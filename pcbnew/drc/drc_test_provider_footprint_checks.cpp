@@ -108,15 +108,8 @@ bool DRC_TEST_PROVIDER_FOOTPRINT_CHECKS::Run()
                     } );
         }
 
-        if( !m_drcEngine->IsErrorLimitExceeded( DRCE_SHORTING_ITEMS ) )
-        {
-            footprint->CheckShortingPads(
-                    [&]( const PAD* aPadA, const PAD* aPadB, const VECTOR2I& aPosition )
-                    {
-                        errorHandler( aPadA, aPadB, nullptr, DRCE_SHORTING_ITEMS, wxEmptyString,
-                                      aPosition, aPadA->GetPrincipalLayer() );
-                    } );
-        }
+        // Don't call footprint->CheckShortingPads().  At the board level we know about nets,
+        // and the pads may have the same net even though they're distinct pads.
 
         if( footprint->IsNetTie() )
         {
