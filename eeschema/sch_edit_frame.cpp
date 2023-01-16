@@ -1438,11 +1438,14 @@ void SCH_EDIT_FRAME::initScreenZoom()
 void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
 {
     const SCH_CONNECTION* highlight       = GetHighlightedConnection();
-    SCH_ITEM*             highlightedItem = highlight ? highlight->Parent() : nullptr;
-    SCH_SHEET_PATH highlightPath;
+    SCH_ITEM*             highlightedItem = nullptr;
+    SCH_SHEET_PATH        highlightPath;
 
     if( highlight )
+    {
         highlightPath = highlight->LocalSheet();
+        highlightedItem = dynamic_cast<SCH_ITEM*>( GetItem( highlight->Parent()->m_Uuid ) );
+    }
 
     SCHEMATIC_SETTINGS& settings = Schematic().Settings();
     SCH_SHEET_LIST      list = Schematic().GetSheets();
