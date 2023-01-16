@@ -1329,6 +1329,10 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
                     return;
 
                 dummyPad.reset( static_cast<PAD*>( aPad->Duplicate() ) );
+
+                if( dummyPad->GetParentGroup() )
+                    dummyPad->GetParentGroup()->RemoveItem( dummyPad.get() );
+
                 int initial_radius = dummyPad->GetRoundRectCornerRadius();
 
                 dummyPad->SetSize( pad_size + margin + margin );
