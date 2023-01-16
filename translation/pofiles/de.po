@@ -20,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-11 12:35-0800\n"
 "PO-Revision-Date: 2023-01-17 17:11+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -5371,7 +5371,7 @@ msgstr "Ausgewählte Zellen in die Zwischenablage kopieren"
 #: common/grid_tricks.cpp:329 common/tool/actions.cpp:165
 #: pcbnew/dialogs/panel_setup_rules.cpp:113
 msgid "Paste"
-msgstr "Einfügen"
+msgstr "Lotpaste"
 
 #: common/grid_tricks.cpp:330
 msgid "Paste clipboard cells to matrix at current cell"
