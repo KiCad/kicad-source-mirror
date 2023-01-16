@@ -76,9 +76,9 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
     bool defaultIntersheetsRefFormatShort =
             appSettings ? appSettings->m_Drawing.intersheets_ref_short : false;
     wxString defaultIntersheetsRefPrefix =
-            appSettings ? appSettings->m_Drawing.intersheets_ref_prefix : DEFAULT_IREF_PREFIX;
+            appSettings ? appSettings->m_Drawing.intersheets_ref_prefix : wxString( wxS( DEFAULT_IREF_PREFIX ) );
     wxString defaultIntersheetsRefSuffix =
-            appSettings ? appSettings->m_Drawing.intersheets_ref_suffix : DEFAULT_IREF_SUFFIX;
+            appSettings ? appSettings->m_Drawing.intersheets_ref_suffix : wxString( wxS( DEFAULT_IREF_SUFFIX ) );
 
     m_params.emplace_back( new PARAM<bool>( "drawing.intersheets_ref_show",
             &m_IntersheetRefsShow, defaultIntersheetsRefShow ) );

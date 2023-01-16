@@ -2902,7 +2902,7 @@ void SCH_ALTIUM_PLUGIN::ParseDesignator( const std::map<wxString, wxString>& aPr
     // Graphics symbols have no reference. '#GRAPHIC' allows them to not have footprint associated.
     // Note: not all unnamed imported symbols are necessarily graphics.
     bool emptyRef = elem.text.IsEmpty();
-    symbol->SetRef( &m_sheetPath, emptyRef ? "#GRAPHIC" : elem.text );
+    symbol->SetRef( &m_sheetPath, emptyRef ? wxString( wxS( "#GRAPHIC" ) ) : elem.text );
 
     // I am not sure value and ref should be invisible just because emptyRef is true
     // I have examples with this criteria fully incorrect.

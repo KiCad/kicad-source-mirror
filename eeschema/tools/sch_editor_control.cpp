@@ -954,7 +954,7 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
         return 0;
 
     bool     selectedIsBus = selectedConn ? selectedConn->IsBus() : false;
-    wxString selectedName  = selectedConn ? selectedConn->Name() : "";
+    wxString selectedName  = selectedConn ? selectedConn->Name() : wxString( wxS( "" ) );
 
     bool                 selectedIsNoNet  = false;
     CONNECTION_SUBGRAPH* selectedSubgraph = nullptr;
