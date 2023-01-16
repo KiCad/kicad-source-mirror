@@ -65,6 +65,7 @@
 #include <stroke_params.h>
 #include "sch_painter.h"
 #include "sch_shape.h"
+#include "common.h"
 
 
 namespace KIGFX
@@ -2185,6 +2186,43 @@ static void orientSymbol( LIB_SYMBOL* symbol, int orientation )
 }
 
 
+wxString resolveTextVars( const wxString& aSourceText, const SCH_SYMBOL* aSymbolContext )
+{
+    std::function<bool( wxString* )> symbolResolver =
+            [&]( wxString* token ) -> bool
+            {
+                if( token->Contains( ':' ) )
+                {
+                    if( aSymbolContext->Schematic()->ResolveCrossReference( token, 0 ) )
+                        return true;
+                }
+                else
+                {
+                    if( aSymbolContext->ResolveTextVar( token, 0 ) )
+                        return true;
+
+                    SCHEMATIC* schematic = aSymbolContext->Schematic();
+                    SCH_SHEET* sheet = schematic ? schematic->CurrentSheet().Last() : nullptr;
+
+                    if( sheet && sheet->ResolveTextVar( token, 0 ) )
+                        return true;
+                }
+
+                return false;
+            };
+
+    PROJECT*  project = nullptr;
+    wxString  text = aSourceText;
+
+    if( aSymbolContext->Schematic() )
+        project = &aSymbolContext->Schematic()->Prj();
+
+    text = ExpandTextVars( text, &symbolResolver, nullptr, project );
+
+    return text;
+}
+
+
 void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
@@ -2226,6 +2264,21 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
     {
         tempItem.SetFlags( aSymbol->GetFlags() );     // SELECTED, HIGHLIGHTED, BRIGHTENED,
         tempItem.MoveTo( tempItem.GetPosition() + (VECTOR2I) mapCoords( aSymbol->GetPosition() ) );
+
+        if( tempItem.Type() == LIB_TEXT_T )
+        {
+            LIB_TEXT* textItem = static_cast<LIB_TEXT*>( &tempItem );
+
+            if( textItem->HasTextVars() )
+                textItem->SetText( resolveTextVars( textItem->GetText(), aSymbol ) );
+        }
+        else if( tempItem.Type() == LIB_TEXTBOX_T )
+        {
+            LIB_TEXTBOX* textboxItem = static_cast<LIB_TEXTBOX*>( &tempItem );
+
+            if( textboxItem->HasTextVars() )
+                textboxItem->SetText( resolveTextVars( textboxItem->GetText(), aSymbol ) );
+        }
     }
 
     // Copy the pin info from the symbol to the temp pins
