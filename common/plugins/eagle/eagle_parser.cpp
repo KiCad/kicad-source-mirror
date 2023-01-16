@@ -60,6 +60,7 @@ bool substituteVariable( wxString* aText )
     else if( *aText == wxT( ">SHEETNR_TOTAL" ) )    *aText = wxT( "${#}" );
     else if( *aText == wxT( ">SHEETS_TOTAL" ) )     *aText = wxT( "${##}" );
     else if( *aText == wxT( ">SHEET_TOTAL" ) )      *aText = wxT( "${#}/${##}" );
+    else if( *aText == wxT( ">SHEET_HEADLINE" ) )   *aText = wxT( "${SHEETNAME}" );
     else if( *aText == wxT( ">ASSEMBLY_VARIANT" ) ) *aText = wxT( "${ASSEMBLY_VARIANT}" );
     else if( *aText == wxT( ">DRAWING_NAME" ) )     *aText = wxT( "${TITLE}" );
     else if( *aText == wxT( ">LAST_DATE_TIME" ) )   *aText = wxT( "${ISSUE_DATE}" );

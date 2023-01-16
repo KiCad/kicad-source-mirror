@@ -2355,16 +2355,26 @@ LIB_TEXT* SCH_EAGLE_PLUGIN::loadSymbolText( std::unique_ptr<LIB_SYMBOL>& aSymbol
     libtext->SetUnit( aGateNumber );
     libtext->SetPosition( VECTOR2I( etext.x.ToSchUnits(), etext.y.ToSchUnits() ) );
 
-    // Eagle supports multiple line text in library symbols.  Legacy library symbol text cannot
-    // contain CRs or LFs.
-    //
-    // @todo Split this into multiple text objects and offset the Y position so that it looks
-    //       more like the original Eagle schematic.
-    wxString text = aLibText->GetNodeContent();
-    std::replace( text.begin(), text.end(), '\n', '_' );
-    std::replace( text.begin(), text.end(), '\r', '_' );
+    const wxString&   eagleText = aLibText->GetNodeContent();
+    wxString          adjustedText;
+    wxStringTokenizer tokenizer( eagleText, "\r\n" );
 
-    libtext->SetText( text.IsEmpty() ? wxT( "~" ) : text );
+    // Strip the whitespace from both ends of each line.
+    while( tokenizer.HasMoreTokens() )
+    {
+        wxString tmp = tokenizer.GetNextToken().Trim( true ).Trim( false );
+        wxString var = tmp.Upper();
+
+        if( substituteVariable( &var ) )
+            tmp = var;
+
+        if( tokenizer.HasMoreTokens() )
+            tmp += wxT( "\n" );
+
+        adjustedText += tmp;
+    }
+
+    libtext->SetText( adjustedText.IsEmpty() ? wxT( "~" ) : adjustedText );
     loadTextAttributes( libtext.get(), etext );
 
     return libtext.release();
@@ -2565,10 +2575,9 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadPlainText( wxXmlNode* aSchText )
     std::unique_ptr<SCH_TEXT> schtext = std::make_unique<SCH_TEXT>();
     ETEXT                     etext   = ETEXT( aSchText );
 
-    const wxString& thetext = aSchText->GetNodeContent();
-
-    wxString adjustedText;
-    wxStringTokenizer tokenizer( thetext, "\r\n" );
+    const wxString&   eagleText = aSchText->GetNodeContent();
+    wxString          adjustedText;
+    wxStringTokenizer tokenizer( eagleText, "\r\n" );
 
     // Strip the whitespace from both ends of each line.
     while( tokenizer.HasMoreTokens() )
