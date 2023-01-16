@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-11 12:35-0800\n"
-"PO-Revision-Date: 2023-01-13 08:09+0000\n"
-"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
+"PO-Revision-Date: 2023-01-17 17:11+0000\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
 "Language: fi\n"
@@ -24895,7 +24895,7 @@ msgid ""
 "Front footprints will start at %s"
 msgstr ""
 "\n"
-"Etujalanjäljet alkavat %s"
+"Etupuolen jalanjäljet alkavat %s:sta"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:327
 #, c-format
@@ -24908,7 +24908,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:328
 msgid "the last front footprint + 1"
-msgstr "viimeinen etujalanjälki + 1"
+msgstr "etupuolen viimeinen jalanjälki + 1"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:336
 #, c-format
@@ -24917,7 +24917,7 @@ msgid ""
 "Front footprints starting with '%s' will have the prefix removed."
 msgstr ""
 "\n"
-"Etumerkinnät poistetaan etuosasta, jotka alkavat kirjaimella %s."
+"Etumerkinnät poistetaan etupuolen jalanjäljistä, jotka alkavat %s:lla."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:342
 #, c-format
@@ -24926,7 +24926,7 @@ msgid ""
 "Front footprints will have '%s' inserted as a prefix."
 msgstr ""
 "\n"
-"Etujalanjäljissä on etuliite ”%s”."
+"Etupuolen jalanjälkiin lisätään etuliite ”%s”."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:352
 #, c-format
@@ -25114,35 +25114,35 @@ msgstr "Jalanjälkitilaus"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:45
 msgid "Horizontally: top left to bottom right"
-msgstr "Vaakasuunnassa: ylhäältä vasemmalta alhaalta oikealle"
+msgstr "Vaakasuunnassa: ylävasemmalta alaoikealle"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:56
 msgid "Horizontally: top right to bottom left"
-msgstr "Vaakasuunnassa: oikea ylhäältä alas vasemmalle"
+msgstr "Vaakasuunnassa: yläoikealta alavasemmalle"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:67
 msgid "Horizontally: bottom left to top right"
-msgstr "Vaakasuunnassa: alhaalta vasemmalta ylhäältä oikealle"
+msgstr "Vaakasuunnassa: alavasemmalta yläoikealle"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:78
 msgid "Horizontally:: bottom right to top left"
-msgstr "Vaakasuunnassa :: alhaalta oikealta ylhäältä vasemmalle"
+msgstr "Vaakasuunnassa: alaoikealta ylävasemmalle"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:86
 msgid "Vertically: top left to bottom right"
-msgstr "Pystysuunnassa: ylhäältä vasemmalta alhaalta oikealle"
+msgstr "Pystysuunnassa: ylävasemmalta alaoikealle"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:97
 msgid "Vertically: top right to bottom left"
-msgstr "Pystysuunnassa: oikea ylhäältä alas vasemmalle"
+msgstr "Pystysuunnassa: yläoikealta alavasemmalle"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:108
 msgid "Vertically: bottom left to top right"
-msgstr "Pystysuunnassa: alhaalta vasemmalta ylhäältä oikealle"
+msgstr "Pystysuunnassa: alavasemmalta yläoikealle"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:119
 msgid "Vertically: bottom right to top left"
-msgstr "Pystysuunnassa: alhaalta oikealta ylhäältä vasemmalle"
+msgstr "Pystysuunnassa: alaoikealta ylävasemmalle"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:132
 msgid "Based on location of:"
