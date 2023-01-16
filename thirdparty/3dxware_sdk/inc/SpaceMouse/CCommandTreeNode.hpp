@@ -29,6 +29,7 @@
 #include <exception>
 #include <iterator>
 #include <memory>
+#include <stdexcept>
 
 #if !_MSC_VER
 #pragma GCC diagnostic push
