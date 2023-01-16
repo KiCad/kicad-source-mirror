@@ -34,6 +34,7 @@
 class PCB_EDIT_FRAME;
 class PROGRESS_REPORTER;
 class WX_PROGRESS_REPORTER;
+class ZONE_FILLER;
 
 
 /**
@@ -59,6 +60,8 @@ public:
 
     bool IsBusy() { return m_fillInProgress; }
 
+    PROGRESS_REPORTER* GetProgressReporter();
+
     void DirtyZone( ZONE* aZone )
     {
         m_dirtyZoneIDs.insert( aZone->m_Uuid );
@@ -77,9 +80,10 @@ private:
     void setTransitions() override;
 
 private:
-    bool m_fillInProgress;
+    std::unique_ptr<ZONE_FILLER> m_filler;
+    bool                         m_fillInProgress;
 
-    std::set<KIID> m_dirtyZoneIDs;
+    std::set<KIID>               m_dirtyZoneIDs;
 };
 
 #endif

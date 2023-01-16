@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2017 CERN
- * Copyright (C) 2014-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -75,19 +75,20 @@ void ZONE_FILLER_TOOL::CheckAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRep
 
     BOARD_COMMIT                          commit( this );
     std::unique_ptr<WX_PROGRESS_REPORTER> reporter;
-    ZONE_FILLER                           filler( frame()->GetBoard(), &commit );
+
+    m_filler = std::make_unique<ZONE_FILLER>( frame()->GetBoard(), &commit );
 
     if( aReporter )
     {
-        filler.SetProgressReporter( aReporter );
+        m_filler->SetProgressReporter( aReporter );
     }
     else
     {
         reporter = std::make_unique<WX_PROGRESS_REPORTER>( aCaller, _( "Checking Zones" ), 4 );
-        filler.SetProgressReporter( reporter.get() );
+        m_filler->SetProgressReporter( reporter.get() );
     }
 
-    if( filler.Fill( toFill, true, aCaller ) )
+    if( m_filler->Fill( toFill, true, aCaller ) )
     {
         commit.Push( _( "Fill Zone(s)" ), SKIP_CONNECTIVITY | ZONE_FILL_OP );
         getEditFrame<PCB_EDIT_FRAME>()->m_ZoneFillsDirty = false;
@@ -101,6 +102,7 @@ void ZONE_FILLER_TOOL::CheckAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRep
     refresh();
 
     m_fillInProgress = false;
+    m_filler.reset( nullptr );
 }
 
 
@@ -128,7 +130,8 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
 
     BOARD_COMMIT                          commit( this );
     std::unique_ptr<WX_PROGRESS_REPORTER> reporter;
-    ZONE_FILLER                           filler( board(), &commit );
+
+    m_filler = std::make_unique<ZONE_FILLER>( board(), &commit );
 
     if( !board()->GetDesignSettings().m_DRCEngine->RulesValid() )
     {
@@ -152,17 +155,17 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
 
     if( aReporter )
     {
-        filler.SetProgressReporter( aReporter );
+        m_filler->SetProgressReporter( aReporter );
     }
     else
     {
         reporter = std::make_unique<WX_PROGRESS_REPORTER>( aCaller, _( "Fill All Zones" ), 5 );
-        filler.SetProgressReporter( reporter.get() );
+        m_filler->SetProgressReporter( reporter.get() );
     }
 
-    if( filler.Fill( toFill ) )
+    if( m_filler->Fill( toFill ) )
     {
-        filler.GetProgressReporter()->AdvancePhase();
+        m_filler->GetProgressReporter()->AdvancePhase();
 
         commit.Push( _( "Fill Zone(s)" ), SKIP_CONNECTIVITY | ZONE_FILL_OP );
         frame->m_ZoneFillsDirty = false;
@@ -175,10 +178,11 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
     rebuildConnectivity();
     refresh();
 
-    if( filler.IsDebug() )
+    if( m_filler->IsDebug() )
         frame->UpdateUserInterface();
 
     m_fillInProgress = false;
+    m_filler.reset( nullptr );
 
     // wxWidgets has keyboard focus issues after the progress reporter.  Re-setting the focus
     // here doesn't work, so we delay it to an idle event.
@@ -212,8 +216,9 @@ int ZONE_FILLER_TOOL::ZoneFillDirty( const TOOL_EVENT& aEvent )
 
     BOARD_COMMIT                          commit( this );
     std::unique_ptr<WX_PROGRESS_REPORTER> reporter;
-    ZONE_FILLER                           filler( board(), &commit );
     int                                   pts = 0;
+
+    m_filler = std::make_unique<ZONE_FILLER>( board(), &commit );
 
     if( !board()->GetDesignSettings().m_DRCEngine->RulesValid() )
     {
@@ -245,12 +250,12 @@ int ZONE_FILLER_TOOL::ZoneFillDirty( const TOOL_EVENT& aEvent )
             wxString title = wxString::Format( _( "Refill %d Zones" ), (int) toFill.size() );
 
             reporter = std::make_unique<WX_PROGRESS_REPORTER>( frame, title, 5 );
-            filler.SetProgressReporter( reporter.get() );
+            m_filler->SetProgressReporter( reporter.get() );
             break;
         }
     }
 
-    if( filler.Fill( toFill ) )
+    if( m_filler->Fill( toFill ) )
         commit.Push( _( "Auto-fill Zone(s)" ), APPEND_UNDO | SKIP_CONNECTIVITY | ZONE_FILL_OP );
     else
         commit.Revert();
@@ -279,10 +284,11 @@ int ZONE_FILLER_TOOL::ZoneFillDirty( const TOOL_EVENT& aEvent )
                                  10000, wxICON_INFORMATION, WX_INFOBAR::MESSAGE_TYPE::GENERIC );
     }
 
-    if( filler.IsDebug() )
+    if( m_filler->IsDebug() )
         frame->UpdateUserInterface();
 
     m_fillInProgress = false;
+    m_filler.reset( nullptr );
 
     // wxWidgets has keyboard focus issues after the progress reporter.  Re-setting the focus
     // here doesn't work, so we delay it to an idle event.
@@ -319,12 +325,13 @@ int ZONE_FILLER_TOOL::ZoneFill( const TOOL_EVENT& aEvent )
 
     BOARD_COMMIT                          commit( this );
     std::unique_ptr<WX_PROGRESS_REPORTER> reporter;
-    ZONE_FILLER                           filler( board(), &commit );
+
+    m_filler = std::make_unique<ZONE_FILLER>( board(), &commit );
 
     reporter = std::make_unique<WX_PROGRESS_REPORTER>( frame(), _( "Fill Zone" ), 5 );
-    filler.SetProgressReporter( reporter.get() );
+    m_filler->SetProgressReporter( reporter.get() );
 
-    if( filler.Fill( toFill ) )
+    if( m_filler->Fill( toFill ) )
     {
         reporter->AdvancePhase();
         commit.Push( _( "Fill Zone(s)" ), SKIP_CONNECTIVITY | ZONE_FILL_OP );
@@ -338,6 +345,7 @@ int ZONE_FILLER_TOOL::ZoneFill( const TOOL_EVENT& aEvent )
     refresh();
 
     m_fillInProgress = false;
+    m_filler.reset( nullptr );
     return 0;
 }
 
@@ -388,6 +396,15 @@ int ZONE_FILLER_TOOL::ZoneUnfillAll( const TOOL_EVENT& aEvent )
     refresh();
 
     return 0;
+}
+
+
+PROGRESS_REPORTER* ZONE_FILLER_TOOL::GetProgressReporter()
+{
+    if( m_fillInProgress && m_filler )
+        return m_filler->GetProgressReporter();
+    else
+        return nullptr;
 }
 
 

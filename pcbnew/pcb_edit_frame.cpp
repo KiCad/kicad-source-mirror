@@ -1006,6 +1006,18 @@ bool PCB_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         return false;
     }
 
+    ZONE_FILLER_TOOL* zoneFillerTool = m_toolManager->GetTool<ZONE_FILLER_TOOL>();
+
+    if( zoneFillerTool->IsBusy() )
+    {
+        wxBell();
+
+        if( wxWindow* reporter = dynamic_cast<wxWindow*>( zoneFillerTool->GetProgressReporter() ) )
+            reporter->ShowWithEffect( wxSHOW_EFFECT_EXPAND );
+
+        return false;
+    }
+
     if( Kiface().IsSingle() )
     {
         auto* fpEditor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_FOOTPRINT_EDITOR, false );
