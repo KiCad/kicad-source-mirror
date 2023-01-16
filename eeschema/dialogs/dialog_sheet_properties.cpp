@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2014-2022 KiCad Developers, see CHANGELOG.txt for contributors.
+ * Copyright (C) 2014-2023 KiCad Developers, see CHANGELOG.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -382,7 +382,7 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
         KIDIALOG dlg( this, _( "Note: item colors are overridden in the current color theme." ),
                       KIDIALOG::KD_WARNING );
         dlg.ShowDetailedText( wxString::Format( _( "To see individual item colors uncheck '%s'\n"
-                                                   "in Preferences > Eeschema > Colors." ),
+                                                   "in Preferences > Schematic Editor > Colors." ),
                                                 checkboxLabel ) );
         dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
         dlg.ShowModal();
