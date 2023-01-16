@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-11 12:35-0800\n"
-"PO-Revision-Date: 2023-01-13 08:09+0000\n"
+"PO-Revision-Date: 2023-01-17 17:11+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -5360,7 +5360,7 @@ msgstr "Lägg till i Markering"
 #: gerbview/tools/gerbview_actions.cpp:119 pcbnew/tools/pcb_actions.cpp:790
 #: pcbnew/tools/pcb_actions.cpp:810
 msgid "Highlight Net"
-msgstr "Markera Net"
+msgstr "Markera nät"
 
 #: common/hotkey_store.cpp:48
 msgid "Remove from Selection"
@@ -13420,7 +13420,7 @@ msgstr "Horisontell"
 #: eeschema/fields_grid_table.cpp:768
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:131
 msgid "Vertical"
-msgstr "Vertikalt"
+msgstr "Vertikal"
 
 #: eeschema/fields_grid_table.cpp:341
 msgid "Show Name"
@@ -13568,7 +13568,7 @@ msgstr ""
 #: eeschema/files-io.cpp:615 pcbnew/files.cpp:172
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:191
 msgid "All supported formats|"
-msgstr "Alla format som stöds"
+msgstr "Alla format som stöds |"
 
 #: eeschema/files-io.cpp:617
 msgid "Import Schematic"
@@ -18158,7 +18158,7 @@ msgstr "Rensa all befintlig nätmarkering"
 
 #: eeschema/tools/ee_actions.cpp:589
 msgid "Highlight Nets"
-msgstr "Markera Net"
+msgstr "Markera nät"
 
 #: eeschema/tools/ee_actions.cpp:589
 msgid "Highlight wires and pins of a net"
@@ -20090,7 +20090,7 @@ msgstr "Markera komponenter i komponenten '%s'"
 #: gerbview/tools/gerbview_selection_tool.cpp:76
 #, c-format
 msgid "Highlight Items of Net '%s'"
-msgstr "Markera objekt av nät '%s'"
+msgstr "Markera objekt i nät '%s'"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:86
 #, c-format
@@ -23712,7 +23712,6 @@ msgid "Transmission Lines"
 msgstr "Transmissionslinjer"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:110
-#, fuzzy
 msgid "Memo"
 msgstr "Memo"
 
@@ -24751,7 +24750,7 @@ msgstr "Ta bort ledare som kortsluter två nät"
 
 #: pcbnew/cleanup_item.cpp:47
 msgid "Remove via shorting two nets"
-msgstr "Ta bort dem genom att kortsluta två nät"
+msgstr "Ta bort via som kortsluter två nät"
 
 #: pcbnew/cleanup_item.cpp:48
 msgid "Remove redundant via"
@@ -24783,7 +24782,7 @@ msgstr "Ta bort ledare inuti lödytan"
 
 #: pcbnew/cleanup_item.cpp:57
 msgid "Remove zero-size graphic"
-msgstr "Ta bort grafik i nollstorlek"
+msgstr "Ta bort grafik med storlek noll"
 
 #: pcbnew/cleanup_item.cpp:58
 msgid "Remove duplicated graphic"
@@ -24791,7 +24790,7 @@ msgstr "Ta bort duplicerad grafik"
 
 #: pcbnew/cleanup_item.cpp:59
 msgid "Convert lines to rectangle"
-msgstr "Konvertera rader till rektangel"
+msgstr "Konvertera linjer till rektangel"
 
 #: pcbnew/cleanup_item.cpp:60
 msgid "Merge overlapping shapes into pad"
@@ -24830,7 +24829,7 @@ msgstr "Bara tillbaka"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:88
 msgid "Only selected"
-msgstr "Endast vald"
+msgstr "Endast valda"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:94
 msgid "Empty"
@@ -24862,8 +24861,9 @@ msgid ""
 "PCB annotation changes should be synchronized with schematic using the "
 "\"Update Schematic from PCB\" tool."
 msgstr ""
-"Förändringar i mönsterkortets annotering ska synkroniseras med schemat genom "
-"\"Uppdatera schema från mönsterkort\"-verktyget."
+"Förändringar i mönsterkortets komponentnumrering ska synkroniseras med "
+"kretsschemat med hjälp av verktyget \"Uppdatera kretsschema från "
+"mönsterkort\"."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:304
 #, c-format
@@ -24911,7 +24911,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:328
 msgid "the last front footprint + 1"
-msgstr "det sista främre fotavtrycket + 1"
+msgstr "det sista fotavtrycket på framsidan + 1"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:336
 #, c-format
@@ -24929,7 +24929,7 @@ msgid ""
 "Front footprints will have '%s' inserted as a prefix."
 msgstr ""
 "\n"
-"Främre fotavtryck har \"%s\" infogats som ett prefix."
+"Framsidans fotavtryck får \"%s\" tillagt som prefix."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:352
 #, c-format
@@ -24989,7 +24989,7 @@ msgid ""
 "\n"
 msgstr ""
 "\n"
-"Exklusive: %s från reannotation\n"
+"Utelämnar: %s från omnumrering\n"
 "\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:526
@@ -24999,7 +24999,7 @@ msgid ""
 "***********************\n"
 msgstr ""
 "\n"
-"    Byt Array\n"
+"    Förändringslista\n"
 "***********************\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:534
@@ -25021,11 +25021,11 @@ msgid ""
 "*********** Sort on %s ***********"
 msgstr ""
 "\n"
-"*********** Sortera på %s ***********"
+"*********** Sortera efter %s ***********"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:555
 msgid "Footprint Coordinates"
-msgstr "Fotavtryck koordinater"
+msgstr "Fotavtrycks koordinater"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:556
 msgid "Reference Designator Coordinates"
@@ -25062,9 +25062,9 @@ msgid ""
 "checked.\n"
 msgstr ""
 "\n"
-"PCB har %d tomma eller ogiltiga referensbeteckningar.\n"
-"Rekommenderar körning av DRC med 'Testa paritet mellan mönsterkort och "
-"schema' ikryssad.\n"
+"Mönsterkortet har %d tomma eller ogiltiga referensbeteckningar.\n"
+"Designregelkontroll, med alternativet 'Testa paritet mellan mönsterkort och "
+"schema' ikryssat, rekommenderas.\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:599
 #, c-format
@@ -25073,7 +25073,7 @@ msgid ""
 "RefDes: %s Footprint: %s:%s at %s on PCB."
 msgstr ""
 "\n"
-"RefDes: %s Fotavtryck: %s: %s vid %s på PCB."
+"Ref.bet.: %s Fotavtryck: %s: %s vid %s på mönsterkortet."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:607
 msgid "Reannotate anyway?"
@@ -25118,35 +25118,35 @@ msgstr "Fotavtrycksordning"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:45
 msgid "Horizontally: top left to bottom right"
-msgstr "Horisontellt: uppe till vänster till nedre högra"
+msgstr "Horisontellt: vänster uppe till höger nere"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:56
 msgid "Horizontally: top right to bottom left"
-msgstr "Horisontellt: uppe till höger till nedre vänster"
+msgstr "Horisontellt: höger uppe till vänster nere"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:67
 msgid "Horizontally: bottom left to top right"
-msgstr "Horisontellt: nedre vänster till övre högra"
+msgstr "Horisontellt: vänster nere till höger uppe"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:78
 msgid "Horizontally:: bottom right to top left"
-msgstr "Horisontellt :: nere till höger till övre vänster"
+msgstr "Horisontellt: höger nere till vänster uppe"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:86
 msgid "Vertically: top left to bottom right"
-msgstr "Vertikalt: uppe till vänster till nedre högra"
+msgstr "Vertikalt: vänster uppe till höger nere"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:97
 msgid "Vertically: top right to bottom left"
-msgstr "Vertikalt: uppe till höger till nedre vänster"
+msgstr "Vertikalt: höger uppe till vänster nere"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:108
 msgid "Vertically: bottom left to top right"
-msgstr "Vertikalt: nedre vänster till övre högra"
+msgstr "Vertikalt: vänster nere till höger uppe"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:119
 msgid "Vertically: bottom right to top left"
-msgstr "Vertikalt: längst ner till höger till vänster"
+msgstr "Vertikalt: höger nere till vänster uppe"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:132
 msgid "Based on location of:"
@@ -25640,9 +25640,8 @@ msgid "Cleanup Graphics"
 msgstr "Städa upp grafik"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:78
-#, fuzzy
 msgid "Build Changes"
-msgstr "Bygg ändringar"
+msgstr "Förhandsgranska ändringar"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:130
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:172
@@ -29288,7 +29287,7 @@ msgstr "Rektangulär"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:101
 msgid "Trapezoidal"
-msgstr "Trapesformad"
+msgstr "Likbent parallelltrapets"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:101 pcbnew/pad.cpp:1711
 msgid "Rounded rectangle"
@@ -29312,11 +29311,11 @@ msgstr "Anpassad (rektangulär bas)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:116
 msgid "Trapezoid delta:"
-msgstr "Trapesformat delta:"
+msgstr "Trapetsformens delta:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:127
 msgid "Trapezoid axis:"
-msgstr "Trapesformad axel:"
+msgstr "Trapetsformens symmetriaxel:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:148
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:277
@@ -29622,7 +29621,7 @@ msgstr "Primitiv-lista:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:794
 msgid "Note: coordinates are relative to anchor pad, orientation 0."
-msgstr "Obs: koordinaterna är relativt ankarplattan, orientering 0."
+msgstr "Obs: koordinaterna är relativt lödytans baselement, orientering 0."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:813
 msgid "Edit Primitive"
@@ -29682,7 +29681,7 @@ msgstr "Duplicera:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1548
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1557
 msgid "Coordinates are relative to anchor pad, rotated 0.0 deg."
-msgstr "Koordinaterna är relativt ankarplattan, roterade 0,0 grader."
+msgstr "Koordinaterna är relativt lödytans baselement, roterade 0,0 grader."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.h:361
 #: pcbnew/dialogs/dialog_pad_properties_base.h:363
@@ -30489,7 +30488,7 @@ msgstr "Ändra lödytor i aktuellt fotavtryck"
 
 #: pcbnew/dialogs/dialog_push_pad_properties.cpp:50
 msgid "Change Pads on Identical Footprints"
-msgstr "Byt kuddar på identiska fotavtryck"
+msgstr "Ändra lödytor i identiska fotavtryck"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:25
 msgid "Do not modify pads having a different shape"
@@ -30975,7 +30974,7 @@ msgstr "Säkerställer att korsprobade fotavtryck är synliga i den aktuella vyn
 #: pcbnew/dialogs/panel_display_options_base.cpp:120
 #: pcbnew/dialogs/panel_display_options_base.cpp:90
 msgid "Highlight nets when they are highlighted in the schematic editor"
-msgstr "Markera nät när de är markerade i kretsschemaredigerare"
+msgstr "Markera nät när de är markerade i kretsschemaredigeraren"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:124
 #: pcbnew/dialogs/panel_display_options_base.cpp:94
@@ -35482,7 +35481,7 @@ msgstr "Externa insticksprogram"
 
 #: pcbnew/menubar_pcb_editor.cpp:471
 msgid "Ro&ute"
-msgstr "Rutt"
+msgstr "Dra ledare"
 
 #: pcbnew/microwave/microwave_footprint.cpp:56
 msgid "Gap Size:"
@@ -36067,7 +36066,7 @@ msgstr "NPTH, mekanisk"
 
 #: pcbnew/pad.cpp:1710
 msgid "Trapezoid"
-msgstr "Trapes"
+msgstr "Likbent parallelltrapets"
 
 #: pcbnew/pad.cpp:1722
 msgid "Castellated pad"
@@ -37620,9 +37619,8 @@ msgid "Cannot rename temporary file '%s' to '%s'"
 msgstr "Kunde inte döpa om temporär fil '%s' till '%s'"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:273
-#, fuzzy
 msgid "Internal Group Data Error"
-msgstr "Intern gruppdatastruktur skadad"
+msgstr "Fel i intern gruppdatastruktur"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:274
 #, c-format
@@ -38018,7 +38016,7 @@ msgstr "Kan inte dra ledare från ett grafiskt element."
 
 #: pcbnew/router/pns_router.cpp:325 pcbnew/router/pns_router.cpp:381
 msgid "The routing start point violates DRC."
-msgstr "Ruttstartpunkten bryter mot DRC."
+msgstr "Ledarens startpunkt bryter mot designregel."
 
 #: pcbnew/router/pns_router.cpp:333
 msgid "Cannot start a differential pair in the middle of nowhere."
@@ -38057,7 +38055,7 @@ msgstr "Placera Microvia"
 
 #: pcbnew/router/router_tool.cpp:128
 msgid "Adds a microvia at the end of currently routed track."
-msgstr "Lägger till en mikrovia i slutet av den för närvarande dragna ledaren."
+msgstr "Lägger till en mikrovia i slutet av den ledare som dras för närvarande."
 
 #: pcbnew/router/router_tool.cpp:135
 msgid "Select Layer and Place Through Via..."
@@ -38091,8 +38089,8 @@ msgstr "Välj lager och placera mikrovia..."
 msgid ""
 "Select a layer, then add a micro via at the end of currently routed track."
 msgstr ""
-"Välj ett lager och lägg sedan till en mikrovia i slutet av den för "
-"närvarande dragna ledaren."
+"Välj ett lager och lägg sedan till en mikrovia i slutet av ledaren som för "
+"närvarande dras."
 
 #: pcbnew/router/router_tool.cpp:161
 msgid "Custom Track/Via Size..."
@@ -38367,7 +38365,7 @@ msgstr "Sessionsfilen saknar avsnittet \"session\""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:345
 msgid "Session file is missing the \"routes\" section"
-msgstr "Sessionsfilen saknar avsnittet \"rutter\""
+msgstr "Sessionsfilen saknar avsnittet \"routes\" (ledare)"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:348
 msgid "Session file is missing the \"library_out\" section"
@@ -38588,7 +38586,7 @@ msgstr "Via: %s (%s)"
 
 #: pcbnew/tools/board_editor_control.cpp:117
 msgid "Locking"
-msgstr "Låser"
+msgstr "Låsning"
 
 #: pcbnew/tools/board_editor_control.cpp:382
 msgid "Specctra Session File"
@@ -39387,9 +39385,8 @@ msgid "Place pad"
 msgstr "Placera lödyta"
 
 #: pcbnew/tools/pad_tool.cpp:588
-#, fuzzy
 msgid "Recombine pad"
-msgstr "Rekombinera lödytor"
+msgstr "Rekombinera lödyta"
 
 #: pcbnew/tools/pad_tool.cpp:614
 #, c-format
@@ -40007,7 +40004,7 @@ msgstr "Omnumrera lödytor..."
 
 #: pcbnew/tools/pcb_actions.cpp:580
 msgid "Renumber pads by clicking on them in the desired order"
-msgstr "Numrera kuddar genom att klicka på dem i önskad ordning"
+msgstr "Numrera om lödytor genom att klicka på dem i önskad ordning"
 
 #: pcbnew/tools/pcb_actions.cpp:585
 msgid "Add Pad"
@@ -40278,7 +40275,7 @@ msgstr "Växla senaste nätmarkering"
 
 #: pcbnew/tools/pcb_actions.cpp:795
 msgid "Toggle between last two highlighted nets"
-msgstr "Växla mellan de två sista markerade näten"
+msgstr "Växla mellan de två senast markerade näten"
 
 #: pcbnew/tools/pcb_actions.cpp:805
 msgid "Toggle Net Highlight"
@@ -40290,7 +40287,7 @@ msgstr "Växla nätmarkering"
 
 #: pcbnew/tools/pcb_actions.cpp:810
 msgid "Highlight all copper items on the selected net(s)"
-msgstr "Markera alla kopparobjekt i markerade nät"
+msgstr "Markera alla kopparobjekt i de(t) valda nät(en)"
 
 #: pcbnew/tools/pcb_actions.cpp:818
 msgid "Hide Net in Ratsnest"
@@ -40777,7 +40774,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1326
 msgid "Unroute Selected"
-msgstr "Ta bort vald ledningsdragning"
+msgstr "Ta bort vald ledardragning"
 
 #: pcbnew/tools/pcb_actions.cpp:1327
 msgid "Unroutes selected items to the nearest pad."
@@ -40793,7 +40790,7 @@ msgstr "Väljer alla ledare och vior som tillhör samma nät."
 
 #: pcbnew/tools/pcb_actions.cpp:1343
 msgid "Deselect All Tracks in Net"
-msgstr "Avmarkera alla ledare i nätet"
+msgstr "Välj bort alla ledare i nätet"
 
 #: pcbnew/tools/pcb_actions.cpp:1344
 msgid "Deselects all tracks & vias belonging to the same net."
