@@ -23,12 +23,75 @@
 
 #include <wx/tokenzr.h>
 #include <wx/dc.h>
+#include <wx/settings.h>
+
 #include <widgets/wx_grid.h>
 #include <widgets/ui_common.h>
 #include <algorithm>
 #include <core/kicad_algo.h>
+#include <gal/color4d.h>
 
 #define MIN_GRIDCELL_MARGIN 3
+
+
+wxColour getBorderColour()
+{
+    KIGFX::COLOR4D bg = wxSystemSettings::GetColour( wxSYS_COLOUR_FRAMEBK );
+    KIGFX::COLOR4D fg = wxSystemSettings::GetColour( wxSYS_COLOUR_ACTIVEBORDER );
+    KIGFX::COLOR4D border = fg.Mix( bg, 0.50 );
+    return border.ToColour();
+}
+
+
+class WX_GRID_CORNER_HEADER_RENDERER : public wxGridCornerHeaderRendererDefault
+{
+public:
+    void DrawBorder( const wxGrid& grid, wxDC& dc, wxRect& rect ) const override
+    {
+        wxDCBrushChanger SetBrush( dc, *wxTRANSPARENT_BRUSH );
+        wxDCPenChanger   SetPen( dc, wxPen( getBorderColour(), 1 ) );
+
+        rect.SetTop( rect.GetTop() + 1 );
+        rect.SetLeft( rect.GetLeft() + 1 );
+        rect.SetBottom( rect.GetBottom() - 1 );
+        rect.SetRight( rect.GetRight() - 1 );
+        dc.DrawRectangle( rect );
+    }
+};
+
+
+class WX_GRID_COLUMN_HEADER_RENDERER : public wxGridColumnHeaderRendererDefault
+{
+public:
+    void DrawBorder( const wxGrid& grid, wxDC& dc, wxRect& rect ) const override
+    {
+        wxDCBrushChanger SetBrush( dc, *wxTRANSPARENT_BRUSH );
+        wxDCPenChanger   SetPen( dc, wxPen( getBorderColour(), 1 ) );
+
+        rect.SetTop( rect.GetTop() + 1 );
+        rect.SetLeft( rect.GetLeft() );
+        rect.SetBottom( rect.GetBottom() - 1 );
+        rect.SetRight( rect.GetRight() - 1 );
+        dc.DrawRectangle( rect );
+    }
+};
+
+
+class WX_GRID_ROW_HEADER_RENDERER : public wxGridRowHeaderRendererDefault
+{
+public:
+    void DrawBorder( const wxGrid& grid, wxDC& dc, wxRect& rect ) const override
+    {
+        wxDCBrushChanger SetBrush( dc, *wxTRANSPARENT_BRUSH );
+        wxDCPenChanger   SetPen( dc, wxPen( getBorderColour(), 1 ) );
+
+        rect.SetTop( rect.GetTop() + 1 );
+        rect.SetLeft( rect.GetLeft() + 1 );
+        rect.SetBottom( rect.GetBottom() - 1 );
+        rect.SetRight( rect.GetRight() );
+        dc.DrawRectangle( rect );
+    }
+};
 
 
 WX_GRID::WX_GRID( wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
@@ -38,8 +101,11 @@ WX_GRID::WX_GRID( wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxS
 {
     SetDefaultCellOverflow( false );
 
-    // Make sure the GUI font scales properly on GTK
+    // Make sure the GUI font scales properly
     SetDefaultCellFont( KIUI::GetControlFont( this ) );
+
+    if( GetColLabelSize() > 0 )
+        SetColLabelSize( GetColLabelSize() + 4 );
 
 #if wxCHECK_VERSION( 3, 1, 3 )
     Connect( wxEVT_DPI_CHANGED, wxDPIChangedEventHandler( WX_GRID::onDPIChanged ), nullptr, this );
@@ -81,7 +147,7 @@ void WX_GRID::SetColLabelSize( int aHeight )
         return;
     }
 
-    wxFont headingFont = KIUI::GetControlFont( this ).Bold();
+    wxFont headingFont = KIUI::GetControlFont( this );
 
     // Make sure the GUI font scales properly on GTK
     SetLabelFont( headingFont );
@@ -236,30 +302,63 @@ void WX_GRID::ShowHideColumns( const wxString& shownColumns )
         shownTokens.GetNextToken().ToLong( &colNumber );
 
         if( colNumber >= 0 && colNumber < GetNumberCols() )
-            ShowCol( colNumber );
+            ShowCol( (int) colNumber );
     }
+}
+
+
+void WX_GRID::DrawCornerLabel( wxDC& dc )
+{
+    if( m_nativeColumnLabels )
+        wxGrid::DrawCornerLabel( dc );
+
+    wxRect rect( wxSize( m_rowLabelWidth, m_colLabelHeight ) );
+
+    static WX_GRID_CORNER_HEADER_RENDERER rend;
+
+    // It is reported that we need to erase the background to avoid display
+    // artifacts, see #12055.
+    {
+        // wxWidgets renamed this variable between 3.1.2 and 3.1.3 ...
+#if wxCHECK_VERSION( 3, 1, 3 )
+        wxDCBrushChanger setBrush( dc, m_colLabelWin->GetBackgroundColour() );
+        wxDCPenChanger   setPen( dc, m_colLabelWin->GetBackgroundColour() );
+#else
+        wxDCBrushChanger setBrush( dc, m_colWindow->GetBackgroundColour() );
+        wxDCPenChanger   setPen( dc, m_colWindow->GetBackgroundColour() );
+#endif
+        dc.DrawRectangle( rect.Inflate( 1 ) );
+    }
+
+    rend.DrawBorder( *this, dc, rect );
 }
 
 
 void WX_GRID::DrawColLabel( wxDC& dc, int col )
 {
+    if( m_nativeColumnLabels )
+        wxGrid::DrawColLabel( dc, col );
+
     if( GetColWidth( col ) <= 0 || m_colLabelHeight <= 0 )
         return;
 
-    int colLeft = GetColLeft( col );
+    wxRect rect( GetColLeft( col ), 0, GetColWidth( col ), m_colLabelHeight );
 
-    wxRect rect( colLeft, 0, GetColWidth( col ), m_colLabelHeight );
-    static wxGridColumnHeaderRendererDefault rend;
+    static WX_GRID_COLUMN_HEADER_RENDERER rend;
 
     // It is reported that we need to erase the background to avoid display
     // artifacts, see #12055.
-    // wxWidgets renamed this variable between 3.1.2 and 3.1.3 ...
+    {
+        // wxWidgets renamed this variable between 3.1.2 and 3.1.3 ...
 #if wxCHECK_VERSION( 3, 1, 3 )
-    wxDCBrushChanger setBrush( dc, m_colLabelWin->GetBackgroundColour() );
+        wxDCBrushChanger setBrush( dc, m_colLabelWin->GetBackgroundColour() );
+        wxDCPenChanger   setPen( dc, m_colLabelWin->GetBackgroundColour() );
 #else
-    wxDCBrushChanger setBrush( dc, m_colWindow->GetBackgroundColour() );
+        wxDCBrushChanger setBrush( dc, m_colWindow->GetBackgroundColour() );
+        wxDCPenChanger   setPen( dc, m_colWindow->GetBackgroundColour() );
 #endif
-    dc.DrawRectangle(rect);
+        dc.DrawRectangle( rect.Inflate( 1 ) );
+    }
 
     rend.DrawBorder( *this, dc, rect );
 
@@ -270,10 +369,51 @@ void WX_GRID::DrawColLabel( wxDC& dc, int col )
     GetColLabelAlignment( &hAlign, &vAlign );
     const int orient = GetColLabelTextOrientation();
 
-    if( col == 0 && GetRowLabelSize() == 0 )
+    if( col == 0 )
         hAlign = wxALIGN_LEFT;
 
+    if( hAlign == wxALIGN_LEFT )
+        rect.SetLeft( rect.GetLeft() + MIN_GRIDCELL_MARGIN );
+
     rend.DrawLabel( *this, dc, GetColLabelValue( col ), rect, hAlign, vAlign, orient );
+}
+
+
+void WX_GRID::DrawRowLabel( wxDC& dc, int row )
+{
+    if ( GetRowHeight( row ) <= 0 || m_rowLabelWidth <= 0 )
+        return;
+
+    wxRect rect( 0, GetRowTop( row ), m_rowLabelWidth, GetRowHeight( row ) );
+
+    static WX_GRID_ROW_HEADER_RENDERER rend;
+
+    // It is reported that we need to erase the background to avoid display
+    // artifacts, see #12055.
+    {
+        // wxWidgets renamed this variable between 3.1.2 and 3.1.3 ...
+#if wxCHECK_VERSION( 3, 1, 3 )
+        wxDCBrushChanger setBrush( dc, m_colLabelWin->GetBackgroundColour() );
+        wxDCPenChanger   setPen( dc, m_colLabelWin->GetBackgroundColour() );
+#else
+        wxDCBrushChanger setBrush( dc, m_colWindow->GetBackgroundColour() );
+        wxDCPenChanger   setPen( dc, m_colWindow->GetBackgroundColour() );
+#endif
+        dc.DrawRectangle( rect.Inflate( 1 ) );
+    }
+
+    rend.DrawBorder( *this, dc, rect );
+
+    // Make sure fonts get scaled correctly on GTK HiDPI monitors
+    dc.SetFont( GetLabelFont() );
+
+    int hAlign, vAlign;
+    GetRowLabelAlignment(&hAlign, &vAlign);
+
+    if( hAlign == wxALIGN_LEFT )
+        rect.SetLeft( rect.GetLeft() + MIN_GRIDCELL_MARGIN );
+
+    rend.DrawLabel( *this, dc, GetRowLabelValue( row ), rect, hAlign, vAlign, wxHORIZONTAL );
 }
 
 
@@ -383,11 +523,8 @@ int WX_GRID::GetVisibleWidth( int aCol, bool aHeader, bool aContents, bool aKeep
         if( aKeep )
             size = GetRowLabelSize();
 
-        // The 1.1 scale factor is due to the fact row labels use a bold font, bigger than
-        // the normal font.
-        // TODO: use a better way to evaluate the text size, for bold font
         for( int row = 0; aContents && row < GetNumberRows(); row++ )
-            size = std::max( size, int( GetTextExtent( GetRowLabelValue( row ) + "M" ).x * 1.1 ) );
+            size = std::max( size, int( GetTextExtent( GetRowLabelValue( row ) + "M" ).x ) );
     }
     else
     {
@@ -400,9 +537,7 @@ int WX_GRID::GetVisibleWidth( int aCol, bool aHeader, bool aContents, bool aKeep
         {
             EnsureColLabelsVisible();
 
-            // The 1.1 scale factor is due to the fact headers use a bold font, bigger than
-            // the normal font.
-            size = std::max( size, int( GetTextExtent( GetColLabelValue( aCol ) + "M" ).x * 1.1 ) );
+            size = std::max( size, int( GetTextExtent( GetColLabelValue( aCol ) + "M" ).x ) );
         }
 
         for( int row = 0; aContents && row < GetNumberRows(); row++ )
@@ -421,10 +556,7 @@ int WX_GRID::GetVisibleWidth( int aCol, bool aHeader, bool aContents, bool aKeep
 
 void WX_GRID::EnsureColLabelsVisible()
 {
-    // The 1.1 scale factor is due to the fact row labels use a bold font, bigger than
-    // the normal font
-    // TODO: use a better way to evaluate the text size, for bold font
-    int line_height = int( GetTextExtent( "Mj" ).y * 1.1 ) + 3;
+    int line_height = int( GetTextExtent( "Mj" ).y ) + 3;
     int row_height = GetColLabelSize();
     int initial_row_height = row_height;
 

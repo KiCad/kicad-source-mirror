@@ -38,7 +38,7 @@ DIALOG_CONFIGURE_PATHS_BASE::DIALOG_CONFIGURE_PATHS_BASE( wxWindow* parent, wxWi
 	m_EnvVars->EnableDragColSize( true );
 	m_EnvVars->SetColLabelValue( 0, _("Name") );
 	m_EnvVars->SetColLabelValue( 1, _("Path") );
-	m_EnvVars->SetColLabelSize( 22 );
+	m_EnvVars->SetColLabelSize( wxGRID_AUTOSIZE );
 	m_EnvVars->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows

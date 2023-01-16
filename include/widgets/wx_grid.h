@@ -138,10 +138,20 @@ public:
 
 protected:
     /**
-     * A re-implementation of wxGrid::DrawColLabel which left-aligns the first column when
-     * there are no row labels.
+     * A re-implementation of wxGrid::DrawColLabel which left-aligns the first column and draws
+     * flat borders.
      */
     void DrawColLabel( wxDC& dc, int col ) override;
+
+    /**
+     * A re-implementation of wxGrid::DrawRowLabel which draws flat borders.
+     */
+    void DrawRowLabel( wxDC& dc, int row ) override;
+
+    /**
+     * A re-implementation of wxGrid::DrawCornerLabel which draws flat borders.
+     */
+    void DrawCornerLabel( wxDC& dc ) override;
 
     void onGridColMove( wxGridEvent& aEvent );
     void onGridCellSelect( wxGridEvent& aEvent );
