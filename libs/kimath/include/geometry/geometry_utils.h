@@ -150,7 +150,7 @@ template <typename in_type, typename ret_type = in_type, typename pad_type = uns
           typename = typename std::enable_if<std::is_unsigned<pad_type>::value>::type>
 VECTOR2<ret_type> GetClampedCoords( const VECTOR2<in_type>& aCoords, pad_type aPadding = 1u )
 {
-    typedef std::numeric_limits<int> coord_limits;
+    typedef std::numeric_limits<int32_t> coord_limits;
 
     long long max = static_cast<long long>( coord_limits::max() ) - aPadding;
     long long min = -max;
