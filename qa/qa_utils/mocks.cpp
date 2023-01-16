@@ -21,7 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <pgm_base.h>
 #include <kiface_base.h>
 #include <confirm.h>
 #include <pcb_edit_frame.h>
@@ -38,6 +37,7 @@
 #include <router/router_tool.h>
 #include <dialog_find.h>
 #include <dialog_filter_selection.h>
+#include <zone_filler.h>
 
 FP_LIB_TABLE GFootprintTable;
 
@@ -397,8 +397,6 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
 }
 
 
-
-
 int PCB_SELECTION_TOOL::updateSelection( const TOOL_EVENT& aEvent )
 {
     return 0;
@@ -457,6 +455,11 @@ void PCB_TOOL_BASE::setTransitions()
 bool PCB_TOOL_BASE::Is45Limited() const
 {
     return false;
+}
+
+
+ZONE_FILLER::~ZONE_FILLER()
+{
 }
 
 
