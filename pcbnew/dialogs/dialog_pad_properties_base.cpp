@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -176,7 +176,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_shapePropsBook->AddPage( m_roudingProps, _("a page"), false );
 	m_chamferProps = new wxPanel( m_shapePropsBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxFlexGridSizer* fgSizerChamferProps;
-	fgSizerChamferProps = new wxFlexGridSizer( 0, 3, 4, 0 );
+	fgSizerChamferProps = new wxFlexGridSizer( 0, 2, 4, 0 );
 	fgSizerChamferProps->AddGrowableCol( 1 );
 	fgSizerChamferProps->SetFlexibleDirection( wxBOTH );
 	fgSizerChamferProps->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -187,12 +187,18 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	fgSizerChamferProps->Add( m_chamferRatioLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
+	wxBoxSizer* bSizer29;
+	bSizer29 = new wxBoxSizer( wxHORIZONTAL );
+
 	m_chamferRatioCtrl = new TEXT_CTRL_EVAL( m_chamferProps, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerChamferProps->Add( m_chamferRatioCtrl, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	bSizer29->Add( m_chamferRatioCtrl, 1, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_chamferRatioUnits = new wxStaticText( m_chamferProps, wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_chamferRatioUnits->Wrap( -1 );
-	fgSizerChamferProps->Add( m_chamferRatioUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	bSizer29->Add( m_chamferRatioUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+
+	fgSizerChamferProps->Add( bSizer29, 1, wxEXPAND, 5 );
 
 	m_staticTextChamferCorner = new wxStaticText( m_chamferProps, wxID_ANY, _("Chamfer corners:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextChamferCorner->Wrap( -1 );
@@ -226,7 +232,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_shapePropsBook->AddPage( m_chamferProps, _("a page"), false );
 	m_mixedProps = new wxPanel( m_shapePropsBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxFlexGridSizer* fgMixedProps;
-	fgMixedProps = new wxFlexGridSizer( 0, 3, 4, 0 );
+	fgMixedProps = new wxFlexGridSizer( 0, 2, 4, 0 );
 	fgMixedProps->AddGrowableCol( 1 );
 	fgMixedProps->SetFlexibleDirection( wxBOTH );
 	fgMixedProps->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -237,12 +243,18 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	fgMixedProps->Add( m_mixedChamferRatioLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
+	wxBoxSizer* bSizer30;
+	bSizer30 = new wxBoxSizer( wxHORIZONTAL );
+
 	m_mixedChamferRatioCtrl = new TEXT_CTRL_EVAL( m_mixedProps, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgMixedProps->Add( m_mixedChamferRatioCtrl, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	bSizer30->Add( m_mixedChamferRatioCtrl, 1, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_mixedChamferRatioUnits = new wxStaticText( m_mixedProps, wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_mixedChamferRatioUnits->Wrap( -1 );
-	fgMixedProps->Add( m_mixedChamferRatioUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	bSizer30->Add( m_mixedChamferRatioUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+
+	fgMixedProps->Add( bSizer30, 1, wxEXPAND, 5 );
 
 	m_staticTextChamferCorner1 = new wxStaticText( m_mixedProps, wxID_ANY, _("Chamfer corners:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextChamferCorner1->Wrap( -1 );
@@ -269,21 +281,24 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	fgMixedProps->Add( gMixedCornersSizer, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
-
-	fgMixedProps->Add( 0, 0, 1, wxEXPAND, 5 );
-
 	m_mixedCornerRatioLabel = new wxStaticText( m_mixedProps, wxID_ANY, _("Corner size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_mixedCornerRatioLabel->Wrap( -1 );
 	m_mixedCornerRatioLabel->SetToolTip( _("Corner radius in percent  of the pad width.\nThe width is the smaller value between size X and size Y.\nThe max value is 50 percent.") );
 
 	fgMixedProps->Add( m_mixedCornerRatioLabel, 0, wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
+	wxBoxSizer* bSizer31;
+	bSizer31 = new wxBoxSizer( wxHORIZONTAL );
+
 	m_mixedCornerRatioCtrl = new TEXT_CTRL_EVAL( m_mixedProps, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgMixedProps->Add( m_mixedCornerRatioCtrl, 0, wxEXPAND|wxBOTTOM|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer31->Add( m_mixedCornerRatioCtrl, 1, wxBOTTOM|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_mixedCornerRatioUnits = new wxStaticText( m_mixedProps, wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_mixedCornerRatioUnits->Wrap( -1 );
-	fgMixedProps->Add( m_mixedCornerRatioUnits, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer31->Add( m_mixedCornerRatioUnits, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	fgMixedProps->Add( bSizer31, 1, wxEXPAND, 5 );
 
 
 	m_mixedProps->SetSizer( fgMixedProps );
