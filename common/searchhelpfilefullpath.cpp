@@ -41,7 +41,7 @@ wxString SearchHelpFileFullPath( const wxString& aBaseName )
     SystemDirsAppend( &basePaths );
 
 #if defined( DEBUG )
-    basePaths.Show( wxString( __func__ ) + ": basePaths" );
+    basePaths.Show( wxString( __func__ ) + wxS( ": basePaths" ) );
 #endif
 
     // By default, the documentation from kicad-doc is installed to a folder called "help" with
@@ -58,10 +58,10 @@ wxString SearchHelpFileFullPath( const wxString& aBaseName )
 
     // short form of the current locale (e.g., "fr")
     // wxLocale::GetName() does not always return the short form
-    localeNameDirs.Add( currentLocale->GetName().BeforeLast( '_' ) );
+    localeNameDirs.Add( currentLocale->GetName().BeforeLast( wxS( '_' ) ) );
 
     // plain English (in case a localised version of the help file cannot be found)
-    localeNameDirs.Add( "en" );
+    localeNameDirs.Add( wxS( "en" ) );
 
     for( wxString& locale : localeNameDirs )
     {
@@ -72,37 +72,38 @@ wxString SearchHelpFileFullPath( const wxString& aBaseName )
             wxFileName path( base, wxEmptyString );
 
             // add <base>/help/<locale>/
-            path.AppendDir( "help" );
+            path.AppendDir( wxS( "help" ) );
             path.AppendDir( locale );
             docPaths.AddPaths( path.GetPath() );
 
             // add <base>/doc/help/<locale>/
-            path.InsertDir( path.GetDirCount() - 2, "doc" );
+            path.InsertDir( path.GetDirCount() - 2, wxS( "doc" ) );
             docPaths.AddPaths( path.GetPath() );
 
             // add <base>/doc/kicad/help/<locale>/
-            path.InsertDir( path.GetDirCount() - 2, "kicad" );
+            path.InsertDir( path.GetDirCount() - 2, wxS( "kicad" ) );
             docPaths.AddPaths( path.GetPath() );
         }
 
 #if defined( DEBUG )
-        docPaths.Show( wxString( __func__ ) + ": docPaths (" + locale + ")" );
+        docPaths.Show( wxString( __func__ ) + wxS( ": docPaths (" ) + locale + wxS( ")" ) );
 #endif
 
         // search HTML first, as it is the preferred format for help files
-        wxLogTrace( tracePathsAndFiles, "Checking SEARCH_STACK for file %s.html", aBaseName );
-        helpFile = docPaths.FindValidPath( aBaseName + ".html" );
+        wxLogTrace( tracePathsAndFiles, wxS( "Checking SEARCH_STACK for file %s.html" ),
+                    aBaseName );
+        helpFile = docPaths.FindValidPath( aBaseName + wxS( ".html" ) );
 
         if( !helpFile.IsEmpty() )
         {
             // prepend URI protocol to open the file in a browser
-            helpFile = "file://" + helpFile;
+            helpFile = wxS( "file://" ) + helpFile;
             break;
         }
 
         // search PDF only when no corresponding HTML file was found
-        wxLogTrace( tracePathsAndFiles, "Checking SEARCH_STACK for file %s.pdf", aBaseName );
-        helpFile = docPaths.FindValidPath( aBaseName + ".pdf" );
+        wxLogTrace( tracePathsAndFiles, wxS( "Checking SEARCH_STACK for file %s.pdf" ), aBaseName );
+        helpFile = docPaths.FindValidPath( aBaseName + wxS( ".pdf" ) );
 
         if( !helpFile.IsEmpty() )
             break;

@@ -143,13 +143,13 @@ bool PROJECT::IsNullProject() const
 
 const wxString PROJECT::SymbolLibTableName() const
 {
-    return libTableName( "sym-lib-table" );
+    return libTableName( wxS( "sym-lib-table" ) );
 }
 
 
 const wxString PROJECT::FootprintLibTblName() const
 {
-    return libTableName( "fp-lib-table" );
+    return libTableName( wxS( "fp-lib-table" ) );
 }
 
 

@@ -134,7 +134,7 @@ void ACTION_MENU::DisplayTitle( bool aDisplay )
 
 wxMenuItem* ACTION_MENU::Add( const wxString& aLabel, int aId, BITMAPS aIcon )
 {
-    wxASSERT_MSG( FindItem( aId ) == nullptr, "Duplicate menu IDs!" );
+    wxASSERT_MSG( FindItem( aId ) == nullptr, wxS( "Duplicate menu IDs!" ) );
 
     wxMenuItem* item = new wxMenuItem( this, aId, aLabel, wxEmptyString, wxITEM_NORMAL );
 
@@ -148,7 +148,7 @@ wxMenuItem* ACTION_MENU::Add( const wxString& aLabel, int aId, BITMAPS aIcon )
 wxMenuItem* ACTION_MENU::Add( const wxString& aLabel, const wxString& aTooltip, int aId,
                               BITMAPS aIcon, bool aIsCheckmarkEntry )
 {
-    wxASSERT_MSG( FindItem( aId ) == nullptr, "Duplicate menu IDs!" );
+    wxASSERT_MSG( FindItem( aId ) == nullptr, wxS( "Duplicate menu IDs!" ) );
 
     wxMenuItem* item = new wxMenuItem( this, aId, aLabel, aTooltip,
                                        aIsCheckmarkEntry ? wxITEM_CHECK : wxITEM_NORMAL );
@@ -185,7 +185,7 @@ wxMenuItem* ACTION_MENU::Add( ACTION_MENU* aMenu )
 {
     m_submenus.push_back( aMenu );
 
-    wxASSERT_MSG( !aMenu->m_title.IsEmpty(), "Set a title for ACTION_MENU using SetTitle()" );
+    wxASSERT_MSG( !aMenu->m_title.IsEmpty(), wxS( "Set a title for ACTION_MENU using SetTitle()" ) );
 
     if( !!aMenu->m_icon )
     {
@@ -209,7 +209,7 @@ void ACTION_MENU::AddClose( const wxString& aAppname )
          wxID_CLOSE,
          BITMAPS::exit );
 #else
-    Add( _( "Close" ) + "\tCtrl+W",
+    Add( _( "Close" ) + wxS( "\tCtrl+W" ),
          wxString::Format( _( "Close %s" ), aAppname ),
          wxID_CLOSE,
          BITMAPS::exit );
@@ -223,7 +223,7 @@ void ACTION_MENU::AddQuitOrClose( KIFACE_BASE* aKiface, wxString aAppname )
     {
         // Don't use ACTIONS::quit; wxWidgets moves this on OSX and expects to find it via
         // wxID_EXIT
-        Add( _( "Quit" ) + "\tCtrl+Q",
+        Add( _( "Quit" ) + wxS( "\tCtrl+Q" ),
              wxString::Format( _( "Quit %s" ), aAppname ),
              wxID_EXIT,
              BITMAPS::exit );
@@ -532,7 +532,7 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
     // clients that don't supply a tool will have to check GetSelected() themselves
     if( evt && m_tool )
     {
-        wxLogTrace( kicadTraceToolStack, "ACTION_MENU::OnMenuEvent %s", evt->Format() );
+        wxLogTrace( kicadTraceToolStack, wxS( "ACTION_MENU::OnMenuEvent %s" ), evt->Format() );
 
         // WARNING: if you're squeamish, look away.
         // What follows is a series of egregious hacks necessitated by a lack of information from
@@ -662,7 +662,7 @@ wxMenuItem* ACTION_MENU::appendCopy( const wxMenuItem* aSource )
     if( aSource->IsSubMenu() )
     {
         ACTION_MENU* menu = dynamic_cast<ACTION_MENU*>( aSource->GetSubMenu() );
-        wxASSERT_MSG( menu, "Submenus are expected to be a ACTION_MENU" );
+        wxASSERT_MSG( menu, wxS( "Submenus are expected to be a ACTION_MENU" ) );
 
         if( menu )
         {

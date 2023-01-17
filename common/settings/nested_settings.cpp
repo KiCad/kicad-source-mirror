@@ -134,7 +134,7 @@ bool NESTED_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
         {
             ( *m_parent->m_internals )[m_path].update( *m_internals );
 
-            wxLogTrace( traceSettings, "Stored NESTED_SETTINGS %s with schema %d",
+            wxLogTrace( traceSettings, wxS( "Stored NESTED_SETTINGS %s with schema %d" ),
                         GetFilename(),
                         m_schemaVersion );
         }
@@ -143,7 +143,7 @@ bool NESTED_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
     }
     catch( ... )
     {
-        wxLogTrace( traceSettings, "NESTED_SETTINGS %s: Could not store to %s at %s",
+        wxLogTrace( traceSettings, wxS( "NESTED_SETTINGS %s: Could not store to %s at %s" ),
                     m_filename,
                     m_parent->GetFilename(),
                     m_path );

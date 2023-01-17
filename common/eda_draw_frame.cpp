@@ -434,7 +434,7 @@ void EDA_DRAW_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
 
 void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
 {
-    wxCHECK_RET( m_gridSelectBox, "m_gridSelectBox uninitialized" );
+    wxCHECK_RET( m_gridSelectBox, wxS( "m_gridSelectBox uninitialized" ) );
 
     int idx = m_gridSelectBox->GetCurrentSelection();
 
@@ -540,7 +540,7 @@ void EDA_DRAW_FRAME::UpdateZoomSelectBox()
 
 void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
 {
-    wxCHECK_RET( m_zoomSelectBox, "m_zoomSelectBox uninitialized" );
+    wxCHECK_RET( m_zoomSelectBox, wxS( "m_zoomSelectBox uninitialized" ) );
 
     int id = m_zoomSelectBox->GetCurrentSelection();
 
@@ -609,7 +609,7 @@ void EDA_DRAW_FRAME::DisplayGridMsg()
 {
     wxString msg;
 
-    msg.Printf( "grid %s", MessageTextFromValue( GetCanvas()->GetGAL()->GetGridSize().x, false ) );
+    msg.Printf( wxS( "grid %s" ), MessageTextFromValue( GetCanvas()->GetGAL()->GetGridSize().x, false ) );
 
     SetStatusText( msg, 4 );
 }
@@ -1087,7 +1087,7 @@ bool EDA_DRAW_FRAME::LibraryFileBrowser( bool doOpen, wxFileName& aFilename,
     {
         // Ensure the file has a dummy name, otherwise GTK will display the regex from the filter
         if( aFilename.GetName().empty() )
-            aFilename.SetName( "Library" );
+            aFilename.SetName( wxS( "Library" ) );
 
         wxFileDialog dlg( this, prompt, defaultDir, aFilename.GetFullName(),
                           wildcard, doOpen ? wxFD_OPEN | wxFD_FILE_MUST_EXIST

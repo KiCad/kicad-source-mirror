@@ -43,21 +43,21 @@
 #include <eda_doc.h>
 #include <wx/msgdlg.h>
 
-#define URL_GET_INVOLVED "https://kicad.org/contribute/"
-#define URL_DONATE "https://go.kicad.org/app-donate"
-#define URL_DOCUMENTATION "https://docs.kicad.org/"
+#define URL_GET_INVOLVED wxS( "https://kicad.org/contribute/" )
+#define URL_DONATE wxS( "https://go.kicad.org/app-donate" )
+#define URL_DOCUMENTATION wxS( "https://docs.kicad.org/" )
 
 
 /// URL to launch a new issue with pre-populated description
 wxString COMMON_CONTROL::m_bugReportUrl =
-        "https://gitlab.com/kicad/code/kicad/issues/new?issue[description]=%s";
+        wxS( "https://gitlab.com/kicad/code/kicad/issues/new?issue[description]=%s" );
 
 
 /// Issue template to use for reporting bugs (this should not be translated)
-wxString COMMON_CONTROL::m_bugReportTemplate =
+wxString COMMON_CONTROL::m_bugReportTemplate = wxS(
         "```\n"
         "%s\n"
-        "```";
+        "```" );
 
 
 void COMMON_CONTROL::Reset( RESET_REASON aReason )
@@ -216,7 +216,7 @@ int COMMON_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
             if( dlg.ShowModal() != wxID_YES )
                 return -1;
 
-            helpFile = baseUrl + names[0] + "/";
+            helpFile = baseUrl + names[0] + wxS( "/" );
         }
     }
     else
@@ -236,7 +236,7 @@ int COMMON_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
             if( dlg.ShowModal() != wxID_YES )
                 return -1;
 
-            helpFile = baseUrl + base_name + "/";
+            helpFile = baseUrl + base_name + wxS( "/" );
         }
     }
 

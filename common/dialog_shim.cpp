@@ -405,8 +405,8 @@ void DIALOG_SHIM::OnPaint( wxPaintEvent &event )
 
 void DIALOG_SHIM::OnModify()
 {
-    if( !GetTitle().StartsWith( "*" ) )
-        SetTitle( "*" + GetTitle() );
+    if( !GetTitle().StartsWith( wxS( "*" ) ) )
+        SetTitle( wxS( "*" ) + GetTitle() );
 }
 
 

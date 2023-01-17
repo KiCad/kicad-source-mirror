@@ -30,7 +30,7 @@
 const wxString IO_ERROR::What() const
 {
 #ifdef DEBUG
-     return wxString( "IO_ERROR: " ) + Problem() + "\n\n" + Where();
+     return wxString( wxS( "IO_ERROR: " ) ) + Problem() + wxS("\n\n" ) + Where();
 #else
      return Problem();
 #endif

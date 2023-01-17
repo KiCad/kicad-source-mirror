@@ -107,7 +107,7 @@ wxString EDA_UNIT_UTILS::GetText( EDA_UNITS aUnits, EDA_DATA_TYPE aType )
     case EDA_UNITS::INCHES:      label = wxT( " in" );   break;
     case EDA_UNITS::PERCENT:     label = wxT( "%" );     break;
     case EDA_UNITS::UNSCALED:                            break;
-    default: UNIMPLEMENTED_FOR( "Unknown units" );       break;
+    default: UNIMPLEMENTED_FOR( wxS( "Unknown units" ) );       break;
     }
 
     switch( aType )
@@ -115,7 +115,7 @@ wxString EDA_UNIT_UTILS::GetText( EDA_UNITS aUnits, EDA_DATA_TYPE aType )
     case EDA_DATA_TYPE::VOLUME:   label += wxT( "³" );   break;
     case EDA_DATA_TYPE::AREA:     label += wxT( "²" );   break;
     case EDA_DATA_TYPE::DISTANCE:                        break;
-    default: UNIMPLEMENTED_FOR( "Unknown measurement" ); break;
+    default: UNIMPLEMENTED_FOR( wxS( "Unknown measurement" ) ); break;
     }
 
     return label;
@@ -496,7 +496,7 @@ double EDA_UNIT_UTILS::UI::DoubleValueFromString( const EDA_IU_SCALE& aIuScale, 
         {
             aUnits = EDA_UNITS::INCHES;
         }
-        else if( unit == "oz" ) // 1 oz = 1.37 mils
+        else if( unit == wxT( "oz" ) ) // 1 oz = 1.37 mils
         {
             aUnits = EDA_UNITS::MILS;
             dtmp *= 1.37;

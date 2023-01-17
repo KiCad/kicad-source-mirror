@@ -243,7 +243,7 @@ public:
     {
         wxFileName file( aFilePath );
 
-        if( file.GetExt() == "json" )
+        if( file.GetExt() == wxS( "json" ) )
             m_action( file );
 
         return wxDIR_CONTINUE;
@@ -299,14 +299,14 @@ void SETTINGS_MANAGER::loadAllColorSettings()
 
     wxFileName third_party_path;
     const ENV_VAR_MAP& env = Pgm().GetLocalEnvVariables();
-    auto               it = env.find( "KICAD6_3RD_PARTY" );
+    auto               it = env.find( wxS( "KICAD6_3RD_PARTY" ) );
 
     if( it != env.end() && !it->second.GetValue().IsEmpty() )
         third_party_path.SetPath( it->second.GetValue() );
     else
         third_party_path.SetPath( PATHS::GetDefault3rdPartyPath() );
 
-    third_party_path.AppendDir( "colors" );
+    third_party_path.AppendDir( wxS( "colors" ) );
 
     wxDir third_party_colors_dir( third_party_path.GetFullPath() );
     wxString color_settings_path = GetColorSettingsPath();
@@ -494,7 +494,7 @@ bool SETTINGS_MANAGER::MigrateIfNeeded()
         return true;
     }
 
-    wxFileName path( GetUserSettingsPath(), "" );
+    wxFileName path( GetUserSettingsPath(), wxS( "" ) );
     wxLogTrace( traceSettings, wxT( "Using settings path %s" ), path.GetFullPath() );
 
     if( path.DirExists() )
@@ -580,11 +580,11 @@ bool SETTINGS_MANAGER::GetPreviousVersionPaths( std::vector<wxString>* aPaths )
     wxDir dir;
     std::vector<wxFileName> base_paths;
 
-    base_paths.emplace_back( wxFileName( calculateUserSettingsPath( false ), "" ) );
+    base_paths.emplace_back( wxFileName( calculateUserSettingsPath( false ), wxS( "" ) ) );
 
     // If the env override is set, also check the default paths
     if( wxGetEnv( wxT( "KICAD_CONFIG_HOME" ), nullptr ) )
-        base_paths.emplace_back( wxFileName( calculateUserSettingsPath( false, false ), "" ) );
+        base_paths.emplace_back( wxFileName( calculateUserSettingsPath( false, false ), wxS( "" ) ) );
 
 #ifdef __WXGTK__
     // When running inside FlatPak, KIPLATFORM::ENV::GetUserConfigPath() will return a sandboxed
@@ -594,12 +594,12 @@ bool SETTINGS_MANAGER::GetPreviousVersionPaths( std::vector<wxString>* aPaths )
     // for it.
     {
         wxFileName wxGtkPath;
-        wxGtkPath.AssignDir( "~/.config/kicad" );
+        wxGtkPath.AssignDir( wxS( "~/.config/kicad" ) );
         wxGtkPath.MakeAbsolute();
         base_paths.emplace_back( wxGtkPath.GetPath() );
 
         // We also want to pick up regular flatpak if we are nightly
-        wxGtkPath.AssignDir( "~/.var/app/org.kicad.KiCad/config/kicad" );
+        wxGtkPath.AssignDir( wxS( "~/.var/app/org.kicad.KiCad/config/kicad" ) );
         wxGtkPath.MakeAbsolute();
         base_paths.emplace_back( wxGtkPath.GetPath() );
     }
@@ -684,7 +684,7 @@ bool SETTINGS_MANAGER::GetPreviousVersionPaths( std::vector<wxString>* aPaths )
 
 bool SETTINGS_MANAGER::IsSettingsPathValid( const wxString& aPath )
 {
-    wxFileName test( aPath, "kicad_common" );
+    wxFileName test( aPath, wxS( "kicad_common" ) );
 
     if( test.Exists() )
         return true;
@@ -700,7 +700,7 @@ wxString SETTINGS_MANAGER::GetColorSettingsPath()
     wxFileName path;
 
     path.AssignDir( GetUserSettingsPath() );
-    path.AppendDir( "colors" );
+    path.AppendDir( wxS( "colors" ) );
 
     if( !path.DirExists() )
     {
@@ -936,7 +936,7 @@ bool SETTINGS_MANAGER::UnloadProject( PROJECT* aProject, bool aSave )
         LoadProject( "" );
 
     // Remove the reference in the environment to the previous project
-    wxSetEnv( PROJECT_VAR_NAME, "" );
+    wxSetEnv( PROJECT_VAR_NAME, wxS( "" ) );
 
     // Release lock on the file, in case we had one
     m_project_lock = nullptr;
@@ -1213,7 +1213,7 @@ bool SETTINGS_MANAGER::TriggerBackupIfNeeded( REPORTER& aReporter ) const
             {
                 wxDateTime dt;
                 wxString fn( wxFileName( aFile ).GetName() );
-                fn.Replace( prefix, "" );
+                fn.Replace( prefix, wxS( "" ) );
                 dt.ParseFormat( fn, backupDateTimeFormat );
                 return dt;
             };
