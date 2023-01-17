@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -166,10 +166,12 @@ bool AskLoadBoardFileName( PCB_EDIT_FRAME* aParent, int* aCtl, wxString* aFileNa
 
             PLUGIN::RELEASER plugin( IO_MGR::PluginFind( loaders[ii].pluginType ) );
             wxCHECK( plugin, false );
-            allWildcards += wxT( "*." ) + formatWildcardExt( plugin->GetFileExtension() ) + wxT( ";" );
+            allWildcards += wxT( "*." ) + formatWildcardExt( plugin->GetFileExtension() ) +
+                            wxT( ";" );
         }
 
-        fileFilters = _( "All supported formats|" ) + allWildcards + wxT( "|" ) + fileFilters;
+        fileFilters = _( "All supported formats" ) + wxT( "|" ) + allWildcards + wxT( "|" ) +
+                      fileFilters;
     }
 
 

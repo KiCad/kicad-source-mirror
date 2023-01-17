@@ -4,7 +4,7 @@
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2013 CERN (www.cern.ch)
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -616,7 +616,8 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
         allWildcards += wxS( "*." ) + formatWildcardExt( plugin->GetFileExtension() ) + wxS( ";" );
     }
 
-    fileFilters = _( "All supported formats|" ) + allWildcards + wxS( "|" ) + fileFilters;
+    fileFilters = _( "All supported formats" ) + wxS( "|" ) + allWildcards + wxS( "|" ) +
+                  fileFilters;
 
     wxFileDialog dlg( this, _( "Import Schematic" ), path, wxEmptyString, fileFilters,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST ); // TODO
