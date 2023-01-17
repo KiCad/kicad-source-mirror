@@ -665,11 +665,11 @@ private:
 
     static bool BoolFromString( wxString aValue )
     {
-        if( aValue == "1" )
+        if( aValue == wxS( "1" ) )
         {
             return true;
         }
-        else if( aValue == "0" )
+        else if( aValue == wxS( "0" ) )
         {
             return false;
         }

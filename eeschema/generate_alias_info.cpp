@@ -25,24 +25,24 @@
 #include <symbol_lib_table.h>
 #include <wx/log.h>
 
-static const wxString DescriptionFormat =
+static const wxString DescriptionFormat = wxS(
     "<b>__NAME__</b>"
     "__ALIASOF__"
     "__DESC__"
     "__KEY__"
     "<hr><table border=0>"
     "__FIELDS__"
-    "</table>";
+    "</table>" );
 
-static const wxString AliasOfFormat =   "<br><i>" + _( "Derived from" ) + " %s (%s)</i>";
-static const wxString DescFormat =      "<br>%s";
-static const wxString KeywordsFormat =  "<br>" + _( "Keywords" ) + ": %s";
-static const wxString FieldFormat =
+static const wxString AliasOfFormat =   wxS( "<br><i>" ) + _( "Derived from" ) + wxS( " %s (%s)</i>" );
+static const wxString DescFormat =      wxS( "<br>%s" );
+static const wxString KeywordsFormat =  wxS( "<br>" ) + _( "Keywords" ) + wxS( ": %s" );
+static const wxString FieldFormat = wxS(
     "<tr>"
     "   <td><b>__NAME__</b></td>"
     "   <td>__VALUE__</td>"
-    "</tr>";
-static const wxString DatasheetLinkFormat = "<a href=\"__HREF__\">__TEXT__</a>";
+    "</tr>" );
+static const wxString DatasheetLinkFormat = wxS( "<a href=\"__HREF__\">__TEXT__</a>" );
 
 
 class FOOTPRINT_INFO_GENERATOR
@@ -106,7 +106,7 @@ public:
 protected:
     void SetHtmlName()
     {
-        m_html.Replace( "__NAME__", EscapeHTML( UnescapeString( m_symbol->GetName() ) ) );
+        m_html.Replace( wxS( "__NAME__" ), EscapeHTML( UnescapeString( m_symbol->GetName() ) ) );
     }
 
 
@@ -119,7 +119,7 @@ protected:
         else
         {
             wxString root_name = _( "Unknown" );
-            wxString root_desc = "";
+            wxString root_desc = wxS( "" );
 
             std::shared_ptr< LIB_SYMBOL > parent = m_symbol->GetParent().lock();
 
@@ -129,7 +129,7 @@ protected:
                 root_desc = parent->GetDescription();
             }
 
-            m_html.Replace( "__ALIASOF__", wxString::Format(  AliasOfFormat,
+            m_html.Replace( wxS( "__ALIASOF__" ), wxString::Format(  AliasOfFormat,
                                                               EscapeHTML( UnescapeString( root_name ) ),
                                                               EscapeHTML( root_desc ) ) );
         }
@@ -140,7 +140,7 @@ protected:
     {
         wxString raw_desc = m_symbol->GetDescription();
 
-        m_html.Replace( "__DESC__", wxString::Format( DescFormat, EscapeHTML( raw_desc ) ) );
+        m_html.Replace( wxS( "__DESC__" ), wxString::Format( DescFormat, EscapeHTML( raw_desc ) ) );
     }
 
 
@@ -149,9 +149,9 @@ protected:
         wxString keywords = m_symbol->GetKeyWords();
 
         if( keywords.empty() )
-            m_html.Replace( "__KEY__", wxEmptyString );
+            m_html.Replace( wxS( "__KEY__" ), wxEmptyString );
         else
-            m_html.Replace( "__KEY__", wxString::Format( KeywordsFormat, EscapeHTML( keywords ) ) );
+            m_html.Replace( wxS( "__KEY__" ), wxString::Format( KeywordsFormat, EscapeHTML( keywords ) ) );
     }
 
 
@@ -161,7 +161,7 @@ protected:
         wxString text = aField.GetFullText( m_unit > 0 ? m_unit : 1 );
         wxString fieldhtml = FieldFormat;
 
-        fieldhtml.Replace( "__NAME__", EscapeHTML( name ) );
+        fieldhtml.Replace( wxS( "__NAME__" ), EscapeHTML( name ) );
 
         switch( aField.GetId() )
         {
@@ -170,19 +170,19 @@ protected:
 
             if( text.IsEmpty() || text == wxT( "~" ) )
             {
-                fieldhtml.Replace( "__VALUE__", text );
+                fieldhtml.Replace( wxS( "__VALUE__" ), text );
             }
             else
             {
                 wxString datasheetlink = DatasheetLinkFormat;
-                datasheetlink.Replace( "__HREF__", EscapeHTML( text ) );
+                datasheetlink.Replace( wxS( "__HREF__" ), EscapeHTML( text ) );
 
                 if( text.Length() > 75 )
                     text = text.Left( 72 ) + wxT( "..." );
 
-                datasheetlink.Replace( "__TEXT__", EscapeHTML( text ) );
+                datasheetlink.Replace( wxS( "__TEXT__" ), EscapeHTML( text ) );
 
-                fieldhtml.Replace( "__VALUE__", datasheetlink );
+                fieldhtml.Replace( wxS( "__VALUE__" ), datasheetlink );
             }
 
             break;
@@ -192,7 +192,7 @@ protected:
             return wxEmptyString;
 
         default:
-            fieldhtml.Replace( "__VALUE__", EscapeHTML( text ) );
+            fieldhtml.Replace( wxS( "__VALUE__" ), EscapeHTML( text ) );
         }
 
         return fieldhtml;
@@ -230,7 +230,7 @@ protected:
             }
         }
 
-        m_html.Replace( "__FIELDS__", fieldtable );
+        m_html.Replace( wxS( "__FIELDS__" ), fieldtable );
     }
 };
 

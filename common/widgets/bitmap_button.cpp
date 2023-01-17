@@ -343,7 +343,7 @@ void BITMAP_BUTTON::SetIsSeparator()
 
 void BITMAP_BUTTON::Check( bool aCheck )
 {
-    wxASSERT_MSG( hasFlag( wxCONTROL_CHECKABLE ), "Button is not a checkButton." );
+    wxASSERT_MSG( hasFlag( wxCONTROL_CHECKABLE ), wxS( "Button is not a checkButton." ) );
 
     if( aCheck && !hasFlag( wxCONTROL_CHECKED ) )
     {
@@ -361,7 +361,7 @@ void BITMAP_BUTTON::Check( bool aCheck )
 
 bool BITMAP_BUTTON::IsChecked() const
 {
-    wxASSERT_MSG( hasFlag( wxCONTROL_CHECKABLE ), "Button is not a checkButton." );
+    wxASSERT_MSG( hasFlag( wxCONTROL_CHECKABLE ), wxS( "Button is not a checkButton." ) );
 
     return hasFlag( wxCONTROL_CHECKED );
 }

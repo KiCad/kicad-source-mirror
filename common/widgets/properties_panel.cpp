@@ -255,7 +255,7 @@ void PROPERTIES_PANEL::update( const SELECTION& aSelection )
 
             if( !converted )
             {
-                wxFAIL_MSG( "Could not convert wxAny to wxVariant" );
+                wxFAIL_MSG( wxS( "Could not convert wxAny to wxVariant" ) );
                 available = false;
                 break;
             }
@@ -345,7 +345,7 @@ void PROPERTIES_PANEL::onCharHook( wxKeyEvent& aEvent )
         m_grid->CommitChangesFromEditor();
         /* don't skip this one; if we're not the last property we'll also go to the next row */
     }
-    
+
     aEvent.Skip();
 }
 

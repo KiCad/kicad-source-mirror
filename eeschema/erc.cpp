@@ -181,11 +181,11 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
     if( aDrawingSheet )
     {
         wsItems.SetMilsToIUfactor( schIUScale.IU_PER_MILS );
-        wsItems.SetPageNumber( "1" );
+        wsItems.SetPageNumber( wxS( "1" ) );
         wsItems.SetSheetCount( 1 );
-        wsItems.SetFileName( "dummyFilename" );
-        wsItems.SetSheetName( "dummySheet" );
-        wsItems.SetSheetLayer( "dummyLayer" );
+        wsItems.SetFileName( wxS( "dummyFilename" ) );
+        wsItems.SetSheetName( wxS( "dummySheet" ) );
+        wsItems.SetSheetLayer( wxS( "dummyLayer" ) );
         wsItems.SetProject( &m_schematic->Prj() );
         wsItems.BuildDrawItemsList( aDrawingSheet->GetPageInfo(), aDrawingSheet->GetTitleBlock());
     }

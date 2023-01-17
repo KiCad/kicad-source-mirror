@@ -148,20 +148,20 @@ int PIN_NUMBERS::Compare( const wxString& lhs, const wxString& rhs )
         if( symbol2.empty() )
             return 2;
 
-        bool sym1_isnumeric = symbol1.find_first_of( "0123456789" ) != wxString::npos;
-        bool sym2_isnumeric = symbol2.find_first_of( "0123456789" ) != wxString::npos;
+        bool sym1_isnumeric = symbol1.find_first_of( wxS( "0123456789" ) ) != wxString::npos;
+        bool sym2_isnumeric = symbol2.find_first_of( wxS( "0123456789" ) ) != wxString::npos;
 
         if( sym1_isnumeric )
         {
             if( sym2_isnumeric )
             {
                 // numeric comparison
-                wxString::size_type v1 = symbol1.find_first_of( "vV" );
+                wxString::size_type v1 = symbol1.find_first_of( wxS( "vV" ) );
 
                 if( v1 != wxString::npos )
                     symbol1[v1] = '.';
 
-                wxString::size_type v2 = symbol2.find_first_of( "vV" );
+                wxString::size_type v2 = symbol2.find_first_of( wxS( "vV" ) );
 
                 if( v2 != wxString::npos )
                     symbol2[v2] = '.';

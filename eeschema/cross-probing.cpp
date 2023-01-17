@@ -478,11 +478,11 @@ bool findSymbolsAndPins(
         wxString    fullRef = schRef.GetRef() + refNum;
 
         // Skip power symbols
-        if( fullRef.StartsWith( "#" ) )
+        if( fullRef.StartsWith( wxS( "#" ) ) )
             continue;
 
         // Unannotated symbols are not supported
-        if( refNum.compare( "?" ) == 0 )
+        if( refNum.compare( wxS( "?" ) ) == 0 )
             continue;
 
         // Look for whole footprint
@@ -570,11 +570,11 @@ bool sheetContainsOnlyWantedItems(
         wxString fullRef = schRef.GetRef() + refNum;
 
         // Skip power symbols
-        if( fullRef.StartsWith( "#" ) )
+        if( fullRef.StartsWith( wxS( "#" ) ) )
             continue;
 
         // Unannotated symbols are not supported
-        if( refNum.compare( "?" ) == 0 )
+        if( refNum.compare( wxS( "?" ) ) == 0 )
             continue;
 
         if( aSyncSymMap.find( fullRef ) == aSyncSymMap.end() )
@@ -599,7 +599,7 @@ std::optional<std::tuple<SCH_SHEET_PATH, SCH_ITEM*, std::vector<SCH_ITEM*>>>
 findItemsFromSyncSelection( const SCHEMATIC& aSchematic, const std::string aSyncStr,
                             bool aFocusOnFirst )
 {
-    wxArrayString syncArray = wxStringTokenize( aSyncStr, "," );
+    wxArrayString syncArray = wxStringTokenize( aSyncStr, wxS( "," ) );
 
     std::unordered_map<wxString, std::vector<SCH_REFERENCE>>             syncSymMap;
     std::unordered_map<wxString, std::unordered_map<wxString, SCH_PIN*>> syncPinMap;

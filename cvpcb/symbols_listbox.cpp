@@ -35,7 +35,7 @@
 
 
 SYMBOLS_LISTBOX::SYMBOLS_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id ) :
-    ITEMS_LISTBOX_BASE( parent, id ), 
+    ITEMS_LISTBOX_BASE( parent, id ),
     m_warningAttr( std::make_unique<wxListItemAttr>() )
 {
     m_warningAttr->SetBackgroundColour( KIPLATFORM::UI::IsDarkTheme()
@@ -101,7 +101,7 @@ void SYMBOLS_LISTBOX::AppendWarning( int index )
 
 void SYMBOLS_LISTBOX::RemoveWarning( int index )
 {
-    if( auto const found{ std::find( m_symbolWarning.begin(), m_symbolWarning.end(), index ) };                                        
+    if( auto const found{ std::find( m_symbolWarning.begin(), m_symbolWarning.end(), index ) };
         found != m_symbolWarning.end() )
     {
         m_symbolWarning.erase( found );
@@ -121,7 +121,7 @@ wxListItemAttr* SYMBOLS_LISTBOX::OnGetItemAttr( long item ) const
     {
         return m_warningAttr.get();
     }
-    return nullptr;    
+    return nullptr;
 }
 
 
@@ -144,7 +144,7 @@ void SYMBOLS_LISTBOX::SetSelection( int index, bool State )
 
 void SYMBOLS_LISTBOX::OnChar( wxKeyEvent& event )
 {
-    wxLogTrace( kicadTraceKeyEvent, "SYMBOLS_LISTBOX::OnChar %s", dump( event ) );
+    wxLogTrace( kicadTraceKeyEvent, wxS( "SYMBOLS_LISTBOX::OnChar %s" ), dump( event ) );
 
     int key = event.GetKeyCode();
 

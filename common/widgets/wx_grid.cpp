@@ -524,7 +524,7 @@ int WX_GRID::GetVisibleWidth( int aCol, bool aHeader, bool aContents, bool aKeep
             size = GetRowLabelSize();
 
         for( int row = 0; aContents && row < GetNumberRows(); row++ )
-            size = std::max( size, int( GetTextExtent( GetRowLabelValue( row ) + "M" ).x ) );
+            size = std::max( size, int( GetTextExtent( GetRowLabelValue( row ) + wxS( "M" ) ).x ) );
     }
     else
     {
@@ -537,14 +537,14 @@ int WX_GRID::GetVisibleWidth( int aCol, bool aHeader, bool aContents, bool aKeep
         {
             EnsureColLabelsVisible();
 
-            size = std::max( size, int( GetTextExtent( GetColLabelValue( aCol ) + "M" ).x ) );
+            size = std::max( size, int( GetTextExtent( GetColLabelValue( aCol ) + wxS( "M" ) ).x ) );
         }
 
         for( int row = 0; aContents && row < GetNumberRows(); row++ )
         {
             // If we have text, get the size.  Otherwise, use a placeholder for the checkbox
             if( GetTable()->CanGetValueAs( row, aCol, wxGRID_VALUE_STRING ) )
-                size = std::max( size, GetTextExtent( GetCellValue( row, aCol ) + "M" ).x );
+                size = std::max( size, GetTextExtent( GetCellValue( row, aCol ) + wxS( "M" ) ).x );
             else
                 size = std::max( size, GetTextExtent( "MM" ).x );
         }

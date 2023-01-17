@@ -515,7 +515,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     }
 
 #ifdef KICAD_SPICE
-    m_cbExcludeFromSim->SetValue( m_symbol->GetFieldText( SIM_ENABLE_FIELD ) == "0" );
+    m_cbExcludeFromSim->SetValue( m_symbol->GetFieldText( SIM_ENABLE_FIELD ) == wxS( "0" ) );
 #endif
     m_cbExcludeFromBom->SetValue( !m_symbol->GetIncludeInBom() );
     m_cbExcludeFromBoard->SetValue( !m_symbol->GetIncludeOnBoard() );
@@ -1184,7 +1184,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
         }
     }
 
-    m_cbExcludeFromSim->SetValue( simEnable == "0" );
+    m_cbExcludeFromSim->SetValue( simEnable == wxS( "0" ) );
 #endif
 }
 

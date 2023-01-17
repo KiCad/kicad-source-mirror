@@ -86,7 +86,7 @@ bool IncrementLabelMember( wxString& name, int aIncrement )
         {
             name.Remove( ii + 1 );
             //write out a format string with correct number of leading zeroes
-            outputFormat.Printf( "%%0%dld", dCount );
+            outputFormat.Printf( wxS( "%%0%dld" ), dCount );
             //write out the number using the format string
             outputNumber.Printf( outputFormat, number );
             name << outputNumber << suffix;

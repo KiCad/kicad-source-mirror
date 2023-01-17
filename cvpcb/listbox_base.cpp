@@ -82,7 +82,7 @@ void ITEMS_LISTBOX_BASE::UpdateLineWidth( unsigned aLine, wxClientDC& dc )
         str = OnGetItemText( aLine, 0 );
     else
         str = GetItemText( aLine, 0 );
-    str += " ";
+    str += wxS( " " );
 
     dc.GetTextExtent( str, &w, nullptr );
     newWidth += w;

@@ -1155,7 +1155,7 @@ void VIEW::Redraw()
 
 #ifdef KICAD_GAL_PROFILE
     totalRealTime.Stop();
-    wxLogTrace( traceGalProfile, "VIEW::Redraw(): %.1f ms", totalRealTime.msecs() );
+    wxLogTrace( traceGalProfile, wxS( "VIEW::Redraw(): %.1f ms" ), totalRealTime.msecs() );
 #endif /* KICAD_GAL_PROFILE */
 }
 
@@ -1471,7 +1471,7 @@ void VIEW::UpdateItems()
         }
     }
 
-    KI_TRACE( traceGalProfile, "View update: total items %u, geom %u anyUpdated %u\n", cntTotal,
+    KI_TRACE( traceGalProfile, wxS( "View update: total items %u, geom %u anyUpdated %u\n" ), cntTotal,
               cntGeomUpdate, (unsigned) anyUpdated );
 }
 

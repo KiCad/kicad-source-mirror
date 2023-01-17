@@ -496,7 +496,7 @@ void LIB_FIELD::SetName( const wxString& aName )
     // Mandatory field names are fixed.
     if( IsMandatory() )
     {
-        wxFAIL_MSG( "trying to set a MANDATORY_FIELD's name\n" );
+        wxFAIL_MSG( wxS( "trying to set a MANDATORY_FIELD's name\n" ) );
         return;
     }
 

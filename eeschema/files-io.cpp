@@ -613,10 +613,10 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
 
         SCH_PLUGIN::SCH_PLUGIN_RELEASER plugin( SCH_IO_MGR::FindPlugin( loader.second ) );
         wxCHECK( plugin, /*void*/ );
-        allWildcards += "*." + formatWildcardExt( plugin->GetFileExtension() ) + ";";
+        allWildcards += wxS( "*." ) + formatWildcardExt( plugin->GetFileExtension() ) + wxS( ";" );
     }
 
-    fileFilters = _( "All supported formats|" ) + allWildcards + "|" + fileFilters;
+    fileFilters = _( "All supported formats|" ) + allWildcards + wxS( "|" ) + fileFilters;
 
     wxFileDialog dlg( this, _( "Import Schematic" ), path, wxEmptyString, fileFilters,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST ); // TODO

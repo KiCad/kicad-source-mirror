@@ -236,7 +236,7 @@ wxString CONNECTION_SUBGRAPH::GetNetName() const
     if( !m_driver->Connection( &m_sheet ) )
     {
 #ifdef CONNECTIVITY_DEBUG
-        wxASSERT_MSG( false, "Tried to get the net name of an item with no connection" );
+        wxASSERT_MSG( false, wxS( "Tried to get the net name of an item with no connection" ) );
 #endif
 
         return "";
@@ -297,7 +297,7 @@ wxString CONNECTION_SUBGRAPH::driverName( SCH_ITEM* aItem ) const
     }
 
     default:
-        wxFAIL_MSG( "Unhandled item type in GetNameForDriver" );
+        wxFAIL_MSG( wxS( "Unhandled item type in GetNameForDriver" ) );
         break;
     }
 
@@ -779,7 +779,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
 void CONNECTION_GRAPH::buildItemSubGraphs()
 {
     // Recache all bus aliases for later use
-    wxCHECK_RET( m_schematic, "Connection graph cannot be built without schematic pointer" );
+    wxCHECK_RET( m_schematic, wxS( "Connection graph cannot be built without schematic pointer" ) );
 
     SCH_SHEET_LIST all_sheets = m_schematic->GetSheets();
 
@@ -991,7 +991,7 @@ void CONNECTION_GRAPH::collectAllDriverValues()
             {
                 UNITS_PROVIDER unitsProvider( schIUScale, EDA_UNITS::MILLIMETRES );
 
-                wxLogTrace( ConnTrace, "Unexpected strong driver %s",
+                wxLogTrace( ConnTrace, wxS( "Unexpected strong driver %s" ),
                             driver->GetItemDescription( &unitsProvider ) );
                 break;
             }
@@ -1136,7 +1136,7 @@ void CONNECTION_GRAPH::processSubGraphs()
                 while( m_net_name_to_subgraphs_map.count( new_name ) )
                     new_name = create_new_name( connection );
 
-                wxLogTrace( ConnTrace, "%ld (%s) is weakly driven and not unique. Changing to %s.",
+                wxLogTrace( ConnTrace, wxS( "%ld (%s) is weakly driven and not unique. Changing to %s." ),
                             subgraph->m_code, name, new_name );
 
                 alg::delete_matching( *vec, subgraph );
@@ -1177,7 +1177,7 @@ void CONNECTION_GRAPH::processSubGraphs()
                     if( conflict )
                     {
                         wxLogTrace( ConnTrace,
-                                    "%ld (%s) skipped for promotion due to potential conflict",
+                                    wxS( "%ld (%s) skipped for promotion due to potential conflict" ),
                                     subgraph->m_code, name );
                     }
                     else
@@ -1185,7 +1185,7 @@ void CONNECTION_GRAPH::processSubGraphs()
                         UNITS_PROVIDER unitsProvider( schIUScale, EDA_UNITS::MILLIMETRES );
 
                         wxLogTrace( ConnTrace,
-                                    "%ld (%s) weakly driven by unique sheet pin %s, promoting",
+                                    wxS( "%ld (%s) weakly driven by unique sheet pin %s, promoting" ),
                                     subgraph->m_code, name,
                                     subgraph->m_driver->GetItemDescription( &unitsProvider ) );
 
@@ -1277,7 +1277,7 @@ void CONNECTION_GRAPH::processSubGraphs()
 
                             connections_to_check.push_back( c );
                             wxLogTrace( ConnTrace,
-                                        "%lu (%s): Adding secondary driver %s", aSubgraph->m_code,
+                                        wxS( "%lu (%s): Adding secondary driver %s" ), aSubgraph->m_code,
                                         aSubgraph->m_driver_connection->Name( true ),
                                         c->Name( true ) );
                         }
@@ -1356,7 +1356,7 @@ void CONNECTION_GRAPH::processSubGraphs()
                 {
                     if( connection->IsBus() && candidate->m_driver_connection->IsNet() )
                     {
-                         wxLogTrace( ConnTrace, "%lu (%s) has bus child %lu (%s)", subgraph->m_code,
+                         wxLogTrace( ConnTrace, wxS( "%lu (%s) has bus child %lu (%s)" ), subgraph->m_code,
                                      connection->Name(), candidate->m_code, member->Name() );
 
                         subgraph->m_bus_neighbors[member].insert( candidate );
@@ -1364,7 +1364,7 @@ void CONNECTION_GRAPH::processSubGraphs()
                     }
                     else
                     {
-                        wxLogTrace( ConnTrace, "%lu (%s) absorbs neighbor %lu (%s)",
+                        wxLogTrace( ConnTrace, wxS( "%lu (%s) absorbs neighbor %lu (%s)" ),
                                     subgraph->m_code, connection->Name(),
                                     candidate->m_code, candidate->m_driver_connection->Name() );
 
@@ -1392,7 +1392,7 @@ void CONNECTION_GRAPH::processSubGraphs()
         else
             assignNewNetCode( *subgraph->m_driver_connection );
 
-        wxLogTrace( ConnTrace, "Re-resolving drivers for %lu (%s)", subgraph->m_code,
+        wxLogTrace( ConnTrace, wxS( "Re-resolving drivers for %lu (%s)" ), subgraph->m_code,
                     subgraph->m_driver_connection->Name() );
     }
 
@@ -1488,7 +1488,7 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
         if( !subgraph->m_dirty )
             continue;
 
-        wxLogTrace( ConnTrace, "Processing %lu (%s) for propagation", subgraph->m_code,
+        wxLogTrace( ConnTrace, wxS( "Processing %lu (%s) for propagation" ), subgraph->m_code,
                     subgraph->m_driver_connection->Name() );
 
         // For subgraphs that are driven by a global (power port or label) and have more
@@ -1522,7 +1522,7 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
 
                     if( conn->Name() == secondary_name )
                     {
-                        wxLogTrace( ConnTrace, "Global %lu (%s) promoted to %s", candidate->m_code,
+                        wxLogTrace( ConnTrace, wxS( "Global %lu (%s) promoted to %s" ), candidate->m_code,
                                     conn->Name(), subgraph->m_driver_connection->Name() );
 
                         conn->Clone( *subgraph->m_driver_connection );
@@ -1560,14 +1560,14 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
     for( CONNECTION_SUBGRAPH* subgraph : m_driver_subgraphs )
     {
         // All SGs should have been processed by propagateToNeighbors above
-        wxASSERT_MSG( !subgraph->m_dirty, "Subgraph not processed by propagateToNeighbors!" );
+        wxASSERT_MSG( !subgraph->m_dirty, wxS( "Subgraph not processed by propagateToNeighbors!" ) );
 
         if( subgraph->m_bus_parents.size() < 2 )
             continue;
 
         SCH_CONNECTION* conn = subgraph->m_driver_connection;
 
-        wxLogTrace( ConnTrace, "%lu (%s) has multiple bus parents",
+        wxLogTrace( ConnTrace, wxS( "%lu (%s) has multiple bus parents" ),
                     subgraph->m_code, conn->Name() );
 
         wxASSERT( conn->IsNet() );
@@ -1585,7 +1585,7 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
 
                 if( !match )
                 {
-                    wxLogTrace( ConnTrace, "Warning: could not match %s inside %lu (%s)",
+                    wxLogTrace( ConnTrace, wxS( "Warning: could not match %s inside %lu (%s)" ),
                                 conn->Name(), parent->m_code, parent->m_driver_connection->Name() );
                     continue;
                 }
@@ -1594,7 +1594,7 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
                 {
                     wxString old_name = match->Name();
 
-                    wxLogTrace( ConnTrace, "Updating %lu (%s) member %s to %s", parent->m_code,
+                    wxLogTrace( ConnTrace, wxS( "Updating %lu (%s) member %s to %s" ), parent->m_code,
                                 parent->m_driver_connection->Name(), old_name, conn->Name() );
 
                     match->Clone( *conn );
@@ -1841,7 +1841,7 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, boo
                         {
                             if( candidate->GetNameForDriver( label ) == aParent->GetNameForDriver( pin ) )
                             {
-                                wxLogTrace( ConnTrace, "%lu: found child %lu (%s)", aParent->m_code,
+                                wxLogTrace( ConnTrace, wxS( "%lu: found child %lu (%s)" ), aParent->m_code,
                                             candidate->m_code, candidate->m_driver_connection->Name() );
 
                                 candidate->m_hier_parent = aParent;
@@ -1888,7 +1888,7 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, boo
 
                     if( aParent->GetNameForDriver( label ) == candidate->GetNameForDriver( pin ) )
                     {
-                        wxLogTrace( ConnTrace, "%lu: found additional parent %lu (%s)",
+                        wxLogTrace( ConnTrace, wxS( "%lu: found additional parent %lu (%s)" ),
                                     aParent->m_code, candidate->m_code,
                                     candidate->m_driver_connection->Name() );
 
@@ -1943,7 +1943,7 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, boo
                 // This is bad, probably an ERC error
                 if( !member )
                 {
-                    wxLogTrace( ConnTrace, "Could not match bus member %s in %s",
+                    wxLogTrace( ConnTrace, wxS( "Could not match bus member %s in %s" ),
                                 kv.first->Name(), parent->Name() );
                     continue;
                 }
@@ -1962,7 +1962,7 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, boo
                 // Safety check against infinite recursion
                 wxASSERT( neighbor_conn->IsNet() );
 
-                wxLogTrace( ConnTrace, "%lu (%s) connected to bus member %s (local %s)",
+                wxLogTrace( ConnTrace, wxS( "%lu (%s) connected to bus member %s (local %s)" ),
                             neighbor->m_code, neighbor_name, member->Name(), member->LocalName() );
 
                 // Take whichever name is higher priority
@@ -1995,13 +1995,13 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, boo
     // on which subgraph comes up first)
     if( !aSubgraph->m_hier_ports.empty() && !aSubgraph->m_hier_pins.empty() )
     {
-        wxLogTrace( ConnTrace, "%lu (%s) has both hier ports and pins; deferring processing",
+        wxLogTrace( ConnTrace, wxS( "%lu (%s) has both hier ports and pins; deferring processing" ),
                     aSubgraph->m_code, conn->Name() );
         return;
     }
     else if( aSubgraph->m_hier_ports.empty() && aSubgraph->m_hier_pins.empty() )
     {
-        wxLogTrace( ConnTrace, "%lu (%s) has no hier pins or ports; marking clean",
+        wxLogTrace( ConnTrace, wxS( "%lu (%s) has no hier pins or ports; marking clean" ),
                     aSubgraph->m_code, conn->Name() );
         aSubgraph->m_dirty = false;
         return;
@@ -2009,7 +2009,7 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, boo
 
     visited.insert( aSubgraph );
 
-    wxLogTrace( ConnTrace, "Propagating %lu (%s) to subsheets",
+    wxLogTrace( ConnTrace, wxS( "Propagating %lu (%s) to subsheets" ),
                 aSubgraph->m_code, aSubgraph->m_driver_connection->Name() );
 
     visit( aSubgraph );
@@ -2072,7 +2072,7 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, boo
 
     if( bestDriver != aSubgraph )
     {
-        wxLogTrace( ConnTrace, "%lu (%s) overridden by new driver %lu (%s)",
+        wxLogTrace( ConnTrace, wxS( "%lu (%s) overridden by new driver %lu (%s)" ),
                     aSubgraph->m_code, aSubgraph->m_driver_connection->Name(), bestDriver->m_code,
                 bestDriver->m_driver_connection->Name() );
     }
@@ -2106,12 +2106,12 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, boo
 
                 if( !member )
                 {
-                    wxLogTrace( ConnTrace, "WARNING: failed to match stale member %s in %s.",
+                    wxLogTrace( ConnTrace, wxS( "WARNING: failed to match stale member %s in %s." ),
                                 stale_member->Name(), subgraph->m_driver_connection->Name() );
                     continue;
                 }
 
-                wxLogTrace( ConnTrace, "Updating %lu (%s) member %s to %s", subgraph->m_code,
+                wxLogTrace( ConnTrace, wxS( "Updating %lu (%s) member %s to %s" ), subgraph->m_code,
                             subgraph->m_driver_connection->Name(), member->LocalName(),
                             stale_member->Name() );
 
@@ -2228,7 +2228,7 @@ void CONNECTION_GRAPH::recacheSubgraphName( CONNECTION_SUBGRAPH* aSubgraph,
         alg::delete_matching( vec, aSubgraph );
     }
 
-    wxLogTrace( ConnTrace, "recacheSubgraphName: %s => %s", aOldName,
+    wxLogTrace( ConnTrace, wxS( "recacheSubgraphName: %s => %s" ), aOldName,
                 aSubgraph->m_driver_connection->Name() );
 
     m_net_name_to_subgraphs_map[aSubgraph->m_driver_connection->Name()].push_back( aSubgraph );
@@ -2279,7 +2279,7 @@ std::vector<const CONNECTION_SUBGRAPH*> CONNECTION_GRAPH::GetBusesNeedingMigrati
             if( !different )
                 continue;
 
-            wxLogTrace( ConnTrace, "SG %ld (%s) has multiple bus labels", subgraph->m_code,
+            wxLogTrace( ConnTrace, wxS( "SG %ld (%s) has multiple bus labels" ), subgraph->m_code,
                         connection->Name() );
 
             ret.push_back( subgraph );
@@ -2365,7 +2365,7 @@ int CONNECTION_GRAPH::RunERC()
 {
     int error_count = 0;
 
-    wxCHECK_MSG( m_schematic, true, "Null m_schematic in CONNECTION_GRAPH::RunERC" );
+    wxCHECK_MSG( m_schematic, true, wxS( "Null m_schematic in CONNECTION_GRAPH::RunERC" ) );
 
     ERC_SETTINGS& settings = m_schematic->ErcSettings();
 
@@ -3152,7 +3152,7 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
 
     wxString netName = GetResolvedSubgraphName( aSubgraph );
 
-    wxCHECK_MSG( m_schematic, true, "Null m_schematic in CONNECTION_GRAPH::ercCheckLabels" );
+    wxCHECK_MSG( m_schematic, true, wxS( "Null m_schematic in CONNECTION_GRAPH::ercCheckLabels" ) );
 
     // Labels that have multiple pins connected are not dangling (may be used for naming segments)
     // so leave them without errors here

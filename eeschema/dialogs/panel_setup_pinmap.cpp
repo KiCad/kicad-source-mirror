@@ -120,7 +120,7 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
     const int    twiddle = 1;
 #endif
 
-    wxSize        charSize = KIUI::GetTextSize( "X", m_matrixPanel );
+    wxSize        charSize = KIUI::GetTextSize( wxS( "X" ), m_matrixPanel );
     wxPoint       pos( 0, charSize.y * 2 );
     wxStaticText* text;
 

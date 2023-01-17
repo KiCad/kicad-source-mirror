@@ -80,7 +80,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_tcFilterString      = nullptr;
     m_FootprintsList      = FOOTPRINT_LIST::GetInstance( Kiway() );
     m_initialized         = false;
-    m_aboutTitle          = "CvPcb";
+    m_aboutTitle          = wxS( "CvPcb" );
 
     // Give an icon
     wxIcon icon;

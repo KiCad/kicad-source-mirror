@@ -150,7 +150,7 @@ public:
         for( unsigned field_idx = 0; field_idx < m_fields.size(); ++field_idx )
         {
             SCH_FIELD* field = m_fields[field_idx];
-            
+
             if( !field->IsVisible() || !field->CanAutoplace() )
                 continue;
 
@@ -248,7 +248,7 @@ protected:
             case PIN_UP:    return SIDE_BOTTOM;
             case PIN_DOWN:  return SIDE_TOP;
             default:
-                wxFAIL_MSG( "Invalid pin orientation" );
+                wxFAIL_MSG( wxS( "Invalid pin orientation" ) );
                 return SIDE_LEFT;
         }
     }
@@ -278,7 +278,7 @@ protected:
      */
     void getPossibleCollisions( std::vector<SCH_ITEM*>& aItems )
     {
-        wxCHECK_RET( m_screen, "getPossibleCollisions() with null m_screen" );
+        wxCHECK_RET( m_screen, wxS( "getPossibleCollisions() with null m_screen" ) );
 
         BOX2I symbolBox = m_symbol->GetBodyAndPinsBoundingBox();
         std::vector<SIDE_AND_NPINS> sides = getPreferredSides();
@@ -670,7 +670,7 @@ protected:
             field_xcoord = aFieldBox.GetRight();
             break;
         default:
-            wxFAIL_MSG( "Unexpected value for SCH_FIELD::GetHorizJustify()" );
+            wxFAIL_MSG( wxS( "Unexpected value for SCH_FIELD::GetHorizJustify()" ) );
             field_xcoord = aFieldBox.Centre().x; // Most are centered
         }
 
@@ -739,7 +739,7 @@ const AUTOPLACER::SIDE AUTOPLACER::SIDE_RIGHT( 1, 0 );
 void SCH_SYMBOL::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
 {
     if( aManual )
-        wxASSERT_MSG( aScreen, "A SCH_SCREEN pointer must be given for manual autoplacement" );
+        wxASSERT_MSG( aScreen, wxS( "A SCH_SCREEN pointer must be given for manual autoplacement" ) );
 
     AUTOPLACER autoplacer( this, aScreen );
     autoplacer.DoAutoplace( aManual );

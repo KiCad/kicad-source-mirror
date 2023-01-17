@@ -74,7 +74,7 @@ FOOTPRINT_NAME_VALIDATOR::FOOTPRINT_NAME_VALIDATOR( wxString* aValue ) :
     // This list of characters follows the string from footprint.cpp which, in turn mimics the
     // strings from lib_id.cpp
     // TODO: Unify forbidden character lists
-    wxString illegalChars = "%$<>\t\n\r\"\\/:";
+    wxString illegalChars = wxS( "%$<>\t\n\r\"\\/:" );
     SetCharExcludes( illegalChars );
  }
 
@@ -377,7 +377,7 @@ void KIUI::ValidatorTransferToWindowWithoutEvents( wxValidator& aValidator )
 {
     wxWindow* ctrl = aValidator.GetWindow();
 
-    wxCHECK_RET( ctrl != nullptr, "Transferring validator data without a control" );
+    wxCHECK_RET( ctrl != nullptr, wxS( "Transferring validator data without a control" ) );
 
     wxEventBlocker orient_update_blocker( ctrl, wxEVT_ANY );
     aValidator.TransferToWindow();

@@ -250,11 +250,11 @@ bool DIALOG_LIB_TEXTBOX_PROPERTIES::TransferDataFromWindow()
 
 #ifdef __WXMAC__
     // On macOS CTRL+Enter produces '\r' instead of '\n' regardless of EOL setting
-    text.Replace( "\r", "\n" );
+    text.Replace( wxS( "\r" ), wxS( "\n" ) );
 #elif defined( __WINDOWS__ )
     // On Windows, a new line is coded as \r\n.  We use only \n in kicad files and in
     // drawing routines so strip the \r char.
-    text.Replace( "\r", "" );
+    text.Replace( wxS( "\r" ), wxS( "" ) );
 #endif
 
     m_currentText->SetText( text );

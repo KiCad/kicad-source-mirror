@@ -160,8 +160,8 @@ void SCH_JUNCTION::Show( int nestLevel, std::ostream& os ) const
     // XML output:
     wxString s = GetClass();
 
-    NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str() << m_pos << ", " << m_diameter
-                                 << "/>\n";
+    NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str() << m_pos << wxS( ", " ) << m_diameter
+                                 << wxS( "/>\n" );
 }
 #endif
 

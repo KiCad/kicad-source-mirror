@@ -139,11 +139,11 @@ void NUMBER_BADGE::computeSize()
 
     // Determine the size using the string "m999{+}" where the 'm' on the front serves as a margin
     // so the number isn't too close to the curved edge.
-    test = "m";
+    test = wxS( "m" );
     test.Pad( len, '9' );
 
     if( m_currentNumber > m_maxNumber )
-        test += "+";
+        test += wxS( "+" );
 
     dc.SetFont( wxFont( m_textSize, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, BADGE_FONTWEIGHT ) );
     wxSize size = dc.GetTextExtent( test );

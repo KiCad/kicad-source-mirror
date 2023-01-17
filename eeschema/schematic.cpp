@@ -105,7 +105,7 @@ void SCHEMATIC::SetProject( PROJECT* aPrj )
 
 void SCHEMATIC::SetRoot( SCH_SHEET* aRootSheet )
 {
-    wxCHECK_RET( aRootSheet, "Call to SetRoot with null SCH_SHEET!" );
+    wxCHECK_RET( aRootSheet, wxS( "Call to SetRoot with null SCH_SHEET!" ) );
 
     m_rootSheet = aRootSheet;
 
@@ -273,7 +273,7 @@ bool SCHEMATIC::ResolveCrossReference( wxString* token, int aDepth ) const
         if( refSymbol->ResolveTextVar( &remainder, aDepth + 1 ) )
             *token = remainder;
         else
-            *token = refSymbol->GetRef( &sheetPath, true ) + ":" + remainder;
+            *token = refSymbol->GetRef( &sheetPath, true ) + wxS( ":" ) + remainder;
 
         return true;    // Cross-reference is resolved whether or not the actual textvar was
     }
@@ -368,13 +368,13 @@ wxString SCHEMATIC::ConvertRefsToKIIDs( const wxString& aSource ) const
 
                     if( ref == refSymbol->GetRef( &references[ jj ].GetSheetPath(), true ) )
                     {
-                        token = refSymbol->m_Uuid.AsString() + ":" + remainder;
+                        token = refSymbol->m_Uuid.AsString() + wxS( ":" ) + remainder;
                         break;
                     }
                 }
             }
 
-            newbuf.append( "${" + token + "}" );
+            newbuf.append( wxS( "${" ) + token + wxS( "}" ) );
         }
         else
         {
@@ -421,11 +421,11 @@ wxString SCHEMATIC::ConvertKIIDsToRefs( const wxString& aSource ) const
                 if( refItem && refItem->Type() == SCH_SYMBOL_T )
                 {
                     SCH_SYMBOL* refSymbol = static_cast<SCH_SYMBOL*>( refItem );
-                    token = refSymbol->GetRef( &refSheetPath, true ) + ":" + remainder;
+                    token = refSymbol->GetRef( &refSheetPath, true ) + wxS( ":" ) + remainder;
                 }
             }
 
-            newbuf.append( "${" + token + "}" );
+            newbuf.append( wxS( "${" ) + token + wxS( "}" ) );
         }
         else
         {

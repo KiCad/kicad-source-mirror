@@ -158,7 +158,7 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
 
     for( const FOOTPRINT_INFO& i : filter )
     {
-        msg.Printf( "%3d %s:%s",
+        msg.Printf( wxS( "%3d %s:%s" ),
                     int( newList.GetCount() + 1 ),
                     i.GetLibNickname(),
                     i.GetFootprintName() );
@@ -211,7 +211,7 @@ void FOOTPRINTS_LISTBOX::OnLeftDClick( wxListEvent& event )
 
 void FOOTPRINTS_LISTBOX::OnChar( wxKeyEvent& event )
 {
-    wxLogTrace( kicadTraceKeyEvent, "FOOTPRINTS_LISTBOX::OnChar %s", dump( event ) );
+    wxLogTrace( kicadTraceKeyEvent, wxS( "FOOTPRINTS_LISTBOX::OnChar %s" ), dump( event ) );
 
     int key = event.GetKeyCode();
 

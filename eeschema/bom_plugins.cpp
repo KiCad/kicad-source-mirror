@@ -60,7 +60,7 @@ BOM_GENERATOR_HANDLER::BOM_GENERATOR_HANDLER( const wxString& aFile )
     if( extension == wxS( "xsl" ) )
     {
         m_info = readHeader( wxS( "-->" ) );
-        m_cmd = wxString::Format( "xsltproc -o \"%%O%s\" \"%s\" \"%%I\"",
+        m_cmd = wxString::Format( wxS( "xsltproc -o \"%%O%s\" \"%s\" \"%%I\"" ),
                                   getOutputExtension( m_info ),
                                   m_file.GetFullPath() );
     }
@@ -110,7 +110,7 @@ BOM_GENERATOR_HANDLER::BOM_GENERATOR_HANDLER( const wxString& aFile )
     else if( extension == wxS( "pyw" ) )
     {
         m_info = readHeader( wxS( "\"\"\"" ) );
-        m_cmd = wxString::Format( "pythonw \"%s/%s\" \"%%I\" \"%%O%s\"",
+        m_cmd = wxString::Format( wxS( "pythonw \"%s/%s\" \"%%I\" \"%%O%s\"" ),
                                   m_file.GetPath(),
                                   m_file.GetFullName(),
                                   getOutputExtension( m_info ) );
@@ -121,7 +121,7 @@ BOM_GENERATOR_HANDLER::BOM_GENERATOR_HANDLER( const wxString& aFile )
         m_cmd = m_file.GetFullPath();
     }
 
-    wxLogTrace( BOM_TRACE, "%s: extracted command line %s", m_name, m_cmd );
+    wxLogTrace( BOM_TRACE, wxS( "%s: extracted command line %s" ), m_name, m_cmd );
 }
 
 
@@ -145,7 +145,7 @@ wxString BOM_GENERATOR_HANDLER::readHeader( const wxString& aEndSection )
     if( aEndSection.IsEmpty() )
         return wxEmptyString;
 
-    wxFFile fdata( m_file.GetFullPath(), "rb" );        // dtor will close the file
+    wxFFile fdata( m_file.GetFullPath(), wxS( "rb" ) );        // dtor will close the file
     wxString data;
 
     if( !fdata.ReadAll( &data ) )
@@ -177,7 +177,7 @@ wxString BOM_GENERATOR_HANDLER::getOutputExtension( const wxString& aHeader )
 {
     // search header for extension after %O (extension includes '.')
     // looks for output argument of the form `"%O.extension"`
-    const wxString outputarg( "\"%O" );
+    const wxString outputarg( wxS( "\"%O" ) );
 
     int strstart = aHeader.Find( outputarg );
 
@@ -185,7 +185,7 @@ wxString BOM_GENERATOR_HANDLER::getOutputExtension( const wxString& aHeader )
         return wxEmptyString;
 
     strstart += outputarg.Length();
-    int strend = aHeader.find( "\"", strstart );
+    int strend = aHeader.find( wxS( "\"" ), strstart );
 
     if( strend == wxNOT_FOUND )
         return wxEmptyString;

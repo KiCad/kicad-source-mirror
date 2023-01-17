@@ -301,7 +301,7 @@ void WIDGET_HOTKEY_LIST::updateFromClientData()
 
             // mark unsaved changes
             if( changed_hk.m_EditKeycode != changed_hk.m_Actions[ 0 ]->GetHotKey() )
-                label += " *";
+                label += wxS( " *" );
 
             description.Replace( wxS( "\n" ), wxS( " " ) );
             description.Replace( wxS( "\r" ), wxS( " " ) );
@@ -467,7 +467,7 @@ WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkey
     wxString command_header = _( "Command" );
 
     if( !m_readOnly )
-        command_header << " " << _( "(double-click to edit)" );
+        command_header << wxS( " " ) << _( "(double-click to edit)" );
 
     AppendColumn( command_header, 450, wxALIGN_LEFT, wxCOL_RESIZABLE | wxCOL_SORTABLE );
     AppendColumn( _( "Hotkey" ), 120, wxALIGN_LEFT, wxCOL_RESIZABLE | wxCOL_SORTABLE );
@@ -495,8 +495,8 @@ WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkey
 
     std::vector<wxString> reserved_keys =
     {
-            "Ctrl+Tab",
-            "Ctrl+Shift+Tab"
+            wxS( "Ctrl+Tab" ),
+            wxS( "Ctrl+Shift+Tab" )
     };
 
     for( const wxString& key : reserved_keys )
@@ -506,7 +506,7 @@ WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkey
         if( code )
             m_reservedHotkeys[code] = key;
         else
-            wxLogWarning( "Unknown reserved keycode %s\n", key );
+            wxLogWarning( wxS( "Unknown reserved keycode %s\n" ), key );
     }
 
     GetDataView()->SetIndent( 10 );

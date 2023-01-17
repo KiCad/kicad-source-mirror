@@ -53,7 +53,7 @@
 LIB_SYMBOL* SchGetLibSymbol( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable,
                              SYMBOL_LIB* aCacheLib, wxWindow* aParent, bool aShowErrorMsg )
 {
-    wxCHECK_MSG( aLibTable, nullptr, "Invalid symbol library table." );
+    wxCHECK_MSG( aLibTable, nullptr, wxS( "Invalid symbol library table." ) );
 
     LIB_SYMBOL* symbol = nullptr;
 
@@ -63,7 +63,7 @@ LIB_SYMBOL* SchGetLibSymbol( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable,
 
         if( !symbol && aCacheLib )
         {
-            wxCHECK_MSG( aCacheLib->IsCache(), nullptr, "Invalid cache library." );
+            wxCHECK_MSG( aCacheLib->IsCache(), nullptr, wxS( "Invalid cache library." ) );
 
             wxString cacheName = aLibId.GetLibNickname().wx_str();
             cacheName += "_" + aLibId.GetLibItemName();
@@ -187,12 +187,12 @@ void SCH_BASE_FRAME::UpdateStatusBar()
     VECTOR2D cursorPos = GetCanvas()->GetViewControls()->GetCursorPosition();
     VECTOR2D d         = cursorPos - screen->m_LocalOrigin;
 
-    line.Printf( "X %s  Y %s",
+    line.Printf( wxS( "X %s  Y %s" ),
                  MessageTextFromValue( cursorPos.x, false ),
                  MessageTextFromValue( cursorPos.y, false ) );
     SetStatusText( line, 2 );
 
-    line.Printf( "dx %s  dy %s  dist %s",
+    line.Printf( wxS( "dx %s  dy %s  dist %s" ),
                  MessageTextFromValue( d.x, false ),
                  MessageTextFromValue( d.y, false ),
                  MessageTextFromValue( hypot( d.x, d.y ), false ) );

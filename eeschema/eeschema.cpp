@@ -419,7 +419,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
             wxString msg;
 
             if( !aErrors.empty() )
-                aErrors += "\n";
+                aErrors += wxS( "\n" );
 
             msg.Printf( _( "Cannot copy file '%s' as it will be overwritten by the new root "
                            "sheet file." ), destFile.GetFullPath() );
@@ -446,11 +446,11 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
     else if( ext == LegacySymbolLibFileExtension || ext == LegacySymbolDocumentFileExtension ||
              ext == KiCadSymbolLibFileExtension )
     {
-        if( destFile.GetName() == aProjectName + "-cache" )
-            destFile.SetName( aNewProjectName + "-cache" );
+        if( destFile.GetName() == aProjectName + wxS( "-cache" ) )
+            destFile.SetName( aNewProjectName + wxS( "-cache" ) );
 
-        if( destFile.GetName() == aProjectName + "-rescue" )
-            destFile.SetName( aNewProjectName + "-rescue" );
+        if( destFile.GetName() == aProjectName + wxS( "-rescue" ) )
+            destFile.SetName( aNewProjectName + wxS( "-rescue" ) );
 
         KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
@@ -481,10 +481,10 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
                         else if( symNode )
                             path = symNode->m_value;
 
-                        if( path == aProjectName + ".sch" )
-                            path = aNewProjectName + ".sch";
-                        else if( path == aProjectBasePath + "/" + aProjectName + ".sch" )
-                            path = aNewProjectBasePath + "/" + aNewProjectName + ".sch";
+                        if( path == aProjectName + wxS( ".sch" ) )
+                            path = aNewProjectName + wxS( ".sch" );
+                        else if( path == aProjectBasePath + "/" + aProjectName + wxS( ".sch" ) )
+                            path = aNewProjectBasePath + "/" + aNewProjectName + wxS( ".sch" );
                         else if( path.StartsWith( aProjectBasePath ) )
                             path.Replace( aProjectBasePath, aNewProjectBasePath, false );
 
@@ -512,13 +512,13 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
             wxString msg;
 
             if( !aErrors.empty() )
-                aErrors += "\n";
+                aErrors += wxS( "\n" );
 
             msg.Printf( _( "Cannot copy file '%s'." ), destFile.GetFullPath() );
             aErrors += msg;
         }
     }
-    else if( destFile.GetName() == "sym-lib-table" )
+    else if( destFile.GetName() == wxS( "sym-lib-table" ) )
     {
         SYMBOL_LIB_TABLE symbolLibTable;
         symbolLibTable.Load( aSrcFilePath );
@@ -528,10 +528,12 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
             LIB_TABLE_ROW& row = symbolLibTable.At( i );
             wxString       uri = row.GetFullURI();
 
-            uri.Replace( "/" + aProjectName + "-cache.lib", "/" + aNewProjectName + "-cache.lib" );
-            uri.Replace( "/" + aProjectName + "-rescue.lib", "/" + aNewProjectName +
-                         "-rescue.lib" );
-            uri.Replace( "/" + aProjectName + ".lib", "/" + aNewProjectName + ".lib" );
+            uri.Replace( wxS( "/" ) + aProjectName + wxS( "-cache.lib" ),
+                         wxS( "/" ) + aNewProjectName + wxS( "-cache.lib" ) );
+            uri.Replace( wxS( "/" ) + aProjectName + wxS( "-rescue.lib" ),
+                         wxS( "/" ) + aNewProjectName +  wxS( "-rescue.lib" ) );
+            uri.Replace( wxS( "/" ) + aProjectName + wxS( ".lib" ),
+                         wxS( "/" ) + aNewProjectName + wxS( ".lib" ) );
 
             row.SetFullURI( uri );
         }
@@ -553,7 +555,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
     }
     else
     {
-        wxFAIL_MSG( "Unexpected filetype for Eeschema::SaveFileAs()" );
+        wxFAIL_MSG( wxS( "Unexpected filetype for Eeschema::SaveFileAs()" ) );
     }
 }
 

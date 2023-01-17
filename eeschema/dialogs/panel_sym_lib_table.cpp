@@ -158,7 +158,7 @@ protected:
             // paste the SYMBOL_LIB_TABLE_ROWs of s-expression (sym_lib_table), starting
             // at column 0 regardless of current cursor column.
 
-            STRING_LINE_READER  slr( TO_UTF8( cb_text ), "Clipboard" );
+            STRING_LINE_READER  slr( TO_UTF8( cb_text ), wxS( "Clipboard" ) );
             LIB_TABLE_LEXER     lexer( &slr );
             SYMBOL_LIB_TABLE    tmp_tbl;
             bool                parsed = true;

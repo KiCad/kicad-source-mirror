@@ -29,20 +29,20 @@
 #include <wx/menu.h>
 #include <wx/renderer.h>
 #include <wx/settings.h>
-#include <wx/version.h> 
+#include <wx/version.h>
 #include <kiplatform/ui.h>
 
 
 STD_BITMAP_BUTTON::STD_BITMAP_BUTTON( wxWindow* aParent, wxWindowID aId,
                                       const wxBitmap& aDummyBitmap, const wxPoint& aPos,
                                       const wxSize& aSize, int aStyle ) :
-        wxPanel( aParent, aId, aPos, aSize, aStyle, "StdBitmapButton" )
+        wxPanel( aParent, aId, aPos, aSize, aStyle, wxS( "StdBitmapButton" ) )
 {
     if( aSize == wxDefaultSize )
     {
         #if wxCHECK_VERSION( 3, 1, 3 )
             wxSize defaultSize = wxButton::GetDefaultSize( aParent );
-        #else 
+        #else
             wxSize defaultSize = wxButton::GetDefaultSize();
         #endif
 
@@ -56,7 +56,7 @@ STD_BITMAP_BUTTON::STD_BITMAP_BUTTON( wxWindow* aParent, wxWindowID aId,
     Bind( wxEVT_LEAVE_WINDOW, &STD_BITMAP_BUTTON::OnMouseLeave, this );
     Bind( wxEVT_ENTER_WINDOW, &STD_BITMAP_BUTTON::OnMouseEnter, this );
 
-    Bind( wxEVT_SYS_COLOUR_CHANGED, 
+    Bind( wxEVT_SYS_COLOUR_CHANGED,
           wxSysColourChangedEventHandler( STD_BITMAP_BUTTON::onThemeChanged ),
           this );
 }

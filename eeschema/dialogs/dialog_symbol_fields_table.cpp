@@ -1112,8 +1112,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRemoveField( wxCommandEvent& event )
 
    // Should never occur: "Remove Field..." button should be disabled if invalid selection
    // via OnFieldsCtrlSelectionChanged()
-    wxCHECK_RET( row != -1, "Some user defined field must be selected first" );
-    wxCHECK_RET( row >= MANDATORY_FIELDS, "Mandatory fields cannot be removed" );
+    wxCHECK_RET( row != -1, wxS( "Some user defined field must be selected first" ) );
+    wxCHECK_RET( row >= MANDATORY_FIELDS, wxS( "Mandatory fields cannot be removed" ) );
 
     wxString fieldName = m_fieldsCtrl->GetTextValue( row, 0 );
 
@@ -1415,9 +1415,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
             continue;
 
         wxString escapedValue = m_grid->GetColLabelValue( col );
-        escapedValue.Replace( "\"", "\"\"" );
+        escapedValue.Replace( wxS( "\"" ), wxS( "\"\"" ) );
 
-        wxString format = col == last_col ? "\"%s\"\r\n" : "\"%s\",";
+        wxString format = col == last_col ? wxS( "\"%s\"\r\n" ) : wxS( "\"%s\"," );
 
         out.Write( wxString::Format( format, escapedValue ) );
     }
@@ -1436,9 +1436,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
 
             // Get the unanottated version of the field, e.g. no ">   " or "v   " by
             wxString escapedValue = m_dataModel->GetRawValue( row, col );
-            escapedValue.Replace( "\"", "\"\"" );
+            escapedValue.Replace( wxS( "\"" ), wxS( "\"\"" ) );
 
-            wxString format = col == last_col ? "\"%s\"\r\n" : "\"%s\",";
+            wxString format = col == last_col ? wxS( "\"%s\"\r\n" ) : wxS( "\"%s\"," );
 
             out.Write( wxString::Format( format, escapedValue ) );
         }

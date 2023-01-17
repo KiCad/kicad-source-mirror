@@ -503,7 +503,7 @@ DIALOG_SCH_FIELD_PROPERTIES::DIALOG_SCH_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
 
     m_isPower = false;
 
-    m_textLabel->SetLabel( aField->GetName() + ":" );
+    m_textLabel->SetLabel( aField->GetName() + wxS( ":" ) );
 
     m_position = m_field->GetPosition();
 
@@ -560,7 +560,7 @@ void DIALOG_SCH_FIELD_PROPERTIES::onScintillaCharAdded( wxStyledTextEvent &aEven
     {
         wxString text = m_StyledTextCtrl->GetText();
         int currpos = m_StyledTextCtrl->GetCurrentPos();
-        text.Replace( "\n", "" );
+        text.Replace( wxS( "\n" ), wxS( "" ) );
         m_StyledTextCtrl->SetText( text );
         m_StyledTextCtrl->GotoPos( currpos-1 );
         return;

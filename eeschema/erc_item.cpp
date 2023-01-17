@@ -269,7 +269,7 @@ std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
     case ERCE_MISSING_BIDI_PIN:        return std::make_shared<ERC_ITEM>( missingBidiPin );
     case ERCE_UNSPECIFIED:
     default:
-        wxFAIL_MSG( "Unknown ERC error code" );
+        wxFAIL_MSG( wxS( "Unknown ERC error code" ) );
         return nullptr;
     }
 

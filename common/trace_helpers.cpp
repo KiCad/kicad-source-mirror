@@ -234,16 +234,16 @@ wxString GetKeyName( const wxKeyEvent &aEvent )
 wxString dump( const wxKeyEvent& aEvent )
 {
     wxString msg;
-    wxString eventType = "unknown";
+    wxString eventType = wxS( "unknown" );
 
     if( aEvent.GetEventType() == wxEVT_KEY_DOWN )
-        eventType = "KeyDown";
+        eventType = wxS( "KeyDown" );
     else if( aEvent.GetEventType() == wxEVT_KEY_UP )
-        eventType = "KeyUp";
+        eventType = wxS( "KeyUp" );
     else if( aEvent.GetEventType() == wxEVT_CHAR )
-        eventType = "Char";
+        eventType = wxS( "Char" );
     else if( aEvent.GetEventType() == wxEVT_CHAR_HOOK )
-        eventType = "Hook";
+        eventType = wxS( "Hook" );
 
     // event  key_name  KeyCode  modifiers  Unicode  raw_code raw_flags pos
     msg.Printf( "%7s %15s %5d   %c%c%c%c"

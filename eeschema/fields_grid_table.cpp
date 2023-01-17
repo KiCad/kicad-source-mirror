@@ -565,7 +565,7 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
         }
         else
         {
-            wxFAIL_MSG( "Unhandled field owner type." );
+            wxFAIL_MSG( wxS( "Unhandled field owner type." ) );
             return field.GetName( false );
         }
 
@@ -913,11 +913,11 @@ wxString FIELDS_GRID_TABLE<T>::StringFromBool( bool aValue ) const
 template <class T>
 bool FIELDS_GRID_TABLE<T>::BoolFromString( wxString aValue ) const
 {
-    if( aValue == "1" )
+    if( aValue == wxS( "1" ) )
     {
         return true;
     }
-    else if( aValue == "0" )
+    else if( aValue == wxS( "0" ) )
     {
         return false;
     }

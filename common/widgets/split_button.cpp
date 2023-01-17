@@ -30,19 +30,19 @@
 #include <wx/menu.h>
 #include <wx/renderer.h>
 #include <wx/settings.h>
-#include <wx/version.h> 
+#include <wx/version.h>
 #include <kiplatform/ui.h>
 
 SPLIT_BUTTON::SPLIT_BUTTON( wxWindow* aParent, wxWindowID aId, const wxString& aLabel,
                             const wxPoint& aPos, const wxSize& aSize ) :
-        wxPanel( aParent, aId, aPos, aSize, wxBORDER_NONE | wxTAB_TRAVERSAL, "DropDownButton" ),
+        wxPanel( aParent, aId, aPos, aSize, wxBORDER_NONE | wxTAB_TRAVERSAL, wxS( "DropDownButton" ) ),
         m_label( aLabel )
 {
     if( aSize == wxDefaultSize )
     {
         #if wxCHECK_VERSION( 3, 1, 3 )
             wxSize defaultSize = wxButton::GetDefaultSize( aParent );
-        #else 
+        #else
             wxSize defaultSize = wxButton::GetDefaultSize();
         #endif
 

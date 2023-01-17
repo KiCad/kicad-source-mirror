@@ -1204,7 +1204,7 @@ wxString LIB_SYMBOL::GetPrefix()
 {
     wxString refDesignator = GetFieldById( REFERENCE_FIELD )->GetText();
 
-    refDesignator.Replace( "~", " " );
+    refDesignator.Replace( wxS( "~" ), wxS( " " ) );
 
     wxString prefix = refDesignator;
 

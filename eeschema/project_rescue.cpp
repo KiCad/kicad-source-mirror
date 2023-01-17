@@ -325,7 +325,7 @@ bool RESCUE_CACHE_CANDIDATE::PerformAction( RESCUER* aRescuer )
 {
     LIB_SYMBOL* tmp = ( m_cache_candidate ) ? m_cache_candidate : m_lib_candidate;
 
-    wxCHECK_MSG( tmp, false, "Both cache and library symbols undefined." );
+    wxCHECK_MSG( tmp, false, wxS( "Both cache and library symbols undefined." ) );
 
     std::unique_ptr<LIB_SYMBOL> new_symbol = tmp->Flatten();
     new_symbol->SetName( m_new_name );
@@ -455,7 +455,7 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues(
             // library.
             wxString libNickname = GetRescueLibraryFileName( aRescuer.Schematic() ).GetName();
 
-            LIB_ID new_id( libNickname, new_name + "-" + symbol_id.GetLibNickname().wx_str() );
+            LIB_ID new_id( libNickname, new_name + wxS( "-" ) + symbol_id.GetLibNickname().wx_str() );
 
             RESCUE_SYMBOL_LIB_TABLE_CANDIDATE candidate( symbol_id, new_id, cache_match, lib_match,
                                                          eachSymbol->GetUnit(),
@@ -504,7 +504,7 @@ bool RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::PerformAction( RESCUER* aRescuer )
 {
     LIB_SYMBOL* tmp = ( m_cache_candidate ) ? m_cache_candidate : m_lib_candidate;
 
-    wxCHECK_MSG( tmp, false, "Both cache and library symbols undefined." );
+    wxCHECK_MSG( tmp, false, wxS( "Both cache and library symbols undefined." ) );
 
     std::unique_ptr<LIB_SYMBOL> new_symbol = tmp->Flatten();
     new_symbol->SetLibId( m_new_id );
@@ -781,7 +781,7 @@ bool LEGACY_RESCUER::WriteRescueLibrary( wxWindow *aParent )
 
 void LEGACY_RESCUER::AddSymbol( LIB_SYMBOL* aNewSymbol )
 {
-    wxCHECK_RET( aNewSymbol, "Invalid LIB_SYMBOL pointer." );
+    wxCHECK_RET( aNewSymbol, wxS( "Invalid LIB_SYMBOL pointer." ) );
 
     aNewSymbol->SetLib( m_rescue_lib.get() );
     m_rescue_lib->AddSymbol( aNewSymbol );
@@ -870,7 +870,7 @@ bool SYMBOL_LIB_TABLE_RESCUER::WriteRescueLibrary( wxWindow *aParent )
     // it to the table.
     if( !row || ( SCH_IO_MGR::EnumFromStr( row->GetType() ) == SCH_IO_MGR::SCH_LEGACY ) )
     {
-        wxString uri = "${KIPRJMOD}/" + fn.GetFullName();
+        wxString uri = wxS( "${KIPRJMOD}/" ) + fn.GetFullName();
         wxString libNickname = fn.GetName();
 
         row = new SYMBOL_LIB_TABLE_ROW( libNickname, uri, wxT( "KiCad" ) );
@@ -905,7 +905,7 @@ bool SYMBOL_LIB_TABLE_RESCUER::WriteRescueLibrary( wxWindow *aParent )
 
 void SYMBOL_LIB_TABLE_RESCUER::AddSymbol( LIB_SYMBOL* aNewSymbol )
 {
-    wxCHECK_RET( aNewSymbol, "Invalid LIB_SYMBOL pointer." );
+    wxCHECK_RET( aNewSymbol, wxS( "Invalid LIB_SYMBOL pointer." ) );
 
     m_rescueLibSymbols.emplace_back( std::make_unique<LIB_SYMBOL>( *aNewSymbol ) );
 }

@@ -182,7 +182,7 @@ void DIALOG_SYMBOL_REMAP::createProjectSymbolLibTable( REPORTER& aReporter )
 
             // Spaces in the file name will break the symbol name because they are not
             // quoted in the symbol library file format.
-            libName.Replace( " ", "-" );
+            libName.Replace( wxS( " " ), wxS( "-" ) );
 
             // Don't create duplicate table entries.
             while( alg::contains( libNames, libName ) )
@@ -445,7 +445,7 @@ bool DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
 
         // Back up the cache library.
         srcFileName.SetPath( Prj().GetProjectPath() );
-        srcFileName.SetName( Prj().GetProjectName() + "-cache" );
+        srcFileName.SetName( Prj().GetProjectName() + wxS( "-cache" ) );
         srcFileName.SetExt( LegacySymbolLibFileExtension );
 
         destFileName = srcFileName;
@@ -465,7 +465,7 @@ bool DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
         }
 
         // Back up the rescue symbol library if it exists.
-        srcFileName.SetName( Prj().GetProjectName() + "-rescue" );
+        srcFileName.SetName( Prj().GetProjectName() + wxS( "-rescue" ) );
         destFileName.SetName( srcFileName.GetName() + timeStamp );
 
         tmp.Printf( _( "Backing up file '%s' to '%s'." ),

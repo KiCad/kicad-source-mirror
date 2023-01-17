@@ -71,7 +71,7 @@ void CVPCB_MAINFRAME::doReCreateMenuBar()
 
     // We can't use ACTIONS::showPreferences yet because wxWidgets moves this on
     // Mac, and it needs the wxID_PREFERENCES id to find it.
-    prefsMenu->Add( _( "Preferences..." ) + "\tCtrl+,",
+    prefsMenu->Add( _( "Preferences..." ) + wxS( "\tCtrl+," ),
                     _( "Show preferences for all open tools" ),
                     wxID_PREFERENCES,
                     BITMAPS::preference );
