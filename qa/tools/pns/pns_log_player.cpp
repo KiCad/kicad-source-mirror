@@ -161,9 +161,9 @@ void PNS_LOG_PLAYER::ReplayLog( PNS_LOG_FILE* aLog, int aStartEventIndex, int aF
         {
             m_debugDecorator->NewStage( "move", 0, PNSLOGINFO );
             m_viewTracker->SetStage( m_debugDecorator->GetStageCount() - 1 );
-            
+
             auto msg = wxString::Format( "event [%d/%d]: move (%d, %d)", eventIdx, totalEvents, evt.p.x, evt.p.y );
-            
+
             m_debugDecorator->Message( msg );
             m_reporter->Report( msg );
 
@@ -236,7 +236,7 @@ void PNS_LOG_PLAYER::ReplayLog( PNS_LOG_FILE* aLog, int aStartEventIndex, int aF
 #endif
     }
 
-    
+
 }
 
 
@@ -244,7 +244,7 @@ bool PNS_LOG_PLAYER::CompareResults( PNS_LOG_FILE* aLog )
 {
     auto cstate = GetRouterUpdatedItems();
 
-    printf("Comparing %lu added/%lu removed items\n", cstate.m_addedItems.size(), cstate.m_removedIds.size() );
+    printf("Comparing %zu added/%zu removed items\n", cstate.m_addedItems.size(), cstate.m_removedIds.size() );
     return cstate.Compare( aLog->GetExpectedResult() );
 }
 
