@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2018 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -1141,7 +1141,7 @@ void TOOL_MANAGER::applyViewControls( const TOOL_STATE* aState )
 
 bool TOOL_MANAGER::processEvent( const TOOL_EVENT& aEvent )
 {
-    wxLogTrace( kicadTraceToolStack, wxS( "TOOL_MANAGER::processEvent - %s", aEvent.Format() ) );
+    wxLogTrace( kicadTraceToolStack, wxS( "TOOL_MANAGER::processEvent - %s" ), aEvent.Format() );
 
     // First try to dispatch the action associated with the event if it is a key press event
     bool handled = DispatchHotKey( aEvent );
