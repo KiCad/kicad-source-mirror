@@ -50,6 +50,7 @@
 #include <advanced_config.h>    // for pad property feature management
 #include <wx/choicdlg.h>
 
+#include <dialog_pad_primitives_properties.h>
 
 // list of pad shapes, ordered like the pad shape wxChoice in dialog.
 static PAD_SHAPE code_shape[] =

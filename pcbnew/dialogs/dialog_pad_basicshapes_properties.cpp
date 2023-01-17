@@ -33,10 +33,11 @@
 #include <footprint.h>
 #include <math/util.h>      // for KiROUND
 
-#include <dialog_pad_properties.h>
 #include <bitmaps.h>
 #include <wx/dcclient.h>
 
+#include <dialog_pad_properties.h>
+#include <dialog_pad_primitives_properties.h>
 
 DIALOG_PAD_PRIMITIVES_PROPERTIES::DIALOG_PAD_PRIMITIVES_PROPERTIES( wxWindow* aParent,
                                                                     PCB_BASE_FRAME* aFrame,

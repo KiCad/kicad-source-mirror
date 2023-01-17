@@ -122,13 +122,14 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_move_exact_base.cpp
     dialogs/dialog_net_inspector.cpp
     dialogs/dialog_net_inspector_base.cpp
-        dialogs/dialog_import_netlist.cpp
-        dialogs/dialog_import_netlist_base.cpp
+    dialogs/dialog_import_netlist.cpp
+    dialogs/dialog_import_netlist_base.cpp
     dialogs/dialog_non_copper_zones_properties.cpp
     dialogs/dialog_non_copper_zones_properties_base.cpp
     dialogs/dialog_pad_basicshapes_properties.cpp
     dialogs/dialog_pad_properties.cpp
     dialogs/dialog_pad_properties_base.cpp
+    dialogs/dialog_pad_primitives_properties_base.cpp
     dialogs/dialog_plot.cpp
     dialogs/dialog_plot_base.cpp
     dialogs/dialog_pns_diff_pair_dimensions.cpp
