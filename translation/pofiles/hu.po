@@ -658,7 +658,7 @@ msgstr "SMD ragasztó réteg megjelenítése"
 #: 3d-viewer/dialogs/dialog_select_3d_model.cpp:95
 #, fuzzy, c-format
 msgid "All supported files (%s)"
-msgstr "Minden támogatott formátum|"
+msgstr "Minden támogatott formátum"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:58
 #, fuzzy
@@ -13777,7 +13777,7 @@ msgstr ""
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:191
 #, fuzzy
 msgid "All supported formats"
-msgstr "Minden támogatott formátum|"
+msgstr "Minden támogatott formátum"
 
 #: eeschema/files-io.cpp:622
 msgid "Import Schematic"

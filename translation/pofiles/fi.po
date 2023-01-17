@@ -13096,7 +13096,7 @@ msgstr ""
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:191
 #, fuzzy
 msgid "All supported formats"
-msgstr "Kaikki tuetut muodot |"
+msgstr "Kaikki tuetut muodot"
 
 #: eeschema/files-io.cpp:622
 msgid "Import Schematic"

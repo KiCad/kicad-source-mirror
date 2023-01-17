@@ -13083,7 +13083,7 @@ msgstr ""
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:191
 #, fuzzy
 msgid "All supported formats"
-msgstr "Все поддерживаемые форматы|"
+msgstr "Все поддерживаемые форматы"
 
 #: eeschema/files-io.cpp:622
 msgid "Import Schematic"
