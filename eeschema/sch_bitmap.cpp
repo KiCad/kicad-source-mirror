@@ -82,7 +82,13 @@ SCH_BITMAP& SCH_BITMAP::operator=( const SCH_ITEM& aItem )
 
 bool SCH_BITMAP::ReadImageFile( const wxString& aFullFilename )
 {
-    return m_image->ReadImageFile( aFullFilename );
+    if( m_image->ReadImageFile( aFullFilename ) )
+    {
+        m_image->SetPixelSizeIu( 254000.0 / m_image->GetPPI() );
+        return true;
+    }
+
+    return false;
 }
 
 

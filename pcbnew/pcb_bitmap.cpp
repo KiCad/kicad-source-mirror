@@ -84,7 +84,13 @@ PCB_BITMAP& PCB_BITMAP::operator=( const BOARD_ITEM& aItem )
 
 bool PCB_BITMAP::ReadImageFile( const wxString& aFullFilename )
 {
-    return m_image->ReadImageFile( aFullFilename );
+    if( m_image->ReadImageFile( aFullFilename ) )
+    {
+        m_image->SetPixelSizeIu( (float) pcbIUScale.MilsToIU( 1000 ) / m_image->GetPPI() );
+        return true;
+    }
+
+    return false;
 }
 
 

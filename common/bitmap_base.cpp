@@ -137,6 +137,17 @@ bool BITMAP_BASE::ReadImageFile( const wxString& aFullFilename )
     m_originalImage = new wxImage( *m_image );
     rebuildBitmap();
 
+    // Todo: eventually we need to support dpi / scaling in both dimensions
+    int dpiX = m_originalImage->GetOptionInt( wxIMAGE_OPTION_RESOLUTIONX );
+
+    if( dpiX > 1 )
+    {
+        if( m_originalImage->GetOptionInt( wxIMAGE_OPTION_RESOLUTIONUNIT ) == wxIMAGE_RESOLUTION_CM )
+            m_ppi = KiROUND( dpiX * 2.54 );
+        else
+            m_ppi = dpiX;
+    }
+
     return true;
 }
 
