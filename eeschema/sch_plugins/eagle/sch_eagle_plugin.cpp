@@ -1968,8 +1968,8 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_S
 
     wxXmlNode* currentNode = aSymbolNode->GetChildren();
 
-    bool foundName  = false;
-    bool foundValue = false;
+    bool showRefDes = false;
+    bool showValue  = false;
     bool ispower    = false;
     int  pincount   = 0;
 
@@ -2051,30 +2051,25 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_S
         }
         else if( nodeName == wxT( "text" ) )
         {
-            std::unique_ptr<LIB_TEXT> libtext( loadSymbolText( aSymbol, currentNode,
-                                                               aGateNumber ) );
-            const wxString&           text = libtext->GetText();
-            const wxString            textUpper = text.Upper();
+            std::unique_ptr<LIB_TEXT> libtext( loadSymbolText( aSymbol, currentNode, aGateNumber ) );
 
-            if( textUpper == wxT( ">NAME" ) )
+            if( libtext->GetText() == wxT( "${REFERENCE}" ) )
             {
+                // Move text & attributes to Reference field and discard LIB_TEXT item
                 LIB_FIELD* field = aSymbol->GetFieldById( REFERENCE_FIELD );
                 loadFieldAttributes( field, libtext.get() );
 
-                if( text != textUpper )
-                    field->SetVisible( false );
-
-                foundName = true;
+                // Show Reference field if Eagle reference was uppercase
+                showRefDes = currentNode->GetNodeContent() == wxT( ">NAME" );
             }
-            else if( textUpper == wxT( ">VALUE" ) )
+            else if( libtext->GetText() == wxT( "${VALUE}" ) )
             {
+                // Move text & attributes to Value field and discard LIB_TEXT item
                 LIB_FIELD* field = aSymbol->GetFieldById( VALUE_FIELD );
                 loadFieldAttributes( field, libtext.get() );
 
-                if( text != textUpper )
-                    field->SetVisible( false );
-
-                foundValue = true;
+                // Show Value field if Eagle reference was uppercase
+                showValue = currentNode->GetNodeContent() == wxT( ">VALUE" );
             }
             else
             {
@@ -2111,10 +2106,10 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_S
         currentNode = currentNode->GetNext();
     }
 
-    if( foundName == false )
+    if( !showRefDes )
         aSymbol->GetFieldById( REFERENCE_FIELD )->SetVisible( false );
 
-    if( foundValue == false )
+    if( !showValue )
         aSymbol->GetFieldById( VALUE_FIELD )->SetVisible( false );
 
     return pincount == 1 ? ispower : false;
