@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -481,12 +481,12 @@ void SCH_LABEL_BASE::GetIntersheetRefs( std::vector<std::pair<wxString, wxString
 
 bool SCH_LABEL_BASE::ResolveTextVar( wxString* token, int aDepth ) const
 {
+    if( !Schematic() )
+        return false;
+
     if( token->Contains( ':' ) )
     {
-        if( !Schematic() )
-            return false;
-
-        if( Schematic()->ResolveCrossReference( token, aDepth ) )
+        if( Schematic()->ResolveCrossReference( token, aDepth + 1 ) )
             return true;
     }
 
@@ -537,20 +537,19 @@ bool SCH_LABEL_BASE::ResolveTextVar( wxString* token, int aDepth ) const
         }
     }
 
+    // See if parent can resolve it (these will recurse to ancestors)
+
     if( Type() == SCH_SHEET_PIN_T && m_parent )
     {
         SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_parent );
 
-        if( sheet->ResolveTextVar( token, aDepth ) )
+        if( sheet->ResolveTextVar( token, aDepth + 1 ) )
             return true;
     }
-    else if( Schematic() )
+    else if( SCH_SHEET* sheet = Schematic()->CurrentSheet().Last() )
     {
-        if( SCH_SHEET* sheet = Schematic()->CurrentSheet().Last() )
-        {
-            if( sheet->ResolveTextVar( token, aDepth ) )
-                return true;
-        }
+        if( sheet->ResolveTextVar( token, aDepth + 1 ) )
+            return true;
     }
 
     return false;
@@ -565,12 +564,6 @@ wxString SCH_LABEL_BASE::GetShownText( int aDepth, bool aAllowExtraText ) const
                 return ResolveTextVar( token, aDepth );
             };
 
-    std::function<bool( wxString* )> schematicTextResolver =
-            [&]( wxString* token ) -> bool
-            {
-                return Schematic()->ResolveTextVar( token, aDepth + 1 );
-            };
-
     wxString text = EDA_TEXT::GetShownText();
 
     if( text == wxS( "~" ) ) // Legacy placeholder for empty string
@@ -579,13 +572,8 @@ wxString SCH_LABEL_BASE::GetShownText( int aDepth, bool aAllowExtraText ) const
     }
     else if( HasTextVars() )
     {
-        PROJECT* project = nullptr;
-
-        if( Schematic() )
-            project = &Schematic()->Prj();
-
         if( aDepth < 10 )
-            text = ExpandTextVars( text, &textResolver, &schematicTextResolver, project );
+            text = ExpandTextVars( text, &textResolver );
     }
 
     return text;

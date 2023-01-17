@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -267,7 +267,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
             };
 
     wxString path = m_parent->GetPcbNewSettings()->m_PlaceFile.output_directory;
-    path = ExpandTextVars( path, &textResolver, nullptr, nullptr );
+    path = ExpandTextVars( path, &textResolver );
     path = ExpandEnvVarSubstitutions( path, nullptr );
 
     wxFileName  outputDir = wxFileName::DirName( path );
@@ -375,7 +375,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
             };
 
     wxString path = m_parent->GetPcbNewSettings()->m_PlaceFile.output_directory;
-    path = ExpandTextVars( path, &textResolver, nullptr, nullptr );
+    path = ExpandTextVars( path, &textResolver );
     path = ExpandEnvVarSubstitutions( path, nullptr );
 
     wxFileName  outputDir = wxFileName::DirName( path );

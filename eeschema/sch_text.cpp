@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -344,27 +344,13 @@ wxString SCH_TEXT::GetShownText( int aDepth, bool aAllowExtraText ) const
     std::function<bool( wxString* )> textResolver =
             [&]( wxString* token ) -> bool
             {
-                if( token->Contains( ':' ) )
+                if( SCH_SHEET* sheet = Schematic()->CurrentSheet().Last() )
                 {
-                    if( Schematic()->ResolveCrossReference( token, aDepth ) )
-                        return true;
-                }
-                else
-                {
-                    SCHEMATIC* schematic = Schematic();
-                    SCH_SHEET* sheet = schematic ? schematic->CurrentSheet().Last() : nullptr;
-
-                    if( sheet && sheet->ResolveTextVar( token, aDepth + 1 ) )
+                    if( sheet->ResolveTextVar( token, aDepth + 1 ) )
                         return true;
                 }
 
                 return false;
-            };
-
-    std::function<bool( wxString* )> schematicTextResolver =
-            [&]( wxString* token ) -> bool
-            {
-                return Schematic()->ResolveTextVar( token, aDepth + 1 );
             };
 
     wxString text = EDA_TEXT::GetShownText();
@@ -375,13 +361,8 @@ wxString SCH_TEXT::GetShownText( int aDepth, bool aAllowExtraText ) const
     }
     else if( HasTextVars() )
     {
-        PROJECT* project = nullptr;
-
-        if( Schematic() )
-            project = &Schematic()->Prj();
-
         if( aDepth < 10 )
-            text = ExpandTextVars( text, &textResolver, &schematicTextResolver, project );
+            text = ExpandTextVars( text, &textResolver );
     }
 
     return text;

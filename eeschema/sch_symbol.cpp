@@ -1138,6 +1138,12 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
     if( !schematic )
         return false;
 
+    if( token->Contains( ':' ) )
+    {
+        if( schematic->ResolveCrossReference( token, aDepth + 1 ) )
+            return true;
+    }
+
     for( int i = 0; i < MANDATORY_FIELDS; ++i )
     {
         if( token->IsSameAs( m_fields[ i ].GetCanonicalName().Upper() ) )
@@ -1243,6 +1249,14 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
     {
         *token = this->GetDNP() ? wxT( "" ) : _( "DNP" );
         return true;
+    }
+
+    // See if parent can resolve it (this will recurse to ancestors)
+
+    if( SCH_SHEET* sheet = schematic->CurrentSheet().Last() )
+    {
+        if( sheet->ResolveTextVar( token, aDepth + 1 ) )
+            return true;
     }
 
     return false;

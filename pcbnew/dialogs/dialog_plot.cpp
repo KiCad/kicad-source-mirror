@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -508,7 +508,7 @@ void DIALOG_PLOT::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
             };
 
     wxString path = m_outputDirectoryName->GetValue();
-    path = ExpandTextVars( path, &textResolver, nullptr, &Prj() );
+    path = ExpandTextVars( path, &textResolver );
     path = ExpandEnvVarSubstitutions( path, &Prj() );
     path = Prj().AbsolutePath( path );
 
@@ -978,7 +978,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
             };
 
     wxString path = m_plotOpts.GetOutputDirectory();
-    path = ExpandTextVars( path, &textResolver, nullptr, board->GetProject() );
+    path = ExpandTextVars( path, &textResolver );
     path = ExpandEnvVarSubstitutions( path, board->GetProject() );
 
     wxFileName outputDir = wxFileName::DirName( path );

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,36 +65,18 @@ wxString PCB_TEXT::GetShownText( int aDepth, bool aAllowExtraText ) const
                     return true;
                 }
 
-                if( token->Contains( ':' ) )
+                if( board->ResolveTextVar( token, aDepth + 1 ) )
                 {
-                    wxString      remainder;
-                    wxString      ref = token->BeforeFirst( ':', &remainder );
-                    BOARD_ITEM*   refItem = board->GetItem( KIID( ref ) );
-
-                    if( refItem && refItem->Type() == PCB_FOOTPRINT_T )
-                    {
-                        FOOTPRINT* refFP = static_cast<FOOTPRINT*>( refItem );
-
-                        if( refFP->ResolveTextVar( &remainder, aDepth + 1 ) )
-                        {
-                            *token = remainder;
-                            return true;
-                        }
-                    }
+                    return true;
                 }
-                return false;
-            };
 
-    std::function<bool( wxString* )> boardTextResolver =
-            [&]( wxString* token ) -> bool
-            {
-                return board->ResolveTextVar( token, aDepth + 1 );
+                return false;
             };
 
     wxString text = EDA_TEXT::GetShownText();
 
     if( board && HasTextVars() && aDepth < 10 )
-        text = ExpandTextVars( text, &pcbTextResolver, &boardTextResolver, board->GetProject() );
+        text = ExpandTextVars( text, &pcbTextResolver );
 
     return text;
 }

@@ -232,6 +232,15 @@ void SCH_SHEET::GetContextualTextVars( wxArrayString* aVars ) const
 
 bool SCH_SHEET::ResolveTextVar( wxString* token, int aDepth ) const
 {
+    if( !Schematic() )
+        return false;
+
+    if( token->Contains( ':' ) )
+    {
+        if( Schematic()->ResolveCrossReference( token, aDepth + 1 ) )
+            return true;
+    }
+
     for( int i = 0; i < SHEET_MANDATORY_FIELDS; ++i )
     {
         if( token->IsSameAs( m_fields[i].GetCanonicalName().Upper() ) )
@@ -275,19 +284,22 @@ bool SCH_SHEET::ResolveTextVar( wxString* token, int aDepth ) const
         *token = findSelf().PathHumanReadable();
         return true;
     }
+
+    // See if parent can resolve it (these will recurse to ancestors)
+
+    SCH_SHEET_PATH sheetPath = findSelf();
+
+    if( sheetPath.size() >= 2 )
+    {
+        sheetPath.pop_back();
+
+        if( sheetPath.Last()->ResolveTextVar( token, aDepth + 1 ) )
+            return true;
+    }
     else
     {
-        // See if any of the sheets up the hierarchy can resolve it:
-
-        SCH_SHEET_PATH sheetPath = findSelf();
-
-        if( sheetPath.size() >= 2 )
-        {
-            sheetPath.pop_back();
-
-            if( sheetPath.Last()->ResolveTextVar( token, aDepth ) )
-                return true;
-        }
+        if( Schematic()->ResolveTextVar( token, aDepth + 1 ) )
+            return true;
     }
 
     return false;

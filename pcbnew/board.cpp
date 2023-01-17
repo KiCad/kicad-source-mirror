@@ -5,7 +5,7 @@
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
  *
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -324,6 +324,24 @@ std::vector<PCB_MARKER*> BOARD::ResolveDRCExclusions()
 
 bool BOARD::ResolveTextVar( wxString* token, int aDepth ) const
 {
+    if( token->Contains( ':' ) )
+    {
+        wxString      remainder;
+        wxString      ref = token->BeforeFirst( ':', &remainder );
+        BOARD_ITEM*   refItem = GetItem( KIID( ref ) );
+
+        if( refItem && refItem->Type() == PCB_FOOTPRINT_T )
+        {
+            FOOTPRINT* refFP = static_cast<FOOTPRINT*>( refItem );
+
+            if( refFP->ResolveTextVar( &remainder, aDepth + 1 ) )
+            {
+                *token = remainder;
+                return true;
+            }
+        }
+    }
+
     wxString var = *token;
 
     if( GetTitleBlock().TextVarResolver( token, m_project ) )
@@ -335,6 +353,9 @@ bool BOARD::ResolveTextVar( wxString* token, int aDepth ) const
         *token = m_properties.at( var );
         return true;
     }
+
+    if( GetProject() && GetProject()->TextVarResolver( token ) )
+        return true;
 
     return false;
 }

@@ -4,7 +4,7 @@
  * Copyright (C) 1992-2018 Jean-Pierre Charras jp.charras at wanadoo.fr
  * Copyright (C) 1992-2010 Lorenzo Marcantonio
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -418,7 +418,7 @@ wxString DIALOG_PLOT_SCHEMATIC::getOutputPath()
             };
 
     wxString path = m_outputDirectoryName->GetValue();
-    path = ExpandTextVars( path, &textResolver, nullptr, &Prj() );
+    path = ExpandTextVars( path, &textResolver );
     path = ExpandEnvVarSubstitutions( path, &Prj() );
 
     fn.SetPath( path );

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2014-2020 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,14 +56,18 @@ enum Bracket
 
 wxString ExpandTextVars( const wxString& aSource, const PROJECT* aProject )
 {
-    return ExpandTextVars( aSource, nullptr, nullptr, aProject );
+    std::function<bool( wxString* )> projectResolver =
+            [&]( wxString* token ) -> bool
+            {
+                return aProject->TextVarResolver( token );
+            };
+
+    return ExpandTextVars( aSource, &projectResolver );
 }
 
 
 wxString ExpandTextVars( const wxString& aSource,
-                         const std::function<bool( wxString* )>* aLocalResolver,
-                         const std::function<bool( wxString* )>* aFallbackResolver,
-                         const PROJECT* aProject )
+                         const std::function<bool( wxString* )>* aResolver )
 {
     wxString newbuf;
     size_t   sourceLen = aSource.length();
@@ -87,15 +91,7 @@ wxString ExpandTextVars( const wxString& aSource,
             if( token.IsEmpty() )
                 continue;
 
-            if( aLocalResolver && (*aLocalResolver)( &token ) )
-            {
-                newbuf.append( token );
-            }
-            else if( aProject && aProject->TextVarResolver( &token ) )
-            {
-                newbuf.append( token );
-            }
-            else if( aFallbackResolver && (*aFallbackResolver)( &token ) )
+            if( aResolver && (*aResolver)( &token ) )
             {
                 newbuf.append( token );
             }

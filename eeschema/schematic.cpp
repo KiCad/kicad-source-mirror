@@ -161,6 +161,9 @@ bool SCHEMATIC::ResolveTextVar( wxString* token, int aDepth ) const
         return CurrentSheet().LastScreen()->GetTitleBlock().TextVarResolver( token, m_project );
     }
 
+    if( Prj().TextVarResolver( token ) )
+        return true;
+
     return false;
 }
 

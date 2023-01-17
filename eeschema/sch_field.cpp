@@ -177,44 +177,22 @@ wxString SCH_FIELD::GetShownText( int aDepth, bool aAllowExtraText ) const
     std::function<bool( wxString* )> symbolResolver =
             [&]( wxString* token ) -> bool
             {
-                if( token->Contains( ':' ) )
-                {
-                    if( Schematic()->ResolveCrossReference( token, aDepth ) )
-                        return true;
-                }
-                else
-                {
-                    SCH_SYMBOL* parentSymbol = static_cast<SCH_SYMBOL*>( m_parent );
-
-                    if( parentSymbol->ResolveTextVar( token, aDepth + 1 ) )
-                        return true;
-
-                    SCHEMATIC* schematic = parentSymbol->Schematic();
-                    SCH_SHEET* sheet = schematic ? schematic->CurrentSheet().Last() : nullptr;
-
-                    if( sheet && sheet->ResolveTextVar( token, aDepth + 1 ) )
-                        return true;
-                }
-
-                return false;
+                return static_cast<SCH_SYMBOL*>( m_parent )->ResolveTextVar( token, aDepth + 1 );
             };
 
     std::function<bool( wxString* )> sheetResolver =
             [&]( wxString* token ) -> bool
             {
-                SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_parent );
-                return sheet->ResolveTextVar( token, aDepth + 1 );
+                return static_cast<SCH_SHEET*>( m_parent )->ResolveTextVar( token, aDepth + 1 );
             };
 
     std::function<bool( wxString* )> labelResolver =
             [&]( wxString* token ) -> bool
             {
-                SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( m_parent );
-                return label->ResolveTextVar( token, aDepth + 1 );
+                return static_cast<SCH_LABEL_BASE*>( m_parent )->ResolveTextVar( token, aDepth + 1 );
             };
 
-    PROJECT*  project = nullptr;
-    wxString  text = EDA_TEXT::GetShownText();
+    wxString text = EDA_TEXT::GetShownText();
 
     if( IsNameShown() )
         text = GetName() << wxS( ": " ) << text;
@@ -225,19 +203,16 @@ wxString SCH_FIELD::GetShownText( int aDepth, bool aAllowExtraText ) const
     }
     else if( HasTextVars() )
     {
-        if( Schematic() )
-            project = &Schematic()->Prj();
-
         if( aDepth < 10 )
         {
             if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
-                text = ExpandTextVars( text, &symbolResolver, nullptr, project );
+                text = ExpandTextVars( text, &symbolResolver );
             else if( m_parent && m_parent->Type() == SCH_SHEET_T )
-                text = ExpandTextVars( text, &sheetResolver, nullptr, project );
+                text = ExpandTextVars( text, &sheetResolver );
             else if( m_parent && m_parent->IsType( { SCH_LABEL_LOCATE_ANY_T } ) )
-                text = ExpandTextVars( text, &labelResolver, nullptr, project );
-            else
-                text = ExpandTextVars( text, project );
+                text = ExpandTextVars( text, &labelResolver );
+            else if( Schematic() )
+                text = ExpandTextVars( text, &Schematic()->Prj() );
         }
     }
 

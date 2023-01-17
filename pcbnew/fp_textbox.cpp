@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -393,8 +393,6 @@ double FP_TEXTBOX::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 wxString FP_TEXTBOX::GetShownText( int aDepth, bool aAllowExtraText ) const
 {
     const FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( GetParent() );
-    wxASSERT( parentFootprint );
-    const BOARD*  board = parentFootprint->GetBoard();
 
     std::function<bool( wxString* )> footprintResolver =
             [&]( wxString* token ) -> bool
@@ -402,23 +400,12 @@ wxString FP_TEXTBOX::GetShownText( int aDepth, bool aAllowExtraText ) const
                 return parentFootprint && parentFootprint->ResolveTextVar( token, aDepth );
             };
 
-    std::function<bool( wxString* )> boardTextResolver =
-            [&]( wxString* token ) -> bool
-            {
-                return board->ResolveTextVar( token, aDepth + 1 );
-            };
-
     wxString text = EDA_TEXT::GetShownText();
 
     if( HasTextVars() )
     {
-        PROJECT* project = nullptr;
-
-        if( parentFootprint && parentFootprint->GetParent() )
-            project = static_cast<BOARD*>( parentFootprint->GetParent() )->GetProject();
-
         if( aDepth < 10 )
-            text = ExpandTextVars( text, &footprintResolver, &boardTextResolver, project );
+            text = ExpandTextVars( text, &footprintResolver );
     }
 
     KIFONT::FONT*         font = getDrawFont();

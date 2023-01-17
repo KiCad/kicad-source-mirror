@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -182,10 +182,13 @@ wxString DS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
                    return true;
                 }
 
+                if( m_project && m_project->TextVarResolver( token ) )
+                    return true;
+
                 return false;
             };
 
-    return ExpandTextVars( aTextbase, &wsResolver, nullptr, m_project );
+    return ExpandTextVars( aTextbase, &wsResolver );
 }
 
 

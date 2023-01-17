@@ -4,7 +4,7 @@
  * Copyright (C) 2014-2020 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2007-2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -79,13 +79,10 @@ bool EnsureFileDirectoryExists( wxFileName*     aTargetFullFileName,
 const wxString ExpandEnvVarSubstitutions( const wxString& aString, const PROJECT* aProject );
 
 /**
- * Expand '${var-name}' templates in text.  The LocalResolver is given first crack at it,
- * after which the PROJECT's resolver is called.
+ * Expand '${var-name}' templates in text.
  */
 wxString ExpandTextVars( const wxString& aSource,
-                         const std::function<bool( wxString* )>* aLocalResolver,
-                         const std::function<bool( wxString* )>* aFallbackResolver,
-                         const PROJECT* aProject );
+                         const std::function<bool( wxString* )>* aResolver );
 
 wxString ExpandTextVars( const wxString& aSource, const PROJECT* aProject );
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -259,7 +259,7 @@ void DIALOG_EXPORT_SVG::ExportSVGFile( bool aOnlyOneFile )
             };
 
     wxString path = m_outputDirectory;
-    path = ExpandTextVars( path, &textResolver, nullptr, nullptr );
+    path = ExpandTextVars( path, &textResolver );
     path = ExpandEnvVarSubstitutions( path, nullptr );
 
     wxFileName outputDir = wxFileName::DirName( path );
