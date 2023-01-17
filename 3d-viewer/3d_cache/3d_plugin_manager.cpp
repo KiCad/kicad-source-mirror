@@ -248,7 +248,7 @@ void S3D_PLUGIN_MANAGER::listPlugins( const wxString& aPath, std::list< wxString
     // Per definition a loadable "xxx.bundle" is similar to an "xxx.app" app
     // bundle being a folder with some special content in it. We obviously don't
     // want to have that here for our loadable module, so just use ".so".
-    nameFilter.Append( ".so" );
+    nameFilter.Append( wxS( ".so" ) );
 #endif
 
     wxString lp = wd.GetNameWithSep();

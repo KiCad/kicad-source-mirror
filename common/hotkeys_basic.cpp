@@ -354,7 +354,7 @@ void ReadHotKeyConfig( const wxString& aFileName, std::map<std::string, int>& aH
 
     if( fileName.IsEmpty() )
     {
-        wxFileName fn( "user" );
+        wxFileName fn( wxS( "user" ) );
         fn.SetExt( HotkeyFileExtension );
         fn.SetPath( SETTINGS_MANAGER::GetUserSettingsPath() );
         fileName = fn.GetFullPath();
@@ -371,11 +371,11 @@ void ReadHotKeyConfig( const wxString& aFileName, std::map<std::string, int>& aH
     wxString input;
     file.ReadAll( &input );
     input.Replace( "\r\n", "\n" );  // Convert Windows files to Unix line-ends
-    wxStringTokenizer fileTokenizer( input, "\n", wxTOKEN_STRTOK );
+    wxStringTokenizer fileTokenizer( input, wxS( "\n" ), wxTOKEN_STRTOK );
 
     while( fileTokenizer.HasMoreTokens() )
     {
-        wxStringTokenizer lineTokenizer( fileTokenizer.GetNextToken(), "\t" );
+        wxStringTokenizer lineTokenizer( fileTokenizer.GetNextToken(), wxS( "\t" ) );
 
         wxString cmdName = lineTokenizer.GetNextToken();
         wxString keyName = lineTokenizer.GetNextToken();

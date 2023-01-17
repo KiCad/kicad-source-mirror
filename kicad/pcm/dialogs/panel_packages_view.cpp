@@ -41,11 +41,11 @@
 
 
 std::unordered_map<PCM_PACKAGE_VERSION_STATUS, wxString> PANEL_PACKAGES_VIEW::STATUS_ENUM_TO_STR = {
-    { PVS_INVALID, "invalid" },
-    { PVS_STABLE, "stable" },
-    { PVS_TESTING, "testing" },
-    { PVS_DEVELOPMENT, "development" },
-    { PVS_DEPRECATED, "deprecated" }
+    { PVS_INVALID, wxS( "invalid" ) },
+    { PVS_STABLE, wxS( "stable" ) },
+    { PVS_TESTING, wxS( "testing" ) },
+    { PVS_DEVELOPMENT, wxS( "development" ) },
+    { PVS_DEPRECATED, wxS( "deprecated" ) }
 };
 
 

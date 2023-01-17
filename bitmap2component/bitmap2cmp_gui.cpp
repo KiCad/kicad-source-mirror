@@ -490,9 +490,9 @@ wxString BM2CMP_FRAME::FormatOutputSize( double aSize )
     wxString text;
 
     if( getUnitFromSelection() == EDA_UNITS::MILLIMETRES )
-        text.Printf( "%.1f", aSize );
+        text.Printf( wxS( "%.1f" ), aSize );
     else if( getUnitFromSelection() == EDA_UNITS::INCHES )
-        text.Printf( "%.2f", aSize );
+        text.Printf( wxS( "%.2f" ), aSize );
     else
         text.Printf( wxT( "%d" ), KiROUND( aSize ) );
 

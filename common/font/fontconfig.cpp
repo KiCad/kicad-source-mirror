@@ -95,7 +95,7 @@ bool FONTCONFIG::FindFont( const wxString& aFontName, wxString& aFontFile )
 
                     if( !styleStr.IsEmpty() )
                     {
-                        styleStr.Replace( " ", ":" );
+                        styleStr.Replace( wxS( " " ), wxS( ":" ) );
                         fontName += ":" + styleStr;
                     }
                 }

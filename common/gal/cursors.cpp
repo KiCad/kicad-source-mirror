@@ -359,12 +359,12 @@ wxCursor constructCursor( const CURSOR_STORE::CURSOR_DEF& aDef )
         };
 
 #else
-        wxASSERT_MSG( false, "Unknown platform for cursor construction." );
+        wxASSERT_MSG( false, wxS( "Unknown platform for cursor construction." ) );
         return wxNullCursor;
 #endif
     }
 
-    wxASSERT_MSG( false, "Unknown to find cursor" );
+    wxASSERT_MSG( false, wxS( "Unknown to find cursor" ) );
     return wxNullCursor;
 }
 

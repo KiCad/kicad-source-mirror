@@ -151,16 +151,16 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
 
     m_auimgr.SetManagedWindow( this );
 
-    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer( 6 ) );
-    m_auimgr.AddPane( m_infoBar, EDA_PANE().InfoBar().Name( "InfoBar" ).Top().Layer( 1 ) );
-    m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
+    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( wxS( "MainToolbar" ) ).Top().Layer( 6 ) );
+    m_auimgr.AddPane( m_infoBar, EDA_PANE().InfoBar().Name( wxS( "InfoBar" ) ).Top().Layer( 1 ) );
+    m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( wxS( "DrawFrame" ) ).Center() );
 
     // Call Update() to fix all pane default sizes, especially the "InfoBar" pane before
     // hiding it.
     m_auimgr.Update();
 
     // We don't want the infobar displayed right away
-    m_auimgr.GetPane( "InfoBar" ).Hide();
+    m_auimgr.GetPane( wxS( "InfoBar" ) ).Hide();
     m_auimgr.Update();
 
     m_canvas->SetInfoBar( m_infoBar );

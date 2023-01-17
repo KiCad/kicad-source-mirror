@@ -104,9 +104,9 @@ PLUGIN_CONTENT_MANAGER::PLUGIN_CONTENT_MANAGER(
     ReadEnvVar();
 
     // Read and store pcm schema
-    wxFileName schema_file( PATHS::GetStockDataPath( true ), "pcm.v1.schema.json" );
+    wxFileName schema_file( PATHS::GetStockDataPath( true ), wxS( "pcm.v1.schema.json" ) );
     schema_file.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
-    schema_file.AppendDir( "schemas" );
+    schema_file.AppendDir( wxS( "schemas" ) );
 
     std::ifstream  schema_stream( schema_file.GetFullPath().ToUTF8() );
     nlohmann::json schema;

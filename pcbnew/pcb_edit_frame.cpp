@@ -269,36 +269,36 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.SetFlags( auiFlags );
 
     // Rows; layers 4 - 6
-    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" )
+    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( wxS( "MainToolbar" ) )
                       .Top().Layer( 6 ) );
-    m_auimgr.AddPane( m_auxiliaryToolBar, EDA_PANE().HToolbar().Name( "AuxToolbar" )
+    m_auimgr.AddPane( m_auxiliaryToolBar, EDA_PANE().HToolbar().Name( wxS( "AuxToolbar" ) )
                       .Top().Layer( 5 ) );
-    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" )
+    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( wxS( "MsgPanel" ) )
                       .Bottom().Layer( 6 ) );
 
     // Columns; layers 1 - 3
-    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" )
+    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( wxS( "OptToolbar" ) )
                       .Left().Layer( 3 ) );
 
-    m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" )
+    m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( wxS( "ToolsToolbar" ) )
                       .Right().Layer( 3 ) );
 
-    m_auimgr.AddPane( m_appearancePanel, EDA_PANE().Name( "LayersManager" )
+    m_auimgr.AddPane( m_appearancePanel, EDA_PANE().Name( wxS( "LayersManager" ) )
                       .Right().Layer( 4 )
                       .Caption( _( "Appearance" ) ).PaneBorder( false )
                       .MinSize( 180, -1 ).BestSize( 180, -1 ) );
 
-    m_auimgr.AddPane( m_selectionFilterPanel, EDA_PANE().Name( "SelectionFilter" )
+    m_auimgr.AddPane( m_selectionFilterPanel, EDA_PANE().Name( wxS( "SelectionFilter" ) )
                       .Right().Layer( 4 ).Position( 2 )
                       .Caption( _( "Selection Filter" ) ).PaneBorder( false )
                       .MinSize( 180, -1 ).BestSize( 180, -1 ) );
 
-    m_auimgr.AddPane( m_propertiesPanel, EDA_PANE().Name( "PropertiesManager" )
+    m_auimgr.AddPane( m_propertiesPanel, EDA_PANE().Name( wxS( "PropertiesManager" ) )
                       .Left().Layer( 5 ).Caption( _( "Properties" ) )
                       .PaneBorder( false ).MinSize( 240, -1 ).BestSize( 300, -1 ) );
 
     // Center
-    m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" )
+    m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( wxS( "DrawFrame" ) )
                       .Center() );
 
 
@@ -329,13 +329,13 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     {
         if( settings->m_AuiPanels.right_panel_width > 0 )
         {
-            wxAuiPaneInfo& layersManager = m_auimgr.GetPane( "LayersManager" );
+            wxAuiPaneInfo& layersManager = m_auimgr.GetPane( wxS( "LayersManager" ) );
             SetAuiPaneSize( m_auimgr, layersManager, settings->m_AuiPanels.right_panel_width, -1 );
         }
 
         if( settings->m_AuiPanels.properties_panel_width > 0 && m_propertiesPanel )
         {
-            wxAuiPaneInfo& propertiesPanel = m_auimgr.GetPane( "PropertiesManager" );
+            wxAuiPaneInfo& propertiesPanel = m_auimgr.GetPane( wxS( "PropertiesManager" ) );
             SetAuiPaneSize( m_auimgr, propertiesPanel,
                             settings->m_AuiPanels.properties_panel_width, -1 );
         }
@@ -1113,8 +1113,8 @@ void PCB_EDIT_FRAME::doCloseWindow()
     // the Layer Manager
     if( m_show_layer_manager_tools )
     {
-        m_auimgr.GetPane( "LayersManager" ).Show( false );
-        m_auimgr.GetPane( "TabbedPanel" ).Show( false );
+        m_auimgr.GetPane( wxS( "LayersManager" ) ).Show( false );
+        m_auimgr.GetPane( wxS( "TabbedPanel" ) ).Show( false );
     }
 
     // Unlink the old project if needed
@@ -2091,13 +2091,13 @@ wxString PCB_EDIT_FRAME::GetCurrentFileName() const
 
 bool PCB_EDIT_FRAME::LayerManagerShown()
 {
-    return m_auimgr.GetPane( "LayersManager" ).IsShown();
+    return m_auimgr.GetPane( wxS( "LayersManager" ) ).IsShown();
 }
 
 
 bool PCB_EDIT_FRAME::PropertiesShown()
 {
-    return m_auimgr.GetPane( "PropertiesManager" ).IsShown();
+    return m_auimgr.GetPane( wxS( "PropertiesManager" ) ).IsShown();
 }
 
 

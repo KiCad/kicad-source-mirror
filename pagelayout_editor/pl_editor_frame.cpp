@@ -670,9 +670,9 @@ void PL_EDITOR_FRAME::DisplayGridMsg()
 
     switch( GetUserUnits() )
     {
-    case EDA_UNITS::INCHES:      gridformatter = "grid %.3f"; break;
-    case EDA_UNITS::MILLIMETRES: gridformatter = "grid %.4f"; break;
-    default:                     gridformatter = "grid %f";   break;
+    case EDA_UNITS::INCHES:      gridformatter = wxS( "grid %.3f" ); break;
+    case EDA_UNITS::MILLIMETRES: gridformatter = wxS( "grid %.4f" ); break;
+    default:                     gridformatter = wxS( "grid %f" );   break;
     }
 
     double grid = EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, GetUserUnits(),

@@ -93,10 +93,10 @@ OUTLINE_FONT* OUTLINE_FONT::LoadFont( const wxString& aFontName, bool aBold, boo
     wxString qualifiedFontName = aFontName;
 
     if( aBold )
-        qualifiedFontName << ":Bold";
+        qualifiedFontName << wxS( ":Bold" );
 
     if( aItalic )
-        qualifiedFontName << ":Italic";
+        qualifiedFontName << wxS( ":Italic" );
 
     if( Fontconfig()->FindFont( qualifiedFontName, fontFile ) )
         (void) font->loadFace( fontFile );

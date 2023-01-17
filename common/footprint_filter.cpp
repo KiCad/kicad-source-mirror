@@ -137,9 +137,9 @@ bool FOOTPRINT_FILTER_IT::FootprintFilterMatch( FOOTPRINT_INFO& aItem )
         name.Empty();
 
         // If the filter contains a ':' character, include the library name in the pattern
-        if( each_filter->GetPattern().Contains( ":" ) )
+        if( each_filter->GetPattern().Contains( wxS( ":" ) ) )
         {
-            name = aItem.GetLibNickname().Lower() + ":";
+            name = aItem.GetLibNickname().Lower() + wxS( ":" );
         }
 
         name += aItem.GetFootprintName().Lower();

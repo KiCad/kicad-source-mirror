@@ -782,9 +782,9 @@ void KICAD_MANAGER_FRAME::ProjectChanged()
     }
 
     if( ADVANCED_CFG::GetCfg().m_HideVersionFromTitle )
-        title += wxT( " \u2014 " ) + wxString( "KiCad" );
+        title += wxT( " \u2014 " ) + wxString( wxS( "KiCad" ) );
     else
-        title += wxT( " \u2014 " ) + wxString( "KiCad " ) + GetMajorMinorVersion();
+        title += wxT( " \u2014 " ) + wxString( wxS( "KiCad " ) ) + GetMajorMinorVersion();
 
     SetTitle( title );
 }

@@ -76,13 +76,13 @@ wxString EDA_SHAPE::SHAPE_T_asString() const
 {
     switch( m_shape )
     {
-    case SHAPE_T::SEGMENT: return "S_SEGMENT";
-    case SHAPE_T::RECT:    return "S_RECT";
-    case SHAPE_T::ARC:     return "S_ARC";
-    case SHAPE_T::CIRCLE:  return "S_CIRCLE";
-    case SHAPE_T::POLY:    return "S_POLYGON";
-    case SHAPE_T::BEZIER:  return "S_CURVE";
-    case SHAPE_T::LAST:    return "!S_LAST!";  // Synthetic value, but if we come across it then
+    case SHAPE_T::SEGMENT: return wxS( "S_SEGMENT" );
+    case SHAPE_T::RECT:    return wxS( "S_RECT" );
+    case SHAPE_T::ARC:     return wxS( "S_ARC" );
+    case SHAPE_T::CIRCLE:  return wxS( "S_CIRCLE" );
+    case SHAPE_T::POLY:    return wxS( "S_POLYGON" );
+    case SHAPE_T::BEZIER:  return wxS( "S_CURVE" );
+    case SHAPE_T::LAST:    return wxS( "!S_LAST!" );  // Synthetic value, but if we come across it then
                                                // we're going to want to know.
     }
 
@@ -649,7 +649,7 @@ void EDA_SHAPE::ShapeGetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
         break;
 
     case SHAPE_T::POLY:
-        msg.Printf( "%d", GetPolyShape().Outline(0).PointCount() );
+        msg.Printf( wxS( "%d" ), GetPolyShape().Outline(0).PointCount() );
         aList.emplace_back( _( "Points" ), msg );
         break;
 

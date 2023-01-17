@@ -136,23 +136,23 @@ KICAD_CURL_EASY::KICAD_CURL_EASY() :
     wxPlatformInfo platformInfo;
     wxString application( Pgm().App().GetAppName() );
     wxString version( GetBuildVersion() );
-    wxString platform = "(" + wxGetOsDescription() + ";" + GetPlatformGetBitnessName();
+    wxString platform = wxS( "(" ) + wxGetOsDescription() + wxS( ";" ) + GetPlatformGetBitnessName();
 
 #if defined( KICAD_BUILD_ARCH_X64 )
-    platform << ";64-bit";
+    platform << wxS( ";64-bit" );
 #elif defined( KICAD_BUILD_ARCH_X86 )
-    platform << ";32-bit";
+    platform << wxS( ";32-bit" );
 #elif defined( KICAD_BUILD_ARCH_ARM )
-    platform << ";ARM 32-bit";
+    platform << wxS( ";ARM 32-bit" );
 #elif defined( KICAD_BUILD_ARCH_ARM64 )
-    platform << ";ARM 64-bit";
+    platform << wxS( ";ARM 64-bit" );
 #endif
 
-    platform << ")";
+    platform << wxS( ")" );
 
-    wxString user_agent = "KiCad/" + version + " " + platform + " " + application;
+    wxString user_agent = wxS( "KiCad/" ) + version + wxS( " " ) + platform + wxS( " " ) + application;
 
-    user_agent << "/" << GetBuildDate();
+    user_agent << wxS( "/" ) << GetBuildDate();
     setOption<const char*>( CURLOPT_USERAGENT, user_agent.ToStdString().c_str() );
     setOption( CURLOPT_ACCEPT_ENCODING, "gzip,deflate" );
 }

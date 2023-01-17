@@ -239,15 +239,15 @@ bool EDA_PATTERN_MATCH_RELATIONAL::SetPattern( const wxString& aPattern )
 
     m_key = key.Lower();
 
-    if( rel == "<" )
+    if( rel == wxS( "<" ) )
         m_relation = LT;
-    else if( rel == "<=" )
+    else if( rel == wxS( "<=" ) )
         m_relation = LE;
-    else if( rel == "=" )
+    else if( rel == wxS( "=" ) )
         m_relation = EQ;
-    else if( rel == ">=" )
+    else if( rel == wxS( ">=" ) )
         m_relation = GE;
-    else if( rel == ">" )
+    else if( rel == wxS( ">" ) )
         m_relation = GT;
     else
         return false;
@@ -351,19 +351,19 @@ wxRegEx EDA_PATTERN_MATCH_RELATIONAL::m_regex_description(
 wxRegEx EDA_PATTERN_MATCH_RELATIONAL::m_regex_search(
         R"(^(\w+)(<|<=|=|>=|>)([-+]?[\d.]*)(\w*)$)", wxRE_ADVANCED );
 const std::map<wxString, double> EDA_PATTERN_MATCH_RELATIONAL::m_units = {
-    { "p",  1e-12 },
-    { "n",  1e-9 },
-    { "u",  1e-6 },
-    { "m",  1e-3 },
-    { "",   1. },
-    { "k",  1e3 },
-    { "meg",1e6 },
-    { "g",  1e9 },
-    { "t",  1e12 },
-    { "ki", 1024. },
-    { "mi", 1048576. },
-    { "gi", 1073741824. },
-    { "ti", 1099511627776. } };
+    { wxS( "p" ),  1e-12 },
+    { wxS( "n" ),  1e-9 },
+    { wxS( "u" ),  1e-6 },
+    { wxS( "m" ),  1e-3 },
+    { wxS( "" ),   1. },
+    { wxS( "k" ),  1e3 },
+    { wxS( "meg" ), 1e6 },
+    { wxS( "g" ),  1e9 },
+    { wxS( "t" ),  1e12 },
+    { wxS( "ki" ), 1024. },
+    { wxS( "mi" ), 1048576. },
+    { wxS( "gi" ), 1073741824. },
+    { wxS( "ti" ), 1099511627776. } };
 
 
 EDA_COMBINED_MATCHER::EDA_COMBINED_MATCHER( const wxString& aPattern,

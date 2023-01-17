@@ -476,7 +476,7 @@ FOOTPRINT* FP_LIB_TABLE::FootprintLoadWithOptionalNickname( const LIB_ID& aFootp
 
 const wxString FP_LIB_TABLE::GlobalPathEnvVariableName()
 {
-    return  "KICAD6_FOOTPRINT_DIR";
+    return  wxS( "KICAD6_FOOTPRINT_DIR" );
 }
 
 
@@ -501,25 +501,25 @@ public:
 
         // consider a directory to be a lib if it's name ends with .pretty and
         // it is under $KICAD6_3RD_PARTY/footprints/<pkgid>/ i.e. has nested level of at least +3
-        if( dirPath.EndsWith( ".pretty" ) && dir.GetDirCount() >= m_prefix_dir_count + 3 )
+        if( dirPath.EndsWith( wxS( ".pretty" ) ) && dir.GetDirCount() >= m_prefix_dir_count + 3 )
         {
             wxArrayString parts = dir.GetDirs();
             parts.RemoveAt( 0, m_prefix_dir_count );
-            parts.Insert( "${KICAD6_3RD_PARTY}", 0 );
+            parts.Insert( wxS( "${KICAD6_3RD_PARTY}" ), 0 );
 
             wxString libPath = wxJoin( parts, '/' );
 
             if( !m_lib_table.HasLibraryWithPath( libPath ) )
             {
                 wxString name = parts.Last().substr( 0, parts.Last().length() - 7 );
-                wxString nickname = wxString::Format( "%s%s", m_lib_prefix, name );
+                wxString nickname = wxString::Format( wxS( "%s%s" ), m_lib_prefix, name );
 
                 if( m_lib_table.HasLibrary( nickname ) )
                 {
                     int increment = 1;
                     do
                     {
-                        nickname = wxString::Format( "%s%s_%d", m_lib_prefix, name, increment );
+                        nickname = wxString::Format( wxS( "%s%s_%d" ), m_lib_prefix, name, increment );
                         increment++;
                     } while( m_lib_table.HasLibrary( nickname ) );
                 }
@@ -591,7 +591,7 @@ bool FP_LIB_TABLE::LoadGlobalTable( FP_LIB_TABLE& aTable )
         // Scan for libraries in PCM packages directory
 
         wxFileName d( packagesPath, "" );
-        d.AppendDir( "footprints" );
+        d.AppendDir( wxS( "footprints" ) );
 
         if( d.DirExists() )
         {

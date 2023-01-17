@@ -127,7 +127,7 @@ void KICAD_MANAGER_FRAME::doReCreateMenuBar()
                    BITMAPS::unzip );
 
     fileMenu->AppendSeparator();
-    fileMenu->AddQuitOrClose( nullptr, "KiCad" );
+    fileMenu->AddQuitOrClose( nullptr, wxS( "KiCad" ) );
 
     //-- Edit menu -----------------------------------------------------------
     //
@@ -199,7 +199,7 @@ void KICAD_MANAGER_FRAME::doReCreateMenuBar()
 
     // We can't use ACTIONS::showPreferences yet because wxWidgets moves this on
     // Mac, and it needs the wxID_PREFERENCES id to find it.
-    prefsMenu->Add( _( "Preferences..." ) + "\tCtrl+,",
+    prefsMenu->Add( _( "Preferences..." ) + wxS( "\tCtrl+," ),
                     _( "Show preferences for all open tools" ),
                     wxID_PREFERENCES,
                     BITMAPS::preference );
