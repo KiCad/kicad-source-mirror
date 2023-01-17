@@ -1528,6 +1528,13 @@ ZONE* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
         vertex = vertex->GetNext();
     }
 
+    // According to Eagle's doc, by default, the orphans (islands in KiCad parlance)
+    // are always removed
+    if( !p.orphans || !p.orphans.Get() )
+        zone->SetIslandRemovalMode( ISLAND_REMOVAL_MODE::ALWAYS );
+    else
+        zone->SetIslandRemovalMode( ISLAND_REMOVAL_MODE::NEVER );
+
     vertices.push_back( vertices[0] );
 
     SHAPE_POLY_SET polygon;
