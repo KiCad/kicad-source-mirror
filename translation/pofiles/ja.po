@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-11 12:35-0800\n"
-"PO-Revision-Date: 2023-01-13 08:09+0000\n"
+"PO-Revision-Date: 2023-01-17 17:11+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -594,7 +594,7 @@ msgstr "ハンダ マスク表示の切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:263
 msgid "Toggle display of solder mask layers"
-msgstr "ハンダ マスク レイヤーの表示を切り替え"
+msgstr "ハンダマスク レイヤーの表示を切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:267
 msgid "Toggle solder paste display"
@@ -602,7 +602,7 @@ msgstr "ハンダ ペースト表示の切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:267
 msgid "Toggle display of solder paste layers"
-msgstr "ハンダ ペースト レイヤーの表示を切り替え"
+msgstr "ハンダペースト レイヤーの表示を切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:271
 msgid "Toggle comments display"
@@ -710,7 +710,7 @@ msgstr "基板レイヤー"
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:35
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:31
 msgid "Show silkscreen layers"
-msgstr "シルクスクリーンレイヤーを表示"
+msgstr "シルクスクリーン レイヤーを表示"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:38
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:34
@@ -725,12 +725,12 @@ msgstr "シルクスクリーンをビアの円環で切り抜く"
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:44
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:40
 msgid "Show solder mask layers"
-msgstr "ハンダ マスク レイヤーを表示"
+msgstr "ハンダマスク レイヤーを表示"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:47
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:43
 msgid "Show solder paste layers"
-msgstr "ハンダ ペースト レイヤーを表示"
+msgstr "ハンダペースト レイヤーを表示"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:50
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:46
@@ -1334,7 +1334,7 @@ msgstr "ファイル '%s' を作成できませんでした。"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:775
 msgid "Create PostScript File"
-msgstr "PostScript ファイルを作成"
+msgstr "PostScriptファイルを作成"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:811
 msgid "Create Symbol Library"
@@ -1499,11 +1499,11 @@ msgstr ""
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:168
 msgid "Symbol (.kicad_sym file)"
-msgstr "シンボル (.kicad_symファイル)"
+msgstr "シンボル (.kicad_sym ファイル)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:168
 msgid "Footprint (.kicad_mod file)"
-msgstr "フットプリント (.kicad_modファイル)"
+msgstr "フットプリント (.kicad_mod ファイル)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:168
 msgid "Postscript (.ps file)"
@@ -1511,7 +1511,7 @@ msgstr "Postscript (.ps ファイル)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:168
 msgid "Drawing Sheet (.kicad_wks file)"
-msgstr "図面シート (.kicad_wksファイル)"
+msgstr "図面シート (.kicad_wks ファイル)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:170
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:44
@@ -2051,10 +2051,10 @@ msgid ""
 "over the ones defined in this table.  This means the values in this table "
 "are ignored."
 msgstr ""
-"各々の環境変数へ名前とパスを入力して下さい。灰色の項目は、システムまたはユー"
-"ザーによって外部で定義された名前です。システムまたはユーザーによって定義され"
-"た環境変数は、このテーブルの定義に優先します。これは、このテーブルの定義が無"
-"視されることを意味します。"
+"各々の環境変数へ名前とパスを入力して下さい。灰色の項目はシステムまたはユーザ"
+"ーによって外部で定義された名前です。システムまたはユーザーによって定義された"
+"環境変数は、このテーブルの定義に優先します。これは、このテーブルの定義が無視"
+"されることを意味します。"
 
 #: common/dialogs/dialog_configure_paths.cpp:400
 msgid ""
@@ -2510,7 +2510,7 @@ msgstr "タイトルブロック"
 #: common/dialogs/dialog_page_settings.cpp:473
 #, c-format
 msgid "Drawing sheet file '%s' not found."
-msgstr "図面シートファイル '%s' が見つかりません。"
+msgstr "図面シート ファイル '%s' が見つかりません。"
 
 #: common/dialogs/dialog_page_settings.cpp:707
 #: common/dialogs/dialog_page_settings_base.cpp:51
@@ -2524,7 +2524,7 @@ msgstr "横向き"
 
 #: common/dialogs/dialog_page_settings.cpp:795
 msgid "Select Drawing Sheet File"
-msgstr "図面シートファイルを選択"
+msgstr "図面シート ファイルを選択"
 
 #: common/dialogs/dialog_page_settings_base.cpp:38
 msgid "dummy text"
@@ -2700,7 +2700,7 @@ msgstr "ファイル:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:174
 msgid "Title Block Parameters"
-msgstr "タイトル ブロック パラメーター"
+msgstr "タイトルブロック パラメーター"
 
 #: common/dialogs/dialog_page_settings_base.cpp:184
 #, c-format
@@ -3129,12 +3129,13 @@ msgid ""
 msgstr ""
 "キャンバスのスケールを設定します。\n"
 "\n"
-"いくつかのプラットフォームでは、高 DPI ディスプレイでの表示時に KiCad は画面"
-"の拡大／縮小率を決定することができません。このような場合、システムの DPI ス"
-"ケーリングに合うような値に設定する必要があります、2.0 が一般的な値です。\n"
+"高 DPI のディスプレイで表示した時に KiCad "
+"が画面の拡大／縮小率を決定することができないプラットフォームがあります。"
+"この場合システムの DPI スケーリングに合うような値に設定する必要があります。"
+"2.0 が一般的な値です。\n"
 "\n"
-"もしこれがシステムの DPI スケーリングに合っていなかったら、キャンバスはウィン"
-"ドウ サイズとカーソル位置に適合しなくなるでしょう。"
+"システムの DPI スケーリングに合っていないと、キャンバスはウィンドウ "
+"サイズとカーソル位置に適合しなくなります。"
 
 #: common/dialogs/panel_common_settings.cpp:125
 #: common/dialogs/panel_common_settings.cpp:126
@@ -3303,7 +3304,7 @@ msgstr ""
 #: common/dialogs/panel_common_settings_base.cpp:214
 #: common/dialogs/panel_common_settings_base.cpp:187
 msgid "High-contrast mode dimming factor:"
-msgstr "ハイコントラストモードの調光要素:"
+msgstr "ハイコントラスト モードの調光要素:"
 
 #: common/dialogs/panel_common_settings_base.cpp:221
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:77
@@ -3343,7 +3344,7 @@ msgstr "編集"
 #: common/dialogs/panel_common_settings_base.cpp:247
 #: common/dialogs/panel_common_settings_base.cpp:213
 msgid "Warp mouse to origin of moved object"
-msgstr "移動されたオブジェクトの原点にマウス カーソルを移動"
+msgstr "移動されたオブジェクトの原点にマウスカーソルを移動"
 
 #: common/dialogs/panel_common_settings_base.cpp:251
 #: common/dialogs/panel_common_settings_base.cpp:217
@@ -3525,18 +3526,18 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are not shared in this process."
 msgstr ""
-"KiCadは、クラッシュや特殊なイベントのデータを匿名で開発者に報告し、ユーザー全"
-"体の重要なバグをより効果的に特定したり、改良のために機能的な分析の手がかりに"
-"します\n"
+"KiCadはクラッシュや稀なイベントのデータを匿名で開発者に報告し、ユーザーベース"
+"全体を通じて重要なバグをより効果的に特定したり、機能改善のための分析の手がか"
+"りにします。\n"
 "\n"
-"同じKiCadインストールからの自動レポートをリンクするために、完全にランダムな一"
-"意の識別子が生成され、それはクラッシュレポートの目的にのみ使用されます。IPア"
-"ドレスを含む個人を特定できる情報（PII）はこの識別子に保存されたり、関連付けた"
-"りしません。このIDはいつでもリセットすることができます。\n"
+"インストールされたKiCadと自動的に送信するレポートを紐づけるために完全にランダ"
+"ムで一意の識別子を生成し、クラッシュのレポートの目的だけに使用します。IPアド"
+"レスを含む個人情報はこの識別子に保存されたり関連付けたりしません。この識別子"
+"はいつでもリセットすることができます。\n"
 "\n"
-"自発的に参加することを選択した場合、KiCadはクラッシュやイベントが発生した時に"
-"自動的にレポートを送信するように処理します。回路図やPCBのようなあなたが作成し"
-"たファイルは、この過程で共有されることはありません。"
+"この活動に参加することを選択した場合、KiCadはクラッシュやイベントが発生した時"
+"に自動的にレポートを送信します。回路図やPCBのようなユーザーが作成したファイル"
+"はこの過程で共有されることはありません。"
 
 #: common/dialogs/panel_data_collection_base.cpp:24
 msgid "I agree to provide anonymous reports"
@@ -4072,7 +4073,7 @@ msgstr "パターン"
 #: common/dialogs/panel_setup_netclasses_base.cpp:43
 #: common/dialogs/panel_setup_netclasses_base.cpp:126
 msgid "Net Class"
-msgstr "ネット クラス"
+msgstr "ネットクラス"
 
 #: common/dialogs/panel_setup_severities.cpp:43
 #: common/dialogs/panel_setup_severities.cpp:117 pcbnew/pcb_marker.cpp:199
@@ -4472,17 +4473,17 @@ msgstr "自動保存ファイルを基板ファイル名にリネームできま
 
 #: common/eda_doc.cpp:130
 msgid "Documentation File"
-msgstr "ドキュメントファイル"
+msgstr "ドキュメント ファイル"
 
 #: common/eda_doc.cpp:140
 #, c-format
 msgid "Documentation file '%s' not found."
-msgstr "ドキュメントファイル '%s' が見つかりません。"
+msgstr "ドキュメント ファイル '%s' が見つかりません。"
 
 #: common/eda_doc.cpp:183
 #, c-format
 msgid "Unknown MIME type for documentation file '%s'"
-msgstr "ドキュメントファイル '%s' のMIME タイプが不明です"
+msgstr "ドキュメント ファイル '%s' のMIME タイプが不明です"
 
 #: common/eda_draw_frame.cpp:144 common/tool/actions.cpp:497
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:31
@@ -5005,7 +5006,7 @@ msgstr "向き"
 #: pcbnew/dialogs/dialog_text_properties_base.h:108 pcbnew/pcb_text.cpp:347
 #: pcbnew/dialogs/dialog_text_properties_base.h:110
 msgid "Text Properties"
-msgstr "テキスト プロパティ"
+msgstr "テキストのプロパティ"
 
 #: common/eda_text.cpp:1036 pcbnew/pcb_text.cpp:362
 msgid "Hyperlink"
@@ -5097,12 +5098,12 @@ msgid ""
 "For instance, ${KIPRJMOD}/libs/footprints.pretty can be defined as a folder "
 "containing a project specific footprint library named footprints.pretty."
 msgstr ""
-"KiCad によって内部定義され (編集できません) 、現在読み込まれているプロジェク"
-"ト ファイルの絶対パスがセットされます。この環境変数は、読み込まれているプロ"
-"ジェクトへの相対的なファイルやパスを定義するために使用できます。例え"
-"ば、${KIPRJMOD}/libs/footprints.pretty は footprints.pretty と名付けられたプ"
-"ロジェクト固有のフットプリント ライブラリーを含むフォルダーとして定義できま"
-"す。"
+"現在読み込まれているプロジェクト ファイルの絶対パスがKiCad "
+"によって内部定義され (編集できません) 設定されます。この環境変数は、読み込ま"
+"れているプロジェクトへの相対的なファイルやパスを定義するために使用できます。"
+"例えば、${KIPRJMOD}/libs/footprints.pretty は footprints.pretty "
+"と名付けられたプロジェクト固有のフットプリント "
+"ライブラリーを含むフォルダーとして定義できます。"
 
 #: common/env_vars.cpp:92
 msgid "A directory containing system-wide scripts installed with KiCad"
@@ -5829,12 +5830,13 @@ msgid ""
 "sending said reports when crashes or events occur. \n"
 "Your design files such as schematic or PCB are not shared in this process."
 msgstr ""
-"KiCadはクラッシュや特別なイベントのデータを匿名で開発者に報告することができ、"
-"より効果的にユーザーベースの重要なバグを特定することで改善のために機能的に分"
-"析するのに役立ちます。\n"
-"自主的に参加されることを選択した場合、KiCadはクラッシュやイベントが発生した時"
-"に自動的に報告書を送信します。\n"
-"回路図やPCBのようなあなたがデザインしたファイルはこの過程で共有されません。"
+"KiCadはクラッシュや稀なイベントのデータを匿名で開発者に報告し、ユーザーベース"
+"全体を通じて重要なバグをより効果的に特定したり、機能改善のための分析の手がか"
+"りにします。\n"
+"\n"
+"この活動に参加することを選択した場合、KiCadはクラッシュやイベントが発生した時"
+"に自動的にレポートを送信します。回路図やPCBのようなユーザーが作成したファイル"
+"はこの過程で共有されることはありません。"
 
 #: common/pgm_base.cpp:361
 msgid "Data collection opt in request"
@@ -5981,12 +5983,12 @@ msgstr "不正な円弧 (半径 %f 、角度 %f )"
 
 #: common/project.cpp:351 common/project.cpp:356 pcbnew/pcb_base_frame.cpp:199
 msgid "Error loading project footprint library table."
-msgstr ""
-"プロジェクト フットプリント ライブラリー テーブルのロード中にエラーしました。"
+msgstr "プロジェクトのフットプリント ライブラリー "
+"テーブルをロード中にエラーしました。"
 
 #: common/project/net_settings.cpp:61 pcbnew/board.cpp:108
 msgid "This is the default net class."
-msgstr "これはデフォルトのネット クラスです。"
+msgstr "これはデフォルトのネットクラスです。"
 
 #: common/project/project_archiver.cpp:52 kicad/pcm/pcm_task_manager.cpp:330
 msgid "Could not open archive file."
@@ -6245,8 +6247,7 @@ msgstr "特殊な貼り付け..."
 
 #: common/tool/actions.cpp:175
 msgid "Paste item(s) from clipboard with annotation options"
-msgstr ""
-"アノテーションオプションを指定してクリップボードからアイテムを貼り付ける"
+msgstr "アノテーションのオプションを指定してクリップボードからアイテムを貼り付ける"
 
 #: common/tool/actions.cpp:181
 msgid "Duplicate"
@@ -6436,7 +6437,7 @@ msgstr "マウスの左クリックを実行"
 
 #: common/tool/actions.cpp:411
 msgid "Double-click"
-msgstr "ダブル クリック"
+msgstr "ダブルクリック"
 
 #: common/tool/actions.cpp:411
 msgid "Performs left mouse button double-click"
@@ -6585,7 +6586,7 @@ msgstr "全画面十字線の表示を切り替え"
 
 #: common/tool/actions.cpp:551
 msgid "Inactive Layer View Mode"
-msgstr "非アクティブレイヤー表示モード"
+msgstr "非アクティブ レイヤー表示モード"
 
 #: common/tool/actions.cpp:552
 msgid "Toggle inactive layers between normal and dimmed"
@@ -6593,7 +6594,7 @@ msgstr "非アクティブのレイヤーを標準と非表示で切り替える
 
 #: common/tool/actions.cpp:558
 msgid "Inactive Layer View Mode (3-state)"
-msgstr "非アクティブレイヤー表示モード (3 状態)"
+msgstr "非アクティブ レイヤー表示モード (3 状態)"
 
 #: common/tool/actions.cpp:559
 msgid "Cycle inactive layers between normal, dimmed, and hidden"
@@ -7121,7 +7122,7 @@ msgstr "コマンド"
 
 #: common/widgets/widget_hotkey_list.cpp:470
 msgid "(double-click to edit)"
-msgstr "(ダブル クリックで編集)"
+msgstr "(ダブルクリックで編集)"
 
 #: common/widgets/widget_hotkey_list.cpp:473
 msgid "Hotkey"
@@ -7297,15 +7298,15 @@ msgstr "P-Cad 200x ASCII PCBファイル"
 
 #: common/wildcards_and_files_ext.cpp:347
 msgid "Altium Designer PCB files"
-msgstr "Altium Designer 基板図ファイル"
+msgstr "Altium Designer 基板ファイル"
 
 #: common/wildcards_and_files_ext.cpp:352
 msgid "Altium Circuit Studio PCB files"
-msgstr "Altium Circuit Studio 基板図ファイル"
+msgstr "Altium Circuit Studio 基板ファイル"
 
 #: common/wildcards_and_files_ext.cpp:357
 msgid "Altium Circuit Maker PCB files"
-msgstr "Altium Circuit Maker 基板図ファイル"
+msgstr "Altium Circuit Maker 基板ファイル"
 
 #: common/wildcards_and_files_ext.cpp:362
 msgid "Fabmaster PCB files"
@@ -7329,7 +7330,7 @@ msgstr "Altium PCB フットプリント ライブラリー ファイル"
 
 #: common/wildcards_and_files_ext.cpp:400
 msgid "Eagle ver. 6.x XML library files"
-msgstr "Eagle ver. 6.x XML ライブラリーファイル"
+msgstr "Eagle ver. 6.x XML ライブラリー ファイル"
 
 #: common/wildcards_and_files_ext.cpp:406
 msgid "Geda PCB footprint library files"
@@ -7337,7 +7338,7 @@ msgstr "Geda PCB フットプリント ライブラリー ファイル"
 
 #: common/wildcards_and_files_ext.cpp:412
 msgid "Drawing sheet files"
-msgstr "図面シートファイル"
+msgstr "図面シート ファイル"
 
 #: common/wildcards_and_files_ext.cpp:420
 msgid "KiCad symbol footprint link files"
@@ -7434,7 +7435,7 @@ msgstr "Specctra DSN ファイル"
 
 #: common/wildcards_and_files_ext.cpp:562
 msgid "Specctra Session file"
-msgstr "Spectra セッションファイル"
+msgstr "Spectra セッション ファイル"
 
 #: common/wildcards_and_files_ext.cpp:569
 msgid "IPC-D-356 Test Files"
@@ -7763,7 +7764,7 @@ msgstr "フットプリントID '%s' は有効ではありません。"
 #: cvpcb/display_footprints_frame.cpp:428
 #, c-format
 msgid "Library '%s' is not in the footprint library table."
-msgstr "ライブラリ '%s' はフットプリント ライブラリ テーブル内にありません。"
+msgstr "ライブラリ '%s' はフットプリント ライブラリー テーブル内にありません。"
 
 #: cvpcb/display_footprints_frame.cpp:437
 #: cvpcb/display_footprints_frame.cpp:462
@@ -7929,7 +7930,7 @@ msgstr "すべてのフットプリント関連付けを削除"
 
 #: cvpcb/tools/cvpcb_actions.cpp:142
 msgid "Use symbol footprint filters"
-msgstr "シンボル フットプリント フィルターを使用"
+msgstr "シンボルのフットプリント フィルターを使用"
 
 #: cvpcb/tools/cvpcb_actions.cpp:143
 msgid "Filter footprint list by footprint filters defined in the symbol"
@@ -8190,7 +8191,7 @@ msgstr "ニックネーム '%s' は既に使われています。"
 #: eeschema/dialogs/dialog_bom.cpp:420
 #: eeschema/dialogs/dialog_export_netlist.cpp:751
 msgid "Generator File"
-msgstr "ジェネレーターファイル"
+msgstr "ジェネレーター ファイル"
 
 #: eeschema/dialogs/dialog_bom.cpp:439
 msgid "Generator file name not found."
@@ -9280,7 +9281,7 @@ msgstr "全てのボディスタイルで統一化"
 #: eeschema/dialogs/dialog_field_properties_base.h:100
 #: eeschema/dialogs/dialog_lib_text_properties_base.h:88
 msgid "Text Item Properties"
-msgstr "テキスト アイテム プロパティ"
+msgstr "テキスト アイテムのプロパティ"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:33
 msgid "Other symbol fields"
@@ -9497,7 +9498,7 @@ msgstr "色を透過色に設定すると、回路図エディターの色を使
 
 #: eeschema/dialogs/dialog_junction_props_base.h:57
 msgid "Junction Properties"
-msgstr "ジャンクション プロパティ"
+msgstr "ジャンクションのプロパティ"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:95
 msgid "Pin length:"
@@ -9505,24 +9506,24 @@ msgstr "ピンの長さ:"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:100
 msgid "Global Label Properties"
-msgstr "グローバル ラベル プロパティ"
+msgstr "グローバル ラベルのプロパティ"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:101
 msgid "Hierarchical Label Properties"
-msgstr "階層ラベル プロパティ"
+msgstr "階層ラベルのプロパティ"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:102
 #: eeschema/dialogs/dialog_label_properties_base.h:118
 msgid "Label Properties"
-msgstr "ラベル プロパティ"
+msgstr "ラベルのプロパティ"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:103
 msgid "Directive Label Properties"
-msgstr "指示ラベル プロパティ"
+msgstr "指示ラベルのプロパティ"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:104
 msgid "Hierarchical Sheet Pin Properties"
-msgstr "階層シートピン プロパティ"
+msgstr "階層シートピンのプロパティ"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:446
 msgid "Label can not be empty."
@@ -9921,7 +9922,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:76
 msgid "Create symbol with alternate body style (De Morgan)"
-msgstr "(ド・モルガン) 代替ボディ スタイルを使ってシンボルを作成"
+msgstr "(ド・モルガン) 代替ボディスタイルを使ってシンボルを作成"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:79
 msgid "Create symbol as power symbol"
@@ -10018,7 +10019,7 @@ msgstr "全てのボディスタイル(ド・モルガン)で共有する (&S)"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.h:86
 msgid "Drawing Properties"
-msgstr "図形 プロパティ"
+msgstr "図形のプロパティ"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:284
 #: eeschema/dialogs/dialog_symbol_properties.cpp:666
@@ -10119,9 +10120,8 @@ msgstr "代替ボディスタイル (ド・モルガン) あり"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:197
 msgid "Check this option if the symbol has an alternate body style (De Morgan)"
-msgstr ""
-"シンボルが代替ボディ スタイル (ド・モルガン) を持っている場合、このオプション"
-"をチェックしてください"
+msgstr "シンボルが代替ボディスタイル (ド・モルガン) "
+"を持っている場合、このオプションをチェックしてください"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:204
 msgid "Define as power symbol"
@@ -10142,7 +10142,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:219
 msgid "Pin Text Options"
-msgstr "ピン テキスト オプション"
+msgstr "ピンのテキスト"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:221
 msgid "Show pin number"
@@ -10246,7 +10246,7 @@ msgstr "シミュレーションモデルを編集..."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.h:118
 msgid "Library Symbol Properties"
-msgstr "ライブラリー シンボル プロパティ"
+msgstr "ライブラリー シンボルのプロパティ"
 
 #: eeschema/dialogs/dialog_lib_text_properties.cpp:217
 #: eeschema/dialogs/dialog_text_properties.cpp:487
@@ -10444,7 +10444,7 @@ msgstr "代替ピン定義"
 
 #: eeschema/dialogs/dialog_pin_properties_base.h:103
 msgid "Pin Properties"
-msgstr "ピン プロパティ"
+msgstr "ピンのプロパティ"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:74
 msgid "Plot All Pages"
@@ -11021,11 +11021,11 @@ msgstr "色を透過色に設定すると、回路図エディターの色を使
 #: eeschema/dialogs/dialog_shape_properties_base.h:77
 #, c-format
 msgid "%s Properties"
-msgstr "%s プロパティ"
+msgstr "%sのプロパティ"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.h:84
 msgid "Sheet Pin Properties"
-msgstr "シートピン プロパティ"
+msgstr "シートピンのプロパティ"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:272
 msgid "A sheet must have a valid file name."
@@ -11037,11 +11037,11 @@ msgstr "シート ファイルは、'.kicad_sch' 拡張子を持つ必要があ�
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:316
 msgid "Use relative path for sheet file?"
-msgstr "シートファイルに相対パスを使用しますか？"
+msgstr "シート ファイルに相対パスを使用しますか？"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:317
 msgid "Sheet File Path"
-msgstr "図面シートファイルのパス"
+msgstr "図面シート ファイルのパス"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:320
 msgid ""
@@ -11095,9 +11095,9 @@ msgid ""
 "against parent sheet schematic file path:\n"
 "'%s'."
 msgstr ""
-"新しい回路図シートファイルのパスを正規化できません:\n"
+"新しい回路図シート ファイルのパスを正規化できません:\n"
 "'%s'\n"
-"親の回路図シートファイルのパスに対して:\n"
+"親の回路図シート ファイルのパスに対して:\n"
 "'%s'."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:491
@@ -11184,7 +11184,7 @@ msgstr "パス"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.h:83
 msgid "Sheet Properties"
-msgstr "シート プロパティ"
+msgstr "シートのプロパティ"
 
 #: eeschema/dialogs/dialog_signal_list.h:45 eeschema/sch_plotter.cpp:547
 msgid "Done"
@@ -11511,11 +11511,11 @@ msgstr "モデル:"
 #: eeschema/dialogs/dialog_sim_model.cpp:448
 #, c-format
 msgid "Save parameter '%s (%s)' in Value field"
-msgstr ""
+msgstr "値フィールドにパラメータ '%s (%s)' を保存"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:456
 msgid "Save primary parameter in Value field"
-msgstr ""
+msgstr "値フィールドに主パラメータを保存"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:473
 #: pcbnew/footprint_wizard_frame.cpp:325 pcbnew/footprint_wizard_frame.cpp:323
@@ -11548,16 +11548,15 @@ msgstr "モデルを参照"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:30
 msgid "SPICE model from file (*.lib, *.sub or *.ibs)"
-msgstr ""
+msgstr "ファイルからSPICEモデルを読み込む (*.lib, *.sub, *.ibs)"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:66
 msgid "Pin:"
 msgstr "ピン:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:77
-#, fuzzy
 msgid "Differential"
-msgstr "差動ペア"
+msgstr "差動"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:101
 msgid "Built-in SPICE model"
@@ -11591,7 +11590,7 @@ msgstr "コード"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:204
 msgid "Save {} in Value field as \"{}\""
-msgstr ""
+msgstr "{} を値フィールドの \"{}\" として保存"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:217
 msgid "Model"
@@ -11611,7 +11610,7 @@ msgstr "ピンの割り当て"
 
 #: eeschema/dialogs/dialog_sim_model_base.h:120
 msgid "Simulation Model Editor"
-msgstr "シミュレーション モデル エディター"
+msgstr "シミュレーションモデル エディター"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:86
 #: eeschema/fields_grid_table.cpp:863
@@ -11854,7 +11853,7 @@ msgstr "シミュレーションモデル..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.h:111
 msgid "Symbol Properties"
-msgstr "シンボル プロパティ"
+msgstr "シンボルのプロパティ"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:59
 #, c-format
@@ -11887,9 +11886,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_remap.cpp:208
 #, c-format
 msgid "Adding library '%s', file '%s' to project symbol library table."
-msgstr ""
-"ライブラリー '%s' , ファイル '%s' をプロジェクト シンボル ライブラリー テーブ"
-"ルへ追加します。"
+msgstr "ライブラリー '%s' , ファイル '%s' をプロジェクトのシンボル ライブラリー "
+"テーブルへ追加します。"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:217
 #: eeschema/dialogs/panel_sym_lib_table.cpp:774
@@ -11903,13 +11901,13 @@ msgid ""
 "Error writing project symbol library table.\n"
 "  %s"
 msgstr ""
-"プロジェクト シンボル ライブラリー テーブルを書き込もうとしたところ、エラーが"
-"発生しました。\n"
+"プロジェクトのシンボル ライブラリー "
+"テーブルを書き込もうとしたところ、エラーが発生しました。\n"
 "  %s"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:238
 msgid "Created project symbol library table.\n"
-msgstr "プロジェクト シンボル ライブラリー テーブルを作成しました。\n"
+msgstr "プロジェクトのシンボル ライブラリー テーブルを作成しました。\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:263
 #, c-format
@@ -12540,7 +12538,7 @@ msgstr "_1"
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:51
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:44
 msgid "Default text size:"
-msgstr "デフォルト テキスト サイズ:"
+msgstr "デフォルトのテキスト サイズ:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:66
 msgid "Label offset ratio:"
@@ -12566,7 +12564,7 @@ msgstr "グローバルラベル周辺の余白のテキストサイズに対す
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:122
 msgid "Pin symbol size:"
-msgstr "ピン シンボル サイズ:"
+msgstr "ピン シンボルのサイズ:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:140
 #: eeschema/erc_item.cpp:41
@@ -13491,9 +13489,9 @@ msgid ""
 "symbol cache library file and reloading the schematic is required."
 msgstr ""
 "特定の条件下で回路図が壊れる可能性があります。 開くときに見つからないシンボル"
-"がない回路図であれば、データ損失を防ぐために変更を加える直前に保存します。 見"
-"つからないシンボルがある場合は、回路図の手動復旧またはシンボル キャッシュ ラ"
-"イブラリー ファイルのリカバリと回路図の再読み込みが必要です。"
+"がない回路図であれば、データ損失を防ぐために変更を加える直前に保存します。 "
+"見つからないシンボルがある場合は、回路図の手動復旧またはシンボル キャッシュ "
+"ライブラリー ファイルの復旧と回路図の再読み込みが必要です。"
 
 #: eeschema/files-io.cpp:411
 msgid "Load Without Cache File"
@@ -13929,7 +13927,7 @@ msgid ""
 "Error reading simulation model from symbol '%s':\n"
 "%s"
 msgstr ""
-"シミュレーション モデル を シンボル '%s' から読み込み中にエラーしました:\n"
+"シミュレーションモデル を シンボル '%s' から読み込み中にエラーしました:\n"
 "%s"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:460
@@ -13942,7 +13940,7 @@ msgstr "IBIS モデルを書き込むためのファイル '%s' を開くこと�
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:509
 #, c-format
 msgid "Could not find library file '%s'"
-msgstr "ライブラリーファイル '%s' が見つかりませんでした"
+msgstr "ライブラリー ファイル '%s' が見つかりませんでした"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:145
 #, c-format
@@ -13974,8 +13972,7 @@ msgstr "シンボルを選択 (%d個のアイテムがロードされていま�
 #: eeschema/picksymbol.cpp:289
 #, c-format
 msgid "No alternate body style found for symbol '%s' in library '%s'."
-msgstr ""
-"シンボル '%s' 用の代替ボディ スタイルがライブラリー '%s' 内に見つかりません。"
+msgstr "シンボル '%s' 用の代替ボディスタイルがライブラリー '%s' 内に見つかりません。"
 
 #: eeschema/pin_numbers.cpp:124 pcbnew/zones.h:65
 msgid "none"
@@ -14493,7 +14490,7 @@ msgstr ""
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:440
 #, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
-msgstr "ストレージファイルは完全に読み込まれていません(%d バイト残っています)."
+msgstr "ストレージのファイルは完全に読み込まれていません(%d バイト残っています)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:500
 #, c-format
@@ -14512,7 +14509,7 @@ msgstr "'PIECHART'のレコードは処理されません。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:717
 msgid "Compile mask not currently supported."
-msgstr "コンパイルマスクは現在サポートされていません。"
+msgstr "コンパイル マスクは現在サポートされていません。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:724
 #, c-format
@@ -16026,7 +16023,7 @@ msgstr "不正な ramp データ"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1411
 msgid "Cannot specify a bandwidth for that kind of matrix"
-msgstr ""
+msgstr "この種類のマトリックスではバンド幅を指定できません"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1430
 msgid "Invalid row in matrix"
@@ -16047,7 +16044,7 @@ msgstr "行列の要素を読み取れません"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1511
 msgid "Can't read a matrix index"
-msgstr "マトリックスインデックスを読み取れません"
+msgstr "マトリックスのインデックスを読み取れません"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1579
 msgid "Unknown matrix type"
@@ -16156,11 +16153,11 @@ msgstr "波形のポイントが2つ未満"
 
 #: eeschema/sim/kibis/kibis.cpp:675 eeschema/sim/kibis/kibis.cpp:740
 msgid "Cannot remove temporary output file"
-msgstr "テンポラリ出力ファイルを削除できません"
+msgstr "テンポラリー出力ファイルを削除できません"
 
 #: eeschema/sim/kibis/kibis.cpp:726
 msgid "Error while reading temporary file"
-msgstr "テンポラリファイル読み込み中のエラー"
+msgstr "テンポラリー ファイル読み込み中のエラー"
 
 #: eeschema/sim/kibis/kibis.cpp:735
 msgid "Error while creating temporary output file"
@@ -16211,30 +16208,28 @@ msgid "Number of cycles should be greater than 0."
 msgstr "サイクル数は 0 以上でなければなりません。"
 
 #: eeschema/sim/kibis/kibis.cpp:1531 eeschema/sim/kibis/kibis.cpp:1577
-#, fuzzy
 msgid "ON time should be greater than 0."
-msgstr "配線間の間隔は 0 以上でなければなりません。"
+msgstr "ON時間は0以上でなければなりません。"
 
 #: eeschema/sim/kibis/kibis.cpp:1537 eeschema/sim/kibis/kibis.cpp:1583
-#, fuzzy
 msgid "OFF time should be greater than 0."
-msgstr "配線間の間隔は 0 以上でなければなりません。"
+msgstr "OFF時間は0以上でなければなりません。"
 
 #: eeschema/sim/kibis/kibis.cpp:1545
 msgid "Rising edge is longer than on time."
-msgstr ""
+msgstr "立ち上がりエッジがON時間より長いです。"
 
 #: eeschema/sim/kibis/kibis.cpp:1554
 msgid "Falling edge is longer than off time."
-msgstr ""
+msgstr "立ち下がりエッジがOFF時間より長いです。"
 
 #: eeschema/sim/kibis/kibis.cpp:1591
 msgid "Rising edge is longer than ON time."
-msgstr ""
+msgstr "立ち上がりエッジがON時間より長いです。"
 
 #: eeschema/sim/kibis/kibis.cpp:1599
 msgid "Falling edge is longer than OFF time."
-msgstr ""
+msgstr "立ち下がりエッジがOFF時間より長いです。"
 
 #: eeschema/sim/kibis/kibis.cpp:1613 eeschema/sim/kibis/kibis.cpp:1644
 msgid "Bitrate should be greater than 0."
@@ -16246,27 +16241,27 @@ msgstr "ビット数は 0 以上でなければなりません。"
 
 #: eeschema/sim/kibis/kibis.cpp:1631
 msgid "Bitrate is too high for rising / falling edges"
-msgstr ""
+msgstr "ビットレートが立ち上がりエッジ/立ち下がりエッジに対して高すぎます"
 
 #: eeschema/sim/kibis/kibis.cpp:1658
 msgid "Bitrate could be too high for rising / falling edges"
-msgstr ""
+msgstr "ビットレートが立ち上がりエッジ/立ち下がりエッジに対して高すぎる可能性がありま"
+"す"
 
 #: eeschema/sim/sim_lib_mgr.cpp:74
 #, c-format
 msgid "Simulation model library not found at '%s' or '%s'"
-msgstr ""
-"'%s' もしくは '%s' にシミュレーション モデル ライブラリーが見つかりません"
+msgstr "'%s' もしくは '%s' にシミュレーションモデル ライブラリーが見つかりません"
 
 #: eeschema/sim/sim_lib_mgr.cpp:304
 #, c-format
 msgid "Error loading simulation model library '%s': %s"
-msgstr "シミュレーション モデル ライブラリー %s のロード中にエラーしました:%s"
+msgstr "シミュレーションモデル ライブラリー %s のロード中にエラーしました:%s"
 
 #: eeschema/sim/sim_lib_mgr.cpp:316
 #, c-format
 msgid "Error loading simulation model: no '%s' field"
-msgstr "シミュレーション モデルの読み込みエラー: '%s' フィールドがありません"
+msgstr "シミュレーションモデルの読み込みエラー: '%s' フィールドがありません"
 
 #: eeschema/sim/sim_lib_mgr.cpp:324
 #: pcbnew/dialogs/dialog_board_statistics.cpp:448
@@ -16283,9 +16278,8 @@ msgstr "不明"
 msgid ""
 "Error loading simulation model: could not find base model '%s' in library "
 "'%s'"
-msgstr ""
-"シミュレーション モデルの読み込み中にエラーが発生しました: ベース モデル "
-"'%s' がライブラリ '%s' 内に見つかりませんでした"
+msgstr "シミュレーションモデルの読み込み中にエラーが発生しました: ベース モデル '%s' "
+"がライブラリ '%s' 内に見つかりませんでした"
 
 #: eeschema/sim/sim_library_kibis.cpp:39 eeschema/sim/sim_model_kibis.cpp:76
 #, c-format
@@ -16308,9 +16302,8 @@ msgstr ""
 msgid ""
 "Simulation model type must be the same as of its base class: '%s', but is "
 "'%s'"
-msgstr ""
-"シミュレーション モデル タイプは、その基本クラス '%s' と同じである必要があり"
-"ますが、'%s' です"
+msgstr "シミュレーションモデル タイプは、その基本クラス '%s' "
+"と同じである必要がありますが、'%s' です"
 
 #: eeschema/sim/sim_model_kibis.cpp:81
 #, c-format
@@ -16366,9 +16359,8 @@ msgid "DC Value"
 msgstr "電圧"
 
 #: eeschema/sim/sim_model_kibis.cpp:432
-#, fuzzy
 msgid "ON time"
-msgstr "立ち下がり時間"
+msgstr "ON時間"
 
 #: eeschema/sim/sim_model_kibis.cpp:440
 msgid "OFF time"
@@ -17374,7 +17366,7 @@ msgstr ""
 
 #: eeschema/tools/backannotate.cpp:73
 msgid "Select at least one property to back annotate."
-msgstr "バック アノテートするには少なくとも一つのプロパティを選択します。"
+msgstr "バックアノテートするには少なくとも一つのプロパティを選択します。"
 
 #: eeschema/tools/backannotate.cpp:97
 msgid ""
@@ -18316,7 +18308,7 @@ msgstr "ERC 警告を表示"
 
 #: eeschema/tools/ee_actions.cpp:704
 msgid "Show markers for electrical rules checker warnings"
-msgstr "エレクトリカル ルールチェック実施時の警告マーカーを表示"
+msgstr "エレクトリカル ルール チェッカーの警告マーカーを表示"
 
 #: eeschema/tools/ee_actions.cpp:708
 msgid "Show ERC Errors"
@@ -18324,7 +18316,7 @@ msgstr "ERC エラーを表示"
 
 #: eeschema/tools/ee_actions.cpp:708
 msgid "Show markers for electrical rules checker errors"
-msgstr "エレクトリカル ルールチェック実施時のエラーマーカーを表示"
+msgstr "エレクトリカル ルール チェッカーのエラーマーカーを表示"
 
 #: eeschema/tools/ee_actions.cpp:712
 msgid "Show ERC Exclusions"
@@ -18332,7 +18324,7 @@ msgstr "ERC 除外部の表示"
 
 #: eeschema/tools/ee_actions.cpp:713
 msgid "Show markers for excluded electrical rules checker violations"
-msgstr "除外されたエレクトリカル ルールチェック違反マーカーを表示"
+msgstr "除外されたエレクトリカル ルール チェッカーの違反マーカーを表示"
 
 #: eeschema/tools/ee_actions.cpp:717 eeschema/tools/ee_actions.cpp:722
 #: eeschema/tools/ee_actions.cpp:728 eeschema/tools/ee_actions.cpp:734
@@ -18922,7 +18914,7 @@ msgid ""
 "The symbol library table nickname is suffixed with\n"
 "an integer to prevent duplicate table entries."
 msgstr ""
-"プロジェクト シンボル ライブラリー テーブルに新しい項目を追加します。\n"
+"プロジェクトのシンボル ライブラリー テーブルに新しい項目を追加します。\n"
 "\n"
 "シンボル ライブラリー テーブルのニックネームには、テーブルエントリーが\n"
 "重複しないように整数を接尾辞として付けます。"
@@ -18930,7 +18922,7 @@ msgstr ""
 #: eeschema/widgets/tuner_slider.cpp:61
 #, c-format
 msgid "Symbol '%s' has simulation model of type '%s %s', which cannot be tuned"
-msgstr "シンボル %s ('%s %s' のシミュレーションモデルタイプの)は調整できません"
+msgstr "シンボル %s ('%s %s' のシミュレーションモデル タイプの)は調整できません"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -19549,7 +19541,7 @@ msgstr "ファイル '%s' (ガーバー ジョブ ファイル) をスキップ�
 #: gerbview/files.cpp:526
 #, c-format
 msgid "<b>Unable to create temporary file '%s'.</b>"
-msgstr "<b>テンポラリ ファイル '%s' を作成できません。</b>"
+msgstr "<b>テンポラリー ファイル '%s' を作成できません。</b>"
 
 #: gerbview/files.cpp:551
 #, c-format
@@ -20262,7 +20254,7 @@ msgstr "PTHとNPTHを別のファイルに出力する"
 
 #: kicad/cli/command_export_pcb_drill.cpp:78
 msgid "Generate map / summary of drill hits"
-msgstr "マップファイルとドリル穴の概要を生成する"
+msgstr "マップ ファイルとドリル穴の概要を生成する"
 
 #: kicad/cli/command_export_pcb_drill.cpp:84
 msgid "Valid options: pdf,gerberx2,ps,dxf,svg"
@@ -20297,7 +20289,7 @@ msgstr "不正なゼロの扱いが指定されています\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:193
 msgid "Invalid map format specified\n"
-msgstr "不正なマップファイル形式が指定されています\n"
+msgstr "不正なマップ ファイル形式が指定されています\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:209
 msgid "Invalid origin mode specified\n"
@@ -20386,7 +20378,7 @@ msgstr "基板ファイルで設定されているガーバーのプロット設
 #: kicad/cli/command_sym_export_svg.cpp:40
 #: kicad/cli/command_sym_export_svg.cpp:38
 msgid "Color theme to use (will default to pcbnew settings)"
-msgstr "カラーテーマを使用する (pcbnewの設定でのデフォルト)"
+msgstr "カラー テーマを使用する (pcbnewの設定でのデフォルト)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:47
 msgid "Valid options: front,back,both. Gerber format only supports \"both\"."
@@ -20537,7 +20529,7 @@ msgstr "非表示フィールドを含める"
 #: kicad/cli/command_sym_export_svg.cpp:76 kicad/cli/command_sym_upgrade.cpp:53
 #: kicad/cli/command_sym_export_svg.cpp:62
 msgid "Symbol file does not exist or is not accessible\n"
-msgstr "シンボルファイルは存在しないかアクセス不可です\n"
+msgstr "シンボル ファイルは存在しないかアクセス不可です\n"
 
 #: kicad/cli/command_sym_upgrade.cpp:37
 msgid "Forces the symbol library to be resaved regardless of versioning"
@@ -20586,7 +20578,7 @@ msgstr ""
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:146
 msgid "Preview Gerber files"
-msgstr "ガーバーファイルを確認します"
+msgstr "ガーバー ファイルを確認します"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:150
 msgid "Convert bitmap images to schematic symbols or PCB footprints"
@@ -20608,9 +20600,8 @@ msgstr ""
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:164
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
-msgstr ""
-"KiCadおよびサードパーティーのリポジトリーからダウンロード可能なパッケージを管"
-"理します"
+msgstr "KiCadおよびサードパーティーのリポジトリからダウンロード可能なパッケージを管理"
+"します"
 
 #: kicad/files-io.cpp:46
 msgid "KiCad project file"
@@ -20692,7 +20683,7 @@ msgid ""
 "does not appear to be a valid KiCad project file."
 msgstr ""
 "ファイル '%s'\n"
-"は有効なKiCadプロジェクトファイルではないようです。"
+"は有効なKiCadプロジェクト ファイルではないようです。"
 
 #: kicad/kicad_cli.cpp:297
 msgid "prints version information and exits"
@@ -20807,7 +20798,7 @@ msgstr "ファイル エクスプローラーでプロジェクト ディレク�
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:53
 msgid "Add Default Repository"
-msgstr "デフォルトリポジトリーを追加"
+msgstr "デフォルトのリポジトリを追加"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:96
 msgid "Please enter fully qualified repository url"
@@ -20815,7 +20806,7 @@ msgstr "完全修飾されたリポジトリのURLを入力してください"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:97
 msgid "Add repository"
-msgstr "Github リポジトリーを追加"
+msgstr "Github リポジトリを追加"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:58
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:134
@@ -20825,7 +20816,7 @@ msgstr "既存を追加"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:62
 msgid "Manage Repositories"
-msgstr "リポジトリーを管理"
+msgstr "リポジトリを管理"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:50
 #, c-format
@@ -20840,7 +20831,7 @@ msgstr "ライブラリー (%d)"
 #: kicad/pcm/dialogs/dialog_pcm.cpp:52
 #, c-format
 msgid "Color themes (%d)"
-msgstr "カラーテーマ (%d)"
+msgstr "カラー テーマ (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:75
 #, c-format
@@ -20872,7 +20863,7 @@ msgstr "アンインストール"
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:53
 #, c-format
 msgid "Repository (%d)"
-msgstr "リポジトリー (%d)"
+msgstr "リポジトリ (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:160
 msgid "Apply Pending Changes"
@@ -20923,7 +20914,7 @@ msgstr "パッケージ"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:88
 msgid "Repository"
-msgstr "リポジトリー"
+msgstr "リポジトリ"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:107
 msgid "Discard action"
@@ -21129,7 +21120,7 @@ msgstr ""
 #: kicad/pcm/pcm.cpp:123
 #, c-format
 msgid "schema file '%s' not found"
-msgstr "スキーマファイル '%s' が見つかりません"
+msgstr "スキーマ ファイル '%s' が見つかりません"
 
 #: kicad/pcm/pcm.cpp:128
 #, c-format
@@ -21152,7 +21143,7 @@ msgstr "ダウンロードのサイズが大きすぎます。"
 
 #: kicad/pcm/pcm.cpp:299
 msgid "Fetching repository"
-msgstr "リポジトリーを取得"
+msgstr "リポジトリを取得"
 
 #: kicad/pcm/pcm.cpp:304
 msgid "Unable to load repository url"
@@ -21161,28 +21152,26 @@ msgstr "リポジトリのURLを読み込めません"
 #: kicad/pcm/pcm.cpp:323
 #, c-format
 msgid "Unable to parse repository: %s"
-msgstr "リポジトリーの解析ができません: %s"
+msgstr "リポジトリの解析ができません: %s"
 
 #: kicad/pcm/pcm.cpp:324
 msgid ""
 "The given repository URL does not look like a valid KiCad package "
 "repository. Please double check the URL."
-msgstr ""
-"指定されたリポジトリーのURL は、有効な KiCad パッケージリポジトリーではないよ"
-"うです。URLを再確認してください。"
+msgstr "指定されたリポジトリのURL は、有効な KiCad "
+"パッケージのリポジトリではないようです。URLを再確認してください。"
 
 #: kicad/pcm/pcm.cpp:350
 msgid "Fetching repository packages"
-msgstr "リポジトリパッケージの取得"
+msgstr "リポジトリ パッケージの取得"
 
 #: kicad/pcm/pcm.cpp:355
 msgid "Unable to load repository packages url."
-msgstr "リポジトリー パッケージURLをロードすることができません。"
+msgstr "リポジトリ パッケージのURLをロードできません。"
 
 #: kicad/pcm/pcm.cpp:365
 msgid "Packages hash doesn't match. Repository may be corrupted."
-msgstr ""
-"パッケージのハッシュが一致しません。リポジトリが壊れている可能性があります。"
+msgstr "パッケージのハッシュが一致しません。リポジトリが壊れている可能性があります。"
 
 #: kicad/pcm/pcm.cpp:381
 #, c-format
@@ -21198,9 +21187,8 @@ msgstr ""
 #: kicad/pcm/pcm.cpp:483
 msgid ""
 "Packages cache for current repository is corrupted, it will be redownloaded."
-msgstr ""
-"現在のリポジトリのパッケージキャッシュが破損しているため、再ダウンロードされ"
-"ます。"
+msgstr "現在のリポジトリ "
+"パッケージのキャッシュが破損しているため、再ダウンロードされます。"
 
 #: kicad/pcm/pcm.cpp:535
 msgid "Downloading resources"
@@ -21210,8 +21198,7 @@ msgstr "リソースをダウンロード中"
 msgid ""
 "Resources file hash doesn't match and will not be used. Repository may be "
 "corrupted."
-msgstr ""
-"リソース ファイルのハッシュが一致しないため使用されません。リポジトリが破損し"
+msgstr "リソース ファイルのハッシュが一致しないため使用されません。リポジトリが破損し"
 "ている可能性があります。"
 
 #: kicad/pcm/pcm.cpp:794
@@ -21300,7 +21287,7 @@ msgstr "アーカイブに有効なmetadata.jsonファイルが含まれてい�
 
 #: kicad/pcm/pcm_task_manager.cpp:378
 msgid "Archive metadata must have a single version defined"
-msgstr "アーカイブメタデータは単一のバージョンが定義されていなければなりません"
+msgstr "アーカイブのメタデータには単一のバージョンが定義されていなければなりません"
 
 #: kicad/pcm/pcm_task_manager.cpp:396
 #, c-format
@@ -22074,7 +22061,7 @@ msgstr "ページの左上角"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:88
 msgid "Origin of coordinates displayed to the status bar"
-msgstr "ステータス バーに表示された座標原点"
+msgstr "ステータスバーに表示された座標原点"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:103
 msgid "Page 1"
@@ -23211,7 +23198,7 @@ msgstr "内層配線"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:23
 msgid "Microstrip Line"
-msgstr "マイクロストリップ ライン"
+msgstr "マイクロストリップライン"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:23
 msgid "Coplanar wave guide"
@@ -23231,7 +23218,7 @@ msgstr "同軸線路"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:23
 msgid "Coupled Microstrip Line"
-msgstr "カップルド マイクロストリップ ライン"
+msgstr "カップルド マイクロストリップライン"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:23
 msgid "Stripline"
@@ -23239,7 +23226,7 @@ msgstr "ストリップライン"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:23
 msgid "Twisted Pair"
-msgstr "ツイスト ペア"
+msgstr "ツイストペア"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:25
 msgid "Transmission Line Type"
@@ -23525,7 +23512,7 @@ msgstr "比透磁率"
 
 #: pcb_calculator/datafile_read_write.cpp:76
 msgid "Data file error."
-msgstr "データ ファイル エラー。"
+msgstr "データファイルのエラー."
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:44
 msgid "Volt"
@@ -23716,19 +23703,19 @@ msgid ""
 "___H___ is thickness (height) in mils<br>\n"
 "___K___ is 0.024 for internal traces or 0.048 for external traces\n"
 msgstr ""
-"最大電流を指定した場合、トレース幅は適合するように計算されます。\n"
+"最大電流を指定すると適合するトレース幅が計算されます。\n"
 "\n"
-"トレース幅の一つを指定した場合、まず扱える最大電流が計算されます。それから、"
-"この電流を扱えるように別のトレース幅が計算されます。\n"
+"トレース幅を指定するとその幅で扱える最大電流が計算されます。そこから、この電"
+"流を扱える別のトレース幅が計算されます。\n"
 "\n"
 "制御する値はボールド体で表示されます。\n"
 "\n"
-"計算は、電流 35 A (外部) または 17.5 A (内部) まで、温度上昇は 100℃ まで、幅"
-"は 400mil (10mm) までの範囲で有効です。\n"
+"計算は、電流 35 A (外部) または 17.5 A (内部) まで、温度上昇は 100℃ まで、"
+"幅は 400mil (10mm) までの範囲で有効です。\n"
 "\n"
 "計算式 (IPC 2221 より)\n"
-"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; "
-"H)<sup>0.725</sup>___</center>\n"
+"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; H)<sup>0."
+"725</sup>___</center>\n"
 "ここでは:<br>\n"
 "__I__ = 最大電流 (A)<br>\n"
 "__dt__ = 周囲環境からの温度上昇 (℃)<br>\n"
@@ -23995,7 +23982,7 @@ msgstr "差動インピーダンス(Zd):"
 
 #: pcb_calculator/transline_ident.cpp:334
 msgid "Zeven"
-msgstr "Zeven (偶モードインピーダンス)"
+msgstr "Zeven (偶モード インピーダンス)"
 
 #: pcb_calculator/transline_ident.cpp:335
 msgid "Even mode impedance (lines driven by common voltages)"
@@ -24003,7 +23990,7 @@ msgstr "偶モード インピーダンス (線路は同じ (同相) 電圧で�
 
 #: pcb_calculator/transline_ident.cpp:338
 msgid "Zodd"
-msgstr "Zodd (奇モードインピーダンス)"
+msgstr "Zodd (奇モード インピーダンス)"
 
 #: pcb_calculator/transline_ident.cpp:339
 msgid "Odd mode impedance (lines driven by opposite (differential) voltages)"
@@ -24011,7 +23998,7 @@ msgstr "奇モード インピーダンス (線路は逆 (差動) 電圧で駆�
 
 #: pcb_calculator/transline_ident.cpp:358
 msgid "Distance between strip and top metal"
-msgstr "ストリップ ラインと上部導体の距離"
+msgstr "ストリップラインと上部導体の距離"
 
 #: pcb_calculator/transline_ident.cpp:390
 msgid "Twists"
@@ -25391,7 +25378,7 @@ msgstr "ブラインド/ベリード:"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:158
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:175
 msgid "Micro vias:"
-msgstr "マイクロ ビア:"
+msgstr "マイクロビア:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:396
 #: pcbnew/dialogs/dialog_board_statistics.cpp:410
@@ -25853,7 +25840,7 @@ msgstr "同一ネット内のパッドと塗りつぶしエリアのクリアラ
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:253
 msgid "Thermal spoke width:"
-msgstr "サーマル スポーク幅:"
+msgstr "サーマルスポーク幅:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:258
 msgid "Width of copper in thermal reliefs."
@@ -26536,7 +26523,7 @@ msgstr "DRC を実行"
 
 #: pcbnew/dialogs/dialog_drc.cpp:263
 msgid "DRC incomplete: could not compile custom design rules.  "
-msgstr "DRC が不完全: カスタム デザイン ルールをコンパイルできませんでした。  "
+msgstr "DRC が不完全: カスタム デザインルールをコンパイルできませんでした。  "
 
 #: pcbnew/dialogs/dialog_drc.cpp:265 pcbnew/tools/board_inspection_tool.cpp:176
 msgid "Show design rules."
@@ -26978,7 +26965,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:64
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:496
 msgid "Technical layers:"
-msgstr "テクニカル レイヤー:"
+msgstr "テクニカルレイヤー:"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:83
 msgid "Print Mode"
@@ -27490,8 +27477,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:673
 msgid ""
 "Note: solder mask and paste values are used only for pads on copper layers."
-msgstr ""
-"注: ハンダ マスクとペーストの値は導体レイヤー上のパッドにのみ使用されます。"
+msgstr "注: ハンダマスクとペーストの値は導体レイヤー上のパッドにのみ使用されます。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:344
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:315
@@ -27658,8 +27644,8 @@ msgstr ""
 "最終的なクリアランスの値は、この値と絶対クリアランス値を合算したものになりま"
 "す。\n"
 "負値の場合、ステンシルの開口部のサイズはパッドのサイズより小さくなります。\n"
-"この値は、パッド プロパティの\"ローカル クリアランスと設定\"タブでパッドごと"
-"に上書きできます。"
+"この値は、パッド プロパティの\"ローカル "
+"クリアランスと設定\"タブでパッドごとにオーバーライドできます。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:339
 msgid "Net Ties"
@@ -27886,7 +27872,7 @@ msgstr "マップ ファイルを生成"
 #: pcbnew/dialogs/dialog_gendrill.cpp:407
 #, c-format
 msgid "Could not write drill and/or map files to folder '%s'."
-msgstr "フォルダー '%s' へドリルまたはマップ ファイルを書き込めませんでした。"
+msgstr "フォルダー '%s' へドリルまたはマップファイルを書き込めませんでした。"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:456
 msgid "Save Drill Report File"
@@ -28309,11 +28295,11 @@ msgstr "フィルターされたアイテム"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:57
 msgid "Filter items by net class:"
-msgstr "ネット クラスでフィルターされたアイテム:"
+msgstr "ネットクラスでフィルターされたアイテム:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:132
 msgid "Set to net class values:"
-msgstr "ネット クラスの値に設定:"
+msgstr "ネットクラスの値に設定:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.h:77
 msgid "Set Track and Via Properties"
@@ -28480,7 +28466,7 @@ msgstr "グループ メンバー:"
 #: pcbnew/dialogs/dialog_group_properties_base.h:64
 #: pcbnew/dialogs/dialog_group_properties_base.h:66
 msgid "Group Properties"
-msgstr "グループ プロパティ"
+msgstr "グループのプロパティ"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:81
 msgid "Load and Test Netlist"
@@ -28507,11 +28493,11 @@ msgstr "基板への変更を適用"
 #: pcbnew/dialogs/dialog_import_netlist.cpp:225
 #, c-format
 msgid "Reading netlist file '%s'.\n"
-msgstr "ネットリストファイル '%s'を読み込んでいます。\n"
+msgstr "ネットリスト ファイル '%s'を読み込んでいます。\n"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:229
 msgid "Using reference designators to match symbols and footprints.\n"
-msgstr "シンボルとフットプリントの関連付けにレファレンス指定子を使用\n"
+msgstr "シンボルとフットプリントの関連付けにリファレンス指定子を使用\n"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:231
 msgid "Using tstamps (unique IDs) to match symbols and footprints.\n"
@@ -28582,7 +28568,7 @@ msgstr "テキストと図形のフォーマット"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:63
 msgid "Design rule constraints"
-msgstr "デザイン ルールの制約"
+msgstr "デザインルールの制約"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:66
 msgid "Predefined track && via dimensions"
@@ -29377,7 +29363,8 @@ msgstr ""
 "BGA 属性は BGA フットプリントのパッド用です\n"
 "ローカル基準は親フットプリント用の基準です\n"
 "グローバル基準はボード全体の基準です\n"
-"テスト パッドはガーバー ファイル中のテスト ポイントを指示するのに役立ちます\n"
+"テストポイント パッドはガーバー "
+"ファイル中のテストポイントを指示するのに役立ちます\n"
 "ヒートシンク パッドはサーマルパッドを指定します\n"
 "端面スルーホールは基板端の端面スルーホール パッドを指定します\n"
 "このプロパティはガーバー X2 ファイル中で指定されます。"
@@ -29396,7 +29383,7 @@ msgstr "基板のグローバル基準"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:545 pcbnew/pad.cpp:1720
 msgid "Test point pad"
-msgstr "テスト ポイント パッド"
+msgstr "テストポイント パッド"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:545 pcbnew/pad.cpp:1721
 msgid "Heatsink pad"
@@ -29542,7 +29529,7 @@ msgstr "カスタム形状の基本要素"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:972
 msgid "Preview pad in sketch mode"
-msgstr "スケッチモードでパッドを表示"
+msgstr "スケッチ モードでパッドを表示"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1130
 msgid "Start point"
@@ -29827,7 +29814,7 @@ msgid ""
 "They are comments in the X1 format.\n"
 "Used to check connectivity in CAM tools and Gerber viewers."
 msgstr ""
-"ガーバーファイルにネットリストのメタデータとアパーチャの属性を含めます。\n"
+"ガーバー ファイルにネットリストのメタデータとアパーチャの属性を含めます。\n"
 "X1 フォーマットではこれらはコメントです。\n"
 "CAMツールとガーバービューアーで接続をチェックするために使用されます。"
 
@@ -29840,7 +29827,7 @@ msgid ""
 "Disable aperture macros in Gerber files\n"
 "Use *only* for broken Gerber viewers."
 msgstr ""
-"ガーバーファイルのアパーチャ マクロを無効化します\n"
+"ガーバー ファイルのアパーチャ マクロを無効化します\n"
 "壊れたガーバー ビューアー*のみ*に対して使用します。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:248
@@ -30092,9 +30079,8 @@ msgid "arc"
 msgstr "円弧"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:160
-#, fuzzy
 msgid "Single-sided"
-msgstr "シングル ページ"
+msgstr "片側のみ"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:166
 msgid "Miter radius (r):"
@@ -30483,7 +30469,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_rule_area_properties_base.h:68
 #: pcbnew/dialogs/dialog_rule_area_properties_base.h:70
 msgid "Rule Area Properties"
-msgstr "ルールエリア プロパティ"
+msgstr "ルールエリアのプロパティ"
 
 #: pcbnew/dialogs/dialog_swap_layers.cpp:49
 msgid "Move items on:"
@@ -30973,9 +30959,7 @@ msgstr "パッドにスナップ:"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:292
 #: pcbnew/dialogs/panel_edit_options_base.cpp:300
 msgid "Capture cursor when the mouse enters a pad area"
-msgstr ""
-"マウス カーソルがパッド エリア内に入った時にカーソルをパッド中心に引き込みま"
-"す"
+msgstr "マウスカーソルがパッド エリア内に入った時にカーソルをパッド中心に引き込みます"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:296
 #: pcbnew/dialogs/panel_edit_options_base.cpp:310
@@ -30989,7 +30973,7 @@ msgstr "配線にスナップ:"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:306
 #: pcbnew/dialogs/panel_edit_options_base.cpp:314
 msgid "Capture cursor when the mouse approaches a track"
-msgstr "マウス カーソルが配線内に入った時にカーソルを配線に引き込みます"
+msgstr "マウスカーソルが配線内に入った時にカーソルを配線に引き込みます"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:318
 msgid "Snap to graphics:"
@@ -30998,8 +30982,7 @@ msgstr "図形にスナップ:"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:320
 #: pcbnew/dialogs/panel_edit_options_base.cpp:328
 msgid "Capture cursor when the mouse approaches graphical control points"
-msgstr ""
-"マウス カーソルが図形制御点に近づいた時にカーソルを図形制御点に引き込みます"
+msgstr "マウスカーソルが図形制御点に近づいた時にカーソルを図形制御点に引き込みます"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:341
 msgid "Always show selected ratsnest"
@@ -31596,7 +31579,7 @@ msgstr "On-board、非導体層"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:91
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:82
 msgid "If you want a solder paste layer for front side of the board"
-msgstr "基板表面にハンダ ペースト レイヤーを使用したい場合"
+msgstr "基板表面にハンダペースト レイヤーを使用したい場合"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:95
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:86
@@ -31616,7 +31599,7 @@ msgstr "SilkS_Front"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:115
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:106
 msgid "If you want a solder mask layer for the front of the board"
-msgstr "基板表面にハンダ マスク レイヤーを使用したい場合"
+msgstr "基板表面にハンダマスク レイヤーを使用したい場合"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:119
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:110
@@ -32140,7 +32123,7 @@ msgstr "裏面 (最背面) の導体層の名称"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:583
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:574
 msgid "If you want a solder mask layer for the back side of the board"
-msgstr "基板裏面にハンダ マスク レイヤーを使用したい場合"
+msgstr "基板裏面にハンダマスク レイヤーを使用したい場合"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:587
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:578
@@ -32160,7 +32143,7 @@ msgstr "SilkS_Back"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:607
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:598
 msgid "If you want a solder paste layer for the back side of the board"
-msgstr "基板裏面にハンダ ペースト レイヤーを使用したい場合"
+msgstr "基板裏面にハンダペースト レイヤーを使用したい場合"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:611
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:602
@@ -32360,8 +32343,8 @@ msgid ""
 msgstr ""
 "２つのパッド領域間の最小距離。\n"
 "この値より近い２つのパッド領域はプロット中にマージされます。\n"
-"このパラメーターはハンダ マスク レイヤーをプロットするためにのみ使用されま"
-"す。\n"
+"このパラメーターはハンダマスク レイヤーをプロットするためにのみ使用されます。"
+"\n"
 "何をしているか知らないなら、0のままにしておいて下さい。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:76
@@ -32831,9 +32814,10 @@ msgstr ""
 " * via\\_diameter\n"
 " * zone\\_connection\n"
 "\n"
-"注: `clearance` と `hole_clearance`のルールは同一ネットにあるアイテムで動作し"
-"ません; `physical_clearance` と `physical_hole_clearance` のルールについても"
-"同様です。\n"
+"注: `clearance` と "
+"`hole_clearance`のルールは同一ネットにあるアイテムで動作しません; "
+"`physical_clearance` と `physical_hole_clearance` "
+"のルールについても同様です。\n"
 "<br><br>\n"
 "\n"
 "### アイテム\n"
@@ -32908,8 +32892,8 @@ msgstr ""
 "\n"
 "### 注\n"
 "\n"
-"Version句は最初の句でなければなりません。  これはファイルの文法のバージョンを"
-"示し、\n"
+"Version句は最初の句でなければなりません。  "
+"これはファイルの文法のバージョンを示し、\n"
 "将来のルールパーサーが自動的にアップデート可能にするためです。\n"
 "\"1\"を設定しなければなりません。\n"
 "\n"
@@ -32922,8 +32906,8 @@ msgstr ""
 "\n"
 "### 式関数\n"
 "\n"
-"全ての関数のパラメーターは単純なワイルドカードをサポートします。 (`*` and `?"
-"`).\n"
+"全ての関数のパラメーターは単純なワイルドカードをサポートします。 (`*` and "
+"`?`).\n"
 "<br><br>\n"
 "\n"
 "    A.intersectsCourtyard('<footprint_refdes>')\n"
@@ -32948,8 +32932,8 @@ msgstr ""
 "    A.enclosedByArea('<zone_name>')\n"
 "`A` のすべてが指定されたゾーンのアウトライン内にある場合に真になります。\n"
 "\n"
-"注意: これは、`intersectsArea()`よりも高コストな呼び出しになる可能性がありま"
-"す。\n"
+"注意: "
+"これは、`intersectsArea()`よりも高コストな呼び出しになる可能性があります。\n"
 "可能であれば`intersectsArea()`を使用してください。\n"
 "<br><br>\n"
 "\n"
@@ -32977,8 +32961,8 @@ msgstr ""
 "レイヤー名は 基板の設定 > 基板編集レイヤー で指定された名前か、\n"
 "正規化名(例: `F.Cu`)が使えます。\n"
 "\n"
-"注意: これは、ルールがそのレイヤーに対して評価されているかいないかにかかわら"
-"ず\n"
+"注意: これは、"
+"ルールがそのレイヤーに対して評価されているかいないかにかかわらず\n"
 "`A`がレイヤーにある場合に真を返します。\n"
 "後者の場合、`(layer \"layer_name\")`の句をルールの中で使います。\n"
 "<br><br>\n"
@@ -33020,13 +33004,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net"
-"\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net"
-"\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -33068,11 +33052,11 @@ msgstr ""
 "        (constraint zone_connection solid)\n"
 "        (condition \"A.Fabrication_Property == 'Heatsink pad'\"))\n"
 "\n"
-"    # 親のゾーンに接続するためにサーマルリリーフスポークを4つ全て要求する\n"
+"    # 親のゾーンに接続するためにサーマルリリーフのスポークを4つ全て要求する\n"
 "    (rule fully_spoked_pads\n"
 "        (constraint min_resolved_spokes 4))\n"
 "\n"
-"    # 全てのゾーンに対してサーマルリリーフギャップとスポーク幅を設定する\n"
+"    # 全てのゾーンに対してサーマルリリーフのギャップとスポーク幅を設定する\n"
 "    (rule defined_relief\n"
 "        (constraint thermal_relief_gap (min 10mil))\n"
 "        (constraint thermal_spoke_width (min 12mil)))\n"
@@ -33304,7 +33288,7 @@ msgstr "%s のローカルオーバーライド; ゾーン接続: %s."
 #: pcbnew/drc/drc_engine.cpp:811
 #, c-format
 msgid "Local override on %s; thermal relief gap: %s."
-msgstr "%s のローカルオーバーライド; サーマルリリーフギャップ: %s."
+msgstr "%s のローカルオーバーライド; サーマルリリーフ ギャップ: %s."
 
 #: pcbnew/drc/drc_engine.cpp:828
 #, c-format
@@ -33384,7 +33368,7 @@ msgstr "[基板の設定]の配線幅の制約確認しています: 最小 %s."
 #: pcbnew/drc/drc_engine.cpp:964
 #, c-format
 msgid "Checking %s annular width: min %s."
-msgstr "%sのアニュラリングサイズを確認しています:最小は%s。"
+msgstr "%sのアニュラーリングのサイズを確認しています:最小は%s。"
 
 #: pcbnew/drc/drc_engine.cpp:972
 #, c-format
@@ -33414,7 +33398,7 @@ msgstr "%sを確認しています: 最小は%s."
 #: pcbnew/drc/drc_engine.cpp:1011
 #, c-format
 msgid "Checking %s diff pair gap: opt %s."
-msgstr "%s の差動ペアギャップをチェックしています: 最適は %s."
+msgstr "%s の差動ペアのギャップをチェックしています: 最適は %s."
 
 #: pcbnew/drc/drc_engine.cpp:1018
 #, c-format
@@ -33529,7 +33513,7 @@ msgstr "ゾーン"
 #: pcbnew/drc/drc_engine.cpp:1433
 #, c-format
 msgid "%s thermal relief gap: %s."
-msgstr "%s のサーマルリリーフギャップ: %s."
+msgstr "%s のサーマルリリーフ ギャップ: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1450
 #, c-format
@@ -33647,7 +33631,7 @@ msgstr "パッドスタックが無効"
 
 #: pcbnew/drc/drc_item.cpp:137
 msgid "Micro via drill out of range"
-msgstr "マイクロ ビアのドリルが許容範囲外"
+msgstr "マイクロビアのドリルが許容範囲外"
 
 #: pcbnew/drc/drc_item.cpp:141
 msgid "Courtyards overlap"
@@ -34289,7 +34273,7 @@ msgstr "ゾーンのプロパティを変更"
 
 #: pcbnew/exporters/export_d356.cpp:381
 msgid "Export D-356 Test File"
-msgstr "D-356テストファイルの出力"
+msgstr "D-356テスト ファイルの出力"
 
 #: pcbnew/exporters/export_footprint_associations.cpp:73
 msgid "Save Footprint Association File"
@@ -34524,7 +34508,7 @@ msgstr "ファイル '%s' を書き込むための権限がありません。"
 #: pcbnew/files.cpp:1065 pcbnew/files.cpp:1217
 #, c-format
 msgid "Error saving custom rules file '%s'."
-msgstr "カスタムルールファイルの保存中のエラー '%s'."
+msgstr "カスタムルール ファイルの保存中のエラー '%s'."
 
 #: pcbnew/files.cpp:1091 pcbnew/files.cpp:1193
 #, c-format
@@ -35138,7 +35122,7 @@ msgstr "デフォルトの単位:"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.h:86
 msgid "Import Vector Graphics File"
-msgstr "ベクター グラフィックス ファイルをインポート"
+msgstr "ベクター画像ファイルをインポート"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:134
 msgid "Memory was exhausted trying to load the DXF, it may be too large."
@@ -35857,7 +35841,7 @@ msgstr "ローカル基準"
 
 #: pcbnew/pad.cpp:999
 msgid "Test point"
-msgstr "テスト ポイント"
+msgstr "テストポイント"
 
 #: pcbnew/pad.cpp:1000
 msgid "Heat sink"
@@ -36007,7 +35991,7 @@ msgstr "サーマルリリーフ スポーク角度"
 
 #: pcbnew/pad.cpp:1838 pcbnew/zone.cpp:1480
 msgid "Thermal Relief Gap"
-msgstr "サーマルリリーフギャップ"
+msgstr "サーマルリリーフ ギャップ"
 
 #: pcbnew/pcb_base_frame.cpp:194
 msgid "Error loading project footprint libraries."
@@ -37409,7 +37393,7 @@ msgstr ""
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3989
 #, c-format
 msgid "Cannot handle footprint text type %s"
-msgstr "フットプリント テキスト タイプ %s は使用できません"
+msgstr "フットプリントのテキスト タイプに %s は使用できません"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4769
 #, c-format
@@ -37942,7 +37926,7 @@ msgstr "ブラインド/ベリード ビアを配置"
 
 #: pcbnew/router/router_tool.cpp:122
 msgid "Adds a blind or buried via at the end of currently routed track."
-msgstr "現在の配線パターンの最後にブラインド/ベリードビアを追加します。"
+msgstr "現在の配線パターンの最後にブラインド/ベリード ビアを追加します。"
 
 #: pcbnew/router/router_tool.cpp:128
 msgid "Place Microvia"
@@ -38231,7 +38215,7 @@ msgstr "セッション ファイルはインポートされ、正常にマー�
 #: pcbnew/specctra_import_export/specctra_import.cpp:159
 #, c-format
 msgid "Session file uses invalid layer id '%s'."
-msgstr "セッション ファイルで不正なレイヤーID '%s' を使用しています。"
+msgstr "セッションファイルで不正なレイヤーID '%s' を使用しています。"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:218
 msgid "Session via padstack has no shapes"
@@ -38769,7 +38753,7 @@ msgstr "クリアランス解決レポートの項目を2つ選択します。"
 #: pcbnew/tools/board_inspection_tool.cpp:569
 #: pcbnew/tools/board_inspection_tool.cpp:582
 msgid "Cannot generate clearance report on empty group."
-msgstr "空のグループに対するクリアランスレポートを生成できません。"
+msgstr "空のグループに対するクリアランス レポートを生成できません。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:595
 msgid "Clearance Report"
@@ -38781,12 +38765,12 @@ msgstr "ゾーンの接続の解決:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:643
 msgid "Thermal relief gap resolution for:"
-msgstr "サーマルリリーフギャップの解決:"
+msgstr "サーマルリリーフ ギャップの解決:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:652
 #, c-format
 msgid "Resolved thermal relief gap: %s."
-msgstr "解決されたサーマルリリーフギャップ: %s."
+msgstr "解決されたサーマルリリーフ ギャップ: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:657
 msgid "Spoke width resolution for:"
@@ -38795,7 +38779,7 @@ msgstr "スポーク幅の解決:"
 #: pcbnew/tools/board_inspection_tool.cpp:666
 #, c-format
 msgid "Resolved thermal relief spoke width: %s."
-msgstr "解決されたサーマルリリーフスポーク幅: %s."
+msgstr "解決されたサーマルリリーフ スポーク幅: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:671
 msgid "Spoke count resolution for:"
@@ -38833,7 +38817,7 @@ msgstr "差動ペア"
 
 #: pcbnew/tools/board_inspection_tool.cpp:792
 msgid "Diff pair gap resolution for:"
-msgstr "差動ペアギャップの解決:"
+msgstr "差動ペアのギャップの解決:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:797
 #, c-format
@@ -39210,7 +39194,7 @@ msgid ""
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
 "クリックで %s を配置 (%ld 個目のアイテム:%ld個中)\n"
-"<esc> を押すとすべてキャンセル、ダブル クリックすると完了"
+"<esc> を押すとすべてキャンセル、ダブルクリックすると完了"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:367
 #, c-format
@@ -39269,7 +39253,7 @@ msgid ""
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
 "パッド %s%d 上をクリック\n"
-"<ESC> ですべてキャンセル、ダブル クリックで確定します"
+"<ESC> ですべてキャンセル、ダブルクリックで確定します"
 
 #: pcbnew/tools/pad_tool.cpp:362 pcbnew/tools/pad_tool.cpp:458
 msgid "Renumber pads"
@@ -39922,7 +39906,7 @@ msgstr "全ての関係するグラフィック形状を編集されたパッド
 
 #: pcbnew/tools/pcb_actions.cpp:604
 msgid "Default Pad Properties..."
-msgstr "デフォルト パッド プロパティ..."
+msgstr "デフォルトのパッド プロパティ..."
 
 #: pcbnew/tools/pcb_actions.cpp:605
 msgid "Edit the pad properties used when creating new pads"
@@ -39986,11 +39970,11 @@ msgstr "製造用ガーバーを生成"
 
 #: pcbnew/tools/pcb_actions.cpp:655
 msgid "Drill Files (.drl)..."
-msgstr "ドリル ファイル (.drl)..."
+msgstr "ドリルファイル (.drl)..."
 
 #: pcbnew/tools/pcb_actions.cpp:655
 msgid "Generate Excellon drill file(s)"
-msgstr "Excellon ドリル ファイルを生成"
+msgstr "Excellon ドリルファイルを生成"
 
 #: pcbnew/tools/pcb_actions.cpp:660
 msgid "Component Placement (.pos)..."
@@ -40086,7 +40070,7 @@ msgstr "ドリル/配置ファイルの原点"
 
 #: pcbnew/tools/pcb_actions.cpp:730
 msgid "Place origin point for drill files and component placement files"
-msgstr "ドリル ファイルと部品配置ファイルへ原点位置を配置"
+msgstr "ドリルファイルと部品配置ファイルへ原点位置を配置"
 
 #: pcbnew/tools/pcb_actions.cpp:736
 msgid "Toggle Lock"
@@ -40219,7 +40203,7 @@ msgstr "外観マネージャーの表示/非表示"
 
 #: pcbnew/tools/pcb_actions.cpp:865
 msgid "Show Properties Manager"
-msgstr "プロパティマネージャーを表示"
+msgstr "プロパティ マネージャーを表示"
 
 #: pcbnew/tools/pcb_actions.cpp:865
 msgid "Show/hide the properties manager"
@@ -40247,7 +40231,7 @@ msgstr "曲線ラッツネスト"
 
 #: pcbnew/tools/pcb_actions.cpp:886
 msgid "Ratsnest Mode (3-state)"
-msgstr "ラッツネストモード (3 状態)"
+msgstr "ラッツネスト モード (3 状態)"
 
 #: pcbnew/tools/pcb_actions.cpp:887
 msgid ""
@@ -40479,7 +40463,7 @@ msgstr "レイヤーを切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:1137
 msgid "Switch between layers in active layer pair"
-msgstr "アクティブなレイヤーペアの間でレイヤーを切り替え"
+msgstr "アクティブなレイヤー ペアの間でレイヤーを切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:1144
 msgid "Increase Layer Opacity"
@@ -40829,7 +40813,7 @@ msgstr "ルーターを迂回モードに切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:1467
 msgid "Cycle Router Mode"
-msgstr "ルーターモード切り替え"
+msgstr "ルーター モード切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:1467
 msgid "Cycle router to the next mode"
@@ -40841,7 +40825,7 @@ msgstr "レイヤー ペアをセット..."
 
 #: pcbnew/tools/pcb_actions.cpp:1472
 msgid "Change active layer pair for routing"
-msgstr "配線時のアクティブなレイヤーペアを変更"
+msgstr "配線時のアクティブなレイヤー ペアを変更"
 
 #: pcbnew/tools/pcb_actions.cpp:1479
 msgid "Tune length of a single track"
@@ -41758,8 +41742,7 @@ msgstr "プリセットを選択:"
 msgid ""
 "The current color theme is read-only.  Create a new theme in Preferences to "
 "enable color editing."
-msgstr ""
-"現在のカラーテーマは読み取り専用です。設定で新しいテーマを作成して、色の編集"
+msgstr "現在のカラー テーマは読み取り専用です。設定で新しいテーマを作成して、色の編集"
 "を有効にします。"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:71
@@ -42118,7 +42101,7 @@ msgstr "ガーバー ファイル"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:27
 msgid "Excellon drill file"
-msgstr "Excellon ドリル ファイル"
+msgstr "Excellon ドリルファイル"
 
 #: resources/linux/mime/kicad-kicad.xml.in:5
 msgid "KiCad Project"
