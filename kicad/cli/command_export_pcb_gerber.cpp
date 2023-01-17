@@ -36,8 +36,6 @@ CLI::EXPORT_PCB_GERBER_COMMAND::EXPORT_PCB_GERBER_COMMAND( const std::string& aN
 {
     addLayerArg( true );
 
-    m_argParser.add_description( UTF8STDSTR( _( "Plot given layers to a single gerber file" ) ) );
-
     m_argParser.add_argument( "-erd", ARG_EXCLUDE_REFDES )
             .help( UTF8STDSTR( _( "Exclude the reference designator text" ) ) )
             .implicit_value( true )
