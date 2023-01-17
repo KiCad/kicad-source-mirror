@@ -80,8 +80,13 @@ void SCRIPTING_TOOL::ReloadPlugins()
     // Remove all action plugins so that we don't keep references to old versions
     ACTION_PLUGINS::UnloadAll();
 
-    PyLOCK lock;
-    callLoadPlugins();
+    try
+    {
+        PyLOCK lock;
+        callLoadPlugins();
+    }
+    catch( ... )
+    {}
 }
 
 
@@ -91,9 +96,14 @@ int SCRIPTING_TOOL::reloadPlugins( const TOOL_EVENT& aEvent )
     // Remove all action plugins so that we don't keep references to old versions
     ACTION_PLUGINS::UnloadAll();
 
+    try
     {
         PyLOCK lock;
         callLoadPlugins();
+    }
+    catch( ... )
+    {
+        return -1;
     }
 
     if( !m_isFootprintEditor )
