@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-11 12:35-0800\n"
+"POT-Creation-Date: 2023-01-17 10:33-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -8573,8 +8573,8 @@ msgstr ""
 "\n"
 "Do you want to save the current document before proceeding?"
 
-msgid "All supported formats|"
-msgstr "All supported formats|"
+msgid "All supported formats"
+msgstr "All supported formats"
 
 msgid "Import Schematic"
 msgstr "Import Schematic"
@@ -13617,6 +13617,9 @@ msgstr "Use the gerber plot settings already configured in the board file"
 msgid "Color theme to use (will default to pcbnew settings)"
 msgstr "Color theme to use (will default to pcbnew settings)"
 
+msgid "Generate Position File"
+msgstr "Generate Position File"
+
 msgid "Valid options: front,back,both. Gerber format only supports \"both\"."
 msgstr "Valid options: front,back,both. Gerber format only supports \"both\"."
 
@@ -16381,6 +16384,12 @@ msgstr "Nets"
 msgid "Unrouted"
 msgstr "Unrouted"
 
+msgid "NetClass"
+msgstr "NetClass"
+
+msgid "NetName"
+msgstr "NetName"
+
 msgid "all copper layers"
 msgstr "all copper layers"
 
@@ -18570,9 +18579,6 @@ msgstr "Not in schematic"
 msgid "Exclude from position files"
 msgstr "Exclude from position files"
 
-msgid "Exclude from BOM"
-msgstr "Exclude from BOM"
-
 msgid "Exempt from courtyard requirement"
 msgstr "Exempt from courtyard requirement"
 
@@ -18853,9 +18859,6 @@ msgstr "Options supported by current plugin"
 
 msgid "<<    Append Selected Option"
 msgstr "<<    Append Selected Option"
-
-msgid "Generate Position File"
-msgstr "Generate Position File"
 
 #, c-format
 msgid "Front (top side) placement file: '%s'."
@@ -19668,6 +19671,36 @@ msgstr "Select a corner to add the new corner after."
 msgid "Select a corner to delete."
 msgstr "Select a corner to delete."
 
+msgid "Start point"
+msgstr "Start point"
+
+msgid "Control point 1"
+msgstr "Control point 1"
+
+msgid "Control point 2"
+msgstr "Control point 2"
+
+msgid "End point"
+msgstr "End point"
+
+msgid "Move vector"
+msgstr "Move vector"
+
+msgid "Scaling factor:"
+msgstr "Scaling factor:"
+
+msgid "Duplicate:"
+msgstr "Duplicate:"
+
+msgid "Coordinates are relative to anchor pad, rotated 0.0 deg."
+msgstr "Coordinates are relative to anchor pad, rotated 0.0 deg."
+
+msgid "Pad Custom Shape Geometry Transform"
+msgstr "Pad Custom Shape Geometry Transform"
+
+msgid "Basic Shape Polygon"
+msgstr "Basic Shape Polygon"
+
 msgid "Pad Properties"
 msgstr "Pad Properties"
 
@@ -20150,36 +20183,6 @@ msgstr "Custom Shape Primitives"
 
 msgid "Preview pad in sketch mode"
 msgstr "Preview pad in sketch mode"
-
-msgid "Start point"
-msgstr "Start point"
-
-msgid "Control point 1"
-msgstr "Control point 1"
-
-msgid "Control point 2"
-msgstr "Control point 2"
-
-msgid "End point"
-msgstr "End point"
-
-msgid "Move vector"
-msgstr "Move vector"
-
-msgid "Scaling factor:"
-msgstr "Scaling factor:"
-
-msgid "Duplicate:"
-msgstr "Duplicate:"
-
-msgid "Coordinates are relative to anchor pad, rotated 0.0 deg."
-msgstr "Coordinates are relative to anchor pad, rotated 0.0 deg."
-
-msgid "Pad Custom Shape Geometry Transform"
-msgstr "Pad Custom Shape Geometry Transform"
-
-msgid "Basic Shape Polygon"
-msgstr "Basic Shape Polygon"
 
 msgid "Plot on All Layers"
 msgstr "Plot on All Layers"
@@ -23790,6 +23793,9 @@ msgstr "Thermal reliefs for PTH"
 
 msgid "Library link"
 msgstr "Library link"
+
+msgid "Exclude from BOM"
+msgstr "Exclude from BOM"
 
 msgid "Overrides"
 msgstr "Overrides"
@@ -29453,6 +29459,9 @@ msgstr "KiCad Schematic"
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
 
+#~ msgid "All supported formats|"
+#~ msgstr "All supported formats|"
+
 #~ msgid "Print border and title block"
 #~ msgstr "Print border and title block"
 
@@ -32257,12 +32266,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "Would you like to automatically check for updates on startup?"
 #~ msgstr "Would you like to automatically check for updates on startup?"
-
-#~ msgid "NetName"
-#~ msgstr "NetName"
-
-#~ msgid "NetClass"
-#~ msgstr "NetClass"
 
 #~ msgid ""
 #~ "Do not allow position of pad relative to parent footprint to be changed"
