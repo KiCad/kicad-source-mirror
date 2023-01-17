@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -103,6 +103,7 @@ WX_GRID::WX_GRID( wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxS
 
     // Make sure the GUI font scales properly
     SetDefaultCellFont( KIUI::GetControlFont( this ) );
+    SetLabelFont( KIUI::GetControlFont( this ) );
 
     if( GetColLabelSize() > 0 )
         SetColLabelSize( GetColLabelSize() + 4 );
@@ -188,6 +189,20 @@ void WX_GRID::SetTable( wxGridTableBase* aTable, bool aTakeOwnership )
     Connect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( WX_GRID::onGridCellSelect ), nullptr, this );
 
     m_weOwnTable = aTakeOwnership;
+}
+
+
+bool WX_GRID::Show( bool aShow )
+{
+    // Don't let wxFormBuilder override the fonts.  It's always the wrong answer as it will set
+    // a fixed-size, non-scaling, non-HiDPI-aware font.
+    if( aShow )
+    {
+        SetDefaultCellFont( KIUI::GetControlFont( this ) );
+        SetLabelFont( KIUI::GetControlFont( this ) );
+    }
+
+    return wxGrid::Show( aShow );
 }
 
 
