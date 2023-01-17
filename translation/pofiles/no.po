@@ -3,13 +3,14 @@
 # Allan Nordhøy <epost@anotheragency.no>, 2020, 2021, 2022.
 # Petter Reinholdtsen <pere-weblate@hungry.com>, 2022.
 # Håvard Syslak <haavard.syslak@gmail.com>, 2022.
+# Henrik Kauhanen <henrik@kauhanen.se>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-17 10:33-0800\n"
-"PO-Revision-Date: 2022-11-22 20:35+0000\n"
-"Last-Translator: Håvard Syslak <haavard.syslak@gmail.com>\n"
+"PO-Revision-Date: 2023-01-20 06:51+0000\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
 "master-source/nb_NO/>\n"
 "Language: no\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15-dev\n"
+"X-Generator: Weblate 4.15.1\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #, fuzzy
@@ -13415,7 +13416,6 @@ msgstr ""
 
 #: eeschema/files-io.cpp:619 pcbnew/files.cpp:173
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:191
-#, fuzzy
 msgid "All supported formats"
 msgstr "Alle støttede formater"
 
