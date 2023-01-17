@@ -1,7 +1,7 @@
 # Tokita, Hiroshi <tokita.hiroshi@gmail.com>, 2021, 2022, 2023.
 # Ji Yoon Choi <chichoon.choi@gmail.com>, 2021.
 # Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>, 2021, 2022.
-# co8 j <co8@nifty.com>, 2022.
+# co8 j <co8@nifty.com>, 2022, 2023.
 # Keisuke Nakao <chome@argv.org>, 2022.
 # Tokita, Hiroshi <tokita.hiroshi@fujitsu.com>, 2023.
 msgid ""
@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-11 12:35-0800\n"
 "PO-Revision-Date: 2023-01-17 17:11+0000\n"
-"Last-Translator: Tokita, Hiroshi <tokita.hiroshi@fujitsu.com>\n"
+"Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -22842,9 +22842,8 @@ msgid "Copper"
 msgstr "銅"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:49
-#, fuzzy
 msgid "Copper-Aluminium"
-msgstr "アルミニウム"
+msgstr "銅-アルミニウム"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:50
 msgid "Brass"
@@ -22863,9 +22862,8 @@ msgid "Lead"
 msgstr "鉛"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:54
-#, fuzzy
 msgid "Aluminium-Copper"
-msgstr "アルミニウム"
+msgstr "アルミニウム-銅"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:55
 msgid "Cast iron"
