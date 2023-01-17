@@ -9,16 +9,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-17 10:33-0800\n"
-"PO-Revision-Date: 2023-01-17 17:11+0000\n"
-"Last-Translator: co8 j <co8@nifty.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"PO-Revision-Date: 2023-01-20 06:51+0000\n"
+"Last-Translator: Tokita, Hiroshi <tokita.hiroshi@fujitsu.com>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.15.1-dev\n"
+"X-Generator: Weblate 4.15.1\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -86,7 +86,7 @@ msgstr "穴の輪郭を簡略化"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:859
 msgid "Build Tech layers"
-msgstr "Tech レイヤーをビルド"
+msgstr "テクニカルレイヤーをビルド"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:898
 #, c-format
@@ -589,7 +589,7 @@ msgstr "シルクスクリーン レイヤーの表示を切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:263
 msgid "Toggle solder mask display"
-msgstr "ハンダ マスク表示の切り替え"
+msgstr "ハンダマスク表示の切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:263
 msgid "Toggle display of solder mask layers"
@@ -597,7 +597,7 @@ msgstr "ハンダマスク レイヤーの表示を切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:267
 msgid "Toggle solder paste display"
-msgstr "ハンダ ペースト表示の切り替え"
+msgstr "ハンダペースト表示の切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:267
 msgid "Toggle display of solder paste layers"
@@ -651,7 +651,7 @@ msgstr "背景のグラデーションの終了:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:51
 msgid "Solder paste:"
-msgstr "ハンダ ペースト:"
+msgstr "ハンダペースト:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:64
 msgid "Board Colors"
@@ -3890,7 +3890,7 @@ msgstr "インポートされた図形"
 #: eeschema/dialogs/dialog_image_properties.cpp:40 eeschema/sch_bitmap.h:129
 #: pcbnew/dialogs/dialog_image_properties.cpp:41 pcbnew/pcb_bitmap.h:110
 msgid "Image"
-msgstr "画像"
+msgstr "イメージ"
 
 #: common/drawing_sheet/ds_data_model_io.cpp:92
 #: common/drawing_sheet/ds_data_model_io.cpp:121
@@ -5187,7 +5187,7 @@ msgstr "シンボルの外形線"
 
 #: common/layer_id.cpp:123
 msgid "Symbol body fills"
-msgstr "シンボルの塗潰し"
+msgstr "シンボルの塗りつぶし"
 
 #: common/layer_id.cpp:124
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:69
@@ -8322,11 +8322,11 @@ msgstr "シンボル"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:38
 msgid "Current Library Reference"
-msgstr "現在のライブラリー リファレンス"
+msgstr "現在の参照ライブラリー"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:39
 msgid "New Library Reference"
-msgstr "新しいライブラリー リファレンス"
+msgstr "新しい参照ライブラリー"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:58
 msgid "Map Orphans"
@@ -8355,7 +8355,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.h:57
 msgid "Symbol Library References"
-msgstr "シンボル ライブラリー リファレンス"
+msgstr "シンボルの参照ライブラリー"
 
 #: eeschema/dialogs/dialog_erc.cpp:99
 msgid "Run ERC"
@@ -9624,7 +9624,7 @@ msgstr "ボディ背景色で塗りつぶし"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:119
 msgid "Fill with:"
-msgstr "塗潰しタイプ:"
+msgstr "塗りつぶしタイプ:"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:140
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:196
@@ -9881,7 +9881,7 @@ msgstr "テキストは空にできません。"
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:259
 #: eeschema/dialogs/dialog_text_properties_base.cpp:262
 msgid "Background fill"
-msgstr "背景塗潰し"
+msgstr "背景塗りつぶし"
 
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:285
 msgid "Private to symbol editor"
@@ -10781,7 +10781,7 @@ msgstr "ボーダー カラー:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:157
 msgid "Background fill:"
-msgstr "背景塗潰し:"
+msgstr "背景塗りつぶし:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:178
 msgid "Page number:"
@@ -12470,7 +12470,7 @@ msgstr "グローバル ライブラリー"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:124
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:121
 msgid "Project Specific Libraries"
-msgstr "プロジェクト固有のライブラリー"
+msgstr "プロジェクト固有ライブラリー"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:132
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:130
@@ -13043,7 +13043,6 @@ msgstr ""
 
 #: eeschema/files-io.cpp:619 pcbnew/files.cpp:173
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:191
-#, fuzzy
 msgid "All supported formats"
 msgstr "サポートされているすべてのフォーマット"
 
@@ -13663,7 +13662,7 @@ msgstr "バス-バス エントリー"
 
 #: eeschema/sch_bus_entry.cpp:496 eeschema/sch_line.cpp:899
 msgid "Wire"
-msgstr "ワイヤー"
+msgstr "配線済み"
 
 #: eeschema/sch_bus_entry.cpp:497 eeschema/sch_line.cpp:900
 msgid "Bus"
@@ -14538,7 +14537,7 @@ msgstr "\"Italics\" or \"~\" を期待"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1303
 msgid "symbol field text attributes must be 3 characters wide"
-msgstr "シンボルのフィールド テキスト属性は、３文字幅でなければなりません"
+msgstr "シンボル フィールドのテキスト属性は、３文字幅でなければなりません"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin_helpers.cpp:222
 msgid "expected unquoted string"
@@ -17822,7 +17821,7 @@ msgstr "エレクトリカル ルール チェッカーのエラーマーカー�
 
 #: eeschema/tools/ee_actions.cpp:712
 msgid "Show ERC Exclusions"
-msgstr "ERC 除外部の表示"
+msgstr "除外されたERCマーカーを表示"
 
 #: eeschema/tools/ee_actions.cpp:713
 msgid "Show markers for excluded electrical rules checker violations"
@@ -23275,7 +23274,7 @@ msgstr "線幅"
 #: pcb_calculator/transline_ident.cpp:331
 #: pcb_calculator/transline_ident.cpp:370
 msgid "Line length"
-msgstr "線路長"
+msgstr "ライン長"
 
 #: pcb_calculator/transline_ident.cpp:149
 #: pcb_calculator/transline_ident.cpp:183
@@ -23428,7 +23427,7 @@ msgstr "環境の比誘電率"
 
 #: pcb_calculator/transline_ident.cpp:409
 msgid "Cable length"
-msgstr "ケーブル長"
+msgstr "レジスト剥離エリア"
 
 #: pcb_calculator/widgets/unit_selector.cpp:35
 msgid "um"
@@ -23536,7 +23535,7 @@ msgstr "導体ゾーンをテッセレーションしています..."
 #: pcbnew/board.cpp:949
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
 msgid "PCB"
-msgstr "PCB"
+msgstr "プリント基板"
 
 #: pcbnew/board.cpp:1319 pcbnew/dialogs/dialog_board_statistics.cpp:687
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:79
@@ -23643,11 +23642,11 @@ msgstr "表面ハンダマスク"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:594
 msgid "Bottom Solder Mask"
-msgstr "裏面ハンダ マスク"
+msgstr "裏面ハンダマスク"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:602
 msgid "Bottom Solder Paste"
-msgstr "裏面ハンダ ペースト"
+msgstr "裏面ハンダペースト"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:610
 msgid "Bottom Silk Screen"
@@ -23873,8 +23872,8 @@ msgid ""
 "If Impedance Controlled option is set,\n"
 "Loss tangent and EpsilonR will be added to constraints."
 msgstr ""
-"インピーダンス コントロールのオプションがセットされている場合、\n"
-"損失正接と εR は制約設定に追加されます。"
+"インピーダンス制御のオプションがセットされている場合、\n"
+"損失正接と εR は制約の設定に追加されます。"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:47
 msgid "Add Dielectric Layer..."
@@ -25192,7 +25191,7 @@ msgstr "塗りつぶし"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:286
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:125
 msgid "Fill type:"
-msgstr "塗潰しタイプ:"
+msgstr "塗りつぶしタイプ:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:290
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:129
@@ -25214,7 +25213,7 @@ msgstr "ハッチング幅:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:318
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:160
 msgid "Hatch gap:"
-msgstr "ハッチング ギャップ:"
+msgstr "ハッチングの間隔:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:329
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:171
@@ -25352,11 +25351,11 @@ msgstr "縦(Y)方向の数:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:48
 msgid "Horizontal spacing:"
-msgstr "横(X)方向の間隔:"
+msgstr "水平間隔:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:59
 msgid "Vertical spacing:"
-msgstr "縦(Y)方向の間隔:"
+msgstr "垂直間隔:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:70
 msgid "Horizontal offset:"
@@ -25448,11 +25447,11 @@ msgstr "グリッド配列"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:216
 msgid "Horizontal center:"
-msgstr "横(X)方向の中心:"
+msgstr "水平中央:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:227
 msgid "Vertical center:"
-msgstr "縦(Y)方向の中心:"
+msgstr "垂直中央:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:238
 #: pcbnew/dialogs/dialog_pad_primitives_properties_base.cpp:134
@@ -25714,7 +25713,7 @@ msgstr "テキスト位置 X"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:185
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:156
 msgid "Text height"
-msgstr "テキスト高さ"
+msgstr "テキスト高"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:316
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:224
@@ -26162,7 +26161,7 @@ msgstr "グリッド原点"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:44
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:44
 msgid "User defined origin"
-msgstr "ユーザー定義の原点"
+msgstr "ユーザー定義原点"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:47
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:44
@@ -26669,7 +26668,7 @@ msgstr "基板の設定の値を使用するため、値を0に設定します�
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:244
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:601
 msgid "Pad clearance:"
-msgstr "パッド クリアランス:"
+msgstr "パッドのクリアランス:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:275
 msgid ""
@@ -26695,7 +26694,7 @@ msgid ""
 "This value can be superseded by a pad local value.\n"
 "If 0, the global value is used."
 msgstr ""
-"これはフットプリントのパッドとハンダ マスク間のローカル クリアランスです。\n"
+"これはフットプリントのパッドとハンダマスク間のローカル クリアランスです。\n"
 "この値は、パッドのローカル値で置き換えられます。\n"
 "0 した場合、グローバル値が使用されます。"
 
@@ -26709,7 +26708,7 @@ msgstr "パッド間を接続するハンダマスク アパーチャを許容�
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:627
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:101
 msgid "Solder paste absolute clearance:"
-msgstr "ハンダ ペーストの絶対クリアランス:"
+msgstr "ハンダペーストの絶対クリアランス:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:304
 msgid ""
@@ -26720,11 +26719,10 @@ msgid ""
 "ratio.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"これはフットプリントのパッドとハンダ ペースト間のローカル クリアランスで"
-"す。\n"
+"これはフットプリントのパッドとハンダペースト間のローカル クリアランスです。\n"
 "この値は、パッドのローカル値で置き換えられます。\n"
-"最終的なクリアランスの値は、この値とクリアランス比率を合算したものになりま"
-"す。\n"
+"最終的なクリアランスの値は、この値とクリアランス比率を合算したものになります"
+"。\n"
 "負値の場合、ステンシルの開口部のサイズはパッドのサイズより小さくなります。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:315
@@ -26732,7 +26730,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:640
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:116
 msgid "Solder paste relative clearance:"
-msgstr "ハンダ ペーストの相対クリアランス:"
+msgstr "ハンダペーストの相対クリアランス:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:317
 #, c-format
@@ -26770,9 +26768,8 @@ msgstr ""
 msgid ""
 "Note: solder paste clearances (absolute and relative) are added to determine "
 "the final clearance."
-msgstr ""
-"注: ハンダ ペーストのクリアランス (絶対および相対) は最終的なクリアランスを決"
-"めるために加算されます。"
+msgstr "注: ハンダペーストのクリアランス (絶対および相対) "
+"は最終的なクリアランスを決めるために加算されます。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:352
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:323
@@ -26885,7 +26882,7 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"これはフットプリントのパッドとハンダ マスク間の\n"
+"これはフットプリントのパッドとハンダマスク間の\n"
 "ローカル クリアランスです。\n"
 "0 した場合、グローバル値が使用されます。\n"
 "この値は、パッド プロパティの\"ローカル クリアランスと設定\"タブにある\n"
@@ -26901,10 +26898,10 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"これはフットプリントのパッドとハンダ ペースト間の\n"
+"これはフットプリントのパッドとハンダペースト間の\n"
 "ローカル クリアランスです。\n"
-"最終的なクリアランスの値は、この値とクリアランス比率を合算したものになりま"
-"す。\n"
+"最終的なクリアランスの値は、この値とクリアランス比率を合算したものになります"
+"。\n"
 "負値の場合、ステンシルの開口部のサイズよりも小さなマスクが使用されます。\n"
 "この値は、パッド プロパティの\"ローカル クリアランスと設定\"タブにある\n"
 "各パッドの設定値で置き換えられます。"
@@ -28036,7 +28033,7 @@ msgstr "グループ '%s' に含まれるネットを全て削除しますか?"
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2207
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2208
 msgid "Report file"
-msgstr "レポート ファイル"
+msgstr "レポートファイル"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:30
 msgid "Net name filter:"
@@ -28100,7 +28097,7 @@ msgstr "中心:"
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:133
 #: pcbnew/dialogs/dialog_pad_properties.cpp:724
 msgid "Ring"
-msgstr "リング"
+msgstr "円環"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:197
 msgid "Line width may not be 0 for unfilled shapes."
@@ -28298,17 +28295,15 @@ msgstr ""
 msgid ""
 "Warning: Negative solder mask clearance larger than pad. No solder mask will "
 "be generated."
-msgstr ""
-"警告: パッドよりも大きい負のハンダ マスクのクリアランスです。ハンダ マスクは"
-"生成されません。"
+msgstr "警告: パッドよりも大きい負のハンダマスクのクリアランスです。ハンダマスクは生"
+"成されません。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1333
 msgid ""
 "Warning: Negative solder paste margins larger than pad. No solder paste mask "
 "will be generated."
-msgstr ""
-"警告: 負のハンダ ペーストの余白がパッドよりも大きいです。ハンダ ペースト マス"
-"クは生成されません。"
+msgstr "警告: 負のハンダペーストの余白がパッドよりも大きいです。ハンダ ペースト "
+"マスクは生成されません。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1340
 msgid "Error: pad has no layer."
@@ -28333,9 +28328,8 @@ msgstr "エラー:スルーホール パッドに穴がありません。"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1368
 msgid ""
 "Warning: Connector pads normally have no solder paste. Use a SMD pad instead."
-msgstr ""
-"警告: 通常、コネクターのパッドにはハンダ ペーストはありません。代わりにSMD"
-"パッドを使用してください。"
+msgstr "警告: 通常、コネクターのパッドにはハンダペーストはありません。代わりにSMDパッ"
+"ドを使用してください。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1377
 msgid "Error: SMD pad has a hole."
@@ -28603,11 +28597,11 @@ msgstr "裏面の接着剤層"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:519
 msgid "Front solder paste"
-msgstr "表面のハンダ ペースト層"
+msgstr "表面のハンダペースト層"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:522
 msgid "Back solder paste"
-msgstr "裏面のハンダ ペースト層"
+msgstr "裏面のハンダペースト層"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:528
 msgid "Back silk screen"
@@ -28615,7 +28609,7 @@ msgstr "裏面のシルクスクリーン層"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:534
 msgid "Back solder mask"
-msgstr "裏面のハンダ マスク層"
+msgstr "裏面のハンダマスク層"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:537
 msgid "Drafting notes"
@@ -28716,7 +28710,7 @@ msgid ""
 "This is the local clearance between this pad and the solder mask.\n"
 "If 0, the footprint local value or the global value is used."
 msgstr ""
-"このパッドとハンダ マスク間のローカル クリアランスです。\n"
+"このパッドとハンダマスク間のローカル クリアランスです。\n"
 "0 とした場合、フットプリントのローカル値かグローバル値が使用されます。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:629
@@ -28727,7 +28721,7 @@ msgid ""
 "ratio.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
-"このパッドとハンダ ペースト間のローカル クリアランスです。\n"
+"このパッドとハンダペースト間のローカル クリアランスです。\n"
 "0 とした場合、フットプリントの値かグローバル値が使用されます。\n"
 "最終的なクリアランス値はこの値とクリアランス比率を合算したものになります。\n"
 "負値の場合、マスクのサイズはパッドのサイズより小さくなります。"
@@ -28741,12 +28735,12 @@ msgid ""
 "The final clearance value is the sum of this value and the clearance value.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
-"このパッドとハンダ ペースト間のローカル クリアランス比率をパーセントで指定し"
-"ます。\n"
+"このパッドとハンダペースト間のローカル "
+"クリアランス比率をパーセントで指定します。\n"
 "値 10 は、クリアランスの値がパッド サイズの10%であることを意味します。\n"
 "0 とした場合、フットプリントの値かグローバル値が使用されます。\n"
-"最終的なクリアランスの値は、この値とクリアランス値を合算したものになりま"
-"す。\n"
+"最終的なクリアランスの値は、この値とクリアランス値を合算したものになります。"
+"\n"
 "負値の場合、マスクのサイズはパッドのサイズより小さくなります。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:712
@@ -28873,7 +28867,7 @@ msgstr "出力フォーマット:"
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Gerber"
-msgstr "Gerber"
+msgstr "ガーバー"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:54
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:269
@@ -28890,7 +28884,7 @@ msgstr "リファレンス指定子をプロット"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:88
 msgid "Force plotting of invisible values / refs"
-msgstr "非表示の値/参照を強制的にプロット"
+msgstr "非表示の値/リファレンス指定子を強制的にプロット"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:89
 msgid "Force plot invisible footprint values and reference designators"
@@ -28910,7 +28904,7 @@ msgstr "ビアのテンティングを禁止"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:99
 msgid "Remove soldermask on vias"
-msgstr "ビア上のハンダ マスクを削除"
+msgstr "ビア上のハンダマスクを削除"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:104
 msgid ""
@@ -28964,9 +28958,8 @@ msgstr "プロット前にゾーンの塗りつぶしをチェック"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:161
 msgid "Global solder mask minimum width and/or margin are not set to 0. "
-msgstr ""
-"グローバルなハンダ マスクの最小幅および/またはマージンは 0 に設定されていませ"
-"ん。 "
+msgstr "グローバルなハンダマスクの最小幅および/またはマージンは 0 "
+"に設定されていません。 "
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:165
 msgid ""
@@ -28978,7 +28971,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:175
 msgid "Board setup"
-msgstr "基板の設定"
+msgstr "基板セットアップ"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:176
 msgid "File > Board Setup..."
@@ -29654,15 +29647,15 @@ msgstr "基本ルール:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:73
 msgid "Keep out tracks"
-msgstr "配線禁止"
+msgstr "配線を禁止"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:74
 msgid "Prevent tracks from routing into this area"
-msgstr "このエリアへ配線がルーティングされるのを防止する"
+msgstr "このエリアへの配線を抑止する"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:78
 msgid "Keep out vias"
-msgstr "ビア禁止"
+msgstr "ビアの配置を禁止"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:79
 msgid "Prevent vias from being placed in this area"
@@ -29670,7 +29663,7 @@ msgstr "このエリアにビアが配置されないようにする"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:83
 msgid "Keep out pads"
-msgstr "配線禁止パッド"
+msgstr "パッドの配置を禁止"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:84
 msgid "Raise a DRC error if a pad overlaps this area"
@@ -29678,15 +29671,15 @@ msgstr "パッドがこの領域に重なっている場合、DRC エラーを�
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:88
 msgid "Keep out copper fill"
-msgstr "銅箔塗りつぶし禁止"
+msgstr "導体塗りつぶし禁止"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:89
 msgid "Zones will not fill copper into this area"
-msgstr "ゾーンのある領域を銅箔の塗りつぶさない"
+msgstr "ゾーンのある領域を導体で塗りつぶさない"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:93
 msgid "Keep out footprints"
-msgstr "配線禁止フットプリント"
+msgstr "フットプリントの配置を禁止"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:94
 msgid "Raise a DRC error if a footprint courtyard overlaps this area"
@@ -30137,15 +30130,15 @@ msgstr "ネットをハイライトします(パッドまたはトラック)."
 #: pcbnew/dialogs/panel_edit_options_base.cpp:260
 #: pcbnew/dialogs/panel_edit_options_base.cpp:283
 msgid "Magnetic Points"
-msgstr "マグネティック ポイント"
+msgstr "吸着ポイント"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:262
 msgid "Magnetic pads"
-msgstr "マグネティック パッド"
+msgstr "パッドに吸着"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:266
 msgid "Magnetic graphics"
-msgstr "マグネティック図形"
+msgstr "図形に吸着"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:290
 msgid "Snap to pads:"
@@ -30494,7 +30487,7 @@ msgstr "穴"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:185
 msgid "Minimum through hole:"
-msgstr "最小スルーホール穴径:"
+msgstr "最小スルーホール:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:190
 msgid ""
@@ -31236,8 +31229,7 @@ msgstr "User9"
 msgid ""
 "Use your board manufacturer's recommendations for solder mask expansion and "
 "minimum web width."
-msgstr ""
-"ハンダ マスクの拡張と最小ウェブ幅については、基板メーカーの推奨値を使用してく"
+msgstr "ハンダマスクの拡張と最小ウェブ幅については、基板メーカーの推奨値を使用してく"
 "ださい。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:36
@@ -31249,20 +31241,19 @@ msgid ""
 "Global clearance between pads and the solder mask.\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
-"これはパッドとハンダ マスク間のグローバル クリアランスです。\n"
+"これはパッドとハンダマスク間のグローバル クリアランスです。\n"
 "この値は、フットプリントやパッドのローカル値で置き換えられます。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:61
 msgid ""
 "Positive clearance means area bigger than the pad (usual for solder mask "
 "clearance)."
-msgstr ""
-"正のクリアランスはパッドより大きな領域を意味します(通常はハンダ マスクのクリ"
-"アランス)。"
+msgstr "正のクリアランスはパッドより大きな領域を意味します(通常はハンダマスクのクリア"
+"ランス)。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:69
 msgid "Solder mask minimum web width:"
-msgstr "ハンダ マスクの最小ウェブ幅:"
+msgstr "ハンダマスクの最小ウェブ幅:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:71
 msgid ""
@@ -31281,13 +31272,12 @@ msgstr ""
 msgid ""
 "Minimum distance between openings in the solder mask.  Pad openings closer "
 "than this distance will be plotted as a single opening."
-msgstr ""
-"ハンダ マスクの開口部間の最小距離。この値より近い パッドの開口部は、一つの開"
-"口部としてプロットされます。"
+msgstr "ハンダマスクの開口部間の最小距離。この値より近い "
+"パッドの開口部は、一つの開口部としてプロットされます。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:84
 msgid "Solder mask to copper clearance:"
-msgstr "ハンダ マスクと導体間のクリアランス:"
+msgstr "ハンダマスクと導体間のクリアランス:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:95
 msgid "Allow bridged solder mask apertures between pads within footprints"
@@ -31305,18 +31295,17 @@ msgid ""
 "This value can be superseded by local values for a footprint or a pad.\n"
 "Final clearance value is the sum of this value and the clearance value ratio."
 msgstr ""
-"これはパッドとハンダ ペースト間のグローバル クリアランスです。\n"
+"これはパッドとハンダペースト間のグローバル クリアランスです。\n"
 "この値は、フットプリントやパッドのローカル値で置き換えられます。\n"
-"最終的なクリアランスの値は、この値とクリアランス比率を合算したものになりま"
-"す。"
+"最終的なクリアランスの値は、この値とクリアランス比率を合算したものになります"
+"。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:108
 msgid ""
 "Negative clearance means area smaller than the pad (usual for solder paste "
 "clearance)."
-msgstr ""
-"負のクリアランスはパッドより小さな領域を意味します(通常はハンダ ペーストのク"
-"リアランス)。"
+msgstr "負のクリアランスはパッドより小さな領域を意味します(通常はハンダペーストのクリ"
+"アランス)。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:118
 msgid ""
@@ -31325,8 +31314,8 @@ msgid ""
 "This value can be superseded by local values for a footprint or a pad.\n"
 "Final clearance value is the sum of this value and the clearance value."
 msgstr ""
-"これはパッドとハンダ ペースト間のパーセント指定したグローバル クリアランス比"
-"率です。\n"
+"これはパッドとハンダペースト間のパーセント指定したグローバル "
+"クリアランス比率です。\n"
 "値 10 は、クリアランスの値がパッド サイズの10%であることを意味します。\n"
 "この値は、フットプリントやパッドのローカル値で置き換えられます。\n"
 "最終的なクリアランスの値は、この値とクリアランス値を合算したものになります。"
@@ -31339,9 +31328,8 @@ msgstr "追加のクリアランスをパッドサイズに対するパーセン
 msgid ""
 "Note: Solder paste clearances (absolute and relative) are added to determine "
 "the final clearance."
-msgstr ""
-"注: ハンダ ペーストのクリアランス (絶対および相対) は最終的なクリアランスを決"
-"めるために加算されます。"
+msgstr "注: ハンダペーストのクリアランス (絶対および相対) "
+"は最終的なクリアランスを決めるために加算されます。"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:93
 msgid "Cancel Changes?"
@@ -32081,7 +32069,7 @@ msgstr "直径"
 #: pcbnew/tools/board_inspection_tool.cpp:921
 #: pcbnew/tools/board_inspection_tool.cpp:950
 msgid "Hole"
-msgstr "穴"
+msgstr "スルーホール"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:152
 msgid "Differential Pairs"
@@ -32522,7 +32510,7 @@ msgstr "導体の接続が細すぎる"
 
 #: pcbnew/drc/drc_item.cpp:117
 msgid "Track width"
-msgstr "配線幅"
+msgstr "トラック幅"
 
 #: pcbnew/drc/drc_item.cpp:121
 msgid "Annular width"
@@ -32610,7 +32598,7 @@ msgstr "異なるネットのアイテムがハンダマスクのアパーチャ
 
 #: pcbnew/drc/drc_item.cpp:209
 msgid "Silkscreen clipped by solder mask"
-msgstr "ハンダ マスクでシルクスクリーンが切り取られている"
+msgstr "ハンダマスクでシルクスクリーンが切り取られている"
 
 #: pcbnew/drc/drc_item.cpp:213
 msgid "Silkscreen clipped by board edge"
@@ -33121,7 +33109,7 @@ msgstr "ハンダマスクとシルク間のクリアランスをチェックし
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:742
 msgid "Checking solder mask web integrity..."
-msgstr "ハンダ マスクのウェブの整合性をチェックしています..."
+msgstr "ハンダマスクのウェブの整合性をチェックしています..."
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:88
 msgid "Checking text dimensions..."
@@ -36271,8 +36259,8 @@ msgid ""
 "The legacy zone fill strategy is no longer supported.\n"
 "Convert zones to smoothed polygon fills?"
 msgstr ""
-"以前のゾーン塗潰しモードは現在ではサポートされていません。\n"
-"ゾーンをポリゴン塗潰しに変換しますか？"
+"以前のゾーンの塗りつぶし方式は現在ではサポートされていません。\n"
+"ゾーンをポリゴン塗りつぶしに変換しますか？"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:2174
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5643
@@ -36396,8 +36384,8 @@ msgid ""
 "The segment zone fill mode is no longer supported.\n"
 "Convert zones to smoothed polygon fills?"
 msgstr ""
-"以前のセグメントゾーン塗潰しモードは現在サポートされていません。\n"
-"ゾーンをポリゴン塗潰しに変換しますか？"
+"セグメントゾーンの塗りつぶしモードは現在サポートされていません。\n"
+"ゾーンをポリゴン塗りつぶしに変換しますか？"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:91
 #, c-format
@@ -36531,8 +36519,8 @@ msgid ""
 "The legacy segment fill mode is no longer supported.\n"
 "Convert zones to smoothed polygon fills?"
 msgstr ""
-"以前のセグメント塗潰しモードは現在サポートされていません。\n"
-"ゾーンをポリゴン塗潰しに変換しますか？"
+"以前のセグメントの塗りつぶしモードは現在サポートされていません。\n"
+"ゾーンをポリゴン塗りつぶしに変換しますか？"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2522
 #, c-format
@@ -37918,7 +37906,7 @@ msgstr "最小穴径: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:483
 msgid "Impedance Control: "
-msgstr "インピーダンス コントロール: "
+msgstr "インピーダンス制御: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:491
 msgid "Plated Board Edge: "
@@ -39881,7 +39869,7 @@ msgstr "解決済みのマージンクリアランス"
 
 #: pcbnew/tools/pcb_control.cpp:1518
 msgid "Selected Items"
-msgstr "選択されたアイテム"
+msgstr "選択アイテム"
 
 #: pcbnew/tools/pcb_point_editor.cpp:633
 msgid "Drag a corner"
@@ -40440,11 +40428,11 @@ msgstr "基板裏面の部品実装用ボンド位置"
 
 #: pcbnew/widgets/appearance_controls.cpp:1614
 msgid "Solder paste on board's front"
-msgstr "基板表面のハンダ ペースト (メタルマスク)"
+msgstr "基板表面のハンダペースト (メタルマスク)"
 
 #: pcbnew/widgets/appearance_controls.cpp:1615
 msgid "Solder paste on board's back"
-msgstr "基板裏面のハンダ ペースト (メタルマスク)"
+msgstr "基板裏面のハンダペースト (メタルマスク)"
 
 #: pcbnew/widgets/appearance_controls.cpp:1616
 msgid "Silkscreen on board's front"
@@ -40456,11 +40444,11 @@ msgstr "基板裏面のシルクスクリーン"
 
 #: pcbnew/widgets/appearance_controls.cpp:1618
 msgid "Solder mask on board's front"
-msgstr "基板表面のハンダ マスク"
+msgstr "基板表面のハンダマスク"
 
 #: pcbnew/widgets/appearance_controls.cpp:1619
 msgid "Solder mask on board's back"
-msgstr "基板裏面のハンダ マスク"
+msgstr "基板裏面のハンダマスク"
 
 #: pcbnew/widgets/appearance_controls.cpp:1620
 msgid "Explanatory drawings"
