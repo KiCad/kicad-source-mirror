@@ -532,20 +532,19 @@ void PCB_EDIT_FRAME::redrawNetnames( wxTimerEvent& aEvent )
         return;
 
     KIGFX::VIEW* view = GetCanvas()->GetView();
+    double scale = view->GetScale();
 
     for( PCB_TRACK* track : GetBoard()->Tracks() )
     {
         double lod = track->ViewGetLOD( GetNetnameLayer( track->GetLayer() ), view );
-        double scale = view->GetScale();
+
+        if( lod < scale )
+            continue;
 
         if( lod != track->GetCachedLOD() || scale != track->GetCachedScale() )
         {
-            if( lod < view->GetScale() )
-            {
-                view->Update( track, KIGFX::REPAINT );
-                needs_refresh = true;
-            }
-
+            view->Update( track, KIGFX::REPAINT );
+            needs_refresh = true;
             track->SetCachedLOD( lod );
             track->SetCachedScale( scale );
         }
