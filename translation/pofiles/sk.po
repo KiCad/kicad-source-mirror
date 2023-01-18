@@ -1,22 +1,22 @@
 # Slavko <linux@slavino.sk>, 2010, 2011, 2012, 2014.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2020, 2021.
-# Jakub Janek <shaman.janek@gmail.com>, 2020, 2022.
+# Jakub Janek <shaman.janek@gmail.com>, 2020, 2022, 2023.
 # Marcel Hecko <maco@blava.net>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-17 10:33-0800\n"
-"PO-Revision-Date: 2022-07-07 12:47+0000\n"
-"Last-Translator: Marcel Hecko <maco@blava.net>\n"
-"Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
-"source/sk/>\n"
+"PO-Revision-Date: 2023-01-20 06:51+0000\n"
+"Last-Translator: Jakub Janek <shaman.janek@gmail.com>\n"
+"Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/"
+"master-source/sk/>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.13.1-dev\n"
+"X-Generator: Weblate 4.15.1\n"
 "X-Poedit-Basepath: /home/slavko/projekty/svn/kicad-20100408\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -7238,7 +7238,7 @@ msgstr "Súbor na kontrolu elektronických pravidiel"
 
 #: common/wildcards_and_files_ext.cpp:507
 msgid "Spice library file"
-msgstr "Súbor knižnice korenia"
+msgstr "Súbor knižnice spice"
 
 #: common/wildcards_and_files_ext.cpp:513
 msgid "SPICE netlist file"
@@ -8764,9 +8764,9 @@ msgid ""
 "Usually <path to spice binary> %I\n"
 "%I will be replaced by the actual spice netlist name"
 msgstr ""
-"Zadajte príkazový riadok a spustite korenie\n"
+"Zadajte príkazový riadok a spustite spice\n"
 "Zvyčajne <cesta k binárnemu koreniu>% I\n"
-"% Bude nahradený skutočným názvom netlist korenia"
+"% Bude nahradený skutočným názvom netlist spice"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:379
 msgid "Create Netlist and Run Simulator Command"
@@ -14731,9 +14731,8 @@ msgstr "Prázdne meno vlastnosti"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:793
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1942
-#, fuzzy
 msgid "Invalid property value"
-msgstr "Neplatný reťazec hodnoty korenia"
+msgstr "Neplatný reťazec hodnoty spice"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1380
 #, fuzzy
@@ -14752,9 +14751,8 @@ msgstr "Alternatívny názov PIN"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1630
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1690
-#, fuzzy
 msgid "Invalid text string"
-msgstr "Neplatný reťazec hodnoty korenia"
+msgstr "Neplatný reťazec hodnoty spice"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1774
 #, fuzzy
@@ -16333,7 +16331,7 @@ msgstr "Nastavenia simulácie"
 
 #: eeschema/sim/sim_plot_frame.cpp:353 eeschema/sim/sim_plot_frame_base.h:129
 msgid "Spice Simulator"
-msgstr "Simulátor korenia"
+msgstr "Spice Simulátor"
 
 #: eeschema/sim/sim_plot_frame.cpp:465 eeschema/sim/sim_plot_frame.cpp:1539
 #, fuzzy
@@ -16622,11 +16620,11 @@ msgstr "NEZNÁMY!"
 
 #: eeschema/sim/spice_value.cpp:42
 msgid "Spice value cannot be empty"
-msgstr "Hodnota korenia nemôže byť prázdna"
+msgstr "Hodnota spice nemôže byť prázdna"
 
 #: eeschema/sim/spice_value.cpp:47
 msgid "Invalid Spice value string"
-msgstr "Neplatný reťazec hodnoty korenia"
+msgstr "Neplatný reťazec hodnoty spice"
 
 #: eeschema/sim/spice_value.cpp:80
 msgid "Invalid unit prefix"
