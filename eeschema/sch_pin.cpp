@@ -269,7 +269,7 @@ void SCH_PIN::ClearDefaultNetName( const SCH_SHEET_PATH* aPath )
 
 wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoConnect )
 {
-    if( m_libPin->IsPowerConnection() )
+    if( m_libPin->IsGlobalPower() )
         return EscapeString( m_libPin->GetName(), CTX_NETNAME );
 
     std::lock_guard<std::recursive_mutex> lock( m_netmap_mutex );

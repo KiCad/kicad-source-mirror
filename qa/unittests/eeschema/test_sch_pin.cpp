@@ -90,7 +90,7 @@ BOOST_AUTO_TEST_CASE( DefaultProperties )
 
     BOOST_CHECK( ( m_sch_pin->GetType() == m_lib_pin->GetType() ) );
 
-    BOOST_CHECK_EQUAL( m_sch_pin->IsPowerConnection(), m_lib_pin->IsPowerConnection() );
+    BOOST_CHECK_EQUAL( m_sch_pin->IsGlobalPower(), m_lib_pin->IsGlobalPower() );
 }
 
 /**

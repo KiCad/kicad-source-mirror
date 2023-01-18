@@ -155,7 +155,7 @@ public:
 
     int GetLength() const;
 
-    bool IsPowerConnection() const { return m_libPin->IsPowerConnection(); }
+    bool IsGlobalPower() const { return m_libPin->IsGlobalPower(); }
 
     bool ConnectionPropagatesTo( const EDA_ITEM* aItem ) const override;
 

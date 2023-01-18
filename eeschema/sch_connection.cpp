@@ -320,7 +320,7 @@ bool SCH_CONNECTION::IsDriver() const
         auto pin = static_cast<SCH_PIN*>( Parent() );
 
         // Only annotated symbols should drive nets.
-        return pin->IsPowerConnection() || pin->GetParentSymbol()->IsAnnotated( &m_sheet );
+        return pin->IsGlobalPower() || pin->GetParentSymbol()->IsAnnotated( &m_sheet );
     }
 
     default:

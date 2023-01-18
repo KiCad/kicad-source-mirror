@@ -196,10 +196,11 @@ public:
                                 bool aIncludeElectricalType ) const;
 
     /**
-     * Return whether this pin forms an implicit power connection: i.e., is part of
-     * a power symbol and of type POWER_IN.
+     * Return whether this pin forms a global power connection: i.e., is part of
+     * a power symbol and of type POWER_IN, or is a legacy invisible global
+     * power pin on a symbol.
      */
-    bool IsPowerConnection() const
+    bool IsGlobalPower() const
     {
         return GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN
                && ( !IsVisible() || (LIB_SYMBOL*) GetParent()->IsPower() );
