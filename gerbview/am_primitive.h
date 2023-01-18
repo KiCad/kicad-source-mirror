@@ -115,32 +115,17 @@ public:
      */
     bool  IsAMPrimitiveExposureOn( const GERBER_DRAW_ITEM* aParent ) const;
 
-    /* Draw functions: */
-
     /**
-     * Calculate a value that can be used to evaluate the size of text when displaying the
-     * D-Code of an item.
-     *
-     * Due to the complexity of the shape of some primitives one cannot calculate the "size"
-     * of a shape (only a bounding box) but here, the "dimension" of the shape is the diameter
-     * of the primitive or for lines the width of the line.
-     *
-     * @param aParent is the parent GERBER_DRAW_ITEM which is actually drawn
-     * @return a dimension, or -1 if no dim to calculate
-     */
-    int  GetShapeDim( const GERBER_DRAW_ITEM* aParent );
-
-    /**
-     * Draw (in fact generate the actual polygonal shape of) the primitive shape of an aperture
+     * Generate the polygonal shape of the primitive shape of an aperture
      * macro instance.
      *
      * @param aParent is the parent GERBER_DRAW_ITEM which is actually drawn.
      * @param aShapeBuffer is a SHAPE_POLY_SET to put the shape converted to a polygon.
      * @param aShapePos is the actual shape position.
      */
-    void DrawBasicShape( const GERBER_DRAW_ITEM* aParent,
-                         SHAPE_POLY_SET& aShapeBuffer,
-                         const VECTOR2I& aShapePos );
+    void ConvertBasicShapeToPolygon( const GERBER_DRAW_ITEM* aParent,
+                                     SHAPE_POLY_SET& aShapeBuffer,
+                                     const VECTOR2I& aShapePos );
 
 private:
     /**
@@ -156,8 +141,6 @@ private:
     void ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent, std::vector<VECTOR2I>& aBuffer );
 };
 
-
-typedef std::vector<AM_PRIMITIVE> AM_PRIMITIVES;
 
 /**
  * Support the "aperture macro" defined within standard RS274X.
@@ -191,44 +174,15 @@ public:
     SHAPE_POLY_SET* GetApertureMacroShape( const GERBER_DRAW_ITEM* aParent,
                                            const VECTOR2I&         aShapePos );
 
-   /**
-     * Draw the primitive shape for flashed items.
-     *
-     * When an item is flashed, this is the shape of the item.
-     *
-     * @param aParent is the parent GERBER_DRAW_ITEM which is actually drawn.
-     * @param aDC is the device context.
-     * @param aColor is the color of shape.
-     * @param aShapePos is the actual shape position.
-     * @param aFilledShape set to true to draw in filled mode, false to draw in sketch mode.
+    /**
+     * The name of the aperture macro as defined like %AMVB_RECTANGLE* (name is VB_RECTANGLE)
      */
-    void DrawApertureMacroShape( const GERBER_DRAW_ITEM* aParent, wxDC* aDC,
-                                 const COLOR4D& aColor,
-                                 const VECTOR2I& aShapePos, bool aFilledShape );
+     wxString      m_AmName;
 
     /**
-     * Calculate a value that can be used to evaluate the size of text when displaying the
-     * D-Code of an item.
-     *
-     * Due to the complexity of a shape using many primitives one cannot calculate the "size" of
-     * a shape (only abounding box) but most of aperture macro are using one or few primitives
-     * and the "dimension" of the shape is the diameter of the primitive (or the max diameter of
-     * primitives).
-     *
-     * @param aParent is the parent #GERBER_DRAW_ITEM which is actually drawn.
-     * @return a dimension, or -1 if no dim to calculate.
+     * A sequence of AM_PRIMITIVEs
      */
-    int  GetShapeDim( GERBER_DRAW_ITEM* aParent );
-
-    /// Return the bounding box of the shape.
-    BOX2I GetBoundingBox() const
-    {
-        return m_boundingBox;
-    }
-
-    wxString      m_AmName;             ///< The name of the aperture macro as defined
-                                        ///< like %AMVB_RECTANGLE* (name is VB_RECTANGLE)
-    AM_PRIMITIVES m_PrimitivesList;     ///< A sequence of AM_PRIMITIVEs
+    std::vector<AM_PRIMITIVE> m_PrimitivesList;
 
     /*  A deferred parameter can be defined in aperture macro,
      *  but outside aperture primitives. Example
@@ -240,9 +194,6 @@ public:
 
 private:
     SHAPE_POLY_SET m_shape;         ///< The shape of the item, calculated by GetApertureMacroShape
-    BOX2I          m_boundingBox;   ///< The bounding box of the item, calculated by
-                                    ///< GetApertureMacroShape.
-
 };
 
 

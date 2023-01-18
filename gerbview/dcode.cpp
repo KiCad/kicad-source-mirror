@@ -114,7 +114,7 @@ const wxChar* D_CODE::ShowApertureType( APERTURE_T aType )
 
 int D_CODE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
 {
-    int dim = -1;
+    int dim = 0;
 
     switch( m_Shape )
     {
@@ -133,7 +133,13 @@ int D_CODE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
 
     case APT_MACRO:
         if( m_Macro )
-            dim = m_Macro->GetShapeDim( aParent );
+        {
+            if( m_Polygon.OutlineCount() == 0 )
+                ConvertShapeToPolygon( aParent );
+
+            BOX2I bbox = m_Polygon.BBox();
+            dim = std::min( bbox.GetWidth(), bbox.GetHeight() );
+        }
         break;
 
     default:
@@ -151,10 +157,6 @@ void D_CODE::DrawFlashedShape( const GERBER_DRAW_ITEM* aParent, wxDC* aDC, const
 
     switch( m_Shape )
     {
-    case APT_MACRO:
-        GetMacro()->DrawApertureMacroShape( aParent, aDC, aColor, aShapePos, aFilledShape );
-        break;
-
     case APT_CIRCLE:
         radius = m_Size.x >> 1;
 
@@ -250,6 +252,7 @@ void D_CODE::DrawFlashedShape( const GERBER_DRAW_ITEM* aParent, wxDC* aDC, const
 
     break;
 
+    case APT_MACRO:
     case APT_POLYGON:
         if( m_Polygon.OutlineCount() == 0 )
             ConvertShapeToPolygon( aParent );

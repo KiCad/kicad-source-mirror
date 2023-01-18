@@ -93,7 +93,7 @@ bool AM_PRIMITIVE::IsAMPrimitiveExposureOn( const GERBER_DRAW_ITEM* aParent ) co
 const int seg_per_circle = 64;   // Number of segments to approximate a circle
 
 
-void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent, SHAPE_POLY_SET& aShapeBuffer,
+void AM_PRIMITIVE::ConvertBasicShapeToPolygon( const GERBER_DRAW_ITEM* aParent, SHAPE_POLY_SET& aShapeBuffer,
                                    const VECTOR2I& aShapePos )
 {
 #define TO_POLY_SHAPE                                                                          \
@@ -694,124 +694,6 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent,
 }
 
 
-int AM_PRIMITIVE::GetShapeDim( const GERBER_DRAW_ITEM* aParent )
-{
-    int dim = -1;
-    D_CODE* tool = aParent->GetDcodeDescr();
-
-    switch( m_Primitive_id )
-    {
-    case AMP_CIRCLE:
-        // m_Params = exposure, diameter, pos.x, pos.y
-        dim = scaletoIU( m_Params[1].GetValue( tool ), m_GerbMetric );     // Diameter
-        break;
-
-    case AMP_LINE2:
-    case AMP_LINE20:        // Line with rectangle ends. (Width, start and end pos + rotation)
-        dim  = scaletoIU( m_Params[1].GetValue( tool ), m_GerbMetric );   // line width
-        break;
-
-    case AMP_LINE_CENTER:
-    {
-        VECTOR2I size =
-                mapPt( m_Params[1].GetValue( tool ), m_Params[2].GetValue( tool ), m_GerbMetric );
-        dim = std::min(size.x, size.y);
-        break;
-    }
-
-    case AMP_LINE_LOWER_LEFT:
-    {
-        VECTOR2I size =
-                mapPt( m_Params[1].GetValue( tool ), m_Params[2].GetValue( tool ), m_GerbMetric );
-        dim = std::min(size.x, size.y);
-        break;
-    }
-
-    case AMP_THERMAL:
-    {
-        // Only 1/4 of the full shape is built, because the other 3 shapes will be draw from
-        // this first rotated by 90, 180 and 270 deg.
-        // m_Params = center.x (unused here), center.y (unused here), outside diam, inside diam,
-        // crosshair thickness.
-        dim   = scaletoIU( m_Params[2].GetValue( tool ), m_GerbMetric ) / 2;  // Outer diam
-        break;
-    }
-
-    case AMP_MOIRE:     // A cross hair with n concentric circles.
-        dim = scaletoIU( m_Params[7].GetValue( tool ), m_GerbMetric );    // = cross hair len
-        break;
-
-    case AMP_OUTLINE:   // a free polygon :
-    {
-        // dim = min side of the bounding box (this is a poor criteria, but what is a good
-        // criteria b?)
-        // exposure, corners count, corner1.x, corner.1y, ..., rotation
-        // note: corners count is the count of corners following corner1
-        int numPoints = (int) m_Params[1].GetValue( tool );
-
-        // Read points. numPoints does not include the starting point, so add 1.
-        // and calculate the bounding box;
-        VECTOR2I pos_min, pos_max, pos;
-        int prm_idx = 2;    //  m_Params[2] is the first X coordinate
-        int last_prm = m_Params.size() - 1;
-
-        for( int i = 0; i<= numPoints; ++i )
-        {
-            pos.x = scaletoIU( m_Params[prm_idx].GetValue( tool ), m_GerbMetric );
-            prm_idx++;
-            pos.y = scaletoIU( m_Params[prm_idx].GetValue( tool ), m_GerbMetric );
-            prm_idx++;
-
-            if( i == 0 )
-            {
-                pos_min = pos_max = pos;
-            }
-            else
-            {
-                // upper right corner:
-                if( pos_min.x > pos.x )
-                    pos_min.x = pos.x;
-
-                if( pos_min.y > pos.y )
-                    pos_min.y = pos.y;
-
-                // lower left corner:
-                if( pos_max.x < pos.x )
-                    pos_max.x = pos.x;
-
-                if( pos_max.y < pos.y )
-                    pos_max.y = pos.y;
-            }
-
-            // Guard: ensure prm_idx < last_prm (last prm is orientation)
-            // I saw malformed gerber files with numCorners = number
-            // of coordinates instead of number of coordinates following the first point
-            if( prm_idx >= last_prm )
-                break;
-        }
-
-        // calculate dim
-        VECTOR2I size;
-        size.x = pos_max.x - pos_min.x;
-        size.y = pos_max.y - pos_min.y;
-        dim = std::min( size.x, size.y );
-        break;
-    }
-
-    case AMP_POLYGON:   // Regular polygon
-        dim = scaletoIU( m_Params[4].GetValue( tool ), m_GerbMetric ) / 2;      // Radius
-        break;
-
-    case AMP_COMMENT:
-    case AMP_UNKNOWN:
-    case AMP_EOF:
-        break;
-    }
-
-    return dim;
-}
-
-
 SHAPE_POLY_SET* APERTURE_MACRO::GetApertureMacroShape( const GERBER_DRAW_ITEM* aParent,
                                                        const VECTOR2I&         aShapePos )
 {
@@ -819,19 +701,18 @@ SHAPE_POLY_SET* APERTURE_MACRO::GetApertureMacroShape( const GERBER_DRAW_ITEM* a
 
     m_shape.RemoveAllContours();
 
-    for( AM_PRIMITIVES::iterator prim_macro = m_PrimitivesList.begin();
-         prim_macro != m_PrimitivesList.end(); ++prim_macro )
+    for( AM_PRIMITIVE& prim_macro : m_PrimitivesList )
     {
-        if( prim_macro->m_Primitive_id == AMP_COMMENT )
+        if( prim_macro.m_Primitive_id == AMP_COMMENT )
             continue;
 
-        if( prim_macro->IsAMPrimitiveExposureOn( aParent ) )
+        if( prim_macro.IsAMPrimitiveExposureOn( aParent ) )
         {
-            prim_macro->DrawBasicShape( aParent, m_shape, aShapePos );
+            prim_macro.ConvertBasicShapeToPolygon( aParent, m_shape, aShapePos );
         }
         else
         {
-            prim_macro->DrawBasicShape( aParent, holeBuffer, aShapePos );
+            prim_macro.ConvertBasicShapeToPolygon( aParent, holeBuffer, aShapePos );
 
             if( holeBuffer.OutlineCount() )     // we have a new hole in shape: remove the hole
             {
@@ -849,49 +730,7 @@ SHAPE_POLY_SET* APERTURE_MACRO::GetApertureMacroShape( const GERBER_DRAW_ITEM* a
     // (i.e link holes by overlapping edges)
     m_shape.Fracture( SHAPE_POLY_SET::PM_FAST );
 
-    m_boundingBox = BOX2I( VECTOR2I( 0, 0 ), VECTOR2I( 1, 1 ) );
-
-    auto bb = m_shape.BBox();
-    VECTOR2I center( bb.Centre().x, bb.Centre().y );
-
-    m_boundingBox.Move( aParent->GetABPosition( center ) );
-    m_boundingBox.Inflate( bb.GetWidth() / 2, bb.GetHeight() / 2 );
-
     return &m_shape;
-}
-
-
-void APERTURE_MACRO::DrawApertureMacroShape( const GERBER_DRAW_ITEM* aParent, wxDC* aDC,
-                                             const COLOR4D& aColor, const VECTOR2I& aShapePos,
-                                             bool aFilledShape )
-{
-    SHAPE_POLY_SET* shapeBuffer = GetApertureMacroShape( aParent, aShapePos );
-
-    if( shapeBuffer->OutlineCount() == 0 )
-        return;
-
-    for( int ii = 0; ii < shapeBuffer->OutlineCount(); ii++ )
-    {
-        SHAPE_LINE_CHAIN& poly = shapeBuffer->Outline( ii );
-        GRClosedPoly( aDC, poly.PointCount(), (VECTOR2I*) &poly.CPoint( 0 ), aFilledShape, aColor );
-    }
-}
-
-
-int APERTURE_MACRO::GetShapeDim( GERBER_DRAW_ITEM* aParent )
-{
-    int dim = -1;
-
-    for( AM_PRIMITIVES::iterator prim_macro = m_PrimitivesList.begin();
-         prim_macro != m_PrimitivesList.end(); ++prim_macro )
-    {
-        int pdim = prim_macro->GetShapeDim( aParent );
-
-        if( dim < pdim )
-            dim = pdim;
-    }
-
-    return dim;
 }
 
 

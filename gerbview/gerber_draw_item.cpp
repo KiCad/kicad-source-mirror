@@ -318,6 +318,7 @@ const BOX2I GERBER_DRAW_ITEM::GetBoundingBox() const
         break;
     }
 
+    case GBR_SPOT_MACRO:
     case GBR_SPOT_POLY:
     {
         if( code )
@@ -327,19 +328,6 @@ const BOX2I GERBER_DRAW_ITEM::GetBoundingBox() const
 
             bbox.Inflate( code->m_Polygon.BBox().GetWidth() / 2,
                           code->m_Polygon.BBox().GetHeight() / 2 );
-        }
-
-        break;
-    }
-    case GBR_SPOT_MACRO:
-    {
-        if( code )
-        {
-            // Update the shape drawings and the bounding box coordinates:
-            code->GetMacro()->GetApertureMacroShape( this, m_Start );
-
-            // now the bounding box is valid:
-            bbox = code->GetMacro()->GetBoundingBox();
         }
 
         break;
@@ -955,7 +943,7 @@ double GERBER_DRAW_ITEM::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         switch( m_Shape )
         {
         case GBR_SPOT_MACRO:
-            size = GetDcodeDescr()->GetMacro()->GetBoundingBox().GetWidth();
+            size = GetDcodeDescr()->m_Polygon.BBox().GetWidth();
             break;
 
         case GBR_ARC:
