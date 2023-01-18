@@ -227,17 +227,18 @@ void DIALOG_FIELD_PROPERTIES::OnTextValueSelectButtonClick( wxCommandEvent& aEve
     else
         fpid = m_TextCtrl->GetValue();
 
-    KIWAY_PLAYER* frame = Kiway().Player( FRAME_FOOTPRINT_VIEWER_MODAL, true );
-
-    if( frame->ShowModal( &fpid, this ) )
+    if( KIWAY_PLAYER* frame = Kiway().Player( FRAME_FOOTPRINT_VIEWER_MODAL, true ) )
     {
-        if( m_StyledTextCtrl->IsShown() )
-            m_StyledTextCtrl->SetValue( fpid );
-        else
-            m_TextCtrl->SetValue( fpid );
-    }
+        if( frame->ShowModal( &fpid, this ) )
+        {
+            if( m_StyledTextCtrl->IsShown() )
+                m_StyledTextCtrl->SetValue( fpid );
+            else
+                m_TextCtrl->SetValue( fpid );
+        }
 
-    frame->Destroy();
+        frame->Destroy();
+    }
 }
 
 
