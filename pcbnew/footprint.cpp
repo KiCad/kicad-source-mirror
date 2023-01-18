@@ -2288,11 +2288,36 @@ std::map<wxString, int> FOOTPRINT::MapPadNumbersToNetTieGroups() const
 
     for( size_t ii = 0; ii < m_netTiePadGroups.size(); ++ii )
     {
-        wxStringTokenizer     groupParser( m_netTiePadGroups[ ii ], "," );
-        std::vector<wxString> numbersInGroup;
+        wxString group( m_netTiePadGroups[ ii ] );
+        bool esc = false;
+        wxString pad;
 
-        while( groupParser.HasMoreTokens() )
-            padNumberToGroupIdxMap[ groupParser.GetNextToken().Trim( false ).Trim( true ) ] = ii;
+        for( auto ch : group )
+        {
+            if( esc )
+            {
+                esc = false;
+                pad.Append( ch );
+                continue;
+            }
+
+            switch( static_cast<unsigned char>( ch ) )
+            {
+            case '\\':
+                esc = true;
+                break;
+
+            case ',':
+                padNumberToGroupIdxMap[ pad ] = ii;
+                pad.Clear();
+                break;
+
+            default:
+                pad.Append( ch );
+                break;
+            }
+
+        }
     }
 
     return padNumberToGroupIdxMap;
@@ -2582,25 +2607,21 @@ void FOOTPRINT::CheckNetTiePadGroups( const std::function<void( const wxString& 
     std::set<wxString> padNumbers;
     wxString           msg;
 
-    for( size_t ii = 0; ii < m_netTiePadGroups.size(); ++ii )
+    auto ret = MapPadNumbersToNetTieGroups();
+
+    for( auto [ padNumber, _ ] : ret )
     {
-        wxStringTokenizer groupParser( m_netTiePadGroups[ ii ], "," );
+        const PAD* pad = FindPadByNumber( padNumber );
 
-        while( groupParser.HasMoreTokens() )
+        if( !pad )
         {
-            wxString   padNumber( groupParser.GetNextToken().Trim( false ).Trim( true ) );
-            const PAD* pad = FindPadByNumber( padNumber );
-
-            if( !pad )
-            {
-                msg.Printf( _( "(net-tie pad group contains unknown pad number %s)" ), padNumber );
-                aErrorHandler( msg );
-            }
-            else if( !padNumbers.insert( pad->GetNumber() ).second )
-            {
-                msg.Printf( _( "(pad %s appears in more than one net-tie pad group)" ), padNumber );
-                aErrorHandler( msg );
-            }
+            msg.Printf( _( "(net-tie pad group contains unknown pad number %s)" ), padNumber );
+            aErrorHandler( msg );
+        }
+        else if( !padNumbers.insert( pad->GetNumber() ).second )
+        {
+            msg.Printf( _( "(pad %s appears in more than one net-tie pad group)" ), padNumber );
+            aErrorHandler( msg );
         }
     }
 }

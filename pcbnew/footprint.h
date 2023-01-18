@@ -282,7 +282,7 @@ public:
     }
 
     /**
-     * @return a map from pad numbers to net-tie group indicies.  If a pad is not a member of
+     * @return a map from pad numbers to net-tie group indices.  If a pad is not a member of
      *         a net-tie group its index will be -1.
      */
     std::map<wxString, int> MapPadNumbersToNetTieGroups() const;
