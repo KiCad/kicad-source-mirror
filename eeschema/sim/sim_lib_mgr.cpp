@@ -74,9 +74,17 @@ wxString SIM_LIB_MGR::ResolveLibraryPath( const wxString& aLibraryPath, const PR
     if( !spiceLibDir.IsEmpty() && spiceLibFn.MakeAbsolute( spiceLibDir ) && spiceLibFn.Exists() )
         return spiceLibFn.GetFullPath();
 
-    THROW_IO_ERROR( wxString::Format( _( "Simulation model library not found at '%s' or '%s'" ),
-                                      projectFn.GetFullPath(),
-                                      spiceLibFn.GetFullPath() ) );
+    if( projectFn.GetFullPath() == spiceLibFn.GetFullPath() )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "Simulation model library not found at '%s'" ),
+                                          spiceLibFn.GetFullPath() ) );
+    }
+    else
+    {
+        THROW_IO_ERROR( wxString::Format( _( "Simulation model library not found at '%s' or '%s'" ),
+                                          projectFn.GetFullPath(),
+                                          spiceLibFn.GetFullPath() ) );
+    }
 }
 
 
