@@ -75,7 +75,7 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
     view->UpdateAllItemsConditionally( KIGFX::REPAINT, [] ( KIGFX::VIEW_ITEM* aItem ) -> bool
             {
 
-            EDA_ITEM* item = dynamic_cast<const EDA_ITEM*>( aItem );
+            const EDA_ITEM* item = dynamic_cast<const EDA_ITEM*>( aItem );
 
             if( !item )
                 return false;
