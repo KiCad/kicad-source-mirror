@@ -269,8 +269,15 @@ void SCH_PIN::ClearDefaultNetName( const SCH_SHEET_PATH* aPath )
 
 wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoConnect )
 {
-    if( m_libPin->IsGlobalPower() )
-        return EscapeString( m_libPin->GetName(), CTX_NETNAME );
+    // Need to check for parent as power symbol to make sure we aren't dealing
+    // with legacy global power pins on non-power symbols
+    if( IsGlobalPower() )
+    {
+        if( GetLibPin()->GetParent()->IsPower() )
+            return EscapeString( GetParentSymbol()->GetValueFieldText( true ), CTX_NETNAME );
+        else
+            return EscapeString( m_libPin->GetName(), CTX_NETNAME );
+    }
 
     std::lock_guard<std::recursive_mutex> lock( m_netmap_mutex );
 

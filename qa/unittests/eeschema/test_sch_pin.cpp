@@ -156,6 +156,7 @@ BOOST_AUTO_TEST_CASE( PinNumberingPower )
     // but if we set isPower...
     m_lib_pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
     m_parent_part->SetPower();
+    BOOST_CHECK_EQUAL( m_lib_pin->IsGlobalPower(), true );
 
     // and update symbol from library...
     SCH_SHEET_PATH path;
@@ -163,13 +164,14 @@ BOOST_AUTO_TEST_CASE( PinNumberingPower )
     m_parent_symbol = new SCH_SYMBOL( *m_parent_part, m_parent_part->GetLibId(), &path, 0, 0,
                                       VECTOR2I( 1, 2 ) );
     m_parent_symbol->SetRef( &path, "U2" );
+    m_parent_symbol->SetValueFieldText( "voltage_value" );
     m_parent_symbol->UpdatePins();
 
     m_sch_pin = m_parent_symbol->GetPins( &path )[0];
 
     // ... then the name is just the pin name
     const wxString pwr_name = m_sch_pin->GetDefaultNetName( path );
-    BOOST_CHECK_EQUAL( pwr_name, "pinname" );
+    BOOST_CHECK_EQUAL( pwr_name, "voltage_value" );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

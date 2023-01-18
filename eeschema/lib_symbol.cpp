@@ -438,9 +438,6 @@ void LIB_SYMBOL::SetName( const wxString& aName )
 {
     m_name = aName;
     m_libId.SetLibItemName( aName );
-
-    if( IsPower() )
-        GetValueField().SetText( aName );
 }
 
 

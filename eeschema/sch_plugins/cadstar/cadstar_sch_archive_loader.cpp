@@ -1421,6 +1421,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
         {
             pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
             pin->SetName( aSymbol->GetName() );
+            aSymbol->GetValueField().SetText( aSymbol->GetName() );
         }
 
         aSymbol->AddDrawItem( pin );

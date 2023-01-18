@@ -611,17 +611,7 @@ bool SCH_FIELD::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) co
 
 bool SCH_FIELD::IsReplaceable() const
 {
-    if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
-    {
-        SCH_SYMBOL* parentSymbol = static_cast<SCH_SYMBOL*>( m_parent );
-
-        if( m_id == VALUE_FIELD )
-        {
-            if( parentSymbol->GetLibSymbolRef() && parentSymbol->GetLibSymbolRef()->IsPower() )
-                return false;
-        }
-    }
-    else if( m_parent && m_parent->Type() == SCH_SHEET_T )
+    if( m_parent && m_parent->Type() == SCH_SHEET_T )
     {
         // See comments in SCH_FIELD::Replace(), below.
         if( m_id == SHEETFILENAME )

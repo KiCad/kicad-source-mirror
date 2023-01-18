@@ -184,19 +184,7 @@ void DIALOG_FIELD_PROPERTIES::init()
     m_TextValueSelectButton->SetBitmap( KiBitmap( BITMAPS::small_library ) );
     m_TextValueSelectButton->Show( m_fieldId == FOOTPRINT_FIELD );
 
-    // Value fields of power symbols cannot be modified. This will grey out
-    // the text box and display an explanation.
-    if( m_fieldId == VALUE_FIELD && m_isPower )
-    {
-        m_note->SetLabel( wxString::Format( m_note->GetLabel(), _( "Power symbol value field text "
-                                                                   "cannot be changed." ) ) );
-        m_note->Show( true );
-        m_TextCtrl->Enable( false );
-    }
-    else
-    {
-        m_TextCtrl->Enable( true );
-    }
+    m_TextCtrl->Enable( true );
 
     GetSizer()->SetSizeHints( this );
 

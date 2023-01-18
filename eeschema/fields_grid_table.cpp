@@ -422,20 +422,8 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
         }
         else if( m_parentType == SCH_SYMBOL_T && aRow == VALUE_FIELD )
         {
-            // For power symbols, the value is not editable, because value and pin name must
-            // be the same and can be edited only in library editor.
-            if( ( m_part && m_part->IsPower() && !m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) ) )
-            {
-                tmp = m_readOnlyAttr->Clone();
-                tmp->SetReadOnly( true );
-                tmp->SetTextColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
-                return tmp;
-            }
-            else
-            {
-                m_valueAttr->IncRef();
-                return m_valueAttr;
-            }
+            m_valueAttr->IncRef();
+            return m_valueAttr;
         }
         else if( m_parentType == SCH_SYMBOL_T && aRow == FOOTPRINT_FIELD )
         {

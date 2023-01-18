@@ -996,7 +996,13 @@ void CONNECTION_GRAPH::generateGlobalPowerPinSubGraphs()
         if( !connection || connection->SubgraphCode() > 0 )
             continue;
 
-        connection->SetName( pin->GetShownName() );
+        // Proper modern power symbols get their net name from the value field
+        // in the symbol, but we support legacy non-power symbols with global
+        // power connections based on invisible, power-in, pin's names.
+        if( pin->GetLibPin()->GetParent()->IsPower() )
+            connection->SetName( pin->GetParentSymbol()->GetValueFieldText( true ) );
+        else
+            connection->SetName( pin->GetShownName() );
 
         int code = assignNewNetCode( *connection );
 
