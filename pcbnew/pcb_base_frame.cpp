@@ -85,14 +85,14 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 PCB_BASE_FRAME::~PCB_BASE_FRAME()
 {
 #if defined( KICAD_USE_3DCONNEXION )
-    if( m_spaceMouse != nullptr )
-        delete m_spaceMouse;
+    delete m_spaceMouse;
 #endif
 
     // Ensure m_canvasType is up to date, to save it in config
     m_canvasType = GetCanvas()->GetBackend();
 
     delete m_pcb;
+    m_pcb = nullptr;
 }
 
 
