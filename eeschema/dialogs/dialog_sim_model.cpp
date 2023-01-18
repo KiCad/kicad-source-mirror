@@ -178,20 +178,27 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
         loadLibrary( libraryFilename );
 
         // Must be set before curModel() is used since the latter checks the combobox value.
-        std::string modelName = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD );
-        int         modelIdx = m_modelNameChoice->FindString( modelName );
-
-        if( modelIdx == wxNOT_FOUND )
+        if( m_modelNameChoice->IsEmpty() )
         {
-            DisplayErrorMessage( this, wxString::Format( _( "No model named '%s' in library." ),
-                                                         modelName ) );
-
-            // Default to first item in library
-            m_modelNameChoice->SetSelection( 0 );
+            m_modelNameChoice->SetSelection( -1 );
         }
         else
         {
-            m_modelNameChoice->SetSelection( modelIdx );
+            std::string modelName = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD );
+            int         modelIdx = m_modelNameChoice->FindString( modelName );
+
+            if( modelIdx == wxNOT_FOUND )
+            {
+                DisplayErrorMessage( this, wxString::Format( _( "No model named '%s' in library." ),
+                                                             modelName ) );
+
+                // Default to first item in library
+                m_modelNameChoice->SetSelection( 0 );
+            }
+            else
+            {
+                m_modelNameChoice->SetSelection( modelIdx );
+            }
         }
 
         if( isIbisLoaded() && ( m_modelNameChoice->GetSelection() >= 0 ) )

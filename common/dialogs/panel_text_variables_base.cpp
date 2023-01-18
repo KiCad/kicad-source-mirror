@@ -45,7 +45,6 @@ PANEL_TEXT_VARIABLES_BASE::PANEL_TEXT_VARIABLES_BASE( wxWindow* parent, wxWindow
 	m_TextVars->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Label Appearance
-	m_TextVars->SetLabelFont( wxFont( 12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	// Cell Defaults
 	m_TextVars->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );

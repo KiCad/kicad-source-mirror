@@ -193,10 +193,8 @@ DIALOG_DIMENSION_PROPERTIES_BASE::DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* pa
 	m_lblPreview->Wrap( -1 );
 	gbSizerFormat->Add( m_lblPreview, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
 
-	m_staticTextPreview = new wxStaticText( m_sizerFormat->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextPreview = new wxStaticText( m_sizerFormat->GetStaticBox(), wxID_ANY, _("<preview>"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextPreview->Wrap( -1 );
-	m_staticTextPreview->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
-
 	gbSizerFormat->Add( m_staticTextPreview, wxGBPosition( 4, 1 ), wxGBSpan( 1, 5 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxEXPAND, 5 );
 
 

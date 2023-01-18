@@ -51,7 +51,6 @@ PANEL_SETUP_BUSES_BASE::PANEL_SETUP_BUSES_BASE( wxWindow* parent, wxWindowID id,
 	m_aliasesGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Label Appearance
-	m_aliasesGrid->SetLabelFont( wxFont( 12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	// Cell Defaults
 	m_aliasesGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
@@ -122,7 +121,6 @@ PANEL_SETUP_BUSES_BASE::PANEL_SETUP_BUSES_BASE( wxWindow* parent, wxWindowID id,
 	m_membersGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Label Appearance
-	m_membersGrid->SetLabelFont( wxFont( 12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	// Cell Defaults
 	m_membersGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );

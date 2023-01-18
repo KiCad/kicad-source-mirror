@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -57,19 +57,16 @@ DIALOG_IMPORTED_LAYERS_BASE::DIALOG_IMPORTED_LAYERS_BASE( wxWindow* parent, wxWi
 	bSizer6 = new wxBoxSizer( wxVERTICAL );
 
 	m_button_add = new wxButton( this, wxID_ANY, _(">"), wxDefaultPosition, wxSize( 36,100 ), 0 );
-	m_button_add->SetFont( wxFont( 9, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	m_button_add->SetToolTip( _("Add selected layers to matched layers list.") );
 
 	bSizer6->Add( m_button_add, 0, wxALL, 5 );
 
 	m_button_remove = new wxButton( this, wxID_ANY, _("<"), wxDefaultPosition, wxSize( 36,100 ), 0 );
-	m_button_remove->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	m_button_remove->SetToolTip( _("Remove selected layers from matched layers list.") );
 
 	bSizer6->Add( m_button_remove, 0, wxALL, 5 );
 
 	m_button_removeall = new wxButton( this, wxID_ANY, _("<<"), wxDefaultPosition, wxSize( 36,50 ), 0 );
-	m_button_removeall->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	m_button_removeall->SetToolTip( _("Remove all matched layers.") );
 
 	bSizer6->Add( m_button_removeall, 0, wxALL, 5 );

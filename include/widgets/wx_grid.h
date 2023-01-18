@@ -49,7 +49,13 @@ public:
      * enough for the system GUI font.
      * @param height
      */
-    void SetColLabelSize( int aHeight );
+    void SetColLabelSize( int aHeight );        // Yes, we're hiding a non-virtual method
+
+    /**
+     * Hide wxGrid's SetLabelFont() because for some reason on MSW it's a one-shot and
+     * subsequent calls to it have no effect.
+     */
+    void SetLabelFont( const wxFont& aFont );   // Yes, we're hiding a non-virtual method
 
     /**
      * Get a tokenized string containing the shown column indexes.
@@ -135,8 +141,6 @@ public:
         if( GetNumberRows() )
             DeleteRows( 0, GetNumberRows() );
     }
-
-    bool Show( bool aShow ) override;
 
 protected:
     /**

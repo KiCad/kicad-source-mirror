@@ -140,6 +140,7 @@ void WX_GRID::onDPIChanged(wxDPIChangedEvent& aEvt)
 }
 #endif
 
+
 void WX_GRID::SetColLabelSize( int aHeight )
 {
     if( aHeight == 0 )
@@ -148,14 +149,15 @@ void WX_GRID::SetColLabelSize( int aHeight )
         return;
     }
 
-    wxFont headingFont = KIUI::GetControlFont( this );
-
-    // Make sure the GUI font scales properly on GTK
-    SetLabelFont( headingFont );
-
     // Correct wxFormBuilder height for large fonts
-    int minHeight = headingFont.GetPixelSize().y + 2 * MIN_GRIDCELL_MARGIN;
+    int minHeight = GetLabelFont().GetPixelSize().y + 2 * MIN_GRIDCELL_MARGIN;
     wxGrid::SetColLabelSize( std::max( aHeight, minHeight ) );
+}
+
+
+void WX_GRID::SetLabelFont( const wxFont& aFont )
+{
+    wxGrid::SetLabelFont( KIUI::GetControlFont( this ) );
 }
 
 
@@ -189,20 +191,6 @@ void WX_GRID::SetTable( wxGridTableBase* aTable, bool aTakeOwnership )
     Connect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( WX_GRID::onGridCellSelect ), nullptr, this );
 
     m_weOwnTable = aTakeOwnership;
-}
-
-
-bool WX_GRID::Show( bool aShow )
-{
-    // Don't let wxFormBuilder override the fonts.  It's always the wrong answer as it will set
-    // a fixed-size, non-scaling, non-HiDPI-aware font.
-    if( aShow )
-    {
-        SetDefaultCellFont( KIUI::GetControlFont( this ) );
-        SetLabelFont( KIUI::GetControlFont( this ) );
-    }
-
-    return wxGrid::Show( aShow );
 }
 
 

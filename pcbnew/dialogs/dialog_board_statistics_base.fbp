@@ -318,7 +318,7 @@
                                                             <property name="hidden">0</property>
                                                             <property name="id">wxID_ANY</property>
                                                             <property name="label_bg"></property>
-                                                            <property name="label_font">,90,90,-1,70,0</property>
+                                                            <property name="label_font"></property>
                                                             <property name="label_text"></property>
                                                             <property name="margin_height">0</property>
                                                             <property name="margin_width">0</property>
@@ -478,7 +478,7 @@
                                                             <property name="hidden">0</property>
                                                             <property name="id">wxID_ANY</property>
                                                             <property name="label_bg"></property>
-                                                            <property name="label_font">,90,90,-1,70,0</property>
+                                                            <property name="label_font"></property>
                                                             <property name="label_text"></property>
                                                             <property name="margin_height">0</property>
                                                             <property name="margin_width">0</property>
@@ -638,7 +638,7 @@
                                                             <property name="hidden">0</property>
                                                             <property name="id">wxID_ANY</property>
                                                             <property name="label_bg"></property>
-                                                            <property name="label_font">,90,90,-1,70,0</property>
+                                                            <property name="label_font"></property>
                                                             <property name="label_text"></property>
                                                             <property name="margin_height">0</property>
                                                             <property name="margin_width">0</property>
@@ -798,7 +798,7 @@
                                                             <property name="hidden">0</property>
                                                             <property name="id">wxID_ANY</property>
                                                             <property name="label_bg"></property>
-                                                            <property name="label_font">,90,90,-1,70,0</property>
+                                                            <property name="label_font"></property>
                                                             <property name="label_text"></property>
                                                             <property name="margin_height">0</property>
                                                             <property name="margin_width">0</property>
@@ -1097,7 +1097,7 @@
                                             <property name="hidden">0</property>
                                             <property name="id">wxID_ANY</property>
                                             <property name="label_bg"></property>
-                                            <property name="label_font">,90,92,-1,70,0</property>
+                                            <property name="label_font"></property>
                                             <property name="label_text"></property>
                                             <property name="margin_height">0</property>
                                             <property name="margin_width">0</property>

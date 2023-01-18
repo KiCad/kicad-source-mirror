@@ -21,7 +21,6 @@ DIALOG_POSITION_RELATIVE_BASE::DIALOG_POSITION_RELATIVE_BASE( wxWindow* parent, 
 
 	m_referenceInfo = new wxStaticText( this, wxID_ANY, _("Reference item: <none selected>"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_referenceInfo->Wrap( -1 );
-	m_referenceInfo->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	m_referenceInfo->SetMinSize( wxSize( 340,-1 ) );
 
 	bUpperSizer->Add( m_referenceInfo, 0, wxALL, 5 );

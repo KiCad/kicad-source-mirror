@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -27,18 +27,20 @@ DIALOG_RESCUE_EACH_BASE::DIALOG_RESCUE_EACH_BASE( wxWindow* parent, wxWindowID i
 
 	m_titleSymbols = new wxStaticText( this, wxID_ANY, _("Symbols to update:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_titleSymbols->Wrap( -1 );
-	m_titleSymbols->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	bSizer8->Add( m_titleSymbols, 0, wxEXPAND|wxLEFT|wxRIGHT, 10 );
+
+
+	bSizer8->Add( 0, 2, 0, wxEXPAND, 5 );
 
 	m_ListOfConflicts = new wxDataViewListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer8->Add( m_ListOfConflicts, 2, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
 	m_titleInstances = new wxStaticText( this, wxID_ANY, _("Instances of this symbol:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_titleInstances->Wrap( -1 );
-	m_titleInstances->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	bSizer8->Add( m_titleInstances, 0, wxEXPAND|wxLEFT|wxRIGHT, 10 );
+
+
+	bSizer8->Add( 0, 2, 0, wxEXPAND, 5 );
 
 	m_ListOfInstances = new wxDataViewListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer8->Add( m_ListOfInstances, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
@@ -54,8 +56,6 @@ DIALOG_RESCUE_EACH_BASE::DIALOG_RESCUE_EACH_BASE( wxWindow* parent, wxWindowID i
 
 	m_previewOldLabel = new wxStaticText( this, wxID_ANY, _("Cached Symbol:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_previewOldLabel->Wrap( -1 );
-	m_previewOldLabel->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	bSizerLeftPreview->Add( m_previewOldLabel, 0, 0, 5 );
 
 	m_previewOldPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -77,8 +77,6 @@ DIALOG_RESCUE_EACH_BASE::DIALOG_RESCUE_EACH_BASE( wxWindow* parent, wxWindowID i
 
 	m_previewNewLabel = new wxStaticText( this, wxID_ANY, _("Library Symbol:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_previewNewLabel->Wrap( -1 );
-	m_previewNewLabel->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	bSizerRightPreview->Add( m_previewNewLabel, 0, 0, 5 );
 
 	m_previewNewPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );

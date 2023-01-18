@@ -102,8 +102,6 @@ PANEL_TRACK_WIDTH_BASE::PANEL_TRACK_WIDTH_BASE( wxWindow* parent, wxWindowID id,
 
 	m_staticTextExtWidth = new wxStaticText( sbSizerTW_Result->GetStaticBox(), wxID_ANY, _("Trace width (W):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextExtWidth->Wrap( -1 );
-	m_staticTextExtWidth->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	fgSizerTW_Results->Add( m_staticTextExtWidth, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_ExtTrackWidthValue = new wxTextCtrl( sbSizerTW_Result->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
