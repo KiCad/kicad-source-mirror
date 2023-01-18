@@ -935,32 +935,35 @@ static void CreateSignalsSection( FILE* aFile, BOARD* aPcb )
     {
         net = aPcb->FindNet( ii );
 
-        if( net->GetNetname() == wxEmptyString ) // dummy netlist (no connection)
+        if( net )
         {
-            msg.Printf( wxT( "NoConnection%d" ), NbNoConn++ );
-        }
-
-        if( net->GetNetCode() <= 0 )  // dummy netlist (no connection)
-            continue;
-
-        msg = wxT( "SIGNAL \"" ) + escapeString( net->GetNetname() ) + wxT( "\"" );
-
-        fputs( TO_UTF8( msg ), aFile );
-        fputs( "\n", aFile );
-
-        for( FOOTPRINT* footprint : aPcb->Footprints() )
-        {
-            for( PAD* pad : footprint->Pads() )
+            if( net->GetNetname() == wxEmptyString ) // dummy netlist (no connection)
             {
-                if( pad->GetNetCode() != net->GetNetCode() )
-                    continue;
+                msg.Printf( wxT( "NoConnection%d" ), NbNoConn++ );
+            }
 
-                msg.Printf( wxT( "NODE \"%s\" \"%s\"" ),
-                            escapeString( footprint->GetReference() ),
-                            escapeString( pad->GetNumber() ) );
+            if( net->GetNetCode() <= 0 )  // dummy netlist (no connection)
+                continue;
 
-                fputs( TO_UTF8( msg ), aFile );
-                fputs( "\n", aFile );
+            msg = wxT( "SIGNAL \"" ) + escapeString( net->GetNetname() ) + wxT( "\"" );
+
+            fputs( TO_UTF8( msg ), aFile );
+            fputs( "\n", aFile );
+
+            for( FOOTPRINT* footprint : aPcb->Footprints() )
+            {
+                for( PAD* pad : footprint->Pads() )
+                {
+                    if( pad->GetNetCode() != net->GetNetCode() )
+                        continue;
+
+                    msg.Printf( wxT( "NODE \"%s\" \"%s\"" ),
+                                escapeString( footprint->GetReference() ),
+                                escapeString( pad->GetNumber() ) );
+
+                    fputs( TO_UTF8( msg ), aFile );
+                    fputs( "\n", aFile );
+                }
             }
         }
     }
