@@ -391,9 +391,7 @@ public:
         m_penSize = 1;
         m_pageNumber = "1";
         m_sheetCount = 1;
-        m_sheetLayer = nullptr;
         m_titleBlock = nullptr;
-        m_paperFormat = nullptr;
         m_project = nullptr;
         m_isFirstPage = true;
         m_properties = nullptr;
@@ -421,7 +419,7 @@ public:
     /**
      * Set the paper format name (mainly for drawing sheet editor)
      */
-    void SetPaperFormat( const wxString* aFormatName ) { m_paperFormat = aFormatName; }
+    void SetPaperFormat( const wxString& aFormatName ) { m_paperFormat = aFormatName; }
 
     /**
      * Set the filename to draw/plot
@@ -441,7 +439,7 @@ public:
     /**
      * Set the sheet layer to draw/plot
      */
-    void SetSheetLayer( const wxString& aSheetLayer ) { m_sheetLayer = &aSheetLayer;  }
+    void SetSheetLayer( const wxString& aSheetLayer ) { m_sheetLayer = aSheetLayer;  }
 
     void SetDefaultPenSize( int aPenSize ) { m_penSize = aPenSize; }
     int GetDefaultPenSize() const { return m_penSize; }
@@ -550,12 +548,12 @@ protected:
     int                m_sheetCount;      ///< The number of sheets
                                           // for text variable references, in schematic
     const TITLE_BLOCK* m_titleBlock;      // for text variable references
-    const wxString*    m_paperFormat;     // for text variable references
+    wxString           m_paperFormat;     // for text variable references
     wxString           m_fileName;        // for text variable references
     wxString           m_sheetName;       // for text variable references
     wxString           m_sheetPath;       // for text variable references
     wxString           m_pageNumber;      ///< The actual page number displayed in the title block.
-    const wxString*    m_sheetLayer;      // for text variable references
+    wxString           m_sheetLayer;      // for text variable references
     const PROJECT*     m_project;         // for project-based text variable references
 
     const std::map<wxString, wxString>* m_properties;    // for text variable references
