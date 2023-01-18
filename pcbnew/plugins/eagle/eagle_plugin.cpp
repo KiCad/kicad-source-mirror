@@ -114,74 +114,6 @@ static wxString makeKey( const wxString& aFirst, const wxString& aSecond )
 }
 
 
-/// interpret special characters in Eagle text and converts them to KiCAD notation
-static wxString interpret_text( const wxString& aText )
-{
-    wxString token = aText.Upper();
-
-    if( substituteVariable( &token ) )
-        return token;
-
-    wxString text;
-    bool sectionOpen = false;
-
-    for( wxString::size_type i = 0; i < aText.size(); i++ )
-    {
-        // Interpret escaped characters
-        if( aText[ i ] == '\\' )
-        {
-            if( i + 1 != aText.size() )
-                text.Append( aText[ i + 1 ] );
-
-            i++;
-            continue;
-        }
-
-        // Escape ~ for KiCAD
-        if( aText[i] == '~' )
-        {
-            text.Append( '~' );
-            text.Append( '~' );
-            continue;
-        }
-
-        if( aText[ i ] == '!' )
-        {
-            if( sectionOpen )
-            {
-                text.Append( '~' );
-                sectionOpen = false;
-                continue;
-            }
-
-            static wxString escapeChars( wxT( " )]}'\"" ) );
-
-            if( i + 1 != aText.size() && escapeChars.Find( aText[i + 1] ) == wxNOT_FOUND )
-            {
-                sectionOpen = true;
-                text.Append( '~' );
-            }
-            else
-            {
-                text.Append( aText[ i ] );
-            }
-
-            continue;
-        }
-
-        if( aText[i] == ',' && sectionOpen )
-        {
-            text.Append( '~' );
-            sectionOpen = false;
-        }
-
-        text.Append( aText[ i ] );
-    }
-
-    return text;
-}
-
-
 void EAGLE_PLUGIN::setKeepoutSettingsToZone( ZONE* aZone, int aLayer ) const
 {
     if( aLayer == EAGLE_LAYER::TRESTRICT || aLayer == EAGLE_LAYER::BRESTRICT )
@@ -764,7 +696,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 m_board->Add( pcbtxt, ADD_MODE::APPEND );
 
                 pcbtxt->SetLayer( layer );
-                wxString kicadText = interpret_text( t.text );
+                wxString kicadText = interpretText( t.text );
                 pcbtxt->SetText( kicadText );
                 pcbtxt->SetTextPos( VECTOR2I( kicad_x( t.x ), kicad_y( t.y ) ) );
 
@@ -2062,7 +1994,7 @@ void EAGLE_PLUGIN::packageText( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
         textItem = new FP_TEXT( aFootprint );
         aFootprint->Add( textItem );
 
-        textItem->SetText( interpret_text( t.text ) );
+        textItem->SetText( interpretText( t.text ) );
     }
 
     VECTOR2I pos( kicad_x( t.x ), kicad_y( t.y ) );

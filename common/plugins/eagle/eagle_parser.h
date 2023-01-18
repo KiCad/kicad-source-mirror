@@ -54,6 +54,9 @@ typedef std::map<wxString, std::unique_ptr<EPART>> EPART_MAP;
 ///< Translates Eagle special characters to their counterparts in KiCad.
 wxString escapeName( const wxString& aNetName );
 
+///< Interprets special characters in Eagle text and converts them to KiCAD notation.
+wxString interpretText( const wxString& aText );
+
 ///< Translates Eagle special text reference to a KiCad variable reference
 bool substituteVariable( wxString* aText );
 

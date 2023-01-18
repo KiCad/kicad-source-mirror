@@ -2357,11 +2357,7 @@ LIB_TEXT* SCH_EAGLE_PLUGIN::loadSymbolText( std::unique_ptr<LIB_SYMBOL>& aSymbol
     // Strip the whitespace from both ends of each line.
     while( tokenizer.HasMoreTokens() )
     {
-        wxString tmp = tokenizer.GetNextToken().Trim( true ).Trim( false );
-        wxString var = tmp.Upper();
-
-        if( substituteVariable( &var ) )
-            tmp = var;
+        wxString tmp = interpretText( tokenizer.GetNextToken().Trim( true ).Trim( false ) );
 
         if( tokenizer.HasMoreTokens() )
             tmp += wxT( "\n" );
@@ -2577,11 +2573,7 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadPlainText( wxXmlNode* aSchText )
     // Strip the whitespace from both ends of each line.
     while( tokenizer.HasMoreTokens() )
     {
-        wxString tmp = tokenizer.GetNextToken().Trim( true ).Trim( false );
-        wxString var = tmp.Upper();
-
-        if( substituteVariable( &var ) )
-            tmp = var;
+        wxString tmp = interpretText( tokenizer.GetNextToken().Trim( true ).Trim( false ) );
 
         if( tokenizer.HasMoreTokens() )
             tmp += wxT( "\n" );

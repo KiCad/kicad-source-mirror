@@ -47,6 +47,73 @@ wxString escapeName( const wxString& aNetName )
 }
 
 
+wxString interpretText( const wxString& aText )
+{
+    wxString token = aText.Upper();
+
+    if( substituteVariable( &token ) )
+        return token;
+
+    wxString text;
+    bool sectionOpen = false;
+
+    for( wxString::size_type i = 0; i < aText.size(); i++ )
+    {
+        // Interpret escaped characters
+        if( aText[ i ] == '\\' )
+        {
+            if( i + 1 != aText.size() )
+                text.Append( aText[ i + 1 ] );
+
+            i++;
+            continue;
+        }
+
+        // Escape ~ for KiCAD
+        if( aText[i] == '~' )
+        {
+            text.Append( '~' );
+            text.Append( '~' );
+            continue;
+        }
+
+        if( aText[ i ] == '!' )
+        {
+            if( sectionOpen )
+            {
+                text.Append( '~' );
+                sectionOpen = false;
+                continue;
+            }
+
+            static wxString escapeChars( wxT( " )]}'\"" ) );
+
+            if( i + 1 != aText.size() && escapeChars.Find( aText[i + 1] ) == wxNOT_FOUND )
+            {
+                sectionOpen = true;
+                text.Append( '~' );
+            }
+            else
+            {
+                text.Append( aText[ i ] );
+            }
+
+            continue;
+        }
+
+        if( aText[i] == ',' && sectionOpen )
+        {
+            text.Append( '~' );
+            sectionOpen = false;
+        }
+
+        text.Append( aText[ i ] );
+    }
+
+    return text;
+}
+
+
 bool substituteVariable( wxString* aText )
 {
     if     ( *aText == wxT( ">NAME" ) )             *aText = wxT( "${REFERENCE}" );
