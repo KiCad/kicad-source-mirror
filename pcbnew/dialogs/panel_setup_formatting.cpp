@@ -71,8 +71,26 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
 
     view->GetPainter()->GetSettings()->SetDashLengthRatio( settings.GetDashedLineDashRatio() );
     view->GetPainter()->GetSettings()->SetGapLengthRatio( settings.GetDashedLineGapRatio() );
-    view->MarkDirty();
-    view->UpdateAllItems( KIGFX::REPAINT );
+
+    view->UpdateAllItemsConditionally( KIGFX::REPAINT, [] ( KIGFX::VIEW_ITEM* aItem ) -> bool
+            {
+
+            EDA_ITEM* item = dynamic_cast<const EDA_ITEM*>( aItem );
+
+            if( !item )
+                return false;
+
+            switch( item->Type() )
+            {
+            case PCB_SHAPE_T:
+            case PCB_FP_SHAPE_T:
+                return true;
+
+            default:
+                return false;
+            }
+
+            } );
     m_frame->GetCanvas()->Refresh();
 
     return true;
