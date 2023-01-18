@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-17 10:33-0800\n"
-"PO-Revision-Date: 2023-01-17 17:11+0000\n"
+"PO-Revision-Date: 2023-01-20 06:51+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.1-dev\n"
+"X-Generator: Weblate 4.15.1\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -13167,9 +13167,8 @@ msgstr ""
 
 #: eeschema/files-io.cpp:619 pcbnew/files.cpp:173
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:191
-#, fuzzy
 msgid "All supported formats"
-msgstr "Todos los formatos admitidos"
+msgstr "Todos los formatos compatibles"
 
 #: eeschema/files-io.cpp:622
 msgid "Import Schematic"
@@ -35660,11 +35659,8 @@ msgid "Footprint library was not updated\n"
 msgstr "La biblioteca de huellas no se actualizó\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:707
-#, fuzzy
 msgid "The given footprint could not be found to export."
-msgstr ""
-"No se puede encontrar la librería de huellas \"%s\" en ninguna de las rutas "
-"de búsqueda."
+msgstr "No se pudo encontrar la huella dada para exportar."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:742
 #, c-format
@@ -38498,25 +38494,21 @@ msgid "Some of the track segments could not be filleted."
 msgstr "Algunos de los segmentos de pista no pudieron ser fileteados."
 
 #: pcbnew/tools/edit_tool.cpp:1155
-#, fuzzy
 msgid "A shape with least two lines must be selected."
-msgstr "Se deben seleccionar al menos dos segmentos rectos de pista."
+msgstr "Se debe seleccionar una forma con al menos dos líneas."
 
 #: pcbnew/tools/edit_tool.cpp:1159 pcbnew/tools/edit_tool.cpp:1326
 #: pcbnew/tools/pcb_actions.cpp:368
-#, fuzzy
 msgid "Fillet Lines"
-msgstr "Rellenar zonas"
+msgstr "Líneas de redondeo"
 
 #: pcbnew/tools/edit_tool.cpp:1329
-#, fuzzy
 msgid "Unable to fillet the selected lines."
-msgstr "No se puede filetear los segmentos de pista seleccionados."
+msgstr "No se pueden redondear las líneas seleccionadas."
 
 #: pcbnew/tools/edit_tool.cpp:1331
-#, fuzzy
 msgid "Some of the lines could not be filleted."
-msgstr "Algunos de los segmentos de pista no pudieron ser fileteados."
+msgstr "Algunas de las líneas no se pudieron redondear."
 
 #: pcbnew/tools/edit_tool.cpp:1499
 msgid "Rotate"
@@ -38561,9 +38553,9 @@ msgstr ""
 "Presione <esc> para cancelar todo; haga doble clic para terminar"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:367
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad %s"
-msgstr "%s y %s"
+msgstr "%s pad %s"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:404
 msgid "Select reference point for move..."
@@ -38611,13 +38603,13 @@ msgid "Push Pad Settings"
 msgstr "Guardar ajustes de pad"
 
 #: pcbnew/tools/pad_tool.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Click on pad %s%d\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
-"Click en el pad %s%d\n"
-"Pulsar <esc> para cancelar o hacer doble click para aceptar"
+"Haga clic en el pad %s%d\n"
+"Pulse <esc> para cancelar todo; haga doble clic para terminar"
 
 #: pcbnew/tools/pad_tool.cpp:362 pcbnew/tools/pad_tool.cpp:458
 msgid "Renumber pads"
@@ -38977,9 +38969,8 @@ msgstr ""
 "tamaño e inicia el movimiento"
 
 #: pcbnew/tools/pcb_actions.cpp:355
-#, fuzzy
 msgid "Skip item"
-msgstr "Omitir elementos bloqueados"
+msgstr "Omitir elemento"
 
 #: pcbnew/tools/pcb_actions.cpp:360
 msgid "Change Track Width"
@@ -38995,10 +38986,8 @@ msgstr ""
 "Añade la tangente del arco a los segmentos rectos de pista seleccionados"
 
 #: pcbnew/tools/pcb_actions.cpp:368
-#, fuzzy
 msgid "Adds arcs tangent to the selected lines"
-msgstr ""
-"Añade la tangente del arco a los segmentos rectos de pista seleccionados"
+msgstr "Añade arcos tangentes a las líneas seleccionadas"
 
 #: pcbnew/tools/pcb_actions.cpp:373
 msgid "Delete Full Track"
@@ -39573,9 +39562,8 @@ msgid "Switch to Schematic Editor"
 msgstr "Cambiar al editor de esquemas"
 
 #: pcbnew/tools/pcb_actions.cpp:830
-#, fuzzy
 msgid "Open in schematic editor"
-msgstr "Abrir un esquema existente"
+msgstr "Abrir en el editor de esquemas"
 
 #: pcbnew/tools/pcb_actions.cpp:839
 msgid "Local Ratsnest"
@@ -39600,14 +39588,12 @@ msgid "Show/hide the appearance manager"
 msgstr "Mostrar/ocultar el administrador de apariencia"
 
 #: pcbnew/tools/pcb_actions.cpp:865
-#, fuzzy
 msgid "Show Properties Manager"
-msgstr "Mostrar el panel de propiedades"
+msgstr "Mostrar administrador de propiedades"
 
 #: pcbnew/tools/pcb_actions.cpp:865
-#, fuzzy
 msgid "Show/hide the properties manager"
-msgstr "Mostrar/ocultar el panel de propiedades"
+msgstr "Mostrar/ocultar el administrador de propiedades"
 
 #: pcbnew/tools/pcb_actions.cpp:870
 msgid "Flip Board View"
@@ -40000,9 +39986,8 @@ msgid "Distributes selected items along the vertical axis"
 msgstr "Distribuye los elementos seleccionados a lo largo del eje vertical"
 
 #: pcbnew/tools/pcb_actions.cpp:1256
-#, fuzzy
 msgid "Keep arc center, adjust radius"
-msgstr "Centro del arco (%s, %s), radio %s"
+msgstr "Mantener el centro del arco, ajustar el radio"
 
 #: pcbnew/tools/pcb_actions.cpp:1257
 msgid "Switch arc editing mode to keep center, adjust radius and endpoints"
@@ -40118,16 +40103,16 @@ msgid "Remove items from the selection by type"
 msgstr "Eliminar elementos de la selección por tipos"
 
 #: pcbnew/tools/pcb_actions.cpp:1386
-#, fuzzy
 msgid "Draft Fill Selected Zone(s)"
-msgstr "Actualizar el relleno de cobre de huella(s) seleccionada(s)"
+msgstr "Actualizar el relleno de zona(s) seleccionada(s)"
 
 #: pcbnew/tools/pcb_actions.cpp:1387
-#, fuzzy
 msgid ""
 "Update copper fill of selected zone(s) without regard to other interacting "
 "zones"
-msgstr "Actualizar el relleno de cobre de huella(s) seleccionada(s)"
+msgstr ""
+"Actualizar el relleno de cobre de la(s) zona(s) seleccionada(s) sin tener en "
+"cuenta otras zonas que interactúen"
 
 #: pcbnew/tools/pcb_actions.cpp:1393 pcbnew/tools/zone_filler_tool.cpp:162
 msgid "Fill All Zones"
@@ -40138,9 +40123,8 @@ msgid "Update copper fill of all zones"
 msgstr "Actualizar el relleno de cobre de todas las huellas"
 
 #: pcbnew/tools/pcb_actions.cpp:1401
-#, fuzzy
 msgid "Unfill Selected Zone(s)"
-msgstr "Vaciar todas las zonas"
+msgstr "Vaciar zona(s) seleccionada(s)"
 
 #: pcbnew/tools/pcb_actions.cpp:1401
 msgid "Remove copper fill from selected zone(s)"
@@ -40697,7 +40681,6 @@ msgid "Show footprint and text origins as a cross"
 msgstr "Mostrar el origen de huellas y textos como una cruz"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
-#, fuzzy
 msgid "Locked Item Shadow"
 msgstr "Sombra de elemento bloqueado"
 
@@ -40743,20 +40726,20 @@ msgid "Back Assembly View"
 msgstr "Vista trasera de ensamblado"
 
 #: pcbnew/widgets/appearance_controls.cpp:436
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save and restore layer visibility combinations.\n"
 "Use %s+Tab to activate selector.\n"
 "Successive Tabs while holding %s down will cycle through presets in the "
 "popup."
 msgstr ""
-"Guardar y restaurar la orientación de la vista y el zoom.\n"
+"Guardar y restaurar combinaciones de visibilidad de capas.\n"
 "Utilice %s+Tab para activar el selector.\n"
-"Las pestañas sucesivas recorrerán las vistas en la ventana emergente "
-"mientras se mantiene presionado %s."
+"Mientras mantenga presionado %s las pestañas sucesivas pasarán por los "
+"ajustes preestablecidos en la ventana emergente."
 
 #: pcbnew/widgets/appearance_controls.cpp:443
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save and restore view location and zoom.\n"
 "Use %s+Tab to activate selector.\n"
@@ -40765,8 +40748,8 @@ msgid ""
 msgstr ""
 "Guardar y restaurar la orientación de la vista y el zoom.\n"
 "Utilice %s+Tab para activar el selector.\n"
-"Las pestañas sucesivas recorrerán las vistas en la ventana emergente "
-"mientras se mantiene presionado %s."
+"Mientras mantenga presionado %s las pestañas sucesivas pasarán por la vistas "
+"en la ventana emergente."
 
 #: pcbnew/widgets/appearance_controls.cpp:458
 msgid "Filter nets"
@@ -41266,9 +41249,8 @@ msgid "Textbox"
 msgstr "Caja de texto"
 
 #: pcbnew/widgets/search_handlers.cpp:317
-#, fuzzy
 msgid "No Net"
-msgstr "Nueva red"
+msgstr "Sin red"
 
 #: pcbnew/zone.cpp:528
 msgid "Cutout"
