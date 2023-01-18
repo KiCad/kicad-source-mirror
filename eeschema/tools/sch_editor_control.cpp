@@ -1213,7 +1213,7 @@ bool SCH_EDITOR_CONTROL::doCopy( bool aUseDuplicateClipboard )
             SCH_SHEET* sheet = (SCH_SHEET*) item;
             m_supplementaryClipboard[ sheet->GetFileName() ] = sheet->GetScreen();
         }
-        else if( item->Type() == SCH_FIELD_T )
+        else if( item->Type() == SCH_FIELD_T && selection.IsHover() )
         {
             // Most of the time the user is trying to duplicate the parent symbol
             // and the field text is in it
