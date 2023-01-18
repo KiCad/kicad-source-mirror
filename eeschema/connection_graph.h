@@ -416,10 +416,10 @@ private:
     void collectAllDriverValues();
 
     /**
-     * Iterate through the invisible power pins to collect the global labels
+     * Iterate through the global power pins to collect the global labels
      * as drivers
      */
-    void generateInvisiblePinSubGraphs();
+    void generateGlobalPowerPinSubGraphs();
 
     /**
      * Process all subgraphs to assign netcodes and merge subgraphs based on labels
@@ -588,7 +588,7 @@ private:
     // Cache to lookup subgraphs in m_driver_subgraphs by sheet path
     std::unordered_map<SCH_SHEET_PATH, std::vector<CONNECTION_SUBGRAPH*>> m_sheet_to_subgraphs_map;
 
-    std::vector<std::pair<SCH_SHEET_PATH, SCH_PIN*>> m_invisible_power_pins;
+    std::vector<std::pair<SCH_SHEET_PATH, SCH_PIN*>> m_global_power_pins;
 
     std::unordered_map<wxString, std::shared_ptr<BUS_ALIAS>> m_bus_alias_cache;
 

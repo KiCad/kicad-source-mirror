@@ -437,7 +437,7 @@ void CONNECTION_GRAPH::Reset()
     m_subgraphs.clear();
     m_driver_subgraphs.clear();
     m_sheet_to_subgraphs_map.clear();
-    m_invisible_power_pins.clear();
+    m_global_power_pins.clear();
     m_bus_alias_cache.clear();
     m_net_name_to_code_map.clear();
     m_bus_name_to_code_map.clear();
@@ -560,10 +560,9 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
                 pin->GetDefaultNetName( aSheet );
                 pin->ConnectedItems( aSheet ).clear();
 
-                // Invisible power pins need to be post-processed later
-
-                if( pin->IsPowerConnection() && !pin->IsVisible() )
-                    m_invisible_power_pins.emplace_back( std::make_pair( aSheet, pin ) );
+                // power symbol pins need to be post-processed later
+                if( pin->IsPowerConnection() )
+                    m_global_power_pins.emplace_back( std::make_pair( aSheet, pin ) );
 
                 connection_map[ pos ].push_back( pin );
                 m_items.emplace_back( pin );
@@ -971,14 +970,16 @@ void CONNECTION_GRAPH::collectAllDriverValues()
 }
 
 
-void CONNECTION_GRAPH::generateInvisiblePinSubGraphs()
+void CONNECTION_GRAPH::generateGlobalPowerPinSubGraphs()
 {
-    // Generate subgraphs for invisible power pins.  These will be merged with other subgraphs
+    // Generate subgraphs for global power pins.  These will be merged with other subgraphs
     // on the same sheet in the next loop.
+    // These are NOT limited to power symbols, we support legacy invisible + power-in pins
+    // on non-power symbols.
 
-    std::unordered_map<int, CONNECTION_SUBGRAPH*> invisible_pin_subgraphs;
+    std::unordered_map<int, CONNECTION_SUBGRAPH*> global_power_pin_subgraphs;
 
-    for( const auto& it : m_invisible_power_pins )
+    for( const auto& it : m_global_power_pins )
     {
         SCH_SHEET_PATH sheet = it.first;
         SCH_PIN*       pin   = it.second;
@@ -1002,9 +1003,9 @@ void CONNECTION_GRAPH::generateInvisiblePinSubGraphs()
         connection->SetNetCode( code );
 
         CONNECTION_SUBGRAPH* subgraph;
-        auto                 jj = invisible_pin_subgraphs.find( code );
+        auto                 jj = global_power_pin_subgraphs.find( code );
 
-        if( jj != invisible_pin_subgraphs.end() )
+        if( jj != global_power_pin_subgraphs.end() )
         {
             subgraph = jj->second;
             subgraph->AddItem( pin );
@@ -1024,7 +1025,7 @@ void CONNECTION_GRAPH::generateInvisiblePinSubGraphs()
             m_subgraphs.push_back( subgraph );
             m_driver_subgraphs.push_back( subgraph );
 
-            invisible_pin_subgraphs[code] = subgraph;
+            global_power_pin_subgraphs[code] = subgraph;
         }
 
         connection->SetSubgraphCode( subgraph->m_code );
@@ -1410,7 +1411,7 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
 
     collectAllDriverValues();
 
-    generateInvisiblePinSubGraphs();
+    generateGlobalPowerPinSubGraphs();
 
     PROF_TIMER proc_sub_graph( "ProcessSubGraphs" );
     processSubGraphs();
@@ -2938,13 +2939,12 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
             }
         }
 
-        // Check if invisible power input pins connect to anything else via net name,
-        // but not for power symbols as the ones in the standard library all have invisible pins
-        // and we want to throw unconnected errors for those even if they are connected to other
+        // Check if power input pins connect to anything else via net name,
+        // but not for power symbols (with visible or legacy invisible pins).
+        // We want to throw unconnected errors for power symbols even if they are connected to other
         // net items by name, because usually failing to connect them graphically is a mistake
         if( pin && !has_other_connections
-                && pin->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN
-                && !pin->IsVisible()
+                && pin->IsPowerConnection()
                 && !pin->GetLibPin()->GetParent()->IsPower() )
         {
             wxString name = pin->Connection( &sheet )->Name();
@@ -2979,9 +2979,9 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
         {
             for( SCH_PIN* testPin : pins )
             {
-                // We only apply this test to power symbols, because other symbols have invisible
-                // pins that are meant to be dangling, but the KiCad standard library power symbols
-                // have invisible pins that are *not* meant to be dangling.
+                // We only apply this test to power symbols, because other symbols have
+                // pins that are meant to be dangling, but the power symbols have pins
+                // that are *not* meant to be dangling.
                 if( testPin->GetLibPin()->GetParent()->IsPower()
                         && testPin->ConnectedItems( sheet ).empty()
                         && settings.IsTestEnabled( ERCE_PIN_NOT_CONNECTED ) )

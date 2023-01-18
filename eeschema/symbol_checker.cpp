@@ -210,10 +210,10 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
             aMessages.push_back( msg );
         }
 
-        if( pin->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN && pin->IsVisible() )
+        if( pin->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN && !pin->IsVisible() )
         {
             msg.Printf( _( "<b>Suspicious Power Symbol</b><br>"
-                           "Only invisible input power pins are automatically connected<br><br>" ) );
+                           "Invisible input power pins are no longer required<br><br>" ) );
             aMessages.push_back( msg );
         }
     }

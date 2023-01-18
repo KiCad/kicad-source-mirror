@@ -196,8 +196,8 @@ public:
                                 bool aIncludeElectricalType ) const;
 
     /**
-     * Return whether this pin forms an implicit power connection: i.e., is hidden
-     * and of type POWER_IN.
+     * Return whether this pin forms an implicit power connection: i.e., is part of
+     * a power symbol and of type POWER_IN.
      */
     bool IsPowerConnection() const
     {

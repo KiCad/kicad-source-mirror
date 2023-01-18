@@ -1419,7 +1419,6 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
 
         if( aSymbol->IsPower() )
         {
-            pin->SetVisible( false );
             pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
             pin->SetName( aSymbol->GetName() );
         }

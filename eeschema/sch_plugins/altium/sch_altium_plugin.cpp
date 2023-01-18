@@ -2341,10 +2341,7 @@ void SCH_ALTIUM_PLUGIN::ParsePowerPort( const std::map<wxString, wxString>& aPro
         pin->SetName( elem.text );
         pin->SetPosition( { 0, 0 } );
         pin->SetLength( 0 );
-
-        // marks the pin as a global label
         pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
-        pin->SetVisible( false );
 
         VECTOR2I valueFieldPos =
                 HelperGeneratePowerPortGraphics( libSymbol, elem.style, m_reporter );

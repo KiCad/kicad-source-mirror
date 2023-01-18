@@ -1312,12 +1312,7 @@ void SCH_PAINTER::draw( const LIB_PIN *aPin, int aLayer, bool aDimmed )
             color = getRenderColor( aPin, LAYER_HIDDEN, drawingShadows, aDimmed );
         }
         else
-        {
-            if( drawingDangling && isDangling && aPin->IsPowerConnection() )
-                drawPinDanglingSymbol( pos, color, drawingShadows, aPin->IsBrightened() );
-
             return;
-        }
     }
 
     if( drawingDangling )
