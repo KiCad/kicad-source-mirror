@@ -94,6 +94,8 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
         newFootprint.Move( VECTOR2I( -refPoint.x, -refPoint.y ) );
 
         Format( static_cast<BOARD_ITEM*>( &newFootprint ) );
+
+        newFootprint.SetParent( nullptr );
     }
     else if( isFootprintEditor )
     {
@@ -171,6 +173,8 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
         partialFootprint.MoveAnchorPosition( moveVector );
 
         Format( &partialFootprint, 0 );
+
+        partialFootprint.SetParent( nullptr );
     }
     else
     {

@@ -795,6 +795,8 @@ BOX2I FOOTPRINT::GetFpPadsLocalBbox() const
     for( PAD* pad : dummy.Pads() )
         bbox.Merge( pad->GetBoundingBox() );
 
+    dummy.SetParent( nullptr );
+
     return bbox;
 }
 

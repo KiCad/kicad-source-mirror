@@ -44,6 +44,8 @@
 #include <kiway.h>
 #include <drc/drc_item.h>
 
+#include <memory>
+
 
 FOOTPRINT_EDITOR_CONTROL::FOOTPRINT_EDITOR_CONTROL() :
     PCB_TOOL_BASE( "pcbnew.ModuleEditor" ),
@@ -326,9 +328,14 @@ int FOOTPRINT_EDITOR_CONTROL::CutCopyFootprint( const TOOL_EVENT& aEvent )
     LIB_ID fpID = m_frame->GetTreeFPID();
 
     if( fpID == m_frame->GetLoadedFPID() )
-        m_copiedFootprint.reset( new FOOTPRINT( *m_frame->GetBoard()->GetFirstFootprint() ) );
+    {
+        m_copiedFootprint = std::make_unique<FOOTPRINT>( *m_frame->GetBoard()->GetFirstFootprint() );
+        m_copiedFootprint->SetParent( nullptr );
+    }
     else
+    {
         m_copiedFootprint.reset( m_frame->LoadFootprint( fpID ) );
+    }
 
     if( aEvent.IsAction( &PCB_ACTIONS::cutFootprint ) )
         DeleteFootprint( aEvent );
