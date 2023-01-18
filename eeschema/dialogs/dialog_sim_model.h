@@ -78,7 +78,7 @@ private:
 
     void removeOrphanedPinAssignments();
 
-    void loadLibrary( const wxString& aLibraryPath, bool aForceReload = false );
+    bool loadLibrary( const wxString& aLibraryPath, bool aForceReload = false );
 
     void addParamPropertyIfRelevant( int aParamIndex );
     wxPGProperty* newParamProperty( int aParamIndex ) const;

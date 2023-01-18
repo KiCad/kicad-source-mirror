@@ -175,12 +175,12 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
     {
         // The model is sourced from a library, optionally with instance overrides.
         m_useLibraryModelRadioButton->SetValue( true );
-        loadLibrary( libraryFilename );
 
-        // Must be set before curModel() is used since the latter checks the combobox value.
-        if( m_modelNameChoice->IsEmpty() )
+        if( !loadLibrary( libraryFilename ) )
         {
+            m_libraryPathText->ChangeValue( libraryFilename );
             m_modelNameChoice->SetSelection( -1 );
+            m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields );
         }
         else
         {
@@ -199,12 +199,14 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
             {
                 m_modelNameChoice->SetSelection( modelIdx );
             }
+
+            m_curModelType = curModel().GetType();
         }
 
         if( isIbisLoaded() && ( m_modelNameChoice->GetSelection() >= 0 ) )
         {
-            SIM_MODEL_KIBIS* kibismodel = dynamic_cast<SIM_MODEL_KIBIS*>(
-                    &m_libraryModelsMgr.GetModels().at( m_modelNameChoice->GetSelection() ).get() );
+            int  idx = m_modelNameChoice->GetSelection();
+            auto kibismodel = dynamic_cast<SIM_MODEL_KIBIS*>( &m_libraryModelsMgr.GetModels().at( idx ).get() );
 
             if( kibismodel )
             {
@@ -245,8 +247,6 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
                 }
             }
         }
-
-        m_curModelType = curModel().GetType();
     }
     else
     {
@@ -310,13 +310,16 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataFromWindow()
     if( !DIALOG_SIM_MODEL_BASE::TransferDataFromWindow() )
         return false;
 
-    std::string modelName = m_modelNameChoice->GetStringSelection().ToStdString();
+    if( !m_modelNameChoice->IsEmpty() )
+    {
+        std::string modelName = m_modelNameChoice->GetStringSelection().ToStdString();
 
-    SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY::NAME_FIELD, modelName );
+        SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY::NAME_FIELD, modelName );
+    }
 
     std::string path;
 
-    if( ( library() && m_useLibraryModelRadioButton->GetValue() ) || isIbisLoaded() )
+    if( m_useLibraryModelRadioButton->GetValue() || isIbisLoaded() )
     {
         path = m_libraryPathText->GetValue();
         wxFileName fn( path );
@@ -676,7 +679,7 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::removeOrphanedPinAssignments()
 
 
 template <typename T_symbol, typename T_field>
-void DIALOG_SIM_MODEL<T_symbol, T_field>::loadLibrary( const wxString& aLibraryPath,
+bool DIALOG_SIM_MODEL<T_symbol, T_field>::loadLibrary( const wxString& aLibraryPath,
                                                        bool aForceReload )
 {
     wxString           msg;
@@ -688,7 +691,7 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::loadLibrary( const wxString& aLibraryP
     if( reporter.HasMessage() )
     {
         DisplayErrorMessage( this, msg );
-        return;
+        return false;
     }
 
     std::vector<LIB_PIN*> sourcePins = m_symbol.GetAllLibPins();
@@ -731,6 +734,8 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::loadLibrary( const wxString& aLibraryP
         m_ibisModelCombobox->SetSelection( -1 );
         m_ibisPinCombobox->SetSelection( -1 );
     }
+
+    return true;
 }
 
 
