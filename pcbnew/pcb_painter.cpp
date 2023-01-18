@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2019 CERN
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -859,16 +859,13 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
     {
         VECTOR2D position( center );
 
-        // Is anything that we can display enabled?
-        if( !pcbconfig() )
-            return;
+        // Is anything that we can display enabled (netname and/or layers ids)?
+        bool showNets =  pcbconfig() && pcbconfig()->m_Display.m_NetNames != 0
+                         && !aVia->GetNetname().empty();
+        bool showLayers = aVia->GetViaType() != VIATYPE::THROUGH;
 
-        if( pcbconfig()->m_Display.m_NetNames == 0
-                || pcbconfig()->m_Display.m_NetNames == 2
-                || aVia->GetNetname().empty() )
-        {
+        if( !showNets && !showLayers )
             return;
-        }
 
         double maxSize = PCB_RENDER_SETTINGS::MAX_FONT_SIZE;
         double size = aVia->GetWidth();
@@ -892,22 +889,49 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
         m_gal->SetIsStroke( true );
         m_gal->SetIsFill( false );
 
-        // Set the text position to the pad shape position (the pad position is not the best place)
+        // Set the text position via position. if only one text, it is on the via position
+        // For 2 lines, the netname is slightly below the center, and the layer IDs above
+        // the netname
         VECTOR2D textpos( 0.0, 0.0 );
 
         wxString netname = UnescapeString( aVia->GetShortNetname() );
 
-        // approximate the size of net name text:
-        double tsize = 1.5 * size / std::max( PrintableCharCount( netname ), 1 );
+        int topLayer = aVia->TopLayer() + 1;
+        int bottomLayer = std::min( aVia->BottomLayer() + 1, board->GetCopperLayerCount() );
+
+        wxString layerIds;
+        layerIds.Printf( wxT( "%d-%d" ), topLayer, bottomLayer );
+
+        // a good size is set room for at least 6 chars, to be able to print 2 lines of text,
+        // or at least 3 chars for only the netname
+        // (The layerIds string has 5 chars max)
+        int minCharCnt = showLayers ? 6 : 3;
+
+        // approximate the size of netname and layerIds text:
+        double tsize = 1.5 * size / std::max( PrintableCharCount( netname ), minCharCnt );
         tsize = std::min( tsize, size );
 
         // Use a smaller text size to handle interline, pen size..
         tsize *= 0.75;
         VECTOR2D namesize( tsize, tsize );
 
+        // For 2 lines, adjust the text pos (move it a small amount to the bottom)
+        if( showLayers )
+            textpos.y += tsize/5;
+
         m_gal->SetGlyphSize( namesize );
-        m_gal->SetLineWidth( namesize.x / 12.0 );
-        m_gal->BitmapText( netname, textpos, ANGLE_HORIZONTAL );
+        m_gal->SetLineWidth( namesize.x / 10.0 );
+
+        if( showNets )
+            m_gal->BitmapText( netname, textpos, ANGLE_HORIZONTAL );
+
+        if( showLayers )
+        {
+            if( showNets )
+                textpos.y -= tsize * 1.3;
+
+            m_gal->BitmapText( layerIds, textpos, ANGLE_HORIZONTAL );
+        }
 
         m_gal->Restore();
 
