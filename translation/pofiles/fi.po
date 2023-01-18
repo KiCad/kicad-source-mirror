@@ -17,16 +17,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-17 10:33-0800\n"
-"PO-Revision-Date: 2023-01-17 17:11+0000\n"
+"PO-Revision-Date: 2023-01-20 06:51+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.1-dev\n"
+"X-Generator: Weblate 4.15.1\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -13094,7 +13094,6 @@ msgstr ""
 
 #: eeschema/files-io.cpp:619 pcbnew/files.cpp:173
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:191
-#, fuzzy
 msgid "All supported formats"
 msgstr "Kaikki tuetut muodot"
 
@@ -26813,7 +26812,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:640
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:116
 msgid "Solder paste relative clearance:"
-msgstr "Juotospastan suhteellinen puhdistuma:"
+msgstr "Juotospastan suhteellinen välys:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:317
 #, c-format
@@ -26827,14 +26826,14 @@ msgid ""
 "clearance value.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"Tämä on paikallinen välyssuhde, jota käytetään prosentteina tyynyn "
+"Tämä on paikallinen välyssuhde, jota käytetään prosentteina anturan "
 "leveydestä ja korkeudesta tälle jalanjäljelle.\n"
-"Arvo 10 tarkoittaa, että vaakasuoran välyksen arvo on 10% o tyynyn "
-"leveydestä ja pystysuoran välyksen arvo on 10 % o tyynyn korkeudesta.\n"
+"Arvo 10 tarkoittaa, että vaakasuoran välyksen arvo on 10% anturan leveydestä "
+"ja pystysuoran välyksen arvo on 10 % anturan korkeudesta.\n"
 "Lopullinen välysarvo on tämän arvon ja absoluuttisen välysarvon summa.\n"
-"Negatiivinen arvo tarkoittaa pienempää kaavainaukon kokoa, kuin tyynyn "
-"koko.\n"
-"Tämä arvo voidaan ohittaa tyyny-tyynyltä pohjalta, tyynyn ominaisuuksissa "
+"Negatiivinen arvo tarkoittaa pienempää kaavainaukon kokoa, kuin anturan koko."
+"\n"
+"Tämä arvo voidaan ohittaa antura-anturalta pohjalta, anturan ominaisuuksissa "
 "Paikallinen Välys ja asetukset välilehdeltä."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:340
@@ -26955,10 +26954,10 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"Tämä on tämän jalanjäljen kaikkien tyynyjen paikallinen nettoväli.\n"
-"Jos 0, käytetään Netclass-arvoja.\n"
-"Tämä arvo voidaan ohittaa Paikallinen-kerrallaan\n"
-"Tyhjennys ja Asetukset-välilehti Pad-ominaisuuksissa."
+"Tämä on tämän jalanjäljen kaikkien anturoiden paikallinen verkkovälys.\n"
+"Jos 0, käytetään Verkkoluokka-arvoja.\n"
+"Tämä arvo voidaan ohittaa antura-anturalta periaatteella Paikallinen\n"
+"Välys ja Asetukset välilehti Anturan ominaisuuksissa."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:259
 msgid ""
@@ -26968,11 +26967,11 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"Tämä on paikallinen välys tyynyjen ja juotosmaskin välillä\n"
-"tämä jalanjälki.\n"
+"Tämä on paikallinen välys anturoiden ja juotosmaskin välillä\n"
+"tälle jalanjäljelle.\n"
 "Jos 0, käytetään globaalia arvoa.\n"
-"Tämä arvo voidaan ohittaa Paikallinen-kerrallaan\n"
-"Tyhjennys ja Asetukset-välilehti Pad-ominaisuuksissa."
+"Tämä arvo voidaan ohittaa antura-anturalta pohjalta Paikallinen\n"
+"Välys ja Asetukset välilehti antura ominaisuuksissa."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:275
 msgid ""
@@ -27081,7 +27080,7 @@ msgstr "Nykyisen laajennuksen tukemat vaihtoehdot"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:85
 msgid "<<    Append Selected Option"
-msgstr "<< Liitä valittu vaihtoehto"
+msgstr "<<     Liitä Valittu Vaihtoehto"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:303
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:435
@@ -27135,7 +27134,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:569
 msgid "Footprint Report"
-msgstr "Jalanjälki-raportti"
+msgstr "Jalanjälkiraportti"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:49
 msgid "ASCII"
