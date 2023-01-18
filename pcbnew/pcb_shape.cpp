@@ -4,7 +4,7 @@
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -354,8 +354,8 @@ void PCB_SHAPE::swapData( BOARD_ITEM* aImage )
 
     SwapShape( image );
 
+    // Swap params not handled by SwapShape( image )
     std::swap( m_layer, image->m_layer );
-    std::swap( m_fill, image->m_fill );
     std::swap( m_flags, image->m_flags );
     std::swap( m_status, image->m_status );
     std::swap( m_parent, image->m_parent );
