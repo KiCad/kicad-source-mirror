@@ -10,6 +10,7 @@
 #ifndef CLIPPER_CORE_H
 #define CLIPPER_CORE_H
 
+#include <cstdint>
 #include <cstdlib>
 #include <cmath>
 #include <vector>
