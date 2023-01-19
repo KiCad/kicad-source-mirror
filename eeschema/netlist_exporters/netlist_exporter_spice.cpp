@@ -553,6 +553,10 @@ void NETLIST_EXPORTER_SPICE::writeInclude( OUTPUTFORMATTER& aFormatter, unsigned
 {
     // First, expand env vars, if any.
     wxString expandedPath = ExpandEnvVarSubstitutions( aPath, &m_schematic->Prj() );
+
+    // Handle windows paths
+    expandedPath.Replace( wxS( "\\" ), wxS( "/" ) );
+
     wxString fullPath;
 
     if( aNetlistOptions & OPTION_ADJUST_INCLUDE_PATHS )
