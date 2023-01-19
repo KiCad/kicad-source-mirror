@@ -275,6 +275,16 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataToWindow()
                 existingLabels.insert( UnescapeString( label->GetText() ) );
             }
 
+            // Add global power labels from power symbols
+            if( m_currentLabel->Type() == SCH_GLOBAL_LABEL_T )
+            {
+                for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_LOCATE_POWER_T ) )
+                {
+                    const SCH_SYMBOL* power = static_cast<const SCH_SYMBOL*>( item );
+                    existingLabels.insert( UnescapeString( power->GetValueFieldText( false ) ) );
+                }
+            }
+
             std::set<std::shared_ptr<BUS_ALIAS>> sheetAliases = screen->GetBusAliases();
             busAliases.insert( busAliases.end(), sheetAliases.begin(), sheetAliases.end() );
         }
