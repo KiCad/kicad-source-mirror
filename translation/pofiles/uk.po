@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-17 10:33-0800\n"
-"PO-Revision-Date: 2023-01-17 17:11+0000\n"
+"PO-Revision-Date: 2023-01-20 06:51+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
-"source/uk/>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
+"master-source/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.15.1-dev\n"
+"X-Generator: Weblate 4.15.1\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -314,7 +314,7 @@ msgstr "Візуалізація поточного виду за допомог
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:101
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:73
 msgid "KiCad 3D Viewer"
-msgstr "KiCad 3D Переглядач"
+msgstr "Переглядач 3D KiCad"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:522
 #: pcbnew/widgets/appearance_controls.cpp:2788
@@ -343,14 +343,14 @@ msgstr "Вибрати набір:"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:773
 msgid "3D Image File Name"
-msgstr "Назва файлу 3D-зображення"
+msgstr "Ім'я файлу 3D-зображення"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:794
 #: common/eda_base_frame.cpp:1212 common/eda_base_frame.cpp:1216
 #: pcbnew/plugins/altium/altium_pcb.cpp:1669
 #, c-format
 msgid "Insufficient permissions to save file '%s'."
-msgstr "Недостатньо прав для збереження файлу '%s."
+msgstr "Недостатньо прав для збереження файлу '%s'."
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:795 common/confirm.cpp:148
 #: common/confirm.cpp:338 common/dialogs/panel_setup_severities.cpp:43
@@ -381,7 +381,7 @@ msgstr "Встановити центр обертання"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:43
 msgid "Center pivot rotation (middle mouse click)"
-msgstr "Перемістити курсор до центру обертання (середній клац мишкою)"
+msgstr "Перемістити курсор до центру обертання (середня кнопка миші)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:48
 msgid "Rotate X Clockwise"
@@ -433,7 +433,7 @@ msgstr "Скинути Вид"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:115
 msgid "Flip Board"
-msgstr "Перевернути Плату"
+msgstr "Перевернути плату"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:115
 msgid "Flip the board view"
@@ -450,7 +450,7 @@ msgstr "Ввімкнути/вимкнути ортогональну проєк�
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:126
 msgid "View Front"
-msgstr "Фронтальний Вид"
+msgstr "Фронтальний вид"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:132
 msgid "View Back"
@@ -458,19 +458,19 @@ msgstr "Вид ззаду"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:138
 msgid "View Left"
-msgstr "Вид Ліворуч"
+msgstr "Вид ліворуч"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:144
 msgid "View Right"
-msgstr "Вид Праворуч"
+msgstr "Вид праворуч"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:150
 msgid "View Top"
-msgstr "Вид Зверху"
+msgstr "Вид зверху"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:156
 msgid "View Bottom"
-msgstr "Вид Знизу"
+msgstr "Вид знизу"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:161
 msgid "No 3D Grid"
@@ -478,23 +478,23 @@ msgstr "Немає 3D сітки"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:166
 msgid "3D Grid 10mm"
-msgstr "3D Сітка 10мм"
+msgstr "3D сітка 10мм"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:171
 msgid "3D Grid 5mm"
-msgstr "3D Сітка 5мм"
+msgstr "3D сітка 5мм"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:176
 msgid "3D Grid 2.5mm"
-msgstr "3D Сітка 2.5мм"
+msgstr "3D сітка 2.5мм"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:181
 msgid "3D Grid 1mm"
-msgstr "3D Сітка 1мм"
+msgstr "3D сітка 1мм"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:187
 msgid "Render Realistic Materials"
-msgstr "Візуалізувати Реалістичні Матеріали"
+msgstr "Візуалізувати реалістичні матеріали"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:188
 msgid "Use all material properties from each 3D model file"
@@ -514,7 +514,7 @@ msgstr "Візуалізувати CAD-кольори"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:202
 msgid "Use a CAD color style based on the diffuse color of the material"
-msgstr "Використовувати кольори стилю CAD для використаного матеріалу"
+msgstr "Використовувати кольори стилю CAD для матеріалу, що використовується"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:208
 msgid "Toggle Through Hole 3D models"
@@ -526,11 +526,11 @@ msgstr "Перемкнути показ 3D-моделей компонентів
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:215
 msgid "Toggle SMD 3D models"
-msgstr "Перемкнути показ 3D-моделей поверхневого монтажу"
+msgstr "Перемкнути показ 3D-моделей поверхневого монтажу (SMD)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:216
 msgid "Toggle 3D models for 'Surface mount' type components"
-msgstr "Перемкнути показ 3D-моделей компонентів вивідного монтажу"
+msgstr "Перемкнути показ 3D-моделей компонентів поверхневого монтажу"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
 msgid "Toggle unspecified 3D models"
@@ -550,7 +550,7 @@ msgstr "Показати обмежувальну рамку"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:238
 msgid "Toggle realistic mode"
-msgstr "Перемкнути реалістичний режим"
+msgstr "Перемкнути в реалістичний режим"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:242
 msgid "Toggle board body display"
@@ -558,7 +558,7 @@ msgstr "Перемкнути показ тіла плати"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:246
 msgid "Show 3D Axis"
-msgstr "Показати 3D вісі"
+msgstr "Показати вісі 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:251
 msgid "Toggle zone display"
@@ -606,11 +606,11 @@ msgstr "Перемкнути показ шарів коментарів та к�
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:275
 msgid "Toggle ECO display"
-msgstr "Перемкнути показ додаткових шарів"
+msgstr "Перемкнути показ ECO шарів"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:275
 msgid "Toggle display of ECO layers"
-msgstr "Перемкнути показ додаткових шарів"
+msgstr "Перемкнути показ ECO шарів"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model.cpp:95
 #, c-format
@@ -632,15 +632,15 @@ msgstr "Виберіть 3D-модель"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:19
 msgid "Environment Colors"
-msgstr "Кольори середовищ"
+msgstr "Кольори середовища"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:31
 msgid "Background gradient start:"
-msgstr "Початок градієнту тла:"
+msgstr "Початок градієнту фону:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:38
 msgid "Background gradient end:"
-msgstr "Кінець градієнту тла:"
+msgstr "Кінець градієнту фону:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:51
 msgid "Solder paste:"
@@ -672,7 +672,7 @@ msgstr "Паяльна маска зверху:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:109
 msgid "Solder mask bottom:"
-msgstr "Паяльна Маска знизу:"
+msgstr "Паяльна маска знизу:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:122
 msgid "Copper/surface finish:"
@@ -696,7 +696,7 @@ msgstr "Вирізати шовкографію на межах паяльної
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:41
 msgid "Clip silkscreen at via annuli"
-msgstr "Видалити шовкографію на перехідними отворами"
+msgstr "Видалити шовкографію над перехідними отворами"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:44
 msgid "Show solder mask layers"
@@ -720,7 +720,7 @@ msgstr "Показати шари коментаря та креслення"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:75
 msgid "Show ECO layers"
-msgstr "Показати додаткові шари"
+msgstr "Показати ECO шари"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:81
 msgid "Render Options"
@@ -765,7 +765,7 @@ msgstr "CAD кольори"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:132
 msgid "Camera Options"
-msgstr "Параметри Камери"
+msgstr "Параметри камери"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:142
 msgid "Rotation increment:"
@@ -795,7 +795,7 @@ msgstr "Швидкість анімації:"
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:19
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:17
 msgid "Rendering Options"
-msgstr "Налаштування Візуалізації"
+msgstr "Налаштування візуалізації"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:32
 msgid "Show model bounding boxes"
@@ -865,7 +865,7 @@ msgstr "Процедурні текстури (повільні)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:31
 msgid "Add floor (slow)"
-msgstr "Додати підлогу (повільно)"
+msgstr "Додати підкладку (повільно)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:35
 msgid "Anti-aliasing (slow)"
@@ -880,7 +880,7 @@ msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:54
 msgid "Number of Samples"
-msgstr "Кількість Проходів"
+msgstr "Кількість проходів"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:58
 msgid "Spread Factor %"
@@ -918,7 +918,7 @@ msgid ""
 "levels improve results, specially on very transparent boards)"
 msgstr ""
 "Кількість взаємодій, яку промінь може зробити під час проходження крізь "
-"обʼєкт. (велике значення покращує результат, особливо на дуже прозорих "
+"об'єкт. (велике значення покращує результат, особливо на дуже прозорих "
 "платах)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:98
@@ -963,35 +963,35 @@ msgstr "Азимут(°)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:209
 msgid "Light 1:"
-msgstr "Світло 1:"
+msgstr "Освітлювач 1:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:227
 msgid "Light 5:"
-msgstr "Світло 5:"
+msgstr "Освітлювач 5:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:242
 msgid "Light 2:"
-msgstr "Світло 2:"
+msgstr "Освітлювач 2:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:260
 msgid "Light 6:"
-msgstr "Світло 6:"
+msgstr "Освітлювач 6:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:275
 msgid "Light 3:"
-msgstr "Світло 3:"
+msgstr "Освітлювач 3:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:293
 msgid "Light 7:"
-msgstr "Світло 7:"
+msgstr "Освітлювач 7:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:308
 msgid "Light 4:"
-msgstr "Світло 4:"
+msgstr "Освітлювач 4:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:326
 msgid "Light 8:"
-msgstr "Світло-8:"
+msgstr "Освітлювач 8:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56 pcbnew/pcb_bitmap.cpp:240
@@ -1212,7 +1212,7 @@ msgstr "Дюйм"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:152
 msgid "DPI"
-msgstr "Точок на дюйм"
+msgstr "DPI"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:218 common/tool/actions.cpp:61
 msgid "Open..."
@@ -1235,7 +1235,7 @@ msgstr "Вийти з конвертера зображень"
 #: eeschema/tools/sch_drawing_tools.cpp:594
 #: pagelayout_editor/pl_editor_frame.cpp:845 pcbnew/tools/drawing_tool.cpp:665
 msgid "Choose Image"
-msgstr "Виберіть зображення"
+msgstr "Виберати зображення"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:375
 #: eeschema/tools/sch_drawing_tools.cpp:595
@@ -1245,7 +1245,7 @@ msgstr "Файли зображень"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:713
 msgid "Unable to export to the Clipboard"
-msgstr "Не вдалося експортувати до Буфера Обміну"
+msgstr "Не вдалося експортувати до буфера обміну"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:738
 msgid "Create Logo File"
@@ -1257,7 +1257,7 @@ msgstr "Створити файл логотипу"
 #: bitmap2component/bitmap2cmp_gui.cpp:861
 #, c-format
 msgid "File '%s' could not be created."
-msgstr "Не вдалося створити файл '%s."
+msgstr "Не вдалося створити файл '%s'."
 
 #: bitmap2component/bitmap2cmp_gui.cpp:775
 msgid "Create PostScript File"
@@ -1265,11 +1265,11 @@ msgstr "Створити файл PostScript"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:811
 msgid "Create Symbol Library"
-msgstr "Створити Бібліотеку Символів"
+msgstr "Створити бібліотеку символів"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:846
 msgid "Create Footprint Library"
-msgstr "Створити Бібліотеку Посадкових Місць"
+msgstr "Створити бібліотеку посадкових місць"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:884
 msgid "Error allocating memory for potrace bitmap"
@@ -1315,7 +1315,7 @@ msgstr "0000"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:59
 msgid "pixels"
-msgstr "пікс"
+msgstr "пікселів"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:63
 msgid "Image PPI:"
@@ -1331,7 +1331,7 @@ msgstr "BPP:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:87
 msgid "bits"
-msgstr "біт"
+msgstr "біти"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:100
 msgid "Load Source Image"
@@ -1407,11 +1407,11 @@ msgstr "Шар користувача Eco1"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 msgid "User layer Eco2"
-msgstr "Шар користувача Еко2"
+msgstr "Шар користувача Eco2"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:162
 msgid "Board Layer for Outline"
-msgstr "Шар плати для контуру"
+msgstr "Шар контуру плати"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:164
 msgid ""
@@ -1478,7 +1478,7 @@ msgstr "Вихідна тека '%s' створена."
 #: common/common.cpp:332
 #, c-format
 msgid "Cannot create output directory '%s'."
-msgstr "Не вдалося створити вихідну теку '%s."
+msgstr "Не вдалося створити вихідну теку '%s'."
 
 #: common/common.cpp:604
 msgid "This operating system is not supported by KiCad and its dependencies."
@@ -1527,7 +1527,7 @@ msgstr "Попередження"
 
 #: common/confirm.cpp:178 common/confirm.cpp:184
 msgid "File Open Warning"
-msgstr "Помилка відкриття файлу"
+msgstr "Попередження про відкриття файлу"
 
 #: common/confirm.cpp:180 common/confirm.cpp:186
 msgid "Interleaved saves may produce very unexpected results."
@@ -1584,7 +1584,7 @@ msgstr "Відновити"
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:164
 #: pcbnew/router/router_tool.cpp:571
 msgid "OK"
-msgstr "Гаразд"
+msgstr "OK"
 
 #: common/confirm.cpp:366
 msgid "Information"
@@ -1653,8 +1653,8 @@ msgid ""
 "The KiCad EDA Suite is a set of open source applications for the creation of "
 "electronic schematics and printed circuit boards."
 msgstr ""
-"KiCad EDA Suite - набір додатків з відкритим кодом для створення електронних "
-"схем та друкованих плат."
+"KiCad EDA Suite - це набір додатків з відкритим кодом для створення "
+"електронних схем та друкованих плат."
 
 #: common/dialog_about/AboutDialog_main.cpp:127
 msgid "KiCad on the web"
@@ -1670,7 +1670,7 @@ msgstr "Веб-сайт розробника - "
 
 #: common/dialog_about/AboutDialog_main.cpp:142
 msgid "Official KiCad library repositories - "
-msgstr "Офіційний репозитарій KiCad бібліотеки - "
+msgstr "Офіційний репозиторій KiCad бібліотеки - "
 
 #: common/dialog_about/AboutDialog_main.cpp:149
 msgid "Bug tracker"
@@ -1690,11 +1690,11 @@ msgstr "KiCad форум - "
 
 #: common/dialog_about/AboutDialog_main.cpp:180
 msgid "The complete KiCad EDA Suite is released under the"
-msgstr "KiCad EDA розповсюджується під"
+msgstr "Пакет KiCad EDA розповсюджується під"
 
 #: common/dialog_about/AboutDialog_main.cpp:182
 msgid "GNU General Public License (GPL) version 3 or any later version"
-msgstr "GNU General Public License (GPL) версії 3 або будь-яка новіша версія"
+msgstr "GNU General Public License (GPL) версії 3 або будь-яка пізніша версія"
 
 #: common/dialog_about/AboutDialog_main.cpp:201
 msgid "Lead Development Team"
@@ -1706,11 +1706,11 @@ msgstr "Попередні провідні розробники"
 
 #: common/dialog_about/AboutDialog_main.cpp:203
 msgid "Additional Contributions By"
-msgstr "Додаткові внески"
+msgstr "Додаткові внески в проект"
 
 #: common/dialog_about/AboutDialog_main.cpp:883
 msgid "KiCad Librarian Team"
-msgstr "Команда Бібліотек KiCad"
+msgstr "Команда бібліотек KiCad"
 
 #: common/dialog_about/AboutDialog_main.cpp:898
 msgid "3D models by"
@@ -1722,11 +1722,11 @@ msgstr "Символи"
 
 #: common/dialog_about/AboutDialog_main.cpp:917
 msgid "Footprints by"
-msgstr "Посадкові Місця"
+msgstr "Посадкові місця"
 
 #: common/dialog_about/AboutDialog_main.cpp:930
 msgid "Icons by"
-msgstr "Значки"
+msgstr "Іконки"
 
 #: common/dialog_about/dialog_about.cpp:99
 #, c-format
@@ -1750,11 +1750,11 @@ msgstr "Розробники"
 
 #: common/dialog_about/dialog_about.cpp:137
 msgid "Doc Writers"
-msgstr "Автори Документації"
+msgstr "Автори документації"
 
 #: common/dialog_about/dialog_about.cpp:140
 msgid "Librarians"
-msgstr "Автори Бібліотек"
+msgstr "Автори бібліотек"
 
 #: common/dialog_about/dialog_about.cpp:143
 msgid "Artists"
@@ -1766,7 +1766,7 @@ msgstr "Перекладачі"
 
 #: common/dialog_about/dialog_about.cpp:147
 msgid "Packagers"
-msgstr "Автори Пакетів"
+msgstr "Автори пакетів"
 
 #: common/dialog_about/dialog_about.cpp:150
 msgid "License"
@@ -1920,25 +1920,25 @@ msgstr "Попередній перегляд (старий/новий):"
 
 #: common/dialogs/dialog_color_picker_base.cpp:207
 msgid "Reset to Default"
-msgstr "Відновити за замовчуванням"
+msgstr "Скинути до типових"
 
 #: common/dialogs/dialog_configure_paths.cpp:188
 #: common/dialogs/dialog_configure_paths.cpp:246
 msgid "Environment variable name cannot be empty."
-msgstr "Ім'я змінної середовища не може бути порожнім."
+msgstr "Ім'я змінної середовища не може бути незаповненим."
 
 #: common/dialogs/dialog_configure_paths.cpp:196
 #: common/dialogs/dialog_configure_paths.cpp:248
 msgid "Environment variable path cannot be empty."
-msgstr "Шлях змінної середовища не може бути порожнім."
+msgstr "Шлях змінної середовища не може бути незаповненим."
 
 #: common/dialogs/dialog_configure_paths.cpp:253
 msgid "3D search path alias cannot be empty."
-msgstr "Псевдонім шляху пошуку 3D моделей не може бути пустим."
+msgstr "Псевдонім шляху пошуку 3D моделей не може бути незаповненим."
 
 #: common/dialogs/dialog_configure_paths.cpp:255
 msgid "3D search path cannot be empty."
-msgstr "Шлях пошуку 3D моделей не може бути порожнім."
+msgstr "Шлях пошуку 3D моделей не може бути незаповненим."
 
 #: common/dialogs/dialog_configure_paths.cpp:270
 msgid ""
@@ -1987,8 +1987,8 @@ msgid ""
 "field will only accept upper case letters, digits, and the underscore "
 "characters."
 msgstr ""
-"Для забезпечення сумісності назв змінних середовища на всіх платформах, поле "
-"назви приймає лише букви у верхньому регістрі, цифри, а також знаки "
+"Для забезпечення сумісності імен змінних середовища на всіх платформах, поле "
+"імені приймає лише букви у верхньому регістрі, цифри, а також знаки "
 "підкреслення."
 
 #: common/dialogs/dialog_configure_paths_base.cpp:23
@@ -2053,8 +2053,7 @@ msgstr ""
 #: common/dialogs/dialog_global_lib_table_config.cpp:49
 #, c-format
 msgid "Copy default global %s library table (recommended)"
-msgstr ""
-"Копіювати глобальну таблицю бібліотек за замовчуванням %s (рекомендовано)"
+msgstr "Копіювати глобальну початкову таблицю бібліотек %s (рекомендовано)"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:51
 #, c-format
@@ -2075,24 +2074,25 @@ msgstr "Копіювати власну глобальну таблицю біб
 msgid ""
 "Select this option to copy a %s library table file other than the default"
 msgstr ""
-"Виберіть цей параметр, щоб скопіювати властний файл таблиці бібліотек %s"
+"Виберіть цей параметр, щоб скопіювати власний файл таблиці бібліотек %s як "
+"початковий"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:61
 #, c-format
 msgid "Create an empty global %s library table"
-msgstr "Створіть порожню глобальну таблицю бібліотек %s"
+msgstr "Створити порожню глобальну таблицю бібліотек %s"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:63
 #, c-format
 msgid ""
 "Select this option to define %s libraries in project specific library tables"
 msgstr ""
-"Виберіть цей параметр для визначення бібліотек %s в таблиці бібліотек проєкту"
+"Виберіть цей параметр для визначення бібліотек %s в таблиці бібліотек проекта"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:67
 #, c-format
 msgid "Select global %s library table file:"
-msgstr "Виберіть файл глобальну таблицю бібліотеки %s:"
+msgstr "Виберіть файл глобальної таблиці бібліотеки %s:"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:21
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:28
@@ -2143,7 +2143,7 @@ msgstr "dummy"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:51
 msgid "Select a file"
-msgstr "Виберіть файл"
+msgstr "Вибрати файл"
 
 #: common/dialogs/dialog_global_lib_table_config_base.h:54
 msgid "Configure Global Library Table"
@@ -2190,7 +2190,7 @@ msgstr "Поточна сітка"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:83
 msgid "User Defined Grid"
-msgstr "Користувацька сітка"
+msgstr "Сітка користувача"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:91
 msgid "Size X:"
@@ -2223,11 +2223,11 @@ msgstr "Відновити початок координат сітки"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:173
 msgid "Reset Grid Sizes"
-msgstr "Відновити розміри сітки"
+msgstr "Скинути розміри сітки"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:175
 msgid "Resets the list of grid sizes to default values"
-msgstr "Скидає список розмірів сітки на типові значення"
+msgstr "Скинути список розмірів сітки на типові значення"
 
 #: common/dialogs/dialog_grid_settings_base.h:78
 msgid "Grid Settings"
@@ -2246,7 +2246,7 @@ msgid ""
 "Remove locked items from the selection and only apply the operation to the "
 "unlocked items (if any)."
 msgstr ""
-"Видаліть з виділення заблоковані елементи та застосовуйте тільки операцію з "
+"Видалити з виділення заблоковані елементи та застосувати операцію тільки з "
 "розблокованими елементами (якщо такі є)."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
@@ -2260,7 +2260,7 @@ msgstr "Ці елементи будуть пропущені, доки їх н�
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
 msgid "Remember decision for this session."
-msgstr "Запам'ятати для цієї сесії."
+msgstr "Запам'ятати рішення для цієї сесії."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:45
 msgid ""
@@ -2302,7 +2302,7 @@ msgstr "Імпортувати налаштування з попередньо�
 
 #: common/dialogs/dialog_migrate_settings.cpp:137
 msgid "Select Settings Path"
-msgstr "Виберіть шлях до налаштувань"
+msgstr "Виберати шлях до налаштувань"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:32
 msgid "How would you like to configure KiCad?"
@@ -2318,7 +2318,7 @@ msgstr "Вибрати інший шлях"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:58
 msgid "The selected path does not contain valid KiCad settings!"
-msgstr "У вибраному шляху немає налаштувань KiCad!"
+msgstr "У вибраному розміщенні немає налаштувань KiCad!"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:65
 msgid "Import library configuration from previous version"
@@ -2329,12 +2329,12 @@ msgid ""
 "When checked, the symbol and footprint library tables from the previous "
 "version will be imported into this version"
 msgstr ""
-"Якщо відмічено, таблиці бібліотек символів та посадкових місць буде "
+"Якщо відмічена, таблиці бібліотек символів та посадкових місць буде "
 "імпортовано з попередньої версії"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:71
 msgid "Start with default settings"
-msgstr "Почати з параметрів за замовчуванням"
+msgstr "Почати з типових параметрів"
 
 #: common/dialogs/dialog_migrate_settings_base.h:67
 msgid "Configure KiCad Settings Path"
@@ -2398,7 +2398,7 @@ msgstr "USLedger 11х17дюйм"
 
 #: common/dialogs/dialog_page_settings.cpp:72
 msgid "User (Custom)"
-msgstr "Заданий Користувачем (Власний)"
+msgstr "Заданий користувачем (Власний)"
 
 #: common/dialogs/dialog_page_settings.cpp:104
 msgid "Preview Settings"
@@ -2429,7 +2429,7 @@ msgstr "Титульний блок"
 #: common/dialogs/dialog_page_settings.cpp:473
 #, c-format
 msgid "Drawing sheet file '%s' not found."
-msgstr "Файл форматної рамки «%s» не знайдено."
+msgstr "Файл форматної рамки '%s' не знайдено."
 
 #: common/dialogs/dialog_page_settings.cpp:707
 #: common/dialogs/dialog_page_settings_base.cpp:51
@@ -2443,7 +2443,7 @@ msgstr "Альбомна орієнтація"
 
 #: common/dialogs/dialog_page_settings.cpp:795
 msgid "Select Drawing Sheet File"
-msgstr "Виберіть файл форматної рамки"
+msgstr "Вибрати файл форматної рамки"
 
 #: common/dialogs/dialog_page_settings_base.cpp:38
 msgid "dummy text"
@@ -2464,7 +2464,7 @@ msgstr "Орієнтація:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:57
 msgid "Custom paper size:"
-msgstr "Розмір заданий користувачем:"
+msgstr "Розмір аркуша заданий користувачем:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:69
 #: pcbnew/dialogs/dialog_board_statistics.cpp:105
@@ -2475,7 +2475,7 @@ msgstr "Висота:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:82
 msgid "Custom paper height."
-msgstr "Висота паперу задана користувачем."
+msgstr "Висота аркушу задана користувачем."
 
 #: common/dialogs/dialog_page_settings_base.cpp:86
 #: common/dialogs/dialog_page_settings_base.cpp:107
@@ -2549,7 +2549,7 @@ msgstr "Висота паперу задана користувачем."
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:149
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:165
 msgid "unit"
-msgstr "одиниць"
+msgstr "одиниці вимірювання"
 
 #: common/dialogs/dialog_page_settings_base.cpp:90
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:43
@@ -2566,7 +2566,7 @@ msgstr "Ширина:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:103
 msgid "Custom paper width."
-msgstr "Ширина паперу заданого користувачем."
+msgstr "Ширина аркушу заданого користувачем."
 
 #: common/dialogs/dialog_page_settings_base.cpp:114
 #: common/dialogs/dialog_page_settings_base.cpp:225
@@ -2615,7 +2615,7 @@ msgstr "Номер аркуша: %d"
 
 #: common/dialogs/dialog_page_settings_base.cpp:204
 msgid "Issue Date:"
-msgstr "Дата запиту:"
+msgstr "Дата випуску:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:216
 msgid "<<<"
@@ -2679,7 +2679,7 @@ msgstr "Знайти наступне доступне позначення се
 #: common/dialogs/dialog_paste_special.cpp:44
 #, c-format
 msgid "Replaces reference designators with '%s'."
-msgstr "Замінити позначення на '%s."
+msgstr "Замінити позначення на '%s'."
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Assign unique reference designators to pasted symbols"
@@ -2695,7 +2695,7 @@ msgstr "Очистити позначення на всіх вставлених
 
 #: common/dialogs/dialog_paste_special_base.cpp:24
 msgid "Paste Options"
-msgstr "Параметри Вставки"
+msgstr "Параметри вставки"
 
 #: common/dialogs/dialog_paste_special_base.h:46
 msgid "Paste Special"
@@ -2713,7 +2713,7 @@ msgstr "Друк"
 #: common/dialogs/dialog_print_generic.cpp:247
 #: eeschema/dialogs/dialog_print_using_printer.cpp:145
 msgid "Print Preview"
-msgstr "Попередній перегляд печаті"
+msgstr "Попередній перегляд друку"
 
 #: common/dialogs/dialog_print_generic.cpp:97 common/hotkey_store.cpp:55
 #: common/tool/action_menu.cpp:207 common/tool/action_menu.cpp:212
@@ -2763,7 +2763,7 @@ msgid ""
 "Warning: Scale option set to a very small value.\n"
 " Clamped to %f"
 msgstr ""
-"Попередження: для параметра масштабу встановлено дуже мале значення.\n"
+"Попередження: для параметра масштабування встановлено дуже мале значення.\n"
 " Змінено на %f"
 
 #: common/dialogs/dialog_print_generic.cpp:242
@@ -2814,7 +2814,7 @@ msgstr "Колір"
 #: pcbnew/dialogs/dialog_plot_base.cpp:380
 #: pcbnew/dialogs/dialog_plot_base.cpp:403
 msgid "Black and white"
-msgstr "Чорно-білий"
+msgstr "Чорний&білий"
 
 #: common/dialogs/dialog_print_generic_base.cpp:41
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:22
@@ -13053,7 +13053,6 @@ msgstr ""
 
 #: eeschema/files-io.cpp:619 pcbnew/files.cpp:173
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:191
-#, fuzzy
 msgid "All supported formats"
 msgstr "Всі формати, які підтримуються"
 
