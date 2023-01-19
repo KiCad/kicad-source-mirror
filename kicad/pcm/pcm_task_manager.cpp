@@ -212,17 +212,16 @@ void PCM_TASK_MANAGER::installDownloadedPackage( const PCM_PACKAGE& aPackage,
         if( extract( aFilePath.GetFullPath(), aPackage.identifier, true ) )
         {
             m_pcm->MarkInstalled( aPackage, pkgver->version, aRepositoryId );
-            // TODO register libraries.
         }
         else
         {
             // Cleanup possibly partially extracted package
             deletePackageDirectories( aPackage.identifier );
         }
-    }
 
-    if( aPackage.type == PCM_PACKAGE_TYPE::PT_COLORTHEME )
-        m_color_themes_changed.store( true );
+        std::unique_lock lock( m_changed_package_types_guard );
+        m_changed_package_types.insert( aPackage.type );
+    }
 
     m_reporter->PCMReport(
             wxString::Format( _( "Removing downloaded archive '%s'." ), aFilePath.GetFullName() ),
@@ -431,7 +430,8 @@ void PCM_TASK_MANAGER::InstallFromFile( wxWindow* aParent, const wxString& aFile
 
     aParent->Raise();
 
-    m_color_themes_changed.store( package.type == PCM_PACKAGE_TYPE::PT_COLORTHEME );
+    std::unique_lock lock( m_changed_package_types_guard );
+    m_changed_package_types.insert( package.type );
 }
 
 
@@ -560,8 +560,8 @@ void PCM_TASK_MANAGER::Uninstall( const PCM_PACKAGE& aPackage )
 
         m_pcm->MarkUninstalled( aPackage );
 
-        if( aPackage.type == PCM_PACKAGE_TYPE::PT_COLORTHEME )
-            m_color_themes_changed.store( true );
+        std::unique_lock lock( m_changed_package_types_guard );
+        m_changed_package_types.insert( aPackage.type );
 
         m_reporter->PCMReport(
                 wxString::Format( _( "Package %s uninstalled" ), aPackage.identifier ),
@@ -588,8 +588,6 @@ void PCM_TASK_MANAGER::RunQueue( wxWindow* aParent )
     std::mutex              mutex;
     std::condition_variable condvar;
     bool                    download_complete = false;
-
-    m_color_themes_changed.store( false );
 
     std::thread download_thread(
             [&]()
@@ -652,10 +650,4 @@ void PCM_TASK_MANAGER::RunQueue( wxWindow* aParent )
     m_reporter.reset();
 
     aParent->Raise();
-}
-
-
-bool PCM_TASK_MANAGER::ColorSettingsChanged() const
-{
-    return m_color_themes_changed.load();
 }

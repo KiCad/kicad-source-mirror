@@ -1324,6 +1324,27 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
         break;
 
+    case MAIL_RELOAD_LIB:
+    {
+        wxString          currentLib = GetCurLib();
+        SYMBOL_LIB_TABLE* libTable = Prj().SchSymbolLibTable();
+
+        FreezeLibraryTree();
+
+        // Check if the currently selected symbol library been removed or disabled.
+        if( !currentLib.empty() && libTable && !libTable->HasLibrary( currentLib, true ) )
+        {
+            SetCurLib( wxEmptyString );
+            emptyScreen();
+        }
+
+        SyncLibraries( true );
+        ThawLibraryTree();
+        RefreshLibraryTree();
+
+        break;
+    }
+
     default:
         ;
     }

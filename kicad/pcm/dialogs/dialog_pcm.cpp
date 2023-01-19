@@ -292,13 +292,12 @@ void DIALOG_PCM::OnInstallFromFileClicked( wxCommandEvent& event )
     PCM_TASK_MANAGER task_manager( m_pcm );
     task_manager.InstallFromFile( this, open_file_dialog.GetPath() );
 
+    m_changed_package_types.merge( task_manager.GetChangedPackageTypes() );
+
     setInstalledPackages();
 
     if( !m_selectedRepositoryId.IsEmpty() )
         setRepositoryData( m_selectedRepositoryId );
-
-    if( task_manager.ColorSettingsChanged() )
-        Pgm().GetSettingsManager().ReloadColorSettings();
 }
 
 
@@ -468,6 +467,8 @@ void DIALOG_PCM::OnApplyChangesClicked( wxCommandEvent& event )
 
     task_manager.RunQueue( this );
 
+    m_changed_package_types.merge( task_manager.GetChangedPackageTypes() );
+
     m_sdbSizer1OK->Enable();
     m_sdbSizer1Apply->Enable();
     m_sdbSizer1Cancel->Enable();
@@ -478,9 +479,6 @@ void DIALOG_PCM::OnApplyChangesClicked( wxCommandEvent& event )
 
     if( !m_selectedRepositoryId.IsEmpty() )
         setRepositoryData( m_selectedRepositoryId );
-
-    if( task_manager.ColorSettingsChanged() )
-        Pgm().GetSettingsManager().ReloadColorSettings();
 }
 
 

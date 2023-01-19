@@ -135,6 +135,8 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
     bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits ) override;
 
+    void Reset() override;
+
     void OnKifaceEnd() override;
 
     wxWindow* CreateKiWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway,
@@ -286,6 +288,8 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
     int HandleJob( JOB* aJob ) override;
 
 private:
+    bool loadGlobalLibTable();
+
     std::unique_ptr<EESCHEMA_JOBS_HANDLER> m_jobHandler;
 
 } kiface( "eeschema", KIWAY::FACE_SCH );
@@ -332,11 +336,28 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 
     start_common( aCtlBits );
 
+    if( !loadGlobalLibTable() )
+        return false;
+
+    m_jobHandler = std::make_unique<EESCHEMA_JOBS_HANDLER>();
+
+    return true;
+}
+
+
+void IFACE::Reset()
+{
+    loadGlobalLibTable();
+}
+
+
+bool IFACE::loadGlobalLibTable()
+{
     wxFileName fn = SYMBOL_LIB_TABLE::GetGlobalTableFileName();
 
     if( !fn.FileExists() )
     {
-        if( !( aCtlBits & KFCTL_CLI ) )
+        if( !( m_start_flags & KFCTL_CLI ) )
         {
             DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG fpDialog( nullptr );
 
@@ -365,8 +386,6 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
             DisplayErrorMessage( nullptr, msg, ioe.What() );
         }
     }
-
-    m_jobHandler = std::make_unique<EESCHEMA_JOBS_HANDLER>();
 
     return true;
 }

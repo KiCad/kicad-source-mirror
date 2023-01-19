@@ -30,6 +30,7 @@
 #include <project/project_file.h>
 #include <project/project_local_settings.h>
 #include <settings/settings_manager.h>
+#include <settings/kicad_settings.h>
 #include <tool/selection.h>
 #include <tool/tool_event.h>
 #include <tools/kicad_manager_actions.h>
@@ -899,6 +900,47 @@ int KICAD_MANAGER_CONTROL::ShowPluginManager( const TOOL_EVENT& aEvent )
 
     DIALOG_PCM pcm( m_frame, m_frame->GetPcm() );
     pcm.ShowModal();
+
+    const std::unordered_set<PCM_PACKAGE_TYPE>& changed = pcm.GetChangedPackageTypes();
+
+    if( changed.count( PCM_PACKAGE_TYPE::PT_PLUGIN ) )
+    {
+        std::string payload = "";
+        m_frame->Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_RELOAD_PLUGINS, payload );
+    }
+
+    KICAD_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<KICAD_SETTINGS>();
+
+    if( changed.count( PCM_PACKAGE_TYPE::PT_LIBRARY )
+        && ( settings->m_PcmLibAutoAdd || settings->m_PcmLibAutoRemove ) )
+    {
+        // Reset project tables
+        Prj().SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, nullptr );
+        Prj().SetElem( PROJECT::ELEM_FPTBL, nullptr );
+
+        KIWAY& kiway = m_frame->Kiway();
+
+        // Reset state containing global lib tables
+        KIFACE* kiface;
+
+        if( kiface = kiway.KiFACE( KIWAY::FACE_SCH, false ) )
+            kiface->Reset();
+
+        if( kiface = kiway.KiFACE( KIWAY::FACE_PCB, false ) )
+            kiface->Reset();
+
+        // Reload lib tables
+        std::string payload = "";
+
+        kiway.ExpressMail( FRAME_FOOTPRINT_EDITOR, MAIL_RELOAD_LIB, payload );
+        kiway.ExpressMail( FRAME_FOOTPRINT_VIEWER, MAIL_RELOAD_LIB, payload );
+        kiway.ExpressMail( FRAME_CVPCB, MAIL_RELOAD_LIB, payload );
+        kiway.ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_RELOAD_LIB, payload );
+        kiway.ExpressMail( FRAME_SCH_VIEWER, MAIL_RELOAD_LIB, payload );
+    }
+
+    if( changed.count( PCM_PACKAGE_TYPE::PT_COLORTHEME ) )
+        Pgm().GetSettingsManager().ReloadColorSettings();
 
     return 0;
 }

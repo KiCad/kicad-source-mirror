@@ -142,6 +142,8 @@ public:
 
     SELECTION& GetCurrentSelection() override;
 
+    void KiwayMailIn( KIWAY_EXPRESS& mail ) override;
+
 protected:
     void setupUIConditions() override;
 

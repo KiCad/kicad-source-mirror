@@ -663,6 +663,10 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         break;
     }
 
+    case MAIL_RELOAD_PLUGINS:
+        GetToolManager()->RunAction( PCB_ACTIONS::pluginsReload, true );
+        break;
+
     // many many others.
     default:
         ;

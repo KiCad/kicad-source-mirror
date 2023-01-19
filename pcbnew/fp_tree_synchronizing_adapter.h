@@ -38,7 +38,7 @@ public:
 
     bool IsContainer( const wxDataViewItem& aItem ) const override;
 
-    void Sync();
+    void Sync( FP_LIB_TABLE* aLibs );
 
     int GetLibrariesCount() const override;
 

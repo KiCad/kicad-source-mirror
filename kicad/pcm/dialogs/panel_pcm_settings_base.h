@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -42,7 +42,6 @@ class PANEL_PCM_SETTINGS_BASE : public wxPanel
 		wxCheckBox* m_libAutoRemove;
 		wxStaticText* m_staticText1;
 		wxTextCtrl* m_libPrefix;
-		wxStaticText* m_libHelp;
 
 	public:
 

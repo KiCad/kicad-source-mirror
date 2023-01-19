@@ -1014,9 +1014,7 @@ size_t PANEL_SYM_LIB_TABLE::m_pageNdx = 0;
 
 void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
 {
-    auto* schEditor = (SCH_EDIT_FRAME*) aKiway->Player( FRAME_SCH, false );
     auto* symbolEditor = (SYMBOL_EDIT_FRAME*) aKiway->Player( FRAME_SCH_SYMBOL_EDITOR, false );
-    auto* symbolViewer = (SYMBOL_VIEWER_FRAME*) aKiway->Player( FRAME_SCH_VIEWER, false );
 
     SYMBOL_LIB_TABLE* globalTable = &SYMBOL_LIB_TABLE::GetGlobalLibTable();
     wxString          globalTablePath = SYMBOL_LIB_TABLE::GetGlobalTableFileName();
@@ -1093,23 +1091,13 @@ void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
         }
     }
 
-    if( schEditor )
-        schEditor->SyncView();
-
     if( symbolEditor )
     {
-        // Check if the currently selected symbol library been removed or disabled.
-        if( !currentLib.empty() && projectTable && !projectTable->HasLibrary( currentLib, true ) )
-        {
-            symbolEditor->SetCurLib( wxEmptyString );
-            symbolEditor->emptyScreen();
-        }
-
-        symbolEditor->SyncLibraries( true );
         symbolEditor->ThawLibraryTree();
-        symbolEditor->RefreshLibraryTree();
     }
 
-    if( symbolViewer )
-        symbolViewer->ReCreateLibList();
+    std::string payload = "";
+    aKiway->ExpressMail( FRAME_SCH, MAIL_RELOAD_LIB, payload );
+    aKiway->ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_RELOAD_LIB, payload );
+    aKiway->ExpressMail( FRAME_SCH_VIEWER, MAIL_RELOAD_LIB, payload );
 }

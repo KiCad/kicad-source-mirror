@@ -32,6 +32,7 @@
 #include <eeschema_settings.h>
 #include <kiface_base.h>
 #include <kiway.h>
+#include <kiway_express.h>
 #include <locale_io.h>
 #include <symbol_viewer_frame.h>
 #include <widgets/msgpanel.h>
@@ -1305,4 +1306,18 @@ void SYMBOL_VIEWER_FRAME::DisplayLibInfos()
 SELECTION& SYMBOL_VIEWER_FRAME::GetCurrentSelection()
 {
     return m_toolManager->GetTool<EE_SELECTION_TOOL>()->GetSelection();
+}
+
+
+void SYMBOL_VIEWER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
+{
+    switch( mail.Command() )
+    {
+    case MAIL_RELOAD_LIB:
+    {
+        ReCreateLibList();
+        break;
+    }
+    default:;
+    }
 }

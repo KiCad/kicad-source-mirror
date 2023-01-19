@@ -1086,6 +1086,11 @@ void FOOTPRINT_VIEWER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
         break;
     }
+    case MAIL_RELOAD_LIB:
+    {
+        ReCreateLibraryList();
+        break;
+    }
 
     default:
         ;
