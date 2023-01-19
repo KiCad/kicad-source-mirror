@@ -158,7 +158,8 @@ bool SCHEMATIC::ResolveTextVar( wxString* token, int aDepth ) const
             return true;
         }
 
-        return CurrentSheet().LastScreen()->GetTitleBlock().TextVarResolver( token, m_project );
+        if( CurrentSheet().LastScreen()->GetTitleBlock().TextVarResolver( token, m_project ) )
+            return true;
     }
 
     if( Prj().TextVarResolver( token ) )
