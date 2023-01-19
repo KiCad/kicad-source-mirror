@@ -2286,13 +2286,22 @@ std::map<wxString, int> FOOTPRINT::MapPadNumbersToNetTieGroups() const
     for( const PAD* pad : m_pads )
         padNumberToGroupIdxMap[ pad->GetNumber() ] = -1;
 
-    for( size_t ii = 0; ii < m_netTiePadGroups.size(); ++ii )
+    auto processPad =
+            [&]( wxString aPad, int aGroup )
+            {
+                aPad.Trim( true ).Trim( false );
+
+                if( !aPad.IsEmpty() )
+                    padNumberToGroupIdxMap[ aPad ] = aGroup;
+            };
+
+    for( int ii = 0; ii < (int) m_netTiePadGroups.size(); ++ii )
     {
         wxString group( m_netTiePadGroups[ ii ] );
         bool esc = false;
         wxString pad;
 
-        for( auto ch : group )
+        for( wxUniCharRef ch : group )
         {
             if( esc )
             {
@@ -2308,7 +2317,7 @@ std::map<wxString, int> FOOTPRINT::MapPadNumbersToNetTieGroups() const
                 break;
 
             case ',':
-                padNumberToGroupIdxMap[ pad ] = ii;
+                processPad( pad, ii );
                 pad.Clear();
                 break;
 
@@ -2316,8 +2325,9 @@ std::map<wxString, int> FOOTPRINT::MapPadNumbersToNetTieGroups() const
                 pad.Append( ch );
                 break;
             }
-
         }
+
+        processPad( pad, ii );
     }
 
     return padNumberToGroupIdxMap;
