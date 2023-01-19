@@ -478,9 +478,7 @@ bool FILENAME_RESOLVER::addPath( const SEARCH_PATH& aPath )
     {
         if( tpath.m_Alias == sPL->m_Alias )
         {
-            wxString msg = _( "Bad alias (duplicate name)" );
-            msg.append( wxT( "\n" ) );
-            msg.append( _( "Alias: " ) );
+            wxString msg = _( "Alias: " );
             msg.append( tpath.m_Alias );
             msg.append( wxT( "\n" ) );
             msg.append( _( "This path:" ) + wxS( " " ) );
