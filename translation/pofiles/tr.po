@@ -14,16 +14,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-17 10:33-0800\n"
-"PO-Revision-Date: 2023-01-17 17:11+0000\n"
+"PO-Revision-Date: 2023-01-20 06:51+0000\n"
 "Last-Translator: Mustafa Selçuk ÇAVDAR <mselcuk@gmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
+"master-source/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.1-dev\n"
+"X-Generator: Weblate 4.15.1\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -106,7 +106,7 @@ msgid "Last render time %.0f ms"
 msgstr "Son oluşturma süresi %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:654
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s\tNet class %s"
 msgstr "Ağ %s\tAğSınıfı %s"
 
@@ -116,12 +116,12 @@ msgid "Pad %s\t"
 msgstr "ayak %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:709
-#, fuzzy, c-format
+#, c-format
 msgid "Rule area %s\t"
 msgstr "Kural alanı %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:711
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s\t"
 msgstr "Bölge %s\t"
 
@@ -276,24 +276,22 @@ msgstr "&Tercihler"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:59
 #: pcbnew/widgets/appearance_controls.cpp:2730
-#, fuzzy, c-format
+#, c-format
 msgid "Viewports (%s+Tab):"
 msgstr "Görünüm alanları (%s+Tab):"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:68
 #: pcbnew/widgets/appearance_controls.cpp:2739
-#, fuzzy
 msgid "Save viewport..."
 msgstr "Görünüm alanını kaydet..."
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:69
 #: pcbnew/widgets/appearance_controls.cpp:2740
-#, fuzzy
 msgid "Delete viewport..."
 msgstr "Görünüm alanını sil..."
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:71
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save and restore view orientation and zoom.\n"
 "Use %s+Tab to activate selector.\n"
@@ -339,7 +337,6 @@ msgstr "Görünümler"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:570
 #: pcbnew/widgets/appearance_controls.cpp:2836
-#, fuzzy
 msgid "Delete Viewport"
 msgstr "Görünüm Alanı Sil"
 
@@ -1218,7 +1215,6 @@ msgid "Open..."
 msgstr "Aç..."
 
 #: bitmap2component/bitmap2cmp_gui.cpp:219
-#, fuzzy
 msgid "Load source image"
 msgstr "Kaynak görüntüyü yükle"
 
@@ -1334,17 +1330,14 @@ msgid "bits"
 msgstr "bit"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:100
-#, fuzzy
 msgid "Load Source Image"
 msgstr "Kaynak Resmi Yükle"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:107
-#, fuzzy
 msgid "Output Size"
-msgstr "Çıkış Bacağı"
+msgstr "Çıkiş Boyutu"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:109
-#, fuzzy
 msgid "Lock height / width ratio"
 msgstr "Yükseklik/genişlik oranını kilitle"
 
@@ -1380,7 +1373,6 @@ msgid "Options"
 msgstr "Seçenekler"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:145
-#, fuzzy
 msgid "Black / white threshold:"
 msgstr "Siyah / Beyaz Eşiği:"
 
@@ -1460,9 +1452,8 @@ msgstr "Panoya Aktar"
 
 #: bitmap2component/bitmap2cmp_gui_base.h:96
 #: kicad/tools/kicad_manager_actions.cpp:110
-#, fuzzy
 msgid "Image Converter"
-msgstr "KiCad Görüntü Dönüştürücüsü"
+msgstr "Resim Dönüştürücüsü"
 
 #: common/common.cpp:223
 #, c-format
@@ -1533,9 +1524,8 @@ msgid "Warning"
 msgstr "Uyarı"
 
 #: common/confirm.cpp:178 common/confirm.cpp:184
-#, fuzzy
 msgid "File Open Warning"
-msgstr "Dosya Açma Hatası"
+msgstr "Dosya Açma Uyarısı"
 
 #: common/confirm.cpp:180 common/confirm.cpp:186
 msgid "Interleaved saves may produce very unexpected results."
@@ -2827,7 +2817,6 @@ msgstr "Siyah ve beyaz"
 
 #: common/dialogs/dialog_print_generic_base.cpp:41
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:22
-#, fuzzy
 msgid "Print drawing sheet"
 msgstr "Çizim Sayfasını Yazdır"
 
@@ -2882,9 +2871,8 @@ msgid "Items:"
 msgstr "Öğeler:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:25
-#, fuzzy
 msgid "Available:"
-msgstr "Kullanılabilir yollar:"
+msgstr "Kullanılabilir:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:40
 #, fuzzy
