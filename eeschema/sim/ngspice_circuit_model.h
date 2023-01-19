@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016-2022 CERN
- * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -47,8 +47,8 @@ struct SPICE_DC_PARAMS
 class NGSPICE_CIRCUIT_MODEL : public NETLIST_EXPORTER_SPICE, public SIMULATION_MODEL
 {
 public:
-    NGSPICE_CIRCUIT_MODEL( SCHEMATIC_IFACE* aSchematic ) :
-            NETLIST_EXPORTER_SPICE( aSchematic ),
+    NGSPICE_CIRCUIT_MODEL( SCHEMATIC_IFACE* aSchematic, wxWindow* aDialogParent = nullptr ) :
+            NETLIST_EXPORTER_SPICE( aSchematic, aDialogParent ),
             m_options( NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS )
     {}
 

@@ -33,6 +33,9 @@
 #include <sim/spice_generator.h>
 
 
+class wxWindow;
+
+
 class NAME_GENERATOR
 {
 public:
@@ -60,7 +63,7 @@ public:
                                | OPTION_SAVE_ALL_CURRENTS
     };
 
-    NETLIST_EXPORTER_SPICE( SCHEMATIC_IFACE* aSchematic );
+    NETLIST_EXPORTER_SPICE( SCHEMATIC_IFACE* aSchematic, wxWindow* aDialogParent = nullptr );
 
     /**
      * Write to specified output file.
@@ -129,7 +132,8 @@ protected:
     void ReadDirectives( unsigned aNetlistOptions );
     virtual void WriteDirectives( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions ) const;
 
-    virtual std::string GenerateItemPinNetName( const std::string& aNetName, int& aNcCounter ) const;
+    virtual std::string GenerateItemPinNetName( const std::string& aNetName,
+                                                int& aNcCounter ) const;
 
     /**
      * Return the paths of exported sheets (either all or the current one).
@@ -152,11 +156,17 @@ private:
 
     SIM_LIB_MGR             m_libMgr;             ///< Holds libraries and models
     NAME_GENERATOR          m_modelNameGenerator; ///< Generates unique model names
-    NAME_GENERATOR          m_netNameGenerator;   ///< Generates unique net names (only unique for NC nets for now)
+
+    ///< Generates unique net names (only unique for NC nets for now)
+    NAME_GENERATOR          m_netNameGenerator;
     std::vector<wxString>   m_directives;         ///< Spice directives found in the schematic sheet
     std::set<wxString>      m_rawIncludes;        ///< include directives found in symbols
     std::set<std::string>   m_nets;
-    std::list<SPICE_ITEM>   m_items;              ///< Items representing schematic symbols in Spice world
+
+    ///< Items representing schematic symbols in Spice world.
+    std::list<SPICE_ITEM>   m_items;
+
+    wxWindow*               m_dialogParent;
 };
 
 

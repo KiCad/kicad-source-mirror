@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016-2022 CERN
- * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -147,9 +147,10 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_reporter = new SIM_THREAD_REPORTER( this );
     m_simulator->SetReporter( m_reporter );
 
-    m_circuitModel.reset( new NGSPICE_CIRCUIT_MODEL( &m_schematicFrame->Schematic() ) );
+    m_circuitModel.reset( new NGSPICE_CIRCUIT_MODEL( &m_schematicFrame->Schematic(), this ) );
 
-    Bind( wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME::menuExit ), this, wxID_EXIT );
+    Bind( wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME::menuExit ), this,
+          wxID_EXIT );
 
     Bind( EVT_SIM_UPDATE, &SIM_PLOT_FRAME::onSimUpdate, this );
     Bind( EVT_SIM_REPORT, &SIM_PLOT_FRAME::onSimReport, this );
@@ -925,7 +926,8 @@ void SIM_PLOT_FRAME::applyTuners()
     }
 
     if( reporter.HasMessage() )
-        DisplayErrorMessage( this, _( "Could not apply tuned value(s):" ) + wxS( "\n\n" ) + errors );
+        DisplayErrorMessage( this,
+                             _( "Could not apply tuned value(s):" ) + wxS( "\n\n" ) + errors );
 }
 
 
