@@ -37,6 +37,10 @@
     {
       "name": "ngspice",
       "version": "38"
+    },
+    {
+      "name": "curl",
+      "version": "7.83.1"
     }
   ]
 }
