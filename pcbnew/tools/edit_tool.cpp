@@ -2541,6 +2541,9 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
 
     frame()->PopTool( selectReferencePoint );
 
+    if( selection.IsHover() )
+        m_selectionTool->ClearSelection();
+
     return 0;
 }
 
