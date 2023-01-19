@@ -38,6 +38,7 @@
 #include <macros.h>
 #include <trigo.h>
 
+#include <basic_gal.h>
 #include <plotters/plotters_pslike.h>
 
 
@@ -837,6 +838,7 @@ void PDF_PLOTTER::Text( const wxPoint&              aPos,
     // be pixel-accurate, but it doesn't matter for searching.
     int render_mode = 3;    // invisible
 
+    wxPoint pos( aPos );
     const char *fontname = aItalic ? ( aBold ? "/KicadFontBI" : "/KicadFontI" )
                                    : ( aBold ? "/KicadFontB"  : "/KicadFont"  );
 
@@ -844,28 +846,64 @@ void PDF_PLOTTER::Text( const wxPoint&              aPos,
     double ctm_a, ctm_b, ctm_c, ctm_d, ctm_e, ctm_f;
     double wideningFactor, heightFactor;
 
-    computeTextParameters( aPos, aText, aOrient, aSize, m_plotMirror, aH_justify,
-                           aV_justify, aWidth, aItalic, aBold,
-                           &wideningFactor, &ctm_a, &ctm_b, &ctm_c,
-                           &ctm_d, &ctm_e, &ctm_f, &heightFactor );
-
     SetColor( aColor );
     SetCurrentLineWidth( aWidth, aData );
 
-    /* We use the full CTM instead of the text matrix because the same
-       coordinate system will be used for the overlining. Also the %f
-       for the trig part of the matrix to avoid %g going in exponential
-       format (which is not supported) */
-    fprintf( workFile, "q %f %f %f %f %g %g cm BT %s %g Tf %d Tr %g Tz ",
-             ctm_a, ctm_b, ctm_c, ctm_d, ctm_e, ctm_f,
-             fontname, heightFactor, render_mode, wideningFactor * 100 );
+    const auto& font = basic_gal.GetStrokeFont();
+    VECTOR2D    fontSize( aSize.x, aSize.y );
+    double      penWidth( aWidth );
+    VECTOR2D    extents =  font.ComputeStringBoundaryLimits( aText, fontSize, penWidth );
 
-    // The text must be escaped correctly
-    std:: string txt_pdf = encodeStringForPlotter( aText );
-    fprintf( workFile, "%s Tj ET\n", txt_pdf.c_str() );
+    wxPoint box_x( KiROUND( extents.x ), 0 );
+    wxPoint box_y( 0, KiROUND( extents.y ) );
 
-    // Restore the CTM
-    fputs( "Q\n", workFile );
+    RotatePoint( &box_x, aOrient );
+    RotatePoint( &box_y, aOrient );
+
+    if( aH_justify == GR_TEXT_HJUSTIFY_CENTER )
+        pos -= box_x / 2;
+    else if( aH_justify == GR_TEXT_HJUSTIFY_RIGHT )
+        pos -= box_x;
+
+    if( aV_justify == GR_TEXT_VJUSTIFY_CENTER )
+        pos += box_y / 2;
+    else if( aV_justify == GR_TEXT_VJUSTIFY_TOP )
+        pos += box_y;
+
+    wxStringTokenizer str_tok( aText, " ", wxTOKEN_RET_DELIMS );
+
+    while( str_tok.HasMoreTokens() )
+    {
+        wxString word = str_tok.GetNextToken();
+
+        computeTextParameters( pos, word, aOrient, aSize, m_plotMirror, GR_TEXT_HJUSTIFY_LEFT,
+                               GR_TEXT_VJUSTIFY_BOTTOM, aWidth, aItalic, aBold, &wideningFactor, &ctm_a,
+                               &ctm_b, &ctm_c, &ctm_d, &ctm_e, &ctm_f, &heightFactor );
+
+        // Extract the changed width and rotate by the orientation to get the offset for the
+        // next word
+        extents = font.ComputeStringBoundaryLimits( word, fontSize, penWidth );
+        wxPoint bbox( KiROUND( extents.x ), 0 );
+        RotatePoint( &bbox, aOrient );
+        pos += bbox;
+
+        // Don't try to output a blank string
+        if( word.Trim( false ).Trim( true ).empty() )
+            continue;
+
+        /* We use the full CTM instead of the text matrix because the same
+           coordinate system will be used for the overlining. Also the %f
+           for the trig part of the matrix to avoid %g going in exponential
+           format (which is not supported) */
+        fprintf( workFile, "q %f %f %f %f %g %g cm BT %s %g Tf %d Tr %g Tz ",
+                 ctm_a, ctm_b, ctm_c, ctm_d, ctm_e, ctm_f,
+                 fontname, heightFactor, render_mode, wideningFactor * 100 );
+
+        std::string txt_pdf = encodeStringForPlotter( word );
+        fprintf( workFile, "%s Tj ET\n", txt_pdf.c_str() );
+        // Restore the CTM
+        fputs( "Q\n", workFile );
+    }
 
     // Plot the stroked text (if requested)
     PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aWidth,
