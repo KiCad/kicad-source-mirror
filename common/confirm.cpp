@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -392,11 +392,15 @@ bool IsOK( wxWindow* aParent, const wxString& aMessage )
     int icon = wxICON_QUESTION;
 #endif
 
+#if !defined( __WXGTK__ )
     wxRichMessageDialog dlg( aParent, aMessage, _( "Confirmation" ),
                              wxOK | wxCANCEL | wxOK_DEFAULT | wxCENTRE | icon | wxSTAY_ON_TOP );
+#else
+    wxMessageDialog dlg( aParent, aMessage, _( "Confirmation" ),
+                         wxOK | wxCANCEL | wxOK_DEFAULT | wxCENTRE | icon | wxSTAY_ON_TOP );
+#endif
 
     dlg.SetOKCancelLabels( _( "Yes" ), _( "No" ) );
-
 
     return dlg.ShowModal() == wxID_OK;
 }
