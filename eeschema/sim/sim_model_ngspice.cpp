@@ -217,7 +217,7 @@ bool SIM_MODEL_NGSPICE::canSilentlyIgnoreParam( const std::string& aParamName )
 }
 
 
-std::vector<std::string> SIM_MODEL_NGSPICE::getPinNames() const
+std::vector<std::string> SIM_MODEL_NGSPICE::GetPinNames() const
 {
     return ModelInfo( getModelType() ).pinNames;
 }

@@ -475,6 +475,8 @@ public:
         m_baseModel = &aBaseModel;
     }
 
+    virtual std::vector<std::string> GetPinNames() const { return {}; }
+
     int GetPinCount() const { return static_cast<int>( m_pins.size() ); }
     const PIN& GetPin( unsigned aIndex ) const { return m_pins.at( aIndex ); }
 
@@ -552,8 +554,6 @@ private:
     void doWriteFields( std::vector<T>& aFields ) const;
 
     virtual bool requiresSpiceModelLine() const;
-
-    virtual std::vector<std::string> getPinNames() const { return {}; }
 
 protected:
     std::vector<PARAM>                    m_params;

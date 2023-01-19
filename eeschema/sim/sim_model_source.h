@@ -76,9 +76,9 @@ public:
     bool HasAutofill() const override { return true; }
     bool HasPrimaryValue() const override { return GetType() == TYPE::V || GetType() == TYPE::I; }
 
-private:
-    std::vector<std::string> getPinNames() const override { return { "+", "-" }; }
+    std::vector<std::string> GetPinNames() const override { return { "+", "-" }; }
 
+private:
     static const std::vector<PARAM::INFO>& makeParamInfos( TYPE aType );
 
     static std::vector<PARAM::INFO> makeDcParamInfos( std::string aPrefix, std::string aUnit );

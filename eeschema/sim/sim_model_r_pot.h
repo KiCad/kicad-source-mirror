@@ -48,9 +48,9 @@ public:
     const PARAM* GetTunerParam() const override { return FindParam( "pos" ); }
     bool HasPrimaryValue() const override { return true; }
 
-private:
-    std::vector<std::string> getPinNames() const override { return { "+", "wiper", "-" }; }
+    std::vector<std::string> GetPinNames() const override { return { "+", "wiper", "-" }; }
 
+private:
     static const std::vector<PARAM::INFO> makeParamInfos();
 };
 

@@ -45,9 +45,10 @@ class SIM_MODEL_BEHAVIORAL : public SIM_MODEL
 public:
     SIM_MODEL_BEHAVIORAL( TYPE aType );
 
+    std::vector<std::string> GetPinNames() const override { return { "+", "-" }; }
+
 private:
     bool parseValueField( const std::string& aValueField );
-    std::vector<std::string> getPinNames() const override { return { "+", "-" }; }
 
     static PARAM::INFO makeParams( std::string aName, std::string aDescription, std::string aUnit );
 };

@@ -49,6 +49,8 @@ public:
     void SetParamFromSpiceCode( const std::string& aParamName, const std::string& aValue,
                                 SIM_VALUE_GRAMMAR::NOTATION aNotation ) override;
 
+    std::vector<std::string> GetPinNames() const override;
+
     // Protected because it's accessed by QA tests.
 protected:
     DEFINE_ENUM_CLASS_WITH_ITERATOR( MODEL_TYPE,
@@ -110,8 +112,6 @@ private:
     bool requiresSpiceModelLine() const override { return false; }
 
     bool canSilentlyIgnoreParam( const std::string& aParamName );
-
-    std::vector<std::string> getPinNames() const override;
 
     MODEL_TYPE getModelType() const;
     bool getIsOtherVariant();

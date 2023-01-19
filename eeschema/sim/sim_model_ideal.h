@@ -49,9 +49,9 @@ public:
     const PARAM* GetTunerParam() const override { return &GetParam( 0 ); }
     bool HasPrimaryValue() const override { return true; }
 
-private:
-    std::vector<std::string> getPinNames() const override { return { "+", "-" }; }
+    std::vector<std::string> GetPinNames() const override { return { "+", "-" }; }
 
+private:
     static PARAM::INFO makeParamInfo( std::string aName, std::string aDescription, std::string aUnit );
 };
 

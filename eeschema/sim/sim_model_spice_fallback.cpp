@@ -35,16 +35,22 @@ SIM_MODEL_SPICE_FALLBACK::SIM_MODEL_SPICE_FALLBACK( TYPE aType, const std::strin
 void SIM_MODEL_SPICE_FALLBACK::SetPinSymbolPinNumber( const std::string& aPinName,
                                                       const std::string& aSymbolPinNumber )
 {
-    for( PIN& pin : m_pins )
+    try
     {
-        if( pin.name == aPinName )
-        {
-            pin.symbolPinNumber = aSymbolPinNumber;
-            return;
-        }
+        SIM_MODEL::SetPinSymbolPinNumber( aPinName, aSymbolPinNumber );
     }
-
-    m_pins.push_back( { aPinName, aSymbolPinNumber } );
+    catch( IO_ERROR& )
+    {
+        // This is a fall-back, so we won't necessarily know the pin names.  If we didn't find
+        // it, then just create a new pin.
+        m_pins.push_back( { aPinName, aSymbolPinNumber } );
+    }
 }
 
 
+std::vector<std::string> SIM_MODEL_SPICE_FALLBACK::GetPinNames() const
+{
+    // If we're a fall-back for a paticular model type, then return its pin names
+    std::unique_ptr<SIM_MODEL> model = SIM_MODEL::Create( GetType() );
+    return model->GetPinNames();
+}

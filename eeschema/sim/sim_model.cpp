@@ -1003,12 +1003,12 @@ void SIM_MODEL::createPins( const std::vector<LIB_PIN*>& aSymbolPins )
 {
     // Default pin sequence: model pins are the same as symbol pins.
     // Excess model pins are set as Not Connected.
-    // Note that intentionally nothing is added if `getPinNames()` returns an empty vector.
+    // Note that intentionally nothing is added if `GetPinNames()` returns an empty vector.
 
     // SIM_MODEL pins must be ordered by symbol pin numbers -- this is assumed by the code that
     // accesses them.
 
-    std::vector<std::string> pinNames = getPinNames();
+    std::vector<std::string> pinNames = GetPinNames();
 
     for( unsigned modelPinIndex = 0; modelPinIndex < pinNames.size(); ++modelPinIndex )
     {

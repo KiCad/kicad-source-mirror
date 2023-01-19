@@ -43,9 +43,9 @@ class SIM_MODEL_TLINE : public SIM_MODEL
 public:
     SIM_MODEL_TLINE( TYPE aType );
 
-private:
-    std::vector<std::string> getPinNames() const override { return { "1+", "1-", "2+", "2-" }; }
+    std::vector<std::string> GetPinNames() const override { return { "1+", "1-", "2+", "2-" }; }
 
+private:
     static std::vector<PARAM::INFO> makeZ0ParamInfos();
     static std::vector<PARAM::INFO> makeRlgcParamInfos();
 };

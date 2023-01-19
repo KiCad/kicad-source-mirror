@@ -45,12 +45,12 @@ class SIM_MODEL_SWITCH : public SIM_MODEL
 public:
     SIM_MODEL_SWITCH( TYPE aType );
 
-private:
-    std::vector<std::string> getPinNames() const override
+    std::vector<std::string> GetPinNames() const override
     {
         return { "ctrl+", "ctrl-", "no+", "no-" };
     }
 
+private:
     bool requiresSpiceModelLine() const override { return true; }
 
     static const std::vector<PARAM::INFO> makeSwVParamInfos();

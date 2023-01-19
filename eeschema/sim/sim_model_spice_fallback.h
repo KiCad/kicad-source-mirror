@@ -34,6 +34,8 @@ public:
 
     void SetPinSymbolPinNumber( const std::string& aPinName,
                                 const std::string& aSymbolPinNumber ) override;
+
+    std::vector<std::string> GetPinNames() const override;
 };
 
 #endif // SIM_MODEL_SPICE_FALLBACK_H
