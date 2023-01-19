@@ -356,6 +356,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Yury Khalyavin" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Eldar Khayrullin" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ingo Kletti" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Kliment" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Sylwester Kocjan" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Clemens Koller" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Asuki Kono" ), CONTRIB_DEV, nullptr ) );
@@ -879,21 +880,39 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                           "Other" ) );
 
 
-    // Program credits for 3d models
+    // Program credits for library team
     #define LIBRARIANS _( "KiCad Librarian Team" )
+    // Lead librarians
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "cpresser"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
+
+    // Active librarians
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Aristeidis Kimirtzis"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "apo"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Armin Schoisswohl"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Carlos Nieves Ónega"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Dash Peters"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Jan Sebastian Götte (jaseg)"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Greg Cormier"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Jeremy Boynes"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Jorge Neiva"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Kliment"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Andrew Lutsenko"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
+
+    // Former librarians
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Christian Schlüter"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Rene Poeschl"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Antonio Vázquez Blanco "), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "cpresser"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Daniel Giesbrecht"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Otavio Augusto Gomes"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "herostrat"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Diego Herranz"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Joel Guittet"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Aristeidis Kimirtzis"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Chris Morgan"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Thomas Pointhuber"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Evan Shultz"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Bob Cousins"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "nickoe"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Oliver Walters"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
 
     #define MODELS_3D_CONTRIBUTION _( "3D models by" )
     aInfo.AddLibrarian( new CONTRIBUTOR( wxS( "Scripts by Maui" ),
@@ -910,7 +929,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     #define SYMBOL_LIB_CONTRIBUTION _( "Symbols by" )
     aInfo.AddLibrarian( new CONTRIBUTOR( wxS( "GitLab contributors" ),
                                       wxEmptyString,
-                                      "https://gitlab.com/kicad/libraries/kicad-symbols/-/graphs/master",
+                                      "https://gitlab.com/kicad/libraries/kicad-symbols/-/graphs/v7",
                                       SYMBOL_LIB_CONTRIBUTION,
                                       aInfo.CreateKiBitmap( BITMAPS::add_component ) ) );
 
