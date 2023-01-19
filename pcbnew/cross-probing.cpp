@@ -624,6 +624,9 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
                                              static_cast<void*>( &items ) );
             }
 
+            // Update 3D viewer highlighting
+            Update3DView( false, GetPcbNewSettings()->m_Display.m_Live3DRefresh );
+
             m_probingSchToPcb = false;
         }
 
