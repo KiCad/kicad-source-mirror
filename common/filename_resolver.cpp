@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2020 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2015-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,12 +27,12 @@
 #include <sstream>
 
 #include <wx/log.h>
-#include <wx/msgdlg.h>
 #include <pgm_base.h>
 #include <trace_helpers.h>
 
-#include "common.h"
-#include "filename_resolver.h"
+#include <common.h>
+#include <filename_resolver.h>
+#include <confirm.h>
 #include <wx_filename.h>
 
 // configuration file version
@@ -453,7 +453,7 @@ bool FILENAME_RESOLVER::addPath( const SEARCH_PATH& aPath )
             wxString msg = _( "The given path does not exist" );
             msg.append( wxT( "\n" ) );
             msg.append( tpath.m_Pathvar );
-            wxMessageBox( msg, _( "3D model search path" ) );
+            DisplayErrorMessage( nullptr, msg );
         }
 
         tpath.m_Pathexp.clear();
@@ -478,7 +478,9 @@ bool FILENAME_RESOLVER::addPath( const SEARCH_PATH& aPath )
     {
         if( tpath.m_Alias == sPL->m_Alias )
         {
-            wxString msg = _( "Alias: " );
+            wxString msg = _( "Bad alias (duplicate name)" );
+            msg.append( wxT( "\n" ) );
+            msg.append( _( "Alias: " ) );
             msg.append( tpath.m_Alias );
             msg.append( wxT( "\n" ) );
             msg.append( _( "This path:" ) + wxS( " " ) );
@@ -486,7 +488,7 @@ bool FILENAME_RESOLVER::addPath( const SEARCH_PATH& aPath )
             msg.append( wxT( "\n" ) );
             msg.append( _( "Existing path:" ) + wxS( " " ) );
             msg.append( sPL->m_Pathvar );
-            wxMessageBox( msg, _( "Bad alias (duplicate name)" ) );
+            DisplayErrorMessage( nullptr, msg );
 
             return false;
         }
