@@ -424,8 +424,10 @@ int COMMON_TOOLS::GridNext( const TOOL_EVENT& aEvent )
 {
     int& currentGrid = m_toolMgr->GetSettings()->m_Window.grid.last_size_idx;
 
-    if( currentGrid + 1 < int( m_grids.size() ) )
-        currentGrid++;
+    currentGrid++;
+
+    if( currentGrid >= int( m_grids.size() ) )
+        currentGrid = 0;
 
     return OnGridChanged();
 }
@@ -435,8 +437,10 @@ int COMMON_TOOLS::GridPrev( const TOOL_EVENT& aEvent )
 {
     int& currentGrid = m_toolMgr->GetSettings()->m_Window.grid.last_size_idx;
 
-    if( currentGrid > 0 )
-        currentGrid--;
+    currentGrid--;
+
+    if( currentGrid < 0 )
+        currentGrid = (int) m_grids.size() - 1;
 
     return OnGridChanged();
 }
