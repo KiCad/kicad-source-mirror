@@ -288,7 +288,9 @@ private:
     void onPlotDragged( wxAuiNotebookEvent& event ) override;
 
     void onSignalDblClick( wxMouseEvent& event ) override;
-    void onSignalRClick( wxListEvent& event ) override;
+    void onSignalRClick( wxListEvent& aEvent ) override;
+
+    void onCursorRClick( wxListEvent& aEvent ) override;
 
     void onWorkbookModified( wxCommandEvent& event );
     void onWorkbookClrModified( wxCommandEvent& event );
@@ -330,24 +332,37 @@ private:
     ///< List of currently displayed tuners
     std::list<TUNER_SLIDER*>               m_tuners;
 
+    enum CONTEXT_MENU_EVENTS
+    {
+        REMOVE_SIGNAL = 944,
+        SHOW_CURSOR,
+        HIDE_CURSOR
+    };
+
     // Right click context menu for signals in the listbox
     class SIGNAL_CONTEXT_MENU : public wxMenu
     {
-        public:
-            SIGNAL_CONTEXT_MENU( const wxString& aSignal, SIM_PLOT_FRAME* aPlotFrame );
+    public:
+        SIGNAL_CONTEXT_MENU( const wxString& aSignal, SIM_PLOT_FRAME* aPlotFrame );
 
-        private:
-            void onMenuEvent( wxMenuEvent& aEvent );
+    private:
+        void onMenuEvent( wxMenuEvent& aEvent );
 
-            const wxString& m_signal;
-            SIM_PLOT_FRAME* m_plotFrame;
+        const wxString& m_signal;
+        SIM_PLOT_FRAME* m_plotFrame;
+    };
 
-            enum SIGNAL_CONTEXT_MENU_EVENTS
-            {
-                REMOVE_SIGNAL = 944,
-                SHOW_CURSOR,
-                HIDE_CURSOR
-            };
+    // Right click context menu for cursors in the listbox
+    class CURSOR_CONTEXT_MENU : public wxMenu
+    {
+    public:
+        CURSOR_CONTEXT_MENU( const wxString& aSignal, SIM_PLOT_FRAME* aPlotFrame );
+
+    private:
+        void onMenuEvent( wxMenuEvent& aEvent );
+
+        const wxString& m_signal;
+        SIM_PLOT_FRAME* m_plotFrame;
     };
 
     ///< Panel that was used as the most recent one for simulations

@@ -1487,9 +1487,9 @@ void SIM_PLOT_FRAME::onSignalDblClick( wxMouseEvent& event )
 }
 
 
-void SIM_PLOT_FRAME::onSignalRClick( wxListEvent& event )
+void SIM_PLOT_FRAME::onSignalRClick( wxListEvent& aEvent )
 {
-    int idx = event.GetIndex();
+    long idx = aEvent.GetIndex();
 
     if( idx != wxNOT_FOUND )
         m_signals->Select( idx );
@@ -1500,6 +1500,24 @@ void SIM_PLOT_FRAME::onSignalRClick( wxListEvent& event )
     {
         const wxString& netName = m_signals->GetItemText( idx, 0 );
         SIGNAL_CONTEXT_MENU ctxMenu( netName, this );
+        m_signals->PopupMenu( &ctxMenu );
+    }
+}
+
+
+void SIM_PLOT_FRAME::onCursorRClick( wxListEvent& aEvent )
+{
+    long idx = aEvent.GetIndex();
+
+    if( idx != wxNOT_FOUND )
+        m_signals->Select( idx );
+
+    idx = m_signals->GetFirstSelected();
+
+    if( idx != wxNOT_FOUND )
+    {
+        const wxString& netName = m_signals->GetItemText( idx, 0 );
+        CURSOR_CONTEXT_MENU ctxMenu( netName, this );
         m_signals->PopupMenu( &ctxMenu );
     }
 }
@@ -2011,6 +2029,31 @@ void SIM_PLOT_FRAME::SIGNAL_CONTEXT_MENU::onMenuEvent( wxMenuEvent& aEvent )
     {
     case REMOVE_SIGNAL: m_plotFrame->removePlot( m_signal );   break;
     case SHOW_CURSOR:   plot->EnableCursor( m_signal, true );  break;
+    case HIDE_CURSOR:   plot->EnableCursor( m_signal, false ); break;
+    }
+}
+
+
+SIM_PLOT_FRAME::CURSOR_CONTEXT_MENU::CURSOR_CONTEXT_MENU( const wxString& aSignal,
+                                                          SIM_PLOT_FRAME* aPlotFrame ) :
+        m_signal( aSignal ),
+        m_plotFrame( aPlotFrame )
+{
+    SIM_PLOT_PANEL* plot = m_plotFrame->GetCurrentPlot();
+
+    AddMenuItem( this, HIDE_CURSOR, _( "Hide Cursor" ), KiBitmap( BITMAPS::pcb_target ) );
+
+    Connect( wxEVT_COMMAND_MENU_SELECTED, wxMenuEventHandler( CURSOR_CONTEXT_MENU::onMenuEvent ),
+             nullptr, this );
+}
+
+
+void SIM_PLOT_FRAME::CURSOR_CONTEXT_MENU::onMenuEvent( wxMenuEvent& aEvent )
+{
+    SIM_PLOT_PANEL* plot = m_plotFrame->GetCurrentPlot();
+
+    switch( aEvent.GetId() )
+    {
     case HIDE_CURSOR:   plot->EnableCursor( m_signal, false ); break;
     }
 }
