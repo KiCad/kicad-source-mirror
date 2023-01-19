@@ -428,7 +428,7 @@ void EDA_DRAW_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
 
 void EDA_DRAW_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
 {
-    wxMessageBox( wxT("EDA_DRAW_FRAME::PrintPage() error") );
+    DisplayErrorMessage( this, wxT("EDA_DRAW_FRAME::PrintPage() error") );
 }
 
 

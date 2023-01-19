@@ -27,6 +27,7 @@
 #include <functional>
 using namespace std::placeholders;
 
+#include <confirm.h>
 #include <kiway.h>
 #include <pcb_edit_frame.h>
 #include <netlist_reader/pcb_netlist.h>
@@ -44,7 +45,6 @@ using namespace std::placeholders;
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
 #include <project/project_file.h>  // LAST_PATH_TYPE
-#include <wx/msgdlg.h>
 
 
 bool PCB_EDIT_FRAME::ReadNetlistFromFile( const wxString &aFilename, NETLIST& aNetlist,
@@ -60,7 +60,7 @@ bool PCB_EDIT_FRAME::ReadNetlistFromFile( const wxString &aFilename, NETLIST& aN
         if( !netlistReader.get() )
         {
             msg.Printf( _( "Cannot open netlist file '%s'." ), aFilename );
-            wxMessageBox( msg, _( "Netlist Load Error." ), wxOK | wxICON_ERROR, this );
+            DisplayErrorMessage( this, msg );
             return false;
         }
 
@@ -71,7 +71,7 @@ bool PCB_EDIT_FRAME::ReadNetlistFromFile( const wxString &aFilename, NETLIST& aN
     catch( const IO_ERROR& ioe )
     {
         msg.Printf( _( "Error loading netlist.\n%s" ), ioe.What().GetData() );
-        wxMessageBox( msg, _( "Netlist Load Error" ), wxOK | wxICON_ERROR );
+        DisplayErrorMessage( this, msg );
         return false;
     }
 

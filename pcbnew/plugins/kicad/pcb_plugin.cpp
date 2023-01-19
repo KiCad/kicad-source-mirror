@@ -2569,7 +2569,7 @@ void PCB_PLUGIN::FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* a
                                                       "Would you like to create it?"),
                                                       aLibraryPath );
 
-            if( wxMessageBox( msg, _( "Library Not Found"), wxYES_NO | wxICON_QUESTION ) != wxYES )
+            if( !IsGUI() || wxMessageBox( msg, _( "Library Not Found"), wxYES_NO | wxICON_QUESTION ) != wxYES )
                 return;
 
             // Save throws its own IO_ERROR on failure, so no need to recreate here

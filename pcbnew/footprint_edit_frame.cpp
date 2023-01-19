@@ -1267,7 +1267,7 @@ void FOOTPRINT_EDIT_FRAME::OnSaveFootprintAsPng( wxCommandEvent& event )
 
     if( id.empty() )
     {
-        wxMessageBox( _( "No footprint selected." ) );
+        DisplayErrorMessage( this, _( "No footprint selected." ) );
         return;
     }
 

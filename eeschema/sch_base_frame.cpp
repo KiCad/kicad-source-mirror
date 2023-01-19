@@ -227,7 +227,7 @@ bool SCH_BASE_FRAME::saveSymbolLibTables( bool aGlobal, bool aProject )
         {
             success = false;
             msg.Printf( _( "Error saving global symbol library table:\n%s" ), ioe.What() );
-            wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
+            DisplayErrorMessage( this, msg );
         }
     }
 
@@ -244,7 +244,7 @@ bool SCH_BASE_FRAME::saveSymbolLibTables( bool aGlobal, bool aProject )
             success = false;
             msg.Printf( _( "Error saving project-specific symbol library table:\n%s" ),
                         ioe.What() );
-            wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
+            DisplayErrorMessage( this, msg );
         }
     }
 

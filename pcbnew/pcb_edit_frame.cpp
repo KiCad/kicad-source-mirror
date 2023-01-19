@@ -1824,7 +1824,7 @@ void PCB_EDIT_FRAME::RunEeschema()
         else
         {
             msg.Printf( _( "Schematic file '%s' not found." ), schematic.GetFullPath() );
-            wxMessageBox( msg, _( "KiCad Error" ), wxOK | wxICON_ERROR, this );
+            DisplayErrorMessage( this, msg );
             return;
         }
     }
@@ -1853,8 +1853,7 @@ void PCB_EDIT_FRAME::RunEeschema()
             }
             catch( const IO_ERROR& err )
             {
-                wxMessageBox( _( "Eeschema failed to load." ) + wxS( "\n" ) + err.What(),
-                              _( "KiCad Error" ), wxOK | wxICON_ERROR, this );
+                DisplayErrorMessage( this, _( "Eeschema failed to load." ) + wxS( "\n" ) + err.What() );
                 return;
             }
         }

@@ -576,12 +576,11 @@ int PCB_EDIT_FRAME::inferLegacyEdgeClearance( BOARD* aBoard )
     if( mixed )
     {
         // If they had different widths then we can't ensure that fills will be the same.
-        wxMessageBox( _( "If the zones on this board are refilled the Copper Edge Clearance "
+        DisplayInfoMessage( this, _( "If the zones on this board are refilled the Copper Edge Clearance "
                          "setting will be used (see Board Setup > Design Rules > Constraints).\n"
                          "This may result in different fills from previous KiCad versions which "
                          "used the line thicknesses of the board boundary on the Edge Cuts "
-                          "layer." ),
-                      _( "Edge Clearance Warning" ), wxOK | wxICON_WARNING, this );
+                          "layer." ) );
     }
 
     return std::max( 0, edgeWidth / 2 );

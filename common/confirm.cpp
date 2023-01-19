@@ -39,6 +39,9 @@ static std::unordered_map<unsigned long, int> doNotShowAgainDlgs;
 
 bool IsGUI()
 {
+    if( !wxTheApp )
+        return false;
+
 #if wxCHECK_VERSION( 3, 1, 6 )
     return wxTheApp->IsGUI();
 #else

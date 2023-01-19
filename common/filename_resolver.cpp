@@ -488,8 +488,7 @@ bool FILENAME_RESOLVER::addPath( const SEARCH_PATH& aPath )
             msg.append( wxT( "\n" ) );
             msg.append( _( "Existing path:" ) + wxS( " " ) );
             msg.append( sPL->m_Pathvar );
-            DisplayErrorMessage( nullptr, msg );
-
+            DisplayErrorMessage( nullptr, _( "Bad alias (duplicate name)" ), msg );
             return false;
         }
 
