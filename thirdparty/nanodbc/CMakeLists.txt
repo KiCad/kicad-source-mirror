@@ -135,7 +135,7 @@ if(UNIX)
   endif()
 
   if(NOT ODBC_CONFIG)
-    message(FATAL_ERROR "can not find a suitable odbc driver manager")
+    message(FATAL_ERROR "can not find a suitable odbc driver manager. Please install either 'unixODBC' or 'iODBC'.")
   endif()
 
   message(STATUS "ODBC compile flags: ${ODBC_CFLAGS}")
