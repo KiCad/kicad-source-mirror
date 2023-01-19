@@ -990,7 +990,7 @@ void FOOTPRINT_EDIT_FRAME::SyncLibraryTree( bool aProgress )
     }
 
     // Sync the LIB_TREE to the FOOTPRINT_INFO list
-    adapter->Sync();
+    adapter->Sync( fpTable );
 
     m_treePane->GetLibTree()->Unselect();
     m_treePane->GetLibTree()->Regenerate( true );

@@ -52,6 +52,8 @@ public:
     virtual  wxWindow* CreateKiWindow( wxWindow* aParent, int aClassId, KIWAY* aKIWAY,
                                        int aCtlBits = 0 ) override = 0;
 
+    virtual void Reset() override{};
+
     virtual void* IfaceOrAddress( int aDataId ) override = 0;
 
     /**
@@ -63,9 +65,9 @@ public:
      *            #FACE_PL_EDITOR, #FACE_PCB_CALCULATOR, #FACE_BMP2CMP)
      */
     KIFACE_BASE( const char* aKifaceName, KIWAY::FACE_T aId ) :
+        m_start_flags( 0 ),
         m_id( aId ),
-        m_bm( aKifaceName ),
-        m_start_flags( 0 )
+        m_bm( aKifaceName )
     {
     }
 
@@ -119,12 +121,12 @@ public:
             aActions.push_back( action );
     }
 
+protected:
+    int m_start_flags;      ///< flags provided in OnKifaceStart()
+
 private:
-    KIWAY::FACE_T       m_id;
-
-    BIN_MOD             m_bm;
-
-    int                 m_start_flags;      ///< flags provided in OnKifaceStart()
+    KIWAY::FACE_T m_id;
+    BIN_MOD       m_bm;
 };
 
 

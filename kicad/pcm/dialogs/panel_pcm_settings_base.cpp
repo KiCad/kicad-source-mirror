@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -70,10 +70,6 @@ PANEL_PCM_SETTINGS_BASE::PANEL_PCM_SETTINGS_BASE( wxWindow* parent, wxWindowID i
 
 
 	bSizer3->Add( bSizer2, 0, wxEXPAND, 5 );
-
-	m_libHelp = new wxStaticText( this, wxID_ANY, _("After packages are (un)installed KiCad may need to be restarted to reflect changes in the global library table."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_libHelp->Wrap( -1 );
-	bSizer3->Add( m_libHelp, 0, wxALL, 5 );
 
 
 	bSizer1->Add( bSizer3, 1, wxEXPAND|wxTOP|wxLEFT, 5 );

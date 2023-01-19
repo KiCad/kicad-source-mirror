@@ -359,6 +359,11 @@ void FOOTPRINT_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
         break;
 
+    case MAIL_RELOAD_LIB:
+        SyncLibraryTree( true );
+        RefreshLibraryTree();
+        break;
+
     default:
         break;
     }

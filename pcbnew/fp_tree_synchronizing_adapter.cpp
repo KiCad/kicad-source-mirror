@@ -68,8 +68,10 @@ bool FP_TREE_SYNCHRONIZING_ADAPTER::IsContainer( const wxDataViewItem& aItem ) c
 
 #define PROGRESS_INTERVAL_MILLIS 33     // 30 FPS refresh rate
 
-void FP_TREE_SYNCHRONIZING_ADAPTER::Sync()
+void FP_TREE_SYNCHRONIZING_ADAPTER::Sync( FP_LIB_TABLE* aLibs )
 {
+    m_libs = aLibs;
+
     // Process already stored libraries
     for( auto it = m_tree.m_Children.begin(); it != m_tree.m_Children.end(); )
     {

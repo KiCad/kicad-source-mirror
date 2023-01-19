@@ -52,7 +52,8 @@ enum MAIL_T
     MAIL_SCH_REFRESH,              // Tell the schematic editor to refresh the display.
     MAIL_LIB_EDIT,
     MAIL_FP_EDIT,
-    MAIL_RELOAD_LIB                //Reload Library List if one was added
+    MAIL_RELOAD_LIB,               // Reload Library List if one was added
+    MAIL_RELOAD_PLUGINS            // Reload python plugins
 };
 
 #endif  // MAIL_TYPE_H_

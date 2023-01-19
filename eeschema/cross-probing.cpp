@@ -947,6 +947,10 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         m_toolManager->RunAction( ACTIONS::updateSchematicFromPcb, true );
         break;
 
+    case MAIL_RELOAD_LIB:
+        SyncView();
+        break;
+
     default:;
 
     }

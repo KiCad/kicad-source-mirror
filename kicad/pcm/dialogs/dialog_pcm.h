@@ -73,6 +73,12 @@ public:
     ///< Handles modification of the buttons' status
     void OnUpdateEventButtons( wxUpdateUIEvent& event );
 
+    ///< Returns types of packages that were installed/uninstalled
+    const std::unordered_set<PCM_PACKAGE_TYPE>& GetChangedPackageTypes() const
+    {
+        return m_changed_package_types;
+    };
+
 private:
     /**
      * @brief Gets package data from PCM and displays it on repository tab
@@ -105,6 +111,7 @@ private:
     std::unordered_map<wxString, wxBitmap>                     m_packageBitmaps;
     std::unordered_map<wxString, wxBitmap>                     m_installedBitmaps;
     wxBitmap                                                   m_defaultBitmap;
+    std::unordered_set<PCM_PACKAGE_TYPE>                       m_changed_package_types;
 
     struct PENDING_ACTION
     {

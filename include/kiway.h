@@ -185,6 +185,11 @@ struct KIFACE
     virtual void OnKifaceEnd() = 0;
 
     /**
+     * Reloads global state.
+     */
+    virtual void Reset() = 0;
+
+    /**
      * Create a wxWindow for the current project.
      *
      * The caller must cast the return value into the known type.

@@ -105,9 +105,12 @@ public:
     void InstallFromFile( wxWindow* aParent, const wxString& aFilePath );
 
     /**
-     * @return true if color settings were installed or uninstalled by the most recent action
+     * @return types of packages that were installed/uninstalled by the task manager
      */
-    bool ColorSettingsChanged() const;
+    std::unordered_set<PCM_PACKAGE_TYPE>& GetChangedPackageTypes()
+    {
+        return m_changed_package_types;
+    };
 
 private:
     /**
@@ -155,7 +158,8 @@ private:
     SYNC_QUEUE<PCM_TASK>                    m_download_queue;
     SYNC_QUEUE<PCM_TASK>                    m_install_queue;
     std::shared_ptr<PLUGIN_CONTENT_MANAGER> m_pcm;
-    std::atomic_bool                        m_color_themes_changed;
+    std::mutex                              m_changed_package_types_guard;
+    std::unordered_set<PCM_PACKAGE_TYPE>    m_changed_package_types;
 };
 
 
