@@ -35,6 +35,7 @@
 
 #include <advanced_config.h>
 #include <eda_text.h> // for IsGotoPageHref
+#include <font/font.h>
 #include <ignore.h>
 #include <macros.h>
 #include <trigo.h>
@@ -1367,6 +1368,7 @@ void PDF_PLOTTER::Text( const VECTOR2I&             aPos,
     // be pixel-accurate, but it doesn't matter for searching.
     int render_mode = 3;    // invisible
 
+    VECTOR2I pos( aPos );
     const char *fontname = aItalic ? ( aBold ? "/KicadFontBI" : "/KicadFontI" )
                                    : ( aBold ? "/KicadFontB"  : "/KicadFont"  );
 
@@ -1381,20 +1383,56 @@ void PDF_PLOTTER::Text( const VECTOR2I&             aPos,
     SetColor( aColor );
     SetCurrentLineWidth( aWidth, aData );
 
-    /* We use the full CTM instead of the text matrix because the same
-       coordinate system will be used for the overlining. Also the %f
-       for the trig part of the matrix to avoid %g going in exponential
-       format (which is not supported) */
-    fprintf( m_workFile, "q %f %f %f %f %g %g cm BT %s %g Tf %d Tr %g Tz ",
-             ctm_a, ctm_b, ctm_c, ctm_d, ctm_e, ctm_f,
-             fontname, heightFactor, render_mode, wideningFactor * 100 );
+    wxStringTokenizer str_tok( aText, " ", wxTOKEN_RET_DELIMS );
 
-    // The text must be escaped correctly
-    std:: string txt_pdf = encodeStringForPlotter( aText );
-    fprintf( m_workFile, "%s Tj ET\n", txt_pdf.c_str() );
+    VECTOR2I full_box( aFont->StringBoundaryLimits( aText, aSize, aWidth, aBold, aItalic ) );
+    VECTOR2I box_x( full_box.x, 0 );
+    VECTOR2I box_y( 0, full_box.y );
 
-    // Restore the CTM
-    fputs( "Q\n", m_workFile );
+    RotatePoint( box_x, aOrient );
+    RotatePoint( box_y, aOrient );
+
+    if( aH_justify == GR_TEXT_H_ALIGN_CENTER )
+        pos -= box_x / 2;
+    else if( aH_justify == GR_TEXT_H_ALIGN_RIGHT )
+        pos -= box_x;
+
+    if( aV_justify == GR_TEXT_V_ALIGN_CENTER )
+        pos += box_y / 2;
+    else if( aV_justify == GR_TEXT_V_ALIGN_TOP )
+        pos += box_y;
+
+    while( str_tok.HasMoreTokens() )
+    {
+        wxString word = str_tok.GetNextToken();
+
+        computeTextParameters( pos, word, aOrient, aSize, m_plotMirror, GR_TEXT_H_ALIGN_LEFT,
+                               GR_TEXT_V_ALIGN_BOTTOM, aWidth, aItalic, aBold, &wideningFactor, &ctm_a,
+                               &ctm_b, &ctm_c, &ctm_d, &ctm_e, &ctm_f, &heightFactor );
+
+        // Extract the changed width and rotate by the orientation to get the offset for the
+        // next word
+        VECTOR2I bbox( aFont->StringBoundaryLimits( word, aSize, aWidth, aBold, aItalic ).x, 0 );
+        RotatePoint( bbox, aOrient );
+        pos += bbox;
+
+        // Don't try to output a blank string
+        if( word.Trim( false ).Trim( true ).empty() )
+            continue;
+
+        /* We use the full CTM instead of the text matrix because the same
+           coordinate system will be used for the overlining. Also the %f
+           for the trig part of the matrix to avoid %g going in exponential
+           format (which is not supported) */
+        fprintf( m_workFile, "q %f %f %f %f %g %g cm BT %s %g Tf %d Tr %g Tz ",
+                 ctm_a, ctm_b, ctm_c, ctm_d, ctm_e, ctm_f,
+                 fontname, heightFactor, render_mode, wideningFactor * 100 );
+
+        std::string txt_pdf = encodeStringForPlotter( word );
+        fprintf( m_workFile, "%s Tj ET\n", txt_pdf.c_str() );
+        // Restore the CTM
+        fputs( "Q\n", m_workFile );
+    }
 
     // Plot the stroked text (if requested)
     PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aWidth, aItalic,
