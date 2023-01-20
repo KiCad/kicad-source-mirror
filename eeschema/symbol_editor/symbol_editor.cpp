@@ -142,8 +142,34 @@ bool SYMBOL_EDIT_FRAME::saveCurrentSymbol()
 
 bool SYMBOL_EDIT_FRAME::LoadSymbol( const LIB_ID& aLibId, int aUnit, int aConvert )
 {
+    LIB_ID libId = aLibId;
+
+    // Database library symbols can't be edited, so load the underlying chosen symbol
+    if( SYMBOL_LIB_TABLE_ROW* lib = m_libMgr->GetLibrary( aLibId.GetLibNickname() ) )
+    {
+        if( lib->SchLibType() == SCH_IO_MGR::SCH_DATABASE )
+        {
+            try
+            {
+                LIB_SYMBOL* dbSym = Prj().SchSymbolLibTable()->LoadSymbol( aLibId );
+
+                if( dbSym && dbSym->GetSourceLibId().IsValid() )
+                    libId = dbSym->GetSourceLibId();
+            }
+            catch( const IO_ERROR& ioe )
+            {
+                wxString msg;
+
+                msg.Printf( _( "Error loading symbol %s from library '%s'." ),
+                            aLibId.GetUniStringLibId(), aLibId.GetUniStringLibItemName() );
+                DisplayErrorMessage( this, msg, ioe.What() );
+                return false;
+            }
+        }
+    }
+
     if( GetCurSymbol() && !IsSymbolFromSchematic()
-            && GetCurSymbol()->GetLibId() == aLibId
+            && GetCurSymbol()->GetLibId() == libId
             && GetUnit() == aUnit
             && GetConvert() == aConvert )
     {
@@ -162,14 +188,14 @@ bool SYMBOL_EDIT_FRAME::LoadSymbol( const LIB_ID& aLibId, int aUnit, int aConver
         }
     }
 
-    SelectActiveLibrary( aLibId.GetLibNickname() );
+    SelectActiveLibrary( libId.GetLibNickname() );
 
-    if( LoadSymbolFromCurrentLib( aLibId.GetLibItemName(), aUnit, aConvert ) )
+    if( LoadSymbolFromCurrentLib( libId.GetLibItemName(), aUnit, aConvert ) )
     {
-        m_treePane->GetLibTree()->SelectLibId( aLibId );
-        m_treePane->GetLibTree()->ExpandLibId( aLibId );
+        m_treePane->GetLibTree()->SelectLibId( libId );
+        m_treePane->GetLibTree()->ExpandLibId( libId );
 
-        m_centerItemOnIdle = aLibId;
+        m_centerItemOnIdle = libId;
         Bind( wxEVT_IDLE, &SYMBOL_EDIT_FRAME::centerItemIdleHandler, this );
 
         return true;

@@ -62,6 +62,8 @@ public:
 
     bool operator!=( const SYMBOL_LIB_TABLE_ROW& aRow ) const   { return !( *this == aRow ); }
 
+    LIB_T SchLibType() const { return type; }
+
     /**
      * Return the type of symbol library table represented by this row.
      */

@@ -141,6 +141,9 @@ public:
     LIB_ID GetLibId() const override { return m_libId; }
     void SetLibId( const LIB_ID& aLibId ) { m_libId = aLibId; }
 
+    LIB_ID GetSourceLibId() const { return m_sourceLibId; }
+    void SetSourceLibId( const LIB_ID& aLibId ) { m_sourceLibId = aLibId; }
+
     wxString GetLibNickname() const override { return GetLibraryName(); }
 
     void SetDescription( const wxString& aDescription ) { m_description = aDescription; }
@@ -747,6 +750,7 @@ private:
     LIB_SYMBOL_SPTR     m_me;
     LIB_SYMBOL_REF      m_parent;           ///< Use for inherited symbols.
     LIB_ID              m_libId;
+    LIB_ID              m_sourceLibId;      ///< For database library symbols; the original symbol
     timestamp_t         m_lastModDate;
 
     int                 m_unitCount;        ///< Number of units (parts) per package.

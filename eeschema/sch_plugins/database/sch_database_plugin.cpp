@@ -312,6 +312,7 @@ LIB_SYMBOL* SCH_DATABASE_PLUGIN::loadSymbolFromRow( const wxString& aSymbolName,
             wxLogTrace( traceDatabase, wxT( "loadSymbolFromRow: found original symbol '%s'" ),
                         symbolIdStr );
             symbol = originalSymbol->Duplicate();
+            symbol->SetSourceLibId( symbolId );
         }
         else
         {
