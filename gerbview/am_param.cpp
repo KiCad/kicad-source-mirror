@@ -7,7 +7,7 @@
  *
  * Copyright (C) 1992-2017 Jean-Pierre Charras <jp.charras at wanadoo.fr>
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +29,7 @@
 
 #include <am_param.h>
 #include <am_primitive.h>
+#include <aperture_macro.h>
 #include <macros.h>
 
 extern int    ReadInt( char*& text, bool aSkipSeparator = true );

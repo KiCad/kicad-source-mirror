@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2019 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,11 +31,8 @@
 #include <dcode.h>
 #include <gerber_draw_item.h>
 #include <am_primitive.h>
+#include <aperture_macro.h>
 #include <gbr_netlist_metadata.h>
-
-// An useful macro used when reading gerber files;
-#define IsNumber( x ) ( ( ( (x) >= '0' ) && ( (x) <='9' ) )   \
-                       || ( (x) == '-' ) || ( (x) == '+' )  || ( (x) == '.' ) )
 
 typedef std::vector<GERBER_DRAW_ITEM*> GERBER_DRAW_ITEMS;
 

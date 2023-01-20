@@ -38,6 +38,7 @@ set( WIDGET_SRCS
 set( GERBVIEW_SRCS
     am_param.cpp
     am_primitive.cpp
+    aperture_macro.cpp
     gbr_layout.cpp
     gerber_file_image.cpp
     gerber_file_image_list.cpp

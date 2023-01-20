@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2014 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,6 +65,14 @@ int scaletoIU( double aCoord, bool isMetric )
         ret = KiROUND( aCoord * GERB_IU_PER_MM * 25.4 );
 
     return ret;
+}
+
+
+// An useful function used when reading gerber files
+static bool IsNumber( char x )
+{
+    return ( ( x >= '0' ) && ( x <='9' ) )
+           || ( x == '-' ) || ( x == '+' )  || ( x == '.' );
 }
 
 
