@@ -151,7 +151,8 @@ bool TITLE_BLOCK::TextVarResolver( wxString* aToken, const PROJECT* aProject ) c
 
     if( tokenUpdated )
     {
-        *aToken = ExpandTextVars( *aToken, aProject );
+        if( aProject )
+            *aToken = ExpandTextVars( *aToken, aProject );
 
         // This is the default fallback, so don't claim we resolved it
         if( *aToken == wxT( "${" ) + originalToken + wxT( "}" ) )
