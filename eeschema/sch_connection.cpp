@@ -429,9 +429,6 @@ void SCH_CONNECTION::AppendInfoToMsgPanel( std::vector<MSG_PANEL_ITEM>& aList ) 
 #if defined(DEBUG)
     // These messages are not flagged as translatable, because they are only debug messages
 
-    if( !ADVANCED_CFG::GetCfg().m_RealTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
-        return;
-
     if( IsBus() )
         aList.emplace_back( wxT( "Bus Code" ), wxString::Format( "%d", m_bus_code ) );
 

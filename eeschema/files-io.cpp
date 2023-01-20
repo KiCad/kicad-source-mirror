@@ -470,7 +470,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         {
             DIALOG_MIGRATE_BUSES dlg( this );
             dlg.ShowQuasiModal();
-            RecalculateConnections( NO_CLEANUP );
             OnModify();
         }
 

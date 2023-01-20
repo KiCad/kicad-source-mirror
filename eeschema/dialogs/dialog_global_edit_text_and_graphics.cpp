@@ -118,10 +118,6 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( SCH_
     m_parent = parent;
     m_appendUndo = false;
 
-    // TODO(JE) remove once real-time connectivity is a given
-    if( !ADVANCED_CFG::GetCfg().m_RealTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
-        m_parent->RecalculateConnections( NO_CLEANUP );
-
     m_lineStyle->Append( DEFAULT_STYLE );
     m_lineStyle->Append( INDETERMINATE_ACTION );
 

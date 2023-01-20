@@ -936,10 +936,7 @@ void SCH_EDIT_FRAME::OnModify()
     GetScreen()->SetContentModified();
     m_autoSaveRequired = true;
 
-    if( ADVANCED_CFG::GetCfg().m_RealTimeConnectivity && CONNECTION_GRAPH::m_allowRealTime )
-        RecalculateConnections( NO_CLEANUP );
-    else
-        GetScreen()->SetConnectivityDirty();
+    RecalculateConnections( NO_CLEANUP );
 
     GetCanvas()->Refresh();
     UpdateHierarchyNavigator();

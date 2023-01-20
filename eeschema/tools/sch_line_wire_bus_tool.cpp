@@ -92,22 +92,15 @@ protected:
 private:
     void update() override
     {
-        SCH_EDIT_FRAME*    frame = (SCH_EDIT_FRAME*) getToolManager()->GetToolHolder();
         EE_SELECTION_TOOL* selTool = getToolManager()->GetTool<EE_SELECTION_TOOL>();
         EE_SELECTION&      selection = selTool->RequestSelection( { SCH_ITEM_LOCATE_BUS_T } );
         SCH_LINE*          bus = (SCH_LINE*) selection.Front();
 
         Clear();
 
-        // TODO(JE) remove once real-time is enabled
-        if( !ADVANCED_CFG::GetCfg().m_RealTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
-        {
-            frame->RecalculateConnections( NO_CLEANUP );
-
-            // Pick up the pointer again because it may have been changed by SchematicCleanUp
-            selection = selTool->RequestSelection( { SCH_ITEM_LOCATE_BUS_T } );
-            bus = (SCH_LINE*) selection.Front();
-        }
+        // Pick up the pointer again because it may have been changed by SchematicCleanUp
+        selection = selTool->RequestSelection( { SCH_ITEM_LOCATE_BUS_T } );
+        bus = (SCH_LINE*) selection.Front();
 
         if( !bus )
         {

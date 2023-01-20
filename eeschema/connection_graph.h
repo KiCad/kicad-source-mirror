@@ -573,9 +573,6 @@ private:
      */
     size_t hasPins( const CONNECTION_SUBGRAPH* aLocSubgraph );
 
-public:
-    // TODO(JE) Remove this when pressure valve is removed
-    static bool m_allowRealTime;
 
 private:
     // All the sheets in the schematic (as long as we don't have partial updates)

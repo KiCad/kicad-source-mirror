@@ -444,9 +444,6 @@ CONNECTION_SUBGRAPH::PRIORITY CONNECTION_SUBGRAPH::GetDriverPriority( SCH_ITEM* 
 }
 
 
-bool CONNECTION_GRAPH::m_allowRealTime = true;
-
-
 void CONNECTION_GRAPH::Reset()
 {
     for( auto& subgraph : m_subgraphs )
@@ -540,17 +537,6 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
 
     if( wxLog::IsAllowedTraceMask( ConnProfileMask ) )
         recalc_time.Show();
-
-#ifndef DEBUG
-    // Pressure relief valve for release builds
-    const double max_recalc_time_msecs = 250.;
-
-    if( m_allowRealTime && ADVANCED_CFG::GetCfg().m_RealTimeConnectivity &&
-        recalc_time.msecs() > max_recalc_time_msecs )
-    {
-        m_allowRealTime = false;
-    }
-#endif
 }
 
 
