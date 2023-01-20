@@ -716,8 +716,6 @@ void SCH_EDIT_FRAME::HardRedraw()
         libSymbol.second->ClearCaches();
     }
 
-    RecalculateConnections( LOCAL_CLEANUP );
-
     FocusOnItem( nullptr );
 
     GetCanvas()->DisplaySheet( GetCurrentSheet().LastScreen() );
