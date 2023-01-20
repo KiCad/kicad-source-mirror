@@ -554,16 +554,15 @@ void NETLIST_EXPORTER_SPICE::writeInclude( OUTPUTFORMATTER& aFormatter, unsigned
     // First, expand env vars, if any.
     wxString expandedPath = ExpandEnvVarSubstitutions( aPath, &m_schematic->Prj() );
 
-    // Handle windows paths
-    expandedPath.Replace( wxS( "\\" ), wxS( "/" ) );
+    // Path may have been authored by someone on a Windows box; convert it to UNIX format
+    expandedPath.Replace( '\\', '/' );
 
     wxString fullPath;
 
     if( aNetlistOptions & OPTION_ADJUST_INCLUDE_PATHS )
     {
         // Look for the library in known search locations.
-        fullPath = ResolveFile( expandedPath, &Pgm().GetLocalEnvVariables(),
-                                &m_schematic->Prj() );
+        fullPath = ResolveFile( expandedPath, &Pgm().GetLocalEnvVariables(), &m_schematic->Prj() );
 
         if( fullPath.IsEmpty() )
         {
@@ -571,6 +570,11 @@ void NETLIST_EXPORTER_SPICE::writeInclude( OUTPUTFORMATTER& aFormatter, unsigned
                                  wxString::Format( _( "Could not find library file '%s'" ),
                                                    expandedPath ) );
             fullPath = expandedPath;
+        }
+        else if( wxFileName::GetPathSeparator() == '\\' )
+        {
+            // Convert it to UNIX format (again) if ResolveFile() returned a Windows style path
+            fullPath.Replace( '\\', '/' );
         }
     }
     else
