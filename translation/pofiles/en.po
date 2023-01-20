@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-17 10:33-0800\n"
+"POT-Creation-Date: 2023-01-20 09:12-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -2938,9 +2938,6 @@ msgstr "No Files"
 
 msgid "The given path does not exist"
 msgstr "The given path does not exist"
-
-msgid "3D model search path"
-msgstr "3D model search path"
 
 msgid "Alias: "
 msgstr "Alias: "
@@ -8129,9 +8126,6 @@ msgstr ""
 "Error saving project-specific library table:\n"
 "\n"
 "%s"
-
-msgid "Libraries by Scope"
-msgstr "Libraries by Scope"
 
 msgid "Active"
 msgstr "Active"
@@ -21300,9 +21294,6 @@ msgstr "Warning: Duplicate Nicknames"
 msgid "LIbrary Format"
 msgstr "LIbrary Format"
 
-msgid "Path Substitutions"
-msgstr "Path Substitutions"
-
 msgid "No filename entered"
 msgstr "No filename entered"
 
@@ -23632,9 +23623,6 @@ msgstr ""
 "This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 
-msgid "Edge Clearance Warning"
-msgstr "Edge Clearance Warning"
-
 #, c-format
 msgid "PCB '%s' is already open."
 msgstr "PCB '%s' is already open."
@@ -24644,9 +24632,6 @@ msgstr "Cannot find symbol %s in footprint filter section of netlist."
 msgid "Cannot open netlist file '%s'."
 msgstr "Cannot open netlist file '%s'."
 
-msgid "Netlist Load Error."
-msgstr "Netlist Load Error."
-
 #, c-format
 msgid ""
 "Error loading netlist.\n"
@@ -24654,9 +24639,6 @@ msgid ""
 msgstr ""
 "Error loading netlist.\n"
 "%s"
-
-msgid "Netlist Load Error"
-msgstr "Netlist Load Error"
 
 #, c-format
 msgid "No footprint defined for symbol %s."
@@ -29458,6 +29440,24 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "3D model search path"
+#~ msgstr "3D model search path"
+
+#~ msgid "Libraries by Scope"
+#~ msgstr "Libraries by Scope"
+
+#~ msgid "Path Substitutions"
+#~ msgstr "Path Substitutions"
+
+#~ msgid "Edge Clearance Warning"
+#~ msgstr "Edge Clearance Warning"
+
+#~ msgid "Netlist Load Error."
+#~ msgstr "Netlist Load Error."
+
+#~ msgid "Netlist Load Error"
+#~ msgstr "Netlist Load Error"
 
 #~ msgid "All supported formats|"
 #~ msgstr "All supported formats|"
