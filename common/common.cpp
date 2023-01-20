@@ -27,6 +27,7 @@
 #include <kiplatform/app.h>
 #include <project.h>
 #include <common.h>
+#include <env_vars.h>
 #include <reporter.h>
 #include <macros.h>
 #include <mutex>
@@ -195,6 +196,27 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject )
             {
                 strResult += tmp;
                 expanded = true;
+            }
+            // Replace unmatched older variables with current 3d model locations
+            // If the user has the older model location defined, that will be matched
+            // first above.  But if they do not, this will ensure that their board still
+            // displays correctly
+            else if( strVarName.Contains( "KISYS3DMOD") || strVarName.Matches( "KICAD*_3DMODEL_DIR" ) )
+            {
+                for( auto& var : ENV_VAR::GetPredefinedEnvVars() )
+                {
+                    if( var.Matches( "KICAD*_3DMODEL_DIR" ) )
+                    {
+                        const auto value = ENV_VAR::GetEnvVar<wxString>( var );
+
+                        if( !value )
+                            continue;
+
+                        strResult += *value;
+                        expanded = true;
+                        break;
+                    }
+                }
             }
             else
             {
