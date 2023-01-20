@@ -10,10 +10,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-20 09:12-0800\n"
-"PO-Revision-Date: 2023-01-20 06:51+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"PO-Revision-Date: 2023-01-22 16:34+0000\n"
+"Last-Translator: Tokita, Hiroshi <tokita.hiroshi@fujitsu.com>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1263,11 +1263,11 @@ msgstr "PostScriptファイルを作成"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:811
 msgid "Create Symbol Library"
-msgstr "シンボル ライブラリーを作成"
+msgstr "シンボル ライブラリを作成"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:846
 msgid "Create Footprint Library"
-msgstr "フットプリント ライブラリーを生成"
+msgstr "フットプリント ライブラリを生成"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:884
 msgid "Error allocating memory for potrace bitmap"
@@ -1669,7 +1669,7 @@ msgstr "開発者向けサイト - "
 
 #: common/dialog_about/AboutDialog_main.cpp:142
 msgid "Official KiCad library repositories - "
-msgstr "オフィシャル KiCad ライブラリー リポジトリ - "
+msgstr "オフィシャル KiCad ライブラリ リポジトリ - "
 
 #: common/dialog_about/AboutDialog_main.cpp:149
 msgid "Bug tracker"
@@ -1797,7 +1797,7 @@ msgstr "ビルド バージョン情報"
 
 #: common/dialog_about/dialog_about_base.cpp:45
 msgid "Lib Version Info"
-msgstr "ライブラリー バージョン情報"
+msgstr "ライブラリ バージョン情報"
 
 #: common/dialog_about/dialog_about_base.cpp:58
 msgid "&Copy Version Info"
@@ -1863,7 +1863,7 @@ msgstr "<b>現在一致しているネット:</b>"
 
 #: common/dialogs/dialog_color_picker.cpp:94
 msgid "Clear Color"
-msgstr "色をクリアー"
+msgstr "色をクリア"
 
 #: common/dialogs/dialog_color_picker_base.cpp:31
 msgid "RGB"
@@ -2027,7 +2027,7 @@ msgstr "パス"
 #: common/dialogs/dialog_global_lib_table_config.cpp:39
 #, c-format
 msgid "Configure Global %s Library Table"
-msgstr "グローバル %s ライブラリー テーブルを編集"
+msgstr "グローバル %s ライブラリ テーブルを編集"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:42
 #, c-format
@@ -2038,59 +2038,56 @@ msgid ""
 "of the options below.  If you are not sure which option to select, please\n"
 "use the default selection."
 msgstr ""
-"ライブラリーにアクセスするための新しい %s ライブラリー テーブルを使用して、\n"
-"初めて KiCad が実行されています。  KiCad が %s ライブラリーにアクセスするため"
-"には、\n"
-"グローバル %s ライブラリー テーブルを設定する必要があります。  以下のオプショ"
-"ンから一つ\n"
-"選択して下さい。  選択するオプションが不明な場合は、デフォルト選択のままにし"
-"て\n"
+"ライブラリにアクセスするための新しい %s ライブラリ テーブルを使用して、\n"
+"初めて KiCad が実行されています。  KiCad が %s "
+"ライブラリにアクセスするためには、\n"
+"グローバル %s ライブラリ テーブルを設定する必要があります。  "
+"以下のオプションから一つ\n"
+"選択して下さい。  選択するオプションが不明な場合は、"
+"デフォルト選択のままにして\n"
 "おいて下さい。"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:49
 #, c-format
 msgid "Copy default global %s library table (recommended)"
-msgstr "既定のグローバル %s ライブラリー テーブルをコピー (推奨)"
+msgstr "既定のグローバル %s ライブラリ テーブルをコピー (推奨)"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:51
 #, c-format
 msgid ""
 "Select this option if you not sure about configuring the global %s library "
 "table"
-msgstr ""
-"グローバル %s ライブラリー テーブルの編集についてよく分からない場合は、このオ"
-"プションを選択します"
+msgstr "グローバル %s ライブラリ "
+"テーブルの編集についてよく分からない場合は、このオプションを選択します"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:55
 #, c-format
 msgid "Copy custom global %s library table"
-msgstr "カスタム グローバル %s ライブラリー テーブルをコピー"
+msgstr "カスタム グローバル %s ライブラリ テーブルをコピー"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:57
 #, c-format
 msgid ""
 "Select this option to copy a %s library table file other than the default"
-msgstr ""
-"デフォルト以外の %s ライブラリー テーブル ファイルをコピーするには、このオプ"
-"ションを選択します"
+msgstr "デフォルト以外の %s ライブラリ テーブル "
+"ファイルをコピーするには、このオプションを選択します"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:61
 #, c-format
 msgid "Create an empty global %s library table"
-msgstr "空のグローバル %s ライブラリー テーブルを作成"
+msgstr "空のグローバル %s ライブラリ テーブルを作成"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:63
 #, c-format
 msgid ""
 "Select this option to define %s libraries in project specific library tables"
-msgstr ""
-"プロジェクト固有のライブラリー テーブルに %s ライブラリーを定義するには、この"
-"オプションを選択します"
+msgstr "プロジェクト固有のライブラリ テーブルに %s "
+"ライブラリーを定義するには、このオプションを選択します"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:67
 #, c-format
 msgid "Select global %s library table file:"
-msgstr "グローバル %s ライブラリー テーブル ファイルを選択:"
+msgstr "グローバル %s ライブラリ テーブル ファイルを選択:"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:21
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:28
@@ -2146,7 +2143,7 @@ msgstr "ファイルを選択"
 
 #: common/dialogs/dialog_global_lib_table_config_base.h:54
 msgid "Configure Global Library Table"
-msgstr "グローバル ライブラリー テーブルを編集"
+msgstr "グローバル ライブラリ テーブルを編集"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:26 common/tool/actions.cpp:474
 msgid "Grid Origin"
@@ -2222,11 +2219,11 @@ msgstr "グリッド原点をリセット"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:173
 msgid "Reset Grid Sizes"
-msgstr "グリッドサイズをリセット"
+msgstr "グリッド サイズをリセット"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:175
 msgid "Resets the list of grid sizes to default values"
-msgstr "グリッドサイズの一覧をデフォルト値にリセット"
+msgstr "グリッド サイズの一覧をデフォルト値にリセット"
 
 #: common/dialogs/dialog_grid_settings_base.h:78
 msgid "Grid Settings"
@@ -2321,15 +2318,14 @@ msgstr "選択したパスに有効なKiCadの設定が含まれていません�
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:65
 msgid "Import library configuration from previous version"
-msgstr "以前のバージョンからライブラリーの設定をインポート"
+msgstr "以前のバージョンからライブラリの設定をインポート"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:67
 msgid ""
 "When checked, the symbol and footprint library tables from the previous "
 "version will be imported into this version"
-msgstr ""
-"オンにすると、前のバージョンのシンボルおよびフットプリント ライブラリー テー"
-"ブルがこのバージョンにインポートされます"
+msgstr "オンにすると、前のバージョンのシンボルおよびフットプリント ライブラリ "
+"テーブルがこのバージョンにインポートされます"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:71
 msgid "Start with default settings"
@@ -2423,7 +2419,7 @@ msgstr "用紙"
 
 #: common/dialogs/dialog_page_settings.cpp:112
 msgid "Title Block"
-msgstr "タイトルブロック"
+msgstr "タイトル ブロック"
 
 #: common/dialogs/dialog_page_settings.cpp:473
 #, c-format
@@ -2600,7 +2596,7 @@ msgstr "ファイル:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:174
 msgid "Title Block Parameters"
-msgstr "タイトルブロック パラメーター"
+msgstr "タイトル ブ ロックのパラメーター"
 
 #: common/dialogs/dialog_page_settings_base.cpp:184
 #, c-format
@@ -2783,7 +2779,7 @@ msgstr "印刷に関して問題があります。"
 
 #: common/dialogs/dialog_print_generic.cpp:351
 msgid "An error occurred initializing the printer information."
-msgstr "プリンタ情報の初期化でエラーが発生しました。"
+msgstr "プリンター情報の初期化でエラーが発生しました。"
 
 #: common/dialogs/dialog_print_generic_base.cpp:31
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:73
@@ -3034,7 +3030,7 @@ msgstr "アンチエイリアシング"
 
 #: common/dialogs/panel_common_settings_base.cpp:39
 msgid "Accelerated graphics:"
-msgstr "アクセラレーター グラフィックス:"
+msgstr "グラフィックス アクセラレータ有効化時:"
 
 #: common/dialogs/panel_common_settings_base.cpp:43
 #: common/dialogs/panel_common_settings_base.cpp:53
@@ -3061,7 +3057,7 @@ msgstr "ヘルパー アプリケーション"
 
 #: common/dialogs/panel_common_settings_base.cpp:84
 msgid "Text editor:"
-msgstr "テキストエディター:"
+msgstr "テキスト エディター:"
 
 #: common/dialogs/panel_common_settings_base.cpp:105
 msgid "System default PDF viewer"
@@ -3073,7 +3069,7 @@ msgstr "その他:"
 
 #: common/dialogs/panel_common_settings_base.cpp:134
 msgid "User Interface"
-msgstr "ユーザー インタフェース"
+msgstr "ユーザー インターフェイス"
 
 #: common/dialogs/panel_common_settings_base.cpp:148
 msgid "Show icons in menus"
@@ -3097,9 +3093,8 @@ msgstr ""
 msgid ""
 "If the mouse cursor is moved over the canvas of a schematic or PCB editor "
 "window, that window is raised."
-msgstr ""
-"回路図エディターもしくはPCBエディターのウィンドウの領域にマウスカーソルが重な"
-"ると、ウィンドウを前面化します。"
+msgstr "回路図エディターもしくはPCBエディターのウィンドウの領域にマウス "
+"カーソルが重なると、ウィンドウを前面化します。"
 
 #: common/dialogs/panel_common_settings_base.cpp:162
 msgid "Icon theme:"
@@ -3179,7 +3174,7 @@ msgstr "編集"
 
 #: common/dialogs/panel_common_settings_base.cpp:247
 msgid "Warp mouse to origin of moved object"
-msgstr "移動されたオブジェクトの原点にマウスカーソルを移動"
+msgstr "移動されたオブジェクトの原点にマウス カーソルを移動"
 
 #: common/dialogs/panel_common_settings_base.cpp:251
 msgid "First hotkey selects tool"
@@ -3233,14 +3228,14 @@ msgstr "ファイル履歴のサイズ:"
 
 #: common/dialogs/panel_common_settings_base.cpp:308
 msgid "3D cache file duration:"
-msgstr "3Dキャッシュファイルの保持期間:"
+msgstr "3Dキャッシュ ファイルの保持期間:"
 
 #: common/dialogs/panel_common_settings_base.cpp:313
 msgid ""
 "3D cache files older than this are deleted.\n"
 "If set to 0, cache clearing is disabled"
 msgstr ""
-"これより古い3Dキャッシュファイルは削除されます。\n"
+"これより古い3Dキャッシュ ファイルは削除されます。\n"
 "0に設定すると、キャッシュのクリアが無効になります"
 
 #: common/dialogs/panel_common_settings_base.cpp:317
@@ -3465,7 +3460,7 @@ msgstr "ズーム速度:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:61
 msgid "How far to zoom in for each rotation of the mouse wheel"
-msgstr "マウスホイールの回転に対するズームインの度合い"
+msgstr "マウス ホイールの回転に対するズームインの度合い"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:68
 msgid "Pick the zoom speed automatically"
@@ -3549,7 +3544,7 @@ msgstr "スクロール ジェスチャー"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:186
 msgid "Vertical touchpad or scroll wheel movement:"
-msgstr "垂直方向タッチパッドまたはスクロールホイールの移動:"
+msgstr "垂直方向タッチパッドまたはスクロール ホイールの移動:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:191
 msgid "Only one action can be assigned to each column"
@@ -4270,11 +4265,11 @@ msgstr "単位"
 #: common/eda_draw_frame.cpp:1055 eeschema/dialogs/panel_sym_lib_table.cpp:504
 #: pcbnew/footprint_libraries_utils.cpp:1384
 msgid "Select Library"
-msgstr "ライブラリーを選択"
+msgstr "ライブラリを選択"
 
 #: common/eda_draw_frame.cpp:1055
 msgid "New Library"
-msgstr "新規ライブラリー"
+msgstr "新規ライブラリ"
 
 #: common/eda_item.cpp:323
 msgid "Screen"
@@ -4307,7 +4302,7 @@ msgstr "ビットマップ"
 #: eeschema/sch_textbox.cpp:428 pcbnew/fp_textbox.cpp:306
 #: pcbnew/pcb_textbox.cpp:282
 msgid "Text Box"
-msgstr "テキストボックス"
+msgstr "テキスト ボックス"
 
 #: common/eda_item.cpp:334 common/eda_item.cpp:335 common/eda_item.cpp:336
 #: common/eda_item.cpp:337 common/eda_item.cpp:344 common/eda_item.cpp:345
@@ -4759,9 +4754,8 @@ msgstr "垂直位置揃え"
 msgid ""
 "The base path of locally installed system footprint libraries (.pretty "
 "folders)."
-msgstr ""
-"ローカルでインストールされたシステムのフットプリント ライブラリーの基本パス "
-"(.prettyフォルダー)。"
+msgstr "ローカルでインストールされたシステムのフットプリント ライブラリの基本パス (."
+"prettyフォルダー)。"
 
 #: common/env_vars.cpp:74
 msgid "The base path of system footprint 3D shapes (.3Dshapes folders)."
@@ -4769,7 +4763,7 @@ msgstr "システムのフットプリント 3Dシェイプの基本パス (.3Ds
 
 #: common/env_vars.cpp:76
 msgid "The base path of the locally installed symbol libraries."
-msgstr "ローカルでインストールされたシンボル ライブラリーの基本パス。"
+msgstr "ローカルでインストールされたシンボル ライブラリの基本パス。"
 
 #: common/env_vars.cpp:78
 msgid "A directory containing project templates installed with KiCad."
@@ -4788,9 +4782,8 @@ msgstr ""
 msgid ""
 "A directory containing 3rd party plugins, libraries and other downloadable "
 "content."
-msgstr ""
-"サードパーティーのプラグイン、ライブラリとその他ダウンロード可能なコンテンツ"
-"を含むディレクトリです。"
+msgstr "サードパーティのプラグイン、ライブラリとその他ダウンロード可能なコンテンツを"
+"含むディレクトリです。"
 
 #: common/env_vars.cpp:86
 msgid ""
@@ -4800,12 +4793,12 @@ msgid ""
 "For instance, ${KIPRJMOD}/libs/footprints.pretty can be defined as a folder "
 "containing a project specific footprint library named footprints.pretty."
 msgstr ""
-"現在読み込まれているプロジェクト ファイルの絶対パスがKiCad によって内部定義さ"
-"れ (編集できません) 設定されます。この環境変数は、読み込まれているプロジェク"
-"トへの相対的なファイルやパスを定義するために使用できます。例え"
-"ば、${KIPRJMOD}/libs/footprints.pretty は footprints.pretty と名付けられたプ"
-"ロジェクト固有のフットプリント ライブラリーを含むフォルダーとして定義できま"
-"す。"
+"現在読み込まれているプロジェクト ファイルの絶対パスがKiCad "
+"によって内部定義され (編集できません) 設定されます。この環境変数は、読み込ま"
+"れているプロジェクトへの相対的なファイルやパスを定義するために使用できます。"
+"例えば、${KIPRJMOD}/libs/footprints.pretty は footprints.pretty "
+"と名付けられたプロジェクト固有のフットプリント "
+"ライブラリを含むフォルダーとして定義できます。"
 
 #: common/env_vars.cpp:92
 msgid "A directory containing system-wide scripts installed with KiCad"
@@ -4925,15 +4918,13 @@ msgstr "フットプリントのロード中にエラーが発生しました:"
 msgid ""
 "Duplicate library nickname '%s' found in footprint library table file line "
 "%d."
-msgstr ""
-"重複したライブラリーの別名 '%s' がフットプリント ライブラリー テーブル ファイ"
-"ルの行 %d に見つかりました。"
+msgstr "重複したライブラリーの別名 '%s' がフットプリント ライブラリ テーブル "
+"ファイルの行 %d に見つかりました。"
 
 #: common/fp_lib_table.cpp:302
 #, c-format
 msgid "fp-lib-table files contain no library named '%s'."
-msgstr ""
-"fp-lib-table ファイルは '%s' という名前のライブラリーを含んでいません。"
+msgstr "fp-lib-table ファイルは '%s' という名前のライブラリを含んでいません。"
 
 #: common/fp_lib_table.cpp:529 eeschema/symbol_lib_table.cpp:572
 msgid "Added by Plugin and Content Manager"
@@ -4942,7 +4933,7 @@ msgstr "プラグインとコンテンツマネージャーにより追加され
 #: common/fp_lib_table.cpp:555 eeschema/symbol_lib_table.cpp:600
 #, c-format
 msgid "Cannot create global library table path '%s'."
-msgstr "グローバル ライブラリー テーブルのパス '%s' が生成できません。"
+msgstr "グローバル ライブラリ テーブルのパス '%s' が生成できません。"
 
 #: common/gestfich.cpp:153
 #, c-format
@@ -5064,19 +5055,18 @@ msgstr "ジェスチャー"
 #: common/kiway.cpp:239
 #, c-format
 msgid "Failed to verify kiface library '%s' signature."
-msgstr "kiface ライブラリー '%s' の署名の検証に失敗しました。"
+msgstr "kiface ライブラリ '%s' の署名の検証に失敗しました。"
 
 #: common/kiway.cpp:268
 #, c-format
 msgid "Failed to load kiface library '%s'."
-msgstr "kiface ライブラリー '%s' のロードに失敗しました。"
+msgstr "kiface ライブラリ '%s' のロードに失敗しました。"
 
 #: common/kiway.cpp:276
 #, c-format
 msgid "Could not read instance name and version from kiface library '%s'."
-msgstr ""
-"kiface ライブラリー '%s' からインスタンス名とバージョン シンボルを読み込めま"
-"せんでした。"
+msgstr "kiface ライブラリ '%s' からインスタンス名とバージョン "
+"シンボルを読み込めませんでした。"
 
 #: common/kiway.cpp:309
 #, c-format
@@ -5095,7 +5085,7 @@ msgstr "見つかりません。\n"
 
 #: common/kiway.cpp:315
 msgid "Perhaps a shared library (.dll or .so) file is missing.\n"
-msgstr "共有ライブラリー (.dll or .so) と思われるファイルが見つかりません。\n"
+msgstr "共有ライブラリ(.dll or .so) と思われるファイルが見つかりません。\n"
 
 #: common/kiway.cpp:317
 msgid ""
@@ -5424,7 +5414,7 @@ msgstr "コートヤード衝突の領域"
 
 #: common/lib_id.cpp:144
 msgid "Illegal character found in logical library name"
-msgstr "論理的なライブラリー名の中に不正な文字があります"
+msgstr "論理的なライブラリ名の中に不正な文字があります"
 
 #: common/lib_table_grid_tricks.cpp:49
 msgid "Activate selected"
@@ -5665,9 +5655,7 @@ msgstr "不正な円弧 (半径 %f 、角度 %f )"
 
 #: common/project.cpp:351 common/project.cpp:356 pcbnew/pcb_base_frame.cpp:199
 msgid "Error loading project footprint library table."
-msgstr ""
-"プロジェクトのフットプリント ライブラリー テーブルをロード中にエラーしまし"
-"た。"
+msgstr "プロジェクトのフットプリント ライブラリ テーブルをロード中にエラーしました。"
 
 #: common/project/net_settings.cpp:61 pcbnew/board.cpp:108
 msgid "This is the default net class."
@@ -5805,19 +5793,19 @@ msgstr "エディターで新規ドキュメントを作成"
 #: common/tool/actions.cpp:49 eeschema/symbol_editor/symbol_editor.cpp:586
 #: pcbnew/footprint_libraries_utils.cpp:1079
 msgid "New Library..."
-msgstr "新規ライブラリー..."
+msgstr "新規ライブラリ..."
 
 #: common/tool/actions.cpp:49
 msgid "Create a new library folder"
-msgstr "新規ライブラリー フォルダーを作成"
+msgstr "新規ライブラリ フォルダーを作成"
 
 #: common/tool/actions.cpp:55
 msgid "Add Library..."
-msgstr "ライブラリーを追加..."
+msgstr "ライブラリを追加..."
 
 #: common/tool/actions.cpp:55
 msgid "Add an existing library folder"
-msgstr "既存のライブラリー フォルダーを追加"
+msgstr "既存のライブラリ フォルダーを追加"
 
 #: common/tool/actions.cpp:61
 msgid "Open existing document"
@@ -6129,19 +6117,19 @@ msgstr "マウスの左ダブルクリックを実行"
 
 #: common/tool/actions.cpp:419
 msgid "Pin Library"
-msgstr "ライブラリーをピン留め"
+msgstr "ライブラリをピン留め"
 
 #: common/tool/actions.cpp:420
 msgid "Keep the library at the top of the list"
-msgstr "一覧の一番上にライブラリーを固定する"
+msgstr "一覧の一番上にライブラリを固定する"
 
 #: common/tool/actions.cpp:424
 msgid "Unpin Library"
-msgstr "ライブラリーのピン留めを外す"
+msgstr "ライブラリのピン留めを外す"
 
 #: common/tool/actions.cpp:425
 msgid "No longer keep the library at the top of the list"
-msgstr "一覧の一番上にライブラリーを固定しない"
+msgstr "一覧の一番上にライブラリを固定しない"
 
 #: common/tool/actions.cpp:430
 msgid "Pan Up"
@@ -6305,11 +6293,11 @@ msgstr "3D ビューアー ウィンドウを表示"
 #: common/tool/actions.cpp:595 eeschema/symbol_viewer_frame.cpp:106
 #: eeschema/symbol_viewer_frame.cpp:1172
 msgid "Symbol Library Browser"
-msgstr "シンボル ライブラリー ブラウザー"
+msgstr "シンボル ライブラリ ブラウザー"
 
 #: common/tool/actions.cpp:595
 msgid "Browse symbol libraries"
-msgstr "シンボル ライブラリーを参照"
+msgstr "シンボル ライブラリを参照"
 
 #: common/tool/actions.cpp:600
 msgid "Create, delete and edit symbols"
@@ -6318,11 +6306,11 @@ msgstr "シンボルを作成、削除、編集"
 #: common/tool/actions.cpp:605 pcbnew/footprint_viewer_frame.cpp:114
 #: pcbnew/footprint_viewer_frame.cpp:1186
 msgid "Footprint Library Browser"
-msgstr "フットプリント ライブラリー ブラウザー"
+msgstr "フットプリント ライブラリ ブラウザー"
 
 #: common/tool/actions.cpp:605
 msgid "Browse footprint libraries"
-msgstr "フットプリント ライブラリーを参照"
+msgstr "フットプリント ライブラリを参照"
 
 #: common/tool/actions.cpp:610
 msgid "Create, delete and edit footprints"
@@ -6355,19 +6343,19 @@ msgstr "パス設定の環境変数を編集"
 
 #: common/tool/actions.cpp:636
 msgid "Manage Symbol Libraries..."
-msgstr "シンボル ライブラリーを管理..."
+msgstr "シンボル ライブラリを管理..."
 
 #: common/tool/actions.cpp:637
 msgid "Edit the global and project symbol library lists"
-msgstr "グローバルとプロジェクトのシンボル ライブラリー リストを編集"
+msgstr "グローバルとプロジェクトのシンボル ライブラリ リストを編集"
 
 #: common/tool/actions.cpp:642
 msgid "Manage Footprint Libraries..."
-msgstr "フットプリント ライブラリーを管理 ..."
+msgstr "フットプリント ライブラリを管理 ..."
 
 #: common/tool/actions.cpp:643
 msgid "Edit the global and project footprint library lists"
-msgstr "グローバルとプロジェクトのフットプリント ライブラリー リストを編集"
+msgstr "グローバルとプロジェクトのフットプリント ライブラリ リストを編集"
 
 #: common/tool/actions.cpp:648
 msgid "Getting Started with KiCad"
@@ -6497,11 +6485,11 @@ msgstr "エントリーは先頭に空白文字を含んでいます。"
 #: common/validators.cpp:302
 #, c-format
 msgid "'%s' is not a valid library identifier format."
-msgstr "'%s' は有効なライブラリー識別子フォーマットではありません。"
+msgstr "'%s' は有効なライブラリ識別子フォーマットではありません。"
 
 #: common/validators.cpp:309
 msgid "Library Identifier Validation Error"
-msgstr "ライブラリー識別子検証エラー"
+msgstr "ライブラリ識別子検証エラー"
 
 #: common/validators.cpp:356
 msgid "Invalid signal name"
@@ -6533,7 +6521,7 @@ msgstr "デフォルトのフットプリントがありません"
 
 #: common/widgets/gal_options_panel.cpp:87
 msgid "Accelerated graphics"
-msgstr "アクセラレーター有効のグラフィックス"
+msgstr "グラフィックス アクセラレータを有効化"
 
 #: common/widgets/gal_options_panel.cpp:87
 msgid "Fallback graphics"
@@ -6545,7 +6533,7 @@ msgstr "レンダリング エンジン"
 
 #: common/widgets/gal_options_panel.cpp:92
 msgid "Hardware-accelerated graphics (recommended)"
-msgstr "ハードウェア アクセラレーター有効のグラフィックス (推奨)"
+msgstr "ハードウェアによるグラフィックス描画の高速化を有効にします (推奨)"
 
 #: common/widgets/gal_options_panel.cpp:93
 msgid ""
@@ -6870,19 +6858,19 @@ msgstr "KiCad 図形シンボル ファイル"
 
 #: common/wildcards_and_files_ext.cpp:213
 msgid "KiCad symbol library files"
-msgstr "KiCad シンボル ライブラリー ファイル"
+msgstr "KiCad シンボル ライブラリ ファイル"
 
 #: common/wildcards_and_files_ext.cpp:220
 msgid "KiCad legacy symbol library files"
-msgstr "KiCad レガシー シンボル ライブラリー ファイル"
+msgstr "KiCad レガシー シンボル ライブラリ ファイル"
 
 #: common/wildcards_and_files_ext.cpp:226
 msgid "KiCad database library files"
-msgstr "KiCad データベース ライブラリー ファイル"
+msgstr "KiCad データベース ライブラリ ファイル"
 
 #: common/wildcards_and_files_ext.cpp:233
 msgid "All KiCad symbol library files"
-msgstr "全ての KiCad シンボル ライブラリー ファイル"
+msgstr "全ての KiCad シンボル ライブラリ ファイル"
 
 #: common/wildcards_and_files_ext.cpp:242
 msgid "KiCad project files"
@@ -6975,23 +6963,23 @@ msgstr "KiCad フットプリント ファイル"
 
 #: common/wildcards_and_files_ext.cpp:381
 msgid "KiCad footprint library paths"
-msgstr "KiCad フットプリント ライブラリー パス"
+msgstr "KiCad フットプリント ライブラリ パス"
 
 #: common/wildcards_and_files_ext.cpp:388
 msgid "Legacy footprint library files"
-msgstr "以前の形式のフットプリント ライブラリー ファイル"
+msgstr "以前の形式のフットプリント ライブラリ ファイル"
 
 #: common/wildcards_and_files_ext.cpp:394
 msgid "Altium PCB footprint library files"
-msgstr "Altium PCB フットプリント ライブラリー ファイル"
+msgstr "Altium PCB フットプリント ライブラリ ファイル"
 
 #: common/wildcards_and_files_ext.cpp:400
 msgid "Eagle ver. 6.x XML library files"
-msgstr "Eagle ver. 6.x XML ライブラリー ファイル"
+msgstr "Eagle ver. 6.x XML ライブラリ ファイル"
 
 #: common/wildcards_and_files_ext.cpp:406
 msgid "Geda PCB footprint library files"
-msgstr "Geda PCB フットプリント ライブラリー ファイル"
+msgstr "Geda PCB フットプリント ライブラリ ファイル"
 
 #: common/wildcards_and_files_ext.cpp:412
 msgid "Drawing sheet files"
@@ -7055,7 +7043,7 @@ msgstr "エレクトリカル ルール チェック ファイル"
 
 #: common/wildcards_and_files_ext.cpp:507
 msgid "Spice library file"
-msgstr "Spice ライブラリー ファイル"
+msgstr "Spice ライブラリ ファイル"
 
 #: common/wildcards_and_files_ext.cpp:513
 msgid "SPICE netlist file"
@@ -7138,9 +7126,8 @@ msgstr "%lu 等価なフットプリント/シンボルが見つかりました�
 msgid ""
 "Component %s: footprint %s not found in any of the project footprint "
 "libraries."
-msgstr ""
-"コンポーネント %s: フットプリント %s は、どのプロジェクト フットプリント ライ"
-"ブラリーにも存在しません。"
+msgstr "コンポーネント %s: フットプリント %s は、どのプロジェクト フットプリント "
+"ライブラリにも存在しません。"
 
 #: cvpcb/auto_associate.cpp:308
 msgid "CvPcb Warning"
@@ -7157,21 +7144,21 @@ msgid ""
 "See the \"Footprint Library Table\" section of the CvPcb documentation for "
 "more information."
 msgstr ""
-"フットプリントの検索に新しいフットプリント ライブラリー テーブルの方法を使う"
-"には、最初に CvPcb を実行します。 \n"
-"CvPcb はデフォルト テーブルをコピーし、あなたのホーム フォルダーへ空のテーブ"
-"ルを作ります。\n"
-"あなたは先ず KiCad がデフォルトで含んでいない全てのフットプリントを含んだライ"
-"ブラリー テーブルを設定しなければなりません。\n"
-"詳細は CvPcb マニュアルの \"フットプリント ライブラリー テーブル\" の章を参照"
-"して下さい。"
+"フットプリントの検索に新しいフットプリント ライブラリ "
+"テーブルの方法を使うには、最初に CvPcb を実行します。 \n"
+"CvPcb はデフォルト テーブルをコピーし、あなたのホーム "
+"フォルダーへ空のテーブルを作ります。\n"
+"あなたは先ず KiCad "
+"がデフォルトで含んでいない全てのフットプリントを含んだライブラリ "
+"テーブルを設定しなければなりません。\n"
+"詳細は CvPcb マニュアルの \"フットプリント ライブラリ テーブル\" "
+"の章を参照して下さい。"
 
 #: cvpcb/cvpcb.cpp:187
 msgid ""
 "An error occurred attempting to load the global footprint library table."
-msgstr ""
-"グローバル フットプリント ライブラリー テーブルをロードしようとしたところ、エ"
-"ラーが発生しました。"
+msgstr "グローバル フットプリント ライブラリ "
+"テーブルをロードしようとしたところ、エラーが発生しました。"
 
 #: cvpcb/cvpcb_mainframe.cpp:67 cvpcb/menubar.cpp:51
 msgid "Assign Footprints"
@@ -7179,7 +7166,7 @@ msgstr "フットプリントを割り当て"
 
 #: cvpcb/cvpcb_mainframe.cpp:111 pcbnew/dialogs/panel_fp_lib_table.cpp:1090
 msgid "Footprint Libraries"
-msgstr "フットプリント ライブラリー"
+msgstr "フットプリント ライブラリ"
 
 #: cvpcb/cvpcb_mainframe.cpp:115
 msgid "Symbol : Footprint Assignments"
@@ -7224,7 +7211,7 @@ msgstr "ピン数"
 #: eeschema/sch_symbol.cpp:1655 eeschema/sch_symbol.cpp:1659
 #: eeschema/sch_symbol.cpp:1689 pcbnew/tools/pcb_control.cpp:1364
 msgid "Library"
-msgstr "ライブラリー"
+msgstr "ライブラリ"
 
 #: cvpcb/cvpcb_mainframe.cpp:835
 msgid "Search Text"
@@ -7247,18 +7234,17 @@ msgstr "説明: %s;  キーワード: %s"
 #: cvpcb/cvpcb_mainframe.cpp:887
 #, c-format
 msgid "Library location: %s"
-msgstr "ライブラリー位置: %s"
+msgstr "ライブラリ位置: %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:889
 msgid "Library location: unknown"
-msgstr "ライブラリー位置: 不明"
+msgstr "ライブラリ位置: 不明"
 
 #: cvpcb/cvpcb_mainframe.cpp:902
 msgid ""
 "No PCB footprint libraries are listed in the current footprint library table."
-msgstr ""
-"現在の フットプリント ライブラリー テーブルには、 PCB フットプリント ライブラ"
-"リーがありません。"
+msgstr "現在の フットプリント ライブラリ テーブルには、 PCB フットプリント "
+"ライブラリがありません。"
 
 #: cvpcb/cvpcb_mainframe.cpp:903
 msgid "Configuration Error"
@@ -7267,7 +7253,7 @@ msgstr "構成エラー"
 #: cvpcb/cvpcb_mainframe.cpp:907 pcbnew/footprint_edit_frame.cpp:940
 #: pcbnew/load_select_footprint.cpp:225
 msgid "Loading Footprint Libraries"
-msgstr "フットプリント ライブラリーをロード中"
+msgstr "フットプリント ライブラリをロード中"
 
 #: cvpcb/cvpcb_mainframe.cpp:973
 #, c-format
@@ -7281,16 +7267,15 @@ msgstr ""
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:51
 #, c-format
 msgid "Project file: '%s'"
-msgstr "プロジェクトファイル: '%s'"
+msgstr "プロジェクト ファイル: '%s'"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:103
 #: eeschema/dialogs/dialog_bom.cpp:448
 #: gerbview/tools/gerbview_inspection_tool.cpp:185
 #: kicad/project_tree_pane.cpp:781
 msgid "No text editor selected in KiCad.  Please choose one."
-msgstr ""
-"KiCad で使用するテキストエディターが設定されていません。一つ選択してくださ"
-"い。"
+msgstr "KiCad で使用するテキスト "
+"エディターが設定されていません。一つ選択してください。"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:244
 msgid "Footprint Association File"
@@ -7413,7 +7398,7 @@ msgstr "フットプリントID '%s' は有効ではありません。"
 #: cvpcb/display_footprints_frame.cpp:428
 #, c-format
 msgid "Library '%s' is not in the footprint library table."
-msgstr "ライブラリ '%s' はフットプリント ライブラリー テーブル内にありません。"
+msgstr "ライブラリ '%s' はフットプリント ライブラリ テーブル内にありません。"
 
 #: cvpcb/display_footprints_frame.cpp:437
 #: cvpcb/display_footprints_frame.cpp:462
@@ -7429,7 +7414,7 @@ msgstr "フットプリント: %s"
 #: cvpcb/display_footprints_frame.cpp:523
 #, c-format
 msgid "Lib: %s"
-msgstr "ライブラリー: %s"
+msgstr "ライブラリ: %s"
 
 #: cvpcb/readwrite_dlgs.cpp:119
 msgid ""
@@ -7438,7 +7423,7 @@ msgid ""
 "format? (If you answer no, then these assignments will be cleared and you "
 "will need to re-assign them manually.)"
 msgstr ""
-"割り当てられフットプリントのいくつかは、ライブラリー名がない古い形式です。"
+"割り当てられフットプリントのいくつかは、ライブラリ名がない古い形式です。"
 "KiCadで必要な新しい LIB_ID フォーマットへの変換を試しますか？(いいえを選択し"
 "た場合、これらの割り当ては消去され、手動で各々のフットプリントの再割り当てを"
 "する必要があります。)"
@@ -7446,24 +7431,22 @@ msgstr ""
 #: cvpcb/readwrite_dlgs.cpp:148
 #, c-format
 msgid "Component '%s' footprint '%s' <b>not found</b> in any library.\n"
-msgstr ""
-"コンポーネント '%s' フットプリント '%s' がどのライブラリーからも<b>見つかりま"
-"せんでした</b>\n"
+msgstr "コンポーネント '%s' フットプリント '%s' "
+"がどのライブラリからも<b>見つかりませんでした</b>\n"
 
 #: cvpcb/readwrite_dlgs.cpp:155
 #, c-format
 msgid "Component '%s' footprint '%s' was found in <b>multiple</b> libraries.\n"
-msgstr ""
-"コンポーネント '%s' フットプリント '%s' が<b>複数のライブラリーから</b>見つか"
-"りました\n"
+msgstr "コンポーネント '%s' フットプリント '%s' が<b>複数のライブラリから</b>"
+"見つかりました\n"
 
 #: cvpcb/readwrite_dlgs.cpp:168
 msgid "First check your footprint library table entries."
-msgstr "最初にフットプリント ライブラリー入力の内容を確認して下さい。"
+msgstr "最初にフットプリント ライブラリ入力の内容を確認して下さい。"
 
 #: cvpcb/readwrite_dlgs.cpp:170
 msgid "Problematic Footprint Library Tables"
-msgstr "フットプリント ライブラリーのエラー"
+msgstr "フットプリント ライブラリのエラー"
 
 #: cvpcb/readwrite_dlgs.cpp:178
 msgid ""
@@ -7597,11 +7580,11 @@ msgstr "ピン数でフットプリントの一覧を絞り込み"
 
 #: cvpcb/tools/cvpcb_actions.cpp:156
 msgid "Filter by library"
-msgstr "ライブラリーでフィルター"
+msgstr "ライブラリでフィルター"
 
 #: cvpcb/tools/cvpcb_actions.cpp:157
 msgid "Filter footprint list by library"
-msgstr "ライブラリーでフットプリントの一覧を絞り込み"
+msgstr "ライブラリでフットプリントの一覧を絞り込み"
 
 #: cvpcb/tools/cvpcb_association_tool.cpp:255
 msgid "Delete all associations?"
@@ -7852,7 +7835,7 @@ msgstr "新しい BOM ジェネレーターとコマンドラインをリスト�
 
 #: eeschema/dialogs/dialog_bom_base.cpp:76
 msgid "Edit the script file in the text editor"
-msgstr "テキストエディターでスクリプト ファイルを編集"
+msgstr "テキスト エディターでスクリプト ファイルを編集"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:84
 msgid "Remove the current generator script from list"
@@ -8068,7 +8051,7 @@ msgstr "値が一致するシンボルを変更:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:95
 msgid "Change symbols matching library identifier:"
-msgstr "ライブラリー識別子が一致するシンボルを変更:"
+msgstr "ライブラリ識別子が一致するシンボルを変更:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:132
 msgid "Update Fields"
@@ -8165,11 +8148,11 @@ msgstr "値が一致するシンボルを更新:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:45
 msgid "Update symbols matching library identifier:"
-msgstr "ライブラリー識別子が一致するシンボルを更新:"
+msgstr "ライブラリ識別子が一致するシンボルを更新:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:72
 msgid "New library identifier:"
-msgstr "新しいライブラリー識別子:"
+msgstr "新しいライブラリ識別子:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:94
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:36
@@ -8189,17 +8172,17 @@ msgstr "更新オプション"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:119
 msgid "Remove fields if not in library symbol"
-msgstr "ライブラリーのシンボルにないフィールドを削除"
+msgstr "ライブラリのシンボルにないフィールドを削除"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:120
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:62
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:97
 msgid "Removes fields that do not occur in the original library symbols"
-msgstr "元のライブラリーのシンボルに存在しないフィールドを削除します"
+msgstr "元のライブラリのシンボルに存在しないフィールドを削除します"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:124
 msgid "Reset fields if empty in library symbol"
-msgstr "ライブラリーのシンボルで空となっているフィールドをリセット"
+msgstr "ライブラリのシンボルで空となっているフィールドをリセット"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:130
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:72
@@ -8227,7 +8210,7 @@ msgstr "シンボルの属性を更新/リセット"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:100
 msgid "Update Symbols from Library"
-msgstr "ライブラリーからシンボルを更新"
+msgstr "ライブラリからシンボルを更新"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:154
 #: pcbnew/dialogs/dialog_choose_footprint.cpp:95
@@ -8258,7 +8241,7 @@ msgstr "連続してシンボルの全てのユニットを配置します。"
 #: eeschema/widgets/symbol_preview_widget.cpp:184
 #, c-format
 msgid "Error loading symbol %s from library '%s'."
-msgstr "シンボル '%s' をライブラリー '%s' からロード中にエラーしました。"
+msgstr "シンボル '%s' をライブラリ '%s' からロード中にエラーしました。"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:436
 msgid "No footprint specified"
@@ -8276,7 +8259,7 @@ msgstr "保存するシンボルが選択されていません"
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:545
 #, c-format
 msgid "Symbol library identifier %s is not valid."
-msgstr "シンボル ライブラリー識別子 '%s' は有効ではありません。"
+msgstr "シンボル ライブラリ識別子 '%s' は有効ではありません。"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:642
 #, c-format
@@ -8300,7 +8283,7 @@ msgstr "すべての %u リンクが解決されました"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:694
 msgid "Invalid symbol library identifier"
-msgstr "不正なシンボル ライブラリー識別子"
+msgstr "不正なシンボル ライブラリ識別子"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:745
 #, c-format
@@ -8309,8 +8292,8 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"シンボル %s をライブラリー %s からロードしようとしたところ、エラーが発生しま"
-"した。\n"
+"シンボル %s をライブラリ %s "
+"からロードしようとしたところ、エラーが発生しました。\n"
 "\n"
 "%s"
 
@@ -8322,11 +8305,11 @@ msgstr "シンボル"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:38
 msgid "Current Library Reference"
-msgstr "現在の参照ライブラリー"
+msgstr "現在の参照ライブラリ"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:39
 msgid "New Library Reference"
-msgstr "新しい参照ライブラリー"
+msgstr "新しい参照ライブラリ"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:58
 msgid "Map Orphans"
@@ -8339,23 +8322,23 @@ msgid ""
 "libraries."
 msgstr ""
 "シンボルが孤立 (接続されたシンボルが見つからない) している場合、\n"
-"ロードされたシンボル ライブラリー内から同じ名前の候補を探してみます。"
+"ロードされたシンボル ライブラリ内から同じ名前の候補を探してみます。"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:63
 msgid "Update symbol fields from new library"
-msgstr "新しいライブラリーからシンボルのフィールドを更新"
+msgstr "新しいライブラリからシンボルのフィールドを更新"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:64
 msgid ""
 "Replace current symbols fields by fields from the new library.\n"
 "Warning: fields \"Value\" and \"Footprints\" will be therefore replaced."
 msgstr ""
-"現在のシンボルのフィールドを新しいライブラリーのフィールドで置き換えます。\n"
+"現在のシンボルのフィールドを新しいライブラリのフィールドで置き換えます。\n"
 "警告: \"値\" と \"フットプリント\" のフィールドは置き換えられます。"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.h:57
 msgid "Symbol Library References"
-msgstr "シンボルの参照ライブラリー"
+msgstr "シンボルの参照ライブラリ"
 
 #: eeschema/dialogs/dialog_erc.cpp:99
 msgid "Run ERC"
@@ -8445,7 +8428,7 @@ msgstr "未接続ピンへの接続をチェック..."
 
 #: eeschema/dialogs/dialog_erc.cpp:546
 msgid "Checking for library symbol issues..."
-msgstr "ライブラリー シンボルの問題をチェック..."
+msgstr "ライブラリ シンボルの問題をチェック..."
 
 #: eeschema/dialogs/dialog_erc.cpp:552
 msgid "Checking for off grid pins and wires..."
@@ -8956,7 +8939,7 @@ msgstr "親のリファレンス指定子でアイテムをフィルター:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:104
 msgid "Filter items by parent symbol library id:"
-msgstr "親シンボル ライブラリー IDでアイテムをフィルター:"
+msgstr "親シンボル ライブラリ IDでアイテムをフィルター:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:110
 msgid "Filter items by parent symbol type:"
@@ -9069,12 +9052,12 @@ msgid ""
 "Error creating symbol library table '%s'.\n"
 "%s"
 msgstr ""
-"シンボル ライブラリー '%s' の作成中にエラーしました。\n"
+"シンボル ライブラリ '%s' の作成中にエラーしました。\n"
 "%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:74
 msgid "Please select a symbol library table file."
-msgstr "シンボル ライブラリー テーブル ファイルを選択してください。"
+msgstr "シンボル ライブラリ テーブル ファイルを選択してください。"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:83
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:82
@@ -9089,19 +9072,18 @@ msgid ""
 "Error reading symbol library table '%s'.\n"
 "%s"
 msgstr ""
-"シンボル ライブラリー テーブル '%s' の読み込み中にエラーが発生しました。\n"
+"シンボル ライブラリ テーブル '%s' の読み込み中にエラーが発生しました。\n"
 "%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:108
 #, c-format
 msgid "Cannot create global library table '%s'."
-msgstr "グローバル ライブラリー テーブル '%s' が生成できません。"
+msgstr "グローバル ライブラリ テーブル '%s' が生成できません。"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:116
 #, c-format
 msgid "Error copying global symbol library table '%s' to '%s'."
-msgstr ""
-"グローバル シンボル ライブラリー テーブル '%s' を '%s' にコピーできません。"
+msgstr "グローバル シンボル ライブラリ テーブル '%s' を '%s' にコピーできません。"
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter.cpp:31
 msgid "Ibis parser log"
@@ -9489,7 +9471,7 @@ msgid ""
 "The symbol name in library and also the default\n"
 "symbol value when loaded in the schematic."
 msgstr ""
-"これはライブラリーにおけるシンボル名で、\n"
+"これはライブラリにおけるシンボル名で、\n"
 "また、回路図にロードされる時のデフォルトのシンボルの値です。"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:42
@@ -9514,7 +9496,7 @@ msgid ""
 "This was previously known as an alias.  Do not select\n"
 "an existing symbol to create a new root symbol."
 msgstr ""
-"親シンボルとして現在のライブラリーにあるシンボルを選択します。\n"
+"親シンボルとして現在のライブラリにあるシンボルを選択します。\n"
 "\n"
 "これは以前にはエイリアスとして知られていました。  新しいルート \n"
 "シンボルを作成する場合は既存のシンボルを選択しないで下さい。"
@@ -9672,7 +9654,7 @@ msgstr "シンボルから代替ボディスタイル(ド・モルガン)削除�
 #: eeschema/tools/symbol_editor_control.cpp:345
 #, c-format
 msgid "Symbol name '%s' already in use in library '%s'."
-msgstr "シンボル '%s' はライブラリー '%s' に既に存在します。"
+msgstr "シンボル '%s' はライブラリ '%s' に既に存在します。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:488
 #, c-format
@@ -9871,7 +9853,7 @@ msgstr "シミュレーションモデルを編集..."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.h:118
 msgid "Library Symbol Properties"
-msgstr "ライブラリー シンボルのプロパティ"
+msgstr "ライブラリ シンボルのプロパティ"
 
 #: eeschema/dialogs/dialog_lib_text_properties.cpp:217
 #: eeschema/dialogs/dialog_text_properties.cpp:487
@@ -9891,7 +9873,7 @@ msgstr "プライベートからシンボル エディターへ"
 #: eeschema/dialogs/dialog_text_properties.cpp:60
 #: pcbnew/dialogs/dialog_textbox_properties_base.h:101
 msgid "Text Box Properties"
-msgstr "テキストボックスのプロパティ"
+msgstr "テキスト ボックスのプロパティ"
 
 #: eeschema/dialogs/dialog_line_properties_base.cpp:79
 msgid "Set width to 0 to use schematic's default line width."
@@ -10355,10 +10337,11 @@ msgid ""
 "\n"
 "The following changes are recommended to update the project."
 msgstr ""
-"この回路図は図面を壊す可能性がある古いシンボル ライブラリーを使用して作成され"
-"ています。  いくつかのシンボルは別のシンボル名にリンクされる必要があるでしょ"
-"う。  これらのシンボルは新しいライブラリーへと \"レスキュー\"(コピーとリネー"
-"ム) する必要があります。\n"
+"この回路図は図面を壊す可能性がある古いシンボル "
+"ライブラリを使用して作成されています。  "
+"いくつかのシンボルは別のシンボル名にリンクされる必要があるでしょう。  "
+"これらのシンボルは新しいライブラリへと \"レスキュー\"(コピーとリネーム) "
+"する必要があります。\n"
 "\n"
 "以下の変更はプロジェクトを更新するために推奨されるものです。"
 
@@ -10407,7 +10390,7 @@ msgstr ""
 "このツールの表示を終了しますか？\n"
 "何も変更されません。 \n"
 "\n"
-"この設定は \"シンボル ライブラリー\" ダイアログから変更でき、 \n"
+"この設定は \"シンボル ライブラリ\" ダイアログから変更でき、 \n"
 "ツールは \"ツール\" メニューから有効化できます。"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:28
@@ -10424,7 +10407,7 @@ msgstr "キャッシュされたシンボル:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:78
 msgid "Library Symbol:"
-msgstr "ライブラリー シンボル:"
+msgstr "ライブラリ シンボル:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:102
 msgid "Never Show Again"
@@ -11068,7 +11051,7 @@ msgstr "カスタム"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:431
 msgid "Add full path for .include library directives"
-msgstr ".include ライブラリー指令の絶対パスを追加"
+msgstr ".include ライブラリ指令の絶対パスを追加"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:444
 msgid "Compatibility mode:"
@@ -11210,11 +11193,11 @@ msgstr "モデル"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:239
 msgid "Symbol Pin"
-msgstr "シンボル ピン"
+msgstr "シンボルのピン"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:240
 msgid "Model Pin"
-msgstr "モデルピン"
+msgstr "モデルのピン"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:301
 msgid "Pin Assignments"
@@ -11428,7 +11411,7 @@ msgstr "未実装にする"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:228
 msgid "Update Symbol from Library..."
-msgstr "ライブラリーからシンボルを更新..."
+msgstr "ライブラリからシンボルを更新..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:231
 #: eeschema/tools/ee_actions.cpp:471
@@ -11442,7 +11425,7 @@ msgstr "シンボルを編集..."
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:240
 #: eeschema/tools/ee_actions.cpp:601
 msgid "Edit Library Symbol..."
-msgstr "ライブラリー シンボルを編集..."
+msgstr "ライブラリ シンボルを編集..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:278
 msgid "Pin Number"
@@ -11459,7 +11442,7 @@ msgstr "代替ピンの割り当て"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:316
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:384
 msgid "Library link:"
-msgstr "ライブラリー リンク:"
+msgstr "ライブラリ リンク:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:331
 msgid "Simulation Model..."
@@ -11488,27 +11471,26 @@ msgid ""
 "to skip this step, you will be responsible for manually remapping the "
 "symbols."
 msgstr ""
-"この回路図は現在、読み込まれたライブラリーのシンボルをプロジェクトのシンボル "
-"ライブラリー リストで参照する方法を使用しています。KiCad は新しいシンボル ラ"
-"イブラリー テーブルを使用して既存のシンボルをマップしようと試みます。リマップ"
-"は古いバージョンの KiCad との互換性を持たない幾つかのプロジェクト ファイルと"
-"回路図に置き換えるでしょう。変更された全てのファイルは、どんな変更も元に戻す"
-"ことができるよう、プロジェクト フォルダー内の \"remap_backup\" フォルダーに"
-"バックアップされます。このステップをスキップした場合、シンボルを手動でリマッ"
-"プしなければならないでしょう。"
+"この回路図は現在、読み込まれたライブラリのシンボルをプロジェクトのシンボル "
+"ライブラリ リストで参照する方法を使用しています。KiCad は新しいシンボル "
+"ライブラリ テーブルを使用して既存のシンボルをマップしようと試みます。"
+"リマップは古いバージョンの KiCad との互換性を持たない幾つかのプロジェクト フ"
+"ァイルと回路図に置き換えるでしょう。変更された全てのファイルは、どんな変更も"
+"元に戻すことができるよう、プロジェクト フォルダー内の \"remap_backup\" フォル"
+"ダーにバックアップされます。このステップをスキップした場合、シンボルを手動で"
+"リマップしなければならないでしょう。"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:208
 #, c-format
 msgid "Adding library '%s', file '%s' to project symbol library table."
-msgstr ""
-"ライブラリー '%s' , ファイル '%s' をプロジェクトのシンボル ライブラリー テー"
-"ブルへ追加します。"
+msgstr "ライブラリ '%s' , ファイル '%s' をプロジェクトのシンボル ライブラリ "
+"テーブルへ追加します。"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:217
 #: eeschema/dialogs/panel_sym_lib_table.cpp:774
 #, c-format
 msgid "Library '%s' not found."
-msgstr "ライブラリー '%s' が見つかりません。"
+msgstr "ライブラリ '%s' が見つかりません。"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:234
 #, c-format
@@ -11516,27 +11498,27 @@ msgid ""
 "Error writing project symbol library table.\n"
 "  %s"
 msgstr ""
-"プロジェクトのシンボル ライブラリー テーブルを書き込もうとしたところ、エラー"
-"が発生しました。\n"
+"プロジェクトのシンボル ライブラリ "
+"テーブルを書き込もうとしたところ、エラーが発生しました。\n"
 "  %s"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:238
 msgid "Created project symbol library table.\n"
-msgstr "プロジェクトのシンボル ライブラリー テーブルを作成しました。\n"
+msgstr "プロジェクトのシンボル ライブラリ テーブルを作成しました。\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:263
 #, c-format
 msgid "No symbol %s found in symbol library table."
-msgstr "シンボル '%s' はシンボル ライブラリー テーブルにはありません。"
+msgstr "シンボル '%s' はシンボル ライブラリ テーブルにはありません。"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:269
 #, c-format
 msgid "Symbol %s mapped to symbol library '%s'."
-msgstr "シンボル '%s' はシンボル ライブラリー '%s' にマップされました。"
+msgstr "シンボル '%s' はシンボル ライブラリ '%s' にマップされました。"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:278
 msgid "Symbol library table mapping complete!"
-msgstr "シンボル ライブラリー テーブルのマッピングを完了!"
+msgstr "シンボル ライブラリ テーブルのマッピングを完了!"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:348
 #, c-format
@@ -12248,17 +12230,17 @@ msgstr "50"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:356
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:540
 msgid "A library table row nickname and path cells are empty."
-msgstr "ライブラリー テーブルの行のニックネームとパスのセルが空です。"
+msgstr "ライブラリ テーブルの行のニックネームとパスのセルが空です。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:358
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:542
 msgid "A library table row nickname cell is empty."
-msgstr "ライブラリー テーブルの行のニックネームのセルが空です。"
+msgstr "ライブラリ テーブルの行のニックネームのセルが空です。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:360
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:544
 msgid "A library table row path cell is empty."
-msgstr "ライブラリー テーブルの行のパスのセルが空です。"
+msgstr "ライブラリ テーブルの行のパスのセルが空です。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:362
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:546
@@ -12292,7 +12274,7 @@ msgstr "不正な文字 '%c' のあるニックネーム: '%s'"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:575
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:617
 msgid "Library Nickname Error"
-msgstr "ライブラリーのニックネームのエラー"
+msgstr "ライブラリのニックネームのエラー"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:421
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:605
@@ -12304,11 +12286,11 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table.cpp:468 eeschema/symbol_library.cpp:534
 #, c-format
 msgid "Symbol library '%s' failed to load."
-msgstr "シンボル ライブラリー '%s' のロードに失敗しました。"
+msgstr "シンボル ライブラリ '%s' のロードに失敗しました。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:471
 msgid "Error Loading Library"
-msgstr "ライブラリー ロード中のエラー"
+msgstr "ライブラリ ロード中のエラー"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:518
 msgid "Warning: Duplicate Nickname"
@@ -12318,7 +12300,7 @@ msgstr "警告: 重複したニックネーム"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:900
 #, c-format
 msgid "A library nicknamed '%s' already exists."
-msgstr "ニックネーム '%s' のライブラリーは既に存在します。"
+msgstr "ニックネーム '%s' のライブラリは既に存在します。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:520
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:901
@@ -12341,9 +12323,8 @@ msgstr "強制的に追加"
 msgid ""
 "Select one or more rows containing libraries in Legacy format (*.lib) to "
 "save as current KiCad format (*.kicad_sym)."
-msgstr ""
-"現在の形式 (*.kicad_sym) として保存する以前の形式(*.lib) のライブラリーを含"
-"む 1 つまたは複数の行を選択します。"
+msgstr "現在の形式 (*.kicad_sym) として保存する以前の形式(*.lib) のライブラリを含む "
+"1 つまたは複数の行を選択します。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:750
 #, c-format
@@ -12359,9 +12340,8 @@ msgstr ""
 msgid ""
 "Save %d Legacy format libraries as current KiCad format (*.kicad_sym) and "
 "replace legacy entries in table?"
-msgstr ""
-"%d 個の以前の形式のライブラリーを現在の形式(* .kicad_sym)として保存し、テーブ"
-"ルのエントリーと置き換えますか?"
+msgstr "%d 個の以前の形式のライブラリを現在の形式(* ."
+"kicad_sym)として保存し、テーブルのエントリーと置き換えますか?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:784
 #: pcbnew/dialogs/dialog_export_step.cpp:354
@@ -12371,13 +12351,13 @@ msgstr "ファイル '%s' は既に存在します。このファイルを上書
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:787
 msgid "Migrate Library"
-msgstr "ライブラリーを移行"
+msgstr "ライブラリを移行"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:811 eeschema/libarch.cpp:153
 #: eeschema/libarch.cpp:159
 #, c-format
 msgid "Failed to save symbol library file '%s'."
-msgstr "シンボル ライブラリー ファイル '%s' を保存できませんでした。"
+msgstr "シンボル ライブラリ ファイル '%s' を保存できませんでした。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1042
 msgid ""
@@ -12385,13 +12365,13 @@ msgid ""
 "Changes must be saved or discarded before the symbol library table can be "
 "modified."
 msgstr ""
-"修正は一つ以上のシンボル ライブラリーに対して行われます。\n"
-"シンボル ライブラリー テーブルを修正する前に、変更は保存あるいは破棄されけれ"
-"ばなりません。"
+"修正は一つ以上のシンボル ライブラリに対して行われます。\n"
+"シンボル ライブラリ "
+"テーブルを修正する前に、変更は保存あるいは破棄されければなりません。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1056
 msgid "Symbol Libraries"
-msgstr "シンボル ライブラリー"
+msgstr "シンボル ライブラリ"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1078
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1111
@@ -12401,7 +12381,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"グローバル ライブラリー テーブル保存中のエラー:\n"
+"グローバル ライブラリ テーブル保存中のエラー:\n"
 "\n"
 "%s"
 
@@ -12422,7 +12402,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"プロジェクト固有ライブラリー テーブル保存中のエラー:\n"
+"プロジェクト固有ライブラリ テーブル保存中のエラー:\n"
 "\n"
 "%s"
 
@@ -12441,30 +12421,30 @@ msgstr "アクティブ"
 #: pcbnew/footprint_libraries_utils.cpp:1032
 #: pcbnew/footprint_libraries_utils.cpp:1349
 msgid "Nickname"
-msgstr "別名(ニックネーム)"
+msgstr "ニックネーム"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:47
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:97
 #: include/lib_table_grid.h:187 pcbnew/dialogs/panel_fp_lib_table_base.cpp:47
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:96
 msgid "Library Path"
-msgstr "ライブラリーのパス"
+msgstr "ライブラリのパス"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:48
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:98
 #: include/lib_table_grid.h:190 pcbnew/dialogs/panel_fp_lib_table_base.cpp:48
 msgid "Library Format"
-msgstr "ライブラリー形式"
+msgstr "ライブラリ形式"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:70
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:69
 msgid "Global Libraries"
-msgstr "グローバル ライブラリー"
+msgstr "グローバル ライブラリ"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:121
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:118
 msgid "Project Specific Libraries"
-msgstr "プロジェクト固有ライブラリー"
+msgstr "プロジェクト固有ライブラリ"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:129
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:126
@@ -12473,16 +12453,16 @@ msgstr "テーブルに空行を追加"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:134
 msgid "Add existing library to table"
-msgstr "テーブルに既存ライブラリーを追加"
+msgstr "テーブルに既存ライブラリを追加"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:152
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:149
 msgid "Remove library from table"
-msgstr "テーブルからライブラリーを削除"
+msgstr "テーブルからライブラリを削除"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:159
 msgid "Migrate Libraries"
-msgstr "ライブラリーを移行"
+msgstr "ライブラリを移行"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:169
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:157
@@ -12520,10 +12500,9 @@ msgid ""
 "An error occurred attempting to load the global symbol library table.\n"
 "Please edit this global symbol library table in Preferences menu."
 msgstr ""
-"グローバル シンボル ライブラリー テーブルをロードしようとしたところ、エラーが"
-"発生しました。\n"
-"設定メニューで、このグローバル シンボル ライブラリー テーブルを編集して下さ"
-"い。"
+"グローバル シンボル ライブラリ "
+"テーブルをロードしようとしたところ、エラーが発生しました。\n"
+"設定メニューで、このグローバル シンボル ライブラリ テーブルを編集して下さい。"
 
 #: eeschema/eeschema.cpp:424
 #, c-format
@@ -12541,7 +12520,7 @@ msgstr "図面シートをロード中にエラーしました。"
 #: eeschema/eeschema_config.cpp:293 eeschema/sheet.cpp:333
 #, c-format
 msgid "Error loading the symbol library table '%s'."
-msgstr "シンボル ライブラリー テーブル '%s' のロード中にエラーが発生しました。"
+msgstr "シンボル ライブラリ テーブル '%s' のロード中にエラーが発生しました。"
 
 #: eeschema/eeschema_jobs_handler.cpp:123
 #: eeschema/eeschema_jobs_handler.cpp:159
@@ -12587,7 +12566,7 @@ msgstr "出力先 '%s' を開けませんでした"
 #: eeschema/eeschema_jobs_handler.cpp:526 pcbnew/pcbnew_jobs_handler.cpp:608
 #: pcbnew/pcbnew_jobs_handler.cpp:669
 msgid "Unable to load library\n"
-msgstr "ライブラリーをロードできません\n"
+msgstr "ライブラリをロードできません\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:474
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:123
@@ -12604,11 +12583,11 @@ msgstr "シンボルライブラリを更新された形式で保存\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:558 pcbnew/pcbnew_jobs_handler.cpp:637
 msgid "Unable to save library\n"
-msgstr "ライブラリーを保存できません\n"
+msgstr "ライブラリを保存できません\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:564
 msgid "Symbol library was not updated\n"
-msgstr "シンボル ライブラリーは更新されていません\n"
+msgstr "シンボル ライブラリは更新されていません\n"
 
 #: eeschema/erc.cpp:66 eeschema/erc.cpp:83
 msgid "Input Pin"
@@ -12711,22 +12690,22 @@ msgstr "ピン %s が %s と %s の両方に接続されています"
 #: eeschema/erc.cpp:879
 #, c-format
 msgid "The current configuration does not include the library '%s'"
-msgstr "現在の設定には '%s' のライブラリーは含まれません"
+msgstr "現在の設定には '%s' のライブラリは含まれません"
 
 #: eeschema/erc.cpp:890
 #, c-format
 msgid "The library '%s' is not enabled in the current configuration"
-msgstr "ライブラリー '%s' は現在の設定では有効化されていません"
+msgstr "ライブラリ '%s' は現在の設定では有効化されていません"
 
 #: eeschema/erc.cpp:905
 #, c-format
 msgid "Symbol '%s' not found in symbol library '%s'"
-msgstr "シンボル '%s' がシンボル ライブラリー '%s' 内に見つかりません"
+msgstr "シンボル '%s' がシンボル ライブラリ '%s' 内に見つかりません"
 
 #: eeschema/erc.cpp:921
 #, c-format
 msgid "Symbol '%s' has been modified in library '%s'"
-msgstr "シンボル '%s' がライブラリー '%s' で変更されました"
+msgstr "シンボル '%s' がライブラリ '%s' で変更されました"
 
 #: eeschema/erc_item.cpp:42
 msgid "Conflicts"
@@ -12836,7 +12815,7 @@ msgstr "配線がどこにも接続されてない"
 
 #: eeschema/erc_item.cpp:146
 msgid "Library symbol issue"
-msgstr "ライブラリー シンボルの問題"
+msgstr "ライブラリ シンボルの問題"
 
 #: eeschema/erc_item.cpp:150
 msgid "Symbol is not annotated"
@@ -12958,9 +12937,8 @@ msgstr ""
 
 #: eeschema/files-io.cpp:361
 msgid "Illegal entry found in project file symbol library list."
-msgstr ""
-"プロジェクト ファイルのシンボル ライブラリー リストに不正なエントリーが見つか"
-"りました。"
+msgstr "プロジェクト ファイルのシンボル ライブラリ "
+"リストに不正なエントリーが見つかりました。"
 
 #: eeschema/files-io.cpp:362
 msgid "Project Load Warning"
@@ -12973,10 +12951,10 @@ msgid ""
 "\n"
 "This may cause broken symbol library links under certain conditions."
 msgstr ""
-"プロジェクト ファイルのシンボル ライブラリー リストで定義されたシンボル ライ"
-"ブラリーは既にサポートされておらず、削除されます。\n"
+"プロジェクト ファイルのシンボル ライブラリ リストで定義されたシンボル "
+"ライブラリは既にサポートされておらず、削除されます。\n"
 "\n"
-"これは特定の条件下でシンボル ライブラリーのリンクを破壊する原因となります。"
+"これは特定の条件下でシンボル ライブラリのリンクを破壊する原因となります。"
 
 #: eeschema/files-io.cpp:369
 msgid "Do not show this dialog again."
@@ -12985,8 +12963,7 @@ msgstr "このダイアログを再度表示しない。"
 #: eeschema/files-io.cpp:398
 #, c-format
 msgid "The project symbol library cache file '%s' was not found."
-msgstr ""
-"プロジェクトのシンボル ライブラリーのキャッシュファイル %s が見つかりません。"
+msgstr "プロジェクトのシンボル ライブラリのキャッシュ ファイル %s が見つかりません。"
 
 #: eeschema/files-io.cpp:400
 msgid ""
@@ -12997,13 +12974,13 @@ msgid ""
 "symbol cache library file and reloading the schematic is required."
 msgstr ""
 "特定の条件下で回路図が壊れる可能性があります。 開くときに見つからないシンボル"
-"がない回路図であれば、データ損失を防ぐために変更を加える直前に保存します。 見"
-"つからないシンボルがある場合は、回路図の手動復旧またはシンボル キャッシュ ラ"
-"イブラリー ファイルの復旧と回路図の再読み込みが必要です。"
+"がない回路図であれば、データ損失を防ぐために変更を加える直前に保存します。 "
+"見つからないシンボルがある場合は、回路図の手動復旧またはシンボル キャッシュ "
+"ライブラリ ファイルの復旧と回路図の再読み込みが必要です。"
 
 #: eeschema/files-io.cpp:411
 msgid "Load Without Cache File"
-msgstr "キャッシュファイルなしでロード"
+msgstr "キャッシュ ファイルなしでロード"
 
 #: eeschema/files-io.cpp:412
 msgid "Abort"
@@ -13292,7 +13269,7 @@ msgstr "図形テキスト %s"
 
 #: eeschema/lib_textbox.cpp:375 eeschema/sch_textbox.cpp:353
 msgid "Graphic Text Box"
-msgstr "図形テキストボックス"
+msgstr "図形テキスト ボックス"
 
 #: eeschema/lib_textbox.cpp:484 eeschema/sch_label.cpp:872
 #: eeschema/sch_text.cpp:487 eeschema/sch_textbox.cpp:432
@@ -13321,12 +13298,12 @@ msgstr "予期しない例外が発生しました。"
 #: eeschema/libarch.cpp:125
 #, c-format
 msgid "Symbol %s not found in any library or cache."
-msgstr "シンボル %s がライブラリーまたはキャッシュに見つかりません。"
+msgstr "シンボル %s がライブラリまたはキャッシュに見つかりません。"
 
 #: eeschema/libarch.cpp:141
 #, c-format
 msgid "Errors occurred creating symbol library %s."
-msgstr "シンボル ライブラリー %s を作成中にエラーが発生しました。"
+msgstr "シンボル ライブラリ %s を作成中にエラーが発生しました。"
 
 #: eeschema/menubar.cpp:72 kicad/menubar.cpp:74
 #: pagelayout_editor/menubar.cpp:64 pcbnew/menubar_pcb_editor.cpp:74
@@ -13383,11 +13360,11 @@ msgstr "ネットリスト..."
 
 #: eeschema/menubar.cpp:125
 msgid "Symbols to Library..."
-msgstr "シンボルからライブラリーへ..."
+msgstr "シンボルからライブラリへ..."
 
 #: eeschema/menubar.cpp:127
 msgid "Symbols to New Library..."
-msgstr "シンボルから新しいライブラリーへ..."
+msgstr "シンボルから新しいライブラリへ..."
 
 #: eeschema/menubar.cpp:195
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:124
@@ -13444,7 +13421,7 @@ msgstr "IBIS モデルを書き込むためのファイル '%s' を開くこと�
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:571
 #, c-format
 msgid "Could not find library file '%s'"
-msgstr "ライブラリー ファイル '%s' が見つかりませんでした"
+msgstr "ライブラリ ファイル '%s' が見つかりませんでした"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:145
 #, c-format
@@ -13476,8 +13453,7 @@ msgstr "シンボルを選択 (%d個のアイテムがロードされていま�
 #: eeschema/picksymbol.cpp:289
 #, c-format
 msgid "No alternate body style found for symbol '%s' in library '%s'."
-msgstr ""
-"シンボル '%s' 用の代替ボディスタイルがライブラリー '%s' 内に見つかりません。"
+msgstr "シンボル '%s' 用の代替ボディスタイルがライブラリ '%s' 内に見つかりません。"
 
 #: eeschema/pin_numbers.cpp:124 pcbnew/zones.h:65
 msgid "none"
@@ -13554,14 +13530,13 @@ msgstr "ファイル名 %s を %s へ変更"
 #, c-format
 msgid ""
 "Cannot rescue symbol %s which is not available in any library or the cache."
-msgstr ""
-"どのライブラリーまたはキャッシュでも有効ではないシンボル %s をレスキューでき"
-"ません。"
+msgstr "どのライブラリまたはキャッシュでも有効ではないシンボル %s "
+"をレスキューできません。"
 
 #: eeschema/project_rescue.cpp:314 eeschema/project_rescue.cpp:488
 #, c-format
 msgid "Rescue symbol %s found only in cache library to %s."
-msgstr "キャッシュ ライブラリーにのみ見つかったシンボル %s を %s へレスキュー."
+msgstr "キャッシュ ライブラリにのみ見つかったシンボル %s を %s へレスキュー."
 
 #: eeschema/project_rescue.cpp:317 eeschema/project_rescue.cpp:494
 #, c-format
@@ -13580,18 +13555,17 @@ msgstr "レスキューするシンボルがありません。"
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:194
 #, c-format
 msgid "Failed to create symbol library file '%s'."
-msgstr "シンボル ライブラリー ファイル '%s' を作成できませんでした。"
+msgstr "シンボル ライブラリ ファイル '%s' を作成できませんでした。"
 
 #: eeschema/project_rescue.cpp:864
 #, c-format
 msgid "Failed to save rescue library %s."
-msgstr "レスキュー ライブラリー %s を保存できませんでした。"
+msgstr "レスキュ ライブラリー %s を保存できませんでした。"
 
 #: eeschema/project_rescue.cpp:887
 msgid "Error occurred saving project specific symbol library table."
-msgstr ""
-"プロジェクト固有のシンボル ライブラリー テーブルを保存中にエラーが発生しまし"
-"た。"
+msgstr "プロジェクト固有のシンボル ライブラリ "
+"テーブルを保存中にエラーが発生しました。"
 
 #: eeschema/project_sch_specific.cpp:109 pcbnew/board_connected_item.cpp:128
 msgid "Not Found"
@@ -13599,7 +13573,7 @@ msgstr "見つかりませんでした"
 
 #: eeschema/project_sch_specific.cpp:111
 msgid "The following libraries were not found:"
-msgstr "ライブラリーは見つかりませんでした:"
+msgstr "ライブラリは見つかりませんでした:"
 
 #: eeschema/sch_base_frame.cpp:229
 #, c-format
@@ -13607,7 +13581,7 @@ msgid ""
 "Error saving global symbol library table:\n"
 "%s"
 msgstr ""
-"グローバル シンボル ライブラリー テーブル保存中のエラー:\n"
+"グローバル シンボル ライブラリ テーブル保存中のエラー:\n"
 "%s"
 
 #: eeschema/sch_base_frame.cpp:245
@@ -13616,16 +13590,16 @@ msgid ""
 "Error saving project-specific symbol library table:\n"
 "%s"
 msgstr ""
-"プロジェクト固有シンボル ライブラリー テーブル保存中のエラー:\n"
+"プロジェクト固有シンボル ライブラリ テーブル保存中のエラー:\n"
 "%s"
 
 #: eeschema/sch_base_frame.cpp:264 pcbnew/footprint_libraries_utils.cpp:512
 msgid "Add the library to the global library table?"
-msgstr "ライブラリーをグローバル ライブラリー テーブルを追加しますか?"
+msgstr "ライブラリーをグローバル ライブラリ テーブルを追加しますか?"
 
 #: eeschema/sch_base_frame.cpp:265 pcbnew/footprint_libraries_utils.cpp:513
 msgid "Add To Global Library Table"
-msgstr "グローバル ライブラリー テーブルへ追加"
+msgstr "グローバル ライブラリ テーブルへ追加"
 
 #: eeschema/sch_base_frame.cpp:275 pcbnew/footprint_libraries_utils.cpp:523
 msgid "Global"
@@ -13633,19 +13607,19 @@ msgstr "グローバル"
 
 #: eeschema/sch_base_frame.cpp:278 pcbnew/footprint_libraries_utils.cpp:526
 msgid "Choose the Library Table to add the library to:"
-msgstr "ライブラリーを追加するライブラリー テーブルを選択:"
+msgstr "ライブラリーを追加するライブラリ テーブルを選択:"
 
 #: eeschema/sch_base_frame.cpp:279 pcbnew/footprint_libraries_utils.cpp:527
 msgid "Add To Library Table"
-msgstr "ライブラリー テーブルへ追加"
+msgstr "ライブラリ テーブルへ追加"
 
 #: eeschema/sch_base_frame.cpp:570
 msgid "No symbol libraries are loaded."
-msgstr "シンボル ライブラリーがロードされていません。"
+msgstr "シンボル ライブラリがロードされていません。"
 
 #: eeschema/sch_base_frame.cpp:615
 msgid "Select Symbol Library"
-msgstr "シンボル ライブラリーを選択"
+msgstr "シンボル ライブラリを選択"
 
 #: eeschema/sch_bus_entry.cpp:418
 msgid "Bus to Wire Entry"
@@ -13966,11 +13940,11 @@ msgstr ""
 
 #: eeschema/sch_plugin.cpp:151 pcbnew/plugin.cpp:160
 msgid "User name for <b>login</b> to some special library server."
-msgstr "特別なライブラリーサーバーへ <b>ログイン</b> するためのユーザー名。"
+msgstr "特別なライブラリサーバーへ <b>ログイン</b> するためのユーザー名。"
 
 #: eeschema/sch_plugin.cpp:155 pcbnew/plugin.cpp:163
 msgid "Password for <b>login</b> to some special library server."
-msgstr "特別なライブラリーサーバーへ <b>ログイン</b> するためのパスワード。"
+msgstr "特別なライブラリサーバーへ <b>ログイン</b> するためのパスワード。"
 
 #: eeschema/sch_plugin.cpp:163
 msgid ""
@@ -14058,9 +14032,8 @@ msgstr "(X = %d; Y = %d)にある予期しない円弧がインポートされ�
 msgid ""
 "Altium's harness connector (%s) was imported as a hierarchical sheet. Please "
 "review the imported schematic."
-msgstr ""
-"Altiumのハーネスコネクター(%s)は階層シートとしてインポートされました。イン"
-"ポートされた回路図を確認してください。"
+msgstr "Altiumのハーネス コネクタ(%s)は階層シートとしてインポートされました。インポー"
+"トされた回路図を確認してください。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2291
 msgid "Power Port with unknown style imported as 'Bar' type."
@@ -14076,8 +14049,7 @@ msgstr "電源シンボルは '%s' という名前のグローバル ラベル�
 msgid ""
 "Altium's harness port (%s) was imported as a text box. Please review the "
 "imported schematic."
-msgstr ""
-"Altiumのハーネスポート(%s)はテキストボックスとしてインポートされました。イン"
+msgstr "Altiumのハーネスポート(%s)はテキスト ボックスとしてインポートされました。イン"
 "ポートされた回路図を確認してください。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2525
@@ -14174,17 +14146,17 @@ msgid ""
 "be found in the symbol library. The part has not been loaded into the KiCad "
 "library."
 msgstr ""
-"パーツ定義 '%s'は、シンボル ライブラリーに見つからなかったシンボル '%s'（代替"
-"は '%s'）を参照しています。パーツはKiCadライブラリーにロードされていません。"
+"パーツ定義 '%s'は、シンボル ライブラリに見つからなかったシンボル '%s'（"
+"代替は "
+"'%s'）を参照しています。パーツはKiCadライブラリにロードされていません。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:423
 #, c-format
 msgid ""
 "Part definition '%s' has an incomplete definition (no symbol definitions are "
 "associated with it). The part has not been loaded into the KiCad library."
-msgstr ""
-"パーツ定義 '%s'が不完全です（シンボル定義が関連付けされていません）。このパー"
-"ツがKiCadライブラリーにロードされていません。"
+msgstr "パーツ定義 '%s'が不完全です（シンボル定義が関連付けされていません）。このパー"
+"ツがKiCadライブラリにロードされていません。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:454
 #, c-format
@@ -14201,8 +14173,8 @@ msgid ""
 "Symbol ID '%s' references library symbol '%s' which could not be found in "
 "the library. Did you export all items of the design?"
 msgstr ""
-"シンボル ID '%s' は、ライブラリー内に見つからないシンボル '%s' を参照していま"
-"す。デザインのすべてのアイテムをエクスポートしましたか?"
+"シンボル ID '%s' は、ライブラリ内に見つからないシンボル '%s' "
+"を参照しています。デザインのすべてのアイテムをエクスポートしましたか?"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:571
 #, c-format
@@ -14230,8 +14202,8 @@ msgid ""
 "revert to the original 1:1 scale."
 msgstr ""
 "シンボル '%s' は、元の CADSTAR 回路図では拡大縮小されていますが、KiCad ではサ"
-"ポートされていません。シンボルがライブラリーから再度読み込まれたときに、元の"
-"1:1のスケールに戻されます。"
+"ポートされていません。シンボルがライブラリから再度読み込まれたときに、元の1:1"
+"のスケールに戻されます。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1193
 #, c-format
@@ -14239,8 +14211,8 @@ msgid ""
 "Documentation Symbol '%s' refers to symbol definition ID '%s' which does not "
 "exist in the library. The symbol was not loaded."
 msgstr ""
-"ドキュメンテーション シンボル '%s' は、ライブラリーに存在しないシンボル定義 "
-"ID '%s' を指します。シンボルは読み込まれませんでした。"
+"ドキュメンテーション シンボル '%s' は、ライブラリに存在しないシンボル定義 ID "
+"'%s' を指します。シンボルは読み込まれませんでした。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1302
 msgid "Text Variables could not be set as there is no project attached."
@@ -14304,16 +14276,14 @@ msgstr "データベース テーブル %s の読み取り中にエラーが発�
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:218
 #, c-format
 msgid "Could not load database library: settings file %s missing or invalid"
-msgstr ""
-"データベースライブラリーを読み込めませんでした: 設定ファイル %s が見つからな"
-"いか、無効です"
+msgstr "データベース ライブラリを読み込めませんでした: 設定ファイル %s "
+"が見つからないか、無効です"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:281
 #, c-format
 msgid "Could not load database library: could not connect to database %s (%s)"
-msgstr ""
-"データベースライブラリーを読み込めませんでした: データベース %s に接続できま"
-"せんでした (%s)"
+msgstr "データベース ライブラリを読み込めませんでした: データベース %s "
+"に接続できませんでした (%s)"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:438
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:3118
@@ -14333,19 +14303,19 @@ msgstr ""
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1636
 #, c-format
 msgid "Could not find '%s' in the imported library."
-msgstr "インポートしたライブラリー内で '%s' を見つけることができません。"
+msgstr "インポートしたライブラリ内で '%s' を見つけることができません。"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_lib_plugin_cache.cpp:54
 #: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:70
 #, c-format
 msgid "Library file '%s' not found."
-msgstr "ライブラリー ファイル '%s' が見つかりません。"
+msgstr "ライブラリ ファイル '%s' が見つかりません。"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_lib_plugin_cache.cpp:516
 #: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:1816
 #, c-format
 msgid "library %s does not contain a symbol named %s"
-msgstr "ライブラリー %s は %s と言う名前のシンボルを含んでいません"
+msgstr "ライブラリ %s は %s と言う名前のシンボルを含んでいません"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:188
 msgid "Invalid symbol name"
@@ -14359,7 +14329,7 @@ msgstr "シンボル %s に不正な文字 '%c' が含まれています"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:209
 msgid "Invalid library identifier"
-msgstr "不正なライブラリー識別子"
+msgstr "不正なライブラリ識別子"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:265
 msgid "Invalid parent symbol name"
@@ -14441,7 +14411,7 @@ msgstr "不正なページタイプ"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1901
 msgid "Invalid title block comment number"
-msgstr "不正なタイトルブロックのコメント番号"
+msgstr "不正なタイトル ブロックのコメント番号"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2033
 msgid "Invalid sheet pin name"
@@ -14453,11 +14423,11 @@ msgstr "空のシートピン名"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2591
 msgid "Invalid symbol library name"
-msgstr "不正なシンボル ライブラリー名"
+msgstr "不正なシンボル ライブラリ名"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2622
 msgid "Invalid symbol library ID"
-msgstr "不正なシンボル ライブラリー識別子"
+msgstr "不正なシンボル ライブラリ識別子"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:212
 #, c-format
@@ -14472,13 +14442,13 @@ msgstr ""
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2169
 #, c-format
 msgid "Symbol library '%s' already exists."
-msgstr "シンボル ライブラリー '%s' は既に存在します。"
+msgstr "シンボル ライブラリ '%s' は既に存在します。"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1546
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2195
 #, c-format
 msgid "Symbol library '%s' cannot be deleted."
-msgstr "シンボル ライブラリー '%s' が削除できませんでした。"
+msgstr "シンボル ライブラリ '%s' が削除できませんでした。"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:84
 msgid "Unexpected end of file."
@@ -14487,11 +14457,11 @@ msgstr "予期しないファイルの終端です。"
 #: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:170
 #, c-format
 msgid "Insufficient permissions to read library '%s'."
-msgstr "ライブラリー '%s' を読み込むための権限がありません。"
+msgstr "ライブラリ '%s' を読み込むための権限がありません。"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:179
 msgid "symbol document library file is empty"
-msgstr "シンボル ドキュメント ライブラリー ファイルが空です"
+msgstr "シンボル ドキュメント ライブラリ ファイルが空です"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:550
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:593
@@ -14573,30 +14543,28 @@ msgstr "異なる値: %s%d%s (%s) と %s%d%s (%s)"
 #: eeschema/sch_screen.cpp:881 eeschema/sch_screen.cpp:973
 #, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
-msgstr "回路図シンボル '%s %s' のライブラリー識別子を '%s' へセットします。"
+msgstr "回路図シンボル '%s %s' のライブラリ識別子を '%s' へセットします。"
 
 #: eeschema/sch_screen.cpp:897
 #, c-format
 msgid ""
 "Schematic symbol reference '%s' library identifier is not valid. Unable to "
 "link library symbol."
-msgstr ""
-"回路図シンボル リファレンス '%s' のライブラリー識別子は無効です。 ライブラ"
-"リー シンボルをリンクできません。"
+msgstr "回路図シンボル リファレンス '%s' のライブラリ識別子は無効です。 ライブラリ "
+"シンボルをリンクできません。"
 
 #: eeschema/sch_screen.cpp:913
 #, c-format
 msgid ""
 "Symbol library '%s' not found and no fallback cache library available.  "
 "Unable to link library symbol."
-msgstr ""
-"シンボル ライブラリー '%s' が見つからず、フォールバック キャッシュ ライブラ"
-"リーが無効です。  ライブラリー シンボルをリンクできません。"
+msgstr "シンボル ライブラリ '%s' が見つからず、フォールバック キャッシュ "
+"ライブラリが無効です。  ライブラリー シンボルをリンクできません。"
 
 #: eeschema/sch_screen.cpp:932
 #, c-format
 msgid "I/O error %s resolving library symbol %s"
-msgstr "I/O エラー %s ライブラリー シンボル %s 解決"
+msgstr "I/O エラー %s ライブラリ シンボル %s 解決"
 
 #: eeschema/sch_screen.cpp:952
 #, c-format
@@ -14608,7 +14576,7 @@ msgstr ""
 #: eeschema/sch_screen.cpp:984
 #, c-format
 msgid "No library symbol found for schematic symbol '%s %s'."
-msgstr "回路図シンボル '%s %s' 用のライブラリー シンボルが見つかりません。"
+msgstr "回路図シンボル '%s %s' 用のライブラリ シンボルが見つかりません。"
 
 #: eeschema/sch_sheet.cpp:795
 msgid "Sheet Name"
@@ -14670,7 +14638,7 @@ msgstr "<不明>"
 
 #: eeschema/sch_symbol.cpp:1685
 msgid "No library defined!"
-msgstr "ライブラリーが定義されていません!"
+msgstr "ライブラリが定義されていません!"
 
 #: eeschema/sch_symbol.cpp:1687
 #, c-format
@@ -15068,9 +15036,10 @@ msgid ""
 "symbol library table.  The project this schematic belongs to must first be "
 "remapped before it can be imported into the current project."
 msgstr ""
-"回路図 '%s' はシンボルライブラリー テーブルに再マップされたシンボルライブラ"
-"リーのリンクを持っていません。  現在のプロジェクトにインポートできるよう、こ"
-"の回路図が属しているプロジェクトは最初に再マップされなければなりません。"
+"回路図 '%s' はシンボルライブラリ "
+"テーブルに再マップされたシンボルライブラリのリンクを持っていません。  現在の"
+"プロジェクトにインポートできるよう、この回路図が属しているプロジェクトは最初"
+"に再マップされなければなりません。"
 
 #: eeschema/sheet.cpp:146
 msgid ""
@@ -15109,10 +15078,10 @@ msgid ""
 msgstr ""
 "古いバージョンのファイルからロードされた回路図ファイルに階層シートがあり、  "
 "シンボル インスタンス データが欠落しています。  これにより、ロードされた回路"
-"図内のすべてのシンボルがデフォルトのインスタンス設定を使用するか、ライブラ"
-"リーのシンボルの設定にフォールバックします。  この回路図ファイルを使用するプ"
-"ロジェクトをロードし、最新のファイル バージョンに保存すると、この問題は解決し"
-"ます。\n"
+"図内のすべてのシンボルがデフォルトのインスタンス設定を使用するか、ライブラリ"
+"のシンボルの設定にフォールバックします。  "
+"この回路図ファイルを使用するプロジェクトをロードし、最新のファイル "
+"バージョンに保存すると、この問題は解決します。\n"
 "\n"
 "続けますか?"
 
@@ -15129,9 +15098,9 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"選択した回路図にプロジェクト ライブラリー テーブルから失われたライブラリー名"
-"があります。  これはロードされた回路図でシンボル ライブラリーのリンクを壊す原"
-"因となります。\n"
+"選択した回路図にプロジェクト ライブラリ "
+"テーブルから失われたライブラリー名があります。  "
+"これはロードされた回路図でシンボル ライブラリのリンクを壊す原因となります。\n"
 "\n"
 "続行しますか？"
 
@@ -15157,9 +15126,9 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"ロードされた回路図でロードされた回路図プロジェクト ライブラリー テーブルから"
-"失われたライブラリー名があります。  これは回路図でシンボル ライブラリーのリン"
-"クを壊す原因となります。\n"
+"ロードされた回路図でロードされた回路図プロジェクト ライブラリ "
+"テーブルから失われたライブラリー名があります。  これは回路図でシンボル "
+"ライブラリのリンクを壊す原因となります。\n"
 "\n"
 "続行しますか？"
 
@@ -15171,9 +15140,9 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"異なったライブラリーを参照している重複したライブラリー名が現在のライブラリー "
-"テーブルに存在します。  この衝突は解決不能で、回路図でシンボル ライブラリーの"
-"リンクを壊す原因となります。\n"
+"異なったライブラリを参照している重複したライブラリ名が現在のライブラリ "
+"テーブルに存在します。  この衝突は解決不能で、回路図でシンボル "
+"ライブラリのリンクを壊す原因となります。\n"
 "\n"
 "続行しますか？"
 
@@ -15676,7 +15645,8 @@ msgstr "ドライバーは少なくともプルアップまたはプルダウン
 msgid ""
 "There are two waveform pairs, but only one transistor. More equations than "
 "unknowns."
-msgstr ""
+msgstr "2つの波形のペアはありますが、トランジスタは1つだけです。未知数よりも多くの方"
+"程式があります。"
 
 #: eeschema/sim/kibis/kibis.cpp:1202
 msgid "Model has no waveform pair, using [Ramp] instead, poor accuracy"
@@ -15690,7 +15660,7 @@ msgstr "モデルには2つ以上の波形のペアがあるため、最初の2�
 
 #: eeschema/sim/kibis/kibis.cpp:1253
 msgid "Invalid model type for a driver."
-msgstr "ドライバのモデルタイプが無効です。"
+msgstr "ドライバーのモデルタイプが無効です。"
 
 #: eeschema/sim/kibis/kibis.cpp:1305
 msgid "Invalid model type for a device"
@@ -15745,13 +15715,12 @@ msgstr ""
 #: eeschema/sim/sim_lib_mgr.cpp:77
 #, c-format
 msgid "Simulation model library not found at '%s' or '%s'"
-msgstr ""
-"'%s' もしくは '%s' にシミュレーションモデル ライブラリーが見つかりません"
+msgstr "'%s' もしくは '%s' にシミュレーションモデル ライブラリが見つかりません"
 
 #: eeschema/sim/sim_lib_mgr.cpp:292
 #, c-format
 msgid "Error loading simulation model library '%s': %s"
-msgstr "シミュレーションモデル ライブラリー %s のロード中にエラーしました:%s"
+msgstr "シミュレーションモデル ライブラリ %s のロード中にエラーしました:%s"
 
 #: eeschema/sim/sim_lib_mgr.cpp:304
 #, c-format
@@ -16182,9 +16151,10 @@ msgstr "不明な SIM_VALUE タイプ"
 
 #: eeschema/sim/spice_model_parser.cpp:84
 #: eeschema/sim/spice_model_parser.cpp:186
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find model '%s' to copy for \"A Kind Of\" model '%s'"
-msgstr "コンポーネント '%s' 中のIBISのピン '%s' がありません"
+msgstr "モデル '%s' が見つかりませんでした (\"A Kind of\" モデル '%s' "
+"にコピーするための)"
 
 #: eeschema/sim/spice_simulator.cpp:63
 msgid "DC Sweep"
@@ -16226,7 +16196,7 @@ msgstr "'%s' は有効な Spice の値ではありません。"
 #: eeschema/symbol_async_loader.cpp:108
 #, c-format
 msgid "Loading library %s..."
-msgstr "ライブラリー %s をロードしています..."
+msgstr "ライブラリ %s をロードしています..."
 
 #: eeschema/symbol_async_loader.cpp:122
 #, c-format
@@ -16235,7 +16205,7 @@ msgid ""
 "\n"
 "%s\n"
 msgstr ""
-"シンボル ライブラリー %s をロード中にエラー。\n"
+"シンボル ライブラリ %s をロード中にエラー。\n"
 "\n"
 "%s\n"
 
@@ -16245,8 +16215,8 @@ msgid ""
 "<b>Warning: reference prefix</b><br>prefix ending by '%s' can create issues "
 "if saved in a symbol library"
 msgstr ""
-"<b>Warning: リファレンス接頭辞</b><br>'%s' で終わる接頭辞は、シンボル ライブ"
-"ラリーに保存すると問題が発生する可能性があります"
+"<b>Warning: リファレンス接頭辞</b><br>'%s' で終わる接頭辞は、シンボル "
+"ライブラリに保存すると問題が発生する可能性があります"
 
 #: eeschema/symbol_checker.cpp:113
 #, c-format
@@ -16342,7 +16312,7 @@ msgstr ""
 #: eeschema/symbol_checker.cpp:281
 msgid ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
-msgstr " "
+msgstr "(非表示の電源ピンは、ピン名で接続されたネットを駆動します。)"
 
 #: eeschema/symbol_checker.cpp:294
 #, c-format
@@ -16375,8 +16345,8 @@ msgid ""
 "Not all symbol libraries could be loaded.  Use the Manage Symbol\n"
 "Libraries dialog to adjust paths and add or remove libraries."
 msgstr ""
-"全てのシンボル ライブラリーをロードできませんでした。 パスを修正してライブラ"
-"リの\n"
+"全てのシンボル ライブラリをロードできませんでした。 "
+"パスを修正してライブラリの\n"
 "追加または削除を行うにはシンボル ライブラリー管理ダイアログを使用して下さい。"
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:70
@@ -16394,7 +16364,7 @@ msgstr "シンボルを SVG として出力..."
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:79
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:100
 msgid "Library Editor"
-msgstr "ライブラリー エディター"
+msgstr "ライブラリ エディター"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:114
 msgid "KiCad Symbol Editor"
@@ -16404,21 +16374,20 @@ msgstr "KiCad シンボル エディター"
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1025
 #: eeschema/symbol_library.cpp:475 eeschema/symbol_tree_model_adapter.cpp:74
 msgid "Loading Symbol Libraries"
-msgstr "シンボル ライブラリーをロード中"
+msgstr "シンボル ライブラリをロード中"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:191
 #: pcbnew/footprint_edit_frame.cpp:218 pcbnew/footprint_edit_frame.cpp:831
 msgid "Libraries"
-msgstr "ライブラリー"
+msgstr "ライブラリ"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:247
 msgid "Library changes are unsaved"
-msgstr "ライブラリーの変更は保存されていません"
+msgstr "ライブラリの変更は保存されていません"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:258
 msgid "Symbol library loading was cancelled by user."
-msgstr ""
-"シンボル ライブラリーの読み込みはユーザーによってキャンセルされました。"
+msgstr "シンボル ライブラリの読み込みはユーザーによってキャンセルされました。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:771
 #, c-format
@@ -16429,15 +16398,14 @@ msgstr ""
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:780
 msgid "Manage symbol libraries"
-msgstr "シンボル ライブラリーを管理"
+msgstr "シンボル ライブラリを管理"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:791
 msgid ""
 "Symbols in legacy libraries are not editable.  Use Manage Symbol Libraries "
 "to migrate to current format."
-msgstr ""
-"以前の形式のライブラリーのシンボルは編集できません。 現在の形式に移行するに"
-"は、 シンボル ライブラリーの管理を使用します。"
+msgstr "以前の形式のライブラリのシンボルは編集できません。 現在の形式に移行するには、"
+" シンボル ライブラリの管理を使用します。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:801
 #, c-format
@@ -16451,7 +16419,7 @@ msgstr ""
 #: eeschema/tools/sch_editor_control.cpp:395
 #, c-format
 msgid "Library '%s' already exists."
-msgstr "ライブラリー '%s' は既に存在します。"
+msgstr "ライブラリ '%s' は既に存在します。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:889
 #, c-format
@@ -16459,19 +16427,19 @@ msgid ""
 "Could not create the library file '%s'.\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"ライブラリー ファイル '%s' を作成できません。\n"
+"ライブラリ ファイル '%s' を作成できません。\n"
 "書き込み権限を確認して、再度試してください。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:900
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:938
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:215
 msgid "Could not open the library file."
-msgstr "ライブラリー ファイルを開くことができません。"
+msgstr "ライブラリ ファイルを開くことができません。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1031
 #, c-format
 msgid "Loading library '%s'..."
-msgstr "ライブラリー '%s' をロードしています..."
+msgstr "ライブラリ '%s' をロードしています..."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1125
 #, c-format
@@ -16485,13 +16453,13 @@ msgid ""
 "The current configuration does not include the library '%s'.\n"
 "Use Manage Symbol Libraries to edit the configuration."
 msgstr ""
-"現在の設定はシンボル ライブラリー \"%s\" を含んでいません。\n"
-"設定を編集するには シンボル ライブラリーの管理 を使用して下さい。"
+"現在の設定はシンボル ライブラリ \"%s\" を含んでいません。\n"
+"設定を編集するには シンボル ライブラリの管理 を使用して下さい。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1299
 #: eeschema/symbol_viewer_frame.cpp:481
 msgid "Library not found in symbol library table."
-msgstr "ライブラリーがシンボル ライブラリー テーブルに見つかりません。"
+msgstr "ライブラリーがシンボル ライブラリ テーブルに見つかりません。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1307
 #: eeschema/symbol_viewer_frame.cpp:485
@@ -16500,13 +16468,13 @@ msgid ""
 "The library '%s' is not enabled in the current configuration.\n"
 "Use Manage Symbol Libraries to edit the configuration."
 msgstr ""
-"ライブラリー '%s' は現在の設定では有効ではありません。\n"
-"設定を編集するには シンボル ライブラリーの管理 を使用して下さい。"
+"ライブラリ '%s' は現在の設定では有効ではありません。\n"
+"設定を編集するには シンボル ライブラリの管理 を使用して下さい。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1310
 #: eeschema/symbol_viewer_frame.cpp:488
 msgid "Symbol library not enabled."
-msgstr "シンボル ライブラリーが有効になっていません。"
+msgstr "シンボル ライブラリが有効になっていません。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1506
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1558
@@ -16516,7 +16484,7 @@ msgstr "グローバル ライブラリー テーブルの保存中にエラー�
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1507
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1559
 msgid "Error saving project library table."
-msgstr "プロジェクト ライブラリー テーブルの保存中にエラーが発生しました。"
+msgstr "プロジェクト ライブラリ テーブルの保存中にエラーが発生しました。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:69
 msgid "[from schematic]"
@@ -16524,7 +16492,7 @@ msgstr "[回路図から]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:79
 msgid "[Read Only Library]"
-msgstr "[読み取り専用ライブラリー]"
+msgstr "[読み取り専用ライブラリ]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:83
 msgid "[no symbol loaded]"
@@ -16548,7 +16516,7 @@ msgstr "この新しいシンボルは名前がなく、作成できませんで
 #: eeschema/symbol_editor/symbol_editor.cpp:362
 #, c-format
 msgid "Symbol '%s' already exists in library '%s'."
-msgstr "シンボル '%s' はライブラリー '%s' に既に存在します。"
+msgstr "シンボル '%s' はライブラリ '%s' に既に存在します。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:367
 #: eeschema/symbol_editor/symbol_editor.cpp:682
@@ -16569,7 +16537,7 @@ msgstr "上書き"
 #: eeschema/tools/symbol_editor_control.cpp:301
 #, c-format
 msgid "Symbol library '%s' is not writable."
-msgstr "シンボル ライブラリー '%s' は書き込み不可です。"
+msgstr "シンボル ライブラリ '%s' は書き込み不可です。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:496
 #: eeschema/symbol_editor/symbol_editor.cpp:1202
@@ -16583,23 +16551,21 @@ msgstr "シンボルに名前を付けて保存"
 #: eeschema/symbol_editor/symbol_editor.cpp:575
 #: pcbnew/footprint_libraries_utils.cpp:1064
 msgid "Save in library:"
-msgstr "ライブラリーに保存:"
+msgstr "ライブラリに保存:"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:649
 msgid "No library specified.  Symbol could not be saved."
-msgstr "ライブラリーが指定されていません。  シンボルを保存できません。"
+msgstr "ライブラリが指定されていません。  シンボルを保存できません。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:658
 msgid ""
 "Derived symbols must be saved in the same library as their parent symbol."
-msgstr ""
-"派生したシンボルは親シンボルが存在するライブラリーに保存しなければなりませ"
-"ん。"
+msgstr "派生したシンボルは親シンボルが存在するライブラリに保存しなければなりません。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:677
 #, c-format
 msgid "Symbol '%s' already exists in library '%s'"
-msgstr "シンボル '%s' はライブラリー '%s' 内に既に存在します"
+msgstr "シンボル '%s' はライブラリ '%s' 内に既に存在します"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:711
 #, c-format
@@ -16613,7 +16579,7 @@ msgid ""
 "Do you want to remove it from the library?"
 msgstr ""
 "シンボル '%s' は変更されています。\n"
-"ライブラリーから削除しますか？"
+"ライブラリから削除しますか？"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:761
 #, c-format
@@ -16646,30 +16612,30 @@ msgstr "'%s' を最後に保存したバージョンへ戻しますか?"
 #: eeschema/symbol_editor/symbol_editor.cpp:1012
 #, c-format
 msgid "Symbol %s not found in library '%s'."
-msgstr "シンボル '%s' がライブラリー '%s' に見つかりません。"
+msgstr "シンボル '%s' がライブラリ '%s' に見つかりません。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1040
 msgid "No library specified."
-msgstr "指定されたライブラリーがありません。"
+msgstr "指定されたライブラリがありません。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1059
 #, c-format
 msgid "Save Library '%s' As..."
-msgstr "名前を付けてライブラリー '%s' を保存..."
+msgstr "名前を付けてライブラリ '%s' を保存..."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1108
 #, c-format
 msgid "Failed to save changes to symbol library file '%s'."
-msgstr "シンボル ライブラリー ファイル '%s' へ変更を保存できませんでした。"
+msgstr "シンボル ライブラリ ファイル '%s' へ変更を保存できませんでした。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1110
 msgid "Error Saving Library"
-msgstr "ライブラリーを保存中にエラーが発生しました"
+msgstr "ライブラリを保存中にエラーが発生しました"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1152
 #, c-format
 msgid "Symbol library file '%s' saved."
-msgstr "シンボル ライブラリー ファイル '%s' を保存しました。"
+msgstr "シンボル ライブラリ ファイル '%s' を保存しました。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1252
 msgid "Undefined!"
@@ -16702,18 +16668,18 @@ msgstr "シンボルをインポート"
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:81
 #, c-format
 msgid "Cannot import symbol library '%s'."
-msgstr "シンボル ライブラリー '%s' をインポートできませんでした。"
+msgstr "シンボル ライブラリ '%s' をインポートできませんでした。"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:88
 #, c-format
 msgid "Symbol library file '%s' is empty."
-msgstr "シンボル ライブラリー ファイル '%s' が空です。"
+msgstr "シンボル ライブラリ ファイル '%s' が空です。"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:100
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:161
 #, c-format
 msgid "Symbol %s already exists in library '%s'."
-msgstr "シンボル '%s' はライブラリー '%s' に既に存在します。"
+msgstr "シンボル '%s' はライブラリ '%s' に既に存在します。"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:132
 msgid "Export Symbol"
@@ -16722,9 +16688,8 @@ msgstr "シンボルをエクスポート"
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:153
 #, c-format
 msgid "Error occurred attempting to load symbol library file '%s'."
-msgstr ""
-"シンボル ライブラリー ファイル '%s' をロードしようとしたところ、エラーが発生"
-"しました。"
+msgstr "シンボル ライブラリ ファイル '%s' "
+"をロードしようとしたところ、エラーが発生しました。"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:176
 #, c-format
@@ -16734,25 +16699,24 @@ msgstr "ライブラリー '%s' を保存する権限がありません。"
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:196
 #, c-format
 msgid "Error creating symbol library '%s'."
-msgstr "シンボル ライブラリー '%s' の作成中にエラーしました。"
+msgstr "シンボル ライブラリ '%s' の作成中にエラーしました。"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:203
 #, c-format
 msgid "Symbol %s saved to library '%s'."
-msgstr "シンボル '%s' をライブラリー '%s' へ保存しました。"
+msgstr "シンボル '%s' をライブラリ '%s' へ保存しました。"
 
 #: eeschema/symbol_lib_table.cpp:252
 #, c-format
 msgid ""
 "Duplicate library nickname '%s' found in symbol library table file line %d"
-msgstr ""
-"重複したライブラリーの別名 '%s' がシンボル ライブラリー テーブル ファイルの"
-"行 %d に見つかりました"
+msgstr "重複したライブラリの別名 '%s' がシンボル ライブラリ テーブル ファイルの行 %d "
+"に見つかりました"
 
 #: eeschema/symbol_library.cpp:556 eeschema/symbol_tree_model_adapter.cpp:217
 #, c-format
 msgid "Error loading symbol library '%s'."
-msgstr "シンボル ライブラリー %s のロード中にエラーしました。"
+msgstr "シンボル ライブラリ %s のロード中にエラーしました。"
 
 #: eeschema/symbol_library_manager.cpp:83
 #: eeschema/symbol_tree_model_adapter.cpp:110
@@ -16762,7 +16726,7 @@ msgstr "シンボル ロード中のエラー:"
 #: eeschema/symbol_library_manager.cpp:153
 #, c-format
 msgid "Library '%s' not found in the Symbol Library Table."
-msgstr "ライブラリー '%s' がシンボル ライブラリー テーブルに見つかりません。"
+msgstr "ライブラリー '%s' がシンボル ライブラリ テーブルに見つかりません。"
 
 #: eeschema/symbol_library_manager.cpp:404
 msgid "Symbol not found."
@@ -16771,25 +16735,24 @@ msgstr "シンボルが見つかりません。"
 #: eeschema/symbol_library_manager.cpp:435
 #, c-format
 msgid "Error loading symbol %s from library '%s'. (%s)"
-msgstr ""
-"シンボル %s をライブラリー '%s' からロードしようとしたところ、エラーが発生し"
-"ました。(%s)"
+msgstr "シンボル %s をライブラリ '%s' "
+"からロードしようとしたところ、エラーが発生しました。(%s)"
 
 #: eeschema/symbol_library_manager.cpp:622
 #, c-format
 msgid "Cannot load symbol '%s' from library '%s'."
-msgstr "シンボル '%s' を ライブラリー '%s' からロードできません。"
+msgstr "シンボル '%s' を ライブラリ '%s' からロードできません。"
 
 #: eeschema/symbol_library_manager.cpp:775
 #, c-format
 msgid "Cannot enumerate library '%s'."
-msgstr "ライブラリー '%s' を列挙できません。"
+msgstr "ライブラリ '%s' を列挙できません。"
 
 #: eeschema/symbol_library_manager.cpp:965
 #: eeschema/symbol_library_manager.cpp:1066
 #, c-format
 msgid "Error saving symbol %s to library '%s'."
-msgstr "シンボル '%s' をライブラリー '%s' へ保存中にエラーが発生しました。"
+msgstr "シンボル '%s' をライブラリ '%s' へ保存中にエラーが発生しました。"
 
 #: eeschema/symbol_tree_synchronizing_adapter.cpp:268
 msgid "(failed to load)"
@@ -16797,7 +16760,7 @@ msgstr "(ロードに失敗しました)"
 
 #: eeschema/symbol_viewer_frame.cpp:120
 msgid "KiCad Symbol Library Viewer"
-msgstr "KiCad シンボル ライブラリー ビューアー"
+msgstr "KiCad シンボル ライブラリ ビューアー"
 
 #: eeschema/symbol_viewer_frame.cpp:180
 msgid ""
@@ -16812,7 +16775,7 @@ msgstr ""
 #: eeschema/symbol_viewer_frame.cpp:1170 pcbnew/footprint_viewer_frame.cpp:1178
 #: pcbnew/footprint_viewer_frame.cpp:1183
 msgid "[no library selected]"
-msgstr "[ライブラリーが未選択です]"
+msgstr "[ライブラリが未選択です]"
 
 #: eeschema/toolbars_symbol_viewer.cpp:51
 msgid "Choose symbol"
@@ -17000,11 +16963,11 @@ msgstr "完全な接続を選択"
 
 #: eeschema/tools/ee_actions.cpp:122
 msgid "Save Library As..."
-msgstr "名前を付けてライブラリーを保存..."
+msgstr "名前を付けてライブラリを保存..."
 
 #: eeschema/tools/ee_actions.cpp:122
 msgid "Save the current library to a new file."
-msgstr "現在のライブラリーを新しいファイルに保存します。"
+msgstr "現在のライブラリを新しいファイルに保存します。"
 
 #: eeschema/tools/ee_actions.cpp:127
 msgid "New Symbol..."
@@ -17040,11 +17003,11 @@ msgstr "選択されたシンボル名を変更"
 
 #: eeschema/tools/ee_actions.cpp:147
 msgid "Save the current symbol to a different library."
-msgstr "現在のシンボルを別のライブラリーに保存します。"
+msgstr "現在のシンボルを別のライブラリに保存します。"
 
 #: eeschema/tools/ee_actions.cpp:152
 msgid "Remove the selected symbol from its library"
-msgstr "ライブラリーから選択されたシンボルを削除"
+msgstr "ライブラリから選択されたシンボルを削除"
 
 #: eeschema/tools/ee_actions.cpp:167
 msgid "Paste Symbol"
@@ -17064,7 +17027,7 @@ msgstr "エクスポート..."
 
 #: eeschema/tools/ee_actions.cpp:177
 msgid "Export a symbol to a new library file"
-msgstr "新規ライブラリー ファイルにシンボルをエクスポート"
+msgstr "新規ライブラリ ファイルにシンボルをエクスポート"
 
 #: eeschema/tools/ee_actions.cpp:182
 msgid "Update Symbol Fields..."
@@ -17162,11 +17125,11 @@ msgstr "テキスト アイテムを追加"
 #: eeschema/tools/ee_actions.cpp:248 eeschema/tools/ee_actions.cpp:358
 #: pcbnew/tools/pcb_actions.cpp:133
 msgid "Add Text Box"
-msgstr "テキストボックスを追加"
+msgstr "テキスト ボックスを追加"
 
 #: eeschema/tools/ee_actions.cpp:248
 msgid "Add a text box item"
-msgstr "テキストボックスアイテムを追加"
+msgstr "テキスト ボックスアイテムを追加"
 
 #: eeschema/tools/ee_actions.cpp:253 eeschema/tools/ee_actions.cpp:834
 msgid "Add Lines"
@@ -17306,7 +17269,7 @@ msgstr "テキストを追加"
 
 #: eeschema/tools/ee_actions.cpp:358
 msgid "Add a text box"
-msgstr "テキストボックスを追加"
+msgstr "テキスト ボックスを追加"
 
 #: eeschema/tools/ee_actions.cpp:363 pagelayout_editor/tools/pl_actions.cpp:49
 msgid "Add Rectangle"
@@ -17444,19 +17407,19 @@ msgstr "シンボルを変更..."
 
 #: eeschema/tools/ee_actions.cpp:460
 msgid "Assign different symbols from the library"
-msgstr "ライブラリーから別のシンボルを割り当て"
+msgstr "ライブラリから別のシンボルを割り当て"
 
 #: eeschema/tools/ee_actions.cpp:465
 msgid "Update Symbols from Library..."
-msgstr "ライブラリーからシンボルを更新..."
+msgstr "ライブラリからシンボルを更新..."
 
 #: eeschema/tools/ee_actions.cpp:466
 msgid "Update symbols to include any changes from the library"
-msgstr "全ての変更を適用するためにライブラリーからシンボルを更新"
+msgstr "全ての変更を適用するためにライブラリからシンボルを更新"
 
 #: eeschema/tools/ee_actions.cpp:472
 msgid "Assign a different symbol from the library"
-msgstr "ライブラリーから別のシンボルを割り当て"
+msgstr "ライブラリから別のシンボルを割り当て"
 
 #: eeschema/tools/ee_actions.cpp:477
 msgid "Update Symbol..."
@@ -17464,7 +17427,7 @@ msgstr "シンボルを更新..."
 
 #: eeschema/tools/ee_actions.cpp:478
 msgid "Update symbol to include any changes from the library"
-msgstr "全ての変更を適用するためにライブラリーからシンボルを更新"
+msgstr "全ての変更を適用するためにライブラリからシンボルを更新"
 
 #: eeschema/tools/ee_actions.cpp:483 pcbnew/tools/pcb_actions.cpp:709
 msgid "Assign Netclass..."
@@ -17540,11 +17503,11 @@ msgstr "既存のアイテムをテキスト コメントに変更"
 
 #: eeschema/tools/ee_actions.cpp:528
 msgid "Change to Text Box"
-msgstr "テキストボックスに変更"
+msgstr "テキスト ボックスに変更"
 
 #: eeschema/tools/ee_actions.cpp:528
 msgid "Change existing item to a text box"
-msgstr "既存のアイテムをテキストボックスに変更"
+msgstr "既存のアイテムをテキスト ボックスに変更"
 
 #: eeschema/tools/ee_actions.cpp:533
 msgid "Cleanup Sheet Pins"
@@ -17632,7 +17595,7 @@ msgstr "選択されたシンボルをシンボル エディターで開く"
 
 #: eeschema/tools/ee_actions.cpp:601
 msgid "Open the library symbol in the Symbol Editor"
-msgstr "ライブラリーのシンボルをシンボル エディターで開く"
+msgstr "ライブラリのシンボルをシンボル エディターで開く"
 
 #: eeschema/tools/ee_actions.cpp:606
 msgid "Edit Symbol Fields..."
@@ -17644,11 +17607,11 @@ msgstr "回路図にある全てのシンボルのフィールドを一括編集
 
 #: eeschema/tools/ee_actions.cpp:611
 msgid "Edit Symbol Library Links..."
-msgstr "シンボル ライブラリー リンクを編集..."
+msgstr "シンボル ライブラリ リンクを編集..."
 
 #: eeschema/tools/ee_actions.cpp:611
 msgid "Edit links between schematic and library symbols"
-msgstr "回路図シンボルとライブラリー シンボル間のリンクを編集"
+msgstr "回路図シンボルとライブラリ シンボル間のリンクを編集"
 
 #: eeschema/tools/ee_actions.cpp:616
 msgid "Assign Footprints..."
@@ -17706,15 +17669,14 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:649
 msgid "Remap Legacy Library Symbols..."
-msgstr "以前の形式のライブラリーのシンボルをリマップ..."
+msgstr "以前の形式のライブラリのシンボルをリマップ..."
 
 #: eeschema/tools/ee_actions.cpp:650
 msgid ""
 "Remap library symbol references in legacy schematics to the symbol library "
 "table"
-msgstr ""
-"従来の回路図のライブラリー シンボルの参照をシンボル ライブラリー テーブルに再"
-"マップする"
+msgstr "従来の回路図のライブラリ シンボルの参照をシンボル ライブラリ "
+"テーブルに再マップする"
 
 #: eeschema/tools/ee_actions.cpp:655
 msgid "Export Drawing to Clipboard"
@@ -17759,8 +17721,8 @@ msgid ""
 "Add symbols used in schematic to an existing symbol library\n"
 "(does not remove other symbols from this library)"
 msgstr ""
-"回路図で使われている全てのシンボルを既存のライブラリーに追加します。\n"
-"(このライブラリーにある他のシンボルを削除しません)"
+"回路図で使われている全てのシンボルを既存のライブラリに追加します。\n"
+"(このライブラリにある他のシンボルを削除しません)"
 
 #: eeschema/tools/ee_actions.cpp:682
 msgid "Export Symbols to New Library..."
@@ -17771,8 +17733,8 @@ msgid ""
 "Create a new symbol library using the symbols used in the schematic\n"
 "(if the library already exists it will be replaced)"
 msgstr ""
-"基板で使われているフットプリントを含む、新しいライブラリーを作成します\n"
-"(ライブラリーが既に存在する場合は置き換えられます)"
+"基板で使われているフットプリントを含む、新しいライブラリを作成します\n"
+"(ライブラリが既に存在する場合は置き換えられます)"
 
 #: eeschema/tools/ee_actions.cpp:689
 msgid "Select on PCB"
@@ -17907,7 +17869,7 @@ msgstr "後ろにナビゲート"
 
 #: eeschema/tools/ee_actions.cpp:780
 msgid "Move forward in sheet navigation history"
-msgstr "シートナビゲーション履歴内で先に進む"
+msgstr "シート ナビゲーションの履歴を進む"
 
 #: eeschema/tools/ee_actions.cpp:786
 msgid "Navigate Forward"
@@ -17915,7 +17877,7 @@ msgstr "先にナビゲート"
 
 #: eeschema/tools/ee_actions.cpp:786
 msgid "Move backward in sheet navigation history"
-msgstr "シートナビゲーション履歴内で後ろに戻る"
+msgstr "シート ナビゲーションの履歴を戻る"
 
 #: eeschema/tools/ee_actions.cpp:792
 msgid "Previous Sheet"
@@ -18169,7 +18131,7 @@ msgstr "ライブラリ '%s' を追加できませんでした。"
 
 #: eeschema/tools/sch_editor_control.cpp:415
 msgid "Update symbols in schematic to refer to new library?"
-msgstr "基板上のシンボルが 新しいライブラリーを参照するように更新しますか?"
+msgstr "基板上のシンボルが 新しいライブラリを参照するように更新しますか?"
 
 #: eeschema/tools/sch_editor_control.cpp:723
 msgid "Error: duplicate sub-sheet names found in current sheet."
@@ -18196,7 +18158,7 @@ msgstr ""
 
 #: eeschema/tools/sch_editor_control.cpp:1904
 msgid "Symbols with broken library symbol links cannot be edited."
-msgstr "ライブラリシンボルリンクが壊れているシンボルは編集できません。"
+msgstr "ライブラリのシンボルへのリンクが壊れているシンボルは編集できません。"
 
 #: eeschema/tools/sch_editor_control.cpp:2198
 #: pcbnew/tools/board_editor_control.cpp:594
@@ -18257,7 +18219,7 @@ msgstr "ページ '%s' が見つかりません。"
 
 #: eeschema/tools/symbol_editor_control.cpp:180
 msgid "No symbol library selected."
-msgstr "シンボル ライブラリーが選択されていません。"
+msgstr "シンボル ライブラリが選択されていません。"
 
 #: eeschema/tools/symbol_editor_control.cpp:331
 #: pcbnew/tools/footprint_editor_control.cpp:403
@@ -18347,17 +18309,17 @@ msgstr "ライブラリー テーブルを編集しないでください"
 #: eeschema/widgets/symbol_filedlg_save_as.h:35
 #: eeschema/widgets/symbol_legacyfiledlg_save_as.h:42
 msgid "Update existing library table entry"
-msgstr "既存のライブラリーテーブル項目を更新"
+msgstr "既存のライブラリ テーブル項目を更新"
 
 #: eeschema/widgets/symbol_filedlg_save_as.h:37
 #: eeschema/widgets/symbol_legacyfiledlg_save_as.h:48
 msgid "Add new global library table entry"
-msgstr "グローバル ライブラリー テーブルの新しいエントリーを追加"
+msgstr "グローバル ライブラリ テーブルの新しいエントリーを追加"
 
 #: eeschema/widgets/symbol_filedlg_save_as.h:39
 #: eeschema/widgets/symbol_legacyfiledlg_save_as.h:54
 msgid "Add new project library table entry"
-msgstr "プロジェクト ライブラリー テーブルに新しい項目を追加"
+msgstr "プロジェクト ライブラリ テーブルに新しい項目を追加"
 
 #: eeschema/widgets/symbol_legacyfiledlg_save_as.h:39
 msgid "Do not perform any additional operations after saving library."
@@ -18369,9 +18331,9 @@ msgid ""
 "\n"
 "The original library will no longer be available for use."
 msgstr ""
-"シンボル ライブラリ テーブル の項目を新しいライブラリーで置き換えます。\n"
+"シンボル ライブラリ テーブル の項目を新しいライブラリで置き換えます。\n"
 "\n"
-"元のライブラリーは使用できなくなります。"
+"元のライブラリは使用できなくなります。"
 
 #: eeschema/widgets/symbol_legacyfiledlg_save_as.h:49
 msgid ""
@@ -18392,9 +18354,9 @@ msgid ""
 "The symbol library table nickname is suffixed with\n"
 "an integer to prevent duplicate table entries."
 msgstr ""
-"プロジェクトのシンボル ライブラリー テーブルに新しい項目を追加します。\n"
+"プロジェクトのシンボル ライブラリ テーブルに新しい項目を追加します。\n"
 "\n"
-"シンボル ライブラリー テーブルのニックネームには、テーブルエントリーが\n"
+"シンボル ライブラリ テーブルのニックネームには、テーブルエントリーが\n"
 "重複しないように整数を接尾辞として付けます。"
 
 #: eeschema/widgets/tuner_slider.cpp:61
@@ -18897,7 +18859,7 @@ msgstr "表面ハンダペースト"
 
 #: gerbview/files.cpp:213
 msgid "Keep-out layer"
-msgstr "キープアウトレイヤー"
+msgstr "キープアウト レイヤー"
 
 #: gerbview/files.cpp:214
 msgid "Mechanical layers"
@@ -19008,7 +18970,7 @@ msgstr "終点"
 
 #: gerbview/gerber_draw_item.cpp:679
 msgid "Clear"
-msgstr "クリアー"
+msgstr "クリア"
 
 #: gerbview/gerber_draw_item.cpp:680 gerbview/gerber_file_image.cpp:339
 msgid "Polarity"
@@ -19297,11 +19259,11 @@ msgstr "KiCad基板ファイルとしてデータをエクスポート"
 #: gerbview/tools/gerbview_actions.cpp:93
 #: gerbview/widgets/gerbview_layer_widget.cpp:190
 msgid "Clear Current Layer..."
-msgstr "現在のレイヤーをクリアー..."
+msgstr "現在のレイヤーをクリア..."
 
 #: gerbview/tools/gerbview_actions.cpp:93
 msgid "Clear the selected graphic layer"
-msgstr "選択されたグラフィック レイヤーをクリアー"
+msgstr "選択されたグラフィック レイヤーをクリア"
 
 #: gerbview/tools/gerbview_actions.cpp:98
 msgid "Clear All Layers"
@@ -19604,7 +19566,7 @@ msgstr "データの出力に失敗しました"
 
 #: kicad/cli/command.h:32
 msgid "shows help message and exits"
-msgstr "ヘルプメッセージを表示して終了する"
+msgstr "ヘルプ メッセージを表示して終了する"
 
 #: kicad/cli/command_export_pcb_base.cpp:39
 #: kicad/cli/command_export_pcb_step.cpp:87
@@ -19881,9 +19843,8 @@ msgstr "基板を反転 (裏面から表示するのに便利です)"
 msgid ""
 "Set page sizing mode (0 = page with frame and title block, 1 = current page "
 "size, 2 = board area only)"
-msgstr ""
-"ページサイズのモードを設定 (0 = フレームとタイトルブロックを含める, 1 = 現在"
-"のページサイズ, 2 = 基板の領域のみ)"
+msgstr "ページサイズのモードを設定 (0 = フレームとタイトル ブロックを含める, 1 = "
+"現在のページサイズ, 2 = 基板の領域のみ)"
 
 #: kicad/cli/command_export_pcb_svg.cpp:63
 #: kicad/cli/command_export_sch_pdf.cpp:46
@@ -19914,15 +19875,15 @@ msgstr "背景色の設定を行いません (テーマに関わらず)"
 #: kicad/cli/command_fp_export_svg.cpp:42
 #: kicad/cli/command_sym_export_svg.cpp:44
 msgid "Specific symbol to export within the library"
-msgstr "ライブラリー中からエクスポートするシンボルを指定する"
+msgstr "ライブラリ中からエクスポートするシンボルを指定する"
 
 #: kicad/cli/command_fp_export_svg.cpp:62
 msgid "Footprint library does not exist or is not accessible\n"
-msgstr "フットプリント ライブラリーが存在しないかアクセス不可です\n"
+msgstr "フットプリント ライブラリが存在しないかアクセス不可です\n"
 
 #: kicad/cli/command_fp_upgrade.cpp:37
 msgid "Forces the footprint library to be resaved regardless of versioning"
-msgstr "バージョンに関係なくフットプリント ライブラリーを強制的に再保存します"
+msgstr "バージョンに関係なくフットプリント ライブラリを強制的に再保存します"
 
 #: kicad/cli/command_fp_upgrade.cpp:53
 msgid "Footprint path does not exist or is not accessible\n"
@@ -19942,7 +19903,7 @@ msgstr "シンボル ファイルは存在しないかアクセス不可です\n
 
 #: kicad/cli/command_sym_upgrade.cpp:37
 msgid "Forces the symbol library to be resaved regardless of versioning"
-msgstr "バージョンに関係なくシンボル ライブラリーを強制的に再保存します"
+msgstr "バージョンに関係なくシンボル ライブラリを強制的に再保存します"
 
 #: kicad/cli/command_version.cpp:35
 msgid "version info format (plain, commit, about)"
@@ -19974,7 +19935,7 @@ msgstr "プロジェクトの回路図を編集します"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:134
 msgid "Edit global and/or project schematic symbol libraries"
-msgstr "グローバルおよびプロジェクトの回路図シンボル ライブラリーを編集します"
+msgstr "グローバルおよびプロジェクトの回路図シンボル ライブラリを編集します"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:138
 msgid "Edit the project PCB design"
@@ -19982,8 +19943,7 @@ msgstr "プロジェクトの基板デザインを編集します"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:142
 msgid "Edit global and/or project PCB footprint libraries"
-msgstr ""
-"グローバルおよびプロジェクトのPCBフットプリント ライブラリーを編集します"
+msgstr "グローバルおよびプロジェクトのPCBフットプリント ライブラリを編集します"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:146
 msgid "Preview Gerber files"
@@ -20003,15 +19963,13 @@ msgstr "抵抗や電流容量などを計算するためのツールを表示し
 msgid ""
 "Edit drawing sheet borders and title blocks for use in schematics and PCB "
 "designs"
-msgstr ""
-"回路図とプリント基板デザインで使われる図面シートの枠線とタイトルブロックを編"
-"集します"
+msgstr "回路図とプリント基板デザインで使われる図面シートの枠線とタイトル "
+"ブロックを編集します"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:164
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
-msgstr ""
-"KiCadおよびサードパーティーのリポジトリからダウンロード可能なパッケージを管理"
-"します"
+msgstr "KiCadおよびサードパーティのリポジトリからダウンロード可能なパッケージを管理し"
+"ます"
 
 #: kicad/files-io.cpp:46
 msgid "KiCad project file"
@@ -20188,11 +20146,11 @@ msgstr "ファイル ブラウザーでプロジェクトのディレクトリ�
 
 #: kicad/menubar.cpp:187
 msgid "Edit Local File..."
-msgstr "ローカルファイルを編集..."
+msgstr "ローカル ファイルを編集..."
 
 #: kicad/menubar.cpp:188
 msgid "Edit local file in text editor"
-msgstr "テキストエディターでローカルファイルを編集します"
+msgstr "テキスト エディターでローカル ファイルを編集します"
 
 #: kicad/menubar.cpp:248
 msgid "Archive all project files"
@@ -20473,11 +20431,11 @@ msgstr "すべて更新"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:91
 msgid "Download Size"
-msgstr "ダウンロードサイズ"
+msgstr "ダウンロード サイズ"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:92
 msgid "Install Size"
-msgstr "インストールサイズ"
+msgstr "インストール サイズ"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:93
 msgid "Compatible"
@@ -20497,7 +20455,7 @@ msgstr "起動時にパッケージのアップデートを確認する"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:40
 msgid "Library package handling"
-msgstr "ライブラリパッケージの取り扱い"
+msgstr "ライブラリ パッケージの取り扱い"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:53
 msgid "Automatically add installed libraries to global lib table"
@@ -20510,16 +20468,16 @@ msgstr "アンインストールされたライブラリを自動的に削除"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:64
 msgid "Library nickname prefix:"
-msgstr "ライブラリーのニックネームの前置詞:"
+msgstr "ライブラリのニックネームの前置詞:"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:74
 msgid ""
 "After packages are (un)installed KiCad may need to be restarted to reflect "
 "changes in the global library table."
 msgstr ""
-"パッケージをインストール (もしくはアンインストール) した後、グローバル ライブ"
-"ラリー テーブルの変更を反映するために、KiCad を再起動する必要がある場合があり"
-"ます。"
+"パッケージをインストール (もしくはアンインストール) した後、グローバル "
+"ライブラリ テーブルの変更を反映するために、KiCad "
+"を再起動する必要がある場合があります。"
 
 #: kicad/pcm/pcm.cpp:123
 #, c-format
@@ -20611,7 +20569,7 @@ msgstr ""
 
 #: kicad/pcm/pcm.cpp:794
 msgid "Local file"
-msgstr "ローカルファイル"
+msgstr "ローカル ファイル"
 
 #: kicad/pcm/pcm.cpp:1175
 msgid "Package updates are available"
@@ -20628,7 +20586,7 @@ msgstr "バージョン %s （パッケージ %s ）が見つかりません!"
 
 #: kicad/pcm/pcm_task_manager.cpp:83
 msgid "Unable to create download directory!"
-msgstr "ダウンロードディレクトリを作成できません!"
+msgstr "ダウンロード ディレクトリを作成できません!"
 
 #: kicad/pcm/pcm_task_manager.cpp:129
 #, c-format
@@ -20828,15 +20786,15 @@ msgstr "既定のシステム ファイル マネージャーでディレクト�
 
 #: kicad/project_tree_pane.cpp:721
 msgid "Open the file in a Text Editor"
-msgstr "テキストエディターでファイルを開く"
+msgstr "テキスト エディターでファイルを開く"
 
 #: kicad/project_tree_pane.cpp:723
 msgid "Open files in a Text Editor"
-msgstr "テキストエディターでファイルを開く"
+msgstr "テキスト エディターでファイルを開く"
 
 #: kicad/project_tree_pane.cpp:725
 msgid "Edit in a Text Editor"
-msgstr "テキストエディターで編集"
+msgstr "テキスト エディターで編集"
 
 #: kicad/project_tree_pane.cpp:733
 msgid "Rename File..."
@@ -20877,11 +20835,11 @@ msgstr "ファイル名変更"
 
 #: kicad/project_tree_pane.cpp:1143
 msgid "Network path: not monitoring folder changes"
-msgstr "ネットワークパス: フォルダーの変更を監視しません"
+msgstr "ネットワーク パス: フォルダーの変更を監視しません"
 
 #: kicad/project_tree_pane.cpp:1148
 msgid "Local path: monitoring folder changes"
-msgstr "ローカルパス: フォルダーの変更を監視します"
+msgstr "ローカル パス: フォルダーの変更を監視します"
 
 #: kicad/tools/kicad_manager_actions.cpp:41
 msgid "New Project..."
@@ -20901,11 +20859,11 @@ msgstr "テンプレートから新規プロジェクトを作成"
 
 #: kicad/tools/kicad_manager_actions.cpp:53
 msgid "Open Demo Project..."
-msgstr "デモプロジェクトを開く..."
+msgstr "デモ プロジェクトを開く..."
 
 #: kicad/tools/kicad_manager_actions.cpp:53
 msgid "Open a demo project"
-msgstr "デモプロジェクトを開く"
+msgstr "デモ プロジェクトを開く"
 
 #: kicad/tools/kicad_manager_actions.cpp:59
 msgid "Open Project..."
@@ -20966,11 +20924,11 @@ msgstr "プラグインとコンテントマネージャーを実行"
 
 #: kicad/tools/kicad_manager_actions.cpp:133
 msgid "Open Text Editor"
-msgstr "テキストエディターを開く"
+msgstr "テキスト エディターを開く"
 
 #: kicad/tools/kicad_manager_actions.cpp:133
 msgid "Launch preferred text editor"
-msgstr "お気に入りのテキストエディターを起動します"
+msgstr "お気に入りのテキスト エディターを起動します"
 
 #: kicad/tools/kicad_manager_control.cpp:71
 msgid "Create New Project"
@@ -21081,7 +21039,7 @@ msgstr "このプロジェクト用に新しいフォルダーを作成"
 #: libs/kiplatform/msw/environment.cpp:63
 #, c-format
 msgid "Error code: %d"
-msgstr "エラーコード: %d"
+msgstr "エラー コード: %d"
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:223
 msgid "Layout"
@@ -21419,7 +21377,7 @@ msgstr "図面シート '%s' をロード中にエラーしました。"
 
 #: pagelayout_editor/pl_editor_frame.cpp:446
 msgid "Error Init Printer info"
-msgstr "プリンタ情報の初期化エラー"
+msgstr "プリンター情報の初期化エラー"
 
 #: pagelayout_editor/pl_editor_frame.cpp:548
 msgid "[no drawing sheet loaded]"
@@ -22750,7 +22708,7 @@ msgstr "クリアランス穴の直径:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:87
 msgid "Diameter of clearance hole in ground plane(s)"
-msgstr "グランド プレーンにおけるクリアランス穴の直径"
+msgstr "グランドプレーンにおけるクリアランス穴の直径"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:99
 msgid "Z0:"
@@ -22915,7 +22873,7 @@ msgstr "比透磁率"
 
 #: pcb_calculator/datafile_read_write.cpp:76
 msgid "Data file error."
-msgstr "データファイルのエラー."
+msgstr "データ ファイルのエラー."
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:44
 msgid "Volt"
@@ -23022,7 +22980,7 @@ msgstr "溶断電流"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:98
 msgid "Cable Size"
-msgstr "ケーブルサイズ"
+msgstr "ケーブル サイズ"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:100
 msgid "High speed"
@@ -23069,7 +23027,7 @@ msgid ""
 "No data filename to save modifications.\n"
 "Do you want to exit and abandon your changes?"
 msgstr ""
-"変更を保存するデータファイル名がありません。\n"
+"変更を保存するデータ ファイル名がありません。\n"
 "変更を破棄して終了してよいですか？"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:282
@@ -23701,7 +23659,7 @@ msgstr "銅箔仕上げ:"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:40
 msgid "Edge card connectors:"
-msgstr "エッジ カード コネクター:"
+msgstr "エッジ カード コネクタ:"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
 msgid "Yes, bevelled"
@@ -23709,7 +23667,7 @@ msgstr "あり、傾斜付"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:48
 msgid "Options for edge card connectors."
-msgstr "エッジ カード コネクターのオプション."
+msgstr "エッジ カード コネクタのオプション."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:119
 msgid "Core"
@@ -24698,7 +24656,7 @@ msgstr "スルーホール:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:152
 msgid "Connector:"
-msgstr "コネクター:"
+msgstr "コネクタ:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:153
 msgid "NPTH:"
@@ -25947,7 +25905,7 @@ msgstr "値の一致するフットプリントを変更:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:79
 msgid "Change footprints with library id:"
-msgstr "指定のライブラリーIDのフットプリントを変更:"
+msgstr "指定のライブラリIDのフットプリントを変更:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:80
 msgid "Update text layers and visibilities"
@@ -25972,10 +25930,11 @@ msgid ""
 "or the user made changes to the library footprint and wants to propagate "
 "them back to the PCB."
 msgstr ""
-"文字列の更新/リセット: これらの説明がカバーする必要がある 2 つのケースがあり"
-"ます: ユーザーが PCB 上のフットプリントを上書きしてそれらを削除する場合、また"
-"はユーザーがライブラリーのフットプリントの変更して PCB に反映させたい場合で"
-"す。"
+"文字列の更新/リセット: これらの説明がカバーする必要がある 2 "
+"つのケースがあります: ユーザーが PCB "
+"上のフットプリントを上書きしてそれらを削除する場合、"
+"またはユーザーがライブラリのフットプリントの変更して PCB "
+"に反映させたい場合です。"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:358
 #, c-format
@@ -25989,7 +25948,7 @@ msgstr "フットプリント %s を '%s' から '%s' に変更"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:374
 msgid "*** library footprint not found ***"
-msgstr "*** フットプリントライブラリーが見つかりません ***"
+msgstr "*** フットプリント ライブラリが見つかりません ***"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:394
 msgid ": (no changes)"
@@ -26017,15 +25976,15 @@ msgstr "値の一致するフットプリントを更新:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:44
 msgid "Update footprints with library id:"
-msgstr "指定のライブラリーIDのフットプリントを更新:"
+msgstr "指定のライブラリIDのフットプリントを更新:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:73
 msgid "New footprint library id:"
-msgstr "新しいフットプリント ライブラリーID:"
+msgstr "新しいフットプリント ライブラリID:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:96
 msgid "Remove text items which are not in library footprint"
-msgstr "ライブラリー フットプリントにないテキスト アイテムを削除"
+msgstr "ライブラリ フットプリントにないテキスト アイテムを削除"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:101
 msgid "Update/reset text layers and visibilities"
@@ -26045,7 +26004,7 @@ msgstr "3D モデルを更新/リセット"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.h:86
 msgid "Update Footprints from Library"
-msgstr "ライブラリーからフットプリントを更新"
+msgstr "ライブラリからフットプリントを更新"
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:161
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:120
@@ -26107,13 +26066,12 @@ msgstr "スケールが不統一のモデル:"
 #: pcbnew/dialogs/dialog_export_step.cpp:214
 msgid ""
 "Scaled models detected.  Model scaling is not reliable for mechanical export."
-msgstr ""
-"スケールされたモデルが検出されました。  モデルのスケーリングは、機械向けのエ"
-"クスポートとして信頼できるものではありません。"
+msgstr "スケーリングされたモデルが検出されました。  モデルのスケーリングは、機械向け"
+"のエクスポートとして信頼できるものではありません。"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:216
 msgid "Model Scale Warning"
-msgstr "モデルスケールの警告"
+msgstr "スケーリングされたモデルの警告"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:284
 msgid "STEP export failed!  Please save the PCB and try again"
@@ -26266,7 +26224,7 @@ msgstr "白い背景に黒の要素としてエクスポート"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:89
 msgid "Page with frame and title block"
-msgstr "フレームとタイトルブロック付きページ"
+msgstr "フレームとタイトル ブロック付きページ"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:89
 msgid "Current page size"
@@ -26610,7 +26568,7 @@ msgstr "スルーホール"
 #: pcbnew/footprint_libraries_utils.cpp:1250 pcbnew/pad.cpp:1232
 #: pcbnew/pad.cpp:1702
 msgid "SMD"
-msgstr "表面実装"
+msgstr "SMD"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:198
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:202
@@ -26637,7 +26595,7 @@ msgstr "\"コートヤードがない(missing courtyard\" DRC違反を発生さ�
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:224
 msgid "Update Footprint from Library..."
-msgstr "ライブラリーからフットプリントを更新..."
+msgstr "ライブラリからフットプリントを更新..."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:227
 #: pcbnew/tools/pcb_actions.cpp:483
@@ -26647,7 +26605,7 @@ msgstr "フットプリントを変更..."
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:236
 #: pcbnew/tools/pcb_actions.cpp:256
 msgid "Edit Library Footprint..."
-msgstr "フットプリント ライブラリーを編集..."
+msgstr "フットプリント ライブラリを編集..."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:261
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:232
@@ -26799,8 +26757,9 @@ msgid ""
 "The library ID and footprint ID currently assigned.  Use \"Change "
 "Footprint...\" to assign a different footprint."
 msgstr ""
-"現在、ライブラリー ID とフットプリント ID が割り当てられています。  別のフッ"
-"トプリントを割り当てるには \"フットプリントの変更…\" を使用して下さい。"
+"現在、ライブラリ ID とフットプリント ID が割り当てられています。  "
+"別のフットプリントを割り当てるには \"フットプリントの変更…\" "
+"を使用して下さい。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.h:121
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.h:113
@@ -26975,7 +26934,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_fp_plugin_options.cpp:63
 #, c-format
 msgid "Options for Library '%s'"
-msgstr "ライブラリー '%s' のオプション"
+msgstr "ライブラリ '%s' のオプション"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:26
 msgid "Plugin Options"
@@ -27277,7 +27236,7 @@ msgstr "精度"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:144
 msgid "Hole Counts"
-msgstr "ホール数"
+msgstr "穴の数"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:151
 msgid "Plated pads:"
@@ -27511,7 +27470,7 @@ msgstr "レイヤーでフィルターされたアイテム:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:79
 msgid "Filter items by parent footprint library id:"
-msgstr "親フットプリントのライブラリー ID でフィルターされたアイテム:"
+msgstr "親フットプリントのライブラリ ID でフィルターされたアイテム:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:106
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:92
@@ -27561,23 +27520,22 @@ msgstr "フットプリント"
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:59
 #, c-format
 msgid "Error occurred writing empty footprint library table '%s'."
-msgstr ""
-"空のフットプリント ライブラリー テーブル ファイル '%s' を書き込もうとしたとこ"
-"ろ、エラーが発生しました。"
+msgstr "空のフットプリント ライブラリ テーブル ファイル '%s' "
+"を書き込もうとしたところ、エラーが発生しました。"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:73
 msgid "Please select a footprint library table file."
-msgstr "フットプリント ライブラリー テーブル ファイルを選択してください。"
+msgstr "フットプリント ライブラリ テーブル ファイルを選択してください。"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:95
 #, c-format
 msgid "'%s' is not a valid footprint library table."
-msgstr "'%s' は有効なフットプリント ライブラリー テーブルではありません。"
+msgstr "'%s' は有効なフットプリント ライブラリ テーブルではありません。"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:106
 #, c-format
 msgid "Cannot create library table path '%s'."
-msgstr "ライブラリー テーブルのパス '%s' が作成できません。"
+msgstr "ライブラリ テーブルのパス '%s' が作成できません。"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:114
 #, c-format
@@ -27587,14 +27545,14 @@ msgid ""
 "to:\n"
 "%s."
 msgstr ""
-"フットプリント ライブラリー をコピーできません:\n"
+"フットプリント ライブラリ をコピーできません:\n"
 "%s\n"
 "から\n"
 "%s."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:133
 msgid "Error loading footprint library table."
-msgstr "プロジェクトのフットプリント ライブラリー テーブルをロード中にエラー。"
+msgstr "プロジェクトのフットプリント ライブラリ テーブルをロード中にエラー。"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:210
 msgid "Circle Properties"
@@ -28028,7 +27986,7 @@ msgstr "グループ '%s' に含まれるネットを全て削除しますか?"
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2207
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2208
 msgid "Report file"
-msgstr "レポートファイル"
+msgstr "レポート ファイル"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:30
 msgid "Net name filter:"
@@ -28325,9 +28283,8 @@ msgstr "エラー:スルーホール パッドに穴がありません。"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1368
 msgid ""
 "Warning: Connector pads normally have no solder paste. Use a SMD pad instead."
-msgstr ""
-"警告: 通常、コネクターのパッドにはハンダペーストはありません。代わりにSMDパッ"
-"ドを使用してください。"
+msgstr "警告: 通常、コネクタのパッドにはハンダペーストはありません。代わりにSMDパッド"
+"を使用してください。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1377
 msgid "Error: SMD pad has a hole."
@@ -28421,7 +28378,7 @@ msgstr "スルーホール"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:39
 msgid "Edge Connector"
-msgstr "エッジ コネクター"
+msgstr "エッジ コネクタ"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:39
 msgid "NPTH, Mechanical"
@@ -29766,7 +29723,7 @@ msgstr "親のフットプリントの説明"
 
 #: pcbnew/dialogs/dialog_textbox_properties.cpp:411
 msgid "Change text box properties"
-msgstr "テキストボックスのプロパティを変更"
+msgstr "テキスト ボックスのプロパティを変更"
 
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:138
 msgid "Text Width:"
@@ -30278,7 +30235,7 @@ msgstr "不正な文字 '%c' がニックネーム '%s' に含まれています
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:808
 #, c-format
 msgid "Select %s Library"
-msgstr "%s ライブラリーを選択"
+msgstr "%s ライブラリを選択"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:866
 msgid "The following directories could not be opened: \n"
@@ -30286,7 +30243,7 @@ msgstr "以下のディレクトリーが開けませんでした: \n"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:871
 msgid "Failed to open directories to look for libraries"
-msgstr "ライブラリー検索でディレクトリーを開くことに失敗しました"
+msgstr "ライブラリ検索でディレクトリを開くことに失敗しました"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:899
 msgid "Warning: Duplicate Nicknames"
@@ -30294,7 +30251,7 @@ msgstr "警告: 重複したニックネーム"
 
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:97
 msgid "LIbrary Format"
-msgstr "ライブラリー形式"
+msgstr "ライブラリ形式"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:388
 msgid "No filename entered"
@@ -30331,7 +30288,7 @@ msgstr "ボタンを表示"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:39
 msgid "Category"
-msgstr "カテゴリー"
+msgstr "カテゴリ"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:76
 #: pcbnew/tools/pcb_actions.cpp:621
@@ -32578,11 +32535,11 @@ msgstr "パッドのネットが回路図と不一致"
 
 #: pcbnew/drc/drc_item.cpp:185
 msgid "Footprint not found in libraries"
-msgstr "フットプリントがライブラリーにない"
+msgstr "フットプリントがライブラリにない"
 
 #: pcbnew/drc/drc_item.cpp:189
 msgid "Footprint doesn't match copy in library"
-msgstr "フットプリントがライブラリーのコピーと一致しない"
+msgstr "フットプリントがライブラリのコピーと一致しない"
 
 #: pcbnew/drc/drc_item.cpp:197
 msgid "Assertion failure"
@@ -32947,27 +32904,26 @@ msgstr "(%s 最小 %s; 現状 %s)"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:459
 msgid "No project loaded, skipping library parity tests."
-msgstr ""
-"プロジェクトがロードされておらず、ライブラリーの等価性のテストをスキップして"
-"います。"
+msgstr "プロジェクトがロードされておらず、ライブラリの等価性のテストをスキップしてい"
+"ます。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:463
 msgid "Loading footprint library table..."
-msgstr "フットプリント ライブラリー テーブルをロード中…"
+msgstr "フットプリント ライブラリ テーブルをロード中…"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:473
 msgid "Checking board footprints against library..."
-msgstr "ライブラリーに対するフットプリントをチェックしています..."
+msgstr "ライブラリに対するフットプリントをチェックしています..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:505
 #, c-format
 msgid "The current configuration does not include the library '%s'."
-msgstr "現在の設定には '%s' のライブラリーは含まれません。"
+msgstr "現在の設定には '%s' のライブラリは含まれません。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:519
 #, c-format
 msgid "The library '%s' is not enabled in the current configuration."
-msgstr "ライブラリー '%s' は現在の設定では有効化されていません。"
+msgstr "ライブラリ '%s' は現在の設定では有効化されていません。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:555
 #, c-format
@@ -33376,15 +33332,13 @@ msgstr "基板 '%s' のロード中にメモリー不足が発生しました"
 #: pcbnew/files.cpp:890
 #, c-format
 msgid "Error saving footprint %s to project specific library."
-msgstr ""
-"フットプリント '%s' をプロジェクト固有のライブラリーへ保存中にエラーが発生し"
-"ました。"
+msgstr "フットプリント '%s' "
+"をプロジェクト固有のライブラリへ保存中にエラーが発生しました。"
 
 #: pcbnew/files.cpp:921
 msgid "Error saving project specific footprint library table."
-msgstr ""
-"プロジェクト固有のフットプリント ライブラリー テーブルの保存中にエラーしまし"
-"た。"
+msgstr "プロジェクト固有のフットプリント ライブラリ "
+"テーブルの保存中にエラーしました。"
 
 #: pcbnew/files.cpp:997
 msgid "Converting zone fills"
@@ -33550,7 +33504,7 @@ msgstr "PTH用のサーマルリリーフ"
 
 #: pcbnew/footprint.cpp:2919
 msgid "Library link"
-msgstr "ライブラリーへのリンク"
+msgstr "ライブラリへのリンク"
 
 #: pcbnew/footprint.cpp:2936
 msgid "Exclude from BOM"
@@ -33614,7 +33568,7 @@ msgstr "[フットプリントがロードされていません]"
 
 #: pcbnew/footprint_edit_frame.cpp:968
 msgid "Updating Footprint Libraries"
-msgstr "フットプリント ライブラリーを更新"
+msgstr "フットプリント ライブラリを更新"
 
 #: pcbnew/footprint_edit_frame.cpp:1270
 msgid "No footprint selected."
@@ -33634,12 +33588,12 @@ msgid ""
 "The current configuration does not include a library named '%s'.\n"
 "Use Manage Footprint Libraries to edit the configuration."
 msgstr ""
-"現在の設定は '%s' という名前のライブラリーを含んでいません。\n"
-"設定を編集するには フットプリント ライブラリーの管理 を使用して下さい。"
+"現在の設定は '%s' という名前のライブラリを含んでいません。\n"
+"設定を編集するには フットプリント ライブラリの管理 を使用して下さい。"
 
 #: pcbnew/footprint_editor_utils.cpp:334
 msgid "Library not found in footprint library table."
-msgstr "ライブラリーがフットプリント ライブラリー テーブルに見つかりません。"
+msgstr "ライブラリがフットプリント ライブラリ テーブルに見つかりません。"
 
 #: pcbnew/footprint_editor_utils.cpp:343
 #, c-format
@@ -33647,16 +33601,16 @@ msgid ""
 "The library '%s' is not enabled in the current configuration.\n"
 "Use Manage Footprint Libraries to edit the configuration."
 msgstr ""
-"'%s' のライブラリーは現在の設定では有効になっていません。\n"
-"設定を編集するには フットプリント ライブラリーの管理 を使用して下さい。"
+"'%s' のライブラリは現在の設定では有効になっていません。\n"
+"設定を編集するには フットプリント ライブラリの管理 を使用して下さい。"
 
 #: pcbnew/footprint_editor_utils.cpp:346 pcbnew/footprint_viewer_frame.cpp:1107
 msgid "Footprint library not enabled."
-msgstr "フットプリント ライブラリーが有効になっていません。"
+msgstr "フットプリント ライブラリが有効になっていません。"
 
 #: pcbnew/footprint_info_impl.cpp:122
 msgid "Fetching footprint libraries..."
-msgstr "フットプリント ライブラリーをフェッチしています..."
+msgstr "フットプリント ライブラリをフェッチしています..."
 
 #: pcbnew/footprint_info_impl.cpp:153
 msgid "Loading footprints..."
@@ -33669,11 +33623,10 @@ msgid ""
 "and update your footprint lib table\n"
 "to save your footprint (a .kicad_mod file) in the .pretty library folder"
 msgstr ""
-"以前の形式のライブラリー (.mod ファイル) を作成したり編集したりすることはでき"
-"ません\n"
-"現在のライブラリーを新しい .pretty フォーマットで保存してください\n"
-"また、フットプリント(.kicad_mod ファイル)を .pretty ライブラリー フォルダー"
-"に\n"
+"以前の形式のライブラリ (.mod ファイル) "
+"を作成したり編集したりすることはできません\n"
+"現在のライブラリを新しい .pretty フォーマットで保存してください\n"
+"また、フットプリント(.kicad_mod ファイル)を .pretty ライブラリ フォルダーに\n"
 "保存して、フットプリント lib テーブルを更新してください"
 
 #: pcbnew/footprint_libraries_utils.cpp:67
@@ -33683,8 +33636,8 @@ msgid ""
 "and update your footprint lib table\n"
 "before deleting a footprint"
 msgstr ""
-"以前の形式のライブラリー (.mod ファイル) を編集することはできません\n"
-"現在のライブラリーを新しい .pretty フォーマットで保存して\n"
+"以前の形式のライブラリ (.mod ファイル) を編集することはできません\n"
+"現在のライブラリを新しい .pretty フォーマットで保存して\n"
 "フットプリントを削除する前に\n"
 "フットプリント lib テーブルを更新してください"
 
@@ -33713,12 +33666,12 @@ msgstr "フットプリントをファイル '%s' へエクスポートしまし
 #: pcbnew/footprint_libraries_utils.cpp:470
 #, c-format
 msgid "Library %s is read only."
-msgstr "ライブラリー %s' は読み込み専用です。"
+msgstr "ライブラリ %s' は読み込み専用です。"
 
 #: pcbnew/footprint_libraries_utils.cpp:476
 #, c-format
 msgid "Library %s already exists."
-msgstr "ライブラリー %s は既に存在します。"
+msgstr "ライブラリ %s は既に存在します。"
 
 #: pcbnew/footprint_libraries_utils.cpp:640
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:973
@@ -33726,17 +33679,17 @@ msgstr "ライブラリー %s は既に存在します。"
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2656
 #, c-format
 msgid "Library '%s' is read only."
-msgstr "ライブラリー '%s' は読み込み専用です。"
+msgstr "ライブラリ '%s' は読み込み専用です。"
 
 #: pcbnew/footprint_libraries_utils.cpp:646
 #, c-format
 msgid "Delete footprint '%s' from library '%s'?"
-msgstr "フットプリント '%s' をライブラリー '%s' から削除しますか？"
+msgstr "フットプリント '%s' をライブラリ '%s' から削除しますか？"
 
 #: pcbnew/footprint_libraries_utils.cpp:663
 #, c-format
 msgid "Footprint '%s' deleted from library '%s'"
-msgstr "フットプリント '%s' はライブラリー '%s' から削除されました"
+msgstr "フットプリント '%s' はライブラリ '%s' から削除されました"
 
 #: pcbnew/footprint_libraries_utils.cpp:678
 msgid "No footprints to export!"
@@ -33749,8 +33702,7 @@ msgstr "基板上のフットプリントが %sを参照するように更新し
 
 #: pcbnew/footprint_libraries_utils.cpp:747
 msgid "Update footprints on board to refer to new library?"
-msgstr ""
-"基板上のフットプリントが 新しいライブラリーを参照するように更新しますか?"
+msgstr "基板上のフットプリントが 新しいライブラリを参照するように更新しますか?"
 
 #: pcbnew/footprint_libraries_utils.cpp:924
 #: pcbnew/footprint_viewer_frame.cpp:826
@@ -33776,7 +33728,7 @@ msgstr "フットプリントに名前を付けて保存"
 
 #: pcbnew/footprint_libraries_utils.cpp:1145
 msgid "No library specified.  Footprint could not be saved."
-msgstr "ライブラリーが指定されていません。フットプリントを保存できません。"
+msgstr "ライブラリが指定されていません。フットプリントを保存できません。"
 
 #: pcbnew/footprint_libraries_utils.cpp:1155
 msgid "No footprint name specified.  Footprint could not be saved."
@@ -33811,7 +33763,7 @@ msgstr "フットプリント名が定義されていません。"
 
 #: pcbnew/footprint_viewer_frame.cpp:127
 msgid "KiCad Footprint Library Viewer"
-msgstr "KiCad フットプリント ライブラリー ブラウザー"
+msgstr "KiCad フットプリント ライブラリ ブラウザー"
 
 #: pcbnew/footprint_viewer_frame.cpp:169
 msgid ""
@@ -33830,7 +33782,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"フットプリント '%s' をライブラリー '%s' からロードできませんでした.。\n"
+"フットプリント '%s' をライブラリ '%s' からロードできませんでした.。\n"
 "\n"
 "%s"
 
@@ -33839,22 +33791,20 @@ msgstr ""
 msgid ""
 "The current configuration does not include library '%s'.  Use Manage "
 "Footprint Libraries to edit the configuration."
-msgstr ""
-"現在の設定はフットプリント ライブラリー '%s' を含んでいません。設定を編集する"
-"には フットプリント ライブラリーの管理 を使用して下さい。"
+msgstr "現在の設定はフットプリント ライブラリ '%s' を含んでいません。"
+"設定を編集するには フットプリント ライブラリの管理 を使用して下さい。"
 
 #: pcbnew/footprint_viewer_frame.cpp:1100
 msgid "Footprint library not found."
-msgstr "フットプリント ライブラリーが見つかりません。"
+msgstr "フットプリント ライブラリが見つかりません。"
 
 #: pcbnew/footprint_viewer_frame.cpp:1104
 #, c-format
 msgid ""
 "Library '%s' is not enabled in the current configuration.  Use Manage "
 "Footprint Libraries to edit the configuration."
-msgstr ""
-"ライブラリー '%s' は現在の設定では有効になっていません。設定を編集するには "
-"フットプリント ライブラリーの管理 を使用して下さい。"
+msgstr "ライブラリ '%s' は現在の設定では有効になっていません。設定を編集するには "
+"フットプリント ライブラリの管理 を使用して下さい。"
 
 #: pcbnew/footprint_wizard_frame.cpp:83
 #: pcbnew/footprint_wizard_frame_functions.cpp:82
@@ -33921,7 +33871,7 @@ msgstr "フットプリント テキスト '%s' (%s)"
 #: pcbnew/fp_textbox.cpp:332
 #, c-format
 msgid "Footprint Text Box of %s"
-msgstr "フットプリント テキストボックス %s"
+msgstr "フットプリント テキスト ボックス %s"
 
 #: pcbnew/generate_footprint_info.cpp:43
 msgid "Documentation"
@@ -33930,7 +33880,7 @@ msgstr "ドキュメント"
 #: pcbnew/generate_footprint_info.cpp:81
 #, c-format
 msgid "Error loading footprint %s from library '%s'."
-msgstr "フットプリント %s をライブラリー %s からのロード中にエラーしました。"
+msgstr "フットプリント %s をライブラリ %s からのロード中にエラーしました。"
 
 #: pcbnew/generate_footprint_info.cpp:122
 msgid "doc url"
@@ -34068,7 +34018,7 @@ msgstr "フットプリント '%s' を保存しました。"
 #: pcbnew/load_select_footprint.cpp:446
 #, c-format
 msgid "Footprint library '%s' saved as '%s'."
-msgstr "フットプリント ライブラリー '%s' を '%s' へ保存しました。"
+msgstr "フットプリント ライブラリ '%s' を '%s' へ保存しました。"
 
 #: pcbnew/menubar_footprint_editor.cpp:68
 #: pcbnew/menubar_footprint_editor.cpp:77
@@ -34193,15 +34143,15 @@ msgstr "Hyperlynx..."
 
 #: pcbnew/menubar_pcb_editor.cpp:151
 msgid "Footprints to Library..."
-msgstr "フットプリントをライブラリーにエクスポート..."
+msgstr "フットプリントをライブラリにエクスポート..."
 
 #: pcbnew/menubar_pcb_editor.cpp:152
 msgid ""
 "Add footprints used on board to an existing footprint library\n"
 "(does not remove other footprints from this library)"
 msgstr ""
-"基板で使われている全てのフットプリントを既存のライブラリーに追加します。\n"
-"(このライブラリーにある他のフットプリントを削除しません)"
+"基板で使われている全てのフットプリントを既存のライブラリに追加します。\n"
+"(このライブラリにある他のフットプリントを削除しません)"
 
 #: pcbnew/menubar_pcb_editor.cpp:156
 msgid "Footprints to New Library..."
@@ -34212,8 +34162,8 @@ msgid ""
 "Create a new footprint library containing the footprints used on board\n"
 "(if the library already exists it will be replaced)"
 msgstr ""
-"基板で使われているフットプリントを含む、新しいライブラリーを作成します\n"
-"(ライブラリーが既に存在する場合は置き換えられます)"
+"基板で使われているフットプリントを含む、新しいライブラリを作成します\n"
+"(ライブラリが既に存在する場合は置き換えられます)"
 
 #: pcbnew/menubar_pcb_editor.cpp:165
 msgid "Fabrication Outputs"
@@ -34691,9 +34641,8 @@ msgstr "%s のフットプリントID '%s' が不正です。"
 #, c-format
 msgid ""
 "%s footprint '%s' not found in any libraries in the footprint library table."
-msgstr ""
-"%s のフットプリント '%s' がフットプリント ライブラリー テーブルにあるどのライ"
-"ブラリーにもありません。"
+msgstr "%s のフットプリント '%s' がフットプリント ライブラリ "
+"テーブルにあるどのライブラリにもありません。"
 
 #: pcbnew/netlist_reader/netlist_reader.cpp:184
 #, c-format
@@ -34818,7 +34767,7 @@ msgstr "PTHパッド %s %s (%s)"
 
 #: pcbnew/pad.cpp:1703
 msgid "Edge connector"
-msgstr "エッジ コネクター"
+msgstr "エッジ コネクタ"
 
 #: pcbnew/pad.cpp:1704
 msgid "NPTH, mechanical"
@@ -34886,7 +34835,7 @@ msgstr "サーマルリリーフ ギャップ"
 
 #: pcbnew/pcb_base_frame.cpp:194
 msgid "Error loading project footprint libraries."
-msgstr "プロジェクトのフットプリント ライブラリーをロード中にエラーしました。"
+msgstr "プロジェクトのフットプリント ライブラリをロード中にエラーしました。"
 
 #: pcbnew/pcb_bitmap.cpp:238
 msgid "Bitmap Properties"
@@ -35100,7 +35049,7 @@ msgstr "基板上のテキスト '%s' ( %s 上)"
 #: pcbnew/pcb_textbox.cpp:400
 #, c-format
 msgid "PCB Text Box on %s"
-msgstr "基板上のテキストボックスが %s 上"
+msgstr "基板上のテキスト ボックスが %s 上"
 
 #: pcbnew/pcb_track.cpp:141
 #, c-format
@@ -35199,10 +35148,10 @@ msgid ""
 "An error occurred attempting to load the global footprint library table.\n"
 "Please edit this global footprint library table in Preferences menu."
 msgstr ""
-"グローバル フットプリント ライブラリー テーブルをロードしようとしたところ、エ"
-"ラーが発生しました。\n"
-"設定メニューで、このグローバル フットプリント ライブラリー テーブルを編集して"
-"下さい。"
+"グローバル フットプリント ライブラリ "
+"テーブルをロードしようとしたところ、エラーが発生しました。\n"
+"設定メニューで、このグローバル フットプリント ライブラリー "
+"テーブルを編集して下さい。"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:84 pcbnew/pcbnew_jobs_handler.cpp:136
 #: pcbnew/pcbnew_jobs_handler.cpp:160 pcbnew/pcbnew_jobs_handler.cpp:216
@@ -35221,15 +35170,15 @@ msgstr "svg ファイルの作成中にエラーが発生しました"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:587 pcbnew/pcbnew_jobs_handler.cpp:658
 msgid "Loading footprint library\n"
-msgstr "フットプリント ライブラリーをロード\n"
+msgstr "フットプリント ライブラリをロード\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:624
 msgid "Saving footprint library\n"
-msgstr "フットプリント ライブラリーを保存\n"
+msgstr "フットプリント ライブラリを保存\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:643
 msgid "Footprint library was not updated\n"
-msgstr "フットプリント ライブラリーが更新できませんでした\n"
+msgstr "フットプリント ライブラリが更新できませんでした\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:707
 msgid "The given footprint could not be found to export."
@@ -35621,9 +35570,9 @@ msgid ""
 "equivalent. The area is neither a via nor route keepout area. The area was "
 "not imported."
 msgstr ""
-"CADSTAR の エリア '%s' (ライブラリー コンポーネント '%s'の中の) は、KiCadに同"
-"等のものがありません。このエリアは、ビアでも配線のキープアウト エリアでもあり"
-"ません。そのエリアはインポートされませんでした。"
+"CADSTAR の エリア '%s' (ライブラリ コンポーネント '%s'の中の) "
+"は、KiCadに同等のものがありません。このエリアは、ビアでも配線のキープアウト "
+"エリアでもありません。そのエリアはインポートされませんでした。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:988
 #, c-format
@@ -35725,14 +35674,12 @@ msgstr ""
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1651
 #, c-format
 msgid "Unable to find component '%s' in the library(Symdef ID: '%s')"
-msgstr "ライブラリー内にコンポーネント '%s' が見つかりません(Symdef ID: '%s')"
+msgstr "ライブラリ内にコンポーネント '%s' が見つかりません(Symdef ID: '%s')"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1771
 #, c-format
 msgid "Unable to find documentation symbol in the library (Symdef ID: '%s')"
-msgstr ""
-"ライブラリー内にドキュメンテーション シンボルが見つかりません (Symdef ID: "
-"'%s')"
+msgstr "ライブラリ内にドキュメンテーション シンボルが見つかりません (Symdef ID: '%s')"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1840
 #, c-format
@@ -35975,7 +35922,7 @@ msgstr "<package> '%s' が、 <library> '%s' で重複しています"
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1191
 #, c-format
 msgid "No '%s' package in library '%s'."
-msgstr "パッケージ '%s' がライブラリー '%s' にありません。"
+msgstr "パッケージ '%s' がライブラリ '%s' にありません。"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1429
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2238
@@ -36163,13 +36110,13 @@ msgstr "'%s' を整数に変換できません。"
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:161
 #, c-format
 msgid "Footprint library '%s' not found."
-msgstr "フットプリント ライブラリー '%s' が見つかりません。"
+msgstr "フットプリント ライブラリ '%s' が見つかりません。"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:282
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:216
 #, c-format
 msgid "Library '%s' has no footprint '%s'."
-msgstr "ライブラリー '%s' にはフットプリント '%s' がありません。"
+msgstr "ライブラリ '%s' にはフットプリント '%s' がありません。"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:347
 #: pcbnew/plugins/kicad/pcb_parser.cpp:721
@@ -36193,19 +36140,19 @@ msgstr "フォルダー '%s' を削除する権限がありません。"
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2708
 #, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
-msgstr "ライブラリーのフォルダー '%s' には予期しないサブフォルダーがあります。"
+msgstr "ライブラリのフォルダー '%s' には予期しないサブフォルダーがあります。"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1019
 #, c-format
 msgid "Unexpected file '%s' found in library '%s'."
-msgstr "予期しないファイル '%s' がライブラリー '%s' に見つかりました。"
+msgstr "予期しないファイル '%s' がライブラリ '%s' に見つかりました。"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1038
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2745
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3222
 #, c-format
 msgid "Footprint library '%s' cannot be deleted."
-msgstr "フットプリント ライブラリー '%s' は削除できません。"
+msgstr "フットプリント ライブラリ '%s' は削除できません。"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:243
 #, c-format
@@ -36383,7 +36330,7 @@ msgstr "フットプリント ライブラリー '%s' を作成できません�
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:97
 #, c-format
 msgid "Footprint library '%s' is read only."
-msgstr "フットプリント ライブラリー '%s' は読み込み専用です。"
+msgstr "フットプリント ライブラリ '%s' は読み込み専用です。"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:135
 #, c-format
@@ -36434,12 +36381,12 @@ msgid ""
 "Library '%s' does not exist.\n"
 "Would you like to create it?"
 msgstr ""
-"ライブラリー '%s' は存在しません。\n"
+"ライブラリ '%s' は存在しません。\n"
 "作成しますか？"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2572
 msgid "Library Not Found"
-msgstr "ライブラリー が見つかりません"
+msgstr "ライブラリ が見つかりません"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2598
 #, c-format
@@ -36454,12 +36401,12 @@ msgstr "'%s' を削除する権限がありません。"
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2675
 #, c-format
 msgid "Cannot overwrite library path '%s'."
-msgstr "ライブラリー パス '%s' を上書きできません。"
+msgstr "ライブラリ パス '%s' を上書きできません。"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2727
 #, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
-msgstr "予期しないファイル '%s' がライブラリー パス '%s' に見つかりました。"
+msgstr "予期しないファイル '%s' がライブラリ パス '%s' に見つかりました。"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:586
 #, c-format
@@ -36543,7 +36490,7 @@ msgstr "ファイル '%s' は空です。"
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2999
 #, c-format
 msgid "File '%s' is not a legacy library."
-msgstr "ファイル '%s' は旧形式のライブラリーではありません。"
+msgstr "ファイル '%s' は旧形式のライブラリではありません。"
 
 #: pcbnew/plugins/pcad/pcb.cpp:50 pcbnew/plugins/pcad/pcb.cpp:61
 #: pcbnew/plugins/pcad/pcb.cpp:72
@@ -36557,7 +36504,7 @@ msgstr "KiCad は 32層までの信号レイヤーをサポートします。"
 
 #: pcbnew/plugins/pcad/pcb_via.cpp:93
 msgid "Unable to find library section."
-msgstr "ライブラリー セクションが見つかりません。"
+msgstr "ライブラリ セクションが見つかりません。"
 
 #: pcbnew/plugins/pcad/pcb_via.cpp:108
 #, c-format
@@ -37902,7 +37849,7 @@ msgstr "基板端メッキ: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:499
 msgid "Edge card connectors: "
-msgstr "エッジ カード コネクター: "
+msgstr "エッジ カード コネクタ: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:507
 msgid "Yes, Bevelled"
@@ -37918,7 +37865,7 @@ msgstr "線セグメントを描画"
 
 #: pcbnew/tools/drawing_tool.cpp:416
 msgid "Draw a text box"
-msgstr "テキストボックスを描画"
+msgstr "テキスト ボックスを描画"
 
 #: pcbnew/tools/drawing_tool.cpp:416 pcbnew/tools/pcb_actions.cpp:93
 msgid "Draw a rectangle"
@@ -38105,7 +38052,7 @@ msgstr "フットプリント名は空にできません。"
 #: pcbnew/tools/footprint_editor_control.cpp:417
 #, c-format
 msgid "Footprint name '%s' already in use in library '%s'."
-msgstr "フットプリント名 '%s' は既にライブラリー'%s' で使われています。"
+msgstr "フットプリント名 '%s' は既にライブラリ'%s' で使われています。"
 
 #: pcbnew/tools/footprint_editor_control.cpp:732
 msgid "No footprint problems found."
@@ -38568,7 +38515,7 @@ msgstr "選択されたフットプリント名を変更"
 
 #: pcbnew/tools/pcb_actions.cpp:423
 msgid "Delete Footprint from Library"
-msgstr "ライブラリーからフットプリントを削除"
+msgstr "ライブラリからフットプリントを削除"
 
 #: pcbnew/tools/pcb_actions.cpp:428
 msgid "Cut Footprint"
@@ -38616,15 +38563,15 @@ msgstr "フットプリントを更新..."
 
 #: pcbnew/tools/pcb_actions.cpp:466
 msgid "Update footprint to include any changes from the library"
-msgstr "全ての変更を適用するためにライブラリーからフットプリントを更新"
+msgstr "全ての変更を適用するためにライブラリからフットプリントを更新"
 
 #: pcbnew/tools/pcb_actions.cpp:471
 msgid "Update Footprints from Library..."
-msgstr "ライブラリーからフットプリントを更新..."
+msgstr "ライブラリからフットプリントを更新..."
 
 #: pcbnew/tools/pcb_actions.cpp:472
 msgid "Update footprints to include any changes from the library"
-msgstr "全ての変更を適用するためにライブラリーからフットプリントを更新"
+msgstr "全ての変更を適用するためにライブラリからフットプリントを更新"
 
 #: pcbnew/tools/pcb_actions.cpp:477
 msgid "Remove Unused Pads..."
@@ -38638,7 +38585,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:483
 msgid "Assign a different footprint from the library"
-msgstr "ライブラリーから別のフットプリントを割り当て"
+msgstr "ライブラリから別のフットプリントを割り当て"
 
 #: pcbnew/tools/pcb_actions.cpp:488
 msgid "Change Footprints..."
@@ -38646,7 +38593,7 @@ msgstr "フットプリントを変更..."
 
 #: pcbnew/tools/pcb_actions.cpp:488
 msgid "Assign different footprints from the library"
-msgstr "ライブラリーから別のフットプリントを割り当て"
+msgstr "ライブラリから別のフットプリントを割り当て"
 
 #: pcbnew/tools/pcb_actions.cpp:493
 msgid "Swap Layers..."
@@ -40714,7 +40661,7 @@ msgstr "プロパティを変更"
 
 #: pcbnew/widgets/search_handlers.cpp:239
 msgid "Textbox"
-msgstr "テキストボックス"
+msgstr "テキスト ボックス"
 
 #: pcbnew/widgets/search_handlers.cpp:317
 msgid "No Net"
@@ -40967,8 +40914,8 @@ msgstr ""
 "プチャ、集積回路のシミュレーション、プリント基板(PCB)のレイアウト、3Dレンダリ"
 "ング、プロッティングや様々なフォーマットへのデータのエクスポートなどの機能が"
 "あります。また、KiCadには何千ものシンボル、フットプリント、3Dモデルを含む高品"
-"質な部品ライブラリーが含まれています。KiCadのシステム要件は最小限で、Linux、"
-"Windows、MacOSで動作します。"
+"質な部品ライブラリが含まれています。KiCadのシステム要件は最小限で、Linux、Win"
+"dows、MacOSで動作します。"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:58
 msgid "KiCad Main Window"
