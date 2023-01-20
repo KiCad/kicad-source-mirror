@@ -411,6 +411,16 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
             }
         }
     }
+    else if( originalLayer == LAYER_VIA_BBLIND || originalLayer == LAYER_VIA_MICROVIA )
+    {
+        const PCB_VIA* via = static_cast<const PCB_VIA*>( item );
+        const BOARD*   board = via->GetBoard();
+        LSET           visibleLayers = board->GetVisibleLayers() & board->GetEnabledLayers();
+
+        // Target graphic is visible if the via crosses a visible layer
+        if( ( via->GetLayerSet() & visibleLayers ).none() )
+            color = COLOR4D::CLEAR;
+    }
 
     // Apply per-type opacity overrides
     if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
