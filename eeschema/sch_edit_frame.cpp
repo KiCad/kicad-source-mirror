@@ -716,6 +716,9 @@ void SCH_EDIT_FRAME::HardRedraw()
         libSymbol.second->ClearCaches();
     }
 
+    if( Schematic().Settings().m_IntersheetRefsShow )
+        RecomputeIntersheetRefs();
+
     FocusOnItem( nullptr );
 
     GetCanvas()->DisplaySheet( GetCurrentSheet().LastScreen() );
