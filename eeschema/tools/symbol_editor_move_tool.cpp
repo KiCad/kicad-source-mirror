@@ -164,8 +164,9 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
                             got_unit[cur_pin->GetUnit()] = true;
 
-                            for( LIB_PIN* pin = symbol->GetNextPin(); pin;
-                                 pin = symbol->GetNextPin( pin ) )
+                            std::vector<LIB_PIN*> pins = symbol->GetAllLibPins();
+
+                            for( LIB_PIN* pin : pins )
                             {
                                 if( !got_unit[pin->GetUnit()]
                                  && pin->GetPosition() == cur_pin->GetPosition()

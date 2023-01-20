@@ -353,10 +353,10 @@ void SCH_SYMBOL::UpdatePins()
 
     unsigned i = 0;
 
-    for( LIB_PIN* libPin = m_part->GetNextPin(); libPin; libPin = m_part->GetNextPin( libPin ) )
-    {
-        wxASSERT( libPin->Type() == LIB_PIN_T );
+    std::vector<LIB_PIN*> pins = m_part->GetAllLibPins();
 
+    for( LIB_PIN* libPin : pins )
+    {
         // NW: Don't filter by unit: this data-structure is used for all instances,
         // some if which might have different units.
         if( libPin->GetConvert() && m_convert && m_convert != libPin->GetConvert() )

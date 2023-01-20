@@ -1192,20 +1192,16 @@ LIB_PIN* SCH_SCREEN::GetPin( const VECTOR2I& aPosition, SCH_SYMBOL** aSymbol,
             if( !candidate->GetLibSymbolRef() )
                 continue;
 
-            for( pin = candidate->GetLibSymbolRef()->GetNextPin(); pin;
-                 pin = candidate->GetLibSymbolRef()->GetNextPin( pin ) )
+            std::vector<LIB_PIN*> pins;
+            candidate->GetLibPins( pins );
+
+            for( LIB_PIN* test_pin : pins )
             {
-                // Skip items not used for this part.
-                if( candidate->GetUnit() && pin->GetUnit() &&
-                    ( pin->GetUnit() != candidate->GetUnit() ) )
-                    continue;
-
-                if( candidate->GetConvert() && pin->GetConvert() &&
-                    ( pin->GetConvert() != candidate->GetConvert() ) )
-                    continue;
-
-                if( candidate->GetPinPhysicalPosition( pin ) == aPosition )
+                if( candidate->GetPinPhysicalPosition( test_pin ) == aPosition )
+                {
+                    pin = test_pin;
                     break;
+                }
             }
 
             if( pin )

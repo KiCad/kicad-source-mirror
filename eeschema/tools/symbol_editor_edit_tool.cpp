@@ -285,13 +285,10 @@ int SYMBOL_EDITOR_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
                 int curr_convert = pin->GetConvert();
                 ELECTRICAL_PINTYPE etype = pin->GetType();
                 wxString name = pin->GetName();
-                LIB_PIN* next_pin = symbol->GetNextPin();
+                std::vector<LIB_PIN*> pins = symbol->GetAllLibPins();
 
-                while( next_pin != nullptr )
+                for( LIB_PIN* pin : pins )
                 {
-                    pin = next_pin;
-                    next_pin = symbol->GetNextPin( pin );
-
                     if( got_unit[pin->GetUnit()] )
                         continue;
 

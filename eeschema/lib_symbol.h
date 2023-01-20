@@ -392,34 +392,9 @@ public:
 
     void RemoveField( LIB_FIELD* aField ) { RemoveDrawItem( aField ); }
 
-    /**
-     * Return the next draw object pointer.
-     *
-     * @param aItem - Pointer to the current draw item.  Setting item NULL
-     *                with return the first item of type in the list.
-     * @param aType - type of searched item (filter).
-     *                if TYPE_NOT_INIT search for all items types
-     * @return - The next drawing object in the list if found, otherwise NULL.
-     */
-    LIB_ITEM* GetNextDrawItem( const LIB_ITEM* aItem = nullptr, KICAD_T aType = TYPE_NOT_INIT );
-
     size_t GetPinCount() const { return m_drawings.size( LIB_PIN_T ); }
 
     size_t GetFieldCount() const { return m_drawings.size( LIB_FIELD_T ); }
-
-    /**
-     * Return the next pin object from the draw list.
-     *
-     * This is just a pin object specific version of GetNextDrawItem().
-     *
-     * @param aItem - Pointer to the previous pin item, or NULL to get the first pin in the draw
-     *                object list.
-     * @return - The next pin object in the list if found, otherwise NULL.
-     */
-    LIB_PIN* GetNextPin( LIB_PIN* aItem = nullptr )
-    {
-        return (LIB_PIN*) GetNextDrawItem( (LIB_ITEM*) aItem, LIB_PIN_T );
-    }
 
     /**
      * Return a list of pin object pointers from the draw item list.

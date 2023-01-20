@@ -861,7 +861,9 @@ DIALOG_LIB_EDIT_PIN_TABLE::~DIALOG_LIB_EDIT_PIN_TABLE()
 bool DIALOG_LIB_EDIT_PIN_TABLE::TransferDataToWindow()
 {
     // Make a copy of the pins for editing
-    for( LIB_PIN* pin = m_symbol->GetNextPin( nullptr ); pin; pin = m_symbol->GetNextPin( pin ) )
+    std::vector<LIB_PIN*> pins = m_symbol->GetAllLibPins();
+
+    for( LIB_PIN* pin : pins )
         m_pins.push_back( new LIB_PIN( *pin ) );
 
     m_dataModel->RebuildRows( m_pins, m_cbGroup->GetValue(), false );
@@ -888,7 +890,9 @@ bool DIALOG_LIB_EDIT_PIN_TABLE::TransferDataFromWindow()
         return false;
 
     // Delete the part's pins
-    while( LIB_PIN* pin = m_symbol->GetNextPin( nullptr ) )
+    std::vector<LIB_PIN*> pins = m_symbol->GetAllLibPins();
+
+    for( LIB_PIN* pin : pins )
         m_symbol->RemoveDrawItem( pin );
 
     // Transfer our pins to the part
