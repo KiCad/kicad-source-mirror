@@ -83,13 +83,6 @@ static const wxChar DRCEpsilon[] = wxT( "DRCEpsilon" );
 static const wxChar HoleWallThickness[] = wxT( "HoleWallPlatingThickness" );
 
 /**
- * Testing mode for new connectivity algorithm.  Setting this to on will cause all modifications
- * to the netlist to be recalculated on the fly.  This may be slower than the standard process
- * at the moment
- */
-static const wxChar RealtimeConnectivity[] = wxT( "RealtimeConnectivity" );
-
-/**
  * Configure the coroutine stack size in bytes.  This should be allocated in multiples of
  * the system page size (n*4096 is generally safe)
  */
@@ -260,7 +253,6 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     // Init defaults - this is done in case the config doesn't exist,
     // then the values will remain as set here.
-    m_RealTimeConnectivity      = true;
     m_CoroutineStackSize        = AC_STACK::default_stack;
     m_ShowRouterDebugGraphics   = false;
     m_DrawArcAccuracy           = 10.0;
@@ -332,9 +324,6 @@ void ADVANCED_CFG::loadFromConfigFile()
 void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 {
     std::vector<PARAM_CFG*> configParams;
-
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::RealtimeConnectivity,
-                                                &m_RealTimeConnectivity, m_RealTimeConnectivity ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::ExtraFillMargin,
                                                   &m_ExtraClearance, m_ExtraClearance, 0.0, 1.0 ) );

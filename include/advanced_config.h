@@ -108,11 +108,6 @@ public:
     double m_HoleWallThickness;
 
     /**
-     * Do real-time connectivity
-     */
-    bool m_RealTimeConnectivity;
-
-    /**
      * Set the stack size for coroutines
      */
     int m_CoroutineStackSize;

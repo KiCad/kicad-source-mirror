@@ -578,11 +578,6 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         NETLIST_EXPORTER_KICAD exporter( &Schematic() );
         STRING_FORMATTER formatter;
 
-        // TODO remove once real-time connectivity is a given
-        if( !ADVANCED_CFG::GetCfg().m_RealTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
-            // Ensure the netlist data is up to date:
-            RecalculateConnections( NO_CLEANUP );
-
         exporter.Format( &formatter, GNL_ALL | GNL_OPT_KICAD );
 
         payload = formatter.GetString();

@@ -228,9 +228,6 @@ int SCH_EDITOR_CONTROL::RemapSymbols( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::Print( const TOOL_EVENT& aEvent )
 {
-    if( !ADVANCED_CFG::GetCfg().m_RealTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
-        m_frame->RecalculateConnections( NO_CLEANUP );
-
     InvokeDialogPrintUsingPrinter( m_frame );
 
     wxFileName fn = m_frame->Prj().AbsolutePath( m_frame->Schematic().RootScreen()->GetFileName() );
@@ -244,9 +241,6 @@ int SCH_EDITOR_CONTROL::Print( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::Plot( const TOOL_EVENT& aEvent )
 {
-    if( !ADVANCED_CFG::GetCfg().m_RealTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
-        m_frame->RecalculateConnections( NO_CLEANUP );
-
     DIALOG_PLOT_SCHEMATIC dlg( m_frame );
 
     dlg.ShowModal();
@@ -1061,10 +1055,6 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     VECTOR2D              cursorPos = controls->GetCursorPosition( !aEvent.DisableGridSnapping() );
 
-    // TODO remove once real-time connectivity is a given
-    if( !ADVANCED_CFG::GetCfg().m_RealTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
-        // Ensure the netlist data is up to date:
-        m_frame->RecalculateConnections( NO_CLEANUP );
 
     // Remove selection in favor of highlighting so the whole net is highlighted
     selectionTool->ClearSelection();
@@ -1314,10 +1304,6 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
 {
-    // TODO(JE) remove once real-time connectivity is a given
-    if( !ADVANCED_CFG::GetCfg().m_RealTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
-        m_frame->RecalculateConnections( NO_CLEANUP );
-
     std::string  tool = aEvent.GetCommandStr().get();
     PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
 
@@ -2090,9 +2076,7 @@ int SCH_EDITOR_CONTROL::GenerateBOM( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::DrawSheetOnClipboard( const TOOL_EVENT& aEvent )
 {
-    if( !ADVANCED_CFG::GetCfg().m_RealTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
-        m_frame->RecalculateConnections( LOCAL_CLEANUP );
-
+    m_frame->RecalculateConnections( LOCAL_CLEANUP );
     m_frame->DrawCurrentSheetToClipboard();
     return 0;
 }
