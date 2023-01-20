@@ -77,13 +77,15 @@
  * @note Because this list is not created on the fly, wxTranslation
  * must be called when a language name must be displayed after translation.
  * Do not change this behavior, because m_Lang_Label is also used as key in config
+ * N.B. Languages that are commented out have some translation existing but are
+ * not sufficiently translated to list as valid translations in KiCad for release
  */
 #undef _
 #define _(s) s
 LANGUAGE_DESCR LanguagesList[] =
 {
     { wxLANGUAGE_DEFAULT,    ID_LANGUAGE_DEFAULT,    _( "Default" ),    false },
-    { wxLANGUAGE_INDONESIAN, ID_LANGUAGE_INDONESIAN, wxT( "Bahasa Indonesia" ), true },
+//    { wxLANGUAGE_INDONESIAN, ID_LANGUAGE_INDONESIAN, wxT( "Bahasa Indonesia" ), true },
     { wxLANGUAGE_CZECH,      ID_LANGUAGE_CZECH,      wxT( "Čeština" ),  true },
     { wxLANGUAGE_DANISH,     ID_LANGUAGE_DANISH,     wxT( "Dansk" ),    true },
     { wxLANGUAGE_GERMAN,     ID_LANGUAGE_GERMAN,     wxT( "Deutsch" ),  true },
@@ -95,18 +97,19 @@ LANGUAGE_DESCR LanguagesList[] =
     { wxLANGUAGE_KOREAN,     ID_LANGUAGE_KOREAN,     wxT( "한국어"),       true },
     { wxLANGUAGE_ITALIAN,    ID_LANGUAGE_ITALIAN,    wxT( "Italiano" ), true },
     { wxLANGUAGE_LITHUANIAN, ID_LANGUAGE_LITHUANIAN, wxT( "Lietuvių" ), true },
-    { wxLANGUAGE_HUNGARIAN,  ID_LANGUAGE_HUNGARIAN,  wxT( "Magyar" ),   true },
+//    { wxLANGUAGE_HUNGARIAN,  ID_LANGUAGE_HUNGARIAN,  wxT( "Magyar" ),   true },
+    { wxLANGUAGE_DUTCH,      ID_LANGUAGE_DUTCH,      wxT( "Nederlandse" ), true },
     { wxLANGUAGE_JAPANESE,   ID_LANGUAGE_JAPANESE,   wxT( "日本語" ),    true },
     { wxLANGUAGE_THAI,       ID_LANGUAGE_THAI,       wxT( "ภาษาไทย" ),    true },
     { wxLANGUAGE_POLISH,     ID_LANGUAGE_POLISH,     wxT( "Polski" ),   true },
     { wxLANGUAGE_PORTUGUESE, ID_LANGUAGE_PORTUGUESE, wxT( "Português" ),true },
     { wxLANGUAGE_PORTUGUESE_BRAZILIAN, ID_LANGUAGE_PORTUGUESE_BRAZILIAN, wxT( "Português (Brasil)" ), true },
     { wxLANGUAGE_RUSSIAN,    ID_LANGUAGE_RUSSIAN,    wxT( "Русский" ),  true },
-    { wxLANGUAGE_SERBIAN,    ID_LANGUAGE_SERBIAN,    wxT( "Српски" ),   true },
+//    { wxLANGUAGE_SERBIAN,    ID_LANGUAGE_SERBIAN,    wxT( "Српски" ),   true },
     { wxLANGUAGE_FINNISH,    ID_LANGUAGE_FINNISH,    wxT( "Suomi" ),    true },
     { wxLANGUAGE_SWEDISH,    ID_LANGUAGE_SWEDISH,    wxT( "Svenska" ),  true },
-    { wxLANGUAGE_VIETNAMESE, ID_LANGUAGE_VIETNAMESE, wxT( "Tiếng Việt" ), true },
-    { wxLANGUAGE_TURKISH,    ID_LANGUAGE_TURKISH,    wxT( "Türkçe" ),   true },
+//    { wxLANGUAGE_VIETNAMESE, ID_LANGUAGE_VIETNAMESE, wxT( "Tiếng Việt" ), true },
+//    { wxLANGUAGE_TURKISH,    ID_LANGUAGE_TURKISH,    wxT( "Türkçe" ),   true },
     { wxLANGUAGE_UKRAINIAN,  ID_LANGUAGE_UKRANIAN,   wxT( "Українець" ),   true },
     { wxLANGUAGE_CHINESE_SIMPLIFIED, ID_LANGUAGE_CHINESE_SIMPLIFIED,
             wxT( "简体中文" ), true },
