@@ -87,7 +87,7 @@ LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent,
     m_shownColumns = cfg->m_LibTree.columns;
 
     if( m_shownColumns.empty() )
-        m_shownColumns = m_availableColumns;
+        m_shownColumns = {  wxT( "Item" ), wxT( "Description" ) };
 
     if( m_shownColumns[0] != wxT( "Item" ) )
         m_shownColumns.insert( m_shownColumns.begin(), wxT( "Item" ) );

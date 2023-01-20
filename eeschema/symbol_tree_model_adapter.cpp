@@ -53,7 +53,10 @@ SYMBOL_TREE_MODEL_ADAPTER::Create( EDA_BASE_FRAME* aParent, LIB_TABLE* aLibs )
 SYMBOL_TREE_MODEL_ADAPTER::SYMBOL_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, LIB_TABLE* aLibs ) :
         LIB_TREE_MODEL_ADAPTER( aParent, "pinned_symbol_libs" ),
         m_libs( (SYMBOL_LIB_TABLE*) aLibs )
-{}
+{
+    // Symbols may have different value from name
+    m_availableColumns.emplace_back( wxT( "Value" ) );
+}
 
 
 SYMBOL_TREE_MODEL_ADAPTER::~SYMBOL_TREE_MODEL_ADAPTER()

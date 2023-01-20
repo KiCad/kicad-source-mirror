@@ -421,6 +421,7 @@ protected:
 
     LIB_TREE_NODE_ROOT           m_tree;
     std::map<unsigned, wxString> m_colIdxMap;
+    std::vector<wxString>        m_availableColumns;
 
 private:
     EDA_BASE_FRAME*         m_parent;
@@ -436,7 +437,6 @@ private:
     std::vector<wxDataViewColumn*>        m_columns;
     std::map<wxString, wxDataViewColumn*> m_colNameMap;
     std::map<wxString, int>               m_colWidths;
-    std::vector<wxString>                 m_availableColumns;
     std::vector<wxString>                 m_shownColumns;   // Stored in display order
 };
 
