@@ -168,7 +168,8 @@ wxString DS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
                 {
                     // no need for tokenUpdated; TITLE_BLOCK::TextVarResolver() does a full
                     // resolve
-                    return m_titleBlock->TextVarResolver( token, m_project );
+                    if( m_titleBlock->TextVarResolver( token, m_project ) )
+                        return true;
                 }
                 else if( m_properties && m_properties->count( *token ) )
                 {
