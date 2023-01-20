@@ -90,7 +90,7 @@ void EESCHEMA_JOBS_HANDLER::InitRenderSettings( KIGFX::SCH_RENDER_SETTINGS* aRen
 
     // Load the drawing sheet from the filename stored in BASE_SCREEN::m_DrawingSheetFileName.
     // If empty, or not existing, the default drawing sheet is loaded.
-    wxString filename = DS_DATA_MODEL::ResolvePath( BASE_SCREEN::m_DrawingSheetFileName,
+    wxString filename = DS_DATA_MODEL::ResolvePath( aSch->Settings().m_SchDrawingSheetFileName,
                                                     aSch->Prj().GetProjectPath() );
 
     if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename ) )
