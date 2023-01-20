@@ -85,7 +85,7 @@ BOOST_AUTO_TEST_CASE( DefaultDrawings )
 {
     // default drawings exist
     BOOST_CHECK_EQUAL( m_part_no_data.GetDrawItems().size(), 4 );
-    BOOST_CHECK_EQUAL( m_part_no_data.GetNextDrawItem( nullptr, LIB_PIN_T ), nullptr );
+    BOOST_CHECK_EQUAL( m_part_no_data.GetAllLibPins().size(), 0 );
 }
 
 
@@ -268,22 +268,22 @@ BOOST_AUTO_TEST_CASE( Compare )
     testPart.AddDrawItem( new LIB_SHAPE( &testPart, SHAPE_T::RECT ) );
     m_part_no_data.AddDrawItem( new LIB_SHAPE( &m_part_no_data, SHAPE_T::RECT ) );
     BOOST_CHECK_EQUAL( m_part_no_data.Compare( testPart ), 0 );
-    m_part_no_data.RemoveDrawItem( m_part_no_data.GetNextDrawItem( nullptr, LIB_SHAPE_T ) );
+    m_part_no_data.RemoveDrawItem( &m_part_no_data.GetDrawItems()[LIB_SHAPE_T].front() );
     BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
-    testPart.RemoveDrawItem( testPart.GetNextDrawItem( nullptr, LIB_SHAPE_T ) );
+    testPart.RemoveDrawItem( &testPart.GetDrawItems()[LIB_SHAPE_T].front() );
     m_part_no_data.AddDrawItem( new LIB_SHAPE( &m_part_no_data, SHAPE_T::RECT ) );
     BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
-    m_part_no_data.RemoveDrawItem( m_part_no_data.GetNextDrawItem( nullptr, LIB_SHAPE_T ) );
+    m_part_no_data.RemoveDrawItem( &m_part_no_data.GetDrawItems()[LIB_SHAPE_T].front() );
 
     // Draw item list contents comparison tests.
     testPart.AddDrawItem( new LIB_SHAPE( &testPart, SHAPE_T::RECT ) );
     m_part_no_data.AddDrawItem( new LIB_SHAPE( &m_part_no_data, SHAPE_T::ARC ) );
     BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
-    m_part_no_data.RemoveDrawItem( m_part_no_data.GetNextDrawItem( nullptr, LIB_SHAPE_T ) );
+    m_part_no_data.RemoveDrawItem( &m_part_no_data.GetDrawItems()[LIB_SHAPE_T].front() );
     m_part_no_data.AddDrawItem( new LIB_PIN( &m_part_no_data ) );
     BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
-    m_part_no_data.RemoveDrawItem( m_part_no_data.GetNextDrawItem( nullptr, LIB_PIN_T ) );
-    testPart.RemoveDrawItem( testPart.GetNextDrawItem( nullptr, LIB_SHAPE_T ) );
+    m_part_no_data.RemoveDrawItem( &m_part_no_data.GetDrawItems()[LIB_PIN_T].front() );
+    testPart.RemoveDrawItem( &testPart.GetDrawItems()[LIB_SHAPE_T].front() );
 
     // Footprint filter array comparison tests.
     wxArrayString footPrintFilters;
@@ -414,7 +414,7 @@ BOOST_AUTO_TEST_CASE( GetUnitItems )
 
     m_part_no_data.RemoveDrawItem( pin2 );
     m_part_no_data.RemoveDrawItem( pin1 );
-    m_part_no_data.RemoveDrawItem( m_part_no_data.GetNextDrawItem() );
+    m_part_no_data.RemoveDrawItem( &*m_part_no_data.GetDrawItems().begin() );
 }
 
 

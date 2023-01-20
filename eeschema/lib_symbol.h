@@ -367,34 +367,9 @@ public:
      */
     void RemoveDrawItem( LIB_ITEM* aItem );
 
-    /**
-     * Return the next draw object pointer.
-     *
-     * @param aItem - Pointer to the current draw item.  Setting item NULL
-     *                with return the first item of type in the list.
-     * @param aType - type of searched item (filter).
-     *                if TYPE_NOT_INIT search for all items types
-     * @return - The next drawing object in the list if found, otherwise NULL.
-     */
-    LIB_ITEM* GetNextDrawItem( const LIB_ITEM* aItem = nullptr, KICAD_T aType = TYPE_NOT_INIT );
-
     size_t GetPinCount() const { return m_drawings.size( LIB_PIN_T ); }
 
     size_t GetFieldCount() const { return m_drawings.size( LIB_FIELD_T ); }
-
-    /**
-     * Return the next pin object from the draw list.
-     *
-     * This is just a pin object specific version of GetNextDrawItem().
-     *
-     * @param aItem - Pointer to the previous pin item, or NULL to get the
-     *                first pin in the draw object list.
-     * @return - The next pin object in the list if found, otherwise NULL.
-     */
-    LIB_PIN* GetNextPin( LIB_PIN* aItem = nullptr )
-    {
-        return (LIB_PIN*) GetNextDrawItem( (LIB_ITEM*) aItem, LIB_PIN_T );
-    }
 
     /**
      * Return a list of pin object pointers from the draw item list.
@@ -410,6 +385,12 @@ public:
      *                   get pins from any convert of symbol.
      */
     void GetPins( LIB_PINS& aList, int aUnit = 0, int aConvert = 0 ) const;
+
+    /**
+     * Return a list of pin pointers for all units / converts.  Used primarily for SPICE where
+     * we want to treat all unit as a single part.
+     */
+    std::vector<LIB_PIN*> GetAllLibPins() const;
 
     /**
      * Return pin object with the requested pin \a aNumber.

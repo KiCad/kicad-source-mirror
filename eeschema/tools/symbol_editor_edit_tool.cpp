@@ -282,30 +282,27 @@ int SYMBOL_EDITOR_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
                 int curr_convert = pin->GetConvert();
                 ELECTRICAL_PINTYPE etype = pin->GetType();
                 wxString name = pin->GetName();
-                LIB_PIN* next_pin = symbol->GetNextPin();
+                std::vector<LIB_PIN*> pins = symbol->GetAllLibPins();
 
-                while( next_pin != nullptr )
+                for( LIB_PIN* test_pin : pins )
                 {
-                    pin = next_pin;
-                    next_pin = symbol->GetNextPin( pin );
-
-                    if( got_unit[pin->GetUnit()] )
+                    if( got_unit[test_pin->GetUnit()] )
                         continue;
 
-                    if( pin->GetPosition() != pos )
+                    if( test_pin->GetPosition() != pos )
                         continue;
 
-                    if( pin->GetConvert() != curr_convert )
+                    if( test_pin->GetConvert() != curr_convert )
                         continue;
 
-                    if( pin->GetType() != etype )
+                    if( test_pin->GetType() != etype )
                         continue;
 
-                    if( pin->GetName() != name )
+                    if( test_pin->GetName() != name )
                         continue;
 
-                    toDelete.insert( pin );
-                    got_unit[pin->GetUnit()] = true;
+                    toDelete.insert( test_pin );
+                    got_unit[test_pin->GetUnit()] = true;
                 }
             }
         }

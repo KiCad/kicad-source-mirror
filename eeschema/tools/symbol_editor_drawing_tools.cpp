@@ -536,10 +536,15 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::RepeatDrawItem( const TOOL_EVENT& aEvent )
         return 0;
 
     // See if we have a pin matching our weak ptr
-    for( LIB_PIN* test = symbol->GetNextPin();  test;  test = symbol->GetNextPin( test ) )
+    std::vector<LIB_PIN*> pins = symbol->GetAllLibPins();
+
+    for( LIB_PIN* test : pins )
     {
         if( (void*) test == g_lastPinWeakPtr )
+        {
             sourcePin = test;
+            break;
+        }
     }
 
     if( sourcePin )

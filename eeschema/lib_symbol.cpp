@@ -732,35 +732,6 @@ void LIB_SYMBOL::AddDrawItem( LIB_ITEM* aItem, bool aSort )
 }
 
 
-LIB_ITEM* LIB_SYMBOL::GetNextDrawItem( const LIB_ITEM* aItem, KICAD_T aType )
-{
-    if( aItem == nullptr )
-    {
-        LIB_ITEMS_CONTAINER::ITERATOR it1 = m_drawings.begin( aType );
-
-        return (it1 != m_drawings.end( aType ) ) ? &( *( m_drawings.begin( aType ) ) ) : nullptr;
-    }
-
-    // Search for the last item, assume aItem is of type aType
-    wxASSERT( ( aType == TYPE_NOT_INIT ) || ( aType == aItem->Type() ) );
-    LIB_ITEMS_CONTAINER::ITERATOR it = m_drawings.begin( aType );
-
-    while( ( it != m_drawings.end( aType ) ) && ( aItem != &( *it ) ) )
-        ++it;
-
-    // Search the next item
-    if( it != m_drawings.end( aType ) )
-    {
-        ++it;
-
-        if( it != m_drawings.end( aType ) )
-            return &( *it );
-    }
-
-    return nullptr;
-}
-
-
 void LIB_SYMBOL::GetPins( LIB_PINS& aList, int aUnit, int aConvert ) const
 {
     /* Notes:
@@ -785,6 +756,15 @@ void LIB_SYMBOL::GetPins( LIB_PINS& aList, int aUnit, int aConvert ) const
 
         aList.push_back( (LIB_PIN*) &item );
     }
+}
+
+
+std::vector<LIB_PIN*> LIB_SYMBOL::GetAllLibPins() const
+{
+    std::vector<LIB_PIN*> pinList;
+
+    GetPins( pinList, 0, 0 );
+    return pinList;
 }
 
 

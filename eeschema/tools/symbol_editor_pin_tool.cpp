@@ -221,7 +221,9 @@ bool SYMBOL_EDITOR_PIN_TOOL::PlacePin( LIB_PIN* aPin )
     LIB_SYMBOL* symbol = m_frame->GetCurSymbol();
     bool        ask_for_pin = true;   // Test for another pin in same position in other units
 
-    for( LIB_PIN* test = symbol->GetNextPin(); test; test = symbol->GetNextPin( test ) )
+    std::vector<LIB_PIN*> pins = symbol->GetAllLibPins();
+
+    for( LIB_PIN* test : pins )
     {
         if( test == aPin || aPin->GetPosition() != test->GetPosition() || test->GetEditFlags() )
             continue;
@@ -270,7 +272,7 @@ bool SYMBOL_EDITOR_PIN_TOOL::PlacePin( LIB_PIN* aPin )
     }
 
     // Put linked pins in new position, and clear flags
-    for( LIB_PIN* pin = symbol->GetNextPin();  pin;  pin = symbol->GetNextPin( pin ) )
+    for( LIB_PIN* pin : pins )
     {
         if( ( pin->GetEditFlags() & IS_LINKED ) == 0 )
             continue;
@@ -383,8 +385,9 @@ int SYMBOL_EDITOR_PIN_TOOL::PushPinProperties( const TOOL_EVENT& aEvent )
         return 0;
 
     saveCopyInUndoList( symbol, UNDO_REDO::LIBEDIT );
+    std::vector<LIB_PIN*> pins = symbol->GetAllLibPins();
 
-    for( LIB_PIN* pin = symbol->GetNextPin();  pin;  pin = symbol->GetNextPin( pin ) )
+    for( LIB_PIN* pin : pins )
     {
         if( pin == sourcePin )
             continue;
