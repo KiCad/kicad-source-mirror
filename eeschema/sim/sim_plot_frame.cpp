@@ -2041,8 +2041,6 @@ SIM_PLOT_FRAME::CURSOR_CONTEXT_MENU::CURSOR_CONTEXT_MENU( const wxString& aSigna
         m_signal( aSignal ),
         m_plotFrame( aPlotFrame )
 {
-    SIM_PLOT_PANEL* plot = m_plotFrame->GetCurrentPlot();
-
     AddMenuItem( this, HIDE_CURSOR, _( "Hide Cursor" ), KiBitmap( BITMAPS::pcb_target ) );
 
     Connect( wxEVT_COMMAND_MENU_SELECTED, wxMenuEventHandler( CURSOR_CONTEXT_MENU::onMenuEvent ),
@@ -2054,10 +2052,8 @@ void SIM_PLOT_FRAME::CURSOR_CONTEXT_MENU::onMenuEvent( wxMenuEvent& aEvent )
 {
     SIM_PLOT_PANEL* plot = m_plotFrame->GetCurrentPlot();
 
-    switch( aEvent.GetId() )
-    {
-    case HIDE_CURSOR:   plot->EnableCursor( m_signal, false ); break;
-    }
+    if( aEvent.GetId() == HIDE_CURSOR )
+        plot->EnableCursor( m_signal, false );
 }
 
 
