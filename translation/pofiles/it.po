@@ -110,7 +110,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-17 10:33-0800\n"
-"PO-Revision-Date: 2023-01-17 13:01+0100\n"
+"PO-Revision-Date: 2023-01-20 08:19+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -3268,7 +3268,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:214
 msgid "High-contrast mode dimming factor:"
-msgstr "Fattore dissolvenza modalità alto contrasto:"
+msgstr "Fattore di attenuazione modalità alto contrasto:"
 
 #: common/dialogs/panel_common_settings_base.cpp:221
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:77
@@ -13234,7 +13234,6 @@ msgstr ""
 
 #: eeschema/files-io.cpp:619 pcbnew/files.cpp:173
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:191
-#, fuzzy
 msgid "All supported formats"
 msgstr "Tutti i formati supportati"
 
@@ -41368,10 +41367,9 @@ msgstr "Suite EDA per la progettazione di schemi elettrici e circuiti stampati"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:34
 msgid "EDA"
-msgstr ""
+msgstr "EDA"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
-#, fuzzy
 msgid "Circuit board"
 msgstr "Circuito stampato"
 
@@ -41423,23 +41421,3 @@ msgstr "Schema KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "Circuito stampato KiCad"
-
-#~ msgid "Plot given layers to a single gerber file"
-#~ msgstr "Traccia gli strati dati in un singolo file gerber"
-
-#~ msgid ""
-#~ "Plot multiple gerbers for a PCB, including the ability to use stored "
-#~ "board plot settings"
-#~ msgstr ""
-#~ "Traccia più file gerber per un C.S., includendo la possibilità di usare "
-#~ "le impostazioni di tracciatura memorizzate per la scheda"
-
-#~ msgid "Export footprint position file"
-#~ msgstr "Esporta file posizioni impronte"
-
-#~ msgid ""
-#~ "Export the legacy bom xml format used in the schematic editor with python "
-#~ "scripts"
-#~ msgstr ""
-#~ "Esporta il vecchio formato xml della diba usato nell'editor degli schemi "
-#~ "con gli script python"
