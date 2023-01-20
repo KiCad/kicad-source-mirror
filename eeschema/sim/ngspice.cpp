@@ -392,15 +392,15 @@ std::vector<std::string> NGSPICE::GetSettingCommands() const
         break;
 
     case NGSPICE_MODEL_MODE::PSPICE:
-        commands.emplace_back( "set ngbehavior=ps" );
+        commands.emplace_back( "set ngbehavior=psa" );
         break;
 
     case NGSPICE_MODEL_MODE::LTSPICE:
-        commands.emplace_back( "set ngbehavior=lt" );
+        commands.emplace_back( "set ngbehavior=lta" );
         break;
 
     case NGSPICE_MODEL_MODE::LT_PSPICE:
-        commands.emplace_back( "set ngbehavior=ltps" );
+        commands.emplace_back( "set ngbehavior=ltpsa" );
         break;
 
     case NGSPICE_MODEL_MODE::HSPICE:
