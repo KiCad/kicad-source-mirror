@@ -70,40 +70,76 @@ void DumpSchematicToFile( SCHEMATIC& aSchematic, SCH_SHEET& aSheet, const std::s
     io.Save( aFilename, &aSheet, &aSchematic );
 }
 
-
-std::unique_ptr<SCHEMATIC> ReadSchematicFromStream( std::istream& aStream, PROJECT* aProject )
+void LoadSheetSchematicContents( const std::string& fileName, SCH_SHEET* sheet )
 {
+    std::ifstream fileStream;
+    fileStream.open( fileName );
+    wxASSERT( fileStream.is_open() );
     STDISTREAM_LINE_READER reader;
-    reader.SetStream( aStream );
-
-    SCH_SEXPR_PARSER           parser( &reader );
-    std::unique_ptr<SCHEMATIC> schematic( new SCHEMATIC( nullptr ) );
-
-    try
-    {
-        schematic->SetProject( aProject );
-        SCH_SHEET* newSheet = new SCH_SHEET( schematic.get() );
-        schematic->SetRoot( newSheet );
-        SCH_SCREEN* rootScreen = new SCH_SCREEN( schematic.get() );
-        schematic->Root().SetScreen( rootScreen );
-        parser.ParseSchematic( newSheet );
-    }
-    catch( const IO_ERROR& )
-    {
-    }
-
-    return schematic;
+    reader.SetStream( fileStream );
+    SCH_SEXPR_PARSER parser( &reader );
+    parser.ParseSchematic( sheet );
 }
 
-
-std::unique_ptr<SCHEMATIC> ReadSchematicFromFile( const std::string& aFilename, PROJECT* aProject )
+void LoadHierarchy( SCHEMATIC* schematic, SCH_SHEET* sheet, const std::string& sheetFilename,
+                    std::unordered_map<std::string, SCH_SCREEN*>& parsedScreens )
 {
-    std::ifstream file_stream;
-    file_stream.open( aFilename );
+    SCH_SCREEN* screen = nullptr;
 
-    wxASSERT( file_stream.is_open() );
+    if( !sheet->GetScreen() )
+    {
+        // Construct paths
+        const wxFileName  fileName( sheetFilename );
+        const std::string filePath( fileName.GetPath( wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR ) );
+        const std::string fileBareName( fileName.GetFullName() );
 
-    return ReadSchematicFromStream( file_stream, aProject );
+        // Check for existing screen
+        auto screenFound = parsedScreens.find( fileBareName );
+        if( screenFound != parsedScreens.end() )
+            screen = screenFound->second;
+
+        // Configure sheet with existing screen, or load screen
+        if( screen )
+        {
+            // Screen already loaded - assign to sheet
+            sheet->SetScreen( screen );
+            sheet->GetScreen()->SetParent( schematic );
+        }
+        else
+        {
+            // Load screen and assign to sheet
+            screen = new SCH_SCREEN( schematic );
+            parsedScreens.insert( { fileBareName, screen } );
+            sheet->SetScreen( screen );
+            sheet->GetScreen()->SetFileName( sheetFilename );
+            LoadSheetSchematicContents( sheetFilename, sheet );
+        }
+
+        // Recurse through child sheets
+        for( SCH_ITEM* item : sheet->GetScreen()->Items().OfType( SCH_SHEET_T ) )
+        {
+            SCH_SHEET* childSheet = static_cast<SCH_SHEET*>( item );
+            wxFileName childSheetFilename = childSheet->GetFileName();
+            if( !childSheetFilename.IsAbsolute() )
+                childSheetFilename.MakeAbsolute( filePath );
+            std::string childSheetFullFilename( childSheetFilename.GetFullPath() );
+            LoadHierarchy( schematic, childSheet, childSheetFullFilename, parsedScreens );
+        }
+    }
+}
+
+std::unique_ptr<SCHEMATIC> LoadHierarchyFromRoot( const std::string& rootFilename,
+                                                  PROJECT*           project )
+{
+    std::unique_ptr<SCHEMATIC>                   schematic( new SCHEMATIC( nullptr ) );
+    std::unordered_map<std::string, SCH_SCREEN*> parsedScreens;
+
+    schematic->SetProject( project );
+    SCH_SHEET* rootSheet = new SCH_SHEET( schematic.get() );
+    schematic->SetRoot( rootSheet );
+    LoadHierarchy( schematic.get(), rootSheet, rootFilename, parsedScreens );
+
+    return schematic;
 }
 
 
@@ -133,7 +169,7 @@ void LoadSchematic( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath
 
     aSettingsManager.Prj().SetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS, nullptr );
 
-    aSchematic = ReadSchematicFromFile( schematicPath, &aSettingsManager.Prj() );
+    aSchematic = LoadHierarchyFromRoot( schematicPath, &aSettingsManager.Prj() );
 
     aSchematic->CurrentSheet().push_back( &aSchematic->Root() );
 
