@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -17,10 +17,7 @@ PANEL_FP_LIB_TABLE_BASE::PANEL_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
-	wxStaticBoxSizer* m_top_sizer;
-	m_top_sizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Libraries by Scope") ), wxVERTICAL );
-
-	m_notebook = new wxNotebook( m_top_sizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_notebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_global_panel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* m_global_sizer;
 	m_global_sizer = new wxBoxSizer( wxVERTICAL );
@@ -120,53 +117,51 @@ PANEL_FP_LIB_TABLE_BASE::PANEL_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID i
 	m_project_sizer->Fit( m_project_panel );
 	m_notebook->AddPage( m_project_panel, _("Project Specific Libraries"), false );
 
-	m_top_sizer->Add( m_notebook, 1, wxEXPAND|wxBOTTOM, 5 );
+	bMainSizer->Add( m_notebook, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
-	m_buttonsPanel = new wxPanel( m_top_sizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bButtonsSizer;
 	bButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_append_button = new STD_BITMAP_BUTTON( m_buttonsPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_append_button = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_append_button->SetToolTip( _("Add empty row to table") );
 
-	bButtonsSizer->Add( m_append_button, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	bButtonsSizer->Add( m_append_button, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
-	m_browseButton = new SPLIT_BUTTON( m_buttonsPanel, wxID_ANY, _( "Add Existing" ), wxDefaultPosition );
+	m_browseButton = new SPLIT_BUTTON( this, wxID_ANY, _( "Add Existing" ), wxDefaultPosition );
 	m_browseButton->SetToolTip( _("Add Existing") );
 
-	bButtonsSizer->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	bButtonsSizer->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
-	m_move_up_button = new STD_BITMAP_BUTTON( m_buttonsPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_move_up_button = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_move_up_button->SetToolTip( _("Move up") );
 
-	bButtonsSizer->Add( m_move_up_button, 0, wxBOTTOM|wxRIGHT, 5 );
+	bButtonsSizer->Add( m_move_up_button, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
-	m_move_down_button = new STD_BITMAP_BUTTON( m_buttonsPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_move_down_button = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_move_down_button->SetToolTip( _("Move down") );
 
-	bButtonsSizer->Add( m_move_down_button, 0, wxBOTTOM|wxRIGHT, 5 );
+	bButtonsSizer->Add( m_move_down_button, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
 	bButtonsSizer->Add( 20, 0, 0, wxEXPAND, 5 );
 
-	m_delete_button = new STD_BITMAP_BUTTON( m_buttonsPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_delete_button = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_delete_button->SetToolTip( _("Remove library from table") );
 
-	bButtonsSizer->Add( m_delete_button, 0, wxBOTTOM|wxRIGHT, 5 );
+	bButtonsSizer->Add( m_delete_button, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
-	m_buttonsPanel->SetSizer( bButtonsSizer );
-	m_buttonsPanel->Layout();
-	bButtonsSizer->Fit( m_buttonsPanel );
-	m_top_sizer->Add( m_buttonsPanel, 0, 0, 5 );
+	bMainSizer->Add( bButtonsSizer, 0, wxEXPAND|wxALL, 8 );
+
+	wxStaticText* stPathsLabel;
+	stPathsLabel = new wxStaticText( this, wxID_ANY, _("Path Substitutions:"), wxDefaultPosition, wxDefaultSize, 0 );
+	stPathsLabel->Wrap( -1 );
+	bMainSizer->Add( stPathsLabel, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 8 );
 
 
-	bMainSizer->Add( m_top_sizer, 1, wxEXPAND|wxALL, 5 );
+	bMainSizer->Add( 0, 2, 0, wxEXPAND, 5 );
 
-	wxStaticBoxSizer* sbSizer1;
-	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Path Substitutions") ), wxVERTICAL );
-
-	m_path_subs_grid = new WX_GRID( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_path_subs_grid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
 	// Grid
 	m_path_subs_grid->CreateGrid( 1, 2 );
@@ -195,10 +190,7 @@ PANEL_FP_LIB_TABLE_BASE::PANEL_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID i
 	m_path_subs_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	m_path_subs_grid->SetToolTip( _("This is a read-only table which shows pertinent environment variables.") );
 
-	sbSizer1->Add( m_path_subs_grid, 1, wxALL|wxEXPAND, 5 );
-
-
-	bMainSizer->Add( sbSizer1, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bMainSizer->Add( m_path_subs_grid, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	this->SetSizer( bMainSizer );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -14,13 +14,10 @@
 
 PANEL_SYM_LIB_TABLE_BASE::PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
 {
-	wxBoxSizer* bSizer1;
-	bSizer1 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bMainSizer;
+	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
-	wxStaticBoxSizer* m_top_sizer;
-	m_top_sizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Libraries by Scope") ), wxVERTICAL );
-
-	m_notebook = new wxNotebook( m_top_sizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_notebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_global_panel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* m_global_sizer;
 	m_global_sizer = new wxBoxSizer( wxVERTICAL );
@@ -123,55 +120,60 @@ PANEL_SYM_LIB_TABLE_BASE::PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	m_project_sizer->Fit( m_project_panel );
 	m_notebook->AddPage( m_project_panel, _("Project Specific Libraries"), false );
 
-	m_top_sizer->Add( m_notebook, 1, wxEXPAND|wxBOTTOM, 5 );
+	bMainSizer->Add( m_notebook, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	wxBoxSizer* bSizer51;
-	bSizer51 = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bButtonsSizer;
+	bButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_append_button = new STD_BITMAP_BUTTON( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_append_button = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_append_button->SetToolTip( _("Add empty row to table") );
 
-	bSizer51->Add( m_append_button, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	bButtonsSizer->Add( m_append_button, 0, wxALL, 5 );
 
-	m_browse_button = new STD_BITMAP_BUTTON( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_browse_button = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_browse_button->SetToolTip( _("Add existing library to table") );
 
-	bSizer51->Add( m_browse_button, 0, wxBOTTOM|wxRIGHT, 5 );
+	bButtonsSizer->Add( m_browse_button, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
-	m_move_up_button = new STD_BITMAP_BUTTON( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_move_up_button = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_move_up_button->SetToolTip( _("Move up") );
 
-	bSizer51->Add( m_move_up_button, 0, wxBOTTOM|wxRIGHT, 5 );
+	bButtonsSizer->Add( m_move_up_button, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
-	m_move_down_button = new STD_BITMAP_BUTTON( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_move_down_button = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_move_down_button->SetToolTip( _("Move down") );
 
-	bSizer51->Add( m_move_down_button, 0, wxBOTTOM|wxRIGHT, 5 );
+	bButtonsSizer->Add( m_move_down_button, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
-	bSizer51->Add( 20, 0, 0, wxEXPAND, 5 );
+	bButtonsSizer->Add( 20, 0, 0, wxEXPAND, 5 );
 
-	m_delete_button = new STD_BITMAP_BUTTON( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_delete_button = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_delete_button->SetToolTip( _("Remove library from table") );
 
-	bSizer51->Add( m_delete_button, 0, wxBOTTOM|wxRIGHT, 5 );
+	bButtonsSizer->Add( m_delete_button, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
-	bSizer51->Add( 0, 0, 1, wxEXPAND, 5 );
+	bButtonsSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_convertLegacy = new wxButton( m_top_sizer->GetStaticBox(), wxID_ANY, _("Migrate Libraries"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer51->Add( m_convertLegacy, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-
-	m_top_sizer->Add( bSizer51, 0, wxEXPAND, 8 );
+	m_convertLegacy = new wxButton( this, wxID_ANY, _("Migrate Libraries"), wxDefaultPosition, wxDefaultSize, 0 );
+	bButtonsSizer->Add( m_convertLegacy, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
-	bSizer1->Add( m_top_sizer, 1, wxALL|wxEXPAND, 5 );
+	bMainSizer->Add( bButtonsSizer, 0, wxEXPAND|wxALL, 3 );
 
-	wxStaticBoxSizer* sbSizer1;
-	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Path Substitutions:") ), wxVERTICAL );
 
-	m_path_subs_grid = new WX_GRID( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	bMainSizer->Add( 0, 5, 0, wxEXPAND, 5 );
+
+	wxStaticText* stPathsLabel;
+	stPathsLabel = new wxStaticText( this, wxID_ANY, _("Path Substitutions:"), wxDefaultPosition, wxDefaultSize, 0 );
+	stPathsLabel->Wrap( -1 );
+	bMainSizer->Add( stPathsLabel, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 8 );
+
+
+	bMainSizer->Add( 0, 2, 0, wxEXPAND, 5 );
+
+	m_path_subs_grid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
 	// Grid
 	m_path_subs_grid->CreateGrid( 1, 2 );
@@ -200,15 +202,12 @@ PANEL_SYM_LIB_TABLE_BASE::PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	m_path_subs_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	m_path_subs_grid->SetToolTip( _("This is a read-only table which shows pertinent environment variables.") );
 
-	sbSizer1->Add( m_path_subs_grid, 1, wxALL|wxEXPAND, 5 );
+	bMainSizer->Add( m_path_subs_grid, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizer1->Add( sbSizer1, 0, wxALL|wxEXPAND, 5 );
-
-
-	this->SetSizer( bSizer1 );
+	this->SetSizer( bMainSizer );
 	this->Layout();
-	bSizer1->Fit( this );
+	bMainSizer->Fit( this );
 
 	// Connect Events
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SYM_LIB_TABLE_BASE::OnUpdateUI ) );

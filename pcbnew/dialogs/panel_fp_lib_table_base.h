@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -28,7 +28,7 @@ class WX_GRID;
 #include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <widgets/split_button.h>
-#include <wx/statbox.h>
+#include <wx/stattext.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -46,7 +46,6 @@ class PANEL_FP_LIB_TABLE_BASE : public wxPanel
 		WX_GRID* m_global_grid;
 		wxPanel* m_project_panel;
 		WX_GRID* m_project_grid;
-		wxPanel* m_buttonsPanel;
 		STD_BITMAP_BUTTON* m_append_button;
 		SPLIT_BUTTON* m_browseButton;
 		STD_BITMAP_BUTTON* m_move_up_button;

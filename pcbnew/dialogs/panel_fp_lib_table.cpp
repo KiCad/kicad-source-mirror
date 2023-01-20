@@ -501,11 +501,6 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
 
     Layout();
 
-    // Hack to make buttons lay out correctly the first time on Mac
-    wxSize hackSize = m_buttonsPanel->GetSize();
-    m_buttonsPanel->SetSize( wxSize( hackSize.x - 5, hackSize.y ) );
-    Layout();
-
     // This is the button only press for the browse button instead of the menu
     m_browseButton->Bind( wxEVT_BUTTON, &PANEL_FP_LIB_TABLE::browseLibrariesHandler, this );
 }

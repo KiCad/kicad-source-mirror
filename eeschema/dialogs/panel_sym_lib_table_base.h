@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -27,7 +27,7 @@ class WX_GRID;
 #include <wx/notebook.h>
 #include <wx/bmpbuttn.h>
 #include <wx/button.h>
-#include <wx/statbox.h>
+#include <wx/stattext.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
