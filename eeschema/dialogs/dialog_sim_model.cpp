@@ -1060,13 +1060,18 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::onLibraryPathTextKillFocus( wxFocusEve
 template <typename T_symbol, typename T_field>
 void DIALOG_SIM_MODEL<T_symbol, T_field>::onBrowseButtonClick( wxCommandEvent& aEvent )
 {
-    wxFileDialog dlg( this, _( "Browse Models" ), Prj().GetProjectPath() );
+    static wxString s_mruPath;
+
+    wxString     path = s_mruPath.IsEmpty() ? Prj().GetProjectPath() : s_mruPath;
+    wxFileDialog dlg( this, _( "Browse Models" ), path );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    wxString path = dlg.GetPath();
+    path = dlg.GetPath();
     wxFileName fn( path );
+
+    s_mruPath = fn.GetPath();
 
     if( fn.MakeRelativeTo( Prj().GetProjectPath() ) && !fn.GetFullPath().StartsWith( wxS( ".." ) ) )
         path = fn.GetFullPath();

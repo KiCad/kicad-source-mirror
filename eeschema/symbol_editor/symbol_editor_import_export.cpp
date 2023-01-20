@@ -60,8 +60,10 @@ void SYMBOL_EDIT_FRAME::ImportSymbol()
     wxFileName fn = dlg.GetPath();
 
     if( fn.GetExt().IsEmpty() )
-        fn.SetExt( (dlg.GetFilterIndex() == 0) ?
-                   KiCadSymbolLibFileExtension : LegacySymbolLibFileExtension );
+    {
+        fn.SetExt( (dlg.GetFilterIndex() == 0) ? KiCadSymbolLibFileExtension
+                                               : LegacySymbolLibFileExtension );
+    }
 
     m_mruPath = fn.GetPath();
 
