@@ -404,7 +404,7 @@ std::vector<std::string> NGSPICE::GetSettingCommands() const
         break;
 
     case NGSPICE_MODEL_MODE::HSPICE:
-        commands.emplace_back( "set ngbehavior=hs" );
+        commands.emplace_back( "set ngbehavior=hsa" );
         break;
 
     default:
