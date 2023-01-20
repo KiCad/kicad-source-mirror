@@ -118,8 +118,10 @@ long NlLoadLibrary()
     if( NULL == libHandle )
     {
         error = -1; // whatever error it's an error dlopen() does not set errno
+#if 0
         fprintf( stderr, "Error: Failed to open library \"%s\"! Error: %s!\n", TheLibrary,
                  dlerror() );
+#endif
     }
     else
     {
@@ -132,9 +134,10 @@ long NlLoadLibrary()
             || ( ( pfnNlGetType = (PFN_NLGETTYPE) dlsym( libHandle, cNlGetType ) ) == NULL ) )
         {
             error = -2; // whatever error it is - it's an error dlsym() does not set errno
+#if 0
             fprintf( stderr, "Error: Failed to fetch symbols from \"%s\"! Error: %s!\n", TheLibrary,
                      dlerror() );
-
+#endif
             dlclose( libHandle );
             libHandle = NULL;
         }
