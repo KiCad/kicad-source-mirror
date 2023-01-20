@@ -182,6 +182,7 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
         if( ii == int( m_SelTrackWidthBox->GetCount() - 2 ) )
         {
             // this is the separator
+            m_SelTrackWidthBox->SetSelection( GetDesignSettings().GetTrackWidthIndex() );
         }
         else if( ii == int( m_SelTrackWidthBox->GetCount() - 1 ) )
         {
