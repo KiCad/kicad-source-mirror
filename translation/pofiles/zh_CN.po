@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# taotieren <admin@taotieren.com>,2019-2020, 2021, 2022.
+# taotieren <admin@taotieren.com>,2019-2020, 2021, 2022, 2023.
 # Rigo Ligo <rigoligo03@gmail.com>, 2020, 2021, 2022.
 # Eric <spice2wolf@gmail.com>, 2020, 2021.
 # Liu Guang <l.g110@163.com>, 2021.
@@ -25,8 +25,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-17 10:33-0800\n"
-"PO-Revision-Date: 2023-01-20 06:51+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"PO-Revision-Date: 2023-01-20 17:03+0000\n"
+"Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -539,7 +539,7 @@ msgstr "切换直插通孔 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:209
 msgid "Toggle 3D models for 'Through hole' type components"
-msgstr "切换 '通孔' 类型组件的 3D 模型"
+msgstr "切换 '通孔' 型元件的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:215
 msgid "Toggle SMD 3D models"
@@ -547,7 +547,7 @@ msgstr "切换贴片(SMD) 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:216
 msgid "Toggle 3D models for 'Surface mount' type components"
-msgstr "切换'表面贴装'类型组件的 3D 模型"
+msgstr "切换 '表面贴装' 型元件的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
 msgid "Toggle unspecified 3D models"
@@ -555,7 +555,7 @@ msgstr "切换未指定的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
 msgid "Toggle 3D models for 'unspecified' type components"
-msgstr "切换 '未指定' 类型组件的 3D 模型"
+msgstr "切换 '未指定' 型元件的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:228
 msgid "Toggle 3D models not in pos file"
@@ -2803,7 +2803,6 @@ msgstr "黑白"
 
 #: common/dialogs/dialog_print_generic_base.cpp:41
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:22
-#, fuzzy
 msgid "Print drawing sheet"
 msgstr "打印图纸"
 
@@ -3663,9 +3662,8 @@ msgid "<b>Nets matching '%s':</b>"
 msgstr "<b>匹配 '%s'的网络：</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:32
-#, fuzzy
 msgid "Netclasses:"
-msgstr "网络类"
+msgstr "网络类："
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: pcbnew/tools/board_inspection_tool.cpp:493
@@ -3767,7 +3765,7 @@ msgstr "忽略"
 
 #: common/dialogs/panel_setup_severities.cpp:117
 msgid "From Pin Conflicts Map"
-msgstr "与引脚冲突映射相同"
+msgstr "与引脚冲突图相同"
 
 #: common/dialogs/panel_text_variables.cpp:121
 #: common/dialogs/panel_text_variables.cpp:149
@@ -4002,7 +4000,7 @@ msgstr "偏好设置"
 #: common/eda_base_frame.cpp:1015 common/hotkey_store.cpp:71
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:20
 msgid "Common"
-msgstr "常规"
+msgstr "共同"
 
 #: common/eda_base_frame.cpp:1016
 msgid "Mouse and Touchpad"
@@ -4050,7 +4048,7 @@ msgstr "原理图编辑器"
 
 #: common/eda_base_frame.cpp:1047
 msgid "Annotation Options"
-msgstr "标注选项"
+msgstr "批注选项"
 
 #: common/eda_base_frame.cpp:1050
 #: eeschema/dialogs/dialog_schematic_setup.cpp:77
@@ -4096,7 +4094,7 @@ msgstr "原点和轴"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:226
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:571
 msgid "General"
-msgstr "常规"
+msgstr "通用"
 
 #: common/eda_base_frame.cpp:1086
 msgid "Realtime Renderer"
@@ -4312,7 +4310,7 @@ msgstr "网络信息"
 #: common/eda_item.cpp:353 pcbnew/pcb_group.cpp:399
 #: pcbnew/tools/pcb_actions.cpp:758
 msgid "Group"
-msgstr "组合"
+msgstr "分组"
 
 #: common/eda_item.cpp:356 eeschema/sch_junction.h:97
 msgid "Junction"
@@ -4365,7 +4363,7 @@ msgstr "引脚"
 
 #: common/eda_item.cpp:371
 msgid "Sheet Pin"
-msgstr "图框引脚"
+msgstr "图纸页码"
 
 #: common/eda_item.cpp:372 eeschema/dialogs/dialog_migrate_buses.cpp:103
 #: pcbnew/tools/pcb_actions.cpp:1360
@@ -5175,7 +5173,7 @@ msgstr "图框文件名"
 #: common/layer_id.cpp:133
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:60
 msgid "Sheet pins"
-msgstr "图框引脚"
+msgstr "图纸页码"
 
 #: common/layer_id.cpp:134
 msgid "No-connect symbols"
@@ -6142,7 +6140,7 @@ msgstr "使用 inch 作为单位"
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:92
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:51
 msgid "Mils"
-msgstr "Mils"
+msgstr "密尔"
 
 #: common/tool/actions.cpp:502
 msgid "Use mils"
@@ -6157,7 +6155,7 @@ msgstr "使用 mil 作为单位"
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:92
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:50
 msgid "Millimeters"
-msgstr "mm"
+msgstr "毫米"
 
 #: common/tool/actions.cpp:507
 msgid "Use millimeters"
@@ -6304,7 +6302,7 @@ msgstr "管理封装库..."
 
 #: common/tool/actions.cpp:643
 msgid "Edit the global and project footprint library lists"
-msgstr "编辑全局和项目封装库列表"
+msgstr "编辑全局和工程封装库列表"
 
 #: common/tool/actions.cpp:648
 msgid "Getting Started with KiCad"
@@ -7541,7 +7539,7 @@ msgstr "已将 %s 批注为 %s。"
 
 #: eeschema/annotate.cpp:420
 msgid "Annotation complete."
-msgstr "标注完成。"
+msgstr "批注完成。"
 
 #: eeschema/bom_plugins.cpp:46
 #, c-format
@@ -7569,12 +7567,12 @@ msgstr "网络 %s 以图形方式连接到总线 %s，但不是总线的成员"
 #: eeschema/connection_graph.cpp:3276
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
-msgstr "图框引脚 %s 在图框内没有匹配的分层标签"
+msgstr "图纸页码 %s 在图框内没有匹配的分层标签"
 
 #: eeschema/connection_graph.cpp:3293
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
-msgstr "层次标签 %s 在父图框内没有匹配的图框引脚"
+msgstr "层次标签 %s 在父图框内没有匹配的图纸页码"
 
 #: eeschema/cross-probing.cpp:164
 #, c-format
@@ -7603,7 +7601,7 @@ msgstr "选择网络："
 
 #: eeschema/dialogs/dialog_annotate.cpp:90
 msgid "Annotation Messages:"
-msgstr "标注信息："
+msgstr "批注信息："
 
 #: eeschema/dialogs/dialog_annotate.cpp:93
 msgid "Annotate"
@@ -7653,11 +7651,11 @@ msgstr "按 &Y 位置排列符号"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:87
 msgid "Keep existing annotations"
-msgstr "保持现有的标注"
+msgstr "保持现有的批注"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:87
 msgid "Reset existing annotations"
-msgstr "重置现有的标注"
+msgstr "重置现有的批注"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:94
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:61
@@ -7681,7 +7679,7 @@ msgstr "参考编号 X 1000"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:133
 msgid "Clear Annotation"
-msgstr "清除标注"
+msgstr "清除批注"
 
 #: eeschema/dialogs/dialog_annotate_base.h:85
 msgid "Annotate Schematic"
@@ -7868,6 +7866,74 @@ msgid ""
 "Double quotes (`\"`) around the arguments are recommended in case filenames "
 "contain spaces or special characters.\n"
 msgstr ""
+"# 1. 摘要\n"
+"\n"
+"BOM 工具创建了一个 BOM，列出了设计中的所有元件。\n"
+"\n"
+"该工具使用一个外部脚本来生成一个所需输出格式的 BOM。"
+"选择一个不同的脚本可以改变 BOM 的格式。\n"
+"\n"
+"在原理图编辑器手册中对生成 BOM 有更详细的描述。\n"
+"\n"
+"# 2. 使用方法\n"
+"\n"
+"在 **BOM 生成器脚本** "
+"列表中选择一个生成器脚本。所选生成器的详细信息显示在对话框的右侧。\n"
+"\n"
+"点击 **生成** 按钮，用选定的生成器创建一个 BOM 文件。\n"
+"\n"
+"默认设置提供了几个生成器脚本选项，尽管一些额外的脚本已随 KiCad 安装，"
+"并可通过 **+** 按钮添加到列表中。\n"
+"\n"
+"**注意：** 在 Windows 上，有一个额外的选项 "
+"**显示控制台窗口**。当该选项未被选中时，BOM 生成器在一个隐藏的控制台窗口中运"
+"行，任何输出都会被重定向并打印在对话框中。当这个选项被选中时，BOM "
+"生成器会在一个可见的控制台窗口中运行。\n"
+"\n"
+"# 3. 自定义生成器和命令行\n"
+"\n"
+"在内部，KiCad 创建了一个 XML "
+"格式的中间网表文件，其中包含了设计中所有元件的信息。BOM "
+"生成器脚本将中间网表文件转换为所需的输出格式。KiCad 根据在 BOM "
+"对话框底部输入的命令行运行 BOM 生成器脚本。\n"
+"\n"
+"命令行格式接受文件名的参数。每个格式化参数都被替换成项目特定的路径或文件名。"
+"支持的格式化参数有。\n"
+"\n"
+" * `%I`：中间网表文件的绝对路径和文件名，它是 BOM 生成器的输入。\n"
+" * `%O`：输出 BOM 文件的绝对路径和文件名（没有文件扩展名）\n"
+" * `%B`：输出 BOM 文件的基本文件名（没有文件扩展名）。\n"
+" * `%P`：项目目录的绝对路径，没有尾部斜线。\n"
+"\n"
+"**注意：** `%O` 输出文件参数不包括文件扩展名。KiCad "
+"将尝试在命令行中自动添加一个适当的扩展名，但可能需要手动添加扩展名。\n"
+"\n"
+"Python 是 BOM 生成器脚本的推荐工具，但也可以使用其他工具。\n"
+"\n"
+"## Python 脚本的命令行示例\n"
+"\n"
+"Python 脚本的命令行格式是这样的。\n"
+"\n"
+"```\n"
+"python <脚本文件名> <输入文件名> <输出文件名> \n"
+"```\n"
+"\n"
+"在 Windows 上，如果想要的 CSV BOM 的生成器脚本是 `C:\\Users\\username\\kicad"
+"\\my_python_script.py`，命令行将是。\n"
+"\n"
+"```\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O.csv\""
+"\n"
+"```\n"
+"\n"
+"在 Linux 上，如果想要 的CSV BOM 的生成器脚本是 `/home/username/kicad/"
+"my_python_script.py`，命令行将是。\n"
+"\n"
+"```\n"
+"python /home/username/kicad/my_python_script.py \"%I\" \"%O.csv\"\n"
+"```\n"
+"\n"
+"建议在参数周围加上双引号（`\"`），以防文件名包含空格或特殊字符。\n"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:66
 msgid "Change all symbols in schematic"
@@ -8184,11 +8250,11 @@ msgstr "运行 ERC"
 
 #: eeschema/dialogs/dialog_erc.cpp:151
 msgid "Show Annotation dialog"
-msgstr "显示标注对话框"
+msgstr "显示批注对话框"
 
 #: eeschema/dialogs/dialog_erc.cpp:164
 msgid "Schematic is not fully annotated. ERC results will be incomplete."
-msgstr "原理图未完全标注。 ERC 结果将不完整。"
+msgstr "原理图未完全批注。 ERC 结果将不完整。"
 
 #: eeschema/dialogs/dialog_erc.cpp:299
 msgid "Delete exclusions too?"
@@ -8326,7 +8392,7 @@ msgstr "违规将不会被检查或报告"
 
 #: eeschema/dialogs/dialog_erc.cpp:678
 msgid "Edit pin-to-pin conflict map..."
-msgstr "编辑引脚到引脚冲突映射..."
+msgstr "编辑引脚到引脚冲突图..."
 
 #: eeschema/dialogs/dialog_erc.cpp:682 pcbnew/dialogs/dialog_drc.cpp:639
 msgid "Edit violation severities..."
@@ -8339,7 +8405,7 @@ msgstr "打开“原理图设置...”对话框"
 #: eeschema/dialogs/dialog_erc.cpp:775
 #: eeschema/dialogs/dialog_schematic_setup.cpp:81
 msgid "Pin Conflicts Map"
-msgstr "引脚冲突映射"
+msgstr "引脚冲突图"
 
 #: eeschema/dialogs/dialog_erc.cpp:779 eeschema/dialogs/dialog_erc.cpp:881
 #: eeschema/dialogs/dialog_schematic_setup.cpp:80
@@ -8550,7 +8616,7 @@ msgstr "图纸文件名只能在图纸属性对话框中修改。"
 msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
 "> General > Formatting"
-msgstr "图框间位号可见性通过\"原理图设置 >常规> 格式\" 进行全局控制"
+msgstr "图框间位号可见性通过\"原理图设置 > 通用 > 格式\" 进行全局控制"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:32
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:32
@@ -10284,7 +10350,7 @@ msgstr "字段名称模板"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:54
 msgid "Pin conflict map"
-msgstr "引脚冲突映射"
+msgstr "引脚冲突图"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:57
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:72
@@ -10440,7 +10506,7 @@ msgstr "%s 属性"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.h:84
 msgid "Sheet Pin Properties"
-msgstr "图框引脚属性"
+msgstr "图纸页码属性"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:272
 msgid "A sheet must have a valid file name."
@@ -11490,7 +11556,7 @@ msgstr "导线 & 总线属性"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:20
 msgid "Automatically annotate symbols"
-msgstr "自动标注符号"
+msgstr "自动批注符号"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:142
 msgid ""
@@ -11647,7 +11713,7 @@ msgstr ""
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:56
 #: pcbnew/dialogs/panel_edit_options_base.cpp:386
 msgid "<ESC> clears net highlighting"
-msgstr "<ESC>清除网络高亮"
+msgstr "<ESC> 清除网络高亮"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:57
 msgid ""
@@ -11822,7 +11888,7 @@ msgstr "网络/嵌套总线名称"
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:27
 #: pcbnew/dialogs/panel_display_options_base.cpp:37
 msgid "Annotations"
-msgstr "标注"
+msgstr "批注"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:30
 msgid "Symbol unit notation:"
@@ -11953,12 +12019,12 @@ msgstr "虚线"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:228
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:28
 msgid "Dash length:"
-msgstr "Dash 长度："
+msgstr "虚线长度："
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:235
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:35
 msgid "Gap length:"
-msgstr "Gap 长度："
+msgstr "差距长度："
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:245
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:45
@@ -12533,7 +12599,7 @@ msgstr "引脚之间的冲突问题"
 
 #: eeschema/erc_item.cpp:74
 msgid "Mismatch between hierarchical labels and sheet pins"
-msgstr "分层标签和图框引脚不匹配"
+msgstr "分层标签和图纸页码不匹配"
 
 #: eeschema/erc_item.cpp:78
 msgid "A pin with a \"no connection\" flag is connected"
@@ -12589,7 +12655,7 @@ msgstr "总线以图形方式连接，但不共享总线成员"
 
 #: eeschema/erc_item.cpp:130
 msgid "Invalid connection between bus and net items"
-msgstr "总线和净项目之间的连接无效"
+msgstr "总线和网络项目之间的连接无效"
 
 #: eeschema/erc_item.cpp:134 pcbnew/drc/drc_item.cpp:193
 msgid "Unresolved text variable"
@@ -12609,7 +12675,7 @@ msgstr "库符号问题"
 
 #: eeschema/erc_item.cpp:150
 msgid "Symbol is not annotated"
-msgstr "符号没有注解"
+msgstr "符号没有批注"
 
 #: eeschema/erc_item.cpp:154
 msgid "Symbol has more units than are defined"
@@ -12797,9 +12863,8 @@ msgstr ""
 
 #: eeschema/files-io.cpp:619 pcbnew/files.cpp:173
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:191
-#, fuzzy
 msgid "All supported formats"
-msgstr "所有支持的库格式"
+msgstr "所有支持的格式"
 
 #: eeschema/files-io.cpp:622
 msgid "Import Schematic"
@@ -13553,7 +13618,7 @@ msgstr "标签"
 
 #: eeschema/sch_label.cpp:859
 msgid "Hierarchical Sheet Pin"
-msgstr "层次图框引脚"
+msgstr "层次图纸页码"
 
 #: eeschema/sch_label.cpp:887 eeschema/sch_text.cpp:502
 msgid "Justification"
@@ -14155,11 +14220,11 @@ msgstr "无效的标题栏注释号"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2033
 msgid "Invalid sheet pin name"
-msgstr "无效的图框引脚名"
+msgstr "无效的图纸页码名"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2041
 msgid "Empty sheet pin name"
-msgstr "空的图框引脚名"
+msgstr "空的图纸页码名"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2591
 msgid "Invalid symbol library name"
@@ -14334,7 +14399,7 @@ msgstr "(删除项)"
 #: eeschema/sch_sheet_pin.cpp:330
 #, c-format
 msgid "Hierarchical Sheet Pin %s"
-msgstr "层次图框引脚 %s"
+msgstr "层次图纸页码 %s"
 
 #: eeschema/sch_symbol.cpp:1240
 msgid "Excluded from BOM"
@@ -14535,10 +14600,9 @@ msgstr ""
 "        <th>显示样式</th>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>^{上标文本}</samp></td>\n"
+"        <td>&nbsp;<br><samp>^{superscript}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><sup>文本会以这样的上标形式显示，样例如下：</sup>"
-"&nbsp;</samp></td>\n"
+"        <td>&nbsp;<br><samp><sup>上标</sup>&nbsp;</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>驱动板^{Rev A}</samp></td>\n"
@@ -14549,10 +14613,9 @@ msgstr ""
 "        <td><br></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>_{下标文本}</samp></td>\n"
+"        <td>&nbsp;<br><samp>_{subscript}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><sub>文本会以这样的下标形式显示，样例如下：</sub>"
-"&nbsp;</samp></td>\n"
+"        <td>&nbsp;<br><samp><sub>下标</sub>&nbsp;</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
@@ -14563,25 +14626,25 @@ msgstr ""
 "        <td></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td> &nbsp;<br><samp>~{上划线文本}</samp><br> "
-"&nbsp;<br><samp>~{CLK}</samp><br> &nbsp;<br><samp>~~</samp> </td>\n"
+"        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</"
+"samp><br> &nbsp;<br><samp>~~</samp> </td>\n"
 "        <td></td>\n"
 "        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>文本会以这样的上划线形式显示，样例如下：</samp><br> "
-"<samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>CLK</samp></td>\n"
+"samp><br> <samp>上划线</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>${变量名}</samp></td>\n"
+"        <td>&nbsp;<br><samp>${variable}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>显示变量的值，样例如下：</i></samp></td>\n"
+"        <td>&nbsp;<br><samp><i>变量的值</i></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${REVISION}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>显示文件的修订版本，如：2020.1</samp></td>\n"
+"        <td>&nbsp;<br><samp>2020.1</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -14607,7 +14670,7 @@ msgstr ""
 "        <th>总线定义</th>\n"
 "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
 ";&nbsp;&nbsp;</th>\n"
-"        <th>合成网</th>\n"
+"        <th>合成网络</th>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>前缀[m..n]</samp></td>\n"
@@ -14796,7 +14859,6 @@ msgid "Cancel Load"
 msgstr "取消加载"
 
 #: eeschema/sheet.cpp:241
-#, fuzzy
 msgid ""
 "There are hierarchical sheets in the loaded schematic file from an older "
 "file version resulting in  missing symbol instance data.  This will result "
@@ -14807,11 +14869,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"从旧文件版本加载的原理图文件中的分层表会导致符号实例数据丢失。 这会导致加载原"
-"理图中的所有符号使用默认实例设置或回退到库符号设置。 加载使用此原理图文件的项"
-"目并保存到最新文件版本将解决此问题。\n"
+"在加载的原理图文件中存在来自旧文件版本的层次图，导致符号实例数据丢失。 "
+"这将导致加载的原理图中的所有符号都使用默认的实例设置或退回到库中的符号设置。 "
+"加载使用该原理图文件的工程并保存为最新的文件版本将解决这个问题。\n"
 "\n"
-" 你想继续吗？"
+"你想继续吗？"
 
 #: eeschema/sheet.cpp:248 eeschema/sheet.cpp:276 eeschema/sheet.cpp:317
 #: eeschema/sheet.cpp:366 eeschema/sheet.cpp:427
@@ -15308,7 +15370,7 @@ msgstr "差异引脚名称不正确"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2288
 msgid "Incorrect inv_pin name"
-msgstr "inv_pin 名称不正确"
+msgstr "这个 inv_pin 名称不正确"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2368
 msgid "Unknown waveform type"
@@ -15551,10 +15613,9 @@ msgid "Number of bits"
 msgstr "位数"
 
 #: eeschema/sim/sim_panel_base.cpp:90
-#, fuzzy
 msgid ""
 "Simulation provided no plots. Please refer to console window for results."
-msgstr "此仿真不提供绘制。有关结果，请参阅控制台窗口"
+msgstr "仿真没有提供任何绘图。请参考控制台窗口的结果。"
 
 #: eeschema/sim/sim_plot_frame.cpp:161
 msgid "Run/Stop Simulation"
@@ -15586,7 +15647,7 @@ msgstr "调整元件的值"
 
 #: eeschema/sim/sim_plot_frame.cpp:169
 msgid "Sim Command"
-msgstr "Sim 命令"
+msgstr "仿真命令"
 
 #: eeschema/sim/sim_plot_frame.cpp:170
 msgid "Simulation command and settings"
@@ -15622,12 +15683,12 @@ msgstr "绘制 %u - "
 #: eeschema/sim/sim_plot_frame.cpp:597 eeschema/sim/sim_plot_frame.cpp:609
 #: eeschema/sim/sim_plot_frame.cpp:928
 msgid "Could not apply tuned value(s):"
-msgstr ""
+msgstr "无法应用调整后的值："
 
 #: eeschema/sim/sim_plot_frame.cpp:610 eeschema/sim/sim_plot_frame.cpp:918
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not tunable"
-msgstr "目录 \"%s\" 不可写入。"
+msgstr "%s 是不可调谐"
 
 #: eeschema/sim/sim_plot_frame.cpp:653
 msgid "Error: simulation type not defined!\n"
@@ -15674,9 +15735,8 @@ msgid "You need to run plot-providing simulation first."
 msgstr "您需要先运行绘制提供仿真。"
 
 #: eeschema/sim/sim_plot_frame.cpp:1661
-#, fuzzy
 msgid "SPICE Netlist"
-msgstr "SPICE 网表文件"
+msgstr "SPICE 网表"
 
 #: eeschema/sim/sim_plot_frame.cpp:1733
 msgid "Save changes to workbook?"
@@ -15695,14 +15755,12 @@ msgstr ""
 "\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:1989
-#, fuzzy
 msgid "Remove Signal"
-msgstr "隐藏信号"
+msgstr "移除信号"
 
 #: eeschema/sim/sim_plot_frame.cpp:1989
-#, fuzzy
 msgid "Remove the signal from the plot"
-msgstr "擦除绘制屏幕上的信号"
+msgstr "从绘图中删除信号"
 
 #: eeschema/sim/sim_plot_frame.cpp:1997
 msgid "Hide Cursor"
@@ -16741,15 +16799,15 @@ msgstr "显示引脚编号"
 
 #: eeschema/tools/ee_actions.cpp:201
 msgid "Annotate pins with their numbers"
-msgstr "用引脚编号注释引脚"
+msgstr "用引脚编号批注引脚"
 
 #: eeschema/tools/ee_actions.cpp:206
 msgid "Show Symbol Tree"
-msgstr "显示符号树"
+msgstr "显示符号工作区"
 
 #: eeschema/tools/ee_actions.cpp:211
 msgid "Hide Symbol Tree"
-msgstr "隐藏符号树"
+msgstr "隐藏符号工作区"
 
 #: eeschema/tools/ee_actions.cpp:216
 msgid "Export View as PNG..."
@@ -16810,7 +16868,7 @@ msgstr "添加文本框项目"
 
 #: eeschema/tools/ee_actions.cpp:253 eeschema/tools/ee_actions.cpp:834
 msgid "Add Lines"
-msgstr "添加线"
+msgstr "添加直线"
 
 #: eeschema/tools/ee_actions.cpp:253 eeschema/tools/ee_actions.cpp:834
 msgid "Add connected graphic lines"
@@ -16926,11 +16984,11 @@ msgstr "添加分层图框"
 
 #: eeschema/tools/ee_actions.cpp:341
 msgid "Import Sheet Pin"
-msgstr "导入图框引脚"
+msgstr "导入图纸页码"
 
 #: eeschema/tools/ee_actions.cpp:341
 msgid "Import a hierarchical sheet pin"
-msgstr "导入分层图框引脚"
+msgstr "导入分层图纸页码"
 
 #: eeschema/tools/ee_actions.cpp:347
 msgid "Add Global Label"
@@ -16958,11 +17016,11 @@ msgstr "添加一个矩形"
 
 #: eeschema/tools/ee_actions.cpp:368
 msgid "Add Circle"
-msgstr "添加圆"
+msgstr "添加圆形"
 
 #: eeschema/tools/ee_actions.cpp:368
 msgid "Add a circle"
-msgstr "添加一个圆"
+msgstr "添加一个圆形"
 
 #: eeschema/tools/ee_actions.cpp:373
 msgid "Add Arc"
@@ -17192,7 +17250,7 @@ msgstr "清除图页连接"
 
 #: eeschema/tools/ee_actions.cpp:533
 msgid "Delete unreferenced sheet pins"
-msgstr "删除未引用的图框引脚"
+msgstr "删除未引用的图纸页码"
 
 #: eeschema/tools/ee_actions.cpp:537 pcbnew/tools/pcb_actions.cpp:504
 msgid "Edit Text & Graphics Properties..."
@@ -17219,23 +17277,20 @@ msgid "Displays pin table for bulk editing of pins"
 msgstr "显示引脚表, 用于批量编辑引脚"
 
 #: eeschema/tools/ee_actions.cpp:553
-#, fuzzy
 msgid "Break"
-msgstr "分割总线"
+msgstr "分割"
 
 #: eeschema/tools/ee_actions.cpp:553
-#, fuzzy
 msgid "Divide into connected segments"
-msgstr "过孔未连接"
+msgstr "划分为相连的片段"
 
 #: eeschema/tools/ee_actions.cpp:558
 msgid "Slice"
-msgstr ""
+msgstr "切片"
 
 #: eeschema/tools/ee_actions.cpp:558
-#, fuzzy
 msgid "Divide into unconnected segments"
-msgstr "过孔未连接"
+msgstr "划分为不相连的片段"
 
 #: eeschema/tools/ee_actions.cpp:568
 msgid "Add a simulator probe"
@@ -17324,7 +17379,7 @@ msgstr "原理图设置..."
 
 #: eeschema/tools/ee_actions.cpp:633
 msgid "Edit schematic setup including annotation styles and electrical rules"
-msgstr "编辑原理图设置，包括标注样式和电气规则"
+msgstr "编辑原理图设置，包括批注样式和电气规则"
 
 #: eeschema/tools/ee_actions.cpp:638
 msgid "Edit Sheet Page Number..."
@@ -17481,11 +17536,11 @@ msgstr "切换到下一个线模式"
 
 #: eeschema/tools/ee_actions.cpp:739
 msgid "Annotate Automatically"
-msgstr "自动标注"
+msgstr "自动批注"
 
 #: eeschema/tools/ee_actions.cpp:739
 msgid "Toggle automatic annotation of new parts symbols"
-msgstr "切换是否自动标注新部件符号"
+msgstr "切换是否自动批注新部件符号"
 
 #: eeschema/tools/ee_actions.cpp:744
 msgid "Repair Schematic"
@@ -17810,9 +17865,8 @@ msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr "错误：在当前图框中找到重复的子图框名称。"
 
 #: eeschema/tools/sch_editor_control.cpp:823
-#, fuzzy
 msgid "No net selected."
-msgstr "没有图层被选择。"
+msgstr "没有选择网络。"
 
 #: eeschema/tools/sch_editor_control.cpp:849
 msgid "Net must be labeled to assign a netclass."
@@ -17885,9 +17939,9 @@ msgid "Press <ESC> to cancel move."
 msgstr "按下 <ESC> 取消移动。"
 
 #: eeschema/tools/sch_navigate_tool.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Page '%s' not found."
-msgstr "未找到页 '%d'。"
+msgstr "未找到 '%s' 页面。"
 
 #: eeschema/tools/symbol_editor_control.cpp:180
 msgid "No symbol library selected."
@@ -19225,7 +19279,7 @@ msgstr "未能输出数据"
 
 #: kicad/cli/command.h:32
 msgid "shows help message and exits"
-msgstr ""
+msgstr "显示帮助信息并退出"
 
 #: kicad/cli/command_export_pcb_base.cpp:39
 #: kicad/cli/command_export_pcb_step.cpp:87
@@ -19295,7 +19349,7 @@ msgstr "生成非金属化孔和金属化孔的独立文件"
 
 #: kicad/cli/command_export_pcb_drill.cpp:92
 msgid "Precision of gerber coordinates (5 or 6)"
-msgstr "gerber 坐标轴精度（5 或 6）"
+msgstr "Gerber 坐标轴精度（5 或 6）"
 
 #: kicad/cli/command_export_pcb_drill.cpp:109
 msgid "Output must be a directory\n"
@@ -19331,16 +19385,14 @@ msgstr "Gerber 坐标精度应为 5 或 6\n"
 #: kicad/cli/command_export_pcb_dxf.cpp:41
 #: kicad/cli/command_export_pcb_gerber.cpp:40
 #: kicad/cli/command_export_pcb_pdf.cpp:39
-#, fuzzy
 msgid "Exclude the reference designator text"
-msgstr "包括位号文本"
+msgstr "排除位号文本"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:46
 #: kicad/cli/command_export_pcb_gerber.cpp:45
 #: kicad/cli/command_export_pcb_pdf.cpp:44
-#, fuzzy
 msgid "Exclude the value text"
-msgstr "包括值文本"
+msgstr "排除值文本"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:51
 #: pcbnew/dialogs/dialog_plot_base.cpp:326
@@ -19383,7 +19435,7 @@ msgstr "禁用光圈（Aperture）宏"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:75
 msgid "Precision of gerber coordinates, valid options: 5 or 6"
-msgstr "gerber 坐标精度，有效值：5 或 6"
+msgstr "Gerber 坐标精度，有效值：5 或 6"
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:44
 msgid ""
@@ -19547,14 +19599,12 @@ msgid "Footprint path does not exist or is not accessible\n"
 msgstr "封装路径不存在或无法访问\n"
 
 #: kicad/cli/command_sym_export_svg.cpp:52
-#, fuzzy
 msgid "Include hidden pins"
-msgstr "显示隐藏引脚 (&H)"
+msgstr "包括隐藏引脚"
 
 #: kicad/cli/command_sym_export_svg.cpp:57
-#, fuzzy
 msgid "Include hidden fields"
-msgstr "搜索隐藏的字段"
+msgstr "包括隐藏字段"
 
 #: kicad/cli/command_sym_export_svg.cpp:76 kicad/cli/command_sym_upgrade.cpp:53
 msgid "Symbol file does not exist or is not accessible\n"
@@ -19566,7 +19616,7 @@ msgstr "强制重新保存符号库，不考虑版本控制"
 
 #: kicad/cli/command_version.cpp:35
 msgid "version info format (plain, commit, about)"
-msgstr ""
+msgstr "版本信息格式（简明提交、关于）"
 
 #: kicad/dialogs/dialog_template_selector.cpp:149
 msgid "<h1>Template Selector</h1>"
@@ -19706,9 +19756,8 @@ msgstr ""
 "似乎不是有效的 KiCad 工程文件。"
 
 #: kicad/kicad_cli.cpp:297
-#, fuzzy
 msgid "prints version information and exits"
-msgstr "打印解析信息"
+msgstr "打印版本信息并退出"
 
 #: kicad/kicad_manager_frame.cpp:213
 msgid "Project Files"
@@ -20929,7 +20978,7 @@ msgstr "下："
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:621
 #: pcbnew/dialogs/dialog_plot_base.cpp:68
 msgid "General Options"
-msgstr "常规选项"
+msgstr "通用选项"
 
 #: pagelayout_editor/files.cpp:57
 msgid "Drawing Sheet File"
@@ -21073,11 +21122,11 @@ msgstr ""
 
 #: pagelayout_editor/tools/pl_actions.cpp:44
 msgid "Add Line"
-msgstr "添加线"
+msgstr "添加直线"
 
 #: pagelayout_editor/tools/pl_actions.cpp:44
 msgid "Add a line"
-msgstr "添加一条线"
+msgstr "添加一条直线"
 
 #: pagelayout_editor/tools/pl_actions.cpp:59
 msgid "Add Bitmap"
@@ -22578,7 +22627,7 @@ msgstr ""
 
 #: pcb_calculator/pcb_calculator_frame.cpp:80
 msgid "General system design"
-msgstr "常规系统设计"
+msgstr "通用系统设计"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:83
 msgid "Regulators"
@@ -23196,7 +23245,7 @@ msgstr "锁定"
 #: pcbnew/board_stackup_manager/board_stackup.cpp:303
 #, c-format
 msgid "Dielectric %d"
-msgstr "电介质层 %d"
+msgstr "Dielectric %d"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:534
 msgid "Top Silk Screen"
@@ -23257,7 +23306,7 @@ msgstr "Loss Tangent（损耗角正切）："
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:60
 msgid "Common materials:"
-msgstr "常规材料："
+msgstr "普通材料："
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.h:55
 msgid "Dielectric Material Characteristics"
@@ -23833,7 +23882,7 @@ msgid ""
 "\n"
 msgstr ""
 "\n"
-"排除：来自重新标注的 %s\n"
+"排除：来自重新批注的 %s\n"
 "\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:526
@@ -24016,7 +24065,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:163
 msgid "Reannotation Scope"
-msgstr "重新标注范围"
+msgstr "重新批注范围"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:170
 msgid "Reannotate:"
@@ -24145,7 +24194,7 @@ msgstr "位号"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.h:106
 msgid "Geographical Reannotation"
-msgstr "位置重新标注"
+msgstr "位置重新批注"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:50
 msgid "Board Setup"
@@ -27217,11 +27266,11 @@ msgstr "图形项属性"
 
 #: pcbnew/dialogs/dialog_group_properties.cpp:120
 msgid "Modified group"
-msgstr "修改组合"
+msgstr "修改分组"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:30
 msgid "Group name:"
-msgstr "组合名称："
+msgstr "分组名称："
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:41
 msgid "Prevents group from being moved on canvas"
@@ -27229,11 +27278,11 @@ msgstr "防止组在画布上被移动"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:45
 msgid "Group members:"
-msgstr "组合成员："
+msgstr "分组成员："
 
 #: pcbnew/dialogs/dialog_group_properties_base.h:64
 msgid "Group Properties"
-msgstr "组合属性"
+msgstr "分组属性"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:81
 msgid "Load and Test Netlist"
@@ -27542,7 +27591,7 @@ msgstr "网络 '%s' 正在使用中。仍要删除吗？"
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2184
 #, c-format
 msgid "Delete all nets in group '%s'?"
-msgstr "删除组合 '%s' 中的所有网？"
+msgstr "删除分组 '%s' 中的所有网络？"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2207
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2208
@@ -29469,7 +29518,7 @@ msgstr "显示焊盘编号"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:65
 msgid "Clearance Outlines"
-msgstr "间隙概要"
+msgstr "间隙边框"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:75
 msgid "Show when routing"
@@ -29752,7 +29801,6 @@ msgid "Warning: Duplicate Nicknames"
 msgstr "警告：重复的昵称"
 
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:100
-#, fuzzy
 msgid "LIbrary Format"
 msgstr "库格式"
 
@@ -30798,7 +30846,6 @@ msgid "Check rule syntax"
 msgstr "检查规则语法"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -31152,12 +31199,16 @@ msgstr ""
 "\n"
 " * annular\\_width\n"
 "# （孔铜环宽度）\n"
+" * assertion\n"
+"# （断言）\n"
 " * clearance\n"
 "# （间隙）\n"
+" * connection\\_width\n"
+"# （连接宽度）\n"
 " * courtyard_clearance\n"
-"# （封装外框之间的间隙）\n"
+"# （与封装外框之间的间隙）\n"
 " * diff\\_pair\\_gap\n"
-"# （差分对间隙）\n"
+"# （与差分对间隙）\n"
 " * diff\\_pair\\_uncoupled\n"
 "# （对布线从该对中的另一个极性布线解耦的距离）\n"
 " * disallow\n"
@@ -31170,12 +31221,12 @@ msgstr ""
 "# （与通孔的间隙）\n"
 " * hole\\_size\n"
 "# （通孔尺寸）\n"
-" * mechanical\\_clearance\n"
-"# （机械间隙）\n"
-" * mechanical\\_hole\\_clearance\n"
-"# （机械孔间隙）\n"
 " * min\\_resolved\\_spokes\n"
 "# （与辐条（散热）最小解析）\n"
+" * physical\\_clearance\n"
+"# （与物理层间隙）\n"
+" * physical\\_hole\\_clearance\n"
+"# （与物理层通孔间隙）\n"
 " * silk\\_clearance\n"
 "# （与丝印的间隙）\n"
 " * skew\n"
@@ -31195,14 +31246,26 @@ msgstr ""
 " * via\\_diameter\n"
 "# （过孔直径）\n"
 " * zone\\_connection\n"
-"# （区域连接）\n"
+"# （敷铜连接）\n"
 "\n"
 "Note: `clearance` and `hole_clearance` rules are not run against items of "
-"the same net; `mechanical_clearance` and `mechanical_hole_clearance` rules "
-"are.\n"
-"# 注：`clearance(间隙)` 和 `hole_clearance (过孔间隙)` 规则不是针对同一网中的"
-"项目运行，`mechanical_clearance (机械间隙)` 和 `mechanical_hole_clearance (机"
-"械孔间隙)` 规则是针对同一网络中的项目运行的。\n"
+"the same net; `physical_clearance` and `physical_hole_clearance` rules are.\n"
+"# 注：`clearance(间隙)` 和 `hole_clearance (通孔间隙)` "
+"规则不是针对同一网络中的项目运行，`physical_clearance (与物理层间隙)` 和 `"
+"physical_hole_clearance (与物理层通孔间隙)` "
+"规则是针对同一网络中的项目运行的。\n"
+"<br><br>\n"
+"\n"
+"### Items\n"
+"### 电路板元素类型\n"
+"\n"
+" * `A` &nbsp;&nbsp; _the first (or only) item under test_\n"
+"# (第一个（或唯一的）被测试项目)\n"
+" * `B` &nbsp;&nbsp; _the second item under test (for binary tests)_\n"
+"# (第二个被测试项目（用于二元测试）)\n"
+" * `L` &nbsp;&nbsp; _the layer currently under test_\n"
+"# （当前被测试的层）\n"
+"\n"
 "<br>\n"
 "\n"
 "### Item Types\n"
@@ -31225,15 +31288,15 @@ msgstr ""
 " * via\n"
 "# （过孔）\n"
 " * zone\n"
-"# （区域）\n"
+"# （敷铜）\n"
 "\n"
 "<br>\n"
 "\n"
 "### Zone Connections\n"
-"### 区域连接\n"
+"### 敷铜连接\n"
 "\n"
 " * solid\n"
-"# （实心区域）\n"
+"# （实心敷铜）\n"
 " * thermal\\_reliefs\n"
 "# （散热（花焊盘））\n"
 " * none\n"
@@ -31249,7 +31312,7 @@ msgstr ""
 " * error\n"
 "# （错误）\n"
 " * exclusion\n"
-"# （拒绝）\n"
+"# （排除）\n"
 " * ignore\n"
 "# （忽略）\n"
 "\n"
@@ -31282,7 +31345,7 @@ msgstr ""
 "\n"
 "\n"
 "    (rule HV_unshielded\n"
-"#    (rule 无护罩高压线路\n"
+"#    (rule 非屏蔽高压线路\n"
 "       (constraint clearance (min 2mm))\n"
 "       (condition \"A.NetClass == 'HV' && !A.insideArea('Shield*')\"))\n"
 "\n"
@@ -31297,11 +31360,12 @@ msgstr ""
 "### Notes\n"
 "### 注意\n"
 "\n"
-"版本语句标志着文件的语法版本，所以版本语句必须是第一个语句，\n"
-"以便将来的 KiCad 解析新版本的规则文件。版本应设为“1”。\n"
+"版本语句必须是第一个语句。 "
+"它表示文件的语法版本，以便未来的规则分析器可以进行自动更新。 它应该被设置为 "
+"\"1\"。\n"
 "\n"
-"规则应该以优先级排序。后面的规则优先于前面的规则；\n"
-"且一旦检测到某个规则成功匹配，则其余的规则均被忽略。\n"
+"规则应按优先级排序。 "
+"后面的规则优先于前面的规则；一旦找到一个匹配的规则，就不再检查其他的规则。\n"
 "\n"
 "使用 Ctrl+/ 来对选中的行添加或取消注释。\n"
 "<br><br><br>\n"
@@ -31314,51 +31378,75 @@ msgstr ""
 "\n"
 "    A.insideCourtyard('<footprint_refdes>')\n"
 "#    A.insideCourtyard('<封装位号>')\n"
-"若 `A` 的任何部分落在指定封装的主要外框中，则为真。\n"
+"若 `A` 的任何部分落在指定封装的主要外框中，则为 True。\n"
 "<br><br>\n"
 "\n"
 "    A.insideFrontCourtyard('<footprint_refdes>')\n"
-"若 `A` 的任何部分落在指定封装的顶层外框中，则为真。\n"
+"若 `A` 的任何部分落在指定封装的顶层外框中，则为 True。\n"
 "<br><br>\n"
 "\n"
 "    A.insideBackCourtyard('<footprint_refdes>')\n"
-"若 `A` 的任何部分落在指定封装的底层外框中，则为真。\n"
+"若 `A` 的任何部分落在指定封装的底层外框中，则为 True。\n"
 "<br><br>\n"
 "\n"
 "    A.insideArea('<zone_name>')\n"
-"若 `A` 的任何部分落在指定区域中，则为真。\n"
+"#   A.insideArea('<敷铜名称>')\n"
+"若 `A` 的任何部分落在指定敷铜中，则为 True。\n"
+"<br><br>\n"
+"\n"
+"    A.enclosedByArea('<zone_name>')\n"
+"如果 `A` 全部位于给定敷铜的边框内，则为 True。  \n"
+"\n"
+"注意：这可能是一个比 `intersectsArea()` 更费时的调用。 尽可能使用 "
+"`intersectsArea()`。\n"
+"\n"
 "<br><br>\n"
 "\n"
 "    A.isPlated()\n"
-"若 `A` 含/是铜孔，则为真。\n"
+"若 `A` 含/是铜孔，则为 True。\n"
 "<br><br>\n"
 "\n"
 "    A.inDiffPair('<net_name>')\n"
 "#    A.inDiffPair('<网络名>')\n"
-"若 `A` 含有指定差分对的网络，则为真。\n"
+"若 `A` 含有指定差分对的网络，则为 True。\n"
 "`<网络名>` 是指定差分对的基础名称。例如， `inDiffPair('CLK')`\n"
 "matches items in the `CLK_P` and `CLK_N` nets.\n"
 "<br><br>\n"
 "\n"
 "    AB.isCoupledDiffPair()\n"
-"若 `A` 和 `B` 分别具有同一差分对的两个网络，则为真。\n"
+"若 `A` 和 `B` 分别具有同一差分对的两个网络，则为 True。\n"
 "<br><br>\n"
 "\n"
 "    A.memberOf('<group_name>')\n"
-"#    A.memberOf('<组名>')\n"
-"若 `A` 是指定组中的成员，则为真。组内嵌套的组也包括在内。\n"
+"#    A.memberOf('<分组名>')\n"
+"若 `A` 是指定分组中的成员，则为 True。组内嵌套的分组也包括在内。\n"
 "<br><br>\n"
 "\n"
 "    A.existsOnLayer('<layer_name>')\n"
 "#    A.existsOnLayer('<层名>')\n"
-"若 `A` 在指定的层中，则为真。层名可以是“电路板设置 >\n"
-"电路板编辑图层”菜单中指定的名称，也可以是内部最简名称\n"
-"（如 `F.Cu`）。\n"
+"如果 `A` 存在于给定的层上，则为 True。 图层名称可以是 “电路板设置 > "
+"电路板编辑图层” 中指定的名称，也可以是典型的名称（例如：`F.Cu`）。\n"
 "\n"
-"注：不论是否正在检查指定的层，只要 `A` 在该层上，\n"
-"此条件即为真。对这样的使用场景，请在规则中使用\n"
-"`(layer \"层名\")`。\n"
+"注意：如果 `A` 在给定的层上，这将返回 "
+"True，与规则是否在评估该层无关。对于后者，在规则中使用 `(layer \"layer_name\""
+")` 语句。\n"
 "\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideCourtyard('<footprint_refdes>') !!!\n"
+"已废弃；使用 `intersectsCourtyard()` 代替。\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideFrontCourtyard('<footprint_refdes>') !!!\n"
+"已废弃；使用 `intersectsFrontCourtyard()` 代替。\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideBackCourtyard('<footprint_refdes>') !!!\n"
+"已废弃；使用 `intersectsBackCourtyard()` 代替。\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideArea('<zone_name>') !!!\n"
+"已废弃；使用 `intersectsArea()` 代替。\n"
 "<br><br><br>\n"
 "\n"
 "### 更多的范例\n"
@@ -31400,7 +31488,7 @@ msgstr ""
 "        (condition \"A.Type =='Via' && B.Type =='Track'\"))\n"
 "    \n"
 "    (rule \"Pad to Track Clearance\"  \n"
-"#    (rule \"焊盘到导线的间距\"  \n"
+"#    (rule \"焊盘到布线的间距\"  \n"
 "        (constraint clearance (min 0.2mm))\n"
 "        (condition \"A.Type =='Pad' && B.Type =='Track'\"))\n"
 "\n"
@@ -31472,7 +31560,23 @@ msgstr ""
 "    # 禁止阻焊层边距覆盖\n"
 "    (rule \"disallow solder mask margin overrides\"\n"
 "        (constraint assertion \"A.Soldermask_Margin_Override == 0mm\")\n"
-"        (condition \"A.Type == 'Pad'\"))"
+"        (condition \"A.Type == 'Pad'\"))\n"
+"\n"
+"\n"
+"    # Enforce a mechanical clearance between components and board edge\n"
+"    # 在元件和电路板边缘之间执行一个机械层间距\n"
+"    (rule front_mechanical_board_edge_clearance\n"
+"        (layer \"F.Courtyard\")\n"
+"        (constraint physical_clearance (min 3mm))\n"
+"        (condition \"B.Layer == 'Edge.Cuts'\"))\n"
+"\n"
+"\n"
+"    # Check current-carrying capacity\n"
+"    # 检查承载电流的能力\n"
+"    (rule high-current\n"
+"        (constraint track_width (min 1.0mm))\n"
+"        (constraint connection_width (min 0.8mm))\n"
+"        (condition \"A.NetClass == 'Power'\"))"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:76
 msgid "Default properties for new dimension objects:"
@@ -32324,9 +32428,9 @@ msgid "(%s clearance %s; actual %s)"
 msgstr "(%s 间隙 %s; 实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:298
-#, fuzzy, c-format
+#, c-format
 msgid "(%s clearance %s; actual < 0)"
-msgstr "(%s 间隙 %s; 实际 %s)"
+msgstr "(%s 间隙 %s; 实际 < 0)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:633
 #, c-format
@@ -33045,7 +33149,7 @@ msgstr "KiCad 封装编辑器"
 
 #: pcbnew/footprint_edit_frame.cpp:192 pcbnew/zone_settings.cpp:224
 msgid "Inner layers"
-msgstr "内部图层"
+msgstr "Inner layers"
 
 #: pcbnew/footprint_edit_frame.cpp:231 pcbnew/footprint_edit_frame.cpp:837
 #: pcbnew/pcb_edit_frame.cpp:293 pcbnew/pcb_edit_frame.cpp:1475
@@ -33454,11 +33558,11 @@ msgstr "导入比例："
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:160
 msgid "Group items"
-msgstr "组合项目"
+msgstr "分组项目"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:161
 msgid "Add all imported items into a new group"
-msgstr "将所有导入的项目添加到新组合中"
+msgstr "将所有导入的项目添加到新分组中"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:172
 msgid "DXF Parameters"
@@ -33629,7 +33733,7 @@ msgstr "封装关联 (.cmp) 文件..."
 
 #: pcbnew/menubar_pcb_editor.cpp:142
 msgid "Export footprint association file (*.cmp) for schematic back annotation"
-msgstr "导出封装关联文件 (*.cmp) 用于原理图中反向标注"
+msgstr "导出封装关联文件 (*.cmp) 用于原理图中反向批注"
 
 #: pcbnew/menubar_pcb_editor.cpp:144
 msgid "Hyperlynx..."
@@ -33914,7 +34018,7 @@ msgstr "断开连接的 %s 引脚 %s。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:526
 #, c-format
 msgid "No net found for symbol %s pin %s."
-msgstr "未找到符号 %s 引脚 %s 的网。"
+msgstr "未找到符号 %s 引脚 %s 的网络。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:578
 #, c-format
@@ -34479,7 +34583,7 @@ msgstr "缺少 %s 的字段名参数。"
 #: pcbnew/pcb_group.cpp:385
 #, c-format
 msgid "Unnamed Group, %zu members"
-msgstr "未命名组合 %zu 成员"
+msgstr "未命名分组 %zu 成员"
 
 #: pcbnew/pcb_group.cpp:387
 #, c-format
@@ -35027,9 +35131,8 @@ msgid ""
 "The CADSTAR area '%s' in library component '%s' does not have a KiCad "
 "equivalent. The area is neither a via nor route keepout area. The area was "
 "not imported."
-msgstr ""
-"库元件 '%s' 中的 CADSTAR 敷铜 '%s' 没有一个 KiCad 等价物。该敷铜既不是过孔也"
-"不是布线禁止区。该敷铜没有被导入。"
+msgstr "库元件 '%s' 中的 CADSTAR 敷铜 '%s' 没有一个 KiCad "
+"等效。该敷铜既不是过孔也不是布线禁止区。该敷铜没有被导入。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:988
 #, c-format
@@ -35100,7 +35203,7 @@ msgstr "意料之外的标注类型 (ID%s)。这未被导入。"
 msgid ""
 "Dimension %s is an angular dimension which has no KiCad equivalent. The "
 "object was not imported."
-msgstr "标注 %s是一个没有 KiCad 等价物的角度标注。对象未被导入。"
+msgstr "标注 %s是一个没有 KiCad 等效的角度标注。对象未被导入。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1615
 #, c-format
@@ -35217,9 +35320,9 @@ msgid ""
 "filled, or as a KiCad Track if the shape was an unfilled outline (open or "
 "closed)."
 msgstr ""
-"CADSTAR 设计包含没有直接 KiCad 等价物的铜元素。如果填充的是实体或图案填充，则"
-"它们已导入为 KiCad 敷铜；如果形状是未填充的轮廓(开放或闭合)，则它们将导入为 "
-"KiCad 布线。"
+"CADSTAR 设计包含没有直接 KiCad 等效的铜元素。如果填充的是实体或图案填充，"
+"则它们已导入为 KiCad 敷铜；如果形状是未填充的轮廓(开放或闭合)，"
+"则它们将导入为 KiCad 布线。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2197
 #, c-format
@@ -35386,7 +35489,7 @@ msgstr "忽略矩形，因为 Eagle 图层 '%s' (%d) 未映射"
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2374
 #, c-format
 msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
-msgstr "忽略一个圆，因为 Eagle 图层 '%s' (%d) 未映射"
+msgstr "忽略一个圆形，因为 Eagle 图层 '%s' (%d) 未映射"
 
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:85
 msgid "Could not read file "
@@ -35474,7 +35577,7 @@ msgstr "无效的令牌计数。预期为 8，但找到了 %zu。"
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1448
 #, c-format
 msgid "Invalid format for record_tag string '%s' in row %zu."
-msgstr "record_tag 字符串 '%s' 的无效格式位于行 %zu。"
+msgstr "这个 record_tag 字符串 '%s' 的无效格式位于行 %zu。"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1419
 #, c-format
@@ -35759,7 +35862,7 @@ msgid ""
 "\n"
 "Save anyway?"
 msgstr ""
-"请报告此错误。验证组合结构时出错：%s。\n"
+"请报告此错误。验证分组结构时出错：%s。\n"
 "\n"
 "还是要保存吗？"
 
@@ -36980,7 +37083,7 @@ msgstr "为间隙解决报告选择两个项目。"
 #: pcbnew/tools/board_inspection_tool.cpp:569
 #: pcbnew/tools/board_inspection_tool.cpp:582
 msgid "Cannot generate clearance report on empty group."
-msgstr "无法为空组合生成间隙报告。"
+msgstr "无法为空分组生成间隙报告。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:595
 msgid "Clearance Report"
@@ -37456,7 +37559,7 @@ msgstr "分组"
 
 #: pcbnew/tools/group_tool.cpp:64
 msgid "Group is in inconsistent state:"
-msgstr "组合处于不一致状态："
+msgstr "分组处于不一致状态："
 
 #: pcbnew/tools/group_tool.cpp:144
 msgid "Click on new member..."
@@ -37859,11 +37962,11 @@ msgstr "删除所选项目和铜连接"
 
 #: pcbnew/tools/pcb_actions.cpp:387
 msgid "Show Footprint Tree"
-msgstr "显示封装树形工作区"
+msgstr "显示封装工作区"
 
 #: pcbnew/tools/pcb_actions.cpp:392
 msgid "Hide Footprint Tree"
-msgstr "显示封装树"
+msgstr "显示封装工作区"
 
 #: pcbnew/tools/pcb_actions.cpp:398
 msgid "New Footprint..."
@@ -38325,7 +38428,7 @@ msgstr "解组"
 
 #: pcbnew/tools/pcb_actions.cpp:763
 msgid "Ungroup any selected groups"
-msgstr "解散任意选中的组合"
+msgstr "解散任意选中的分组"
 
 #: pcbnew/tools/pcb_actions.cpp:768
 msgid "Remove Items"
@@ -38333,23 +38436,23 @@ msgstr "删除项目"
 
 #: pcbnew/tools/pcb_actions.cpp:768
 msgid "Remove items from group"
-msgstr "从组合中删除项目"
+msgstr "从分组中删除项目"
 
 #: pcbnew/tools/pcb_actions.cpp:773
 msgid "Enter Group"
-msgstr "编辑组合"
+msgstr "编辑分组"
 
 #: pcbnew/tools/pcb_actions.cpp:773
 msgid "Enter the group to edit items"
-msgstr "输入要编辑项目的组合"
+msgstr "输入要编辑项目的分组"
 
 #: pcbnew/tools/pcb_actions.cpp:778
 msgid "Leave Group"
-msgstr "离开组合"
+msgstr "离开分组"
 
 #: pcbnew/tools/pcb_actions.cpp:778
 msgid "Leave the current group"
-msgstr "离开当前组合"
+msgstr "离开当前分组"
 
 #: pcbnew/tools/pcb_actions.cpp:783
 msgid "Append Board..."
@@ -38405,7 +38508,7 @@ msgstr "在原理图编辑器中打开"
 
 #: pcbnew/tools/pcb_actions.cpp:839
 msgid "Local Ratsnest"
-msgstr "本地飞线"
+msgstr "局部飞线"
 
 #: pcbnew/tools/pcb_actions.cpp:839
 msgid "Toggle ratsnest display of selected item(s)"
