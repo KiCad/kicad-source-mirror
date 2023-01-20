@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-17 10:33-0800\n"
-"PO-Revision-Date: 2023-01-20 06:51+0000\n"
+"PO-Revision-Date: 2023-01-20 17:03+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -2896,7 +2896,7 @@ msgstr "Увімкнено:"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:142
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:140
 msgid "Move up"
-msgstr "Посунути вгору"
+msgstr "Перемістити вгору"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:70
 #: eeschema/dialogs/dialog_label_properties_base.cpp:129
@@ -2906,12 +2906,12 @@ msgstr "Посунути вгору"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:147
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:145
 msgid "Move down"
-msgstr "Посунути вниз"
+msgstr "Перемістити вниз"
 
 #: common/dialogs/eda_view_switcher_base.cpp:19
 #: common/dialogs/eda_view_switcher_base.h:40
 msgid "View Preset Switcher"
-msgstr "Перемикач попередніх налаштувань"
+msgstr "Показати перемикач налаштувань"
 
 #: common/dialogs/panel_color_settings.cpp:51
 msgid "Reveal Themes in Finder"
@@ -2923,7 +2923,7 @@ msgstr "Назва нової теми:"
 
 #: common/dialogs/panel_color_settings.cpp:133
 msgid "Add Color Theme"
-msgstr "Додати колірну тему"
+msgstr "Додати кольорову тему"
 
 #: common/dialogs/panel_color_settings.cpp:145
 msgid "Theme already exists!"
