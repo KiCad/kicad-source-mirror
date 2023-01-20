@@ -1979,7 +1979,7 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, boo
     // If we have both ports and pins, skip processing as we'll be visited by a parent or child.
     // If we only have one or the other, process (we can either go bottom-up or top-down depending
     // on which subgraph comes up first)
-    if( !aSubgraph->m_hier_ports.empty() && !aSubgraph->m_hier_pins.empty() )
+    if( !aForce && !aSubgraph->m_hier_ports.empty() && !aSubgraph->m_hier_pins.empty() )
     {
         wxLogTrace( ConnTrace, wxS( "%lu (%s) has both hier ports and pins; deferring processing" ),
                     aSubgraph->m_code, conn->Name() );
