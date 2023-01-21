@@ -7,7 +7,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2012 Lorenzo Marcantonio, l.marcantonio@logossrl.com
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1384,6 +1384,10 @@ void PDF_PLOTTER::Text( const VECTOR2I&             aPos,
     SetCurrentLineWidth( aWidth, aData );
 
     wxStringTokenizer str_tok( aText, " ", wxTOKEN_RET_DELIMS );
+
+    // If aFont is not specilied (== nullptr), use the default kicad stroke font
+    if( !aFont )
+        aFont = KIFONT::FONT::GetFont();
 
     VECTOR2I full_box( aFont->StringBoundaryLimits( aText, aSize, aWidth, aBold, aItalic ) );
     VECTOR2I box_x( full_box.x, 0 );
