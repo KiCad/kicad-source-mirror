@@ -831,7 +831,17 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprint( FOOTPRINT* aFootprint )
 
     // Legacy libraries are readable, but modifying legacy format is not allowed
     // So prompt the user if he try to add/replace a footprint in a legacy lib
-    wxString libfullname = tbl->FindRow( libraryName )->GetFullURI();
+    wxString libfullname;
+
+    try
+    {
+        libfullname = tbl->FindRow( libraryName )->GetFullURI();
+    }
+    catch( IO_ERROR& error )
+    {
+        DisplayInfoMessage( this, error.What() );
+        return false;
+    }
 
     if( IO_MGR::GuessPluginTypeFromLibPath( libfullname ) == IO_MGR::LEGACY )
     {
