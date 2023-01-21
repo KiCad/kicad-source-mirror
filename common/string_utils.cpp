@@ -200,7 +200,7 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
             {
                 unsigned int code = c;
                 char buffer[16];
-                sprintf( buffer, "\\\\u%4.4X", code );
+                snprintf( buffer, sizeof(buffer), "\\\\u%4.4X", code );
                 converted += buffer;
             }
             else
@@ -1128,7 +1128,7 @@ std::string UIDouble2Str( double aValue )
     {
         // For these small values, %f works fine,
         // and %g gives an exponent
-        len = sprintf( buf,  "%.16f", aValue );
+        len = snprintf( buf, sizeof(buf), "%.16f", aValue );
 
         while( --len > 0 && buf[len] == '0' )
             buf[len] = '\0';
@@ -1142,7 +1142,7 @@ std::string UIDouble2Str( double aValue )
     {
         // For these values, %g works fine, and sometimes %f
         // gives a bad value (try aValue = 1.222222222222, with %.16f format!)
-        len = sprintf( buf, "%.10g", aValue );
+        len = snprintf( buf, sizeof(buf), "%.10g", aValue );
     }
 
     return std::string( buf, len );
