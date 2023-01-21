@@ -39,8 +39,7 @@ extern APIIMPORT wxPGGlobalVarsClass* wxPGGlobalVars;
 PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
         wxPanel( aParent ),
         m_frame( aFrame ),
-        m_splitter_key_proportion( -1 ),
-        m_skipNextUpdate( false )
+        m_splitter_key_proportion( -1 )
 {
     wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
 
@@ -65,6 +64,8 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
 
     delete wxPGGlobalVars->m_defaultRenderer;
     wxPGGlobalVars->m_defaultRenderer = new PG_CELL_RENDERER();
+
+    m_cachedSelection = std::make_unique<SELECTION>();
 
     m_caption = new wxStaticText( this, wxID_ANY, _( "No objects selected" ) );
     mainSizer->Add( m_caption, 0, wxALL | wxEXPAND, 5 );
@@ -130,11 +131,10 @@ void PROPERTIES_PANEL::OnLanguageChanged()
 
 void PROPERTIES_PANEL::update( const SELECTION& aSelection )
 {
-    if( m_skipNextUpdate )
-    {
-        m_skipNextUpdate = false;
+    if( *m_cachedSelection == aSelection )
         return;
-    }
+
+    *m_cachedSelection = aSelection;
 
     if( m_grid->IsEditorFocused() )
         m_grid->CommitChangesFromEditor();

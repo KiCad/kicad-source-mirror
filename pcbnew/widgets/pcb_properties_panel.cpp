@@ -145,10 +145,14 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
     const SELECTION& selection = selectionTool->GetSelection();
     BOARD_ITEM* firstItem = static_cast<BOARD_ITEM*>( selection.Front() );
 
-    wxCHECK( firstItem, /* void */ );
+    wxCHECK_MSG( firstItem, /* void */,
+                 wxT( "valueChanged for a property with nothing selected!") );
 
     PROPERTY_BASE* property = m_propMgr.GetProperty( TYPE_HASH( *firstItem ),
                                                      aEvent.GetPropertyName() );
+    wxCHECK_MSG( property, /* void */,
+                 wxT( "valueChanged for a property not found on the selected item!" ) );
+
     wxVariant newValue = aEvent.GetPropertyValue();
     BOARD_COMMIT changes( m_frame );
 
@@ -158,9 +162,6 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
         changes.Modify( item );
         item->Set( property, newValue );
     }
-
-    // Pushing the commit will result in a SelectedItemsModified event, which we want to skip
-    m_skipNextUpdate = true;
 
     changes.Push( _( "Change property" ) );
     m_frame->Refresh();

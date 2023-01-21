@@ -29,6 +29,16 @@
 #include <tool/selection.h>
 
 
+bool SELECTION::operator==( const SELECTION& aOther )
+{
+    return ( m_items == aOther.m_items
+             && m_itemsOrders == aOther.m_itemsOrders
+             && m_isHover == aOther.m_isHover
+             && m_lastAddedItem == aOther.m_lastAddedItem
+             && m_orderCounter == aOther.m_orderCounter );
+}
+
+
 void SELECTION::Add( EDA_ITEM* aItem )
 {
     // We're not sorting here; this is just a time-optimized way to do an

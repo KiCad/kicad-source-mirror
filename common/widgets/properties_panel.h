@@ -28,6 +28,7 @@
 #include <wx/propgrid/propgrid.h>
 
 #include <vector>
+#include <memory>
 
 class EDA_BASE_FRAME;
 class SELECTION;
@@ -88,8 +89,7 @@ protected:
     /// Proportion of the grid column splitter that is used for the key column (0.0 - 1.0)
     float m_splitter_key_proportion;
 
-    /// Skips one call to update()
-    bool m_skipNextUpdate;
+    std::unique_ptr<SELECTION> m_cachedSelection;
 };
 
 #endif /* PROPERTIES_PANEL_H */
