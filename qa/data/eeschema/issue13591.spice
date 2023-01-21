@@ -1,0 +1,10 @@
+KiCad schematic
+.include "/Users/jeff/kicad_arm/kicad/qa/data/eeschema/issue13591_models/diode.lib"
+.save all
+.probe alli
+.tran 1us 1ms
+R2 0 Net-_D1-A_ 10k
+D1 Net-_D1-A_ 0 1N456
+R1 Net-_R1-Pad1_ Net-_D1-A_ 1k
+V1 Net-_R1-Pad1_ 0 dc 0 pulse(0 2 1m 50n 50n 1m 2m)
+.end
