@@ -180,6 +180,11 @@ bool DIALOG_CONFIGURE_PATHS::TransferDataFromWindow()
         {
             // Don't check for consistency on external variables, just use them as-is
         }
+        else if( name.empty() && path.empty() )
+        {
+            // Skip empty rows altogether
+            continue;
+        }
         else if( name.IsEmpty() )
         {
             m_errorGrid = m_EnvVars;
