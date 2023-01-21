@@ -20,7 +20,7 @@ DIALOG_CONSTRAINTS_REPORTER_BASE::DIALOG_CONSTRAINTS_REPORTER_BASE( wxWindow* pa
 	m_notebook->SetMinSize( wxSize( 550,480 ) );
 
 
-	bMainSizer->Add( m_notebook, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+	bMainSizer->Add( m_notebook, 1, wxEXPAND|wxALL, 10 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );

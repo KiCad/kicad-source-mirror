@@ -850,14 +850,14 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_bSizerPanelPrimitives->Fit( m_panelCustomShapePrimitives );
 	m_notebook->AddPage( m_panelCustomShapePrimitives, _("Custom Shape Primitives"), false );
 
-	bSizerUpper->Add( m_notebook, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 10 );
+	bSizerUpper->Add( m_notebook, 0, wxEXPAND|wxTOP|wxBOTTOM, 12 );
 
 	wxBoxSizer* bSizerDisplayPad;
 	bSizerDisplayPad = new wxBoxSizer( wxVERTICAL );
 
 	bSizerDisplayPad->SetMinSize( wxSize( 290,-1 ) );
 
-	bSizerDisplayPad->Add( 0, 10, 0, wxEXPAND, 5 );
+	bSizerDisplayPad->Add( 0, 25, 0, wxEXPAND, 5 );
 
 	m_stackupImagesBook = new wxSimplebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE );
 	page0 = new wxPanel( m_stackupImagesBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -954,7 +954,10 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	page7Sizer->Fit( page7 );
 	m_stackupImagesBook->AddPage( page7, _("a page"), false );
 
-	bSizerDisplayPad->Add( m_stackupImagesBook, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 6 );
+	bSizerDisplayPad->Add( m_stackupImagesBook, 0, wxEXPAND|wxRIGHT|wxLEFT, 7 );
+
+
+	bSizerDisplayPad->Add( 0, 4, 0, wxEXPAND, 5 );
 
 	m_boardViewPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_padPreviewSizer = new wxBoxSizer( wxVERTICAL );
@@ -964,13 +967,13 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_boardViewPanel->SetSizer( m_padPreviewSizer );
 	m_boardViewPanel->Layout();
 	m_padPreviewSizer->Fit( m_boardViewPanel );
-	bSizerDisplayPad->Add( m_boardViewPanel, 1, wxEXPAND|wxALL, 2 );
+	bSizerDisplayPad->Add( m_boardViewPanel, 1, wxEXPAND|wxRIGHT|wxLEFT, 2 );
 
 
-	bSizerUpper->Add( bSizerDisplayPad, 1, wxEXPAND|wxTOP|wxRIGHT, 10 );
+	bSizerUpper->Add( bSizerDisplayPad, 1, wxEXPAND|wxTOP, 5 );
 
 
-	m_MainSizer->Add( bSizerUpper, 1, wxEXPAND, 5 );
+	m_MainSizer->Add( bSizerUpper, 1, wxEXPAND|wxLEFT, 8 );
 
 	wxBoxSizer* bottomSizer;
 	bottomSizer = new wxBoxSizer( wxHORIZONTAL );
