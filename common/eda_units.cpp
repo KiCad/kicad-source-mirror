@@ -152,6 +152,13 @@ std::string EDA_UNIT_UTILS::FormatInternalUnits( const EDA_IU_SCALE& aIuScale, i
         {
             buf.pop_back();
         }
+
+        // if the value was really small
+        // we may have just stripped all the zeros after the decimal
+        if( buf[buf.size() - 1] == '.' )
+        {
+            buf.pop_back();
+        }
     }
     else
     {

@@ -36,6 +36,7 @@
  */
 BOOST_AUTO_TEST_SUITE( KicadString )
 
+
 /**
  * Test the #GetTrailingInt method.
  */
@@ -57,6 +58,7 @@ BOOST_AUTO_TEST_CASE( TrailingInt )
         BOOST_CHECK_EQUAL( GetTrailingInt( c.first ), c.second );
     }
 }
+
 
 /**
  * Test the #StrNumCmp method.
@@ -110,6 +112,32 @@ BOOST_AUTO_TEST_CASE( NaturalNumberCompare )
         BOOST_CHECK_MESSAGE(
                 StrNumCmp( c.first.first, c.first.second, true ) == c.second.second,
                 c.first.first + " AND " + c.first.second + " failed for case insensitive" );
+    }
+}
+
+
+/**
+ * Test the #GetTrailingInt method.
+ */
+BOOST_AUTO_TEST_CASE( Double2Str )
+{
+    using CASE = std::pair<double, std::string>;
+
+    // conceptually a little quirky because doubles do have all those pesky additional values
+    const std::vector<CASE> cases = {
+        { 0, "0" },
+        { 1.000, "1" },
+        { 1.050, "1.05" },                       // single trailing zero
+        { 0.00001523, "0.00001523" },            // value less than the magic 0.0001 threshold
+        { 0.00000000000000001523, "0" },         // really small decimal that gets cut off
+        { 623523, "623523" },                    // large whole number
+    };
+
+    for( const auto& c : cases )
+    {
+        // Test both of these functions that work the same but the innards are different
+        BOOST_CHECK_EQUAL( FormatDouble2Str( c.first ), c.second );
+        BOOST_CHECK_EQUAL( UIDouble2Str( c.first ), c.second );
     }
 }
 

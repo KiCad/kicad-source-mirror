@@ -1104,8 +1104,15 @@ std::string FormatDouble2Str( double aValue )
     {
         buf = fmt::format( "{:.16f}", aValue );
 
-        // remove trailing zeros
+        // remove trailing zeros (and the decimal marker if needed)
         while( !buf.empty() && buf[buf.size() - 1] == '0' )
+        {
+            buf.pop_back();
+        }
+
+        // if the value was really small
+        // we may have just stripped all the zeros after the decimal
+        if( buf[buf.size() - 1] == '.' )
         {
             buf.pop_back();
         }
@@ -1133,7 +1140,7 @@ std::string UIDouble2Str( double aValue )
         while( --len > 0 && buf[len] == '0' )
             buf[len] = '\0';
 
-        if( buf[len] == '.' )
+        if( buf[len] == '.' || buf[len] == ',' )
             buf[len] = '\0';
         else
             ++len;
