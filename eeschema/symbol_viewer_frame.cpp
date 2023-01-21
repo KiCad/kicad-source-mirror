@@ -291,6 +291,15 @@ SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAM
     bbox.SetSize( max_size_x, max_size_y );
     GetCanvas()->GetView()->SetBoundary( bbox );
     GetToolManager()->RunAction( ACTIONS::zoomFitScreen, true );
+
+    // If a symbol was previously selected in m_symbolList from a previous run, show it
+    wxString symbName = m_symbolList->GetStringSelection();
+
+    if( !symbName.IsEmpty() )
+    {
+        SetSelectedSymbol( symbName );
+        updatePreviewSymbol();
+    }
 }
 
 
@@ -718,7 +727,7 @@ bool SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
 
     if( m_symbolList->IsEmpty() )
     {
-        m_libraryName = wxEmptyString;
+        SetSelectedSymbol( wxEmptyString );
         m_entryName = wxEmptyString;
         m_convert = LIB_ITEM::LIB_CONVERT::BASE;
         m_unit    = 1;
@@ -734,8 +743,9 @@ bool SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
         // the current library.
         m_convert   = LIB_ITEM::LIB_CONVERT::BASE;
         m_unit      = 1;
-        index       = 0;
+        index       = -1;
         changed     = true;
+        SetSelectedSymbol( wxEmptyString );
         m_entryName = wxEmptyString;
     }
 
