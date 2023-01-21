@@ -100,6 +100,12 @@ wx_version = ""
 try:
     from wx import version
     wx_version = version()
+
+    # Import wx modules that re-initialize wx globals, because they break wxPropertyGrid
+    # (and probably some other stuff) if we let this happen after we already have started
+    # mutating those globals.
+    import wx.adv, wx.html, wx.richtext
+
 except:
     pass
     )", pybind11::globals(), locals );
