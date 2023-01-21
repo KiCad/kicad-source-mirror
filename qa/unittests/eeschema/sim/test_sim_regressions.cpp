@@ -63,22 +63,47 @@ public:
         netFile.SetExt( "spice" );
         return netFile.GetFullPath();
     }
+
+    unsigned GetNetlistOptions() override
+    {
+        unsigned options = NETLIST_EXPORTER_SPICE::OPTION_ADJUST_INCLUDE_PATHS
+                            | NETLIST_EXPORTER_SPICE::OPTION_SIM_COMMAND;
+
+        if( m_SaveCurrents )
+            options |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS;
+
+        if( m_SaveVoltages )
+            options |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES;
+
+        return options;
+    }
+
+public:
+    bool  m_SaveVoltages = true;
+    bool  m_SaveCurrents = true;
 };
 
 
-BOOST_FIXTURE_TEST_SUITE( SimRegressions, TEST_SIM_REGRESSIONS_FIXTURE )
-
-
-BOOST_AUTO_TEST_CASE( WindowsPaths )
+BOOST_FIXTURE_TEST_CASE( WindowsPaths, TEST_SIM_REGRESSIONS_FIXTURE )
 {
     LOCALE_IO dummy;
 
     TestNetlist( "issue13591" );
-    TestTranPoint( 100e-6, { { "I(R1)", 0 }, { "I(R2)", 0 } } );
-    TestTranPoint( 500e-6, { { "I(R1)", 0 }, { "I(R2)", 0 } } );
+    TestTranPoint( 100e-6, { { "I(R1)", 0 }, { "I(R2)", 0 } }, 0.00001 );
+    TestTranPoint( 500e-6, { { "I(R1)", 0 }, { "I(R2)", 0 } }, 0.00001 );
 }
 
 
-BOOST_AUTO_TEST_SUITE_END()
+BOOST_FIXTURE_TEST_CASE( ImmediateSBCKTs, TEST_SIM_REGRESSIONS_FIXTURE )
+{
+    LOCALE_IO dummy;
+
+    m_SaveCurrents = false;
+
+    TestNetlist( "issue13431" );
+    TestTranPoint( 0.005, { { "V(/soft_start)", 2.489 } }, 0.001 );
+    TestTranPoint( 0.012, { { "V(/soft_start)", 5.100 } }, 0.001 );
+}
+
 
 #endif // KICAD_SPICE

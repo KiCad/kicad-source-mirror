@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,8 +64,7 @@ public:
         : m_schematic( nullptr ),
           m_pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) ),
           m_manager( true )
-    {
-    }
+    { }
 
     virtual ~SCHEMATIC_TEST_FIXTURE()
     {
@@ -77,11 +76,8 @@ protected:
     virtual void LoadSchematic( const wxString& aRelativePath );
     virtual wxFileName GetSchematicPath( const wxString& aBaseName );
 
-    ///> Schematic to load
-    SCHEMATIC m_schematic;
-
-    SCH_PLUGIN* m_pi;
-
+    SCHEMATIC        m_schematic;
+    SCH_PLUGIN*      m_pi;
     SETTINGS_MANAGER m_manager;
 };
 

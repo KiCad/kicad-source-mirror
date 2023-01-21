@@ -1,0 +1,67 @@
+KiCad schematic
+.save all
+.probe alli
+.tran 10us 20ms uic
+.option INTERP
+.subckt OPAMP INon IInv out Vp Vm g=100k
+  bGain gain gnd v={g*v(INon, IInv)}
+  bOut out gnd v={v(gain)> v(Vp) ? v(Vp) : v(gain) < v(Vm) ? v(Vm) : v(gain)}
+.ends OPAMP
+
+
+.subckt SG3525 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
+	* Voltage reference
+	.param Vref = 5.1V
+	bVref 16 12 v={Vref < v(15, 12) ? Vref : v(15) }
+
+	* Error amplifier (opamp)
+	xOpampError 2 1 9 15 12 OPAMP
+
+	* Measure Ct
+	aCtMeter 5 CtVal ctest
+	.model ctest cmeter(gain=1.0)
+
+	* Measure Rt
+	vRtMeasI 16 6 0
+	bRt 12 RtVal v={-Vref/i(vRtMeasI)}
+
+	* Triangular wave oscillator
+	* f = 1/(Ct*0.7*Rt)
+	bFreq freq 12 v={(1/(v(CtVal)*0.7*v(RtVal))) < 1 ? 1 : 1/(v(CtVal)*0.7*v(RtVal))}
+	aTriOsc freq carrier trigen
+	.model trigen triangle(cntl_array = [10 500e3]
+		+freq_array=[10 500e3] out_low = 0
+		+out_high = {Vref} duty_cycle = 0.999)
+
+	* Carrier debug (send it to OSC output)
+	Rtie carrier 4 0
+
+	* PWM
+	bOutA 11 12 v={min(v(9), v(8)) > v(carrier)+v(12) ? v(doShutdown,12) < {Vref/2} ? v(13) : v(12) : v(12) }
+	bOutB 14 12 v={min(v(9), v(8)) < v(carrier)+v(12) ? v(doShutdown,12) < {Vref/2} ? v(13) : v(12) : v(12) }
+
+	* Soft Start
+	.param IssVal = 50u
+	Iss 12 8 {IssVal}
+	a1 12 8 vclamp
+	.model vclamp zener(v_breakdown={Vref} i_breakdown={IssVal})
+	*.model vclamp sidiode(Vrev={Vref})
+
+	* Shutdown
+	bShutdown doShutdown 12 v={v(10,12) > 0.8 ? {Vref} : v(12) }; Threshold on pin 10 is around 0.8V
+	sShutdownSwitch 8 12 doShutdown 12 sswitch ON
+	.model sswitch SW(RON=3k VT={Vref/2})
+
+.ends SG3525
+
+
+C4 /ct GND 150n
+R1 /rt GND 3.22k
+C3 +15V GND 100n
+XU1 /opamp_buff_fb Net-_U1-NI_ unconnected-_U1-SYNC-Pad3_ unconnected-_U1-OSC-Pad4_ /ct /rt /ct /soft_start /opamp_buff_fb GND /pwm_to_driver GND +15V unconnected-_U1-OUTB-Pad14_ +15V /vref SG3525
+C1 /vref GND 100n
+V3 Net-_U1-NI_ GND 4.5
+V1 +15V GND 15
+V2 GND -15V 15
+C2 /soft_start GND 100n
+.end
