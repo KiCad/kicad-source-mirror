@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2022 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,9 +28,9 @@ extern double DoubleFromString( const wxString& TextValue );
 CORROSION_TABLE_ENTRY::CORROSION_TABLE_ENTRY( const wxString& aName, const wxString& aSymbol,
                                               double aPotential )
 {
-    m_potential = aPotential;
     m_name = aName;
     m_symbol = aSymbol;
+    m_potential = aPotential;
 }
 
 PANEL_GALVANIC_CORROSION::PANEL_GALVANIC_CORROSION( wxWindow* parent, wxWindowID id, const wxPoint& pos,
@@ -136,13 +136,16 @@ void PANEL_GALVANIC_CORROSION::fillTable()
         if( entryA.m_symbol.size() > 0 )
             label += " (" + entryA.m_symbol + ")";
 
+        m_table->SetRowLabelAlignment( wxALIGN_RIGHT, wxALIGN_CENTER );
         m_table->SetRowLabelValue( i, label );
+        m_table->SetColLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
         m_table->SetColLabelValue( i, label );
+        m_table->SetCellAlignment( i, j, wxALIGN_CENTER, wxALIGN_CENTER );
 
         for( const CORROSION_TABLE_ENTRY& entryB : m_entries )
         {
             double diff = entryA.m_potential - entryB.m_potential;
-            int    diff_temp = KiROUND( abs( diff * 100 ) );
+            int    diff_temp = KiROUND( abs( diff * 84 ) );
             value = "";
             value << diff * 1000; // Let's display it in mV instead of V.
             m_table->SetCellValue( i, j, value );
@@ -156,9 +159,19 @@ void PANEL_GALVANIC_CORROSION::fillTable()
             }
             else if( ( KiROUND( abs( diff * 1000 ) ) ) > m_corFilterValue )
             {
-                m_table->SetCellBackgroundColour( i, j, wxColour( 202 - diff_temp,
-                                                                  206 - diff_temp,
-                                                                  225 - diff_temp ) );
+
+                if( diff > 0 )
+                {
+                    m_table->SetCellBackgroundColour( i, j, wxColour( 202 - diff_temp,
+                                                                      206 - diff_temp,
+                                                                      225 - diff_temp ) );
+                }
+                else if( diff < 0 )
+                {
+                    m_table->SetCellBackgroundColour( i, j, wxColour( 255 - diff_temp,
+                                                                      217 - diff_temp,
+                                                                      194 - diff_temp ) );
+                }
             }
             else
             {
