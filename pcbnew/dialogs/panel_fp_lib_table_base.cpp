@@ -154,7 +154,7 @@ PANEL_FP_LIB_TABLE_BASE::PANEL_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID i
 	bMainSizer->Add( bButtonsSizer, 0, wxEXPAND|wxALL, 8 );
 
 	wxStaticText* stPathsLabel;
-	stPathsLabel = new wxStaticText( this, wxID_ANY, _("Path Substitutions:"), wxDefaultPosition, wxDefaultSize, 0 );
+	stPathsLabel = new wxStaticText( this, wxID_ANY, _("Available path substitutions:"), wxDefaultPosition, wxDefaultSize, 0 );
 	stPathsLabel->Wrap( -1 );
 	bMainSizer->Add( stPathsLabel, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 8 );
 

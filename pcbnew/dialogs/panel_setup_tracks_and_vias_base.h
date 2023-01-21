@@ -38,17 +38,14 @@ class PANEL_SETUP_TRACKS_AND_VIAS_BASE : public wxPanel
 	private:
 
 	protected:
-		wxStaticText* m_tracksLabel;
 		WX_GRID* m_trackWidthsGrid;
 		STD_BITMAP_BUTTON* m_trackWidthsAddButton;
 		STD_BITMAP_BUTTON* m_trackWidthsSortButton;
 		STD_BITMAP_BUTTON* m_trackWidthsRemoveButton;
-		wxStaticText* m_viasLabel;
 		WX_GRID* m_viaSizesGrid;
 		STD_BITMAP_BUTTON* m_viaSizesAddButton;
 		STD_BITMAP_BUTTON* m_viaSizesSortButton;
 		STD_BITMAP_BUTTON* m_viaSizesRemoveButton;
-		wxStaticText* m_diffPairsLabel;
 		WX_GRID* m_diffPairsGrid;
 		STD_BITMAP_BUTTON* m_diffPairsAddButton;
 		STD_BITMAP_BUTTON* m_diffPairsSortButton;

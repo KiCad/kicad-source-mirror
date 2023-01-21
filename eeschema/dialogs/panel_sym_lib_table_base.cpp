@@ -166,7 +166,7 @@ PANEL_SYM_LIB_TABLE_BASE::PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	bMainSizer->Add( 0, 5, 0, wxEXPAND, 5 );
 
 	wxStaticText* stPathsLabel;
-	stPathsLabel = new wxStaticText( this, wxID_ANY, _("Path Substitutions:"), wxDefaultPosition, wxDefaultSize, 0 );
+	stPathsLabel = new wxStaticText( this, wxID_ANY, _("Available path substitutions:"), wxDefaultPosition, wxDefaultSize, 0 );
 	stPathsLabel->Wrap( -1 );
 	bMainSizer->Add( stPathsLabel, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 8 );
 

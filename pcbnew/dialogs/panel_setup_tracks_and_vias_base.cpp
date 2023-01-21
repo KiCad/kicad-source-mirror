@@ -20,9 +20,10 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	wxBoxSizer* bSizerTracks;
 	bSizerTracks = new wxBoxSizer( wxVERTICAL );
 
-	m_tracksLabel = new wxStaticText( this, wxID_ANY, _("Tracks"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_tracksLabel->Wrap( -1 );
-	bSizerTracks->Add( m_tracksLabel, 0, wxALL, 5 );
+	wxStaticText* stTracksLabel;
+	stTracksLabel = new wxStaticText( this, wxID_ANY, _("Tracks:"), wxDefaultPosition, wxDefaultSize, 0 );
+	stTracksLabel->Wrap( -1 );
+	bSizerTracks->Add( stTracksLabel, 0, wxALL, 5 );
 
 	m_trackWidthsGrid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
@@ -83,9 +84,10 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	wxBoxSizer* bSizerVias;
 	bSizerVias = new wxBoxSizer( wxVERTICAL );
 
-	m_viasLabel = new wxStaticText( this, wxID_ANY, _("Vias"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_viasLabel->Wrap( -1 );
-	bSizerVias->Add( m_viasLabel, 0, wxALL, 5 );
+	wxStaticText* stViasLabel;
+	stViasLabel = new wxStaticText( this, wxID_ANY, _("Vias:"), wxDefaultPosition, wxDefaultSize, 0 );
+	stViasLabel->Wrap( -1 );
+	bSizerVias->Add( stViasLabel, 0, wxALL, 5 );
 
 	m_viaSizesGrid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
@@ -147,9 +149,10 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	wxBoxSizer* bSizerDiffPairs;
 	bSizerDiffPairs = new wxBoxSizer( wxVERTICAL );
 
-	m_diffPairsLabel = new wxStaticText( this, wxID_ANY, _("Differential Pairs"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_diffPairsLabel->Wrap( -1 );
-	bSizerDiffPairs->Add( m_diffPairsLabel, 0, wxALL, 5 );
+	wxStaticText* stDiffPairsLabel;
+	stDiffPairsLabel = new wxStaticText( this, wxID_ANY, _("Differential pairs:"), wxDefaultPosition, wxDefaultSize, 0 );
+	stDiffPairsLabel->Wrap( -1 );
+	bSizerDiffPairs->Add( stDiffPairsLabel, 0, wxALL, 5 );
 
 	m_diffPairsGrid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
