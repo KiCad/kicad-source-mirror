@@ -1,0 +1,20 @@
+KiCad schematic
+.include "/Users/jeff/kicad_arm/kicad/qa/data/eeschema/BC546.lib"
+.save all
+.probe alli
+.tran 10u 25m 5m
+C3 Net-_C2-Pad2_ Net-_Q1-B_ 2.4n
+C2 Net-_C1-Pad2_ Net-_C2-Pad2_ 2.4n
+C1 Net-_Q1-C_ Net-_C1-Pad2_ 2.4n
+R4 Net-_Q1-B_ GND 6.8k
+R2 Net-_C2-Pad2_ GND 6.8k
+R1 Net-_C1-Pad2_ GND 6.8k
+R3 vdd Net-_Q1-B_ 8.5k
+C4 Net-_Q1-E_ GND 10u
+R6 Net-_Q1-E_ GND 2.2k
+Q1 Net-_Q1-C_ Net-_Q1-B_ Net-_Q1-E_ BC546B
+R5 vdd Net-_Q1-C_ 2.7k
+C5 Net-_Q1-C_ out 1u
+V1 vdd GND 5
+R7 out GND 1Meg
+.end

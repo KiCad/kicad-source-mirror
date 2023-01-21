@@ -94,7 +94,7 @@ BOOST_FIXTURE_TEST_CASE( WindowsPaths, TEST_SIM_REGRESSIONS_FIXTURE )
 }
 
 
-BOOST_FIXTURE_TEST_CASE( ImmediateSBCKTs, TEST_SIM_REGRESSIONS_FIXTURE )
+BOOST_FIXTURE_TEST_CASE( ImmediateSBCKT, TEST_SIM_REGRESSIONS_FIXTURE )
 {
     LOCALE_IO dummy;
 
@@ -103,6 +103,16 @@ BOOST_FIXTURE_TEST_CASE( ImmediateSBCKTs, TEST_SIM_REGRESSIONS_FIXTURE )
     TestNetlist( "issue13431" );
     TestTranPoint( 0.005, { { "V(/soft_start)", 2.489 } }, 0.001 );
     TestTranPoint( 0.012, { { "V(/soft_start)", 5.100 } }, 0.001 );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( LegacyFixups, TEST_SIM_REGRESSIONS_FIXTURE )
+{
+    LOCALE_IO dummy;
+
+    TestNetlist( "issue13112" );
+    TestTranPoint( 0.01, { { "V(out)", -0.060 } }, 0.001 );
+    TestTranPoint( 0.02, { { "V(out)", 0.856 } }, 0.001 );
 }
 
 
