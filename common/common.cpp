@@ -115,8 +115,15 @@ wxString ExpandTextVars( const wxString& aSource,
 //
 // Stolen from wxExpandEnvVars and then heavily optimized
 //
-wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject )
+wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject, std::set<wxString>* aSet = nullptr )
 {
+    // If the same string is inserted twice, we have a loop
+    if( aSet )
+    {
+        if( auto [ _, result ] = aSet->insert( str ); !result )
+            return str;
+    }
+
     size_t strlen = str.length();
 
     wxString strResult;
@@ -277,6 +284,13 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject )
             strResult += str_n;
         }
     }
+
+    std::set<wxString> loop_check;
+    auto first_pos = strResult.find_first_of( wxS( "{(%" ) );
+    auto last_pos = strResult.find_last_of( wxS( "})%" ) );
+
+    if( first_pos != strResult.npos && last_pos != strResult.npos && first_pos != last_pos )
+        strResult = KIwxExpandEnvVars( strResult, aProject, aSet ? aSet : &loop_check );
 
     return strResult;
 }
