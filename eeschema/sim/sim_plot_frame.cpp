@@ -375,8 +375,14 @@ void SIM_PLOT_FRAME::setSubWindowsSashSize()
 
 void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
 {
-    wxCHECK_RET( m_circuitModel->CommandToSimType( GetCurrentSimCommand() ) != ST_UNKNOWN,
-                 wxT( "Unknown simulation type" ) );
+    if( m_circuitModel->CommandToSimType( GetCurrentSimCommand() ) == ST_UNKNOWN )
+    {
+        if( !EditSimCommand()
+            || m_circuitModel->CommandToSimType( GetCurrentSimCommand() ) == ST_UNKNOWN )
+        {
+            return;
+        }
+    }
 
     m_simConsole->Clear();
 
@@ -858,8 +864,7 @@ void SIM_PLOT_FRAME::applyTuners()
     }
 
     if( reporter.HasMessage() )
-        DisplayErrorMessage( this,
-                             _( "Could not apply tuned value(s):" ) + wxS( "\n\n" ) + errors );
+        DisplayErrorMessage( this, _( "Could not apply tuned value(s):" ) + wxS( "\n" ) + errors );
 }
 
 
@@ -1226,7 +1231,7 @@ void SIM_PLOT_FRAME::onWorkbookClrModified( wxCommandEvent& event )
 }
 
 
-void SIM_PLOT_FRAME::EditSimCommand()
+bool SIM_PLOT_FRAME::EditSimCommand()
 {
     SIM_PANEL_BASE*     plotPanelWindow = getCurrentPlotWindow();
     DIALOG_SIM_COMMAND  dlg( this, m_circuitModel, m_simulator->Settings() );
@@ -1238,7 +1243,7 @@ void SIM_PLOT_FRAME::EditSimCommand()
     {
         DisplayErrorMessage( this, _( "Errors during netlist generation; simulation aborted.\n\n" )
                                    + errors );
-        return;
+        return false;
     }
 
     if( m_workbook->GetPageIndex( plotPanelWindow ) != wxNOT_FOUND )
@@ -1289,7 +1294,10 @@ void SIM_PLOT_FRAME::EditSimCommand()
         }
 
         m_simulator->Init();
+        return true;
     }
+
+    return false;
 }
 
 
@@ -1427,12 +1435,6 @@ void SIM_PLOT_FRAME::setupUIConditions()
                 return m_darkMode;
             };
 
-    auto haveCommand =
-            [this]( const SELECTION& aSel )
-            {
-                return m_circuitModel->CommandToSimType( GetCurrentSimCommand() ) != ST_UNKNOWN;
-            };
-
     auto simRunning =
             [this]( const SELECTION& aSel )
             {
@@ -1467,7 +1469,7 @@ void SIM_PLOT_FRAME::setupUIConditions()
     mgr->SetConditions( EE_ACTIONS::toggleDarkModePlots,   CHECK( darkModePlotCondition ) );
 
     mgr->SetConditions( EE_ACTIONS::simCommand,            ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
-    mgr->SetConditions( EE_ACTIONS::runSimulation,         ENABLE( haveCommand && !simRunning ) );
+    mgr->SetConditions( EE_ACTIONS::runSimulation,         ENABLE( !simRunning ) );
     mgr->SetConditions( EE_ACTIONS::stopSimulation,        ENABLE( simRunning ) );
     mgr->SetConditions( EE_ACTIONS::addSignals,            ENABLE( simFinished ) );
     mgr->SetConditions( EE_ACTIONS::simProbe,              ENABLE( simFinished ) );

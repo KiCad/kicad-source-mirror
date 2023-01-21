@@ -77,7 +77,7 @@ public:
      * Shows a dialog for editing the current tab's simulation command, or creating a new tab
      * with a different simulation command type.
      */
-    void EditSimCommand();
+    bool EditSimCommand();
 
     /**
      * Add a voltage plot for a given net name.
