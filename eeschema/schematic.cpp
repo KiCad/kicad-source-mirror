@@ -194,6 +194,39 @@ std::vector<SCH_MARKER*> SCHEMATIC::ResolveERCExclusions()
     SCH_SHEET_LIST sheetList = GetSheets();
     ERC_SETTINGS&  settings  = ErcSettings();
 
+    // Migrate legacy marker exclusions to new format to ensure exclusion matching functions across
+    // file versions. Silently drops any legacy exclusions which can not be mapped to the new format
+    // without risking an incorrect exclusion - this is preferable to silently dropping
+    // new ERC errors / warnings due to an incorrect match between a legacy and new
+    // marker serialization format
+    std::set<wxString> migratedExclusions;
+
+    for( auto it = settings.m_ErcExclusions.begin(); it != settings.m_ErcExclusions.end(); )
+    {
+        SCH_MARKER* testMarker = SCH_MARKER::Deserialize( this, *it );
+        if( testMarker->IsLegacyMarker() )
+        {
+            const wxString settingsKey = testMarker->GetRCItem()->GetSettingsKey();
+
+            if( settingsKey != wxT( "pin_to_pin" ) && settingsKey != wxT( "hier_label_mismatch" )
+                && settingsKey != wxT( "different_unit_net" ) )
+            {
+                migratedExclusions.insert( testMarker->Serialize() );
+            }
+
+            it = settings.m_ErcExclusions.erase( it );
+        }
+        else
+        {
+            ++it;
+        }
+        delete testMarker;
+    }
+
+    settings.m_ErcExclusions.insert( migratedExclusions.begin(), migratedExclusions.end() );
+
+    // End of legacy exclusion removal / migrations
+
     for( const SCH_SHEET_PATH& sheet : sheetList )
     {
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_MARKER_T ) )
@@ -213,7 +246,7 @@ std::vector<SCH_MARKER*> SCHEMATIC::ResolveERCExclusions()
 
     for( const wxString& exclusionData : settings.m_ErcExclusions )
     {
-        SCH_MARKER* marker = SCH_MARKER::Deserialize( exclusionData );
+        SCH_MARKER* marker = SCH_MARKER::Deserialize( this, exclusionData );
 
         if( marker )
         {

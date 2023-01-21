@@ -29,6 +29,7 @@
 #include "connection_graph.h"
 #include <common.h>     // for ExpandEnvVarSubstitutions
 #include <erc.h>
+#include <erc_sch_pin_context.h>
 #include <string_utils.h>
 #include <lib_pin.h>
 #include <sch_edit_frame.h>
@@ -38,7 +39,6 @@
 #include <sch_sheet_pin.h>
 #include <sch_textbox.h>
 #include <sch_line.h>
-#include <sch_pin.h>
 #include <schematic.h>
 #include <drawing_sheet/ds_draw_item.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
@@ -600,7 +600,7 @@ int ERC_TESTER::TestPinToPin()
 
     for( const std::pair<NET_NAME_CODE_CACHE_KEY, std::vector<CONNECTION_SUBGRAPH*>> net : nets )
     {
-        std::vector<SCH_PIN*> pins;
+        std::vector<ERC_SCH_PIN_CONTEXT>           pins;
         std::unordered_map<EDA_ITEM*, SCH_SCREEN*> pinToScreenMap;
         bool has_noconnect = false;
 
@@ -613,44 +613,46 @@ int ERC_TESTER::TestPinToPin()
             {
                 if( item->Type() == SCH_PIN_T )
                 {
-                    pins.emplace_back( static_cast<SCH_PIN*>( item ) );
+                    pins.emplace_back( static_cast<SCH_PIN*>( item ), subgraph->m_sheet );
                     pinToScreenMap[item] = subgraph->m_sheet.LastScreen();
                 }
             }
         }
 
-        std::set<std::pair<SCH_PIN*, SCH_PIN*>> tested;
+        std::set<std::pair<ERC_SCH_PIN_CONTEXT, ERC_SCH_PIN_CONTEXT>> tested;
 
-        SCH_PIN* needsDriver = nullptr;
-        bool     hasDriver   = false;
+        ERC_SCH_PIN_CONTEXT needsDriver;
+        bool                hasDriver = false;
 
         // We need different drivers for power nets and normal nets.
         // A power net has at least one pin having the ELECTRICAL_PINTYPE::PT_POWER_IN
         // and power nets can be driven only by ELECTRICAL_PINTYPE::PT_POWER_OUT pins
         bool     ispowerNet  = false;
 
-        for( SCH_PIN* refPin : pins )
+        for( ERC_SCH_PIN_CONTEXT& refPin : pins )
         {
-            if( refPin->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN )
+            if( refPin.Pin()->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN )
             {
                 ispowerNet = true;
                 break;
             }
         }
 
-        for( SCH_PIN* refPin : pins )
+        for( ERC_SCH_PIN_CONTEXT& refPin : pins )
         {
-            ELECTRICAL_PINTYPE refType = refPin->GetType();
+            ELECTRICAL_PINTYPE refType = refPin.Pin()->GetType();
 
             if( DrivenPinTypes.count( refType ) )
             {
                 // needsDriver will be the pin shown in the error report eventually, so try to
                 // upgrade to a "better" pin if possible: something visible and only a power symbol
                 // if this net needs a power driver
-                if( !needsDriver ||
-                    ( !needsDriver->IsVisible() && refPin->IsVisible() ) ||
-                    ( ispowerNet != ( needsDriver->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN ) &&
-                      ispowerNet == ( refType == ELECTRICAL_PINTYPE::PT_POWER_IN ) ) )
+                if( !needsDriver.Pin()
+                    || ( !needsDriver.Pin()->IsVisible() && refPin.Pin()->IsVisible() )
+                    || ( ispowerNet
+                                 != ( needsDriver.Pin()->GetType()
+                                      == ELECTRICAL_PINTYPE::PT_POWER_IN )
+                         && ispowerNet == ( refType == ELECTRICAL_PINTYPE::PT_POWER_IN ) ) )
                 {
                     needsDriver = refPin;
                 }
@@ -661,18 +663,19 @@ int ERC_TESTER::TestPinToPin()
             else
                 hasDriver |= ( DrivingPinTypes.count( refType ) != 0 );
 
-            for( SCH_PIN* testPin : pins )
+            for( ERC_SCH_PIN_CONTEXT& testPin : pins )
             {
                 if( testPin == refPin )
                     continue;
 
-                SCH_PIN* first_pin = refPin;
-                SCH_PIN* second_pin = testPin;
+                ERC_SCH_PIN_CONTEXT first_pin = refPin;
+                ERC_SCH_PIN_CONTEXT second_pin = testPin;
 
-                if( first_pin > second_pin )
+                if( second_pin < first_pin )
                     std::swap( first_pin, second_pin );
 
-                std::pair<SCH_PIN*, SCH_PIN*> pair = std::make_pair( first_pin, second_pin );
+                std::pair<ERC_SCH_PIN_CONTEXT, ERC_SCH_PIN_CONTEXT> pair =
+                        std::make_pair( first_pin, second_pin );
 
                 if( auto [ins_pin, inserted ] = tested.insert( pair ); !inserted )
                     continue;
@@ -680,13 +683,14 @@ int ERC_TESTER::TestPinToPin()
                 // Multiple pins in the same symbol that share a type,
                 // name and position are considered
                 // "stacked" and shouldn't trigger ERC errors
-                if( refPin->GetParent() == testPin->GetParent() &&
-                    refPin->GetPosition() == testPin->GetPosition() &&
-                    refPin->GetName() == testPin->GetName() &&
-                    refPin->GetType() == testPin->GetType() )
+                if( refPin.Pin()->GetParent() == testPin.Pin()->GetParent()
+                    && refPin.Pin()->GetPosition() == testPin.Pin()->GetPosition()
+                    && refPin.Pin()->GetName() == testPin.Pin()->GetName()
+                    && refPin.Pin()->GetType() == testPin.Pin()->GetType()
+                    && refPin.Sheet() == testPin.Sheet() )
                     continue;
 
-                ELECTRICAL_PINTYPE testType = testPin->GetType();
+                ELECTRICAL_PINTYPE testType = testPin.Pin()->GetType();
 
                 if( ispowerNet )
                     hasDriver |= ( DrivingPowerPinTypes.count( testType ) != 0 );
@@ -700,23 +704,24 @@ int ERC_TESTER::TestPinToPin()
                     std::shared_ptr<ERC_ITEM> ercItem =
                             ERC_ITEM::Create( erc == PIN_ERROR::WARNING ? ERCE_PIN_TO_PIN_WARNING :
                                                                           ERCE_PIN_TO_PIN_ERROR );
-                    ercItem->SetItems( refPin, testPin );
-                    ercItem->SetIsSheetSpecific();
+                    ercItem->SetItems( refPin.Pin(), testPin.Pin() );
+                    ercItem->SetSheetSpecificPath( refPin.Sheet() );
+                    ercItem->SetItemsSheetPaths( refPin.Sheet(), testPin.Sheet() );
 
                     ercItem->SetErrorMessage(
                             wxString::Format( _( "Pins of type %s and %s are connected" ),
                                               ElectricalPinTypeGetText( refType ),
                                               ElectricalPinTypeGetText( testType ) ) );
 
-                    SCH_MARKER* marker = new SCH_MARKER( ercItem,
-                                                         refPin->GetTransformedPosition() );
-                    pinToScreenMap[refPin]->Append( marker );
+                    SCH_MARKER* marker =
+                            new SCH_MARKER( ercItem, refPin.Pin()->GetTransformedPosition() );
+                    pinToScreenMap[refPin.Pin()]->Append( marker );
                     errors++;
                 }
             }
         }
 
-        if( needsDriver && !hasDriver && !has_noconnect )
+        if( needsDriver.Pin() && !hasDriver && !has_noconnect )
         {
             int err_code = ispowerNet ? ERCE_POWERPIN_NOT_DRIVEN : ERCE_PIN_NOT_DRIVEN;
 
@@ -724,11 +729,11 @@ int ERC_TESTER::TestPinToPin()
             {
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( err_code );
 
-                ercItem->SetItems( needsDriver );
+                ercItem->SetItems( needsDriver.Pin() );
 
-                SCH_MARKER* marker = new SCH_MARKER( ercItem,
-                                                     needsDriver->GetTransformedPosition() );
-                pinToScreenMap[needsDriver]->Append( marker );
+                SCH_MARKER* marker =
+                        new SCH_MARKER( ercItem, needsDriver.Pin()->GetTransformedPosition() );
+                pinToScreenMap[needsDriver.Pin()]->Append( marker );
                 errors++;
             }
         }
@@ -780,7 +785,8 @@ int ERC_TESTER::TestMultUnitPinConflicts()
                                 pinToNetMap[name].first ) );
 
                         ercItem->SetItems( pin, pinToNetMap[name].second );
-                        ercItem->SetIsSheetSpecific();
+                        ercItem->SetSheetSpecificPath( subgraph->m_sheet );
+                        ercItem->SetItemsSheetPaths( subgraph->m_sheet, subgraph->m_sheet );
 
                         SCH_MARKER* marker = new SCH_MARKER( ercItem,
                                                              pin->GetTransformedPosition() );

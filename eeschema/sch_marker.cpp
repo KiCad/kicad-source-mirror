@@ -35,6 +35,9 @@
 #include <settings/settings_manager.h>
 #include <settings/color_settings.h>
 #include <erc_item.h>
+#include <schematic.h>
+#include <sch_screen.h>
+#include <sch_file_versions.h>
 
 /// Factor to convert the maker unit shape to internal units:
 #define SCALING_FACTOR schIUScale.mmToIU( 0.15 )
@@ -48,6 +51,8 @@ SCH_MARKER::SCH_MARKER( std::shared_ptr<ERC_ITEM> aItem, const VECTOR2I& aPos ) 
         m_rcItem->SetParent( this );
 
     m_Pos = aPos;
+
+    m_isLegacyMarker = false;
 }
 
 
@@ -72,16 +77,26 @@ void SCH_MARKER::SwapData( SCH_ITEM* aItem )
 
 wxString SCH_MARKER::Serialize() const
 {
-    return wxString::Format( wxT( "%s|%d|%d|%s|%s" ),
-                             m_rcItem->GetSettingsKey(),
-                             m_Pos.x,
-                             m_Pos.y,
-                             m_rcItem->GetMainItemID().AsString(),
-                             m_rcItem->GetAuxItemID().AsString() );
+    std::shared_ptr<ERC_ITEM> erc = std::static_pointer_cast<ERC_ITEM>( m_rcItem );
+    wxString                  sheetSpecificPath, mainItemPath, auxItemPath;
+
+    if( erc->IsSheetSpecific() )
+        sheetSpecificPath = erc->GetSpecificSheetPath().Path().AsString();
+
+    if( erc->MainItemHasSheetPath() )
+        mainItemPath = erc->GetMainItemSheetPath().Path().AsString();
+
+    if( erc->AuxItemHasSheetPath() )
+        auxItemPath = erc->GetAuxItemSheetPath().Path().AsString();
+
+    return wxString::Format( wxT( "%s|%d|%d|%s|%s|%s|%s|%s" ), m_rcItem->GetSettingsKey(), m_Pos.x,
+                             m_Pos.y, m_rcItem->GetMainItemID().AsString(),
+                             m_rcItem->GetAuxItemID().AsString(), sheetSpecificPath, mainItemPath,
+                             auxItemPath );
 }
 
 
-SCH_MARKER* SCH_MARKER::Deserialize( const wxString& data )
+SCH_MARKER* SCH_MARKER::Deserialize( SCHEMATIC* schematic, const wxString& data )
 {
     wxArrayString props = wxSplit( data, '|' );
     VECTOR2I      markerPos( (int) strtol( props[1].c_str(), nullptr, 10 ),
@@ -94,7 +109,55 @@ SCH_MARKER* SCH_MARKER::Deserialize( const wxString& data )
 
     ercItem->SetItems( KIID( props[3] ), KIID( props[4] ) );
 
-    return new SCH_MARKER( ercItem, markerPos );
+    bool isLegacyMarker = true;
+
+    // Deserialize sheet / item specific paths - we are not able to use the file version to determine
+    // if markers are legacy as there could be a file opened with a prior version but which has
+    // new markers - this code is called not just during schematic load, but also to match new
+    // ERC exceptions to exclusions.
+    if( props.size() == 8 )
+    {
+        isLegacyMarker = false;
+
+        SCH_SHEET_LIST sheetPaths = schematic->GetSheets();
+
+        if( !props[5].IsEmpty() )
+        {
+            KIID_PATH                     sheetSpecificKiidPath( props[5] );
+            std::optional<SCH_SHEET_PATH> sheetSpecificPath =
+                    sheetPaths.GetSheetPathByKIIDPath( sheetSpecificKiidPath, true );
+            if( sheetSpecificPath.has_value() )
+                ercItem->SetSheetSpecificPath( sheetSpecificPath.value() );
+        }
+
+        if( !props[6].IsEmpty() )
+        {
+            KIID_PATH                     mainItemKiidPath( props[6] );
+            std::optional<SCH_SHEET_PATH> mainItemPath =
+                    sheetPaths.GetSheetPathByKIIDPath( mainItemKiidPath, true );
+            if( mainItemPath.has_value() )
+            {
+                if( props[7].IsEmpty() )
+                {
+                    ercItem->SetItemsSheetPaths( mainItemPath.value() );
+                }
+                else
+                {
+                    KIID_PATH                     auxItemKiidPath( props[7] );
+                    std::optional<SCH_SHEET_PATH> auxItemPath =
+                            sheetPaths.GetSheetPathByKIIDPath( auxItemKiidPath, true );
+
+                    if( auxItemPath.has_value() )
+                        ercItem->SetItemsSheetPaths( mainItemPath.value(), auxItemPath.value() );
+                }
+            }
+        }
+    }
+
+    SCH_MARKER* marker = new SCH_MARKER( ercItem, markerPos );
+    marker->SetIsLegacyMarker( isLegacyMarker );
+
+    return marker;
 }
 
 
@@ -111,9 +174,19 @@ void SCH_MARKER::Show( int nestLevel, std::ostream& os ) const
 
 void SCH_MARKER::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    aCount = 2;
-
     wxCHECK_RET( Schematic(), "No SCHEMATIC set for SCH_MARKER!" );
+
+    // Don't display sheet-specific markers when SCH_SHEET_PATHs do not match
+    std::shared_ptr<ERC_ITEM> ercItem = std::static_pointer_cast<ERC_ITEM>( GetRCItem() );
+
+    if( ercItem->IsSheetSpecific()
+        && ( ercItem->GetSpecificSheetPath() != Schematic()->CurrentSheet() ) )
+    {
+        aCount = 0;
+        return;
+    }
+
+    aCount = 2;
 
     if( IsExcluded() )
     {

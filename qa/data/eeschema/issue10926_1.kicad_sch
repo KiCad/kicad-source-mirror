@@ -1,0 +1,72 @@
+(kicad_sch (version 20221206) (generator eeschema)
+
+  (uuid 30037e9f-fb8a-4b65-9af4-98689a2fae61)
+
+  (paper "A4")
+
+  (lib_symbols
+  )
+
+
+  (no_connect (at 218.44 62.23) (uuid 083eb137-b86e-4300-a846-2bb596205673))
+  (no_connect (at 140.97 62.23) (uuid 4be53f71-3455-49bb-bde8-59378e524b0f))
+
+  (wire (pts (xy 165.1 62.23) (xy 194.31 62.23))
+    (stroke (width 0) (type default))
+    (uuid ad8a2a0f-07e5-4bda-adf7-ee4963f2c46d)
+  )
+
+  (sheet (at 140.97 59.69) (size 24.13 5.08) (fields_autoplaced)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0000))
+    (uuid 48e5c29d-dae7-410f-a801-6c402cc42990)
+    (property "Sheetname" "SubSheet1" (at 140.97 58.9784 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "issue10926_1_subsheet_1.kicad_sch" (at 140.97 65.3546 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (pin "OUT" output (at 165.1 62.23 0)
+      (effects (font (size 1.27 1.27)) (justify right))
+      (uuid 1f5f62db-c203-4919-ba5b-ade4e9ea2a6b)
+    )
+    (pin "IN" input (at 140.97 62.23 180)
+      (effects (font (size 1.27 1.27)) (justify left))
+      (uuid 56de26b5-1deb-4848-83c8-22baf301b552)
+    )
+    (instances
+      (project "issue10926_1"
+        (path "/30037e9f-fb8a-4b65-9af4-98689a2fae61" (page "3"))
+      )
+    )
+  )
+
+  (sheet (at 194.31 59.69) (size 24.13 5.08) (fields_autoplaced)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0000))
+    (uuid 745d7512-5b57-4355-bb9c-332f95478133)
+    (property "Sheetname" "SubSheet2" (at 194.31 58.9784 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "issue10926_1_subsheet_1.kicad_sch" (at 194.31 65.3546 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (pin "OUT" output (at 194.31 62.23 180)
+      (effects (font (size 1.27 1.27)) (justify left))
+      (uuid faa919ea-e1e6-48fa-a852-eca05c09b10a)
+    )
+    (pin "IN" input (at 218.44 62.23 0)
+      (effects (font (size 1.27 1.27)) (justify right))
+      (uuid c3b43390-ad2c-4f18-8b8b-2ecd0ba9205a)
+    )
+    (instances
+      (project "issue10926_1"
+        (path "/30037e9f-fb8a-4b65-9af4-98689a2fae61" (page "4"))
+      )
+    )
+  )
+
+  (sheet_instances
+    (path "/" (page "1"))
+  )
+)

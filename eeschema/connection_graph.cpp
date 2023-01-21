@@ -3266,7 +3266,8 @@ int CONNECTION_GRAPH::ercCheckHierSheets()
                     std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_HIERACHICAL_LABEL );
                     ercItem->SetItems( unmatched.second );
                     ercItem->SetErrorMessage( msg );
-                    ercItem->SetIsSheetSpecific();
+                    ercItem->SetSheetSpecificPath( sheet );
+                    ercItem->SetItemsSheetPaths( sheet );
 
                     SCH_MARKER* marker = new SCH_MARKER( ercItem, unmatched.second->GetPosition() );
                     sheet.LastScreen()->Append( marker );
@@ -3280,10 +3281,14 @@ int CONNECTION_GRAPH::ercCheckHierSheets()
                                                         "sheet pin in the parent sheet" ),
                                                      UnescapeString( unmatched.first ) );
 
+                    SCH_SHEET_PATH parentSheetPath = sheet;
+                    parentSheetPath.push_back( parentSheet );
+
                     std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_HIERACHICAL_LABEL );
                     ercItem->SetItems( unmatched.second );
                     ercItem->SetErrorMessage( msg );
-                    ercItem->SetIsSheetSpecific();
+                    ercItem->SetSheetSpecificPath( parentSheetPath );
+                    ercItem->SetItemsSheetPaths( parentSheetPath );
 
                     SCH_MARKER* marker = new SCH_MARKER( ercItem, unmatched.second->GetPosition() );
                     parentSheet->GetScreen()->Append( marker );

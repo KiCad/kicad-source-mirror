@@ -1,0 +1,94 @@
+(kicad_sch (version 20221206) (generator eeschema)
+
+  (uuid 45062e6c-d9e3-47ef-9773-cf9ed241f3ea)
+
+  (paper "A4")
+
+  (lib_symbols
+    (symbol "Test-Library:TEST" (in_bom yes) (on_board yes)
+      (property "Reference" "U" (at 0 1.27 0)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "Value" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "Footprint" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Datasheet" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (symbol "TEST_0_1"
+        (rectangle (start -3.81 0) (end 5.08 -5.08)
+          (stroke (width 0) (type default))
+          (fill (type background))
+        )
+      )
+      (symbol "TEST_1_1"
+        (pin input line (at -6.35 -2.54 0) (length 2.54)
+          (name "IN" (effects (font (size 1.27 1.27))))
+          (number "1" (effects (font (size 1.27 1.27))))
+        )
+        (pin output line (at 7.62 -2.54 180) (length 2.54)
+          (name "OUT" (effects (font (size 1.27 1.27))))
+          (number "2" (effects (font (size 1.27 1.27))))
+        )
+      )
+    )
+  )
+
+
+
+  (hierarchical_label "OUT_A" (shape output) (at 105.41 46.99 0) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid 13b0c889-1ff2-41ce-b523-62a03c25b660)
+  )
+  (hierarchical_label "IN_A" (shape input) (at 91.44 46.99 180) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid 829b3ae8-cd09-4eec-8fb1-2248807b71c5)
+  )
+
+  (symbol (lib_id "Test-Library:TEST") (at 97.79 44.45 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (uuid ad556e4a-3e61-4db6-b04a-45e4e2ee1dfb)
+    (property "Reference" "U?" (at 98.425 43.18 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "~" (at 97.79 44.45 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "" (at 97.79 44.45 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "" (at 97.79 44.45 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid add2ba25-6d53-4e93-8c77-301f68c1eb6d))
+    (pin "2" (uuid e707f010-d34a-44d3-8c9b-00dd66344fb6))
+    (instances
+      (project "issue10926_1"
+        (path "/30037e9f-fb8a-4b65-9af4-98689a2fae61"
+          (reference "U?") (unit 1)
+        )
+        (path "/30037e9f-fb8a-4b65-9af4-98689a2fae61/745d7512-5b57-4355-bb9c-332f95478133"
+          (reference "U3") (unit 1)
+        )
+        (path "/30037e9f-fb8a-4b65-9af4-98689a2fae61/48e5c29d-dae7-410f-a801-6c402cc42990"
+          (reference "U2") (unit 1)
+        )
+        (path "/30037e9f-fb8a-4b65-9af4-98689a2fae61/48e5c29d-dae7-410f-a801-6c402cc42990/0203a5e0-a22b-467e-bbd1-13728dd7050e"
+          (reference "U1") (unit 1)
+        )
+        (path "/30037e9f-fb8a-4b65-9af4-98689a2fae61/745d7512-5b57-4355-bb9c-332f95478133/0203a5e0-a22b-467e-bbd1-13728dd7050e"
+          (reference "U4") (unit 1)
+        )
+        (path "/30037e9f-fb8a-4b65-9af4-98689a2fae61/48e5c29d-dae7-410f-a801-6c402cc42990/efd6cf1d-46e4-43a3-833d-ac2e75973904"
+          (reference "U5") (unit 1)
+        )
+        (path "/30037e9f-fb8a-4b65-9af4-98689a2fae61/745d7512-5b57-4355-bb9c-332f95478133/efd6cf1d-46e4-43a3-833d-ac2e75973904"
+          (reference "U6") (unit 1)
+        )
+      )
+    )
+  )
+)

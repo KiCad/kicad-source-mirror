@@ -24,8 +24,33 @@
 #ifndef ERC_ITEM_H
 #define ERC_ITEM_H
 
+#include <optional>
 #include <rc_item.h>
+#include "sch_sheet_path.h"
 
+/**
+ * A specialisation of the RC_TREE_MODEL class to enable ERC errors / warnings to be resolved in
+ * a specific sheet path context. This allows the displayed ERC descriptions in the ERC dialog to
+ * reflect component references on a per-sheet basis in hierarchical schematics.
+ * @see RC_TREE_MODEL
+ */
+class ERC_TREE_MODEL : public RC_TREE_MODEL
+{
+public:
+    ERC_TREE_MODEL( EDA_DRAW_FRAME* aParentFrame, wxDataViewCtrl* aView ) :
+            RC_TREE_MODEL( aParentFrame, aView )
+    {
+    }
+
+    ~ERC_TREE_MODEL() {}
+
+    /**
+     * Override of RC_TREE_MODEL::GetValue which returns item descriptions in a specific
+     * SCH_SHEET_PATH context, if a context is available on the given SCH_MARKER or ERC_ITEM
+     * targets.
+     */
+    void GetValue( wxVariant& aVariant, wxDataViewItem const& aItem, unsigned int aCol ) const;
+};
 
 class ERC_ITEM : public RC_ITEM
 {
@@ -52,17 +77,103 @@ public:
         return allItemTypes;
     }
 
-    bool IsSheetSpecific() const { return m_sheetSpecific; }
-    void SetIsSheetSpecific( bool aSpecific = true ) { m_sheetSpecific = aSpecific; }
+    /**
+     * Determines whether the ERC item is bound to a specific sheet, or is common across multiple
+     * sheets (e.g. whether the error is internal to a hierarchical sheet, or is due to an enclosing
+     * context interacting with the hierarchical sheet)
+     * @return true if ERC applies to a specific sheet, otherwise false
+     */
+    bool IsSheetSpecific() const { return m_sheetSpecificPath.has_value(); }
+
+    /**
+     * Sets the SCH_SHEET_PATH this ERC item is bound to
+     * @param aSpecificSheet The SCH_SHEET_PATH containing the ERC violation
+     */
+    void SetSheetSpecificPath( const SCH_SHEET_PATH& aSpecificSheet )
+    {
+        m_sheetSpecificPath = aSpecificSheet;
+    }
+
+    /**
+     * Gets the SCH_SHEET_PATH this ERC item is bound to. Throws std::bad_optional_access if there
+     * is no specific sheet path binding
+     * @return the SCH_SHEET_PATH containing the ERC violation
+     */
+    const SCH_SHEET_PATH& GetSpecificSheetPath() const
+    {
+        wxASSERT( m_sheetSpecificPath.has_value() );
+        return m_sheetSpecificPath.value();
+    }
+
+    /**
+     * Sets the SCH_SHEET_PATH of the main item causing this ERC violation to (e.g. a schematic
+     * pin). This allows violations to be specific to particular uses of shared hierarchical
+     * schematics.
+     * @param mainItemSheet the SCH_SHEET_PATH of the item causing the ERC violation
+     */
+    void SetItemsSheetPaths( const SCH_SHEET_PATH& mainItemSheet )
+    {
+        m_mainItemSheet = mainItemSheet;
+    }
+
+    /**
+     * Set the SCH_SHEET PATHs of the main and auxiliary items causing this ERC violation to (e.g.
+     * two schematic pins which have a mutual connection violation). This allows violations to be
+     * specific to particular uses of shared hierarchical schematics.
+     * @param mainItemSheet the SCH_SHEET_PATH of the first item causing the ERC violation
+     * @param auxItemSheet  the SCH_SHEET_PATH of the second item causing the ERC violation
+     */
+    void SetItemsSheetPaths( const SCH_SHEET_PATH& mainItemSheet,
+                             const SCH_SHEET_PATH& auxItemSheet )
+    {
+        m_mainItemSheet = mainItemSheet;
+        m_auxItemSheet = auxItemSheet;
+    }
+
+    /**
+     * Gets the SCH_SHEET_PATH of the main item causing this ERC violation
+     * @return SCH_SHEET_PATH containing the main item
+     */
+    SCH_SHEET_PATH& GetMainItemSheetPath()
+    {
+        wxASSERT( MainItemHasSheetPath() );
+        return m_mainItemSheet.value();
+    }
+
+    /**
+     * Gets the SCH_SHEET_PATH of the auxillary item causing this ERC violation
+     * @return SCH_SHEET_PATH containing the auxillary item
+     */
+    SCH_SHEET_PATH& GetAuxItemSheetPath()
+    {
+        wxASSERT( AuxItemHasSheetPath() );
+        return m_auxItemSheet.value();
+    }
+
+    /**
+     * Determines whether the main item causing this ERC violation has a specific
+     * SCH_SHEET_PATH binding.
+     * @return true if the item ERC violation is specific to a sheet, false otherwise
+     */
+    bool MainItemHasSheetPath() { return m_mainItemSheet.has_value(); }
+
+    /**
+     * Determines whether the auxiliary item causing this ERC violation has a specific
+     * SCH_SHEET_PATH binding.
+     * @return true if the item ERC violation is specific to a sheet, false otherwise
+     */
+    bool AuxItemHasSheetPath() { return m_auxItemSheet.has_value(); }
 
 private:
     ERC_ITEM( int aErrorCode = 0, const wxString& aTitle = "", const wxString& aSettingsKey = "" )
     {
         m_errorCode     = aErrorCode;
         m_errorTitle    = aTitle;
-        m_settingsKey   = aSettingsKey;
-        m_sheetSpecific = false;
+        m_settingsKey = aSettingsKey;
     }
+
+    std::optional<SCH_SHEET_PATH> m_mainItemSheet;
+    std::optional<SCH_SHEET_PATH> m_auxItemSheet;
 
     /// A list of all ERC_ITEM types which are valid error codes
     static std::vector<std::reference_wrapper<RC_ITEM>> allItemTypes;
@@ -108,7 +219,7 @@ private:
     static ERC_ITEM busEntryNeeded;
 
     /// True if this item is specific to a sheet instance (as opposed to applying to all instances)
-    bool m_sheetSpecific;
+    std::optional<SCH_SHEET_PATH> m_sheetSpecificPath;
 };
 
 

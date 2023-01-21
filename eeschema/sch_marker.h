@@ -54,7 +54,7 @@ public:
     void SwapData( SCH_ITEM* aItem ) override;
 
     wxString Serialize() const;
-    static SCH_MARKER* Deserialize( const wxString& data );
+    static SCH_MARKER* Deserialize( SCHEMATIC* schematic, const wxString& data );
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
@@ -108,12 +108,26 @@ public:
 
     EDA_ITEM* Clone() const override;
 
+    /**
+     * Sets this marker as a legacy artifact. Legacy markers are those deserialized from a file
+     * version < 20230121
+     */
+    void SetIsLegacyMarker( bool isLegacyMarker = true ) { m_isLegacyMarker = isLegacyMarker; }
+
+    /**
+     * Determines if this marker is legacy (i.e. does not store sheet paths for specific errors)
+     * @return True if marker deserialized from a file version < 20230121
+     */
+    bool IsLegacyMarker() const { return m_isLegacyMarker; }
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif
 
 protected:
     KIGFX::COLOR4D getColor() const override;
+
+    bool m_isLegacyMarker; /// True if marker was deserialized from a file version < 20230121
 };
 
 #endif // TYPE_SCH_MARKER_H_

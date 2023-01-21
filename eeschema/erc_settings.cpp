@@ -291,12 +291,19 @@ void SHEETLIST_ERC_ITEMS_PROVIDER::visitMarkers( std::function<void( SCH_MARKER*
             if( marker->GetMarkerType() != MARKER_BASE::MARKER_ERC )
                 continue;
 
-            // Don't show non-specific markers more than once
-            if( !firstTime &&
-                !static_cast<const ERC_ITEM*>( marker->GetRCItem().get() )->IsSheetSpecific() )
+            std::shared_ptr<const ERC_ITEM> ercItem =
+                    std::static_pointer_cast<const ERC_ITEM>( marker->GetRCItem() );
+
+            // Only show sheet-specific markers on the owning sheet
+            if( ercItem->IsSheetSpecific() )
             {
-                continue;
+                if( ercItem->GetSpecificSheetPath() != sheetList[i] )
+                    continue;
             }
+
+            // Don't show non-specific markers more than once
+            if( !firstTime && !ercItem->IsSheetSpecific() )
+                continue;
 
             aVisitor( marker );
         }

@@ -80,7 +80,7 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
 
     m_markerProvider = std::make_shared<SHEETLIST_ERC_ITEMS_PROVIDER>( &m_parent->Schematic() );
 
-    m_markerTreeModel = new RC_TREE_MODEL( parent, m_markerDataView );
+    m_markerTreeModel = new ERC_TREE_MODEL( parent, m_markerDataView );
     m_markerDataView->AssociateModel( m_markerTreeModel );
     m_markerTreeModel->Update( m_markerProvider, m_severities );
 
@@ -582,6 +582,30 @@ void DIALOG_ERC::OnERCItemSelected( wxDataViewEvent& aEvent )
     }
     else if( item && item->GetClass() != wxT( "DELETED_SHEET_ITEM" ) )
     {
+        const RC_TREE_NODE* node = RC_TREE_MODEL::ToNode( aEvent.GetItem() );
+
+        if( node )
+        {
+            // Determine the owning sheet for sheet-specific items
+            std::shared_ptr<ERC_ITEM> ercItem =
+                    std::static_pointer_cast<ERC_ITEM>( node->m_RcItem );
+            switch( node->m_Type )
+            {
+            case RC_TREE_NODE::MARKER:
+                if( ercItem->IsSheetSpecific() )
+                    sheet = ercItem->GetSpecificSheetPath();
+                break;
+            case RC_TREE_NODE::MAIN_ITEM:
+                if( ercItem->MainItemHasSheetPath() )
+                    sheet = ercItem->GetMainItemSheetPath();
+                break;
+            case RC_TREE_NODE::AUX_ITEM:
+                if( ercItem->AuxItemHasSheetPath() )
+                    sheet = ercItem->GetAuxItemSheetPath();
+                break;
+            }
+        }
+
         WINDOW_THAWER thawer( m_parent );
 
         if( !sheet.empty() && sheet != m_parent->GetCurrentSheet() )

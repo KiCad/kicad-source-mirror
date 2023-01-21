@@ -25,8 +25,9 @@
 #include "wx/html/m_templ.h"
 #include "wx/html/styleparams.h"
 #include <erc.h>
-#include <erc_item.h>
-#include <i18n_utility.h>
+#include <eda_draw_frame.h>
+#include <marker_base.h>
+#include <sch_edit_frame.h>
 
 
 // These, being statically-defined, require specialized I18N handling.  We continue to
@@ -274,4 +275,112 @@ std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
     }
 
     return nullptr;
+}
+
+/**
+ * Override of RC_TREE_MODEL::GetValue which returns item descriptions in a specific
+ * SCH_SHEET_PATH context, if a context is available on the given SCH_MARKER or ERC_ITEM
+ * targets.
+ */
+void ERC_TREE_MODEL::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
+                               unsigned int aCol ) const
+{
+    const RC_TREE_NODE*            node = ToNode( aItem );
+    const std::shared_ptr<RC_ITEM> rcItem = node->m_RcItem;
+
+    switch( node->m_Type )
+    {
+    case RC_TREE_NODE::MARKER:
+    {
+        wxString prefix;
+
+        if( rcItem->GetParent() )
+        {
+            SEVERITY severity = rcItem->GetParent()->GetSeverity();
+
+            if( severity == RPT_SEVERITY_EXCLUSION )
+            {
+                if( m_editFrame->GetSeverity( rcItem->GetErrorCode() ) == RPT_SEVERITY_WARNING )
+                    prefix = _( "Excluded warning: " );
+                else
+                    prefix = _( "Excluded error: " );
+            }
+            else if( severity == RPT_SEVERITY_WARNING )
+            {
+                prefix = _( "Warning: " );
+            }
+            else
+            {
+                prefix = _( "Error: " );
+            }
+        }
+
+        aVariant = prefix + rcItem->GetErrorMessage();
+    }
+    break;
+
+    case RC_TREE_NODE::MAIN_ITEM:
+        if( rcItem->GetParent()
+            && rcItem->GetParent()->GetMarkerType() == MARKER_BASE::MARKER_DRAWING_SHEET )
+        {
+            aVariant = _( "Drawing Sheet" );
+            break;
+        }
+        else
+        {
+            std::shared_ptr<ERC_ITEM> ercItem = std::static_pointer_cast<ERC_ITEM>( rcItem );
+            SCH_EDIT_FRAME*           schEditFrame = static_cast<SCH_EDIT_FRAME*>( m_editFrame );
+            SCH_SHEET_PATH            curPath;
+
+            // Update the target ERC item reference field to a specific sheet context if present
+            curPath = schEditFrame->GetCurrentSheet();
+
+            if( ercItem->MainItemHasSheetPath() )
+                ercItem->GetMainItemSheetPath().UpdateAllScreenReferences();
+
+            EDA_ITEM* item = m_editFrame->GetItem( rcItem->GetMainItemID() );
+            aVariant = item->GetItemDescription( m_editFrame );
+
+            // Reset reference fields to current visible sheet
+            if( ercItem->MainItemHasSheetPath() )
+                curPath.UpdateAllScreenReferences();
+        }
+
+        break;
+
+    case RC_TREE_NODE::AUX_ITEM:
+    {
+        std::shared_ptr<ERC_ITEM> ercItem = std::static_pointer_cast<ERC_ITEM>( rcItem );
+        SCH_EDIT_FRAME*           schEditFrame = static_cast<SCH_EDIT_FRAME*>( m_editFrame );
+        SCH_SHEET_PATH            curPath;
+
+        // Update the target ERC item reference field to a specific sheet context if present
+        curPath = schEditFrame->GetCurrentSheet();
+
+        if( ercItem->AuxItemHasSheetPath() )
+            ercItem->GetAuxItemSheetPath().UpdateAllScreenReferences();
+
+        EDA_ITEM* item = m_editFrame->GetItem( rcItem->GetMainItemID() );
+        aVariant = item->GetItemDescription( m_editFrame );
+
+        // Reset reference fields to current visible sheet
+        if( ercItem->AuxItemHasSheetPath() )
+            curPath.UpdateAllScreenReferences();
+    }
+    break;
+
+    case RC_TREE_NODE::AUX_ITEM2:
+    {
+        EDA_ITEM* item = m_editFrame->GetItem( rcItem->GetAuxItem2ID() );
+        aVariant = item->GetItemDescription( m_editFrame );
+    }
+    break;
+
+    case RC_TREE_NODE::AUX_ITEM3:
+    {
+        EDA_ITEM* item = m_editFrame->GetItem( rcItem->GetAuxItem3ID() );
+        aVariant = item->GetItemDescription( m_editFrame );
+    }
+    break;
+    }
 }

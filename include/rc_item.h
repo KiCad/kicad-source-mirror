@@ -271,7 +271,7 @@ public:
      */
     void DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, bool aDeep );
 
-private:
+protected:
     void rebuildModel( std::shared_ptr<RC_ITEMS_PROVIDER> aProvider, int aSeverities );
     void onSizeView( wxSizeEvent& aEvent );
 

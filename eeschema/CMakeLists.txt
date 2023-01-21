@@ -196,6 +196,7 @@ set( EESCHEMA_SRCS
     eeschema_settings.cpp
     erc.cpp
     erc_item.cpp
+    erc_sch_pin_context.cpp
     erc_settings.cpp
     fields_grid_table.cpp
     files-io.cpp
