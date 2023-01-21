@@ -1,0 +1,54 @@
+KiCad schematic
+.include "/Users/jeff/kicad_arm/kicad/qa/data/eeschema/TL072-dual.lib"
+.include "/Users/jeff/kicad_arm/kicad/qa/data/eeschema/VDMOS_models.lib"
+.save all
+.probe alli
+.ic v(Tj1)={envtemp} v(Tj2)={envtemp}
+.temp {envtemp}
+.param envtemp=25
+.tran 200u 10
+.option RELTOL=.01 ABSTOL=1N VNTOL=10u
+.control
+set controlswait
+if $?sharedmode
+rusage
+else
+run
+rusage
+settype temperature  tj1 tj2 tcase1 tcase2
+plot tj1 tj2 tcase1 tcase2
+plot in out xlimit 5.2 5.3
+end
+.endc
+Rload1 out GND 8
+C7 Net-_C7-Pad1_ GND 300m
+Vamb1 Net-_R11-Pad1_ GND {envtemp}
+R14 Net-_R11-Pad1_ Net-_C7-Pad1_ 3
+C6 Net-_C6-Pad1_ GND 300m
+R13 Net-_C7-Pad1_ Tcase2 200m
+R12 GND Tj2 1G
+R9 GND Tj1 1G
+R10 Net-_C6-Pad1_ Tcase1 200m
+R11 Net-_R11-Pad1_ Net-_C6-Pad1_ 3
+R4 Net-_U1A--_ GND 1k
+C3 Net-_U1B-+_ GND 1u
+R2 Net-_U1B-+_ GND 10k
+XU1 Net-_R16-Pad2_ Net-_U1A--_ Net-_U1A-+_ GND Net-_U1B-+_ Net-_U1B--_ Net-_R17-Pad2_ VCC TL072c
+R5 Net-_M2-D_ Net-_U1A--_ 19.5k
+R17 Net-_M2-G_ Net-_R17-Pad2_ 100
+R6 Net-_M2-S_ Net-_U1B--_ 100k
+Vin1 in GND dc 0 ac 1 sin(0 0.5 100 20m)
+C1 VCC GND 1u
+R16 Net-_M1-G_ Net-_R16-Pad2_ 100
+C2 Net-_U1A-+_ in 330n
+R3 Net-_U1A-+_ Net-_U1B--_ 100k
+R1 VCC Net-_U1B-+_ 390k
+R7 Net-_M1-S_ Net-_M2-D_ 100m
+C4 Net-_M2-D_ out 10m
+R15 out GND 1k
+C5 out Net-_M2-D_ 1u
+M2 Net-_M2-D_ Net-_M2-G_ Net-_M2-S_ Tj2 Tcase2 IRFP240 thermal
+M1 VCC Net-_M1-G_ Net-_M1-S_ Tj1 Tcase1 IRFP240 thermal
+V1 VCC GND 36
+R8 Net-_M2-S_ GND 800m
+.end

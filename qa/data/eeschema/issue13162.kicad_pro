@@ -1,6 +1,28 @@
 {
   "board": {
     "3dviewports": [],
+    "design_settings": {
+      "defaults": {
+        "board_outline_line_width": 0.1,
+        "copper_line_width": 0.2,
+        "copper_text_size_h": 1.5,
+        "copper_text_size_v": 1.5,
+        "copper_text_thickness": 0.3,
+        "other_line_width": 0.15,
+        "silk_line_width": 0.15,
+        "silk_text_size_h": 1.0,
+        "silk_text_size_v": 1.0,
+        "silk_text_thickness": 0.15
+      },
+      "diff_pair_dimensions": [],
+      "drc_exclusions": [],
+      "rules": {
+        "solder_mask_clearance": 0.0,
+        "solder_mask_min_width": 0.0
+      },
+      "track_widths": [],
+      "via_dimensions": []
+    },
     "layer_presets": [],
     "viewports": []
   },
@@ -224,7 +246,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "issue13112.kicad_pro",
+    "filename": "issue13162.kicad_pro",
     "version": 1
   },
   "net_settings": {
@@ -270,8 +292,11 @@
     "drawing": {
       "dashed_lines_dash_length_ratio": 12.0,
       "dashed_lines_gap_length_ratio": 3.0,
+      "default_bus_thickness": 12.0,
+      "default_junction_size": 40.0,
       "default_line_thickness": 6.0,
       "default_text_size": 50.0,
+      "default_wire_thickness": 6.0,
       "field_names": [],
       "intersheets_ref_own_page": false,
       "intersheets_ref_prefix": "",
@@ -279,9 +304,9 @@
       "intersheets_ref_show": false,
       "intersheets_ref_suffix": "",
       "junction_size_choice": 3,
-      "label_size_ratio": 0.375,
+      "label_size_ratio": 0.3,
       "pin_symbol_size": 25.0,
-      "text_offset_ratio": 0.15
+      "text_offset_ratio": 0.3
     },
     "legacy_lib_dir": "",
     "legacy_lib_list": [],
@@ -295,8 +320,8 @@
       "meta": {
         "version": 0
       },
-      "model_mode": 0,
-      "workbook_filename": ""
+      "model_mode": 4,
+      "workbook_filename": "Dual-NMOS-amp.wbk"
     },
     "page_layout_descr_file": "",
     "plot_directory": "",
@@ -309,7 +334,7 @@
   },
   "sheets": [
     [
-      "b12b7699-6571-441f-8efe-53de6bffa3bf",
+      "26ed1b96-1145-41e6-9da8-50c504d01964",
       ""
     ]
   ],

@@ -1,0 +1,6 @@
+* A dual opamp ngspice model
+.subckt TL072c 1out 1in- 1in+ vcc- 2in+ 2in- 2out vcc+
+.include TL072.301
+XU1A 1in+ 1in- vcc+ vcc- 1out TL072
+XU1B 2in+ 2in- vcc+ vcc- 2out TL072
+.ends

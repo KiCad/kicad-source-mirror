@@ -116,4 +116,14 @@ BOOST_FIXTURE_TEST_CASE( LegacyFixups, TEST_SIM_REGRESSIONS_FIXTURE )
 }
 
 
+BOOST_FIXTURE_TEST_CASE( DualNMOSAmp, TEST_SIM_REGRESSIONS_FIXTURE )
+{
+    LOCALE_IO dummy;
+
+    TestNetlist( "issue13162" );
+    TestTranPoint( 0.030, { { "V(out)", 0.535 } }, 0.001 );
+    TestTranPoint( 0.035, { { "V(out)", -1.437 } }, 0.001 );
+}
+
+
 #endif // KICAD_SPICE
