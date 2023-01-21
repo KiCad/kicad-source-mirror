@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2015-2022 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015-2023 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -144,7 +144,6 @@ void RESCUE_CASE_CANDIDATE::FindRescues( RESCUER& aRescuer,
     std::vector<LIB_SYMBOL*> case_insensitive_matches;
 
     wxString symbol_name;
-    wxString search_name;
     wxString last_symbol_name;
 
     for( SCH_SYMBOL* eachSymbol : *( aRescuer.GetSymbols() ) )
@@ -167,7 +166,7 @@ void RESCUE_CASE_CANDIDATE::FindRescues( RESCUER& aRescuer,
 
             // If the case sensitive match failed, try a case insensitive match.
             aRescuer.GetPrj()->SchLibs()->FindLibraryNearEntries( case_insensitive_matches,
-                                                                  search_name );
+                                                                  symbol_name );
 
             // If there are not case insensitive matches either, the symbol cannot be rescued.
             if( !case_insensitive_matches.size() )
@@ -200,6 +199,12 @@ wxString RESCUE_CASE_CANDIDATE::GetActionDescription() const
 
 bool RESCUE_CASE_CANDIDATE::PerformAction( RESCUER* aRescuer )
 {
+    wxCHECK( m_lib_candidate, true );
+
+    std::unique_ptr<LIB_SYMBOL> new_symbol = m_lib_candidate->Flatten();
+    new_symbol->SetName( m_new_name );
+    aRescuer->AddSymbol( new_symbol.get() );
+
     for( SCH_SYMBOL* eachSymbol : *aRescuer->GetSymbols() )
     {
         if( eachSymbol->GetLibId().GetLibItemName() != UTF8( m_requested_name ) )
@@ -325,7 +330,9 @@ bool RESCUE_CACHE_CANDIDATE::PerformAction( RESCUER* aRescuer )
 {
     LIB_SYMBOL* tmp = ( m_cache_candidate ) ? m_cache_candidate : m_lib_candidate;
 
-    wxCHECK_MSG( tmp, false, wxS( "Both cache and library symbols undefined." ) );
+    // A symbol that cannot be rescued is a valid condition so just bail out here.
+    if( !tmp )
+        return true;
 
     std::unique_ptr<LIB_SYMBOL> new_symbol = tmp->Flatten();
     new_symbol->SetName( m_new_name );
