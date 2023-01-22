@@ -269,10 +269,10 @@ int SYMBOL_EDITOR_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
     {
         if( item->Type() == LIB_PIN_T )
         {
-            LIB_PIN*  pin = static_cast<LIB_PIN*>( item );
-            VECTOR2I pos = pin->GetPosition();
+            LIB_PIN*  curr_pin = static_cast<LIB_PIN*>( item );
+            VECTOR2I pos = curr_pin->GetPosition();
 
-            toDelete.insert( pin );
+            toDelete.insert( curr_pin );
 
             // when pin editing is synchronized, pins in the same position, with the same name
             // in different units are also removed.  But only one pin per unit (matching)
@@ -280,11 +280,11 @@ int SYMBOL_EDITOR_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
             {
                 std::vector<bool> got_unit( symbol->GetUnitCount() + 1 );
 
-                got_unit[pin->GetUnit()] = true;
+                got_unit[curr_pin->GetUnit()] = true;
 
-                int curr_convert = pin->GetConvert();
-                ELECTRICAL_PINTYPE etype = pin->GetType();
-                wxString name = pin->GetName();
+                int curr_convert = curr_pin->GetConvert();
+                ELECTRICAL_PINTYPE etype = curr_pin->GetType();
+                wxString name = curr_pin->GetName();
                 std::vector<LIB_PIN*> pins = symbol->GetAllLibPins();
 
                 for( LIB_PIN* pin : pins )

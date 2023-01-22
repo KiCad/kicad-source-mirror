@@ -2708,12 +2708,12 @@ void SCH_ALTIUM_PLUGIN::ParseWire( const std::map<wxString, wxString>& aProperti
 
 void SCH_ALTIUM_PLUGIN::ParseJunction( const std::map<wxString, wxString>& aProperties )
 {
+    SCH_SCREEN* screen = getCurrentScreen();
+    wxCHECK( screen, /* void */ );
+
     ASCH_JUNCTION elem( aProperties );
 
     SCH_JUNCTION* junction = new SCH_JUNCTION( elem.location + m_sheetOffset );
-
-    SCH_SCREEN* screen = getCurrentScreen();
-    wxCHECK( screen, /* void */ );
 
     junction->SetFlags( IS_NEW );
     screen->Append( junction );

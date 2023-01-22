@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright (C) 2012-2021 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2023 Kicad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2013-2017 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -337,6 +337,7 @@ OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
     ufm_screenPixelSize = 1;
     ufm_pixelSizeMultiplier = 1;
     ufm_antialiasingOffset = 1;
+    m_swapInterval  = 0;
 }
 
 
