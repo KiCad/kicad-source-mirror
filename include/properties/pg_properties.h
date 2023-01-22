@@ -126,9 +126,9 @@ protected:
 class PGPROPERTY_COLORENUM : public wxEnumProperty
 {
 public:
-    PGPROPERTY_COLORENUM( const wxString& aLabel, wxString& aName, const wxPGChoices& aChoices,
+    PGPROPERTY_COLORENUM( const wxString& aLabel, wxString& aName, wxPGChoices* aChoices,
                           int aValue = 0 ) :
-            wxEnumProperty( aLabel, aName, const_cast<wxPGChoices&>( aChoices ), aValue ),
+            wxEnumProperty( aLabel, aName, *aChoices, aValue ),
             m_colorFunc( []( const wxString& aChoice ) { return wxNullColour; } )
     {
         SetFlag( wxPG_PROP_CUSTOMIMAGE );

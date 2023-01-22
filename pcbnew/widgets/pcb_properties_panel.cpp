@@ -116,15 +116,31 @@ wxPGProperty* PCB_PROPERTIES_PANEL::createPGProperty( const PROPERTY_BASE* aProp
     {
         wxASSERT( aProperty->HasChoices() );
 
+        const wxPGChoices& canonicalLayers = aProperty->Choices();
+        wxArrayString      boardLayerNames;
+        wxArrayInt         boardLayerIDs;
+
+        for( int ii = 0; ii < (int) aProperty->Choices().GetCount(); ++ii )
+        {
+            int layer = canonicalLayers.GetValue( ii );
+
+            boardLayerNames.push_back( m_frame->GetBoard()->GetLayerName( ToLAYER_ID( layer ) ) );
+            boardLayerIDs.push_back( canonicalLayers.GetValue( ii ) );
+        }
+
         auto ret = new PGPROPERTY_COLORENUM( wxPG_LABEL, wxPG_LABEL,
-                                             const_cast<wxPGChoices&>( aProperty->Choices() ) );
+                                             new wxPGChoices( boardLayerNames, boardLayerIDs ) );
 
         ret->SetColorFunc(
                 [&]( const wxString& aChoice ) -> wxColour
                 {
-                    PCB_LAYER_ID l = ENUM_MAP<PCB_LAYER_ID>::Instance().ToEnum( aChoice );
-                    wxASSERT( IsPcbLayer( l ) );
-                    return m_frame->GetColorSettings()->GetColor( l ).ToColour();
+                    for( int layer = PCBNEW_LAYER_ID_START; layer < PCB_LAYER_ID_COUNT; ++layer )
+                    {
+                        if( m_frame->GetBoard()->GetLayerName( ToLAYER_ID( layer ) ) == aChoice )
+                            return m_frame->GetColorSettings()->GetColor( layer ).ToColour();
+                    }
+
+                    return wxNullColour;
                 } );
 
         ret->SetLabel( wxGetTranslation( aProperty->Name() ) );
