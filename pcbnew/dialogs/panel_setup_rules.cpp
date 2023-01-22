@@ -482,7 +482,8 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
             }
             else if( m_typeRegex.Matches( last ) )
             {
-                tokens = wxT( "Dimension|"
+                tokens = wxT( "Bitmap|"
+                              "Dimension|"
                               "Footprint|"
                               "Graphic|"
                               "Group|"
@@ -490,6 +491,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                               "Pad|"
                               "Target|"
                               "Text|"
+                              "Text Box|"
                               "Track|"
                               "Via|"
                               "Zone" );
