@@ -129,10 +129,13 @@ void PROPERTIES_PANEL::OnLanguageChanged()
 }
 
 
-void PROPERTIES_PANEL::update( const SELECTION& aSelection )
+void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
 {
     if( *m_cachedSelection == aSelection )
+    {
+        updatePropertyValues( aSelection );
         return;
+    }
 
     *m_cachedSelection = aSelection;
 
@@ -223,47 +226,34 @@ void PROPERTIES_PANEL::update( const SELECTION& aSelection )
 
         // Either determine the common value for a property or "<...>" to indicate multiple values
         bool available = true;
-        wxVariant commonVal, itemVal;
-
-        bool writeable = property->Writeable( aSelection.Front() );
+        bool writeable = true;
+        wxVariant commonVal;
 
         for( EDA_ITEM* item : aSelection )
         {
             if( !propMgr.IsAvailableFor( TYPE_HASH( *item ), property, item ) )
+            {
+                available = false;
                 break; // there is an item that does not have this property, so do not display it
+            }
 
             // If read-only for any of the selection, read-only for the whole selection.
             if( !property->Writeable( item ) )
                 writeable = false;
 
-            wxVariant& value = commonVal.IsNull() ? commonVal : itemVal;
-            const wxAny& any = item->Get( property );
-            bool converted = false;
+            wxVariant value = commonVal;
 
-            if( property->HasChoices() )
+            if( getItemValue( item, property, value ) )
             {
-                // handle enums as ints, since there are no default conversion functions for wxAny
-                int tmp;
-                converted = any.GetAs<int>( &tmp );
-
-                if( converted )
-                    value = wxVariant( tmp );
+                // Null value indicates different property values between items
+                if( !commonVal.IsNull() && value != commonVal )
+                    commonVal.MakeNull();
+                else
+                    commonVal = value;
             }
-
-            if( !converted )                // all other types
-                converted = any.GetAs( &value );
-
-            if( !converted )
+            else
             {
-                wxFAIL_MSG( wxS( "Could not convert wxAny to wxVariant" ) );
                 available = false;
-                break;
-            }
-
-            if( !commonVal.IsNull() && value != commonVal )
-            {
-                commonVal.MakeNull();       // items have different values for this property
-                break;
             }
         }
 
@@ -310,6 +300,31 @@ void PROPERTIES_PANEL::update( const SELECTION& aSelection )
     }
 
     RecalculateSplitterPos();
+}
+
+
+bool PROPERTIES_PANEL::getItemValue( EDA_ITEM* aItem, PROPERTY_BASE* aProperty, wxVariant& aValue )
+{
+    const wxAny& any = aItem->Get( aProperty );
+    bool converted = false;
+
+    if( aProperty->HasChoices() )
+    {
+        // handle enums as ints, since there are no default conversion functions for wxAny
+        int tmp;
+        converted = any.GetAs<int>( &tmp );
+
+        if( converted )
+            aValue = wxVariant( tmp );
+    }
+
+    if( !converted )                // all other types
+        converted = any.GetAs( &aValue );
+
+    if( !converted )
+        wxFAIL_MSG( wxS( "Could not convert wxAny to wxVariant" ) );
+
+    return converted;
 }
 
 

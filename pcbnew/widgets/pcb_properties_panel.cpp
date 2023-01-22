@@ -77,7 +77,9 @@ void PCB_PROPERTIES_PANEL::UpdateData()
 
     // TODO perhaps it could be called less often? use PROPERTIES_TOOL and catch MODEL_RELOAD?
     updateLists( static_cast<PCB_EDIT_FRAME*>( m_frame )->GetBoard() );
-    update( selection );
+
+    // Will actually just be updatePropertyValues() if selection hasn't changed
+    rebuildProperties( selection );
 }
 
 
@@ -85,7 +87,20 @@ void PCB_PROPERTIES_PANEL::AfterCommit()
 {
     PCB_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
     const SELECTION& selection = selectionTool->GetSelection();
-    BOARD_ITEM* firstItem = static_cast<BOARD_ITEM*>( selection.Front() );
+
+    updatePropertyValues( selection );
+
+    CallAfter( [&]()
+               {
+                   static_cast<PCB_EDIT_FRAME*>( m_frame )->GetCanvas()->SetFocus();
+               } );
+}
+
+
+void PCB_PROPERTIES_PANEL::updatePropertyValues( const SELECTION& aSelection )
+{
+    // TODO: Refactor to reduce duplication with PROPERTIES_PANEL::rebuildProperties
+    BOARD_ITEM* firstItem = static_cast<BOARD_ITEM*>( aSelection.Front() );
 
     for( wxPropertyGridIterator it = m_grid->GetIterator(); !it.AtEnd(); it.Next() )
     {
@@ -96,17 +111,27 @@ void PCB_PROPERTIES_PANEL::AfterCommit()
         wxCHECK2( property, continue );
 
         bool writeable = true;
+        wxVariant commonVal;
 
-        for( EDA_ITEM* edaItem : selection )
+        for( EDA_ITEM* edaItem : aSelection )
+        {
             writeable &= property->Writeable( edaItem );
 
+            wxVariant value = commonVal;
+
+            if( getItemValue( edaItem, property, value ) )
+            {
+                // Null value indicates different property values between items
+                if( !commonVal.IsNull() && value != commonVal )
+                    commonVal.MakeNull();
+                else
+                    commonVal = value;
+            }
+        }
+
+        pgProp->SetValue( commonVal );
         pgProp->Enable( writeable );
     }
-
-    CallAfter( [&]()
-               {
-                   static_cast<PCB_EDIT_FRAME*>( m_frame )->GetCanvas()->SetFocus();
-               } );
 }
 
 
