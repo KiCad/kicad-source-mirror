@@ -131,16 +131,16 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     description << wxT( "<ul>" );
     description << wxT( "<li>" )
                 << _( "The official KiCad website - " )
-                << HtmlHyperlink( "http://www.kicad.org" )
+                << HtmlHyperlink( wxS( "http://www.kicad.org" ) )
                 << wxT( "</li>" );
     description << wxT( "<li>" )
                 << _( "Developer website - " )
-                << HtmlHyperlink( "https://go.kicad.org/dev" )
+                << HtmlHyperlink( wxS( "https://go.kicad.org/dev" ) )
                 << wxT( "</li>" );
 
     description << wxT( "<li>" )
                 << _("Official KiCad library repositories - " )
-                << HtmlHyperlink( "https://go.kicad.org/libraries" )
+                << HtmlHyperlink( wxS( "https://go.kicad.org/libraries" ) )
                 << wxT( "</li>" );
 
     description << wxT( "</ul></p>" );
@@ -153,7 +153,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     description << wxT( "<ul>" );
     description << wxT( "<li>" )
                 << _( "Report or examine bugs - " )
-                << HtmlHyperlink( "https://go.kicad.org/bugs" )
+                << HtmlHyperlink( wxS( "https://go.kicad.org/bugs" ) )
                 << wxT( "</li>" );
     description << wxT( "</ul></p>" );
 
@@ -164,7 +164,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     description << wxT( "<ul>" );
     description << wxT( "<li>" )
                 << _( "KiCad forum - " )
-                << HtmlHyperlink( "https://go.kicad.org/forum" )
+                << HtmlHyperlink( wxS( "https://go.kicad.org/forum" ) )
                 << wxT( "</li>" );
 
     description << wxT( "</ul></p>" );
@@ -178,7 +178,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
         << wxT( "<div align='center'>" )
         << HtmlNewline( 4 )
         << _( "The complete KiCad EDA Suite is released under the" ) << HtmlNewline( 2 )
-        << HtmlHyperlink( "http://www.gnu.org/licenses",
+        << HtmlHyperlink( wxS( "http://www.gnu.org/licenses" ),
                           _( "GNU General Public License (GPL) version 3 or any later version" ) )
         << wxT( "</div>" );
 
@@ -541,343 +541,343 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Martin Kratoška" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Czech (CS)" ) );
+                                          wxS( "Czech (CS)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Radek Kuznik" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Czech (CS)" ) );
+                                          wxS( "Czech (CS)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Roman Ondráček" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Czech (CS)" ) );
+                                          wxS( "Czech (CS)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Jan Straka" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Czech (CS)" ) );
+                                          wxS( "Czech (CS)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Jan Vykydal" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Czech (CS)" ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( "Jonathan Haas",
+                                          wxS( "Czech (CS)" ) ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxS( "Jonathan Haas" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "German (DE)" ) );
+                                          wxS( "German (DE)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Mark Hämmerling" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "German (DE)" ) );
+                                          wxS( "German (DE)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Mathias Neumann" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "German (DE)" ) );
+                                          wxS( "German (DE)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Dominik Wernberger" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "German (DE)" ) );
+                                          wxS( "German (DE)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxS( "Manolis Stefanis" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Greek (el_GR)" ) );
+                                          wxS( "Greek (el_GR)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxS( "Athanasios Vlastos" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Greek (el_GR)" ) );
+                                          wxS( "Greek (el_GR)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxS( "Milonas Kostas" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Greek (el_GR)" ) );
+                                          wxS( "Greek (el_GR)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxS( "Michail Misirlis" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Greek (el_GR)" ) );
+                                          wxS( "Greek (el_GR)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Adolfo Jayme Barrientos" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Spanish (ES)" ) );
+                                          wxS( "Spanish (ES)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Roberto Fernandez Bautista" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Spanish (ES)" ) );
+                                          wxS( "Spanish (ES)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Augusto Fraga Giachero" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Spanish (ES)" ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( "Pedro Martin del Valle",
+                                          wxS( "Spanish (ES)" ) ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxS( "Pedro Martin del Valle" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Spanish (ES)" ) );
+                                          wxS( "Spanish (ES)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Iñigo Figuero" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Spanish (ES)" ) );
+                                          wxS( "Spanish (ES)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Iñigo Zuluaga" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Spanish (ES)" ) );
+                                          wxS( "Spanish (ES)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Ulices Avila Hernandez" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Spanish - Latin American (ES)" ) );
+                                          wxS( "Spanish - Latin American (ES)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Vesa Solonen" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Finnish (FI)" ) );
+                                          wxS( "Finnish (FI)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Alex Gellen" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Finnish (FI)" ) );
+                                          wxS( "Finnish (FI)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "J. Lavoie" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Finnish (FI)" ) );
+                                          wxS( "Finnish (FI)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Purkka Koodari" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Finnish (FI)" ) );
+                                          wxS( "Finnish (FI)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Ola Rinta-Koski" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Finnish (FI)" ) );
+                                          wxS( "Finnish (FI)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Riku Viitanen" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Finnish (FI)" ) );
+                                          wxS( "Finnish (FI)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Simo Mattila" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Finnish (FI)" ) );
+                                          wxS( "Finnish (FI)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Jean-Pierre Charras" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "French (FR)" ) );
+                                          wxS( "French (FR)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Marco Ciampa" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Italian (IT)" ) );
+                                          wxS( "Italian (IT)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Hiroshi Tokita" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Japanese (JA)" ) );
+                                          wxS( "Japanese (JA)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Kenta Yonekura" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Japanese (JA)" ) );
+                                          wxS( "Japanese (JA)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Ji Yoon Choi" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Japanese (JA)" ) );
+                                          wxS( "Japanese (JA)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Hidemichi Gotou" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Japanese (JA)" ) );
+                                          wxS( "Japanese (JA)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Kaoru Zenyouji" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Japanese (JA)" ) );
+                                          wxS( "Japanese (JA)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Kinichiro Inoguchi" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Japanese (JA)" ) );
+                                          wxS( "Japanese (JA)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Norio Suzuki" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Japanese (JA)" ) );
+                                          wxS( "Japanese (JA)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "starfort-jp" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Japanese (JA)" ) );
+                                          wxS( "Japanese (JA)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "킴슨김랑기" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Korean (KO)" ) );
+                                          wxS( "Korean (KO)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Ji Yoon Choi" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Korean (KO)" ) );
+                                          wxS( "Korean (KO)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "jeongsuAn" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Korean (KO)" ) );
+                                          wxS( "Korean (KO)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "이상수" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Korean (KO)" ) );
+                                          wxS( "Korean (KO)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "jehunseo" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Korean (KO)" ) );
+                                          wxS( "Korean (KO)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Uibeom Jung" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Korean (KO)" ) );
+                                          wxS( "Korean (KO)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "박준언" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Korean (KO)" ) );
+                                          wxS( "Korean (KO)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "방준영" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Korean (KO)" ) );
+                                          wxS( "Korean (KO)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "박기정" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Korean (KO)" ) );
+                                          wxS( "Korean (KO)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "hokim" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Korean (KO)" ) );
+                                          wxS( "Korean (KO)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "강명구" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Korean (KO)" ) );
+                                          wxS( "Korean (KO)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "서범기" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Korean (KO)" ) );
+                                          wxS( "Korean (KO)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Arend-Jan van Hilten" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Dutch (NL)" ) );
+                                          wxS( "Dutch (NL)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "CJ van der Hoeven" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Dutch (NL)" ) );
+                                          wxS( "Dutch (NL)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Pim Jansen" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Dutch (NL)" ) );
+                                          wxS( "Dutch (NL)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Allan Nordhøy" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Norwegian (NO)" ) );
+                                          wxS( "Norwegian (NO)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Mateusz Skowroński" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Polish (PL)" ) );
+                                          wxS( "Polish (PL)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Kerusey Karyu" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Polish (PL)" ) );
+                                          wxS( "Polish (PL)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Mark Roszko" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Polish (PL)" ) );
+                                          wxS( "Polish (PL)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "ZbeeGin" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Polish (PL)" ) );
+                                          wxS( "Polish (PL)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Augusto Fraga Giachero" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Brazilian Portuguese (PT_BR)" ) );
+                                          wxS( "Brazilian Portuguese (PT_BR)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Wellington Terumi Uemura" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Brazilian Portuguese (PT_BR)" ) );
+                                          wxS( "Brazilian Portuguese (PT_BR)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Augusto Fraga Giachero" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Portuguese (PT)" ) );
+                                          wxS( "Portuguese (PT)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Renie Marquet" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Portuguese (PT)" ) );
+                                          wxS( "Portuguese (PT)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Rafael Silva" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Portuguese (PT)" ) );
+                                          wxS( "Portuguese (PT)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Igor Plyatov" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Russian (RU)" ) );
+                                          wxS( "Russian (RU)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Дмитрий Дёмин" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Russian (RU)" ) );
+                                          wxS( "Russian (RU)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Andrey Fedorushkov" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Russian (RU)" ) );
+                                          wxS( "Russian (RU)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Eldar Khayrullin" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Russian (RU)" ) );
+                                          wxS( "Russian (RU)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Konstantin Baranovskiy" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Russian (RU)" ) );
+                                          wxS( "Russian (RU)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Axel Henriksson"  ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Swedish (SV)" ) );
+                                          wxS( "Swedish (SV)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Richard Jonsson" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Swedish (SV)" ) );
+                                          wxS( "Swedish (SV)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Allan Nordhøy" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Swedish (SV)" ) );
+                                          wxS( "Swedish (SV)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Boonchai Kingrungped" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Thai (TH)" ) );
+                                          wxS( "Thai (TH)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Liu Guang" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Simplified Chinese (zh_CN)" ) );
+                                          wxS( "Simplified Chinese (zh_CN)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Taotieren" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Simplified Chinese (zh_CN)" ) );
+                                          wxS( "Simplified Chinese (zh_CN)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Dingzhong Chen" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Simplified Chinese (zh_CN)" ) );
+                                          wxS( "Simplified Chinese (zh_CN)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "David Chen" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Simplified Chinese (zh_CN)" ) );
+                                          wxS( "Simplified Chinese (zh_CN)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Rigo Ligo" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Simplified Chinese (zh_CN)" ) );
+                                          wxS( "Simplified Chinese (zh_CN)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Tian Yunhao" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Simplified Chinese (zh_CN)" ) );
+                                          wxS( "Simplified Chinese (zh_CN)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "David Chen" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Traditional Chinese (zh_TW)" ) );
+                                          wxS( "Traditional Chinese (zh_TW)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "kai chiao chuang" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Traditional Chinese (zh_TW)" ) );
+                                          wxS( "Traditional Chinese (zh_TW)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Taotieren" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Traditional Chinese (zh_TW)" ) );
+                                          wxS( "Traditional Chinese (zh_TW)" ) ) );
 
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Remy Halvick" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Other" ) );
+                                          wxS( "Other" ) ) );
 
     aInfo.AddTranslator( new CONTRIBUTOR( wxS( "David J S Briscoe" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Other" ) );
+                                          wxS( "Other" ) ) );
 
     aInfo.AddTranslator( new CONTRIBUTOR( wxS( "Dominique Laigle" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Other" ) );
+                                          wxS( "Other" ) ) );
 
     aInfo.AddTranslator( new CONTRIBUTOR( wxS( "Paul Burke" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Other" ) );
+                                          wxS( "Other" ) ) );
 
 
     // Program credits for library team
@@ -916,32 +916,32 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
 
     #define MODELS_3D_CONTRIBUTION _( "3D models by" )
     aInfo.AddLibrarian( new CONTRIBUTOR( wxS( "Scripts by Maui" ),
-                                      "https://github.com/easyw",
-                                      "https://gitlab.com/kicad/libraries/kicad-packages3D-generator",
+                                      wxS( "https://github.com/easyw" ),
+                                      wxS( "https://gitlab.com/kicad/libraries/kicad-packages3D-generator" ),
                                       MODELS_3D_CONTRIBUTION,
                                       aInfo.CreateKiBitmap( BITMAPS::three_d ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxS( "GitLab contributors" ),
                                       wxEmptyString,
-                                      "https://gitlab.com/kicad/libraries/kicad-packages3D/-/graphs/master",
+                                      wxS( "https://gitlab.com/kicad/libraries/kicad-packages3D/-/graphs/master" ),
                                       MODELS_3D_CONTRIBUTION,
                                       aInfo.CreateKiBitmap( BITMAPS::three_d ) ) );
 
     #define SYMBOL_LIB_CONTRIBUTION _( "Symbols by" )
     aInfo.AddLibrarian( new CONTRIBUTOR( wxS( "GitLab contributors" ),
                                       wxEmptyString,
-                                      "https://gitlab.com/kicad/libraries/kicad-symbols/-/graphs/v7",
+                                      wxS( "https://gitlab.com/kicad/libraries/kicad-symbols/-/graphs/v7" ),
                                       SYMBOL_LIB_CONTRIBUTION,
                                       aInfo.CreateKiBitmap( BITMAPS::add_component ) ) );
 
     #define FOOTPRINT_LIB_CONTRIBUTION _( "Footprints by" )
     aInfo.AddLibrarian( new CONTRIBUTOR( wxS( "Scripts by Thomas Pointhuber" ),
                                       wxEmptyString,
-                                      "https://gitlab.com/kicad/libraries/kicad-footprint-generator",
+                                      wxS( "https://gitlab.com/kicad/libraries/kicad-footprint-generator" ),
                                       FOOTPRINT_LIB_CONTRIBUTION,
                                       aInfo.CreateKiBitmap( BITMAPS::module ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxS( "GitLab contributors" ),
                                       wxEmptyString,
-                                      "https://gitlab.com/kicad/libraries/kicad-footprints/-/graphs/master",
+                                      wxS( "https://gitlab.com/kicad/libraries/kicad-footprints/-/graphs/master" ),
                                       FOOTPRINT_LIB_CONTRIBUTION,
                                       aInfo.CreateKiBitmap( BITMAPS::module ) ) );
 
@@ -955,7 +955,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                       wxEmptyString,
                                       wxEmptyString,
                                       ICON_CONTRIBUTION ) );
-    aInfo.AddArtist( new CONTRIBUTOR( "Fabrizio Tappero",
+    aInfo.AddArtist( new CONTRIBUTOR( wxS( "Fabrizio Tappero" ),
                                       wxEmptyString,
                                       wxEmptyString,
                                       ICON_CONTRIBUTION ) );

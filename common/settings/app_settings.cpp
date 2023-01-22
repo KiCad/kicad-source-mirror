@@ -55,7 +55,7 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
                                             &m_FindReplace.search_and_replace, false ) );
 
     m_params.emplace_back( new PARAM<wxString>( "find_replace.find_string",
-            &m_FindReplace.find_string, "" ) );
+            &m_FindReplace.find_string, wxS( "" ) ) );
 
     m_params.emplace_back( new PARAM_LIST<wxString>( "find_replace.find_history",
             &m_FindReplace.find_history, {} ) );
@@ -120,7 +120,7 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
             &m_Printing.use_theme, false ) );
 
     m_params.emplace_back( new PARAM<wxString>( "printing.color_theme",
-            &m_Printing.color_theme, "" ) );
+            &m_Printing.color_theme, wxS( "" ) ) );
 
     m_params.emplace_back( new PARAM<bool>( "printing.title_block",
             &m_Printing.title_block, false ) );
@@ -147,7 +147,7 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
             &m_System.last_imperial_units, static_cast<int>( EDA_UNITS::INCHES ) ) );
 
     m_params.emplace_back( new PARAM<wxString>( "appearance.color_theme",
-            &m_ColorTheme, "_builtin_default" ) );
+            &m_ColorTheme, wxS( "_builtin_default" ) ) );
 
     addParamsForWindow( &m_Window, "window" );
 
@@ -294,14 +294,14 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
             &aWindow->state.maximized, false ) );
 
     m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".mru_path",
-            &aWindow->mru_path, "" ) );
+            &aWindow->mru_path, wxS( "" ) ) );
 
     m_params.emplace_back( new PARAM<int>( aJsonPath + ".size_x", &aWindow->state.size_x, 0 ) );
 
     m_params.emplace_back( new PARAM<int>( aJsonPath + ".size_y", &aWindow->state.size_y, 0 ) );
 
     m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".perspective",
-            &aWindow->perspective, "" ) );
+            &aWindow->perspective, wxS( "" ) ) );
 
     m_params.emplace_back( new PARAM<int>( aJsonPath + ".pos_x", &aWindow->state.pos_x, 0 ) );
 
@@ -317,14 +317,14 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
 
     int defaultGridIdx;
 
-    if( m_filename == "pl_editor" )
+    if( m_filename == wxS( "pl_editor" ) )
     {
         defaultGridIdx = 1;
 
         m_params.emplace_back( new PARAM_LIST<wxString>( aJsonPath + ".grid.sizes",
                 &aWindow->grid.sizes, DefaultGridSizeList() ) );
     }
-    else if( m_filename == "eeschema" || m_filename == "symbol_editor" )
+    else if( m_filename == wxS( "eeschema" ) || m_filename == wxS( "symbol_editor" ) )
     {
         defaultGridIdx = 1;
 
@@ -378,40 +378,40 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
 
 const std::vector<wxString> APP_SETTINGS_BASE::DefaultGridSizeList() const
 {
-    if( m_filename == "eeschema" || m_filename == "symbol_editor" )
+    if( m_filename == wxS( "eeschema" ) || m_filename == wxS( "symbol_editor" ) )
     {
-        return { "100 mil",
-                 "50 mil",
-                 "25 mil",
-                 "10 mil",
-                 "5 mil",
-                 "2 mil",
-                 "1 mil" };
+        return { wxS( "100 mil" ),
+                 wxS( "50 mil" ),
+                 wxS( "25 mil" ),
+                 wxS( "10 mil" ),
+                 wxS( "5 mil" ),
+                 wxS( "2 mil" ),
+                 wxS( "1 mil" ) };
     }
     else
     {
-        return { "1000 mil",
-                 "500 mil",
-                 "250 mil",
-                 "200 mil",
-                 "100 mil",
-                 "50 mil",
-                 "25 mil",
-                 "20 mil",
-                 "10 mil",
-                 "5 mil",
-                 "2 mil",
-                 "1 mil",
-                 "5.0 mm",
-                 "2.5 mm",
-                 "1.0 mm",
-                 "0.5 mm",
-                 "0.25 mm",
-                 "0.2 mm",
-                 "0.1 mm",
-                 "0.05 mm",
-                 "0.025 mm",
-                 "0.01 mm" };
+        return { wxS( "1000 mil" ),
+                 wxS( "500 mil" ),
+                 wxS( "250 mil" ),
+                 wxS( "200 mil" ),
+                 wxS( "100 mil" ),
+                 wxS( "50 mil" ),
+                 wxS( "25 mil" ),
+                 wxS( "20 mil" ),
+                 wxS( "10 mil" ),
+                 wxS( "5 mil" ),
+                 wxS( "2 mil" ),
+                 wxS( "1 mil" ),
+                 wxS( "5.0 mm" ),
+                 wxS( "2.5 mm" ),
+                 wxS( "1.0 mm" ),
+                 wxS( "0.5 mm" ),
+                 wxS( "0.25 mm" ),
+                 wxS( "0.2 mm" ),
+                 wxS( "0.1 mm" ),
+                 wxS( "0.05 mm" ),
+                 wxS( "0.025 mm" ),
+                 wxS( "0.01 mm" ) };
     }
 }
 

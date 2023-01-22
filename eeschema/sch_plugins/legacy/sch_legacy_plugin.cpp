@@ -2236,7 +2236,7 @@ bool SCH_LEGACY_PLUGIN::CheckHeader( const wxString& aFileName )
     firstline = tempFile.GetFirstLine();
     tempFile.Close();
 
-    return firstline.StartsWith( "EESchema" );
+    return firstline.StartsWith( wxS( "EESchema" ) );
 }
 
 

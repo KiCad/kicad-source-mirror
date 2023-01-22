@@ -233,7 +233,7 @@ void GRID_TRICKS::onGridMotion( wxMouseEvent& aEvent )
     // Empty tooltip if the cell doesn't exist or the column doesn't have tooltips
     if( ( col == wxNOT_FOUND ) || ( row == wxNOT_FOUND ) || !m_tooltipEnabled[col] )
     {
-        m_grid->GetGridWindow()->SetToolTip( "" );
+        m_grid->GetGridWindow()->SetToolTip( wxS( "" ) );
         return;
     }
 

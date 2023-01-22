@@ -98,7 +98,7 @@ static void pcbnewRunPythonMethodWithReturnedString( const char* aMethodName, wx
             }
             else
             {
-                wxLogMessage( "cannot encode Unicode python string" );
+                wxLogMessage( wxS( "cannot encode Unicode python string" ) );
             }
         }
         else

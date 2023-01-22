@@ -223,7 +223,7 @@ const wxString PROJECT::libTableName( const wxString& aLibTableName ) const
          * until the project file being edited is saved.  It is then moved to the correct
          * file in the folder where the project file is saved.
          */
-        fn.SetName( "prj-" + aLibTableName );
+        fn.SetName( wxS( "prj-" ) + aLibTableName );
     }
     else    // normal path.
     {

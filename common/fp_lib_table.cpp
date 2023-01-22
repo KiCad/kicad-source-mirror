@@ -489,7 +489,7 @@ public:
             m_path_prefix( aPath ),
             m_lib_prefix( aPrefix )
     {
-        wxFileName f( aPath, "" );
+        wxFileName f( aPath, wxS( "" ) );
         m_prefix_dir_count = f.GetDirCount();
     }
 
@@ -590,7 +590,7 @@ bool FP_LIB_TABLE::LoadGlobalTable( FP_LIB_TABLE& aTable )
     {
         // Scan for libraries in PCM packages directory
 
-        wxFileName d( packagesPath, "" );
+        wxFileName d( packagesPath, wxS( "" ) );
         d.AppendDir( wxS( "footprints" ) );
 
         if( d.DirExists() )

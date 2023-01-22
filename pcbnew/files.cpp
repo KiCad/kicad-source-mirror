@@ -1077,7 +1077,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
         GetBoard()->SynchronizeNetsAndNetClasses( false );
     }
 
-    wxString   tempFile = wxFileName::CreateTempFileName( "pcbnew" );
+    wxString   tempFile = wxFileName::CreateTempFileName( wxS( "pcbnew" ) );
     wxString   upperTxt;
     wxString   lowerTxt;
 

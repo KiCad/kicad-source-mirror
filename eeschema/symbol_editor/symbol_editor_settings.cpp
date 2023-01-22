@@ -44,7 +44,7 @@ SYMBOL_EDITOR_SETTINGS::SYMBOL_EDITOR_SETTINGS() :
     m_UseEeschemaColorSettings = true;;
 
     // Init settings:
-    SetLegacyFilename( "eeschema" );
+    SetLegacyFilename( wxS( "eeschema" ) );
 
     m_params.emplace_back( new PARAM<int>( "defaults.line_width",
                                            &m_Defaults.line_width, 0 ) );

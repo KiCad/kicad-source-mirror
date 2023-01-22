@@ -150,7 +150,7 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
                     if( var.IsDefault() )
                     {
                         wxLogTrace( traceEnvVars,
-                                    "COMMON_SETTINGS: Env var %s skipping save (default)",
+                                    wxS( "COMMON_SETTINGS: Env var %s skipping save (default)" ),
                                     var.GetKey() );
                         continue;
                     }
@@ -164,7 +164,7 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
                         if( var.GetDefinedInSettings() )
                         {
                             wxLogTrace( traceEnvVars,
-                                        "COMMON_SETTINGS: Env var %s was overridden externally, "
+                                        wxS( "COMMON_SETTINGS: Env var %s was overridden externally, " )
                                         "saving previously-loaded value %s",
                                         var.GetKey(), var.GetSettingsValue() );
                             value = var.GetSettingsValue();
@@ -172,14 +172,14 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
                         else
                         {
                             wxLogTrace( traceEnvVars,
-                                        "COMMON_SETTINGS: Env var %s skipping save (external)",
+                                        wxS( "COMMON_SETTINGS: Env var %s skipping save (external)" ),
                                         var.GetKey() );
                             continue;
                         }
                     }
 
                     wxLogTrace( traceEnvVars,
-                                "COMMON_SETTINGS: Saving env var %s = %s",
+                                wxS( "COMMON_SETTINGS: Saving env var %s = %s" ),
                                 var.GetKey(), value);
 
                     std::string key( var.GetKey().ToUTF8() );
@@ -202,7 +202,7 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
                     {
                         if( m_Env.vars[key].GetDefinedExternally() )
                         {
-                            wxLogTrace( traceEnvVars, "COMMON_SETTINGS: %s is defined externally",
+                            wxLogTrace( traceEnvVars, wxS( "COMMON_SETTINGS: %s is defined externally" ),
                                         key );
                             m_Env.vars[key].SetDefinedInSettings();
                             m_Env.vars[key].SetSettingsValue( val );
@@ -210,14 +210,14 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
                         }
                         else
                         {
-                            wxLogTrace( traceEnvVars, "COMMON_SETTINGS: Updating %s: %s -> %s",
+                            wxLogTrace( traceEnvVars, wxS( "COMMON_SETTINGS: Updating %s: %s -> %s"),
                                         key, m_Env.vars[key].GetValue(), val );
                             m_Env.vars[key].SetValue( val );
                         }
                     }
                     else
                     {
-                        wxLogTrace( traceEnvVars, "COMMON_SETTINGS: Loaded new var: %s = %s",
+                        wxLogTrace( traceEnvVars, wxS( "COMMON_SETTINGS: Loaded new var: %s = %s" ),
                                     key, val );
                         m_Env.vars[key] = ENV_VAR_ITEM( key, val );
                     }
@@ -295,26 +295,26 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
 
 #ifdef __WXMAC__
     m_params.emplace_back( new PARAM<wxString>( "system.text_editor",
-            &m_System.text_editor, "/usr/bin/open -e" ) );
+            &m_System.text_editor, wxS( "/usr/bin/open -e" ) ) );
 #else
     m_params.emplace_back( new PARAM<wxString>( "system.text_editor",
-            &m_System.text_editor, "" ) );
+            &m_System.text_editor, wxS( "" ) ) );
 #endif
 
     m_params.emplace_back( new PARAM<int>( "system.file_history_size",
             &m_System.file_history_size, 9 ) );
 
     m_params.emplace_back( new PARAM<wxString>( "system.language",
-            &m_System.language, "Default" ) );
+            &m_System.language, wxS( "Default" ) ) );
 
     m_params.emplace_back( new PARAM<wxString>( "system.pdf_viewer_name",
-            &m_System.pdf_viewer_name, "" ) );
+            &m_System.pdf_viewer_name, wxS( "" ) ) );
 
     m_params.emplace_back( new PARAM<bool>( "system.use_system_pdf_viewer",
             &m_System.use_system_pdf_viewer, true ) );
 
     m_params.emplace_back( new PARAM<wxString>( "system.working_dir",
-            &m_System.working_dir, "" ) );
+            &m_System.working_dir, wxS( "" ) ) );
 
     m_params.emplace_back( new PARAM<int>( "system.clear_3d_cache_interval",
             &m_System.clear_3d_cache_interval, 30 ) );
@@ -425,14 +425,14 @@ bool COMMON_SETTINGS::migrateSchema2to3()
     wxFileName cfgpath;
     cfgpath.AssignDir( SETTINGS_MANAGER::GetUserSettingsPath() );
     cfgpath.AppendDir( wxT( "3d" ) );
-    cfgpath.SetFullName( "3Dresolver.cfg" );
+    cfgpath.SetFullName( wxS( "3Dresolver.cfg" ) );
     cfgpath.MakeAbsolute();
 
     std::vector<LEGACY_3D_SEARCH_PATH> legacyPaths;
     readLegacy3DResolverCfg( cfgpath.GetFullPath(), legacyPaths );
 
     // env variables have a limited allowed character set for names
-    wxRegEx nonValidCharsRegex( "[^A-Z0-9_]+", wxRE_ADVANCED );
+    wxRegEx nonValidCharsRegex( wxS( "[^A-Z0-9_]+" ), wxRE_ADVANCED );
 
     for( const LEGACY_3D_SEARCH_PATH& path : legacyPaths )
     {
@@ -452,7 +452,7 @@ bool COMMON_SETTINGS::migrateSchema2to3()
 
         if( !m_Env.vars.count( key ) )
         {
-            wxLogTrace( traceEnvVars, "COMMON_SETTINGS: Loaded new var: %s = %s", key, val );
+            wxLogTrace( traceEnvVars, wxS( "COMMON_SETTINGS: Loaded new var: %s = %s" ), key, val );
             m_Env.vars[key] = ENV_VAR_ITEM( key, val );
         }
     }
@@ -560,12 +560,12 @@ void COMMON_SETTINGS::InitializeEnvironment()
                 m_Env.vars[aKey].SetValue( envValue );
                 m_Env.vars[aKey].SetDefinedExternally();
                 wxLogTrace( traceEnvVars,
-                            "InitializeEnvironment: Entry %s defined externally as %s", aKey,
+                            wxS( "InitializeEnvironment: Entry %s defined externally as %s" ), aKey,
                             envValue );
             }
             else
             {
-                wxLogTrace( traceEnvVars, "InitializeEnvironment: Setting entry %s to default %s",
+                wxLogTrace( traceEnvVars, wxS( "InitializeEnvironment: Setting entry %s to default %s" ),
                             aKey, aDefault );
             }
         };
@@ -623,9 +623,9 @@ bool COMMON_SETTINGS::readLegacy3DResolverCfg( const wxString&                  
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = "Could not open configuration file";
+        wxString errmsg = wxS( "Could not open configuration file" );
         ostr << " * " << errmsg.ToUTF8() << " '" << cfgname.ToUTF8() << "'";
-        wxLogTrace( traceSettings, "%s\n", ostr.str().c_str() );
+        wxLogTrace( traceSettings, wxS( "%s\n" ), ostr.str().c_str() );
         return false;
     }
 
@@ -668,9 +668,9 @@ bool COMMON_SETTINGS::readLegacy3DResolverCfg( const wxString&                  
 
         // Don't add KICAD6_3DMODEL_DIR, one of its legacy equivalents, or KIPRJMOD from a
         // config file.  They're system variables are are defined at runtime.
-        if( al.m_Alias == "${KICAD6_3DMODEL_DIR}" || al.m_Alias == "${KIPRJMOD}"
-            || al.m_Alias == "$(KIPRJMOD)" || al.m_Alias == "${KISYS3DMOD}"
-            || al.m_Alias == "$(KISYS3DMOD)" )
+        if( al.m_Alias == wxS( "${KICAD6_3DMODEL_DIR}" ) || al.m_Alias == wxS( "${KIPRJMOD}" )
+            || al.m_Alias == wxS( "$(KIPRJMOD)" ) || al.m_Alias == wxS( "${KISYS3DMOD}" )
+            || al.m_Alias == wxS( "$(KISYS3DMOD)" ) )
         {
             continue;
         }
@@ -699,9 +699,9 @@ bool COMMON_SETTINGS::getLegacy3DHollerith( const std::string& aString, size_t& 
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = "bad Hollerith string on line";
+        wxString errmsg = wxS( "bad Hollerith string on line" );
         ostr << " * " << errmsg.ToUTF8() << "\n'" << aString << "'";
-        wxLogTrace( traceSettings, "%s\n", ostr.str().c_str() );
+        wxLogTrace( traceSettings, wxS( "%s\n" ), ostr.str().c_str() );
 
         return false;
     }
@@ -712,9 +712,9 @@ bool COMMON_SETTINGS::getLegacy3DHollerith( const std::string& aString, size_t& 
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = "missing opening quote mark in config file";
+        wxString errmsg = wxS( "missing opening quote mark in config file" );
         ostr << " * " << errmsg.ToUTF8() << "\n'" << aString << "'";
-        wxLogTrace( traceSettings, "%s\n", ostr.str().c_str() );
+        wxLogTrace( traceSettings, wxS( "%s\n" ), ostr.str().c_str() );
 
         return false;
     }
@@ -725,9 +725,9 @@ bool COMMON_SETTINGS::getLegacy3DHollerith( const std::string& aString, size_t& 
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = "invalid entry (unexpected end of line)";
+        wxString errmsg = wxS( "invalid entry (unexpected end of line)" );
         ostr << " * " << errmsg.ToUTF8() << "\n'" << aString << "'";
-        wxLogTrace( traceSettings, "%s\n", ostr.str().c_str() );
+        wxLogTrace( traceSettings, wxS( "%s\n" ), ostr.str().c_str() );
 
         return false;
     }
@@ -741,9 +741,9 @@ bool COMMON_SETTINGS::getLegacy3DHollerith( const std::string& aString, size_t& 
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = "bad Hollerith string on line";
+        wxString errmsg = wxS( "bad Hollerith string on line" );
         ostr << " * " << errmsg.ToUTF8() << "\n'" << aString << "'";
-        wxLogTrace( traceSettings, "%s\n", ostr.str().c_str() );
+        wxLogTrace( traceSettings, wxS( "%s\n" ), ostr.str().c_str() );
 
         return false;
     }
@@ -757,9 +757,9 @@ bool COMMON_SETTINGS::getLegacy3DHollerith( const std::string& aString, size_t& 
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = "invalid entry (unexpected end of line)";
+        wxString errmsg = wxS( "invalid entry (unexpected end of line)" );
         ostr << " * " << errmsg.ToUTF8() << "\n'" << aString << "'";
-        wxLogTrace( traceSettings, "%s\n", ostr.str().c_str() );
+        wxLogTrace( traceSettings, wxS( "%s\n" ), ostr.str().c_str() );
 
         return false;
     }
@@ -774,9 +774,9 @@ bool COMMON_SETTINGS::getLegacy3DHollerith( const std::string& aString, size_t& 
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = "missing closing quote mark in config file";
+        wxString errmsg = wxS( "missing closing quote mark in config file" );
         ostr << " * " << errmsg.ToUTF8() << "\n'" << aString << "'";
-        wxLogTrace( traceSettings, "%s\n", ostr.str().c_str() );
+        wxLogTrace( traceSettings, wxS( "%s\n" ), ostr.str().c_str() );
 
         return false;
     }

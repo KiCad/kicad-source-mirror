@@ -86,7 +86,7 @@ KICAD_SETTINGS::KICAD_SETTINGS() :
 
     m_params.emplace_back( new PARAM<bool>( "pcm.lib_auto_remove", &m_PcmLibAutoRemove, true ) );
 
-    m_params.emplace_back( new PARAM<wxString>( "pcm.lib_prefix", &m_PcmLibPrefix, "PCM_" ) );
+    m_params.emplace_back( new PARAM<wxString>( "pcm.lib_prefix", &m_PcmLibPrefix, wxS( "PCM_" ) ) );
 }
 
 

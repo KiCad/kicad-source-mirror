@@ -41,7 +41,7 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) 
     if( aAbsolutePath )
         SetLocation( SETTINGS_LOC::NONE );
 
-    m_params.emplace_back( new PARAM<wxString>( "meta.name", &m_displayName, "KiCad Default" ) );
+    m_params.emplace_back( new PARAM<wxString>( "meta.name", &m_displayName, wxS( "KiCad Default" ) ) );
 
     m_params.emplace_back( new PARAM<bool>( "schematic.override_item_colors",
                                             &m_overrideSchItemColors, false ) );

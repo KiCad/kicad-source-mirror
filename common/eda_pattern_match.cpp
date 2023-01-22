@@ -209,7 +209,7 @@ bool EDA_PATTERN_MATCH_WILDCARD_EXPLICIT::SetPattern( const wxString& aPattern )
         }
         else if( to_replace.Find( c ) != wxNOT_FOUND )
         {
-            regex += "\\";
+            regex += wxS( "\\" );
             regex += c;
         }
         else

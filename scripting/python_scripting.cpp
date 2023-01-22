@@ -339,7 +339,7 @@ static void RunPythonMethodWithReturnedString( const char* aMethodName, wxString
             }
             else
             {
-                wxLogMessage( "cannot encode Unicode python string" );
+                wxLogMessage( wxS( "cannot encode Unicode python string" ) );
             }
         }
         else
@@ -425,7 +425,7 @@ wxString PyStringToWx( PyObject* aString )
     }
     else
     {
-        wxLogMessage( "cannot encode Unicode python string" );
+        wxLogMessage( wxS( "cannot encode Unicode python string" ) );
     }
 
     return ret;
@@ -458,7 +458,7 @@ wxArrayString PyArrayStringToWx( PyObject* aArrayString )
             }
             else
             {
-                wxLogMessage( "cannot encode Unicode python string" );
+                wxLogMessage( wxS( "cannot encode Unicode python string" ) );
             }
         }
     }

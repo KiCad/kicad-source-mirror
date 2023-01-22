@@ -1648,7 +1648,7 @@ void GERBER_PLOTTER::plotRoundRectAsRegion( const VECTOR2I& aRectCenter, const V
 
 #if 0    // For test only:
     if( last_pt != first_pt )
-        wxLogMessage( "first pt %d %d last pt %d %d",
+        wxLogMessage( wxS( "first pt %d %d last pt %d %d" ),
                       first_pt.x, first_pt.y, last_pt.x, last_pt.y );
 #endif
 
@@ -1857,7 +1857,7 @@ void GERBER_PLOTTER::FlashPadChamferRoundRect( const VECTOR2I& aShapePos, const 
         break;
 
     default:
-        wxLogMessage( "FlashPadChamferRoundRect(): Unexpected number of corners (%d)",
+        wxLogMessage( wxS( "FlashPadChamferRoundRect(): Unexpected number of corners (%d)" ),
                       (int)cornerList.size() );
         break;
     }

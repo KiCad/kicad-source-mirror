@@ -206,7 +206,7 @@ COLOR_SETTINGS* SETTINGS_MANAGER::loadColorSettingsByName( const wxString& aName
 {
     wxLogTrace( traceSettings, wxT( "Attempting to load color theme %s" ), aName );
 
-    wxFileName fn( GetColorSettingsPath(), aName, "json" );
+    wxFileName fn( GetColorSettingsPath(), aName, wxS( "json" ) );
 
     if( !fn.IsOk() || !fn.Exists() )
     {
@@ -465,8 +465,8 @@ public:
         wxFileName dir( dirPath );
 
         // Whitelist of directories to migrate
-        if( dir.GetName() == "colors" ||
-            dir.GetName() == "3d" )
+        if( dir.GetName() == wxS( "colors" ) ||
+            dir.GetName() == wxS( "3d" ) )
         {
 
             wxString path = dir.GetPath();
@@ -500,8 +500,8 @@ bool SETTINGS_MANAGER::MigrateIfNeeded()
     if( path.DirExists() )
     {
         wxFileName common = path;
-        common.SetName( "kicad_common" );
-        common.SetExt( "json" );
+        common.SetName( wxS( "kicad_common" ) );
+        common.SetExt( wxS( "json" ) );
 
         if( common.Exists() )
         {

@@ -115,8 +115,8 @@ void GL_CONTEXT_MANAGER::UnlockCtx( wxGLContext* aContext )
     }
     else
     {
-        wxFAIL_MSG( wxString::Format( "Trying to unlock GL context mutex from "
-                    "a wrong context: aContext %p m_glCtx %p", aContext, m_glCtx ) );
+        wxFAIL_MSG( wxString::Format( wxS( "Trying to unlock GL context mutex from "
+                    "a wrong context: aContext %p m_glCtx %p" ), aContext, m_glCtx ) );
     }
 }
 

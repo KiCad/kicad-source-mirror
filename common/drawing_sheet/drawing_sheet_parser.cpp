@@ -900,7 +900,7 @@ void DS_DATA_MODEL::SetPageLayout( const char* aPageLayout, bool Append, const w
     }
     catch( const std::bad_alloc& )
     {
-        wxLogMessage( "Memory exhaustion reading drawing sheet" );
+        wxLogMessage( wxS( "Memory exhaustion reading drawing sheet" ) );
     }
 }
 
@@ -925,7 +925,7 @@ bool DS_DATA_MODEL::LoadDrawingSheet( const wxString& aFullFileName, bool Append
         }
     }
 
-    wxFFile wksFile( fullFileName, "rb" );
+    wxFFile wksFile( fullFileName, wxS( "rb" ) );
 
     if( ! wksFile.IsOpened() )
     {
@@ -965,7 +965,7 @@ bool DS_DATA_MODEL::LoadDrawingSheet( const wxString& aFullFileName, bool Append
         }
         catch( const std::bad_alloc& )
         {
-            wxLogMessage( "Memory exhaustion reading drawing sheet" );
+            wxLogMessage( wxS( "Memory exhaustion reading drawing sheet" ) );
             return false;
         }
     }

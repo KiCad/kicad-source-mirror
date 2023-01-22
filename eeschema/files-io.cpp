@@ -691,10 +691,10 @@ bool SCH_EDIT_FRAME::saveSchematicFile( SCH_SHEET* aSheet, const wxString& aSave
     if( !IsWritable( schematicFileName ) )
         return false;
 
-    wxString tempFile = wxFileName::CreateTempFileName( "eeschema" );
+    wxString tempFile = wxFileName::CreateTempFileName( wxS( "eeschema" ) );
 
     // Save
-    wxLogTrace( traceAutoSave, "Saving file " + schematicFileName.GetFullPath() );
+    wxLogTrace( traceAutoSave, wxS( "Saving file " ) + schematicFileName.GetFullPath() );
 
     if( m_infoBar->GetMessageType() == WX_INFOBAR::MESSAGE_TYPE::OUTDATED_SAVE )
         m_infoBar->Dismiss();

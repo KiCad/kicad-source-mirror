@@ -27,19 +27,19 @@
 #include <executable_names.h>
 
 #ifdef __WINDOWS__
-const wxString CVPCB_EXE           ( "cvpcb.exe" );
-const wxString PCBNEW_EXE          ( "pcbnew.exe" );
-const wxString EESCHEMA_EXE        ( "eeschema.exe" );
-const wxString GERBVIEW_EXE        ( "gerbview.exe" );
-const wxString BITMAPCONVERTER_EXE ( "bitmap2component.exe" );
-const wxString PCB_CALCULATOR_EXE  ( "pcb_calculator.exe" );
-const wxString PL_EDITOR_EXE       ( "pl_editor.exe" );
+const wxString CVPCB_EXE           ( wxS( "cvpcb.exe" ) );
+const wxString PCBNEW_EXE          ( wxS( "pcbnew.exe" ) );
+const wxString EESCHEMA_EXE        ( wxS( "eeschema.exe" ) );
+const wxString GERBVIEW_EXE        ( wxS( "gerbview.exe" ) );
+const wxString BITMAPCONVERTER_EXE ( wxS( "bitmap2component.exe" ) );
+const wxString PCB_CALCULATOR_EXE  ( wxS( "pcb_calculator.exe" ) );
+const wxString PL_EDITOR_EXE       ( wxS( "pl_editor.exe" ) );
 #else
-const wxString CVPCB_EXE           ( "cvpcb" );
-const wxString PCBNEW_EXE          ( "pcbnew" );
-const wxString EESCHEMA_EXE        ( "eeschema" );
-const wxString GERBVIEW_EXE        ( "gerbview" );
-const wxString BITMAPCONVERTER_EXE ( "bitmap2component" );
-const wxString PCB_CALCULATOR_EXE  ( "pcb_calculator" );
-const wxString PL_EDITOR_EXE       ( "pl_editor" );
+const wxString CVPCB_EXE           ( wxS( "cvpcb" ) );
+const wxString PCBNEW_EXE          ( wxS( "pcbnew" ) );
+const wxString EESCHEMA_EXE        ( wxS( "eeschema" ) );
+const wxString GERBVIEW_EXE        ( wxS( "gerbview" ) );
+const wxString BITMAPCONVERTER_EXE ( wxS( "bitmap2component" ) );
+const wxString PCB_CALCULATOR_EXE  ( wxS( "pcb_calculator" ) );
+const wxString PL_EDITOR_EXE       ( wxS( "pl_editor" ) );
 #endif

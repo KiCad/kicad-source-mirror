@@ -848,7 +848,7 @@ void SYMBOL_EDIT_FRAME::DuplicateSymbol( bool aFromClipboard )
         clipboard->GetData( data );
         wxString symbolSource = data.GetText();
 
-        std::unique_ptr<STRING_LINE_READER> reader = std::make_unique<STRING_LINE_READER>( TO_UTF8( symbolSource ), "Clipboard" );
+        std::unique_ptr<STRING_LINE_READER> reader = std::make_unique<STRING_LINE_READER>( TO_UTF8( symbolSource ), wxS( "Clipboard" ) );
         LIB_SYMBOL* newSymbol = nullptr;
 
         do
@@ -859,7 +859,7 @@ void SYMBOL_EDIT_FRAME::DuplicateSymbol( bool aFromClipboard )
             }
             catch( IO_ERROR& e )
             {
-                wxLogMessage( "Can not paste: %s", e.Problem() );
+                wxLogMessage( wxS( "Can not paste: %s" ), e.Problem() );
                 break;
             }
 
