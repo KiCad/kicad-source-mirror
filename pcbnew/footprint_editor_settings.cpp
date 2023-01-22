@@ -279,7 +279,7 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
                 SetIfPresent( aVal, "otherItems", m_SelectionFilter.otherItems );
             },
             {
-                { "lockedItems", true },
+                { "lockedItems", false },
                 { "footprints", true },
                 { "text", true },
                 { "tracks", true },

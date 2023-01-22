@@ -131,7 +131,7 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                 SetIfPresent( aVal, "otherItems", m_SelectionFilter.otherItems );
             },
             {
-                { "lockedItems", true },
+                { "lockedItems", false },
                 { "footprints", true },
                 { "text", true },
                 { "tracks", true },
