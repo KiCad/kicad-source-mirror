@@ -164,9 +164,6 @@ void GERBVIEW_FRAME::doReCreateMenuBar()
     //
     ACTION_MENU* viewMenu = new ACTION_MENU( false, selTool );
 
-    viewMenu->Add( GERBVIEW_ACTIONS::toggleLayerManager,      ACTION_MENU::CHECK );
-
-    viewMenu->AppendSeparator();
     viewMenu->Add( ACTIONS::zoomInCenter );
     viewMenu->Add( ACTIONS::zoomOutCenter );
     viewMenu->Add( ACTIONS::zoomFitScreen );
@@ -204,6 +201,8 @@ void GERBVIEW_FRAME::doReCreateMenuBar()
     viewMenu->Add( ACTIONS::highContrastMode,                 ACTION_MENU::CHECK );
     viewMenu->Add( GERBVIEW_ACTIONS::flipGerberView,          ACTION_MENU::CHECK );
 
+    viewMenu->AppendSeparator();
+    viewMenu->Add( GERBVIEW_ACTIONS::toggleLayerManager,      ACTION_MENU::CHECK );
 
     //-- Tools menu -------------------------------------------------------
     //
