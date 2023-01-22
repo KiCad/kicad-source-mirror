@@ -521,6 +521,14 @@ protected:
      */
     LIB_TABLE_ROW* findRow( const wxString& aNickname, bool aCheckIfEnabled = false ) const;
 
+    /**
+     * Updates the env vars from older version of KiCad, provided they do not currently
+     * resolve to anything
+     *
+     * @return True if the tables were modified
+     */
+    bool migrate();
+
     void reindex()
     {
         std::lock_guard<std::mutex> lock( m_nickIndexMutex );

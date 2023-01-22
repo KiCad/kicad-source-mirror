@@ -326,6 +326,31 @@ bool LIB_TABLE::InsertRow( LIB_TABLE_ROW* aRow, bool doReplace )
 }
 
 
+bool LIB_TABLE::migrate()
+{
+    bool table_updated = false;
+
+    for( LIB_TABLE_ROW& row : m_rows )
+    {
+        bool     row_updated = false;
+        wxString uri = row.GetFullURI( true );
+
+        // If the uri still has a variable in it, that means that the user does not have
+        // these vars defined.  We update the old vars to the KICAD7 versions on load
+        row_updated |= ( uri.Replace( wxS( "${KICAD5_" ), wxS( "${KICAD7_" ), false ) > 0 );
+        row_updated |= ( uri.Replace( wxS( "${KICAD6_" ), wxS( "${KICAD7_" ), false ) > 0 );
+
+        if( row_updated )
+        {
+            row.SetFullURI( uri );
+            table_updated = true;
+        }
+    }
+
+    return table_updated;
+}
+
+
 void LIB_TABLE::Load( const wxString& aFileName )
 {
     // It's OK if footprint library tables are missing.
@@ -335,6 +360,9 @@ void LIB_TABLE::Load( const wxString& aFileName )
         LIB_TABLE_LEXER  lexer( &reader );
 
         Parse( &lexer );
+
+        if( migrate() && wxFileName::IsFileWritable( aFileName ) )
+            Save( aFileName );
     }
 }
 
