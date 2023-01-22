@@ -88,6 +88,9 @@ BOOST_FIXTURE_TEST_CASE( WindowsPaths, TEST_SIM_REGRESSIONS_FIXTURE )
 {
     LOCALE_IO dummy;
 
+    const MOCK_PGM_BASE& program = static_cast<MOCK_PGM_BASE&>( Pgm() );
+    MOCK_EXPECT( program.GetLocalEnvVariables ).returns( ENV_VAR_MAP() );
+
     TestNetlist( "issue13591" );
     TestTranPoint( 100e-6, { { "I(R1)", 0 }, { "I(R2)", 0 } }, 0.00001 );
     TestTranPoint( 500e-6, { { "I(R1)", 0 }, { "I(R2)", 0 } }, 0.00001 );
@@ -110,6 +113,9 @@ BOOST_FIXTURE_TEST_CASE( LegacyFixups, TEST_SIM_REGRESSIONS_FIXTURE )
 {
     LOCALE_IO dummy;
 
+    const MOCK_PGM_BASE& program = static_cast<MOCK_PGM_BASE&>( Pgm() );
+    MOCK_EXPECT( program.GetLocalEnvVariables ).returns( ENV_VAR_MAP() );
+
     TestNetlist( "issue13112" );
     TestTranPoint( 0.01, { { "V(out)", -0.060 } } );
     TestTranPoint( 0.02, { { "V(out)", 0.856 } } );
@@ -119,6 +125,9 @@ BOOST_FIXTURE_TEST_CASE( LegacyFixups, TEST_SIM_REGRESSIONS_FIXTURE )
 BOOST_FIXTURE_TEST_CASE( DualNMOSAmp, TEST_SIM_REGRESSIONS_FIXTURE )
 {
     LOCALE_IO dummy;
+
+    const MOCK_PGM_BASE& program = static_cast<MOCK_PGM_BASE&>( Pgm() );
+    MOCK_EXPECT( program.GetLocalEnvVariables ).returns( ENV_VAR_MAP() );
 
     TestNetlist( "issue13162" );
     TestTranPoint( 0.030, { { "V(out)", 0.535 } } );

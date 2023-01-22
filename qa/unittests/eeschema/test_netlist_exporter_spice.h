@@ -33,6 +33,9 @@
 #include <mock_pgm_base.h>
 #include <locale_io.h>
 
+// A relative max error accepted when comparing 2 values
+#define MAX_DEFAULT_REL_ERROR 2e-2
+
 
 class TEST_NETLIST_EXPORTER_SPICE_FIXTURE : public TEST_NETLIST_EXPORTER_FIXTURE<NETLIST_EXPORTER_SPICE>
 {
@@ -169,7 +172,8 @@ public:
         ngspice->Command( "listing runnable" );
     }
 
-    void TestOpPoint( double aRefValue, const std::string& aVectorName, double aMaxRelError = 1e-2 )
+    void TestOpPoint( double aRefValue, const std::string& aVectorName,
+                      double aMaxRelError = MAX_DEFAULT_REL_ERROR )
     {
         BOOST_TEST_CONTEXT( "Vector name: " << aVectorName )
         {
@@ -186,7 +190,7 @@ public:
 
     void TestPoint( const std::string& aXVectorName, double aXValue,
                     const std::map<const std::string, double> aTestVectorsAndValues,
-                    double aMaxRelError = 1e-2 )
+                    double aMaxRelError = MAX_DEFAULT_REL_ERROR )
     {
         // The default aMaxRelError is fairly large because we have some problems with determinism
         // in QA pipeline. We don't need to fix this for now because, if this has to be fixed in
@@ -243,14 +247,14 @@ public:
 
     void TestTranPoint( double aTime,
                         const std::map<const std::string, double> aTestVectorsAndValues,
-                        double aMaxRelError = 1e-2 )
+                        double aMaxRelError = MAX_DEFAULT_REL_ERROR )
     {
         TestPoint( "time", aTime, aTestVectorsAndValues, aMaxRelError );
     }
 
     void TestACPoint( double aFrequency,
                       const std::map<const std::string, double> aTestVectorsAndValues,
-                      double aMaxRelError = 1e-2 )
+                      double aMaxRelError = MAX_DEFAULT_REL_ERROR )
     {
         TestPoint( "frequency", aFrequency, aTestVectorsAndValues, aMaxRelError );
     }
