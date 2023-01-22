@@ -130,22 +130,26 @@ void SCH_EDIT_FRAME::SaveProjectSettings()
 
     RecordERCExclusions();
 
+
+    // Save the page layout file if doesn't exist yet (e.g. if we opened a non-kicad schematic)
+
     // TODO: We need to remove dependence on BASE_SCREEN
-    Prj().GetProjectFile().m_SchematicSettings->m_SchDrawingSheetFileName = BASE_SCREEN::m_DrawingSheetFileName;
+    Prj().GetProjectFile().m_SchematicSettings->m_SchDrawingSheetFileName
+                                        = BASE_SCREEN::m_DrawingSheetFileName;
 
     if( !BASE_SCREEN::m_DrawingSheetFileName.IsEmpty() )
     {
-        // Save the page layout file if doesn't exist yet (e.g. if we opened a non-kicad schematic)
-
         wxFileName layoutfn( BASE_SCREEN::m_DrawingSheetFileName );
 
-        if( !layoutfn.IsAbsolute() )
-            layoutfn = wxFileName( Prj().GetProjectPath(), BASE_SCREEN::m_DrawingSheetFileName );
+        bool success = true;
 
-        if( !layoutfn.FileExists() )
+        if( !layoutfn.IsAbsolute() )
+            success = layoutfn.MakeAbsolute( Prj().GetProjectPath() );
+
+        if( success && layoutfn.IsOk() && !layoutfn.FileExists() )
         {
-            layoutfn.MakeAbsolute();
-            DS_DATA_MODEL::GetTheInstance().Save( layoutfn.GetFullPath() );
+            if( layoutfn.DirExists() && layoutfn.IsDirWritable() )
+                DS_DATA_MODEL::GetTheInstance().Save( layoutfn.GetFullPath() );
         }
     }
 

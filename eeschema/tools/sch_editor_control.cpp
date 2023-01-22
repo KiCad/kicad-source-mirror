@@ -182,7 +182,7 @@ int SCH_EDITOR_CONTROL::PageSetup( const TOOL_EVENT& aEvent )
                                                         MAX_PAGE_SIZE_EESCHEMA_MILS ) );
     dlg.SetWksFileName( BASE_SCREEN::m_DrawingSheetFileName );
 
-    if( dlg.ShowModal() )
+    if( dlg.ShowModal() == wxID_OK )
     {
         // Update text variables
         m_frame->GetCanvas()->GetView()->MarkDirty();
