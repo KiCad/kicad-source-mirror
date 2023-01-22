@@ -165,15 +165,9 @@ wxPGProperty* PCB_PROPERTIES_PANEL::createPGProperty( const PROPERTY_BASE* aProp
                                              new wxPGChoices( boardLayerNames, boardLayerIDs ) );
 
         ret->SetColorFunc(
-                [&]( const wxString& aChoice ) -> wxColour
+                [&]( int aValue ) -> wxColour
                 {
-                    for( int layer = PCBNEW_LAYER_ID_START; layer < PCB_LAYER_ID_COUNT; ++layer )
-                    {
-                        if( m_frame->GetBoard()->GetLayerName( ToLAYER_ID( layer ) ) == aChoice )
-                            return m_frame->GetColorSettings()->GetColor( layer ).ToColour();
-                    }
-
-                    return wxNullColour;
+                    return m_frame->GetColorSettings()->GetColor( ToLAYER_ID( aValue ) ).ToColour();
                 } );
 
         ret->SetLabel( wxGetTranslation( aProperty->Name() ) );

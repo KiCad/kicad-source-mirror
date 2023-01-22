@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -21,9 +21,7 @@
 
 #include <wx/dc.h>
 #include <wx/propgrid/propgrid.h>
-#include <wx/regex.h>
 
-#include <common.h>
 #include <macros.h>
 #include <validators.h>
 #include <eda_units.h>
@@ -147,8 +145,8 @@ wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty )
         }
         else
         {
-            wxFAIL_MSG( wxString::Format( "Property '" + aProperty->Name() +
-                        "' is not supported by PGPropertyFactory" ) );
+            wxFAIL_MSG( wxString::Format( wxS( "Property %s not supported by PGPropertyFactory" ),
+                                          aProperty->Name() ) );
             ret = new wxPropertyCategory();
             ret->Enable( false );
         }
@@ -185,7 +183,7 @@ bool PGPROPERTY_DISTANCE::StringToDistance( wxVariant& aVariant, const wxString&
                                             int aArgFlags ) const
 {
     // TODO(JE): Are there actual use cases for this?
-    wxCHECK_MSG( false, false, wxT( "PGPROPERTY_DISTANCE::StringToDistance should not be used." ) );
+    wxCHECK_MSG( false, false, wxS( "PGPROPERTY_DISTANCE::StringToDistance should not be used." ) );
 }
 
 
@@ -203,16 +201,16 @@ wxString PGPROPERTY_DISTANCE::DistanceToString( wxVariant& aVariant, int aArgFla
     switch( PROPERTY_MANAGER::Instance().GetUnits() )
     {
         case EDA_UNITS::INCHES:
-            return wxString::Format( wxT( "%g in" ), pcbIUScale.IUToMils( distanceIU ) / 1000.0 );
+            return wxString::Format( wxS( "%g in" ), pcbIUScale.IUToMils( distanceIU ) / 1000.0 );
 
         case EDA_UNITS::MILS:
-            return wxString::Format( wxT( "%d mils" ), pcbIUScale.IUToMils( distanceIU ) );
+            return wxString::Format( wxS( "%d mils" ), pcbIUScale.IUToMils( distanceIU ) );
 
         case EDA_UNITS::MILLIMETRES:
-            return wxString::Format( wxT( "%g mm" ), pcbIUScale.IUTomm( distanceIU ) );
+            return wxString::Format( wxS( "%g mm" ), pcbIUScale.IUTomm( distanceIU ) );
 
         case EDA_UNITS::UNSCALED:
-            return wxString::Format( wxT( "%li" ), distanceIU );
+            return wxString::Format( wxS( "%li" ), distanceIU );
 
         default:
             // DEGREEs are handled by PGPROPERTY_ANGLE
@@ -278,9 +276,9 @@ wxString PGPROPERTY_ANGLE::ValueToString( wxVariant& aVariant, int aArgFlags ) c
     if( aVariant.GetType() == wxPG_VARIANT_TYPE_DOUBLE )
     {
         // TODO(JE) Is this still needed?
-        return wxString::Format( wxT( "%g\u00B0" ), aVariant.GetDouble() / m_scale );
+        return wxString::Format( wxS( "%g\u00B0" ), aVariant.GetDouble() / m_scale );
     }
-    else if( aVariant.GetType() == wxT( "EDA_ANGLE" ) )
+    else if( aVariant.GetType() == wxS( "EDA_ANGLE" ) )
     {
         wxString ret;
         static_cast<EDA_ANGLE_VARIANT_DATA*>( aVariant.GetData() )->Write( ret );
@@ -288,7 +286,7 @@ wxString PGPROPERTY_ANGLE::ValueToString( wxVariant& aVariant, int aArgFlags ) c
     }
     else
     {
-        wxCHECK_MSG( false, wxEmptyString, "Unexpected variant type in PGPROPERTY_ANGLE" );
+        wxCHECK_MSG( false, wxEmptyString, wxS( "Unexpected variant type in PGPROPERTY_ANGLE" ) );
     }
 }
 
@@ -318,8 +316,7 @@ void PGPROPERTY_COLORENUM::OnCustomPaint( wxDC& aDC, const wxRect& aRect,
     if( index < 0 || index >= static_cast<int>( GetChoices().GetCount() ) )
         return;
 
-    wxString layer = GetChoices().GetLabel( index );
-    wxColour color = GetColor( layer );
+    wxColour color = GetColor( GetChoices().GetValue( index ) );
 
     if( color == wxNullColour )
         return;

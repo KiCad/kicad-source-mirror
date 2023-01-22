@@ -129,7 +129,7 @@ public:
     PGPROPERTY_COLORENUM( const wxString& aLabel, wxString& aName, wxPGChoices* aChoices,
                           int aValue = 0 ) :
             wxEnumProperty( aLabel, aName, *aChoices, aValue ),
-            m_colorFunc( []( const wxString& aChoice ) { return wxNullColour; } )
+            m_colorFunc( []( int aValue ) { return wxNullColour; } )
     {
         SetFlag( wxPG_PROP_CUSTOMIMAGE );
     }
@@ -138,18 +138,18 @@ public:
 
     void OnCustomPaint( wxDC& aDC, const wxRect& aRect, wxPGPaintData& aPaintData ) override;
 
-    void SetColorFunc( std::function<wxColour( const wxString& aChoice )> aFunc )
+    void SetColorFunc( std::function<wxColour( int aValue )> aFunc )
     {
         m_colorFunc = aFunc;
     }
 
-    wxColour GetColor( const wxString& aChoice )
+    wxColour GetColor( int aValue )
     {
-        return m_colorFunc( aChoice );
+        return m_colorFunc( aValue );
     }
 
 protected:
-    std::function<wxColour( const wxString& aChoice )> m_colorFunc;
+    std::function<wxColour( int aValue )> m_colorFunc;
 };
 
 
