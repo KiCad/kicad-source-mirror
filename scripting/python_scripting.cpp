@@ -537,7 +537,7 @@ wxString SCRIPTING::PyScriptingPath( PATH_TYPE aPathType )
         break;
     case THIRDPARTY:
         const ENV_VAR_MAP& env = Pgm().GetLocalEnvVariables();
-        auto               it = env.find( "KICAD6_3RD_PARTY" );
+        auto               it = env.find( "KICAD7_3RD_PARTY" );
 
         if( it != env.end() && !it->second.GetValue().IsEmpty() )
             path = it->second.GetValue();

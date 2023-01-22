@@ -299,7 +299,7 @@ void SETTINGS_MANAGER::loadAllColorSettings()
 
     wxFileName third_party_path;
     const ENV_VAR_MAP& env = Pgm().GetLocalEnvVariables();
-    auto               it = env.find( wxS( "KICAD6_3RD_PARTY" ) );
+    auto               it = env.find( wxS( "KICAD7_3RD_PARTY" ) );
 
     if( it != env.end() && !it->second.GetValue().IsEmpty() )
         third_party_path.SetPath( it->second.GetValue() );
@@ -553,6 +553,10 @@ bool SETTINGS_MANAGER::MigrateIfNeeded()
             wxT( "KICAD6_3DMODEL_DIR" ),
             wxT( "KICAD6_FOOTPRINT_DIR" ),
             wxT( "KICAD6_TEMPLATE_DIR" ), // Stores the default library table to be copied
+            wxT( "KICAD7_SYMBOL_DIR" ),
+            wxT( "KICAD7_3DMODEL_DIR" ),
+            wxT( "KICAD7_FOOTPRINT_DIR" ),
+            wxT( "KICAD7_TEMPLATE_DIR" ), // Stores the default library table to be copied
 
             // Deprecated keys
             wxT( "KICAD_PTEMPLATES" ),

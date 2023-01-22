@@ -520,7 +520,7 @@ LIB_SYMBOL* SYMBOL_LIB_TABLE::LoadSymbolWithOptionalNickname( const LIB_ID& aLib
 
 const wxString SYMBOL_LIB_TABLE::GlobalPathEnvVariableName()
 {
-    return  "KICAD6_SYMBOL_DIR";
+    return  "KICAD7_SYMBOL_DIR";
 }
 
 
@@ -542,12 +542,12 @@ public:
         wxFileName file = wxFileName::FileName( aFilePath );
 
         // consider a file to be a lib if it's name ends with .kicad_sym and
-        // it is under $KICAD6_3RD_PARTY/symbols/<pkgid>/ i.e. has nested level of at least +2
+        // it is under $KICAD7_3RD_PARTY/symbols/<pkgid>/ i.e. has nested level of at least +2
         if( file.GetExt() == wxT( "kicad_sym" ) && file.GetDirCount() >= m_prefix_dir_count + 2 )
         {
             wxArrayString parts = file.GetDirs();
             parts.RemoveAt( 0, m_prefix_dir_count );
-            parts.Insert( "${KICAD6_3RD_PARTY}", 0 );
+            parts.Insert( "${KICAD7_3RD_PARTY}", 0 );
             parts.Add( file.GetFullName() );
 
             wxString libPath = wxJoin( parts, '/' );
@@ -608,7 +608,7 @@ bool SYMBOL_LIB_TABLE::LoadGlobalTable( SYMBOL_LIB_TABLE& aTable )
         SystemDirsAppend( &ss );
 
         wxString templatePath =
-            Pgm().GetLocalEnvVariables().at( wxT( "KICAD6_TEMPLATE_DIR" ) ).GetValue();
+            Pgm().GetLocalEnvVariables().at( wxT( "KICAD7_TEMPLATE_DIR" ) ).GetValue();
 
         if( !templatePath.IsEmpty() )
             ss.AddPaths( templatePath, 0 );
@@ -629,7 +629,7 @@ bool SYMBOL_LIB_TABLE::LoadGlobalTable( SYMBOL_LIB_TABLE& aTable )
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
     KICAD_SETTINGS*   settings = mgr.GetAppSettings<KICAD_SETTINGS>();
 
-    wxString packagesPath = Pgm().GetLocalEnvVariables().at( wxT( "KICAD6_3RD_PARTY" ) ).GetValue();
+    wxString packagesPath = Pgm().GetLocalEnvVariables().at( wxT( "KICAD7_3RD_PARTY" ) ).GetValue();
 
     if( settings->m_PcmLibAutoAdd )
     {

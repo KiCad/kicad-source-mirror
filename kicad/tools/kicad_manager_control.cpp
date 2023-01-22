@@ -145,7 +145,7 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
     wxFileName  templatePath;
 
     // KiCad system template path.
-    ENV_VAR_MAP_CITER it =  Pgm().GetLocalEnvVariables().find( "KICAD6_TEMPLATE_DIR" );
+    ENV_VAR_MAP_CITER it =  Pgm().GetLocalEnvVariables().find( "KICAD7_TEMPLATE_DIR" );
 
     if( it != Pgm().GetLocalEnvVariables().end() && it->second.GetValue() != wxEmptyString )
     {

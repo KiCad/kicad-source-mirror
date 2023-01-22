@@ -38,10 +38,10 @@
 ///! The following environment variables will never be migrated from a previous version
 const std::set<wxString> envVarBlacklist =
         {
-            wxT( "KICAD6_SYMBOL_DIR" ),
-            wxT( "KICAD6_FOOTPRINT_DIR" ),
-            wxT( "KICAD6_TEMPLATES_DIR" ),
-            wxT( "KICAD6_3DMODEL_DIR" )
+            wxT( "KICAD7_SYMBOL_DIR" ),
+            wxT( "KICAD7_FOOTPRINT_DIR" ),
+            wxT( "KICAD7_TEMPLATES_DIR" ),
+            wxT( "KICAD7_3DMODEL_DIR" )
         };
 
 
@@ -574,21 +574,21 @@ void COMMON_SETTINGS::InitializeEnvironment()
 
     wxFileName path( basePath );
     path.AppendDir( wxT( "footprints" ) );
-    addVar( wxT( "KICAD6_FOOTPRINT_DIR" ), path.GetFullPath() );
+    addVar( wxT( "KICAD7_FOOTPRINT_DIR" ), path.GetFullPath() );
 
     path = basePath;
     path.AppendDir( wxT( "3dmodels" ) );
-    addVar( wxT( "KICAD6_3DMODEL_DIR" ), path.GetFullPath() );
+    addVar( wxT( "KICAD7_3DMODEL_DIR" ), path.GetFullPath() );
 
-    addVar( wxT( "KICAD6_TEMPLATE_DIR" ), PATHS::GetStockTemplatesPath() );
+    addVar( wxT( "KICAD7_TEMPLATE_DIR" ), PATHS::GetStockTemplatesPath() );
 
     addVar( wxT( "KICAD_USER_TEMPLATE_DIR" ), PATHS::GetUserTemplatesPath() );
 
-    addVar( wxT( "KICAD6_3RD_PARTY" ), PATHS::GetDefault3rdPartyPath() );
+    addVar( wxT( "KICAD7_3RD_PARTY" ), PATHS::GetDefault3rdPartyPath() );
 
     path = basePath;
     path.AppendDir( wxT( "symbols" ) );
-    addVar( wxT( "KICAD6_SYMBOL_DIR" ), path.GetFullPath() );
+    addVar( wxT( "KICAD7_SYMBOL_DIR" ), path.GetFullPath() );
 }
 
 
@@ -666,9 +666,9 @@ bool COMMON_SETTINGS::readLegacy3DResolverCfg( const wxString&                  
         if( !getLegacy3DHollerith( cfgLine, idx, al.m_Alias ) )
             continue;
 
-        // Don't add KICAD6_3DMODEL_DIR, one of its legacy equivalents, or KIPRJMOD from a
+        // Don't add KICAD7_3DMODEL_DIR, one of its legacy equivalents, or KIPRJMOD from a
         // config file.  They're system variables are are defined at runtime.
-        if( al.m_Alias == wxS( "${KICAD6_3DMODEL_DIR}" ) || al.m_Alias == wxS( "${KIPRJMOD}" )
+        if( al.m_Alias == wxS( "${KICAD7_3DMODEL_DIR}" ) || al.m_Alias == wxS( "${KIPRJMOD}" )
             || al.m_Alias == wxS( "$(KIPRJMOD)" ) || al.m_Alias == wxS( "${KISYS3DMOD}" )
             || al.m_Alias == wxS( "$(KISYS3DMOD)" ) )
         {

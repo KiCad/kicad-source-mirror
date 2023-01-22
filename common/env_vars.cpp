@@ -35,13 +35,13 @@ using STRING_MAP = std::map<wxString, wxString>;
  */
 static const ENV_VAR::ENV_VAR_LIST predefinedEnvVars = {
     wxS( "KIPRJMOD" ),
-    wxS( "KICAD6_SYMBOL_DIR" ),
-    wxS( "KICAD6_3DMODEL_DIR" ),
-    wxS( "KICAD6_FOOTPRINT_DIR" ),
-    wxS( "KICAD6_TEMPLATE_DIR" ),
+    wxS( "KICAD7_SYMBOL_DIR" ),
+    wxS( "KICAD7_3DMODEL_DIR" ),
+    wxS( "KICAD7_FOOTPRINT_DIR" ),
+    wxS( "KICAD7_TEMPLATE_DIR" ),
     wxS( "KICAD_USER_TEMPLATE_DIR" ),
     wxS( "KICAD_PTEMPLATES" ),
-    wxS( "KICAD6_3RD_PARTY" ),
+    wxS( "KICAD7_3RD_PARTY" ),
 };
 
 
@@ -67,19 +67,19 @@ static void initialiseEnvVarHelp( STRING_MAP& aMap )
 {
     // Set up dynamically, as we want to be able to use _() translations,
     // which can't be done statically
-    aMap[wxS( "KICAD6_FOOTPRINT_DIR" )] =
+    aMap[wxS( "KICAD7_FOOTPRINT_DIR" )] =
         _( "The base path of locally installed system "
             "footprint libraries (.pretty folders).");
-    aMap[wxS( "KICAD6_3DMODEL_DIR" )] =
+    aMap[wxS( "KICAD7_3DMODEL_DIR" )] =
         _( "The base path of system footprint 3D shapes (.3Dshapes folders).");
-    aMap[wxS( "KICAD6_SYMBOL_DIR" )] =
+    aMap[wxS( "KICAD7_SYMBOL_DIR" )] =
         _( "The base path of the locally installed symbol libraries.");
-    aMap[wxS( "KICAD6_TEMPLATE_DIR" )] =
+    aMap[wxS( "KICAD7_TEMPLATE_DIR" )] =
         _( "A directory containing project templates installed with KiCad.");
     aMap[wxS( "KICAD_USER_TEMPLATE_DIR" )] =
         _( "Optional. Can be defined if you want to create your own project "
            "templates folder.");
-    aMap[wxS( "KICAD6_3RD_PARTY" )] =
+    aMap[wxS( "KICAD7_3RD_PARTY" )] =
         _( "A directory containing 3rd party plugins, libraries and other "
            "downloadable content.");
     aMap[wxS( "KIPRJMOD" )] =
@@ -88,18 +88,18 @@ static void initialiseEnvVarHelp( STRING_MAP& aMap )
           "variable can be used to define files and paths relative to the currently loaded "
           "project.  For instance, ${KIPRJMOD}/libs/footprints.pretty can be defined as a "
           "folder containing a project specific footprint library named footprints.pretty." );
-    aMap[wxS( "KICAD6_SCRIPTING_DIR" )] =
+    aMap[wxS( "KICAD7_SCRIPTING_DIR" )] =
         _( "A directory containing system-wide scripts installed with KiCad" );
-    aMap[wxS( "KICAD6_USER_SCRIPTING_DIR" )] =
+    aMap[wxS( "KICAD7_USER_SCRIPTING_DIR" )] =
         _( "A directory containing user-specific scripts installed with KiCad" );
 
     // Deprecated vars
     aMap[wxS( "KICAD_PTEMPLATES" )] =
         _( "Deprecated version of KICAD_TEMPLATE_DIR.");
     aMap[wxS( "KISYS3DMOD" )] =
-        _( "Deprecated version of KICAD6_3DMODEL_DIR." );
+        _( "Deprecated version of KICAD7_3DMODEL_DIR." );
     aMap[wxS( "KISYSMOD" )] =
-        _( "Deprecated version of KICAD6_FOOTPRINT_DIR." );
+        _( "Deprecated version of KICAD7_FOOTPRINT_DIR." );
     aMap[wxS( "KICAD_SYMBOL_DIR" )] =
         _( "Deprecated version of KICAD_SYMBOL_DIR.");
 }

@@ -476,7 +476,7 @@ FOOTPRINT* FP_LIB_TABLE::FootprintLoadWithOptionalNickname( const LIB_ID& aFootp
 
 const wxString FP_LIB_TABLE::GlobalPathEnvVariableName()
 {
-    return  wxS( "KICAD6_FOOTPRINT_DIR" );
+    return  wxS( "KICAD7_FOOTPRINT_DIR" );
 }
 
 
@@ -500,12 +500,12 @@ public:
         wxFileName dir = wxFileName::DirName( dirPath );
 
         // consider a directory to be a lib if it's name ends with .pretty and
-        // it is under $KICAD6_3RD_PARTY/footprints/<pkgid>/ i.e. has nested level of at least +3
+        // it is under $KICAD7_3RD_PARTY/footprints/<pkgid>/ i.e. has nested level of at least +3
         if( dirPath.EndsWith( wxS( ".pretty" ) ) && dir.GetDirCount() >= m_prefix_dir_count + 3 )
         {
             wxArrayString parts = dir.GetDirs();
             parts.RemoveAt( 0, m_prefix_dir_count );
-            parts.Insert( wxS( "${KICAD6_3RD_PARTY}" ), 0 );
+            parts.Insert( wxS( "${KICAD7_3RD_PARTY}" ), 0 );
 
             wxString libPath = wxJoin( parts, '/' );
 
@@ -563,7 +563,7 @@ bool FP_LIB_TABLE::LoadGlobalTable( FP_LIB_TABLE& aTable )
         SystemDirsAppend( &ss );
 
         wxString templatePath =
-            Pgm().GetLocalEnvVariables().at( wxT( "KICAD6_TEMPLATE_DIR" ) ).GetValue();
+            Pgm().GetLocalEnvVariables().at( wxT( "KICAD7_TEMPLATE_DIR" ) ).GetValue();
 
         if( !templatePath.IsEmpty() )
             ss.AddPaths( templatePath, 0 );
@@ -584,7 +584,7 @@ bool FP_LIB_TABLE::LoadGlobalTable( FP_LIB_TABLE& aTable )
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
     KICAD_SETTINGS*   settings = mgr.GetAppSettings<KICAD_SETTINGS>();
 
-    wxString packagesPath = Pgm().GetLocalEnvVariables().at( wxT( "KICAD6_3RD_PARTY" ) ).GetValue();
+    wxString packagesPath = Pgm().GetLocalEnvVariables().at( wxT( "KICAD7_3RD_PARTY" ) ).GetValue();
 
     if( settings->m_PcmLibAutoAdd )
     {

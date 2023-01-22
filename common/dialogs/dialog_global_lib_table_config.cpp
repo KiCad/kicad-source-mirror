@@ -109,7 +109,7 @@ bool DIALOG_GLOBAL_LIB_TABLE_CONFIG::TransferDataToWindow()
     SystemDirsAppend( &ss );
 
     wxString templatePath =
-        Pgm().GetLocalEnvVariables().at( wxT( "KICAD6_TEMPLATE_DIR" ) ).GetValue();
+        Pgm().GetLocalEnvVariables().at( wxT( "KICAD7_TEMPLATE_DIR" ) ).GetValue();
 
     if( !templatePath.IsEmpty() )
         ss.AddPaths( templatePath, 0 );

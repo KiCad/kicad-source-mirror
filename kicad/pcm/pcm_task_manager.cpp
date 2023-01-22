@@ -274,7 +274,7 @@ bool PCM_TASK_MANAGER::extract( const wxString& aFilePath, const wxString& aPack
         // Transform paths from
         // <PackageRoot>/$folder/$contents
         // To
-        // $KICAD6_3RD_PARTY/$folder/$package_id/$contents
+        // $KICAD7_3RD_PARTY/$folder/$package_id/$contents
         path_parts.Insert( clean_package_id, 1 );
         path_parts.Insert( m_pcm->Get3rdPartyPath(), 0 );
 

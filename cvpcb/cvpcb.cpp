@@ -143,7 +143,7 @@ FOOTPRINT_LIST_IMPL GFootprintList;
 //!!!!!!!!!!!!!!! This code is obsolete because of the merge into Pcbnew, don't bother with it.
 
 // A short lived implementation.  cvpcb will get combine into Pcbnew shortly, so
-// we skip setting KICAD6_FOOTPRINT_DIR here for now.  User should set the environment
+// we skip setting KICAD7_FOOTPRINT_DIR here for now.  User should set the environment
 // variable.
 bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 {

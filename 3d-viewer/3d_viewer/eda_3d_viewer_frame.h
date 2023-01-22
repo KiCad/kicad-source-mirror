@@ -42,7 +42,7 @@
 
 /// A variable name whose value holds the path of 3D shape files.
 /// Currently an environment variable, eventually a project variable.
-#define KICAD6_3DMODEL_DIR wxT( "KICAD6_3DMODEL_DIR" )
+#define KICAD7_3DMODEL_DIR wxT( "KICAD7_3DMODEL_DIR" )
 
 
 #define KICAD_DEFAULT_3D_DRAWFRAME_STYLE    (wxDEFAULT_FRAME_STYLE | wxWANTS_CHARS)

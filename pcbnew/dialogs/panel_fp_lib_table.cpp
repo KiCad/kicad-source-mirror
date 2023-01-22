@@ -39,7 +39,7 @@
 #include <wx/filedlg.h>
 
 #include <project.h>
-#include <3d_viewer/eda_3d_viewer_frame.h>      // for KICAD6_3DMODEL_DIR
+#include <3d_viewer/eda_3d_viewer_frame.h>      // for KICAD7_3DMODEL_DIR
 #include <panel_fp_lib_table.h>
 #include <lib_id.h>
 #include <fp_lib_table.h>
@@ -1049,7 +1049,7 @@ void PANEL_FP_LIB_TABLE::populateEnvironReadOnlyTable()
     unique.insert( PROJECT_VAR_NAME );
     unique.insert( FP_LIB_TABLE::GlobalPathEnvVariableName() );
     // This special environment variable is used to locate 3d shapes
-    unique.insert( KICAD6_3DMODEL_DIR );
+    unique.insert( KICAD7_3DMODEL_DIR );
 
     for( const wxString& evName : unique )
     {

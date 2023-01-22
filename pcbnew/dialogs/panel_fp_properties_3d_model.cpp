@@ -76,7 +76,7 @@ PANEL_FP_PROPERTIES_3D_MODEL::PANEL_FP_PROPERTIES_3D_MODEL(
     PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
 
     if( cfg->m_lastFootprint3dDir.IsEmpty() )
-        wxGetEnv( KICAD6_3DMODEL_DIR, &cfg->m_lastFootprint3dDir );
+        wxGetEnv( KICAD7_3DMODEL_DIR, &cfg->m_lastFootprint3dDir );
 
     // Icon showing warning/error information
     wxGridCellAttr* attr = new wxGridCellAttr;
@@ -144,7 +144,7 @@ bool PANEL_FP_PROPERTIES_3D_MODEL::TransferDataFromWindow()
 void PANEL_FP_PROPERTIES_3D_MODEL::ReloadModelsFromFootprint()
 {
     wxString default_path;
-    wxGetEnv( KICAD6_3DMODEL_DIR, &default_path );
+    wxGetEnv( KICAD7_3DMODEL_DIR, &default_path );
 
 #ifdef __WINDOWS__
     default_path.Replace( wxT( "/" ), wxT( "\\" ) );
@@ -287,11 +287,11 @@ void PANEL_FP_PROPERTIES_3D_MODEL::OnAdd3DModel( wxCommandEvent&  )
     wxString sidx = prj.GetRString( PROJECT::VIEWER_3D_FILTER_INDEX );
     int      filter = 0;
 
-    // If the PROJECT::VIEWER_3D_PATH hasn't been set yet, use the KICAD6_3DMODEL_DIR environment
+    // If the PROJECT::VIEWER_3D_PATH hasn't been set yet, use the KICAD7_3DMODEL_DIR environment
     // variable and fall back to the project path if necessary.
     if( initialpath.IsEmpty() )
     {
-        if( !wxGetEnv( wxT( "KICAD6_3DMODEL_DIR" ), &initialpath ) || initialpath.IsEmpty() )
+        if( !wxGetEnv( wxT( "KICAD7_3DMODEL_DIR" ), &initialpath ) || initialpath.IsEmpty() )
             initialpath = prj.GetProjectPath();
     }
 

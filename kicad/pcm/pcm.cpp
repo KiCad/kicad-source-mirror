@@ -224,7 +224,7 @@ void PLUGIN_CONTENT_MANAGER::ReadEnvVar()
 {
     // Get 3rd party path
     const ENV_VAR_MAP& env = Pgm().GetLocalEnvVariables();
-    auto               it = env.find( wxT( "KICAD6_3RD_PARTY" ) );
+    auto               it = env.find( wxT( "KICAD7_3RD_PARTY" ) );
 
     if( it != env.end() && !it->second.GetValue().IsEmpty() )
         m_3rdparty_path = it->second.GetValue();
