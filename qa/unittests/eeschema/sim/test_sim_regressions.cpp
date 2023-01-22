@@ -101,8 +101,8 @@ BOOST_FIXTURE_TEST_CASE( ImmediateSBCKT, TEST_SIM_REGRESSIONS_FIXTURE )
     m_SaveCurrents = false;
 
     TestNetlist( "issue13431" );
-    TestTranPoint( 0.005, { { "V(/soft_start)", 2.489 } }, 0.001 );
-    TestTranPoint( 0.012, { { "V(/soft_start)", 5.100 } }, 0.001 );
+    TestTranPoint( 0.005, { { "V(/soft_start)", 2.489 } } );
+    TestTranPoint( 0.012, { { "V(/soft_start)", 5.100 } } );
 }
 
 
@@ -111,8 +111,8 @@ BOOST_FIXTURE_TEST_CASE( LegacyFixups, TEST_SIM_REGRESSIONS_FIXTURE )
     LOCALE_IO dummy;
 
     TestNetlist( "issue13112" );
-    TestTranPoint( 0.01, { { "V(out)", -0.060 } }, 0.001 );
-    TestTranPoint( 0.02, { { "V(out)", 0.856 } }, 0.001 );
+    TestTranPoint( 0.01, { { "V(out)", -0.060 } } );
+    TestTranPoint( 0.02, { { "V(out)", 0.856 } } );
 }
 
 
@@ -121,8 +121,8 @@ BOOST_FIXTURE_TEST_CASE( DualNMOSAmp, TEST_SIM_REGRESSIONS_FIXTURE )
     LOCALE_IO dummy;
 
     TestNetlist( "issue13162" );
-    TestTranPoint( 0.030, { { "V(out)", 0.535 } }, 0.001 );
-    TestTranPoint( 0.035, { { "V(out)", -1.437 } }, 0.001 );
+    TestTranPoint( 0.030, { { "V(out)", 0.535 } } );
+    TestTranPoint( 0.035, { { "V(out)", -1.437 } } );
 }
 
 

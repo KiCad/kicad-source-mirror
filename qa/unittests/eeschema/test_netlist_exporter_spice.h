@@ -228,6 +228,7 @@ public:
                                     << ", Actual value: " << yVector[i] )
                 {
                     double maxError = abs( refValue * aMaxRelError );
+
                     if( maxError == 0 )
                     {
                         // If refValue is 0, we need a obtain the max. error differently.
