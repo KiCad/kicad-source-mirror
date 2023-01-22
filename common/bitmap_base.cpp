@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 jean-pierre.charras
- * Copyright (C) 2011-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -293,17 +293,25 @@ void BITMAP_BASE::DrawBitmap( wxDC* aDC, const VECTOR2I& aPos )
     aDC->GetLogicalOrigin( &logicalOriginX, &logicalOriginY );
 
     // We already have issues to draw a bitmap on the wxDC, depending on wxWidgets version.
-    // Now we have an issue on wxWidgets 3.1.6 and later to fix the clipboard
+    // Now we have an issue on wxWidgets 3.1.6 to fix the clip area
     // and the bitmap position when using TransformMatrix
-    // So for version >= 3.1.6  do not use it
+    // So for version == 3.1.6  do not use it
     // Be carefull before changing the code.
     bool useTransform = aDC->CanUseTransformMatrix();
 
-    #if wxCHECK_VERSION( 3, 1, 6 )
+    #if wxCHECK_VERSION( 3, 1, 6 ) && !wxCHECK_VERSION( 3, 1, 7 )
     useTransform = false;
     #endif
 
     wxAffineMatrix2D init_matrix = aDC->GetTransformMatrix();
+
+    // Note: clipping bitmap area was made to fix a minor issue in old versions of
+    // Kicad/wxWidgets (5.1 / wx 3.0)
+    // However SetClippingRegion creates a lot of issues (different ways to fix the
+    // position and size of the area, depending on wxWidget version)because it changes with
+    // each versions of wxWigets, so it is now disabled
+    // However the code is still here, just in case
+    // #define USE_CLIP_AREA
 
     wxPoint clipAreaPos;
 
@@ -335,8 +343,10 @@ void BITMAP_BASE::DrawBitmap( wxDC* aDC, const VECTOR2I& aPos )
         clipAreaPos.y = pos.y;
     }
 
+    #ifdef USE_CLIP_AREA
     aDC->DestroyClippingRegion();
     aDC->SetClippingRegion( clipAreaPos, wxSize( size.x, size.y ) );
+    #endif
 
     if( GetGRForceBlackPenState() )
     {
@@ -356,7 +366,9 @@ void BITMAP_BASE::DrawBitmap( wxDC* aDC, const VECTOR2I& aPos )
         aDC->SetLogicalOrigin( logicalOriginX, logicalOriginY );
     }
 
+    #ifdef USE_CLIP_AREA
     aDC->DestroyClippingRegion();
+    #endif
 }
 
 
