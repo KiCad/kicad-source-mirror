@@ -26,6 +26,7 @@
 #include <wx/log.h>
 
 const wxString PG_UNIT_EDITOR::EDITOR_NAME = wxS( "KiCadUnitEditor" );
+const wxString PG_CHECKBOX_EDITOR::EDITOR_NAME = wxS( "KiCadCheckboxEditor" );
 
 
 PG_UNIT_EDITOR::PG_UNIT_EDITOR( EDA_DRAW_FRAME* aFrame ) :
@@ -186,4 +187,23 @@ bool PG_UNIT_EDITOR::GetValueFromControl( wxVariant& aVariant, wxPGProperty* aPr
         changed = true;
 
     return changed;
+}
+
+
+PG_CHECKBOX_EDITOR::PG_CHECKBOX_EDITOR() :
+        wxPGCheckBoxEditor()
+{
+}
+
+
+wxPGWindowList PG_CHECKBOX_EDITOR::CreateControls( wxPropertyGrid* aGrid, wxPGProperty* aProperty,
+                                                   const wxPoint& aPos, const wxSize& aSize ) const
+{
+    // Override wx behavior and toggle unspecified checkboxes to "true"
+    // CreateControls for a checkbox editor is only triggered when the user activates the checkbox
+    // Set the value to false here; the base class will then trigger an event setting it true.
+    if( aProperty->IsValueUnspecified() )
+        aProperty->SetValueFromInt( 0 );
+
+    return wxPGCheckBoxEditor::CreateControls( aGrid, aProperty, aPos, aSize );
 }

@@ -50,15 +50,23 @@ PCB_PROPERTIES_PANEL::PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_EDIT_FRAME* a
 
     if( it != wxPGGlobalVars->m_mapEditorClasses.end() )
     {
-        m_editor = static_cast<PG_UNIT_EDITOR*>( it->second );
-        m_editor->UpdateFrame( m_frame );
+        m_unitEditorInstance = static_cast<PG_UNIT_EDITOR*>( it->second );
+        m_unitEditorInstance->UpdateFrame( m_frame );
         found = true;
     }
 
     if( !found )
     {
         PG_UNIT_EDITOR* new_editor = new PG_UNIT_EDITOR( m_frame );
-        m_editor = static_cast<PG_UNIT_EDITOR*>( wxPropertyGrid::RegisterEditorClass( new_editor ) );
+        m_unitEditorInstance = static_cast<PG_UNIT_EDITOR*>( wxPropertyGrid::RegisterEditorClass( new_editor ) );
+    }
+
+    it = wxPGGlobalVars->m_mapEditorClasses.find( PG_CHECKBOX_EDITOR::EDITOR_NAME );
+
+    if( it == wxPGGlobalVars->m_mapEditorClasses.end() )
+    {
+        PG_CHECKBOX_EDITOR* cbEditor = new PG_CHECKBOX_EDITOR();
+        m_checkboxEditorInstance = static_cast<PG_CHECKBOX_EDITOR*>( wxPropertyGrid::RegisterEditorClass( cbEditor ) );
     }
 }
 
@@ -66,7 +74,7 @@ PCB_PROPERTIES_PANEL::PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_EDIT_FRAME* a
 
 PCB_PROPERTIES_PANEL::~PCB_PROPERTIES_PANEL()
 {
-    m_editor->UpdateFrame( nullptr );
+    m_unitEditorInstance->UpdateFrame( nullptr );
 }
 
 

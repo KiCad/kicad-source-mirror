@@ -169,4 +169,16 @@ public:
                         int aFlags = 0 ) const override;
 };
 
+
+class PGPROPERTY_BOOL : public wxBoolProperty
+{
+public:
+    PGPROPERTY_BOOL( const wxString& aLabel = wxPG_LABEL, const wxString& aName = wxPG_LABEL,
+                     bool aValue = false );
+
+    virtual ~PGPROPERTY_BOOL() = default;
+
+    const wxPGEditor* DoGetEditorClass() const override;
+};
+
 #endif /* PG_PROPERTIES_H */

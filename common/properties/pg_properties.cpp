@@ -139,8 +139,7 @@ wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty )
         }
         else if( typeId == TYPE_HASH( bool ) )
         {
-            ret = new wxBoolProperty();
-            ret->SetAttribute( wxPG_BOOL_USE_CHECKBOX, true );
+            ret = new PGPROPERTY_BOOL();
         }
         else if( typeId == TYPE_HASH( wxString ) )
         {
@@ -347,4 +346,19 @@ bool PGPROPERTY_STRING::StringToValue( wxVariant& aVariant, const wxString& aStr
 {
     aVariant = EscapeString( aString, CTX_QUOTED_STR );
     return true;
+}
+
+
+PGPROPERTY_BOOL::PGPROPERTY_BOOL( const wxString& aLabel, const wxString& aName, bool aValue ) :
+            wxBoolProperty( aLabel, aName, aValue )
+{
+    SetEditor( PG_CHECKBOX_EDITOR::EDITOR_NAME );
+}
+
+
+const wxPGEditor* PGPROPERTY_BOOL::DoGetEditorClass() const
+{
+    wxCHECK_MSG( m_customEditor, wxPGEditor_CheckBox,
+                 wxT( "Make sure to set custom editor for PGPROPERTY_BOOL!" ) );
+    return m_customEditor;
 }

@@ -64,4 +64,20 @@ protected:
     std::unique_ptr<PROPERTY_EDITOR_UNIT_BINDER> m_unitBinder;
 };
 
+
+class PG_CHECKBOX_EDITOR : public wxPGCheckBoxEditor
+{
+public:
+    static const wxString EDITOR_NAME;
+
+    PG_CHECKBOX_EDITOR();
+
+    virtual ~PG_CHECKBOX_EDITOR() {}
+
+    wxString GetName() const override { return EDITOR_NAME; }
+
+    wxPGWindowList CreateControls( wxPropertyGrid* aGrid, wxPGProperty* aProperty,
+                                   const wxPoint& aPos, const wxSize& aSize ) const override;
+};
+
 #endif //KICAD_PG_EDITORS_H
