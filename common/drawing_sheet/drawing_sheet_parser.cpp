@@ -912,9 +912,6 @@ bool DS_DATA_MODEL::LoadDrawingSheet( const wxString& aFullFileName, bool Append
     if( !Append )
     {
         if( fullFileName.IsEmpty() )
-            wxGetEnv( wxT( "KICAD_WKSFILE" ), &fullFileName );
-
-        if( fullFileName.IsEmpty() )
         {
             SetDefaultLayout();
             return true; // we assume its fine / default init
