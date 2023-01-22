@@ -35,9 +35,6 @@
 #include <string_utf8_map.h>
 #include <richio.h>
 
-
-#define FP_LATE_ENVVAR  1           ///< late=1/early=0 environment variable expansion
-
 class OUTPUTFORMATTER;
 class LIB_TABLE_LEXER;
 class LIB_ID;
@@ -207,9 +204,6 @@ protected:
     LIB_TABLE_ROW( const LIB_TABLE_ROW& aRow ) :
         nickName( aRow.nickName ),
         uri_user( aRow.uri_user ),
-#if !FP_LATE_ENVVAR
-        uri_expanded( aRow.uri_expanded ),
-#endif
         options( aRow.options ),
         description( aRow.description ),
         enabled( aRow.enabled ),
@@ -232,11 +226,6 @@ private:
 
     wxString          nickName;
     wxString          uri_user;           ///< what user entered from UI or loaded from disk
-
-#if !FP_LATE_ENVVAR
-    wxString          uri_expanded;       ///< from ExpandSubstitutions()
-#endif
-
     wxString          options;
     wxString          description;
 
@@ -342,8 +331,8 @@ public:
     {
         std::lock_guard<std::mutex> lock( m_nickIndexMutex );
 
-        rows.clear();
-        nickIndex.clear();
+        m_rows.clear();
+        m_nickIndex.clear();
     }
 
     /**
@@ -354,14 +343,14 @@ public:
      */
     bool operator==( const LIB_TABLE& r ) const
     {
-        if( rows.size() == r.rows.size() )
+        if( m_rows.size() == r.m_rows.size() )
         {
             unsigned i;
 
-            for( i = 0; i < rows.size() && rows[i] == r.rows[i];  ++i )
+            for( i = 0; i < m_rows.size() && m_rows[i] == r.m_rows[i];  ++i )
                 ;
 
-            if( i == rows.size() )
+            if( i == m_rows.size() )
                 return true;
         }
 
@@ -375,7 +364,7 @@ public:
      */
     unsigned GetCount() const
     {
-        return rows.size();
+        return m_rows.size();
     }
 
     /**
@@ -385,7 +374,7 @@ public:
      */
     LIB_TABLE_ROW& At( unsigned aIndex )
     {
-        return rows[aIndex];
+        return m_rows[aIndex];
     }
 
     /**
@@ -393,7 +382,7 @@ public:
      */
     const LIB_TABLE_ROW& At( unsigned aIndex ) const
     {
-        return rows[aIndex];
+        return m_rows[aIndex];
     }
 
     /**
@@ -460,11 +449,11 @@ public:
      */
     bool RemoveRow( const LIB_TABLE_ROW* aRow )
     {
-        for( auto iter = rows.begin(); iter != rows.end(); ++iter )
+        for( auto iter = m_rows.begin(); iter != m_rows.end(); ++iter )
         {
             if( *iter == *aRow )
             {
-                rows.erase( iter, iter + 1 );
+                m_rows.erase( iter, iter + 1 );
                 reindex();
                 return true;
             }
@@ -536,10 +525,10 @@ protected:
     {
         std::lock_guard<std::mutex> lock( m_nickIndexMutex );
 
-        nickIndex.clear();
+        m_nickIndex.clear();
 
-        for( LIB_TABLE_ROWS_ITER it = rows.begin(); it != rows.end(); ++it )
-            nickIndex.insert( INDEX_VALUE( it->GetNickName(), it - rows.begin() ) );
+        for( LIB_TABLE_ROWS_ITER it = m_rows.begin(); it != m_rows.end(); ++it )
+            m_nickIndex.insert( INDEX_VALUE( it->GetNickName(), it - m_rows.begin() ) );
     }
 
     void ensureIndex()
@@ -547,7 +536,7 @@ protected:
         // The dialog lib table editor may not maintain the nickIndex.
         // Lazy indexing may be required.  To handle lazy indexing, we must enforce
         // that "nickIndex" is either empty or accurate, but never inaccurate.
-        if( !nickIndex.size() )
+        if( !m_nickIndex.size() )
             reindex();
     }
 
@@ -556,7 +545,7 @@ private:
     friend class LIB_TABLE_GRID;
 
 protected:
-    LIB_TABLE_ROWS rows;
+    LIB_TABLE_ROWS m_rows;
 
     /// this is a non-owning index into the LIB_TABLE_ROWS table
     typedef std::map<wxString,int>      INDEX;              // "int" is std::vector array index
@@ -565,9 +554,9 @@ protected:
     typedef INDEX::value_type           INDEX_VALUE;
 
     /// this particular key is the nickName within each row.
-    INDEX nickIndex;
+    INDEX m_nickIndex;
 
-    LIB_TABLE* fallBack;
+    LIB_TABLE* m_fallBack;
 
     /// Mutex to protect access to the nickIndex variable
     mutable std::mutex m_nickIndexMutex;

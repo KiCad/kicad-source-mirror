@@ -270,7 +270,7 @@ void SYMBOL_LIB_TABLE::Format( OUTPUTFORMATTER* aOutput, int aIndentLevel ) cons
 {
     aOutput->Print( aIndentLevel, "(sym_lib_table\n" );
 
-    for( LIB_TABLE_ROWS_CITER it = rows.begin();  it != rows.end();  ++it )
+    for( LIB_TABLE_ROWS_CITER it = m_rows.begin();  it != m_rows.end();  ++it )
     {
         it->Format( aOutput, aIndentLevel+1 );
     }

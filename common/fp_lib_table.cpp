@@ -218,11 +218,11 @@ void FP_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
 
 bool FP_LIB_TABLE::operator==( const FP_LIB_TABLE& aFpTable ) const
 {
-    if( rows.size() == aFpTable.rows.size() )
+    if( m_rows.size() == aFpTable.m_rows.size() )
     {
-        for( unsigned i = 0; i < rows.size();  ++i )
+        for( unsigned i = 0; i < m_rows.size();  ++i )
         {
-            if( (FP_LIB_TABLE_ROW&)rows[i] != (FP_LIB_TABLE_ROW&)aFpTable.rows[i] )
+            if( (FP_LIB_TABLE_ROW&)m_rows[i] != (FP_LIB_TABLE_ROW&)aFpTable.m_rows[i] )
                 return false;
         }
 
@@ -237,7 +237,7 @@ void FP_LIB_TABLE::Format( OUTPUTFORMATTER* aOutput, int aIndentLevel ) const
 {
     aOutput->Print( aIndentLevel, "(fp_lib_table\n" );
 
-    for( LIB_TABLE_ROWS_CITER it = rows.begin();  it != rows.end();  ++it )
+    for( LIB_TABLE_ROWS_CITER it = m_rows.begin();  it != m_rows.end();  ++it )
         it->Format( aOutput, aIndentLevel+1 );
 
     aOutput->Print( aIndentLevel, ")\n" );

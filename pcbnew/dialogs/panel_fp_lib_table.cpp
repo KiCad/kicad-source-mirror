@@ -212,34 +212,34 @@ class FP_LIB_TABLE_GRID : public LIB_TABLE_GRID, public FP_LIB_TABLE
     friend class FP_GRID_TRICKS;
 
 protected:
-    LIB_TABLE_ROW* at( size_t aIndex ) override { return &rows.at( aIndex ); }
+    LIB_TABLE_ROW* at( size_t aIndex ) override { return &m_rows.at( aIndex ); }
 
-    size_t size() const override { return rows.size(); }
+    size_t size() const override { return m_rows.size(); }
 
     LIB_TABLE_ROW* makeNewRow() override
     {
         return dynamic_cast< LIB_TABLE_ROW* >( new FP_LIB_TABLE_ROW );
     }
 
-    LIB_TABLE_ROWS_ITER begin() override { return rows.begin(); }
+    LIB_TABLE_ROWS_ITER begin() override { return m_rows.begin(); }
 
     LIB_TABLE_ROWS_ITER insert( LIB_TABLE_ROWS_ITER aIterator, LIB_TABLE_ROW* aRow ) override
     {
-        return rows.insert( aIterator, aRow );
+        return m_rows.insert( aIterator, aRow );
     }
 
-    void push_back( LIB_TABLE_ROW* aRow ) override { rows.push_back( aRow ); }
+    void push_back( LIB_TABLE_ROW* aRow ) override { m_rows.push_back( aRow ); }
 
     LIB_TABLE_ROWS_ITER erase( LIB_TABLE_ROWS_ITER aFirst, LIB_TABLE_ROWS_ITER aLast ) override
     {
-        return rows.erase( aFirst, aLast );
+        return m_rows.erase( aFirst, aLast );
     }
 
 public:
 
     FP_LIB_TABLE_GRID( const FP_LIB_TABLE& aTableToEdit )
     {
-        rows = aTableToEdit.rows;
+        m_rows = aTableToEdit.m_rows;
     }
 };
 
@@ -342,7 +342,7 @@ protected:
                     tbl->AppendRows( tmp_tbl.GetCount() - tbl->GetNumberRows() );
 
                 for( unsigned i = 0;  i < tmp_tbl.GetCount();  ++i )
-                    tbl->rows.replace( i, tmp_tbl.At( i ).clone() );
+                    tbl->m_rows.replace( i, tmp_tbl.At( i ).clone() );
             }
 
             m_grid->AutoSizeColumns( false );
@@ -723,10 +723,10 @@ void PANEL_FP_LIB_TABLE::moveUpHandler( wxCommandEvent& event )
     if( curRow >= 1 )
     {
         boost::ptr_vector< LIB_TABLE_ROW >::auto_type move_me =
-            tbl->rows.release( tbl->rows.begin() + curRow );
+            tbl->m_rows.release( tbl->m_rows.begin() + curRow );
 
         --curRow;
-        tbl->rows.insert( tbl->rows.begin() + curRow, move_me.release() );
+        tbl->m_rows.insert( tbl->m_rows.begin() + curRow, move_me.release() );
 
         if( tbl->GetView() )
         {
@@ -750,13 +750,13 @@ void PANEL_FP_LIB_TABLE::moveDownHandler( wxCommandEvent& event )
     int curRow = m_cur_grid->GetGridCursorRow();
 
     // @todo: add multiple selection moves.
-    if( unsigned( curRow + 1 ) < tbl->rows.size() )
+    if( unsigned( curRow + 1 ) < tbl->m_rows.size() )
     {
         boost::ptr_vector< LIB_TABLE_ROW >::auto_type move_me =
-            tbl->rows.release( tbl->rows.begin() + curRow );
+            tbl->m_rows.release( tbl->m_rows.begin() + curRow );
 
         ++curRow;
-        tbl->rows.insert( tbl->rows.begin() + curRow, move_me.release() );
+        tbl->m_rows.insert( tbl->m_rows.begin() + curRow, move_me.release() );
 
         if( tbl->GetView() )
         {
@@ -983,8 +983,8 @@ bool PANEL_FP_LIB_TABLE::TransferDataFromWindow()
             m_parent->m_GlobalTableChanged = true;
 
             m_global->Clear();
-            m_global->rows.transfer( m_global->rows.end(), global_model()->rows.begin(),
-                                     global_model()->rows.end(), global_model()->rows );
+            m_global->m_rows.transfer( m_global->m_rows.end(), global_model()->m_rows.begin(),
+                                     global_model()->m_rows.end(), global_model()->m_rows );
             m_global->reindex();
         }
 
@@ -993,8 +993,8 @@ bool PANEL_FP_LIB_TABLE::TransferDataFromWindow()
             m_parent->m_ProjectTableChanged = true;
 
             m_project->Clear();
-            m_project->rows.transfer( m_project->rows.end(), project_model()->rows.begin(),
-                                      project_model()->rows.end(), project_model()->rows );
+            m_project->m_rows.transfer( m_project->m_rows.end(), project_model()->m_rows.begin(),
+                                      project_model()->m_rows.end(), project_model()->m_rows );
             m_project->reindex();
         }
 

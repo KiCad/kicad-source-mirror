@@ -54,10 +54,6 @@ void LIB_TABLE_ROW::setProperties( STRING_UTF8_MAP* aProperties )
 void LIB_TABLE_ROW::SetFullURI( const wxString& aFullURI )
 {
     uri_user = aFullURI;
-
-#if !FP_LATE_ENVVAR
-    uri_expanded = FP_LIB_TABLE::ExpandSubstitutions( aFullURI );
-#endif
 }
 
 
@@ -65,12 +61,7 @@ const wxString LIB_TABLE_ROW::GetFullURI( bool aSubstituted ) const
 {
     if( aSubstituted )
     {
-#if !FP_LATE_ENVVAR         // early expansion
-        return uri_expanded;
-
-#else   // late expansion
         return ExpandEnvVarSubstitutions( uri_user, nullptr );
-#endif
     }
 
     return uri_user;
@@ -123,7 +114,7 @@ void LIB_TABLE_ROW::SetOptions( const wxString& aOptions )
 
 
 LIB_TABLE::LIB_TABLE( LIB_TABLE* aFallBackTable ) :
-    fallBack( aFallBackTable )
+    m_fallBack( aFallBackTable )
 {
     // not copying fall back, simply search aFallBackTable separately
     // if "nickName not found".
@@ -138,10 +129,10 @@ LIB_TABLE::~LIB_TABLE()
 
 bool LIB_TABLE::IsEmpty( bool aIncludeFallback )
 {
-    if( !aIncludeFallback || !fallBack )
-        return rows.empty();
+    if( !aIncludeFallback || !m_fallBack )
+        return m_rows.empty();
 
-    return rows.empty() && fallBack->IsEmpty( true );
+    return m_rows.empty() && m_fallBack->IsEmpty( true );
 }
 
 
@@ -170,7 +161,7 @@ bool LIB_TABLE::HasLibrary( const wxString& aNickname, bool aCheckEnabled ) cons
 
 bool LIB_TABLE::HasLibraryWithPath( const wxString& aPath ) const
 {
-    for( const LIB_TABLE_ROW& row : rows )
+    for( const LIB_TABLE_ROW& row : m_rows )
     {
         if( row.GetFullURI() == aPath )
             return true;
@@ -202,11 +193,11 @@ LIB_TABLE_ROW* LIB_TABLE::findRow( const wxString& aNickName, bool aCheckIfEnabl
     {
         cur->ensureIndex();
 
-        for( const std::pair<const wxString, int>& entry : cur->nickIndex )
+        for( const std::pair<const wxString, int>& entry : cur->m_nickIndex )
         {
             if( entry.first == aNickName )
             {
-                row = &cur->rows[entry.second];
+                row = &cur->m_rows[entry.second];
 
                 if( !aCheckIfEnabled || row->GetIsEnabled() )
                     return row;
@@ -215,14 +206,14 @@ LIB_TABLE_ROW* LIB_TABLE::findRow( const wxString& aNickName, bool aCheckIfEnabl
 
         // Repeat, this time looking for names that were "fixed" by legacy versions because
         // the old eeschema file format didn't support spaces in tokens.
-        for( const std::pair<const wxString, int>& entry : cur->nickIndex )
+        for( const std::pair<const wxString, int>& entry : cur->m_nickIndex )
         {
             wxString legacyLibName = entry.first;
             legacyLibName.Replace( " ", "_" );
 
             if( legacyLibName == aNickName )
             {
-                row = &cur->rows[entry.second];
+                row = &cur->m_rows[entry.second];
 
                 if( !aCheckIfEnabled || row->GetIsEnabled() )
                     return row;
@@ -230,7 +221,7 @@ LIB_TABLE_ROW* LIB_TABLE::findRow( const wxString& aNickName, bool aCheckIfEnabl
         }
 
         // not found, search fall back table(s), if any
-    } while( ( cur = cur->fallBack ) != nullptr );
+    } while( ( cur = cur->m_fallBack ) != nullptr );
 
     return nullptr; // not found
 }
@@ -244,14 +235,14 @@ const LIB_TABLE_ROW* LIB_TABLE::FindRowByURI( const wxString& aURI )
     {
         cur->ensureIndex();
 
-        for( unsigned i = 0;  i < cur->rows.size();  i++ )
+        for( unsigned i = 0;  i < cur->m_rows.size();  i++ )
         {
-            wxString tmp = cur->rows[i].GetFullURI( true );
+            wxString tmp = cur->m_rows[i].GetFullURI( true );
 
             if( tmp.Find( "://" ) != wxNOT_FOUND )
             {
                 if( tmp == aURI )
-                    return &cur->rows[i];  // found as URI
+                    return &cur->m_rows[i];  // found as URI
             }
             else
             {
@@ -261,12 +252,12 @@ const LIB_TABLE_ROW* LIB_TABLE::FindRowByURI( const wxString& aURI )
                 // a symlink to the same real file, the comparison will be true.  See
                 // wxFileName::SameAs() in the wxWidgets source.
                 if( fn == wxFileName( tmp ) )
-                    return &cur->rows[i];  // found as full path and file name
+                    return &cur->m_rows[i];  // found as full path and file name
             }
         }
 
         // not found, search fall back table(s), if any
-    } while( ( cur = cur->fallBack ) != nullptr );
+    } while( ( cur = cur->m_fallBack ) != nullptr );
 
     return nullptr; // not found
 }
@@ -283,13 +274,13 @@ std::vector<wxString> LIB_TABLE::GetLogicalLibs()
 
     do
     {
-        for( LIB_TABLE_ROWS_CITER it = cur->rows.begin();  it!=cur->rows.end();  ++it )
+        for( LIB_TABLE_ROWS_CITER it = cur->m_rows.begin();  it!=cur->m_rows.end();  ++it )
         {
             if( it->GetIsEnabled() )
                 unique.insert( it->GetNickName() );
         }
 
-    } while( ( cur = cur->fallBack ) != nullptr );
+    } while( ( cur = cur->m_fallBack ) != nullptr );
 
     ret.reserve( unique.size() );
 
@@ -314,20 +305,20 @@ bool LIB_TABLE::InsertRow( LIB_TABLE_ROW* aRow, bool doReplace )
 
     std::lock_guard<std::mutex> lock( m_nickIndexMutex );
 
-    INDEX_CITER it = nickIndex.find( aRow->GetNickName() );
+    INDEX_CITER it = m_nickIndex.find( aRow->GetNickName() );
 
     aRow->SetParent( this );
 
-    if( it == nickIndex.end() )
+    if( it == m_nickIndex.end() )
     {
-        rows.push_back( aRow );
-        nickIndex.insert( INDEX_VALUE( aRow->GetNickName(), rows.size() - 1 ) );
+        m_rows.push_back( aRow );
+        m_nickIndex.insert( INDEX_VALUE( aRow->GetNickName(), m_rows.size() - 1 ) );
         return true;
     }
 
     if( doReplace )
     {
-        rows.replace( it->second, aRow );
+        m_rows.replace( it->second, aRow );
         return true;
     }
 
