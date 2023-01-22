@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2011 jean-pierre.charras
  * Copyright (C) 2022 Mike Williams
- * Copyright (C) 2011-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -107,6 +107,13 @@ void PCB_BITMAP::swapData( BOARD_ITEM* aItem )
                                    aItem->GetClass() ) );
 
     PCB_BITMAP* item = (PCB_BITMAP*) aItem;
+    std::swap( m_layer, item->m_layer );
+    std::swap( m_isKnockout, item->m_isKnockout );
+    std::swap( m_isLocked, item->m_isLocked );
+    std::swap( m_flags, item->m_flags );
+    std::swap( m_status, item->m_status );
+    std::swap( m_parent, item->m_parent );
+    std::swap( m_forceVisible, item->m_forceVisible );
     std::swap( m_pos, item->m_pos );
     std::swap( m_image, item->m_image );
 }
