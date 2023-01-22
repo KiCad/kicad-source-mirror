@@ -61,6 +61,7 @@ PANEL_SETUP_RULES::PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFr
     m_padTypeRegex.Compile( "^Pad_Type\\s*[!=]=\\s*$", wxRE_ADVANCED );
     m_pinTypeRegex.Compile( "^Pin_Type\\s*[!=]=\\s*$", wxRE_ADVANCED );
     m_fabPropRegex.Compile( "^Fabrication_Property\\s*[!=]=\\s*$", wxRE_ADVANCED );
+    m_shapeRegex.Compile( "^Shape\\s*[!=]=\\s*$", wxRE_ADVANCED );
 
     m_compileButton->SetBitmap( KiBitmap( BITMAPS::drc ) );
 
@@ -527,6 +528,15 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                               "Test point pad|"
                               "Heatsink pad|"
                               "Castellated pad" );
+            }
+            else if( m_shapeRegex.Matches( last ) )
+            {
+                tokens = wxT( "Segment|"
+                              "Rectangle|"
+                              "Arc|"
+                              "Circle|"
+                              "Polygon|"
+                              "Bezier" );
             }
         }
     }
