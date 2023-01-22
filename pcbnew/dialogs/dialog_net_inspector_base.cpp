@@ -22,27 +22,27 @@ DIALOG_NET_INSPECTOR_BASE::DIALOG_NET_INSPECTOR_BASE( wxWindow* parent, wxWindow
 	bTopSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 0, 3, 5, 0 );
+	fgSizer1 = new wxFlexGridSizer( 0, 3, 5, 5 );
 	fgSizer1->AddGrowableCol( 1 );
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_staticTextFilter = new wxStaticText( this, wxID_ANY, _("Net name filter:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextFilter->Wrap( -1 );
-	fgSizer1->Add( m_staticTextFilter, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	fgSizer1->Add( m_staticTextFilter, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
 
 	m_textCtrlFilter = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_textCtrlFilter, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	fgSizer1->Add( m_textCtrlFilter, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 	m_cbShowZeroPad = new wxCheckBox( this, wxID_ANY, _("Show zero pad nets"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbShowZeroPad->SetValue(true);
-	fgSizer1->Add( m_cbShowZeroPad, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer1->Add( m_cbShowZeroPad, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	m_groupBy = new wxCheckBox( this, wxID_ANY, _("Group by:"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_groupBy, 0, wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer1->Add( m_groupBy, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
 
 	m_groupByText = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_groupByText, 1, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer1->Add( m_groupByText, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 	m_groupByKind = new wxComboBox( this, wxID_ANY, _("Wildcard"), wxDefaultPosition, wxSize( -1,-1 ), 0, NULL, wxCB_DROPDOWN|wxCB_READONLY );
 	m_groupByKind->Append( _("Wildcard") );
@@ -50,7 +50,7 @@ DIALOG_NET_INSPECTOR_BASE::DIALOG_NET_INSPECTOR_BASE( wxWindow* parent, wxWindow
 	m_groupByKind->Append( _("Wildcard Substr") );
 	m_groupByKind->Append( _("RegEx Substr") );
 	m_groupByKind->SetSelection( 0 );
-	fgSizer1->Add( m_groupByKind, 0, wxALIGN_CENTER|wxLEFT|wxRIGHT, 5 );
+	fgSizer1->Add( m_groupByKind, 0, wxALIGN_CENTER|wxLEFT, 5 );
 
 
 	bTopSizer->Add( fgSizer1, 1, wxEXPAND, 5 );
@@ -67,7 +67,7 @@ DIALOG_NET_INSPECTOR_BASE::DIALOG_NET_INSPECTOR_BASE( wxWindow* parent, wxWindow
 	m_netsList = new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_HORIZ_RULES|wxDV_MULTIPLE|wxDV_VERT_RULES );
 	m_netsList->SetMinSize( wxSize( 640,300 ) );
 
-	bSizerMain->Add( m_netsList, 1, wxEXPAND|wxLEFT|wxRIGHT, 10 );
+	bSizerMain->Add( m_netsList, 1, wxEXPAND, 10 );
 
 	wxBoxSizer* bSizerListButtons;
 	bSizerListButtons = new wxBoxSizer( wxHORIZONTAL );
@@ -92,13 +92,6 @@ DIALOG_NET_INSPECTOR_BASE::DIALOG_NET_INSPECTOR_BASE( wxWindow* parent, wxWindow
 
 
 	bSizerMain->Add( bSizerListButtons, 0, wxEXPAND|wxALL, 5 );
-
-	m_sdbSizer = new wxStdDialogButtonSizer();
-	m_sdbSizerOK = new wxButton( this, wxID_OK );
-	m_sdbSizer->AddButton( m_sdbSizerOK );
-	m_sdbSizer->Realize();
-
-	bSizerMain->Add( m_sdbSizer, 0, wxALL|wxEXPAND, 5 );
 
 
 	this->SetSizer( bSizerMain );

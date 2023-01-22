@@ -79,7 +79,7 @@
                                 <property name="flexible_direction">wxBOTH</property>
                                 <property name="growablecols">1</property>
                                 <property name="growablerows"></property>
-                                <property name="hgap">0</property>
+                                <property name="hgap">5</property>
                                 <property name="minimum_size"></property>
                                 <property name="name">fgSizer1</property>
                                 <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
@@ -88,7 +88,7 @@
                                 <property name="vgap">5</property>
                                 <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
-                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT</property>
+                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM</property>
                                     <property name="proportion">0</property>
                                     <object class="wxStaticText" expanded="0">
                                         <property name="BottomDockable">1</property>
@@ -149,7 +149,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
-                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</property>
+                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxTextCtrl" expanded="0">
                                         <property name="BottomDockable">1</property>
@@ -214,7 +214,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
-                                    <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
+                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxCheckBox" expanded="0">
                                         <property name="BottomDockable">1</property>
@@ -279,7 +279,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
-                                    <property name="flag">wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_VERTICAL</property>
+                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM</property>
                                     <property name="proportion">0</property>
                                     <object class="wxCheckBox" expanded="0">
                                         <property name="BottomDockable">1</property>
@@ -344,7 +344,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
-                                    <property name="flag">wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL</property>
+                                    <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT</property>
                                     <property name="proportion">1</property>
                                     <object class="wxTextCtrl" expanded="0">
                                         <property name="BottomDockable">1</property>
@@ -409,7 +409,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
-                                    <property name="flag">wxALIGN_CENTER|wxLEFT|wxRIGHT</property>
+                                    <property name="flag">wxALIGN_CENTER|wxLEFT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxComboBox" expanded="0">
                                         <property name="BottomDockable">1</property>
@@ -490,7 +490,7 @@
                 </object>
                 <object class="sizeritem" expanded="0">
                     <property name="border">10</property>
-                    <property name="flag">wxEXPAND|wxLEFT|wxRIGHT</property>
+                    <property name="flag">wxEXPAND</property>
                     <property name="proportion">1</property>
                     <object class="wxDataViewCtrl" expanded="0">
                         <property name="bg"></property>
@@ -843,24 +843,6 @@
                                 <event name="OnButtonClick">onReport</event>
                             </object>
                         </object>
-                    </object>
-                </object>
-                <object class="sizeritem" expanded="0">
-                    <property name="border">5</property>
-                    <property name="flag">wxALL|wxEXPAND</property>
-                    <property name="proportion">0</property>
-                    <object class="wxStdDialogButtonSizer" expanded="0">
-                        <property name="Apply">0</property>
-                        <property name="Cancel">0</property>
-                        <property name="ContextHelp">0</property>
-                        <property name="Help">0</property>
-                        <property name="No">0</property>
-                        <property name="OK">1</property>
-                        <property name="Save">0</property>
-                        <property name="Yes">0</property>
-                        <property name="minimum_size"></property>
-                        <property name="name">m_sdbSizer</property>
-                        <property name="permission">protected</property>
                     </object>
                 </object>
             </object>

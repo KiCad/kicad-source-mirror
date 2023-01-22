@@ -53,8 +53,6 @@ class DIALOG_NET_INSPECTOR_BASE : public DIALOG_SHIM
 		STD_BITMAP_BUTTON* m_renameNet;
 		STD_BITMAP_BUTTON* m_deleteNet;
 		wxButton* m_ReportButt;
-		wxStdDialogButtonSizer* m_sdbSizer;
-		wxButton* m_sdbSizerOK;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void onFilterChange( wxCommandEvent& event ) { event.Skip(); }
