@@ -9,16 +9,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-20 09:12-0800\n"
-"PO-Revision-Date: 2023-01-20 06:51+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/master-"
-"source/el/>\n"
+"PO-Revision-Date: 2023-01-25 00:33+0000\n"
+"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
+"master-source/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.1\n"
+"X-Generator: Weblate 4.16-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: /home/m/ll/mount_point/home/mmisirlis/KiCad-GR-LL-notes/"
 "sources_git_official/kicad\n"
@@ -15420,9 +15420,8 @@ msgid "Checking model "
 msgstr "Έλεγχος Ζωνών"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:450
-#, fuzzy
 msgid "Undefined model type"
-msgstr "Μη ορισμένα επίπεδα:"
+msgstr "Απροσδιόριστος τύπος μοντέλου"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:456
 #, fuzzy
@@ -15654,9 +15653,8 @@ msgid "Unknown keyword in "
 msgstr "Άγνωστος κωδικός καταγραφής: %d."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1261
-#, fuzzy
 msgid " context: "
-msgstr "Βήμα κειμένου:"
+msgstr " γενικό πλαίσιο: "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1327
 #, fuzzy
@@ -15797,9 +15795,8 @@ msgid "Internal error: Bad parser context."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2481
-#, fuzzy
 msgid "Missing keyword."
-msgstr "Λέξεις-κλειδιά συνώνυμου:"
+msgstr "Λείπει λέξη-κλειδί."
 
 #: eeschema/sim/kibis/kibis.cpp:454
 #, fuzzy
@@ -16141,9 +16138,8 @@ msgid " (mag)"
 msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:734
-#, fuzzy
 msgid " (phase)"
-msgstr "Φάση AC:"
+msgstr " (φάση)"
 
 #: eeschema/sim/sim_plot_frame.cpp:840 eeschema/sim/sim_plot_frame.cpp:1803
 msgid "Signal"
@@ -16179,9 +16175,8 @@ msgid "SPICE Netlist"
 msgstr "Αρχείο λίστας δικτύων SPICE"
 
 #: eeschema/sim/sim_plot_frame.cpp:1753
-#, fuzzy
 msgid "Save changes to workbook?"
-msgstr "Αποθήκευση τρέχουσας πλακέτας"
+msgstr "Αποθήκευση αλλαγών στο περιβάλλον εργασίας;"
 
 #: eeschema/sim/sim_plot_frame.cpp:1918
 msgid ""
@@ -19217,9 +19212,9 @@ msgid "Zip file '%s' cannot be opened."
 msgstr "Το αρχείο zip '%s' δεν μπορεί να ανοιχτεί."
 
 #: gerbview/files.cpp:481
-#, fuzzy, c-format
+#, c-format
 msgid "Skipped file '%s' (gerber job file)."
-msgstr "\n"
+msgstr "Παραλειπόμενο αρχείο '%s' (αρχείο εργασίας gerber)."
 
 #: gerbview/files.cpp:526
 #, c-format
@@ -19227,9 +19222,9 @@ msgid "<b>Unable to create temporary file '%s'.</b>"
 msgstr "<b>Αδυναμία δημιουργίας προσωρινού αρχείου '%s'</b>"
 
 #: gerbview/files.cpp:551
-#, fuzzy, c-format
+#, c-format
 msgid "Skipped file '%s' (unknown type)."
-msgstr "\n"
+msgstr "Παραλειπόμενο αρχείο '%s' (αγνώστου τύπου)."
 
 #: gerbview/files.cpp:590
 #, c-format
@@ -20038,9 +20033,8 @@ msgstr "Μονάδες εξόδου, έγκυρες επιλογές: mm, in"
 #: kicad/cli/command_export_pcb_pdf.cpp:78
 #: kicad/cli/command_export_pcb_pos.cpp:101
 #: kicad/cli/command_export_pcb_svg.cpp:88
-#, fuzzy
 msgid "Board file does not exist or is not accessible\n"
-msgstr "Το σχηματικό \"%s\" δεν υπάρχει. Θέλετε να το δημιουργήσετε;"
+msgstr "Το αρχείο της πλακέτα δεν υπάρχει ή δεν είναι προσβάσιμο\n"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:50
 #: kicad/cli/command_export_pcb_pdf.cpp:49
@@ -20218,9 +20212,8 @@ msgstr ""
 #: kicad/cli/command_export_sch_pdf.cpp:69
 #: kicad/cli/command_export_sch_pythonbom.cpp:47
 #: kicad/cli/command_export_sch_svg.cpp:69
-#, fuzzy
 msgid "Schematic file does not exist or is not accessible\n"
-msgstr "Το σχηματικό \"%s\" δεν υπάρχει. Θέλετε να το δημιουργήσετε;"
+msgstr "Το αρχείο του σχηματικού δεν υπάρχει ή δεν είναι προσβάσιμο\n"
 
 #: kicad/cli/command_export_sch_pdf.cpp:51
 #: kicad/cli/command_export_sch_svg.cpp:51
@@ -20260,9 +20253,8 @@ msgid "Include hidden fields"
 msgstr "Αναζήτηση σε κρυφά πεδία"
 
 #: kicad/cli/command_sym_export_svg.cpp:76 kicad/cli/command_sym_upgrade.cpp:53
-#, fuzzy
 msgid "Symbol file does not exist or is not accessible\n"
-msgstr "Το σχηματικό \"%s\" δεν υπάρχει. Θέλετε να το δημιουργήσετε;"
+msgstr "Το αρχείο του συμβόλου δεν υπάρχει ή δεν είναι προσβάσιμο\n"
 
 #: kicad/cli/command_sym_upgrade.cpp:37
 msgid "Forces the symbol library to be resaved regardless of versioning"
@@ -20846,9 +20838,8 @@ msgid "Automatically remove uninstalled libraries"
 msgstr "Αυτόματα δρομολογημένοι δρόμοι"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:64
-#, fuzzy
 msgid "Library nickname prefix:"
-msgstr "Σφάλμα Ψευδωνύμου Βιβλιοθήκης"
+msgstr "Πρόθεμα ψευδωνύμου βιβλιοθήκης:"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:74
 msgid ""
@@ -20959,9 +20950,9 @@ msgid "No package updates available"
 msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:74 kicad/pcm/pcm_task_manager.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "Version %s of package %s not found!"
-msgstr "Δεν βρέθηκε το σχηματικό αρχείο \"%s\"."
+msgstr "Η έκδοση %s του πακέτου %s δεν βρέθηκε!"
 
 #: kicad/pcm/pcm_task_manager.cpp:83
 msgid "Unable to create download directory!"
@@ -22509,9 +22500,8 @@ msgstr "Απλή επίλυση:"
 #: pcb_calculator/calculator_panels/panel_eseries_base.cpp:111
 #: pcb_calculator/calculator_panels/panel_eseries_base.cpp:131
 #: pcb_calculator/calculator_panels/panel_eseries_base.cpp:151
-#, fuzzy
 msgid "Approximation:"
-msgstr "Κλίμακα Κατά Προσέγγιση"
+msgstr "Με προσέγγιση:"
 
 #: pcb_calculator/calculator_panels/panel_eseries_base.cpp:122
 msgid "3R solution:"
@@ -22538,9 +22528,8 @@ msgid "Ambient temperature:"
 msgstr "Φωτισμός κάμερας περιβάλλοντος:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:48
-#, fuzzy
 msgid "Melting point:"
-msgstr "Σημείο Λειτουργίας"
+msgstr "Σημείο τήξης:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:62
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:117
@@ -23237,14 +23226,12 @@ msgid "Period:"
 msgstr "Περίοδος:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:51
-#, fuzzy
 msgid "Wavelength in vacuum:"
-msgstr "Μήκος κυματοδηγού"
+msgstr "Μήκος κύματος στο κενό:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:63
-#, fuzzy
 msgid "Wavelength in medium:"
-msgstr "Μήκος κυματοδηγού"
+msgstr "Μήκος κύματος στο μέσο:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:75
 msgid "Speed in medium:"
@@ -23935,7 +23922,7 @@ msgstr "Μη Δρομολογημένα"
 
 #: pcbnew/board_connected_item.cpp:178
 msgid "NetClass"
-msgstr "NetClass"
+msgstr "Κλάση δικτύου"
 
 #: pcbnew/board_connected_item.cpp:185
 msgid "NetName"
@@ -24457,9 +24444,8 @@ msgid "(not a closed shape)"
 msgstr "(μη κλειστό σχήμα)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:517
-#, fuzzy
 msgid "(multiple board outlines not supported)"
-msgstr "Το περίγραμμα της πλακέτας δεν κλείνει σωστά:"
+msgstr "(δεν υποστηρίζονται πολλαπλά περιγράμματα πλακέτας)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:86
 msgid "Only front"
@@ -25059,9 +25045,8 @@ msgid "SMD:"
 msgstr "SMD:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:147
-#, fuzzy
 msgid "Unspecified:"
-msgstr "Απροσδιόριστο"
+msgstr "Ακαθόριστα:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:150
 msgid "Through hole:"
@@ -29272,9 +29257,8 @@ msgid "Zone knockout:"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:726
-#, fuzzy
 msgid "Pad shape"
-msgstr "Σχήμα Pad:"
+msgstr "Σχήμα έδρας"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:726
 #, fuzzy
@@ -29292,9 +29276,8 @@ msgid "Relief gap:"
 msgstr "Κενό θερμικής εκτόνωσης:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:758
-#, fuzzy
 msgid "Spoke width:"
-msgstr "Πάχος ακτίνας"
+msgstr "Πάχος ακτίνας:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:769
 #, fuzzy
@@ -30314,14 +30297,12 @@ msgid "Change text box properties"
 msgstr "Αλλαγή ιδιοτήτων κειμένου"
 
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:138
-#, fuzzy
 msgid "Text Width:"
-msgstr "Πλάτος Κειμένου"
+msgstr "Πάχος Κειμένου:"
 
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:154
-#, fuzzy
 msgid "Text Height:"
-msgstr "Ύψος Κειμένου"
+msgstr "Ύψος Κειμένου:"
 
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:204
 #, fuzzy
@@ -32698,9 +32679,9 @@ msgid "Local override on %s; thermal spoke width: %s."
 msgstr "Τοπική παράκαμψη σε %s; διάκενο: %s."
 
 #: pcbnew/drc/drc_engine.cpp:837
-#, fuzzy, c-format
+#, c-format
 msgid "%s min thickness: %s."
-msgstr "Ελάχιστη τιμή πάχους για ζώνη:"
+msgstr "%s ελάχιστο πάχος: %s."
 
 #: pcbnew/drc/drc_engine.cpp:851
 #, fuzzy, c-format
@@ -32738,9 +32719,9 @@ msgid "Checking %s gap: %s."
 msgstr "Έλεγχος %s %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:905
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s thermal spoke width: %s."
-msgstr "Πλάτος θερμικής ακτίνας:"
+msgstr "Έλεγχος %s πάχους θερμικής ακτίνας: %s."
 
 #: pcbnew/drc/drc_engine.cpp:911
 #, fuzzy, c-format
@@ -32921,9 +32902,9 @@ msgid "%s thermal relief gap: %s."
 msgstr "Ζώνη θερμικής εκτόνωσης: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1450
-#, fuzzy, c-format
+#, c-format
 msgid "%s thermal spoke width: %s."
-msgstr "Πλάτος θερμικής ακτίνας:"
+msgstr "%s πάχος θερμικής ακτίνας: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1483
 #, fuzzy, c-format
@@ -33793,11 +33774,8 @@ msgstr ""
 "** Σφάλμα εγγραφής στο αρχείο STEP. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:337
-#, fuzzy
 msgid "Writing STEP file\n"
-msgstr ""
-"\n"
-"** Σφάλμα εγγραφής στο αρχείο STEP. **\n"
+msgstr "Εγγραφή αρχείου STEP\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:341
 msgid ""
@@ -33805,7 +33783,7 @@ msgid ""
 "** Error writing STEP file. **\n"
 msgstr ""
 "\n"
-"** Σφάλμα εγγραφής στο αρχείο STEP. **\n"
+"** Σφάλμα εγγραφής αρχείου STEP. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:346
 #, c-format
@@ -34100,9 +34078,8 @@ msgid "Thermal reliefs for PTH"
 msgstr "Θερμικές εκτονώσεις"
 
 #: pcbnew/footprint.cpp:2919
-#, fuzzy
 msgid "Library link"
-msgstr "Σύνδεσμος βιβλιοθήκης:"
+msgstr "Σύνδεσμος βιβλιοθήκης"
 
 #: pcbnew/footprint.cpp:2936
 msgid "Exclude from BOM"
@@ -37705,9 +37682,9 @@ msgid "Footprint with value of '%s' has an empty reference designator."
 msgstr "Το σύμβολο με την τιμή \"%s\" έχει κενή ταυτότητα αναφοράς."
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:1104
-#, fuzzy, c-format
+#, c-format
 msgid "Multiple footprints have the reference designator '%s'."
-msgstr "Ενημέρωση αποτυπωμάτων με προσδιορισμό αναφοράς:"
+msgstr "Πολλαπλά αποτυπώματα με προσδιορισμό αναφοράς '%s'."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:76
 msgid ""
@@ -37779,9 +37756,8 @@ msgid "%d teardrops removed."
 msgstr "Προσθήκη Ετικέτας"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:34
-#, fuzzy
 msgid "Round shapes:"
-msgstr "Στερεό σχήμα"
+msgstr "Κυκλικά σχήματα:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:48
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:152
@@ -37832,9 +37808,8 @@ msgid "Rect shapes:"
 msgstr "Γέμισμα επιλεγμένων σχημάτων"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:242
-#, fuzzy
 msgid "Tracks:"
-msgstr "Δρόμοι"
+msgstr "Διάδρομοι:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:349
 msgid "Vias and PTH pads"
@@ -37863,9 +37838,8 @@ msgid "Add teardrops to not driiled pads, like SMD"
 msgstr ""
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:366
-#, fuzzy
 msgid "Track to track"
-msgstr "Κόλλημα στους διαδρόμους:"
+msgstr "Διάδρομος με διαδρόμο"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:368
 #, fuzzy
@@ -37895,9 +37869,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:395
-#, fuzzy
 msgid "Curve points:"
-msgstr "Καμπύλη Bezier, %d σημεία"
+msgstr "Σημεία καμπύλης:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:397
 msgid "Number of segments to build a teardrop with curved shape"
@@ -38155,9 +38128,8 @@ msgid "Resolved width constraints: min %s; max %s."
 msgstr "Περιορισμοί πλάτους: ελάχιστο %s; ιδανικό %s; μέγιστο %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:332
-#, fuzzy
 msgid "Connection Width"
-msgstr "Είδος σύνδεσης:"
+msgstr "Πάχος Σύνδεσης"
 
 #: pcbnew/tools/board_inspection_tool.cpp:333
 #, fuzzy
@@ -38249,14 +38221,12 @@ msgstr "Ανάλυση διακένου οπής για:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:425
 #: pcbnew/tools/board_inspection_tool.cpp:1098
-#, fuzzy
 msgid "No 'physical_hole_clearance' constraints defined."
-msgstr "Ανάλυση διακένου οπής για:"
+msgstr "Δεν ορίστηκαν περιορισμοί 'physical_hole_clearance'."
 
 #: pcbnew/tools/board_inspection_tool.cpp:436
-#, fuzzy
 msgid "Hole to Hole"
-msgstr "Διάκενο οπής με οπή:"
+msgstr "Οπής με Οπή"
 
 #: pcbnew/tools/board_inspection_tool.cpp:437
 #: pcbnew/tools/board_inspection_tool.cpp:960
@@ -38323,9 +38293,9 @@ msgid "Spoke width resolution for:"
 msgstr "Ανάλυση πλάτους διαδρόμου για:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:666
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thermal relief spoke width: %s."
-msgstr "Πλάτος θερμικής ακτίνας:"
+msgstr "Επίλυση πάχους θερμικής ακτίνας: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:671
 #, fuzzy
@@ -38647,9 +38617,8 @@ msgid "DRC"
 msgstr "ΕΚΣ"
 
 #: pcbnew/tools/edit_tool.cpp:95
-#, fuzzy
 msgid "Positioning Tools"
-msgstr "Μετατόπιση θέσης:"
+msgstr "Εργαλεία Τοποθέτησης"
 
 #: pcbnew/tools/edit_tool.cpp:430
 #, fuzzy, c-format
@@ -40592,9 +40561,8 @@ msgid "Resolved hole clearance"
 msgstr "Εντοπισμένο διάκενο: %s."
 
 #: pcbnew/tools/pcb_control.cpp:1469
-#, fuzzy
 msgid "Actual hole clearance"
-msgstr "Διάκενο οπής με οπή:"
+msgstr "Πραγματικό διάκενο οπής"
 
 #: pcbnew/tools/pcb_control.cpp:1502
 #, fuzzy
@@ -41578,9 +41546,8 @@ msgid "Zone %s on %s"
 msgstr "Ζώνη %s στο %s"
 
 #: pcbnew/zone.cpp:1473
-#, fuzzy
 msgid "Minimum Width"
-msgstr "Ελάχιστο πλάτος:"
+msgstr "Ελάχιστο Πάχος"
 
 #: pcbnew/zone.cpp:1478
 msgid "Pad Connections"
