@@ -478,7 +478,7 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
         removeItems( toRemove );
 
     auto mergeSegments =
-            [&]( CN_CONNECTIVITY_ALGO* connectivity ) -> bool
+            [&]( std::shared_ptr<CN_CONNECTIVITY_ALGO> connectivity ) -> bool
             {
                 for( PCB_TRACK* segment : m_brd->Tracks() )
                 {
@@ -542,9 +542,11 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
     {
         do
         {
-            m_brd->BuildConnectivity();
+            while( !m_brd->BuildConnectivity() )
+                wxSafeYield();
+
             m_connectedItemsCache.clear();
-        } while( mergeSegments( m_brd->GetConnectivity()->GetConnectivityAlgo().get() ) );
+        } while( mergeSegments( m_brd->GetConnectivity()->GetConnectivityAlgo() ) );
     }
 
     for( PCB_TRACK* track : m_brd->Tracks() )

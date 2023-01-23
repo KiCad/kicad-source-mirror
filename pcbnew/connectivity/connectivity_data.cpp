@@ -92,14 +92,14 @@ bool CONNECTIVITY_DATA::Update( BOARD_ITEM* aItem )
 }
 
 
-void CONNECTIVITY_DATA::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
+bool CONNECTIVITY_DATA::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
 {
     aBoard->CacheTriangulation( aReporter );
 
     std::unique_lock<KISPINLOCK> lock( m_lock, std::try_to_lock );
 
     if( !lock )
-        return;
+        return false;
 
     if( aReporter )
     {
@@ -135,6 +135,8 @@ void CONNECTIVITY_DATA::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
         aReporter->SetCurrentProgress( 1.0 );
         aReporter->KeepRefreshing( false );
     }
+
+    return true;
 }
 
 

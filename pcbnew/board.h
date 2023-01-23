@@ -428,7 +428,7 @@ public:
      * especially the list of connected items, list of nets and rastnest data
      * Needed after loading a board to have the connectivity database updated.
      */
-    void BuildConnectivity( PROGRESS_REPORTER* aReporter = nullptr );
+    bool BuildConnectivity( PROGRESS_REPORTER* aReporter = nullptr );
 
     /**
      * Delete all MARKERS from the board.

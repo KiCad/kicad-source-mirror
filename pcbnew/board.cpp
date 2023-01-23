@@ -159,10 +159,13 @@ BOARD::~BOARD()
 }
 
 
-void BOARD::BuildConnectivity( PROGRESS_REPORTER* aReporter )
+bool BOARD::BuildConnectivity( PROGRESS_REPORTER* aReporter )
 {
-    GetConnectivity()->Build( this, aReporter );
+    if( !GetConnectivity()->Build( this, aReporter ) )
+        return false;
+
     UpdateRatsnestExclusions();
+    return true;
 }
 
 

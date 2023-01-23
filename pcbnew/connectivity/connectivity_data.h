@@ -109,7 +109,7 @@ public:
      * Function Build()
      * Builds the connectivity database for the board aBoard.
      */
-    void Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter = nullptr );
+    bool Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter = nullptr );
 
     /**
      * Function Build()
