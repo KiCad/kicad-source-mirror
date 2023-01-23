@@ -40,10 +40,11 @@ void NETLIST_EXPORTER_SPICE_MODEL::WriteHead( OUTPUTFORMATTER& aFormatter,
 
         switch( port.dir )
         {
-            case L_INPUT:       portDir = "input";   break;
-            case L_OUTPUT:      portDir = "output";  break;
-            case L_BIDI:        portDir = "inout";   break;
-            case L_UNSPECIFIED: portDir = "passive"; break;
+            case L_INPUT:       portDir = "input";      break;
+            case L_OUTPUT:      portDir = "output";     break;
+            case L_BIDI:        portDir = "inout";      break;
+            case L_TRISTATE:    portDir = "tristate";   break;
+            case L_UNSPECIFIED: portDir = "passive";    break;
 
             default:
                 wxFAIL_MSG( "Invalid port direction" );
