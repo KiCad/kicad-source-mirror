@@ -145,7 +145,7 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
                 {
                     PAD* pad = static_cast<PAD*>( item );
 
-                    // We only care about drilled (ie: round) holes
+                    // Slots are generally milled _after_ drilling, so we ignore them.
                     if( pad->GetDrillSize().x && pad->GetDrillSize().x == pad->GetDrillSize().y )
                         m_holeTree.Insert( item, Edge_Cuts, m_largestHoleToHoleClearance );
                 }
@@ -153,9 +153,9 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
                 {
                     PCB_VIA* via = static_cast<PCB_VIA*>( item );
 
-                    // We only care about mechanically drilled (ie: non-laser) holes
-                    if( via->GetViaType() == VIATYPE::THROUGH )
-                        m_holeTree.Insert( item, Edge_Cuts, m_largestHoleToHoleClearance );
+                    // Blind/buried/microvias will be drilled/burned _prior_ to lamination, so
+                    // subsequently drilled holes need to avoid them.
+                    m_holeTree.Insert( item, Edge_Cuts, m_largestHoleToHoleClearance );
                 }
 
                 return true;
@@ -173,8 +173,10 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
         if( !reportProgress( ii++, count, progressDelta ) )
             return false;   // DRC cancelled
 
-        // We only care about mechanically drilled (ie: non-laser) holes
-        if( via->GetViaType() == VIATYPE::THROUGH )
+        // We only care about mechanically drilled (ie: non-laser) holes.  These include both
+        // blind/buried via holes (drilled prior to lamination) and through-via and drilled pad
+        // holes (which are generally drilled post laminataion).
+        if( via->GetViaType() != VIATYPE::MICROVIA )
         {
             std::shared_ptr<SHAPE_CIRCLE> holeShape = getDrilledHoleShape( via );
 
