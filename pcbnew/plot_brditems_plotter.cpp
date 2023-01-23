@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -409,7 +409,9 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItem( const FP_TEXT* aText, const COLOR4
 
     if( !font )
     {
-        font = KIFONT::FONT::GetFont( m_plotter->RenderSettings()->GetDefaultFont(),
+        font = KIFONT::FONT::GetFont( m_plotter->RenderSettings()
+                                            ? m_plotter->RenderSettings()->GetDefaultFont()
+                                            : wxString( wxEmptyString ),
                                       aText->IsBold(), aText->IsItalic() );
     }
 
@@ -784,13 +786,16 @@ void BRDITEMS_PLOTTER::PlotFootprintShape( const FP_SHAPE* aShape )
 }
 
 
+#include <font/stroke_font.h>
 void BRDITEMS_PLOTTER::PlotPcbText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, bool aIsKnockout )
 {
     KIFONT::FONT* font = aText->GetFont();
 
     if( !font )
     {
-        font = KIFONT::FONT::GetFont( m_plotter->RenderSettings()->GetDefaultFont(),
+        font = KIFONT::FONT::GetFont( m_plotter->RenderSettings()
+                                            ? m_plotter->RenderSettings()->GetDefaultFont()
+                                            : wxString( wxEmptyString ),
                                       aText->IsBold(), aText->IsItalic() );
     }
 
