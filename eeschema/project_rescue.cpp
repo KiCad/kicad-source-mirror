@@ -144,6 +144,7 @@ void RESCUE_CASE_CANDIDATE::FindRescues( RESCUER& aRescuer,
     std::vector<LIB_SYMBOL*> case_insensitive_matches;
 
     wxString symbol_name;
+    wxString search_name;
     wxString last_symbol_name;
 
     for( SCH_SYMBOL* eachSymbol : *( aRescuer.GetSymbols() ) )
