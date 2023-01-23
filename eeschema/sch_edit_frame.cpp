@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1530,9 +1530,10 @@ void SCH_EDIT_FRAME::ShowAllIntersheetRefs( bool aShow )
 
 void SCH_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
 {
+    SCH_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
+
     SCHEMATIC_SETTINGS& settings = Schematic().Settings();
 
-    SCH_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
     settings.m_JunctionSize = GetSchematicJunctionSize();
 
     ShowAllIntersheetRefs( settings.m_IntersheetRefsShow );
@@ -1545,6 +1546,11 @@ void SCH_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
     view->SetLayerVisible( LAYER_ERC_ERR, cfg->m_Appearance.show_erc_errors );
     view->SetLayerVisible( LAYER_ERC_WARN, cfg->m_Appearance.show_erc_warnings );
     view->SetLayerVisible( LAYER_ERC_EXCLUSION, cfg->m_Appearance.show_erc_exclusions );
+
+    settings.m_TemplateFieldNames.DeleteAllFieldNameTemplates( true /* global */ );
+
+    if( !cfg->m_Drawing.field_names.IsEmpty() )
+        settings.m_TemplateFieldNames.AddTemplateFieldNames( cfg->m_Drawing.field_names );
 
     SCH_SCREEN* screen = GetCurrentSheet().LastScreen();
 

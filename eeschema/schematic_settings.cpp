@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -163,26 +163,11 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
                     }
                 }
 
+                // Read global fieldname templates
                 auto* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
 
-                if( cfg )
-                {
-                    // Read global fieldname templates
-                    wxString templateFieldNames = cfg->m_Drawing.field_names;
-
-                    if( !templateFieldNames.IsEmpty() )
-                    {
-                        TEMPLATE_FIELDNAMES_LEXER field_lexer( TO_UTF8( templateFieldNames ) );
-
-                        try
-                        {
-                            m_TemplateFieldNames.Parse( &field_lexer, true );
-                        }
-                        catch( const IO_ERROR& )
-                        {
-                        }
-                    }
-                }
+                if( cfg && !cfg->m_Drawing.field_names.IsEmpty() )
+                    m_TemplateFieldNames.AddTemplateFieldNames( cfg->m_Drawing.field_names );
             }, {} ) );
 
     m_params.emplace_back( new PARAM<wxString>( "page_layout_descr_file",

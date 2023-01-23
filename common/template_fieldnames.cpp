@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2015-2022 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2015-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -135,7 +135,7 @@ void TEMPLATES::Format( OUTPUTFORMATTER* out, int nestLevel, bool aGlobal ) cons
 }
 
 
-void TEMPLATES::Parse( TEMPLATE_FIELDNAMES_LEXER* in, bool aGlobal )
+void TEMPLATES::parse( TEMPLATE_FIELDNAMES_LEXER* in, bool aGlobal )
 {
     T  tok;
 
@@ -226,6 +226,20 @@ void TEMPLATES::AddTemplateFieldName( const TEMPLATE_FIELDNAME& aFieldName, bool
     // it and return its index within the container.
     target.push_back( aFieldName );
     m_resolvedDirty = true;
+}
+
+
+void TEMPLATES::AddTemplateFieldNames( const wxString& aSerializedFieldNames )
+{
+    TEMPLATE_FIELDNAMES_LEXER field_lexer( TO_UTF8( aSerializedFieldNames ) );
+
+    try
+    {
+        parse( &field_lexer, true );
+    }
+    catch( const IO_ERROR& )
+    {
+    }
 }
 
 

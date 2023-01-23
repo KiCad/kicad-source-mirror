@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2014-2022 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2014-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -132,13 +132,6 @@ public:
     void Format( OUTPUTFORMATTER* out, int nestLevel, bool aGlobal ) const ;
 
     /**
-     * Fill this object from information in the input stream handled by
-     * #TEMPLATE_FIELDNAMES_LEXER.
-     */
-    void Parse( TEMPLATE_FIELDNAMES_LEXER* in, bool aGlobal );
-
-
-    /**
      * Insert or append a wanted symbol field name into the field names template.
      *
      * Should be used for any symbol property editor.  If the name already exists, it
@@ -149,6 +142,11 @@ public:
      * @param aGlobal indicates whether to add to the global or project table.
      */
     void AddTemplateFieldName( const TEMPLATE_FIELDNAME& aFieldName, bool aGlobal );
+
+    /**
+     * Add a serialized list of template field names.
+     */
+    void AddTemplateFieldNames( const wxString& aSerializedFieldNames );
 
     /**
      * Delete the entire contents.
@@ -175,6 +173,8 @@ public:
 
 protected:
     void resolveTemplates();
+
+    void parse( TEMPLATE_FIELDNAMES_LEXER* in, bool aGlobal );
 
 private:
     TEMPLATE_FIELDNAMES     m_globals;

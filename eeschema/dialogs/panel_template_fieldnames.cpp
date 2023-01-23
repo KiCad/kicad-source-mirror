@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,24 +50,8 @@ PANEL_TEMPLATE_FIELDNAMES::PANEL_TEMPLATE_FIELDNAMES( wxWindow* aWindow,
 
         EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
 
-        if( cfg )
-        {
-            // Read global fieldname templates
-            wxString templateFieldNames = cfg->m_Drawing.field_names;
-
-            if( !templateFieldNames.IsEmpty() )
-            {
-                TEMPLATE_FIELDNAMES_LEXER  field_lexer( TO_UTF8( templateFieldNames ) );
-
-                try
-                {
-                    m_templateMgr->Parse( &field_lexer, true );
-                }
-                catch( const IO_ERROR& )
-                {
-                }
-            }
-        }
+        if( cfg && !cfg->m_Drawing.field_names.IsEmpty() )
+            m_templateMgr->AddTemplateFieldNames( cfg->m_Drawing.field_names );
     }
 
     m_addFieldButton->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
