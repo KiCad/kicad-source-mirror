@@ -510,6 +510,16 @@ public:
      */
     static UTF8 FormatOptions( const STRING_UTF8_MAP* aProperties );
 
+    /**
+     * Returns the version number (0 if unset)
+     *
+     * @return integer version number read from table
+     */
+    int GetVersion() const
+    {
+        return m_version;
+    }
+
 protected:
     /**
      * Return a #LIB_TABLE_ROW if \a aNickname is found in this table or in any chained
@@ -565,6 +575,9 @@ protected:
     INDEX m_nickIndex;
 
     LIB_TABLE* m_fallBack;
+
+    /// Versioning to handle importing old tables
+    mutable int m_version;
 
     /// Mutex to protect access to the nickIndex variable
     mutable std::mutex m_nickIndexMutex;

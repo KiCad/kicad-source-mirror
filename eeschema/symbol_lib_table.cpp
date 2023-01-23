@@ -141,8 +141,19 @@ void SYMBOL_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
 
         // in case there is a "row integrity" error, tell where later.
         int lineNum = in->CurLineNumber();
+        tok = in->NextTok();
 
-        if( ( tok = in->NextTok() ) != T_lib )
+        // Optionally parse the current version number
+        if( tok == T_version )
+        {
+            in->NeedNUMBER( "version" );
+            m_version = std::stoi( in->CurText() );
+            in->NeedRIGHT();
+            in->NeedLEFT();
+            tok = in->NextTok();
+        }
+
+        if( tok != T_lib )
             in->Expecting( T_lib );
 
         // (name NICKNAME)
@@ -269,6 +280,7 @@ void SYMBOL_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
 void SYMBOL_LIB_TABLE::Format( OUTPUTFORMATTER* aOutput, int aIndentLevel ) const
 {
     aOutput->Print( aIndentLevel, "(sym_lib_table\n" );
+    aOutput->Print( aIndentLevel + 1, "(version %d)\n", m_version );
 
     for( LIB_TABLE_ROWS_CITER it = m_rows.begin();  it != m_rows.end();  ++it )
     {

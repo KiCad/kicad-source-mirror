@@ -114,7 +114,7 @@ void LIB_TABLE_ROW::SetOptions( const wxString& aOptions )
 
 
 LIB_TABLE::LIB_TABLE( LIB_TABLE* aFallBackTable ) :
-    m_fallBack( aFallBackTable )
+    m_fallBack( aFallBackTable ), m_version( 0 )
 {
     // not copying fall back, simply search aFallBackTable separately
     // if "nickName not found".
@@ -361,7 +361,7 @@ void LIB_TABLE::Load( const wxString& aFileName )
 
         Parse( &lexer );
 
-        if( migrate() && wxFileName::IsFileWritable( aFileName ) )
+        if( m_version != 7 && migrate() && wxFileName::IsFileWritable( aFileName ) )
             Save( aFileName );
     }
 }
@@ -370,6 +370,9 @@ void LIB_TABLE::Load( const wxString& aFileName )
 void LIB_TABLE::Save( const wxString& aFileName ) const
 {
     FILE_OUTPUTFORMATTER sf( aFileName );
+
+    // Force the lib table version to 7 before saving
+    m_version = 7;
     Format( &sf, 0 );
 }
 
