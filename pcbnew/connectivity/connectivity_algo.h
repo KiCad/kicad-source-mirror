@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
@@ -213,10 +213,8 @@ public:
     /**
      * Propagate nets from pads to other items in clusters.
      * @param aCommit is used to store undo information for items modified by the call.
-     * @param aMode controls how clusters with conflicting nets are resolved.
      */
-    void PropagateNets( BOARD_COMMIT* aCommit = nullptr,
-                        PROPAGATE_MODE aMode = PROPAGATE_MODE::SKIP_CONFLICTS );
+    void PropagateNets( BOARD_COMMIT* aCommit = nullptr );
 
     void FindIsolatedCopperIslands( ZONE* aZone, PCB_LAYER_ID aLayer, std::vector<int>& aIslands );
 
@@ -261,8 +259,7 @@ public:
 private:
     void searchConnections();
 
-    void propagateConnections( BOARD_COMMIT* aCommit = nullptr,
-                               PROPAGATE_MODE aMode = PROPAGATE_MODE::SKIP_CONFLICTS );
+    void propagateConnections( BOARD_COMMIT* aCommit = nullptr );
 
     template <class Container, class BItem>
     void add( Container& c, BItem brditem )

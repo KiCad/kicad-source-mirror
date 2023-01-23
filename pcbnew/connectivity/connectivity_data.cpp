@@ -394,9 +394,9 @@ void CONNECTIVITY_DATA::HideLocalRatsnest()
 }
 
 
-void CONNECTIVITY_DATA::PropagateNets( BOARD_COMMIT* aCommit, PROPAGATE_MODE aMode )
+void CONNECTIVITY_DATA::PropagateNets( BOARD_COMMIT* aCommit )
 {
-    m_connAlgo->PropagateNets( aCommit, aMode );
+    m_connAlgo->PropagateNets( aCommit );
 }
 
 

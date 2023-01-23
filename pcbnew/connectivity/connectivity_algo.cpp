@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2016-2018 CERN
- * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -551,42 +551,21 @@ void CN_CONNECTIVITY_ALGO::LocalBuild( const std::vector<BOARD_ITEM*>& aItems )
 }
 
 
-void CN_CONNECTIVITY_ALGO::propagateConnections( BOARD_COMMIT* aCommit, PROPAGATE_MODE aMode )
+void CN_CONNECTIVITY_ALGO::propagateConnections( BOARD_COMMIT* aCommit )
 {
-    bool resolveConflicts = ( aMode != PROPAGATE_MODE::SKIP_CONFLICTS );
-
-    wxLogTrace( wxT( "CN" ), wxT( "propagateConnections: resolve conflicts? %d" ),
-                resolveConflicts );
-
     for( const std::shared_ptr<CN_CLUSTER>& cluster : m_connClusters )
     {
-        if( cluster->IsOrphaned() )
+        if( cluster->IsConflicting() )
         {
-            wxLogTrace( wxT( "CN" ), wxT( "Skipping orphaned cluster %p [net: %s]" ),
-                        cluster.get(),
-                        (const char*) cluster->OriginNetName().c_str() );
+            // Conflicting pads in cluster: we don't know the user's intent so best to do
+            // nothing.
+            wxLogTrace( wxT( "CN" ), wxT( "Conflicting pads in cluster %p; skipping propagation" ),
+                        cluster.get() );
         }
         else if( cluster->HasValidNet() )
         {
-            if( cluster->IsConflicting() )
-            {
-                if( resolveConflicts )
-                {
-                    wxLogTrace( wxT( "CN" ),
-                                wxT( "Conflicting nets in cluster %p; chose %d (%s)" ),
-                                cluster.get(),
-                                cluster->OriginNet(),
-                                cluster->OriginNetName() );
-                }
-                else
-                {
-                    wxLogTrace( wxT( "CN" ),
-                                wxT( "Conflicting nets in cluster %p; skipping update" ),
-                                cluster.get() );
-                }
-            }
-
-            // normal cluster: just propagate from the pads
+            // Propagate from the origin (will be a pad if there are any, or another item if
+            // there are no pads).
             int n_changed = 0;
 
             for( CN_ITEM* item : *cluster )
@@ -594,49 +573,43 @@ void CN_CONNECTIVITY_ALGO::propagateConnections( BOARD_COMMIT* aCommit, PROPAGAT
                 if( item->Valid() && item->CanChangeNet()
                         && item->Parent()->GetNetCode() != cluster->OriginNet() )
                 {
-                    bool isFreePad = item->Parent()->Type() == PCB_PAD_T
-                                        && static_cast<PAD*>( item->Parent() )->IsFreePad();
+                    MarkNetAsDirty( item->Parent()->GetNetCode() );
+                    MarkNetAsDirty( cluster->OriginNet() );
 
-                    if( !cluster->IsConflicting() || resolveConflicts || isFreePad )
-                    {
-                        MarkNetAsDirty( item->Parent()->GetNetCode() );
-                        MarkNetAsDirty( cluster->OriginNet() );
+                    if( aCommit )
+                        aCommit->Modify( item->Parent() );
 
-                        if( aCommit )
-                            aCommit->Modify( item->Parent() );
-
-                        item->Parent()->SetNetCode( cluster->OriginNet() );
-                        n_changed++;
-                    }
+                    item->Parent()->SetNetCode( cluster->OriginNet() );
+                    n_changed++;
                 }
             }
 
             if( n_changed )
             {
-                wxLogTrace( wxT( "CN" ), wxT( "Cluster %p : net : %d %s" ),
+                wxLogTrace( wxT( "CN" ), wxT( "Cluster %p: net: %d %s" ),
                             cluster.get(),
                             cluster->OriginNet(),
                             (const char*) cluster->OriginNetName().c_str() );
             }
             else
             {
-                wxLogTrace( wxT( "CN" ), wxT( "Cluster %p : nothing to propagate" ),
+                wxLogTrace( wxT( "CN" ), wxT( "Cluster %p: no changeable items to propagate to" ),
                             cluster.get() );
             }
         }
         else
         {
-            wxLogTrace( wxT( "CN" ), wxT( "Cluster %p : connected to unused net" ),
+            wxLogTrace( wxT( "CN" ), wxT( "Cluster %p: connected to unused net" ),
                         cluster.get() );
         }
     }
 }
 
 
-void CN_CONNECTIVITY_ALGO::PropagateNets( BOARD_COMMIT* aCommit, PROPAGATE_MODE aMode )
+void CN_CONNECTIVITY_ALGO::PropagateNets( BOARD_COMMIT* aCommit )
 {
     m_connClusters = SearchClusters( CSM_PROPAGATE );
-    propagateConnections( aCommit, aMode );
+    propagateConnections( aCommit );
 }
 
 

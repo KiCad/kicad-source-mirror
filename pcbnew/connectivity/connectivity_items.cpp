@@ -414,29 +414,31 @@ void CN_CLUSTER::Add( CN_ITEM* item )
         return;
 
     if( m_originNet <= 0 )
+    {
         m_originNet = netCode;
+        m_netRanks[m_originNet] = 0;
+    }
 
     if( item->Parent()->Type() == PCB_PAD_T && !static_cast<PAD*>( item->Parent() )->IsFreePad() )
     {
-        if( m_netRanks.count( netCode ) )
-        {
-            m_netRanks[netCode]++;
+        int  rank;
+        auto it = m_netRanks.find( netCode );
 
-            if( m_netRanks.count( m_originNet ) && m_netRanks[netCode] > m_netRanks[m_originNet] )
-            {
-                m_originPad = item;
-                m_originNet = netCode;
-            }
+        if( it == m_netRanks.end() )
+        {
+            m_netRanks[netCode] = 1;
+            rank = 1;
         }
         else
         {
-            m_netRanks[netCode] = 1;
+            it->second++;
+            rank = it->second;
+        }
 
-            if( !m_originPad )
-            {
-                m_originPad = item;
-                m_originNet = netCode;
-            }
+        if( !m_originPad || rank > m_netRanks[m_originNet] )
+        {
+            m_originPad = item;
+            m_originNet = netCode;
         }
 
         if( m_originPad && item->Net() != m_originNet )

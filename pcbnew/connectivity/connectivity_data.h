@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -173,8 +173,7 @@ public:
      * @param aCommit is used to save the undo state of items modified by this call
      * @param aMode controls how conflicts between pads are resolved
      */
-    void PropagateNets( BOARD_COMMIT* aCommit = nullptr,
-                        PROPAGATE_MODE aMode = PROPAGATE_MODE::SKIP_CONFLICTS );
+    void PropagateNets( BOARD_COMMIT* aCommit = nullptr );
 
     /**
      * Function FindIsolatedCopperIslands()

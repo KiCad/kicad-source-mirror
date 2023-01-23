@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -62,16 +62,6 @@ public:
     COMMIT&      Stage( const PICKED_ITEMS_LIST& aItems,
                         UNDO_REDO aModFlag = UNDO_REDO::UNSPECIFIED ) override;
 
-    /**
-     * Sets a flag that will cause Push() to resolve net conflicts on track/via clusters instead
-     * of the default behavior which is to skip updating track/via clusters that have conflicts.
-     * This is used in the netlist updater to update any clusters that were changed due to pad nets
-     * changing, but should not be used for other changes as you typically don't want to change
-     * track/via nets due to temporary conflicts created by board editing operations.
-     * @param aResolve is true if this commit should resolve conflicting track/via net assignments
-    */
-    void SetResolveNetConflicts( bool aResolve = true ) { m_resolveNetConflicts = aResolve; }
-
 private:
     EDA_ITEM* parentObject( EDA_ITEM* aItem ) const override;
 
@@ -83,7 +73,6 @@ private:
     TOOL_MANAGER*  m_toolMgr;
     bool           m_isFootprintEditor;
     bool           m_isBoardEditor;
-    bool           m_resolveNetConflicts;
 };
 
 #endif
