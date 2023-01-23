@@ -320,7 +320,7 @@ void SCH_EDIT_FRAME::AnnotateSymbols( ANNOTATE_SCOPE_T  aAnnotateScope,
     // that these references must be reannotated, but keeps the original reference
     // so that we can reannotate multi-unit symbols together.
     if( aResetAnnotation )
-        references.RemoveAnnotation( false );
+        references.RemoveAnnotation();
 
     // Build additional list of references to be used during reannotation
     // to avoid duplicate designators (no additional references when annotating
