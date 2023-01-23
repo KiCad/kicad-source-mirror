@@ -202,7 +202,7 @@ void SCH_EDIT_FRAME::AnnotateSymbols( ANNOTATE_SCOPE_T  aAnnotateScope,
                                       bool              appendUndo )
 {
     EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
-    EE_SELECTION&      selection = selTool->RequestSelection();
+    EE_SELECTION&      selection = selTool->GetSelection();
 
     SCH_REFERENCE_LIST references;
     SCH_SCREENS        screens( Schematic().Root() );
