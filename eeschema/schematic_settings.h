@@ -69,7 +69,6 @@ public:
     wxString  m_NetFormatName;
 
     ///< @todo These should probably be moved to the "schematic.simulator" path.
-    bool      m_SpiceAdjustPassiveValues;
     bool      m_SpiceCurSheetAsRoot;
     bool      m_SpiceSaveAllVoltages;
     bool      m_SpiceSaveAllCurrents;

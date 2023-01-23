@@ -304,6 +304,9 @@ void DIALOG_EXPORT_NETLIST::OnRunExternSpiceCommand( wxCommandEvent& event )
     wxFileName fn = m_Parent->Schematic().GetFileName();
     fn.SetExt( SpiceFileExtension );
 
+    if( settings.m_SpiceCurSheetAsRoot )
+        netlist_opt |= NETLIST_EXPORTER_SPICE::OPTION_CUR_SHEET_AS_ROOT;
+
     if( settings.m_SpiceSaveAllVoltages )
         netlist_opt |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES;
 
@@ -473,7 +476,7 @@ void DIALOG_EXPORT_NETLIST::NetlistUpdateOpt()
     settings.m_SpiceSaveAllVoltages  = saveAllVoltages;
     settings.m_SpiceSaveAllCurrents  = saveAllCurrents;
     settings.m_SpiceCommandString    = spiceCmdString;
-    settings.m_SpiceCurSheetAsRoot = curSheetAsRoot;
+    settings.m_SpiceCurSheetAsRoot   = curSheetAsRoot;
     settings.m_SpiceModelCurSheetAsRoot = spiceModelCurSheetAsRoot;
     settings.m_NetFormatName         = m_PanelNetType[m_NoteBook->GetSelection()]->GetPageNetFmtName();
 }

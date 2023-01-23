@@ -675,7 +675,7 @@ std::string NETLIST_EXPORTER_SPICE::GenerateItemPinNetName( const std::string& a
 SCH_SHEET_LIST NETLIST_EXPORTER_SPICE::GetSheets( unsigned aNetlistOptions ) const
 {
     if( aNetlistOptions & OPTION_CUR_SHEET_AS_ROOT )
-        return SCH_SHEET_LIST( m_schematic->CurrentSheet().at( 0 ) );
+        return SCH_SHEET_LIST( m_schematic->CurrentSheet().Last() );
     else
         return m_schematic->GetSheets();
 }

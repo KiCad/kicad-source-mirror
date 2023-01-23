@@ -52,7 +52,6 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
         m_IntersheetRefsSuffix( DEFAULT_IREF_SUFFIX ),
         m_DashedLineDashRatio( 12.0 ),
         m_DashedLineGapRatio( 3.0 ),
-        m_SpiceAdjustPassiveValues( false ),
         m_SpiceCurSheetAsRoot( false ),
         m_SpiceSaveAllVoltages( false ),
         m_SpiceSaveAllCurrents( false ),
@@ -195,14 +194,17 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
     m_params.emplace_back( new PARAM<wxString>( "net_format_name",
             &m_NetFormatName, "" ) );
 
-    m_params.emplace_back( new PARAM<bool>( "spice_adjust_passive_values",
-            &m_SpiceAdjustPassiveValues, false ) );
+    m_params.emplace_back( new PARAM<bool>( "spice_current_sheet_as_root",
+            &m_SpiceCurSheetAsRoot, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "spice_save_all_voltages",
             &m_SpiceSaveAllVoltages, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "spice_save_all_currents",
             &m_SpiceSaveAllCurrents, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "spice_model_current_sheet_as_root",
+            &m_SpiceModelCurSheetAsRoot, true ) );
 
     m_params.emplace_back( new PARAM<wxString>( "spice_external_command",
             &m_SpiceCommandString, "spice \"%I\"" ) );
