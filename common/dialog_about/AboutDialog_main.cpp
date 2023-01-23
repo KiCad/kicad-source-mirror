@@ -532,6 +532,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     aInfo.AddDocWriter( new CONTRIBUTOR( wxS( "Marco Ciampa" ) ) );
     aInfo.AddDocWriter( new CONTRIBUTOR( wxS( "Jon Evans" ) ) );
     aInfo.AddDocWriter( new CONTRIBUTOR( wxS( "Dick Hollenbeck" ) ) );
+    aInfo.AddDocWriter( new CONTRIBUTOR( wxS( "Graham Keeth" ) ) );
     aInfo.AddDocWriter( new CONTRIBUTOR( wxS( "Igor Plyatov" ) ) );
     aInfo.AddDocWriter( new CONTRIBUTOR( wxS( "Wayne Stambaugh" ) ) );
     aInfo.AddDocWriter( new CONTRIBUTOR( wxS( "Fabrizio Tappero" ) ) );
