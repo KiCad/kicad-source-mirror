@@ -264,6 +264,10 @@ void PANEL_FP_PROPERTIES_3D_MODEL::OnRemove3DModel( wxCommandEvent&  )
 
     if( idx >= 0 && m_modelsGrid->GetNumberRows() && !m_shapes3D_list.empty() )
     {
+        // Don't allow selection until we call select3DModel(), below.  Otherwise wxWidgets
+        // has a tendency to get its knickers in a knot....
+        m_inSelect = true;
+
         m_shapes3D_list.erase( m_shapes3D_list.begin() + idx );
         m_modelsGrid->DeleteRows( idx );
 
