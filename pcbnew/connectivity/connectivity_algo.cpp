@@ -572,14 +572,16 @@ void CN_CONNECTIVITY_ALGO::propagateConnections( BOARD_COMMIT* aCommit, PROPAGAT
             {
                 if( resolveConflicts )
                 {
-                    wxLogTrace( wxT( "CN" ), wxT( "Conflicting nets in cluster %p; chose %d (%s)" ),
+                    wxLogTrace( wxT( "CN" ),
+                                wxT( "Conflicting nets in cluster %p; chose %d (%s)" ),
                                 cluster.get(),
                                 cluster->OriginNet(),
                                 cluster->OriginNetName() );
                 }
                 else
                 {
-                    wxLogTrace( wxT( "CN" ), wxT( "Conflicting nets in cluster %p; skipping update" ),
+                    wxLogTrace( wxT( "CN" ),
+                                wxT( "Conflicting nets in cluster %p; skipping update" ),
                                 cluster.get() );
                 }
             }
@@ -589,12 +591,13 @@ void CN_CONNECTIVITY_ALGO::propagateConnections( BOARD_COMMIT* aCommit, PROPAGAT
 
             for( CN_ITEM* item : *cluster )
             {
-                bool isFreePad = item->Parent()->Type() == PCB_PAD_T
-                                    && static_cast<PAD*>( item->Parent() )->IsFreePad();
-
-                if( ( resolveConflicts && item->CanChangeNet() ) || isFreePad )
+                if( item->Valid() && item->CanChangeNet()
+                        && item->Parent()->GetNetCode() != cluster->OriginNet() )
                 {
-                    if( item->Valid() && item->Parent()->GetNetCode() != cluster->OriginNet() )
+                    bool isFreePad = item->Parent()->Type() == PCB_PAD_T
+                                        && static_cast<PAD*>( item->Parent() )->IsFreePad();
+
+                    if( !cluster->IsConflicting() || resolveConflicts || isFreePad )
                     {
                         MarkNetAsDirty( item->Parent()->GetNetCode() );
                         MarkNetAsDirty( cluster->OriginNet() );
