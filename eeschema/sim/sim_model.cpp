@@ -1107,6 +1107,11 @@ bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, std::vector<T_field>* aFields,
     auto convertNotation =
             [&]( const wxString& units ) -> wxString
             {
+                /// KiCad Spice PEGTL only handles ASCII
+                /// Although these two look the same, they are U+03BC and U+00B5
+                if( units == wxS( "µ" ) || units == wxS( "μ" ) )
+                    return wxS( "u" );
+
                 if( aNotation == SIM_VALUE_GRAMMAR::NOTATION::SPICE )
                 {
                     if( units == wxT( "M" ) )
