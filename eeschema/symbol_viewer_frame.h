@@ -117,7 +117,8 @@ public:
     /**
      * Set the selected library in the library window.
      */
-    void SetSelectedLibrary( const wxString& aLibName );
+    void SetSelectedLibrary( const wxString& aLibName,
+                             const wxString& aSubLibName = wxEmptyString );
 
     /**
      * Set the selected symbol.
@@ -170,6 +171,8 @@ private:
 
     void updatePreviewSymbol();
 
+    void loadAllLibraries();
+
 private:
     wxChoice*           m_unitChoice;
 
@@ -185,11 +188,11 @@ private:
     bool                m_listPowerOnly;
     wxArrayString       m_allowedLibs;
 
-    static wxString     m_libraryName;
-    static wxString     m_entryName;
+    static LIB_ID       m_currentSymbol;
 
     static int          m_unit;
     static int          m_convert;
+    static bool         m_show_progress;
 
     /**
      * Updated to `true` if a list rewrite on GUI activation resulted in the symbol

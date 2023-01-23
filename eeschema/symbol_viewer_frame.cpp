@@ -27,10 +27,12 @@
 #include <symbol_library_common.h>
 #include <confirm.h>
 #include <dialog_choose_symbol.h>
+#include <dialogs/html_message_box.h>
 #include <eeschema_id.h>
 #include <eeschema_settings.h>
 #include <kiface_base.h>
 #include <kiway.h>
+#include <locale_io.h>
 #include <symbol_viewer_frame.h>
 #include <widgets/msgpanel.h>
 #include <widgets/wx_listbox.h>
@@ -41,6 +43,7 @@
 #include <pgm_base.h>
 #include <project/project_file.h>
 #include <settings/settings_manager.h>
+#include <symbol_async_loader.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
 #include <tool/common_tools.h>
@@ -53,6 +56,7 @@
 #include <tools/symbol_editor_control.h>
 #include <tools/ee_inspection_tool.h>
 #include <view/view_controls.h>
+#include <widgets/wx_progress_reporters.h>
 #include <wx/srchctrl.h>
 
 #include <default_values.h>
@@ -60,11 +64,11 @@
 #include "eda_pattern_match.h"
 
 // Save previous symbol library viewer state.
-wxString SYMBOL_VIEWER_FRAME::m_libraryName;
-wxString SYMBOL_VIEWER_FRAME::m_entryName;
+LIB_ID SYMBOL_VIEWER_FRAME::m_currentSymbol;
 
 int SYMBOL_VIEWER_FRAME::m_unit = 1;
 int SYMBOL_VIEWER_FRAME::m_convert = 1;
+bool SYMBOL_VIEWER_FRAME::m_show_progress = true;
 
 
 BEGIN_EVENT_TABLE( SYMBOL_VIEWER_FRAME, EDA_DRAW_FRAME )
@@ -196,14 +200,17 @@ SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAM
     symbolPanel->SetSizer( symbolSizer );
     symbolPanel->Fit();
 
+    // Preload libraries
+    loadAllLibraries();
+
     if( aLibraryName.empty() )
     {
         ReCreateLibList();
     }
     else
     {
-        m_libraryName = aLibraryName;
-        m_entryName.Clear();
+        m_currentSymbol.SetLibNickname( aLibraryName );
+        m_currentSymbol.SetLibItemName( "" );
         m_unit = 1;
         m_convert = 1;
     }
@@ -311,6 +318,58 @@ SYMBOL_VIEWER_FRAME::~SYMBOL_VIEWER_FRAME()
 
     if( m_previewItem )
         GetCanvas()->GetView()->Remove( m_previewItem );
+}
+
+
+void SYMBOL_VIEWER_FRAME::loadAllLibraries()
+{
+    // TODO: deduplicate with SYMBOL_TREE_MODEL_ADAPTER::AddLibraries
+    std::vector<wxString> libraryNames = Prj().SchSymbolLibTable()->GetLogicalLibs();
+    std::unique_ptr<WX_PROGRESS_REPORTER> progressReporter = nullptr;
+
+    if( m_show_progress )
+    {
+        progressReporter = std::make_unique<WX_PROGRESS_REPORTER>( this,
+                                                                   _( "Loading Symbol Libraries" ),
+                                                                   libraryNames.size(), true );
+    }
+
+    // Disable KIID generation: not needed for library parts; sometimes very slow
+    KIID::CreateNilUuids( true );
+
+    std::unordered_map<wxString, std::vector<LIB_SYMBOL*>> loadedSymbols;
+
+    SYMBOL_ASYNC_LOADER loader( libraryNames, Prj().SchSymbolLibTable(), false, nullptr,
+                                progressReporter.get() );
+
+    LOCALE_IO toggle;
+
+    loader.Start();
+
+    while( !loader.Done() )
+    {
+        if( progressReporter && !progressReporter->KeepRefreshing() )
+            break;
+
+        wxMilliSleep( 33 );
+    }
+
+    loader.Join();
+
+    KIID::CreateNilUuids( false );
+
+    if( !loader.GetErrors().IsEmpty() )
+    {
+        HTML_MESSAGE_BOX dlg( this, _( "Load Error" ) );
+
+        dlg.MessageSet( _( "Errors loading symbols:" ) );
+
+        wxString msg = loader.GetErrors();
+        msg.Replace( "\n", "<BR>" );
+
+        dlg.AddHTML_Text( msg );
+        dlg.ShowModal();
+    }
 }
 
 
@@ -423,8 +482,8 @@ LIB_SYMBOL* SYMBOL_VIEWER_FRAME::GetSelectedSymbol() const
 {
     LIB_SYMBOL* symbol = nullptr;
 
-    if( !m_libraryName.IsEmpty() && !m_entryName.IsEmpty() )
-        symbol = Prj().SchSymbolLibTable()->LoadSymbol( m_libraryName, m_entryName );
+    if( m_currentSymbol.IsValid() )
+        symbol = Prj().SchSymbolLibTable()->LoadSymbol( m_currentSymbol );
 
     return symbol;
 }
@@ -498,8 +557,8 @@ bool SYMBOL_VIEWER_FRAME::ShowModal( wxString* aSymbol, wxWindow* aParent )
             }
             else
             {
-                SetSelectedLibrary( libid.GetLibNickname() );
-                SetSelectedSymbol( libid.GetLibItemName());
+                SetSelectedLibrary( libid.GetLibNickname(), libid.GetSubLibraryName() );
+                SetSelectedSymbol( libid.GetLibItemName() );
             }
         }
     }
@@ -581,9 +640,24 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
 
     COMMON_SETTINGS*      cfg = Pgm().GetCommonSettings();
     PROJECT_FILE&         project = Kiway().Prj().GetProjectFile();
-    std::vector<wxString> libs = Prj().SchSymbolLibTable()->GetLogicalLibs();
+    SYMBOL_LIB_TABLE*     libTable = Prj().SchSymbolLibTable();
+    std::vector<wxString> libs = libTable->GetLogicalLibs();
     std::set<wxString>    pinnedMatches;
     std::set<wxString>    otherMatches;
+
+    auto doAddLib =
+            [&]( const wxString& aLib )
+            {
+                if( alg::contains( project.m_PinnedSymbolLibs, aLib )
+                    || alg::contains( cfg->m_Session.pinned_symbol_libs, aLib ) )
+                {
+                    pinnedMatches.insert( aLib );
+                }
+                else
+                {
+                    otherMatches.insert( aLib );
+                }
+            };
 
     auto process =
             [&]( const wxString& aLib )
@@ -606,14 +680,28 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
                         return;
                 }
 
-                if( alg::contains( project.m_PinnedSymbolLibs, aLib )
-                        || alg::contains( cfg->m_Session.pinned_symbol_libs, aLib ) )
+                SYMBOL_LIB_TABLE_ROW* row = libTable->FindRow( aLib );
+
+                if( !row->GetIsVisible() )
+                    return;
+
+                if( row->SupportsSubLibraries() )
                 {
-                    pinnedMatches.insert( aLib );
+                    std::vector<wxString> subLibraries;
+                    row->GetSubLibraryNames( subLibraries );
+
+                    for( const wxString& lib : subLibraries )
+                    {
+                        wxString suffix = lib.IsEmpty() ? wxT( "" )
+                                                        : wxString::Format( wxT( " - %s" ), lib );
+                        wxString name = wxString::Format( wxT( "%s%s" ), aLib, suffix );
+
+                        doAddLib( name );
+                    }
                 }
                 else
                 {
-                    otherMatches.insert( aLib );
+                    doAddLib( aLib );
                 }
             };
 
@@ -650,7 +738,7 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
         m_libList->Append( UnescapeString( name ) );
 
     // Search for a previous selection:
-    int index = m_libList->FindString( UnescapeString( m_libraryName ) );
+    int index = m_libList->FindString( UnescapeString( m_currentSymbol.GetUniStringLibNickname() ) );
 
     if( index != wxNOT_FOUND )
     {
@@ -660,8 +748,9 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
     {
         // If not found, clear current library selection because it can be deleted after a
         // config change.
-        m_libraryName = m_libList->GetCount() > 0 ? m_libList->GetBaseString( 0 ) : wxT( "" );
-        m_entryName = wxEmptyString;
+        m_currentSymbol.SetLibNickname( m_libList->GetCount() > 0
+                                        ? m_libList->GetBaseString( 0 ) : wxT( "" ) );
+        m_currentSymbol.SetLibItemName( wxEmptyString );
         m_unit = 1;
         m_convert = LIB_ITEM::LIB_CONVERT::BASE;
     }
@@ -681,15 +770,18 @@ bool SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
 
     m_symbolList->Clear();
 
-    if( m_libraryName.IsEmpty() )
+    wxString libName = m_currentSymbol.GetUniStringLibNickname();
+
+    if( libName.IsEmpty() )
         return false;
 
     std::vector<LIB_SYMBOL*> symbols;
+    SYMBOL_LIB_TABLE_ROW* row = Prj().SchSymbolLibTable()->FindRow( libName );
 
     try
     {
-        if( Prj().SchSymbolLibTable()->FindRow( m_libraryName ) )
-            Prj().SchSymbolLibTable()->LoadSymbolLib( symbols, m_libraryName, m_listPowerOnly );
+        if( row )
+            Prj().SchSymbolLibTable()->LoadSymbolLib( symbols, libName, m_listPowerOnly );
     }
     catch( const IO_ERROR& ) {}   // ignore, it is handled below
 
@@ -719,8 +811,16 @@ bool SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
         }
     }
 
+    wxString subLib = m_currentSymbol.GetSubLibraryName();
+
     for( const LIB_SYMBOL* symbol : symbols )
     {
+        if( row->SupportsSubLibraries()
+            && !subLib.IsSameAs( symbol->GetLibId().GetSubLibraryName() ) )
+        {
+            continue;
+        }
+
         if( !excludes.count( symbol->GetName() ) )
             m_symbolList->Append( UnescapeString( symbol->GetName() ) );
     }
@@ -728,13 +828,12 @@ bool SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
     if( m_symbolList->IsEmpty() )
     {
         SetSelectedSymbol( wxEmptyString );
-        m_entryName = wxEmptyString;
         m_convert = LIB_ITEM::LIB_CONVERT::BASE;
         m_unit    = 1;
         return true;
     }
 
-    int  index = m_symbolList->FindString( UnescapeString( m_entryName ) );
+    int  index = m_symbolList->FindString( UnescapeString( m_currentSymbol.GetUniStringLibItemName() ) );
     bool changed = false;
 
     if( index == wxNOT_FOUND )
@@ -746,7 +845,6 @@ bool SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
         index       = -1;
         changed     = true;
         SetSelectedSymbol( wxEmptyString );
-        m_entryName = wxEmptyString;
     }
 
     m_symbolList->SetSelection( index, true );
@@ -764,16 +862,33 @@ void SYMBOL_VIEWER_FRAME::ClickOnLibList( wxCommandEvent& event )
 
     m_selection_changed = true;
 
-    SetSelectedLibrary( EscapeString( m_libList->GetBaseString( ii ), CTX_LIBID ) );
+    wxString selection = EscapeString( m_libList->GetBaseString( ii ), CTX_LIBID );
+
+    if( !Prj().SchSymbolLibTable()->FindRow( selection )
+        && selection.Find( '-' ) != wxNOT_FOUND )
+    {
+        // Probably a sub-library
+        wxString sublib;
+        selection = selection.BeforeLast( '-', &sublib ).Trim();
+        sublib.Trim( false );
+        SetSelectedLibrary( selection, sublib );
+    }
+    else
+    {
+        SetSelectedLibrary( selection );
+    }
 }
 
 
-void SYMBOL_VIEWER_FRAME::SetSelectedLibrary( const wxString& aLibraryName )
+void SYMBOL_VIEWER_FRAME::SetSelectedLibrary( const wxString& aLibraryName,
+                                              const wxString& aSubLibName )
 {
-    if( m_libraryName == aLibraryName )
+    if( m_currentSymbol.GetUniStringLibNickname() == aLibraryName &&
+        wxString( m_currentSymbol.GetSubLibraryName() ) == aSubLibName )
         return;
 
-    m_libraryName = aLibraryName;
+    m_currentSymbol.SetLibNickname( aLibraryName );
+    m_currentSymbol.SetSubLibraryName( aSubLibName );
     ReCreateSymbolList();
     GetCanvas()->Refresh();
     DisplayLibInfos();
@@ -781,7 +896,7 @@ void SYMBOL_VIEWER_FRAME::SetSelectedLibrary( const wxString& aLibraryName )
     // Ensure the corresponding line in m_libList is selected
     // (which is not necessary the case if SetSelectedLibrary is called
     // by another caller than ClickOnLibList.
-    m_libList->SetStringSelection( UnescapeString( m_libraryName ), true );
+    m_libList->SetStringSelection( UnescapeString( m_currentSymbol.GetFullLibraryName() ), true );
 
     // The m_libList has now the focus, in order to be able to use arrow keys
     // to navigate inside the list.
@@ -812,9 +927,9 @@ void SYMBOL_VIEWER_FRAME::ClickOnSymbolList( wxCommandEvent& event )
 
 void SYMBOL_VIEWER_FRAME::SetSelectedSymbol( const wxString& aSymbolName )
 {
-    if( m_entryName != aSymbolName )
+    if( m_currentSymbol.GetUniStringLibItemName() != aSymbolName )
     {
-        m_entryName = aSymbolName;
+        m_currentSymbol.SetLibItemName( aSymbolName );
 
         // Ensure the corresponding line in m_symbolList is selected
         // (which is not necessarily the case if SetSelectedSymbol is called
@@ -975,8 +1090,7 @@ void SYMBOL_VIEWER_FRAME::FinishModal()
 {
     if( m_symbolList->GetSelection() >= 0 )
     {
-        DismissModal( true, m_libraryName + ':'
-                                + EscapeString( m_symbolList->GetStringSelection(), CTX_LIBID ) );
+        DismissModal( true, m_currentSymbol.Format() );
     }
     else
     {
@@ -1034,7 +1148,7 @@ void SYMBOL_VIEWER_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
     if( !id.IsValid() )
         return;
 
-    SetSelectedLibrary( id.GetLibNickname() );
+    SetSelectedLibrary( id.GetLibNickname(), id.GetSubLibraryName() );
     SetSelectedSymbol( id.GetLibItemName() );
     SetUnitAndConvert( unit, 1 );
 }
@@ -1173,9 +1287,12 @@ void SYMBOL_VIEWER_FRAME::onSelectSymbolUnit( wxCommandEvent& aEvent )
 
 void SYMBOL_VIEWER_FRAME::DisplayLibInfos()
 {
-    if( m_libList && !m_libList->IsEmpty() && !m_libraryName.IsEmpty() )
+    wxString libName = m_currentSymbol.GetUniStringLibNickname();
+
+    if( m_libList && !m_libList->IsEmpty() && !libName.IsEmpty() )
     {
-        const SYMBOL_LIB_TABLE_ROW* row = Prj().SchSymbolLibTable()->FindRow( m_libraryName, true );
+        const SYMBOL_LIB_TABLE_ROW* row =
+                Prj().SchSymbolLibTable()->FindRow( libName, true );
 
         wxString title = row ? row->GetFullURI( true ) : _( "[no library selected]" );
 

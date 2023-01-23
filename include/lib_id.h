@@ -85,6 +85,7 @@ public:
      * Return the logical library name portion of a LIB_ID.
      */
     const UTF8& GetLibNickname() const { return m_libraryName; }
+    const wxString GetUniStringLibNickname() const { return m_libraryName.wx_str(); }
 
     /**
      * Override the logical library name portion of the LIB_ID to @a aNickname.
@@ -128,6 +129,12 @@ public:
      */
     UTF8 GetSubLibraryName() const { return m_subLibraryName; }
     void SetSubLibraryName( const UTF8& aName ) { m_subLibraryName = aName; }
+    const wxString GetUniStringSubLibraryName() const { return m_subLibraryName.wx_str(); }
+
+    /**
+     * @return a display-formatted name of the library and sublibrary (if present)
+     */
+    const wxString GetFullLibraryName() const;
 
     /**
      * @return the fully formatted text of the LIB_ID in a UTF8 string.
