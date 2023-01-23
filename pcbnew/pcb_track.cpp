@@ -851,7 +851,13 @@ double PCB_VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
 wxString PCB_TRACK::GetFriendlyName() const
 {
-    return Type() == PCB_ARC_T ? _( "Track (arc)" ) : _( "Track" );
+    switch( Type() )
+    {
+    case PCB_ARC_T:     return _( "Track (arc)" );
+    case PCB_VIA_T:     return _( "Via" );
+    case PCB_TRACE_T:
+    default:            return _( "Track" );
+    }
 }
 
 
