@@ -116,6 +116,8 @@ DIALOG_PRINT_PCBNEW::DIALOG_PRINT_PCBNEW( PCB_BASE_EDIT_FRAME* aParent,
     m_infoText->SetLabel( _( "Right-click for layer selection commands." ) );
     m_infoText->Show( true );
 
+    finishDialogSettings();
+
     m_popMenu->Bind( wxEVT_COMMAND_MENU_SELECTED,
                      wxCommandEventHandler( DIALOG_PRINT_PCBNEW::onPopUpLayers ), this,
                      ID_SELECT_FIRST, ID_SELECT_LAST );

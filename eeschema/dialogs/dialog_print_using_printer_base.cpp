@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-254-gc2ef7767)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -25,12 +25,12 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 
 	bleftSizer->Add( m_checkReference, 0, wxALL, 5 );
 
-	wxBoxSizer* bSizer41;
-	bSizer41 = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bSizerOttputMode;
+	bSizerOttputMode = new wxBoxSizer( wxHORIZONTAL );
 
 	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Output mode:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
-	bSizer41->Add( m_staticText1, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
+	bSizerOttputMode->Add( m_staticText1, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
 
 	wxString m_colorPrintChoices[] = { _("Color"), _("Black and White") };
 	int m_colorPrintNChoices = sizeof( m_colorPrintChoices ) / sizeof( wxString );
@@ -38,10 +38,10 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	m_colorPrint->SetSelection( 0 );
 	m_colorPrint->SetMinSize( wxSize( 200,-1 ) );
 
-	bSizer41->Add( m_colorPrint, 0, wxLEFT, 25 );
+	bSizerOttputMode->Add( m_colorPrint, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 25 );
 
 
-	bleftSizer->Add( bSizer41, 1, wxEXPAND, 5 );
+	bleftSizer->Add( bSizerOttputMode, 0, wxEXPAND, 5 );
 
 	m_checkBackgroundColor = new wxCheckBox( this, wxID_ANY, _("Print background color"), wxDefaultPosition, wxDefaultSize, 0 );
 	bleftSizer->Add( m_checkBackgroundColor, 0, wxALL, 5 );
@@ -93,7 +93,6 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 
 	this->SetSizer( bMainSizer );
 	this->Layout();
-	bMainSizer->Fit( this );
 
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_PRINT_USING_PRINTER_BASE::OnCloseWindow ) );
