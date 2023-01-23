@@ -140,13 +140,20 @@ struct DIFF_PAIR_KEY
                 return true;
             else if( netN > b.netN )
                 return false;
+            else if( gapRuleName.IsEmpty() )
+                return gapRuleName < b.gapRuleName;
             else
-                return parentRule < b.parentRule;
+                return uncoupledRuleName < b.uncoupledRuleName;
         }
     }
 
     int       netP, netN;
-    DRC_RULE* parentRule;
+    wxString  gapRuleName;
+    wxString  uncoupledRuleName;
+    std::optional<MINOPTMAX<int>> gapConstraint;
+    DRC_RULE* gapRule;
+    std::optional<MINOPTMAX<int>> uncoupledConstraint;
+    DRC_RULE* uncoupledRule;
 };
 
 struct DIFF_PAIR_COUPLED_SEGMENTS
@@ -304,7 +311,26 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
                         drc_dbg( 10, wxT( "cns %d item %p\n" ), constraintsToCheck[i], item );
 
-                        key.parentRule = constraint.GetParentRule();
+                        DRC_RULE* parentRule = constraint.GetParentRule();
+                        wxString ruleName = parentRule ? parentRule->m_Name : constraint.GetName();
+
+                        switch( constraintsToCheck[i] )
+                        {
+                        case DIFF_PAIR_GAP_CONSTRAINT:
+                            key.gapConstraint = constraint.GetValue();
+                            key.gapRule = parentRule;
+                            key.gapRuleName = ruleName;
+                            break;
+
+                        case DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT:
+                            key.uncoupledConstraint = constraint.GetValue();
+                            key.uncoupledRule = parentRule;
+                            key.uncoupledRuleName = ruleName;
+                            break;
+
+                        default:
+                            break;
+                        }
 
                         if( refNet->GetNetCode() == key.netN )
                             dpRuleMatches[key].itemsN.insert( citem );
@@ -337,9 +363,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
         wxString nameN = niN->GetNetname();
 
         reportAux( wxString::Format( wxT( "Rule '%s', DP: (+) %s - (-) %s" ),
-                                     key.parentRule->m_Name,
-                                     nameP,
-                                     nameN ) );
+                                     key.gapRuleName, nameP, nameN ) );
 
         extractDiffPairCoupledItems( itemSet );
 
@@ -348,12 +372,6 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
         itemSet.totalLengthP = 0;
 
         drc_dbg(10, wxT( "       coupled prims : %d\n" ), (int) itemSet.coupled.size() );
-
-        std::optional<DRC_CONSTRAINT> gapConstraint
-                            = key.parentRule->FindConstraint( DIFF_PAIR_GAP_CONSTRAINT );
-
-        std::optional<DRC_CONSTRAINT> maxUncoupledConstraint
-                            = key.parentRule->FindConstraint( DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT );
 
         for( BOARD_CONNECTED_ITEM* item : itemSet.itemsN )
         {
@@ -397,14 +415,12 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
                      gap,
                      dp.parentP->GetLayer() );
 
-            if( gapConstraint )
+            if( key.gapConstraint )
             {
-                const MINOPTMAX<int>& val = gapConstraint->GetValue();
-
-                if( val.HasMin() && gap < val.Min() - epsilon )
+                if( key.gapConstraint->HasMin() && gap < key.gapConstraint->Min() - epsilon )
                     dp.couplingFailMin = true;
 
-                if( val.HasMax() && gap > val.Max() + epsilon )
+                if( key.gapConstraint->HasMax() && gap > key.gapConstraint->Max() + epsilon )
                     dp.couplingFailMax = true;
             }
 
@@ -421,15 +437,15 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
         bool uncoupledViolation = false;
 
-        if( maxUncoupledConstraint && ( !itemSet.itemsP.empty() || !itemSet.itemsN.empty() ) )
+        if( key.uncoupledConstraint && ( !itemSet.itemsP.empty() || !itemSet.itemsN.empty() ) )
         {
-            const MINOPTMAX<int>& val = maxUncoupledConstraint->GetValue();
+            const MINOPTMAX<int>& val = *key.uncoupledConstraint;
 
             if ( val.HasMax() && totalUncoupled > val.Max() )
             {
                 auto     drce = DRC_ITEM::Create( DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG );
                 wxString msg = formatMsg( _( "(%s maximum uncoupled length %s; actual %s)" ),
-                                          maxUncoupledConstraint->GetParentRule()->m_Name,
+                                          key.uncoupledRuleName,
                                           val.Max(),
                                           totalUncoupled );
 
@@ -461,33 +477,33 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
                 uncoupledViolation = true;
 
-                drce->SetViolatingRule( maxUncoupledConstraint->GetParentRule() );
+                drce->SetViolatingRule( key.uncoupledRule );
 
                 reportViolation( drce, item->GetPosition(), item->GetLayer() );
             }
         }
 
-        if( gapConstraint && ( uncoupledViolation || !maxUncoupledConstraint ) )
+        if( key.gapConstraint && ( uncoupledViolation || !key.uncoupledConstraint ) )
         {
             for( DIFF_PAIR_COUPLED_SEGMENTS& dp : itemSet.coupled )
             {
                 if( ( dp.couplingFailMin || dp.couplingFailMax ) && ( dp.parentP || dp.parentN ) )
                 {
-                    MINOPTMAX<int> val = gapConstraint->GetValue();
+                    MINOPTMAX<int> val = *key.gapConstraint;
                     auto           drcItem = DRC_ITEM::Create( DRCE_DIFF_PAIR_GAP_OUT_OF_RANGE );
                     wxString       msg;
 
                     if( dp.couplingFailMin )
                     {
                         msg = formatMsg( _( "(%s minimum gap %s; actual %s)" ),
-                                         gapConstraint->GetParentRule()->m_Name,
+                                         key.gapRuleName,
                                          val.Min(),
                                          dp.computedGap );
                     }
                     else if( dp.couplingFailMax )
                     {
                         msg = formatMsg( _( "(%s maximum gap %s; actual %s)" ),
-                                         gapConstraint->GetParentRule()->m_Name,
+                                         key.gapRuleName,
                                          val.Max(),
                                          dp.computedGap );
                     }
@@ -508,7 +524,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
                         drcItem->AddItem( dp.parentN );
                     }
 
-                    drcItem->SetViolatingRule( gapConstraint->GetParentRule() );
+                    drcItem->SetViolatingRule( key.gapRule );
 
                     reportViolation( drcItem, item->GetPosition(), item->GetLayer() );
                 }
