@@ -91,7 +91,7 @@ bool SIM_WORKBOOK::AddTrace( SIM_PLOT_PANEL* aPlotPanel, const wxString& aTitle,
                              const wxString& aName, int aPoints, const double* aX, const double* aY,
                              SIM_PLOT_TYPE aType )
 {
-    if( aPlotPanel->addTrace( aTitle, aName, aPoints, aX, aY, aType ) )
+    if( aPoints && aPlotPanel->addTrace( aTitle, aName, aPoints, aX, aY, aType ) )
     {
         setModified();
         return true;

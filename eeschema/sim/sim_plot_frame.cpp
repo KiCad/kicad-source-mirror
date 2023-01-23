@@ -764,7 +764,7 @@ bool SIM_PLOT_FRAME::updatePlot( const wxString& aName, SIM_PLOT_TYPE aType,
         else if( aType & SPT_AC_PHASE )
             data_y = m_simulator->GetPhasePlot( (const char*) aName.c_str() );
         else
-            wxASSERT_MSG( false, wxT( "Plot type missing AC_PHASE or AC_MAG bit" ) );
+            wxFAIL_MSG( wxT( "Plot type missing AC_PHASE or AC_MAG bit" ) );
 
         break;
 
@@ -775,9 +775,10 @@ bool SIM_PLOT_FRAME::updatePlot( const wxString& aName, SIM_PLOT_TYPE aType,
         break;
 
     default:
-        wxASSERT_MSG( false, wxT( "Unhandled plot type" ) );
-        return false;
+        wxFAIL_MSG( wxT( "Unhandled plot type" ) );
     }
+
+    wxCHECK_MSG( data_y.size() >= size, false, wxT( "No (or not enough) y data values to plot" ) );
 
     // If we did a two-source DC analysis, we need to split the resulting vector and add traces
     // for each input step
