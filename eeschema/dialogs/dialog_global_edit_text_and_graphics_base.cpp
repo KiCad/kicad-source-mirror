@@ -48,6 +48,9 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	m_hierLabels = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Hierarchical labels"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbScope->Add( m_hierLabels, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
 
+	m_labelFields = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Label fields"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbScope->Add( m_labelFields, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
+
 
 	sbScope->Add( 0, 0, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 

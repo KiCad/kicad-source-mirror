@@ -47,6 +47,7 @@ static bool       g_modifyWires;
 static bool       g_modifyBuses;
 static bool       g_modifyGlobalLabels;
 static bool       g_modifyHierLabels;
+static bool       g_modifyLabelFields;
 static bool       g_modifySheetTitles;
 static bool       g_modifyOtherSheetFields;
 static bool       g_modifySheetPins;
@@ -145,6 +146,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::~DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS()
     g_modifyBuses = m_buses->GetValue();
     g_modifyGlobalLabels = m_globalLabels->GetValue();
     g_modifyHierLabels = m_hierLabels->GetValue();
+    g_modifyLabelFields = m_labelFields->GetValue();
     g_modifySheetTitles = m_sheetTitles->GetValue();
     g_modifyOtherSheetFields = m_sheetFields->GetValue();
     g_modifySheetPins = m_sheetPins->GetValue();
@@ -177,6 +179,7 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
     m_buses->SetValue( g_modifyBuses );
     m_globalLabels->SetValue( g_modifyGlobalLabels );
     m_hierLabels->SetValue( g_modifyHierLabels );
+    m_labelFields->SetValue( g_modifyLabelFields );
     m_sheetTitles->SetValue( g_modifySheetTitles );
     m_sheetFields->SetValue( g_modifyOtherSheetFields );
     m_sheetPins->SetValue( g_modifySheetPins );
@@ -486,6 +489,28 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
                 processItem( aSheetPath, pin );
         }
     }
+    else if( aItem->IsType( { SCH_LABEL_LOCATE_ANY_T } ) )
+    {
+        if( m_globalLabels->GetValue() && aItem->Type() == SCH_GLOBAL_LABEL_T )
+            processItem( aSheetPath, aItem );
+
+        if( m_hierLabels->GetValue() && aItem->Type() == SCH_HIER_LABEL_T )
+            processItem( aSheetPath, aItem );
+
+        if( m_labelFields->GetValue() )
+        {
+            for( SCH_FIELD& field : static_cast<SCH_LABEL_BASE*>( aItem )->GetFields() )
+            {
+                const wxString& fieldName = field.GetName();
+
+                if( !m_fieldnameFilterOpt->GetValue() || m_fieldnameFilter->GetValue().IsEmpty()
+                        || WildCompareString( m_fieldnameFilter->GetValue(), fieldName, false ) )
+                {
+                    processItem( aSheetPath, &field );
+                }
+            }
+        }
+    }
     else if( aItem->Type() == SCH_JUNCTION_T )
     {
         SCH_JUNCTION* junction = static_cast<SCH_JUNCTION*>( aItem );
@@ -511,14 +536,6 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
     }
     else if( m_buses->GetValue() && aItem->IsType( { SCH_ITEM_LOCATE_BUS_T,
                                                      SCH_LABEL_LOCATE_BUS_T } ) )
-    {
-        processItem( aSheetPath, aItem );
-    }
-    else if( m_globalLabels->GetValue() && aItem->Type() == SCH_GLOBAL_LABEL_T )
-    {
-        processItem( aSheetPath, aItem );
-    }
-    else if( m_hierLabels->GetValue() && aItem->Type() == SCH_HIER_LABEL_T )
     {
         processItem( aSheetPath, aItem );
     }
