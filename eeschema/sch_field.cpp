@@ -415,6 +415,8 @@ COLOR4D SCH_FIELD::GetFieldColor() const
 
         if( parentLabel && !parentLabel->IsConnectivityDirty() )
             m_lastResolvedColor = parentLabel->GetEffectiveNetClass()->GetSchematicColor();
+        else
+            m_lastResolvedColor = GetTextColor();
     }
 
     return m_lastResolvedColor;
