@@ -778,8 +778,14 @@ void PLUGIN_CONTENT_MANAGER::DiscardRepositoryCache( const wxString& aRepository
 void PLUGIN_CONTENT_MANAGER::MarkInstalled( const PCM_PACKAGE& aPackage, const wxString& aVersion,
                                             const wxString& aRepositoryId )
 {
-    // In case of package update remove old data
-    MarkUninstalled( aPackage );
+    // In case of package update remove old data but keep pinned state
+    bool pinned = false;
+
+    if( m_installed.count( aPackage.identifier ) )
+    {
+        pinned = m_installed.at( aPackage.identifier ).pinned;
+        MarkUninstalled( aPackage );
+    }
 
     PCM_INSTALLATION_ENTRY entry;
     entry.package = aPackage;
@@ -799,6 +805,7 @@ void PLUGIN_CONTENT_MANAGER::MarkInstalled( const PCM_PACKAGE& aPackage, const w
     }
 
     entry.install_timestamp = getCurrentTimestamp();
+    entry.pinned = pinned;
 
     m_installed.emplace( aPackage.identifier, entry );
 }
