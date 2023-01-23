@@ -84,7 +84,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	fgSizer2->SetFlexibleDirection( wxBOTH );
 	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_fieldnameFilterOpt = new wxCheckBox( sbFilters->GetStaticBox(), wxID_ANY, _("Filter other symbol fields by name:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_fieldnameFilterOpt = new wxCheckBox( sbFilters->GetStaticBox(), wxID_ANY, _("Filter fields by name:"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer2->Add( m_fieldnameFilterOpt, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_fieldnameFilter = new wxTextCtrl( sbFilters->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
