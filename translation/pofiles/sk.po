@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-20 09:12-0800\n"
-"PO-Revision-Date: 2023-01-20 06:51+0000\n"
+"PO-Revision-Date: 2023-01-25 00:33+0000\n"
 "Last-Translator: Jakub Janek <shaman.janek@gmail.com>\n"
-"Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
-"source/sk/>\n"
+"Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/"
+"master-source/sk/>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.15.1\n"
+"X-Generator: Weblate 4.16-dev\n"
 "X-Poedit-Basepath: /home/slavko/projekty/svn/kicad-20100408\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -71,19 +71,17 @@ msgid "Simplifying copper layers polygons"
 msgstr "Zjednodušiť polygóny medených vrstiev"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:749
-#, fuzzy
 msgid "Simplifying polygons on F_Cu"
-msgstr "Zjednodušiť polygóny medených vrstiev"
+msgstr "Zjednodušovanie polygónov na F_Cu"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:760
-#, fuzzy
 msgid "Simplifying polygons on B_Cu"
-msgstr "Zjednodušiť polygóny medených vrstiev"
+msgstr "Zjednodušovanie polygónov na B_Cu"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:790
-#, fuzzy, c-format
+#, c-format
 msgid "Simplifying %d copper layers"
-msgstr "Zjednodušiť polygóny medených vrstiev"
+msgstr "Zjednodušovanie vrstiev medi %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:830
 msgid "Simplify holes contours"
@@ -321,9 +319,8 @@ msgstr "Vykresliť aktuálne zobrazenie pomocou Raytracingu"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:101
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:73
-#, fuzzy
 msgid "KiCad 3D Viewer"
-msgstr "Zobrazovač 3D"
+msgstr "KiCad 3D prehliadač"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:522
 #: pcbnew/widgets/appearance_controls.cpp:2788
@@ -507,27 +504,24 @@ msgid "3D Grid 1mm"
 msgstr "3D mriežka 1 mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:187
-#, fuzzy
 msgid "Render Realistic Materials"
-msgstr "Dielektrické materiály"
+msgstr "Vykresliť realistické materiály"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:188
 msgid "Use all material properties from each 3D model file"
 msgstr "Využite všetky vlastnosti materiálu z každého súboru 3D modelu"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:194
-#, fuzzy
 msgid "Render Solid Colors"
-msgstr "Vykresliť tiene"
+msgstr "Vykersliť plné farby"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:195
 msgid "Use only the diffuse color property from model 3D model file"
 msgstr "Použite iba vlastnosť rozptýlenej farby zo súboru modelu 3D modelu"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:201
-#, fuzzy
 msgid "Render CAD Colors"
-msgstr "Definované farby"
+msgstr "Vykresliť farby CAD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:202
 msgid "Use a CAD color style based on the diffuse color of the material"
@@ -538,18 +532,16 @@ msgid "Toggle Through Hole 3D models"
 msgstr "Prepínanie medzi 3D modelmi otvorov"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:209
-#, fuzzy
 msgid "Toggle 3D models for 'Through hole' type components"
-msgstr "Prepínať 3D modely s atribútom „Through hole“"
+msgstr "Prepnúť 3D modely pre typ komponentov 'drôtovej technológie (THT)'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:215
 msgid "Toggle SMD 3D models"
 msgstr "Načítanie 3D modelov"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:216
-#, fuzzy
 msgid "Toggle 3D models for 'Surface mount' type components"
-msgstr "Prepínajte 3D modely s atribútom „Surface mount“"
+msgstr "Prepnúť 3D modely pre typ komponentov 'povrchovej technológie (SMT)'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
 #, fuzzy
@@ -653,14 +645,12 @@ msgid "Select 3D Model"
 msgstr "Výber 3D modelu"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:19
-#, fuzzy
 msgid "Environment Colors"
-msgstr "Premenné prostredia"
+msgstr "Farby prostredia"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:31
-#, fuzzy
 msgid "Background gradient start:"
-msgstr "Spätný odkaz na začiatok:"
+msgstr "Začiatok gradientu pozadia:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:38
 msgid "Background gradient end:"
@@ -671,19 +661,16 @@ msgid "Solder paste:"
 msgstr "Spájkovacia pasta:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:64
-#, fuzzy
 msgid "Board Colors"
-msgstr "Farba tela dosky"
+msgstr "Farby dosky"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:71
-#, fuzzy
 msgid "Use board stackup colors"
-msgstr "obmedzenia nastavenia dosky"
+msgstr "Použiť farby zo štruktúry vrstiev"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:74
-#, fuzzy
 msgid "Use colors:"
-msgstr "Čisté farby:"
+msgstr "Použiť farby:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:82
 msgid "Silkscreen top:"
@@ -3909,7 +3896,7 @@ msgstr "Ignorovať"
 
 #: common/dialogs/panel_setup_severities.cpp:117
 msgid "From Pin Conflicts Map"
-msgstr "Z mapy pinov konfliktov"
+msgstr "Z mapy konfliktov vývodov"
 
 #: common/dialogs/panel_text_variables.cpp:121
 #: common/dialogs/panel_text_variables.cpp:149
@@ -4252,14 +4239,12 @@ msgid "General"
 msgstr "Všeobecné"
 
 #: common/eda_base_frame.cpp:1086
-#, fuzzy
 msgid "Realtime Renderer"
-msgstr "Odhaliť vo vyhľadávači"
+msgstr "Reálny čas vykreslovania"
 
 #: common/eda_base_frame.cpp:1087
-#, fuzzy
 msgid "Raytracing Renderer"
-msgstr "Možnosti vykreslovania Raytracing"
+msgstr "Raytracing vykreslovanie"
 
 #: common/eda_base_frame.cpp:1103 common/hotkey_store.cpp:77
 #: gerbview/gerbview_frame.cpp:611 gerbview/gerbview_frame.cpp:635
@@ -4479,7 +4464,7 @@ msgstr "Čisté informácie"
 #: common/eda_item.cpp:353 pcbnew/pcb_group.cpp:399
 #: pcbnew/tools/pcb_actions.cpp:758
 msgid "Group"
-msgstr "Skupina"
+msgstr "Zoskupiť"
 
 #: common/eda_item.cpp:356 eeschema/sch_junction.h:97
 msgid "Junction"
@@ -5296,11 +5281,11 @@ msgstr "Hierarchické štítky"
 
 #: common/layer_id.cpp:115
 msgid "Pin numbers"
-msgstr "Čísla PIN"
+msgstr "Čísla vývodov"
 
 #: common/layer_id.cpp:116
 msgid "Pin names"
-msgstr "Pripnúť mená"
+msgstr "Názvy vývodov"
 
 #: common/layer_id.cpp:117
 msgid "Symbol references"
@@ -5349,7 +5334,7 @@ msgstr "Schematický text a grafika"
 
 #: common/layer_id.cpp:127
 msgid "Pins"
-msgstr "Špendlíky"
+msgstr "Vývody"
 
 #: common/layer_id.cpp:128
 msgid "Sheet borders"
@@ -5374,7 +5359,7 @@ msgstr "Názvy hárkov"
 #: common/layer_id.cpp:133
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:60
 msgid "Sheet pins"
-msgstr "Špendlíky"
+msgstr "Vývody listu"
 
 #: common/layer_id.cpp:134
 msgid "No-connect symbols"
@@ -7398,7 +7383,7 @@ msgstr "Kľúčové slová"
 
 #: cvpcb/cvpcb_mainframe.cpp:809
 msgid "Pin Count"
-msgstr "Počet pinov"
+msgstr "Počet vývodov"
 
 #: cvpcb/cvpcb_mainframe.cpp:822 eeschema/sch_base_frame.cpp:576
 #: eeschema/sch_symbol.cpp:1655 eeschema/sch_symbol.cpp:1659
@@ -7766,11 +7751,11 @@ msgstr "Filter footprint list by footprint filters definované v symbole"
 
 #: cvpcb/tools/cvpcb_actions.cpp:149
 msgid "Filter by pin count"
-msgstr "Filtrovať podľa počtu pinov"
+msgstr "Filtrovať podľa počtu vývodov"
 
 #: cvpcb/tools/cvpcb_actions.cpp:150
 msgid "Filter footprint list by pin count"
-msgstr "Filtrujte zoznam stôp podľa počtu pinov"
+msgstr "Filtrujte zoznam stôp podľa počtu vývodov"
 
 #: cvpcb/tools/cvpcb_actions.cpp:156
 msgid "Filter by library"
@@ -7842,7 +7827,8 @@ msgstr ""
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
-"Pin listu %s nemá vo vnútri listu žiadny zodpovedajúci hierarchický štítok"
+"Vývod listu %s nemá vo vnútri listu žiadne zodpovedajúce hierarchické "
+"označenie"
 
 #: eeschema/connection_graph.cpp:3293
 #, fuzzy, c-format
@@ -7858,7 +7844,7 @@ msgstr "Vývod %s púzdra %s nájdený"
 #: eeschema/cross-probing.cpp:166
 #, c-format
 msgid "%s found but pin %s not found"
-msgstr "%s nájdené, ale pin %s nebol nájdený"
+msgstr "%s nájdené, ale vývod %s nebol nájdený"
 
 #: eeschema/cross-probing.cpp:170
 #, c-format
@@ -8531,7 +8517,7 @@ msgstr "Prebieha kontrola stôp ..."
 
 #: eeschema/dialogs/dialog_erc.cpp:505
 msgid "Checking pins..."
-msgstr "Kontrolujú sa kolíky ..."
+msgstr "Kontrolujú sa vývody..."
 
 #: eeschema/dialogs/dialog_erc.cpp:522
 msgid "Checking labels..."
@@ -8548,7 +8534,7 @@ msgstr "Kontroluje sa plnenie zón ..."
 
 #: eeschema/dialogs/dialog_erc.cpp:540
 msgid "Checking no connect pins for connections..."
-msgstr "Nekontrolujú sa žiadne spojovacie kolíky na pripojenie ..."
+msgstr "Kontrola, či nie sú pripojené piny \"žiadne pripojenie (NC)\"..."
 
 #: eeschema/dialogs/dialog_erc.cpp:546
 msgid "Checking for library symbol issues..."
@@ -8617,7 +8603,7 @@ msgstr "Porušenia nebudú skontrolované ani nahlásené"
 
 #: eeschema/dialogs/dialog_erc.cpp:678
 msgid "Edit pin-to-pin conflict map..."
-msgstr "Upraviť konfliktnú mapu typu pin-to-pin ..."
+msgstr "Upraviť konfliktnú mapu typu pin-to-pin..."
 
 #: eeschema/dialogs/dialog_erc.cpp:682 pcbnew/dialogs/dialog_drc.cpp:639
 msgid "Edit violation severities..."
@@ -9560,7 +9546,7 @@ msgstr "Uložiť zmeny?"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:26
 msgid "Pin numbers:"
-msgstr "Čísla PINov:"
+msgstr "Číslo vývodu:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:30
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:41
@@ -9624,7 +9610,7 @@ msgstr "Filtrovať podľa jednotky:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:82
 msgid "Pin Table"
-msgstr "Pripnúť stôl"
+msgstr "Tabuľka vývodov"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:33
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:128
@@ -9720,19 +9706,19 @@ msgstr "Vylúčiť z hracieho plánu"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:103
 msgid "Pin name position offset:"
-msgstr "Posun pozície špendlíka:"
+msgstr "Posun názvu v popise vývodov:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:120
 msgid "Show pin number text"
-msgstr "Zobraziť text s číslom špendlíka"
+msgstr "Zobraziť číslo vývodu"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:124
 msgid "Show pin name text"
-msgstr "Zobraziť text názvu špendlíka"
+msgstr "Zobraziť názov vývodu"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:128
 msgid "Pin name inside"
-msgstr "Meno vývodu vo vnútri"
+msgstr "Názov vývodu vnútri"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.h:74
 msgid "New Symbol"
@@ -9931,11 +9917,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:219
 msgid "Pin Text Options"
-msgstr "Pripnúť možnosti textu"
+msgstr "Možnosti textu vývodu"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:221
 msgid "Show pin number"
-msgstr "Zobraziť číslo PIN"
+msgstr "Zobraziť číslo vývodu"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:223
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:177
@@ -9944,7 +9930,7 @@ msgstr "Zobrazí/skryje čísla vývodov"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:227
 msgid "Show pin name"
-msgstr "Zobraziť názov špendlíka"
+msgstr "Zobraziť názov vývodu"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:229
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:183
