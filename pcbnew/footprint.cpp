@@ -2933,7 +2933,7 @@ static struct FOOTPRINT_DESC
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, bool>( _HKI( "Exclude from position files" ),
                     &FOOTPRINT::SetExcludedFromPosFiles, &FOOTPRINT::IsExcludedFromPosFiles ),
                     groupAttributes );
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT, bool>( _HKI( "Exclude from BOM" ),
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, bool>( _HKI( "Exclude from bill of materials" ),
                     &FOOTPRINT::SetExcludedFromBOM, &FOOTPRINT::IsExcludedFromBOM ),
                     groupAttributes );
 
