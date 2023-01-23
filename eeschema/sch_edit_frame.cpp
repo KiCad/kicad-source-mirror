@@ -614,7 +614,8 @@ void SCH_EDIT_FRAME::SetCurrentSheet( const SCH_SHEET_PATH& aSheet )
 
 void SCH_EDIT_FRAME::HardRedraw()
 {
-    RecalculateConnections( LOCAL_CLEANUP );
+    if( Schematic().Settings().m_IntersheetRefsShow )
+        RecomputeIntersheetRefs();
 
     FocusOnItem( nullptr );
 
