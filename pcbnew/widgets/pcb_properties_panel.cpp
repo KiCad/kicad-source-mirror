@@ -68,6 +68,10 @@ PCB_PROPERTIES_PANEL::PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_EDIT_FRAME* a
         PG_CHECKBOX_EDITOR* cbEditor = new PG_CHECKBOX_EDITOR();
         m_checkboxEditorInstance = static_cast<PG_CHECKBOX_EDITOR*>( wxPropertyGrid::RegisterEditorClass( cbEditor ) );
     }
+    else
+    {
+        m_checkboxEditorInstance = static_cast<PG_CHECKBOX_EDITOR*>( it->second );
+    }
 }
 
 

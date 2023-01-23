@@ -815,7 +815,7 @@ bool SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
 
     for( const LIB_SYMBOL* symbol : symbols )
     {
-        if( row->SupportsSubLibraries()
+        if( row && row->SupportsSubLibraries()
             && !subLib.IsSameAs( symbol->GetLibId().GetSubLibraryName() ) )
         {
             continue;
