@@ -61,6 +61,7 @@ private:
     wxRegEx           m_netClassRegex;
     wxRegEx           m_netNameRegex;
     wxRegEx           m_typeRegex;
+    wxRegEx           m_viaTypeRegex;
     wxRegEx           m_padTypeRegex;
     wxRegEx           m_pinTypeRegex;
     wxRegEx           m_fabPropRegex;
