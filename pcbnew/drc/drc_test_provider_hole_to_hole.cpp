@@ -151,8 +151,6 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
                 }
                 else if( item->Type() == PCB_VIA_T )
                 {
-                    PCB_VIA* via = static_cast<PCB_VIA*>( item );
-
                     // Blind/buried/microvias will be drilled/burned _prior_ to lamination, so
                     // subsequently drilled holes need to avoid them.
                     m_holeTree.Insert( item, Edge_Cuts, m_largestHoleToHoleClearance );
