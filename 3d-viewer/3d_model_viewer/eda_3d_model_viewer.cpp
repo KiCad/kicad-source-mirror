@@ -27,6 +27,7 @@
  * 3d models that come in the original data from the files without any transformations.
  */
 
+#include <gal/opengl/kiglew.h>    // Must be included first
 #include <iostream>
 #include "3d_rendering/opengl/3d_model.h"
 #include "eda_3d_model_viewer.h"
@@ -38,6 +39,7 @@
 #include <settings/common_settings.h>
 #include <pgm_base.h>
 #include <gal/dpi_scaling.h>
+#include <macros.h>
 
 /**
   * Scale conversion from 3d model units to pcb units
@@ -182,6 +184,20 @@ void EDA_3D_MODEL_VIEWER::Clear3DModel()
 
 void EDA_3D_MODEL_VIEWER::ogl_initialize()
 {
+    const GLenum err = glewInit();
+
+    if( GLEW_OK != err )
+    {
+        const wxString msgError = (const char*) glewGetErrorString( err );
+
+        wxLogMessage( msgError );
+    }
+    else
+    {
+        wxLogTrace( m_logTrace, wxT( "EDA_3D_MODEL_VIEWER::ogl_initialize Using GLEW version %s" ),
+                    FROM_UTF8( (char*) glewGetString( GLEW_VERSION ) ) );
+    }
+
     glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );
     glHint( GL_LINE_SMOOTH_HINT, GL_NICEST );
     glHint( GL_POLYGON_SMOOTH_HINT, GL_NICEST );
