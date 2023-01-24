@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -298,7 +298,8 @@ void DIALOG_ERC::OnDeleteAllClick( wxCommandEvent& event )
     {
         wxMessageDialog dlg( this, _( "Delete exclusions too?" ), _( "Delete All Markers" ),
                              wxYES_NO | wxCANCEL | wxCENTER | wxICON_QUESTION );
-        dlg.SetYesNoLabels( _( "Errors and Warnings Only" ) , _( "Errors, Warnings and Exclusions" ) );
+        dlg.SetYesNoLabels( _( "Errors and Warnings Only" ),
+                            _( "Errors, Warnings and Exclusions" ) );
 
         int ret = dlg.ShowModal();
 
@@ -602,6 +603,8 @@ void DIALOG_ERC::OnERCItemSelected( wxDataViewEvent& aEvent )
             case RC_TREE_NODE::AUX_ITEM:
                 if( ercItem->AuxItemHasSheetPath() )
                     sheet = ercItem->GetAuxItemSheetPath();
+                break;
+            default:
                 break;
             }
         }
