@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-20 09:12-0800\n"
-"PO-Revision-Date: 2023-01-22 16:34+0000\n"
+"PO-Revision-Date: 2023-01-25 00:33+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.15.1\n"
+"X-Generator: Weblate 4.16-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -6081,7 +6081,7 @@ msgstr "Центрувати за курсором"
 
 #: common/tool/actions.cpp:343
 msgid "Zoom to Selection"
-msgstr "Наблизити виділення"
+msgstr "Масштабувати виділення"
 
 #: common/tool/actions.cpp:356
 msgid "Cursor Up"
@@ -6117,19 +6117,19 @@ msgstr "Курсор правіше швидко"
 
 #: common/tool/actions.cpp:405
 msgid "Click"
-msgstr "Клац"
+msgstr "Натискання мишкою"
 
 #: common/tool/actions.cpp:405
 msgid "Performs left mouse button click"
-msgstr "Виконує клац лівої кнопки миші"
+msgstr "Виконати натискання лівої кнопки миші"
 
 #: common/tool/actions.cpp:411
 msgid "Double-click"
-msgstr "Подвійний клац"
+msgstr "Подвійне натискання мишки"
 
 #: common/tool/actions.cpp:411
 msgid "Performs left mouse button double-click"
-msgstr "Виконує подвійний клац лівої кнопки миші"
+msgstr "Виконати подвійне натискання лівої кнопки миші"
 
 #: common/tool/actions.cpp:419
 msgid "Pin Library"
@@ -6137,7 +6137,7 @@ msgstr "Закріпити бібліотеку"
 
 #: common/tool/actions.cpp:420
 msgid "Keep the library at the top of the list"
-msgstr "Тримайте бібліотеку у верхній частині списку"
+msgstr "Тримати бібліотеку у верхній частині списку"
 
 #: common/tool/actions.cpp:424
 msgid "Unpin Library"
@@ -6157,7 +6157,7 @@ msgstr "Панорамування вниз"
 
 #: common/tool/actions.cpp:442
 msgid "Pan Left"
-msgstr "Панорамування зліва"
+msgstr "Панорамування вліво"
 
 #: common/tool/actions.cpp:448
 msgid "Pan Right"
@@ -6165,11 +6165,11 @@ msgstr "Панорамування вправо"
 
 #: common/tool/actions.cpp:455
 msgid "Switch to Fast Grid 1"
-msgstr "Перейти на Сітку 1"
+msgstr "Перейти на швидку сітку 1"
 
 #: common/tool/actions.cpp:460
 msgid "Switch to Fast Grid 2"
-msgstr "Перейти в Сітку 2"
+msgstr "Перейти на швидку сітку 2"
 
 #: common/tool/actions.cpp:465
 msgid "Switch to Next Grid"
@@ -6197,7 +6197,7 @@ msgstr "Властивості сітки..."
 
 #: common/tool/actions.cpp:492
 msgid "Set grid dimensions"
-msgstr "Визначити розміри сітки"
+msgstr "Встановити розміри сітки"
 
 #: common/tool/actions.cpp:497
 msgid "Use inches"
@@ -6290,19 +6290,19 @@ msgstr ""
 
 #: common/tool/actions.cpp:564
 msgid "Draw Bounding Boxes"
-msgstr "Малювати габаритну рамку"
+msgstr "Креслити обмежувальні рамки"
 
 #: common/tool/actions.cpp:569
 msgid "Select item(s)"
-msgstr "Вибрати елементи"
+msgstr "Вибрати елемент(и)"
 
 #: common/tool/actions.cpp:576
 msgid "Measure Tool"
-msgstr "Інструмент Вимірювання"
+msgstr "Інструмент вимірювання"
 
 #: common/tool/actions.cpp:576
 msgid "Interactively measure distance between points"
-msgstr "Інтерактивно виміряти відстань між точками"
+msgstr "Інтерактивне вимірювання відстані між точками"
 
 #: common/tool/actions.cpp:590
 msgid "Show 3D viewer window"
@@ -6348,12 +6348,12 @@ msgstr "Оновити схему з плати..."
 
 #: common/tool/actions.cpp:621
 msgid "Update schematic with changes made to PCB"
-msgstr "Внести в схему зміни із друкованої плати"
+msgstr "Оновити схему зі змінами із друкованої плати"
 
 #: common/tool/actions.cpp:631
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:69
 msgid "Configure Paths..."
-msgstr "Налаштувати шлях..."
+msgstr "Налаштування шляхів..."
 
 #: common/tool/actions.cpp:631
 msgid "Edit path configuration environment variables"
@@ -6392,7 +6392,7 @@ msgstr "Довідка"
 
 #: common/tool/actions.cpp:655
 msgid "Open product documentation in a web browser"
-msgstr "Відкрити документацію в веббраузері"
+msgstr "Відкрити документацію в веб браузері"
 
 #: common/tool/actions.cpp:661
 msgid "List Hotkeys..."
@@ -6408,11 +6408,11 @@ msgstr "Долучитися"
 
 #: common/tool/actions.cpp:668
 msgid "Open \"Contribute to KiCad\" in a web browser"
-msgstr "Відкрити розділ \"Приєднатися до KiCad\" у веббраузері"
+msgstr "Відкрити розділ \"Приєднатися до KiCad\" у веб браузері"
 
 #: common/tool/actions.cpp:674
 msgid "Open \"Donate to KiCad\" in a web browser"
-msgstr "Відкрити \"Пожертвувати KiCad\" у веббраузері"
+msgstr "Відкрити \"Пожертвувати KiCad\" у веб браузері"
 
 #: common/tool/actions.cpp:678
 msgid "Report Bug"
@@ -6427,7 +6427,7 @@ msgid ""
 msgstr ""
 "Файл допомоги '%s' або\n"
 "'%s' не знайдено.\n"
-"Хочите отримати доступ до допомоги KiCad онлайн?"
+"Хочте отримати доступ до допомоги KiCad онлайн?"
 
 #: common/tool/common_control.cpp:213 common/tool/common_control.cpp:233
 msgid "File Not Found"
@@ -6440,7 +6440,7 @@ msgid ""
 "Do you want to access the KiCad online help?"
 msgstr ""
 "Файл допомоги '%s' не знайдено.\n"
-"Хочите отримати доступ до допомоги KiCad онлайн?"
+"Хочте отримати доступ до допомоги KiCad онлайн?"
 
 #: common/tool/common_control.cpp:260
 #, c-format
@@ -6448,7 +6448,7 @@ msgid ""
 "Could not launch the default browser.\n"
 "For information on how to help the KiCad project, visit %s"
 msgstr ""
-"Не вдалося запустити браузер по замовчуванні.\n"
+"Не вдалося запустити основний браузер.\n"
 "Для отримання інформації про допомогу проекту KiCad, відвідайте %s"
 
 #: common/tool/common_control.cpp:263
@@ -6461,8 +6461,8 @@ msgid ""
 "Could not launch the default browser.\n"
 "To donate to the KiCad project, visit %s"
 msgstr ""
-"Не вдалося запустити браузер по замовчуванні.\n"
-"Для пожертвування для KiCad проекту, відвідайте %s"
+"Не вдалося запустити основний браузер.\n"
+"Для пожертвування для KiCad проєкту, відвідайте %s"
 
 #: common/tool/grid_menu.cpp:100
 #, c-format
@@ -6535,7 +6535,7 @@ msgstr "Посадкове місце не знайдено."
 
 #: common/widgets/footprint_select_widget.cpp:141
 msgid "No default footprint"
-msgstr "Немає посадкового місця за замовчуванням"
+msgstr "Немає типового посадкового місця"
 
 #: common/widgets/gal_options_panel.cpp:87
 msgid "Accelerated graphics"
@@ -6547,7 +6547,7 @@ msgstr "Звичайна графіка"
 
 #: common/widgets/gal_options_panel.cpp:88
 msgid "Rendering Engine"
-msgstr "Візуалізатор"
+msgstr "Двигун візуалізації"
 
 #: common/widgets/gal_options_panel.cpp:92
 msgid "Hardware-accelerated graphics (recommended)"
@@ -6589,7 +6589,7 @@ msgstr "Товщина сітки:"
 #: common/widgets/gal_options_panel.cpp:156
 #: common/widgets/gal_options_panel.cpp:172
 msgid "px"
-msgstr "пікс."
+msgstr "px"
 
 #: common/widgets/gal_options_panel.cpp:146
 msgid "Min grid spacing:"
@@ -6637,7 +6637,7 @@ msgstr "Форма курсору"
 
 #: common/widgets/gal_options_panel.cpp:212
 msgid "Cursor shape for drawing, placement and movement tools"
-msgstr "Форма курсору для креслення, розміщення та переміщення"
+msgstr "Форма курсору для креслення, розміщення та переміщення інструментів"
 
 #: common/widgets/gal_options_panel.cpp:215
 msgid "Always show crosshairs"
@@ -6645,11 +6645,11 @@ msgstr "Завжди показувати перехрестя"
 
 #: common/widgets/grid_text_button_helpers.cpp:407
 msgid "Select a File"
-msgstr "Виберіть файл"
+msgstr "Виберати файл"
 
 #: common/widgets/grid_text_button_helpers.cpp:439
 msgid "Select Path"
-msgstr "Виберіть шлях"
+msgstr "Вибрати шлях"
 
 #: common/widgets/lib_tree.cpp:289
 msgid "recent searches"
@@ -6661,11 +6661,11 @@ msgstr "Центрувати зображення графіка у цій по�
 
 #: common/widgets/mathplot.cpp:1677 eeschema/sim/sim_plot_frame_base.cpp:95
 msgid "Fit on Screen"
-msgstr "Масштаб за розміром"
+msgstr "За розміром екрана"
 
 #: common/widgets/mathplot.cpp:1677
 msgid "Set plot view to show all items"
-msgstr "Показати на діаграми всі елементи"
+msgstr "Налаштування режиму перегляду для відображення всіх елементів"
 
 #: common/widgets/mathplot.cpp:1678
 msgid "Zoom in plot view."
@@ -6698,12 +6698,12 @@ msgstr "Фільтр:"
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:455
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:365
 msgid "Reset to Defaults"
-msgstr "Відновити параметри за замовчуванням"
+msgstr "Відновити типові параметри"
 
 #: common/widgets/paged_dialog.cpp:328
 #, c-format
 msgid "Reset %s to Defaults"
-msgstr "Відновити %s за замовчуванням"
+msgstr "Відновити %s до типових"
 
 #: common/widgets/properties_panel.cpp:69
 #: common/widgets/properties_panel.cpp:147
@@ -6764,7 +6764,7 @@ msgstr "Очистити призначену гарячу клавішу"
 
 #: common/widgets/widget_hotkey_list.cpp:405
 msgid "Restore Default"
-msgstr "Відновити за замовчуванням"
+msgstr "Відновити до типових"
 
 #: common/widgets/widget_hotkey_list.cpp:441
 #, c-format
@@ -6815,7 +6815,7 @@ msgstr "Зберегти звіт до файлу"
 #: common/widgets/wx_html_report_panel.cpp:385
 #, c-format
 msgid "Cannot write report to file '%s'."
-msgstr "Неможливо записати звіт у файл '%s."
+msgstr "Неможливо записати звіт у файл '%s'."
 
 #: common/widgets/wx_html_report_panel.cpp:387
 msgid "File save error"
@@ -6823,7 +6823,7 @@ msgstr "Помилка збереження файлу"
 
 #: common/widgets/wx_html_report_panel_base.cpp:16
 msgid "Output Messages"
-msgstr "Інформація про виконання"
+msgstr "Вихідні повідомлення"
 
 #: common/widgets/wx_html_report_panel_base.cpp:30
 #: eeschema/dialogs/dialog_erc_base.cpp:117
@@ -6940,7 +6940,7 @@ msgstr "OrcadPCB2 файли зв'язку"
 
 #: common/wildcards_and_files_ext.cpp:320
 msgid "KiCad netlist files"
-msgstr "KiCad файли зв'язку"
+msgstr "KiCad файли зв'язків"
 
 #: common/wildcards_and_files_ext.cpp:326
 #: common/wildcards_and_files_ext.cpp:367
@@ -7021,7 +7021,7 @@ msgstr "HTML-файли"
 
 #: common/wildcards_and_files_ext.cpp:447
 msgid "CSV Files"
-msgstr "CSV-файли"
+msgstr "CSV файли"
 
 #: common/wildcards_and_files_ext.cpp:453
 msgid "Portable document format files"
@@ -7073,11 +7073,11 @@ msgstr "CadStar файл зв'язку"
 
 #: common/wildcards_and_files_ext.cpp:525
 msgid "Symbol footprint association files"
-msgstr "Файли відповідности символів посадковим місцям"
+msgstr "Файли відповідності символів посадковим місцям"
 
 #: common/wildcards_and_files_ext.cpp:531
 msgid "Zip file"
-msgstr "Zip-файл"
+msgstr "Zip файл"
 
 #: common/wildcards_and_files_ext.cpp:537
 msgid "GenCAD 1.4 board files"
@@ -7123,7 +7123,7 @@ msgstr "Файл гарячих клавіш"
 #: cvpcb/auto_associate.cpp:108
 #, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr "Файл відповідностей '%s' не знайдено."
+msgstr "Файл відповідності '%s' не знайдено."
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
@@ -7137,7 +7137,7 @@ msgstr "Помилка завантаження файлу відповідно�
 #: cvpcb/auto_associate.cpp:187
 #, c-format
 msgid "%lu footprint/symbol equivalences found."
-msgstr "Знайдено %lu відповідностей посадкове місце/символ."
+msgstr "Знайдено %lu відповідність посадкове місце/символ."
 
 #: cvpcb/auto_associate.cpp:263
 #, c-format
@@ -7187,7 +7187,7 @@ msgstr "Бібліотеки посадкових місць"
 
 #: cvpcb/cvpcb_mainframe.cpp:115
 msgid "Symbol : Footprint Assignments"
-msgstr "Відповідність Символ : Посадкове місце"
+msgstr "Символ : призначення посадкового місця"
 
 #: cvpcb/cvpcb_mainframe.cpp:118
 msgid "Filtered Footprints"
@@ -7196,7 +7196,7 @@ msgstr "Відфільтровані посадкові місця"
 #: cvpcb/cvpcb_mainframe.cpp:149
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:130
 msgid "Apply, Save Schematic && Continue"
-msgstr "Прийняти, Зберегти Схему && Продовжити"
+msgstr "Прийняти, Зберегти схему && Продовжити"
 
 #: cvpcb/cvpcb_mainframe.cpp:221
 msgid "Symbol to footprint changes are unsaved"
@@ -7240,7 +7240,7 @@ msgstr "Фільтрація відсутня"
 #: cvpcb/cvpcb_mainframe.cpp:841
 #, c-format
 msgid "Filtered by %s"
-msgstr "Фільтри: %s"
+msgstr "Фільтрувати за %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:855
 #, c-format
@@ -7277,20 +7277,20 @@ msgid ""
 "Error loading schematic.\n"
 "%s"
 msgstr ""
-"Помилка загрузки схеми.\n"
+"Помилка завантаження схеми.\n"
 "%s"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:51
 #, c-format
 msgid "Project file: '%s'"
-msgstr "Файл проєкту:%s'"
+msgstr "Файл проєкту:'%s'"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:103
 #: eeschema/dialogs/dialog_bom.cpp:448
 #: gerbview/tools/gerbview_inspection_tool.cpp:185
 #: kicad/project_tree_pane.cpp:781
 msgid "No text editor selected in KiCad.  Please choose one."
-msgstr "У KiCad не вибрано текстовий редактор. Будь ласка, виберіть один."
+msgstr "У KiCad не вибрано текстовий редактор.  Будь ласка, виберіть один."
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:244
 msgid "Footprint Association File"
@@ -7303,7 +7303,7 @@ msgstr "Файл '%s' вже існує у списку."
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:20
 msgid "Symbol Footprint Association Files (.equ)"
-msgstr "Файли відповідностей символів та посадкових місць (.equ)"
+msgstr "Файли відповідності символів та посадкових місць (.equ)"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:36
 #: eeschema/sch_base_frame.cpp:284 pcbnew/footprint_libraries_utils.cpp:532
@@ -7373,7 +7373,7 @@ msgstr "Посилання"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:38
 msgid "Schematic assignment"
-msgstr "Відповідність у схемі"
+msgstr "Схематичне призначення"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:41
 msgid "Cmp file assignment"
@@ -7386,19 +7386,19 @@ msgid ""
 "\n"
 "Please choose the assignment."
 msgstr ""
-"Призначенні посадкові місця із схеми зв'язків і символи з повязаного файлу (."
-"cmp) є конфліктними.\n"
+"Призначенні посадкові місця із схеми зв'язків і символи з пов'язаного файлу ("
+".cmp) є конфліктними.\n"
 "\n"
 "Виберіть, будь ласка, завдання."
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector_base.h:53
 msgid "Footprint Assignment Conflicts"
-msgstr "Конфлікт призначення посадкових місць"
+msgstr "Конфлікти призначення посадкових місць"
 
 #: cvpcb/display_footprints_frame.cpp:72
 #: pcbnew/toolbars_footprint_viewer.cpp:176
 msgid "Footprint Viewer"
-msgstr "Програма показу посадкових місць"
+msgstr "Програма перегляду посадкових місць"
 
 #: cvpcb/display_footprints_frame.cpp:325
 #: pcbnew/toolbars_footprint_viewer.cpp:107
@@ -7438,17 +7438,17 @@ msgid ""
 "format? (If you answer no, then these assignments will be cleared and you "
 "will need to re-assign them manually.)"
 msgstr ""
-"Деякі з призначених посадкових місць використовують застарілі записи "
-"(відсутнє унікальне ім'я бібліотеки). Бажаєте, щоб KiCad спробував "
+"Деякі з призначених посадкових місць використовують застарілі записи ("
+"відсутнє унікальне ім'я бібліотеки). Бажаєте, щоб KiCad спробував "
 "перетворити їх в новий формат LIB_ID? (Якщо відповісте ні, після завершення "
-"ці призначення будуть прибрані і потрібно буде самостійно перепризначити "
+"ці призначення будуть прибрані і потрібно буде самостійно пере-призначити "
 "дані посадкові місця.)"
 
 #: cvpcb/readwrite_dlgs.cpp:148
 #, c-format
 msgid "Component '%s' footprint '%s' <b>not found</b> in any library.\n"
 msgstr ""
-"Компонент '%s' посадкове місце '%s' <b>не знайдено</b> в ніякій бібліотеці.\n"
+"Компонент '%s' посадкове місце '%s' <b>не знайдено</b> в жодній бібліотеці.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:155
 #, c-format
@@ -7501,7 +7501,7 @@ msgstr "Переглянути виділене посадкове місце"
 #: cvpcb/tools/cvpcb_actions.cpp:53
 msgid "View the selected footprint in the footprint viewer"
 msgstr ""
-"Подивитися виділене посадкове місце в програмі перегляду посадкових місць"
+"Переглянути виділене посадкове місце в програмі перегляду посадкових місць"
 
 #: cvpcb/tools/cvpcb_actions.cpp:60
 msgid "Manage Footprint Association Files"
@@ -7518,29 +7518,29 @@ msgstr ""
 
 #: cvpcb/tools/cvpcb_actions.cpp:67
 msgid "Save to Schematic"
-msgstr "Зберегти у схему"
+msgstr "Зберегти до схеми"
 
 #: cvpcb/tools/cvpcb_actions.cpp:68
 msgid "Save footprint associations in schematic symbol footprint fields"
 msgstr ""
-"Зберегти ім'я відповідного посадкового місця в полі Посадкове Місце символу "
+"Зберегти ім'я відповідного посадкового місця в полі посадкове місце символу "
 "схеми"
 
 #: cvpcb/tools/cvpcb_actions.cpp:74
 msgid "Save to Schematic and File"
-msgstr "Зберегти у файл зі схемою та файлом"
+msgstr "Зберегти до схеми та файл"
 
 #: cvpcb/tools/cvpcb_actions.cpp:75
 msgid ""
 "Save footprint associations in schematic symbol footprint fields and "
 "schematic files"
 msgstr ""
-"Зберегти ім'я відповідного посадкового місця в полі Посадкове Місце символу "
-"схеми та в файлі схеми"
+"Зберегти ім'я відповідного посадкового місця в полі посадкове місце символу "
+"схеми та в файлах схеми"
 
 #: cvpcb/tools/cvpcb_actions.cpp:98
 msgid "Select next unassigned symbol"
-msgstr "Вибрати наступний непризначений символ"
+msgstr "Вибрати наступний символ без призначення"
 
 #: cvpcb/tools/cvpcb_actions.cpp:99
 msgid "Select next symbol with no footprint assignment"
@@ -7560,7 +7560,7 @@ msgstr "Призначити посадкове місце"
 
 #: cvpcb/tools/cvpcb_actions.cpp:116
 msgid "Assign footprint to selected symbols"
-msgstr "Призначити посадкове місце для виділеного символу"
+msgstr "Призначити посадкове місце для виділених символів"
 
 #: cvpcb/tools/cvpcb_actions.cpp:121
 msgid "Automatically assign footprints"
@@ -7568,7 +7568,7 @@ msgstr "Автоматично призначати посадкові місц�
 
 #: cvpcb/tools/cvpcb_actions.cpp:122
 msgid "Perform automatic footprint assignment"
-msgstr "Виконати автоматичне призначення посадкових місць"
+msgstr "Виконати автоматичне призначення посадкового місця"
 
 #: cvpcb/tools/cvpcb_actions.cpp:128
 msgid "Delete association"
@@ -7638,7 +7638,7 @@ msgstr "Додано позначення %s як %s."
 
 #: eeschema/annotate.cpp:420
 msgid "Annotation complete."
-msgstr "Додавання позначення завершено."
+msgstr "Анотування завершено."
 
 #: eeschema/bom_plugins.cpp:46
 #, c-format
@@ -7663,18 +7663,17 @@ msgstr ""
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
-msgstr ""
-"Зв'язок %s графічно підключена до шини %s , але не є учасником цієї шини"
+msgstr "Зв'язок %s графічно підключена до шини %s , але не є членом цієї шини"
 
 #: eeschema/connection_graph.cpp:3276
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
-msgstr "Виводу аркуша %s не має відповідної ієрархічної мітки всередині аркуша"
+msgstr "Виводу листа %s не має відповідної ієрархічної мітки всередині листа"
 
 #: eeschema/connection_graph.cpp:3293
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
-msgstr "Ієрархічна мітка %s не має відповідного виводу аркуша"
+msgstr "Ієрархічна мітка %s не має відповідного виводу листа"
 
 #: eeschema/cross-probing.cpp:164
 #, c-format
@@ -7703,11 +7702,11 @@ msgstr "Вибраний зв'язок:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:90
 msgid "Annotation Messages:"
-msgstr "Інформація про виконання:"
+msgstr "Повідомлення анотування:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:93
 msgid "Annotate"
-msgstr "Позначити"
+msgstr "Анотувати"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:40
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:25
@@ -7724,7 +7723,7 @@ msgstr "Вся схема"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:45
 msgid "Current sheet only"
-msgstr "Тільки поточний аркуш"
+msgstr "Тільки поточний лист"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:48
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:101
@@ -7753,11 +7752,11 @@ msgstr "Сортувати символи по осі &Y"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:87
 msgid "Keep existing annotations"
-msgstr "Зберегти наявні позначення"
+msgstr "Зберегти наявне анотування"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:87
 msgid "Reset existing annotations"
-msgstr "Скинути наявні позначення"
+msgstr "Скинути наявне анотування"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:94
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:61
@@ -7772,24 +7771,24 @@ msgstr "Використовувати перший вільний номер п
 #: eeschema/dialogs/dialog_annotate_base.cpp:107
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:79
 msgid "First free after sheet number X 100"
-msgstr "Перший вільний номер після номера аркуша X 100"
+msgstr "Перший вільний номер після номера алиста X 100"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:110
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:82
 msgid "First free after sheet number X 1000"
-msgstr "Перший вільний номер після номера аркуша X 1000"
+msgstr "Перший вільний номер після номера листа X 1000"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:133
 msgid "Clear Annotation"
-msgstr "Очистити позначення"
+msgstr "Очистити анотування"
 
 #: eeschema/dialogs/dialog_annotate_base.h:85
 msgid "Annotate Schematic"
-msgstr "Позначити компоненти схеми"
+msgstr "Анотування схеми"
 
 #: eeschema/dialogs/dialog_bom.cpp:135
 msgid "Generate"
-msgstr "Створити"
+msgstr "Генерувати"
 
 #: eeschema/dialogs/dialog_bom.cpp:217
 msgid "(file missing)"
@@ -7817,29 +7816,29 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_bom.cpp:345
 msgid "Generating BOM requires a fully annotated schematic."
-msgstr "Генерування BOM потребує повністю позначену схему."
+msgstr "Генерування BOM потребує повністю анотовану схему."
 
 #: eeschema/dialogs/dialog_bom.cpp:382 eeschema/dialogs/dialog_bom_base.cpp:45
 msgid "Generator nickname:"
-msgstr "Ім'я плагіну:"
+msgstr "Генератор псевдоніму:"
 
 #: eeschema/dialogs/dialog_bom.cpp:382
 msgid "Add Generator"
-msgstr "Додати плагін"
+msgstr "Додати генератор"
 
 #: eeschema/dialogs/dialog_bom.cpp:391
 #, c-format
 msgid "Nickname '%s' already in use."
-msgstr "Імʼя '%s' вже використовується."
+msgstr "Псевдонім '%s' вже використовується."
 
 #: eeschema/dialogs/dialog_bom.cpp:420
 #: eeschema/dialogs/dialog_export_netlist.cpp:751
 msgid "Generator File"
-msgstr "Файл плагіну"
+msgstr "Файл генератора"
 
 #: eeschema/dialogs/dialog_bom.cpp:439
 msgid "Generator file name not found."
-msgstr "Ім'я файлу плагіну не знайдено."
+msgstr "Ім'я файлу генератору не знайдено."
 
 #: eeschema/dialogs/dialog_bom.cpp:460
 msgid "Bill of Materials Generation Help"
@@ -7847,11 +7846,11 @@ msgstr "Допомога у формуванні переліку елемент
 
 #: eeschema/dialogs/dialog_bom_base.cpp:27
 msgid "BOM generator scripts:"
-msgstr "Скрипти плагіну Переліку Елементів BOM:"
+msgstr "Скрипти генераторів BOM:"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:71
 msgid "Add a new BOM generator and its command line to the list"
-msgstr "Додати новий плагін BOM та його команду запуску до списку"
+msgstr "Додати новий генератор BOM та його команду запуску до списку"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:76
 msgid "Edit the script file in the text editor"
@@ -7859,11 +7858,11 @@ msgstr "Редагувати скриптовий файл у текстовом
 
 #: eeschema/dialogs/dialog_bom_base.cpp:84
 msgid "Remove the current generator script from list"
-msgstr "Видалити поточний плагін зі списку"
+msgstr "Видалити поточний скрипт генератору зі списку"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:94
 msgid "Command line running the generator:"
-msgstr "Командний рядок запуску плагіну:"
+msgstr "Командний рядок запуску генератору:"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:103
 msgid "Show console window"
@@ -7875,17 +7874,17 @@ msgid ""
 "redirected to the info display.\n"
 "Set this option to show the window of the running command."
 msgstr ""
-"За замовчуванням командний рядок запускається з прихованим вікном консолі, а "
-"вихідні дані переспрямовуються на інформаційний дисплей.\n"
+"Основний командний рядок запускається з прихованим вікном консолі, а вихідні "
+"дані переспрямовуються на інформаційний дисплей.\n"
 "Встановіть цей параметр, щоб показати вікно запущеної команди."
 
 #: eeschema/dialogs/dialog_bom_base.cpp:115
 msgid "Reset the list of BOM generator scripts to the default settings"
-msgstr "Скинути список скриптів генератора BOM до параметрів за замовчуванням"
+msgstr "Скинути список скриптів генератора BOM до початкових параметрів"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
 msgid "Bill of Materials"
-msgstr "Перелік Елементів (BOM)"
+msgstr "Перелік компонентів (BOM)"
 
 #: eeschema/dialogs/dialog_bom_help_md.h:2
 msgid ""
@@ -8058,7 +8057,7 @@ msgstr "Змінити символи"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:76
 msgid "Change selected symbol(s)"
-msgstr "Змінити виділені символи"
+msgstr "Змінити виділені символ(и)"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:93
 msgid "Change symbols matching reference designator:"
@@ -8066,7 +8065,7 @@ msgstr "Замінити символи з позначеннями:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:94
 msgid "Change symbols matching value:"
-msgstr "Замінити символи із позначеннями:"
+msgstr "Замінити символи із значеннями:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:95
 msgid "Change symbols matching library identifier:"
@@ -8151,11 +8150,11 @@ msgstr "*** новий символ має занадто мало частин 
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:27
 msgid "Update all symbols in schematic"
-msgstr "Оновити всі символи в схеми"
+msgstr "Оновити всі символи в схемі"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:30
 msgid "Update selected symbol(s)"
-msgstr "Оновити виділені символи"
+msgstr "Оновити виділені символ(и)"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:33
 msgid "Update symbols matching reference designator:"
@@ -8198,11 +8197,11 @@ msgstr "Прибрати поля, які відсутні в бібліотец
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:97
 msgid "Removes fields that do not occur in the original library symbols"
 msgstr ""
-"Видаляє поля, які не зустрічаються в оригінальних бібліотечних символах"
+"Видалити поля, які не зустрічаються в оригінальних бібліотечних символах"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:124
 msgid "Reset fields if empty in library symbol"
-msgstr "Скинути поля, які порожні бібліотеці символу"
+msgstr "Скинути поля, які порожні в бібліотеці символу"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:130
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:72
@@ -8212,7 +8211,7 @@ msgstr "Оновити/скинути текст поля"
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:133
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:75
 msgid "Update/reset field visibilities"
-msgstr "Оновити/скинути видимості полів"
+msgstr "Оновити/скинути видимість полів"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:136
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:78
@@ -8235,7 +8234,7 @@ msgstr "Оновити символи з бібліотеки"
 #: eeschema/dialogs/dialog_choose_symbol.cpp:154
 #: pcbnew/dialogs/dialog_choose_footprint.cpp:95
 msgid "Select with Browser"
-msgstr "Вибрати в браузері"
+msgstr "Вибрати в переглядачі"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:158
 msgid "Place repeated copies"
@@ -8243,7 +8242,7 @@ msgstr "Розмістити декілька копій"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:159
 msgid "Keep the symbol selected for subsequent clicks."
-msgstr "Зберегти виділений символ для наступних кліків."
+msgstr "Зберегти виділений символ для наступних натискань."
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:161
 msgid "Place all units"
@@ -8269,7 +8268,7 @@ msgstr "Не вказано посадкове місце"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:449
 msgid "Invalid footprint specified"
-msgstr "Виділене недопустиме посадкове місце"
+msgstr "Вказано недопустиме посадкове місце"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:533
 #: eeschema/tools/symbol_editor_control.cpp:292
@@ -8367,11 +8366,11 @@ msgstr "Запустити ERC"
 
 #: eeschema/dialogs/dialog_erc.cpp:151
 msgid "Show Annotation dialog"
-msgstr "Показати діалог Позначити"
+msgstr "Показати діалог анотації"
 
 #: eeschema/dialogs/dialog_erc.cpp:164
 msgid "Schematic is not fully annotated. ERC results will be incomplete."
-msgstr "Схема не повністю позначена. Результати ERC будуть неповними."
+msgstr "Схема не повністю анотована. Результати ERC будуть неповними."
 
 #: eeschema/dialogs/dialog_erc.cpp:299
 msgid "Delete exclusions too?"
@@ -8389,12 +8388,12 @@ msgstr "Лише помилки та попередження"
 
 #: eeschema/dialogs/dialog_erc.cpp:301
 msgid "Errors, Warnings and Exclusions"
-msgstr "Помилки, Попередження і винятки"
+msgstr "Помилки, попередження і винятки"
 
 #: eeschema/dialogs/dialog_erc.cpp:417
 #, c-format
 msgid "%d symbol(s) require annotation.<br><br>"
-msgstr "%d символ(s) потрібно позначити.<br><br>"
+msgstr "%d символ(и) потрібно анотувати.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:421
 msgid "-------- ERC cancelled by user.<br><br>"
@@ -8402,15 +8401,15 @@ msgstr "-------- ERC скасовано користувачем.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:423 pcbnew/dialogs/dialog_drc.cpp:312
 msgid "Done.<br><br>"
-msgstr "Готово.<br><br>"
+msgstr "Виконано.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:473
 msgid "Checking sheet names..."
-msgstr "Перевірка імен аркушів..."
+msgstr "Перевірка імен листів..."
 
 #: eeschema/dialogs/dialog_erc.cpp:479
 msgid "Checking bus conflicts..."
-msgstr "Перевірка конфліктів шин..."
+msgstr "Перевірка конфліктів шини..."
 
 #: eeschema/dialogs/dialog_erc.cpp:484
 msgid "Checking conflicts..."
@@ -8435,7 +8434,7 @@ msgstr "Перевірка міток..."
 
 #: eeschema/dialogs/dialog_erc.cpp:528
 msgid "Checking for unresolved variables..."
-msgstr "Перевірка невирішених змінних..."
+msgstr "Перевірка для невирішених змінних..."
 
 #: eeschema/dialogs/dialog_erc.cpp:534
 msgid "Checking SPICE models..."
@@ -8443,7 +8442,7 @@ msgstr "Перевірка SPICE моделей..."
 
 #: eeschema/dialogs/dialog_erc.cpp:540
 msgid "Checking no connect pins for connections..."
-msgstr "Перевірка не підключених виводів на підключення..."
+msgstr "Перевірка не підключених виводів для підключення..."
 
 #: eeschema/dialogs/dialog_erc.cpp:546
 msgid "Checking for library symbol issues..."
@@ -8481,7 +8480,7 @@ msgstr "Виключити це порушення"
 #: eeschema/dialogs/dialog_erc.cpp:647 pcbnew/dialogs/dialog_drc.cpp:585
 #, c-format
 msgid "It will be excluded from the %s list"
-msgstr "Воно буде виключено зі списку %s"
+msgstr "буде виключено зі списку %s"
 
 #: eeschema/dialogs/dialog_erc.cpp:659 pcbnew/dialogs/dialog_drc.cpp:619
 #, c-format
@@ -8496,7 +8495,7 @@ msgstr "Рівень порушень можна також редагувати
 #: eeschema/dialogs/dialog_erc.cpp:665 pcbnew/dialogs/dialog_drc.cpp:626
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
-msgstr "Встановити рівень Попередження для порушення '%s'"
+msgstr "Встановити рівень Попередження для всіх порушень '%s'"
 
 #: eeschema/dialogs/dialog_erc.cpp:670 pcbnew/dialogs/dialog_drc.cpp:632
 #, c-format
@@ -8529,7 +8528,7 @@ msgstr "Карта конфліктів виводів"
 #: pcbnew/dialogs/dialog_board_setup.cpp:112 pcbnew/dialogs/dialog_drc.cpp:802
 #: pcbnew/dialogs/dialog_drc.cpp:817
 msgid "Violation Severity"
-msgstr "Рівні Порушення"
+msgstr "Рівні порушення"
 
 #: eeschema/dialogs/dialog_erc.cpp:876
 msgid "Edit ignored violations..."
@@ -8566,12 +8565,12 @@ msgstr ""
 #: eeschema/dialogs/dialog_erc_base.cpp:59
 #: pcbnew/dialogs/dialog_drc_base.cpp:77
 msgid "Tests Running..."
-msgstr "Працюють перевірки..."
+msgstr "Виконуються перевірки..."
 
 #: eeschema/dialogs/dialog_erc_base.cpp:78
 #: pcbnew/dialogs/dialog_drc_base.cpp:99
 msgid "Click on items to highlight them on the board."
-msgstr "Клацніть на елемент, щоб виділити його на платі."
+msgstr "Натисніть на елементи, щоб підсвітити їх на платі."
 
 #: eeschema/dialogs/dialog_erc_base.cpp:87
 #: pcbnew/dialogs/dialog_drc_base.cpp:107
@@ -8604,22 +8603,22 @@ msgstr "Перевірка електричних правил"
 #: eeschema/dialogs/dialog_export_netlist.cpp:274
 #: eeschema/dialogs/dialog_export_netlist_base.h:73
 msgid "Export Netlist"
-msgstr "Експортувати список мереж"
+msgstr "Експортувати список зв'язків"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:317
 #: eeschema/sim/sim_plot_frame.cpp:463
 msgid "Simulator requires a fully annotated schematic."
-msgstr "Симулятор потребує повністю позначену схему."
+msgstr "Симулятор потребує повністю анотовану схему."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:345
 #: eeschema/dialogs/dialog_export_netlist.cpp:392
 msgid "Use current sheet as root"
-msgstr "Використовувати поточний аркуш як кореневий"
+msgstr "Використовувати поточний лист як кореневий"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:346
 #: eeschema/dialogs/dialog_export_netlist.cpp:393
 msgid "Export netlist only for the current sheet"
-msgstr "Експортувати список зв'язків лише для поточного аркуша"
+msgstr "Експортувати список зв'язків лише для поточного листа"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:351
 #: eeschema/dialogs/dialog_sim_command_base.cpp:435
@@ -8628,7 +8627,7 @@ msgstr "Зберегти всі напруги"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:352
 msgid "Write a directive to save all voltages (.save all)"
-msgstr "Напишіть директиву для збереження всіх напруг (.save all)"
+msgstr "Написати директиву для збереження всіх напруг (.save all)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:357
 #: eeschema/dialogs/dialog_sim_command_base.cpp:438
@@ -8637,7 +8636,7 @@ msgstr "Зберегти всі струми"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:358
 msgid "Write a directive to save all currents (.probe alli)"
-msgstr "Напишіть директиву для збереження всіх струмів (.probe alli)"
+msgstr "Написати директиву для збереження всіх струмів (.probe alli)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:364
 msgid "External simulator command:"
@@ -8649,9 +8648,9 @@ msgid ""
 "Usually <path to spice binary> %I\n"
 "%I will be replaced by the actual spice netlist name"
 msgstr ""
-"Введіть командний рядок, щоб запустити spice\n"
+"Ввести в командний рядок, щоб запустити spice\n"
 "Зазвичай <шлях до двійкового файлу spice> %I\n"
-"%Мене буде замінено фактичною назвою зв'язків spice"
+"%Буде замінено фактичною назвою зв'язків spice"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:379
 msgid "Create Netlist and Run Simulator Command"
@@ -8673,7 +8672,7 @@ msgstr "%s експорт"
 #: eeschema/dialogs/dialog_export_netlist.cpp:564
 #: eeschema/netlist_exporters/netlist_generator.cpp:55
 msgid "Exporting netlist requires a fully annotated schematic."
-msgstr "Експорт списку зв'язків вимагає повністю позначеної схеми."
+msgstr "Експорт списку зв'язків вимагає повністю анотованої схеми."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:694
 msgid "This plugin already exists."
@@ -8685,15 +8684,15 @@ msgstr "Ви повинні вказати командну строку для 
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:733
 msgid "You must provide a netlist generator title"
-msgstr "Ви повинні вказати заголовок для створення списку зв'язків"
+msgstr "Ви повинні вказати заголовок для генерування списку зв'язків"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:52
 msgid "Add Generator..."
-msgstr "Додати плагін..."
+msgstr "Додати генератор..."
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:55
 msgid "Remove Generator"
-msgstr "Видалити плагін"
+msgstr "Видалити генератор"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:96
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:32
@@ -8706,27 +8705,27 @@ msgstr "Ім’я:"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:103
 msgid "Command line to run the generator:"
-msgstr "Командний рядок для запуску плагіну:"
+msgstr "Командний рядок для запуску генератору:"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:118
 msgid "Browse Generators..."
-msgstr "Перегляд плагінів..."
+msgstr "Перегляд генераторів..."
 
 #: eeschema/dialogs/dialog_export_netlist_base.h:112
 msgid "Script Generator Properties"
-msgstr "Властивості Плагінів"
+msgstr "Властивості скрипту генератора"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:188
 msgid "Power symbol value field text cannot be changed."
-msgstr "Текст поля Значення символу живлення не може бути змінений."
+msgstr "Текст поля значення символу живлення не може бути змінений."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:362
 msgid "Illegal reference designator value!"
-msgstr "Некоректне значення поля Позначення!"
+msgstr "Некоректне значення посилання!"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:486
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
-msgstr "Ім'я файлу аркуша можна змінити лише в діалозі властивостей аркуша."
+msgstr "Ім'я файлу листа можна змінити лише в діалозі властивостей листа."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:659
 #: eeschema/dialogs/dialog_label_properties.cpp:478
@@ -8755,7 +8754,7 @@ msgstr "(%s)"
 #: eeschema/dialogs/dialog_field_properties_base.cpp:93
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:298
 msgid "Show field name"
-msgstr "Показати назву поля"
+msgstr "Показати ім'я поля"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:95
 msgid "Show the field name in addtion to its value"
@@ -8813,7 +8812,7 @@ msgstr "Вирівняти ліворуч"
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:104
 #: eeschema/dialogs/dialog_text_properties_base.cpp:124
 msgid "Align horizontal center"
-msgstr "Вирівняти по горизонталі"
+msgstr "Вирівняти по горизонтальному центру"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:162
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:127
@@ -8831,14 +8830,14 @@ msgstr "Вирівняти праворуч"
 #: eeschema/dialogs/dialog_text_properties_base.cpp:139
 #: eeschema/sch_label.cpp:883 eeschema/sch_text.cpp:498
 msgid "Align top"
-msgstr "Вирівняти вгорі"
+msgstr "Вирівняти зверху"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:177
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:142
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:144
 #: eeschema/dialogs/dialog_text_properties_base.cpp:144
 msgid "Align vertical center"
-msgstr "Вирівняти по вертикалі"
+msgstr "Вирівняти по вертикальному центру"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:182
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:147
@@ -8846,7 +8845,7 @@ msgstr "Вирівняти по вертикалі"
 #: eeschema/dialogs/dialog_text_properties_base.cpp:149
 #: eeschema/sch_label.cpp:881 eeschema/sch_text.cpp:496
 msgid "Align bottom"
-msgstr "Вирівняти знизу"
+msgstr "Вирівняти по низу"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:192
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:87
@@ -8911,12 +8910,12 @@ msgstr "Загальний для всіх частин"
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:202
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:291
 msgid "Common to all body styles"
-msgstr "Загальний для всіх стилів"
+msgstr "Спільне для всіх стилів"
 
 #: eeschema/dialogs/dialog_field_properties_base.h:100
 #: eeschema/dialogs/dialog_lib_text_properties_base.h:88
 msgid "Text Item Properties"
-msgstr "Властивості тексту"
+msgstr "Властивості елемента тексту"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:33
 msgid "Other symbol fields"
@@ -8932,11 +8931,11 @@ msgstr "Шини && мітки шини"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:54
 msgid "Sheet titles"
-msgstr "Назви аркушів"
+msgstr "Назви листів"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:57
 msgid "Other sheet fields"
-msgstr "Інші поля аркушів"
+msgstr "Інші поля листа"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:63
 msgid "Sheet borders && backgrounds"
@@ -8949,12 +8948,12 @@ msgstr "Фільтри"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:84
 msgid "Filter other symbol fields by name:"
-msgstr "Відфільтрувати поля за іменем:"
+msgstr "Відфільтрувати інші поля за іменем:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:96
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:73
 msgid "Filter items by parent reference designator:"
-msgstr "Відфільтрувати елементи за позначенням:"
+msgstr "Відфільтрувати елементи за початковим позначенням:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:104
 msgid "Filter items by parent symbol library id:"
@@ -8966,7 +8965,7 @@ msgstr "Відфільтрувати елементи за типом симво
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:113
 msgid "Non-power symbols"
-msgstr "Звичайні символи"
+msgstr "Несилові символи"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:113
 msgid "Power symbols"
@@ -8975,17 +8974,17 @@ msgstr "Символи живлення"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:125
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:51
 msgid "Filter items by net:"
-msgstr "Фільтрувати елементи за зв'язками:"
+msgstr "Фільтрувати елементи за зв'язком:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:137
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:85
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:77
 msgid "Only include selected items"
-msgstr "Тільки виділені елементи"
+msgstr "Включити тільки виділені елементи"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:156
 msgid "Set To"
-msgstr "Нове значення"
+msgstr "Встановити на"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:186
 msgid "Text color:"
@@ -9054,7 +9053,7 @@ msgstr "Розмір точки з'єднання:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:385
 msgid "Junction color:"
-msgstr "Колір заповнення:"
+msgstr "Колір з'єднання:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.h:125
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.h:102
@@ -9107,7 +9106,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter.cpp:31
 msgid "Ibis parser log"
-msgstr "Логування парсеру Ibis"
+msgstr "Журнал парсера Ibis"
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter_base.h:46
 msgid "Ibis parser"
@@ -9129,7 +9128,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_line_properties_base.cpp:83
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:94
 msgid "Clear color to use Schematic Editor colors."
-msgstr "Очистить колір, щоб використати кольори Редактора Схем."
+msgstr "Очистить колір, щоб використати кольори редактора схем."
 
 #: eeschema/dialogs/dialog_junction_props_base.h:57
 msgid "Junction Properties"
@@ -9162,7 +9161,7 @@ msgstr "Властивості виводу ієрархічного аркуш�
 
 #: eeschema/dialogs/dialog_label_properties.cpp:456
 msgid "Label can not be empty."
-msgstr "Мітка не може бути пустою."
+msgstr "Мітка не може бути незаповненою."
 
 #: eeschema/dialogs/dialog_label_properties.cpp:661
 msgid "The first field is mandatory."
@@ -9348,7 +9347,7 @@ msgstr "Авто"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:44
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:45
 msgid "ALL"
-msgstr "ВСІ"
+msgstr "Всі"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:46
 msgid "Standard"
@@ -9379,7 +9378,7 @@ msgstr "Номер"
 #: eeschema/dialogs/dialog_symbol_properties.cpp:162
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:281
 msgid "Electrical Type"
-msgstr "Електричний Тип"
+msgstr "Електричний тип"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:123
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:91
@@ -9403,7 +9402,7 @@ msgstr "Розмір тексту імені"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:132
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:100
 msgid "De Morgan"
-msgstr "Напис за Д.Морганом"
+msgstr "Д.Морган"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:826
 #: eeschema/dialogs/dialog_lib_shape_properties.cpp:72
@@ -9472,7 +9471,7 @@ msgstr "Групувати за ім'ям"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:140
 msgid "Group Selected"
-msgstr "Групувати Виділені"
+msgstr "Групувати виділене"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:151
 msgid "Filter by unit:"
@@ -9492,7 +9491,7 @@ msgid ""
 "The symbol name in library and also the default\n"
 "symbol value when loaded in the schematic."
 msgstr ""
-"Ім'я символу в бібліотеці і також по замовчуванні\n"
+"Ім'я символу в бібліотеці і також типове\n"
 "значення символу під час додавання в схему."
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:42
@@ -9508,7 +9507,7 @@ msgstr "Похідна від наявного символу:"
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:176
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:208
 msgid "Combo!"
-msgstr "Комбо!"
+msgstr "Combo!"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:47
 msgid ""
@@ -9524,7 +9523,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:51
 msgid "Default reference designator:"
-msgstr "Позначення за замовчуванням:"
+msgstr "Початкове позначення:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:55
 msgid "U"
@@ -9546,7 +9545,7 @@ msgid ""
 "for pin numbers."
 msgstr ""
 "Позначте цей параметр, якщо всі одиниці символів ідентичні, за винятком\n"
-"для пін-номерів."
+"для номерів виводів."
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:76
 msgid "Create symbol with alternate body style (De Morgan)"
@@ -9569,7 +9568,7 @@ msgstr "Виключити з плати"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:103
 msgid "Pin name position offset:"
-msgstr "Зсув назви виводу:"
+msgstr "Зсув позиції імені виводу:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:120
 msgid "Show pin number text"
@@ -9607,8 +9606,7 @@ msgstr "Стиль:"
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:89
 msgid "Set border width to 0 to use schematic's default symbol line width."
 msgstr ""
-"Встановіть ширину контуру в 0 для використання ширини лінії символу за "
-"замовчуванням."
+"Встановити ширину контуру в 0 для використання типової ширини лінії символу."
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:103
 #: pcbnew/zone.cpp:1437
@@ -9625,11 +9623,11 @@ msgstr "Заповнити кольором контуру"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:116
 msgid "Fill with body background color"
-msgstr "Заповнити кольором тла"
+msgstr "Заповнити кольором фону"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:119
 msgid "Fill with:"
-msgstr "Заповнити:"
+msgstr "Заповнити з:"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:140
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:196
@@ -9648,7 +9646,7 @@ msgstr "Спільне для всіх стилів основи (Де Морг�
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.h:86
 msgid "Drawing Properties"
-msgstr "Властивості показу"
+msgstr "Властивості креслення"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:284
 #: eeschema/dialogs/dialog_symbol_properties.cpp:666
@@ -9659,7 +9657,7 @@ msgstr "Позначення повинні починатися з літери
 #: eeschema/dialogs/dialog_sheet_properties.cpp:217
 #: eeschema/dialogs/dialog_symbol_properties.cpp:683
 msgid "Fields must have a name."
-msgstr "Поля повинні мати назву."
+msgstr "Поля повинні мати імена."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:321
 msgid "Derived symbol must have a parent selected"
@@ -9677,7 +9675,7 @@ msgstr "Видалити альтернативний стиль (De Morgan) з 
 #: eeschema/tools/symbol_editor_control.cpp:345
 #, c-format
 msgid "Symbol name '%s' already in use in library '%s'."
-msgstr "Імʼя символу '%s' вже використовується в бібліотеці '%s."
+msgstr "Імʼя символу '%s' вже використовується в бібліотеці '%s'."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:488
 #, c-format
@@ -9711,7 +9709,7 @@ msgstr "Ключові слова:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:150
 msgid "Derive from symbol:"
-msgstr "Батьківський символ:"
+msgstr "Одержати з символу:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:154
 msgid "<None>"
@@ -9755,7 +9753,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:204
 msgid "Define as power symbol"
-msgstr "Створити як символ живлення"
+msgstr "Визначити як символ живлення"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:205
 msgid ""
@@ -9881,12 +9879,12 @@ msgstr "Властивості символу бібліотеки"
 #: eeschema/dialogs/dialog_lib_text_properties.cpp:217
 #: eeschema/dialogs/dialog_text_properties.cpp:487
 msgid "Text can not be empty."
-msgstr "Текст не може бути порожнім."
+msgstr "Текст не може бути незаповненим."
 
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:259
 #: eeschema/dialogs/dialog_text_properties_base.cpp:262
 msgid "Background fill"
-msgstr "Заповнення тла"
+msgstr "Заповнення фону"
 
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:285
 msgid "Private to symbol editor"
@@ -9896,7 +9894,7 @@ msgstr "Тільки для редактора символів"
 #: eeschema/dialogs/dialog_text_properties.cpp:60
 #: pcbnew/dialogs/dialog_textbox_properties_base.h:101
 msgid "Text Box Properties"
-msgstr "Властивості текстового поля"
+msgstr "Властивості текстового блоку"
 
 #: eeschema/dialogs/dialog_line_properties_base.cpp:79
 msgid "Set width to 0 to use schematic's default line width."
@@ -9908,7 +9906,7 @@ msgstr "Властивості лінії"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:104
 msgid "Conflicting Labels"
-msgstr "Конфліктні Мітки"
+msgstr "Конфліктні мітки"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:105
 msgid "New Label"
@@ -10007,13 +10005,12 @@ msgstr "Режим синхронного редагування виводів.
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:441
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
-msgstr ""
-"Режим синхронізованих виводів. Новий вивід буде додано до всіх елементів."
+msgstr "Режим синхронізованих виводів.  Новий вивід буде додано до всіх частин."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:443
 msgid "Synchronized Pins Mode.  Matching pins in other units will be updated."
 msgstr ""
-"Режим синхронізації виводів.  Відповідні виводи в інших елементах будуть "
+"Режим синхронізації виводів.  Відповідні виводи в інших частинах будуть "
 "оновлені."
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:44
@@ -10079,11 +10076,11 @@ msgstr "Властивості виводів"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:74
 msgid "Plot All Pages"
-msgstr "Креслити всі аркуші"
+msgstr "Креслити всі сторінки"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:75
 msgid "Plot Current Page"
-msgstr "Креслити поточний аркуш"
+msgstr "Креслити поточну сторінку"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:178
 #: pcbnew/dialogs/dialog_export_svg.cpp:203
@@ -10091,7 +10088,7 @@ msgstr "Креслити поточний аркуш"
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:552
 #: pcbnew/dialogs/dialog_gendrill.cpp:301 pcbnew/dialogs/dialog_plot.cpp:515
 msgid "Select Output Directory"
-msgstr "Виберіть теку виведення"
+msgstr "Виберати теку виведення"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:195
 #: pcbnew/dialogs/dialog_gendrill.cpp:310 pcbnew/dialogs/dialog_plot.cpp:532
@@ -10101,7 +10098,7 @@ msgid ""
 "'%s'?"
 msgstr ""
 "Ви хочете використовувати відносний шлях\n"
-"\"%s\"?"
+"'%s'?"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:197
 #: pcbnew/dialogs/dialog_export_svg.cpp:210
@@ -10111,12 +10108,12 @@ msgstr ""
 #: pcbnew/dialogs/dialog_gendrill.cpp:312
 #: pcbnew/dialogs/dialog_gendrill.cpp:321 pcbnew/dialogs/dialog_plot.cpp:534
 msgid "Plot Output Directory"
-msgstr "Тека виводу Креслень"
+msgstr "Тека виводу креслень"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:240
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:60
 msgid "Schematic size"
-msgstr "Розмір Схеми"
+msgstr "Розмір схеми"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:246
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:76
@@ -10177,7 +10174,7 @@ msgstr "E"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:411
 #, c-format
 msgid "Falling back to user path '%s'."
-msgstr "Перемикаюсь на шлях користувача '%s."
+msgstr "Повернення до шляху користувача '%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:439
 #: eeschema/dialogs/dialog_plot_schematic.cpp:477
@@ -10194,14 +10191,14 @@ msgstr "Для поточної схеми не визначено ні проє
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:27
 #: pcbnew/dialogs/dialog_plot_base.cpp:37
 msgid "Output directory:"
-msgstr "Каталог призначення:"
+msgstr "Вихідна тека:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:30
 msgid ""
 "Target directory for plot files. Can be absolute or relative to the "
 "schematic main file location."
 msgstr ""
-"Цільовий каталог для файлів креслення. Може бути абсолютним або відносним до "
+"Цільова тека для файлів креслення. Може бути абсолютна або відносна до "
 "розташування основного файлу схеми."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:42
@@ -10234,7 +10231,7 @@ msgstr "HPGL"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:56
 msgid "Page size:"
-msgstr "Розмір аркуша:"
+msgstr "Розмір сторінки:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:66
 #: pcbnew/dialogs/dialog_plot_base.cpp:75
@@ -10243,7 +10240,7 @@ msgstr "Креслити форматну рамку"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:68
 msgid "Plot the drawing sheet border and title block"
-msgstr "Накреслети границі листа і блок заголовку"
+msgstr "Креслити границі листа і блок заголовку"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:77
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:35
@@ -10252,11 +10249,11 @@ msgstr "Чорно-біла"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:83
 msgid "Plot background color"
-msgstr "Креслити колір тла"
+msgstr "Креслити колір фону"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:84
 msgid "Plot the background color if the output format supports it"
-msgstr "Заповнити тло кольором, якщо це підтримується форматом виводу"
+msgstr "Заповнити фон кольором, якщо це підтримується форматом виводу"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:88
 #: pagelayout_editor/dialogs/panel_pl_editor_color_settings_base.cpp:20
@@ -10278,8 +10275,8 @@ msgid ""
 "Selection of the default pen thickness used to draw items, when their "
 "thickness is set to 0."
 msgstr ""
-"Вибрати товщину пера для креслення елементів. Якщо товщина встановлена в 0 – "
-"використовується значення за замовчуванням."
+"Вибір стандартної товщини пера, що використовується для малювання елементів, "
+"коли їх товщина встановлена на 0."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:123
 #: pcbnew/dialogs/dialog_plot_base.cpp:246
@@ -10300,7 +10297,7 @@ msgstr "По центру, од. вимір. плотера"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:134
 msgid "Page fit, user units"
-msgstr "За розміром аркуша, одиниці вимірювання користувача"
+msgstr "За розміром сторінки, одиниці вимірювання користувача"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:134
 msgid "Content fit, user units"
