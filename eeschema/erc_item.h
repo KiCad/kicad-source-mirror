@@ -49,7 +49,8 @@ public:
      * SCH_SHEET_PATH context, if a context is available on the given SCH_MARKER or ERC_ITEM
      * targets.
      */
-    void GetValue( wxVariant& aVariant, wxDataViewItem const& aItem, unsigned int aCol ) const;
+    void GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
+                   unsigned int aCol ) const override;
 };
 
 class ERC_ITEM : public RC_ITEM
