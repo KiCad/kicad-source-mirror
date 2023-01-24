@@ -155,12 +155,17 @@ public:
      * Before we had custom pad shapes it was common to have multiple overlapping pads to
      * represent a more complex shape.
      */
-    bool SameLogicalPadAs( const PAD* other ) const
+    bool SameLogicalPadAs( const PAD* aOther ) const
     {
         // hide tricks behind sensible API
-        return GetParentFootprint() == other->GetParentFootprint()
-            && !m_number.IsEmpty() && m_number == other->m_number;
+        return GetParentFootprint() == aOther->GetParentFootprint()
+            && !m_number.IsEmpty() && m_number == aOther->m_number;
     }
+
+    /**
+     * @return true if this and \aOther represent a net-tie.
+     */
+    bool SharesNetTieGroup( const PAD* aOther ) const;
 
     /**
      * @return true if the pad is associated with an "unconnected" pin (or a no-connect symbol)

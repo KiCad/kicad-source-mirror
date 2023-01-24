@@ -162,6 +162,23 @@ bool PAD::IsLocked() const
 };
 
 
+bool PAD::SharesNetTieGroup( const PAD* aOther ) const
+{
+    FOOTPRINT* parentFp = static_cast<FOOTPRINT*>( GetParentFootprint() );
+
+    if( parentFp && parentFp->IsNetTie() && aOther->GetParentFootprint() == parentFp )
+    {
+        std::map<wxString, int> padToNetTieGroupMap = parentFp->MapPadNumbersToNetTieGroups();
+        int thisNetTieGroup = padToNetTieGroupMap[ GetNumber() ];
+        int otherNetTieGroup = padToNetTieGroupMap[ aOther->GetNumber() ];
+
+        return thisNetTieGroup >= 0 && thisNetTieGroup == otherNetTieGroup;
+    }
+
+    return false;
+}
+
+
 bool PAD::IsNoConnectPad() const
 {
     return GetShortNetname().StartsWith( wxT( "unconnected-(" ) )

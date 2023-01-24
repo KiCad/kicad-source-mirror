@@ -441,7 +441,8 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
                         return false;
                 }
 
-                if( pad && otherPad && pad->SameLogicalPadAs( otherPad ) )
+                if( pad && otherPad && ( pad->SameLogicalPadAs( otherPad )
+                                         || pad->SharesNetTieGroup( otherPad ) ) )
                 {
                     return false;
                 }
