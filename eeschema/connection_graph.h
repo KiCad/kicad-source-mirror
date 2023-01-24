@@ -112,9 +112,7 @@ public:
     std::vector<SCH_ITEM*> GetBusLabels() const;
 
     /// Returns the candidate net name for a driver
-    const wxString& GetNameForDriver( SCH_ITEM* aItem );
-
-    const wxString GetNameForDriver( SCH_ITEM* aItem ) const;
+    const wxString& GetNameForDriver( SCH_ITEM* aItem ) const;
 
     const wxString GetNetclassForDriver( SCH_ITEM* aItem ) const;
 
@@ -226,7 +224,7 @@ public:
     CONNECTION_SUBGRAPH* m_hier_parent;
 
     /// A cache of escaped netnames from schematic items
-    std::unordered_map<SCH_ITEM*, wxString> m_driver_name_cache;
+    mutable std::unordered_map<SCH_ITEM*, wxString> m_driver_name_cache;
 
     /**
      * Stores the primary driver for the multiple drivers ERC check.  This is the chosen driver

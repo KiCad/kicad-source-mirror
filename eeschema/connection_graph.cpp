@@ -161,8 +161,8 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCheckMultipleDrivers )
                                        return false;
                                }
 
-                               wxString a_name = GetNameForDriver( a );
-                               wxString b_name = GetNameForDriver( b );
+                               const wxString& a_name = GetNameForDriver( a );
+                               const wxString& b_name = GetNameForDriver( b );
                                bool     a_lowQualityName = a_name.Contains( "-Pad" );
                                bool     b_lowQualityName = b_name.Contains( "-Pad" );
 
@@ -204,7 +204,7 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCheckMultipleDrivers )
     {
         // First check if all the candidates are actually the same
         bool same = true;
-        wxString first = GetNameForDriver( candidates[0] );
+        const wxString& first = GetNameForDriver( candidates[0] );
         SCH_ITEM* second_item = nullptr;
 
         for( unsigned i = 1; i < candidates.size(); i++ )
@@ -305,27 +305,11 @@ wxString CONNECTION_SUBGRAPH::driverName( SCH_ITEM* aItem ) const
 }
 
 
-const wxString& CONNECTION_SUBGRAPH::GetNameForDriver( SCH_ITEM* aItem )
+const wxString& CONNECTION_SUBGRAPH::GetNameForDriver( SCH_ITEM* aItem ) const
 {
-    auto it = m_driver_name_cache.find( aItem );
+    auto [it, success] = m_driver_name_cache.try_emplace( aItem, driverName( aItem ) );
 
-    if( it != m_driver_name_cache.end() )
-        return it->second;
-
-    m_driver_name_cache.emplace( aItem, driverName( aItem ) );
-
-    return m_driver_name_cache.at( aItem );
-}
-
-
-const wxString CONNECTION_SUBGRAPH::GetNameForDriver( SCH_ITEM* aItem ) const
-{
-    auto it = m_driver_name_cache.find( aItem );
-
-    if( it != m_driver_name_cache.end() )
-        return it->second;
-
-    return driverName( aItem );
+    return it->second;
 }
 
 
@@ -1488,7 +1472,7 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
                 if( driver == subgraph->m_driver )
                     continue;
 
-                wxString secondary_name = subgraph->GetNameForDriver( driver );
+                const wxString& secondary_name = subgraph->GetNameForDriver( driver );
 
                 if( secondary_name == subgraph->m_driver_connection->Name() )
                     continue;
@@ -2472,8 +2456,8 @@ bool CONNECTION_GRAPH::ercCheckMultipleDrivers( const CONNECTION_SUBGRAPH* aSubg
                       static_cast<SCH_PIN*>( primary )->GetTransformedPosition() :
                       primary->GetPosition();
 
-        wxString primaryName   = aSubgraph->GetNameForDriver( primary );
-        wxString secondaryName = aSubgraph->GetNameForDriver( secondary );
+        const wxString& primaryName   = aSubgraph->GetNameForDriver( primary );
+        const wxString& secondaryName = aSubgraph->GetNameForDriver( secondary );
 
         wxString msg = wxString::Format( _( "Both %s and %s are attached to the same "
                                             "items; %s will be used in the netlist" ),
@@ -2502,8 +2486,8 @@ bool CONNECTION_GRAPH::ercCheckMultipleDrivers( const CONNECTION_SUBGRAPH* aSubg
                     || ( driver->Type() == SCH_PIN_T
                          && static_cast<SCH_PIN*>( driver )->IsPowerConnection() ) )
             {
-                wxString primaryName   = aSubgraph->GetNameForDriver( aSubgraph->m_driver );
-                wxString secondaryName = aSubgraph->GetNameForDriver( driver );
+                const wxString& primaryName   = aSubgraph->GetNameForDriver( aSubgraph->m_driver );
+                const wxString& secondaryName = aSubgraph->GetNameForDriver( driver );
 
                 if( primaryName == secondaryName )
                     continue;
