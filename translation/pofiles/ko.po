@@ -1,4 +1,4 @@
-# 킴슨김랑기 <korearf@gmail.com>, 2021, 2022.
+# 킴슨김랑기 <korearf@gmail.com>, 2021, 2022, 2023.
 # Ji Yoon Choi <chichoon.choi@gmail.com>, 2021.
 # jeongsuAn <dks9467@gmail.com>, 2021, 2022.
 # 이상수 <kku1818@gmail.com>, 2021, 2022.
@@ -28,16 +28,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-20 09:12-0800\n"
-"PO-Revision-Date: 2022-11-20 18:07+0000\n"
+"PO-Revision-Date: 2023-01-25 00:33+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.15-dev\n"
+"X-Generator: Weblate 4.16-dev\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -303,9 +303,9 @@ msgstr "설정 (&P)"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:59
 #: pcbnew/widgets/appearance_controls.cpp:2730
-#, fuzzy, c-format
+#, c-format
 msgid "Viewports (%s+Tab):"
-msgstr "뷰포트(Alt+Tab):"
+msgstr "뷰포트(%s+Tab):"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:68
 #: pcbnew/widgets/appearance_controls.cpp:2739
@@ -325,6 +325,9 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
+"뷰 방향과 확대/축소를 저장하고 복원합니다.\n"
+"%s+Tab을 사용하여 선택기를 활성화합니다.\n"
+"%s를 누른 상태에서 연속 탭하면 팝업의 뷰포트를 순환합니다."
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:83
 msgid "Reload board"
@@ -1234,9 +1237,8 @@ msgid "Open..."
 msgstr "열기…"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:219
-#, fuzzy
 msgid "Load source image"
-msgstr "사용자 이미지 표시"
+msgstr "소스 이미지 로드"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:228 common/hotkey_store.cpp:57
 #: common/tool/action_menu.cpp:226 common/tool/actions.cpp:114
@@ -1244,9 +1246,8 @@ msgid "Quit"
 msgstr "종료"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:229
-#, fuzzy
 msgid "Quit Image Converter"
-msgstr "이미지 변환기"
+msgstr "이미지 변환기 종료"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:374
 #: eeschema/tools/sch_drawing_tools.cpp:594
@@ -1311,19 +1312,16 @@ msgid "Greyscale Picture"
 msgstr "그레이 스케일 사진"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:30
-#, fuzzy
 msgid "Black && White Picture"
 msgstr "흑백 사진"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:38
-#, fuzzy
 msgid "Image Information"
-msgstr "비트맵 정보"
+msgstr "이미지 정보"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:47
-#, fuzzy
 msgid "Image size:"
-msgstr "페이지 크기:"
+msgstr "이미지 크기:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:51
 #: bitmap2component/bitmap2cmp_gui_base.cpp:55
@@ -1338,9 +1336,8 @@ msgid "pixels"
 msgstr "픽셀"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:63
-#, fuzzy
 msgid "Image PPI:"
-msgstr "비트맵 PPI:"
+msgstr "이미지 PPI:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:75
 msgid "PPI"
@@ -1355,17 +1352,14 @@ msgid "bits"
 msgstr "비트"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:100
-#, fuzzy
 msgid "Load Source Image"
-msgstr "이미지 선택"
+msgstr "소스 이미지 로드"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:107
-#, fuzzy
 msgid "Output Size"
-msgstr "출력 핀"
+msgstr "출력 크기"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:109
-#, fuzzy
 msgid "Lock height / width ratio"
 msgstr "높이 / 너비 비율 잠금"
 
@@ -1401,7 +1395,6 @@ msgid "Options"
 msgstr "설정"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:145
-#, fuzzy
 msgid "Black / white threshold:"
 msgstr "흑백 임계 값 :"
 
@@ -2836,7 +2829,6 @@ msgstr "흑백"
 
 #: common/dialogs/dialog_print_generic_base.cpp:41
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:22
-#, fuzzy
 msgid "Print drawing sheet"
 msgstr "도면 시트 인쇄"
 
@@ -3214,13 +3206,11 @@ msgid "Remember open files for next project launch"
 msgstr "다음 프로젝트 시작을 위해 열린 파일 기억"
 
 #: common/dialogs/panel_common_settings_base.cpp:274
-#, fuzzy
 msgid ""
 "If checked, launching a project will also launch tools such as the schematic "
 "and board editors with previously open files"
-msgstr ""
-"체크할 경우, 프로젝트를 시작할 때 이전에 열려 있는 파일에 대해 eeschema 및 "
-"pcbnew와 같은 도구도 같이 실행됩니다"
+msgstr "이 옵션을 선택하면 프로젝트를 시작할때 이전에 열린 파일이 있는 회로도 및 "
+"보드 편집기와 같은 도구도 시작됨"
 
 #: common/dialogs/panel_common_settings_base.cpp:287
 msgid "&Auto save:"
@@ -3714,9 +3704,8 @@ msgid "<b>Nets matching '%s':</b>"
 msgstr "<b> '%s'와 일치하는 네트:</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:32
-#, fuzzy
 msgid "Netclasses:"
-msgstr "네트클래스"
+msgstr "네트클래스:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: pcbnew/tools/board_inspection_tool.cpp:493
@@ -5421,7 +5410,7 @@ msgstr "잠긴 항목"
 
 #: common/layer_id.cpp:186
 msgid "Courtyard collision shadow"
-msgstr ""
+msgstr "코트야드 겹침 그림자"
 
 #: common/lib_id.cpp:144
 msgid "Illegal character found in logical library name"
@@ -5487,9 +5476,9 @@ msgid "Unrecognized function '%s'"
 msgstr "인식할 수 없는 함수 '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1008
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected units for '%s'"
-msgstr "예기치 않은 '%s'"
+msgstr "예기치 않은 단위 '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1020
 #, c-format
@@ -5952,13 +5941,12 @@ msgid "Delete clicked items"
 msgstr "클릭한 항목 삭제"
 
 #: common/tool/actions.cpp:204
-#, fuzzy
 msgid "Cycle arc editing mode"
-msgstr "현실적 모드 전환"
+msgstr "사이클 아크 편집 모드"
 
 #: common/tool/actions.cpp:205
 msgid "Switch to a different method of editing arcs"
-msgstr ""
+msgstr "다른 호 편집 방법으로 전환"
 
 #: common/tool/actions.cpp:210
 msgid "Show Search Panel"
@@ -6703,14 +6691,13 @@ msgid "No objects selected"
 msgstr "선택한 객체가 없습니다"
 
 #: common/widgets/properties_panel.cpp:161
-#, fuzzy, c-format
+#, c-format
 msgid "%d objects selected"
-msgstr "선택한 객체가 없습니다"
+msgstr "%d 오브젝트가 선택됨"
 
 #: common/widgets/properties_panel.cpp:287
-#, fuzzy
 msgid "Basic Properties"
-msgstr "%s 속성"
+msgstr "기본 속성"
 
 #: common/widgets/unit_binder.cpp:318
 #, c-format
@@ -7825,7 +7812,6 @@ msgid "Generator file name not found."
 msgstr "생성기 파일명을 찾을 수 없습니다."
 
 #: eeschema/dialogs/dialog_bom.cpp:460
-#, fuzzy
 msgid "Bill of Materials Generation Help"
 msgstr "자재 명세서 (BOM) 생성 도움말"
 
@@ -7868,9 +7854,8 @@ msgid "Reset the list of BOM generator scripts to the default settings"
 msgstr "BOM 생성기 스크립트의 리스트를 초기 설정으로 초기화"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
-#, fuzzy
 msgid "Bill of Materials"
-msgstr "자재 명세서"
+msgstr "BOM"
 
 #: eeschema/dialogs/dialog_bom_help_md.h:2
 msgid ""
@@ -7954,6 +7939,79 @@ msgid ""
 "Double quotes (`\"`) around the arguments are recommended in case filenames "
 "contain spaces or special characters.\n"
 msgstr ""
+"# 1. 요약\n"
+"\n"
+"BOM 도구는 설계의 모든 구성요소를 나열하는 BOM을 작성합니다.\n"
+"\n"
+"이 도구는 외부 스크립트를 사용하여 원하는 출력 형식으로 BOM을 생성합니다. "
+"다른 스크립트를 선택하면 BOM의 형식이 변경됩니다.\n"
+"\n"
+"BOM 생성은 스키매틱 편집기 매뉴얼에 자세히 설명되어 있습니다.\n"
+"\n"
+"# 2. 사용법\n"
+"\n"
+"**BOM 생성기 스크립트** 목록에서 생성기 스크립트를 선택합니다. 선택한 "
+"생성기에 대한 세부 정보가 대화상자 오른쪽에 표시됩니다.\n"
+"\n"
+"**생성** 버튼을 클릭하면 선택한 생성기로 BOM 파일이 생성됩니다.\n"
+"\n"
+"기본 설정에는 여러 생성기 스크립트 옵션이 있지만 일부 추가 스크립트는 "
+"KiCad와 함께 설치되며 **+** 버튼을 사용하여 목록에 추가할 수 있습니다.\n"
+"\n"
+"**참고:** Windows에는 추가 옵션인 **콘솔 창 표시**가 있습니다. 이 옵션을 "
+"선택하지 않으면 BOM 생성기가 숨겨진 콘솔 창에서 실행되고 모든 출력이 "
+"리디렉션되어 대화상자에 인쇄됩니다. 이 옵션을 선택하면 BOM 생성기가 가시성 "
+"콘솔 창에서 실행됩니다.\n"
+"\n"
+"# 3. 사용자 지정 생성기 및 명령줄\n"
+"\n"
+"내부적으로 KiCad는 설계의 모든 구성 요소에 대한 정보가 포함 된 XML 형식의 "
+"중간 넷리스트 파일을 만듭니다. BOM 생성기 스크립트는 중간 넷리스트 파일을 "
+"원하는 출력 형식으로 변환합니다. KiCad는 BOM 대화상자 하단에 입력한 명령줄에 "
+"따라 BOM 생성기 스크립트를 실행합니다.\n"
+"\n"
+"명령줄 형식은 파일 이름에 대한 매개 변수를 허용합니다. 각 형식 지정 매개 "
+"변수는 프로젝트별 경로 또는 파일 이름으로 바뀝니다. 지원되는 형식 매개 "
+"변수는 다음과 같습니다.\n"
+"\n"
+"* '%I': BOM 생성기에 대한 입력인 중간 넷리스트 파일의 절대 경로 및 파일 "
+"이름\n"
+" * '%O': 출력 BOM 파일의 절대 경로 및 파일 이름(파일 확장자 제외)\n"
+" * '%B': 출력 BOM 파일의 기본 파일 이름(파일 확장자 제외)\n"
+" * '%P': 후행 슬래시가 없는 프로젝트 디렉터리의 절대 경로\n"
+"\n"
+"**참고:** '%O' 출력 파일 매개 변수에는 파일 확장자가 포함되어 있지 않습니다. "
+"KiCad는 명령 줄에 적절한 확장을 자동으로 추가하려고 시도하지만 확장을 "
+"수동으로 추가해야 할 수도 있습니다.\n"
+"\n"
+"Python은 BOM 생성기 스크립트에 권장되는 도구이지만 다른 도구도 사용할 수 "
+"있습니다.\n"
+"\n"
+"## 파이썬 스크립트에 대한 예제 명령 줄\n"
+"\n"
+"Python 스크립트의 명령줄 형식은 다음과 같은 형식입니다.\n"
+"\n"
+"```\n"
+"파이썬 <스크립트 파일 이름 > < 입력 파일 이름 > < 출력 파일 이름>\n"
+"```\n"
+"\n"
+"Windows에서 CSV BOM에 대해 원하는 생성기 스크립트가 'C:\\Users\\username"
+"\\kicad\\my_python_script.py'인 경우 명령줄은 다음과 같습니다.\n"
+"\n"
+"```\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O.csv\""
+"\n"
+"```\n"
+"\n"
+"Linux에서 CSV BOM에 대해 원하는 생성기 스크립트가 '/home/username/kicad/"
+"my_python_script.py'인 경우 명령줄은 다음과 같습니다.\n"
+"\n"
+"```\n"
+"파이썬 / 홈 / 사용자 이름 / kicad / my_python_script.py \"%I\" \"% O .csv\"\n"
+"```\n"
+"\n"
+"인수 주위의 큰따옴표('\"')는 파일 이름에 공백이나 특수 문자가 포함된 경우에 "
+"권장됩니다.\n"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:66
 msgid "Change all symbols in schematic"
@@ -8322,9 +8380,8 @@ msgid "Checking conflicts..."
 msgstr "충돌 확인..."
 
 #: eeschema/dialogs/dialog_erc.cpp:488
-#, fuzzy
 msgid "Checking units..."
-msgstr "핀 확인..."
+msgstr "단위 확인 중..."
 
 #: eeschema/dialogs/dialog_erc.cpp:493
 #: pcbnew/drc/drc_test_provider_footprint_checks.cpp:69
@@ -8344,9 +8401,8 @@ msgid "Checking for unresolved variables..."
 msgstr "해결되지 않은 변수를 확인 중..."
 
 #: eeschema/dialogs/dialog_erc.cpp:534
-#, fuzzy
 msgid "Checking SPICE models..."
-msgstr "영역 확인 중..."
+msgstr "SPICE 모델 확인 중..."
 
 #: eeschema/dialogs/dialog_erc.cpp:540
 msgid "Checking no connect pins for connections..."
@@ -9011,11 +9067,11 @@ msgstr "전역 심볼 라이브러리 테이블 '%s'을(를) '%s'에 복사할 �
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter.cpp:31
 msgid "Ibis parser log"
-msgstr ""
+msgstr "Ibis 파서 로그"
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter_base.h:46
 msgid "Ibis parser"
-msgstr ""
+msgstr "Ibis 파서"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
@@ -9564,9 +9620,8 @@ msgid "Fields must have a name."
 msgstr "필드에는 이름이 있어야 합니다."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:321
-#, fuzzy
 msgid "Derived symbol must have a parent selected"
-msgstr "별칭이 지정된 심볼은 상위 항목이 선택되어 있어야 합니다"
+msgstr "별칭이 지정된 심볼은 상위 항목이 선택되어야 함"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:333
 msgid "Delete extra units from symbol?"
@@ -9659,14 +9714,13 @@ msgid "Define as power symbol"
 msgstr "전원 심볼으로 정의"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:205
-#, fuzzy
 msgid ""
 "Setting this option makes the symbol in question appear in the\n"
 "\"add power symbol\" dialog.  It will lock the value text to protect it\n"
 "from editing in the schematic.  The symbol will not be included in\n"
 "the BOM and cannot be assigned a footprint."
 msgstr ""
-"이 옵션을 설정하면 \"전원 포트 추가\" 대화 상자에 \n"
+"이 옵션을 설정하면 \"전원 심볼 추가\" 대화 상자에 \n"
 "해당 심볼을 표시합니다. 또한 값 텍스트를 잠궈 Eeschema가\n"
 "편집하지 못하도록 막아줍니다. 이 심볼은 더이상 BOM에\n"
 "포함될 수 없으며, 풋프린트에 할당될 수 없습니다."
@@ -10787,9 +10841,8 @@ msgid "Frequency scale"
 msgstr "주파수 배율"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:37
-#, fuzzy
 msgid "Number of points per decade:"
-msgstr "패키지당 유닛의 수:"
+msgstr "10개 당 포인트 수 :"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:47
 msgid "Start frequency:"
@@ -11002,9 +11055,8 @@ msgid "HSpice"
 msgstr "HSpice"
 
 #: eeschema/dialogs/dialog_sim_command_base.h:139
-#, fuzzy
 msgid "Simulation Command"
-msgstr "시뮬레이션"
+msgstr "시뮬레이션 명령"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:192
 #, c-format
@@ -11012,14 +11064,12 @@ msgid "No model named '%s' in library."
 msgstr "라이브러리에 '%s' 모델이 없습니다."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:280
-#, fuzzy
 msgid "Failed to read simulation model from fields."
-msgstr "필드에서 시뮬레이션 모델을 읽기 실패"
+msgstr "필드에서 시뮬레이션 모델을 읽기 실패."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:402
-#, fuzzy
 msgid "Component:"
-msgstr "Component"
+msgstr "부품:"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:402
 #: eeschema/dialogs/dialog_sim_model_base.cpp:54
@@ -11030,11 +11080,11 @@ msgstr "모델:"
 #: eeschema/dialogs/dialog_sim_model.cpp:463
 #, c-format
 msgid "Save parameter '%s (%s)' in Value field"
-msgstr ""
+msgstr "값 필드에 '%s (%s)' 매개 변수 저장"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:471
 msgid "Save primary parameter in Value field"
-msgstr ""
+msgstr "값 필드에 기본 매개 변수 저장"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:488
 #: pcbnew/footprint_wizard_frame.cpp:325
@@ -11066,21 +11116,19 @@ msgstr "모델 찾아보기"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:30
 msgid "SPICE model from file (*.lib, *.sub or *.ibs)"
-msgstr ""
+msgstr "SPICE 모델의 파일(* .lib, * .sub 또는 * .ibs)"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:66
 msgid "Pin:"
 msgstr "핀:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:77
-#, fuzzy
 msgid "Differential"
-msgstr "차동 쌍"
+msgstr "차동"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:101
-#, fuzzy
 msgid "Built-in SPICE model"
-msgstr "영역 확인 중..."
+msgstr "내장 SPICE 모델"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:110
 msgid "Device:"
@@ -11110,7 +11158,7 @@ msgstr "코드"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:207
 msgid "Save {} in Value field as \"{}\""
-msgstr ""
+msgstr "값 필드에 {}을(를) \"{}\"로 저장"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:220
 msgid "Model"
@@ -12441,49 +12489,45 @@ msgstr "심볼 라이브러리 테이블 '%s'을(를) 불러오는 중에 오류
 #: eeschema/eeschema_jobs_handler.cpp:159
 #: eeschema/eeschema_jobs_handler.cpp:195
 #: eeschema/eeschema_jobs_handler.cpp:290
-#, fuzzy
 msgid "Failed to load schematic file\n"
-msgstr "회로도 라이브러리 열기 시작"
+msgstr "회로도 파일을 로드하지 못했습니다.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:206
 #: eeschema/eeschema_jobs_handler.cpp:305
 msgid ""
 "Warning: schematic has annotation errors, please use the schematic editor to "
 "fix them\n"
-msgstr ""
+msgstr "경고: 회로도에 주석 오류가 있으므로 회로도 편집기를 사용하여 수정하시오\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:215
 #: eeschema/eeschema_jobs_handler.cpp:315
-#, fuzzy
 msgid "Warning: duplicate sheet names.\n"
-msgstr "경고: 중복된 닉네임"
+msgstr "경고: 시트 이름이 중복되었습니다.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:257
-#, fuzzy
 msgid "Unknown netlist format.\n"
-msgstr "알 수 없는 파일 형식: <%s>"
+msgstr "알 수 없는 네트리스트 형식.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:386
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
-msgstr "심볼 %s을(를) '%s'에서 '%s'(으)로 변경"
+msgstr "플로팅 심볼 '%s' 단위 %d ~ '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:392
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' to '%s'\n"
-msgstr "심볼 %s을(를) '%s'에서 '%s'(으)로 변경"
+msgstr "'%s'에서 '%s'로 심볼 플로팅\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:416
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open destination '%s'"
-msgstr "구문 분석 할 수 없는 '%s'이(가) '%s'에 있음"
+msgstr "대상 '%s'을(를) 열 수 없음"
 
 #: eeschema/eeschema_jobs_handler.cpp:463
 #: eeschema/eeschema_jobs_handler.cpp:526 pcbnew/pcbnew_jobs_handler.cpp:608
 #: pcbnew/pcbnew_jobs_handler.cpp:669
-#, fuzzy
 msgid "Unable to load library\n"
-msgstr "%s 파일을 불러올 수 없습니다"
+msgstr "라이브러리를 로드할 수 없습니다.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:474
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:123
@@ -12492,22 +12536,19 @@ msgstr "저장하기 위해 선택한 심볼이 없습니다."
 
 #: eeschema/eeschema_jobs_handler.cpp:534 pcbnew/pcbnew_jobs_handler.cpp:594
 msgid "Output path must not conflict with existing path\n"
-msgstr ""
+msgstr "출력 경로는 기존 경로와 충돌하지 않아야 합니다\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:544
-#, fuzzy
 msgid "Saving symbol library in updated format\n"
-msgstr "잘못된 심볼 라이브러리 식별자"
+msgstr "심볼 라이브러리를 업데이트된 형식으로 저장\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:558 pcbnew/pcbnew_jobs_handler.cpp:637
-#, fuzzy
 msgid "Unable to save library\n"
-msgstr "활성 라이브러리가 없습니다."
+msgstr "라이브러리를 저장할 수 없음\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:564
-#, fuzzy
 msgid "Symbol library was not updated\n"
-msgstr "심볼 라이브러리가 활성화되지 않았습니다."
+msgstr "심볼 라이브러리가 업데이트되지 않음\n"
 
 #: eeschema/erc.cpp:66 eeschema/erc.cpp:83
 msgid "Input Pin"
@@ -12572,24 +12613,24 @@ msgid "Different footprints assigned to %s and %s"
 msgstr "%s와 %s에 다른 풋프린트가 할당되었음"
 
 #: eeschema/erc.cpp:483
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has unplaced units %s"
-msgstr "은(는) 라이브러리에 이미 존재합니다."
+msgstr "심볼 %s에 배치되지 않은 유닛 %s가 있음"
 
 #: eeschema/erc.cpp:531
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has input power pins in units %s that are not placed."
-msgstr "심볼에 정의된 것보다 더 많은 유닛이 있습니다"
+msgstr "심볼 %s에는 배치되지 않은 장치 %s에 입력 전원 핀이 있습니다."
 
 #: eeschema/erc.cpp:537
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has input pins in units %s that are not placed."
-msgstr "심볼에 정의된 것보다 더 많은 유닛이 있습니다"
+msgstr "심볼 %s에는 배치되지 않은 장치 %s에 입력 핀이 있습니다."
 
 #: eeschema/erc.cpp:543
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has bidirectional pins in units %s that are not placed."
-msgstr "심볼에 정의된 것보다 더 많은 유닛이 있습니다"
+msgstr "심볼 %s에는 배치되지 않은 장치 %s에 양방향 핀이 있습니다."
 
 #: eeschema/erc.cpp:582
 msgid "Pins with 'no connection' type are connected"
@@ -12725,9 +12766,8 @@ msgid "Unresolved text variable"
 msgstr "확인되지 않은 텍스트 변수"
 
 #: eeschema/erc_item.cpp:138
-#, fuzzy
 msgid "SPICE model issue"
-msgstr "SPICE 네트리스트 파일"
+msgstr "SPICE 모델 문제"
 
 #: eeschema/erc_item.cpp:142
 msgid "Wires not connected to anything"
@@ -12746,24 +12786,20 @@ msgid "Symbol has more units than are defined"
 msgstr "심볼에 정의된 것보다 더 많은 유닛이 있습니다"
 
 #: eeschema/erc_item.cpp:158
-#, fuzzy
 msgid "Symbol has units that are not placed"
-msgstr "심볼에 정의된 것보다 더 많은 유닛이 있습니다"
+msgstr "심볼에 배치되지 않은 장치가 있음"
 
 #: eeschema/erc_item.cpp:162
-#, fuzzy
 msgid "Symbol has input pins that are not placed"
-msgstr "심볼에 정의된 것보다 더 많은 유닛이 있습니다"
+msgstr "심볼에 정의된 것보다 더 많은 유닛이 있음"
 
 #: eeschema/erc_item.cpp:166
-#, fuzzy
 msgid "Symbol has bidirectional pins that are not placed"
-msgstr "심볼에 정의된 것보다 더 많은 유닛이 있습니다"
+msgstr "심볼에 배치되지 않은 양방향 핀이 있음"
 
 #: eeschema/erc_item.cpp:170
-#, fuzzy
 msgid "Symbol has power input pins that are not placed"
-msgstr "심볼에 정의된 것보다 더 많은 유닛이 있습니다"
+msgstr "심볼에 배치되지 않은 전원 입력 핀이 있음"
 
 #: eeschema/erc_item.cpp:174
 msgid "Units of same symbol have different values"
@@ -12795,12 +12831,10 @@ msgid "Vertical"
 msgstr "세로쓰기"
 
 #: eeschema/fields_grid_table.cpp:341
-#, fuzzy
 msgid "Show Name"
-msgstr "네트 표시"
+msgstr "이름 표시"
 
 #: eeschema/fields_grid_table.cpp:352
-#, fuzzy
 msgid "Allow Autoplacement"
 msgstr "자동 배치 허용"
 
@@ -12939,7 +12973,6 @@ msgstr ""
 
 #: eeschema/files-io.cpp:619 pcbnew/files.cpp:173
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:191
-#, fuzzy
 msgid "All supported formats"
 msgstr "지원되는 모든 형식"
 
@@ -13032,9 +13065,9 @@ msgid "Importing Schematic"
 msgstr "회로도 가져오기"
 
 #: eeschema/files-io.cpp:1287
-#, fuzzy, c-format
+#, c-format
 msgid "Unhandled exception occurred loading schematic '%s'."
-msgstr "회로도 '%s' 불러오는 중에 메모리가 부족합니다."
+msgstr "회로도 '%s'를 로드하는 동안 처리되지 않은 예외가 발생했습니다."
 
 #: eeschema/files-io.cpp:1321
 msgid "The current schematic has been modified.  Save changes?"
@@ -13098,9 +13131,8 @@ msgstr ""
 "회로도 편집기가 시작될 때마다 표시됩니다."
 
 #: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1651
-#, fuzzy
 msgid "Derived from"
-msgstr "다음 심볼에서 파생:"
+msgstr "파생 위치"
 
 #: eeschema/generate_alias_info.cpp:121 eeschema/sim/spice_simulator.cpp:85
 #: kicad/pcm/pcm.cpp:798 pcbnew/footprint.cpp:1033 pcbnew/zone.cpp:598
@@ -13154,14 +13186,14 @@ msgid "Pin %s [%s, %s]"
 msgstr "핀 %s [%s, %s]"
 
 #: eeschema/lib_pin.cpp:1372
-#, fuzzy, c-format
+#, c-format
 msgid "Hidden pin %s [%s, %s, %s]"
-msgstr "핀 %s [%s, %s, %s]"
+msgstr "숨겨진 핀 %s [%s, %s, %s]"
 
 #: eeschema/lib_pin.cpp:1380
-#, fuzzy, c-format
+#, c-format
 msgid "Hidden pin %s [%s, %s]"
-msgstr "핀 %s [%s, %s]"
+msgstr "숨겨진 핀 %s [%s, %s]"
 
 #: eeschema/lib_shape.cpp:469 eeschema/sch_shape.cpp:407
 #, c-format
@@ -13332,11 +13364,13 @@ msgid "Failed to generate a name for '%s': exceeded UINT64_MAX"
 msgstr "'%s'에 대한 이름 생성 실패: UINT64_MAX 초과"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:279
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading simulation model from symbol '%s':\n"
 "%s"
-msgstr "시뮬레이션 모델 라이브러리 '%s'를로드 중 오류 발생: %s"
+msgstr ""
+"심볼 '%s'에서 시뮬레이션 모델을 읽는 중 오류 발생:\n"
+"%s"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:515
 #, c-format
@@ -13882,7 +13916,8 @@ msgstr "SCH_PLUGIN::Symbol*() 함수를 실행하는 python 심볼을 입력하�
 msgid ""
 "The file name for sheet %s is undefined, this is probably an Altium signal "
 "harness that got converted to a sheet."
-msgstr ""
+msgstr "시트 %s의 파일 이름은 정의되지 않았으며 시트로 변환 된 Altium 신호 하네스 일 "
+"수 있습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:440
 #, c-format
@@ -13890,35 +13925,31 @@ msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr "저장소 파일이 완전히 파싱되지 않았습니다 (%d바이트 남음)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:500
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown or unexpected record ID %d found inside \"Additional\" section."
-msgstr ""
-"알 수 없거나 예기치 않은 레코드가 \"추가\" 섹션, 레코드 ID: %d에서 발견되었습"
-"니다."
+msgstr "알 수 없거나 예기치 않은 레코드 ID %d가 \"추가\" 섹션에 있습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:573
 msgid "Record 'IEEE_SYMBOL' not handled."
-msgstr ""
+msgstr "'IEEE_SYMBOL' 레코드가 처리되지 않았습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:598
 msgid "Record 'PIECHART' not handled."
-msgstr ""
+msgstr "레코드 '파이차트'가 처리되지 않았습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:717
 msgid "Compile mask not currently supported."
 msgstr "컴파일 마스크는 현재 지원되지 않습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:724
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown or unexpected record id %d found inside \"FileHeader\" section."
-msgstr ""
-"알 수 없거나 예기치 않은 레코드가 \"FileHeader\" 섹션, 레코드 ID: %d에서 발견"
-"되었습니다."
+msgstr "알 수 없거나 예기치 않은 레코드 ID %d가 \"파일 헤더\"섹션에서 발견되었습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:824
 #, c-format
 msgid "Symbol \"%s\" in sheet \"%s\" at index %d replaced with symbol \"%s\"."
-msgstr ""
+msgstr "기호 \"%s\"가 시트\"%s\"의 인덱스 %d에서 \"%s\"기호로 대체됨."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:928
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2404
@@ -13948,13 +13979,12 @@ msgid "Unsupported ellipse was not imported at (X = %d; Y = %d)."
 msgstr "지원되지 않는 타원은 (X = %d; Y = %d)에서 가져오지 못했습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1935
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Altium's harness connector (%s) was imported as a hierarchical sheet. Please "
 "review the imported schematic."
-msgstr ""
-"Altium의 하니스 커넥터(%s)를 계층 시트로 가져왔습니다. 가져온 회로도를 검토하"
-"십시오."
+msgstr "Altium의 하니스 커넥터(%s)를 계층 시트로 가져왔습니다. 가져온 회로도를 "
+"검토하십시오."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2291
 msgid "Power Port with unknown style imported as 'Bar' type."
@@ -14983,7 +15013,6 @@ msgid "Cancel Load"
 msgstr "불러오기 취소"
 
 #: eeschema/sheet.cpp:241
-#, fuzzy
 msgid ""
 "There are hierarchical sheets in the loaded schematic file from an older "
 "file version resulting in  missing symbol instance data.  This will result "
@@ -14994,10 +15023,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"이전 파일 버전에서 로드된 회로도 파일에 계층 시트가 있어 기호 인스턴스 데이터"
-"가 누락되었습니다. 그러면 로드된 회로도의 모든 기호가 기본 인스턴스 설정을 사"
-"용하거나 라이브러리 심볼 설정으로 대체됩니다. 이 회로도 파일을 사용하는 프로"
-"젝트를 로드하고 최신 파일 버전으로 저장하면 이 문제가 해결됩니다.\n"
+"이전 파일 버전에서 로드된 회로도 파일에 계층 시트가 있어 심볼 인스턴스 "
+"데이터가 누락되었습니다. 이렇게 하면 로드된 회로도의 모든 심볼이 기본 "
+"인스턴스 설정을 사용하거나 라이브러리 심볼 설정으로 대체됩니다. 이 회로도 "
+"파일을 사용하는 프로젝트를 로드하고 최신 파일 버전으로 저장하면 이 문제가 "
+"해결됩니다.\n"
 "\n"
 "계속하시겠습니까?"
 
@@ -15346,9 +15376,8 @@ msgid "Error on line "
 msgstr "오류 라인 "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:769
-#, fuzzy
 msgid "A line did not end properly."
-msgstr "줄이 제대로 끝나지 않았습니다.."
+msgstr "줄이 제대로 끝나지 않았습니다."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:905
 #: eeschema/sim/kibis/ibis_parser.cpp:922
@@ -15533,9 +15562,8 @@ msgid "Error while reading temporary file"
 msgstr "임시 파일을 읽는 중 오류 발생"
 
 #: eeschema/sim/kibis/kibis.cpp:735
-#, fuzzy
 msgid "Error while creating temporary output file"
-msgstr "임시 파일을 만드는 동안 오류 발생"
+msgstr "임시 출력 파일을 생성하는 동안 오류가 발생됨"
 
 #: eeschema/sim/kibis/kibis.cpp:774
 msgid ""
@@ -15578,19 +15606,16 @@ msgid "Invalid model type for a device"
 msgstr "디바이스에 대한 잘못된 모델"
 
 #: eeschema/sim/kibis/kibis.cpp:1525 eeschema/sim/kibis/kibis.cpp:1571
-#, fuzzy
 msgid "Number of cycles should be greater than 0."
-msgstr "추적 간격은 0보다 커야 합니다."
+msgstr "주기 간격은 0보다 커야 합니다."
 
 #: eeschema/sim/kibis/kibis.cpp:1531 eeschema/sim/kibis/kibis.cpp:1577
-#, fuzzy
 msgid "ON time should be greater than 0."
-msgstr "추적 간격은 0보다 커야 합니다."
+msgstr "ON 시간은 0보다 커야 합니다."
 
 #: eeschema/sim/kibis/kibis.cpp:1537 eeschema/sim/kibis/kibis.cpp:1583
-#, fuzzy
 msgid "OFF time should be greater than 0."
-msgstr "추적 간격은 0보다 커야 합니다."
+msgstr "OFF 시간은 0보다 커야 합니다."
 
 #: eeschema/sim/kibis/kibis.cpp:1545
 msgid "Rising edge is longer than on time."
@@ -15601,37 +15626,33 @@ msgid "Falling edge is longer than off time."
 msgstr "하강 에지(Edge)가 OFF time보다 더 깁니다."
 
 #: eeschema/sim/kibis/kibis.cpp:1591
-#, fuzzy
 msgid "Rising edge is longer than ON time."
-msgstr "상승 에지(edge)가 ON time보다 더 깁니다."
+msgstr "상승 에지가 ON 시간보다 더 길다."
 
 #: eeschema/sim/kibis/kibis.cpp:1599
-#, fuzzy
 msgid "Falling edge is longer than OFF time."
-msgstr "하강 에지(Edge)가 OFF time보다 더 깁니다."
+msgstr "하강 에지가 OFF 시간보다 더 길다."
 
 #: eeschema/sim/kibis/kibis.cpp:1613 eeschema/sim/kibis/kibis.cpp:1644
-#, fuzzy
 msgid "Bitrate should be greater than 0."
-msgstr "추적 간격은 0보다 커야 합니다."
+msgstr "비트 전송률은 0보다 커야 한다."
 
 #: eeschema/sim/kibis/kibis.cpp:1619 eeschema/sim/kibis/kibis.cpp:1650
-#, fuzzy
 msgid "Number of bits should be greater than 0."
-msgstr "추적 간격은 0보다 커야 합니다."
+msgstr "비트 수는 0보다 커야 한다."
 
 #: eeschema/sim/kibis/kibis.cpp:1631
 msgid "Bitrate is too high for rising / falling edges"
-msgstr ""
+msgstr "비트 전송률이 상승/하강 에지에 비해 너무 높음"
 
 #: eeschema/sim/kibis/kibis.cpp:1658
 msgid "Bitrate could be too high for rising / falling edges"
-msgstr ""
+msgstr "비트 전송률이 상승/하강 에지에 비해 너무 높을 수 있음"
 
 #: eeschema/sim/sim_lib_mgr.cpp:77
-#, fuzzy, c-format
+#, c-format
 msgid "Simulation model library not found at '%s' or '%s'"
-msgstr "시뮬레이션 모델 라이브러리 '%s'를로드 중 오류 발생: %s"
+msgstr "시뮬레이션 모델 라이브러리를 '%s' 또는 '%s'에서 찾을 수 없음"
 
 #: eeschema/sim/sim_lib_mgr.cpp:292
 #, c-format
@@ -15662,19 +15683,19 @@ msgstr ""
 "시뮬레이션 모델 로드 오류: '%s' 라이브러리에서 기본 모델 '%s'를 찾을 수 없음"
 
 #: eeschema/sim/sim_library_kibis.cpp:39 eeschema/sim/sim_model_kibis.cpp:76
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS file '%s'"
-msgstr "잘못된 IBIS 모델 '%s'"
+msgstr "잘못된 IBIS 파일 '%s'"
 
 #: eeschema/sim/sim_model.cpp:759
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find a pin named '%s' in simulation model of type '%s'"
-msgstr "%s인 시뮬레이션 모델 매개 변수를 찾을 수 없습니다"
+msgstr "'%s'라는 핀을 '%s' 유형의 시뮬레이션 모델에서 찾을 수 없음"
 
 #: eeschema/sim/sim_model.cpp:849
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find a parameter named '%s' in simulation model of type '%s'"
-msgstr "%s인 시뮬레이션 모델 매개 변수를 찾을 수 없습니다"
+msgstr "'%s'라는 매개 변수를 '%s' 유형의 시뮬레이션 모델에서 찾을 수 없음"
 
 #: eeschema/sim/sim_model.h:470
 #, c-format
@@ -15689,9 +15710,9 @@ msgid "Could not find IBIS component '%s'"
 msgstr "IBIS 컴포넌트를 찾을 수 없습니다 ‘%s’"
 
 #: eeschema/sim/sim_model_kibis.cpp:87
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS component '%s'"
-msgstr "잘못된 IBIS 모델 '%s'"
+msgstr "잘못된 IBIS 구성 요소 '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:91
 #, c-format
@@ -15718,17 +15739,14 @@ msgid "Power supply"
 msgstr "전원 공급 장치"
 
 #: eeschema/sim/sim_model_kibis.cpp:350
-#, fuzzy
 msgid "Parasitic pin resistance"
-msgstr "기생 저항"
+msgstr "기생 핀 저항"
 
 #: eeschema/sim/sim_model_kibis.cpp:360
-#, fuzzy
 msgid "Parasitic pin inductance"
 msgstr "기생 핀 인덕턴스"
 
 #: eeschema/sim/sim_model_kibis.cpp:370
-#, fuzzy
 msgid "Parasitic pin capacitance"
 msgstr "기생 핀 커패시턴스"
 
@@ -15749,9 +15767,8 @@ msgid "Delay"
 msgstr "지연"
 
 #: eeschema/sim/sim_model_kibis.cpp:456
-#, fuzzy
 msgid "Number of cycles"
-msgstr "샘플 수"
+msgstr "주기의 수"
 
 #: eeschema/sim/sim_model_kibis.cpp:473
 msgid "Bitrate"
@@ -15762,12 +15779,10 @@ msgid "Number of bits"
 msgstr "비트 수"
 
 #: eeschema/sim/sim_panel_base.cpp:90
-#, fuzzy
 msgid ""
 "Simulation provided no plots. Please refer to console window for results."
-msgstr ""
-"이 시뮬레이션이 제공하는 플롯이 없습니다. 결과를 확인하려면 콘솔 창을 참고하"
-"세요"
+msgstr "이 시뮬레이션이 제공하는 플롯이 없습니다. 결과를 확인하려면 콘솔 창을 "
+"참조하세요."
 
 #: eeschema/sim/sim_plot_frame.cpp:162
 msgid "Run/Stop Simulation"
@@ -15798,31 +15813,31 @@ msgid "Tune component values"
 msgstr "컴포넌트 값 조정"
 
 #: eeschema/sim/sim_plot_frame.cpp:170
-#, fuzzy
 msgid "Sim Command"
-msgstr "커맨드"
+msgstr "Sim 명령"
 
 #: eeschema/sim/sim_plot_frame.cpp:171
-#, fuzzy
 msgid "Simulation command and settings"
-msgstr "시뮬레이션 매개변수 및 설정"
+msgstr "시뮬레이션 명령 및 설정"
 
 #: eeschema/sim/sim_plot_frame.cpp:354 eeschema/sim/sim_plot_frame_base.h:130
 msgid "Spice Simulator"
 msgstr "Spice 시뮬레이터"
 
 #: eeschema/sim/sim_plot_frame.cpp:466 eeschema/sim/sim_plot_frame.cpp:1559
-#, fuzzy
 msgid ""
 "Errors during netlist generation; simulation aborted.\n"
 "\n"
-msgstr "네트리스트 내보내기 중에 오류가 발생하였습니다. 내보내기를 중단합니다."
+msgstr ""
+"네트리스트 생성 중 오류; 시뮬레이션이 중단되었습니다.\n"
+"\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:483
 msgid ""
 "Schematic sheet simulation command directive has changed.  Do you wish to "
 "update the Simulation Command?"
-msgstr ""
+msgstr "회로도 시트 시뮬레이션 명령 지시문이 변경되었습니다.   시뮬레이션 명령을 "
+"업데이트하시겠습니까?"
 
 #: eeschema/sim/sim_plot_frame.cpp:506 eeschema/sim/sim_plot_frame.cpp:1988
 msgid "Another simulation is already running."
@@ -15836,12 +15851,12 @@ msgstr "플롯%u - "
 #: eeschema/sim/sim_plot_frame.cpp:598 eeschema/sim/sim_plot_frame.cpp:610
 #: eeschema/sim/sim_plot_frame.cpp:930
 msgid "Could not apply tuned value(s):"
-msgstr ""
+msgstr "조정된 값을 적용할 수 없음:"
 
 #: eeschema/sim/sim_plot_frame.cpp:611 eeschema/sim/sim_plot_frame.cpp:919
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not tunable"
-msgstr "%s을(를) 찾을 수 없음"
+msgstr "%s는 조정할 수 없음"
 
 #: eeschema/sim/sim_plot_frame.cpp:654
 msgid "Error: simulation type not defined!\n"
@@ -15853,12 +15868,11 @@ msgstr "오류: 시뮬레이션 유형이 플로팅을 지원하지 않습니다
 
 #: eeschema/sim/sim_plot_frame.cpp:732
 msgid " (mag)"
-msgstr ""
+msgstr " (mag)"
 
 #: eeschema/sim/sim_plot_frame.cpp:734
-#, fuzzy
 msgid " (phase)"
-msgstr "AC 위상:"
+msgstr " (상)"
 
 #: eeschema/sim/sim_plot_frame.cpp:840 eeschema/sim/sim_plot_frame.cpp:1803
 msgid "Signal"
@@ -15889,14 +15903,12 @@ msgid "You need to run plot-providing simulation first."
 msgstr "플롯 제공 시뮬레이션을 먼저 실행하여야 합니다."
 
 #: eeschema/sim/sim_plot_frame.cpp:1681
-#, fuzzy
 msgid "SPICE Netlist"
-msgstr "SPICE 네트리스트 파일"
+msgstr "SPICE 네트리스트"
 
 #: eeschema/sim/sim_plot_frame.cpp:1753
-#, fuzzy
 msgid "Save changes to workbook?"
-msgstr "현재 보드 저장"
+msgstr "통합 문서에 변경 내용을 저장하시겠습니까?"
 
 #: eeschema/sim/sim_plot_frame.cpp:1918
 msgid ""
@@ -15911,14 +15923,12 @@ msgstr ""
 "\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:2009
-#, fuzzy
 msgid "Remove Signal"
-msgstr "제거"
+msgstr "신호 제거"
 
 #: eeschema/sim/sim_plot_frame.cpp:2009
-#, fuzzy
 msgid "Remove the signal from the plot"
-msgstr "플롯 화면으로부터 신호 삭제"
+msgstr "플롯에서 신호 제거"
 
 #: eeschema/sim/sim_plot_frame.cpp:2017 eeschema/sim/sim_plot_frame.cpp:2046
 msgid "Hide Cursor"
@@ -15933,29 +15943,24 @@ msgid "New Plot"
 msgstr "새 플롯"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:25
-#, fuzzy
 msgid "Open Workbook..."
-msgstr "프로젝트 열기..."
+msgstr "통합 문서 열기..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:29
-#, fuzzy
 msgid "Save Workbook"
-msgstr "시뮬레이션 통합 문서 저장"
+msgstr "통합 문서 저장"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:33
-#, fuzzy
 msgid "Save Workbook As..."
-msgstr "다른 이름으로 사본 저장..."
+msgstr "다른 이름으로 통합 문서 저장..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:39
-#, fuzzy
 msgid "Export Current Plot as PNG..."
-msgstr "현재 화면을 PNG로 내보내기..."
+msgstr "현재 플롯을 PNG로 내보내기 ..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:43
-#, fuzzy
 msgid "Export Current Plot as CSV..."
-msgstr "현재 화면을 PNG로 내보내기..."
+msgstr "현재 플롯을 CSV로 내보내기 ..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:52
 msgid "File"
@@ -17116,9 +17121,8 @@ msgid "Add Power"
 msgstr "전원 추가"
 
 #: eeschema/tools/ee_actions.cpp:295
-#, fuzzy
 msgid "Add a power symbol"
-msgstr "심볼 추가"
+msgstr "전원 기호 추가"
 
 #: eeschema/tools/ee_actions.cpp:301
 msgid "Add No Connect Flag"
@@ -17471,23 +17475,20 @@ msgid "Displays pin table for bulk editing of pins"
 msgstr "핀 일괄 편집을 위해 핀 테이블 표시"
 
 #: eeschema/tools/ee_actions.cpp:553
-#, fuzzy
 msgid "Break"
-msgstr "버스 끊기"
+msgstr "휴식"
 
 #: eeschema/tools/ee_actions.cpp:553
-#, fuzzy
 msgid "Divide into connected segments"
-msgstr "네트가 없습니다. (연결 안 됨)"
+msgstr "연결된 세그먼트로 나누기"
 
 #: eeschema/tools/ee_actions.cpp:558
 msgid "Slice"
-msgstr ""
+msgstr "분리"
 
 #: eeschema/tools/ee_actions.cpp:558
-#, fuzzy
 msgid "Divide into unconnected segments"
-msgstr "네트가 없습니다. (연결 안 됨)"
+msgstr "연결되지 않은 세그먼트로 나누기"
 
 #: eeschema/tools/ee_actions.cpp:568
 msgid "Add a simulator probe"
@@ -17558,10 +17559,9 @@ msgid "Import Footprint Assignments..."
 msgstr "풋프린트 할당 가져오기..."
 
 #: eeschema/tools/ee_actions.cpp:622
-#, fuzzy
 msgid ""
 "Import symbol footprint assignments from .cmp file created by board editor"
-msgstr "Pcbnew에서 작성된 .cmp 파일의 심볼 풋프린트 할당을 가져오기"
+msgstr "보드 편집기에서 만든 .cmp 파일에서 심볼 풋프린트 할당 가져오기"
 
 #: eeschema/tools/ee_actions.cpp:627
 msgid "Annotate Schematic..."
@@ -17757,9 +17757,8 @@ msgid "Show the Python scripting console"
 msgstr "Python 스크립팅 콘솔 창 표시"
 
 #: eeschema/tools/ee_actions.cpp:758
-#, fuzzy
 msgid "Change Sheet"
-msgstr "형상 바꾸기"
+msgstr "시트 변경"
 
 #: eeschema/tools/ee_actions.cpp:758
 msgid "Change to provided sheet's contents in the schematic editor"
@@ -18066,9 +18065,8 @@ msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr "오류: 현재 시트에서 중복되는 하위 시트 이름이 발견되었습니다."
 
 #: eeschema/tools/sch_editor_control.cpp:823
-#, fuzzy
 msgid "No net selected."
-msgstr "네트가 선택되지 않았습니다."
+msgstr "선택한 네트가 없음."
 
 #: eeschema/tools/sch_editor_control.cpp:849
 msgid "Net must be labeled to assign a netclass."
@@ -18142,9 +18140,9 @@ msgid "Press <ESC> to cancel move."
 msgstr "<ESC>를 눌러 이동을 취소하세요."
 
 #: eeschema/tools/sch_navigate_tool.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Page '%s' not found."
-msgstr "'%d' 페이지를 찾을 수 없습니다."
+msgstr "'%s' 페이지를 찾을 수 없음."
 
 #: eeschema/tools/symbol_editor_control.cpp:180
 msgid "No symbol library selected."
@@ -18213,9 +18211,9 @@ msgid "Edit Page Number"
 msgstr "페이지 번호 편집"
 
 #: eeschema/widgets/hierarchy_pane.cpp:283
-#, fuzzy, c-format
+#, c-format
 msgid "Enter page number for sheet path %s"
-msgstr "시트 경로 %s의 페이지 번호를 입력하세요"
+msgstr "시트 경로 %s의 페이지 번호 입력"
 
 #: eeschema/widgets/hierarchy_pane.cpp:322
 #, c-format
@@ -18291,7 +18289,7 @@ msgstr ""
 #: eeschema/widgets/tuner_slider.cpp:61
 #, c-format
 msgid "Symbol '%s' has simulation model of type '%s %s', which cannot be tuned"
-msgstr ""
+msgstr "'%s' 심볼에 튜닝할 수 없는 '%s %s' 유형의 시뮬레이션 모델이 있음"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -19291,19 +19289,16 @@ msgid "Show in Differential Mode"
 msgstr "차동 모드로 표시"
 
 #: gerbview/tools/gerbview_actions.cpp:191
-#, fuzzy
 msgid "Show layers in differential compare mode"
-msgstr "패드 채움 모드 보이기"
+msgstr "차등 비교 모드에서 레이어 표시"
 
 #: gerbview/tools/gerbview_actions.cpp:196
-#, fuzzy
 msgid "Show in XOR Mode"
-msgstr "D-Code 표시"
+msgstr "XOR 모드로 표시"
 
 #: gerbview/tools/gerbview_actions.cpp:196
-#, fuzzy
 msgid "Show layers in exclusive-or compare mode"
-msgstr "레이어를 diff (비교) 모드로 표시"
+msgstr "XOR 비교 모드에서 레이어 표시"
 
 #: gerbview/tools/gerbview_actions.cpp:201
 msgid "Flip Gerber View"
@@ -19494,50 +19489,47 @@ msgstr "데이터 출력에 실패하였습니다"
 
 #: kicad/cli/command.h:32
 msgid "shows help message and exits"
-msgstr ""
+msgstr "도움말 메시지를 보여주고 종료"
 
 #: kicad/cli/command_export_pcb_base.cpp:39
 #: kicad/cli/command_export_pcb_step.cpp:87
-#, fuzzy
 msgid "Output file name"
-msgstr "시트 파일 이름"
+msgstr "출력 파일 이름"
 
 #: kicad/cli/command_export_pcb_base.cpp:41
 #: kicad/cli/command_export_pcb_step.cpp:89
-#, fuzzy
 msgid "Input file"
-msgstr "입력 핀"
+msgstr "입력 파일"
 
 #: kicad/cli/command_export_pcb_base.cpp:82
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid layer name \"%s\"\n"
-msgstr "잘못된 속성 이름"
+msgstr "잘못된 레이어 이름 \"%s\"\n"
 
 #: kicad/cli/command_export_pcb_base.cpp:96
 msgid ""
 "Comma separated list of untranslated layer names to include such as F.Cu,B.Cu"
-msgstr ""
+msgstr "번역되지 않은 레이어 이름의 쉼표로 구분된 목록에 F.Cu,B.Cu이 포함됨"
 
 #: kicad/cli/command_export_pcb_base.cpp:113
-#, fuzzy
 msgid "At least one or more layers must be specified\n"
-msgstr "최소한 두 개의 직선 배선 세그먼트가 선택되어야 합니다."
+msgstr "하나 이상의 레이어를 지정해야 합니다.\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:47
 msgid "Valid options excellon, gerber."
-msgstr ""
+msgstr "유효한 옵션 excellon, gerber."
 
 #: kicad/cli/command_export_pcb_drill.cpp:52
 msgid "Valid options are: decimal,suppressleading,suppresstrailing,keep."
-msgstr ""
+msgstr "유효한 옵션: 십진수, 선행 억제, 후행 억제, 유지."
 
 #: kicad/cli/command_export_pcb_drill.cpp:56
 msgid "Valid options are: absolute,plot"
-msgstr ""
+msgstr "유효한 옵션: 절대, 플롯"
 
 #: kicad/cli/command_export_pcb_drill.cpp:60
 msgid "Output units, valid options:in,mm"
-msgstr ""
+msgstr "출력 단위, 유효한 옵션:in,mm"
 
 #: kicad/cli/command_export_pcb_drill.cpp:63
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:52
@@ -19550,77 +19542,67 @@ msgid "Minimal header"
 msgstr "최소 헤더"
 
 #: kicad/cli/command_export_pcb_drill.cpp:73
-#, fuzzy
 msgid "PTH and NPTH in separate files file"
-msgstr "PTH와 NPTH를 하나의 파일로 합치기"
+msgstr "PTH & NPTH를 별도의 파일로"
 
 #: kicad/cli/command_export_pcb_drill.cpp:78
 msgid "Generate map / summary of drill hits"
-msgstr ""
+msgstr "맵 생성 / 드릴 요약"
 
 #: kicad/cli/command_export_pcb_drill.cpp:84
 msgid "Valid options: pdf,gerberx2,ps,dxf,svg"
-msgstr ""
+msgstr "유효한 옵션: pdf,gerberx2,ps,dxf,svg"
 
 #: kicad/cli/command_export_pcb_drill.cpp:87
-#, fuzzy
 msgid "Generate independent files for NPTH and PTH holes"
-msgstr "선택 및 배치를 위한 부품 배치 파일 생성"
+msgstr "NPTH & PTH 홀에 대한 독립 파일 생성"
 
 #: kicad/cli/command_export_pcb_drill.cpp:92
 msgid "Precision of gerber coordinates (5 or 6)"
-msgstr ""
+msgstr "거버 좌표의 정밀도(5 또는 6)"
 
 #: kicad/cli/command_export_pcb_drill.cpp:109
-#, fuzzy
 msgid "Output must be a directory\n"
-msgstr "출력 디렉토리:"
+msgstr "출력은 디렉토리여야 합니다.\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:125
-#, fuzzy
 msgid "Invalid drill format\n"
-msgstr "잘못된 보관 파일 형식."
+msgstr "잘못된 드릴 형식\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:141
 #: kicad/cli/command_export_pcb_dxf.cpp:94
 #: kicad/cli/command_export_pcb_pos.cpp:142
-#, fuzzy
 msgid "Invalid units specified\n"
-msgstr "잘못된 단위 접두사"
+msgstr "단위가 잘못 지정됨\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:165
-#, fuzzy
 msgid "Invalid zeros format specified\n"
-msgstr "잘못된 풋프린트 지정"
+msgstr "제로 형식이 잘못 지정됨\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:193
-#, fuzzy
 msgid "Invalid map format specified\n"
-msgstr "잘못된 풋프린트 지정"
+msgstr "맵 형식이 잘못 지정됨\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:209
-#, fuzzy
 msgid "Invalid origin mode specified\n"
-msgstr "잘못된 풋프린트 지정"
+msgstr "원점 모드가 잘못 지정됨\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:220
 #: kicad/cli/command_export_pcb_gerber.cpp:109
 msgid "Gerber coordinate precision should be either 5 or 6\n"
-msgstr ""
+msgstr "거버 좌표 정밀도는 5 또는 6이어야 함\n"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:41
 #: kicad/cli/command_export_pcb_gerber.cpp:40
 #: kicad/cli/command_export_pcb_pdf.cpp:39
-#, fuzzy
 msgid "Exclude the reference designator text"
-msgstr "참조 지정자를 플롯"
+msgstr "참조 지정자 텍스트 제외"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:46
 #: kicad/cli/command_export_pcb_gerber.cpp:45
 #: kicad/cli/command_export_pcb_pdf.cpp:44
-#, fuzzy
 msgid "Exclude the value text"
-msgstr "텍스트 항목 포함 (&e)"
+msgstr "값 텍스트 제외"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:51
 #: pcbnew/dialogs/dialog_plot_base.cpp:326
@@ -19629,32 +19611,28 @@ msgstr "그래픽 개체의 윤곽선을 이용하여 플롯"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:57
 msgid "Output units, valid options: mm, in"
-msgstr ""
+msgstr "출력 단위, 유효한 옵션: mm, in"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:74
 #: kicad/cli/command_export_pcb_gerber.cpp:103
 #: kicad/cli/command_export_pcb_pdf.cpp:78
 #: kicad/cli/command_export_pcb_pos.cpp:101
 #: kicad/cli/command_export_pcb_svg.cpp:88
-#, fuzzy
 msgid "Board file does not exist or is not accessible\n"
-msgstr "회로도 '%s'이(가) 존재하지 않습니다. 생성하시겠습니까?"
+msgstr "보드 파일이 존재하지 않거나 액세스할 수 없습니다.\n"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:50
 #: kicad/cli/command_export_pcb_pdf.cpp:49
-#, fuzzy
 msgid "Include the border and title block"
-msgstr "외곽선과 제목 블록을 플롯"
+msgstr "테두리 및 제목 블록 포함"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:55
-#, fuzzy
 msgid "Do not use the extended X2 format"
-msgstr "확장된 X2 형식 사용 (권장)"
+msgstr "확장 X2 형식을 사용하지 마십시오"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:60
-#, fuzzy
 msgid "Do not generate netlist attributes"
-msgstr "네트리스트 속성 포함"
+msgstr "네트리스트 속성을 생성하지 않음"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:65
 #: pcbnew/dialogs/dialog_plot_base.cpp:208
@@ -19662,23 +19640,23 @@ msgid "Subtract soldermask from silkscreen"
 msgstr "실크스크린에서 솔더 마스크 빼기"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:70
-#, fuzzy
 msgid "Disable aperature macros"
-msgstr "조리개 매크로 비활성화 (권장하지 않음)"
+msgstr "조리개 매크로 비활성화"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:75
 msgid "Precision of gerber coordinates, valid options: 5 or 6"
-msgstr ""
+msgstr "거버 좌표의 정밀도, 유효한 옵션: 5 또는 6"
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:44
 msgid ""
 "Layers to include on each plot, comma separated list of untranslated layer "
 "names to include such as F.Cu,B.Cu"
-msgstr ""
+msgstr "각 플롯에 포함할 레이어, 포함할 변환되지 않은 레이어 이름의 쉼표로 구분된 "
+"목록(예: F.Cu,B.Cu)"
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:48
 msgid "Use the gerber plot settings already configured in the board file"
-msgstr ""
+msgstr "보드 파일에 이미 구성된 거버 플롯 설정 사용"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:61
 #: kicad/cli/command_export_pcb_svg.cpp:49
@@ -19687,7 +19665,7 @@ msgstr ""
 #: kicad/cli/command_fp_export_svg.cpp:38
 #: kicad/cli/command_sym_export_svg.cpp:40
 msgid "Color theme to use (will default to pcbnew settings)"
-msgstr ""
+msgstr "사용할 색상 테마(기본값은 pcbnew 설정임)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:44
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:64
@@ -19696,176 +19674,159 @@ msgstr "위치 파일 생성"
 
 #: kicad/cli/command_export_pcb_pos.cpp:49
 msgid "Valid options: front,back,both. Gerber format only supports \"both\"."
-msgstr ""
+msgstr "유효한 옵션: 전면, 후면, 양면. Gerber 형식은 \"양면\"만 지원합니다."
 
 #: kicad/cli/command_export_pcb_pos.cpp:53
 msgid "Valid options: ascii,csv,gerber"
-msgstr ""
+msgstr "유효한 옵션: ascii,csv,gerber"
 
 #: kicad/cli/command_export_pcb_pos.cpp:57
 msgid "Output units; ascii or csv format only; valid options: in,mm"
-msgstr ""
+msgstr "출력 단위; ASCII 또는 CSV 형식만 해당; 유효한 옵션: in,mm"
 
 #: kicad/cli/command_export_pcb_pos.cpp:60
-#, fuzzy
 msgid ""
 "Use negative X coordinates for footprints on bottom layer (ascii or csv "
 "formats only)"
-msgstr "하단 레이어의 풋 프린트에 음수 X 좌표 사용"
+msgstr "맨 아래 레이어의 풋프린트에 음수 X 좌표 사용(ASCII 또는 csv 형식만 해당)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:66
-#, fuzzy
 msgid "Use drill/place file origin (ascii or csv only)"
-msgstr "드릴/파일 배치 원점을 원점으로 사용"
+msgstr "드릴/배치 파일 원본 사용(ascii 또는 csv만 해당)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:71
-#, fuzzy
 msgid "Include only SMD footprints (ascii or csv only)"
-msgstr "SMD 풋프린트만 포함"
+msgstr "SMD 풋프린트만 포함(ascii 또는 csv만)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:77
-#, fuzzy
 msgid "Exclude all footprints with through-hole pads (ascii or csv only)"
-msgstr "스루홀 패드가 존재하는 모든 풋프린트를 제외"
+msgstr "스루홀 패드가 있는 모든 풋프린트 제외(ascii 또는 csv 전용)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:82
-#, fuzzy
 msgid "Include board edge layer (gerber only)"
-msgstr "보드 에지 레이어 포함"
+msgstr "보드 에지 레이어 포함(거버만 해당)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:126
 #: kicad/cli/command_export_sch_netlist.cpp:81 kicad/cli/command_version.cpp:67
-#, fuzzy
 msgid "Invalid format\n"
-msgstr "잘못된 램프 데이터"
+msgstr "잘못된 형식\n"
 
 #: kicad/cli/command_export_pcb_pos.cpp:152
 msgid "\"both\" not supported for gerber format\n"
-msgstr ""
+msgstr "거버 형식에 대해 \"양면\"이 지원되지 않음\n"
 
 #: kicad/cli/command_export_pcb_pos.cpp:168
-#, fuzzy
 msgid "Invalid side specified\n"
-msgstr "잘못된 풋프린트 지정"
+msgstr "면이 잘못 지정됨\n"
 
 #: kicad/cli/command_export_pcb_step.cpp:48
-#, fuzzy
 msgid "Use Drill Origin for output origin"
-msgstr "드릴/파일 배치 원점을 원점으로 사용"
+msgstr "출력 원점에 드릴 원점 사용"
 
 #: kicad/cli/command_export_pcb_step.cpp:53
-#, fuzzy
 msgid "Use Grid Origin for output origin"
-msgstr "그리드 원점 사용"
+msgstr "출력 원점에 그리드 원점 사용"
 
 #: kicad/cli/command_export_pcb_step.cpp:58
-#, fuzzy
 msgid "Exclude 3D models for components with 'virtual' attribute"
-msgstr "'가상' 속성으로 3D 모델 전환"
+msgstr "'가상' 속성이 있는 구성요소의 3D 모델 제외"
 
 #: kicad/cli/command_export_pcb_step.cpp:63
 msgid ""
 "Substitute STEP or IGS models with the same name in place of VRML models"
-msgstr ""
+msgstr "VRML 모델 대신 동일한 이름의 STEP 또는 IGS 모델로 대체"
 
 #: kicad/cli/command_export_pcb_step.cpp:68
-#, fuzzy
 msgid "Overwrite output file"
-msgstr "오래된 파일 덮어쓰기"
+msgstr "출력 파일 덮어쓰기"
 
 #: kicad/cli/command_export_pcb_step.cpp:73
-#, fuzzy
 msgid "Only generate a board with no components"
-msgstr "네트가 없는 패드에 대해 경고 생성"
+msgstr "부품 없이 보드만 생성"
 
 #: kicad/cli/command_export_pcb_step.cpp:79
 msgid "Minimum distance between points to treat them as separate ones"
-msgstr ""
+msgstr "점을 별도의 점으로 취급하기 위한 점 사이의 최소 거리"
 
 #: kicad/cli/command_export_pcb_step.cpp:83
 msgid ""
 "User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default unit "
 "mm)"
-msgstr ""
+msgstr "사용자 지정 출력 원점 예: 1x1in, 1x1inch, 25.4x25.4mm(기본 단위 mm)"
 
 #: kicad/cli/command_export_pcb_svg.cpp:43
 msgid "Mirror the board (useful for trying to show bottom layers)"
-msgstr ""
+msgstr "보드 미러링 (하단 레이어를 표시하는 데 유용)"
 
 #: kicad/cli/command_export_pcb_svg.cpp:57
 msgid ""
 "Set page sizing mode (0 = page with frame and title block, 1 = current page "
 "size, 2 = board area only)"
-msgstr ""
+msgstr "페이지 크기 설정 모드 설정(0 = 프레임 및 제목 블록이 있는 페이지, 1 = 현재 "
+"페이지 크기, 2 = 보드 영역만)"
 
 #: kicad/cli/command_export_pcb_svg.cpp:63
 #: kicad/cli/command_export_sch_pdf.cpp:46
 #: kicad/cli/command_export_sch_svg.cpp:46
-#, fuzzy
 msgid "No drawing sheet"
-msgstr "도면 시트 플롯"
+msgstr "도면 시트 없음"
 
 #: kicad/cli/command_export_sch_netlist.cpp:36
 msgid ""
 "Netlist output format, valid options: kicadsexpr, kicadxml, cadstar, "
 "orcadpcb2, spice, spicemodel"
 msgstr ""
+"네트리스트 출력 형식, 유효한 옵션: kicadsexpr, kicadxml, cadstar, orcadpcb2, "
+"spice, spicemodel"
 
 #: kicad/cli/command_export_sch_netlist.cpp:50
 #: kicad/cli/command_export_sch_pdf.cpp:69
 #: kicad/cli/command_export_sch_pythonbom.cpp:47
 #: kicad/cli/command_export_sch_svg.cpp:69
-#, fuzzy
 msgid "Schematic file does not exist or is not accessible\n"
-msgstr "회로도 '%s'이(가) 존재하지 않습니다. 생성하시겠습니까?"
+msgstr "회로도 파일이 없거나 액세스할 수 없습니다.\n"
 
 #: kicad/cli/command_export_sch_pdf.cpp:51
 #: kicad/cli/command_export_sch_svg.cpp:51
 msgid "Avoid setting a background color (regardless of theme)"
-msgstr ""
+msgstr "배경색 설정 금지(테마 상관없음)"
 
 #: kicad/cli/command_fp_export_svg.cpp:42
 #: kicad/cli/command_sym_export_svg.cpp:44
-#, fuzzy
 msgid "Specific symbol to export within the library"
-msgstr "클립보드로 내보낼 수 없음"
+msgstr "라이브러리에서 내보낼 특정 심볼"
 
 #: kicad/cli/command_fp_export_svg.cpp:62
-#, fuzzy
 msgid "Footprint library does not exist or is not accessible\n"
-msgstr "회로도 '%s'이(가) 존재하지 않습니다. 생성하시겠습니까?"
+msgstr "풋프린트 라이브러리가 없거나 액세스할 수 없습니다.\n"
 
 #: kicad/cli/command_fp_upgrade.cpp:37
 msgid "Forces the footprint library to be resaved regardless of versioning"
-msgstr ""
+msgstr "버전 관리에 관계없이 풋프린트 라이브러리를 강제로 다시 저장함"
 
 #: kicad/cli/command_fp_upgrade.cpp:53
-#, fuzzy
 msgid "Footprint path does not exist or is not accessible\n"
-msgstr "회로도 '%s'이(가) 존재하지 않습니다. 생성하시겠습니까?"
+msgstr "풋프린트 경로가 없거나 액세스할 수 없습니다.\n"
 
 #: kicad/cli/command_sym_export_svg.cpp:52
-#, fuzzy
 msgid "Include hidden pins"
-msgstr "숨겨진 핀 표시 (&h)"
+msgstr "숨겨진 핀 포함"
 
 #: kicad/cli/command_sym_export_svg.cpp:57
-#, fuzzy
 msgid "Include hidden fields"
-msgstr "숨겨진 필드 찾기"
+msgstr "숨겨진 필드 포함"
 
 #: kicad/cli/command_sym_export_svg.cpp:76 kicad/cli/command_sym_upgrade.cpp:53
-#, fuzzy
 msgid "Symbol file does not exist or is not accessible\n"
-msgstr "회로도 '%s'이(가) 존재하지 않습니다. 생성하시겠습니까?"
+msgstr "심볼 파일이 없거나 액세스할 수 없습니다.\n"
 
 #: kicad/cli/command_sym_upgrade.cpp:37
 msgid "Forces the symbol library to be resaved regardless of versioning"
-msgstr ""
+msgstr "버전 관리에 관계없이 심볼 라이브러리를 강제로 다시 저장함"
 
 #: kicad/cli/command_version.cpp:35
 msgid "version info format (plain, commit, about)"
-msgstr ""
+msgstr "버전 정보 형식 (plain, commit, about)"
 
 #: kicad/dialogs/dialog_template_selector.cpp:149
 msgid "<h1>Template Selector</h1>"
@@ -20009,7 +19970,7 @@ msgstr ""
 
 #: kicad/kicad_cli.cpp:297
 msgid "prints version information and exits"
-msgstr ""
+msgstr "버전 정보를 출력하고 종료"
 
 #: kicad/kicad_manager_frame.cpp:213
 msgid "Project Files"
@@ -20286,13 +20247,11 @@ msgid "Pin package"
 msgstr "핀 패키지"
 
 #: kicad/pcm/dialogs/panel_package.cpp:68
-#, fuzzy
 msgid ""
 "Pinned packages don't affect available update notification and will not be "
 "updated with 'Update All' button."
-msgstr ""
-"고정된 패키지는 사용 가능한 업데이트 알림에 영향을 주지 않으며 \"모두 업데이"
-"트\" 버튼으로 업데이트되지 않습니다."
+msgstr "고정된 패키지는 사용 가능한 업데이트 알림에 영향을 주지 않으며 \"모두 "
+"업데이트\" 버튼으로 업데이트되지 않습니다."
 
 #: kicad/pcm/dialogs/panel_package.cpp:120
 msgid "Install Pending"
@@ -21481,7 +21440,6 @@ msgstr ""
 "___R<sub>2</sub> = Z<sub>0</sub> / (L&minus;1)___\n"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### Pi Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -21501,12 +21459,13 @@ msgstr ""
 "___Z<sub>in</sub>___ &#x2126 에서 원하는 입력 임피던스;<br>\n"
 "___Z<sub>out</sub>___ &#x2126 에서 원하는 출력 임피던스;<br>\n"
 "\n"
-"___L = 10<sup>a/20</sup>___<br>\n"
+"___K = V<sub>I</sub>/V<sub>O</sub> = 10<sup>a/20</sup>___<br>\n"
+"___L = K<sup>2</sup> = 10<sup>a/10</sup>___<br>\n"
 "___A = (L+1) / (L&minus;1)___<br><br>\n"
-"___R<sub>2</sub> = (L&minus;1) / 2&middot;&radic;(Z<sub>in</sub> &middot; "
-"Z<sub>out</sub> / L)___<br>\n"
-"___R<sub>1</sub> = 1 / (A/Z<sub>in</sub> &minus; 1/R<sub>2</sub>)___<br>\n"
-"___R<sub>3</sub> = 1 / (A/Z<sub>out</sub> &minus; 1/R<sub>2</sub>)___\n"
+"___R2 = (L&minus;1) / 2&middot;&radic;(Z<sub>in</sub> &middot; Z<sub>out</"
+"sub> / L)___<br>\n"
+"___R1 = 1 / (A/Z<sub>in</sub> &minus; 1/R2)___<br>\n"
+"___R3 = 1 / (A/Z<sub>out</sub> &minus; 1/R2)___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
 msgid ""
@@ -21527,7 +21486,6 @@ msgstr ""
 "___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -21547,12 +21505,13 @@ msgstr ""
 "___Z<sub>in</sub>___ &#x2126 에서 원하는 입력 임피던스;<br>\n"
 "___Z<sub>out</sub>___ &#x2126 에서 원하는 출력 임피던스;<br>\n"
 "\n"
-"___L = 10<sup>a/20</sup>___<br>\n"
-"___A = (L+1) / (L&minus;1)___<br>\n"
-"___R<sub>2</sub> = 2&middot;&radic;(L &middot; Z<sub>in</sub> &middot; "
-"Z<sub>out</sub>) / (L&minus;1)___<br>\n"
-"___R<sub>1</sub> = Z<sub>in</sub> &middot; A &minus; R<sub>2</sub>___<br>\n"
-"___R<sub>3</sub> = Z<sub>out</sub> &middot; A &minus; R<sub>2</sub>___\n"
+"___K = V<sub>I</sub>/V<sub>O</sub> = 10<sup>a/20</sup>___<br>\n"
+"___L = K<sup>2</sup> = 10<sup>a/10</sup>___<br>\n"
+"___A = (L+1) / (L&minus;1)___<br><br>\n"
+"___R2 = 2&middot;&radic;(L &middot; Z<sub>in</sub> &middot; Z<sub>out</sub>) "
+"/ (L&minus;1)___<br>\n"
+"___R1 = Z<sub>in</sub> &middot; A &minus; R2___<br>\n"
+"___R3 = Z<sub>out</sub> &middot; A &minus; R2___\n"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:33
 msgid "Note: Values are minimal values"
@@ -24878,17 +24837,15 @@ msgstr "변환 설정"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:109
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:100
 #: pcbnew/tools/convert_tool.cpp:71
-#, fuzzy
 msgid "Use centerlines"
-msgstr "inch 단위 사용"
+msgstr "중심선 사용"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:230
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:113
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:104
 #: pcbnew/tools/convert_tool.cpp:75
-#, fuzzy
 msgid "Create bounding hull"
-msgstr "로고 파일 생성"
+msgstr "경계 선체 만들기"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:234
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:118
@@ -26066,13 +26023,12 @@ msgid "Other Options"
 msgstr "다른 옵션"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:110
-#, fuzzy
 msgid "Ignore not mounted components"
-msgstr "가상 부품을 무시"
+msgstr "마운트되지 않은 부품 무시"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:111
 msgid "Do not show components not in BOM and not in place file"
-msgstr ""
+msgstr "BOM 및 배치 파일에 없는 구성요소를 표시하지 않음"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:115
 msgid "Substitute similarly named models"
@@ -29028,9 +28984,8 @@ msgstr ""
 "잘 모르겠다면 4번을 선택하세요."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:396
-#, fuzzy
 msgid "PDF Options"
-msgstr "DXF 옵션"
+msgstr "PDF 옵션"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:438
 msgid "Run DRC..."
@@ -29176,9 +29131,8 @@ msgid "arc"
 msgstr "호"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:160
-#, fuzzy
 msgid "Single-sided"
-msgstr "단일 페이지"
+msgstr "단면"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:166
 msgid "Miter radius (r):"
@@ -29949,9 +29903,8 @@ msgid ""
 msgstr "체크할 경우, 패드를 나머지 풋프린트와 관련하여 움직일 수 있습니다."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:45
-#, fuzzy
 msgid "Constrain actions to H, V, 45 degrees"
-msgstr "수평, 수직, 45도 각도로 제한"
+msgstr "수평, 수직, 45도로 제한"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:51
 msgid "Step for &rotate commands:"
@@ -29962,17 +29915,16 @@ msgid "Set increment (in degrees) for context menu and hotkey rotation."
 msgstr "컨텍스트 메뉴와 단축키 회전의 증감값을 (단위: 도) 설정합니다."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:74
-#, fuzzy
 msgid "Arc editing mode:"
-msgstr "위치 모드 :"
+msgstr "호 편집 모드:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:81
 msgid "Keep center, adjust radius"
-msgstr ""
+msgstr "중심 유지, 반경 조정"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:81
 msgid "Keep endpoints or direction of starting point"
-msgstr ""
+msgstr "끝점 또는 시작점 방향 유지"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:112
 #: pcbnew/dialogs/panel_edit_options_base.cpp:184
@@ -30093,18 +30045,15 @@ msgstr "시트 크기를 보여주기 위해 외곽선을 그립니다."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:396
 msgid "Show courtyard collisions when moving/dragging"
-msgstr ""
+msgstr "이동/끌기 시 코트야드 겹침 표시"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:400
 msgid "Auto-refill zones"
 msgstr "자동 리필 영역"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:402
-#, fuzzy
 msgid "If checked, zones will be re-filled after each edit operation"
-msgstr ""
-"체크하면, 영역 속성 대화창에서 영역의 속성을 편집한 뒤, 영역이 다시 채워집니"
-"다"
+msgstr "선택하면 각 편집 작업 후 영역이 다시 채워짐"
 
 #: pcbnew/dialogs/panel_fp_editor_color_settings.cpp:113
 msgid "Internal Layers"
@@ -30163,7 +30112,6 @@ msgid "Warning: Duplicate Nicknames"
 msgstr "경고: 중복된 닉네임"
 
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:97
-#, fuzzy
 msgid "LIbrary Format"
 msgstr "라이브러리 형식"
 
@@ -31220,7 +31168,6 @@ msgid "Check rule syntax"
 msgstr "규칙 문법을 체크"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -31593,9 +31540,9 @@ msgstr ""
 " * via\\_diameter\n"
 " * zone\\_connection\n"
 "\n"
-"참고: `clearance` 및 `hole_clearance` 규칙은 동일한 네트의 항목에 대해 실행되"
-"지 않습니다; 'physical_clearance' 및 'physical_hole_clearance' 규칙이 있습니"
-"다.\n"
+"참고: `clearance` 및 `hole_clearance` 규칙은 동일한 네트의 항목에 대해 "
+"실행되지 않습니다; 'physical_clearance' 및 'physical_hole_clearance' 규칙이 "
+"있습니다.\n"
 "<br><br>\n"
 "\n"
 "### Items\n"
@@ -31775,13 +31722,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -32714,9 +32661,9 @@ msgid "(%s clearance %s; actual %s)"
 msgstr "(%s 클리어런스 %s; 실제 값 %s)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:298
-#, fuzzy, c-format
+#, c-format
 msgid "(%s clearance %s; actual < 0)"
-msgstr "(%s 클리어런스 %s; 실제 값 %s)"
+msgstr "(%s 클리어런스 %s; 실제값 < 0)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:633
 #, c-format
@@ -33086,7 +33033,7 @@ msgstr "기판 시작 설정이 최신이 아닙니다."
 
 #: pcbnew/exporters/step/exporter_step.cpp:324
 msgid "Determining PCB data\n"
-msgstr ""
+msgstr "PCB 데이터 결정\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:329
 msgid "Build STEP data\n"
@@ -33102,9 +33049,8 @@ msgstr ""
 "니다. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:337
-#, fuzzy
 msgid "Writing STEP file\n"
-msgstr "STEP 파일 쓰기\n"
+msgstr "STEP 파일 작성\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:341
 msgid ""
@@ -33399,18 +33345,16 @@ msgid "Thermal reliefs for PTH"
 msgstr "PTH용 단열판"
 
 #: pcbnew/footprint.cpp:2919
-#, fuzzy
 msgid "Library link"
-msgstr "라이브러리 링크:"
+msgstr "라이브러리 링크"
 
 #: pcbnew/footprint.cpp:2936
 msgid "Exclude from BOM"
 msgstr "BOM에서 제외"
 
 #: pcbnew/footprint.cpp:2940 pcbnew/pad.cpp:1815 pcbnew/zone.cpp:1466
-#, fuzzy
 msgid "Overrides"
-msgstr "재정의"
+msgstr "재설정"
 
 #: pcbnew/footprint.cpp:2946 pcbnew/pad.cpp:1817 pcbnew/zone.cpp:1468
 msgid "Clearance Override"
@@ -33425,9 +33369,8 @@ msgid "Solderpaste Margin Ratio Override"
 msgstr "솔더 페이스트 간격 비율 재정의"
 
 #: pcbnew/footprint.cpp:2960 pcbnew/pad.cpp:1830
-#, fuzzy
 msgid "Zone Connection Style"
-msgstr "연결 없음"
+msgstr "영역 연결 스타일"
 
 #: pcbnew/footprint.h:236
 #, c-format
@@ -34392,11 +34335,12 @@ msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
 msgstr "레이어 %s의 (%s, %s) 구리 영역에는 연결된 패드가 없습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:861
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol %s has pins with no number.  These pins can not be matched to pads in "
 "%s."
-msgstr "심볼에 정의된 것보다 더 많은 유닛이 있습니다"
+msgstr "심볼 %s에는 번호가 없는 핀이 있습니다. 이 핀은 %s의 패드와 일치시킬 수 "
+"없습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:871
 #, c-format
@@ -34724,14 +34668,12 @@ msgid "Error loading project footprint libraries."
 msgstr "프로젝트 풋프린트 라이브러리를 불러오는 중에 오류가 발생했습니다."
 
 #: pcbnew/pcb_bitmap.cpp:238
-#, fuzzy
 msgid "Bitmap Properties"
-msgstr "핀 속성"
+msgstr "비트맵 속성"
 
 #: pcbnew/pcb_bitmap.cpp:245
-#, fuzzy
 msgid "Greyscale"
-msgstr "그레이 스케일 사진"
+msgstr "그레이스케일"
 
 #: pcbnew/pcb_dimension.cpp:298
 msgid "Prefix"
@@ -35012,9 +34954,8 @@ msgid "Track %s on %s, length %s"
 msgstr "배선 %s on %s, 길이 %s"
 
 #: pcbnew/pcb_track.cpp:1301
-#, fuzzy
 msgid "Via Properties"
-msgstr "핀 속성"
+msgstr "비아 속성"
 
 #: pcbnew/pcb_track.cpp:1311 pcbnew/widgets/pcb_properties_panel.cpp:190
 msgid "Layer Top"
@@ -35052,29 +34993,25 @@ msgid "Error creating svg file"
 msgstr "svg 파일 생성 오류"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:587 pcbnew/pcbnew_jobs_handler.cpp:658
-#, fuzzy
 msgid "Loading footprint library\n"
-msgstr "풋프린트 압축 만들기"
+msgstr "풋프린트 라이브러리 로드\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:624
-#, fuzzy
 msgid "Saving footprint library\n"
-msgstr "풋프린트 압축 만들기"
+msgstr "풋프린트 라이브러리 저장\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:643
-#, fuzzy
 msgid "Footprint library was not updated\n"
-msgstr "풋프린트 라이브러리가 활성화되지 않았습니다."
+msgstr "풋프린트 라이브러리가 업데이트되지 않음\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:707
-#, fuzzy
 msgid "The given footprint could not be found to export."
-msgstr "동일한 파일 '%s'을(를) 찾을 수 없습니다."
+msgstr "내보낼 지정된 풋프린트를 찾을 수 없습니다."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:742
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting footprint '%s' to '%s'\n"
-msgstr "풋프린트 %s을 '%s'에서 '%s'로 변경"
+msgstr "풋프린트 '%s'를 '%s'로 플로팅\n"
 
 #: pcbnew/pcbnew_printout.cpp:113
 msgid "Multiple Layers"
@@ -37637,7 +37574,7 @@ msgstr "다음을 위한 규칙:"
 
 #: pcbnew/tools/convert_tool.cpp:67
 msgid "Copy line width of first object"
-msgstr ""
+msgstr "첫 번째 개체의 선 너비 복사"
 
 #: pcbnew/tools/convert_tool.cpp:176
 msgid "Create from Selection"
@@ -37850,25 +37787,21 @@ msgid "Some of the track segments could not be filleted."
 msgstr "일부 배선 세그먼트를 모깍기 할 수 없습니다."
 
 #: pcbnew/tools/edit_tool.cpp:1155
-#, fuzzy
 msgid "A shape with least two lines must be selected."
-msgstr "최소한 두 개의 직선 배선 세그먼트가 선택되어야 합니다."
+msgstr "두 개 이상의 선이 있는 도형을 선택해야 합니다."
 
 #: pcbnew/tools/edit_tool.cpp:1159 pcbnew/tools/edit_tool.cpp:1326
 #: pcbnew/tools/pcb_actions.cpp:368
-#, fuzzy
 msgid "Fillet Lines"
-msgstr "영역 채우기"
+msgstr "모깍기 라인"
 
 #: pcbnew/tools/edit_tool.cpp:1329
-#, fuzzy
 msgid "Unable to fillet the selected lines."
-msgstr "선택한 배선 세그먼트를 모깍기 할 수 없습니다."
+msgstr "선택한 선을 모깎기할 수 없습니다."
 
 #: pcbnew/tools/edit_tool.cpp:1331
-#, fuzzy
 msgid "Some of the lines could not be filleted."
-msgstr "일부 배선 세그먼트를 모깍기 할 수 없습니다."
+msgstr "일부 선을 모깎기할 수 없습니다."
 
 #: pcbnew/tools/edit_tool.cpp:1499
 msgid "Rotate"
@@ -37904,18 +37837,18 @@ msgid "Pack footprints"
 msgstr "풋프린트 잠금"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:354
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Click to place %s (item %ld of %ld)\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
-"패드 %s%d을(를) 클릭\n"
-"<esc>를 눌러 취소, 더블 클릭으로 커밋"
+"클릭하여 배치 %s(항목 %ld의 %ld)\n"
+"<esc> 모두 취소; 완료는 더블클릭"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:367
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad %s"
-msgstr "%s와%s"
+msgstr "%s 패드 %s"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:404
 msgid "Select reference point for move..."
@@ -37963,13 +37896,13 @@ msgid "Push Pad Settings"
 msgstr "푸시 패드 설정"
 
 #: pcbnew/tools/pad_tool.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Click on pad %s%d\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
-"패드 %s%d을(를) 클릭\n"
-"<esc>를 눌러 취소, 더블 클릭으로 커밋"
+"패드 클릭 %s %d\n"
+"모두 취소는 <esc>; 더블클릭은 완료"
 
 #: pcbnew/tools/pad_tool.cpp:362 pcbnew/tools/pad_tool.cpp:458
 msgid "Renumber pads"
@@ -37998,27 +37931,24 @@ msgid "Edit pad shapes"
 msgstr "패드 모양 편집"
 
 #: pcbnew/tools/pcb_actions.cpp:48
-#, fuzzy
 msgid "Create Polygon from Selection..."
-msgstr "선택 범위에서 다각형 생성"
+msgstr "선택에서 다각형 만들기..."
 
 #: pcbnew/tools/pcb_actions.cpp:48
 msgid "Creates a graphic polygon from the selection"
 msgstr "선택 영역에서 그래픽 다각형 생성"
 
 #: pcbnew/tools/pcb_actions.cpp:53
-#, fuzzy
 msgid "Create Zone from Selection..."
-msgstr "선택 범위에서 영역 생성"
+msgstr "선택 범위에서 영역 만들기..."
 
 #: pcbnew/tools/pcb_actions.cpp:53
 msgid "Creates a copper zone from the selection"
 msgstr "선택 항목에서 구리 영역 생성"
 
 #: pcbnew/tools/pcb_actions.cpp:58
-#, fuzzy
 msgid "Create Rule Area from Selection..."
-msgstr "선택 범위에서 규칙 영역 생성"
+msgstr "선택 범위에서 규칙 영역 만들기..."
 
 #: pcbnew/tools/pcb_actions.cpp:58
 msgid "Creates a rule area from the selection"
@@ -38325,9 +38255,8 @@ msgid ""
 msgstr "선택한 풋프린트를 참조별로 정렬하고 크기에 따라 포장하고 이동을 시작함"
 
 #: pcbnew/tools/pcb_actions.cpp:355
-#, fuzzy
 msgid "Skip item"
-msgstr "잠긴 항목 건너뛰기"
+msgstr "항목 건너뛰기"
 
 #: pcbnew/tools/pcb_actions.cpp:360
 msgid "Change Track Width"
@@ -38342,9 +38271,8 @@ msgid "Adds arcs tangent to the selected straight track segments"
 msgstr "선택한 직선 배선 세그먼트에 호 탄젠트를 추가합니다"
 
 #: pcbnew/tools/pcb_actions.cpp:368
-#, fuzzy
 msgid "Adds arcs tangent to the selected lines"
-msgstr "선택한 직선 배선 세그먼트에 호 탄젠트를 추가합니다"
+msgstr "선택한 선에 접하는 호 탄젠트 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:373
 msgid "Delete Full Track"
@@ -38898,9 +38826,8 @@ msgid "Switch to Schematic Editor"
 msgstr "회로도 편집기로 전환"
 
 #: pcbnew/tools/pcb_actions.cpp:830
-#, fuzzy
 msgid "Open in schematic editor"
-msgstr "보드 열기"
+msgstr "회로도 편집기에서 열기"
 
 #: pcbnew/tools/pcb_actions.cpp:839
 msgid "Local Ratsnest"
@@ -38923,14 +38850,12 @@ msgid "Show/hide the appearance manager"
 msgstr "형상 관리자 표시/숨기기"
 
 #: pcbnew/tools/pcb_actions.cpp:865
-#, fuzzy
 msgid "Show Properties Manager"
-msgstr "속성 패널 표시"
+msgstr "속성 관리자 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:865
-#, fuzzy
 msgid "Show/hide the properties manager"
-msgstr "속성 패널 표시/숨기기"
+msgstr "속성 관리자 표시/숨기기"
 
 #: pcbnew/tools/pcb_actions.cpp:870
 msgid "Flip Board View"
@@ -39319,21 +39244,21 @@ msgstr "선택한 항목을 수직 축을 따라 배치"
 
 #: pcbnew/tools/pcb_actions.cpp:1256
 msgid "Keep arc center, adjust radius"
-msgstr ""
+msgstr "아크 중심 유지, 반경 조정"
 
 #: pcbnew/tools/pcb_actions.cpp:1257
 msgid "Switch arc editing mode to keep center, adjust radius and endpoints"
-msgstr ""
+msgstr "호 편집 모드를 전환하여 중심을 유지하고 반지름과 끝점을 조정함"
 
 #: pcbnew/tools/pcb_actions.cpp:1262
 msgid "Keep arc endpoints or direction of starting point"
-msgstr ""
+msgstr "끝점 또는 시작점 방향 유지"
 
 #: pcbnew/tools/pcb_actions.cpp:1263
 msgid ""
 "Switch arc editing mode to keep endpoints, or to keep direction of the other "
 "point"
-msgstr ""
+msgstr "호 편집 모드를 전환하여 끝점을 유지하거나 다른 점의 방향을 유지함"
 
 #: pcbnew/tools/pcb_actions.cpp:1282
 msgid "Position Relative To..."
@@ -39426,16 +39351,14 @@ msgid "Remove items from the selection by type"
 msgstr "선택한 항목에서 특정 유형의 항목 제거"
 
 #: pcbnew/tools/pcb_actions.cpp:1386
-#, fuzzy
 msgid "Draft Fill Selected Zone(s)"
-msgstr "선택한 영역의 구리 채우기 업데이트"
+msgstr "선택 영역 초안 채우기"
 
 #: pcbnew/tools/pcb_actions.cpp:1387
-#, fuzzy
 msgid ""
 "Update copper fill of selected zone(s) without regard to other interacting "
 "zones"
-msgstr "선택한 영역의 구리 채우기 업데이트"
+msgstr "다른 상호 작용 영역에 관계없이 선택한 영역의 구리 채우기"
 
 #: pcbnew/tools/pcb_actions.cpp:1393 pcbnew/tools/zone_filler_tool.cpp:162
 msgid "Fill All Zones"
@@ -39446,9 +39369,8 @@ msgid "Update copper fill of all zones"
 msgstr "모든 영역의 구리 채우기를 업데이트"
 
 #: pcbnew/tools/pcb_actions.cpp:1401
-#, fuzzy
 msgid "Unfill Selected Zone(s)"
-msgstr "모든 영역 채우기 삭제"
+msgstr "선택한 영역 채우기 해제"
 
 #: pcbnew/tools/pcb_actions.cpp:1401
 msgid "Remove copper fill from selected zone(s)"
@@ -39813,7 +39735,7 @@ msgstr "설정 열기"
 msgid ""
 "Automatic refill of zones can be turned off in Preferences if it becomes too "
 "slow."
-msgstr ""
+msgstr "너무 느려지면 기본 설정에서 영역 자동 채우기를 끌 수 있습니다."
 
 #: pcbnew/tools/zone_filler_tool.cpp:331
 msgid "Fill Zone"
@@ -39988,9 +39910,8 @@ msgid "Show footprint and text origins as a cross"
 msgstr "풋프린트와 텍스트 원점을 십자로 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
-#, fuzzy
 msgid "Locked Item Shadow"
-msgstr "잠긴 항목"
+msgstr "잠긴 항목 그림자"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "Show a shadow marker on locked items"
@@ -40041,6 +39962,9 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through presets in the "
 "popup."
 msgstr ""
+"레이어 가시성 조합을 저장하고 복원합니다.\n"
+"%s+Tab을 사용하여 선택기를 활성화합니다.\n"
+"%s를 누른 상태에서 연속 탭을 누르면 팝업의 사전 설정이 순환됩니다."
 
 #: pcbnew/widgets/appearance_controls.cpp:443
 #, c-format
@@ -40050,6 +39974,9 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
+"뷰 방향과 확대/축소를 저장하고 복원합니다.\n"
+"%s+Tab을 사용하여 선택기를 활성화합니다.\n"
+"%s를 누른 상태에서 연속 탭하면 팝업의 뷰포트를 순환합니다."
 
 #: pcbnew/widgets/appearance_controls.cpp:458
 msgid "Filter nets"
@@ -40416,9 +40343,9 @@ msgid "Show or hide ratsnest for nets in %s"
 msgstr "%s 내의 네트 연결선 표시 또는 숨기기"
 
 #: pcbnew/widgets/appearance_controls.cpp:2475
-#, fuzzy, c-format
+#, c-format
 msgid "Presets (%s+Tab):"
-msgstr "사전 설정 (Ctrl+Tab):"
+msgstr "사전 설정(%s+탭):"
 
 #: pcbnew/widgets/appearance_controls.cpp:2497
 msgid "Save preset..."
@@ -40541,9 +40468,8 @@ msgid "Textbox"
 msgstr "텍스트 상자"
 
 #: pcbnew/widgets/search_handlers.cpp:317
-#, fuzzy
 msgid "No Net"
-msgstr "새 네트"
+msgstr "네트 없음"
 
 #: pcbnew/zone.cpp:528
 msgid "Cutout"
@@ -40631,9 +40557,8 @@ msgid "Zone %s on %s"
 msgstr "영역 %s (%s 상의)"
 
 #: pcbnew/zone.cpp:1473
-#, fuzzy
 msgid "Minimum Width"
-msgstr "최소 폭:"
+msgstr "최소 폭"
 
 #: pcbnew/zone.cpp:1478
 msgid "Pad Connections"
