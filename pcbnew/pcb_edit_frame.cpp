@@ -41,6 +41,7 @@
 #include <dialog_board_setup.h>
 #include <invoke_pcb_dialog.h>
 #include <board.h>
+#include <pcb_group.h>
 #include <board_design_settings.h>
 #include <footprint.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
@@ -1979,6 +1980,234 @@ int PCB_EDIT_FRAME::ShowExchangeFootprintsDialog( FOOTPRINT* aFootprint, bool aU
     DIALOG_EXCHANGE_FOOTPRINTS dialog( this, aFootprint, aUpdateMode, aSelectedMode );
 
     return dialog.ShowQuasiModal();
+}
+
+
+namespace {
+
+
+void processTextItem( const FP_TEXT& aSrc, FP_TEXT& aDest,
+                      bool resetText, bool resetTextLayers, bool resetTextEffects,
+                      bool* aUpdated )
+{
+    if( resetText )
+        *aUpdated |= aSrc.GetText() != aDest.GetText();
+    else
+        aDest.SetText( aSrc.GetText() );
+
+    if( resetTextLayers )
+    {
+        *aUpdated |= aSrc.GetLayer() != aDest.GetLayer();
+        *aUpdated |= aSrc.IsVisible() != aDest.IsVisible();
+    }
+    else
+    {
+        aDest.SetLayer( aSrc.GetLayer() );
+        aDest.SetVisible( aSrc.IsVisible() );
+    }
+
+    if( resetTextEffects )
+    {
+        *aUpdated |= aSrc.GetHorizJustify() != aDest.GetHorizJustify();
+        *aUpdated |= aSrc.GetVertJustify() != aDest.GetVertJustify();
+        *aUpdated |= aSrc.GetTextSize() != aDest.GetTextSize();
+        *aUpdated |= aSrc.GetTextThickness() != aDest.GetTextThickness();
+        *aUpdated |= aSrc.GetTextAngle() != aDest.GetTextAngle();
+        *aUpdated |= aSrc.GetPos0() != aDest.GetPos0();
+    }
+    else
+    {
+        // Careful: the visible bit and position are also set by SetAttributes()
+        bool visible = aDest.IsVisible();
+        aDest.SetAttributes( aSrc );
+        aDest.SetVisible( visible );
+        aDest.SetPos0( aSrc.GetPos0() );
+    }
+
+    aDest.SetLocked( aSrc.IsLocked() );
+}
+
+
+FP_TEXT* getMatchingTextItem( FP_TEXT* aRefItem, FOOTPRINT* aFootprint )
+{
+    std::vector<FP_TEXT*> candidates;
+
+    for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
+    {
+        FP_TEXT* candidate = dyn_cast<FP_TEXT*>( item );
+
+        if( candidate && candidate->GetText() == aRefItem->GetText() )
+            candidates.push_back( candidate );
+    }
+
+    if( candidates.size() == 0 )
+        return nullptr;
+
+    if( candidates.size() == 1 )
+        return candidates[0];
+
+    // Try refining the match by layer
+    std::vector<FP_TEXT*> candidatesOnSameLayer;
+
+    for( FP_TEXT* candidate : candidates )
+    {
+        if( candidate->GetLayer() == aRefItem->GetLayer() )
+            candidatesOnSameLayer.push_back( candidate );
+    }
+
+    if( candidatesOnSameLayer.size() == 1 )
+        return candidatesOnSameLayer[0];
+
+    // Last ditch effort: refine by position
+    std::vector<FP_TEXT*> candidatesAtSamePos;
+
+    for( FP_TEXT* candidate : candidatesOnSameLayer.size() ? candidatesOnSameLayer : candidates )
+    {
+        if( candidate->GetPos0() == aRefItem->GetPos0() )
+            candidatesAtSamePos.push_back( candidate );
+    }
+
+    if( candidatesAtSamePos.size() > 0 )
+        return candidatesAtSamePos[0];
+    else if( candidatesOnSameLayer.size() > 0 )
+        return candidatesOnSameLayer[0];
+    else
+        return candidates[0];
+}
+
+
+}
+
+
+void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
+                                        BOARD_COMMIT& aCommit, bool deleteExtraTexts,
+                                        bool resetTextLayers, bool resetTextEffects,
+                                        bool resetFabricationAttrs, bool reset3DModels,
+                                        bool* aUpdated )
+{
+    PCB_GROUP* parentGroup = aExisting->GetParentGroup();
+    bool       dummyBool   = false;
+
+    if( !aUpdated )
+        aUpdated = &dummyBool;
+
+    if( parentGroup )
+    {
+        parentGroup->RemoveItem( aExisting );
+        parentGroup->AddItem( aNew );
+    }
+
+    aNew->SetParent( GetBoard() );
+
+    PlaceFootprint( aNew, false );
+
+    // PlaceFootprint will move the footprint to the cursor position, which we don't want.  Copy
+    // the original position across.
+    aNew->SetPosition( aExisting->GetPosition() );
+
+    if( aNew->GetLayer() != aExisting->GetLayer() )
+        aNew->Flip( aNew->GetPosition(), GetPcbNewSettings()->m_FlipLeftRight );
+
+    if( aNew->GetOrientation() != aExisting->GetOrientation() )
+        aNew->SetOrientation( aExisting->GetOrientation() );
+
+    aNew->SetLocked( aExisting->IsLocked() );
+
+    // Now transfer the net info from "old" pads to the new footprint
+    for( PAD* pad : aNew->Pads() )
+    {
+        PAD* pad_model = nullptr;
+
+        // Pads with no copper are never connected to a net
+        if( !pad->IsOnCopperLayer() )
+        {
+            pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
+            continue;
+        }
+
+        // Pads with no numbers are never connected to a net
+        if( pad->GetNumber().IsEmpty() )
+        {
+            pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
+            continue;
+        }
+
+        // Search for a similar pad on a copper layer, to reuse net info
+        PAD* last_pad = nullptr;
+
+        while( true )
+        {
+            pad_model = aExisting->FindPadByNumber( pad->GetNumber(), last_pad );
+
+            if( !pad_model )
+                break;
+
+            if( pad_model->IsOnCopperLayer() )     // a candidate is found
+                break;
+
+            last_pad = pad_model;
+        }
+
+        if( pad_model )
+        {
+            pad->SetLocalRatsnestVisible( pad_model->GetLocalRatsnestVisible() );
+            pad->SetPinFunction( pad_model->GetPinFunction() );
+            pad->SetPinType( pad_model->GetPinType() );
+        }
+
+        pad->SetNetCode( pad_model ? pad_model->GetNetCode() : NETINFO_LIST::UNCONNECTED );
+    }
+
+    // Copy reference
+    processTextItem( aExisting->Reference(), aNew->Reference(),
+                     // never reset reference text
+                     false,
+                     resetTextLayers, resetTextEffects, aUpdated );
+
+    // Copy value
+    processTextItem( aExisting->Value(), aNew->Value(),
+                     // reset value text only when it is a proxy for the footprint ID
+                     // (cf replacing value "MountingHole-2.5mm" with "MountingHole-4.0mm")
+                     aExisting->GetValue() == aExisting->GetFPID().GetLibItemName(),
+                     resetTextLayers, resetTextEffects, aUpdated );
+
+    // Copy fields in accordance with the reset* flags
+    for( BOARD_ITEM* item : aExisting->GraphicalItems() )
+    {
+        FP_TEXT* srcItem = dyn_cast<FP_TEXT*>( item );
+
+        if( srcItem )
+        {
+            FP_TEXT* destItem = getMatchingTextItem( srcItem, aNew );
+
+            if( destItem )
+            {
+                processTextItem( *srcItem, *destItem, false, resetTextLayers, resetTextEffects,
+                                 aUpdated );
+            }
+            else if( !deleteExtraTexts )
+            {
+                aNew->Add( new FP_TEXT( *srcItem ) );
+            }
+        }
+    }
+
+    if( !resetFabricationAttrs )
+        aNew->SetAttributes( aExisting->GetAttributes() );
+
+    // Copy 3D model settings in accordance with the reset* flag
+    if( !reset3DModels )
+        aNew->Models() = aExisting->Models();  // Linked list of 3D models.
+
+    // Updating other parameters
+    const_cast<KIID&>( aNew->m_Uuid ) = aExisting->m_Uuid;
+    aNew->SetProperties( aExisting->GetProperties() );
+    aNew->SetPath( aExisting->GetPath() );
+
+    aCommit.Remove( aExisting );
+    aCommit.Add( aNew );
+
+    aNew->ClearFlags();
 }
 
 
