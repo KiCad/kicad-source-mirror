@@ -129,7 +129,7 @@ public:
     PGPROPERTY_COLORENUM( const wxString& aLabel, wxString& aName, wxPGChoices* aChoices,
                           int aValue = 0 ) :
             wxEnumProperty( aLabel, aName, *aChoices, aValue ),
-            m_colorFunc( []( int aValue ) { return wxNullColour; } )
+            m_colorFunc( []( int aDummy ) { return wxNullColour; } )
     {
         SetFlag( wxPG_PROP_CUSTOMIMAGE );
     }
