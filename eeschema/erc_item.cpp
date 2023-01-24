@@ -360,7 +360,7 @@ void ERC_TREE_MODEL::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
         if( ercItem->AuxItemHasSheetPath() )
             ercItem->GetAuxItemSheetPath().UpdateAllScreenReferences();
 
-        EDA_ITEM* item = m_editFrame->GetItem( rcItem->GetMainItemID() );
+        EDA_ITEM* item = m_editFrame->GetItem( rcItem->GetAuxItemID() );
         aVariant = item->GetItemDescription( m_editFrame );
 
         // Reset reference fields to current visible sheet
