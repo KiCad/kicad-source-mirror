@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-20 09:12-0800\n"
-"PO-Revision-Date: 2023-01-22 16:34+0000\n"
+"PO-Revision-Date: 2023-01-25 00:33+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/kicad/"
 "master-source/et/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.1\n"
+"X-Generator: Weblate 4.16-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -6389,7 +6389,7 @@ msgstr ""
 #: common/widgets/gal_options_panel.cpp:156
 #: common/widgets/gal_options_panel.cpp:172
 msgid "px"
-msgstr ""
+msgstr "px"
 
 #: common/widgets/gal_options_panel.cpp:146
 msgid "Min grid spacing:"
@@ -8988,7 +8988,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:44
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:45
 msgid "ALL"
-msgstr ""
+msgstr "Kõik"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:46
 msgid "Standard"
@@ -9043,7 +9043,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:132
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:100
 msgid "De Morgan"
-msgstr ""
+msgstr "De Morgan"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:826
 #: eeschema/dialogs/dialog_lib_shape_properties.cpp:72
@@ -9096,7 +9096,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:87
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:133
 msgid "0"
-msgstr ""
+msgstr "0"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:37
 msgid "Pin count:"
@@ -9146,7 +9146,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:176
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:208
 msgid "Combo!"
-msgstr ""
+msgstr "Combo!"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:47
 msgid ""
@@ -9162,7 +9162,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:55
 msgid "U"
-msgstr ""
+msgstr "U"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:58
 msgid "Number of units per package:"
@@ -9345,7 +9345,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:154
 msgid "<None>"
-msgstr ""
+msgstr "<Ei ole>"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:155
 msgid ""
@@ -9716,29 +9716,29 @@ msgstr ""
 #: eeschema/dialogs/dialog_plot_schematic.cpp:246
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:76
 msgid "A5"
-msgstr ""
+msgstr "A5"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:247
 #: eeschema/dialogs/dialog_plot_schematic.cpp:262
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:60
 msgid "A4"
-msgstr ""
+msgstr "A4"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:248
 msgid "A3"
-msgstr ""
+msgstr "A3"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:249
 msgid "A2"
-msgstr ""
+msgstr "A2"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:250
 msgid "A1"
-msgstr ""
+msgstr "A1"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:251
 msgid "A0"
-msgstr ""
+msgstr "A0"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:252
 #: eeschema/dialogs/dialog_plot_schematic.cpp:263
@@ -9751,23 +9751,23 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:120
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:286
 msgid "A"
-msgstr ""
+msgstr "A"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:253
 msgid "B"
-msgstr ""
+msgstr "B"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:254
 msgid "C"
-msgstr ""
+msgstr "C"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:255
 msgid "D"
-msgstr ""
+msgstr "D"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:256
 msgid "E"
-msgstr ""
+msgstr "E"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:411
 #, c-format
@@ -9800,30 +9800,30 @@ msgstr ""
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:42
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
 msgid "Postscript"
-msgstr ""
+msgstr "Postscript"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:42
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:84
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
 msgid "PDF"
-msgstr ""
+msgstr "PDF"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:42
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:84
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
 msgid "SVG"
-msgstr ""
+msgstr "SVG"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:42
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:84
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
 msgid "DXF"
-msgstr ""
+msgstr "DXF"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:42
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
 msgid "HPGL"
-msgstr ""
+msgstr "HPGL"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:56
 msgid "Page size:"
