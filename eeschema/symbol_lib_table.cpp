@@ -149,8 +149,7 @@ void SYMBOL_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
             in->NeedNUMBER( "version" );
             m_version = std::stoi( in->CurText() );
             in->NeedRIGHT();
-            in->NeedLEFT();
-            tok = in->NextTok();
+            continue;
         }
 
         if( tok != T_lib )
