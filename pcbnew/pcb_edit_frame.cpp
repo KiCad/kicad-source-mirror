@@ -1098,11 +1098,7 @@ void PCB_EDIT_FRAME::doCloseWindow()
 
     // Remove the auto save file on a normal close of Pcbnew.
     if( fn.FileExists() && !wxRemoveFile( fn.GetFullPath() ) )
-    {
-        wxString msg = wxString::Format( _( "The auto save file '%s' could not be removed!" ),
-                                         fn.GetFullPath() );
-        wxMessageBox( msg, Pgm().App().GetAppName(), wxOK | wxICON_ERROR, this );
-    }
+        wxLogTrace( traceAutoSave, wxT( "The auto save file could not be removed!" ) );
 
     // Make sure local settings are persisted
     SaveProjectSettings();
