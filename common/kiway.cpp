@@ -382,12 +382,15 @@ KIWAY_PLAYER* KIWAY::GetPlayerFrame( FRAME_T aFrameType )
 
     wxWindow* frame = wxWindow::FindWindowById( storedId );
 
+    // sanity check to ensure we didn't somehow get a bad window
+    KIWAY_PLAYER* player = dynamic_cast<KIWAY_PLAYER*>( frame );
+
     // Since wxWindow::FindWindow*() is not cheap (especially if the window does not exist),
     // clear invalid entries to save CPU on repeated calls that do not lead to frame creation
-    if( !frame )
+    if( !frame || !player )
         m_playerFrameId[aFrameType].compare_exchange_strong( storedId, wxID_NONE );
 
-    return static_cast<KIWAY_PLAYER*>( frame );
+    return player;
 }
 
 
