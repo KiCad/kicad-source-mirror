@@ -134,6 +134,7 @@ add_library( gerbview_kiface_objects OBJECT
     ${WIDGET_SRCS}
     ${GERBVIEW_EXTRA_SRCS}
     )
+
 target_link_libraries( gerbview_kiface_objects
     PUBLIC
         common
@@ -141,18 +142,23 @@ target_link_libraries( gerbview_kiface_objects
     )
 
 # the main gerbview program, in DSO form.
-add_library( gerbview_kiface MODULE $<TARGET_OBJECTS:gerbview_kiface_objects> )
+add_library( gerbview_kiface MODULE )
+
 set_target_properties( gerbview_kiface PROPERTIES
     OUTPUT_NAME     gerbview
     PREFIX          ${KIFACE_PREFIX}
     SUFFIX          ${KIFACE_SUFFIX}
     )
+
 target_link_libraries( gerbview_kiface
-    nlohmann_json
-    gal
-    common
-    ${wxWidgets_LIBRARIES}
+    PRIVATE
+        nlohmann_json
+        gal
+        common
+        gerbview_kiface_objects
+        ${wxWidgets_LIBRARIES}
     )
+
 set_source_files_properties( gerbview.cpp PROPERTIES
     # The KIFACE is in gerbview.cpp, export it:
     COMPILE_DEFINITIONS     "BUILD_KIWAY_DLL;COMPILING_DLL"
