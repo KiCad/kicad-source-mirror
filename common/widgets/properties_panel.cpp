@@ -225,43 +225,11 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
             continue;
 
         // Either determine the common value for a property or "<...>" to indicate multiple values
-        bool available = true;
-        bool writeable = true;
-        bool different = false;
+        bool available;
+        bool writeable;
         wxVariant commonVal;
 
-        for( EDA_ITEM* item : aSelection )
-        {
-            if( !propMgr.IsAvailableFor( TYPE_HASH( *item ), property, item ) )
-            {
-                available = false;
-                break; // there is an item that does not have this property, so do not display it
-            }
-
-            // If read-only for any of the selection, read-only for the whole selection.
-            if( !property->Writeable( item ) )
-                writeable = false;
-
-            wxVariant value;
-
-            if( getItemValue( item, property, value ) )
-            {
-                // Null value indicates different property values between items
-                if( !different && !commonVal.IsNull() && value != commonVal )
-                {
-                    different = true;
-                    commonVal.MakeNull();
-                }
-                else if( !different )
-                {
-                    commonVal = value;
-                }
-            }
-            else
-            {
-                available = false;
-            }
-        }
+        available = extractValueAndWritability( aSelection, property, commonVal, writeable );
 
         if( available )
         {
@@ -331,6 +299,54 @@ bool PROPERTIES_PANEL::getItemValue( EDA_ITEM* aItem, PROPERTY_BASE* aProperty, 
         wxFAIL_MSG( wxS( "Could not convert wxAny to wxVariant" ) );
 
     return converted;
+}
+
+
+bool PROPERTIES_PANEL::extractValueAndWritability( const SELECTION& aSelection,
+                                                   PROPERTY_BASE* aProperty,
+                                                   wxVariant& aValue, bool& aWritable )
+{
+    PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+    propMgr.SetUnits( m_frame->GetUserUnits() );
+    propMgr.SetTransforms( &m_frame->GetOriginTransforms() );
+
+    bool different = false;
+    wxVariant commonVal;
+
+    aWritable = true;
+
+    for( EDA_ITEM* item : aSelection )
+    {
+        if( !propMgr.IsAvailableFor( TYPE_HASH( *item ), aProperty, item ) )
+            return false;
+
+        // If read-only for any of the selection, read-only for the whole selection.
+        if( !aProperty->Writeable( item ) )
+            aWritable = false;
+
+        wxVariant value;
+
+        if( getItemValue( item, aProperty, value ) )
+        {
+            // Null value indicates different property values between items
+            if( !different && !aValue.IsNull() && value != aValue )
+            {
+                different = true;
+                aValue.MakeNull();
+            }
+            else if( !different )
+            {
+                aValue = value;
+            }
+        }
+        else
+        {
+            // getItemValue returned false -- not available for this item
+            return false;
+        }
+    }
+
+    return true;
 }
 
 

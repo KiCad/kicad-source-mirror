@@ -111,7 +111,6 @@ void PCB_PROPERTIES_PANEL::AfterCommit()
 
 void PCB_PROPERTIES_PANEL::updatePropertyValues( const SELECTION& aSelection )
 {
-    // TODO: Refactor to reduce duplication with PROPERTIES_PANEL::rebuildProperties
     BOARD_ITEM* firstItem = static_cast<BOARD_ITEM*>( aSelection.Front() );
 
     for( wxPropertyGridIterator it = m_grid->GetIterator(); !it.AtEnd(); it.Next() )
@@ -123,29 +122,10 @@ void PCB_PROPERTIES_PANEL::updatePropertyValues( const SELECTION& aSelection )
         wxCHECK2( property, continue );
 
         bool writeable = true;
-        bool different = false;
         wxVariant commonVal;
 
-        for( EDA_ITEM* edaItem : aSelection )
-        {
-            writeable &= property->Writeable( edaItem );
-
-            wxVariant value = commonVal;
-
-            if( getItemValue( edaItem, property, value ) )
-            {
-                // Null value indicates different property values between items
-                if( !different && !commonVal.IsNull() && value != commonVal )
-                {
-                    different = true;
-                    commonVal.MakeNull();
-                }
-                else if( !different )
-                {
-                    commonVal = value;
-                }
-            }
-        }
+        // Availablility of the property should not be changing here
+        wxASSERT( extractValueAndWritability( aSelection, property, commonVal, writeable ) );
 
         pgProp->SetValue( commonVal );
         pgProp->Enable( writeable );
