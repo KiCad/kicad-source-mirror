@@ -775,7 +775,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         lwbTool->TrimOverLappingWires( &selectionCopy );
         lwbTool->AddJunctionsIfNeeded( &selectionCopy );
 
-        m_frame->RecalculateConnections( LOCAL_CLEANUP );
+        m_frame->SchematicCleanUp();
         m_frame->TestDanglingEnds();
 
         m_frame->OnModify();
@@ -969,7 +969,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             lwbTool->TrimOverLappingWires( &selectionCopy );
             lwbTool->AddJunctionsIfNeeded( &selectionCopy );
 
-            m_frame->RecalculateConnections( LOCAL_CLEANUP );
+            m_frame->SchematicCleanUp();
             m_frame->TestDanglingEnds();
         }
 
@@ -1155,7 +1155,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
         lwbTool->TrimOverLappingWires( &newItems );
         lwbTool->AddJunctionsIfNeeded( &newItems );
 
-        m_frame->RecalculateConnections( LOCAL_CLEANUP );
+        m_frame->SchematicCleanUp();
         m_frame->TestDanglingEnds();
     }
 

@@ -1338,7 +1338,7 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_SCREEN* aScreen, SCH_ITEM* 
         }
 
         // Update connectivity info for new item
-        if( !aItem->IsMoving() )
+        if( !aItem->IsMoving() && aItem->IsConnectable() )
             RecalculateConnections( LOCAL_CLEANUP );
     }
 
