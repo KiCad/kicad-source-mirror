@@ -227,6 +227,7 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
         // Either determine the common value for a property or "<...>" to indicate multiple values
         bool available = true;
         bool writeable = true;
+        bool different = false;
         wxVariant commonVal;
 
         for( EDA_ITEM* item : aSelection )
@@ -241,15 +242,20 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
             if( !property->Writeable( item ) )
                 writeable = false;
 
-            wxVariant value = commonVal;
+            wxVariant value;
 
             if( getItemValue( item, property, value ) )
             {
                 // Null value indicates different property values between items
-                if( !commonVal.IsNull() && value != commonVal )
+                if( !different && !commonVal.IsNull() && value != commonVal )
+                {
+                    different = true;
                     commonVal.MakeNull();
-                else
+                }
+                else if( !different )
+                {
                     commonVal = value;
+                }
             }
             else
             {

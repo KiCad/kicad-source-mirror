@@ -123,6 +123,7 @@ void PCB_PROPERTIES_PANEL::updatePropertyValues( const SELECTION& aSelection )
         wxCHECK2( property, continue );
 
         bool writeable = true;
+        bool different = false;
         wxVariant commonVal;
 
         for( EDA_ITEM* edaItem : aSelection )
@@ -134,10 +135,15 @@ void PCB_PROPERTIES_PANEL::updatePropertyValues( const SELECTION& aSelection )
             if( getItemValue( edaItem, property, value ) )
             {
                 // Null value indicates different property values between items
-                if( !commonVal.IsNull() && value != commonVal )
+                if( !different && !commonVal.IsNull() && value != commonVal )
+                {
+                    different = true;
                     commonVal.MakeNull();
-                else
+                }
+                else if( !different )
+                {
                     commonVal = value;
+                }
             }
         }
 
