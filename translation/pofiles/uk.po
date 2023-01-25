@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-20 09:12-0800\n"
-"PO-Revision-Date: 2023-01-25 00:33+0000\n"
+"PO-Revision-Date: 2023-01-25 12:27+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -10317,7 +10317,7 @@ msgstr "Відкрити файл після креслення"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:163
 msgid "Open output file with associated application after successful plot"
-msgstr "Відкрийте вихідний файл пов’язаною програмою після успішного створення"
+msgstr "Відкрийте вихідний файл пов’язаною програмою після успішного креслення"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:89
 msgid "Plot Schematic Options"
@@ -10343,7 +10343,7 @@ msgstr "Друкувати (або ні) рамку сторінки."
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:46
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:209
 msgid "Print background color"
-msgstr "Друкувати колір тла"
+msgstr "Друкувати колір фону"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:49
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:214
@@ -10376,7 +10376,7 @@ msgstr "Імʼя символу"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:126
 msgid "Action Taken"
-msgstr "Вжиті заходи"
+msgstr "Вжити дію"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:130
 #: eeschema/dialogs/dialog_sim_model_base.cpp:255
@@ -10389,7 +10389,7 @@ msgstr "Налаштування"
 #: eeschema/dialogs/dialog_rescue_each.cpp:150
 #: eeschema/dialogs/dialog_rescue_each.cpp:300
 msgid "Rescue Symbols"
-msgstr "Порятунок Символів"
+msgstr "Відновити символи"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:151
 msgid "Skip Symbol Rescue"
