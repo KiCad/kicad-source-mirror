@@ -40,6 +40,7 @@ public:
     virtual wxString GetResultCell( int row, int col ) = 0;
 
     virtual void SelectItems( std::vector<long>& aItemRows ) {}
+    virtual void ActivateItem( long aItemRow ) {}
 
 protected:
     wxString                              m_name;

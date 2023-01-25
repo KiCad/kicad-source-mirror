@@ -43,6 +43,7 @@ public:
 protected:
     wxString OnGetItemText( long item, long column ) const override;
     void     OnItemSelected( wxListEvent& aEvent );
+    void     OnItemActivated( wxListEvent& aEvent );
     void     OnItemDeselected( wxListEvent& aEvent );
 
     void GetSelectRowsList( std::vector<long>& aSelectedList );
