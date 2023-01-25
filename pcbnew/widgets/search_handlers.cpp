@@ -30,9 +30,23 @@
 #include "search_handlers.h"
 
 
+PCB_SEARCH_HANDLER::PCB_SEARCH_HANDLER( wxString aName, PCB_EDIT_FRAME* aFrame ) :
+        SEARCH_HANDLER( aName ), m_frame( aFrame )
+{
+}
+
+
+void PCB_SEARCH_HANDLER::ActivateItem( long aItemRow )
+{
+    std::vector<long> item = { aItemRow };
+    SelectItems( item );
+
+    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::properties, true );
+}
+
+
 FOOTPRINT_SEARCH_HANDLER::FOOTPRINT_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame ) :
-        SEARCH_HANDLER( wxT( "Footprints" ) ),
-        m_frame( aFrame )
+        PCB_SEARCH_HANDLER( wxT( "Footprints" ), aFrame )
 {
     m_columns.emplace_back( wxT( "Reference" ), 1 );
     m_columns.emplace_back( wxT( "Value" ), 2 );
@@ -107,8 +121,7 @@ void FOOTPRINT_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
 
 
 ZONE_SEARCH_HANDLER::ZONE_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame ) :
-        SEARCH_HANDLER( wxT( "Zones" ) ),
-        m_frame( aFrame )
+        PCB_SEARCH_HANDLER( wxT( "Zones" ), aFrame )
 {
     m_columns.emplace_back( wxT( "Name" ), 2 );
     m_columns.emplace_back( wxT( "Net" ), 1 );
@@ -192,8 +205,7 @@ void ZONE_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
 
 
 TEXT_SEARCH_HANDLER::TEXT_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame ) :
-        SEARCH_HANDLER( wxT( "Text" ) ),
-        m_frame( aFrame )
+        PCB_SEARCH_HANDLER( wxT( "Text" ), aFrame )
 {
     m_columns.emplace_back( wxT( "Type" ), 1 );
     m_columns.emplace_back( wxT( "Text" ), 3 );
@@ -279,8 +291,7 @@ void TEXT_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
 
 
 NETS_SEARCH_HANDLER::NETS_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame ) :
-        SEARCH_HANDLER( wxT( "Nets" ) ),
-        m_frame( aFrame )
+        PCB_SEARCH_HANDLER( wxT( "Nets" ), aFrame )
 {
     m_columns.emplace_back( wxT( "Name" ), 2 );
     m_columns.emplace_back( wxT( "Class" ), 2 );

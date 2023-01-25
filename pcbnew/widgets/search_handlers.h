@@ -29,8 +29,21 @@
 class ZONE;
 class FOOTPRINT;
 class PCB_TEXT;
+class PCB_EDIT_FRAME;
 
-class FOOTPRINT_SEARCH_HANDLER : public SEARCH_HANDLER
+
+class PCB_SEARCH_HANDLER : public SEARCH_HANDLER
+{
+public:
+    PCB_SEARCH_HANDLER( wxString aName, PCB_EDIT_FRAME* aFrame );
+    void ActivateItem( long aItemRow ) override;
+
+protected:
+    PCB_EDIT_FRAME* m_frame;
+};
+
+
+class FOOTPRINT_SEARCH_HANDLER : public PCB_SEARCH_HANDLER
 {
 public:
     FOOTPRINT_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame );
@@ -40,11 +53,11 @@ public:
     void     SelectItems( std::vector<long>& aItemRows ) override;
 
 private:
-    PCB_EDIT_FRAME*         m_frame;
     std::vector<FOOTPRINT*> m_hitlist;
 };
 
-class ZONE_SEARCH_HANDLER : public SEARCH_HANDLER
+
+class ZONE_SEARCH_HANDLER : public PCB_SEARCH_HANDLER
 {
 public:
     ZONE_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame );
@@ -54,12 +67,11 @@ public:
     void     SelectItems( std::vector<long>& aItemRows ) override;
 
 private:
-    PCB_EDIT_FRAME*         m_frame;
     std::vector<ZONE*> m_hitlist;
 };
 
 
-class TEXT_SEARCH_HANDLER : public SEARCH_HANDLER
+class TEXT_SEARCH_HANDLER : public PCB_SEARCH_HANDLER
 {
 public:
     TEXT_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame );
@@ -69,12 +81,11 @@ public:
     void     SelectItems( std::vector<long>& aItemRows ) override;
 
 private:
-    PCB_EDIT_FRAME*    m_frame;
     std::vector<BOARD_ITEM*> m_hitlist;
 };
 
 
-class NETS_SEARCH_HANDLER : public SEARCH_HANDLER
+class NETS_SEARCH_HANDLER : public PCB_SEARCH_HANDLER
 {
 public:
     NETS_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame );
@@ -84,7 +95,6 @@ public:
     void     SelectItems( std::vector<long>& aItemRows ) override;
 
 private:
-    PCB_EDIT_FRAME*            m_frame;
     std::vector<NETINFO_ITEM*> m_hitlist;
 };
 
