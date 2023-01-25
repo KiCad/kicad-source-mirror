@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-20 09:12-0800\n"
-"PO-Revision-Date: 2023-01-25 00:33+0000\n"
+"PO-Revision-Date: 2023-01-25 12:14+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -376,7 +376,7 @@ msgstr "エラー"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:828
 msgid "Failed to copy image to clipboard"
-msgstr "クリップボードにイメージをコピーできませんでした"
+msgstr "クリップボードに画像をコピーできませんでした"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:839
 msgid "Can't save file"
@@ -1232,7 +1232,7 @@ msgstr "イメージ コンバーターを終了します"
 #: eeschema/tools/sch_drawing_tools.cpp:594
 #: pagelayout_editor/pl_editor_frame.cpp:845 pcbnew/tools/drawing_tool.cpp:665
 msgid "Choose Image"
-msgstr "イメージの選択"
+msgstr "画像の選択"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:375
 #: eeschema/tools/sch_drawing_tools.cpp:595
@@ -3386,16 +3386,15 @@ msgstr "無効な倍率です"
 #, c-format
 msgid ""
 "This scale results in an image which is too small (%.2f mm or %.1f mil)."
-msgstr "この拡大率ではイメージ サイズ (%.2f mm or %.1f mil) が小さすぎます。"
+msgstr "この拡大率に対して画像サイズ (%.2f mm or %.1f mil) が小さすぎます。"
 
 #: common/dialogs/panel_image_editor.cpp:92
 #, c-format
 msgid ""
 "This scale results in an image which is very large (%.1f mm or %.2f in). Are "
 "you sure?"
-msgstr ""
-"この拡大率ではイメージ サイズ (%.1f mm or %.2f in) が非常に大きくなります。宜"
-"しいですか?"
+msgstr "この拡大率にすると画像サイズ (%.1f mm or %.2f in) "
+"が非常に大きくなります。よろしいですか?"
 
 #: common/dialogs/panel_image_editor_base.cpp:31
 msgid "Grey"
@@ -3887,7 +3886,7 @@ msgstr "インポートされた図形"
 #: eeschema/dialogs/dialog_image_properties.cpp:40 eeschema/sch_bitmap.h:129
 #: pcbnew/dialogs/dialog_image_properties.cpp:41 pcbnew/pcb_bitmap.h:110
 msgid "Image"
-msgstr "イメージ"
+msgstr "画像"
 
 #: common/drawing_sheet/ds_data_model_io.cpp:92
 #: common/drawing_sheet/ds_data_model_io.cpp:121
@@ -14061,7 +14060,7 @@ msgstr "ストレージに埋め込まれたファイル '%s' が見つかりま
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2775
 #, c-format
 msgid "Error reading image %s."
-msgstr "イメージ '%s' の読み込み中にエラーしました。"
+msgstr "画像 '%s' の読み込み中にエラーしました。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2768
 #, c-format
@@ -17292,11 +17291,11 @@ msgstr "円弧を追加"
 
 #: eeschema/tools/ee_actions.cpp:378 pcbnew/tools/pcb_actions.cpp:122
 msgid "Add Image"
-msgstr "イメージを追加"
+msgstr "画像を追加"
 
 #: eeschema/tools/ee_actions.cpp:378 pcbnew/tools/pcb_actions.cpp:122
 msgid "Add bitmap image"
-msgstr "ビットマップ イメージを追加"
+msgstr "ビットマップ画像を追加"
 
 #: eeschema/tools/ee_actions.cpp:383
 msgid "Finish Sheet"
@@ -18036,7 +18035,7 @@ msgstr "<ESC>を押すと、イメージの作成をキャンセルします。"
 #: pagelayout_editor/pl_editor_frame.cpp:865 pcbnew/tools/drawing_tool.cpp:695
 #, c-format
 msgid "Could not load image from '%s'."
-msgstr "'%s' からイメージをロードできません。"
+msgstr "'%s' から画像をロードできません。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:812
 msgid "Junction location contains no joinable wires and/or pins."
@@ -20895,7 +20894,7 @@ msgstr "ガーバー出力ファイルを確認します"
 
 #: kicad/tools/kicad_manager_actions.cpp:110
 msgid "Convert bitmap images to schematic or PCB components"
-msgstr "ビットマップ イメージを回路図または PCB のコンポーネントへ変換します"
+msgstr "ビットマップ画像を回路図または PCB のコンポーネントへ変換します"
 
 #: kicad/tools/kicad_manager_actions.cpp:115
 #: pcb_calculator/pcb_calculator_frame.cpp:53
@@ -21450,7 +21449,7 @@ msgstr "ビットマップを追加"
 
 #: pagelayout_editor/tools/pl_actions.cpp:59
 msgid "Add a bitmap image"
-msgstr "ビットマップ イメージを追加"
+msgstr "ビットマップ画像を追加"
 
 #: pagelayout_editor/tools/pl_actions.cpp:73
 msgid "Append Existing Drawing Sheet..."
@@ -38109,7 +38108,7 @@ msgstr "選択対象からポリゴンを作成..."
 
 #: pcbnew/tools/pcb_actions.cpp:48
 msgid "Creates a graphic polygon from the selection"
-msgstr "選択対象から図形ポリゴンを作成"
+msgstr "選択対象からポリゴンを作成"
 
 #: pcbnew/tools/pcb_actions.cpp:53
 msgid "Create Zone from Selection..."
@@ -38161,11 +38160,11 @@ msgstr "線を描画"
 
 #: pcbnew/tools/pcb_actions.cpp:88
 msgid "Draw Graphic Polygon"
-msgstr "図形ポリゴンを描く"
+msgstr "ポリゴンを描く"
 
 #: pcbnew/tools/pcb_actions.cpp:88
 msgid "Draw a graphic polygon"
-msgstr "図形ポリゴンを描く"
+msgstr "ポリゴンを描く"
 
 #: pcbnew/tools/pcb_actions.cpp:93
 msgid "Draw Rectangle"
@@ -39873,7 +39872,7 @@ msgstr "ゾーンを追加"
 
 #: pcbnew/tools/zone_create_helper.cpp:279
 msgid "Add a graphical polygon"
-msgstr "図形ポリゴンを追加"
+msgstr "ポリゴンを追加"
 
 #: pcbnew/tools/zone_filler_tool.cpp:87
 msgid "Checking Zones"
