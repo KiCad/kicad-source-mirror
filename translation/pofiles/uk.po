@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-20 09:12-0800\n"
-"PO-Revision-Date: 2023-01-25 12:27+0000\n"
+"PO-Revision-Date: 2023-01-25 14:38+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -10437,7 +10437,7 @@ msgstr "Більше не показувати"
 #: eeschema/dialogs/dialog_rescue_each_base.h:67
 #: eeschema/project_rescue.cpp:589 eeschema/project_rescue.cpp:604
 msgid "Project Rescue Helper"
-msgstr "Помічник порятунку проєкту"
+msgstr "Помічник відновлення проєкту"
 
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:44
 #: eeschema/dialogs/dialog_sch_import_settings_base.h:63
@@ -10501,12 +10501,12 @@ msgstr "Класи зв'язків"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:31
 msgid "&Search for:"
-msgstr "&Знайти до:"
+msgstr "&Знайти:"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:36
 #: pcbnew/dialogs/dialog_find_base.cpp:33
 msgid "Text with optional wildcards"
-msgstr "Текст з шаблоном"
+msgstr "Текст із необов’язковими символами підстановки"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:41
 msgid "Replace &with:"
@@ -10536,7 +10536,7 @@ msgstr "Слова"
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:89
 #: pcbnew/dialogs/dialog_find_base.cpp:49
 msgid "Wildcards"
-msgstr "Шаблони"
+msgstr "Символи підстановки"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:92
 msgid "Search pin &names and numbers"
@@ -10568,7 +10568,7 @@ msgstr "Замінити &все"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:41
 msgid "Schematic Setup"
-msgstr "Параметри Схеми"
+msgstr "Параметри схеми"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:42
 msgid "Import Settings from Another Project..."
@@ -10583,7 +10583,7 @@ msgstr "Електричні правила"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:663
 #: pcbnew/footprint_libraries_utils.cpp:524
 msgid "Project"
-msgstr "Проект"
+msgstr "Проєкт"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:84
 #: pcbnew/dialogs/dialog_board_setup.cpp:110
@@ -10613,15 +10613,15 @@ msgid ""
 "Error importing settings from project:\n"
 "Project file %s could not be loaded."
 msgstr ""
-"Помилка імпорту налаштувань з проекту:\n"
-"Файл проекту %s cзавантажити не вдалося."
+"Помилка імпорту налаштувань з проєкту:\n"
+"Файл проекту %s завантажити не вдалося."
 
 #: eeschema/dialogs/dialog_shape_properties.cpp:58
 #: eeschema/dialogs/dialog_sheet_properties.cpp:78
 #: eeschema/dialogs/dialog_text_properties.cpp:74
 msgid "Note: individual item colors overridden in Preferences."
 msgstr ""
-"Примітка: індивідуальні кольори елементів перевизначені у Налаштуваннях."
+"Примітка: індивідуальні кольори елементів перевизначені у налаштуваннях."
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:88
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:158
@@ -10645,23 +10645,23 @@ msgstr "Властивості %s"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.h:84
 msgid "Sheet Pin Properties"
-msgstr "Властивості виводу аркуша"
+msgstr "Властивості виводу листа"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:272
 msgid "A sheet must have a valid file name."
-msgstr "Аркуш має мати правильне ім'я файлу."
+msgstr "Лист має мати правильне ім'я файлу."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:282
 msgid "Sheet file must have a '.kicad_sch' extension."
-msgstr "Файл аркуша повинен мати розширення '.kicad_sch'."
+msgstr "Файл листа повинен мати розширення '.kicad_sch'."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:316
 msgid "Use relative path for sheet file?"
-msgstr "Використовувати відносний шлях для файлу аркуша?"
+msgstr "Використовувати відносний шлях для файлу листа?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:317
 msgid "Sheet File Path"
-msgstr "Шлях до файлу аркуша"
+msgstr "Шлях до файлу листа"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:320
 msgid ""
@@ -10669,13 +10669,13 @@ msgid ""
 "portability across systems and platforms.  Using absolute paths can result "
 "in portability issues."
 msgstr ""
-"Використання відносних ієрархічних шляхів імен файлів аркушів покращує "
+"Використання відносних ієрархічних шляхів імен файлів листів покращує "
 "переміщення схем між системами та платформами. Використання абсолютних "
 "шляхів може призвести до проблем з переміщенням."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:324
 msgid "Use Relative Path"
-msgstr "Використовувати Відносний Шлях"
+msgstr "Використовувати відносний шлях"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:325
 msgid "Use Absolute Path"
@@ -10683,7 +10683,7 @@ msgstr "Використовувати абсолютний шлях"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:356
 msgid "Untitled Sheet"
-msgstr "Аркуш без назви"
+msgstr "Лист без назви"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:382
 msgid "Note: item colors are overridden in the current color theme."
@@ -10695,13 +10695,13 @@ msgid ""
 "To see individual item colors uncheck '%s'\n"
 "in Preferences > Eeschema > Colors."
 msgstr ""
-"Що б вибрати індивідуальні кольори відмідьте '%s'\n"
+"Що б вибрати індивідуальні кольори відмітьте '%s'\n"
 "в Налаштуваннях > Eeschema > Кольори."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:426
 #, c-format
 msgid "The file '%s' does not appear to be a valid schematic file."
-msgstr "Файл '%s\", здається, не є файлом схеми."
+msgstr "Файл '%s', здається, не є коректним файлом схеми."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:428
 msgid "Invalid Schematic File"
@@ -10715,10 +10715,10 @@ msgid ""
 "against parent sheet schematic file path:\n"
 "'%s'."
 msgstr ""
-"Неможливо нормалізувати новий шлях до файлу схеми аркуша:\n"
-"\"%s\"\n"
-"проти шляху до файлу схеми батьківського аркуша:\n"
-"\"%s\"."
+"Неможливо нормалізувати новий шлях до файлу схеми листа:\n"
+"'%s'\n"
+"проти шляху до файлу схеми батьківського листа:\n"
+"'%s'."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:491
 #: kicad/tools/kicad_manager_control.cpp:659
@@ -10758,11 +10758,11 @@ msgstr "Не вдалося зберегти схему '%s'"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:679
 msgid "A sheet must have a name."
-msgstr "Аркуш має мати імʼя."
+msgstr "Лист має мати імʼя."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:687
 msgid "A sheet must have a file specified."
-msgstr "Аркушу повинен бути призначений файл."
+msgstr "Листу повинен бути призначений файл."
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:128
 #: eeschema/lib_field.cpp:544 eeschema/lib_pin.cpp:1164
@@ -10787,7 +10787,7 @@ msgstr "Колір контуру:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:157
 msgid "Background fill:"
-msgstr "Заповнити тло:"
+msgstr "Заповнити фон:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:178
 msgid "Page number:"
@@ -10803,7 +10803,7 @@ msgstr "шлях"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.h:83
 msgid "Sheet Properties"
-msgstr "Властивості аркуша"
+msgstr "Властивості листа"
 
 #: eeschema/dialogs/dialog_signal_list.h:45 eeschema/sch_plotter.cpp:547
 msgid "Done"
@@ -10816,7 +10816,7 @@ msgstr "Додати сигнал з імʼям:"
 #: eeschema/dialogs/dialog_signal_list_base.h:50
 #: eeschema/sim/sim_plot_frame.cpp:164
 msgid "Add Signals"
-msgstr "Додати Сигнали"
+msgstr "Додати сигнали"
 
 #: eeschema/dialogs/dialog_sim_command.cpp:116
 msgid "You need to select DC source"
@@ -10908,7 +10908,7 @@ msgstr "Кінцева частота:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:81
 msgid "AC"
-msgstr "~"
+msgstr "AC"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:91
 msgid "Source 2"
@@ -10983,11 +10983,11 @@ msgstr "Вимірюваний вузол"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:238
 msgid "Reference node"
-msgstr "Референтний вузол"
+msgstr "Опорний вузол"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:245
 msgid "(optional; default GND)"
-msgstr "(не обов'язково; GND)"
+msgstr "(не обов'язково; типовий GND)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:249
 msgid "Noise source"
@@ -10999,11 +10999,11 @@ msgstr "Кількість точок"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:286
 msgid "Start frequency [Hz]"
-msgstr "Початкова Частота [Гц]"
+msgstr "Початкова частота [Гц]"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:293
 msgid "Stop frequency [Hz]"
-msgstr "Кінцева Частота [Гц]"
+msgstr "Кінцева частота [Гц]"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:310
 #: eeschema/sim/spice_simulator.cpp:72
@@ -11017,7 +11017,7 @@ msgstr "Ця вкладка не має налаштувань"
 #: eeschema/dialogs/dialog_sim_command_base.cpp:329
 #: eeschema/sim/spice_simulator.cpp:57
 msgid "Operating Point"
-msgstr "Робоча Точка"
+msgstr "Робоча точка"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:333
 msgid "Pole-Zero"
@@ -11052,16 +11052,16 @@ msgstr "Початковий час:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:392
 msgid "(optional; default 0)"
-msgstr "(необов'язково; за замовчуванням 0)"
+msgstr "(необов'язково; початковий 0)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:403
 #: eeschema/sim/spice_simulator.cpp:66
 msgid "Transient"
-msgstr "Перехідний процес"
+msgstr "Перехідний"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:408
 msgid "Spice directives:"
-msgstr "Директиви Spice:"
+msgstr "Директиви spice:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:417
 msgid "Load directives from schematic"
@@ -11085,7 +11085,7 @@ msgstr "Конфігурація користувача"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:448
 msgid "Spice"
-msgstr "Cпецій"
+msgstr "Spice"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:448
 msgid "PSpice"
@@ -11105,7 +11105,7 @@ msgstr "HSpice"
 
 #: eeschema/dialogs/dialog_sim_command_base.h:139
 msgid "Simulation Command"
-msgstr "Команди симуляції"
+msgstr "Команда симуляції"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:192
 #, c-format
@@ -11118,7 +11118,7 @@ msgstr "Неможливо прочитати модель симуляції з
 
 #: eeschema/dialogs/dialog_sim_model.cpp:402
 msgid "Component:"
-msgstr "Компоненти:"
+msgstr "Компонент:"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:402
 #: eeschema/dialogs/dialog_sim_model_base.cpp:54
@@ -11165,7 +11165,7 @@ msgstr "Вибір моделей"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:30
 msgid "SPICE model from file (*.lib, *.sub or *.ibs)"
-msgstr "SPICE модель з файлу (*.lib, *.sub or *.ibs)"
+msgstr "SPICE модель з файлу (*.lib, *.sub або *.ibs)"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:66
 msgid "Pin:"
@@ -11242,7 +11242,7 @@ msgstr "Переглянути посадкові місця"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:92
 #: eeschema/fields_grid_table.cpp:869 eeschema/tools/ee_actions.cpp:61
 msgid "Show Datasheet"
-msgstr "Показати Документацію"
+msgstr "Показати документацію"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:93
 #: eeschema/fields_grid_table.cpp:870
@@ -11252,7 +11252,7 @@ msgstr "Показати документацію в браузері"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:130
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1205
 msgid "The Reference column cannot be hidden."
-msgstr "Стовпець Позначення не може бути прихованим."
+msgstr "Стовпець позначення не може бути прихованим."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:252
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:266
