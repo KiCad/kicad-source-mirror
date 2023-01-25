@@ -221,97 +221,23 @@ int OUTLINE_DECOMPOSER::winding( const GLYPH_POINTS& aContour ) const
         return 0;
     }
 
-    unsigned int i_lowest_vertex = 0;
-    double       lowest_y = std::numeric_limits<double>::max();
+    double sum = 0.0;
+    size_t len = aContour.size();
 
-    for( unsigned int i = 0; i < aContour.size(); i++ )
+    for( size_t i = 0; i < len - 1; i++ )
     {
-        VECTOR2D p = aContour[i];
+        VECTOR2D p1 = aContour[ i ];
+        VECTOR2D p2 = aContour[ i + 1 ];
 
-        if( p.y < lowest_y )
-        {
-            i_lowest_vertex = i;
-            lowest_y = p.y;
-
-            // note: we should also check for p.y == lowest_y and then choose the point with
-            // leftmost.x, but as p.x is a double, equality is a dubious concept; however
-            // this should suffice in the general case
-        }
+        sum += ( ( p2.x - p1.x ) * ( p2.y + p1.y ) );
     }
 
-    unsigned int i_prev_vertex = ( i_lowest_vertex + aContour.size() - 1 ) % aContour.size();
-    unsigned int i_next_vertex = ( i_lowest_vertex + 1 ) % aContour.size();
+    sum += ( ( aContour[0].x - aContour[len - 1].x ) * ( aContour[0].y + aContour[len - 1].y ) );
 
-    const VECTOR2D& lowest = aContour[i_lowest_vertex];
-    VECTOR2D        prev( aContour[i_prev_vertex] );
-
-    while( prev == lowest )
-    {
-        if( i_prev_vertex == 0 )
-            i_prev_vertex = aContour.size() - 1;
-        else
-            i_prev_vertex--;
-
-        if( i_prev_vertex == i_lowest_vertex )
-        {
-            // ERROR: degenerate contour (all points are colinear with equal Y coordinate)
-            // TODO: signal error
-            // for now let's just return something at random
-            return cw;
-        }
-
-        prev = aContour[i_prev_vertex];
-    }
-
-    VECTOR2D next( aContour[i_next_vertex] );
-
-    while( next == lowest )
-    {
-        if( i_next_vertex == aContour.size() - 1 )
-            i_next_vertex = 0;
-        else
-            i_next_vertex++;
-
-        if( i_next_vertex == i_lowest_vertex )
-        {
-            // ERROR: degenerate contour (all points are equal)
-            // TODO: signal error
-            // for now let's just return something at random
-            return cw;
-        }
-
-        next = aContour[i_next_vertex];
-    }
-
-    // winding is figured out based on the angle between the lowest
-    // vertex and its neighbours
-    //
-    // prev.x < lowest.x && next.x > lowest.x -> ccw
-    //
-    // prev.x > lowest.x && next.x < lowest.x -> cw
-    //
-    // prev.x < lowest.x && next.x < lowest.x:
-    // ?
-    //
-    // prev.x > lowest.x && next.x > lowest.x:
-    // ?
-    //
-    if( prev.x < lowest.x && next.x > lowest.x )
+    if( sum > 0.0 )
+        return cw;
+    if( sum < 0.0 )
         return ccw;
 
-    if( prev.x > lowest.x && next.x < lowest.x )
-        return cw;
-
-    double prev_deltaX = prev.x - lowest.x;
-    double prev_deltaY = prev.y - lowest.y;
-    double next_deltaX = next.x - lowest.x;
-    double next_deltaY = next.y - lowest.y;
-
-    double prev_atan = atan2( prev_deltaY, prev_deltaX );
-    double next_atan = atan2( next_deltaY, next_deltaX );
-
-    if( prev_atan > next_atan )
-        return ccw;
-    else
-        return cw;
+    return 0;
 }
