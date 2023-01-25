@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-20 09:12-0800\n"
-"PO-Revision-Date: 2023-01-25 14:38+0000\n"
+"PO-Revision-Date: 2023-01-27 14:28+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/kicad/"
 "master-source/et/>\n"
@@ -10651,23 +10651,23 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:448
 msgid "Spice"
-msgstr ""
+msgstr "Spice"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:448
 msgid "PSpice"
-msgstr ""
+msgstr "PSpice"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:448
 msgid "LTSpice"
-msgstr ""
+msgstr "LTSpice"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:448
 msgid "PSpice and LTSpice"
-msgstr ""
+msgstr "PSpice ja LTSpice"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:448
 msgid "HSpice"
-msgstr ""
+msgstr "HSpice"
 
 #: eeschema/dialogs/dialog_sim_command_base.h:139
 msgid "Simulation Command"
@@ -10929,19 +10929,19 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:151
 msgid "+90"
-msgstr ""
+msgstr "+90"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:151
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:144
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:340
 msgid "-90"
-msgstr ""
+msgstr "-90"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:151
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:145
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:341
 msgid "180"
-msgstr ""
+msgstr "180"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:157
 msgid "Mirror:"
@@ -11470,7 +11470,7 @@ msgstr ""
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
 #: pcbnew/dialogs/panel_edit_options_base.cpp:142
 msgid "Ctrl+Shift"
-msgstr ""
+msgstr "Ctrl+Shift"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:166
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:224
@@ -11489,7 +11489,7 @@ msgstr ""
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:220
 #: pcbnew/dialogs/panel_edit_options_base.cpp:214
 msgid "Shift+Cmd"
-msgstr ""
+msgstr "Shift+Cmd"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:256
 msgid "Symbol Field Automatic Placement"
