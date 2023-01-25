@@ -77,7 +77,7 @@ bool PCB_PLOT_SVG::Plot( BOARD* aBoard, const PCB_PLOT_SVG_OPTIONS& aSvgPlotOpti
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
     PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>();
 
-    plot_opts.SetColorSettings( mgr.GetColorSettings( cfg->m_ColorTheme ) );
+    plot_opts.SetColorSettings( mgr.GetColorSettings( aSvgPlotOptions.m_colorTheme ) );
 
     LOCALE_IO toggle;
 
