@@ -98,6 +98,7 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
     m_parentModelList = aParentModelList;
 
     m_dummyFootprint = new FOOTPRINT( *aFootprint );
+    m_dummyFootprint->SetParentGroup( nullptr );
     m_dummyBoard->Add( m_dummyFootprint );
 
     // Create the 3D canvas
