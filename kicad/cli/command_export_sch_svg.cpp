@@ -31,7 +31,7 @@
 #define ARG_EXCLUDE_DRAWING_SHEET "--exclude-drawing-sheet"
 #define ARG_NO_BACKGROUND_COLOR "--no-background-color"
 
-CLI::EXPORT_SCH_SVG_COMMAND::EXPORT_SCH_SVG_COMMAND() : EXPORT_PCB_BASE_COMMAND( "svg" )
+CLI::EXPORT_SCH_SVG_COMMAND::EXPORT_SCH_SVG_COMMAND() : EXPORT_PCB_BASE_COMMAND( "svg", true )
 {
     m_argParser.add_argument( "-t", ARG_THEME )
             .default_value( std::string() )

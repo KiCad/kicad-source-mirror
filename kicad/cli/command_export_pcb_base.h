@@ -40,7 +40,7 @@ namespace CLI
 
 struct EXPORT_PCB_BASE_COMMAND : public COMMAND
 {
-    EXPORT_PCB_BASE_COMMAND( const std::string& aName );
+    EXPORT_PCB_BASE_COMMAND( const std::string& aName, bool aOutputIsDir = false );
 
 protected:
     int  doPerform( KIWAY& aKiway ) override;

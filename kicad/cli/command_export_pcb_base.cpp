@@ -28,15 +28,26 @@
 #include <wx/tokenzr.h>
 #include <wx/crt.h>
 
-CLI::EXPORT_PCB_BASE_COMMAND::EXPORT_PCB_BASE_COMMAND( const std::string& aName ) : COMMAND( aName )
+CLI::EXPORT_PCB_BASE_COMMAND::EXPORT_PCB_BASE_COMMAND( const std::string& aName,
+                                                       bool               aOutputIsDir ) :
+        COMMAND( aName )
 {
     m_selectedLayersSet = false;
     m_requireLayers = false;
     m_hasLayerArg = false;
 
-    m_argParser.add_argument( "-o", ARG_OUTPUT )
-            .default_value( std::string() )
-            .help( UTF8STDSTR( _( "Output file name" ) ) );
+    if( aOutputIsDir )
+    {
+        m_argParser.add_argument( "-o", ARG_OUTPUT )
+                .default_value( std::string() )
+                .help( UTF8STDSTR( _( "Output directory:" ) ) ); // todo fix after string freeze in v8
+    }
+    else
+    {
+        m_argParser.add_argument( "-o", ARG_OUTPUT )
+                .default_value( std::string() )
+                .help( UTF8STDSTR( _( "Output file name" ) ) );
+    }
 
     m_argParser.add_argument( ARG_INPUT ).help( UTF8STDSTR( _( "Input file" ) ) );
 
