@@ -993,10 +993,6 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
                          sheet->GetMinHeight( edited == RECT_BOTLEFT || edited == RECT_BOTRIGHT ),
                          topLeft, topRight, botLeft, botRight, &gridHelper );
 
-        // Pin positions are relative to origin.  Attempt to leave them where they
-        // are if the origin moves.
-        VECTOR2I originDelta = sheet->GetPosition() - topLeft;
-
         if( isModified( m_editPoints->Point( RECT_TOPLEFT ) )
                 || isModified( m_editPoints->Point( RECT_TOPRIGHT ) )
                 || isModified( m_editPoints->Point( RECT_BOTRIGHT ) )
@@ -1033,16 +1029,10 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
             }
         }
 
-        // Update the fields if we're in autoplace mode
-        if( sheet->GetFieldsAutoplaced() == FIELDS_AUTOPLACED_AUTO )
-            sheet->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
-
         // Keep sheet pins attached to edges:
         for( SCH_SHEET_PIN* pin : sheet->GetPins() )
         {
             VECTOR2I pos = pin->GetPosition();
-
-            pos += originDelta;
 
             switch( pin->GetSide() )
             {
@@ -1055,6 +1045,10 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
 
             pin->SetPosition( pos );
         }
+
+        // Update the fields if we're in autoplace mode
+        if( sheet->GetFieldsAutoplaced() == FIELDS_AUTOPLACED_AUTO )
+            sheet->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
 
         break;
     }
