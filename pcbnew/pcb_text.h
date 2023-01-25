@@ -117,8 +117,7 @@ public:
     /**
      * Function TransformTextToPolySet
      * Convert the text to a polygonSet describing the actual character strokes (one per segment).
-     * Used in 3D viewer
-     * Circles and arcs are approximated by segments
+     * Circles and arcs are approximated by segments.
      * @aBuffer = SHAPE_POLY_SET to store the polygon corners
      * @aClearance = the clearance around the text
      * @aError = the maximum error to allow when approximating curves

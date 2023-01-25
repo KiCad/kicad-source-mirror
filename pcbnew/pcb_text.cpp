@@ -35,6 +35,7 @@
 #include <trigo.h>
 #include <string_utils.h>
 #include <geometry/shape_compound.h>
+#include <geometry/shape_rect.h>
 #include <callback_gal.h>
 #include <convert_basic_shapes_to_polygon.h>
 
@@ -264,6 +265,25 @@ void PCB_TEXT::swapData( BOARD_ITEM* aImage )
 
 std::shared_ptr<SHAPE> PCB_TEXT::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
 {
+    if( IsKnockout() )
+    {
+        SHAPE_POLY_SET knockouts;
+
+        TransformTextToPolySet( knockouts, aLayer, 0, GetBoard()->GetDesignSettings().m_MaxError,
+                                ERROR_INSIDE );
+
+        SHAPE_POLY_SET finalPoly;
+        int            strokeWidth = GetEffectiveTextPenWidth();
+        VECTOR2I       fontSize = GetTextSize();
+        int            margin = strokeWidth * 1.5 + GetKnockoutTextMargin( fontSize, strokeWidth );
+
+        TransformBoundingBoxToPolygon( &finalPoly, margin );
+        finalPoly.BooleanSubtract( knockouts, SHAPE_POLY_SET::PM_FAST );
+        finalPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
+
+        return std::make_shared<SHAPE_POLY_SET>( finalPoly );
+    }
+
     return GetEffectiveTextShape();
 }
 
@@ -275,10 +295,8 @@ void PCB_TEXT::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLa
     KIFONT::FONT*              font = getDrawFont();
     int                        penWidth = GetEffectiveTextPenWidth();
 
-    // Note: this function is mainly used in 3D viewer.
-    // the polygonal shape of a text can have many basic shapes,
-    // so combining these shapes can be very useful to create a final shape
-    // swith a lot less vertices to speedup calculations using this final shape
+    // The polygonal shape of a text can have many basic shapes, so combining these shapes can
+    // be very useful to create a final shape with a lot less vertices to speedup calculations.
     // Simplify shapes is not usually always efficient, but in this case it is.
     SHAPE_POLY_SET buffer;
 
