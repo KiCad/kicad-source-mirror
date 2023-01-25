@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-20 09:12-0800\n"
-"PO-Revision-Date: 2023-01-25 00:33+0000\n"
+"PO-Revision-Date: 2023-01-25 14:38+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/kicad/"
 "master-source/et/>\n"
@@ -10420,11 +10420,11 @@ msgstr ""
 #: eeschema/dialogs/dialog_sim_command_base.cpp:183
 #: eeschema/dialogs/dialog_sim_command_base.cpp:192
 msgid "Volts"
-msgstr ""
+msgstr "V"
 
 #: eeschema/dialogs/dialog_sim_command.cpp:588
 msgid "Amperes"
-msgstr ""
+msgstr "A"
 
 #: eeschema/dialogs/dialog_sim_command.cpp:589
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:72
@@ -10433,7 +10433,7 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:136
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:147
 msgid "Ohms"
-msgstr ""
+msgstr "Ω"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:24
 #: eeschema/dialogs/dialog_sim_command_base.cpp:265
@@ -10466,7 +10466,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_sim_command_base.cpp:56
 #: eeschema/dialogs/dialog_sim_command_base.cpp:67
 msgid "Hertz"
-msgstr ""
+msgstr "Hz"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:60
 msgid "Stop frequency:"
@@ -10474,7 +10474,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:81
 msgid "AC"
-msgstr ""
+msgstr "AC"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:91
 msgid "Source 2"
@@ -10489,22 +10489,22 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:246
 #: pcb_calculator/widgets/unit_selector.cpp:256
 msgid "V"
-msgstr ""
+msgstr "V"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:96
 #: eeschema/dialogs/dialog_sim_command_base.cpp:102
 msgid "I"
-msgstr ""
+msgstr "I"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:96
 #: eeschema/dialogs/dialog_sim_command_base.cpp:102
 msgid "R"
-msgstr ""
+msgstr "R"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:96
 #: eeschema/dialogs/dialog_sim_command_base.cpp:102
 msgid "TEMP"
-msgstr ""
+msgstr "TEMP"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:108
 msgid "Source:"
