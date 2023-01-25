@@ -406,7 +406,11 @@ void PCM_TASK_MANAGER::InstallFromFile( wxWindow* aParent, const wxString& aFile
     }
 
     m_reporter = std::make_unique<DIALOG_PCM_PROGRESS>( aParent, false );
+#ifdef __WXMAC__
     m_reporter->ShowWindowModal();
+#else
+    m_reporter->Show();
+#endif
 
     if( isUpdate )
     {
@@ -571,7 +575,11 @@ void PCM_TASK_MANAGER::RunQueue( wxWindow* aParent )
     m_reporter = std::make_unique<DIALOG_PCM_PROGRESS>( aParent );
 
     m_reporter->SetNumPhases( m_download_queue.size() + m_install_queue.size() );
+#ifdef __WXMAC__
     m_reporter->ShowWindowModal();
+#else
+    m_reporter->Show();
+#endif
 
     wxSafeYield();
 
