@@ -429,6 +429,8 @@ void PCM_TASK_MANAGER::InstallFromFile( wxWindow* aParent, const wxString& aFile
     m_reporter->Destroy();
     m_reporter.reset();
 
+    aParent->Raise();
+
     m_color_themes_changed.store( package.type == PCM_PACKAGE_TYPE::PT_COLORTHEME );
 }
 
@@ -642,6 +644,8 @@ void PCM_TASK_MANAGER::RunQueue( wxWindow* aParent )
     m_reporter->KeepRefreshing( true );
     m_reporter->Destroy();
     m_reporter.reset();
+
+    aParent->Raise();
 
     download_thread.join();
     install_thread.join();

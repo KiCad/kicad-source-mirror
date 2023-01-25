@@ -82,6 +82,7 @@ private:
 #if wxCHECK_VERSION( 3, 1, 0 )
     wxAppProgressIndicator m_appProgressIndicator;
 #endif
+    wxWindowDisabler m_disabler;
 };
 
 #endif // DIALOG_PCM_PROGRESS_H_

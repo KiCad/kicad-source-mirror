@@ -31,6 +31,7 @@ DIALOG_PCM_PROGRESS::DIALOG_PCM_PROGRESS( wxWindow* parent, bool aShowDownloadSe
         m_downloadTotal( 0 ),
         m_currentProgress( 0 ),
         m_currentProgressTotal( 0 ),
+        m_disabler( this ),
         m_finished( false )
 #if wxCHECK_VERSION( 3, 1, 0 )
         ,
