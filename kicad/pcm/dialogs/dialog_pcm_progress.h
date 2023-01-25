@@ -79,10 +79,11 @@ private:
 
     std::vector< std::pair<wxString, SEVERITY> > m_reports;
 
+    wxWindowDisabler m_disabler;
+
 #if wxCHECK_VERSION( 3, 1, 0 )
     wxAppProgressIndicator m_appProgressIndicator;
 #endif
-    wxWindowDisabler m_disabler;
 };
 
 #endif // DIALOG_PCM_PROGRESS_H_
