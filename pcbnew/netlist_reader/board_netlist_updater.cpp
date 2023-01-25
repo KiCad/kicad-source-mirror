@@ -402,46 +402,6 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
     }
 
-    if( ( aNetlistComponent->GetProperties().count( wxT( "dnp" ) ) > 0 )
-            != ( ( aPcbFootprint->GetAttributes() & FP_EXCLUDE_FROM_POS_FILES ) > 0 ) )
-    {
-        if( m_isDryRun )
-        {
-            if( aNetlistComponent->GetProperties().count( wxT( "dnp" ) ) )
-            {
-                msg.Printf( _( "Add %s 'exclude from position files' fabrication attribute." ),
-                            aPcbFootprint->GetReference() );
-            }
-            else
-            {
-                msg.Printf( _( "Remove %s 'exclude from position files' fabrication attribute." ),
-                            aPcbFootprint->GetReference() );
-            }
-        }
-        else
-        {
-            int attributes = aPcbFootprint->GetAttributes();
-
-            if( aNetlistComponent->GetProperties().count( wxT( "dnp" ) ) )
-            {
-                attributes |= FP_EXCLUDE_FROM_POS_FILES;
-                msg.Printf( _( "Added %s 'exclude from position files' fabrication attribute." ),
-                            aPcbFootprint->GetReference() );
-            }
-            else
-            {
-                attributes &= ~FP_EXCLUDE_FROM_POS_FILES;
-                msg.Printf( _( "Removed %s 'exclude from position files' fabrication attribute." ),
-                            aPcbFootprint->GetReference() );
-            }
-
-            changed = true;
-            aPcbFootprint->SetAttributes( attributes );
-        }
-
-        m_reporter->Report( msg, RPT_SEVERITY_ACTION );
-    }
-
     if( changed && copy )
         m_commit.Modified( aPcbFootprint, copy );
     else if( copy )
