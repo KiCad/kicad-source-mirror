@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-20 09:12-0800\n"
-"PO-Revision-Date: 2023-01-25 14:38+0000\n"
+"PO-Revision-Date: 2023-01-27 14:28+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -11318,7 +11318,7 @@ msgstr "Групувати символи"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:69
 msgid "Group symbols together based on common properties"
-msgstr "Групувати символи на основі загальних властивостей"
+msgstr "Групуйте символи на основі спільних властивостей"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:127
 msgid "Export as CSV..."
@@ -11335,7 +11335,7 @@ msgstr "Основне імʼя"
 #: eeschema/dialogs/dialog_symbol_properties.cpp:161
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:280
 msgid "Alternate Assignment"
-msgstr "Альтернативна функція"
+msgstr "Альтернативне призначення"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:131
 msgid "Unit:"
@@ -11397,17 +11397,17 @@ msgstr "По осі Y"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:175
 msgid "Show pin numbers"
-msgstr "Показати номер виводу"
+msgstr "Показати номера виводів"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:181
 msgid "Show pin names"
-msgstr "Показувати імʼя виводу"
+msgstr "Показувати імена виводів"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:206
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:204
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:208
 msgid "Exclude from bill of materials"
-msgstr "Виключити з переліку елементів"
+msgstr "Виключити з переліку компонентів"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:207
 msgid ""
@@ -11461,7 +11461,7 @@ msgstr "Базове імʼя виводу"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:306
 msgid "Alternate Pin Assignments"
-msgstr "Альтернативні функції виводів"
+msgstr "Альтернативні призначення виводів"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:316
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:384
@@ -11482,8 +11482,8 @@ msgid ""
 "Remapping is not possible because you have insufficient privileges to the "
 "project folder '%s'."
 msgstr ""
-"Повторне визначення неможливе, оскільки у вас недостатньо прав для запису в "
-"теку проєкту '%s'."
+"Перепризначення неможливе, оскільки у вас недостатньо прав на теку проєкту "
+"'%s'."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:68
 msgid ""
@@ -11497,11 +11497,11 @@ msgid ""
 "symbols."
 msgstr ""
 "Ця схема наразі використовує метод пошуку бібліотеки символів проекту для "
-"завантаження символів бібліотеки. KiCad спробує відобразити існуючі символи "
+"завантаження символів бібліотеки.  KiCad спробує відобразити існуючі символи "
 "для використання нової таблиці бібліотеки символів. Переналаштування змінить "
 "деякі файли проекту, а схеми можуть бути несумісними зі старішими версіями "
-"KiCad. Усі змінені файли буде створено в папці \"remap_backup\" у папці "
-"проекту, якщо вам знадобиться скасувати будь-які зміни. Якщо ви вирішите "
+"KiCad.  Усі змінені файли буде створено в папці \"remap_backup\" у папці "
+"проекту, якщо вам знадобиться скасувати будь-які зміни.  Якщо ви вирішите "
 "пропустити цей крок, ви будете відповідальні за ручне переналаштування "
 "символів."
 
@@ -11509,7 +11509,7 @@ msgstr ""
 #, c-format
 msgid "Adding library '%s', file '%s' to project symbol library table."
 msgstr ""
-"Додання бібліотеки '%s', файл%s' до таблиці бібліотек символів проектів."
+"Додання бібліотеки '%s', файл '%s' до таблиці бібліотек символів проєктів."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:217
 #: eeschema/dialogs/panel_sym_lib_table.cpp:774
@@ -11528,7 +11528,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:238
 msgid "Created project symbol library table.\n"
-msgstr "Створено таблицю бібліотеки символів проекту.\n"
+msgstr "Створено таблицю бібліотеки символів проєкту.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:263
 #, c-format
@@ -11557,7 +11557,7 @@ msgstr "Помилка резервного копіювання"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:353
 #: eeschema/dialogs/dialog_symbol_remap.cpp:507
 msgid "Continue with Rescue"
-msgstr "Продовжити з Відновленням"
+msgstr "Продовжити з відновленням"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:354
 #: eeschema/dialogs/dialog_symbol_remap.cpp:508
@@ -11596,7 +11596,7 @@ msgstr "Деякі з резервних копій файлів проєкту 
 #: eeschema/dialogs/dialog_symbol_remap_base.cpp:30
 #: eeschema/dialogs/dialog_symbol_remap_base.h:54
 msgid "Remap Symbols"
-msgstr "Перевизначення Символів"
+msgstr "Перевизначення символів"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:157 eeschema/schematic.cpp:305
 msgid "<root sheet>"
@@ -11714,7 +11714,7 @@ msgstr "Властивості провідника & шини"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:20
 msgid "Automatically annotate symbols"
-msgstr "Автоматичне призначення імен символів"
+msgstr "Автоматичне анотування символів"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:142
 msgid ""
@@ -11728,7 +11728,7 @@ msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:201
 msgid "(symbol editor only)"
-msgstr "(тільки в редакторі символів)"
+msgstr "(лише редактор символів)"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:245
 #: pcbnew/dialogs/panel_pcbnew_color_settings.cpp:485
@@ -11747,11 +11747,11 @@ msgstr "Зовнішній вигляд"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:40
 msgid "Default font:"
-msgstr "Шрифт по замовчуванні:"
+msgstr "Типовий шрифт:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:53
 msgid "S&how hidden pins"
-msgstr "Показати приховані ніжки"
+msgstr "Показати приховані виводи"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:56
 msgid "Show hidden fields"
@@ -11800,20 +11800,20 @@ msgstr "Товщина підсвітки:"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:129
 #: pcbnew/dialogs/panel_display_options_base.cpp:92
 msgid "Cross-probing"
-msgstr "Двосторонній зв'язок"
+msgstr "Перехресне випробування"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:139
 msgid "Highlight symbols when footprints selected"
-msgstr "Підсвітити символи якщо посадкове місце вибране"
+msgstr "Підсвітити символи, якщо посадкові місця вибрані"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:141
 msgid "Highlight symbols corresponding to selected footprints"
-msgstr "Підсвічувати всі мідні елементи виділеного зв'язку"
+msgstr "Підсвітити символи, що відповідають вибраним посадковим місцям"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:145
 #: pcbnew/dialogs/panel_display_options_base.cpp:108
 msgid "Center view on cross-probed items"
-msgstr "Центрувати перегляд виділених елементів"
+msgstr "Вигляд по центру предметів із перехресним випробуванням"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:147
 msgid "Ensures that cross-probed symbols are visible in the current view"
@@ -11822,16 +11822,16 @@ msgstr "Забезпечити видимість перехресних сим�
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:151
 #: pcbnew/dialogs/panel_display_options_base.cpp:114
 msgid "Zoom to fit cross-probed items"
-msgstr "Збільшення до розмірів екрану виділених елементів"
+msgstr "Збільшення до розмірів екрану перехресних елементів"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:155
 #: pcbnew/dialogs/panel_display_options_base.cpp:118
 msgid "Highlight cross-probed nets"
-msgstr "Виділяти перехресні звʼязки"
+msgstr "Підсвічувати перехресні звʼязки"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:157
 msgid "Highlight nets when they are highlighted in the PCB editor"
-msgstr "Виділяти звʼязки в схемі які виділені в редакторі плат"
+msgstr "Підсвітити звʼязки в схемі які підсвітити в редакторі плат"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
 msgid "Line Drawing Mode:"
@@ -11855,7 +11855,7 @@ msgstr "Перетягування мишею виконує операцією 
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:47
 msgid "If unchecked, mouse drag will perform move (M) operation"
-msgstr "Якщо не відмічено, виконати операцію переміщення (M) мишкою"
+msgstr "Якщо не відмічена, виконати операцію переміщення (M) мишкою"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:51
 msgid "Automatically start wires on unconnected pins"
@@ -11866,7 +11866,7 @@ msgid ""
 "When enabled, you can start wiring by clicking on unconnected pins even when "
 "the wire tool is not active"
 msgstr ""
-"Якщо увімкнено, ви можете почати провідник з кліку по непідключеному виводу "
+"Якщо ввімкнено, ви можете почати провідник з кліку по непідключеному виводу "
 "якщо інструмент не активований"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:56
@@ -11879,12 +11879,12 @@ msgid ""
 "First <ESC> in selection tool clears selection, next clears net highlighting"
 msgstr ""
 "Перший <ESC> в режимі виділення знімає виділення, наступний очищає "
-"підсвічування мереж"
+"підсвічування зв'язків"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:67
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:20
 msgid "Defaults for New Objects"
-msgstr "За промовчанням для нових об'єктів"
+msgstr "Типові для нових об'єктів"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:77
 msgid "Sheet border:"
@@ -11905,7 +11905,7 @@ msgid ""
 "If disabled, clicking on a pin select only the pin."
 msgstr ""
 "У редакторі схем:\n"
-"Якщо ввімкнено, клацання на виводі вибирає батьківський символ.\n"
+"Якщо ввімкнена, клацання на виводі вибирає батьківський символ.\n"
 "Якщо вимкнено, натискання на вивід вибирає лише один вивід."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:127
@@ -11913,7 +11913,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:96
 #: pcbnew/dialogs/panel_edit_options_base.cpp:168
 msgid "Left Click Mouse Commands"
-msgstr "Команди по кліку лівої кнопки маніпулятора"
+msgstr "Команди по натисканню лівої кнопки миші"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:137
 #: pcbnew/dialogs/panel_edit_options_base.cpp:98
@@ -12011,7 +12011,7 @@ msgstr "Приріст мітки:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:337
 msgid "Dialog Preferences"
-msgstr "Діалог Налаштувань"
+msgstr "Діалог налаштувань"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:347
 msgid "Show footprint previews in Symbol Chooser"
@@ -12025,7 +12025,7 @@ msgstr "Псевдонім '%s' вже використовується."
 
 #: eeschema/dialogs/panel_setup_buses.cpp:290
 msgid "Member net/alias name cannot be empty."
-msgstr "Ім'я учасника зв'язку/псевдоніму не може бути пустим."
+msgstr "Ім'я учасника зв'язку/псевдоніму не може бути незаповненим."
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:24
 msgid "Bus definitions:"
