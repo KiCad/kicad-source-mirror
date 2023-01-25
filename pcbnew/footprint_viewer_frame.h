@@ -72,6 +72,9 @@ public:
      */
     void OnUpdateFootprintButton(  wxUpdateUIEvent& aEvent );
 
+    ///< @copydoc EDADRAW_FRAME::UpdateMsgPanel
+    void UpdateMsgPanel() override;
+
     /**
      * Run the footprint viewer as a modal dialog.
      *

@@ -1359,16 +1359,7 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
         if( !pcbFrame )
         {
             FOOTPRINT* fp = static_cast<FOOTPRINT*>( m_frame->GetModel() );
-            size_t     padCount = fp->GetPadCount( DO_NOT_INCLUDE_NPTH );
-
-            msgItems.emplace_back( _( "Library" ), fp->GetFPID().GetLibNickname().wx_str() );
-
-            msgItems.emplace_back( _( "Footprint Name" ), fp->GetFPID().GetLibItemName().wx_str() );
-
-            msgItems.emplace_back( _( "Pads" ), wxString::Format( wxT( "%zu" ), padCount ) );
-
-            msgItems.emplace_back( wxString::Format( _( "Doc: %s" ), fp->GetDescription() ),
-                                   wxString::Format( _( "Keywords: %s" ), fp->GetKeywords() ) );
+            fp->GetMsgPanelInfo( m_frame, msgItems );
         }
         else
         {

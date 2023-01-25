@@ -334,6 +334,21 @@ FOOTPRINT_EDIT_FRAME::~FOOTPRINT_EDIT_FRAME()
 }
 
 
+void FOOTPRINT_EDIT_FRAME::UpdateMsgPanel()
+{
+    EDA_DRAW_FRAME::UpdateMsgPanel();
+
+    FOOTPRINT* fp = static_cast<FOOTPRINT*>( GetModel() );
+
+    if( fp )
+    {
+        std::vector<MSG_PANEL_ITEM> msgItems;
+        fp->GetMsgPanelInfo( this, msgItems );
+        SetMsgPanel( msgItems );
+    }
+}
+
+
 bool FOOTPRINT_EDIT_FRAME::IsContentModified() const
 {
     return GetScreen() && GetScreen()->IsContentModified()

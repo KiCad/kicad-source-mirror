@@ -370,6 +370,21 @@ SELECTION& FOOTPRINT_VIEWER_FRAME::GetCurrentSelection()
 }
 
 
+void FOOTPRINT_VIEWER_FRAME::UpdateMsgPanel()
+{
+    EDA_DRAW_FRAME::UpdateMsgPanel();
+
+    FOOTPRINT* fp = static_cast<FOOTPRINT*>( GetModel() );
+
+    if( fp )
+    {
+        std::vector<MSG_PANEL_ITEM> msgItems;
+        fp->GetMsgPanelInfo( this, msgItems );
+        SetMsgPanel( msgItems );
+    }
+}
+
+
 void FOOTPRINT_VIEWER_FRAME::setupUIConditions()
 {
     PCB_BASE_FRAME::setupUIConditions();

@@ -1024,20 +1024,22 @@ void FOOTPRINT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
         || aFrame->IsType( FRAME_FOOTPRINT_VIEWER_MODAL )
         || aFrame->IsType( FRAME_FOOTPRINT_EDITOR ) )
     {
-        wxDateTime date( static_cast<time_t>( m_lastEditTime ) );
+        size_t     padCount = GetPadCount( DO_NOT_INCLUDE_NPTH );
 
-        // Date format: see http://www.cplusplus.com/reference/ctime/strftime
-        if( m_lastEditTime && date.IsValid() )
-            msg = date.Format( wxT( "%b %d, %Y" ) ); // Abbreviated_month_name Day, Year
-        else
-            msg = _( "Unknown" );
+        aList.emplace_back( _( "Library" ), GetFPID().GetLibNickname().wx_str() );
 
-        aList.emplace_back( _( "Last Change" ), msg );
+        aList.emplace_back( _( "Footprint Name" ), GetFPID().GetLibItemName().wx_str() );
+
+        aList.emplace_back( _( "Pads" ), wxString::Format( wxT( "%zu" ), padCount ) );
+
+        aList.emplace_back( wxString::Format( _( "Doc: %s" ), GetDescription() ),
+                               wxString::Format( _( "Keywords: %s" ), GetKeywords() ) );
+
+        return;
     }
-    else if( aFrame->IsType( FRAME_PCB_EDITOR ) )
-    {
-        aList.emplace_back( _( "Board Side" ), IsFlipped() ? _( "Back (Flipped)" ) : _( "Front" ) );
-    }
+
+    // aFrame is the board editor:
+    aList.emplace_back( _( "Board Side" ), IsFlipped() ? _( "Back (Flipped)" ) : _( "Front" ) );
 
     auto addToken = []( wxString* aStr, const wxString& aAttr )
                     {
@@ -1050,7 +1052,7 @@ void FOOTPRINT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
     wxString status;
     wxString attrs;
 
-    if( aFrame->GetName() == PCB_EDIT_FRAME_NAME && IsLocked() )
+    if( IsLocked() )
         addToken( &status, _( "Locked" ) );
 
     if( m_fpStatus & FP_is_PLACED )
