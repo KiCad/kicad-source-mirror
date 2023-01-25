@@ -149,6 +149,7 @@ public:
 
         if( aLine )
         {
+            m_stroke = aLine->GetStroke();
             m_lastResolvedLineStyle = aLine->m_lastResolvedLineStyle;
             m_lastResolvedWidth = aLine->m_lastResolvedWidth;
             m_lastResolvedColor = aLine->m_lastResolvedColor;
