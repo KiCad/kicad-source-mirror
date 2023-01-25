@@ -2388,7 +2388,7 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
         for( int layer : activeLayers )
         {
             // NOTE: Only checking the regular layers (not GAL meta-layers)
-            if( layer < PCB_LAYER_ID_COUNT && aItem->IsOnLayer( ToLAYER_ID( layer ) ) )
+            if( layer < PCB_LAYER_ID_COUNT && aItem->IsOnLayer( ToLAYER_ID( layer ), true ) )
             {
                 onActiveLayer = true;
                 break;
@@ -2897,19 +2897,21 @@ int PCB_SELECTION_TOOL::hitTestDistance( const wxPoint& aWhere, BOARD_ITEM* aIte
 void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
                                                    const VECTOR2I& aWhere ) const
 {
-    std::set<BOARD_ITEM*> preferred;
-    std::set<BOARD_ITEM*> rejected;
-    wxPoint               where( aWhere.x, aWhere.y );
+    static const LSET silkLayers( 2, B_SilkS, F_SilkS );
+    static const LSET courtyardLayers( 2, B_CrtYd, F_CrtYd );
 
-    PCB_LAYER_ID activeLayer = m_frame->GetActiveLayer();
-    LSET         silkLayers( 2, B_SilkS, F_SilkS );
+    std::set<BOARD_ITEM*>  preferred;
+    std::set<BOARD_ITEM*>  rejected;
+    wxPoint                where( aWhere.x, aWhere.y );
+    const RENDER_SETTINGS* settings = getView()->GetPainter()->GetSettings();
+    PCB_LAYER_ID           activeLayer = m_frame->GetActiveLayer();
 
     if( silkLayers[activeLayer] )
     {
         for( int i = 0; i < aCollector.GetCount(); ++i )
         {
             BOARD_ITEM* item = aCollector[i];
-            KICAD_T type = item->Type();
+            KICAD_T     type = item->Type();
 
             if( ( type == PCB_TEXT_T || type == PCB_TEXTBOX_T || type == PCB_SHAPE_T )
                     && silkLayers[item->GetLayer()] )
@@ -2917,16 +2919,27 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
                 preferred.insert( item );
             }
         }
-
-        if( preferred.size() > 0 )
+    }
+    else if( courtyardLayers[activeLayer] && settings->GetHighContrast() )
+    {
+        for( int i = 0; i < aCollector.GetCount(); ++i )
         {
-            aCollector.Empty();
+            BOARD_ITEM* item = aCollector[i];
+            KICAD_T     type = item->Type();
 
-            for( BOARD_ITEM* item : preferred )
-                aCollector.Append( item );
-
-            return;
+            if( type == PCB_FOOTPRINT_T )
+                preferred.insert( item );
         }
+    }
+
+    if( preferred.size() > 0 )
+    {
+        aCollector.Empty();
+
+        for( BOARD_ITEM* item : preferred )
+            aCollector.Append( item );
+
+        return;
     }
 
     // Prefer exact hits to sloppy ones

@@ -328,7 +328,7 @@ public:
      * given layer, even if that layer is not one of the valid footprint layers F_Cu and B_Cu.
      * This allows selection of "graphic" footprints that contain only silkscreen, for example.
      */
-    bool IsOnLayer( PCB_LAYER_ID aLayer ) const override;
+    bool IsOnLayer( PCB_LAYER_ID aLayer, bool aIncludeCourtyards = false ) const override;
 
 // m_footprintStatus bits:
 #define FP_is_LOCKED        0x01        ///< footprint LOCKED: no autoplace allowed

@@ -1085,8 +1085,13 @@ void FOOTPRINT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 }
 
 
-bool FOOTPRINT::IsOnLayer( PCB_LAYER_ID aLayer ) const
+bool FOOTPRINT::IsOnLayer( PCB_LAYER_ID aLayer, bool aIncludeCourtyards ) const
 {
+    static const LSET courtyardLayers( 2, B_CrtYd, F_CrtYd );
+
+    if( aIncludeCourtyards && courtyardLayers[aLayer] )
+        return !GetCourtyard( aLayer ).IsEmpty();
+
     // If we have any pads, fall back on normal checking
     if( !m_pads.empty() )
         return m_layer == aLayer;

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -164,7 +164,7 @@ public:
     // Return the first layer in GUI sequence.
     PCB_LAYER_ID GetFirstLayer() const;
 
-    virtual bool IsOnLayer( PCB_LAYER_ID ) const override;
+    virtual bool IsOnLayer( PCB_LAYER_ID, bool aIncludeCourtyards = false ) const override;
 
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 

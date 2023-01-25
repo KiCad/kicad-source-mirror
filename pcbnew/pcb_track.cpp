@@ -482,7 +482,7 @@ int PCB_VIA::GetSolderMaskExpansion() const
 }
 
 
-bool PCB_VIA::IsOnLayer( PCB_LAYER_ID aLayer ) const
+bool PCB_VIA::IsOnLayer( PCB_LAYER_ID aLayer, bool aIncludeCourtyards ) const
 {
 #if 0
     // Nice and simple, but raises its ugly head in performance profiles....

@@ -1298,7 +1298,7 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
                 // as they won't be found in the view layer's itemset for re-painting.
                 if( GetDisplayOptions().m_ContrastModeDisplay == HIGH_CONTRAST_MODE::HIDDEN )
                 {
-                    if( item->IsOnLayer( oldLayer ) || item->IsOnLayer( aLayer ) )
+                    if( item->IsOnLayer( oldLayer, true ) || item->IsOnLayer( aLayer, true ) )
                         return KIGFX::ALL;
                 }
 
