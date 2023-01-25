@@ -36,13 +36,23 @@ public:
 
     static wxString Version();
 
+    enum class FF_RESULT
+    {
+        OK,
+        ERROR,
+        SUBSTITUTE,
+        MISSING_BOLD,
+        MISSING_ITAL,
+        MISSING_BOLD_ITAL
+    };
+
     /**
      * Given a fully-qualified font name ("Times:Bold:Italic") find the closest matching font
      * and return its filepath in \a aFontFile.
      *
      * A return value of false indicates a serious error in the font system.
      */
-    bool FindFont( const wxString& aFontName, wxString& aFontFile );
+    FF_RESULT FindFont( const wxString& aFontName, wxString& aFontFile, bool aBold, bool aItalic );
 
     /**
      * List the current available font families.

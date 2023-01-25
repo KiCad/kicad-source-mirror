@@ -63,12 +63,22 @@ public:
 
     bool IsBold() const override
     {
-        return m_face && ( m_face->style_flags & FT_STYLE_FLAG_BOLD );
+        return m_face && ( m_fakeBold || ( m_face->style_flags & FT_STYLE_FLAG_BOLD ) );
     }
 
     bool IsItalic() const override
     {
-        return m_face && ( m_face->style_flags & FT_STYLE_FLAG_ITALIC );
+        return m_face && ( m_fakeItal || ( m_face->style_flags & FT_STYLE_FLAG_ITALIC ) );
+    }
+
+    void SetFakeBold()
+    {
+        m_fakeBold = true;
+    }
+
+    void SetFakeItal()
+    {
+        m_fakeItal = true;
     }
 
     /**
@@ -128,6 +138,8 @@ private:
     static FT_Library m_freeType;
     FT_Face           m_face;
     const int         m_faceSize;
+    bool              m_fakeBold;
+    bool              m_fakeItal;
 
     // cache for glyphs converted to straight segments
     // key is glyph index (FT_GlyphSlot field glyph_index)

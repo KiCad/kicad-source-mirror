@@ -32,6 +32,7 @@
 #include <bezier_curves.h>
 #include <geometry/shape_poly_set.h>
 #include <eda_text.h>
+#include <font/fontconfig.h>
 #include <font/outline_font.h>
 #include FT_GLYPH_H
 #include FT_BBOX_H
@@ -46,7 +47,9 @@ FT_Library OUTLINE_FONT::m_freeType = nullptr;
 
 OUTLINE_FONT::OUTLINE_FONT() :
         m_face(NULL),
-        m_faceSize( 16 )
+        m_faceSize( 16 ),
+        m_fakeBold( false ),
+        m_fakeItal( false )
 {
     if( !m_freeType )
         FT_Init_FreeType( &m_freeType );
@@ -90,15 +93,17 @@ OUTLINE_FONT* OUTLINE_FONT::LoadFont( const wxString& aFontName, bool aBold, boo
     OUTLINE_FONT* font = new OUTLINE_FONT();
 
     wxString fontFile;
-    wxString qualifiedFontName = aFontName;
+    using fc = fontconfig::FONTCONFIG;
 
-    if( aBold )
-        qualifiedFontName << wxS( ":Bold" );
+    fc::FF_RESULT retval = Fontconfig()->FindFont( aFontName, fontFile, aBold, aItalic );
 
-    if( aItalic )
-        qualifiedFontName << wxS( ":Italic" );
+    if( retval == fc::FF_RESULT::MISSING_BOLD || retval == fc::FF_RESULT::MISSING_BOLD_ITAL )
+        font->SetFakeBold();
 
-    if( Fontconfig()->FindFont( qualifiedFontName, fontFile ) )
+    if( retval == fc::FF_RESULT::MISSING_ITAL || retval == fc::FF_RESULT::MISSING_BOLD_ITAL )
+        font->SetFakeItal();
+
+    if( retval != fc::FF_RESULT::ERROR )
         (void) font->loadFace( fontFile );
 
     font->m_fontName = aFontName;       // Keep asked-for name, even if we substituted.
@@ -357,7 +362,23 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
 
         if( aGlyphs )
         {
+            if( m_fakeItal )
+            {
+                FT_Matrix matrix;
+                // Create a 12 degree slant
+                const float angle = ( -M_PI * 12 ) / 180.0f;
+                matrix.xx = (FT_Fixed) ( cos( angle ) * 0x10000L );
+                matrix.xy = (FT_Fixed) ( -sin( angle ) * 0x10000L );
+                matrix.yx = (FT_Fixed) ( 0 * 0x10000L );  // Don't rotate in the y direction
+                matrix.yy = (FT_Fixed) ( 1 * 0x10000L );
+
+                FT_Set_Transform(face, &matrix,0);
+            }
+
             FT_Load_Glyph( face, glyphInfo[i].codepoint, FT_LOAD_NO_BITMAP );
+
+            if( m_fakeBold )
+                FT_Outline_Embolden( &face->glyph->outline, 1 << 6 );
 
             // contours is a collection of all outlines in the glyph; for example the 'o' glyph
             // generally contains 2 contours, one for the glyph outline and one for the hole

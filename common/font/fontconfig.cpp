@@ -61,9 +61,19 @@ FONTCONFIG* Fontconfig()
 }
 
 
-bool FONTCONFIG::FindFont( const wxString& aFontName, wxString& aFontFile )
+FONTCONFIG::FF_RESULT FONTCONFIG::FindFont( const wxString &aFontName, wxString &aFontFile,
+        bool aBold, bool aItalic )
 {
-    FcPattern* pat = FcNameParse( wxStringToFcChar8( aFontName ) );
+    FF_RESULT retval = FF_RESULT::ERROR;
+    wxString qualifiedFontName = aFontName;
+
+    if( aBold )
+        qualifiedFontName << wxS( ":Bold" );
+
+    if( aItalic )
+        qualifiedFontName << wxS( ":Italic" );
+
+    FcPattern* pat = FcNameParse( wxStringToFcChar8( qualifiedFontName ) );
     FcConfigSubstitute( nullptr, pat, FcMatchPattern );
     FcDefaultSubstitute( pat );
 
@@ -71,8 +81,6 @@ bool FONTCONFIG::FindFont( const wxString& aFontName, wxString& aFontFile )
     FcPattern* font = FcFontMatch( nullptr, pat, &r );
 
     wxString fontName;
-    bool     ok = false;
-    bool     substituted = false;
 
     if( font )
     {
@@ -81,9 +89,11 @@ bool FONTCONFIG::FindFont( const wxString& aFontName, wxString& aFontFile )
         if( FcPatternGetString( font, FC_FILE, 0, &file ) == FcResultMatch )
         {
             aFontFile = wxString::FromUTF8( (char*) file );
-
+            wxString styleStr;
             FcChar8* family = nullptr;
             FcChar8* style = nullptr;
+
+            retval = FF_RESULT::SUBSTITUTE;
 
             if( FcPatternGetString( font, FC_FAMILY, 0, &family ) == FcResultMatch )
             {
@@ -91,7 +101,7 @@ bool FONTCONFIG::FindFont( const wxString& aFontName, wxString& aFontFile )
 
                 if( FcPatternGetString( font, FC_STYLE, 0, &style ) == FcResultMatch )
                 {
-                    wxString styleStr = wxString::FromUTF8( (char*) style );
+                    styleStr = wxString::FromUTF8( (char*) style );
 
                     if( !styleStr.IsEmpty() )
                     {
@@ -100,27 +110,51 @@ bool FONTCONFIG::FindFont( const wxString& aFontName, wxString& aFontFile )
                     }
                 }
 
-                // TODO: report Regular vs Book, Italic vs Oblique, etc. or filter them out?
+                bool has_bold = false;
+                bool has_ital = false;
+                wxString lower_style = styleStr.Lower();
 
-                if( aFontName.Contains( ":" ) )
-                    substituted = aFontName.CmpNoCase( fontName ) != 0;
-                else
-                    substituted = !fontName.StartsWith( aFontName );
+                if( lower_style.Contains( wxS( "bold" ) )
+                        || lower_style.Contains( wxS( "black" ) )
+                        || lower_style.Contains( wxS( "thick" ) )
+                        || lower_style.Contains( wxS( "dark" ) ) )
+                {
+                    has_bold = true;
+                }
+
+                if( lower_style.Contains( wxS( "italic" ) )
+                        || lower_style.Contains( wxS( "oblique" ) )
+                        || lower_style.Contains( wxS( "slant" ) ) )
+                {
+                    has_ital = true;
+                }
+
+                if( fontName.Lower().StartsWith( aFontName.Lower() ) )
+                {
+                    if( ( aBold && !has_bold ) && ( aItalic && !has_ital ) )
+                        retval = FF_RESULT::MISSING_BOLD_ITAL;
+                    else if( aBold && !has_bold )
+                        retval = FF_RESULT::MISSING_BOLD;
+                    else if( aItalic && !has_ital )
+                        retval = FF_RESULT::MISSING_ITAL;
+                    else if( ( aBold != has_bold ) || ( aItalic != has_ital ) )
+                        retval = FF_RESULT::SUBSTITUTE;
+                    else
+                        retval = FF_RESULT::OK;
+                }
             }
-
-            ok = true;
         }
 
         FcPatternDestroy( font );
     }
 
-    if( !ok )
-        wxLogWarning( _( "Error loading font '%s'." ), aFontName );
-    else if( substituted )
-        wxLogWarning( _( "Font '%s' not found; substituting '%s'." ), aFontName, fontName );
+    if( retval == FF_RESULT::ERROR )
+        wxLogWarning( _( "Error loading font '%s'." ), qualifiedFontName );
+    else if( retval == FF_RESULT::SUBSTITUTE )
+        wxLogWarning( _( "Font '%s' not found; substituting '%s'." ), qualifiedFontName, fontName );
 
     FcPatternDestroy( pat );
-    return ok;
+    return retval;
 }
 
 
