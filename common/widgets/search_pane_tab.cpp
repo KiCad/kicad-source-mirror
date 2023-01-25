@@ -33,6 +33,7 @@ SEARCH_PANE_LISTVIEW::SEARCH_PANE_LISTVIEW( SEARCH_HANDLER* handler, wxWindow* p
     RefreshColumnNames();
 
     Bind( wxEVT_LIST_ITEM_SELECTED, &SEARCH_PANE_LISTVIEW::OnItemSelected, this );
+    Bind( wxEVT_LIST_ITEM_ACTIVATED, &SEARCH_PANE_LISTVIEW::OnItemActivated, this );
     Bind( wxEVT_LIST_ITEM_FOCUSED, &SEARCH_PANE_LISTVIEW::OnItemSelected, this );
     Bind( wxEVT_LIST_ITEM_DESELECTED, &SEARCH_PANE_LISTVIEW::OnItemDeselected, this );
 }
@@ -41,6 +42,7 @@ SEARCH_PANE_LISTVIEW::SEARCH_PANE_LISTVIEW( SEARCH_HANDLER* handler, wxWindow* p
 SEARCH_PANE_LISTVIEW::~SEARCH_PANE_LISTVIEW()
 {
     Unbind( wxEVT_LIST_ITEM_SELECTED, &SEARCH_PANE_LISTVIEW::OnItemSelected, this );
+    Unbind( wxEVT_LIST_ITEM_ACTIVATED, &SEARCH_PANE_LISTVIEW::OnItemActivated, this );
     Unbind( wxEVT_LIST_ITEM_FOCUSED, &SEARCH_PANE_LISTVIEW::OnItemSelected, this );
     Unbind( wxEVT_LIST_ITEM_DESELECTED, &SEARCH_PANE_LISTVIEW::OnItemDeselected, this );
 }
@@ -62,6 +64,23 @@ void SEARCH_PANE_LISTVIEW::GetSelectRowsList( std::vector<long>& aSelectedList )
         aSelectedList.emplace_back( idx );
         idx = GetNextSelected( idx );
     }
+}
+
+
+void SEARCH_PANE_LISTVIEW::OnItemActivated( wxListEvent& aEvent )
+{
+    CallAfter(
+            [&]()
+            {
+                m_handler->ActivateItem( aEvent.GetIndex() );
+
+                // Reset our selection to match the selected list items
+                std::vector<long> list;
+                GetSelectRowsList( list );
+                m_handler->SelectItems( list );
+            } );
+
+    aEvent.Skip();
 }
 
 
