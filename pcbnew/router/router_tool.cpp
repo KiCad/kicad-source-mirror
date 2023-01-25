@@ -714,12 +714,24 @@ void ROUTER_TOOL::updateSizesAfterLayerSwitch( PCB_LAYER_ID targetLayer )
 
         if( !constraint.IsNull() )
         {
-            sizes.SetTrackWidth( std::max( bds.m_TrackMinWidth, constraint.m_Value.Opt() ) );
+            int width = sizes.TrackWidth();
 
-            if( sizes.TrackWidth() == constraint.m_Value.Opt() )
-                sizes.SetWidthSource( constraint.GetName() );
-            else
+            // Only change the size if we're explicitly using the net class, or we're out of range for our
+            // new constraints. Otherwise, just leave the track width alone so we don't change for no reason.
+            if( bds.UseNetClassTrack()
+                    || ( width < bds.m_TrackMinWidth )
+                    || ( width < constraint.m_Value.Min() )
+                    || ( width > constraint.m_Value.Max() ) )
+            {
+                sizes.SetTrackWidth( std::max( bds.m_TrackMinWidth, constraint.m_Value.Opt() ) );
+            }
+
+            if( sizes.TrackWidth() == width )
+                sizes.SetWidthSource( _( "existing track" ) );
+            else if( sizes.TrackWidth() == bds.m_TrackMinWidth )
                 sizes.SetWidthSource( _( "board minimum track width" ) );
+            else
+                sizes.SetWidthSource( constraint.GetName() );
         }
     }
 
