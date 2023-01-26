@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014-2022 KiCad Developers, see AUTHOR.txt for contributors.
+ * Copyright (C) 2014-2023 KiCad Developers, see AUTHOR.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,6 +65,7 @@ public:
     void OnDeleteAlternate( wxCommandEvent& event ) override;
     void OnSize( wxSizeEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
+    void OnCollapsiblePaneChange( wxCollapsiblePaneEvent& event ) override;
 
 protected:
     void adjustGridColumns();

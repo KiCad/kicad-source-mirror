@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -94,6 +94,7 @@ class DIALOG_PIN_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnPropertiesChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPaintShowPanel( wxPaintEvent& event ) { event.Skip(); }
+		virtual void OnCollapsiblePaneChange( wxCollapsiblePaneEvent& event ) { event.Skip(); }
 		virtual void OnAddAlternate( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteAlternate( wxCommandEvent& event ) { event.Skip(); }
 

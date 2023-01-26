@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -532,5 +532,21 @@ void DIALOG_PIN_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 
         m_delayedFocusRow = -1;
         m_delayedFocusColumn = -1;
+    }
+}
+void DIALOG_PIN_PROPERTIES::OnCollapsiblePaneChange( wxCollapsiblePaneEvent& event )
+{
+    if( !event.GetCollapsed() )
+    {
+        wxTopLevelWindow* tlw = dynamic_cast<wxTopLevelWindow*>( wxGetTopLevelParent( this ) );
+
+        if( tlw )
+        {
+            tlw->InvalidateBestSize();
+            wxSize bestSize = tlw->GetBestSize();
+            wxSize currentSize = tlw->GetSize();
+            tlw->SetSize( wxMax( bestSize.GetWidth(), currentSize.GetWidth() ),
+                          wxMax( bestSize.GetHeight(), currentSize.GetHeight() ) );
+        }
     }
 }
