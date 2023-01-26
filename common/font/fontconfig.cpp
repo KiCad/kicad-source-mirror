@@ -64,7 +64,7 @@ FONTCONFIG* Fontconfig()
 FONTCONFIG::FF_RESULT FONTCONFIG::FindFont( const wxString &aFontName, wxString &aFontFile,
         bool aBold, bool aItalic )
 {
-    FF_RESULT retval = FF_RESULT::ERROR;
+    FF_RESULT retval = FF_RESULT::FF_ERROR;
     wxString qualifiedFontName = aFontName;
 
     if( aBold )
@@ -93,7 +93,7 @@ FONTCONFIG::FF_RESULT FONTCONFIG::FindFont( const wxString &aFontName, wxString 
             FcChar8* family = nullptr;
             FcChar8* style = nullptr;
 
-            retval = FF_RESULT::SUBSTITUTE;
+            retval = FF_RESULT::FF_SUBSTITUTE;
 
             if( FcPatternGetString( font, FC_FAMILY, 0, &family ) == FcResultMatch )
             {
@@ -132,15 +132,15 @@ FONTCONFIG::FF_RESULT FONTCONFIG::FindFont( const wxString &aFontName, wxString 
                 if( fontName.Lower().StartsWith( aFontName.Lower() ) )
                 {
                     if( ( aBold && !has_bold ) && ( aItalic && !has_ital ) )
-                        retval = FF_RESULT::MISSING_BOLD_ITAL;
+                        retval = FF_RESULT::FF_MISSING_BOLD_ITAL;
                     else if( aBold && !has_bold )
-                        retval = FF_RESULT::MISSING_BOLD;
+                        retval = FF_RESULT::FF_MISSING_BOLD;
                     else if( aItalic && !has_ital )
-                        retval = FF_RESULT::MISSING_ITAL;
+                        retval = FF_RESULT::FF_MISSING_ITAL;
                     else if( ( aBold != has_bold ) || ( aItalic != has_ital ) )
-                        retval = FF_RESULT::SUBSTITUTE;
+                        retval = FF_RESULT::FF_SUBSTITUTE;
                     else
-                        retval = FF_RESULT::OK;
+                        retval = FF_RESULT::FF_OK;
                 }
             }
         }
@@ -148,9 +148,9 @@ FONTCONFIG::FF_RESULT FONTCONFIG::FindFont( const wxString &aFontName, wxString 
         FcPatternDestroy( font );
     }
 
-    if( retval == FF_RESULT::ERROR )
+    if( retval == FF_RESULT::FF_ERROR )
         wxLogWarning( _( "Error loading font '%s'." ), qualifiedFontName );
-    else if( retval == FF_RESULT::SUBSTITUTE )
+    else if( retval == FF_RESULT::FF_SUBSTITUTE )
         wxLogWarning( _( "Font '%s' not found; substituting '%s'." ), qualifiedFontName, fontName );
 
     FcPatternDestroy( pat );

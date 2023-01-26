@@ -97,13 +97,13 @@ OUTLINE_FONT* OUTLINE_FONT::LoadFont( const wxString& aFontName, bool aBold, boo
 
     fc::FF_RESULT retval = Fontconfig()->FindFont( aFontName, fontFile, aBold, aItalic );
 
-    if( retval == fc::FF_RESULT::MISSING_BOLD || retval == fc::FF_RESULT::MISSING_BOLD_ITAL )
+    if( retval == fc::FF_RESULT::FF_MISSING_BOLD || retval == fc::FF_RESULT::FF_MISSING_BOLD_ITAL )
         font->SetFakeBold();
 
-    if( retval == fc::FF_RESULT::MISSING_ITAL || retval == fc::FF_RESULT::MISSING_BOLD_ITAL )
+    if( retval == fc::FF_RESULT::FF_MISSING_ITAL || retval == fc::FF_RESULT::FF_MISSING_BOLD_ITAL )
         font->SetFakeItal();
 
-    if( retval != fc::FF_RESULT::ERROR )
+    if( retval != fc::FF_RESULT::FF_ERROR )
         (void) font->loadFace( fontFile );
 
     font->m_fontName = aFontName;       // Keep asked-for name, even if we substituted.

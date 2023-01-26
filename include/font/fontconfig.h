@@ -38,12 +38,12 @@ public:
 
     enum class FF_RESULT
     {
-        OK,
-        ERROR,
-        SUBSTITUTE,
-        MISSING_BOLD,
-        MISSING_ITAL,
-        MISSING_BOLD_ITAL
+        FF_OK,
+        FF_ERROR,
+        FF_SUBSTITUTE,
+        FF_MISSING_BOLD,
+        FF_MISSING_ITAL,
+        FF_MISSING_BOLD_ITAL
     };
 
     /**
