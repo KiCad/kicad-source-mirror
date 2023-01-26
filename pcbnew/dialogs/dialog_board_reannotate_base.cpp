@@ -26,8 +26,13 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 	wxBoxSizer* bSizerOpts;
 	bSizerOpts = new wxBoxSizer( wxVERTICAL );
 
-	wxStaticBoxSizer* sbSizerFpOrder;
-	sbSizerFpOrder = new wxStaticBoxSizer( new wxStaticBox( m_StandardOptions, wxID_ANY, _("Footprint Order") ), wxVERTICAL );
+	wxStaticText* stOrderLabel;
+	stOrderLabel = new wxStaticText( m_StandardOptions, wxID_ANY, _("Footprint Order"), wxDefaultPosition, wxDefaultSize, 0 );
+	stOrderLabel->Wrap( -1 );
+	bSizerOpts->Add( stOrderLabel, 0, wxRIGHT|wxLEFT, 5 );
+
+	m_staticline1 = new wxStaticLine( m_StandardOptions, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizerOpts->Add( m_staticline1, 0, wxEXPAND|wxBOTTOM, 8 );
 
 	wxFlexGridSizer* fgSizerButtons;
 	fgSizerButtons = new wxFlexGridSizer( 2, 11, 0, 0 );
@@ -37,11 +42,11 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 	fgSizerButtons->SetFlexibleDirection( wxBOTH );
 	fgSizerButtons->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_Down_Right = new wxRadioButton( sbSizerFpOrder->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_Down_Right = new wxRadioButton( m_StandardOptions, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_Down_Right->SetValue( true );
 	fgSizerButtons->Add( m_Down_Right, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	reannotate_down_right_bitmap = new wxStaticBitmap( sbSizerFpOrder->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 48,48 ), 0 );
+	reannotate_down_right_bitmap = new wxStaticBitmap( m_StandardOptions, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 48,48 ), 0 );
 	reannotate_down_right_bitmap->SetToolTip( _("Horizontally: top left to bottom right") );
 
 	fgSizerButtons->Add( reannotate_down_right_bitmap, 0, wxALL, 5 );
@@ -49,10 +54,10 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 
 	fgSizerButtons->Add( 20, 0, 1, wxEXPAND, 5 );
 
-	m_Right_Down = new wxRadioButton( sbSizerFpOrder->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_Right_Down = new wxRadioButton( m_StandardOptions, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerButtons->Add( m_Right_Down, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	reannotate_right_down_bitmap = new wxStaticBitmap( sbSizerFpOrder->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 48,48 ), 0 );
+	reannotate_right_down_bitmap = new wxStaticBitmap( m_StandardOptions, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 48,48 ), 0 );
 	reannotate_right_down_bitmap->SetToolTip( _("Horizontally: top right to bottom left") );
 
 	fgSizerButtons->Add( reannotate_right_down_bitmap, 0, wxALL, 5 );
@@ -60,10 +65,10 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 
 	fgSizerButtons->Add( 20, 0, 1, wxEXPAND, 5 );
 
-	m_Down_Left = new wxRadioButton( sbSizerFpOrder->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_Down_Left = new wxRadioButton( m_StandardOptions, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerButtons->Add( m_Down_Left, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	reannotate_down_left_bitmap = new wxStaticBitmap( sbSizerFpOrder->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 48,48 ), 0 );
+	reannotate_down_left_bitmap = new wxStaticBitmap( m_StandardOptions, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 48,48 ), 0 );
 	reannotate_down_left_bitmap->SetToolTip( _("Horizontally: bottom left to top right") );
 
 	fgSizerButtons->Add( reannotate_down_left_bitmap, 0, wxALL, 5 );
@@ -71,18 +76,18 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 
 	fgSizerButtons->Add( 20, 0, 1, wxEXPAND, 5 );
 
-	m_Left_Down = new wxRadioButton( sbSizerFpOrder->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_Left_Down = new wxRadioButton( m_StandardOptions, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerButtons->Add( m_Left_Down, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	reannotate_left_down_bitmap = new wxStaticBitmap( sbSizerFpOrder->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 48,48 ), 0 );
+	reannotate_left_down_bitmap = new wxStaticBitmap( m_StandardOptions, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 48,48 ), 0 );
 	reannotate_left_down_bitmap->SetToolTip( _("Horizontally:: bottom right to top left") );
 
 	fgSizerButtons->Add( reannotate_left_down_bitmap, 0, wxALL, 5 );
 
-	m_Up_Right = new wxRadioButton( sbSizerFpOrder->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_Up_Right = new wxRadioButton( m_StandardOptions, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerButtons->Add( m_Up_Right, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	reannotate_up_right_bitmap = new wxStaticBitmap( sbSizerFpOrder->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 48,48 ), 0 );
+	reannotate_up_right_bitmap = new wxStaticBitmap( m_StandardOptions, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 48,48 ), 0 );
 	reannotate_up_right_bitmap->SetToolTip( _("Vertically: top left to bottom right") );
 
 	fgSizerButtons->Add( reannotate_up_right_bitmap, 0, wxALL, 5 );
@@ -90,10 +95,10 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 
 	fgSizerButtons->Add( 20, 0, 1, wxEXPAND, 5 );
 
-	m_Right_Up = new wxRadioButton( sbSizerFpOrder->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_Right_Up = new wxRadioButton( m_StandardOptions, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerButtons->Add( m_Right_Up, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	reannotate_right_up_bitmap = new wxStaticBitmap( sbSizerFpOrder->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 48,48 ), 0 );
+	reannotate_right_up_bitmap = new wxStaticBitmap( m_StandardOptions, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 48,48 ), 0 );
 	reannotate_right_up_bitmap->SetToolTip( _("Vertically: top right to bottom left") );
 
 	fgSizerButtons->Add( reannotate_right_up_bitmap, 0, wxALL, 5 );
@@ -101,10 +106,10 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 
 	fgSizerButtons->Add( 20, 0, 1, wxEXPAND, 5 );
 
-	m_Up_Left = new wxRadioButton( sbSizerFpOrder->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_Up_Left = new wxRadioButton( m_StandardOptions, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerButtons->Add( m_Up_Left, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	reannotate_up_left_bitmap = new wxStaticBitmap( sbSizerFpOrder->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 48,48 ), 0 );
+	reannotate_up_left_bitmap = new wxStaticBitmap( m_StandardOptions, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 48,48 ), 0 );
 	reannotate_up_left_bitmap->SetToolTip( _("Vertically: bottom left to top right") );
 
 	fgSizerButtons->Add( reannotate_up_left_bitmap, 0, wxALL, 5 );
@@ -112,16 +117,16 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 
 	fgSizerButtons->Add( 20, 0, 1, wxEXPAND, 5 );
 
-	m_Left_Up = new wxRadioButton( sbSizerFpOrder->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_Left_Up = new wxRadioButton( m_StandardOptions, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerButtons->Add( m_Left_Up, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	reannotate_left_up_bitmap = new wxStaticBitmap( sbSizerFpOrder->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 48,48 ), 0 );
+	reannotate_left_up_bitmap = new wxStaticBitmap( m_StandardOptions, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 48,48 ), 0 );
 	reannotate_left_up_bitmap->SetToolTip( _("Vertically: bottom right to top left") );
 
 	fgSizerButtons->Add( reannotate_left_up_bitmap, 0, wxALL, 5 );
 
 
-	sbSizerFpOrder->Add( fgSizerButtons, 1, wxEXPAND, 5 );
+	bSizerOpts->Add( fgSizerButtons, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 
 	wxFlexGridSizer* fgSizerLocations;
 	fgSizerLocations = new wxFlexGridSizer( 0, 2, 0, 0 );
@@ -129,66 +134,64 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 	fgSizerLocations->SetFlexibleDirection( wxBOTH );
 	fgSizerLocations->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticText9 = new wxStaticText( sbSizerFpOrder->GetStaticBox(), wxID_ANY, _("Based on location of:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText9 = new wxStaticText( m_StandardOptions, wxID_ANY, _("Based on location of:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText9->Wrap( -1 );
-	fgSizerLocations->Add( m_staticText9, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizerLocations->Add( m_staticText9, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	wxString m_locationChoiceChoices[] = { _("Footprint"), _("Reference Designator") };
 	int m_locationChoiceNChoices = sizeof( m_locationChoiceChoices ) / sizeof( wxString );
-	m_locationChoice = new wxChoice( sbSizerFpOrder->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_locationChoiceNChoices, m_locationChoiceChoices, 0 );
+	m_locationChoice = new wxChoice( m_StandardOptions, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_locationChoiceNChoices, m_locationChoiceChoices, 0 );
 	m_locationChoice->SetSelection( 0 );
-	fgSizerLocations->Add( m_locationChoice, 0, wxALL|wxEXPAND, 5 );
+	fgSizerLocations->Add( m_locationChoice, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
 
-	m_SortGridText = new wxStaticText( sbSizerFpOrder->GetStaticBox(), wxID_ANY, _("Round locations to:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SortGridText = new wxStaticText( m_StandardOptions, wxID_ANY, _("Round locations to:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SortGridText->Wrap( -1 );
 	m_SortGridText->SetToolTip( _("Component position will be rounded\nto this grid before sorting.\nThis helps with misaligned parts.") );
 
 	fgSizerLocations->Add( m_SortGridText, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	wxArrayString m_GridChoiceChoices;
-	m_GridChoice = new wxChoice( sbSizerFpOrder->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_GridChoiceChoices, 0 );
+	m_GridChoice = new wxChoice( m_StandardOptions, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_GridChoiceChoices, 0 );
 	m_GridChoice->SetSelection( 0 );
 	m_GridChoice->SetToolTip( _("Component position will be rounded\nto this grid before sorting.\nThis helps with misaligned parts.") );
 	m_GridChoice->SetMinSize( wxSize( 150,-1 ) );
 
-	fgSizerLocations->Add( m_GridChoice, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	fgSizerLocations->Add( m_GridChoice, 0, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
 
 
-	sbSizerFpOrder->Add( fgSizerLocations, 0, wxEXPAND|wxTOP, 5 );
+	bSizerOpts->Add( fgSizerLocations, 0, wxEXPAND|wxALL, 10 );
 
 
-	bSizerOpts->Add( sbSizerFpOrder, 0, wxALL|wxEXPAND, 5 );
+	bSizerOpts->Add( 0, 15, 0, wxEXPAND, 5 );
 
-	wxStaticBoxSizer* sbSizeScope;
-	sbSizeScope = new wxStaticBoxSizer( new wxStaticBox( m_StandardOptions, wxID_ANY, _("Reannotation Scope") ), wxVERTICAL );
+	wxStaticText* stScopeLabel;
+	stScopeLabel = new wxStaticText( m_StandardOptions, wxID_ANY, _("Reannotation Scope"), wxDefaultPosition, wxDefaultSize, 0 );
+	stScopeLabel->Wrap( -1 );
+	bSizerOpts->Add( stScopeLabel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+	m_staticline2 = new wxStaticLine( m_StandardOptions, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizerOpts->Add( m_staticline2, 0, wxEXPAND|wxBOTTOM, 8 );
 
 	wxFlexGridSizer* fgSizer6111;
 	fgSizer6111 = new wxFlexGridSizer( 0, 5, 0, 0 );
 	fgSizer6111->SetFlexibleDirection( wxVERTICAL );
 	fgSizer6111->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_NONE );
 
-	AnnotateLabel = new wxStaticText( sbSizeScope->GetStaticBox(), wxID_ANY, _("Reannotate:"), wxDefaultPosition, wxDefaultSize, 0 );
-	AnnotateLabel->Wrap( -1 );
-	fgSizer6111->Add( AnnotateLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
-
-	m_AnnotateAll = new wxRadioButton( sbSizeScope->GetStaticBox(), wxID_ANY, _("All"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_AnnotateAll = new wxRadioButton( m_StandardOptions, wxID_ANY, _("All"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_AnnotateAll->SetValue( true );
-	fgSizer6111->Add( m_AnnotateAll, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	fgSizer6111->Add( m_AnnotateAll, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	m_AnnotateFront = new wxRadioButton( sbSizeScope->GetStaticBox(), wxID_ANY, _("Front"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer6111->Add( m_AnnotateFront, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	m_AnnotateFront = new wxRadioButton( m_StandardOptions, wxID_ANY, _("Front"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer6111->Add( m_AnnotateFront, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	m_AnnotateBack = new wxRadioButton( sbSizeScope->GetStaticBox(), wxID_ANY, _("Back"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer6111->Add( m_AnnotateBack, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	m_AnnotateBack = new wxRadioButton( m_StandardOptions, wxID_ANY, _("Back"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer6111->Add( m_AnnotateBack, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	m_AnnotateSelection = new wxRadioButton( sbSizeScope->GetStaticBox(), wxID_ANY, _("Selection"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer6111->Add( m_AnnotateSelection, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
-
-
-	sbSizeScope->Add( fgSizer6111, 0, wxBOTTOM|wxTOP, 5 );
+	m_AnnotateSelection = new wxRadioButton( m_StandardOptions, wxID_ANY, _("Selection"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer6111->Add( m_AnnotateSelection, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizerOpts->Add( sbSizeScope, 0, wxALL|wxEXPAND, 5 );
+	bSizerOpts->Add( fgSizer6111, 0, wxBOTTOM|wxLEFT|wxEXPAND, 10 );
 
 
 	m_StandardOptions->SetSizer( bSizerOpts );
@@ -203,7 +206,7 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 	gbSizer1 = new wxGridBagSizer( 0, 0 );
 	gbSizer1->SetFlexibleDirection( wxBOTH );
 	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-	gbSizer1->SetEmptyCellSize( wxSize( 20,-1 ) );
+	gbSizer1->SetEmptyCellSize( wxSize( 20,10 ) );
 
 	m_FrontRefDesStartText = new wxStaticText( m_Advanced, wxID_ANY, _("Front reference start:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_FrontRefDesStartText->Wrap( -1 );
@@ -264,16 +267,16 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 	m_ExcludeLocked = new wxCheckBox( m_Advanced, wxID_ANY, _("Exclude locked footprints"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ExcludeLocked->SetToolTip( _("Locked footprints will not be reannotated") );
 
-	gbSizer1->Add( m_ExcludeLocked, wxGBPosition( 4, 0 ), wxGBSpan( 1, 5 ), wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	gbSizer1->Add( m_ExcludeLocked, wxGBPosition( 5, 0 ), wxGBSpan( 1, 5 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, 5 );
 
 	m_ExcludeListText = new wxStaticText( m_Advanced, wxID_ANY, _("Exclude references:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ExcludeListText->Wrap( -1 );
 	m_ExcludeListText->SetToolTip( _("Do not re-annotate this type \nof reference (R means R*)") );
 
-	gbSizer1->Add( m_ExcludeListText, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	gbSizer1->Add( m_ExcludeListText, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_ExcludeList = new wxTextCtrl( m_Advanced, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_ExcludeList, wxGBPosition( 5, 1 ), wxGBSpan( 1, 4 ), wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	gbSizer1->Add( m_ExcludeList, wxGBPosition( 6, 1 ), wxGBSpan( 1, 4 ), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
 	gbSizer1->AddGrowableCol( 1 );
@@ -300,7 +303,7 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 	bSizerMessages->Add( m_MessageWindow, 1, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
-	bupperSizer->Add( bSizerMessages, 1, wxALL|wxEXPAND, 5 );
+	bupperSizer->Add( bSizerMessages, 1, wxEXPAND|wxTOP, 15 );
 
 
 	bmainSizer->Add( bupperSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 6 );

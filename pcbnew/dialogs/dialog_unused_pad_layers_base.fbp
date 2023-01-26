@@ -212,7 +212,7 @@
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
                                     <property name="flag">wxEXPAND</property>
-                                    <property name="proportion">1</property>
+                                    <property name="proportion">0</property>
                                     <object class="spacer" expanded="1">
                                         <property name="height">15</property>
                                         <property name="permission">protected</property>

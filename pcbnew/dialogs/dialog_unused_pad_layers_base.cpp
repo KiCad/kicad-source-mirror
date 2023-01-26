@@ -28,7 +28,7 @@ DIALOG_UNUSED_PAD_LAYERS_BASE::DIALOG_UNUSED_PAD_LAYERS_BASE( wxWindow* parent, 
 	bSizer4->Add( m_cbPads, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizer4->Add( 0, 15, 1, wxEXPAND, 5 );
+	bSizer4->Add( 0, 15, 0, wxEXPAND, 5 );
 
 	m_cbSelectedOnly = new wxCheckBox( this, wxID_ANY, _("&Selected only"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer4->Add( m_cbSelectedOnly, 0, wxEXPAND|wxBOTTOM|wxLEFT, 5 );

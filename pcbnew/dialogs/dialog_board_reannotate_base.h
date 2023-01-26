@@ -14,19 +14,19 @@ class WX_HTML_REPORT_PANEL;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
-#include <wx/radiobut.h>
+#include <wx/stattext.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/statline.h>
+#include <wx/radiobut.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/statbmp.h>
 #include <wx/sizer.h>
-#include <wx/stattext.h>
 #include <wx/choice.h>
-#include <wx/statbox.h>
 #include <wx/panel.h>
 #include <wx/textctrl.h>
 #include <wx/valgen.h>
@@ -49,6 +49,7 @@ class DIALOG_BOARD_REANNOTATE_BASE : public DIALOG_SHIM
 	protected:
 		wxNotebook* m_notebook;
 		wxPanel* m_StandardOptions;
+		wxStaticLine* m_staticline1;
 		wxRadioButton* m_Down_Right;
 		wxStaticBitmap* reannotate_down_right_bitmap;
 		wxRadioButton* m_Right_Down;
@@ -69,7 +70,7 @@ class DIALOG_BOARD_REANNOTATE_BASE : public DIALOG_SHIM
 		wxChoice* m_locationChoice;
 		wxStaticText* m_SortGridText;
 		wxChoice* m_GridChoice;
-		wxStaticText* AnnotateLabel;
+		wxStaticLine* m_staticline2;
 		wxRadioButton* m_AnnotateAll;
 		wxRadioButton* m_AnnotateFront;
 		wxRadioButton* m_AnnotateBack;
