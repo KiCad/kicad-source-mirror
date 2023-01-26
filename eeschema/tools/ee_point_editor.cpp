@@ -980,17 +980,10 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
         VECTOR2I       topRight = m_editPoints->Point( RECT_TOPRIGHT ).GetPosition();
         VECTOR2I       botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
         VECTOR2I       botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
-        int            edited = getEditedPointIndex();
-
-        if( isModified( m_editPoints->Line( RECT_RIGHT ) ) )
-            edited = RECT_TOPRIGHT;
-        else if( isModified( m_editPoints->Line( RECT_BOT ) ) )
-            edited = RECT_BOTLEFT;
 
         gridHelper.SetSnap( aSnapToGrid );
 
-        pinEditedCorner( sheet->GetMinWidth( edited == RECT_TOPRIGHT || edited == RECT_BOTRIGHT ),
-                         sheet->GetMinHeight( edited == RECT_BOTLEFT || edited == RECT_BOTRIGHT ),
+        pinEditedCorner( sheet->GetMinWidth(), sheet->GetMinHeight(),
                          topLeft, topRight, botLeft, botRight, &gridHelper );
 
         if( isModified( m_editPoints->Point( RECT_TOPLEFT ) )
@@ -999,25 +992,25 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
                 || isModified( m_editPoints->Point( RECT_BOTLEFT ) ) )
         {
             sheet->SetPosition( topLeft );
-            sheet->SetSize( wxSize( botRight.x - topLeft.x, botRight.y - topLeft.y ) );
+            sheet->Resize( wxSize( botRight.x - topLeft.x, botRight.y - topLeft.y ) );
         }
         else if( isModified( m_editPoints->Line( RECT_TOP ) ) )
         {
             sheet->SetPosition( VECTOR2I( sheet->GetPosition().x, topLeft.y ) );
-            sheet->SetSize( wxSize( sheet->GetSize().x, botRight.y - topLeft.y ) );
+            sheet->Resize( wxSize( sheet->GetSize().x, botRight.y - topLeft.y ) );
         }
         else if( isModified( m_editPoints->Line( RECT_LEFT ) ) )
         {
             sheet->SetPosition( VECTOR2I( topLeft.x, sheet->GetPosition().y ) );
-            sheet->SetSize( wxSize( botRight.x - topLeft.x, sheet->GetSize().y ) );
+            sheet->Resize( wxSize( botRight.x - topLeft.x, sheet->GetSize().y ) );
         }
         else if( isModified( m_editPoints->Line( RECT_BOT ) ) )
         {
-            sheet->SetSize( wxSize( sheet->GetSize().x, botRight.y - topLeft.y ) );
+            sheet->Resize( wxSize( sheet->GetSize().x, botRight.y - topLeft.y ) );
         }
         else if( isModified( m_editPoints->Line( RECT_RIGHT ) ) )
         {
-            sheet->SetSize( wxSize( botRight.x - topLeft.x, sheet->GetSize().y ) );
+            sheet->Resize( wxSize( botRight.x - topLeft.x, sheet->GetSize().y ) );
         }
 
         for( unsigned i = 0; i < m_editPoints->LinesSize(); ++i )
@@ -1028,28 +1021,6 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
                         new EC_PERPLINE( m_editPoints->Line( i ) ) );
             }
         }
-
-        // Keep sheet pins attached to edges:
-        for( SCH_SHEET_PIN* pin : sheet->GetPins() )
-        {
-            VECTOR2I pos = pin->GetPosition();
-
-            switch( pin->GetSide() )
-            {
-            case SHEET_SIDE::LEFT:      pos.x = topLeft.x;  break;
-            case SHEET_SIDE::RIGHT:     pos.x = topRight.x; break;
-            case SHEET_SIDE::TOP:       pos.y = topLeft.y;  break;
-            case SHEET_SIDE::BOTTOM:    pos.y = botLeft.y;  break;
-            case SHEET_SIDE::UNDEFINED:                     break;
-            }
-
-            pin->SetPosition( pos );
-        }
-
-        // Update the fields if we're in autoplace mode
-        if( sheet->GetFieldsAutoplaced() == FIELDS_AUTOPLACED_AUTO )
-            sheet->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
-
         break;
     }
 
