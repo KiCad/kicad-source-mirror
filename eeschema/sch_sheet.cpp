@@ -481,7 +481,7 @@ int bumpToNextGrid( const int aVal, const int aDirection )
 }
 
 
-int SCH_SHEET::GetMinWidth() const
+int SCH_SHEET::GetMinWidth( bool aFromLeft ) const
 {
     int pinsLeft = m_pos.x + m_size.x;
     int pinsRight = m_pos.x;
@@ -506,14 +506,16 @@ int SCH_SHEET::GetMinWidth() const
 
     if( pinsLeft >= pinsRight )
         pinMinWidth = 0;
-    else
+    else if( aFromLeft )
         pinMinWidth = pinsRight - m_pos.x;
+    else
+        pinMinWidth = m_pos.x + m_size.x - pinsLeft;
 
     return std::max( pinMinWidth, schIUScale.MilsToIU( MIN_SHEET_WIDTH ) );
 }
 
 
-int SCH_SHEET::GetMinHeight() const
+int SCH_SHEET::GetMinHeight( bool aFromTop ) const
 {
     int pinsTop = m_pos.y + m_size.y;
     int pinsBottom = m_pos.y;
@@ -538,8 +540,10 @@ int SCH_SHEET::GetMinHeight() const
 
     if( pinsTop >= pinsBottom )
         pinMinHeight = 0;
-    else
+    else if( aFromTop )
         pinMinHeight = pinsBottom - m_pos.y;
+    else
+        pinMinHeight = m_pos.y + m_size.y - pinsTop;
 
     return std::max( pinMinHeight, schIUScale.MilsToIU( MIN_SHEET_HEIGHT ) );
 }

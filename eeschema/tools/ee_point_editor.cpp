@@ -980,10 +980,21 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
         VECTOR2I       topRight = m_editPoints->Point( RECT_TOPRIGHT ).GetPosition();
         VECTOR2I       botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
         VECTOR2I       botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
+        VECTOR2I       sheetPrevPos = sheet->GetPosition();
 
         gridHelper.SetSnap( aSnapToGrid );
 
-        pinEditedCorner( sheet->GetMinWidth(), sheet->GetMinHeight(),
+        int edited = getEditedPointIndex();
+
+        if( isModified( m_editPoints->Line( RECT_RIGHT ) ) )
+            edited = RECT_TOPRIGHT;
+        else if( isModified( m_editPoints->Line( RECT_BOT ) ) )
+            edited = RECT_BOTLEFT;
+
+        gridHelper.SetSnap( aSnapToGrid );
+
+        pinEditedCorner( sheet->GetMinWidth( edited == RECT_TOPRIGHT || edited == RECT_BOTRIGHT ),
+                         sheet->GetMinHeight( edited == RECT_BOTLEFT || edited == RECT_BOTRIGHT ),
                          topLeft, topRight, botLeft, botRight, &gridHelper );
 
         if( isModified( m_editPoints->Point( RECT_TOPLEFT ) )
@@ -1021,6 +1032,28 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
                         new EC_PERPLINE( m_editPoints->Line( i ) ) );
             }
         }
+
+        //Keep pins in the place they were before resizing
+        if( sheet->GetPosition() != sheetPrevPos )
+        {
+            for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+            {
+                switch( pin->GetSide() )
+                {
+                case SHEET_SIDE::LEFT:      
+                case SHEET_SIDE::RIGHT:     
+                    pin->Move( VECTOR2I( 0, sheetPrevPos.y - sheet->GetPosition().y) );
+                    break;
+                case SHEET_SIDE::TOP:       
+                case SHEET_SIDE::BOTTOM:    
+                    pin->Move( VECTOR2I( sheetPrevPos.x - sheet->GetPosition().x, 0) );
+                    break;
+                case SHEET_SIDE::UNDEFINED:     
+                    break;    
+                }
+            }
+        }
+ 
         break;
     }
 
