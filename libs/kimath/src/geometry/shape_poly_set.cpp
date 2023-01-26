@@ -498,8 +498,11 @@ bool SHAPE_POLY_SET::IsPolygonSelfIntersecting( int aPolygonIndex ) const
             if( max_x < min_x || ( max_x == min_x && max_y < min_y ) )
                 break;
 
+            int index_diff = std::abs( firstSegment.Index() - secondSegment.Index() );
+            bool adjacent = ( index_diff == 1) || (index_diff == (segments.size() - 1) ); 
+
             // Check whether the two segments built collide, only when they are not adjacent.
-            if( !firstSegment.IsAdjacent( secondSegment ) && !firstSegment.Collide( secondSegment, 0 ) )
+            if( !adjacent && firstSegment.Collide( secondSegment, 0 ) )
                 return true;
         }
     }
