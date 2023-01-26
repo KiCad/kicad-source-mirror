@@ -15,40 +15,29 @@ DIALOG_UNUSED_PAD_LAYERS_BASE::DIALOG_UNUSED_PAD_LAYERS_BASE( wxWindow* parent, 
 
 	m_MainSizer = new wxBoxSizer( wxVERTICAL );
 
-	wxBoxSizer* bSizer2;
-	bSizer2 = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bMargins;
+	bMargins = new wxBoxSizer( wxHORIZONTAL );
 
-	wxFlexGridSizer* fgSizerProps;
-	fgSizerProps = new wxFlexGridSizer( 0, 2, 0, 5 );
-	fgSizerProps->SetFlexibleDirection( wxVERTICAL );
-	fgSizerProps->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxBoxSizer* bSizer4;
+	bSizer4 = new wxBoxSizer( wxVERTICAL );
 
-	wxStaticBoxSizer* sbSizerScope;
-	sbSizerScope = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Scope") ), wxVERTICAL );
+	m_cbVias = new wxCheckBox( this, wxID_ANY, _("Vias"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer4->Add( m_cbVias, 0, wxALL, 5 );
 
-	m_cbVias = new wxCheckBox( sbSizerScope->GetStaticBox(), wxID_ANY, _("Vias"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizerScope->Add( m_cbVias, 0, wxALL, 5 );
-
-	m_cbPads = new wxCheckBox( sbSizerScope->GetStaticBox(), wxID_ANY, _("Pads"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizerScope->Add( m_cbPads, 0, wxALL, 5 );
+	m_cbPads = new wxCheckBox( this, wxID_ANY, _("Pads"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer4->Add( m_cbPads, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	fgSizerProps->Add( sbSizerScope, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer4->Add( 0, 15, 1, wxEXPAND, 5 );
 
-	wxString m_rbActionChoices[] = { _("&Remove unused layers"), _("Res&tore unused layers") };
-	int m_rbActionNChoices = sizeof( m_rbActionChoices ) / sizeof( wxString );
-	m_rbAction = new wxRadioBox( this, wxID_ANY, _("Action"), wxDefaultPosition, wxDefaultSize, m_rbActionNChoices, m_rbActionChoices, 1, wxRA_SPECIFY_COLS );
-	m_rbAction->SetSelection( 1 );
-	fgSizerProps->Add( m_rbAction, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
-
-	m_cbSelectedOnly = new wxCheckBox( this, wxID_ANY, _("&Selection only"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerProps->Add( m_cbSelectedOnly, 0, wxEXPAND|wxLEFT|wxTOP, 5 );
+	m_cbSelectedOnly = new wxCheckBox( this, wxID_ANY, _("&Selected only"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer4->Add( m_cbSelectedOnly, 0, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
 
 	m_cbPreservePads = new wxCheckBox( this, wxID_ANY, _("Keep &outside layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerProps->Add( m_cbPreservePads, 0, wxEXPAND|wxLEFT|wxTOP, 5 );
+	bSizer4->Add( m_cbPreservePads, 0, wxEXPAND|wxLEFT, 5 );
 
 
-	bSizer2->Add( fgSizerProps, 0, wxEXPAND|wxALL, 5 );
+	bMargins->Add( bSizer4, 1, wxEXPAND|wxTOP|wxLEFT, 10 );
 
 	wxBoxSizer* bSizerPreview;
 	bSizerPreview = new wxBoxSizer( wxVERTICAL );
@@ -63,14 +52,16 @@ DIALOG_UNUSED_PAD_LAYERS_BASE::DIALOG_UNUSED_PAD_LAYERS_BASE( wxWindow* parent, 
 	bSizerPreview->Add( 0, 0, 0, wxEXPAND, 5 );
 
 
-	bSizer2->Add( bSizerPreview, 1, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bMargins->Add( bSizerPreview, 1, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
-	m_MainSizer->Add( bSizer2, 6, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	m_MainSizer->Add( bMargins, 6, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_StdButtons = new wxStdDialogButtonSizer();
 	m_StdButtonsOK = new wxButton( this, wxID_OK );
 	m_StdButtons->AddButton( m_StdButtonsOK );
+	m_StdButtonsApply = new wxButton( this, wxID_APPLY );
+	m_StdButtons->AddButton( m_StdButtonsApply );
 	m_StdButtonsCancel = new wxButton( this, wxID_CANCEL );
 	m_StdButtons->AddButton( m_StdButtonsCancel );
 	m_StdButtons->Realize();
@@ -87,8 +78,8 @@ DIALOG_UNUSED_PAD_LAYERS_BASE::DIALOG_UNUSED_PAD_LAYERS_BASE( wxWindow* parent, 
 	// Connect Events
 	m_cbVias->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UNUSED_PAD_LAYERS_BASE::syncImages ), NULL, this );
 	m_cbPads->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UNUSED_PAD_LAYERS_BASE::syncImages ), NULL, this );
-	m_rbAction->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_UNUSED_PAD_LAYERS_BASE::syncImages ), NULL, this );
 	m_cbPreservePads->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UNUSED_PAD_LAYERS_BASE::syncImages ), NULL, this );
+	m_StdButtonsApply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_UNUSED_PAD_LAYERS_BASE::onApply ), NULL, this );
 }
 
 DIALOG_UNUSED_PAD_LAYERS_BASE::~DIALOG_UNUSED_PAD_LAYERS_BASE()
@@ -96,7 +87,7 @@ DIALOG_UNUSED_PAD_LAYERS_BASE::~DIALOG_UNUSED_PAD_LAYERS_BASE()
 	// Disconnect Events
 	m_cbVias->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UNUSED_PAD_LAYERS_BASE::syncImages ), NULL, this );
 	m_cbPads->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UNUSED_PAD_LAYERS_BASE::syncImages ), NULL, this );
-	m_rbAction->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_UNUSED_PAD_LAYERS_BASE::syncImages ), NULL, this );
 	m_cbPreservePads->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UNUSED_PAD_LAYERS_BASE::syncImages ), NULL, this );
+	m_StdButtonsApply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_UNUSED_PAD_LAYERS_BASE::onApply ), NULL, this );
 
 }

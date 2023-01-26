@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,13 +33,6 @@
 #include <tools/pcb_selection_tool.h>
 
 
-enum PAD_ACTION : int
-{
-    PAD_ACTION_REMOVE = 0,
-    PAD_ACTION_RESET
-};
-
-
 DIALOG_UNUSED_PAD_LAYERS::DIALOG_UNUSED_PAD_LAYERS( PCB_BASE_FRAME* aParent,
                                                     const PCB_SELECTION& aItems,
                                                     COMMIT& aCommit  )
@@ -55,7 +48,9 @@ DIALOG_UNUSED_PAD_LAYERS::DIALOG_UNUSED_PAD_LAYERS( PCB_BASE_FRAME* aParent,
     // is probably not frequent
     m_cbPreservePads->SetValue( true );
 
-    SetupStandardButtons();
+    SetupStandardButtons( { { wxID_OK,     _( "Remove Unused Layers" ) },
+                            { wxID_APPLY,  _( "Restore All Layers" )   },
+                            { wxID_CANCEL, _( "Cancel" )               } } );
 
     updateImage();
 
@@ -66,9 +61,7 @@ DIALOG_UNUSED_PAD_LAYERS::DIALOG_UNUSED_PAD_LAYERS( PCB_BASE_FRAME* aParent,
 
 void DIALOG_UNUSED_PAD_LAYERS::updateImage()
 {
-    if( m_rbAction->GetSelection() == PAD_ACTION_RESET )
-        m_image->SetBitmap( KiBitmap( BITMAPS::pads_reset_unused ) );
-    else if( m_cbPreservePads->IsChecked() )
+    if( m_cbPreservePads->IsChecked() )
         m_image->SetBitmap( KiBitmap( BITMAPS::pads_remove_unused_keep_bottom ) );
     else
         m_image->SetBitmap( KiBitmap( BITMAPS::pads_remove_unused ) );
@@ -78,6 +71,12 @@ void DIALOG_UNUSED_PAD_LAYERS::updateImage()
 void DIALOG_UNUSED_PAD_LAYERS::syncImages( wxCommandEvent& aEvent )
 {
     updateImage();
+}
+
+
+void DIALOG_UNUSED_PAD_LAYERS::onApply( wxCommandEvent& event )
+{
+    EndModal( wxID_APPLY );
 }
 
 
@@ -92,7 +91,7 @@ bool DIALOG_UNUSED_PAD_LAYERS::TransferDataFromWindow()
             if( item->Type() == PCB_VIA_T && m_cbVias->IsChecked() )
             {
                 PCB_VIA* via = static_cast<PCB_VIA*>( item );
-                via->SetRemoveUnconnected( m_rbAction->GetSelection() == PAD_ACTION_REMOVE );
+                via->SetRemoveUnconnected( GetReturnCode() == wxID_OK );
                 via->SetKeepStartEnd( m_cbPreservePads->IsChecked() );
             }
 
@@ -102,7 +101,7 @@ bool DIALOG_UNUSED_PAD_LAYERS::TransferDataFromWindow()
 
                 for( PAD* pad : footprint->Pads() )
                 {
-                    pad->SetRemoveUnconnected( m_rbAction->GetSelection() == PAD_ACTION_REMOVE );
+                    pad->SetRemoveUnconnected( GetReturnCode() == wxID_OK );
                     pad->SetKeepTopBottom( m_cbPreservePads->IsChecked() );
                 }
             }
@@ -111,7 +110,7 @@ bool DIALOG_UNUSED_PAD_LAYERS::TransferDataFromWindow()
             {
                 PAD* pad = static_cast<PAD*>( item );
 
-                pad->SetRemoveUnconnected( m_rbAction->GetSelection() == PAD_ACTION_REMOVE );
+                pad->SetRemoveUnconnected( GetReturnCode() == wxID_OK );
                 pad->SetKeepTopBottom( m_cbPreservePads->IsChecked() );
             }
         }
@@ -126,7 +125,7 @@ bool DIALOG_UNUSED_PAD_LAYERS::TransferDataFromWindow()
 
                 for( PAD* pad : footprint->Pads() )
                 {
-                    pad->SetRemoveUnconnected( m_rbAction->GetSelection() == PAD_ACTION_REMOVE );
+                    pad->SetRemoveUnconnected( GetReturnCode() == wxID_OK );
                     pad->SetKeepTopBottom( m_cbPreservePads->IsChecked() );
                 }
             }
@@ -141,7 +140,7 @@ bool DIALOG_UNUSED_PAD_LAYERS::TransferDataFromWindow()
 
                 m_commit.Modify( item );
                 PCB_VIA* via = static_cast<PCB_VIA*>( item );
-                via->SetRemoveUnconnected( m_rbAction->GetSelection() == PAD_ACTION_REMOVE );
+                via->SetRemoveUnconnected( GetReturnCode() == wxID_OK );
                 via->SetKeepStartEnd( m_cbPreservePads->IsChecked() );
             }
         }

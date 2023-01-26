@@ -18,8 +18,6 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/sizer.h>
-#include <wx/statbox.h>
-#include <wx/radiobox.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
@@ -41,21 +39,22 @@ class DIALOG_UNUSED_PAD_LAYERS_BASE : public DIALOG_SHIM
 		wxBoxSizer* m_MainSizer;
 		wxCheckBox* m_cbVias;
 		wxCheckBox* m_cbPads;
-		wxRadioBox* m_rbAction;
 		wxCheckBox* m_cbSelectedOnly;
 		wxCheckBox* m_cbPreservePads;
 		wxStaticBitmap* m_image;
 		wxStdDialogButtonSizer* m_StdButtons;
 		wxButton* m_StdButtonsOK;
+		wxButton* m_StdButtonsApply;
 		wxButton* m_StdButtonsCancel;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void syncImages( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onApply( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
-		DIALOG_UNUSED_PAD_LAYERS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Remove Unused Pads"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_UNUSED_PAD_LAYERS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Unused Pads"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_UNUSED_PAD_LAYERS_BASE();
 

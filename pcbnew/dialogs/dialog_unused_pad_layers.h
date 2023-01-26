@@ -41,9 +41,9 @@ public:
 private:
     bool TransferDataFromWindow() override;
 
-    bool AcceptOptions();
     void updateImage();
 
+    void onApply( wxCommandEvent& event ) override;
 
     void syncImages( wxCommandEvent& aEvent ) override;
 
