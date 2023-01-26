@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-20 09:12-0800\n"
-"PO-Revision-Date: 2023-01-25 12:14+0000\n"
+"PO-Revision-Date: 2023-01-27 14:28+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -505,7 +505,7 @@ msgstr "リアルな質感で描画"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:188
 msgid "Use all material properties from each 3D model file"
-msgstr "各 3D モデル ファイルから全てのマテリアル プロパティを使用"
+msgstr "各 3D モデル ファイルからすべてのマテリアル プロパティを使用"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:194
 msgid "Render Solid Colors"
@@ -1567,7 +1567,7 @@ msgstr "変更を破棄"
 
 #: common/confirm.cpp:208 common/confirm.cpp:287
 msgid "Apply to all"
-msgstr "全て適用"
+msgstr "すべて適用"
 
 #: common/confirm.cpp:253
 msgid "Your current changes will be permanently lost."
@@ -1692,7 +1692,7 @@ msgstr "KiCad EDAスイートは、下記のラインセンスのもと提供さ
 
 #: common/dialog_about/AboutDialog_main.cpp:182
 msgid "GNU General Public License (GPL) version 3 or any later version"
-msgstr "GNU General Public License (GPL) のバージョン3 以降の全てのバージョン"
+msgstr "GNU General Public License (GPL) のバージョン3 以降のすべてのバージョン"
 
 #: common/dialog_about/AboutDialog_main.cpp:201
 msgid "Lead Development Team"
@@ -1983,9 +1983,8 @@ msgid ""
 "To ensure environment variable names are valid on all platforms, the name "
 "field will only accept upper case letters, digits, and the underscore "
 "characters."
-msgstr ""
-"全てのプラットフォームで有効な環境変数名とするため、名前フィールドは大文字、"
-"数字、アンダースコアだけを受け付けます。"
+msgstr "すべてのプラットフォームで有効な環境変数名とするため、名前フィールドは大文字"
+"、数字、アンダースコアだけを受け付けます。"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:23
 msgid "Environment Variables"
@@ -2441,7 +2440,7 @@ msgstr "図面シート ファイルを選択"
 
 #: common/dialogs/dialog_page_settings_base.cpp:38
 msgid "dummy text"
-msgstr "ダミーテキスト"
+msgstr "ダミーのテキスト"
 
 #: common/dialogs/dialog_page_settings_base.cpp:47
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:217
@@ -2923,7 +2922,7 @@ msgstr "カラー テーマを追加"
 
 #: common/dialogs/panel_color_settings.cpp:145
 msgid "Theme already exists!"
-msgstr "テーマは既に存在します！"
+msgstr "テーマはすでに存在します！"
 
 #: common/dialogs/panel_color_settings.cpp:213
 #: common/dialogs/panel_color_settings.cpp:235
@@ -2958,9 +2957,8 @@ msgstr "各々のアイテム カラーを無視"
 msgid ""
 "Show all items in their default color even if they have specific colors set "
 "in their properties."
-msgstr ""
-"プロパティでカラーが設定されていた場合でもデフォルト カラーで全てのアイテムを"
-"表示する。"
+msgstr "プロパティでカラーが設定されていた場合でもデフォルト "
+"カラーですべてのアイテムを表示する。"
 
 #: common/dialogs/panel_color_settings_base.cpp:43
 msgid "Open Theme Folder"
@@ -3638,7 +3636,7 @@ msgstr "ネットクラスは名前を持たなければなりません。"
 
 #: common/dialogs/panel_setup_netclasses.cpp:439
 msgid "Netclass name already in use."
-msgstr "ネットクラス名は既に使われています。"
+msgstr "ネットクラス名はすでに使われています。"
 
 #: common/dialogs/panel_setup_netclasses.cpp:500
 msgid "Minimum copper clearance"
@@ -5314,7 +5312,7 @@ msgstr "リファレンス指定子"
 
 #: common/layer_id.cpp:157
 msgid "Footprint text"
-msgstr "フットプリント テキスト"
+msgstr "フットプリントのテキスト"
 
 #: common/layer_id.cpp:158
 msgid "Hidden text"
@@ -6749,9 +6747,8 @@ msgstr "デフォルト値を復元"
 msgid ""
 "'%s' is already assigned to '%s' in section '%s'. Are you sure you want to "
 "change its assignment?"
-msgstr ""
-"'%s' は既に '%s' のセクション '%s' へ割り当てられています。本当に現在の割り当"
-"てを変更してもよろしいですか？"
+msgstr "'%s' はすでに '%s' のセクション '%s' "
+"へ割り当てられています。本当に現在の割り当てを変更してもよろしいですか？"
 
 #: common/widgets/widget_hotkey_list.cpp:447
 msgid "Confirm change"
@@ -6866,7 +6863,7 @@ msgstr "KiCad データベース ライブラリ ファイル"
 
 #: common/wildcards_and_files_ext.cpp:233
 msgid "All KiCad symbol library files"
-msgstr "全ての KiCad シンボル ライブラリ ファイル"
+msgstr "すべての KiCad シンボル ライブラリ ファイル"
 
 #: common/wildcards_and_files_ext.cpp:242
 msgid "KiCad project files"
@@ -7280,7 +7277,7 @@ msgstr "フットプリント関連付けファイル"
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:288
 #, c-format
 msgid "File '%s' already exists in list."
-msgstr "ファイル '%s' は既にリスト中に存在します。"
+msgstr "ファイル '%s' はすでにリスト中に存在します。"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:20
 msgid "Symbol Footprint Association Files (.equ)"
@@ -7374,7 +7371,7 @@ msgstr ""
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector_base.h:53
 msgid "Footprint Assignment Conflicts"
-msgstr "フットプリントの割り当て競合"
+msgstr "フットプリント割り当ての競合"
 
 #: cvpcb/display_footprints_frame.cpp:72
 #: pcbnew/toolbars_footprint_viewer.cpp:176
@@ -7806,7 +7803,7 @@ msgstr "ジェネレーターを追加"
 #: eeschema/dialogs/dialog_bom.cpp:391
 #, c-format
 msgid "Nickname '%s' already in use."
-msgstr "ニックネーム '%s' は既に使われています。"
+msgstr "ニックネーム '%s' はすでに使われています。"
 
 #: eeschema/dialogs/dialog_bom.cpp:420
 #: eeschema/dialogs/dialog_export_netlist.cpp:751
@@ -8027,7 +8024,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:66
 msgid "Change all symbols in schematic"
-msgstr "回路図の全てのシンボルを変更"
+msgstr "回路図のすべてのシンボルを変更"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:67
 msgid "Change Symbols"
@@ -8128,7 +8125,7 @@ msgstr "*** 新しいシンボルのユニットが少なすぎます ***"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:27
 msgid "Update all symbols in schematic"
-msgstr "回路図の全てのシンボルを更新"
+msgstr "回路図のすべてのシンボルを更新"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:30
 msgid "Update selected symbol(s)"
@@ -8463,7 +8460,7 @@ msgstr "%s リストから除外されます"
 #: eeschema/dialogs/dialog_erc.cpp:659 pcbnew/dialogs/dialog_drc.cpp:619
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
-msgstr "全ての '%s' 違反のためにエラーの深刻度を変更"
+msgstr "すべての '%s' 違反のためにエラーの深刻度を変更"
 
 #: eeschema/dialogs/dialog_erc.cpp:661 eeschema/dialogs/dialog_erc.cpp:667
 #: pcbnew/dialogs/dialog_drc.cpp:621 pcbnew/dialogs/dialog_drc.cpp:628
@@ -8473,7 +8470,7 @@ msgstr "違反の深刻度は、基板の設定... ダイアログで編集す�
 #: eeschema/dialogs/dialog_erc.cpp:665 pcbnew/dialogs/dialog_drc.cpp:626
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
-msgstr "全ての '%s' 違反のために警告の深刻度を変更"
+msgstr "すべての '%s' 違反のために警告の深刻度を変更"
 
 #: eeschema/dialogs/dialog_erc.cpp:670 pcbnew/dialogs/dialog_drc.cpp:632
 #, c-format
@@ -8605,16 +8602,16 @@ msgstr "すべての電圧を保存"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:352
 msgid "Write a directive to save all voltages (.save all)"
-msgstr "全ての電圧を保存する指示を書く（.save all）"
+msgstr "すべての電圧を保存する指示を書く（.save all）"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:357
 #: eeschema/dialogs/dialog_sim_command_base.cpp:438
 msgid "Save all currents"
-msgstr "全ての電流を保存"
+msgstr "すべての電流を保存"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:358
 msgid "Write a directive to save all currents (.probe alli)"
-msgstr "全ての電流を保存する指示を書く (.probe alli)"
+msgstr "すべての電流を保存する指示を書く (.probe alli)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:364
 msgid "External simulator command:"
@@ -8654,7 +8651,7 @@ msgstr "ネットリストのエクスポートには回路図の完全なアノ
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:694
 msgid "This plugin already exists."
-msgstr "このプラグインは既に存在します。"
+msgstr "このプラグインはすでに存在します。"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:727
 msgid "You must provide a netlist generator command string"
@@ -8882,13 +8879,13 @@ msgstr "Y 位置:"
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:199
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:288
 msgid "Common to all units"
-msgstr "全てのユニットで統一化"
+msgstr "すべてのユニットで統一化"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:271
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:202
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:291
 msgid "Common to all body styles"
-msgstr "全てのボディスタイルで統一化"
+msgstr "すべてのボディスタイルで統一化"
 
 #: eeschema/dialogs/dialog_field_properties_base.h:100
 #: eeschema/dialogs/dialog_lib_text_properties_base.h:88
@@ -9291,7 +9288,7 @@ msgstr "双方向"
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:64
 #: eeschema/pin_type.cpp:55 eeschema/pin_type.cpp:247
 msgid "Tri-state"
-msgstr "トライ-ステート"
+msgstr "トライステート"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:164
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:67
@@ -9512,7 +9509,7 @@ msgstr "パッケージ内のユニット数:"
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:71
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:188
 msgid "All units are interchangeable"
-msgstr "全てのユニットが交換可能"
+msgstr "すべてのユニットが交換可能"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:72
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:189
@@ -9520,7 +9517,7 @@ msgid ""
 "Check this option when all symbol units are identical except\n"
 "for pin numbers."
 msgstr ""
-"シンボルの全てのユニットがピン番号を除いて同じである場合は、\n"
+"シンボルのすべてのユニットがピン番号を除いて同じである場合は、\n"
 "このオプションをチェックしてください。"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:76
@@ -9612,12 +9609,12 @@ msgstr "プライベートからシンボル エディターへ"
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:143
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:154
 msgid "Common to all &units in symbol"
-msgstr "シンボル内の全てのユニットで共通化 (&u)"
+msgstr "シンボル内のすべてのユニットで共通化 (&u)"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:149
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:157
 msgid "Common to all body &styles (De Morgan)"
-msgstr "全てのボディスタイル(ド・モルガン)で共有する (&S)"
+msgstr "すべてのボディスタイル(ド・モルガン)で共有する (&S)"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.h:86
 msgid "Drawing Properties"
@@ -9650,12 +9647,12 @@ msgstr "シンボルから代替ボディスタイル(ド・モルガン)削除�
 #: eeschema/tools/symbol_editor_control.cpp:345
 #, c-format
 msgid "Symbol name '%s' already in use in library '%s'."
-msgstr "シンボル '%s' はライブラリ '%s' に既に存在します。"
+msgstr "シンボル '%s' はライブラリ '%s' にすでに存在します。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:488
 #, c-format
 msgid "The name '%s' is already in use."
-msgstr "名前 '%s' は既に使われています。"
+msgstr "名前 '%s' はすでに使われています。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:571
 #: eeschema/dialogs/dialog_sheet_properties.cpp:745
@@ -9666,7 +9663,7 @@ msgstr "最初の %d フィールドは必須です。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:748
 msgid "Add Footprint Filter"
-msgstr "フットプリント フィルタの追加"
+msgstr "フットプリント フィルターの追加"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:791
 msgid "Edit Footprint Filter"
@@ -10695,7 +10692,7 @@ msgstr ""
 #: kicad/tools/kicad_manager_control.cpp:659
 #, c-format
 msgid "'%s' already exists."
-msgstr "'%s' は既に存在します。"
+msgstr "'%s' はすでに存在します。"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:494
 #, c-format
@@ -11257,7 +11254,7 @@ msgstr "フィールドは名前を持たなければなりません。"
 #: eeschema/dialogs/dialog_symbol_properties.cpp:903
 #, c-format
 msgid "Field name '%s' already in use."
-msgstr "フィールド名 '%s' は既に使われています。"
+msgstr "フィールド名 '%s' はすでに使われています。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1120
 #, c-format
@@ -11985,7 +11982,7 @@ msgstr "シンボル選択中にフットプリントのプレビューを表示
 #: eeschema/dialogs/panel_setup_buses.cpp:266
 #, c-format
 msgid "Alias name '%s' already in use."
-msgstr "エイリアス名 '%s' は既に使われています。"
+msgstr "エイリアス名 '%s' はすでに使われています。"
 
 #: eeschema/dialogs/panel_setup_buses.cpp:290
 msgid "Member net/alias name cannot be empty."
@@ -12294,7 +12291,7 @@ msgstr "警告: 重複したニックネーム"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:900
 #, c-format
 msgid "A library nicknamed '%s' already exists."
-msgstr "ニックネーム '%s' のライブラリは既に存在します。"
+msgstr "ニックネーム '%s' のライブラリはすでに存在します。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:520
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:901
@@ -12325,9 +12322,8 @@ msgstr "現在の形式 (*.kicad_sym) として保存する以前の形式(*.lib
 msgid ""
 "Save '%s' as current KiCad format (*.kicad_sym) and replace legacy entry in "
 "table?"
-msgstr ""
-"'%s' を現在の形式(* .kicad_sym)として保存し、テーブルの以前の形式のエントリー"
-"と置き換えますか?"
+msgstr "'%s' を現在の形式(* ."
+"kicad_sym)で保存して、テーブルの以前の形式の項目と置き換えますか?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:756
 #, c-format
@@ -12335,13 +12331,13 @@ msgid ""
 "Save %d Legacy format libraries as current KiCad format (*.kicad_sym) and "
 "replace legacy entries in table?"
 msgstr "%d 個の以前の形式のライブラリを現在の形式(* ."
-"kicad_sym)として保存し、テーブルのエントリーと置き換えますか?"
+"kicad_sym)で保存して、テーブルの以前の形式の項目と置き換えますか?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:784
 #: pcbnew/dialogs/dialog_export_step.cpp:354
 #, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
-msgstr "ファイル '%s' は既に存在します。このファイルを上書きしますか？"
+msgstr "ファイル '%s' はすでに存在します。このファイルを上書きしますか？"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:787
 msgid "Migrate Library"
@@ -12875,7 +12871,7 @@ msgstr "自動配置を許可する"
 #: eeschema/files-io.cpp:101 eeschema/files-io.cpp:1215
 #, c-format
 msgid "Schematic '%s' is already open."
-msgstr "回路図 '%s' は既に開かれています。"
+msgstr "回路図 '%s' はすでに開かれています。"
 
 #: eeschema/files-io.cpp:123
 #, c-format
@@ -12946,7 +12942,7 @@ msgid ""
 "This may cause broken symbol library links under certain conditions."
 msgstr ""
 "プロジェクト ファイルのシンボル ライブラリ リストで定義されたシンボル "
-"ライブラリは既にサポートされておらず、削除されます。\n"
+"ライブラリはすでにサポートされておらず、削除されます。\n"
 "\n"
 "これは特定の条件下でシンボル ライブラリのリンクを破壊する原因となります。"
 
@@ -13420,7 +13416,7 @@ msgstr "ライブラリ ファイル '%s' が見つかりませんでした"
 #: eeschema/netlist_exporters/netlist_generator.cpp:145
 #, c-format
 msgid "Command error. Return code %d."
-msgstr "コマンドエラー。リターンコード %d."
+msgstr "コマンドのエラー。戻り値は %d."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:150
 msgid "Success."
@@ -13695,7 +13691,7 @@ msgstr "新規回路図"
 #: eeschema/sch_edit_frame.cpp:1117
 #, c-format
 msgid "Schematic file '%s' already exists."
-msgstr "回路図ファイル '%s' は既に存在します。"
+msgstr "回路図ファイル '%s' はすでに存在します。"
 
 #: eeschema/sch_edit_frame.cpp:1138
 msgid "Open Schematic"
@@ -14428,15 +14424,14 @@ msgstr "不正なシンボル ライブラリ識別子"
 msgid ""
 "Could not load sheet '%s' because it already appears as a direct ancestor in "
 "the schematic hierarchy."
-msgstr ""
-"シート '%s' をロードできませんでした。これは回路図の階層で直接の先祖として既"
-"に表示されているためです。"
+msgstr "シート '%s' をロードできませんでした。これは回路図の階層で直接の先祖としてす"
+"でに表示されているためです。"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1520
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2169
 #, c-format
 msgid "Symbol library '%s' already exists."
-msgstr "シンボル ライブラリ '%s' は既に存在します。"
+msgstr "シンボル ライブラリ '%s' はすでに存在します。"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1546
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2195
@@ -15020,8 +15015,8 @@ msgid ""
 "the sheet '%s' or one of its subsheets as a parent somewhere in the "
 "schematic hierarchy."
 msgstr ""
-"シートの変更ができません。保存先のシートは、既にシート '%s' を持っているか、"
-"階層のどこかで親シートとしてサブシートの一つに持っています。"
+"シートの変更ができません。保存先のシートは、すでにシート '%s' "
+"を持っているか、階層のどこかで親シートとしてサブシートの一つに持っています。"
 
 #: eeschema/sheet.cpp:84
 #, c-format
@@ -15907,7 +15902,7 @@ msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:506 eeschema/sim/sim_plot_frame.cpp:1988
 msgid "Another simulation is already running."
-msgstr "別のシミュレーションが既に実行中です。"
+msgstr "別のシミュレーションがすでに実行中です。"
 
 #: eeschema/sim/sim_plot_frame.cpp:534
 #, c-format
@@ -16413,7 +16408,7 @@ msgstr ""
 #: eeschema/tools/sch_editor_control.cpp:395
 #, c-format
 msgid "Library '%s' already exists."
-msgstr "ライブラリ '%s' は既に存在します。"
+msgstr "ライブラリ '%s' はすでに存在します。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:889
 #, c-format
@@ -16510,7 +16505,7 @@ msgstr "この新しいシンボルは名前がなく、作成できませんで
 #: eeschema/symbol_editor/symbol_editor.cpp:362
 #, c-format
 msgid "Symbol '%s' already exists in library '%s'."
-msgstr "シンボル '%s' はライブラリ '%s' に既に存在します。"
+msgstr "シンボル '%s' はライブラリ '%s' にすでに存在します。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:367
 #: eeschema/symbol_editor/symbol_editor.cpp:682
@@ -16559,12 +16554,12 @@ msgstr "派生したシンボルは親シンボルが存在するライブラリ
 #: eeschema/symbol_editor/symbol_editor.cpp:677
 #, c-format
 msgid "Symbol '%s' already exists in library '%s'"
-msgstr "シンボル '%s' はライブラリ '%s' 内に既に存在します"
+msgstr "シンボル '%s' はライブラリ '%s' 内にすでに存在します"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:711
 #, c-format
 msgid "Symbol name '%s' already in use."
-msgstr "シンボル名 '%s' は既に使われています。"
+msgstr "シンボル名 '%s' はすでに使われています。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:749
 #, c-format
@@ -16673,7 +16668,7 @@ msgstr "シンボル ライブラリ ファイル '%s' が空です。"
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:161
 #, c-format
 msgid "Symbol %s already exists in library '%s'."
-msgstr "シンボル '%s' はライブラリ '%s' に既に存在します。"
+msgstr "シンボル '%s' はライブラリ '%s' にすでに存在します。"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:132
 msgid "Export Symbol"
@@ -17131,7 +17126,7 @@ msgstr "線を追加"
 
 #: eeschema/tools/ee_actions.cpp:253 eeschema/tools/ee_actions.cpp:834
 msgid "Add connected graphic lines"
-msgstr "繋がった図形ラインを追加"
+msgstr "つながった図形ラインを追加"
 
 #: eeschema/tools/ee_actions.cpp:258
 msgid "Move Symbol Anchor"
@@ -17409,7 +17404,7 @@ msgstr "ライブラリからシンボルを更新..."
 
 #: eeschema/tools/ee_actions.cpp:466
 msgid "Update symbols to include any changes from the library"
-msgstr "全ての変更を適用するためにライブラリからシンボルを更新"
+msgstr "すべての変更を適用するためにライブラリからシンボルを更新"
 
 #: eeschema/tools/ee_actions.cpp:472
 msgid "Assign a different symbol from the library"
@@ -17421,7 +17416,7 @@ msgstr "シンボルを更新..."
 
 #: eeschema/tools/ee_actions.cpp:478
 msgid "Update symbol to include any changes from the library"
-msgstr "全ての変更を適用するためにライブラリからシンボルを更新"
+msgstr "すべての変更を適用するためにライブラリからシンボルを更新"
 
 #: eeschema/tools/ee_actions.cpp:483 pcbnew/tools/pcb_actions.cpp:709
 msgid "Assign Netclass..."
@@ -17597,7 +17592,7 @@ msgstr "シンボル フィールドを編集..."
 
 #: eeschema/tools/ee_actions.cpp:606
 msgid "Bulk-edit fields of all symbols in schematic"
-msgstr "回路図にある全てのシンボルのフィールドを一括編集"
+msgstr "回路図にあるすべてのシンボルのフィールドを一括編集"
 
 #: eeschema/tools/ee_actions.cpp:611
 msgid "Edit Symbol Library Links..."
@@ -17715,7 +17710,7 @@ msgid ""
 "Add symbols used in schematic to an existing symbol library\n"
 "(does not remove other symbols from this library)"
 msgstr ""
-"回路図で使われている全てのシンボルを既存のライブラリに追加します。\n"
+"回路図で使われているすべてのシンボルを既存のライブラリに追加します。\n"
 "(このライブラリにある他のシンボルを削除しません)"
 
 #: eeschema/tools/ee_actions.cpp:682
@@ -17728,7 +17723,7 @@ msgid ""
 "(if the library already exists it will be replaced)"
 msgstr ""
 "基板で使われているフットプリントを含む、新しいライブラリを作成します\n"
-"(ライブラリが既に存在する場合は置き換えられます)"
+"(すでにライブラリが存在する場合は置き換えられます)"
 
 #: eeschema/tools/ee_actions.cpp:689
 msgid "Select on PCB"
@@ -18147,8 +18142,8 @@ msgid ""
 "subsheets as a parent."
 msgstr ""
 "ペーストされたシート '%s'\n"
-"は除外されました。貼り付け先は既にシートを持っているか、親としてサブシートの"
-"一つになっているためです。"
+"は除外されました。貼り付け先はすでにシートを持っているか、親としてサブシート"
+"の一つになっているためです。"
 
 #: eeschema/tools/sch_editor_control.cpp:1904
 msgid "Symbols with broken library symbol links cannot be edited."
@@ -18262,7 +18257,7 @@ msgstr "ユニットの表示名を設定"
 #: eeschema/tools/symbol_editor_pin_tool.cpp:236
 #, c-format
 msgid "This position is already occupied by another pin, in unit %d."
-msgstr "ユニット %d 内で、この位置には既に他のピンがあります。"
+msgstr "ユニット %d 内で、この位置にはすでに他のピンがあります。"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:240
 msgid "Place Pin Anyway"
@@ -18308,7 +18303,7 @@ msgstr "既存のライブラリ テーブル項目を更新"
 #: eeschema/widgets/symbol_filedlg_save_as.h:37
 #: eeschema/widgets/symbol_legacyfiledlg_save_as.h:48
 msgid "Add new global library table entry"
-msgstr "グローバル ライブラリ テーブルの新しいエントリーを追加"
+msgstr "グローバル ライブラリ テーブルに新しい項目を追加"
 
 #: eeschema/widgets/symbol_filedlg_save_as.h:39
 #: eeschema/widgets/symbol_legacyfiledlg_save_as.h:54
@@ -18350,7 +18345,7 @@ msgid ""
 msgstr ""
 "プロジェクトのシンボル ライブラリ テーブルに新しい項目を追加します。\n"
 "\n"
-"シンボル ライブラリ テーブルのニックネームには、テーブルエントリーが\n"
+"シンボル ライブラリ テーブルのニックネームには、テーブルの項目が\n"
 "重複しないように整数を接尾辞として付けます。"
 
 #: eeschema/widgets/tuner_slider.cpp:61
@@ -18566,7 +18561,7 @@ msgstr "グラフィック レイヤー %d"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:37
 msgid "Show D codes"
-msgstr "D コードを表示"
+msgstr "Dコードを表示"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:41
 #: pcbnew/dialogs/panel_edit_options_base.cpp:390
@@ -19191,7 +19186,7 @@ msgstr "ガーバー プロット ファイルを開く..."
 
 #: gerbview/tools/gerbview_actions.cpp:46
 msgid "Open Gerber plot file(s) on a new layer."
-msgstr "ガーバー プロット ファイル新規レイヤーで開く。"
+msgstr "ガーバー プロット ファイルを新規レイヤーで開く。"
 
 #: gerbview/tools/gerbview_actions.cpp:51
 msgid "Open Excellon Drill File(s)..."
@@ -19232,7 +19227,7 @@ msgstr "Dコード リスト..."
 
 #: gerbview/tools/gerbview_actions.cpp:76
 msgid "List D-codes defined in Gerber files"
-msgstr "ガーバー ファイル内で定義されている D-codes をリスト表示する"
+msgstr "ガーバー ファイル内で定義されているDコードをリスト表示する"
 
 #: gerbview/tools/gerbview_actions.cpp:81
 msgid "Show Source..."
@@ -19265,7 +19260,7 @@ msgstr "すべてのレイヤーをクリア"
 
 #: gerbview/tools/gerbview_actions.cpp:99
 msgid "Clear all layers. All data will be deleted"
-msgstr "すべてのレイヤーをクリアします。全てのデータが削除されます"
+msgstr "すべてのレイヤーをクリアします。すべてのデータが削除されます"
 
 #: gerbview/tools/gerbview_actions.cpp:104
 msgid "Reload All Layers"
@@ -19273,7 +19268,7 @@ msgstr "全レイヤーをリロード"
 
 #: gerbview/tools/gerbview_actions.cpp:105
 msgid "Reload all layers. All data will be reloaded"
-msgstr "すべてのレイヤーをリロードします。全てのデータがリロードされます"
+msgstr "すべてのレイヤーをリロードします。すべてのデータがリロードされます"
 
 #: gerbview/tools/gerbview_actions.cpp:114
 msgid "Clear Highlight"
@@ -19476,11 +19471,11 @@ msgstr "すべてのレイヤーを表示"
 #: gerbview/widgets/gerbview_layer_widget.cpp:165
 #: pcbnew/widgets/appearance_controls.cpp:1783
 msgid "Hide All Layers But Active"
-msgstr "アクティブでない全てのレイヤーを隠す"
+msgstr "アクティブでないすべてのレイヤーを隠す"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:169
 msgid "Always Hide All Layers But Active"
-msgstr "常にアクティブでない全てのレイヤーを隠す"
+msgstr "常にアクティブでないすべてのレイヤーを隠す"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:172
 #: pcbnew/widgets/appearance_controls.cpp:1799
@@ -19520,11 +19515,11 @@ msgstr "左ダブルクリックまたは中クリックで色の変更"
 
 #: include/dialogs/panel_color_settings.h:50
 msgid "Reset all colors in this theme to the KiCad defaults"
-msgstr "このテーマの全てのカラーを KiCad のデフォルトに戻す"
+msgstr "このテーマのすべてのカラーを KiCad のデフォルトに戻す"
 
 #: include/kiway_player.h:228
 msgid "This file is already open."
-msgstr "このファイルは既に開かれています。"
+msgstr "このファイルはすでに開かれています。"
 
 #: include/libeval_compiler/libeval_compiler.h:342
 msgid "Malformed expression"
@@ -19532,7 +19527,7 @@ msgstr "不正な式"
 
 #: include/panel_hotkeys_editor.h:55
 msgid "Reset all hotkeys to the built-in KiCad defaults"
-msgstr "全てのホットキーを組み込まれている KiCad のデフォルトにリセットします"
+msgstr "すべてのホットキーを組み込まれている KiCad のデフォルトにリセットします"
 
 #: include/project.h:42
 msgid "untitled"
@@ -19544,7 +19539,7 @@ msgstr "変更しないままにする"
 
 #: include/widgets/resettable_panel.h:66
 msgid "Reset all settings on this page to their default"
-msgstr "このページ上の全ての設定をデフォルトにリセットします"
+msgstr "このページ上のすべての設定をデフォルトにリセットします"
 
 #: include/widgets/ui_common.h:42
 msgid "-- mixed values --"
@@ -19774,7 +19769,7 @@ msgstr "表面実装のフットプリントのみを含む (ASCIIかCSVの場�
 
 #: kicad/cli/command_export_pcb_pos.cpp:77
 msgid "Exclude all footprints with through-hole pads (ascii or csv only)"
-msgstr "スルーホールのあるフットプリントを全て除外する (ASCIIかCSVの場合のみ)"
+msgstr "スルーホールのあるフットプリントをすべて除外する (ASCIIかCSVの場合のみ)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:82
 msgid "Include board edge layer (gerber only)"
@@ -20081,11 +20076,11 @@ msgstr "'%s' を復元しています"
 
 #: kicad/kicad_manager_frame.cpp:903
 msgid "Would you like to automatically check for plugin updates on startup?"
-msgstr "起動時に自動的プラグインのアップデートを確認しますか？"
+msgstr "起動時に自動的プラグインの更新を確認しますか？"
 
 #: kicad/kicad_manager_frame.cpp:904
 msgid "Check for updates"
-msgstr "アップデートを確認する"
+msgstr "更新を確認する"
 
 #: kicad/menubar.cpp:58
 msgid "Clear Recent Projects"
@@ -20118,7 +20113,7 @@ msgstr "プロジェクトをアーカイブ (&A)..."
 
 #: kicad/menubar.cpp:120
 msgid "Archive all needed project files into zip archive"
-msgstr "zip アーカイブへ全ての必要なプロジェクト ファイルをアーカイブします"
+msgstr "zip アーカイブへすべての必要なプロジェクト ファイルをアーカイブします"
 
 #: kicad/menubar.cpp:124
 msgid "&Unarchive Project..."
@@ -20146,7 +20141,7 @@ msgstr "テキスト エディターでローカル ファイルを編集しま�
 
 #: kicad/menubar.cpp:248
 msgid "Archive all project files"
-msgstr "プロジェクトの全てのファイルをアーカイブ"
+msgstr "プロジェクトのすべてのファイルをアーカイブ"
 
 #: kicad/menubar.cpp:261
 msgid "Reveal project folder in Finder"
@@ -20329,9 +20324,8 @@ msgstr "パッケージをピン留めする"
 msgid ""
 "Pinned packages don't affect available update notification and will not be "
 "updated with 'Update All' button."
-msgstr ""
-"ピン留めされたパッケージは、利用可能なアップデートの通知には影響せず、[すべて"
-"更新]ボタンで更新されません。"
+msgstr "ピン留めされたパッケージは、利用可能な更新の通知には影響せず、[すべて更新]ボ"
+"タンで更新されません。"
 
 #: kicad/pcm/dialogs/panel_package.cpp:120
 msgid "Install Pending"
@@ -20443,7 +20437,7 @@ msgstr "ダウンロード"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:30
 msgid "Check for package updates on startup"
-msgstr "起動時にパッケージのアップデートを確認する"
+msgstr "起動時にパッケージの更新を確認する"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:40
 msgid "Library package handling"
@@ -20451,8 +20445,8 @@ msgstr "ライブラリ パッケージの取り扱い"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:53
 msgid "Automatically add installed libraries to global lib table"
-msgstr ""
-"インストールされたライブラリをグローバル lib テーブルに自動的に追加する"
+msgstr "インストールされたライブラリをグローバル ライブラリ "
+"テーブルに自動的に追加する"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:57
 msgid "Automatically remove uninstalled libraries"
@@ -20565,11 +20559,11 @@ msgstr "ローカル ファイル"
 
 #: kicad/pcm/pcm.cpp:1175
 msgid "Package updates are available"
-msgstr "パッケージのアップデートが可能"
+msgstr "パッケージの更新が可能"
 
 #: kicad/pcm/pcm.cpp:1176
 msgid "No package updates available"
-msgstr "パッケージのアップデートはありません"
+msgstr "パッケージの更新はありません"
 
 #: kicad/pcm/pcm_task_manager.cpp:74 kicad/pcm/pcm_task_manager.cpp:165
 #, c-format
@@ -20653,9 +20647,8 @@ msgstr ""
 msgid ""
 "Package with identifier %s is already installed. Would you like to update it "
 "to the version from selected file?"
-msgstr ""
-"識別子 %s を持つパッケージは既にインストールされています。選択されたファイル"
-"のバージョンに更新しますか？"
+msgstr "識別子 %s を持つパッケージはすでにインストールされています。選択されたファイ"
+"ルのバージョンに更新しますか？"
 
 #: kicad/pcm/pcm_task_manager.cpp:399
 msgid "Update package"
@@ -20737,7 +20730,7 @@ msgstr "このプロジェクトに切り替え"
 
 #: kicad/project_tree_pane.cpp:680
 msgid "Close all editors, and switch to the selected project"
-msgstr "全てのエディターを閉じて、選択されたプロジェクトへ切り替え"
+msgstr "すべてのエディターを閉じて、選択されたプロジェクトへ切り替え"
 
 #: kicad/project_tree_pane.cpp:687
 msgid "New Directory..."
@@ -20967,7 +20960,7 @@ msgstr "上書きされたファイル:"
 
 #: kicad/tools/kicad_manager_control.cpp:264
 msgid "Similar files already exist in the destination folder."
-msgstr "フォルダーには既に同名ファイルが存在しています。"
+msgstr "フォルダーにはすでに同名ファイルが存在しています。"
 
 #: kicad/tools/kicad_manager_control.cpp:283
 msgid "A problem occurred creating new project from template."
@@ -21432,7 +21425,7 @@ msgid ""
 "Simulate page 1 or other pages to show how items\n"
 "which are not on all page are displayed"
 msgstr ""
-"表示されている全てのページにはないアイテムの見え方を\n"
+"表示されているすべてのページにはないアイテムの見え方を\n"
 "１ページ目または他のページにシミュレートします"
 
 #: pagelayout_editor/tools/pl_actions.cpp:44
@@ -22309,7 +22302,7 @@ msgstr "データ ファイル '%s' を読み込めません。"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:221
 msgid "This regulator is already in list. Aborted"
-msgstr "指定されたレギュレーターは既にリストへ登録されています。中止します"
+msgstr "指定されたレギュレーターはすでにリストへ登録されています。中止します"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:253
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:117
@@ -22361,11 +22354,11 @@ msgstr "レギュレーター"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:86
 msgid "Regulators data file:"
-msgstr "レギュレーター データ ファイル:"
+msgstr "レギュレーターのデータ:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:88
 msgid "The name of the data file which stores known regulators parameters."
-msgstr "既存レギュレーターのパラメーターを保存しているデータ ファイル名です。"
+msgstr "レギュレーターのパラメーターを保存しているデータ ファイル名です。"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:98
 msgid "Browse"
@@ -23352,7 +23345,7 @@ msgstr "ストリップラインと上部導体の距離"
 
 #: pcb_calculator/transline_ident.cpp:390
 msgid "Twists"
-msgstr "ツイスト数"
+msgstr "撚り数"
 
 #: pcb_calculator/transline_ident.cpp:391
 msgid "Number of twists per length"
@@ -23687,7 +23680,7 @@ msgstr "値が小さすぎます。(最小値 %s)."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:211
 msgid "All dielectric  thickness layers are locked"
-msgstr "全ての誘電体厚レイヤーはロックされています"
+msgstr "すべての誘電体厚レイヤーはロックされています"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:278
 #, c-format
@@ -25814,11 +25807,11 @@ msgstr "実行しない"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:27
 msgid "Refill all zones before performing DRC"
-msgstr "DRC 実行前に全てのゾーンを再塗りつぶし"
+msgstr "DRC 実行前にすべてのゾーンを再塗りつぶし"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
 msgid "Report all errors for each track"
-msgstr "配線のエラーを全てレポート"
+msgstr "配線のエラーをすべてレポート"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:31
 msgid ""
@@ -25973,7 +25966,7 @@ msgstr "新しいフットプリント ライブラリID:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:96
 msgid "Remove text items which are not in library footprint"
-msgstr "ライブラリ フットプリントにないテキスト アイテムを削除"
+msgstr "ライブラリのフットプリントにないテキスト アイテムを削除"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:101
 msgid "Update/reset text layers and visibilities"
@@ -25999,7 +25992,7 @@ msgstr "ライブラリからフットプリントを更新"
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:120
 #, c-format
 msgid "File %s already exists."
-msgstr "ファイル %s は既に存在します。"
+msgstr "ファイル %s はすでに存在します。"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:21
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:22
@@ -26580,7 +26573,7 @@ msgstr "コートヤード要件から除外"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:208
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:212
 msgid "Will not generate \"missing courtyard\" DRC violations"
-msgstr "\"コートヤードがない(missing courtyard\" DRC違反を発生させない"
+msgstr "「コートヤードがない」のDRC違反を発生させない"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:224
 msgid "Update Footprint from Library..."
@@ -26902,7 +26895,7 @@ msgstr "トレースを表示"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:98
 msgid "Update Python Modules"
-msgstr "Python モジュールをアップデート"
+msgstr "Python モジュールを更新"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.h:65
 msgid "Footprint Generators"
@@ -27025,7 +27018,7 @@ msgid ""
 "Creates only one file containing all footprints to place\n"
 msgstr ""
 "２ファイルを生成: 基板面ごとにファイルを生成するか、\n"
-"配置するための全てのフットプリントを含んだ1つのファイルを生成します\n"
+"配置するすべてのフットプリントを含んだ1つのファイルを生成します\n"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:75
 msgid "Include only SMD footprints"
@@ -27952,7 +27945,7 @@ msgstr "新規ネット"
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2084
 #, c-format
 msgid "Net name '%s' is already in use."
-msgstr "ネット名 '%s' は既に使われています。"
+msgstr "ネット名 '%s' はすでに使われています。"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2061
 msgid "Rename Net"
@@ -28359,7 +28352,7 @@ msgstr "基本要素を追加"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:35
 msgid "Pad type:"
-msgstr "パッドタイプ:"
+msgstr "パッドのタイプ:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/pad.cpp:1701
 msgid "Through-hole"
@@ -28946,7 +28939,7 @@ msgid ""
 "Generate a Gerber job file that contains info about the board,\n"
 "and the list of generated Gerber plot files"
 msgstr ""
-"基板に関する情報および生成されたガーバー プロット ファイルのリスト\n"
+"基板の情報と生成されたガーバー プロット ファイルのリスト\n"
 "を含んだガーバー ジョブ ファイルを生成します"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:209
@@ -29398,7 +29391,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:76
 msgid "Fix all segments on click"
-msgstr "クリック時に全ての配線セグメントを固定する"
+msgstr "クリック時にすべての配線セグメントを固定する"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:77
 msgid ""
@@ -30595,7 +30588,7 @@ msgid ""
 "Do you wish to continue?"
 msgstr ""
 "アイテムが削除されたレイヤー上に見つかりました。この操作は削除されたレイヤー"
-"から全てのアイテムを削除し、取り消すことができません。\n"
+"からすべてのアイテムを削除し、取り消すことができません。\n"
 "続行しますか？"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:674
@@ -30614,7 +30607,7 @@ msgstr "レイヤー名 \"signal\" は予約されています。"
 #: pcbnew/dialogs/panel_setup_layers.cpp:695
 #, c-format
 msgid "Layer name '%s' already in use."
-msgstr "レイヤー名 '%s' は既に使われています。"
+msgstr "レイヤー名 '%s' はすでに使われています。"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:795
 #, c-format
@@ -31269,7 +31262,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:123
 msgid "Additional clearance as a percentage of the pad size."
-msgstr "追加のクリアランスをパッドサイズに対するパーセンテージで指定します。"
+msgstr "追加のクリアランスをパッドのサイズに対するパーセンテージで指定します。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:134
 msgid ""
@@ -33295,7 +33288,7 @@ msgstr ""
 #: pcbnew/files.cpp:614
 #, c-format
 msgid "PCB '%s' is already open."
-msgstr "プリント基板 '%s' は既に開かれています。"
+msgstr "プリント基板 '%s' はすでに開かれています。"
 
 #: pcbnew/files.cpp:622
 msgid "The current PCB has been modified.  Save changes?"
@@ -33601,7 +33594,7 @@ msgstr "フットプリント ライブラリが有効になっていません�
 
 #: pcbnew/footprint_info_impl.cpp:122
 msgid "Fetching footprint libraries..."
-msgstr "フットプリント ライブラリをフェッチしています..."
+msgstr "フットプリント ライブラリを取得しています..."
 
 #: pcbnew/footprint_info_impl.cpp:153
 msgid "Loading footprints..."
@@ -33662,7 +33655,7 @@ msgstr "ライブラリ %s' は読み込み専用です。"
 #: pcbnew/footprint_libraries_utils.cpp:476
 #, c-format
 msgid "Library %s already exists."
-msgstr "ライブラリ %s は既に存在します。"
+msgstr "ライブラリ %s はすでに存在します。"
 
 #: pcbnew/footprint_libraries_utils.cpp:640
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:973
@@ -33728,7 +33721,7 @@ msgstr "フットプリント名が指定されていません。フットプリ
 #: pcbnew/footprint_libraries_utils.cpp:1179
 #, c-format
 msgid "Footprint %s already exists in %s."
-msgstr "フットプリント %s は既に %s 内に既に存在します。"
+msgstr "フットプリント %s はすでに %s 内に既に存在します。"
 
 #: pcbnew/footprint_libraries_utils.cpp:1195
 #, c-format
@@ -33949,7 +33942,7 @@ msgstr "グループにする"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:161
 msgid "Add all imported items into a new group"
-msgstr "全てのインポートされたアイテムを新しいグループに追加"
+msgstr "すべてのインポートされたアイテムを新しいグループに追加"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:172
 msgid "DXF Parameters"
@@ -34154,7 +34147,7 @@ msgid ""
 "(if the library already exists it will be replaced)"
 msgstr ""
 "基板で使われているフットプリントを含む、新しいライブラリを作成します\n"
-"(ライブラリが既に存在する場合は置き換えられます)"
+"(ライブラリがすでに存在する場合は置き換えられます)"
 
 #: pcbnew/menubar_pcb_editor.cpp:165
 msgid "Fabrication Outputs"
@@ -34301,13 +34294,12 @@ msgstr "%s (フットプリント '%s')を追加します。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:209
 #, c-format
 msgid "Cannot update %s (no footprint assigned)."
-msgstr ""
-"%s をアップデートできません(関連付けられたフットプリントがありません)。"
+msgstr "%s を更新できません(関連付けられたフットプリントがありません)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:221
 #, c-format
 msgid "Cannot update %s (footprint '%s' not found)."
-msgstr "%s をアップデートできません(フットプリント \"%s\" が見つかりません)。"
+msgstr "%s を更新できません(フットプリント \"%s\" が見つかりません)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:231
 #, c-format
@@ -34774,7 +34766,7 @@ msgstr "端面スルーホール パッド"
 
 #: pcbnew/pad.cpp:1762
 msgid "Pad Type"
-msgstr "パッドタイプ"
+msgstr "パッドのタイプ"
 
 #: pcbnew/pad.cpp:1773
 msgid "Pad Number"
@@ -34830,7 +34822,7 @@ msgstr "プロジェクトのフットプリント ライブラリをロード�
 
 #: pcbnew/pcb_bitmap.cpp:238
 msgid "Bitmap Properties"
-msgstr "ビットマップ プロパティ"
+msgstr "ビットマップのプロパティ"
 
 #: pcbnew/pcb_bitmap.cpp:245
 msgid "Greyscale"
@@ -36005,12 +35997,12 @@ msgstr ""
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:541
 #, c-format
 msgid "Expecting pad size values but found %s : %s in row %zu."
-msgstr "パッドサイズの値が必要ですが、%s が見つかりました: %s は行 %zu です。"
+msgstr "パッドのサイズの値が必要ですが、%s が見つかりました: %s は行 %zu です。"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:563
 #, c-format
 msgid "Invalid pad size in row %zu."
-msgstr "不正なパッドサイズ : %zu行目."
+msgstr "不正なパッドのサイズ : %zu行目."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:598
 #, c-format
@@ -36594,7 +36586,7 @@ msgstr ""
 #: pcbnew/router/pns_diff_pair_placer.cpp:547
 #, c-format
 msgid "Can't find a suitable starting point for coupled net \"%s\"."
-msgstr "カップルド ネット \"%s\" の最適な開始位置を見つけることができません。"
+msgstr "組となるネット \"%s\" の最適な開始位置を見つけることができません。"
 
 #: pcbnew/router/pns_dp_meander_placer.cpp:76
 #: pcbnew/router/pns_meander_placer.cpp:65
@@ -37258,7 +37250,7 @@ msgstr ""
 msgid ""
 "When routing from an existing track use its width instead of the current "
 "width setting"
-msgstr "既に配線がある場合には、現在の設定の代わりにその配線幅を使用します"
+msgstr "すでに配線がある場合には、現在の設定の代わりにその配線幅を使用します"
 
 #: pcbnew/toolbars_pcb_editor.cpp:669
 msgid "Track: use netclass width"
@@ -38041,7 +38033,7 @@ msgstr "フットプリント名は空にできません。"
 #: pcbnew/tools/footprint_editor_control.cpp:417
 #, c-format
 msgid "Footprint name '%s' already in use in library '%s'."
-msgstr "フットプリント名 '%s' は既にライブラリ'%s' で使われています。"
+msgstr "フットプリント名 '%s' はすでにライブラリ'%s' で使われています。"
 
 #: pcbnew/tools/footprint_editor_control.cpp:732
 msgid "No footprint problems found."
@@ -38552,7 +38544,7 @@ msgstr "フットプリントを更新..."
 
 #: pcbnew/tools/pcb_actions.cpp:466
 msgid "Update footprint to include any changes from the library"
-msgstr "全ての変更を適用するためにライブラリからフットプリントを更新"
+msgstr "すべての変更を適用するためにライブラリからフットプリントを更新"
 
 #: pcbnew/tools/pcb_actions.cpp:471
 msgid "Update Footprints from Library..."
@@ -38560,7 +38552,7 @@ msgstr "ライブラリからフットプリントを更新..."
 
 #: pcbnew/tools/pcb_actions.cpp:472
 msgid "Update footprints to include any changes from the library"
-msgstr "全ての変更を適用するためにライブラリからフットプリントを更新"
+msgstr "すべての変更を適用するためにライブラリからフットプリントを更新"
 
 #: pcbnew/tools/pcb_actions.cpp:477
 msgid "Remove Unused Pads..."
@@ -38722,7 +38714,7 @@ msgstr "パッド編集を終了"
 
 #: pcbnew/tools/pcb_actions.cpp:599
 msgid "Regroups all touching graphic shapes into the edited pad"
-msgstr "全ての関係するグラフィック形状を編集されたパッドに再グループ化"
+msgstr "すべての関係するグラフィック形状を編集されたパッドに再グループ化"
 
 #: pcbnew/tools/pcb_actions.cpp:604
 msgid "Default Pad Properties..."
@@ -38738,7 +38730,7 @@ msgstr "プラグインを更新"
 
 #: pcbnew/tools/pcb_actions.cpp:613
 msgid "Reload all python plugins and refresh plugin menus"
-msgstr "全ての python プラグインをリロードしてプラグイン メニューを更新"
+msgstr "すべての python プラグインをリロードしてプラグイン メニューを更新"
 
 #: pcbnew/tools/pcb_actions.cpp:619
 msgid "Reveal Plugin Folder in Finder"
@@ -38810,7 +38802,7 @@ msgstr "フットプリント レポート (.rpt)..."
 
 #: pcbnew/tools/pcb_actions.cpp:667
 msgid "Create report of all footprints from current board"
-msgstr "現在の基板から全てのフットプリントのレポートを作成"
+msgstr "現在の基板からすべてのフットプリントのレポートを作成"
 
 #: pcbnew/tools/pcb_actions.cpp:672
 msgid "IPC-D-356 Netlist File..."
@@ -39468,7 +39460,7 @@ msgstr "ネット内の全配線を選択"
 
 #: pcbnew/tools/pcb_actions.cpp:1339
 msgid "Selects all tracks & vias belonging to the same net."
-msgstr "同じネットに属する全ての配線とビアを選択します。"
+msgstr "同じネットに属するすべての配線とビアを選択します。"
 
 #: pcbnew/tools/pcb_actions.cpp:1343
 msgid "Deselect All Tracks in Net"
@@ -39476,7 +39468,7 @@ msgstr "ネット内の全配線を選択を解除"
 
 #: pcbnew/tools/pcb_actions.cpp:1344
 msgid "Deselects all tracks & vias belonging to the same net."
-msgstr "同じネットに属する全ての配線とビアを選択を解除します。"
+msgstr "同じネットに属するすべての配線とビアを選択を解除します。"
 
 #: pcbnew/tools/pcb_actions.cpp:1349
 msgid "Select All Unconnected Footprints"
@@ -39508,7 +39500,7 @@ msgstr "同じ階層シートにあるアイテム"
 
 #: pcbnew/tools/pcb_actions.cpp:1367
 msgid "Selects all footprints and tracks in the same schematic sheet"
-msgstr "同じ回路図に含まれる全てのフットプリントと配線を選択"
+msgstr "同じ回路図に含まれるすべてのフットプリントと配線を選択"
 
 #: pcbnew/tools/pcb_actions.cpp:1372
 msgid "Select on Schematic"
@@ -39542,7 +39534,7 @@ msgstr "すべてのゾーンを塗りつぶし"
 
 #: pcbnew/tools/pcb_actions.cpp:1393
 msgid "Update copper fill of all zones"
-msgstr "全てのゾーンの導体塗りつぶしを更新"
+msgstr "すべてのゾーンの導体塗りつぶしを更新"
 
 #: pcbnew/tools/pcb_actions.cpp:1401
 msgid "Unfill Selected Zone(s)"
@@ -39558,7 +39550,7 @@ msgstr "すべてのゾーンの塗りつぶしを削除"
 
 #: pcbnew/tools/pcb_actions.cpp:1407
 msgid "Remove copper fill from all zones"
-msgstr "全てのゾーンから導体塗りつぶしを削除"
+msgstr "すべてのゾーンから導体塗りつぶしを削除"
 
 #: pcbnew/tools/pcb_actions.cpp:1415
 msgid "Place Selected Footprints"
@@ -40045,11 +40037,11 @@ msgstr "フットプリントのリファレンスを表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:343
 msgid "Footprint Text"
-msgstr "フットプリント テキスト"
+msgstr "フットプリントのテキスト"
 
 #: pcbnew/widgets/appearance_controls.cpp:343
 msgid "Show all footprint text"
-msgstr "すべてのフットプリント テキストを表示"
+msgstr "すべてのフットプリントのテキストを表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:344
 msgid "Hidden Text"
@@ -40057,7 +40049,7 @@ msgstr "非表示テキスト"
 
 #: pcbnew/widgets/appearance_controls.cpp:344
 msgid "Show footprint text marked as invisible"
-msgstr "非表示になっているフットプリントのテキストを表示"
+msgstr "非表示のフットプリントのテキストを表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:347
 msgid "Show unconnected nets as a ratsnest"
@@ -40236,7 +40228,7 @@ msgstr "ネットとネットクラスのカラー表示を行う条件を選択
 #: pcbnew/widgets/appearance_controls.cpp:712
 #: pcbnew/widgets/appearance_controls.cpp:2439
 msgid "Net and netclass colors are shown on all copper items"
-msgstr "全ての導体アイテムのネットとネットクラスをカラー表示"
+msgstr "すべての導体アイテムのネットとネットクラスをカラー表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:720
 #: pcbnew/widgets/appearance_controls.cpp:2442
@@ -40311,7 +40303,7 @@ msgstr "すべてのネットを表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:924
 msgid "Hide All Other Nets"
-msgstr "他の全てのネットを非表示"
+msgstr "他のすべてのネットを非表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:956
 #, c-format
@@ -40519,7 +40511,7 @@ msgstr "すべてのネットクラスを表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:2302
 msgid "Hide All Other Netclasses"
-msgstr "他の全てのネットクラスを非表示"
+msgstr "他のすべてのネットクラスを非表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:2364
 #, c-format
