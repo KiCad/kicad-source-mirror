@@ -39,6 +39,8 @@ int SCH_FIND_REPLACE_TOOL::FindAndReplace( const TOOL_EVENT& aEvent )
 int SCH_FIND_REPLACE_TOOL::UpdateFind( const TOOL_EVENT& aEvent )
 {
     EDA_SEARCH_DATA& data = m_frame->GetFindReplaceData();
+    SCH_SEARCH_DATA* schSearchData = dynamic_cast<SCH_SEARCH_DATA*>( &data );
+    bool             selectedOnly = schSearchData ? schSearchData->searchSelectedOnly : false;
 
     auto visit =
             [&]( EDA_ITEM* aItem, SCH_SHEET_PATH* aSheet )
@@ -48,7 +50,8 @@ int SCH_FIND_REPLACE_TOOL::UpdateFind( const TOOL_EVENT& aEvent )
                 // closed....so we need to double check the dialog is open.
                 if( m_frame->m_findReplaceDialog != nullptr
                     && !data.findString.IsEmpty()
-                    && aItem->Matches( data, aSheet ) )
+                    && aItem->Matches( data, aSheet )
+                    && ( !selectedOnly || aItem->IsSelected() ) )
                 {
                     aItem->SetForceVisible( true );
                     m_selectionTool->BrightenItem( aItem );
@@ -65,7 +68,6 @@ int SCH_FIND_REPLACE_TOOL::UpdateFind( const TOOL_EVENT& aEvent )
         || aEvent.IsAction( &ACTIONS::updateFind ) )
     {
         m_foundItemHighlighted = false;
-        m_selectionTool->ClearSelection();
 
         for( SCH_ITEM* item : m_frame->GetScreen()->Items() )
         {
@@ -78,8 +80,17 @@ int SCH_FIND_REPLACE_TOOL::UpdateFind( const TOOL_EVENT& aEvent )
                     } );
         }
     }
-    else if( aEvent.Matches( EVENTS::SelectedItemsModified ) )
+    else if( aEvent.Matches( EVENTS::SelectedItemsModified )
+             || aEvent.Matches( EVENTS::PointSelectedEvent )
+             || aEvent.Matches( EVENTS::SelectedEvent )
+             || aEvent.Matches( EVENTS::UnselectedEvent ) )
     {
+        // Normal find modifies the selection, but selection-based find does
+        // not so we want to start over in the items we are searching through when
+        // the selection changes
+        if( selectedOnly )
+            m_afterItem = nullptr;
+
         for( EDA_ITEM* item : m_selectionTool->GetSelection() )
             visit( item, &m_frame->GetCurrentSheet() );
     }
@@ -111,35 +122,45 @@ SCH_ITEM* SCH_FIND_REPLACE_TOOL::nextMatch( SCH_SCREEN* aScreen, SCH_SHEET_PATH*
                                             SCH_ITEM* aAfter, EDA_SEARCH_DATA& aData,
                                             bool reversed )
 {
+    SCH_SEARCH_DATA*       schSearchData = dynamic_cast<SCH_SEARCH_DATA*>( &aData );
+    bool                   selectedOnly = schSearchData ? schSearchData->searchSelectedOnly : false;
     bool                   past_item = !aAfter;
     std::vector<SCH_ITEM*> sorted_items;
 
-    for( SCH_ITEM* item : aScreen->Items() )
-    {
-        sorted_items.push_back( item );
+    auto addItem =
+            [&](SCH_ITEM* item)
+            {
+                sorted_items.push_back( item );
 
-        if( item->Type() == SCH_SYMBOL_T )
-        {
-            SCH_SYMBOL* cmp = static_cast<SCH_SYMBOL*>( item );
+                if( item->Type() == SCH_SYMBOL_T )
+                {
+                    SCH_SYMBOL* cmp = static_cast<SCH_SYMBOL*>( item );
 
-            for( SCH_FIELD& field : cmp->GetFields() )
-                sorted_items.push_back( &field );
+                    for( SCH_FIELD& field : cmp->GetFields() )
+                        sorted_items.push_back( &field );
 
-            for( SCH_PIN* pin : cmp->GetPins() )
-                sorted_items.push_back( pin );
-        }
+                    for( SCH_PIN* pin : cmp->GetPins() )
+                        sorted_items.push_back( pin );
+                }
 
-        if( item->Type() == SCH_SHEET_T )
-        {
-            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+                if( item->Type() == SCH_SHEET_T )
+                {
+                    SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
 
-            for( SCH_FIELD& field : sheet->GetFields() )
-                sorted_items.push_back( &field );
+                    for( SCH_FIELD& field : sheet->GetFields() )
+                        sorted_items.push_back( &field );
 
-            for( SCH_SHEET_PIN* pin : sheet->GetPins() )
-                sorted_items.push_back( pin );
-        }
-    }
+                    for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+                        sorted_items.push_back( pin );
+                }
+            };
+
+    if( selectedOnly )
+        for( EDA_ITEM* item : m_selectionTool->GetSelection() )
+            addItem( static_cast<SCH_ITEM*>( item ) );
+    else
+        for( SCH_ITEM* item : aScreen->Items() )
+            addItem( item );
 
     std::sort( sorted_items.begin(), sorted_items.end(),
             [&]( SCH_ITEM* a, SCH_ITEM* b )
@@ -181,14 +202,18 @@ SCH_ITEM* SCH_FIND_REPLACE_TOOL::nextMatch( SCH_SCREEN* aScreen, SCH_SHEET_PATH*
 
 int SCH_FIND_REPLACE_TOOL::FindNext( const TOOL_EVENT& aEvent )
 {
-    EDA_SEARCH_DATA& data = m_frame->GetFindReplaceData();
+    EDA_SEARCH_DATA& data            = m_frame->GetFindReplaceData();
     bool             searchAllSheets = false;
-    bool             isReversed = aEvent.IsAction( &ACTIONS::findPrevious );
+    bool             selectedOnly    = false;
+    bool             isReversed      = aEvent.IsAction( &ACTIONS::findPrevious );
+    SCH_ITEM*        item            = nullptr;
+    SCH_SHEET_PATH*  afterSheet      = &m_frame->GetCurrentSheet();
 
     try
     {
         const SCH_SEARCH_DATA& schSearchData = dynamic_cast<const SCH_SEARCH_DATA&>( data );
         searchAllSheets = !( schSearchData.searchCurrentSheetOnly );
+        selectedOnly = schSearchData.searchSelectedOnly;
     }
     catch( const std::bad_cast& )
     {
@@ -199,24 +224,16 @@ int SCH_FIND_REPLACE_TOOL::FindNext( const TOOL_EVENT& aEvent )
     else if( data.findString.IsEmpty() )
         return FindAndReplace( ACTIONS::find.MakeEvent() );
 
-    EE_SELECTION& selection       = m_selectionTool->GetSelection();
-    SCH_ITEM*     afterItem       = dynamic_cast<SCH_ITEM*>( selection.Front() );
-    SCH_ITEM*     item            = nullptr;
-
-    SCH_SHEET_PATH* afterSheet    = &m_frame->GetCurrentSheet();
-
     if( m_wrapAroundTimer.IsRunning() )
     {
         afterSheet = nullptr;
-        afterItem = nullptr;
+        m_afterItem = nullptr;
         m_wrapAroundTimer.Stop();
         m_frame->ClearFindReplaceStatus();
     }
 
-    m_selectionTool->ClearSelection();
-
     if( afterSheet || !searchAllSheets )
-        item = nextMatch( m_frame->GetScreen(), &m_frame->GetCurrentSheet(), afterItem, data,
+        item = nextMatch( m_frame->GetScreen(), &m_frame->GetCurrentSheet(), m_afterItem, data,
                           isReversed );
 
     if( !item && searchAllSheets )
@@ -272,6 +289,8 @@ int SCH_FIND_REPLACE_TOOL::FindNext( const TOOL_EVENT& aEvent )
 
     if( item )
     {
+        m_afterItem = item;
+
         if( !item->IsBrightened() )
         {
             // Clear any previous brightening
@@ -283,7 +302,12 @@ int SCH_FIND_REPLACE_TOOL::FindNext( const TOOL_EVENT& aEvent )
             m_foundItemHighlighted = true;
         }
 
-        m_selectionTool->AddItemToSel( item );
+        if( !selectedOnly )
+        {
+            m_selectionTool->ClearSelection();
+            m_selectionTool->AddItemToSel( item );
+        }
+
         m_frame->FocusOnLocation( item->GetBoundingBox().GetCenter() );
         m_frame->GetCanvas()->Refresh();
     }
@@ -301,26 +325,34 @@ int SCH_FIND_REPLACE_TOOL::FindNext( const TOOL_EVENT& aEvent )
     return 0;
 }
 
+EDA_ITEM* SCH_FIND_REPLACE_TOOL::getCurrentMatch()
+{
+    EDA_SEARCH_DATA& data = m_frame->GetFindReplaceData();
+    SCH_SEARCH_DATA* schSearchData = dynamic_cast<SCH_SEARCH_DATA*>( &data );
+    bool             selectedOnly = schSearchData ? schSearchData->searchSelectedOnly : false;
+
+    return selectedOnly ? m_afterItem : m_selectionTool->GetSelection().Front();
+}
 
 bool SCH_FIND_REPLACE_TOOL::HasMatch()
 {
     EDA_SEARCH_DATA& data = m_frame->GetFindReplaceData();
-    EDA_ITEM*        item = m_selectionTool->GetSelection().Front();
+    EDA_ITEM*        match = getCurrentMatch();
 
-    return item && item->Matches( data, &m_frame->GetCurrentSheet() );
+    return match && match->Matches( data, &m_frame->GetCurrentSheet() );
 }
 
 
 int SCH_FIND_REPLACE_TOOL::ReplaceAndFindNext( const TOOL_EVENT& aEvent )
 {
     EDA_SEARCH_DATA& data = m_frame->GetFindReplaceData();
-    EDA_ITEM*        item = m_selectionTool->GetSelection().Front();
+    EDA_ITEM*        item = getCurrentMatch();
     SCH_SHEET_PATH*  sheet = &m_frame->GetCurrentSheet();
 
     if( data.findString.IsEmpty() )
         return FindAndReplace( ACTIONS::find.MakeEvent() );
 
-    if( item && item->Matches( data, sheet ) )
+    if( item && HasMatch() )
     {
         SCH_ITEM* sch_item = static_cast<SCH_ITEM*>( item );
 
@@ -344,11 +376,13 @@ int SCH_FIND_REPLACE_TOOL::ReplaceAll( const TOOL_EVENT& aEvent )
 {
     EDA_SEARCH_DATA& data = m_frame->GetFindReplaceData();
     bool             currentSheetOnly = false;
+    bool             selectedOnly = false;
 
     try
     {
         const SCH_SEARCH_DATA& schSearchData = dynamic_cast<const SCH_SEARCH_DATA&>( data );
         currentSheetOnly = schSearchData.searchCurrentSheetOnly;
+        selectedOnly     = schSearchData.searchSelectedOnly;
     }
     catch( const std::bad_cast& )
     {
@@ -372,7 +406,7 @@ int SCH_FIND_REPLACE_TOOL::ReplaceAll( const TOOL_EVENT& aEvent )
                 }
             };
 
-    if( currentSheetOnly )
+    if( currentSheetOnly || selectedOnly )
     {
         SCH_SHEET_PATH* currentSheet = &m_frame->GetCurrentSheet();
 
@@ -380,7 +414,9 @@ int SCH_FIND_REPLACE_TOOL::ReplaceAll( const TOOL_EVENT& aEvent )
 
         while( item )
         {
-            doReplace( item, currentSheet, data );
+            if( !selectedOnly || item->IsSelected() )
+                doReplace( item, currentSheet, data );
+
             item = nextMatch( m_frame->GetScreen(), currentSheet, item, data, false );
         }
     }
@@ -454,4 +490,6 @@ void SCH_FIND_REPLACE_TOOL::setTransitions()
     Go( &SCH_FIND_REPLACE_TOOL::UpdateFind,            EVENTS::SelectedItemsModified );
     Go( &SCH_FIND_REPLACE_TOOL::UpdateFind,            EVENTS::PointSelectedEvent );
     Go( &SCH_FIND_REPLACE_TOOL::UpdateFind,            EVENTS::SelectedEvent );
+    Go( &SCH_FIND_REPLACE_TOOL::UpdateFind,            EVENTS::UnselectedEvent );
+    Go( &SCH_FIND_REPLACE_TOOL::UpdateFind,            EVENTS::ClearedEvent );
 }

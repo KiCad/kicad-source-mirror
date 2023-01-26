@@ -46,6 +46,7 @@ DIALOG_SCH_FIND::DIALOG_SCH_FIND( SCH_EDIT_FRAME* aParent, SCH_SEARCH_DATA* aDat
         m_buttonReplaceAll->Show( true );
         m_staticReplace->Show( true );
         m_comboReplace->Show( true );
+        m_checkSelectedOnly->Show( true );
         m_checkReplaceReferences->Show( true );
         m_checkWildcardMatch->Show( false );  // Wildcard replace is not implemented.
     }
@@ -59,6 +60,8 @@ DIALOG_SCH_FIND::DIALOG_SCH_FIND( SCH_EDIT_FRAME* aParent, SCH_SEARCH_DATA* aDat
     m_checkReplaceReferences->SetValue( m_findReplaceData->replaceReferences );
     m_checkAllPins->SetValue( m_findReplaceData->searchAllPins );
     m_checkCurrentSheetOnly->SetValue( m_findReplaceData->searchCurrentSheetOnly );
+    m_checkCurrentSheetOnly->Enable( !m_findReplaceData->searchSelectedOnly );
+    m_checkSelectedOnly->SetValue( m_findReplaceData->searchSelectedOnly );
 
     m_buttonFind->SetDefault();
     SetInitialFocus( m_comboFind );
@@ -111,8 +114,8 @@ void DIALOG_SCH_FIND::OnCancel( wxCommandEvent& aEvent )
 
 void DIALOG_SCH_FIND::OnUpdateReplaceUI( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Enable( HasFlag( wxFR_REPLACEDIALOG ) && !m_comboFind->GetValue().empty() &&
-                   m_findReplaceTool->HasMatch() );
+    aEvent.Enable( HasFlag( wxFR_REPLACEDIALOG ) && !m_comboFind->GetValue().empty()
+                   && m_findReplaceTool->HasMatch() );
 }
 
 
@@ -198,11 +201,11 @@ void DIALOG_SCH_FIND::OnOptions( wxCommandEvent& aEvent )
 void DIALOG_SCH_FIND::updateFlags()
 {
     // Rebuild the search flags in m_findReplaceData from dialog settings
-
-    if( m_checkMatchCase->GetValue() )
-        m_findReplaceData->matchCase = true;
-    else
-        m_findReplaceData->matchCase = false;
+    m_findReplaceData->matchCase                = m_checkMatchCase->GetValue();
+    m_findReplaceData->searchAllFields          = m_checkAllFields->GetValue();
+    m_findReplaceData->searchAllPins            = m_checkAllPins->GetValue();
+    m_findReplaceData->searchCurrentSheetOnly   = m_checkCurrentSheetOnly->GetValue();
+    m_findReplaceData->replaceReferences        = m_checkReplaceReferences->GetValue();
 
     if( m_checkWholeWord->GetValue() )
         m_findReplaceData->matchMode = EDA_SEARCH_MATCH_MODE::WHOLEWORD;
@@ -211,25 +214,17 @@ void DIALOG_SCH_FIND::updateFlags()
     else
         m_findReplaceData->matchMode = EDA_SEARCH_MATCH_MODE::PLAIN;
 
-    if( m_checkAllFields->GetValue() )
-        m_findReplaceData->searchAllFields = true;
+    if( m_checkSelectedOnly->GetValue() )
+    {
+        m_checkCurrentSheetOnly->SetValue( true );
+        m_checkCurrentSheetOnly->Enable( false );
+        m_findReplaceData->searchSelectedOnly = true;
+    }
     else
-        m_findReplaceData->searchAllFields = false;
-
-    if( m_checkAllPins->GetValue() )
-        m_findReplaceData->searchAllPins = true;
-    else
-        m_findReplaceData->searchAllPins = false;
-
-    if( m_checkCurrentSheetOnly->GetValue() )
-        m_findReplaceData->searchCurrentSheetOnly = true;
-    else
-        m_findReplaceData->searchCurrentSheetOnly = false;
-
-    if( m_checkReplaceReferences->GetValue() )
-        m_findReplaceData->replaceReferences = true;
-    else
-        m_findReplaceData->replaceReferences = false;
+    {
+        m_checkCurrentSheetOnly->Enable( true );
+        m_findReplaceData->searchSelectedOnly = false;
+    }
 }
 
 

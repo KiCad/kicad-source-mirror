@@ -174,6 +174,7 @@ void SCH_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
         searchData->searchAllFields = eeconfig()->m_FindReplaceExtra.search_all_fields;
         searchData->searchAllPins = eeconfig()->m_FindReplaceExtra.search_all_pins;
         searchData->searchCurrentSheetOnly = eeconfig()->m_FindReplaceExtra.search_current_sheet_only;
+        searchData->searchSelectedOnly = eeconfig()->m_FindReplaceExtra.search_selected_only;
     }
 
     GetRenderSettings()->m_ShowPinsElectricalType = false;
@@ -205,6 +206,7 @@ void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
             eeconfig()->m_FindReplaceExtra.search_all_pins = searchData->searchAllPins;
             eeconfig()->m_FindReplaceExtra.search_current_sheet_only =
                     searchData->searchCurrentSheetOnly;
+            eeconfig()->m_FindReplaceExtra.search_selected_only = searchData->searchSelectedOnly;
         }
     }
 }

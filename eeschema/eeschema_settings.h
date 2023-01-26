@@ -252,6 +252,7 @@ public:
         bool search_all_fields;
         bool search_all_pins;
         bool search_current_sheet_only;
+        bool search_selected_only;
 
         bool replace_references;
     };

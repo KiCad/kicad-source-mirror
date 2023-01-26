@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-133-g388db8e4)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -22,10 +22,10 @@
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
 #include <wx/gbsizer.h>
+#include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -52,13 +52,14 @@ class DIALOG_SCH_FIND_BASE : public DIALOG_SHIM
 		wxCheckBox* m_checkAllPins;
 		wxCheckBox* m_checkAllFields;
 		wxCheckBox* m_checkCurrentSheetOnly;
+		wxCheckBox* m_checkSelectedOnly;
 		wxCheckBox* m_checkReplaceReferences;
 		wxButton* m_buttonFind;
 		wxButton* m_buttonReplace;
 		wxButton* m_buttonReplaceAll;
 		wxButton* m_buttonCancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnIdle( wxIdleEvent& event ) { event.Skip(); }
 		virtual void OnSearchForSelect( wxCommandEvent& event ) { event.Skip(); }
@@ -79,6 +80,7 @@ class DIALOG_SCH_FIND_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Find"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_SCH_FIND_BASE();
 
 };

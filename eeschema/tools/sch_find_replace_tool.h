@@ -83,8 +83,10 @@ private:
      */
     SCH_ITEM* nextMatch( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aSheet, SCH_ITEM* aAfter,
                          EDA_SEARCH_DATA& aData, bool reverse );
+    EDA_ITEM* getCurrentMatch();
 
 private:
+    SCH_ITEM*   m_afterItem = nullptr;
     bool        m_foundItemHighlighted;
     wxTimer     m_wrapAroundTimer;          // A timer during which a subsequent FindNext will
                                             //  result in a wrap-around

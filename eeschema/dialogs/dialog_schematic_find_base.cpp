@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-133-g388db8e4)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -98,10 +98,13 @@ DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, con
 	m_checkCurrentSheetOnly = new wxCheckBox( this, wxID_ANY, _("Search the current &sheet only"), wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer2->Add( m_checkCurrentSheetOnly, wxGBPosition( 3, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
+	m_checkSelectedOnly = new wxCheckBox( this, wxID_ANY, _("Search the current selection &only"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer2->Add( m_checkSelectedOnly, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+
 	m_checkReplaceReferences = new wxCheckBox( this, wxID_ANY, _("Replace matches in reference designators"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkReplaceReferences->Hide();
 
-	gbSizer2->Add( m_checkReplaceReferences, wxGBPosition( 4, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	gbSizer2->Add( m_checkReplaceReferences, wxGBPosition( 5, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	leftSizer->Add( gbSizer2, 1, wxEXPAND, 5 );
@@ -160,6 +163,7 @@ DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, con
 	m_checkAllPins->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnOptions ), NULL, this );
 	m_checkAllFields->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnOptions ), NULL, this );
 	m_checkCurrentSheetOnly->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnOptions ), NULL, this );
+	m_checkSelectedOnly->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnOptions ), NULL, this );
 	m_buttonFind->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnFind ), NULL, this );
 	m_buttonReplace->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnReplace ), NULL, this );
 	m_buttonReplace->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SCH_FIND_BASE::OnUpdateReplaceUI ), NULL, this );
@@ -187,6 +191,7 @@ DIALOG_SCH_FIND_BASE::~DIALOG_SCH_FIND_BASE()
 	m_checkAllPins->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnOptions ), NULL, this );
 	m_checkAllFields->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnOptions ), NULL, this );
 	m_checkCurrentSheetOnly->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnOptions ), NULL, this );
+	m_checkSelectedOnly->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnOptions ), NULL, this );
 	m_buttonFind->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnFind ), NULL, this );
 	m_buttonReplace->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnReplace ), NULL, this );
 	m_buttonReplace->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SCH_FIND_BASE::OnUpdateReplaceUI ), NULL, this );

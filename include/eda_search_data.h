@@ -62,6 +62,7 @@ struct SCH_SEARCH_DATA : public EDA_SEARCH_DATA
     bool searchAllFields;
     bool searchAllPins;
     bool searchCurrentSheetOnly;
+    bool searchSelectedOnly;
 
     bool replaceReferences;
 
@@ -70,6 +71,7 @@ struct SCH_SEARCH_DATA : public EDA_SEARCH_DATA
             searchAllFields( false ),
             searchAllPins( false ),
             searchCurrentSheetOnly( false ),
+            searchSelectedOnly( false ),
             replaceReferences( false )
     {
     }
