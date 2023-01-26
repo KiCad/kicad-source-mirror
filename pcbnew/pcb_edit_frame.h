@@ -142,7 +142,7 @@ public:
     /**
      * Find the next item using our existing search parameters.
      */
-    void FindNext();
+    void FindNext( bool reverse = false );
 
     /**
      * Open a dialog frame to create plot and drill files relative to the current board.

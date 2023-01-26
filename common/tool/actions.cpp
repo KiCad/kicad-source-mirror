@@ -228,9 +228,15 @@ TOOL_ACTION ACTIONS::findNext( "common.Interactive.findNext",
         _( "Find Next" ), _( "Find next match" ),
         BITMAPS::find );
 
+TOOL_ACTION ACTIONS::findPrevious( "common.Interactive.findPrevious",
+        AS_GLOBAL,
+        MD_SHIFT + WXK_F3, LEGACY_HK_NAME( "Find Previous" ),
+        _( "Find Previous" ), _( "Find previous match" ),
+        BITMAPS::find );
+
 TOOL_ACTION ACTIONS::findNextMarker( "common.Interactive.findNextMarker",
         AS_GLOBAL,
-        MD_SHIFT + WXK_F3, LEGACY_HK_NAME( "Find Next Marker" ),
+        MD_CTRL + MD_SHIFT + WXK_F3, LEGACY_HK_NAME( "Find Next Marker" ),
         _( "Find Next Marker" ), "",
         BITMAPS::find );
 

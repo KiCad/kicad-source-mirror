@@ -350,7 +350,7 @@ int BOARD_EDITOR_CONTROL::Find( const TOOL_EVENT& aEvent )
 
 int BOARD_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
 {
-    m_frame->FindNext();
+    m_frame->FindNext( aEvent.IsAction( &ACTIONS::findPrevious ) );
     return 0;
 }
 
@@ -1609,6 +1609,7 @@ void BOARD_EDITOR_CONTROL::setTransitions()
     Go( &BOARD_EDITOR_CONTROL::Search,                 ACTIONS::showSearch.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::Find,                   ACTIONS::find.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::FindNext,               ACTIONS::findNext.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::FindNext,               ACTIONS::findPrevious.MakeEvent() );
 
     Go( &BOARD_EDITOR_CONTROL::BoardSetup,             PCB_ACTIONS::boardSetup.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ImportNetlist,          PCB_ACTIONS::importNetlist.MakeEvent() );

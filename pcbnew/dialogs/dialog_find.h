@@ -68,7 +68,7 @@ public:
     /**
      * Finds the next item
      */
-    void FindNext() { search( true ); }
+    void FindNext( bool reverse ) { search( !reverse ); }
 
     /**
      * The Show method is overridden to make the search combobox

@@ -108,7 +108,8 @@ int SCH_FIND_REPLACE_TOOL::UpdateFind( const TOOL_EVENT& aEvent )
 
 
 SCH_ITEM* SCH_FIND_REPLACE_TOOL::nextMatch( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aSheet,
-                                            SCH_ITEM* aAfter, EDA_SEARCH_DATA& aData )
+                                            SCH_ITEM* aAfter, EDA_SEARCH_DATA& aData,
+                                            bool reversed )
 {
     bool                   past_item = !aAfter;
     std::vector<SCH_ITEM*> sorted_items;
@@ -155,6 +156,9 @@ SCH_ITEM* SCH_FIND_REPLACE_TOOL::nextMatch( SCH_SCREEN* aScreen, SCH_SHEET_PATH*
                     return a->GetPosition().x < b->GetPosition().x;
             } );
 
+    if( reversed )
+        std::reverse( sorted_items.begin(), sorted_items.end() );
+
     for( SCH_ITEM* item : sorted_items )
     {
         if( item == aAfter )
@@ -179,6 +183,7 @@ int SCH_FIND_REPLACE_TOOL::FindNext( const TOOL_EVENT& aEvent )
 {
     EDA_SEARCH_DATA& data = m_frame->GetFindReplaceData();
     bool             searchAllSheets = false;
+    bool             isReversed = aEvent.IsAction( &ACTIONS::findPrevious );
 
     try
     {
@@ -211,7 +216,8 @@ int SCH_FIND_REPLACE_TOOL::FindNext( const TOOL_EVENT& aEvent )
     m_selectionTool->ClearSelection();
 
     if( afterSheet || !searchAllSheets )
-        item = nextMatch( m_frame->GetScreen(), &m_frame->GetCurrentSheet(), afterItem, data );
+        item = nextMatch( m_frame->GetScreen(), &m_frame->GetCurrentSheet(), afterItem, data,
+                          isReversed );
 
     if( !item && searchAllSheets )
     {
@@ -239,6 +245,9 @@ int SCH_FIND_REPLACE_TOOL::FindNext( const TOOL_EVENT& aEvent )
                         return lhs->GetCurrentHash() < rhs->GetCurrentHash();
                 } );
 
+        if( isReversed )
+            std::reverse( paths.begin(), paths.end() );
+
         for( SCH_SHEET_PATH* sheet : paths )
         {
             if( afterSheet )
@@ -249,7 +258,7 @@ int SCH_FIND_REPLACE_TOOL::FindNext( const TOOL_EVENT& aEvent )
                 continue;
             }
 
-            item = nextMatch( sheet->LastScreen(), sheet, nullptr, data );
+            item = nextMatch( sheet->LastScreen(), sheet, nullptr, data, isReversed );
 
             if( item )
             {
@@ -367,12 +376,12 @@ int SCH_FIND_REPLACE_TOOL::ReplaceAll( const TOOL_EVENT& aEvent )
     {
         SCH_SHEET_PATH* currentSheet = &m_frame->GetCurrentSheet();
 
-        SCH_ITEM* item = nextMatch( m_frame->GetScreen(), currentSheet, nullptr, data );
+        SCH_ITEM* item = nextMatch( m_frame->GetScreen(), currentSheet, nullptr, data, false );
 
         while( item )
         {
             doReplace( item, currentSheet, data );
-            item = nextMatch( m_frame->GetScreen(), currentSheet, item, data );
+            item = nextMatch( m_frame->GetScreen(), currentSheet, item, data, false );
         }
     }
     else
@@ -386,7 +395,7 @@ int SCH_FIND_REPLACE_TOOL::ReplaceAll( const TOOL_EVENT& aEvent )
 
             for( unsigned ii = 0; ii < sheets.size(); ++ii )
             {
-                SCH_ITEM* item = nextMatch( screen, &sheets[ii], nullptr, data );
+                SCH_ITEM* item = nextMatch( screen, &sheets[ii], nullptr, data, false );
 
                 while( item )
                 {
@@ -416,7 +425,7 @@ int SCH_FIND_REPLACE_TOOL::ReplaceAll( const TOOL_EVENT& aEvent )
                         }
                     }
 
-                    item = nextMatch( screen, &sheets[ii], item, data );
+                    item = nextMatch( screen, &sheets[ii], item, data, false );
                 }
             }
         }
@@ -437,6 +446,7 @@ void SCH_FIND_REPLACE_TOOL::setTransitions()
     Go( &SCH_FIND_REPLACE_TOOL::FindAndReplace,        ACTIONS::find.MakeEvent() );
     Go( &SCH_FIND_REPLACE_TOOL::FindAndReplace,        ACTIONS::findAndReplace.MakeEvent() );
     Go( &SCH_FIND_REPLACE_TOOL::FindNext,              ACTIONS::findNext.MakeEvent() );
+    Go( &SCH_FIND_REPLACE_TOOL::FindNext,              ACTIONS::findPrevious.MakeEvent() );
     Go( &SCH_FIND_REPLACE_TOOL::FindNext,              ACTIONS::findNextMarker.MakeEvent() );
     Go( &SCH_FIND_REPLACE_TOOL::ReplaceAndFindNext,    ACTIONS::replaceAndFindNext.MakeEvent() );
     Go( &SCH_FIND_REPLACE_TOOL::ReplaceAll,            ACTIONS::replaceAll.MakeEvent() );

@@ -1660,12 +1660,12 @@ void PCB_EDIT_FRAME::ShowFindDialog()
 }
 
 
-void PCB_EDIT_FRAME::FindNext()
+void PCB_EDIT_FRAME::FindNext( bool reverse )
 {
     if( !m_findDialog )
         ShowFindDialog();
 
-    m_findDialog->FindNext();
+    m_findDialog->FindNext( reverse );
 }
 
 

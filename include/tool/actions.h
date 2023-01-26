@@ -78,6 +78,7 @@ public:
     static TOOL_ACTION find;
     static TOOL_ACTION findAndReplace;
     static TOOL_ACTION findNext;
+    static TOOL_ACTION findPrevious;
     static TOOL_ACTION findNextMarker;
     static TOOL_ACTION replaceAndFindNext;
     static TOOL_ACTION replaceAll;
