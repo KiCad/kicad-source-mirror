@@ -1003,6 +1003,12 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
     for( SCH_ITEM* item : allItems )
     {
         item->SetPosition( item->GetPosition() + translation );
+
+        // We don't read positions of Eagle label fields (primarily intersheet refs), so we
+        // need to autoplace them after applying the translation.
+        if( SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( item ) )
+            label->AutoplaceFields( screen, false );
+
         item->ClearFlags();
         screen->Update( item );
 
