@@ -642,8 +642,8 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
     PROJECT_FILE&         project = Kiway().Prj().GetProjectFile();
     SYMBOL_LIB_TABLE*     libTable = Prj().SchSymbolLibTable();
     std::vector<wxString> libs = libTable->GetLogicalLibs();
-    std::set<wxString>    pinnedMatches;
-    std::set<wxString>    otherMatches;
+    std::vector<wxString> pinnedMatches;
+    std::vector<wxString> otherMatches;
 
     auto doAddLib =
             [&]( const wxString& aLib )
@@ -651,11 +651,11 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
                 if( alg::contains( project.m_PinnedSymbolLibs, aLib )
                     || alg::contains( cfg->m_Session.pinned_symbol_libs, aLib ) )
                 {
-                    pinnedMatches.insert( aLib );
+                    pinnedMatches.push_back( aLib );
                 }
                 else
                 {
-                    otherMatches.insert( aLib );
+                    otherMatches.push_back( aLib );
                 }
             };
 
