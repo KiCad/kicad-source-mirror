@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-20 09:12-0800\n"
-"PO-Revision-Date: 2023-01-27 14:28+0000\n"
+"PO-Revision-Date: 2023-01-28 22:14+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
@@ -2872,9 +2872,8 @@ msgid "Set X scale adjust for exact scale plotting"
 msgstr "Ορισμός προσαρμογής κλίμακας Χ για σχεδιογράφηση ακριβούς κλίμακας"
 
 #: common/dialogs/dialog_print_generic_base.cpp:96
-#, fuzzy
 msgid "Info text"
-msgstr "Εύρεση κειμένου"
+msgstr "Κείμενο πληροφοριών"
 
 #: common/dialogs/dialog_print_generic_base.cpp:108
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:73
@@ -4434,9 +4433,8 @@ msgstr "Ετικέτα Net"
 
 #: common/eda_item.cpp:365 eeschema/sch_label.cpp:856
 #: eeschema/sch_label.cpp:1225
-#, fuzzy
 msgid "Directive Label"
-msgstr "Διαγραφή Ετικέτας"
+msgstr "Ετικέτα οδηγίας"
 
 #: common/eda_item.cpp:366 eeschema/sch_label.cpp:857
 msgid "Global Label"
@@ -9155,9 +9153,8 @@ msgid "Label Properties"
 msgstr "Ιδιότητες Ετικέτας"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:103
-#, fuzzy
 msgid "Directive Label Properties"
-msgstr "Ιδιότητες Ιεραρχικής Ετικέτας"
+msgstr "Ιδιότητες Ετικέτας Οδηγίας"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:104
 msgid "Hierarchical Sheet Pin Properties"
@@ -9351,7 +9348,7 @@ msgstr "Αυτόματη"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:44
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:45
 msgid "ALL"
-msgstr ""
+msgstr "ΌΛΑ"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:46
 msgid "Standard"
@@ -9609,9 +9606,10 @@ msgid "Style:"
 msgstr "Στυλ:"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:89
-#, fuzzy
 msgid "Set border width to 0 to use schematic's default symbol line width."
-msgstr "Ορίστε το πλάτος σε 0 για να χρησιμοποιήσετε πλάτη Κλάσης Δικτύου."
+msgstr ""
+"Ορίστε το πλάτος το ορίου σε 0 για χρήση των προκαθορισμένων τιμών του "
+"σχηματικού."
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:103
 #: pcbnew/zone.cpp:1437
@@ -9975,9 +9973,8 @@ msgid "Alternate pin assignments are not available for De Morgan symbols."
 msgstr "Εναλλακτικά pin δεν είναι διαθέσιμα για σύμβολα DeMorgan."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:280
-#, fuzzy
 msgid "Exit sync pins mode"
-msgstr "Έξοδος λειτουργίας συγχρονισμού ακροδεκτών"
+msgstr "Έξοδος λειτουργίας συγχρονισμένων ακροδεκτών"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:295
 msgid ""
@@ -11737,7 +11734,6 @@ msgid "Wire/bus width:"
 msgstr "Πλάτος γραμμής/διαύλου:"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:90
-#, fuzzy
 msgid "Set width to 0 to use netclass's wire/bus widths."
 msgstr ""
 "Ορισμός πλάτους σε 0 για χρήση πλάτους γραμμής/διαύλου από Κλάση Δικτύου."
@@ -11820,7 +11816,6 @@ msgid "Fill selected shapes"
 msgstr "Γέμισμα επιλεγμένων σχημάτων"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:100
-#, fuzzy
 msgid "Selection thickness:"
 msgstr "Πάχος επιλεγμένου:"
 
@@ -12060,14 +12055,13 @@ msgid "Show footprint previews in Symbol Chooser"
 msgstr "Εμφάνιση αποτυπώματος στην Επιλογή Συμβόλου"
 
 #: eeschema/dialogs/panel_setup_buses.cpp:266
-#, fuzzy, c-format
+#, c-format
 msgid "Alias name '%s' already in use."
-msgstr "Υπάρχει ήδη πεδίο με το όνομα \"%s\"."
+msgstr "Το όνομα \"%s\" χρησιμοποιείται ήδη."
 
 #: eeschema/dialogs/panel_setup_buses.cpp:290
-#, fuzzy
 msgid "Member net/alias name cannot be empty."
-msgstr "Το %s δεν μπορεί να είναι κενό."
+msgstr "Το όνομα δεν μπορεί να είναι κενό."
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:24
 msgid "Bus definitions:"
@@ -12131,19 +12125,17 @@ msgid "Default text size:"
 msgstr "Προκαθορισμένο μέγεθος κειμένου:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:66
-#, fuzzy
 msgid "Label offset ratio:"
-msgstr "Αναλογία μετακίνησης κειμένου:"
+msgstr "Λόγος απόκλισης ετικέτας:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:68
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:73
-#, fuzzy
 msgid ""
 "Percentage of the text size to offset labels above (or below) a wire, bus, "
 "or pin"
 msgstr ""
-"Ποσοστό του μεγέθους κειμένου για την αντιστάθμιση της θέσης πάνω ή κάτω από "
-"το καλώδιο ή το δίαυλο"
+"Ποσοστό μεγέθους του κειμένου για την αντιστάθμιση της θέσης πάνω ή κάτω από "
+"το καλώδιο, δίαυλο ή ακροδέκτη"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
 msgid "Global label margin:"
@@ -12725,9 +12717,8 @@ msgid "No Connection"
 msgstr "Μη Σύνδεση"
 
 #: eeschema/erc.cpp:287
-#, fuzzy
 msgid "Unresolved text variable in drawing sheet"
-msgstr "Μη επιλυμένη μεταβλητή κειμένου στο φύλλο σχεδίασης."
+msgstr "Μη επιλυμένη μεταβλητή κειμένου στο φύλλο σχεδίασης"
 
 #: eeschema/erc.cpp:324
 #, c-format
@@ -13116,7 +13107,6 @@ msgstr ""
 
 #: eeschema/files-io.cpp:619 pcbnew/files.cpp:173
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:191
-#, fuzzy
 msgid "All supported formats"
 msgstr "Όλες οι υποστηριζόμενες μορφές"
 
@@ -13277,9 +13267,8 @@ msgstr ""
 "θα εμφανίζεται κάθε φορά που εκκινείται ο επεξεργαστής σχηματικού."
 
 #: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1651
-#, fuzzy
 msgid "Derived from"
-msgstr "Προέρχεται από το σύμβολο:"
+msgstr "Προέρχεται από"
 
 #: eeschema/generate_alias_info.cpp:121 eeschema/sim/spice_simulator.cpp:85
 #: kicad/pcm/pcm.cpp:798 pcbnew/footprint.cpp:1033 pcbnew/zone.cpp:598
@@ -13311,7 +13300,7 @@ msgstr "Μετατράπηκε"
 #: eeschema/lib_item.cpp:70
 #, fuzzy
 msgid "Private"
-msgstr "Εκτύπωση επιπέδων"
+msgstr "Ιδιωτικό"
 
 #: eeschema/lib_pin.cpp:1177
 #: pcbnew/dialogs/dialog_pad_primitives_properties_base.cpp:350
@@ -13761,7 +13750,7 @@ msgstr "Τύπος Εισόδου Διαύλου"
 #: pcbnew/tools/pcb_control.cpp:1540 pcbnew/zone.cpp:560
 #, fuzzy
 msgid "Resolved Netclass"
-msgstr "Netclass που έχουν Ανατεθεί"
+msgstr "Ανεπτυγμένη Κλάση Δικτύου"
 
 #: eeschema/sch_connection.cpp:410
 msgid "Connection Name"
@@ -13907,9 +13896,8 @@ msgid "Net"
 msgstr "Δίκτυο"
 
 #: eeschema/sch_label.cpp:952 eeschema/sch_line.cpp:867
-#, fuzzy
 msgid "Resolved netclass"
-msgstr "Netclass που έχουν Ανατεθεί"
+msgstr "Ανεπτυγμένη κλάση δικτύου"
 
 #: eeschema/sch_label.cpp:967
 msgid "Hierarchical Labels"
@@ -14096,11 +14084,11 @@ msgstr ""
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:573
 msgid "Record 'IEEE_SYMBOL' not handled."
-msgstr "Μη διαχείριση καταγραφής 'IEEE_SYMBOL'."
+msgstr "Μη διαχειρίσιμη καταγραφή 'IEEE_SYMBOL'."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:598
 msgid "Record 'PIECHART' not handled."
-msgstr "Μη διαχείριση καταγραφής 'PIECHART'."
+msgstr "Μη διαχειρίσιμη καταγραφή 'PIECHART'."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:717
 msgid "Compile mask not currently supported."
@@ -14560,6 +14548,8 @@ msgid ""
 "Could not load sheet '%s' because it already appears as a direct ancestor in "
 "the schematic hierarchy."
 msgstr ""
+"Αδυναμία φόρτωσης φύλλου '%s' επειδή εμφανίζεται ήδη σαν άμεσος πρόγονος "
+"στην ιεραρχία του σχηματικού."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1520
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2169
@@ -15200,6 +15190,7 @@ msgid "Cancel Load"
 msgstr "Ακύρωση Φόρτωσης"
 
 #: eeschema/sheet.cpp:241
+#, fuzzy
 msgid ""
 "There are hierarchical sheets in the loaded schematic file from an older "
 "file version resulting in  missing symbol instance data.  This will result "
@@ -15210,6 +15201,14 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"Υπάρχουν ιεραρχικά φύλλα στο φορτωμένο σχηματικό από προηγούμενη έκδοση που "
+"οδηγούν σε  ελλιπή δεδομένα συμβόλου.  Αυτό έχει σαν αποτέλεσμα όλα τα "
+"σύμβολα του φορτωμένου σχηματικού να χρησιμοποιήσουν είτε τα προκαθορισμένα "
+"από το σχηματικό είτε να ανασύρουν δεδομένα από τις βιβλιοθήκες.  Το φόρτωμα "
+"του έργου που περιέχει αυτό το αρχείο σχηματικού και η αποθήκευση με την "
+"τρέχουσα έκδοση θα επιλύσει αυτήν την κατάσταση.\n"
+"\n"
+"Συνέχεια;"
 
 #: eeschema/sheet.cpp:248 eeschema/sheet.cpp:276 eeschema/sheet.cpp:317
 #: eeschema/sheet.cpp:366 eeschema/sheet.cpp:427
@@ -15217,7 +15216,6 @@ msgid "Continue Load Schematic"
 msgstr "Συνέχεια Φόρτωσης Σχηματικού"
 
 #: eeschema/sheet.cpp:272
-#, fuzzy
 msgid ""
 "There are library names in the selected schematic that are missing from the "
 "current project library table.  This may result in broken symbol library "
@@ -15227,7 +15225,9 @@ msgid ""
 msgstr ""
 "Υπάρχουν ονόματα βιβλιοθηκών στο φορτωμένο σχηματικό, που λείπουν από τον "
 "κατάλογο βιβλιοθήκης έργου. Αυτό μπορεί να οδηγήσει σε σπασμένες συνδέσεις "
-"βιβλιοθήκης συμβόλων για το φορτωμένο σχηματικό. Συνέχεια;"
+"βιβλιοθήκης συμβόλων για το φορτωμένο σχηματικό.\n"
+"\n"
+"Συνέχεια;"
 
 #: eeschema/sheet.cpp:313
 #, fuzzy
@@ -15238,10 +15238,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Ένα διπλό όνομα βιβλιοθήκης που αναφέρει μια διαφορετική βιβλιοθήκη υπάρχει "
-"στον τρέχοντα κατάλογο βιβλιοθήκης. Αυτή η σύγκρουση δεν μπορεί να επιλυθεί "
-"και μπορεί να οδηγήσει σε σπασμένες συνδέσεις βιβλιοθήκης συμβόλων για το "
-"σχηματικό. Συνέχεια;"
+"Το αρχείο δημιουργήθηκε σαν μέρος κάποιου άλλου έργου.  Η συσχέτιση αυτού "
+"του αρχείου σε αυτό το έργο μπορεί να οδηγήσει σε χαμένες ή λανθασμένες "
+"συσχετίσεις βιβλιοθηκών.\n"
+"\n"
+"Συνέχεια;"
 
 #: eeschema/sheet.cpp:362
 #, fuzzy
@@ -15253,8 +15254,10 @@ msgid ""
 "Do you wish to continue?"
 msgstr ""
 "Υπάρχουν ονόματα βιβλιοθηκών στο φορτωμένο σχηματικό, που λείπουν από τον "
-"φορτωμένο κατάλογο βιβλιοθήκης σχηματικού έργου. Αυτό μπορεί να οδηγήσει σε "
-"σπασμένες συνδέσεις βιβλιοθήκης συμβόλων για το σχηματικό. Συνέχεια;"
+"επιλεγμένο κατάλογο βιβλιοθήκης σχηματικού έργου. Αυτό μπορεί να οδηγήσει σε "
+"σπασμένες συνδέσεις βιβλιοθήκης συμβόλων για το σχηματικό.\n"
+"\n"
+"Συνέχεια;"
 
 #: eeschema/sheet.cpp:423
 #, fuzzy
@@ -15267,8 +15270,9 @@ msgid ""
 msgstr ""
 "Ένα διπλό όνομα βιβλιοθήκης που αναφέρει μια διαφορετική βιβλιοθήκη υπάρχει "
 "στον τρέχοντα κατάλογο βιβλιοθήκης. Αυτή η σύγκρουση δεν μπορεί να επιλυθεί "
-"και μπορεί να οδηγήσει σε σπασμένες συνδέσεις βιβλιοθήκης συμβόλων για το "
-"σχηματικό. Συνέχεια;"
+"και μπορεί να οδηγήσει σε σπασμένες συνδέσεις βιβλιοθήκης συμβόλων.\n"
+"\n"
+"Συνέχεια;"
 
 #: eeschema/sheet.cpp:634
 #, c-format
@@ -15303,8 +15307,9 @@ msgstr "Διαγραφή Νέου Φύλλου"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:66 eeschema/sim/kibis/ibis_parser.cpp:95
 #: eeschema/sim/kibis/ibis_parser.cpp:118
+#, fuzzy
 msgid "Dimension of matrices should be >= 1."
-msgstr ""
+msgstr "Οι διαστάσεις των πινάκων πρέπει να είναι >= 1."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:72
 msgid "Bandwidth of banded matrices should be >= 1."
@@ -15312,78 +15317,67 @@ msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:80 eeschema/sim/kibis/ibis_parser.cpp:103
 #: eeschema/sim/kibis/ibis_parser.cpp:126
+#, fuzzy
 msgid "There are NaN elements in a matrix."
-msgstr ""
+msgstr "Υπάρχουν NaN στοιχεία στον πίνακα."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:161
-#, fuzzy
 msgid "Invalid R_pkg value."
-msgstr "Μη έγκυρη τιμή Spice"
+msgstr "Μη έγκυρη τιμή R_pkg."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:166
-#, fuzzy
 msgid "Invalid L_pkg value."
-msgstr "Μη έγκυρη τιμή Spice"
+msgstr "Μη έγκυρη τιμή L_pkg."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:171
-#, fuzzy
 msgid "Invalid C_pkg value."
-msgstr "Μη έγκυρη τιμή Spice"
+msgstr "Μη έγκυρη τιμή C_pkg."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:185
-#, fuzzy
 msgid "Checking pin "
-msgstr "Έλεγχος pins..."
+msgstr "Έλεγχος ακροδέκτη "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:190
-#, fuzzy
 msgid "Pin name cannot be empty."
-msgstr "Το %s δεν μπορεί να είναι κενό."
+msgstr "Το όνομα του ακροδέκτη δεν μπορεί να είναι κενό."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:195
-#, fuzzy
 msgid "Signal name cannot be empty."
-msgstr "Το όνομα μίας μεταβλητής δεν μπορεί να είναι κενό."
+msgstr "Το όνομα του σήματος δεν μπορεί να είναι κενό."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:200
-#, fuzzy
 msgid "Model name cannot be empty."
-msgstr "Το %s δεν μπορεί να είναι κενό."
+msgstr "Το όνομα του μοντέλου δεν μπορεί να είναι κενό."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:205
-#, fuzzy
 msgid "Rpin is not valid."
-msgstr "Μη έγκυρη ταυτότητα αποτυπώματος \"%s\"."
+msgstr "Μη έγκυρο Rpin."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:210
-#, fuzzy
 msgid "Lpin is not valid."
-msgstr "Μη έγκυρη ταυτότητα αποτυπώματος \"%s\"."
+msgstr "Μη έγκυρο Lpin."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:215
-#, fuzzy
 msgid "Cpin is not valid."
-msgstr "Μη έγκυρη ταυτότητα αποτυπώματος \"%s\"."
+msgstr "Μη έγκυρο Cpin."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:229
-#, fuzzy
 msgid "Component name cannot be empty."
-msgstr "Το %s δεν μπορεί να είναι κενό."
+msgstr "Το όνομα του εξαρτήματος δεν μπορεί να είναι κενό."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:234
-#, fuzzy
 msgid "Checking component "
-msgstr "Έλεγχος Ζωνών"
+msgstr "Έλεγχος εξαρτήματος "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:239
 #, fuzzy
 msgid "Component: manufacturer cannot be empty."
-msgstr "Το %s δεν μπορεί να είναι κενό."
+msgstr "Εξάρτημα: manufacturer δεν μπορεί να είναι άδειο."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:245
 #, fuzzy
 msgid "Component: Invalid Package."
-msgstr "Τιμή εξαρτήματος"
+msgstr "Εξάρτημα: Λανθασμένο Πακέτο."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:251
 msgid "Component: no pin"
@@ -15399,76 +15393,64 @@ msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:373
 msgid "There is an invalid current in an IV table"
-msgstr ""
+msgstr "Υπάρχει λανθασμένη τιμή ρεύματος σε κάποιον IV πίνακα"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:416
-#, fuzzy
 msgid "Invalid R_load."
-msgstr "Άκυρη Είσοδος"
+msgstr "Μη έγκυρο R_load."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:420
 #, fuzzy
 msgid "Invalid falling dv/dt."
-msgstr "Μη έγκυρη τιμή Spice"
+msgstr "Μη έγκυρο falling dv/dt."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:425
-#, fuzzy
 msgid "Invalid rising dv/dt."
-msgstr "Μη έγκυρη τιμή Spice"
+msgstr "Μη έγκυρο rising dv/dt."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:440
-#, fuzzy
 msgid "Model name cannot be empty"
-msgstr "Το %s δεν μπορεί να είναι κενό."
+msgstr "Το όνομα του μοντέλου δεν μπορεί να είναι κενό."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:445
-#, fuzzy
 msgid "Checking model "
-msgstr "Έλεγχος Ζωνών"
+msgstr "Έλεγχος μοντέλου "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:450
 msgid "Undefined model type"
 msgstr "Απροσδιόριστος τύπος μοντέλου"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:456
-#, fuzzy
 msgid "Invalid Vinh value."
-msgstr "Μη έγκυρη τιμή Spice"
+msgstr "Μη έγκυρη τιμή Vinh."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:461
-#, fuzzy
 msgid "Invalid Vinl value."
-msgstr "Μη έγκυρη τιμή Spice"
+msgstr "Μη έγκυρη τιμή Vinl."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:466
-#, fuzzy
 msgid "Invalid R_ref value."
-msgstr "Μη έγκυρη τιμή Spice"
+msgstr "Μη έγκυρη τιμή R_ref."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:471
-#, fuzzy
 msgid "Invalid C_ref value."
-msgstr "Μη έγκυρη τιμή Spice"
+msgstr "Μη έγκυρη τιμή C_ref."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:476
-#, fuzzy
 msgid "invalid V_ref value."
-msgstr "Μη έγκυρη τιμή Spice"
+msgstr "Μη έγκυρη τιμή V_ref."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:481
-#, fuzzy
 msgid "Invalid V_meas value."
-msgstr "Μη έγκυρη τιμή Spice"
+msgstr "Μη έγκυρη τιμή V_meas."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:486
-#, fuzzy
 msgid "C_comp is invalid."
-msgstr "Το εύρος τάσης δεν είναι έγκυρο."
+msgstr "Μη έγκυρο C_comp."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:491
-#, fuzzy
 msgid "Temperature Range is invalid."
-msgstr "Αύξηση θερμοκρασίας"
+msgstr "Μη έκγυρο Θερμοκρασιακό Εύρος."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:516
 msgid "Voltage Range is invalid."
@@ -15477,81 +15459,74 @@ msgstr "Το εύρος τάσης δεν είναι έγκυρο."
 #: eeschema/sim/kibis/ibis_parser.cpp:522
 #, fuzzy
 msgid "Invalid pulldown."
-msgstr "Μη έγκυρο όνομα σήματος"
+msgstr "Μη έγκυρη pulldown."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:527
 #, fuzzy
 msgid "Invalid pullup."
-msgstr "Μη έγκυρη τιμή Spice"
+msgstr "Μη έγκυρη pullup."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:532
-#, fuzzy
 msgid "Invalid POWER clamp."
-msgstr "Μη έγκυρη κλίμακα Χ"
+msgstr "Μη έγκυρoς ψαλιδισμός POWER."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:537
-#, fuzzy
 msgid "Invalid GND clamp."
-msgstr "Μη έγκυρη κλίμακα Χ"
+msgstr "Μη έγκυρος ψαλιδισμός GND."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:546
-#, fuzzy
 msgid "Invalid Ramp"
-msgstr "Άκυρη Είσοδος"
+msgstr "Μη έγκυρη Ράμπα"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:556
 #, fuzzy
 msgid "Checking Header..."
-msgstr "Έλεγχος pins..."
+msgstr "Έλεγχος Header..."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:560
-#, fuzzy
 msgid "Missing [IBIS Ver]"
-msgstr "Λείπει το όνομα κανόνα."
+msgstr "Λείπει [IBIS Ver]"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:566
 msgid "The parser does not handle this IBIS version"
 msgstr "Ο αναλυτής δεν χειρίζεται αυτήν την έκδοση IBIS"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:572
-#, fuzzy
 msgid "Missing [File Rev]"
-msgstr "Λείπει το όνομα κανόνα."
+msgstr "Λείπει το [File Rev]"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:578
-#, fuzzy
 msgid "Missing [File Name]"
-msgstr "Λείπει το όνομα κανόνα."
+msgstr "Λείπει το [File Name]"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:601
 #, fuzzy
 msgid "Package model name cannot be empty."
-msgstr "Το %s δεν μπορεί να είναι κενό."
+msgstr "Το όνομα του πακέτου του μοντέλου δεν μπορεί να είναι κενό."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:606
 #, fuzzy
 msgid "Checking package model "
-msgstr "Έλεγχος οπών pad..."
+msgstr "Έλεγχος πακέτου μοντέλου "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:611
 #, fuzzy
 msgid "Manufacturer cannot be empty."
-msgstr "Το %s δεν μπορεί να είναι κενό."
+msgstr "Ο κατασκευαστής δεν μπορεί να είναι κενό."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:617
 #, fuzzy
 msgid "OEM cannot be empty."
-msgstr "Το %s δεν μπορεί να είναι κενό."
+msgstr "Το OEM δεν μπορεί να είναι κενό."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:623
-#, fuzzy
 msgid "Negative number of pins."
-msgstr "Αριθμός σημείων"
+msgstr "Αρνητικός αριθμός ακροδεκτών."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:637
 #, fuzzy
 msgid "Empty pin number"
-msgstr "Αναμένεται %s"
+msgstr "Κενός αριθμός ακροδέκτη"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:645
 msgid "Resistance matrix is incorrect"
@@ -15582,257 +15557,234 @@ msgid "Inductance matrix is nullptr"
 msgstr "Ο πίνακας αυτεπαγωγής είναι nullptr"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:701
-#, fuzzy
 msgid "Cannot open file "
-msgstr "Αδυναμία ανοίγματος αρχείου '%s'"
+msgstr "Αδυναμία ανοίγματος αρχείου "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:707
-#, fuzzy
 msgid "Reading file "
-msgstr "Φόρτωση κανόνων..."
+msgstr "Ανάγνωση αρχείου "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:729
 msgid "Unexpected end of file. Missing [END] ?"
 msgstr "Μη αναμενόμενο τέλος αρχείου. Λείπει το [END] ;"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:741
-#, fuzzy
 msgid "Error on line "
-msgstr "Λίστα σφαλμάτων"
+msgstr "Σφάλμα στη γραμμή "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:769
-#, fuzzy
 msgid "A line did not end properly."
-msgstr ""
-"Τα αντικείμενα του εισαγόμενου αρχείου δεν ήταν δυνατό να αντιμετωπιστούν "
-"σωστά."
+msgstr "Γραμμή με ακατάλληλο χαρακτήρα τερματισμού."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:905
 #: eeschema/sim/kibis/ibis_parser.cpp:922
+#, fuzzy
 msgid "Line exceeds maximum length."
-msgstr ""
+msgstr "Η γραμμή ξεπερνάει το μέγιστο μήκος."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:948
-#, fuzzy
 msgid "Failed to read a double."
-msgstr "Αποτυχία δημιουργίας φακέλου '%s'."
+msgstr "Αποτυχία ανάγνωσης double."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:954
 #: eeschema/sim/kibis/ibis_parser.cpp:998
-#, fuzzy
 msgid "Failed to read a word."
-msgstr "Αποτυχία φόρτωσης '%s'."
+msgstr "Αποτυχία ανάγνωσης word."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:991
-#, fuzzy
 msgid "Number is not an integer"
-msgstr "Το σύμβολο δεν έχει σχόλια"
+msgstr "Μη ακέραιος αριθμός"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1035
 #, fuzzy
 msgid "Unable to read string, input is empty."
-msgstr "Αδυναμία ανάγνωσης αρχείου δεδομένων '%s'."
+msgstr "Αδυναμία ανάγνωσης χαρακτήρα κειμενου, κενή είσοδος."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1085
 #, fuzzy
 msgid "New comment character is invalid."
-msgstr "Η παράμετρος πλήθους Μπεζιέ %d είναι εσφαλμένη"
+msgstr "Μη έγκυρος χαρακτήρας νέου σχολίου."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1098
 msgid "Invalid syntax. Should be |_char or &_char, etc..."
-msgstr ""
+msgstr "Λανθασμένο συντακτικό. Πρέπει να είναι |_char ή &_char, κτλ..."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1109
-#, fuzzy
 msgid "No extra argument was expected"
-msgstr "Το δίκτυο δεν επιλέχτηκε"
+msgstr "Μη αναμενόμενη παράμετρος"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1261
 #, fuzzy
 msgid "Unknown keyword in "
-msgstr "Άγνωστος κωδικός καταγραφής: %d."
+msgstr "Άγνωστο keyword σε "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1261
 msgid " context: "
 msgstr " γενικό πλαίσιο: "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1327
-#, fuzzy
 msgid "Invalid ramp data"
-msgstr "Μη έγκυρο πλάτος δρόμου"
+msgstr "Μη έγκυρα δεδομένα ράμπας"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1411
 msgid "Cannot specify a bandwidth for that kind of matrix"
-msgstr ""
+msgstr "Αδυναμία καθορισμού bandwidth για τέτοιου είδους πίνακα"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1430
-#, fuzzy
 msgid "Invalid row in matrix"
-msgstr "Άκυρος Ορισμός Γραμμής"
+msgstr "Μη έγκυρη γραμμή στον πίνακα"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1460
-#, fuzzy
 msgid "Too much data for this matrix row."
-msgstr "Καμία έδρα για αυτό το αποτύπωμα."
+msgstr "Υπερβολικά δεδομένα για αυτήν τη γραμμή του πίνακα."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1468
-#, fuzzy
 msgid "Too much data for this matrix."
-msgstr "Καμία έδρα για αυτό το αποτύπωμα."
+msgstr "Υπερβολικά δεδομένα για αυτόν τον πίνακα."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1473
 #: eeschema/sim/kibis/ibis_parser.cpp:1506
 msgid "Can't read a matrix element"
-msgstr ""
+msgstr "Αδυναμία ανάγνωσης στοιχείων πίνακα"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1511
+#, fuzzy
 msgid "Can't read a matrix index"
-msgstr ""
+msgstr "Αδυναμία ανάγνωσης index πίνακα"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1579
-#, fuzzy
 msgid "Unknown matrix type"
-msgstr "άγνωστος τύπος διέλευσης %d"
+msgstr "Άγνωστος τύπος πίνακα"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1587
-#, fuzzy
 msgid "Missing matrix type"
-msgstr "Λείπει η μέγιστη τιμή."
+msgstr "Ελλιπής τύπος πίνακα"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1593
 msgid " Matrix is already init. But m_continue was not set ( internal error )"
 msgstr ""
+" Ο πίνακας αρχικοποιήθηκε. Όμως το m_continue δεν ορίστηκε ( εσωτερικό "
+"σφάλμα )"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1619
 msgid "Tried to read a row from an undefined matrix"
-msgstr ""
+msgstr "Προσπάθεια ανάγνωσης γραμμής από μη ορισμένο πίνακα"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1625
+#, fuzzy
 msgid "matrix pointer is null"
-msgstr ""
+msgstr "Ο pointer του πίνακα είναι null"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1774
 msgid "Typ-Min-Max Values requires at least Typ."
-msgstr ""
+msgstr "Τυπική-Ελάχιστη-Μέγιστη Τιμή απαιτεί τουλάχιστον την τυπική."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1867
-#, fuzzy
 msgid "Unknown Model_type "
-msgstr "Άγνωστη Μέθοδος"
+msgstr "Άγνωστο Model_type "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1874
-#, fuzzy
 msgid "Internal Error while reading model_type"
-msgstr "Σφάλμα ανάγνωσης αρχείου."
+msgstr "Εσωτερικό σφάλμα κατα την ανάγνωση του model_type."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1889
 #, fuzzy
 msgid "Unknown Enable: "
-msgstr "Άγνωστο επίπεδο PCad %u"
+msgstr "Άγνωστο Enable: "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1896
 #: eeschema/sim/kibis/ibis_parser.cpp:1918
-#, fuzzy
 msgid "Internal Error while reading Enable"
-msgstr "Σφάλμα ανάγνωσης αρχείου."
+msgstr "Εσωτερικό σφάλμα κατα την ανάγνωση του Enable"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1911
-#, fuzzy
 msgid "Unknown polarity "
-msgstr "άγνωστος τύπος ακροδέκτη"
+msgstr "Άγνωστο polarity "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1948
 msgid "Continued reading a model that did not begin. ( internal error )"
-msgstr ""
+msgstr "Συνέχεια ανάγνωσης μοντέλου που δεν άρχισε. ( εσωτερικό σφάλμα )"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2115
 msgid "A [Package] line requires exactly 4 elements."
-msgstr ""
+msgstr "Μια γραμμή [Package] απαιτεί ακριβώς 4 στοιχεία."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2168
 msgid "Invalid pin entry: 6 values from a table with only 3."
-msgstr ""
+msgstr "Μη έγκυρη καταχώρηση pin: 6 τιμές από πίνακα μόνο με 3."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2178
 msgid "Can't read a R, L or C value for a pin."
-msgstr ""
+msgstr "Αδυναμία ανάγνωσης R, L ή C τιμής για pin."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2201
-#, fuzzy
 msgid "Invalid field name in [Pin]"
-msgstr "Καθορισμός της περιμέτρου πλακέτας"
+msgstr "Μη έγκυρο όνομα πεδίου [Pin]"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2208
-#, fuzzy
 msgid "Missing argument in [Pin]"
-msgstr "Λείπει γονική σύνδεση"
+msgstr "Ελλειπής παράμετρος σε [Pin]"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2243
 msgid "Wrong number of columns for pin mapping."
-msgstr ""
+msgstr "Λανθασμένος αριθμός στηλών για την αντιστοίχιση των pin."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2283
-#, fuzzy
 msgid "Incorrect diff pin name"
-msgstr "Λανθασμένος αριθμός κλίμακας"
+msgstr "Λανθασμένο όνομα διαφορικού pin"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2288
-#, fuzzy
 msgid "Incorrect inv_pin name"
-msgstr "Λανθασμένος αριθμός κλίμακας"
+msgstr "Λανθασμένο όνομα inv_pin"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2368
-#, fuzzy
 msgid "Unknown waveform type"
-msgstr "άγνωστος τύπος διέλευσης %d"
+msgstr "Λανθασμένος τύπος κυματομορφής"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2379
 msgid "Internal error detected, a waveform should exist"
-msgstr ""
+msgstr "Ανιχνεύθηκε εσωτερικό σφάλμα, μια κυματομορφή έπρεπε να υπάρχει"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2444
+#, fuzzy
 msgid "Internal error: Bad parser context."
-msgstr ""
+msgstr "Εσωτερικό σφάλμα: Εσφαλμένο περιεχόμενο."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2481
 msgid "Missing keyword."
 msgstr "Λείπει λέξη-κλειδί."
 
 #: eeschema/sim/kibis/kibis.cpp:454
-#, fuzzy
 msgid "waveform has less than two points"
-msgstr "Το σχήμα δεν έχει σημεία."
+msgstr "η κυματομορφή έχει λιγότερα από δυο σημεία"
 
 #: eeschema/sim/kibis/kibis.cpp:675 eeschema/sim/kibis/kibis.cpp:740
-#, fuzzy
 msgid "Cannot remove temporary output file"
-msgstr ""
-"Αδυναμία μετονομασίας προσωρινού αρχείου \"%s\" σε αρχείο βιβλιοθήκης "
-"αποτυπωμάτων \"%s\""
+msgstr "Αδυναμία αφαίρεσης προσωρινού αρχείου εξόδου"
 
 #: eeschema/sim/kibis/kibis.cpp:726
-#, fuzzy
 msgid "Error while reading temporary file"
-msgstr "Σφάλμα ανάγνωσης αρχείου."
+msgstr "Σφάλμα ανάγνωσης προσωρινού αρχείου."
 
 #: eeschema/sim/kibis/kibis.cpp:735
-#, fuzzy
 msgid "Error while creating temporary output file"
-msgstr "Αποτυχία δημιουργίας προσωρινού αρχείου \"%s\""
+msgstr "Αποτυχία δημιουργίας προσωρινού αρχείου εξόδου"
 
 #: eeschema/sim/kibis/kibis.cpp:774
 msgid ""
 "Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
 "pdf"
 msgstr ""
+"Το Kibis δεν υποστηρίζει ακόμη DUT τιμές. https://ibis.org/summits/nov16a/"
+"chen.pdf"
 
 #: eeschema/sim/kibis/kibis.cpp:877
 msgid "Model has only one waveform pair, reduced accuracy"
-msgstr ""
+msgstr "Το μοντέλο έχει μόνο ένα ζεύγος κυματομορφών, μειωμένη ακρίβεια"
 
 #: eeschema/sim/kibis/kibis.cpp:897 eeschema/sim/kibis/kibis.cpp:1102
 msgid "Driver needs at least a pullup or a pulldown"
-msgstr ""
+msgstr "Ο οδηγός χρειάζεται τουλάχιστον pullup ή pulldown"
 
 #: eeschema/sim/kibis/kibis.cpp:1085 eeschema/sim/kibis/kibis.cpp:1094
 msgid ""
@@ -15843,12 +15795,16 @@ msgstr ""
 "Περισσότερες εξισώσεις από τους αγνώστους."
 
 #: eeschema/sim/kibis/kibis.cpp:1202
+#, fuzzy
 msgid "Model has no waveform pair, using [Ramp] instead, poor accuracy"
 msgstr ""
+"Το μοντέλο δεν έχει κάποιο ζεύγος κυματομορφών, χρήση [Ramp] αντ'αυτού, "
+"χαμηλή ακρίβεια"
 
 #: eeschema/sim/kibis/kibis.cpp:1215
+#, fuzzy
 msgid "Model has more than 2 waveform pairs, using the first two."
-msgstr ""
+msgstr "Το μοντέλο έχει πάνω από 2 ζεύγη κυματομορφών, χρήση των πρώτων δυο."
 
 #: eeschema/sim/kibis/kibis.cpp:1253
 msgid "Invalid model type for a driver."
@@ -15917,9 +15873,9 @@ msgid "Error loading simulation model library '%s': %s"
 msgstr "Σφάλμα φόρτωσης βιβλιοθήκης μοντέλων προσομοίωσης '%s': %s"
 
 #: eeschema/sim/sim_lib_mgr.cpp:304
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading simulation model: no '%s' field"
-msgstr "Σφάλμα κατά τη φόρτωση σχηματικού '%s'."
+msgstr "Σφάλμα φόρτωσης μοντέλου προσομοίωσης: λείπει το πεδίο '%s'"
 
 #: eeschema/sim/sim_lib_mgr.cpp:310
 #: pcbnew/dialogs/dialog_board_statistics.cpp:448
@@ -15932,11 +15888,13 @@ msgid "unknown"
 msgstr "άγνωστο"
 
 #: eeschema/sim/sim_lib_mgr.cpp:321
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading simulation model: could not find base model '%s' in library "
 "'%s'"
-msgstr "Σφάλμα κατά τη φόρτωση συμβόλου '%s' από βιβλιοθήκη '%s'."
+msgstr ""
+"Σφάλμα κατά τη φόρτωση μοντέλου προσομοίωσης: αδυναμία εύρεσης βασικού "
+"μοντέλου '%s' στη βιβλιοθήκη '%s'"
 
 #: eeschema/sim/sim_library_kibis.cpp:39 eeschema/sim/sim_model_kibis.cpp:76
 #, c-format
@@ -15958,7 +15916,7 @@ msgstr ""
 "'%s'"
 
 #: eeschema/sim/sim_model.h:470
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Simulation model type must be the same as of its base class: '%s', but is "
 "'%s'"
@@ -16035,14 +15993,12 @@ msgid "Number of cycles"
 msgstr "Αριθμός κύκλων"
 
 #: eeschema/sim/sim_model_kibis.cpp:473
-#, fuzzy
 msgid "Bitrate"
-msgstr "υπόστρωμα"
+msgstr "Bitrate"
 
 #: eeschema/sim/sim_model_kibis.cpp:489
-#, fuzzy
 msgid "Number of bits"
-msgstr "Αριθμός Μερών:"
+msgstr "Αριθμός bits"
 
 #: eeschema/sim/sim_panel_base.cpp:90
 msgid ""
@@ -16100,7 +16056,6 @@ msgstr ""
 "\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:483
-#, fuzzy
 msgid ""
 "Schematic sheet simulation command directive has changed.  Do you wish to "
 "update the Simulation Command?"
@@ -16120,7 +16075,7 @@ msgstr "Σχεδιογράφηση%u - "
 #: eeschema/sim/sim_plot_frame.cpp:598 eeschema/sim/sim_plot_frame.cpp:610
 #: eeschema/sim/sim_plot_frame.cpp:930
 msgid "Could not apply tuned value(s):"
-msgstr ""
+msgstr "Αδυναμία εφαρμογής διορθωτικής τιμής:"
 
 #: eeschema/sim/sim_plot_frame.cpp:611 eeschema/sim/sim_plot_frame.cpp:919
 #, fuzzy, c-format
@@ -16136,8 +16091,9 @@ msgid "Error: simulation type doesn't support plotting!\n"
 msgstr "Σφάλμα: ο τύπος της προσομοίωσης δεν υποστηρίζει αυτή τη λειτουργία!\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:732
+#, fuzzy
 msgid " (mag)"
-msgstr ""
+msgstr " (mag)"
 
 #: eeschema/sim/sim_plot_frame.cpp:734
 msgid " (phase)"
@@ -16172,9 +16128,8 @@ msgid "You need to run plot-providing simulation first."
 msgstr "Πρέπει πρώτα να εκτελέσετε την προσωμοίωση."
 
 #: eeschema/sim/sim_plot_frame.cpp:1681
-#, fuzzy
 msgid "SPICE Netlist"
-msgstr "Αρχείο λίστας δικτύων SPICE"
+msgstr "Λίστα δικτύων SPICE"
 
 #: eeschema/sim/sim_plot_frame.cpp:1753
 msgid "Save changes to workbook?"
@@ -16193,14 +16148,12 @@ msgstr ""
 "\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:2009
-#, fuzzy
 msgid "Remove Signal"
-msgstr "Σύμβολο Ισχύος"
+msgstr "Αφαίρεση Σήματος"
 
 #: eeschema/sim/sim_plot_frame.cpp:2009
-#, fuzzy
 msgid "Remove the signal from the plot"
-msgstr "Διαγραφή σήματος από οθόνη σχεδιογράφησης"
+msgstr "Αφαίρεση σήματος από οθόνη σχεδιογράφησης"
 
 #: eeschema/sim/sim_plot_frame.cpp:2017 eeschema/sim/sim_plot_frame.cpp:2046
 msgid "Hide Cursor"
@@ -16215,28 +16168,24 @@ msgid "New Plot"
 msgstr "Νέο Σχεδιογράφημα"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:25
-#, fuzzy
 msgid "Open Workbook..."
-msgstr "Άνοιγμα Βιβλίου Εργασίας"
+msgstr "Άνοιγμα Βιβλίου Εργασίας..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:29
 msgid "Save Workbook"
 msgstr "Αποθήκευση Βιβλίου Εργασίας"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:33
-#, fuzzy
 msgid "Save Workbook As..."
-msgstr "Αποθήκευση Βιβλίου Εργασίας"
+msgstr "Αποθήκευση Βιβλίου Εργασίας Σαν..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:39
-#, fuzzy
 msgid "Export Current Plot as PNG..."
 msgstr "Εξαγωγή Τρέχουσας Προβολής ως PNG..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:43
-#, fuzzy
 msgid "Export Current Plot as CSV..."
-msgstr "Εξαγωγή Τρέχουσας Προβολής ως PNG..."
+msgstr "Εξαγωγή Τρέχουσας Προβολής ως CSV..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:52
 msgid "File"
@@ -16350,15 +16299,15 @@ msgid "Voltage (measured)"
 msgstr "Τάση (μέτρηση)"
 
 #: eeschema/sim/sim_value.cpp:386
-#, fuzzy
 msgid "Unknown SIM_VALUE type"
-msgstr "Άγνωστη Μέθοδος"
+msgstr "Άγνωστος τύπος SIM_VALUE"
 
 #: eeschema/sim/spice_model_parser.cpp:84
 #: eeschema/sim/spice_model_parser.cpp:186
 #, fuzzy, c-format
 msgid "Could not find model '%s' to copy for \"A Kind Of\" model '%s'"
-msgstr "Αδυναμία εύρεσης προσαρμοσμένης έδρας '%s'."
+msgstr ""
+"Αδυναμία εύρεσης μοντέλου '%s' για αντιγραφή ως \"Σαν είδος\" μοντέλο '%s'"
 
 #: eeschema/sim/spice_simulator.cpp:63
 msgid "DC Sweep"
@@ -16419,6 +16368,8 @@ msgid ""
 "<b>Warning: reference prefix</b><br>prefix ending by '%s' can create issues "
 "if saved in a symbol library"
 msgstr ""
+"<b>Προειδοποίηση: πρόθεμα αναφοράς</b><br>το πρόθεμα τελειώνει σε '%s' και "
+"μπορεί να δημιουργήσει προβλήματα εαν αποθηκευτεί σε βιβλιοθήκη συμβόλων"
 
 #: eeschema/symbol_checker.cpp:113
 #, c-format
@@ -16430,13 +16381,13 @@ msgstr ""
 "το pin %s%s στην τοποθεσία <b>(%.3f, %.3f)</b> μετατροπής."
 
 #: eeschema/symbol_checker.cpp:127
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %s and %s of converted."
 msgstr ""
 "<b>Διπλότυπος ακροδέκτης %s</b> %s στη θέση <b>(%.3f, %.3f)</b> συγκρούεται "
-"με τον ακροδέκτη %s%s στη θέση <b>(%.3f, %.3f)</b> στις μονάδες %c και %c "
+"με τον ακροδέκτη %s%s στη θέση <b>(%.3f, %.3f)</b> στις μονάδες %s και %s "
 "από μετετραμένο."
 
 #: eeschema/symbol_checker.cpp:146
@@ -16449,13 +16400,13 @@ msgstr ""
 "τον ακροδέκτη %s%s στη θέση <b>(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:159
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in units %s and %s."
 msgstr ""
 "<b>Διπλός ακροδέκτης %s</b> %s στη θέση <b>(%s, %s)</b> που συγκρούεται με "
-"τον ακροδέκτη %s%s στη θέση <b>(%s, %s)</b> στις μονάδες %c και %c."
+"τον ακροδέκτη %s%s στη θέση <b>(%s, %s)</b> στις μονάδες %s και %s."
 
 #: eeschema/symbol_checker.cpp:187
 msgid "<b>A Power Symbol should have only one unit</b><br><br>"
@@ -16463,23 +16414,27 @@ msgstr "<b>Ένα σύμβολο τροφοδοσίας πρέπει να έχε
 
 #: eeschema/symbol_checker.cpp:193
 msgid "<b>A Power Symbol should have no convert option</b><br><br>"
-msgstr ""
+msgstr "<b>Η θύρα τροφοδοσίας δεν πρέπει να έχει επιλογή μετατροπής</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:199
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
-msgstr ""
+msgstr "<b>Η θύρα τροφοδοσίας θα πρέπει να έχει μόνο έναν ακροδέκτη</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:208
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Only a input or output power pin has "
 "meaning<br><br>"
 msgstr ""
+"<b>Ύποπτη Θύρα Τροφοδοσίας</b><br>Ακροδέκτης μόνο σαν Είσοδος ή Έξοδος "
+"Ισχύος έχει νόημα<br><br>"
 
 #: eeschema/symbol_checker.cpp:215
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Only invisible input power pins are "
 "automatically connected<br><br>"
 msgstr ""
+"<b>Ύποπτη Θύρα Τροφοδοσίας</b><br>Μόνο κρυφοί ακροδέκτες ισχύος συνδέονται "
+"αυτόματα<br><br>"
 
 #: eeschema/symbol_checker.cpp:240
 #, c-format
@@ -16593,9 +16548,8 @@ msgid "Library changes are unsaved"
 msgstr "Οι αλλαγές στη βιβλιοθήκη δεν είναι αποθηκευμένες"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:258
-#, fuzzy
 msgid "Symbol library loading was cancelled by user."
-msgstr "Η βιοβλιοθήκη \"%s\" υπάρχει ήδη."
+msgstr "Φόρτωση βιβλιοθήκης συμβόλου ακυρώθηκε από χρήστη."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:771
 #, c-format
@@ -16977,17 +16931,17 @@ msgid "KiCad Symbol Library Viewer"
 msgstr "Πρόγραμμα Προβολής Βιβλιοθήκης Συμβόλων KiCad"
 
 #: eeschema/symbol_viewer_frame.cpp:180
-#, fuzzy
 msgid ""
 "Filter on symbol name, keywords, description and pin count.\n"
 "Search terms are separated by spaces.  All search terms must match.\n"
 "A term which is a number will also match against the pin count."
 msgstr ""
-"Φιλτράρισμα στο όνομα του αποτυπώματος, τις λέξεις-κλειδιά, την περιγραφή "
-"και τον αριθμό των εδρών.\n"
+"Φιλτράρισμα στο όνομα του συμβόλου, τις λέξεις-κλειδιά, την περιγραφή και "
+"τον αριθμό των ακροδεκτών.\n"
 "Οι όροι αναζήτησης χωρίζονται με κενά. Όλοι οι όροι αναζήτησης πρέπει να "
 "ταιριάζουν.\n"
-"Ένας όρος που είναι ένας αριθμός θα ταιριάζει επίσης με τον αριθμό των εδρών."
+"Ένας όρος που είναι ένας αριθμός θα ταιριάζει επίσης με τον αριθμό των "
+"ακροδεκτών."
 
 #: eeschema/symbol_viewer_frame.cpp:1170 pcbnew/footprint_viewer_frame.cpp:1178
 #: pcbnew/footprint_viewer_frame.cpp:1183
@@ -17213,14 +17167,12 @@ msgid "Make a copy of the selected symbol"
 msgstr "Δημιουργία αντίγραφου για το επιλεγμένο σύμβολο"
 
 #: eeschema/tools/ee_actions.cpp:142
-#, fuzzy
 msgid "Rename Symbol..."
-msgstr "Διάσωση Συμβόλων..."
+msgstr "Μετονομασία Συμβόλου..."
 
 #: eeschema/tools/ee_actions.cpp:142
-#, fuzzy
 msgid "Rename the selected symbol"
-msgstr "Ενημέρωση επιλεγμένου συμβόλου"
+msgstr "Μετονομασία επιλεγμένου συμβόλου"
 
 #: eeschema/tools/ee_actions.cpp:147
 msgid "Save the current symbol to a different library."
@@ -17279,14 +17231,13 @@ msgid "Annotate pins with their electrical types"
 msgstr "Εμφάνιση του ηλεκτρικού τύπου των ακροδεκτών"
 
 #: eeschema/tools/ee_actions.cpp:201
-#, fuzzy
 msgid "Show Pin Numbers"
-msgstr "Προβολή αριθμού pin"
+msgstr "Προβολή Αριθμού Ακροδέκτη"
 
 #: eeschema/tools/ee_actions.cpp:201
 #, fuzzy
 msgid "Annotate pins with their numbers"
-msgstr "Εμφάνιση του ηλεκτρικού τύπου των ακροδεκτών"
+msgstr "Ονομασία ακροδεκτών από τον αριθμό τους"
 
 #: eeschema/tools/ee_actions.cpp:206
 msgid "Show Symbol Tree"
@@ -17347,14 +17298,12 @@ msgstr "Προσθήκη κειμένου"
 
 #: eeschema/tools/ee_actions.cpp:248 eeschema/tools/ee_actions.cpp:358
 #: pcbnew/tools/pcb_actions.cpp:133
-#, fuzzy
 msgid "Add Text Box"
-msgstr "Προσθήκη κειμένου"
+msgstr "Προσθήκη Πλαισίου Κειμένου"
 
 #: eeschema/tools/ee_actions.cpp:248
-#, fuzzy
 msgid "Add a text box item"
-msgstr "Προσθήκη κειμένου"
+msgstr "Προσθήκη αντικειμένου σαν πλαίσιο κειμένου"
 
 #: eeschema/tools/ee_actions.cpp:253 eeschema/tools/ee_actions.cpp:834
 msgid "Add Lines"
@@ -17415,9 +17364,8 @@ msgid "Add Power"
 msgstr "Προσθήκη Ισχύος"
 
 #: eeschema/tools/ee_actions.cpp:295
-#, fuzzy
 msgid "Add a power symbol"
-msgstr "Προσθήκη συμβόλου"
+msgstr "Προσθήκη θύρας τροφοδοσίας"
 
 #: eeschema/tools/ee_actions.cpp:301
 msgid "Add No Connect Flag"
@@ -17452,14 +17400,12 @@ msgid "Add a net label"
 msgstr "Προσθήκη ετικέτας δικτύου"
 
 #: eeschema/tools/ee_actions.cpp:324
-#, fuzzy
 msgid "Add Net Class Directive"
-msgstr "Κλάση Δικτύου"
+msgstr "Προσθήκη Οδηγίας Κλάσης Δικτύου"
 
 #: eeschema/tools/ee_actions.cpp:324
-#, fuzzy
 msgid "Add a net class directive label"
-msgstr "Προσθήκη ετικέτας δικτύου"
+msgstr "Προσθήκη ετικέτας οδηγίας κλάσης δικτύου"
 
 #: eeschema/tools/ee_actions.cpp:330
 msgid "Add Hierarchical Label"
@@ -17498,9 +17444,8 @@ msgid "Add text"
 msgstr "Προσθήκη κειμένου"
 
 #: eeschema/tools/ee_actions.cpp:358
-#, fuzzy
 msgid "Add a text box"
-msgstr "Προσθήκη κειμένου"
+msgstr "Προσθήκη πλαισίου κειμένου"
 
 #: eeschema/tools/ee_actions.cpp:363 pagelayout_editor/tools/pl_actions.cpp:49
 msgid "Add Rectangle"
@@ -17585,12 +17530,11 @@ msgstr "Αντιστρέφει τα επιλεγμένα αντικείμενα 
 #: eeschema/tools/ee_actions.cpp:424 pcbnew/tools/edit_tool_move_fct.cpp:183
 #: pcbnew/tools/pcb_actions.cpp:342
 msgid "Swap"
-msgstr ""
+msgstr "Εναλλαγή"
 
 #: eeschema/tools/ee_actions.cpp:424 pcbnew/tools/pcb_actions.cpp:342
-#, fuzzy
 msgid "Swaps selected items' positions"
-msgstr "Περιστροφή επιλεγμένων αντικειμένων δεξιόστροφα"
+msgstr "Εναλλαγή θέσης επιλεγμένων"
 
 #: eeschema/tools/ee_actions.cpp:430 pcbnew/tools/pcb_actions.cpp:379
 msgid "Properties..."
@@ -17668,9 +17612,8 @@ msgid "Assign Netclass..."
 msgstr "Ανάθεση Netclass..."
 
 #: eeschema/tools/ee_actions.cpp:483 pcbnew/tools/pcb_actions.cpp:709
-#, fuzzy
 msgid "Assign a netclass to nets matching a pattern"
-msgstr "Εκχωρήστε ένα netclass στο net του επιλεγμένου καλωδίου"
+msgstr "Ανάθεση κλάσης δικτύου σε δίκτυα που ταιριάζουν σε μοτίβο"
 
 #: eeschema/tools/ee_actions.cpp:488
 msgid "De Morgan Conversion"
@@ -17705,14 +17648,12 @@ msgid "Change existing item to a label"
 msgstr "Αλλαγή του στοιχείου σε ετικέτα"
 
 #: eeschema/tools/ee_actions.cpp:508
-#, fuzzy
 msgid "Change to Directive Label"
-msgstr "Αλλαγή σε Ιεραρχική Ετικέτα"
+msgstr "Αλλαγή σε Ετικέτα Οδηγίας"
 
 #: eeschema/tools/ee_actions.cpp:508
-#, fuzzy
 msgid "Change existing item to a directive label"
-msgstr "Αλλαγή του στοιχείου σε ετικέτα"
+msgstr "Αλλαγή του στοιχείου σε ετικέτα οδηγίας"
 
 #: eeschema/tools/ee_actions.cpp:513
 msgid "Change to Hierarchical Label"
@@ -17739,14 +17680,12 @@ msgid "Change existing item to a text comment"
 msgstr "Αλλαγή του στοιχείου σε σχόλιο κειμένου"
 
 #: eeschema/tools/ee_actions.cpp:528
-#, fuzzy
 msgid "Change to Text Box"
-msgstr "Αλλαγή σε Κείμενο"
+msgstr "Αλλαγή σε Πλαίσιο Κειμένου"
 
 #: eeschema/tools/ee_actions.cpp:528
-#, fuzzy
 msgid "Change existing item to a text box"
-msgstr "Αλλαγή του στοιχείου σε σχόλιο κειμένου"
+msgstr "Αλλαγή του στοιχείου σε πλαίσιο κειμένου"
 
 #: eeschema/tools/ee_actions.cpp:533
 msgid "Cleanup Sheet Pins"
@@ -17785,21 +17724,20 @@ msgstr "Εμφάνιση πίνακα ακροδεκτών για μαζική �
 #: eeschema/tools/ee_actions.cpp:553
 #, fuzzy
 msgid "Break"
-msgstr "Διακοπή Δίαυλου"
+msgstr "Διακοπή"
 
 #: eeschema/tools/ee_actions.cpp:553
-#, fuzzy
 msgid "Divide into connected segments"
-msgstr "Via μη συνδεδεμένο"
-
-#: eeschema/tools/ee_actions.cpp:558
-msgid "Slice"
-msgstr ""
+msgstr "Υποδιαίρεση σε συνδεδεμένα τμήματα"
 
 #: eeschema/tools/ee_actions.cpp:558
 #, fuzzy
+msgid "Slice"
+msgstr "Τεμαχισμός"
+
+#: eeschema/tools/ee_actions.cpp:558
 msgid "Divide into unconnected segments"
-msgstr "Via μη συνδεδεμένο"
+msgstr "Υποδιαίρεση σε ασύνδετα τμήματα"
 
 #: eeschema/tools/ee_actions.cpp:568
 msgid "Add a simulator probe"
@@ -17871,11 +17809,11 @@ msgid "Import Footprint Assignments..."
 msgstr "Εισαγωγή Συσχετίσεων Αποτυπωμάτων..."
 
 #: eeschema/tools/ee_actions.cpp:622
-#, fuzzy
 msgid ""
 "Import symbol footprint assignments from .cmp file created by board editor"
 msgstr ""
-"Εισαγωγή αντιστοίχισης συμβόλων με αποτυπώματα, από αρχείο .cmp του Pcbnew"
+"Εισαγωγή αντιστοίχισης συμβόλων με αποτυπώματα, από αρχείο .cmp του "
+"επεξεργαστή πλακέτας"
 
 #: eeschema/tools/ee_actions.cpp:627
 msgid "Annotate Schematic..."
@@ -17957,41 +17895,35 @@ msgid "Generate a bill of materials for the current schematic"
 msgstr "Δημιουργία λίστας υλικών για το τρέχον σχηματικό"
 
 #: eeschema/tools/ee_actions.cpp:675
-#, fuzzy
 msgid "Export Symbols to Library..."
-msgstr "Ενημέρωση Συμβόλων από Βιβλιοθήκη..."
+msgstr "Εξαγωγή Συμβόλων σε Βιβλιοθήκη..."
 
 #: eeschema/tools/ee_actions.cpp:676
-#, fuzzy
 msgid ""
 "Add symbols used in schematic to an existing symbol library\n"
 "(does not remove other symbols from this library)"
 msgstr ""
-"Προσθήκη αποτυπωμάτων τρέχουσας πλακέτας σε υπάρχουσα βιβλιοθήκη "
-"αποτυπωμάτων\n"
-"(δεν αφαιρεί άλλα αποτυπώματα από τη βιβλιοθήκη)"
+"Προσθήκη συμβόλων τρέχον σχηματικού σε υπάρχουσα βιβλιοθήκη συμβόλων\n"
+"(δεν αφαιρεί άλλα σύμβολα από τη βιβλιοθήκη)"
 
 #: eeschema/tools/ee_actions.cpp:682
-#, fuzzy
 msgid "Export Symbols to New Library..."
-msgstr "Ενημέρωση Συμβόλων από Βιβλιοθήκη..."
+msgstr "Εξαγωγή Συμβόλων σε Νεα Βιβλιοθήκη..."
 
 #: eeschema/tools/ee_actions.cpp:683
-#, fuzzy
 msgid ""
 "Create a new symbol library using the symbols used in the schematic\n"
 "(if the library already exists it will be replaced)"
 msgstr ""
-"Αρχειοθέτηση όλων των αποτυπωμάτων σε μια νέα βιβλιοθήκη \n"
-"(αν η βιβλιοθήκη υπάρχει, θα αντικατασταθεί)"
+"Δημιουργία νεας βιβλιοθήκης συμβόλων με όσα σύμβολα είναι σε χρήση στο "
+"σχηματικό \n"
+"(αν το αρχείο βιβλιοθήκης υπάρχει, θα αντικατασταθεί)"
 
 #: eeschema/tools/ee_actions.cpp:689
-#, fuzzy
 msgid "Select on PCB"
-msgstr "Επιλογή Αντικειμένων Στο PCB"
+msgstr "Επιλογή Στο PCB"
 
 #: eeschema/tools/ee_actions.cpp:690
-#, fuzzy
 msgid "Select corresponding items in PCB editor"
 msgstr "Επισήμανση αντίστοιχων αντικειμένων στον επεξεργαστή πλακέτας"
 
@@ -18012,34 +17944,29 @@ msgid "Toggle display of hidden text fields"
 msgstr "Εναλλαγή εμφάνισης κρυφών πεδίων κειμένου"
 
 #: eeschema/tools/ee_actions.cpp:704
-#, fuzzy
 msgid "Show ERC Warnings"
-msgstr "Προειδοποιήσεις ΕΚΣ"
+msgstr "Εμφάνιση Προειδοποιήσεων ΕΚΣ"
 
 #: eeschema/tools/ee_actions.cpp:704
-#, fuzzy
 msgid "Show markers for electrical rules checker warnings"
-msgstr "Έλεγχος ηλεκτρικών κανόνων (ΕΗΚ)"
+msgstr "Εφάνιση σημάνσεων προειδοποιήσεων ελέγχου ηλεκτρικών κανόνων"
 
 #: eeschema/tools/ee_actions.cpp:708
-#, fuzzy
 msgid "Show ERC Errors"
-msgstr "Εμφάνιση Σφαλμάτων Προσθέτου"
+msgstr "Εμφάνιση Σφαλμάτων ΕΗΚ"
 
 #: eeschema/tools/ee_actions.cpp:708
-#, fuzzy
 msgid "Show markers for electrical rules checker errors"
-msgstr "Έλεγχος ηλεκτρικών κανόνων (ΕΗΚ)"
+msgstr "Εμφάνιση σημάνσεων σφαλμάτων ελέγχου ηλεκτρικών κανόνων"
 
 #: eeschema/tools/ee_actions.cpp:712
-#, fuzzy
 msgid "Show ERC Exclusions"
-msgstr "Εξαιρέσεις ΕΚΣ"
+msgstr "Εμφάνιση Εξαιρέσεων ΕΗΚ"
 
 #: eeschema/tools/ee_actions.cpp:713
-#, fuzzy
 msgid "Show markers for excluded electrical rules checker violations"
-msgstr "Έλεγχος ηλεκτρικών κανόνων (ΕΗΚ)"
+msgstr ""
+"Εμφάνιση σημάνσεων για εξαιρεμένες παραβάσεις ελέγχου ηλεκτρικών κανόνων"
 
 #: eeschema/tools/ee_actions.cpp:717 eeschema/tools/ee_actions.cpp:722
 #: eeschema/tools/ee_actions.cpp:728 eeschema/tools/ee_actions.cpp:734
@@ -18048,50 +17975,41 @@ msgid "Line Mode for Wires and Buses"
 msgstr "Υποχρεωτικά Οριζ/Καθ Καλώδια και Δίαυλοι"
 
 #: eeschema/tools/ee_actions.cpp:717
-#, fuzzy
 msgid "Draw and drag at any angle"
-msgstr "Σχεδιάστε ορθογώνιο"
+msgstr "Σχεδιάση και σύρσιμο ως προς κάθε γωνιά"
 
 #: eeschema/tools/ee_actions.cpp:723
-#, fuzzy
 msgid "Constrain drawing and dragging to horizontal or vertical motions"
-msgstr ""
-"Περιορισμός δράσης σε οριζόντια, κάθετη, ή υπό γονεία 45 μοιρών από το "
-"αρχικό σημείο"
+msgstr "Περιορισμός σχεδίασης και συρσίματος σε οριζόντιες ή κάθετες κινήσεις"
 
 #: eeschema/tools/ee_actions.cpp:729
-#, fuzzy
 msgid ""
 "Constrain drawing and dragging to horizontal, vertical, or 45-degree angle "
 "motions"
 msgstr ""
-"Περιορισμός δράσης σε οριζόντια, κάθετη, ή υπό γονεία 45 μοιρών από το "
-"αρχικό σημείο"
+"Περιορισμός σχεδίασης και συρσίματος σε οριζόντια, κάθετη, ή υπό γονεία 45 "
+"μοιρών κίνηση"
 
 #: eeschema/tools/ee_actions.cpp:734
-#, fuzzy
 msgid "Switch to next line mode"
-msgstr "Μετάβαση σε Επόμενο Πλέγμα"
+msgstr "Εναλλαγή στην επόμενη λειτουργία γραμμής"
 
 #: eeschema/tools/ee_actions.cpp:739
-#, fuzzy
 msgid "Annotate Automatically"
-msgstr "Αυτόματη προσαρμογή"
+msgstr "Αυτόματη Ονοματοδοσία"
 
 #: eeschema/tools/ee_actions.cpp:739
 #, fuzzy
 msgid "Toggle automatic annotation of new parts symbols"
-msgstr "Αυτόματη ονοματοδοσία συμβόλων"
+msgstr "Εναλλαγή αυτόματης ονοματοδοσίας νέων συμβόλων"
 
 #: eeschema/tools/ee_actions.cpp:744
-#, fuzzy
 msgid "Repair Schematic"
-msgstr "Εκτύπωση Σχηματικού"
+msgstr "Επιδιόρθωση Σχηματικού"
 
 #: eeschema/tools/ee_actions.cpp:745
-#, fuzzy
 msgid "Run various diagnostics and attempt to repair schematic"
-msgstr "Εκκίνηση διαφόρων διαγνωστικών και προσπάθεια επιδιόρθωσης πλακέτας"
+msgstr "Εκκίνηση διαφόρων διαγνωστικών και προσπάθεια επιδιόρθωσης σχηματικού"
 
 #: eeschema/tools/ee_actions.cpp:751 pcbnew/tools/pcb_actions.cpp:855
 msgid "Scripting Console"
@@ -18102,9 +18020,8 @@ msgid "Show the Python scripting console"
 msgstr "Εμφάνιση της κονσόλας σεναρίων Python"
 
 #: eeschema/tools/ee_actions.cpp:758
-#, fuzzy
 msgid "Change Sheet"
-msgstr "Αλλαγή των Net"
+msgstr "Εναλλαγή Φύλλου"
 
 #: eeschema/tools/ee_actions.cpp:758
 #, fuzzy
@@ -18130,18 +18047,17 @@ msgid "Display the parent sheet in the schematic editor"
 msgstr "Εμφάνιση γονικού φύλλου στον σχηματικό επεξεργαστή"
 
 #: eeschema/tools/ee_actions.cpp:774
-#, fuzzy
 msgid "Navigate Up"
-msgstr "Μετάβαση στη σελίδα"
+msgstr "Μετάβαση Επάνω"
 
 #: eeschema/tools/ee_actions.cpp:774
+#, fuzzy
 msgid "Navigate up one sheet in the hierarchy"
-msgstr ""
+msgstr "Μετάβαση επάνω στην ιεραρχία κατα ένα φύλλο"
 
 #: eeschema/tools/ee_actions.cpp:780
-#, fuzzy
 msgid "Navigate Back"
-msgstr "Μετάβαση στη σελίδα"
+msgstr "Μετάβαση Πίσω"
 
 #: eeschema/tools/ee_actions.cpp:780
 msgid "Move forward in sheet navigation history"
@@ -19214,7 +19130,7 @@ msgstr "Το αρχείο zip '%s' δεν μπορεί να ανοιχτεί."
 #: gerbview/files.cpp:481
 #, c-format
 msgid "Skipped file '%s' (gerber job file)."
-msgstr "Παραλειπόμενο αρχείο '%s' (αρχείο εργασίας gerber)."
+msgstr "Παραλειπόμενο '%s' (αρχείο εργασίας gerber)."
 
 #: gerbview/files.cpp:526
 #, c-format
@@ -35665,9 +35581,8 @@ msgid "removed annular ring"
 msgstr "αφαίρεση κυκλικού δακτυλίου"
 
 #: pcbnew/pcb_track.cpp:854
-#, fuzzy
 msgid "Track (arc)"
-msgstr "Δρόμος "
+msgstr "Διάδρομος (τόξο)"
 
 #: pcbnew/pcb_track.cpp:877
 msgid "Segment Length"
