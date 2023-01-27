@@ -174,6 +174,8 @@ int PCB_CONTROL::ToggleRatsnest( const TOOL_EVENT& aEvent )
         Flip( displayOptions().m_DisplayRatsnestLinesCurved );
     }
 
+    frame()->OnDisplayOptionsChanged();
+
     canvas()->RedrawRatsnest();
     canvas()->Refresh();
 
@@ -354,6 +356,13 @@ int PCB_CONTROL::RatsnestModeCycle( const TOOL_EVENT& aEvent )
         displayOptions().m_ShowGlobalRatsnest = false;
     }
 
+    getEditFrame<PCB_EDIT_FRAME>()->SetElementVisibility( LAYER_RATSNEST,
+                                                          displayOptions().m_ShowGlobalRatsnest );
+
+    frame()->OnDisplayOptionsChanged();
+
+    canvas()->RedrawRatsnest();
+    canvas()->Refresh();
     return 0;
 }
 

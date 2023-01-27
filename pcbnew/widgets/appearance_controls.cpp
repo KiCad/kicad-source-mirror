@@ -2018,6 +2018,7 @@ void APPEARANCE_CONTROLS::onObjectVisibilityChanged( GAL_LAYER_ID aLayer, bool i
         {
             m_frame->GetPcbNewSettings()->m_Display.m_ShowGlobalRatsnest = isVisible;
             m_frame->GetBoard()->SetElementVisibility( aLayer, isVisible );
+            m_frame->OnDisplayOptionsChanged();
             m_frame->GetCanvas()->RedrawRatsnest();
         }
 
@@ -3077,7 +3078,13 @@ void APPEARANCE_CONTROLS::onRatsnestMode( wxCommandEvent& aEvent )
         cfg->m_Display.m_ShowGlobalRatsnest = false;
     }
 
-    m_frame->GetCanvas()->RedrawRatsnest();
+    if( PCB_EDIT_FRAME* editframe = dynamic_cast<PCB_EDIT_FRAME*>( m_frame ) )
+    {
+        editframe->SetElementVisibility( LAYER_RATSNEST, cfg->m_Display.m_ShowGlobalRatsnest );
+        editframe->OnDisplayOptionsChanged();
+        editframe->GetCanvas()->RedrawRatsnest();
+        editframe->GetCanvas()->Refresh();
+    }
     passOnFocus();
 }
 
