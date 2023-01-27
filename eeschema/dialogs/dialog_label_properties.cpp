@@ -91,6 +91,7 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_L
         m_labelCombo->Show( false );
         m_valueCombo->Show( false );
         m_syntaxHelp->Show( false );
+        m_textEntrySizer->Show( false );
 
         m_textSizeLabel->SetLabel( _( "Pin length:" ) );
     }
