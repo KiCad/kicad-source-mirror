@@ -205,6 +205,14 @@ void CONNECTIVITY_DATA::addRatsnestCluster( const std::shared_ptr<CN_CLUSTER>& a
 
 void CONNECTIVITY_DATA::RecalculateRatsnest( BOARD_COMMIT* aCommit  )
 {
+
+    // We can take over the lock here if called in the same thread
+    // This is to prevent redraw during a RecalculateRatsnets process
+    std::unique_lock<KISPINLOCK> lock( m_lock, std::adopt_lock );
+
+    if( !lock )
+        return;
+
     m_connAlgo->PropagateNets( aCommit );
 
     int lastNet = m_connAlgo->NetCount();
