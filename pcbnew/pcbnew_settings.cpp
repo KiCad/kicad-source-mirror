@@ -338,7 +338,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             &m_ExportStep.no_virtual, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "export_step.replace_models",
-            &m_ExportStep.replace_models, false ) );
+            &m_ExportStep.replace_models, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "export_step.overwrite_file",
             &m_ExportStep.overwrite_file, true ) );
