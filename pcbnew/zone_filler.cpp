@@ -474,6 +474,27 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
     //
     for( CN_ZONE_ISOLATED_ISLAND_LIST& zone : islandsList )
     {
+        // If *all* the polygons are islands, do not remove any of them
+        bool allIslands = true;
+
+        for( PCB_LAYER_ID layer : zone.m_zone->GetLayerSet().Seq() )
+        {
+            if( !zone.m_islands.count( layer ) )
+                continue;
+
+            std::vector<int>& islands = zone.m_islands.at( layer );
+            std::shared_ptr<SHAPE_POLY_SET> poly = zone.m_zone->GetFilledPolysList( layer );
+
+            if( islands.size() != static_cast<size_t>( poly->OutlineCount() ) )
+            {
+                allIslands = false;
+                break;
+            }
+        }
+
+        if( allIslands )
+            continue;
+
         for( PCB_LAYER_ID layer : zone.m_zone->GetLayerSet().Seq() )
         {
             if( m_debugZoneFiller && LSET::InternalCuMask().Contains( layer ) )

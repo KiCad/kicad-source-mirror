@@ -71,7 +71,7 @@ ZONE_SETTINGS::ZONE_SETTINGS()
     m_cornerSmoothingType = SMOOTHING_NONE;
     m_cornerRadius = 0;
 
-    m_removeIslands = ISLAND_REMOVAL_MODE::AREA;
+    m_removeIslands = ISLAND_REMOVAL_MODE::ALWAYS;
     m_minIslandArea = 10 * pcbIUScale.IU_PER_MM * pcbIUScale.IU_PER_MM;
 
     SetIsRuleArea( false );
