@@ -101,7 +101,7 @@ html = html.replace('<!--COMPCOUNT-->', "<b>Component Count:</b>" + \
 
 row  = "<tr><th style='width:640px'>Ref</th>" + "<th>Qnty</th>"
 row += "<th>Value</th>" + "<th>Part</th>" + "<th>Footprint</th>"
-row += "<th>Description</th>" + "<th>Vendor</th> + "<th>DNP</th></tr>"
+row += "<th>Description</th>" + "<th>Vendor</th>" + "<th>DNP</th></tr>"
 
 html = html.replace('<!--TABLEROW-->', row + "<!--TABLEROW-->")
 
