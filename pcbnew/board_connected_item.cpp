@@ -137,6 +137,12 @@ wxString BOARD_CONNECTED_ITEM::GetShortNetname() const
 }
 
 
+wxString BOARD_CONNECTED_ITEM::GetUnescapedShortNetname() const
+{
+    return m_netinfo ? m_netinfo->GetUnescapedShortNetname() : wxString();
+}
+
+
 static struct BOARD_CONNECTED_ITEM_DESC
 {
     BOARD_CONNECTED_ITEM_DESC()

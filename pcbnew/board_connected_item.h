@@ -125,6 +125,11 @@ public:
     wxString GetShortNetname() const;
 
     /**
+     * @return the unescaped short netname.
+     */
+    wxString GetUnescapedShortNetname() const;
+
+    /**
      * Return an item's "own" clearance in internal units.
      *
      * @param aLayer the layer in question.

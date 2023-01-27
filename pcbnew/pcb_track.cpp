@@ -701,7 +701,7 @@ double PCB_TRACK::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         }
 
         // Pick the approximate size of the netname (square chars)
-        wxString netName = UnescapeString( GetShortNetname() );
+        wxString netName = GetUnescapedShortNetname();
         size_t  num_chars = netName.size();
 
         if( GetLength() < num_chars * GetWidth() )

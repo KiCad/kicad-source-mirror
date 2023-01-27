@@ -685,7 +685,7 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
 
         ClipLine( &clipBox, visibleSeg.A.x, visibleSeg.A.y, visibleSeg.B.x, visibleSeg.B.y );
 
-        wxString netName = UnescapeString( aTrack->GetShortNetname() );
+        wxString netName = aTrack->GetUnescapedShortNetname();
         size_t  num_char = netName.size();
 
         // Check if the track is long enough to have a netname displayed
@@ -904,7 +904,7 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
         // the netname
         VECTOR2D textpos( 0.0, 0.0 );
 
-        wxString netname = UnescapeString( aVia->GetShortNetname() );
+        wxString netname = aVia->GetUnescapedShortNetname();
 
         int topLayer = aVia->TopLayer() + 1;
         int bottomLayer = std::min( aVia->BottomLayer() + 1, board->GetCopperLayerCount() );
@@ -1088,13 +1088,13 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             padNumber = UnescapeString( aPad->GetNumber() );
 
             if( dynamic_cast<CVPCB_SETTINGS*>( viewer_settings() ) )
-                netname = UnescapeString( aPad->GetShortNetname() );
+                netname = aPad->GetUnescapedShortNetname();
         }
 
         if( displayOpts )
         {
             if( displayOpts->m_NetNames == 1 || displayOpts->m_NetNames == 3 )
-                netname = UnescapeString( aPad->GetShortNetname() );
+                netname = aPad->GetUnescapedShortNetname();
 
             if( aPad->IsNoConnectPad() )
                 netname = wxT( "x" );
