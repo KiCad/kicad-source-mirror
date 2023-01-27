@@ -119,7 +119,7 @@ public:
 
     void SetMode( PNS::DRAG_MODE aDragMode ) override;
 
-    PNS::DRAG_MODE DRAGGER::Mode() const override;
+    PNS::DRAG_MODE Mode() const override;
 
 private:
     const ITEM_SET findViaFanoutByHandle ( NODE *aNode, const VIA_HANDLE& handle );
