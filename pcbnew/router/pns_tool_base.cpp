@@ -33,6 +33,7 @@ using namespace std::placeholders;
 #include "pns_tool_base.h"
 #include "pns_arc.h"
 #include "pns_solid.h"
+#include "pns_dragger.h"
 
 
 using namespace KIGFX;
@@ -264,14 +265,18 @@ bool TOOL_BASE::checkSnap( ITEM *aItem )
     // Sync PNS engine settings with the general PCB editor options.
     auto& pnss = m_router->Settings();
 
-    // If we're dragging a track segment, don't try to snap to items on the same copper layer with same nets. This is not a perfect heuristic, but seems to work reasonably well :-)
-    // This way we avoid 'flickery' behaviour for short segments when the snap algo is trying to
-    // snap to the corners of the segments next to the one being dragged.
+    // If we're dragging a track segment, don't try to snap to items that are part of the original line.
     if( m_startItem && aItem && m_router->GetState() == ROUTER::DRAG_SEGMENT
-        && aItem->Layer() == m_startItem->Layer() && aItem->OfKind( ITEM::SEGMENT_T )
-        && m_startItem->OfKind( ITEM::SEGMENT_T ) 
-        && aItem->Net() == m_startItem->Net() )
-        return false;
+        && m_router->GetDragger() )
+    {
+        DRAGGER*     dragger = dynamic_cast<DRAGGER*>( m_router->GetDragger() );
+        LINKED_ITEM* liItem = dynamic_cast<LINKED_ITEM*>( aItem );
+
+        if( dragger && liItem && dragger->GetOriginalLine().ContainsLink( liItem ) )
+        {
+            return false;
+        }
+    }
 
     pnss.SetSnapToPads(
             frame()->GetMagneticItemsSettings()->pads == MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL ||

@@ -185,7 +185,7 @@ bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM_SET aStartItems, int aDragM
         m_state = DRAG_SEGMENT;
     }
 
-    m_dragger->SetMode( aDragMode );
+    m_dragger->SetMode( static_cast<PNS::DRAG_MODE>( aDragMode ) );
     m_dragger->SetWorld( m_world.get() );
     m_dragger->SetLogger( m_logger );
     m_dragger->SetDebugDecorator( m_iface->GetDebugDecorator() );

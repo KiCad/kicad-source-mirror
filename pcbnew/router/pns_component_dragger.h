@@ -104,6 +104,11 @@ public:
      */
     const ITEM_SET Traces() override;
 
+    virtual PNS::DRAG_MODE Mode() const override
+    {
+        return PNS::DM_COMPONENT;
+    }
+
 private:
     struct DRAGGED_CONNECTION
     {

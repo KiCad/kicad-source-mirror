@@ -258,9 +258,15 @@ bool DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
 }
 
 
-void DRAGGER::SetMode( int aMode )
+void DRAGGER::SetMode( PNS::DRAG_MODE aMode )
 {
-    m_mode = aMode;
+    m_mode = static_cast<int>( aMode );
+}
+
+
+PNS::DRAG_MODE DRAGGER::Mode() const
+{
+    return static_cast<PNS::DRAG_MODE>( m_mode );
 }
 
 

@@ -100,6 +100,16 @@ public:
         return m_draggedLine.Layer();
     }
 
+    const LINE& GetOriginalLine()
+{
+        return m_draggedLine;
+    }
+
+    const LINE& GetLastDragSolution()
+    {
+        return m_lastDragSolution;
+    }
+
     /**
      * Function Traces()
      *
@@ -107,7 +117,9 @@ public:
      */
     const ITEM_SET Traces() override;
 
-    void SetMode( int aDragMode ) override;
+    void SetMode( PNS::DRAG_MODE aDragMode ) override;
+
+    PNS::DRAG_MODE DRAGGER::Mode() const override;
 
 private:
     const ITEM_SET findViaFanoutByHandle ( NODE *aNode, const VIA_HANDLE& handle );

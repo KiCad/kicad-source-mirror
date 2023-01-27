@@ -25,6 +25,7 @@
 #include <memory>
 #include <math/vector2d.h>
 
+#include "pns_router.h"
 #include "pns_algo_base.h"
 #include "pns_itemset.h"
 #include "pns_layerset.h"
@@ -115,7 +116,9 @@ public:
      */
     virtual const ITEM_SET Traces() = 0;
 
-    virtual void SetMode( int aDragMode ) {};
+    virtual void SetMode( PNS::DRAG_MODE aDragMode ){};
+
+    virtual PNS::DRAG_MODE Mode() const = 0;
 
 protected:
     NODE*   m_world;
