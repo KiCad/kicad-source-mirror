@@ -345,6 +345,9 @@ void PGM_BASE::sentryInit()
 
 void PGM_BASE::sentryPrompt()
 {
+    if( !IsGUI() )
+        return;
+
     KIPLATFORM::POLICY::STATE policyState =
             KIPLATFORM::POLICY::GetPolicyState( POLICY_KEY_DATACOLLECTION );
 
