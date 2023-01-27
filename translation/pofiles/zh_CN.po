@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-20 09:12-0800\n"
-"PO-Revision-Date: 2023-01-20 17:03+0000\n"
+"PO-Revision-Date: 2023-01-27 14:28+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.15.1\n"
+"X-Generator: Weblate 4.16-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -21861,7 +21861,7 @@ msgstr "汞"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:47
 msgid "Nickel"
-msgstr "铝"
+msgstr "镍"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:48
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:842
