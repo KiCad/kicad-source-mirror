@@ -333,8 +333,8 @@ void VIEW::Add( VIEW_ITEM* aItem, int aDrawPriority )
 
     for( int i = 0; i < layers_count; ++i )
     {
-        if( layers[i] < 0 || layers[i] >= (int)m_layers.size() )
-            continue;
+        wxCHECK2_MSG( layers[i] >= 0 && static_cast<unsigned>( layers[i] ) < m_layers.size(),
+                continue, wxS( "Invalid layer" ) );
 
         VIEW_LAYER& l = m_layers[layers[i]];
         l.items->Insert( aItem );
@@ -1451,6 +1451,8 @@ void VIEW::UpdateItems()
 
             for( int i = 0; i < layers_count; ++i )
             {
+                wxCHECK2_MSG( layers[i] >= 0 && static_cast<unsigned>( layers[i] ) < m_layers.size(),
+                        continue, wxS( "Invalid layer" ) );
                 VIEW_LAYER& l = m_layers[layers[i]];
                 l.items->Insert( item );
                 MarkTargetDirty( l.target );
