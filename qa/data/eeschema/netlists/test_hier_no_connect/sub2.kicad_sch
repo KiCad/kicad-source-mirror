@@ -1,0 +1,80 @@
+(kicad_sch (version 20230121) (generator eeschema)
+
+  (uuid 5c9be1c7-6a4a-4df0-812c-39a920083d04)
+
+  (paper "A4")
+
+  (lib_symbols
+    (symbol "TEST_LIB:TEST_SINGLE" (in_bom yes) (on_board yes)
+      (property "Reference" "U" (at 0 0 0)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "Value" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "Footprint" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Datasheet" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (symbol "TEST_SINGLE_0_1"
+        (rectangle (start 2.54 -1.27) (end 7.62 -6.35)
+          (stroke (width 0) (type default))
+          (fill (type background))
+        )
+      )
+      (symbol "TEST_SINGLE_1_1"
+        (pin input line (at 0 -3.81 0) (length 2.54)
+          (name "PIN" (effects (font (size 1.27 1.27))))
+          (number "1" (effects (font (size 1.27 1.27))))
+        )
+      )
+    )
+  )
+
+
+  (wire (pts (xy 127 67.31) (xy 130.81 67.31))
+    (stroke (width 0) (type default))
+    (uuid e6aaf3b9-093d-4471-96bd-fed5b98141f6)
+  )
+
+  (text "PIN 1 SHOULD HAVE no_connect ANNOTATION AS IT\nIS CONNECTED TO NC IN PARENT SHEET"
+    (at 115.57 82.55 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid 2887b945-22f5-4a24-bff1-edcbe3d8773d)
+  )
+
+  (hierarchical_label "PIN" (shape input) (at 127 67.31 180) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid 5d1eea2c-2dae-4a71-9b12-abef5a05334a)
+  )
+
+  (symbol (lib_id "TEST_LIB:TEST_SINGLE") (at 130.81 63.5 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (uuid 4de6e629-b0b3-4928-9859-b3e6bfe3cfc6)
+    (property "Reference" "U1" (at 139.7 67.945 0)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Value" "~" (at 130.81 63.5 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "" (at 130.81 63.5 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "" (at 130.81 63.5 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 53113259-0a12-4b72-8ad5-4f1195c2f58d))
+    (instances
+      (project "test_hier_no_connect"
+        (path "/a68fb8f1-2acf-4e52-8498-fd8a9cae28e4/ac073b00-33b3-4c40-9adc-0d2ac39cf8ef"
+          (reference "U1") (unit 1)
+        )
+        (path "/a68fb8f1-2acf-4e52-8498-fd8a9cae28e4/701adb8c-f139-4a93-a927-02c9f06ca5b2"
+          (reference "U4") (unit 1)
+        )
+      )
+    )
+  )
+)

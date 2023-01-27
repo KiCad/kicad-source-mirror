@@ -647,24 +647,19 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
 
     struct NET_NODE
     {
-        NET_NODE( SCH_PIN* aPin, const SCH_SHEET_PATH& aSheet, bool aNoConnect ) :
-                m_Pin( aPin ),
-                m_Sheet( aSheet ),
-                m_NoConnect( aNoConnect )
+        NET_NODE( SCH_PIN* aPin, const SCH_SHEET_PATH& aSheet ) : m_Pin( aPin ), m_Sheet( aSheet )
         {}
 
         SCH_PIN*       m_Pin;
         SCH_SHEET_PATH m_Sheet;
-        bool           m_NoConnect;
     };
 
     struct NET_RECORD
     {
-        NET_RECORD( const wxString& aName ) :
-            m_Name( aName )
-        {};
+        NET_RECORD( const wxString& aName ) : m_Name( aName ), m_HasNoConnect( false ){};
 
         wxString              m_Name;
+        bool                  m_HasNoConnect;
         std::vector<NET_NODE> m_Nodes;
     };
 
@@ -686,6 +681,9 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
             bool nc = subgraph->m_no_connect && subgraph->m_no_connect->Type() == SCH_NO_CONNECT_T;
             const SCH_SHEET_PATH& sheet = subgraph->m_sheet;
 
+            if( nc )
+                net_record->m_HasNoConnect = true;
+
             for( SCH_ITEM* item : subgraph->m_items )
             {
                 if( item->Type() == SCH_PIN_T )
@@ -700,7 +698,7 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
                         continue;
                     }
 
-                    net_record->m_Nodes.emplace_back( pin, sheet, nc );
+                    net_record->m_Nodes.emplace_back( pin, sheet );
                 }
             }
         }
@@ -744,6 +742,23 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
                     return refA == refB && a.m_Pin->GetShownNumber() == b.m_Pin->GetShownNumber();
                 } );
 
+        // Determine if all pins in the net are stacked (nets with only one pin are implicitly
+        // taken to be stacked)
+        bool allNetPinsStacked = true;
+
+        if( net_record->m_Nodes.size() > 1 )
+        {
+            SCH_PIN* firstPin = net_record->m_Nodes.begin()->m_Pin;
+            allNetPinsStacked =
+                    std::all_of( net_record->m_Nodes.begin() + 1, net_record->m_Nodes.end(),
+                                 [=]( auto& node )
+                                 {
+                                     return firstPin->GetParent() == node.m_Pin->GetParent()
+                                            && firstPin->GetPosition() == node.m_Pin->GetPosition()
+                                            && firstPin->GetName() == node.m_Pin->GetName();
+                                 } );
+        }
+
         for( const NET_NODE& netNode : net_record->m_Nodes )
         {
             wxString refText = netNode.m_Pin->GetParentSymbol()->GetRef( &netNode.m_Sheet );
@@ -774,7 +789,8 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
             if( !pinName.IsEmpty() )
                 xnode->AddAttribute( wxT( "pinfunction" ), pinName );
 
-            if( netNode.m_NoConnect )
+            if( net_record->m_HasNoConnect
+                && ( net_record->m_Nodes.size() == 1 || allNetPinsStacked ) )
                 pinType += wxT( "+no_connect" );
 
             xnode->AddAttribute( wxT( "pintype" ), pinType );
