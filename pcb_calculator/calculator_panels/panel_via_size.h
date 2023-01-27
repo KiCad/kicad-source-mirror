@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2022 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,9 +29,8 @@ class PANEL_VIA_SIZE : public PANEL_VIA_SIZE_BASE
 {
 public:
     PANEL_VIA_SIZE( wxWindow* parent, wxWindowID id = wxID_ANY,
-                     const wxPoint& pos = wxDefaultPosition,
-                     const wxSize& size = wxDefaultSize,
-                     long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+                    const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+                    long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
     ~PANEL_VIA_SIZE();
 
     // Methods from CALCULATOR_PANEL that must be overridden

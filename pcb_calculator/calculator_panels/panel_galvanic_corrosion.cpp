@@ -33,8 +33,9 @@ CORROSION_TABLE_ENTRY::CORROSION_TABLE_ENTRY( const wxString& aName, const wxStr
     m_potential = aPotential;
 }
 
-PANEL_GALVANIC_CORROSION::PANEL_GALVANIC_CORROSION( wxWindow* parent, wxWindowID id, const wxPoint& pos,
-                                                    const wxSize& size, long style, const wxString& name ) :
+PANEL_GALVANIC_CORROSION::PANEL_GALVANIC_CORROSION( wxWindow* parent, wxWindowID id,
+                                                    const wxPoint& pos, const wxSize& size,
+                                                    long style, const wxString& name ) :
         PANEL_GALVANIC_CORROSION_BASE( parent, id, pos, size, style, name )
 {
     m_entries.clear();

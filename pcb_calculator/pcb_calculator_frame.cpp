@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 1992-2015 jean-pierre.charras
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,7 +17,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <wx/menu.h>
 #include <wx/msgdlg.h>
 #include <wx/treebook.h>
 #include <wx/sizer.h>
@@ -28,7 +27,6 @@
 #include <bitmap_store.h>
 #include <geometry/shape_poly_set.h>
 #include <kiface_base.h>
-
 #include <attenuators/attenuator_classes.h>
 #include <pcb_calculator_frame.h>
 #include <pcb_calculator_settings.h>
@@ -49,12 +47,9 @@
 
 
 PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
-    KIWAY_PLAYER( aParent, wxID_ANY,
-                 _( "Calculator Tools"  ), // Window title
-                 wxDefaultPosition,
-                 wxSize( 646,361 ), // Default size
-                 wxDEFAULT_FRAME_STYLE | wxRESIZE_BORDER | wxFULL_REPAINT_ON_RESIZE | wxTAB_TRAVERSAL,
-                 wxT( "calculator_tools" ) ), // Window name
+    KIWAY_PLAYER( aParent, wxID_ANY, _( "Calculator Tools" ), wxDefaultPosition, wxSize( 646, 361 ),
+                  wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER|wxFULL_REPAINT_ON_RESIZE|wxTAB_TRAVERSAL,
+                  wxT( "calculator_tools" ) ),
     m_lastNotebookPage( -1 )
 {
     SHAPE_POLY_SET dummy;   // A ugly trick to force the linker to include
@@ -64,14 +59,11 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     SetSizeHints( wxDefaultSize, wxDefaultSize );
 
-
     m_mainSizer = new wxBoxSizer( wxVERTICAL );
-
 
     m_treebook = new wxTreebook( this, wxID_ANY );
     m_treebook->SetFont( KIUI::GetControlFont( this ) );
     m_mainSizer->Add( m_treebook, 1, wxEXPAND | wxLEFT | wxTOP, 0 );
-
 
     SetSizer( m_mainSizer );
     Layout();
@@ -79,44 +71,28 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_treebook->AddPage( nullptr, _( "General system design" ) );
 
-    AddCalculator( new PANEL_REGULATOR( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL ),
-                   _( "Regulators" ) );
+    AddCalculator( new PANEL_REGULATOR( m_treebook ), _( "Regulators" ) );
 
     m_treebook->AddPage( nullptr, _( "Power, current and isolation" ) );
 
-    AddCalculator( new PANEL_ELECTRICAL_SPACING( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL ),
-                   _( "Electrical Spacing" ) );
-    AddCalculator( new PANEL_VIA_SIZE( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL ),
-                   _( "Via Size" ) );
-    AddCalculator( new PANEL_TRACK_WIDTH( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL ),
-                   _( "Track Width" ) );
-    AddCalculator( new PANEL_FUSING_CURRENT( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                             wxTAB_TRAVERSAL ),
-                   _( "Fusing Current" ) );
-    AddCalculator( new PANEL_CABLE_SIZE( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                         wxTAB_TRAVERSAL ),
-                   _( "Cable Size" ) );
+    AddCalculator( new PANEL_ELECTRICAL_SPACING( m_treebook ), _( "Electrical Spacing" ) );
+    AddCalculator( new PANEL_VIA_SIZE( m_treebook ), _( "Via Size" ) );
+    AddCalculator( new PANEL_TRACK_WIDTH( m_treebook ), _( "Track Width" ) );
+    AddCalculator( new PANEL_FUSING_CURRENT( m_treebook ), _( "Fusing Current" ) );
+    AddCalculator( new PANEL_CABLE_SIZE( m_treebook ), _( "Cable Size" ) );
 
     m_treebook->AddPage( nullptr, _( "High speed" ) );
 
-    AddCalculator( new PANEL_WAVELENGTH( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                         wxTAB_TRAVERSAL ),
-                   _( "Wavelength" ) );
-    AddCalculator( new PANEL_RF_ATTENUATORS( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL ),
-                   _( "RF Attenuators" ) );
-    AddCalculator( new PANEL_TRANSLINE( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL ),
-                   _( "Transmission Lines") );
+    AddCalculator( new PANEL_WAVELENGTH( m_treebook ), _( "Wavelength" ) );
+    AddCalculator( new PANEL_RF_ATTENUATORS( m_treebook ), _( "RF Attenuators" ) );
+    AddCalculator( new PANEL_TRANSLINE( m_treebook ), _( "Transmission Lines") );
 
     m_treebook->AddPage( nullptr, _( "Memo" ) );
 
-    AddCalculator( new PANEL_E_SERIES( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL ),
-                   _( "E-Series" ) );
-    AddCalculator( new PANEL_COLOR_CODE( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL ),
-                   _( "Color Code" ) );
-    AddCalculator( new PANEL_BOARD_CLASS( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL ),
-                   _("Board Classes") );
-    AddCalculator( new PANEL_GALVANIC_CORROSION( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL ),
-                   _( "Galvanic Corrosion" ) );
+    AddCalculator( new PANEL_E_SERIES( m_treebook ), _( "E-Series" ) );
+    AddCalculator( new PANEL_COLOR_CODE( m_treebook ), _( "Color Code" ) );
+    AddCalculator( new PANEL_BOARD_CLASS( m_treebook ), _("Board Classes") );
+    AddCalculator( new PANEL_GALVANIC_CORROSION( m_treebook ), _( "Galvanic Corrosion" ) );
 
     LoadSettings( config() );
 
@@ -212,7 +188,7 @@ void PCB_CALCULATOR_FRAME::OnUpdateUI( wxUpdateUIEvent& event )
         // Kick all the things that wxWidgets can't seem to redraw on its own.
         // This is getting seriously ridiculous....
         PANEL_TRANSLINE*          translinePanel   = GetCalculator<PANEL_TRANSLINE>();
-        PANEL_RF_ATTENUATORS*        attenPanel       = GetCalculator<PANEL_RF_ATTENUATORS>();
+        PANEL_RF_ATTENUATORS*     attenPanel       = GetCalculator<PANEL_RF_ATTENUATORS>();
         PANEL_VIA_SIZE*           viaSizePanel     = GetCalculator<PANEL_VIA_SIZE>();
         PANEL_REGULATOR*          regulPanel       = GetCalculator<PANEL_REGULATOR>();
         PANEL_ELECTRICAL_SPACING* elecSpacingPanel = GetCalculator<PANEL_ELECTRICAL_SPACING>();
@@ -304,7 +280,7 @@ void PCB_CALCULATOR_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     m_treebook->ChangeSelection( cfg->m_LastPage );
 
-    for( auto& panel : m_panels )
+    for( CALCULATOR_PANEL* panel : m_panels )
         panel->LoadSettings( cfg );
 }
 
@@ -323,7 +299,7 @@ void PCB_CALCULATOR_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     {
         cfg->m_LastPage = m_treebook->GetSelection();
 
-        for( auto& panel : m_panels )
+        for( CALCULATOR_PANEL* panel : m_panels )
             panel->SaveSettings( cfg );
     }
 

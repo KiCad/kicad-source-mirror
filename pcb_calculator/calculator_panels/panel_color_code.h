@@ -28,9 +28,8 @@ class PANEL_COLOR_CODE : public PANEL_COLOR_CODE_BASE
 {
 public:
     PANEL_COLOR_CODE( wxWindow* parent, wxWindowID id = wxID_ANY,
-                     const wxPoint& pos = wxDefaultPosition,
-                     const wxSize& size = wxDefaultSize,
-                     long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+                      const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+                      long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
     ~PANEL_COLOR_CODE();
 
     void OnToleranceSelection( wxCommandEvent& event ) override;

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2021 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,9 +29,9 @@ class PANEL_ELECTRICAL_SPACING : public PANEL_ELECTRICAL_SPACING_BASE
 {
 public:
     PANEL_ELECTRICAL_SPACING( wxWindow* parent, wxWindowID id = wxID_ANY,
-                     const wxPoint& pos = wxDefaultPosition,
-                     const wxSize& size = wxDefaultSize,
-                     long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+                              const wxPoint& pos = wxDefaultPosition,
+                              const wxSize& size = wxDefaultSize,
+                              long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
     ~PANEL_ELECTRICAL_SPACING();
 
     // Methods from CALCULATOR_PANEL that must be overridden

@@ -29,9 +29,8 @@ class PANEL_TRACK_WIDTH : public PANEL_TRACK_WIDTH_BASE
 {
 public:
     PANEL_TRACK_WIDTH( wxWindow* parent, wxWindowID id = wxID_ANY,
-                     const wxPoint& pos = wxDefaultPosition,
-                     const wxSize& size = wxDefaultSize,
-                     long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+                       const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+                       long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
     ~PANEL_TRACK_WIDTH();
 
     // Methods from CALCULATOR_PANEL that must be overridden

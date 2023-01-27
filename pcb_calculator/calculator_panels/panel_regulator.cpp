@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 1992-2011 jean-pierre.charras
- * Copyright (C) 1992-2021 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,9 +17,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-
-//#include <macros.h>
 
 #include <wx/choicdlg.h>
 #include <wx/filedlg.h>
@@ -37,9 +34,8 @@ extern double DoubleFromString( const wxString& TextValue );
 static const wxString DataFileNameExt( wxT( "pcbcalc" ) );
 
 
-PANEL_REGULATOR::PANEL_REGULATOR( wxWindow* parent, wxWindowID id,
-                                  const wxPoint& pos, const wxSize& size,
-                                  long style, const wxString& name ) :
+PANEL_REGULATOR::PANEL_REGULATOR( wxWindow* parent, wxWindowID id, const wxPoint& pos,
+                                  const wxSize& size, long style, const wxString& name ) :
         PANEL_REGULATOR_BASE( parent, id, pos, size, style, name ),
         m_RegulatorListChanged( false )
 {
@@ -155,11 +151,11 @@ void PANEL_REGULATOR::OnDataFileSelection( wxCommandEvent& event )
     wxString fullfilename = GetDataFilename();
 
     wxString wildcard;
-    wildcard.Printf( _("PCB Calculator data file" ) + wxT( " (*.%s)|*.%s"),
+    wildcard.Printf( _( "PCB Calculator data file" ) + wxT( " (*.%s)|*.%s" ),
                      DataFileNameExt, DataFileNameExt );
 
-    wxFileDialog dlg( this, _("Select PCB Calculator Data File"),
-                      wxEmptyString, fullfilename, wildcard, wxFD_OPEN );
+    wxFileDialog dlg( this, _( "Select PCB Calculator Data File" ), wxEmptyString, fullfilename,
+                      wildcard, wxFD_OPEN );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
@@ -190,7 +186,7 @@ void PANEL_REGULATOR::OnDataFileSelection( wxCommandEvent& event )
     else
     {
         wxString msg;
-        msg.Printf( _("Unable to read data file '%s'."), fullfilename );
+        msg.Printf( _( "Unable to read data file '%s'." ), fullfilename );
         wxMessageBox( msg );
     }
 }
@@ -218,7 +214,7 @@ void PANEL_REGULATOR::OnAddRegulator( wxCommandEvent& event )
     }
     else
     {
-        wxMessageBox( _("This regulator is already in list. Aborted") );
+        wxMessageBox( _( "This regulator is already in list. Aborted" ) );
         delete new_item;
     }
 }
@@ -250,7 +246,7 @@ void PANEL_REGULATOR::OnEditRegulator( wxCommandEvent& event )
 
 void PANEL_REGULATOR::OnRemoveRegulator( wxCommandEvent& event )
 {
-    wxString name = wxGetSingleChoice( _("Remove Regulator"), wxEmptyString,
+    wxString name = wxGetSingleChoice( _( "Remove Regulator" ), wxEmptyString,
                                        m_RegulatorList.GetRegList() );
     if( name.IsEmpty() )
         return;
@@ -335,7 +331,7 @@ void PANEL_REGULATOR::RegulatorsSolve()
     // Some tests:
     if( vout < vref && id != 2 )
     {
-        m_RegulMessage->SetLabel( _("Vout must be greater than vref" ) );
+        m_RegulMessage->SetLabel( _( "Vout must be greater than vref" ) );
         return;
     }
 
@@ -347,7 +343,7 @@ void PANEL_REGULATOR::RegulatorsSolve()
 
     if( ( r1 < 0 && id != 0 ) || ( r2 <= 0 && id != 1 ) )
     {
-        m_RegulMessage->SetLabel( _("Incorrect value for R1 R2" ) );
+        m_RegulMessage->SetLabel( _( "Incorrect value for R1 R2" ) );
         return;
     }
 

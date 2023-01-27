@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2011 jean-pierre.charras
- * Copyright (C) 1992-2022 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,9 +26,8 @@
 #include <widgets/std_bitmap_button.h>
 
 
-PANEL_TRANSLINE::PANEL_TRANSLINE( wxWindow* parent, wxWindowID id,
-                                const wxPoint& pos, const wxSize& size,
-                                long style, const wxString& name ) :
+PANEL_TRANSLINE::PANEL_TRANSLINE( wxWindow* parent, wxWindowID id, const wxPoint& pos,
+                                  const wxSize& size, long style, const wxString& name ) :
         PANEL_TRANSLINE_BASE( parent, id, pos, size, style, name ),
         m_currTransLine( nullptr ),
         m_currTransLineType( DEFAULT_TYPE )

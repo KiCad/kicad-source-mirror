@@ -28,8 +28,7 @@ class PANEL_REGULATOR : public PANEL_REGULATOR_BASE
 {
 public:
     PANEL_REGULATOR( wxWindow* parent, wxWindowID id = wxID_ANY,
-                     const wxPoint& pos = wxDefaultPosition,
-                     const wxSize& size = wxDefaultSize,
+                     const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
                      long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
     ~PANEL_REGULATOR();
 

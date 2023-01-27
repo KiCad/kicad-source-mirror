@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 1992-2011 jean-pierre.charras
- * Copyright (C) 1992-2021 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,9 +23,8 @@
 #include <pcb_calculator_settings.h>
 
 
-PANEL_COLOR_CODE::PANEL_COLOR_CODE( wxWindow* parent, wxWindowID id,
-                                  const wxPoint& pos, const wxSize& size,
-                                  long style, const wxString& name ) :
+PANEL_COLOR_CODE::PANEL_COLOR_CODE( wxWindow* parent, wxWindowID id, const wxPoint& pos,
+                                    const wxSize& size, long style, const wxString& name ) :
         PANEL_COLOR_CODE_BASE( parent, id, pos, size, style, name )
 {
     ToleranceSelection( m_rbToleranceSelection->GetSelection() );
