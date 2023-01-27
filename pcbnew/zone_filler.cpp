@@ -479,11 +479,17 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
 
         for( PCB_LAYER_ID layer : zone.m_zone->GetLayerSet().Seq() )
         {
+            std::shared_ptr<SHAPE_POLY_SET> poly = zone.m_zone->GetFilledPolysList( layer );
+
             if( !zone.m_islands.count( layer ) )
+            {
+                if( poly->OutlineCount() > 0 )
+                    allIslands = false;
+
                 continue;
+            }
 
             std::vector<int>& islands = zone.m_islands.at( layer );
-            std::shared_ptr<SHAPE_POLY_SET> poly = zone.m_zone->GetFilledPolysList( layer );
 
             if( islands.size() != static_cast<size_t>( poly->OutlineCount() ) )
             {

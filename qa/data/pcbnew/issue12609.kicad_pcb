@@ -2097,7 +2097,7 @@
     (priority 1)
     (connect_pads (clearance 0.25))
     (min_thickness 0.254) (filled_areas_thickness no)
-    (fill yes (thermal_gap 0.508) (thermal_bridge_width 0.508) (island_removal_mode 2) (island_area_min 10))
+    (fill yes (thermal_gap 0.508) (thermal_bridge_width 0.508) (island_removal_mode 0) (island_area_min 10))
     (polygon
       (pts
         (xy 147 80)
@@ -2753,7 +2753,7 @@
   (zone (net 2) (net_name "GND") (layer "In1.Cu") (tstamp 06f7470f-025c-4658-a456-66fabbc4a1cf) (hatch edge 0.508)
     (connect_pads (clearance 0.25))
     (min_thickness 0.254) (filled_areas_thickness no)
-    (fill yes (thermal_gap 0.508) (thermal_bridge_width 0.508) (island_removal_mode 2) (island_area_min 10))
+    (fill yes (thermal_gap 0.508) (thermal_bridge_width 0.508) (island_removal_mode 0) (island_area_min 10))
     (polygon
       (pts
         (xy 167.5 113.5)
@@ -5032,7 +5032,7 @@
     (connect_pads (clearance 0))
     (min_thickness 0.254) (filled_areas_thickness no)
     (keepout (tracks allowed) (vias allowed) (pads allowed) (copperpour not_allowed) (footprints allowed))
-    (fill (thermal_gap 0.508) (thermal_bridge_width 0.508) (island_removal_mode 2) (island_area_min 10))
+    (fill (thermal_gap 0.508) (thermal_bridge_width 0.508) (island_removal_mode 0) (island_area_min 10))
     (polygon
       (pts
         (xy 162 83.5)
@@ -5046,7 +5046,7 @@
     (priority 1)
     (connect_pads (clearance 0.25))
     (min_thickness 0.254) (filled_areas_thickness no)
-    (fill yes (thermal_gap 0.508) (thermal_bridge_width 0.508) (smoothing fillet) (radius 1) (island_removal_mode 2) (island_area_min 10))
+    (fill yes (thermal_gap 0.508) (thermal_bridge_width 0.508) (smoothing fillet) (radius 1) (island_removal_mode 0) (island_area_min 10))
     (polygon
       (pts
         (xy 148.5 80)
@@ -5464,7 +5464,7 @@
   (zone (net 5) (net_name "+12V") (layer "In2.Cu") (tstamp a3413c1d-8a1b-44e0-8059-27085646a1a3) (hatch edge 0.508)
     (connect_pads (clearance 0.25))
     (min_thickness 0.254) (filled_areas_thickness no)
-    (fill yes (thermal_gap 0.508) (thermal_bridge_width 0.508) (island_removal_mode 2) (island_area_min 10))
+    (fill yes (thermal_gap 0.508) (thermal_bridge_width 0.508) (island_removal_mode 0) (island_area_min 10))
     (polygon
       (pts
         (xy 167.5 113.5)
@@ -7286,7 +7286,7 @@
     (priority 2)
     (connect_pads yes (clearance 0.25))
     (min_thickness 0.254) (filled_areas_thickness no)
-    (fill yes (thermal_gap 0.508) (thermal_bridge_width 0.508) (island_removal_mode 2) (island_area_min 10))
+    (fill yes (thermal_gap 0.508) (thermal_bridge_width 0.508) (island_removal_mode 0) (island_area_min 10))
     (polygon
       (pts
         (xy 144.75 86.5)
@@ -7328,7 +7328,7 @@
     (priority 1)
     (connect_pads yes (clearance 1))
     (min_thickness 0.254) (filled_areas_thickness no)
-    (fill yes (thermal_gap 0.508) (thermal_bridge_width 0.508) (island_removal_mode 2) (island_area_min 10))
+    (fill yes (thermal_gap 0.508) (thermal_bridge_width 0.508) (island_removal_mode 0) (island_area_min 10))
     (polygon
       (pts
         (xy 167 107.75)

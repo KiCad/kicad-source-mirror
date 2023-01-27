@@ -2260,7 +2260,7 @@
   (zone (net 1) (net_name "GND") (layer "B.Cu") (tstamp 754c1c43-ce1c-402f-8633-c6299f05323c) (hatch edge 0.508)
     (connect_pads (clearance 0.508))
     (min_thickness 0.254) (filled_areas_thickness no)
-    (fill yes (thermal_gap 0.508) (thermal_bridge_width 0.508) (island_removal_mode 2) (island_area_min 10))
+    (fill yes (thermal_gap 0.508) (thermal_bridge_width 0.508) (island_removal_mode 0) (island_area_min 10))
     (polygon
       (pts
         (xy 185 125)
