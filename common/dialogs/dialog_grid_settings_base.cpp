@@ -114,7 +114,7 @@ DIALOG_GRID_SETTINGS_BASE::DIALOG_GRID_SETTINGS_BASE( wxWindow* parent, wxWindow
 	sbUserGridSizer->Add( fgSizer31, 0, wxEXPAND|wxALL, 5 );
 
 
-	bUpperSizer->Add( sbUserGridSizer, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bUpperSizer->Add( sbUserGridSizer, 1, wxEXPAND|wxALL, 5 );
 
 
 	bSizerMain->Add( bUpperSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
@@ -168,13 +168,13 @@ DIALOG_GRID_SETTINGS_BASE::DIALOG_GRID_SETTINGS_BASE( wxWindow* parent, wxWindow
 	bButtonSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_buttonResetOrigin = new wxButton( this, wxID_ANY, _("Reset Grid Origin"), wxDefaultPosition, wxDefaultSize, 0 );
-	bButtonSizer->Add( m_buttonResetOrigin, 0, wxALL, 5 );
+	bButtonSizer->Add( m_buttonResetOrigin, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_buttonResetSizes = new wxButton( this, wxID_ANY, _("Reset Grid Sizes"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonResetSizes->Hide();
 	m_buttonResetSizes->SetToolTip( _("Resets the list of grid sizes to default values") );
 
-	bButtonSizer->Add( m_buttonResetSizes, 0, wxALL, 5 );
+	bButtonSizer->Add( m_buttonResetSizes, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -183,7 +183,7 @@ DIALOG_GRID_SETTINGS_BASE::DIALOG_GRID_SETTINGS_BASE( wxWindow* parent, wxWindow
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 
-	bButtonSizer->Add( m_sdbSizer, 0, wxALL|wxEXPAND, 5 );
+	bButtonSizer->Add( m_sdbSizer, 1, wxALL|wxEXPAND, 5 );
 
 
 	bSizerMain->Add( bButtonSizer, 0, wxEXPAND|wxLEFT, 10 );
