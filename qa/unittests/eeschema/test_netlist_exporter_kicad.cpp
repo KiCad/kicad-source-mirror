@@ -85,6 +85,7 @@ public:
                 // The two nets at the same index should be identical
                 BOOST_REQUIRE_EQUAL( goldenNet.GetNetName(), testNet.GetNetName() );
                 BOOST_REQUIRE_EQUAL( goldenNet.GetPinName(), testNet.GetPinName() );
+                BOOST_REQUIRE_EQUAL( goldenNet.GetPinType(), testNet.GetPinType() );
             }
         }
     }
@@ -169,6 +170,12 @@ BOOST_AUTO_TEST_CASE( TopLevelHierPins )
 BOOST_AUTO_TEST_CASE( BusEntries )
 {
     TestNetlist( "bus_entries" );
+}
+
+
+BOOST_AUTO_TEST_CASE( HierNoConnect )
+{
+    TestNetlist( "test_hier_no_connect" );
 }
 
 
