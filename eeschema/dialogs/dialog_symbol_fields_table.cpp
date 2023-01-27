@@ -241,6 +241,22 @@ public:
         }
     }
 
+    void RenameColumn( int aCol, const wxString& newName )
+    {
+        wxString fieldName = m_fieldNames[aCol];
+
+        m_fieldNames[aCol] = newName;
+
+        for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
+        {
+            SCH_SYMBOL* symbol = m_symbolsList[i].GetSymbol();
+
+            auto node = m_dataStore[symbol->m_Uuid].extract( fieldName );
+            node.key() = newName;
+            m_dataStore[symbol->m_Uuid].insert( std::move( node ) );
+        }
+    }
+
     int GetNumberRows() override { return m_rows.size(); }
 
     // Columns are fieldNames + quantity column
@@ -1136,7 +1152,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRemoveField( wxCommandEvent& event )
     m_fieldsCtrl->SelectRow( --row );
 
     if( row < MANDATORY_FIELDS )
-        m_removeFieldButton->Enable( false );
+    {
+         m_removeFieldButton->Enable( false );
+         m_renameFieldButton->Enable( false );
+    }
 
     wxGridTableMessage msg( m_dataModel, wxGRIDTABLE_NOTIFY_COLS_DELETED,
                                 m_fieldsCtrl->GetItemCount(), 1 );
@@ -1150,6 +1169,69 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRemoveField( wxCommandEvent& event )
     m_grid->SetColAttr( m_dataModel->GetColsCount() - 1, attr );
     m_grid->SetColFormatNumber( m_dataModel->GetColsCount() - 1 );
     m_grid->SetColSize( m_dataModel->GetColsCount() - 1, 50 );
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::OnRenameField( wxCommandEvent& event )
+{
+    int col = -1;
+    int row = m_fieldsCtrl->GetSelectedRow();
+
+    // Should never occur: "Rename Field..." button should be disabled if invalid selection
+    // via OnFieldsCtrlSelectionChanged()
+    wxCHECK_RET( row != -1, wxS( "Some user defined field must be selected first" ) );
+    wxCHECK_RET( row >= MANDATORY_FIELDS, wxS( "Mandatory fields cannot be renamed" ) );
+
+    wxString fieldName = m_fieldsCtrl->GetTextValue( row, 0 );
+
+
+    wxTextEntryDialog dlg( this, _( "New field name:" ), _( "Rename Field" ) );
+
+    if( dlg.ShowModal() != wxID_OK )
+         return;
+
+    wxString newFieldName = dlg.GetValue();
+
+    if( fieldName.IsEmpty() )
+    {
+         DisplayError( this, _( "Field must have a name." ) );
+         return;
+    }
+
+    for( int i = 0; i < m_dataModel->GetNumberCols(); ++i )
+    {
+         if( fieldName == m_dataModel->GetColLabelValue( i ) )
+         {
+            if( col == -1 )
+            {
+                col = i;
+            }
+            else
+            {
+                wxString confirm_msg = wxString::Format(
+                        _( "Field name %s already exists. Cannot rename over existing field." ),
+                        fieldName );
+                DisplayError( this, confirm_msg );
+                return;
+            }
+         }
+    }
+
+
+    m_dataModel->RenameColumn( col, newFieldName );
+    m_fieldsCtrl->SetTextValue( newFieldName, col, 0 );
+
+    std::string oldKey( fieldName.ToUTF8() );
+    std::string newKey( newFieldName.ToUTF8() );
+
+    EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+
+    //In-place rename map key
+    auto node = cfg->m_FieldEditorPanel.fields_show.extract( oldKey );
+    node.key() = newKey;
+    cfg->m_FieldEditorPanel.fields_show.insert( std::move( node ) );
+
+    cfg->m_FieldEditorPanel.fields_show[newKey] = true;
 }
 
 
@@ -1181,9 +1263,15 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnFieldsCtrlSelectionChanged( wxDataViewEvent& 
     int row = m_fieldsCtrl->GetSelectedRow();
 
     if( row >= MANDATORY_FIELDS )
+    {
         m_removeFieldButton->Enable( true );
+        m_renameFieldButton->Enable( true );
+    }
     else
+    {
         m_removeFieldButton->Enable( false );
+        m_renameFieldButton->Enable( false );
+    }
 }
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnColumnItemToggled( wxDataViewEvent& event )

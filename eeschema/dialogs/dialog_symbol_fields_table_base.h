@@ -50,6 +50,7 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		wxDataViewListCtrl* m_fieldsCtrl;
 		wxButton* m_addFieldButton;
 		wxButton* m_removeFieldButton;
+		wxButton* m_renameFieldButton;
 		wxPanel* m_rightPanel;
 		wxSearchCtrl* m_filter;
 		BITMAP_BUTTON* m_separator1;
@@ -70,6 +71,7 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		virtual void OnSizeFieldList( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnAddField( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemoveField( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnRenameField( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnFilterMouseMoved( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnFilterText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnGroupSymbolsToggled( wxCommandEvent& event ) { event.Skip(); }
