@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-20 09:12-0800\n"
 "PO-Revision-Date: 2023-01-27 14:28+0000\n"
-"Last-Translator: Tokita, Hiroshi <tokita.hiroshi@fujitsu.com>\n"
+"Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -21879,7 +21879,7 @@ msgstr "長さ:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:192
 msgid "Length includes the return path"
-msgstr ""
+msgstr "長さにはリターンパスが含まれます"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:204
 msgid "Resistance DC:"
