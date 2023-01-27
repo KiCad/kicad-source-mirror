@@ -23,13 +23,15 @@
 
 #include "dialog_global_lib_table_config_base.h"
 
+#include <kiway.h>
 #include <wx/filename.h>
 
 
 class DIALOG_GLOBAL_LIB_TABLE_CONFIG : public DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE
 {
 public:
-    DIALOG_GLOBAL_LIB_TABLE_CONFIG( wxWindow* aParent, const wxString& aTableName );
+    DIALOG_GLOBAL_LIB_TABLE_CONFIG( wxWindow* aParent, const wxString& aTableName,
+                                    const KIWAY::FACE_T aFaceType );
     virtual ~DIALOG_GLOBAL_LIB_TABLE_CONFIG();
 
     virtual wxFileName GetGlobalTableFileName() = 0;
@@ -42,6 +44,7 @@ protected:
 
     wxString m_tableName;
     bool m_defaultFileFound;
+    KIWAY::FACE_T m_faceType;
 };
 
 #endif  // _DIALOG_GLOBAL_LIB_TABLE_CONFIG_H_

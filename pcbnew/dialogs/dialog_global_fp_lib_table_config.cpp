@@ -22,12 +22,13 @@
 
 #include <confirm.h>
 #include <kiface_base.h>
+#include <kiway.h>
 
 #include "fp_lib_table.h"
 
 
 DIALOG_GLOBAL_FP_LIB_TABLE_CONFIG::DIALOG_GLOBAL_FP_LIB_TABLE_CONFIG( wxWindow* aParent ) :
-    DIALOG_GLOBAL_LIB_TABLE_CONFIG( aParent, _( "footprint" ) )
+        DIALOG_GLOBAL_LIB_TABLE_CONFIG( aParent, _( "footprint" ), KIWAY::FACE_PCB )
 {
 }
 

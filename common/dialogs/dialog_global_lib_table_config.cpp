@@ -28,12 +28,13 @@
 
 
 DIALOG_GLOBAL_LIB_TABLE_CONFIG::DIALOG_GLOBAL_LIB_TABLE_CONFIG( wxWindow* aParent,
-                                                                const wxString& aTableName  ) :
+                                                                const wxString&     aTableName,
+                                                                const KIWAY::FACE_T aFaceType ) :
     DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE( aParent ),
-    m_defaultFileFound( false )
+    m_defaultFileFound( false ),
+    m_faceType( aFaceType ),
+    m_tableName( aTableName )
 {
-    m_tableName = aTableName;
-
     wxString tmp;
 
     tmp.Printf( _( "Configure Global %s Library Table" ), aTableName.Capitalize() );
@@ -106,7 +107,7 @@ bool DIALOG_GLOBAL_LIB_TABLE_CONFIG::TransferDataToWindow()
 
     SEARCH_STACK ss;
 
-    SystemDirsAppend( &ss );
+    GlobalPathsAppend( &ss, m_faceType );
 
     wxString templatePath =
         Pgm().GetLocalEnvVariables().at( wxT( "KICAD7_TEMPLATE_DIR" ) ).GetValue();

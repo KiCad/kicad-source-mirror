@@ -29,6 +29,8 @@
 #ifndef INCLUDE__SYSTEM_DIRS_APPEND_H_
 #define INCLUDE__SYSTEM_DIRS_APPEND_H_
 
+#include <kiway.h>
+
 class SEARCH_STACK;
 
 /**
@@ -36,5 +38,11 @@ class SEARCH_STACK;
  * to KiCad programs.
  */
 void SystemDirsAppend( SEARCH_STACK* aSearchStack );
+
+/**
+ * Initialize aDst SEARCH_STACK with KIFACE (DSO) specific settings.
+ * Adds libraries, docs, template paths to the search stack.
+ */
+void GlobalPathsAppend( SEARCH_STACK* aDst, KIWAY::FACE_T aId );
 
 #endif  // INCLUDE__SYSTEM_DIRS_APPEND_H_

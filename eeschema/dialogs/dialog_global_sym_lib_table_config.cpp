@@ -22,13 +22,14 @@
 
 #include <confirm.h>
 #include <kiface_base.h>
+#include <kiway.h>
 #include <macros.h>
 
 #include "symbol_lib_table.h"
 
 
 DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG::DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG( wxWindow* aParent ) :
-    DIALOG_GLOBAL_LIB_TABLE_CONFIG( aParent, _( "symbol" ) )
+        DIALOG_GLOBAL_LIB_TABLE_CONFIG( aParent, _( "symbol" ), KIWAY::FACE_SCH )
 {
 }
 

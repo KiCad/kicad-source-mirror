@@ -25,6 +25,7 @@
 
 #include <wx/stdpaths.h>
 
+#include <systemdirsappend.h>
 #include <common.h>
 #include <kiplatform/environment.h>
 #include <search_stack.h>
@@ -170,5 +171,69 @@ void SystemDirsAppend( SEARCH_STACK* aSearchStack )
 #if defined(DEBUG) && 0
     // final results:
     aSearchStack->Show( __func__ );
+#endif
+}
+
+
+void GlobalPathsAppend( SEARCH_STACK* aDst, KIWAY::FACE_T aId )
+{
+    SEARCH_STACK bases;
+
+    SystemDirsAppend( &bases );
+    aDst->Clear();
+
+    for( unsigned i = 0; i < bases.GetCount(); ++i )
+    {
+        wxFileName fn( bases[i], wxEmptyString );
+
+        // Add schematic library file path to search path list.
+        // we must add <kicad path>/library and <kicad path>/library/doc
+        if( aId == KIWAY::FACE_SCH )
+        {
+            // Add schematic doc file path (library/doc) to search path list.
+
+            fn.AppendDir( wxT( "library" ) );
+            aDst->AddPaths( fn.GetPath() );
+
+            fn.AppendDir( wxT( "doc" ) );
+            aDst->AddPaths( fn.GetPath() );
+
+            fn.RemoveLastDir();
+            fn.RemoveLastDir(); // "../../"  up twice, removing library/doc/
+
+            fn.AppendDir( wxT( "symbols" ) );
+            aDst->AddPaths( fn.GetPath() );
+
+            fn.AppendDir( wxT( "doc" ) );
+            aDst->AddPaths( fn.GetPath() );
+
+            fn.RemoveLastDir();
+            fn.RemoveLastDir(); // "../../"  up twice, removing symbols/doc/
+        }
+
+        // Add PCB library file path to search path list.
+        if( aId == KIWAY::FACE_PCB || aId == KIWAY::FACE_CVPCB )
+        {
+            fn.AppendDir( wxT( "modules" ) );
+            aDst->AddPaths( fn.GetPath() );
+            fn.RemoveLastDir();
+
+            fn.AppendDir( wxT( "footprints" ) );
+            aDst->AddPaths( fn.GetPath() );
+            fn.RemoveLastDir();
+
+            // Add 3D module library file path to search path list.
+            fn.AppendDir( wxT( "3dmodels" ) );
+            aDst->AddPaths( fn.GetPath() );
+            fn.RemoveLastDir();
+        }
+
+        // Add KiCad template file path to search path list.
+        fn.AppendDir( wxT( "template" ) );
+        aDst->AddPaths( fn.GetPath() );
+    }
+
+#ifndef __WXMAC__
+    aDst->AddPaths( wxT( "/usr/local/share" ) );
 #endif
 }
