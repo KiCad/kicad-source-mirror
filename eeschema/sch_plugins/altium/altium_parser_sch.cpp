@@ -726,6 +726,7 @@ ASCH_IMAGE::ASCH_IMAGE( const std::map<wxString, wxString>& aProps )
     wxASSERT( ReadRecord( aProps ) == ALTIUM_SCH_RECORD::IMAGE );
 
     indexinsheet = ALTIUM_PARSER::ReadInt( aProps, "INDEXINSHEET", 0 );
+    ownerindex = ReadOwnerIndex( aProps );
     ownerpartid = ReadOwnerPartId( aProps );
 
     filename = ALTIUM_PARSER::ReadString( aProps, "FILENAME", "" );

@@ -704,6 +704,7 @@ struct ASCH_JUNCTION
 struct ASCH_IMAGE
 {
     int indexinsheet;
+    int ownerindex;
     int ownerpartid;
 
     wxString filename;

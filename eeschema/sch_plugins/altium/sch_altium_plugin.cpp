@@ -2724,6 +2724,13 @@ void SCH_ALTIUM_PLUGIN::ParseImage( const std::map<wxString, wxString>& aPropert
 {
     ASCH_IMAGE elem( aProperties );
 
+    const auto& component = m_altiumComponents.find( elem.ownerindex );
+
+    //Hide the image if it is owned by a component but the part id do not match
+    if( component != m_altiumComponents.end()
+        && component->second.currentpartid != elem.ownerpartid )
+        return;
+
     VECTOR2I                    center = ( elem.location + elem.corner ) / 2 + m_sheetOffset;
     std::unique_ptr<SCH_BITMAP> bitmap = std::make_unique<SCH_BITMAP>( center );
 
