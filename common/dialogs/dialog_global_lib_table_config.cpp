@@ -31,9 +31,9 @@ DIALOG_GLOBAL_LIB_TABLE_CONFIG::DIALOG_GLOBAL_LIB_TABLE_CONFIG( wxWindow* aParen
                                                                 const wxString&     aTableName,
                                                                 const KIWAY::FACE_T aFaceType ) :
     DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE( aParent ),
+    m_tableName( aTableName ),
     m_defaultFileFound( false ),
-    m_faceType( aFaceType ),
-    m_tableName( aTableName )
+    m_faceType( aFaceType )
 {
     wxString tmp;
 

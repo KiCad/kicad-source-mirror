@@ -333,7 +333,7 @@ void VIEW::Add( VIEW_ITEM* aItem, int aDrawPriority )
 
     for( int i = 0; i < layers_count; ++i )
     {
-        if( layers[i] < 0 || layers[i] >= m_layers.size() )
+        if( layers[i] < 0 || layers[i] >= (int)m_layers.size() )
             continue;
 
         VIEW_LAYER& l = m_layers[layers[i]];
