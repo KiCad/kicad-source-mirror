@@ -185,6 +185,7 @@ private:
     float getShadowWidth( bool aForHighlight ) const;
     COLOR4D getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDrawingShadows,
                             bool aDimmed = false ) const;
+    KIFONT::FONT* getFont( const EDA_TEXT* aText ) const;
     float getLineWidth( const EDA_ITEM* aItem, bool aDrawingShadows ) const;
     float getTextThickness( const EDA_ITEM* aItem ) const;
 

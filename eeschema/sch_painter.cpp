@@ -344,6 +344,18 @@ bool SCH_PAINTER::isUnitAndConversionShown( const LIB_ITEM* aItem ) const
 }
 
 
+KIFONT::FONT* SCH_PAINTER::getFont( const EDA_TEXT* aItem ) const
+{
+    KIFONT::FONT* retval = aItem->GetFont();
+
+    if( !retval )
+        retval = KIFONT::FONT::GetFont( m_schSettings.GetDefaultFont(), aItem->IsBold(),
+                aItem->IsItalic() );
+
+    return retval;
+}
+
+
 float SCH_PAINTER::getShadowWidth( bool aForHighlight ) const
 {
     const MATRIX3x3D& matrix = m_gal->GetScreenWorldMatrix();
@@ -958,7 +970,7 @@ void SCH_PAINTER::draw( const LIB_FIELD *aField, int aLayer, bool aDimmed )
 
     BOX2I bbox = aField->GetBoundingBox();
 
-    if( drawingShadows )
+    if( drawingShadows && getFont( aField )->IsOutline() )
     {
         bbox.Inflate( KiROUND( getTextThickness( aField ) * 2 ) );
 
@@ -974,6 +986,9 @@ void SCH_PAINTER::draw( const LIB_FIELD *aField, int aLayer, bool aDimmed )
         attrs.m_Halign = GR_TEXT_H_ALIGN_CENTER;
         attrs.m_Valign = GR_TEXT_V_ALIGN_CENTER;
         attrs.m_StrokeWidth = KiROUND( getTextThickness( aField ) );
+
+        if( drawingShadows )
+            attrs.m_StrokeWidth += getShadowWidth( !aField->IsSelected() );
 
         strokeText( UnescapeString( aField->GetShownText() ), textpos, attrs );
     }
@@ -1016,7 +1031,7 @@ void SCH_PAINTER::draw( const LIB_TEXT* aText, int aLayer, bool aDimmed )
     m_gal->SetFillColor( color );
     m_gal->SetStrokeColor( color );
 
-    if( drawingShadows )
+    if( drawingShadows && getFont( aText )->IsOutline() )
     {
         bBox.Inflate( KiROUND( getTextThickness( aText ) * 2 ) );
 
@@ -1031,6 +1046,9 @@ void SCH_PAINTER::draw( const LIB_TEXT* aText, int aLayer, bool aDimmed )
         TEXT_ATTRIBUTES attrs = aText->GetAttributes();
 
         attrs.m_StrokeWidth = KiROUND( getTextThickness( aText ) );
+
+        if( drawingShadows )
+            attrs.m_StrokeWidth += getShadowWidth( !aText->IsSelected() );
 
         if( attrs.m_Angle == ANGLE_VERTICAL )
         {
@@ -1411,8 +1429,8 @@ void SCH_PAINTER::draw( const LIB_PIN *aPin, int aLayer, bool aDimmed )
 
     float penWidth = (float) m_schSettings.GetDefaultPenWidth();
     int   textOffset = libEntry->GetPinNameOffset();
-    float nameStrokeWidth = getLineWidth( aPin, drawingShadows );
-    float numStrokeWidth = getLineWidth( aPin, drawingShadows );
+    float nameStrokeWidth = getLineWidth( aPin, false );
+    float numStrokeWidth = getLineWidth( aPin, false );
     bool  showPinNames = libEntry->ShowPinNames();
     bool  showPinNumbers = m_schSettings.m_ShowPinNumbers || libEntry->ShowPinNumbers();
 
@@ -1513,8 +1531,14 @@ void SCH_PAINTER::draw( const LIB_PIN *aPin, int aLayer, bool aDimmed )
                 attrs.m_Valign = vAlign;
                 attrs.m_Angle = aAngle;
                 attrs.m_StrokeWidth = KiROUND( thickness[i] );
+                KIFONT::FONT* font = KIFONT::FONT::GetFont( eeconfig()->m_Appearance.default_font, attrs.m_Bold,
+                                                      attrs.m_Italic );
 
-                if( drawingShadows )
+                if( drawingShadows && !font->IsOutline() )
+                {
+                    strokeText( text[i], aPos, attrs );
+                }
+                else if( drawingShadows )
                 {
                     boxText( text[i], aPos, attrs );
                 }
@@ -1938,7 +1962,24 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
     m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );
 
-    if( drawingShadows )
+    wxString        shownText( aText->GetShownText() );
+    VECTOR2I        text_offset = aText->GetSchematicTextOffset( &m_schSettings );
+    TEXT_ATTRIBUTES attrs = aText->GetAttributes();
+    KIFONT::FONT*   font = getFont( aText );
+
+    attrs.m_Angle = aText->GetDrawRotation();
+    attrs.m_StrokeWidth = KiROUND( getTextThickness( aText ) );
+
+    if( drawingShadows && !font->IsOutline() )
+    {
+        m_gal->SetIsFill( false );
+        m_gal->SetIsStroke( true );
+        attrs.m_StrokeWidth += getShadowWidth( !aText->IsSelected() );
+        attrs.m_Underlined = false;
+        strokeText( shownText, aText->GetDrawPos() + text_offset, attrs );
+
+    }
+    else if( drawingShadows )
     {
         BOX2I bBox = aText->GetBoundingBox();
         bBox.Inflate( KiROUND( getTextThickness( aText ) * 2 ) );
@@ -1950,26 +1991,11 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
     }
     else
     {
-        wxString        shownText( aText->GetShownText() );
-        VECTOR2I        text_offset = aText->GetSchematicTextOffset( &m_schSettings );
-        TEXT_ATTRIBUTES attrs = aText->GetAttributes();
-
-        attrs.m_Angle = aText->GetDrawRotation();
-        attrs.m_StrokeWidth = KiROUND( getTextThickness( aText ) );
-
         if( aText->IsHypertext() && aText->IsRollover() )
         {
             m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_HOVERED ) );
             m_gal->SetFillColor( m_schSettings.GetLayerColor( LAYER_HOVERED ) );
             attrs.m_Underlined = true;
-        }
-
-        KIFONT::FONT* font = aText->GetFont();
-
-        if( !font )
-        {
-            font = KIFONT::FONT::GetFont( m_schSettings.GetDefaultFont(), aText->IsBold(),
-                                          aText->IsItalic() );
         }
 
         // Adjust text drawn in an outline font to more closely mimic the positioning of
@@ -2375,7 +2401,7 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
     m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );
 
-    if( drawingShadows )
+    if( drawingShadows && getFont( aField )->IsOutline() )
     {
         BOX2I shadow_box = bbox;
         shadow_box.Inflate( KiROUND( getTextThickness( aField ) * 2 ) );
@@ -2394,6 +2420,9 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
         attributes.m_Valign = GR_TEXT_V_ALIGN_CENTER;
         attributes.m_StrokeWidth = KiROUND( getTextThickness( aField ) );
         attributes.m_Angle = orient;
+
+        if( drawingShadows )
+            attributes.m_StrokeWidth += getShadowWidth( !aField->IsSelected() );
 
         if( aField->IsHypertext() && aField->IsRollover() )
         {
