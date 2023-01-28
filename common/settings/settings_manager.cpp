@@ -179,9 +179,23 @@ void SETTINGS_MANAGER::FlushAndRelease( JSON_SETTINGS* aSettings, bool aSave )
 
 COLOR_SETTINGS* SETTINGS_MANAGER::GetColorSettings( const wxString& aName )
 {
+    // Find settings the fast way
     if( m_color_settings.count( aName ) )
         return m_color_settings.at( aName );
 
+    // Maybe it's the display name (cli is one method of invoke)
+    auto it = std::find_if( m_color_settings.begin(), m_color_settings.end(),
+                            [&aName]( const std::pair<wxString, COLOR_SETTINGS*>& p )
+                            {
+                                return p.second->GetName().Lower() == aName.Lower();
+                            } );
+
+    if( it != m_color_settings.end() )
+    {
+        return it->second;
+    }
+
+    // No match? See if we can load it
     if( !aName.empty() )
     {
         COLOR_SETTINGS* ret = loadColorSettingsByName( aName );
