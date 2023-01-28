@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-20 09:12-0800\n"
-"PO-Revision-Date: 2023-01-28 22:14+0000\n"
+"PO-Revision-Date: 2023-01-28 22:27+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -19700,7 +19700,7 @@ msgstr "ネットリスト属性を生成しない"
 #: kicad/cli/command_export_pcb_gerber.cpp:65
 #: pcbnew/dialogs/dialog_plot_base.cpp:208
 msgid "Subtract soldermask from silkscreen"
-msgstr "シルクスクリーンからソルダーマスクを除去する"
+msgstr "ハンダマスクに重なるシルク印刷を除去する"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:70
 msgid "Disable aperature macros"
