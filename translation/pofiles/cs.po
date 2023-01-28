@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-20 09:12-0800\n"
-"PO-Revision-Date: 2023-01-22 16:34+0000\n"
+"PO-Revision-Date: 2023-01-28 22:14+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.15.1\n"
+"X-Generator: Weblate 4.16-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -17761,9 +17761,8 @@ msgid "Annotate Automatically"
 msgstr "Automatické očíslování"
 
 #: eeschema/tools/ee_actions.cpp:739
-#, fuzzy
 msgid "Toggle automatic annotation of new parts symbols"
-msgstr "Automatické číslování symbolů"
+msgstr "Přepíná funkci automatického číslování pro nové symboly"
 
 #: eeschema/tools/ee_actions.cpp:744
 msgid "Repair Schematic"
@@ -17892,9 +17891,8 @@ msgid "Switch Segment Posture"
 msgstr "Změna polohy segmentu"
 
 #: eeschema/tools/ee_actions.cpp:846
-#, fuzzy
 msgid "Switches posture of the current segment."
-msgstr "Přidává mikrovia na konci aktuálně tahaného spoje."
+msgstr "Změní polohu aktuálního segmentu."
 
 #: eeschema/tools/ee_actions.cpp:852
 msgid "Finish Wire or Bus"
@@ -18082,7 +18080,7 @@ msgstr "Nelze přidat knihovnu '%s'."
 
 #: eeschema/tools/sch_editor_control.cpp:415
 msgid "Update symbols in schematic to refer to new library?"
-msgstr "Aktualizovat symboly ve schématu, aby se odkazovaly na novou knihovnu?"
+msgstr "Aktualizovat symboly ve schématu, aby odkazovaly na novou knihovnu?"
 
 #: eeschema/tools/sch_editor_control.cpp:723
 msgid "Error: duplicate sub-sheet names found in current sheet."
@@ -19311,16 +19309,18 @@ msgid "Show in Differential Mode"
 msgstr "Zobrazit v diferenciálním režimu"
 
 #: gerbview/tools/gerbview_actions.cpp:191
+#, fuzzy
 msgid "Show layers in differential compare mode"
-msgstr "Zobrazit vrstvy v režimu diferenciálního porovnání"
+msgstr "Zobrazit obrysy v režimu výplně"
 
 #: gerbview/tools/gerbview_actions.cpp:196
 msgid "Show in XOR Mode"
 msgstr "Zobrazit v režimu XOR"
 
 #: gerbview/tools/gerbview_actions.cpp:196
+#, fuzzy
 msgid "Show layers in exclusive-or compare mode"
-msgstr "Zobrazit vrstvy v exkluzivním režimu jako srovnávací"
+msgstr "Zobrazit vrstvy v režimu diff (porovnat)"
 
 #: gerbview/tools/gerbview_actions.cpp:201
 msgid "Flip Gerber View"
@@ -19617,14 +19617,16 @@ msgstr "Přesnost souřadnic gerber by měla být buď 5 nebo 6\n"
 #: kicad/cli/command_export_pcb_dxf.cpp:41
 #: kicad/cli/command_export_pcb_gerber.cpp:40
 #: kicad/cli/command_export_pcb_pdf.cpp:39
+#, fuzzy
 msgid "Exclude the reference designator text"
-msgstr "Vyloučit text referenčního označení"
+msgstr "Zahrnout označení reference"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:46
 #: kicad/cli/command_export_pcb_gerber.cpp:45
 #: kicad/cli/command_export_pcb_pdf.cpp:44
+#, fuzzy
 msgid "Exclude the value text"
-msgstr "Vyloučit text hodnoty"
+msgstr "Zahrnout textové hodnoty"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:51
 #: pcbnew/dialogs/dialog_plot_base.cpp:326
@@ -19670,12 +19672,13 @@ msgid "Precision of gerber coordinates, valid options: 5 or 6"
 msgstr "Přesnost souřadnic gerber, platné možnosti: 5 nebo 6"
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:44
+#, fuzzy
 msgid ""
 "Layers to include on each plot, comma separated list of untranslated layer "
 "names to include such as F.Cu,B.Cu"
 msgstr ""
-"Vrstvy k zahrnutí na každém vykreslení, čárkou oddělený seznam "
-"nepřekládaných názvů vrstev, které zahrnují jako F.Cu, B.Cu"
+"Čárkou oddělený seznam nepřeložených názvů vrstev tak, aby obsahovaly "
+"například F.Cu,B.Cu"
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:48
 msgid "Use the gerber plot settings already configured in the board file"
@@ -20685,8 +20688,9 @@ msgid "Reveal in Finder"
 msgstr "Odhalit ve vyhledávači"
 
 #: kicad/project_tree_pane.cpp:697
+#, fuzzy
 msgid "Reveals the directory in a Finder window"
-msgstr "Zobrazí adresář v okně Správce souborů"
+msgstr "Zobrazení adresáře projektu v Správci souborů"
 
 #: kicad/project_tree_pane.cpp:699
 msgid "Open Directory in File Explorer"
@@ -22935,12 +22939,13 @@ msgid "Write Data Failed"
 msgstr "Zápis dat se nezdařil"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:272
+#, fuzzy
 msgid ""
 "No data filename to save modifications.\n"
 "Do you want to exit and abandon your changes?"
 msgstr ""
-"K uložení změn není k dispozici žádný název dat.\n"
-"Chcete ukončit a opustit své změny?"
+"Data upravena, není žádný soubor k uložení úprav\n"
+"Chcete ukončit a vzdát se změn?"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:282
 #, c-format
@@ -23270,7 +23275,7 @@ msgstr "Zodd"
 
 #: pcb_calculator/transline_ident.cpp:339
 msgid "Odd mode impedance (lines driven by opposite (differential) voltages)"
-msgstr "Odd mód Impedance (čáry poháněné opačným (diferenciálním) napětím)"
+msgstr "Odd-mód impedance (spoje řízeným opačným (diferenciálním) napětím)"
 
 #: pcb_calculator/transline_ident.cpp:358
 msgid "Distance between strip and top metal"
@@ -23942,7 +23947,7 @@ msgstr "Převést linku do obdélníku"
 
 #: pcbnew/cleanup_item.cpp:60
 msgid "Merge overlapping shapes into pad"
-msgstr "Sloučit překrývající se tvary do plošky"
+msgstr "Spojení překrývajících se tvarů do plošky"
 
 #: pcbnew/cleanup_item.cpp:64
 msgid "Unknown cleanup action"
@@ -24401,10 +24406,8 @@ msgstr "Předpona pro spodní stranu:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:255
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:260
-#, fuzzy
 msgid "Optional prefix for solder side reference designations (e.g. B_)"
-msgstr ""
-"Volitelná předpona pro reference schématu na straně součástek (např. B_)"
+msgstr "Volitelná předpona pro reference schématu na straně pájení (např. B_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:264
 msgid "Exclude locked footprints"
@@ -24818,8 +24821,9 @@ msgid "Teardrop on Vias/Pads Properties"
 msgstr "Vlastnosti \"teardrop\" na prokovech/ploškách"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:213
+#, fuzzy
 msgid "Teardrop on Tracks Properties"
-msgstr "Vlastnosti Teardrop na spojích"
+msgstr "Nastavit spoje a prokovy Vlastnosti"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:217
 msgid "Teardrop Properties"
@@ -24836,26 +24840,30 @@ msgstr "Nastavení převodu"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:109
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:100
 #: pcbnew/tools/convert_tool.cpp:71
+#, fuzzy
 msgid "Use centerlines"
-msgstr "Použít středové čáry"
+msgstr "Použít metrické jednotky"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:230
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:113
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:104
 #: pcbnew/tools/convert_tool.cpp:75
+#, fuzzy
 msgid "Create bounding hull"
-msgstr "Vytvořit omezující obal"
+msgstr "Vytvořit soubor loga"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:234
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:118
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:109
 #: pcbnew/tools/convert_tool.cpp:79
+#, fuzzy
 msgid "Delete source objects after conversion"
-msgstr "Smazat zdrojové objekty po převodu"
+msgstr "Smazat objekty s gumou"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:243
+#, fuzzy
 msgid "Convert to Copper Zone"
-msgstr "Převést na zónu mědi"
+msgstr "Připojení k zónám mědi"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:426
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:164
@@ -24944,8 +24952,9 @@ msgstr "Plně šrafované"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:140
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:65
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:126
+#, fuzzy
 msgid "Outline hatch pitch:"
-msgstr "Šířka obrysu:"
+msgstr "Tloušťka obrysu:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:154
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:87
@@ -25113,12 +25122,13 @@ msgid "Export Settings to Other Similar Zones"
 msgstr "Exportovat nastavení do dalších podobných zón"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:396
+#, fuzzy
 msgid ""
 "Export this zone setup (excluding layer and net selection) to other similar "
 "copper zones (teardrops or usual copper zones)."
 msgstr ""
-"Exportovat nastavení této zóny (s výjimkou vrstvy a vybraných sítí) do "
-"ostatních podobných zón mědi (teardrop nebo obvyklé zóny mědi)."
+"Exportovat nastavení zóny (s výjimkou vrstvy a vybraných sítí) do ostatních "
+"zón mědi."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:141
 msgid "Copper Zone Properties"
@@ -25345,8 +25355,9 @@ msgid "Keep existing reference designators"
 msgstr "Nahradit shody v referenci schématu"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:355
+#, fuzzy
 msgid "Assign unique reference designators"
-msgstr "Přiřadit jedinečné označení reference schématu"
+msgstr "Přiřadit jedinečné označení reference na vložené symboly"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:357
 msgid ""
@@ -25359,12 +25370,13 @@ msgid "Create Array"
 msgstr "Vytvořit matrici"
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:223
+#, fuzzy
 msgid ""
 "This item was on a non-existing layer.\n"
 "It has been moved to the first defined layer."
 msgstr ""
-"Tato položka byla v neexistující vrstvě.\n"
-"Byla přesunuta do první definované vrstvy."
+"Tato položka byla na nepovolené nebo neexistující vrstvě.\n"
+"Byla přesunuta na první povolenou vrstvu."
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:312
 msgid "Change dimension properties"
@@ -25432,8 +25444,9 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:132
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:137
+#, fuzzy
 msgid "Text to print before the dimension value"
-msgstr "Text vytištěn před hodnotou kóty"
+msgstr "Tloušťka čar kót"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:141
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:114
@@ -25663,7 +25676,7 @@ msgstr "Spustit DRC"
 
 #: pcbnew/dialogs/dialog_drc.cpp:263
 msgid "DRC incomplete: could not compile custom design rules.  "
-msgstr "Neúplné DRC: nelze zkompilovat vlastní pravidla návrhu.  "
+msgstr "Nekompletní DRC: nelze zkompilovat vlastní pravidla návrhu.  "
 
 #: pcbnew/dialogs/dialog_drc.cpp:265 pcbnew/tools/board_inspection_tool.cpp:176
 msgid "Show design rules."
@@ -25688,8 +25701,9 @@ msgid "Run clearance resolution tool..."
 msgstr "Spusťte nástroj pro rozlišení izolační mezery..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:612
+#, fuzzy
 msgid "Run constraints resolution tool..."
-msgstr "Spusťte nástroj pro rozlišení omezení..."
+msgstr "Spusťte nástroj pro rozlišení izolační mezery..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:639
 msgid "Open the Board Setup... dialog"
@@ -26012,7 +26026,7 @@ msgstr "Další možnosti"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:110
 msgid "Ignore not mounted components"
-msgstr "Ignorovat nenamontované součástí"
+msgstr "Ignorujte nenamontované komponenty"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:111
 msgid "Do not show components not in BOM and not in place file"
@@ -26047,10 +26061,12 @@ msgid "Loose (0.1 mm)"
 msgstr "Volné (0,1 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:131
+#, fuzzy
 msgid ""
 "Tolerance sets the distance between two points that are considered joined."
 msgstr ""
-"Tolerance nastavuje vzdálenost mezi dvěma body, které se považují za spojené."
+"Tolerance nastavuje vzdálenost mezi dvěma body, které jsou považovány za "
+"spojené. Standard je 0,001 mm."
 
 #: pcbnew/dialogs/dialog_export_step_base.h:75
 msgid "Export STEP"
@@ -26287,8 +26303,9 @@ msgid "Wrap"
 msgstr "Vrátit se na začátek"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
+#, fuzzy
 msgid "Search footprint reference designators"
-msgstr "Hledejte v referencích pouzder"
+msgstr "Znova přiřadit pouzdra podle reference"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:66
 msgid "Search footprint values"
@@ -26503,14 +26520,15 @@ msgid "Pad clearance:"
 msgstr "Izolační mezera plošky:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:275
+#, fuzzy
 msgid ""
 "This is the local net clearance for all pad of this footprint\n"
 "If 0, the Netclass values are used\n"
 "This value can be superseded by a pad local value."
 msgstr ""
-"Toto je místní izolační mezera sítě pro všechny plošky tohoto pouzdra\n"
+"Toto je místní oddělovací mezera sítě pro všechny plošky tohoto pouzdra\n"
 "Je-li 0, budou použity hodnoty třídy sítě\n"
-"Tuto hodnotu lze nahradit místní hodnotou plošky."
+"Tato hodnota může být nahrazena místní hodnotou, platnou pro plošku."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:286
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:257
@@ -26543,6 +26561,7 @@ msgid "Solder paste absolute clearance:"
 msgstr "Absolutní izolační mezera pájecí pasty:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:304
+#, fuzzy
 msgid ""
 "This is the local clearance between pads and the solder paste for this "
 "footprint.\n"
@@ -26555,7 +26574,7 @@ msgstr ""
 "\n"
 "Tato hodnota může být nahrazena místní hodnotou plošky.\n"
 "Konečná hodnota mezery je součtem této hodnoty a poměru hodnoty mezery.\n"
-"Záporná hodnota znamená, že maska je menší než ploška."
+"Záporná hodnota znamená menší velikost masky než velikost plošky."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:315
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:286
@@ -26565,7 +26584,7 @@ msgid "Solder paste relative clearance:"
 msgstr "Relativní izolační mezera pájecí pasty:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:317
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -26576,12 +26595,11 @@ msgid ""
 "clearance value.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"Jedná se o lokální poměr izolační mezery použitý jako procento šířky a výšky "
-"plošky pro toto pouzdro.\n"
-"Hodnota 10 znamená, že hodnota horizontální mezery je 10% šířky plošky a "
-"hodnota vertikální mezery je 10% výšky plošky.\n"
+"Tato poměr v procentech lokální mezery mezi ploškami a pastou pro toto "
+"pouzdro.\n"
+"Hodnota 10 znamená, že hodnota mezera je 10% velikosti plošky\n"
 "Tuto hodnotu lze nahradit lokální hodnotou plošky.\n"
-"Konečná hodnota mezery je součtem této hodnoty a absolutní hodnoty mezery\n"
+"Konečná hodnota mezery je součtem této hodnoty a velikosti mezery\n"
 "Záporná hodnota znamená menší velikost masky než velikost plošky."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:340
@@ -26756,12 +26774,17 @@ msgstr ""
 "Konečná hodnota mezery je součtem této hodnoty a absolutní hodnoty mezery.\n"
 "Záporná hodnota znamená, že maska je menší než velikost plošky.\n"
 "Tuto hodnotu lze přepsat na základě ploška po plošce v Místní izolační "
+"mezera na kartě Nastavení, Vlastnosti plošky.\n"
+"Hodnota 10 znamená, že hodnota mezery je 10 procent velikosti plošky.\n"
+"Konečná hodnota izolační mezery je součtem této hodnoty a hodnoty izolační "
+"mezery.\n"
+"Záporná hodnota znamená, že maska je menší než velikost plošky.\n"
+"Tuto hodnotu lze přepsat na základě ploška po plošce v Místní izolační "
 "mezera na kartě Nastavení, Vlastnosti plošky."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:339
-#, fuzzy
 msgid "Net Ties"
-msgstr "Nástroje sítí"
+msgstr "Uzly sítě"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:341
 msgid "Pad groups allowed to short different nets:"
@@ -27437,9 +27460,8 @@ msgid "Circle Properties"
 msgstr "Vlastnosti kružnice"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:211
-#, fuzzy
 msgid "Center Point"
-msgstr "Zarovnat na střed"
+msgstr "Centrální bod"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:223
 msgid "Arc Properties"
@@ -28430,8 +28452,9 @@ msgid "Offset shape from hole"
 msgstr "Posun tvaru a díry"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:458
+#, fuzzy
 msgid "Specify pad to die length"
-msgstr "Vzdálenost od plošky po čip"
+msgstr "Délka od plošky po čip"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:493
 msgid ""
@@ -28478,6 +28501,7 @@ msgid "E.C.O.2"
 msgstr "E.C.O.2"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:549
+#, fuzzy
 msgid "Fabrication property:"
 msgstr "Výrobní vlastnosti:"
 
@@ -32792,7 +32816,7 @@ msgstr "Export do VRML selhal: Nelze přidat otvory na obrysy."
 
 #: pcbnew/exporters/exporter_vrml.cpp:1241
 msgid "No project when exporting the VRML file"
-msgstr ""
+msgstr "Žádný projekt při exportu souboru VRML"
 
 #: pcbnew/exporters/exporter_vrml.cpp:1301
 #, fuzzy
@@ -32821,7 +32845,7 @@ msgstr "Nastavení struktury desky není aktuální."
 
 #: pcbnew/exporters/step/exporter_step.cpp:324
 msgid "Determining PCB data\n"
-msgstr ""
+msgstr "Stanovení údajů o DPS\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:329
 msgid "Build STEP data\n"
@@ -32925,6 +32949,11 @@ msgid ""
 "This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
+"Pokud budou zóny na této desce znovu vyplněny, bude použito nastavení "
+"izolační mezery mezi mědí a okraji desky (viz Nastavení desky > Pravidla "
+"návrhu > Omezení).\n"
+"To může mít za následek odlišné výplně oproti předchozím verzím KiCadu, "
+"které používaly tloušťky čáry hranice desky na vrstvě Edge Cuts."
 
 #: pcbnew/files.cpp:614
 #, c-format
@@ -34854,7 +34883,7 @@ msgstr "Soubor nenalezen: '%s'."
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:134
 #, c-format
 msgid "Unknown mapping of the Altium layer '%s'."
-msgstr ""
+msgstr "Neznámé mapování vrstvy Altium '%s'."
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:182
 #, fuzzy, c-format
