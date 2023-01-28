@@ -172,7 +172,7 @@ void AM_PARAM::PushOperator( parm_item_type aType, int aValue )
  * @param aText = pointer to the parameter to read. Will be modified to point to the next field
  * @return true if a param is read, or false
  */
-bool AM_PARAM::ReadParam( char*& aText  )
+bool AM_PARAM::ReadParamFromAmDef( char*& aText  )
 {
     bool found = false;
     int ivalue;

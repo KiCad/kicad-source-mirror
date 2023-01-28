@@ -1020,14 +1020,14 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
         // all other symbols are illegal.
         if( *aText == '$' )  // local parameter declaration, inside the aperture macro
         {
-            am.m_LocalParamStack.push_back( AM_PARAM() );
-            AM_PARAM& param = am.m_LocalParamStack.back();
+            am.AddLocalParamDefToStack();
+            AM_PARAM& param = am.GetLastLocalParamDefFromStack();
             aText = GetNextLine(  aBuff, aBuffSize, aText, gerber_file );
 
             if( aText == nullptr)   // End of File
                 return false;
 
-            param.ReadParam( aText );
+            param.ReadParamFromAmDef( aText );
             continue;
         }
         else if( !isdigit(*aText)  )     // Ill. symbol
@@ -1114,7 +1114,7 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
             if( aText == nullptr)   // End of File
                 return false;
 
-            param.ReadParam( aText );
+            param.ReadParamFromAmDef( aText );
         }
 
         if( ii < paramCount )
@@ -1149,7 +1149,7 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
                 if( aText == nullptr )  // End of File
                     return false;
 
-                param.ReadParam( aText );
+                param.ReadParamFromAmDef( aText );
             }
         }
 
@@ -1158,10 +1158,11 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
         {
             prim.m_Params.push_back( AM_PARAM() );
             AM_PARAM& param = prim.m_Params.back();
-            param.ReadParam( aText );
+            param.ReadParamFromAmDef( aText );
         }
 
-        am.m_PrimitivesList.push_back( prim );
+        // The primitive description is now parsed: push it to the current aperture macro
+        am.AddPrimitiveToList( prim );
     }
 
     m_aperture_macros.insert( am );

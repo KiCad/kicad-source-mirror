@@ -32,6 +32,24 @@
 #include <aperture_macro.h>
 
 
+void APERTURE_MACRO::AddPrimitiveToList( AM_PRIMITIVE& aPrimitive )
+{
+    m_primitivesList.push_back( aPrimitive );
+    m_primitivesList.back().m_LocalParamLevel = m_localParamStack.size();
+}
+
+void APERTURE_MACRO::AddLocalParamDefToStack()
+{
+    m_localParamStack.push_back( AM_PARAM() );
+}
+
+
+AM_PARAM& APERTURE_MACRO::GetLastLocalParamDefFromStack()
+{
+    return m_localParamStack.back();
+}
+
+
 SHAPE_POLY_SET* APERTURE_MACRO::GetApertureMacroShape( const GERBER_DRAW_ITEM* aParent,
                                                        const VECTOR2I&         aShapePos )
 {
@@ -39,7 +57,7 @@ SHAPE_POLY_SET* APERTURE_MACRO::GetApertureMacroShape( const GERBER_DRAW_ITEM* a
 
     m_shape.RemoveAllContours();
 
-    for( AM_PRIMITIVE& prim_macro : m_PrimitivesList )
+    for( AM_PRIMITIVE& prim_macro : m_primitivesList )
     {
         if( prim_macro.m_Primitive_id == AMP_COMMENT )
             continue;
@@ -77,11 +95,11 @@ double APERTURE_MACRO::GetLocalParam( const D_CODE* aDcode, unsigned aParamId ) 
     // find parameter descr.
     const AM_PARAM * param = nullptr;
 
-    for( unsigned ii = 0; ii < m_LocalParamStack.size(); ii ++ )
+    for( unsigned ii = 0; ii < m_localParamStack.size(); ii ++ )
     {
-        if( m_LocalParamStack[ii].GetIndex() == aParamId )
+        if( m_localParamStack[ii].GetIndex() == aParamId )
         {
-            param = &m_LocalParamStack[ii];
+            param = &m_localParamStack[ii];
             break;
         }
     }

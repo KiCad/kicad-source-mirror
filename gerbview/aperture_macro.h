@@ -100,19 +100,31 @@ public:
      wxString      m_AmName;
 
     /**
-     * A sequence of AM_PRIMITIVEs
+     * Add a new ptimitive (  AMP_CIRCLE, AMP_LINE2 ...) to the list of primitives
+     * to define the full shape of the aperture macro
      */
-    std::vector<AM_PRIMITIVE> m_PrimitivesList;
+    void AddPrimitiveToList( AM_PRIMITIVE& aPrimitive );
 
-    /*  A deferred parameter can be defined in aperture macro,
-     *  but outside aperture primitives. Example
+    /**
+     * A deferred parameter can be defined in aperture macro,
+     * but outside aperture primitives. Example
      *  %AMRECTHERM*
      *  $4=$3/2*    parameter $4 is half value of parameter $3
-     * m_localparamStack handle a list of local deferred parameters
      */
-    AM_PARAMS m_LocalParamStack;
+    void AddLocalParamDefToStack();
+    AM_PARAM& GetLastLocalParamDefFromStack();
 
 private:
+    /**
+     * A list of AM_PRIMITIVEs to define the shape of the aperture macro
+     */
+    std::vector<AM_PRIMITIVE> m_primitivesList;
+
+    /**
+     * m_localparamStack handle a list of local deferred parameters
+     */
+    AM_PARAMS m_localParamStack;
+
     SHAPE_POLY_SET m_shape;         ///< The shape of the item, calculated by GetApertureMacroShape
 };
 

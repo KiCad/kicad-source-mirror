@@ -86,8 +86,8 @@ enum AM_PRIMITIVE_ID {
 
 
 /**
- * An aperture macro primitive as given in Table 3 of
- * http://gerbv.sourceforge.net/docs/rs274xrevd_e.pdf
+ * An aperture macro primitive as given in gerber layer format doc. See
+ * https://www.ucamco.com/en/news/gerber-layer-format-specification-revision-????
  */
 class AM_PRIMITIVE
 {
@@ -96,11 +96,16 @@ public:
     AM_PARAMS       m_Params;           ///< A sequence of parameters used by the primitive
     bool            m_GerbMetric;       // units for this primitive:
                                         // false = Inches, true = metric
+    int             m_LocalParamLevel;  // count of local param defined inside a aperture macro
+                                        // local param stack when this primitive is put in
+                                        // aperture macro primitive stack list
+                                        // not used outside a aperture macro
 
     AM_PRIMITIVE( bool aGerbMetric, AM_PRIMITIVE_ID aId = AMP_UNKNOWN )
     {
         m_Primitive_id = aId;
         m_GerbMetric = aGerbMetric;
+        m_LocalParamLevel = 0;
     }
 
 
