@@ -1,4 +1,4 @@
-// Copyright 2017 The Crashpad Authors. All rights reserved.
+// Copyright 2022 The Crashpad Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,18 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "util/misc/capture_context.h"
-
-#include <ostream>
-
-#include "base/check.h"
+#ifndef CRASHPAD_CLIENT_UPLOAD_BEHAVIOR_IOS_H_
+#define CRASHPAD_CLIENT_UPLOAD_BEHAVIOR_IOS_H_
 
 namespace crashpad {
 
-void CaptureContext(NativeCPUContext* context) {
-  // Don't use this file in production.
-  CHECK(false)
-      << "Don't use this! For cross builds only. See https://crbug.com/762167.";
-}
+//! \brief Enum to control upload behavior when processing pending reports.
+enum class UploadBehavior {
+  //! \brief Only upload reports while the application is active (e.g., in the
+  //!     foreground).
+  kUploadWhenAppIsActive = 1,
+
+  //! \brief Upload reports immediately, regardless of whether or not the
+  //!     application is active.
+  kUploadImmediately = 2,
+};
 
 }  // namespace crashpad
+
+#endif  // CRASHPAD_CLIENT_UPLOAD_BEHAVIOR_IOS_H_

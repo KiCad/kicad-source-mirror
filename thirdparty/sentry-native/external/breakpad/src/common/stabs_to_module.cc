@@ -1,5 +1,4 @@
-// Copyright (c) 2010 Google Inc.
-// All rights reserved.
+// Copyright 2010 Google LLC
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -11,7 +10,7 @@
 // copyright notice, this list of conditions and the following disclaimer
 // in the documentation and/or other materials provided with the
 // distribution.
-//     * Neither the name of Google Inc. nor the names of its
+//     * Neither the name of Google LLC nor the names of its
 // contributors may be used to endorse or promote products derived from
 // this software without specific prior written permission.
 //
@@ -192,9 +191,11 @@ void StabsToModule::Finalize() {
     }
   }
   // Now that everything has a size, add our functions to the module, and
-  // dispose of our private list.
+  // dispose of our private list. Delete the functions that we fail to add, so
+  // they aren't leaked.
   for (Module::Function* func: functions_)
-    module_->AddFunction(func);
+    if (!module_->AddFunction(func))
+      delete func;
   functions_.clear();
 }
 

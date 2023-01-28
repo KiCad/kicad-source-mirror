@@ -1,4 +1,4 @@
-// Copyright 2005 Google Inc. All Rights Reserved.
+// Copyright 2005 Google LLC
 // Author: chatham@google.com (Andrew Chatham)
 // Author: satorux@google.com (Satoru Takabayashi)
 //
@@ -39,6 +39,7 @@
 #include <unistd.h>
 
 #include <algorithm>
+#include <cstring>
 #include <map>
 #include <string>
 #include <vector>
@@ -182,7 +183,7 @@ class Elf64 {
 template<class ElfArch>
 class ElfSectionReader {
  public:
-  ElfSectionReader(const char* name, const string& path, int fd,
+  ElfSectionReader(const char* cname, const string& path, int fd,
                    const typename ElfArch::Shdr& section_header)
       : contents_aligned_(NULL),
         contents_(NULL),
@@ -196,6 +197,17 @@ class ElfSectionReader {
     // to process its contents.
     if (header_.sh_type == SHT_NOBITS || header_.sh_size == 0)
       return;
+    // extra sh_type check for string table.
+    std::string_view name{cname};
+    if ((name == ".strtab" || name == ".shstrtab") &&
+        header_.sh_type != SHT_STRTAB) {
+      fprintf(stderr,
+              "Invalid sh_type for string table section: expected "
+              "SHT_STRTAB or SHT_DYNSYM, but got %d\n",
+              header_.sh_type);
+      return;
+    }
+
     contents_aligned_ = mmap(NULL, size_aligned_, PROT_READ, MAP_SHARED,
                              fd, offset_aligned);
     // Set where the offset really should begin.
@@ -203,7 +215,7 @@ class ElfSectionReader {
                 (header_.sh_offset - offset_aligned);
 
     // Check for and handle any compressed contents.
-    //if (strncmp(name, ".zdebug_", strlen(".zdebug_")) == 0)
+    //if (name == ".zdebug_")
     //  DecompressZlibContents();
     // TODO(saugustine): Add support for proposed elf-section flag
     // "SHF_COMPRESS".
@@ -877,7 +889,7 @@ class ElfReaderImpl {
     if (reader == NULL)
       reader = new ElfSectionReader<ElfArch>(name, path_, fd_,
                                              section_headers_[num]);
-    return reader;
+    return reader->contents() ? reader : nullptr;
   }
 
   // Parse out the overall header information from the file and assert

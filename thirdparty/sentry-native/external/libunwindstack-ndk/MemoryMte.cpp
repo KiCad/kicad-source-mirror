@@ -23,8 +23,18 @@
 namespace unwindstack {
 
 long MemoryRemote::ReadTag(uint64_t addr) {
+#if defined(PTRACE_PEEKMTETAGS) || defined(PT_PEEKMTETAGS)
+  char tag;
+  iovec iov = {&tag, 1};
+  if (ptrace(PTRACE_PEEKMTETAGS, pid_, reinterpret_cast<void*>(addr), &iov) != 0 ||
+      iov.iov_len != 1) {
+    return -1;
+  }
+  return tag;
+#else
   (void)addr;
   return -1;
+#endif
 }
 
 long MemoryLocal::ReadTag(uint64_t addr) {

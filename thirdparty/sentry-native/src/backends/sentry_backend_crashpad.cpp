@@ -276,7 +276,6 @@ sentry__crashpad_backend_startup(
 
     base::FilePath database(options->database_path->path);
     base::FilePath handler(absolute_handler_path->path);
-    sentry__path_free(absolute_handler_path);
 
     std::map<std::string, std::string> annotations;
     std::vector<base::FilePath> attachments;
@@ -319,6 +318,42 @@ sentry__crashpad_backend_startup(
     bool success = client.StartHandler(handler, database, database, url,
         annotations, arguments, /* restartable */ true,
         /* asynchronous_start */ false, attachments);
+
+#ifdef CRASHPAD_WER_ENABLED
+    sentry_path_t *handler_dir = sentry__path_dir(absolute_handler_path);
+    sentry_path_t *wer_path = nullptr;
+    if (handler_dir) {
+        wer_path = sentry__path_join_str(handler_dir, "crashpad_wer.dll");
+        sentry__path_free(handler_dir);
+    }
+
+    if (wer_path && sentry__path_is_file(wer_path)) {
+        SENTRY_TRACEF("registering crashpad WER handler "
+                      "\"%" SENTRY_PATH_PRI "\"",
+            wer_path->path);
+
+        // The WER handler needs to be registered in the registry first.
+        DWORD dwOne = 1;
+        LSTATUS reg_res = RegSetKeyValueW(HKEY_CURRENT_USER,
+            L"Software\\Microsoft\\Windows\\Windows Error Reporting\\"
+            L"RuntimeExceptionHelperModules",
+            wer_path->path, REG_DWORD, &dwOne, sizeof(DWORD));
+        if (reg_res != ERROR_SUCCESS) {
+            SENTRY_WARN("registering crashpad WER handler in registry failed");
+        } else {
+            std::wstring wer_path_string(wer_path->path);
+            if (!client.RegisterWerModule(wer_path_string)) {
+                SENTRY_WARN("registering crashpad WER handler module failed");
+            }
+        }
+
+        sentry__path_free(wer_path);
+    } else {
+        SENTRY_WARN("crashpad WER handler module not found");
+    }
+#endif // CRASHPAD_WER_ENABLED
+
+    sentry__path_free(absolute_handler_path);
 
     if (success) {
         SENTRY_DEBUG("started crashpad client handler");

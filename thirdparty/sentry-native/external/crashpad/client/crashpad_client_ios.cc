@@ -1,4 +1,4 @@
-// Copyright 2020 The Crashpad Authors. All rights reserved.
+// Copyright 2020 The Crashpad Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -72,11 +72,14 @@ class CrashHandler : public Thread,
     instance_ = nullptr;
   }
 
-  bool Initialize(const base::FilePath& database,
-                  const std::string& url,
-                  const std::map<std::string, std::string>& annotations) {
+  bool Initialize(
+      const base::FilePath& database,
+      const std::string& url,
+      const std::map<std::string, std::string>& annotations,
+      internal::InProcessHandler::ProcessPendingReportsObservationCallback
+          callback) {
     INITIALIZATION_STATE_SET_INITIALIZING(initialized_);
-    if (!in_process_handler_.Initialize(database, url, annotations) ||
+    if (!in_process_handler_.Initialize(database, url, annotations, callback) ||
         !InstallMachExceptionHandler() ||
         // xnu turns hardware faults into Mach exceptions, so the only signal
         // left to register is SIGABRT, which never starts off as a hardware
@@ -145,9 +148,9 @@ class CrashHandler : public Thread,
         context, kMachExceptionSimulated, path);
   }
 
-  void StartProcessingPendingReports() {
+  void StartProcessingPendingReports(UploadBehavior upload_behavior) {
     INITIALIZATION_STATE_DCHECK_VALID(initialized_);
-    in_process_handler_.StartProcessingPendingReports();
+    in_process_handler_.StartProcessingPendingReports(upload_behavior);
   }
 
   void SetMachExceptionCallbackForTesting(void (*callback)()) {
@@ -411,10 +414,11 @@ CrashpadClient::~CrashpadClient() {}
 bool CrashpadClient::StartCrashpadInProcessHandler(
     const base::FilePath& database,
     const std::string& url,
-    const std::map<std::string, std::string>& annotations) {
+    const std::map<std::string, std::string>& annotations,
+    ProcessPendingReportsObservationCallback callback) {
   CrashHandler* crash_handler = CrashHandler::Get();
   DCHECK(crash_handler);
-  return crash_handler->Initialize(database, url, annotations);
+  return crash_handler->Initialize(database, url, annotations, callback);
 }
 
 // static
@@ -435,10 +439,11 @@ void CrashpadClient::ProcessIntermediateDump(
 }
 
 // static
-void CrashpadClient::StartProcessingPendingReports() {
+void CrashpadClient::StartProcessingPendingReports(
+    UploadBehavior upload_behavior) {
   CrashHandler* crash_handler = CrashHandler::Get();
   DCHECK(crash_handler);
-  crash_handler->StartProcessingPendingReports();
+  crash_handler->StartProcessingPendingReports(upload_behavior);
 }
 
 // static

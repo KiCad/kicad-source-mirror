@@ -1,4 +1,4 @@
-// Copyright 2022 The Crashpad Authors. All rights reserved.
+// Copyright 2022 The Crashpad Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,13 +17,17 @@
 #include <errno.h>
 #include <pthread.h>
 
+#include <ostream>
 #include <string>
 
 #include "base/check.h"
+#include "base/check_op.h"
 #include "build/build_config.h"
 
 #if BUILDFLAG(IS_APPLE)
 #include <mach/thread_info.h>
+#elif BUILDFLAG(IS_ANDROID)
+#include <sys/prctl.h>
 #endif
 
 namespace crashpad {
@@ -31,36 +35,44 @@ namespace test {
 
 namespace {
 
-#if BUILDFLAG(IS_LINUX)
+#if BUILDFLAG(IS_APPLE)
+constexpr size_t kPthreadNameMaxLen = MAXTHREADNAMESIZE;
+#elif BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_ANDROID) || BUILDFLAG(IS_CHROMEOS)
 // The kernel headers define this in linux/sched.h as TASK_COMM_LEN, but the
 // userspace copy of that header does not define it.
 constexpr size_t kPthreadNameMaxLen = 16;
-#elif BUILDFLAG(IS_APPLE)
-constexpr size_t kPthreadNameMaxLen = MAXTHREADNAMESIZE;
 #else
 #error Port to your platform
 #endif
 
 void SetCurrentThreadName(const std::string& thread_name) {
-#if BUILDFLAG(IS_LINUX)
-  PCHECK((errno = pthread_setname_np(pthread_self(), thread_name.c_str())) == 0)
-      << "pthread_setname_np";
-#elif BUILDFLAG(IS_APPLE)
+#if BUILDFLAG(IS_APPLE)
   // Apple's pthread_setname_np() sets errno instead of returning it.
   PCHECK(pthread_setname_np(thread_name.c_str()) == 0) << "pthread_setname_np";
+#elif BUILDFLAG(IS_ANDROID) && __ANDROID_API__ < 24
+  // pthread_setname_np() requires Android API 24 or later.
+  CHECK_LT(thread_name.length(), kPthreadNameMaxLen);
+  PCHECK(prctl(PR_SET_NAME, thread_name.c_str()) == 0) << "prctl(PR_SET_NAME)";
 #else
-#error Port to your platform
+  PCHECK((errno = pthread_setname_np(pthread_self(), thread_name.c_str())) == 0)
+      << "pthread_setname_np";
 #endif
 }
 
 std::string GetCurrentThreadName() {
   std::string result(kPthreadNameMaxLen, '\0');
+#if BUILDFLAG(IS_ANDROID) && __ANDROID_API__ < 24
+  static constexpr char kGetThreadNameFunctionName[] = "prctl";
+  PCHECK(prctl(PR_GET_NAME, result.data()) == 0) << "prctl(PR_GET_NAME)";
+#else
+  static constexpr char kGetThreadNameFunctionName[] = "pthread_getname_np";
   PCHECK((errno = pthread_getname_np(
               pthread_self(), result.data(), result.length())) == 0)
       << "pthread_getname_np";
+#endif
   const auto result_nul_idx = result.find('\0');
   CHECK(result_nul_idx != std::string::npos)
-      << "pthread_getname_np did not NUL terminate";
+      << kGetThreadNameFunctionName << " did not NUL terminate";
   result.resize(result_nul_idx);
   return result;
 }

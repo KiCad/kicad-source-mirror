@@ -1,4 +1,4 @@
-// Copyright 2022 The Crashpad Authors. All rights reserved.
+// Copyright 2022 The Crashpad Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -32,9 +32,14 @@ class ScopedSetThreadName final {
 
   ~ScopedSetThreadName();
 
+#if BUILDFLAG(IS_WIN) || DOXYGEN
+  //! \brief Returns `true` if Windows supports setting and getting thread name.
+  static bool IsSupported();
+#endif
+
  private:
 #if BUILDFLAG(IS_WIN)
-  const std::wstring original_name_;
+  std::wstring original_name_;
 #else
   const std::string original_name_;
 #endif

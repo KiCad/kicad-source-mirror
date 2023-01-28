@@ -737,6 +737,10 @@ sentry_transaction_start(
     // traces_sampler.
     sentry_value_decref(sampling_ctx);
 
+    if (!opaque_tx_cxt) {
+        return NULL;
+    }
+
     sentry_value_t tx_cxt = opaque_tx_cxt->inner;
 
     // If the parent span ID is some empty-ish value, just remove it
@@ -1001,11 +1005,11 @@ sentry_span_finish(sentry_span_t *opaque_span)
         sentry_value_set_by_key(root_transaction, "spans", spans);
     }
     sentry_value_append(spans, span);
-    sentry__span_free(opaque_span);
+    sentry__span_decref(opaque_span);
     return;
 
 fail:
-    sentry__span_free(opaque_span);
+    sentry__span_decref(opaque_span);
     return;
 }
 

@@ -315,8 +315,14 @@ Other important configuration options include:
 
 - The crashpad backend on macOS currently has no support for notifying the crashing
   process, and can thus not properly terminate sessions or call the registered
-  `before_send` hook. It will also lose any events that have been queued for
+  `before_send` or `on_crash` hook. It will also lose any events that have been queued for
   sending at time of crash.
+- The Crashpad backend on Windows supports fast-fail crashes, which bypass SEH (Structured
+  Exception Handling) primarily for security reasons. `sentry-native` registers a WER (Windows Error
+  Reporting) module, which signals the `crashpad_handler` to send a minidump when a fast-fail crash occurs
+  But since this process bypasses SEH, the application local exception handler is no longer invoked, which
+  also means that for these kinds of crashes, `before_send` and `on_crash` will not be invoked before
+  sending the minidump and thus have no effect.
 
 ## Development
 

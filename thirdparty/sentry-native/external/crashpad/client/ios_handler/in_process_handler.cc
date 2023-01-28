@@ -1,4 +1,4 @@
-// Copyright 2021 The Crashpad Authors. All rights reserved.
+// Copyright 2021 The Crashpad Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -65,13 +65,14 @@ InProcessHandler::~InProcessHandler() {
   if (cached_writer_) {
     cached_writer_->Close();
   }
-  UpdatePruneAndUploadThreads(false);
+  UpdatePruneAndUploadThreads(false, UploadBehavior::kUploadWhenAppIsActive);
 }
 
 bool InProcessHandler::Initialize(
     const base::FilePath& database,
     const std::string& url,
-    const std::map<std::string, std::string>& annotations) {
+    const std::map<std::string, std::string>& annotations,
+    ProcessPendingReportsObservationCallback callback) {
   INITIALIZATION_STATE_SET_INITIALIZING(initialized_);
   annotations_ = annotations;
   database_ = CrashReportDatabase::Initialize(database);
@@ -92,7 +93,7 @@ bool InProcessHandler::Initialize(
     upload_thread_options.identify_client_via_url = true;
 
     upload_thread_.reset(new CrashReportUploadThread(
-        database_.get(), url, upload_thread_options));
+        database_.get(), url, upload_thread_options, callback));
   }
 
   if (!CreateDirectory(database))
@@ -117,7 +118,8 @@ bool InProcessHandler::Initialize(
     system_data_.SetActiveApplicationCallback([this](bool active) {
       dispatch_async(
           dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            UpdatePruneAndUploadThreads(active);
+            UpdatePruneAndUploadThreads(active,
+                                        UploadBehavior::kUploadWhenAppIsActive);
           });
     });
   }
@@ -271,7 +273,8 @@ void InProcessHandler::ProcessIntermediateDump(
   }
 }
 
-void InProcessHandler::StartProcessingPendingReports() {
+void InProcessHandler::StartProcessingPendingReports(
+    UploadBehavior upload_behavior) {
   if (!upload_thread_)
     return;
 
@@ -283,15 +286,27 @@ void InProcessHandler::StartProcessingPendingReports() {
   // TODO(crbug.com/crashpad/400): Consider moving prune and upload thread to
   // BackgroundTasks and/or NSURLSession. This might allow uploads to continue
   // in the background.
-  UpdatePruneAndUploadThreads(system_data_.IsApplicationActive());
+  UpdatePruneAndUploadThreads(system_data_.IsApplicationActive(),
+                              upload_behavior);
 }
 
-void InProcessHandler::UpdatePruneAndUploadThreads(bool active) {
+void InProcessHandler::UpdatePruneAndUploadThreads(
+    bool active,
+    UploadBehavior upload_behavior) {
   base::AutoLock lock_owner(prune_and_upload_lock_);
   // TODO(crbug.com/crashpad/400): Consider moving prune and upload thread to
   // BackgroundTasks and/or NSURLSession. This might allow uploads to continue
   // in the background.
-  if (active) {
+  bool threads_should_run;
+  switch (upload_behavior) {
+    case UploadBehavior::kUploadWhenAppIsActive:
+      threads_should_run = active;
+      break;
+    case UploadBehavior::kUploadImmediately:
+      threads_should_run = true;
+      break;
+  }
+  if (threads_should_run) {
     if (!prune_thread_->is_running())
       prune_thread_->Start();
     if (upload_thread_enabled_ && !upload_thread_->is_running()) {

@@ -1,4 +1,4 @@
-// Copyright 2015 The Crashpad Authors. All rights reserved.
+// Copyright 2015 The Crashpad Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -643,18 +643,8 @@ bool ProcessSnapshotMinidump::InitializeThreadNames() {
       return false;
     }
 
-    // XXX sentry maintainers:
-    //    the upstream line
-    //
-    //    thread_names_.emplace(minidump_thread_name.ThreadId, std::move(name));
-    //
-    //    fails to compile on GCC (which is untested/-supported by the crashpad
-    //    maintainers). emplace() takes its parameters as rvalue-references
-    //    which is illegal when referencing a bitfield (or packed struct).
-    //
-    //    Creating an explicit copy by-passes the issue, trading for more
-    //    (typically two) instructions per thread-name.
-    uint32_t thread_id = minidump_thread_name.ThreadId;
+    // See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=36566
+    const uint32_t thread_id = minidump_thread_name.ThreadId;
     thread_names_.emplace(thread_id, std::move(name));
   }
 

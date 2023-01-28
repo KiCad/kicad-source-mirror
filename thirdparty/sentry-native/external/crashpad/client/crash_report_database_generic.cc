@@ -1,4 +1,4 @@
-// Copyright 2018 The Crashpad Authors. All rights reserved.
+// Copyright 2018 The Crashpad Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
+#include <mutex>
 #include <tuple>
 #include <utility>
 
@@ -258,15 +259,15 @@ class CrashReportDatabaseGeneric : public CrashReportDatabase {
   static bool WriteMetadata(const base::FilePath& path, const Report& report);
 
   Settings& SettingsInternal() {
-    if (!settings_init_)
+    std::call_once(settings_init_, [this]() {
       settings_.Initialize(base_dir_.Append(kSettings));
-    settings_init_ = true;
+    });
     return settings_;
   }
 
   base::FilePath base_dir_;
   Settings settings_;
-  bool settings_init_ = false;
+  std::once_flag settings_init_;
   InitializationStateDcheck initialized_;
 };
 
@@ -548,6 +549,16 @@ int CrashReportDatabaseGeneric::CleanDatabase(time_t lockfile_ttl) {
   removed += CleanReportsInState(kPending, lockfile_ttl);
   removed += CleanReportsInState(kCompleted, lockfile_ttl);
   CleanOrphanedAttachments();
+#if !CRASHPAD_FLOCK_ALWAYS_SUPPORTED
+  base::FilePath settings_path(kSettings);
+  if (Settings::IsLockExpired(settings_path, lockfile_ttl)) {
+    base::FilePath lockfile_path(settings_path.value() +
+                                 Settings::kLockfileExtension);
+    if (LoggingRemoveFile(lockfile_path)) {
+      ++removed;
+    }
+  }
+#endif  // !CRASHPAD_FLOCK_ALWAYS_SUPPORTED
   return removed;
 }
 

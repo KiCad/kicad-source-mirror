@@ -1,4 +1,4 @@
-// Copyright 2018 The Crashpad Authors. All rights reserved.
+// Copyright 2018 The Crashpad Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -147,7 +147,7 @@ CRASHPAD_CHILD_TEST_MAIN(ProcessReaderChildThreadsTestMain) {
   EXPECT_EQ(status, ZX_OK);
 
   constexpr size_t kNumThreads = 5;
-  struct ThreadData thread_data[kNumThreads] = {{0}};
+  struct ThreadData thread_data[kNumThreads] = {{0, 0}};
 
   for (size_t i = 0; i < kNumThreads; ++i) {
     thread_data[i] = {

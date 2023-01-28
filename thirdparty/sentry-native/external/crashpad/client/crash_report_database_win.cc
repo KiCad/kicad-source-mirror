@@ -1,4 +1,4 @@
-// Copyright 2015 The Crashpad Authors. All rights reserved.
+// Copyright 2015 The Crashpad Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@
 #include <time.h>
 #include <wchar.h>
 
+#include <mutex>
 #include <tuple>
 #include <utility>
 
@@ -663,15 +664,15 @@ class CrashReportDatabaseWin : public CrashReportDatabase {
   std::unique_ptr<Metadata> AcquireMetadata();
 
   Settings& SettingsInternal() {
-    if (!settings_init_)
+    std::call_once(settings_init_, [this]() {
       settings_.Initialize(base_dir_.Append(kSettings));
-    settings_init_ = true;
+    });
     return settings_;
   }
 
   base::FilePath base_dir_;
   Settings settings_;
-  bool settings_init_;
+  std::once_flag settings_init_;
   InitializationStateDcheck initialized_;
 };
 
@@ -679,7 +680,7 @@ CrashReportDatabaseWin::CrashReportDatabaseWin(const base::FilePath& path)
     : CrashReportDatabase(),
       base_dir_(path),
       settings_(),
-      settings_init_(false),
+      settings_init_(),
       initialized_() {}
 
 CrashReportDatabaseWin::~CrashReportDatabaseWin() {

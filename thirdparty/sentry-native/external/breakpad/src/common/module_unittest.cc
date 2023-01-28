@@ -1,5 +1,4 @@
-// Copyright (c) 2010 Google Inc.
-// All rights reserved.
+// Copyright 2010 Google LLC
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -11,7 +10,7 @@
 // copyright notice, this list of conditions and the following disclaimer
 // in the documentation and/or other materials provided with the
 // distribution.
-//     * Neither the name of Google Inc. nor the names of its
+//     * Neither the name of Google LLC nor the names of its
 // contributors may be used to endorse or promote products derived from
 // this software without specific prior written permission.
 //
@@ -45,11 +44,12 @@
 #include "common/using_std_string.h"
 
 using google_breakpad::Module;
+using google_breakpad::StringView;
 using std::stringstream;
 using std::vector;
 using testing::ContainerEq;
 
-static Module::Function* generate_duplicate_function(const string& name) {
+static Module::Function* generate_duplicate_function(StringView name) {
   const Module::Address DUP_ADDRESS = 0xd35402aac7a7ad5cULL;
   const Module::Address DUP_SIZE = 0x200b26e605f99071ULL;
   const Module::Address DUP_PARAMETER_SIZE = 0xf14ac4fed48c4a99ULL;
@@ -67,7 +67,7 @@ static Module::Function* generate_duplicate_function(const string& name) {
 #define MODULE_ID "id-string"
 #define MODULE_CODE_ID "code-id-string"
 
-TEST(Write, Header) {
+TEST(Module, WriteHeader) {
   stringstream s;
   Module m(MODULE_NAME, MODULE_OS, MODULE_ARCH, MODULE_ID);
   m.Write(s, ALL_SYMBOL_DATA);
@@ -76,7 +76,7 @@ TEST(Write, Header) {
                contents.c_str());
 }
 
-TEST(Write, HeaderCodeId) {
+TEST(Module, WriteHeaderCodeId) {
   stringstream s;
   Module m(MODULE_NAME, MODULE_OS, MODULE_ARCH, MODULE_ID, MODULE_CODE_ID);
   m.Write(s, ALL_SYMBOL_DATA);
@@ -86,7 +86,7 @@ TEST(Write, HeaderCodeId) {
                contents.c_str());
 }
 
-TEST(Write, OneLineFunc) {
+TEST(Module, WriteOneLineFunc) {
   stringstream s;
   Module m(MODULE_NAME, MODULE_OS, MODULE_ARCH, MODULE_ID);
 
@@ -111,7 +111,7 @@ TEST(Write, OneLineFunc) {
                contents.c_str());
 }
 
-TEST(Write, RelativeLoadAddress) {
+TEST(Module, WriteRelativeLoadAddress) {
   stringstream s;
   Module m(MODULE_NAME, MODULE_OS, MODULE_ARCH, MODULE_ID);
 
@@ -169,7 +169,7 @@ TEST(Write, RelativeLoadAddress) {
                contents.c_str());
 }
 
-TEST(Write, OmitUnusedFiles) {
+TEST(Module, WriteOmitUnusedFiles) {
   Module m(MODULE_NAME, MODULE_OS, MODULE_ARCH, MODULE_ID);
 
   // Create some source files.
@@ -220,7 +220,7 @@ TEST(Write, OmitUnusedFiles) {
                contents.c_str());
 }
 
-TEST(Write, NoCFI) {
+TEST(Module, WriteNoCFI) {
   stringstream s;
   Module m(MODULE_NAME, MODULE_OS, MODULE_ARCH, MODULE_ID);
 
@@ -266,7 +266,7 @@ TEST(Write, NoCFI) {
                contents.c_str());
 }
 
-TEST(Construct, AddFunction) {
+TEST(Module, ConstructAddFunction) {
   stringstream s;
   Module m(MODULE_NAME, MODULE_OS, MODULE_ARCH, MODULE_ID);
 
@@ -308,7 +308,62 @@ TEST(Construct, AddFunction) {
   EXPECT_EQ((size_t) 2, vec.size());
 }
 
-TEST(Construct, AddFrames) {
+TEST(Module, WriteOutOfRangeAddresses) {
+  stringstream s;
+  Module m(MODULE_NAME, MODULE_OS, MODULE_ARCH, MODULE_ID);
+
+  // Specify an allowed address range, representing a PT_LOAD segment in a
+  // module.
+  vector<Module::Range> address_ranges = {
+    Module::Range(0x2000ULL, 0x1000ULL),
+  };
+  m.SetAddressRanges(address_ranges);
+
+  // Add three stack frames (one lower, one in, and one higher than the allowed
+  // address range).  Only the middle frame should be captured.
+  Module::StackFrameEntry* entry1 = new Module::StackFrameEntry();
+  entry1->address = 0x1000ULL;
+  entry1->size = 0x100ULL;
+  m.AddStackFrameEntry(entry1);
+  Module::StackFrameEntry* entry2 = new Module::StackFrameEntry();
+  entry2->address = 0x2000ULL;
+  entry2->size = 0x100ULL;
+  m.AddStackFrameEntry(entry2);
+  Module::StackFrameEntry* entry3 = new Module::StackFrameEntry();
+  entry3->address = 0x3000ULL;
+  entry3->size = 0x100ULL;
+  m.AddStackFrameEntry(entry3);
+
+  // Add a function outside the allowed range.
+  Module::File* file = m.FindFile("file_name.cc");
+  Module::Function* function = new Module::Function(
+      "function_name", 0x4000ULL);
+  Module::Range range(0x4000ULL, 0x1000ULL);
+  function->ranges.push_back(range);
+  function->parameter_size = 0x100ULL;
+  Module::Line line = { 0x4000ULL, 0x100ULL, file, 67519080 };
+  function->lines.push_back(line);
+  m.AddFunction(function);
+
+  // Add an extern outside the allowed range.
+  Module::Extern* extern1 = new Module::Extern(0x5000ULL);
+  extern1->name = "_xyz";
+  m.AddExtern(extern1);
+
+  m.Write(s, ALL_SYMBOL_DATA);
+
+  EXPECT_STREQ("MODULE os-name architecture id-string name with spaces\n"
+               "STACK CFI INIT 2000 100 \n",
+               s.str().c_str());
+
+  // Cleanup - Prevent Memory Leak errors.
+  delete (extern1);
+  delete (function);
+  delete (entry3);
+  delete (entry1);
+}
+
+TEST(Module, ConstructAddFrames) {
   stringstream s;
   Module m(MODULE_NAME, MODULE_OS, MODULE_ARCH, MODULE_ID);
 
@@ -395,7 +450,7 @@ TEST(Construct, AddFrames) {
   EXPECT_THAT(entries[2]->rule_changes, ContainerEq(entry3_changes));
 }
 
-TEST(Construct, UniqueFiles) {
+TEST(Module, ConstructUniqueFiles) {
   Module m(MODULE_NAME, MODULE_OS, MODULE_ARCH, MODULE_ID);
   Module::File* file1 = m.FindFile("foo");
   Module::File* file2 = m.FindFile(string("bar"));
@@ -408,7 +463,7 @@ TEST(Construct, UniqueFiles) {
   EXPECT_TRUE(m.FindExistingFile("baz") == NULL);
 }
 
-TEST(Construct, DuplicateFunctions) {
+TEST(Module, ConstructDuplicateFunctions) {
   stringstream s;
   Module m(MODULE_NAME, MODULE_OS, MODULE_ARCH, MODULE_ID);
 
@@ -417,7 +472,10 @@ TEST(Construct, DuplicateFunctions) {
   Module::Function* function2 = generate_duplicate_function("_without_form");
 
   m.AddFunction(function1);
-  m.AddFunction(function2);
+  // If this succeeds, we'll have a double-free with the `delete` below. Avoid
+  // that.
+  ASSERT_FALSE(m.AddFunction(function2));
+  delete function2;
 
   m.Write(s, ALL_SYMBOL_DATA);
   string contents = s.str();
@@ -427,7 +485,7 @@ TEST(Construct, DuplicateFunctions) {
                contents.c_str());
 }
 
-TEST(Construct, FunctionsWithSameAddress) {
+TEST(Module, ConstructFunctionsWithSameAddress) {
   stringstream s;
   Module m(MODULE_NAME, MODULE_OS, MODULE_ARCH, MODULE_ID);
 
@@ -448,9 +506,37 @@ TEST(Construct, FunctionsWithSameAddress) {
                contents.c_str());
 }
 
+// If multiple fields are enabled, only one function is included per address.
+// The entry will be tagged with `m` to show that there are multiple symbols
+// at that address.
+// TODO(lgrey): Remove the non-multiple versions of these tests and remove the
+// suffixes from the suffxed ones when removing `enable_multiple_field_`.
+TEST(Module, ConstructFunctionsWithSameAddressMultiple) {
+  stringstream s;
+  Module m(MODULE_NAME, MODULE_OS, MODULE_ARCH, MODULE_ID, "", true);
+
+  // Two functions.
+  Module::Function* function1 = generate_duplicate_function("_without_form");
+  Module::Function* function2 = generate_duplicate_function("_and_void");
+
+  m.AddFunction(function1);
+  // If this succeeds, we'll have a double-free with the `delete` below. Avoid
+  // that.
+  ASSERT_FALSE(m.AddFunction(function2));
+  delete function2;
+
+  m.Write(s, ALL_SYMBOL_DATA);
+  string contents = s.str();
+  EXPECT_STREQ(
+      "MODULE os-name architecture id-string name with spaces\n"
+      "FUNC m d35402aac7a7ad5c 200b26e605f99071 f14ac4fed48c4a99"
+      " _without_form\n",
+      contents.c_str());
+}
+
 // Externs should be written out as PUBLIC records, sorted by
 // address.
-TEST(Construct, Externs) {
+TEST(Module, ConstructExterns) {
   stringstream s;
   Module m(MODULE_NAME, MODULE_OS, MODULE_ARCH, MODULE_ID);
 
@@ -475,7 +561,7 @@ TEST(Construct, Externs) {
 
 // Externs with the same address should only keep the first entry
 // added.
-TEST(Construct, DuplicateExterns) {
+TEST(Module, ConstructDuplicateExterns) {
   stringstream s;
   Module m(MODULE_NAME, MODULE_OS, MODULE_ARCH, MODULE_ID);
 
@@ -496,10 +582,33 @@ TEST(Construct, DuplicateExterns) {
                "PUBLIC ffff 0 _xyz\n",
                contents.c_str());
 }
+// Externs with the same address  have the `m` tag if the multiple field are
+// enabled.
+TEST(Module, ConstructDuplicateExternsMultiple) {
+  stringstream s;
+  Module m(MODULE_NAME, MODULE_OS, MODULE_ARCH, MODULE_ID, "", true);
+
+  // Two externs.
+  Module::Extern* extern1 = new Module::Extern(0xffff);
+  extern1->name = "_xyz";
+  Module::Extern* extern2 = new Module::Extern(0xffff);
+  extern2->name = "_abc";
+
+  m.AddExtern(extern1);
+  m.AddExtern(extern2);
+
+  m.Write(s, ALL_SYMBOL_DATA);
+  string contents = s.str();
+
+  EXPECT_STREQ("MODULE " MODULE_OS " " MODULE_ARCH " " MODULE_ID " " MODULE_NAME
+               "\n"
+               "PUBLIC m ffff 0 _xyz\n",
+               contents.c_str());
+}
 
 // If there exists an extern and a function at the same address, only write
 // out the FUNC entry.
-TEST(Construct, FunctionsAndExternsWithSameAddress) {
+TEST(Module, ConstructFunctionsAndExternsWithSameAddress) {
   stringstream s;
   Module m(MODULE_NAME, MODULE_OS, MODULE_ARCH, MODULE_ID);
 
@@ -529,9 +638,40 @@ TEST(Construct, FunctionsAndExternsWithSameAddress) {
 }
 
 // If there exists an extern and a function at the same address, only write
+// out the FUNC entry, and mark it with `m` if the multiple field is enabled.
+TEST(Module, ConstructFunctionsAndExternsWithSameAddressMultiple) {
+  stringstream s;
+  Module m(MODULE_NAME, MODULE_OS, MODULE_ARCH, MODULE_ID, "", true);
+
+  // Two externs.
+  Module::Extern* extern1 = new Module::Extern(0xabc0);
+  extern1->name = "abc";
+  Module::Extern* extern2 = new Module::Extern(0xfff0);
+  extern2->name = "xyz";
+
+  m.AddExtern(extern1);
+  m.AddExtern(extern2);
+
+  Module::Function* function = new Module::Function("_xyz", 0xfff0);
+  Module::Range range(0xfff0, 0x10);
+  function->ranges.push_back(range);
+  function->parameter_size = 0;
+  m.AddFunction(function);
+
+  m.Write(s, ALL_SYMBOL_DATA);
+  string contents = s.str();
+
+  EXPECT_STREQ("MODULE " MODULE_OS " " MODULE_ARCH " " MODULE_ID " " MODULE_NAME
+               "\n"
+               "FUNC m fff0 10 0 _xyz\n"
+               "PUBLIC abc0 0 abc\n",
+               contents.c_str());
+}
+
+// If there exists an extern and a function at the same address, only write
 // out the FUNC entry. For ARM THUMB, the extern that comes from the ELF
 // symbol section has bit 0 set.
-TEST(Construct, FunctionsAndThumbExternsWithSameAddress) {
+TEST(Module, ConstructFunctionsAndThumbExternsWithSameAddress) {
   stringstream s;
   Module m(MODULE_NAME, MODULE_OS, "arm", MODULE_ID);
 
@@ -565,59 +705,4 @@ TEST(Construct, FunctionsAndThumbExternsWithSameAddress) {
                "PUBLIC abc1 0 thumb_abc\n"
                "PUBLIC cc00 0 arm_func\n",
                contents.c_str());
-}
-
-TEST(Write, OutOfRangeAddresses) {
-  stringstream s;
-  Module m(MODULE_NAME, MODULE_OS, MODULE_ARCH, MODULE_ID);
-
-  // Specify an allowed address range, representing a PT_LOAD segment in a
-  // module.
-  vector<Module::Range> address_ranges = {
-    Module::Range(0x2000ULL, 0x1000ULL),
-  };
-  m.SetAddressRanges(address_ranges);
-
-  // Add three stack frames (one lower, one in, and one higher than the allowed
-  // address range).  Only the middle frame should be captured.
-  Module::StackFrameEntry* entry1 = new Module::StackFrameEntry();
-  entry1->address = 0x1000ULL;
-  entry1->size = 0x100ULL;
-  m.AddStackFrameEntry(entry1);
-  Module::StackFrameEntry* entry2 = new Module::StackFrameEntry();
-  entry2->address = 0x2000ULL;
-  entry2->size = 0x100ULL;
-  m.AddStackFrameEntry(entry2);
-  Module::StackFrameEntry* entry3 = new Module::StackFrameEntry();
-  entry3->address = 0x3000ULL;
-  entry3->size = 0x100ULL;
-  m.AddStackFrameEntry(entry3);
-
-  // Add a function outside the allowed range.
-  Module::File* file = m.FindFile("file_name.cc");
-  Module::Function* function = new Module::Function(
-      "function_name", 0x4000ULL);
-  Module::Range range(0x4000ULL, 0x1000ULL);
-  function->ranges.push_back(range);
-  function->parameter_size = 0x100ULL;
-  Module::Line line = { 0x4000ULL, 0x100ULL, file, 67519080 };
-  function->lines.push_back(line);
-  m.AddFunction(function);
-
-  // Add an extern outside the allowed range.
-  Module::Extern* extern1 = new Module::Extern(0x5000ULL);
-  extern1->name = "_xyz";
-  m.AddExtern(extern1);
-
-  m.Write(s, ALL_SYMBOL_DATA);
-
-  EXPECT_STREQ("MODULE os-name architecture id-string name with spaces\n"
-               "STACK CFI INIT 2000 100 \n",
-               s.str().c_str());
-
-  // Cleanup - Prevent Memory Leak errors.
-  delete (extern1);
-  delete (function);
-  delete (entry3);
-  delete (entry1);
 }

@@ -30,7 +30,7 @@ extern "C" {
 #        define SENTRY_SDK_NAME "sentry.native"
 #    endif
 #endif
-#define SENTRY_SDK_VERSION "0.5.0"
+#define SENTRY_SDK_VERSION "0.5.4"
 #define SENTRY_SDK_USER_AGENT SENTRY_SDK_NAME "/" SENTRY_SDK_VERSION
 
 /* common platform detection */
@@ -787,6 +787,11 @@ SENTRY_API void sentry_options_set_transport(
  * event, following the cross-SDK session filter order:
  *
  * https://develop.sentry.dev/sdk/sessions/#filter-order
+ *
+ * On Windows the crashpad backend can capture fast-fail crashes which by-pass
+ * SEH. Since the `before_send` is called by a local exception-handler, it will
+ * not be invoked when such a crash happened, even though a minidump will be
+ * sent.
  */
 typedef sentry_value_t (*sentry_event_function_t)(
     sentry_value_t event, void *hint, void *closure);
@@ -841,6 +846,10 @@ SENTRY_API void sentry_options_set_before_send(
  *
  *  - does not work with crashpad on macOS.
  *  - for breakpad on Linux the `uctx` parameter is always NULL.
+ *  - on Windows the crashpad backend can capture fast-fail crashes which
+ * by-pass SEH. Since `on_crash` is called by a local exception-handler, it will
+ * not be invoked when such a crash happened, even though a minidump will be
+ * sent.
  */
 typedef sentry_value_t (*sentry_crash_function_t)(
     const sentry_ucontext_t *uctx, sentry_value_t event, void *closure);

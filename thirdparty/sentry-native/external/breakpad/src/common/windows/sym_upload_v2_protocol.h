@@ -1,5 +1,4 @@
-// Copyright (c) 2022, Google Inc.
-// All rights reserved.
+// Copyright 2022 Google LLC
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -11,7 +10,7 @@
 // copyright notice, this list of conditions and the following disclaimer
 // in the documentation and/or other materials provided with the
 // distribution.
-//     * Neither the name of Google Inc. nor the names of its
+//     * Neither the name of Google LLC nor the names of its
 // contributors may be used to endorse or promote products derived from
 // this software without specific prior written permission.
 //
@@ -48,6 +47,8 @@ namespace google_breakpad {
 //   "DSYM"
 //   "PDB"
 //   "SOURCE_MAP"
+// If |product_name| is non-empty then it will be sent as part of the symbol
+// metadata.
 // If |force| is set then it will overwrite an existing file with the
 // same |debug_file| and |debug_id| in the store.
 bool SymUploadV2ProtocolSend(const wchar_t* api_url,
@@ -57,6 +58,7 @@ bool SymUploadV2ProtocolSend(const wchar_t* api_url,
                              const std::wstring& debug_id,
                              const std::wstring& symbol_filename,
                              const std::wstring& symbol_type,
+                             const std::wstring& product_name,
                              bool force);
 
 }  // namespace google_breakpad

@@ -1,4 +1,4 @@
-// Copyright 2018 The Crashpad Authors. All rights reserved.
+// Copyright 2018 The Crashpad Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -45,9 +45,9 @@
 #include "util/linux/socket.h"
 #include "util/misc/address_sanitizer.h"
 #include "util/misc/from_pointer_cast.h"
-#include "util/posix/double_fork_and_exec.h"
 #include "util/posix/scoped_mmap.h"
 #include "util/posix/signals.h"
+#include "util/posix/spawn_subprocess.h"
 
 namespace crashpad {
 
@@ -180,8 +180,10 @@ class SignalHandler {
 
     DCHECK(!handler_);
     handler_ = this;
-    return Signals::InstallCrashHandlers(
-        HandleOrReraiseSignal, SA_ONSTACK, &old_actions_, unhandled_signals);
+    return Signals::InstallCrashHandlers(HandleOrReraiseSignal,
+                                         SA_ONSTACK | SA_EXPOSE_TAGBITS,
+                                         &old_actions_,
+                                         unhandled_signals);
   }
 
   const ExceptionInformation& GetExceptionInfo() {
@@ -459,9 +461,10 @@ bool CrashpadClient::StartHandler(
 
   argv.push_back(FormatArgumentInt("initial-client-fd", handler_sock.get()));
   argv.push_back("--shared-client-connection");
-  if (!DoubleForkAndExec(argv, nullptr, handler_sock.get(), false, nullptr)) {
+  if (!SpawnSubprocess(argv, nullptr, handler_sock.get(), false, nullptr)) {
     return false;
   }
+  handler_sock.reset();
 
   pid_t handler_pid = -1;
   if (!IsRegularFile(base::FilePath("/proc/sys/kernel/yama/ptrace_scope"))) {
@@ -614,7 +617,7 @@ bool CrashpadClient::StartJavaHandlerForClient(
     int socket) {
   std::vector<std::string> argv = BuildAppProcessArgs(
       class_name, database, metrics_dir, url, annotations, arguments, socket);
-  return DoubleForkAndExec(argv, env, socket, false, nullptr);
+  return SpawnSubprocess(argv, env, socket, false, nullptr);
 }
 
 bool CrashpadClient::StartHandlerWithLinkerAtCrash(
@@ -663,7 +666,7 @@ bool CrashpadClient::StartHandlerWithLinkerForClient(
                                   annotations,
                                   arguments,
                                   socket);
-  return DoubleForkAndExec(argv, env, socket, false, nullptr);
+  return SpawnSubprocess(argv, env, socket, false, nullptr);
 }
 
 #endif
@@ -697,7 +700,7 @@ bool CrashpadClient::StartHandlerForClient(
 
   argv.push_back(FormatArgumentInt("initial-client-fd", socket));
 
-  return DoubleForkAndExec(argv, nullptr, socket, true, nullptr);
+  return SpawnSubprocess(argv, nullptr, socket, true, nullptr);
 }
 
 // static
