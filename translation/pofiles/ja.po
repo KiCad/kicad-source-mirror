@@ -2,7 +2,7 @@
 # Ji Yoon Choi <chichoon.choi@gmail.com>, 2021.
 # Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>, 2021, 2022.
 # co8 j <co8@nifty.com>, 2022, 2023.
-# Keisuke Nakao <chome@argv.org>, 2022.
+# Keisuke Nakao <chome@argv.org>, 2022, 2023.
 # Tokita, Hiroshi <tokita.hiroshi@fujitsu.com>, 2023.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2023.
 msgid ""
@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-20 09:12-0800\n"
-"PO-Revision-Date: 2023-01-27 14:28+0000\n"
-"Last-Translator: co8 j <co8@nifty.com>\n"
+"PO-Revision-Date: 2023-01-28 22:14+0000\n"
+"Last-Translator: Keisuke Nakao <chome@argv.org>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -2322,7 +2322,7 @@ msgstr "以前のバージョンからライブラリの設定をインポート
 msgid ""
 "When checked, the symbol and footprint library tables from the previous "
 "version will be imported into this version"
-msgstr "オンにすると、前のバージョンのシンボルおよびフットプリント ライブラリ "
+msgstr "チェックすると、前のバージョンのシンボルおよびフットプリント ライブラリ "
 "テーブルがこのバージョンにインポートされます"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:71
@@ -5521,7 +5521,7 @@ msgstr ""
 
 #: common/pgm_base.cpp:360
 msgid "Data collection opt in request"
-msgstr "データ収集オプトイン要求"
+msgstr "データ提供のお願い"
 
 #: common/pgm_base.cpp:432
 msgid "Environment variable HOME is empty.  Unable to continue."
@@ -10858,9 +10858,8 @@ msgid "Frequency scale"
 msgstr "周波数スケール"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:37
-#, fuzzy
 msgid "Number of points per decade:"
-msgstr "パッケージ内のユニット数:"
+msgstr "１ディケードあたりのデータ点数:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:47
 msgid "Start frequency:"
@@ -15795,19 +15794,16 @@ msgid "Power supply"
 msgstr "電源"
 
 #: eeschema/sim/sim_model_kibis.cpp:350
-#, fuzzy
 msgid "Parasitic pin resistance"
-msgstr "比抵抗"
+msgstr "ピンの寄生抵抗"
 
 #: eeschema/sim/sim_model_kibis.cpp:360
-#, fuzzy
 msgid "Parasitic pin inductance"
-msgstr "比抵抗"
+msgstr "ピンの寄生インダクタンス"
 
 #: eeschema/sim/sim_model_kibis.cpp:370
-#, fuzzy
 msgid "Parasitic pin capacitance"
-msgstr "比抵抗"
+msgstr "ピンの寄生容量"
 
 #: eeschema/sim/sim_model_kibis.cpp:414
 msgid "DC Value"
@@ -19704,7 +19700,7 @@ msgstr "ネットリスト属性を生成しない"
 #: kicad/cli/command_export_pcb_gerber.cpp:65
 #: pcbnew/dialogs/dialog_plot_base.cpp:208
 msgid "Subtract soldermask from silkscreen"
-msgstr "シルクをレジストで抜く"
+msgstr "シルクスクリーンからソルダーマスクを除去する"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:70
 msgid "Disable aperature macros"
@@ -21858,7 +21854,7 @@ msgstr "ケーブルの温度:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:166
 msgid "Off-Load max conductor temp. Reference: 20 deg C"
-msgstr ""
+msgstr "無負荷時の導体の最大温度"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:175
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:40
