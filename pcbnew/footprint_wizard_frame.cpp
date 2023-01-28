@@ -56,7 +56,7 @@
 #include <python/scripting/pcb_scripting_tool.h>
 
 
-BEGIN_EVENT_TABLE( FOOTPRINT_WIZARD_FRAME, EDA_DRAW_FRAME )
+BEGIN_EVENT_TABLE( FOOTPRINT_WIZARD_FRAME, PCB_BASE_EDIT_FRAME )
 
     // Window events
     EVT_SIZE( FOOTPRINT_WIZARD_FRAME::OnSize )
