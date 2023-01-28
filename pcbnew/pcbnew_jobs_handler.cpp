@@ -749,7 +749,7 @@ int PCBNEW_JOBS_HANDLER::doFpExportSvg( JOB_FP_EXPORT_SVG* aSvgJob, const FOOTPR
     svgPlotOptions.m_outputFile = outputFile.GetFullPath();
     svgPlotOptions.m_mirror = false;
     svgPlotOptions.m_pageSizeMode = 2; // board bounding box
-    svgPlotOptions.m_printMaskLayer = LSET::AllLayersMask();
+    svgPlotOptions.m_printMaskLayer = aSvgJob->m_printMaskLayer;
     svgPlotOptions.m_plotFrame = false;
 
     if( !PCB_PLOT_SVG::Plot( brd.get(), svgPlotOptions ) )

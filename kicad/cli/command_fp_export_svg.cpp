@@ -33,6 +33,8 @@
 
 CLI::FP_EXPORT_SVG_COMMAND::FP_EXPORT_SVG_COMMAND() : EXPORT_PCB_BASE_COMMAND( "svg" )
 {
+    addLayerArg( false );
+
     m_argParser.add_argument( "-t", ARG_THEME )
             .default_value( std::string() )
             .help( UTF8STDSTR( _( "Color theme to use (will default to pcbnew settings)" ) ) );
@@ -50,6 +52,10 @@ CLI::FP_EXPORT_SVG_COMMAND::FP_EXPORT_SVG_COMMAND() : EXPORT_PCB_BASE_COMMAND( "
 
 int CLI::FP_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
 {
+    int baseExit = EXPORT_PCB_BASE_COMMAND::doPerform( aKiway );
+    if( baseExit != EXIT_CODES::OK )
+        return baseExit;
+
     std::unique_ptr<JOB_FP_EXPORT_SVG> svgJob = std::make_unique<JOB_FP_EXPORT_SVG>( true );
 
     svgJob->m_libraryPath = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
@@ -64,6 +70,11 @@ int CLI::FP_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
     }
 
     svgJob->m_colorTheme = FROM_UTF8( m_argParser.get<std::string>( ARG_THEME ).c_str() );
+
+    if( m_selectedLayers.count() > 0 )
+        svgJob->m_printMaskLayer = m_selectedLayers;
+    else
+        svgJob->m_printMaskLayer = LSET::AllLayersMask();
 
     int exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, svgJob.get() );
 
