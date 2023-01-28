@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-20 09:12-0800\n"
 "PO-Revision-Date: 2023-01-28 22:14+0000\n"
-"Last-Translator: Keisuke Nakao <chome@argv.org>\n"
+"Last-Translator: Tokita, Hiroshi <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -134,7 +134,7 @@ msgstr "読み込み OpenGL: 基板"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:497
 msgid "Load OpenGL: holes and vias"
-msgstr "読み込み OpenGL: 機構穴とスルーホール"
+msgstr "読み込み OpenGL: 穴とビア"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:565
 msgid "Load OpenGL: layers"
@@ -22142,7 +22142,7 @@ msgstr "配線の銅箔厚:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:106
 msgid "Time to fuse:"
-msgstr "ヒューズするまでの時間:"
+msgstr "溶断までの時間:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:113
 msgid "s"
@@ -22962,7 +22962,7 @@ msgstr "ケーブル サイズ"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:100
 msgid "High speed"
-msgstr "高速"
+msgstr "高周波"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:104
 msgid "Wavelength"
@@ -35213,7 +35213,7 @@ msgstr "不明なレコード名: '%s'."
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:223
 #, c-format
 msgid "Unknown Extended Primitive Information type: '%s'."
-msgstr "未知の拡張プリミティブ情報タイプ: %s."
+msgstr "不明な拡張プリミティブ情報タイプ: %s."
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:784
 #, c-format
@@ -35253,7 +35253,7 @@ msgstr "'%s' は完全にパースされていません。"
 #: pcbnew/plugins/altium/altium_pcb.cpp:784
 #, c-format
 msgid "Record of unknown type: '%d'."
-msgstr "未知のパッド形状です: %d."
+msgstr "不明なタイプ: %d."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:874
 msgid "Loading extended primitive information data..."
@@ -35387,7 +35387,7 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_pcb.cpp:2556
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
-msgstr "フットプリント %s のパッド%sは未知のパッド形状を使用しています。"
+msgstr "フットプリント %s のパッド%sは不明なパッド形状を使用しています。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2614
 #: pcbnew/plugins/altium/altium_pcb.cpp:2635
@@ -35419,7 +35419,7 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_pcb.cpp:2808
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
-msgstr "非導体のパッド %s は、未知のパッド形状を使用しています。"
+msgstr "非導体のパッド %s は、不明なパッド形状を使用しています。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2818
 msgid "Loading vias..."
@@ -35950,7 +35950,7 @@ msgstr "ファイル \"%s\" を作成できません "
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:250
 #, c-format
 msgid "Unknown FABMASTER section %s:%s at row %zu."
-msgstr "未知のFABMASTERセクション %s:%s 行 %zu."
+msgstr "不明なFABMASTERセクション %s:%s 行 %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:267
 #, c-format
@@ -36100,7 +36100,7 @@ msgstr "ライブラリ '%s' にはフットプリント '%s' がありません
 #: pcbnew/plugins/kicad/pcb_parser.cpp:899
 #, c-format
 msgid "Unknown token '%s'"
-msgstr "未知のトークン '%s'"
+msgstr "不明なトークン '%s'"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:354
 #, c-format
@@ -36336,17 +36336,17 @@ msgstr "強制的に保存"
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:1433
 #, c-format
 msgid "unknown pad type: %d"
-msgstr "未知のパッド形状です: %d"
+msgstr "不明なパッドのタイプ: %d"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2034
 #, c-format
 msgid "unknown via type %d"
-msgstr "未知のビア形状です: %d"
+msgstr "不明なビア形状 %d"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2263
 #, c-format
 msgid "unknown zone corner smoothing type %d"
-msgstr "未知のゾーンのコーナー用スムージング タイプ %d"
+msgstr "不明なゾーンの角のスムージング タイプ %d"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2418
 msgid "This file does not contain a PCB."
@@ -36393,7 +36393,7 @@ msgstr "ファイル '%s' には認識できないバージョンがあります
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:732
 #, c-format
 msgid "Unknown sheet type '%s' on line: %d."
-msgstr "未知のシート タイプ '%s' : %d 行目."
+msgstr "不明なシート タイプ '%s' : %d 行目."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1297
 #, c-format
@@ -36403,7 +36403,7 @@ msgstr "モジュール '%s' に対する '$EndMODULE' が見つかりません�
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1347
 #, c-format
 msgid "Unknown padshape '%c=0x%02x' on line: %d of footprint: '%s'."
-msgstr "未知のパッド形状 '%c=0x%02x' 、行 %d 、フットプリント '%s'."
+msgstr "不明なパッド形状 '%c=0x%02x' 、行 %d 、フットプリント '%s'."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1546
 #, c-format
