@@ -581,6 +581,10 @@ bool PANEL_FP_LIB_TABLE::verifyTables()
                 // set the trimmed values back into the table so they get saved to disk.
                 model->SetValue( r, COL_NICKNAME, nick );
                 model->SetValue( r, COL_URI, uri );
+
+                // Make sure to not save a hidden flag
+                model->SetValue( r, COL_VISIBLE, wxS( "1" ) );
+
                 ++r;        // this row was OK.
             }
         }

@@ -184,6 +184,12 @@ void FP_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
                 row->SetEnabled( false );
                 break;
 
+            case T_hidden:
+                // Hiding footprint libraries is not yet supported.  Unclear what path can set this
+                // attribute, but clear it on load.
+                row->SetVisible();
+                break;
+
             default:
                 in->Unexpected( tok );
             }
