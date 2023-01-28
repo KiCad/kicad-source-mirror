@@ -967,6 +967,7 @@ endif()
 
 
 if( KICAD_USE_SENTRY )
+    set( CRASHPAD_WER_ENABLED ON )
     add_subdirectory( thirdparty/sentry-native )
     add_definitions( -DKICAD_USE_SENTRY )
 endif()
