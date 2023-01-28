@@ -1,10 +1,10 @@
-# boonchai k. <kicadthai@gmail.com>, 2021, 2022.
+# boonchai k. <kicadthai@gmail.com>, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-20 09:12-0800\n"
-"PO-Revision-Date: 2022-11-08 17:02+0000\n"
+"PO-Revision-Date: 2023-01-28 22:14+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.14.2\n"
+"X-Generator: Weblate 4.16-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -264,9 +264,9 @@ msgstr "ตั้งความชอบ(&P)"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:59
 #: pcbnew/widgets/appearance_controls.cpp:2730
-#, fuzzy, c-format
+#, c-format
 msgid "Viewports (%s+Tab):"
-msgstr "ช่องมอง (Alt+Tab):"
+msgstr "ช่องมอง (%s+Tab):"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:68
 #: pcbnew/widgets/appearance_controls.cpp:2739
@@ -286,6 +286,9 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
+"บันทึกและคืนค่าการจัดวางและการซูม\n"
+"ใช้ %s+Tab สำหรับกระตุ้นการเลือก\n"
+"กด Tab ต่อเนื่องระหว่างกด %s ค้าง จะหมุนวนไปในมุมมองทั้งหมดบนป้อปอัพ"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:83
 msgid "Reload board"
@@ -521,19 +524,16 @@ msgid "Toggle 3D models for 'Surface mount' type components"
 msgstr "สลับเปิดปิดโมเดล3มิติ สำหรับอุปกรณ์ชนิด\"ยึดติดผิวหน้า\""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
-#, fuzzy
 msgid "Toggle unspecified 3D models"
-msgstr "สลับเปิดปิดโมเดล3มิติอื่นๆ"
+msgstr "สลับโมเดล 3 มิติที่ไม่ระบุ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
-#, fuzzy
 msgid "Toggle 3D models for 'unspecified' type components"
-msgstr "สลับเปิดปิดโมเดล3มิติ สำหรับอุปกรณ์ชนิด\"อื่นๆ\""
+msgstr "สลับเปิดปิดโมเดล3มิติ สำหรับอุปกรณ์ชนิด\"ไม่ระบุ\""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:228
-#, fuzzy
 msgid "Toggle 3D models not in pos file"
-msgstr "สลับเปิดปิดโมเดล3มิติ สำหรับอุปกรณ์ชนิด\"อื่นๆ\""
+msgstr "สลับเปิดปิดโมเดล3มิติ ที่ไม่อยู่ในไฟล์pos"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:233
 msgid "Show Model Bounding Boxes"
@@ -1198,9 +1198,8 @@ msgid "Open..."
 msgstr "เปิด…"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:219
-#, fuzzy
 msgid "Load source image"
-msgstr "แสดงเป็นภาพกลับกระจก"
+msgstr "โหลดภาพต้นฉบับ"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:228 common/hotkey_store.cpp:57
 #: common/tool/action_menu.cpp:226 common/tool/actions.cpp:114
@@ -1208,9 +1207,8 @@ msgid "Quit"
 msgstr "ออก"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:229
-#, fuzzy
 msgid "Quit Image Converter"
-msgstr "ตัวแปลงรูป"
+msgstr "ออกจากโปรแกรมแปลงรูปภาพ"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:374
 #: eeschema/tools/sch_drawing_tools.cpp:594
@@ -1275,19 +1273,16 @@ msgid "Greyscale Picture"
 msgstr "ภาพสีเทา"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:30
-#, fuzzy
 msgid "Black && White Picture"
-msgstr "ภาพขาวดำ"
+msgstr "ภาพ(&&W)ขาวดำ"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:38
-#, fuzzy
 msgid "Image Information"
-msgstr "ข้อมูลบิทแมบ"
+msgstr "ข้อมูลภาพ"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:47
-#, fuzzy
 msgid "Image size:"
-msgstr "ขนาดหน้า:"
+msgstr "ขนาดภาพ:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:51
 #: bitmap2component/bitmap2cmp_gui_base.cpp:55
@@ -1302,9 +1297,8 @@ msgid "pixels"
 msgstr "พิกเซล"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:63
-#, fuzzy
 msgid "Image PPI:"
-msgstr "บิทแมบ PPI:"
+msgstr "ภาพ PPI:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:75
 msgid "PPI"
@@ -1319,17 +1313,14 @@ msgid "bits"
 msgstr "บิท"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:100
-#, fuzzy
 msgid "Load Source Image"
-msgstr "เลือกภาพ"
+msgstr "โหลดภาพต้นฉบับ"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:107
-#, fuzzy
 msgid "Output Size"
-msgstr "ขาทางออก"
+msgstr "ขนาดเอาต์พุต"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:109
-#, fuzzy
 msgid "Lock height / width ratio"
 msgstr "ล็อคอัตราส่วน สูง/กว้าง"
 
@@ -1365,7 +1356,6 @@ msgid "Options"
 msgstr "ทางเลือก"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:145
-#, fuzzy
 msgid "Black / white threshold:"
 msgstr "ระดับตัดสิน ดำ/ขาว:"
 
@@ -2789,7 +2779,6 @@ msgstr "ขาวดำ"
 
 #: common/dialogs/dialog_print_generic_base.cpp:41
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:22
-#, fuzzy
 msgid "Print drawing sheet"
 msgstr "พิมพ์แผ่นเขียนแบบ"
 
@@ -2844,14 +2833,12 @@ msgid "Items:"
 msgstr "ชิ้นส่วน:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:25
-#, fuzzy
 msgid "Available:"
-msgstr "เส้นทางที่มี:"
+msgstr "มีให้ใช้:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:40
-#, fuzzy
 msgid ">>"
-msgstr ">"
+msgstr ">>"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:43
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:69
@@ -3058,13 +3045,15 @@ msgstr "การแก้ไขนี้จะมีผลเมื่อปิ
 
 #: common/dialogs/panel_common_settings_base.cpp:157
 msgid "Focus follows mouse between schematic and PCB editors"
-msgstr ""
+msgstr "โฟกัสตามเมาส์ระหว่างตัวแก้ไขวงจรและพีซีบี"
 
 #: common/dialogs/panel_common_settings_base.cpp:158
 msgid ""
 "If the mouse cursor is moved over the canvas of a schematic or PCB editor "
 "window, that window is raised."
 msgstr ""
+"หากเลื่อนเมาส์เคอร์เซอร์ไปบนพื้นที่หน้าต่างแก้ไขแผนผังหรือพีซีบี "
+"หน้าต่างนั้นจะถูกยกขึ้น"
 
 #: common/dialogs/panel_common_settings_base.cpp:162
 msgid "Icon theme:"
@@ -3163,12 +3152,12 @@ msgid "Remember open files for next project launch"
 msgstr "จำไฟล์เปิดไว้ สำหรับเรียกโครงการครั้งหน้า"
 
 #: common/dialogs/panel_common_settings_base.cpp:274
-#, fuzzy
 msgid ""
 "If checked, launching a project will also launch tools such as the schematic "
 "and board editors with previously open files"
 msgstr ""
-"ถ้าเลือก เมื่อเปิดโครงการ จะเปิดเครื่องมือเช่น Eeschema และ Pcbnew พร้อมไฟล์เก่าที่ค้างไว้"
+"ถ้าเช็คไว้ เมื่อเปิดโครงการอีกครั้ง จะเปิดเครื่องมือแก้ไขวงจรและพีซีบี "
+"พร้อมไฟล์เก่าที่เปิดค้างไว้"
 
 #: common/dialogs/panel_common_settings_base.cpp:287
 msgid "&Auto save:"
@@ -3652,9 +3641,8 @@ msgid "<b>Nets matching '%s':</b>"
 msgstr "<b> เน็ตจับคู่กับ '%s':</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:32
-#, fuzzy
 msgid "Netclasses:"
-msgstr "เน็ตคลาส"
+msgstr "เน็ตคลาส:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: pcbnew/tools/board_inspection_tool.cpp:493
@@ -4872,9 +4860,8 @@ msgid "fp-lib-table files contain no library named '%s'."
 msgstr "ไฟล์ fp-lib-table ไม่มีไลบรารีชื่อ '%s'"
 
 #: common/fp_lib_table.cpp:529 eeschema/symbol_lib_table.cpp:572
-#, fuzzy
 msgid "Added by Plugin and Content Manager"
-msgstr "ผู้จัดการปลั๊กอินและเนื้อหา"
+msgstr "เพิ่มโดยปลั๊กอินและระบบจัดการเนื้อหา"
 
 #: common/fp_lib_table.cpp:555 eeschema/symbol_lib_table.cpp:600
 #, c-format
@@ -5355,7 +5342,7 @@ msgstr "เงาชิ้นส่วนที่ถูกล็อก"
 
 #: common/layer_id.cpp:186
 msgid "Courtyard collision shadow"
-msgstr ""
+msgstr "เงาลานบ้านเมื่อเกิดการชน"
 
 #: common/lib_id.cpp:144
 msgid "Illegal character found in logical library name"
@@ -5421,9 +5408,9 @@ msgid "Unrecognized function '%s'"
 msgstr "ไม่รู้จักฟังก์ชั่น '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1008
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected units for '%s'"
-msgstr "ไม่คาดหวัง '%s'"
+msgstr "หน่วยที่ไม่คาดคิดสำหรับ '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1020
 #, c-format
@@ -5886,17 +5873,15 @@ msgstr "สลับเปิดปิดโหมดเหมือนจริ
 
 #: common/tool/actions.cpp:205
 msgid "Switch to a different method of editing arcs"
-msgstr ""
+msgstr "สลับไปยังวิธีอื่นในการแก้ไขส่วนโค้ง"
 
 #: common/tool/actions.cpp:210
-#, fuzzy
 msgid "Show Search Panel"
-msgstr "คุณสมบัติชีต"
+msgstr "แสดงแผงค้นหา"
 
 #: common/tool/actions.cpp:210
-#, fuzzy
 msgid "Show/hide the search panel"
-msgstr "แสดง/ซ่อนตัวจัดการลักษณะที่ปรากฏ"
+msgstr "แสดง/ซ่อนแผงการค้นหา"
 
 #: common/tool/actions.cpp:216 eeschema/dialogs/dialog_schematic_find.cpp:33
 #: eeschema/dialogs/dialog_schematic_find_base.h:81
@@ -6001,9 +5986,8 @@ msgid "Zoom Out"
 msgstr "ย่อออก"
 
 #: common/tool/actions.cpp:337 common/widgets/mathplot.cpp:1676
-#, fuzzy
 msgid "Center on Cursor"
-msgstr "วัดขนาดอยู่กึ่งกลาง"
+msgstr "ศูนย์กลางบนเคอร์เซอร์"
 
 #: common/tool/actions.cpp:343
 msgid "Zoom to Selection"
@@ -6157,9 +6141,8 @@ msgid "Use millimeters"
 msgstr "ใช้หน่วยมิลลิเมตร"
 
 #: common/tool/actions.cpp:518 common/widgets/lib_tree.cpp:700
-#, fuzzy
 msgid "Select Columns"
-msgstr "ไม่เลือกใดๆ"
+msgstr "เลือกคอลัมน์"
 
 #: common/tool/actions.cpp:523
 msgid "Switch units"
@@ -6636,14 +6619,13 @@ msgid "No objects selected"
 msgstr "ไม่ได้เลือกวัตถุ"
 
 #: common/widgets/properties_panel.cpp:161
-#, fuzzy, c-format
+#, c-format
 msgid "%d objects selected"
-msgstr "ไม่ได้เลือกวัตถุ"
+msgstr "เลือกวัตถุ %d"
 
 #: common/widgets/properties_panel.cpp:287
-#, fuzzy
 msgid "Basic Properties"
-msgstr "คุณสมบัติ %s"
+msgstr "คุณสมบัติพื้นฐาน"
 
 #: common/widgets/unit_binder.cpp:318
 #, c-format
@@ -7742,9 +7724,8 @@ msgid "Generator file name not found."
 msgstr "ชื่อไฟล์ผู้สร้างไม่พบ"
 
 #: eeschema/dialogs/dialog_bom.cpp:460
-#, fuzzy
 msgid "Bill of Materials Generation Help"
-msgstr "ช่วยเหลือสร้างรายการวัสดุ"
+msgstr "ช่วยเหลือการสร้างรายการวัสดุ"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:27
 msgid "BOM generator scripts:"
@@ -7784,7 +7765,6 @@ msgid "Reset the list of BOM generator scripts to the default settings"
 msgstr "ล้างรายการของสคริปผู้สร้าง BOM ไปเป็นค่าปริยาย"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
-#, fuzzy
 msgid "Bill of Materials"
 msgstr "รายการวัสดุ"
 
@@ -8237,9 +8217,8 @@ msgid "Checking conflicts..."
 msgstr "ตรวจสอบข้อขัดแย้ง…"
 
 #: eeschema/dialogs/dialog_erc.cpp:488
-#, fuzzy
 msgid "Checking units..."
-msgstr "ตรวจสอบขา…"
+msgstr "ตรวจสอบหน่วย…"
 
 #: eeschema/dialogs/dialog_erc.cpp:493
 #: pcbnew/drc/drc_test_provider_footprint_checks.cpp:69
@@ -8259,9 +8238,8 @@ msgid "Checking for unresolved variables..."
 msgstr "ตรวจสอบตัวแปรที่แก้ไม่ได้…"
 
 #: eeschema/dialogs/dialog_erc.cpp:534
-#, fuzzy
 msgid "Checking SPICE models..."
-msgstr "กำลังตรวจสอบโซน..."
+msgstr "กําลังตรวจสอบโมเดล SPICE..."
 
 #: eeschema/dialogs/dialog_erc.cpp:540
 msgid "Checking no connect pins for connections..."
@@ -8552,13 +8530,12 @@ msgstr "ชื่อไฟล์ของแผ่นชีตสามารถ
 
 #: eeschema/dialogs/dialog_field_properties.cpp:659
 #: eeschema/dialogs/dialog_label_properties.cpp:478
-#, fuzzy
 msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
 "> General > Formatting"
 msgstr ""
-"ขอบเขตรอบข้อความควบคุมโดยสัดส่วนระยะเลื่อน\n"
-"ใน Schematic Setup > General > Formatting"
+"ควบคุมการมองเห็นอ้างอิงระหว่างชีตจากส่วนกลางใน Schematic Setup > General > "
+"Formatting"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:32
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:32
@@ -8839,9 +8816,8 @@ msgstr "จัดเรียงแนว H:"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:277
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:291
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:301
-#, fuzzy
 msgid "(fields only)"
-msgstr "มองเห็น (ช่องเท่านั้น)"
+msgstr "(ฟิลด์เท่านั้น)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:281
 msgid "V Align:"
@@ -8919,22 +8895,22 @@ msgstr ""
 "%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create global library table '%s'."
-msgstr "ไม่สามารถสร้างเส้นทาง ตารางไลบรารีส่วนกลาง '%s'"
+msgstr "ไม่สามารถสร้าง ตารางไลบรารีส่วนกลาง '%s'"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying global symbol library table '%s' to '%s'."
-msgstr "ไม่สามารถสำเนาไฟล์ตารางไลบรารีสัญลักษณ์จากส่วนกลาง '%s' ไปที่ '%s'"
+msgstr "เกิดข้อผิดพลาด สำเนาตารางไลบรารีสัญลักษณ์จากส่วนกลาง '%s' ไปที่ '%s'"
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter.cpp:31
 msgid "Ibis parser log"
-msgstr ""
+msgstr "บันทึกการแยกวิเคราะห์ Ibis"
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter_base.h:46
 msgid "Ibis parser"
-msgstr ""
+msgstr "ตัวแยกวิเคราะห์ Ibis"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
