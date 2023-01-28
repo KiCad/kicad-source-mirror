@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-20 09:12-0800\n"
-"PO-Revision-Date: 2023-01-22 16:34+0000\n"
+"PO-Revision-Date: 2023-01-28 22:14+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.15.1\n"
+"X-Generator: Weblate 4.16-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -13478,7 +13478,7 @@ msgstr ""
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:515
 #, c-format
 msgid "Could not open file '%s' to write IBIS model"
-msgstr "Не удалось открыть файл «%s» для записи модели IBIS."
+msgstr "Не удалось открыть файл '%s' для записи модели IBIS"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:571
 #, c-format
@@ -14585,8 +14585,7 @@ msgstr "Элемент не обозначен: %s%s"
 #: eeschema/sch_reference_list.cpp:715
 #, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)"
-msgstr ""
-"Ошибка: символ %s%s%s (часть %d) превышает кол-во заданных частей (%d)."
+msgstr "Ошибка: символ %s%s%s (часть %d) превышает кол-во заданных частей (%d)"
 
 #: eeschema/sch_reference_list.cpp:754
 #, c-format
@@ -15811,12 +15810,12 @@ msgstr "Недопустимый файл IBIS '%s'"
 #: eeschema/sim/sim_model.cpp:759
 #, c-format
 msgid "Could not find a pin named '%s' in simulation model of type '%s'"
-msgstr "Не удалось найти вывод с именем '%s' в модели симуляции типа '%s'."
+msgstr "Не удалось найти вывод с именем '%s' в модели симуляции типа '%s'"
 
 #: eeschema/sim/sim_model.cpp:849
 #, c-format
 msgid "Could not find a parameter named '%s' in simulation model of type '%s'"
-msgstr "Не удалось найти параметр с именем '%s' в модели симуляции типа '%s'."
+msgstr "Не удалось найти параметр с именем '%s' в модели симуляции типа '%s'"
 
 #: eeschema/sim/sim_model.h:470
 #, c-format
@@ -16206,7 +16205,7 @@ msgstr "Неизвестный тип SIM_VALUE"
 #, c-format
 msgid "Could not find model '%s' to copy for \"A Kind Of\" model '%s'"
 msgstr ""
-"Не удалось найти модель '%s' для копирования для модели \"A Kind Of\" '%s'."
+"Не удалось найти модель '%s' для копирования для модели \"A Kind Of\" '%s'"
 
 #: eeschema/sim/spice_simulator.cpp:63
 msgid "DC Sweep"
@@ -16316,7 +16315,7 @@ msgstr "<b>Символ питания не должен иметь опции �
 
 #: eeschema/symbol_checker.cpp:199
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
-msgstr "<b>Символ питания должен иметь только один вывод</b><br><br>."
+msgstr "<b>Символ питания должен иметь только один вывод</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:208
 msgid ""
@@ -17861,7 +17860,7 @@ msgid ""
 "motions"
 msgstr ""
 "Ограничить рисование и перетаскивание горизонтальными, вертикальными "
-"движениями, или под углом 45°."
+"движениями, или под углом 45°"
 
 #: eeschema/tools/ee_actions.cpp:734
 msgid "Switch to next line mode"
@@ -28850,7 +28849,7 @@ msgstr "Форма конт.пл."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:726
 msgid "Pad convex hull"
-msgstr "Выпуклая оболочка конт.пл."
+msgstr "Выпуклая обол. конт.пл."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:739
 msgid "Thermal Relief Overrides"
@@ -37046,7 +37045,7 @@ msgstr "Размер перех.отв. из класса цепей"
 #: pcbnew/router/router_tool.cpp:261 pcbnew/tools/drawing_tool.cpp:120
 #, c-format
 msgid "Via %s, hole %s"
-msgstr "Перех.отв. %s, отв. %s"
+msgstr "Диаметр %s, отверстие %s"
 
 #: pcbnew/router/router_tool.cpp:267 pcbnew/tools/drawing_tool.cpp:126
 #, c-format
