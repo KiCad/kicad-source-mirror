@@ -184,8 +184,15 @@ void FP_CACHE::Load()
                 FILE_LINE_READER reader( fn.GetFullPath() );
                 PCB_PARSER       parser( &reader, nullptr, nullptr );
 
-                FOOTPRINT* footprint = (FOOTPRINT*) parser.Parse();
-                wxString   fpName = fn.GetName();
+                // use dynamic cast in case somebody renames a .kicad_pcb as .kicad_mod and chucks it into a library folder
+                // the parsing definitely fails then
+                FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( parser.Parse() );
+                wxString fpName = fn.GetName();
+
+                if( !footprint )
+                {
+                    THROW_IO_ERROR( wxString::Format( _( "Unable to read file '%s'" ), fn.GetFullPath() ) );
+                }
 
                 footprint->SetFPID( LIB_ID( wxEmptyString, fpName ) );
                 m_footprints.insert( fpName, new FP_CACHE_ITEM( footprint, fn ) );
