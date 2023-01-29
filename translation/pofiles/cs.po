@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-20 09:12-0800\n"
-"PO-Revision-Date: 2023-01-28 22:14+0000\n"
+"PO-Revision-Date: 2023-01-29 22:21+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -19309,18 +19309,16 @@ msgid "Show in Differential Mode"
 msgstr "Zobrazit v diferenciálním režimu"
 
 #: gerbview/tools/gerbview_actions.cpp:191
-#, fuzzy
 msgid "Show layers in differential compare mode"
-msgstr "Zobrazit obrysy v režimu výplně"
+msgstr "Zobrazit vrstvy v režimu diferenciálního porovnání"
 
 #: gerbview/tools/gerbview_actions.cpp:196
 msgid "Show in XOR Mode"
 msgstr "Zobrazit v režimu XOR"
 
 #: gerbview/tools/gerbview_actions.cpp:196
-#, fuzzy
 msgid "Show layers in exclusive-or compare mode"
-msgstr "Zobrazit vrstvy v režimu diff (porovnat)"
+msgstr "Zobrazuje vrstvy v exklusive-or režimu jako srovnávací"
 
 #: gerbview/tools/gerbview_actions.cpp:201
 msgid "Flip Gerber View"
@@ -25350,14 +25348,12 @@ msgid "Footprint Annotation"
 msgstr "Očíslování pouzdra"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:352
-#, fuzzy
 msgid "Keep existing reference designators"
-msgstr "Nahradit shody v referenci schématu"
+msgstr "Udržujte stávající referenci schématu"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:355
-#, fuzzy
 msgid "Assign unique reference designators"
-msgstr "Přiřadit jedinečné označení reference na vložené symboly"
+msgstr "Přiřadit jedinečné označení reference"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:357
 msgid ""
@@ -25370,13 +25366,12 @@ msgid "Create Array"
 msgstr "Vytvořit matrici"
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:223
-#, fuzzy
 msgid ""
 "This item was on a non-existing layer.\n"
 "It has been moved to the first defined layer."
 msgstr ""
-"Tato položka byla na nepovolené nebo neexistující vrstvě.\n"
-"Byla přesunuta na první povolenou vrstvu."
+"Tato položka byla na neexistující vrstvě.\n"
+"Byla přesunuta na první definovanou vrstvu."
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:312
 msgid "Change dimension properties"
@@ -26769,13 +26764,8 @@ msgid ""
 msgstr ""
 "To je poměr místní izolační mezery v jako procento šířky a výšky plošky pro "
 "toto pouzdro.\n"
-"Hodnota 10 znamená, že hodnota horizontální mezery je 10% šířky plošky a "
-"hodnota vertikální mezery je 10% výšky plošky.\n"
-"Konečná hodnota mezery je součtem této hodnoty a absolutní hodnoty mezery.\n"
-"Záporná hodnota znamená, že maska je menší než velikost plošky.\n"
-"Tuto hodnotu lze přepsat na základě ploška po plošce v Místní izolační "
-"mezera na kartě Nastavení, Vlastnosti plošky.\n"
-"Hodnota 10 znamená, že hodnota mezery je 10 procent velikosti plošky.\n"
+"Hodnota 10 znamená, že hodnota horizontální mezery je 10 procent šířky "
+"plošky a hodnota vertikální mezery je 10 procent výšky plošky.\n"
 "Konečná hodnota izolační mezery je součtem této hodnoty a hodnoty izolační "
 "mezery.\n"
 "Záporná hodnota znamená, že maska je menší než velikost plošky.\n"
@@ -27515,19 +27505,16 @@ msgid "Rectangle cannot be empty."
 msgstr "Obdélník nemůže být prázdný."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:473
-#, fuzzy
 msgid "Line width must be greater than zero for an unfilled rectangle."
-msgstr "Poloměr musí být větší než nula."
+msgstr "Šířka čáry musí být větší než nula pro nevyplněný obdélník."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:479
-#, fuzzy
 msgid "Line width must be greater than zero for an unfilled polygon."
-msgstr "Poloměr musí být větší než nula."
+msgstr "Šířka čáry musí být větší než nula pro nevyplněný mnohoúhelník."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:491
-#, fuzzy
 msgid "Line width must be greater than zero for an unfilled curve."
-msgstr "Poloměr musí být větší než nula."
+msgstr "Šířka čáry musí být větší než nula pro nevyplněnou křivku."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:502
 msgid "Error List"
@@ -27723,9 +27710,8 @@ msgid ">"
 msgstr ">"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:60
-#, fuzzy
 msgid "Add selected layers to matched layers list."
-msgstr "Odebrat vybrané vrstvy ze seznamu shodných vrstev."
+msgstr "Přidat vybrané vrstvy do odpovídajícího seznamu vrstev."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:64
 msgid "<"
@@ -27938,9 +27924,8 @@ msgid "Net Inspector"
 msgstr "Kontrola sítě"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:127
-#, fuzzy
 msgid "Convert to Non Copper Zone"
-msgstr "Připojení k zónám mědi"
+msgstr "Převést na zónu bez mědi"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:55
 msgid "Outline style:"
@@ -27951,15 +27936,13 @@ msgid "degree"
 msgstr "stupeň"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.h:84
-#, fuzzy
 msgid "Non Copper Zone Properties"
 msgstr "Vlastnosti zón bez mědi"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:114
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:143
-#, fuzzy
 msgid "Center Point:"
-msgstr "Střed X:"
+msgstr "Centrální bod:"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:133
 #: pcbnew/dialogs/dialog_pad_properties.cpp:724
@@ -28190,9 +28173,8 @@ msgstr ""
 "vrstvě."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1352
-#, fuzzy
 msgid "Error: Trapazoid delta is too large."
-msgstr "Chyba: ploška nemá vrstvu."
+msgstr "Chyba: Trapézovitost je příliš velká."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1361
 msgid "Error: Through hole pad has no hole."
@@ -28207,9 +28189,8 @@ msgstr ""
 "místo nich SMD plošky."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1377
-#, fuzzy
 msgid "Error: SMD pad has a hole."
-msgstr "Chyba: ploška nemá vrstvu."
+msgstr "Chyba: SMD ploška má díru."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1383
 msgid "Warning: SMD pad has no outer layers."
@@ -28402,13 +28383,12 @@ msgstr "Velikost zkosení:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:186
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:242
-#, fuzzy
 msgid ""
 "Chamfer size in percent of the pad width.\n"
 "The width is the smaller value between size X and size Y.\n"
 "The max value is 50 percent."
 msgstr ""
-"Poloměr rohu v procentech šířky plošky.\n"
+"Velikost zkosení v procentech šířky plošky.\n"
 "Šířka je menší hodnota mezi velikostí X a Y.\n"
 "Maximální hodnota je 50 procent."
 
@@ -28452,9 +28432,8 @@ msgid "Offset shape from hole"
 msgstr "Posun tvaru a díry"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:458
-#, fuzzy
 msgid "Specify pad to die length"
-msgstr "Délka od plošky po čip"
+msgstr "Vzdálenost mezi ploškou a čipem"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:493
 msgid ""
@@ -28501,9 +28480,8 @@ msgid "E.C.O.2"
 msgstr "E.C.O.2"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:549
-#, fuzzy
 msgid "Fabrication property:"
-msgstr "Výrobní vlastnosti:"
+msgstr "Vlastnosti výroby:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:551
 msgid ""
@@ -28523,14 +28501,12 @@ msgid "BGA pad"
 msgstr "BGA ploška"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:1719
-#, fuzzy
 msgid "Fiducial, local to footprint"
-msgstr "Aktualizovat pouzdra"
+msgstr "Fiduciální, lokální pro pouzdro"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:1718
-#, fuzzy
 msgid "Fiducial, global to board"
-msgstr "Aktualizovat pouzdra"
+msgstr "Fiduciální, globální k desce"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:1720
 msgid "Test point pad"
@@ -28620,9 +28596,8 @@ msgid "From parent footprint"
 msgstr "Z nadřazeného pouzdra"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:722
-#, fuzzy
 msgid "Zone knockout:"
-msgstr "Text v Negativu"
+msgstr "Vyřazení zóny:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:726
 msgid "Pad shape"
@@ -28688,14 +28663,12 @@ msgid "Plot on All Layers"
 msgstr "Kreslit na všechny vrstvy"
 
 #: pcbnew/dialogs/dialog_plot.cpp:162
-#, fuzzy
 msgid "Move current selection up"
-msgstr "Vy&čistit aktuální vrstvu"
+msgstr "Přesun aktuálního výběru nahoru"
 
 #: pcbnew/dialogs/dialog_plot.cpp:169
-#, fuzzy
 msgid "Move current selection down"
-msgstr "Pouze aktuální vrstva"
+msgstr "Přesun aktuálního výběru dolů"
 
 #: pcbnew/dialogs/dialog_plot.cpp:180
 msgid "Generate Drill Files..."
@@ -29027,9 +29000,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:396
-#, fuzzy
 msgid "PDF Options"
-msgstr "Možnosti DXF"
+msgstr "Možnosti PDF"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:438
 msgid "Run DRC..."
@@ -29173,9 +29145,8 @@ msgid "arc"
 msgstr "oblouk"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:160
-#, fuzzy
 msgid "Single-sided"
-msgstr "Jedna stránka"
+msgstr "Jednostranný"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:166
 msgid "Miter radius (r):"
@@ -29375,9 +29346,9 @@ msgid "<none selected>"
 msgstr "<nevybráno>"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:244
-#, fuzzy, c-format
+#, c-format
 msgid "Reference item: %s"
-msgstr "Reference '%s'"
+msgstr "Reference: %s"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:22
 msgid "Reference item: <none selected>"
@@ -29486,9 +29457,8 @@ msgid "Push Pad Properties"
 msgstr "Vynutit vlastnosti plošky"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:118
-#, fuzzy
 msgid "Convert to Rule Area"
-msgstr "Převést na oblouk"
+msgstr "Převést na oblast pravidel"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:221
 msgid "No layers selected."
@@ -30300,9 +30270,8 @@ msgid "Minimum connection width:"
 msgstr "Minimální šířka prstence:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:84
-#, fuzzy
 msgid "The minimum copper width of connected copper items."
-msgstr "Vyberte si, co dělat s nepřipojenými ostrovy mědi"
+msgstr "Minimální šířka mědi připojených měděných prvků."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:96
 msgid "Minimum annular width:"
@@ -30477,9 +30446,8 @@ msgid "Allow fillets outside zone outline"
 msgstr "Povolit vyplnění mimo obrys zóny"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:420
-#, fuzzy
 msgid "Min thermal relief spoke count:"
-msgstr "Šířka paprsku tepelného reliéfu:"
+msgstr "Min. počet paprsků termálního reliefu:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:439
 msgid "Length tuning"
