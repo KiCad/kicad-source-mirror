@@ -1,21 +1,21 @@
-# ___davidpr <david.pribic95@gmail.com>, 2021, 2022.
+# ___davidpr <david.pribic95@gmail.com>, 2021, 2022, 2023.
 # Zoran <zastos@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-20 09:12-0800\n"
-"PO-Revision-Date: 2022-10-17 17:05+0000\n"
+"PO-Revision-Date: 2023-01-29 22:21+0000\n"
 "Last-Translator: ___davidpr <david.pribic95@gmail.com>\n"
-"Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/master-"
-"source/sr/>\n"
+"Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/"
+"master-source/sr/>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.15-dev\n"
+"X-Generator: Weblate 4.16-dev\n"
 "X-Poedit-Bookmarks: -1,-1,5234,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
@@ -9036,9 +9036,9 @@ msgstr "Ротација"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:99
 #: pcbnew/dialogs/dialog_drc_base.cpp:149
-#, fuzzy, c-format
+#, c-format
 msgid "Ignored Tests (%s)"
-msgstr "Измјени опције круга..."
+msgstr "Изигнорисани тестови (%s)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:139
 #: pcbnew/dialogs/dialog_drc_base.cpp:189
@@ -9050,9 +9050,8 @@ msgstr "Избриши"
 #: eeschema/dialogs/dialog_erc_base.cpp:162
 #: pcbnew/dialogs/dialog_drc_base.cpp:209
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:76
-#, fuzzy
 msgid "Delete Marker"
-msgstr "Маркер није пронађен"
+msgstr "Избриши ознаку"
 
 #: eeschema/dialogs/dialog_erc_base.h:98 eeschema/tools/ee_actions.cpp:45
 #, fuzzy
@@ -9084,9 +9083,8 @@ msgstr "Остало:"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:351
 #: eeschema/dialogs/dialog_sim_command_base.cpp:435
-#, fuzzy
 msgid "Save all voltages"
-msgstr "Сачувај све промјене"
+msgstr "Сачувај све напоне"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:352
 msgid "Write a directive to save all voltages (.save all)"
@@ -9094,9 +9092,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:357
 #: eeschema/dialogs/dialog_sim_command_base.cpp:438
-#, fuzzy
 msgid "Save all currents"
-msgstr "Сачувај све промјене"
+msgstr "Сачувај све струје"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:358
 msgid "Write a directive to save all currents (.probe alli)"
@@ -37889,9 +37886,9 @@ msgid ""
 msgstr "%s у \"%s\", линија %d, помак %d"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2996
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' is empty."
-msgstr "Фајл \"%s\" је унешен"
+msgstr "Датоетка '%s' је празна."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2999
 #, fuzzy, c-format
@@ -42803,9 +42800,8 @@ msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Додјела шеме"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
-#, fuzzy
 msgid "eeschema"
-msgstr "Eeschema"
+msgstr "еeschema"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 #, fuzzy
@@ -42824,9 +42820,8 @@ msgstr "Покрени"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
-#, fuzzy
 msgid "KiCad"
-msgstr "KiCad грешка"
+msgstr "KiCad"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 msgid "EDA Suite"
@@ -42837,14 +42832,12 @@ msgid "Suite of tools for schematic design and circuit board layout"
 msgstr ""
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
-#, fuzzy
 msgid "KiCad PCB Calculator"
-msgstr "Отвори"
+msgstr "KiCad PCB дигитрон"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
-#, fuzzy
 msgid "PCB Calculator"
-msgstr "Отвори"
+msgstr "PCB дигитрон"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "Calculator for various electronics-related computations"
@@ -42893,7 +42886,7 @@ msgstr ""
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:58
 msgid "KiCad Main Window"
-msgstr ""
+msgstr "KiCad главни прозор"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:68
 #, fuzzy
@@ -42920,9 +42913,8 @@ msgid "KiCad Project"
 msgstr "KiCad пројект"
 
 #: resources/linux/mime/kicad-kicad.xml.in:12
-#, fuzzy
 msgid "KiCad Schematic"
-msgstr "Додјела шеме"
+msgstr "KiCad шема"
 
 #: resources/linux/mime/kicad-kicad.xml.in:27
 #, fuzzy
