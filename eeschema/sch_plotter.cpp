@@ -235,7 +235,7 @@ void SCH_PLOTTER::plotOneSheetPDF( PLOTTER* aPlotter, SCH_SCREEN* aScreen,
         const PAGE_INFO& actualPage = aScreen->GetPageSettings(); // page size selected in schematic
 
         PlotDrawingSheet( aPlotter, &aScreen->Schematic()->Prj(),
-                          m_schematic->RootScreen()->GetTitleBlock(),
+                          aScreen->GetTitleBlock(),
                           actualPage,
                           aScreen->Schematic()->GetProperties(),
                           aScreen->GetPageNumber(), aScreen->GetPageCount(), sheetName, sheetPath,
@@ -446,7 +446,7 @@ bool SCH_PLOTTER::plotOneSheetPS( const wxString& aFileName, SCH_SCREEN* aScreen
         COLOR4D  color = plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_DRAWINGSHEET );
 
         PlotDrawingSheet( plotter, &aScreen->Schematic()->Prj(),
-                          m_schematic->RootScreen()->GetTitleBlock(),
+                          aScreen->GetTitleBlock(),
                           aPageInfo, aScreen->Schematic()->GetProperties(),
                           aScreen->GetPageNumber(), aScreen->GetPageCount(), sheetName, sheetPath,
                           aScreen->GetFileName(), plotter->GetColorMode() ? color : COLOR4D::BLACK,
@@ -625,7 +625,7 @@ bool SCH_PLOTTER::plotOneSheetSVG( const wxString& aFileName, SCH_SCREEN* aScree
         COLOR4D  color = plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_DRAWINGSHEET );
 
         PlotDrawingSheet( plotter, &aScreen->Schematic()->Prj(),
-                          m_schematic->RootScreen()->GetTitleBlock(),
+                          aScreen->GetTitleBlock(),
                           actualPage, aScreen->Schematic()->GetProperties(), aScreen->GetPageNumber(),
                           aScreen->GetPageCount(), sheetName, sheetPath, aScreen->GetFileName(),
                           plotter->GetColorMode() ? color : COLOR4D::BLACK,
@@ -817,7 +817,8 @@ bool SCH_PLOTTER::plotOneSheetHpgl( const wxString& aFileName,
         wxString sheetName = m_schematic->CurrentSheet().Last()->GetName();
         wxString sheetPath = m_schematic->CurrentSheet().PathHumanReadable();
 
-        PlotDrawingSheet( plotter, &m_schematic->Prj(), m_schematic->RootScreen()->GetTitleBlock(),
+        PlotDrawingSheet( plotter, &m_schematic->Prj(), 
+                          aScreen->GetTitleBlock(),
                           aPageInfo,
                           aScreen->Schematic()->GetProperties(), aScreen->GetPageNumber(),
                           aScreen->GetPageCount(), sheetName, sheetPath, aScreen->GetFileName(),
@@ -975,7 +976,8 @@ bool SCH_PLOTTER::plotOneSheetDXF( const wxString& aFileName, SCH_SCREEN* aScree
         wxString sheetPath = m_schematic->CurrentSheet().PathHumanReadable();
         COLOR4D  color = plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_DRAWINGSHEET );
 
-        PlotDrawingSheet( plotter, &m_schematic->Prj(), m_schematic->RootScreen()->GetTitleBlock(),
+        PlotDrawingSheet( plotter, &m_schematic->Prj(), 
+                          aScreen->GetTitleBlock(),
                           pageInfo,
                           aScreen->Schematic()->GetProperties(), aScreen->GetPageNumber(),
                           aScreen->GetPageCount(), sheetName, sheetPath, aScreen->GetFileName(),
