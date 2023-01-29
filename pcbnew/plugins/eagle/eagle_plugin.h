@@ -241,6 +241,9 @@ private:
     /// get a file's  or dir's modification time.
     static wxDateTime getModificationTime( const wxString& aPath );
 
+    /// Determines the minimum copper layer stackup count that includes all mapped layers.
+    int getMinimumCopperLayerCount() const;
+
     // all these loadXXX() throw IO_ERROR or ptree_error exceptions:
 
     void loadAllSections( wxXmlNode* aDocument );

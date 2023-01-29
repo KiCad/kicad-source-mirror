@@ -398,17 +398,7 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
 
     // IO_ERROR exceptions are left uncaught, they pass upwards from here.
 
-    // Ensure the copper layers count is a multiple of 2
-    // Pcbnew does not like boards with odd layers count
-    // (these boards cannot exist. they actually have a even layers count)
-    int lyrcnt = m_board->GetCopperLayerCount();
-
-    if( (lyrcnt % 2) != 0 )
-    {
-        lyrcnt++;
-        m_board->SetCopperLayerCount( lyrcnt );
-    }
-
+    m_board->SetCopperLayerCount( getMinimumCopperLayerCount() );
     centerBoard();
 
     deleter.release();
@@ -3212,4 +3202,28 @@ FOOTPRINT* EAGLE_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
 void EAGLE_PLUGIN::FootprintLibOptions( STRING_UTF8_MAP* aListToAppendTo ) const
 {
     PLUGIN::FootprintLibOptions( aListToAppendTo );
+}
+
+int EAGLE_PLUGIN::getMinimumCopperLayerCount() const
+{
+    int minLayerCount = 2;
+
+    std::map<wxString, PCB_LAYER_ID>::const_iterator it;
+
+    for( it = m_layer_map.begin(); it != m_layer_map.end(); ++it )
+    {
+        PCB_LAYER_ID layerId = it->second;
+
+        if( IsCopperLayer( layerId ) && layerId != F_Cu && layerId != B_Cu
+            && ( layerId + 2 ) > minLayerCount )
+            minLayerCount = layerId + 2;
+    }
+
+    // Ensure the copper layers count is a multiple of 2
+    // Pcbnew does not like boards with odd layers count
+    // (these boards cannot exist. they actually have a even layers count)
+    if( ( minLayerCount % 2 ) != 0 )
+        minLayerCount++;
+
+    return minLayerCount;
 }
