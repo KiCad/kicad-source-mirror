@@ -704,7 +704,7 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::loadLibrary( const wxString& aLibraryP
 
     std::string modelName = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD );
 
-    for( auto& [baseModelName, baseModel] : library()->GetModels() )
+    for( const auto& [baseModelName, baseModel] : library()->GetModels() )
     {
         if( baseModelName == modelName )
             m_libraryModelsMgr.CreateModel( &baseModel, sourcePins, m_fields );
@@ -720,7 +720,7 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::loadLibrary( const wxString& aLibraryP
 
     wxArrayString modelNames;
 
-    for( auto& [name, model] : library()->GetModels() )
+    for( const auto& [name, model] : library()->GetModels() )
         modelNames.Add( name );
 
     m_modelNameChoice->Clear();

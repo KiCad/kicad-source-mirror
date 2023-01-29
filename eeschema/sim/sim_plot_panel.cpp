@@ -260,6 +260,18 @@ void CURSOR::doSetCoordX( double aValue )
 }
 
 
+wxString CURSOR::getID()
+{
+    for( const auto& [ id, cursor ] : m_trace->GetCursors() )
+    {
+        if( cursor == this )
+            return wxString::Format( _( "%d" ), id );
+    }
+
+    return wxEmptyString;
+}
+
+
 void CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
 {
     if( !m_window )
@@ -298,7 +310,10 @@ void CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
     wxCoord bottomPx = m_drawOutsideMargins ? aWindow.GetScrY() :
                                               aWindow.GetScrY() - aWindow.GetMarginBottom();
 
-    wxPen pen = GetPen();
+    wxPen    pen = GetPen();
+    wxColour fg = GetPen().GetColour();
+
+    pen.SetColour( COLOR4D( m_trace->GetTraceColour() ).Mix( fg, 0.6 ).ToColour() );
     pen.SetStyle( m_continuous ? wxPENSTYLE_SOLID : wxPENSTYLE_LONG_DASH );
     aDC.SetPen( pen );
 
@@ -306,7 +321,35 @@ void CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
         aDC.DrawLine( leftPx, cursorPos.y, rightPx, cursorPos.y );
 
     if( leftPx < cursorPos.x && cursorPos.x < rightPx )
+    {
         aDC.DrawLine( cursorPos.x, topPx, cursorPos.x, bottomPx );
+
+        wxString id = getID();
+        wxSize   size = aDC.GetTextExtent( wxS( "M" ) );
+        wxRect   textRect( wxPoint( cursorPos.x + 1 - size.x / 2, topPx - 4 - size.y ), size );
+        wxBrush  brush;
+        wxPoint  poly[3];
+
+        // Because a "1" looks off-center if it's actually centred.
+        if( id == "1" )
+            textRect.x -= 1;
+
+        // We want an equalateral triangle, so use size.y for both axes.
+        size.y += 3;
+        // Make sure it's an even number so the slopes of the sides will be identical.
+        size.y = ( size.y / 2 ) * 2;
+        poly[0] = { cursorPos.x - 1 - size.y / 2, topPx - size.y };
+        poly[1] = { cursorPos.x + 1 + size.y / 2, topPx - size.y };
+        poly[2] = { cursorPos.x, topPx };
+
+        brush.SetStyle( wxBRUSHSTYLE_SOLID );
+        brush.SetColour( m_trace->GetTraceColour() );
+        aDC.SetBrush( brush );
+        aDC.DrawPolygon( 3, poly );
+
+        aDC.SetTextForeground( fg );
+        aDC.DrawLabel( id, textRect, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL );
+    }
 }
 
 
@@ -345,7 +388,7 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( const wxString& aCommand, int aOptions, wxWindow
     m_plotWin = new mpWindow( this, wxID_ANY, pos, size, style );
 
     m_plotWin->LimitView( true );
-    m_plotWin->SetMargins( 50, 80, 50, 80 );
+    m_plotWin->SetMargins( 35, 70, 35, 70 );
 
     UpdatePlotColors();
 
@@ -447,7 +490,7 @@ void SIM_PLOT_PANEL::updateAxes()
     if( m_axis_x )
     {
         m_axis_x->SetTicks( false );
-        m_axis_x->SetNameAlign ( mpALIGN_BOTTOM );
+        m_axis_x->SetNameAlign( mpALIGN_BOTTOM );
 
         m_plotWin->AddLayer( m_axis_x );
     }
@@ -455,14 +498,14 @@ void SIM_PLOT_PANEL::updateAxes()
     if( m_axis_y1 )
     {
         m_axis_y1->SetTicks( false );
-        m_axis_y1->SetNameAlign ( mpALIGN_LEFT );
+        m_axis_y1->SetNameAlign( mpALIGN_LEFT );
         m_plotWin->AddLayer( m_axis_y1 );
     }
 
     if( m_axis_y2 )
     {
         m_axis_y2->SetTicks( false );
-        m_axis_y2->SetNameAlign ( mpALIGN_RIGHT );
+        m_axis_y2->SetNameAlign( mpALIGN_RIGHT );
         m_plotWin->AddLayer( m_axis_y2 );
     }
 }
@@ -540,9 +583,9 @@ void SIM_PLOT_PANEL::UpdatePlotColors()
                                m_colors.GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::AXIS ) );
 
     // Update color of all traces
-    for( auto& [ name, trace ] : m_traces )
+    for( const auto& [ name, trace ] : m_traces )
     {
-        for( auto& [ id, cursor ] : trace->GetCursors() )
+        for( const auto& [ id, cursor ] : trace->GetCursors() )
         {
             if( cursor )
                 cursor->SetPen( wxPen( m_colors.GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::CURSOR ) ) );
@@ -657,7 +700,7 @@ bool SIM_PLOT_PANEL::deleteTrace( const wxString& aName )
         TRACE* trace = it->second;
         m_traces.erase( it );
 
-        for( auto& [ id, cursor ] : trace->GetCursors() )
+        for( const auto& [ id, cursor ] : trace->GetCursors() )
         {
             if( cursor )
                 m_plotWin->DelLayer( cursor, true );

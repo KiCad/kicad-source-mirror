@@ -588,7 +588,7 @@ void NETLIST_EXPORTER_SPICE::writeInclude( OUTPUTFORMATTER& aFormatter, unsigned
 
 void NETLIST_EXPORTER_SPICE::writeIncludes( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions )
 {
-    for( auto& [path, library] : m_libMgr.GetLibraries() )
+    for( const auto& [path, library] : m_libMgr.GetLibraries() )
     {
         if( dynamic_cast<const SIM_LIBRARY_SPICE*>( &library.get() ) )
             writeInclude( aFormatter, aNetlistOptions, path );

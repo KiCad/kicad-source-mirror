@@ -143,7 +143,7 @@ void GRID_CELL_COLOR_SELECTOR::Create( wxWindow* aParent, wxWindowID aId,
                                        wxEvtHandler* aEventHandler )
 {
     // wxWidgets needs a control to hold on to the event handler
-    m_control = new wxCheckBox( aParent, wxID_ANY, wxEmptyString );
+    m_control = new wxTextCtrl( aParent, wxID_ANY, wxEmptyString );
 
     wxGridCellEditor::Create( aParent, aId, aEventHandler );
 }
@@ -159,16 +159,25 @@ void GRID_CELL_COLOR_SELECTOR::BeginEdit( int row, int col, wxGrid* grid )
 {
     m_value.SetFromWxString( grid->GetTable()->GetValue( row, col ) );
 
-    DIALOG_COLOR_PICKER dialog( m_parent, m_value, false );
+    grid->CallAfter(
+            [=]()
+            {
+                DIALOG_COLOR_PICKER dialog( m_parent, m_value, false );
 
-    if( dialog.ShowModal() == wxID_OK )
-        m_value = dialog.GetColor();
+                if( dialog.ShowModal() == wxID_OK )
+                    m_value = dialog.GetColor();
 
-    m_grid->GetTable()->SetValue( row, col, GetValue() );
+                m_grid->GetTable()->SetValue( row, col, GetValue() );
+                m_grid->ForceRefresh();
+
+                // Let any clients know
+                wxGridEvent event( m_grid->GetId(), wxEVT_GRID_CELL_CHANGED, m_grid, row, col );
+                event.SetString( GetValue() );
+                m_grid->GetEventHandler()->ProcessEvent( event );
+            } );
 
     // That's it; we're all done
     m_grid->HideCellEditControl();
-    m_grid->ForceRefresh();
 }
 
 

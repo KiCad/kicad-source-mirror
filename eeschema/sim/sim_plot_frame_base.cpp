@@ -172,7 +172,7 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 
 	// Columns
 	m_cursorsGrid->SetColSize( 0, 44 );
-	m_cursorsGrid->SetColSize( 1, 140 );
+	m_cursorsGrid->SetColSize( 1, 152 );
 	m_cursorsGrid->SetColSize( 2, 110 );
 	m_cursorsGrid->SetColSize( 3, 110 );
 	m_cursorsGrid->EnableDragColMove( false );

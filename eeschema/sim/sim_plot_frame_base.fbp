@@ -1110,7 +1110,7 @@
                                                                                     <property name="col_label_values">&quot;Cursor&quot; &quot;Signal&quot; &quot;Time&quot; &quot;Voltage / Current&quot;</property>
                                                                                     <property name="col_label_vert_alignment">wxALIGN_CENTER</property>
                                                                                     <property name="cols">4</property>
-                                                                                    <property name="column_sizes">44,140,110,110</property>
+                                                                                    <property name="column_sizes">44,152,110,110</property>
                                                                                     <property name="context_help"></property>
                                                                                     <property name="context_menu">1</property>
                                                                                     <property name="default_pane">0</property>

@@ -44,7 +44,7 @@ class TRACE;
 class CURSOR : public mpInfoLayer
 {
 public:
-    CURSOR( const TRACE* aTrace, SIM_PLOT_PANEL* aPlotPanel ) :
+    CURSOR( TRACE* aTrace, SIM_PLOT_PANEL* aPlotPanel ) :
             mpInfoLayer( wxRect( 0, 0, DRAG_MARGIN, DRAG_MARGIN ), wxTRANSPARENT_BRUSH ),
             m_trace( aTrace ),
             m_updateRequired( true ),
@@ -89,12 +89,14 @@ public:
 private:
     void doSetCoordX( double aValue );
 
+    wxString getID();
+
 private:
-    const TRACE*  m_trace;
-    bool          m_updateRequired;
-    bool          m_updateRef;
-    wxRealPoint   m_coords;
-    mpWindow*     m_window;
+    TRACE*       m_trace;
+    bool         m_updateRequired;
+    bool         m_updateRef;
+    wxRealPoint  m_coords;
+    mpWindow*    m_window;
 
     static constexpr int DRAG_MARGIN = 10;
 };
@@ -169,7 +171,7 @@ public:
         m_traceColour = aColour;
     }
 
-    wxColour GetTraceColour()
+    wxColour GetTraceColour() const
     {
         return m_traceColour;
     }

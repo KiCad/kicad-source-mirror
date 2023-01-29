@@ -654,9 +654,10 @@ void SIM_PLOT_FRAME::OnFilterMouseMoved( wxMouseEvent& aEvent )
 
 void SIM_PLOT_FRAME::onSignalsGridCellChanged( wxGridEvent& aEvent )
 {
-    int      row = aEvent.GetRow();
-    int      col = aEvent.GetCol();
-    wxString text = m_signalsGrid->GetCellValue( row, col );
+    int             row = aEvent.GetRow();
+    int             col = aEvent.GetCol();
+    wxString        text = m_signalsGrid->GetCellValue( row, col );
+    SIM_PLOT_PANEL* plot = GetCurrentPlot();
 
     if( col == COL_SIGNAL_SHOW )
     {
@@ -684,11 +685,25 @@ void SIM_PLOT_FRAME::onSignalsGridCellChanged( wxGridEvent& aEvent )
         {
             removeTrace( m_signalsGrid->GetCellValue( row, COL_SIGNAL_NAME ) );
         }
+
+        // Update enabled/visible states of other controls
+        updateSignalsGrid();
+    }
+    else if( col == COL_SIGNAL_COLOR )
+    {
+        KIGFX::COLOR4D color( m_signalsGrid->GetCellValue( row, COL_SIGNAL_COLOR ) );
+        wxString       signalName = m_signalsGrid->GetCellValue( row, COL_SIGNAL_NAME );
+        TRACE*         trace = plot->GetTrace( signalName );
+
+        if( trace )
+        {
+            trace->SetTraceColour( color.ToColour() );
+            plot->UpdateTraceStyle( trace );
+            plot->UpdatePlotColors();
+        }
     }
     else if( col == COL_CURSOR_1 || col == COL_CURSOR_2 )
     {
-        SIM_PLOT_PANEL* plot = GetCurrentPlot();
-
         for( int ii = 0; ii < m_signalsGrid->GetNumberRows(); ++ii )
         {
             wxString signalName = m_signalsGrid->GetCellValue( ii, COL_SIGNAL_NAME );
@@ -696,9 +711,10 @@ void SIM_PLOT_FRAME::onSignalsGridCellChanged( wxGridEvent& aEvent )
 
             plot->EnableCursor( signalName, col == COL_CURSOR_1 ? 1 : 2, enable );
         }
-    }
 
-    updateSignalsGrid();
+        // Update cursor checkboxes (which are really radio buttons)
+        updateSignalsGrid();
+    }
 }
 
 
@@ -1808,7 +1824,7 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
         std::vector<struct TRACE_DESC> traceInfo;
 
         // Get information about all the traces on the plot, remove and add again
-        for( auto& [name, trace] : plotPanel->GetTraces() )
+        for( const auto& [name, trace] : plotPanel->GetTraces() )
         {
             struct TRACE_DESC placeholder;
             placeholder.m_name = trace->GetName();
