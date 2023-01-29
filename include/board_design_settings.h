@@ -38,8 +38,8 @@
 #include <teardrop/teardrop_parameters.h>
 
 
-#define DEFAULT_SILK_LINE_WIDTH       0.12
-#define DEFAULT_COPPER_LINE_WIDTH     0.20
+#define DEFAULT_SILK_LINE_WIDTH       0.1
+#define DEFAULT_COPPER_LINE_WIDTH     0.2
 #define DEFAULT_EDGE_WIDTH            0.05
 #define DEFAULT_COURTYARD_WIDTH       0.05
 #define DEFAULT_LINE_WIDTH            0.10
@@ -48,7 +48,7 @@
 #define DEFAULT_COPPER_TEXT_SIZE      1.5
 #define DEFAULT_TEXT_SIZE             1.0
 
-#define DEFAULT_SILK_TEXT_WIDTH       0.15
+#define DEFAULT_SILK_TEXT_WIDTH       0.1
 #define DEFAULT_COPPER_TEXT_WIDTH     0.30
 #define DEFAULT_TEXT_WIDTH            0.15
 
@@ -78,8 +78,8 @@
 
 #define DEFAULT_MINCLEARANCE          0.0     // overall min clearance
 #define DEFAULT_MINCONNECTION         0.0     // overall min connection width
-#define DEFAULT_TRACKMINWIDTH         0.2     // track width min value
-#define DEFAULT_VIASMINSIZE           0.4     // vias (not micro vias) min diameter
+#define DEFAULT_TRACKMINWIDTH         0.0     // track width min value
+#define DEFAULT_VIASMINSIZE           0.5     // vias (not micro vias) min diameter
 #define DEFAULT_MINTHROUGHDRILL       0.3     // through holes (not micro vias) min drill diameter
 #define DEFAULT_MICROVIASMINSIZE      0.2     // micro vias (not vias) min diameter
 #define DEFAULT_MICROVIASMINDRILL     0.1     // micro vias (not vias) min drill diameter
