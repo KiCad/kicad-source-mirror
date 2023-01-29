@@ -178,6 +178,20 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
     cutTunedLine( m_originPair.CP(), m_currentStart, aP, preP, tunedP, postP );
     cutTunedLine( m_originPair.CN(), m_currentStart, aP, preN, tunedN, postN );
 
+    auto updateStatus =
+            [&]()
+            {
+                int comp = compareWithTolerance( m_lastLength - m_settings.m_targetLength, 0,
+                                                 m_settings.m_lengthTolerance );
+
+                if( comp > 0 )
+                    m_lastStatus = TOO_LONG;
+                else if( comp < 0 )
+                    m_lastStatus = TOO_SHORT;
+                else
+                    m_lastStatus = TUNED;
+            };
+
     DIFF_PAIR tuned( m_originPair );
 
     tuned.SetShape( tunedP, tunedN );
@@ -185,7 +199,17 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
     tuned.CoupledSegmentPairs( coupledSegments );
 
     if( coupledSegments.size() == 0 )
+    {
+        // Tuning started at an uncoupled area of the DP; we won't get a valid result until the
+        // cursor is moved far enough along a coupled area.  Prevent the track from disappearing and
+        // the length from being zero by just using the original.
+        m_finalShapeP = m_originPair.CP();
+        m_finalShapeN = m_originPair.CN();
+        m_lastLength  = origPathLength();
+        updateStatus();
+
         return false;
+    }
 
     m_result = MEANDERED_LINE( this, true );
     m_result.SetWidth( tuned.Width() );
@@ -314,16 +338,7 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
         }
 
         m_lastLength += std::max( tunedP.Length(), tunedN.Length() );
-
-        int comp = compareWithTolerance( m_lastLength - m_settings.m_targetLength, 0,
-                                         m_settings.m_lengthTolerance );
-
-        if( comp > 0 )
-            m_lastStatus = TOO_LONG;
-        else if( comp < 0 )
-            m_lastStatus = TOO_SHORT;
-        else
-            m_lastStatus = TUNED;
+        updateStatus();
     }
 
     m_finalShapeP.Clear();
@@ -463,6 +478,7 @@ DP_MEANDER_PLACER::TUNING_STATUS DP_MEANDER_PLACER::TuningStatus() const
 {
     return m_lastStatus;
 }
+
 
 const std::vector<int> DP_MEANDER_PLACER::CurrentNets() const
 {
