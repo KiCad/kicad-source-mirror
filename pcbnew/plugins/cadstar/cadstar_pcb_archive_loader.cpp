@@ -2545,20 +2545,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarText(
 
     txt->SetMirrored( aCadstarText.Mirror );
 
-    TEXTCODE tc = getTextCode( aCadstarText.TextCodeID );
-
-    txt->SetTextThickness( getKiCadLength( tc.LineWidth ) );
-
-    wxSize unscaledTextSize;
-    unscaledTextSize.x = getKiCadLength( tc.Width );
-
-    // The width is zero for all non-cadstar fonts. Using a width equal to the height seems
-    // to work well for most fonts.
-    if( unscaledTextSize.x == 0 )
-        unscaledTextSize.x = getKiCadLength( tc.Height );
-
-    unscaledTextSize.y = KiROUND( TXT_HEIGHT_RATIO * (double) getKiCadLength( tc.Height ) );
-    txt->SetTextSize( unscaledTextSize );
+    applyTextCode( txt, aCadstarText.TextCodeID );
 
     switch( aCadstarText.Alignment )
     {
@@ -2620,12 +2607,15 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarText(
     //scale it after flipping:
     if( aScalingFactor != 1.0 )
     {
-        wxSize scaledTextSize;
+        VECTOR2I unscaledTextSize = txt->GetTextSize();
+        int      unscaledThickness = txt->GetTextThickness();
+
+        VECTOR2I scaledTextSize;
         scaledTextSize.x = KiROUND( (double) unscaledTextSize.x * aScalingFactor );
         scaledTextSize.y = KiROUND( (double) unscaledTextSize.y * aScalingFactor );
+
         txt->SetTextSize( scaledTextSize );
-        txt->SetTextThickness(
-                KiROUND( (double) getKiCadLength( tc.LineWidth ) * aScalingFactor ) );
+        txt->SetTextThickness( KiROUND( (double) unscaledThickness * aScalingFactor ) );
     }
 
     txt->Move( aMoveVector );
@@ -3278,20 +3268,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::addAttribute( const ATTRIBUTE_LOCATION& aCadsta
     if( aCadstarAttrLoc.Mirror ) // If mirroring, invert angle to match CADSTAR
         txt->SetTextAngle( -txt->GetTextAngle() );
 
-    TEXTCODE tc = getTextCode( aCadstarAttrLoc.TextCodeID );
+    applyTextCode( txt, aCadstarAttrLoc.TextCodeID );
 
-    txt->SetTextThickness( getKiCadLength( tc.LineWidth ) );
-
-    wxSize txtSize;
-    txtSize.x = getKiCadLength( tc.Width );
-
-    // The width is zero for all non-cadstar fonts. Using a width equal to the height seems
-    // to work well for most fonts.
-    if( txtSize.x == 0 )
-        txtSize.x = getKiCadLength( tc.Height );
-
-    txtSize.y = KiROUND( TXT_HEIGHT_RATIO * (double) getKiCadLength( tc.Height ) );
-    txt->SetTextSize( txtSize );
     txt->SetKeepUpright( false ); //Keeping it upright seems to result in incorrect orientation
 
     switch( aCadstarAttrLoc.Alignment )
@@ -3369,6 +3347,40 @@ void CADSTAR_PCB_ARCHIVE_LOADER::applyRouteOffset( VECTOR2I*      aPointToOffset
     {
         *aPointToOffset = aRefPoint; // zero length track. Needs to be removed to mimmick
                                      // cadstar behaviour
+    }
+}
+
+
+void CADSTAR_PCB_ARCHIVE_LOADER:: applyTextCode( EDA_TEXT*          aKiCadText,
+                                                const TEXTCODE_ID& aCadstarTextCodeID )
+{
+    TEXTCODE tc = getTextCode( aCadstarTextCodeID );
+
+    aKiCadText->SetTextThickness( getKiCadLength( tc.LineWidth ) );
+
+    VECTOR2I textSize;
+    textSize.x = getKiCadLength( tc.Width );
+
+    // The width is zero for all non-cadstar fonts. Using a width equal to the height seems
+    // to work well for most fonts.
+    if( textSize.x == 0 )
+        textSize.x = getKiCadLength( tc.Height );
+
+    textSize.y = KiROUND( TXT_HEIGHT_RATIO * (double) getKiCadLength( tc.Height ) );
+
+    if( textSize.x == 0 || textSize.y == 0 )
+    {
+        // Make zero sized text not visible
+
+        aKiCadText->SetTextSize(
+                VECTOR2I( EDA_UNIT_UTILS::Mils2IU( pcbIUScale, DEFAULT_SIZE_TEXT ),
+                          EDA_UNIT_UTILS::Mils2IU( pcbIUScale, DEFAULT_SIZE_TEXT ) ) );
+
+        aKiCadText->SetVisible( false );
+    }
+    else
+    {
+        aKiCadText->SetTextSize( textSize );
     }
 }
 
@@ -3614,9 +3626,6 @@ void CADSTAR_PCB_ARCHIVE_LOADER::applyDimensionSettings( const DIMENSION&  aCads
                                                          PCB_DIMENSION_BASE* aKiCadDim )
 {
     UNITS dimensionUnits = aCadstarDim.LinearUnits;
-    TEXTCODE txtCode = getTextCode( aCadstarDim.Text.TextCodeID );
-    int correctedHeight = KiROUND( TXT_HEIGHT_RATIO * (double) getKiCadLength( txtCode.Height ) );
-    wxSize   txtSize( getKiCadLength( txtCode.Width ), correctedHeight );
     LINECODE linecode = Assignments.Codedefs.LineCodes.at( aCadstarDim.Line.LineCodeID );
 
     aKiCadDim->SetLayer( getKiCadLayer( aCadstarDim.LayerID ) );
@@ -3625,8 +3634,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::applyDimensionSettings( const DIMENSION&  aCads
     aKiCadDim->SetEnd( getKiCadPoint( aCadstarDim.ExtensionLineParams.End ) );
     aKiCadDim->SetExtensionOffset( getKiCadLength( aCadstarDim.ExtensionLineParams.Offset ) );
     aKiCadDim->SetLineThickness( getKiCadLength( linecode.Width ) );
-    aKiCadDim->Text().SetTextThickness( getKiCadLength( txtCode.LineWidth ) );
-    aKiCadDim->Text().SetTextSize( txtSize );
+
+    applyTextCode( &aKiCadDim->Text(), aCadstarDim.Text.TextCodeID );
 
     // Find prefix and suffix:
     wxString prefix = wxEmptyString;

@@ -400,6 +400,11 @@ private:
     void applyRouteOffset( VECTOR2I* aPointToOffset, const VECTOR2I& aRefPoint,
                            const long& aOffsetAmount );
 
+    /**
+     * Apply cadstar textcode parameters to a KiCad text object
+     */
+    void applyTextCode( EDA_TEXT* aKiCadText, const TEXTCODE_ID& aCadstarTextCodeID );
+
     //Helper Functions for obtaining CADSTAR elements in the parsed structures
     int        getLineThickness( const LINECODE_ID& aCadstarLineCodeID );
     COPPERCODE getCopperCode( const COPPERCODE_ID& aCadstaCopperCodeID );
