@@ -246,7 +246,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnExcludeFromSimulation( wxCommandEvent& even
         if( simEnableFieldRow == -1 )
         {
             simEnableFieldRow = (int) m_fields->size();
-            m_fields->emplace_back( m_libEntry, simEnableFieldRow );
+            m_fields->emplace_back( m_libEntry, simEnableFieldRow, SIM_ENABLE_FIELD );
 
             // notify the grid
             wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1 );
@@ -254,6 +254,8 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnExcludeFromSimulation( wxCommandEvent& even
         }
 
         m_grid->SetCellValue( simEnableFieldRow, FDC_VALUE, wxT( "0" ) );
+        m_grid->SetCellValue( simEnableFieldRow, FDC_SHOWN, wxT( "0" ) );
+        m_grid->SetCellValue( simEnableFieldRow, FDC_SHOW_NAME, wxT( "0" ) );
     }
     else if( simEnableFieldRow >= 0 )
     {
@@ -889,6 +891,21 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
         m_delayedFocusRow = -1;
         m_delayedFocusColumn = -1;
     }
+
+#ifdef KICAD_SPICE
+    wxString simEnable;
+
+    for( int ii = MANDATORY_FIELDS; ii < m_fields->GetNumberRows(); ++ii )
+    {
+        if( m_fields->GetValue( ii, FDC_NAME ) == SIM_ENABLE_FIELD )
+        {
+            simEnable = m_fields->GetValue( ii, FDC_VALUE );
+            break;
+        }
+    }
+
+    m_excludeFromSim->SetValue( simEnable == wxS( "0" ) );
+#endif
 }
 
 

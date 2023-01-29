@@ -562,6 +562,8 @@ void DIALOG_SYMBOL_PROPERTIES::OnExcludeFromSimulation( wxCommandEvent& event )
         }
 
         m_fieldsGrid->SetCellValue( simEnableFieldRow, FDC_VALUE, wxT( "0" ) );
+        m_fieldsGrid->SetCellValue( simEnableFieldRow, FDC_SHOWN, wxT( "0" ) );
+        m_fieldsGrid->SetCellValue( simEnableFieldRow, FDC_SHOW_NAME, wxT( "0" ) );
     }
     else if( simEnableFieldRow >= 0 )
     {
