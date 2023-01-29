@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -78,6 +78,7 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		virtual void OnTableCellClick( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnTableItemContextMenu( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnTableColSize( wxGridSizeEvent& event ) { event.Skip(); }
+		virtual void OnTableRangeSelected( wxGridRangeSelectEvent& event ) { event.Skip(); }
 		virtual void OnExport( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSaveAndContinue( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancel( wxCommandEvent& event ) { event.Skip(); }

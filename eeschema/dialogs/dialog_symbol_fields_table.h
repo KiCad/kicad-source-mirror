@@ -60,6 +60,7 @@ private:
     void OnRegroupSymbols( wxCommandEvent& aEvent ) override;
     void OnTableValueChanged( wxGridEvent& event ) override;
     void OnTableCellClick( wxGridEvent& event ) override;
+    void OnTableRangeSelected( wxGridRangeSelectEvent& event ) override;
     void OnTableItemContextMenu( wxGridEvent& event ) override;
     void OnTableColSize( wxGridSizeEvent& event ) override;
     void OnSizeFieldList( wxSizeEvent& event ) override;
