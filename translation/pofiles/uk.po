@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-29 14:24-0800\n"
-"PO-Revision-Date: 2023-01-27 14:28+0000\n"
+"PO-Revision-Date: 2023-01-30 07:26+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
-"source/uk/>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
+"master-source/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -8933,9 +8933,8 @@ msgid "Buses && bus labels"
 msgstr "Шини && мітки шини"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:51
-#, fuzzy
 msgid "Label fields"
-msgstr "Поля символів"
+msgstr "Поля міток"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:57
 msgid "Sheet titles"
@@ -8955,9 +8954,8 @@ msgid "Filters"
 msgstr "Фільтри"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:87
-#, fuzzy
 msgid "Filter fields by name:"
-msgstr "Фільтрувати елементи за зв'язком:"
+msgstr "Фільтрувати поля за іменем:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:99
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:73
@@ -10701,13 +10699,13 @@ msgid "Note: item colors are overridden in the current color theme."
 msgstr "Примітка: кольори елементів перевизначені в поточній кольоровій темі."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:384
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "To see individual item colors uncheck '%s'\n"
 "in Preferences > Schematic Editor > Colors."
 msgstr ""
-"Що б вибрати індивідуальні кольори відмітьте '%s'\n"
-"в Налаштуваннях > Eeschema > Кольори."
+"Що б вибрати індивідуальні кольори елементу зніміть відмітку '%s'\n"
+"в Налаштуваннях > Редактор схеми> Кольори."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:426
 #, c-format
@@ -23004,7 +23002,6 @@ msgstr ""
 "R1 + (R2|R3)... будь-яка комбінація\n"
 
 #: pcb_calculator/fusing_current_help.h:2
-#, fuzzy
 msgid ""
 "You can use this calculator to check if a small track can handle a large "
 "current for a short period of time.<br>\n"
@@ -23019,7 +23016,7 @@ msgstr ""
 "Ви можете скористатися цим калькулятором, щоб перевірити, чи невелика "
 "доріжка може витримати великий струм протягом короткого періоду часу.<br>\n"
 "Цей інструмент дозволяє розробити запобіжник доріжки, але його слід "
-"використовувати лише як оцінку.\n"
+"використовувати лише для приблизної оцінки.\n"
 "\n"
 "Калькулятор розраховує енергію, необхідну для нагрівання дроту<br>\n"
 "до точки плавлення, а також енергію, необхідну для зміни фази.<br>\n"
