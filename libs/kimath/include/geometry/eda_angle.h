@@ -257,6 +257,17 @@ public:
         return *this;
     }
 
+    inline EDA_ANGLE NormalizeNegative()
+    {
+        while( m_value <= -360.0 )
+            m_value += 360.0;
+
+        while( m_value > 0.0 )
+            m_value -= 360.0;
+
+        return *this;
+    }
+
     inline EDA_ANGLE Normalize90()
     {
         while( m_value < -90.0 )
