@@ -167,7 +167,7 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
         wxChar csv_sep = ',';
 
         // Set first line:;
-        sprintf( line, "Ref%cVal%cPackage%cPosX%cPosY%cRot%cSide\n",
+        snprintf( line, sizeof(line), "Ref%cVal%cPackage%cPosX%cPosY%cRot%cSide\n",
                  csv_sep, csv_sep, csv_sep, csv_sep, csv_sep, csv_sep );
 
         buffer += line;
@@ -211,12 +211,12 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
     else
     {
         // Write file header
-        sprintf( line, "### Footprint positions - created on %s ###\n", TO_UTF8( DateAndTime() ) );
+        snprintf( line, sizeof(line), "### Footprint positions - created on %s ###\n", TO_UTF8( DateAndTime() ) );
 
         buffer += line;
 
         wxString Title = GetBuildVersion();
-        sprintf( line, "### Printed by KiCad version %s\n", TO_UTF8( Title ) );
+        snprintf( line, sizeof(line), "### Printed by KiCad version %s\n", TO_UTF8( Title ) );
         buffer += line;
 
         buffer +=  unit_text;
@@ -233,7 +233,7 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
 
         buffer += "\n";
 
-        sprintf(line, "%-*s  %-*s  %-*s  %9.9s  %9.9s  %8.8s  %s\n",
+        snprintf(line, sizeof(line), "%-*s  %-*s  %-*s  %9.9s  %9.9s  %8.8s  %s\n",
                 int(lenRefText), "# Ref",
                 int(lenValText), "Val",
                 int(lenPkgText), "Package",
@@ -258,7 +258,7 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
             ref.Replace( wxT( " " ), wxT( "_" ) );
             val.Replace( wxT( " " ), wxT( "_" ) );
             pkg.Replace( wxT( " " ), wxT( "_" ) );
-            sprintf(line, "%-*s  %-*s  %-*s  %9.4f  %9.4f  %8.4f  %s\n",
+            snprintf(line, sizeof(line), "%-*s  %-*s  %-*s  %9.4f  %9.4f  %8.4f  %s\n",
                     lenRefText, TO_UTF8( ref ),
                     lenValText, TO_UTF8( val ),
                     lenPkgText, TO_UTF8( pkg ),
@@ -293,11 +293,11 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
 
     // Generate header file comments.)
     char line[1024];
-    sprintf( line, "## Footprint report - date %s\n", TO_UTF8( DateAndTime() ) );
+    snprintf( line, sizeof(line), "## Footprint report - date %s\n", TO_UTF8( DateAndTime() ) );
     buffer += line;
 
     wxString Title = GetBuildVersion();
-    sprintf( line, "## Created by KiCad version %s\n", TO_UTF8( Title ) );
+    snprintf( line, sizeof(line), "## Created by KiCad version %s\n", TO_UTF8( Title ) );
     buffer += line;
 
     buffer += unit_text;
@@ -308,11 +308,11 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
 
     buffer += "\n$BOARD\n";
 
-    sprintf( line, "upper_left_corner %9.6f %9.6f\n",
+    snprintf( line, sizeof(line), "upper_left_corner %9.6f %9.6f\n",
              bbbox.GetX() * conv_unit, bbbox.GetY() * conv_unit );
     buffer += line;
 
-    sprintf( line, "lower_right_corner %9.6f %9.6f\n",
+    snprintf( line, sizeof(line), "lower_right_corner %9.6f %9.6f\n",
              bbbox.GetRight()  * conv_unit, bbbox.GetBottom() * conv_unit );
     buffer += line;
 
@@ -333,12 +333,12 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
     {
         wxString ref = footprint->Reference().GetShownText();
 
-        sprintf( line, "$MODULE %s\n", TO_UTF8( ref ) );
+        snprintf( line, sizeof(line), "$MODULE %s\n", TO_UTF8( ref ) );
         buffer += line;
 
-        sprintf( line, "reference %s\n", TO_UTF8( ref ) );
-        sprintf( line, "value %s\n", EscapedUTF8( footprint->Value().GetShownText() ).c_str() );
-        sprintf( line, "footprint %s\n", footprint->GetFPID().Format().c_str() );
+        snprintf( line, sizeof(line), "reference %s\n", TO_UTF8( ref ) );
+        snprintf( line, sizeof(line), "value %s\n", EscapedUTF8( footprint->Value().GetShownText() ).c_str() );
+        snprintf( line, sizeof(line), "footprint %s\n", footprint->GetFPID().Format().c_str() );
         buffer += line;
 
         buffer += "attribut";
@@ -357,7 +357,7 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
         VECTOR2I footprint_pos = footprint->GetPosition();
         footprint_pos -= m_place_Offset;
 
-        sprintf( line, "position %9.6f %9.6f  orientation %.2f\n",
+        snprintf( line, sizeof(line), "position %9.6f %9.6f  orientation %.2f\n",
                  footprint_pos.x * conv_unit,
                  footprint_pos.y * conv_unit,
                  footprint->GetOrientation().AsDegrees() );
@@ -383,7 +383,7 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
 
         for( PAD* pad : sortedPads )
         {
-            sprintf( line, "$PAD \"%s\"\n", TO_UTF8( pad->GetNumber() ) );
+            snprintf( line, sizeof(line), "$PAD \"%s\"\n", TO_UTF8( pad->GetNumber() ) );
             buffer += line;
 
             int layer = 0;
@@ -395,12 +395,12 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
                 layer |= 2;
 
             static const char* layer_name[4] = { "nocopper", "back", "front", "both" };
-            sprintf( line, "Shape %s Layer %s\n",
+            snprintf( line, sizeof(line), "Shape %s Layer %s\n",
                      TO_UTF8( pad->ShowPadShape() ),
                      layer_name[layer] );
             buffer += line;
 
-            sprintf( line, "position %9.6f %9.6f  size %9.6f %9.6f  orientation %.2f\n",
+            snprintf( line, sizeof(line), "position %9.6f %9.6f  size %9.6f %9.6f  orientation %.2f\n",
                      pad->GetPos0().x * conv_unit,
                      pad->GetPos0().y * conv_unit,
                      pad->GetSize().x * conv_unit,
@@ -408,10 +408,10 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
                      ( pad->GetOrientation() - footprint->GetOrientation() ).AsDegrees() );
             buffer += line;
 
-            sprintf( line, "drill %9.6f\n", pad->GetDrillSize().x * conv_unit );
+            snprintf( line, sizeof(line), "drill %9.6f\n", pad->GetDrillSize().x * conv_unit );
             buffer += line;
 
-            sprintf( line, "shape_offset %9.6f %9.6f\n",
+            snprintf( line, sizeof(line), "shape_offset %9.6f %9.6f\n",
                      pad->GetOffset().x * conv_unit,
                      pad->GetOffset().y * conv_unit );
             buffer += line;
@@ -419,7 +419,7 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
             buffer += "$EndPAD\n";
         }
 
-        sprintf( line, "$EndMODULE  %s\n\n", TO_UTF8( ref ) );
+        snprintf( line, sizeof(line), "$EndMODULE  %s\n\n", TO_UTF8( ref ) );
         buffer += line;
     }
 

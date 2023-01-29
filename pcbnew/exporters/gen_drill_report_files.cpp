@@ -305,22 +305,22 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
         plotter->SetCurrentLineWidth( -1 );
 
         // List the diameter of each drill in mm and inches.
-        sprintf( line, "%3.3fmm / %2.4f\" ", diameter_in_mm( tool.m_Diameter ),
+        snprintf( line, sizeof(line), "%3.3fmm / %2.4f\" ", diameter_in_mm( tool.m_Diameter ),
                  diameter_in_inches( tool.m_Diameter ) );
 
         msg = FROM_UTF8( line );
 
         // Now list how many holes and ovals are associated with each drill.
         if( ( tool.m_TotalCount == 1 ) && ( tool.m_OvalCount == 0 ) )
-            sprintf( line, "(1 hole)" );
+            snprintf( line, sizeof(line), "(1 hole)" );
         else if( tool.m_TotalCount == 1 ) // && ( toolm_OvalCount == 1 )
-            sprintf( line, "(1 slot)" );
+            snprintf( line, sizeof(line), "(1 slot)" );
         else if( tool.m_OvalCount == 0 )
-            sprintf( line, "(%d holes)", tool.m_TotalCount );
+            snprintf( line, sizeof(line), "(%d holes)", tool.m_TotalCount );
         else if( tool.m_OvalCount == 1 )
-            sprintf( line, "(%d holes + 1 slot)", tool.m_TotalCount - 1 );
+            snprintf( line, sizeof(line), "(%d holes + 1 slot)", tool.m_TotalCount - 1 );
         else // if ( toolm_OvalCount > 1 )
-            sprintf( line, "(%d holes + %d slots)", tool.m_TotalCount - tool.m_OvalCount,
+            snprintf( line, sizeof(line), "(%d holes + %d slots)", tool.m_TotalCount - tool.m_OvalCount,
                      tool.m_OvalCount );
 
         msg += FROM_UTF8( line );

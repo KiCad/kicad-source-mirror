@@ -722,8 +722,8 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             char        ybuf[30];
 
             // EAGLE_PLUGIN can use this info to center the BOARD, but it does not yet.
-            sprintf( xbuf, "%d", GetPageSizeIU().x );
-            sprintf( ybuf, "%d", GetPageSizeIU().y );
+            snprintf( xbuf, sizeof(xbuf), "%d", GetPageSizeIU().x );
+            snprintf( ybuf, sizeof(ybuf), "%d", GetPageSizeIU().y );
 
             props["page_width"]  = xbuf;
             props["page_height"] = ybuf;

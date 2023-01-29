@@ -1255,8 +1255,8 @@ int PCB_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
         char        ybuf[30];
 
         // EAGLE_PLUGIN can use this info to center the BOARD, but it does not yet.
-        sprintf( xbuf, "%d", editFrame->GetPageSizeIU().x );
-        sprintf( ybuf, "%d", editFrame->GetPageSizeIU().y );
+        snprintf( xbuf, sizeof(xbuf), "%d", editFrame->GetPageSizeIU().x );
+        snprintf( ybuf, sizeof(ybuf), "%d", editFrame->GetPageSizeIU().y );
 
         props["page_width"]  = xbuf;
         props["page_height"] = ybuf;

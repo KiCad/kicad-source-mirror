@@ -3111,7 +3111,7 @@ void LP_CACHE::LoadModules( LINE_READER* aReader )
                     std::string newName = footprintName;
 
                     newName += "_v";
-                    sprintf( buf, "%d", version++ );
+                    snprintf( buf, sizeof(buf), "%d", version++ );
                     newName += buf;
 
                     it = m_footprints.find( newName );
