@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-20 09:12-0800\n"
-"PO-Revision-Date: 2023-01-28 22:27+0000\n"
-"Last-Translator: Keisuke Nakao <chome@argv.org>\n"
+"PO-Revision-Date: 2023-01-29 22:21+0000\n"
+"Last-Translator: Tokita, Hiroshi <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -234,7 +234,7 @@ msgstr "設定..."
 #: pagelayout_editor/menubar.cpp:160 pcbnew/menubar_footprint_editor.cpp:243
 #: pcbnew/menubar_pcb_editor.cpp:457
 msgid "Show preferences for all open tools"
-msgstr "開かれた全ツールの設定を表示"
+msgstr "開かれているすべてのツールの設定を表示"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:117
 msgid "Reset to Default Settings"
@@ -1469,7 +1469,7 @@ msgstr "絶対パス '%s' を '%s' について設定できません。"
 #: common/common.cpp:323
 #, c-format
 msgid "Output directory '%s' created."
-msgstr "出力ディレクトリ '%s' が作成されました。"
+msgstr "出力ディレクトリ '%s' を作成しました。"
 
 #: common/common.cpp:332
 #, c-format
@@ -2233,20 +2233,19 @@ msgstr "ホットキー リスト"
 
 #: common/dialogs/dialog_locked_items_query.cpp:35
 msgid "Skip Locked Items"
-msgstr "ロックされたアイテムを除外"
+msgstr "ロックしたアイテムを除外"
 
 #: common/dialogs/dialog_locked_items_query.cpp:36
 msgid ""
 "Remove locked items from the selection and only apply the operation to the "
 "unlocked items (if any)."
-msgstr ""
-"ロックされたアイテムを選択から除外し、ロックされていないアイテムにのみ操作を"
-"適用します。"
+msgstr "ロックしたアイテムを選択から除外し、ロック解除されたアイテムにのみ操作を適用"
+"します。"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
 #, c-format
 msgid "The selection contains %d locked items."
-msgstr "選択対象に%d個のロックされたアイテムが含まれています。"
+msgstr "選択対象に%d個のロックしたアイテムが含まれています。"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
@@ -2274,11 +2273,11 @@ msgid ""
 "Any locked items will remain locked after the operation is complete."
 msgstr ""
 "ロックを無視して、選択したすべての項目に対して操作を適用します。\n"
-"操作が完了しても、ロックされたアイテムはロックされたままになります。"
+"操作が完了しても、ロックしたアイテムはロックしたままになります。"
 
 #: common/dialogs/dialog_locked_items_query_base.h:56
 msgid "Locked Items"
-msgstr "ロックされたアイテム"
+msgstr "ロックしたアイテム"
 
 #: common/dialogs/dialog_migrate_settings.cpp:32
 msgid "Quit KiCad"
@@ -2749,7 +2748,7 @@ msgid ""
 "Warning: Scale option set to a very large value.\n"
 " Clamped to %f"
 msgstr ""
-"警告: スケール オプションは非常に大きな値にセットされます。\n"
+"警告: スケール オプションは非常に大きな値にセットされています。\n"
 " %f にクランプ"
 
 #: common/dialogs/dialog_print_generic.cpp:172
@@ -2758,7 +2757,7 @@ msgid ""
 "Warning: Scale option set to a very small value.\n"
 " Clamped to %f"
 msgstr ""
-"警告: スケール オプションは非常に小さな値にセットされます。\n"
+"警告: スケール オプションは非常に小さな値にセットされています。\n"
 " %f にクランプ"
 
 #: common/dialogs/dialog_print_generic.cpp:242
@@ -4719,7 +4718,7 @@ msgstr "厚さ"
 
 #: common/eda_text.cpp:1052 pcbnew/microwave/microwave_polygon.cpp:128
 msgid "Mirrored"
-msgstr "ミラー"
+msgstr "反転"
 
 #: common/eda_text.cpp:1056
 #: eeschema/dialogs/dialog_field_properties_base.cpp:87
@@ -4750,7 +4749,7 @@ msgstr "垂直位置揃え"
 msgid ""
 "The base path of locally installed system footprint libraries (.pretty "
 "folders)."
-msgstr "ローカルでインストールされたシステムのフットプリント ライブラリの基本パス (."
+msgstr "ローカルでインストールしたシステムのフットプリント ライブラリの基本パス (."
 "prettyフォルダー)。"
 
 #: common/env_vars.cpp:74
@@ -4759,11 +4758,11 @@ msgstr "システムのフットプリント 3Dシェイプの基本パス (.3Ds
 
 #: common/env_vars.cpp:76
 msgid "The base path of the locally installed symbol libraries."
-msgstr "ローカルでインストールされたシンボル ライブラリの基本パス。"
+msgstr "ローカルでインストールしたシンボル ライブラリの基本パス。"
 
 #: common/env_vars.cpp:78
 msgid "A directory containing project templates installed with KiCad."
-msgstr "KiCad でインストールされたプロジェクト テンプレートを含むディレクトリ。"
+msgstr "KiCadと一緒にインストールしたプロジェクト テンプレートを含むディレクトリ。"
 
 #: common/env_vars.cpp:80
 msgid ""
@@ -4797,11 +4796,11 @@ msgstr ""
 
 #: common/env_vars.cpp:92
 msgid "A directory containing system-wide scripts installed with KiCad"
-msgstr "KiCad でインストールされたシステム全体のスクリプトを含むディレクトリ"
+msgstr "KiCadと一緒にインストールしたシステム全体のスクリプトを含むディレクトリ"
 
 #: common/env_vars.cpp:94
 msgid "A directory containing user-specific scripts installed with KiCad"
-msgstr "KiCad でインストールされたユーザー固有のスクリプトを含むディレクトリ"
+msgstr "KiCadと一緒にインストールしたユーザー固有のスクリプトを含むディレクトリ"
 
 #: common/env_vars.cpp:98
 msgid "Deprecated version of KICAD_TEMPLATE_DIR."
@@ -5401,7 +5400,7 @@ msgstr "グリッド軸"
 
 #: common/layer_id.cpp:185
 msgid "Locked item shadow"
-msgstr "ロックされたアイテムの影"
+msgstr "ロックしたアイテムの影"
 
 #: common/layer_id.cpp:186
 msgid "Courtyard collision shadow"
@@ -5603,7 +5602,7 @@ msgstr "ファイルのインポートはユーザーによってキャンセル
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2510
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2516
 msgid "The selected file is not valid or might be corrupt!"
-msgstr "選択されたファイルは不正であるか、壊れています!"
+msgstr "選択したファイルは不正であるか、壊れています!"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2615
 #, c-format
@@ -5713,15 +5712,15 @@ msgstr "ファイル '%s' にアーカイブできませんでした。"
 #: common/project/project_archiver.cpp:237
 #, c-format
 msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
-msgstr "Zip アーカイブ '%s' が作成されました (%s 未圧縮, %s 圧縮済)."
+msgstr "Zip アーカイブ '%s' を作成しました (%s 未圧縮, %s 圧縮済)."
 
 #: common/rc_item.cpp:350
 msgid "Excluded warning: "
-msgstr "除外された警告: "
+msgstr "除外した警告: "
 
 #: common/rc_item.cpp:352
 msgid "Excluded error: "
-msgstr "除外されたエラー: "
+msgstr "除外したエラー: "
 
 #: common/rc_item.cpp:356
 msgid "Warning: "
@@ -5892,11 +5891,11 @@ msgstr "一つ前の編集をやり直す"
 
 #: common/tool/actions.cpp:153
 msgid "Cut selected item(s) to clipboard"
-msgstr "選択されたアイテムをクリップボードに送る"
+msgstr "選択したアイテムをクリップボードに送る"
 
 #: common/tool/actions.cpp:159
 msgid "Copy selected item(s) to clipboard"
-msgstr "選択されたアイテムをクリップボードにコピー"
+msgstr "選択したアイテムをクリップボードにコピー"
 
 #: common/tool/actions.cpp:165
 msgid "Paste item(s) from clipboard"
@@ -6641,7 +6640,7 @@ msgstr "スクリーンにフィット"
 
 #: common/widgets/mathplot.cpp:1677
 msgid "Set plot view to show all items"
-msgstr "全アイテムを表示するようプロット表示を設定"
+msgstr "すべてのアイテムを表示するようプロット表示を設定"
 
 #: common/widgets/mathplot.cpp:1678
 msgid "Zoom in plot view."
@@ -6724,7 +6723,7 @@ msgstr "ホットキーを設定"
 #: common/widgets/widget_hotkey_list.cpp:351
 #, c-format
 msgid "'%s' is a reserved hotkey in KiCad and cannot be assigned."
-msgstr "'%s' はKiCad予約されたホットキーなので、指定することはできません。"
+msgstr "'%s' はKiCad予約済みのホットキーなので、指定することはできません。"
 
 #: common/widgets/widget_hotkey_list.cpp:402
 msgid "Edit..."
@@ -7167,7 +7166,7 @@ msgstr "シンボル : フットプリント割り当て"
 
 #: cvpcb/cvpcb_mainframe.cpp:118
 msgid "Filtered Footprints"
-msgstr "フィルターされたフットプリント"
+msgstr "フィルターしたフットプリント"
 
 #: cvpcb/cvpcb_mainframe.cpp:149
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:130
@@ -7470,11 +7469,11 @@ msgstr "フットプリント フィルター:"
 
 #: cvpcb/tools/cvpcb_actions.cpp:52
 msgid "View selected footprint"
-msgstr "選択されたフットプリントを表示"
+msgstr "選択したフットプリントを表示"
 
 #: cvpcb/tools/cvpcb_actions.cpp:53
 msgid "View the selected footprint in the footprint viewer"
-msgstr "フットプリント ビューアーで選択されたフットプリントを見る"
+msgstr "フットプリント ビューアーで選択したフットプリントを見る"
 
 #: cvpcb/tools/cvpcb_actions.cpp:60
 msgid "Manage Footprint Association Files"
@@ -7531,7 +7530,7 @@ msgstr "フットプリントを割り当て"
 
 #: cvpcb/tools/cvpcb_actions.cpp:116
 msgid "Assign footprint to selected symbols"
-msgstr "フットプリントを選択されたシンボルに割り当てる"
+msgstr "フットプリントを選択したシンボルに割り当てる"
 
 #: cvpcb/tools/cvpcb_actions.cpp:121
 msgid "Automatically assign footprints"
@@ -7547,7 +7546,7 @@ msgstr "関連付けを削除"
 
 #: cvpcb/tools/cvpcb_actions.cpp:129
 msgid "Delete selected footprint associations"
-msgstr "選択されたフットプリントの関連付けを削除"
+msgstr "選択したフットプリントの関連付けを削除"
 
 #: cvpcb/tools/cvpcb_actions.cpp:134 cvpcb/tools/cvpcb_actions.cpp:135
 msgid "Delete all footprint associations"
@@ -7627,9 +7626,8 @@ msgstr ""
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
-msgstr ""
-"%s と %s は、ともに同じ配線に接続されています; %s がネットリスト用ラベルとし"
-"て選択されました"
+msgstr "%s と %s は、ともに同じ配線に接続されています; %s "
+"をネットリスト用ラベルとして選択しました"
 
 #: eeschema/connection_graph.cpp:2794
 #, c-format
@@ -8032,7 +8030,7 @@ msgstr "シンボルを変更"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:76
 msgid "Change selected symbol(s)"
-msgstr "選択されたシンボルを変更"
+msgstr "選択したシンボルを変更"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:93
 msgid "Change symbols matching reference designator:"
@@ -8129,7 +8127,7 @@ msgstr "回路図のすべてのシンボルを更新"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:30
 msgid "Update selected symbol(s)"
-msgstr "選択されたシンボルを更新"
+msgstr "選択したシンボルを更新"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:33
 msgid "Update symbols matching reference designator:"
@@ -8224,7 +8222,7 @@ msgstr "すべてのユニットを配置"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:162
 msgid "Sequentially place all units of the symbol."
-msgstr "連続してシンボルの全てのユニットを配置します。"
+msgstr "連続してシンボルのすべてのユニットを配置します。"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:413
 #: eeschema/dialogs/dialog_choose_symbol.cpp:472
@@ -8238,7 +8236,7 @@ msgstr "シンボル '%s' をライブラリ '%s' からロード中にエラー
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:436
 msgid "No footprint specified"
-msgstr "指定されたフットプリントがありません"
+msgstr "指定したフットプリントがありません"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:449
 msgid "Invalid footprint specified"
@@ -8355,7 +8353,7 @@ msgstr "除外したものも削除しますか?"
 #: pcbnew/dialogs/dialog_drc.cpp:1133 pcbnew/dialogs/dialog_drc_base.cpp:212
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:79
 msgid "Delete All Markers"
-msgstr "全マーカーを削除"
+msgstr "すべてのマーカーを削除"
 
 #: eeschema/dialogs/dialog_erc.cpp:301
 msgid "Errors and Warnings Only"
@@ -8363,7 +8361,7 @@ msgstr "エラーと警告のみ"
 
 #: eeschema/dialogs/dialog_erc.cpp:301
 msgid "Errors, Warnings and Exclusions"
-msgstr "エラー、警告、および除外されたマーカー"
+msgstr "エラー、警告、および除外したマーカー"
 
 #: eeschema/dialogs/dialog_erc.cpp:417
 #, c-format
@@ -8441,7 +8439,7 @@ msgstr "適用"
 
 #: eeschema/dialogs/dialog_erc.cpp:641 pcbnew/dialogs/dialog_drc.cpp:572
 msgid "Remove exclusion for this violation"
-msgstr "この違反のための除外を外す"
+msgstr "この違反の除外の指定を外す"
 
 #: eeschema/dialogs/dialog_erc.cpp:642 pcbnew/dialogs/dialog_drc.cpp:573
 #, c-format
@@ -8460,7 +8458,7 @@ msgstr "%s リストから除外されます"
 #: eeschema/dialogs/dialog_erc.cpp:659 pcbnew/dialogs/dialog_drc.cpp:619
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
-msgstr "すべての '%s' 違反のためにエラーの深刻度を変更"
+msgstr "すべての '%s' 違反のエラーの深刻度を変更"
 
 #: eeschema/dialogs/dialog_erc.cpp:661 eeschema/dialogs/dialog_erc.cpp:667
 #: pcbnew/dialogs/dialog_drc.cpp:621 pcbnew/dialogs/dialog_drc.cpp:628
@@ -8470,12 +8468,12 @@ msgstr "違反の深刻度は、基板の設定... ダイアログで編集す�
 #: eeschema/dialogs/dialog_erc.cpp:665 pcbnew/dialogs/dialog_drc.cpp:626
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
-msgstr "すべての '%s' 違反のために警告の深刻度を変更"
+msgstr "すべての '%s' 違反の警告の深刻度を変更"
 
 #: eeschema/dialogs/dialog_erc.cpp:670 pcbnew/dialogs/dialog_drc.cpp:632
 #, c-format
 msgid "Ignore all '%s' violations"
-msgstr "すべての '%s' 違反を無視"
+msgstr "すべての '%s' 違反をテストしない"
 
 #: eeschema/dialogs/dialog_erc.cpp:671 pcbnew/dialogs/dialog_drc.cpp:634
 msgid "Violations will not be checked or reported"
@@ -8507,12 +8505,12 @@ msgstr "違反の深刻度"
 
 #: eeschema/dialogs/dialog_erc.cpp:876
 msgid "Edit ignored violations..."
-msgstr "無視された違反箇所を編集..."
+msgstr "無視する違反を編集..."
 
 #: eeschema/dialogs/dialog_erc.cpp:949 pcbnew/dialogs/dialog_gendrill.cpp:487
 #, c-format
 msgid "Report file '%s' created."
-msgstr "レポート ファイル '%s' が作成されました。"
+msgstr "レポート ファイル '%s' を作成しました。"
 
 #: eeschema/dialogs/dialog_erc.cpp:967
 #, c-format
@@ -8557,7 +8555,7 @@ msgstr "違反 (%s)"
 #: pcbnew/dialogs/dialog_drc_base.cpp:149
 #, c-format
 msgid "Ignored Tests (%s)"
-msgstr "無視されたテスト (%s)"
+msgstr "テストしない項目 (%s)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:139
 #: pcbnew/dialogs/dialog_drc_base.cpp:189
@@ -8928,15 +8926,15 @@ msgstr "他のシンボル フィールドを名前でフィルター:"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:96
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:73
 msgid "Filter items by parent reference designator:"
-msgstr "親のリファレンス指定子でアイテムをフィルター:"
+msgstr "親のリファレンス指定子でフィルター:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:104
 msgid "Filter items by parent symbol library id:"
-msgstr "親シンボル ライブラリ IDでアイテムをフィルター:"
+msgstr "親シンボル ライブラリ IDでフィルター:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:110
 msgid "Filter items by parent symbol type:"
-msgstr "親のシンボル タイプでアイテムをフィルター:"
+msgstr "親のシンボル タイプでフィルター:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:113
 msgid "Non-power symbols"
@@ -8949,13 +8947,13 @@ msgstr "電源シンボル"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:125
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:51
 msgid "Filter items by net:"
-msgstr "ネットでアイテムをフィルター:"
+msgstr "ネットでフィルター:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:137
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:85
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:77
 msgid "Only include selected items"
-msgstr "選択されたアイテムのみ"
+msgstr "選択したアイテムのみ"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:156
 msgid "Set To"
@@ -9821,8 +9819,8 @@ msgid ""
 "starting by sm."
 msgstr ""
 "このシンボルに使用できるフットプリント名のリストです。\n"
-"フットプリント名には、sm で始まる全てのフットプリント名を許可するための sm* "
-"のように、ワイルドカードを使用できます。"
+"フットプリント名には、sm で始まるすべてのフットプリント名を許可するための sm*"
+" のように、ワイルドカードを使用できます。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:322
 msgid "Add footprint filter"
@@ -11621,7 +11619,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:55
 msgid "Update references of symbols that have been changed in the PCB editor."
-msgstr "PCBエディターで変更されたシンボルのリファレンスを更新します。"
+msgstr "PCBエディターで変更したシンボルのリファレンスを更新します。"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:59
 msgid "Footprint assignments"
@@ -11742,11 +11740,11 @@ msgstr "選択領域とハイライト"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:88
 msgid "Draw selected child items"
-msgstr "選択された子アイテムを描画"
+msgstr "選択した子アイテムを描画"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:91
 msgid "Fill selected shapes"
-msgstr "選択された図形を塗りつぶし"
+msgstr "選択した図形を塗りつぶし"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:100
 msgid "Selection thickness:"
@@ -12694,7 +12692,7 @@ msgstr "シンボル '%s' がシンボル ライブラリ '%s' 内に見つか�
 #: eeschema/erc.cpp:921
 #, c-format
 msgid "Symbol '%s' has been modified in library '%s'"
-msgstr "シンボル '%s' がライブラリ '%s' で変更されました"
+msgstr "シンボル '%s' はライブラリ '%s' で変更されています"
 
 #: eeschema/erc_item.cpp:42
 msgid "Conflicts"
@@ -13427,7 +13425,7 @@ msgstr "エラー: シート名の重複。続けますか？"
 
 #: eeschema/picksymbol.cpp:169 pcbnew/load_select_footprint.cpp:256
 msgid "Recently Used"
-msgstr "最近使用された"
+msgstr "最近使用したもの"
 
 #: eeschema/picksymbol.cpp:192
 #, c-format
@@ -14021,12 +14019,12 @@ msgstr "(X = %d; Y = %d)にある予期しない円弧がインポートされ�
 msgid ""
 "Altium's harness connector (%s) was imported as a hierarchical sheet. Please "
 "review the imported schematic."
-msgstr "Altiumのハーネス コネクタ(%s)は階層シートとしてインポートされました。インポー"
-"トされた回路図を確認してください。"
+msgstr "Altiumのハーネス コネクタ(%s)は階層シートとしてインポートしました。インポート"
+"された回路図を確認してください。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2291
 msgid "Power Port with unknown style imported as 'Bar' type."
-msgstr "電源ポートのスタイルが不明なので、バーとしてインポートされました。"
+msgstr "電源ポートのスタイルが不明なので、バーとしてインポートしました。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2332
 #, c-format
@@ -14083,9 +14081,8 @@ msgstr ""
 msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "master variant ('%s') was loaded."
-msgstr ""
-"CADSTARのデザインには、KiCadに相当するものがないバリアントが含まれています。"
-"マスターバリアント( '%s' )のみがロードされました。"
+msgstr "CADSTARのデザインには、KiCadに相当するものがないバリアントが含まれています。"
+"マスターバリアント( '%s' )のみロードしました。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:139
 msgid ""
@@ -14100,9 +14097,8 @@ msgstr ""
 msgid ""
 "The CADSTAR design contains re-use blocks which has no KiCad equivalent. The "
 "re-use block information has been discarded during the import."
-msgstr ""
-"CADSTARのデザインには、KiCadに相当するものがない再利用ブロックが含まれていま"
-"す。再利用ブロック情報はインポート中に破棄されました。"
+msgstr "CADSTARのデザインには、KiCadに相当するものがない再利用ブロックが含まれていま"
+"す。再利用ブロック情報はインポート中に破棄しました。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:260
 msgid ""
@@ -14120,8 +14116,8 @@ msgid ""
 "The CADSTAR design has been imported successfully.\n"
 "Please review the import errors and warnings (if any)."
 msgstr ""
-"CADSTARのデザインは正常にインポートされました。\n"
-"(ある場合は)インポートのエラーと警告を確認してください。"
+"CADSTARのデザインを正常にインポートしました。\n"
+"(もしあれば)インポートのエラーと警告を確認してください。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:318
 msgid "The CADSTAR schematic might be corrupt: there is no root sheet."
@@ -15100,9 +15096,9 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"選択されたファイルは、別のプロジェクトの一部として作成されました。  このファ"
-"イルをこのプロジェクトにリンクすると、シンボル ライブラリの参照が欠落したり、"
-"不正確になる可能性があります。\n"
+"選択したファイルは、別のプロジェクトの一部として作成されました。  "
+"このファイルをこのプロジェクトにリンクすると、シンボル "
+"ライブラリの参照が欠落したり、不正確になる可能性があります。\n"
 "\n"
 "続行しますか？"
 
@@ -15587,7 +15583,7 @@ msgstr "未知の波形タイプです"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2379
 msgid "Internal error detected, a waveform should exist"
-msgstr "内部エラーが検出されました。波形が存在する必要があります"
+msgstr "内部エラーを検出しました。波形が存在する必要があります"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2444
 msgid "Internal error: Bad parser context."
@@ -16330,7 +16326,7 @@ msgid ""
 "Not all symbol libraries could be loaded.  Use the Manage Symbol\n"
 "Libraries dialog to adjust paths and add or remove libraries."
 msgstr ""
-"全てのシンボル ライブラリをロードできませんでした。 "
+"すべてのシンボル ライブラリをロードできませんでした。 "
 "パスを修正してライブラリの\n"
 "追加または削除を行うにはシンボル ライブラリ管理ダイアログを使用して下さい。"
 
@@ -16968,7 +16964,7 @@ msgstr "シンボルを編集"
 
 #: eeschema/tools/ee_actions.cpp:132
 msgid "Show selected symbol on editor canvas"
-msgstr "エディターのキャンバスに選択されたシンボルを表示"
+msgstr "エディターのキャンバスに選択したシンボルを表示"
 
 #: eeschema/tools/ee_actions.cpp:137
 msgid "Duplicate Symbol"
@@ -16976,7 +16972,7 @@ msgstr "シンボルを複製"
 
 #: eeschema/tools/ee_actions.cpp:137
 msgid "Make a copy of the selected symbol"
-msgstr "選択されたシンボルをコピー"
+msgstr "選択したシンボルをコピー"
 
 #: eeschema/tools/ee_actions.cpp:142
 msgid "Rename Symbol..."
@@ -16984,7 +16980,7 @@ msgstr "シンボル名の変更..."
 
 #: eeschema/tools/ee_actions.cpp:142
 msgid "Rename the selected symbol"
-msgstr "選択されたシンボル名を変更"
+msgstr "選択したシンボル名を変更"
 
 #: eeschema/tools/ee_actions.cpp:147
 msgid "Save the current symbol to a different library."
@@ -16992,7 +16988,7 @@ msgstr "現在のシンボルを別のライブラリに保存します。"
 
 #: eeschema/tools/ee_actions.cpp:152
 msgid "Remove the selected symbol from its library"
-msgstr "ライブラリから選択されたシンボルを削除"
+msgstr "ライブラリから選択したシンボルを削除"
 
 #: eeschema/tools/ee_actions.cpp:167
 msgid "Paste Symbol"
@@ -17085,8 +17081,8 @@ msgid ""
 "Enabled by default for multiunit parts with interchangeable units."
 msgstr ""
 "同期ピン編集モード\n"
-"有効の場合、全ての変更 (ピン番号を除く) を他のユニットにも同時に適用しま"
-"す。\n"
+"有効の場合、すべての変更 (ピン番号を除く) "
+"を他のユニットにも同時に適用します。\n"
 "ユニットが交換可能な部品ではデフォルトで有効です。"
 
 #: eeschema/tools/ee_actions.cpp:238
@@ -17326,7 +17322,7 @@ msgstr "垂直反転"
 
 #: eeschema/tools/ee_actions.cpp:412
 msgid "Flips selected item(s) from top to bottom"
-msgstr "選択されたアイテムの上下を反転"
+msgstr "選択したアイテムの上下を反転"
 
 #: eeschema/tools/ee_actions.cpp:418 pcbnew/tools/pcb_actions.cpp:331
 msgid "Mirror Horizontally"
@@ -17334,7 +17330,7 @@ msgstr "水平反転"
 
 #: eeschema/tools/ee_actions.cpp:418
 msgid "Flips selected item(s) from left to right"
-msgstr "選択されたアイテムの左右を反転"
+msgstr "選択したアイテムの左右を反転"
 
 #: eeschema/tools/ee_actions.cpp:424 pcbnew/tools/edit_tool_move_fct.cpp:183
 #: pcbnew/tools/pcb_actions.cpp:342
@@ -17343,7 +17339,7 @@ msgstr "交換"
 
 #: eeschema/tools/ee_actions.cpp:424 pcbnew/tools/pcb_actions.cpp:342
 msgid "Swaps selected items' positions"
-msgstr "選択されたアイテムの位置を交換"
+msgstr "選択したアイテムの位置を交換"
 
 #: eeschema/tools/ee_actions.cpp:430 pcbnew/tools/pcb_actions.cpp:379
 msgid "Properties..."
@@ -17576,7 +17572,7 @@ msgstr "シンボル エディターで編集"
 
 #: eeschema/tools/ee_actions.cpp:595
 msgid "Open the selected symbol in the Symbol Editor"
-msgstr "選択されたシンボルをシンボル エディターで開く"
+msgstr "選択したシンボルをシンボル エディターで開く"
 
 #: eeschema/tools/ee_actions.cpp:601
 msgid "Open the library symbol in the Symbol Editor"
@@ -17613,9 +17609,8 @@ msgstr "フットプリントの割り当てをインポート..."
 #: eeschema/tools/ee_actions.cpp:622
 msgid ""
 "Import symbol footprint assignments from .cmp file created by board editor"
-msgstr ""
-"基板エディターで作成された .cmp ファイルからシンボルのフットプリント割り当て"
-"をインポート"
+msgstr "基板エディターで作成した .cmp "
+"ファイルからシンボルのフットプリント割り当てをインポート"
 
 #: eeschema/tools/ee_actions.cpp:627
 msgid "Annotate Schematic..."
@@ -17763,11 +17758,11 @@ msgstr "エレクトリカル ルール チェッカーのエラーマーカー�
 
 #: eeschema/tools/ee_actions.cpp:712
 msgid "Show ERC Exclusions"
-msgstr "除外されたERCマーカーを表示"
+msgstr "除外したERCマーカーを表示"
 
 #: eeschema/tools/ee_actions.cpp:713
 msgid "Show markers for excluded electrical rules checker violations"
-msgstr "除外されたエレクトリカル ルール チェッカーの違反マーカーを表示"
+msgstr "除外したエレクトリカル ルール チェッカーの違反マーカーを表示"
 
 #: eeschema/tools/ee_actions.cpp:717 eeschema/tools/ee_actions.cpp:722
 #: eeschema/tools/ee_actions.cpp:728 eeschema/tools/ee_actions.cpp:734
@@ -17830,7 +17825,7 @@ msgstr "シートに入る"
 
 #: eeschema/tools/ee_actions.cpp:763
 msgid "Display the selected sheet's contents in the schematic editor"
-msgstr "回路図エディターで選択されたシートの内容を表示"
+msgstr "選択したシートの内容を回路図エディターで表示"
 
 #: eeschema/tools/ee_actions.cpp:769
 msgid "Leave Sheet"
@@ -17971,7 +17966,7 @@ msgstr "移動"
 #: eeschema/tools/ee_actions.cpp:876 pagelayout_editor/tools/pl_actions.cpp:68
 #: pcbnew/tools/pcb_actions.cpp:270
 msgid "Moves the selected item(s)"
-msgstr "選択されたアイテムを移動"
+msgstr "選択したアイテムを移動"
 
 #: eeschema/tools/ee_actions.cpp:881
 msgid "Drag"
@@ -17979,7 +17974,7 @@ msgstr "ドラッグ"
 
 #: eeschema/tools/ee_actions.cpp:881
 msgid "Drags the selected item(s)"
-msgstr "選択されたアイテムをドラッグ"
+msgstr "選択したアイテムをドラッグ"
 
 #: eeschema/tools/ee_actions.cpp:885
 msgid "Move Activate"
@@ -18157,7 +18152,7 @@ msgstr "%d 重複したタイムスタンプが見つかり、置き換えられ
 #: pcbnew/tools/footprint_editor_control.cpp:727
 #, c-format
 msgid "%d potential problems repaired."
-msgstr "%d 個の潜在的な問題が修復されました。"
+msgstr "%d 個の潜在的な問題を修復しました。"
 
 #: eeschema/tools/sch_editor_control.cpp:2212
 #: pcbnew/drc/drc_rule_parser.cpp:179
@@ -18391,9 +18386,8 @@ msgstr "穴データ"
 msgid ""
 "Exported board does not have enough copper layers to handle selected inner "
 "layers"
-msgstr ""
-"エクスポートされた基板は選択された内層を操作するために必要な導体層を持ってい"
-"ません"
+msgstr "エクスポートされた基板は選択した内層を操作するために必要な導体層を持っていま"
+"せん"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:32
 msgid "Layer selection:"
@@ -18493,7 +18487,7 @@ msgstr "レイヤー選択"
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:95
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:246
 msgid "Print mirrored"
-msgstr "ミラーして印刷"
+msgstr "反転して印刷"
 
 #: gerbview/dialogs/dialog_print_gerbview.cpp:179
 msgid "Included Layers"
@@ -18965,7 +18959,7 @@ msgstr "極性"
 #: pcbnew/fp_textbox.cpp:312 pcbnew/pcb_text.cpp:120 pcbnew/pcb_textbox.cpp:288
 #: pcbnew/tools/edit_tool.cpp:1715
 msgid "Mirror"
-msgstr "ミラー"
+msgstr "反転"
 
 #: gerbview/gerber_draw_item.cpp:689
 msgid "AB axis"
@@ -19248,7 +19242,7 @@ msgstr "現在のレイヤーをクリア..."
 
 #: gerbview/tools/gerbview_actions.cpp:93
 msgid "Clear the selected graphic layer"
-msgstr "選択されたグラフィック レイヤーをクリア"
+msgstr "選択したグラフィック レイヤーをクリア"
 
 #: gerbview/tools/gerbview_actions.cpp:98
 msgid "Clear All Layers"
@@ -19260,7 +19254,7 @@ msgstr "すべてのレイヤーをクリアします。すべてのデータが
 
 #: gerbview/tools/gerbview_actions.cpp:104
 msgid "Reload All Layers"
-msgstr "全レイヤーをリロード"
+msgstr "すべてのレイヤーをリロード"
 
 #: gerbview/tools/gerbview_actions.cpp:105
 msgid "Reload all layers. All data will be reloaded"
@@ -19597,7 +19591,7 @@ msgstr "有効なオプション: in,mm"
 #: kicad/cli/command_export_pcb_drill.cpp:63
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:52
 msgid "Mirror Y axis"
-msgstr "Y軸でミラー"
+msgstr "Y軸で反転"
 
 #: kicad/cli/command_export_pcb_drill.cpp:68
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:57
@@ -19700,7 +19694,7 @@ msgstr "ネットリスト属性を生成しない"
 #: kicad/cli/command_export_pcb_gerber.cpp:65
 #: pcbnew/dialogs/dialog_plot_base.cpp:208
 msgid "Subtract soldermask from silkscreen"
-msgstr "ハンダマスクに重なるシルク印刷を除去する"
+msgstr "ハンダマスクがない部分のシルク印刷を除去する"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:70
 msgid "Disable aperature macros"
@@ -20433,7 +20427,7 @@ msgstr "ダウンロード"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:30
 msgid "Check for package updates on startup"
-msgstr "起動時にパッケージの更新を確認する"
+msgstr "起動時にパッケージの更新を確認"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:40
 msgid "Library package handling"
@@ -20441,12 +20435,11 @@ msgstr "ライブラリ パッケージの取り扱い"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:53
 msgid "Automatically add installed libraries to global lib table"
-msgstr "インストールされたライブラリをグローバル ライブラリ "
-"テーブルに自動的に追加する"
+msgstr "インストールしたライブラリを自動的にグローバル ライブラリ テーブルに追加"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:57
 msgid "Automatically remove uninstalled libraries"
-msgstr "アンインストールされたライブラリを自動的に削除"
+msgstr "アンインストールしたライブラリを自動的に削除"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:64
 msgid "Library nickname prefix:"
@@ -20616,7 +20609,7 @@ msgstr "パッケージのインストールを中止します。"
 
 #: kicad/pcm/pcm_task_manager.cpp:317
 msgid "Extracted package\n"
-msgstr "展開されたパッケージ\n"
+msgstr "展開したパッケージ\n"
 
 #: kicad/pcm/pcm_task_manager.cpp:361
 #, c-format
@@ -20643,8 +20636,8 @@ msgstr ""
 msgid ""
 "Package with identifier %s is already installed. Would you like to update it "
 "to the version from selected file?"
-msgstr "識別子 %s を持つパッケージはすでにインストールされています。選択されたファイ"
-"ルのバージョンに更新しますか？"
+msgstr "識別子 %s を持つパッケージはすでにインストールされています。選択したファイル"
+"のバージョンに更新しますか？"
 
 #: kicad/pcm/pcm_task_manager.cpp:399
 msgid "Update package"
@@ -20663,7 +20656,7 @@ msgstr "ディレクトリ '%s' の削除に失敗しました"
 #: kicad/pcm/pcm_task_manager.cpp:561
 #, c-format
 msgid "Package %s uninstalled"
-msgstr "パッケージ %s はアンインストールされました"
+msgstr "パッケージ %s をアンインストールしました"
 
 #: kicad/project_template.cpp:52
 msgid "Could open the template path!"
@@ -20726,7 +20719,7 @@ msgstr "このプロジェクトに切り替え"
 
 #: kicad/project_tree_pane.cpp:680
 msgid "Close all editors, and switch to the selected project"
-msgstr "すべてのエディターを閉じて、選択されたプロジェクトへ切り替え"
+msgstr "すべてのエディターを閉じて、選択したプロジェクトへ切り替え"
 
 #: kicad/project_tree_pane.cpp:687
 msgid "New Directory..."
@@ -20921,8 +20914,8 @@ msgid ""
 "\n"
 "Do you want to continue?"
 msgstr ""
-"選択されたディレクトリは空ではありません。専用の空ディレクトリにプロジェクト"
-"を作成することを推奨します。\n"
+"選択したディレクトリは空ではありません。専用の空ディレクトリにプロジェクトを"
+"作成することを推奨します。\n"
 "\n"
 "続行しますか?"
 
@@ -22298,7 +22291,7 @@ msgstr "データ ファイル '%s' を読み込めません。"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:221
 msgid "This regulator is already in list. Aborted"
-msgstr "指定されたレギュレーターはすでにリストへ登録されています。中止します"
+msgstr "このレギュレーターはすでにリストへ登録されています。中止します"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:253
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:117
@@ -23357,7 +23350,7 @@ msgstr "環境の比誘電率"
 
 #: pcb_calculator/transline_ident.cpp:409
 msgid "Cable length"
-msgstr "レジスト剥離エリア"
+msgstr "ケーブル長"
 
 #: pcb_calculator/widgets/unit_selector.cpp:35
 msgid "um"
@@ -24098,7 +24091,7 @@ msgid ""
 "Locked footprints will not be annotated"
 msgstr ""
 "\n"
-"ロックされたフットプリントは再アノテーションされません"
+"ロックしたフットプリントは再アノテーションされません"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:318
 #, c-format
@@ -24494,7 +24487,7 @@ msgstr "ロックされているフットプリントを除外する"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:265
 msgid "Locked footprints will not be reannotated"
-msgstr "ロックされたフットプリントは再アノテーションされません"
+msgstr "ロックしたフットプリントは再アノテーションされません"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:269
 msgid "Exclude references:"
@@ -25791,7 +25784,7 @@ msgstr "レポート ファイル '%s' が作成されました<br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:1132
 msgid "Do you wish to delete excluded markers as well?"
-msgstr "除外されたマーカーも同様に削除してよろしいですか?"
+msgstr "除外したマーカーも同様に削除してよろしいですか?"
 
 #: pcbnew/dialogs/dialog_drc.cpp:1135
 msgid "Delete exclusions"
@@ -25803,7 +25796,7 @@ msgstr "実行しない"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:27
 msgid "Refill all zones before performing DRC"
-msgstr "DRC 実行前にすべてのゾーンを再塗りつぶし"
+msgstr "DRC 実行前にすべてのゾーンを塗り直す"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
 msgid "Report all errors for each track"
@@ -25817,11 +25810,11 @@ msgid ""
 "If unselected, only the first DRC violation will be reported for each track "
 "connection."
 msgstr ""
-"選択された場合には、配線に関する全ての DRC 違反がレポートされます。  複雑な回"
-"路設計の場合、この影響で遅くなることがあります。\n"
+"選択した場合、配線に関するすべての DRC 違反がレポートされます。  "
+"複雑な回路設計の場合、この影響で遅くなることがあります。\n"
 "\n"
-"非選択の場合には、各配線の接続に関して最初に見つかった DRC 違反のみがレポート"
-"されます。"
+"非選択の場合には、各配線の接続に関して最初に見つかった DRC "
+"違反のみがレポートされます。"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:41
 msgid "Test for parity between PCB and schematic"
@@ -25839,7 +25832,7 @@ msgstr "回路図の等価性 (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:139
 msgid "Edit ignored tests"
-msgstr "無視された違反箇所を編集"
+msgstr "テストしない項目を編集"
 
 #: pcbnew/dialogs/dialog_drc_base.h:106 pcbnew/tools/pcb_actions.cpp:240
 msgid "Design Rules Checker"
@@ -25871,7 +25864,7 @@ msgstr "基板の全フットプリントを変更"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:76
 msgid "Change selected footprint(s)"
-msgstr "選択されたフットプリントを変更"
+msgstr "選択したフットプリントを変更"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:77
 msgid "Change footprints matching reference designator:"
@@ -25938,11 +25931,11 @@ msgstr ": OK"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:24
 msgid "Update all footprints on board"
-msgstr "基板の全てのフットプリントを更新"
+msgstr "基板のすべてのフットプリントを更新"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:27
 msgid "Update selected footprint(s)"
-msgstr "選択されたフットプリントを更新"
+msgstr "選択したフットプリントを更新"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:30
 msgid "Update footprints matching reference designator:"
@@ -26341,7 +26334,7 @@ msgstr "ゾーンを含む (&z)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.h:57
 msgid "Filter Selected Items"
-msgstr "選択されたアイテムをフィルター"
+msgstr "選択したアイテムをフィルター"
 
 #: pcbnew/dialogs/dialog_find.cpp:251
 msgid "Searching..."
@@ -26431,9 +26424,9 @@ msgid ""
 "only be selected when the 'Locked items' checkbox is enabled in the "
 "selection filter."
 msgstr ""
-"フットプリントはロックされているためキャンバス上で自由な移動、向きの変更はで"
-"きず、選択フィルターで[ロックされたアイテム]のチェックボックスが有効になって"
-"いる場合にのみ選択できます。"
+"ロックしたフットプリントはキャンバス上で自由な移動、向きの変更はできず、選択"
+"フィルターで[ロックしたアイテム]のチェックボックスが有効になっている場合にの"
+"み選択できます。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:362
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:416
@@ -26871,7 +26864,7 @@ msgstr "異なるネットを接続しても問題ないパッドのグループ
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:143
 msgid "All footprint generator scripts were loaded"
-msgstr "全てのフットプリント生成スクリプトがロードされました"
+msgstr "すべてのフットプリント生成スクリプトをロードしました"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:65
 msgid "Available Footprint Generators"
@@ -27022,7 +27015,7 @@ msgstr "表面実装のフットプリントのみを含む"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:78
 msgid "Exclude all footprints with through hole pads"
-msgstr "スルーホールのあるフットプリントを全て除外する"
+msgstr "スルーホールのあるフットプリントをすべて除外する"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:81
 msgid "Include board edge layer"
@@ -27256,7 +27249,7 @@ msgstr "本当に基板全体を削除してもよろしいですか？"
 
 #: pcbnew/dialogs/dialog_global_deletion.cpp:121
 msgid "Are you sure you want to delete the selected items?"
-msgstr "選択されたアイテムを削除してもよろしいですか？"
+msgstr "選択したアイテムを削除してもよろしいですか？"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:23
 msgid "Items to Delete"
@@ -27329,7 +27322,7 @@ msgstr "ロックされていない配線"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:84
 msgid "All layers"
-msgstr "全レイヤー"
+msgstr "すべてのレイヤー"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:84
 msgid "Current layer only"
@@ -27444,16 +27437,16 @@ msgstr "PCB テキスト アイテム"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:61
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:71
 msgid "Filter items by layer:"
-msgstr "レイヤーでフィルターされたアイテム:"
+msgstr "レイヤーでフィルター:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:79
 msgid "Filter items by parent footprint library id:"
-msgstr "親フットプリントのライブラリ ID でフィルターされたアイテム:"
+msgstr "親フットプリントのライブラリ ID でフィルター:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:106
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:92
 msgid "Set to specified values:"
-msgstr "指定された値に設定:"
+msgstr "指定した値に設定:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:222
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:104
@@ -27476,11 +27469,11 @@ msgstr "マイクロビアの直径"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:39
 msgid "Filter Items"
-msgstr "フィルターされたアイテム"
+msgstr "フィルター"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:57
 msgid "Filter items by net class:"
-msgstr "ネットクラスでフィルターされたアイテム:"
+msgstr "ネットクラスでフィルター:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:132
 msgid "Set to net class values:"
@@ -27598,8 +27591,7 @@ msgstr "塗りつぶされていない四角形の線幅は 0 より大きくす
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:479
 msgid "Line width must be greater than zero for an unfilled polygon."
-msgstr ""
-"塗りつぶされていない多角形の場合、線幅を0より大きくする必要があります。"
+msgstr "塗りつぶされていないポリゴンの場合、線幅を0より大きくする必要があります。"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:491
 msgid "Line width must be greater than zero for an unfilled curve."
@@ -27801,7 +27793,7 @@ msgstr "<"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:65
 msgid "Remove selected layers from matched layers list."
-msgstr "一致したレイヤーのリストから選択されたレイヤーを削除します。"
+msgstr "一致したレイヤーのリストから選択したレイヤーを削除します。"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:70
 msgid "Remove all matched layers."
@@ -27959,7 +27951,7 @@ msgstr "ネット '%s' は使用中です。強制的に削除しますか?"
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2184
 #, c-format
 msgid "Delete all nets in group '%s'?"
-msgstr "グループ '%s' に含まれるネットを全て削除しますか?"
+msgstr "グループ '%s' に含まれるネットをすべて削除しますか?"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2207
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2208
@@ -28120,7 +28112,7 @@ msgstr "フットプリント %s (%s), %s, 回転 %g 度"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:497
 #: pcbnew/dialogs/dialog_text_properties.cpp:254
 msgid "back side (mirrored)"
-msgstr "裏面 (ミラー)"
+msgstr "裏面 (反転)"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:497
 #: pcbnew/dialogs/dialog_text_properties.cpp:254
@@ -28746,7 +28738,7 @@ msgstr "スケッチ モードでパッドを表示"
 
 #: pcbnew/dialogs/dialog_plot.cpp:133
 msgid "Plot on All Layers"
-msgstr "全レイヤーでプロットする"
+msgstr "すべてのレイヤーでプロットする"
 
 #: pcbnew/dialogs/dialog_plot.cpp:162
 msgid "Move current selection up"
@@ -28878,7 +28870,7 @@ msgstr "スケッチ"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:138
 msgid "Mirrored plot"
-msgstr "ミラーしてプロット"
+msgstr "反転してプロット"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:141
 msgid "Negative plot"
@@ -28940,7 +28932,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:209
 msgid "Remove silkscreen from areas without soldermask"
-msgstr "レジスト剥離エリアに重なるシルクスクリーンを削除"
+msgstr "ハンダマスクが作られないエリアのシルクスクリーンを削除します"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:213
 msgid "Coordinate format:"
@@ -29467,8 +29459,8 @@ msgid ""
 "Click and select a board item.\n"
 "The anchor position will be the position of the selected item."
 msgstr ""
-"クリックして基板のアイテムを選択する。\n"
-"アンカー位置は選択されたアイテムの位置となります。"
+"クリックして基板のアイテムを選択します。\n"
+"アンカー位置が選択したアイテムの位置となります。"
 
 #: pcbnew/dialogs/dialog_position_relative_base.h:72
 msgid "Position Relative To Reference Item"
@@ -29684,7 +29676,7 @@ msgstr "テキストのプロパティを変更"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:60
 msgid "Enter the text placed on selected layer."
-msgstr "選択されたレイヤー上に置くテキストを入力します。"
+msgstr "選択したレイヤー上に置くテキストを入力します。"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:101 pcbnew/pcb_text.cpp:327
 msgid "Knockout"
@@ -30163,11 +30155,11 @@ msgstr "移動/ドラッグ時にコートヤードの衝突を表示する"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:400
 msgid "Auto-refill zones"
-msgstr "ゾーンを自動的に再塗りつぶし"
+msgstr "ゾーンを自動的に塗り直す"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:402
 msgid "If checked, zones will be re-filled after each edit operation"
-msgstr "チェックすると、編集を行った後にゾーンが再塗りつぶしが行われます"
+msgstr "チェックすると、編集を行った後にゾーンを塗り直します"
 
 #: pcbnew/dialogs/panel_fp_editor_color_settings.cpp:113
 msgid "Internal Layers"
@@ -30583,7 +30575,7 @@ msgid ""
 "items from removed layers and cannot be undone.\n"
 "Do you wish to continue?"
 msgstr ""
-"アイテムが削除されたレイヤー上に見つかりました。この操作は削除されたレイヤー"
+"削除されたレイヤー上にアイテムが見つかりました。この操作は削除されたレイヤー"
 "からすべてのアイテムを削除し、取り消すことができません。\n"
 "続行しますか？"
 
@@ -34047,9 +34039,7 @@ msgstr "レスキュー (&u)"
 
 #: pcbnew/menubar_pcb_editor.cpp:106
 msgid "Clear board and get last rescue file automatically saved by PCB editor"
-msgstr ""
-"基板をクリアし、PCBエディターで保存された直近のレスキュー ファイルを取得しま"
-"す"
+msgstr "基板をクリアし、PCBエディターで保存した直近のレスキュー ファイルを取得します"
 
 #: pcbnew/menubar_pcb_editor.cpp:116
 msgid "Specctra Session..."
@@ -34130,7 +34120,7 @@ msgid ""
 "Add footprints used on board to an existing footprint library\n"
 "(does not remove other footprints from this library)"
 msgstr ""
-"基板で使われている全てのフットプリントを既存のライブラリに追加します。\n"
+"基板で使われているすべてのフットプリントを既存のライブラリに追加します。\n"
 "(このライブラリにある他のフットプリントを削除しません)"
 
 #: pcbnew/menubar_pcb_editor.cpp:156
@@ -34208,19 +34198,19 @@ msgstr "配線長:"
 
 #: pcbnew/microwave/microwave_inductor.cpp:376
 msgid "Requested length < minimum length"
-msgstr "指定された長さ < 最小長さ"
+msgstr "指定した長さ < 最小長さ"
 
 #: pcbnew/microwave/microwave_inductor.cpp:390
 msgid "Requested length too large"
-msgstr "指定された長さは長すぎです"
+msgstr "指定した長さは長すぎです"
 
 #: pcbnew/microwave/microwave_inductor.cpp:393
 msgid "Requested length too small"
-msgstr "指定された長さは短すぎです"
+msgstr "指定した長さは短すぎです"
 
 #: pcbnew/microwave/microwave_inductor.cpp:396
 msgid "Requested length can't be represented"
-msgstr "指定された長さは表現できません"
+msgstr "指定した長さは表現できません"
 
 #: pcbnew/microwave/microwave_inductor.cpp:404
 msgid "Component Value:"
@@ -35161,7 +35151,7 @@ msgstr "フットプリント ライブラリが更新できませんでした\n
 
 #: pcbnew/pcbnew_jobs_handler.cpp:707
 msgid "The given footprint could not be found to export."
-msgstr "指定されたフットプリントは見つからないのでエクスポートできません。"
+msgstr "指定したフットプリントが見つからないため、エクスポートできません。"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:742
 #, c-format
@@ -35462,9 +35452,9 @@ msgid ""
 "procedure in CADSTAR and re-import, to avoid inconsistencies between the PCB "
 "and the schematic. "
 msgstr ""
-"選択されたファイルは、ネットが回路図と同期していない可能性があることを示しま"
-"す。PCBと回路図の間の不整合を避けるために、CADSTAR で 'Align Nets' の手順を実"
-"行して再インポートすることをお勧めします。 "
+"選択したファイルは、ネットが回路図と同期していない可能性があることを示します"
+"。PCBと回路図の間の不整合を避けるために、CADSTAR で 'Align Nets' "
+"の手順を実行して再インポートすることをお勧めします。 "
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:132
 #, c-format
@@ -36920,7 +36910,7 @@ msgstr "配線は導体レイヤーのみです。"
 
 #: pcbnew/router/router_tool.cpp:1811 pcbnew/router/router_tool.cpp:2391
 msgid "The selected item is locked."
-msgstr "選択されたアイテムはロックされています。"
+msgstr "選択したアイテムはロックされています。"
 
 #: pcbnew/router/router_tool.cpp:1813
 msgid "Drag Anyway"
@@ -37076,7 +37066,7 @@ msgstr "%d 個のティアドロップが作られました"
 #: pcbnew/teardrop/dialog_teardrop.cpp:242
 #, c-format
 msgid "%d teardrops removed."
-msgstr "%d 個のティアドロップが削除されました。"
+msgstr "%d 個のティアドロップを削除しました。"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:34
 msgid "Round shapes:"
@@ -37890,7 +37880,7 @@ msgstr "ビアを配置"
 
 #: pcbnew/tools/drc_tool.cpp:150
 msgid "Refilling all zones..."
-msgstr "すべてのゾーンを再塗りつぶし..."
+msgstr "すべてのゾーンを塗り直し..."
 
 #: pcbnew/tools/drc_tool.cpp:159
 msgid "Schematic parity tests require a fully annotated schematic."
@@ -38128,7 +38118,7 @@ msgstr "選択対象から円弧を作成"
 
 #: pcbnew/tools/pcb_actions.cpp:68
 msgid "Creates an arc from the selected line segment"
-msgstr "選択された線セグメントから円弧を作成"
+msgstr "選択した線セグメントから円弧を作成"
 
 #: pcbnew/tools/pcb_actions.cpp:73
 msgid "Create Tracks from Selection"
@@ -38136,7 +38126,7 @@ msgstr "選択対象から配線を作成"
 
 #: pcbnew/tools/pcb_actions.cpp:73
 msgid "Creates tracks from the selected graphic lines"
-msgstr "選択された図形ラインから配線を作成"
+msgstr "選択した図形ラインから配線を作成"
 
 #: pcbnew/tools/pcb_actions.cpp:82
 msgid "Draw Line"
@@ -38184,7 +38174,7 @@ msgstr "図形レイヤーに基板スタックアップの表を追加します
 
 #: pcbnew/tools/pcb_actions.cpp:133
 msgid "Add a wrapped text item"
-msgstr "折り返されたテキストを追加"
+msgstr "折り返したテキストを追加"
 
 #: pcbnew/tools/pcb_actions.cpp:139
 msgid "Add Aligned Dimension"
@@ -38312,7 +38302,7 @@ msgstr "最後の点を削除"
 
 #: pcbnew/tools/pcb_actions.cpp:228
 msgid "Delete the last point added to the current item"
-msgstr "現在のアイテムに追加された最後の点を削除"
+msgstr "現在のアイテムに追加した最後の点を削除"
 
 #: pcbnew/tools/pcb_actions.cpp:233
 msgid "Close Outline"
@@ -38346,7 +38336,7 @@ msgstr "個別に移動"
 
 #: pcbnew/tools/pcb_actions.cpp:276
 msgid "Moves the selected items one-by-one"
-msgstr "選択されたアイテムを一つ一つ移動"
+msgstr "選択したアイテムを一つ一つ移動"
 
 #: pcbnew/tools/pcb_actions.cpp:281
 msgid "Move with Reference"
@@ -38354,7 +38344,7 @@ msgstr "参照点を指定して移動"
 
 #: pcbnew/tools/pcb_actions.cpp:282
 msgid "Moves the selected item(s) with a specified starting point"
-msgstr "指定された開始位置で選択されたアイテムを移動"
+msgstr "選択したアイテムを開始点を指定して移動"
 
 #: pcbnew/tools/pcb_actions.cpp:287
 msgid "Copy with Reference"
@@ -38362,7 +38352,7 @@ msgstr "参照点を指定してコピー"
 
 #: pcbnew/tools/pcb_actions.cpp:288
 msgid "Copy selected item(s) to clipboard with a specified starting point"
-msgstr "指定された開始位置で選択されたアイテムをクリップボードにコピー"
+msgstr "選択したアイテムを開始点を指定してクリップボードにコピー"
 
 #: pcbnew/tools/pcb_actions.cpp:294
 msgid "Duplicate and Increment"
@@ -38394,7 +38384,7 @@ msgstr "選択したアイテムを左回転"
 
 #: pcbnew/tools/pcb_actions.cpp:326
 msgid "Flips selected item(s) to opposite side of board"
-msgstr "基板の反対側に選択されたアイテムを裏返します"
+msgstr "基板の反対側に選択したアイテムを裏返して配置します"
 
 #: pcbnew/tools/pcb_actions.cpp:331
 msgid "Mirrors selected item across the Y axis"
@@ -38424,7 +38414,7 @@ msgstr "配線幅を変更"
 
 #: pcbnew/tools/pcb_actions.cpp:360
 msgid "Updates selected track & via sizes"
-msgstr "選択された配線とビアのサイズを更新"
+msgstr "選択した配線とビアのサイズを更新"
 
 #: pcbnew/tools/pcb_actions.cpp:364
 msgid "Adds arcs tangent to the selected straight track segments"
@@ -38440,7 +38430,7 @@ msgstr "完全に配線を削除"
 
 #: pcbnew/tools/pcb_actions.cpp:373
 msgid "Deletes selected item(s) and copper connections"
-msgstr "選択されたアイテムと導体接続を削除"
+msgstr "選択したアイテムと導体接続を削除"
 
 #: pcbnew/tools/pcb_actions.cpp:387
 msgid "Show Footprint Tree"
@@ -38472,7 +38462,7 @@ msgstr "フットプリントを編集"
 
 #: pcbnew/tools/pcb_actions.cpp:408
 msgid "Show selected footprint on editor canvas"
-msgstr "エディターのキャンバスに選択されたフットプリントを表示"
+msgstr "エディターのキャンバスに選択したフットプリントを表示"
 
 #: pcbnew/tools/pcb_actions.cpp:413
 msgid "Duplicate Footprint"
@@ -38480,7 +38470,7 @@ msgstr "フットプリントを複製する"
 
 #: pcbnew/tools/pcb_actions.cpp:413
 msgid "Make a copy of the selected footprint"
-msgstr "選択されたフットプリントをコピー"
+msgstr "選択したフットプリントをコピー"
 
 #: pcbnew/tools/pcb_actions.cpp:418
 msgid "Rename Footprint..."
@@ -38488,7 +38478,7 @@ msgstr "フットプリント名を変更..."
 
 #: pcbnew/tools/pcb_actions.cpp:418
 msgid "Rename the selected footprint"
-msgstr "選択されたフットプリント名を変更"
+msgstr "選択したフットプリント名を変更"
 
 #: pcbnew/tools/pcb_actions.cpp:423
 msgid "Delete Footprint from Library"
@@ -38641,11 +38631,11 @@ msgstr "高周波基板用に指定長のスタブ (円弧) を作成"
 
 #: pcbnew/tools/pcb_actions.cpp:547
 msgid "Add Microwave Polygonal Shape"
-msgstr "マイクロ波用の多角形を追加"
+msgstr "マイクロ波用のポリゴンを追加"
 
 #: pcbnew/tools/pcb_actions.cpp:548
 msgid "Create a microwave polygonal shape from a list of vertices"
-msgstr "頂点のリストからマイクロ波用の多角形を作成"
+msgstr "頂点のリストからマイクロ波用のポリゴンを作成"
 
 #: pcbnew/tools/pcb_actions.cpp:553
 msgid "Add Microwave Line"
@@ -38665,7 +38655,7 @@ msgstr "現在のパッド プロパティをコピー"
 
 #: pcbnew/tools/pcb_actions.cpp:567
 msgid "Paste Default Pad Properties to Selected"
-msgstr "選択されたパッドにデフォルトのパッド プロパティをペースト"
+msgstr "選択したパッドにデフォルトのパッド プロパティをペースト"
 
 #: pcbnew/tools/pcb_actions.cpp:568
 msgid "Replace the current pad's properties with those copied earlier"
@@ -38886,7 +38876,7 @@ msgstr "ロックを切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:736
 msgid "Lock or unlock selected items"
-msgstr "選択されたアイテムをロック/ロック解除する"
+msgstr "選択したアイテムをロック/ロック解除する"
 
 #: pcbnew/tools/pcb_actions.cpp:743
 msgid ""
@@ -38911,7 +38901,7 @@ msgstr "グループ解除"
 
 #: pcbnew/tools/pcb_actions.cpp:763
 msgid "Ungroup any selected groups"
-msgstr "選択されたグループをグループ化を解除する"
+msgstr "選択したグループのグループ化を解除する"
 
 #: pcbnew/tools/pcb_actions.cpp:768
 msgid "Remove Items"
@@ -38971,7 +38961,7 @@ msgstr "ラッツネストを非表示"
 
 #: pcbnew/tools/pcb_actions.cpp:819
 msgid "Hide the selected net in the ratsnest of unconnected net lines/arcs"
-msgstr "選択されたネットの未接続部分のラッツネストを非表示にする"
+msgstr "選択したネットの未接続部分のラッツネストを非表示にする"
 
 #: pcbnew/tools/pcb_actions.cpp:824
 msgid "Show Net in Ratsnest"
@@ -38979,7 +38969,7 @@ msgstr "ラッツネストを表示"
 
 #: pcbnew/tools/pcb_actions.cpp:825
 msgid "Show the selected net in the ratsnest of unconnected net lines/arcs"
-msgstr "選択されたネットの未接続部分のラッツネストを表示する"
+msgstr "選択したネットの未接続部分のラッツネストを表示する"
 
 #: pcbnew/tools/pcb_actions.cpp:830
 msgid "Switch to Schematic Editor"
@@ -38995,7 +38985,7 @@ msgstr "ローカル ラッツネスト"
 
 #: pcbnew/tools/pcb_actions.cpp:839
 msgid "Toggle ratsnest display of selected item(s)"
-msgstr "選択されたアイテムのラッツネストの表示を切り替え"
+msgstr "選択したアイテムのラッツネストの表示を切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:850
 msgid "Show the net inspector"
@@ -39313,7 +39303,7 @@ msgstr "制約の解決..."
 
 #: pcbnew/tools/pcb_actions.cpp:1173
 msgid "Show constraints resolution for the selected object"
-msgstr "選択されたオブジェクトの制約の解決を表示します"
+msgstr "選択したオブジェクトの制約の解決を表示します"
 
 #: pcbnew/tools/pcb_actions.cpp:1179
 msgid "Geographical Reannotate..."
@@ -39405,22 +39395,22 @@ msgstr "選択したアイテムを垂直方向に配置"
 
 #: pcbnew/tools/pcb_actions.cpp:1256
 msgid "Keep arc center, adjust radius"
-msgstr "円弧の中心を固定し、半径を調整"
+msgstr "半径と角度を調整"
 
 #: pcbnew/tools/pcb_actions.cpp:1257
 msgid "Switch arc editing mode to keep center, adjust radius and endpoints"
-msgstr "円弧編集モードを中心を保持して半径と端点を調整するモードに切り替えます"
+msgstr "中心を保持して、半径と角度を調整する円弧編集モードに切り替えます"
 
 #: pcbnew/tools/pcb_actions.cpp:1262
 msgid "Keep arc endpoints or direction of starting point"
-msgstr "円弧の終点もしくは始点の方向を固定"
+msgstr "端点と通過点を調整"
 
 #: pcbnew/tools/pcb_actions.cpp:1263
 msgid ""
 "Switch arc editing mode to keep endpoints, or to keep direction of the other "
 "point"
-msgstr "端点を維持する、または他の点の向きを維持するために円弧編集モードに切り替えま"
-"す"
+msgstr "円弧編集モードを端点を保持して通過点かもう一方の端点を調整するモードに切り替"
+"えます"
 
 #: pcbnew/tools/pcb_actions.cpp:1282
 msgid "Position Relative To..."
@@ -39428,7 +39418,7 @@ msgstr "相対位置..."
 
 #: pcbnew/tools/pcb_actions.cpp:1283
 msgid "Positions the selected item(s) by an exact amount relative to another"
-msgstr "他への相対値による選択されたアイテムの位置"
+msgstr "選択したアイテムの位置を他への相対値で指定"
 
 #: pcbnew/tools/pcb_actions.cpp:1320
 msgid "Select/Expand Connection"
@@ -39488,7 +39478,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1361
 msgid "Selects all footprints and tracks in the schematic sheet"
-msgstr "回路図にある全てのフットプリントと配線を選択"
+msgstr "回路図にあるすべてのフットプリントと配線を選択"
 
 #: pcbnew/tools/pcb_actions.cpp:1366
 msgid "Items in Same Hierarchical Sheet"
@@ -39516,13 +39506,13 @@ msgstr "選択対象から指定のタイプのアイテムを除外"
 
 #: pcbnew/tools/pcb_actions.cpp:1386
 msgid "Draft Fill Selected Zone(s)"
-msgstr "選択されたゾーンの塗りつぶしを更新"
+msgstr "選択したゾーンの塗りつぶしを更新"
 
 #: pcbnew/tools/pcb_actions.cpp:1387
 msgid ""
 "Update copper fill of selected zone(s) without regard to other interacting "
 "zones"
-msgstr "干渉する他のゾーンに配慮せずに選択されたゾーンの導体塗りつぶしを更新"
+msgstr "干渉する他のゾーンに配慮せずに選択したゾーンの導体塗りつぶしを更新"
 
 #: pcbnew/tools/pcb_actions.cpp:1393 pcbnew/tools/zone_filler_tool.cpp:162
 msgid "Fill All Zones"
@@ -39538,7 +39528,7 @@ msgstr "選択したゾーンの塗りつぶしを削除"
 
 #: pcbnew/tools/pcb_actions.cpp:1401
 msgid "Remove copper fill from selected zone(s)"
-msgstr "選択されたゾーンから導体塗りつぶしを削除"
+msgstr "選択したゾーンから導体塗りつぶしを削除"
 
 #: pcbnew/tools/pcb_actions.cpp:1407 pcbnew/tools/zone_filler_tool.cpp:394
 msgid "Unfill All Zones"
@@ -39550,11 +39540,11 @@ msgstr "すべてのゾーンから導体塗りつぶしを削除"
 
 #: pcbnew/tools/pcb_actions.cpp:1415
 msgid "Place Selected Footprints"
-msgstr "選択されたフットプリントを配置"
+msgstr "選択したフットプリントを配置"
 
 #: pcbnew/tools/pcb_actions.cpp:1416
 msgid "Performs automatic placement of selected components"
-msgstr "選択されたコンポーネントの自動配置を実行"
+msgstr "選択したコンポーネントの自動配置を実行"
 
 #: pcbnew/tools/pcb_actions.cpp:1420
 msgid "Place Off-Board Footprints"
@@ -39888,7 +39878,7 @@ msgstr ""
 #: pcbnew/tools/zone_filler_tool.cpp:250
 #, c-format
 msgid "Refill %d Zones"
-msgstr "%d ゾーンを再塗りつぶし"
+msgstr "%d ゾーンを塗り直し"
 
 #: pcbnew/tools/zone_filler_tool.cpp:259
 msgid "Auto-fill Zone(s)"
@@ -39903,9 +39893,8 @@ msgstr "設定を開く"
 msgid ""
 "Automatic refill of zones can be turned off in Preferences if it becomes too "
 "slow."
-msgstr ""
-"処理が遅くなるのであれば、ゾーンの自動再塗りつぶしは設定で無効にすることがで"
-"きます。"
+msgstr "処理が遅くなるのであれば、ゾーンの自動塗り直しは設定で無効にすることができま"
+"す。"
 
 #: pcbnew/tools/zone_filler_tool.cpp:331
 msgid "Fill Zone"
@@ -40057,7 +40046,7 @@ msgstr "DRC 警告"
 
 #: pcbnew/widgets/appearance_controls.cpp:348
 msgid "DRC violations with a Warning severity"
-msgstr "深刻度を警告で DRC 違反"
+msgstr "深刻度が警告のDRC 違反"
 
 #: pcbnew/widgets/appearance_controls.cpp:349
 msgid "DRC Errors"
@@ -40065,7 +40054,7 @@ msgstr "DRC エラー"
 
 #: pcbnew/widgets/appearance_controls.cpp:349
 msgid "DRC violations with an Error severity"
-msgstr "深刻度をエラーで DRC 違反"
+msgstr "深刻度がエラーのDRC 違反"
 
 #: pcbnew/widgets/appearance_controls.cpp:350
 msgid "DRC Exclusions"
@@ -40073,7 +40062,7 @@ msgstr "DRC 除外"
 
 #: pcbnew/widgets/appearance_controls.cpp:350
 msgid "DRC violations which have been individually excluded"
-msgstr "個別に除外された DRC 違反"
+msgstr "個別に除外した DRC 違反"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
 msgid "Show footprint and text origins as a cross"
@@ -40081,11 +40070,11 @@ msgstr "フットプリントとテキストの原点を十字で表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "Locked Item Shadow"
-msgstr "ロックされたアイテムの領域"
+msgstr "ロックしたアイテムの領域"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "Show a shadow marker on locked items"
-msgstr "ロックされたアイテムに影を表示する"
+msgstr "ロックしたアイテムに影を表示する"
 
 #: pcbnew/widgets/appearance_controls.cpp:353
 msgid "Show drawing sheet borders and title block"
@@ -40098,7 +40087,7 @@ msgstr "レイヤーがありません"
 #: pcbnew/widgets/appearance_controls.cpp:377
 #: pcbnew/widgets/appearance_controls_base.cpp:165
 msgid "All Layers"
-msgstr "全レイヤー"
+msgstr "すべてのレイヤー"
 
 #: pcbnew/widgets/appearance_controls.cpp:379
 msgid "All Copper Layers"
@@ -40609,12 +40598,12 @@ msgstr "%s のみ"
 #: pcbnew/widgets/panel_selection_filter.cpp:184
 #: pcbnew/widgets/panel_selection_filter_base.cpp:23
 msgid "Locked items"
-msgstr "ロックされたアイテム"
+msgstr "ロックしたアイテム"
 
 #: pcbnew/widgets/panel_selection_filter.cpp:185
 #: pcbnew/widgets/panel_selection_filter_base.cpp:25
 msgid "Allow selection of locked items"
-msgstr "ロックされたアイテムの選択を許可"
+msgstr "ロックしたアイテムの選択を許可"
 
 #: pcbnew/widgets/panel_selection_filter.cpp:193
 #: pcbnew/widgets/panel_selection_filter_base.cpp:57
@@ -40754,11 +40743,11 @@ msgstr "ゾーンの塗りつぶしは古いままです。再度塗りつぶし
 
 #: pcbnew/zone_filler.cpp:577
 msgid "Refill"
-msgstr "再塗りつぶし"
+msgstr "塗り直し"
 
 #: pcbnew/zone_filler.cpp:577
 msgid "Continue without Refill"
-msgstr "再塗りつぶしせずに続行"
+msgstr "塗り直さずに続行"
 
 #: pcbnew/zones.h:64
 msgid "inherited"
