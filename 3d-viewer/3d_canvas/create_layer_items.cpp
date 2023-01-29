@@ -279,7 +279,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
                 if( viatype != VIATYPE::THROUGH )
                 {
-
                     // Add hole objects
                     BVH_CONTAINER_2D *layerHoleContainer = nullptr;
 
@@ -311,15 +310,21 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                                                                    hole_inner_radius + thickness,
                                                                    *track ) );
 
-                    if( m_Cfg->m_Render.clip_silk_on_via_annulus && m_Cfg->m_Render.realistic )
+                    if( m_Cfg->m_Render.clip_silk_on_via_annulus
+                            && m_Cfg->m_Render.realistic
+                            && ring_radius > 0.0 )
                     {
                         m_throughHoleAnnularRings.Add( new FILLED_CIRCLE_2D( via_center,
                                                                              ring_radius,
                                                                              *track ) );
                     }
 
-                    m_throughHoleIds.Add( new FILLED_CIRCLE_2D( via_center, hole_inner_radius,
-                                                                *track ) );
+                    if( hole_inner_radius > 0.0 )
+                    {
+                        m_throughHoleIds.Add( new FILLED_CIRCLE_2D( via_center,
+                                                                    hole_inner_radius,
+                                                                    *track ) );
+                    }
                 }
             }
         }
