@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-29 14:24-0800\n"
-"PO-Revision-Date: 2023-01-29 22:21+0000\n"
+"PO-Revision-Date: 2023-01-30 07:26+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
-"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/master-"
-"source/el/>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
+"master-source/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -55,7 +55,7 @@ msgid ""
 "analysis."
 msgstr ""
 "Το περίγραμμα του αποτυπώματος έχει λανθασμένη μορφή ή λείπει. Εκτελέστε τον "
-"Ελεγκτή Αποτυπώματος για πλήρη ανάλυση."
+"Έλεγχο Αποτυπώματος για πλήρη ανάλυση."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:694
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
@@ -10107,13 +10107,13 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:439
 msgid "Synchronized Pins Mode."
-msgstr "Λειτουργία Συγχρονισμένων Ακροδεκτών"
+msgstr "Λειτουργία Συγχρονισμένων Ακροδεκτών."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:441
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
 msgstr ""
-"Λειτουργία Συγχρονισμένων Ακροδεκτών.\n"
-"Νέοι ακροδέκτες θα προστεθούν σε όλες τις μονάδες συμβόλου."
+"Λειτουργία Συγχρονισμένων Ακροδεκτών.  Νέοι ακροδέκτες θα προστεθούν σε όλες "
+"τις μονάδες συμβόλου."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:443
 msgid "Synchronized Pins Mode.  Matching pins in other units will be updated."
@@ -12971,7 +12971,7 @@ msgstr "Αντικρουόμενες αναθέσεις κλάσεων δικτ�
 #: eeschema/erc_item.cpp:119
 msgid "Net is graphically connected to a bus but not a bus member"
 msgstr ""
-"Το net είναι γραφικά συνδεδεμένο με ένα δίαυλο αλλά όχι με ένα μέλος του "
+"Το δίκτυο είναι γραφικά συνδεδεμένο με ένα δίαυλο αλλά όχι με ένα μέλος του "
 "διαύλου"
 
 #: eeschema/erc_item.cpp:123
@@ -14454,7 +14454,7 @@ msgid ""
 "Net %s references unknown net element %s. The net was not properly loaded "
 "and may require manual fixing."
 msgstr ""
-"Το net %s αναφέρεται στο άγνωστο στοιχείο %s του net. Το net δεν φορτώθηκε "
+"Το δίκτυο %s αναφέρεται στο άγνωστο στοιχείο %s του δικτύου. Δεν φορτώθηκε "
 "σωστά και ενδέχεται να απαιτείται χειροκίνητη διόρθωση."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:2237
@@ -15694,7 +15694,6 @@ msgid "Number is not an integer"
 msgstr "Μη ακέραιος αριθμός"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1035
-#, fuzzy
 msgid "Unable to read string, input is empty."
 msgstr "Αδυναμία ανάγνωσης χαρακτήρα κειμενου, κενή είσοδος."
 
@@ -17105,11 +17104,10 @@ msgid ""
 "Cannot fetch PCB netlist because eeschema is opened in stand-alone mode.\n"
 "You must launch the KiCad project manager and create a project."
 msgstr ""
-"Αδυναμία ανανέωσης του PCB, επειδή το Pcbnew έχει ανοιχτεί σε αυτόνομη "
-"λειτουργία.\n"
-"Για να είναι εφικτή η δημιουργία ή ενημέρωση των PCB από σχηματικά "
-"διαγράμματα, πρέπει να εκτελέσετε τον διαχειριστή έργων Kicad και να "
-"δημιουργήσετε ένα έργο PCB."
+"Αδυναμία ενημέρωσης λίστας δικτύων γιατί ο Επεξεργαστής Σχηματικού "
+"εκτελείται σε αυτόνομη λειτουργία.\n"
+"Πρέπει να εκτελέσετε τον διαχειριστή έργων KiCad και να δημιουργήσετε ένα "
+"έργο."
 
 #: eeschema/tools/backannotate.cpp:164
 #, c-format
@@ -17169,11 +17167,11 @@ msgid "Change %s pin %s net label from '%s' to '%s'."
 msgstr "Αλλαγή %s ακροδέκτη %s ετικέτα δικτύου από '%s' σε '%s'."
 
 #: eeschema/tools/backannotate.cpp:557
-#, c-format
+#, c-format, fuzzy
 msgid "Net %s cannot be changed to %s because it is driven by a power pin."
 msgstr ""
-"Το δίκτυο %s δεν μπορεί να αλλάξει σε «%s» επειδή οδηγείται από μία ακίδα "
-"ισχύος."
+"Το δίκτυο %s δεν μπορεί να αλλάξει σε %s επειδή οδηγείται από ακροδέκτη "
+"τροφοδοσίας."
 
 #: eeschema/tools/backannotate.cpp:566
 #, c-format
@@ -17378,7 +17376,8 @@ msgstr ""
 "Λειτουργία Συγχρονισμένων Ακροδεκτών\n"
 "Όταν ενεργοποιηθεί, διαδίδονται όλες οι αλλαγές (εκτός τον αριθμό ακροδέκτη) "
 "στις άλλες μονάδες.\n"
-"Προεπιλεγμένο για εξαρτήματα πολλαπλών και εναλλάξιμων μονάδων."
+"Ενεργοποιείται από προεπιλογή για εξαρτήματα πολλαπλών και εναλλάξιμων "
+"μονάδων."
 
 #: eeschema/tools/ee_actions.cpp:238
 msgid "Add Pin"
@@ -25358,10 +25357,9 @@ msgid "No layer selected."
 msgstr "Δεν επιλέχθηκε επίπεδο."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:891
-#, fuzzy
 msgid "<no net> will result in an isolated copper island."
 msgstr ""
-"Η επιλογή <καθόλου δίχτυ> θα έχει σαν αποτέλεσμα μια αποσυνδεδεμένη νησίδα "
+"Η επιλογή <κανένα δίκτυο> θα έχει σαν αποτέλεσμα μια αποσυνδεδεμένη νησίδα "
 "χαλκού."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:48
@@ -28195,7 +28193,7 @@ msgstr "Διαγραφή των αποτυπωμάτων χωρίς συνδεδ
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:56
 msgid "Delete footprints with no components in netlist"
-msgstr "Διαγραφή των αποτυπωμάτων χωρίς συνδεδεμένο σύμβολο"
+msgstr "Διαγραφή των αποτυπωμάτων χωρίς εξάρτημα στη λίστα δικτύων"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:59
 msgid "Delete tracks shorting multiple nets"
@@ -28436,7 +28434,7 @@ msgstr "Μετονομασία αρχείου"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2074
 msgid "Net name cannot be empty."
-msgstr "Το %s δεν μπορεί να είναι κενό."
+msgstr "Το όνομα του δικτύου δεν μπορεί να είναι κενό."
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2143
 #, c-format
@@ -37949,46 +37947,39 @@ msgstr "Ξεκλείδωμα"
 
 #: pcbnew/tools/board_editor_control.cpp:1273
 msgid "Zones have insufficient overlap for merging."
-msgstr ""
+msgstr "Ανεπαρκής επικάλυψη ζωνών για συγχώνευση."
 
 #: pcbnew/tools/board_editor_control.cpp:1319
-#, fuzzy
 msgid "Some zone netcodes did not match and were not merged."
-msgstr "Κάποια στοιχεία απέτυχαν στον ΕΚΣ και δεν μεταβλήθηκαν."
+msgstr "Δεν έγινε συγχώνευση λόγω αναντιστοιχίας κωδικών δικτύων κάποιων ζωνών."
 
 #: pcbnew/tools/board_editor_control.cpp:1325
-#, fuzzy
 msgid "Some zone priorities did not match and were not merged."
-msgstr "Κάποια στοιχεία απέτυχαν στον ΕΚΣ και δεν μεταβλήθηκαν."
+msgstr "Δεν έγινε συγχώνευση λόγω αναντιστοιχίας προτεραιοτήτων κάποιων ζωνών."
 
 #: pcbnew/tools/board_editor_control.cpp:1331
-#, fuzzy
 msgid "Some zones were rule areas and were not merged."
-msgstr "Κάποια στοιχεία απέτυχαν στον ΕΚΣ και δεν μεταβλήθηκαν."
+msgstr "Κάποιες ζώνες ήταν περιοχές κανόνων και δεν έγινε συγχώνευση."
 
 #: pcbnew/tools/board_editor_control.cpp:1337
-#, fuzzy
 msgid "Some zone layer sets did not match and were not merged."
-msgstr "Κανόνας επιπέδου \"%s\" δεν ταιριάζει."
+msgstr "Δεν έγινε συγχώνευση λόγω αναντιστοιχίας επιπέδων κάποιων ζωνών."
 
 #: pcbnew/tools/board_editor_control.cpp:1354
-#, fuzzy
 msgid "Some zones did not intersect and were not merged."
-msgstr "Κάποια στοιχεία απέτυχαν στον ΕΚΣ και δεν μεταβλήθηκαν."
+msgstr "Κάποιες ζώνες δεν τέμνονται και δεν έγινε συγχώνευση."
 
 #: pcbnew/tools/board_editor_control.cpp:1423
 msgid "Duplicate zone"
 msgstr "Πολλαπλή ζώνη"
 
 #: pcbnew/tools/board_editor_control.cpp:1498
-#, fuzzy
 msgid "Selection contains no items with labeled nets."
-msgstr "Η επιλογή περιέχει %d κλειδωμένα αντικείμενα."
+msgstr "Η επιλογή δεν περιέχει στοιχεία με κατονομαζόμενα δίκτυα."
 
 #: pcbnew/tools/board_inspection_tool.cpp:59
-#, fuzzy
 msgid "Net Inspection Tools"
-msgstr "Επιθεωρητής Net"
+msgstr "Εργαλεία Επιθεώρησης Δικτύων"
 
 #: pcbnew/tools/board_inspection_tool.cpp:164
 #, c-format
@@ -38001,14 +37992,12 @@ msgstr ""
 "Ημιτελής αναφορά: αποτυχία κατάρτισης προσαρμοσμένων κανόνων σχεδίασης.  "
 
 #: pcbnew/tools/board_inspection_tool.cpp:246
-#, fuzzy
 msgid "Violation Report"
-msgstr "Σοβαρότητα Παραβίασης"
+msgstr "Αναφορά Παραβίασης"
 
 #: pcbnew/tools/board_inspection_tool.cpp:272
-#, fuzzy
 msgid "Uncoupled Length"
-msgstr "Μήκος Πλακέτας"
+msgstr "Μη συζευγμένο Μήκος"
 
 #: pcbnew/tools/board_inspection_tool.cpp:273
 msgid "Diff pair uncoupled length resolution for:"
@@ -38016,20 +38005,19 @@ msgstr "Επίλυση αποδιαζευγμένου μήκος διαφορι�
 
 #: pcbnew/tools/board_inspection_tool.cpp:281
 #: pcbnew/tools/board_inspection_tool.cpp:818
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved max uncoupled length: %s."
-msgstr "Αφαίρεση μη χρησιμοποιούμενου net \"%s\"."
+msgstr "Ανάλυση μέγιστου μη συζευγμένου μήκους: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:288
 #: pcbnew/tools/board_inspection_tool.cpp:1231
-#, fuzzy
 msgid "Text height resolution for:"
-msgstr "Ανάλυση καθαρής περιοχής για:"
+msgstr "Ανάλυση ύψους κειμένου για:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:296
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved height constraints: min %s; max %s."
-msgstr "Περιορισμοί πλάτους: ελάχιστο %s; ιδανικό %s; μέγιστο %s."
+msgstr "Ανάλυση περιορισμών ύψους: ελάχιστο %s; μέγιστο %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:303
 #: pcbnew/tools/board_inspection_tool.cpp:1247
@@ -38207,14 +38195,13 @@ msgid "Thermal relief gap resolution for:"
 msgstr "Ανάλυση καθαρής περιοχής για:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:652
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thermal relief gap: %s."
-msgstr "Ζώνη θερμικής εκτόνωσης: %s."
+msgstr "Ανάλυση ζώνη θερμικής εκτόνωσης: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:657
-#, fuzzy
 msgid "Spoke width resolution for:"
-msgstr "Ανάλυση πλάτους διαδρόμου για:"
+msgstr "Ανάλυση πλάτους ακτίνας για:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:666
 #, c-format
@@ -38222,9 +38209,8 @@ msgid "Resolved thermal relief spoke width: %s."
 msgstr "Επίλυση πάχους θερμικής ακτίνας: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:671
-#, fuzzy
 msgid "Spoke count resolution for:"
-msgstr "Ανάλυση καθαρής περιοχής για:"
+msgstr "Ανάλυση πλήθους ακτίνων για:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:680
 #, c-format
@@ -38233,9 +38219,8 @@ msgstr "Επίλυση καταμέτρησης ελάχιστου θερμικ�
 
 #: pcbnew/tools/board_inspection_tool.cpp:689
 #: pcbnew/tools/board_inspection_tool.cpp:737
-#, fuzzy
 msgid "Zone clearance resolution for:"
-msgstr "Ανάλυση διακένου οπής για:"
+msgstr "Ανάλυση διακένου ζώνης για:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:693
 #, c-format
@@ -38243,29 +38228,28 @@ msgid "Zone clearance: %s."
 msgstr "Διάκενο zone: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:703
-#, fuzzy, c-format
+#, c-format
 msgid "Overridden by larger physical clearance from %s;clearance: %s."
-msgstr "Παράκαμψη από μεγαλύτερη θερμική απαγωγή από %s;διάκενο: %s."
+msgstr "Παρακάμπτεται από μεγαλύτερη απόσταση διακένου από %s;διάκενο: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:719
-#, fuzzy, c-format
+#, c-format
 msgid "Overridden by larger physical hole clearance from %s;clearance: %s."
-msgstr "Παράκαμψη από μεγαλύτερη θερμική απαγωγή από %s;διάκενο: %s."
+msgstr "Παρακάμπτεται από μεγαλύτερο διάκενο οπής από %s;διάκενο: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:791
-#, fuzzy
 msgid "Diff Pair"
-msgstr "Κενό Διαφορικού Ζεύγους"
+msgstr "Διαφορικό Ζεύγος"
 
 #: pcbnew/tools/board_inspection_tool.cpp:792
 #, fuzzy
 msgid "Diff pair gap resolution for:"
-msgstr "Εντοπισμένο διάκενο:"
+msgstr "Ανάλυση απόστασης κενού διαφορικού ζεύγους για:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:797
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved gap constraints: min %s; opt %s; max %s."
-msgstr "Περιορισμοί πλάτους: ελάχιστο %s; ιδανικό %s; μέγιστο %s."
+msgstr "Ανάλυση περιορισμών πλάτους: ελάχιστο %s; ιδανικό %s; μέγιστο %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:805
 msgid "Diff pair max uncoupled length resolution for:"
@@ -38273,12 +38257,12 @@ msgstr "Επίλυση αποδιαζευγμένου μήκος διαφορι�
 
 #: pcbnew/tools/board_inspection_tool.cpp:810
 msgid "No 'diff_pair_uncoupled' constraints defined."
-msgstr ""
+msgstr "Δεν ορίστηκαν περιορισμοί 'Διαφορικό ζεύγος μη συζευγμένο'."
 
 #: pcbnew/tools/board_inspection_tool.cpp:842
 #, c-format
 msgid "Note: %s is tented; clearance will only be applied to holes."
-msgstr ""
+msgstr "Σημείωση: %s είναι tended; Το διάκενο θα εφαρμοστεί από τις οπές."
 
 #: pcbnew/tools/board_inspection_tool.cpp:859
 msgid "Silkscreen clearance resolution for:"
@@ -38291,7 +38275,7 @@ msgstr "Ανάλυση διακένου περιοχής αποτυπώματο�
 #: pcbnew/tools/board_inspection_tool.cpp:1015
 #, fuzzy
 msgid "Physical Clearances"
-msgstr "Φυσικές Παράμετροι"
+msgstr "Διάκενα Φυσικής Μορφής"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1125
 msgid "Select an item for a constraints resolution report."
@@ -38322,14 +38306,14 @@ msgid "Annular width constraints: min %s; opt %s; max %s."
 msgstr "Περιορισμοί πλάτους δακτυλίου: ελάχιστο %s; ιδανικό %s; μέγιστο %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1239
-#, fuzzy, c-format
+#, c-format
 msgid "Text height constraints: min %s; opt %s; max %s."
-msgstr "Περιορισμοί πλάτους: ελάχιστο %s; ιδανικό %s; μέγιστο %s."
+msgstr "Περιορισμοί ύψους κειμένου: ελάχιστο %s; ιδανικό %s; μέγιστο %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1255
-#, fuzzy, c-format
+#, c-format
 msgid "Text thickness constraints: min %s; opt %s; max %s."
-msgstr "Περιορισμοί πλάτους: ελάχιστο %s; ιδανικό %s; μέγιστο %s."
+msgstr "Περιορισμοί πάχους κειμένου: ελάχιστο %s; ιδανικό %s; μέγιστο %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1263
 msgid "Keepouts"
@@ -38362,7 +38346,7 @@ msgstr "Το στοιχείο επιτρέπεται στην τρέχουσα �
 #: pcbnew/tools/board_inspection_tool.cpp:1287
 #, fuzzy
 msgid "Assertions"
-msgstr "Ενέργειες"
+msgstr "Assertions"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1288
 msgid "Assertions for:"
@@ -38370,7 +38354,7 @@ msgstr "Αναφορές για:"
 
 #: pcbnew/tools/convert_tool.cpp:67
 msgid "Copy line width of first object"
-msgstr ""
+msgstr "Αντιγραφή πλάτους γραμμής του πρώτου αντικειμένου"
 
 #: pcbnew/tools/convert_tool.cpp:176
 msgid "Create from Selection"
@@ -38477,9 +38461,8 @@ msgid "Draw a line segment"
 msgstr "Σχεδίαση ενός τμήματος γραμμής"
 
 #: pcbnew/tools/drawing_tool.cpp:416
-#, fuzzy
 msgid "Draw a text box"
-msgstr "Σχεδίαση μίας γραμμής"
+msgstr "Σχεδίαση πλαισίου πεδίου κειμένου"
 
 #: pcbnew/tools/drawing_tool.cpp:416 pcbnew/tools/pcb_actions.cpp:93
 msgid "Draw a rectangle"
@@ -38494,9 +38477,8 @@ msgid "Draw an arc"
 msgstr "Σχεδίαση ενός τόξου"
 
 #: pcbnew/tools/drawing_tool.cpp:716
-#, fuzzy
 msgid "Place an image"
-msgstr "Τοποθέτηση αποτυπώματος"
+msgstr "Τοποθέτηση εικόνας"
 
 #: pcbnew/tools/drawing_tool.cpp:973
 msgid "Place a text"
@@ -38543,11 +38525,9 @@ msgid "Positioning Tools"
 msgstr "Εργαλεία Τοποθέτησης"
 
 #: pcbnew/tools/edit_tool.cpp:430
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to resize arc tracks of %s or greater."
-msgstr ""
-"Δεν είναι δυνατή η αλλαγή μεγέθους για τόξα διαδρόμου με %.1f μοίρες ή "
-"περισσότερο."
+msgstr "Αδυναμία αλλαγής μεγέθους τόξου διαδρόμου με %s ή περισσότερο."
 
 #: pcbnew/tools/edit_tool.cpp:777
 msgid "Drag Arc Track"
@@ -38587,9 +38567,8 @@ msgid "Some of the track segments could not be filleted."
 msgstr "Κάποια τμήματα του διαδρόμου δεν φιλεταρίστηκαν."
 
 #: pcbnew/tools/edit_tool.cpp:1155
-#, fuzzy
 msgid "A shape with least two lines must be selected."
-msgstr "Πρέπει να επιλεγούν τουλάχιστον δύο ευθύγραμμα τμήματα διαδρόμων."
+msgstr "Πρέπει να γίνει επιλογή σχήματος με τουλάχιστον δυο γραμμές."
 
 #: pcbnew/tools/edit_tool.cpp:1159 pcbnew/tools/edit_tool.cpp:1326
 #: pcbnew/tools/pcb_actions.cpp:368
@@ -38637,23 +38616,22 @@ msgid "Copy canceled"
 msgstr "Αντιγραφή ακυρώθηκε"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:229
-#, fuzzy
 msgid "Pack footprints"
-msgstr "Κλείδωμα αποτυπώματος"
+msgstr "Συγκέντρωση αποτυπωμάτων"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:354
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Click to place %s (item %ld of %ld)\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
-"Κάντε κλικ στην έδρα %s%d\n"
+"Κάντε κλικ για τοποθέτιση %s (εξάρτημα %ld του %ld)\n"
 "Πατήστε <esc> για ακύρωση ή διπλό κλικ για εγγραφή"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:367
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad %s"
-msgstr "%s και %s"
+msgstr "%s έδρα %s"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:404
 msgid "Select reference point for move..."
@@ -38664,19 +38642,17 @@ msgid "_copy"
 msgstr "_αντιγραφή"
 
 #: pcbnew/tools/footprint_editor_control.cpp:403
-#, fuzzy
 msgid "Change Footprint Name"
-msgstr "Αλλαγή Αποτυπώματος"
+msgstr "Αλλαγή Ονομασίας Αποτυπώματος"
 
 #: pcbnew/tools/footprint_editor_control.cpp:413
-#, fuzzy
 msgid "Footprint name cannot be empty."
-msgstr "Το %s δεν μπορεί να είναι κενό."
+msgstr "Το όνομα δεν μπορεί να είναι κενό."
 
 #: pcbnew/tools/footprint_editor_control.cpp:417
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint name '%s' already in use in library '%s'."
-msgstr "Το αποτύπωμα δε βρέθηκε στη λίστα αλλαγών"
+msgstr "Το όνομα του αποτυπώματος '%s' είναι ήδη σε χρήση στη βιβλιοθήκη '%s'."
 
 #: pcbnew/tools/footprint_editor_control.cpp:732
 msgid "No footprint problems found."
@@ -38703,7 +38679,7 @@ msgid "Push Pad Settings"
 msgstr "Σπρώξιμο Ρυθμίσεων Έδρας"
 
 #: pcbnew/tools/pad_tool.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Click on pad %s%d\n"
 "Press <esc> to cancel all; double-click to finish"
@@ -38720,9 +38696,8 @@ msgid "Place pad"
 msgstr "Τοποθέτηση έδρας"
 
 #: pcbnew/tools/pad_tool.cpp:588
-#, fuzzy
 msgid "Recombine pad"
-msgstr "Ανασυνδυασμός pads"
+msgstr "Ανασυνδυασμός έδρας"
 
 #: pcbnew/tools/pad_tool.cpp:614
 #, c-format
@@ -38739,27 +38714,24 @@ msgid "Edit pad shapes"
 msgstr "Επεξεργασία σχήματος pad"
 
 #: pcbnew/tools/pcb_actions.cpp:48
-#, fuzzy
 msgid "Create Polygon from Selection..."
-msgstr "Δημιουργία Γραφικού Πολυγώνου από το Επιλεγμένο"
+msgstr "Δημιουργία Γραφικού Πολυγώνου από το Επιλεγμένο..."
 
 #: pcbnew/tools/pcb_actions.cpp:48
 msgid "Creates a graphic polygon from the selection"
 msgstr "Δημιουργία γραφικού πολυγώνου από το επιλεγμένο"
 
 #: pcbnew/tools/pcb_actions.cpp:53
-#, fuzzy
 msgid "Create Zone from Selection..."
-msgstr "Δημιουργία Ζώνης από το Επιλεγμένο"
+msgstr "Δημιουργία Ζώνης από το Επιλεγμένο..."
 
 #: pcbnew/tools/pcb_actions.cpp:53
 msgid "Creates a copper zone from the selection"
 msgstr "Δημιουργία zone χαλκού από το επιλεγμένο"
 
 #: pcbnew/tools/pcb_actions.cpp:58
-#, fuzzy
 msgid "Create Rule Area from Selection..."
-msgstr "Δημιουργία Περιοχής Κανόνων από το Επιλεγμένο"
+msgstr "Δημιουργία Περιοχής Κανόνων από το Επιλεγμένο..."
 
 #: pcbnew/tools/pcb_actions.cpp:58
 msgid "Creates a rule area from the selection"
@@ -38855,14 +38827,12 @@ msgid "Add a center dimension"
 msgstr "Προσθήκη μιας διάστασης"
 
 #: pcbnew/tools/pcb_actions.cpp:149
-#, fuzzy
 msgid "Add Radial Dimension"
-msgstr "Προσθήκη διάστασης"
+msgstr "Προσθήκη Ακτινικής Διάστασης"
 
 #: pcbnew/tools/pcb_actions.cpp:149
-#, fuzzy
 msgid "Add a radial dimension"
-msgstr "Προσθήκη μιας διάστασης"
+msgstr "Προσθήκη ακτινικής διάστασης"
 
 #: pcbnew/tools/pcb_actions.cpp:154
 msgid "Add Orthogonal Dimension"
@@ -38997,13 +38967,13 @@ msgstr ""
 "μετακίνηση"
 
 #: pcbnew/tools/pcb_actions.cpp:276
+#, fuzzy
 msgid "Move Individually"
-msgstr ""
+msgstr "Μετακίνηση Μεμονομένου"
 
 #: pcbnew/tools/pcb_actions.cpp:276
-#, fuzzy
 msgid "Moves the selected items one-by-one"
-msgstr "Μετακίνηση των επιλεγμένων αντικειμένων"
+msgstr "Μετακίνηση των επιλεγμένων αντικειμένων ένα προς ένα"
 
 #: pcbnew/tools/pcb_actions.cpp:281
 msgid "Move with Reference"
@@ -39054,30 +39024,28 @@ msgid "Flips selected item(s) to opposite side of board"
 msgstr "Αντιστροφή επιλεγμένων αντικειμένων στην αντίθετη πλευρά της πλακέτας"
 
 #: pcbnew/tools/pcb_actions.cpp:331
-#, fuzzy
 msgid "Mirrors selected item across the Y axis"
-msgstr "Αντιστροφή επιλεγμένου αντικειμένου"
+msgstr "Καθρεπτισμός επιλεγμένου στον Ψ άξονα"
 
 #: pcbnew/tools/pcb_actions.cpp:336
-#, fuzzy
 msgid "Mirrors selected item across the X axis"
-msgstr "Αντιστροφή επιλεγμένου αντικειμένου"
+msgstr "Καθρεπτισμός επιλεγμένου στον Χ αξονα"
 
 #: pcbnew/tools/pcb_actions.cpp:348
-#, fuzzy
 msgid "Pack and Move Footprints"
-msgstr "Λήψη και μετακίνηση αποτυπώματος"
+msgstr "Συγκέντρωση και Μετακίνηση Αποτυπωμάτων"
 
 #: pcbnew/tools/pcb_actions.cpp:349
 msgid ""
 "Sorts selected footprints by reference, packs based on size and initiates "
 "movement"
 msgstr ""
+"Κατατάσσει επιλεγμένα αποτυπώματα με βάση την ονομασία αναφοράς, "
+"συγκεντρώνει με βάση το μέγεθος και μετακινεί"
 
 #: pcbnew/tools/pcb_actions.cpp:355
-#, fuzzy
 msgid "Skip item"
-msgstr "Κλειδωμένα Αντικείμενα"
+msgstr "Παράλειψη αντικειμένου"
 
 #: pcbnew/tools/pcb_actions.cpp:360
 msgid "Change Track Width"
@@ -39092,9 +39060,8 @@ msgid "Adds arcs tangent to the selected straight track segments"
 msgstr "Προσθέτει τόξα εφαπτόμενα στα επιλεγμένα ευθύγραμμα τμήματα διαδρόμων"
 
 #: pcbnew/tools/pcb_actions.cpp:368
-#, fuzzy
 msgid "Adds arcs tangent to the selected lines"
-msgstr "Προσθέτει τόξα εφαπτόμενα στα επιλεγμένα ευθύγραμμα τμήματα διαδρόμων"
+msgstr "Προσθέτει εφαπτόμενα τόξα στις επιλεγμένες γραμμές"
 
 #: pcbnew/tools/pcb_actions.cpp:373
 msgid "Delete Full Track"
@@ -39137,24 +39104,20 @@ msgid "Show selected footprint on editor canvas"
 msgstr "Προβολή επιλεγμένου αποτυπώματος στον χώρο σχεδίασης επεξεργαστή"
 
 #: pcbnew/tools/pcb_actions.cpp:413
-#, fuzzy
 msgid "Duplicate Footprint"
-msgstr "Αναπαραγωγή αποτυπωμάτων"
+msgstr "Αναπαραγωγή Αποτυπώματος"
 
 #: pcbnew/tools/pcb_actions.cpp:413
-#, fuzzy
 msgid "Make a copy of the selected footprint"
-msgstr "Δημιουργία αντίγραφου για το επιλεγμένο σύμβολο"
+msgstr "Δημιουργία αντίγραφου επιλεγμένου αποτυπώματος"
 
 #: pcbnew/tools/pcb_actions.cpp:418
-#, fuzzy
 msgid "Rename Footprint..."
-msgstr "Δημιουργία Αποτυπώματος..."
+msgstr "Μετονομασία Αποτυπώματος..."
 
 #: pcbnew/tools/pcb_actions.cpp:418
-#, fuzzy
 msgid "Rename the selected footprint"
-msgstr "Ενημέρωση επιλεγμένου αποτυπώματος"
+msgstr "Μετονομασία επιλεγμένου αποτυπώματος"
 
 #: pcbnew/tools/pcb_actions.cpp:423
 msgid "Delete Footprint from Library"
@@ -39656,31 +39619,31 @@ msgstr "Φωτισμός όλων των αντικειμένων χαλκού �
 #: pcbnew/tools/pcb_actions.cpp:818
 #, fuzzy
 msgid "Hide Net in Ratsnest"
-msgstr "Απόκρυψη φωλιάς συνδέσεων αποτυπώματος"
+msgstr "Απόκρυψη δικτύου από φωλιά συνδέσεων"
 
 #: pcbnew/tools/pcb_actions.cpp:819
-#, fuzzy
 msgid "Hide the selected net in the ratsnest of unconnected net lines/arcs"
-msgstr "Μετακίνηση των επιλεγμένων δικτύων από τη δεξιά λίστα στην αριστερή"
+msgstr ""
+"Απόκρυψη των επιλεγμένων δικτύων από φωλιά συνδέσεων μη συνδεδεμένων γραμμών/"
+"τόξων δικτύων"
 
 #: pcbnew/tools/pcb_actions.cpp:824
-#, fuzzy
 msgid "Show Net in Ratsnest"
-msgstr "Εμφάνιση Φωλιάς Συνδέσεων"
+msgstr "Εμφάνιση Δικτύου σε Φωλιά Συνδέσεων"
 
 #: pcbnew/tools/pcb_actions.cpp:825
-#, fuzzy
 msgid "Show the selected net in the ratsnest of unconnected net lines/arcs"
-msgstr "Μετακίνηση των επιλεγμένων δικτύων από τη δεξιά λίστα στην αριστερή"
+msgstr ""
+"Εμφάνιση των επιλεγμένων δικτύων από φωλιά συνδέσεων μη συνδεδεμένων γραμμών/"
+"τόξων δικτύων"
 
 #: pcbnew/tools/pcb_actions.cpp:830
 msgid "Switch to Schematic Editor"
 msgstr "Μετάβαση σε Επεξεργαστή Σχηματικού"
 
 #: pcbnew/tools/pcb_actions.cpp:830
-#, fuzzy
 msgid "Open in schematic editor"
-msgstr "Άνοιγμα υπάρχοντος σχηματικού"
+msgstr "Άνοιγμα στον επεξεργαστή σχηματικού"
 
 #: pcbnew/tools/pcb_actions.cpp:839
 msgid "Local Ratsnest"
@@ -39703,14 +39666,12 @@ msgid "Show/hide the appearance manager"
 msgstr "Προβολή/απόκρυψη του διαχειριστή εμφάνισης"
 
 #: pcbnew/tools/pcb_actions.cpp:865
-#, fuzzy
 msgid "Show Properties Manager"
-msgstr "Ιδιότητες Φύλλου"
+msgstr "Εμφάνιση Διαχειριστή Ιδιοτήτων"
 
 #: pcbnew/tools/pcb_actions.cpp:865
-#, fuzzy
 msgid "Show/hide the properties manager"
-msgstr "Προβολή/απόκρυψη του διαχειριστή εμφάνισης"
+msgstr "Εμφάνιση/απόκρυψη του διαχειριστή ιδιοτήτων"
 
 #: pcbnew/tools/pcb_actions.cpp:870
 msgid "Flip Board View"
@@ -40104,23 +40065,26 @@ msgid "Distributes selected items along the vertical axis"
 msgstr "Διανομή επιλεγμένων αντικειμένων κατά μήκος του κάθετου άξονα"
 
 #: pcbnew/tools/pcb_actions.cpp:1256
-#, fuzzy
 msgid "Keep arc center, adjust radius"
-msgstr "Κέντρο τόξου (%s, %s), ακτίνα %s"
+msgstr "Διατήρηση κέντρου τόξου, τροποποίηση ακτίνας"
 
 #: pcbnew/tools/pcb_actions.cpp:1257
 msgid "Switch arc editing mode to keep center, adjust radius and endpoints"
 msgstr ""
+"Εναλλαγή λειτουργίας τόξου σε διατήρηση κέντρου, τροποποίηση ακτίνας και "
+"τελικών σημείων"
 
 #: pcbnew/tools/pcb_actions.cpp:1262
 msgid "Keep arc endpoints or direction of starting point"
-msgstr ""
+msgstr "Διατήρηση τελικών σημείων τόξου ή κατεύθυνσης αρχικού σημείου"
 
 #: pcbnew/tools/pcb_actions.cpp:1263
 msgid ""
 "Switch arc editing mode to keep endpoints, or to keep direction of the other "
 "point"
 msgstr ""
+"Εναλλαγή λειτουργίας επεξεργασίας τόξου σε διατήρηση τελικών σημείων, ή "
+"διατήρηση κατεύθυνσης του άλλου σημείου"
 
 #: pcbnew/tools/pcb_actions.cpp:1282
 msgid "Position Relative To..."
@@ -40147,12 +40111,11 @@ msgstr ""
 #: pcbnew/tools/pcb_actions.cpp:1326
 #, fuzzy
 msgid "Unroute Selected"
-msgstr "Επιλογή Πλέγματος"
+msgstr "Αποδρομολόγηση Επιλεγμένου"
 
 #: pcbnew/tools/pcb_actions.cpp:1327
-#, fuzzy
 msgid "Unroutes selected items to the nearest pad."
-msgstr "Στοίχιση επιλεγμένων στοιχείων στο αριστερό άκρο"
+msgstr "Αποδρομολόγηση επιλεγμένων στην κοντινότερη έδρα."
 
 #: pcbnew/tools/pcb_actions.cpp:1338
 msgid "Select All Tracks in Net"
@@ -40172,19 +40135,18 @@ msgstr ""
 "Αποεπιλογή όλων των διαδρόμων και διελεύσεων που ανήκουν στο ίδιο δίκτυο."
 
 #: pcbnew/tools/pcb_actions.cpp:1349
-#, fuzzy
 msgid "Select All Unconnected Footprints"
-msgstr "Επιλέγει όλους τους συνδεδεμένους δρόμους & via."
+msgstr "Επιλογή Όλων των Ασύνδετων Αποτυπωμάτων"
 
 #: pcbnew/tools/pcb_actions.cpp:1350
-#, fuzzy
 msgid "Selects all unconnected footprints belonging to each selected net."
-msgstr "Επιλογή όλων των διαδρόμων και διελεύσεων που ανήκουν στο ίδιο δίκτυο."
+msgstr ""
+"Επιλογή όλων των ασύνδετων αποτυπωμάτων που ανήκουν στο εκάστοτε επιλεγμένο "
+"δίκτυο."
 
 #: pcbnew/tools/pcb_actions.cpp:1355
-#, fuzzy
 msgid "Grab Nearest Unconnected Footprints"
-msgstr "Τοποθέτηση Επιλεγμένων Αποτυπωμάτων"
+msgstr "Επιλογή Κοντινότερων Ασύνδετων Αποτυπωμάτων"
 
 #: pcbnew/tools/pcb_actions.cpp:1356
 #, fuzzy
@@ -40207,14 +40169,12 @@ msgstr ""
 "Επιλογή όλων των αποτυπωμάτων και διαδρόμων στο ίδιο φύλλο του σχηματικού"
 
 #: pcbnew/tools/pcb_actions.cpp:1372
-#, fuzzy
 msgid "Select on Schematic"
-msgstr "Αποθήκευση στο Σχηματικό"
+msgstr "Επιλογή στο Σχηματικό"
 
 #: pcbnew/tools/pcb_actions.cpp:1373
-#, fuzzy
 msgid "Selects corresponding items in Schematic editor"
-msgstr "Επισήμανση αντίστοιχων αντικειμένων στον επεξεργαστή πλακέτας"
+msgstr "Επιλογή αντίστοιχων αντικειμένων στον Επεξεργαστή Σχηματικού"
 
 #: pcbnew/tools/pcb_actions.cpp:1378
 msgid "Filter Selected Items..."
