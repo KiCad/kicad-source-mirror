@@ -2883,14 +2883,14 @@ PCB_SHAPE* CADSTAR_PCB_ARCHIVE_LOADER::getShapeFromVertex( const POINT& aCadstar
 
         EDA_ANGLE arcStartAngle( startPoint - centerPoint );
         EDA_ANGLE arcEndAngle( endPoint - centerPoint );
-        EDA_ANGLE arcAngle = arcEndAngle - arcStartAngle;
+        EDA_ANGLE arcAngle = ( arcEndAngle - arcStartAngle ).Normalize();
         //TODO: detect if we are supposed to draw a circle instead (i.e. two SEMICIRCLEs
         // with opposite start/end points and same centre point)
 
-        if( cw )
-            shape->SetArcAngleAndEnd( arcAngle.Normalize() );
-        else
-            shape->SetArcAngleAndEnd( -arcAngle.Normalize(), true );
+        if( !cw )
+            arcAngle.NormalizeNegative(); // anticlockwise arc
+
+        shape->SetArcAngleAndEnd( arcAngle, true );
 
         break;
     }
