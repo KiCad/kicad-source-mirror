@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -43,7 +43,7 @@ enum SIM_TYPE
 };
 
 ///< Possible plot types
-enum SIM_PLOT_TYPE
+enum SIM_TRACE_TYPE
 {
     // Y axis
     SPT_VOLTAGE  = 0x01,

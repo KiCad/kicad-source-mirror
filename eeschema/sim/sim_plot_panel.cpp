@@ -134,6 +134,9 @@ public:
             m_unit( unit )
     {};
 
+    wxString GetUnits() const { return m_unit; }
+
+private:
     void formatLabels() override
     {
         double        maxVis = parent::AbsVisibleMaxValue();
@@ -175,6 +178,9 @@ public:
             m_unit( unit )
     {};
 
+    wxString GetUnits() const { return m_unit; }
+
+private:
     void formatLabels() override
     {
         wxString suffix;
@@ -196,50 +202,75 @@ private:
 };
 
 
+void CURSOR::SetCoordX( double aValue )
+{
+    wxRealPoint oldCoords = m_coords;
+
+    doSetCoordX( aValue );
+    m_updateRequired = false;
+    m_updateRef = true;
+
+    if( m_window )
+    {
+        wxRealPoint delta = m_coords - oldCoords;
+        mpInfoLayer::Move( wxPoint( m_window->x2p( m_trace->x2s( delta.x ) ),
+                                    m_window->y2p( m_trace->y2s( delta.y ) ) ) );
+
+        m_window->Refresh();
+    }
+}
+
+
+void CURSOR::doSetCoordX( double aValue )
+{
+    m_coords.x = aValue;
+
+    const std::vector<double>& dataX = m_trace->GetDataX();
+    const std::vector<double>& dataY = m_trace->GetDataY();
+
+    if( dataX.size() <= 1 )
+        return;
+
+    // Find the closest point coordinates
+    auto maxXIt = std::upper_bound( dataX.begin(), dataX.end(), m_coords.x );
+    int maxIdx = maxXIt - dataX.begin();
+    int minIdx = maxIdx - 1;
+
+    // Out of bounds checks
+    if( minIdx < 0 )
+    {
+        minIdx = 0;
+        maxIdx = 1;
+        m_coords.x = dataX[0];
+    }
+    else if( maxIdx >= (int) dataX.size() )
+    {
+        maxIdx = dataX.size() - 1;
+        minIdx = maxIdx - 1;
+        m_coords.x = dataX[maxIdx];
+    }
+
+    const double leftX = dataX[minIdx];
+    const double rightX = dataX[maxIdx];
+    const double leftY = dataY[minIdx];
+    const double rightY = dataY[maxIdx];
+
+    // Linear interpolation
+    m_coords.y = leftY + ( rightY - leftY ) / ( rightX - leftX ) * ( m_coords.x - leftX );
+}
+
+
 void CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
 {
     if( !m_window )
         m_window = &aWindow;
 
-    if( !m_visible )
-        return;
-
-    const auto& dataX = m_trace->GetDataX();
-    const auto& dataY = m_trace->GetDataY();
-
-    if( dataX.size() <= 1 )
+    if( !m_visible || m_trace->GetDataX().size() <= 1 )
         return;
 
     if( m_updateRequired )
     {
-        m_coords.x = m_trace->s2x( aWindow.p2x( m_dim.x ) );
-
-        // Find the closest point coordinates
-        auto maxXIt = std::upper_bound( dataX.begin(), dataX.end(), m_coords.x );
-        int maxIdx = maxXIt - dataX.begin();
-        int minIdx = maxIdx - 1;
-
-        // Out of bounds checks
-        if( minIdx < 0 )
-        {
-            minIdx = 0;
-            maxIdx = 1;
-            m_coords.x = dataX[0];
-        }
-        else if( maxIdx >= (int) dataX.size() )
-        {
-            maxIdx = dataX.size() - 1;
-            minIdx = maxIdx - 1;
-            m_coords.x = dataX[maxIdx];
-        }
-
-        const double leftX = dataX[minIdx];
-        const double rightX = dataX[maxIdx];
-        const double leftY = dataY[minIdx];
-        const double rightY = dataY[maxIdx];
-
-        // Linear interpolation
-        m_coords.y = leftY + ( rightY - leftY ) / ( rightX - leftX ) * ( m_coords.x - leftX );
+        doSetCoordX( m_trace->s2x( aWindow.p2x( m_dim.x ) ) );
         m_updateRequired = false;
 
         // Notify the parent window about the changes
@@ -336,6 +367,20 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( const wxString& aCommand, int aOptions, wxWindow
 SIM_PLOT_PANEL::~SIM_PLOT_PANEL()
 {
     // ~mpWindow destroys all the added layers, so there is no need to destroy m_traces contents
+}
+
+
+wxString SIM_PLOT_PANEL::GetUnitsX() const
+{
+    LOG_SCALE<mpScaleXLog>* logScale = dynamic_cast<LOG_SCALE<mpScaleXLog>*>( m_axis_x );
+    LIN_SCALE<mpScaleX>*    linScale = dynamic_cast<LIN_SCALE<mpScaleX>*>( m_axis_x );
+
+    if( logScale )
+        return logScale->GetUnits();
+    else if( linScale )
+        return linScale->GetUnits();
+    else
+        return wxEmptyString;
 }
 
 
@@ -497,8 +542,11 @@ void SIM_PLOT_PANEL::UpdatePlotColors()
     // Update color of all traces
     for( auto& [ name, trace ] : m_traces )
     {
-        if( CURSOR* cursor = trace->GetCursor() )
-            cursor->SetPen( wxPen( m_colors.GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::CURSOR ) ) );
+        for( auto& [ id, cursor ] : trace->GetCursors() )
+        {
+            if( cursor )
+                cursor->SetPen( wxPen( m_colors.GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::CURSOR ) ) );
+        }
     }
 
     m_plotWin->UpdateAll();
@@ -523,7 +571,7 @@ void SIM_PLOT_PANEL::UpdateTraceStyle( TRACE* trace )
 
 
 bool SIM_PLOT_PANEL::addTrace( const wxString& aTitle, const wxString& aName, int aPoints,
-                               const double* aX, const double* aY, SIM_PLOT_TYPE aType )
+                               const double* aX, const double* aY, SIM_TRACE_TYPE aType )
 {
     TRACE* trace = nullptr;
 
@@ -609,8 +657,11 @@ bool SIM_PLOT_PANEL::deleteTrace( const wxString& aName )
         TRACE* trace = it->second;
         m_traces.erase( it );
 
-        if( CURSOR* cursor = trace->GetCursor() )
-            m_plotWin->DelLayer( cursor, true );
+        for( auto& [ id, cursor ] : trace->GetCursors() )
+        {
+            if( cursor )
+                m_plotWin->DelLayer( cursor, true );
+        }
 
         m_plotWin->DelLayer( trace, true, true );
         ResetScales();
@@ -622,30 +673,32 @@ bool SIM_PLOT_PANEL::deleteTrace( const wxString& aName )
 }
 
 
-void SIM_PLOT_PANEL::EnableCursor( const wxString& aName, bool aEnable )
+void SIM_PLOT_PANEL::EnableCursor( const wxString& aName, int aCursorId, bool aEnable )
 {
     TRACE* t = GetTrace( aName );
 
-    if( t == nullptr || t->HasCursor() == aEnable )
+    if( t == nullptr || t->HasCursor( aCursorId ) == aEnable )
         return;
 
     if( aEnable )
     {
-        CURSOR* c = new CURSOR( t, this );
-        int     plotCenter = GetPlotWin()->GetMarginLeft()
-                         + ( GetPlotWin()->GetXScreen() - GetPlotWin()->GetMarginLeft()
-                                   - GetPlotWin()->GetMarginRight() )
-                                   / 2;
-        c->SetX( plotCenter );
-        c->SetPen( wxPen( m_colors.GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::CURSOR ) ) );
-        t->SetCursor( c );
-        m_plotWin->AddLayer( c );
+        CURSOR*   cursor = new CURSOR( t, this );
+        mpWindow* win = GetPlotWin();
+        int       width = win->GetXScreen() - win->GetMarginLeft() - win->GetMarginRight();
+        int       center = win->GetMarginLeft() + KiROUND( width * ( aCursorId == 1 ? 0.4 : 0.6 ) );
+
+        cursor->SetName( aName );
+        cursor->SetX( center );
+        cursor->SetPen( wxPen( m_colors.GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::CURSOR ) ) );
+
+        t->SetCursor( aCursorId, cursor );
+        m_plotWin->AddLayer( cursor );
     }
     else
     {
-        CURSOR* c = t->GetCursor();
-        t->SetCursor( nullptr );
-        m_plotWin->DelLayer( c, true );
+        CURSOR* cursor = t->GetCursor( aCursorId );
+        t->SetCursor( aCursorId, nullptr );
+        m_plotWin->DelLayer( cursor, true );
     }
 
     // Notify the parent window about the changes

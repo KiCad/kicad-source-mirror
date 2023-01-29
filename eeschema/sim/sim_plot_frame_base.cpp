@@ -6,6 +6,7 @@
 ///////////////////////////////////////////////////////////////////////////
 
 #include "tool/action_toolbar.h"
+#include "widgets/wx_grid.h"
 
 #include "sim_plot_frame_base.h"
 
@@ -87,25 +88,67 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_panelSignals = new wxPanel( m_splitterSignals, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_panelSignals->SetMinSize( wxSize( -1,100 ) );
 
-	wxBoxSizer* bSizer10;
-	bSizer10 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSignalsSizer;
+	bSignalsSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_staticTextSignals = new wxStaticText( m_panelSignals, wxID_ANY, _("Signals"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextSignals->Wrap( -1 );
-	bSizer10->Add( m_staticTextSignals, 0, wxTOP|wxRIGHT, 5 );
+	wxBoxSizer* bFiltersSizer;
+	bFiltersSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_signals = new wxListView( m_panelSignals, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_NO_HEADER|wxLC_REPORT|wxLC_SINGLE_SEL );
-	bSizer10->Add( m_signals, 1, wxEXPAND, 5 );
+	m_filter = new wxSearchCtrl( m_panelSignals, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	#ifndef __WXMAC__
+	m_filter->ShowSearchButton( true );
+	#endif
+	m_filter->ShowCancelButton( true );
+	bFiltersSizer->Add( m_filter, 1, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	m_panelSignals->SetSizer( bSizer10 );
+	bSignalsSizer->Add( bFiltersSizer, 0, wxEXPAND, 5 );
+
+	m_signalsGrid = new WX_GRID( m_panelSignals, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+
+	// Grid
+	m_signalsGrid->CreateGrid( 0, 5 );
+	m_signalsGrid->EnableEditing( true );
+	m_signalsGrid->EnableGridLines( true );
+	m_signalsGrid->EnableDragGridSize( false );
+	m_signalsGrid->SetMargins( 0, 0 );
+
+	// Columns
+	m_signalsGrid->SetColSize( 0, 196 );
+	m_signalsGrid->SetColSize( 1, 50 );
+	m_signalsGrid->SetColSize( 2, 50 );
+	m_signalsGrid->SetColSize( 3, 54 );
+	m_signalsGrid->SetColSize( 4, 54 );
+	m_signalsGrid->EnableDragColMove( false );
+	m_signalsGrid->EnableDragColSize( true );
+	m_signalsGrid->SetColLabelValue( 0, _("Signal") );
+	m_signalsGrid->SetColLabelValue( 1, _("Plot") );
+	m_signalsGrid->SetColLabelValue( 2, _("Color") );
+	m_signalsGrid->SetColLabelValue( 3, _("Cursor 1") );
+	m_signalsGrid->SetColLabelValue( 4, _("Cursor 2") );
+	m_signalsGrid->SetColLabelSize( -1 );
+	m_signalsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+
+	// Rows
+	m_signalsGrid->EnableDragRowSize( true );
+	m_signalsGrid->SetRowLabelSize( 0 );
+	m_signalsGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+
+	// Label Appearance
+
+	// Cell Defaults
+	m_signalsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	bSignalsSizer->Add( m_signalsGrid, 1, wxEXPAND, 5 );
+
+
+	m_panelSignals->SetSizer( bSignalsSizer );
 	m_panelSignals->Layout();
-	bSizer10->Fit( m_panelSignals );
+	bSignalsSizer->Fit( m_panelSignals );
 	m_panelCursorsAndTune = new wxPanel( m_splitterSignals, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_panelCursorsAndTune->SetMinSize( wxSize( -1,300 ) );
 
-	wxBoxSizer* bSizer9;
-	bSizer9 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bCursorsSizer;
+	bCursorsSizer = new wxBoxSizer( wxVERTICAL );
 
 	m_splitterTuneValues = new wxSplitterWindow( m_panelCursorsAndTune, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_LIVE_UPDATE|wxBORDER_NONE );
 	m_splitterTuneValues->SetSashGravity( 0.5 );
@@ -118,12 +161,39 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	wxBoxSizer* bSizer12;
 	bSizer12 = new wxBoxSizer( wxVERTICAL );
 
-	m_staticTextCursors = new wxStaticText( m_panelCursors, wxID_ANY, _("Cursors"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextCursors->Wrap( -1 );
-	bSizer12->Add( m_staticTextCursors, 0, wxTOP|wxRIGHT, 5 );
+	m_cursorsGrid = new WX_GRID( m_panelCursors, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
-	m_cursors = new wxListCtrl( m_panelCursors, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_SINGLE_SEL );
-	bSizer12->Add( m_cursors, 1, wxEXPAND, 5 );
+	// Grid
+	m_cursorsGrid->CreateGrid( 0, 4 );
+	m_cursorsGrid->EnableEditing( true );
+	m_cursorsGrid->EnableGridLines( true );
+	m_cursorsGrid->EnableDragGridSize( false );
+	m_cursorsGrid->SetMargins( 0, 0 );
+
+	// Columns
+	m_cursorsGrid->SetColSize( 0, 44 );
+	m_cursorsGrid->SetColSize( 1, 140 );
+	m_cursorsGrid->SetColSize( 2, 110 );
+	m_cursorsGrid->SetColSize( 3, 110 );
+	m_cursorsGrid->EnableDragColMove( false );
+	m_cursorsGrid->EnableDragColSize( true );
+	m_cursorsGrid->SetColLabelValue( 0, _("Cursor") );
+	m_cursorsGrid->SetColLabelValue( 1, _("Signal") );
+	m_cursorsGrid->SetColLabelValue( 2, _("Time") );
+	m_cursorsGrid->SetColLabelValue( 3, _("Voltage / Current") );
+	m_cursorsGrid->SetColLabelSize( -1 );
+	m_cursorsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+
+	// Rows
+	m_cursorsGrid->EnableDragRowSize( true );
+	m_cursorsGrid->SetRowLabelSize( 0 );
+	m_cursorsGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+
+	// Label Appearance
+
+	// Cell Defaults
+	m_cursorsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	bSizer12->Add( m_cursorsGrid, 1, wxEXPAND, 5 );
 
 
 	m_panelCursors->SetSizer( bSizer12 );
@@ -149,12 +219,12 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_tunePanel->Layout();
 	bSizer13->Fit( m_tunePanel );
 	m_splitterTuneValues->SplitHorizontally( m_panelCursors, m_tunePanel, 0 );
-	bSizer9->Add( m_splitterTuneValues, 1, wxEXPAND, 5 );
+	bCursorsSizer->Add( m_splitterTuneValues, 1, wxEXPAND, 5 );
 
 
-	m_panelCursorsAndTune->SetSizer( bSizer9 );
+	m_panelCursorsAndTune->SetSizer( bCursorsSizer );
 	m_panelCursorsAndTune->Layout();
-	bSizer9->Fit( m_panelCursorsAndTune );
+	bCursorsSizer->Fit( m_panelCursorsAndTune );
 	m_splitterSignals->SplitHorizontally( m_panelSignals, m_panelCursorsAndTune, 0 );
 	m_sideSizer->Add( m_splitterSignals, 1, wxEXPAND, 5 );
 
@@ -176,9 +246,10 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_workbook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( SIM_PLOT_FRAME_BASE::onPlotChanged ), NULL, this );
 	m_workbook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, wxAuiNotebookEventHandler( SIM_PLOT_FRAME_BASE::onPlotClose ), NULL, this );
 	m_workbook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSED, wxAuiNotebookEventHandler( SIM_PLOT_FRAME_BASE::onPlotClosed ), NULL, this );
-	m_signals->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( SIM_PLOT_FRAME_BASE::onSignalDblClick ), NULL, this );
-	m_signals->Connect( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, wxListEventHandler( SIM_PLOT_FRAME_BASE::onSignalRClick ), NULL, this );
-	m_cursors->Connect( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, wxListEventHandler( SIM_PLOT_FRAME_BASE::onCursorRClick ), NULL, this );
+	m_filter->Connect( wxEVT_MOTION, wxMouseEventHandler( SIM_PLOT_FRAME_BASE::OnFilterMouseMoved ), NULL, this );
+	m_filter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::OnFilterText ), NULL, this );
+	m_signalsGrid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( SIM_PLOT_FRAME_BASE::onSignalsGridCellChanged ), NULL, this );
+	m_cursorsGrid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( SIM_PLOT_FRAME_BASE::onCursorsGridCellChanged ), NULL, this );
 }
 
 SIM_PLOT_FRAME_BASE::~SIM_PLOT_FRAME_BASE()
@@ -188,8 +259,9 @@ SIM_PLOT_FRAME_BASE::~SIM_PLOT_FRAME_BASE()
 	m_workbook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( SIM_PLOT_FRAME_BASE::onPlotChanged ), NULL, this );
 	m_workbook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, wxAuiNotebookEventHandler( SIM_PLOT_FRAME_BASE::onPlotClose ), NULL, this );
 	m_workbook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSED, wxAuiNotebookEventHandler( SIM_PLOT_FRAME_BASE::onPlotClosed ), NULL, this );
-	m_signals->Disconnect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( SIM_PLOT_FRAME_BASE::onSignalDblClick ), NULL, this );
-	m_signals->Disconnect( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, wxListEventHandler( SIM_PLOT_FRAME_BASE::onSignalRClick ), NULL, this );
-	m_cursors->Disconnect( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, wxListEventHandler( SIM_PLOT_FRAME_BASE::onCursorRClick ), NULL, this );
+	m_filter->Disconnect( wxEVT_MOTION, wxMouseEventHandler( SIM_PLOT_FRAME_BASE::OnFilterMouseMoved ), NULL, this );
+	m_filter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::OnFilterText ), NULL, this );
+	m_signalsGrid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( SIM_PLOT_FRAME_BASE::onSignalsGridCellChanged ), NULL, this );
+	m_cursorsGrid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( SIM_PLOT_FRAME_BASE::onCursorsGridCellChanged ), NULL, this );
 
 }

@@ -55,14 +55,14 @@ public:
     virtual ~NGSPICE_CIRCUIT_MODEL() {}
 
     /**
-     * Return name of Spice dataset for a specific plot.
+     * Return name of Spice dataset for a specific trace.
      *
      * @param aVector is name of the vector produced by ngspice
      * @param [out] aSignal is output in form: V(R1), Ib(Q2), I(L8)
-     * @return [SPT_VOLTAGE, SPT_CURRENT]. Otherwise SPT_UNKNOWN if vector is
-     *         of different, unsupported type.
+     * @return [SPT_VOLTAGE, SPT_CURRENT]. Otherwise SPT_UNKNOWN if vector is of different,
+     *                                     unsupported type.
      */
-    SIM_PLOT_TYPE VectorToSignal( const std::string& aVector, wxString& aSignal ) const;
+    SIM_TRACE_TYPE VectorToSignal( const std::string& aVector, wxString& aSignal ) const;
 
     void SetSimOptions( int aOptions ) { m_options = aOptions; }
     int  GetSimOptions() const { return m_options; }

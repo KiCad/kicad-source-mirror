@@ -256,7 +256,6 @@ public:
     static TOOL_ACTION simCommand;
     static TOOL_ACTION runSimulation;
     static TOOL_ACTION stopSimulation;
-    static TOOL_ACTION addSignals;
     static TOOL_ACTION showNetlist;
 
     // Net highlighting

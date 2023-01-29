@@ -58,7 +58,6 @@ void SIM_PLOT_FRAME::ReCreateHToolbar()
     m_toolBar->Add( ACTIONS::zoomFitScreen );
 
     m_toolBar->AddScaledSeparator( this );
-    m_toolBar->Add( EE_ACTIONS::addSignals );
     m_toolBar->Add( EE_ACTIONS::simProbe );
     m_toolBar->Add( EE_ACTIONS::simTune );
 
@@ -123,7 +122,6 @@ void SIM_PLOT_FRAME::doReCreateMenuBar()
     simulationMenu->Add( EE_ACTIONS::runSimulation );
 
     simulationMenu->AppendSeparator();
-    simulationMenu->Add( EE_ACTIONS::addSignals );
     simulationMenu->Add( EE_ACTIONS::simProbe );
     simulationMenu->Add( EE_ACTIONS::simTune );
 

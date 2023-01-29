@@ -35,7 +35,6 @@
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
 #include <tools/simulator_control.h>
-#include <dialogs/dialog_signal_list.h>
 #include <scintilla_tricks.h>
 
 
@@ -290,23 +289,6 @@ int SIMULATOR_CONTROL::RunSimulation( const TOOL_EVENT& aEvent )
 }
 
 
-int SIMULATOR_CONTROL::AddSignals( const TOOL_EVENT& aEvent )
-{
-    SIM_PLOT_PANEL* plotPanel = m_plotFrame->GetCurrentPlot();
-
-    if( !plotPanel || !m_circuitModel || plotPanel->GetType() != m_circuitModel->GetSimType() )
-    {
-        DisplayInfoMessage( m_plotFrame, _( "You need to run plot-providing simulation first." ) );
-        return -1;
-    }
-
-    DIALOG_SIGNAL_LIST dialog( m_plotFrame, m_circuitModel.get() );
-    dialog.ShowModal();
-
-    return 0;
-}
-
-
 int SIMULATOR_CONTROL::Probe( const TOOL_EVENT& aEvent )
 {
     if( m_schematicFrame == nullptr )
@@ -435,7 +417,6 @@ void SIMULATOR_CONTROL::setTransitions()
     Go( &SIMULATOR_CONTROL::EditSimCommand,         EE_ACTIONS::simCommand.MakeEvent() );
     Go( &SIMULATOR_CONTROL::RunSimulation,          EE_ACTIONS::runSimulation.MakeEvent() );
     Go( &SIMULATOR_CONTROL::RunSimulation,          EE_ACTIONS::stopSimulation.MakeEvent() );
-    Go( &SIMULATOR_CONTROL::AddSignals,             EE_ACTIONS::addSignals.MakeEvent() );
     Go( &SIMULATOR_CONTROL::Probe,                  EE_ACTIONS::simProbe.MakeEvent() );
     Go( &SIMULATOR_CONTROL::Tune,                   EE_ACTIONS::simTune.MakeEvent() );
 

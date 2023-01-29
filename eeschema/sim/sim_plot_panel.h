@@ -84,6 +84,11 @@ public:
         return m_coords;
     }
 
+    void SetCoordX( double aValue );
+
+private:
+    void doSetCoordX( double aValue );
+
 private:
     const TRACE*  m_trace;
     bool          m_updateRequired;
@@ -98,9 +103,8 @@ private:
 class TRACE : public mpFXYVector
 {
 public:
-    TRACE( const wxString& aName, SIM_PLOT_TYPE aType ) :
+    TRACE( const wxString& aName, SIM_TRACE_TYPE aType ) :
             mpFXYVector( aName ),
-            m_cursor( nullptr ),
             m_type( aType )
     {
         SetContinuity( true );
@@ -116,8 +120,11 @@ public:
      */
     void SetData( const std::vector<double>& aX, const std::vector<double>& aY ) override
     {
-        if( m_cursor )
-            m_cursor->Update();
+        for( auto& [ idx, cursor ] : m_cursors )
+        {
+            if( cursor )
+                cursor->Update();
+        }
 
         mpFXYVector::SetData( aX, aY );
     }
@@ -132,27 +139,32 @@ public:
         return m_ys;
     }
 
-    bool HasCursor() const
+    bool HasCursor( int aCursorId )
     {
-        return m_cursor != nullptr;
+        return m_cursors[ aCursorId ] != nullptr;
     }
 
-    void SetCursor( CURSOR* aCursor )
+    void SetCursor( int aCursorId, CURSOR* aCursor )
     {
-        m_cursor = aCursor;
+        m_cursors[ aCursorId ] = aCursor;
     }
 
-    CURSOR* GetCursor() const
+    CURSOR* GetCursor( int aCursorId )
     {
-        return m_cursor;
+        return m_cursors[ aCursorId ];
     }
 
-    SIM_PLOT_TYPE GetType() const
+    std::map<int, CURSOR*>& GetCursors()
+    {
+        return m_cursors;
+    }
+
+    SIM_TRACE_TYPE GetType() const
     {
         return m_type;
     }
 
-    void SetTraceColour( wxColour aColour )
+    void SetTraceColour( const wxColour& aColour )
     {
         m_traceColour = aColour;
     }
@@ -169,13 +181,13 @@ public:
 
 
 protected:
-    CURSOR*       m_cursor;
-    SIM_PLOT_TYPE m_type;
-    wxColour      m_traceColour;
+    std::map<int, CURSOR*> m_cursors;       // No ownership; the mpWindow owns the CURSORs
+    SIM_TRACE_TYPE         m_type;
+    wxColour               m_traceColour;
 
 private:
     ///< Name of the signal parameter
-    wxString      m_param;
+    wxString               m_param;
 };
 
 
@@ -192,18 +204,20 @@ public:
 
     wxString GetLabelX() const
     {
-        return m_axis_x ? m_axis_x->GetName() : "";
+        return m_axis_x ? m_axis_x->GetName() : wxS( "" );
     }
 
     wxString GetLabelY1() const
     {
-        return m_axis_y1 ? m_axis_y1->GetName() : "";
+        return m_axis_y1 ? m_axis_y1->GetName() : wxS( "" );
     }
 
     wxString GetLabelY2() const
     {
-        return m_axis_y2 ? m_axis_y2->GetName() : "";
+        return m_axis_y2 ? m_axis_y2->GetName() : wxS( "" );
     }
+
+    wxString GetUnitsX() const;
 
     bool TraceShown( const wxString& aName ) const
     {
@@ -269,7 +283,7 @@ public:
     }
 
     ///< Toggle cursor for a particular trace.
-    void EnableCursor( const wxString& aName, bool aEnable );
+    void EnableCursor( const wxString& aName, int aCursorId, bool aEnable );
 
     ///< Reset scale ranges to fit the current traces.
     void ResetScales();
@@ -290,7 +304,7 @@ public:
 
 protected:
     bool addTrace( const wxString& aTitle, const wxString& aName, int aPoints, const double* aX,
-                   const double* aY, SIM_PLOT_TYPE aType );
+                   const double* aY, SIM_TRACE_TYPE aType );
 
     bool deleteTrace( const wxString& aName );
 

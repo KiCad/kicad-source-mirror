@@ -962,12 +962,6 @@ TOOL_ACTION EE_ACTIONS::stopSimulation( "eeschema.Simulation.stopSimulation",
         _( "Stop Simulation" ), "",
         BITMAPS::sim_stop );
 
-TOOL_ACTION EE_ACTIONS::addSignals( "eeschema.Simulation.addSignals",
-        AS_GLOBAL,
-        'A', "",
-        _( "Add Signals..." ), "",
-        BITMAPS::sim_add_signal );
-
 TOOL_ACTION EE_ACTIONS::simProbe( "eeschema.Simulation.probe",
         AS_GLOBAL,
         'P', "",

@@ -1175,6 +1175,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnFilterMouseMoved( wxMouseEvent& aEvent )
         SetCursor( wxCURSOR_IBEAM );
 }
 
+
 void DIALOG_SYMBOL_FIELDS_TABLE::OnFieldsCtrlSelectionChanged( wxDataViewEvent& event )
 {
     int row = m_fieldsCtrl->GetSelectedRow();

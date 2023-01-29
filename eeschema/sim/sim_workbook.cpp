@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2021 Mikołaj Wielgus <wielgusmikolaj@gmail.com>
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,7 +89,7 @@ bool SIM_WORKBOOK::DeletePage( size_t page )
 
 bool SIM_WORKBOOK::AddTrace( SIM_PLOT_PANEL* aPlotPanel, const wxString& aTitle,
                              const wxString& aName, int aPoints, const double* aX, const double* aY,
-                             SIM_PLOT_TYPE aType )
+                             SIM_TRACE_TYPE aType )
 {
     if( aPoints && aPlotPanel->addTrace( aTitle, aName, aPoints, aX, aY, aType ) )
     {

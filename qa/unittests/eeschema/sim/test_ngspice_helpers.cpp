@@ -131,9 +131,9 @@ BOOST_AUTO_TEST_CASE( VectorToSignal )
 {
     struct TEST_DATA
     {
-        std::string   vector;
-        wxString      signal;
-        SIM_PLOT_TYPE type;
+        std::string    vector;
+        wxString       signal;
+        SIM_TRACE_TYPE type;
     };
 
     std::vector<struct TEST_DATA> testData = {
@@ -189,8 +189,8 @@ BOOST_AUTO_TEST_CASE( VectorToSignal )
 
     for( auto& step : testData )
     {
-        wxString      outputSignalName;
-        SIM_PLOT_TYPE retVal;
+        wxString       outputSignalName;
+        SIM_TRACE_TYPE retVal;
 
         retVal = m_exporter.VectorToSignal( step.vector, outputSignalName );
 

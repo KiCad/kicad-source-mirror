@@ -38,6 +38,10 @@
 #include <bitmaps.h>
 #include <wildcards_and_files_ext.h>
 #include <widgets/tuner_slider.h>
+#include <widgets/grid_color_swatch_helpers.h>
+#include <widgets/wx_grid.h>
+#include <grid_tricks.h>
+#include <eda_pattern_match.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/action_manager.h>
@@ -58,11 +62,11 @@
 #include <memory>
 
 
-SIM_PLOT_TYPE operator|( SIM_PLOT_TYPE aFirst, SIM_PLOT_TYPE aSecond )
+SIM_TRACE_TYPE operator|( SIM_TRACE_TYPE aFirst, SIM_TRACE_TYPE aSecond )
 {
     int res = (int) aFirst | (int) aSecond;
 
-    return (SIM_PLOT_TYPE) res;
+    return (SIM_TRACE_TYPE) res;
 }
 
 
@@ -106,6 +110,25 @@ private:
 };
 
 
+enum SIGNALS_GRID_COLUMNS
+{
+    COL_SIGNAL_NAME = 0,
+    COL_SIGNAL_SHOW,
+    COL_SIGNAL_COLOR,
+    COL_CURSOR_1,
+    COL_CURSOR_2
+};
+
+
+enum CURSORS_GRID_COLUMNS
+{
+    COL_CURSOR_NAME = 0,
+    COL_CURSOR_SIGNAL,
+    COL_CURSOR_X,
+    COL_CURSOR_Y
+};
+
+
 SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         SIM_PLOT_FRAME_BASE( aParent ),
         m_lastSimPlot( nullptr ),
@@ -114,7 +137,6 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_simFinished( false )
 {
     SetKiway( this, aKiway );
-    m_signalsIconColorList = nullptr;
 
     m_schematicFrame = (SCH_EDIT_FRAME*) Kiway().Player( FRAME_SCH, false );
     wxASSERT( m_schematicFrame );
@@ -129,6 +151,36 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     // Get the previous size and position of windows:
     LoadSettings( config() );
+
+    m_signalsGrid->wxGrid::SetLabelFont( KIUI::GetStatusFont( this ) );
+
+    wxGridCellAttr* attr = new wxGridCellAttr;
+    attr->SetReadOnly();
+    m_signalsGrid->SetColAttr( COL_SIGNAL_NAME, attr );
+
+    attr = new wxGridCellAttr;
+    attr->SetRenderer( new wxGridCellBoolRenderer() );
+    attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
+    attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+    m_signalsGrid->SetColAttr( COL_SIGNAL_SHOW, attr );
+
+    m_signalsGrid->PushEventHandler( new GRID_TRICKS( m_signalsGrid ) );
+
+    m_cursorsGrid->wxGrid::SetLabelFont( KIUI::GetStatusFont( this ) );
+
+    attr = new wxGridCellAttr;
+    attr->SetReadOnly();
+    m_cursorsGrid->SetColAttr( COL_CURSOR_NAME, attr );
+
+    attr = new wxGridCellAttr;
+    attr->SetReadOnly();
+    m_cursorsGrid->SetColAttr( COL_CURSOR_SIGNAL, attr );
+
+    attr = new wxGridCellAttr;
+    attr->SetReadOnly();
+    m_cursorsGrid->SetColAttr( COL_CURSOR_Y, attr );
+
+    m_cursorsGrid->PushEventHandler( new GRID_TRICKS( m_cursorsGrid ) );
 
     // Prepare the color list to plot traces
     SIM_PLOT_COLORS::FillDefaultColorList( m_darkMode );
@@ -184,12 +236,15 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
 SIM_PLOT_FRAME::~SIM_PLOT_FRAME()
 {
+    // Delete the GRID_TRICKS.
+    m_signalsGrid->PopEventHandler( true );
+    m_cursorsGrid->PopEventHandler( true );
+
     NULL_REPORTER devnull;
 
     m_simulator->Attach( nullptr, devnull );
     m_simulator->SetReporter( nullptr );
     delete m_reporter;
-    delete m_signalsIconColorList;
 }
 
 
@@ -230,10 +285,16 @@ void SIM_PLOT_FRAME::ShowChangedLanguage()
         m_workbook->SetPageText( ii, pageTitle );
     }
 
-    m_staticTextSignals->SetLabel( _( "Signals" ) );
-    updateSignalList();
+    m_signalsGrid->SetColLabelValue( COL_SIGNAL_NAME, _( "Signal" ) );
+    m_signalsGrid->SetColLabelValue( COL_SIGNAL_SHOW, _( "Plot" ) );
+    m_signalsGrid->SetColLabelValue( COL_SIGNAL_COLOR, _( "Color" ) );
+    m_signalsGrid->SetColLabelValue( COL_CURSOR_1, _( "Cursor 1" ) );
+    m_signalsGrid->SetColLabelValue( COL_CURSOR_2, _( "Cursor 2" ) );
 
-    m_staticTextCursors->SetLabel( _( "Cursors" ) );
+    m_cursorsGrid->SetColLabelValue( COL_CURSOR_NAME, _( "Cursor" ) );
+    m_cursorsGrid->SetColLabelValue( COL_CURSOR_SIGNAL, _( "Signal" ) );
+    m_cursorsGrid->SetColLabelValue( COL_CURSOR_X, _( "Time" ) );
+    m_cursorsGrid->SetColLabelValue( COL_CURSOR_Y, _( "Voltage / Current" ) );
     wxCommandEvent dummy;
     onCursorUpdate( dummy );
 
@@ -373,6 +434,73 @@ void SIM_PLOT_FRAME::setSubWindowsSashSize()
 }
 
 
+void SIM_PLOT_FRAME::rebuildSignalsGrid( wxString aFilter )
+{
+    m_signalsGrid->ClearRows();
+
+    if( aFilter.IsEmpty() )
+        aFilter = wxS( "*" );
+
+    EDA_COMBINED_MATCHER matcher( aFilter, CTX_SIGNAL );
+    int                  row = 0;
+
+    for( const wxString& signal : m_signals )
+    {
+        int matches;
+        int offset;
+
+        if( matcher.Find( signal, matches, offset ) && offset == 0 )
+        {
+            m_signalsGrid->AppendRows( 1 );
+
+            m_signalsGrid->SetCellValue( row, COL_SIGNAL_NAME, signal );
+
+            if( TRACE* trace = GetCurrentPlot()->GetTrace( signal ) )
+            {
+                m_signalsGrid->SetCellValue( row, COL_SIGNAL_SHOW, wxS( "1" ) );
+
+                wxGridCellAttr* attr = new wxGridCellAttr;
+                attr->SetRenderer( new GRID_CELL_COLOR_RENDERER( this ) );
+                attr->SetEditor( new GRID_CELL_COLOR_SELECTOR( this, m_signalsGrid ) );
+                attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+                m_signalsGrid->SetAttr( row, COL_SIGNAL_COLOR, attr );
+                KIGFX::COLOR4D color( trace->GetPen().GetColour() );
+                m_signalsGrid->SetCellValue( row, COL_SIGNAL_COLOR, color.ToCSSString() );
+
+                attr = new wxGridCellAttr;
+                attr->SetRenderer( new wxGridCellBoolRenderer() );
+                attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
+                attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+                m_signalsGrid->SetAttr( row, COL_CURSOR_1, attr );
+
+                attr = new wxGridCellAttr;
+                attr->SetRenderer( new wxGridCellBoolRenderer() );
+                attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
+                attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+                m_signalsGrid->SetAttr( row, COL_CURSOR_2, attr );
+            }
+            else
+            {
+                wxGridCellAttr* attr = new wxGridCellAttr;
+                attr->SetReadOnly();
+                m_signalsGrid->SetAttr( row, COL_SIGNAL_COLOR, attr );
+                m_signalsGrid->SetCellValue( row, COL_SIGNAL_COLOR, wxEmptyString );
+
+                attr = new wxGridCellAttr;
+                attr->SetReadOnly();
+                m_signalsGrid->SetAttr( row, COL_CURSOR_1, attr );
+
+                attr = new wxGridCellAttr;
+                attr->SetReadOnly();
+                m_signalsGrid->SetAttr( row, COL_CURSOR_2, attr );
+            }
+
+            row++;
+        }
+    }
+}
+
+
 void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
 {
     if( m_circuitModel->CommandToSimType( GetCurrentSimCommand() ) == ST_UNKNOWN )
@@ -423,11 +551,44 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
         }
     }
 
+    if( !plotWindow || plotWindow->GetType() != m_circuitModel->GetSimType() )
+    {
+        plotWindow = NewPlotPanel( m_circuitModel->GetSimCommand(),
+                                   m_circuitModel->GetSimOptions() );
+    }
+
     std::unique_lock<std::mutex> simulatorLock( m_simulator->GetMutex(), std::try_to_lock );
 
     if( simulatorLock.owns_lock() )
     {
         wxBusyCursor toggle;
+
+        m_signals.clear();
+
+        // Add voltages
+        for( const std::string& net : m_circuitModel->GetNets() )
+        {
+            // netnames are escaped (can contain "{slash}" for '/') Unscape them:
+            wxString netname = UnescapeString( net );
+
+            if( netname != "GND" && netname != "0" )
+                m_signals.push_back( wxString::Format( "V(%s)", netname ) );
+        }
+
+        auto simType = m_circuitModel->GetSimType();
+
+        // Add currents
+        if( simType == ST_TRANSIENT || simType == ST_DC )
+        {
+            for( const SPICE_ITEM& item : m_circuitModel->GetItems() )
+            {
+                // Add all possible currents for the primitive.
+                for( const std::string& name : item.model->SpiceGenerator().CurrentNames( item ) )
+                    m_signals.push_back( name );
+            }
+        }
+
+        rebuildSignalsGrid( m_filter->GetValue() );
 
         applyTuners();
 
@@ -442,25 +603,22 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
 }
 
 
-SIM_PANEL_BASE* SIM_PLOT_FRAME::NewPlotPanel( wxString aSimCommand, int aOptions )
+SIM_PANEL_BASE* SIM_PLOT_FRAME::NewPlotPanel( const wxString& aSimCommand, int aOptions )
 {
     SIM_PANEL_BASE* plotPanel = nullptr;
     SIM_TYPE        simType   = NGSPICE_CIRCUIT_MODEL::CommandToSimType( aSimCommand );
 
     if( SIM_PANEL_BASE::IsPlottable( simType ) )
     {
-        SIM_PLOT_PANEL* panel;
-        panel = new SIM_PLOT_PANEL( aSimCommand, aOptions, m_workbook, wxID_ANY );
-
-        panel->GetPlotWin()->EnableMouseWheelPan(
-                Pgm().GetCommonSettings()->m_Input.scroll_modifier_zoom != 0 );
-
+        SIM_PLOT_PANEL* panel = new SIM_PLOT_PANEL( aSimCommand, aOptions, m_workbook, wxID_ANY );
         plotPanel = dynamic_cast<SIM_PANEL_BASE*>( panel );
+
+        COMMON_SETTINGS::INPUT cfg = Pgm().GetCommonSettings()->m_Input;
+        panel->GetPlotWin()->EnableMouseWheelPan( cfg.scroll_modifier_zoom != 0 );
     }
     else
     {
-        SIM_NOPLOT_PANEL* panel;
-        panel = new SIM_NOPLOT_PANEL( aSimCommand, aOptions, m_workbook, wxID_ANY );
+        SIM_NOPLOT_PANEL* panel = new SIM_NOPLOT_PANEL( aSimCommand, aOptions, m_workbook, wxID_ANY );
         plotPanel = dynamic_cast<SIM_PANEL_BASE*>( panel );
     }
 
@@ -473,15 +631,131 @@ SIM_PANEL_BASE* SIM_PLOT_FRAME::NewPlotPanel( wxString aSimCommand, int aOptions
 }
 
 
+void SIM_PLOT_FRAME::OnFilterText( wxCommandEvent& aEvent )
+{
+    rebuildSignalsGrid( m_filter->GetValue() );
+}
+
+
+void SIM_PLOT_FRAME::OnFilterMouseMoved( wxMouseEvent& aEvent )
+{
+    wxPoint pos = aEvent.GetPosition();
+    wxRect  ctrlRect = m_filter->GetScreenRect();
+    int     buttonWidth = ctrlRect.GetHeight();         // Presume buttons are square
+
+    if( m_filter->IsSearchButtonVisible() && pos.x < buttonWidth )
+        SetCursor( wxCURSOR_ARROW );
+    else if( m_filter->IsCancelButtonVisible() && pos.x > ctrlRect.GetWidth() - buttonWidth )
+        SetCursor( wxCURSOR_ARROW );
+    else
+        SetCursor( wxCURSOR_IBEAM );
+}
+
+
+void SIM_PLOT_FRAME::onSignalsGridCellChanged( wxGridEvent& aEvent )
+{
+    int      row = aEvent.GetRow();
+    int      col = aEvent.GetCol();
+    wxString text = m_signalsGrid->GetCellValue( row, col );
+
+    if( col == COL_SIGNAL_SHOW )
+    {
+        if( text == wxS( "1" ) )
+        {
+            wxString signalName = m_signalsGrid->GetCellValue( row, COL_SIGNAL_NAME );
+
+            if( !signalName.IsEmpty() )
+            {
+                wxUniChar firstChar = signalName[0];
+
+                if( firstChar == 'V' || firstChar == 'v' )
+                    addTrace( signalName, SPT_VOLTAGE );
+                else if( firstChar == 'I' || firstChar == 'i' )
+                    addTrace( signalName, SPT_CURRENT );
+            }
+
+            if( !GetCurrentPlot()->GetTrace( signalName ) )
+            {
+                aEvent.Veto();
+                return;
+            }
+        }
+        else
+        {
+            removeTrace( m_signalsGrid->GetCellValue( row, COL_SIGNAL_NAME ) );
+        }
+    }
+    else if( col == COL_CURSOR_1 || col == COL_CURSOR_2 )
+    {
+        SIM_PLOT_PANEL* plot = GetCurrentPlot();
+
+        for( int ii = 0; ii < m_signalsGrid->GetNumberRows(); ++ii )
+        {
+            wxString signalName = m_signalsGrid->GetCellValue( ii, COL_SIGNAL_NAME );
+            bool     enable = ii == row && text == wxS( "1" );
+
+            plot->EnableCursor( signalName, col == COL_CURSOR_1 ? 1 : 2, enable );
+        }
+    }
+
+    updateSignalsGrid();
+}
+
+
+void SIM_PLOT_FRAME::onCursorsGridCellChanged( wxGridEvent& aEvent )
+{
+    SIM_PLOT_PANEL* plotPanel = GetCurrentPlot();
+
+    if( !plotPanel )
+        return;
+
+    int      row = aEvent.GetRow();
+    int      col = aEvent.GetCol();
+    wxString text = m_cursorsGrid->GetCellValue( row, col );
+    wxString cursorName = m_cursorsGrid->GetCellValue( row, COL_CURSOR_NAME );
+
+    if( col == COL_CURSOR_X )
+    {
+        CURSOR* cursor1 = nullptr;
+        CURSOR* cursor2 = nullptr;
+
+        for( const auto& [name, trace] : plotPanel->GetTraces() )
+        {
+            if( CURSOR* cursor = trace->GetCursor( 1 ) )
+                cursor1 = cursor;
+
+            if( CURSOR* cursor = trace->GetCursor( 2 ) )
+                cursor2 = cursor;
+        }
+
+        double value = SPICE_VALUE( text ).ToDouble();
+
+        if( cursorName == wxS( "1" ) && cursor1 )
+            cursor1->SetCoordX( value );
+        else if( cursorName == wxS( "2" ) && cursor2 )
+            cursor2->SetCoordX( value );
+        else if( cursorName == _( "Diff" ) && cursor1 && cursor2 )
+            cursor2->SetCoordX( cursor1->GetCoords().x + value );
+
+        wxCommandEvent dummy;
+        onCursorUpdate( dummy );
+    }
+    else
+    {
+        wxFAIL_MSG( wxT( "All other columns are supposed to be read-only!" ) );
+    }
+}
+
+
 void SIM_PLOT_FRAME::AddVoltagePlot( const wxString& aNetName )
 {
-    addPlot( aNetName, SPT_VOLTAGE );
+    addTrace( aNetName, SPT_VOLTAGE );
 }
 
 
 void SIM_PLOT_FRAME::AddCurrentPlot( const wxString& aDeviceName )
 {
-    addPlot( aDeviceName, SPT_CURRENT );
+    addTrace( aDeviceName, SPT_CURRENT );
 }
 
 
@@ -579,7 +853,7 @@ const NGSPICE_CIRCUIT_MODEL* SIM_PLOT_FRAME::GetExporter() const
 }
 
 
-void SIM_PLOT_FRAME::addPlot( const wxString& aName, SIM_PLOT_TYPE aType )
+void SIM_PLOT_FRAME::addTrace( const wxString& aName, SIM_TRACE_TYPE aType )
 {
     SIM_TYPE simType = m_circuitModel->GetSimType();
 
@@ -611,7 +885,7 @@ void SIM_PLOT_FRAME::addPlot( const wxString& aName, SIM_PLOT_TYPE aType )
         return;
 
     bool updated = false;
-    SIM_PLOT_TYPE xAxisType = getXAxisType( simType );
+    SIM_TRACE_TYPE xAxisType = getXAxisType( simType );
 
     if( xAxisType == SPT_LIN_FREQUENCY || xAxisType == SPT_LOG_FREQUENCY )
     {
@@ -620,52 +894,52 @@ void SIM_PLOT_FRAME::addPlot( const wxString& aName, SIM_PLOT_TYPE aType )
         // If magnitude or phase wasn't specified, then add both
         if( baseType == aType )
         {
-            updated |= updatePlot( aName, ( SIM_PLOT_TYPE )( baseType | SPT_AC_MAG ), plotPanel );
-            updated |= updatePlot( aName, ( SIM_PLOT_TYPE )( baseType | SPT_AC_PHASE ), plotPanel );
+            updated |= updateTrace( aName, (SIM_TRACE_TYPE) ( baseType | SPT_AC_MAG ), plotPanel );
+            updated |= updateTrace( aName, (SIM_TRACE_TYPE) ( baseType | SPT_AC_PHASE ), plotPanel );
         }
         else
         {
-            updated |= updatePlot( aName, ( SIM_PLOT_TYPE )( aType ), plotPanel );
+            updated |= updateTrace( aName, (SIM_TRACE_TYPE) ( aType ), plotPanel );
         }
     }
     else
     {
-        updated = updatePlot( aName, aType, plotPanel );
+        updated = updateTrace( aName, aType, plotPanel );
     }
 
     if( updated )
-        updateSignalList();
+        updateSignalsGrid();
 }
 
 
-void SIM_PLOT_FRAME::removePlot( const wxString& aPlotName )
+void SIM_PLOT_FRAME::removeTrace( const wxString& aSignalName )
 {
     SIM_PLOT_PANEL* plotPanel = GetCurrentPlot();
 
     if( !plotPanel )
         return;
 
-    wxASSERT( plotPanel->TraceShown( aPlotName ) );
-    m_workbook->DeleteTrace( plotPanel, aPlotName );
+    wxASSERT( plotPanel->TraceShown( aSignalName ) );
+    m_workbook->DeleteTrace( plotPanel, aSignalName );
     plotPanel->GetPlotWin()->Fit();
 
-    updateSignalList();
+    updateSignalsGrid();
     wxCommandEvent dummy;
     onCursorUpdate( dummy );
 }
 
 
-bool SIM_PLOT_FRAME::updatePlot( const wxString& aName, SIM_PLOT_TYPE aType,
-                                 SIM_PLOT_PANEL* aPlotPanel )
+bool SIM_PLOT_FRAME::updateTrace( const wxString& aName, SIM_TRACE_TYPE aType,
+                                  SIM_PLOT_PANEL* aPlotPanel )
 {
     SIM_TYPE simType = m_circuitModel->GetSimType();
 
-    wxString plotTitle = aName;
+    wxString traceTitle = aName;
 
     if( aType & SPT_AC_MAG )
-        plotTitle += _( " (mag)" );
+        traceTitle += _( " (mag)" );
     else if( aType & SPT_AC_PHASE )
-        plotTitle += _( " (phase)" );
+        traceTitle += _( " (phase)" );
 
     if( !SIM_PANEL_BASE::IsPlottable( simType ) )
     {
@@ -739,7 +1013,7 @@ bool SIM_PLOT_FRAME::updatePlot( const wxString& aName, SIM_PLOT_TYPE aType,
             for( size_t idx = 0; idx <= outer; idx++ )
             {
                 name = wxString::Format( wxT( "%s (%s = %s V)" ),
-                                         plotTitle,
+                                         traceTitle,
                                          source2.m_source,
                                          v.ToString() );
 
@@ -759,74 +1033,74 @@ bool SIM_PLOT_FRAME::updatePlot( const wxString& aName, SIM_PLOT_TYPE aType,
         }
     }
 
-    m_workbook->AddTrace( aPlotPanel, plotTitle, aName, size, data_x.data(), data_y.data(), aType );
+    m_workbook->AddTrace( aPlotPanel, traceTitle, aName, size, data_x.data(), data_y.data(), aType );
 
     return true;
 }
 
 
-void SIM_PLOT_FRAME::updateSignalList()
+void SIM_PLOT_FRAME::updateSignalsGrid()
 {
-    m_signals->ClearAll();
+    SIM_PLOT_PANEL* plot = GetCurrentPlot();
 
-    SIM_PLOT_PANEL* plotPanel = GetCurrentPlot();
-
-    if( !plotPanel )
-        return;
-
-    wxSize size = m_signals->GetClientSize();
-    m_signals->AppendColumn( _( "Signal" ), wxLIST_FORMAT_LEFT, size.x );
-
-    // Build an image list, to show the color of the corresponding trace
-    // in the plot panel
-    // This image list is used for trace and cursor lists
-    wxMemoryDC bmDC;
-    const int isize = bmDC.GetCharHeight();
-
-    if( m_signalsIconColorList == nullptr )
-        m_signalsIconColorList = new wxImageList( isize, isize, false );
-    else
-        m_signalsIconColorList->RemoveAll();
-
-    for( const auto& [name, trace] : GetCurrentPlot()->GetTraces() )
+    for( int row = 0; row < m_signalsGrid->GetNumberRows(); ++row )
     {
-        wxBitmap bitmap( isize, isize );
-        bmDC.SelectObject( bitmap );
-        wxColour tcolor = trace->GetPen().GetColour();
+        wxString signal = m_signalsGrid->GetCellValue( row, COL_SIGNAL_NAME );
 
-        wxColour bgColor = m_signals->wxWindow::GetBackgroundColour();
-        bmDC.SetPen( wxPen( bgColor ) );
-        bmDC.SetBrush( wxBrush( bgColor ) );
-        bmDC.DrawRectangle( 0, 0, isize, isize ); // because bmDC.Clear() does not work in wxGTK
+        if( TRACE* trace = plot->GetTrace( signal ) )
+        {
+            m_signalsGrid->SetCellValue( row, COL_SIGNAL_SHOW, wxS( "1" ) );
 
-        bmDC.SetPen( wxPen( tcolor ) );
-        bmDC.SetBrush( wxBrush( tcolor ) );
-        bmDC.DrawRectangle( 0, isize / 4 + 1, isize, isize / 2 );
+            wxGridCellAttr* attr = new wxGridCellAttr;
+            attr->SetRenderer( new GRID_CELL_COLOR_RENDERER( this ) );
+            attr->SetEditor( new GRID_CELL_COLOR_SELECTOR( this, m_signalsGrid ) );
+            attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+            m_signalsGrid->SetAttr( row, COL_SIGNAL_COLOR, attr );
 
-        bmDC.SelectObject( wxNullBitmap );  // Needed to initialize bitmap
+            KIGFX::COLOR4D color( trace->GetPen().GetColour() );
+            m_signalsGrid->SetCellValue( row, COL_SIGNAL_COLOR, color.ToCSSString() );
 
-        bitmap.SetMask( new wxMask( bitmap, *wxBLACK ) );
-        m_signalsIconColorList->Add( bitmap );
-    }
+            attr = new wxGridCellAttr;
+            attr->SetRenderer( new wxGridCellBoolRenderer() );
+            attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
+            attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+            m_signalsGrid->SetAttr( row, COL_CURSOR_1, attr );
 
-    if( bmDC.IsOk() )
-    {
-        bmDC.SetBrush( wxNullBrush );
-        bmDC.SetPen( wxNullPen );
-    }
+            attr = new wxGridCellAttr;
+            attr->SetRenderer( new wxGridCellBoolRenderer() );
+            attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
+            attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+            m_signalsGrid->SetAttr( row, COL_CURSOR_2, attr );
 
-    m_signals->SetImageList( m_signalsIconColorList, wxIMAGE_LIST_SMALL );
+            if( trace->HasCursor( 1 ) )
+                m_signalsGrid->SetCellValue( row, COL_CURSOR_1, wxS( "1" ) );
+            else
+                m_signalsGrid->SetCellValue( row, COL_CURSOR_1, wxEmptyString );
 
-    // Fill the signals listctrl. Keep the order of names and
-    // the order of icon color identical, because the icons
-    // are also used in cursor list, and the color index is
-    // calculated from the trace name index
-    int imgidx = 0;
+            if( trace->HasCursor( 2 ) )
+                m_signalsGrid->SetCellValue( row, COL_CURSOR_2, wxS( "1" ) );
+            else
+                m_signalsGrid->SetCellValue( row, COL_CURSOR_2, wxEmptyString );
+        }
+        else
+        {
+            m_signalsGrid->SetCellValue( row, COL_SIGNAL_SHOW, wxEmptyString );
 
-    for( const auto& [name, trace] : plotPanel->GetTraces() )
-    {
-        m_signals->InsertItem( imgidx, name, imgidx );
-        imgidx++;
+            wxGridCellAttr* attr = new wxGridCellAttr;
+            attr->SetReadOnly();
+            m_signalsGrid->SetAttr( row, COL_SIGNAL_COLOR, attr );
+            m_signalsGrid->SetCellValue( row, COL_SIGNAL_COLOR, wxEmptyString );
+
+            attr = new wxGridCellAttr;
+            attr->SetReadOnly();
+            m_signalsGrid->SetAttr( row, COL_CURSOR_1, attr );
+            m_signalsGrid->SetCellValue( row, COL_CURSOR_1, wxEmptyString );
+
+            attr = new wxGridCellAttr;
+            attr->SetReadOnly();
+            m_signalsGrid->SetAttr( row, COL_CURSOR_2, attr );
+            m_signalsGrid->SetCellValue( row, COL_CURSOR_2, wxEmptyString );
+        }
     }
 }
 
@@ -1002,7 +1276,7 @@ bool SIM_PLOT_FRAME::LoadWorkbook( const wxString& aPath )
             }
             #endif
 
-            addPlot( name, (SIM_PLOT_TYPE) traceType );
+            addTrace( name, (SIM_TRACE_TYPE) traceType );
         }
     }
 
@@ -1102,7 +1376,7 @@ bool SIM_PLOT_FRAME::SaveWorkbook( const wxString& aPath )
 }
 
 
-SIM_PLOT_TYPE SIM_PLOT_FRAME::getXAxisType( SIM_TYPE aType ) const
+SIM_TRACE_TYPE SIM_PLOT_FRAME::getXAxisType( SIM_TYPE aType ) const
 {
     switch( aType )
     {
@@ -1112,7 +1386,7 @@ SIM_PLOT_TYPE SIM_PLOT_FRAME::getXAxisType( SIM_TYPE aType ) const
         case ST_TRANSIENT: return SPT_TIME;
         default:
             wxASSERT_MSG( false, wxT( "Unhandled simulation type" ) );
-            return (SIM_PLOT_TYPE) 0;
+            return (SIM_TRACE_TYPE) 0;
     }
 }
 
@@ -1146,23 +1420,17 @@ void SIM_PLOT_FRAME::onPlotClose( wxAuiNotebookEvent& event )
 
 void SIM_PLOT_FRAME::onPlotClosed( wxAuiNotebookEvent& event )
 {
-    if( m_workbook->GetPageCount() == 0 )
-    {
-        m_signals->ClearAll();
-        m_cursors->ClearAll();
-    }
-    else
-    {
-        updateSignalList();
-        wxCommandEvent dummy;
-        onCursorUpdate( dummy );
-    }
+    m_signals.clear();
+    rebuildSignalsGrid( m_filter->GetValue() );
+
+    wxCommandEvent dummy;
+    onCursorUpdate( dummy );
 }
 
 
 void SIM_PLOT_FRAME::onPlotChanged( wxAuiNotebookEvent& event )
 {
-    updateSignalList();
+    rebuildSignalsGrid( m_filter->GetValue() );
     wxCommandEvent dummy;
     onCursorUpdate( dummy );
 }
@@ -1170,52 +1438,6 @@ void SIM_PLOT_FRAME::onPlotChanged( wxAuiNotebookEvent& event )
 
 void SIM_PLOT_FRAME::onPlotDragged( wxAuiNotebookEvent& event )
 {
-}
-
-
-void SIM_PLOT_FRAME::onSignalDblClick( wxMouseEvent& event )
-{
-    // Remove signal from the plot panel when double clicked
-    long idx = m_signals->GetFocusedItem();
-
-    if( idx != wxNOT_FOUND )
-        removePlot( m_signals->GetItemText( idx, 0 ) );
-}
-
-
-void SIM_PLOT_FRAME::onSignalRClick( wxListEvent& aEvent )
-{
-    long idx = aEvent.GetIndex();
-
-    if( idx != wxNOT_FOUND )
-        m_signals->Select( idx );
-
-    idx = m_signals->GetFirstSelected();
-
-    if( idx != wxNOT_FOUND )
-    {
-        const wxString& netName = m_signals->GetItemText( idx, 0 );
-        SIGNAL_CONTEXT_MENU ctxMenu( netName, this );
-        m_signals->PopupMenu( &ctxMenu );
-    }
-}
-
-
-void SIM_PLOT_FRAME::onCursorRClick( wxListEvent& aEvent )
-{
-    long idx = aEvent.GetIndex();
-
-    if( idx != wxNOT_FOUND )
-        m_signals->Select( idx );
-
-    idx = m_signals->GetFirstSelected();
-
-    if( idx != wxNOT_FOUND )
-    {
-        const wxString& netName = m_signals->GetItemText( idx, 0 );
-        CURSOR_CONTEXT_MENU ctxMenu( netName, this );
-        m_signals->PopupMenu( &ctxMenu );
-    }
 }
 
 
@@ -1315,19 +1537,11 @@ bool SIM_PLOT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
                 filename.SetFullName( Prj().GetProjectName() + wxT( ".wbk" ) );
         }
 
-#if 0 // TODO: Enable once 8.0 opens for dev
-        wxString msg = _( "Save changes to workbook?" );
-#else
-        wxString fullFilename = filename.GetFullName();
-        wxString msg = _( "Save changes to '%s' before closing?" );
-        msg.Printf( msg, fullFilename );
-#endif
-
-        return HandleUnsavedChanges( this, msg,
-                                     [&]() -> bool
-                                     {
-                                         return SaveWorkbook( Prj().AbsolutePath( fullFilename ) );
-                                     } );
+        return HandleUnsavedChanges( this, _( "Save changes to workbook?" ),
+                [&]() -> bool
+                {
+                    return SaveWorkbook( Prj().AbsolutePath( filename.GetFullName() ) );
+                } );
     }
 
     return true;
@@ -1355,49 +1569,106 @@ void SIM_PLOT_FRAME::doCloseWindow()
 
 void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
 {
-    wxSize size = m_cursors->GetClientSize();
+    m_cursorsGrid->ClearRows();
+
     SIM_PLOT_PANEL* plotPanel = GetCurrentPlot();
-    m_cursors->ClearAll();
 
     if( !plotPanel )
         return;
 
-    if( m_signalsIconColorList )
-        m_cursors->SetImageList(m_signalsIconColorList, wxIMAGE_LIST_SMALL);
-
-    // Fill the signals listctrl
-    m_cursors->AppendColumn( _( "Signal" ), wxLIST_FORMAT_LEFT, size.x / 2 );
-    const long X_COL = m_cursors->AppendColumn( plotPanel->GetLabelX(), wxLIST_FORMAT_LEFT,
-                                                size.x / 4 );
+    // Set up the labels
+    m_cursorsGrid->SetColLabelValue( COL_CURSOR_X, plotPanel->GetLabelX() );
 
     wxString labelY1 = plotPanel->GetLabelY1();
     wxString labelY2 = plotPanel->GetLabelY2();
-    wxString labelY;
 
-    if( !labelY2.IsEmpty() )
-        labelY = labelY1 + wxT( " / " ) + labelY2;
+    if( labelY2.IsEmpty() )
+        m_cursorsGrid->SetColLabelValue( COL_CURSOR_Y, labelY1 );
     else
-        labelY = labelY1;
+        m_cursorsGrid->SetColLabelValue( COL_CURSOR_Y, labelY1 + wxT( " / " ) + labelY2 );
 
-    const long Y_COL = m_cursors->AppendColumn( labelY, wxLIST_FORMAT_LEFT, size.x / 4 );
+    auto getUnitsY =
+            [&]( TRACE* aTrace ) -> wxString
+            {
+                if( aTrace->GetType() == SPT_VOLTAGE )
+                    return wxS( "V" );
+                else if( aTrace->GetType() == SPT_CURRENT )
+                    return wxS( "A" );
+                else
+                    return wxEmptyString;
+            };
 
     // Update cursor values
-    int itemidx = 0;
+    wxString unitsX = plotPanel->GetUnitsX();
+    CURSOR*  cursor1 = nullptr;
+    wxString unitsY1;
+    CURSOR*  cursor2 = nullptr;
+    wxString unitsY2;
+
+#define SET_CELL( r, c, v ) m_cursorsGrid->SetCellValue( r, c, v )
 
     for( const auto& [name, trace] : plotPanel->GetTraces() )
     {
-        if( CURSOR* cursor = trace->GetCursor() )
+        if( CURSOR* cursor = trace->GetCursor( 1 ) )
         {
-            // Find the right icon color in list.
-            // It is the icon used in m_signals list for the same trace
-            long iconColor = m_signals->FindItem( -1, name );
+            cursor1 = cursor;
+            unitsY1 = getUnitsY( trace );
 
-            const wxRealPoint coords = cursor->GetCoords();
-            long              idx = m_cursors->InsertItem( itemidx++, name, iconColor );
-            m_cursors->SetItem( idx, X_COL, SPICE_VALUE( coords.x ).ToSpiceString() );
-            m_cursors->SetItem( idx, Y_COL, SPICE_VALUE( coords.y ).ToSpiceString() );
+            wxRealPoint coords = cursor->GetCoords();
+            int         row = m_cursorsGrid->GetNumberRows();
+
+            m_cursorsGrid->AppendRows( 1 );
+            SET_CELL( row, COL_CURSOR_NAME, wxS( "1" ) );
+            SET_CELL( row, COL_CURSOR_SIGNAL, cursor->GetName() );
+            SET_CELL( row, COL_CURSOR_X, SPICE_VALUE( coords.x ).ToSpiceString() + unitsX );
+            SET_CELL( row, COL_CURSOR_Y, SPICE_VALUE( coords.y ).ToSpiceString() + unitsY1 );
+
+            break;
         }
     }
+
+    for( const auto& [name, trace] : plotPanel->GetTraces() )
+    {
+        if( CURSOR* cursor = trace->GetCursor( 2 ) )
+        {
+            cursor2 = cursor;
+            unitsY2 = getUnitsY( trace );
+
+            wxRealPoint coords = cursor->GetCoords();
+            int         row = m_cursorsGrid->GetNumberRows();
+
+            m_cursorsGrid->AppendRows( 1 );
+            SET_CELL( row, COL_CURSOR_NAME, wxS( "2" ) );
+            SET_CELL( row, COL_CURSOR_SIGNAL, cursor->GetName() );
+            SET_CELL( row, COL_CURSOR_X, SPICE_VALUE( coords.x ).ToSpiceString() + unitsX );
+            SET_CELL( row, COL_CURSOR_Y, SPICE_VALUE( coords.y ).ToSpiceString() + unitsY2 );
+
+            break;
+        }
+    }
+
+    if( cursor1 && cursor2 && unitsY1 == unitsY2 )
+    {
+        const wxRealPoint coords = cursor2->GetCoords() - cursor1->GetCoords();
+
+        m_cursorsGrid->AppendRows( 1 );
+        SET_CELL( 2, COL_CURSOR_NAME, _( "Diff" ) );
+        if( cursor1->GetName() == cursor2->GetName() )
+        {
+            SET_CELL( 2, COL_CURSOR_SIGNAL, wxString::Format( wxS( "%s[2 - 1]" ),
+                                                              cursor2->GetName() ) );
+        }
+        else
+        {
+            SET_CELL( 2, COL_CURSOR_SIGNAL, wxString::Format( wxS( "%s - %s" ),
+                                                              cursor2->GetName(),
+                                                              cursor1->GetName() ) );
+        }
+        SET_CELL( 2, COL_CURSOR_X, SPICE_VALUE( coords.x ).ToSpiceString() + unitsX );
+        SET_CELL( 2, COL_CURSOR_Y, SPICE_VALUE( coords.y ).ToSpiceString() + unitsY1 );
+    }
+
+#undef SET_CELL
 }
 
 
@@ -1471,7 +1742,6 @@ void SIM_PLOT_FRAME::setupUIConditions()
     mgr->SetConditions( EE_ACTIONS::simCommand,            ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
     mgr->SetConditions( EE_ACTIONS::runSimulation,         ENABLE( !simRunning ) );
     mgr->SetConditions( EE_ACTIONS::stopSimulation,        ENABLE( simRunning ) );
-    mgr->SetConditions( EE_ACTIONS::addSignals,            ENABLE( simFinished ) );
     mgr->SetConditions( EE_ACTIONS::simProbe,              ENABLE( simFinished ) );
     mgr->SetConditions( EE_ACTIONS::simTune,               ENABLE( simFinished ) );
     mgr->SetConditions( EE_ACTIONS::showNetlist,           ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
@@ -1532,7 +1802,7 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
         struct TRACE_DESC
         {
             wxString      m_name;    ///< Name of the measured net/device
-            SIM_PLOT_TYPE m_type;    ///< Type of the signal
+            SIM_TRACE_TYPE m_type;    ///< Type of the signal
         };
 
         std::vector<struct TRACE_DESC> traceInfo;
@@ -1549,11 +1819,11 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
 
         for( const struct TRACE_DESC& trace : traceInfo )
         {
-            if( !updatePlot( trace.m_name, trace.m_type, plotPanel ) )
-                removePlot( trace.m_name );
+            if( !updateTrace( trace.m_name, trace.m_type, plotPanel ) )
+                removeTrace( trace.m_name );
         }
 
-        updateSignalList();
+        rebuildSignalsGrid( m_filter->GetValue() );
         plotPanel->GetPlotWin()->UpdateAll();
         plotPanel->ResetScales();
     }
@@ -1569,12 +1839,12 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
             if( val_list.size() == 0 )      // The list of values can be empty!
                 continue;
 
-            double val = val_list.at( 0 );
-            wxString      outLine, signal;
-            SIM_PLOT_TYPE type = m_circuitModel->VectorToSignal( vec, signal );
+            double         val = val_list.at( 0 );
+            wxString       outLine, signal;
+            SIM_TRACE_TYPE type = m_circuitModel->VectorToSignal( vec, signal );
 
-            const size_t tab     = 25; //characters
-            size_t padding = ( signal.length() < tab ) ? ( tab - signal.length() ) : 1;
+            const size_t   tab = 25; //characters
+            size_t         padding = ( signal.length() < tab ) ? ( tab - signal.length() ) : 1;
 
             outLine.Printf( wxT( "%s%s" ),
                             ( signal + wxT( ":" ) ).Pad( padding, wxUniChar( ' ' ) ),
@@ -1640,64 +1910,6 @@ void SIM_PLOT_FRAME::onSimReport( wxCommandEvent& aEvent )
 {
     m_simConsole->AppendText( aEvent.GetString() + "\n" );
     m_simConsole->SetInsertionPointEnd();
-}
-
-
-SIM_PLOT_FRAME::SIGNAL_CONTEXT_MENU::SIGNAL_CONTEXT_MENU( const wxString& aSignal,
-                                                          SIM_PLOT_FRAME* aPlotFrame ) :
-        m_signal( aSignal ),
-        m_plotFrame( aPlotFrame )
-{
-    SIM_PLOT_PANEL* plot = m_plotFrame->GetCurrentPlot();
-
-    AddMenuItem( this, REMOVE_SIGNAL, _( "Remove Signal" ), _( "Remove the signal from the plot" ),
-                 KiBitmap( BITMAPS::trash ) );
-
-    TRACE* trace = plot->GetTrace( m_signal );
-
-    AppendSeparator();
-
-    if( trace->HasCursor() )
-        AddMenuItem( this, HIDE_CURSOR, _( "Hide Cursor" ), KiBitmap( BITMAPS::pcb_target ) );
-    else
-        AddMenuItem( this, SHOW_CURSOR, _( "Show Cursor" ), KiBitmap( BITMAPS::pcb_target ) );
-
-    Connect( wxEVT_COMMAND_MENU_SELECTED, wxMenuEventHandler( SIGNAL_CONTEXT_MENU::onMenuEvent ),
-             nullptr, this );
-}
-
-
-void SIM_PLOT_FRAME::SIGNAL_CONTEXT_MENU::onMenuEvent( wxMenuEvent& aEvent )
-{
-    SIM_PLOT_PANEL* plot = m_plotFrame->GetCurrentPlot();
-
-    switch( aEvent.GetId() )
-    {
-    case REMOVE_SIGNAL: m_plotFrame->removePlot( m_signal );   break;
-    case SHOW_CURSOR:   plot->EnableCursor( m_signal, true );  break;
-    case HIDE_CURSOR:   plot->EnableCursor( m_signal, false ); break;
-    }
-}
-
-
-SIM_PLOT_FRAME::CURSOR_CONTEXT_MENU::CURSOR_CONTEXT_MENU( const wxString& aSignal,
-                                                          SIM_PLOT_FRAME* aPlotFrame ) :
-        m_signal( aSignal ),
-        m_plotFrame( aPlotFrame )
-{
-    AddMenuItem( this, HIDE_CURSOR, _( "Hide Cursor" ), KiBitmap( BITMAPS::pcb_target ) );
-
-    Connect( wxEVT_COMMAND_MENU_SELECTED, wxMenuEventHandler( CURSOR_CONTEXT_MENU::onMenuEvent ),
-             nullptr, this );
-}
-
-
-void SIM_PLOT_FRAME::CURSOR_CONTEXT_MENU::onMenuEvent( wxMenuEvent& aEvent )
-{
-    SIM_PLOT_PANEL* plot = m_plotFrame->GetCurrentPlot();
-
-    if( aEvent.GetId() == HIDE_CURSOR )
-        plot->EnableCursor( m_signal, false );
 }
 
 

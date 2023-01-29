@@ -67,7 +67,6 @@ public:
 
     int EditSimCommand( const TOOL_EVENT& aEvent );
     int RunSimulation( const TOOL_EVENT& aEvent );
-    int AddSignals( const TOOL_EVENT& aEvent );
     int Probe( const TOOL_EVENT& aEvent );
     int Tune( const TOOL_EVENT& aEvent );
 

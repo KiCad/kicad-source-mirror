@@ -30,8 +30,8 @@
 #include <locale_io.h>
 
 
-SIM_PLOT_TYPE NGSPICE_CIRCUIT_MODEL::VectorToSignal( const std::string& aVector,
-                                                     wxString& aSignal ) const
+SIM_TRACE_TYPE NGSPICE_CIRCUIT_MODEL::VectorToSignal( const std::string& aVector,
+                                                      wxString& aSignal ) const
 {
     using namespace std;
 

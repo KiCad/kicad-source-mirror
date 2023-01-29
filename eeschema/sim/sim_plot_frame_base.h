@@ -11,7 +11,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class ACTION_TOOLBAR;
-class wxListView;
+class WX_GRID;
 
 #include "sim_workbook.h"
 #include "kiway_player.h"
@@ -27,8 +27,9 @@ class wxListView;
 #include <wx/panel.h>
 #include <wx/textctrl.h>
 #include <wx/splitter.h>
+#include <wx/srchctrl.h>
+#include <wx/grid.h>
 #include <wx/stattext.h>
-#include <wx/listctrl.h>
 #include <wx/frame.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -58,13 +59,12 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		wxBoxSizer* m_sideSizer;
 		wxSplitterWindow* m_splitterSignals;
 		wxPanel* m_panelSignals;
-		wxStaticText* m_staticTextSignals;
-		wxListView* m_signals;
+		wxSearchCtrl* m_filter;
+		WX_GRID* m_signalsGrid;
 		wxPanel* m_panelCursorsAndTune;
 		wxSplitterWindow* m_splitterTuneValues;
 		wxPanel* m_panelCursors;
-		wxStaticText* m_staticTextCursors;
-		wxListCtrl* m_cursors;
+		WX_GRID* m_cursorsGrid;
 		wxPanel* m_tunePanel;
 		wxStaticText* m_staticTextTune;
 		wxBoxSizer* m_tuneSizer;
@@ -74,9 +74,10 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		virtual void onPlotChanged( wxAuiNotebookEvent& event ) { event.Skip(); }
 		virtual void onPlotClose( wxAuiNotebookEvent& event ) { event.Skip(); }
 		virtual void onPlotClosed( wxAuiNotebookEvent& event ) { event.Skip(); }
-		virtual void onSignalDblClick( wxMouseEvent& event ) { event.Skip(); }
-		virtual void onSignalRClick( wxListEvent& event ) { event.Skip(); }
-		virtual void onCursorRClick( wxListEvent& event ) { event.Skip(); }
+		virtual void OnFilterMouseMoved( wxMouseEvent& event ) { event.Skip(); }
+		virtual void OnFilterText( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onSignalsGridCellChanged( wxGridEvent& event ) { event.Skip(); }
+		virtual void onCursorsGridCellChanged( wxGridEvent& event ) { event.Skip(); }
 
 
 	public:

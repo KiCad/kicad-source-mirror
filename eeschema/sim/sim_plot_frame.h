@@ -71,7 +71,7 @@ public:
      * @param aSimOptions netlisting options
      * @return The new plot panel.
      */
-    SIM_PANEL_BASE* NewPlotPanel( wxString aSimCommand, int aSimOptions );
+    SIM_PANEL_BASE* NewPlotPanel( const wxString& aSimCommand, int aSimOptions );
 
     /**
      * Shows a dialog for editing the current tab's simulation command, or creating a new tab
@@ -209,18 +209,18 @@ private:
      * @param aType describes the type of plot.
      * @param aParam is the parameter for the device/net (e.g. I, Id, V).
      */
-    void addPlot( const wxString& aName, SIM_PLOT_TYPE aType );
+    void addTrace( const wxString& aName, SIM_TRACE_TYPE aType );
 
     /**
      * Remove a plot with a specific title.
      *
-     * @param aPlotName is the full plot title (e.g. I(Net-C1-Pad1)).
+     * @param aSignalName is the full plot title (e.g. I(Net-C1-Pad1)).
      */
-    void removePlot( const wxString& aPlotName );
+    void removeTrace( const wxString& aSignalName );
 
     /**
-     * Update plot in a particular SIM_PLOT_PANEL. If the panel does not contain
-     * the plot, it will be added.
+     * Update a trace in a particular SIM_PLOT_PANEL.  If the panel does not contain the given
+     * trace, then add it.
      *
      * @param aName is the device/net name.
      * @param aType describes the type of plot.
@@ -228,12 +228,17 @@ private:
      * @param aPlotPanel is the panel that should receive the update.
      * @return True if a plot was successfully added/updated.
      */
-    bool updatePlot( const wxString& aName, SIM_PLOT_TYPE aType, SIM_PLOT_PANEL* aPlotPanel );
+    bool updateTrace( const wxString& aName, SIM_TRACE_TYPE aType, SIM_PLOT_PANEL* aPlotPanel );
 
     /**
-     * Update the list of currently plotted signals.
+     * Rebuild the filtered list of signals in the signals grid.
      */
-    void updateSignalList();
+    void rebuildSignalsGrid( wxString aFilter );
+
+    /**
+     * Update the values in the signals grid.
+     */
+    void updateSignalsGrid();
 
     /**
      * Apply component values specified using tuner sliders to the current netlist.
@@ -254,7 +259,7 @@ private:
     /**
      * Return X axis for a given simulation type.
      */
-    SIM_PLOT_TYPE getXAxisType( SIM_TYPE aType ) const;
+    SIM_TRACE_TYPE getXAxisType( SIM_TYPE aType ) const;
 
     // Event handlers
     void onPlotClose( wxAuiNotebookEvent& event ) override;
@@ -262,10 +267,11 @@ private:
     void onPlotChanged( wxAuiNotebookEvent& event ) override;
     void onPlotDragged( wxAuiNotebookEvent& event ) override;
 
-    void onSignalDblClick( wxMouseEvent& event ) override;
-    void onSignalRClick( wxListEvent& aEvent ) override;
+    void OnFilterText( wxCommandEvent& aEvent ) override;
+    void OnFilterMouseMoved( wxMouseEvent& aEvent ) override;
 
-    void onCursorRClick( wxListEvent& aEvent ) override;
+    void onSignalsGridCellChanged( wxGridEvent& aEvent ) override;
+    void onCursorsGridCellChanged( wxGridEvent& aEvent ) override;
 
     void onWorkbookModified( wxCommandEvent& event );
     void onWorkbookClrModified( wxCommandEvent& event );
@@ -287,53 +293,17 @@ private:
     // frame is initialized (end of the Ctor)
     void setSubWindowsSashSize();
 
-    enum CONTEXT_MENU_EVENTS
-    {
-        REMOVE_SIGNAL = 944,
-        SHOW_CURSOR,
-        HIDE_CURSOR
-    };
-
-    // Right click context menu for signals in the listbox
-    class SIGNAL_CONTEXT_MENU : public wxMenu
-    {
-    public:
-        SIGNAL_CONTEXT_MENU( const wxString& aSignal, SIM_PLOT_FRAME* aPlotFrame );
-
-    private:
-        void onMenuEvent( wxMenuEvent& aEvent );
-
-        const wxString& m_signal;
-        SIM_PLOT_FRAME* m_plotFrame;
-    };
-
-    // Right click context menu for cursors in the listbox
-    class CURSOR_CONTEXT_MENU : public wxMenu
-    {
-    public:
-        CURSOR_CONTEXT_MENU( const wxString& aSignal, SIM_PLOT_FRAME* aPlotFrame );
-
-    private:
-        void onMenuEvent( wxMenuEvent& aEvent );
-
-        const wxString& m_signal;
-        SIM_PLOT_FRAME* m_plotFrame;
-    };
-
 private:
     SCH_EDIT_FRAME*                        m_schematicFrame;
     std::shared_ptr<NGSPICE_CIRCUIT_MODEL> m_circuitModel;
     std::shared_ptr<SPICE_SIMULATOR>       m_simulator;
     SIM_THREAD_REPORTER*                   m_reporter;
 
+    std::vector<wxString>                  m_signals;
     std::list<TUNER_SLIDER*>               m_tuners;
 
     ///< Panel that was used as the most recent one for simulations
     SIM_PANEL_BASE*                        m_lastSimPlot;
-
-    ///< imagelists used to add a small colored icon to signal names
-    ///< and cursors name, the same color as the corresponding signal traces
-    wxImageList*  m_signalsIconColorList;
 
     // Variables for temporary storage:
     int           m_splitterLeftRightSashPosition;

@@ -345,8 +345,6 @@ set( EESCHEMA_COMMON_SRCS
 if( KICAD_SPICE )
     set( EESCHEMA_SRCS
         ${EESCHEMA_SRCS}
-        dialogs/dialog_signal_list.cpp
-        dialogs/dialog_signal_list_base.cpp
         dialogs/dialog_sim_command.cpp
         dialogs/dialog_sim_command_base.cpp
         dialogs/dialog_sim_model.cpp

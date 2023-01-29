@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2017 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2015-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -385,6 +385,12 @@ EDA_COMBINED_MATCHER::EDA_COMBINED_MATCHER( const wxString& aPattern,
     case CTX_NETCLASS:
         AddMatcher( aPattern, std::make_unique<EDA_PATTERN_MATCH_REGEX_EXPLICIT>() );
         AddMatcher( aPattern, std::make_unique<EDA_PATTERN_MATCH_WILDCARD_EXPLICIT>() );
+        break;
+
+    case CTX_SIGNAL:
+        AddMatcher( aPattern, std::make_unique<EDA_PATTERN_MATCH_REGEX>() );
+        AddMatcher( aPattern, std::make_unique<EDA_PATTERN_MATCH_WILDCARD>() );
+        AddMatcher( aPattern, std::make_unique<EDA_PATTERN_MATCH_SUBSTR>() );
         break;
     }
 }
