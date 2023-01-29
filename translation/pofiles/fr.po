@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 15:41+0100\n"
+"POT-Creation-Date: 2023-01-29 14:24-0800\n"
 "PO-Revision-Date: 2023-01-28 20:04+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
@@ -1553,7 +1553,7 @@ msgstr ""
 #: common/confirm.cpp:185 common/confirm.cpp:190 common/confirm.cpp:254
 #: common/confirm.cpp:281 common/tool/actions.cpp:121
 #: eeschema/dialogs/dialog_erc.cpp:392
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1381
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1399
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:168
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:66
 #: pcbnew/dialogs/dialog_drc.cpp:298 pcbnew/plugins/kicad/pcb_parser.cpp:923
@@ -1597,7 +1597,7 @@ msgstr "Vos changements seront définitivement perdus."
 msgid "Revert"
 msgstr "Restaurer"
 
-#: common/confirm.cpp:280 eeschema/dialogs/dialog_symbol_fields_table.cpp:1380
+#: common/confirm.cpp:280 eeschema/dialogs/dialog_symbol_fields_table.cpp:1398
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:164
 #: pcbnew/router/router_tool.cpp:571
 msgid "OK"
@@ -5761,7 +5761,7 @@ msgstr "Erreur en extrayant le fichier!"
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:52
 #: eeschema/sch_plotter.cpp:165 eeschema/sch_plotter.cpp:376
 #: eeschema/sch_plotter.cpp:520 eeschema/sch_plotter.cpp:731
-#: eeschema/sch_plotter.cpp:903 gerbview/export_to_pcbnew.cpp:68
+#: eeschema/sch_plotter.cpp:904 gerbview/export_to_pcbnew.cpp:68
 #: pagelayout_editor/files.cpp:212 pcbnew/build_BOM_from_board.cpp:101
 #: pcbnew/dialogs/dialog_board_statistics.cpp:656
 #: pcbnew/dialogs/dialog_drc.cpp:874 pcbnew/dialogs/dialog_export_idf.cpp:223
@@ -8031,12 +8031,12 @@ msgid ""
 "python <script file name> <input filename> <output filename>\n"
 "```\n"
 "\n"
-"On Windows, if the desired generator script for a CSV BOM is `C:\\Users"
-"\\username\\kicad\\my_python_script.py`, the command line would be:\n"
+"On Windows, if the desired generator script for a CSV BOM is `C:"
+"\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O.csv"
-"\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
+"csv\"\n"
 "```\n"
 "\n"
 "On Linux, if the desired generator script for a CSV BOM is `/home/username/"
@@ -8124,8 +8124,8 @@ msgstr ""
 "serait la suivante :\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O.csv"
-"\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
+"csv\"\n"
 "```\n"
 "\n"
 "Sous Linux, si le script de génération souhaité pour une nomenclature CSV "
@@ -9520,7 +9520,7 @@ msgid "Read Only"
 msgstr "Lecture Seule"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1168
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1462
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1480
 msgid "Save changes?"
 msgstr "Sauver les changements?"
 
@@ -11426,16 +11426,16 @@ msgstr "Nom de champ '%s' déjà existant."
 msgid "Are you sure you want to remove the field '%s'?"
 msgstr "Etes-vous sûr de vouloir supprimer le champ '%s' ?"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1379
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1397
 msgid "Unsaved data"
 msgstr "Données non sauvées"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1380
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1398
 msgid "Changes are unsaved. Export unsaved data?"
 msgstr ""
 "Les modifications ne sont pas sauvées. Exporter des données non sauvées ?"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1390
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1408
 msgid "Save as CSV"
 msgstr "Enregistrer au format CSV"
 
@@ -11459,7 +11459,7 @@ msgstr "Grouper les composants par leur propriétés communes"
 msgid "Export as CSV..."
 msgstr "Exporter au format CSV..."
 
-#: eeschema/dialogs/dialog_symbol_fields_table_base.h:88
+#: eeschema/dialogs/dialog_symbol_fields_table_base.h:89
 msgid "Symbol Fields Table"
 msgstr "Table Champs de Symboles"
 
@@ -13917,7 +13917,8 @@ msgstr ""
 "mode autonome. Afin de créer/mettre à jour le PCB à partir du schéma, vous "
 "devrez lancer Kicad manager et créez un projet."
 
-#: eeschema/sch_edit_frame.cpp:1086 eeschema/sch_plotter.cpp:1026
+#: eeschema/sch_edit_frame.cpp:1086 eeschema/sch_plotter.cpp:1028
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
 msgstr "Schématique"
 
@@ -14128,7 +14129,7 @@ msgid "Plotted to '%s'.\n"
 msgstr "Tracé en '%s'\n"
 
 #: eeschema/sch_plotter.cpp:208 eeschema/sch_plotter.cpp:393
-#: eeschema/sch_plotter.cpp:748 eeschema/sch_plotter.cpp:929
+#: eeschema/sch_plotter.cpp:748 eeschema/sch_plotter.cpp:930
 #: kicad/pcm/pcm_task_manager.cpp:639
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:162
 #: pcbnew/dialogs/dialog_plot.cpp:1137
@@ -14138,13 +14139,13 @@ msgid "Done."
 msgstr "Fini."
 
 #: eeschema/sch_plotter.cpp:367 eeschema/sch_plotter.cpp:528
-#: eeschema/sch_plotter.cpp:723 eeschema/sch_plotter.cpp:895
+#: eeschema/sch_plotter.cpp:723 eeschema/sch_plotter.cpp:896
 #: pcbnew/dialogs/dialog_plot.cpp:1115
 #, c-format
 msgid "Plotted to '%s'."
 msgstr "Tracé en '%s'."
 
-#: eeschema/sch_plotter.cpp:1034
+#: eeschema/sch_plotter.cpp:1036
 #, c-format
 msgid "Failed to write plot files to folder '%s'."
 msgstr "Impossible d'écrire les fichiers de tracés dans le répertoire '%s'."
@@ -14526,7 +14527,7 @@ msgstr ""
 "connecter à la base de données %s (%s)"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:438
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:3118
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:3108
 #, c-format
 msgid "Unable to read file '%s'."
 msgstr "Impossible de lire le fichier '%s'."
@@ -16496,20 +16497,20 @@ msgstr ""
 #: eeschema/symbol_checker.cpp:146
 #, c-format
 msgid ""
-"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
-"%s at location <b>(%s, %s)</b>."
+"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
+"%s%s at location <b>(%s, %s)</b>."
 msgstr ""
-"<b>Pin dupliquée %s</b> %s en position <b>(%s, %s)</b> en conflit avec pin %s"
-"%s en position <b>(%s %s)</b>."
+"<b>Pin dupliquée %s</b> %s en position <b>(%s, %s)</b> en conflit avec pin "
+"%s%s en position <b>(%s %s)</b>."
 
 #: eeschema/symbol_checker.cpp:159
 #, c-format
 msgid ""
-"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
-"%s at location <b>(%s, %s)</b> in units %s and %s."
+"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
+"%s%s at location <b>(%s, %s)</b> in units %s and %s."
 msgstr ""
-"<b>Pin dupliquée %s</b> %s en position <b>(%s, %s)</b> en conflit avec pin %s"
-"%s en position <b>(%s, %s)</b> unité %s et %s."
+"<b>Pin dupliquée %s</b> %s en position <b>(%s, %s)</b> en conflit avec pin "
+"%s%s en position <b>(%s, %s)</b> unité %s et %s."
 
 #: eeschema/symbol_checker.cpp:187
 msgid "<b>A Power Symbol should have only one unit</b><br><br>"
@@ -23849,6 +23850,7 @@ msgid "Tessellating copper zones..."
 msgstr "Découpage des zone de cuivre..."
 
 #: pcbnew/board.cpp:952
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
 msgid "PCB"
 msgstr "PCB"
 
@@ -29261,6 +29263,7 @@ msgid "Plot format:"
 msgstr "Format du tracé:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Gerber"
 msgstr "Gerber"
 
@@ -32038,13 +32041,13 @@ msgid ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net"
-"\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net"
-"\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -32360,13 +32363,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net"
-"\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net"
-"\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -36424,29 +36427,29 @@ msgstr ""
 msgid "Unable to read file '%s'"
 msgstr "Impossible de lire le fichier '%s'"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:1113
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:1103
 #, c-format
 msgid "<package> '%s' duplicated in <library> '%s'"
 msgstr "<package> '%s' dupliqué dans la <librairie> '%s'"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:1191
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:1181
 #, c-format
 msgid "No '%s' package in library '%s'."
 msgstr "Pas de boîtier '%s' en librairie '%s'."
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:1429
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2238
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:1419
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2228
 #, c-format
 msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
 "Ignorer un polygone puisque la couche Eagle '%s' (%d) n’a pas été associée"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:1798
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:1788
 #, c-format
 msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignorer un fil puisque la couche Eagle '%s' (%d) n’a pas été associée"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:1959
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:1949
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2420
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:616
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1522
@@ -36458,19 +36461,19 @@ msgstr ""
 "Le pad de taille zéro non valide est ignoré dans le\n"
 "fichier : %s"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:1971
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:1961
 #, c-format
 msgid "Ignoring a text since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
 "Ignorer un texte puisque la couche Eagle '%s' (%d) n’a pas été associée"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2124
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2114
 #, c-format
 msgid "Ignoring a rectangle since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
 "Ignore un rectangle puisque la couche Eagle '%s' (%d) n’a pas été associée"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2313
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2303
 #, c-format
 msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
@@ -41396,11 +41399,6 @@ msgstr "freins thermiques pour pads traversants"
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] chargement échouée: ligne d’entrée trop longue\n"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
-msgid "bitmap2component"
-msgstr "bitmap2component"
-
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
 msgid "KiCad Image Converter"
 msgstr "Convertisseur d'Image KiCad"
@@ -41415,10 +41413,9 @@ msgstr ""
 "Créer un composant à partir d’une image bitmap pour une utilisation avec "
 "KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:5
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
-msgid "eeschema"
-msgstr "eeschema"
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
+msgid "bitmap2component"
+msgstr "bitmap2component"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
@@ -41432,10 +41429,9 @@ msgstr "Outil de Capture Schématique"
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Editeur de schématique indépendant pour les schémas KiCad"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:5
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
-msgid "gerbview"
-msgstr "gerbview"
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
+msgid "eeschema"
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
@@ -41445,9 +41441,9 @@ msgstr "Visionneuse de fichiers Gerber"
 msgid "View Gerber files"
 msgstr "Visualiser fichiers Gerber"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:5
-msgid "kicad"
-msgstr "kicad"
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
+msgid "gerbview"
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -41462,10 +41458,6 @@ msgstr "Suite CAO Electronique"
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:5
-msgid "pcbcalculator"
-msgstr "pcbcalculator"
-
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
 msgstr "Calculateur pour PCB KiCad"
@@ -41477,11 +41469,6 @@ msgstr "PCB Calculator"
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculatrice pour divers calculs liés à l’électronique"
-
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
-msgid "pcbnew"
-msgstr "pcbnew"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"
@@ -41495,9 +41482,21 @@ msgstr "Éditeur de circuit imprimé"
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Éditeur indépendant de circuits imprimés pour les C.I. KiCad"
 
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
+msgid "pcbnew"
+msgstr "pcbnew"
+
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:34
+msgid "EDA"
+msgstr "EDA"
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
+msgid "Circuit board"
+msgstr "Circuit Imprimé"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
@@ -41548,6 +41547,12 @@ msgstr "Schématique KiCad"
 msgid "KiCad Printed Circuit Board"
 msgstr "Fichier Circuit Imprimé KiCad"
 
+#~ msgid "kicad"
+#~ msgstr "kicad"
+
+#~ msgid "pcbcalculator"
+#~ msgstr "pcbcalculator"
+
 #~ msgid "3D model search path"
 #~ msgstr "Chemin de recherche des modèles 3D"
 
@@ -41596,12 +41601,6 @@ msgstr "Fichier Circuit Imprimé KiCad"
 
 #~ msgid "The auto save file '%s' could not be removed!"
 #~ msgstr "Le fichier d'auto sauvegarde '%s' n'a pas pu être supprimé!"
-
-#~ msgid "EDA"
-#~ msgstr "EDA"
-
-#~ msgid "Circuit board"
-#~ msgstr "Circuit Imprimé"
 
 #~ msgid "Print border and title block"
 #~ msgstr "Imprimer cartouche et encadrement"
@@ -42006,8 +42005,8 @@ msgstr "Fichier Circuit Imprimé KiCad"
 #~ "\n"
 #~ "On Linux:\n"
 #~ "```\n"
-#~ "python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I"
-#~ "\" \"%O.csv\"\n"
+#~ "python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py "
+#~ "\"%I\" \"%O.csv\"\n"
 #~ "```\n"
 #~ msgstr ""
 #~ "# 1 - Documentation complète \n"
@@ -42207,8 +42206,8 @@ msgstr "Fichier Circuit Imprimé KiCad"
 #~ "On Linux:\n"
 #~ "\n"
 #~ "```\n"
-#~ "python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I"
-#~ "\" \"%O.csv\"\n"
+#~ "python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py "
+#~ "\"%I\" \"%O.csv\"\n"
 #~ "```\n"
 
 #~ msgid "Self-intersecting polygons are not allowed."
@@ -45147,8 +45146,8 @@ msgstr "Fichier Circuit Imprimé KiCad"
 
 #~ msgid "user does not have permission to delete directory \"%s\""
 #~ msgstr ""
-#~ "Vous n'avez pas la permission d'écriture pour supprimer le répertoire \"%s"
-#~ "\""
+#~ "Vous n'avez pas la permission d'écriture pour supprimer le répertoire "
+#~ "\"%s\""
 
 #~ msgid "library directory \"%s\" has unexpected sub-directories"
 #~ msgstr "le répertoire librairie \"%s\" a des sous-répertoires inattendus"
@@ -45166,8 +45165,8 @@ msgstr "Fichier Circuit Imprimé KiCad"
 
 #~ msgid "User does not have permission to delete directory \"%s\"."
 #~ msgstr ""
-#~ "Vous n'avez pas la permission d'écriture pour supprimer le répertoire \"%s"
-#~ "\"."
+#~ "Vous n'avez pas la permission d'écriture pour supprimer le répertoire "
+#~ "\"%s\"."
 
 #~ msgid ""
 #~ "Invalid net ID in\n"
@@ -48994,13 +48993,13 @@ msgstr "Fichier Circuit Imprimé KiCad"
 #~ "buried_via        graphic<br><br></pre><b>Constraint Types</"
 #~ "b><pre>clearance    annulus_width   track_width     hole<br><br></"
 #~ "pre><b>Examples</b><pre>(rule \"copper keepout\"<br>   (disallow track) "
-#~ "(disallow via) (disallow zone)<br>   (condition \"a.name == no_copper"
-#~ "\"))<br><br>(rule neckdown<br>   (constraint track_width (min 0.2mm) (opt "
-#~ "0.25mm) (max 1.0mm)<br>   (condition \"a.name == BGA\"))<br><br>(rule "
-#~ "HV<br>   (constraint clearance (min 1.5mm)<br>   (condition \"a.netclass "
-#~ "== HV\"))<br><br>(rule HV-HV<br>   (constraint clearance (min "
-#~ "2.0mm)<br>   (condition \"a.netclass == HV && b.netclass == HV\"))<br></"
-#~ "pre>"
+#~ "(disallow via) (disallow zone)<br>   (condition \"a.name == "
+#~ "no_copper\"))<br><br>(rule neckdown<br>   (constraint track_width (min "
+#~ "0.2mm) (opt 0.25mm) (max 1.0mm)<br>   (condition \"a.name == "
+#~ "BGA\"))<br><br>(rule HV<br>   (constraint clearance (min 1.5mm)<br>   "
+#~ "(condition \"a.netclass == HV\"))<br><br>(rule HV-HV<br>   (constraint "
+#~ "clearance (min 2.0mm)<br>   (condition \"a.netclass == HV && b.netclass "
+#~ "== HV\"))<br></pre>"
 #~ msgstr ""
 #~ "<b>Top-level Expressions</b><pre>(version &lt;number>)<br>(rule &lt;"
 #~ "rule_name> &lt;rule_expression> ...)<br><br></pre><b>Rule Expressions</"
@@ -49011,20 +49010,20 @@ msgstr "Fichier Circuit Imprimé KiCad"
 #~ "buried_via        graphic<br><br></pre><b>Constraint Types</"
 #~ "b><pre>clearance    annulus_width   track_width     hole<br><br></"
 #~ "pre><b>Examples</b><pre>(rule \"copper keepout\"<br>   (disallow track) "
-#~ "(disallow via) (disallow zone)<br>   (condition \"a.name == no_copper"
-#~ "\"))<br><br>(rule neckdown<br>   (constraint track_width (min 0.2mm) (opt "
-#~ "0.25mm) (max 1.0mm)<br>   (condition \"a.name == BGA\"))<br><br>(rule "
-#~ "HV<br>   (constraint clearance (min 1.5mm)<br>   (condition \"a.netclass "
-#~ "== HV\"))<br><br>(rule HV-HV<br>   (constraint clearance (min "
-#~ "2.0mm)<br>   (condition \"a.netclass == HV && b.netclass == HV\"))<br></"
-#~ "pre>"
+#~ "(disallow via) (disallow zone)<br>   (condition \"a.name == "
+#~ "no_copper\"))<br><br>(rule neckdown<br>   (constraint track_width (min "
+#~ "0.2mm) (opt 0.25mm) (max 1.0mm)<br>   (condition \"a.name == "
+#~ "BGA\"))<br><br>(rule HV<br>   (constraint clearance (min 1.5mm)<br>   "
+#~ "(condition \"a.netclass == HV\"))<br><br>(rule HV-HV<br>   (constraint "
+#~ "clearance (min 2.0mm)<br>   (condition \"a.netclass == HV && b.netclass "
+#~ "== HV\"))<br></pre>"
 
 #~ msgid "Use touchpad to pan"
 #~ msgstr "Utiliser le pavé tactile pour le pan"
 
 #~ msgid ""
-#~ "Enable touchpad-friendly controls (pan with scroll action, zoom with Ctrl"
-#~ "+scroll)."
+#~ "Enable touchpad-friendly controls (pan with scroll action, zoom with "
+#~ "Ctrl+scroll)."
 #~ msgstr ""
 #~ "Activez les commandes compatibles avec le touchpad (pan avec scroll, zoom "
 #~ "avec Ctrl+ scroll)."
@@ -52630,8 +52629,8 @@ msgstr "Fichier Circuit Imprimé KiCad"
 
 #~ msgid "Could not load symbol \"%s\" from library \"%s\"."
 #~ msgstr ""
-#~ "Impossible de charger le symbole \"%s\" à partie du fichier librairie \"%s"
-#~ "\"."
+#~ "Impossible de charger le symbole \"%s\" à partie du fichier librairie "
+#~ "\"%s\"."
 
 #~ msgid "Add component"
 #~ msgstr "Ajout composant"

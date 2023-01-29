@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-20 09:12-0800\n"
+"POT-Creation-Date: 2023-01-29 14:24-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -2897,11 +2897,11 @@ msgstr "A directory containing user-specific scripts installed with KiCad"
 msgid "Deprecated version of KICAD_TEMPLATE_DIR."
 msgstr "Deprecated version of KICAD_TEMPLATE_DIR."
 
-msgid "Deprecated version of KICAD6_3DMODEL_DIR."
-msgstr "Deprecated version of KICAD6_3DMODEL_DIR."
+msgid "Deprecated version of KICAD7_3DMODEL_DIR."
+msgstr "Deprecated version of KICAD7_3DMODEL_DIR."
 
-msgid "Deprecated version of KICAD6_FOOTPRINT_DIR."
-msgstr "Deprecated version of KICAD6_FOOTPRINT_DIR."
+msgid "Deprecated version of KICAD7_FOOTPRINT_DIR."
+msgstr "Deprecated version of KICAD7_FOOTPRINT_DIR."
 
 msgid "Deprecated version of KICAD_SYMBOL_DIR."
 msgstr "Deprecated version of KICAD_SYMBOL_DIR."
@@ -5801,6 +5801,9 @@ msgstr "Wires && wire labels"
 msgid "Buses && bus labels"
 msgstr "Buses && bus labels"
 
+msgid "Label fields"
+msgstr "Label fields"
+
 msgid "Sheet titles"
 msgstr "Sheet titles"
 
@@ -5813,8 +5816,8 @@ msgstr "Sheet borders && backgrounds"
 msgid "Filters"
 msgstr "Filters"
 
-msgid "Filter other symbol fields by name:"
-msgstr "Filter other symbol fields by name:"
+msgid "Filter fields by name:"
+msgstr "Filter fields by name:"
 
 msgid "Filter items by parent reference designator:"
 msgstr "Filter items by parent reference designator:"
@@ -6916,10 +6919,10 @@ msgstr "Note: item colors are overridden in the current color theme."
 #, c-format
 msgid ""
 "To see individual item colors uncheck '%s'\n"
-"in Preferences > Eeschema > Colors."
+"in Preferences > Schematic Editor > Colors."
 msgstr ""
 "To see individual item colors uncheck '%s'\n"
-"in Preferences > Eeschema > Colors."
+"in Preferences > Schematic Editor > Colors."
 
 #, c-format
 msgid "The file '%s' does not appear to be a valid schematic file."
@@ -15990,7 +15993,7 @@ msgstr ""
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 
 msgid ""
-"You can use the this calculator to check if a small track can handle a large "
+"You can use this calculator to check if a small track can handle a large "
 "current for a short period of time.<br>\n"
 "This tool allows you to design a track fuse but should be used as an "
 "estimate only.\n"
@@ -16000,7 +16003,7 @@ msgid ""
 "<br>\n"
 "This energy is then compared to the one dissipated by the wire resistance."
 msgstr ""
-"You can use the this calculator to check if a small track can handle a large "
+"You can use this calculator to check if a small track can handle a large "
 "current for a short period of time.<br>\n"
 "This tool allows you to design a track fuse but should be used as an "
 "estimate only.\n"
@@ -23693,8 +23696,16 @@ msgstr ""
 msgid "Other"
 msgstr "Other"
 
-msgid "Last Change"
-msgstr "Last Change"
+msgid "Footprint Name"
+msgstr "Footprint Name"
+
+#, c-format
+msgid "Doc: %s"
+msgstr "Doc: %s"
+
+#, c-format
+msgid "Keywords: %s"
+msgstr "Keywords: %s"
 
 msgid "Board Side"
 msgstr "Board Side"
@@ -23726,14 +23737,6 @@ msgstr "3D-Shape: %s"
 
 msgid "<none>"
 msgstr "<none>"
-
-#, c-format
-msgid "Doc: %s"
-msgstr "Doc: %s"
-
-#, c-format
-msgid "Keywords: %s"
-msgstr "Keywords: %s"
 
 msgid "<no reference designator>"
 msgstr "<no reference designator>"
@@ -23781,9 +23784,6 @@ msgstr "Thermal reliefs for PTH"
 
 msgid "Library link"
 msgstr "Library link"
-
-msgid "Exclude from BOM"
-msgstr "Exclude from BOM"
 
 msgid "Overrides"
 msgstr "Overrides"
@@ -24460,22 +24460,6 @@ msgid "Removed %s 'exclude from BOM' fabrication attribute."
 msgstr "Removed %s 'exclude from BOM' fabrication attribute."
 
 #, c-format
-msgid "Add %s 'exclude from position files' fabrication attribute."
-msgstr "Add %s 'exclude from position files' fabrication attribute."
-
-#, c-format
-msgid "Remove %s 'exclude from position files' fabrication attribute."
-msgstr "Remove %s 'exclude from position files' fabrication attribute."
-
-#, c-format
-msgid "Added %s 'exclude from position files' fabrication attribute."
-msgstr "Added %s 'exclude from position files' fabrication attribute."
-
-#, c-format
-msgid "Removed %s 'exclude from position files' fabrication attribute."
-msgstr "Removed %s 'exclude from position files' fabrication attribute."
-
-#, c-format
 msgid "Disconnect %s pin %s."
 msgstr "Disconnect %s pin %s."
 
@@ -24832,10 +24816,6 @@ msgstr "Search"
 
 msgid "New PCB file is unsaved"
 msgstr "New PCB file is unsaved"
-
-#, c-format
-msgid "The auto save file '%s' could not be removed!"
-msgstr "The auto save file '%s' could not be removed!"
 
 msgid "Board file is read only."
 msgstr "Board file is read only."
@@ -28573,9 +28553,6 @@ msgstr ""
 "Error loading board.\n"
 "%s"
 
-msgid "Footprint Name"
-msgstr "Footprint Name"
-
 msgid "Resolved clearance"
 msgstr "Resolved clearance"
 
@@ -29440,6 +29417,70 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Deprecated version of KICAD7_3DMODEL_DIR."
+#~ msgstr "Deprecated version of KICAD7_3DMODEL_DIR."
+
+#~ msgid "Deprecated version of KICAD7_FOOTPRINT_DIR."
+#~ msgstr "Deprecated version of KICAD7_FOOTPRINT_DIR."
+
+#~ msgid "Filter other symbol fields by name:"
+#~ msgstr "Filter other symbol fields by name:"
+
+#, c-format
+#~ msgid ""
+#~ "To see individual item colors uncheck '%s'\n"
+#~ "in Preferences > Eeschema > Colors."
+#~ msgstr ""
+#~ "To see individual item colors uncheck '%s'\n"
+#~ "in Preferences > Eeschema > Colors."
+
+#~ msgid ""
+#~ "You can use the this calculator to check if a small track can handle a "
+#~ "large current for a short period of time.<br>\n"
+#~ "This tool allows you to design a track fuse but should be used as an "
+#~ "estimate only.\n"
+#~ "\n"
+#~ "The calculator estimates the energy required to heat the wire up<br>\n"
+#~ "to its melting point as well as the energy required for the change of "
+#~ "phase.<br>\n"
+#~ "This energy is then compared to the one dissipated by the wire resistance."
+#~ msgstr ""
+#~ "You can use the this calculator to check if a small track can handle a "
+#~ "large current for a short period of time.<br>\n"
+#~ "This tool allows you to design a track fuse but should be used as an "
+#~ "estimate only.\n"
+#~ "\n"
+#~ "The calculator estimates the energy required to heat the wire up<br>\n"
+#~ "to its melting point as well as the energy required for the change of "
+#~ "phase.<br>\n"
+#~ "This energy is then compared to the one dissipated by the wire resistance."
+
+#~ msgid "Last Change"
+#~ msgstr "Last Change"
+
+#~ msgid "Exclude from BOM"
+#~ msgstr "Exclude from BOM"
+
+#, c-format
+#~ msgid "Add %s 'exclude from position files' fabrication attribute."
+#~ msgstr "Add %s 'exclude from position files' fabrication attribute."
+
+#, c-format
+#~ msgid "Remove %s 'exclude from position files' fabrication attribute."
+#~ msgstr "Remove %s 'exclude from position files' fabrication attribute."
+
+#, c-format
+#~ msgid "Added %s 'exclude from position files' fabrication attribute."
+#~ msgstr "Added %s 'exclude from position files' fabrication attribute."
+
+#, c-format
+#~ msgid "Removed %s 'exclude from position files' fabrication attribute."
+#~ msgstr "Removed %s 'exclude from position files' fabrication attribute."
+
+#, c-format
+#~ msgid "The auto save file '%s' could not be removed!"
+#~ msgstr "The auto save file '%s' could not be removed!"
 
 #~ msgid "3D model search path"
 #~ msgstr "3D model search path"
@@ -41392,9 +41433,6 @@ msgstr "KiCad Printed Circuit Board"
 #~ "If some components are orphan (the linked symbol is found nowhere),\n"
 #~ "try to find a candidate having the same name in one of loaded symbol "
 #~ "libraries."
-
-#~ msgid "Filter fields by name:"
-#~ msgstr "Filter fields by name:"
 
 #, c-format
 #~ msgid ""
