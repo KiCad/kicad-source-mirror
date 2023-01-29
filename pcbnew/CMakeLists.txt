@@ -425,6 +425,12 @@ set( PCBNEW_SCRIPTING_PYTHON_HELPERS
     python/scripting/pcb_scripting_tool.cpp
     )
 
+if( KICAD_IPC_API )
+    set( PCBNEW_SRCS ${PCBNEW_SRCS}
+        api/api_handler_pcb.cpp
+        )
+endif()
+
 
 if( COMPILER_SUPPORTS_WARNINGS )
     # Only compile our source files with the warnings, since the SWIG generated
@@ -719,7 +725,6 @@ set( PCBNEW_KIFACE_LIBRARIES
     ${PCBNEW_EXTRA_LIBS}    # -lrt must follow Boost
     )
 
-
 target_link_libraries( pcbnew_kiface
     PRIVATE
         ${PCBNEW_KIFACE_LIBRARIES}
@@ -741,6 +746,9 @@ if( WIN32 )
     # Copy dynamic lib dependency to build dir to allow running directly
     add_custom_command( TARGET pcbnew POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:kicad_3dsg>" "$<TARGET_FILE_DIR:pcbnew>"
+        )
+    add_custom_command( TARGET pcbnew POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:kiapi>" "$<TARGET_FILE_DIR:pcbnew>"
         )
 endif()
 

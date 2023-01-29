@@ -58,6 +58,11 @@ class ACTION_MENU;
 class TOOL_ACTION;
 class STRING_UTF8_MAP;
 
+#ifdef KICAD_IPC_API
+class KICAD_API_SERVER;
+class API_HANDLER_PCB;
+#endif
+
 enum LAST_PATH_TYPE : unsigned int;
 
 namespace PCB { struct IFACE; }     // KIFACE is in pcbnew.cpp
@@ -856,6 +861,10 @@ private:
     wxTimer      m_redrawNetnamesTimer;
 
     wxTimer*     m_eventCounterTimer;
+
+#ifdef KICAD_IPC_API
+    std::unique_ptr<API_HANDLER_PCB> m_apiHandler;
+#endif
 };
 
 #endif  // __PCB_EDIT_FRAME_H__

@@ -52,9 +52,9 @@ public:
 
     const KIID GetUUID() const override { return m_Uuid; }
 
-    wxString Serialize() const;
+    wxString SerializeToString() const;
 
-    static PCB_MARKER* Deserialize( const wxString& data );
+    static PCB_MARKER* DeserializeFromString( const wxString& data );
 
     void Move( const VECTOR2I& aMoveVector ) override
     {

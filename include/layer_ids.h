@@ -61,8 +61,7 @@ enum PCB_LAYER_ID: int
     UNDEFINED_LAYER = -1,
     UNSELECTED_LAYER = -2,
 
-    PCBNEW_LAYER_ID_START = 0,
-    F_Cu = PCBNEW_LAYER_ID_START,
+    F_Cu = 0,
     In1_Cu,
     In2_Cu,
     In3_Cu,
@@ -137,6 +136,8 @@ enum PCB_LAYER_ID: int
 
     PCB_LAYER_ID_COUNT
 };
+
+constexpr PCB_LAYER_ID PCBNEW_LAYER_ID_START = F_Cu;
 
 #define MAX_CU_LAYERS       (B_Cu - F_Cu + 1)
 

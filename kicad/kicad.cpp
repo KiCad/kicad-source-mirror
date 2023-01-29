@@ -57,6 +57,10 @@
 #include <kiplatform/app.h>
 #include <kiplatform/environment.h>
 
+#ifdef KICAD_IPC_API
+#include <api/api_server.h>
+#endif
+
 
 // a dummy to quiet linking with EDA_BASE_FRAME::config();
 #include <kiface_base.h>
@@ -237,6 +241,10 @@ bool PGM_KICAD::OnPgmInit()
 
     KICAD_SETTINGS* settings = static_cast<KICAD_SETTINGS*>( PgmSettings() );
 
+#ifdef KICAD_IPC_API
+    m_api_server = std::make_unique<KICAD_API_SERVER>();
+#endif
+
     wxString projToLoad;
 
     HideSplash();
@@ -348,6 +356,10 @@ bool PGM_KICAD::OnPgmInit()
     frame->Show( true );
     frame->Raise();
 
+#ifdef KICAD_IPC_API
+    m_api_server->SetReadyToReply();
+#endif
+
     return true;
 }
 
@@ -361,6 +373,10 @@ int PGM_KICAD::OnPgmRun()
 void PGM_KICAD::OnPgmExit()
 {
     Kiway.OnKiwayEnd();
+
+#ifdef KICAD_IPC_API
+    m_api_server.reset();
+#endif
 
     if( m_settings_manager && m_settings_manager->IsOK() )
     {

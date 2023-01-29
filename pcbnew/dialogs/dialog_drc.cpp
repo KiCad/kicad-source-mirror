@@ -710,7 +710,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
 
             marker->SetExcluded( true, dlg.GetValue() );
 
-            wxString serialized = marker->Serialize();
+            wxString serialized = marker->SerializeToString();
             m_frame->GetDesignSettings().m_DrcExclusions.insert( serialized );
             m_frame->GetDesignSettings().m_DrcExclusionComments[ serialized ] = dlg.GetValue();
 
@@ -726,7 +726,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         {
             marker->SetExcluded( false );
 
-            wxString serialized = marker->Serialize();
+            wxString serialized = marker->SerializeToString();
             m_frame->GetDesignSettings().m_DrcExclusions.erase( serialized );
             m_frame->GetDesignSettings().m_DrcExclusionComments.erase( serialized );
 
@@ -758,7 +758,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
 
             marker->SetExcluded( true, dlg.GetValue() );
 
-            wxString serialized = marker->Serialize();
+            wxString serialized = marker->SerializeToString();
             m_frame->GetDesignSettings().m_DrcExclusions.insert( serialized );
             m_frame->GetDesignSettings().m_DrcExclusionComments[ serialized ] = dlg.GetValue();
 
@@ -792,7 +792,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
             {
                 marker->SetExcluded( false );
 
-                wxString serialized = marker->Serialize();
+                wxString serialized = marker->SerializeToString();
                 m_frame->GetDesignSettings().m_DrcExclusions.erase( serialized );
                 m_frame->GetDesignSettings().m_DrcExclusionComments.erase( serialized );
             }
@@ -812,7 +812,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
             {
                 marker->SetExcluded( true );
 
-                wxString serialized = marker->Serialize();
+                wxString serialized = marker->SerializeToString();
                 m_frame->GetDesignSettings().m_DrcExclusions.insert( serialized );
             }
         }
@@ -1082,7 +1082,7 @@ void DIALOG_DRC::ExcludeMarker()
     if( marker && marker->GetSeverity() != RPT_SEVERITY_EXCLUSION )
     {
         marker->SetExcluded( true );
-        m_frame->GetDesignSettings().m_DrcExclusions.insert( marker->Serialize() );
+        m_frame->GetDesignSettings().m_DrcExclusions.insert( marker->SerializeToString() );
         m_frame->GetCanvas()->GetView()->Update( marker );
 
         // Update view

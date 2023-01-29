@@ -88,7 +88,7 @@ void SCH_MARKER::SwapData( SCH_ITEM* aItem )
 }
 
 
-wxString SCH_MARKER::Serialize() const
+wxString SCH_MARKER::SerializeToString() const
 {
     std::shared_ptr<ERC_ITEM> erc = std::static_pointer_cast<ERC_ITEM>( m_rcItem );
     wxString                  sheetSpecificPath, mainItemPath, auxItemPath;
@@ -109,7 +109,7 @@ wxString SCH_MARKER::Serialize() const
 }
 
 
-SCH_MARKER* SCH_MARKER::Deserialize( SCHEMATIC* schematic, const wxString& data )
+SCH_MARKER* SCH_MARKER::DeserializeFromString( SCHEMATIC* schematic, const wxString& data )
 {
     wxArrayString props = wxSplit( data, '|' );
     VECTOR2I      markerPos( (int) strtol( props[1].c_str(), nullptr, 10 ),

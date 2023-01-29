@@ -1,0 +1,217 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/*
+ * base_types.proto
+ * Includes types used in many parts of the API
+ */
+
+syntax = "proto3";
+
+package kiapi.common.types;
+
+import "google/protobuf/field_mask.proto";
+
+enum CommandStatus
+{
+  CS_UNKNOWN      = 0;
+  CS_OK           = 1;   // Command succeeded
+  CS_FAILED       = 2;   // Command failed
+}
+
+message CommandStatusResponse
+{
+  CommandStatus status = 1;
+}
+
+/**
+ * Describes a particular version of KiCad
+ */
+message KiCadVersion
+{
+  uint32 major = 1;
+  uint32 minor = 2;
+  uint32 patch = 3;
+
+  // Full identifier string, potentially containing git hashes, packager-added info, etc.
+  string full_version = 4;
+}
+
+/**
+ * Some commands are specific to a KiCad window (frame).  This list contains all addressable frames.
+ */
+enum FrameType
+{
+  FT_UNKNOWN              = 0;
+  FT_PROJECT_MANAGER      = 1;
+  FT_SCHEMATIC_EDITOR     = 2;
+  FT_PCB_EDITOR           = 3;
+  FT_SPICE_SIMULATOR      = 4;
+  FT_SYMBOL_EDITOR        = 5;
+  FT_FOOTPRINT_EDITOR     = 6;
+  FT_DRAWING_SHEET_EDITOR = 7;
+}
+
+/**
+ * Describes a KIID, or UUID of an object in a KiCad editor model.
+ */
+message KIID
+{
+  // The KIID's value in standard UUID format, stored as a string for easy portability
+  string value = 1;
+}
+
+/**
+ * Identifier for the type of document being targeted by a request
+ */
+enum DocumentType
+{
+  DOCTYPE_UNKNOWN       = 0;
+  DOCTYPE_SCHEMATIC     = 1;
+  DOCTYPE_SYMBOL        = 2;
+  DOCTYPE_PCB           = 3;
+  DOCTYPE_FOOTPRINT     = 4;
+  DOCTYPE_DRAWING_SHEET = 5;
+}
+
+/**
+ * Describes a KiCad LIB_ID; a unique identifier for a loaded symbol or footprint
+ */
+message LibraryIdentifier
+{
+  /// The library portion of the LIB_ID
+  string library_nickname = 1;
+
+  /// The symbol or footprint name
+  string entry_name = 2;
+}
+
+/**
+ * Describes a unique sheet in a schematic
+ */
+message SheetPath
+{
+  /// The canonical path to the sheet.  The first KIID will be the root sheet, etc.
+  repeated KIID path = 1;
+
+  /// The path converted to a human readable form such as "/", "/child", or "/child/grandchild"
+  string path_human_readable = 2;
+}
+
+/**
+ * Describes a document that will be the target of a request
+ */
+message DocumentSpecifier
+{
+  DocumentType type = 1;
+
+  oneof identifier
+  {
+    /// If type == DT_SYMBOL or DT_FOOTPRINT, identifies a certain library entry
+    LibraryIdentifier lib_id = 2;
+
+    /// If type == DT_SCHEMATIC, identifies a sheet with a given path
+    SheetPath sheet_path = 3;
+
+    /// If type == DT_PCB, identifies a PCB with a given filename, e.g. "board.kicad_pcb"
+    string board_filename = 4;
+  }
+}
+
+/**
+ * Describes the type of a KiCad item (wrapper for KICAD_T)
+ */
+message ItemType
+{
+  /// Must be a valid value in the KICAD_T C++ enum (see typeinfo.h)
+  int32 type = 1;
+}
+
+/**
+ * This header is included in requests and responses about item(s) in a document
+ */
+message ItemHeader
+{
+  /// Which document is this request targeting?
+  DocumentSpecifier document = 1;
+
+  /// Which fields on the item(s) are included with this request or response
+  google.protobuf.FieldMask field_mask = 2;
+}
+
+/**
+ * Status of a request that included an ItemHeader
+ */
+enum ItemRequestStatus
+{
+  IRS_UNKNOWN            = 0;
+  IRS_OK                 = 1;
+  IRS_DOCUMENT_NOT_FOUND = 2;   /// The given document is not open in KiCad
+  IRS_FIELD_MASK_INVALID = 3;   /// The given field_mask contains invalid specifiers
+}
+
+/// Describes a point in 2D space.  All coordinates are in nanometers.
+message Point2D
+{
+  int64 x_nm = 1;
+  int64 y_nm = 2;
+}
+
+/// Describes a point in 3D space.  All coordinates are in nanometers.
+message Point3D
+{
+  int64 x_nm = 1;
+  int64 y_nm = 2;
+  int64 z_nm = 3;
+}
+
+/// Describes a quantity of distance (size, length, etc).  All coordinates are in nanometers.
+message Distance
+{
+  int64 value_nm = 1;
+}
+
+/// Describes whether or not an item is locked for editing or movement
+enum LockedState
+{
+  LS_UNKNOWN  = 0;
+  LS_UNLOCKED = 1;
+  LS_LOCKED   = 2;
+}
+
+message BoardLayer
+{
+  int32 layer_id = 1; /// From PCB_LAYER_T
+}
+
+/// Describes a copper item's net
+message Net
+{
+  /// A unique code representing this net
+  int32 code = 1;
+
+  /// Human-readable net name
+  string name = 2;
+}
+
+/// Describes a net class (a grouping of nets)
+message NetClass
+{
+  string name = 1;
+}

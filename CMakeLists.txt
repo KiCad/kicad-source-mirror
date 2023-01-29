@@ -247,6 +247,10 @@ option( KICAD_GAL_PROFILE
     "Enable profiling info for GAL"
     OFF )
 
+option( KICAD_IPC_API
+    "Enable experimental IPC API"
+    OFF )
+
 # Global setting: exports are explicit
 set( CMAKE_CXX_VISIBILITY_PRESET "hidden" )
 set( CMAKE_VISIBILITY_INLINES_HIDDEN ON )
@@ -276,6 +280,10 @@ endif()
 if( KICAD_WAYLAND )
     message( STATUS "Configuring KiCad to support Wayland features" )
     add_compile_definitions( KICAD_WAYLAND )
+endif()
+
+if( KICAD_IPC_API )
+    add_definitions( -DKICAD_IPC_API )
 endif()
 
 # Ensure DEBUG is defined for all platforms in Debug builds
@@ -842,6 +850,26 @@ if( OCC_VERSION_STRING VERSION_LESS 7.5.0 )
 endif()
 include_directories( SYSTEM ${OCC_INCLUDE_DIR} )
 
+option( KICAD_USE_CMAKE_FINDPROTOBUF "Use FindProtobuf provided by CMake" OFF )
+mark_as_advanced( KICAD_USE_CMAKE_FINDPROTOBUF )
+
+if( KICAD_USE_CMAKE_FINDPROTOBUF )
+    include( FindProtobuf )
+    find_package( Protobuf REQUIRED )
+else()
+    find_package( Protobuf REQUIRED CONFIG )
+    set( Protobuf_LIBRARY "protobuf::libprotobuf" )
+endif()
+
+if( NOT Protobuf_PROTOC_EXECUTABLE )
+    set( Protobuf_PROTOC_EXECUTABLE "protobuf::protoc" )
+endif()
+
+if( NOT Protobuf_INCLUDE_DIR )
+    get_target_property( Protobuf_INCLUDE_DIR protobuf::libprotobuf INTERFACE_INCLUDE_DIRECTORIES )
+endif()
+
+
 # Assist with header file searching optimization:
 # INC_BEFORE and INC_AFTER are two lists which go at the front and back of the
 # header file search lists, respectively.
@@ -1051,6 +1079,10 @@ if( KICAD_USE_SENTRY )
     add_compile_definitions( KICAD_USE_SENTRY )
 endif()
 
+if( KICAD_IPC_API )
+    find_package( nng REQUIRED )
+endif()
+
 #================================================
 # Add the doxygen target
 #================================================
@@ -1120,6 +1152,8 @@ endif ( KICAD_INSTALL_DEMOS )
 if( KICAD_BUILD_I18N )
     add_subdirectory( translation )
 endif()
+
+add_subdirectory( api )
 
 if( APPLE )
     set( KICAD_OSX_CODESIGN ON

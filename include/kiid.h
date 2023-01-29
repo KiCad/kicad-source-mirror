@@ -64,6 +64,7 @@ public:
 
     wxString AsString() const;
     wxString AsLegacyTimestampString() const;
+    std::string AsStdString() const;
 
     /**
      * Returns true if a string has the correct formatting to be a KIID.

@@ -576,8 +576,11 @@ public:
      */
     bool m_EnableCacheFriendlyFracture;
 
-    ///@}
-
+    /**
+     * Log IPC API requests and responses
+     */
+    bool m_EnableAPILogging;
+///@}
 
 private:
     ADVANCED_CFG();

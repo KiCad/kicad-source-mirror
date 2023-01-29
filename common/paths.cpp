@@ -399,6 +399,17 @@ wxString PATHS::GetInstanceCheckerPath()
 }
 
 
+wxString PATHS::GetLogsPath()
+{
+    wxFileName tmp;
+    getUserDocumentPath( tmp );
+
+    tmp.AppendDir( wxT( "logs" ) );
+
+    return tmp.GetPath();
+}
+
+
 bool PATHS::EnsurePathExists( const wxString& aPath )
 {
     wxFileName path( aPath );

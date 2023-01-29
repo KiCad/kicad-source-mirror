@@ -302,7 +302,7 @@ bool TOOL_MANAGER::doRunAction( const std::string& aActionName, bool aNow, const
 
     doRunAction( *action, aNow, aParam, aCommit );
 
-    return false;
+    return true;
 }
 
 

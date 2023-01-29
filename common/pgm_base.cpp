@@ -74,6 +74,10 @@
 #include <build_version.h>
 #endif
 
+#ifdef KICAD_IPC_API
+#include <api/api_server.h>
+#endif
+
 /**
  * Current list of languages supported by KiCad.
  *

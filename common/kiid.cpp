@@ -260,6 +260,12 @@ wxString KIID::AsString() const
 }
 
 
+std::string KIID::AsStdString() const
+{
+    return boost::uuids::to_string( m_uuid );
+}
+
+
 wxString KIID::AsLegacyTimestampString() const
 {
     return wxString::Format( "%8.8lX", (unsigned long) AsLegacyTimestamp() );

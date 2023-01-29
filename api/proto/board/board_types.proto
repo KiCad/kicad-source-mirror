@@ -1,0 +1,110 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+syntax = "proto3";
+
+package kiapi.board.types;
+
+import "common/types/base_types.proto";
+
+/// Represents a track segment on a board
+message Track
+{
+  kiapi.common.types.KIID        id     = 1;
+  kiapi.common.types.Point2D     start  = 2;
+  kiapi.common.types.Point2D     end    = 3;
+  kiapi.common.types.Distance    width  = 4;
+  kiapi.common.types.LockedState locked = 5;
+  kiapi.common.types.BoardLayer  layer  = 6;
+  kiapi.common.types.Net         net    = 7;
+}
+
+/// Represents an arc track (not a PCB_SHAPE in arc shape)
+/// Arc tracks in KiCad store start, midpoint, and end.
+/// All other values (center point, angles, etc) are inferred.
+message Arc
+{
+  kiapi.common.types.KIID        id     = 1;
+  kiapi.common.types.Point2D     start  = 2;
+  kiapi.common.types.Point2D     mid    = 3;  /// Arc midpoint
+  kiapi.common.types.Point2D     end    = 4;
+  kiapi.common.types.Distance    width  = 5;
+  kiapi.common.types.LockedState locked = 6;
+  kiapi.common.types.BoardLayer  layer  = 7;
+  kiapi.common.types.Net         net    = 8;
+}
+
+enum PadStackType
+{
+  PST_UNKNOWN      = 0;
+  PST_THROUGH      = 1;  /// Through all layers; same shape on all layers
+  PST_BLIND_BURIED = 2;  /// From a start layer to end layer (inclusive); same shape on all included layers
+}
+
+enum UnconnectedLayerRemoval
+{
+  ULR_UNKNOWN = 0;
+
+  /// Keep annular rings on all layers
+  ULR_KEEP = 1;
+
+  /// Remove annular rings on unconnected layers, including start and end layers.
+  ULR_REMOVE = 2;
+
+  /// Remove annular rings on unconnected layers, but preserve start and end layers even if unconnected.
+  ULR_REMOVE_EXCEPT_START_AND_END = 3;
+}
+
+/// A pad stack definition for a multilayer pad or via.
+message PadStack
+{
+  /// What type of pad stack this represents.
+  PadStackType type = 1;
+
+  /// Lowest (closest to F_Cu) layer this stack exists on.  Ignored if type == PST_THROUGH.
+  kiapi.common.types.BoardLayer start_layer = 2;
+
+  /// Highest (closest to B_Cu) layer this stack exists on.  Ignored if type == PST_THROUGH.
+  kiapi.common.types.BoardLayer end_layer   = 3;
+
+  /// How to treat annular rings on unconnected layers.
+  UnconnectedLayerRemoval unconnected_layer_removal = 4;
+}
+
+/// Represents a via
+message Via
+{
+  /// The unique identifier of the via
+  kiapi.common.types.KIID id = 1;
+
+  /// The location of the via's center point
+  kiapi.common.types.Point2D position = 2;
+
+  /// The diameter of the via's circular copper pad
+  kiapi.common.types.Distance pad_diameter = 4;
+
+  /// The diameter of the via's drilled hole
+  kiapi.common.types.Distance drill_diameter = 5;
+
+  /// The pad stack definition for this via.  The via's VIATYPE (blind/buried/normal) is inferred from this.
+  PadStack pad_stack = 6;
+
+  kiapi.common.types.LockedState locked = 7;
+  kiapi.common.types.Net         net    = 8;
+}

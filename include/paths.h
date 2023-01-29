@@ -154,6 +154,11 @@ public:
     static wxString GetInstanceCheckerPath();
 
     /**
+     * Gets a path to use for user-visible log files
+     */
+    static wxString GetLogsPath();
+
+    /**
      * Attempts to create a given path if it does not exist
      */
     static bool EnsurePathExists( const wxString& aPath );

@@ -58,6 +58,10 @@
 #include <sentry.h>
 #endif
 
+#ifdef KICAD_IPC_API
+#include <api/api_server.h>
+#endif
+
 // Only a single KIWAY is supported in this single_top top level component,
 // which is dedicated to loading only a single DSO.
 KIWAY    Kiway( KFCTL_STANDALONE );
@@ -77,6 +81,10 @@ static struct PGM_SINGLE_TOP : public PGM_BASE
     {
 
         Kiway.OnKiwayEnd();
+
+#ifdef KICAD_IPC_API
+        m_api_server.reset();
+#endif
 
         if( m_settings_manager && m_settings_manager->IsOK() )
         {
@@ -350,6 +358,11 @@ bool PGM_SINGLE_TOP::OnPgmInit()
 
     GetSettingsManager().RegisterSettings( new KICAD_SETTINGS );
 
+#ifdef KICAD_IPC_API
+    // Create the API server thread once the app event loop exists
+    m_api_server = std::make_unique<KICAD_API_SERVER>();
+#endif
+
     // Use KIWAY to create a top window, which registers its existence also.
     // "TOP_FRAME" is a macro that is passed on compiler command line from CMake,
     // and is one of the types in FRAME_T.
@@ -423,6 +436,10 @@ bool PGM_SINGLE_TOP::OnPgmInit()
 
         frame->OpenProjectFiles( fileArgs );
     }
+
+#ifdef KICAD_IPC_API
+    m_api_server->SetReadyToReply();
+#endif
 
     return true;
 }

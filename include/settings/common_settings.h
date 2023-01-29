@@ -166,6 +166,11 @@ public:
         wxString                    authorEmail;
     };
 
+    struct PYTHON
+    {
+        wxString interpreter_path;
+    };
+
     COMMON_SETTINGS();
 
     virtual ~COMMON_SETTINGS() {}
@@ -217,6 +222,8 @@ public:
     PACKAGE_MANAGER m_PackageManager;
 
     GIT m_Git;
+
+    PYTHON m_Python;
 };
 
 #endif

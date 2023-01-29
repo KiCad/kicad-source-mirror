@@ -37,6 +37,10 @@
 #include <wx/validate.h>    // required for propgrid
 #include <wx/propgrid/property.h>
 
+#ifdef DEBUG
+#include <wx/wxcrt.h>
+#endif
+
 #include <functional>
 #include <unordered_map>
 #include <memory>

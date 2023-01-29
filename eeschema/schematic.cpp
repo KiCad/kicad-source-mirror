@@ -312,7 +312,7 @@ std::vector<SCH_MARKER*> SCHEMATIC::ResolveERCExclusions()
 
     for( auto it = settings.m_ErcExclusions.begin(); it != settings.m_ErcExclusions.end(); )
     {
-        SCH_MARKER* testMarker = SCH_MARKER::Deserialize( this, *it );
+        SCH_MARKER* testMarker = SCH_MARKER::DeserializeFromString( this, *it );
 
         if( testMarker->IsLegacyMarker() )
         {
@@ -322,7 +322,7 @@ std::vector<SCH_MARKER*> SCHEMATIC::ResolveERCExclusions()
                 && settingsKey != wxT( "hier_label_mismatch" )
                 && settingsKey != wxT( "different_unit_net" ) )
             {
-                migratedExclusions.insert( testMarker->Serialize() );
+                migratedExclusions.insert( testMarker->SerializeToString() );
             }
 
             it = settings.m_ErcExclusions.erase( it );
@@ -344,7 +344,7 @@ std::vector<SCH_MARKER*> SCHEMATIC::ResolveERCExclusions()
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_MARKER_T ) )
         {
             SCH_MARKER*                  marker = static_cast<SCH_MARKER*>( item );
-            wxString                     serialized = marker->Serialize();
+            wxString                     serialized = marker->SerializeToString();
             std::set<wxString>::iterator it = settings.m_ErcExclusions.find( serialized );
 
             if( it != settings.m_ErcExclusions.end() )
@@ -359,7 +359,7 @@ std::vector<SCH_MARKER*> SCHEMATIC::ResolveERCExclusions()
 
     for( const wxString& serialized : settings.m_ErcExclusions )
     {
-        SCH_MARKER* marker = SCH_MARKER::Deserialize( this, serialized );
+        SCH_MARKER* marker = SCH_MARKER::DeserializeFromString( this, serialized );
 
         if( marker )
         {
@@ -811,7 +811,7 @@ void SCHEMATIC::RecordERCExclusions()
 
             if( marker->IsExcluded() )
             {
-                wxString serialized = marker->Serialize();
+                wxString serialized = marker->SerializeToString();
                 ercSettings.m_ErcExclusions.insert( serialized );
                 ercSettings.m_ErcExclusionComments[ serialized ] = marker->GetComment();
             }

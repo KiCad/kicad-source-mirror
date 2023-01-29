@@ -109,6 +109,11 @@
 #include <footprint_viewer_frame.h>
 #include <footprint_chooser_frame.h>
 
+#ifdef KICAD_IPC_API
+#include <api/api_server.h>
+#include <api/api_handler_pcb.h>
+#endif
+
 #include <action_plugin.h>
 #include <pcbnew_scripting_helpers.h>
 #include "../scripting/python_scripting.h"
@@ -426,6 +431,11 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // Sync action plugins in case they changed since the last time the frame opened
     GetToolManager()->RunAction( PCB_ACTIONS::pluginsReload );
 
+#ifdef KICAD_IPC_API
+    m_apiHandler = std::make_unique<API_HANDLER_PCB>( this );
+    Pgm().GetApiServer().RegisterHandler( m_apiHandler.get() );
+#endif
+
     GetCanvas()->SwitchBackend( m_canvasType );
     ActivateGalCanvas();
 
@@ -516,6 +526,16 @@ PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
         m_eventCounterTimer->Stop();
         delete m_eventCounterTimer;
     }
+
+#ifdef KICAD_IPC_API
+    Pgm().GetApiServer().DeregisterHandler( m_apiHandler.get() );
+#endif
+
+    // Close modeless dialogs
+    wxWindow* open_dlg = wxWindow::FindWindowByName( DIALOG_DRC_WINDOW_NAME );
+
+    if( open_dlg )
+        open_dlg->Close( true );
 
     // Shutdown all running tools
     if( m_toolManager )

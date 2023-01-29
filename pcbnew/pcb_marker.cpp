@@ -93,7 +93,7 @@ PCB_MARKER::~PCB_MARKER()
 }
 
 
-wxString PCB_MARKER::Serialize() const
+wxString PCB_MARKER::SerializeToString() const
 {
     if( m_rcItem->GetErrorCode() == DRCE_COPPER_SLIVER )
     {
@@ -137,7 +137,7 @@ wxString PCB_MARKER::Serialize() const
 }
 
 
-PCB_MARKER* PCB_MARKER::Deserialize( const wxString& data )
+PCB_MARKER* PCB_MARKER::DeserializeFromString( const wxString& data )
 {
     auto getMarkerLayer =
             []( const wxString& layerName ) -> int

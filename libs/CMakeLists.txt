@@ -26,3 +26,7 @@ add_subdirectory( core )
 add_subdirectory( kimath )
 add_subdirectory( kiplatform )
 add_subdirectory( sexpr )
+
+if( KICAD_IPC_API )
+	add_subdirectory( kinng )
+endif()

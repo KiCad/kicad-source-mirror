@@ -1,0 +1,90 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+syntax = "proto3";
+
+package kiapi.common;
+
+import "google/protobuf/any.proto";
+
+enum ApiStatusCode
+{
+  AS_UNKNOWN        = 0;
+  AS_OK             = 1; // Request succeeded
+  AS_TIMEOUT        = 2; // Request timed out
+  AS_BAD_REQUEST    = 3; // The request had invalid parameters or otherwise was illegal
+  AS_NOT_READY      = 4; // KiCad was not (yet) in a state where it could handle API requests
+  AS_UNHANDLED      = 5; // The request was not handled by KiCad
+  AS_TOKEN_MISMATCH = 6; // The kicad_token in the request didn't match this KiCad's token
+}
+
+/*
+ * For future expansion: any header fields that should be sent with a request
+ */
+message ApiRequestHeader
+{
+  // An opaque string identifying a running instance of KiCad.  If this is set to a non-empty
+  // string in an API request, KiCad will reject the request if the value doesn't match its own
+  // token.  This can be used to let API clients make sure they are still talking to the same
+  // instance of KiCad if they are long-running.
+  string kicad_token = 1;
+
+  // A string identifying an API client.  Should be set by the client to a value that is unique
+  // to a specific instance of a client, for example the package name of the client plus its
+  // process ID or a random string, e.g. "com.github.me.my_awesome_plugin-73951".  The main purpose
+  // of this name is to identify the client in debug logs.
+  string client_name = 2;
+}
+
+/*
+ * The top-level envelope container for an API request (message from a client to the KiCad API server)
+ */
+message ApiRequest
+{
+  ApiRequestHeader header = 1;
+
+  google.protobuf.Any message = 2;
+}
+
+/*
+ * For future expansion: any header fields that should be sent with a response
+ */
+message ApiResponseHeader
+{
+  /// An opaque string identifying a running instance of KiCad.
+  string kicad_token = 1;
+}
+
+message ApiResponse
+{
+  ApiResponseHeader header = 1;
+
+  ApiResponseStatus status = 2;
+
+  google.protobuf.Any message = 3;
+}
+
+message ApiResponseStatus
+{
+  /// A code describing the category of error (or AS_OK if no error)
+  ApiStatusCode status = 1;
+
+  /// A human-readable description of the error, if any
+  string error_message = 2;
+}

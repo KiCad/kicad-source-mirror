@@ -260,6 +260,9 @@ public:
         bool operator()( const PCB_TRACK* aFirst, const PCB_TRACK* aSecond ) const;
     };
 
+    void Serialize( google::protobuf::Any &aContainer ) const override;
+    bool Deserialize( const google::protobuf::Any &aContainer ) override;
+
 #if defined (DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
@@ -360,6 +363,9 @@ public:
     double Similarity( const BOARD_ITEM& aOther ) const override;
 
     bool operator==( const BOARD_ITEM& aOther ) const override;
+
+    void Serialize( google::protobuf::Any &aContainer ) const override;
+    bool Deserialize( const google::protobuf::Any &aContainer ) override;
 
 protected:
     virtual void swapData( BOARD_ITEM* aImage ) override;
@@ -594,6 +600,9 @@ public:
     double Similarity( const BOARD_ITEM& aOther ) const override;
 
     bool operator==( const BOARD_ITEM& aOther ) const override;
+
+    void Serialize( google::protobuf::Any &aContainer ) const override;
+    bool Deserialize( const google::protobuf::Any &aContainer ) override;
 
 protected:
     void swapData( BOARD_ITEM* aImage ) override;

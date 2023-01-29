@@ -52,6 +52,10 @@ class COMMON_SETTINGS;
 class SETTINGS_MANAGER;
 class SCRIPTING;
 
+#ifdef KICAD_IPC_API
+class KICAD_API_SERVER;
+#endif
+
 /**
  * A small class to handle the list of existing translations.
  *
@@ -141,6 +145,10 @@ public:
     virtual BACKGROUND_JOBS_MONITOR& GetBackgroundJobMonitor() const { return *m_background_jobs_monitor; }
 
     virtual NOTIFICATIONS_MANAGER& GetNotificationsManager() const { return *m_notifications_manager; }
+
+#ifdef KICAD_IPC_API
+    KICAD_API_SERVER& GetApiServer() { return *m_api_server; }
+#endif
 
     virtual void SetTextEditor( const wxString& aFileName );
 
@@ -403,6 +411,9 @@ protected:
     /// Checks if there is another copy of Kicad running at the same time
     std::unique_ptr<wxSingleInstanceChecker> m_pgm_checker;
 
+#ifdef KICAD_IPC_API
+    std::unique_ptr<KICAD_API_SERVER> m_api_server;
+#endif
 
     wxString        m_kicad_env;              /// The KICAD system environment variable.
 

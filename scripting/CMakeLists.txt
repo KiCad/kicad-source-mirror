@@ -1,5 +1,6 @@
 set( KIPYTHON_SRCS
     kipython_settings.cpp
+    python_manager.cpp
 )
 
 add_library( scripting STATIC

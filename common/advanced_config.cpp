@@ -110,6 +110,7 @@ static const wxChar OcePluginAngularDeflection[] = wxT( "OcePluginAngularDeflect
 static const wxChar TriangulateSimplificationLevel[] = wxT( "TriangulateSimplificationLevel" );
 static const wxChar TriangulateMinimumArea[] = wxT( "TriangulateMinimumArea" );
 static const wxChar EnableCacheFriendlyFracture[] = wxT( "EnableCacheFriendlyFracture" );
+static const wxChar EnableAPILogging[] = wxT( "EnableAPILogging" );
 } // namespace KEYS
 
 
@@ -244,6 +245,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_3DRT_BevelExtentFactor    = 1.0 / 16.0;
 
     m_UseClipper2               = true;
+    m_EnableAPILogging          = false;
 
     m_Use3DConnexionDriver      = true;
 
@@ -443,6 +445,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableGenerators,
                                                 &m_EnableGenerators, m_EnableGenerators ) );
+
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableAPILogging,
+                                                &m_EnableAPILogging, m_EnableAPILogging ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableGit,
                                                 &m_EnableGit, m_EnableGit ) );

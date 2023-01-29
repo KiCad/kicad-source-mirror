@@ -52,6 +52,8 @@ class UNITS_PROVIDER;
 class EDA_DRAW_FRAME;
 class MSG_PANEL_ITEM;
 
+namespace google { namespace protobuf { class Any; } }
+
 
 /**
  * Used to inspect and possibly collect the (search) results of iterating over a list or
@@ -435,6 +437,10 @@ public:
     virtual const BOX2I ViewBBox() const override;
 
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
+
+    virtual void Serialize( google::protobuf::Any &aContainer ) const {}
+
+    virtual bool Deserialize( const google::protobuf::Any &aContainer ) { return false; }
 
 #if defined(DEBUG)
 

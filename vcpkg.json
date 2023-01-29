@@ -40,7 +40,9 @@
     "icu",
     "ngspice",
     "wxpython",
-    "libgit2"
+    "libgit2",
+    "nng",
+    "protobuf"
   ],
   "overrides": [
     {

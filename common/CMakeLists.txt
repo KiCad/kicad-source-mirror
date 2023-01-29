@@ -186,6 +186,7 @@ set_target_properties(kicommon PROPERTIES CXX_VISIBILITY_PRESET hidden)
 
 target_link_libraries( kicommon
     core
+    kiapi
     kimath
     kiplatform
     nlohmann_json
@@ -254,6 +255,7 @@ target_include_directories( kicommon
         .
         ${CMAKE_BINARY_DIR}
         $<TARGET_PROPERTY:pegtl,INTERFACE_INCLUDE_DIRECTORIES>
+        $<TARGET_PROPERTY:kiapi,INTERFACE_INCLUDE_DIRECTORIES>
     )
 
 add_dependencies( kicommon pegtl version_header )
@@ -335,6 +337,8 @@ set( COMMON_DLG_SRCS
     dialogs/panel_mouse_settings_base.cpp
     dialogs/panel_packages_and_updates.cpp
     dialogs/panel_packages_and_updates_base.cpp
+    dialogs/panel_python_settings.cpp
+    dialogs/panel_python_settings_base.cpp
     dialogs/panel_setup_netclasses.cpp
     dialogs/panel_setup_netclasses_base.cpp
     dialogs/panel_setup_severities.cpp
@@ -608,6 +612,15 @@ set( COMMON_SRCS
 
     )
 
+if( KICAD_IPC_API )
+    set( COMMON_SRCS
+        ${COMMON_SRCS}
+        api/api_server.cpp
+        api/api_handler.cpp
+        api/api_handler_common.cpp
+    )
+endif()
+
 add_library( common STATIC
     ${COMMON_SRCS}
     )
@@ -647,6 +660,12 @@ if( KICAD_USE_SENTRY )
         sentry )
 endif()
 
+if( KICAD_IPC_API )
+    target_link_libraries( common
+        kinng
+        )
+endif()
+
 target_include_directories( common
     PUBLIC
         .
@@ -656,18 +675,16 @@ target_include_directories( common
 
 # text markup support
 add_dependencies( common pegtl )
+
 target_include_directories( common PUBLIC
     $<TARGET_PROPERTY:pegtl,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:magic_enum,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:expected,INTERFACE_INCLUDE_DIRECTORIES>
     )
 
 target_include_directories( common SYSTEM PUBLIC
     $<TARGET_PROPERTY:nanodbc,INTERFACE_INCLUDE_DIRECTORIES>
     )
-
-target_include_directories( common PUBLIC
-    $<TARGET_PROPERTY:magic_enum,INTERFACE_INCLUDE_DIRECTORIES>
-    )
-
 
 set( PCB_COMMON_SRCS
     fp_lib_table.cpp

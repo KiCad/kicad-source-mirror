@@ -1,0 +1,251 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/*
+ * Commands and responses related to manipulating editor windows
+ */
+
+syntax = "proto3";
+
+package kiapi.common.commands;
+
+import "google/protobuf/any.proto";
+import "common/types/base_types.proto";
+
+/// Refreshes the given frame, if that frame is open
+message RefreshEditor
+{
+  kiapi.common.types.FrameType frame = 1;
+}
+
+/// Retrieves a list of open documents of the given type
+message GetOpenDocuments
+{
+  /// Which type of documents to query
+  kiapi.common.types.DocumentType type = 1;
+}
+
+message GetOpenDocumentsResponse
+{
+  repeated kiapi.common.types.DocumentSpecifier documents = 1;
+}
+
+/*
+ * Runs a TOOL_ACTION using the TOOL_MANAGER of a given frame.
+ * WARNING: The TOOL_ACTIONs are specifically *not* an API.
+ * Command names may change as code is refactored, and commands may disappear.
+ * This API method is provided for low-level prototyping purposes only.
+ */
+message RunAction
+{
+  string action = 1;  // Action name, like "eeschema.InteractiveSelection.ClearSelection"
+}
+
+enum RunActionStatus
+{
+  RAS_UNKNOWN        = 0;
+  RAS_OK             = 1;  // The action was submitted successfully.
+  RAS_INVALID        = 2;  // The action was unknown for the targeted frame.
+  RAS_FRAME_NOT_OPEN = 3;  // The targeted frame was not open when the call was submitted.
+}
+
+/*
+ * NOTE: At the moment, RAS_FRAME_NOT_OPEN won't be returned as the handler is inside the frame.
+ */
+message RunActionResponse
+{
+  RunActionStatus status = 1;
+}
+
+
+/*
+ * Begins a staged set of changes.  Any modifications made to a document through the API after this
+ * call will be saved to a pending commit, and will not appear in KiCad until a matching call to
+ * END_COMMIT.
+ */
+message BeginCommit
+{
+}
+
+
+message BeginCommitResponse
+{
+}
+
+
+enum CommitResult
+{
+  CR_UNKNOWN   = 0;
+  CR_OK        = 1; // Commit was pushed successfully
+  CR_NO_COMMIT = 2; // There was no commit started
+}
+
+
+message EndCommit
+{
+  // Optional message describing this changeset
+  string message = 1;
+}
+
+
+message EndCommitResponse
+{
+  CommitResult result = 1;
+}
+
+/// Creates new items on a given document
+message CreateItems
+{
+  /// Specifies which document to create on, which fields are included, etc.
+  kiapi.common.types.ItemHeader header = 1;
+
+  /// List of items to create
+  repeated google.protobuf.Any items = 2;
+
+  /// Items may be created on a top-level document (sheet, board, etc) or inside a container
+  /// (symbol, footprint).  If this field is not empty, it holds the ID of a symbol or footprint
+  /// that the items should be added to.  This ID must be an existing symbol (for schematic
+  /// documents) or footprint (for board documents).  If the given container does not exist or is
+  /// not the correct item type, the CreateItems call will fail.
+  kiapi.common.types.KIID container = 3;
+}
+
+enum ItemCreationStatus
+{
+  ICS_UNKNOWN      = 0;
+  ICS_OK           = 1; /// The item was created
+  ICS_INVALID_TYPE = 2; /// The item's type is not valid for the given document
+  ICS_EXISTING     = 3; /// The item had a specified KIID and that KIID was already in use
+}
+
+message ItemCreationResult
+{
+  ItemCreationStatus status = 1;
+
+  /// The created version of the item, including an updated KIID as applicable
+  google.protobuf.Any item = 2;
+}
+
+message CreateItemsResponse
+{
+  /// Specifies which document was modified, which fields are included in created_items, etc.
+  kiapi.common.types.ItemHeader header = 1;
+
+  /// Status of the overall request; may return IRS_OK even if no items were created
+  kiapi.common.types.ItemRequestStatus status = 2;
+
+  /// Status of each item to be created
+  repeated ItemCreationResult created_items = 3;
+}
+
+message GetItems
+{
+  /// Specifies which document to query, which fields to return, etc.
+  kiapi.common.types.ItemHeader header = 1;
+
+  /// List of one or more types of items to retreive
+  repeated kiapi.common.types.ItemType types = 2;
+}
+
+message GetItemsResponse
+{
+  /// Specifies which document was modified, which fields are included in items, etc.
+  kiapi.common.types.ItemHeader header = 1;
+
+  /// Status of the overall request; may return IRS_OK even if no items were retrieved
+  kiapi.common.types.ItemRequestStatus status = 2;
+
+  repeated google.protobuf.Any items = 3;
+}
+
+/// Updates items in a given document
+message UpdateItems
+{
+  /// Specifies which document to modify, which fields are included, etc.
+  kiapi.common.types.ItemHeader header = 1;
+
+  /// List of items to modify
+  repeated google.protobuf.Any items = 2;
+}
+
+enum ItemUpdateStatus
+{
+  IUS_UNKNOWN      = 0;
+  IUS_OK           = 1; /// The item was updated
+  IUS_INVALID_TYPE = 2; /// The item's type is not valid for the given document
+  IUS_NONEXISTENT  = 3; /// The item did not exist in the given document
+  IUS_IMMUTABLE    = 4; /// The item is not allowed to be modified by the API
+}
+
+message ItemUpdateResult
+{
+  ItemUpdateStatus status = 1;
+
+  /// The update version of the item
+  google.protobuf.Any item = 2;
+}
+
+message UpdateItemsResponse
+{
+  /// Specifies which document was modified, which fields are included in updated_items, etc.
+  kiapi.common.types.ItemHeader header = 1;
+
+  /// Status of the overall request; may return IRS_OK even if no items were modified
+  kiapi.common.types.ItemRequestStatus status = 2;
+
+  /// Status of each item to be created
+  repeated ItemUpdateResult updated_items = 3;
+}
+
+/// Deletes items in a given document
+message DeleteItems
+{
+  /// Specifies which document to modify
+  kiapi.common.types.ItemHeader header = 1;
+
+  /// List of item KIIDs to delete
+  repeated kiapi.common.types.KIID item_ids = 2;
+}
+
+enum ItemDeletionStatus
+{
+  IDS_UNKNOWN      = 0;
+  IDS_OK           = 1;
+  IDS_NONEXISTENT  = 2; /// The item did not exist in the given document
+  IDS_IMMUTABLE    = 3; /// The item is not allowed to be modified by the API
+}
+
+message ItemDeletionResult
+{
+  kiapi.common.types.KIID id = 1;
+
+  ItemDeletionStatus status = 2;
+}
+
+message DeleteItemsResponse
+{
+  /// Specifies which document was modified, etc.
+  kiapi.common.types.ItemHeader header = 1;
+
+  /// Status of the overall request; may return IRS_OK even if no items were deleted
+  kiapi.common.types.ItemRequestStatus status = 2;
+
+  /// Status of each item requested to be deleted
+  repeated ItemDeletionResult deleted_items = 3;
+}
