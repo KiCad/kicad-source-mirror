@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-29 14:24-0800\n"
-"PO-Revision-Date: 2023-01-20 06:51+0000\n"
+"PO-Revision-Date: 2023-01-30 16:44+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.15.1\n"
+"X-Generator: Weblate 4.16-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -4143,7 +4143,7 @@ msgstr "Cores"
 #: eeschema/menubar.cpp:139 eeschema/sch_edit_frame.cpp:1423
 #: kicad/tools/kicad_manager_actions.cpp:80
 msgid "Schematic Editor"
-msgstr "Editor do esquemático"
+msgstr "Editor esquemático"
 
 #: common/eda_base_frame.cpp:1047
 msgid "Annotation Options"
@@ -9016,9 +9016,8 @@ msgid "Buses && bus labels"
 msgstr "Os barramentos && as etiquetas dos barramentos"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:51
-#, fuzzy
 msgid "Label fields"
-msgstr "Campos dos símbolos"
+msgstr "Campos das etiquetas"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:57
 msgid "Sheet titles"
@@ -9038,9 +9037,8 @@ msgid "Filters"
 msgstr "Filtros"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:87
-#, fuzzy
 msgid "Filter fields by name:"
-msgstr "Filtre os itens pela rede:"
+msgstr "Filtrar os campos por nome:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:99
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:73
@@ -10799,13 +10797,13 @@ msgid "Note: item colors are overridden in the current color theme."
 msgstr "Nota: as cores dos itens são substituídas no tema atual das cores."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:384
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "To see individual item colors uncheck '%s'\n"
 "in Preferences > Schematic Editor > Colors."
 msgstr ""
 "Para ver as cores dos itens individuais, desmarque '%s'\n"
-"em Preferências> Eeschema> Cores."
+"em Preferências> Editor esquemático > Cores."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:426
 #, c-format
@@ -23240,7 +23238,6 @@ msgstr ""
 "\tR1 + (R2|R3)...\t\tqualquer combinação das opções acima\n"
 
 #: pcb_calculator/fusing_current_help.h:2
-#, fuzzy
 msgid ""
 "You can use this calculator to check if a small track can handle a large "
 "current for a short period of time.<br>\n"
@@ -23254,11 +23251,11 @@ msgid ""
 msgstr ""
 "Você pode usar esta calculadora para verificar se uma pequena trilha pode "
 "suportar uma grande corrente por um curto período de tempo.<br>\n"
-"Esta ferramenta permite projetar um fusível, mas deve ser usada apenas como "
-"uma estimativa.\n"
+"Esta ferramenta permite projetar um fusível da trilha, porém, deve ser usada "
+"apenas como uma estimativa.\n"
 "\n"
 "A calculadora estima a energia necessária para aquecer o fio<br>\n"
-"ao seu ponto de fusão, bem como a energia necessária para a alteração da "
+"ao seu ponto de fusão, bem como, a energia necessária para a alteração da "
 "fase.<br>\n"
 "Esta energia é então comparada com a energia dissipada pela resistência do "
 "fio."
