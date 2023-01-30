@@ -168,7 +168,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportSvg( JOB* aJob )
 
     SCH_PLOT_SETTINGS settings;
     settings.m_plotAll = true;
-    settings.m_plotDrawingSheet = true;
+    settings.m_plotDrawingSheet = aSvgJob->m_plotDrawingSheet;
     settings.m_blackAndWhite = aSvgJob->m_blackAndWhite;
     settings.m_theme = aSvgJob->m_colorTheme;
     settings.m_pageSizeSelect = PAGE_SIZE_AUTO;
