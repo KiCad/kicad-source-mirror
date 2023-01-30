@@ -11,17 +11,17 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-29 14:24-0800\n"
-"PO-Revision-Date: 2023-01-20 06:51+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"PO-Revision-Date: 2023-01-30 07:26+0000\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.15.1\n"
+"X-Generator: Weblate 4.16-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -8984,9 +8984,8 @@ msgid "Buses && bus labels"
 msgstr "Magistrale i etykiety magistral"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:51
-#, fuzzy
 msgid "Label fields"
-msgstr "Pola symbolu"
+msgstr "Pola etykiety"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:57
 msgid "Sheet titles"
@@ -9006,9 +9005,8 @@ msgid "Filters"
 msgstr "Filtry"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:87
-#, fuzzy
 msgid "Filter fields by name:"
-msgstr "Filtrowane na podstawie sieci:"
+msgstr "Filtrowane pól na podstawie nazwy:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:99
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:73
@@ -10763,13 +10761,13 @@ msgid "Note: item colors are overridden in the current color theme."
 msgstr "Informacja: kolory elementów są zastąpione przez bieżący motyw."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:384
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "To see individual item colors uncheck '%s'\n"
 "in Preferences > Schematic Editor > Colors."
 msgstr ""
 "By zobaczyć indywidualne kolory elementów odznacz '%s'\n"
-"we Właściwości > Eeschema > Kolory."
+"we Właściwości > Edytor Schematów > Kolory."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:426
 #, c-format
@@ -23137,7 +23135,6 @@ msgstr ""
 "\tR1 + (R2|R3)...\t\tdowolna kombinacja powyższych\n"
 
 #: pcb_calculator/fusing_current_help.h:2
-#, fuzzy
 msgid ""
 "You can use this calculator to check if a small track can handle a large "
 "current for a short period of time.<br>\n"
@@ -23149,14 +23146,14 @@ msgid ""
 "<br>\n"
 "This energy is then compared to the one dissipated by the wire resistance."
 msgstr ""
-"Można użyć tego kalkulatora, aby sprawdzić, czy ścieżka może przenieść duży "
-"prąd w krótkim czasie.<br>\n"
+"Można użyć tego kalkulatora, aby sprawdzić, czy mała ścieżka może przenieść "
+"duży prąd w krótkim czasie.<br>\n"
 "Narzędzie pozwala zaprojektować bezpiecznik w formie ścieżki, choć powinno "
 "być używane tylko do szacowania prądu.\n"
 "\n"
 "Kalkulator szacuje energię potrzebną do podgrzania przewodnika<br>\n"
-"do jego temperatury topnienia, a także energię potrzebną do zmiany fazy."
-"<br>\n"
+"do jego temperatury topnienia, a także energię potrzebną do zmiany fazy.<br>"
+"\n"
 "Energia ta jest następnie porównywana z energią rozpraszaną przez "
 "rezystancję w postaci przewodu."
 
