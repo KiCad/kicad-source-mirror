@@ -37,8 +37,10 @@ wxString SearchHelpFileFullPath( const wxString& aBaseName )
     // help files are most likely located in the documentation install path
     basePaths.Add( PATHS::GetDocumentationPath() );
 
+#ifndef __WIN32__
     // just in case, add all known system directories to the search stack
     SystemDirsAppend( &basePaths );
+#endif
 
 #if defined( DEBUG )
     basePaths.Show( wxString( __func__ ) + wxS( ": basePaths" ) );
