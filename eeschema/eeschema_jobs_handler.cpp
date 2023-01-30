@@ -101,9 +101,9 @@ void EESCHEMA_JOBS_HANDLER::InitRenderSettings( KIGFX::SCH_RENDER_SETTINGS* aRen
 REPORTER& EESCHEMA_JOBS_HANDLER::Report( const wxString& aText, SEVERITY aSeverity )
 {
     if( aSeverity == RPT_SEVERITY_ERROR )
-        wxFprintf( stderr, aText );
+        wxFprintf( stderr, wxS( "%s\n" ), aText );
     else
-        wxPrintf( aText );
+        wxPrintf( wxS( "%s\n" ), aText );
 
     return *this;
 }
