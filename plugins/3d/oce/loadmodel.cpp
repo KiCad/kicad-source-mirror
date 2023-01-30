@@ -1005,6 +1005,13 @@ bool processLabel( const TDF_Label& aLabel, DATA& aData, SGNODE* aParent,
                     processShell( xp.Current(), aData, pptr, aItems, nullptr );
                     ret = true;
                 }
+
+                for( xp.Init( shape, TopAbs_FACE ); xp.More(); xp.Next() )
+                {
+                    const TopoDS_Face& face = TopoDS::Face( xp.Current() );
+                    processFace( face, aData, pptr, aItems, nullptr );
+                    ret = true;
+                }
             }
         }
         break;
