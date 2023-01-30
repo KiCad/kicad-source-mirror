@@ -933,10 +933,6 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                           wxEmptyString,
                                           wxS( "Portuguese (PT)" ) ) );
 
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Ivan Chuba" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Russian (RU)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Igor Plyatov" ),
                                           wxEmptyString,
                                           wxEmptyString,
@@ -985,6 +981,10 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                           wxS( "Thai (TH)" ) ) );
 
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Artem" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          wxS( "Ukrainian (UK)" ) ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Ivan Chuba" ),
                                           wxEmptyString,
                                           wxEmptyString,
                                           wxS( "Ukrainian (UK)" ) ) );
