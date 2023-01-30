@@ -672,10 +672,9 @@ public:
                 SCH_FIELD*      destField = symbol.FindField( srcName );
 
                 // Add a not existing field if it has a value for this symbol
-                bool createField = !destField && !srcValue.IsEmpty();
-
-                if( alg::contains( m_userAddedFields, srcName ) )
-                    createField = true;
+                bool createField =
+                        !destField
+                        && ( !srcValue.IsEmpty() || alg::contains( m_userAddedFields, srcName ) );
 
                 if( createField )
                 {
@@ -1314,8 +1313,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected( wxGridRangeSelectEvent& e
 {
     wxGridCellCoordsArray selectedCells = m_grid->GetSelectedCells();
 
-    if( selectedCells.GetCount() == 1 ) 
-    {   
+    if( selectedCells.GetCount() == 1 )
+    {
         int row = selectedCells[0].GetRow();
         int col = selectedCells[0].GetCol();
 
@@ -1343,7 +1342,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected( wxGridRangeSelectEvent& e
                 editor->FindSymbolAndItem( &symbol_path, nullptr, true, HIGHLIGHT_SYMBOL, wxEmptyString );
             }
 
-            return; 
+            return;
         }
     }
 
