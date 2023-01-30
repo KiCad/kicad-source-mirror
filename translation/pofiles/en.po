@@ -29418,12 +29418,6 @@ msgstr "KiCad Schematic"
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
 
-#~ msgid "Deprecated version of KICAD7_3DMODEL_DIR."
-#~ msgstr "Deprecated version of KICAD7_3DMODEL_DIR."
-
-#~ msgid "Deprecated version of KICAD7_FOOTPRINT_DIR."
-#~ msgstr "Deprecated version of KICAD7_FOOTPRINT_DIR."
-
 #~ msgid "Filter other symbol fields by name:"
 #~ msgstr "Filter other symbol fields by name:"
 
