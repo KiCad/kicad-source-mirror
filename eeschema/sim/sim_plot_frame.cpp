@@ -778,7 +778,10 @@ bool SIM_PLOT_FRAME::updatePlot( const wxString& aName, SIM_PLOT_TYPE aType,
         wxFAIL_MSG( wxT( "Unhandled plot type" ) );
     }
 
-    wxCHECK_MSG( data_y.size() >= size, false, wxT( "No (or not enough) y data values to plot" ) );
+    if( data_y.size() == 0 )
+        return false;                   // Signal no longer exists
+    else
+        wxCHECK_MSG( data_y.size() >= size, false, wxT( "Not enough y data values to plot" ) );
 
     // If we did a two-source DC analysis, we need to split the resulting vector and add traces
     // for each input step
