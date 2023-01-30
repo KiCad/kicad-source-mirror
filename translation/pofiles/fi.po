@@ -17,16 +17,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-29 14:24-0800\n"
-"PO-Revision-Date: 2023-01-20 06:51+0000\n"
+"PO-Revision-Date: 2023-01-30 23:24+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.1\n"
+"X-Generator: Weblate 4.16-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -8963,9 +8963,8 @@ msgid "Buses && bus labels"
 msgstr "Väylät && Väylänimikkeet"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:51
-#, fuzzy
 msgid "Label fields"
-msgstr "Symbolikentät"
+msgstr "Nimeä kentät"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:57
 msgid "Sheet titles"
@@ -8985,9 +8984,8 @@ msgid "Filters"
 msgstr "Suodattimet"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:87
-#, fuzzy
 msgid "Filter fields by name:"
-msgstr "Suodata kohteet verkon(net) mukaan:"
+msgstr "Suodata kohteet nimen mukaan:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:99
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:73
@@ -10736,13 +10734,13 @@ msgid "Note: item colors are overridden in the current color theme."
 msgstr "Huomaa: kohteen värit ohitetaan nykyisessä väriteemassa."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:384
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "To see individual item colors uncheck '%s'\n"
 "in Preferences > Schematic Editor > Colors."
 msgstr ""
-"Jos haluat nähdä yksittäisten tuotteiden värit, poista valinta %s\n"
-"kohdassa Asetukset> Eeschema> Värit."
+"Jos haluat nähdä yksittäisen kohteen värit, poista valinta '%s'\n"
+"kohdassa Asetukset > Kytkentäkaavioeditori > Värit."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:426
 #, c-format
@@ -23053,7 +23051,6 @@ msgstr ""
 "R1 + (R2 | R3) ... : mikä tahansa yllä olevien yhdistelmä\n"
 
 #: pcb_calculator/fusing_current_help.h:2
-#, fuzzy
 msgid ""
 "You can use this calculator to check if a small track can handle a large "
 "current for a short period of time.<br>\n"
@@ -23070,9 +23067,9 @@ msgstr ""
 "Tämän työkalun avulla voit suunnitella kiskosulakkeen, mutta sitä tulee "
 "käyttää vain arviona.\n"
 "\n"
-"Laskin arvioi johtimen lämmittämiseen tarvittavan energian<br>\n"
+"Laskin arvioi johtimen kuumenemiseen tarvittavan energian<br>\n"
 "sulamispisteeseensä sekä vaiheen muutokseen tarvittava energia.<br>\n"
-"Tätä energiaa verrataan sitten johtimen vastuksen hajottamaan energiaan."
+"Tätä energiaa verrataan sitten johtimen vastuksen luovuttamaan energiaan."
 
 #: pcb_calculator/pcb_calculator_frame.cpp:72
 msgid "General system design"
