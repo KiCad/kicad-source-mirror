@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -80,7 +80,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	bSizer41->Add( m_syntaxHelp, 0, wxBOTTOM|wxRIGHT|wxLEFT, 6 );
 
 
-	m_textEntrySizer->Add( bSizer41, wxGBPosition( 1, 5 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_RIGHT|wxLEFT, 80 );
+	m_textEntrySizer->Add( bSizer41, wxGBPosition( 1, 5 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_RIGHT|wxLEFT, 5 );
 
 	m_fontLabel = new wxStaticText( this, wxID_ANY, _("Font:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_fontLabel->Wrap( -1 );

@@ -272,7 +272,7 @@
                             </object>
                         </object>
                         <object class="gbsizeritem" expanded="1">
-                            <property name="border">80</property>
+                            <property name="border">5</property>
                             <property name="colspan">1</property>
                             <property name="column">5</property>
                             <property name="flag">wxEXPAND|wxALIGN_RIGHT|wxLEFT</property>
