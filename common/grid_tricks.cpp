@@ -35,6 +35,7 @@
 // why not us too for now.
 #define COL_SEP     wxT( '\t' )
 #define ROW_SEP     wxT( '\n' )
+#define ROW_SEP_R   wxT( '\r' )
 
 
 GRID_TRICKS::GRID_TRICKS( WX_GRID* aGrid ) :
@@ -480,8 +481,11 @@ void GRID_TRICKS::onCharHook( wxKeyEvent& ev )
 
                 if( data.GetText().Contains( COL_SEP ) || data.GetText().Contains( ROW_SEP ) )
                 {
-                    m_grid->CommitPendingChanges( true /* quiet mode */ );
-                    paste_text( data.GetText() );
+                    wxString stripped( data.GetText() );
+                    stripped.Replace( ROW_SEP, " " );
+                    stripped.Replace( ROW_SEP_R, " " );
+                    stripped.Replace( COL_SEP, " " );
+                    paste_text( stripped );
                     handled = true;
                 }
             }
@@ -709,10 +713,9 @@ void GRID_TRICKS::paste_text( const wxString& cb_text )
         if( m_sel_row_count > 1 )
             is_selection = true;
     }
-    else
+    else if( m_sel_col_count > 1 || m_sel_row_count > 1 )
     {
-        if( m_grid->IsSelection() )
-            is_selection = true;
+        is_selection = true;
     }
 
     wxStringTokenizer rows( cb_text, ROW_SEP, wxTOKEN_RET_EMPTY );
