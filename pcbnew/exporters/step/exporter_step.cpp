@@ -123,6 +123,8 @@ EXPORTER_STEP::EXPORTER_STEP( BOARD* aBoard, const EXPORTER_STEP_PARAMS& aParams
 
     m_resolver = std::make_unique<FILENAME_RESOLVER>();
     m_resolver->Set3DConfigDir( wxT( "" ) );
+    // needed to add the project to the search stack
+    m_resolver->SetProject( aBoard->GetProject() );
     m_resolver->SetProgramBase( &Pgm() );
 }
 
@@ -188,7 +190,7 @@ bool EXPORTER_STEP::composePCB( FOOTPRINT* aFootprint, VECTOR2D aOrigin )
             continue;
 
         std::vector<wxString> searchedPaths;
-        wxString mname = m_resolver->ResolvePath( fp_model.m_Filename, wxEmptyString );
+        wxString mname = m_resolver->ResolvePath( fp_model.m_Filename, footprintBasePath );
 
 
         if( !wxFileName::FileExists( mname ) )
