@@ -10,16 +10,16 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-29 14:24-0800\n"
-"PO-Revision-Date: 2023-01-20 06:51+0000\n"
+"PO-Revision-Date: 2023-01-30 07:26+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.1\n"
+"X-Generator: Weblate 4.16-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -2964,7 +2964,7 @@ msgstr "Tema:"
 
 #: common/dialogs/panel_color_settings_base.cpp:35
 msgid "Override individual item colors"
-msgstr "Åsidosätt enskilda artikelfärger"
+msgstr "Åsidosätt individuella objekts färger"
 
 #: common/dialogs/panel_color_settings_base.cpp:36
 msgid ""
@@ -8951,9 +8951,8 @@ msgid "Buses && bus labels"
 msgstr "Bussar && buss etiketter"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:51
-#, fuzzy
 msgid "Label fields"
-msgstr "Symbolfält"
+msgstr "Etikettfält"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:57
 msgid "Sheet titles"
@@ -8973,9 +8972,8 @@ msgid "Filters"
 msgstr "Filter"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:87
-#, fuzzy
 msgid "Filter fields by name:"
-msgstr "Filtrera objekt efter nät:"
+msgstr "Filtrera fält efter namn:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:99
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:73
@@ -10722,13 +10720,13 @@ msgid "Note: item colors are overridden in the current color theme."
 msgstr "Obs! Objektfärger åsidosätts i det aktuella färgtemat."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:384
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "To see individual item colors uncheck '%s'\n"
 "in Preferences > Schematic Editor > Colors."
 msgstr ""
-"Avmarkera '%s' för att se enskilda artikelfärger.\n"
-"i Inställningar> Eeschema> Färger."
+"Avmarkera '%s' i Inställningar > Kretsschemaredigerare > Färger\n"
+"för att se färger för enskilda objekt."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:426
 #, c-format
@@ -17164,9 +17162,8 @@ msgid "Create SVG file from the current symbol"
 msgstr "Skapa SVG-fil från den aktuella symbolen"
 
 #: eeschema/tools/ee_actions.cpp:226
-#, fuzzy
 msgid "Synchronized Pins Mode"
-msgstr "Redigeringsläge för synkroniserade stift"
+msgstr "Redigering med synkroniserade stift"
 
 #: eeschema/tools/ee_actions.cpp:227
 msgid ""
@@ -17745,14 +17742,14 @@ msgstr "Hitta gamla symboler i projektet och byt namn på / rädda dem"
 
 #: eeschema/tools/ee_actions.cpp:649
 msgid "Remap Legacy Library Symbols..."
-msgstr "Remap Legacy Library Symbols ..."
+msgstr "Ny tilldelning av symboler från gamla bibliotek..."
 
 #: eeschema/tools/ee_actions.cpp:650
 msgid ""
 "Remap library symbol references in legacy schematics to the symbol library "
 "table"
 msgstr ""
-"Omforma bibliotekssymbolreferenser i äldre kretsscheman till "
+"Länka bibliotekssymbolreferenser i äldre kretsscheman till "
 "symbolbibliotekstabellen"
 
 #: eeschema/tools/ee_actions.cpp:655
@@ -23047,7 +23044,6 @@ msgstr ""
 "\tR1 + (R2|R3)...\t\tnågon kombination av ovanstående\n"
 
 #: pcb_calculator/fusing_current_help.h:2
-#, fuzzy
 msgid ""
 "You can use this calculator to check if a small track can handle a large "
 "current for a short period of time.<br>\n"
@@ -23059,16 +23055,16 @@ msgid ""
 "<br>\n"
 "This energy is then compared to the one dissipated by the wire resistance."
 msgstr ""
-"Du kan använda detta beräkningsverktyg för att kontrollera om en liten "
-"ledare kan hantera en hög ström under ett kort tidsintervall.<br>\n"
+"Du kan använda detta beräkningsverktyg för att kontrollera om en smal ledare "
+"kan hantera en hög ström under ett kort tidsintervall.<br>\n"
 "Detta verktyg låter dig designa en ledare som säkring, men skall endast "
 "användas som en uppskattning.\n"
 "\n"
 "Beräkningsverktyget uppskattar energin som behövs för att hetta upp "
 "ledaren<br>\n"
-"till smältpunkten, såväl som energin som behövs för tillståndsförändring."
-"<br>\n"
-"Denna energi jämförs sedan med den avgivna energin i ledarresistansen."
+"till smältpunkten, såväl som energin som behövs för tillståndsförändring.<br>"
+"\n"
+"Denna energi jämförs sedan med den i ledarresistansen avgivna energin."
 
 #: pcb_calculator/pcb_calculator_frame.cpp:72
 msgid "General system design"
@@ -23472,6 +23468,7 @@ msgid "Zodd"
 msgstr "Zudda"
 
 #: pcb_calculator/transline_ident.cpp:339
+#, fuzzy
 msgid "Odd mode impedance (lines driven by opposite (differential) voltages)"
 msgstr ""
 "Udda lägesimpedans (linjer som drivs av motsatta (differentiella) spänningar)"
@@ -33747,9 +33744,8 @@ msgid "No footprint selected."
 msgstr "Inget fotavtryck har valts."
 
 #: pcbnew/footprint_edit_frame.cpp:1294
-#, fuzzy
 msgid "Footprint Image File Name"
-msgstr "Filnamn för fotavtrycks grafik"
+msgstr "Filnamn för fotavtrycksbild"
 
 #: pcbnew/footprint_editor_utils.cpp:252
 msgid "Edit Zone"
@@ -37346,7 +37342,8 @@ msgid ""
 "Check this option to allow teardrop for these pads."
 msgstr ""
 "Lödytor inne i en kopparzon med samma nät saknar kragförstärkningar.\n"
-"Markera denna option för att tillåta kragförstärkningar för dessa lödytor."
+"Markera detta alternativ för att tillåta kragförstärkningar för dessa "
+"lödytor."
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:395
 msgid "Curve points:"
