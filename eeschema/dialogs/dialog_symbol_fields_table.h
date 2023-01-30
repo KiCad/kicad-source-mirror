@@ -54,6 +54,7 @@ private:
     void LoadFieldNames();
 
     void OnColSort( wxGridEvent& aEvent );
+    void OnColMove( wxGridEvent& aEvent );
 
     void OnColumnItemToggled( wxDataViewEvent& event ) override;
     void OnGroupSymbolsToggled( wxCommandEvent& event ) override;

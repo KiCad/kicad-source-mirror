@@ -768,6 +768,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
         DIALOG_SYMBOL_FIELDS_TABLE_BASE( parent ),
         m_parent( parent )
 {
+    EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     wxSize defaultDlgSize = ConvertDialogToPixels( wxSize( 600, 300 ) );
     int    nameColWidthMargin = 44;
 
@@ -803,6 +804,9 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
     m_fieldsCtrl->SetIndent( 0 );
 
     m_filter->SetDescriptiveText( _( "Filter" ) );
+    m_filter->ChangeValue( cfg->m_FieldEditorPanel.filter_string );
+
+    m_groupSymbolsBox->SetValue( cfg->m_FieldEditorPanel.group_symbols );
 
     m_dataModel = new FIELDS_EDITOR_GRID_DATA_MODEL( m_parent, m_symbolsList );
 
@@ -831,7 +835,6 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
     m_splitterMainWindow->SetSashPosition( fieldsMinWidth + 40 );
 
     m_dataModel->RebuildRows( m_filter, m_groupSymbolsBox, m_fieldsCtrl );
-    m_dataModel->Sort( 0, true );
 
     m_grid->UseNativeColHeader( true );
     m_grid->SetTable( m_dataModel, true );
@@ -876,13 +879,16 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
     m_grid->SetColFormatNumber( m_dataModel->GetColsCount() - 1 );
     m_grid->AutoSizeColumns( false );
 
+    // Restore column sorting order and widths
+    int  sortCol = 0;
+    bool sortAscending = true;
+
     for( int col = 0; col < m_grid->GetNumberCols(); ++col )
     {
         // Columns are hidden by setting their width to 0 so if we resize them they will
         // become unhidden.
         if( m_grid->IsColShown( col ) )
         {
-            EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
             std::string        key( m_dataModel->GetCanonicalColLabel( col ).ToUTF8() );
 
             if( cfg->m_FieldEditorPanel.column_widths.count( key ) )
@@ -900,7 +906,27 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
                 else
                     m_grid->SetColSize( col, Clamp( 100, textWidth, maxWidth ) );
             }
+
+            if( cfg->m_FieldEditorPanel.column_sorts.count( key ) )
+            {
+                sortCol = col;
+                sortAscending = cfg->m_FieldEditorPanel.column_sorts[key];
+            }
         }
+    }
+
+    m_dataModel->Sort( sortCol, sortAscending );
+    m_grid->SetSortingColumn( sortCol, sortAscending );
+
+    // Restore user column order
+    for( int col = 0; col < (int) cfg->m_FieldEditorPanel.column_order.size(); col++ )
+    {
+        int pos = cfg->m_FieldEditorPanel.column_order[col];
+
+        if( col >= m_grid->GetNumberCols() || pos >= m_grid->GetNumberCols() )
+            break;
+
+        m_grid->SetColPos( col, pos );
     }
 
     m_grid->SelectRow( 0 );
@@ -916,6 +942,8 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
     // Connect Events
     m_grid->Connect( wxEVT_GRID_COL_SORT,
                      wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnColSort ), nullptr, this );
+    m_grid->Connect( wxEVT_GRID_COL_MOVE,
+                     wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnColMove ), nullptr, this );
 }
 
 
@@ -924,6 +952,9 @@ DIALOG_SYMBOL_FIELDS_TABLE::~DIALOG_SYMBOL_FIELDS_TABLE()
     // Disconnect Events
     m_grid->Disconnect( wxEVT_GRID_COL_SORT,
                         wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnColSort ), nullptr,
+                        this );
+    m_grid->Disconnect( wxEVT_GRID_COL_SORT,
+                        wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnColMove ), nullptr,
                         this );
 
     // Delete the GRID_TRICKS.
@@ -1237,6 +1268,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRenameField( wxCommandEvent& event )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnFilterText( wxCommandEvent& aEvent )
 {
+    EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+
+    cfg->m_FieldEditorPanel.filter_string = m_filter->GetValue();
     m_dataModel->RebuildRows( m_filter, m_groupSymbolsBox, m_fieldsCtrl );
     m_dataModel->Sort( m_grid->GetSortingColumn(), m_grid->IsSortOrderAscending() );
     m_grid->ForceRefresh();
@@ -1327,6 +1361,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnColumnItemToggled( wxDataViewEvent& event )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnGroupSymbolsToggled( wxCommandEvent& event )
 {
+    EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+
+    cfg->m_FieldEditorPanel.group_symbols = m_groupSymbolsBox->GetValue();
     m_dataModel->RebuildRows( m_filter, m_groupSymbolsBox, m_fieldsCtrl );
     m_dataModel->Sort( m_grid->GetSortingColumn(), m_grid->IsSortOrderAscending() );
     m_grid->ForceRefresh();
@@ -1335,8 +1372,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnGroupSymbolsToggled( wxCommandEvent& event )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnColSort( wxGridEvent& aEvent )
 {
-    int sortCol = aEvent.GetCol();
-    bool ascending;
+    EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    int                sortCol = aEvent.GetCol();
+    std::string        key( m_dataModel->GetCanonicalColLabel( sortCol ).ToUTF8() );
+    bool               ascending;
 
     // This is bonkers, but wxWidgets doesn't tell us ascending/descending in the event, and
     // if we ask it will give us pre-event info.
@@ -1351,8 +1390,27 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnColSort( wxGridEvent& aEvent )
         ascending = true;
     }
 
+    // We only support sorting on one column at this time
+    cfg->m_FieldEditorPanel.column_sorts.clear();
+    cfg->m_FieldEditorPanel.column_sorts[key] = ascending;
+
     m_dataModel->Sort( sortCol, ascending );
     m_grid->ForceRefresh();
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::OnColMove( wxGridEvent& aEvent )
+{
+    CallAfter(
+            [this]()
+            {
+                EESCHEMA_SETTINGS* cfg =
+                        static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+                cfg->m_FieldEditorPanel.column_order.clear();
+
+                for( int i = 0; i < m_grid->GetNumberCols(); i++ )
+                    cfg->m_FieldEditorPanel.column_order.emplace_back( m_grid->GetColPos( i ) );
+            } );
 }
 
 
