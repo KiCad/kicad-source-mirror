@@ -438,8 +438,62 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
         }
     }
 
+    // Save the modified symbol library table. We need to look this up by name in each table to find
+    // whether the new library is a global or project entity as the code above to choose the library
+    // returns a different type depending on whether a global or project library is chosen.
+    SYMBOL_LIB_TABLE* globalTable = &SYMBOL_LIB_TABLE::GetGlobalLibTable();
+    SYMBOL_LIB_TABLE* projectTable = nullptr;
+
+    if( !m_frame->Prj().IsNullProject() )
+        projectTable = m_frame->Prj().SchSymbolLibTable();
+
+    if( globalTable->FindRow( targetLib ) )
+    {
+        try
+        {
+            wxString globalTablePath = SYMBOL_LIB_TABLE::GetGlobalTableFileName();
+            globalTable->Save( globalTablePath );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            wxString msg;
+            msg.Printf( _( "Error saving global library table:\n\n%s" ), ioe.What() );
+            wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
+        }
+    }
+    else if( projectTable && projectTable->FindRow( targetLib ) )
+    {
+        try
+        {
+            wxString   projectPath = m_frame->Prj().GetProjectPath();
+            wxFileName projectTableFn( projectPath, SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
+            projectTable->Save( projectTableFn.GetFullPath() );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            wxString msg;
+            msg.Printf( _( "Error saving project-specific library table:\n\n%s" ), ioe.What() );
+            wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
+        }
+    }
+
     if( append )
+    {
+        std::set<SCH_SCREEN*> processedScreens;
+        SCH_SHEET_LIST        sheets = m_frame->Schematic().GetSheets();
+
+        for( SCH_SHEET_PATH& sheet : sheets )
+        {
+            SCH_SCREEN* screen = sheet.LastScreen();
+            if( processedScreens.find( ( screen ) ) == processedScreens.end() )
+            {
+                processedScreens.insert( screen );
+                screen->UpdateSymbolLinks();
+            }
+        }
+
         m_frame->OnModify();
+    }
 
     return 0;
 }
