@@ -519,7 +519,8 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                         DisplayErrorMessage( m_frame, e.What() );
                     }
                 }
-                else if( item->IsType( { SCH_ITEM_LOCATE_WIRE_T } ) )
+                else if( item->IsType( { SCH_ITEM_LOCATE_WIRE_T } )
+                         || item->IsType( { SCH_JUNCTION_T } ) )
                 {
                     if( SCH_CONNECTION* conn = static_cast<SCH_ITEM*>( item )->Connection() )
                     {
