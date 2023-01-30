@@ -1131,43 +1131,98 @@ bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, std::vector<T_field>* aFields,
             {
                 mantissa->Replace( wxS( " " ), wxEmptyString );
 
+                wxChar ambiguousSeparator = '?';
                 wxChar thousandsSeparator = '?';
+                bool   thousandsSeparatorFound = false;
                 wxChar decimalSeparator = '?';
-                int    length = (int) mantissa->length();
-                int    radix = length;
+                bool   decimalSeparatorFound = false;
+                int    digits = 0;
 
-                for( int ii = length - 1; ii >= 0; --ii )
+                for( int ii = (int) mantissa->length() - 1; ii >= 0; --ii )
                 {
                     wxChar c = mantissa->GetChar( ii );
 
-                    if( c == '.' || c == ',' )
+                    if( c >= '0' && c <= '9' )
                     {
-                        if( ( radix - ii ) % 4 == 0 )
+                        digits += 1;
+                    }
+                    else if( c == '.' || c == ',' )
+                    {
+                        if( decimalSeparator != '?' || thousandsSeparator != '?' )
                         {
-                            if( thousandsSeparator == '?' )
+                            // We've previously found a non-ambiguous separator...
+
+                            if( c == decimalSeparator )
                             {
-                                thousandsSeparator = c;
+                                if( thousandsSeparatorFound )
+                                    return false;       // decimal before thousands
+                                else if( decimalSeparatorFound )
+                                    return false;       // more than one decimal
+                                else
+                                    decimalSeparatorFound = true;
+                            }
+                            else if( c == thousandsSeparator )
+                            {
+                                if( digits != 3 )
+                                    return false;       // thousands not followed by 3 digits
+                                else
+                                    thousandsSeparatorFound = true;
+                            }
+                        }
+                        else if( ambiguousSeparator != '?' )
+                        {
+                            // We've previously found a separator, but we don't know for sure
+                            // which...
+
+                            if( c == ambiguousSeparator )
+                            {
+                                // They both must be thousands separators
+                                thousandsSeparator = ambiguousSeparator;
+                                thousandsSeparatorFound = true;
                                 decimalSeparator = c == '.' ? ',' : '.';
                             }
-                            else if( thousandsSeparator != c )
+                            else
                             {
-                                return false;
+                                // The first must have been a decimal, and this must be a
+                                // thousands.
+                                decimalSeparator = ambiguousSeparator;
+                                decimalSeparatorFound = true;
+                                thousandsSeparator = c;
+                                thousandsSeparatorFound = true;
                             }
                         }
                         else
                         {
-                            if( decimalSeparator == '?' )
+                            // This is the first separator...
+
+                            // If it's followed by 3 digits then it could be either.
+                            // Otherwise it -must- be a decimal separator (and the thousands
+                            // separator must be the other).
+                            if( digits == 3 )
                             {
-                                decimalSeparator = c;
-                                thousandsSeparator = c == '.' ? ',' : '.';
-                                radix = ii;
+                                ambiguousSeparator = c;
                             }
                             else
                             {
-                                return false;
+                                decimalSeparator = c;
+                                decimalSeparatorFound = true;
+                                thousandsSeparator = c == '.' ? ',' : '.';
                             }
                         }
+
+                        digits = 0;
                     }
+                    else
+                    {
+                        digits = 0;
+                    }
+                }
+
+                // If we found nothing difinitive then we have to assume SPICE-native syntax
+                if( decimalSeparator == '?' && thousandsSeparator == '?' )
+                {
+                    decimalSeparator = '.';
+                    thousandsSeparator = ',';
                 }
 
                 mantissa->Replace( thousandsSeparator, wxEmptyString );

@@ -71,12 +71,15 @@ BOOST_AUTO_TEST_CASE( InferPassiveValues )
         { wxString( "R4" ),  wxString( "3,000.5" ),      wxString( "r=\"3000.5\"" )    },
         { wxString( "R5" ),  wxString( "3.000,5" ),      wxString( "r=\"3000.5\"" )    },
         { wxString( "R6" ),  wxString( "3000.5" ),       wxString( "r=\"3000.5\"" )    },
+        { wxString( "R7" ),  wxString( "3,000K" ),       wxString( "r=\"3000K\"" )     },
+        { wxString( "R8" ),  wxString( "3.000K" ),       wxString( "r=\"3.000K\"" )    },
+        { wxString( "R9" ),  wxString( "3.0,000,000" ),  wxString( "" )                },
 
         { wxString( "X1" ),  wxString( "3.3K" ),         wxString( "" )                },
 
         { wxString( "C14" ), wxString( "33,000,000uF" ), wxString( "c=\"33000000u\"" ) },
         { wxString( "C15" ), wxString( "33 000 000uF" ), wxString( "c=\"33000000u\"" ) },
-        { wxString( "C16" ), wxString( "33.000,000uF" ), wxString( "" )                }
+        { wxString( "C16" ), wxString( "33.000,000uF" ), wxString( "c=\"33000.000u\"" )},
     };
 
     std::unique_ptr<LIB_SYMBOL> symbol = std::make_unique<LIB_SYMBOL>( "symbol", nullptr );
