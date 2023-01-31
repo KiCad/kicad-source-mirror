@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Sylwester Kocjan <s.kocjan@o2.pl>
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -30,19 +30,6 @@ class SIMULATION_MODEL
 {
 public:
     virtual ~SIMULATION_MODEL() {};
-};
-
-
-class SIMULATION_RESULTS
-{
-public:
-    virtual ~SIMULATION_RESULTS() {};
-};
-
-
-class SIMULATION
-{
-    virtual ~SIMULATION(){};
 };
 
 
@@ -83,8 +70,6 @@ public:
      * @return True in case of success, false otherwise.
      */
     virtual bool Run() = 0;
-    // virtual bool Run( SIMULATION* aSim ) = 0;
-    // virtual SIM_RESULT Run( SPICE_SIMULATION* aSim ) = 0;
 
     /**
      * Halt the simulation.
