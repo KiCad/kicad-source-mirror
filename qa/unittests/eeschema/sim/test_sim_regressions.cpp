@@ -130,7 +130,7 @@ BOOST_FIXTURE_TEST_CASE( DualNMOSAmp, TEST_SIM_REGRESSIONS_FIXTURE )
     MOCK_EXPECT( program.GetLocalEnvVariables ).returns( ENV_VAR_MAP() );
 
     TestNetlist( "issue13162" );
-    TestTranPoint( 0.030, { { "V(out)", 0.535 } } );
+    TestTranPoint( 0.030, { { "V(out)", 0.557 } } );
     TestTranPoint( 0.035, { { "V(out)", -1.437 } } );
 }
 

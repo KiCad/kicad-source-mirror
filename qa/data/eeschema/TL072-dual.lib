@@ -1,6 +1,8 @@
 * A dual opamp ngspice model
+* Actual circuit uses TL072.301, available from TI, but we substitute a similar
+* model for the regression test to avoid any potential licensing issues.
 .subckt TL072c 1out 1in- 1in+ vcc- 2in+ 2in- 2out vcc+
-.include TL072.301
-XU1A 1in+ 1in- vcc+ vcc- 1out TL072
-XU1B 2in+ 2in- vcc+ vcc- 2out TL072
+.include TL072-like.lib
+XU1A 1in+ 1in- vcc+ vcc- 1out OPAMP
+XU1B 2in+ 2in- vcc+ vcc- 2out OPAMP
 .ends

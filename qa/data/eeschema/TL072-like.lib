@@ -1,0 +1,33 @@
+* An opamp similar to the TI TL072.
+*               IN+ IN- Vcc  Vee  OUT
+.subckt OPAMP    1   2  101  102  82
+*
+  J1    11   2 10 JX
+  J2    12   1 10 JX
+  D1    82  53 DX
+  D2    54  82 DX
+  D3    90  91 DX
+  D4    92  90 DX
+  D5   102 101 DX
+  R1     6   9 100000
+  R2     8  82 150
+  R3     7  99 150
+  R4    10  99 1000000
+  R5   102  11 3500
+  R6   102  12 3500
+  R7   101 102 2100
+  HLIM  90   0 V4 1K
+  GA     6   0 11 12 300E-6
+  GCM    0   6 10 99 9E-9
+  ISS  101  10 DC 200E-6
+  V1     9   0 DC 0
+  V2   101  53 DC 2.5
+  V3    54 102 DC 2.5
+  V4     7   8 DC 0
+  V5    91   0 DC 15
+  V6     0  92 DC 15
+  FB     7  99 POLY(5) V1 V2 V3 V5 V6 0 5E6 -5E6 5E6 5E6 -5E6
+  EGND  99   0 POLY(2) (101,0) (102,0) 0 0.5 0.5
+.model DX D(is=800E-18)
+.model JX PJF(is=15E-12 beta=270E-6 vto=-1)
+.ends
