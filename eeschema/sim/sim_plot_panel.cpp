@@ -353,7 +353,7 @@ void CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
 }
 
 
-bool CURSOR::Inside( wxPoint& aPoint )
+bool CURSOR::Inside( const wxPoint& aPoint ) const
 {
     if( !m_window )
         return false;

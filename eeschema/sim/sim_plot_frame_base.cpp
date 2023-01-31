@@ -114,11 +114,11 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_signalsGrid->SetMargins( 0, 0 );
 
 	// Columns
-	m_signalsGrid->SetColSize( 0, 196 );
-	m_signalsGrid->SetColSize( 1, 50 );
-	m_signalsGrid->SetColSize( 2, 50 );
-	m_signalsGrid->SetColSize( 3, 54 );
-	m_signalsGrid->SetColSize( 4, 54 );
+	m_signalsGrid->SetColSize( 0, 204 );
+	m_signalsGrid->SetColSize( 1, 45 );
+	m_signalsGrid->SetColSize( 2, 45 );
+	m_signalsGrid->SetColSize( 3, 55 );
+	m_signalsGrid->SetColSize( 4, 55 );
 	m_signalsGrid->EnableDragColMove( false );
 	m_signalsGrid->EnableDragColSize( true );
 	m_signalsGrid->SetColLabelValue( 0, _("Signal") );
@@ -173,8 +173,8 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	// Columns
 	m_cursorsGrid->SetColSize( 0, 44 );
 	m_cursorsGrid->SetColSize( 1, 152 );
-	m_cursorsGrid->SetColSize( 2, 110 );
-	m_cursorsGrid->SetColSize( 3, 110 );
+	m_cursorsGrid->SetColSize( 2, 103 );
+	m_cursorsGrid->SetColSize( 3, 106 );
 	m_cursorsGrid->EnableDragColMove( false );
 	m_cursorsGrid->EnableDragColSize( true );
 	m_cursorsGrid->SetColLabelValue( 0, _("Cursor") );

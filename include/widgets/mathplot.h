@@ -370,7 +370,7 @@ public:
     /** Checks whether a point is inside the info box rectangle.
      *  @param point The point to be checked
      *  @return \a true if the point is inside the bounding box */
-    virtual bool Inside( wxPoint& point );
+    virtual bool Inside( const wxPoint& point ) const;
 
     /** Moves the layer rectangle of given pixel deltas.
      *  @param delta The wxPoint container for delta coordinates along x and y. Units are in pixels. */

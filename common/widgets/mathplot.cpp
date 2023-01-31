@@ -28,6 +28,7 @@
 #include "wx/intl.h"
 #include "wx/dcclient.h"
 #include "wx/cursor.h"
+#include "gal/cursors.h"
 #endif
 
 #include <widgets/mathplot.h>
@@ -103,7 +104,8 @@ mpInfoLayer::mpInfoLayer()
 }
 
 
-mpInfoLayer::mpInfoLayer( wxRect rect, const wxBrush* brush ) : m_dim( rect )
+mpInfoLayer::mpInfoLayer( wxRect rect, const wxBrush* brush ) :
+        m_dim( rect )
 {
     m_brush = *brush;
     m_reference.x   = rect.x;
@@ -124,7 +126,7 @@ void mpInfoLayer::UpdateInfo( mpWindow& w, wxEvent& event )
 }
 
 
-bool mpInfoLayer::Inside( wxPoint& point )
+bool mpInfoLayer::Inside( const wxPoint& point ) const
 {
     return m_dim.Contains( point );
 }
@@ -1812,8 +1814,12 @@ void mpWindow::OnMouseMove( wxMouseEvent& event )
         return;
     }
 
+    wxCursor cursor = wxCURSOR_MAGNIFIER;
+
     if( event.m_middleDown )
     {
+        cursor = wxCURSOR_ARROW;
+
         // The change:
         int Ax  = m_mouseMClick.x - event.GetX();
         int Ay  = m_mouseMClick.y - event.GetY();
@@ -1836,60 +1842,59 @@ void mpWindow::OnMouseMove( wxMouseEvent& event )
         if( updateRequired )
             UpdateAll();
     }
-    else
+    else if( event.m_leftDown )
     {
-        if( event.m_leftDown )
+        if( m_movingInfoLayer )
         {
-            if( m_movingInfoLayer == NULL )
-            {
-                wxClientDC dc( this );
-                wxPen pen( m_fgColour, 1, wxPENSTYLE_DOT );
-                dc.SetPen( pen );
-                dc.SetBrush( *wxTRANSPARENT_BRUSH );
-                dc.DrawRectangle( m_mouseLClick.x, m_mouseLClick.y,
-                        event.GetX() - m_mouseLClick.x, event.GetY() - m_mouseLClick.y );
-                m_zooming = true;
-                m_zoomRect.x    = m_mouseLClick.x;
-                m_zoomRect.y    = m_mouseLClick.y;
-                m_zoomRect.width    = event.GetX() - m_mouseLClick.x;
-                m_zoomRect.height   = event.GetY() - m_mouseLClick.y;
-            }
-            else
-            {
-                wxPoint moveVector( event.GetX() - m_mouseLClick.x, event.GetY() - m_mouseLClick.y );
-                m_movingInfoLayer->Move( moveVector );
-                m_zooming = false;
-            }
+            cursor = wxCURSOR_SIZEWE;
 
-            UpdateAll();
+            wxPoint moveVector( event.GetX() - m_mouseLClick.x, event.GetY() - m_mouseLClick.y );
+            m_movingInfoLayer->Move( moveVector );
+            m_zooming = false;
         }
         else
         {
-#if 0
-            wxLayerList::iterator li;
+            cursor = wxCURSOR_MAGNIFIER;
 
-            for( li = m_layers.begin(); li != m_layers.end(); li++ )
-            {
-                if( (*li)->IsInfo() && (*li)->IsVisible() )
-                {
-                    mpInfoLayer* tmpLyr = (mpInfoLayer*) (*li);
-                    tmpLyr->UpdateInfo( *this, event );
-                    // UpdateAll();
-                    RefreshRect( tmpLyr->GetRectangle() );
-                }
-            }
-
-#endif
-            /* if (m_coordTooltip) {
-             *  wxString toolTipContent;
-             *  toolTipContent.Printf( "X = %f\nY = %f", p2x(event.GetX()), p2y(event.GetY()));
-             *  wxTipWindow** ptr = NULL;
-             *  wxRect rectBounds(event.GetX(), event.GetY(), 5, 5);
-             *  wxTipWindow* tip = new wxTipWindow(this, toolTipContent, 100, ptr, &rectBounds);
-             *
-             *  } */
+            wxClientDC dc( this );
+            wxPen pen( m_fgColour, 1, wxPENSTYLE_DOT );
+            dc.SetPen( pen );
+            dc.SetBrush( *wxTRANSPARENT_BRUSH );
+            dc.DrawRectangle( m_mouseLClick.x, m_mouseLClick.y,
+                    event.GetX() - m_mouseLClick.x, event.GetY() - m_mouseLClick.y );
+            m_zooming = true;
+            m_zoomRect.x    = m_mouseLClick.x;
+            m_zoomRect.y    = m_mouseLClick.y;
+            m_zoomRect.width    = event.GetX() - m_mouseLClick.x;
+            m_zoomRect.height   = event.GetY() - m_mouseLClick.y;
         }
+
+        UpdateAll();
     }
+    else
+    {
+        for( mpLayer* layer : m_layers)
+        {
+            if( layer->IsInfo() && layer->IsVisible() )
+            {
+                mpInfoLayer* infoLayer = (mpInfoLayer*) layer;
+
+                if( infoLayer->Inside( event.GetPosition() ) )
+                    cursor = wxCURSOR_SIZEWE;
+            }
+        }
+
+        /* if (m_coordTooltip) {
+         *  wxString toolTipContent;
+         *  toolTipContent.Printf( "X = %f\nY = %f", p2x(event.GetX()), p2y(event.GetY()));
+         *  wxTipWindow** ptr = NULL;
+         *  wxRect rectBounds(event.GetX(), event.GetY(), 5, 5);
+         *  wxTipWindow* tip = new wxTipWindow(this, toolTipContent, 100, ptr, &rectBounds);
+         *
+         *  } */
+    }
+
+    SetCursor( cursor );
 
     event.Skip();
 }

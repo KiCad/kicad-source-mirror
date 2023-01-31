@@ -69,7 +69,7 @@ public:
         m_updateRequired = true;
     }
 
-    bool Inside( wxPoint& aPoint ) override;
+    bool Inside( const wxPoint& aPoint ) const override;
 
     void Move( wxPoint aDelta ) override
     {
