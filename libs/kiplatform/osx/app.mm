@@ -21,11 +21,13 @@
 #include <kiplatform/app.h>
 
 #include <wx/string.h>
+#include <wx/sysopt.h>
 
 
 bool KIPLATFORM::APP::Init()
 {
-    // No special OSX init tasks
+    // KiCad relies on showing the file type selector in a few places; force it to be shown
+    wxSystemOptions::SetOption( wxS( "osx.openfiledialog.always-show-types" ), 1 );
     return true;
 }
 
