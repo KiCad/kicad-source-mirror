@@ -110,7 +110,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-30 17:07-0800\n"
-"PO-Revision-Date: 2023-01-20 08:19+0100\n"
+"PO-Revision-Date: 2023-01-31 15:39+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -4232,7 +4232,7 @@ msgstr "Colori"
 #: eeschema/menubar.cpp:139 eeschema/sch_edit_frame.cpp:1423
 #: kicad/tools/kicad_manager_actions.cpp:80
 msgid "Schematic Editor"
-msgstr "Editor schemi elettrici"
+msgstr "Editor degli schemi"
 
 #: common/eda_base_frame.cpp:1047
 msgid "Annotation Options"
@@ -8117,62 +8117,36 @@ msgid ""
 msgstr ""
 "# 1. Riepilogo\n"
 "\n"
-"Lo strumento Distinta materiali crea una distinta materiali che elenca tutti "
-"i componenti del progetto.\n"
+"Lo strumento Distinta materiali crea una distinta materiali che elenca tutti i componenti del progetto.\n"
 "\n"
-"Lo strumento utilizza uno script esterno per generare una distinta materiali "
-"nel formato desiderato. La scelta di uno script diverso modifica il modo in "
-"cui viene formattata la distinta materiali.\n"
+"Lo strumento utilizza uno script esterno per generare una distinta materiali nel formato desiderato. La scelta di uno script diverso modifica il modo in cui viene formattata la distinta materiali.\n"
 "\n"
-"La generazione di una distinta materiali è descritta in maggior dettaglio "
-"nel manuale dell'editor degli schemi.\n"
+"La generazione di una distinta materiali è descritta in maggior dettaglio nel manuale dell'editor degli schemi.\n"
 "\n"
 "# 2. Modalità d'uso\n"
 "\n"
-"Selezionare uno script generatore nell'elenco **Script generatori DIBA**. I "
-"dettagli per il generatore selezionato sono mostrati a destra della finestra "
-"di dialogo.\n"
+"Selezionare uno script generatore nell'elenco **Script generatori DIBA**. I dettagli per il generatore selezionato sono mostrati a destra della finestra di dialogo.\n"
 "\n"
-"Facendo clic sul pulsante **Genera** viene creato un file DIBA con il "
-"generatore selezionato.\n"
+"Facendo clic sul pulsante **Genera** viene creato un file DIBA con il generatore selezionato.\n"
 "\n"
-"Le impostazioni predefinite presentano diverse opzioni per lo script "
-"generatore, sebbene alcuni script aggiuntivi siano già installati con KiCad "
-"e possano essere aggiunti all'elenco con il pulsante **+**.\n"
+"Le impostazioni predefinite presentano diverse opzioni per lo script generatore, sebbene alcuni script aggiuntivi siano già installati con KiCad e possano essere aggiunti all'elenco con il pulsante **+**.\n"
 "\n"
-"**Nota:** su Windows è disponibile un'opzione aggiuntiva **Mostra finestra "
-"console**. Quando questa opzione è deselezionata, i generatori DIBA vengono "
-"eseguiti in una finestra della console nascosta e qualsiasi output viene "
-"reindirizzato e stampato nella finestra di dialogo. Quando questa opzione è "
-"selezionata, i generatori DIBA vengono eseguiti in una finestra della "
-"console visibile.\n"
+"**Nota:** su Windows è disponibile un'opzione aggiuntiva **Mostra finestra console**. Quando questa opzione è deselezionata, i generatori DIBA vengono eseguiti in una finestra della console nascosta e qualsiasi output viene reindirizzato e stampato nella finestra di dialogo. Quando questa opzione è selezionata, i generatori DIBA vengono eseguiti in una finestra della console visibile.\n"
 "\n"
 "# 3. Generatori personalizzati e righe di comando\n"
 "\n"
-"Internamente, KiCad crea un file netlist intermedio in formato XML che "
-"contiene informazioni su tutti i componenti del progetto. Uno script "
-"generatore DIBA converte il file netlist intermedio nel formato desiderato. "
-"KiCad esegue gli script del generatore DIBA in base alla riga di comando "
-"immessa nella parte inferiore della finestra di dialogo DIBA.\n"
+"Internamente, KiCad crea un file netlist intermedio in formato XML che contiene informazioni su tutti i componenti del progetto. Uno script generatore DIBA converte il file netlist intermedio nel formato desiderato. KiCad esegue gli script del generatore DIBA in base alla riga di comando immessa nella parte inferiore della finestra di dialogo DIBA.\n"
 "\n"
-"Il formato della riga di comando accetta parametri per i nomi di file. Ogni "
-"parametro di formattazione viene sostituito con un percorso o nome file "
-"specifico del progetto. I parametri di formattazione supportati sono:\n"
+"Il formato della riga di comando accetta parametri per i nomi di file. Ogni parametro di formattazione viene sostituito con un percorso o nome file specifico del progetto. I parametri di formattazione supportati sono:\n"
 "\n"
-"  * `%I`: percorso assoluto e nome file del file netlist intermedio, che è "
-"l'ingresso per il generatore DIBA\n"
-"  * `%O`: percorso assoluto e nome file del file DIBA in uscita (senza "
-"estensione file)\n"
+"  * `%I`: percorso assoluto e nome file del file netlist intermedio, che è l'ingresso per il generatore DIBA\n"
+"  * `%O`: percorso assoluto e nome file del file DIBA in uscita (senza estensione file)\n"
 "  * `%B`: nome file base del file DIBA in uscita (senza estensione file)\n"
 "  * `%P`: percorso assoluto della cartella del progetto, senza barra finale\n"
 "\n"
-"**Nota:** il parametro del file di uscita `%O` non include un'estensione "
-"file. KiCad tenterà di aggiungere automaticamente un'estensione appropriata "
-"alla riga di comando, ma potrebbe essere necessario aggiungere manualmente "
-"un'estensione.\n"
+"**Nota:** il parametro del file di uscita `%O` non include un'estensione file. KiCad tenterà di aggiungere automaticamente un'estensione appropriata alla riga di comando, ma potrebbe essere necessario aggiungere manualmente un'estensione.\n"
 "\n"
-"Python è lo strumento consigliato per gli script del generatore DIBA, ma è "
-"possibile utilizzare anche altri strumenti.\n"
+"Python è lo strumento consigliato per gli script del generatore DIBA, ma è possibile utilizzare anche altri strumenti.\n"
 "\n"
 "## Righe di comando di esempio per script Python\n"
 "\n"
@@ -8182,24 +8156,19 @@ msgstr ""
 "python <nome file script> <nome file in ingresso> <nome file in uscita>\n"
 "```\n"
 "\n"
-"Su Windows, se lo script del generatore desiderato per una distinta "
-"materiali CSV è `C:\\Users\\username\\kicad\\my_python_script.py`, la riga "
-"di comando sarà:\n"
+"Su Windows, se lo script del generatore desiderato per una distinta materiali CSV è `C:\\Users\\username\\kicad\\my_python_script.py`, la riga di comando sarà:\n"
 "\n"
 "```\n"
-"python.exe C:\\Utenti\\nomeutente\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Utenti\\nomeutente\\kicad\\my_python_script.py \"%I\" \"%O.csv\"\n"
 "```\n"
 "\n"
-"Su Linux, se lo script del generatore desiderato per una DIBA CSV è `/home/"
-"username/kicad/my_python_script.py`, la riga di comando sarà:\n"
+"Su Linux, se lo script del generatore desiderato per una DIBA CSV è `/home/username/kicad/my_python_script.py`, la riga di comando sarà:\n"
 "\n"
 "```\n"
 "python /home/nomeutente/kicad/my_python_script.py \"%I\" \"%O.csv\"\n"
 "```\n"
 "\n"
-"Le virgolette doppie (`\"`) intorno agli argomenti sono consigliate nel caso "
-"in cui i nomi dei file contengano spazi o caratteri speciali.\n"
+"Le virgolette doppie (`\"`) intorno agli argomenti sono consigliate nel caso in cui i nomi dei file contengano spazi o caratteri speciali.\n"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:66
 msgid "Change all symbols in schematic"
@@ -9090,9 +9059,8 @@ msgid "Buses && bus labels"
 msgstr "Bus ed etichette bus"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:51
-#, fuzzy
 msgid "Label fields"
-msgstr "Campi simboli"
+msgstr "Campi etichette"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:57
 msgid "Sheet titles"
@@ -9112,9 +9080,8 @@ msgid "Filters"
 msgstr "Filtri"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:87
-#, fuzzy
 msgid "Filter fields by name:"
-msgstr "Filtra elementi per connessione:"
+msgstr "Filtra campi per nome:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:99
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:73
@@ -10861,13 +10828,13 @@ msgstr ""
 "Nota: i colori degli elementi vengono scavalcati nel tema colore corrente."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:384
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "To see individual item colors uncheck '%s'\n"
 "in Preferences > Schematic Editor > Colors."
 msgstr ""
 "Per visualizzare i colori dei singoli articoli deseleziona \"%s\"\n"
-"in Preferenze > Eeschema > Colori."
+"in Preferenze > Editor degli schemi > Colori."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:426
 #, c-format
@@ -13891,7 +13858,7 @@ msgstr "Membri alias bus %s"
 #: eeschema/sch_edit_frame.cpp:127
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:63
 msgid "KiCad Schematic Editor"
-msgstr "Editor schemi KiCad"
+msgstr "Editor degli schemi KiCad"
 
 #: eeschema/sch_edit_frame.cpp:180 eeschema/sch_edit_frame.cpp:1589
 msgid "Schematic Hierarchy"
@@ -23208,7 +23175,6 @@ msgstr ""
 "\tR1 + (R2|R3)...\t\tqualunque combinazione di cui sopra\n"
 
 #: pcb_calculator/fusing_current_help.h:2
-#, fuzzy
 msgid ""
 "You can use this calculator to check if a small track can handle a large "
 "current for a short period of time.<br>\n"
@@ -23220,16 +23186,12 @@ msgid ""
 "<br>\n"
 "This energy is then compared to the one dissipated by the wire resistance."
 msgstr ""
-"Si può usare questa calcolatrice per verificare se una minuscola pista è in "
-"grado di gestire una grande corrente per un breve periodo di tempo.<br>\n"
-"Questo strumento consente di progettare una pista fusibile, ma deve essere "
-"usato solo come stima.\n"
+"Si può usare questa calcolatrice per verificare se una minuscola pista è in grado di gestire una grande corrente per un breve periodo di tempo.<br>\n"
+"Questo strumento consente di progettare una pista fusibile, ma deve essere usato solo come stima.\n"
 "\n"
-"La calcolatrice stima l'energia necessaria per riscaldare il filo<br>\n"
-"al suo punto di fusione così come l'energia necessaria per il cambio di fase."
-"<br>\n"
-"Questa energia viene poi confrontata con quella dissipata dalla resistenza "
-"del filo."
+"La calcolatrice stima l'energia necessaria per riscaldare il filo fino<br>\n"
+"al suo punto di fusione e l'energia necessaria per il cambio di fase.<br>\n"
+"Questa energia viene poi confrontata con quella dissipata dalla resistenza del filo."
 
 #: pcb_calculator/pcb_calculator_frame.cpp:72
 msgid "General system design"
@@ -39412,7 +39374,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:830
 msgid "Switch to Schematic Editor"
-msgstr "Passa all'editor degli schemi el."
+msgstr "Passa all'editor degli schemi"
 
 #: pcbnew/tools/pcb_actions.cpp:830
 msgid "Open in schematic editor"
@@ -41252,7 +41214,7 @@ msgstr "bitmap2component"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
-msgstr "Editor schemi elettrici KiCad (autonomo)"
+msgstr "Editor degli schemi KiCad (autonomo)"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Schematic Capture Tool"
@@ -41379,52 +41341,3 @@ msgstr "Schema KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "Circuito stampato KiCad"
-
-#~ msgid "Filter other symbol fields by name:"
-#~ msgstr "Filtra altri campi simbolo per nome:"
-
-#~ msgid "Last Change"
-#~ msgstr "Ultima modifica"
-
-#~ msgid "Exclude from BOM"
-#~ msgstr "Escludi dalla DIBA"
-
-#, c-format
-#~ msgid "Add %s 'exclude from position files' fabrication attribute."
-#~ msgstr ""
-#~ "Aggiungi %s attributi di fabbricazione 'escludi dai file posizione'."
-
-#, c-format
-#~ msgid "Remove %s 'exclude from position files' fabrication attribute."
-#~ msgstr "Rimuovi %s attributi di fabbricazione 'escludi dai file posizione'."
-
-#, c-format
-#~ msgid "Added %s 'exclude from position files' fabrication attribute."
-#~ msgstr ""
-#~ "Aggiunti %s attributi di fabbricazione 'escludi dai file posizione'."
-
-#, c-format
-#~ msgid "Removed %s 'exclude from position files' fabrication attribute."
-#~ msgstr "Rimossi %s attributi di fabbricazione 'escludi dalla DIBA'."
-
-#, c-format
-#~ msgid "The auto save file '%s' could not be removed!"
-#~ msgstr "Il file di salvataggio automatico '%s' non può essere rimosso!"
-
-#~ msgid "3D model search path"
-#~ msgstr "Percorso di ricerca modelli 3D"
-
-#~ msgid "Libraries by Scope"
-#~ msgstr "Librerie per tipologia"
-
-#~ msgid "Path Substitutions"
-#~ msgstr "Sostituzioni percorsi"
-
-#~ msgid "Edge Clearance Warning"
-#~ msgstr "Avviso distanza bordo"
-
-#~ msgid "Netlist Load Error."
-#~ msgstr "Errore caricamento netlist."
-
-#~ msgid "Netlist Load Error"
-#~ msgstr "Errore nel caricamento netlist"
