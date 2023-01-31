@@ -596,6 +596,7 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
     if( aStartItem && m_startLayer < 0 )
         m_startLayer = aStartItem->Layer();
 
+    aSizes.SetClearance( bds.m_MinClearance );
     aSizes.SetMinClearance( bds.m_MinClearance );
     aSizes.SetClearanceSource( _( "board minimum clearance" ) );
 
@@ -604,7 +605,7 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
     {
         if( constraint.m_Value.Min() > bds.m_MinClearance )
         {
-            aSizes.SetMinClearance( constraint.m_Value.Min() );
+            aSizes.SetClearance( constraint.m_Value.Min() );
             aSizes.SetClearanceSource( constraint.m_RuleName );
         }
     }

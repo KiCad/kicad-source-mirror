@@ -38,6 +38,7 @@ class SIZES_SETTINGS
 {
 public:
     SIZES_SETTINGS() :
+            m_clearance( 0 ),
             m_minClearance( 0 ),
             m_trackWidth( 155000 ),
             m_trackWidthIsExplicit( true ),
@@ -56,6 +57,12 @@ public:
     void ClearLayerPairs();
     void AddLayerPair( int aL1, int aL2 );
 
+    // The working clearance, from the current net to anything else (without knowing the net of the
+    // other object).  Specific clearance to another object may be resolved differently.
+    int Clearance() const { return m_clearance; }
+    void SetClearance( int aClearance ) { m_clearance = aClearance; }
+
+    // The absolute minimum clearance from the board
     int MinClearance() const { return m_minClearance; }
     void SetMinClearance( int aClearance ) { m_minClearance = aClearance; }
 
@@ -116,6 +123,7 @@ public:
     void SetDiffPairGapSource( const wxString& aSource ) { m_diffPairGapSource = aSource; }
 
 private:
+    int     m_clearance;
     int     m_minClearance;
     int     m_trackWidth;
     bool    m_trackWidthIsExplicit;
