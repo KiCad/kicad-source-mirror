@@ -20,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-30 17:07-0800\n"
 "PO-Revision-Date: 2023-02-01 03:03+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -9049,9 +9049,8 @@ msgid "Buses && bus labels"
 msgstr "Busse && Busbezeichner"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:51
-#, fuzzy
 msgid "Label fields"
-msgstr "Symbolfelder"
+msgstr "Bezeichnerfelder"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:57
 msgid "Sheet titles"
@@ -9071,9 +9070,8 @@ msgid "Filters"
 msgstr "Filter"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:87
-#, fuzzy
 msgid "Filter fields by name:"
-msgstr "Elemente nach Netz filtern:"
+msgstr "Felder nach Name filtern:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:99
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:73
@@ -10834,7 +10832,7 @@ msgid "Note: item colors are overridden in the current color theme."
 msgstr "Hinweis: Elementfarben werden im aktuellen Farbthema überschrieben."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:384
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "To see individual item colors uncheck '%s'\n"
 "in Preferences > Schematic Editor > Colors."
@@ -23286,7 +23284,6 @@ msgstr ""
 "\tR1 + (R2 | R3) ...    eine beliebige Kombination der oben genannten\n"
 
 #: pcb_calculator/fusing_current_help.h:2
-#, fuzzy
 msgid ""
 "You can use this calculator to check if a small track can handle a large "
 "current for a short period of time.<br>\n"
@@ -23300,9 +23297,8 @@ msgid ""
 msgstr ""
 "Mit diesem Rechner können Sie prüfen, ob eine dünne Leiterbahn für kurze "
 "Zeit einen hohen Strom verkraften kann.<br>\n"
-"Dieses Werkzeug ermöglicht es Ihnen, eine Leiterbahn-Sicherung zu entwerfen,"
-"<br>\n"
-"es sollte jedoch nur für eine Schätzung verwendet werden.\n"
+"Dieses Werkzeug ermöglicht Ihnen, eine Leiterbahn-Sicherung zu entwerfen, "
+"jedoch sollte es nur für eine Schätzung verwendet werden.\n"
 "\n"
 "Der Rechner schätzt die Energie, die erforderlich ist, um die Leiterbahn bis "
 "zu ihrem Schmelzpunkt zu<br>\n"
