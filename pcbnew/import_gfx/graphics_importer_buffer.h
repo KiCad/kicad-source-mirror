@@ -188,7 +188,7 @@ public:
 
     std::vector<VECTOR2D>& Vertices() { return m_vertices; }
 
-    int GetWidth() const { return m_width; }
+    double GetWidth() const { return m_width; }
 
 private:
     std::vector<VECTOR2D> m_vertices;

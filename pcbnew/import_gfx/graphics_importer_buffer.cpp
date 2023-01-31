@@ -97,7 +97,7 @@ void GRAPHICS_IMPORTER_BUFFER::ImportTo( GRAPHICS_IMPORTER& aImporter )
 static void convertPolygon( std::list<std::unique_ptr<IMPORTED_SHAPE>>& aShapes,
                             std::vector<IMPORTED_POLYGON*>&             aPaths,
                             GRAPHICS_IMPORTER::POLY_FILL_RULE           aFillRule,
-                            int aWidth )
+                            double aWidth )
 {
     double minX = std::numeric_limits<double>::max();
     double minY = minX;
@@ -173,7 +173,7 @@ static void convertPolygon( std::list<std::unique_ptr<IMPORTED_SHAPE>>& aShapes,
 void GRAPHICS_IMPORTER_BUFFER::PostprocessNestedPolygons()
 {
     int curShapeIdx = -1;
-    int lastWidth = 1;
+    double lastWidth = 0;
 
     std::list<std::unique_ptr<IMPORTED_SHAPE>> newShapes;
     std::vector<IMPORTED_POLYGON*>             polypaths;
