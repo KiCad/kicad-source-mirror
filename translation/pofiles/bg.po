@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 14:24-0800\n"
+"POT-Creation-Date: 2023-01-30 17:07-0800\n"
 "PO-Revision-Date: 2011-11-29 21:48+0200\n"
 "Last-Translator: Evgeniy Ivanov <evgeniy_p_ivanov@yahoo.ca>\n"
 "Language-Team: KiCad Team <evgeniy_p_ivanov@yahoo.ca>\n"
@@ -61,44 +61,44 @@ msgstr ""
 msgid "Create tracks and vias"
 msgstr "Добавяне на дири и прох.отв."
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:673
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:678
 #, fuzzy
 msgid "Create zones"
 msgstr "Създай ъгъл"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:740
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:745
 #, fuzzy
 msgid "Simplifying copper layers polygons"
 msgstr "всички медни слоеве"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:749
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:754
 msgid "Simplifying polygons on F_Cu"
 msgstr ""
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:760
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:765
 msgid "Simplifying polygons on B_Cu"
 msgstr ""
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:790
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:795
 #, fuzzy, c-format
 msgid "Simplifying %d copper layers"
 msgstr "всички медни слоеве"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:830
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:835
 msgid "Simplify holes contours"
 msgstr ""
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:859
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:864
 #, fuzzy
 msgid "Build Tech layers"
 msgstr "Скрий всички слоеве"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:898
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:903
 #, fuzzy, c-format
 msgid "Build Tech layer %d"
 msgstr "Скрий всички слоеве"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1058
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1063
 msgid "Build BVH for holes and vias"
 msgstr ""
 
@@ -1716,7 +1716,7 @@ msgstr ""
 #: common/confirm.cpp:185 common/confirm.cpp:190 common/confirm.cpp:254
 #: common/confirm.cpp:281 common/tool/actions.cpp:121
 #: eeschema/dialogs/dialog_erc.cpp:392
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1399
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1393
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:168
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:66
 #: pcbnew/dialogs/dialog_drc.cpp:298 pcbnew/plugins/kicad/pcb_parser.cpp:923
@@ -1764,7 +1764,7 @@ msgstr ""
 msgid "Revert"
 msgstr "Върни"
 
-#: common/confirm.cpp:280 eeschema/dialogs/dialog_symbol_fields_table.cpp:1398
+#: common/confirm.cpp:280 eeschema/dialogs/dialog_symbol_fields_table.cpp:1392
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:164
 #: pcbnew/router/router_tool.cpp:571
 msgid "OK"
@@ -1899,27 +1899,27 @@ msgstr ""
 msgid "Additional Contributions By"
 msgstr ""
 
-#: common/dialog_about/AboutDialog_main.cpp:886
+#: common/dialog_about/AboutDialog_main.cpp:1084
 #, fuzzy
 msgid "KiCad Librarian Team"
 msgstr "Библиотечни файлове:"
 
-#: common/dialog_about/AboutDialog_main.cpp:919
+#: common/dialog_about/AboutDialog_main.cpp:1117
 #, fuzzy
 msgid "3D models by"
 msgstr "TE-Modes"
 
-#: common/dialog_about/AboutDialog_main.cpp:931
+#: common/dialog_about/AboutDialog_main.cpp:1129
 #, fuzzy
 msgid "Symbols by"
 msgstr "Захранващ символ"
 
-#: common/dialog_about/AboutDialog_main.cpp:938
+#: common/dialog_about/AboutDialog_main.cpp:1136
 #, fuzzy
 msgid "Footprints by"
 msgstr "Комп. отпечатъци"
 
-#: common/dialog_about/AboutDialog_main.cpp:951
+#: common/dialog_about/AboutDialog_main.cpp:1149
 msgid "Icons by"
 msgstr ""
 
@@ -2211,7 +2211,7 @@ msgstr "Редактирай документен файл"
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:89
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:58
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:60
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:774
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:773
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:55
 #: eeschema/dialogs/panel_sym_lib_table.cpp:310
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:42
@@ -3112,7 +3112,7 @@ msgid "MyLabel"
 msgstr "Етикет"
 
 #: common/dialogs/eda_list_dialog.cpp:47 common/widgets/lib_tree.cpp:154
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:790
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:789
 #: eeschema/symbol_viewer_frame.cpp:167 eeschema/symbol_viewer_frame.cpp:182
 #: kicad/pcm/dialogs/panel_packages_view.cpp:77
 #: pcbnew/dialogs/dialog_copper_zones.cpp:252
@@ -4619,7 +4619,7 @@ msgstr "Нова библиотека"
 msgid "Screen"
 msgstr "Silkscreen Cmp"
 
-#: common/eda_item.cpp:325 eeschema/dialogs/dialog_symbol_fields_table.cpp:1042
+#: common/eda_item.cpp:325 eeschema/dialogs/dialog_symbol_fields_table.cpp:1041
 #: eeschema/sch_symbol.cpp:1668 pcbnew/build_BOM_from_board.cpp:110
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:136 pcbnew/fp_shape.cpp:116
 #: pcbnew/fp_text.cpp:287 pcbnew/load_select_footprint.cpp:376
@@ -4740,7 +4740,7 @@ msgstr "Глобален етикет"
 msgid "Hierarchical Label"
 msgstr "Йерархичен етикет"
 
-#: common/eda_item.cpp:368 eeschema/dialogs/dialog_symbol_fields_table.cpp:766
+#: common/eda_item.cpp:368 eeschema/dialogs/dialog_symbol_fields_table.cpp:765
 #: eeschema/lib_field.cpp:535 eeschema/lib_field.h:78
 #: eeschema/sch_label.cpp:190
 msgid "Field"
@@ -8017,7 +8017,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:59
 #: eeschema/dialogs/dialog_rescue_each.cpp:134
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:61
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1041
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1040
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:56
 #: eeschema/dialogs/panel_sym_lib_table.cpp:311
 #: eeschema/fields_grid_table.cpp:339 eeschema/sch_symbol.cpp:1634
@@ -8375,7 +8375,7 @@ msgid "%s found"
 msgstr "%s намерени"
 
 #: eeschema/cross-probing.cpp:175 eeschema/sim/sim_plot_frame.cpp:599
-#: eeschema/sim/sim_plot_frame.cpp:912 eeschema/widgets/tuner_slider.cpp:52
+#: eeschema/sim/sim_plot_frame.cpp:915 eeschema/widgets/tuner_slider.cpp:52
 #, c-format
 msgid "%s not found"
 msgstr "%s ненамерени"
@@ -9961,7 +9961,7 @@ msgstr "Полета"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:88
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:60
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:62
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:767
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:766
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:57
 #: eeschema/fields_grid_table.cpp:340
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:54
@@ -10190,7 +10190,7 @@ msgid "Read Only"
 msgstr "[Четене само]"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1168
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1480
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1474
 #, fuzzy
 msgid "Save changes?"
 msgstr "Запамети текуща библиотека като"
@@ -11230,7 +11230,7 @@ msgstr "Опции"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:130
 #: eeschema/dialogs/dialog_sim_model_base.cpp:255
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1040
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1039
 #: eeschema/sch_symbol.cpp:1633 eeschema/sch_symbol.cpp:1677
 #: pcbnew/footprint.cpp:2914 pcbnew/fp_text.cpp:279
 msgid "Reference"
@@ -12192,7 +12192,7 @@ msgid "Show datasheet in browser"
 msgstr "Покажи име на извод"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:130
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1205
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1204
 #, fuzzy
 msgid "The Reference column cannot be hidden."
 msgstr "Обозначаващото поле не може да е празно! Без промяна"
@@ -12203,51 +12203,51 @@ msgstr "Обозначаващото поле не може да е празно
 msgid "Qty"
 msgstr ""
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:769
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:768
 #, fuzzy
 msgid "Group By"
 msgstr "Захранващ символ"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1043
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1042
 #: eeschema/symbol_editor/symbol_editor.cpp:1276
 msgid "Datasheet"
 msgstr "Документация"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1065
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1064
 #, fuzzy
 msgid "New field name:"
 msgstr "Име на поле"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1065
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1064
 #, fuzzy
 msgid "Add Field"
 msgstr "Поле"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1074
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1073
 #, fuzzy
 msgid "Field must have a name."
 msgstr "Стойност на класа на веригите"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1082
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1081
 #: eeschema/dialogs/dialog_symbol_properties.cpp:905
 #, fuzzy, c-format
 msgid "Field name '%s' already in use."
 msgstr "Лист с име \"%s\" вече съществува."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1120
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1119
 #, fuzzy, c-format
 msgid "Are you sure you want to remove the field '%s'?"
 msgstr "ОК за изтриване на избраните артикули?"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1397
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1391
 msgid "Unsaved data"
 msgstr ""
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1398
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1392
 msgid "Changes are unsaved. Export unsaved data?"
 msgstr ""
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1408
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1402
 #, fuzzy
 msgid "Save as CSV"
 msgstr "Запамети файл на макросите"
@@ -14820,7 +14820,7 @@ msgstr "Размер на схемата"
 msgid "New schematic file is unsaved"
 msgstr "Помощен файл %s не е намерен."
 
-#: eeschema/sch_edit_frame.cpp:786 eeschema/sim/sim_plot_frame.cpp:1757
+#: eeschema/sch_edit_frame.cpp:786 eeschema/sim/sim_plot_frame.cpp:1760
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:539
 #: eeschema/symbol_editor/symbol_editor.cpp:1179
 #: pagelayout_editor/pl_editor_frame.cpp:381
@@ -16950,7 +16950,7 @@ msgstr "Настройки на конт.пл."
 msgid "Spice Simulator"
 msgstr "Старт на симулатор"
 
-#: eeschema/sim/sim_plot_frame.cpp:466 eeschema/sim/sim_plot_frame.cpp:1560
+#: eeschema/sim/sim_plot_frame.cpp:466 eeschema/sim/sim_plot_frame.cpp:1563
 msgid ""
 "Errors during netlist generation; simulation aborted.\n"
 "\n"
@@ -16962,7 +16962,7 @@ msgid ""
 "update the Simulation Command?"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:506 eeschema/sim/sim_plot_frame.cpp:1989
+#: eeschema/sim/sim_plot_frame.cpp:506 eeschema/sim/sim_plot_frame.cpp:1992
 #, fuzzy
 msgid "Another simulation is already running."
 msgstr "GerbView е вече стартиран. Продължение?"
@@ -16973,11 +16973,11 @@ msgid "Plot%u - "
 msgstr "Чертай"
 
 #: eeschema/sim/sim_plot_frame.cpp:598 eeschema/sim/sim_plot_frame.cpp:610
-#: eeschema/sim/sim_plot_frame.cpp:931
+#: eeschema/sim/sim_plot_frame.cpp:934
 msgid "Could not apply tuned value(s):"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:611 eeschema/sim/sim_plot_frame.cpp:920
+#: eeschema/sim/sim_plot_frame.cpp:611 eeschema/sim/sim_plot_frame.cpp:923
 #, fuzzy, c-format
 msgid "%s is not tunable"
 msgstr "%s изводи %s ненамерени"
@@ -16999,51 +16999,51 @@ msgstr ""
 msgid " (phase)"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:841 eeschema/sim/sim_plot_frame.cpp:1804
+#: eeschema/sim/sim_plot_frame.cpp:844 eeschema/sim/sim_plot_frame.cpp:1807
 #, fuzzy
 msgid "Signal"
 msgstr "сигнален"
 
-#: eeschema/sim/sim_plot_frame.cpp:1177
+#: eeschema/sim/sim_plot_frame.cpp:1180
 #, fuzzy
 msgid "noname"
 msgstr "Име на извод"
 
-#: eeschema/sim/sim_plot_frame.cpp:1226
+#: eeschema/sim/sim_plot_frame.cpp:1229
 #, fuzzy
 msgid "Open simulation workbook"
 msgstr "Запази платка"
 
-#: eeschema/sim/sim_plot_frame.cpp:1255
+#: eeschema/sim/sim_plot_frame.cpp:1258
 #, fuzzy
 msgid "Save Simulation Workbook As"
 msgstr "Запази платка"
 
-#: eeschema/sim/sim_plot_frame.cpp:1270
+#: eeschema/sim/sim_plot_frame.cpp:1273
 #, fuzzy
 msgid "Save Plot as Image"
 msgstr "Завърти изображение"
 
-#: eeschema/sim/sim_plot_frame.cpp:1287
+#: eeschema/sim/sim_plot_frame.cpp:1290
 #, fuzzy
 msgid "Save Plot Data"
 msgstr "Запази като основен"
 
-#: eeschema/sim/sim_plot_frame.cpp:1625
+#: eeschema/sim/sim_plot_frame.cpp:1628
 msgid "You need to run plot-providing simulation first."
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:1682
+#: eeschema/sim/sim_plot_frame.cpp:1685
 #, fuzzy
 msgid "SPICE Netlist"
 msgstr "SPICE файл с лист на веригите (.cir)|*.cir"
 
-#: eeschema/sim/sim_plot_frame.cpp:1754
+#: eeschema/sim/sim_plot_frame.cpp:1757
 #, fuzzy
 msgid "Save changes to workbook?"
 msgstr "Запази текущата платка/табло"
 
-#: eeschema/sim/sim_plot_frame.cpp:1919
+#: eeschema/sim/sim_plot_frame.cpp:1922
 #, fuzzy
 msgid ""
 "\n"
@@ -17052,22 +17052,22 @@ msgid ""
 "\n"
 msgstr "Настройки на конт.пл."
 
-#: eeschema/sim/sim_plot_frame.cpp:2010
+#: eeschema/sim/sim_plot_frame.cpp:2013
 #, fuzzy
 msgid "Remove Signal"
 msgstr "Премахни полета"
 
-#: eeschema/sim/sim_plot_frame.cpp:2010
+#: eeschema/sim/sim_plot_frame.cpp:2013
 #, fuzzy
 msgid "Remove the signal from the plot"
 msgstr "Увеличи избора"
 
-#: eeschema/sim/sim_plot_frame.cpp:2018 eeschema/sim/sim_plot_frame.cpp:2045
+#: eeschema/sim/sim_plot_frame.cpp:2021 eeschema/sim/sim_plot_frame.cpp:2048
 #, fuzzy
 msgid "Hide Cursor"
 msgstr "Курсор"
 
-#: eeschema/sim/sim_plot_frame.cpp:2020
+#: eeschema/sim/sim_plot_frame.cpp:2023
 #, fuzzy
 msgid "Show Cursor"
 msgstr "Курсор"
@@ -19466,20 +19466,20 @@ msgstr "Невъзможно отваряне на библиотечен фай
 msgid "Update symbols in schematic to refer to new library?"
 msgstr "Отвори модул компонентен отпечатък от Библиотека"
 
-#: eeschema/tools/sch_editor_control.cpp:717
+#: eeschema/tools/sch_editor_control.cpp:718
 #, fuzzy
 msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr "Грешка: дубликат имена на листове. Продължение?"
 
-#: eeschema/tools/sch_editor_control.cpp:810
+#: eeschema/tools/sch_editor_control.cpp:811
 msgid "No net selected."
 msgstr "Не е избрана верига."
 
-#: eeschema/tools/sch_editor_control.cpp:836
+#: eeschema/tools/sch_editor_control.cpp:837
 msgid "Net must be labeled to assign a netclass."
 msgstr ""
 
-#: eeschema/tools/sch_editor_control.cpp:1512
+#: eeschema/tools/sch_editor_control.cpp:1513
 #, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -19487,26 +19487,26 @@ msgid ""
 "subsheets as a parent."
 msgstr ""
 
-#: eeschema/tools/sch_editor_control.cpp:1891
+#: eeschema/tools/sch_editor_control.cpp:1892
 #, fuzzy
 msgid "Symbols with broken library symbol links cannot be edited."
 msgstr "не са избрани библиотеки"
 
-#: eeschema/tools/sch_editor_control.cpp:2183
+#: eeschema/tools/sch_editor_control.cpp:2184
 #: pcbnew/tools/board_editor_control.cpp:594
 #: pcbnew/tools/footprint_editor_control.cpp:712
 #, fuzzy, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d дубликати на времеви маркери са намерени и заменени."
 
-#: eeschema/tools/sch_editor_control.cpp:2190
+#: eeschema/tools/sch_editor_control.cpp:2191
 #: pcbnew/tools/board_editor_control.cpp:609
 #: pcbnew/tools/footprint_editor_control.cpp:727
 #, c-format
 msgid "%d potential problems repaired."
 msgstr ""
 
-#: eeschema/tools/sch_editor_control.cpp:2197
+#: eeschema/tools/sch_editor_control.cpp:2198
 #: pcbnew/drc/drc_rule_parser.cpp:179
 #, fuzzy
 msgid "No errors found."
@@ -35371,7 +35371,7 @@ msgstr ""
 
 #: pcbnew/exporters/export_hyperlynx.cpp:290
 #: pcbnew/exporters/exporter_vrml.cpp:780
-#: pcbnew/exporters/step/exporter_step.cpp:244
+#: pcbnew/exporters/step/exporter_step.cpp:246
 #: pcbnew/specctra_import_export/specctra_export.cpp:124
 msgid "Board outline is malformed. Run DRC for a full analysis."
 msgstr ""
@@ -35415,55 +35415,55 @@ msgstr "Сиздай SVG файл"
 msgid "Board stackup settings not up to date."
 msgstr ""
 
-#: pcbnew/exporters/step/exporter_step.cpp:324
+#: pcbnew/exporters/step/exporter_step.cpp:326
 msgid "Determining PCB data\n"
 msgstr ""
 
-#: pcbnew/exporters/step/exporter_step.cpp:329
+#: pcbnew/exporters/step/exporter_step.cpp:331
 msgid "Build STEP data\n"
 msgstr ""
 
-#: pcbnew/exporters/step/exporter_step.cpp:333
+#: pcbnew/exporters/step/exporter_step.cpp:335
 #, fuzzy
 msgid ""
 "\n"
 "** Error building STEP board model. Export aborted. **\n"
 msgstr "Грешка при съхранение на библиотечен файл \""
 
-#: pcbnew/exporters/step/exporter_step.cpp:337
+#: pcbnew/exporters/step/exporter_step.cpp:339
 #, fuzzy
 msgid "Writing STEP file\n"
 msgstr "Gerber файлове"
 
-#: pcbnew/exporters/step/exporter_step.cpp:341
+#: pcbnew/exporters/step/exporter_step.cpp:343
 #, fuzzy
 msgid ""
 "\n"
 "** Error writing STEP file. **\n"
 msgstr "Грешка при съхранение на библиотечен файл \""
 
-#: pcbnew/exporters/step/exporter_step.cpp:346
+#: pcbnew/exporters/step/exporter_step.cpp:348
 #, fuzzy, c-format
 msgid ""
 "\n"
 "STEP file '%s' created.\n"
 msgstr "Доклад файл \"%s\" създаден"
 
-#: pcbnew/exporters/step/exporter_step.cpp:352
-#: pcbnew/exporters/step/exporter_step.cpp:357
+#: pcbnew/exporters/step/exporter_step.cpp:354
+#: pcbnew/exporters/step/exporter_step.cpp:359
 #, fuzzy
 msgid ""
 "\n"
 "** Error exporting STEP file. Export aborted. **\n"
 msgstr "Грешка при съхранение на библиотечен файл \""
 
-#: pcbnew/exporters/step/exporter_step.cpp:367
+#: pcbnew/exporters/step/exporter_step.cpp:369
 msgid ""
 "Unable to create STEP file.\n"
 "Check that the board has a valid outline and models."
 msgstr ""
 
-#: pcbnew/exporters/step/exporter_step.cpp:372
+#: pcbnew/exporters/step/exporter_step.cpp:374
 msgid "STEP file has been created, but there are warnings."
 msgstr ""
 
@@ -38079,14 +38079,14 @@ msgid ""
 "with circular shape of %.2f mm diameter."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2705
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2695
 #, c-format
 msgid ""
 "The shape for '%s' is Hatch filled in CADSTAR, which has no KiCad "
 "equivalent. Using solid fill instead."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3562
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3574
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has %d hatches defined. KiCad only supports 2 "
@@ -38094,7 +38094,7 @@ msgid ""
 "crosshatched."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3572
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3584
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different line widths for each hatch. "
@@ -38102,7 +38102,7 @@ msgid ""
 "the width defined in the first hatch definition, i.e. %.2f mm."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3584
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3596
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different step sizes for each hatch. "
@@ -38110,7 +38110,7 @@ msgid ""
 "uses the step size defined in the first hatching definition, i.e. %.2f mm."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3597
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3609
 #, c-format
 msgid ""
 "The hatches in CADSTAR Hatching code '%s' have an angle  difference of %.1f "
@@ -38119,14 +38119,14 @@ msgid ""
 "horizontal."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3670
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3679
 #, c-format
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
 "Millimeters were applied instead."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3952
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3961
 msgid ""
 "The CADSTAR design contains nets with a 'Net Class' assigned. KiCad does not "
 "have an equivalent to CADSTAR's Net Class so these elements were not "
@@ -38134,7 +38134,7 @@ msgid ""
 "Route Code' (which has been imported for all nets)."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3962
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3971
 msgid ""
 "The CADSTAR design contains nets with a 'Spacing Class' assigned. KiCad does "
 "not have an equivalent to CADSTAR's Spacing Class so these elements were not "

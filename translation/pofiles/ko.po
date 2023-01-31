@@ -27,7 +27,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 14:24-0800\n"
+"POT-Creation-Date: 2023-01-30 17:07-0800\n"
 "PO-Revision-Date: 2023-01-27 14:28+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
@@ -85,41 +85,41 @@ msgstr ""
 msgid "Create tracks and vias"
 msgstr "배선 및 비아 생성"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:673
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:678
 msgid "Create zones"
 msgstr "영역 만들기"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:740
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:745
 msgid "Simplifying copper layers polygons"
 msgstr "동박층 다각형 단순화"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:749
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:754
 msgid "Simplifying polygons on F_Cu"
 msgstr "F_Cu 다각형 단순화"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:760
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:765
 msgid "Simplifying polygons on B_Cu"
 msgstr "B_Cu 다각형 단순화"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:790
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:795
 #, c-format
 msgid "Simplifying %d copper layers"
 msgstr "%d 동박층 단순화"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:830
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:835
 msgid "Simplify holes contours"
 msgstr "홀 윤곽 단순화"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:859
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:864
 msgid "Build Tech layers"
 msgstr "기술 레이어 생성"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:898
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:903
 #, c-format
 msgid "Build Tech layer %d"
 msgstr "기술 레이어 생성 %d"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1058
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1063
 msgid "Build BVH for holes and vias"
 msgstr "홀과 비아용 BVH 생성"
 
@@ -1551,7 +1551,7 @@ msgstr "인터리브 저장 시 매우 예상치 못한 결과가 발생할 수 
 #: common/confirm.cpp:185 common/confirm.cpp:190 common/confirm.cpp:254
 #: common/confirm.cpp:281 common/tool/actions.cpp:121
 #: eeschema/dialogs/dialog_erc.cpp:392
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1399
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1393
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:168
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:66
 #: pcbnew/dialogs/dialog_drc.cpp:298 pcbnew/plugins/kicad/pcb_parser.cpp:923
@@ -1594,7 +1594,7 @@ msgstr "현재 변경 내용이 영구적으로 손실됩니다."
 msgid "Revert"
 msgstr "되돌리기"
 
-#: common/confirm.cpp:280 eeschema/dialogs/dialog_symbol_fields_table.cpp:1398
+#: common/confirm.cpp:280 eeschema/dialogs/dialog_symbol_fields_table.cpp:1392
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:164
 #: pcbnew/router/router_tool.cpp:571
 msgid "OK"
@@ -1723,23 +1723,23 @@ msgstr "리드 개발 동문"
 msgid "Additional Contributions By"
 msgstr "추가 기여자"
 
-#: common/dialog_about/AboutDialog_main.cpp:886
+#: common/dialog_about/AboutDialog_main.cpp:1084
 msgid "KiCad Librarian Team"
 msgstr "KiCad 사서팀"
 
-#: common/dialog_about/AboutDialog_main.cpp:919
+#: common/dialog_about/AboutDialog_main.cpp:1117
 msgid "3D models by"
 msgstr "3D 모델 작성자"
 
-#: common/dialog_about/AboutDialog_main.cpp:931
+#: common/dialog_about/AboutDialog_main.cpp:1129
 msgid "Symbols by"
 msgstr "심볼 작성자"
 
-#: common/dialog_about/AboutDialog_main.cpp:938
+#: common/dialog_about/AboutDialog_main.cpp:1136
 msgid "Footprints by"
 msgstr "풋프린트 작성자"
 
-#: common/dialog_about/AboutDialog_main.cpp:951
+#: common/dialog_about/AboutDialog_main.cpp:1149
 msgid "Icons by"
 msgstr "아이콘 작성자"
 
@@ -2015,7 +2015,7 @@ msgstr "환경 변수"
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:89
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:58
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:60
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:774
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:773
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:55
 #: eeschema/dialogs/panel_sym_lib_table.cpp:310
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:42
@@ -2871,7 +2871,7 @@ msgid "MyLabel"
 msgstr "마이라벨"
 
 #: common/dialogs/eda_list_dialog.cpp:47 common/widgets/lib_tree.cpp:154
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:790
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:789
 #: eeschema/symbol_viewer_frame.cpp:167 eeschema/symbol_viewer_frame.cpp:182
 #: kicad/pcm/dialogs/panel_packages_view.cpp:77
 #: pcbnew/dialogs/dialog_copper_zones.cpp:252
@@ -4281,7 +4281,7 @@ msgstr "새 라이브러리"
 msgid "Screen"
 msgstr "화면"
 
-#: common/eda_item.cpp:325 eeschema/dialogs/dialog_symbol_fields_table.cpp:1042
+#: common/eda_item.cpp:325 eeschema/dialogs/dialog_symbol_fields_table.cpp:1041
 #: eeschema/sch_symbol.cpp:1668 pcbnew/build_BOM_from_board.cpp:110
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:136 pcbnew/fp_shape.cpp:116
 #: pcbnew/fp_text.cpp:287 pcbnew/load_select_footprint.cpp:376
@@ -4389,7 +4389,7 @@ msgstr "전역 라벨"
 msgid "Hierarchical Label"
 msgstr "계층 라벨"
 
-#: common/eda_item.cpp:368 eeschema/dialogs/dialog_symbol_fields_table.cpp:766
+#: common/eda_item.cpp:368 eeschema/dialogs/dialog_symbol_fields_table.cpp:765
 #: eeschema/lib_field.cpp:535 eeschema/lib_field.h:78
 #: eeschema/sch_label.cpp:190
 msgid "Field"
@@ -4819,7 +4819,7 @@ msgstr "더 이상 사용되지 않는 KICAD_TEMPLATE_DIR 버전."
 msgid "Deprecated version of KICAD7_3DMODEL_DIR."
 msgstr "더 이상 사용되지 않는 KICAD7_3DMODEL_DIR 버전."
 
-#: common/env_vars.cpp:100
+#: common/env_vars.cpp:102
 msgid "Deprecated version of KICAD7_FOOTPRINT_DIR."
 msgstr "더 이상 사용되지 않는 KICAD7_FOOTPRINT_DIR 버전."
 
@@ -7319,7 +7319,7 @@ msgstr "상대 경로에 사용 가능한 환경 변수들:"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:59
 #: eeschema/dialogs/dialog_rescue_each.cpp:134
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:61
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1041
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1040
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:56
 #: eeschema/dialogs/panel_sym_lib_table.cpp:311
 #: eeschema/fields_grid_table.cpp:339 eeschema/sch_symbol.cpp:1634
@@ -7665,7 +7665,7 @@ msgid "%s found"
 msgstr "%s 발견"
 
 #: eeschema/cross-probing.cpp:175 eeschema/sim/sim_plot_frame.cpp:599
-#: eeschema/sim/sim_plot_frame.cpp:912 eeschema/widgets/tuner_slider.cpp:52
+#: eeschema/sim/sim_plot_frame.cpp:915 eeschema/widgets/tuner_slider.cpp:52
 #, c-format
 msgid "%s not found"
 msgstr "%s을(를) 찾을 수 없음"
@@ -9172,7 +9172,7 @@ msgstr "필드"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:88
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:60
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:62
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:767
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:766
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:57
 #: eeschema/fields_grid_table.cpp:340
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:54
@@ -9382,7 +9382,7 @@ msgid "Read Only"
 msgstr "읽기 전용"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1168
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1480
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1474
 msgid "Save changes?"
 msgstr "변경 내용을 저장 할까요?"
 
@@ -10345,7 +10345,7 @@ msgstr "취한 액션"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:130
 #: eeschema/dialogs/dialog_sim_model_base.cpp:255
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1040
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1039
 #: eeschema/sch_symbol.cpp:1633 eeschema/sch_symbol.cpp:1677
 #: pcbnew/footprint.cpp:2914 pcbnew/fp_text.cpp:279
 msgid "Reference"
@@ -11212,7 +11212,7 @@ msgid "Show datasheet in browser"
 msgstr "브라우저에서 데이터 시트 보기"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:130
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1205
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1204
 msgid "The Reference column cannot be hidden."
 msgstr "참조 열은 숨겨질 수 없습니다."
 
@@ -11222,48 +11222,48 @@ msgstr "참조 열은 숨겨질 수 없습니다."
 msgid "Qty"
 msgstr "수량"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:769
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:768
 msgid "Group By"
 msgstr "그룹화"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1043
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1042
 #: eeschema/symbol_editor/symbol_editor.cpp:1276
 msgid "Datasheet"
 msgstr "데이터 시트"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1065
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1064
 msgid "New field name:"
 msgstr "새 필드 이름:"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1065
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1064
 msgid "Add Field"
 msgstr "필드 추가"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1074
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1073
 msgid "Field must have a name."
 msgstr "필드에는 이름이 포함되어 있어야 합니다."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1082
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1081
 #: eeschema/dialogs/dialog_symbol_properties.cpp:905
 #, c-format
 msgid "Field name '%s' already in use."
 msgstr "필드 이름 '%s'은(는) 이미 사용 중입니다."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1120
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1119
 #, c-format
 msgid "Are you sure you want to remove the field '%s'?"
 msgstr "'%s' 필드를 제거하시겠습니까?"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1397
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1391
 msgid "Unsaved data"
 msgstr "데이터가 저장되지 않음"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1398
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1392
 msgid "Changes are unsaved. Export unsaved data?"
 msgstr ""
 "변경 사항이 저장되지 않습니다. 저장되지 않은 데이터를 내보내시겠습니까?"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1408
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1402
 msgid "Save as CSV"
 msgstr "CSV파일로 저장"
 
@@ -13641,7 +13641,7 @@ msgstr "회로도 계층"
 msgid "New schematic file is unsaved"
 msgstr "새 회로도 파일이 저장되지 않음"
 
-#: eeschema/sch_edit_frame.cpp:786 eeschema/sim/sim_plot_frame.cpp:1757
+#: eeschema/sch_edit_frame.cpp:786 eeschema/sim/sim_plot_frame.cpp:1760
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:539
 #: eeschema/symbol_editor/symbol_editor.cpp:1179
 #: pagelayout_editor/pl_editor_frame.cpp:381
@@ -15840,7 +15840,7 @@ msgstr "시뮬레이션 명령 및 설정"
 msgid "Spice Simulator"
 msgstr "Spice 시뮬레이터"
 
-#: eeschema/sim/sim_plot_frame.cpp:466 eeschema/sim/sim_plot_frame.cpp:1560
+#: eeschema/sim/sim_plot_frame.cpp:466 eeschema/sim/sim_plot_frame.cpp:1563
 msgid ""
 "Errors during netlist generation; simulation aborted.\n"
 "\n"
@@ -15856,7 +15856,7 @@ msgstr ""
 "회로도 시트 시뮬레이션 명령 지시문이 변경되었습니다.   시뮬레이션 명령을 업데"
 "이트하시겠습니까?"
 
-#: eeschema/sim/sim_plot_frame.cpp:506 eeschema/sim/sim_plot_frame.cpp:1989
+#: eeschema/sim/sim_plot_frame.cpp:506 eeschema/sim/sim_plot_frame.cpp:1992
 msgid "Another simulation is already running."
 msgstr "다른 시뮬레이션이 이미 실행 중입니다."
 
@@ -15866,11 +15866,11 @@ msgid "Plot%u - "
 msgstr "플롯%u - "
 
 #: eeschema/sim/sim_plot_frame.cpp:598 eeschema/sim/sim_plot_frame.cpp:610
-#: eeschema/sim/sim_plot_frame.cpp:931
+#: eeschema/sim/sim_plot_frame.cpp:934
 msgid "Could not apply tuned value(s):"
 msgstr "조정된 값을 적용할 수 없음:"
 
-#: eeschema/sim/sim_plot_frame.cpp:611 eeschema/sim/sim_plot_frame.cpp:920
+#: eeschema/sim/sim_plot_frame.cpp:611 eeschema/sim/sim_plot_frame.cpp:923
 #, c-format
 msgid "%s is not tunable"
 msgstr "%s는 조정할 수 없음"
@@ -15891,43 +15891,43 @@ msgstr " (mag)"
 msgid " (phase)"
 msgstr " (상)"
 
-#: eeschema/sim/sim_plot_frame.cpp:841 eeschema/sim/sim_plot_frame.cpp:1804
+#: eeschema/sim/sim_plot_frame.cpp:844 eeschema/sim/sim_plot_frame.cpp:1807
 msgid "Signal"
 msgstr "신호"
 
-#: eeschema/sim/sim_plot_frame.cpp:1177
+#: eeschema/sim/sim_plot_frame.cpp:1180
 msgid "noname"
 msgstr "이름 없음"
 
-#: eeschema/sim/sim_plot_frame.cpp:1226
+#: eeschema/sim/sim_plot_frame.cpp:1229
 msgid "Open simulation workbook"
 msgstr "시뮬레이션 워크북 열기"
 
-#: eeschema/sim/sim_plot_frame.cpp:1255
+#: eeschema/sim/sim_plot_frame.cpp:1258
 msgid "Save Simulation Workbook As"
 msgstr "시뮬레이션 통합 문서 저장"
 
-#: eeschema/sim/sim_plot_frame.cpp:1270
+#: eeschema/sim/sim_plot_frame.cpp:1273
 msgid "Save Plot as Image"
 msgstr "플롯을 이미지로 저장"
 
-#: eeschema/sim/sim_plot_frame.cpp:1287
+#: eeschema/sim/sim_plot_frame.cpp:1290
 msgid "Save Plot Data"
 msgstr "플롯 데이터 저장"
 
-#: eeschema/sim/sim_plot_frame.cpp:1625
+#: eeschema/sim/sim_plot_frame.cpp:1628
 msgid "You need to run plot-providing simulation first."
 msgstr "플롯 제공 시뮬레이션을 먼저 실행하여야 합니다."
 
-#: eeschema/sim/sim_plot_frame.cpp:1682
+#: eeschema/sim/sim_plot_frame.cpp:1685
 msgid "SPICE Netlist"
 msgstr "SPICE 네트리스트"
 
-#: eeschema/sim/sim_plot_frame.cpp:1754
+#: eeschema/sim/sim_plot_frame.cpp:1757
 msgid "Save changes to workbook?"
 msgstr "통합 문서에 변경 내용을 저장하시겠습니까?"
 
-#: eeschema/sim/sim_plot_frame.cpp:1919
+#: eeschema/sim/sim_plot_frame.cpp:1922
 msgid ""
 "\n"
 "\n"
@@ -15939,19 +15939,19 @@ msgstr ""
 "시뮬레이션 결과:\n"
 "\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:2010
+#: eeschema/sim/sim_plot_frame.cpp:2013
 msgid "Remove Signal"
 msgstr "신호 제거"
 
-#: eeschema/sim/sim_plot_frame.cpp:2010
+#: eeschema/sim/sim_plot_frame.cpp:2013
 msgid "Remove the signal from the plot"
 msgstr "플롯에서 신호 제거"
 
-#: eeschema/sim/sim_plot_frame.cpp:2018 eeschema/sim/sim_plot_frame.cpp:2045
+#: eeschema/sim/sim_plot_frame.cpp:2021 eeschema/sim/sim_plot_frame.cpp:2048
 msgid "Hide Cursor"
 msgstr "커서 숨김"
 
-#: eeschema/sim/sim_plot_frame.cpp:2020
+#: eeschema/sim/sim_plot_frame.cpp:2023
 msgid "Show Cursor"
 msgstr "커서 표시"
 
@@ -18079,19 +18079,19 @@ msgstr "라이브러리 '%s'을(를) 추가 할 수 없음."
 msgid "Update symbols in schematic to refer to new library?"
 msgstr "새 라이브러리를 참조하도록 회로도의 심볼을 업데이트하시겠습니까?"
 
-#: eeschema/tools/sch_editor_control.cpp:717
+#: eeschema/tools/sch_editor_control.cpp:718
 msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr "오류: 현재 시트에서 중복되는 하위 시트 이름이 발견되었습니다."
 
-#: eeschema/tools/sch_editor_control.cpp:810
+#: eeschema/tools/sch_editor_control.cpp:811
 msgid "No net selected."
 msgstr "선택한 네트가 없음."
 
-#: eeschema/tools/sch_editor_control.cpp:836
+#: eeschema/tools/sch_editor_control.cpp:837
 msgid "Net must be labeled to assign a netclass."
 msgstr "네트클래스를 할당하려면 네트에 라벨을 지정해야 합니다."
 
-#: eeschema/tools/sch_editor_control.cpp:1512
+#: eeschema/tools/sch_editor_control.cpp:1513
 #, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -18102,25 +18102,25 @@ msgstr ""
 "는 제외되었습니다. 목적지 또는 목적지의 하위 시트 중 해당 시트를 상위 시트로 "
 "갖는 시트가 발견되었습니다."
 
-#: eeschema/tools/sch_editor_control.cpp:1891
+#: eeschema/tools/sch_editor_control.cpp:1892
 msgid "Symbols with broken library symbol links cannot be edited."
 msgstr "라이브러리 기호 링크가 끊어진 기호는 편집할 수 없습니다."
 
-#: eeschema/tools/sch_editor_control.cpp:2183
+#: eeschema/tools/sch_editor_control.cpp:2184
 #: pcbnew/tools/board_editor_control.cpp:594
 #: pcbnew/tools/footprint_editor_control.cpp:712
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d 개의 중복된 ID를 교체하였습니다.\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2190
+#: eeschema/tools/sch_editor_control.cpp:2191
 #: pcbnew/tools/board_editor_control.cpp:609
 #: pcbnew/tools/footprint_editor_control.cpp:727
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d 개의 잠재적 문제점이 복구되었습니다."
 
-#: eeschema/tools/sch_editor_control.cpp:2197
+#: eeschema/tools/sch_editor_control.cpp:2198
 #: pcbnew/drc/drc_rule_parser.cpp:179
 msgid "No errors found."
 msgstr "오류가 발견되지 않았습니다."
@@ -33022,7 +33022,7 @@ msgstr "이들은 타원 패드로 출력되었습니다."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:290
 #: pcbnew/exporters/exporter_vrml.cpp:780
-#: pcbnew/exporters/step/exporter_step.cpp:244
+#: pcbnew/exporters/step/exporter_step.cpp:246
 #: pcbnew/specctra_import_export/specctra_export.cpp:124
 msgid "Board outline is malformed. Run DRC for a full analysis."
 msgstr "기판의 외곽선이 잘못되었습니다. DRC를 실행하여 전체 분석을 진행하세요."
@@ -33064,15 +33064,15 @@ msgstr "거버 작업 파일 '%s'을(를) 생성하였습니다."
 msgid "Board stackup settings not up to date."
 msgstr "기판 시작 설정이 최신이 아닙니다."
 
-#: pcbnew/exporters/step/exporter_step.cpp:324
+#: pcbnew/exporters/step/exporter_step.cpp:326
 msgid "Determining PCB data\n"
 msgstr "PCB 데이터 결정\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:329
+#: pcbnew/exporters/step/exporter_step.cpp:331
 msgid "Build STEP data\n"
 msgstr "STEP 데이터 구축\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:333
+#: pcbnew/exporters/step/exporter_step.cpp:335
 msgid ""
 "\n"
 "** Error building STEP board model. Export aborted. **\n"
@@ -33081,11 +33081,11 @@ msgstr ""
 "** STEP 보드 모델을 빌드하는 동안 오류가 발생했습니다. 내보내기가 중단되었습"
 "니다. **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:337
+#: pcbnew/exporters/step/exporter_step.cpp:339
 msgid "Writing STEP file\n"
 msgstr "STEP 파일 작성\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:341
+#: pcbnew/exporters/step/exporter_step.cpp:343
 msgid ""
 "\n"
 "** Error writing STEP file. **\n"
@@ -33093,7 +33093,7 @@ msgstr ""
 "\n"
 "** STEP 파일 쓰기 오류. **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:346
+#: pcbnew/exporters/step/exporter_step.cpp:348
 #, c-format
 msgid ""
 "\n"
@@ -33102,8 +33102,8 @@ msgstr ""
 "\n"
 "STEP 파일 '%s' 생성됨.\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:352
-#: pcbnew/exporters/step/exporter_step.cpp:357
+#: pcbnew/exporters/step/exporter_step.cpp:354
+#: pcbnew/exporters/step/exporter_step.cpp:359
 msgid ""
 "\n"
 "** Error exporting STEP file. Export aborted. **\n"
@@ -33111,7 +33111,7 @@ msgstr ""
 "\n"
 "** STEP 파일을 내보내는 중 오류가 발생했습니다. 내보내기가 중단됨 **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:367
+#: pcbnew/exporters/step/exporter_step.cpp:369
 msgid ""
 "Unable to create STEP file.\n"
 "Check that the board has a valid outline and models."
@@ -33119,7 +33119,7 @@ msgstr ""
 "STEP 파일을 생성할 수 없습니다.\n"
 "보드에 유효한 아웃라인과 모델이 있는지 확인하십시오."
 
-#: pcbnew/exporters/step/exporter_step.cpp:372
+#: pcbnew/exporters/step/exporter_step.cpp:374
 msgid "STEP file has been created, but there are warnings."
 msgstr "STEP 파일이 생성되었지만 경고가 있습니다."
 
@@ -35640,7 +35640,7 @@ msgstr ""
 "만을 지원하며, 따라서 해당 비아 유형은 직경 %.2f mm의 원형 비아로 변경되었습"
 "니다."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2705
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2695
 #, c-format
 msgid ""
 "The shape for '%s' is Hatch filled in CADSTAR, which has no KiCad "
@@ -35649,7 +35649,7 @@ msgstr ""
 "형상 '%s'은(는) CADSTAR에서 해치로 채워져 있으며, 이는 KiCad에서 대응되지 않"
 "습니다. 솔리드 채우기를 대신 사용합니다."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3562
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3574
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has %d hatches defined. KiCad only supports 2 "
@@ -35660,7 +35660,7 @@ msgstr ""
 "만의 90도 떨어져 있는 해치를 지원합니다 (크로스해칭). 불러온 해칭은 크로스해"
 "치로 변환됩니다."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3572
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3584
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different line widths for each hatch. "
@@ -35671,7 +35671,7 @@ msgstr ""
 "칭에 대해 하나의 폭만을 지원합니다. 불러온 해칭은 첫 번째 해치에 정의된 폭을 "
 "사용합니다 (예: %.2fmm)."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3584
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3596
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different step sizes for each hatch. "
@@ -35682,7 +35682,7 @@ msgstr ""
 "해칭에 대해 하나의 스텝 크기를 지원합니다. 불러와진 해칭은 첫 번째 해치에 정"
 "의된 스텝 크기를 사용합니다 (예: %.2fmm)."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3597
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3609
 #, c-format
 msgid ""
 "The hatches in CADSTAR Hatching code '%s' have an angle  difference of %.1f "
@@ -35694,7 +35694,7 @@ msgstr ""
 "는 해칭에 대해 90도 차이만을 지원합니다. 불러와진 해칭은 수평으로 %.1f도 방향"
 "으로 90도 떨어져 있는 2개의 해치가 됩니다."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3670
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3679
 #, c-format
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
@@ -35703,7 +35703,7 @@ msgstr ""
 "치수 ID %s은(는) KiCad에서 지원하지 않는 단위 유형을 사용합니다. 밀리미터가 "
 "대신 적용됩니다."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3952
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3961
 msgid ""
 "The CADSTAR design contains nets with a 'Net Class' assigned. KiCad does not "
 "have an equivalent to CADSTAR's Net Class so these elements were not "
@@ -35715,7 +35715,7 @@ msgstr ""
 "올 수 없습니다. 참고: KiCad의 '네트 클래스' 버전은 CADSTAR의 '네트 라우터 코"
 "드' 와 더 비슷합니다 (모든 네트에 대해 가져오기 된)."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3962
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3971
 msgid ""
 "The CADSTAR design contains nets with a 'Spacing Class' assigned. KiCad does "
 "not have an equivalent to CADSTAR's Spacing Class so these elements were not "
