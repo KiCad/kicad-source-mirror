@@ -525,7 +525,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
 
                 if( mode == ISLAND_REMOVAL_MODE::ALWAYS )
                     poly->DeletePolygonAndTriangulationData( idx, false );
-                else if ( mode == ISLAND_REMOVAL_MODE::AREA && outline.Area() < minArea )
+                else if ( mode == ISLAND_REMOVAL_MODE::AREA && outline.Area( true ) < minArea )
                     poly->DeletePolygonAndTriangulationData( idx, false );
                 else
                     zone.m_zone->SetIsIsland( layer, idx );
@@ -563,8 +563,8 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
                 std::vector<SHAPE_LINE_CHAIN>& island = poly->Polygon( ii );
 
                 if( island.empty()
-                        || !m_boardOutline.Contains( island.front().CPoint( 0 ) )
-                        || island.front().Area() < minArea )
+                        || !m_boardOutline.Contains( island.front().CPoint( 0 ), -1, 1 )
+                        || island.front().Area( true ) < minArea )
                 {
                     poly->DeletePolygonAndTriangulationData( ii, false );
                 }
