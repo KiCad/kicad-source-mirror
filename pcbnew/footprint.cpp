@@ -641,6 +641,7 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
     case PCB_FP_DIM_LEADER_T:
     case PCB_FP_SHAPE_T:
     case PCB_FP_TEXTBOX_T:
+    case PCB_BITMAP_T:
         for( auto it = m_drawings.begin(); it != m_drawings.end(); ++it )
         {
             if( *it == aBoardItem )

@@ -66,6 +66,7 @@ using namespace std::placeholders;
 #include <dialogs/dialog_unit_entry.h>
 #include <board_commit.h>
 #include <zone_filler.h>
+#include <pcb_bitmap.h>
 
 const unsigned int EDIT_TOOL::COORDS_PADDING = pcbIUScale.mmToIU( 20 );
 
@@ -1863,6 +1864,21 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
             parent->Remove( textbox );
             break;
         }
+
+        case PCB_BITMAP_T:
+            if( IsFootprintEditor() )
+            {
+                PCB_BITMAP* fp_bitmap = static_cast<PCB_BITMAP*>( item );
+                FOOTPRINT*  parent = static_cast<FOOTPRINT*>( item->GetParent() );
+
+                m_commit->Modify( parent );
+                getView()->Remove( fp_bitmap );
+                parent->Remove( fp_bitmap );
+            }
+            else
+                m_commit->Remove( item );
+
+            break;
 
         case PCB_PAD_T:
             if( IsFootprintEditor() || frame()->GetPcbNewSettings()->m_AllowFreePads )
