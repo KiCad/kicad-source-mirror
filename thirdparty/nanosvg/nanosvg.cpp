@@ -588,7 +588,7 @@ static NSVGparser* nsvg__createParser()
     p->attr[0].fillOpacity = 1;
     p->attr[0].strokeOpacity    = 1;
     p->attr[0].stopOpacity      = 1;
-    p->attr[0].strokeWidth      = 1;
+    p->attr[0].strokeWidth      = 0;
     p->attr[0].strokeLineJoin   = NSVG_JOIN_MITER;
     p->attr[0].strokeLineCap    = NSVG_CAP_BUTT;
     p->attr[0].miterLimit = 4;
