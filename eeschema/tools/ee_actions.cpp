@@ -777,13 +777,13 @@ TOOL_ACTION EE_ACTIONS::navigateUp( "eeschema.NavigateTool.up",
 TOOL_ACTION EE_ACTIONS::navigateBack( "eeschema.NavigateTool.back",
         AS_GLOBAL,
         MD_ALT + WXK_LEFT, "",
-        _( "Navigate Back" ), _( "Move forward in sheet navigation history" ),
+        _( "Navigate Back" ), _( "Move backward in sheet navigation history" ),
         BITMAPS::left );
 
 TOOL_ACTION EE_ACTIONS::navigateForward( "eeschema.NavigateTool.forward",
         AS_GLOBAL,
         MD_ALT + WXK_RIGHT, "",
-        _( "Navigate Forward" ), _( "Move backward in sheet navigation history" ),
+        _( "Navigate Forward" ), _( "Move forward in sheet navigation history" ),
         BITMAPS::right );
 
 TOOL_ACTION EE_ACTIONS::navigatePrevious( "eeschema.NavigateTool.previous",
