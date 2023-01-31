@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-30 17:07-0800\n"
-"PO-Revision-Date: 2023-01-30 23:24+0000\n"
-"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"PO-Revision-Date: 2023-02-01 03:03+0000\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1411,12 +1411,12 @@ msgstr "Negatiivi"
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:525
 msgid "Front silk screen"
-msgstr "Silkkipaino edessä"
+msgstr "Etupuolen silkkipaino"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:531
 msgid "Front solder mask"
-msgstr "Juotosmaski edessä"
+msgstr "Etupuolen juotosmaski"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 msgid "User layer Eco1"
@@ -3117,7 +3117,7 @@ msgid ""
 "If the mouse cursor is moved over the canvas of a schematic or PCB editor "
 "window, that window is raised."
 msgstr ""
-"Jos hiiren osoitin siirretään kytkentäkaavion tai PCB-editorin ikkunan "
+"Jos hiiren osoitin siirretään kytkentäkaavion tai piirilevyeditorin ikkunan "
 "kankaan päälle, ikkuna nousee ylös."
 
 #: common/dialogs/panel_common_settings_base.cpp:162
@@ -3372,7 +3372,7 @@ msgstr ""
 "\n"
 "Jos päätät osallistua vapaaehtoisesti, KiCad käsittelee automaattisesti "
 "mainittujen raporttien lähettämisen kaatumisten tai tapahtumien sattuessa. "
-"Suunnittelutiedostojasi, kuten kaavioita tai PCB:tä, ei jaeta tässä "
+"Suunnittelutiedostojasi, kuten kaavioita tai piirilevyä, ei jaeta tässä "
 "prosessissa."
 
 #: common/dialogs/panel_data_collection_base.cpp:24
@@ -4390,7 +4390,7 @@ msgstr "Verkkotiedot"
 #: common/eda_item.cpp:353 pcbnew/pcb_group.cpp:399
 #: pcbnew/tools/pcb_actions.cpp:758
 msgid "Group"
-msgstr "Ryhmittely"
+msgstr "Ryhmä"
 
 #: common/eda_item.cpp:356 eeschema/sch_junction.h:97
 msgid "Junction"
@@ -5338,7 +5338,7 @@ msgstr "Sivurajoitukset"
 
 #: common/layer_id.cpp:153
 msgid "Footprints front"
-msgstr "Jalanjäljet edessä"
+msgstr "Etupuolen jalanjäljet"
 
 #: common/layer_id.cpp:154
 msgid "Footprints back"
@@ -5567,7 +5567,7 @@ msgstr ""
 "parannuksia.\n"
 "Jos päätät osallistua vapaaehtoisesti, KiCad käsittelee automaattisesti "
 "mainittujen raporttien lähettämisen kaatumisten tai tapahtumien sattuessa.\n"
-"Suunnittelutiedostojasi, kuten kaavioita tai PCB:tä, ei jaeta tässä "
+"Suunnittelutiedostojasi, kuten kaavioita tai piirilevyä, ei jaeta tässä "
 "prosessissa."
 
 #: common/pgm_base.cpp:366
@@ -6365,15 +6365,15 @@ msgstr "Luo, poista ja muokkaa jalanjälkiä"
 
 #: common/tool/actions.cpp:616
 msgid "Update PCB from Schematic..."
-msgstr "Päivitä Piirilevy kytkentäkaaviosta..."
+msgstr "Päivitä piirilevy kytkentäkaaviosta..."
 
 #: common/tool/actions.cpp:616
 msgid "Update PCB with changes made to schematic"
-msgstr "Päivitä Piirilevy kytkentäkaavioon tehdyillä muutoksilla"
+msgstr "Päivitä piirilevy kytkentäkaavioon tehdyillä muutoksilla"
 
 #: common/tool/actions.cpp:621
 msgid "Update Schematic from PCB..."
-msgstr "Päivitä kytkentäkaavio Piirilevyltä..."
+msgstr "Päivitä kytkentäkaavio piirilevyltä..."
 
 #: common/tool/actions.cpp:621
 msgid "Update schematic with changes made to PCB"
@@ -6851,6 +6851,7 @@ msgid "File save error"
 msgstr "Tiedoston tallennusvirhe"
 
 #: common/widgets/wx_html_report_panel_base.cpp:16
+#, fuzzy
 msgid "Output Messages"
 msgstr "Lähtevät Viestit"
 
@@ -9507,7 +9508,7 @@ msgstr "Ryhmittele nimen mukaan"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:140
 msgid "Group Selected"
-msgstr "Ryhmä Valittu"
+msgstr "Ryhmittele valitut"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:151
 msgid "Filter by unit:"
@@ -11306,7 +11307,7 @@ msgstr "Määrä"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:768
 msgid "Group By"
-msgstr "Group by"
+msgstr "Ryhmittele mukaan"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1042
 #: eeschema/symbol_editor/symbol_editor.cpp:1276
@@ -11358,7 +11359,7 @@ msgstr "Poista Kenttä..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:67
 msgid "Group symbols"
-msgstr "Ryhmäsymbolit"
+msgstr "Ryhmittele symbolit"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:69
 msgid "Group symbols together based on common properties"
@@ -14197,7 +14198,7 @@ msgid ""
 "grouped items have been ungrouped."
 msgstr ""
 "CADSTAR-suunnittelu sisältää ryhmiteltyjä kohteita, joilla ei ole KiCad-"
-"vastaavaa. Kaikki ryhmitetyt kohteet on ryhmitelty."
+"vastaavaa. Kaikki kohteiden ryhmittelyt on purettu."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:146
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:161
@@ -19566,7 +19567,7 @@ msgstr "Näytä piirustusarkin sivurajat"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:142
 msgid "PCB Background"
-msgstr "PCB Tausta"
+msgstr "Piirilevyn Tausta"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:161
 #: pcbnew/widgets/appearance_controls.cpp:1796
@@ -24171,11 +24172,11 @@ msgstr "(useita piirilevyn ääriviivoja ei tueta)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:86
 msgid "Only front"
-msgstr "Vain edessä"
+msgstr "Vain etupuoli"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:87
 msgid "Only back"
-msgstr "Vain takaisin"
+msgstr "Vain kääntöpuoli"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:88
 msgid "Only selected"
@@ -24195,11 +24196,11 @@ msgstr "Ohita"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:111
 msgid "Reannotate PCB"
-msgstr "Merkitse PCB uudelleen"
+msgstr "Merkitse piirilevy uudelleen"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:278
 msgid "No PCB to reannotate!"
-msgstr "Ei piirikorttia selitteiden uudelleenmerkitsemiseksi!"
+msgstr "Ei piirilevyä selitteiden uudelleenmerkitsemiseksi!"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:290
 msgid "PCB successfully reannotated"
@@ -24255,7 +24256,7 @@ msgid ""
 "Back footprints will start at %s."
 msgstr ""
 "\n"
-"Takana olevat jalanjäljet alkavat %s."
+"Kääntöpuolen jalanjäljet alkavat %s:sta."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:328
 msgid "the last front footprint + 1"
@@ -24268,7 +24269,7 @@ msgid ""
 "Front footprints starting with '%s' will have the prefix removed."
 msgstr ""
 "\n"
-"Etumerkinnät poistetaan etupuolen jalanjäljistä, jotka alkavat %s:lla."
+"Etumerkinnät poistetaan etupuolen jalanjäljistä, jotka alkavat '%s':lla."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:342
 #, c-format
@@ -24277,7 +24278,7 @@ msgid ""
 "Front footprints will have '%s' inserted as a prefix."
 msgstr ""
 "\n"
-"Etupuolen jalanjälkiin lisätään etuliite ”%s”."
+"Etupuolen jalanjälkiin lisätään etuliite '%s'."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:352
 #, c-format
@@ -24286,7 +24287,7 @@ msgid ""
 "Back footprints starting with '%s' will have the prefix removed."
 msgstr ""
 "\n"
-"Takaosan jalanjäljet, joiden alussa on %s, etuliite poistetaan."
+"Kääntöpuolen jalanjäljistä, joiden alussa on %s, poistetaan etuliite."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:358
 #, c-format
@@ -24295,7 +24296,7 @@ msgid ""
 "Back footprints will have '%s' inserted as a prefix."
 msgstr ""
 "\n"
-"Takana oleviin jalanjälkiin lisätään etuliite ”%s”."
+"Kääntöpuolen jalanjälkiin lisätään etuliite ”%s”."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:366
 #, c-format
@@ -24336,7 +24337,7 @@ msgid ""
 "\n"
 msgstr ""
 "\n"
-"Poistetaan: %s uudelleenkirjoittamisesta\n"
+"Poistetaan: %s uudelleenmerkinnästä\n"
 "\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:526
@@ -24424,7 +24425,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:607
 msgid "Reannotate anyway?"
-msgstr "Merkitkö uudelleen?"
+msgstr "Merkitkö siitä huolimatta uudelleen?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:789
 #, c-format
@@ -24443,7 +24444,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Etujalanjäljet"
+"Etupuolen jalanjäljet"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:850
 msgid ""
@@ -24453,7 +24454,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Takana jalanjäljet"
+"Kääntöpuolen jalanjäljet"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:915
 msgid "Footprint not found in changelist"
@@ -24524,27 +24525,27 @@ msgstr "Uudelleenmerkinnän laajuus"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:170
 msgid "Reannotate:"
-msgstr "Uudelleenkirjoittaminen:"
+msgstr "Merkitse uudelleen:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:178
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:155
 #: pcbnew/footprint.cpp:1042
 msgid "Front"
-msgstr "Etu"
+msgstr "Etupuoli"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:181
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:155
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:569
 msgid "Back"
-msgstr "Taka"
+msgstr "Kääntöpuoli"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:208
 msgid "Front reference start:"
-msgstr "Edessä oleva referenssin alku:"
+msgstr "Etupuolen referenssien alku:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:210
 msgid "Starting reference designation for front."
-msgstr "Aloitetaan viitetunnus edessä."
+msgstr "Etupuolen viitetunnuksien alkunumero."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:214
 #: pcbnew/dialogs/dialog_create_array_base.cpp:96
@@ -24567,15 +24568,15 @@ msgstr "Oletusarvo on 1"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:220
 msgid "Back reference start:"
-msgstr "Takaisin viitteen alku:"
+msgstr "Kääntöpuolen viitteiden alku:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:222
 msgid ""
 "Blank continues from front or enter a number greater than the highest "
 "reference designation on the front."
 msgstr ""
-"Tyhjä jatkuu edestä tai syötä luku, joka on suurempi kuin korkein "
-"viitemerkintä edessä."
+"Tyhjä jatkuu etupuolelta, tai syötä luku, joka on suurempi kuin korkein "
+"etupuolen viitemerkintä."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:227
 msgid ""
@@ -24583,11 +24584,11 @@ msgid ""
 "designation on the front."
 msgstr ""
 "Jätä tyhjäksi tai nollaksi tai syötä luku, joka on suurempi kuin korkein "
-"viitetunnus edessä."
+"etupuolen viitetunnus."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:232
 msgid "Remove front prefix"
-msgstr "Poista etuliite"
+msgstr "Poista etupuolen etuliite"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:233
 msgid ""
@@ -24595,23 +24596,23 @@ msgid ""
 "in the front prefix box if present"
 msgstr ""
 "Jos tämä on valittu, etupuolen etuliite poistetaan\n"
-"etuliitteessä, jos sellainen on"
+"etupuolen etuliitteen kentästä, mikäli olemassa"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:237
 msgid "Remove back prefix"
-msgstr "Poista etuliite"
+msgstr "Poista etuliite kääntöpuolella"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:238
 msgid ""
 "If checked will remove the Back side prefix\n"
 "in the back prefix box if present"
 msgstr ""
-"Jos tämä on valittu, takaosan etuliite poistetaan\n"
-"etuosan eturuudussa, jos sellainen on"
+"Jos tämä on valittu, kääntöpuolen etuliite poistetaan\n"
+"kääntöpuolen etuliiteruudussa, jos sellainen on olemassa"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:242
 msgid "Front prefix:"
-msgstr "Etuliite:"
+msgstr "Etupuolen etuliite:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:244
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:249
@@ -24620,7 +24621,7 @@ msgstr "Valinnainen etuliite komponenttipuolen viitenimityksille (ts. F_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:253
 msgid "Back prefix:"
-msgstr "Takaisin etuliite:"
+msgstr "Kääntöpuolen etuliite:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:255
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:260
@@ -24653,7 +24654,7 @@ msgstr "Viitenimet"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.h:106
 msgid "Geographical Reannotation"
-msgstr "Maantieteellinen uudelleenhuomautus"
+msgstr "Sijaintiperusteinen uudelleemerkintä"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:50
 msgid "Board Setup"
@@ -24748,7 +24749,7 @@ msgstr "Etupuoli"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:98
 #: pcbnew/dialogs/dialog_board_statistics.cpp:701
 msgid "Back Side"
-msgstr "Takapuoli"
+msgstr "Kääntöpuoli"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:100
 #: pcbnew/dialogs/dialog_board_statistics.cpp:701
@@ -24953,7 +24954,7 @@ msgid ""
 "(Pads which appear in a Net Tie pad group will not be considered for "
 "merging.)"
 msgstr ""
-"(Verkkosidonta-pad ryhmässä olevia anturoita ei oteta huomioon yhdistämisen "
+"(Verkkosidosanturaryhmässä olevia anturoita ei oteta huomioon yhdistämisen "
 "yhteydessä.)"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:48
@@ -25121,7 +25122,7 @@ msgstr "Piilota automattisesti luodut verkkonimet"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:62
 msgid "Sort nets by pad count"
-msgstr "Lajittele verkot tyynyjen mukaan"
+msgstr "Lajittele verkot anturalukumäärän mukaan"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:95
 msgid "Zone name:"
@@ -26058,7 +26059,7 @@ msgid ""
 "them back to the PCB."
 msgstr ""
 "Päivitä/nollaa merkkijonot: näiden kuvausten on katettava kaksi tapausta: "
-"käyttäjän tekemät ohitukset piirilevyllä oleville jalanjäljille ja haluaa "
+"käyttäjä teki ohituksia piirilevyllä oleville jalanjäljille ja haluaa "
 "poistaa ne, tai käyttäjä teki muutoksia kirjaston jalanjälkeen ja haluaa "
 "lisätä ne takaisin piirilevylle."
 
@@ -27011,9 +27012,9 @@ msgstr ""
 "Arvo 10 tarkoittaa, että vaakasuoran välyksen arvo on 10% o anturan "
 "leveydestä ja pystysuoran välyksen arvo on 10 % o anturan korkeudesta.\n"
 "Lopullinen välysarvo on tämän arvon ja absoluuttisen välysarvon summa.\n"
-"Negatiivinen arvo tarkoittaa pienempää kaavainaukon kokoa, kuin anturan "
-"koko.\n"
-"Tämä arvo voidaan ohittaa antura-anturalta pohjalta. Tyynyn ominaisuuksissa "
+"Negatiivinen arvo tarkoittaa pienempää kaavainaukon kokoa, kuin anturan koko."
+"\n"
+"Tämä arvo voidaan ohittaa antura-anturalta pohjalta. Anturan ominaisuuksissa "
 "Paikallinen Välys ja asetukset välilehdeltä."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:339
@@ -27022,7 +27023,7 @@ msgstr "Verkkosidonnat"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:341
 msgid "Pad groups allowed to short different nets:"
-msgstr "Anturaryhmät saavat lyhentää erilaisia verkkoja:"
+msgstr "Anturaryhmät jotka saavat oikosulkea eri verkkoja:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:143
 msgid "All footprint generator scripts were loaded"
@@ -27089,7 +27090,7 @@ msgstr "<<     Liitä Valittu Vaihtoehto"
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:435
 #, c-format
 msgid "Front (top side) placement file: '%s'."
-msgstr "Edestä (yläpuoli) sijoitustiedosto: '%s'."
+msgstr "Etupuolen (yläpuoli) sijoitustiedosto: '%s'."
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:306
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:328
@@ -27103,7 +27104,7 @@ msgstr "Komponenttien määrä: %d."
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:481
 #, c-format
 msgid "Back (bottom side) placement file: '%s'."
-msgstr "Takaa (alapuoli) sijoitustiedosto: '%s'."
+msgstr "Kääntöpuolen (alapuoli) sijoitustiedosto: '%s'."
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:332
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:491
@@ -27153,7 +27154,7 @@ msgstr "Gerber (kokeellinen)"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:61
 msgid "Separate files for front, back"
-msgstr "Erota tiedostot edessä, takana"
+msgstr "Erilliset etupuolen ja kääntöpuolen tiedostot"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:61
 msgid "Single file for board"
@@ -27379,11 +27380,11 @@ msgstr "Reikien lukumäärä"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:151
 msgid "Plated pads:"
-msgstr "Pinnoitetut tyynyt:"
+msgstr "Pinnoitetut anturat:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:159
 msgid "Non-plated pads:"
-msgstr "Päällystämättömät tyynyt:"
+msgstr "Päällystämättömät anturat:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:183
 msgid "Buried vias:"
@@ -27995,7 +27996,7 @@ msgstr "Ylä-/Etukerros:"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:161
 msgid "Bottom/Back layer:"
-msgstr "Pohja/Takakerros:"
+msgstr "Ala-/Kääntöpuolen kerros:"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.h:50
 msgid "Select Layer"
@@ -28127,7 +28128,7 @@ msgstr "Verkko '%s' on käytössä. Poistetaanko silti?"
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2184
 #, c-format
 msgid "Delete all nets in group '%s'?"
-msgstr "Poistetaanko kaikki verkot ryhmästä %s?"
+msgstr "Poistetaanko kaikki verkot ryhmässä %s?"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2207
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2208
@@ -28140,11 +28141,11 @@ msgstr "Verkon nimisuodatin:"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:37
 msgid "Show zero pad nets"
-msgstr "Näytä nollatyynyverkot"
+msgstr "Näytä verkot joissa ei anturoita"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:41
 msgid "Group by:"
-msgstr "Ryhmittele:"
+msgstr "Ryhmittele mukaan:"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:47
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:48
@@ -28261,7 +28262,7 @@ msgstr "Monista:"
 
 #: pcbnew/dialogs/dialog_pad_primitives_properties_base.cpp:448
 msgid "Coordinates are relative to anchor pad, rotated 0.0 deg."
-msgstr "Koordinaatit ovat suhteessa ankkurityynyyn, kiertämällä 0,0 astetta."
+msgstr "Koordinaatit ovat suhteessa ankkurianturaan, käännetty 0,0 astetta."
 
 #: pcbnew/dialogs/dialog_pad_primitives_properties_base.h:124
 msgid "Pad Custom Shape Geometry Transform"
@@ -28288,7 +28289,7 @@ msgstr "Jalanjälki %s (%s), %s, kierretty %g astetta"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:497
 #: pcbnew/dialogs/dialog_text_properties.cpp:254
 msgid "back side (mirrored)"
-msgstr "takapuoli (peilattu)"
+msgstr "kääntöpuoli (peilattu)"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:497
 #: pcbnew/dialogs/dialog_text_properties.cpp:254
@@ -28396,8 +28397,8 @@ msgid ""
 "Warning: Negative solder mask clearance larger than pad. No solder mask will "
 "be generated."
 msgstr ""
-"Varoitus: Negatiivisen juotosmaskin välys on suurempi kuin tyyny. "
-"Juotosmaskia ei luoda."
+"Varoitus: Negatiivisen juotosmaskin välys on anturaa suurempi. Juotosmaskia "
+"ei luoda."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1333
 msgid ""
@@ -28468,11 +28469,11 @@ msgstr "Virhe: Negatiivinen kulman koko."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1427
 msgid "Warning: Corner size will make pad circular."
-msgstr "Varoitus: Kulman koko tekee tyynystä pyöreän."
+msgstr "Varoitus: Kulman koko tekee anturasta pyöreän."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1437
 msgid "Error: Custom pad shape must resolve to a single polygon."
-msgstr "Virhe: Mukautetun tyynyn muodon on oltava yksi polygoni."
+msgstr "Virhe: Mukautetun anturan muodon on oltava yksi polygoni."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1443
 msgid "Pad Properties Errors"
@@ -28541,7 +28542,7 @@ msgstr "Anturan numero:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:95
 msgid "Pad shape:"
-msgstr "Tyynyn muoto:"
+msgstr "Anturan muoto:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:99
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:365
@@ -28602,7 +28603,7 @@ msgid ""
 "The width is the smaller value between size X and size Y.\n"
 "The max value is 50 percent."
 msgstr ""
-"Kulmasäde prosentteina tyynyn leveydestä.\n"
+"Kulmasäde prosentteina anturan leveydestä.\n"
 "Leveys on pienempi arvo koon X ja Y välillä.\n"
 "Suurin arvo on 50 prosenttia."
 
@@ -28618,7 +28619,7 @@ msgid ""
 "Note: IPC norm gives a max value = 0.25mm."
 msgstr ""
 "Kulman säde.\n"
-"Voi olla enintään puolet tyynyleveydestä.\n"
+"Voi olla enintään puolet anturan leveydestä.\n"
 "Leveys on pienempi arvo koon X ja Y välillä.\n"
 "Huomaa: IPC-normi antaa maksimiarvon = 0,25 mm."
 
@@ -28634,7 +28635,7 @@ msgid ""
 "The width is the smaller value between size X and size Y.\n"
 "The max value is 50 percent."
 msgstr ""
-"Viisteen koko prosentteina tyynyn leveydestä.\n"
+"Viisteen koko prosentteina anturan leveydestä.\n"
 "Leveys on pienempi arvo koon X ja Y välillä.\n"
 "Suurin arvo on 50 prosenttia."
 
@@ -28647,7 +28648,7 @@ msgstr "Viistekulmat:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:261
 msgid ""
 "Chamfered corners. The position is relative to a pad orientation 0 degree."
-msgstr "Viistetyt kulmat. Asento on suhteessa tyynyn suuntaan 0 astetta."
+msgstr "Viistetyt kulmat. Asento on suhteessa anturan suuntaan 0 astetta."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:212
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:268
@@ -28691,27 +28692,27 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:513
 msgid "Front adhesive"
-msgstr "Sidosaine edessä"
+msgstr "Etupuolen sidosaine"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:516
 msgid "Back adhesive"
-msgstr "Sidosaine takana"
+msgstr "Kääntöpuolen sidosaine"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:519
 msgid "Front solder paste"
-msgstr "Juotospasta edessä"
+msgstr "Etupuolen juotospasta"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:522
 msgid "Back solder paste"
-msgstr "Juotospasta takana"
+msgstr "Kääntöpuolen juotospasta"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:528
 msgid "Back silk screen"
-msgstr "Silkkipaino takana"
+msgstr "Kääntöpuolen silkkipaino"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:534
 msgid "Back solder mask"
-msgstr "Juotosmaski takana"
+msgstr "Kääntöpuolen juotosmaski"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:537
 msgid "Drafting notes"
@@ -28790,8 +28791,8 @@ msgstr ""
 msgid ""
 "Positive clearance means area bigger than the pad (usual for mask clearance)."
 msgstr ""
-"Positiivinen välys tarkoittaa aluetta, joka on suurempi kuin tyyny "
-"(tavallista maskin puhdistukseen)."
+"Positiivinen välys tarkoittaa aluetta, joka on suurempi kuin antura ("
+"tavallista maskin välykselle)."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:591
 msgid ""
@@ -28888,7 +28889,7 @@ msgstr "Primitiivien luettelo:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:807
 msgid "Note: coordinates are relative to anchor pad, orientation 0."
-msgstr "Huomaa: koordinaatit ovat suhteessa ankkurityynyyn, suunta 0."
+msgstr "Huomaa: koordinaatit ovat suhteessa ankkurianturaan, suunta 0."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:826
 msgid "Edit Primitive"
@@ -29206,11 +29207,12 @@ msgid ""
 "The reasonable width correction value must be in a range of [-"
 "(MinTrackWidth-1), +(MinClearanceValue-1)]."
 msgstr ""
-"Aseta yleinen leveyden korjaus tarkalle leveydelle PostScript-tulosteelle.\n"
-"Nämä leveyskorjaukset on tarkoitettu kompensoimaan raitojen leveys ja myös "
-"tyynyjen ja läpivientien koon virheet.\n"
-"Kohtuullisen leveyden korjausarvon on oltava alueella [- (MinTrackWidth-1), "
-"+ (MinClearanceValue-1)]."
+"Aseta yleinen leveyden korjaus PostScript-tulosteen leveykisen tarkkuudelle."
+"\n"
+"Nämä leveyskorjaukset ovat tarkoitetut kompensoimaan johtimien leveyksien "
+"niinkuin myös anturojen ja läpivientien koon virheitä.\n"
+"Kohtuullisen leveyden korjausarvon on oltava alueella [- (MinTrackWidth-1), +"
+" (MinClearanceValue-1)]."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:315
 msgid "Force A4 output"
@@ -29472,8 +29474,8 @@ msgid ""
 "When enabled, the router tries to move colliding traces behind solid "
 "obstacles (e.g. pads) instead of \"reflecting\" back the collision"
 msgstr ""
-"Kun tämä on käytössä, reititin yrittää siirtää törmäysjälkiä kiinteiden "
-"esteiden taakse (esim. Anturat ) sen sijaan, että \"heijastaisi\" törmäyksen "
+"Kun tämä on käytössä, reititin yrittää siirtää törmääviä johtimia kiinteiden "
+"esteiden taakse (esim. anturat ) sen sijaan, että \"heijastaisi\" törmäyksen "
 "takaisin"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:41
@@ -29769,11 +29771,11 @@ msgstr "Estä läpivientien sijoittaminen tälle alueelle"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:83
 msgid "Keep out pads"
-msgstr "Pidä tyynyt poissa"
+msgstr "Pidä anturat poissa"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:84
 msgid "Raise a DRC error if a pad overlaps this area"
-msgstr "Nosta DRC-virhe, jos tyyny menee päällekkäin tämän alueen kanssa"
+msgstr "Nosta DRC-virhe, jos antura menee päällekkäin tämän alueen kanssa"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:88
 msgid "Keep out copper fill"
@@ -30086,7 +30088,7 @@ msgstr "Älä näytä"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:47
 msgid "Show on pads"
-msgstr "Näytä tyynyillä"
+msgstr "Näytä anturoilla"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:47
 msgid "Show on tracks"
@@ -30107,7 +30109,7 @@ msgstr "Näytä tai piilota verkkonimet anturoilla ja/tai johtimilla."
 #: pcbnew/dialogs/panel_display_options_base.cpp:55
 #: pcbnew/tools/pcb_actions.cpp:922
 msgid "Show pad numbers"
-msgstr "Näytä tyynynumerot"
+msgstr "Näytä anturoiden numerot"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:65
 msgid "Clearance Outlines"
@@ -30874,7 +30876,7 @@ msgstr "Maski_Etu"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:127
 msgid "If you want a front copper layer"
-msgstr "Jos sinä haluat etukuparikerroksen"
+msgstr "Jos sinä haluat kuparikerroksen etupuolelle"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:131
 msgid "Front_layer"
@@ -30882,7 +30884,7 @@ msgstr "Etu_kerros"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:132
 msgid "Layer name of front (top) copper layer"
-msgstr "Kerroksen nimi edessä(päällä) kuparikerros"
+msgstr "Etupuolen (yläpuoli) kuparikerroksen nimi"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:136
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:150
@@ -31185,15 +31187,15 @@ msgstr "In30"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:565
 msgid "If you want a back copper layer"
-msgstr "Jos sinä haluat takakuparikerroksen"
+msgstr "Jos haluat kuparikerroksen kääntöpuolelle"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:570
 msgid "Layer name of back (bottom) copper layer"
-msgstr "Kerroksen nimi taka(pohja)kuparikerrokselle"
+msgstr "Kääntöpuolen (alapuoli) kuparikerroksen nimi"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:583
 msgid "If you want a solder mask layer for the back side of the board"
-msgstr "Jos sinä haluat juotosmaskikerroksen piirilevyn takapuolelle"
+msgstr "Jos haluat juotosmaskikerroksen piirilevyn kääntöpuolelle"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:587
 msgid "SoldM_Back"
@@ -31201,7 +31203,7 @@ msgstr "JuotosM_Taka"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:595
 msgid "If you want a silk screen layer for the back side of the board"
-msgstr "Haluttaessa takapuolen silkkipainokerros"
+msgstr "Haluttaessa kääntöpuolen silkkipainokerros"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:599
 msgid "SilkS_Back"
@@ -31209,7 +31211,7 @@ msgstr "SilkkiS_Taka"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:607
 msgid "If you want a solder paste layer for the back side of the board"
-msgstr "Haluttaessa takapuolen juotospastakerros"
+msgstr "Haluttaessa kääntöpuolen juotospastakerros"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:611
 msgid "SoldP_Back"
@@ -31217,7 +31219,7 @@ msgstr "JuotosP_Taka"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:619
 msgid "If you want an adhesive layer for the back side of the board"
-msgstr "Jos haluat sidosainekerroksen piirilevyn takapuolelle"
+msgstr "Jos haluat sidosainekerroksen piirilevyn kääntöpuolelle"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:623
 msgid "Adhes_Back"
@@ -31225,7 +31227,7 @@ msgstr "Adhes_Taka()"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:631
 msgid "If you want a fabrication layer for the back side of the board"
-msgstr "Jos haluat valmistuskerroksen levyn takapuolelle"
+msgstr "Jos haluat valmistuskerroksen levyn kääntöpuolelle"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:635
 msgid "Fab_Back"
@@ -31249,7 +31251,7 @@ msgstr "Reunus"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:668
 msgid "Edge_Cuts setback"
-msgstr "Edge_Cuts takaisku"
+msgstr "Edge_Cuts reunavälys"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:675
 msgid "Eco1"
@@ -33197,7 +33199,7 @@ msgstr "piirilevyn asennus juotosmaskin minimi leveys"
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:511
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:605
 msgid "Front solder mask aperture bridges items with different nets"
-msgstr "Edessä olevan juotosmaskin aukko siltaa kohteita eri verkoilla"
+msgstr "Etupuolen juotosmaskin aukko siltaa eri verkkojen kohteita"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:513
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:607
@@ -33560,7 +33562,7 @@ msgstr "Piirilevyn puoli"
 
 #: pcbnew/footprint.cpp:1042
 msgid "Back (Flipped)"
-msgstr "Takaisin (käännetty)"
+msgstr "Kääntöpuoli (peilattu)"
 
 #: pcbnew/footprint.cpp:1059
 msgid "autoplaced"
@@ -33624,7 +33626,7 @@ msgstr "(PTH anturan reikään ei jää kuparia)"
 
 #: pcbnew/footprint.cpp:2432
 msgid "(SMD pad appears on both front and back copper)"
-msgstr "(SMD-antura näkyy sekä etu- että takakuparissa)"
+msgstr "(SMD-antura näkyy sekä etupuolen että kääntöpuolen kuparissa)"
 
 #: pcbnew/footprint.cpp:2439 pcbnew/footprint.cpp:2452
 msgid "(SMD pad copper and mask layers don't match)"
@@ -33917,10 +33919,10 @@ msgid ""
 "Search terms are separated by spaces.  All search terms must match.\n"
 "A term which is a number will also match against the pad count."
 msgstr ""
-"Suodata jalanjäljen nimi, avainsanat, kuvaus ja tyynyjen määrä.\n"
+"Suodata jalanjäljen nimi, avainsanat, kuvaus ja anturoiden määrä.\n"
 "Hakutermit erotetaan välilyönneillä. Kaikkien hakutermien on vastattava "
 "toisiaan.\n"
-"Numero, joka on numero, vastaa myös tyynyjen määrää."
+"Numero, joka on numero, vastaa myös anturoiden määrää."
 
 #: pcbnew/footprint_viewer_frame.cpp:773
 #, c-format
@@ -34102,11 +34104,11 @@ msgstr "Tuonnin mittakaava:"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:160
 msgid "Group items"
-msgstr "Ryhmät"
+msgstr "Ryhmittele kohteet"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:161
 msgid "Add all imported items into a new group"
-msgstr "Lisää kaikki tuodut tuotteet uuteen ryhmään"
+msgstr "Lisää kaikki tuodut kohteet uuteen ryhmään"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:172
 msgid "DXF Parameters"
@@ -35079,11 +35081,11 @@ msgstr "Jalanjäljen piha ei ole yksi suljettu muoto."
 
 #: pcbnew/pcb_expr_functions.cpp:458
 msgid "Footprint has no front courtyard."
-msgstr "Jalanjäljellä ei ole etupihaa."
+msgstr "Jalanjäljellä ei ole etupuolen pihaa."
 
 #: pcbnew/pcb_expr_functions.cpp:473
 msgid "Footprint has no back courtyard."
-msgstr "Jalanjäljellä ei ole takapihaa."
+msgstr "Jalanjäljellä ei ole pihaa kääntöpuolella."
 
 #: pcbnew/pcb_expr_functions.cpp:589
 #, c-format
@@ -35701,8 +35703,8 @@ msgid ""
 "The CADSTAR pad definition '%s' has the hole shape outside the pad shape. "
 "The hole has been moved to the center of the pad."
 msgstr ""
-"CADSTAR-tyynymäärityksellä '%s' on aukon muoto tyynyn muodon ulkopuolella. "
-"Reikä on siirretty tyynyn keskelle."
+"CADSTAR-anturamäärityksellä '%s' on aukon muoto anturan muodon ulkopuolella. "
+"Reikä on siirretty anturan keskelle."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1238
 #, c-format
@@ -35847,9 +35849,9 @@ msgid ""
 "and vias. KiCad only supports one single setting for both. The setting for "
 "pads has been applied."
 msgstr ""
-"CADSTAR-mallilla \"%s\" on erilaiset lämpötyynyn helpotukset tyynyissä ja "
-"läpivienneissä. KiCad tukee vain yhtä yksittäistä asetusta molemmille. "
-"Tyynyjen asetus on otettu käyttöön."
+"CADSTAR-mallilla \"%s\" on erilaiset lämpöhelpotuksen asetukset anturoissa "
+"ja läpivienneissä. KiCad tukee vain yhtä yksittäistä asetusta molemmille. "
+"Anturoiden asetus on otettu käyttöön."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1945
 #, c-format
@@ -38691,7 +38693,7 @@ msgstr "Päivitä jalanjäljet sisällyttämään kirjastoon tehdyt muutokset"
 
 #: pcbnew/tools/pcb_actions.cpp:477
 msgid "Remove Unused Pads..."
-msgstr "Poista käyttämättömät tyynyt ..."
+msgstr "Poista käyttämättömät anturat..."
 
 #: pcbnew/tools/pcb_actions.cpp:478
 msgid ""
@@ -38802,7 +38804,7 @@ msgstr "Kopioi Pad-ominaisuudet oletusasetuksiin"
 
 #: pcbnew/tools/pcb_actions.cpp:562
 msgid "Copy current pad's properties"
-msgstr "Kopioi nykyisen tyynyn ominaisuudet"
+msgstr "Kopioi nykyisen anturan ominaisuudet"
 
 #: pcbnew/tools/pcb_actions.cpp:567
 msgid "Paste Default Pad Properties to Selected"
@@ -38810,24 +38812,24 @@ msgstr "Liitä oletusalustan ominaisuudet valittuun"
 
 #: pcbnew/tools/pcb_actions.cpp:568
 msgid "Replace the current pad's properties with those copied earlier"
-msgstr "Korvaa nykyisen tyynyn ominaisuudet aiemmin kopioiduilla"
+msgstr "Korvaa nykyisen anturan ominaisuudet aiemmin kopioiduilla"
 
 #: pcbnew/tools/pcb_actions.cpp:573
 msgid "Push Pad Properties to Other Pads..."
-msgstr "Työnnä tyynyjen ominaisuudet muihin tyynyihin ..."
+msgstr "Työnnä anturan ominaisuudet muihin anturoihin..."
 
 #: pcbnew/tools/pcb_actions.cpp:574
 msgid "Copy the current pad's properties to other pads"
-msgstr "Kopioi nykyisen tyynyn ominaisuudet muihin tyynyihin"
+msgstr "Kopioi nykyisen anturan ominaisuudet muihin anturoihin"
 
 #: pcbnew/tools/pcb_actions.cpp:579
 msgid "Renumber Pads..."
-msgstr "Numeroi tyynyt uudelleen ..."
+msgstr "Numeroi anturat uudelleen ..."
 
 #: pcbnew/tools/pcb_actions.cpp:580
 msgid "Renumber pads by clicking on them in the desired order"
 msgstr ""
-"Numeroi tyynyt uudelleen napsauttamalla niitä haluamassasi järjestyksessä"
+"Numeroi anturat uudelleen napsauttamalla niitä haluamassasi järjestyksessä"
 
 #: pcbnew/tools/pcb_actions.cpp:585
 msgid "Add Pad"
@@ -38844,8 +38846,8 @@ msgstr "Muokkaa alusta graafisina muotoina"
 #: pcbnew/tools/pcb_actions.cpp:592
 msgid "Ungroups a custom-shaped pad for editing as individual graphic shapes"
 msgstr ""
-"Poistaa mukautetun muotoisen tyynyn muokkaamisen yksittäisinä graafisina "
-"muotoina"
+"Poistaa mukautetun muotoisen anturan ryhmittelyn yksittäisinä graafisina "
+"muotoina muokkaamista varten"
 
 #: pcbnew/tools/pcb_actions.cpp:598
 msgid "Finish Pad Edit"
@@ -38853,7 +38855,7 @@ msgstr "Viimeistele muokkaus"
 
 #: pcbnew/tools/pcb_actions.cpp:599
 msgid "Regroups all touching graphic shapes into the edited pad"
-msgstr "Ryhmittää kaikki koskettavat graafiset muodot muokattuun alustaan"
+msgstr "Ryhmittää kaikki koskettavat graafiset muodot muokattuun anturaan"
 
 #: pcbnew/tools/pcb_actions.cpp:604
 msgid "Default Pad Properties..."
@@ -38861,7 +38863,7 @@ msgstr "Oletusalustan ominaisuudet ..."
 
 #: pcbnew/tools/pcb_actions.cpp:605
 msgid "Edit the pad properties used when creating new pads"
-msgstr "Muokkaa uusien tyynyjen luomisessa käytettyjä tyynyjen ominaisuuksia"
+msgstr "Muokkaa uusien anturoiden luomisessa käytettyjä anturan ominaisuuksia"
 
 #: pcbnew/tools/pcb_actions.cpp:613
 msgid "Refresh Plugins"
@@ -39472,15 +39474,15 @@ msgstr "Näytä valitun objektin rajoitusten tarkkuus"
 
 #: pcbnew/tools/pcb_actions.cpp:1179
 msgid "Geographical Reannotate..."
-msgstr "Maantieteellinen uudelleenhuomautus ..."
+msgstr "Sijaintiperusteinen uudelleenmerkintä..."
 
 #: pcbnew/tools/pcb_actions.cpp:1179
 msgid "Reannotate PCB in geographical order"
-msgstr "Merkitse PCB uudelleen maantieteellisessä järjestyksessä"
+msgstr "Merkitse piirilevy uudelleen sijaintiperusteisessa järjestyksessä"
 
 #: pcbnew/tools/pcb_actions.cpp:1184
 msgid "Repair Board"
-msgstr "Korjaa Piirilevy"
+msgstr "Korjaa piirilevy"
 
 #: pcbnew/tools/pcb_actions.cpp:1185
 msgid "Run various diagnostics and attempt to repair board"
@@ -39497,7 +39499,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1198
 msgid "Align to Top"
-msgstr "Kohdista Päälle"
+msgstr "Kohdista yläreunaan"
 
 #: pcbnew/tools/pcb_actions.cpp:1198
 msgid "Aligns selected items to the top edge"
@@ -39505,7 +39507,7 @@ msgstr "Kohdistaa valitut kohteet yläreunaan"
 
 #: pcbnew/tools/pcb_actions.cpp:1203
 msgid "Align to Bottom"
-msgstr "Kohdista Pohjaan"
+msgstr "Kohdista alareunaan"
 
 #: pcbnew/tools/pcb_actions.cpp:1203
 msgid "Aligns selected items to the bottom edge"
@@ -39817,7 +39819,7 @@ msgstr "Säädä differentiaaliparin vinous"
 
 #: pcbnew/tools/pcb_actions.cpp:1502
 msgid "Walks the current track back one segment."
-msgstr "Siirtää nykyisen johtimen yhden osion taakse päin."
+msgstr "Siirtää nykyisen johtimen yhden osion taaksepäin."
 
 #: pcbnew/tools/pcb_actions.cpp:1507
 msgid "Route From Other End"
@@ -40159,7 +40161,7 @@ msgstr "Näytä käyttäjän kuvat"
 
 #: pcbnew/widgets/appearance_controls.cpp:338
 msgid "Footprints Front"
-msgstr "Jalanjäljet edessä"
+msgstr "Jalanjäljet etupuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:338
 msgid "Show footprints that are on board's front"
@@ -40167,11 +40169,11 @@ msgstr "Näytä piirilevyn etupuolella olevat jalanjäljet"
 
 #: pcbnew/widgets/appearance_controls.cpp:339
 msgid "Footprints Back"
-msgstr "Jalanjäljet Takaisin"
+msgstr "Kääntöpuolen jalanjäljet"
 
 #: pcbnew/widgets/appearance_controls.cpp:339
 msgid "Show footprints that are on board's back"
-msgstr "Näytä piirilevyn takapuolella olevat jalanjäljet"
+msgstr "Näytä piirilevyn kääntöpuolella olevat jalanjäljet"
 
 #: pcbnew/widgets/appearance_controls.cpp:340
 msgid "Through-hole Pads"
@@ -40272,7 +40274,7 @@ msgstr "Sisäiset Kuparikerrokset"
 
 #: pcbnew/widgets/appearance_controls.cpp:385
 msgid "Front Layers"
-msgstr "Etukerrokset"
+msgstr "Etupuolen kerrokset"
 
 #: pcbnew/widgets/appearance_controls.cpp:388
 msgid "Front Assembly View"
@@ -40280,11 +40282,11 @@ msgstr "Kasausnäkymä edestä"
 
 #: pcbnew/widgets/appearance_controls.cpp:391
 msgid "Back Layers"
-msgstr "Takakerrokset"
+msgstr "Kääntöpuolen kerrokset"
 
 #: pcbnew/widgets/appearance_controls.cpp:394
 msgid "Back Assembly View"
-msgstr "Takana kokoonpanonäkymä"
+msgstr "Kokoonpanonäkymä takaa"
 
 #: pcbnew/widgets/appearance_controls.cpp:436
 #, c-format
@@ -40502,7 +40504,7 @@ msgstr "Sidosaine levyn etupuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1613
 msgid "Adhesive on board's back"
-msgstr "Sidosaine levyn takapuolella"
+msgstr "Sidosaine piirilevyn kääntöpuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1614
 msgid "Solder paste on board's front"
@@ -40510,7 +40512,7 @@ msgstr "Juotospasta levyn etupuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1615
 msgid "Solder paste on board's back"
-msgstr "Juotospasta levyn takapuolella"
+msgstr "Juotospasta piirilevyn kääntöpuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1616
 msgid "Silkscreen on board's front"
@@ -40518,7 +40520,7 @@ msgstr "Silkkipaino levyn etupuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1617
 msgid "Silkscreen on board's back"
-msgstr "Silkkipaino levyn takapuolella"
+msgstr "Silkkipaino piirilevyn kääntöpuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1618
 msgid "Solder mask on board's front"
@@ -40526,7 +40528,7 @@ msgstr "Juotosmaski levyn etupuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1619
 msgid "Solder mask on board's back"
-msgstr "Juotosmaski levyn takapuolella"
+msgstr "Juotosmaski piirilevyn kääntöpuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1620
 msgid "Explanatory drawings"
@@ -40551,11 +40553,11 @@ msgstr "Piirilevyn reunan ääriviivan vähimmäisetäisyys"
 
 #: pcbnew/widgets/appearance_controls.cpp:1626
 msgid "Footprint courtyards on board's front"
-msgstr "Jalanjäljen komponettipihat piirilevyn edessä"
+msgstr "Jalanjäljen komponettipihat piirilevyn etupuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1627
 msgid "Footprint courtyards on board's back"
-msgstr "Jalanjäljen komponettipihat piirilevyn takana"
+msgstr "Jalanjäljen komponenttipihat piirilevyn kääntöpuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1628
 msgid "Footprint assembly on board's front"
@@ -40563,7 +40565,7 @@ msgstr "Jalanjäljen asennus levyn etupuolelle"
 
 #: pcbnew/widgets/appearance_controls.cpp:1629
 msgid "Footprint assembly on board's back"
-msgstr "Jalanjäljen asennus piirilevyn takapuolelle"
+msgstr "Jalanjäljen asennus piirilevyn kääntöpuolelle"
 
 #: pcbnew/widgets/appearance_controls.cpp:1630
 msgid "User defined layer 1"
@@ -40603,11 +40605,11 @@ msgstr "Käyttäjän määrittelemä taso 9"
 
 #: pcbnew/widgets/appearance_controls.cpp:1686
 msgid "Front copper layer"
-msgstr "Kuparikerros, etu"
+msgstr "Etupuolen kuparikerros"
 
 #: pcbnew/widgets/appearance_controls.cpp:1687
 msgid "Back copper layer"
-msgstr "Kuparikerros, taka"
+msgstr "Kääntöpuolen kuparikerros"
 
 #: pcbnew/widgets/appearance_controls.cpp:1688
 msgid "Inner copper layer"
@@ -40631,11 +40633,11 @@ msgstr "Piilota kaikki ei-kupariset kerrokset"
 
 #: pcbnew/widgets/appearance_controls.cpp:1804
 msgid "Show Only Front Assembly Layers"
-msgstr "Näytä vain Etukokopanokerrokset"
+msgstr "Näytä vain etupuolen kokoonpanokerrokset"
 
 #: pcbnew/widgets/appearance_controls.cpp:1807
 msgid "Show Only Front Layers"
-msgstr "Näytä vain Etukerrokset"
+msgstr "Näytä vain etupuolen kerrokset"
 
 #: pcbnew/widgets/appearance_controls.cpp:1813
 msgid "Show Only Inner Layers"
@@ -40643,11 +40645,11 @@ msgstr "Näytä vain Sisäkerrokset"
 
 #: pcbnew/widgets/appearance_controls.cpp:1817
 msgid "Show Only Back Layers"
-msgstr "Näytä vain Takakerrokset"
+msgstr "Näytä vain kääntöpuolen kerrokset"
 
 #: pcbnew/widgets/appearance_controls.cpp:1820
 msgid "Show Only Back Assembly Layers"
-msgstr "Näytä vain Takakokoonpanokerrokset"
+msgstr "Näytä vain kääntöpuolen kokoonpanokerrokset"
 
 #: pcbnew/widgets/appearance_controls.cpp:2130
 #, c-format
