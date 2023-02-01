@@ -25,8 +25,10 @@
 #include <wx/clipbrd.h>
 #include <wx/log.h>
 #include <wx/textctrl.h>
+#include <wx/uri.h>
 #include <string_utils.h>
 #include <dialogs/html_message_box.h>
+#include <build_version.h>
 
 
 HTML_MESSAGE_BOX::HTML_MESSAGE_BOX( wxWindow* aParent, const wxString& aTitle,
@@ -141,6 +143,20 @@ void HTML_MESSAGE_BOX::ShowModeless()
     Layout();
 
     Show( true );
+}
+
+
+void HTML_MESSAGE_BOX::OnHTMLLinkClicked( wxHtmlLinkEvent& event )
+{
+    wxString href = event.GetLinkInfo().GetHref();
+
+    if( href.StartsWith( wxS( "https://docs.kicad.org/" ) ) )
+    {
+        href.Replace( wxS( "GetMajorMinorVersion" ), GetMajorMinorVersion() );
+
+        wxURI uri( href );
+        wxLaunchDefaultBrowser( uri.BuildURI() );
+    }
 }
 
 

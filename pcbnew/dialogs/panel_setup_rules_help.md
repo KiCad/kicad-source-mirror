@@ -312,3 +312,7 @@ Deprecated; use `intersectsArea()` instead.
         (constraint track_width (min 1.0mm))
         (constraint connection_width (min 0.8mm))
         (condition "A.NetClass == 'Power'"))
+
+### Documentation
+
+For the full documentation see [https://docs.kicad.org](https://docs.kicad.org/GetMajorMinorVersion/pcbnew/#custom_design_rules).
