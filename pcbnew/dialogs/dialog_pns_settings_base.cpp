@@ -71,7 +71,7 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	m_autoPosture = new wxCheckBox( bOptions->GetStaticBox(), wxID_ANY, _("Use mouse path to set track posture"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_autoPosture->SetToolTip( _("When enabled, the posture of tracks will be guided by how the mouse is moved from the starting location") );
 
-	bOptions->Add( m_autoPosture, 0, wxALL, 5 );
+	bOptions->Add( m_autoPosture, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	m_fixAllSegments = new wxCheckBox( bOptions->GetStaticBox(), wxID_ANY, _("Fix all segments on click"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_fixAllSegments->SetToolTip( _("When enabled, all track segments will be fixed in place up to the cursor location.  When disabled, the last segment (closest to the cursor) will remain free and follow the cursor.") );
