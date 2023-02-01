@@ -289,8 +289,13 @@ int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
 
         SCH_SYMBOL* symbol = (SCH_SYMBOL*) selection.Front();
 
-        // Use GetShownText() to resolve any text variables
-        datasheet = symbol->GetField( DATASHEET_FIELD )->GetShownText();
+        // Use GetShownText() to resolve any text variables, but uve only field value
+        // (do not allow adding field name )
+        SCH_FIELD* tmp = symbol->GetField( DATASHEET_FIELD );
+        bool name_shown = tmp->IsNameShown();
+        tmp->SetNameShown( false );
+        datasheet = tmp->GetShownText();
+        tmp->SetNameShown( name_shown );
     }
 
     if( datasheet.IsEmpty() || datasheet == wxT( "~" ) )
