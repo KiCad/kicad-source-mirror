@@ -240,29 +240,6 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
             wxString modelParams;
             wxString pinMap;
 
-            // JEY TODO: readModel() below will also do the inference, so I don't think this
-            // accomplishes anything....
-            // Infer RLC and VI models if they aren't specified
-            if( SIM_MODEL::InferSimModel( *symbol, &spiceItem.fields, true,
-                                          SIM_VALUE_GRAMMAR::NOTATION::SPICE, &deviceType,
-                                          &modelType, &modelParams, &pinMap ) )
-            {
-                spiceItem.fields.emplace_back( symbol, -1, SIM_DEVICE_TYPE_FIELD );
-                spiceItem.fields.back().SetText( deviceType );
-
-                if( !modelType.IsEmpty() )
-                {
-                    spiceItem.fields.emplace_back( symbol, -1, SIM_TYPE_FIELD );
-                    spiceItem.fields.back().SetText( modelType );
-                }
-
-                spiceItem.fields.emplace_back( symbol, -1, SIM_PARAMS_FIELD );
-                spiceItem.fields.back().SetText( modelParams );
-
-                spiceItem.fields.emplace_back( symbol, -1, SIM_PINS_FIELD );
-                spiceItem.fields.back().SetText( pinMap );
-            }
-
             try
             {
                 readRefName( sheet, *symbol, spiceItem, refNames );
