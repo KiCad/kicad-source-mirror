@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-30 17:07-0800\n"
-"PO-Revision-Date: 2023-02-01 03:03+0000\n"
+"PO-Revision-Date: 2023-02-01 16:10+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
@@ -69,8 +69,8 @@ msgstr ""
 #: 3d-viewer/3d_canvas/board_adapter.cpp:694
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
-"Piirilevyn ääriviiva puuttuu tai on epämuodostunut. Suorita DRC täydellistä "
-"analyysiä varten."
+"Piirilevyn ääriviiva puuttuu tai on epämuodostunut. Suorita "
+"suunnittelusääntöjen tarkistus (DRC) saadaksesi täydellisen analyysin."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:226
 msgid "Create tracks and vias"
@@ -7511,7 +7511,8 @@ msgid ""
 msgstr ""
 "\n"
 "Sinun on määritettävä ne uudelleen manuaalisesti, jos haluat niiden "
-"päivittyvän oikein, kun seuraavan kerran tuot netlistin Pcbnewiin."
+"päivittyvän oikein, kun seuraavan kerran tuot verkkolistan "
+"piirilevyeditoriin."
 
 #: cvpcb/readwrite_dlgs.cpp:307
 msgid "Schematic saved"
@@ -7822,7 +7823,7 @@ msgstr "(tiedosto puuttuu)"
 #: eeschema/dialogs/dialog_bom.cpp:294
 #, c-format
 msgid "The selected BOM generator script %s could not be found."
-msgstr "Valittua BOM-generaattoriskriptiä %s ei löydy."
+msgstr "Valittua materiaaliluettelon generaattoriskriptiä %s ei löydy."
 
 #: eeschema/dialogs/dialog_bom.cpp:299
 #, c-format
@@ -7842,7 +7843,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_bom.cpp:345
 msgid "Generating BOM requires a fully annotated schematic."
 msgstr ""
-"Materiaalilistan (BOM) generointi vaatii täysin kommentoidun kytkentäkaavion."
+"Materiaaliluettelon (BOM) generointi vaatii täysin kommentoidun "
+"kytkentäkaavion."
 
 #: eeschema/dialogs/dialog_bom.cpp:382 eeschema/dialogs/dialog_bom_base.cpp:45
 msgid "Generator nickname:"
@@ -7872,11 +7874,12 @@ msgstr "Materiaaliluettelon luontiohje"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:27
 msgid "BOM generator scripts:"
-msgstr "BOM-generaattorin komentosarjat:"
+msgstr "Materialiluettelon generaattorin komentosarjat:"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:71
 msgid "Add a new BOM generator and its command line to the list"
-msgstr "Lisää uusi BOM-generaattori ja sen komentorivi luetteloon"
+msgstr ""
+"Lisää uusi materialiluettelon generaattori ja sen komentorivi luetteloon"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:76
 msgid "Edit the script file in the text editor"
@@ -9801,10 +9804,10 @@ msgid ""
 "from editing in the schematic.  The symbol will not be included in\n"
 "the BOM and cannot be assigned a footprint."
 msgstr ""
-"Tämän vaihtoehdon asettaminen saa kyseisen symbolin kysymyksen näkyviin\n"
-"\"lisää tehosymboli\" -valintaikkunassa. Se lukitsee arvotekstin sen "
+"Tämän vaihtoehdon asettaminen saa kyseisen symbolin näkyviin\n"
+"\"lisää tehosymboli\" -valintaikkunassa.  Se lukitsee arvotekstin sen "
 "suojaamiseksi\n"
-"muokkaamiselta kytkentäkaaviossa. Symbolia ei sisällytetä \n"
+"muokkaamiselta kytkentäkaaviossa.  Symbolia ei sisällytetä \n"
 "materiaaliluetteloon, eikä sille voi määrittää jalanjälkeä."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:219
@@ -11726,7 +11729,7 @@ msgstr "Verkonimet"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.h:55
 msgid "Update Schematic from PCB"
-msgstr "Päivitä kaavio PCB: ltä"
+msgstr "Päivitä kaavio piirilevyltä"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:21
 msgid "Parent symbol:"
@@ -13773,7 +13776,7 @@ msgid ""
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
 "and create a project."
 msgstr ""
-"Piirikorttia ei voi päivittää, koska kytkentäkaavio on avattu suoraan "
+"Piirilevyä ei voi päivittää, koska kytkentäkaavio on avattu suoraan "
 "editoriin. Voit luoda/päivittää piirilevyjä kytkentäkaavioista, kun "
 "käynnistät KiCad-ohjelman ja luot projektin."
 
@@ -14698,7 +14701,7 @@ msgstr "Hierarkinen lehtinasta %s"
 
 #: eeschema/sch_symbol.cpp:1240
 msgid "Excluded from BOM"
-msgstr "Poissuljettu BOM-luettelosta"
+msgstr "Poissuljettu materiaaliluettelosta"
 
 #: eeschema/sch_symbol.cpp:1245
 msgid "Excluded from board"
@@ -16922,9 +16925,9 @@ msgid ""
 "Cannot fetch PCB netlist because eeschema is opened in stand-alone mode.\n"
 "You must launch the KiCad project manager and create a project."
 msgstr ""
-"PCB-verkkoluetteloa ei voi noutaa, koska eeschema on auki erillisessä "
-"tilassa.\n"
-"Sinun on käynnistettävä KiCad-projektipäällikkö ja luotava projekti."
+"Piirilevyn verkkoluetteloa ei voi noutaa, koska eeschema on avattu "
+"erillisessä tilassa.\n"
+"Sinun on käynnistettävä KiCad-projektinhallinta ja luotava projekti."
 
 #: eeschema/tools/backannotate.cpp:164
 #, c-format
@@ -17781,7 +17784,7 @@ msgstr "Vie nykyisen arkin piirustus leikepöydälle"
 
 #: eeschema/tools/ee_actions.cpp:660
 msgid "Switch to PCB Editor"
-msgstr "Vaihda PCB Editoriin"
+msgstr "Vaihda piirilevyeditoriin"
 
 #: eeschema/tools/ee_actions.cpp:660
 msgid "Open PCB in board editor"
@@ -17798,7 +17801,7 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:670
 msgid "Generate BOM..."
-msgstr "Luo BOM ..."
+msgstr "Luo materiaaliluettelo..."
 
 #: eeschema/tools/ee_actions.cpp:670
 msgid "Generate a bill of materials for the current schematic"
@@ -17831,11 +17834,11 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:689
 msgid "Select on PCB"
-msgstr "Valitse PCB:ltä"
+msgstr "Valitse piirilevyltä"
 
 #: eeschema/tools/ee_actions.cpp:690
 msgid "Select corresponding items in PCB editor"
-msgstr "Valitse vastaavat kohteet PCB editorissa"
+msgstr "Valitse vastaavat kohteet piirilevyeditorissa"
 
 #: eeschema/tools/ee_actions.cpp:695
 msgid "Show Hidden Pins"
@@ -19846,7 +19849,7 @@ msgstr ""
 #: kicad/cli/command_fp_export_svg.cpp:40
 #: kicad/cli/command_sym_export_svg.cpp:40
 msgid "Color theme to use (will default to pcbnew settings)"
-msgstr "Käytettävä väriteema (oletuksena pcbnew-asetukset)"
+msgstr "Käytettävä väriteema (oletuksena piirilevyeditorin asetukset)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:44
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:64
@@ -19971,7 +19974,7 @@ msgid ""
 "orcadpcb2, spice, spicemodel"
 msgstr ""
 "Verkkolista-tulostusmuoto, hyväksytyt asetukset: kicadsexpr, kicadxml, "
-"cadstar, orcadpcb2, spice, spicemalli"
+"cadstar, orcadpcb2, spice, spicemodel"
 
 #: kicad/cli/command_export_sch_netlist.cpp:50
 #: kicad/cli/command_export_sch_pdf.cpp:69
@@ -20053,7 +20056,7 @@ msgstr "Muokkaa yleistä ja/tai projektin symbolikirjastoluetteloa"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:138
 msgid "Edit the project PCB design"
-msgstr "Muokkaa projektin PCB:n suunnittelua"
+msgstr "Muokkaa projektin piirilevysuunnittelua"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:142
 msgid "Edit global and/or project PCB footprint libraries"
@@ -22415,11 +22418,11 @@ msgstr "mV"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:154
 msgid "PCB Calculator data file"
-msgstr "PCB Laskimen datatiedosto"
+msgstr "Laskintyökalujen datatiedosto"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:157
 msgid "Select PCB Calculator Data File"
-msgstr "Valitse piirilevyn laskimen datatiedosto"
+msgstr "Valitse laskintyökalujen datatiedosto"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:172
 msgid "Do you want to load this file and replace current regulator list?"
@@ -24073,7 +24076,7 @@ msgstr "Ei määritelty"
 
 #: pcbnew/build_BOM_from_board.cpp:79
 msgid "Cannot export BOM: there are no footprints on the PCB."
-msgstr "BOM-tiedostoa ei voi viedä: piirilevyssä ei ole jalanjälkiä."
+msgstr "Materiaaliluetteloa ei voi viedä: piirilevyssä ei ole jalanjälkiä."
 
 #: pcbnew/build_BOM_from_board.cpp:89
 msgid "Save Bill of Materials"
@@ -24211,8 +24214,8 @@ msgid ""
 "PCB annotation changes should be synchronized with schematic using the "
 "\"Update Schematic from PCB\" tool."
 msgstr ""
-"Piirikortin selitemuutokset tulisi synkronisoida kytkentäkaavion kanssa "
-"käyttäen \"Päivitä kytkentäkaavio piirikortilta\" työkalua."
+"Piirilevyn selitemuutokset tulisi synkronisoida kytkentäkaavion kanssa "
+"käyttäen \"Päivitä kytkentäkaavio piirilevyltä\" työkalua."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:304
 #, c-format
@@ -24410,9 +24413,9 @@ msgid ""
 "checked.\n"
 msgstr ""
 "\n"
-"Piirilevyssä on %d tyhjä tai virheellinen viitenimitys.\n"
-"Suosittellaan ajamaan DRC:llä optiolla 'Testaa pariteetti Piirilevyn ja "
-"kytkentäkaavion välillä'.\n"
+"Piirilevyssä on %d tyhjää tai virheellistä viitteennimitystä.\n"
+"Suosittellaan suorittamaan suunnittelusääntöjen tarkistus (DRC) optiolla "
+"'Testaa pariteetti piirilevyn ja kytkentäkaavion välillä'.\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:599
 #, c-format
@@ -24730,7 +24733,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_setup.cpp:193 pcbnew/files.cpp:654
 #: pcbnew/tools/pcb_control.cpp:1277
 msgid "Loading PCB"
-msgstr "Ladataan piirikorttia"
+msgstr "Ladataan piirilevyä"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:215
 #, c-format
@@ -24835,7 +24838,7 @@ msgid ""
 "PCB statistics report\n"
 "====================="
 msgstr ""
-"PCB-tilastoraportti\n"
+"Piirileyn tilastoraportti\n"
 "====================="
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:662
@@ -24931,7 +24934,7 @@ msgstr "Päivitä Jalanjälki"
 #: pcbnew/dialogs/dialog_import_netlist.cpp:83
 #: pcbnew/dialogs/dialog_update_pcb.cpp:59
 msgid "Update PCB"
-msgstr "Päivitä PIIRILEVY"
+msgstr "Päivitä piirilevy"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:124
 msgid "Graphics cleanup"
@@ -25130,7 +25133,9 @@ msgstr "Vyöhykkeen nimi:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:97
 msgid "A unique name for this zone to identify it for DRC"
-msgstr "Tämän vyöhykkeen yksilöllinen nimi sen tunnistamiseksi DRC:ssä"
+msgstr ""
+"Tämän vyöhykkeen yksilöllinen nimi sen tunnistamiseksi suunnittelusääntöjen "
+"tarkistuksessa"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:104
 msgid "Zone priority level:"
@@ -25149,7 +25154,7 @@ msgstr ""
 "Kun vyöhyke on toisen vyöhykkeen sisällä:\n"
 "* Jos sen prioriteetti on korkeampi, sen ääriviivat poistetaan toisesta "
 "vyöhykkeestä.\n"
-"* Jos sen prioriteetti on sama, DRC-virhe asetetaan."
+"* Jos sen prioriteetti on sama, asetetaan suunnittelusääntövirhe."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:130
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:116
@@ -25898,11 +25903,13 @@ msgstr "Mittojen Ominaisuudet"
 
 #: pcbnew/dialogs/dialog_drc.cpp:125
 msgid "Run DRC"
-msgstr "Suorita DRC"
+msgstr "Suorita suunnittelusääntöjen tarkistus (DRC)"
 
 #: pcbnew/dialogs/dialog_drc.cpp:263
 msgid "DRC incomplete: could not compile custom design rules.  "
-msgstr "DRC keskeneräinen: ei voitu koota mukautettuja suunnitelusääntöjä.  "
+msgstr ""
+"Suunnittelusääntöjen tarkistus keskeneräinen: ei voitu koota mukautettuja "
+"suunnitelusääntöjä.  "
 
 #: pcbnew/dialogs/dialog_drc.cpp:265 pcbnew/tools/board_inspection_tool.cpp:176
 msgid "Show design rules."
@@ -25910,7 +25917,7 @@ msgstr "Näytä suunnittelusäännöt."
 
 #: pcbnew/dialogs/dialog_drc.cpp:310
 msgid "-------- DRC cancelled by user.<br><br>"
-msgstr "-------- Käyttäjä keskeytti DRC:n.<br><br>"
+msgstr "-------- Käyttäjä keskeytti suunnittelusääntöjen tarkistuksen.<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:577
 #, c-format
@@ -25953,7 +25960,9 @@ msgstr "älä käynnistä"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:27
 msgid "Refill all zones before performing DRC"
-msgstr "Täytä kaikki alueet ennen DRC: n suorittamista"
+msgstr ""
+"Täytä kaikki alueet uudelleen ennen suunnittelusääntöjen tarkistuksen "
+"suorittamista"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
 msgid "Report all errors for each track"
@@ -25967,15 +25976,16 @@ msgid ""
 "If unselected, only the first DRC violation will be reported for each track "
 "connection."
 msgstr ""
-"Jos tämä valitaan, kaikista kappaleiden DRC-rikkomuksista ilmoitetaan. Tämä "
-"voi olla hidasta monimutkaisissa malleissa.\n"
+"Jos tämä valitaan, ilmoitetaan kaikista johtimien "
+"suunnittelusääntövirheistä. Tämä voi olla hidasta monimutkaisissa malleissa."
 "\n"
-"Jos valitsinta ei valita, vain ensimmäisestä DRC-rikkomuksesta ilmoitetaan "
-"kustakin raidayhteydestä."
+"\n"
+"Jos valintaa ei valita, kustakin jotimesta ilmoitetaan ainoastaan "
+"ensimmäinen suunnittelusääntövirhe."
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:41
 msgid "Test for parity between PCB and schematic"
-msgstr "Testaa PCB: n ja kaavamaisen välinen pariteetti"
+msgstr "Testaa piirilevyn ja kytkentäkaavion välinen pariteetti"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:119
 #, c-format
@@ -26212,7 +26222,7 @@ msgid ""
 "Run DRC for a full analysis."
 msgstr ""
 "Piirilevyn ääriviiva puuttuu tai se ei ole suljettu %.3f mm toleranssilla.\n"
-"Suorita DRC täydellistä analyysiä varten."
+"Suorita suunnittelusääntöjen tarkistus saadaksesi täydellisen analyysin."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:357
 #: pcbnew/dialogs/dialog_export_step_process_base.h:44
@@ -26263,7 +26273,7 @@ msgstr "Ohita asentamattomat komponentit"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:111
 msgid "Do not show components not in BOM and not in place file"
 msgstr ""
-"Älä näytä komponentteja, jotka eivät ole tuoteluettelossa tai "
+"Älä näytä komponentteja, jotka eivät ole materiaaliluettelossa tai "
 "paikkatiedostossa"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:115
@@ -26550,7 +26560,7 @@ msgstr "Hae muita tekstikohteita"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:74
 msgid "Search DRC markers"
-msgstr "Hae DRC-merkkeistä"
+msgstr "Hae DRC-merkeistä"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:78
 msgid "Search net names"
@@ -26723,7 +26733,7 @@ msgstr "Vapauta piha-alue vaatimuksista"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:208
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:212
 msgid "Will not generate \"missing courtyard\" DRC violations"
-msgstr "Ei generoida \"puuttuva piha-alue\" DRC rikkeisiin"
+msgstr "Ei generoi \"puuttuva piha-alue\" suunnittelusääntövirheitä"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:224
 msgid "Update Footprint from Library..."
@@ -27599,11 +27609,11 @@ msgstr "Graafiset jalanjäljet"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:43
 msgid "PCB graphic items"
-msgstr "Piirilevyn graafiset esineet"
+msgstr "Piirilevyn graafiset kohteet"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
 msgid "PCB text items"
-msgstr "PCB-tekstikohdat"
+msgstr "Piirilevyn tekstikohteet"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:61
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:71
@@ -27834,7 +27844,7 @@ msgstr "Netlist-tiedostoa ei ole olemassa."
 #: pcbnew/dialogs/dialog_import_netlist.cpp:157
 #: pcbnew/dialogs/dialog_update_pcb.cpp:134
 msgid "Changes Applied to PCB"
-msgstr "Muutokset Koskevat Piirilevyä"
+msgstr "Muutokset sovellettu piirilevylle"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:225
 #, c-format
@@ -29268,12 +29278,12 @@ msgstr "PDF Asetukset"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:438
 msgid "Run DRC..."
-msgstr "Suorita DRC ..."
+msgstr "Suorita suunnittelusääntöjen tarkistus..."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:441
 #, c-format
 msgid "(%d known DRC violations; %d exclusions)"
-msgstr "(%d tunnettua DRC-rikkomusta; %d jätetty huomiotta)"
+msgstr "(%d tunnettua suunnittelusääntövirhettä; %d jätetty huomiotta)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:465
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:283
@@ -29423,15 +29433,15 @@ msgstr "Jäljen pituuden säätö"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:34
 msgid "DRC violation: highlight obstacles"
-msgstr "DRC-rikkomus: korosta esteitä"
+msgstr "Suunnittelusääntövirhe: korosta esteitä"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:35
 msgid "DRC violation: shove tracks and vias"
-msgstr "DRC-rikkomus: työnnä liuskoja ja läpivientejä"
+msgstr "Suunnittelusääntövirhe: työnnä johtimia ja läpivientejä"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:36
 msgid "DRC violation: walk around obstacles"
-msgstr "DRC-rikkomus: kierrä esteet"
+msgstr "Suunnittelusääntövirhe: kierrä esteet"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:19
 msgid "Highlight collisions"
@@ -29520,15 +29530,15 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:56
 msgid "Allow DRC violations"
-msgstr "Salli DRC-rikkomukset"
+msgstr "Salli suunnittelusääntövirheet"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:57
 msgid ""
 "(Highlight collisions mode only) - allows one to establish a track even if "
 "is violating the DRC rules."
 msgstr ""
-"(Korosta vain törmäys -tila) - sallii vedon muodostamisen, vaikka se rikkoo "
-"DRC-sääntöjä."
+"(Vain tilassa: Korosta törmäys) - sallii johtimen muodostamisen, vaikka se "
+"rikkoo suunnittelusääntöjä."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:61
 msgid "Suggest track finish"
@@ -29697,7 +29707,7 @@ msgstr "Tuota Piirilevy"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.h:44
 msgid "Send PCB for production"
-msgstr "Lähetä Piirilevy tuotantoon"
+msgstr "Lähetä piirilevy tuotantoon"
 
 #: pcbnew/dialogs/dialog_push_pad_properties.cpp:49
 msgid "Change Pads on Current Footprint"
@@ -29747,7 +29757,8 @@ msgstr "Alueen nimi:"
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:54
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:131
 msgid "A unique name for this rule area for use in DRC rules"
-msgstr "Tämän sääntöalueen yksilöllinen nimi käytettäväksi DRC-säännöissä"
+msgstr ""
+"Tämän sääntöalueen yksilöllinen nimi käytettäväksi suunnittelusäännöissä"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:69
 msgid "Basic rules:"
@@ -29775,7 +29786,9 @@ msgstr "Pidä anturat poissa"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:84
 msgid "Raise a DRC error if a pad overlaps this area"
-msgstr "Nosta DRC-virhe, jos antura menee päällekkäin tämän alueen kanssa"
+msgstr ""
+"Nosta suunnittelusääntövirhe, jos antura menee päällekkäin tämän alueen "
+"kanssa"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:88
 msgid "Keep out copper fill"
@@ -29791,7 +29804,9 @@ msgstr "Pidä jalanjäljet poissa"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:94
 msgid "Raise a DRC error if a footprint courtyard overlaps this area"
-msgstr "Nosta DRC-virhe, jos sisäpiha on päällekkäinen tämän alueen kanssa"
+msgstr ""
+"Nosta suunnittelusääntövirhe, jos sisäpiha on päällekkäinen tämän alueen "
+"kanssa"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.h:68
 msgid "Rule Area Properties"
@@ -30079,7 +30094,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_update_pcb_base.h:53
 msgid "Update PCB from Schematic"
-msgstr "Päivitä PCB Kytkentäkaaviosta"
+msgstr "Päivitä piirilevy kytkentäkaaviosta"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:47
 #: pcbnew/dialogs/panel_display_options_base.cpp:75
@@ -31446,7 +31461,7 @@ msgstr "Perutaanko muutokset?"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:564
 msgid "DRC rules"
-msgstr "DRC-säännöt"
+msgstr "suunnittelusäännöt"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:571
 #: pcbnew/drc/drc_rule_condition.cpp:64
@@ -31459,7 +31474,7 @@ msgstr "Suunnittelusääntöjä ei voi lisätä ilman projektia"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:22
 msgid "DRC rules:"
-msgstr "DRC-säännöt:"
+msgstr "Suunnittelusäännöt:"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:76
 msgid "Check rule syntax"
@@ -33182,7 +33197,7 @@ msgstr "Anturaa ei löydy nastalle %s kytkentäkaaviossa."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:219
 msgid "Checking PCB to schematic parity..."
-msgstr "Tarkistetaan piirilevyn vastaavuutta..."
+msgstr "Tarkistetaan piirilevyn vastaavuutta kytkentäkaavioon..."
 
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:97
 msgid "Checking silkscreen for overlapping items..."
@@ -33303,8 +33318,8 @@ msgstr "Ne on nyt viety ovaalianturoina."
 #: pcbnew/specctra_import_export/specctra_export.cpp:124
 msgid "Board outline is malformed. Run DRC for a full analysis."
 msgstr ""
-"Taulun piirteet ovat epämuodostuneet. Suorita DRC täydellistä analyysiä "
-"varten."
+"Piirilevyn ääriviivat ovat epämuodostuneet. Suorita suunnittelusääntöjen "
+"tarkistus saadaksesi täydellisen analyysin."
 
 #: pcbnew/exporters/export_idf.cpp:655 pcbnew/exporters/export_idf.cpp:664
 #: pcbnew/exporters/export_idf.cpp:672
@@ -33457,7 +33472,7 @@ msgstr ""
 #: pcbnew/files.cpp:614
 #, c-format
 msgid "PCB '%s' is already open."
-msgstr "PCB '%s' on jo auki."
+msgstr "Piirilevy '%s' on jo auki."
 
 #: pcbnew/files.cpp:622
 msgid "The current PCB has been modified.  Save changes?"
@@ -33475,12 +33490,12 @@ msgstr "Luodaan piirilevyä"
 #: pcbnew/files.cpp:758 pcbnew/files.cpp:768
 #, c-format
 msgid "Error loading PCB '%s'."
-msgstr "Virhe ladattaessa korttia '%s'."
+msgstr "Virhe ladattaessa piirilevyä '%s'."
 
 #: pcbnew/files.cpp:777
 #, c-format
 msgid "Memory exhausted loading PCB '%s'"
-msgstr "Muisti loppui ladattaessa korttia '%s'"
+msgstr "Muisti loppui ladattaessa piirilevyä '%s'"
 
 #: pcbnew/files.cpp:890
 #, c-format
@@ -33578,7 +33593,7 @@ msgstr "sulje pois pos-tiedostoista"
 
 #: pcbnew/footprint.cpp:1068
 msgid "exclude from BOM"
-msgstr "jätä luettelosta pois"
+msgstr "sulje pois materiaaliluettelosta"
 
 #: pcbnew/footprint.cpp:1070
 msgid "Status: "
@@ -34084,11 +34099,11 @@ msgstr "Klo"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:75
 msgid "DXF origin on PCB Grid, X Coordinate"
-msgstr "DXF-lähtö PCB-ruudukossa, X-koordinaatti"
+msgstr "DXF-lähtö piirilevyruudukossa, X-koordinaatti"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:96
 msgid "DXF origin on PCB Grid, Y Coordinate"
-msgstr "DXF-lähtö PCB-ruudukossa, Y-koordinaatti"
+msgstr "DXF-lähtö piirilevyruudukossa, Y-koordinaatti"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:117
 msgid "Import Parameters"
@@ -34197,7 +34212,7 @@ msgstr "&Kontrastitila"
 
 #: pcbnew/menubar_footprint_editor.cpp:218
 msgid "&Load Footprint from PCB..."
-msgstr "&Lataa Jalanjälki Piirilevyltä..."
+msgstr "&Lataa jalanjälki piirilevyltä..."
 
 #: pcbnew/menubar_footprint_editor.cpp:219
 msgid "Load a footprint from the current board into the editor"
@@ -34205,7 +34220,7 @@ msgstr "Lataa jalanjälki nykyiseltä levyltä editoriin"
 
 #: pcbnew/menubar_footprint_editor.cpp:223
 msgid "&Insert Footprint on PCB"
-msgstr "&Lisää Jalanjälki Piirilevylle"
+msgstr "&Lisää jalanjälki piirilevylle"
 
 #: pcbnew/menubar_footprint_editor.cpp:224
 msgid "Insert footprint onto current board"
@@ -34521,22 +34536,22 @@ msgstr "Päivitettiin %s ominaisuudet."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:372
 #, c-format
 msgid "Add %s 'exclude from BOM' fabrication attribute."
-msgstr "Aseta %s 'älä lisää BOM:iin' valmistusasetus."
+msgstr "Aseta %s:lle valmistusasetus 'sulje pois materiaaliluettelosta'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:377
 #, c-format
 msgid "Remove %s 'exclude from BOM' fabrication attribute."
-msgstr "Poista %s 'älä lisää BOM:iin' valmistusasetus."
+msgstr "Poista %s:ltä valmistusasetus 'sulje pois materiaaliluettelosta'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:388
 #, c-format
 msgid "Added %s 'exclude from BOM' fabrication attribute."
-msgstr "Lisättiin %s 'älä lisää BOM:iin' valmistusasetus."
+msgstr "Lisättiin %s:lle valmistusasetus 'sulje pois materiaaliluettelosta'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:394
 #, c-format
 msgid "Removed %s 'exclude from BOM' fabrication attribute."
-msgstr "Poistettiin %s 'älä lisää BOM:iin' valmistusasetus."
+msgstr "Poistettiin %s:ltä valmistusasetus 'sulje pois materiaaliluettelosta'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:470
 #, c-format
@@ -34999,7 +35014,7 @@ msgstr "Etsi"
 
 #: pcbnew/pcb_edit_frame.cpp:393
 msgid "New PCB file is unsaved"
-msgstr "Uusi Piirilevytiedosto on tallentamatta"
+msgstr "Uusi piirilevytiedosto on tallentamatta"
 
 #: pcbnew/pcb_edit_frame.cpp:1402
 msgid "Board file is read only."
@@ -35007,7 +35022,7 @@ msgstr "Piirilevytiedostoon ei ole kirjoitusoikeuksia."
 
 #: pcbnew/pcb_edit_frame.cpp:1437
 msgid "PCB file changes are unsaved"
-msgstr "PCB-tiedostomuutoksia ei ole tallennettu"
+msgstr "Piirilevytiedoston muutoksia ei ole tallennettu"
 
 #: pcbnew/pcb_edit_frame.cpp:1736
 msgid "The schematic for this board cannot be found."
@@ -35021,7 +35036,7 @@ msgid ""
 msgstr ""
 "Piirilevyä ei voi päivittää, koska piirilevy on avattu itsenäisesti. Jotta "
 "voit luoda tai päivittää piirilevyjä kytkentäkaavioista, sinun on "
-"käynnistettävä KiCad-ohjelma ja luotava projekti."
+"käynnistettävä KiCad projektinhallinta ja luotava projekti."
 
 #: pcbnew/pcb_edit_frame.cpp:1785
 msgid "Eeschema netlist"
@@ -35148,6 +35163,7 @@ msgid "Drawing"
 msgstr "Piirustus"
 
 #: pcbnew/pcb_target.cpp:151
+#, fuzzy
 msgid "PCB Target"
 msgstr "PCB Kohde"
 
@@ -35156,12 +35172,12 @@ msgid "PCB Text"
 msgstr "PCB Teksti"
 
 #: pcbnew/pcb_text.cpp:240
-#, c-format
+#, c-format, fuzzy
 msgid "PCB Text '%s' on %s"
-msgstr "PCB Teksti '%s' %s"
+msgstr "PCB Teksti '%s' kerroksella %s"
 
 #: pcbnew/pcb_textbox.cpp:400
-#, c-format
+#, c-format, fuzzy
 msgid "PCB Text Box on %s"
 msgstr "PCB Tekstilaatikko '%s'"
 
@@ -35595,10 +35611,10 @@ msgid ""
 "procedure in CADSTAR and re-import, to avoid inconsistencies between the PCB "
 "and the schematic. "
 msgstr ""
-"Valittu tiedosto osoittaa, että verkot eivät ehkä ole synkronoituja kaavion "
-"kanssa. On suositeltavaa suorittaa 'Align Nets' -menettely CADSTARissa ja "
-"tuoda se uudelleen, jotta vältetään ristiriidat piirilevyn ja kaavion "
-"välillä. "
+"Valittu tiedosto osoittaa, että verkot eivät ehkä ole synkronoituja "
+"kytkentäkaavion kanssa. On suositeltavaa suorittaa 'Align Nets' -menettely "
+"CADSTARissa ja tuoda se uudelleen, jotta vältettäisiin ristiriidat "
+"piirilevyn ja kytkentäkaavion välillä. "
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:132
 #, c-format
@@ -35608,8 +35624,8 @@ msgid ""
 "of the zone priorities is required."
 msgstr ""
 "Ei pystytä määrittämään vyöhykkeen täyttöprioriteetteja tasolle '%s'. Paras "
-"arvaus on tehty mutta DRC-virheet ovat mahdollisia, prioriteetit tarvitsevat "
-"käsinmuokkausta."
+"arvaus on tehty mutta suunnittelusääntövirheet ovat mahdollisia, "
+"prioriteetit tarvitsevat käsinmuokkausta."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:146
 msgid ""
@@ -35635,9 +35651,9 @@ msgid ""
 "elements carefully and correct manually if required."
 msgstr ""
 "CADSTAR-kirjasimet ovat erilaisia kuin KiCadissa. Tämä johtaa "
-"todennäköisesti kohdistusongelmiin, jotka voivat aiheuttaa DRC-virheitä. "
-"Tarkista tuodut tekstielementit huolellisesti ja korjaa tarvittaessa "
-"manuaalisesti."
+"todennäköisesti kohdistusongelmiin, jotka voivat aiheuttaa "
+"suunittelusääntövirheitä. Tarkista tuodut tekstielementit huolellisesti ja "
+"korjaa tarvittaessa manuaalisesti."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:194
 #, c-format
@@ -36840,7 +36856,7 @@ msgstr "Reititystä ei voi aloittaa grafiikasta."
 
 #: pcbnew/router/pns_router.cpp:325 pcbnew/router/pns_router.cpp:381
 msgid "The routing start point violates DRC."
-msgstr "Reitityksen aloituspiste rikkoo DRC: tä."
+msgstr "Reitityksen aloituspiste rikkoo suunnittelusääntöjä."
 
 #: pcbnew/router/pns_router.cpp:333
 msgid "Cannot start a differential pair in the middle of nowhere."
@@ -37448,7 +37464,7 @@ msgstr "Piirilevyongelmia ei löytynyt."
 
 #: pcbnew/tools/board_editor_control.cpp:627
 msgid "Updating PCB requires a fully annotated schematic."
-msgstr "Piirilevyn päivitys vaatii täysin kommentoidun kytkentäkaavion."
+msgstr "Piirilevyn päivitys vaatii täysin merkityn kytkentäkaavion."
 
 #: pcbnew/tools/board_editor_control.cpp:641
 msgid ""
@@ -37457,7 +37473,7 @@ msgid ""
 "project manager and create a project."
 msgstr ""
 "Kytkentäkaaviota ei voi päivittää, koska Pcbnew on avattu erillisessä "
-"tilassa. Jotta voit luoda tai päivittää piirilevyjä kytkentäkaavioista, "
+"tilassa. Jotta voisit luoda tai päivittää piirilevyjä kytkentäkaavioista, "
 "sinun on käynnistettävä KiCad-projektinhallinta ja luotava projekti."
 
 #: pcbnew/tools/board_editor_control.cpp:1135
@@ -37849,7 +37865,8 @@ msgstr ""
 #: pcbnew/tools/board_inspection_tool.cpp:1275
 #: pcbnew/tools/board_inspection_tool.cpp:1297
 msgid "Run DRC for a full analysis."
-msgstr "Suorita DRC täydellistä analyysiä varten."
+msgstr ""
+"Suorita suunnittelusääntöjen tarkistus saadaksesi täydellisen analyysin."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1281
 msgid "Item <b>disallowed</b> at current location."
@@ -38017,7 +38034,7 @@ msgstr "Siirrä jalanjäljen viiteankkuria"
 
 #: pcbnew/tools/drawing_tool.cpp:3052
 msgid "Via location violates DRC."
-msgstr "Läpiviennin sijainti rikkoo DRC:tä."
+msgstr "Läpiviennin sijainti rikkoo suunnittelusääntöjä."
 
 #: pcbnew/tools/drawing_tool.cpp:3255
 msgid "Place via"
@@ -38958,7 +38975,7 @@ msgstr "Luo IPC-D-356 netlist-tiedosto"
 
 #: pcbnew/tools/pcb_actions.cpp:677
 msgid "BOM..."
-msgstr "BOM ..."
+msgstr "Materiaaliluettelo (BOM)..."
 
 #: pcbnew/tools/pcb_actions.cpp:677
 msgid "Create bill of materials from board"
@@ -40038,7 +40055,7 @@ msgstr "Täytä alue"
 
 #: pcbnew/tools/zone_filler_tool.cpp:139 pcbnew/tools/zone_filler_tool.cpp:226
 msgid "Show DRC rules"
-msgstr "Näytä DRC-säännöt"
+msgstr "Näytä suunnittelusäännöt"
 
 #: pcbnew/tools/zone_filler_tool.cpp:146 pcbnew/tools/zone_filler_tool.cpp:233
 msgid "Rules"
@@ -40047,7 +40064,8 @@ msgstr "Säännöt"
 #: pcbnew/tools/zone_filler_tool.cpp:152 pcbnew/tools/zone_filler_tool.cpp:239
 msgid "Zone fills may be inaccurate.  DRC rules contain errors."
 msgstr ""
-"Vyöhykkeen täyttäminen voi olla epätarkka. DRC-säännöt sisältävät virheitä."
+"Vyöhykkeen täyttäminen voi olla epätarkka. Suunnittelusäännöt sisältävät "
+"virheitä."
 
 #: pcbnew/tools/zone_filler_tool.cpp:250
 #, c-format
@@ -40217,27 +40235,27 @@ msgstr "Näytä liittämättömät kytkentäverkot kytkentärisukkona"
 
 #: pcbnew/widgets/appearance_controls.cpp:348
 msgid "DRC Warnings"
-msgstr "DRC Varoitukset"
+msgstr "Suunnittelusääntövaroitukset"
 
 #: pcbnew/widgets/appearance_controls.cpp:348
 msgid "DRC violations with a Warning severity"
-msgstr "DRC rikkomukset vakavalla Varoituksella"
+msgstr "Suunnittelusääntövirhe vakavuusasteella \"varoitus\""
 
 #: pcbnew/widgets/appearance_controls.cpp:349
 msgid "DRC Errors"
-msgstr "DRC Virheet"
+msgstr "Suunnittelusääntövirheet"
 
 #: pcbnew/widgets/appearance_controls.cpp:349
 msgid "DRC violations with an Error severity"
-msgstr "DRC rikkomukset Virheen vakavuuden mukaan"
+msgstr "Suunnittelusääntövirhe vakavuusasteella \"Virhe\""
 
 #: pcbnew/widgets/appearance_controls.cpp:350
 msgid "DRC Exclusions"
-msgstr "DRC Poissuljetut"
+msgstr "Suunnittelusääntöpoikkeukset"
 
 #: pcbnew/widgets/appearance_controls.cpp:350
 msgid "DRC violations which have been individually excluded"
-msgstr "DRC rikkomukset, jotka on erikseen suljettu pois"
+msgstr "Suunnittelusääntövirheet, jotka on erikseen suljettu pois"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
 msgid "Show footprint and text origins as a cross"
@@ -41008,11 +41026,11 @@ msgstr "Paketti työkaluja kytkentäkaavio- ja piirilevysuunnitteluun"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
-msgstr "KiCad PCB Laskin"
+msgstr "KiCad Laskintyökalut"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "PCB Calculator"
-msgstr "PCB Laskin"
+msgstr "Laskintyökalut"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "Calculator for various electronics-related computations"
@@ -41020,11 +41038,11 @@ msgstr "Laskin erilaisiin elektroniikkaan liittyviin laskelmiin"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"
-msgstr "KiCad PCB Editori (Itsenäinen)"
+msgstr "KiCad Piirilevyeditori (Itsenäinen)"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "PCB layout editor"
-msgstr "PCB ulkoasueditori"
+msgstr "Piirilevyeditori"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "Standalone circuit board editor for KiCad boards"
@@ -41032,7 +41050,7 @@ msgstr "Itsenäinen piirilevyeditori KiCad alustoille"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
 msgid "pcbnew"
-msgstr "pcbuusi"
+msgstr "piirilevyeditori"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
@@ -41057,9 +41075,9 @@ msgid ""
 msgstr ""
 "KiCad on ilmainen ja avoimen lähdekoodin elektroniikan "
 "suunnitteluautomaation (EDA) ohjelmistopaketti. Se sisältää "
-"kytkentäkaaviokaappauksen, integroitujen piirien simuloinnin, (PCB) "
+"kytkentäkaavioeditorin, integroidun piirien simuloinnin, (PCB) "
 "piirilevyasettelun, 3D-renderöinnin ja piirtämisen/tietojen viennin "
-"lukuisiin eri muotoihin. KiCad sisältää myös korkea-laatuisen "
+"lukuisiin eri muotoihin. KiCad sisältää myös korkealaatuisen "
 "komponenttikirjaston, joka sisältää tuhansia symboleja, jalanjälkiä ja 3D-"
 "malleja. KiCadilla on minimaaliset järjestelmävaatimukset ja se toimii "
 "Linuxissa, Windowsissa ja macOS:ssä."
@@ -41070,7 +41088,7 @@ msgstr "KiCad:in Pääikkuna"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:68
 msgid "KiCad PCB Layout Editor"
-msgstr "KiCad PCB Ulkoasueditori"
+msgstr "KiCad Piirilevyeditori"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:85
 msgid "The KiCad Developers"
