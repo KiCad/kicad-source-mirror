@@ -83,6 +83,9 @@ public:
      */
     void ShowModeless();
 
+    void OnHTMLLinkClicked( wxHtmlLinkEvent& event ) override;
+
+
 protected:
     void reload();
 
