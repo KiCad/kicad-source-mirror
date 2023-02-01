@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-30 17:07-0800\n"
-"PO-Revision-Date: 2023-02-01 16:09+0000\n"
+"PO-Revision-Date: 2023-02-01 20:01+0000\n"
 "Last-Translator: Michael Misirlis <MMISIRLIS@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
@@ -35324,9 +35324,10 @@ msgid "Unrecognized layer '%s'"
 msgstr "Μη αναγνωρισμένο επίπεδο '%s'"
 
 #: pcbnew/pcb_expr_functions.cpp:240
-#, fuzzy, c-format
+#, c-format
 msgid "Missing footprint argument (A, B, or reference designator) to %s."
-msgstr "Αντιστοιχία αποτυπωμάτων με χρήση προσδιορισμού αναφοράς"
+msgstr ""
+"Λείπει στοιχείο του αποτυπώματος (Α, Β, ή προσδιορισμός αναφοράς) για %s."
 
 #: pcbnew/pcb_expr_functions.cpp:446
 msgid "Footprint's courtyard is not a single, closed shape."
@@ -37597,9 +37598,8 @@ msgid "Add teardrops to two connected tracks of different widths"
 msgstr "Τρύπα πολύ κοντά σε δρόμο"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:378
-#, fuzzy
 msgid "Allow teardrops to span two track segments"
-msgstr "Τρύπα πολύ κοντά σε δρόμο"
+msgstr "Να επιτρέπεται σε δάκρυα να εκτείνονται σε δύο τμήματα διαδρομής"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:380
 msgid ""
@@ -37853,9 +37853,9 @@ msgid "Text thickness resolution for:"
 msgstr "Επίλυση πάχους κειμένου για:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:311
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thickness constraints: min %s; max %s."
-msgstr "Περιορισμοί πλάτους: ελάχιστο %s; ιδανικό %s; μέγιστο %s."
+msgstr "Αναλυμένοι περιορισμοί πλάτους: ελάχιστο %s, μέγιστο %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:318
 #: pcbnew/tools/board_inspection_tool.cpp:1152
@@ -37863,23 +37863,22 @@ msgid "Track width resolution for:"
 msgstr "Ανάλυση πλάτους διαδρόμου για:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:326
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved width constraints: min %s; max %s."
-msgstr "Περιορισμοί πλάτους: ελάχιστο %s; ιδανικό %s; μέγιστο %s."
+msgstr "Αναλυμένοι περιορισμοί πλάτους: ελάχιστο %s, μέγιστο %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:332
 msgid "Connection Width"
 msgstr "Πάχος Σύνδεσης"
 
 #: pcbnew/tools/board_inspection_tool.cpp:333
-#, fuzzy
 msgid "Connection width resolution for:"
-msgstr "Ανάλυση πλάτους διαδρόμου για:"
+msgstr "Ανάλυση πλάτους σύνδεσης για:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:341
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved min connection width constraint: %s."
-msgstr "Τύπος σύνδεσης ζώνης: %s."
+msgstr "Αναλυμένος περιορισμός ελάχιστου πλάτους σύνδεσης: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:347
 #: pcbnew/tools/board_inspection_tool.cpp:1171
@@ -37888,14 +37887,13 @@ msgstr "Ανάλυση διαμέτρου διέλευσης για:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:355
 #: pcbnew/tools/board_inspection_tool.cpp:386
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved diameter constraints: min %s; max %s."
-msgstr "Περιορισμοί διαμέτρου: ελάχιστο %s; ιδανικό %s; μέγιστο %s."
+msgstr "Αναλυμένοι περιορισμοί διαμέτρου: ελάχιστο %s, μέγιστο %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:361
-#, fuzzy
 msgid "Via Annulus"
-msgstr "Πλάτος Δακτυλίου Διέλευσης"
+msgstr "Δακτύλιος Διέλευσης"
 
 #: pcbnew/tools/board_inspection_tool.cpp:362
 #: pcbnew/tools/board_inspection_tool.cpp:1188
@@ -37903,9 +37901,9 @@ msgid "Via annular width resolution for:"
 msgstr "Ανάλυση πλάτους δακτυλίου διέλευσης για:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:370
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved annular width constraints: min %s; max %s."
-msgstr "Περιορισμοί πλάτους δακτυλίου: ελάχιστο %s; ιδανικό %s; μέγιστο %s."
+msgstr "Αναλυμένοι περιορισμοί πλάτους δακτυλίου: ελάχιστο %s, μέγιστο %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:377
 #: pcbnew/tools/board_inspection_tool.cpp:1208
@@ -37918,9 +37916,8 @@ msgid "Hole diameter resolution for:"
 msgstr "Ανάλυση διαμέτρου οπής για:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:392
-#, fuzzy
 msgid "Hole Clearance"
-msgstr "Διάκενο"
+msgstr "Διάκενο Τρύπας"
 
 #: pcbnew/tools/board_inspection_tool.cpp:393
 #: pcbnew/tools/board_inspection_tool.cpp:931
@@ -37955,9 +37952,8 @@ msgstr "Εντοπισμένο διάκενο: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:416
 #: pcbnew/tools/board_inspection_tool.cpp:1086
-#, fuzzy
 msgid "Physical hole clearance resolution for:"
-msgstr "Ανάλυση διακένου οπής για:"
+msgstr "Ανάλυση διακένου φυσικής οπής για:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:425
 #: pcbnew/tools/board_inspection_tool.cpp:1098
@@ -37970,14 +37966,12 @@ msgstr "Οπής με Οπή"
 
 #: pcbnew/tools/board_inspection_tool.cpp:437
 #: pcbnew/tools/board_inspection_tool.cpp:960
-#, fuzzy
 msgid "Hole to hole clearance resolution for:"
-msgstr "Ανάλυση διακένου οπής για:"
+msgstr "Ανάλυση διακένου οπής με οπή για:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:451
-#, fuzzy
 msgid "Edge Clearance"
-msgstr "Διάκενο"
+msgstr "Διάκενο Ορίου"
 
 #: pcbnew/tools/board_inspection_tool.cpp:452
 #: pcbnew/tools/board_inspection_tool.cpp:999
@@ -37991,14 +37985,13 @@ msgstr "Εντοπισμένο διάκενο:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:517
 #: pcbnew/tools/board_inspection_tool.cpp:1020
-#, fuzzy
 msgid "Physical clearance resolution for:"
-msgstr "Εντοπισμένο διάκενο περιγράμματος:"
+msgstr "Ανάλυση φυσικού διάκενου για:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:526
 #: pcbnew/tools/board_inspection_tool.cpp:1032
 msgid "No 'physical_clearance' constraints defined."
-msgstr ""
+msgstr "Δεν έχουν οριστεί περιορισμοί 'physical_clearance'."
 
 #: pcbnew/tools/board_inspection_tool.cpp:554
 msgid "Select two items for a clearance resolution report."
@@ -38018,9 +38011,8 @@ msgid "Zone connection resolution for:"
 msgstr "Ανάλυση σύνδεσης ζώνης για:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:643
-#, fuzzy
 msgid "Thermal relief gap resolution for:"
-msgstr "Ανάλυση καθαρής περιοχής για:"
+msgstr "Ανάλυση κενού θερμικής εκτόνωσης για:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:652
 #, c-format
@@ -38070,9 +38062,8 @@ msgid "Diff Pair"
 msgstr "Διαφορικό Ζεύγος"
 
 #: pcbnew/tools/board_inspection_tool.cpp:792
-#, fuzzy
 msgid "Diff pair gap resolution for:"
-msgstr "Ανάλυση απόστασης κενού διαφορικού ζεύγους για:"
+msgstr "Ανάλυση κενού διαφορικού ζεύγους για:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:797
 #, c-format
@@ -38101,7 +38092,6 @@ msgid "Courtyard clearance resolution for:"
 msgstr "Ανάλυση διακένου περιοχής αποτυπώματος για:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1015
-#, fuzzy
 msgid "Physical Clearances"
 msgstr "Διάκενα Φυσικής Μορφής"
 
@@ -38399,19 +38389,16 @@ msgstr "Πρέπει να γίνει επιλογή σχήματος με του
 
 #: pcbnew/tools/edit_tool.cpp:1159 pcbnew/tools/edit_tool.cpp:1326
 #: pcbnew/tools/pcb_actions.cpp:368
-#, fuzzy
 msgid "Fillet Lines"
-msgstr "Γέμισμα Ζωνών"
+msgstr "Γραμμές με Κοίλες Γωνίες"
 
 #: pcbnew/tools/edit_tool.cpp:1329
-#, fuzzy
 msgid "Unable to fillet the selected lines."
-msgstr "Αδυναμία στρογγυλοποίησης των επιλεγμένων τμημάτων διαδρόμου."
+msgstr "Αδυναμία στρογγυλοποίησης των επιλεγμένων γραμμών."
 
 #: pcbnew/tools/edit_tool.cpp:1331
-#, fuzzy
 msgid "Some of the lines could not be filleted."
-msgstr "Κάποια τμήματα του διαδρόμου δεν φιλεταρίστηκαν."
+msgstr "Κάποιες από τις γραμμές δεν ήταν εφικτό να στρογγυλοποιηθούν."
 
 #: pcbnew/tools/edit_tool.cpp:1499
 msgid "Rotate"
@@ -38633,9 +38620,8 @@ msgid "Add a board stackup table on a graphic layer"
 msgstr "Προσθήκη καταλόγου στοίβαξης πλακέτας, σε ένα επίπεδο γραφικών"
 
 #: pcbnew/tools/pcb_actions.cpp:133
-#, fuzzy
 msgid "Add a wrapped text item"
-msgstr "Προσθήκη κειμένου"
+msgstr "Προσθήκη αναδιπλούμενου κειμένου"
 
 #: pcbnew/tools/pcb_actions.cpp:139
 msgid "Add Aligned Dimension"
@@ -38794,9 +38780,8 @@ msgstr ""
 "μετακίνηση"
 
 #: pcbnew/tools/pcb_actions.cpp:276
-#, fuzzy
 msgid "Move Individually"
-msgstr "Μετακίνηση Μεμονομένου"
+msgstr "Μετακίνηση Μεμονωμένα"
 
 #: pcbnew/tools/pcb_actions.cpp:276
 msgid "Moves the selected items one-by-one"
@@ -39444,9 +39429,8 @@ msgid "Highlight all copper items on the selected net(s)"
 msgstr "Φωτισμός όλων των αντικειμένων χαλκού ενός δικτύου"
 
 #: pcbnew/tools/pcb_actions.cpp:818
-#, fuzzy
 msgid "Hide Net in Ratsnest"
-msgstr "Απόκρυψη δικτύου από φωλιά συνδέσεων"
+msgstr "Απόκρυψη Δικτύου στη Φωλιά Συνδέσεων"
 
 #: pcbnew/tools/pcb_actions.cpp:819
 msgid "Hide the selected net in the ratsnest of unconnected net lines/arcs"
@@ -39975,11 +39959,12 @@ msgid "Grab Nearest Unconnected Footprints"
 msgstr "Επιλογή Κοντινότερων Ασύνδετων Αποτυπωμάτων"
 
 #: pcbnew/tools/pcb_actions.cpp:1356
-#, fuzzy
 msgid ""
 "Selects and initiates moving the nearest unconnected footprint on each "
 "selected net."
-msgstr "Επιλογή όλων των διαδρόμων και διελεύσεων που ανήκουν στο ίδιο δίκτυο."
+msgstr ""
+"Επιλέγει και ξεκινά τη μετακίνηση του πλησιέστερου μη συνδεδεμένου "
+"αποτυπώματος σε κάθε επιλεγμένο δίκτυο."
 
 #: pcbnew/tools/pcb_actions.cpp:1361
 msgid "Selects all footprints and tracks in the schematic sheet"
@@ -40011,16 +39996,16 @@ msgid "Remove items from the selection by type"
 msgstr "Αφαίρεση αντικειμένων από την επιλογή ανα τύπο"
 
 #: pcbnew/tools/pcb_actions.cpp:1386
-#, fuzzy
 msgid "Draft Fill Selected Zone(s)"
-msgstr "Ενημέρωση επιλεγμένου αποτυπώματος"
+msgstr "Πρόχειρο Γέμισμα Επιλεγμένων Ζωνών"
 
 #: pcbnew/tools/pcb_actions.cpp:1387
-#, fuzzy
 msgid ""
 "Update copper fill of selected zone(s) without regard to other interacting "
 "zones"
-msgstr "Ενημέρωση επιλεγμένου αποτυπώματος"
+msgstr ""
+"Ενημέρωση γεμίσματος χαλκού των επιλεγμένων ζωνών χωρίς να ληφθούν υπόψη "
+"άλλες ζώνες που αλληλεπιδρούν"
 
 #: pcbnew/tools/pcb_actions.cpp:1393 pcbnew/tools/zone_filler_tool.cpp:162
 msgid "Fill All Zones"
@@ -40031,9 +40016,8 @@ msgid "Update copper fill of all zones"
 msgstr "Άδειασμα όλων των ζωνών"
 
 #: pcbnew/tools/pcb_actions.cpp:1401
-#, fuzzy
 msgid "Unfill Selected Zone(s)"
-msgstr "Άδειασμα Όλων Των Ζωνών"
+msgstr "Άδειασμα Επιλεγμένων Ζωνών"
 
 #: pcbnew/tools/pcb_actions.cpp:1401
 msgid "Remove copper fill from selected zone(s)"
@@ -40153,44 +40137,47 @@ msgstr "Πάει τον τρέχοντα διάδρομο πίσω, κατά έ�
 
 #: pcbnew/tools/pcb_actions.cpp:1507
 msgid "Route From Other End"
-msgstr ""
+msgstr "Δρομολόγηση Από Την Άλλη Άκρη"
 
 #: pcbnew/tools/pcb_actions.cpp:1508
 msgid ""
 "Commits current segments and starts next segment from nearest ratsnest end."
 msgstr ""
+"Δεσμεύει τα τρέχοντα τμήματα και ξεκινά το επόμενο τμήμα από το πλησιέστερο "
+"άκρο της φωλιάς συνδέσεων."
 
 #: pcbnew/tools/pcb_actions.cpp:1513
 msgid "Attempt Finish"
-msgstr ""
+msgstr "Προσπάθεια Ολοκλήρωσης"
 
 #: pcbnew/tools/pcb_actions.cpp:1514
 msgid "Attempts to complete current route to nearest ratsnest end."
 msgstr ""
+"Προσπάθεια ολοκλήρωσης της τρέχουσας δρομολόγησης προς το πλησιέστερο τέλος "
+"της φωλιάς συνδέσεων."
 
 #: pcbnew/tools/pcb_actions.cpp:1519
-#, fuzzy
 msgid "Route Selected"
-msgstr "Επιλογή Πλέγματος"
+msgstr "Επιλογή Δρομολόγησης"
 
 #: pcbnew/tools/pcb_actions.cpp:1520
-#, fuzzy
 msgid "Sequentially route selected items from ratsnest anchor."
-msgstr "Στοίχιση επιλεγμένων στοιχείων στο αριστερό άκρο"
+msgstr ""
+"Διαδοχική δρομολόγηση επιλεγμένων στοιχείων από αγκίστρωση φωλιάς συνδέσεων."
 
 #: pcbnew/tools/pcb_actions.cpp:1526
-#, fuzzy
 msgid "Route Selected From Other End"
-msgstr "Επιλογή Πλέγματος"
+msgstr "Δρομολόγηση Επιλεγένων Από Την Άλλη Άκρη"
 
 #: pcbnew/tools/pcb_actions.cpp:1527
-#, fuzzy
 msgid "Sequentially route selected items from other end of ratsnest anchor."
-msgstr "Στοίχιση επιλεγμένων στοιχείων στο αριστερό άκρο"
+msgstr ""
+"Διαδοχική δρομολόγηση επιλεγμένων στοιχείων από την άλλη άκρη της "
+"αγκίστρωσης φωλιάς συνδέσεων."
 
 #: pcbnew/tools/pcb_actions.cpp:1533
 msgid "Attempt Finish Selected (Autoroute)"
-msgstr ""
+msgstr "Προσπάθεια Ολοκλήρωσης Επιλεγμένων (Αυτόματη Δρομολόγηση)"
 
 #: pcbnew/tools/pcb_actions.cpp:1534
 msgid "Sequentially attempt to automatically route all selected pads."
