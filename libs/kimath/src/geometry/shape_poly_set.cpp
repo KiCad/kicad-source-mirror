@@ -562,10 +562,10 @@ double SHAPE_POLY_SET::Area()
 
     for( int i = 0; i < OutlineCount(); i++ )
     {
-        area += Outline( i ).Area();
+        area += Outline( i ).Area( true );
 
         for( int j = 0; j < HoleCount( i ); j++ )
-            area -= Hole( i, j ).Area();
+            area -= Hole( i, j ).Area( true );
     }
 
     return area;

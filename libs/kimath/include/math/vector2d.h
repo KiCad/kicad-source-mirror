@@ -235,7 +235,7 @@ public:
     VECTOR2<T> operator*( const T& aFactor ) const;
 
     /// Division with a factor
-    VECTOR2<T> operator/( const T& aFactor ) const;
+    VECTOR2<T> operator/( double aFactor ) const;
 
     /// Equality operator
     bool operator==( const VECTOR2<T>& aVector ) const;
@@ -466,7 +466,7 @@ VECTOR2<T> VECTOR2<T>::operator*( const T& aFactor ) const
 
 
 template <class T>
-VECTOR2<T> VECTOR2<T>::operator/( const T& aFactor ) const
+VECTOR2<T> VECTOR2<T>::operator/( double aFactor ) const
 {
     if( std::is_integral<T>::value )
         return VECTOR2<T>( KiROUND( x / aFactor ), KiROUND( y / aFactor ) );

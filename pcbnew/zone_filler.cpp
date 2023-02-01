@@ -541,7 +541,13 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
 
     // Now remove islands which are either outside the board edge or fail to meet the minimum
     // area requirements
-    //
+    using island_check_return = std::vector<std::pair<std::shared_ptr<SHAPE_POLY_SET>, int>>;
+
+    std::vector<std::pair<std::shared_ptr<SHAPE_POLY_SET>, double>> polys_to_check;
+
+    // rough estimate to save re-allocation time
+    polys_to_check.reserve( m_board->GetCopperLayerCount() * aZones.size() );
+
     for( ZONE* zone : aZones )
     {
         LSET   zoneCopperLayers = zone->GetLayerSet() & LSET::AllCuMask( MAX_CU_LAYERS );
@@ -556,27 +562,88 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
             if( m_debugZoneFiller && LSET::InternalCuMask().Contains( layer ) )
                 continue;
 
-            std::shared_ptr<SHAPE_POLY_SET> poly = zone->GetFilledPolysList( layer );
+            polys_to_check.emplace_back( std::move( zone->GetFilledPolysList( layer ) ), minArea );
+        }
+    }
 
-            for( int ii = poly->OutlineCount() - 1; ii >= 0; ii-- )
+    auto island_lambda = [&]( int aStart, int aEnd ) -> island_check_return
+        {
+            island_check_return retval;
+
+            for( int ii = aStart; ii < aEnd && !cancelled; ++ii )
             {
-                std::vector<SHAPE_LINE_CHAIN>& island = poly->Polygon( ii );
+                auto [poly, minArea] = polys_to_check[ii];
 
-                if( island.empty()
-                        || !m_boardOutline.Contains( island.front().CPoint( 0 ), -1, 1 )
-                        || island.front().Area( true ) < minArea )
+                for( int jj = poly->OutlineCount() - 1; jj >= 0; jj-- )
                 {
-                    poly->DeletePolygonAndTriangulationData( ii, false );
+                    SHAPE_POLY_SET island;
+                    SHAPE_POLY_SET intersection;
+                    const SHAPE_LINE_CHAIN& test_poly = poly->Polygon( jj ).front();
+                    double island_area = test_poly.Area();
+
+                    if( island_area < minArea )
+                        continue;
+
+
+                    island.AddOutline( test_poly );
+                    intersection.BooleanIntersection( m_boardOutline, island, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+
+                    // Nominally, all of these areas should be either inside or outside the board outline.  So this test
+                    // should be able to just compare areas (if they are equal, you are inside).  But in practice,
+                    // we sometimes can have slight overlap at the edges.  So testing against half-size area is
+                    // a fail-safe
+                    if( intersection.Area() < island_area / 2.0 )
+                        retval.emplace_back( poly, jj );
                 }
             }
 
-            poly->UpdateTriangulationDataHash();
-            zone->CalculateFilledArea();
+            return retval;
+        };
 
-            if( m_progressReporter && m_progressReporter->IsCancelled() )
-                return false;
+    auto island_returns = tp.parallelize_loop( 0, polys_to_check.size(), island_lambda );
+    cancelled = false;
+
+    // Allow island removal threads to finish
+    for( size_t ii = 0; ii < island_returns.size(); ++ii )
+    {
+        std::future<island_check_return>& ret = island_returns[ii];
+
+        if( ret.valid() )
+        {
+            std::future_status status = ret.wait_for( std::chrono::seconds( 0 ) );
+
+            while( status != std::future_status::ready )
+            {
+                if( m_progressReporter )
+                {
+                    m_progressReporter->KeepRefreshing();
+
+                    if( m_progressReporter->IsCancelled() )
+                        cancelled = true;
+                }
+
+                status = ret.wait_for( std::chrono::milliseconds( 100 ) );
+            }
         }
     }
+
+    if( cancelled )
+        return false;
+
+    for( size_t ii = 0; ii < island_returns.size(); ++ii )
+    {
+        std::future<island_check_return>& ret = island_returns[ii];
+
+        if( ret.valid() )
+        {
+            for( auto action_item : ret.get() )
+                action_item.first->DeletePolygonAndTriangulationData( action_item.second, true );
+        }
+    }
+
+    for( ZONE* zone : aZones )
+        zone->CalculateFilledArea();
+
 
     if( aCheck )
     {
