@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-01 14:03-0800\n"
-"PO-Revision-Date: 2023-02-01 20:01+0000\n"
-"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"PO-Revision-Date: 2023-02-01 23:02+0000\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -7038,7 +7038,7 @@ msgstr "KiCad-symbolin jalanjälkitiedostot"
 
 #: common/wildcards_and_files_ext.cpp:428 gerbview/files.cpp:70
 msgid "Drill files"
-msgstr "Poratiedostot"
+msgstr "Poraustiedostot"
 
 #: common/wildcards_and_files_ext.cpp:435
 msgid "SVG files"
@@ -7062,7 +7062,7 @@ msgstr "PostScript tiedostot"
 
 #: common/wildcards_and_files_ext.cpp:465
 msgid "Report files"
-msgstr "Raportoi tiedostot"
+msgstr "Raporttitiedostot"
 
 #: common/wildcards_and_files_ext.cpp:471
 msgid "Component placement files"
@@ -18871,7 +18871,7 @@ msgstr "Ei tyhjiä tasoja, joihin tiedosto ladataan."
 
 #: gerbview/excellon_read_drill_file.cpp:289
 msgid "Error reading EXCELLON drill file"
-msgstr "Virhe lukemalla EXCELLON-poratiedostoa"
+msgstr "Virhe lukiessa EXCELLON-poratiedostoa"
 
 #: gerbview/excellon_read_drill_file.cpp:577
 #, c-format
@@ -18981,7 +18981,7 @@ msgstr "Avaa Gerber-tiedosto (t)"
 
 #: gerbview/files.cpp:236
 msgid "Open NC (Excellon) Drill File(s)"
-msgstr "Avaa NC (Excellon) -poratiedosto (t)"
+msgstr "Avaa NC (Excellon) -poratiedosto(t)"
 
 #: gerbview/files.cpp:274
 msgid "File not found:"
@@ -19302,7 +19302,7 @@ msgstr "Avaa Gerber Plottaus tiedosto(t) uudessa kerroksessa."
 
 #: gerbview/tools/gerbview_actions.cpp:51
 msgid "Open Excellon Drill File(s)..."
-msgstr "Avaa Excellon-poratiedosto (t) ..."
+msgstr "Avaa Excellon-poratiedosto(t)..."
 
 #: gerbview/tools/gerbview_actions.cpp:52
 msgid "Open Excellon drill file(s) on a new layer."
@@ -19884,7 +19884,7 @@ msgstr ""
 
 #: kicad/cli/command_export_pcb_pos.cpp:66
 msgid "Use drill/place file origin (ascii or csv only)"
-msgstr "Käytä pora/paikkatiedostoa alkupisteenä (ascii tai csv ainoastaan)"
+msgstr "Käytä poraus-/asennustiedoston alkupistettä (vain ascii tai csv)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:71
 msgid "Include only SMD footprints (ascii or csv only)"
@@ -24912,7 +24912,7 @@ msgstr "Pysäytyskerros"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:253
 msgid "Drill Holes"
-msgstr "Poraa Reikiä"
+msgstr "Poratut reiät"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:260
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:216
@@ -26243,7 +26243,7 @@ msgstr "Koordinaatit"
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:98
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
 msgid "Drill/place file origin"
-msgstr "Poraa/aseta tiedoston alkupiste"
+msgstr "Poraus-/asennustiedoston alkupiste"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:41
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
@@ -27263,7 +27263,7 @@ msgstr "Kohdekansio:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:44
 msgid "Drill File Format"
-msgstr "Poraa tiedostomuoto"
+msgstr "Poraustiedoston muoto"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:46
 msgid "Excellon"
@@ -27355,7 +27355,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:108
 msgid "Drill Units"
-msgstr "Poraa Yksiköt"
+msgstr "Poraustiedoston yksiköt"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:112
 msgid "Decimal format (recommended)"
@@ -38943,7 +38943,7 @@ msgstr "Luo Gerbers valmistusta varten"
 
 #: pcbnew/tools/pcb_actions.cpp:655
 msgid "Drill Files (.drl)..."
-msgstr "Poraa tiedostot (.drl) ..."
+msgstr "Poraustiedostot (.drl)..."
 
 #: pcbnew/tools/pcb_actions.cpp:655
 msgid "Generate Excellon drill file(s)"
