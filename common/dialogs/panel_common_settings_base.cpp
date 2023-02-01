@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-254-gc2ef7767)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -142,8 +142,8 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	bUserInterfaceSizer = new wxBoxSizer( wxVERTICAL );
 
 	m_gbUserInterface = new wxGridBagSizer( 5, 0 );
-	m_gbUserInterface->SetFlexibleDirection( wxHORIZONTAL );
-	m_gbUserInterface->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	m_gbUserInterface->SetFlexibleDirection( wxVERTICAL );
+	m_gbUserInterface->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_ALL );
 
 	m_checkBoxIconsInMenus = new wxCheckBox( this, wxID_ANY, _("Show icons in menus"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_gbUserInterface->Add( m_checkBoxIconsInMenus, wxGBPosition( 0, 0 ), wxGBSpan( 1, 4 ), 0, 5 );
@@ -205,9 +205,6 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	m_fontScalingHelp->Wrap( -1 );
 	bUserInterfaceSizer->Add( m_fontScalingHelp, 0, wxBOTTOM|wxLEFT, 8 );
 
-
-	bUserInterfaceSizer->Add( 0, 0, 1, wxEXPAND, 5 );
-
 	wxBoxSizer* bSizerHighContrast;
 	bSizerHighContrast = new wxBoxSizer( wxHORIZONTAL );
 
@@ -224,6 +221,9 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 
 
 	bUserInterfaceSizer->Add( bSizerHighContrast, 0, wxBOTTOM|wxEXPAND, 5 );
+
+
+	bUserInterfaceSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
 	bLeftSizer->Add( bUserInterfaceSizer, 0, wxEXPAND|wxTOP|wxLEFT, 5 );

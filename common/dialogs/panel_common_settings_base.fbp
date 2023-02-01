@@ -35,7 +35,6 @@
             <property name="bg"></property>
             <property name="context_help"></property>
             <property name="context_menu">1</property>
-            <property name="drag_accept_files">0</property>
             <property name="enabled">1</property>
             <property name="event_handler">impl_virtual</property>
             <property name="fg"></property>
@@ -92,7 +91,6 @@
                                 <property name="dock">Dock</property>
                                 <property name="dock_fixed">0</property>
                                 <property name="docking">Left</property>
-                                <property name="drag_accept_files">0</property>
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
@@ -154,7 +152,6 @@
                                 <property name="dock">Dock</property>
                                 <property name="dock_fixed">0</property>
                                 <property name="docking">Left</property>
-                                <property name="drag_accept_files">0</property>
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
@@ -192,16 +189,16 @@
                             <property name="border">5</property>
                             <property name="flag">wxEXPAND|wxTOP|wxLEFT</property>
                             <property name="proportion">0</property>
-                            <object class="wxBoxSizer" expanded="1">
+                            <object class="wxBoxSizer" expanded="0">
                                 <property name="minimum_size"></property>
                                 <property name="name">bAntialiasingSizer</property>
                                 <property name="orient">wxVERTICAL</property>
                                 <property name="permission">none</property>
-                                <object class="sizeritem" expanded="1">
+                                <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
                                     <property name="flag">wxEXPAND|wxTOP|wxBOTTOM</property>
                                     <property name="proportion">0</property>
-                                    <object class="wxGridBagSizer" expanded="1">
+                                    <object class="wxGridBagSizer" expanded="0">
                                         <property name="empty_cell_size">-1,2</property>
                                         <property name="flexible_direction">wxBOTH</property>
                                         <property name="growablecols">1</property>
@@ -240,7 +237,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -306,7 +302,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -373,7 +368,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -439,7 +433,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -517,7 +510,6 @@
                                 <property name="dock">Dock</property>
                                 <property name="dock_fixed">0</property>
                                 <property name="docking">Left</property>
-                                <property name="drag_accept_files">0</property>
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
@@ -579,7 +571,6 @@
                                 <property name="dock">Dock</property>
                                 <property name="dock_fixed">0</property>
                                 <property name="docking">Left</property>
-                                <property name="drag_accept_files">0</property>
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
@@ -617,12 +608,12 @@
                             <property name="border">5</property>
                             <property name="flag">wxEXPAND|wxTOP|wxLEFT</property>
                             <property name="proportion">0</property>
-                            <object class="wxBoxSizer" expanded="1">
+                            <object class="wxBoxSizer" expanded="0">
                                 <property name="minimum_size"></property>
                                 <property name="name">bHelperAppsSizer</property>
                                 <property name="orient">wxVERTICAL</property>
                                 <property name="permission">none</property>
-                                <object class="sizeritem" expanded="1">
+                                <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
                                     <property name="flag">wxEXPAND|wxTOP|wxRIGHT</property>
                                     <property name="proportion">0</property>
@@ -656,7 +647,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -718,7 +708,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -788,7 +777,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -835,17 +823,17 @@
                                         </object>
                                     </object>
                                 </object>
-                                <object class="sizeritem" expanded="1">
+                                <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
                                     <property name="flag">wxEXPAND</property>
                                     <property name="proportion">0</property>
-                                    <object class="spacer" expanded="1">
+                                    <object class="spacer" expanded="0">
                                         <property name="height">12</property>
                                         <property name="permission">protected</property>
                                         <property name="width">0</property>
                                     </object>
                                 </object>
-                                <object class="sizeritem" expanded="1">
+                                <object class="sizeritem" expanded="0">
                                     <property name="border">3</property>
                                     <property name="flag">wxEXPAND|wxBOTTOM</property>
                                     <property name="proportion">0</property>
@@ -879,7 +867,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -922,7 +909,7 @@
                                         </object>
                                     </object>
                                 </object>
-                                <object class="sizeritem" expanded="1">
+                                <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
                                     <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT</property>
                                     <property name="proportion">0</property>
@@ -956,7 +943,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -1022,7 +1008,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -1092,7 +1077,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -1176,7 +1160,6 @@
                                 <property name="dock">Dock</property>
                                 <property name="dock_fixed">0</property>
                                 <property name="docking">Left</property>
-                                <property name="drag_accept_files">0</property>
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
@@ -1238,7 +1221,6 @@
                                 <property name="dock">Dock</property>
                                 <property name="dock_fixed">0</property>
                                 <property name="docking">Left</property>
-                                <property name="drag_accept_files">0</property>
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
@@ -1287,13 +1269,13 @@
                                     <property name="proportion">0</property>
                                     <object class="wxGridBagSizer" expanded="1">
                                         <property name="empty_cell_size">-1,-1</property>
-                                        <property name="flexible_direction">wxHORIZONTAL</property>
+                                        <property name="flexible_direction">wxVERTICAL</property>
                                         <property name="growablecols"></property>
                                         <property name="growablerows"></property>
                                         <property name="hgap">0</property>
                                         <property name="minimum_size"></property>
                                         <property name="name">m_gbUserInterface</property>
-                                        <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
+                                        <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_ALL</property>
                                         <property name="permission">protected</property>
                                         <property name="vgap">5</property>
                                         <object class="gbsizeritem" expanded="0">
@@ -1325,7 +1307,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -1393,7 +1374,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -1461,7 +1441,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -1528,7 +1507,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -1593,7 +1571,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -1661,7 +1638,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -1729,7 +1705,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -1797,7 +1772,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -1863,7 +1837,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -1931,7 +1904,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -1973,21 +1945,21 @@
                                         </object>
                                     </object>
                                 </object>
-                                <object class="sizeritem" expanded="1">
+                                <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
                                     <property name="flag">wxEXPAND</property>
                                     <property name="proportion">0</property>
-                                    <object class="spacer" expanded="1">
+                                    <object class="spacer" expanded="0">
                                         <property name="height">10</property>
                                         <property name="permission">protected</property>
                                         <property name="width">0</property>
                                     </object>
                                 </object>
-                                <object class="sizeritem" expanded="1">
+                                <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
                                     <property name="flag">wxLEFT|wxRIGHT|wxTOP</property>
                                     <property name="proportion">0</property>
-                                    <object class="wxCheckBox" expanded="1">
+                                    <object class="wxCheckBox" expanded="0">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
                                         <property name="RightDockable">1</property>
@@ -2009,7 +1981,6 @@
                                         <property name="dock">Dock</property>
                                         <property name="dock_fixed">0</property>
                                         <property name="docking">Left</property>
-                                        <property name="drag_accept_files">0</property>
                                         <property name="enabled">1</property>
                                         <property name="fg"></property>
                                         <property name="floatable">1</property>
@@ -2048,11 +2019,11 @@
                                         <property name="window_style"></property>
                                     </object>
                                 </object>
-                                <object class="sizeritem" expanded="1">
+                                <object class="sizeritem" expanded="0">
                                     <property name="border">8</property>
                                     <property name="flag">wxBOTTOM|wxLEFT</property>
                                     <property name="proportion">0</property>
-                                    <object class="wxStaticText" expanded="1">
+                                    <object class="wxStaticText" expanded="0">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
                                         <property name="RightDockable">1</property>
@@ -2073,7 +2044,6 @@
                                         <property name="dock">Dock</property>
                                         <property name="dock_fixed">0</property>
                                         <property name="docking">Left</property>
-                                        <property name="drag_accept_files">0</property>
                                         <property name="enabled">1</property>
                                         <property name="fg"></property>
                                         <property name="floatable">1</property>
@@ -2110,30 +2080,20 @@
                                         <property name="wrap">-1</property>
                                     </object>
                                 </object>
-                                <object class="sizeritem" expanded="1">
-                                    <property name="border">5</property>
-                                    <property name="flag">wxEXPAND</property>
-                                    <property name="proportion">1</property>
-                                    <object class="spacer" expanded="1">
-                                        <property name="height">0</property>
-                                        <property name="permission">protected</property>
-                                        <property name="width">0</property>
-                                    </object>
-                                </object>
-                                <object class="sizeritem" expanded="1">
+                                <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
                                     <property name="flag">wxBOTTOM|wxEXPAND</property>
                                     <property name="proportion">0</property>
-                                    <object class="wxBoxSizer" expanded="1">
+                                    <object class="wxBoxSizer" expanded="0">
                                         <property name="minimum_size"></property>
                                         <property name="name">bSizerHighContrast</property>
                                         <property name="orient">wxHORIZONTAL</property>
                                         <property name="permission">none</property>
-                                        <object class="sizeritem" expanded="1">
+                                        <object class="sizeritem" expanded="0">
                                             <property name="border">5</property>
                                             <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
                                             <property name="proportion">1</property>
-                                            <object class="wxStaticText" expanded="1">
+                                            <object class="wxStaticText" expanded="0">
                                                 <property name="BottomDockable">1</property>
                                                 <property name="LeftDockable">1</property>
                                                 <property name="RightDockable">1</property>
@@ -2154,7 +2114,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -2191,11 +2150,11 @@
                                                 <property name="wrap">-1</property>
                                             </object>
                                         </object>
-                                        <object class="sizeritem" expanded="1">
+                                        <object class="sizeritem" expanded="0">
                                             <property name="border">5</property>
                                             <property name="flag">wxALIGN_CENTER_VERTICAL</property>
                                             <property name="proportion">0</property>
-                                            <object class="wxTextCtrl" expanded="1">
+                                            <object class="wxTextCtrl" expanded="0">
                                                 <property name="BottomDockable">1</property>
                                                 <property name="LeftDockable">1</property>
                                                 <property name="RightDockable">1</property>
@@ -2216,7 +2175,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -2256,11 +2214,11 @@
                                                 <property name="window_style"></property>
                                             </object>
                                         </object>
-                                        <object class="sizeritem" expanded="1">
+                                        <object class="sizeritem" expanded="0">
                                             <property name="border">5</property>
                                             <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
                                             <property name="proportion">0</property>
-                                            <object class="wxStaticText" expanded="1">
+                                            <object class="wxStaticText" expanded="0">
                                                 <property name="BottomDockable">1</property>
                                                 <property name="LeftDockable">1</property>
                                                 <property name="RightDockable">1</property>
@@ -2281,7 +2239,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -2318,6 +2275,16 @@
                                                 <property name="wrap">-1</property>
                                             </object>
                                         </object>
+                                    </object>
+                                </object>
+                                <object class="sizeritem" expanded="0">
+                                    <property name="border">5</property>
+                                    <property name="flag">wxEXPAND</property>
+                                    <property name="proportion">1</property>
+                                    <object class="spacer" expanded="0">
+                                        <property name="height">0</property>
+                                        <property name="permission">protected</property>
+                                        <property name="width">0</property>
                                     </object>
                                 </object>
                             </object>
@@ -2358,7 +2325,6 @@
                                 <property name="dock">Dock</property>
                                 <property name="dock_fixed">0</property>
                                 <property name="docking">Left</property>
-                                <property name="drag_accept_files">0</property>
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
@@ -2420,7 +2386,6 @@
                                 <property name="dock">Dock</property>
                                 <property name="dock_fixed">0</property>
                                 <property name="docking">Left</property>
-                                <property name="drag_accept_files">0</property>
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
@@ -2489,7 +2454,6 @@
                                         <property name="dock">Dock</property>
                                         <property name="dock_fixed">0</property>
                                         <property name="docking">Left</property>
-                                        <property name="drag_accept_files">0</property>
                                         <property name="enabled">1</property>
                                         <property name="fg"></property>
                                         <property name="floatable">1</property>
@@ -2554,7 +2518,6 @@
                                         <property name="dock">Dock</property>
                                         <property name="dock_fixed">0</property>
                                         <property name="docking">Left</property>
-                                        <property name="drag_accept_files">0</property>
                                         <property name="enabled">1</property>
                                         <property name="fg"></property>
                                         <property name="floatable">1</property>
@@ -2630,7 +2593,6 @@
                                 <property name="dock">Dock</property>
                                 <property name="dock_fixed">0</property>
                                 <property name="docking">Left</property>
-                                <property name="drag_accept_files">0</property>
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
@@ -2692,7 +2654,6 @@
                                 <property name="dock">Dock</property>
                                 <property name="dock_fixed">0</property>
                                 <property name="docking">Left</property>
-                                <property name="drag_accept_files">0</property>
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
@@ -2761,7 +2722,6 @@
                                         <property name="dock">Dock</property>
                                         <property name="dock_fixed">0</property>
                                         <property name="docking">Left</property>
-                                        <property name="drag_accept_files">0</property>
                                         <property name="enabled">1</property>
                                         <property name="fg"></property>
                                         <property name="floatable">1</property>
@@ -2853,7 +2813,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -2918,7 +2877,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -2984,7 +2942,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -3049,7 +3006,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -3114,7 +3070,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -3180,7 +3135,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -3245,7 +3199,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -3311,7 +3264,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -3387,7 +3339,6 @@
                                 <property name="dock">Dock</property>
                                 <property name="dock_fixed">0</property>
                                 <property name="docking">Left</property>
-                                <property name="drag_accept_files">0</property>
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
@@ -3449,7 +3400,6 @@
                                 <property name="dock">Dock</property>
                                 <property name="dock_fixed">0</property>
                                 <property name="docking">Left</property>
-                                <property name="drag_accept_files">0</property>
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
@@ -3536,7 +3486,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -3604,7 +3553,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -3671,7 +3619,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -3736,7 +3683,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -3802,7 +3748,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -3867,7 +3812,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -3933,7 +3877,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -3998,7 +3941,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -4064,7 +4006,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -4129,7 +4070,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -4194,7 +4134,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
@@ -4260,7 +4199,6 @@
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
-                                                <property name="drag_accept_files">0</property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="floatable">1</property>
