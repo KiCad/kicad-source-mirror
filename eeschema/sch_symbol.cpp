@@ -1247,7 +1247,7 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
     }
     else if( token->IsSameAs( wxT( "DNP" ) ) )
     {
-        *token = this->GetDNP() ? wxT( "" ) : _( "DNP" );
+        *token = this->GetDNP() ? _( "DNP" ) : wxT( "" );
         return true;
     }
 
