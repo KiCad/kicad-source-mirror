@@ -562,7 +562,9 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
     if( simulatorLock.owns_lock() )
     {
         wxBusyCursor toggle;
+        wxString     unconnected = wxString( wxS( "unconnected-(" ) );
 
+        unconnected.Replace( '(', '_' );    // Convert to SPICE markup
         m_signals.clear();
 
         // Add voltages
@@ -571,7 +573,7 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
             // netnames are escaped (can contain "{slash}" for '/') Unscape them:
             wxString netname = UnescapeString( net );
 
-            if( netname != "GND" && netname != "0" )
+            if( netname != "GND" && netname != "0" && !netname.StartsWith( unconnected ) )
                 m_signals.push_back( wxString::Format( "V(%s)", netname ) );
         }
 
