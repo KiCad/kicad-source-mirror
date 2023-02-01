@@ -59,9 +59,11 @@ bool KIPLATFORM::APP::Init()
     SetSearchPathMode( BASE_SEARCH_PATH_ENABLE_SAFE_SEARCHMODE | BASE_SEARCH_PATH_PERMANENT );
 
     // In order to support GUI and CLI
-    // Let's attach to console when it's possible
+    // Let's attach to console when it's possible, or allocate if requested.
+    bool tryAlloc = wxGetEnv( wxS( "KICAD_ALLOC_CONSOLE" ), nullptr );
+
     HANDLE handle;
-    if( AttachConsole( ATTACH_PARENT_PROCESS ) )
+    if( AttachConsole( ATTACH_PARENT_PROCESS ) || ( tryAlloc && AllocConsole() ) )
     {
         #if !defined( __MINGW32__ ) // These redirections create problems on mingw:
                                     // Nothing is printed to the console
