@@ -1056,11 +1056,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::LoadFieldNames()
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnAddField( wxCommandEvent& event )
 {
-    // quantities column will become new field column, so it needs to be reset
-    wxGridCellAttr* attr = new wxGridCellAttr;
-    m_grid->SetColAttr( m_dataModel->GetColsCount() - 1, attr );
-    m_grid->SetColFormatCustom( m_dataModel->GetColsCount() - 1, wxGRID_VALUE_STRING );
-
     wxTextEntryDialog dlg( this, _( "New field name:" ), _( "Add Field" ) );
 
     if( dlg.ShowModal() != wxID_OK )
@@ -1083,6 +1078,11 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnAddField( wxCommandEvent& event )
             return;
         }
     }
+
+    // quantities column will become new field column, so it needs to be reset
+    wxGridCellAttr* attr = new wxGridCellAttr;
+    m_grid->SetColAttr( m_dataModel->GetColsCount() - 1, attr );
+    m_grid->SetColFormatCustom( m_dataModel->GetColsCount() - 1, wxGRID_VALUE_STRING );
 
     std::string key( fieldName.ToUTF8() );
 
