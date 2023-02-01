@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-30 17:07-0800\n"
+"POT-Creation-Date: 2023-02-01 14:03-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -5979,6 +5979,9 @@ msgstr "Fields"
 msgid "Show"
 msgstr "Show"
 
+msgid "Show Name"
+msgstr "Show Name"
+
 msgid "H Align"
 msgstr "H Align"
 
@@ -8453,9 +8456,6 @@ msgstr "Horizontal"
 
 msgid "Vertical"
 msgstr "Vertical"
-
-msgid "Show Name"
-msgstr "Show Name"
 
 msgid "Allow Autoplacement"
 msgstr "Allow Autoplacement"
@@ -12305,14 +12305,14 @@ msgstr "Navigate up one sheet in the hierarchy"
 msgid "Navigate Back"
 msgstr "Navigate Back"
 
-msgid "Move forward in sheet navigation history"
-msgstr "Move forward in sheet navigation history"
+msgid "Move backward in sheet navigation history"
+msgstr "Move backward in sheet navigation history"
 
 msgid "Navigate Forward"
 msgstr "Navigate Forward"
 
-msgid "Move backward in sheet navigation history"
-msgstr "Move backward in sheet navigation history"
+msgid "Move forward in sheet navigation history"
+msgstr "Move forward in sheet navigation history"
 
 msgid "Previous Sheet"
 msgstr "Previous Sheet"
