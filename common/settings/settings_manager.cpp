@@ -502,14 +502,23 @@ public:
 
 bool SETTINGS_MANAGER::MigrateIfNeeded()
 {
+    wxFileName path( GetUserSettingsPath(), wxS( "" ) );
+    wxLogTrace( traceSettings, wxT( "Using settings path %s" ), path.GetFullPath() );
+
     if( m_headless )
     {
+        // Special case namely for cli
+        // Ensure the settings directory at least exists to prevent additional loading errors from subdirectories
+        // TODO review headless (unit tests) vs cli needs, this should be fine for unit tests though
+        if( !path.DirExists() )
+        {
+            wxLogTrace( traceSettings, wxT( "Path didn't exist; creating it" ) );
+            path.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
+        }
+
         wxLogTrace( traceSettings, wxT( "Settings migration not checked; running headless" ) );
         return true;
     }
-
-    wxFileName path( GetUserSettingsPath(), wxS( "" ) );
-    wxLogTrace( traceSettings, wxT( "Using settings path %s" ), path.GetFullPath() );
 
     if( path.DirExists() )
     {
