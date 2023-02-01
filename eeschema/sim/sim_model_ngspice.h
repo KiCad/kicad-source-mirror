@@ -109,7 +109,10 @@ protected:
     int doFindParam( const std::string& aParamName ) const override;
 
 private:
-    bool requiresSpiceModelLine() const override { return false; }
+    bool requiresSpiceModelLine() const override
+    {
+        return getModelType() == MODEL_TYPE::DIODE;
+    }
 
     bool canSilentlyIgnoreParam( const std::string& aParamName );
 
