@@ -327,10 +327,7 @@ void PGM_BASE::sentryInit()
         sentry_options_set_symbolize_stacktraces( options, true );
         sentry_options_set_auto_session_tracking( options, false );
 
-        if( !IsNightlyVersion() )
-            sentry_options_set_release( options, GetSemanticVersion().ToStdString().c_str() );
-        else
-            sentry_options_set_release( options, GetCommitHash().ToStdString().c_str() );
+        sentry_options_set_release( options, GetCommitHash().ToStdString().c_str() );
 
         sentry_init( options );
 
