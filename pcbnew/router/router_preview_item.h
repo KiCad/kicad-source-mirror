@@ -55,6 +55,12 @@ public:
         PR_SHAPE
     };
 
+    // fixme: shouldn't this go to VIEW?
+    static const int ClearanceOverlayDepth;
+    static const int BaseOverlayDepth;
+    static const int ViaOverlayDepth;
+    static const int PathOverlayDepth;
+
     ROUTER_PREVIEW_ITEM( const SHAPE& aShape, KIGFX::VIEW* aView = nullptr);
     ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem = nullptr, KIGFX::VIEW* aView = nullptr);
     ~ROUTER_PREVIEW_ITEM();
@@ -135,11 +141,6 @@ private:
     int          m_originLayer;
     int          m_clearance;
     bool         m_showClearance;
-
-    // fixme: shouldn't this go to VIEW?
-    static const int ClearanceOverlayDepth;
-    static const int BaseOverlayDepth;
-    static const int ViaOverlayDepth;
 
     double         m_depth;
 

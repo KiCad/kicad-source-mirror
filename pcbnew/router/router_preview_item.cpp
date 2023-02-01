@@ -211,7 +211,7 @@ void ROUTER_PREVIEW_ITEM::drawLineChain( const SHAPE_LINE_CHAIN_BASE* aL, KIGFX:
         gal->DrawArc( arc.GetCenter(), arc.GetRadius(), start_angle, start_angle + angle);
     }
 
-    if( aL->IsClosed() )
+    if( aL && aL->IsClosed() )
         gal->DrawLine( aL->GetSegment( -1 ).B, aL->GetSegment( 0 ).A );
 }
 
@@ -500,3 +500,4 @@ const COLOR4D ROUTER_PREVIEW_ITEM::assignColor( int aStyle ) const
 const int ROUTER_PREVIEW_ITEM::ClearanceOverlayDepth = -VIEW::VIEW_MAX_LAYERS - 10;
 const int ROUTER_PREVIEW_ITEM::BaseOverlayDepth = -VIEW::VIEW_MAX_LAYERS - 20;
 const int ROUTER_PREVIEW_ITEM::ViaOverlayDepth = -VIEW::VIEW_MAX_LAYERS - 50;
+const int ROUTER_PREVIEW_ITEM::PathOverlayDepth = -VIEW::VIEW_MAX_LAYERS - 55;

@@ -224,13 +224,21 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
     for( const ITEM* item : m_tunedPathP.CItems() )
     {
         if( const LINE* l = dyn_cast<const LINE*>( item ) )
+        {
             PNS_DBG( Dbg(), AddShape, &l->CLine(), YELLOW, 10000, wxT( "tuned-path-p" ) );
+
+            m_router->GetInterface()->DisplayPathLine( l->CLine(), 1 );
+        }
     }
 
     for( const ITEM* item : m_tunedPathN.CItems() )
     {
         if( const LINE* l = dyn_cast<const LINE*>( item ) )
+        {
             PNS_DBG( Dbg(), AddShape, &l->CLine(), YELLOW, 10000, wxT( "tuned-path-n" ) );
+
+            m_router->GetInterface()->DisplayPathLine( l->CLine(), 1 );
+        }
     }
 
     int curIndexP = 0, curIndexN = 0;

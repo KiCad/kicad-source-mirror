@@ -1654,6 +1654,25 @@ void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aClearance, bool 
 }
 
 
+void PNS_KICAD_IFACE::DisplayPathLine( const SHAPE_LINE_CHAIN& aLine, int aImportance )
+{
+    ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( aLine, m_view );
+    pitem->SetDepth( ROUTER_PREVIEW_ITEM::PathOverlayDepth );
+
+    COLOR4D color;
+
+    if( aImportance >= 1 )
+        color = COLOR4D( 1.0, 1.0, 0.0, 0.6 );
+    else if( aImportance == 0 )
+        color = COLOR4D( 0.7, 0.7, 0.7, 0.6 );
+
+    pitem->SetColor( color );
+
+    m_previewItems->Add( pitem );
+    m_view->Update( m_previewItems );
+}
+
+
 void PNS_KICAD_IFACE::DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, int aNetCode )
 {
     ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( aRatline, m_view );

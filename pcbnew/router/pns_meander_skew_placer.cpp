@@ -138,16 +138,26 @@ long long int MEANDER_SKEW_PLACER::currentSkew() const
 
 bool MEANDER_SKEW_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 {
+    bool isPositive = m_originPair.NetP() == m_originLine.Net();
+
     for( const ITEM* item : m_tunedPathP.CItems() )
     {
         if( const LINE* l = dyn_cast<const LINE*>( item ) )
+        {
             PNS_DBG( Dbg(), AddItem, l, BLUE, 10000, wxT( "tuned-path-skew-p" ) );
+
+            m_router->GetInterface()->DisplayPathLine( l->CLine(), isPositive ? 1 : 0 );
+        }
     }
 
     for( const ITEM* item : m_tunedPathN.CItems() )
     {
         if( const LINE* l = dyn_cast<const LINE*>( item ) )
+        {
             PNS_DBG( Dbg(), AddItem, l, YELLOW, 10000, wxT( "tuned-path-skew-n" ) );
+
+            m_router->GetInterface()->DisplayPathLine( l->CLine(), isPositive ? 0 : 1 );
+        }
     }
 
     return doMove( aP, aEndItem, m_coupledLength + m_settings.m_targetSkew );

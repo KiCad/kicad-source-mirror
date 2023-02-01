@@ -60,6 +60,7 @@ public:
     bool IsItemVisible( const PNS::ITEM* aItem ) const override { return true; };
     void HideItem( PNS::ITEM* aItem ) override {}
     void DisplayItem( const PNS::ITEM* aItem, int aClearance, bool aEdit = false, bool aIsHeadTrace = false ) override {}
+    void DisplayPathLine( const SHAPE_LINE_CHAIN& aLine, int aImportance ) override {}
     void DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, int aNetCode ) override {}
     void AddItem( PNS::ITEM* aItem ) override;
     void UpdateItem( PNS::ITEM* aItem ) override;
@@ -116,6 +117,7 @@ public:
     bool IsItemVisible( const PNS::ITEM* aItem ) const override;
     void HideItem( PNS::ITEM* aItem ) override;
     void DisplayItem( const PNS::ITEM* aItem, int aClearance, bool aEdit = false, bool aIsHeadTrace = false ) override;
+    void DisplayPathLine( const SHAPE_LINE_CHAIN& aLine, int aImportance ) override;
     void DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, int aNetCode ) override;
     void Commit() override;
     void AddItem( PNS::ITEM* aItem ) override;

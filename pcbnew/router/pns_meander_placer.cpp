@@ -159,6 +159,8 @@ bool MEANDER_PLACER::doMove( const VECTOR2I& aP, ITEM* aEndItem, long long int a
         if( const LINE* l = dyn_cast<const LINE*>( item ) )
         {
             PNS_DBG( Dbg(), AddItem, l, BLUE, 30000, wxT( "tuned-line" ) );
+
+            m_router->GetInterface()->DisplayPathLine( l->CLine(), 1 );
         }
     }
 
