@@ -45,7 +45,7 @@
             <property name="minimum_size"></property>
             <property name="name">PANEL_COMMON_SETTINGS_BASE</property>
             <property name="pos"></property>
-            <property name="size">-1,-1</property>
+            <property name="size">790,592</property>
             <property name="subclass">RESETTABLE_PANEL; widgets/resettable_panel.h; Not forward_declare</property>
             <property name="tooltip"></property>
             <property name="two_step_creation">0</property>
@@ -2294,7 +2294,7 @@
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
                     <property name="flag">wxEXPAND|wxLEFT</property>
-                    <property name="proportion">1</property>
+                    <property name="proportion">0</property>
                     <object class="wxBoxSizer" expanded="1">
                         <property name="minimum_size"></property>
                         <property name="name">rightSizer</property>
