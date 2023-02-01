@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-30 17:07-0800\n"
-"PO-Revision-Date: 2023-02-01 17:38+0000\n"
+"PO-Revision-Date: 2023-02-01 20:01+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
@@ -6851,7 +6851,6 @@ msgid "File save error"
 msgstr "Tiedoston tallennusvirhe"
 
 #: common/widgets/wx_html_report_panel_base.cpp:16
-#, fuzzy
 msgid "Output Messages"
 msgstr "Lähtevät Viestit"
 
@@ -24934,7 +24933,7 @@ msgstr "Päivitä Jalanjälki"
 #: pcbnew/dialogs/dialog_import_netlist.cpp:83
 #: pcbnew/dialogs/dialog_update_pcb.cpp:59
 msgid "Update PCB"
-msgstr "Päivitä piirilevy"
+msgstr "Päivitä PCB"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:124
 msgid "Graphics cleanup"
@@ -27319,8 +27318,7 @@ msgid ""
 msgstr ""
 "Soikeat reiät aiheuttavat usein ongelmia piirilevyvalmistajille.\n"
 "\"Käytä jyrsinkomentoa\" käyttää tavallista G00-jyrsinkomentoa (suositus)\n"
-" \"Käytä vaihtoehtoista poraustilaa\" käyttää toista pora- / jyrsinkomentoa "
-"(G85)\n"
+" \"Käytä vaihtoehtoista tilaa\" käyttää toista pora- / jyrsinkomentoa (G85)\n"
 "(Käytä sitä vain, jos suositeltu komento ei toimi)"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:78
@@ -35163,7 +35161,6 @@ msgid "Drawing"
 msgstr "Piirustus"
 
 #: pcbnew/pcb_target.cpp:151
-#, fuzzy
 msgid "PCB Target"
 msgstr "PCB Kohde"
 
@@ -35177,7 +35174,7 @@ msgid "PCB Text '%s' on %s"
 msgstr "PCB Teksti '%s' kohteessa %s"
 
 #: pcbnew/pcb_textbox.cpp:400
-#, c-format, fuzzy
+#, c-format
 msgid "PCB Text Box on %s"
 msgstr "PCB Tekstilaatikko '%s'"
 
