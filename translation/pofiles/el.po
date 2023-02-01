@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-30 17:07-0800\n"
-"PO-Revision-Date: 2023-02-01 03:03+0000\n"
+"PO-Revision-Date: 2023-02-01 16:09+0000\n"
 "Last-Translator: Michael Misirlis <MMISIRLIS@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
@@ -27241,7 +27241,7 @@ msgstr "Σύρμα Δικτύου"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:341
 msgid "Pad groups allowed to short different nets:"
-msgstr ""
+msgstr "Ομάδες εδρών που επιτρέπεται να ενώνουν διαφορετικά δίκτυα:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:143
 msgid "All footprint generator scripts were loaded"
@@ -28134,9 +28134,8 @@ msgid "Solder mask/paste defaults"
 msgstr "Προκαθορισμένα μάσκας/πάστας συγκόλλησης"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:57
-#, fuzzy
 msgid "Text && graphics default properties"
-msgstr "Προκαθορισμένες ιδιότητες γραφικών και κειμένου"
+msgstr "Προκαθορισμένες ιδιότητες γραφικών && κειμένου"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:60
 msgid "Text && graphics formatting"
@@ -28611,9 +28610,8 @@ msgid "Warning: Pad hole not inside pad shape."
 msgstr "Προειδοποίηση: Η τρύπα της έδρας δεν είναι μέσα στο σχήμα της έδρας."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1283
-#, fuzzy
 msgid "Warning: Pad hole will leave no copper."
-msgstr "Προειδοποίηση: Το μέγεθος της έδρας είναι μικρότερο από το μηδέν."
+msgstr "Προειδοποίηση: Η τρύπα της έδρας δεν θα αφήσει καθόλου χαλκό"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1288
 msgid "Warning: Negative local clearance values will have no effect."
@@ -28667,7 +28665,6 @@ msgid "Error: Through hole pad has no hole."
 msgstr "Σφάλμα: Η διαμπερής έδρα δεν έχει τρύπα."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1368
-#, fuzzy
 msgid ""
 "Warning: Connector pads normally have no solder paste. Use a SMD pad instead."
 msgstr ""
@@ -29888,9 +29885,9 @@ msgid "<none selected>"
 msgstr "<κανένα επιλεγμένο>"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:244
-#, fuzzy, c-format
+#, c-format
 msgid "Reference item: %s"
-msgstr "Αναφορά '%s'"
+msgstr "Αντικείμενο αναφοράς: '%s'"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:22
 msgid "Reference item: <none selected>"
@@ -29922,7 +29919,7 @@ msgstr "Θέση Σχετική Με Αντικείμενο Αναφοράς"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:116
 msgid "Right-click for layer selection commands."
-msgstr ""
+msgstr "Δεξί-κλικ για εντολές επιλογής επιπέδου"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:207
 msgid "Print according to objects tab of appearance manager"
@@ -30484,9 +30481,8 @@ msgstr ""
 "Ορισμός βήματος αύξησης (σε βαθμούς) για περιστροφή μενού και συντομεύσεων."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:74
-#, fuzzy
 msgid "Arc editing mode:"
-msgstr "Μετατόπιση θέσης:"
+msgstr "Κατάσταση επεξεργασίας τόξου:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:81
 msgid "Keep center, adjust radius"
@@ -32504,9 +32500,9 @@ msgid "Local override on %s; thermal relief gap: %s."
 msgstr "Παράκαμψη από %s; θερμική απαγωγή: %s."
 
 #: pcbnew/drc/drc_engine.cpp:828
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; thermal spoke width: %s."
-msgstr "Τοπική παράκαμψη σε %s; διάκενο: %s."
+msgstr "Τοπική παράκαμψη σε %s- πλάτος θερμικής ακτίνας: %s."
 
 #: pcbnew/drc/drc_engine.cpp:837
 #, c-format
@@ -33122,9 +33118,8 @@ msgid "(%s max annular width %s; actual %s)"
 msgstr "(%s μέγιστο πλάτος δακτυλίου %s· πραγματικό %s)"
 
 #: pcbnew/drc/drc_test_provider_connection_width.cpp:640
-#, fuzzy
 msgid "Checking nets for minimum connection width..."
-msgstr "Έλεγχος συνδέσεων net..."
+msgstr "Έλεγχος δικτύων για ελάχιστο πλάτος σύνδεσης..."
 
 #: pcbnew/drc/drc_test_provider_connection_width.cpp:779
 #, c-format
@@ -33273,14 +33268,12 @@ msgid "No project loaded, skipping library parity tests."
 msgstr "Δεν παρέχεται netlist, παρακάμπτεται το LVS."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:463
-#, fuzzy
 msgid "Loading footprint library table..."
-msgstr "Σφάλμα κατά τη φόρτωση του καταλόγου βιβλιοθήκης αποτυπωμάτων."
+msgstr "Φόρτωση πίνακα βιβλιοθήκης αποτυπωμάτων..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:473
-#, fuzzy
 msgid "Checking board footprints against library..."
-msgstr "Έλεγχος αποτυπωμάτων..."
+msgstr "Έλεγχος αποτυπωμάτων πλακέτας σε σχέση με τη βιβλιοθήκη..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:505
 #, c-format
@@ -33293,30 +33286,31 @@ msgid "The library '%s' is not enabled in the current configuration."
 msgstr "Η βιβλιοθήκη '%s' δεν είναι ενεργοποιημένη στην τρέχουσα διαμόρφωση."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:555
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in library '%s'."
-msgstr "Το αποτύπωμα δε βρέθηκε στη λίστα αλλαγών"
+msgstr "Το αποτύπωμα '%s'δεν βρέθηκε στη βιβλιοθήκη '%s'."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:568
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' does not match copy in library '%s'."
-msgstr "Ο τύπος αποτυπώματος δεν ταιριάζει με τις έδρες του αποτυπώματος"
+msgstr "Το αποτύπωμα '%s' δεν ταιριάζει με το αντίγραφο στη βιβλιοθήκη '%s'."
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min length %s; actual %s)"
-msgstr "(%s ελάχιστο μήκος: %s; πραγματικό: %s)"
+msgstr "(%s ελάχιστο μήκος: %s- πραγματικό: %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max length %s; actual %s)"
-msgstr "(%s μέγιστο μήκος: %s; πραγματικό: %s)"
+msgstr "(%s μέγιστο μήκος: %s- πραγματικό: %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:160
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max skew %s; actual %s; average net length %s; actual %s)"
 msgstr ""
-"(%s μέγιστη λοξότητα: %s; πραγματική: %s; μέσο μήκος net: %s; πραγματικό: %s)"
+"(%s μέγιστη απόκλιση: %s- πραγματική: %s- μέσο μήκος δικτύου: %s- πραγματικό:"
+" %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:189
 #, c-format
@@ -33362,9 +33356,8 @@ msgid "Checking assertions..."
 msgstr "Έλεγχος pins..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:108
-#, fuzzy
 msgid "Gathering physical items..."
-msgstr "Συλλογή αντικειμένων χαλκού..."
+msgstr "Συλλογή φυσικών αντικειμένων..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:176
 #, fuzzy
@@ -33415,24 +33408,26 @@ msgid "Running sliver detection on copper layers..."
 msgstr "Λειτουργία ανίχνευσης λωρίδων σε στρώματα χαλκού..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:55
-#, fuzzy
 msgid "board setup solder mask min width"
-msgstr "περιορισμοί ρύθμισης πλακέτας"
+msgstr "ρυθμίσεις πλακέτας ελάχιστο πλάτος μάσκας συγκόλλησης"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:511
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:605
 msgid "Front solder mask aperture bridges items with different nets"
 msgstr ""
+"Τα ανοίγματα της μπροστινής μάσκας συγκόλλησης ενώνουν αντικείμενα με "
+"διαφορετικά δίκτυα"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:513
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:607
 msgid "Rear solder mask aperture bridges items with different nets"
 msgstr ""
+"Τα ανοίγματα της πίσω μάσκας συγκόλλησης ενώνουν αντικείμενα με διαφορετικά "
+"δίκτυα"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:730
-#, fuzzy
 msgid "Building solder mask..."
-msgstr "Χτίσιμο γεμίσματος ζωνών..."
+msgstr "Χτίσιμο μάσκας συγκόλλησης..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:738
 #, fuzzy
