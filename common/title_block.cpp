@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -76,6 +76,7 @@ void TITLE_BLOCK::GetContextualTextVars( wxArrayString* aVars )
     if( !alg::contains( *aVars, wxT( "ISSUE_DATE" ) ) )
     {
         aVars->push_back( wxT( "ISSUE_DATE" ) );
+        aVars->push_back( wxT( "CURRENT_DATE" ) );
         aVars->push_back( wxT( "REVISION" ) );
         aVars->push_back( wxT( "TITLE" ) );
         aVars->push_back( wxT( "COMPANY" ) );
