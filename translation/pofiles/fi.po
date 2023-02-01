@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-30 17:07-0800\n"
-"PO-Revision-Date: 2023-02-01 16:10+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"PO-Revision-Date: 2023-02-01 17:38+0000\n"
+"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
 "Language: fi\n"
@@ -35172,9 +35172,9 @@ msgid "PCB Text"
 msgstr "PCB Teksti"
 
 #: pcbnew/pcb_text.cpp:240
-#, c-format, fuzzy
+#, c-format
 msgid "PCB Text '%s' on %s"
-msgstr "PCB Teksti '%s' kerroksella %s"
+msgstr "PCB Teksti '%s' kohteessa %s"
 
 #: pcbnew/pcb_textbox.cpp:400
 #, c-format, fuzzy
