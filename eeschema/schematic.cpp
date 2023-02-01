@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -19,6 +19,7 @@
 
 #include <bus_alias.h>
 #include <connection_graph.h>
+#include <core/kicad_algo.h>
 #include <erc_settings.h>
 #include <sch_marker.h>
 #include <project.h>
@@ -119,6 +120,30 @@ void SCHEMATIC::SetRoot( SCH_SHEET* aRootSheet )
 SCH_SCREEN* SCHEMATIC::RootScreen() const
 {
     return IsValid() ? m_rootSheet->GetScreen() : nullptr;
+}
+
+
+void SCHEMATIC::GetContextualTextVars( wxArrayString* aVars ) const
+{
+    auto add =
+            [&]( const wxString& aVar )
+            {
+                if( !alg::contains( *aVars, aVar ) )
+                    aVars->push_back( aVar );
+            };
+
+    add( wxT( "#" ) );
+    add( wxT( "##" ) );
+    add( wxT( "SHEETPATH" ) );
+    add( wxT( "SHEETNAME" ) );
+    add( wxT( "FILENAME" ) );
+    add( wxT( "PROJECTNAME" ) );
+
+    if( !CurrentSheet().empty() )
+        CurrentSheet().LastScreen()->GetTitleBlock().GetContextualTextVars( aVars );
+
+    for( std::pair<wxString, wxString> entry : Prj().GetTextVars() )
+        add( entry.first );
 }
 
 
