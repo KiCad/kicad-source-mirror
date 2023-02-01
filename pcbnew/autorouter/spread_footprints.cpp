@@ -128,7 +128,6 @@ void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, VECTOR2I aTargetBox
             std::pair<BOX2I, std::map<VECTOR2I, FpBBoxToFootprintsPair>>;
 
     std::map<wxString, SheetBBoxToFootprintsMapPair> sheetsMap;
-    std::vector<BOX2I>                               blockMap;
 
     // Fill in the maps
     for( FOOTPRINT* footprint : *aFootprints )
