@@ -33,7 +33,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	m_grid = new WX_GRID( sbSizer4->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
 	// Grid
-	m_grid->CreateGrid( 4, 13 );
+	m_grid->CreateGrid( 4, 14 );
 	m_grid->EnableEditing( true );
 	m_grid->EnableGridLines( true );
 	m_grid->EnableDragGridSize( false );
@@ -43,31 +43,33 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	m_grid->SetColSize( 0, 72 );
 	m_grid->SetColSize( 1, 120 );
 	m_grid->SetColSize( 2, 48 );
-	m_grid->SetColSize( 3, 72 );
-	m_grid->SetColSize( 4, 72 );
-	m_grid->SetColSize( 5, 48 );
+	m_grid->SetColSize( 3, 84 );
+	m_grid->SetColSize( 4, 70 );
+	m_grid->SetColSize( 5, 70 );
 	m_grid->SetColSize( 6, 48 );
-	m_grid->SetColSize( 7, 84 );
+	m_grid->SetColSize( 7, 48 );
 	m_grid->SetColSize( 8, 84 );
 	m_grid->SetColSize( 9, 84 );
 	m_grid->SetColSize( 10, 84 );
-	m_grid->SetColSize( 11, 140 );
-	m_grid->SetColSize( 12, 48 );
+	m_grid->SetColSize( 11, 84 );
+	m_grid->SetColSize( 12, 140 );
+	m_grid->SetColSize( 13, 48 );
 	m_grid->EnableDragColMove( false );
 	m_grid->EnableDragColSize( true );
 	m_grid->SetColLabelValue( 0, _("Name") );
 	m_grid->SetColLabelValue( 1, _("Value") );
 	m_grid->SetColLabelValue( 2, _("Show") );
-	m_grid->SetColLabelValue( 3, _("H Align") );
-	m_grid->SetColLabelValue( 4, _("V Align") );
-	m_grid->SetColLabelValue( 5, _("Italic") );
-	m_grid->SetColLabelValue( 6, _("Bold") );
-	m_grid->SetColLabelValue( 7, _("Text Size") );
-	m_grid->SetColLabelValue( 8, _("Orientation") );
-	m_grid->SetColLabelValue( 9, _("X Position") );
-	m_grid->SetColLabelValue( 10, _("Y Position") );
-	m_grid->SetColLabelValue( 11, _("Font") );
-	m_grid->SetColLabelValue( 12, _("Color") );
+	m_grid->SetColLabelValue( 3, _("Show Name") );
+	m_grid->SetColLabelValue( 4, _("H Align") );
+	m_grid->SetColLabelValue( 5, _("V Align") );
+	m_grid->SetColLabelValue( 6, _("Italic") );
+	m_grid->SetColLabelValue( 7, _("Bold") );
+	m_grid->SetColLabelValue( 8, _("Text Size") );
+	m_grid->SetColLabelValue( 9, _("Orientation") );
+	m_grid->SetColLabelValue( 10, _("X Position") );
+	m_grid->SetColLabelValue( 11, _("Y Position") );
+	m_grid->SetColLabelValue( 12, _("Font") );
+	m_grid->SetColLabelValue( 13, _("Color") );
 	m_grid->SetColLabelSize( 22 );
 	m_grid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 

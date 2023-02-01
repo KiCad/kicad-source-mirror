@@ -30,7 +30,7 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 	m_fieldsGrid = new WX_GRID( sbFields->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
 	// Grid
-	m_fieldsGrid->CreateGrid( 4, 13 );
+	m_fieldsGrid->CreateGrid( 4, 14 );
 	m_fieldsGrid->EnableEditing( true );
 	m_fieldsGrid->EnableGridLines( true );
 	m_fieldsGrid->EnableDragGridSize( false );
@@ -40,31 +40,33 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 	m_fieldsGrid->SetColSize( 0, 72 );
 	m_fieldsGrid->SetColSize( 1, 120 );
 	m_fieldsGrid->SetColSize( 2, 48 );
-	m_fieldsGrid->SetColSize( 3, 72 );
-	m_fieldsGrid->SetColSize( 4, 72 );
-	m_fieldsGrid->SetColSize( 5, 48 );
+	m_fieldsGrid->SetColSize( 3, 84 );
+	m_fieldsGrid->SetColSize( 4, 70 );
+	m_fieldsGrid->SetColSize( 5, 70 );
 	m_fieldsGrid->SetColSize( 6, 48 );
-	m_fieldsGrid->SetColSize( 7, 84 );
+	m_fieldsGrid->SetColSize( 7, 48 );
 	m_fieldsGrid->SetColSize( 8, 84 );
 	m_fieldsGrid->SetColSize( 9, 84 );
 	m_fieldsGrid->SetColSize( 10, 84 );
-	m_fieldsGrid->SetColSize( 11, 140 );
-	m_fieldsGrid->SetColSize( 12, 48 );
+	m_fieldsGrid->SetColSize( 11, 84 );
+	m_fieldsGrid->SetColSize( 12, 140 );
+	m_fieldsGrid->SetColSize( 13, 48 );
 	m_fieldsGrid->EnableDragColMove( false );
 	m_fieldsGrid->EnableDragColSize( true );
 	m_fieldsGrid->SetColLabelValue( 0, _("Name") );
 	m_fieldsGrid->SetColLabelValue( 1, _("Value") );
 	m_fieldsGrid->SetColLabelValue( 2, _("Show") );
-	m_fieldsGrid->SetColLabelValue( 3, _("H Align") );
-	m_fieldsGrid->SetColLabelValue( 4, _("V Align") );
-	m_fieldsGrid->SetColLabelValue( 5, _("Italic") );
-	m_fieldsGrid->SetColLabelValue( 6, _("Bold") );
-	m_fieldsGrid->SetColLabelValue( 7, _("Text Size") );
-	m_fieldsGrid->SetColLabelValue( 8, _("Orientation") );
-	m_fieldsGrid->SetColLabelValue( 9, _("X Position") );
-	m_fieldsGrid->SetColLabelValue( 10, _("Y Position") );
-	m_fieldsGrid->SetColLabelValue( 11, _("Font") );
-	m_fieldsGrid->SetColLabelValue( 12, _("Color") );
+	m_fieldsGrid->SetColLabelValue( 3, _("Show Name") );
+	m_fieldsGrid->SetColLabelValue( 4, _("H Align") );
+	m_fieldsGrid->SetColLabelValue( 5, _("V Align") );
+	m_fieldsGrid->SetColLabelValue( 6, _("Italic") );
+	m_fieldsGrid->SetColLabelValue( 7, _("Bold") );
+	m_fieldsGrid->SetColLabelValue( 8, _("Text Size") );
+	m_fieldsGrid->SetColLabelValue( 9, _("Orientation") );
+	m_fieldsGrid->SetColLabelValue( 10, _("X Position") );
+	m_fieldsGrid->SetColLabelValue( 11, _("Y Position") );
+	m_fieldsGrid->SetColLabelValue( 12, _("Font") );
+	m_fieldsGrid->SetColLabelValue( 13, _("Color") );
 	m_fieldsGrid->SetColLabelSize( 22 );
 	m_fieldsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
