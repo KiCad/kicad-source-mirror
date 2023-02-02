@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-01 14:03-0800\n"
-"PO-Revision-Date: 2023-01-28 22:14+0000\n"
+"PO-Revision-Date: 2023-02-04 10:00+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -8970,9 +8970,8 @@ msgid "Buses && bus labels"
 msgstr "Шины и их метки"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:51
-#, fuzzy
 msgid "Label fields"
-msgstr "Поля символов"
+msgstr "Поля меток"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:57
 msgid "Sheet titles"
@@ -8992,9 +8991,8 @@ msgid "Filters"
 msgstr "Фильтры"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:87
-#, fuzzy
 msgid "Filter fields by name:"
-msgstr "Фильтровать элементы по цепи:"
+msgstr "Фильтровать поля по имени:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:99
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:73
@@ -10744,13 +10742,13 @@ msgid "Note: item colors are overridden in the current color theme."
 msgstr "Примечание: цвета элементов переназначены в текущей цветовой теме."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:384
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "To see individual item colors uncheck '%s'\n"
 "in Preferences > Schematic Editor > Colors."
 msgstr ""
-"Чтобы просмотреть цвет отдельного элемента снимите отмету '%s'\n"
-"в меню Настройки > Eeschema > Цвета."
+"Чтобы видеть цвета отдельных элементов, снимите флажок '%s'\n"
+"в меню Настройки > Редактор схем > Цвета."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:426
 #, c-format
@@ -23022,7 +23020,6 @@ msgstr ""
 "соединений\n"
 
 #: pcb_calculator/fusing_current_help.h:2
-#, fuzzy
 msgid ""
 "You can use this calculator to check if a small track can handle a large "
 "current for a short period of time.<br>\n"
@@ -23040,8 +23037,8 @@ msgstr ""
 "следует использовать только для оценки.\n"
 "\n"
 "Калькулятор оценивает энергию, необходимую для нагрева проводника<br>\n"
-"до температуры плавления, а также энергии, необходимой для фазового перехода."
-"<br>\n"
+"до температуры плавления, а также энергии, необходимой для фазового "
+"перехода.<br>\n"
 "Затем эта энергия сравнивается с энергией, рассеиваемой сопротивлением "
 "проводника."
 
