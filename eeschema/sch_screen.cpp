@@ -1241,12 +1241,12 @@ size_t SCH_SCREEN::getLibSymbolNameMatches( const SCH_SYMBOL& aSymbol,
 
     searchName = aSymbol.GetLibId().GetUniStringLibItemName() + wxS( "_" );
 
-    int tmp;
+    long tmp;
     wxString suffix;
 
     for( auto pair : m_libSymbols )
     {
-        if( pair.first.StartsWith( searchName, &suffix ) && suffix.ToInt( &tmp ) )
+        if( pair.first.StartsWith( searchName, &suffix ) && suffix.ToLong( &tmp ) )
             aMatches.emplace_back( pair.first );
     }
 
