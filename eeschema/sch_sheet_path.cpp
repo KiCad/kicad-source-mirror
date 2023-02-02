@@ -339,7 +339,7 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences() const
 
             symbol->GetField( REFERENCE_FIELD )->SetText( symbol->GetRef( this ) );
             symbol->UpdateUnit( symbol->GetUnitSelection( this ) );
-            LastScreen()->Update( item );
+            LastScreen()->Update( item, false );
         }
         else if( item->Type() == SCH_GLOBAL_LABEL_T )
         {

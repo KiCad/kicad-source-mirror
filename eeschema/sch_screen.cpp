@@ -142,14 +142,14 @@ bool SCH_SCREEN::ClassOf( const EDA_ITEM* aItem )
 }
 
 
-void SCH_SCREEN::Append( SCH_ITEM* aItem )
+void SCH_SCREEN::Append( SCH_ITEM* aItem, bool aUpdateLibSymbol )
 {
     if( aItem->Type() != SCH_SHEET_PIN_T && aItem->Type() != SCH_FIELD_T )
     {
         // Ensure the item can reach the SCHEMATIC through this screen
         aItem->SetParent( this );
 
-        if( aItem->Type() == SCH_SYMBOL_T )
+        if( aItem->Type() == SCH_SYMBOL_T && aUpdateLibSymbol )
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( aItem );
 
@@ -176,30 +176,65 @@ void SCH_SCREEN::Append( SCH_ITEM* aItem )
 
                     if( *foundSymbol != *symbol->GetLibSymbolRef() )
                     {
-                        int cnt = 1;
                         wxString newName;
+                        std::vector<wxString> matches;
 
-                        newName.Printf( "%s_%d", symbol->GetLibId().GetUniStringLibItemName(),
-                                        cnt );
+                        getLibSymbolNameMatches( *symbol, matches );
+                        foundSymbol = nullptr;
 
-                        while( m_libSymbols.find( newName ) != m_libSymbols.end() )
+                        for( const wxString& libSymbolName : matches )
                         {
-                            cnt += 1;
-                            newName.Printf( "%s_%d", symbol->GetLibId().GetUniStringLibItemName(),
+                            it = m_libSymbols.find( libSymbolName );
+
+                            if( it == m_libSymbols.end() )
+                                continue;
+
+                            foundSymbol = it->second;
+
+                            wxCHECK2( foundSymbol, continue );
+
+                            if( *foundSymbol == *symbol->GetLibSymbolRef() )
+                            {
+                                newName = libSymbolName;
+                                break;
+                            }
+
+                            foundSymbol = nullptr;
+                        }
+
+                        if( !foundSymbol )
+                        {
+                            int cnt = 1;
+
+                            newName.Printf( wxT( "%s_%d" ),
+                                            symbol->GetLibId().GetUniStringLibItemName(),
                                             cnt );
+
+                            while( m_libSymbols.find( newName ) != m_libSymbols.end() )
+                            {
+                                cnt += 1;
+                                newName.Printf( wxT( "%s_%d" ),
+                                                symbol->GetLibId().GetUniStringLibItemName(),
+                                                cnt );
+                            }
                         }
 
                         // Update the schematic symbol library link as this symbol only exists
                         // in the schematic.
                         symbol->SetSchSymbolLibraryName( newName );
 
-                        LIB_SYMBOL* newLibSymbol = new LIB_SYMBOL( *symbol->GetLibSymbolRef() );
-                        LIB_ID newLibId( wxEmptyString, newName );
+                        if( !foundSymbol )
+                        {
+                            // Update the schematic symbol library link as this symbol does not
+                            // exist in any symbol library.
+                            LIB_ID newLibId( wxEmptyString, newName );
+                            LIB_SYMBOL* newLibSymbol = new LIB_SYMBOL( *symbol->GetLibSymbolRef() );
 
-                        newLibSymbol->SetLibId( newLibId );
-                        newLibSymbol->SetName( newName );
-                        symbol->SetLibSymbol( newLibSymbol->Flatten().release() );
-                        m_libSymbols[newName] = newLibSymbol;
+                            newLibSymbol->SetLibId( newLibId );
+                            newLibSymbol->SetName( newName );
+                            symbol->SetLibSymbol( newLibSymbol->Flatten().release() );
+                            m_libSymbols[newName] = newLibSymbol;
+                        }
                     }
                 }
             }
@@ -262,19 +297,19 @@ void SCH_SCREEN::FreeDrawList()
 }
 
 
-void SCH_SCREEN::Update( SCH_ITEM* aItem )
+void SCH_SCREEN::Update( SCH_ITEM* aItem, bool aUpdateLibSymbol )
 {
-    if( Remove( aItem ) )
-        Append( aItem );
+    if( Remove( aItem, aUpdateLibSymbol ) )
+        Append( aItem, aUpdateLibSymbol );
 }
 
 
-bool SCH_SCREEN::Remove( SCH_ITEM* aItem )
+bool SCH_SCREEN::Remove( SCH_ITEM* aItem, bool aUpdateLibSymbol )
 {
     bool retv = m_rtree.remove( aItem );
 
     // Check if the library symbol for the removed schematic symbol is still required.
-    if( retv && aItem->Type() == SCH_SYMBOL_T )
+    if( retv && aItem->Type() == SCH_SYMBOL_T && aUpdateLibSymbol )
     {
         SCH_SYMBOL* removedSymbol = static_cast<SCH_SYMBOL*>( aItem );
 
@@ -1538,6 +1573,29 @@ void SCH_SCREEN::SetLegacySymbolInstanceData()
                                               instance.m_Unit );
         }
     }
+}
+
+
+size_t SCH_SCREEN::getLibSymbolNameMatches( const SCH_SYMBOL& aSymbol,
+                                            std::vector<wxString>& aMatches )
+{
+    wxString searchName = aSymbol.GetLibId().GetUniStringLibId();
+
+    if( m_libSymbols.find( searchName ) != m_libSymbols.end() )
+        aMatches.emplace_back( searchName );
+
+    searchName = aSymbol.GetLibId().GetUniStringLibItemName() + wxS( "_" );
+
+    int tmp;
+    wxString suffix;
+
+    for( auto pair : m_libSymbols )
+    {
+        if( pair.first.StartsWith( searchName, &suffix ) && suffix.ToInt( &tmp ) )
+            aMatches.emplace_back( pair.first );
+    }
+
+    return aMatches.size();
 }
 
 

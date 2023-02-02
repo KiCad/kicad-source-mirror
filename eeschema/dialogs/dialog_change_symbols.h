@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -73,9 +73,10 @@ private:
     void updateFieldsList();
 
     bool isMatch( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aInstance );
-    bool processMatchingSymbols();
-    bool processSymbol( SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH* aInstance,
-                        const LIB_ID& aNewId, bool aAppendToUndo );
+    int processMatchingSymbols();
+    int processSymbols( const std::map<SCH_SYMBOL*, std::vector<SCH_SHEET_PATH>>& aSymbols,
+                        const LIB_ID& aNewId );
+    wxString getSymbolReferences( SCH_SYMBOL& aSymbol, const LIB_ID& aNewId );
 
     SCH_SYMBOL* m_symbol;
     MODE        m_mode;
