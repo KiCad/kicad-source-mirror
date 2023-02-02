@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,37 +38,6 @@ std::string SPICE_GENERATOR_R_POT::ModelLine( const SPICE_ITEM& aItem ) const
     }
     else
         return fmt::format( ".model {} potentiometer( r={} )\n", aItem.modelName, r );
-}
-
-
-std::string SPICE_GENERATOR_R_POT::ItemPins( const SPICE_ITEM& aItem ) const
-{
-    std::string result;
-    int ncCounter = 0;
-
-    wxCHECK( GetPins().size() == 3, "" );
-
-    // Swap pin order so that pos=1 is +, and pos=0 is -.
-    std::vector<std::reference_wrapper<const SIM_MODEL::PIN>> inverted( GetPins() );
-    std::swap( inverted[0], inverted[2] );
-
-    for( const SIM_MODEL::PIN& pin : GetPins() )
-    {
-        auto it = std::find( aItem.pinNumbers.begin(), aItem.pinNumbers.end(),
-                             pin.symbolPinNumber );
-
-        if( it != aItem.pinNumbers.end() )
-        {
-            long symbolPinIndex = std::distance( aItem.pinNumbers.begin(), it );
-            result.append( fmt::format( " {}", aItem.pinNetNames.at( symbolPinIndex ) ) );
-        }
-        else
-        {
-            result.append( fmt::format( " NC-{}-{}", aItem.refName, ncCounter++ ) );
-        }
-    }
-
-    return result;
 }
 
 

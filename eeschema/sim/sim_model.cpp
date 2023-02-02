@@ -1394,7 +1394,24 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
         || aSymbol.FindField( SIM_PINS_FIELD )
         || aSymbol.FindField( SIM_PARAMS_FIELD ) )
     {
-        // Has a V7 model field -- skip.
+        // Has a V7 model field.
+
+        // Up until 7.0RC2 we used '+' and '-' for potentiometer pins, which doesn't match
+        // SPICE.  Here we remap them to 'r0' and 'r1'.
+        if( T_field* deviceType = aSymbol.FindField( SIM_TYPE_FIELD ) )
+        {
+            if( deviceType->GetShownText().Lower() == wxS( "pot" ) )
+            {
+                if( T_field* pins = aSymbol.FindField( SIM_PINS_FIELD ) )
+                {
+                    wxString pinMap = pins->GetText();
+                    pinMap.Replace( wxS( "=+" ), wxS( "=r1" ) );
+                    pinMap.Replace( wxS( "=-" ), wxS( "=r0" ) );
+                    pins->SetText( pinMap );
+                }
+            }
+        }
+
         return;
     }
 

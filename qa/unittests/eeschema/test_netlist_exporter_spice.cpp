@@ -102,8 +102,8 @@ BOOST_AUTO_TEST_CASE( Potentiometers )
 {
     TestNetlist( "potentiometers" );
     TestOpPoint( 0.5, "V(/out1)" );
-    TestOpPoint( 0.3, "V(/out2)" );
-    TestOpPoint( 0.1, "V(/out3)" );
+    TestOpPoint( 0.7, "V(/out2)" );
+    TestOpPoint( 0.9, "V(/out3)" );
 }
 
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,7 +35,6 @@ public:
     using SPICE_GENERATOR::SPICE_GENERATOR;
 
     std::string ModelLine( const SPICE_ITEM& aItem ) const override;
-    std::string ItemPins( const SPICE_ITEM& aItem ) const override;
     std::string TunerCommand( const SPICE_ITEM& aItem, const SIM_VALUE_FLOAT& aValue ) const override;
 };
 
@@ -48,7 +47,7 @@ public:
     const PARAM* GetTunerParam() const override { return FindParam( "pos" ); }
     bool HasPrimaryValue() const override { return true; }
 
-    std::vector<std::string> GetPinNames() const override { return { "+", "wiper", "-" }; }
+    std::vector<std::string> GetPinNames() const override { return { "r0", "wiper", "r1" }; }
 
 private:
     static const std::vector<PARAM::INFO> makeParamInfos();
