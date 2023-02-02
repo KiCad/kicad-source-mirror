@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -2246,8 +2246,16 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect 
         break;
 
     case PCB_BITMAP_T:
-        if( !m_filter.graphics || !m_isFootprintEditor )
+        // a bitmap living in a footprint must not be selected inside the board editor
+        if( !m_filter.graphics )
             return false;
+
+        if( !m_isFootprintEditor )
+        {
+            if( dynamic_cast<FOOTPRINT*>( aItem->GetParent() ) )
+                return false;
+        }
+
 
         break;
 
