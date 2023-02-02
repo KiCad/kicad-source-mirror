@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -181,7 +181,7 @@ public:
         return m_clientSheetPathList;
     }
 
-    void Append( SCH_ITEM* aItem );
+    void Append( SCH_ITEM* aItem, bool aUpdateLibSymbol = true );
 
     /**
      * Copy the contents of \a aScreen into this #SCH_SCREEN object.
@@ -264,16 +264,18 @@ public:
      *
      * @note The removed item is not deleted.  It is only unlinked from the item list.
      * @param[in] aItem Item to be removed from schematic.
+     * @param aUpdateLibSymbol removes the library symbol as required when true.
      * @return True if we successfully removed the item
      */
-    bool Remove( SCH_ITEM* aItem );
+    bool Remove( SCH_ITEM* aItem, bool aUpdateLibSymbol = true );
 
     /**
      * Update \a aItem's bounding box in the tree
      *
      * @param[in] aItem Item that needs to be updated.
+     * @param aUpdateLibSymbol removes the library symbol as required when true.
      */
-    void Update( SCH_ITEM* aItem );
+    void Update( SCH_ITEM* aItem, bool aUpdateLibSymbol = true );
 
     /**
      * Removes \a aItem from the linked list and deletes the object.
@@ -516,12 +518,27 @@ private:
     bool doIsJunction( const wxPoint& aPosition, bool aBreakCrossings,
                        bool* aHasExplicitJunctionDot, bool* aHasBusEntry ) const;
 
+    void clearLibSymbols();
+
+    /**
+     * Return a list of potential library symbol matches for \a aSymbol.
+     *
+     * When and existing library symbol named with the full #LIB_ID object is found, there may
+     * be more potential matches if the #SCH_SCREEN::Append() method need to create an alternate
+     * symbol due to differences from the original symbol.  This process creates a new library
+     * symbol name by adding a "_#" suffix to the existing #LIB_ID item name.
+     *
+     * @param[in] aSymbol is the schematic symbol to search for potential library symbol matches.
+     * @param[out] aMatches contains library cache names of all of the potential matches.
+     *
+     * @return the number of potential matches found for \a aSymbol.
+     */
+    size_t getLibSymbolNameMatches( const SCH_SYMBOL& aSymbol, std::vector<wxString>& aMatches );
+
 private:
     friend SCH_EDIT_FRAME;     // Only to populate m_symbolInstances.
     friend SCH_SEXPR_PARSER;   // Only to load instance information from schematic file.
     friend SCH_SEXPR_PLUGIN;   // Only to save the loaded instance information to schematic file.
-
-    void clearLibSymbols();
 
     wxString    m_fileName;                 // File used to load the screen.
     int         m_fileFormatVersionAtLoad;

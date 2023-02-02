@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -310,7 +310,7 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences()
         symbol->GetField( VALUE_FIELD )->SetText( symbol->GetValue( this, false ) );
         symbol->GetField( FOOTPRINT_FIELD )->SetText( symbol->GetFootprint( this, false ) );
         symbol->UpdateUnit( symbol->GetUnitSelection( this ) );
-        LastScreen()->Update( item );
+        LastScreen()->Update( item, false );
     }
 }
 

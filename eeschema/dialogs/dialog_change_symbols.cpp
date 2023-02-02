@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020-2021 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -399,7 +399,9 @@ void DIALOG_CHANGE_SYMBOLS::onOkButtonClicked( wxCommandEvent& aEvent )
                 m_updateFields.insert( dummy_field.GetCanonicalName() );
             }
             else
+            {
                 m_updateFields.insert( m_fieldsBox->GetString( i ) );
+            }
         }
     }
 
@@ -451,15 +453,16 @@ bool DIALOG_CHANGE_SYMBOLS::isMatch( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aInsta
 }
 
 
-bool DIALOG_CHANGE_SYMBOLS::processMatchingSymbols()
+int DIALOG_CHANGE_SYMBOLS::processMatchingSymbols()
 {
     SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( GetParent() );
 
     wxCHECK( frame, false );
 
     LIB_ID newId;
-    bool appendToUndo = false;
-    bool changed = false;
+    wxString msg;
+    int matchesProcessed = 0;
+    SCH_SYMBOL* symbol = nullptr;
     SCH_SHEET_LIST hierarchy = frame->Schematic().GetSheets();
 
     if( m_mode == MODE::CHANGE )
@@ -470,70 +473,255 @@ bool DIALOG_CHANGE_SYMBOLS::processMatchingSymbols()
             return false;
     }
 
+    std::map<SCH_SYMBOL*, std::vector<SCH_SHEET_PATH>> symbols;
+
     for( SCH_SHEET_PATH& instance : hierarchy )
     {
         SCH_SCREEN* screen = instance.LastScreen();
 
         wxCHECK2( screen, continue );
 
-        std::vector<SCH_SYMBOL*> symbols;
-
+        // Fetch all the symbols that meet the change criteria.
         for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
-            symbols.push_back( static_cast<SCH_SYMBOL*>( item ) );
-
-        for( SCH_SYMBOL* symbol : symbols )
         {
+            symbol = static_cast<SCH_SYMBOL*>( item );
+
+            wxCHECK2( symbol, continue );
+
             if( !isMatch( symbol, &instance ) )
                 continue;
 
-            if( m_mode == MODE::UPDATE )
-            {
-                if( processSymbol( symbol, &instance, symbol->GetLibId(), appendToUndo ) )
-                    changed = true;
-            }
-            else
-            {
-                if( processSymbol( symbol, &instance, newId, appendToUndo ) )
-                    changed = true;
-            }
+            if( ( m_mode == MODE::UPDATE ) && !newId.IsValid() )
+                newId = symbol->GetLibId();
 
-            if( changed )
-                appendToUndo = true;
+            auto it = symbols.find( symbol );
+
+            if( it == symbols.end() )
+                symbols.insert( { symbol, { instance } } );
+            else
+                it->second.emplace_back( instance );
         }
     }
 
+    matchesProcessed += processSymbols( symbols, newId );
+
     frame->GetCurrentSheet().UpdateAllScreenReferences();
 
-    return changed;
+    return matchesProcessed;
 }
 
 
-bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH* aInstance,
-                                           const LIB_ID& aNewId, bool aAppendToUndo )
+int DIALOG_CHANGE_SYMBOLS::processSymbols( const std::map<SCH_SYMBOL*,
+                                           std::vector<SCH_SHEET_PATH>>& aSymbols,
+                                           const LIB_ID& aNewId )
 {
-    wxCHECK( aSymbol, false );
-    wxCHECK( aNewId.IsValid(), false );
+    wxCHECK( !aSymbols.empty() && aNewId.IsValid(), 0 );
 
+    std::vector<SCH_SHEET_PATH> instances;
+    int             matchesProcessed = 0;
     SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( GetParent() );
-    SCH_SCREEN*     screen = aInstance->LastScreen();
+    SCH_SCREEN*     screen = nullptr;
+    SCH_SYMBOL*     symbol = nullptr;
+    LIB_SYMBOL*     libSymbol = nullptr;
+    std::map<SCH_SYMBOL*, std::vector<SCH_SHEET_PATH>> symbols = aSymbols;
 
-    wxCHECK( frame, false );
+    wxCHECK( frame, 0 );
 
-    LIB_ID    oldId = aSymbol->GetLibId();
     wxString  msg;
-    wxString  references;
 
-    for( SYMBOL_INSTANCE_REFERENCE instance : aSymbol->GetInstanceReferences() )
+    auto it = symbols.begin();
+
+    // Remove all symbols that don't have a valid library symbol link or enough units to
+    // satify the library symbol update.
+    while( it != symbols.end() )
+    {
+        symbol = it->first;
+
+        wxCHECK2( symbol, continue );
+
+        libSymbol = frame->GetLibSymbol( aNewId );
+
+        if( !libSymbol )
+        {
+            msg = getSymbolReferences( *symbol, aNewId );
+            msg << wxT( ": " ) << _( "*** symbol not found ***" );
+            m_messagePanel->Report( msg, RPT_SEVERITY_ERROR );
+            it = symbols.erase( it );
+            continue;
+        }
+
+        std::unique_ptr<LIB_SYMBOL> flattenedSymbol = libSymbol->Flatten();
+
+        if( flattenedSymbol->GetUnitCount() < symbol->GetUnit() )
+        {
+            msg = getSymbolReferences( *symbol, aNewId );
+            msg << wxT( ": " ) << _( "*** new symbol has too few units ***" );
+            m_messagePanel->Report( msg, RPT_SEVERITY_ERROR );
+            it = symbols.erase( it );
+        }
+        else
+        {
+            ++it;
+        }
+    }
+
+    // Removing the symbol needs to be done before the LIB_SYMBOL is changed to prevent stale
+    // library symbols in the schematic file.
+    for( auto pair : symbols )
+    {
+        symbol = pair.first;
+        instances = pair.second;
+
+        wxCHECK( symbol && !instances.empty(), 0 );
+
+        screen = instances[0].LastScreen();
+
+        wxCHECK( screen, 0 );
+
+        screen->Remove( symbol );
+        frame->SaveCopyInUndoList( screen, symbol, UNDO_REDO::CHANGED, true );
+    }
+
+    for( auto pair : symbols )
+    {
+        symbol = pair.first;
+
+        if( aNewId != symbol->GetLibId() )
+            symbol->SetLibId( aNewId );
+
+        libSymbol = frame->GetLibSymbol( aNewId );
+        std::unique_ptr<LIB_SYMBOL> flattenedSymbol = libSymbol->Flatten();
+
+        symbol->SetLibSymbol( flattenedSymbol.release() );
+
+        if( m_resetAttributes->GetValue() )
+        {
+            symbol->SetIncludeInBom( libSymbol->GetIncludeInBom() );
+            symbol->SetIncludeOnBoard( libSymbol->GetIncludeOnBoard() );
+        }
+
+        bool removeExtras = m_removeExtraBox->GetValue();
+        bool resetVis = m_resetFieldVisibilities->GetValue();
+        bool resetEffects = m_resetFieldEffects->GetValue();
+        bool resetPositions = m_resetFieldPositions->GetValue();
+
+        for( unsigned i = 0; i < symbol->GetFields().size(); ++i )
+        {
+            SCH_FIELD& field = symbol->GetFields()[i];
+            LIB_FIELD* libField = nullptr;
+
+            // Mandatory fields always exist in m_updateFields, but these names can be translated.
+            // so use GetCanonicalName().
+            if( !alg::contains( m_updateFields, field.GetCanonicalName() ) )
+                continue;
+
+            if( i < MANDATORY_FIELDS )
+                libField = libSymbol->GetFieldById( (int) i );
+            else
+                libField = libSymbol->FindField( field.GetName() );
+
+            if( libField )
+            {
+                bool resetText = libField->GetText().IsEmpty() ? m_resetEmptyFields->GetValue()
+                                 : m_resetFieldText->GetValue();
+
+                if( resetText )
+                {
+                    for( const SCH_SHEET_PATH& instance : pair.second )
+                    {
+                        if( i == REFERENCE_FIELD )
+                            symbol->SetRef( &instance,
+                                            UTIL::GetRefDesUnannotated( libField->GetText() ) );
+                        else if( i == VALUE_FIELD )
+                            symbol->SetValue( &instance, UnescapeString( libField->GetText() ) );
+                        else if( i == FOOTPRINT_FIELD )
+                            symbol->SetFootprint( &instance, libField->GetText() );
+                        else
+                            field.SetText( libField->GetText() );
+                    }
+                }
+
+                if( resetVis )
+                    field.SetVisible( libField->IsVisible() );
+
+                if( resetEffects )
+                {
+                    // Careful: the visible bit and position are also in Effects
+                    bool    visible = field.IsVisible();
+                    wxPoint pos = field.GetPosition();
+
+                    field.SetEffects( *libField );
+
+                    field.SetVisible( visible );
+                    field.SetPosition( pos );
+                }
+
+                if( resetPositions )
+                    field.SetTextPos( symbol->GetPosition() + libField->GetTextPos() );
+            }
+            else if( i >= MANDATORY_FIELDS && removeExtras )
+            {
+                symbol->RemoveField( field.GetName() );
+                i--;
+            }
+        }
+
+        std::vector<LIB_FIELD*> libFields;
+        libSymbol->GetFields( libFields );
+
+        for( unsigned i = MANDATORY_FIELDS; i < libFields.size(); ++i )
+        {
+            const LIB_FIELD& libField = *libFields[i];
+
+            if( !alg::contains( m_updateFields, libField.GetCanonicalName() ) )
+                continue;
+
+            if( !symbol->FindField( libField.GetName(), false ) )
+            {
+                wxString   fieldName = libField.GetCanonicalName();
+                SCH_FIELD  newField( wxPoint( 0, 0 ), symbol->GetFieldCount(), symbol,
+                                     fieldName );
+                SCH_FIELD* schField = symbol->AddField( newField );
+
+                schField->SetEffects( libField );
+                schField->SetText( libField.GetText() );
+                schField->SetTextPos( symbol->GetPosition() + libField.GetTextPos() );
+            }
+        }
+
+        symbol->SetSchSymbolLibraryName( wxEmptyString );
+        instances = pair.second;
+        screen = instances[0].LastScreen();
+        screen->Append( symbol );
+        frame->GetCanvas()->GetView()->Update( symbol );
+
+        msg = getSymbolReferences( *symbol, aNewId );
+        msg += wxT( ": OK" );
+        m_messagePanel->Report( msg, RPT_SEVERITY_ACTION );
+        matchesProcessed +=1;
+    }
+
+    return matchesProcessed;
+}
+
+
+wxString DIALOG_CHANGE_SYMBOLS::getSymbolReferences( SCH_SYMBOL& aSymbol,
+                                                     const LIB_ID& aNewId )
+{
+    wxString msg;
+    wxString references;
+    LIB_ID oldId = aSymbol.GetLibId();
+
+    for( const SYMBOL_INSTANCE_REFERENCE& instance : aSymbol.GetInstanceReferences() )
     {
         if( references.IsEmpty() )
             references = instance.m_Reference;
         else
             references += wxT( " " ) + instance.m_Reference;
     }
-
     if( m_mode == MODE::UPDATE )
     {
-        if( aSymbol->GetInstanceReferences().size() == 1 )
+        if( aSymbol.GetInstanceReferences().size() == 1 )
         {
             msg.Printf( _( "Update symbol %s from '%s' to '%s'" ),
                         references,
@@ -550,7 +738,7 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_SYMBOL* aSymbol, const SCH_SHEET_
     }
     else
     {
-        if( aSymbol->GetInstanceReferences().size() == 1 )
+        if( aSymbol.GetInstanceReferences().size() == 1 )
         {
             msg.Printf( _( "Change symbol %s from '%s' to '%s'" ),
                         references,
@@ -566,132 +754,5 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_SYMBOL* aSymbol, const SCH_SHEET_
         }
     }
 
-    LIB_SYMBOL* libSymbol = frame->GetLibSymbol( aNewId );
-
-    if( !libSymbol )
-    {
-        msg << wxT( ": " ) << _( "*** symbol not found ***" );
-        m_messagePanel->Report( msg, RPT_SEVERITY_ERROR );
-        return false;
-    }
-
-    std::unique_ptr<LIB_SYMBOL> flattenedSymbol = libSymbol->Flatten();
-
-    if( flattenedSymbol->GetUnitCount() < aSymbol->GetUnit() )
-    {
-        msg << wxT( ": " ) << _( "*** new symbol has too few units ***" );
-        m_messagePanel->Report( msg, RPT_SEVERITY_ERROR );
-        return false;
-    }
-
-    // Removing the symbol needs to be done before the LIB_SYMBOL is changed to prevent stale
-    // library symbols in the schematic file.
-    screen->Remove( aSymbol );
-    frame->SaveCopyInUndoList( screen, aSymbol, UNDO_REDO::CHANGED, aAppendToUndo );
-
-    if( aNewId != aSymbol->GetLibId() )
-        aSymbol->SetLibId( aNewId );
-
-    aSymbol->SetLibSymbol( flattenedSymbol.release() );
-
-    if( m_resetAttributes->GetValue() )
-    {
-        aSymbol->SetIncludeInBom( libSymbol->GetIncludeInBom() );
-        aSymbol->SetIncludeOnBoard( libSymbol->GetIncludeOnBoard() );
-    }
-
-    bool removeExtras = m_removeExtraBox->GetValue();
-    bool resetVis = m_resetFieldVisibilities->GetValue();
-    bool resetEffects = m_resetFieldEffects->GetValue();
-    bool resetPositions = m_resetFieldPositions->GetValue();
-
-    for( unsigned i = 0; i < aSymbol->GetFields().size(); ++i )
-    {
-        SCH_FIELD& field = aSymbol->GetFields()[i];
-        LIB_FIELD* libField = nullptr;
-
-        // Mandatory fields always exist in m_updateFields, but these names can be translated.
-        // so use GetCanonicalName().
-        if( !alg::contains( m_updateFields, field.GetCanonicalName() ) )
-            continue;
-
-        if( i < MANDATORY_FIELDS )
-            libField = libSymbol->GetFieldById( (int) i );
-        else
-            libField = libSymbol->FindField( field.GetName() );
-
-        if( libField )
-        {
-            bool resetText = libField->GetText().IsEmpty() ? m_resetEmptyFields->GetValue()
-                                                           : m_resetFieldText->GetValue();
-
-            if( resetText )
-            {
-                if( i == REFERENCE_FIELD )
-                    aSymbol->SetRef( aInstance, UTIL::GetRefDesUnannotated( libField->GetText() ) );
-                else if( i == VALUE_FIELD )
-                    aSymbol->SetValue( aInstance, UnescapeString( libField->GetText() ) );
-                else if( i == FOOTPRINT_FIELD )
-                    aSymbol->SetFootprint( aInstance, libField->GetText() );
-                else
-                    field.SetText( libField->GetText() );
-            }
-
-            if( resetVis )
-                field.SetVisible( libField->IsVisible() );
-
-            if( resetEffects )
-            {
-                // Careful: the visible bit and position are also in Effects
-                bool    visible = field.IsVisible();
-                wxPoint pos = field.GetPosition();
-
-                field.SetEffects( *libField );
-
-                field.SetVisible( visible );
-                field.SetPosition( pos );
-            }
-
-            if( resetPositions )
-                field.SetTextPos( aSymbol->GetPosition() + libField->GetTextPos() );
-        }
-        else if( i >= MANDATORY_FIELDS && removeExtras )
-        {
-            aSymbol->RemoveField( field.GetName() );
-            i--;
-        }
-    }
-
-    std::vector<LIB_FIELD*> libFields;
-    libSymbol->GetFields( libFields );
-
-    for( unsigned i = MANDATORY_FIELDS; i < libFields.size(); ++i )
-    {
-        const LIB_FIELD& libField = *libFields[i];
-
-        if( !alg::contains( m_updateFields, libField.GetCanonicalName() ) )
-            continue;
-
-        if( !aSymbol->FindField( libField.GetName(), false ) )
-        {
-            wxString   fieldName = libField.GetCanonicalName();
-            SCH_FIELD  newField( wxPoint( 0, 0), aSymbol->GetFieldCount(), aSymbol, fieldName );
-            SCH_FIELD* schField = aSymbol->AddField( newField );
-
-            schField->SetEffects( libField );
-            schField->SetText( libField.GetText() );
-            schField->SetTextPos( aSymbol->GetPosition() + libField.GetTextPos() );
-        }
-    }
-
-    aSymbol->SetSchSymbolLibraryName( wxEmptyString );
-    screen->Append( aSymbol );
-    frame->GetCanvas()->GetView()->Update( aSymbol );
-
-    msg += wxT( ": OK" );
-    m_messagePanel->Report( msg, RPT_SEVERITY_ACTION );
-
-    return true;
+    return msg;
 }
-
-
