@@ -2442,7 +2442,9 @@ void PCB_PARSER::parseNETCLASS()
         NeedRIGHT();
     }
 
-    if( m_board->GetDesignSettings().m_NetSettings->m_NetClasses.count( nc->GetName() ) )
+    std::shared_ptr<NET_SETTINGS>& netSettings = m_board->GetDesignSettings().m_NetSettings;
+
+    if( netSettings->m_NetClasses.count( nc->GetName() ) )
     {
         // Must have been a name conflict, this is a bad board file.
         // User may have done a hand edit to the file.
@@ -2452,9 +2454,13 @@ void PCB_PARSER::parseNETCLASS()
                       CurOffset() );
         THROW_IO_ERROR( error );
     }
+    else if( nc->GetName() == netSettings->m_DefaultNetClass->GetName() )
+    {
+        netSettings->m_DefaultNetClass = nc;
+    }
     else
     {
-        m_board->GetDesignSettings().m_NetSettings->m_NetClasses[ nc->GetName() ] = nc;
+        netSettings->m_NetClasses[ nc->GetName() ] = nc;
     }
 }
 

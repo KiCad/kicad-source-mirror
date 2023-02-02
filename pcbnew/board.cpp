@@ -192,9 +192,13 @@ void BOARD::SetProject( PROJECT* aProject, bool aReferenceOnly )
         // want to transfer it over to the project netclasses list.
         if( m_LegacyNetclassesLoaded )
         {
-            std::shared_ptr<NET_SETTINGS> legacySettings = GetDesignSettings().m_NetSettings;
-            project.NetSettings()->m_DefaultNetClass = legacySettings->m_DefaultNetClass;
-            project.NetSettings()->m_NetClasses = legacySettings->m_NetClasses;
+            std::shared_ptr<NET_SETTINGS>  legacySettings  = GetDesignSettings().m_NetSettings;
+            std::shared_ptr<NET_SETTINGS>& projectSettings = project.NetSettings();
+
+            projectSettings->m_DefaultNetClass = legacySettings->m_DefaultNetClass;
+            projectSettings->m_NetClasses      = legacySettings->m_NetClasses;
+            projectSettings->m_NetClassPatternAssignments =
+                    std::move( legacySettings->m_NetClassPatternAssignments );
         }
 
         // Now update the DesignSettings' netclass pointer to point into the project.
