@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1356,6 +1356,16 @@ static struct ZONE_DESC
 {
     ZONE_DESC()
     {
+        ENUM_MAP<PCB_LAYER_ID>& layerEnum = ENUM_MAP<PCB_LAYER_ID>::Instance();
+
+        if( layerEnum.Choices().GetCount() == 0 )
+        {
+            layerEnum.Undefined( UNDEFINED_LAYER );
+
+            for( LSEQ seq = LSET::AllLayersMask().Seq(); seq; ++seq )
+                layerEnum.Map( *seq, LSET::Name( *seq ) );
+        }
+
         ENUM_MAP<ZONE_CONNECTION>& zcMap = ENUM_MAP<ZONE_CONNECTION>::Instance();
 
         if( zcMap.Choices().GetCount() == 0 )
