@@ -60,6 +60,7 @@ std::string SPICE_GENERATOR_RAW_SPICE::ItemName( const SPICE_ITEM& aItem ) const
 std::string SPICE_GENERATOR_RAW_SPICE::ItemPins( const SPICE_ITEM& aItem ) const
 {
     std::string result;
+    int ncCounter = 0;
 
     if( !GetPins().empty() )
     {
@@ -72,6 +73,10 @@ std::string SPICE_GENERATOR_RAW_SPICE::ItemPins( const SPICE_ITEM& aItem ) const
             {
                 long symbolPinIndex = std::distance( aItem.pinNumbers.begin(), it );
                 result.append( fmt::format( " {}", aItem.pinNetNames.at( symbolPinIndex ) ) );
+            }
+            else
+            {
+                result.append( fmt::format( " NC-{}-{}", aItem.refName, ncCounter++ ) );
             }
         }
     }
