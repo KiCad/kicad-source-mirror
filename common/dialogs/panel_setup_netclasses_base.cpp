@@ -74,7 +74,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 
 	// Cell Defaults
 	m_netclassGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	bUpperSizer->Add( m_netclassGrid, 1, wxEXPAND|wxLEFT, 1 );
+	bUpperSizer->Add( m_netclassGrid, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 1 );
 
 	wxBoxSizer* buttonBoxSizer;
 	buttonBoxSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -93,10 +93,10 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 
 	m_colorDefaultHelpText = new wxStaticText( m_netclassesPane, wxID_ANY, _("Set color to transparent to use KiCad default color."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_colorDefaultHelpText->Wrap( -1 );
-	buttonBoxSizer->Add( m_colorDefaultHelpText, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 10 );
+	buttonBoxSizer->Add( m_colorDefaultHelpText, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 10 );
 
 
-	bUpperSizer->Add( buttonBoxSizer, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bUpperSizer->Add( buttonBoxSizer, 0, wxEXPAND|wxLEFT|wxTOP, 5 );
 
 
 	m_netclassesPane->SetSizer( bUpperSizer );
@@ -147,13 +147,13 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 
 	// Cell Defaults
 	m_assignmentGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	bSizer14->Add( m_assignmentGrid, 1, wxEXPAND|wxLEFT, 1 );
+	bSizer14->Add( m_assignmentGrid, 2, wxEXPAND|wxLEFT, 5 );
 
 
 	bColumns->Add( bSizer14, 3, wxEXPAND, 5 );
 
 	m_matchingNets = new WX_HTML_REPORT_BOX( m_membershipPane, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO );
-	bColumns->Add( m_matchingNets, 2, wxEXPAND|wxLEFT, 15 );
+	bColumns->Add( m_matchingNets, 2, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	bLowerSizer->Add( bColumns, 1, wxEXPAND|wxTOP, 3 );

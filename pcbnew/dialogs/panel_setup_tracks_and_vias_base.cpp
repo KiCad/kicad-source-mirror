@@ -57,7 +57,7 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 
 	// Cell Defaults
 	m_trackWidthsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	bSizerTracks->Add( m_trackWidthsGrid, 1, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
+	bSizerTracks->Add( m_trackWidthsGrid, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
@@ -121,7 +121,7 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 
 	// Cell Defaults
 	m_viaSizesGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	bSizerVias->Add( m_viaSizesGrid, 1, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
+	bSizerVias->Add( m_viaSizesGrid, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
@@ -187,7 +187,7 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	// Cell Defaults
 	m_diffPairsGrid->SetDefaultCellBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 	m_diffPairsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	bSizerDiffPairs->Add( m_diffPairsGrid, 1, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
+	bSizerDiffPairs->Add( m_diffPairsGrid, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
