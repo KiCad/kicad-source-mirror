@@ -417,11 +417,19 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
             if( key.gapConstraint )
             {
-                if( key.gapConstraint->HasMin() && gap < key.gapConstraint->Min() - epsilon )
+                if( key.gapConstraint->HasMin()
+                    && key.gapConstraint->Min() >= 0
+                    && ( gap < key.gapConstraint->Min() - epsilon ) )
+                {
                     dp.couplingFailMin = true;
+                }
 
-                if( key.gapConstraint->HasMax() && gap > key.gapConstraint->Max() + epsilon )
+                if( key.gapConstraint->HasMax()
+                    && key.gapConstraint->Max() >= 0
+                    && ( gap > key.gapConstraint->Max() + epsilon ) )
+                {
                     dp.couplingFailMax = true;
+                }
             }
 
             if( !dp.couplingFailMin && !dp.couplingFailMax )
@@ -441,7 +449,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
         {
             const MINOPTMAX<int>& val = *key.uncoupledConstraint;
 
-            if ( val.HasMax() && totalUncoupled > val.Max() )
+            if( val.HasMax() && val.Max() >= 0 && totalUncoupled > val.Max() )
             {
                 auto     drce = DRC_ITEM::Create( DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG );
                 wxString msg = formatMsg( _( "(%s maximum uncoupled length %s; actual %s)" ),
@@ -489,9 +497,24 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
             {
                 if( ( dp.couplingFailMin || dp.couplingFailMax ) && ( dp.parentP || dp.parentN ) )
                 {
-                    MINOPTMAX<int> val = *key.gapConstraint;
-                    auto           drcItem = DRC_ITEM::Create( DRCE_DIFF_PAIR_GAP_OUT_OF_RANGE );
-                    wxString       msg;
+                    // We have a candidate violation, now we need to re-query for a constraint
+                    // given the actual items, because there may be a location-based rule in play.
+                    DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( DIFF_PAIR_GAP_CONSTRAINT,
+                                                                        dp.parentP, dp.parentN,
+                                                                        dp.parentP->GetLayer() );
+                    MINOPTMAX<int> val = constraint.GetValue();
+
+                    if( !val.HasMin() || val.Min() < 0 || dp.computedGap >= val.Min() )
+                        dp.couplingFailMin = false;
+
+                    if( !val.HasMax() || val.Max() < 0 || dp.computedGap <= val.Max() )
+                        dp.couplingFailMax = false;
+
+                    if( !dp.couplingFailMin && !dp.couplingFailMax )
+                        continue;
+
+                    auto     drcItem = DRC_ITEM::Create( DRCE_DIFF_PAIR_GAP_OUT_OF_RANGE );
+                    wxString msg;
 
                     if( dp.couplingFailMin )
                     {
