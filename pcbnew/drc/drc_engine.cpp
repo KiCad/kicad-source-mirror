@@ -881,6 +881,15 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                     REPORT( wxString::Format( _( "Checking %s clearance: %s." ),
                                               EscapeHTML( c->constraint.GetName() ),
                                               MessageTextFromValue( c->constraint.m_Value.Min() ) ) )
+
+                    if( c->constraint.GetValue().Min() < 0 )
+                    {
+                        // JEY TODO: translate for 8.0....
+                        REPORT( implicit ? wxS( "Negative clearance specified; constraint ignored." )
+                                         : wxS( "Negative clearance specified; rule ignored." ) )
+                        return true;
+                    }
+
                     break;
 
                 case DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT:
@@ -1168,7 +1177,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                 {
                     if( implicit )
                     {
-                        REPORT( "Constraint layer not matched." )
+                        // JEY TODO: translate for 8.0....
+                        REPORT( wxS( "Constraint layer not matched." ) )
                     }
                     else if( c->parentRule )
                     {
