@@ -28,10 +28,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-01 14:03-0800\n"
-"PO-Revision-Date: 2023-01-27 14:28+0000\n"
+"PO-Revision-Date: 2023-02-04 10:00+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -415,27 +415,27 @@ msgstr "중앙 피벗 회전 (중간 마우스 클릭)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:48
 msgid "Rotate X Clockwise"
-msgstr "시계 방향으로 X 회전"
+msgstr "시계 방향 X 회전"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:53
 msgid "Rotate X Counterclockwise"
-msgstr "시계 반대 방향으로 X 회전"
+msgstr "반시계 방향 X 회전"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:58
 msgid "Rotate Y Clockwise"
-msgstr "시계 방향으로 Y 회전"
+msgstr "시계 방향 Y 회전"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:63
 msgid "Rotate Y Counterclockwise"
-msgstr "시계 반대 방향으로 Y 회전"
+msgstr "반시계 방향 Y 회전"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:68
 msgid "Rotate Z Clockwise"
-msgstr "시계 방향으로 Z 회전"
+msgstr "시계 방향 Z 회전"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:73
 msgid "Rotate Z Counterclockwise"
-msgstr "시계 반대 방향으로 Z 회전"
+msgstr "반시계 방향 Z 회전"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:79
 msgid "Move board Left"
@@ -6035,15 +6035,15 @@ msgstr "새로고침"
 
 #: common/tool/actions.cpp:292
 msgid "Zoom to Fit"
-msgstr "화면에 맞게 확대"
+msgstr "화면 맞춤 확대"
 
 #: common/tool/actions.cpp:297
 msgid "Zoom to Objects"
-msgstr "개체에 맞게 확대"
+msgstr "개체 맞춤 확대"
 
 #: common/tool/actions.cpp:308
 msgid "Zoom In at Cursor"
-msgstr "커서를 중심으로 확대"
+msgstr "커서 중심 확대"
 
 #: common/tool/actions.cpp:319
 msgid "Zoom Out at Cursor"
@@ -6067,7 +6067,7 @@ msgstr "커서 중심"
 
 #: common/tool/actions.cpp:343
 msgid "Zoom to Selection"
-msgstr "선택 영역으로 확대"
+msgstr "선택 영역 확대"
 
 #: common/tool/actions.cpp:356
 msgid "Cursor Up"
@@ -6303,7 +6303,7 @@ msgstr "심볼 라이브러리 탐색"
 
 #: common/tool/actions.cpp:600
 msgid "Create, delete and edit symbols"
-msgstr "심볼 생성, 삭제 및 편집"
+msgstr "심볼 편집기"
 
 #: common/tool/actions.cpp:605 pcbnew/footprint_viewer_frame.cpp:114
 #: pcbnew/footprint_viewer_frame.cpp:1201
@@ -6320,7 +6320,7 @@ msgstr "풋프린트 생성, 삭제 및 편집"
 
 #: common/tool/actions.cpp:616
 msgid "Update PCB from Schematic..."
-msgstr "회로도로부터 PCB 업데이트..."
+msgstr "회로도에서 PCB 업데이트..."
 
 #: common/tool/actions.cpp:616
 msgid "Update PCB with changes made to schematic"
@@ -7385,7 +7385,7 @@ msgstr "풋프린트 보기"
 #: cvpcb/display_footprints_frame.cpp:325
 #: pcbnew/toolbars_footprint_viewer.cpp:107
 msgid "Automatic Zoom on footprint change"
-msgstr "자동 줌 확대/축소 설치 공간 변경"
+msgstr "풋프린트 변경 시 자동 줌"
 
 #: cvpcb/display_footprints_frame.cpp:413
 #, c-format
@@ -8198,7 +8198,7 @@ msgstr "심볼 속성 업데이트 / 초기화"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:100
 msgid "Update Symbols from Library"
-msgstr "라이브러리에서 심볼 업데이트"
+msgstr "심볼 라이브러리 업데이트"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:154
 #: pcbnew/dialogs/dialog_choose_footprint.cpp:95
@@ -8566,7 +8566,7 @@ msgstr "마커 삭제"
 
 #: eeschema/dialogs/dialog_erc_base.h:98 eeschema/tools/ee_actions.cpp:45
 msgid "Electrical Rules Checker"
-msgstr "전기적 규칙 검사기 (ERC)"
+msgstr "전기 규칙 검사기 (ERC)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:274
 #: eeschema/dialogs/dialog_export_netlist_base.h:73
@@ -8896,9 +8896,8 @@ msgid "Buses && bus labels"
 msgstr "버스와 버스 라벨"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:51
-#, fuzzy
 msgid "Label fields"
-msgstr "심볼 필드"
+msgstr "레이블 필드"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:57
 msgid "Sheet titles"
@@ -8918,9 +8917,8 @@ msgid "Filters"
 msgstr "필터"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:87
-#, fuzzy
 msgid "Filter fields by name:"
-msgstr "네트 항목으로 필터링:"
+msgstr "이름으로 필드 필터링:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:99
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:73
@@ -10659,13 +10657,13 @@ msgid "Note: item colors are overridden in the current color theme."
 msgstr "참고: 항목 색상은 현재 색상 테마에 의해 재정의됩니다."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:384
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "To see individual item colors uncheck '%s'\n"
 "in Preferences > Schematic Editor > Colors."
 msgstr ""
-"개별 항목의 색상을 보기 위해서는 환경 설정 > Eeschema > 색상 에서\n"
-"'%s' 선택을 취소하세요."
+"개별 항목 색상을 보려면 '%s'를 선택 해제한다\n"
+"기본 설정 > 회로도 편집기 > 색상."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:426
 #, c-format
@@ -11782,7 +11780,7 @@ msgstr "교차 조사된 심볼은 현재 뷰에 표시되게함"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:151
 #: pcbnew/dialogs/panel_display_options_base.cpp:114
 msgid "Zoom to fit cross-probed items"
-msgstr "교차 프로브 항목에 맞게 확대/축소"
+msgstr "교차 탐색 항목 맞춤 확대/축소"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:155
 #: pcbnew/dialogs/panel_display_options_base.cpp:118
@@ -13856,7 +13854,7 @@ msgstr "네트클래스로부터"
 
 #: eeschema/sch_marker.cpp:263
 msgid "Electrical Rule Check Error"
-msgstr "전기적 규칙 검사 오류"
+msgstr "전기 규칙 검사 오류"
 
 #: eeschema/sch_marker.h:99
 msgid "ERC Marker"
@@ -16862,7 +16860,7 @@ msgstr "'%s' 라벨을 %s 핀 %s 네트에 추가합니다."
 
 #: eeschema/tools/ee_actions.cpp:45
 msgid "Perform electrical rules check"
-msgstr "전기적 규칙 검사 수행"
+msgstr "전기 규칙 검사 수행"
 
 #: eeschema/tools/ee_actions.cpp:50
 msgid "Symbol Checker"
@@ -17148,11 +17146,11 @@ msgstr "전원 기호 추가"
 
 #: eeschema/tools/ee_actions.cpp:301
 msgid "Add No Connect Flag"
-msgstr "연결 없음 플래그 추가"
+msgstr "연결 없음 추가"
 
 #: eeschema/tools/ee_actions.cpp:301
 msgid "Add a no-connection flag"
-msgstr "연결 없음 플래그 추가"
+msgstr "연결 없음 추가"
 
 #: eeschema/tools/ee_actions.cpp:307
 msgid "Add Junction"
@@ -17164,11 +17162,11 @@ msgstr "접합 추가"
 
 #: eeschema/tools/ee_actions.cpp:313
 msgid "Add Wire to Bus Entry"
-msgstr "버스 항목에 배선 추가"
+msgstr "버스 항목 추가"
 
 #: eeschema/tools/ee_actions.cpp:313
 msgid "Add a wire entry to a bus"
-msgstr "버스에 배선 항목 추가"
+msgstr "버스 항목 추가"
 
 #: eeschema/tools/ee_actions.cpp:319
 msgid "Add Label"
@@ -17276,19 +17274,19 @@ msgstr "마지막으로 그린 항목 복제"
 
 #: eeschema/tools/ee_actions.cpp:400 pcbnew/tools/pcb_actions.cpp:314
 msgid "Rotate Clockwise"
-msgstr "시계 방향으로 회전"
+msgstr "시계 방향 회전"
 
 #: eeschema/tools/ee_actions.cpp:400 pcbnew/tools/pcb_actions.cpp:314
 msgid "Rotates selected item(s) clockwise"
-msgstr "선택한 항목을 시계 방향으로 회전"
+msgstr "선택 항목 시계 방향 회전"
 
 #: eeschema/tools/ee_actions.cpp:406 pcbnew/tools/pcb_actions.cpp:320
 msgid "Rotate Counterclockwise"
-msgstr "시계 반대 방향으로 회전"
+msgstr "반시계 방향 회전"
 
 #: eeschema/tools/ee_actions.cpp:406
 msgid "Rotates selected item(s) counter-clockwise"
-msgstr "선택한 항목을 반시계 방향으로 회전"
+msgstr "선택 항목 반시계 방향 회전"
 
 #: eeschema/tools/ee_actions.cpp:412 pcbnew/tools/pcb_actions.cpp:336
 msgid "Mirror Vertically"
@@ -17296,7 +17294,7 @@ msgstr "수직 방향 반전"
 
 #: eeschema/tools/ee_actions.cpp:412
 msgid "Flips selected item(s) from top to bottom"
-msgstr "선택한 항목을 상하 반전"
+msgstr "선택 항목 상하 반전"
 
 #: eeschema/tools/ee_actions.cpp:418 pcbnew/tools/pcb_actions.cpp:331
 msgid "Mirror Horizontally"
@@ -17304,7 +17302,7 @@ msgstr "수평 방향 반전"
 
 #: eeschema/tools/ee_actions.cpp:418
 msgid "Flips selected item(s) from left to right"
-msgstr "선택한 항목을 좌우 반전"
+msgstr "선택 항목 좌우 반전"
 
 #: eeschema/tools/ee_actions.cpp:424 pcbnew/tools/edit_tool_move_fct.cpp:183
 #: pcbnew/tools/pcb_actions.cpp:342
@@ -17591,7 +17589,7 @@ msgstr "회로도 주석 달기..."
 
 #: eeschema/tools/ee_actions.cpp:627
 msgid "Fill in schematic symbol reference designators"
-msgstr "회로도 심볼 참조 지정자 채우기"
+msgstr "회로도 주석 달기"
 
 #: eeschema/tools/ee_actions.cpp:632
 msgid "Schematic Setup..."
@@ -17641,7 +17639,7 @@ msgstr "PCB 편집기로 전환"
 
 #: eeschema/tools/ee_actions.cpp:660
 msgid "Open PCB in board editor"
-msgstr "보드 편집기에서 PCB 열기"
+msgstr "PCB 편집기 열기"
 
 #: eeschema/tools/ee_actions.cpp:665
 msgid "Export Netlist..."
@@ -17657,7 +17655,7 @@ msgstr "BOM 생성..."
 
 #: eeschema/tools/ee_actions.cpp:670
 msgid "Generate a bill of materials for the current schematic"
-msgstr "현재 회로도에 대한 BOM 생성"
+msgstr "회로도 BOM 생성"
 
 #: eeschema/tools/ee_actions.cpp:675
 msgid "Export Symbols to Library..."
@@ -22864,7 +22862,6 @@ msgstr ""
 "\tR1 + (R2|R3)...\t\t위의 임의의 조합\n"
 
 #: pcb_calculator/fusing_current_help.h:2
-#, fuzzy
 msgid ""
 "You can use this calculator to check if a small track can handle a large "
 "current for a short period of time.<br>\n"
@@ -22876,13 +22873,13 @@ msgid ""
 "<br>\n"
 "This energy is then compared to the one dissipated by the wire resistance."
 msgstr ""
-"이 계산기를 사용하여 작은 배선이 짧은 시간동안 큰 전류를 처리할 수 있는지 확"
-"인할 수 있습니다.<br>\n"
-"이 도구는 배선에 퓨즈를 설계할수 있지만 추정치로만 사용해야합니다.\n"
+"이 계산기를 사용하여 작은 트랙이 짧은 시간 동안 큰 전류를 처리할 수 있는지 "
+"확인할 수 있습니다.<br>\n"
+"이 도구를 사용하면 트랙 퓨즈를 설계할 수 있지만 추정치로만 사용해야 합니다.\n"
 "\n"
-"계산기는 와이어를 가열하는데 필요한 에너지를 추정합니다.<br>\n"
-"이 에너지는 상태변화에 요구되는 녹는점만큼의 에너지 입니다.<br>\n"
-"이 에너지는 전선 저항에 의해 소멸된 에너지이기도 합니다."
+"계산기는 전선을 가열하는 데 필요한 에너지를 추정합니다<br>\n"
+"녹는점과 상 변화에 필요한 에너지.<br>\n"
+"그런 다음 이 에너지를 와이어 저항에 의해 소실된 에너지와 비교합니다."
 
 #: pcb_calculator/pcb_calculator_frame.cpp:72
 msgid "General system design"
@@ -26024,7 +26021,7 @@ msgstr "좌표"
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:98
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
 msgid "Drill/place file origin"
-msgstr "드릴/배치 파일의 원점"
+msgstr "드릴/배치 파일 원점 추가"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:41
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
@@ -26965,7 +26962,7 @@ msgstr "보드 에지 레이어 포함"
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:84
 #: pcbnew/dialogs/dialog_plot_base.cpp:103
 msgid "Use drill/place file origin"
-msgstr "드릴/파일 배치 원점을 사용"
+msgstr "드릴/배치 파일 원점 사용"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:87
 msgid "Use negative X coordinates for footprints on bottom layer"
@@ -26997,7 +26994,7 @@ msgstr "각 풋프린트 인스턴스에 대하여 새로운 도형 생성 (도�
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:139
 msgid "Use drill/place file origin as origin"
-msgstr "드릴/파일 배치 원점을 원점으로 사용"
+msgstr "드릴/배치 파일 원점을 원점으로 사용"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:140
 msgid "Save the origin coordinates in the file"
@@ -29525,7 +29522,7 @@ msgstr "패드가 이 영역을 덮을 경우 DRC 오류 발생시키기"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:88
 msgid "Keep out copper fill"
-msgstr "구리 충전물 금지"
+msgstr "구리 채움 금지"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:89
 msgid "Zones will not fill copper into this area"
@@ -29791,7 +29788,7 @@ msgstr "외곽 레이어 유지 (&o)"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.h:58
 msgid "Remove Unused Pads"
-msgstr "사용하지 않는 패드 제거"
+msgstr "미사용 패드 제거"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:32
 msgid "Delete footprints with no symbols"
@@ -32315,7 +32312,7 @@ msgstr "구리 영역 교차"
 
 #: pcbnew/drc/drc_item.cpp:85
 msgid "Isolated copper fill"
-msgstr "절연 구리 채우기"
+msgstr "격리된 구리 채움"
 
 #: pcbnew/drc/drc_item.cpp:89
 msgid "Thermal relief connection to zone incomplete"
@@ -37587,7 +37584,7 @@ msgstr "첫 번째 개체의 선 너비 복사"
 
 #: pcbnew/tools/convert_tool.cpp:176
 msgid "Create from Selection"
-msgstr "선택 항목에서 생성"
+msgstr "선택 항목 생성"
 
 #: pcbnew/tools/convert_tool.cpp:419
 msgid "Convert shapes to polygon"
@@ -37818,7 +37815,7 @@ msgstr "회전"
 
 #: pcbnew/tools/edit_tool.cpp:1793 pcbnew/tools/pcb_actions.cpp:326
 msgid "Change Side / Flip"
-msgstr "배치면을 변경 / 반전"
+msgstr "배치면 변경 / 반전"
 
 #: pcbnew/tools/edit_tool.cpp:2175
 msgid "Move exact"
@@ -37835,7 +37832,7 @@ msgstr "복사본에 대한 참조점 선택..."
 
 #: pcbnew/tools/edit_tool.cpp:2538 pcbnew/tools/edit_tool.cpp:2555
 msgid "Selection copied"
-msgstr "선택 항목이 복사되었습니다"
+msgstr "선택 항목이 복사됨"
 
 #: pcbnew/tools/edit_tool.cpp:2539
 msgid "Copy canceled"
@@ -37945,7 +37942,7 @@ msgstr "선택에서 다각형 만들기..."
 
 #: pcbnew/tools/pcb_actions.cpp:48
 msgid "Creates a graphic polygon from the selection"
-msgstr "선택 영역에서 그래픽 다각형 생성"
+msgstr "다각형 그래픽 생성"
 
 #: pcbnew/tools/pcb_actions.cpp:53
 msgid "Create Zone from Selection..."
@@ -37953,7 +37950,7 @@ msgstr "선택 범위에서 영역 만들기..."
 
 #: pcbnew/tools/pcb_actions.cpp:53
 msgid "Creates a copper zone from the selection"
-msgstr "선택 항목에서 구리 영역 생성"
+msgstr "구리 영역 생성"
 
 #: pcbnew/tools/pcb_actions.cpp:58
 msgid "Create Rule Area from Selection..."
@@ -37961,7 +37958,7 @@ msgstr "선택 범위에서 규칙 영역 만들기..."
 
 #: pcbnew/tools/pcb_actions.cpp:58
 msgid "Creates a rule area from the selection"
-msgstr "선택 항목에서 규칙 영역 생성"
+msgstr "규칙 영역 생성"
 
 #: pcbnew/tools/pcb_actions.cpp:63
 msgid "Create Lines from Selection"
@@ -38077,11 +38074,11 @@ msgstr "리더 치수선 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:170
 msgid "Add Filled Zone"
-msgstr "채워진 영역 추가"
+msgstr "채움 영역 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:170
 msgid "Add a filled zone"
-msgstr "채워진 영역 추가"
+msgstr "채움 영역 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:176
 msgid "Add Vias"
@@ -38239,7 +38236,7 @@ msgstr "어레이 생성"
 
 #: pcbnew/tools/pcb_actions.cpp:320
 msgid "Rotates selected item(s) counterclockwise"
-msgstr "선택한 개체를 반시계 방향으로 회전"
+msgstr "선택 항목 반시계 방향 회전"
 
 #: pcbnew/tools/pcb_actions.cpp:326
 msgid "Flips selected item(s) to opposite side of board"
@@ -38393,7 +38390,7 @@ msgstr "라이브러리의 모든 변경 사항을 포함하도록 풋프린트 
 
 #: pcbnew/tools/pcb_actions.cpp:471
 msgid "Update Footprints from Library..."
-msgstr "라이브러리로부터 풋프린트 업데이트..."
+msgstr "풋프린트 라이브러리 업데이트..."
 
 #: pcbnew/tools/pcb_actions.cpp:472
 msgid "Update footprints to include any changes from the library"
@@ -38401,7 +38398,7 @@ msgstr "라이브러리에서 모든 변경점을 포함하도록 풋프린트 �
 
 #: pcbnew/tools/pcb_actions.cpp:477
 msgid "Remove Unused Pads..."
-msgstr "사용하지 않는 패드 제거..."
+msgstr "미사용 패드 제거..."
 
 #: pcbnew/tools/pcb_actions.cpp:478
 msgid ""
@@ -38619,7 +38616,7 @@ msgstr "Specctra DSN 라우팅 정보 내보내기"
 
 #: pcbnew/tools/pcb_actions.cpp:650
 msgid "Gerbers (.gbr)..."
-msgstr "거버 (.gbr)..."
+msgstr "거버 파일(.gbr)..."
 
 #: pcbnew/tools/pcb_actions.cpp:650
 msgid "Generate Gerbers for fabrication"
@@ -38635,7 +38632,7 @@ msgstr "Excellon 드릴 파일 생성"
 
 #: pcbnew/tools/pcb_actions.cpp:660
 msgid "Component Placement (.pos)..."
-msgstr "부품 배치(.pos)..."
+msgstr "부품 배치 파일(.pos)..."
 
 #: pcbnew/tools/pcb_actions.cpp:661
 msgid "Generate component placement file(s) for pick and place"
@@ -38723,11 +38720,11 @@ msgstr "풋프린트 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:729
 msgid "Drill/Place File Origin"
-msgstr "드릴/배치 파일의 원점"
+msgstr "드릴/배치 파일 원점"
 
 #: pcbnew/tools/pcb_actions.cpp:730
 msgid "Place origin point for drill files and component placement files"
-msgstr "드릴 파일과 부품 배치 파일로 원점 배치"
+msgstr "드릴 파일과 부품 배치 파일 원점 배치"
 
 #: pcbnew/tools/pcb_actions.cpp:736
 msgid "Toggle Lock"
@@ -39165,7 +39162,7 @@ msgstr "선택한 객체에 대한 제약 해결 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:1179
 msgid "Geographical Reannotate..."
-msgstr "위치에서 다시 주석 처리..."
+msgstr "위치별 재 주석 처리..."
 
 #: pcbnew/tools/pcb_actions.cpp:1179
 msgid "Reannotate PCB in geographical order"
@@ -39375,7 +39372,7 @@ msgstr "모든 영역 채우기"
 
 #: pcbnew/tools/pcb_actions.cpp:1393
 msgid "Update copper fill of all zones"
-msgstr "모든 영역의 구리 채우기를 업데이트"
+msgstr "모든 영역의 구리 채움 업데이트"
 
 #: pcbnew/tools/pcb_actions.cpp:1401
 msgid "Unfill Selected Zone(s)"
@@ -39383,15 +39380,15 @@ msgstr "선택한 영역 채우기 해제"
 
 #: pcbnew/tools/pcb_actions.cpp:1401
 msgid "Remove copper fill from selected zone(s)"
-msgstr "선택한 영역에서 구리 채우기 제거"
+msgstr "선택 영역의 구리 채움 제거"
 
 #: pcbnew/tools/pcb_actions.cpp:1407 pcbnew/tools/zone_filler_tool.cpp:394
 msgid "Unfill All Zones"
-msgstr "모든 영역 채우기 삭제"
+msgstr "모든 영역 비우기"
 
 #: pcbnew/tools/pcb_actions.cpp:1407
 msgid "Remove copper fill from all zones"
-msgstr "모든 영역의 구리 채우기를 삭제"
+msgstr "모든 영역의 구리 채움 제거"
 
 #: pcbnew/tools/pcb_actions.cpp:1415
 msgid "Place Selected Footprints"
