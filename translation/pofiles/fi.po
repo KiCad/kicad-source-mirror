@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-01 14:03-0800\n"
-"PO-Revision-Date: 2023-02-01 23:02+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"PO-Revision-Date: 2023-02-04 10:00+0000\n"
+"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
 "Language: fi\n"
@@ -1454,7 +1454,7 @@ msgstr "Postscript (.ps tiedosto)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:168
 msgid "Drawing Sheet (.kicad_wks file)"
-msgstr "Piirrustuslehti (.kicad_wks tiedosto)"
+msgstr "Piirustuslehti (.kicad_wks tiedosto)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:170
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:44
@@ -4196,7 +4196,7 @@ msgstr "Excellon Vaihtoehdot"
 #: kicad/tools/kicad_manager_actions.cpp:121 pagelayout_editor/menubar.cpp:89
 #: pagelayout_editor/pl_editor_frame.cpp:550
 msgid "Drawing Sheet Editor"
-msgstr "Piirrustusarkkieditori"
+msgstr "Piirustusarkkieditori"
 
 #: common/eda_base_frame.cpp:1124 kicad/pcm/dialogs/dialog_pcm.cpp:204
 #: kicad/tools/kicad_manager_actions.cpp:127
@@ -7198,7 +7198,8 @@ msgstr ""
 "kotikansioosi.\n"
 "Sinun on ensin määritettävä kirjastotaulukko sisältämään kaikki "
 "jalanjälkikirjastot, jotka eivät sisälly KiCadiin.\n"
-"Katso lisätietoja CvPcb-dokumentaation \"Footprint Library Table\" -osiosta."
+"Katso lisätietoja CvPcb-dokumentaation \"Jalanjälkikirjastotaulukko\" "
+"-osiosta."
 
 #: cvpcb/cvpcb.cpp:187
 msgid ""
@@ -17345,7 +17346,7 @@ msgstr "Lisää hierarkkinen lehti"
 
 #: eeschema/tools/ee_actions.cpp:341
 msgid "Import Sheet Pin"
-msgstr "Tuo Arkin Nasta"
+msgstr "Tuo Nasta Lehdeltä"
 
 #: eeschema/tools/ee_actions.cpp:341
 msgid "Import a hierarchical sheet pin"
@@ -24912,7 +24913,7 @@ msgstr "Pysäytyskerros"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:253
 msgid "Drill Holes"
-msgstr "Poratut reiät"
+msgstr "Poraa reiät"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:260
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:216
