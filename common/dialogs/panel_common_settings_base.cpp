@@ -210,7 +210,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 
 	m_highContrastLabel = new wxStaticText( this, wxID_ANY, _("High-contrast mode dimming factor:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_highContrastLabel->Wrap( -1 );
-	bSizerHighContrast->Add( m_highContrastLabel, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	bSizerHighContrast->Add( m_highContrastLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_highContrastCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerHighContrast->Add( m_highContrastCtrl, 0, wxALIGN_CENTER_VERTICAL, 5 );

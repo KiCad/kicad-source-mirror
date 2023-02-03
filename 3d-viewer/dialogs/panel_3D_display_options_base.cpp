@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -124,7 +124,7 @@ PANEL_3D_DISPLAY_OPTIONS_BASE::PANEL_3D_DISPLAY_OPTIONS_BASE( wxWindow* parent, 
 	bSizeLeft->Add( fgSizer2, 1, wxEXPAND|wxTOP|wxLEFT, 5 );
 
 
-	bSizer7->Add( bSizeLeft, 1, wxEXPAND|wxRIGHT, 20 );
+	bSizer7->Add( bSizeLeft, 0, wxEXPAND|wxRIGHT, 20 );
 
 	wxBoxSizer* bSizerRight;
 	bSizerRight = new wxBoxSizer( wxVERTICAL );
@@ -180,7 +180,7 @@ PANEL_3D_DISPLAY_OPTIONS_BASE::PANEL_3D_DISPLAY_OPTIONS_BASE( wxWindow* parent, 
 	bSizerRight->Add( bSizerSlider, 0, wxEXPAND|wxLEFT, 5 );
 
 
-	bSizer7->Add( bSizerRight, 1, wxEXPAND, 15 );
+	bSizer7->Add( bSizerRight, 0, wxEXPAND, 15 );
 
 
 	bSizerMain->Add( bSizer7, 1, 0, 5 );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -211,9 +211,9 @@ PANEL_3D_RAYTRACING_OPTIONS_BASE::PANEL_3D_RAYTRACING_OPTIONS_BASE( wxWindow* pa
 	fgSizer11->Add( m_staticText21, 0, wxALIGN_CENTER|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_colourPickerLight1 = new COLOR_SWATCH( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_colourPickerLight1->SetMinSize( wxSize( 72,20 ) );
+	m_colourPickerLight1->SetMinSize( wxSize( 40,20 ) );
 
-	fgSizer11->Add( m_colourPickerLight1, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizer11->Add( m_colourPickerLight1, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_lightElevation1 = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer11->Add( m_lightElevation1, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
@@ -229,9 +229,9 @@ PANEL_3D_RAYTRACING_OPTIONS_BASE::PANEL_3D_RAYTRACING_OPTIONS_BASE( wxWindow* pa
 	fgSizer11->Add( m_staticText22, 0, wxALIGN_CENTER|wxLEFT, 5 );
 
 	m_colourPickerLight5 = new COLOR_SWATCH( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_colourPickerLight5->SetMinSize( wxSize( 72,20 ) );
+	m_colourPickerLight5->SetMinSize( wxSize( 40,20 ) );
 
-	fgSizer11->Add( m_colourPickerLight5, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizer11->Add( m_colourPickerLight5, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_lightElevation5 = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer11->Add( m_lightElevation5, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -244,7 +244,7 @@ PANEL_3D_RAYTRACING_OPTIONS_BASE::PANEL_3D_RAYTRACING_OPTIONS_BASE( wxWindow* pa
 	fgSizer11->Add( m_staticText23, 0, wxALIGN_CENTER|wxLEFT, 5 );
 
 	m_colourPickerLight2 = new COLOR_SWATCH( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_colourPickerLight2->SetMinSize( wxSize( 72,20 ) );
+	m_colourPickerLight2->SetMinSize( wxSize( 40,20 ) );
 
 	fgSizer11->Add( m_colourPickerLight2, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
@@ -262,7 +262,7 @@ PANEL_3D_RAYTRACING_OPTIONS_BASE::PANEL_3D_RAYTRACING_OPTIONS_BASE( wxWindow* pa
 	fgSizer11->Add( m_staticText24, 0, wxALIGN_CENTER|wxLEFT, 5 );
 
 	m_colourPickerLight6 = new COLOR_SWATCH( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_colourPickerLight6->SetMinSize( wxSize( 72,20 ) );
+	m_colourPickerLight6->SetMinSize( wxSize( 40,20 ) );
 
 	fgSizer11->Add( m_colourPickerLight6, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
@@ -277,7 +277,7 @@ PANEL_3D_RAYTRACING_OPTIONS_BASE::PANEL_3D_RAYTRACING_OPTIONS_BASE( wxWindow* pa
 	fgSizer11->Add( m_staticText25, 0, wxALIGN_CENTER|wxLEFT, 5 );
 
 	m_colourPickerLight3 = new COLOR_SWATCH( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_colourPickerLight3->SetMinSize( wxSize( 72,20 ) );
+	m_colourPickerLight3->SetMinSize( wxSize( 40,20 ) );
 
 	fgSizer11->Add( m_colourPickerLight3, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
@@ -295,7 +295,7 @@ PANEL_3D_RAYTRACING_OPTIONS_BASE::PANEL_3D_RAYTRACING_OPTIONS_BASE( wxWindow* pa
 	fgSizer11->Add( m_staticText26, 0, wxALIGN_CENTER|wxLEFT, 5 );
 
 	m_colourPickerLight7 = new COLOR_SWATCH( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_colourPickerLight7->SetMinSize( wxSize( 72,20 ) );
+	m_colourPickerLight7->SetMinSize( wxSize( 40,20 ) );
 
 	fgSizer11->Add( m_colourPickerLight7, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
@@ -310,7 +310,7 @@ PANEL_3D_RAYTRACING_OPTIONS_BASE::PANEL_3D_RAYTRACING_OPTIONS_BASE( wxWindow* pa
 	fgSizer11->Add( m_staticText171, 0, wxALIGN_CENTER|wxLEFT, 5 );
 
 	m_colourPickerLight4 = new COLOR_SWATCH( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_colourPickerLight4->SetMinSize( wxSize( 72,20 ) );
+	m_colourPickerLight4->SetMinSize( wxSize( 40,20 ) );
 
 	fgSizer11->Add( m_colourPickerLight4, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -328,7 +328,7 @@ PANEL_3D_RAYTRACING_OPTIONS_BASE::PANEL_3D_RAYTRACING_OPTIONS_BASE( wxWindow* pa
 	fgSizer11->Add( m_staticText181, 0, wxALIGN_CENTER|wxLEFT, 5 );
 
 	m_colourPickerLight8 = new COLOR_SWATCH( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_colourPickerLight8->SetMinSize( wxSize( 72,20 ) );
+	m_colourPickerLight8->SetMinSize( wxSize( 40,20 ) );
 
 	fgSizer11->Add( m_colourPickerLight8, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -347,7 +347,6 @@ PANEL_3D_RAYTRACING_OPTIONS_BASE::PANEL_3D_RAYTRACING_OPTIONS_BASE( wxWindow* pa
 
 	this->SetSizer( bSizerMain );
 	this->Layout();
-	bSizerMain->Fit( this );
 }
 
 PANEL_3D_RAYTRACING_OPTIONS_BASE::~PANEL_3D_RAYTRACING_OPTIONS_BASE()
