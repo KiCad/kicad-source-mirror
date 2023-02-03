@@ -636,7 +636,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
 
         if( ret.valid() )
         {
-            for( auto action_item : ret.get() )
+            for( auto& action_item : ret.get() )
                 action_item.first->DeletePolygonAndTriangulationData( action_item.second, true );
         }
     }
