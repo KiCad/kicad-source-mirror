@@ -1828,7 +1828,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 annotatedSymbols[instance].ReannotateByOptions( (ANNOTATE_ORDER_T) annotate.sort_order,
                                                                 (ANNOTATE_ALGO_T) annotate.method,
                                                                 annotateStartNum, existingRefs,
-                                                                true,
+                                                                false,
                                                                 &hierarchy );
 
             annotatedSymbols[instance].UpdateAnnotation();
