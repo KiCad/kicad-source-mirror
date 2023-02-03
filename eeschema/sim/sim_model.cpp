@@ -308,10 +308,10 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     //case TYPE::PMOS_STAG:            return {};
     case TYPE::NMOS_HISIM2:          return { "M", "NMOS",        "",        "68"  };
     case TYPE::PMOS_HISIM2:          return { "M", "PMOS",        "",        "68"  };
-    case TYPE::NMOS_HISIMHV1:        return { "M", "NMOS",        "",        "73", true,  false, "1.2.4" };
-    case TYPE::PMOS_HISIMHV1:        return { "M", "PMOS",        "",        "73", true,  false, "1.2.4" };
-    case TYPE::NMOS_HISIMHV2:        return { "M", "NMOS",        "",        "73", true,  false, "2.2.0" };
-    case TYPE::PMOS_HISIMHV2:        return { "M", "PMOS",        "",        "73", true,  false, "2.2.0" };
+    case TYPE::NMOS_HISIMHV1:        return { "M", "NMOS",        "",        "73", false, false, "1.2.4" };
+    case TYPE::PMOS_HISIMHV1:        return { "M", "PMOS",        "",        "73", false, false, "1.2.4" };
+    case TYPE::NMOS_HISIMHV2:        return { "M", "NMOS",        "",        "73", false, false, "2.2.0" };
+    case TYPE::PMOS_HISIMHV2:        return { "M", "PMOS",        "",        "73", false, false, "2.2.0" };
 
     case TYPE::V:                    return { "V", "",            "DC"       };
     case TYPE::V_SIN:                return { "V", "",            "SIN"      };
