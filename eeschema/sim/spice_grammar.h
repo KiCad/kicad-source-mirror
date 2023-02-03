@@ -97,7 +97,7 @@ namespace SPICE_GRAMMAR
                                   sep,
                                   sor<TAO_PEGTL_ISTRING( "nchan" ),
                                       TAO_PEGTL_ISTRING( "pchan" )>>,
-                              plus<alpha>> {};
+                              plus<not_at<garbageOrEolf>, any>> {};
 
     struct vectorExpr : seq<one<'['>,
                             star<not_one<']'>>,
