@@ -38,6 +38,7 @@ bool DRC_CACHE_GENERATOR::Run()
     int&           m_largestClearance = m_board->m_DRCMaxClearance;
     int&           m_largestPhysicalClearance = m_board->m_DRCMaxPhysicalClearance;
     DRC_CONSTRAINT worstConstraint;
+    LSET           boardCopperLayers = LSET::AllCuMask( m_board->GetCopperLayerCount() );
 
     if( m_drcEngine->QueryWorstConstraint( CLEARANCE_CONSTRAINT, worstConstraint ) )
         m_largestClearance = worstConstraint.GetValue().Min();
@@ -61,7 +62,7 @@ bool DRC_CACHE_GENERATOR::Run()
         {
             m_board->m_DRCZones.push_back( zone );
 
-            if( ( zone->GetLayerSet() & LSET::AllCuMask() ).any() )
+            if( ( zone->GetLayerSet() & boardCopperLayers ).any() )
             {
                 m_board->m_DRCCopperZones.push_back( zone );
                 m_largestClearance = std::max( m_largestClearance, zone->GetLocalClearance() );
@@ -82,7 +83,7 @@ bool DRC_CACHE_GENERATOR::Run()
             {
                 m_board->m_DRCZones.push_back( zone );
 
-                if( ( zone->GetLayerSet() & LSET::AllCuMask() ).any() )
+                if( ( zone->GetLayerSet() & boardCopperLayers ).any() )
                 {
                     m_board->m_DRCCopperZones.push_back( zone );
                     m_largestClearance = std::max( m_largestClearance, zone->GetLocalClearance() );
@@ -109,7 +110,7 @@ bool DRC_CACHE_GENERATOR::Run()
                 if( !reportProgress( ii++, count, progressDelta ) )
                     return false;
 
-                LSET layers = item->GetLayerSet();
+                LSET copperLayers = item->GetLayerSet() & boardCopperLayers;
 
                 // Special-case pad holes which pierce all the copper layers
                 if( item->Type() == PCB_PAD_T )
@@ -117,10 +118,10 @@ bool DRC_CACHE_GENERATOR::Run()
                     PAD* pad = static_cast<PAD*>( item );
 
                     if( pad->HasHole() )
-                        layers |= LSET::AllCuMask();
+                        copperLayers = boardCopperLayers;
                 }
 
-                for( PCB_LAYER_ID layer : layers.Seq() )
+                for( PCB_LAYER_ID layer : copperLayers.Seq() )
                 {
                     if( IsCopperLayer( layer ) )
                         m_board->m_CopperItemRTreeCache->Insert( item, layer, m_largestClearance );

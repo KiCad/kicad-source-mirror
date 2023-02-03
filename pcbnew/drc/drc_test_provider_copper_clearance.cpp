@@ -442,12 +442,14 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
     std::map<BOARD_ITEM*, int>                            freePadsUsageMap;
     std::unordered_map<PTR_PTR_CACHE_KEY, layers_checked> checkedPairs;
 
+    LSET boardCopperLayers = LSET::AllCuMask( m_board->GetCopperLayerCount() );
+
     for( PCB_TRACK* track : m_board->Tracks() )
     {
         if( !reportProgress( ii++, m_board->Tracks().size(), progressDelta ) )
             break;
 
-        for( PCB_LAYER_ID layer : LSET( track->GetLayerSet() & LSET::AllCuMask() ).Seq() )
+        for( PCB_LAYER_ID layer : LSET( track->GetLayerSet() & boardCopperLayers ).Seq() )
         {
             std::shared_ptr<SHAPE> trackShape = track->GetEffectiveShape( layer );
 
@@ -765,11 +767,13 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
 
     std::unordered_map<PTR_PTR_CACHE_KEY, int> checkedPairs;
 
+    LSET boardCopperLayers = LSET::AllCuMask( m_board->GetCopperLayerCount() );
+
     for( FOOTPRINT* footprint : m_board->Footprints() )
     {
         for( PAD* pad : footprint->Pads() )
         {
-            for( PCB_LAYER_ID layer : pad->GetLayerSet().Seq() )
+            for( PCB_LAYER_ID layer : LSET( pad->GetLayerSet() & boardCopperLayers ).Seq() )
             {
                 std::shared_ptr<SHAPE> padShape = pad->GetEffectiveShape( layer );
 
