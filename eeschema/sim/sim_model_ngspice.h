@@ -111,7 +111,7 @@ protected:
 private:
     bool requiresSpiceModelLine() const override
     {
-        return getModelType() == MODEL_TYPE::DIODE;
+        return getModelType() != MODEL_TYPE::NONE;
     }
 
     bool canSilentlyIgnoreParam( const std::string& aParamName );

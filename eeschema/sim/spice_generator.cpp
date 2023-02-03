@@ -52,7 +52,16 @@ std::string SPICE_GENERATOR::ModelLine( const SPICE_ITEM& aItem ) const
     result.append( fmt::format( ".model {} ", aItem.modelName ) );
     size_t indentLength = result.length();
 
-    result.append( fmt::format( "{}\n", m_model.GetSpiceInfo().modelType ) );
+    SIM_MODEL::SPICE_INFO spiceInfo = m_model.GetSpiceInfo();
+    result.append( spiceInfo.modelType );
+
+    if ( !spiceInfo.isDefaultLevel && !spiceInfo.level.empty() )
+        result.append( fmt::format( " level={}", spiceInfo.level ) );
+
+    if ( !spiceInfo.version.empty() )
+        result.append( fmt::format( " version={}", spiceInfo.version ) );
+
+    result.append( "\n" );
 
     for( const SIM_MODEL::PARAM& param : m_model.GetParams() )
     {
