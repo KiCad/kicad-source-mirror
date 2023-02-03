@@ -106,14 +106,14 @@ wxString BOARD_ITEM::GetLayerName() const
 wxString BOARD_ITEM::layerMaskDescribe() const
 {
     const BOARD* board = GetBoard();
-    LSET         layers = GetLayerSet();
+    LSET         layers = GetLayerSet() & board->GetEnabledLayers();
+
+    LSET copperLayers = layers & LSET::AllCuMask();
+    LSET techLayers = layers & LSET::AllTechMask();
 
     // Try to be smart and useful.  Check all copper first.
-    if( layers[F_Cu] && layers[B_Cu] )
+    if( (int) copperLayers.count() == board->GetCopperLayerCount() )
         return _( "all copper layers" );
-
-    LSET copperLayers = layers & board->GetEnabledLayers().AllCuMask();
-    LSET techLayers = layers & board->GetEnabledLayers().AllTechMask();
 
     for( LSET testLayers : { copperLayers, techLayers, layers } )
     {
