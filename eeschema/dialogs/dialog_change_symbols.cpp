@@ -561,7 +561,7 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( const std::map<SCH_SYMBOL*,
 
     // Removing the symbol needs to be done before the LIB_SYMBOL is changed to prevent stale
     // library symbols in the schematic file.
-    for( auto pair : symbols )
+    for( auto& pair : symbols )
     {
         symbol = pair.first;
         instances = pair.second;
@@ -576,7 +576,7 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( const std::map<SCH_SYMBOL*,
         frame->SaveCopyInUndoList( screen, symbol, UNDO_REDO::CHANGED, true );
     }
 
-    for( auto pair : symbols )
+    for( auto& pair : symbols )
     {
         symbol = pair.first;
 
