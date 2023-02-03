@@ -511,11 +511,9 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( const std::map<SCH_SYMBOL*,
 {
     wxCHECK( !aSymbols.empty() && aNewId.IsValid(), 0 );
 
-    std::vector<SCH_SHEET_PATH> instances;
     int             matchesProcessed = 0;
     SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( GetParent() );
     SCH_SCREEN*     screen = nullptr;
-    SCH_SYMBOL*     symbol = nullptr;
     LIB_SYMBOL*     libSymbol = nullptr;
     std::map<SCH_SYMBOL*, std::vector<SCH_SHEET_PATH>> symbols = aSymbols;
 
@@ -529,7 +527,7 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( const std::map<SCH_SYMBOL*,
     // satify the library symbol update.
     while( it != symbols.end() )
     {
-        symbol = it->first;
+        SCH_SYMBOL* symbol = it->first;
 
         wxCHECK2( symbol, continue );
 
@@ -561,11 +559,8 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( const std::map<SCH_SYMBOL*,
 
     // Removing the symbol needs to be done before the LIB_SYMBOL is changed to prevent stale
     // library symbols in the schematic file.
-    for( auto& pair : symbols )
+    for( const auto& [ symbol, instances ] : symbols )
     {
-        symbol = pair.first;
-        instances = pair.second;
-
         wxCHECK( symbol && !instances.empty(), 0 );
 
         screen = instances[0].LastScreen();
@@ -576,10 +571,8 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( const std::map<SCH_SYMBOL*,
         frame->SaveCopyInUndoList( screen, symbol, UNDO_REDO::CHANGED, true );
     }
 
-    for( auto& pair : symbols )
+    for( const auto& [ symbol, instances ] : symbols )
     {
-        symbol = pair.first;
-
         if( aNewId != symbol->GetLibId() )
             symbol->SetLibId( aNewId );
 
@@ -623,7 +616,7 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( const std::map<SCH_SYMBOL*,
                 {
                     if( i == REFERENCE_FIELD )
                     {
-                        for( const SCH_SHEET_PATH& instance : pair.second )
+                        for( const SCH_SHEET_PATH& instance : instances )
                         {
                             symbol->SetRef( &instance,
                                             UTIL::GetRefDesUnannotated( libField->GetText() ) );
@@ -698,7 +691,6 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( const std::map<SCH_SYMBOL*,
         }
 
         symbol->SetSchSymbolLibraryName( wxEmptyString );
-        instances = pair.second;
         screen = instances[0].LastScreen();
         screen->Append( symbol );
         frame->GetCanvas()->GetView()->Update( symbol );
