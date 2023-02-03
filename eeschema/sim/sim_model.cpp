@@ -258,10 +258,10 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     case TYPE::NPN_HICUM2:           return { "Q", "NPN",         "",        "8"   };
     case TYPE::PNP_HICUM2:           return { "Q", "PNP",         "",        "8"   };
 
-    case TYPE::NJFET_SHICHMANHODGES: return { "M", "NJF",         "",        "1"   };
-    case TYPE::PJFET_SHICHMANHODGES: return { "M", "PJF",         "",        "1"   };
-    case TYPE::NJFET_PARKERSKELLERN: return { "M", "NJF",         "",        "2"   };
-    case TYPE::PJFET_PARKERSKELLERN: return { "M", "PJF",         "",        "2"   };
+    case TYPE::NJFET_SHICHMANHODGES: return { "J", "NJF",         "",        "1"   };
+    case TYPE::PJFET_SHICHMANHODGES: return { "J", "PJF",         "",        "1"   };
+    case TYPE::NJFET_PARKERSKELLERN: return { "J", "NJF",         "",        "2"   };
+    case TYPE::PJFET_PARKERSKELLERN: return { "J", "PJF",         "",        "2"   };
 
     case TYPE::NMES_STATZ:           return { "Z", "NMF",         "",        "1"   };
     case TYPE::PMES_STATZ:           return { "Z", "PMF",         "",        "1"   };
