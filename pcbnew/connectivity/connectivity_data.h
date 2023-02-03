@@ -295,9 +295,15 @@ public:
     std::shared_ptr<FROM_TO_CACHE> GetFromToCache() { return m_fromToCache; }
 
 private:
-    void    updateRatsnest();
 
-    void    addRatsnestCluster( const std::shared_ptr<CN_CLUSTER>& aCluster );
+    /**
+     * Updates the ratsnest for the board without locking the connectivity mutex.
+     * @param aCommit is used to save the undo state of items modified by this call
+     */
+    void internalRecalculateRatsnest( BOARD_COMMIT* aCommit = nullptr );
+    void updateRatsnest();
+
+    void addRatsnestCluster( const std::shared_ptr<CN_CLUSTER>& aCluster );
 
 private:
     std::shared_ptr<CN_CONNECTIVITY_ALGO> m_connAlgo;

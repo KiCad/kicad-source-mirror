@@ -128,7 +128,7 @@ bool CONNECTIVITY_DATA::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
         aReporter->KeepRefreshing( false );
     }
 
-    RecalculateRatsnest();
+    internalRecalculateRatsnest();
 
     if( aReporter )
     {
@@ -150,7 +150,7 @@ void CONNECTIVITY_DATA::Build( const std::vector<BOARD_ITEM*>& aItems )
     m_connAlgo.reset( new CN_CONNECTIVITY_ALGO );
     m_connAlgo->LocalBuild( aItems );
 
-    RecalculateRatsnest();
+    internalRecalculateRatsnest();
 }
 
 
@@ -208,11 +208,14 @@ void CONNECTIVITY_DATA::RecalculateRatsnest( BOARD_COMMIT* aCommit  )
 
     // We can take over the lock here if called in the same thread
     // This is to prevent redraw during a RecalculateRatsnets process
-    std::unique_lock<KISPINLOCK> lock( m_lock, std::adopt_lock );
+    std::unique_lock<KISPINLOCK> lock( m_lock );
 
-    if( !lock )
-        return;
+    internalRecalculateRatsnest( aCommit );
 
+}
+
+void CONNECTIVITY_DATA::internalRecalculateRatsnest( BOARD_COMMIT* aCommit  )
+{
     m_connAlgo->PropagateNets( aCommit );
 
     int lastNet = m_connAlgo->NetCount();
