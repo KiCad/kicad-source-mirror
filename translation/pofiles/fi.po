@@ -9,7 +9,7 @@
 # PurkkaKoodari <purkka@purkka.codes>, 2021.
 # Simo Mattila <simo.mattila@kapsi.fi>, 2021.
 # Vesa Solonen <vesa.solonen@vli.fi>, 2021.
-# Petri Niemelä <petrinm@gmail.com>, 2022.
+# Petri Niemelä <petrinm@gmail.com>, 2022, 2023.
 # Henrik Kauhanen <henrik@kauhanen.se>, 2022, 2023.
 # Toni Laiho <apelegeos@gmail.com>, 2022, 2023.
 msgid ""
@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-01 14:03-0800\n"
 "PO-Revision-Date: 2023-02-04 10:00+0000\n"
-"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
+"Last-Translator: Petri Niemelä <petrinm@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
 "Language: fi\n"
@@ -37931,7 +37931,7 @@ msgstr "Häviötangentti"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:300
 msgid "Dielectric"
-msgstr "Dielektrinen aine"
+msgstr "Dielektri"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:353
 msgid "Insert board stackup table"
