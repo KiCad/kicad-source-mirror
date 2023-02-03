@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2017 CERN
- * Copyright (C) 2014-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Włostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -135,8 +135,6 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
                 pad->BuildEffectivePolygon();
             }
 
-            pad->ClearZoneConnectionCache();
-
             m_worstClearance = std::max( m_worstClearance, pad->GetLocalClearance() );
         }
 
@@ -150,10 +148,162 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
         footprint->BuildCourtyardCaches();
     }
 
+    LSET boardCuMask = m_board->GetEnabledLayers() & LSET::AllCuMask();
+
+    auto findHighestPriorityZone = [&]( const BOX2I& aBBox, const PCB_LAYER_ID aItemLayer,
+                                        const int                                aNetcode,
+                                        const std::function<bool( const ZONE* )> aTestFn ) -> ZONE*
+    {
+        unsigned highestPriority = 0;
+        ZONE*    highestPriorityZone = nullptr;
+
+        for( ZONE* zone : m_board->Zones() )
+        {
+            // Rule areas are not filled
+            if( zone->GetIsRuleArea() )
+                continue;
+
+            if( zone->GetAssignedPriority() < highestPriority )
+                continue;
+
+            if( !zone->IsOnLayer( aItemLayer ) )
+                continue;
+
+            // Degenerate zones will cause trouble; skip them
+            if( zone->GetNumCorners() <= 2 )
+                continue;
+
+            if( !zone->GetBoundingBox().Intersects( aBBox ) )
+                continue;
+
+            if( !aTestFn( zone ) )
+                continue;
+
+            // Prefer highest priority and matching netcode
+            if( zone->GetAssignedPriority() > highestPriority || zone->GetNetCode() == aNetcode )
+            {
+                highestPriority = zone->GetAssignedPriority();
+                highestPriorityZone = zone;
+            }
+        }
+
+        return highestPriorityZone;
+    };
+
+    auto isInPourKeepoutArea = [&]( const BOX2I& aBBox, const PCB_LAYER_ID aItemLayer,
+                                    const VECTOR2I aTestPoint ) -> bool
+    {
+        for( ZONE* zone : m_board->Zones() )
+        {
+            if( !zone->GetIsRuleArea() )
+                continue;
+
+            if( !zone->GetDoNotAllowCopperPour() )
+                continue;
+
+            if( !zone->IsOnLayer( aItemLayer ) )
+                continue;
+
+            // Degenerate zones will cause trouble; skip them
+            if( zone->GetNumCorners() <= 2 )
+                continue;
+
+            if( !zone->GetBoundingBox().Intersects( aBBox ) )
+                continue;
+
+            if( zone->Outline()->Contains( aTestPoint ) )
+                return true;
+        }
+
+        return false;
+    };
+    
+    // Determine state of conditional via flashing
     for( PCB_TRACK* track : m_board->Tracks() )
     {
         if( track->Type() == PCB_VIA_T )
-            static_cast<PCB_VIA*>( track )->ClearZoneConnectionCache();
+        {
+            PCB_VIA* via = static_cast<PCB_VIA*>( track );
+
+            via->ClearZoneConnectionCache();
+
+            if( !via->GetRemoveUnconnected() )
+                continue;
+
+            BOX2I    bbox = via->GetBoundingBox();
+            VECTOR2I center = via->GetPosition();
+            int      testRadius = via->GetDrillValue() / 2 + 1;
+            unsigned netcode = via->GetNetCode();
+            LSET     layers = via->GetLayerSet() & boardCuMask;
+
+            // Checking if the via hole touches the zone outline
+            auto viaTestFn = [&]( const ZONE* aZone ) -> bool
+            {
+                return aZone->Outline()->Contains( center, -1, testRadius );
+            };
+
+            for( PCB_LAYER_ID layer : layers.Seq() )
+            {
+                if( !via->ConditionallyFlashed( layer ) )
+                    continue;
+
+                if( isInPourKeepoutArea( bbox, layer, center ) )
+                {
+                    via->SetZoneConnectionCache( layer, ZLC_UNCONNECTED );
+                }
+                else
+                {
+                    ZONE* zone = findHighestPriorityZone( bbox, layer, netcode, viaTestFn );
+
+                    if( zone && zone->GetNetCode() == via->GetNetCode() )
+                        via->SetZoneConnectionCache( layer, ZLC_CONNECTED );
+                    else
+                        via->SetZoneConnectionCache( layer, ZLC_UNCONNECTED );
+                }
+            }
+        }
+    }
+
+    // Determine state of conditional pad flashing
+    for( FOOTPRINT* footprint : m_board->Footprints() )
+    {
+        for( PAD* pad : footprint->Pads() )
+        {
+            pad->ClearZoneConnectionCache();
+
+            if( !pad->GetRemoveUnconnected() )
+                continue;
+
+            BOX2I    bbox = pad->GetBoundingBox();
+            VECTOR2I center = pad->GetPosition();
+            unsigned netcode = pad->GetNetCode();
+            LSET     layers = pad->GetLayerSet() & boardCuMask;
+
+            auto padTestFn = [&]( const ZONE* aZone ) -> bool
+            {
+                return aZone->Outline()->Contains( center );
+            };
+
+            for( PCB_LAYER_ID layer : layers.Seq() )
+            {
+                if( !pad->ConditionallyFlashed( layer ) )
+                    continue;
+
+                if( isInPourKeepoutArea( bbox, layer, center ) )
+                {
+                    pad->SetZoneConnectionCache( layer, ZLC_UNCONNECTED );
+                }
+                else
+                {
+                    ZONE* zone = findHighestPriorityZone( bbox, layer, netcode, padTestFn );
+
+                    if( zone && zone->GetNetCode() == pad->GetNetCode() )
+                        pad->SetZoneConnectionCache( layer, ZLC_CONNECTED );
+                    else
+                        pad->SetZoneConnectionCache( layer, ZLC_UNCONNECTED );
+                }
+            }
+        }
     }
 
     for( ZONE* zone : aZones )
@@ -562,7 +712,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
             if( m_debugZoneFiller && LSET::InternalCuMask().Contains( layer ) )
                 continue;
 
-            polys_to_check.emplace_back( std::move( zone->GetFilledPolysList( layer ) ), minArea );
+            polys_to_check.emplace_back( zone->GetFilledPolysList( layer ), minArea );
         }
     }
 
