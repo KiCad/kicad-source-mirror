@@ -1102,8 +1102,13 @@ void SCH_SHEET_LIST::UpdateSymbolInstanceData(
             // the full path here.
             symbol->AddHierarchicalReference( sheetPath.Path(), it->m_Reference, it->m_Unit );
             symbol->GetField( REFERENCE_FIELD )->SetText( it->m_Reference );
-            symbol->SetValueFieldText( it->m_Value );
-            symbol->SetFootprintFieldText( it->m_Footprint );
+
+            if( !it->m_Value.IsEmpty() )
+                symbol->SetValueFieldText( it->m_Value );
+
+            if( !it->m_Footprint.IsEmpty() )
+                symbol->SetFootprintFieldText( it->m_Footprint );
+
             symbol->UpdatePrefix();
         }
     }
