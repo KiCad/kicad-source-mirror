@@ -59,7 +59,6 @@ class PANEL_COMMON_SETTINGS_BASE : public RESETTABLE_PANEL
 		STD_BITMAP_BUTTON* m_pdfViewerBtn;
 		wxStaticText* m_staticText22;
 		wxStaticLine* m_staticline1;
-		wxGridBagSizer* m_gbUserInterface;
 		wxCheckBox* m_checkBoxIconsInMenus;
 		wxCheckBox* m_showScrollbars;
 		wxCheckBox* m_focusFollowSchPcb;
@@ -67,6 +66,7 @@ class PANEL_COMMON_SETTINGS_BASE : public RESETTABLE_PANEL
 		wxRadioButton* m_rbIconThemeLight;
 		wxRadioButton* m_rbIconThemeDark;
 		wxRadioButton* m_rbIconThemeAuto;
+		wxGridBagSizer* m_gbUserInterface;
 		wxStaticText* m_staticTextCanvasScale;
 		wxSpinCtrlDouble* m_canvasScaleCtrl;
 		wxCheckBox* m_canvasScaleAuto;
@@ -113,7 +113,7 @@ class PANEL_COMMON_SETTINGS_BASE : public RESETTABLE_PANEL
 
 	public:
 
-		PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 790,592 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 676,655 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~PANEL_COMMON_SETTINGS_BASE();
 

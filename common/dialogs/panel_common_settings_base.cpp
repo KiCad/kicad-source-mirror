@@ -59,17 +59,17 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 
 	gbSizer11->AddGrowableCol( 1 );
 
-	bAntialiasingSizer->Add( gbSizer11, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	bAntialiasingSizer->Add( gbSizer11, 0, wxTOP|wxBOTTOM, 5 );
 
 
-	bLeftSizer->Add( bAntialiasingSizer, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
+	bLeftSizer->Add( bAntialiasingSizer, 0, wxTOP|wxLEFT, 5 );
 
 
-	bLeftSizer->Add( 0, 15, 0, wxEXPAND, 5 );
+	bLeftSizer->Add( 0, 15, 0, 0, 5 );
 
 	m_staticText21 = new wxStaticText( this, wxID_ANY, _("Helper Applications"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText21->Wrap( -1 );
-	bLeftSizer->Add( m_staticText21, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 13 );
+	bLeftSizer->Add( m_staticText21, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bLeftSizer->Add( m_staticline2, 0, wxEXPAND|wxBOTTOM, 5 );
@@ -86,15 +86,13 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	bSizer61->Add( textEditorLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_textEditorPath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_textEditorPath->SetMinSize( wxSize( 280,-1 ) );
-
-	bSizer61->Add( m_textEditorPath, 1, wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer61->Add( m_textEditorPath, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_textEditorBtn = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer61->Add( m_textEditorBtn, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bHelperAppsSizer->Add( bSizer61, 0, wxEXPAND|wxTOP|wxRIGHT, 5 );
+	bHelperAppsSizer->Add( bSizer61, 0, wxTOP|wxRIGHT|wxEXPAND, 5 );
 
 
 	bHelperAppsSizer->Add( 0, 12, 0, wxEXPAND, 5 );
@@ -103,10 +101,10 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	bSizer8 = new wxBoxSizer( wxVERTICAL );
 
 	m_defaultPDFViewer = new wxRadioButton( this, wxID_ANY, _("System default PDF viewer"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer8->Add( m_defaultPDFViewer, 1, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizer8->Add( m_defaultPDFViewer, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bHelperAppsSizer->Add( bSizer8, 0, wxEXPAND|wxBOTTOM, 3 );
+	bHelperAppsSizer->Add( bSizer8, 0, wxBOTTOM, 3 );
 
 	wxBoxSizer* bSizer7;
 	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
@@ -115,25 +113,23 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	bSizer7->Add( m_otherPDFViewer, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_PDFViewerPath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_PDFViewerPath->SetMinSize( wxSize( 280,-1 ) );
-
-	bSizer7->Add( m_PDFViewerPath, 1, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	bSizer7->Add( m_PDFViewerPath, 1, wxALIGN_CENTER_VERTICAL|wxLEFT|wxEXPAND, 5 );
 
 	m_pdfViewerBtn = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer7->Add( m_pdfViewerBtn, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bHelperAppsSizer->Add( bSizer7, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
+	bHelperAppsSizer->Add( bSizer7, 0, wxBOTTOM|wxRIGHT|wxEXPAND, 5 );
 
 
 	bLeftSizer->Add( bHelperAppsSizer, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
 
 
-	bLeftSizer->Add( 0, 15, 0, wxEXPAND, 5 );
+	bLeftSizer->Add( 0, 15, 0, 0, 5 );
 
 	m_staticText22 = new wxStaticText( this, wxID_ANY, _("User Interface"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText22->Wrap( -1 );
-	bLeftSizer->Add( m_staticText22, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 13 );
+	bLeftSizer->Add( m_staticText22, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bLeftSizer->Add( m_staticline1, 0, wxEXPAND|wxBOTTOM, 5 );
@@ -141,59 +137,69 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bUserInterfaceSizer;
 	bUserInterfaceSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_gbUserInterface = new wxGridBagSizer( 5, 0 );
-	m_gbUserInterface->SetFlexibleDirection( wxVERTICAL );
-	m_gbUserInterface->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_ALL );
+	wxBoxSizer* bSizer14;
+	bSizer14 = new wxBoxSizer( wxVERTICAL );
 
 	m_checkBoxIconsInMenus = new wxCheckBox( this, wxID_ANY, _("Show icons in menus"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_gbUserInterface->Add( m_checkBoxIconsInMenus, wxGBPosition( 0, 0 ), wxGBSpan( 1, 4 ), 0, 5 );
+	bSizer14->Add( m_checkBoxIconsInMenus, 0, wxALL, 5 );
 
 	m_showScrollbars = new wxCheckBox( this, wxID_ANY, _("Show scrollbars in editors"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_showScrollbars->SetValue(true);
 	m_showScrollbars->SetToolTip( _("This change takes effect when relaunching the editor.") );
 
-	m_gbUserInterface->Add( m_showScrollbars, wxGBPosition( 1, 0 ), wxGBSpan( 1, 4 ), 0, 5 );
+	bSizer14->Add( m_showScrollbars, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_focusFollowSchPcb = new wxCheckBox( this, wxID_ANY, _("Focus follows mouse between schematic and PCB editors"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_focusFollowSchPcb->SetToolTip( _("If the mouse cursor is moved over the canvas of a schematic or PCB editor window, that window is raised.") );
 
-	m_gbUserInterface->Add( m_focusFollowSchPcb, wxGBPosition( 2, 0 ), wxGBSpan( 1, 5 ), 0, 5 );
+	bSizer14->Add( m_focusFollowSchPcb, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	bUserInterfaceSizer->Add( bSizer14, 0, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizerIconsTheme;
+	bSizerIconsTheme = new wxBoxSizer( wxHORIZONTAL );
 
 	m_stIconTheme = new wxStaticText( this, wxID_ANY, _("Icon theme:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stIconTheme->Wrap( -1 );
-	m_gbUserInterface->Add( m_stIconTheme, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	bSizerIconsTheme->Add( m_stIconTheme, 0, wxALL, 5 );
 
 	m_rbIconThemeLight = new wxRadioButton( this, wxID_ANY, _("Light"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	m_rbIconThemeLight->SetToolTip( _("Use icons designed for light window backgrounds") );
-	m_rbIconThemeLight->SetMinSize( wxSize( 108,-1 ) );
 
-	m_gbUserInterface->Add( m_rbIconThemeLight, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerIconsTheme->Add( m_rbIconThemeLight, 0, wxALL, 5 );
 
 	m_rbIconThemeDark = new wxRadioButton( this, wxID_ANY, _("Dark"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rbIconThemeDark->SetToolTip( _("Use icons designed for dark window backgrounds") );
-	m_rbIconThemeDark->SetMinSize( wxSize( 108,-1 ) );
 
-	m_gbUserInterface->Add( m_rbIconThemeDark, wxGBPosition( 4, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerIconsTheme->Add( m_rbIconThemeDark, 0, wxALL, 5 );
 
 	m_rbIconThemeAuto = new wxRadioButton( this, wxID_ANY, _("Automatic"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rbIconThemeAuto->SetValue( true );
 	m_rbIconThemeAuto->SetToolTip( _("Automatically choose light or dark icons based on the system color theme") );
 
-	m_gbUserInterface->Add( m_rbIconThemeAuto, wxGBPosition( 4, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	bSizerIconsTheme->Add( m_rbIconThemeAuto, 0, wxALL, 5 );
+
+
+	bUserInterfaceSizer->Add( bSizerIconsTheme, 0, 0, 5 );
+
+	m_gbUserInterface = new wxGridBagSizer( 5, 0 );
+	m_gbUserInterface->SetFlexibleDirection( wxVERTICAL );
+	m_gbUserInterface->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_ALL );
 
 	m_staticTextCanvasScale = new wxStaticText( this, wxID_ANY, _("Canvas scale:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextCanvasScale->Wrap( -1 );
-	m_gbUserInterface->Add( m_staticTextCanvasScale, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_gbUserInterface->Add( m_staticTextCanvasScale, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_canvasScaleCtrl = new wxSpinCtrlDouble( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 100, 0, 1 );
 	m_canvasScaleCtrl->SetDigits( 0 );
-	m_gbUserInterface->Add( m_canvasScaleCtrl, wxGBPosition( 6, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	m_gbUserInterface->Add( m_canvasScaleCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_canvasScaleAuto = new wxCheckBox( this, wxID_ANY, _("Automatic"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_gbUserInterface->Add( m_canvasScaleAuto, wxGBPosition( 6, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 15 );
+	m_gbUserInterface->Add( m_canvasScaleAuto, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 15 );
 
 
-	bUserInterfaceSizer->Add( m_gbUserInterface, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bUserInterfaceSizer->Add( m_gbUserInterface, 0, wxTOP|wxBOTTOM|wxLEFT|wxEXPAND, 5 );
 
 
 	bUserInterfaceSizer->Add( 0, 10, 0, wxEXPAND, 5 );
@@ -223,13 +229,10 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	bUserInterfaceSizer->Add( bSizerHighContrast, 0, wxBOTTOM|wxEXPAND, 5 );
 
 
-	bUserInterfaceSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	bLeftSizer->Add( bUserInterfaceSizer, 0, wxTOP|wxLEFT|wxEXPAND, 5 );
 
 
-	bLeftSizer->Add( bUserInterfaceSizer, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
-
-
-	bPanelSizer->Add( bLeftSizer, 1, wxEXPAND|wxRIGHT, 20 );
+	bPanelSizer->Add( bLeftSizer, 0, wxRIGHT|wxEXPAND, 20 );
 
 	wxBoxSizer* rightSizer;
 	rightSizer = new wxBoxSizer( wxVERTICAL );
@@ -324,7 +327,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	bSessionSizer->Add( gbSizer1, 0, wxALL, 5 );
 
 
-	rightSizer->Add( bSessionSizer, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
+	rightSizer->Add( bSessionSizer, 0, wxTOP|wxLEFT|wxEXPAND, 5 );
 
 
 	rightSizer->Add( 0, 15, 0, wxEXPAND, 5 );
