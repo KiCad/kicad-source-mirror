@@ -20,7 +20,10 @@
     "python3",
     "openssl",
     "icu",
-    "ngspice",
+    {
+      "name": "ngspice",
+      "features": [ "fftw" ]
+    },
     "wxpython"
   ],
   "overrides": [
@@ -38,7 +41,7 @@
     },
     {
       "name": "ngspice",
-      "version": "38"
+      "version": "39"
     },
     {
       "name": "curl",
