@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -61,7 +61,7 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 	m_zoomSpeed->SetToolTip( _("How far to zoom in for each rotation of the mouse wheel") );
 	m_zoomSpeed->SetMinSize( wxSize( 120,-1 ) );
 
-	m_zoomSizer->Add( m_zoomSpeed, 1, wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 0 );
+	m_zoomSizer->Add( m_zoomSpeed, 0, wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 0 );
 
 	m_checkAutoZoomSpeed = new wxCheckBox( this, wxID_ANY, _("Automatic"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkAutoZoomSpeed->SetValue(true);
@@ -82,7 +82,7 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 	m_autoPanSpeed->SetToolTip( _("How fast to pan when moving an object off the edge of the screen") );
 	m_autoPanSpeed->SetMinSize( wxSize( 120,-1 ) );
 
-	m_panSizer->Add( m_autoPanSpeed, 1, wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 0 );
+	m_panSizer->Add( m_autoPanSpeed, 0, wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 0 );
 
 
 	gbSizer1->Add( m_panSizer, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxEXPAND|wxTOP, 5 );
@@ -293,7 +293,7 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 	bSizerLeft->Add( m_checkEnablePanH, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bMargins->Add( bSizerLeft, 1, wxEXPAND|wxLEFT, 5 );
+	bMargins->Add( bSizerLeft, 0, wxEXPAND|wxLEFT, 5 );
 
 	wxBoxSizer* bSizerRight;
 	bSizerRight = new wxBoxSizer( wxVERTICAL );
@@ -305,7 +305,7 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 	bSizerRight->Add( m_trackpadDefaults, 0, wxALL|wxEXPAND, 5 );
 
 
-	bMargins->Add( bSizerRight, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
+	bMargins->Add( bSizerRight, 0, wxTOP|wxLEFT|wxEXPAND, 5 );
 
 
 	bSizer1->Add( bMargins, 1, wxEXPAND|wxTOP|wxRIGHT, 10 );
@@ -316,7 +316,6 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 
 	this->SetSizer( bSizer10 );
 	this->Layout();
-	bSizer10->Fit( this );
 
 	// Connect Events
 	m_rbZoomNone->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_MOUSE_SETTINGS_BASE::OnScrollRadioButton ), NULL, this );

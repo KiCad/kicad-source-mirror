@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -248,7 +248,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	bMiddleLeftSizer->Add( m_mouseCmdsOSX, 1, wxEXPAND|wxALL, 5 );
 
 
-	bMargins->Add( bMiddleLeftSizer, 1, wxEXPAND|wxTOP|wxRIGHT, 5 );
+	bMargins->Add( bMiddleLeftSizer, 0, wxEXPAND|wxTOP|wxRIGHT, 5 );
 
 	m_optionsBook = new wxSimplebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	wxPanel* fpPage;
@@ -267,7 +267,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	sbFPMagnets->Add( m_magneticGraphics, 0, wxBOTTOM|wxLEFT, 5 );
 
 
-	bSizer10->Add( sbFPMagnets, 1, wxEXPAND|wxTOP, 5 );
+	bSizer10->Add( sbFPMagnets, 0, wxEXPAND|wxTOP, 5 );
 
 
 	fpPage->SetSizer( bSizer10 );
@@ -404,7 +404,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	sbSizerMisc->Add( m_autoRefillZones, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	pcbOptionsSizer->Add( sbSizerMisc, 1, wxEXPAND|wxTOP, 5 );
+	pcbOptionsSizer->Add( sbSizerMisc, 0, wxEXPAND|wxTOP, 5 );
 
 
 	pcbPage->SetSizer( pcbOptionsSizer );
@@ -412,7 +412,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	pcbOptionsSizer->Fit( pcbPage );
 	m_optionsBook->AddPage( pcbPage, _("a page"), false );
 
-	bMargins->Add( m_optionsBook, 1, wxEXPAND | wxALL, 5 );
+	bMargins->Add( m_optionsBook, 0, wxEXPAND | wxALL, 5 );
 
 
 	bPanelSizer->Add( bMargins, 1, wxRIGHT, 5 );

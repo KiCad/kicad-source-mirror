@@ -60,7 +60,7 @@
                 <object class="sizeritem" expanded="1">
                     <property name="border">15</property>
                     <property name="flag">wxEXPAND|wxRIGHT</property>
-                    <property name="proportion">1</property>
+                    <property name="proportion">0</property>
                     <object class="wxBoxSizer" expanded="1">
                         <property name="minimum_size"></property>
                         <property name="name">m_galOptionsSizer</property>
@@ -71,7 +71,7 @@
                 <object class="sizeritem" expanded="1">
                     <property name="border">10</property>
                     <property name="flag">wxEXPAND|wxBOTTOM|wxLEFT</property>
-                    <property name="proportion">1</property>
+                    <property name="proportion">0</property>
                     <object class="wxBoxSizer" expanded="1">
                         <property name="minimum_size"></property>
                         <property name="name">bRightColumn</property>
@@ -199,7 +199,7 @@
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
                             <property name="flag">wxEXPAND|wxTOP|wxLEFT</property>
-                            <property name="proportion">1</property>
+                            <property name="proportion">0</property>
                             <object class="wxBoxSizer" expanded="1">
                                 <property name="minimum_size"></property>
                                 <property name="name">bAppearanceSizer</property>

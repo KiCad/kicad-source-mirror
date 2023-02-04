@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,7 +20,7 @@ PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWind
 	m_galOptionsSizer = new wxBoxSizer( wxVERTICAL );
 
 
-	bupperSizer->Add( m_galOptionsSizer, 1, wxEXPAND|wxRIGHT, 10 );
+	bupperSizer->Add( m_galOptionsSizer, 0, wxEXPAND|wxRIGHT, 10 );
 
 	m_optionsBook = new wxSimplebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	wxPanel* emptyPage;
@@ -138,7 +138,7 @@ PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWind
 	pcbOptionsSizer->Fit( pcbPage );
 	m_optionsBook->AddPage( pcbPage, _("a page"), false );
 
-	bupperSizer->Add( m_optionsBook, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bupperSizer->Add( m_optionsBook, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
 	bMainSizer->Add( bupperSizer, 0, wxEXPAND, 5 );

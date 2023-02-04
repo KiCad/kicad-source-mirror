@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -248,7 +248,7 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	bLeftColumn->Add( m_leftClickCmdsBook, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
-	bPanelSizer->Add( bLeftColumn, 1, wxEXPAND|wxRIGHT, 20 );
+	bPanelSizer->Add( bLeftColumn, 0, wxEXPAND|wxRIGHT, 20 );
 
 	wxBoxSizer* bRightColumn;
 	bRightColumn = new wxBoxSizer( wxVERTICAL );
@@ -351,7 +351,7 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	bRightColumn->Add( bSizer14, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
 
 
-	bPanelSizer->Add( bRightColumn, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bPanelSizer->Add( bRightColumn, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
 	this->SetSizer( bPanelSizer );

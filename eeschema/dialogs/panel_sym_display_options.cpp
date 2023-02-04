@@ -39,8 +39,7 @@ PANEL_SYM_DISPLAY_OPTIONS::PANEL_SYM_DISPLAY_OPTIONS( wxWindow* aParent,
     m_galOptsPanel = new GAL_OPTIONS_PANEL( this, aAppSettings );
     bLeftCol->Add( m_galOptsPanel, 1, wxEXPAND, 0 );
 
-    bPanelSizer->Add( bLeftCol, 1, wxLEFT, 5 );
-    bPanelSizer->Add( 0, 0, 1, wxLEFT, 5 );
+    bPanelSizer->Add( bLeftCol, 0, wxLEFT, 5 );
 
     this->SetSizerAndFit( bPanelSizer );
     this->Layout();

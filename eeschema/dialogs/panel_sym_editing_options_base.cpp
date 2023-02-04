@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -145,15 +145,11 @@ PANEL_SYM_EDITING_OPTIONS_BASE::PANEL_SYM_EDITING_OPTIONS_BASE( wxWindow* parent
 	leftColumn->Add( fgSizer1, 1, wxEXPAND|wxTOP|wxLEFT, 5 );
 
 
-	p1mainSizer->Add( leftColumn, 1, wxEXPAND, 5 );
-
-
-	p1mainSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	p1mainSizer->Add( leftColumn, 0, wxEXPAND, 5 );
 
 
 	this->SetSizer( p1mainSizer );
 	this->Layout();
-	p1mainSizer->Fit( this );
 }
 
 PANEL_SYM_EDITING_OPTIONS_BASE::~PANEL_SYM_EDITING_OPTIONS_BASE()

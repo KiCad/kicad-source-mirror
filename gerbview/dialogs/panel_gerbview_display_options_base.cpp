@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -19,7 +19,7 @@ PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE::PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE( wxWind
 	m_galOptionsSizer = new wxBoxSizer( wxVERTICAL );
 
 
-	m_UpperSizer->Add( m_galOptionsSizer, 1, wxEXPAND|wxRIGHT, 20 );
+	m_UpperSizer->Add( m_galOptionsSizer, 0, wxEXPAND|wxRIGHT, 20 );
 
 	wxBoxSizer* bRightSizer;
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
@@ -98,7 +98,7 @@ PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE::PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE( wxWind
 	bRightSizer->Add( bPageSizeSizer, 0, wxEXPAND|wxTOP|wxRIGHT, 5 );
 
 
-	m_UpperSizer->Add( bRightSizer, 1, wxEXPAND|wxLEFT, 5 );
+	m_UpperSizer->Add( bRightSizer, 0, wxEXPAND|wxLEFT, 5 );
 
 
 	bDialogSizer->Add( m_UpperSizer, 1, wxEXPAND, 5 );
