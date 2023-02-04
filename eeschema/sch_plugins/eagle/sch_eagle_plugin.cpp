@@ -1717,10 +1717,19 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
     for( const auto& a : epart->attribute )
     {
-        SCH_FIELD* field = symbol->AddField( *symbol->GetField( VALUE_FIELD ) );
-        field->SetName( a.first );
-        field->SetText( a.second );
-        field->SetVisible( false );
+        VECTOR2I newFieldPosition( 0, 0 );
+        SCH_FIELD* lastField = symbol->GetFieldById( symbol->GetFieldCount() - 1 );
+
+        if( lastField )
+            newFieldPosition = lastField->GetPosition();
+
+        SCH_FIELD newField( newFieldPosition, symbol->GetFieldCount(), symbol.get() );
+
+        newField.SetName( a.first );
+        newField.SetText( a.second );
+        newField.SetVisible( false );
+
+        symbol->AddField( newField );
     }
 
     for( const auto& a : epart->variant )
