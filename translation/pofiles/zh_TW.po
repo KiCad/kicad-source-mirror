@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-01 14:03-0800\n"
-"PO-Revision-Date: 2023-01-27 14:28+0000\n"
+"PO-Revision-Date: 2023-02-06 07:25+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -8796,9 +8796,8 @@ msgid "Buses && bus labels"
 msgstr "匯流排和匯流排標籤"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:51
-#, fuzzy
 msgid "Label fields"
-msgstr "符號欄位"
+msgstr "標籤欄位"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:57
 msgid "Sheet titles"
@@ -8818,9 +8817,8 @@ msgid "Filters"
 msgstr "篩選"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:87
-#, fuzzy
 msgid "Filter fields by name:"
-msgstr "按網路篩選專案："
+msgstr "按名稱篩選專案："
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:99
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:73
@@ -10548,13 +10546,13 @@ msgid "Note: item colors are overridden in the current color theme."
 msgstr "注意：專案配色在當前配色主題中被覆蓋。"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:384
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "To see individual item colors uncheck '%s'\n"
 "in Preferences > Schematic Editor > Colors."
 msgstr ""
-"要檢視各個專案的顏色，請取消選中 \"%s\"\n"
-"在偏好設定 > Eeschema > 顏色中。"
+"要檢視單個專案的顏色，\n"
+"請在偏好設定 > 原理圖編輯器 > 顏色中取消選擇 \"%s\"。"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:426
 #, c-format
@@ -22598,7 +22596,6 @@ msgstr ""
 "\tR1 + (R2 | R3)...\t以上任意組合\n"
 
 #: pcb_calculator/fusing_current_help.h:2
-#, fuzzy
 msgid ""
 "You can use this calculator to check if a small track can handle a large "
 "current for a short period of time.<br>\n"
@@ -22610,12 +22607,11 @@ msgid ""
 "<br>\n"
 "This energy is then compared to the one dissipated by the wire resistance."
 msgstr ""
-"你可以使用此計算器檢查小導線是否可以在短時間內處理大電流。<br>\n"
-"此工具允許你設計導線保險絲，但僅應用作估算值。\n"
+"你可以使用這個計算器來檢查一個小導線是否能在短時間內處理大電流。\n"
+"這個工具允許你設計一個導線保險絲，但僅應用作估算值。\n"
 "\n"
-"計算器估算加熱電線到它的熔點<br>\n"
-"所需的能量以及相變所需的能量。<br>\n"
-"然後將該能量與導線電阻耗散的能量進行比較。"
+"該計算器估計了將導線加熱到熔點所需的能量以及相位變化所需的能量。\n"
+"然後將這些能量與導線電阻所耗散的能量進行比較。"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:72
 msgid "General system design"
