@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-01 14:03-0800\n"
-"PO-Revision-Date: 2023-01-27 14:28+0000\n"
+"PO-Revision-Date: 2023-02-06 07:25+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -8811,9 +8811,8 @@ msgid "Buses && bus labels"
 msgstr "总线和总线标签"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:51
-#, fuzzy
 msgid "Label fields"
-msgstr "符号字段"
+msgstr "标签字段"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:57
 msgid "Sheet titles"
@@ -8833,9 +8832,8 @@ msgid "Filters"
 msgstr "筛选"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:87
-#, fuzzy
 msgid "Filter fields by name:"
-msgstr "按网络筛选项目："
+msgstr "按名称筛选项目："
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:99
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:73
@@ -10563,13 +10561,13 @@ msgid "Note: item colors are overridden in the current color theme."
 msgstr "注意：项目配色在当前配色主题中被覆盖。"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:384
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "To see individual item colors uncheck '%s'\n"
 "in Preferences > Schematic Editor > Colors."
 msgstr ""
-"要查看各个项目的颜色，请取消选中 \"%s\"\n"
-"在偏好设置 > Eeschema > 颜色中。"
+"要查看单个项目的颜色，\n"
+"请在偏好设置 > 原理图编辑器 > 颜色中取消选择 \"%s\"。"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:426
 #, c-format
@@ -22613,7 +22611,6 @@ msgstr ""
 "\tR1 + (R2 | R3)...\t以上任意组合\n"
 
 #: pcb_calculator/fusing_current_help.h:2
-#, fuzzy
 msgid ""
 "You can use this calculator to check if a small track can handle a large "
 "current for a short period of time.<br>\n"
@@ -22625,12 +22622,11 @@ msgid ""
 "<br>\n"
 "This energy is then compared to the one dissipated by the wire resistance."
 msgstr ""
-"你可以使用此计算器检查小导线是否可以在短时间内处理大电流。<br>\n"
-"此工具允许你设计导线保险丝，但仅应用作估算值。\n"
+"你可以使用这个计算器来检查一个小导线是否能在短时间内处理大电流。\n"
+"这个工具允许你设计一个导线保险丝，但仅应用作估算值。\n"
 "\n"
-"计算器估算加热电线到它的熔点<br>\n"
-"所需的能量以及相变所需的能量。<br>\n"
-"然后将该能量与导线电阻耗散的能量进行比较。"
+"该计算器估计了将导线加热到熔点所需的能量以及相位变化所需的能量。\n"
+"然后将这些能量与导线电阻所耗散的能量进行比较。"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:72
 msgid "General system design"
