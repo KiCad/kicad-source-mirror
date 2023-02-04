@@ -738,7 +738,9 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
             VECTOR2I textPosition =
                       VECTOR2D( start ) * static_cast<double>( num_names - ii ) / ( num_names + 1 )
                     + VECTOR2D( end ) * static_cast<double>( ii + 1 ) / ( num_names + 1 );
-            m_gal->BitmapText( netName, textPosition, textOrientation );
+
+            if( clipBox.Contains( textPosition ) )
+                m_gal->BitmapText( netName, textPosition, textOrientation );
         }
 
         return;
