@@ -462,18 +462,7 @@ public:
     TYPE GetType() const { return m_type; }
 
     const SIM_MODEL* GetBaseModel() const { return m_baseModel; }
-    virtual void SetBaseModel( const SIM_MODEL& aBaseModel )
-    {
-        if( GetType() != aBaseModel.GetType() )
-        {
-            THROW_IO_ERROR( wxString::Format(
-                    _( "Simulation model type must be the same as of its base class: '%s', but is '%s'" ),
-                    aBaseModel.GetTypeInfo().fieldValue,
-                    GetTypeInfo().fieldValue ) );
-        }
-
-        m_baseModel = &aBaseModel;
-    }
+    virtual void SetBaseModel( const SIM_MODEL& aBaseModel );
 
     virtual std::vector<std::string> GetPinNames() const { return {}; }
 

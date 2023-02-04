@@ -212,7 +212,7 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     //case TYPE::I_RANDPOISSON:        return { DEVICE_TYPE::I,      "RANDPOISSON",    "Random Poisson"             };
     case TYPE::I_BEHAVIORAL:         return { DEVICE_T::I,      "=",              "Behavioral"                 };
 
-    case TYPE::SUBCKT:               return { DEVICE_T::SUBCKT, "",               ""                           };
+    case TYPE::SUBCKT:               return { DEVICE_T::SUBCKT, "",               "Subcircuit"                 };
     case TYPE::XSPICE:               return { DEVICE_T::XSPICE, "",               ""                           };
 
     case TYPE::KIBIS_DEVICE:         return { DEVICE_T::KIBIS,  "DEVICE",         "Device"                     };
@@ -718,6 +718,28 @@ void SIM_MODEL::AddParam( const PARAM::INFO& aInfo, bool aIsOtherVariant )
     // Enums are initialized with their default values.
     if( aInfo.enumValues.size() >= 1 )
         m_params.back().value->FromString( aInfo.defaultValue );
+}
+
+
+void SIM_MODEL::SetBaseModel( const SIM_MODEL& aBaseModel )
+{
+    auto describe =
+            []( const SIM_MODEL* aModel )
+            {
+                return fmt::format( "{} ({})",
+                                    aModel->GetDeviceInfo().fieldValue,
+                                    aModel->GetTypeInfo().description );
+            };
+
+    if( GetType() != aBaseModel.GetType() )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "Simulation model type must be the same as of its "
+                                             "base class: '%s', but is '%s'" ),
+                                          describe( &aBaseModel ),
+                                          describe( this ) ) );
+    }
+
+    m_baseModel = &aBaseModel;
 }
 
 
@@ -1232,6 +1254,8 @@ bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, std::vector<T_field>* aFields,
             };
 
     wxString              prefix = aSymbol.GetPrefix();
+    wxString              library = GetFieldValue( aFields, SIM_LIBRARY_FIELD, aResolve );
+    wxString              modelName = GetFieldValue( aFields, SIM_NAME_FIELD, aResolve );
     wxString              value = GetFieldValue( aFields, SIM_VALUE_FIELD, aResolve );
     std::vector<LIB_PIN*> pins = aSymbol.GetAllLibPins();
 
@@ -1246,7 +1270,8 @@ bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, std::vector<T_field>* aFields,
     if(   ( ( *aDeviceType == "R" || *aDeviceType == "L" || *aDeviceType == "C" )
             && aModelType->IsEmpty() )
        ||
-          ( aDeviceType->IsEmpty()
+          ( library.IsEmpty() && modelName.IsEmpty()
+            && aDeviceType->IsEmpty()
             && aModelType->IsEmpty()
             && !value.IsEmpty()
             && ( prefix.StartsWith( "R" ) || prefix.StartsWith( "L" ) || prefix.StartsWith( "C" ) ) ) )
