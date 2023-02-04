@@ -919,15 +919,20 @@ int DIALOG_SIM_MODEL<T_symbol, T_field>::findSymbolPinRow( const wxString& aSymb
 template <typename T_symbol, typename T_field>
 SIM_MODEL& DIALOG_SIM_MODEL<T_symbol, T_field>::curModel() const
 {
-    if( m_useLibraryModelRadioButton->GetValue()
-        && m_modelNameChoice->GetSelection() != wxNOT_FOUND )
+    if( m_useLibraryModelRadioButton->GetValue() )
     {
-        return m_libraryModelsMgr.GetModels().at( m_modelNameChoice->GetSelection() ).get();
+        int sel = m_modelNameChoice->GetSelection();
+
+        if( sel >= 0 && sel < (int) m_modelNameChoice->GetCount() )
+            return m_libraryModelsMgr.GetModels().at( m_modelNameChoice->GetSelection() ).get();
     }
     else
     {
-        return m_builtinModelsMgr.GetModels().at( static_cast<int>( m_curModelType ) );
+        if( (int) m_curModelType < (int) m_builtinModelsMgr.GetModels().size() )
+            return m_builtinModelsMgr.GetModels().at( (int) m_curModelType );
     }
+
+    return m_builtinModelsMgr.GetModels().at( (int) SIM_MODEL::TYPE::NONE );
 }
 
 
