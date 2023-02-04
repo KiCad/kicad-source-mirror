@@ -923,8 +923,8 @@ SIM_MODEL& DIALOG_SIM_MODEL<T_symbol, T_field>::curModel() const
     {
         int sel = m_modelNameChoice->GetSelection();
 
-        if( sel >= 0 && sel < (int) m_modelNameChoice->GetCount() )
-            return m_libraryModelsMgr.GetModels().at( m_modelNameChoice->GetSelection() ).get();
+        if( sel >= 0 && sel < (int) m_libraryModelsMgr.GetModels().size() )
+            return m_libraryModelsMgr.GetModels().at( sel ).get();
     }
     else
     {
