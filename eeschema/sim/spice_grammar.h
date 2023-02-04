@@ -118,11 +118,11 @@ namespace SPICE_GRAMMAR
     struct token : seq<tokenStart,
                        star<not_at<eolf>,
                             not_at<backslashContinuation>,
-                            not_one<' ', '\t', '=', '(', ')', ',', '*', '/', '^', ';'>>>
-        {};
+                            not_one<' ', '\t', '=', '(', ')', ',', ';'>>> {};
 
     // Param names cannot be `token` because LTspice models contain spurious values without
-    // parameter names, which we need to skip.
+    // parameter names, which we need to skip, and because tokens can include a very limited
+    // subset of un-braced expressions
     struct param : identifier {};
     struct paramValue : sor<bracedExpr,
                             vectorExpr,
