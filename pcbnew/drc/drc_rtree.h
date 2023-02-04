@@ -345,7 +345,7 @@ public:
 
         // Special case the polygon case.  Otherwise we'll call its Collide() method which will
         // triangulate it as well and then do triangle/triangle collisions.  This ends up being
-        // *much* slower than 4 calls to PointInside().
+        // *much* slower than 3 segment Collide()s and a PointInside().
         auto polyVisitor =
                 [&]( ITEM_WITH_SHAPE* aItem ) -> bool
                 {
@@ -355,10 +355,17 @@ public:
 
                     const SHAPE_LINE_CHAIN& outline = poly->Outline( 0 );
 
-                    if( outline.PointInside( tri->GetPoint( 0 ) )
-                            || outline.PointInside( tri->GetPoint( 1 ) )
-                            || outline.PointInside( tri->GetPoint( 2 ) )
-                            || tri->PointInside( outline.CPoint( 0 ) ) )
+                    for( int ii = 0; ii < (int) tri->GetSegmentCount(); ++ii )
+                    {
+                        if( outline.Collide( tri->GetSegment( ii ) ) )
+                        {
+                            collision = true;
+                            return false;
+                        }
+                    }
+
+                    // Also must check for poly being completely inside the triangle
+                    if( tri->PointInside( outline.CPoint( 0 ) ) )
                     {
                         collision = true;
                         return false;
@@ -379,7 +386,7 @@ public:
                     return true;
                 };
 
-        if( poly && poly->OutlineCount() == 1 )
+        if( poly && poly->OutlineCount() == 1 && poly->HoleCount( 0 ) == 0 )
             this->m_tree[aLayer]->Search( min, max, polyVisitor );
         else
             this->m_tree[aLayer]->Search( min, max, visitor );
