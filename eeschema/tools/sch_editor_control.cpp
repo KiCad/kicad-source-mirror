@@ -391,11 +391,16 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
             return 0;
         }
 
+        // if the "new" library is in fact an existing library and the used asked for replacing
+        // it by the recreated lib, erase it:
+        if( fn.FileExists() )
+            wxRemoveFile( fn.GetFullPath() );
+
         if( !mgr.CreateLibrary( fn.GetFullPath(), libTable ) )
         {
-            DisplayError( m_frame, wxString::Format( _( "Could not add library '%s'." ),
+                DisplayError( m_frame, wxString::Format( _( "Could not add library '%s'." ),
                                                      targetLib ) );
-            return 0;
+                return 0;
         }
     }
     else
