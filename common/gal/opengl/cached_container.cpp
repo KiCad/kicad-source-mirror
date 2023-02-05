@@ -40,6 +40,10 @@
 #include <algorithm>
 #include <cassert>
 
+#ifdef __WIN32__
+#include <excpt.h>
+#endif
+
 #ifdef KICAD_GAL_PROFILE
 #include <wx/log.h>
 #include <profile.h>
@@ -275,29 +279,42 @@ void CACHED_CONTAINER::defragment( VERTEX* aTarget )
     ITEMS::iterator it, it_end;
     int             newOffset = 0;
 
-    for( VERTEX_ITEM* item : m_items )
+#ifdef __WIN32__
+    __try
+#endif
     {
-        int itemOffset = item->GetOffset();
-        int itemSize = item->GetSize();
+        for( VERTEX_ITEM* item : m_items )
+        {
+            int itemOffset = item->GetOffset();
+            int itemSize = item->GetSize();
 
-        // Move an item to the new container
-        memcpy( &aTarget[newOffset], &m_vertices[itemOffset], itemSize * VERTEX_SIZE );
+            // Move an item to the new container
+            memcpy( &aTarget[newOffset], &m_vertices[itemOffset], itemSize * VERTEX_SIZE );
 
-        // Update new offset
-        item->setOffset( newOffset );
+            // Update new offset
+            item->setOffset( newOffset );
 
-        // Move to the next free space
-        newOffset += itemSize;
+            // Move to the next free space
+            newOffset += itemSize;
+        }
+
+        // Move the current item and place it at the end
+        if( m_item->GetSize() > 0 )
+        {
+            memcpy( &aTarget[newOffset], &m_vertices[m_item->GetOffset()],
+                    m_item->GetSize() * VERTEX_SIZE );
+            m_item->setOffset( newOffset );
+            m_chunkOffset = newOffset;
+        }
     }
-
-    // Move the current item and place it at the end
-    if( m_item->GetSize() > 0 )
+#ifdef __WIN32__
+    __except( GetExceptionCode() == STATUS_ACCESS_VIOLATION ? EXCEPTION_EXECUTE_HANDLER
+                                                            : EXCEPTION_CONTINUE_SEARCH )
     {
-        memcpy( &aTarget[newOffset], &m_vertices[m_item->GetOffset()],
-                m_item->GetSize() * VERTEX_SIZE );
-        m_item->setOffset( newOffset );
-        m_chunkOffset = newOffset;
-    }
+        throw std::runtime_error( "Access violation in defragment. This is usually an indicator of "
+                                  "system or GPU memory running low." );
+    };
+#endif
 
     m_maxIndex = usedSpace();
 }
