@@ -275,48 +275,52 @@ bool CACHED_CONTAINER::reallocate( unsigned int aSize )
 
 void CACHED_CONTAINER::defragment( VERTEX* aTarget )
 {
-#ifdef __WIN32__
-    __try
-#endif
+    // Defragmentation
+    ITEMS::iterator it, it_end;
+    int             newOffset = 0;
+
+    [&]()
     {
-        // Defragmentation
-        ITEMS::iterator it, it_end;
-        int             newOffset = 0;
-
-        for( VERTEX_ITEM* item : m_items )
-        {
-            int itemOffset = item->GetOffset();
-            int itemSize = item->GetSize();
-
-            // Move an item to the new container
-            memcpy( &aTarget[newOffset], &m_vertices[itemOffset], itemSize * VERTEX_SIZE );
-
-            // Update new offset
-            item->setOffset( newOffset );
-
-            // Move to the next free space
-            newOffset += itemSize;
-        }
-
-        // Move the current item and place it at the end
-        if( m_item->GetSize() > 0 )
-        {
-            memcpy( &aTarget[newOffset], &m_vertices[m_item->GetOffset()],
-                    m_item->GetSize() * VERTEX_SIZE );
-            m_item->setOffset( newOffset );
-            m_chunkOffset = newOffset;
-        }
-
-        m_maxIndex = usedSpace();
-    }
 #ifdef __WIN32__
-    __except( GetExceptionCode() == STATUS_ACCESS_VIOLATION ? EXCEPTION_EXECUTE_HANDLER
-                                                            : EXCEPTION_CONTINUE_SEARCH )
-    {
-        throw std::runtime_error( "Access violation in defragment. This is usually an indicator of "
-                                  "system or GPU memory running low." );
-    };
+        __try
 #endif
+        {
+            for( VERTEX_ITEM* item : m_items )
+            {
+                int itemOffset = item->GetOffset();
+                int itemSize = item->GetSize();
+
+                // Move an item to the new container
+                memcpy( &aTarget[newOffset], &m_vertices[itemOffset], itemSize * VERTEX_SIZE );
+
+                // Update new offset
+                item->setOffset( newOffset );
+
+                // Move to the next free space
+                newOffset += itemSize;
+            }
+
+            // Move the current item and place it at the end
+            if( m_item->GetSize() > 0 )
+            {
+                memcpy( &aTarget[newOffset], &m_vertices[m_item->GetOffset()],
+                        m_item->GetSize() * VERTEX_SIZE );
+                m_item->setOffset( newOffset );
+                m_chunkOffset = newOffset;
+            }
+        }
+#ifdef __WIN32__
+        __except( GetExceptionCode() == STATUS_ACCESS_VIOLATION ? EXCEPTION_EXECUTE_HANDLER
+                                                                : EXCEPTION_CONTINUE_SEARCH )
+        {
+            throw std::runtime_error(
+                    "Access violation in defragment. This is usually an indicator of "
+                    "system or GPU memory running low." );
+        };
+#endif
+    }();
+
+    m_maxIndex = usedSpace();
 }
 
 
