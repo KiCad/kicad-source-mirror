@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-01 14:03-0800\n"
-"PO-Revision-Date: 2023-02-04 10:00+0000\n"
-"Last-Translator: Michael Misirlis <MMISIRLIS@gmail.com>\n"
+"PO-Revision-Date: 2023-02-06 07:25+0000\n"
+"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -9654,7 +9654,7 @@ msgstr "Δημιουργία συμβόλου με εναλλακτικό στυ
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:79
 msgid "Create symbol as power symbol"
-msgstr "Δημιουργία συμβόλου ως σύμβολο ισχύος"
+msgstr "Δημιουργία συμβόλου ως θύρα τροφοδοσίας"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:82
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:284
@@ -15494,7 +15494,7 @@ msgstr "Μη έγκυρο rising dv/dt."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:440
 msgid "Model name cannot be empty"
-msgstr "Το όνομα του μοντέλου δεν μπορεί να είναι κενό."
+msgstr "Το όνομα του μοντέλου δεν μπορεί να είναι κενό"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:445
 msgid "Checking model "
@@ -15755,7 +15755,7 @@ msgstr "Άγνωστο Model_type "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1874
 msgid "Internal Error while reading model_type"
-msgstr "Εσωτερικό σφάλμα κατα την ανάγνωση του model_type."
+msgstr "Εσωτερικό σφάλμα κατα την ανάγνωση του model_type"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1889
 msgid "Unknown Enable: "
@@ -15832,7 +15832,7 @@ msgstr "Αδυναμία αφαίρεσης προσωρινού αρχείου 
 
 #: eeschema/sim/kibis/kibis.cpp:726
 msgid "Error while reading temporary file"
-msgstr "Σφάλμα ανάγνωσης προσωρινού αρχείου."
+msgstr "Σφάλμα ανάγνωσης προσωρινού αρχείου"
 
 #: eeschema/sim/kibis/kibis.cpp:735
 msgid "Error while creating temporary output file"
@@ -26824,7 +26824,7 @@ msgid ""
 "It will be clamped at %s."
 msgstr ""
 "Το πάχος του κειμένου είναι πολύ μεγάλο για το μέγεθός του. \n"
-"Θα συμπιεστεί σε %s"
+"Θα συμπιεστεί σε %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:573
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:608
@@ -28599,7 +28599,7 @@ msgstr "Προειδοποίηση: Η τρύπα της έδρας δεν εί�
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1283
 msgid "Warning: Pad hole will leave no copper."
-msgstr "Προειδοποίηση: Η τρύπα της έδρας δεν θα αφήσει καθόλου χαλκό"
+msgstr "Προειδοποίηση: Η τρύπα της έδρας δεν θα αφήσει καθόλου χαλκό."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1288
 msgid "Warning: Negative local clearance values will have no effect."
@@ -29901,7 +29901,7 @@ msgstr "Θέση Σχετική Με Αντικείμενο Αναφοράς"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:116
 msgid "Right-click for layer selection commands."
-msgstr "Δεξί-κλικ για εντολές επιλογής επιπέδου"
+msgstr "Δεξί-κλικ για εντολές επιλογής επιπέδου."
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:207
 msgid "Print according to objects tab of appearance manager"
@@ -31757,7 +31757,6 @@ msgid "Check rule syntax"
 msgstr "Ελέγξτε τη σύνταξη κανόνων"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -32081,30 +32080,34 @@ msgid ""
 "        (constraint connection_width (min 0.8mm))\n"
 "        (condition \"A.NetClass == 'Power'\"))"
 msgstr ""
-"### Κανόνες ανώτατου επιπέδου \n"
+"### Κανόνες ανώτατου επιπέδου\n"
 "\n"
-"    (version <number>)\n"
+"    (version <αριθμός>)\n"
 "\n"
-"    (rule <rule_name> <rule_clause> ...)\n"
+"    (rule <όνομα_κανόνα> <κανόνας> ...)\n"
 "\n"
 "\n"
-"<br><br>\n"
+"<br>\n"
 "\n"
 "### Κανόνες\n"
 "\n"
-"    (constraint <constraint_type> ...)\n"
+"    (constraint <τύπος_περιορισμού> ...)\n"
 "\n"
-"    (condition \"<expression>\")\n"
+"    (condition \"<έκφραση>\")\n"
 "\n"
-"    (layer \"<layer_name>\")\n"
+"    (layer \"<όνομα_επιπέδου>\")\n"
+"\n"
+"    (severity <όνομα_σοβαρότητας>)\n"
 "\n"
 "\n"
-"<br><br>\n"
+"<br>\n"
 "\n"
-"### Τύποι περιορισμών\n"
+"### Τύποι Περιορισμών\n"
 "\n"
 " * annular\\_width\n"
+" * assertion\n"
 " * clearance\n"
+" * connection\\_width\n"
 " * courtyard_clearance\n"
 " * diff\\_pair\\_gap\n"
 " * diff\\_pair\\_uncoupled\n"
@@ -32113,26 +32116,61 @@ msgstr ""
 " * length\n"
 " * hole\\_clearance\n"
 " * hole\\_size\n"
+" * min\\_resolved\\_spokes\n"
+" * physical\\_clearance\n"
+" * physical\\_hole\\_clearance\n"
 " * silk\\_clearance\n"
 " * skew\n"
+" * text\\_height\n"
+" * text\\_thickness\n"
+" * thermal\\_relief\\_gap\n"
+" * thermal\\_spoke\\_width\n"
 " * track\\_width\n"
 " * via\\_count\n"
 " * via\\_diameter\n"
+" * zone\\_connection\n"
 "\n"
-"\n"
+"Σημείωση: οι κανόνες `clearance` και `hole_clearance` δεν εφαρμόζονται σε "
+"αντικείμενα του ίδιου δικτύου; οι `physical_clearance` και "
+"`physical_hole_clearance` εφαρμόζονται για αυτόν το σκοπό.\n"
 "<br><br>\n"
 "\n"
-"### Τύποι αντικειμένων\n"
+"### Αντικείμενα\n"
 "\n"
-" * buried_via\n"
+" * `A` &nbsp;&nbsp; _το πρώτο(ή το μοναδικό) αντικείμενο υπό έλεγχο_\n"
+" * `B` &nbsp;&nbsp; _το δεύτερο αντικείμενο (ή για δυαδικό έλεγχο)_\n"
+" * `L` &nbsp;&nbsp; _το τρέχον επίπεδο υπό έλεγχο_\n"
+"\n"
+"<br>\n"
+"\n"
+"### Τύποι Αντικειμένων\n"
+"\n"
+" * buried\\_via\n"
 " * graphic\n"
 " * hole\n"
-" * micro_via\n"
+" * micro\\_via\n"
 " * pad\n"
 " * text\n"
 " * track\n"
 " * via\n"
 " * zone\n"
+"\n"
+"<br>\n"
+"\n"
+"### Συνδέσεις Ζωνών\n"
+"\n"
+" * solid\n"
+" * thermal\\_reliefs\n"
+" * none\n"
+"\n"
+"<br>\n"
+"\n"
+"### Ονόματα Σοβαρότητας\n"
+"\n"
+" * warning\n"
+" * error\n"
+" * exclusion\n"
+" * ignore\n"
 "\n"
 "<br>\n"
 "\n"
@@ -32159,7 +32197,12 @@ msgstr ""
 "\n"
 "    (rule HV_unshielded\n"
 "       (constraint clearance (min 2mm))\n"
-"       (condition \"A.NetClass == 'HV' && !A.insideArea('Shield*')\"))\n"
+"       (condition \"A.NetClass == 'HV' && !A.enclosedByArea('Shield*')\"))\n"
+"\n"
+"\n"
+"    (rule heavy_thermals\n"
+"       (constraint thermal_spoke_width (min 0.5mm))\n"
+"       (condition \"A.NetClass == 'HV'\"))\n"
 "<br><br>\n"
 "\n"
 "### Σημειώσεις\n"
@@ -32174,44 +32217,53 @@ msgstr ""
 "κανόνες υπερισχύουν των προγενέστερων, όταν εντοπιστεί κανόνας που "
 "ικανοποιείται δεν ελέγχονται άλλοι κανόνες.\n"
 "\n"
-"Χρήση Ctrl+/για μετατροπή γραμμής σε σχόλιο.\n"
+"Χρήση Ctrl+/ για μετατροπή γραμμής σε σχόλιο.\n"
 "<br><br><br>\n"
 "\n"
 "### Εκφράσεις συναρτήσεων\n"
 "\n"
-"Όλες οι παράμετροι των συναρτήσεων υποστηρίζουν τα απλά wildcards (`*` και `?"
-"`).\n"
+"Όλες οι παράμετροι των συναρτήσεων υποστηρίζουν τα απλά wildcards (`*` και "
+"`?`).\n"
 "<br><br>\n"
 "\n"
-"    A.insideCourtyard('<footprint_refdes>')\n"
+"    A.intersectsCourtyard('<ονομασία_αναφοράς_αποτυπώματος>')\n"
 "Αληθές εαν κάποιο μέρος του `A` βρεθεί εντός της περιοχής του επιλεγμένου "
 "αποτυπώματος.\n"
 "<br><br>\n"
 "\n"
-"    A.insideFrontCourtyard('<footprint_refdes>')\n"
+"    A.intersectsFrontCourtyard('<ονομασία_αναφοράς_αποτυπώματος>')\n"
 "Αληθές εαν κάποιο μέρος του `A` βρεθεί εντός της εμπρόσθιας περιοχής του "
 "επιλεγμένου αποτυπώματος.\n"
 "<br><br>\n"
 "\n"
-"    A.insideBackCourtyard('<footprint_refdes>')\n"
+"    A.intersectsBackCourtyard('<ονομασία_αναφοράς_αποτυπώματος>')\n"
 "Αληθές εαν κάποιο μέρος του  `A` βρεθεί εντός της πίσω περιοχής του "
 "επιλεγμένου αποτυπώματος.\n"
 "<br><br>\n"
 "\n"
-"    A.insideArea('<zone_name>')\n"
+"    A.intersectsArea('<όνομα_ζώνης>')\n"
 "Αληθές εαν κάποιο μέρος του  `A` βρεθεί εντός του περιγράμματος της "
 "επιλεγμένης ζώνης.\n"
+"<br><br>\n"
+"\n"
+"    A.enclosedByArea('<όνομα_ζώνης>')\n"
+"Αληθές εαν ολόκληρο το `A`βρεθεί εντός του περιγράμματος της επιλεγμένης "
+"ζώνης.  \n"
+"\n"
+"NB: πιθανό να είναι πιο κοστοβόρο από το `intersectsArea()`.  Συνίσταται  "
+"χρήση του `intersectsArea()` \n"
+"όπου εφαρμόζει.\n"
 "<br><br>\n"
 "\n"
 "    A.isPlated()\n"
 "Αληθές εαν το`A` περιέχει επιμεταλλωμένη οπή.\n"
 "<br><br>\n"
 "\n"
-"    A.inDiffPair('<net_name>')\n"
+"    A.inDiffPair('<όνομα_δικτύου>')\n"
 "Αληθές εαν το `A` περιέχει δίκτυο που αποτελεί μέρος του επιλεγμένου "
 "διαφορικού ζεύγους.\n"
-"`<net_name>` είναι το βασικό όνομα του διαφορικού ζεύγους.  Για παράδειγμα, "
-"`inDiffPair('CLK')`\n"
+"`<όνομα_δικτύου>` είναι το βασικό όνομα του διαφορικού ζεύγους.  Για "
+"παράδειγμα, `inDiffPair('CLK')`\n"
 "ταιριάζει με τα δίκτυα `CLK_P` και `CLK_N`.\n"
 "<br><br>\n"
 "\n"
@@ -32219,12 +32271,12 @@ msgstr ""
 "Αληθές εαν το `A` και το `B` αποτελούν μέλη του ίδιου διαφορικού ζεύγους.\n"
 "<br><br>\n"
 "\n"
-"    A.memberOf('<group_name>')\n"
+"    A.memberOf('<όνομα_ομάδας>')\n"
 "Αληθές εαν το `A` αποτελεί μέλος της επιλεγμένης ομάδας. Εμπεριέχει "
 "εμφωλευμένη ομαδοποίηση.\n"
 "<br><br>\n"
 "\n"
-"    A.existsOnLayer('<layer_name>')\n"
+"    A.existsOnLayer('<όνομα_επιπέδου>')\n"
 "Αληθές εαν το `A` υπάρχει στο επιλεγμένο επίπεδο.  Το όνομα του επιπέδου "
 "μπορεί να είναι\n"
 "είτε εκείνο που αποδώθηκε στο Ρύθμιση Πλακέτας > Επίπεδα Επεξεργαστή "
@@ -32233,7 +32285,23 @@ msgstr ""
 "\n"
 "NB: επιστρέφει αληθές εαν το `A` υπάρχει στο επιλεγμένο επίπεδο, ανεξάρτητα\n"
 "από το εαν ο κανόνας αξιολογείται για εκείνο το επίπεδο ή όχι.\n"
-"Για αυτή τη χρήση `(layer \"layer_name\")` είναι η ρήτρα στον κανόνα.\n"
+"Για αυτή τη χρήση `(layer \"όνομα_επιπέδου\")` είναι η ρήτρα στον κανόνα.\n"
+"<br><br><br>\n"
+"\n"
+"    !!! A.insideCourtyard('<ονομασία_αναφοράς_αποτυπώματος>') !!!\n"
+"Καταργήθηκε; χρήση `intersectsCourtyard()` αντ' αυτού.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideFrontCourtyard('<ονομασία_αναφοράς_αποτυπώματος>') !!!\n"
+"Καταργήθηκε; χρήση `intersectsFrontCourtyard()` αντ' αυτού.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideBackCourtyard('<ονομασία_αναφοράς_αποτυπώματος>') !!!\n"
+"Καταργήθηκε; χρήση `intersectsBackCourtyard()` αντ' αυτού.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideArea('<όνομα_ζώνης>') !!!\n"
+"Καταργήθηκε; χρήση `intersectsArea()` αντ' αυτού.\n"
 "<br><br><br>\n"
 "\n"
 "### Περισσότερα παραδείγματα\n"
@@ -32249,26 +32317,26 @@ msgstr ""
 "       (condition \"A.insideCourtyard('U3')\"))\n"
 "\n"
 "\n"
-"    # prevent silk over tented vias\n"
+"    # αποτροπή εφαρμογής μεταξοτυπίας πάνω σε επικαλυπτόμενες διελέυσεις\n"
 "    (rule silk_over_via\n"
 "       (constraint silk_clearance (min 0.2mm))\n"
 "       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
 "\n"
 "\n"
-"    (rule \"Distance between Vias of Different Nets\"  \n"
+"    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
 "        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != B.Net\"))\n"
 "\n"
-"    (rule \"Clearance between Pads of Different Nets\"  \n"
+"    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
 "        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != B.Net\"))\n"
 "\n"
 "\n"
-"    (rule \"Via Hole to Track Clearance\"  \n"
+"    (rule \"Via Hole to Track Clearance\"\n"
 "        (constraint hole_clearance (min 0.254mm))\n"
 "        (condition \"A.Type =='Via' && B.Type =='Track'\"))\n"
-"    \n"
-"    (rule \"Pad to Track Clearance\"  \n"
+"\n"
+"    (rule \"Pad to Track Clearance\"\n"
 "        (constraint clearance (min 0.2mm))\n"
 "        (condition \"A.Type =='Pad' && B.Type =='Track'\"))\n"
 "\n"
@@ -32278,24 +32346,71 @@ msgstr ""
 "        (condition \"A.Layer=='Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
 "\n"
 "\n"
-"    (rule \"Max Drill Hole Size Mechanical\"  \n"
+"    (rule \"Max Drill Hole Size Mechanical\"\n"
 "        (constraint hole_size (max 6.3mm))\n"
 "        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
-"    \n"
-"    (rule \"Max Drill Hole Size PTH\"  \n"
+"\n"
+"    (rule \"Max Drill Hole Size PTH\"\n"
 "        (constraint hole_size (max 6.35mm))\n"
 "        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
 "\n"
 "\n"
-"    # Specify an optimal gap for a particular diff-pair\n"
+"    # Ορισμός διααπόστασης για συγκεκριμένο διαφορικό ζεύγος\n"
 "    (rule \"dp clock gap\"\n"
 "        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
 "        (condition \"A.inDiffPair('CLK') && AB.isCoupledDiffPair()\"))\n"
 "\n"
-"    # Specify a larger clearance around any diff-pair\n"
+"    # Ορισμός διακένου για κάθε διαφορικό ζεύγος\n"
 "    (rule \"dp clearance\"\n"
 "        (constraint clearance (min \"1.5mm\"))\n"
 "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
+"\n"
+"\n"
+"    # Να μην γίνει εφαρμογή θερμικών απολήξεων σε έδρες απαγωγής θερμότητας\n"
+"    (rule heat_sink_pad\n"
+"        (constraint zone_connection solid)\n"
+"        (condition \"A.Fabrication_Property == 'Heatsink pad'\"))\n"
+"\n"
+"    # Απαίτηση σύνδεσης των 4 θερμικών απολήξεων στη γονική ζώνη\n"
+"    (rule fully_spoked_pads\n"
+"        (constraint min_resolved_spokes 4))\n"
+"\n"
+"    # Ορισμός θερμικού διακένου και πλάτος ακτίνας για όλες τις ζώνες\n"
+"    (rule defined_relief\n"
+"        (constraint thermal_relief_gap (min 10mil))\n"
+"        (constraint thermal_spoke_width (min 12mil)))\n"
+"\n"
+"    # Παράκαμψη θερμικού διακένου και πλάτος ακτίνας για τις ζώνες GND και "
+"PWR\n"
+"    (rule defined_relief_pwr\n"
+"        (constraint thermal_relief_gap (min 10mil))\n"
+"        (constraint thermal_spoke_width (min 12mil))\n"
+"        (condition \"A.Name == 'zone_GND' || A.Name == 'zone_PWR'\"))\n"
+"\n"
+"\n"
+"    # Για αποφυγή αποστράγγισης κόλλησης σε SMD έδρες\n"
+"    (rule holes_in_pads\n"
+"        (constraint physical_hole_clearance (min 0.2mm))\n"
+"        (condition \"B.Pad_Type == 'SMD'\"))\n"
+"\n"
+"    # Αποφυγή παράκαμψης περιθορίου μάσκας συγκόλησης\n"
+"    (rule \"disallow solder mask margin overrides\"\n"
+"        (constraint assertion \"A.Soldermask_Margin_Override == 0mm\")\n"
+"        (condition \"A.Type == 'Pad'\"))\n"
+"\n"
+"\n"
+"    # Εφαρμογή μηχανικού διακένου εξαρτημάτων και ορίου επιφάνειας πλακέτας\n"
+"    (rule front_mechanical_board_edge_clearance\n"
+"        (layer \"F.Courtyard\")\n"
+"        (constraint physical_clearance (min 3mm))\n"
+"        (condition \"B.Layer == 'Edge.Cuts'\"))\n"
+"\n"
+"\n"
+"    # Έλεγχος ικανότητας φόρτισης\n"
+"    (rule high-current\n"
+"        (constraint track_width (min 1.0mm))\n"
+"        (constraint connection_width (min 0.8mm))\n"
+"        (condition \"A.NetClass == 'Power'\"))"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:75
 msgid "Default properties for new dimension objects:"
@@ -32516,9 +32631,9 @@ msgid "Checking %s max uncoupled length: %s."
 msgstr "Έλεγχος %s μέγιστου αποδιαζευγμένου μήκους: %s."
 
 #: pcbnew/drc/drc_engine.cpp:893
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s max skew: %s."
-msgstr "Έλεγχος %s %s: %s."
+msgstr "Έλεγχος %s μέγιστη λοξότητα: %s."
 
 #: pcbnew/drc/drc_engine.cpp:899
 #, c-format
@@ -32531,9 +32646,9 @@ msgid "Checking %s thermal spoke width: %s."
 msgstr "Έλεγχος %s πάχους θερμικής ακτίνας: %s."
 
 #: pcbnew/drc/drc_engine.cpp:911
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s min spoke count: %s."
-msgstr "Έλεγχος %s %s: %s."
+msgstr "Έλεγχος %s ελάχιστο πλήθος ακτίνων: %s."
 
 #: pcbnew/drc/drc_engine.cpp:918
 #, c-format
@@ -32550,7 +32665,7 @@ msgstr "Μη καθορισμένο"
 #: pcbnew/drc/drc_engine.cpp:950
 #, c-format
 msgid "Checking %s track width: opt %s."
-msgstr ""
+msgstr "Έλεγχος %s πλάτος διαδρόμου: ιδανικό %s."
 
 #: pcbnew/drc/drc_engine.cpp:956
 #, c-format
@@ -32558,24 +32673,25 @@ msgid "Checking board setup constraints track width: min %s."
 msgstr "Έλεγχος περιορισμών ρύθμισης πλακέτας πλάτος διαδρόμου: ελάχιστο %s."
 
 #: pcbnew/drc/drc_engine.cpp:964
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s annular width: min %s."
-msgstr "Έλεγχος κυκλικών δακτυλίων διέλευσης..."
+msgstr "Έλεγχος %s πλάτους κυκλικών δακτυλίων: ελάχιστο %s."
 
 #: pcbnew/drc/drc_engine.cpp:972
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s via diameter: opt %s."
-msgstr "Έλεγχος διαμέτρων διελεύσεων..."
+msgstr "Έλεγχος %s διάμετρος διέλευσης: ιδανικού %s."
 
 #: pcbnew/drc/drc_engine.cpp:978
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints via diameter: min %s."
-msgstr "περιορισμοί ρύθμισης πλακέτας περίγραμμα"
+msgstr ""
+"Έλεγχος περιορισμών ρύθμισης πλακέτας διαμέτρου διελεύσεων: ελάχιστο %s."
 
 #: pcbnew/drc/drc_engine.cpp:987
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s hole size: opt %s."
-msgstr "Έλεγχος %s; διάκενο οπών: %s."
+msgstr "Έλεγχος %s μεγέθους οπών: ιδανικό %s."
 
 #: pcbnew/drc/drc_engine.cpp:993
 #, c-format
@@ -32583,14 +32699,14 @@ msgid "Checking board setup constraints hole size: min %s."
 msgstr "Έλεγχος περιορισμών ρύθμισης πλακέτας μέγεθος τρύπας: ελάχιστο %s."
 
 #: pcbnew/drc/drc_engine.cpp:1003
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s: min %s."
-msgstr "Έλεγχος %s %s: %s."
+msgstr "Έλεγχος %s: ελάχιστο %s."
 
 #: pcbnew/drc/drc_engine.cpp:1011
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s diff pair gap: opt %s."
-msgstr "Έλεγχος %s διάκενο διαφορικού ζεύγους: %s."
+msgstr "Έλεγχος %s διακένου διαφορικού ζεύγους: ιδανικό %s."
 
 #: pcbnew/drc/drc_engine.cpp:1018
 #, c-format
@@ -33079,12 +33195,11 @@ msgstr "Μη αναγνωρισμένο επίπεδο '%s'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:653
 msgid "Missing severity name."
-msgstr "Λείπει το όνομα σπουδαιότητας"
+msgstr "Λείπει όνομα σοβαρότητας."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:88
-#, fuzzy
 msgid "Checking pad & via annular rings..."
-msgstr "Έλεγχος κυκλικών δακτυλίων διέλευσης..."
+msgstr "Έλεγχος κυκλικών δακτυλίων διέλευσης και έδρας..."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:248
 #, c-format
@@ -33341,9 +33456,9 @@ msgid "Checking physical clearances..."
 msgstr "Έλεγχος φυσικών διάκενων..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:497
-#, fuzzy, c-format
+#, c-format
 msgid "Internal clearance violation (%s clearance %s; actual %s)"
-msgstr "Τοπικό διάκενο στο %s; διάκενο: %s."
+msgstr "Παραβίαση εσωτερικού διακένου (%s διάκενο %s; πραγματικό %s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:116
 #, c-format
@@ -33410,37 +33525,36 @@ msgid "Checking solder mask to silk clearance..."
 msgstr "Έλεγχος διακένων ανάμεσα σε μάσκα συγκόλλησης και μεταξοτυπία..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:743
-#, fuzzy
 msgid "Checking solder mask web integrity..."
-msgstr "Έλεγχος πλάτους διαδρόμων..."
+msgstr "Έλεγχος ακεραιότητας μάσκας συγκόλλησης..."
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:88
 msgid "Checking text dimensions..."
 msgstr "Έλεγχος διαστάσεων κειμένου..."
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min height %s; actual %s)"
-msgstr "(%s ελάχιστο πλάτος %s; πραγματικό %s)"
+msgstr "(%s ελάχιστο ύψος %s; πραγματικό %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max height %s; actual %s)"
-msgstr "(%s μέγιστο πλάτος %s; πραγματικό %s)"
+msgstr "(%s μέγιστο ύψος %s; πραγματικό %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:211
 msgid "(TrueType font characters with insufficient stroke weight)"
 msgstr "(Χαρακτήρες γραμματοσειράς TrueType με ανεπαρκές πλάτος)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:227
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min thickness %s; actual %s)"
-msgstr "(%s ελάχιστο πλάτος %s; πραγματικό %s)"
+msgstr "(%s ελάχιστο πάχος %s; πραγματικό %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max thickness %s; actual %s)"
-msgstr "(%s μέγιστο πλάτος %s; πραγματικό %s)"
+msgstr "(%s μέγιστο πάχος %s; πραγματικό %s)"
 
 #: pcbnew/drc/drc_test_provider_track_width.cpp:76
 msgid "Checking track widths..."
@@ -33461,9 +33575,9 @@ msgid "(%s max diameter %s; actual %s)"
 msgstr "(%s μέγιστη διάμετρος %s; πραγματική %s)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:170
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min spoke count %d; actual %d)"
-msgstr "(%s μέγιστο πλήθος: %d; πραγματικό: %d)"
+msgstr "(%s μέγιστο πλήθος ακτίνων: %d; πραγματικό: %d)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:192
 msgid "Checking thermal reliefs..."
@@ -33482,13 +33596,13 @@ msgid "Save Footprint Association File"
 msgstr "Αποθήκευση Αρχείου Συσχέτισης Αποτυπωμάτων"
 
 #: pcbnew/exporters/export_hyperlynx.cpp:171
-#, fuzzy
 msgid ""
 "File contains pad shapes that are not supported by the Hyperlynx exporter "
 "(supported shapes are oval, rectangle, rounded rectangle, and circle)."
 msgstr ""
 "Το αρχείο περιέχει σχήματα εδρών που δεν υποστηρίζονται από τον εξαγωγέα "
-"Hyperlynx(Υποστηρίζονται μόνο οβάλ, ορθογώνιο, κύκλος)."
+"Hyperlynx (Υποστηρίζονται μόνο οβάλ, στρογγυλεμένο και μη ορθογώνιο και "
+"κύκλος)."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:175
 msgid "They have been exported as oval pads."
@@ -33694,7 +33808,7 @@ msgstr "Σφάλμα κατά τη δημιουργία καταλόγου βι�
 
 #: pcbnew/files.cpp:997
 msgid "Converting zone fills"
-msgstr "Μετατροπή γεμίσματος ζωνών..."
+msgstr "Μετατροπή γεμίσματος ζωνών"
 
 #: pcbnew/files.cpp:1001
 msgid "Convert Zone(s)"
@@ -33821,31 +33935,30 @@ msgid "(PTH pad has no copper layers)"
 msgstr "Η έδρα PTH δεν έχει επίπεδα χαλκού"
 
 #: pcbnew/footprint.cpp:2424
-#, fuzzy
 msgid "(PTH pad's hole leaves no copper)"
-msgstr "Προειδοποίηση: Η SMD έδρα δεν έχει εξωτερικά επίπεδα."
+msgstr "(η οπή της PTH έδρας δεν αφήνει καθόλου χαλκό)"
 
 #: pcbnew/footprint.cpp:2433
 msgid "(SMD pad appears on both front and back copper)"
-msgstr ""
+msgstr "(Έδρα SMD εμφανίζεται σε μπροστά και πίσω επίπεδα χαλκού)"
 
 #: pcbnew/footprint.cpp:2440 pcbnew/footprint.cpp:2453
 msgid "(SMD pad copper and mask layers don't match)"
-msgstr ""
+msgstr "(επίπεδα χαλκού και μάσκας συγκόλλησης SMD έδρας δεν ταιριάζουν)"
 
 #: pcbnew/footprint.cpp:2445 pcbnew/footprint.cpp:2458
 msgid "(SMD pad copper and paste layers don't match)"
-msgstr ""
+msgstr "(επίπεδα χαλκού και πάστας συγκόλλησης SMD έδρας δεν ταιριάζουν)"
 
 #: pcbnew/footprint.cpp:2631
 #, c-format
 msgid "(net-tie pad group contains unknown pad number %s)"
-msgstr ""
+msgstr "(η ομάδα εδρών net-tie περιέχει άγνωστο αριθμό έδρας %s)"
 
 #: pcbnew/footprint.cpp:2636
 #, c-format
 msgid "(pad %s appears in more than one net-tie pad group)"
-msgstr ""
+msgstr "(η έδρα %s εμφανίζεται πάνω από μια φορές στην ομάδα net-tie εδρών)"
 
 #: pcbnew/footprint.cpp:2876 pcbnew/pad.cpp:1746 pcbnew/zone.cpp:1364
 msgid "Inherited"
@@ -33860,9 +33973,8 @@ msgid "Library link"
 msgstr "Σύνδεσμος βιβλιοθήκης"
 
 #: pcbnew/footprint.cpp:2943 pcbnew/pad.cpp:1832 pcbnew/zone.cpp:1466
-#, fuzzy
 msgid "Overrides"
-msgstr "Αντικατάσταση"
+msgstr "Παρακάμψεις"
 
 #: pcbnew/footprint.cpp:2949 pcbnew/pad.cpp:1834 pcbnew/zone.cpp:1468
 msgid "Clearance Override"
@@ -34228,9 +34340,9 @@ msgid "Footprint Text '%s' of %s"
 msgstr "Κείμενο Αποτυπώματος '%s' από %s"
 
 #: pcbnew/fp_textbox.cpp:332
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint Text Box of %s"
-msgstr "Κείμενο Αποτυπώματος '%s' από %s"
+msgstr "Πλαίσιο Κειμένου Αποτυπώματος από %s"
 
 #: pcbnew/generate_footprint_info.cpp:43
 msgid "Documentation"
@@ -34838,13 +34950,13 @@ msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
 msgstr "H ζώνη χαλκού στο επίπεδο %s (%s, %s) δεν έχει καμία έδρα συνδεδεμένη."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:821
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol %s has pins with no number.  These pins can not be matched to pads in "
 "%s."
 msgstr ""
-"Το σύμβολο %s έχει ακροδέκτες εισόδου τροφοδοσίας στις μονάδες %s που δεν "
-"έχουν τοποθετηθεί."
+"Το σύμβολο %s έχει ακροδέκτες χωρίς αριθμό.  Αυτοί οι ακροδέκτης δεν "
+"αντιστοιχίζονται με έδρες σε %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:831
 #, c-format
@@ -35083,14 +35195,14 @@ msgid "Pad %s of %s on %s"
 msgstr "Έδρα %s από %s στο %s"
 
 #: pcbnew/pad.cpp:1270
-#, fuzzy, c-format
+#, c-format
 msgid "NPTH pad of %s"
-msgstr "Έδρα του %s στο %s"
+msgstr "NPTH έδρα του %s"
 
 #: pcbnew/pad.cpp:1274
-#, fuzzy, c-format
+#, c-format
 msgid "PTH pad %s of %s"
-msgstr "Έδρα του %s στο %s"
+msgstr "PTH έδρα %s στο %s"
 
 #: pcbnew/pad.cpp:1283
 #, c-format
@@ -35103,9 +35215,9 @@ msgid "NPTH of %s"
 msgstr "NPTH του %s"
 
 #: pcbnew/pad.cpp:1295
-#, fuzzy, c-format
+#, c-format
 msgid "PTH pad %s %s of %s"
-msgstr "Έδρα %s από %s στο %s"
+msgstr "PTH έδρα %s %s στο %s"
 
 #: pcbnew/pad.cpp:1720
 msgid "Edge connector"
@@ -35283,9 +35395,9 @@ msgid "must be mm, in, or mil"
 msgstr "πρέπει να είναι mm, in ή mil"
 
 #: pcbnew/pcb_expr_functions.cpp:74
-#, fuzzy, c-format
+#, c-format
 msgid "Missing layer name argument to %s."
-msgstr "Λείπει παράμετρος από '%s'"
+msgstr "Λείπει παράμετρος ονομασίας επιπέδου από %s."
 
 #: pcbnew/pcb_expr_functions.cpp:127
 #, c-format
@@ -35311,24 +35423,25 @@ msgid "Footprint has no back courtyard."
 msgstr "Το αποτύπωμα δεν έχει πίσω χώρο αποτυπώματος."
 
 #: pcbnew/pcb_expr_functions.cpp:589
-#, fuzzy, c-format
+#, c-format
 msgid "Missing rule-area argument (A, B, or rule-area name) to %s."
-msgstr "Αντιστοιχία αποτυπωμάτων με χρήση προσδιορισμού αναφοράς"
+msgstr ""
+"Λείπει παράμετρος περιοχής κανόνα (A, B, ή όνομα περιοχής κανόνα) σε %s."
 
 #: pcbnew/pcb_expr_functions.cpp:755
-#, fuzzy, c-format
+#, c-format
 msgid "Missing group name argument to %s."
-msgstr "Λείπει παράμετρος από '%s'"
+msgstr "Λείπει παράμετρος ονόματος ομάδας σε %s."
 
 #: pcbnew/pcb_expr_functions.cpp:869
-#, fuzzy, c-format
+#, c-format
 msgid "Missing diff-pair name argument to %s."
-msgstr "Λείπει παράμετρος από '%s'"
+msgstr "Λείπει παράμετρος ονομασίας διαφορικού ζεύγους σε %s."
 
 #: pcbnew/pcb_expr_functions.cpp:933
-#, fuzzy, c-format
+#, c-format
 msgid "Missing field name argument to %s."
-msgstr "Λείπει παράμετρος από '%s'"
+msgstr "Λείπει παράμετρος ονομασίας πεδίου από %s."
 
 #: pcbnew/pcb_group.cpp:385
 #, c-format
@@ -35358,9 +35471,8 @@ msgstr "Παραβίαση"
 
 #: pcbnew/pcb_marker.cpp:199 pcbnew/pcb_marker.cpp:202
 #: pcbnew/pcb_marker.cpp:205
-#, fuzzy
 msgid "Severity"
-msgstr "Επαναφορά"
+msgstr "Σοβαρότητα"
 
 #: pcbnew/pcb_marker.cpp:263
 #, c-format
@@ -35385,9 +35497,9 @@ msgid "PCB Text '%s' on %s"
 msgstr "Κείμενο PCB '%s' στο %s"
 
 #: pcbnew/pcb_textbox.cpp:400
-#, fuzzy, c-format
+#, c-format
 msgid "PCB Text Box on %s"
-msgstr "Κείμενο PCB '%s' στο %s"
+msgstr "Πλαίσιο κειμένου PCB %s"
 
 #: pcbnew/pcb_track.cpp:141
 #, c-format
@@ -35425,14 +35537,14 @@ msgid "Full Length"
 msgstr "Πλήρες Μήκος"
 
 #: pcbnew/pcb_track.cpp:917
-#, fuzzy, c-format
+#, c-format
 msgid "Width Constraints: min %s, max %s"
-msgstr "Περιορισμοί πλάτους: ελάχιστο %s; ιδανικό %s; μέγιστο %s."
+msgstr "Περιορισμοί Πλάτους: ελάχιστο %s, μέγιστο %s"
 
 #: pcbnew/pcb_track.cpp:924
-#, fuzzy, c-format
+#, c-format
 msgid "Width Constraints: min %s"
-msgstr "Περιορισμός οπών: ελάχιστο %s."
+msgstr "Περιορισμός Πλάτους: ελάχιστο %s"
 
 #: pcbnew/pcb_track.cpp:937
 msgid "Micro Via"
@@ -35466,9 +35578,8 @@ msgid "Track %s on %s, length %s"
 msgstr "Διάδρομος %s σε %s, μήκος %s"
 
 #: pcbnew/pcb_track.cpp:1307
-#, fuzzy
 msgid "Via Properties"
-msgstr "Ιδιότητες Ακροδέκτη"
+msgstr "Ιδιότητες Διέλευσης"
 
 #: pcbnew/pcb_track.cpp:1317 pcbnew/widgets/pcb_properties_panel.cpp:224
 msgid "Layer Top"
@@ -35500,9 +35611,8 @@ msgid "Loading board\n"
 msgstr "Φόρτωση πλακέτας\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:143
-#, fuzzy
 msgid "Successfully created svg file"
-msgstr "Επιτυχής επανα-ονοματισμός του PCB και του σχηματικού"
+msgstr "Επιτυχής δημιουργία svg αρχείου"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:145 pcbnew/pcbnew_jobs_handler.cpp:756
 msgid "Error creating svg file"
@@ -35566,17 +35676,17 @@ msgstr "Άγνωστη αντιστοίχιση του επιπέδου Altium '
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:182
 #, fuzzy, c-format
 msgid "Unknown Mode string: '%s'."
-msgstr "Άγνωστο στοιχείο '%s' σε '%s'"
+msgstr "Άγνωστο στοιχείο: '%s'."
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:209
 #, fuzzy, c-format
 msgid "Unknown Record name string: '%s'."
-msgstr "Άγνωστος κωδικός καταγραφής: %d."
+msgstr "Άγνωστος κωδικός καταγραφής: '%s'."
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:223
 #, fuzzy, c-format
 msgid "Unknown Extended Primitive Information type: '%s'."
-msgstr "Άγνωστος τύπος MIME για το αρχείο τεκμηρίωσης '%s'"
+msgstr "Άγνωστος τύπος: '%s'."
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:784
 #, c-format
@@ -35621,7 +35731,7 @@ msgstr "Εγγραφή αγνώστου τύπου: '%d'."
 #: pcbnew/plugins/altium/altium_pcb.cpp:874
 #, fuzzy
 msgid "Loading extended primitive information data..."
-msgstr "Άγνωστος τύπος MIME για το αρχείο τεκμηρίωσης '%s'"
+msgstr "Φόρτωση..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:895
 msgid "Loading board data..."
@@ -37342,7 +37452,7 @@ msgstr "Δρομολόγηση Διαφορικού Ζεύγους: %s"
 #: pcbnew/router/router_tool.cpp:2497 pcbnew/router/router_tool.cpp:2508
 #, c-format
 msgid "Resolved Netclass: %s"
-msgstr "Αναλυμένη Κλάση Δικτύου: %s."
+msgstr "Ανάλυση Κλάσης Δικτύου: %s"
 
 #: pcbnew/router/router_tool.cpp:2505
 #, c-format
@@ -37511,6 +37621,9 @@ msgid ""
 "Max pad/via size to track width ratio to create a teardrop.\n"
 "100 always creates a teardrop."
 msgstr ""
+"Μέγιστος λόγος μεγέθους έδρας/διέλευσης προς πλάτος διαδρόμου για τη "
+"δημιουργία δακρύου.\n"
+"100 πάντα δημιουργεί δάκρυ."
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:120
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:224
@@ -40210,14 +40323,12 @@ msgstr ""
 "%s"
 
 #: pcbnew/tools/pcb_control.cpp:1416
-#, fuzzy
 msgid "Resolved clearance"
-msgstr "Εντοπισμένο διάκενο: %s."
+msgstr "Ανάλυση διακένου"
 
 #: pcbnew/tools/pcb_control.cpp:1421
-#, fuzzy
 msgid "Actual clearance"
-msgstr "Διάκενο Έδρας"
+msgstr "Πραγματικό διάκενο"
 
 #: pcbnew/tools/pcb_control.cpp:1464
 msgid "Resolved hole clearance"
@@ -40228,14 +40339,12 @@ msgid "Actual hole clearance"
 msgstr "Πραγματικό διάκενο οπής"
 
 #: pcbnew/tools/pcb_control.cpp:1502
-#, fuzzy
 msgid "Resolved edge clearance"
-msgstr "Εντοπισμένο διάκενο: %s."
+msgstr "Ανάλυση διακένου ορίου"
 
 #: pcbnew/tools/pcb_control.cpp:1507
-#, fuzzy
 msgid "Resolved margin clearance"
-msgstr "Εντοπισμένο διάκενο: %s."
+msgstr "Ανάλυση διακένου περιθορίου"
 
 #: pcbnew/tools/pcb_control.cpp:1518
 msgid "Selected Items"
@@ -40262,9 +40371,8 @@ msgid "Select"
 msgstr "Επιλογή"
 
 #: pcbnew/tools/pcb_selection_tool.cpp:1178
-#, fuzzy
 msgid "Select/Expand Connection..."
-msgstr "Επιλογή/Επέκταση Σύνδεσης"
+msgstr "Επιλογή/Επέκταση Σύνδεσης..."
 
 #: pcbnew/tools/placement_tool.cpp:64
 msgid "Align/Distribute"
@@ -40351,9 +40459,8 @@ msgid "Refill %d Zones"
 msgstr "Επαναγέμισμα %d Ζωνών"
 
 #: pcbnew/tools/zone_filler_tool.cpp:259
-#, fuzzy
 msgid "Auto-fill Zone(s)"
-msgstr "Γέμισμα Zωνών"
+msgstr "Αυτόματο Γέμισμα Zωνών"
 
 #: pcbnew/tools/zone_filler_tool.cpp:270
 #: pcbnew/widgets/appearance_controls.cpp:3240
@@ -40377,69 +40484,57 @@ msgid "Unfill Zone"
 msgstr "Άδειασμα Ζώνης"
 
 #: pcbnew/tracks_cleaner.cpp:68
-#, fuzzy
 msgid "Checking null tracks and vias..."
-msgstr "Έλεγχος πλάτους διαδρόμων..."
+msgstr "Έλεγχος κενών διαδρόμων και διελεύσεων..."
 
 #: pcbnew/tracks_cleaner.cpp:70
-#, fuzzy
 msgid "Removing null tracks and vias..."
-msgstr "Γενική Επεξεργασία Δρόμων και Via"
+msgstr "Αφαίρεση κενών διαδρόμων και διελεύσεων..."
 
 #: pcbnew/tracks_cleaner.cpp:81
-#, fuzzy
 msgid "Checking redundant tracks..."
-msgstr "Αφαίρεση πλεονάζοντων διαδρόμων"
+msgstr "Έλεγχος πλεονάζοντων διαδρόμων..."
 
 #: pcbnew/tracks_cleaner.cpp:83
-#, fuzzy
 msgid "Removing redundant tracks..."
-msgstr "Αφαίρεση πλεονάζοντων διαδρόμων"
+msgstr "Αφαίρεση πλεονάζοντων διαδρόμων..."
 
 #: pcbnew/tracks_cleaner.cpp:95
-#, fuzzy
 msgid "Checking shorting tracks..."
-msgstr "Έλεγχος αποτυπωμάτων..."
+msgstr "Έλεγχος διαδρόμων με βραχυκύκλωμα..."
 
 #: pcbnew/tracks_cleaner.cpp:97
-#, fuzzy
 msgid "Removing shorting tracks..."
-msgstr "Αφαίρεση μη συνδεδεμένου δρόμου"
+msgstr "Αφαίρεση διαδρόμων με βραχυκύκλωμα..."
 
 #: pcbnew/tracks_cleaner.cpp:110
-#, fuzzy
 msgid "Checking tracks in pads..."
-msgstr "Έλεγχος πλάτους διαδρόμων..."
+msgstr "Έλεγχος διαδρόμων σε έδρες..."
 
 #: pcbnew/tracks_cleaner.cpp:112
-#, fuzzy
 msgid "Removing tracks in pads..."
-msgstr "Αφαίρεση διαδρόμου εντός έδρας"
+msgstr "Αφαίρεση διαδρόμων εντός έδρων..."
 
 #: pcbnew/tracks_cleaner.cpp:126
-#, fuzzy
 msgid "Checking dangling tracks and vias..."
-msgstr "Έλεγχος πλάτους διαδρόμων..."
+msgstr "Έλεγχος ασύνδετων διαδρόμων και διελεύσεων..."
 
 #: pcbnew/tracks_cleaner.cpp:131
-#, fuzzy
 msgid "Removing dangling tracks..."
-msgstr "Αφαίρεση μη συνδεδεμένου δρόμου"
+msgstr "Αφαίρεση μη συνδεδεμένων διαδρόμων..."
 
 #: pcbnew/tracks_cleaner.cpp:134
-#, fuzzy
 msgid "Removing dangling vias..."
-msgstr "Αφαίρεση μη συνδεδεμένου δρόμου"
+msgstr "Αφαίρεση μη συνδεδεμένων διελεύσεων..."
 
 #: pcbnew/tracks_cleaner.cpp:148
 #, fuzzy
 msgid "Checking collinear tracks..."
-msgstr "Διάκενα από έδρα σε έδρα..."
+msgstr "Έεγχος παραλληλισμένων διαδρόμων..."
 
 #: pcbnew/tracks_cleaner.cpp:150
-#, fuzzy
 msgid "Merging collinear tracks..."
-msgstr "Ένωση συγγραμικών διαδρόμων"
+msgstr "Συγχώνευση συγγραμικών διαδρόμων..."
 
 #: pcbnew/undo_redo.cpp:547
 msgid "Incomplete undo/redo operation: some items not found"
@@ -40464,14 +40559,12 @@ msgid "Show copper zones"
 msgstr "Προβολή ζωνών χαλκού"
 
 #: pcbnew/widgets/appearance_controls.cpp:336
-#, fuzzy
 msgid "Images"
-msgstr "Εικόνα"
+msgstr "Εικόνες"
 
 #: pcbnew/widgets/appearance_controls.cpp:336
-#, fuzzy
 msgid "Show user images"
-msgstr "Προβολή καθρεπτισμένης εικόνας"
+msgstr "Προβολή εικόνων χρήστη"
 
 #: pcbnew/widgets/appearance_controls.cpp:338
 msgid "Footprints Front"
@@ -40559,9 +40652,8 @@ msgid "Show footprint and text origins as a cross"
 msgstr "Προβολή αποτυπώματος και προέλευσης κειμένου σε αντιστοίχηση"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
-#, fuzzy
 msgid "Locked Item Shadow"
-msgstr "Σκίαση κλειδωμένου αντικειμένου"
+msgstr "Σκίαση Κλειδωμένου Αντικειμένου"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "Show a shadow marker on locked items"
@@ -40618,13 +40710,16 @@ msgstr ""
 "προεπιλογών στο αναδυόμενο παράθυρο."
 
 #: pcbnew/widgets/appearance_controls.cpp:443
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Save and restore view location and zoom.\n"
 "Use %s+Tab to activate selector.\n"
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
+"Αποθήκευση και επαναφορά θέσης προβολής και μεγέθυνσης.\n"
+"Χρήση %s+Tab για ενεργοποίηση επιλογέα.\n"
+"Διαδοχικά Tabs με πατημένο %s εναλλάσει τις επιλογές στο popup."
 
 #: pcbnew/widgets/appearance_controls.cpp:458
 msgid "Filter nets"
@@ -40993,9 +41088,9 @@ msgid "Show or hide ratsnest for nets in %s"
 msgstr "Προβολή ή απόκρυψη φωλιάς συνδέσεων για δίκτυα σε %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:2476
-#, fuzzy, c-format
+#, c-format
 msgid "Presets (%s+Tab):"
-msgstr "Προκαθορισμένα (Ctrl + Tab):"
+msgstr "Προκαθορισμένα (%s + Tab):"
 
 #: pcbnew/widgets/appearance_controls.cpp:2498
 msgid "Save preset..."
@@ -41051,9 +41146,8 @@ msgid "(unsaved)"
 msgstr "[Μη αποθηκευμένο]"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:180
-#, fuzzy
 msgid "Viewports (Alt+Tab):"
-msgstr "Προκαθορισμένα (Ctrl + Tab):"
+msgstr "Προβολές (Alt+Tab):"
 
 #: pcbnew/widgets/filedlg_hook_save_project.h:32
 #: pcbnew/widgets/legacyfiledlg_save_project.h:34
