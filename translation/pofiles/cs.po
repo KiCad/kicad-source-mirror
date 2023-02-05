@@ -18,10 +18,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-01 14:03-0800\n"
-"PO-Revision-Date: 2023-01-29 22:21+0000\n"
+"PO-Revision-Date: 2023-02-06 07:25+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1418,8 +1418,8 @@ msgid ""
 "The reference designator and value are always placed on the silk screen "
 "layer (but will be marked invisible)."
 msgstr ""
-"Zvolte vrstvu desky k umístění obrysu.\n"
-"Označení reference a hodnota jsou vždy umístěny na vrstvě potisku (ale budou "
+"Zvolte vrstvu desky pro umístění obrysu.\n"
+"Reference schématu a hodnota jsou vždy umístěny na vrstvě potisku (ale budou "
 "označeny jako neviditelné)."
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:168
@@ -2675,25 +2675,24 @@ msgid ""
 "Finds the next available reference designator for any designators that "
 "already exist in the design."
 msgstr ""
-"Najít následující dostupné reference pro všechny označení existující v "
-"návrhu."
+"Najde další dostupné reference pro všechny označení existující v návrhu."
 
 #: common/dialogs/dialog_paste_special.cpp:44
 #, c-format
 msgid "Replaces reference designators with '%s'."
-msgstr "Nahrazení označení reference na '%s'."
+msgstr "Nahrazení reference schématu za '%s'."
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Assign unique reference designators to pasted symbols"
-msgstr "Přiřadit jedinečné označení reference na vložené symboly"
+msgstr "Přiřadit jedinečné reference schématu na vložené symboly"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Keep existing reference designators, even if they are duplicated"
-msgstr "Zachovat stávající číslování, i když existují duplikáty"
+msgstr "Zachovat stávající reference schématu, i když existují duplikáty"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Clear reference designators on all pasted symbols"
-msgstr "Vyčištění označení reference na všech vložených symbolech"
+msgstr "Vyčištění referencí schématu na všech vložených symbolech"
 
 #: common/dialogs/dialog_paste_special_base.cpp:24
 msgid "Paste Options"
@@ -5321,7 +5320,7 @@ msgstr "Hodnoty"
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:53
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:28
 msgid "Reference designators"
-msgstr "Označení reference"
+msgstr "Reference schématu"
 
 #: common/layer_id.cpp:157
 msgid "Footprint text"
@@ -8137,7 +8136,7 @@ msgstr "Aktualizovat vybraný symbol(y)"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:33
 msgid "Update symbols matching reference designator:"
-msgstr "Aktualizovat symboly odpovídající označení reference:"
+msgstr "Aktualizovat symboly odpovídající referenci schématu:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:39
 msgid "Update symbols matching value:"
@@ -8699,7 +8698,7 @@ msgstr "Text hodnoty symbolu napájení nelze změnit."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:362
 msgid "Illegal reference designator value!"
-msgstr "Nepovolená hodnota označení reference!"
+msgstr "Nepovolená hodnota reference schématu!"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:486
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
@@ -8908,9 +8907,8 @@ msgid "Buses && bus labels"
 msgstr "Sběrnice && označení sběrnic"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:51
-#, fuzzy
 msgid "Label fields"
-msgstr "Pole symbolu"
+msgstr "Pole označení"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:57
 msgid "Sheet titles"
@@ -8930,14 +8928,13 @@ msgid "Filters"
 msgstr "Filtry"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:87
-#, fuzzy
 msgid "Filter fields by name:"
-msgstr "Filtrovat položky podle sítě:"
+msgstr "Filtrovat pole podle názvu:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:99
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:73
 msgid "Filter items by parent reference designator:"
-msgstr "Filtr položek podle nadřazeného označení reference:"
+msgstr "Filtr položek podle nadřazené reference schématu:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:107
 msgid "Filter items by parent symbol library id:"
@@ -9512,7 +9509,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:51
 msgid "Default reference designator:"
-msgstr "Výchozí označení reference:"
+msgstr "Výchozí reference schématu:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:55
 msgid "U"
@@ -10542,7 +10539,7 @@ msgstr "Hledat pouze na aktuálním &listu"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:101
 msgid "Replace matches in reference designators"
-msgstr "Nahradit shody v referenci schématu"
+msgstr "Nahradit shody v referencích schématu"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:115
 msgid "&Find"
@@ -10680,14 +10677,13 @@ msgid "Note: item colors are overridden in the current color theme."
 msgstr "Poznámka: Barvy položek jsou v aktuálním barevném motivu přepsány."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:384
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "To see individual item colors uncheck '%s'\n"
 "in Preferences > Schematic Editor > Colors."
 msgstr ""
-"Chcete-li zobrazit barvy jednotlivých položek, zrušte zaškrtnutí políčka "
-"„%s“\n"
-"v Předvolby> Eeschema> Barvy."
+"Chcete-li zobrazit barvy jednotlivých položek, odškrtněte '%s'\n"
+"v Předvolby > Editor schémat > Barvy."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:426
 #, c-format
@@ -11628,8 +11624,7 @@ msgstr "Aktualizace schématu"
 msgid ""
 "Re-link footprints to schematic symbols based on their reference designators"
 msgstr ""
-"Opětovné propojení pouzder se symboly schématu na základě jejich označení "
-"referencí"
+"Opětovné propojení pouzder se symboly schématu na základě jejich referencí"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:33
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:28
@@ -11639,8 +11634,8 @@ msgid ""
 "their reference designators."
 msgstr ""
 "Za normálních okolností jsou pouzdra spojeny s jejich symboly "
-"prostřednictvím jejich jedinečných ID. Tuto možnost vyberte, pouze pokud "
-"chcete obnovit vazby stopy na základě jejich referenčních označení."
+"prostřednictvím jejich jedinečných ID.  Tuto možnost vyberte, pouze pokud "
+"chcete obnovit vazby stopy na základě referencí schématu."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:55
 msgid "Update references of symbols that have been changed in the PCB editor."
@@ -12860,7 +12855,7 @@ msgstr "Jednotky stejného symbolu mají různé hodnoty"
 
 #: eeschema/erc_item.cpp:179
 msgid "Duplicate reference designators"
-msgstr "Duplicitní označení reference"
+msgstr "Duplicitní reference schématu"
 
 #: eeschema/erc_item.cpp:183
 msgid "Bus Entry needed"
@@ -13023,7 +13018,6 @@ msgstr ""
 
 #: eeschema/files-io.cpp:618 pcbnew/files.cpp:173
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:191
-#, fuzzy
 msgid "All supported formats"
 msgstr "Všechny podporované formáty"
 
@@ -14944,7 +14938,7 @@ msgstr ""
 #: eeschema/sch_validators.cpp:101
 #, c-format
 msgid "The reference designator cannot contain %s character(s)."
-msgstr "Identifikátor reference nesmí obsahovat znak(y) %s."
+msgstr "Reference schématu nesmí obsahovat znak(y) %s."
 
 #: eeschema/sch_validators.cpp:105
 #, c-format
@@ -15010,7 +15004,7 @@ msgstr ", nebo "
 
 #: eeschema/sch_validators.cpp:188
 msgid "The reference designator cannot contain text variable references"
-msgstr "Označení reference nemůže obsahovat textové proměnné reference"
+msgstr "Reference schématu nemůže obsahovat textové proměnné"
 
 #: eeschema/sch_validators.cpp:195
 msgid "Field Validation Error"
@@ -16841,7 +16835,7 @@ msgstr "Opětovné propojení pouzdra zrušené uživatelem."
 #: eeschema/tools/backannotate.cpp:329
 #, c-format
 msgid "Change '%s' reference designator to '%s'."
-msgstr "Změna '%s' reference na '%s'."
+msgstr "Změna '%s' reference schématu na '%s'."
 
 #: eeschema/tools/backannotate.cpp:346
 #, c-format
@@ -17338,11 +17332,11 @@ msgstr "Zobrazí okno vlastností položky"
 
 #: eeschema/tools/ee_actions.cpp:436
 msgid "Edit Reference Designator..."
-msgstr "Upravit označení reference..."
+msgstr "Upravit reference schématu..."
 
 #: eeschema/tools/ee_actions.cpp:436
 msgid "Displays reference designator dialog"
-msgstr "Zobrazí dialogové okno označení reference"
+msgstr "Zobrazí dialogové okno reference schématu"
 
 #: eeschema/tools/ee_actions.cpp:442
 msgid "Edit Value..."
@@ -17604,7 +17598,7 @@ msgstr "Očíslovat schéma..."
 
 #: eeschema/tools/ee_actions.cpp:627
 msgid "Fill in schematic symbol reference designators"
-msgstr "Vyplnit označení reference symbolů ve schématu"
+msgstr "Vyplnit reference schématu symbolů ve schématu"
 
 #: eeschema/tools/ee_actions.cpp:632
 msgid "Schematic Setup..."
@@ -19630,16 +19624,14 @@ msgstr "Přesnost souřadnic gerber by měla být buď 5 nebo 6\n"
 #: kicad/cli/command_export_pcb_dxf.cpp:41
 #: kicad/cli/command_export_pcb_gerber.cpp:40
 #: kicad/cli/command_export_pcb_pdf.cpp:39
-#, fuzzy
 msgid "Exclude the reference designator text"
-msgstr "Zahrnout označení reference"
+msgstr "Vyloučit text reference schématu"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:46
 #: kicad/cli/command_export_pcb_gerber.cpp:45
 #: kicad/cli/command_export_pcb_pdf.cpp:44
-#, fuzzy
 msgid "Exclude the value text"
-msgstr "Zahrnout textové hodnoty"
+msgstr "Vyloučit text hodnoty"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:51
 #: pcbnew/dialogs/dialog_plot_base.cpp:326
@@ -19685,13 +19677,12 @@ msgid "Precision of gerber coordinates, valid options: 5 or 6"
 msgstr "Přesnost souřadnic gerber, platné možnosti: 5 nebo 6"
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:44
-#, fuzzy
 msgid ""
 "Layers to include on each plot, comma separated list of untranslated layer "
 "names to include such as F.Cu,B.Cu"
 msgstr ""
-"Čárkou oddělený seznam nepřeložených názvů vrstev tak, aby obsahovaly "
-"například F.Cu,B.Cu"
+"Vrstvy zahrnuté na každém vykreslení, čárkou oddělený seznam nepřeložených "
+"názvů vrstev tak, aby obsahovaly např. F.Cu,B.Cu"
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:48
 msgid "Use the gerber plot settings already configured in the board file"
@@ -20701,9 +20692,8 @@ msgid "Reveal in Finder"
 msgstr "Odhalit ve vyhledávači"
 
 #: kicad/project_tree_pane.cpp:697
-#, fuzzy
 msgid "Reveals the directory in a Finder window"
-msgstr "Zobrazení adresáře projektu v Správci souborů"
+msgstr "Zobrazení adresáře v okně Hledání"
 
 #: kicad/project_tree_pane.cpp:699
 msgid "Open Directory in File Explorer"
@@ -24128,7 +24118,7 @@ msgstr "umístění pouzdra"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:369
 msgid "reference designator location"
-msgstr "umístění označení reference"
+msgstr "umístění reference schématu"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:509
 #, c-format
@@ -24188,7 +24178,7 @@ msgstr "Souřadnice pouzdra"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:556
 msgid "Reference Designator Coordinates"
-msgstr "Souřadnice označení reference"
+msgstr "Souřadnice reference schématu"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:558
 #, c-format
@@ -24307,7 +24297,7 @@ msgstr "Na základě umístění:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:136
 msgid "Reference Designator"
-msgstr "Referenční označení"
+msgstr "Reference schématu"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:142
 msgid "Round locations to:"
@@ -24445,7 +24435,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:290
 msgid "Reference Designators"
-msgstr "Referenční identifikátory"
+msgstr "Reference schématu"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.h:106
 msgid "Geographical Reannotation"
@@ -25365,11 +25355,11 @@ msgstr "Očíslování pouzdra"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:352
 msgid "Keep existing reference designators"
-msgstr "Udržujte stávající referenci schématu"
+msgstr "Ponechat existující referenci schématu"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:355
 msgid "Assign unique reference designators"
-msgstr "Přiřadit jedinečné označení reference"
+msgstr "Přiřadit jedinečnou referenci schématu"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:357
 msgid ""
@@ -25500,7 +25490,7 @@ msgstr "Přesnost:"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:168
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:176
 msgid "Choose how many digits of precision to display"
-msgstr ""
+msgstr "Vyberte, kolik číslic přesnosti se zobrazí"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:345
@@ -26314,9 +26304,8 @@ msgid "Wrap"
 msgstr "Vrátit se na začátek"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
-#, fuzzy
 msgid "Search footprint reference designators"
-msgstr "Znova přiřadit pouzdra podle reference"
+msgstr "Hledat pouzdra podle reference"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:66
 msgid "Search footprint values"
@@ -27164,7 +27153,7 @@ msgstr "Generovat soubory vrtání"
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:28
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:69
 msgid "Reference designator:"
-msgstr "Referenční označení:"
+msgstr "Reference schématu:"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:35
 msgid "(specify multiple items separated by spaces for successive placement)"
@@ -27606,9 +27595,8 @@ msgid "Reading netlist file '%s'.\n"
 msgstr "Čtení souboru netlistu '%s'.\n"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:229
-#, fuzzy
 msgid "Using reference designators to match symbols and footprints.\n"
-msgstr "Použití referencí aby odpovídali součástky a pouzdra.\n"
+msgstr "Použití referencí při porovnávání symbolů a pouzder.\n"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:231
 #, fuzzy
@@ -27625,9 +27613,8 @@ msgid "Link footprints using component tstamps (unique ids)"
 msgstr "Znova přiřadit pouzdra podle reference"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:42
-#, fuzzy
 msgid "Link footprints using reference designators"
-msgstr "Znova přiřadit pouzdra podle reference"
+msgstr "Přiřadit pouzdra podle s použitím reference schématu"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:44
 #, fuzzy
@@ -28743,7 +28730,7 @@ msgstr "Kreslit hodnoty pouzder"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:84
 msgid "Plot reference designators"
-msgstr "Vykreslit označení reference"
+msgstr "Vykreslit reference schématu"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:88
 msgid "Force plotting of invisible values / refs"
@@ -28751,7 +28738,7 @@ msgstr "Vynutit kreslení neviditelných hodnot / referencí"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:89
 msgid "Force plot invisible footprint values and reference designators"
-msgstr "Vynutit kreslení neviditelných hodnot a referencí"
+msgstr "Vynutit kreslení neviditelných hodnot a referencí schématu"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:93
 msgid "Sketch pads on fabrication layers"
@@ -30114,7 +30101,7 @@ msgstr "Výchozí textové položky pro nové pouzdra:"
 msgid ""
 "Note: a blank reference designator or value will use the footprint name."
 msgstr ""
-"Poznámka: Prázdné označení reference nebo hodnota použije název pouzdra."
+"Poznámka: Prázdná reference schématu nebo hodnota použije název pouzdra."
 
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:105
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:21
@@ -33086,7 +33073,7 @@ msgstr "<žádný>"
 
 #: pcbnew/footprint.cpp:1362
 msgid "<no reference designator>"
-msgstr "<bez referenčního označení>"
+msgstr "<bez reference schematu>"
 
 #: pcbnew/footprint.cpp:1364
 #, c-format
@@ -33970,12 +33957,12 @@ msgstr "Změněno pouzdro '%s' z '%s' na '%s'."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:276
 #, c-format
 msgid "Change %s reference designator to %s."
-msgstr "Změnit referenční označení %s na %s."
+msgstr "Změnit referenci schématu %s na %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:282
 #, c-format
 msgid "Changed %s reference designator to %s."
-msgstr "Změněno referenčního označení %s na %s."
+msgstr "Změněna reference schématu %s na %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:298
 #, c-format
@@ -34198,9 +34185,8 @@ msgid "Cannot parse footprint name in symbol section of netlist."
 msgstr "Nelze přečíst název pouzdra v sekci součástky netlistu."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:142
-#, fuzzy
 msgid "Cannot parse reference designator in symbol section of netlist."
-msgstr "Nelze přečíst referenci v sekci součástky netlistu."
+msgstr "Nelze přečíst referenci schématu v sekci symbol netlistu."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:152
 #, fuzzy
@@ -34568,9 +34554,9 @@ msgid "Unrecognized layer '%s'"
 msgstr "Nerozpoznaná vrstva '%s'"
 
 #: pcbnew/pcb_expr_functions.cpp:240
-#, fuzzy, c-format
+#, c-format
 msgid "Missing footprint argument (A, B, or reference designator) to %s."
-msgstr "Znova přiřadit pouzdra podle reference"
+msgstr "Chybějící argument pouzdra (A, B nebo reference schématu) pro %s."
 
 #: pcbnew/pcb_expr_functions.cpp:446
 msgid "Footprint's courtyard is not a single, closed shape."
@@ -36622,14 +36608,14 @@ msgid "Unable to export, please fix and try again"
 msgstr "Nelze exportovat, prosím opravte a zkuste znovu"
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:1094
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint with value of '%s' has an empty reference designator."
-msgstr "Symbol s hodnotou \"%s\" má prázdné id reference."
+msgstr "Pouzdro s hodnotou '%s' má prázdnou referenci schématu."
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:1104
-#, fuzzy, c-format
+#, c-format
 msgid "Multiple footprints have the reference designator '%s'."
-msgstr "Aktualizujte pouzdra v souladu s referencí schématu:"
+msgstr "Několik pouzder má stejnou referenci schématu '%s'."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:76
 #, fuzzy
@@ -38053,11 +38039,12 @@ msgid "Opens the selected footprint in the Footprint Editor"
 msgstr "Otevře vybrané pouzdro v Editoru pouzder"
 
 #: pcbnew/tools/pcb_actions.cpp:264
-#, fuzzy
 msgid ""
 "Selects a footprint by reference designator and places it under the cursor "
 "for moving"
-msgstr "Vybírá pouzdro podle odkazu a umístí ho pod kurzor pro přesun"
+msgstr ""
+"Vybere pouzdro založenou na referenci schématu a umístí ji pod kurzor pro "
+"přesun"
 
 #: pcbnew/tools/pcb_actions.cpp:276
 msgid "Move Individually"
