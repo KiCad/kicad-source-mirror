@@ -211,9 +211,10 @@ int MEANDER_SHAPE::cornerRadius() const
     int minCr = std::abs( m_baselineOffset );
     int maxCr = std::min( m_amplitude / 2, spacing() / 2 );
 
-    int cr = std::clamp( optCr, minCr, maxCr );
-
-    return cr;
+    if( maxCr > minCr )
+        return std::clamp( optCr, minCr, maxCr );
+    else
+        return maxCr;
 }
 
 
