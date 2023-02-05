@@ -1481,25 +1481,42 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
     GetCanvas()->GetView()->UpdateAllItemsConditionally(
             []( KIGFX::VIEW_ITEM* aItem ) -> int
             {
-                SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( aItem );
+                int             flags = 0;
+                SCH_ITEM*       item = dynamic_cast<SCH_ITEM*>( aItem );
                 SCH_CONNECTION* connection = item ? item->Connection() : nullptr;
 
                 if( connection && connection->HasDriverChanged() )
                 {
                     connection->ClearDriverChanged();
-                    return KIGFX::REPAINT;
+                    flags |= KIGFX::REPAINT;
                 }
 
-                EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem );
-
-                if( text && text->HasTextVars() )
+                if( item )
                 {
-                    text->ClearRenderCache();
-                    text->ClearBoundingBoxCache();
-                    return KIGFX::GEOMETRY | KIGFX::REPAINT;
+                    item->RunOnChildren(
+                            [&flags]( SCH_ITEM* aChild )
+                            {
+                                EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aChild );
+
+                                if( text && text->HasTextVars() )
+                                {
+                                    text->ClearRenderCache();
+                                    text->ClearBoundingBoxCache();
+                                    flags |= KIGFX::GEOMETRY | KIGFX::REPAINT;
+                                }
+                            } );
+
+                    EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem );
+
+                    if( text && text->HasTextVars() )
+                    {
+                        text->ClearRenderCache();
+                        text->ClearBoundingBoxCache();
+                        flags |= KIGFX::GEOMETRY | KIGFX::REPAINT;
+                    }
                 }
 
-                return 0;
+                return flags;
             } );
 
     if( highlightedItem )

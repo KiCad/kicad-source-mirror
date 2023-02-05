@@ -961,27 +961,45 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
         getView()->UpdateAllItemsConditionally(
                 []( KIGFX::VIEW_ITEM* aItem ) -> int
                 {
+                    int flags = 0;
+
                     // Netclass coloured items
                     //
                     if( dynamic_cast<SCH_LINE*>( aItem ) )
-                        return KIGFX::REPAINT;
+                        flags |= KIGFX::REPAINT;
                     else if( dynamic_cast<SCH_JUNCTION*>( aItem ) )
-                        return KIGFX::REPAINT;
+                        flags |= KIGFX::REPAINT;
                     else if( dynamic_cast<SCH_BUS_ENTRY_BASE*>( aItem ) )
-                        return KIGFX::REPAINT;
+                        flags |= KIGFX::REPAINT;
 
                     // Items that might reference an item's netclass name
                     //
-                    EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem );
-
-                    if( text && text->HasTextVars() )
+                    if( SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( aItem ) )
                     {
-                        text->ClearRenderCache();
-                        text->ClearBoundingBoxCache();
-                        return KIGFX::GEOMETRY | KIGFX::REPAINT;
+                        item->RunOnChildren(
+                                [&flags]( SCH_ITEM* aChild )
+                                {
+                                    EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aChild );
+
+                                    if( text && text->HasTextVars() )
+                                    {
+                                        text->ClearRenderCache();
+                                        text->ClearBoundingBoxCache();
+                                        flags |= KIGFX::GEOMETRY | KIGFX::REPAINT;
+                                    }
+                                } );
+
+                        EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem );
+
+                        if( text && text->HasTextVars() )
+                        {
+                            text->ClearRenderCache();
+                            text->ClearBoundingBoxCache();
+                            flags |= KIGFX::GEOMETRY | KIGFX::REPAINT;
+                        }
                     }
 
-                    return 0;
+                    return flags;
                 } );
     }
 
