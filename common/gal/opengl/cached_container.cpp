@@ -282,7 +282,12 @@ void CACHED_CONTAINER::defragment( VERTEX* aTarget )
     [&]()
     {
 #ifdef __WIN32__
+    #ifdef __MINGW32__
+        // currently, because SEH (Structured Exception Handling) is not documented on msys
+        // (for intance __try or __try1 exists without doc) or is not supported, do nothing
+    #else
         __try
+    #endif
 #endif
         {
             for( VERTEX_ITEM* item : m_items )
@@ -310,6 +315,10 @@ void CACHED_CONTAINER::defragment( VERTEX* aTarget )
             }
         }
 #ifdef __WIN32__
+    #ifdef __MINGW32__
+        // currently, because SEH (Structured Exception Handling) is not documented on msys
+        // (for intance __except1 exists without doc) or is not supported, do nothing
+    #else
         __except( GetExceptionCode() == STATUS_ACCESS_VIOLATION ? EXCEPTION_EXECUTE_HANDLER
                                                                 : EXCEPTION_CONTINUE_SEARCH )
         {
@@ -317,6 +326,7 @@ void CACHED_CONTAINER::defragment( VERTEX* aTarget )
                     "Access violation in defragment. This is usually an indicator of "
                     "system or GPU memory running low." );
         };
+    #endif
 #endif
     }();
 
