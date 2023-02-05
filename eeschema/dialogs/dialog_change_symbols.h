@@ -25,11 +25,21 @@
 
 #include <dialog_change_symbols_base.h>
 
-class LIB_ID;
+#include <lib_id.h>
+#include <sch_sheet_path.h>
+
+
 class SCH_SYMBOL;
 class SCH_EDIT_FRAME;
 class SCH_SCREEN;
-class SCH_SHEET_PATH;
+
+
+struct SYMBOL_CHANGE_INFO
+{
+    std::vector<SCH_SHEET_PATH> m_Instances;
+    LIB_ID                      m_LibId;
+};
+
 
 /**
  * Dialog to update or change schematic library symbols.
@@ -74,8 +84,7 @@ private:
 
     bool isMatch( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aInstance );
     int processMatchingSymbols();
-    int processSymbols( const std::map<SCH_SYMBOL*, std::vector<SCH_SHEET_PATH>>& aSymbols,
-                        const LIB_ID& aNewId );
+    int processSymbols( const std::map<SCH_SYMBOL*, SYMBOL_CHANGE_INFO>& aSymbols );
     wxString getSymbolReferences( SCH_SYMBOL& aSymbol, const LIB_ID& aNewId );
 
     SCH_SYMBOL* m_symbol;

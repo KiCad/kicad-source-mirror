@@ -25,14 +25,12 @@
 #include <bitmaps.h>
 #include <string_utils.h>   // WildCompareString
 #include <kiway.h>
-#include <lib_id.h>
 #include <refdes_utils.h>
 #include <core/kicad_algo.h>
 #include <dialog_change_symbols.h>
 #include <sch_symbol.h>
 #include <sch_edit_frame.h>
 #include <sch_screen.h>
-#include <sch_sheet_path.h>
 #include <schematic.h>
 #include <template_fieldnames.h>
 #include <wx_html_report_panel.h>
@@ -473,7 +471,7 @@ int DIALOG_CHANGE_SYMBOLS::processMatchingSymbols()
             return false;
     }
 
-    std::map<SCH_SYMBOL*, std::vector<SCH_SHEET_PATH>> symbols;
+    std::map<SCH_SYMBOL*, SYMBOL_CHANGE_INFO> symbols;
 
     for( SCH_SHEET_PATH& instance : hierarchy )
     {
@@ -491,19 +489,27 @@ int DIALOG_CHANGE_SYMBOLS::processMatchingSymbols()
             if( !isMatch( symbol, &instance ) )
                 continue;
 
-            if( ( m_mode == MODE::UPDATE ) && !newId.IsValid() )
+            if( m_mode == MODE::UPDATE )
                 newId = symbol->GetLibId();
 
             auto it = symbols.find( symbol );
 
             if( it == symbols.end() )
-                symbols.insert( { symbol, { instance } } );
+            {
+                SYMBOL_CHANGE_INFO info;
+
+                info.m_Instances.emplace_back( instance );
+                info.m_LibId = newId;
+                symbols.insert( { symbol, info } );
+            }
             else
-                it->second.emplace_back( instance );
+            {
+                it->second.m_Instances.emplace_back( instance );
+            }
         }
     }
 
-    matchesProcessed += processSymbols( symbols, newId );
+    matchesProcessed += processSymbols( symbols );
 
     frame->GetCurrentSheet().UpdateAllScreenReferences();
 
@@ -512,18 +518,16 @@ int DIALOG_CHANGE_SYMBOLS::processMatchingSymbols()
 
 
 int DIALOG_CHANGE_SYMBOLS::processSymbols( const std::map<SCH_SYMBOL*,
-                                           std::vector<SCH_SHEET_PATH>>& aSymbols,
-                                           const LIB_ID& aNewId )
+                                           SYMBOL_CHANGE_INFO>& aSymbols )
 {
-    wxCHECK( !aSymbols.empty() && aNewId.IsValid(), 0 );
+    wxCHECK( !aSymbols.empty(), 0 );
 
-    std::vector<SCH_SHEET_PATH> instances;
-    int             matchesProcessed = 0;
-    SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( GetParent() );
-    SCH_SCREEN*     screen = nullptr;
-    SCH_SYMBOL*     symbol = nullptr;
-    LIB_SYMBOL*     libSymbol = nullptr;
-    std::map<SCH_SYMBOL*, std::vector<SCH_SHEET_PATH>> symbols = aSymbols;
+    int                matchesProcessed = 0;
+    SCH_EDIT_FRAME*    frame = dynamic_cast<SCH_EDIT_FRAME*>( GetParent() );
+    SCH_SCREEN*        screen = nullptr;
+    SCH_SYMBOL*        symbol = nullptr;
+    LIB_SYMBOL*        libSymbol = nullptr;
+    std::map<SCH_SYMBOL*, SYMBOL_CHANGE_INFO> symbols = aSymbols;
 
     wxCHECK( frame, 0 );
 
@@ -537,13 +541,13 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( const std::map<SCH_SYMBOL*,
     {
         symbol = it->first;
 
-        wxCHECK2( symbol, continue );
+        wxCHECK2( symbol && it->second.m_LibId.IsValid(), continue );
 
-        libSymbol = frame->GetLibSymbol( aNewId );
+        libSymbol = frame->GetLibSymbol( it->second.m_LibId );
 
         if( !libSymbol )
         {
-            msg = getSymbolReferences( *symbol, aNewId );
+            msg = getSymbolReferences( *symbol, it->second.m_LibId );
             msg << wxT( ": " ) << _( "*** symbol not found ***" );
             m_messagePanel->Report( msg, RPT_SEVERITY_ERROR );
             it = symbols.erase( it );
@@ -554,7 +558,7 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( const std::map<SCH_SYMBOL*,
 
         if( flattenedSymbol->GetUnitCount() < symbol->GetUnit() )
         {
-            msg = getSymbolReferences( *symbol, aNewId );
+            msg = getSymbolReferences( *symbol, it->second.m_LibId );
             msg << wxT( ": " ) << _( "*** new symbol has too few units ***" );
             m_messagePanel->Report( msg, RPT_SEVERITY_ERROR );
             it = symbols.erase( it );
@@ -570,11 +574,10 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( const std::map<SCH_SYMBOL*,
     for( auto& pair : symbols )
     {
         symbol = pair.first;
-        instances = pair.second;
 
-        wxCHECK( symbol && !instances.empty(), 0 );
+        wxCHECK( symbol && !pair.second.m_Instances.empty(), 0 );
 
-        screen = instances[0].LastScreen();
+        screen = pair.second.m_Instances[0].LastScreen();
 
         wxCHECK( screen, 0 );
 
@@ -586,10 +589,10 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( const std::map<SCH_SYMBOL*,
     {
         symbol = pair.first;
 
-        if( aNewId != symbol->GetLibId() )
-            symbol->SetLibId( aNewId );
+        if( pair.second.m_LibId != symbol->GetLibId() )
+            symbol->SetLibId( pair.second.m_LibId );
 
-        libSymbol = frame->GetLibSymbol( aNewId );
+        libSymbol = frame->GetLibSymbol( pair.second.m_LibId );
         std::unique_ptr<LIB_SYMBOL> flattenedSymbol = libSymbol->Flatten();
 
         symbol->SetLibSymbol( flattenedSymbol.release() );
@@ -627,7 +630,7 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( const std::map<SCH_SYMBOL*,
 
                 if( resetText )
                 {
-                    for( const SCH_SHEET_PATH& instance : pair.second )
+                    for( const SCH_SHEET_PATH& instance : pair.second.m_Instances )
                     {
                         if( i == REFERENCE_FIELD )
                             symbol->SetRef( &instance,
@@ -690,13 +693,12 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( const std::map<SCH_SYMBOL*,
         }
 
         symbol->SetSchSymbolLibraryName( wxEmptyString );
-        instances = pair.second;
-        screen = instances[0].LastScreen();
+        screen = pair.second.m_Instances[0].LastScreen();
         screen->Append( symbol );
         frame->GetCanvas()->GetView()->Update( symbol );
 
-        msg = getSymbolReferences( *symbol, aNewId );
-        msg += wxT( ": OK" );
+        msg = getSymbolReferences( *symbol, pair.second.m_LibId );
+        msg += wxS( ": OK" );
         m_messagePanel->Report( msg, RPT_SEVERITY_ACTION );
         matchesProcessed +=1;
     }
@@ -705,8 +707,7 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( const std::map<SCH_SYMBOL*,
 }
 
 
-wxString DIALOG_CHANGE_SYMBOLS::getSymbolReferences( SCH_SYMBOL& aSymbol,
-                                                     const LIB_ID& aNewId )
+wxString DIALOG_CHANGE_SYMBOLS::getSymbolReferences( SCH_SYMBOL& aSymbol, const LIB_ID& aNewId )
 {
     wxString msg;
     wxString references;
