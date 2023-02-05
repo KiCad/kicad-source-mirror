@@ -1535,7 +1535,7 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
 
                 for( LSEQ cu = board->GetEnabledLayers().CuStack();  cu;  ++cu )
                 {
-                    if( aPad->ZoneConnectionCache( *cu ) == ZLC_CONNECTED )
+                    if( aPad->GetZoneLayerOverride( *cu ) == ZLO_FORCE_FLASHED )
                         m_out->Print( 0, " %s", m_out->Quotew( LSET::Name( *cu ) ).c_str() );
                 }
 
@@ -2085,7 +2085,7 @@ void PCB_PLUGIN::format( const PCB_TRACK* aTrack, int aNestLevel ) const
 
             for( LSEQ cu = board->GetEnabledLayers().CuStack();  cu;  ++cu )
             {
-                if( via->ZoneConnectionCache( *cu ) == ZLC_CONNECTED )
+                if( via->GetZoneLayerOverride( *cu ) == ZLO_FORCE_FLASHED )
                     m_out->Print( 0, " %s", m_out->Quotew( LSET::Name( *cu ) ).c_str() );
             }
 

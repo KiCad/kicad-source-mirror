@@ -225,7 +225,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
         {
             PCB_VIA* via = static_cast<PCB_VIA*>( track );
 
-            via->ClearZoneConnectionCache();
+            via->ClearZoneLayerOverrides();
 
             if( !via->GetRemoveUnconnected() )
                 continue;
@@ -249,16 +249,16 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
 
                 if( isInPourKeepoutArea( bbox, layer, center ) )
                 {
-                    via->SetZoneConnectionCache( layer, ZLC_UNCONNECTED );
+                    via->SetZoneLayerOverride( layer, ZLO_FORCE_NO_ZONE_CONNECTION );
                 }
                 else
                 {
                     ZONE* zone = findHighestPriorityZone( bbox, layer, netcode, viaTestFn );
 
                     if( zone && zone->GetNetCode() == via->GetNetCode() )
-                        via->SetZoneConnectionCache( layer, ZLC_CONNECTED );
+                        via->SetZoneLayerOverride( layer, ZLO_FORCE_FLASHED );
                     else
-                        via->SetZoneConnectionCache( layer, ZLC_UNCONNECTED );
+                        via->SetZoneLayerOverride( layer, ZLO_FORCE_NO_ZONE_CONNECTION );
                 }
             }
         }
@@ -269,7 +269,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
     {
         for( PAD* pad : footprint->Pads() )
         {
-            pad->ClearZoneConnectionCache();
+            pad->ClearZoneLayerOverrides();
 
             if( !pad->GetRemoveUnconnected() )
                 continue;
@@ -291,16 +291,16 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
 
                 if( isInPourKeepoutArea( bbox, layer, center ) )
                 {
-                    pad->SetZoneConnectionCache( layer, ZLC_UNCONNECTED );
+                    pad->SetZoneLayerOverride( layer, ZLO_FORCE_NO_ZONE_CONNECTION );
                 }
                 else
                 {
                     ZONE* zone = findHighestPriorityZone( bbox, layer, netcode, padTestFn );
 
                     if( zone && zone->GetNetCode() == pad->GetNetCode() )
-                        pad->SetZoneConnectionCache( layer, ZLC_CONNECTED );
+                        pad->SetZoneLayerOverride( layer, ZLO_FORCE_FLASHED );
                     else
-                        pad->SetZoneConnectionCache( layer, ZLC_UNCONNECTED );
+                        pad->SetZoneLayerOverride( layer, ZLO_FORCE_NO_ZONE_CONNECTION );
                 }
             }
         }
@@ -890,7 +890,9 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
             if( !padBBox.Intersects( aZone->GetBoundingBox() ) )
                 continue;
 
-            if( pad->GetNetCode() != aZone->GetNetCode() || pad->GetNetCode() <= 0 )
+            if( pad->GetNetCode() != aZone->GetNetCode()
+                || pad->GetNetCode() <= 0
+                || pad->GetZoneLayerOverride( aLayer ) == ZLO_FORCE_NO_ZONE_CONNECTION )
             {
                 // collect these for knockout in buildCopperItemClearances()
                 aNoConnectionPads.push_back( pad );
@@ -1057,7 +1059,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                     {
                         PCB_VIA* via = static_cast<PCB_VIA*>( aTrack );
 
-                        if( via->ZoneConnectionCache( aLayer ) == ZLC_UNCONNECTED )
+                        if( via->GetZoneLayerOverride( aLayer ) == ZLO_FORCE_NO_ZONE_CONNECTION )
                             sameNet = false;
                     }
 

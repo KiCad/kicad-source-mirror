@@ -5025,6 +5025,9 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
             break;
 
         case T_zone_layer_connections:
+            for( PCB_LAYER_ID layer : pad->GetLayerSet().Seq() )
+                pad->SetZoneLayerOverride( layer, ZLO_FORCE_NO_ZONE_CONNECTION );
+
             for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
             {
                 PCB_LAYER_ID layer = lookUpLayer<PCB_LAYER_ID>( m_layerIndices );
@@ -5032,7 +5035,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
                 if( layer < F_Cu || layer > B_Cu )
                     Expecting( "copper layer name" );
 
-                pad->SetZoneConnectionCache( layer, ZLC_CONNECTED );
+                pad->SetZoneLayerOverride( layer, ZLO_FORCE_FLASHED );
             }
 
             break;
@@ -5449,6 +5452,9 @@ PCB_VIA* PCB_PARSER::parsePCB_VIA()
             break;
 
         case T_zone_layer_connections:
+            for( PCB_LAYER_ID layer : via->GetLayerSet().Seq() )
+                via->SetZoneLayerOverride( layer, ZLO_FORCE_NO_ZONE_CONNECTION );
+
             for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
             {
                 PCB_LAYER_ID layer = lookUpLayer<PCB_LAYER_ID>( m_layerIndices );
@@ -5456,7 +5462,7 @@ PCB_VIA* PCB_PARSER::parsePCB_VIA()
                 if( layer < F_Cu || layer > B_Cu )
                     Expecting( "copper layer name" );
 
-                via->SetZoneConnectionCache( layer, ZLC_CONNECTED );
+                via->SetZoneLayerOverride( layer, ZLO_FORCE_FLASHED );
             }
 
             break;

@@ -41,11 +41,23 @@ class SHAPE;
 class PCB_GROUP;
 
 
-enum ZONE_LAYER_CONNECTION
+/**
+ * Conditionally flashed vias and pads that interact with zones of different priority can be
+ * very squirrelly.
+ *
+ * In particular, when filling a higher-priority zone that does -not- connect to a via/pad, we
+ * don't know whether or not a lower-priority zone will subsequently connect -- so we can't
+ * determine clearance because we don't know what the final flashing state will be.
+ *
+ * We therefore force the flashing state if the highest-priority zone with the same net -can-
+ * connect (whether or not it does in the end), and otherwise force the zone-connection state
+ * to no-connection (even though a lower priority zone -might- have otherwise connected to it.
+ */
+enum ZONE_LAYER_OVERRIDE
 {
-    ZLC_UNRESOLVED,
-    ZLC_CONNECTED,
-    ZLC_UNCONNECTED
+    ZLO_NONE,
+    ZLO_FORCE_FLASHED,
+    ZLO_FORCE_NO_ZONE_CONNECTION
 };
 
 

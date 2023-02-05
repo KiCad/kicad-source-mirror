@@ -745,15 +745,21 @@ void CN_VISITOR::checkZoneItemConnection( CN_ZONE_LAYER* aZoneLayer, CN_ITEM* aI
     {
         PAD* pad = static_cast<PAD*>( item );
 
-        if( pad->ConditionallyFlashed( layer ) && pad->ZoneConnectionCache( layer ) == ZLC_UNCONNECTED )
+        if( pad->ConditionallyFlashed( layer )
+            && pad->GetZoneLayerOverride( layer ) == ZLO_FORCE_NO_ZONE_CONNECTION )
+        {
             return;
+        }
     }
     else if( item->Type() == PCB_VIA_T )
     {
         PCB_VIA* via = static_cast<PCB_VIA*>( item );
 
-        if( via->ConditionallyFlashed( layer ) && via->ZoneConnectionCache( layer ) == ZLC_UNCONNECTED )
+        if( via->ConditionallyFlashed( layer )
+            && via->GetZoneLayerOverride( layer ) == ZLO_FORCE_NO_ZONE_CONNECTION )
+        {
             return;
+        }
     }
 
     for( int i = 0; i < aItem->AnchorCount(); ++i )

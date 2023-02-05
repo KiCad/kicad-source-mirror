@@ -4,7 +4,7 @@
  * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,8 +89,8 @@ PCB_VIA::PCB_VIA( BOARD_ITEM* aParent ) :
     m_removeUnconnectedLayer = false;
     m_keepStartEndLayer = true;
 
-    for( size_t ii = 0; ii < arrayDim( m_zoneLayerConnections ); ++ii )
-        m_zoneLayerConnections[ ii ] = ZLC_UNCONNECTED;
+    for( size_t ii = 0; ii < arrayDim( m_zoneLayerOverrides ); ++ii )
+        m_zoneLayerOverrides[ ii ] = ZLO_NONE;
 
     m_isFree = false;
 }
@@ -654,15 +654,10 @@ bool PCB_VIA::FlashLayer( int aLayer ) const
     static std::initializer_list<KICAD_T> connectedTypes = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T,
                                                              PCB_PAD_T };
 
-    // Only the highest priority zone that a via interacts with on any given layer gets to
-    // determine if it is connected or not.  This keeps us from deciding it's not flashed when
-    // filling the first zone, and then later having another zone connect to it, causing it to
-    // become flashed, resulting in the first zone having insufficient clearance.
-    // See https://gitlab.com/kicad/code/kicad/-/issues/11299.
-    if( m_zoneLayerConnections[ aLayer ] == ZLC_CONNECTED )
+    if( m_zoneLayerOverrides[ aLayer ] == ZLO_FORCE_FLASHED )
         return true;
-
-    return board->GetConnectivity()->IsConnectedOnLayer( this, aLayer, connectedTypes );
+    else
+        return board->GetConnectivity()->IsConnectedOnLayer( this, aLayer, connectedTypes );
 }
 
 

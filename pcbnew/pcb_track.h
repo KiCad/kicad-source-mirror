@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -553,21 +553,21 @@ public:
     std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
                                               FLASHING aFlash = FLASHING::DEFAULT ) const override;
 
-    void ClearZoneConnectionCache()
+    void ClearZoneLayerOverrides()
     {
-        for( size_t ii = 0; ii < arrayDim( m_zoneLayerConnections ); ++ii )
-            m_zoneLayerConnections[ ii ] = ZLC_UNRESOLVED;
+        for( size_t ii = 0; ii < arrayDim( m_zoneLayerOverrides ); ++ii )
+            m_zoneLayerOverrides[ ii ] = ZLO_NONE;
     }
 
-    const ZONE_LAYER_CONNECTION& ZoneConnectionCache( PCB_LAYER_ID aLayer ) const
+    const ZONE_LAYER_OVERRIDE& GetZoneLayerOverride( PCB_LAYER_ID aLayer ) const
     {
-        return m_zoneLayerConnections[ aLayer ];
+        return m_zoneLayerOverrides[ aLayer ];
     }
 
-    void SetZoneConnectionCache( PCB_LAYER_ID aLayer, ZONE_LAYER_CONNECTION aConnection )
+    void SetZoneLayerOverride( PCB_LAYER_ID aLayer, ZONE_LAYER_OVERRIDE aOverride )
     {
-        std::unique_lock<std::mutex> cacheLock( m_zoneLayerConnectionsMutex );
-        m_zoneLayerConnections[ aLayer ] = aConnection;
+        std::unique_lock<std::mutex> cacheLock( m_zoneLayerOverridesMutex );
+        m_zoneLayerOverrides[ aLayer ] = aOverride;
     }
 
 protected:
@@ -587,8 +587,8 @@ private:
     bool         m_keepStartEndLayer;        ///< Keep the start and end annular rings
     bool         m_isFree;                   ///< "Free" vias don't get their nets auto-updated
 
-    std::mutex            m_zoneLayerConnectionsMutex;
-    ZONE_LAYER_CONNECTION m_zoneLayerConnections[B_Cu + 1];
+    std::mutex           m_zoneLayerOverridesMutex;
+    ZONE_LAYER_OVERRIDE  m_zoneLayerOverrides[B_Cu + 1];
 };
 
 
