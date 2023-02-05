@@ -275,14 +275,14 @@ bool CACHED_CONTAINER::reallocate( unsigned int aSize )
 
 void CACHED_CONTAINER::defragment( VERTEX* aTarget )
 {
-    // Defragmentation
-    ITEMS::iterator it, it_end;
-    int             newOffset = 0;
-
 #ifdef __WIN32__
     __try
 #endif
     {
+        // Defragmentation
+        ITEMS::iterator it, it_end;
+        int             newOffset = 0;
+
         for( VERTEX_ITEM* item : m_items )
         {
             int itemOffset = item->GetOffset();
@@ -306,6 +306,8 @@ void CACHED_CONTAINER::defragment( VERTEX* aTarget )
             m_item->setOffset( newOffset );
             m_chunkOffset = newOffset;
         }
+
+        m_maxIndex = usedSpace();
     }
 #ifdef __WIN32__
     __except( GetExceptionCode() == STATUS_ACCESS_VIOLATION ? EXCEPTION_EXECUTE_HANDLER
@@ -315,8 +317,6 @@ void CACHED_CONTAINER::defragment( VERTEX* aTarget )
                                   "system or GPU memory running low." );
     };
 #endif
-
-    m_maxIndex = usedSpace();
 }
 
 
