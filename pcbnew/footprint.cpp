@@ -40,6 +40,7 @@
 #include <pcb_group.h>
 #include <pcb_track.h>
 #include <pcb_dimension.h>
+#include <pcb_bitmap.h>
 #include <footprint.h>
 #include <zone.h>
 #include <view/view.h>
@@ -1636,6 +1637,10 @@ void FOOTPRINT::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 
         case PCB_FP_TEXTBOX_T:
             static_cast<FP_TEXTBOX*>( item )->Flip( m_pos, false );
+            break;
+
+        case PCB_BITMAP_T:
+            static_cast<PCB_BITMAP*>( item )->Flip( m_pos, false );
             break;
 
         case PCB_FP_DIM_ALIGNED_T:
