@@ -398,9 +398,9 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
 
         if( !mgr.CreateLibrary( fn.GetFullPath(), libTable ) )
         {
-                DisplayError( m_frame, wxString::Format( _( "Could not add library '%s'." ),
+            DisplayError( m_frame, wxString::Format( _( "Could not add library '%s'." ),
                                                      targetLib ) );
-                return 0;
+            return 0;
         }
     }
     else
