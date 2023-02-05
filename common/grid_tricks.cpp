@@ -289,11 +289,11 @@ void GRID_TRICKS::getSelectedArea()
 }
 
 
-void GRID_TRICKS::onGridCellRightClick( wxGridEvent&  )
+void GRID_TRICKS::onGridCellRightClick( wxGridEvent& aEvent  )
 {
     wxMenu menu;
 
-    showPopupMenu( menu );
+    showPopupMenu( menu, aEvent );
 }
 
 
@@ -320,7 +320,7 @@ void GRID_TRICKS::onGridLabelRightClick( wxGridEvent&  )
 }
 
 
-void GRID_TRICKS::showPopupMenu( wxMenu& menu )
+void GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 {
     menu.Append( GRIDTRICKS_ID_CUT, _( "Cut" ) + "\tCtrl+X",
                  _( "Clear selected cells placing original contents on clipboard" ) );

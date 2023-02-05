@@ -44,7 +44,7 @@ public:
     {}
 
 protected:
-    virtual void showPopupMenu( wxMenu& menu ) override;
+    virtual void showPopupMenu( wxMenu& menu, wxGridEvent& aEvent ) override;
     virtual void doPopupSelection( wxCommandEvent& event ) override;
     DIALOG_SHIM* m_dlg;
 };

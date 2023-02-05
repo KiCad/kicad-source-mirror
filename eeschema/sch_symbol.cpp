@@ -1117,6 +1117,7 @@ void SCH_SYMBOL::GetContextualTextVars( wxArrayString* aVars ) const
     for( size_t i = MANDATORY_FIELDS; i < m_fields.size(); ++i )
         aVars->push_back( m_fields[i].GetName() );
 
+    aVars->push_back( wxT( "OP" ) );
     aVars->push_back( wxT( "FOOTPRINT_LIBRARY" ) );
     aVars->push_back( wxT( "FOOTPRINT_NAME" ) );
     aVars->push_back( wxT( "UNIT" ) );
@@ -1132,11 +1133,37 @@ void SCH_SYMBOL::GetContextualTextVars( wxArrayString* aVars ) const
 
 bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
 {
+    static wxRegEx operatingPoint( wxT( "^"
+                                        "OP"
+                                        "(:[a-zA-Z]*)?"            // port
+                                        "(.([0-9])?([a-zA-Z]*))?"  // format
+                                        "$" ) );
+
     SCHEMATIC* schematic = Schematic();
 
     // SCH_SYMOL object has no context outside a schematic.
     if( !schematic )
         return false;
+
+    if( operatingPoint.Matches( *token ) )
+    {
+        wxString port( operatingPoint.GetMatch( *token, 1 ) );
+        wxString precisionStr( operatingPoint.GetMatch( *token, 3 ) );
+        wxString range( operatingPoint.GetMatch( *token, 4 ) );
+
+        wxString signal = GetRef( &schematic->CurrentSheet() ) + port;
+        int      precision = 3;
+
+        if( !precisionStr.IsEmpty() )
+            precision = precisionStr[0] - '0';
+
+        if( range.IsEmpty() )
+            range = wxS( "~A" );
+
+        *token = Schematic()->GetOperatingPoint( signal.Lower(), precision, range );
+
+        return true;
+    }
 
     if( token->Contains( ':' ) )
     {

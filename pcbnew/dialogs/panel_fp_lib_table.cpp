@@ -289,7 +289,7 @@ protected:
         return false;
     }
 
-    void showPopupMenu( wxMenu& menu ) override
+    void showPopupMenu( wxMenu& menu, wxGridEvent& aEvent ) override
     {
         if( m_grid->GetGridCursorCol() == COL_OPTIONS )
         {
@@ -297,7 +297,7 @@ protected:
             menu.AppendSeparator();
         }
 
-        LIB_TABLE_GRID_TRICKS::showPopupMenu( menu );
+        LIB_TABLE_GRID_TRICKS::showPopupMenu( menu, aEvent );
     }
 
     void doPopupSelection( wxCommandEvent& event ) override

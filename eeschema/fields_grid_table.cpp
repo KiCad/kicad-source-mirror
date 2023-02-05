@@ -856,7 +856,7 @@ template class FIELDS_GRID_TABLE<SCH_FIELD>;
 template class FIELDS_GRID_TABLE<LIB_FIELD>;
 
 
-void FIELDS_GRID_TRICKS::showPopupMenu( wxMenu& menu )
+void FIELDS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 {
     if( m_grid->GetGridCursorRow() == FOOTPRINT_FIELD && m_grid->GetGridCursorCol() == FDC_VALUE )
     {
@@ -871,7 +871,7 @@ void FIELDS_GRID_TRICKS::showPopupMenu( wxMenu& menu )
         menu.AppendSeparator();
     }
 
-    GRID_TRICKS::showPopupMenu( menu );
+    GRID_TRICKS::showPopupMenu( menu, aEvent );
 }
 
 

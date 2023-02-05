@@ -1256,6 +1256,45 @@ void SCH_EDIT_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
 }
 
 
+void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
+{
+    GetCanvas()->GetView()->UpdateAllItemsConditionally(
+            [&]( KIGFX::VIEW_ITEM* aItem ) -> int
+            {
+                int flags = 0;
+
+                if( SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( aItem ) )
+                {
+                    item->RunOnChildren(
+                            [&flags]( SCH_ITEM* aChild )
+                            {
+                                EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aChild );
+
+                                if( text && text->HasTextVars() )
+                                {
+                                    text->ClearRenderCache();
+                                    text->ClearBoundingBoxCache();
+                                    flags |= KIGFX::GEOMETRY | KIGFX::REPAINT;
+                                }
+                            } );
+
+                    EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem );
+
+                    if( text && text->HasTextVars() )
+                    {
+                        text->ClearRenderCache();
+                        text->ClearBoundingBoxCache();
+                        flags |= KIGFX::GEOMETRY | KIGFX::REPAINT;
+                    }
+                }
+
+                return flags;
+            } );
+
+    GetCanvas()->ForceRefresh();
+}
+
+
 void SCH_EDIT_FRAME::AutoRotateItem( SCH_SCREEN* aScreen, SCH_ITEM* aItem )
 {
     if( aItem->IsType( { SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T } ) )

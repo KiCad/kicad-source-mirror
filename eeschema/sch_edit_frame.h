@@ -188,6 +188,11 @@ public:
     void KiwayMailIn( KIWAY_EXPRESS& aEvent ) override;
 
     /**
+     * Refresh the display of any operating points.  Called after a .op simulation completes.
+     */
+    void RefreshOperatingPointDisplay();
+
+    /**
      * Automatically set the rotation of an item (if the item supports it)
      */
     void AutoRotateItem( SCH_SCREEN* aScreen, SCH_ITEM* aItem );

@@ -30,6 +30,6 @@ class LIB_TABLE_GRID_TRICKS : public GRID_TRICKS
 public:
     explicit LIB_TABLE_GRID_TRICKS( WX_GRID* aGrid );
 
-    void showPopupMenu( wxMenu& menu ) override;
+    void showPopupMenu( wxMenu& menu, wxGridEvent& aEvent ) override;
     void doPopupSelection( wxCommandEvent& event ) override;
 };

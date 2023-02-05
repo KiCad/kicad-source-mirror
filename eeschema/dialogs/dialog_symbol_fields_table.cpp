@@ -79,7 +79,7 @@ public:
     {}
 
 protected:
-    void showPopupMenu( wxMenu& menu ) override
+    void showPopupMenu( wxMenu& menu, wxGridEvent& aEvent ) override
     {
         if( m_grid->GetGridCursorCol() == FOOTPRINT_FIELD )
         {
@@ -94,7 +94,7 @@ protected:
             menu.AppendSeparator();
         }
 
-        GRID_TRICKS::showPopupMenu( menu );
+        GRID_TRICKS::showPopupMenu( menu, aEvent );
     }
 
     void doPopupSelection( wxCommandEvent& event ) override

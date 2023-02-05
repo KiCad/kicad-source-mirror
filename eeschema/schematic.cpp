@@ -31,6 +31,7 @@
 #include <sch_screen.h>
 #include <sim/spice_settings.h>
 #include <sch_label.h>
+#include <sim/spice_value.h>
 
 SCHEMATIC::SCHEMATIC( PROJECT* aPrj ) :
           EDA_ITEM( nullptr, SCHEMATIC_T ),
@@ -622,6 +623,20 @@ void SCHEMATIC::RecomputeIntersheetRefs( const std::function<void( SCH_GLOBALLAB
             aItemCallback( globalLabel );
         }
     }
+}
+
+
+wxString SCHEMATIC::GetOperatingPoint( const wxString& aNetName, int aPrecision,
+                                       const wxString& aRange )
+{
+    auto it = m_operatingPoints.find( aNetName );
+
+    if( it != m_operatingPoints.end() )
+        return SPICE_VALUE( it->second ).ToString( aPrecision, aRange );
+    else if( m_operatingPoints.empty() )
+        return wxS( "--" );
+    else
+        return wxS( "?" );
 }
 
 

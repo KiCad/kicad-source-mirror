@@ -56,7 +56,7 @@
 #include "sim_plot_panel.h"
 #include "spice_simulator.h"
 #include "spice_reporter.h"
-#include <menus_helpers.h>
+#include <dialog_sim_format_value.h>
 #include <eeschema_settings.h>
 
 #include <memory>
@@ -129,6 +129,73 @@ enum CURSORS_GRID_COLUMNS
 };
 
 
+enum
+{
+    MYID_FORMAT_VALUE = GRIDTRICKS_FIRST_CLIENT_ID
+};
+
+
+class CURSORS_GRID_TRICKS : public GRID_TRICKS
+{
+public:
+    CURSORS_GRID_TRICKS( SIM_PLOT_FRAME* aParent, WX_GRID* aGrid ) :
+            GRID_TRICKS( aGrid ),
+            m_parent( aParent )
+    {}
+
+protected:
+    void showPopupMenu( wxMenu& menu, wxGridEvent& aEvent ) override;
+    void doPopupSelection( wxCommandEvent& event ) override;
+
+protected:
+    SIM_PLOT_FRAME* m_parent;
+    int             m_menuRow;
+    int             m_menuCol;
+};
+
+
+void CURSORS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
+{
+    m_menuRow = aEvent.GetRow();
+    m_menuCol = aEvent.GetCol();
+
+    if( m_menuCol == COL_CURSOR_X || m_menuCol == COL_CURSOR_Y )
+    {
+        wxString msg = m_grid->GetColLabelValue( m_menuCol );
+
+        menu.Append( MYID_FORMAT_VALUE, wxString::Format( _( "Format..." ), msg ),
+                     wxString::Format( _( "Specify %s precision and range" ), msg.Lower() ) );
+        menu.AppendSeparator();
+    }
+
+    GRID_TRICKS::showPopupMenu( menu, aEvent );
+}
+
+
+void CURSORS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
+{
+    if( event.GetId() == MYID_FORMAT_VALUE )
+    {
+        int      cursorId = m_menuRow;
+        int      cursorAxis = m_menuCol - COL_CURSOR_X;
+        int      precision = m_parent->GetCursorPrecision( cursorId, cursorAxis );
+        wxString range = m_parent->GetCursorRange( cursorId, cursorAxis );
+
+        DIALOG_SIM_FORMAT_VALUE formatDialog( m_parent, &precision, &range );
+
+        if( formatDialog.ShowModal() == wxID_OK )
+        {
+            m_parent->SetCursorPrecision( cursorId, cursorAxis, precision );
+            m_parent->SetCursorRange( cursorId, cursorAxis, range );
+        }
+    }
+    else
+    {
+        GRID_TRICKS::doPopupSelection( event );
+    }
+}
+
+
 SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         SIM_PLOT_FRAME_BASE( aParent ),
         m_lastSimPlot( nullptr ),
@@ -180,7 +247,15 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     attr->SetReadOnly();
     m_cursorsGrid->SetColAttr( COL_CURSOR_Y, attr );
 
-    m_cursorsGrid->PushEventHandler( new GRID_TRICKS( m_cursorsGrid ) );
+    m_cursorsGrid->PushEventHandler( new CURSORS_GRID_TRICKS( this, m_cursorsGrid ) );
+
+    for( int cursorId = 0; cursorId < 3; ++cursorId )
+    {
+        m_cursorPrecision[ cursorId ][ 0 ] = 3;
+        m_cursorRange[ cursorId ][ 0 ] = wxS( "~s" );
+        m_cursorPrecision[ cursorId ][ 1 ] = 3;
+        m_cursorRange[ cursorId ][ 1 ] = wxS( "~V" );
+    }
 
     // Prepare the color list to plot traces
     SIM_PLOT_COLORS::FillDefaultColorList( m_darkMode );
@@ -438,6 +513,9 @@ void SIM_PLOT_FRAME::rebuildSignalsGrid( wxString aFilter )
 {
     m_signalsGrid->ClearRows();
 
+    if( !GetCurrentPlot() )
+        return;
+
     if( aFilter.IsEmpty() )
         aFilter = wxS( "*" );
 
@@ -567,6 +645,8 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
         unconnected.Replace( '(', '_' );    // Convert to SPICE markup
         m_signals.clear();
 
+        auto simType = m_circuitModel->GetSimType();
+
         // Add voltages
         for( const std::string& net : m_circuitModel->GetNets() )
         {
@@ -574,10 +654,18 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
             wxString netname = UnescapeString( net );
 
             if( netname != "GND" && netname != "0" && !netname.StartsWith( unconnected ) )
-                m_signals.push_back( wxString::Format( "V(%s)", netname ) );
+            {
+                if( simType == ST_AC )
+                {
+                    m_signals.push_back( wxString::Format( _( "V(%s) (gain)" ), netname ) );
+                    m_signals.push_back( wxString::Format( _( "V(%s) (phase)" ), netname ) );
+                }
+                else
+                {
+                    m_signals.push_back( wxString::Format( "V(%s)", netname ) );
+                }
+            }
         }
-
-        auto simType = m_circuitModel->GetSimType();
 
         // Add currents
         if( simType == ST_TRANSIENT || simType == ST_DC )
@@ -666,15 +754,33 @@ void SIM_PLOT_FRAME::onSignalsGridCellChanged( wxGridEvent& aEvent )
         if( text == wxS( "1" ) )
         {
             wxString signalName = m_signalsGrid->GetCellValue( row, COL_SIGNAL_NAME );
+            wxString baseSignal = signalName;
 
             if( !signalName.IsEmpty() )
             {
+                wxString  gainSuffix = _( " (gain)" );
+                wxString  phaseSuffix = _( " (phase)" );
                 wxUniChar firstChar = signalName[0];
+                int       traceType = SPT_UNKNOWN;
 
                 if( firstChar == 'V' || firstChar == 'v' )
-                    addTrace( signalName, SPT_VOLTAGE );
+                    traceType = SPT_VOLTAGE;
                 else if( firstChar == 'I' || firstChar == 'i' )
-                    addTrace( signalName, SPT_CURRENT );
+                    traceType = SPT_CURRENT;
+
+                if( signalName.EndsWith( gainSuffix ) )
+                {
+                    traceType |= SPT_AC_MAG;
+                    baseSignal = signalName.Left( signalName.Length() - gainSuffix.Length() );
+                }
+                else if( signalName.EndsWith( phaseSuffix ) )
+                {
+                    traceType |= SPT_AC_PHASE;
+                    baseSignal = signalName.Left( signalName.Length() - phaseSuffix.Length() );
+                }
+
+                if( traceType != SPT_UNKNOWN )
+                    addTrace( baseSignal, (SIM_TRACE_TYPE) traceType );
             }
 
             if( !GetCurrentPlot()->GetTrace( signalName ) )
@@ -955,7 +1061,7 @@ bool SIM_PLOT_FRAME::updateTrace( const wxString& aName, SIM_TRACE_TYPE aType,
     wxString traceTitle = aName;
 
     if( aType & SPT_AC_MAG )
-        traceTitle += _( " (mag)" );
+        traceTitle += _( " (gain)" );
     else if( aType & SPT_AC_PHASE )
         traceTitle += _( " (phase)" );
 
@@ -1605,17 +1711,6 @@ void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
     else
         m_cursorsGrid->SetColLabelValue( COL_CURSOR_Y, labelY1 + wxT( " / " ) + labelY2 );
 
-    auto getUnitsY =
-            [&]( TRACE* aTrace ) -> wxString
-            {
-                if( aTrace->GetType() == SPT_VOLTAGE )
-                    return wxS( "V" );
-                else if( aTrace->GetType() == SPT_CURRENT )
-                    return wxS( "A" );
-                else
-                    return wxEmptyString;
-            };
-
     // Update cursor values
     wxString unitsX = plotPanel->GetUnitsX();
     CURSOR*  cursor1 = nullptr;
@@ -1623,7 +1718,32 @@ void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
     CURSOR*  cursor2 = nullptr;
     wxString unitsY2;
 
-#define SET_CELL( r, c, v ) m_cursorsGrid->SetCellValue( r, c, v )
+    auto getUnitsY =
+            [&]( TRACE* aTrace ) -> wxString
+            {
+                if( ( aTrace->GetType() & SPT_AC_PHASE ) || ( aTrace->GetType() & SPT_CURRENT ) )
+                    return plotPanel->GetUnitsY2();
+                else
+                    return plotPanel->GetUnitsY1();
+            };
+
+    auto updateRangeUnits =
+            []( wxString* aRange, const wxString& aUnits )
+            {
+                if( aRange->GetChar( 0 ) == '~' )
+                    *aRange = aRange->Left( 1 ) + aUnits;
+                else if( SPICE_VALUE::ParseSIPrefix( aRange->GetChar( 0 ) ) != SPICE_VALUE::PFX_NONE )
+                    *aRange = aRange->Left( 1 ) + aUnits;
+                else
+                    *aRange = aUnits;
+            };
+
+    auto formatValue =
+            [this]( double aValue, int aCursorId, int aCol ) -> wxString
+            {
+                return SPICE_VALUE( aValue ).ToString( m_cursorPrecision[ aCursorId ][ aCol ],
+                                                       m_cursorRange[ aCursorId ][ aCol ] );
+            };
 
     for( const auto& [name, trace] : plotPanel->GetTraces() )
     {
@@ -1635,12 +1755,14 @@ void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
             wxRealPoint coords = cursor->GetCoords();
             int         row = m_cursorsGrid->GetNumberRows();
 
-            m_cursorsGrid->AppendRows( 1 );
-            SET_CELL( row, COL_CURSOR_NAME, wxS( "1" ) );
-            SET_CELL( row, COL_CURSOR_SIGNAL, cursor->GetName() );
-            SET_CELL( row, COL_CURSOR_X, SPICE_VALUE( coords.x ).ToSpiceString() + unitsX );
-            SET_CELL( row, COL_CURSOR_Y, SPICE_VALUE( coords.y ).ToSpiceString() + unitsY1 );
+            updateRangeUnits( &m_cursorRange[0][0], unitsX );
+            updateRangeUnits( &m_cursorRange[0][1], unitsY1 );
 
+            m_cursorsGrid->AppendRows( 1 );
+            m_cursorsGrid->SetCellValue( row, COL_CURSOR_NAME, wxS( "1" ) );
+            m_cursorsGrid->SetCellValue( row, COL_CURSOR_SIGNAL, cursor->GetName() );
+            m_cursorsGrid->SetCellValue( row, COL_CURSOR_X, formatValue( coords.x, 0, 0 ) );
+            m_cursorsGrid->SetCellValue( row, COL_CURSOR_Y, formatValue( coords.y, 0, 1 ) );
             break;
         }
     }
@@ -1655,38 +1777,37 @@ void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
             wxRealPoint coords = cursor->GetCoords();
             int         row = m_cursorsGrid->GetNumberRows();
 
-            m_cursorsGrid->AppendRows( 1 );
-            SET_CELL( row, COL_CURSOR_NAME, wxS( "2" ) );
-            SET_CELL( row, COL_CURSOR_SIGNAL, cursor->GetName() );
-            SET_CELL( row, COL_CURSOR_X, SPICE_VALUE( coords.x ).ToSpiceString() + unitsX );
-            SET_CELL( row, COL_CURSOR_Y, SPICE_VALUE( coords.y ).ToSpiceString() + unitsY2 );
+            updateRangeUnits( &m_cursorRange[1][0], unitsX );
+            updateRangeUnits( &m_cursorRange[1][1], unitsY2 );
 
+            m_cursorsGrid->AppendRows( 1 );
+            m_cursorsGrid->SetCellValue( row, COL_CURSOR_NAME, wxS( "2" ) );
+            m_cursorsGrid->SetCellValue( row, COL_CURSOR_SIGNAL, cursor->GetName() );
+            m_cursorsGrid->SetCellValue( row, COL_CURSOR_X, formatValue( coords.x, 1, 0 ) );
+            m_cursorsGrid->SetCellValue( row, COL_CURSOR_Y, formatValue( coords.y, 1, 1 ) );
             break;
         }
     }
 
     if( cursor1 && cursor2 && unitsY1 == unitsY2 )
     {
-        const wxRealPoint coords = cursor2->GetCoords() - cursor1->GetCoords();
+        wxRealPoint coords = cursor2->GetCoords() - cursor1->GetCoords();
+        wxString    signal;
+
+        updateRangeUnits( &m_cursorRange[2][0], unitsX );
+        updateRangeUnits( &m_cursorRange[2][1], unitsY1 );
+
+        if( cursor1->GetName() == cursor2->GetName() )
+            signal = wxString::Format( wxS( "%s[2 - 1]" ), cursor2->GetName() );
+        else
+            signal = wxString::Format( wxS( "%s - %s" ), cursor2->GetName(), cursor1->GetName() );
 
         m_cursorsGrid->AppendRows( 1 );
-        SET_CELL( 2, COL_CURSOR_NAME, _( "Diff" ) );
-        if( cursor1->GetName() == cursor2->GetName() )
-        {
-            SET_CELL( 2, COL_CURSOR_SIGNAL, wxString::Format( wxS( "%s[2 - 1]" ),
-                                                              cursor2->GetName() ) );
-        }
-        else
-        {
-            SET_CELL( 2, COL_CURSOR_SIGNAL, wxString::Format( wxS( "%s - %s" ),
-                                                              cursor2->GetName(),
-                                                              cursor1->GetName() ) );
-        }
-        SET_CELL( 2, COL_CURSOR_X, SPICE_VALUE( coords.x ).ToSpiceString() + unitsX );
-        SET_CELL( 2, COL_CURSOR_Y, SPICE_VALUE( coords.y ).ToSpiceString() + unitsY1 );
+        m_cursorsGrid->SetCellValue( 2, COL_CURSOR_NAME, _( "Diff" ) );
+        m_cursorsGrid->SetCellValue( 2, COL_CURSOR_SIGNAL, signal );
+        m_cursorsGrid->SetCellValue( 2, COL_CURSOR_X, formatValue( coords.x, 2, 0 ) );
+        m_cursorsGrid->SetCellValue( 2, COL_CURSOR_Y, formatValue( coords.y, 2, 1 ) );
     }
-
-#undef SET_CELL
 }
 
 
@@ -1847,6 +1968,9 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
     }
     else if( simType == ST_OP )
     {
+        SCHEMATIC& schematic = m_schematicFrame->Schematic();
+        schematic.ClearOperatingPoints();
+
         m_simConsole->AppendText( _( "\n\nSimulation results:\n\n" ) );
         m_simConsole->SetInsertionPointEnd();
 
@@ -1857,23 +1981,28 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
             if( val_list.size() == 0 )      // The list of values can be empty!
                 continue;
 
-            double         val = val_list.at( 0 );
-            wxString       outLine, signal;
+            wxString       value = SPICE_VALUE( val_list.at( 0 ) ).ToSpiceString();
+            wxString       msg;
+            wxString       signal;
             SIM_TRACE_TYPE type = m_circuitModel->VectorToSignal( vec, signal );
 
             const size_t   tab = 25; //characters
             size_t         padding = ( signal.length() < tab ) ? ( tab - signal.length() ) : 1;
 
-            outLine.Printf( wxT( "%s%s" ),
-                            ( signal + wxT( ":" ) ).Pad( padding, wxUniChar( ' ' ) ),
-                            SPICE_VALUE( val ).ToSpiceString() );
+            value.Append( type == SPT_CURRENT ? wxS( "A" ) : wxS( "V" ) );
 
-            outLine.Append( type == SPT_CURRENT ? wxT( "A\n" ) : wxT( "V\n" ) );
+            msg.Printf( wxT( "%s%s\n" ),
+                        ( signal + wxT( ":" ) ).Pad( padding, wxUniChar( ' ' ) ),
+                        value );
 
-            m_simConsole->AppendText( outLine );
+            m_simConsole->AppendText( msg );
             m_simConsole->SetInsertionPointEnd();
 
-            // @todo display calculated values on the schematic
+            if( signal.StartsWith( wxS( "V(" ) ) || signal.StartsWith( wxS( "I(" ) ) )
+                signal = signal.SubString( 2, signal.Length() - 2 );
+
+            schematic.SetOperatingPoint( signal, val_list.at( 0 ) );
+            m_schematicFrame->RefreshOperatingPointDisplay();
         }
     }
 

@@ -427,6 +427,28 @@ wxString SIM_PLOT_PANEL::GetUnitsX() const
 }
 
 
+wxString SIM_PLOT_PANEL::GetUnitsY1() const
+{
+    LIN_SCALE<mpScaleY>* linScale = dynamic_cast<LIN_SCALE<mpScaleY>*>( m_axis_y1 );
+
+    if( linScale )
+        return linScale->GetUnits();
+    else
+        return wxEmptyString;
+}
+
+
+wxString SIM_PLOT_PANEL::GetUnitsY2() const
+{
+    LIN_SCALE<mpScaleY>* linScale = dynamic_cast<LIN_SCALE<mpScaleY>*>( m_axis_y2 );
+
+    if( linScale )
+        return linScale->GetUnits();
+    else
+        return wxEmptyString;
+}
+
+
 void SIM_PLOT_PANEL::updateAxes()
 {
     bool skipAddToView = false;

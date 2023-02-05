@@ -107,7 +107,7 @@ protected:
     void onGridMotion( wxMouseEvent& event );
 
     virtual bool handleDoubleClick( wxGridEvent& aEvent );
-    virtual void showPopupMenu( wxMenu& menu );
+    virtual void showPopupMenu( wxMenu& menu, wxGridEvent& aEvent );
     virtual void doPopupSelection( wxCommandEvent& event );
 
     bool toggleCell( int aRow, int aCol, bool aPreserveSelection = false );

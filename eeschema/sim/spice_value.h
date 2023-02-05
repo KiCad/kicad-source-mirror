@@ -83,6 +83,13 @@ public:
     wxString ToString() const;
 
     /**
+     * Return string value with a particular precision and range.
+     * @param aPrecision number of significant digits
+     * @param aRange "~" + unit for autorage; otherwise SI prefix + unit
+     */
+    wxString ToString( int aPrecision, const wxString& aRange );
+
+    /**
      * Return string value in Spice format (e.g. 123.3456789k).
      */
     wxString ToSpiceString() const;
@@ -136,6 +143,8 @@ public:
 
     ///< Remove redundant zeros from the end of a string.
     static void StripZeros( wxString& aString );
+
+    static UNIT_PREFIX ParseSIPrefix( wxChar c );
 
 private:
     double      m_base;

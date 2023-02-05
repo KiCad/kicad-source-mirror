@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2016 Wayne Stambaugh, stambaughw@gmail.com
- * Copyright (C) 2004-2022 KiCad Developers, see AITHORS.txt for contributors.
+ * Copyright (C) 2004-2023 KiCad Developers, see AITHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,6 +35,7 @@
 #include <sch_edit_frame.h>
 #include <ee_collectors.h>
 #include <sch_symbol.h>
+#include <sch_label.h>
 #include <lib_field.h>
 #include <template_fieldnames.h>
 #include <symbol_library.h>
@@ -44,6 +45,8 @@
 #include <sch_text.h>
 #include <scintilla_tricks.h>
 #include <wildcards_and_files_ext.h>
+#include <sim/sim_model.h>
+#include <sim/sim_lib_mgr.h>
 
 
 DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const wxString& aTitle,
@@ -584,32 +587,52 @@ void DIALOG_SCH_FIELD_PROPERTIES::onScintillaCharAdded( wxStyledTextEvent &aEven
         {
             partial = m_StyledTextCtrl->GetRange( start, pos );
 
-            wxString           ref = m_StyledTextCtrl->GetRange( refStart, start - 1 );
-            SCH_SHEET_LIST     sheets = editFrame->Schematic().GetSheets();
-            SCH_REFERENCE_LIST refs;
-            SCH_SYMBOL*        refSymbol = nullptr;
+            wxString ref = m_StyledTextCtrl->GetRange( refStart, start - 1 );
 
-            sheets.GetSymbols( refs );
-
-            for( size_t jj = 0; jj < refs.GetCount(); jj++ )
+            if( ref == wxS( "OP" ) )
             {
-                if( refs[ jj ].GetSymbol()->GetRef( &refs[ jj ].GetSheetPath(), true ) == ref )
+                // SPICE operating points use ':' syntax for ports
+                SCH_SYMBOL*     symbol = dynamic_cast<SCH_SYMBOL*>( m_field->GetParent() );
+                SCH_SHEET_PATH& sheet = editFrame->Schematic().CurrentSheet();
+
+                if( symbol )
                 {
-                    refSymbol = refs[ jj ].GetSymbol();
-                    break;
+                    SIM_LIB_MGR mgr( &Prj() );
+                    SIM_MODEL&  model = mgr.CreateModel( &sheet, *symbol ).model;
+
+                    for( const std::string& pin : model.GetPinNames() )
+                        autocompleteTokens.push_back( pin );
                 }
             }
+            else
+            {
+                SCH_SHEET_LIST     sheets = editFrame->Schematic().GetSheets();
+                SCH_REFERENCE_LIST refs;
+                SCH_SYMBOL*        refSymbol = nullptr;
 
-            if( refSymbol )
-                refSymbol->GetContextualTextVars( &autocompleteTokens );
+                sheets.GetSymbols( refs );
+
+                for( size_t jj = 0; jj < refs.GetCount(); jj++ )
+                {
+                    if( refs[ jj ].GetSymbol()->GetRef( &refs[ jj ].GetSheetPath(), true ) == ref )
+                    {
+                        refSymbol = refs[ jj ].GetSymbol();
+                        break;
+                    }
+                }
+
+                if( refSymbol )
+                    refSymbol->GetContextualTextVars( &autocompleteTokens );
+            }
         }
     }
     else if( textVarRef( start ) )
     {
         partial = m_StyledTextCtrl->GetTextRange( start, pos );
 
-        SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( m_field->GetParent() );
-        SCH_SHEET*  sheet = dynamic_cast<SCH_SHEET*>( m_field->GetParent() );
+        SCH_SYMBOL*     symbol = dynamic_cast<SCH_SYMBOL*>( m_field->GetParent() );
+        SCH_SHEET*      sheet = dynamic_cast<SCH_SHEET*>( m_field->GetParent() );
+        SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( m_field->GetParent() );
 
         if( symbol )
         {
@@ -623,6 +646,9 @@ void DIALOG_SCH_FIELD_PROPERTIES::onScintillaCharAdded( wxStyledTextEvent &aEven
 
         if( sheet )
             sheet->GetContextualTextVars( &autocompleteTokens );
+
+        if( label )
+            label->GetContextualTextVars( &autocompleteTokens );
 
         for( std::pair<wxString, wxString> entry : Prj().GetTextVars() )
             autocompleteTokens.push_back( entry.first );

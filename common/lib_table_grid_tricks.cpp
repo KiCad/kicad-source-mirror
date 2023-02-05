@@ -24,7 +24,7 @@ LIB_TABLE_GRID_TRICKS::LIB_TABLE_GRID_TRICKS( WX_GRID* aGrid ) : GRID_TRICKS( aG
 {
 }
 
-void LIB_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& menu )
+void LIB_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 {
     bool            showActivate = false;
     bool            showDeactivate = false;
@@ -33,13 +33,9 @@ void LIB_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& menu )
     for( int row = m_sel_row_start; row < m_sel_row_start + m_sel_row_count; ++row )
     {
         if( tbl->GetValueAsBool( row, 0 ) )
-        {
             showDeactivate = true;
-        }
         else
-        {
             showActivate = true;
-        }
 
         if( showActivate && showDeactivate )
             break;
@@ -47,24 +43,25 @@ void LIB_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& menu )
 
     if( showActivate )
         menu.Append( LIB_TABLE_GRID_TRICKS_ACTIVATE_SELECTED, _( "Activate selected" ) );
+
     if( showDeactivate )
         menu.Append( LIB_TABLE_GRID_TRICKS_DEACTIVATE_SELECTED, _( "Deactivate selected" ) );
+
     menu.AppendSeparator();
-    GRID_TRICKS::showPopupMenu( menu );
+    GRID_TRICKS::showPopupMenu( menu, aEvent );
 }
 
 void LIB_TABLE_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
 {
     int menu_id = event.GetId();
+
     if( menu_id == LIB_TABLE_GRID_TRICKS_ACTIVATE_SELECTED
         || menu_id == LIB_TABLE_GRID_TRICKS_DEACTIVATE_SELECTED )
     {
         LIB_TABLE_GRID* tbl = (LIB_TABLE_GRID*) m_grid->GetTable();
 
         for( int row = m_sel_row_start; row < m_sel_row_start + m_sel_row_count; ++row )
-        {
             tbl->SetValueAsBool( row, 0, menu_id == LIB_TABLE_GRID_TRICKS_ACTIVATE_SELECTED );
-        }
     }
     else
     {

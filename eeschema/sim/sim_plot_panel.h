@@ -220,6 +220,8 @@ public:
     }
 
     wxString GetUnitsX() const;
+    wxString GetUnitsY1() const;
+    wxString GetUnitsY2() const;
 
     bool TraceShown( const wxString& aName ) const
     {

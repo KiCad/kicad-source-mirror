@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -126,6 +126,16 @@ public:
      */
     void GetIntersheetRefs( std::vector<std::pair<wxString, wxString>>* pages );
 
+    /**
+     * Return the list of system text vars & fields for this label.
+     */
+    void GetContextualTextVars( wxArrayString* aVars ) const;
+
+    /**
+     * Resolve any references to system tokens supported by the label.
+     *
+     * @param aDepth a counter to limit recursion and circular references.
+     */
     virtual bool ResolveTextVar( wxString* token, int aDepth ) const;
 
     wxString GetShownText( int aDepth = 0, bool aAllowExtraText = true ) const override;

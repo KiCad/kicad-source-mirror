@@ -205,6 +205,24 @@ public:
     void RecomputeIntersheetRefs( const std::function<void( SCH_GLOBALLABEL* )>& aItemCallback );
 
     /**
+     * Clear operating points from a .op simulation.
+     */
+    void ClearOperatingPoints()
+    {
+        m_operatingPoints.clear();
+    }
+
+    /**
+     * Set operating points from a .op simulation.  Called after the simulation completes.
+     */
+    void SetOperatingPoint( const wxString& aSignal, double aValue )
+    {
+        m_operatingPoints[ aSignal ] = aValue;
+    }
+
+    wxString GetOperatingPoint( const wxString& aNetName, int aPrecision, const wxString& aRange );
+
+    /**
      * Add junctions to this schematic where required. This function is needed for some plugins
      * (e.g. Legacy and Cadstar) in order to retain connectivity after loading.
      */
@@ -243,6 +261,11 @@ private:
      * Properties for text variable substitution (and perhaps other uses in future).
      */
     std::map<wxString, wxString>      m_properties;
+
+    /**
+     * Simulation operating points for text variable substitution.
+     */
+    std::map<wxString, double>        m_operatingPoints;
 };
 
 #endif

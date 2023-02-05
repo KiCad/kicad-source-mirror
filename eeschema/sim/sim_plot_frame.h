@@ -95,6 +95,41 @@ public:
     void AddCurrentPlot( const wxString& aDeviceName );
 
     /**
+     * Get/Set the number of decimal places to show in a cursor value.
+     * @param aValueCol 0 indicates the X value column; 1 the Y value.
+     */
+    int GetCursorPrecision( int aCursorId, int aValueCol ) const
+    {
+        return m_cursorPrecision[ aCursorId ][ aValueCol ];
+    }
+
+    void SetCursorPrecision( int aCursorId, int aValueCol, int aPrecision )
+    {
+        m_cursorPrecision[ aCursorId ][ aValueCol ] = aPrecision;
+
+        wxCommandEvent dummy;
+        onCursorUpdate( dummy );
+    }
+
+    /**
+     * Get/Set the range of a cursor value.
+     * @param aValueCol 0 indicates the X value column; 1 the Y value.
+     * @param aScale "~" + unit indicates automatic; the rest are SI prefix + unit.
+     */
+    wxString GetCursorRange( int aCursorId, int aValueCol ) const
+    {
+        return m_cursorRange[ aCursorId ][ aValueCol ];
+    }
+
+    void SetCursorRange( int aCursorId, int aValueCol, const wxString& aRange )
+    {
+        m_cursorRange[ aCursorId ][ aValueCol ] = aRange;
+
+        wxCommandEvent dummy;
+        onCursorUpdate( dummy );
+    }
+
+    /**
      * Add a tuner for a symbol.
      */
     void AddTuner( const SCH_SHEET_PATH& aSheetPath, SCH_SYMBOL* aSymbol );
@@ -313,6 +348,9 @@ private:
     bool          m_darkMode;
     unsigned int  m_plotNumber;
     bool          m_simFinished;
+
+    int           m_cursorPrecision[3][2];
+    wxString      m_cursorRange[3][2];
 };
 
 // Commands

@@ -347,6 +347,8 @@ if( KICAD_SPICE )
         ${EESCHEMA_SRCS}
         dialogs/dialog_sim_command.cpp
         dialogs/dialog_sim_command_base.cpp
+        dialogs/dialog_sim_format_value.cpp
+        dialogs/dialog_sim_format_value_base.cpp
         dialogs/dialog_sim_model.cpp
         dialogs/dialog_sim_model_base.cpp
         tools/simulator_control.cpp

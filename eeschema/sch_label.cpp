@@ -479,10 +479,49 @@ void SCH_LABEL_BASE::GetIntersheetRefs( std::vector<std::pair<wxString, wxString
 }
 
 
+void SCH_LABEL_BASE::GetContextualTextVars( wxArrayString* aVars ) const
+{
+    for( const SCH_FIELD& field : m_fields )
+        aVars->push_back( field.GetCanonicalName().Upper() );
+
+    aVars->push_back( wxT( "OP" ) );
+    aVars->push_back( wxT( "CONNECTION_TYPE" ) );
+    aVars->push_back( wxT( "SHORT_NET_NAME" ) );
+    aVars->push_back( wxT( "NET_NAME" ) );
+    aVars->push_back( wxT( "NET_CLASS" ) );
+}
+
+
 bool SCH_LABEL_BASE::ResolveTextVar( wxString* token, int aDepth ) const
 {
+    static wxRegEx operatingPoint( wxT( "^"
+                                        "OP"
+                                        "(.([0-9])?([a-zA-Z]*))?"
+                                        "$" ) );
+
     if( !Schematic() )
         return false;
+
+    if( operatingPoint.Matches( *token ) )
+    {
+        int      precision = 3;
+        wxString precisionStr( operatingPoint.GetMatch( *token, 2 ) );
+        wxString range( operatingPoint.GetMatch( *token, 3 ) );
+
+        if( !precisionStr.IsEmpty() )
+            precision = precisionStr[0] - '0';
+
+        if( range.IsEmpty() )
+            range = wxS( "~V" );
+
+        const SCH_CONNECTION* connection = Connection();
+        *token = wxS( "?" );
+
+        if( connection )
+            *token = Schematic()->GetOperatingPoint( connection->Name( false ), precision, range );
+
+        return true;
+    }
 
     if( token->Contains( ':' ) )
     {
@@ -528,11 +567,11 @@ bool SCH_LABEL_BASE::ResolveTextVar( wxString* token, int aDepth ) const
         return true;
     }
 
-    for( size_t i = 0; i < m_fields.size(); ++i )
+    for( const SCH_FIELD& field : m_fields)
     {
-        if( token->IsSameAs( m_fields[i].GetName() ) )
+        if( token->IsSameAs( field.GetName() ) )
         {
-            *token = m_fields[i].GetShownText( aDepth + 1 );
+            *token = field.GetShownText( aDepth + 1 );
             return true;
         }
     }

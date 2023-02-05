@@ -23,6 +23,7 @@
  */
 
 #include "spice_value.h"
+#include "math/util.h"
 
 #include <stdexcept>
 #include <cmath>
@@ -33,6 +34,7 @@
 #include <common.h>
 #include <ki_exception.h>
 #include <locale_io.h>
+
 
 SPICE_VALUE::SPICE_VALUE( const wxString& aString )
 {
@@ -107,20 +109,56 @@ void SPICE_VALUE::Normalize()
 }
 
 
-wxString prefix( SPICE_VALUE::UNIT_PREFIX aPrefix )
+wxString spice_prefix( SPICE_VALUE::UNIT_PREFIX aPrefix )
 {
     switch( aPrefix )
     {
-        case SPICE_VALUE::PFX_FEMTO: return wxT( "f" );
-        case SPICE_VALUE::PFX_PICO:  return wxT( "p" );
-        case SPICE_VALUE::PFX_NANO:  return wxT( "n" );
-        case SPICE_VALUE::PFX_MICRO: return wxT( "u" );
-        case SPICE_VALUE::PFX_MILI:  return wxT( "m" );
-        case SPICE_VALUE::PFX_NONE:  return wxEmptyString;
-        case SPICE_VALUE::PFX_KILO:  return wxT( "k" );
-        case SPICE_VALUE::PFX_MEGA:  return wxT( "Meg" );
-        case SPICE_VALUE::PFX_GIGA:  return wxT( "G" );
-        case SPICE_VALUE::PFX_TERA:  return wxT( "T" );
+    case SPICE_VALUE::PFX_FEMTO: return wxT( "f" );
+    case SPICE_VALUE::PFX_PICO:  return wxT( "p" );
+    case SPICE_VALUE::PFX_NANO:  return wxT( "n" );
+    case SPICE_VALUE::PFX_MICRO: return wxT( "u" );
+    case SPICE_VALUE::PFX_MILI:  return wxT( "m" );
+    case SPICE_VALUE::PFX_NONE:  return wxEmptyString;
+    case SPICE_VALUE::PFX_KILO:  return wxT( "k" );
+    case SPICE_VALUE::PFX_MEGA:  return wxT( "Meg" );
+    case SPICE_VALUE::PFX_GIGA:  return wxT( "G" );
+    case SPICE_VALUE::PFX_TERA:  return wxT( "T" );
+    }
+}
+
+
+wxString si_prefix( SPICE_VALUE::UNIT_PREFIX aPrefix )
+{
+    switch( aPrefix )
+    {
+    case SPICE_VALUE::PFX_FEMTO: return wxT( "f" );
+    case SPICE_VALUE::PFX_PICO:  return wxT( "p" );
+    case SPICE_VALUE::PFX_NANO:  return wxT( "n" );
+    case SPICE_VALUE::PFX_MICRO: return wxT( "u" );
+    case SPICE_VALUE::PFX_MILI:  return wxT( "m" );
+    case SPICE_VALUE::PFX_NONE:  return wxEmptyString;
+    case SPICE_VALUE::PFX_KILO:  return wxT( "K" );
+    case SPICE_VALUE::PFX_MEGA:  return wxT( "M" );
+    case SPICE_VALUE::PFX_GIGA:  return wxT( "G" );
+    case SPICE_VALUE::PFX_TERA:  return wxT( "T" );
+    }
+}
+
+
+SPICE_VALUE::UNIT_PREFIX SPICE_VALUE::ParseSIPrefix( wxChar c )
+{
+    switch( c )
+    {
+    case 'f': return SPICE_VALUE::PFX_FEMTO;
+    case 'p': return SPICE_VALUE::PFX_PICO;
+    case 'n': return SPICE_VALUE::PFX_NANO;
+    case 'u': return SPICE_VALUE::PFX_MICRO;
+    case 'm': return SPICE_VALUE::PFX_MILI;
+    case 'K': return SPICE_VALUE::PFX_KILO;
+    case 'M': return SPICE_VALUE::PFX_MEGA;
+    case 'G': return SPICE_VALUE::PFX_GIGA;
+    case 'T': return SPICE_VALUE::PFX_TERA;
+    default:  return SPICE_VALUE::PFX_NONE;
     }
 }
 
@@ -129,7 +167,7 @@ double SPICE_VALUE::ToNormalizedDouble( wxString* aPrefix )
 {
     Normalize();
 
-    *aPrefix = prefix( m_prefix );
+    *aPrefix = spice_prefix( m_prefix );
     return m_base;
 }
 
@@ -153,11 +191,52 @@ wxString SPICE_VALUE::ToString() const
 }
 
 
+wxString SPICE_VALUE::ToString( int aPrecision, const wxString& aRange )
+{
+    wxString range( aRange );
+
+    if( range.StartsWith( wxS( "~" ) ) )
+    {
+        Normalize();
+        range = si_prefix( m_prefix ) + range.Right( range.Length() - 1 );
+    }
+    else
+    {
+        SPICE_VALUE::UNIT_PREFIX rangePrefix = ParseSIPrefix( aRange[0] );
+        m_base = m_base * std::pow( 10, m_prefix - rangePrefix );
+        m_prefix = rangePrefix;
+    }
+
+    double mantissa = m_base;
+    int    scale = 0;
+
+    while( std::fabs( mantissa ) >= 10.0 )
+    {
+        mantissa *= 0.1;
+        scale += 1;
+    }
+
+    while( mantissa != 0.0 && std::fabs( mantissa ) < 1.0 )
+    {
+        mantissa *= 10;
+        scale -= 1;
+    }
+
+    mantissa = KiROUND( mantissa * std::pow( 10, aPrecision - 1 ) );
+    mantissa *= std::pow( 10, scale - aPrecision + 1 );
+
+    wxString res = wxString::FromCDouble( mantissa );
+    StripZeros( res );
+
+    return res + range;
+}
+
+
 wxString SPICE_VALUE::ToSpiceString() const
 {
     wxString res = wxString::FromCDouble( m_base );
     StripZeros( res );
-    res += prefix( m_prefix );
+    res += spice_prefix( m_prefix );
 
     return res;
 }
