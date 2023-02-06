@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-01 14:03-0800\n"
-"PO-Revision-Date: 2023-02-06 07:25+0000\n"
-"Last-Translator: Michael Misirlis <MMISIRLIS@gmail.com>\n"
+"PO-Revision-Date: 2023-02-06 21:07+0000\n"
+"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -90,7 +90,7 @@ msgstr "Απλοποίηση %d επιπέδων χαλκού"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:835
 msgid "Simplify holes contours"
-msgstr "Απλοποίηση περιγραμμάτων τρυπών"
+msgstr "Απλοποίηση περιγραμμάτων οπών"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:864
 msgid "Build Tech layers"
@@ -102,8 +102,9 @@ msgid "Build Tech layer %d"
 msgstr "Κατασκευή Τεχνικού επιπέδου %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1063
+#, fuzzy
 msgid "Build BVH for holes and vias"
-msgstr "Κατασκευή BVH για τρύπες και διελεύσεις"
+msgstr "Κατασκευή Ιεραρχίας Ορίων Αντικειμένων για τρύπες και διελεύσεις"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:411
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
@@ -149,7 +150,7 @@ msgstr "Φόρτωση OpenGL: επίπεδα"
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:578
 #, c-format
 msgid "Load OpenGL layer %d"
-msgstr "Φόρτωση OpenGL επιπέδου %d"
+msgstr "Φόρτωση OpenGL επίπεδο %d"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:677
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:791
@@ -307,10 +308,10 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
-"Αποθηκεύστε και επαναφέρετε τον προσανατολισμό της προβολής και τη "
-"μεγέθυνση.\n"
+"Αποθηκεύστε και επαναφέρετε τον προσανατολισμό της προβολής και τη μεγέθυνση."
+"\n"
 "Χρησιμοποιήστε %s+Tab για να ενεργοποιήσετε τον επιλογέα.\n"
-"Διαδοχικά Tab με πατημένο το %s εναλλάσσουν από τα προκαθορισμένα στο "
+"Διαδοχικά Tabs με πατημένο το %s εναλλάσσουν από τα προκαθορισμένα στο "
 "αναδυόμενο παράθυρο."
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:83
@@ -508,15 +509,15 @@ msgstr "Πλέγμα 3Δ 1 mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:187
 msgid "Render Realistic Materials"
-msgstr "Διηλεκτρικά Υλικά"
+msgstr "Απόδοση Πραγματικών Υλικών"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:188
 msgid "Use all material properties from each 3D model file"
-msgstr "Χρήση όλων των ιδιοτήτων υλικών από κάθε αρχείο μοντέλων 3Δ"
+msgstr "Χρήση όλων των ιδιοτήτων υλικών από κάθε αρχείο μοντέλου 3Δ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:194
 msgid "Render Solid Colors"
-msgstr "Απόδοση Σκιών"
+msgstr "Απόδοση Συμπαγή Χρωμάτων"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:195
 msgid "Use only the diffuse color property from model 3D model file"
@@ -524,15 +525,15 @@ msgstr "Χρήση μόνο της ιδιότητας διάχυσης χρωμ�
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:201
 msgid "Render CAD Colors"
-msgstr "Καθορισμένα Χρώματα"
+msgstr "Απόδοση Χρωμάτων CAD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:202
 msgid "Use a CAD color style based on the diffuse color of the material"
-msgstr "Χρήση χρωμάτων τύπου CAD, βασισμένα στο χρώμα διάχυσης του υλικού"
+msgstr "Χρήση χρωμάτων CAD, βασισμένα στο χρώμα διάχυσης του υλικού"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:208
 msgid "Toggle Through Hole 3D models"
-msgstr "Εναλλαγή Προβολής 3Δ μοντέλων για διαμπερείς οπές"
+msgstr "Εναλλαγή Προβολής 3Δ μοντέλων με διαμπερείς οπές"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:209
 msgid "Toggle 3D models for 'Through hole' type components"
@@ -548,7 +549,7 @@ msgstr "Εναλλαγή 3Δ μοντέλων εξαρτήματα 'Surface moun
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
 msgid "Toggle unspecified 3D models"
-msgstr "Εναλλαγή απροσδιόριστων 3D μοντέλων"
+msgstr "Εναλλαγή απροσδιόριστων 3Δ μοντέλων"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
 msgid "Toggle 3D models for 'unspecified' type components"
@@ -556,7 +557,7 @@ msgstr "Εναλλαγή 3Δ μοντέλων στα 'απροσδιόριστα
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:228
 msgid "Toggle 3D models not in pos file"
-msgstr "Εναλλαγή 3Δ μοντέλων αφαιρεμένων από το αρχείο θέσης"
+msgstr "Εναλλαγή 3Δ μοντέλων που λείπουν από το αρχείο θέσης"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:233
 msgid "Show Model Bounding Boxes"
@@ -564,11 +565,11 @@ msgstr "Εμφάνιση Πλαίσιου Οριοθέτησης Μοντέλω�
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:238
 msgid "Toggle realistic mode"
-msgstr "Ρεαλιστική προβολή"
+msgstr "Εναλλαγή ρεαλιστικής προβολής"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:242
 msgid "Toggle board body display"
-msgstr "Προβολή σώματος πλακέτας"
+msgstr "Εναλλαγή προβολής σώματος πλακέτας"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:246
 msgid "Show 3D Axis"
@@ -576,51 +577,52 @@ msgstr "Εμφάνιση 3Δ Αξόνων"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:251
 msgid "Toggle zone display"
-msgstr "Αλλαγή προβολής ζωνών"
+msgstr "Εναλλαγή προβολής ζωνών"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:255
+#, fuzzy
 msgid "Toggle adhesive display"
-msgstr "Αλλαγή προβολής επικόλλησης"
+msgstr "Εναλλαγή προβολής επικόλλησης"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:255
 msgid "Toggle display of adhesive layers"
-msgstr "Αλλαγή προβολής επιπέδων επικόλλησης"
+msgstr "Εναλλαγή προβολής επιπέδων επικόλλησης"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:259
 msgid "Toggle silkscreen display"
-msgstr "Αλλαγή προβολής μεταξοτυπίας"
+msgstr "Εναλλαγή προβολής μεταξοτυπίας"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:259
 msgid "Toggle display of silkscreen layers"
-msgstr "Εμφάνιση επιπέδων μεταξοτυπίας"
+msgstr "Εναλλαγή εμφάνισης επιπέδων μεταξοτυπίας"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:263
 msgid "Toggle solder mask display"
-msgstr "Αλλαγή προβολής μάσκας κόλλησης"
+msgstr "Εναλλαγή προβολής μάσκας κόλλησης"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:263
 msgid "Toggle display of solder mask layers"
-msgstr "Αλλαγή προβολής επιπέδων μάσκας συγκόλλησης"
+msgstr "Εναλλαγή προβολής επιπέδων μάσκας συγκόλλησης"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:267
 msgid "Toggle solder paste display"
-msgstr "Προβολή επιπέδων πάστας κόλλησης"
+msgstr "Εναλλαγή προβολής επιπέδων πάστας κόλλησης"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:267
 msgid "Toggle display of solder paste layers"
-msgstr "Προβολή επιπέδων πάστας κόλλησης"
+msgstr "Εναλλαγή προβολής επιπέδων πάστας κόλλησης"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:271
 msgid "Toggle comments display"
-msgstr "Προβολή σχολίων"
+msgstr "Εναλλαγή προβολής σχολίων"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:271
 msgid "Toggle display of comments and drawings layers"
-msgstr "Προβολή επιπέδων σχολίων και σχεδίων"
+msgstr "Εναλλαγή προβολής επιπέδων σχολίων και σχεδίων"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:275
 msgid "Toggle ECO display"
-msgstr "Αλλαγή προβολής ECO"
+msgstr "Εναλλαγή προβολής ECO"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:275
 msgid "Toggle display of ECO layers"
@@ -642,7 +644,7 @@ msgstr "Ρύθμιση Διαδρομών"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.h:63
 msgid "Select 3D Model"
-msgstr "Επιλογή 3D Μοντέλου"
+msgstr "Επιλογή 3Δ Μοντέλου"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:19
 msgid "Environment Colors"
@@ -678,7 +680,7 @@ msgstr "Μεταξοτυπία πάνω:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:89
 msgid "Silkscreen bottom:"
-msgstr "Μεταξοτυπίας Κάτω:"
+msgstr "Μεταξοτυπία κάτω:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:102
 msgid "Solder mask top:"
@@ -690,7 +692,7 @@ msgstr "Κάτω μάσκα συγκόλλησης:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:122
 msgid "Copper/surface finish:"
-msgstr "Τελείωμα χαλκού:"
+msgstr "Τελείωμα επιφάνειας/χαλκού:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:135
 msgid "Board body:"
@@ -698,7 +700,7 @@ msgstr "Σώμα πλακέτας:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:23
 msgid "Board Layers"
-msgstr "Επίπεδα πλακέτας"
+msgstr "Επίπεδα Πλακέτας"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:35
 msgid "Show silkscreen layers"
@@ -710,7 +712,7 @@ msgstr "Ψαλίδισμα μεταξοτυπίας στις άκρες της �
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:41
 msgid "Clip silkscreen at via annuli"
-msgstr "Συγκράτιση μεταξοτυπίας στο δακτύλιο της διέλευσης"
+msgstr "Ψαλίδισμα μεταξοτυπίας στο δακτύλιο της διέλευσης"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:44
 msgid "Show solder mask layers"
@@ -726,7 +728,7 @@ msgstr "Εμφάνιση επιπέδων επικόλλησης"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:59
 msgid "User Layers (not shown in realistic mode)"
-msgstr "Στρώματα χρηστών (δεν εμφανίζονται σε ρεαλιστική λειτουργία)"
+msgstr "Επίπεδα Χρήστη (δεν εμφανίζονται σε ρεαλιστική λειτουργία)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:69
 msgid "Show comment and drawing layers"
@@ -764,7 +766,7 @@ msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:110
 msgid "Material properties:"
-msgstr "Ιδιοτήτες Υλικού:"
+msgstr "Ιδιοτήτες υλικού:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:114
 msgid "Realistic"
@@ -776,7 +778,7 @@ msgstr "Συμπαγή χρώματα"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:114
 msgid "CAD colors"
-msgstr "Χρώματα"
+msgstr "CAD χρώματα"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:132
 msgid "Camera Options"
@@ -821,8 +823,9 @@ msgid "Show copper and tech layers thickness (very slow)"
 msgstr "Εμφάνιση πάχους χαλκού και τεχνικών επιπέδων (πολύ αργό)"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:38
+#, fuzzy
 msgid "Highlight items on rollover"
-msgstr "Τονισμένα αντικείμενα"
+msgstr "Επισήμανση αντικειμένων"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:44
 msgid "Anti-aliasing:"
@@ -878,11 +881,11 @@ msgstr "Διαδικαστική πλοκή"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:31
 msgid "Add floor (slow)"
-msgstr "Προσθήκη Δαπέδου"
+msgstr "Προσθήκη δαπέδου (αργό)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:35
 msgid "Anti-aliasing (slow)"
-msgstr "Εξομάλυνση"
+msgstr "Εξομάλυνση (αργό)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:39
 msgid ""
@@ -1268,7 +1271,7 @@ msgstr "Δημιουργία Αρχείου Λογότυπου"
 #: bitmap2component/bitmap2cmp_gui.cpp:861
 #, c-format
 msgid "File '%s' could not be created."
-msgstr "Δεν ήταν δυνατή η δημιουργία του αρχείου \"%s\"."
+msgstr "Δεν ήταν δυνατή η δημιουργία του αρχείου '%s'."
 
 #: bitmap2component/bitmap2cmp_gui.cpp:775
 msgid "Create PostScript File"
@@ -1407,12 +1410,12 @@ msgstr "Αρνητικό"
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:525
 msgid "Front silk screen"
-msgstr "Μπροστινό Μεταξοτυπία"
+msgstr "Μπροστά Μεταξοτυπία"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:531
 msgid "Front solder mask"
-msgstr "Μπροστινή μάσκα συγκόλλησης"
+msgstr "Μπροστά μάσκα συγκόλλησης"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 msgid "User layer Eco1"
@@ -1446,7 +1449,7 @@ msgstr "Αποτύπωμα (αρχείο *.kicad_mod)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:168
 msgid "Postscript (.ps file)"
-msgstr "Postscript (.ps αρχείο)"
+msgstr "Postscript (αρχείο .ps)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:168
 msgid "Drawing Sheet (.kicad_wks file)"
@@ -1482,23 +1485,23 @@ msgstr ""
 #: common/common.cpp:340
 #, c-format
 msgid "Cannot make path '%s' absolute with respect to '%s'."
-msgstr "Αδυναμία δημιουργίας απόλυτης διαδρομής \"%s\" σε σχέση με το \"%s\"."
+msgstr "Αδυναμία δημιουργίας απόλυτης διαδρομής '%s' σε σχέση με το '%s'."
 
 #: common/common.cpp:359
 #, c-format
 msgid "Output directory '%s' created."
-msgstr "Δημιουργήθηκε ο φάκελος εξόδου \"%s\"."
+msgstr "Δημιουργήθηκε ο φάκελος εξόδου '%s'."
 
 #: common/common.cpp:368
 #, c-format
 msgid "Cannot create output directory '%s'."
-msgstr "Αδυναμία δημιουργίας φακέλου εξόδου \"%s\"."
+msgstr "Αδυναμία δημιουργίας φακέλου εξόδου '%s'."
 
 #: common/common.cpp:640
 msgid "This operating system is not supported by KiCad and its dependencies."
 msgstr ""
-"Τα Windows 7 και παλαιότερα δεν υποστηρίζονται πλέον από το KiCad και τις "
-"εξαρτήσεις του."
+"Αυτό το λειτουργικό δεν υποστηρίζεται πλέον από το KiCad και τις εξαρτήσεις "
+"του."
 
 #: common/common.cpp:642
 msgid "Unsupported Operating System"
@@ -1822,11 +1825,11 @@ msgstr "Πληροφορίες Έκδοσης Βιβλιοθήκης"
 
 #: common/dialog_about/dialog_about_base.cpp:58
 msgid "&Copy Version Info"
-msgstr "Αντιγραφή Πληροφορι&ών Έκδοσης"
+msgstr "&Αντιγραφή Πληροφοριών Έκδοσης"
 
 #: common/dialog_about/dialog_about_base.cpp:59
 msgid "Copy KiCad version info to the clipboard"
-msgstr "Αντιγραφή πληοροφριών έκδοσης στο πρόχειρο"
+msgstr "Αντιγραφή πληροφοριών έκδοσης στο πρόχειρο"
 
 #: common/dialog_about/dialog_about_base.cpp:63
 msgid "&Report Bug"
@@ -1851,7 +1854,7 @@ msgstr "&Εντάξει"
 
 #: common/dialog_shim.cpp:666
 msgid "&Cancel"
-msgstr "Ά&κυρο"
+msgstr "&Άκυρο"
 
 #: common/dialog_shim.cpp:667
 msgid "&Yes"
@@ -1867,7 +1870,7 @@ msgstr "&Εφαρμογή"
 
 #: common/dialog_shim.cpp:670
 msgid "&Save"
-msgstr "Απο&θήκευση"
+msgstr "&Αποθήκευση"
 
 #: common/dialog_shim.cpp:671 common/dialog_shim.cpp:672
 #: common/eda_base_frame.cpp:478
@@ -1940,7 +1943,7 @@ msgstr "Προεπισκόπηση (παλιά/νέα):"
 
 #: common/dialogs/dialog_color_picker_base.cpp:207
 msgid "Reset to Default"
-msgstr "Επαναφορά προεπιλογών"
+msgstr "Επαναφορά Προεπιλογών"
 
 #: common/dialogs/dialog_configure_paths.cpp:193
 #: common/dialogs/dialog_configure_paths.cpp:251
@@ -2344,7 +2347,7 @@ msgstr "Επιλέξτε διαφορετική διαδρομή"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:58
 msgid "The selected path does not contain valid KiCad settings!"
-msgstr "Το επιλεγμένο μονοπάτι δεν περιέχει έγκυρες ρυθμίσεις KiCad!"
+msgstr "Η επιλεγμένη διαδρομή δεν περιέχει έγκυρες ρυθμίσεις KiCad!"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:65
 msgid "Import library configuration from previous version"
@@ -2469,7 +2472,7 @@ msgstr "Οριζόντιος"
 
 #: common/dialogs/dialog_page_settings.cpp:795
 msgid "Select Drawing Sheet File"
-msgstr "Φύλλο Σχεδίασης"
+msgstr "Επιλογή Αρχείου Φύλλου Σχεδίασης"
 
 #: common/dialogs/dialog_page_settings_base.cpp:38
 msgid "dummy text"
@@ -2708,11 +2711,11 @@ msgstr ""
 #: common/dialogs/dialog_paste_special.cpp:44
 #, c-format
 msgid "Replaces reference designators with '%s'."
-msgstr "Αλλαγή προσδιορισμού αναφοράς σε '%s'."
+msgstr "Αντικατάσταση προσδιορισμών αναφοράς με '%s'."
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Assign unique reference designators to pasted symbols"
-msgstr "Χρήση μοναδικών προσδιορισμών αναφοράς στα επικολλημένα σύμβολα"
+msgstr "Ανάθεση μοναδικών προσδιορισμών αναφοράς στα επικολλημένα σύμβολα"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Keep existing reference designators, even if they are duplicated"
@@ -2820,7 +2823,7 @@ msgstr "Συνέβη ένα σφάλμα κατά την δημιουργία π
 #: pcbnew/dialogs/dialog_plot_base.cpp:386
 #: pcbnew/dialogs/dialog_plot_base.cpp:409
 msgid "Output mode:"
-msgstr "Κατάσταση Εξόδου:"
+msgstr "Λειτουργία εξόδου:"
 
 #: common/dialogs/dialog_print_generic_base.cpp:35
 #: common/dialogs/panel_setup_netclasses_base.cpp:62
@@ -3396,7 +3399,7 @@ msgstr "Επαναφορά Μοναδικού Id"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:78
 msgid "Type filter text"
-msgstr "Δώστε κείμενο για φιλτράρισμα"
+msgstr "Εισαγωγή κειμένου για φιλτράρισμα"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:114
 msgid "Undo All Changes"
