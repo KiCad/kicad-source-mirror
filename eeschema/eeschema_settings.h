@@ -198,7 +198,7 @@ public:
         std::map<std::string, bool> fields_group_by;
         std::map<std::string, int>  column_widths;
         std::map<std::string, bool> column_sorts;
-        std::vector<int>            column_order;
+        std::vector<wxString>       column_order;
         wxString                    filter_string;
         bool                        group_symbols;
     };

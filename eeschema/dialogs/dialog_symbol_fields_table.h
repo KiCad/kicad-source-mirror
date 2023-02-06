@@ -44,6 +44,7 @@ public:
     bool TransferDataFromWindow() override;
 
 private:
+    void SetupColumnProperties();
     void AddField( const wxString& displayName, const wxString& aCanonicalName, bool defaultShow,
                    bool defaultSortBy, bool addedByUser = false );
 

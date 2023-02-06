@@ -42,6 +42,7 @@
 #include <widgets/grid_text_button_helpers.h>
 #include <widgets/bitmap_button.h>
 #include <widgets/wx_grid.h>
+#include <wx/debug.h>
 #include <wx/ffile.h>
 #include <wx/grid.h>
 #include <wx/textdlg.h>
@@ -255,6 +256,11 @@ public:
         }
     }
 
+    void MoveColumn( int aCol, int aNewPos )
+    {
+        std::swap( m_fieldNames[aCol], m_fieldNames[aNewPos] );
+    }
+
     int GetNumberRows() override { return (int) m_rows.size(); }
 
     int GetNumberCols() override { return (int) m_fieldNames.size(); }
@@ -274,6 +280,24 @@ public:
         return -1;
     }
 
+    const std::vector<wxString>& GetFieldsOrder() { return m_fieldNames; }
+
+    void SetFieldsOrder( const std::vector<wxString>& aNewOrder )
+    {
+        size_t foundCount = 0;
+
+        for( const wxString& newField : aNewOrder )
+        {
+            for( wxString& currentField : m_fieldNames )
+            {
+                if( currentField == newField )
+                {
+                    std::swap( m_fieldNames[foundCount], currentField );
+                    foundCount++;
+                }
+            }
+        }
+    }
 
     bool IsEmptyCell( int aRow, int aCol ) override
     {
@@ -843,49 +867,78 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
     // must be done after SetTable(), which appears to re-set it
     m_grid->SetSelectionMode( wxGrid::wxGridSelectCells );
 
-    // sync m_grid's column visibilities to Show checkboxes in m_fieldsCtrl
-    for( int i = 0; i < m_fieldsCtrl->GetItemCount(); ++i )
-    {
-        if( m_fieldsCtrl->GetToggleValue( i, 1 ) )
-            m_grid->ShowCol( i );
-        else
-            m_grid->HideCol( i );
-    }
-
     // add Cut, Copy, and Paste to wxGrid
     m_grid->PushEventHandler( new FIELDS_EDITOR_GRID_TRICKS( this, m_grid, m_fieldsCtrl ) );
 
     // give a bit more room for comboboxes
     m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
 
-    // set reference column attributes
-    wxGridCellAttr* attr = new wxGridCellAttr;
-    attr->SetReadOnly();
-    m_grid->SetColAttr( m_dataModel->GetFieldNameCol( _( "Reference" ) ), attr );
-    // set footprint column browse button
-    attr = new wxGridCellAttr;
-    attr->SetEditor( new GRID_CELL_FPID_EDITOR( this, wxEmptyString ) );
-    m_grid->SetColAttr( m_dataModel->GetFieldNameCol( _( "Footprint" ) ), attr );
+    SetupColumnProperties();
 
-    // set datasheet column viewer button
-    attr = new wxGridCellAttr;
-    attr->SetEditor( new GRID_CELL_URL_EDITOR( this, Prj().SchSearchS() ) );
-    m_grid->SetColAttr( m_dataModel->GetFieldNameCol( _( "Datasheet" ) ), attr );
+    m_grid->SelectRow( 0 );
+    m_grid->SetGridCursor( 0, 1 );
+    SetInitialFocus( m_grid );
 
-    // set quantities column attributes
-    int qtyCol = m_dataModel->GetFieldNameCol( _( "Qty" ) );
-    attr = new wxGridCellAttr;
-    attr->SetReadOnly();
-    m_grid->SetColAttr( qtyCol, attr );
-    m_grid->SetColFormatNumber( qtyCol );
+    SetupStandardButtons();
+
+    finishDialogSettings();
+    SetSize( defaultDlgSize );
+    Center();
+
+    // Connect Events
+    m_grid->Connect( wxEVT_GRID_COL_SORT,
+                     wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnColSort ), nullptr, this );
+    m_grid->Connect( wxEVT_GRID_COL_MOVE,
+                     wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnColMove ), nullptr, this );
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::SetupColumnProperties()
+{
+    EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    wxSize             defaultDlgSize = ConvertDialogToPixels( wxSize( 600, 300 ) );
 
     // Restore column sorting order and widths
     m_grid->AutoSizeColumns( false );
     int  sortCol = 0;
     bool sortAscending = true;
 
+
     for( int col = 0; col < m_grid->GetNumberCols(); ++col )
     {
+        wxGridCellAttr* attr = new wxGridCellAttr;
+        attr->SetReadOnly( false );
+
+        // Set some column types to specific editors
+        if( m_dataModel->GetColFieldName( col ) == _( "Reference" ) )
+        {
+            attr->SetReadOnly();
+            m_grid->SetColAttr( col, attr );
+        }
+        else if( m_dataModel->GetColFieldName( col ) == _( "Footprint" ) )
+        {
+            attr->SetEditor( new GRID_CELL_FPID_EDITOR( this, wxEmptyString ) );
+            m_grid->SetColAttr( col, attr );
+        }
+        else if( m_dataModel->GetColFieldName( col ) == _( "Datasheet" ) )
+        {
+            // set datasheet column viewer button
+            attr->SetEditor( new GRID_CELL_URL_EDITOR( this, Prj().SchSearchS() ) );
+            m_grid->SetColAttr( col, attr );
+        }
+        else if( m_dataModel->GetColFieldName( col ) == _( "Qty" ) )
+        {
+            attr->SetReadOnly();
+            m_grid->SetColAttr( col, attr );
+            m_grid->SetColFormatNumber( col );
+        }
+        else
+        {
+            attr->SetEditor( m_grid->GetDefaultEditor() );
+            m_grid->SetColAttr( col, attr );
+            m_grid->SetColFormatCustom( col, wxGRID_VALUE_STRING );
+        }
+
         // Columns are hidden by setting their width to 0 so if we resize them they will
         // become unhidden.
         if( m_grid->IsColShown( col ) )
@@ -916,35 +969,19 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
         }
     }
 
-    m_dataModel->Sort( sortCol, sortAscending );
-    m_grid->SetSortingColumn( sortCol, sortAscending );
-
-    // Restore user column order
-    for( int col = 0; col < (int) cfg->m_FieldEditorPanel.column_order.size(); col++ )
+    // sync m_grid's column visibilities to Show checkboxes in m_fieldsCtrl
+    for( int i = 0; i < m_fieldsCtrl->GetItemCount(); ++i )
     {
-        int pos = cfg->m_FieldEditorPanel.column_order[col];
+        const wxString& fieldName = m_fieldsCtrl->GetTextValue( i, 0 );
 
-        if( col >= m_grid->GetNumberCols() || pos >= m_grid->GetNumberCols() )
-            break;
-
-        m_grid->SetColPos( col, pos );
+        if( m_fieldsCtrl->GetToggleValue( i, 1 ) )
+            m_grid->ShowCol( m_dataModel->GetFieldNameCol( fieldName ) );
+        else
+            m_grid->HideCol( m_dataModel->GetFieldNameCol( fieldName ) );
     }
 
-    m_grid->SelectRow( 0 );
-    m_grid->SetGridCursor( 0, 1 );
-    SetInitialFocus( m_grid );
-
-    SetupStandardButtons();
-
-    finishDialogSettings();
-    SetSize( defaultDlgSize );
-    Center();
-
-    // Connect Events
-    m_grid->Connect( wxEVT_GRID_COL_SORT,
-                     wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnColSort ), nullptr, this );
-    m_grid->Connect( wxEVT_GRID_COL_MOVE,
-                     wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnColMove ), nullptr, this );
+    m_dataModel->Sort( sortCol, sortAscending );
+    m_grid->SetSortingColumn( sortCol, sortAscending );
 }
 
 
@@ -1100,6 +1137,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::LoadFieldNames()
         if( userFieldNames.count( templateFieldname.m_Name ) == 0 )
             AddField( templateFieldname.m_Name, templateFieldname.m_Name, false, false );
     }
+
+    m_dataModel->SetFieldsOrder( cfg->m_FieldEditorPanel.column_order );
 }
 
 
@@ -1327,9 +1366,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnColumnItemToggled( wxDataViewEvent& event )
         cfg->m_FieldEditorPanel.fields_show[fieldName] = value;
 
         if( value )
-            m_grid->ShowCol( row );
+            m_grid->ShowCol( m_dataModel->GetFieldNameCol( fieldName ) );
         else
-            m_grid->HideCol( row );     // grid's columns map to fieldsCtrl's rows
+            m_grid->HideCol( m_dataModel->GetFieldNameCol( fieldName ) );
 
         break;
     }
@@ -1403,15 +1442,26 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnColSort( wxGridEvent& aEvent )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnColMove( wxGridEvent& aEvent )
 {
+    int origPos = aEvent.GetCol();
+
     CallAfter(
-            [this]()
+            [origPos, this]()
             {
+                int newPos = m_grid->GetColPos( origPos );
+
+                m_dataModel->MoveColumn( origPos, newPos );
+
                 EESCHEMA_SETTINGS* cfg =
                         static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-                cfg->m_FieldEditorPanel.column_order.clear();
+                cfg->m_FieldEditorPanel.column_order = m_dataModel->GetFieldsOrder();
 
-                for( int i = 0; i < m_grid->GetNumberCols(); i++ )
-                    cfg->m_FieldEditorPanel.column_order.emplace_back( m_grid->GetColPos( i ) );
+                // "Unmove" the column since we've moved the column internally
+                m_grid->ResetColPos();
+
+                // We need to reset all the column attr's to the correct column order
+                SetupColumnProperties();
+
+                m_grid->ForceRefresh();
             } );
 }
 
@@ -1445,7 +1495,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRegroupSymbols( wxCommandEvent& aEvent )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnTableCellClick( wxGridEvent& event )
 {
-    if( event.GetCol() == REFERENCE_FIELD )
+    if( m_dataModel->ColIsReference( event.GetCol() ) )
     {
         m_grid->ClearSelection();
         m_grid->SetGridCursor( event.GetRow(), event.GetCol() );

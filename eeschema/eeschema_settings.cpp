@@ -368,7 +368,7 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM_MAP<bool>( "field_editor.column_sorts",
             &m_FieldEditorPanel.column_sorts, {} ) );
 
-    m_params.emplace_back( new PARAM_LIST<int>( "field_editor.column_order",
+    m_params.emplace_back( new PARAM_LIST<wxString>( "field_editor.column_order",
             &m_FieldEditorPanel.column_order, {} ) );
 
     m_params.emplace_back( new PARAM<wxString>( "field_editor.filter_string",
