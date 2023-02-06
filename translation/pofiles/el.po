@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-01 14:03-0800\n"
 "PO-Revision-Date: 2023-02-06 21:07+0000\n"
-"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
+"Last-Translator: Michael Misirlis <MMISIRLIS@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -34,7 +34,7 @@ msgstr ""
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
-msgstr "Όλα τα αρχεία"
+msgstr "Όλα τα Αρχεία"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:312
 msgid "Build board outline"
@@ -5422,7 +5422,7 @@ msgstr "Διάδρομοι"
 
 #: common/layer_id.cpp:163
 msgid "Through vias"
-msgstr "Διαμπερές διελεύσεις"
+msgstr "Διαμπερή διεύλευση"
 
 #: common/layer_id.cpp:164
 msgid "Blind/Buried vias"
@@ -5430,7 +5430,7 @@ msgstr "Τυφλές/Ενταφιασμένες Διελεύσεις"
 
 #: common/layer_id.cpp:165
 msgid "Micro-vias"
-msgstr "Μίκρο-διελεύσεις"
+msgstr "Μικρο-διελεύσεις"
 
 #: common/layer_id.cpp:166
 msgid "Via holes"
@@ -24113,7 +24113,7 @@ msgstr "32"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:39
 msgid "Impedance controlled"
-msgstr "Ελεγχόμενη Εμπέδηση"
+msgstr "Ελεγχόμενo από αντίσταση"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:40
 msgid ""
@@ -35677,19 +35677,19 @@ msgid "Unknown mapping of the Altium layer '%s'."
 msgstr "Άγνωστη αντιστοίχιση του επιπέδου Altium '%s'."
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:182
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown Mode string: '%s'."
-msgstr "Άγνωστο στοιχείο: '%s'."
+msgstr "Άγνωστη Κατάσταση: '%s'."
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:209
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown Record name string: '%s'."
-msgstr "Άγνωστος κωδικός καταγραφής: '%s'."
+msgstr "Άγνωστο αλφαριθμητικό ονόματος Εγγραφής: '%s'."
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:223
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown Extended Primitive Information type: '%s'."
-msgstr "Άγνωστος τύπος: '%s'."
+msgstr "Άγνωστος τύπος Εκτεταμένων Πληροφοριών Πρωτεύοντων: '%s'."
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:784
 #, c-format
@@ -35732,9 +35732,8 @@ msgid "Record of unknown type: '%d'."
 msgstr "Εγγραφή αγνώστου τύπου: '%d'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:874
-#, fuzzy
 msgid "Loading extended primitive information data..."
-msgstr "Φόρτωση..."
+msgstr "Φόρτωση εκτεταμένων πρωτεύοντων δεδομένων..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:895
 msgid "Loading board data..."
@@ -36794,13 +36793,12 @@ msgstr ""
 "θέση: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5684
-#, fuzzy
 msgid ""
 "The segment zone fill mode is no longer supported.\n"
 "Convert zones to smoothed polygon fills?"
 msgstr ""
-"Ο παλαιός τρόπος γεμίσματος ζωνών υποστηρίζεται πλέον.\n"
-"Μετατροπή ζωνών σε πολυγωνικά γεμίσματα;"
+"Η λειτουργία γεμίσματος τμημάτων ζώνης δεν υποστηρίζεται πλέον.\n"
+"Μετατροπή ζωνών σε λειασμένα πολύγωνα;"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:91
 #, c-format
@@ -37637,7 +37635,6 @@ msgstr "Ευθείες γραμμές"
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:120
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:224
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:328
-#, fuzzy
 msgid "Curved"
 msgstr "Καμπύλη"
 
@@ -38295,7 +38292,7 @@ msgstr "Πάχος"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:277
 msgid "Loss Tangent"
-msgstr "tan(δ)"
+msgstr "εφαπτομένη απώλειας"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:300
 msgid "Dielectric"
@@ -40531,9 +40528,8 @@ msgid "Removing dangling vias..."
 msgstr "Αφαίρεση μη συνδεδεμένων διελεύσεων..."
 
 #: pcbnew/tracks_cleaner.cpp:148
-#, fuzzy
 msgid "Checking collinear tracks..."
-msgstr "Έεγχος παραλληλισμένων διαδρόμων..."
+msgstr "Έλεγχος συγγραμμικών διαδρομών..."
 
 #: pcbnew/tracks_cleaner.cpp:150
 msgid "Merging collinear tracks..."
@@ -40713,16 +40709,17 @@ msgstr ""
 "προεπιλογών στο αναδυόμενο παράθυρο."
 
 #: pcbnew/widgets/appearance_controls.cpp:443
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "Save and restore view location and zoom.\n"
 "Use %s+Tab to activate selector.\n"
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
-"Αποθήκευση και επαναφορά θέσης προβολής και μεγέθυνσης.\n"
-"Χρήση %s+Tab για ενεργοποίηση επιλογέα.\n"
-"Διαδοχικά Tabs με πατημένο %s εναλλάσει τις επιλογές στο popup."
+"Αποθήκευση και επαναφορά σημείου προβολής και ζουμ.\n"
+"Χρησιμοποιήστε %s+Tab για να ενεργοποιήσετε τον επιλογέα.\n"
+"Οι διαδοχικές καρτέλες ενώ κρατάτε πατημένο το %s θα εναλλάσσους τις "
+"προβολές στο αναδυόμενο παράθυρο."
 
 #: pcbnew/widgets/appearance_controls.cpp:458
 msgid "Filter nets"
