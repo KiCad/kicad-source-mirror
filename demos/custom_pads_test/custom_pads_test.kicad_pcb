@@ -1,4 +1,4 @@
-(kicad_pcb (version 20220818) (generator pcbnew)
+(kicad_pcb (version 20221018) (generator pcbnew)
 
   (general
     (thickness 1.6)
@@ -291,10 +291,10 @@
       (stroke (width 0.15) (type solid)) (layer "F.CrtYd") (tstamp e175a9d4-f0f5-4709-8aee-b2747ff96f9f))
     (fp_line (start 19 12) (end -10 12)
       (stroke (width 0.15) (type solid)) (layer "F.CrtYd") (tstamp b93f815c-17d4-4351-8042-69a2b147ec33))
-    (pad "1" thru_hole rect (at -8.2 3.8 180) (size 1.5748 2.286) (drill 0.8128) (layers *.Cu *.Mask) (tstamp 1e91853f-6c5f-4cc6-a47e-d3161b54c610))
-    (pad "2" thru_hole oval (at -5.08 3.81 180) (size 1.5748 2.286) (drill 0.8128) (layers *.Cu *.Mask) (tstamp 0d5e85a5-c072-4f46-a662-c5fb6161ef8f))
-    (pad "3" thru_hole trapezoid (at -7.62 -3.81 180) (size 1.5748 2.286) (rect_delta 0 1) (drill 0.8128) (layers *.Cu *.Mask) (tstamp 3f42c680-b719-426b-b2fb-d61cf259bfb3))
-    (pad "4" thru_hole oval (at -5.08 -3.81 210) (size 1.5748 2.286) (drill 0.8128) (layers *.Cu *.Mask) (tstamp 4af71947-2ca9-4a35-8d94-d83c2875314a))
+    (pad "1" thru_hole rect (at -8.2 3.8 180) (size 1.5748 2.286) (drill 0.8128) (layers "*.Cu" "*.Mask") (tstamp 1e91853f-6c5f-4cc6-a47e-d3161b54c610))
+    (pad "2" thru_hole oval (at -5.08 3.81 180) (size 1.5748 2.286) (drill 0.8128) (layers "*.Cu" "*.Mask") (tstamp 0d5e85a5-c072-4f46-a662-c5fb6161ef8f))
+    (pad "3" thru_hole trapezoid (at -7.62 -3.81 180) (size 1.5748 2.286) (rect_delta 0 1) (drill 0.8128) (layers "*.Cu" "*.Mask") (tstamp 3f42c680-b719-426b-b2fb-d61cf259bfb3))
+    (pad "4" thru_hole oval (at -5.08 -3.81 210) (size 1.5748 2.286) (drill 0.8128) (layers "*.Cu" "*.Mask") (tstamp 4af71947-2ca9-4a35-8d94-d83c2875314a))
     (pad "5" connect custom (at 8 10 180) (size 1 1) (layers "F.Cu" "F.Mask")
       (zone_connect 0) (thermal_bridge_angle 45)
       (options (clearance convexhull) (anchor circle))

@@ -1,4 +1,4 @@
-(kicad_pcb (version 20220818) (generator pcbnew)
+(kicad_pcb (version 20221018) (generator pcbnew)
 
   (general
     (thickness 1.6)
@@ -3392,7 +3392,7 @@
         (effects (font (size 0.25 0.25) (thickness 0.0625)))
       (tstamp 48adf574-375d-4487-9296-a136bc7c983d)
     )
-    (pad "" np_thru_hole oval (at 0 0) (size 4 1.5) (drill oval 4 1.5) (layers F&B.Cu *.Mask) (tstamp ee73646a-5901-40e5-a597-cce284530fbf))
+    (pad "" np_thru_hole oval (at 0 0) (size 4 1.5) (drill oval 4 1.5) (layers "F&B.Cu" "*.Mask") (tstamp ee73646a-5901-40e5-a597-cce284530fbf))
   )
 
   (footprint "Connector_JST:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal" (layer "F.Cu")

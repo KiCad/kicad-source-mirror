@@ -1,4 +1,4 @@
-(kicad_sch (version 20221004) (generator eeschema)
+(kicad_sch (version 20230121) (generator eeschema)
 
   (uuid 729930f1-b9a5-4502-a5bf-e1c5c07e00cc)
 
@@ -2776,7 +2776,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "C15") (unit 1) (value "100nF") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "C15") (unit 1)
         )
       )
     )
@@ -2802,7 +2802,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "C16") (unit 1) (value "100nF") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "C16") (unit 1)
         )
       )
     )
@@ -2827,7 +2827,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "#GND052") (unit 1) (value "GND") (footprint "")
+          (reference "#GND052") (unit 1)
         )
       )
     )
@@ -2852,7 +2852,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "#VCC034") (unit 1) (value "VCC") (footprint "")
+          (reference "#VCC034") (unit 1)
         )
       )
     )
@@ -2877,7 +2877,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "#VCC053") (unit 1) (value "VCC") (footprint "")
+          (reference "#VCC053") (unit 1)
         )
       )
     )
@@ -2902,7 +2902,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "#VCC054") (unit 1) (value "VCC") (footprint "")
+          (reference "#VCC054") (unit 1)
         )
       )
     )
@@ -2927,7 +2927,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "#VCC055") (unit 1) (value "VCC") (footprint "")
+          (reference "#VCC055") (unit 1)
         )
       )
     )
@@ -2952,7 +2952,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "#VCC056") (unit 1) (value "VCC") (footprint "")
+          (reference "#VCC056") (unit 1)
         )
       )
     )
@@ -2978,7 +2978,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "X2") (unit 1) (value "30MHz") (footprint "Crystal:Crystal_HC18-U_Vertical")
+          (reference "X2") (unit 1)
         )
       )
     )
@@ -3004,7 +3004,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "C66") (unit 1) (value "22pF") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "C66") (unit 1)
         )
       )
     )
@@ -3030,7 +3030,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "C11") (unit 1) (value "100nF") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "C11") (unit 1)
         )
       )
     )
@@ -3056,7 +3056,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "C14") (unit 1) (value "100nF") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "C14") (unit 1)
         )
       )
     )
@@ -3082,7 +3082,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "D2") (unit 1) (value "BAT46") (footprint "Diode_THT:D_DO-34_SOD68_P7.62mm_Horizontal")
+          (reference "D2") (unit 1)
         )
       )
     )
@@ -3108,7 +3108,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "R25") (unit 1) (value "220K") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "R25") (unit 1)
         )
       )
     )
@@ -3134,7 +3134,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "L4") (unit 1) (value "22uF") (footprint "Resistor_SMD:R_1812_4532Metric_Pad1.24x3.50mm_HandSolder")
+          (reference "L4") (unit 1)
         )
       )
     )
@@ -3160,7 +3160,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "D1") (unit 1) (value "BAT46") (footprint "Diode_THT:D_DO-34_SOD68_P7.62mm_Horizontal")
+          (reference "D1") (unit 1)
         )
       )
     )
@@ -3185,7 +3185,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "#GND041") (unit 1) (value "GND") (footprint "")
+          (reference "#GND041") (unit 1)
         )
       )
     )
@@ -3210,7 +3210,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "#GND040") (unit 1) (value "GND") (footprint "")
+          (reference "#GND040") (unit 1)
         )
       )
     )
@@ -3236,7 +3236,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "R2") (unit 1) (value "100") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "R2") (unit 1)
         )
       )
     )
@@ -3262,7 +3262,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "C47") (unit 1) (value "220pF") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "C47") (unit 1)
         )
       )
     )
@@ -3287,7 +3287,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "#GND046") (unit 1) (value "GND") (footprint "")
+          (reference "#GND046") (unit 1)
         )
       )
     )
@@ -3313,7 +3313,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "C4") (unit 1) (value "100nF") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "C4") (unit 1)
         )
       )
     )
@@ -3339,7 +3339,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "C6") (unit 1) (value "100nF") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "C6") (unit 1)
         )
       )
     )
@@ -3364,7 +3364,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "#GND035") (unit 1) (value "GND") (footprint "")
+          (reference "#GND035") (unit 1)
         )
       )
     )
@@ -3390,7 +3390,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "R35") (unit 1) (value "470") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "R35") (unit 1)
         )
       )
     )
@@ -3416,7 +3416,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "C3") (unit 1) (value "100nF") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "C3") (unit 1)
         )
       )
     )
@@ -3441,7 +3441,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "#GND048") (unit 1) (value "GND") (footprint "")
+          (reference "#GND048") (unit 1)
         )
       )
     )
@@ -3466,7 +3466,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "#GND047") (unit 1) (value "GND") (footprint "")
+          (reference "#GND047") (unit 1)
         )
       )
     )
@@ -3492,7 +3492,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "C5") (unit 1) (value "100nF") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "C5") (unit 1)
         )
       )
     )
@@ -3517,7 +3517,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "#GND045") (unit 1) (value "GND") (footprint "")
+          (reference "#GND045") (unit 1)
         )
       )
     )
@@ -3542,7 +3542,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "#GND038") (unit 1) (value "GND") (footprint "")
+          (reference "#GND038") (unit 1)
         )
       )
     )
@@ -3568,7 +3568,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "C62") (unit 1) (value "47uF") (footprint "Resistor_SMD:R_1210_3225Metric_Pad1.24x2.70mm_HandSolder")
+          (reference "C62") (unit 1)
         )
       )
     )
@@ -3594,7 +3594,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "C2") (unit 1) (value "100nF") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "C2") (unit 1)
         )
       )
     )
@@ -3620,7 +3620,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "C10") (unit 1) (value "100nF") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "C10") (unit 1)
         )
       )
     )
@@ -3646,7 +3646,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "C13") (unit 1) (value "100nF") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "C13") (unit 1)
         )
       )
     )
@@ -3810,7 +3810,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "U10") (unit 1) (value "BT812") (footprint "Package_QFP:PQFP-160_28x28mm_P0.65mm")
+          (reference "U10") (unit 1)
         )
       )
     )
@@ -3836,7 +3836,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "R19") (unit 1) (value "220") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "R19") (unit 1)
         )
       )
     )
@@ -3862,7 +3862,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "R12") (unit 1) (value "1K") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "R12") (unit 1)
         )
       )
     )
@@ -3887,7 +3887,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "#GND051") (unit 1) (value "GND") (footprint "")
+          (reference "#GND051") (unit 1)
         )
       )
     )
@@ -3913,7 +3913,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "C12") (unit 1) (value "100nF") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "C12") (unit 1)
         )
       )
     )
@@ -3938,7 +3938,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "#GND039") (unit 1) (value "GND") (footprint "")
+          (reference "#GND039") (unit 1)
         )
       )
     )
@@ -3963,7 +3963,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "#GND037") (unit 1) (value "GND") (footprint "")
+          (reference "#GND037") (unit 1)
         )
       )
     )
@@ -3988,7 +3988,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "#GND036") (unit 1) (value "GND") (footprint "")
+          (reference "#GND036") (unit 1)
         )
       )
     )
@@ -4013,7 +4013,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "#GND044") (unit 1) (value "GND") (footprint "")
+          (reference "#GND044") (unit 1)
         )
       )
     )
@@ -4039,7 +4039,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "C1") (unit 1) (value "100nF") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "C1") (unit 1)
         )
       )
     )
@@ -4064,7 +4064,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "#GND049") (unit 1) (value "GND") (footprint "")
+          (reference "#GND049") (unit 1)
         )
       )
     )
@@ -4089,7 +4089,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "#GND043") (unit 1) (value "GND") (footprint "")
+          (reference "#GND043") (unit 1)
         )
       )
     )
@@ -4115,7 +4115,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "D3") (unit 1) (value "BAT46") (footprint "Diode_THT:D_DO-34_SOD68_P7.62mm_Horizontal")
+          (reference "D3") (unit 1)
         )
       )
     )
@@ -4141,7 +4141,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "C7") (unit 1) (value "100nF") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "C7") (unit 1)
         )
       )
     )
@@ -4166,7 +4166,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "#GND042") (unit 1) (value "GND") (footprint "")
+          (reference "#GND042") (unit 1)
         )
       )
     )
@@ -4192,7 +4192,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "D4") (unit 1) (value "BAT46") (footprint "Diode_THT:D_DO-34_SOD68_P7.62mm_Horizontal")
+          (reference "D4") (unit 1)
         )
       )
     )
@@ -4218,7 +4218,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "R20") (unit 1) (value "220") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "R20") (unit 1)
         )
       )
     )
@@ -4243,7 +4243,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "#GND050") (unit 1) (value "GND") (footprint "")
+          (reference "#GND050") (unit 1)
         )
       )
     )
@@ -4269,7 +4269,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "R27") (unit 1) (value "27K") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "R27") (unit 1)
         )
       )
     )
@@ -4295,7 +4295,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "C9") (unit 1) (value "100nF") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "C9") (unit 1)
         )
       )
     )
@@ -4321,7 +4321,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "R14") (unit 1) (value "1M") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "R14") (unit 1)
         )
       )
     )
@@ -4347,7 +4347,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "C8") (unit 1) (value "100nF") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "C8") (unit 1)
         )
       )
     )
@@ -4373,7 +4373,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "C65") (unit 1) (value "22pF") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "C65") (unit 1)
         )
       )
     )
@@ -4399,7 +4399,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681"
-          (reference "R3") (unit 1) (value "100") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "R3") (unit 1)
         )
       )
     )

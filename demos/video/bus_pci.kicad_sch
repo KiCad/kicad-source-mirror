@@ -1,4 +1,4 @@
-(kicad_sch (version 20221004) (generator eeschema)
+(kicad_sch (version 20230121) (generator eeschema)
 
   (uuid 95fec9b4-a774-45ee-ab6f-5a336ab16745)
 
@@ -5221,7 +5221,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "U11") (unit 1) (value "S5933_PQ160") (footprint "Package_QFP:PQFP-160_28x28mm_P0.65mm")
+          (reference "U11") (unit 1)
         )
       )
     )
@@ -5246,7 +5246,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND086") (unit 1) (value "GND") (footprint "")
+          (reference "#GND086") (unit 1)
         )
       )
     )
@@ -5271,7 +5271,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND087") (unit 1) (value "GND") (footprint "")
+          (reference "#GND087") (unit 1)
         )
       )
     )
@@ -5296,7 +5296,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND088") (unit 1) (value "GND") (footprint "")
+          (reference "#GND088") (unit 1)
         )
       )
     )
@@ -5321,7 +5321,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND089") (unit 1) (value "GND") (footprint "")
+          (reference "#GND089") (unit 1)
         )
       )
     )
@@ -5346,7 +5346,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND090") (unit 1) (value "GND") (footprint "")
+          (reference "#GND090") (unit 1)
         )
       )
     )
@@ -5371,7 +5371,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND091") (unit 1) (value "GND") (footprint "")
+          (reference "#GND091") (unit 1)
         )
       )
     )
@@ -5396,7 +5396,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND092") (unit 1) (value "GND") (footprint "")
+          (reference "#GND092") (unit 1)
         )
       )
     )
@@ -5421,7 +5421,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND093") (unit 1) (value "GND") (footprint "")
+          (reference "#GND093") (unit 1)
         )
       )
     )
@@ -5446,7 +5446,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND094") (unit 1) (value "GND") (footprint "")
+          (reference "#GND094") (unit 1)
         )
       )
     )
@@ -5471,7 +5471,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND095") (unit 1) (value "GND") (footprint "")
+          (reference "#GND095") (unit 1)
         )
       )
     )
@@ -5496,7 +5496,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND096") (unit 1) (value "GND") (footprint "")
+          (reference "#GND096") (unit 1)
         )
       )
     )
@@ -5521,7 +5521,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND097") (unit 1) (value "GND") (footprint "")
+          (reference "#GND097") (unit 1)
         )
       )
     )
@@ -5546,7 +5546,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND098") (unit 1) (value "GND") (footprint "")
+          (reference "#GND098") (unit 1)
         )
       )
     )
@@ -5571,7 +5571,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND099") (unit 1) (value "GND") (footprint "")
+          (reference "#GND099") (unit 1)
         )
       )
     )
@@ -5596,7 +5596,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND0100") (unit 1) (value "GND") (footprint "")
+          (reference "#GND0100") (unit 1)
         )
       )
     )
@@ -5621,7 +5621,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND0101") (unit 1) (value "GND") (footprint "")
+          (reference "#GND0101") (unit 1)
         )
       )
     )
@@ -5646,7 +5646,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND0102") (unit 1) (value "GND") (footprint "")
+          (reference "#GND0102") (unit 1)
         )
       )
     )
@@ -5671,7 +5671,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND0103") (unit 1) (value "GND") (footprint "")
+          (reference "#GND0103") (unit 1)
         )
       )
     )
@@ -5697,7 +5697,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "W4") (unit 1) (value "TEST") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
+          (reference "W4") (unit 1)
         )
       )
     )
@@ -5723,7 +5723,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "W5") (unit 1) (value "TEST") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
+          (reference "W5") (unit 1)
         )
       )
     )
@@ -5748,7 +5748,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND0104") (unit 1) (value "GND") (footprint "")
+          (reference "#GND0104") (unit 1)
         )
       )
     )
@@ -5892,7 +5892,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "BUS1") (unit 1) (value "BUSPCI_5V") (footprint "Connectors:BUSPCI")
+          (reference "BUS1") (unit 1)
         )
       )
     )
@@ -5918,7 +5918,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "R5") (unit 1) (value "10K") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "R5") (unit 1)
         )
       )
     )
@@ -5944,7 +5944,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "W1") (unit 1) (value "16/32") (footprint "Connectors:GS2")
+          (reference "W1") (unit 1)
         )
       )
     )
@@ -5969,7 +5969,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND0105") (unit 1) (value "GND") (footprint "")
+          (reference "#GND0105") (unit 1)
         )
       )
     )
@@ -5995,7 +5995,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "W2") (unit 1) (value "FLOAT#") (footprint "Connectors:GS2")
+          (reference "W2") (unit 1)
         )
       )
     )
@@ -6020,7 +6020,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND0106") (unit 1) (value "GND") (footprint "")
+          (reference "#GND0106") (unit 1)
         )
       )
     )
@@ -6046,7 +6046,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "R6") (unit 1) (value "10K") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "R6") (unit 1)
         )
       )
     )
@@ -6071,7 +6071,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND0107") (unit 1) (value "GND") (footprint "")
+          (reference "#GND0107") (unit 1)
         )
       )
     )
@@ -6097,7 +6097,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "R7") (unit 1) (value "10K") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "R7") (unit 1)
         )
       )
     )
@@ -6123,7 +6123,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "W3") (unit 1) (value "SERNV") (footprint "Connectors:GS2")
+          (reference "W3") (unit 1)
         )
       )
     )
@@ -6148,7 +6148,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND0108") (unit 1) (value "GND") (footprint "")
+          (reference "#GND0108") (unit 1)
         )
       )
     )
@@ -6174,7 +6174,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "R28") (unit 1) (value "2,2K") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "R28") (unit 1)
         )
       )
     )
@@ -6200,7 +6200,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "R29") (unit 1) (value "2,2K") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "R29") (unit 1)
         )
       )
     )
@@ -6226,7 +6226,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "C24") (unit 1) (value "100nF") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "C24") (unit 1)
         )
       )
     )
@@ -6251,7 +6251,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND0109") (unit 1) (value "GND") (footprint "")
+          (reference "#GND0109") (unit 1)
         )
       )
     )
@@ -6277,7 +6277,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "C25") (unit 1) (value "100nF") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "C25") (unit 1)
         )
       )
     )
@@ -6302,7 +6302,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND0110") (unit 1) (value "GND") (footprint "")
+          (reference "#GND0110") (unit 1)
         )
       )
     )
@@ -6328,7 +6328,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "C26") (unit 1) (value "100nF") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "C26") (unit 1)
         )
       )
     )
@@ -6353,7 +6353,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND0111") (unit 1) (value "GND") (footprint "")
+          (reference "#GND0111") (unit 1)
         )
       )
     )
@@ -6379,7 +6379,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "C27") (unit 1) (value "100nF") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "C27") (unit 1)
         )
       )
     )
@@ -6404,7 +6404,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND0112") (unit 1) (value "GND") (footprint "")
+          (reference "#GND0112") (unit 1)
         )
       )
     )
@@ -6430,7 +6430,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "C28") (unit 1) (value "100nF") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "C28") (unit 1)
         )
       )
     )
@@ -6455,7 +6455,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND0113") (unit 1) (value "GND") (footprint "")
+          (reference "#GND0113") (unit 1)
         )
       )
     )
@@ -6481,7 +6481,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "C29") (unit 1) (value "100nF") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "C29") (unit 1)
         )
       )
     )
@@ -6506,7 +6506,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND0114") (unit 1) (value "GND") (footprint "")
+          (reference "#GND0114") (unit 1)
         )
       )
     )
@@ -6532,7 +6532,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "C30") (unit 1) (value "100nF") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "C30") (unit 1)
         )
       )
     )
@@ -6557,7 +6557,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND0115") (unit 1) (value "GND") (footprint "")
+          (reference "#GND0115") (unit 1)
         )
       )
     )
@@ -6583,7 +6583,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "C31") (unit 1) (value "100nF") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "C31") (unit 1)
         )
       )
     )
@@ -6608,7 +6608,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND0116") (unit 1) (value "GND") (footprint "")
+          (reference "#GND0116") (unit 1)
         )
       )
     )
@@ -6634,7 +6634,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "C38") (unit 1) (value "4,7uF") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "C38") (unit 1)
         )
       )
     )
@@ -6659,7 +6659,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND0117") (unit 1) (value "GND") (footprint "")
+          (reference "#GND0117") (unit 1)
         )
       )
     )
@@ -6691,7 +6691,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "U1") (unit 1) (value "24C16") (footprint "Package_DIP:DIP-8_W7.62mm")
+          (reference "U1") (unit 1)
         )
       )
     )
@@ -6717,7 +6717,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "C67") (unit 1) (value "4,7uF") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "C67") (unit 1)
         )
       )
     )
@@ -6743,7 +6743,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "C69") (unit 1) (value "4,7uF") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "C69") (unit 1)
         )
       )
     )
@@ -6768,7 +6768,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#PWR082") (unit 1) (value "+3.3V") (footprint "")
+          (reference "#PWR082") (unit 1)
         )
       )
     )
@@ -6793,7 +6793,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#PWR081") (unit 1) (value "VCC") (footprint "")
+          (reference "#PWR081") (unit 1)
         )
       )
     )
@@ -6818,7 +6818,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#PWR080") (unit 1) (value "VSS") (footprint "")
+          (reference "#PWR080") (unit 1)
         )
       )
     )
@@ -6843,7 +6843,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#FLG079") (unit 1) (value "PWR_FLAG") (footprint "")
+          (reference "#FLG079") (unit 1)
         )
       )
     )
@@ -6868,7 +6868,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#FLG078") (unit 1) (value "PWR_FLAG") (footprint "")
+          (reference "#FLG078") (unit 1)
         )
       )
     )
@@ -6893,7 +6893,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#FLG076") (unit 1) (value "PWR_FLAG") (footprint "")
+          (reference "#FLG076") (unit 1)
         )
       )
     )
@@ -6918,7 +6918,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#FLG077") (unit 1) (value "PWR_FLAG") (footprint "")
+          (reference "#FLG077") (unit 1)
         )
       )
     )
@@ -6943,7 +6943,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0129") (unit 1) (value "+5V") (footprint "")
+          (reference "#+0129") (unit 1)
         )
       )
     )
@@ -6968,7 +6968,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0128") (unit 1) (value "+3.3V") (footprint "")
+          (reference "#+0128") (unit 1)
         )
       )
     )
@@ -6993,7 +6993,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0127") (unit 1) (value "+3.3V") (footprint "")
+          (reference "#+0127") (unit 1)
         )
       )
     )
@@ -7018,7 +7018,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0126") (unit 1) (value "+5V") (footprint "")
+          (reference "#+0126") (unit 1)
         )
       )
     )
@@ -7043,7 +7043,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0125") (unit 1) (value "+5V") (footprint "")
+          (reference "#+0125") (unit 1)
         )
       )
     )
@@ -7068,7 +7068,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0124") (unit 1) (value "+5V") (footprint "")
+          (reference "#+0124") (unit 1)
         )
       )
     )
@@ -7093,7 +7093,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0123") (unit 1) (value "+5V") (footprint "")
+          (reference "#+0123") (unit 1)
         )
       )
     )
@@ -7118,7 +7118,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0118") (unit 1) (value "+5V") (footprint "")
+          (reference "#+0118") (unit 1)
         )
       )
     )
@@ -7143,7 +7143,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0122") (unit 1) (value "+5V") (footprint "")
+          (reference "#+0122") (unit 1)
         )
       )
     )
@@ -7168,7 +7168,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0119") (unit 1) (value "+5V") (footprint "")
+          (reference "#+0119") (unit 1)
         )
       )
     )
@@ -7193,7 +7193,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0121") (unit 1) (value "+5V") (footprint "")
+          (reference "#+0121") (unit 1)
         )
       )
     )
@@ -7218,7 +7218,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0120") (unit 1) (value "+5V") (footprint "")
+          (reference "#+0120") (unit 1)
         )
       )
     )
@@ -7243,7 +7243,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0148") (unit 1) (value "+5V") (footprint "")
+          (reference "#+0148") (unit 1)
         )
       )
     )
@@ -7268,7 +7268,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0149") (unit 1) (value "+3.3V") (footprint "")
+          (reference "#+0149") (unit 1)
         )
       )
     )
@@ -7293,7 +7293,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0150") (unit 1) (value "+3.3V") (footprint "")
+          (reference "#+0150") (unit 1)
         )
       )
     )
@@ -7318,7 +7318,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0151") (unit 1) (value "+3.3V") (footprint "")
+          (reference "#+0151") (unit 1)
         )
       )
     )
@@ -7343,7 +7343,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0152") (unit 1) (value "+3.3V") (footprint "")
+          (reference "#+0152") (unit 1)
         )
       )
     )
@@ -7368,7 +7368,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0153") (unit 1) (value "+5V") (footprint "")
+          (reference "#+0153") (unit 1)
         )
       )
     )
@@ -7393,7 +7393,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0154") (unit 1) (value "+5V") (footprint "")
+          (reference "#+0154") (unit 1)
         )
       )
     )
@@ -7418,7 +7418,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0155") (unit 1) (value "+5V") (footprint "")
+          (reference "#+0155") (unit 1)
         )
       )
     )
@@ -7443,7 +7443,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0156") (unit 1) (value "+5V") (footprint "")
+          (reference "#+0156") (unit 1)
         )
       )
     )
@@ -7468,7 +7468,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0157") (unit 1) (value "+5V") (footprint "")
+          (reference "#+0157") (unit 1)
         )
       )
     )
@@ -7493,7 +7493,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0158") (unit 1) (value "+5V") (footprint "")
+          (reference "#+0158") (unit 1)
         )
       )
     )
@@ -7518,7 +7518,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0159") (unit 1) (value "+5V") (footprint "")
+          (reference "#+0159") (unit 1)
         )
       )
     )
@@ -7543,7 +7543,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0130") (unit 1) (value "+5V") (footprint "")
+          (reference "#+0130") (unit 1)
         )
       )
     )
@@ -7568,7 +7568,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0131") (unit 1) (value "+12V") (footprint "")
+          (reference "#+0131") (unit 1)
         )
       )
     )
@@ -7593,7 +7593,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0132") (unit 1) (value "+5V") (footprint "")
+          (reference "#+0132") (unit 1)
         )
       )
     )
@@ -7618,7 +7618,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0133") (unit 1) (value "+5V") (footprint "")
+          (reference "#+0133") (unit 1)
         )
       )
     )
@@ -7643,7 +7643,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0134") (unit 1) (value "+5V") (footprint "")
+          (reference "#+0134") (unit 1)
         )
       )
     )
@@ -7668,7 +7668,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0135") (unit 1) (value "+5V") (footprint "")
+          (reference "#+0135") (unit 1)
         )
       )
     )
@@ -7693,7 +7693,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0136") (unit 1) (value "+5V") (footprint "")
+          (reference "#+0136") (unit 1)
         )
       )
     )
@@ -7718,7 +7718,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0137") (unit 1) (value "+5V") (footprint "")
+          (reference "#+0137") (unit 1)
         )
       )
     )
@@ -7743,7 +7743,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0138") (unit 1) (value "+5V") (footprint "")
+          (reference "#+0138") (unit 1)
         )
       )
     )
@@ -7768,7 +7768,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0139") (unit 1) (value "+5V") (footprint "")
+          (reference "#+0139") (unit 1)
         )
       )
     )
@@ -7793,7 +7793,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0140") (unit 1) (value "+3.3V") (footprint "")
+          (reference "#+0140") (unit 1)
         )
       )
     )
@@ -7818,7 +7818,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0141") (unit 1) (value "+3.3V") (footprint "")
+          (reference "#+0141") (unit 1)
         )
       )
     )
@@ -7843,7 +7843,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0142") (unit 1) (value "+3.3V") (footprint "")
+          (reference "#+0142") (unit 1)
         )
       )
     )
@@ -7868,7 +7868,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0143") (unit 1) (value "+3.3V") (footprint "")
+          (reference "#+0143") (unit 1)
         )
       )
     )
@@ -7893,7 +7893,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0144") (unit 1) (value "+3.3V") (footprint "")
+          (reference "#+0144") (unit 1)
         )
       )
     )
@@ -7918,7 +7918,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0145") (unit 1) (value "+3.3V") (footprint "")
+          (reference "#+0145") (unit 1)
         )
       )
     )
@@ -7943,7 +7943,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0146") (unit 1) (value "+5V") (footprint "")
+          (reference "#+0146") (unit 1)
         )
       )
     )
@@ -7968,7 +7968,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0147") (unit 1) (value "+5V") (footprint "")
+          (reference "#+0147") (unit 1)
         )
       )
     )
@@ -7993,7 +7993,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND083") (unit 1) (value "GND") (footprint "")
+          (reference "#GND083") (unit 1)
         )
       )
     )
@@ -8018,7 +8018,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND084") (unit 1) (value "GND") (footprint "")
+          (reference "#GND084") (unit 1)
         )
       )
     )
@@ -8043,7 +8043,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND085") (unit 1) (value "GND") (footprint "")
+          (reference "#GND085") (unit 1)
         )
       )
     )
@@ -8069,7 +8069,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "C68") (unit 1) (value "4,7uF") (footprint "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder")
+          (reference "C68") (unit 1)
         )
       )
     )
@@ -8094,7 +8094,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#PWR0160") (unit 1) (value "GND") (footprint "")
+          (reference "#PWR0160") (unit 1)
         )
       )
     )
@@ -8119,7 +8119,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#+0161") (unit 1) (value "+5V") (footprint "")
+          (reference "#+0161") (unit 1)
         )
       )
     )
@@ -8152,7 +8152,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "RR7") (unit 1) (value "8x10K") (footprint "Resistor_THT:R_Array_SIP9")
+          (reference "RR7") (unit 1)
         )
       )
     )
@@ -8185,7 +8185,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "RR6") (unit 1) (value "8x10K") (footprint "Resistor_THT:R_Array_SIP9")
+          (reference "RR6") (unit 1)
         )
       )
     )
@@ -8218,7 +8218,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "RR4") (unit 1) (value "8x10K") (footprint "Resistor_THT:R_Array_SIP9")
+          (reference "RR4") (unit 1)
         )
       )
     )
@@ -8251,7 +8251,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "RR8") (unit 1) (value "8x10K") (footprint "Resistor_THT:R_Array_SIP9")
+          (reference "RR8") (unit 1)
         )
       )
     )
@@ -8276,7 +8276,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#GND0118") (unit 1) (value "GND") (footprint "")
+          (reference "#GND0118") (unit 1)
         )
       )
     )
@@ -8301,7 +8301,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "#PWR0101") (unit 1) (value "VCC") (footprint "")
+          (reference "#PWR0101") (unit 1)
         )
       )
     )
@@ -8334,7 +8334,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "RR3") (unit 1) (value "8x10K") (footprint "Resistor_THT:R_Array_SIP9")
+          (reference "RR3") (unit 1)
         )
       )
     )
@@ -8367,7 +8367,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "RR5") (unit 1) (value "8x10K") (footprint "Resistor_THT:R_Array_SIP9")
+          (reference "RR5") (unit 1)
         )
       )
     )
@@ -8400,7 +8400,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "RR2") (unit 1) (value "8x10K") (footprint "Resistor_THT:R_Array_SIP9")
+          (reference "RR2") (unit 1)
         )
       )
     )
@@ -8433,7 +8433,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687"
-          (reference "RR1") (unit 1) (value "8x10K") (footprint "Resistor_THT:R_Array_SIP9")
+          (reference "RR1") (unit 1)
         )
       )
     )

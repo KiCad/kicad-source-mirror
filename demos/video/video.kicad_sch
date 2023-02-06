@@ -1,4 +1,4 @@
-(kicad_sch (version 20221004) (generator eeschema)
+(kicad_sch (version 20230121) (generator eeschema)
 
   (uuid f54f2c44-70ae-46db-88a1-bf696c289e90)
 
@@ -1769,7 +1769,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90"
-          (reference "P8") (unit 1) (value "BNC") (footprint "Discret:SUBCLICK")
+          (reference "P8") (unit 1)
         )
       )
     )
@@ -1794,7 +1794,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90"
-          (reference "#GND02") (unit 1) (value "GND") (footprint "")
+          (reference "#GND02") (unit 1)
         )
       )
     )
@@ -1820,7 +1820,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90"
-          (reference "P1") (unit 1) (value "BNC") (footprint "Discret:SUBCLICK")
+          (reference "P1") (unit 1)
         )
       )
     )
@@ -1846,7 +1846,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90"
-          (reference "P2") (unit 1) (value "BNC") (footprint "Discret:SUBCLICK")
+          (reference "P2") (unit 1)
         )
       )
     )
@@ -1872,7 +1872,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90"
-          (reference "P3") (unit 1) (value "BNC") (footprint "Discret:SUBCLICK")
+          (reference "P3") (unit 1)
         )
       )
     )
@@ -1897,7 +1897,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90"
-          (reference "#GND05") (unit 1) (value "GND") (footprint "")
+          (reference "#GND05") (unit 1)
         )
       )
     )
@@ -1922,7 +1922,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90"
-          (reference "#GND04") (unit 1) (value "GND") (footprint "")
+          (reference "#GND04") (unit 1)
         )
       )
     )
@@ -1947,7 +1947,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90"
-          (reference "#GND03") (unit 1) (value "GND") (footprint "")
+          (reference "#GND03") (unit 1)
         )
       )
     )
@@ -1972,7 +1972,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90"
-          (reference "#GND01") (unit 1) (value "GND") (footprint "")
+          (reference "#GND01") (unit 1)
         )
       )
     )
@@ -2005,7 +2005,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90"
-          (reference "J4") (unit 1) (value "DB9FEM") (footprint "Connector_Dsub:DSUB-9_Female_Horizontal_P2.77x2.84mm_EdgePinOffset14.56mm_Housed_MountingHolesOffset15.98mm")
+          (reference "J4") (unit 1)
         )
       )
     )
@@ -2089,6 +2089,11 @@
       (effects (font (size 1.524 1.524)) (justify left))
       (uuid f9155aba-a1e5-4a54-add7-8c2e753d6883)
     )
+    (instances
+      (project "video"
+        (path "/f54f2c44-70ae-46db-88a1-bf696c289e90" (page "7"))
+      )
+    )
   )
 
   (sheet (at 337.82 44.45) (size 34.29 27.94)
@@ -2128,6 +2133,11 @@
     (pin "CSYNC-OUT" input (at 337.82 62.23 180)
       (effects (font (size 1.524 1.524)) (justify left))
       (uuid bf7caaa0-3034-4b45-82e1-d6d579ca7e05)
+    )
+    (instances
+      (project "video"
+        (path "/f54f2c44-70ae-46db-88a1-bf696c289e90" (page "8"))
+      )
     )
   )
 
@@ -2196,6 +2206,11 @@
     (pin "BT812_RD-" input (at 175.26 125.73 180)
       (effects (font (size 1.524 1.524)) (justify left))
       (uuid ee205f93-2685-4fb4-8ec9-7ac759402551)
+    )
+    (instances
+      (project "video"
+        (path "/f54f2c44-70ae-46db-88a1-bf696c289e90" (page "5"))
+      )
     )
   )
 
@@ -2453,6 +2468,11 @@
       (effects (font (size 1.524 1.524)) (justify right))
       (uuid a92d668f-81f1-4876-8369-f9494ee05ca9)
     )
+    (instances
+      (project "video"
+        (path "/f54f2c44-70ae-46db-88a1-bf696c289e90" (page "3"))
+      )
+    )
   )
 
   (sheet (at 176.53 163.83) (size 46.99 43.18)
@@ -2524,6 +2544,11 @@
     (pin "MXA[0..10]" input (at 176.53 204.47 180)
       (effects (font (size 1.524 1.524)) (justify left))
       (uuid ca268211-7a89-47cc-8593-dd599e5dee60)
+    )
+    (instances
+      (project "video"
+        (path "/f54f2c44-70ae-46db-88a1-bf696c289e90" (page "6"))
+      )
     )
   )
 
@@ -2629,6 +2654,11 @@
       (effects (font (size 1.524 1.524)) (justify right))
       (uuid 40df14f4-9d05-483f-b8cd-ca01edcc82f3)
     )
+    (instances
+      (project "video"
+        (path "/f54f2c44-70ae-46db-88a1-bf696c289e90" (page "2"))
+      )
+    )
   )
 
   (sheet (at 173.99 41.91) (size 50.8 54.61)
@@ -2733,16 +2763,14 @@
       (effects (font (size 1.524 1.524)) (justify right))
       (uuid 12f7c272-cc70-4289-ab00-a8083626d567)
     )
+    (instances
+      (project "video"
+        (path "/f54f2c44-70ae-46db-88a1-bf696c289e90" (page "4"))
+      )
+    )
   )
 
   (sheet_instances
-    (path "/f54f2c44-70ae-46db-88a1-bf696c289e90" (page "1"))
-    (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03687" (page "2"))
-    (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03683" (page "3"))
-    (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03689" (page "4"))
-    (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03681" (page "5"))
-    (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf03685" (page "6"))
-    (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf0367d" (page "7"))
-    (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf0367f" (page "8"))
+    (path "/" (page "1"))
   )
 )

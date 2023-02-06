@@ -1,4 +1,4 @@
-(kicad_sch (version 20221004) (generator eeschema)
+(kicad_sch (version 20230121) (generator eeschema)
 
   (uuid 39bf5ddc-d073-496b-8d93-14dacb63ae69)
 
@@ -2479,7 +2479,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf0367d"
-          (reference "U22") (unit 1) (value "XC4003-VQ100") (footprint "Package_QFP:TQFP-100_14x14mm_P0.5mm")
+          (reference "U22") (unit 1)
         )
       )
     )
@@ -2504,7 +2504,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf0367d"
-          (reference "#PWR06") (unit 1) (value "VCC") (footprint "")
+          (reference "#PWR06") (unit 1)
         )
       )
     )
@@ -2548,7 +2548,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf0367d"
-          (reference "U3") (unit 1) (value "74LS245") (footprint "Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm")
+          (reference "U3") (unit 1)
         )
       )
     )
@@ -2592,7 +2592,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf0367d"
-          (reference "U6") (unit 1) (value "74LS245") (footprint "Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm")
+          (reference "U6") (unit 1)
         )
       )
     )
@@ -2636,7 +2636,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf0367d"
-          (reference "U5") (unit 1) (value "74LS245") (footprint "Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm")
+          (reference "U5") (unit 1)
         )
       )
     )
@@ -2680,7 +2680,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf0367d"
-          (reference "U4") (unit 1) (value "74LS245") (footprint "Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm")
+          (reference "U4") (unit 1)
         )
       )
     )
@@ -2705,7 +2705,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf0367d"
-          (reference "#PWR0103") (unit 1) (value "VCC") (footprint "")
+          (reference "#PWR0103") (unit 1)
         )
       )
     )
@@ -2730,7 +2730,7 @@
     (instances
       (project "video"
         (path "/f54f2c44-70ae-46db-88a1-bf696c289e90/00000000-0000-0000-0000-00004bf0367d"
-          (reference "#PWR0102") (unit 1) (value "GND") (footprint "")
+          (reference "#PWR0102") (unit 1)
         )
       )
     )
