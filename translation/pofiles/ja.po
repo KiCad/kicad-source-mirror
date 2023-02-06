@@ -10,10 +10,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-01 14:03-0800\n"
-"PO-Revision-Date: 2023-02-01 03:03+0000\n"
+"PO-Revision-Date: 2023-02-07 01:13+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@fujitsu.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -9846,7 +9846,7 @@ msgstr "属性"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:278
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:201
 msgid "Exclude from simulation"
-msgstr "シミュレーションから除外する"
+msgstr "シミュレーションから除外"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:311
 msgid "Footprint filters:"
@@ -11438,7 +11438,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:218
 msgid "Do not populate"
-msgstr "未実装にする"
+msgstr "未実装"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:230
 msgid "Update Symbol from Library..."
