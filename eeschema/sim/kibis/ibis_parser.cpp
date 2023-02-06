@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Fabien Corona f.corona<at>laposte.net
+ * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -183,39 +184,57 @@ bool IbisComponentPin::Check()
     {
         std::stringstream message;
         message << _( "Checking pin " ) << m_pinName;
-        Report( message.str(), RPT_SEVERITY_ACTION );
 
         if( m_pinName.empty() )
         {
+            if(status )
+                Report( message.str(), RPT_SEVERITY_ACTION );
+
             Report( _( "Pin name cannot be empty." ), RPT_SEVERITY_ERROR );
             status = false;
         }
         if( m_signalName.empty() )
         {
+            if(status )
+                Report( message.str(), RPT_SEVERITY_ACTION );
+
             Report( _( "Signal name cannot be empty." ), RPT_SEVERITY_ERROR );
             status = false;
         }
         if( m_modelName.empty() )
         {
+            if(status )
+                Report( message.str(), RPT_SEVERITY_ACTION );
+
             Report( _( "Model name cannot be empty." ), RPT_SEVERITY_ERROR );
             status = false;
         }
         if( isnan( m_Rpin ) && !isNumberNA( m_Rpin ) )
         {
-            Report( _( "Rpin is not valid." ), RPT_SEVERITY_ERROR );
+            if(status )
+                Report( message.str(), RPT_SEVERITY_ACTION );
+
+           Report( _( "Rpin is not valid." ), RPT_SEVERITY_ERROR );
             status = false;
         }
         if( isnan( m_Lpin )&& !isNumberNA( m_Lpin )  )
         {
+            if(status )
+                Report( message.str(), RPT_SEVERITY_ACTION );
+
             Report( _( "Lpin is not valid." ), RPT_SEVERITY_ERROR );
             status = false;
         }
         if( isnan( m_Cpin )&& !isNumberNA( m_Cpin ) )
         {
+            if(status )
+                Report( message.str(), RPT_SEVERITY_ACTION );
+
             Report( _( "Cpin is not valid." ), RPT_SEVERITY_ERROR );
             status = false;
         }
     }
+
     return status;
 }
 
@@ -224,30 +243,41 @@ bool IbisComponent::Check()
 {
     bool status = true;
 
+    std::stringstream message;
+    message << _( "Checking component " ) << m_name;
+
     if( m_name.empty() )
     {
-        Report( _( "Component name cannot be empty." ), RPT_SEVERITY_ERROR );
+        if( status )
+            Report( message.str(), RPT_SEVERITY_ACTION );
+
+       Report( _( "Component name cannot be empty." ), RPT_SEVERITY_ERROR );
         status = false;
     }
 
-    std::stringstream message;
-    message << _( "Checking component " ) << m_name;
-    Report( message.str(), RPT_SEVERITY_ACTION );
-
     if( m_manufacturer.empty() )
     {
+        if( status )
+            Report( message.str(), RPT_SEVERITY_ACTION );
+
         Report( _( "Component: manufacturer cannot be empty." ), RPT_SEVERITY_ERROR );
         status = false;
     }
 
     if( !m_package.Check() )
     {
+        if( status )
+            Report( message.str(), RPT_SEVERITY_ACTION );
+
         Report( _( "Component: Invalid Package." ), RPT_SEVERITY_ERROR );
         status = false;
     }
 
     if( m_pins.size() < 1 )
     {
+        if( status )
+            Report( message.str(), RPT_SEVERITY_ACTION );
+
         Report( _( "Component: no pin" ), RPT_SEVERITY_ERROR );
         status = false;
     }
@@ -443,51 +473,77 @@ bool IbisModel::Check()
 
     std::stringstream message;
     message << _( "Checking model " ) << m_name;
-    Report( message.str(), RPT_SEVERITY_ACTION );
 
     if(m_type == IBIS_MODEL_TYPE::UNDEFINED)
     {
+        if( status )
+            Report( message.str(), RPT_SEVERITY_ACTION );
+
         Report( _( "Undefined model type" ), RPT_SEVERITY_ERROR );
         status = false;
     }
 
     if( isnan( m_vinh ) && !isNumberNA( m_vinh ) )
     {
+        if( status )
+            Report( message.str(), RPT_SEVERITY_ACTION );
+
         Report( _( "Invalid Vinh value." ), RPT_SEVERITY_ERROR );
         status = false;
     }
     if( isnan( m_vinl ) && !isNumberNA( m_vinl ) )
     {
+        if( status )
+            Report( message.str(), RPT_SEVERITY_ACTION );
+
         Report( _( "Invalid Vinl value." ), RPT_SEVERITY_ERROR );
         status = false;
     }
     if( isnan( m_rref ) && !isNumberNA( m_rref ) )
     {
+        if( status )
+            Report( message.str(), RPT_SEVERITY_ACTION );
+
         Report( _( "Invalid R_ref value." ), RPT_SEVERITY_ERROR );
         status = false;
     }
     if( isnan( m_cref ) && !isNumberNA( m_cref ) )
     {
+        if( status )
+            Report( message.str(), RPT_SEVERITY_ACTION );
+
         Report( _( "Invalid C_ref value." ), RPT_SEVERITY_ERROR );
         status = false;
     }
     if( isnan( m_vref ) && !isNumberNA( m_vref ) )
     {
+        if( status )
+            Report( message.str(), RPT_SEVERITY_ACTION );
+
         Report( _( "invalid V_ref value." ), RPT_SEVERITY_ERROR );
         status = false;
     }
     if( isnan( m_vmeas ) && !isNumberNA( m_vmeas ) )
     {
+        if( status )
+            Report( message.str(), RPT_SEVERITY_ACTION );
+
         Report( _( "Invalid V_meas value." ), RPT_SEVERITY_ERROR );
         status = false;
     }
     if( !m_C_comp.Check() )
     {
+        if( status )
+            Report( message.str(), RPT_SEVERITY_ACTION );
+
         Report( _( "C_comp is invalid." ), RPT_SEVERITY_ERROR );
         status = false;
     }
     if( !m_temperatureRange.Check() )
     {
+        if( status )
+            Report( message.str(), RPT_SEVERITY_ACTION );
+
         Report( _( "Temperature Range is invalid." ), RPT_SEVERITY_ERROR );
         status = false;
     }
@@ -553,28 +609,41 @@ bool IbisHeader::Check()
 {
     bool status = true;
 
-    Report( _( "Checking Header..." ), RPT_SEVERITY_ACTION );
+    std::stringstream message;
+    message << _( "Checking Header... " );
 
     if( m_ibisVersion == -1 )
     {
+        if(status )
+            Report( message.str(), RPT_SEVERITY_ACTION );
+
         Report( _( "Missing [IBIS Ver]" ), RPT_SEVERITY_ERROR );
         status = false;
     }
 
     if( m_ibisVersion > IBIS_MAX_VERSION )
     {
+        if(status )
+            Report( message.str(), RPT_SEVERITY_ACTION );
+
         Report( _( "The parser does not handle this IBIS version" ), RPT_SEVERITY_ERROR );
         status = false;
     }
 
     if( m_fileRevision == -1 )
     {
+        if(status )
+            Report( message.str(), RPT_SEVERITY_ACTION );
+
         Report( _( "Missing [File Rev]" ), RPT_SEVERITY_ERROR );
         status = false;
     }
 
     if( m_fileName.empty() )
     {
+        if(status )
+            Report( message.str(), RPT_SEVERITY_ACTION );
+
         Report( _( "Missing [File Name]" ), RPT_SEVERITY_ERROR );
         status = false;
     }
@@ -584,6 +653,9 @@ bool IbisHeader::Check()
     if( !( !strcmp( ext.c_str(), ".ibs" ) || !strcmp( ext.c_str(), ".pkg" )
            || !strcmp( ext.c_str(), ".ebd" ) || !strcmp( ext.c_str(), ".ims" ) ) )
     {
+        if(status )
+            Report( message.str(), RPT_SEVERITY_ACTION );
+
         Report( "Invalid file extension in [File Name]", RPT_SEVERITY_ERROR );
         status = false;
     }
@@ -604,28 +676,39 @@ bool IbisPackageModel::Check()
 
     std::stringstream message;
     message << _( "Checking package model " ) << m_name;
-    Report( message.str(), RPT_SEVERITY_ACTION );
 
     if( m_manufacturer.empty() )
     {
+        if( status )
+            Report( message.str(), RPT_SEVERITY_ACTION );
+
         Report( _( "Manufacturer cannot be empty." ), RPT_SEVERITY_ERROR );
         status = false;
     }
 
     if( m_OEM.empty() )
     {
+        if( status )
+            Report( message.str(), RPT_SEVERITY_ACTION );
+
         Report( _( "OEM cannot be empty." ), RPT_SEVERITY_ERROR );
         status = false;
     }
 
     if( m_numberOfPins < 0 )
     {
+        if( status )
+            Report( message.str(), RPT_SEVERITY_ACTION );
+
         Report( _( "Negative number of pins." ), RPT_SEVERITY_ERROR );
         status = false;
     }
 
     if( (int)m_pins.size() != m_numberOfPins )
     {
+        if( status )
+            Report( message.str(), RPT_SEVERITY_ACTION );
+
         Report( "Number of pins does not match [Pin Numbers] size", RPT_SEVERITY_ERROR );
         status = false;
     }
@@ -634,6 +717,9 @@ bool IbisPackageModel::Check()
     {
         if( m_pins.at( i ).empty() )
         {
+            if( status )
+                Report( message.str(), RPT_SEVERITY_ACTION );
+
             Report( _( "Empty pin number" ), RPT_SEVERITY_ERROR );
             status = false;
         }
@@ -642,6 +728,9 @@ bool IbisPackageModel::Check()
 
     if( !( m_resistanceMatrix )->Check() )
     {
+        if( status )
+            Report( message.str(), RPT_SEVERITY_ACTION );
+
         Report( _( "Resistance matrix is incorrect" ), RPT_SEVERITY_ERROR );
         status = false;
     }
@@ -650,18 +739,27 @@ bool IbisPackageModel::Check()
     {
         if( m_capacitanceMatrix->m_type == IBIS_MATRIX_TYPE::UNDEFINED )
         {
+            if( status )
+                Report( message.str(), RPT_SEVERITY_ACTION );
+
             Report( _( "Capacitance matrix is undefined" ), RPT_SEVERITY_ERROR );
             status = false;
         }
 
         if( !m_capacitanceMatrix->Check() )
         {
+            if( status )
+                Report( message.str(), RPT_SEVERITY_ACTION );
+
             Report( _( "Capacitance matrix is incorrect" ), RPT_SEVERITY_ERROR );
             status = false;
         }
     }
     else
     {
+        if( status )
+            Report( message.str(), RPT_SEVERITY_ACTION );
+
         Report( _( "Capacitance matrix is nullptr" ), RPT_SEVERITY_ERROR );
         status = false;
     }
@@ -670,18 +768,27 @@ bool IbisPackageModel::Check()
     {
         if( m_inductanceMatrix->m_type == IBIS_MATRIX_TYPE::UNDEFINED )
         {
+            if( status )
+                Report( message.str(), RPT_SEVERITY_ACTION );
+
             Report( _( "Inductance matrix is undefined" ), RPT_SEVERITY_ERROR );
             status = false;
         }
 
         if( !m_inductanceMatrix->Check() )
         {
+            if( status )
+                Report( message.str(), RPT_SEVERITY_ACTION );
+
             Report( _( "Inductance matrix is incorrect" ), RPT_SEVERITY_ERROR );
             status = false;
         }
     }
     else
     {
+        if( status )
+            Report( message.str(), RPT_SEVERITY_ACTION );
+
         Report( _( "Inductance matrix is nullptr" ), RPT_SEVERITY_ERROR );
         status = false;
     }
@@ -702,10 +809,6 @@ bool IbisParser::ParseFile( std::string& aFileName )
         Report( err_msg.str(), RPT_SEVERITY_ERROR );
         return false;
     }
-
-    err_msg.clear();
-    err_msg << _( "Reading file " ) << aFileName << wxT( "..." );
-    Report( err_msg.str(), RPT_SEVERITY_ACTION );
 
     std::ostringstream ss;
     ss << ibisFile.rdbuf();

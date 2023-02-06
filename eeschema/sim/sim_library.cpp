@@ -29,7 +29,7 @@
 
 
 std::unique_ptr<SIM_LIBRARY> SIM_LIBRARY::Create( const wxString& aFilePath, REPORTER* aReporter,
-                                                  std::function<std::string( const std::string&, const std::string& )> *aResolver )
+            std::function<std::string( const std::string&, const std::string& )> *aResolver )
 {
     std::unique_ptr<SIM_LIBRARY> library;
 
@@ -40,7 +40,8 @@ std::unique_ptr<SIM_LIBRARY> SIM_LIBRARY::Create( const wxString& aFilePath, REP
 
     library->m_reporter = aReporter;
     library->m_pathResolver = aResolver;
-    library->ReadFile( std::string( aFilePath.c_str() ), aReporter );
+    library->ReadFile( aFilePath.utf8_string(), aReporter );
+
     return library;
 }
 
