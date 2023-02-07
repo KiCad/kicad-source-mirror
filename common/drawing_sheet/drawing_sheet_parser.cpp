@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2013 Jean-Pierre Charras <jp.charras at wanadoo.fr>.
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -113,7 +113,6 @@ private:
     void readPngdata( DS_DATA_ITEM_BITMAP * aItem );
 };
 
-// PCB_PLOT_PARAMS_PARSER
 
 DRAWING_SHEET_PARSER::DRAWING_SHEET_PARSER( const char* aLine,
                                             const wxString& aSource ) :
@@ -233,7 +232,7 @@ void DRAWING_SHEET_PARSER::Parse( DS_DATA_MODEL* aLayout )
 
         case T_polygon:
             item = new DS_DATA_ITEM_POLYGONS();
-            parsePolygon(  (DS_DATA_ITEM_POLYGONS*) item );
+            parsePolygon( (DS_DATA_ITEM_POLYGONS*) item );
             aLayout->Append( item );
             break;
 
@@ -406,7 +405,7 @@ void DRAWING_SHEET_PARSER::parsePolygon( DS_DATA_ITEM_POLYGONS * aItem )
             break;
 
         case T_repeat:
-            aItem->m_RepeatCount = parseInt( -1, 100 );
+            aItem->m_RepeatCount = parseInt( 1, 100 );
             NeedRIGHT();
             break;
 
@@ -483,7 +482,7 @@ void DRAWING_SHEET_PARSER::parseBitmap( DS_DATA_ITEM_BITMAP * aItem )
             break;
 
         case T_repeat:
-            aItem->m_RepeatCount = parseInt( -1, 100 );
+            aItem->m_RepeatCount = parseInt( 1, 100 );
             NeedRIGHT();
             break;
 
@@ -619,7 +618,7 @@ void DRAWING_SHEET_PARSER::parseGraphic( DS_DATA_ITEM * aItem )
             break;
 
         case T_repeat:
-            aItem->m_RepeatCount = parseInt( -1, 100 );
+            aItem->m_RepeatCount = parseInt( 1, 100 );
             NeedRIGHT();
             break;
 
@@ -679,7 +678,7 @@ void DRAWING_SHEET_PARSER::parseText( DS_DATA_ITEM_TEXT* aItem )
             break;
 
         case T_repeat:
-            aItem->m_RepeatCount = parseInt( -1, 100 );
+            aItem->m_RepeatCount = parseInt( 1, 100 );
             NeedRIGHT();
             break;
 

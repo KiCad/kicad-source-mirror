@@ -42,6 +42,11 @@
 #include <dialogs/html_message_box.h>
 
 
+#define DLG_MIN_TEXTSIZE 0.01       // min drawing sheet text default size in mm from PROPERTIES_FRAME
+                                    // Note also 0.0 is allowed for a given text to use the default size
+#define DLG_MAX_TEXTSIZE 100.0      // max drawing sheet text size in mm from PROPERTIES_FRAME
+
+
 PROPERTIES_FRAME::PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent ) :
         PANEL_PROPERTIES_BASE( aParent ),
         m_scintillaTricks( nullptr ),
@@ -175,14 +180,26 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToGeneral()
     DS_DATA_MODEL&   model = DS_DATA_MODEL::GetTheInstance();
 
     // Import default parameters from widgets
+    m_defaultLineWidth.Validate( 0.0, 10.0, EDA_UNITS::MILLIMETRES );
     model.m_DefaultLineWidth = EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units,
                                                                m_defaultLineWidth.GetValue() );
 
-    model.m_DefaultTextSize.x = EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units,
-                                                                m_defaultTextSizeX.GetValue() );
-    model.m_DefaultTextSize.y = EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units,
+    bool is_valid = m_defaultTextSizeX.Validate( DLG_MIN_TEXTSIZE, DLG_MAX_TEXTSIZE,
+                                                 EDA_UNITS::MILLIMETRES );
+    if( is_valid )
+        model.m_DefaultTextSize.x = EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units,
+                                                            m_defaultTextSizeX.GetValue() );
+
+    is_valid = m_defaultTextSizeY.Validate( DLG_MIN_TEXTSIZE, DLG_MAX_TEXTSIZE, EDA_UNITS::MILLIMETRES );
+
+    if( is_valid )
+        model.m_DefaultTextSize.y = EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units,
                                                                 m_defaultTextSizeY.GetValue() );
-    model.m_DefaultTextThickness = EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units,
+
+    is_valid = m_defaultTextThickness.Validate( 0.0, 5.0, EDA_UNITS::MILLIMETRES );
+
+    if( is_valid )
+        model.m_DefaultTextThickness = EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units,
                                                                 m_defaultTextThickness.GetValue() );
 
     // Get page margins values
@@ -462,7 +479,10 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( DS_DATA_ITEM* aItem )
     }
 
     // Import thickness
-    aItem->m_LineWidth =
+    bool is_valid = m_lineWidth.Validate( 0.0, 10.0, EDA_UNITS::MILLIMETRES );
+
+    if( is_valid )
+        aItem->m_LineWidth =
             EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units, m_lineWidth.GetValue() );
 
     // Import Start point
@@ -497,6 +517,15 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( DS_DATA_ITEM* aItem )
     long itmp;
     msg = m_textCtrlRepeatCount->GetValue();
     msg.ToLong( &itmp );
+    // Ensure m_RepeatCount is > 0. Otherwise it create issues because a repeat
+    // count < 1 make no sense
+    if( itmp < 1l )
+    {
+        itmp = 1;
+        msg.Printf( wxT( "%ld" ), itmp );
+        m_textCtrlRepeatCount->SetValue( msg );
+    }
+
     aItem->m_RepeatCount = itmp;
 
     aItem->m_IncrementVector.x =
@@ -539,10 +568,16 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( DS_DATA_ITEM* aItem )
         item->m_Orient = EDA_UNIT_UTILS::UI::DoubleValueFromString( drawSheetIUScale, EDA_UNITS::UNSCALED, msg );
 
         // Import text size
-        item->m_TextSize.x =
-                EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units, m_textSizeX.GetValue() );
-        item->m_TextSize.y =
-                EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units, m_textSizeY.GetValue() );
+        is_valid = m_textSizeX.Validate( 0.0, DLG_MAX_TEXTSIZE, EDA_UNITS::MILLIMETRES );
+
+        if( is_valid )
+            item->m_TextSize.x = EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units,
+                                                                 m_textSizeX.GetValue() );
+        is_valid = m_textSizeY.Validate( 0.0, DLG_MAX_TEXTSIZE, EDA_UNITS::MILLIMETRES );
+
+        if( is_valid )
+            item->m_TextSize.y = EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units,
+                                                                 m_textSizeY.GetValue() );
 
         // Import constraints:
         item->m_BoundingBoxSize.x =
