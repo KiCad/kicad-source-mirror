@@ -987,10 +987,7 @@ void PCB_EDIT_FRAME::ResolveDRCExclusions()
     for( PCB_MARKER* marker : GetBoard()->Markers() )
     {
         if( marker->GetSeverity() == RPT_SEVERITY_EXCLUSION )
-        {
-            GetCanvas()->GetView()->Remove( marker );
-            GetCanvas()->GetView()->Add( marker );
-        }
+            GetCanvas()->GetView()->Update( marker );
     }
 
     GetBoard()->UpdateRatsnestExclusions();

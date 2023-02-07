@@ -316,6 +316,20 @@ std::vector<PCB_MARKER*> BOARD::ResolveDRCExclusions()
     {
         PCB_MARKER* marker = PCB_MARKER::Deserialize( exclusionData );
 
+        if( !marker )
+            continue;
+
+        // Check to see if items still exist
+        for( const KIID& guid : marker->GetRCItem()->GetIDs() )
+        {
+            if( GetItem( guid ) == DELETED_BOARD_ITEM::GetInstance() )
+            {
+                delete marker;
+                marker = nullptr;
+                break;
+            }
+        }
+
         if( marker )
         {
             marker->SetExcluded( true );
