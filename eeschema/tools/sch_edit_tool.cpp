@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1361,11 +1361,15 @@ int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 
 void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
 {
+    KICAD_T  parentType = aField->GetParent() ? aField->GetParent()->Type() : SCHEMATIC_T;
+
     // Save old symbol in undo list if not already in edit, or moving.
     if( aField->GetEditFlags() == 0 )    // i.e. not edited, or moved
         saveCopyInUndoList( aField, UNDO_REDO::CHANGED );
 
-    KICAD_T  parentType = aField->GetParent() ? aField->GetParent()->Type() : SCHEMATIC_T;
+    if( parentType == SCH_SYMBOL_T && aField->GetId() == REFERENCE_FIELD )
+        static_cast<SCH_ITEM*>( aField->GetParent() )->SetConnectivityDirty();
+
     wxString caption;
 
     // Use title caps for mandatory fields.  "Edit Sheet name Field" looks dorky.
