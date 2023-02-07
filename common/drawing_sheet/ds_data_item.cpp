@@ -739,6 +739,9 @@ void DS_DATA_ITEM_BITMAP::SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::V
         m_ImageBitmap->SetPixelSizeIu( pix_size_iu );
     }
 
+    if( !m_ImageBitmap->GetOriginalImageData() )
+        return;
+
     m_drawItems.clear();
 
     for( int j = 0; j < m_RepeatCount; j++ )

@@ -240,7 +240,18 @@ void DRAWING_SHEET_PARSER::Parse( DS_DATA_MODEL* aLayout )
         case T_bitmap:
             item = new DS_DATA_ITEM_BITMAP( NULL );
             parseBitmap( (DS_DATA_ITEM_BITMAP*) item );
-            aLayout->Append( item );
+
+            // Drop invalid bitmaps
+            if( static_cast<DS_DATA_ITEM_BITMAP*>( item )->m_ImageBitmap->GetOriginalImageData() )
+            {
+                aLayout->Append( item );
+            }
+            else
+            {
+                delete static_cast<DS_DATA_ITEM_BITMAP*>( item )->m_ImageBitmap;
+                delete item;
+            }
+
             break;
 
         case T_tbtext:

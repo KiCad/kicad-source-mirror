@@ -397,6 +397,10 @@ void DS_DATA_MODEL_IO::format( DS_DATA_ITEM_POLYGONS* aItem, int aNestLevel ) co
 
 void DS_DATA_MODEL_IO::format( DS_DATA_ITEM_BITMAP* aItem, int aNestLevel ) const
 {
+    // Don't save empty images
+    if( !aItem->m_ImageBitmap->GetOriginalImageData() )
+        return;
+
     m_out->Print( aNestLevel, "(bitmap" );
     m_out->Print( 0, " (name %s)", m_out->Quotew( aItem->m_Name ).c_str() );
     formatCoordinate( "pos", aItem->m_Pos );

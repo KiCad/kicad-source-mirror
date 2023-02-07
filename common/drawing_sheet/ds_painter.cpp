@@ -282,6 +282,13 @@ void KIGFX::DS_PAINTER::draw( const DS_DRAW_ITEM_BITMAP* aItem, int aLayer ) con
     VECTOR2D position = aItem->GetPosition();
     m_gal->Translate( position );
 
+    // If we've failed to read the bitmap data, don't try to draw it
+    if( !( bitmap && bitmap->m_ImageBitmap
+                    && bitmap->m_ImageBitmap->GetImageData() ) )
+    {
+        return;
+    }
+
     // When the image scale factor is not 1.0, we need to modify the actual scale
     // as the image scale factor is similar to a local zoom
     double img_scale = bitmap->m_ImageBitmap->GetScale();

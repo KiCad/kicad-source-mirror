@@ -159,7 +159,12 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
 {
     CACHED_BITMAP bmp;
 
-    const wxImage& imgData = *aBitmap->GetOriginalImageData();
+    const wxImage* imgPtr = aBitmap->GetOriginalImageData();
+
+    if( !imgPtr )
+        return std::numeric_limits< GLuint >::max();
+
+    const wxImage& imgData = *imgPtr;
 
     bmp.w = imgData.GetSize().x;
     bmp.h = imgData.GetSize().y;
