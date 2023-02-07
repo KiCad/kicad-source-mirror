@@ -52,7 +52,7 @@
 #define DISPLAY_NAME_COLUMN   0
 #define SHOW_FIELD_COLUMN     1
 #define GROUP_BY_COLUMN       2
-#define CANONICAL_NAME_COLUMN 3
+#define FIELD_NAME_COLUMN     3
 
 #ifdef __WXMAC__
 #define COLUMN_MARGIN 5
@@ -531,7 +531,7 @@ public:
             if( !fieldsCtrl->GetToggleValue( i, GROUP_BY_COLUMN ) )
                 continue;
 
-            wxString fieldName = fieldsCtrl->GetTextValue( i, CANONICAL_NAME_COLUMN );
+            wxString fieldName = fieldsCtrl->GetTextValue( i, FIELD_NAME_COLUMN );
 
             if( m_dataStore[ lhRefID ][ fieldName ] != m_dataStore[ rhRefID ][ fieldName ] )
                 return false;
@@ -843,8 +843,8 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
 
     for( int row = 0; row < m_fieldsCtrl->GetItemCount(); ++row )
     {
-        const wxString& fieldName = m_fieldsCtrl->GetTextValue( row, DISPLAY_NAME_COLUMN );
-        nameColWidth = std::max( nameColWidth, KIUI::GetTextSize( fieldName, m_fieldsCtrl ).x );
+        const wxString& displayName = m_fieldsCtrl->GetTextValue( row, DISPLAY_NAME_COLUMN );
+        nameColWidth = std::max( nameColWidth, KIUI::GetTextSize( displayName, m_fieldsCtrl ).x );
     }
 
     nameColWidth += nameColWidthMargin;
@@ -854,7 +854,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
     m_fieldsCtrl->GetColumn( DISPLAY_NAME_COLUMN )->SetWidth( nameColWidth );
 
     // This is used for data only.  Don't show it to the user.
-    m_fieldsCtrl->GetColumn( CANONICAL_NAME_COLUMN )->SetHidden( true );
+    m_fieldsCtrl->GetColumn( FIELD_NAME_COLUMN )->SetHidden( true );
 
     m_splitterMainWindow->SetMinimumPaneSize( fieldsMinWidth );
     m_splitterMainWindow->SetSashPosition( fieldsMinWidth + 40 );
@@ -868,7 +868,8 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
     m_grid->SetSelectionMode( wxGrid::wxGridSelectCells );
 
     // add Cut, Copy, and Paste to wxGrid
-    m_grid->PushEventHandler( new FIELDS_EDITOR_GRID_TRICKS( this, m_grid, m_fieldsCtrl ) );
+    m_grid->PushEventHandler(
+            new FIELDS_EDITOR_GRID_TRICKS( this, m_grid, m_fieldsCtrl, m_dataModel ) );
 
     // give a bit more room for comboboxes
     m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
@@ -972,7 +973,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupColumnProperties()
     // sync m_grid's column visibilities to Show checkboxes in m_fieldsCtrl
     for( int i = 0; i < m_fieldsCtrl->GetItemCount(); ++i )
     {
-        const wxString& fieldName = m_fieldsCtrl->GetTextValue( i, 0 );
+        const wxString& fieldName = m_fieldsCtrl->GetTextValue( i, FIELD_NAME_COLUMN );
 
         if( m_fieldsCtrl->GetToggleValue( i, 1 ) )
             m_grid->ShowCol( m_dataModel->GetFieldNameCol( fieldName ) );
@@ -1193,10 +1194,11 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRemoveField( wxCommandEvent& event )
     wxCHECK_RET( row != -1, wxS( "Some user defined field must be selected first" ) );
     wxCHECK_RET( row >= MANDATORY_FIELDS, wxS( "Mandatory fields cannot be removed" ) );
 
-    wxString fieldName = m_fieldsCtrl->GetTextValue( row, 0 );
+    wxString fieldName = m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN );
+    wxString displayName = m_fieldsCtrl->GetTextValue( row, DISPLAY_NAME_COLUMN );
 
-    wxString confirm_msg = wxString::Format( _( "Are you sure you want to remove the field '%s'?" ),
-                                        fieldName );
+    wxString confirm_msg =
+            wxString::Format( _( "Are you sure you want to remove the field '%s'?" ), displayName );
 
     if( !IsOK( this, confirm_msg ) )
         return;
@@ -1323,7 +1325,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnFilterMouseMoved( wxMouseEvent& aEvent )
         SetCursor( wxCURSOR_IBEAM );
 }
 
-
 void DIALOG_SYMBOL_FIELDS_TABLE::OnFieldsCtrlSelectionChanged( wxDataViewEvent& event )
 {
     int row = m_fieldsCtrl->GetSelectedRow();
@@ -1362,7 +1363,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnColumnItemToggled( wxDataViewEvent& event )
             m_fieldsCtrl->SetToggleValue( value, row, col );
         }
 
-        std::string fieldName( m_fieldsCtrl->GetTextValue( row, CANONICAL_NAME_COLUMN ).ToUTF8() );
+        std::string fieldName( m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN ).ToUTF8() );
         cfg->m_FieldEditorPanel.fields_show[fieldName] = value;
 
         if( value )
@@ -1385,7 +1386,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnColumnItemToggled( wxDataViewEvent& event )
             m_fieldsCtrl->SetToggleValue( value, row, col );
         }
 
-        std::string fieldName( m_fieldsCtrl->GetTextValue( row, CANONICAL_NAME_COLUMN ).ToUTF8() );
+        std::string fieldName( m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN ).ToUTF8() );
         cfg->m_FieldEditorPanel.fields_group_by[fieldName] = value;
 
         m_dataModel->RebuildRows( m_filter, m_groupSymbolsBox, m_fieldsCtrl );
@@ -1566,7 +1567,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSizeFieldList( wxSizeEvent& event )
     m_fieldsCtrl->GetColumn( SHOW_FIELD_COLUMN )->SetWidth( m_showColWidth );
     m_fieldsCtrl->GetColumn( GROUP_BY_COLUMN )->SetWidth( m_groupByColWidth );
 
-    m_fieldsCtrl->GetColumn( CANONICAL_NAME_COLUMN )->SetHidden( true );
+    m_fieldsCtrl->GetColumn( FIELD_NAME_COLUMN )->SetHidden( true );
     m_fieldsCtrl->GetColumn( DISPLAY_NAME_COLUMN )->SetWidth( nameColWidth );
 
     m_fieldsCtrl->Refresh(); // To refresh checkboxes on Windows.
