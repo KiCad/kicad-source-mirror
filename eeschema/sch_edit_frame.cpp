@@ -1479,7 +1479,7 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
     Schematic().ConnectionGraph()->Recalculate( list, true, &changeHandler );
 
     GetCanvas()->GetView()->UpdateAllItemsConditionally(
-            []( KIGFX::VIEW_ITEM* aItem ) -> int
+            [&]( KIGFX::VIEW_ITEM* aItem ) -> int
             {
                 int             flags = 0;
                 SCH_ITEM*       item = dynamic_cast<SCH_ITEM*>( aItem );
@@ -1514,6 +1514,9 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
                         text->ClearBoundingBoxCache();
                         flags |= KIGFX::GEOMETRY | KIGFX::REPAINT;
                     }
+
+                    if( flags & KIGFX::GEOMETRY )
+                        GetScreen()->Update( item, false );     // Refresh RTree
                 }
 
                 return flags;

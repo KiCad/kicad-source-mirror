@@ -959,7 +959,7 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
     if( dlg.ShowModal() )
     {
         getView()->UpdateAllItemsConditionally(
-                []( KIGFX::VIEW_ITEM* aItem ) -> int
+                [&]( KIGFX::VIEW_ITEM* aItem ) -> int
                 {
                     int flags = 0;
 
@@ -997,6 +997,9 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
                             text->ClearBoundingBoxCache();
                             flags |= KIGFX::GEOMETRY | KIGFX::REPAINT;
                         }
+
+                        if( flags & KIGFX::GEOMETRY )
+                            m_frame->GetScreen()->Update( item, false );   // Refresh RTree
                     }
 
                     return flags;
