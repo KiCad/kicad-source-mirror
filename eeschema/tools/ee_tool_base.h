@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -158,7 +158,14 @@ protected:
 
             if( editFrame )
             {
-                if( itemType == SCH_PIN_T || itemType == SCH_FIELD_T || itemType == SCH_SHEET_PIN_T )
+                if( itemType == SCH_FIELD_T )
+                {
+                    editFrame->SaveCopyInUndoList( editFrame->GetScreen(),
+                                                   static_cast<SCH_ITEM*>( aItem->GetParent() ),
+                                                   UNDO_REDO::CHANGED, aAppend,
+                                                   false );
+                }
+                else if( itemType == SCH_PIN_T || itemType == SCH_SHEET_PIN_T )
                 {
                     editFrame->SaveCopyInUndoList( editFrame->GetScreen(),
                                                    static_cast<SCH_ITEM*>( aItem->GetParent() ),

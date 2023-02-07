@@ -2317,20 +2317,19 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
 
     if( aSymbol->GetDNP() )
     {
-        BOX2I bbox = aSymbol->GetBodyAndPinsBoundingBox();
+        COLOR_SETTINGS* colors = Pgm().GetSettingsManager().GetColorSettings();
+        BOX2I           bbox = aSymbol->GetBodyAndPinsBoundingBox();
+        VECTOR2I        pt1 = bbox.GetOrigin();
+        VECTOR2I        pt2 = bbox.GetEnd();
 
         m_gal->SetIsStroke( true );
         m_gal->SetIsFill( true );
-        COLOR_SETTINGS* colors = Pgm().GetSettingsManager().GetColorSettings();
-
         m_gal->SetStrokeColor( colors->GetColor( LAYER_ERC_ERR ) );
         m_gal->SetFillColor( colors->GetColor( LAYER_ERC_ERR ) );
 
-            m_gal->DrawSegment( bbox.GetOrigin(), bbox.GetEnd(),
-                    3.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ) );
-            m_gal->DrawSegment( bbox.GetOrigin() + VECTOR2I( bbox.GetWidth(), 0 ),
-                                bbox.GetOrigin() + VECTOR2I( 0, bbox.GetHeight() ),
-                    3.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ) );
+        m_gal->DrawSegment( pt1, pt2, 3.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ) );
+        std::swap( pt1.x, pt2.x );
+        m_gal->DrawSegment( pt1, pt2, 3.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ) );
     }
 }
 
@@ -2396,6 +2395,16 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
     {
         SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( aField->GetParent() );
         bbox.Offset( label->GetSchematicTextOffset( &m_schSettings ) );
+    }
+
+    if( m_schSettings.GetDrawBoundingBoxes() )
+    {
+        m_gal->SetIsFill( false );
+        m_gal->SetIsStroke( true );
+        m_gal->SetStrokeColor( aField->IsSelected() ? COLOR4D( 1.0, 0.2, 0.2, 1 )
+                                                    : COLOR4D( 0.2, 0.2, 0.2, 1 ) );
+        m_gal->SetLineWidth( schIUScale.MilsToIU( 3 ) );
+        m_gal->DrawRectangle( bbox.GetOrigin(), bbox.GetEnd() );
     }
 
     m_gal->SetStrokeColor( color );
