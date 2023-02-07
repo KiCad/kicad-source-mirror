@@ -26,6 +26,7 @@
 #include <sim/sim_library.h>
 #include <sim/sim_library_spice.h>
 #include <boost/algorithm/string/case_conv.hpp>
+#include <macros.h>
 
 
 std::unique_ptr<SIM_LIBRARY> SIM_LIBRARY::Create( const wxString& aFilePath, REPORTER* aReporter,
@@ -40,7 +41,7 @@ std::unique_ptr<SIM_LIBRARY> SIM_LIBRARY::Create( const wxString& aFilePath, REP
 
     library->m_reporter = aReporter;
     library->m_pathResolver = aResolver;
-    library->ReadFile( aFilePath.utf8_string(), aReporter );
+    library->ReadFile( std::string( TO_UTF8( aFilePath ) ), aReporter );
 
     return library;
 }
