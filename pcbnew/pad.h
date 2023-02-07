@@ -26,6 +26,7 @@
 #define PAD_H
 
 #include <mutex>
+#include <array>
 #include <zones.h>
 #include <board_connected_item.h>
 #include <geometry/shape_poly_set.h>
@@ -741,8 +742,7 @@ public:
 
     void ClearZoneLayerOverrides()
     {
-        for( size_t ii = 0; ii < arrayDim( m_zoneLayerOverrides ); ++ii )
-            m_zoneLayerOverrides[ ii ] = ZLO_NONE;
+        m_zoneLayerOverrides.fill( ZLO_NONE );
     }
 
     const ZONE_LAYER_OVERRIDE& GetZoneLayerOverride( PCB_LAYER_ID aLayer ) const
@@ -874,8 +874,8 @@ private:
                                                 //   while 90° will produce a +.
     int         m_thermalGap;
 
-    std::mutex           m_zoneLayerOverridesMutex;
-    ZONE_LAYER_OVERRIDE  m_zoneLayerOverrides[B_Cu + 1];
+    std::mutex                                     m_zoneLayerOverridesMutex;
+    std::array<ZONE_LAYER_OVERRIDE, MAX_CU_LAYERS> m_zoneLayerOverrides;
 };
 
 #endif  // PAD_H

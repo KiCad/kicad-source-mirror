@@ -89,8 +89,7 @@ PCB_VIA::PCB_VIA( BOARD_ITEM* aParent ) :
     m_removeUnconnectedLayer = false;
     m_keepStartEndLayer = true;
 
-    for( size_t ii = 0; ii < arrayDim( m_zoneLayerOverrides ); ++ii )
-        m_zoneLayerOverrides[ ii ] = ZLO_NONE;
+    m_zoneLayerOverrides.fill( ZLO_NONE );
 
     m_isFree = false;
 }

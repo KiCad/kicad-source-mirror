@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 CERN
- * Copyright (C) 2012-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -5025,10 +5025,13 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
             break;
 
         case T_zone_layer_connections:
-            for( PCB_LAYER_ID layer : pad->GetLayerSet().Seq() )
+        {
+            LSET cuLayers = pad->GetLayerSet() & LSET::AllCuMask();
+
+            for( PCB_LAYER_ID layer : cuLayers.Seq() )
                 pad->SetZoneLayerOverride( layer, ZLO_FORCE_NO_ZONE_CONNECTION );
 
-            for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
             {
                 PCB_LAYER_ID layer = lookUpLayer<PCB_LAYER_ID>( m_layerIndices );
 
@@ -5039,6 +5042,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
             }
 
             break;
+        }
 
         // Continue to process "(locked)" format which was output during 5.99 development
         case T_locked:

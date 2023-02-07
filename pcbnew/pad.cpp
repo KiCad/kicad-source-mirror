@@ -105,8 +105,7 @@ PAD::PAD( FOOTPRINT* parent ) :
     m_removeUnconnectedLayer = false;
     m_keepTopBottomLayer = true;
 
-    for( size_t ii = 0; ii < arrayDim( m_zoneLayerOverrides ); ++ii )
-        m_zoneLayerOverrides[ ii ] = ZLO_NONE;
+    m_zoneLayerOverrides.fill( ZLO_NONE );
 }
 
 
