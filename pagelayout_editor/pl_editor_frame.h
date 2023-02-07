@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
  * This program is free software; you can redistribute it and/or
@@ -235,12 +235,7 @@ public:
     /**
      * Must be called after a change in order to set the "modify" flag.
      */
-    void OnModify() override
-    {
-        EDA_BASE_FRAME::OnModify();
-
-        GetScreen()->SetContentModified();
-    }
+    void OnModify() override;
 
     /**
      * Save a copy of the description (in a S expr string) for Undo/redo commands.

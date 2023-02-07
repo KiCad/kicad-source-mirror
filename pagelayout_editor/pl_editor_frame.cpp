@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
  * This program is free software; you can redistribute it and/or
@@ -349,6 +349,18 @@ bool PL_EDITOR_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, i
 }
 
 
+void PL_EDITOR_FRAME::OnModify()
+{
+    // Must be called after a change in order to set the "modify" flag and update
+    // the frame title.
+    EDA_BASE_FRAME::OnModify();
+
+    GetScreen()->SetContentModified();
+
+    UpdateTitleAndInfo();
+}
+
+
 bool PL_EDITOR_FRAME::IsContentModified() const
 {
     return GetScreen() && GetScreen()->IsContentModified();
@@ -542,10 +554,13 @@ void PL_EDITOR_FRAME::UpdateTitleAndInfo()
     wxString title;
     wxFileName file( GetCurrentFileName() );
 
+    if( IsContentModified() )
+        title = wxT( "*" );
+
     if( file.IsOk() )
-        title = file.GetName();
+        title += file.GetName();
     else
-        title = _( "[no drawing sheet loaded]" );
+        title += _( "[no drawing sheet loaded]" );
 
     title += wxT( " \u2014 " ) + _( "Drawing Sheet Editor" ),
 
