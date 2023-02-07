@@ -966,12 +966,12 @@ int SYMBOL_EDIT_FRAME::GetTreeLIBIDs( std::vector<LIB_ID>& aSelection ) const
 
 LIB_SYMBOL* SYMBOL_EDIT_FRAME::getTargetSymbol() const
 {
-    LIB_ID libId = GetTreeLIBID();
-
-    if( libId.IsValid() )
+    if( IsSymbolTreeShown() )
     {
-        LIB_SYMBOL* alias = m_libMgr->GetAlias( libId.GetLibItemName(), libId.GetLibNickname() );
-        return alias;
+        LIB_ID libId = GetTreeLIBID();
+
+        if( libId.IsValid() )
+            return m_libMgr->GetAlias( libId.GetLibItemName(), libId.GetLibNickname() );
     }
 
     return m_symbol;
