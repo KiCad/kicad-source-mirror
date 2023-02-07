@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -173,7 +173,6 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
     PCB_PLOT_PARAMS plotOpts;
     plotOpts.SetFormat( PLOT_FORMAT::DXF );
 
-
     plotOpts.SetDXFPlotPolygonMode( aDxfJob->m_plotGraphicItemsUsingContours );
 
     if( aDxfJob->m_dxfUnits == JOB_EXPORT_PCB_DXF::DXF_UNITS::MILLIMETERS )
@@ -234,6 +233,10 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
     plotOpts.SetPlotReference( aPdfJob->m_plotRefDes );
 
     plotOpts.SetLayerSelection( aPdfJob->m_printMaskLayer );
+
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    plotOpts.SetColorSettings( mgr.GetColorSettings( aPdfJob->m_colorTheme ) );
+    plotOpts.SetBlackAndWhite( aPdfJob->m_blackAndWhite );
 
     PDF_PLOTTER* plotter = (PDF_PLOTTER*) StartPlotBoard(
             brd, &plotOpts, UNDEFINED_LAYER, aPdfJob->m_outputFile, wxEmptyString, wxEmptyString );

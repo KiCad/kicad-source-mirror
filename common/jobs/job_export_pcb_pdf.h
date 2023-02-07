@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -32,6 +32,8 @@ public:
             JOB( "pdf", aIsCli ),
             m_filename(),
             m_outputFile(),
+            m_colorTheme(),
+            m_blackAndWhite( false ),
             m_plotFootprintValues( true ),
             m_plotRefDes( true ),
             m_plotBorderTitleBlocks( false ),
@@ -41,7 +43,9 @@ public:
 
     wxString m_filename;
     wxString m_outputFile;
+    wxString m_colorTheme;
 
+    bool m_blackAndWhite;
     bool m_plotFootprintValues;
     bool m_plotRefDes;
     bool m_plotBorderTitleBlocks;

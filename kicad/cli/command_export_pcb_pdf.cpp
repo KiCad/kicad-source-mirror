@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -57,14 +57,14 @@ CLI::EXPORT_PCB_PDF_COMMAND::EXPORT_PCB_PDF_COMMAND() : EXPORT_PCB_BASE_COMMAND(
 
     m_argParser.add_argument( "-t", ARG_THEME )
             .default_value( std::string() )
-            .help( std::string(
-                    _( "Color theme to use (will default to pcbnew settings)" ).ToUTF8() ) );
+            .help( UTF8STDSTR( _( "Color theme to use (will default to pcbnew settings)" ) ) );
 }
 
 
 int CLI::EXPORT_PCB_PDF_COMMAND::doPerform( KIWAY& aKiway )
 {
     int baseExit = EXPORT_PCB_BASE_COMMAND::doPerform( aKiway );
+
     if( baseExit != EXIT_CODES::OK )
         return baseExit;
 
@@ -83,6 +83,9 @@ int CLI::EXPORT_PCB_PDF_COMMAND::doPerform( KIWAY& aKiway )
     pdfJob->m_plotRefDes = !m_argParser.get<bool>( ARG_EXCLUDE_REFDES );
 
     pdfJob->m_plotBorderTitleBlocks = m_argParser.get<bool>( ARG_INCLUDE_BORDER_TITLE );
+
+    pdfJob->m_blackAndWhite = m_argParser.get<bool>( ARG_BLACKANDWHITE );
+    pdfJob->m_colorTheme = FROM_UTF8( m_argParser.get<std::string>( ARG_THEME ).c_str() );
 
     pdfJob->m_printMaskLayer = m_selectedLayers;
 
