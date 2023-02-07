@@ -1355,14 +1355,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnColumnItemToggled( wxDataViewEvent& event )
     {
         bool value = m_fieldsCtrl->GetToggleValue( row, col );
 
-        if( row == REFERENCE_FIELD && !value )
-        {
-            DisplayError( this, _( "The Reference column cannot be hidden." ) );
-
-            value = true;
-            m_fieldsCtrl->SetToggleValue( value, row, col );
-        }
-
         std::string fieldName( m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN ).ToUTF8() );
         cfg->m_FieldEditorPanel.fields_show[fieldName] = value;
 
