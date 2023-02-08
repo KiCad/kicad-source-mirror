@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
  * This program is free software; you can redistribute it and/or
@@ -180,11 +180,13 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToGeneral()
     DS_DATA_MODEL&   model = DS_DATA_MODEL::GetTheInstance();
 
     // Import default parameters from widgets
-    m_defaultLineWidth.Validate( 0.0, 10.0, EDA_UNITS::MILLIMETRES );
-    model.m_DefaultLineWidth = EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units,
+    bool is_valid = m_defaultLineWidth.Validate( 0.0, 10.0, EDA_UNITS::MILLIMETRES );
+
+    if( is_valid )
+        model.m_DefaultLineWidth = EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units,
                                                                m_defaultLineWidth.GetValue() );
 
-    bool is_valid = m_defaultTextSizeX.Validate( DLG_MIN_TEXTSIZE, DLG_MAX_TEXTSIZE,
+    is_valid = m_defaultTextSizeX.Validate( DLG_MIN_TEXTSIZE, DLG_MAX_TEXTSIZE,
                                                  EDA_UNITS::MILLIMETRES );
     if( is_valid )
         model.m_DefaultTextSize.x = EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units,
