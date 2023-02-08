@@ -29,7 +29,12 @@
 #include <wx/utils.h>
 
 #ifdef _WIN32
-#pragma optimize( "", off )
+    #ifdef __MINGW32__
+    #pragma GCC push_options
+    #pragma GCC optimize( "O0" )
+    #else
+    #pragma optimize( "", off )
+    #endif
 #endif
 
 class GL_UTILS
@@ -158,7 +163,11 @@ public:
 };
 
 #ifdef _WIN32
-#pragma optimize( "", on )
+    #ifdef __MINGW32__
+    #pragma GCC pop_options
+    #else
+    #pragma optimize( "", on )
+    #endif
 #endif
 
 #endif /* GL_CONTEXT_MANAGER_H */
