@@ -73,7 +73,6 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
     if( plotColor == COLOR4D::UNSPECIFIED )
         plotColor = COLOR4D( RED );
 
-    plotter->SetColor( plotColor );
     DS_DRAW_ITEM_LIST drawList;
 
     // Print only a short filename, if aFilename is the full filename
@@ -97,6 +96,7 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
     // Draw item list
     for( DS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item; item = drawList.GetNext() )
     {
+        plotter->SetColor( plotColor );
         plotter->SetCurrentLineWidth( PLOTTER::USE_DEFAULT_LINE_WIDTH );
 
         switch( item->Type() )
@@ -126,6 +126,7 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
         {
             DS_DRAW_ITEM_TEXT* text = (DS_DRAW_ITEM_TEXT*) item;
             KIFONT::FONT*      font = text->GetFont();
+            COLOR4D            color = plotColor;
 
             if( !font )
             {
@@ -133,12 +134,15 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
                                               text->IsItalic() );
             }
 
+            if( plotter->GetColorMode() && text->GetTextColor() != COLOR4D::UNSPECIFIED )
+                color = text->GetTextColor();
+
             int penWidth = std::max( text->GetEffectiveTextPenWidth(), defaultPenWidth );
 
-            plotter->Text( text->GetTextPos(), plotColor, text->GetShownText(),
-                           text->GetTextAngle(), text->GetTextSize(), text->GetHorizJustify(),
-                           text->GetVertJustify(), penWidth, text->IsItalic(), text->IsBold(),
-                           text->IsMultilineAllowed(), font );
+            plotter->Text( text->GetTextPos(), color, text->GetShownText(), text->GetTextAngle(),
+                           text->GetTextSize(), text->GetHorizJustify(), text->GetVertJustify(),
+                           penWidth, text->IsItalic(), text->IsBold(), text->IsMultilineAllowed(),
+                           font );
         }
             break;
 
