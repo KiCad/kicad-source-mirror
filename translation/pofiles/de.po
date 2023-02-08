@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-01 14:03-0800\n"
-"PO-Revision-Date: 2023-02-04 10:00+0000\n"
+"PO-Revision-Date: 2023-02-09 11:36+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -34831,7 +34831,7 @@ msgstr "Auf Platine"
 
 #: pcbnew/netinfo_item.cpp:139
 msgid "In Package"
-msgstr "In Paket"
+msgstr "Im Gehäuse"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:139
 #, c-format
@@ -35218,7 +35218,7 @@ msgstr "Castellated (Halbloch)"
 
 #: pcbnew/pad.cpp:1047
 msgid "Length in Package"
-msgstr "Länge in Package"
+msgstr "Länge im Gehäuse"
 
 #: pcbnew/pad.cpp:1061
 msgid "Hole X / Y"
