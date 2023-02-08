@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 jp.charras at wanadoo.fr
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019, 2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -38,6 +38,7 @@
 #include "properties_frame.h"
 #include "tools/pl_actions.h"
 #include "tools/pl_selection_tool.h"
+
 
 /* XPM
  * This bitmap is used to show item types
@@ -156,6 +157,7 @@ static const char*  img_xpm[] =
     "     xx     "
 };
 
+
 // A helper class to draw these bitmaps into a wxGrid cell:
 class BitmapGridCellRenderer : public wxGridCellStringRenderer
 {
@@ -170,6 +172,7 @@ public:
                wxDC& aDc, const wxRect& aRect,
                int aRow, int aCol, bool aIsSelected) override;
 };
+
 
 // Column ids for m_gridListItems
 enum COL_INDEX
@@ -221,10 +224,13 @@ void DIALOG_INSPECTOR::ReCreateDesignList()
     // The first item is the layout: Display info about the page: fmt, size...
     int row = 0;
     GetGridList()->SetCellValue( row, COL_TYPENAME, _( "Layout" ) );
-    GetGridList()->SetCellValue( row, COL_COMMENT, page_info.GetType() );   // Display page format name
+
+    // Display page format name.
+    GetGridList()->SetCellValue( row, COL_COMMENT, page_info.GetType() );
     GetGridList()->SetCellValue( row, COL_REPEAT_NUMBER, "-" );
     wxSize page_sizeIU = m_editorFrame->GetPageSizeIU();
-    GetGridList()->SetCellValue( row, COL_TEXTSTRING, wxString::Format( _( "Size: %.1fx%.1fmm" ),
+    GetGridList()->SetCellValue( row, COL_TEXTSTRING,
+                                 wxString::Format( _( "Size: %.1fx%.1fmm" ),
                                                    drawSheetIUScale.IUTomm( page_sizeIU.x ),
                                                    drawSheetIUScale.IUTomm( page_sizeIU.y ) ) );
     GetGridList()->SetCellRenderer (row, COL_BITMAP, new BitmapGridCellRenderer( root_xpm ) );
@@ -233,31 +239,32 @@ void DIALOG_INSPECTOR::ReCreateDesignList()
 
     // Now adding all current items
     row++;
+
     for( DS_DATA_ITEM* item : drawingSheet.GetItems() )
     {
         const char** img = nullptr;
 
         switch( item->GetType() )
         {
-            case DS_DATA_ITEM::DS_SEGMENT:
-                img = line_xpm;
-                break;
+        case DS_DATA_ITEM::DS_SEGMENT:
+            img = line_xpm;
+            break;
 
-            case DS_DATA_ITEM::DS_RECT:
-                img = rect_xpm;
-                break;
+        case DS_DATA_ITEM::DS_RECT:
+            img = rect_xpm;
+            break;
 
-            case DS_DATA_ITEM::DS_TEXT:
-                img = text_xpm;
-                break;
+        case DS_DATA_ITEM::DS_TEXT:
+            img = text_xpm;
+            break;
 
-            case DS_DATA_ITEM::DS_POLYPOLYGON:
-                img = poly_xpm;
-                break;
+        case DS_DATA_ITEM::DS_POLYPOLYGON:
+            img = poly_xpm;
+            break;
 
-            case DS_DATA_ITEM::DS_BITMAP:
-                img = img_xpm;
-                break;
+        case DS_DATA_ITEM::DS_BITMAP:
+            img = img_xpm;
+            break;
         }
 
         GetGridList()->AppendRows( 1 );
@@ -298,14 +305,15 @@ void DIALOG_INSPECTOR::ReCreateDesignList()
             GetGridList()->AutoSizeColumn( col, false );
         }
         else
+        {
             GetGridList()->AutoSizeColumn( col );
+        }
 
         GetGridList()->AutoSizeColLabelSize( col );
     }
 }
 
 
-// Select the row corresponding to the DS_DATA_ITEM aItem
 void DIALOG_INSPECTOR::SelectRow( DS_DATA_ITEM* aItem )
 {
     // m_itemsList[0] is not a true DS_DATA_ITEM
@@ -320,7 +328,7 @@ void DIALOG_INSPECTOR::SelectRow( DS_DATA_ITEM* aItem )
     }
 }
 
-//return the drawing sheet item managed by the cell
+
 DS_DATA_ITEM* DIALOG_INSPECTOR::GetDrawingSheetDataItem( int aRow ) const
 {
         return ( aRow >= 0 && aRow < (int)m_itemsList.size() ) ? m_itemsList[aRow]: nullptr;
@@ -349,11 +357,11 @@ void DIALOG_INSPECTOR::onCellClicked( wxGridEvent& event )
 
 void BitmapGridCellRenderer::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr,
                                    wxDC& aDc, const wxRect& aRect,
-                                   int aRow, int aCol, bool aIsSelected)
+                                   int aRow, int aCol, bool aIsSelected )
 {
-    wxGridCellStringRenderer::Draw( aGrid, aAttr, aDc, aRect, aRow, aCol, aIsSelected);
+    wxGridCellStringRenderer::Draw( aGrid, aAttr, aDc, aRect, aRow, aCol, aIsSelected );
     wxBitmap bm( m_BitmapXPM );
-    aDc.DrawBitmap( bm,aRect.GetX()+5, aRect.GetY()+2, true);
+    aDc.DrawBitmap( bm,aRect.GetX()+5, aRect.GetY()+2, true );
 }
 
 

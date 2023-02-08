@@ -1,12 +1,8 @@
-/**
- * @file dialogs_for_printing.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
@@ -28,6 +24,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+/**
+ * @file dialogs_for_printing.cpp
+ */
+
 #include <base_units.h>
 #include <gr_basic.h>
 #include <drawing_sheet/ds_data_item.h>
@@ -47,9 +47,6 @@
  */
 class PLEDITOR_PRINTOUT : public wxPrintout
 {
-private:
-    PL_EDITOR_FRAME* m_parent;
-
 public:
     PLEDITOR_PRINTOUT( PL_EDITOR_FRAME* aParent, const wxString& aTitle ) :
         wxPrintout( aTitle )
@@ -62,6 +59,9 @@ public:
     bool HasPage( int aPageNum ) override { return ( aPageNum <= 2 ); }
     void GetPageInfo( int* minPage, int* maxPage, int* selPageFrom, int* selPageTo ) override;
     void PrintPage( int aPageNum );
+
+private:
+    PL_EDITOR_FRAME* m_parent;
 };
 
 
@@ -70,8 +70,6 @@ public:
  */
 class PLEDITOR_PREVIEW_FRAME : public wxPreviewFrame
 {
-    PL_EDITOR_FRAME* m_parent;
-
 public:
     PLEDITOR_PREVIEW_FRAME( wxPrintPreview* aPreview, PL_EDITOR_FRAME* aParent,
                             const wxString& aTitle, const wxPoint& aPos = wxDefaultPosition,
@@ -118,6 +116,8 @@ public:
     }
 
 private:
+    PL_EDITOR_FRAME* m_parent;
+
     static wxPoint  s_pos;
     static wxSize   s_size;
 
@@ -168,7 +168,6 @@ void PLEDITOR_PRINTOUT::PrintPage( int aPageNum )
     old_org = screen->m_DrawOrg;
 
     // Change scale factor and offset to print the whole page.
-
     pageSizeIU = m_parent->GetPageSettings().GetSizeIU( drawSheetIUScale.IU_PER_MILS );
     FitThisSizeToPaper( pageSizeIU );
     fitRect = GetLogicalPaperRect();

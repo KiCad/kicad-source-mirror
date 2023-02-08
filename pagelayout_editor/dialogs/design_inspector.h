@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 jp.charras at wanadoo.fr
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019, 2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -34,19 +34,8 @@ class PL_EDITOR_FRAME;
 /**
  * DESIGN_INSPECTOR is the left window showing the list of items
  */
-
 class DIALOG_INSPECTOR : public DIALOG_INSPECTOR_BASE
 {
-    friend class PL_EDITOR_FRAME;
-
-private:
-    wxGrid* GetGridList() const { return m_gridListItems; }
-	void onCellClicked( wxGridEvent& event ) override;
-
-    // The list of DS_DATA_ITEM found in drawing sheet
-    std::vector<DS_DATA_ITEM*> m_itemsList;
-    PL_EDITOR_FRAME* m_editorFrame;
-
 public:
     DIALOG_INSPECTOR( PL_EDITOR_FRAME* aParent );
     ~DIALOG_INSPECTOR();
@@ -60,6 +49,17 @@ public:
 
     // Select the tree item corresponding to the DS_DATA_ITEM aItem
     void SelectRow( DS_DATA_ITEM* aItem );
+
+private:
+    friend class PL_EDITOR_FRAME;
+
+    wxGrid* GetGridList() const { return m_gridListItems; }
+	void onCellClicked( wxGridEvent& event ) override;
+
+    // The list of DS_DATA_ITEM found in drawing sheet
+    std::vector<DS_DATA_ITEM*> m_itemsList;
+    PL_EDITOR_FRAME* m_editorFrame;
+
 };
 
 #endif /* _DESIGN_INSPECTOR_H */
