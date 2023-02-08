@@ -36,17 +36,17 @@ CLI::EXPORT_PCB_GERBER_COMMAND::EXPORT_PCB_GERBER_COMMAND( const std::string& aN
 {
     addLayerArg( true );
 
-    m_argParser.add_argument( "-erd", ARG_EXCLUDE_REFDES )
+    m_argParser.add_argument( "--erd", ARG_EXCLUDE_REFDES )
             .help( UTF8STDSTR( _( "Exclude the reference designator text" ) ) )
             .implicit_value( true )
             .default_value( false );
 
-    m_argParser.add_argument( "-ev", ARG_EXCLUDE_VALUE )
+    m_argParser.add_argument( "--ev", ARG_EXCLUDE_VALUE )
             .help( UTF8STDSTR( _( "Exclude the value text" ) ) )
             .implicit_value( true )
             .default_value( false );
 
-    m_argParser.add_argument( "-ibt", ARG_INCLUDE_BORDER_TITLE )
+    m_argParser.add_argument( "--ibt", ARG_INCLUDE_BORDER_TITLE )
             .help( UTF8STDSTR( _( "Include the border and title block" ) ) )
             .implicit_value( true )
             .default_value( false );

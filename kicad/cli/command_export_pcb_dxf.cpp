@@ -37,22 +37,22 @@ CLI::EXPORT_PCB_DXF_COMMAND::EXPORT_PCB_DXF_COMMAND() : EXPORT_PCB_BASE_COMMAND(
 {
     addLayerArg( true );
 
-    m_argParser.add_argument( "-erd", ARG_EXCLUDE_REFDES )
+    m_argParser.add_argument( "--erd", ARG_EXCLUDE_REFDES )
             .help( UTF8STDSTR( _( "Exclude the reference designator text" ) ) )
             .implicit_value( true )
             .default_value( false );
 
-    m_argParser.add_argument( "-ev", ARG_EXCLUDE_VALUE )
+    m_argParser.add_argument( "--ev", ARG_EXCLUDE_VALUE )
             .help( UTF8STDSTR( _( "Exclude the value text" ) ) )
             .implicit_value( true )
             .default_value( false );
 
-    m_argParser.add_argument( "-uc", ARG_USE_CONTOURS )
+    m_argParser.add_argument( "--uc", ARG_USE_CONTOURS )
             .help( UTF8STDSTR( _( "Plot graphic items using their contours" ) ) )
             .implicit_value( true )
             .default_value( false );
 
-    m_argParser.add_argument( "-ou", ARG_OUTPUT_UNITS )
+    m_argParser.add_argument( "--ou", ARG_OUTPUT_UNITS )
             .default_value( std::string( "in" ) )
             .help( UTF8STDSTR( _( "Output units, valid options: mm, in" ) ) );
 }

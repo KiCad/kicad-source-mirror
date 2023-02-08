@@ -38,7 +38,7 @@ CLI::EXPORT_PCB_GERBERS_COMMAND::EXPORT_PCB_GERBERS_COMMAND() :
 {
     m_requireLayers = false;
 
-    m_argParser.add_argument( "-cl", ARG_COMMON_LAYERS )
+    m_argParser.add_argument( "--cl", ARG_COMMON_LAYERS )
             .default_value( std::string() )
             .help( UTF8STDSTR(
                     _( "Layers to include on each plot, comma separated list of untranslated layer names to include such as "

@@ -39,7 +39,7 @@ CLI::FP_EXPORT_SVG_COMMAND::FP_EXPORT_SVG_COMMAND() : EXPORT_PCB_BASE_COMMAND( "
             .default_value( std::string() )
             .help( UTF8STDSTR( _( "Color theme to use (will default to pcbnew settings)" ) ) );
 
-    m_argParser.add_argument( "-fp", ARG_FOOTPRINT )
+    m_argParser.add_argument( "--fp", ARG_FOOTPRINT )
             .default_value( std::string() )
             .help( UTF8STDSTR( _( "Specific symbol to export within the library" ) ) );
 
