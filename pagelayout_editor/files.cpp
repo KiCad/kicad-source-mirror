@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
@@ -314,6 +314,7 @@ bool PL_EDITOR_FRAME::SaveDrawingSheetFile( const wxString& aFullFileName )
             m_infoBar->Dismiss();
 
         GetScreen()->SetContentModified( false );
+        UpdateTitleAndInfo();
         return true;
     }
 

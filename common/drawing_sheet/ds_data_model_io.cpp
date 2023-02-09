@@ -248,7 +248,8 @@ void DS_DATA_MODEL_IO::format( DS_DATA_ITEM_TEXT* aItem, int aNestLevel ) const
     bool write_size = aItem->m_TextSize.x != 0.0 || aItem->m_TextSize.y != 0.0;
     bool write_thickness = aItem->m_LineWidth != 0.0;
 
-    if( write_thickness || write_size || aItem->m_Bold || aItem->m_Italic )
+    if( write_thickness || write_size || aItem->m_Bold
+        || aItem->m_Italic || aItem->m_TextColor != COLOR4D::UNSPECIFIED )
     {
         m_out->Print( 0, " (font" );
 
