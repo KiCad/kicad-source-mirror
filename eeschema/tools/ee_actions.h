@@ -215,6 +215,8 @@ public:
     static TOOL_ACTION toggleERCWarnings;
     static TOOL_ACTION toggleERCErrors;
     static TOOL_ACTION toggleERCExclusions;
+    static TOOL_ACTION toggleOPVoltages;
+    static TOOL_ACTION toggleOPCurrents;
     static TOOL_ACTION toggleSyncedPinsMode;
     static TOOL_ACTION restartMove;
     static TOOL_ACTION selectOnPCB;

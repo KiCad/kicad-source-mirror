@@ -133,6 +133,12 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "appearance.show_erc_exclusions",
             &m_Appearance.show_erc_exclusions, false ) );
 
+    m_params.emplace_back( new PARAM<bool>( "appearance.show_op_voltages",
+            &m_Appearance.show_op_voltages, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "appearance.show_op_currents",
+            &m_Appearance.show_op_currents, true ) );
+
     m_params.emplace_back( new PARAM<bool>( "appearance.show_illegal_symbol_lib_dialog",
             &m_Appearance.show_illegal_symbol_lib_dialog, true ) );
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHOR.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHOR.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -159,6 +159,8 @@ public:
 
     bool ConnectionPropagatesTo( const EDA_ITEM* aItem ) const override;
 
+    const wxString& GetOperatingPoint() const { return m_operatingPoint; }
+    void SetOperatingPoint( const wxString& aText ) { m_operatingPoint = aText; }
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override {}
@@ -175,6 +177,8 @@ private:
     /// The name that this pin connection will drive onto a net.
     std::recursive_mutex                                      m_netmap_mutex;
     std::map<const SCH_SHEET_PATH, std::pair<wxString, bool>> m_net_name_map;
+
+    wxString       m_operatingPoint;
 };
 
 #endif

@@ -147,6 +147,8 @@ wxString LayerName( int aLayer )
     case LAYER_SELECTION_SHADOWS:       return _( "Selection highlight" );
     case LAYER_SCHEMATIC_DRAWINGSHEET:  return _( "Drawing sheet" );
     case LAYER_SCHEMATIC_PAGE_LIMITS:   return _( "Page limits" );
+    case LAYER_OP_VOLTAGES:             return _( "Operating point voltages" );
+    case LAYER_OP_CURRENTS:             return _( "Operating point currents" );
 
     // GAL_LAYER_ID
 

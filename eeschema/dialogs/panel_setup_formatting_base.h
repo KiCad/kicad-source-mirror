@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -22,6 +22,7 @@
 #include <wx/textctrl.h>
 #include <wx/checkbox.h>
 #include <wx/radiobut.h>
+#include <wx/spinctrl.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -71,6 +72,10 @@ class PANEL_SETUP_FORMATTING_BASE : public wxPanel
 		wxStaticText* gapLengthLabel;
 		wxTextCtrl* m_gapLengthCtrl;
 		wxStaticText* m_dashedLineHelp;
+		wxSpinCtrl* m_vPrecisionCtrl;
+		wxChoice* m_vRangeCtrl;
+		wxSpinCtrl* m_iPrecisionCtrl;
+		wxChoice* m_iRangeCtrl;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void onCheckBoxIref( wxCommandEvent& event ) { event.Skip(); }

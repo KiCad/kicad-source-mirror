@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2014-2019 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -167,6 +167,11 @@ void SCH_DRAW_PANEL::setDefaultLayerDeps()
 
     m_view->SetLayerTarget( LAYER_DRAWINGSHEET, KIGFX::TARGET_NONCACHED );
     m_view->SetLayerDisplayOnly( LAYER_DRAWINGSHEET ) ;
+
+    m_view->SetLayerTarget( LAYER_OP_VOLTAGES, KIGFX::TARGET_OVERLAY );
+    m_view->SetLayerDisplayOnly( LAYER_OP_VOLTAGES );
+    m_view->SetLayerTarget( LAYER_OP_CURRENTS, KIGFX::TARGET_OVERLAY );
+    m_view->SetLayerDisplayOnly( LAYER_OP_CURRENTS );
 
 //    m_view->SetLayerTarget( LAYER_SELECTION_SHADOWS, KIGFX::TARGET_NONCACHED );
 //    m_view->SetLayerDisplayOnly( LAYER_SELECTION_SHADOWS ) ;

@@ -704,6 +704,16 @@ TOOL_ACTION EE_ACTIONS::toggleERCExclusions( "eeschema.EditorControl.showERCExcl
         _( "Show ERC Exclusions" ),
         _( "Show markers for excluded electrical rules checker violations" ) );
 
+TOOL_ACTION EE_ACTIONS::toggleOPVoltages( "eeschema.EditorControl.showOperatingPointVoltages",
+        AS_GLOBAL, 0, "",
+        _( "Show OP Voltages" ),
+        _( "Show operating point voltage data from simulation" ) );
+
+TOOL_ACTION EE_ACTIONS::toggleOPCurrents( "eeschema.EditorControl.showOperatingPointCurrents",
+        AS_GLOBAL, 0, "",
+        _( "Show OP Currents" ),
+        _( "Show operating point current data from simulation" ) );
+
 TOOL_ACTION EE_ACTIONS::lineModeFree( "eeschema.EditorControl.lineModeFree",
         AS_GLOBAL, 0, "",
         _( "Line Mode for Wires and Buses" ), _( "Draw and drag at any angle" ),

@@ -4,7 +4,7 @@
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,9 +43,21 @@ int GetPenSizeForBold( int aTextSize )
 }
 
 
+int GetPenSizeForDemiBold( int aTextSize )
+{
+    return KiROUND( aTextSize / 6 );
+}
+
+
 int GetPenSizeForBold( const wxSize& aTextSize )
 {
     return GetPenSizeForBold( std::min( aTextSize.x, aTextSize.y ) );
+}
+
+
+int GetPenSizeForDemiBold( const wxSize& aTextSize )
+{
+    return GetPenSizeForDemiBold( std::min( aTextSize.x, aTextSize.y ) );
 }
 
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019-2020 CERN
- * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -189,6 +189,8 @@ private:
     float getLineWidth( const EDA_ITEM* aItem, bool aDrawingShadows ) const;
     float getTextThickness( const EDA_ITEM* aItem ) const;
 
+    int getOperatingPointTextSize() const;
+
     bool setDeviceColors( const LIB_ITEM* aItem, int aLayer, bool aDimmed );
 
     void triLine( const VECTOR2D &a, const VECTOR2D &b, const VECTOR2D &c );
@@ -196,7 +198,10 @@ private:
                      const TEXT_ATTRIBUTES& aAttributes );
     void bitmapText( const wxString& aText, const VECTOR2D& aPosition,
                      const TEXT_ATTRIBUTES& aAttributes );
-    void boxText( const wxString& aText, const VECTOR2D& aPosition, const TEXT_ATTRIBUTES& aAttrs );
+    void knockoutText( const wxString& aText, const VECTOR2D& aPosition,
+                       const TEXT_ATTRIBUTES& aAttrs );
+    void boxText( const wxString& aText, const VECTOR2D& aPosition,
+                  const TEXT_ATTRIBUTES& aAttrs );
 
 public:
     static std::vector<KICAD_T> g_ScaledSelectionTypes;

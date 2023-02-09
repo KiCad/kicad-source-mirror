@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -197,6 +197,8 @@ public:
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
+    double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
+
     const BOX2I GetBoundingBox() const override;
 
     /**
@@ -295,6 +297,9 @@ public:
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
+    const wxString& GetOperatingPoint() const { return m_operatingPoint; }
+    void SetOperatingPoint( const wxString& aText ) { m_operatingPoint = aText; }
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif
@@ -347,6 +352,8 @@ private:
     mutable PLOT_DASH_TYPE   m_lastResolvedLineStyle;
     mutable int              m_lastResolvedWidth;
     mutable COLOR4D          m_lastResolvedColor;
+
+    wxString                 m_operatingPoint;
 };
 
 

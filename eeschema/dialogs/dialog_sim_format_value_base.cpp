@@ -33,7 +33,7 @@ DIALOG_SIM_FORMAT_VALUE_BASE::DIALOG_SIM_FORMAT_VALUE_BASE( wxWindow* parent, wx
 	m_rangeLabel->Wrap( -1 );
 	fgSizer->Add( m_rangeLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	wxString m_rangeCtrlChoices[] = { _("auto"), _("f"), _("p"), _("n"), _("u"), _("m"), wxEmptyString, _("K"), _("M"), _("G"), _("T"), _("P") };
+	wxString m_rangeCtrlChoices[] = { _("Auto"), _("f"), _("p"), _("n"), _("u"), _("m"), wxEmptyString, _("K"), _("M"), _("G"), _("T"), _("P") };
 	int m_rangeCtrlNChoices = sizeof( m_rangeCtrlChoices ) / sizeof( wxString );
 	m_rangeCtrl = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_rangeCtrlNChoices, m_rangeCtrlChoices, 0 );
 	m_rangeCtrl->SetSelection( 0 );

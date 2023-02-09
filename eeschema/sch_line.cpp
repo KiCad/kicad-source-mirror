@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -85,7 +85,10 @@ SCH_LINE::SCH_LINE( const SCH_LINE& aLine ) :
     m_lastResolvedLineStyle = aLine.m_lastResolvedLineStyle;
     m_lastResolvedWidth = aLine.m_lastResolvedWidth;
     m_lastResolvedColor = aLine.m_lastResolvedColor;
+
+    m_operatingPoint = aLine.m_operatingPoint;
 }
+
 
 wxString SCH_LINE::GetNetname( const SCH_SHEET_PATH& aSheet )
 {
@@ -93,6 +96,7 @@ wxString SCH_LINE::GetNetname( const SCH_SHEET_PATH& aSheet )
     checkedLines.push_back(this);
     return FindWireSegmentNetNameRecursive( this, checkedLines, aSheet );
 }
+
 
 wxString SCH_LINE::FindWireSegmentNetNameRecursive( SCH_LINE *line,
                                                     std::list<const SCH_LINE *> &checkedLines,
@@ -124,6 +128,7 @@ wxString SCH_LINE::FindWireSegmentNetNameRecursive( SCH_LINE *line,
     }
     return "";
 }
+
 
 EDA_ITEM* SCH_LINE::Clone() const
 {
@@ -181,10 +186,36 @@ void SCH_LINE::Show( int nestLevel, std::ostream& os ) const
 
 void SCH_LINE::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    aCount     = 3;
+    aCount     = 4;
     aLayers[0] = LAYER_DANGLING;
     aLayers[1] = m_layer;
     aLayers[2] = LAYER_SELECTION_SHADOWS;
+    aLayers[3] = LAYER_OP_VOLTAGES;
+}
+
+
+double SCH_LINE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+{
+    constexpr double HIDE = std::numeric_limits<double>::max();
+    constexpr double SHOW = 0.0;
+
+    if( aLayer == LAYER_OP_VOLTAGES )
+    {
+        if( m_start == m_end )
+            return HIDE;
+
+        int height = std::abs( m_end.y - m_start.y );
+        int width = std::abs( m_end.x - m_start.x );
+
+        // Operating points will be shown only if zoom is appropriate
+        if( height == 0 )
+            return (double) schIUScale.mmToIU( 15 ) / width;
+        else
+            return (double) schIUScale.mmToIU( 5 ) / height;
+    }
+
+    // Other layers are always drawn.
+    return SHOW;
 }
 
 

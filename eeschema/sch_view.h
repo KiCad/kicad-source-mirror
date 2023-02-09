@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,6 +46,7 @@ static const int SCH_LAYER_ORDER[] =
 {
     LAYER_GP_OVERLAY, LAYER_SELECT_OVERLAY,
     LAYER_ERC_ERR, LAYER_ERC_WARN, LAYER_ERC_EXCLUSION, LAYER_DANGLING,
+    LAYER_OP_VOLTAGES, LAYER_OP_CURRENTS,
     LAYER_REFERENCEPART, LAYER_VALUEPART, LAYER_FIELDS,
     LAYER_INTERSHEET_REFS, LAYER_NETCLASS_REFS,
     LAYER_BUS_JUNCTION, LAYER_JUNCTION, LAYER_NOCONNECT,

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 CERN
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -152,10 +152,11 @@ const BOX2I SCH_PIN::ViewBBox() const
 
 void SCH_PIN::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    aCount     = 3;
+    aCount     = 4;
     aLayers[0] = LAYER_DANGLING;
     aLayers[1] = LAYER_DEVICE;
     aLayers[2] = LAYER_SELECTION_SHADOWS;
+    aLayers[3] = LAYER_OP_CURRENTS;
 }
 
 

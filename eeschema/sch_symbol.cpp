@@ -244,15 +244,16 @@ bool SCH_SYMBOL::IsMissingLibSymbol() const
 
 void SCH_SYMBOL::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    aCount     = 7;
+    aCount     = 8;
     aLayers[0] = LAYER_DANGLING;       // Pins are drawn by their parent symbol, so the parent
                                        // symbol needs to draw to LAYER_DANGLING
-    aLayers[1] = LAYER_DEVICE;
-    aLayers[2] = LAYER_REFERENCEPART;
-    aLayers[3] = LAYER_VALUEPART;
-    aLayers[4] = LAYER_FIELDS;
-    aLayers[5] = LAYER_DEVICE_BACKGROUND;
-    aLayers[6] = LAYER_SELECTION_SHADOWS;
+    aLayers[1] = LAYER_OP_CURRENTS;    // Same for pin operating points
+    aLayers[2] = LAYER_DEVICE;
+    aLayers[3] = LAYER_REFERENCEPART;
+    aLayers[4] = LAYER_VALUEPART;
+    aLayers[5] = LAYER_FIELDS;
+    aLayers[6] = LAYER_DEVICE_BACKGROUND;
+    aLayers[7] = LAYER_SELECTION_SHADOWS;
 }
 
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -73,6 +73,8 @@ static const std::map<int, COLOR4D> s_defaultTheme =
             { LAYER_WIRE,                   CSS_COLOR( 0,   150, 0,   1 ) },
             { LAYER_SCHEMATIC_DRAWINGSHEET, CSS_COLOR( 132, 0,   0,   1 ) },
             { LAYER_SCHEMATIC_PAGE_LIMITS,  CSS_COLOR( 181, 181, 181, 1 ) },
+            { LAYER_OP_VOLTAGES,            CSS_COLOR( 132, 0,   50,  1 ) },
+            { LAYER_OP_CURRENTS,            CSS_COLOR( 224, 0,   12,  1 ) },
 
             { LAYER_GERBVIEW_AXES,          CSS_COLOR( 0,   0,   132, 1 ) },
             { LAYER_GERBVIEW_BACKGROUND,    CSS_COLOR( 0,   0,   0,   1 ) },
@@ -287,6 +289,8 @@ static const std::map<int, COLOR4D> s_classicTheme =
             { LAYER_VALUEPART,              COLOR4D( CYAN ) },
             { LAYER_WIRE,                   COLOR4D( GREEN ) },
             { LAYER_SCHEMATIC_DRAWINGSHEET, COLOR4D( RED ) },
+            { LAYER_OP_VOLTAGES,            COLOR4D( DARKMAGENTA ) },
+            { LAYER_OP_CURRENTS,            COLOR4D( RED ) },
 
             { LAYER_GERBVIEW_AXES,          COLOR4D( BLUE ) },
             { LAYER_GERBVIEW_BACKGROUND,    COLOR4D( BLACK ) },

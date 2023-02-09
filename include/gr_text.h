@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009-2014 Jerry Jacobs
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,6 +70,13 @@ int Clamp_Text_PenSize( int aPenSize, const VECTOR2I& aSize, bool aStrict = fals
  */
 int GetPenSizeForBold( int aTextSize );
 int GetPenSizeForBold( const wxSize& aTextSize );
+
+/**
+ * @param aTextSize the char size (height or width).
+ * @return the "best" value for a pen size to draw/plot a demibold text.
+ */
+int GetPenSizeForDemiBold( int aTextSize );
+int GetPenSizeForDemiBold( const wxSize& aTextSize );
 
 /**
  * @param aTextSize = the char size (height or width).

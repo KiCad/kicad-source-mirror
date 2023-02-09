@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -94,6 +94,8 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) 
     CLR( "schematic.wire",              LAYER_WIRE                   );
     CLR( "schematic.worksheet",         LAYER_SCHEMATIC_DRAWINGSHEET );
     CLR( "schematic.page_limits",       LAYER_SCHEMATIC_PAGE_LIMITS  );
+    CLR( "schematic.op_voltages",       LAYER_OP_VOLTAGES            );
+    CLR( "schematic.op_currents",       LAYER_OP_CURRENTS            );
 
     CLR( "gerbview.axes",               LAYER_GERBVIEW_AXES          );
     CLR( "gerbview.background",         LAYER_GERBVIEW_BACKGROUND    );

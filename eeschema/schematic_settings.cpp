@@ -52,6 +52,10 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
         m_IntersheetRefsSuffix( DEFAULT_IREF_SUFFIX ),
         m_DashedLineDashRatio( 12.0 ),
         m_DashedLineGapRatio( 3.0 ),
+        m_OPO_VPrecision( 3 ),
+        m_OPO_VRange( wxS( "~V" ) ),
+        m_OPO_IPrecision( 3 ),
+        m_OPO_IRange( wxS( "~A" ) ),
         m_SpiceCurSheetAsRoot( false ),
         m_SpiceSaveAllVoltages( false ),
         m_SpiceSaveAllCurrents( false ),
@@ -99,6 +103,18 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
 
     m_params.emplace_back( new PARAM<double>( "drawing.dashed_lines_gap_length_ratio",
             &m_DashedLineGapRatio, 3.0 ) );     // Default from ISO 128-2
+
+    m_params.emplace_back( new PARAM<int>( "drawing.operating_point_overlay_v_precision",
+            &m_OPO_VPrecision, 3 ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "drawing.operating_point_overlay_v_range",
+            &m_OPO_VRange, wxS( "~V" ) ) );
+
+    m_params.emplace_back( new PARAM<int>( "drawing.operating_point_overlay_i_precision",
+            &m_OPO_VPrecision, 3 ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "drawing.operating_point_overlay_i_range",
+            &m_OPO_VRange, wxS( "~A" ) ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "drawing.default_line_thickness",
             &m_DefaultLineWidth, schIUScale.MilsToIU( defaultLineThickness ), schIUScale.MilsToIU( 5 ), schIUScale.MilsToIU( 1000 ),

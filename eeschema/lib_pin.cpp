@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1187,12 +1187,13 @@ const BOX2I LIB_PIN::ViewBBox() const
 
 void LIB_PIN::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    aCount     = 3;
+    aCount     = 4;
     aLayers[0] = LAYER_DANGLING;    // We don't really show dangling vs non-dangling (since there
                                     // are no connections in the symbol editor), but it's still
                                     // a good visual indication of which end of the pin is which.
     aLayers[1] = LAYER_DEVICE;
     aLayers[2] = LAYER_SELECTION_SHADOWS;
+    aLayers[3] = LAYER_OP_CURRENTS;
 }
 
 

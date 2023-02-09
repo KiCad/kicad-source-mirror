@@ -2002,8 +2002,9 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
                 signal = signal.SubString( 2, signal.Length() - 2 );
 
             schematic.SetOperatingPoint( signal, val_list.at( 0 ) );
-            m_schematicFrame->RefreshOperatingPointDisplay();
         }
+
+        m_schematicFrame->RefreshOperatingPointDisplay();
     }
 
     m_lastSimPlot = plotPanelWindow;

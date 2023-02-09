@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -64,6 +64,12 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 
 	m_checkShowERCExclusions = new wxCheckBox( this, wxID_ANY, _("Show ERC exclusions"), wxDefaultPosition, wxDefaultSize, 0 );
 	bAppearanceSizer->Add( m_checkShowERCExclusions, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_checkShowOPVoltages = new wxCheckBox( this, wxID_ANY, _("Show OP voltages"), wxDefaultPosition, wxDefaultSize, 0 );
+	bAppearanceSizer->Add( m_checkShowOPVoltages, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_checkShowOPCurrents = new wxCheckBox( this, wxID_ANY, _("Show OP currents"), wxDefaultPosition, wxDefaultSize, 0 );
+	bAppearanceSizer->Add( m_checkShowOPCurrents, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_checkPageLimits = new wxCheckBox( this, wxID_ANY, _("Show page limi&ts"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkPageLimits->SetValue(true);

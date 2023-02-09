@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -30,6 +30,7 @@
 #include <symbol_library.h>
 #include <connection_graph.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <callback_gal.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_simple.h>
 #include <gr_text.h>
@@ -565,6 +566,16 @@ float SCH_PAINTER::getTextThickness( const EDA_ITEM* aItem ) const
 }
 
 
+int SCH_PAINTER::getOperatingPointTextSize() const
+{
+    int docTextSize = schIUScale.MilsToIU( 50 );
+    int screenTextSize = std::abs( (int) m_gal->GetScreenWorldMatrix().GetScale().y * 7 );
+
+    // 66% zoom-relative
+    return KiROUND( ( docTextSize + screenTextSize * 2 ) / 3 );
+}
+
+
 static VECTOR2D mapCoords( const VECTOR2D& aCoord )
 {
     return VECTOR2D( aCoord.x, -aCoord.y );
@@ -614,6 +625,52 @@ void SCH_PAINTER::bitmapText( const wxString& aText, const VECTOR2D& aPosition,
     m_gal->SetVerticalJustify( aAttrs.m_Valign );
 
     m_gal->BitmapText( aText, aPosition, aAttrs.m_Angle );
+}
+
+
+void SCH_PAINTER::knockoutText( const wxString& aText, const VECTOR2D& aPosition,
+                                const TEXT_ATTRIBUTES& aAttrs )
+{
+    TEXT_ATTRIBUTES attrs( aAttrs );
+    KIFONT::FONT*   font = aAttrs.m_Font;
+
+    if( !font )
+    {
+        font = KIFONT::FONT::GetFont( eeconfig()->m_Appearance.default_font, attrs.m_Bold,
+                                      attrs.m_Italic );
+    }
+
+    KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
+    SHAPE_POLY_SET             knockouts;
+
+    CALLBACK_GAL callback_gal( empty_opts,
+            // Polygon callback
+            [&]( const SHAPE_LINE_CHAIN& aPoly )
+            {
+                knockouts.AddOutline( aPoly );
+            } );
+
+    callback_gal.SetIsFill( false );
+    callback_gal.SetIsStroke( true );
+    callback_gal.SetLineWidth( (float) attrs.m_StrokeWidth );
+    font->Draw( &callback_gal, aText, aPosition, attrs );
+
+    BOX2I          bbox = knockouts.BBox( attrs.m_StrokeWidth * 2 );
+    SHAPE_POLY_SET finalPoly;
+
+    finalPoly.NewOutline();
+    finalPoly.Append( bbox.GetLeft(),  bbox.GetTop() );
+    finalPoly.Append( bbox.GetRight(), bbox.GetTop() );
+    finalPoly.Append( bbox.GetRight(), bbox.GetBottom() );
+    finalPoly.Append( bbox.GetLeft(),  bbox.GetBottom() );
+
+    finalPoly.BooleanSubtract( knockouts, SHAPE_POLY_SET::PM_FAST );
+    finalPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
+
+    m_gal->SetIsStroke( false );
+    m_gal->SetIsFill( true );
+    m_gal->SetFillColor( attrs.m_Color );
+    m_gal->DrawPolygon( finalPoly );
 }
 
 
@@ -1232,6 +1289,7 @@ void SCH_PAINTER::draw( const LIB_PIN *aPin, int aLayer, bool aDimmed )
 
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
     bool drawingDangling = aLayer == LAYER_DANGLING;
+    bool drawingOP = aLayer == LAYER_OP_CURRENTS;
     bool isDangling = m_schSettings.m_IsSymbolEditor || aPin->HasFlag( IS_DANGLING );
 
     if( drawingShadows && !( aPin->IsBrightened() || aPin->IsSelected() ) )
@@ -1290,6 +1348,40 @@ void SCH_PAINTER::draw( const LIB_PIN *aPin, int aLayer, bool aDimmed )
         p0 = VECTOR2I( pos.x + len, pos.y );
         dir = VECTOR2I( -1, 0 );
         break;
+    }
+
+    if( drawingOP && !aPin->GetOperatingPoint().IsEmpty() )
+    {
+        int             textSize = getOperatingPointTextSize();
+        VECTOR2I        mid = ( p0 + pos ) / 2;
+        int             textOffset = KiROUND( textSize * 0.22 );
+        TEXT_ATTRIBUTES attrs;
+
+        if( len > KiROUND( textSize * 1.8 ) )
+        {
+            if( dir.x == 0 )
+            {
+                mid.x += KiROUND( textOffset * 1.2 );
+                attrs.m_Angle = ANGLE_HORIZONTAL;
+            }
+            else
+            {
+                mid.y -= KiROUND( textOffset * 1.2 );
+                attrs.m_Angle = ANGLE_VERTICAL;
+            }
+
+            attrs.m_Halign = GR_TEXT_H_ALIGN_LEFT;
+            attrs.m_Valign = GR_TEXT_V_ALIGN_CENTER;
+
+            attrs.m_Font = KIFONT::FONT::GetFont();  // always use stroke font for performance
+            attrs.m_Size = VECTOR2I( textSize, textSize );
+            attrs.m_StrokeWidth = GetPenSizeForDemiBold( textSize );
+            attrs.m_Color = m_schSettings.GetLayerColor( LAYER_OP_CURRENTS );
+
+            knockoutText( aPin->GetOperatingPoint(), mid, attrs );
+        }
+
+        return;
     }
 
     VECTOR2D pc;
@@ -1706,6 +1798,7 @@ void SCH_PAINTER::draw( const SCH_LINE *aLine, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
     bool drawingDangling = aLayer == LAYER_DANGLING;
+    bool drawingOP = aLayer == LAYER_OP_VOLTAGES;
 
     if( drawingShadows && !( aLine->IsBrightened() || aLine->IsSelected() ) )
         return;
@@ -1746,6 +1839,35 @@ void SCH_PAINTER::draw( const SCH_LINE *aLine, int aLayer )
 
     if( drawingDangling )
         return;
+
+    if( drawingOP && !aLine->GetOperatingPoint().IsEmpty() )
+    {
+        int             textSize = getOperatingPointTextSize();
+        VECTOR2I        pos = aLine->GetMidPoint();
+        int             textOffset = KiROUND( textSize * 0.22 );
+        TEXT_ATTRIBUTES attrs;
+
+        if( aLine->GetStartPoint().y == aLine->GetEndPoint().y )
+        {
+            pos.y -= textOffset;
+            attrs.m_Halign = GR_TEXT_H_ALIGN_CENTER;
+            attrs.m_Valign = GR_TEXT_V_ALIGN_BOTTOM;
+        }
+        else
+        {
+            pos.x += KiROUND( textOffset * 1.2 );
+            attrs.m_Halign = GR_TEXT_H_ALIGN_LEFT;
+            attrs.m_Valign = GR_TEXT_V_ALIGN_CENTER;
+        }
+
+        attrs.m_Font = KIFONT::FONT::GetFont();  // always use stroke font for performance
+        attrs.m_Size = VECTOR2I( textSize, textSize );
+        attrs.m_StrokeWidth = GetPenSizeForDemiBold( textSize );
+        attrs.m_Color = m_schSettings.GetLayerColor( LAYER_OP_VOLTAGES );
+
+        knockoutText( aLine->GetOperatingPoint(), pos, attrs );
+        return;
+    }
 
     m_gal->SetIsStroke( true );
     m_gal->SetStrokeColor( color );
@@ -2300,6 +2422,8 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
             tempPin->SetFlags( IS_DANGLING );
         else
             tempPin->ClearFlags( IS_DANGLING );
+
+        tempPin->SetOperatingPoint( symbolPin->GetOperatingPoint() );
     }
 
     draw( &tempSymbol, aLayer, false, aSymbol->GetUnit(), aSymbol->GetConvert(), aSymbol->GetDNP() );

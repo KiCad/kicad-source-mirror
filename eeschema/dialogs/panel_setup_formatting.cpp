@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -116,6 +116,11 @@ bool PANEL_SETUP_FORMATTING::TransferDataToWindow()
 
 #undef SET_VALUE
 
+    m_vPrecisionCtrl->SetValue( settings.m_OPO_VPrecision );
+    m_vRangeCtrl->SetStringSelection( settings.m_OPO_VRange );
+    m_iPrecisionCtrl->SetValue( settings.m_OPO_IPrecision );
+    m_iRangeCtrl->SetStringSelection( settings.m_OPO_IRange );
+
     return true;
 }
 
@@ -166,6 +171,20 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
     settings.m_LabelSizeRatio = GET_VALUE( EDA_UNITS::PERCENT, m_labelSizeRatioCtrl->GetValue() ) / 100.0;
 
 #undef GET_VALUE
+
+    settings.m_OPO_VPrecision = m_vPrecisionCtrl->GetValue();
+
+    if( m_vRangeCtrl->GetSelection() == 0 )
+        settings.m_OPO_VRange = wxS( "~V" );
+    else
+        settings.m_OPO_VRange = m_vRangeCtrl->GetStringSelection();
+
+    settings.m_OPO_IPrecision = m_iPrecisionCtrl->GetValue();
+
+    if( m_iRangeCtrl->GetSelection() == 0 )
+        settings.m_OPO_IRange = wxS( "~A" );
+    else
+        settings.m_OPO_IRange = m_iRangeCtrl->GetStringSelection();
 
     return true;
 }

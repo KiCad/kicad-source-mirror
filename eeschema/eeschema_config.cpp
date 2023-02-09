@@ -102,6 +102,7 @@ void SCH_EDIT_FRAME::ShowSchematicSetupDialog( const wxString& aInitialPage )
 
         GetCanvas()->GetView()->MarkDirty();
         GetCanvas()->GetView()->UpdateAllItems( KIGFX::REPAINT );
+        RefreshOperatingPointDisplay();
         GetCanvas()->Refresh();
     }
 }

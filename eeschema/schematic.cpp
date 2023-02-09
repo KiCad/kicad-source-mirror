@@ -32,6 +32,7 @@
 #include <sim/spice_settings.h>
 #include <sch_label.h>
 #include <sim/spice_value.h>
+#include <netlist_exporter_spice.h>
 
 SCHEMATIC::SCHEMATIC( PROJECT* aPrj ) :
           EDA_ITEM( nullptr, SCHEMATIC_T ),
@@ -629,7 +630,13 @@ void SCHEMATIC::RecomputeIntersheetRefs( const std::function<void( SCH_GLOBALLAB
 wxString SCHEMATIC::GetOperatingPoint( const wxString& aNetName, int aPrecision,
                                        const wxString& aRange )
 {
-    auto it = m_operatingPoints.find( aNetName );
+    std::string spiceNetName( aNetName.Lower().ToStdString() );
+    NETLIST_EXPORTER_SPICE::ConvertToSpiceMarkup( spiceNetName );
+
+    if( spiceNetName == "gnd" || spiceNetName == "0" )
+        return wxEmptyString;
+
+    auto it = m_operatingPoints.find( spiceNetName );
 
     if( it != m_operatingPoints.end() )
         return SPICE_VALUE( it->second ).ToString( aPrecision, aRange );

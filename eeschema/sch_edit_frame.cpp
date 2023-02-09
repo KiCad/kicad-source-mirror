@@ -248,6 +248,12 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     LoadProjectSettings();
 
+    view->SetLayerVisible( LAYER_ERC_ERR, cfg->m_Appearance.show_erc_errors );
+    view->SetLayerVisible( LAYER_ERC_WARN, cfg->m_Appearance.show_erc_warnings );
+    view->SetLayerVisible( LAYER_ERC_EXCLUSION, cfg->m_Appearance.show_erc_exclusions );
+    view->SetLayerVisible( LAYER_OP_VOLTAGES, cfg->m_Appearance.show_op_voltages );
+    view->SetLayerVisible( LAYER_OP_CURRENTS, cfg->m_Appearance.show_op_currents );
+
     initScreenZoom();
 
     m_hierarchy->Connect( wxEVT_SIZE,
@@ -496,6 +502,20 @@ void SCH_EDIT_FRAME::setupUIConditions()
                 return cfg && cfg->m_Appearance.show_erc_exclusions;
             };
 
+    auto showOPVoltagesCond =
+            [this]( const SELECTION& )
+            {
+                EESCHEMA_SETTINGS* cfg = eeconfig();
+                return cfg && cfg->m_Appearance.show_op_voltages;
+            };
+
+    auto showOPCurrentsCond =
+            [this]( const SELECTION& )
+            {
+                EESCHEMA_SETTINGS* cfg = eeconfig();
+                return cfg && cfg->m_Appearance.show_op_currents;
+            };
+
     auto showAnnotateAutomaticallyCond =
             [this]( const SELECTION& )
             {
@@ -554,6 +574,8 @@ void SCH_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( EE_ACTIONS::toggleERCErrors,     CHECK( showERCErrorsCond ) );
     mgr->SetConditions( EE_ACTIONS::toggleERCWarnings,   CHECK( showERCWarningsCond ) );
     mgr->SetConditions( EE_ACTIONS::toggleERCExclusions, CHECK( showERCExclusionsCond ) );
+    mgr->SetConditions( EE_ACTIONS::toggleOPVoltages,    CHECK( showOPVoltagesCond ) );
+    mgr->SetConditions( EE_ACTIONS::toggleOPCurrents,    CHECK( showOPCurrentsCond ) );
     mgr->SetConditions( EE_ACTIONS::toggleAnnotateAuto,  CHECK( showAnnotateAutomaticallyCond ) );
     mgr->SetConditions( ACTIONS::toggleBoundingBoxes,    CHECK( cond.BoundingBoxes() ) );
 
@@ -1258,6 +1280,11 @@ void SCH_EDIT_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
 
 void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
 {
+    SCHEMATIC_SETTINGS& settings = m_schematic->Settings();
+    SIM_LIB_MGR         simLibMgr( &Prj() );
+
+    // Update items which may have ${OP} text variables
+    //
     GetCanvas()->GetView()->UpdateAllItemsConditionally(
             [&]( KIGFX::VIEW_ITEM* aItem ) -> int
             {
@@ -1290,6 +1317,89 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
 
                 return flags;
             } );
+
+    // Update OP overlay items
+    //
+    for( SCH_ITEM* item : GetScreen()->Items() )
+    {
+        if( item->Type() == SCH_LINE_T )
+        {
+            static_cast<SCH_LINE*>( item )->SetOperatingPoint( wxEmptyString );
+            // update value from netlist, below
+        }
+        else if( item->Type() == SCH_SYMBOL_T )
+        {
+            SCH_SYMBOL*           symbol = static_cast<SCH_SYMBOL*>( item );
+            wxString              ref = symbol->GetRef( &GetCurrentSheet() );
+            std::vector<SCH_PIN*> pins = symbol->GetPins( &GetCurrentSheet() );
+
+            for( SCH_PIN* pin : pins )
+                pin->SetOperatingPoint( wxEmptyString );
+
+            if( pins.size() == 2 )
+            {
+                wxString op = m_schematic->GetOperatingPoint( ref, settings.m_OPO_IPrecision,
+                                                              settings.m_OPO_IRange );
+
+                if( !op.IsEmpty() && op != wxS( "?" ) )
+                    pins[0]->SetOperatingPoint( op );
+            }
+            else
+            {
+                SIM_MODEL& model = simLibMgr.CreateModel( &GetCurrentSheet(), *symbol ).model;
+
+                for( const auto& modelPin : model.GetPins() )
+                {
+                    SCH_PIN* symbolPin = symbol->GetPin( modelPin.get().symbolPinNumber );
+                    wxString signalName = ref + wxS( ":" ) + modelPin.get().name;
+                    wxString op = m_schematic->GetOperatingPoint( signalName,
+                                                                  settings.m_OPO_IPrecision,
+                                                                  settings.m_OPO_IRange );
+
+                    if( symbolPin && !op.IsEmpty() && op != wxS( "?" ) )
+                    {
+                        symbolPin->SetOperatingPoint( op );
+                        GetCanvas()->GetView()->Update( symbol );
+                    }
+                }
+            }
+        }
+    }
+
+    for( const auto& [ key, subgraphList ] : m_schematic->m_connectionGraph->GetNetMap() )
+    {
+        wxString op = m_schematic->GetOperatingPoint( key.Name, settings.m_OPO_VPrecision,
+                                                      settings.m_OPO_VRange );
+
+        if( !op.IsEmpty() )
+        {
+            for( CONNECTION_SUBGRAPH* subgraph : subgraphList )
+            {
+                SCH_LINE* longestWire = nullptr;
+                double    length = 0.0;
+
+                for( SCH_ITEM* item : subgraph->m_items )
+                {
+                    if( item->IsType( { SCH_ITEM_LOCATE_WIRE_T } ) )
+                    {
+                        SCH_LINE* wire = static_cast<SCH_LINE*>( item );
+
+                        if( wire->GetLength() > length )
+                        {
+                            longestWire = wire;
+                            length = wire->GetLength();
+                        }
+                    }
+                }
+
+                if( longestWire )
+                {
+                    longestWire->SetOperatingPoint( op );
+                    GetCanvas()->GetView()->Update( longestWire );
+                }
+            }
+        }
+    }
 
     GetCanvas()->ForceRefresh();
 }
@@ -1603,6 +1713,10 @@ void SCH_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
     view->SetLayerVisible( LAYER_ERC_ERR, cfg->m_Appearance.show_erc_errors );
     view->SetLayerVisible( LAYER_ERC_WARN, cfg->m_Appearance.show_erc_warnings );
     view->SetLayerVisible( LAYER_ERC_EXCLUSION, cfg->m_Appearance.show_erc_exclusions );
+    view->SetLayerVisible( LAYER_OP_VOLTAGES, cfg->m_Appearance.show_op_voltages );
+    view->SetLayerVisible( LAYER_OP_CURRENTS, cfg->m_Appearance.show_op_currents );
+
+    RefreshOperatingPointDisplay();
 
     settings.m_TemplateFieldNames.DeleteAllFieldNameTemplates( true /* global */ );
 
@@ -1871,6 +1985,7 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     // update the References
     GetCurrentSheet().UpdateAllScreenReferences();
     SetSheetNumberAndCount();
+    RefreshOperatingPointDisplay();
 
     EE_SELECTION_TOOL* selectionTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
 
