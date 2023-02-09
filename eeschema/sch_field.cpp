@@ -1010,6 +1010,11 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground ) const
         vjustify = GR_TEXT_V_ALIGN_CENTER;
         textpos = GetBoundingBox().Centre();
     }
+    else if( m_parent && m_parent->Type() == SCH_GLOBAL_LABEL_T )
+    {
+        SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( m_parent );
+        textpos += label->GetSchematicTextOffset( settings );
+    }
 
     KIFONT::FONT* font = GetFont();
 
