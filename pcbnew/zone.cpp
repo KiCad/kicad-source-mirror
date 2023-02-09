@@ -1446,13 +1446,18 @@ static struct ZONE_DESC
 
         const wxString groupFill = _HKI( "Fill Style" );
 
-        propMgr.AddProperty( new PROPERTY_ENUM<ZONE, ZONE_FILL_MODE>( _HKI( "Fill Mode" ),
-                    &ZONE::SetFillMode, &ZONE::GetFillMode ), groupFill );
+        auto fillMode = new PROPERTY_ENUM<ZONE, ZONE_FILL_MODE>( _HKI( "Fill Mode" ),
+                    &ZONE::SetFillMode, &ZONE::GetFillMode );
+        // Fill mode can't be exposed to the UI until validation is moved to the ZONE class.
+        // see https://gitlab.com/kicad/code/kicad/-/issues/13811
+        fillMode->SetIsInternal();
+        propMgr.AddProperty( fillMode, groupFill );
 
         auto hatchOrientation = new PROPERTY<ZONE, EDA_ANGLE>( _HKI( "Orientation" ),
                     &ZONE::SetHatchOrientation, &ZONE::GetHatchOrientation,
                     PROPERTY_DISPLAY::PT_DEGREE );
         hatchOrientation->SetWriteableFunc( isHatchedFill );
+        hatchOrientation->SetIsInternal();
         propMgr.AddProperty( hatchOrientation, groupFill );
 
         //TODO: Switch to translated
@@ -1460,6 +1465,7 @@ static struct ZONE_DESC
                     &ZONE::SetHatchThickness, &ZONE::GetHatchThickness,
                     PROPERTY_DISPLAY::PT_SIZE );
         hatchWidth->SetWriteableFunc( isHatchedFill );
+        hatchWidth->SetIsInternal();
         propMgr.AddProperty( hatchWidth, groupFill );
 
         //TODO: Switch to translated
@@ -1467,6 +1473,7 @@ static struct ZONE_DESC
                     &ZONE::SetHatchGap, &ZONE::GetHatchGap,
                     PROPERTY_DISPLAY::PT_SIZE );
         hatchGap->SetWriteableFunc( isHatchedFill );
+        hatchGap->SetIsInternal();
         propMgr.AddProperty( hatchGap, groupFill );
 
         // TODO: Smoothing effort needs to change to enum (in dialog too)
