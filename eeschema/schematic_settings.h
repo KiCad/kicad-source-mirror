@@ -24,7 +24,46 @@
 #include <settings/nested_settings.h>
 #include <template_fieldnames.h>
 
+#include <utility>
+
 class NGSPICE_SIMULATOR_SETTINGS;
+
+struct BOM_PRESET
+{
+    BOM_PRESET( const wxString& aName = wxEmptyString ) :
+        name( aName ), readOnly(false), group_symbols( false) { }
+
+    BOM_PRESET( const wxString&                     aName,
+                const std::map<std::string, bool>&  aFieldsShow,
+                const std::map<std::string, bool>&  aFieldsGroupBy,
+                const std::map<std::string, int>&   aColumnWidths,
+                const std::map<std::string, bool>&  aColumnSorts,
+                const std::vector<wxString>&        aColumnOrder,
+                const wxString&                     aFilterString,
+                bool                                aGroupSymbols
+                ) :
+            name( aName ),
+            readOnly( false ),
+            fields_show( aFieldsShow ),
+            fields_group_by( aFieldsGroupBy ),
+            column_widths( aColumnWidths ),
+            column_sorts( aColumnSorts ),
+            column_order( aColumnOrder ),
+            filter_string( aFilterString ),
+            group_symbols( aGroupSymbols )
+    {
+    }
+
+    wxString                    name;
+    bool                        readOnly;
+    std::map<std::string, bool> fields_show;
+    std::map<std::string, bool> fields_group_by;
+    std::map<std::string, int>  column_widths;
+    std::map<std::string, bool> column_sorts;
+    std::vector<wxString>       column_order;
+    wxString                    filter_string;
+    bool                        group_symbols;
+};
 
 /**
  * These settings were stored in SCH_BASE_FRAME previously.
@@ -83,6 +122,10 @@ public:
     bool      m_SpiceModelCurSheetAsRoot;
 
     TEMPLATES m_TemplateFieldNames;
+
+    /// List of stored BOM presets
+    BOM_PRESET              m_BomSettings;
+    std::vector<BOM_PRESET> m_BomPresets;
 
     /**
      * Ngspice simulator settings.

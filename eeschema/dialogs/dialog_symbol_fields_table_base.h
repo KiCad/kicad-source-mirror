@@ -14,17 +14,19 @@ class BITMAP_BUTTON;
 class WX_GRID;
 
 #include "dialog_shim.h"
-#include <wx/dataview.h>
+#include <wx/string.h>
+#include <wx/stattext.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/string.h>
+#include <wx/choice.h>
+#include <wx/sizer.h>
+#include <wx/dataview.h>
 #include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/sizer.h>
 #include <wx/panel.h>
 #include <wx/srchctrl.h>
 #include <wx/bmpbuttn.h>
@@ -47,6 +49,8 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 	protected:
 		wxSplitterWindow* m_splitterMainWindow;
 		wxPanel* m_leftPanel;
+		wxStaticText* m_bomPresetsLabel;
+		wxChoice* m_cbBomPresets;
 		wxDataViewListCtrl* m_fieldsCtrl;
 		wxButton* m_addFieldButton;
 		wxButton* m_removeFieldButton;

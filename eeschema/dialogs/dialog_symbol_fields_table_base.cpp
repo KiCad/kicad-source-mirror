@@ -26,23 +26,39 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	wxBoxSizer* bLeftSizer;
 	bLeftSizer = new wxBoxSizer( wxVERTICAL );
 
+	wxBoxSizer* bPresets;
+	bPresets = new wxBoxSizer( wxVERTICAL );
+
+	m_bomPresetsLabel = new wxStaticText( m_leftPanel, wxID_ANY, _("Presets (Ctrl+Tab):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_bomPresetsLabel->Wrap( -1 );
+	bPresets->Add( m_bomPresetsLabel, 0, wxLEFT|wxRIGHT, 2 );
+
+	wxString m_cbBomPresetsChoices[] = { _("Default"), _("(unsaved)") };
+	int m_cbBomPresetsNChoices = sizeof( m_cbBomPresetsChoices ) / sizeof( wxString );
+	m_cbBomPresets = new wxChoice( m_leftPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbBomPresetsNChoices, m_cbBomPresetsChoices, 0 );
+	m_cbBomPresets->SetSelection( 1 );
+	bPresets->Add( m_cbBomPresets, 0, wxALL|wxEXPAND, 5 );
+
+
+	bLeftSizer->Add( bPresets, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+
 	m_fieldsCtrl = new wxDataViewListCtrl( m_leftPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_fieldsCtrl->SetMinSize( wxSize( -1,320 ) );
 
-	bLeftSizer->Add( m_fieldsCtrl, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bLeftSizer->Add( m_fieldsCtrl, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	m_addFieldButton = new wxButton( m_leftPanel, wxID_ANY, _("Add Field..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bLeftSizer->Add( m_addFieldButton, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bLeftSizer->Add( m_addFieldButton, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	m_removeFieldButton = new wxButton( m_leftPanel, wxID_ANY, _("Remove Field..."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_removeFieldButton->Enable( false );
 
-	bLeftSizer->Add( m_removeFieldButton, 0, wxEXPAND|wxLEFT, 5 );
+	bLeftSizer->Add( m_removeFieldButton, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_renameFieldButton = new wxButton( m_leftPanel, wxID_ANY, _("Rename Field..."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_renameFieldButton->Enable( false );
 
-	bLeftSizer->Add( m_renameFieldButton, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxTOP, 5 );
+	bLeftSizer->Add( m_renameFieldButton, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 
 	m_leftPanel->SetSizer( bLeftSizer );

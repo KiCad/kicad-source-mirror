@@ -356,27 +356,6 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "page_settings.export_comment9",
             &m_PageSettings.export_comment9, false ) );
 
-    m_params.emplace_back( new PARAM_MAP<bool>( "field_editor.fields_show",
-            &m_FieldEditorPanel.fields_show, {} ) );
-
-    m_params.emplace_back( new PARAM_MAP<bool>( "field_editor.fields_group_by",
-            &m_FieldEditorPanel.fields_group_by, {} ) );
-
-    m_params.emplace_back( new PARAM_MAP<int>( "field_editor.column_widths",
-            &m_FieldEditorPanel.column_widths, {} ) );
-
-    m_params.emplace_back( new PARAM_MAP<bool>( "field_editor.column_sorts",
-            &m_FieldEditorPanel.column_sorts, {} ) );
-
-    m_params.emplace_back( new PARAM_LIST<wxString>( "field_editor.column_order",
-            &m_FieldEditorPanel.column_order, {} ) );
-
-    m_params.emplace_back( new PARAM<wxString>( "field_editor.filter_string",
-            &m_FieldEditorPanel.filter_string, {} ) );
-
-    m_params.emplace_back( new PARAM<bool>( "field_editor.group_symbols",
-            &m_FieldEditorPanel.group_symbols, true ) );
-
     m_params.emplace_back( new PARAM<bool>( "plot.background_color",
             &m_PlotPanel.background_color, false ) );
 

@@ -30,6 +30,8 @@
 #include <sch_reference_list.h>
 
 
+class SCHEMATIC_SETTINGS;
+struct BOM_PRESET;
 class SCH_EDIT_FRAME;
 class FIELDS_EDITOR_GRID_DATA_MODEL;
 
@@ -76,14 +78,37 @@ private:
     void OnFilterText( wxCommandEvent& aEvent ) override;
     void OnFilterMouseMoved( wxMouseEvent& event ) override;
     void OnFieldsCtrlSelectionChanged( wxDataViewEvent& event ) override;
+    bool TryBefore( wxEvent& aEvent ) override;
+
+    std::vector<BOM_PRESET> GetUserBomPresets() const;
+    void                    SetUserBomPresets( std::vector<BOM_PRESET>& aPresetList );
+    void                    ApplyBomPreset( const wxString& aPresetName );
+    void                    ApplyBomPreset( const BOM_PRESET& aPreset );
 
 private:
+    void syncBomPresetSelection();
+    void rebuildBomPresetsWidget();
+    void updateBomPresetSelection( const wxString& aName );
+    void onBomPresetChanged( wxCommandEvent& aEvent );
+    void doApplyBomPreset( const BOM_PRESET& aPreset );
+    void loadDefaultBomPresets();
+
+    std::map<wxString, BOM_PRESET> m_bomPresets;
+    BOM_PRESET*                    m_currentBomPreset;
+    BOM_PRESET*                    m_lastSelectedBomPreset;
+    wxArrayString                  m_bomPresetMRU;
+
+    static BOM_PRESET              bomPresetGroupedByValue;
+    static BOM_PRESET              bomPresetGroupedByValueFootprint;
+
     SCH_EDIT_FRAME*                m_parent;
     int                            m_showColWidth;
     int                            m_groupByColWidth;
 
     SCH_REFERENCE_LIST             m_symbolsList;
     FIELDS_EDITOR_GRID_DATA_MODEL* m_dataModel;
+
+    SCHEMATIC_SETTINGS&            m_schSettings;
 };
 
 #endif /* DIALOG_SYMBOL_FIELDS_TABLE_H */
