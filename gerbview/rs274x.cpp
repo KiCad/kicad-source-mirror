@@ -1068,10 +1068,6 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
             paramCount = 6;
             break;
 
-        case AMP_EOF:
-            paramCount = 0;
-            break;
-
         case AMP_OUTLINE:
             paramCount = 4; // partial count. other parameters are vertices and rotation
                             // Second parameter is vertice (coordinate pairs) count.

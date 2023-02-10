@@ -75,11 +75,10 @@ enum AM_PRIMITIVE_ID {
     AMP_LINE20  = 20,           // Same as AMP_LINE2
     AMP_LINE_CENTER = 21,       // Rectangle. (height, width and center pos + rotation)
     AMP_LINE_LOWER_LEFT = 22,   // Rectangle. (height, width and left bottom corner pos + rotation)
-    AMP_EOF     = 3,            // End Of File marker: not really a shape
     AMP_OUTLINE = 4,            // Free polyline (n corners + rotation)
     AMP_POLYGON = 5,            // Closed regular polygon(diameter, number of vertices (3 to 10),
                                 // rotation)
-    AMP_MOIRE   = 6,            // A cross hair with n concentric circles + rotation
+    AMP_MOIRE   = 6,            // A cross hair with n concentric circles + rotation (deprecated in 2021)
     AMP_THERMAL = 7             // Thermal shape (pos, outer and inner diameter, cross hair
                                 // thickness + rotation)
 };
@@ -118,7 +117,7 @@ public:
      * In a aperture macro shape, a basic primitive with exposure off is a hole in the shape
      * it is NOT a negative shape
      */
-    bool  IsAMPrimitiveExposureOn( const GERBER_DRAW_ITEM* aParent ) const;
+    bool  IsAMPrimitiveExposureOn( const D_CODE* aDcode ) const;
 
     /**
      * Generate the polygonal shape of the primitive shape of an aperture
@@ -128,9 +127,8 @@ public:
      * @param aShapeBuffer is a SHAPE_POLY_SET to put the shape converted to a polygon.
      * @param aShapePos is the actual shape position.
      */
-    void ConvertBasicShapeToPolygon( const GERBER_DRAW_ITEM* aParent,
-                                     SHAPE_POLY_SET& aShapeBuffer,
-                                     const VECTOR2I& aShapePos );
+    void ConvertBasicShapeToPolygon( const D_CODE* aDcode,
+                                     SHAPE_POLY_SET& aShapeBuffer );
 
 private:
     /**
@@ -143,7 +141,7 @@ private:
      *       converted because circles are very easy to draw (no rotation problem) so convert
      *       them in polygons and draw them as polygons is not a good idea.
      */
-    void ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent, std::vector<VECTOR2I>& aBuffer );
+    void ConvertShapeToPolygon( const D_CODE* aDcode, std::vector<VECTOR2I>& aBuffer );
 };
 
 

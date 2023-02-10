@@ -55,7 +55,7 @@ static VECTOR2I mapPt( double x, double y, bool isMetric )
 }
 
 
-bool AM_PRIMITIVE::IsAMPrimitiveExposureOn( const GERBER_DRAW_ITEM* aParent ) const
+bool AM_PRIMITIVE::IsAMPrimitiveExposureOn( const D_CODE* aDcode ) const
 {
     /*
      * Some but not all primitives use the first parameter as an exposure control.
@@ -75,12 +75,11 @@ bool AM_PRIMITIVE::IsAMPrimitiveExposureOn( const GERBER_DRAW_ITEM* aParent ) co
     case AMP_OUTLINE:
     case AMP_POLYGON:
         // All have an exposure parameter and can return a value (0 or 1)
-        return m_Params[0].GetValue( aParent->GetDcodeDescr() ) != 0;
+        return m_Params[0].GetValue( aDcode ) != 0;
         break;
 
     case AMP_THERMAL:   // Exposure is always on
     case AMP_MOIRE:     // Exposure is always on
-    case AMP_EOF:
     case AMP_UNKNOWN:
     default:
         return 1;       // All have no exposure parameter and are always 0N return true
@@ -93,29 +92,15 @@ bool AM_PRIMITIVE::IsAMPrimitiveExposureOn( const GERBER_DRAW_ITEM* aParent ) co
 const int seg_per_circle = 64;   // Number of segments to approximate a circle
 
 
-void AM_PRIMITIVE::ConvertBasicShapeToPolygon( const GERBER_DRAW_ITEM* aParent, SHAPE_POLY_SET& aShapeBuffer,
-                                   const VECTOR2I& aShapePos )
+void AM_PRIMITIVE::ConvertBasicShapeToPolygon( const D_CODE* aDcode,
+                                               SHAPE_POLY_SET& aShapeBuffer )
 {
-#define TO_POLY_SHAPE                                                                          \
-    {                                                                                          \
-        if( polybuffer.size() > 1 )                                                            \
-        {                                                                                      \
-            aShapeBuffer.NewOutline();                                                         \
-                                                                                               \
-            for( unsigned jj = 0; jj < polybuffer.size(); jj++ )                               \
-                aShapeBuffer.Append( polybuffer[jj].x, polybuffer[jj].y );                     \
-                                                                                               \
-            aShapeBuffer.Append( polybuffer[0].x, polybuffer[0].y );                           \
-        }                                                                                      \
-    }
-
     // Draw the primitive shape for flashed items.
     // Create a static buffer to avoid a lot of memory reallocation.
     static std::vector<VECTOR2I> polybuffer;
     polybuffer.clear();
 
-    VECTOR2I curPos = aShapePos;
-    D_CODE* tool   = aParent->GetDcodeDescr();
+    const D_CODE* tool = aDcode;
 
     switch( m_Primitive_id )
     {
@@ -127,7 +112,7 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( const GERBER_DRAW_ITEM* aParent, 
          * <rotation> is a optional parameter: rotation from origin.
          * type is not stored in parameters list, so the first parameter is exposure
          */
-        ConvertShapeToPolygon( aParent, polybuffer );
+        ConvertShapeToPolygon( tool, polybuffer );
 
         // shape rotation (if any):
         if( m_Params.size() >= 5 )
@@ -141,15 +126,6 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( const GERBER_DRAW_ITEM* aParent, 
             }
         }
 
-
-        // Move to current position:
-        for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
-        {
-            polybuffer[ii] += curPos;
-            polybuffer[ii] = aParent->GetABPosition( polybuffer[ii] );
-        }
-
-        TO_POLY_SHAPE;
         break;
     }
 
@@ -165,7 +141,7 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( const GERBER_DRAW_ITEM* aParent, 
          * type (2), exposure, width, start.x, start.y, end.x, end.y, rotation
          * type is not stored in parameters list, so the first parameter is exposure
          */
-        ConvertShapeToPolygon( aParent, polybuffer );
+        ConvertShapeToPolygon( tool, polybuffer );
 
         // shape rotation:
         EDA_ANGLE rotation( m_Params[6].GetValue( tool ), DEGREES_T );
@@ -176,14 +152,6 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( const GERBER_DRAW_ITEM* aParent, 
                 RotatePoint( polybuffer[ii], -rotation );
         }
 
-        // Move to current position:
-        for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
-        {
-            polybuffer[ii] += curPos;
-            polybuffer[ii] = aParent->GetABPosition( polybuffer[ii] );
-        }
-
-        TO_POLY_SHAPE;
         break;
     }
 
@@ -197,7 +165,7 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( const GERBER_DRAW_ITEM* aParent, 
          * type (21), exposure, ,width, height, center pos.x, center pos.y, rotation
          * type is not stored in parameters list, so the first parameter is exposure
          */
-        ConvertShapeToPolygon( aParent, polybuffer );
+        ConvertShapeToPolygon( tool, polybuffer );
 
         // shape rotation:
         EDA_ANGLE rotation( m_Params[5].GetValue( tool ), DEGREES_T );
@@ -208,14 +176,6 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( const GERBER_DRAW_ITEM* aParent, 
                 RotatePoint( polybuffer[ii], -rotation );
         }
 
-        // Move to current position:
-        for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
-        {
-            polybuffer[ii] += curPos;
-            polybuffer[ii] = aParent->GetABPosition( polybuffer[ii] );
-        }
-
-        TO_POLY_SHAPE;
         break;
     }
 
@@ -226,7 +186,7 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( const GERBER_DRAW_ITEM* aParent, 
          * type (22), exposure, ,width, height, corner pos.x, corner pos.y, rotation
          * type is not stored in parameters list, so the first parameter is exposure
          */
-        ConvertShapeToPolygon( aParent, polybuffer );
+        ConvertShapeToPolygon( tool, polybuffer );
 
         // shape rotation:
         EDA_ANGLE rotation( m_Params[5].GetValue( tool ), DEGREES_T );
@@ -236,15 +196,6 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( const GERBER_DRAW_ITEM* aParent, 
             for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
                 RotatePoint( polybuffer[ii], -rotation );
         }
-
-        // Move to current position:
-        for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
-        {
-            polybuffer[ii] += curPos;
-            polybuffer[ii] = aParent->GetABPosition( polybuffer[ii] );
-        }
-
-        TO_POLY_SHAPE;
         break;
     }
 
@@ -259,8 +210,9 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( const GERBER_DRAW_ITEM* aParent, 
          * on.
          */
         std::vector<VECTOR2I> subshape_poly;
-        curPos += mapPt( m_Params[0].GetValue( tool ), m_Params[1].GetValue( tool ), m_GerbMetric );
-        ConvertShapeToPolygon( aParent, subshape_poly );
+        VECTOR2I center( mapPt( m_Params[0].GetValue( tool ),
+                                 m_Params[1].GetValue( tool ), m_GerbMetric ) );
+        ConvertShapeToPolygon( tool, subshape_poly );
 
         // shape rotation:
         EDA_ANGLE rotation( m_Params[5].GetValue( tool ), DEGREES_T );
@@ -275,14 +227,18 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( const GERBER_DRAW_ITEM* aParent, 
             for( unsigned jj = 0; jj < polybuffer.size(); jj++ )
                 RotatePoint( polybuffer[jj], -sub_rotation );
 
-            // Move to current position:
+            // Move to center position given by the tool:
             for( unsigned jj = 0; jj < polybuffer.size(); jj++ )
             {
-                polybuffer[jj] += curPos;
-                polybuffer[jj] = aParent->GetABPosition( polybuffer[jj] );
+                polybuffer[jj] += center;
             }
 
-            TO_POLY_SHAPE;
+            aShapeBuffer.NewOutline();
+
+            for( unsigned jj = 0; jj < polybuffer.size(); jj++ )
+                aShapeBuffer.Append( polybuffer[jj] );
+
+            aShapeBuffer.Append( polybuffer[0] );
         }
     }
     break;
@@ -293,8 +249,6 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( const GERBER_DRAW_ITEM* aParent, 
          * The moire primitive is a cross hair centered on concentric rings (annuli).
          * Exposure is always on.
          */
-        curPos += mapPt( m_Params[0].GetValue( tool ), m_Params[1].GetValue( tool ),
-                         m_GerbMetric );
 
         /* Generated by an aperture macro declaration like:
          * "6,0,0,0.125,.01,0.01,3,0.003,0.150,0"
@@ -307,8 +261,9 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( const GERBER_DRAW_ITEM* aParent, 
         int gap = scaletoIU( m_Params[4].GetValue( tool ), m_GerbMetric );
         int numCircles = KiROUND( m_Params[5].GetValue( tool ) );
 
-        // Draw circles:
-        VECTOR2I center = aParent->GetABPosition( curPos );
+        // Draw circles @ position pos.x, pos.y given by the tool:
+        VECTOR2I center( mapPt( m_Params[0].GetValue( tool ), m_Params[1].GetValue( tool ),
+                         m_GerbMetric ) );
 
         // adjust outerDiam by this on each nested circle
         int diamAdjust = ( gap + penThickness ) * 2;
@@ -334,21 +289,17 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( const GERBER_DRAW_ITEM* aParent, 
         }
 
         // Draw the cross:
-        ConvertShapeToPolygon( aParent, polybuffer );
+        ConvertShapeToPolygon( tool, polybuffer );
 
         EDA_ANGLE rotation( m_Params[8].GetValue( tool ), DEGREES_T );
 
         for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
         {
-            // shape rotation:
+            // move crossair shape to center and rotate shape:
             RotatePoint( polybuffer[ii], -rotation );
-
-            // Move to current position:
-            polybuffer[ii] += curPos;
-            polybuffer[ii] = aParent->GetABPosition( polybuffer[ii] );
+            polybuffer[ii] += center;
         }
 
-        TO_POLY_SHAPE;
         break;
     }
 
@@ -405,14 +356,6 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( const GERBER_DRAW_ITEM* aParent, 
             RotatePoint( polybuffer[ii], -rotation );
         }
 
-        // Move to current position:
-        for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
-        {
-            polybuffer[ii] += curPos;
-            polybuffer[ii] = aParent->GetABPosition( polybuffer[ii] );
-        }
-
-        TO_POLY_SHAPE;
         break;
     }
 
@@ -427,41 +370,45 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( const GERBER_DRAW_ITEM* aParent, 
          * type(5), exposure, vertices count, pox.x, pos.y, diameter, rotation
          * type is not stored in parameters list, so the first parameter is exposure
          */
-        curPos += mapPt( m_Params[2].GetValue( tool ), m_Params[3].GetValue( tool ), m_GerbMetric );
+        VECTOR2I curPos( mapPt( m_Params[2].GetValue( tool ), m_Params[3].GetValue( tool ), m_GerbMetric ) );
 
         // Creates the shape:
-        ConvertShapeToPolygon( aParent, polybuffer );
+        ConvertShapeToPolygon( tool, polybuffer );
 
-        // rotate polygon and move it to the actual position
+        // rotate polygon
         EDA_ANGLE rotation( m_Params[5].GetValue( tool ), DEGREES_T );
 
         for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
         {
             RotatePoint( polybuffer[ii], -rotation );
             polybuffer[ii] += curPos;
-            polybuffer[ii] = aParent->GetABPosition( polybuffer[ii] );
         }
-
-        TO_POLY_SHAPE;
 
         break;
     }
 
-    case AMP_EOF:
-        // not yet supported, waiting for you.
-        break;
-
+    case AMP_COMMENT:
     case AMP_UNKNOWN:
-    default:
         break;
+    }
+
+    if( polybuffer.size() > 1 )     // a valid polygon has more than 1 corner
+    {
+        aShapeBuffer.NewOutline();
+
+        for( unsigned jj = 0; jj < polybuffer.size(); jj++ )
+            aShapeBuffer.Append( polybuffer[jj] );
+
+        // Close the shape:
+        aShapeBuffer.Append( polybuffer[0] );
     }
 }
 
 
-void AM_PRIMITIVE::ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent,
+void AM_PRIMITIVE::ConvertShapeToPolygon( const D_CODE* aDcode,
                                           std::vector<VECTOR2I>&  aBuffer )
 {
-    D_CODE* tool = aParent->GetDcodeDescr();
+    const D_CODE* tool = aDcode;
 
     switch( m_Primitive_id )
     {
@@ -688,7 +635,6 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent,
 
     case AMP_COMMENT:
     case AMP_UNKNOWN:
-    case AMP_EOF:
         break;
     }
 }

@@ -30,6 +30,7 @@
 
 #include <gerbview.h>
 #include <aperture_macro.h>
+#include <gerber_draw_item.h>
 
 
 void APERTURE_MACRO::AddPrimitiveToList( AM_PRIMITIVE& aPrimitive )
@@ -56,19 +57,20 @@ SHAPE_POLY_SET* APERTURE_MACRO::GetApertureMacroShape( const GERBER_DRAW_ITEM* a
     SHAPE_POLY_SET holeBuffer;
 
     m_shape.RemoveAllContours();
+    D_CODE * dcode = aParent->GetDcodeDescr();
 
     for( AM_PRIMITIVE& prim_macro : m_primitivesList )
     {
         if( prim_macro.m_Primitive_id == AMP_COMMENT )
             continue;
 
-        if( prim_macro.IsAMPrimitiveExposureOn( aParent ) )
+        if( prim_macro.IsAMPrimitiveExposureOn( dcode ) )
         {
-            prim_macro.ConvertBasicShapeToPolygon( aParent, m_shape, aShapePos );
+            prim_macro.ConvertBasicShapeToPolygon( dcode, m_shape );
         }
         else
         {
-            prim_macro.ConvertBasicShapeToPolygon( aParent, holeBuffer, aShapePos );
+            prim_macro.ConvertBasicShapeToPolygon( dcode, holeBuffer );
 
             if( holeBuffer.OutlineCount() )     // we have a new hole in shape: remove the hole
             {
@@ -85,6 +87,21 @@ SHAPE_POLY_SET* APERTURE_MACRO::GetApertureMacroShape( const GERBER_DRAW_ITEM* a
     // a hole when merged, so we must fracture the polygon to be able to drawn it
     // (i.e link holes by overlapping edges)
     m_shape.Fracture( SHAPE_POLY_SET::PM_FAST );
+
+    // Move m_shape to the actual draw position:
+    for( int icnt = 0; icnt < m_shape.OutlineCount(); icnt++ )
+    {
+
+        SHAPE_LINE_CHAIN& outline = m_shape.Outline( icnt );
+
+        for( int jj = 0; jj < outline.PointCount(); jj++ )
+        {
+            VECTOR2I point = outline.CPoint( jj );
+            point += aShapePos;
+            point = aParent->GetABPosition( point );
+            outline.SetPoint( jj, point );
+        }
+    }
 
     return &m_shape;
 }
