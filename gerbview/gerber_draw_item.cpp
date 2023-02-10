@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2017 <Jean-Pierre Charras>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@ GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( GERBER_FILE_IMAGE* aGerberImageFile ) :
     EDA_ITEM( nullptr, GERBER_DRAW_ITEM_T )
 {
     m_GerberImageFile = aGerberImageFile;
-    m_Shape         = GBR_SEGMENT;
+    m_ShapeType     = GBR_SEGMENT;
     m_Flashed       = false;
     m_DCode         = 0;
     m_UnitsMetric   = false;
@@ -92,7 +92,7 @@ bool GERBER_DRAW_ITEM::GetTextD_CodePrms( int& aSize, VECTOR2I& aPos, EDA_ANGLE&
     if( m_DCode <= 0 )
         return false;       // No D_Code for this item
 
-    if( m_Flashed || m_Shape == GBR_ARC )
+    if( m_Flashed || m_ShapeType == GBR_ARC )
         aPos = m_Start;
     else    // it is a line:
         aPos = ( m_Start + m_End) / 2;
@@ -207,7 +207,7 @@ void GERBER_DRAW_ITEM::SetLayerParameters()
 
 wxString GERBER_DRAW_ITEM::ShowGBRShape() const
 {
-    switch( m_Shape )
+    switch( m_ShapeType )
     {
     case GBR_SEGMENT:     return _( "Line" );
     case GBR_ARC:         return _( "Arc" );
@@ -256,7 +256,7 @@ const BOX2I GERBER_DRAW_ITEM::GetBoundingBox() const
     // Until/unless that is changed, we need to do different things depending on
     // what is actually being represented by this GERBER_DRAW_ITEM.
 
-    switch( m_Shape )
+    switch( m_ShapeType )
     {
     case GBR_POLYGON:
     {
@@ -432,7 +432,7 @@ void GERBER_DRAW_ITEM::Print( wxDC* aDC, const VECTOR2I& aOffset, GBR_DISPLAY_OP
 
     isFilled = aOptions->m_DisplayLinesFill;
 
-    switch( m_Shape )
+    switch( m_ShapeType )
     {
     case GBR_POLYGON:
         isFilled = aOptions->m_DisplayPolygonsFill;
@@ -622,7 +622,7 @@ void GERBER_DRAW_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_
     aList.emplace_back( _( "Type" ), msg );
 
     // Display D_Code value with its attributes for items using a DCode:
-    if( m_Shape == GBR_POLYGON )    // Has no DCode, but can have an attribute
+    if( m_ShapeType == GBR_POLYGON )    // Has no DCode, but can have an attribute
     {
         msg = _( "Attribute" );
 
@@ -739,7 +739,7 @@ BITMAPS GERBER_DRAW_ITEM::GetMenuImage() const
     if( m_Flashed )
         return BITMAPS::pad;
 
-    switch( m_Shape )
+    switch( m_ShapeType )
     {
     case GBR_SEGMENT:
     case GBR_ARC:
@@ -772,7 +772,7 @@ bool GERBER_DRAW_ITEM::HitTest( const VECTOR2I& aRefPos, int aAccuracy ) const
 
     SHAPE_POLY_SET poly;
 
-    switch( m_Shape )
+    switch( m_ShapeType )
     {
     case GBR_POLYGON:
         poly = m_Polygon;
@@ -861,9 +861,16 @@ bool GERBER_DRAW_ITEM::HitTest( const VECTOR2I& aRefPos, int aAccuracy ) const
     }
 
     case GBR_SPOT_MACRO:
+    {
         // Aperture macro polygons are already in absolute coordinates
         auto p = GetDcodeDescr()->GetMacro()->GetApertureMacroShape( this, m_Start );
         return p->Contains( VECTOR2I( aRefPos ), -1, aAccuracy );
+    }
+
+    case GBR_SEGMENT:
+    case GBR_CIRCLE:
+    case GBR_SPOT_CIRCLE:
+        break;  // handled below.
     }
 
     // TODO: a better analyze of the shape (perhaps create a D_CODE::HitTest for flashed items)
@@ -900,7 +907,7 @@ bool GERBER_DRAW_ITEM::HitTest( const BOX2I& aRefArea, bool aContained, int aAcc
 void GERBER_DRAW_ITEM::Show( int nestLevel, std::ostream& os ) const
 {
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
-                                 " shape=\"" << m_Shape << '"' <<
+                                 " shape=\"" << m_ShapeType << '"' <<
                                  " addr=\"" << std::hex << this << std::dec << '"' <<
                                  " layer=\"" << GetLayer() << '"' <<
                                  " size=\"" << m_Size << '"' <<
@@ -940,7 +947,7 @@ double GERBER_DRAW_ITEM::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     {
         int size = 0;
 
-        switch( m_Shape )
+        switch( m_ShapeType )
         {
         case GBR_SPOT_MACRO:
             size = GetDcodeDescr()->m_Polygon.BBox().GetWidth();

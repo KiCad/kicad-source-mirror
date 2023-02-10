@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -244,7 +244,7 @@ int GERBVIEW_CONTROL::DisplayControl( const TOOL_EVENT& aEvent )
                 {
                     GERBER_DRAW_ITEM* item = static_cast<GERBER_DRAW_ITEM*>( aItem );
 
-                    switch( item->m_Shape )
+                    switch( item->m_ShapeType )
                     {
                     case GBR_CIRCLE:
                     case GBR_ARC:
@@ -265,7 +265,7 @@ int GERBVIEW_CONTROL::DisplayControl( const TOOL_EVENT& aEvent )
                 {
                     GERBER_DRAW_ITEM* item = static_cast<GERBER_DRAW_ITEM*>( aItem );
 
-                    switch( item->m_Shape )
+                    switch( item->m_ShapeType )
                     {
                     case GBR_SPOT_CIRCLE:
                     case GBR_SPOT_RECT:
@@ -288,7 +288,7 @@ int GERBVIEW_CONTROL::DisplayControl( const TOOL_EVENT& aEvent )
                 {
                     GERBER_DRAW_ITEM* item = static_cast<GERBER_DRAW_ITEM*>( aItem );
 
-                    return ( item->m_Shape == GBR_POLYGON );
+                    return ( item->m_ShapeType == GBR_POLYGON );
                 } );
     }
     else if( aEvent.IsAction( &GERBVIEW_ACTIONS::negativeObjectDisplay ) )

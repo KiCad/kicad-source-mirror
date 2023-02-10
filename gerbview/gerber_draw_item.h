@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2016 <Jean-Pierre Charras>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,8 +46,8 @@ namespace KIGFX
 }
 
 
-/* Shapes id for basic shapes ( .m_Shape member ) */
-enum Gbr_Basic_Shapes
+/* Shapes id for basic shapes ( .m_ShapeType member ) */
+enum GBR_BASIC_SHAPE_TYPE
 {
     GBR_SEGMENT = 0,        // usual segment : line with rounded ends
     GBR_ARC,                // Arcs (with rounded ends)
@@ -57,8 +57,7 @@ enum Gbr_Basic_Shapes
     GBR_SPOT_RECT,          // flashed shape: rectangular shape can have hole)
     GBR_SPOT_OVAL,          // flashed shape: oval shape
     GBR_SPOT_POLY,          // flashed shape: regular polygon, 3 to 12 edges
-    GBR_SPOT_MACRO,         // complex shape described by a macro
-    GBR_LAST                // last value for this list
+    GBR_SPOT_MACRO         // complex shape described by a macro
 };
 
 class GERBER_DRAW_ITEM : public EDA_ITEM
@@ -172,7 +171,7 @@ public:
     void PrintGerberPoly( wxDC* aDC, const COLOR4D& aColor, const VECTOR2I& aOffset,
                           bool aFilledShape );
 
-    int Shape() const { return m_Shape; }
+    GBR_BASIC_SHAPE_TYPE ShapeType() const { return m_ShapeType; }
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
@@ -230,7 +229,7 @@ public:
 public:
     bool               m_UnitsMetric;       // store here the gerber units (inch/mm).  Used
                                             // only to calculate aperture macros shapes sizes
-    int                m_Shape;             // Shape and type of this gerber item
+    GBR_BASIC_SHAPE_TYPE   m_ShapeType;         // Shape type of this gerber item
     VECTOR2I           m_Start;             // Line or arc start point or position of the shape
                                             // for flashed items
     VECTOR2I           m_End;               // Line or arc end point

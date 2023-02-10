@@ -6,7 +6,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -114,24 +114,24 @@ void fillFlashedGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
     switch( aAperture )
     {
     case APT_POLYGON:           // flashed regular polygon
-        aGbrItem->m_Shape = GBR_SPOT_POLY;
+        aGbrItem->m_ShapeType = GBR_SPOT_POLY;
         break;
 
     case APT_CIRCLE:
-        aGbrItem->m_Shape  = GBR_SPOT_CIRCLE;
+        aGbrItem->m_ShapeType  = GBR_SPOT_CIRCLE;
         aGbrItem->m_Size.y = aGbrItem->m_Size.x;
         break;
 
     case APT_OVAL:
-        aGbrItem->m_Shape = GBR_SPOT_OVAL;
+        aGbrItem->m_ShapeType = GBR_SPOT_OVAL;
         break;
 
     case APT_RECT:
-        aGbrItem->m_Shape = GBR_SPOT_RECT;
+        aGbrItem->m_ShapeType = GBR_SPOT_RECT;
         break;
 
     case APT_MACRO:
-        aGbrItem->m_Shape = GBR_SPOT_MACRO;
+        aGbrItem->m_ShapeType = GBR_SPOT_MACRO;
 
         // Cache the bounding box for aperture macros
         aGbrItem->GetDcodeDescr()->GetMacro()->GetApertureMacroShape( aGbrItem, aPos );
@@ -205,7 +205,7 @@ void fillArcGBRITEM( GERBER_DRAW_ITEM* aGbrItem, int Dcode_index, const VECTOR2I
 {
     VECTOR2I center, delta;
 
-    aGbrItem->m_Shape = GBR_ARC;
+    aGbrItem->m_ShapeType = GBR_ARC;
     aGbrItem->m_Size  = aPenSize;
     aGbrItem->m_Flashed = false;
 
@@ -598,7 +598,7 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
                 m_Exposure = true;
                 gbritem    = new GERBER_DRAW_ITEM( this );
                 AddItemToList( gbritem );
-                gbritem->m_Shape = GBR_POLYGON;
+                gbritem->m_ShapeType = GBR_POLYGON;
                 gbritem->m_Flashed = false;
                 gbritem->m_DCode = 0;   // No DCode for a Polygon (Region in Gerber dialect)
 

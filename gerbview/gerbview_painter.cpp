@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -244,7 +244,7 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
     m_gal->SetIsFill( isFilled );
     m_gal->SetIsStroke( !isFilled );
 
-    switch( aItem->m_Shape )
+    switch( aItem->m_ShapeType )
     {
     case GBR_POLYGON:
     {
@@ -459,7 +459,7 @@ void GERBVIEW_PAINTER::drawFlashedShape( GERBER_DRAW_ITEM* aItem, bool aFilled )
     m_gal->SetIsStroke( !aFilled );
     m_gal->SetLineWidth( m_gerbviewSettings.m_outlineWidth );
 
-    switch( aItem->m_Shape )
+    switch( aItem->m_ShapeType )
     {
     case GBR_SPOT_CIRCLE:
     {

@@ -163,7 +163,7 @@ void GBR_TO_PCB_EXPORTER::export_non_copper_item( const GERBER_DRAW_ITEM* aGbrIt
     if( d_codeDescr == nullptr )
         d_codeDescr = &dummyD_CODE;
 
-    switch( aGbrItem->m_Shape )
+    switch( aGbrItem->m_ShapeType )
     {
     case GBR_POLYGON:
         writePcbPolygon( aGbrItem->m_Polygon, aLayer );
@@ -287,7 +287,7 @@ void GBR_TO_PCB_EXPORTER::export_via( const EXPORT_VIA& aVia )
 
 void GBR_TO_PCB_EXPORTER::export_copper_item( const GERBER_DRAW_ITEM* aGbrItem, int aLayer )
 {
-    switch( aGbrItem->m_Shape )
+    switch( aGbrItem->m_ShapeType )
     {
     case GBR_SPOT_CIRCLE:
     case GBR_SPOT_RECT:
@@ -412,7 +412,7 @@ void GBR_TO_PCB_EXPORTER::export_flashed_copper_item( const GERBER_DRAW_ITEM* aG
     if( d_codeDescr == nullptr )
         d_codeDescr = &flashed_item_D_CODE;
 
-    if( aGbrItem->m_Shape == GBR_SPOT_CIRCLE )
+    if( aGbrItem->m_ShapeType == GBR_SPOT_CIRCLE )
     {
         // See if there's a via that we can enlarge to fit this flashed item
         for( EXPORT_VIA& via : m_vias )
@@ -427,8 +427,8 @@ void GBR_TO_PCB_EXPORTER::export_flashed_copper_item( const GERBER_DRAW_ITEM* aG
 
     VECTOR2I offset = aGbrItem->GetABPosition( aGbrItem->m_Start );
 
-    if( aGbrItem->m_Shape == GBR_SPOT_CIRCLE ||
-        ( aGbrItem->m_Shape == GBR_SPOT_OVAL && d_codeDescr->m_Size.x == d_codeDescr->m_Size.y ) )
+    if( aGbrItem->m_ShapeType == GBR_SPOT_CIRCLE ||
+        ( aGbrItem->m_ShapeType == GBR_SPOT_OVAL && d_codeDescr->m_Size.x == d_codeDescr->m_Size.y ) )
     {
         // export it as filled circle
         VECTOR2I center = offset;
