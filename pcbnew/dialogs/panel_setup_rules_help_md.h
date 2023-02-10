@@ -312,8 +312,4 @@ _HKI( "### Top-level Clauses\n"
 "    (rule high-current\n"
 "        (constraint track_width (min 1.0mm))\n"
 "        (constraint connection_width (min 0.8mm))\n"
-"        (condition \"A.NetClass == 'Power'\"))\n"
-"\n"
-"### Documentation\n"
-"\n"
-"For the full documentation see [https://docs.kicad.org](https://docs.kicad.org/GetMajorMinorVersion/pcbnew/#custom_design_rules)." );
+"        (condition \"A.NetClass == 'Power'\"))" );
