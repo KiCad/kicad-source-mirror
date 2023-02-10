@@ -610,7 +610,7 @@ bool IbisHeader::Check()
     bool status = true;
 
     std::stringstream message;
-    message << _( "Checking Header... " );
+    message << _( "Checking Header..." );
 
     if( m_ibisVersion == -1 )
     {
