@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-10 14:35-0800\n"
+"POT-Creation-Date: 2023-02-10 15:35-0800\n"
 "PO-Revision-Date: 2023-02-09 11:36+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
@@ -15605,8 +15605,7 @@ msgid "Invalid Ramp"
 msgstr "Ungültige Rampe"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:613
-#, fuzzy
-msgid "Checking Header... "
+msgid "Checking Header..."
 msgstr "Prüfe Header ..."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:620
@@ -31806,7 +31805,6 @@ msgid "Check rule syntax"
 msgstr "Regelsyntax überprüfen"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -32128,12 +32126,7 @@ msgid ""
 "    (rule high-current\n"
 "        (constraint track_width (min 1.0mm))\n"
 "        (constraint connection_width (min 0.8mm))\n"
-"        (condition \"A.NetClass == 'Power'\"))\n"
-"\n"
-"### Documentation\n"
-"\n"
-"For the full documentation see [https://docs.kicad.org](https://docs.kicad."
-"org/GetMajorMinorVersion/pcbnew/#custom_design_rules)."
+"        (condition \"A.NetClass == 'Power'\"))"
 msgstr ""
 "### Allgemeine Bestimmungen\n"
 "\n"

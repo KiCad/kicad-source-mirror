@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-10 14:35-0800\n"
+"POT-Creation-Date: 2023-02-10 15:35-0800\n"
 "PO-Revision-Date: 2023-02-06 21:07+0000\n"
 "Last-Translator: Michał Radziejewicz <radziejewiczmichal@gmail.com>\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/kicad/master-"
@@ -16360,7 +16360,7 @@ msgstr "X мащаб:"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:613
 #, fuzzy
-msgid "Checking Header... "
+msgid "Checking Header..."
 msgstr "Старт на запълване..."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:620
@@ -34059,12 +34059,7 @@ msgid ""
 "    (rule high-current\n"
 "        (constraint track_width (min 1.0mm))\n"
 "        (constraint connection_width (min 0.8mm))\n"
-"        (condition \"A.NetClass == 'Power'\"))\n"
-"\n"
-"### Documentation\n"
-"\n"
-"For the full documentation see [https://docs.kicad.org](https://docs.kicad."
-"org/GetMajorMinorVersion/pcbnew/#custom_design_rules)."
+"        (condition \"A.NetClass == 'Power'\"))"
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:75
