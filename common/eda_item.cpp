@@ -392,10 +392,9 @@ static struct EDA_ITEM_DESC
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( EDA_ITEM );
 
-        auto typeProp = new PROPERTY_ENUM<EDA_ITEM, KICAD_T>( wxS( "Type" ),
-                NO_SETTER( EDA_ITEM, KICAD_T ), &EDA_ITEM::Type );
-        typeProp->SetIsInternal( true );
-        propMgr.AddProperty( typeProp );
+        propMgr.AddProperty( new PROPERTY_ENUM<EDA_ITEM, KICAD_T>( wxS( "Type" ),
+                             NO_SETTER( EDA_ITEM, KICAD_T ), &EDA_ITEM::Type ) )
+                .SetIsInternal();
     }
 } _EDA_ITEM_DESC;
 

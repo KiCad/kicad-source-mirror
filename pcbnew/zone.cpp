@@ -1431,55 +1431,57 @@ static struct ZONE_DESC
                     return false;
                 };
 
-        auto layer = new PROPERTY_ENUM<ZONE, PCB_LAYER_ID>( _HKI( "Layer" ),
-                    &ZONE::SetLayer, &ZONE::GetLayer );
-        layer->SetIsInternal( true );
-        propMgr.ReplaceProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ), layer );
+        propMgr.ReplaceProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ),
+                                 new PROPERTY_ENUM<ZONE, PCB_LAYER_ID>( _HKI( "Layer" ),
+                                                                        &ZONE::SetLayer,
+                                                                        &ZONE::GetLayer ) )
+                .SetIsInternal();
 
         propMgr.OverrideAvailability( TYPE_HASH( ZONE ), TYPE_HASH( BOARD_CONNECTED_ITEM ),
                                       _HKI( "Net" ), isCopperZone );
         propMgr.OverrideAvailability( TYPE_HASH( ZONE ), TYPE_HASH( BOARD_CONNECTED_ITEM ),
                                       _HKI( "Net Class" ), isCopperZone );
 
-        auto priority = new PROPERTY<ZONE, unsigned>( _HKI( "Priority" ),
-                    &ZONE::SetAssignedPriority, &ZONE::GetAssignedPriority );
-        priority->SetAvailableFunc( isCopperZone );
-        propMgr.AddProperty( priority );
+        propMgr.AddProperty( new PROPERTY<ZONE, unsigned>( _HKI( "Priority" ),
+                                                           &ZONE::SetAssignedPriority,
+                                                           &ZONE::GetAssignedPriority ) )
+                .SetAvailableFunc( isCopperZone );
 
         propMgr.AddProperty( new PROPERTY<ZONE, wxString>( _HKI( "Name" ),
                     &ZONE::SetZoneName, &ZONE::GetZoneName ) );
 
         const wxString groupFill = _HKI( "Fill Style" );
 
-        auto fillMode = new PROPERTY_ENUM<ZONE, ZONE_FILL_MODE>( _HKI( "Fill Mode" ),
-                    &ZONE::SetFillMode, &ZONE::GetFillMode );
         // Fill mode can't be exposed to the UI until validation is moved to the ZONE class.
         // see https://gitlab.com/kicad/code/kicad/-/issues/13811
-        fillMode->SetIsInternal();
-        propMgr.AddProperty( fillMode, groupFill );
+        propMgr.AddProperty( new PROPERTY_ENUM<ZONE, ZONE_FILL_MODE>(
+                                     _HKI( "Fill Mode" ), &ZONE::SetFillMode, &ZONE::GetFillMode ),
+                             groupFill )
+                .SetIsInternal();
 
-        auto hatchOrientation = new PROPERTY<ZONE, EDA_ANGLE>( _HKI( "Orientation" ),
-                    &ZONE::SetHatchOrientation, &ZONE::GetHatchOrientation,
-                    PROPERTY_DISPLAY::PT_DEGREE );
-        hatchOrientation->SetWriteableFunc( isHatchedFill );
-        hatchOrientation->SetIsInternal();
-        propMgr.AddProperty( hatchOrientation, groupFill );
-
-        //TODO: Switch to translated
-        auto hatchWidth = new PROPERTY<ZONE, int>( wxT( "Hatch Width" ),
-                    &ZONE::SetHatchThickness, &ZONE::GetHatchThickness,
-                    PROPERTY_DISPLAY::PT_SIZE );
-        hatchWidth->SetWriteableFunc( isHatchedFill );
-        hatchWidth->SetIsInternal();
-        propMgr.AddProperty( hatchWidth, groupFill );
+        propMgr.AddProperty( new PROPERTY<ZONE, EDA_ANGLE>(
+                                     _HKI( "Orientation" ), &ZONE::SetHatchOrientation,
+                                     &ZONE::GetHatchOrientation, PROPERTY_DISPLAY::PT_DEGREE ),
+                             groupFill )
+                .SetWriteableFunc( isHatchedFill )
+                .SetIsInternal();
 
         //TODO: Switch to translated
-        auto hatchGap = new PROPERTY<ZONE, int>( wxT( "Hatch Gap" ),
-                    &ZONE::SetHatchGap, &ZONE::GetHatchGap,
-                    PROPERTY_DISPLAY::PT_SIZE );
-        hatchGap->SetWriteableFunc( isHatchedFill );
-        hatchGap->SetIsInternal();
-        propMgr.AddProperty( hatchGap, groupFill );
+        propMgr.AddProperty( new PROPERTY<ZONE, int>( wxT( "Hatch Width" ),
+                                                      &ZONE::SetHatchThickness,
+                                                      &ZONE::GetHatchThickness,
+                                                      PROPERTY_DISPLAY::PT_SIZE ),
+                             groupFill )
+                .SetWriteableFunc( isHatchedFill )
+                .SetIsInternal();
+
+        //TODO: Switch to translated
+        propMgr.AddProperty( new PROPERTY<ZONE, int>( wxT( "Hatch Gap" ), &ZONE::SetHatchGap,
+                                                      &ZONE::GetHatchGap,
+                                                      PROPERTY_DISPLAY::PT_SIZE ),
+                             groupFill )
+                .SetWriteableFunc( isHatchedFill )
+                .SetIsInternal();
 
         // TODO: Smoothing effort needs to change to enum (in dialog too)
         // TODO: Smoothing amount (double)
