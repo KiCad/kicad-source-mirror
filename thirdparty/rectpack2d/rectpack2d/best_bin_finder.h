@@ -1,4 +1,5 @@
 #pragma once
+#include <optional>
 #include <variant>
 #include <cassert>
 #include "rect_structs.h"
@@ -213,7 +214,7 @@ namespace rectpack2D {
 		class F,
 		class I
 	>
-	rect_wh find_best_packing_impl(F for_each_order, const I input) {
+	std::optional<rect_wh> find_best_packing_impl(F for_each_order, const I input) {
 		const auto max_bin = rect_wh(input.max_bin_side, input.max_bin_side);
 
 		OrderType* best_order = nullptr;
@@ -258,9 +259,8 @@ namespace rectpack2D {
 			}
 		});
 
+		if( best_order != nullptr )
 		{
-			assert(best_order != nullptr);
-			
 			root.reset(best_bin);
 
 			for (auto& rr : *best_order) {
@@ -281,6 +281,10 @@ namespace rectpack2D {
 			}
 
 			return root.get_rects_aabb();
-		}
+        }
+        else
+        {
+            return std::nullopt;
+        }
 	}
 }

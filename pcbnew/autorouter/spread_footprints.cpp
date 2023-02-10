@@ -5,7 +5,7 @@
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
  *
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,6 +35,7 @@
  */
 
 #include <spread_footprints.h>
+#include <optional>
 #include <algorithm>
 #include <refdes_utils.h>
 #include <string_utils.h>
@@ -77,12 +78,13 @@ static bool compareFootprintsbyRef( FOOTPRINT* ref, FOOTPRINT* compare )
 
 
 // Spread a list of rectangles inside a placement area
-rectpack2D::rect_wh spreadRectangles( rect_vector& vecSubRects, int areaSizeX, int areaSizeY )
+std::optional<rectpack2D::rect_wh> spreadRectangles( rect_vector& vecSubRects, int areaSizeX,
+                                                     int areaSizeY )
 {
     areaSizeX /= scale;
     areaSizeY /= scale;
 
-    rectpack2D::rect_wh result;
+    std::optional<rectpack2D::rect_wh> result;
 
     int max_side = std::max( areaSizeX, areaSizeY );
 
@@ -107,7 +109,7 @@ rectpack2D::rect_wh spreadRectangles( rect_vector& vecSubRects, int areaSizeX, i
                 make_finder_input( max_side, discard_step, report_successful, report_unsuccessful,
                                    rectpack2D::flipping_option::DISABLED ) );
 
-        if( anyUnsuccessful )
+        if( !result || anyUnsuccessful )
         {
             max_side = (int) ( max_side * 1.2 );
             continue;

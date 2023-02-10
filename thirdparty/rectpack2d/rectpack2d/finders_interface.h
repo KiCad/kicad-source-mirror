@@ -69,7 +69,7 @@ namespace rectpack2D {
 	*/
 
 	template <class empty_spaces_type, class F, class G, class Comparator, class... Comparators>
-	rect_wh find_best_packing(
+	std::optional<rect_wh> find_best_packing(
 		std::vector<output_rect_t<empty_spaces_type>>& subjects,
 		const finder_input<F, G>& input,
 
@@ -122,7 +122,7 @@ namespace rectpack2D {
 	*/
 
 	template <class empty_spaces_type, class F, class G>
-	rect_wh find_best_packing(
+	std::optional<rect_wh> find_best_packing(
 		std::vector<output_rect_t<empty_spaces_type>>& subjects,
 		const finder_input<F, G>& input
 	) {
