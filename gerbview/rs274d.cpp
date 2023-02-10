@@ -372,8 +372,8 @@ static void fillArcPOLY( GERBER_DRAW_ITEM* aGbrItem, const VECTOR2I& aStart, con
     EDA_ANGLE increment_angle = ANGLE_360 / 36;
     int count = std::abs( arc_angle.AsDegrees() / increment_angle.AsDegrees() );
 
-    if( aGbrItem->m_Polygon.OutlineCount() == 0 )
-        aGbrItem->m_Polygon.NewOutline();
+    if( aGbrItem->m_ShapeAsPolygon.OutlineCount() == 0 )
+        aGbrItem->m_ShapeAsPolygon.NewOutline();
 
     // calculate polygon corners
     // when arc is counter-clockwise, dummyGbrItem arc goes from end to start
@@ -393,7 +393,7 @@ static void fillArcPOLY( GERBER_DRAW_ITEM* aGbrItem, const VECTOR2I& aStart, con
         else    // last point
             end_arc = aClockwise ? end : start;
 
-        aGbrItem->m_Polygon.Append( end_arc + center );
+        aGbrItem->m_ShapeAsPolygon.Append( end_arc + center );
     }
 }
 
@@ -527,8 +527,8 @@ bool GERBER_FILE_IMAGE::Execute_G_Command( char*& text, int G_command )
         {
             GERBER_DRAW_ITEM * gbritem = GetLastItemInList();
 
-            if( gbritem->m_Polygon.VertexCount() )
-                gbritem->m_Polygon.Append( gbritem->m_Polygon.CVertex( 0 ) );
+            if( gbritem->m_ShapeAsPolygon.VertexCount() )
+                gbritem->m_ShapeAsPolygon.Append( gbritem->m_ShapeAsPolygon.CVertex( 0 ) );
 
             StepAndRepeatItem( *gbritem );
         }
@@ -637,14 +637,14 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
 
                 gbritem->m_Start = m_PreviousPos;       // m_Start is used as temporary storage
 
-                if( gbritem->m_Polygon.OutlineCount() == 0 )
+                if( gbritem->m_ShapeAsPolygon.OutlineCount() == 0 )
                 {
-                    gbritem->m_Polygon.NewOutline();
-                    gbritem->m_Polygon.Append( VECTOR2I( gbritem->m_Start ) );
+                    gbritem->m_ShapeAsPolygon.NewOutline();
+                    gbritem->m_ShapeAsPolygon.Append( VECTOR2I( gbritem->m_Start ) );
                 }
 
                 gbritem->m_End = m_CurrentPos;       // m_End is used as temporary storage
-                gbritem->m_Polygon.Append( VECTOR2I( gbritem->m_End ) );
+                gbritem->m_ShapeAsPolygon.Append( VECTOR2I( gbritem->m_End ) );
                 break;
             }
 
@@ -656,7 +656,7 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
             if( m_Exposure && GetLastItemInList() )    // End of polygon
             {
                 gbritem = GetLastItemInList();
-                gbritem->m_Polygon.Append( gbritem->m_Polygon.CVertex( 0 ) );
+                gbritem->m_ShapeAsPolygon.Append( gbritem->m_ShapeAsPolygon.CVertex( 0 ) );
                 StepAndRepeatItem( *gbritem );
             }
 

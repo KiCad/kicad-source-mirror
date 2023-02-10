@@ -166,7 +166,7 @@ void GBR_TO_PCB_EXPORTER::export_non_copper_item( const GERBER_DRAW_ITEM* aGbrIt
     switch( aGbrItem->m_ShapeType )
     {
     case GBR_POLYGON:
-        writePcbPolygon( aGbrItem->m_Polygon, aLayer );
+        writePcbPolygon( aGbrItem->m_ShapeAsPolygon, aLayer );
         break;
 
     case GBR_SPOT_CIRCLE:
@@ -307,7 +307,7 @@ void GBR_TO_PCB_EXPORTER::export_copper_item( const GERBER_DRAW_ITEM* aGbrItem, 
         // The current way is use a polygon, as the zone export
         // is experimental and only for tests.
 #if 1
-        writePcbPolygon( aGbrItem->m_Polygon, aLayer );
+        writePcbPolygon( aGbrItem->m_ShapeAsPolygon, aLayer );
 #else
         // Only for tests:
         writePcbZoneItem( aGbrItem, aLayer );
@@ -548,7 +548,7 @@ void GBR_TO_PCB_EXPORTER::writePcbPolygon( const SHAPE_POLY_SET& aPolys, int aLa
 
 void GBR_TO_PCB_EXPORTER::writePcbZoneItem( const GERBER_DRAW_ITEM* aGbrItem, int aLayer )
 {
-    SHAPE_POLY_SET polys = aGbrItem->m_Polygon.CloneDropTriangulation();
+    SHAPE_POLY_SET polys = aGbrItem->m_ShapeAsPolygon.CloneDropTriangulation();
     polys.Simplify( SHAPE_POLY_SET::PM_FAST );
 
     if( polys.OutlineCount() == 0 )

@@ -260,7 +260,7 @@ const BOX2I GERBER_DRAW_ITEM::GetBoundingBox() const
     {
     case GBR_POLYGON:
     {
-        BOX2I bb = m_Polygon.BBox();
+        BOX2I bb = m_ShapeAsPolygon.BBox();
         bbox.Inflate( bb.GetWidth() / 2, bb.GetHeight() / 2 );
         bbox.SetOrigin( bb.GetOrigin() );
         break;
@@ -337,9 +337,9 @@ const BOX2I GERBER_DRAW_ITEM::GetBoundingBox() const
     {
         if( code && code->m_ApertType == APT_RECT )
         {
-            if( m_Polygon.OutlineCount() == 0 )
+            if( m_ShapeAsPolygon.OutlineCount() == 0 )
             {
-                // We cannot initialize m_Polygon, because we are in a const function.
+                // We cannot initialize m_ShapeAsPolygon, because we are in a const function.
                 // So use a temporary polygon
                 SHAPE_POLY_SET poly_shape;
                 ConvertSegmentToPolygon( &poly_shape );
@@ -348,7 +348,7 @@ const BOX2I GERBER_DRAW_ITEM::GetBoundingBox() const
 
             else
             {
-                bbox = m_Polygon.BBox();
+                bbox = m_ShapeAsPolygon.BBox();
             }
         }
         else
@@ -390,7 +390,7 @@ void GERBER_DRAW_ITEM::MoveXY( const VECTOR2I& aMoveVector )
     m_End       += aMoveVector;
     m_ArcCentre += aMoveVector;
 
-    m_Polygon.Move( aMoveVector );
+    m_ShapeAsPolygon.Move( aMoveVector );
 }
 
 
@@ -494,7 +494,7 @@ void GERBER_DRAW_ITEM::Print( wxDC* aDC, const VECTOR2I& aOffset, GBR_DISPLAY_OP
          */
         if( d_codeDescr->m_ApertType == APT_RECT )
         {
-            if( m_Polygon.OutlineCount() == 0 )
+            if( m_ShapeAsPolygon.OutlineCount() == 0 )
                 ConvertSegmentToPolygon();
 
             PrintGerberPoly( aDC, color, aOffset, isFilled );
@@ -589,7 +589,7 @@ void GERBER_DRAW_ITEM::ConvertSegmentToPolygon( SHAPE_POLY_SET* aPolygon ) const
 
 void GERBER_DRAW_ITEM::ConvertSegmentToPolygon()
 {
-    ConvertSegmentToPolygon( &m_Polygon );
+    ConvertSegmentToPolygon( &m_ShapeAsPolygon );
 }
 
 
@@ -597,7 +597,7 @@ void GERBER_DRAW_ITEM::PrintGerberPoly( wxDC* aDC, const COLOR4D& aColor, const 
                                         bool aFilledShape )
 {
     std::vector<VECTOR2I> points;
-    SHAPE_LINE_CHAIN& poly = m_Polygon.Outline( 0 );
+    SHAPE_LINE_CHAIN& poly = m_ShapeAsPolygon.Outline( 0 );
     int pointCount = poly.PointCount() - 1;
 
     points.reserve( pointCount );
@@ -775,7 +775,7 @@ bool GERBER_DRAW_ITEM::HitTest( const VECTOR2I& aRefPos, int aAccuracy ) const
     switch( m_ShapeType )
     {
     case GBR_POLYGON:
-        poly = m_Polygon;
+        poly = m_ShapeAsPolygon;
         return poly.Contains( VECTOR2I( ref_pos ), 0, aAccuracy );
 
     case GBR_SPOT_POLY:
@@ -863,7 +863,8 @@ bool GERBER_DRAW_ITEM::HitTest( const VECTOR2I& aRefPos, int aAccuracy ) const
     case GBR_SPOT_MACRO:
     {
         // Aperture macro polygons are already in absolute coordinates
-        auto p = GetDcodeDescr()->GetMacro()->GetApertureMacroShape( this, m_Start );
+        SHAPE_POLY_SET* p =
+            GetDcodeDescr()->GetMacro()->GetApertureMacroShape( this, m_Start );
         return p->Contains( VECTOR2I( aRefPos ), -1, aAccuracy );
     }
 

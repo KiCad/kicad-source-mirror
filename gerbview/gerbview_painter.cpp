@@ -263,7 +263,7 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
 
         if( aItem->m_AbsolutePolygon.OutlineCount() == 0 )
         {
-            std::vector<VECTOR2I> pts = aItem->m_Polygon.COutline( 0 ).CPoints();
+            std::vector<VECTOR2I> pts = aItem->m_ShapeAsPolygon.COutline( 0 ).CPoints();
 
             for( auto& pt : pts )
                 pt = aItem->GetABPosition( pt );
@@ -386,10 +386,10 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
         D_CODE* code = aItem->GetDcodeDescr();
         if( code && code->m_ApertType == APT_RECT )
         {
-            if( aItem->m_Polygon.OutlineCount() == 0 )
+            if( aItem->m_ShapeAsPolygon.OutlineCount() == 0 )
                 aItem->ConvertSegmentToPolygon();
 
-            drawPolygon( aItem, aItem->m_Polygon, isFilled );
+            drawPolygon( aItem, aItem->m_ShapeAsPolygon, isFilled );
         }
         else
         {
