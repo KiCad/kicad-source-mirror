@@ -364,8 +364,9 @@ void CONNECTIVITY_DATA::ComputeLocalRatsnest( const std::vector<BOARD_ITEM*>& aI
     };
 
     thread_pool& tp = GetKiCadThreadPool();
+    size_t num_nets = std::min( m_nets.size(), aDynamicData->m_nets.size() );
 
-    tp.push_loop( 1, aDynamicData->m_nets.size(),
+    tp.push_loop( 1, num_nets,
             [&]( const int a, const int b)
             {
                 for( int ii = a; ii < b; ++ii )
