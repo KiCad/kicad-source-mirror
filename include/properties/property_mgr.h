@@ -146,7 +146,7 @@ public:
      * @param aProperty is the property to register.
      * @param aGroup is an optional grouping key for the property
      */
-    void AddProperty( PROPERTY_BASE* aProperty, const wxString& aGroup = wxEmptyString );
+    PROPERTY_BASE& AddProperty( PROPERTY_BASE* aProperty, const wxString& aGroup = wxEmptyString );
 
     /**
      * Replace an existing property for a specific type.
@@ -159,8 +159,8 @@ public:
      * @param aNew is the property replacing the inherited one.
      * @param aGroup is the group to set for the replaced property.
      */
-    void ReplaceProperty( size_t aBase, const wxString& aName, PROPERTY_BASE* aNew,
-                          const wxString& aGroup = wxEmptyString );
+    PROPERTY_BASE& ReplaceProperty( size_t aBase, const wxString& aName, PROPERTY_BASE* aNew,
+                                    const wxString& aGroup = wxEmptyString );
 
     /**
      * Register a type converter. Required prior TypeCast() usage.

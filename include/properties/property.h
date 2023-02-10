@@ -195,10 +195,7 @@ PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = PT_DEFAULT,
     {
     }
 
-    const wxString& Name() const
-    {
-        return m_name;
-    }
+    const wxString& Name() const { return m_name; }
 
     /**
      * Return a limited set of possible values (e.g. enum). Check with HasChoices() if a particular
@@ -238,9 +235,10 @@ PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = PT_DEFAULT,
     /**
      * Set a callback function to determine whether an object provides this property.
      */
-    void SetAvailableFunc( std::function<bool(INSPECTABLE*)> aFunc )
+    PROPERTY_BASE& SetAvailableFunc( std::function<bool(INSPECTABLE*)> aFunc )
     {
         m_availFunc = aFunc;
+        return *this;
     }
 
     virtual bool Writeable( INSPECTABLE* aObject ) const
@@ -248,9 +246,10 @@ PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = PT_DEFAULT,
         return m_writeableFunc( aObject );
     }
 
-    void SetWriteableFunc( std::function<bool(INSPECTABLE*)> aFunc )
+    PROPERTY_BASE& SetWriteableFunc( std::function<bool(INSPECTABLE*)> aFunc )
     {
         m_writeableFunc = aFunc;
+        return *this;
     }
 
     /**
@@ -268,21 +267,32 @@ PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = PT_DEFAULT,
      */
     virtual size_t TypeHash() const = 0;
 
-    PROPERTY_DISPLAY Display() const
-    {
-        return m_display;
-    }
+    PROPERTY_DISPLAY Display() const { return m_display; }
+    PROPERTY_BASE& SetDisplay( PROPERTY_DISPLAY aDisplay ) { m_display = aDisplay; return *this; }
 
     ORIGIN_TRANSFORMS::COORD_TYPES_T CoordType() const { return m_coordType; }
+    PROPERTY_BASE& SetCoordType( ORIGIN_TRANSFORMS::COORD_TYPES_T aType )
+    {
+        m_coordType = aType;
+        return *this;
+    }
 
-    void SetIsInternal( bool aIsInternal = true ) { m_isInternal = aIsInternal; }
     bool IsInternal() const { return m_isInternal; }
+    PROPERTY_BASE& SetIsInternal( bool aIsInternal = true )
+    {
+        m_isInternal = aIsInternal;
+        return *this;
+    }
 
-    void SetIsDeprecated( bool aIsDeprecated = true ) { m_isDeprecated = aIsDeprecated; }
     bool IsDeprecated() const { return m_isDeprecated; }
+    PROPERTY_BASE& SetIsDeprecated( bool aIsDeprecated = true )
+    {
+        m_isDeprecated = aIsDeprecated;
+        return *this;
+    }
 
     wxString Group() const { return m_group; }
-    void SetGroup( const wxString& aGroup ) { m_group = aGroup; }
+    PROPERTY_BASE& SetGroup( const wxString& aGroup ) { m_group = aGroup; return *this; }
 
 protected:
     template<typename T>
@@ -329,8 +339,8 @@ private:
 
 private:
     const wxString         m_name;
-    const PROPERTY_DISPLAY m_display;
-    const ORIGIN_TRANSFORMS::COORD_TYPES_T m_coordType;
+    PROPERTY_DISPLAY m_display;
+    ORIGIN_TRANSFORMS::COORD_TYPES_T m_coordType;
 
     /// Internal properties are hidden from the GUI but not from the rules editor autocomplete
     bool m_isInternal;

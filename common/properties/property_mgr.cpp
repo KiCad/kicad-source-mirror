@@ -130,7 +130,7 @@ const void* PROPERTY_MANAGER::TypeCast( const void* aSource, TYPE_ID aBase, TYPE
 }
 
 
-void PROPERTY_MANAGER::AddProperty( PROPERTY_BASE* aProperty, const wxString& aGroup )
+PROPERTY_BASE& PROPERTY_MANAGER::AddProperty( PROPERTY_BASE* aProperty, const wxString& aGroup )
 {
     const wxString& name = aProperty->Name();
     TYPE_ID hash = aProperty->OwnerHash();
@@ -147,15 +147,16 @@ void PROPERTY_MANAGER::AddProperty( PROPERTY_BASE* aProperty, const wxString& aG
     }
 
     m_dirty = true;
+    return *aProperty;
 }
 
 
-void PROPERTY_MANAGER::ReplaceProperty( size_t aBase, const wxString& aName, PROPERTY_BASE* aNew,
-                                        const wxString& aGroup )
+PROPERTY_BASE& PROPERTY_MANAGER::ReplaceProperty( size_t aBase, const wxString& aName, PROPERTY_BASE* aNew,
+                                                  const wxString& aGroup )
 {
     CLASS_DESC& classDesc = getClass( aNew->OwnerHash() );
     classDesc.m_replaced.insert( std::make_pair( aBase, aName ) );
-    AddProperty( aNew, aGroup );
+    return AddProperty( aNew, aGroup );
 }
 
 
