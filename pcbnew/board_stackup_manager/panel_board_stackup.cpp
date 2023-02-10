@@ -961,7 +961,7 @@ BOARD_STACKUP_ROW_UI_ITEM PANEL_SETUP_BOARD_STACKUP::createRowData( int aRow,
 }
 
 
-void PANEL_SETUP_BOARD_STACKUP::rebuildLayerStackPanel()
+void PANEL_SETUP_BOARD_STACKUP::rebuildLayerStackPanel( bool aRelinkItems )
 {
     wxWindowUpdateLocker locker( m_scGridWin );
     m_scGridWin->Hide();
@@ -974,7 +974,7 @@ void PANEL_SETUP_BOARD_STACKUP::rebuildLayerStackPanel()
     m_controlItemsList.clear();
 
     // Delete widgets (handled by the wxPanel parent)
-    for( BOARD_STACKUP_ROW_UI_ITEM ui_item: m_rowUiItemsList )
+    for( BOARD_STACKUP_ROW_UI_ITEM& ui_item: m_rowUiItemsList )
     {
         // This remove and delete the current ui_item.m_MaterialCtrl sizer
         ui_item.m_MaterialCtrl->SetSizer( nullptr );
@@ -1019,7 +1019,7 @@ void PANEL_SETUP_BOARD_STACKUP::rebuildLayerStackPanel()
 
 
     // Now, rebuild the widget list from the new m_stackup items:
-    buildLayerStackPanel( false );
+    buildLayerStackPanel( false, aRelinkItems );
 
     // Now enable/disable stackup items, according to the m_enabledLayers config
     showOnlyActiveLayers();
@@ -1029,17 +1029,22 @@ void PANEL_SETUP_BOARD_STACKUP::rebuildLayerStackPanel()
 }
 
 
-void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel( bool aCreatedInitialStackup )
+void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel( bool aCreateInitialStackup,
+                                                      bool aRelinkStackup )
 {
     // Build a full stackup for the dialog, with a active copper layer count
     // = current board layer count to calculate a reasonable default stackup:
-    if( aCreatedInitialStackup )
+    if( aCreateInitialStackup || aRelinkStackup )
     {
-        // Creates a full BOARD_STACKUP with 32 copper layers.
-        // extra layers will be hidden later.
-        // but if the number of layer is changed in the dialog, the corresponding
-        // widgets will be available with their previous values.
-        m_stackup.BuildDefaultStackupList( nullptr, m_brdSettings->GetCopperLayerCount() );
+        if( aCreateInitialStackup )
+        {
+            // Creates a full BOARD_STACKUP with 32 copper layers.
+            // extra layers will be hidden later.
+            // but if the number of layer is changed in the dialog, the corresponding
+            // widgets will be available with their previous values.
+            m_stackup.BuildDefaultStackupList( nullptr, m_brdSettings->GetCopperLayerCount() );
+        }
+
         const BOARD_STACKUP& brd_stackup = m_brdSettings->GetStackupDescriptor();
 
         // Now initialize all stackup items to the board values, when exist
@@ -1304,7 +1309,7 @@ void PANEL_SETUP_BOARD_STACKUP::ImportSettingsFrom( BOARD* aBoard )
 
     m_enabledLayers = m_board->GetEnabledLayers() & BOARD_STACKUP::StackupAllowedBrdLayers();
 
-    rebuildLayerStackPanel();
+    rebuildLayerStackPanel( true );
     synchronizeWithBoard( true );
     computeBoardThickness();
 

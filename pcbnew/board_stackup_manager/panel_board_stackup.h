@@ -148,10 +148,11 @@ private:
      * all copper layers and all tech layers that are supported by the stackup
      * items not in the current board stackup will be not shown, but they are
      * existing in list
-     * @param aCreatedInitialStackup = true to create a initial stackup list for the dialog
+     * @param aCreateInitialStackup = true to create a initial stackup list for the dialog
+     * @param aRelinkStackup = true to re-link m_stackup to m_brdSettings
      * false to build the stackup panel from the existing stackup list.
      */
-    void buildLayerStackPanel( bool aCreatedInitialStackup );
+    void buildLayerStackPanel( bool aCreateInitialStackup = false, bool aRelinkStackup = false );
 
     /** Synchronize the full stackup shown in m_fgGridSizer according to the stackup of the
      * current board and optionally update the stackup params (thickness, color ... )
@@ -171,8 +172,9 @@ private:
      * If previous items are in list, remove old items
      * New prms are added
      * must be called after adding or deleting a dielectric parameter set
+     * @param aRelinkItems will recreate the links between m_stackup and m_brdSettings
      */
-    void rebuildLayerStackPanel();
+    void rebuildLayerStackPanel( bool aRelinkItems = false );
 
     /** Transfer current UI settings to m_stackup but not to the board
      */
