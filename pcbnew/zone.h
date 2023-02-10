@@ -251,10 +251,16 @@ public:
     int GetMinThickness() const { return m_ZoneMinThickness; }
     void SetMinThickness( int aMinThickness )
     {
-        if( m_ZoneMinThickness != aMinThickness )
+        if( m_ZoneMinThickness != aMinThickness
+            || ( m_fillMode == ZONE_FILL_MODE::HATCH_PATTERN
+                 && ( m_hatchThickness < aMinThickness || m_hatchGap < aMinThickness ) ) )
+        {
             SetNeedRefill( true );
+        }
 
         m_ZoneMinThickness = aMinThickness;
+        m_hatchThickness   = std::max( m_hatchThickness, aMinThickness );
+        m_hatchGap         = std::max( m_hatchGap, aMinThickness );
     }
 
     int GetHatchThickness() const { return m_hatchThickness; }

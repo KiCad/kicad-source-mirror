@@ -27,6 +27,7 @@
 #include <core/wx_stl_compat.h>
 #include <origin_transforms.h>
 #include <properties/eda_angle_variant.h>
+#include <properties/property_validator.h>
 
 #include <wx/any.h>
 #include <wx/string.h>
@@ -187,7 +188,8 @@ PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = PT_DEFAULT,
         m_isInternal( false ),
         m_isDeprecated( false ),
         m_availFunc( [](INSPECTABLE*)->bool { return true; } ),
-        m_writeableFunc( [](INSPECTABLE*)->bool { return true; } )
+        m_writeableFunc( [](INSPECTABLE*)->bool { return true; } ),
+        m_validator( NullValidator )
     {
     }
 
@@ -294,6 +296,22 @@ PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = PT_DEFAULT,
     wxString Group() const { return m_group; }
     PROPERTY_BASE& SetGroup( const wxString& aGroup ) { m_group = aGroup; return *this; }
 
+    PROPERTY_BASE& SetValidator( PROPERTY_VALIDATOR_FN&& aValidator )
+    {
+        m_validator = aValidator;
+        return *this;
+    }
+
+    VALIDATOR_RESULT Validate( const wxAny&& aValue, EDA_ITEM* aItem )
+    {
+        return m_validator( std::move( aValue ), aItem );
+    }
+
+    static VALIDATOR_RESULT NullValidator( const wxAny&& aValue, EDA_ITEM* aItem )
+    {
+        return std::nullopt;
+    }
+
 protected:
     template<typename T>
     void set( void* aObject, T aValue )
@@ -338,8 +356,17 @@ private:
     virtual wxAny getter( const void* aObject ) const = 0;
 
 private:
-    const wxString         m_name;
+    /**
+     * Permanent identifier for this property.  Property names are an API contract; changing them
+     * after release will impact the Custom DRC Rules system as well as the automatic API binding
+     * system.  Never rename properties; instead deprecate them and hide them from the GUI.
+     */
+    const wxString m_name;
+
+    /// The display style controls how properties are edited in the properties manager GUI
     PROPERTY_DISPLAY m_display;
+
+    /// The coordinate type controls how distances are mapped to the user coordinate system
     ORIGIN_TRANSFORMS::COORD_TYPES_T m_coordType;
 
     /// Internal properties are hidden from the GUI but not from the rules editor autocomplete
@@ -354,6 +381,8 @@ private:
     std::function<bool(INSPECTABLE*)> m_availFunc;   ///< Eval to determine if prop is available
 
     std::function<bool(INSPECTABLE*)> m_writeableFunc;   ///< Eval to determine if prop is read-only
+
+    PROPERTY_VALIDATOR_FN m_validator;
 
     friend class INSPECTABLE;
 };

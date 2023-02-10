@@ -172,19 +172,54 @@ wxPGProperty* PCB_PROPERTIES_PANEL::createPGProperty( const PROPERTY_BASE* aProp
 }
 
 
-void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
+PROPERTY_BASE* PCB_PROPERTIES_PANEL::getPropertyFromEvent( const wxPropertyGridEvent& aEvent ) const
 {
     PCB_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
     const SELECTION& selection = selectionTool->GetSelection();
     BOARD_ITEM* firstItem = static_cast<BOARD_ITEM*>( selection.Front() );
 
-    wxCHECK_MSG( firstItem, /* void */,
-                 wxT( "valueChanged for a property with nothing selected!") );
+    wxCHECK_MSG( firstItem, nullptr,
+                 wxT( "getPropertyFromEvent for a property with nothing selected!") );
 
     PROPERTY_BASE* property = m_propMgr.GetProperty( TYPE_HASH( *firstItem ),
                                                      aEvent.GetPropertyName() );
-    wxCHECK_MSG( property, /* void */,
-                 wxT( "valueChanged for a property not found on the selected item!" ) );
+    wxCHECK_MSG( property, nullptr,
+                 wxT( "getPropertyFromEvent for a property not found on the selected item!" ) );
+
+    return property;
+}
+
+
+void PCB_PROPERTIES_PANEL::valueChanging( wxPropertyGridEvent& aEvent )
+{
+    PCB_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
+    const SELECTION& selection = selectionTool->GetSelection();
+    EDA_ITEM* item = selection.Front();
+
+    PROPERTY_BASE* property = getPropertyFromEvent( aEvent );
+    wxCHECK( property, /* void */ );
+    wxCHECK( item, /* void */ );
+
+    wxVariant newValue = aEvent.GetPropertyValue();
+
+    if( VALIDATOR_RESULT validationFailure = property->Validate( newValue.GetAny(), item ) )
+    {
+        wxString errorMsg = wxString::Format( wxS( "%s: %s" ), wxGetTranslation( property->Name() ),
+                                              validationFailure->get()->Format( m_frame ) );
+        m_frame->ShowInfoBarError( errorMsg );
+        aEvent.Veto();
+        return;
+    }
+}
+
+
+void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
+{
+    PCB_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
+    const SELECTION& selection = selectionTool->GetSelection();
+
+    PROPERTY_BASE* property = getPropertyFromEvent( aEvent );
+    wxCHECK( property, /* void */ );
 
     wxVariant newValue = aEvent.GetPropertyValue();
     BOARD_COMMIT changes( m_frame );

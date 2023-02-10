@@ -74,6 +74,7 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
                                  wxPG_DEFAULT_STYLE );
     m_grid->SetUnspecifiedValueAppearance( wxPGCell( wxT( "<...>" ) ) );
     m_grid->SetExtraStyle( wxPG_EX_HELP_AS_TOOLTIPS );
+    m_grid->SetValidationFailureBehavior( wxPG_VFB_MARK_CELL );
     m_grid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_RETURN );
     m_grid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_NUMPAD_ENTER );
     m_grid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_DOWN );

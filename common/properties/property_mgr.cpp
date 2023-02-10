@@ -151,8 +151,8 @@ PROPERTY_BASE& PROPERTY_MANAGER::AddProperty( PROPERTY_BASE* aProperty, const wx
 }
 
 
-PROPERTY_BASE& PROPERTY_MANAGER::ReplaceProperty( size_t aBase, const wxString& aName, PROPERTY_BASE* aNew,
-                                                  const wxString& aGroup )
+PROPERTY_BASE& PROPERTY_MANAGER::ReplaceProperty( size_t aBase, const wxString& aName,
+                                                  PROPERTY_BASE* aNew, const wxString& aGroup )
 {
     CLASS_DESC& classDesc = getClass( aNew->OwnerHash() );
     classDesc.m_replaced.insert( std::make_pair( aBase, aName ) );
