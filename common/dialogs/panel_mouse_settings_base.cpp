@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -61,13 +61,13 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 	m_zoomSpeed->SetToolTip( _("How far to zoom in for each rotation of the mouse wheel") );
 	m_zoomSpeed->SetMinSize( wxSize( 120,-1 ) );
 
-	m_zoomSizer->Add( m_zoomSpeed, 0, wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 0 );
+	m_zoomSizer->Add( m_zoomSpeed, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 0 );
 
 	m_checkAutoZoomSpeed = new wxCheckBox( this, wxID_ANY, _("Automatic"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkAutoZoomSpeed->SetValue(true);
 	m_checkAutoZoomSpeed->SetToolTip( _("Pick the zoom speed automatically") );
 
-	m_zoomSizer->Add( m_checkAutoZoomSpeed, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 10 );
+	m_zoomSizer->Add( m_checkAutoZoomSpeed, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 10 );
 
 
 	gbSizer1->Add( m_zoomSizer, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxEXPAND|wxTOP, 5 );
@@ -82,7 +82,7 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 	m_autoPanSpeed->SetToolTip( _("How fast to pan when moving an object off the edge of the screen") );
 	m_autoPanSpeed->SetMinSize( wxSize( 120,-1 ) );
 
-	m_panSizer->Add( m_autoPanSpeed, 0, wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 0 );
+	m_panSizer->Add( m_autoPanSpeed, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 0 );
 
 
 	gbSizer1->Add( m_panSizer, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxEXPAND|wxTOP, 5 );
@@ -127,7 +127,7 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 	int m_choiceLeftButtonDragNChoices = sizeof( m_choiceLeftButtonDragChoices ) / sizeof( wxString );
 	m_choiceLeftButtonDrag = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceLeftButtonDragNChoices, m_choiceLeftButtonDragChoices, 0 );
 	m_choiceLeftButtonDrag->SetSelection( 0 );
-	fgSizer1->Add( m_choiceLeftButtonDrag, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizer1->Add( m_choiceLeftButtonDrag, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -140,7 +140,7 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 	int m_choiceMiddleButtonDragNChoices = sizeof( m_choiceMiddleButtonDragChoices ) / sizeof( wxString );
 	m_choiceMiddleButtonDrag = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceMiddleButtonDragNChoices, m_choiceMiddleButtonDragChoices, 0 );
 	m_choiceMiddleButtonDrag->SetSelection( 0 );
-	fgSizer1->Add( m_choiceMiddleButtonDrag, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	fgSizer1->Add( m_choiceMiddleButtonDrag, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -153,7 +153,7 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 	int m_choiceRightButtonDragNChoices = sizeof( m_choiceRightButtonDragChoices ) / sizeof( wxString );
 	m_choiceRightButtonDrag = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceRightButtonDragNChoices, m_choiceRightButtonDragChoices, 0 );
 	m_choiceRightButtonDrag->SetSelection( 0 );
-	fgSizer1->Add( m_choiceRightButtonDrag, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	fgSizer1->Add( m_choiceRightButtonDrag, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
