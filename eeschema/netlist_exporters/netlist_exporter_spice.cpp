@@ -609,6 +609,18 @@ void NETLIST_EXPORTER_SPICE::WriteDirectives( OUTPUTFORMATTER& aFormatter,
     if( aNetlistOptions & OPTION_SAVE_ALL_CURRENTS )
         aFormatter.Print( 0, ".probe alli\n" );
 
+    if( aNetlistOptions & OPTION_SAVE_ALL_DISSIPATIONS )
+    {
+        for( const SPICE_ITEM& item : m_items )
+        {
+            if( item.model->GetPinCount() >= 2 )
+            {
+                aFormatter.Print( 0, ".probe p(%s)\n",
+                                  item.model->SpiceGenerator().ItemName( item ).c_str() );
+            }
+        }
+    }
+
     for( const wxString& directive : m_directives )
     {
         bool simCommand = false;

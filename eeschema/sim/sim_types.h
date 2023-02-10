@@ -43,6 +43,21 @@ enum SIM_TYPE
 };
 
 ///< Possible plot types
+enum LEGACY_SIM_TRACE_TYPE
+{
+    // Y axis
+    LEGACY_SPT_VOLTAGE  = 0x01,
+    LEGACY_SPT_CURRENT  = 0x02,
+    LEGACY_SPT_AC_PHASE = 0x04,
+    LEGACY_SPT_AC_MAG   = 0x08,
+
+    // X axis
+    LEGACY_SPT_TIME          = 0x10,
+    LEGACY_SPT_LIN_FREQUENCY = 0x20,
+    LEGACY_SPT_SWEEP         = 0x40
+};
+
+
 enum SIM_TRACE_TYPE
 {
     // Y axis
@@ -50,12 +65,13 @@ enum SIM_TRACE_TYPE
     SPT_CURRENT  = 0x02,
     SPT_AC_PHASE = 0x04,
     SPT_AC_MAG   = 0x08,
+    SPT_POWER    = 0x10,
 
     // X axis
-    SPT_TIME          = 0x10,
-    SPT_LIN_FREQUENCY = 0x20,
-    SPT_LOG_FREQUENCY = 0x20,
-    SPT_SWEEP         = 0x40,
+    SPT_TIME          = 0x0100,
+    SPT_LIN_FREQUENCY = 0x0200,
+    SPT_LOG_FREQUENCY = 0x0400,
+    SPT_SWEEP         = 0x0800,
 
     SPT_UNKNOWN = 0x00
 };

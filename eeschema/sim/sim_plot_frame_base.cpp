@@ -114,8 +114,8 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_signalsGrid->SetMargins( 0, 0 );
 
 	// Columns
-	m_signalsGrid->SetColSize( 0, 204 );
-	m_signalsGrid->SetColSize( 1, 45 );
+	m_signalsGrid->SetColSize( 0, 212 );
+	m_signalsGrid->SetColSize( 1, 40 );
 	m_signalsGrid->SetColSize( 2, 45 );
 	m_signalsGrid->SetColSize( 3, 55 );
 	m_signalsGrid->SetColSize( 4, 55 );
@@ -171,16 +171,16 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_cursorsGrid->SetMargins( 0, 0 );
 
 	// Columns
-	m_cursorsGrid->SetColSize( 0, 44 );
-	m_cursorsGrid->SetColSize( 1, 152 );
-	m_cursorsGrid->SetColSize( 2, 103 );
-	m_cursorsGrid->SetColSize( 3, 106 );
+	m_cursorsGrid->SetColSize( 0, 45 );
+	m_cursorsGrid->SetColSize( 1, 162 );
+	m_cursorsGrid->SetColSize( 2, 100 );
+	m_cursorsGrid->SetColSize( 3, 100 );
 	m_cursorsGrid->EnableDragColMove( false );
 	m_cursorsGrid->EnableDragColSize( true );
 	m_cursorsGrid->SetColLabelValue( 0, _("Cursor") );
 	m_cursorsGrid->SetColLabelValue( 1, _("Signal") );
 	m_cursorsGrid->SetColLabelValue( 2, _("Time") );
-	m_cursorsGrid->SetColLabelValue( 3, _("Voltage / Current") );
+	m_cursorsGrid->SetColLabelValue( 3, _("Value") );
 	m_cursorsGrid->SetColLabelSize( -1 );
 	m_cursorsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 

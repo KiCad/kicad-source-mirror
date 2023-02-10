@@ -219,9 +219,15 @@ public:
         return m_axis_y2 ? m_axis_y2->GetName() : wxS( "" );
     }
 
+    wxString GetLabelY3() const
+    {
+        return m_axis_y3 ? m_axis_y3->GetName() : wxS( "" );
+    }
+
     wxString GetUnitsX() const;
     wxString GetUnitsY1() const;
     wxString GetUnitsY2() const;
+    wxString GetUnitsY3() const;
 
     bool TraceShown( const wxString& aName ) const
     {
@@ -245,6 +251,7 @@ public:
         m_axis_x->SetTicks( !aEnable );
         m_axis_y1->SetTicks( !aEnable );
         m_axis_y2->SetTicks( !aEnable );
+        m_axis_y3->SetTicks( !aEnable );
         m_plotWin->UpdateAll();
     }
 
@@ -317,7 +324,7 @@ private:
     void prepareDCAxes();
 
     ///> Create/Ensure axes are available for plotting
-    void updateAxes();
+    void updateAxes( SIM_TRACE_TYPE aNewTraceType = SIM_TRACE_TYPE::SPT_UNKNOWN );
 
 private:
     SIM_PLOT_COLORS            m_colors;
@@ -332,6 +339,7 @@ private:
     mpScaleXBase*              m_axis_x;
     mpScaleY*                  m_axis_y1;
     mpScaleY*                  m_axis_y2;
+    mpScaleY*                  m_axis_y3;
     mpInfoLegend*              m_legend;
 
     bool                       m_dotted_cp;

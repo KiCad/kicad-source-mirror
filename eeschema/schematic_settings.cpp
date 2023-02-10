@@ -59,6 +59,7 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
         m_SpiceCurSheetAsRoot( false ),
         m_SpiceSaveAllVoltages( false ),
         m_SpiceSaveAllCurrents( false ),
+        m_SpiceSaveAllDissipations( false ),
         m_SpiceModelCurSheetAsRoot( true ),
         m_NgspiceSimulatorSettings( nullptr )
 {
@@ -203,6 +204,9 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
 
     m_params.emplace_back( new PARAM<bool>( "spice_save_all_currents",
             &m_SpiceSaveAllCurrents, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "spice_save_all_dissipations",
+            &m_SpiceSaveAllDissipations, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "spice_model_current_sheet_as_root",
             &m_SpiceModelCurSheetAsRoot, true ) );

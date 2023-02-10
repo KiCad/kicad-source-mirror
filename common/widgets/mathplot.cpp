@@ -1436,6 +1436,9 @@ void mpScaleY::Plot( wxDC& dc, mpWindow& w )
                 orgx = w.GetScrX() - w.GetMarginRight();
         }
 
+        if( m_flags == mpALIGN_FAR_RIGHT )
+            orgx = w.GetScrX() - ( w.GetMarginRight() / 2 );
+
         if( m_flags == mpALIGN_BORDER_RIGHT )
             orgx = w.GetScrX() - 1;    // dc.LogicalToDeviceX(0) - 1;
 
@@ -1514,7 +1517,7 @@ void mpScaleY::Plot( wxDC& dc, mpWindow& w )
                 s = getLabel( n );
                 dc.GetTextExtent( s, &tx, &ty );
 
-                if( (m_flags == mpALIGN_BORDER_LEFT) || (m_flags == mpALIGN_RIGHT) )
+                if( m_flags == mpALIGN_BORDER_LEFT || m_flags == mpALIGN_RIGHT || m_flags == mpALIGN_FAR_RIGHT )
                     dc.DrawText( s, orgx + 4, p - ty / 2 );
                 else
                     dc.DrawText( s, orgx - 4 - tx, p - ty / 2 );    // ( s, orgx+4, p-ty/2);
@@ -1537,7 +1540,7 @@ void mpScaleY::Plot( wxDC& dc, mpWindow& w )
             // if ((!m_drawOutsideMargins) && (w.GetMarginLeft() > (ty + labelW + 8))) {
             // dc.DrawRotatedText( m_name, orgx - 6 - labelW - ty, (maxYpx + minYpx) / 2 + tx / 2, 90);
             // } else {
-            dc.DrawText( m_name, orgx + 4, minYpx - ty - 4 );
+            dc.DrawText( m_name, orgx - ( tx / 2 ), minYpx - ty - 4 );
             // }
         }
         break;
@@ -1547,13 +1550,14 @@ void mpScaleY::Plot( wxDC& dc, mpWindow& w )
             break;
 
         case mpALIGN_RIGHT:
+        case mpALIGN_FAR_RIGHT:
         {
             // dc.DrawRotatedText( m_name, orgx + 6, (maxYpx + minYpx) / 2 + tx / 2, 90);
 
             /*if ((!m_drawOutsideMargins) && (w.GetMarginRight() > (ty + labelW + 8))) {
              *  dc.DrawRotatedText( m_name, orgx + 6 + labelW, (maxYpx - minYpx + tx)>>1, 90);
              *  } else {*/
-            dc.DrawText( m_name, orgx - tx - 4, minYpx - ty - 4 );
+            dc.DrawText( m_name, orgx - ( tx / 2 ), minYpx - ty - 4 );
             // }
         }
         break;

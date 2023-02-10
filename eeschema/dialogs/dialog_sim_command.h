@@ -79,6 +79,7 @@ public:
         m_fixIncludePaths->SetValue( aOptions & NETLIST_EXPORTER_SPICE::OPTION_ADJUST_INCLUDE_PATHS );
         m_saveAllVoltages->SetValue( aOptions & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES );
         m_saveAllCurrents->SetValue( aOptions & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS );
+        m_saveAllDissipations->SetValue( aOptions & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_DISSIPATIONS );
     }
 
     bool TransferDataFromWindow() override;

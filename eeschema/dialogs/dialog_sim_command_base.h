@@ -119,6 +119,7 @@ class DIALOG_SIM_COMMAND_BASE : public DIALOG_SHIM
 		wxCheckBox* m_fixIncludePaths;
 		wxCheckBox* m_saveAllVoltages;
 		wxCheckBox* m_saveAllCurrents;
+		wxCheckBox* m_saveAllDissipations;
 		wxBoxSizer* m_compatibilityMode;
 		wxChoice* m_compatibilityModeChoice;
 		wxStdDialogButtonSizer* m_sdbSizer;

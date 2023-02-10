@@ -130,7 +130,7 @@ class LIN_SCALE : public parent
 {
 public:
     LIN_SCALE( const wxString& name, const wxString& unit, int flags ) :
-            parent( name, flags ),
+            parent( name, flags, false ),
             m_unit( unit )
     {};
 
@@ -174,7 +174,7 @@ class LOG_SCALE : public parent
 {
 public:
     LOG_SCALE( const wxString& name, const wxString& unit, int flags ) :
-            parent( name, flags ),
+            parent( name, flags, false ),
             m_unit( unit )
     {};
 
@@ -377,12 +377,13 @@ void CURSOR::UpdateReference()
 
 SIM_PLOT_PANEL::SIM_PLOT_PANEL( const wxString& aCommand, int aOptions, wxWindow* parent,
                                 wxWindowID id, const wxPoint& pos, const wxSize& size, long style,
-                                const wxString& name )
-    : SIM_PANEL_BASE( aCommand, aOptions, parent, id, pos, size, style, name ),
-      m_axis_x( nullptr ),
-      m_axis_y1( nullptr ),
-      m_axis_y2( nullptr ),
-      m_dotted_cp( false )
+                                const wxString& name ) :
+        SIM_PANEL_BASE( aCommand, aOptions, parent, id, pos, size, style, name ),
+        m_axis_x( nullptr ),
+        m_axis_y1( nullptr ),
+        m_axis_y2( nullptr ),
+        m_axis_y3( nullptr ),
+        m_dotted_cp( false )
 {
     m_sizer   = new wxBoxSizer( wxVERTICAL );
     m_plotWin = new mpWindow( this, wxID_ANY, pos, size, style );
@@ -449,22 +450,36 @@ wxString SIM_PLOT_PANEL::GetUnitsY2() const
 }
 
 
-void SIM_PLOT_PANEL::updateAxes()
+wxString SIM_PLOT_PANEL::GetUnitsY3() const
 {
-    bool skipAddToView = false;
+    LIN_SCALE<mpScaleY>* linScale = dynamic_cast<LIN_SCALE<mpScaleY>*>( m_axis_y3 );
 
-    if( m_axis_x )
-        skipAddToView = true;
+    if( linScale )
+        return linScale->GetUnits();
+    else
+        return wxEmptyString;
+}
 
+
+void SIM_PLOT_PANEL::updateAxes( SIM_TRACE_TYPE aNewTraceType )
+{
     switch( GetType() )
     {
         case ST_AC:
             if( !m_axis_x )
             {
                 m_axis_x = new LOG_SCALE<mpScaleXLog>( wxEmptyString, wxT( "Hz" ), mpALIGN_BOTTOM );
+                m_axis_x->SetNameAlign( mpALIGN_BOTTOM );
+                m_plotWin->AddLayer( m_axis_x );
+
                 m_axis_y1 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "dBV" ), mpALIGN_LEFT );
+                m_axis_y1->SetNameAlign( mpALIGN_LEFT );
+                m_plotWin->AddLayer( m_axis_y1 );
+
                 m_axis_y2 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "°" ), mpALIGN_RIGHT );
+                m_axis_y2->SetNameAlign( mpALIGN_RIGHT );
                 m_axis_y2->SetMasterScale( m_axis_y1 );
+                m_plotWin->AddLayer( m_axis_y2 );
             }
 
             m_axis_x->SetName( _( "Frequency" ) );
@@ -480,7 +495,12 @@ void SIM_PLOT_PANEL::updateAxes()
             if( !m_axis_x )
             {
                 m_axis_x = new LOG_SCALE<mpScaleXLog>( wxEmptyString, wxT( "Hz" ), mpALIGN_BOTTOM );
-                m_axis_y1 = new mpScaleY( wxEmptyString, mpALIGN_LEFT );
+                m_axis_x->SetNameAlign( mpALIGN_BOTTOM );
+                m_plotWin->AddLayer( m_axis_x );
+
+                m_axis_y1 = new mpScaleY( wxEmptyString, mpALIGN_LEFT, false );
+                m_axis_y1->SetNameAlign( mpALIGN_LEFT );
+                m_plotWin->AddLayer( m_axis_y1 );
             }
 
             m_axis_x->SetName( _( "Frequency" ) );
@@ -491,44 +511,41 @@ void SIM_PLOT_PANEL::updateAxes()
             if( !m_axis_x )
             {
                 m_axis_x = new LIN_SCALE<mpScaleX>( wxEmptyString, wxT( "s" ), mpALIGN_BOTTOM );
+                m_axis_x->SetNameAlign( mpALIGN_BOTTOM );
+                m_plotWin->AddLayer( m_axis_x );
+
                 m_axis_y1 = new LIN_SCALE<mpScaleY>(wxEmptyString, wxT( "V" ), mpALIGN_LEFT );
+                m_axis_y1->SetNameAlign( mpALIGN_LEFT );
+                m_plotWin->AddLayer( m_axis_y1 );
+
                 m_axis_y2 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "A" ), mpALIGN_RIGHT );
+                m_axis_y2->SetNameAlign( mpALIGN_RIGHT );
                 m_axis_y2->SetMasterScale( m_axis_y1 );
+                m_plotWin->AddLayer( m_axis_y2 );
             }
 
             m_axis_x->SetName( _( "Time" ) );
             m_axis_y1->SetName( _( "Voltage" ) );
             m_axis_y2->SetName( _( "Current" ) );
+
+            if( aNewTraceType == SPT_POWER && !m_axis_y3 )
+            {
+                m_plotWin->SetMargins( 35, 140, 35, 70 );
+
+                m_axis_y3 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "W" ), mpALIGN_FAR_RIGHT );
+                m_axis_y3->SetNameAlign( mpALIGN_FAR_RIGHT );
+                m_axis_y3->SetMasterScale( m_axis_y1 );
+                m_plotWin->AddLayer( m_axis_y3 );
+            }
+
+            if( m_axis_y3 )
+                m_axis_y3->SetName( _( "Power" ) );
+
             break;
 
         default:
             // suppress warnings
             break;
-    }
-
-    if( skipAddToView )
-        return;
-
-    if( m_axis_x )
-    {
-        m_axis_x->SetTicks( false );
-        m_axis_x->SetNameAlign( mpALIGN_BOTTOM );
-
-        m_plotWin->AddLayer( m_axis_x );
-    }
-
-    if( m_axis_y1 )
-    {
-        m_axis_y1->SetTicks( false );
-        m_axis_y1->SetNameAlign( mpALIGN_LEFT );
-        m_plotWin->AddLayer( m_axis_y1 );
-    }
-
-    if( m_axis_y2 )
-    {
-        m_axis_y2->SetTicks( false );
-        m_axis_y2->SetNameAlign( mpALIGN_RIGHT );
-        m_plotWin->AddLayer( m_axis_y2 );
     }
 }
 
@@ -558,38 +575,62 @@ void SIM_PLOT_PANEL::prepareDCAxes()
         default:
         case 'v':
             if( !m_axis_x )
+            {
                 m_axis_x = new LIN_SCALE<mpScaleX>( wxEmptyString, wxT( "V" ), mpALIGN_BOTTOM );
+                m_axis_x->SetNameAlign( mpALIGN_BOTTOM );
+                m_plotWin->AddLayer( m_axis_x );
+            }
 
             m_axis_x->SetName( _( "Voltage (swept)" ) );
             break;
 
         case 'i':
             if( !m_axis_x )
+            {
                 m_axis_x = new LIN_SCALE<mpScaleX>( wxEmptyString, wxT( "A" ), mpALIGN_BOTTOM );
+                m_axis_x->SetNameAlign( mpALIGN_BOTTOM );
+                m_plotWin->AddLayer( m_axis_x );
+            }
 
             m_axis_x->SetName( _( "Current (swept)" ) );
             break;
 
         case 'r':
             if( !m_axis_x )
+            {
                 m_axis_x = new LIN_SCALE<mpScaleX>( wxEmptyString, wxT( "Ω" ), mpALIGN_BOTTOM );
+                m_axis_x->SetNameAlign( mpALIGN_BOTTOM );
+                m_plotWin->AddLayer( m_axis_x );
+            }
 
             m_axis_x->SetName( _( "Resistance (swept)" ) );
             break;
 
         case 't':
             if( !m_axis_x )
+            {
                 m_axis_x = new LIN_SCALE<mpScaleX>( wxEmptyString, wxT( "°C" ), mpALIGN_BOTTOM );
+                m_axis_x->SetNameAlign( mpALIGN_BOTTOM );
+                m_plotWin->AddLayer( m_axis_x );
+            }
 
             m_axis_x->SetName( _( "Temperature (swept)" ) );
             break;
         }
 
         if( !m_axis_y1 )
+        {
             m_axis_y1 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "V" ), mpALIGN_LEFT );
+            m_axis_y1->SetNameAlign( mpALIGN_LEFT );
+            m_plotWin->AddLayer( m_axis_y1 );
+        }
 
         if( !m_axis_y2 )
+        {
             m_axis_y2 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "A" ), mpALIGN_RIGHT );
+            m_axis_y2->SetNameAlign( mpALIGN_RIGHT );
+            m_plotWin->AddLayer( m_axis_y2 );
+        }
 
         m_axis_y1->SetName( _( "Voltage (measured)" ) );
         m_axis_y2->SetName( _( "Current" ) );
@@ -640,7 +681,7 @@ bool SIM_PLOT_PANEL::addTrace( const wxString& aTitle, const wxString& aName, in
 {
     TRACE* trace = nullptr;
 
-    updateAxes();
+    updateAxes( aType );
 
     // Find previous entry, if there is one
     auto prev = m_traces.find( aTitle );
@@ -652,9 +693,9 @@ bool SIM_PLOT_PANEL::addTrace( const wxString& aTitle, const wxString& aName, in
         {
             bool hasVoltageTraces = false;
 
-            for( const auto& tr : m_traces )
+            for( const auto& [ name, candidate ] : m_traces )
             {
-                if( !( tr.second->GetType() & SPT_CURRENT ) )
+                if( candidate->GetType() & SPT_VOLTAGE )
                 {
                     hasVoltageTraces = true;
                     break;
@@ -662,9 +703,13 @@ bool SIM_PLOT_PANEL::addTrace( const wxString& aTitle, const wxString& aName, in
             }
 
             if( !hasVoltageTraces )
-                m_axis_y2->SetMasterScale( nullptr );
-            else
-                m_axis_y2->SetMasterScale( m_axis_y1 );
+            {
+                if( m_axis_y2 )
+                    m_axis_y2->SetMasterScale( nullptr );
+
+                if( m_axis_y3 )
+                    m_axis_y3->SetMasterScale( nullptr );
+            }
         }
 
         // New entry
@@ -704,6 +749,8 @@ bool SIM_PLOT_PANEL::addTrace( const wxString& aTitle, const wxString& aName, in
 
     if( ( aType & SPT_AC_PHASE ) || ( aType & SPT_CURRENT ) )
         trace->SetScale( m_axis_x, m_axis_y2 );
+    else if( aType & SPT_POWER )
+        trace->SetScale( m_axis_x, m_axis_y3 );
     else
         trace->SetScale( m_axis_x, m_axis_y1 );
 
@@ -781,6 +828,9 @@ void SIM_PLOT_PANEL::ResetScales()
 
     if( m_axis_y2 )
         m_axis_y2->ResetDataRange();
+
+    if( m_axis_y3 )
+        m_axis_y3->ResetDataRange();
 
     for( auto& [ name, trace ] : m_traces )
         trace->UpdateScales();

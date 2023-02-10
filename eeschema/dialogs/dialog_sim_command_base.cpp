@@ -438,6 +438,9 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_saveAllCurrents = new wxCheckBox( this, wxID_ANY, _("Save all currents"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer88->Add( m_saveAllCurrents, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
+	m_saveAllDissipations = new wxCheckBox( this, wxID_ANY, _("Save all power dissipations"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer88->Add( m_saveAllDissipations, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
 	m_compatibilityMode = new wxBoxSizer( wxHORIZONTAL );
 
 	wxStaticText* compatibilityLabel;
@@ -452,7 +455,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_compatibilityMode->Add( m_compatibilityModeChoice, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bSizer88->Add( m_compatibilityMode, 1, wxEXPAND|wxBOTTOM, 5 );
+	bSizer88->Add( m_compatibilityMode, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
 	bSizer1->Add( bSizer88, 0, wxEXPAND|wxTOP|wxLEFT, 10 );

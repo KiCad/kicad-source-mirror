@@ -77,6 +77,7 @@ public:
     bool      m_SpiceCurSheetAsRoot;
     bool      m_SpiceSaveAllVoltages;
     bool      m_SpiceSaveAllCurrents;
+    bool      m_SpiceSaveAllDissipations;
     wxString  m_SpiceCommandString;      // A command string to run external spice
 
     bool      m_SpiceModelCurSheetAsRoot;

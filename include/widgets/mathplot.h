@@ -487,6 +487,8 @@ protected:
 #define mpALIGN_BORDER_BOTTOM   0x04
 /** Aligns X axis to top border. For mpScaleX */
 #define mpALIGN_BORDER_TOP      0x05
+/** Aligns label to the right of mpALIGN_RIGHT */
+#define mpALIGN_FAR_RIGHT       0x06
 /** Set label for X axis in normal mode */
 #define mpX_NORMAL              0x00
 /** Set label for X axis in time mode: the value is represented as minutes:seconds.milliseconds if time is less than 2 minutes, hours:minutes:seconds otherwise. */

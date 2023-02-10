@@ -51,16 +51,18 @@ class NETLIST_EXPORTER_SPICE : public NETLIST_EXPORTER_BASE
 public:
     enum OPTIONS
     {
-        OPTION_ADJUST_INCLUDE_PATHS = 0x0010,
-        OPTION_ADJUST_PASSIVE_VALS  = 0x0020,
-        OPTION_SAVE_ALL_VOLTAGES    = 0x0040,
-        OPTION_SAVE_ALL_CURRENTS    = 0x0080,
-        OPTION_CUR_SHEET_AS_ROOT    = 0x0100,
-        OPTION_SIM_COMMAND          = 0x0200,
+        OPTION_ADJUST_INCLUDE_PATHS  = 0x0010,
+        OPTION_ADJUST_PASSIVE_VALS   = 0x0020,
+        OPTION_SAVE_ALL_VOLTAGES     = 0x0040,
+        OPTION_SAVE_ALL_CURRENTS     = 0x0080,
+        OPTION_SAVE_ALL_DISSIPATIONS = 0x0100,
+        OPTION_CUR_SHEET_AS_ROOT     = 0x0200,
+        OPTION_SIM_COMMAND           = 0x0400,
         OPTION_DEFAULT_FLAGS =   OPTION_ADJUST_INCLUDE_PATHS
                                | OPTION_ADJUST_PASSIVE_VALS
                                | OPTION_SAVE_ALL_VOLTAGES
                                | OPTION_SAVE_ALL_CURRENTS
+                               | OPTION_SAVE_ALL_DISSIPATIONS
     };
 
     NETLIST_EXPORTER_SPICE( SCHEMATIC_IFACE* aSchematic, wxWindow* aDialogParent = nullptr );

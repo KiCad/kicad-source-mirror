@@ -369,7 +369,7 @@ void SIM_PLOT_FRAME::ShowChangedLanguage()
     m_cursorsGrid->SetColLabelValue( COL_CURSOR_NAME, _( "Cursor" ) );
     m_cursorsGrid->SetColLabelValue( COL_CURSOR_SIGNAL, _( "Signal" ) );
     m_cursorsGrid->SetColLabelValue( COL_CURSOR_X, _( "Time" ) );
-    m_cursorsGrid->SetColLabelValue( COL_CURSOR_Y, _( "Voltage / Current" ) );
+    m_cursorsGrid->SetColLabelValue( COL_CURSOR_Y, _( "Value" ) );
     wxCommandEvent dummy;
     onCursorUpdate( dummy );
 
@@ -645,16 +645,19 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
         unconnected.Replace( '(', '_' );    // Convert to SPICE markup
         m_signals.clear();
 
-        auto simType = m_circuitModel->GetSimType();
+        int      options = m_circuitModel->GetSimOptions();
+        SIM_TYPE simType = m_circuitModel->GetSimType();
 
-        // Add voltages
-        for( const std::string& net : m_circuitModel->GetNets() )
+        if( options & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES )
         {
-            // netnames are escaped (can contain "{slash}" for '/') Unscape them:
-            wxString netname = UnescapeString( net );
-
-            if( netname != "GND" && netname != "0" && !netname.StartsWith( unconnected ) )
+            for( const std::string& net : m_circuitModel->GetNets() )
             {
+                // netnames are escaped (can contain "{slash}" for '/') Unscape them:
+                wxString netname = UnescapeString( net );
+
+                if( netname == "GND" || netname == "0" || netname.StartsWith( unconnected ) )
+                    continue;
+
                 if( simType == ST_AC )
                 {
                     m_signals.push_back( wxString::Format( _( "V(%s) (gain)" ), netname ) );
@@ -667,15 +670,37 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
             }
         }
 
-        // Add currents
-        if( simType == ST_TRANSIENT || simType == ST_DC )
+        if( ( options & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS )
+                && ( simType == ST_TRANSIENT || simType == ST_DC ) )
         {
             for( const SPICE_ITEM& item : m_circuitModel->GetItems() )
             {
-                // Add all possible currents for the primitive.
+                // Add all possible currents for the device.
                 for( const std::string& name : item.model->SpiceGenerator().CurrentNames( item ) )
                     m_signals.push_back( name );
             }
+        }
+
+        if( ( options & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_DISSIPATIONS )
+                && ( simType == ST_TRANSIENT || simType == ST_DC ) )
+        {
+            for( const SPICE_ITEM& item : m_circuitModel->GetItems() )
+            {
+                if( item.model->GetPinCount() >= 2 )
+                {
+                    wxString name = item.model->SpiceGenerator().ItemName( item );
+                    m_signals.push_back( wxString::Format( wxS( "P(%s)" ), name ) );
+                }
+            }
+        }
+
+        // Add .PROBE directives
+        for( const wxString& directive : m_circuitModel->GetDirectives() )
+        {
+            wxString directiveParams;
+
+            if( directive.Upper().StartsWith( wxS( ".PROBE" ), &directiveParams ) )
+                m_signals.push_back( directiveParams.Trim( false ) );
         }
 
         rebuildSignalsGrid( m_filter->GetValue() );
@@ -767,6 +792,8 @@ void SIM_PLOT_FRAME::onSignalsGridCellChanged( wxGridEvent& aEvent )
                     traceType = SPT_VOLTAGE;
                 else if( firstChar == 'I' || firstChar == 'i' )
                     traceType = SPT_CURRENT;
+                else if( firstChar == 'P' || firstChar == 'p' )
+                    traceType = SPT_POWER;
 
                 if( signalName.EndsWith( gainSuffix ) )
                 {
@@ -1059,11 +1086,15 @@ bool SIM_PLOT_FRAME::updateTrace( const wxString& aName, SIM_TRACE_TYPE aType,
     SIM_TYPE simType = m_circuitModel->GetSimType();
 
     wxString traceTitle = aName;
+    wxString vectorName = aName;
 
     if( aType & SPT_AC_MAG )
         traceTitle += _( " (gain)" );
     else if( aType & SPT_AC_PHASE )
         traceTitle += _( " (phase)" );
+
+    if( aType & SPT_POWER )
+        vectorName = vectorName.AfterFirst( '(' ).BeforeLast( ')' ) + wxS( ":power" );
 
     if( !SIM_PANEL_BASE::IsPlottable( simType ) )
     {
@@ -1092,9 +1123,9 @@ bool SIM_PLOT_FRAME::updateTrace( const wxString& aName, SIM_TRACE_TYPE aType,
                       wxT( "Cannot set both AC_PHASE and AC_MAG bits" ) );
 
         if( aType & SPT_AC_MAG )
-            data_y = m_simulator->GetMagPlot( (const char*) aName.c_str() );
+            data_y = m_simulator->GetMagPlot( (const char*) vectorName.c_str() );
         else if( aType & SPT_AC_PHASE )
-            data_y = m_simulator->GetPhasePlot( (const char*) aName.c_str() );
+            data_y = m_simulator->GetPhasePlot( (const char*) vectorName.c_str() );
         else
             wxFAIL_MSG( wxT( "Plot type missing AC_PHASE or AC_MAG bit" ) );
 
@@ -1103,7 +1134,7 @@ bool SIM_PLOT_FRAME::updateTrace( const wxString& aName, SIM_TRACE_TYPE aType,
     case ST_NOISE:
     case ST_DC:
     case ST_TRANSIENT:
-        data_y = m_simulator->GetMagPlot( (const char*) aName.c_str() );
+        data_y = m_simulator->GetMagPlot( (const char*) vectorName.c_str() );
         break;
 
     default:
@@ -1332,6 +1363,10 @@ bool SIM_PLOT_FRAME::LoadWorkbook( const wxString& aPath )
             simOptions &= ~NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES;
             simOptions &= ~NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS;
         }
+        else if( version >= 3 )
+        {
+            simOptions &= ~NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_DISSIPATIONS;
+        }
 
         while( tokenizer.HasMoreTokens() )
         {
@@ -1343,6 +1378,8 @@ bool SIM_PLOT_FRAME::LoadWorkbook( const wxString& aPath )
                 simOptions |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES;
             else if( line.StartsWith( wxT( ".probe alli" ) ) )
                 simOptions |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS;
+            else if( line.StartsWith( wxT( ".probe allp" ) ) )
+                simOptions |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_DISSIPATIONS;
             else
                 simCommand += line + wxT( "\n" );
         }
@@ -1376,6 +1413,33 @@ bool SIM_PLOT_FRAME::LoadWorkbook( const wxString& aPath )
                 file.Close();
 
                 return false;
+            }
+
+            if( version <= 2 )
+            {
+                long legacyTraceType = traceType;
+                traceType = 0;
+
+                if( legacyTraceType & LEGACY_SPT_VOLTAGE )
+                    traceType |= SPT_VOLTAGE;
+
+                if( legacyTraceType & LEGACY_SPT_CURRENT )
+                    traceType |= SPT_CURRENT;
+
+                if( legacyTraceType & LEGACY_SPT_AC_PHASE )
+                    traceType |= SPT_AC_PHASE;
+
+                if( legacyTraceType & LEGACY_SPT_AC_MAG )
+                    traceType |= SPT_AC_MAG;
+
+                if( legacyTraceType & LEGACY_SPT_TIME )
+                    traceType |= SPT_TIME;
+
+                if( legacyTraceType & LEGACY_SPT_LIN_FREQUENCY )
+                    traceType |= SPT_LIN_FREQUENCY;
+
+                if( legacyTraceType & LEGACY_SPT_SWEEP )
+                    traceType |= SPT_SWEEP;
             }
 
             name = file.GetNextLine();
@@ -1437,7 +1501,7 @@ bool SIM_PLOT_FRAME::SaveWorkbook( const wxString& aPath )
         file.Create();
     }
 
-    file.AddLine( wxT( "version 2" ) );
+    file.AddLine( wxT( "version 3" ) );
 
     file.AddLine( wxString::Format( wxT( "%llu" ), m_workbook->GetPageCount() ) );
 
@@ -1464,6 +1528,9 @@ bool SIM_PLOT_FRAME::SaveWorkbook( const wxString& aPath )
 
         if( options & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS )
             command += wxT( "\n.probe alli" );
+
+        if( options & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_DISSIPATIONS )
+            command += wxT( "\n.probe allp" );
 
         file.AddLine( EscapeString( command, CTX_LINE ) );
 
@@ -1700,31 +1767,34 @@ void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
     if( !plotPanel )
         return;
 
-    // Set up the labels
-    m_cursorsGrid->SetColLabelValue( COL_CURSOR_X, plotPanel->GetLabelX() );
-
-    wxString labelY1 = plotPanel->GetLabelY1();
-    wxString labelY2 = plotPanel->GetLabelY2();
-
-    if( labelY2.IsEmpty() )
-        m_cursorsGrid->SetColLabelValue( COL_CURSOR_Y, labelY1 );
-    else
-        m_cursorsGrid->SetColLabelValue( COL_CURSOR_Y, labelY1 + wxT( " / " ) + labelY2 );
-
     // Update cursor values
-    wxString unitsX = plotPanel->GetUnitsX();
     CURSOR*  cursor1 = nullptr;
-    wxString unitsY1;
+    wxString cursor1Name;
+    wxString cursor1Units;
     CURSOR*  cursor2 = nullptr;
-    wxString unitsY2;
+    wxString cursor2Name;
+    wxString cursor2Units;
 
     auto getUnitsY =
             [&]( TRACE* aTrace ) -> wxString
             {
                 if( ( aTrace->GetType() & SPT_AC_PHASE ) || ( aTrace->GetType() & SPT_CURRENT ) )
                     return plotPanel->GetUnitsY2();
+                else if( aTrace->GetType() & SPT_POWER )
+                    return plotPanel->GetUnitsY3();
                 else
                     return plotPanel->GetUnitsY1();
+            };
+
+    auto getNameY =
+            [&]( TRACE* aTrace ) -> wxString
+            {
+                if( ( aTrace->GetType() & SPT_AC_PHASE ) || ( aTrace->GetType() & SPT_CURRENT ) )
+                    return plotPanel->GetLabelY2();
+                else if( aTrace->GetType() & SPT_POWER )
+                    return plotPanel->GetLabelY3();
+                else
+                    return plotPanel->GetLabelY1();
             };
 
     auto updateRangeUnits =
@@ -1750,13 +1820,14 @@ void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
         if( CURSOR* cursor = trace->GetCursor( 1 ) )
         {
             cursor1 = cursor;
-            unitsY1 = getUnitsY( trace );
+            cursor1Name = getNameY( trace );
+            cursor1Units = getUnitsY( trace );
 
             wxRealPoint coords = cursor->GetCoords();
             int         row = m_cursorsGrid->GetNumberRows();
 
-            updateRangeUnits( &m_cursorRange[0][0], unitsX );
-            updateRangeUnits( &m_cursorRange[0][1], unitsY1 );
+            updateRangeUnits( &m_cursorRange[0][0], plotPanel->GetUnitsX() );
+            updateRangeUnits( &m_cursorRange[0][1], cursor1Units );
 
             m_cursorsGrid->AppendRows( 1 );
             m_cursorsGrid->SetCellValue( row, COL_CURSOR_NAME, wxS( "1" ) );
@@ -1772,13 +1843,14 @@ void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
         if( CURSOR* cursor = trace->GetCursor( 2 ) )
         {
             cursor2 = cursor;
-            unitsY2 = getUnitsY( trace );
+            cursor2Name = getNameY( trace );
+            cursor2Units = getUnitsY( trace );
 
             wxRealPoint coords = cursor->GetCoords();
             int         row = m_cursorsGrid->GetNumberRows();
 
-            updateRangeUnits( &m_cursorRange[1][0], unitsX );
-            updateRangeUnits( &m_cursorRange[1][1], unitsY2 );
+            updateRangeUnits( &m_cursorRange[1][0], plotPanel->GetUnitsX() );
+            updateRangeUnits( &m_cursorRange[1][1], cursor2Units );
 
             m_cursorsGrid->AppendRows( 1 );
             m_cursorsGrid->SetCellValue( row, COL_CURSOR_NAME, wxS( "2" ) );
@@ -1789,13 +1861,13 @@ void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
         }
     }
 
-    if( cursor1 && cursor2 && unitsY1 == unitsY2 )
+    if( cursor1 && cursor2 && cursor1Units == cursor2Units )
     {
         wxRealPoint coords = cursor2->GetCoords() - cursor1->GetCoords();
         wxString    signal;
 
-        updateRangeUnits( &m_cursorRange[2][0], unitsX );
-        updateRangeUnits( &m_cursorRange[2][1], unitsY1 );
+        updateRangeUnits( &m_cursorRange[2][0], plotPanel->GetUnitsX() );
+        updateRangeUnits( &m_cursorRange[2][1], cursor1Units );
 
         if( cursor1->GetName() == cursor2->GetName() )
             signal = wxString::Format( wxS( "%s[2 - 1]" ), cursor2->GetName() );
@@ -1808,6 +1880,21 @@ void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
         m_cursorsGrid->SetCellValue( 2, COL_CURSOR_X, formatValue( coords.x, 2, 0 ) );
         m_cursorsGrid->SetCellValue( 2, COL_CURSOR_Y, formatValue( coords.y, 2, 1 ) );
     }
+
+    // Set up the labels
+    m_cursorsGrid->SetColLabelValue( COL_CURSOR_X, plotPanel->GetLabelX() );
+
+    wxString valColName = _( "Value" );
+
+    if( !cursor1Name.IsEmpty() && cursor2Name.IsEmpty() )
+        valColName = cursor1Name;
+    else if( !cursor2Name.IsEmpty() && cursor1Name.IsEmpty() )
+        valColName = cursor2Name;
+    else if( cursor1Name == cursor2Name )
+        valColName = cursor1Name;
+
+    m_cursorsGrid->SetColLabelValue( COL_CURSOR_Y, valColName );
+
 }
 
 
