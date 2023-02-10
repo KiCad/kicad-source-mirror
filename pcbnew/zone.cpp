@@ -34,6 +34,7 @@
 #include <zone.h>
 #include <string_utils.h>
 #include <math_for_graphics.h>
+#include <properties/property_validators.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 #include <trigo.h>
@@ -1431,6 +1432,8 @@ static struct ZONE_DESC
                     return false;
                 };
 
+        // Layer property is internal because it only holds a single layer and zones actually use
+        // a layer set
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ),
                                  new PROPERTY_ENUM<ZONE, PCB_LAYER_ID>( _HKI( "Layer" ),
                                                                         &ZONE::SetLayer,
@@ -1452,36 +1455,51 @@ static struct ZONE_DESC
 
         const wxString groupFill = _HKI( "Fill Style" );
 
-        // Fill mode can't be exposed to the UI until validation is moved to the ZONE class.
-        // see https://gitlab.com/kicad/code/kicad/-/issues/13811
-        propMgr.AddProperty( new PROPERTY_ENUM<ZONE, ZONE_FILL_MODE>(
-                                     _HKI( "Fill Mode" ), &ZONE::SetFillMode, &ZONE::GetFillMode ),
-                             groupFill )
-                .SetIsInternal();
+        propMgr.AddProperty( new PROPERTY_ENUM<ZONE, ZONE_FILL_MODE>( _HKI( "Fill Mode" ),
+                                                                      &ZONE::SetFillMode,
+                                                                      &ZONE::GetFillMode ),
+                             groupFill );
 
-        propMgr.AddProperty( new PROPERTY<ZONE, EDA_ANGLE>(
-                                     _HKI( "Orientation" ), &ZONE::SetHatchOrientation,
-                                     &ZONE::GetHatchOrientation, PROPERTY_DISPLAY::PT_DEGREE ),
+        propMgr.AddProperty( new PROPERTY<ZONE, EDA_ANGLE>( _HKI( "Orientation" ),
+                                                            &ZONE::SetHatchOrientation,
+                                                            &ZONE::GetHatchOrientation,
+                                                            PROPERTY_DISPLAY::PT_DEGREE ),
                              groupFill )
-                .SetWriteableFunc( isHatchedFill )
-                .SetIsInternal();
+                .SetWriteableFunc( isHatchedFill );
 
-        //TODO: Switch to translated
+        // TODO: Switch to translated
+        auto atLeastMinWidthValidator =
+                []( const wxAny&& aValue, EDA_ITEM* aZone ) -> VALIDATOR_RESULT
+                {
+                    int   val = aValue.As<int>();
+                    ZONE* zone = dynamic_cast<ZONE*>( aZone );
+                    wxCHECK( zone, std::nullopt );
+
+                    if( val < zone->GetMinThickness() )
+                    {
+                        return std::make_unique<VALIDATION_ERROR_MSG>(
+                                wxT( "Cannot be less than zone minimum width" ) );
+                    }
+
+                    return std::nullopt;
+                };
+
+        // TODO: Switch to translated
         propMgr.AddProperty( new PROPERTY<ZONE, int>( wxT( "Hatch Width" ),
                                                       &ZONE::SetHatchThickness,
                                                       &ZONE::GetHatchThickness,
                                                       PROPERTY_DISPLAY::PT_SIZE ),
                              groupFill )
                 .SetWriteableFunc( isHatchedFill )
-                .SetIsInternal();
+                .SetValidator( atLeastMinWidthValidator );
 
-        //TODO: Switch to translated
+        // TODO: Switch to translated
         propMgr.AddProperty( new PROPERTY<ZONE, int>( wxT( "Hatch Gap" ), &ZONE::SetHatchGap,
                                                       &ZONE::GetHatchGap,
                                                       PROPERTY_DISPLAY::PT_SIZE ),
                              groupFill )
                 .SetWriteableFunc( isHatchedFill )
-                .SetIsInternal();
+                .SetValidator( atLeastMinWidthValidator );
 
         // TODO: Smoothing effort needs to change to enum (in dialog too)
         // TODO: Smoothing amount (double)
@@ -1493,11 +1511,16 @@ static struct ZONE_DESC
                     &ZONE::SetLocalClearance, &ZONE::GetLocalClearance,
                     PROPERTY_DISPLAY::PT_SIZE );
         clearanceOverride->SetAvailableFunc( isCopperZone );
+        constexpr int maxClearance = pcbIUScale.mmToIU( ZONE_CLEARANCE_MAX_VALUE_MM );
+        clearanceOverride->SetValidator( PROPERTY_VALIDATORS::RangeIntValidator<0, maxClearance> );
 
         auto minWidth = new PROPERTY<ZONE, int>( _HKI( "Minimum Width" ),
                     &ZONE::SetMinThickness, &ZONE::GetMinThickness,
                     PROPERTY_DISPLAY::PT_SIZE );
         minWidth->SetAvailableFunc( isCopperZone );
+        constexpr int minMinWidth = pcbIUScale.mmToIU( ZONE_THICKNESS_MIN_VALUE_MM );
+        clearanceOverride->SetValidator( PROPERTY_VALIDATORS::RangeIntValidator<minMinWidth,
+                                                                                INT_MAX> );
 
         auto padConnections = new PROPERTY_ENUM<ZONE, ZONE_CONNECTION>( _HKI( "Pad Connections" ),
                     &ZONE::SetPadConnection, &ZONE::GetPadConnection );
@@ -1507,11 +1530,13 @@ static struct ZONE_DESC
                     &ZONE::SetThermalReliefGap, &ZONE::GetThermalReliefGap,
                     PROPERTY_DISPLAY::PT_SIZE );
         thermalGap->SetAvailableFunc( isCopperZone );
+        thermalGap->SetValidator( PROPERTY_VALIDATORS::PositiveIntValidator );
 
         auto thermalSpokeWidth = new PROPERTY<ZONE, int>( _HKI( "Thermal Relief Spoke Width" ),
                     &ZONE::SetThermalReliefSpokeWidth, &ZONE::GetThermalReliefSpokeWidth,
                     PROPERTY_DISPLAY::PT_SIZE );
         thermalSpokeWidth->SetAvailableFunc( isCopperZone );
+        thermalSpokeWidth->SetValidator( atLeastMinWidthValidator );
 
         propMgr.AddProperty( clearanceOverride, groupOverrides );
         propMgr.AddProperty( minWidth, groupOverrides );

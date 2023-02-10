@@ -347,26 +347,8 @@ bool DIALOG_COPPER_ZONE::TransferDataToWindow()
 
     m_gridStyleRotation.SetUnits( EDA_UNITS::DEGREES );
     m_gridStyleRotation.SetAngleValue( m_settings.m_HatchOrientation );
-
-    // Gives a reasonable value to grid style parameters, if currently there are no defined
-    // parameters for grid pattern thickness and gap (if the value is 0)
-    // the grid pattern thickness default value is (arbitrary) m_ZoneMinThickness * 4
-    // or 1mm
-    // the grid pattern gap default value is (arbitrary) m_ZoneMinThickness * 6
-    // or 1.5 mm
-    int bestvalue = m_settings.m_HatchThickness;
-
-    if( bestvalue <= 0 )     // No defined value for m_HatchThickness
-        bestvalue = std::max( m_settings.m_ZoneMinThickness * 4, pcbIUScale.mmToIU( 1.0 ) );
-
-    m_gridStyleThickness.SetValue( std::max( bestvalue, m_settings.m_ZoneMinThickness ) );
-
-    bestvalue = m_settings.m_HatchGap;
-
-    if( bestvalue <= 0 )     // No defined value for m_HatchGap
-        bestvalue = std::max( m_settings.m_ZoneMinThickness * 6, pcbIUScale.mmToIU( 1.5 ) );
-
-    m_gridStyleGap.SetValue( std::max( bestvalue, m_settings.m_ZoneMinThickness ) );
+    m_gridStyleThickness.SetValue( m_settings.m_HatchThickness );
+    m_gridStyleGap.SetValue( m_settings.m_HatchGap );
 
     m_spinCtrlSmoothLevel->SetValue( m_settings.m_HatchSmoothingLevel );
     m_spinCtrlSmoothValue->SetValue( m_settings.m_HatchSmoothingValue );

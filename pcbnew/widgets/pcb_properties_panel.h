@@ -44,6 +44,9 @@ public:
 protected:
     wxPGProperty* createPGProperty( const PROPERTY_BASE* aProperty ) const override;
 
+    PROPERTY_BASE* getPropertyFromEvent( const wxPropertyGridEvent& aEvent ) const;
+
+    void valueChanging( wxPropertyGridEvent& aEvent ) override;
     void valueChanged( wxPropertyGridEvent& aEvent ) override;
 
     ///> Regenerates caches storing layer and net names
