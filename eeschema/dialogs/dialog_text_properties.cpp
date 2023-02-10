@@ -370,7 +370,7 @@ void DIALOG_TEXT_PROPERTIES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
 
         if( textVarRef( refStart ) )
         {
-            partial = te->GetRange( start+1, text_pos );
+            partial = te->GetRange( start, text_pos );
 
             wxString           ref = te->GetRange( refStart, start-1 );
             SCH_SHEET_LIST     sheets = m_frame->Schematic().GetSheets();
