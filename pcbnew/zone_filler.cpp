@@ -1329,7 +1329,10 @@ void ZONE_FILLER::subtractHigherPriorityZones( const ZONE* aZone, PCB_LAYER_ID a
 
     for( ZONE* otherZone : m_board->Zones() )
     {
-        if( otherZone->SameNet( aZone ) && otherZone->HigherPriority( aZone ) )
+        // Don't use the `HigherPriority()` check here because we _only_ want to knock out zones
+        // with explicitly higher priorities, not those with equal priorities
+        if( otherZone->SameNet( aZone )
+                && otherZone->GetAssignedPriority() > aZone->GetAssignedPriority() )
         {
             // Do not remove teardrop area: it is not useful and not good
             if( !otherZone->IsTeardropArea() )
