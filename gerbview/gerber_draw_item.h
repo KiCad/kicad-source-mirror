@@ -57,7 +57,7 @@ enum GBR_BASIC_SHAPE_TYPE
     GBR_SPOT_RECT,          // flashed shape: rectangular shape can have hole)
     GBR_SPOT_OVAL,          // flashed shape: oval shape
     GBR_SPOT_POLY,          // flashed shape: regular polygon, 3 to 12 edges
-    GBR_SPOT_MACRO         // complex shape described by a macro
+    GBR_SPOT_MACRO          // complex shape described by a macro
 };
 
 class GERBER_DRAW_ITEM : public EDA_ITEM

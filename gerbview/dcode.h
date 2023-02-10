@@ -42,8 +42,8 @@ class GERBER_DRAW_ITEM;
 
 
 /**
- * The set of all gerber aperture types allowed, according to page 16 of
- * http://gerbv.sourceforge.net/docs/rs274xrevd_e.pdf
+ * The set of all gerber aperture types allowed
+ * from ADD dcode command, like %ADD11C,0.304800*% to add a DCode number 11, circle shape
  */
 enum APERTURE_T {
     APT_CIRCLE  = 'C',      // Flashed shape: Circle with or without hole
@@ -187,7 +187,8 @@ public:
 
 public:
     wxSize                m_Size;           ///< Horizontal and vertical dimensions.
-    APERTURE_T            m_Shape;          ///< shape ( Line, rectangle, circle , oval .. )
+    APERTURE_T            m_ApertType;      ///< Aperture type ( Line, rectangle, circle,
+                                            ///< oval poly, macro )
     int                   m_Num_Dcode;      ///< D code value ( >= 10 )
     wxSize                m_Drill;          ///< dimension of the hole (if any) (drill file)
     APERTURE_DEF_HOLETYPE m_DrillShape;     ///< shape of the hole (0 = no hole, round = 1,

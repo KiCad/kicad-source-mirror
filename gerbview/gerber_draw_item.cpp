@@ -335,7 +335,7 @@ const BOX2I GERBER_DRAW_ITEM::GetBoundingBox() const
 
     case GBR_SEGMENT:
     {
-        if( code && code->m_Shape == APT_RECT )
+        if( code && code->m_ApertType == APT_RECT )
         {
             if( m_Polygon.OutlineCount() == 0 )
             {
@@ -492,7 +492,7 @@ void GERBER_DRAW_ITEM::Print( wxDC* aDC, const VECTOR2I& aOffset, GBR_DISPLAY_OP
          * In fact, any aperture can be used to plot a line.
          * currently: only a square pen is handled (I believe using a polygon gives a strange plot).
          */
-        if( d_codeDescr->m_Shape == APT_RECT )
+        if( d_codeDescr->m_ApertType == APT_RECT )
         {
             if( m_Polygon.OutlineCount() == 0 )
                 ConvertSegmentToPolygon();

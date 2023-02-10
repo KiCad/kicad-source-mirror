@@ -384,7 +384,7 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
 
         // TODO(JE) Refactor this to allow const aItem
         D_CODE* code = aItem->GetDcodeDescr();
-        if( code && code->m_Shape == APT_RECT )
+        if( code && code->m_ApertType == APT_RECT )
         {
             if( aItem->m_Polygon.OutlineCount() == 0 )
                 aItem->ConvertSegmentToPolygon();

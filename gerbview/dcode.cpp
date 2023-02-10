@@ -71,7 +71,7 @@ void D_CODE::Clear_D_CODE_Data()
 {
     m_Size.x     = DCODE_DEFAULT_SIZE;
     m_Size.y     = DCODE_DEFAULT_SIZE;
-    m_Shape      = APT_CIRCLE;
+    m_ApertType  = APT_CIRCLE;
     m_Drill.x    = m_Drill.y = 0;
     m_DrillShape = APT_DEF_NO_HOLE;
     m_InUse      = false;
@@ -116,7 +116,7 @@ int D_CODE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
 {
     int dim = 0;
 
-    switch( m_Shape )
+    switch( m_ApertType )
     {
     case APT_CIRCLE:
         dim = m_Size.x;
@@ -155,7 +155,7 @@ void D_CODE::DrawFlashedShape( const GERBER_DRAW_ITEM* aParent, wxDC* aDC, const
 {
     int radius;
 
-    switch( m_Shape )
+    switch( m_ApertType )
     {
     case APT_CIRCLE:
         radius = m_Size.x >> 1;
@@ -301,7 +301,7 @@ void D_CODE::ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent )
 
     m_Polygon.RemoveAllContours();
 
-    switch( m_Shape )
+    switch( m_ApertType )
     {
     case APT_CIRCLE:        // creates only a circle with rectangular hole
         TransformCircleToPolygon( m_Polygon, initialpos, m_Size.x >> 1, ARC_HIGH_DEF,

@@ -682,7 +682,7 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
             {
                 size     = tool->m_Size;
                 dcode    = tool->m_Num_Dcode;
-                aperture = tool->m_Shape;
+                aperture = tool->m_ApertType;
             }
 
             switch( m_Iterpolation )
@@ -741,7 +741,7 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
             {
                 size     = tool->m_Size;
                 dcode    = tool->m_Num_Dcode;
-                aperture = tool->m_Shape;
+                aperture = tool->m_ApertType;
             }
 
             gbritem = new GERBER_DRAW_ITEM( this );

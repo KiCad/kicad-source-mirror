@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -352,7 +352,7 @@ void GERBVIEW_FRAME::updateDCodeSelectBox()
                     dcode->m_Num_Dcode,
                     dcode->m_Size.x / scale, dcode->m_Size.y / scale,
                     units,
-                    D_CODE::ShowApertureType( dcode->m_Shape ) );
+                    D_CODE::ShowApertureType( dcode->m_ApertType ) );
 
         if( !dcode->m_AperFunction.IsEmpty() )
             msg << wxT( ", " ) << dcode->m_AperFunction;

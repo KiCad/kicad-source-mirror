@@ -735,7 +735,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
             switch( stdAperture )   // Aperture desceiption has optional parameters. Read them
             {
             case 'C':               // Circle
-                dcode->m_Shape = APT_CIRCLE;
+                dcode->m_ApertType = APT_CIRCLE;
                 while( *aText == ' ' )
                     aText++;
 
@@ -763,7 +763,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
 
             case 'O':               // oval
             case 'R':               // rect
-                dcode->m_Shape = (stdAperture == 'O') ? APT_OVAL : APT_RECT;
+                dcode->m_ApertType = (stdAperture == 'O') ? APT_OVAL : APT_RECT;
 
                 while( *aText == ' ' )
                     aText++;
@@ -805,7 +805,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
                 /* Regular polygon: a command line like %ADD12P,0.040X10X25X0.025X0.025X0.0150*%
                  * params are: <diameter>, X<edge count>, X<Rotation>, X<X hole dim>, X<Y hole dim>
                  */
-                dcode->m_Shape = APT_POLYGON;
+                dcode->m_ApertType = APT_POLYGON;
                 while( *aText == ' ' )
                     aText++;
 
@@ -897,7 +897,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
                 break;
             }
 
-            dcode->m_Shape = APT_MACRO;
+            dcode->m_ApertType = APT_MACRO;
             dcode->SetMacro( pam );
             dcode->m_Defined = true;
         }

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2016 Jean-Pierre Charras <jp.charras at wanadoo.fr>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -799,7 +799,7 @@ bool EXCELLON_IMAGE::readToolInformation( char*& aText )
         conv_scale /= 25.4;
 
     dcode->m_Size.x = dcode->m_Size.y = KiROUND( dprm * conv_scale );
-    dcode->m_Shape  = APT_CIRCLE;
+    dcode->m_ApertType = APT_CIRCLE;
     dcode->m_Defined  = true;
 
     return true;
@@ -877,7 +877,7 @@ bool EXCELLON_IMAGE::Execute_Drill_Command( char*& text )
                 }
                 else
                 {
-                    fillFlashedGBRITEM( gbritem, tool->m_Shape, tool->m_Num_Dcode,
+                    fillFlashedGBRITEM( gbritem, tool->m_ApertType, tool->m_Num_Dcode,
                                     m_CurrentPos, tool->m_Size, false );
                 }
 
