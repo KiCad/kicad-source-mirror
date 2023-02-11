@@ -48,6 +48,7 @@
 #include <convert_basic_shapes_to_polygon.h>
 #include <widgets/msgpanel.h>
 #include <pcb_painter.h>
+#include <properties/property_validators.h>
 #include <wx/log.h>
 
 #include <memory>
@@ -1753,6 +1754,18 @@ static struct PAD_DESC
                     return false;
                 };
 
+        auto padCanHaveHole =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
+                    {
+                        return pad->GetAttribute() == PAD_ATTRIB::PTH
+                               || pad->GetAttribute() == PAD_ATTRIB::NPTH;
+                    }
+
+                    return false;
+                };
+
         propMgr.OverrideAvailability( TYPE_HASH( PAD ), TYPE_HASH( BOARD_CONNECTED_ITEM ),
                                       _HKI( "Net" ), isCopperPad );
         propMgr.OverrideAvailability( TYPE_HASH( PAD ), TYPE_HASH( BOARD_CONNECTED_ITEM ),
@@ -1799,10 +1812,15 @@ static struct PAD_DESC
 
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Hole Size X" ),
                     &PAD::SetDrillSizeX, &PAD::GetDrillSizeX,
-                    PROPERTY_DISPLAY::PT_SIZE ), groupPad );
+                    PROPERTY_DISPLAY::PT_SIZE ), groupPad )
+                .SetWriteableFunc( padCanHaveHole )
+                .SetValidator( PROPERTY_VALIDATORS::PositiveIntValidator );
+
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Hole Size Y" ),
                     &PAD::SetDrillSizeY, &PAD::GetDrillSizeY,
-                    PROPERTY_DISPLAY::PT_SIZE ), groupPad );
+                    PROPERTY_DISPLAY::PT_SIZE ), groupPad )
+                .SetWriteableFunc( padCanHaveHole )
+                .SetValidator( PROPERTY_VALIDATORS::PositiveIntValidator );
 
         propMgr.AddProperty( new PROPERTY_ENUM<PAD, PAD_PROP>( _HKI( "Fabrication Property" ),
                     &PAD::SetProperty, &PAD::GetProperty ), groupPad );
@@ -1818,27 +1836,38 @@ static struct PAD_DESC
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Clearance Override" ),
                     &PAD::SetLocalClearance, &PAD::GetLocalClearance,
                     PROPERTY_DISPLAY::PT_SIZE ), groupOverrides );
+
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Soldermask Margin Override" ),
                     &PAD::SetLocalSolderMaskMargin, &PAD::GetLocalSolderMaskMargin,
                     PROPERTY_DISPLAY::PT_SIZE ), groupOverrides );
+
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Solderpaste Margin Override" ),
                     &PAD::SetLocalSolderPasteMargin, &PAD::GetLocalSolderPasteMargin,
                     PROPERTY_DISPLAY::PT_SIZE ), groupOverrides );
+
         propMgr.AddProperty( new PROPERTY<PAD, double>( _HKI( "Solderpaste Margin Ratio Override" ),
                     &PAD::SetLocalSolderPasteMarginRatio, &PAD::GetLocalSolderPasteMarginRatio ),
                     groupOverrides );
+
         propMgr.AddProperty( new PROPERTY_ENUM<PAD, ZONE_CONNECTION>(
                     _HKI( "Zone Connection Style" ),
                     &PAD::SetZoneConnection, &PAD::GetZoneConnection ), groupOverrides );
+
+        constexpr int minZoneWidth = pcbIUScale.mmToIU( ZONE_THICKNESS_MIN_VALUE_MM );
+
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Thermal Relief Spoke Width" ),
                     &PAD::SetThermalSpokeWidth, &PAD::GetThermalSpokeWidth,
-                    PROPERTY_DISPLAY::PT_SIZE ), groupOverrides );
+                    PROPERTY_DISPLAY::PT_SIZE ), groupOverrides )
+                .SetValidator( PROPERTY_VALIDATORS::RangeIntValidator<minZoneWidth, INT_MAX> );
+
         propMgr.AddProperty( new PROPERTY<PAD, double>( _HKI( "Thermal Relief Spoke Angle" ),
                     &PAD::SetThermalSpokeAngleDegrees, &PAD::GetThermalSpokeAngleDegrees,
                     PROPERTY_DISPLAY::PT_DEGREE ), groupOverrides );
+
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Thermal Relief Gap" ),
                     &PAD::SetThermalGap, &PAD::GetThermalGap,
-                    PROPERTY_DISPLAY::PT_SIZE ), groupOverrides );
+                    PROPERTY_DISPLAY::PT_SIZE ), groupOverrides )
+                .SetValidator( PROPERTY_VALIDATORS::PositiveIntValidator );
 
         // TODO delta, drill shape offset, layer set
     }
