@@ -75,23 +75,9 @@ protected:
     /**
      * Generates the property grid for a given selection of items.
      *
-     * Calling this will remove any existing properties shown, causing visible flicker on some
-     * platforms and canceling any pending edits.  Make sure to only call this when the group of
-     * selected items has actually changed.
-     *
      * @param aSelection is a set of items to show properties for.
      */
     virtual void rebuildProperties( const SELECTION& aSelection );
-
-    /**
-     * Updates the values shown in the property grid for the current selection.
-     *
-     * Does not add or remove properties from the display (@see rebuildProperties)
-     * This implies that aSelection must have the same contents as m_cachedSelection.
-     *
-     * @param aSelection is the set of selected items.
-     */
-    virtual void updatePropertyValues( const SELECTION& aSelection ) {}
 
     virtual wxPGProperty* createPGProperty( const PROPERTY_BASE* aProperty ) const = 0;
 
@@ -128,9 +114,6 @@ protected:
 
     /// Proportion of the grid column splitter that is used for the key column (0.0 - 1.0)
     float m_splitter_key_proportion;
-
-    /// A copy of the most recent selection passed to rebuildProperties
-    std::unique_ptr<SELECTION> m_cachedSelection;
 };
 
 #endif /* PROPERTIES_PANEL_H */
