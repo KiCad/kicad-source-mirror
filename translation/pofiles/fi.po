@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-10 15:35-0800\n"
-"PO-Revision-Date: 2023-02-06 07:25+0000\n"
+"PO-Revision-Date: 2023-02-13 00:59+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19986,9 +19986,8 @@ msgid "Schematic file does not exist or is not accessible\n"
 msgstr "Kytkentäkaaviotiedostoa ei ole olemassa tai se ei ole käytettävissä\n"
 
 #: kicad/cli/command_export_sch_pdf.cpp:38
-#, fuzzy
 msgid "Color theme to use (will default to schematic settings)"
-msgstr "Käytettävä väriteema (oletuksena piirilevyeditorin asetukset)"
+msgstr "Käytettävä väriteema (käytetään oletuksena kytkentäkaavioasetuksissa)"
 
 #: kicad/cli/command_export_sch_pdf.cpp:51
 #: kicad/cli/command_export_sch_svg.cpp:51
