@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-10 15:35-0800\n"
-"PO-Revision-Date: 2023-01-30 16:44+0000\n"
+"PO-Revision-Date: 2023-02-13 00:59+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -20142,10 +20142,10 @@ msgid "Schematic file does not exist or is not accessible\n"
 msgstr "O arquivo esquemático não existe ou não está acessível\n"
 
 #: kicad/cli/command_export_sch_pdf.cpp:38
-#, fuzzy
 msgid "Color theme to use (will default to schematic settings)"
 msgstr ""
-"Tema das cores que será usado (o padrão será as configurações do pcbnew)"
+"O tema da cor que será usado (será redefinido para as configurações do "
+"esquema)"
 
 #: kicad/cli/command_export_sch_pdf.cpp:51
 #: kicad/cli/command_export_sch_svg.cpp:51
