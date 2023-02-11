@@ -601,7 +601,7 @@ void DIALOG_SIM_COMMAND::updateDCUnits( wxChar aType, wxChoice* aSource,
 void DIALOG_SIM_COMMAND::loadDirectives()
 {
     if( m_circuitModel )
-        m_customTxt->SetValue( m_circuitModel->GetSheetSimCommand() );
+        m_customTxt->SetValue( m_circuitModel->GetSchTextSimCommand() );
 }
 
 

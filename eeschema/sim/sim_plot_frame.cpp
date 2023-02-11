@@ -721,21 +721,41 @@ void SIM_PLOT_FRAME::rebuildSignalsGrid( wxString aFilter )
 }
 
 
-void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
+void SIM_PLOT_FRAME::StartSimulation()
 {
     if( m_circuitModel->CommandToSimType( GetCurrentSimCommand() ) == ST_UNKNOWN )
     {
-        if( !EditSimCommand()
-            || m_circuitModel->CommandToSimType( GetCurrentSimCommand() ) == ST_UNKNOWN )
-        {
+        if( !EditSimCommand() )
             return;
-        }
+
+        if( m_circuitModel->CommandToSimType( GetCurrentSimCommand() ) == ST_UNKNOWN )
+            return;
     }
 
-    m_simConsole->Clear();
+    wxString        schTextSimCommand = m_circuitModel->GetSchTextSimCommand();
+    SIM_TYPE        schTextSimType = NGSPICE_CIRCUIT_MODEL::CommandToSimType( schTextSimCommand );
+    SIM_PANEL_BASE* plotWindow = getCurrentPlotWindow();
 
-    if( aSimCommand != wxEmptyString )
-        m_circuitModel->SetSimCommandOverride( aSimCommand );
+    if( !plotWindow )
+    {
+        plotWindow = NewPlotPanel( schTextSimCommand, m_circuitModel->GetSimOptions() );
+        m_workbook->SetSimCommand( plotWindow, schTextSimCommand );
+    }
+    else
+    {
+        m_circuitModel->SetSimCommandOverride( m_workbook->GetSimCommand( plotWindow ) );
+
+        if( plotWindow->GetType() == schTextSimType
+                && schTextSimCommand != m_circuitModel->GetLastSchTextSimCommand() )
+        {
+            if( IsOK( this, _( "Schematic sheet simulation command directive has changed.  "
+                               "Do you wish to update the Simulation Command?" ) ) )
+            {
+                m_circuitModel->SetSimCommandOverride( wxEmptyString );
+                m_workbook->SetSimCommand( plotWindow, schTextSimCommand );
+            }
+        }
+    }
 
     m_circuitModel->SetSimOptions( GetCurrentOptions() );
 
@@ -750,33 +770,6 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
         return;
     }
 
-    SIM_PANEL_BASE* plotWindow = getCurrentPlotWindow();
-    wxString        sheetSimCommand = m_circuitModel->GetSheetSimCommand();
-
-    if( plotWindow
-            && plotWindow->GetType() == NGSPICE_CIRCUIT_MODEL::CommandToSimType( sheetSimCommand ) )
-    {
-        if( m_circuitModel->GetSimCommandOverride().IsEmpty() )
-        {
-            m_workbook->SetSimCommand( plotWindow, sheetSimCommand );
-        }
-        else if( sheetSimCommand != m_circuitModel->GetLastSheetSimCommand() )
-        {
-            if( IsOK( this, _( "Schematic sheet simulation command directive has changed.  Do you "
-                               "wish to update the Simulation Command?" ) ) )
-            {
-                m_circuitModel->SetSimCommandOverride( wxEmptyString );
-                m_workbook->SetSimCommand( plotWindow, sheetSimCommand );
-            }
-        }
-    }
-
-    if( !plotWindow || plotWindow->GetType() != m_circuitModel->GetSimType() )
-    {
-        plotWindow = NewPlotPanel( m_circuitModel->GetSimCommand(),
-                                   m_circuitModel->GetSimOptions() );
-    }
-
     std::unique_lock<std::mutex> simulatorLock( m_simulator->GetMutex(), std::try_to_lock );
 
     if( simulatorLock.owns_lock() )
@@ -785,6 +778,8 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
         wxString     unconnected = wxString( wxS( "unconnected-(" ) );
 
         unconnected.Replace( '(', '_' );    // Convert to SPICE markup
+
+        m_simConsole->Clear();
         m_signals.clear();
 
         int      options = m_circuitModel->GetSimOptions();
@@ -1648,7 +1643,7 @@ bool SIM_PLOT_FRAME::LoadWorkbook( const wxString& aPath )
         }
 
         NewPlotPanel( simCommand, simOptions );
-        StartSimulation( simCommand );
+        StartSimulation();
 
         // Perform simulation, so plots can be added with values
         do

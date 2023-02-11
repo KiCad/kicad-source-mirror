@@ -62,7 +62,7 @@ public:
     SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent );
     ~SIM_PLOT_FRAME();
 
-    void StartSimulation( const wxString& aSimCommand = wxEmptyString );
+    void StartSimulation();
 
     /**
      * Create a new plot panel for a given simulation type and adds it to the main notebook.
@@ -209,7 +209,7 @@ public:
     wxString GetCurrentSimCommand() const
     {
         if( getCurrentPlotWindow() == nullptr )
-            return m_circuitModel->GetSheetSimCommand();
+            return m_circuitModel->GetSchTextSimCommand();
         else
             return m_workbook->GetSimCommand( getCurrentPlotWindow() );
     }
