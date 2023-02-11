@@ -37,6 +37,8 @@
 #include <tool/action_menu.h>
 #include <tool/action_toolbar.h>
 #include <tool/tool_manager.h>
+#include <tools/pcb_actions.h>
+#include <tools/pcb_selection_tool.h>
 #include <pcb_painter.h>
 #include <wx/msgdlg.h>
 #include "../../scripting/python_scripting.h"
@@ -281,23 +283,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     PICKED_ITEMS_LIST deletedItemsList;
 
     // The list of existing items after running the action script
-    std::set<BOARD_ITEM*> currItemList;
-
-    // Append tracks:
-    for( PCB_TRACK* item : currentPcb->Tracks() )
-        currItemList.insert( item );
-
-    // Append footprints:
-    for( FOOTPRINT* item : currentPcb->Footprints() )
-        currItemList.insert( item );
-
-    // Append drawings
-    for( BOARD_ITEM* item : currentPcb->Drawings() )
-        currItemList.insert( item );
-
-    // Append zones outlines
-    for( ZONE* zone : currentPcb->Zones() )
-        currItemList.insert( zone );
+    const std::set<BOARD_ITEM*> currItemList = currentPcb->GetItemSet();
 
     // Found deleted items
     for( unsigned int i = 0; i < oldBuffer->GetCount(); i++ )
@@ -362,7 +348,6 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
         }
     }
 
-
     if( oldBuffer->GetCount() )
     {
         OnModify();
@@ -382,6 +367,36 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
 
 void PCB_EDIT_FRAME::RebuildAndRefresh()
 {
+    // The list of existing items after running the action script
+    const std::set<BOARD_ITEM*> items = GetBoard()->GetItemSet();
+
+    // Sync selection with items selection state
+    SELECTION&          selection = GetCurrentSelection();
+    PCB_SELECTION_TOOL* selTool = m_toolManager->GetTool<PCB_SELECTION_TOOL>();
+    EDA_ITEMS           to_add;
+    EDA_ITEMS           to_remove;
+
+    for( BOARD_ITEM* item : items )
+    {
+        if( item->IsSelected() && !selection.Contains( item ) )
+        {
+            item->ClearSelected(); // temporarily
+            to_add.push_back( item );
+        }
+    }
+
+    for( EDA_ITEM* item : selection.GetItems() )
+    {
+        if( !item->IsSelected() )
+            to_remove.push_back( static_cast<BOARD_ITEM*>( item ) );
+    }
+
+    if( !to_add.empty() )
+        selTool->AddItemsToSel( &to_add );
+
+    if( !to_remove.empty() )
+        selTool->RemoveItemsFromSel( &to_remove );
+
     m_pcb->BuildConnectivity();
 
     PCB_DRAW_PANEL_GAL* canvas = GetCanvas();

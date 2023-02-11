@@ -316,6 +316,8 @@ public:
     MARKERS& Markers() { return m_markers; }
     const MARKERS& Markers() const { return m_markers; }
 
+    const std::set<BOARD_ITEM*> GetItemSet();
+
     /**
      * The groups must maintain the following invariants. These are checked by
      * GroupsSanityCheck():

@@ -2344,3 +2344,21 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer,
 }
 
 
+const std::set<BOARD_ITEM*> BOARD::GetItemSet()
+{
+    std::set<BOARD_ITEM*> items;
+
+#define INSERT_ITEMS( collection )                                                                 \
+    for( BOARD_ITEM * item : collection )                                                          \
+        items.insert( item );
+
+    INSERT_ITEMS( m_tracks )
+    INSERT_ITEMS( m_footprints )
+    INSERT_ITEMS( m_drawings )
+    INSERT_ITEMS( m_zones )
+    INSERT_ITEMS( m_markers )
+
+#undef INSERT_ITEMS
+
+    return items;
+}
