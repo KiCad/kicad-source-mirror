@@ -470,13 +470,13 @@ TOOL_ACTION ACTIONS::gridPrev( "common.Control.gridPrev",
 
 TOOL_ACTION ACTIONS::gridSetOrigin( "common.Control.gridSetOrigin",
         AS_GLOBAL,
-        'S', LEGACY_HK_NAME( "Set Grid Origin" ),
+        0, LEGACY_HK_NAME( "Set Grid Origin" ),
         _( "Grid Origin" ), _( "Set the grid origin point" ),
         BITMAPS::grid_select_axis );
 
 TOOL_ACTION ACTIONS::gridResetOrigin( "common.Control.gridResetOrigin",
         AS_GLOBAL,
-        'Z', LEGACY_HK_NAME( "Reset Grid Origin" ),
+        0, LEGACY_HK_NAME( "Reset Grid Origin" ),
         _( "Reset Grid Origin" ), "" );
 
 TOOL_ACTION ACTIONS::gridPreset( "common.Control.gridPreset",
