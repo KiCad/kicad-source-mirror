@@ -14,16 +14,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-10 15:35-0800\n"
-"PO-Revision-Date: 2023-01-20 06:51+0000\n"
+"PO-Revision-Date: 2023-02-13 00:59+0000\n"
 "Last-Translator: Mustafa Selçuk ÇAVDAR <mselcuk@gmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
+"master-source/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.1\n"
+"X-Generator: Weblate 4.16-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -4165,7 +4165,7 @@ msgid "Insufficient permissions to folder '%s'."
 msgstr "'%s' klasörü için yetersiz izin."
 
 #: common/eda_base_frame.cpp:1249
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing\n"
@@ -4174,11 +4174,12 @@ msgid ""
 "\n"
 "Do you wish to open the auto-saved file instead?"
 msgstr ""
-"Peki bu potansiyel olarak utanç verici!\n"
-"Dosyayı en son düzenlediğinizde görünüyor\n"
+"Bu potansiyel olarak utanç verici!\n"
+"Görünüşe göre en son düzenlediğinizde\n"
 "%s\n"
-"düzgün kaydedilmedi. Yaptığınız son kaydedilen düzenlemeleri geri yüklemek "
-"istiyor musunuz?"
+"KiCad kaydetmeden önce çıktı.\n"
+"\n"
+"Bunun yerine otomatik kaydedilmiş dosyayı açmak ister misiniz?"
 
 #: common/eda_base_frame.cpp:1266
 msgid "The auto save file could not be renamed to the board file name."
@@ -9011,11 +9012,13 @@ msgid "symbol"
 msgstr "simge"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:61
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error creating symbol library table '%s'.\n"
 "%s"
-msgstr "'%s' sembol kitaplığı oluşturulurken hata oluştu."
+msgstr ""
+"Sembol kütüphane tablosu '%s' oluşturulurken hata oluştu.\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:75
 msgid "Please select a symbol library table file."
@@ -9029,11 +9032,13 @@ msgid "File '%s' not found."
 msgstr "'%s' dosyası bulunamadı."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:97
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading symbol library table '%s'.\n"
 "%s"
-msgstr "'%s' sembol kitaplığı tablosu yüklenirken hata oluştu."
+msgstr ""
+"Sembol kütüphanesi tablosu '%s' okunurken hata oluştu.\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:109
 #, fuzzy, c-format
@@ -18950,14 +18955,14 @@ msgid "<b>No more available layers</b> in GerbView to load files"
 msgstr ""
 
 #: gerbview/files.cpp:44
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Not loaded:</b> <i>%s</i>"
-msgstr "Pcb '%s' yüklenirken bellek tükendi"
+msgstr "<b>Yüklü değil:</b> <i>%s</i>"
 
 #: gerbview/files.cpp:45
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Memory was exhausted reading:</b> <i>%s</i>"
-msgstr "Pcb '%s' yüklenirken bellek tükendi"
+msgstr "<b> Bellek okuma tükendi:</b> <i>%s</i>"
 
 #: gerbview/files.cpp:52 gerbview/files.cpp:202
 msgid "Gerber files"
@@ -19071,9 +19076,9 @@ msgid "Skipped file '%s' (gerber job file)."
 msgstr "'%s' zip dosyası açılamıyor."
 
 #: gerbview/files.cpp:526
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Unable to create temporary file '%s'.</b>"
-msgstr "Geçici dosya '%s' yeniden adlandırılamadı."
+msgstr "<b>Geçici dosya '%s' oluşturulamıyor.</b>"
 
 #: gerbview/files.cpp:551
 #, fuzzy, c-format
@@ -32612,9 +32617,9 @@ msgid "Pad is not a through hole pad; connection will be: %s."
 msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:735 pcbnew/drc/drc_engine.cpp:745
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; clearance: %s."
-msgstr "%s üzerinde yerel açıklık; açıklık: %s."
+msgstr "%s üzerinde yerel istisna; açıklık: %s."
 
 #: pcbnew/drc/drc_engine.cpp:760 pcbnew/drc/drc_engine.cpp:1380
 #: pcbnew/drc/drc_engine.cpp:1395
@@ -33368,14 +33373,14 @@ msgstr "Mekanik boşluklar kontrol ediliyor..."
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:795
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:240
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:278
-#, fuzzy, c-format
+#, c-format
 msgid "(%s clearance %s; actual %s)"
-msgstr "%s üzerinde yerel açıklık; açıklık: %s."
+msgstr "(%s açıklık %s; şu anki %s)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:298
-#, fuzzy, c-format
+#, c-format
 msgid "(%s clearance %s; actual < 0)"
-msgstr "%s üzerinde yerel açıklık; açıklık: %s."
+msgstr "(%s açıklık %s; gerçek < 0)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:635
 #, fuzzy, c-format
@@ -33462,9 +33467,9 @@ msgid "Checking hole to hole clearances..."
 msgstr "Lehim maskesi ile ipek baskı açıklığı kontrol ediliyor..."
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:304
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min %s; actual %s)"
-msgstr "%s üzerinde yerel açıklık; açıklık: %s."
+msgstr "(%s min %s; şu anki %s)"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:459
 msgid "No project loaded, skipping library parity tests."
@@ -33571,9 +33576,9 @@ msgid "Checking physical clearances..."
 msgstr "Mekanik boşluklar kontrol ediliyor..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:497
-#, fuzzy, c-format
+#, c-format
 msgid "Internal clearance violation (%s clearance %s; actual %s)"
-msgstr "%s üzerinde yerel açıklık; açıklık: %s."
+msgstr "Dahili açıklık ihlali (%s açıklık %s; şu anki %s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:116
 #, fuzzy, c-format
@@ -38137,14 +38142,18 @@ msgid "Zone clearance: %s."
 msgstr "Pano minimum açıklığı: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:703
-#, fuzzy, c-format
+#, c-format
 msgid "Overridden by larger physical clearance from %s;clearance: %s."
-msgstr "%s üzerinde yerel açıklık; açıklık: %s."
+msgstr ""
+"%s adresindeki daha büyük fiziksel açıklık tarafından geçersiz kılınmıştır "
+";açıklık: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:719
-#, fuzzy, c-format
+#, c-format
 msgid "Overridden by larger physical hole clearance from %s;clearance: %s."
-msgstr "%s üzerinde yerel açıklık; açıklık: %s."
+msgstr ""
+"%s adresindeki daha büyük fiziksel delik açıklığı tarafından geçersiz "
+"kılınmıştır ;açıklık: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:791
 #, fuzzy
