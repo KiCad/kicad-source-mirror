@@ -52,8 +52,6 @@ protected:
     ///> Regenerates caches storing layer and net names
     void updateLists( const BOARD* aBoard );
 
-    void updatePropertyValues( const SELECTION& aSelection ) override;
-
     PCB_EDIT_FRAME* m_frame;
     PROPERTY_MANAGER& m_propMgr;
     PG_UNIT_EDITOR* m_unitEditorInstance;

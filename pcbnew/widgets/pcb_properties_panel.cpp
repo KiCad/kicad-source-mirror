@@ -100,36 +100,12 @@ void PCB_PROPERTIES_PANEL::AfterCommit()
     PCB_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
     const SELECTION& selection = selectionTool->GetSelection();
 
-    updatePropertyValues( selection );
+    rebuildProperties( selection );
 
     CallAfter( [&]()
                {
                    static_cast<PCB_EDIT_FRAME*>( m_frame )->GetCanvas()->SetFocus();
                } );
-}
-
-
-void PCB_PROPERTIES_PANEL::updatePropertyValues( const SELECTION& aSelection )
-{
-    BOARD_ITEM* firstItem = static_cast<BOARD_ITEM*>( aSelection.Front() );
-
-    for( wxPropertyGridIterator it = m_grid->GetIterator(); !it.AtEnd(); it.Next() )
-    {
-        wxPGProperty* pgProp = it.GetProperty();
-
-        PROPERTY_BASE* property = m_propMgr.GetProperty( TYPE_HASH( *firstItem ),
-                                                         pgProp->GetName() );
-        wxCHECK2( property, continue );
-
-        bool writeable = true;
-        wxVariant commonVal;
-
-        // Availablility of the property should not be changing here
-        wxASSERT( extractValueAndWritability( aSelection, property, commonVal, writeable ) );
-
-        pgProp->SetValue( commonVal );
-        pgProp->Enable( writeable );
-    }
 }
 
 

@@ -65,8 +65,6 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
     delete wxPGGlobalVars->m_defaultRenderer;
     wxPGGlobalVars->m_defaultRenderer = new PG_CELL_RENDERER();
 
-    m_cachedSelection = std::make_unique<SELECTION>();
-
     m_caption = new wxStaticText( this, wxID_ANY, _( "No objects selected" ) );
     mainSizer->Add( m_caption, 0, wxALL | wxEXPAND, 5 );
 
@@ -132,23 +130,20 @@ void PROPERTIES_PANEL::OnLanguageChanged()
 
 void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
 {
-    if( *m_cachedSelection == aSelection )
-    {
-        updatePropertyValues( aSelection );
-        return;
-    }
+    auto reset =
+            [&]()
+            {
+                if( m_grid->IsEditorFocused() )
+                    m_grid->CommitChangesFromEditor();
 
-    *m_cachedSelection = aSelection;
-
-    if( m_grid->IsEditorFocused() )
-        m_grid->CommitChangesFromEditor();
-
-    m_grid->Clear();
-    m_displayed.clear();
+                m_grid->Clear();
+                m_displayed.clear();
+            };
 
     if( aSelection.Empty() )
     {
         m_caption->SetLabel( _( "No objects selected" ) );
+        reset();
         return;
     }
 
@@ -159,15 +154,6 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
         types.insert( TYPE_HASH( *item ) );
 
     wxCHECK( !types.empty(), /* void */ );
-
-    if( aSelection.Size() > 1 )
-    {
-        m_caption->SetLabel( wxString::Format( _( "%d objects selected" ), aSelection.Size() ) );
-    }
-    else
-    {
-        m_caption->SetLabel( aSelection.Front()->GetFriendlyName() );
-    }
 
     PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
     propMgr.SetUnits( m_frame->GetUserUnits() );
@@ -182,8 +168,7 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
     std::vector<wxString> groupDisplayOrder = propMgr.GetGroupDisplayOrder( *types.begin() );
     std::set<wxString> groups( groupDisplayOrder.begin(), groupDisplayOrder.end() );
 
-    std::map<wxPGProperty*, int> pgPropOrders;
-    std::map<wxString, std::vector<wxPGProperty*>> pgPropGroups;
+    std::set<PROPERTY_BASE*> availableProps;
 
     // Get all possible properties
     for( const TYPE_ID& type : types )
@@ -215,38 +200,72 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
         }
     }
 
+    EDA_ITEM* firstItem = aSelection.Front();
+
     // Find a set of properties that is common to all selected items
     for( PROPERTY_BASE* property : commonProps )
     {
         if( property->IsInternal() )
             continue;
 
-        if( !propMgr.IsAvailableFor( TYPE_HASH( *aSelection.Front() ), property,
-                                     aSelection.Front() ) )
-            continue;
+        if( propMgr.IsAvailableFor( TYPE_HASH( *firstItem ), property, firstItem ) )
+            availableProps.insert( property );
+    }
 
-        // Either determine the common value for a property or "<...>" to indicate multiple values
-        bool available;
-        bool writeable;
+    bool writeable = true;
+    std::set<PROPERTY_BASE*> existingProps;
+
+    for( wxPropertyGridIterator it = m_grid->GetIterator(); !it.AtEnd(); it.Next() )
+    {
+        wxPGProperty* pgProp = it.GetProperty();
+
+        PROPERTY_BASE* property = propMgr.GetProperty( TYPE_HASH( *firstItem ), pgProp->GetName() );
+        wxCHECK2( property, continue );
         wxVariant commonVal;
 
-        available = extractValueAndWritability( aSelection, property, commonVal, writeable );
+        extractValueAndWritability( aSelection, property, commonVal, writeable );
+        pgProp->SetValue( commonVal );
+        pgProp->Enable( writeable );
 
-        if( available )
+        existingProps.insert( property );
+    }
+
+    if( existingProps == availableProps )
+        return;
+
+    // Some difference exists:  start from scratch
+    reset();
+
+    std::map<wxPGProperty*, int> pgPropOrders;
+    std::map<wxString, std::vector<wxPGProperty*>> pgPropGroups;
+
+    for( PROPERTY_BASE* property : availableProps )
+    {
+        wxPGProperty* pgProp = createPGProperty( property );
+        wxVariant commonVal;
+
+        if( !extractValueAndWritability( aSelection, property, commonVal, writeable ) )
+            continue;
+
+        if( pgProp )
         {
-            wxPGProperty* pgProp = createPGProperty( property );
+            pgProp->SetValue( commonVal );
+            pgProp->Enable( writeable );
+            m_displayed.push_back( property );
 
-            if( pgProp )
-            {
-                pgProp->SetValue( commonVal );
-                pgProp->Enable( writeable );
-                m_displayed.push_back( property );
-
-                wxASSERT( displayOrder.count( property ) );
-                pgPropOrders[pgProp] = displayOrder[property];
-                pgPropGroups[property->Group()].emplace_back( pgProp );
-            }
+            wxASSERT( displayOrder.count( property ) );
+            pgPropOrders[pgProp] = displayOrder[property];
+            pgPropGroups[property->Group()].emplace_back( pgProp );
         }
+    }
+
+    if( aSelection.Size() > 1 )
+    {
+        m_caption->SetLabel( wxString::Format( _( "%d objects selected" ), aSelection.Size() ) );
+    }
+    else
+    {
+        m_caption->SetLabel( aSelection.Front()->GetFriendlyName() );
     }
 
     const wxString unspecifiedGroupCaption = _( "Basic Properties" );
