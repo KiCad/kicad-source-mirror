@@ -216,7 +216,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::DIODE].instanceParams.emplace_back( "sens_cplx",  16, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_COMPLEX, U(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "ac sensitivity", true );
 
 
-        modelInfos[MODEL_TYPE::BJT] = { "BJT", "NPN", "PNP", { "C", "B", "E" }, "Bipolar Junction Transistor", {}, {} };
+        modelInfos[MODEL_TYPE::BJT] = { "BJT", "NPN", "PNP", { "C", "B", "E", "S" }, "Bipolar Junction Transistor", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::BJT].modelParams.emplace_back( "type",  309, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_STRING, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "npn", "pnp", "NPN or PNP" );
         modelInfos[MODEL_TYPE::BJT].modelParams.emplace_back( "npn",  101, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_BOOL, U(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "NaN", "NaN", "NPN type device" );
@@ -426,7 +426,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::BJT].instanceParams.emplace_back( "dtemp",  8, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, U(), "°C", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "instance temperature delta from circuit", true );
 
 
-        modelInfos[MODEL_TYPE::VBIC] = { "VBIC", "NPN", "PNP", { "C", "B", "E" }, "Vertical Bipolar Inter-Company Model", {}, {} };
+        modelInfos[MODEL_TYPE::VBIC] = { "VBIC", "NPN", "PNP", { "C", "B", "E", "S", "TJ" }, "Vertical Bipolar Inter-Company Model", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::VBIC].modelParams.emplace_back( "type",  305, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_STRING, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "npn", "pnp", "NPN or PNP" );
         modelInfos[MODEL_TYPE::VBIC].modelParams.emplace_back( "npn",  101, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_BOOL, U(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "NaN", "NaN", "NPN type device" );
@@ -593,7 +593,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::VBIC].instanceParams.emplace_back( "cqbx",  249, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, U(), "F", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Cap. due to charge storage in B-X jct.", true );
 
 
-        modelInfos[MODEL_TYPE::HICUM2] = { "hicum2", "NPN", "PNP", { "C", "B", "E" }, "High Current Model for BJT" , {}, {} };
+        modelInfos[MODEL_TYPE::HICUM2] = { "hicum2", "NPN", "PNP", { "C", "B", "E", "S", "TJ" }, "High Current Model for BJT" , {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::HICUM2].modelParams.emplace_back( "type", 305, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_STRING, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "npn", "pnp", "For transistor type NPN(+1) or PNP (-1)" );
         modelInfos[MODEL_TYPE::HICUM2].modelParams.emplace_back( "npn", 101, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_BOOL, U(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "NaN", "NaN", "NPN type device" );
@@ -1108,7 +1108,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::MESA].instanceParams.emplace_back( "p", 10, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Power dissipated by the mesfet", true );
 
 
-        modelInfos[MODEL_TYPE::HFET1] = { "HFET1", "NMF", "PMF", { "D", "G", "S", "B" }, "HFET1 Model", {}, {} };
+        modelInfos[MODEL_TYPE::HFET1] = { "HFET1", "NMF", "PMF", { "D", "G", "S" }, "HFET1 Model", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::HFET1].modelParams.emplace_back( "vt0", 101, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, SIM_MODEL::PARAM::FLAGS(), "V", SIM_MODEL::PARAM::CATEGORY::DC, "Pinch-off voltage" );
         modelInfos[MODEL_TYPE::HFET1].modelParams.emplace_back( "vto", 101, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, R(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "n.a." );
@@ -1210,7 +1210,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::HFET1].instanceParams.emplace_back( "p", 9, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Power dissipated by the mesfet", true );
 
 
-        modelInfos[MODEL_TYPE::HFET2] = { "HFET2", "NMF", "PMF", { "D", "G", "S", "B" }, "HFET2 Model", {}, {} };
+        modelInfos[MODEL_TYPE::HFET2] = { "HFET2", "NMF", "PMF", { "D", "G", "S" }, "HFET2 Model", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::HFET2].modelParams.emplace_back( "type", 139, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_STRING, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "664639780", "-1511458520", "NHFET or PHFET" );
         modelInfos[MODEL_TYPE::HFET2].modelParams.emplace_back( "nhfet", 101, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_BOOL, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "N type HFET model" );
