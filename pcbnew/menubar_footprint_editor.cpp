@@ -199,6 +199,8 @@ void FOOTPRINT_EDIT_FRAME::doReCreateMenuBar()
     placeMenu->AppendSeparator();
     placeMenu->Add( PCB_ACTIONS::setAnchor );
     placeMenu->Add( ACTIONS::gridSetOrigin );
+    placeMenu->AppendSeparator();
+    placeMenu->Add( ACTIONS::gridResetOrigin );
 
 
     //-- Inspect menu ------------------------------------------------------

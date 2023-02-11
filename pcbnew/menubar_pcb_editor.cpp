@@ -346,6 +346,8 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     placeMenu->AppendSeparator();
     placeMenu->Add( PCB_ACTIONS::drillOrigin );
     placeMenu->Add( ACTIONS::gridSetOrigin );
+    placeMenu->AppendSeparator();
+    placeMenu->Add( ACTIONS::gridResetOrigin );
 
     placeMenu->AppendSeparator();
 
