@@ -304,9 +304,13 @@ void D_CODE::ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent )
     switch( m_ApertType )
     {
     case APT_CIRCLE:        // creates only a circle with rectangular hole
-        TransformCircleToPolygon( m_Polygon, initialpos, m_Size.x >> 1, ARC_HIGH_DEF,
+        {
+        // Adjust the allowed approx error to convert arcs to segments:
+        int arc_to_seg_error = gerbIUScale.mmToIU( 0.005 );    // Allow 5 microns
+        TransformCircleToPolygon( m_Polygon, initialpos, m_Size.x >> 1, arc_to_seg_error,
                                   ERROR_INSIDE );
         addHoleToPolygon( &m_Polygon, m_DrillShape, m_Drill, initialpos );
+        }
         break;
 
     case APT_RECT:
@@ -423,7 +427,9 @@ static void addHoleToPolygon( SHAPE_POLY_SET* aPolygon, APERTURE_DEF_HOLETYPE aH
 
     if( aHoleShape == APT_DEF_ROUND_HOLE )
     {
-        TransformCircleToPolygon( holeBuffer, VECTOR2I( 0, 0 ), aSize.x / 2, ARC_HIGH_DEF,
+        // Adjust the allowed approx error to convert arcs to segments:
+        int arc_to_seg_error = gerbIUScale.mmToIU( 0.005 );    // Allow 5 microns
+        TransformCircleToPolygon( holeBuffer, VECTOR2I( 0, 0 ), aSize.x / 2, arc_to_seg_error,
                                   ERROR_INSIDE );
     }
     else if( aHoleShape == APT_DEF_RECT_HOLE )

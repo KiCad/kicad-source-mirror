@@ -261,6 +261,9 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( const D_CODE* aDcode,
         int gap = scaletoIU( m_Params[4].GetValue( tool ), m_GerbMetric );
         int numCircles = KiROUND( m_Params[5].GetValue( tool ) );
 
+        // Adjust the allowed approx error to convert arcs to segments:
+        int arc_to_seg_error = gerbIUScale.mmToIU( 0.005 );    // Allow 5 microns
+
         // Draw circles @ position pos.x, pos.y given by the tool:
         VECTOR2I center( mapPt( m_Params[0].GetValue( tool ), m_Params[1].GetValue( tool ),
                          m_GerbMetric ) );
@@ -278,13 +281,13 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( const D_CODE* aDcode,
             if( outerDiam <= penThickness )
             {   // No room to draw a ring (no room for the hole):
                 // draw a circle instead (with no hole), with the right diameter
-                TransformCircleToPolygon( aShapeBuffer, center, outerDiam / 2, ARC_HIGH_DEF,
+                TransformCircleToPolygon( aShapeBuffer, center, outerDiam / 2, arc_to_seg_error,
                                           ERROR_INSIDE );
             }
             else
             {
                 TransformRingToPolygon( aShapeBuffer, center, ( outerDiam - penThickness ) / 2,
-                                        penThickness, ARC_HIGH_DEF, ERROR_INSIDE );
+                                        penThickness, arc_to_seg_error, ERROR_INSIDE );
             }
         }
 
