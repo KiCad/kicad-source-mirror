@@ -88,7 +88,7 @@ std::optional<rectpack2D::rect_wh> spreadRectangles( rect_vector& vecSubRects, i
 
     int max_side = std::max( areaSizeX, areaSizeY );
 
-    while( true )
+    for( int i = 0; i < 2000; i++ )
     {
         bool      anyUnsuccessful = false;
         const int discard_step = 1;
