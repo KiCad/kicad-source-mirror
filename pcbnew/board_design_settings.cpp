@@ -705,7 +705,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             pcbIUScale.mmToIU( DEFAULT_DIMENSION_EXTENSION_OFFSET ) ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "defaults.zones.min_clearance",
-            &m_defaultZoneSettings.m_ZoneClearance, pcbIUScale.MilsToIU( ZONE_CLEARANCE_MIL ),
+            &m_defaultZoneSettings.m_ZoneClearance, pcbIUScale.mmToIU( ZONE_CLEARANCE_MM ),
             pcbIUScale.mmToIU( 0.0 ), pcbIUScale.mmToIU( 25.0 ), pcbIUScale.MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "defaults.pads",

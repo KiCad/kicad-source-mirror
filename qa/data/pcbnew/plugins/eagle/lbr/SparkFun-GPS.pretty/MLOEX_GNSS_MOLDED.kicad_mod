@@ -60,11 +60,11 @@
     (solder_mask_margin 0.1016) (thermal_bridge_angle 45) (tstamp c230476f-0a2f-46e6-b3f4-fb9db7e9c35c))
   (pad "FEED" smd rect (at 0.97 1.95) (size 1.54 1.54) (layers "F.Cu" "F.Paste" "F.Mask")
     (solder_mask_margin 0.1016) (thermal_bridge_angle 45) (tstamp df678a79-0577-4e5d-811e-7537bf99a5ba))
-  (zone (net 0) (net_name "") (layer "F.Cu") (tstamp 850ff00e-5d53-44b8-b71e-a335072cdc1e) (hatch edge 0.508)
+  (zone (net 0) (net_name "") (layer "F.Cu") (tstamp 850ff00e-5d53-44b8-b71e-a335072cdc1e) (hatch edge 0.5)
     (connect_pads (clearance 0))
-    (min_thickness 0.254) (filled_areas_thickness no)
+    (min_thickness 0.25) (filled_areas_thickness no)
     (keepout (tracks not_allowed) (vias not_allowed) (pads not_allowed ) (copperpour not_allowed) (footprints allowed))
-    (fill (thermal_gap 0.508) (thermal_bridge_width 0.508) (island_removal_mode 0) (island_area_min 10))
+    (fill (thermal_gap 0.5) (thermal_bridge_width 0.5) (island_removal_mode 0) (island_area_min 10))
     (polygon
       (pts
         (xy -2.64 1.2)
@@ -74,11 +74,11 @@
       )
     )
   )
-  (zone (net 0) (net_name "") (layer "F.Cu") (tstamp fb3d45e6-87e0-4700-bf36-d1ee69c21568) (hatch edge 0.508)
+  (zone (net 0) (net_name "") (layer "F.Cu") (tstamp fb3d45e6-87e0-4700-bf36-d1ee69c21568) (hatch edge 0.5)
     (connect_pads (clearance 0))
-    (min_thickness 0.254) (filled_areas_thickness no)
+    (min_thickness 0.25) (filled_areas_thickness no)
     (keepout (tracks not_allowed) (vias not_allowed) (pads not_allowed ) (copperpour not_allowed) (footprints allowed))
-    (fill (thermal_gap 0.508) (thermal_bridge_width 0.508) (island_removal_mode 0) (island_area_min 10))
+    (fill (thermal_gap 0.5) (thermal_bridge_width 0.5) (island_removal_mode 0) (island_area_min 10))
     (polygon
       (pts
         (xy -2.64 3.735)
@@ -88,11 +88,11 @@
       )
     )
   )
-  (zone (net 0) (net_name "") (layer "F.Cu") (tstamp d0aacc61-9eff-49b0-945d-df1deb541851) (hatch edge 0.508)
+  (zone (net 0) (net_name "") (layer "F.Cu") (tstamp d0aacc61-9eff-49b0-945d-df1deb541851) (hatch edge 0.5)
     (connect_pads (clearance 0))
-    (min_thickness 0.254) (filled_areas_thickness no)
+    (min_thickness 0.25) (filled_areas_thickness no)
     (keepout (tracks not_allowed) (vias not_allowed) (pads not_allowed ) (copperpour not_allowed) (footprints allowed))
-    (fill (thermal_gap 0.508) (thermal_bridge_width 0.508) (island_removal_mode 0) (island_area_min 10))
+    (fill (thermal_gap 0.5) (thermal_bridge_width 0.5) (island_removal_mode 0) (island_area_min 10))
     (polygon
       (pts
         (xy 0.2 3.735)
@@ -102,11 +102,11 @@
       )
     )
   )
-  (zone (net 0) (net_name "") (layer "B.Cu") (tstamp 51235af9-3047-4057-a7d5-a98e6a367462) (hatch edge 0.508)
+  (zone (net 0) (net_name "") (layer "B.Cu") (tstamp 51235af9-3047-4057-a7d5-a98e6a367462) (hatch edge 0.5)
     (connect_pads (clearance 0))
-    (min_thickness 0.254) (filled_areas_thickness no)
+    (min_thickness 0.25) (filled_areas_thickness no)
     (keepout (tracks not_allowed) (vias not_allowed) (pads not_allowed ) (copperpour not_allowed) (footprints allowed))
-    (fill (thermal_gap 0.508) (thermal_bridge_width 0.508) (island_removal_mode 0) (island_area_min 10))
+    (fill (thermal_gap 0.5) (thermal_bridge_width 0.5) (island_removal_mode 0) (island_area_min 10))
     (polygon
       (pts
         (xy -2.64 3.735)

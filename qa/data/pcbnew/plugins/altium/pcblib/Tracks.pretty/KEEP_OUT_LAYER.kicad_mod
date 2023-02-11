@@ -8,11 +8,11 @@
       (effects (font (size 1.27 1.27) (thickness 0.15)))
     (tstamp b85efbbe-b9ce-4d73-abc0-852cf03a11f8)
   )
-  (zone (net 0) (net_name "") (layers *.Cu) (tstamp aae315f2-6324-4db5-a3c7-b14d512389f2) (hatch edge 0.508)
+  (zone (net 0) (net_name "") (layers *.Cu) (tstamp aae315f2-6324-4db5-a3c7-b14d512389f2) (hatch edge 0.5)
     (connect_pads (clearance 0))
-    (min_thickness 0.254) (filled_areas_thickness no)
+    (min_thickness 0.25) (filled_areas_thickness no)
     (keepout (tracks allowed) (vias allowed) (pads allowed ) (copperpour allowed) (footprints allowed))
-    (fill (thermal_gap 0.508) (thermal_bridge_width 0.508) (island_removal_mode 0) (island_area_min 10))
+    (fill (thermal_gap 0.5) (thermal_bridge_width 0.5) (island_removal_mode 0) (island_area_min 10))
     (polygon
       (pts
         (xy 0.67078 -0.121856)

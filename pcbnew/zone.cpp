@@ -60,9 +60,14 @@ ZONE::ZONE( BOARD_ITEM_CONTAINER* aParent, bool aInFP ) :
     SetLocalFlags( 0 );               // flags temporary used in zone calculations
     m_fillVersion = 5;                // set the "old" way to build filled polygon areas (< 6.0.x)
 
-    m_ZoneMinThickness = EDA_UNIT_UTILS::Mils2IU( pcbIUScale, ZONE_THICKNESS_MIL );
-    m_thermalReliefSpokeWidth = EDA_UNIT_UTILS::Mils2IU( pcbIUScale,  ZONE_THERMAL_RELIEF_COPPER_WIDTH_MIL );
-    m_thermalReliefGap = EDA_UNIT_UTILS::Mils2IU( pcbIUScale, ZONE_THERMAL_RELIEF_GAP_MIL );
+    // Technically not necesssary to set this here, but just ensure a safe min value is set
+    m_ZoneMinThickness = pcbIUScale.mmToIU( ZONE_CLEARANCE_MM );
+
+    // Will be overridden by larger defaults from ZONE_SETTINGS
+    m_thermalReliefSpokeWidth = m_ZoneMinThickness;
+    m_thermalReliefGap        = m_ZoneMinThickness;
+    m_hatchThickness          = m_ZoneMinThickness;
+    m_hatchGap                = m_ZoneMinThickness;
 
     aParent->GetZoneSettings().ExportSetting( *this );
 
@@ -984,7 +989,7 @@ void ZONE::HatchBorder()
 
 int ZONE::GetDefaultHatchPitch()
 {
-    return EDA_UNIT_UTILS::Mils2IU( pcbIUScale, ZONE_BORDER_HATCH_DIST_MIL );
+    return pcbIUScale.mmToIU( ZONE_BORDER_HATCH_DIST_MM );
 }
 
 

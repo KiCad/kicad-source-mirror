@@ -1526,7 +1526,7 @@ ZONE* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
 
     // We divide the thickness by half because we are tracing _inside_ the zone outline
     // This means the radius of curvature will be twice the size for an equivalent EAGLE zone
-    zone->SetMinThickness( std::max<int>( ZONE_THICKNESS_MIN_VALUE_MIL * pcbIUScale.IU_PER_MILS,
+    zone->SetMinThickness( std::max<int>( ZONE_THICKNESS_MIN_VALUE_MM * pcbIUScale.IU_PER_MM,
                                           p.width.ToPcbUnits() / 2 ) );
 
     if( p.isolate )

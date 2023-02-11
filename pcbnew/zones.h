@@ -29,17 +29,16 @@
 
 struct CONVERT_SETTINGS;
 
-// Default values in mils for parameters in ZONE
-#define ZONE_THERMAL_RELIEF_GAP_MIL 20     // default value for ZONE_SETTINGS::m_ThermalReliefGap
-#define ZONE_THERMAL_RELIEF_COPPER_WIDTH_MIL 20 // default value for ZONE_SETTINGS::m_ThermalReliefCopperBridge
-#define ZONE_THICKNESS_MIL 10               // default value for ZONE_SETTINGS::m_ZoneMinThickness
-#define ZONE_THICKNESS_MIN_VALUE_MIL 1      // minimum acceptable value for ZONE_SETTINGS::m_ZoneMinThickness
-#define ZONE_CLEARANCE_MIL 20               // default value for ZONE_SETTINGS::m_ZoneClearance
-#define ZONE_CLEARANCE_MAX_VALUE_MIL 500    // maximum acceptable value for ZONE_SETTINGS::m_ZoneClearance
-#define ZONE_BORDER_HATCH_DIST_MIL 20       // default distance between hatches to draw hatched outlines
-#define ZONE_BORDER_HATCH_MINDIST_MM 0.1    // min distance between hatches to draw hatched outlines
-#define ZONE_BORDER_HATCH_MAXDIST_MM 2.0    // min distance between hatches to draw hatched outlines
-
+// Default values in mm for parameters in ZONE_SETTINGS
+#define ZONE_THERMAL_RELIEF_GAP_MM 0.5          // ZONE_SETTINGS::m_ThermalReliefGap
+#define ZONE_THERMAL_RELIEF_COPPER_WIDTH_MM 0.5 // ZONE_SETTINGS::m_ThermalReliefCopperBridge
+#define ZONE_THICKNESS_MM 0.25                  // ZONE_SETTINGS::m_ZoneMinThickness
+#define ZONE_THICKNESS_MIN_VALUE_MM 0.025       // Minimum for ZONE_SETTINGS::m_ZoneMinThickness
+#define ZONE_CLEARANCE_MM 0.5                   // ZONE_SETTINGS::m_ZoneClearance
+#define ZONE_CLEARANCE_MAX_VALUE_MM 100         // Maximum for ZONE_SETTINGS::m_ZoneClearance
+#define ZONE_BORDER_HATCH_DIST_MM 0.5           // ZONE_SETTINGS::m_BorderHatchPitch
+#define ZONE_BORDER_HATCH_MINDIST_MM 0.1        // Minimum for ZONE_SETTINGS::m_BorderHatchPitch
+#define ZONE_BORDER_HATCH_MAXDIST_MM 2.0        // Maximum for ZONE_SETTINGS::m_BorderHatchPitch
 
 #define ZONE_EXPORT_VALUES  1004        // Copper zone dialog reports wxID_OK, wxID_CANCEL or
                                         // ZONE_EXPORT_VALUES
