@@ -188,6 +188,7 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const TOOL_EVENT&        aTool,
                 if( !aPlacer->PlaceItem( newBoardItem, commit ) )
                 {
                     newBoardItem->SetFlags( oldFlags );
+                    newItem.reset( newBoardItem );
                     continue;
                 }
 
