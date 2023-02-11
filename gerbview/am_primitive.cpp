@@ -55,7 +55,7 @@ static VECTOR2I mapPt( double x, double y, bool isMetric )
 }
 
 
-bool AM_PRIMITIVE::IsAMPrimitiveExposureOn( const D_CODE* aDcode ) const
+bool AM_PRIMITIVE::IsAMPrimitiveExposureOn( APERTURE_MACRO* aApertMacro ) const
 {
     /*
      * Some but not all primitives use the first parameter as an exposure control.
@@ -75,7 +75,7 @@ bool AM_PRIMITIVE::IsAMPrimitiveExposureOn( const D_CODE* aDcode ) const
     case AMP_OUTLINE:
     case AMP_POLYGON:
         // All have an exposure parameter and can return a value (0 or 1)
-        return m_Params[0].GetValue( aDcode ) != 0;
+        return m_Params[0].GetValueFromMacro( aApertMacro ) != 0;
         break;
 
     case AMP_THERMAL:   // Exposure is always on
@@ -88,11 +88,7 @@ bool AM_PRIMITIVE::IsAMPrimitiveExposureOn( const D_CODE* aDcode ) const
 }
 
 
-// TODO(snh): Remove hard coded count
-const int seg_per_circle = 64;   // Number of segments to approximate a circle
-
-
-void AM_PRIMITIVE::ConvertBasicShapeToPolygon( const D_CODE* aDcode,
+void AM_PRIMITIVE::ConvertBasicShapeToPolygon( APERTURE_MACRO* aApertMacro,
                                                SHAPE_POLY_SET& aShapeBuffer )
 {
     // Draw the primitive shape for flashed items.
@@ -100,7 +96,7 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( const D_CODE* aDcode,
     static std::vector<VECTOR2I> polybuffer;
     polybuffer.clear();
 
-    const D_CODE* tool = aDcode;
+    aApertMacro->EvalLocalParams( *this );
 
     switch( m_Primitive_id )
     {
@@ -112,12 +108,12 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( const D_CODE* aDcode,
          * <rotation> is a optional parameter: rotation from origin.
          * type is not stored in parameters list, so the first parameter is exposure
          */
-        ConvertShapeToPolygon( tool, polybuffer );
+        ConvertShapeToPolygon( aApertMacro, polybuffer );
 
         // shape rotation (if any):
         if( m_Params.size() >= 5 )
         {
-            EDA_ANGLE rotation( m_Params[4].GetValue( tool ), DEGREES_T );
+            EDA_ANGLE rotation( m_Params[4].GetValueFromMacro( aApertMacro ), DEGREES_T );
 
             if( !rotation.IsZero() )
             {
@@ -141,10 +137,10 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( const D_CODE* aDcode,
          * type (2), exposure, width, start.x, start.y, end.x, end.y, rotation
          * type is not stored in parameters list, so the first parameter is exposure
          */
-        ConvertShapeToPolygon( tool, polybuffer );
+        ConvertShapeToPolygon( aApertMacro, polybuffer );
 
         // shape rotation:
-        EDA_ANGLE rotation( m_Params[6].GetValue( tool ), DEGREES_T );
+        EDA_ANGLE rotation( m_Params[6].GetValueFromMacro( aApertMacro ), DEGREES_T );
 
         if( !rotation.IsZero() )
         {
@@ -165,10 +161,10 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( const D_CODE* aDcode,
          * type (21), exposure, ,width, height, center pos.x, center pos.y, rotation
          * type is not stored in parameters list, so the first parameter is exposure
          */
-        ConvertShapeToPolygon( tool, polybuffer );
+        ConvertShapeToPolygon( aApertMacro, polybuffer );
 
         // shape rotation:
-        EDA_ANGLE rotation( m_Params[5].GetValue( tool ), DEGREES_T );
+        EDA_ANGLE rotation( m_Params[5].GetValueFromMacro( aApertMacro ), DEGREES_T );
 
         if( !rotation.IsZero() )
         {
@@ -186,10 +182,10 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( const D_CODE* aDcode,
          * type (22), exposure, ,width, height, corner pos.x, corner pos.y, rotation
          * type is not stored in parameters list, so the first parameter is exposure
          */
-        ConvertShapeToPolygon( tool, polybuffer );
+        ConvertShapeToPolygon( aApertMacro, polybuffer );
 
         // shape rotation:
-        EDA_ANGLE rotation( m_Params[5].GetValue( tool ), DEGREES_T );
+        EDA_ANGLE rotation( m_Params[5].GetValueFromMacro( aApertMacro ), DEGREES_T );
 
         if( !rotation.IsZero() )
         {
@@ -210,12 +206,12 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( const D_CODE* aDcode,
          * on.
          */
         std::vector<VECTOR2I> subshape_poly;
-        VECTOR2I center( mapPt( m_Params[0].GetValue( tool ),
-                                 m_Params[1].GetValue( tool ), m_GerbMetric ) );
-        ConvertShapeToPolygon( tool, subshape_poly );
+        VECTOR2I center( mapPt( m_Params[0].GetValueFromMacro( aApertMacro ),
+                         m_Params[1].GetValueFromMacro( aApertMacro ), m_GerbMetric ) );
+        ConvertShapeToPolygon( aApertMacro, subshape_poly );
 
         // shape rotation:
-        EDA_ANGLE rotation( m_Params[5].GetValue( tool ), DEGREES_T );
+        EDA_ANGLE rotation( m_Params[5].GetValueFromMacro( aApertMacro ), DEGREES_T );
 
         // Because a thermal shape has 4 identical sub-shapes, only one is created in subshape_poly.
         // We must draw 4 sub-shapes rotated by 90 deg
@@ -256,17 +252,17 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( const D_CODE* aDcode,
          * crosshair len, rotation.  The type is not stored in parameters list, so the first
          * parameter is pos.x.
          */
-        int outerDiam    = scaletoIU( m_Params[2].GetValue( tool ), m_GerbMetric );
-        int penThickness = scaletoIU( m_Params[3].GetValue( tool ), m_GerbMetric );
-        int gap = scaletoIU( m_Params[4].GetValue( tool ), m_GerbMetric );
-        int numCircles = KiROUND( m_Params[5].GetValue( tool ) );
+        int outerDiam    = scaletoIU( m_Params[2].GetValueFromMacro( aApertMacro ), m_GerbMetric );
+        int penThickness = scaletoIU( m_Params[3].GetValueFromMacro( aApertMacro ), m_GerbMetric );
+        int gap = scaletoIU( m_Params[4].GetValueFromMacro( aApertMacro ), m_GerbMetric );
+        int numCircles = KiROUND( m_Params[5].GetValueFromMacro( aApertMacro ) );
 
         // Adjust the allowed approx error to convert arcs to segments:
         int arc_to_seg_error = gerbIUScale.mmToIU( 0.005 );    // Allow 5 microns
 
         // Draw circles @ position pos.x, pos.y given by the tool:
-        VECTOR2I center( mapPt( m_Params[0].GetValue( tool ), m_Params[1].GetValue( tool ),
-                         m_GerbMetric ) );
+        VECTOR2I center( mapPt( m_Params[0].GetValueFromMacro( aApertMacro ),
+                         m_Params[1].GetValueFromMacro( aApertMacro ), m_GerbMetric ) );
 
         // adjust outerDiam by this on each nested circle
         int diamAdjust = ( gap + penThickness ) * 2;
@@ -292,9 +288,9 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( const D_CODE* aDcode,
         }
 
         // Draw the cross:
-        ConvertShapeToPolygon( tool, polybuffer );
+        ConvertShapeToPolygon( aApertMacro, polybuffer );
 
-        EDA_ANGLE rotation( m_Params[8].GetValue( tool ), DEGREES_T );
+        EDA_ANGLE rotation( m_Params[8].GetValueFromMacro( aApertMacro ), DEGREES_T );
 
         for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
         {
@@ -325,11 +321,11 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( const D_CODE* aDcode,
          * type is not stored in parameters list, so the first parameter is exposure
          */
         // m_Params[0] is the exposure and m_Params[1] is the corners count after the first corner
-        int numCorners = (int) m_Params[1].GetValue( tool );
+        int numCorners = (int) m_Params[1].GetValueFromMacro( aApertMacro );
 
         // the shape rotation is the last param of list, after corners
         int       last_prm = m_Params.size() - 1;
-        EDA_ANGLE rotation( m_Params[last_prm].GetValue( tool ), DEGREES_T );
+        EDA_ANGLE rotation( m_Params[last_prm].GetValueFromMacro( aApertMacro ), DEGREES_T );
         VECTOR2I  pos;
 
         // Read points.
@@ -340,9 +336,9 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( const D_CODE* aDcode,
 
         for( int i = 0; i <= numCorners; ++i )
         {
-            pos.x = scaletoIU( m_Params[prm_idx].GetValue( tool ), m_GerbMetric );
+            pos.x = scaletoIU( m_Params[prm_idx].GetValueFromMacro( aApertMacro ), m_GerbMetric );
             prm_idx++;
-            pos.y = scaletoIU( m_Params[prm_idx].GetValue( tool ), m_GerbMetric );
+            pos.y = scaletoIU( m_Params[prm_idx].GetValueFromMacro( aApertMacro ), m_GerbMetric );
             prm_idx++;
             polybuffer.push_back(pos);
 
@@ -373,13 +369,14 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( const D_CODE* aDcode,
          * type(5), exposure, vertices count, pox.x, pos.y, diameter, rotation
          * type is not stored in parameters list, so the first parameter is exposure
          */
-        VECTOR2I curPos( mapPt( m_Params[2].GetValue( tool ), m_Params[3].GetValue( tool ), m_GerbMetric ) );
+        VECTOR2I curPos( mapPt( m_Params[2].GetValueFromMacro( aApertMacro ),
+                                m_Params[3].GetValueFromMacro( aApertMacro ), m_GerbMetric ) );
 
         // Creates the shape:
-        ConvertShapeToPolygon( tool, polybuffer );
+        ConvertShapeToPolygon( aApertMacro, polybuffer );
 
         // rotate polygon
-        EDA_ANGLE rotation( m_Params[5].GetValue( tool ), DEGREES_T );
+        EDA_ANGLE rotation( m_Params[5].GetValueFromMacro( aApertMacro ), DEGREES_T );
 
         for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
         {
@@ -408,11 +405,9 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( const D_CODE* aDcode,
 }
 
 
-void AM_PRIMITIVE::ConvertShapeToPolygon( const D_CODE* aDcode,
+void AM_PRIMITIVE::ConvertShapeToPolygon( APERTURE_MACRO* aApertMacro,
                                           std::vector<VECTOR2I>&  aBuffer )
 {
-    const D_CODE* tool = aDcode;
-
     switch( m_Primitive_id )
     {
     case AMP_CIRCLE:
@@ -423,17 +418,19 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( const D_CODE* aDcode,
          * <rotation> is a optional parameter: rotation from origin.
          * type is not stored in parameters list, so the first parameter is exposure
          */
-        int radius = scaletoIU( m_Params[1].GetValue( tool ), m_GerbMetric ) / 2;
+        int radius = scaletoIU( m_Params[1].GetValueFromMacro( aApertMacro ), m_GerbMetric ) / 2;
 
         // A circle primitive can have a 0 size (for instance when used in roundrect macro),
         // so skip it
         if( radius <= 0 )
             break;
 
-        VECTOR2I  center = mapPt( m_Params[2].GetValue( tool ), m_Params[3].GetValue( tool ),
+        VECTOR2I  center = mapPt( m_Params[2].GetValueFromMacro( aApertMacro ), m_Params[3].GetValueFromMacro( aApertMacro ),
                                   m_GerbMetric );
         VECTOR2I  corner;
-        EDA_ANGLE delta = ANGLE_360 / seg_per_circle;    // rot angle in 0.1 degree
+
+        const int seg_per_circle = 64;   // Number of segments to approximate a circle
+        EDA_ANGLE delta = ANGLE_360 / seg_per_circle;
 
         for( EDA_ANGLE angle = ANGLE_0; angle < ANGLE_360; angle += delta )
         {
@@ -450,11 +447,11 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( const D_CODE* aDcode,
     case AMP_LINE2:
     case AMP_LINE20:        // Line with rectangle ends. (Width, start and end pos + rotation)
     {
-        int      width = scaletoIU( m_Params[1].GetValue( tool ), m_GerbMetric );
+        int      width = scaletoIU( m_Params[1].GetValueFromMacro( aApertMacro ), m_GerbMetric );
         VECTOR2I start =
-                mapPt( m_Params[2].GetValue( tool ), m_Params[3].GetValue( tool ), m_GerbMetric );
+                mapPt( m_Params[2].GetValueFromMacro( aApertMacro ), m_Params[3].GetValueFromMacro( aApertMacro ), m_GerbMetric );
         VECTOR2I end =
-                mapPt( m_Params[4].GetValue( tool ), m_Params[5].GetValue( tool ), m_GerbMetric );
+                mapPt( m_Params[4].GetValueFromMacro( aApertMacro ), m_Params[5].GetValueFromMacro( aApertMacro ), m_GerbMetric );
         VECTOR2I delta = end - start;
         int     len   = KiROUND( EuclideanNorm( delta ) );
 
@@ -485,9 +482,9 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( const D_CODE* aDcode,
     case AMP_LINE_CENTER:
     {
         VECTOR2I size =
-                mapPt( m_Params[1].GetValue( tool ), m_Params[2].GetValue( tool ), m_GerbMetric );
+                mapPt( m_Params[1].GetValueFromMacro( aApertMacro ), m_Params[2].GetValueFromMacro( aApertMacro ), m_GerbMetric );
         VECTOR2I pos =
-                mapPt( m_Params[3].GetValue( tool ), m_Params[4].GetValue( tool ), m_GerbMetric );
+                mapPt( m_Params[3].GetValueFromMacro( aApertMacro ), m_Params[4].GetValueFromMacro( aApertMacro ), m_GerbMetric );
 
         // Build poly:
         pos.x -= size.x / 2;
@@ -505,9 +502,9 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( const D_CODE* aDcode,
     case AMP_LINE_LOWER_LEFT:
     {
         VECTOR2I size =
-                mapPt( m_Params[1].GetValue( tool ), m_Params[2].GetValue( tool ), m_GerbMetric );
+                mapPt( m_Params[1].GetValueFromMacro( aApertMacro ), m_Params[2].GetValueFromMacro( aApertMacro ), m_GerbMetric );
         VECTOR2I lowerLeft =
-                mapPt( m_Params[3].GetValue( tool ), m_Params[4].GetValue( tool ), m_GerbMetric );
+                mapPt( m_Params[3].GetValueFromMacro( aApertMacro ), m_Params[4].GetValueFromMacro( aApertMacro ), m_GerbMetric );
 
         // Build poly:
         aBuffer.push_back( lowerLeft );
@@ -526,14 +523,14 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( const D_CODE* aDcode,
         // this first rotated by 90, 180 and 270 deg.
         // m_Params = center.x (unused here), center.y (unused here), outside diam, inside diam,
         // crosshair thickness.
-        int outerRadius   = scaletoIU( m_Params[2].GetValue( tool ), m_GerbMetric ) / 2;
-        int innerRadius   = scaletoIU( m_Params[3].GetValue( tool ), m_GerbMetric ) / 2;
+        int outerRadius   = scaletoIU( m_Params[2].GetValueFromMacro( aApertMacro ), m_GerbMetric ) / 2;
+        int innerRadius   = scaletoIU( m_Params[3].GetValueFromMacro( aApertMacro ), m_GerbMetric ) / 2;
 
         // Safety checks to guarantee no divide-by-zero
         outerRadius = std::max( 1, outerRadius );
         innerRadius = std::max( 1, innerRadius );
 
-        int       halfthickness  = scaletoIU( m_Params[4].GetValue( tool ), m_GerbMetric ) / 2;
+        int       halfthickness  = scaletoIU( m_Params[4].GetValueFromMacro( aApertMacro ), m_GerbMetric ) / 2;
         EDA_ANGLE angle_start( asin( (double) halfthickness / innerRadius ), RADIANS_T );
 
         // Draw shape in the first quadrant (X and Y > 0)
@@ -582,8 +579,8 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( const D_CODE* aDcode,
     {
         // A cross hair with n concentric circles. Only the cross is built as
         // polygon because circles can be drawn easily
-        int crossHairThickness = scaletoIU( m_Params[6].GetValue( tool ), m_GerbMetric );
-        int crossHairLength    = scaletoIU( m_Params[7].GetValue( tool ), m_GerbMetric );
+        int crossHairThickness = scaletoIU( m_Params[6].GetValueFromMacro( aApertMacro ), m_GerbMetric );
+        int crossHairLength    = scaletoIU( m_Params[7].GetValueFromMacro( aApertMacro ), m_GerbMetric );
 
         // Create cross. First create 1/4 of the shape.
         // Others point are the same, rotated by 90, 180 and 270 deg
@@ -616,8 +613,8 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( const D_CODE* aDcode,
 
     case AMP_POLYGON:   // Creates a regular polygon
     {
-        int vertexcount = KiROUND( m_Params[1].GetValue( tool ) );
-        int radius    = scaletoIU( m_Params[4].GetValue( tool ), m_GerbMetric ) / 2;
+        int vertexcount = KiROUND( m_Params[1].GetValueFromMacro( aApertMacro ) );
+        int radius    = scaletoIU( m_Params[4].GetValueFromMacro( aApertMacro ), m_GerbMetric ) / 2;
 
         // rs274x said: vertex count = 3 ... 10, and the first corner is on the X axis
         if( vertexcount < 3 )

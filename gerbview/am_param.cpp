@@ -69,7 +69,8 @@ bool AM_PARAM::IsImmediate() const
     return is_immediate;
 }
 
-double AM_PARAM::GetValue( const D_CODE* aDcode ) const
+
+double AM_PARAM::GetValueFromMacro( APERTURE_MACRO* aApertureMacro ) const
 {
     // In macros, actual values are sometimes given by an expression like:
     // 0-$2/2-$4
@@ -102,22 +103,15 @@ double AM_PARAM::GetValue( const D_CODE* aDcode ) const
                 break;
 
             case PUSHPARM:
-                // a defered value: get the actual parameter from the aDcode
-                if( aDcode )    // should be always true here
+                // a defered value: get the actual parameter from the aperture macro
+                if( aApertureMacro )    // should be always true here
                 {
-                    if( item.GetIndex() <= aDcode->GetParamCount() )
-                    {
-                        curr_value = aDcode->GetParam( item.GetIndex() );
-                    }
-                    else    // Get parameter from local param definition
-                    {
-                        const APERTURE_MACRO * am_parent = aDcode->GetMacro();
-                        curr_value = am_parent->GetLocalParam( aDcode, item.GetIndex() );
-                    }
-                }
+                    // Get the actual value
+                    curr_value = aApertureMacro->GetLocalParamValue( item.GetIndex() );
+               }
                 else
                 {
-                    wxFAIL_MSG( wxT( "AM_PARAM::GetValue(): NULL param aDcode" ) );
+                    wxFAIL_MSG( wxT( "AM_PARAM::GetValue(): NULL param aApertureMacro" ) );
                 }
 
                 ops.emplace_back( curr_value );
@@ -129,10 +123,8 @@ double AM_PARAM::GetValue( const D_CODE* aDcode ) const
                 break;
 
             default:
-                wxFAIL_MSG( wxString::Format( wxT( "AM_PARAM::GetValue(): dcode %d prm %d/%d: "
-                                                   "unexpected type %d" ),
-                                               aDcode ? aDcode->m_Num_Dcode : -1, ii,
-                                               m_paramStack.size(), item.GetType() ) );
+                wxFAIL_MSG( wxString::Format( wxT( "AM_PARAM::GetValue(): unexpected prm type %d" ),
+                                                   item.GetType() ) );
                 break;
         }
     }
@@ -141,6 +133,7 @@ double AM_PARAM::GetValue( const D_CODE* aDcode ) const
 
     return result;
 }
+
 
 /**
  * add an operator/operand to the current stack

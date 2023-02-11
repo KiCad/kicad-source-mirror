@@ -105,6 +105,7 @@ public:
      * Return a parameter stored in parameter list.
      *
      * @param aIdx is the index of parameter.
+     * for n parameters from the Dcode definition, aIdx = 1 .. n, not 0
      */
     double GetParam( unsigned aIdx ) const
     {

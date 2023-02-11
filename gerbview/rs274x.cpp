@@ -1132,7 +1132,7 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
             // in advance, i.e. be immediate.
             wxASSERT( prim.m_Params[1].IsImmediate() );
 
-            paramCount = (int) prim.m_Params[1].GetValue( nullptr ) * 2 + 1;
+            paramCount = (int) prim.m_Params[1].GetValueFromMacro( nullptr ) * 2 + 1;
 
             for( int jj = 0; jj < paramCount && *aText != '*'; ++jj )
             {

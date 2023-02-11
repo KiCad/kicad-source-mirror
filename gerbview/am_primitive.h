@@ -117,17 +117,20 @@ public:
      * In a aperture macro shape, a basic primitive with exposure off is a hole in the shape
      * it is NOT a negative shape
      */
-    bool  IsAMPrimitiveExposureOn( const D_CODE* aDcode ) const;
+    bool  IsAMPrimitiveExposureOn( APERTURE_MACRO* aApertMacro ) const;
 
     /**
      * Generate the polygonal shape of the primitive shape of an aperture
      * macro instance.
      *
-     * @param aParent is the parent GERBER_DRAW_ITEM which is actually drawn.
+     * @param aApertMacro is the aperture macro using this primitive.
      * @param aShapeBuffer is a SHAPE_POLY_SET to put the shape converted to a polygon.
-     * @param aShapePos is the actual shape position.
      */
+#if 0
     void ConvertBasicShapeToPolygon( const D_CODE* aDcode,
+                                     SHAPE_POLY_SET& aShapeBuffer );
+#endif
+    void ConvertBasicShapeToPolygon( APERTURE_MACRO* aApertMacro,
                                      SHAPE_POLY_SET& aShapeBuffer );
 
 private:
@@ -141,7 +144,8 @@ private:
      *       converted because circles are very easy to draw (no rotation problem) so convert
      *       them in polygons and draw them as polygons is not a good idea.
      */
-    void ConvertShapeToPolygon( const D_CODE* aDcode, std::vector<VECTOR2I>& aBuffer );
+    //void ConvertShapeToPolygon( const D_CODE* aDcode, std::vector<VECTOR2I>& aBuffer );
+    void ConvertShapeToPolygon( APERTURE_MACRO* aApertMacroe, std::vector<VECTOR2I>& aBuffer );
 };
 
 
