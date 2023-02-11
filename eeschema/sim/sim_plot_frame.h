@@ -95,38 +95,31 @@ public:
     void AddCurrentPlot( const wxString& aDeviceName );
 
     /**
-     * Get/Set the number of decimal places to show in a cursor value.
+     * Get/Set the number of significant digits and the range for formatting a cursor value.
      * @param aValueCol 0 indicates the X value column; 1 the Y value.
      */
-    int GetCursorPrecision( int aCursorId, int aValueCol ) const
+    SPICE_VALUE_FORMAT GetCursorFormat( int aCursorId, int aValueCol ) const
     {
-        return m_cursorPrecision[ aCursorId ][ aValueCol ];
+        return m_cursorFormats[ aCursorId ][ aValueCol ];
     }
 
-    void SetCursorPrecision( int aCursorId, int aValueCol, int aPrecision )
+    void SetCursorFormat( int aCursorId, int aValueCol, const SPICE_VALUE_FORMAT& aFormat )
     {
-        m_cursorPrecision[ aCursorId ][ aValueCol ] = aPrecision;
+        m_cursorFormats[ aCursorId ][ aValueCol ] = aFormat;
 
         wxCommandEvent dummy;
         onCursorUpdate( dummy );
     }
 
-    /**
-     * Get/Set the range of a cursor value.
-     * @param aValueCol 0 indicates the X value column; 1 the Y value.
-     * @param aScale "~" + unit indicates automatic; the rest are SI prefix + unit.
-     */
-    wxString GetCursorRange( int aCursorId, int aValueCol ) const
+    SPICE_VALUE_FORMAT GetMeasureFormat( int aRow ) const
     {
-        return m_cursorRange[ aCursorId ][ aValueCol ];
+        return m_measurementFormats[ aRow ];
     }
 
-    void SetCursorRange( int aCursorId, int aValueCol, const wxString& aRange )
+    void SetMeasureFormat( int aRow, const SPICE_VALUE_FORMAT& aFormat )
     {
-        m_cursorRange[ aCursorId ][ aValueCol ] = aRange;
-
-        wxCommandEvent dummy;
-        onCursorUpdate( dummy );
+        m_measurementFormats[ aRow ] = aFormat;
+        updateMeasurement( aRow );
     }
 
     /**
@@ -153,6 +146,18 @@ public:
      */
     void UpdateTunerValue( const SCH_SHEET_PATH& aSheetPath, const KIID& aSymbol,
                            const wxString& aRef, const wxString& aValue );
+
+    /**
+     * Add a measurement to the measurements grid.
+     * @param aCmd AVG, MIN, MAX, PP, RMS, MIN_AT, or MAX_AT
+     * @param aSignal
+     */
+    void AddMeasurement( const wxString& aCmd, const wxString& aSignal );
+
+    /**
+     * Delete a row from the measurements grid.
+     */
+    void DeleteMeasurement( int aRow );
 
     /**
      * Return the currently opened plot panel (or NULL if there is none).
@@ -276,6 +281,11 @@ private:
     void updateSignalsGrid();
 
     /**
+     * Update a measurement in the measurements grid.
+     */
+    void updateMeasurement( int aRow );
+
+    /**
      * Apply component values specified using tuner sliders to the current netlist.
      */
     void applyTuners();
@@ -307,6 +317,7 @@ private:
 
     void onSignalsGridCellChanged( wxGridEvent& aEvent ) override;
     void onCursorsGridCellChanged( wxGridEvent& aEvent ) override;
+    void onMeasurementsGridCellChanged( wxGridEvent& aEvent ) override;
 
     void onWorkbookModified( wxCommandEvent& event );
     void onWorkbookClrModified( wxCommandEvent& event );
@@ -340,17 +351,19 @@ private:
     ///< Panel that was used as the most recent one for simulations
     SIM_PANEL_BASE*                        m_lastSimPlot;
 
-    // Variables for temporary storage:
-    int           m_splitterLeftRightSashPosition;
-    int           m_splitterPlotAndConsoleSashPosition;
-    int           m_splitterSignalsSashPosition;
-    int           m_splitterTuneValuesSashPosition;
-    bool          m_darkMode;
-    unsigned int  m_plotNumber;
-    bool          m_simFinished;
+    SPICE_VALUE_FORMAT                     m_cursorFormats[3][2];
+    std::vector<SPICE_VALUE_FORMAT>        m_measurementFormats;
 
-    int           m_cursorPrecision[3][2];
-    wxString      m_cursorRange[3][2];
+    // Variables for temporary storage:
+    int                   m_splitterLeftRightSashPosition;
+    int                   m_splitterPlotAndConsoleSashPosition;
+    int                   m_splitterSignalsSashPosition;
+    int                   m_splitterCursorsSashPosition;
+    int                   m_splitterTuneValuesSashPosition;
+    bool                  m_darkMode;
+    unsigned int          m_plotNumber;
+    bool                  m_simFinished;
+    unsigned int          m_outputCounter;
 };
 
 // Commands

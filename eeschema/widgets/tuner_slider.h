@@ -76,6 +76,8 @@ public:
     bool SetMin( const SPICE_VALUE& aVal );
     bool SetMax( const SPICE_VALUE& aVal );
 
+    void ShowChangedLanguage();
+
 private:
     void updateComponentValue();
     void updateSlider();
@@ -99,8 +101,10 @@ private:
     void onValueTextEnter( wxCommandEvent& event ) override;
     void onMinTextEnter( wxCommandEvent& event ) override;
 
+private:
     KIID            m_symbol;
     SCH_SHEET_PATH  m_sheetPath;
+    wxString        m_ref;
 
     SPICE_VALUE     m_min;
     SPICE_VALUE     m_max;

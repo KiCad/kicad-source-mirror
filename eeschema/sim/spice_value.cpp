@@ -191,9 +191,9 @@ wxString SPICE_VALUE::ToString() const
 }
 
 
-wxString SPICE_VALUE::ToString( int aPrecision, const wxString& aRange )
+wxString SPICE_VALUE::ToString( const SPICE_VALUE_FORMAT& aFormat )
 {
-    wxString range( aRange );
+    wxString range( aFormat.Range );
 
     if( range.StartsWith( wxS( "~" ) ) )
     {
@@ -202,7 +202,7 @@ wxString SPICE_VALUE::ToString( int aPrecision, const wxString& aRange )
     }
     else
     {
-        SPICE_VALUE::UNIT_PREFIX rangePrefix = ParseSIPrefix( aRange[0] );
+        SPICE_VALUE::UNIT_PREFIX rangePrefix = ParseSIPrefix( range[0] );
         m_base = m_base * std::pow( 10, m_prefix - rangePrefix );
         m_prefix = rangePrefix;
     }
@@ -222,8 +222,8 @@ wxString SPICE_VALUE::ToString( int aPrecision, const wxString& aRange )
         scale -= 1;
     }
 
-    mantissa = KiROUND( mantissa * std::pow( 10, aPrecision - 1 ) );
-    mantissa *= std::pow( 10, scale - aPrecision + 1 );
+    mantissa = KiROUND( mantissa * std::pow( 10, aFormat.Precision - 1 ) );
+    mantissa *= std::pow( 10, scale - aFormat.Precision + 1 );
 
     wxString res = wxString::FromCDouble( mantissa );
     StripZeros( res );

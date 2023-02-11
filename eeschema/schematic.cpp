@@ -639,7 +639,7 @@ wxString SCHEMATIC::GetOperatingPoint( const wxString& aNetName, int aPrecision,
     auto it = m_operatingPoints.find( spiceNetName );
 
     if( it != m_operatingPoints.end() )
-        return SPICE_VALUE( it->second ).ToString( aPrecision, aRange );
+        return SPICE_VALUE( it->second ).ToString( { aPrecision, aRange } );
     else if( m_operatingPoints.empty() )
         return wxS( "--" );
     else

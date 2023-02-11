@@ -29,7 +29,6 @@ class WX_GRID;
 #include <wx/splitter.h>
 #include <wx/srchctrl.h>
 #include <wx/grid.h>
-#include <wx/stattext.h>
 #include <wx/frame.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -61,13 +60,16 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		wxPanel* m_panelSignals;
 		wxSearchCtrl* m_filter;
 		WX_GRID* m_signalsGrid;
-		wxPanel* m_panelCursorsAndTune;
-		wxSplitterWindow* m_splitterTuneValues;
+		wxPanel* m_panelCMT;
+		wxSplitterWindow* m_splitterCursors;
 		wxPanel* m_panelCursors;
 		WX_GRID* m_cursorsGrid;
-		wxPanel* m_tunePanel;
-		wxStaticText* m_staticTextTune;
-		wxBoxSizer* m_tuneSizer;
+		wxPanel* m_panelMT;
+		wxSplitterWindow* m_splitterMeasurements;
+		wxPanel* m_panelMeasurements;
+		WX_GRID* m_measurementsGrid;
+		wxPanel* m_panelTuners;
+		wxBoxSizer* m_sizerTuners;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void onPlotDragged( wxAuiNotebookEvent& event ) { event.Skip(); }
@@ -78,6 +80,7 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		virtual void OnFilterText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSignalsGridCellChanged( wxGridEvent& event ) { event.Skip(); }
 		virtual void onCursorsGridCellChanged( wxGridEvent& event ) { event.Skip(); }
+		virtual void onMeasurementsGridCellChanged( wxGridEvent& event ) { event.Skip(); }
 
 
 	public:
@@ -104,10 +107,16 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 			m_splitterSignals->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIM_PLOT_FRAME_BASE::m_splitterSignalsOnIdle ), NULL, this );
 		}
 
-		void m_splitterTuneValuesOnIdle( wxIdleEvent& )
+		void m_splitterCursorsOnIdle( wxIdleEvent& )
 		{
-			m_splitterTuneValues->SetSashPosition( 0 );
-			m_splitterTuneValues->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIM_PLOT_FRAME_BASE::m_splitterTuneValuesOnIdle ), NULL, this );
+			m_splitterCursors->SetSashPosition( 0 );
+			m_splitterCursors->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIM_PLOT_FRAME_BASE::m_splitterCursorsOnIdle ), NULL, this );
+		}
+
+		void m_splitterMeasurementsOnIdle( wxIdleEvent& )
+		{
+			m_splitterMeasurements->SetSashPosition( 0 );
+			m_splitterMeasurements->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIM_PLOT_FRAME_BASE::m_splitterMeasurementsOnIdle ), NULL, this );
 		}
 
 };

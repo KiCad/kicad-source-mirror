@@ -425,6 +425,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "simulator.cursors_panel_height",
             &m_Simulator.cursors_panel_height, 0 ) );
 
+    m_params.emplace_back( new PARAM<int>( "simulator.measurements_panel_height",
+            &m_Simulator.measurements_panel_height, 0 ) );
+
     m_params.emplace_back( new PARAM<bool>( "simulator.white_background",
             &m_Simulator.white_background, false ) );
 

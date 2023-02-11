@@ -40,20 +40,21 @@
 
 TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent,
                             const SCH_SHEET_PATH& aSheetPath, SCH_SYMBOL* aSymbol ) :
-    TUNER_SLIDER_BASE( aParent ),
-    m_symbol( aSymbol->m_Uuid ), m_sheetPath( aSheetPath ),
-    m_min( 0.0 ),
-    m_max( 0.0 ),
-    m_value( 0.0 ),
-    m_frame ( aFrame )
+        TUNER_SLIDER_BASE( aParent ),
+        m_symbol( aSymbol->m_Uuid ),
+        m_sheetPath( aSheetPath ),
+        m_ref( aSymbol->GetRef( &aSheetPath ) ),
+        m_min( 0.0 ),
+        m_max( 0.0 ),
+        m_value( 0.0 ),
+        m_frame ( aFrame )
 {
-    wxString          ref = aSymbol->GetRef( &m_sheetPath );
-    const SPICE_ITEM* item = aFrame->GetExporter()->FindItem( std::string( ref.ToUTF8() ) );
+    const SPICE_ITEM* item = aFrame->GetExporter()->FindItem( std::string( m_ref.ToUTF8() ) );
 
     if( !item )
-        throw KI_PARAM_ERROR( wxString::Format( _( "%s not found" ), ref ) );
+        throw KI_PARAM_ERROR( wxString::Format( _( "%s not found" ), m_ref ) );
 
-    m_name->SetLabel( ref );
+    m_name->SetLabel( wxString::Format( _( "Tune %s" ), m_ref ) );
     m_closeBtn->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
 
     m_e24->SetBitmap( KiBitmap( BITMAPS::e_24 ) );
@@ -72,7 +73,7 @@ TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent,
     {
         throw KI_PARAM_ERROR( wxString::Format( _( "%s has simulation model of type '%s %s'; "
                                                    "only RLC passives be tuned" ),
-                                                ref,
+                                                m_ref,
                                                 item->model->GetDeviceInfo().fieldValue,
                                                 item->model->GetTypeInfo().fieldValue ) );
     }
@@ -104,6 +105,12 @@ TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent,
     updateSlider();
 
     Layout();
+}
+
+
+void TUNER_SLIDER::ShowChangedLanguage()
+{
+    m_name->SetLabel( wxString::Format( _( "Tune %s" ), m_ref ) );
 }
 
 

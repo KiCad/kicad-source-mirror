@@ -30,6 +30,13 @@
 #include <wx/string.h>
 #include <wx/valtext.h>
 
+struct SPICE_VALUE_FORMAT
+{
+    int      Precision;
+    wxString Range;
+};
+
+
 ///< Helper class to handle Spice way of expressing values (e.g. 10.5 Meg)
 class SPICE_VALUE
 {
@@ -87,7 +94,7 @@ public:
      * @param aPrecision number of significant digits
      * @param aRange "~" + unit for autorage; otherwise SI prefix + unit
      */
-    wxString ToString( int aPrecision, const wxString& aRange );
+    wxString ToString( const SPICE_VALUE_FORMAT& aFormat );
 
     /**
      * Return string value in Spice format (e.g. 123.3456789k).

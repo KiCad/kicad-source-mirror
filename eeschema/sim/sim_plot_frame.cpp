@@ -129,10 +129,89 @@ enum CURSORS_GRID_COLUMNS
 };
 
 
+enum MEASUREMENTS_GIRD_COLUMNS
+{
+    COL_MEASUREMENT = 0,
+    COL_MEASUREMENT_VALUE
+};
+
+
 enum
 {
-    MYID_FORMAT_VALUE = GRIDTRICKS_FIRST_CLIENT_ID
+    MYID_MEASURE_MIN = GRIDTRICKS_FIRST_CLIENT_ID,
+    MYID_MEASURE_MAX,
+    MYID_MEASURE_AVE,
+    MYID_MEASURE_RMS,
+    MYID_MEASURE_PP,
+    MYID_MEASURE_MIN_AT,
+    MYID_MEASURE_MAX_AT,
+
+    MYID_FORMAT_VALUE,
+    MYID_DELETE_MEASUREMENT
 };
+
+
+class SIGNALS_GRID_TRICKS : public GRID_TRICKS
+{
+public:
+    SIGNALS_GRID_TRICKS( SIM_PLOT_FRAME* aParent, WX_GRID* aGrid ) :
+            GRID_TRICKS( aGrid ),
+            m_parent( aParent )
+    {}
+
+protected:
+    void showPopupMenu( wxMenu& menu, wxGridEvent& aEvent ) override;
+    void doPopupSelection( wxCommandEvent& event ) override;
+
+protected:
+    SIM_PLOT_FRAME* m_parent;
+    int             m_menuRow;
+    int             m_menuCol;
+};
+
+
+void SIGNALS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
+{
+    m_menuRow = aEvent.GetRow();
+    m_menuCol = aEvent.GetCol();
+
+    if( m_menuCol == COL_SIGNAL_NAME )
+    {
+        wxString msg = m_grid->GetCellValue( m_menuRow, m_menuCol );
+
+        menu.Append( MYID_MEASURE_MIN, _( "Measure Min" ) );
+        menu.Append( MYID_MEASURE_MAX, _( "Measure Max" ) );
+        menu.Append( MYID_MEASURE_AVE, _( "Measure Average" ) );
+        menu.Append( MYID_MEASURE_RMS, _( "Measure RMS" ) );
+        menu.Append( MYID_MEASURE_PP, _( "Measure Peak-to-peak" ) );
+        menu.Append( MYID_MEASURE_MIN_AT, _( "Measure Time of Min" ) );
+        menu.Append( MYID_MEASURE_MAX_AT, _( "Measure Time of Max" ) );
+        menu.AppendSeparator();
+    }
+
+    GRID_TRICKS::showPopupMenu( menu, aEvent );
+}
+
+
+void SIGNALS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
+{
+    if( event.GetId() == MYID_MEASURE_MIN )
+        m_parent->AddMeasurement( wxS( "MIN" ), m_grid->GetCellValue( m_menuRow, m_menuCol ) );
+    else if( event.GetId() == MYID_MEASURE_MAX )
+        m_parent->AddMeasurement( wxS( "MAX" ), m_grid->GetCellValue( m_menuRow, m_menuCol ) );
+    else if( event.GetId() == MYID_MEASURE_AVE )
+        m_parent->AddMeasurement( wxS( "AVE" ), m_grid->GetCellValue( m_menuRow, m_menuCol ) );
+    else if( event.GetId() == MYID_MEASURE_RMS )
+        m_parent->AddMeasurement( wxS( "RMS" ), m_grid->GetCellValue( m_menuRow, m_menuCol ) );
+    else if( event.GetId() == MYID_MEASURE_PP )
+        m_parent->AddMeasurement( wxS( "PP" ), m_grid->GetCellValue( m_menuRow, m_menuCol ) );
+    else if( event.GetId() == MYID_MEASURE_MIN_AT )
+        m_parent->AddMeasurement( wxS( "MIN_AT" ), m_grid->GetCellValue( m_menuRow, m_menuCol ) );
+    else if( event.GetId() == MYID_MEASURE_MAX_AT )
+        m_parent->AddMeasurement( wxS( "MAX_AT" ), m_grid->GetCellValue( m_menuRow, m_menuCol ) );
+    else
+        GRID_TRICKS::doPopupSelection( event );
+}
 
 
 class CURSORS_GRID_TRICKS : public GRID_TRICKS
@@ -163,8 +242,7 @@ void CURSORS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
     {
         wxString msg = m_grid->GetColLabelValue( m_menuCol );
 
-        menu.Append( MYID_FORMAT_VALUE, wxString::Format( _( "Format..." ), msg ),
-                     wxString::Format( _( "Specify %s precision and range" ), msg.Lower() ) );
+        menu.Append( MYID_FORMAT_VALUE, wxString::Format( _( "Format %s..." ), msg ) );
         menu.AppendSeparator();
     }
 
@@ -176,18 +254,68 @@ void CURSORS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
 {
     if( event.GetId() == MYID_FORMAT_VALUE )
     {
-        int      cursorId = m_menuRow;
-        int      cursorAxis = m_menuCol - COL_CURSOR_X;
-        int      precision = m_parent->GetCursorPrecision( cursorId, cursorAxis );
-        wxString range = m_parent->GetCursorRange( cursorId, cursorAxis );
-
-        DIALOG_SIM_FORMAT_VALUE formatDialog( m_parent, &precision, &range );
+        int                     cursorId = m_menuRow;
+        int                     cursorAxis = m_menuCol - COL_CURSOR_X;
+        SPICE_VALUE_FORMAT      format = m_parent->GetCursorFormat( cursorId, cursorAxis );
+        DIALOG_SIM_FORMAT_VALUE formatDialog( m_parent, &format.Precision, &format.Range );
 
         if( formatDialog.ShowModal() == wxID_OK )
-        {
-            m_parent->SetCursorPrecision( cursorId, cursorAxis, precision );
-            m_parent->SetCursorRange( cursorId, cursorAxis, range );
-        }
+            m_parent->SetCursorFormat( cursorId, cursorAxis, format );
+    }
+    else
+    {
+        GRID_TRICKS::doPopupSelection( event );
+    }
+}
+
+
+class MEASUREMENTS_GRID_TRICKS : public GRID_TRICKS
+{
+public:
+    MEASUREMENTS_GRID_TRICKS( SIM_PLOT_FRAME* aParent, WX_GRID* aGrid ) :
+            GRID_TRICKS( aGrid ),
+            m_parent( aParent )
+    {}
+
+protected:
+    void showPopupMenu( wxMenu& menu, wxGridEvent& aEvent ) override;
+    void doPopupSelection( wxCommandEvent& event ) override;
+
+protected:
+    SIM_PLOT_FRAME* m_parent;
+    int             m_menuRow;
+    int             m_menuCol;
+};
+
+
+void MEASUREMENTS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
+{
+    m_menuRow = aEvent.GetRow();
+    m_menuCol = aEvent.GetCol();
+
+    if( m_menuCol == COL_MEASUREMENT_VALUE )
+        menu.Append( MYID_FORMAT_VALUE, _( "Format Value..." ) );
+
+    menu.Append( MYID_DELETE_MEASUREMENT, _( "Delete Measurement" ) );
+    menu.AppendSeparator();
+
+    GRID_TRICKS::showPopupMenu( menu, aEvent );
+}
+
+
+void MEASUREMENTS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
+{
+    if( event.GetId() == MYID_FORMAT_VALUE )
+    {
+        SPICE_VALUE_FORMAT      format = m_parent->GetMeasureFormat( m_menuRow );
+        DIALOG_SIM_FORMAT_VALUE formatDialog( m_parent, &format.Precision, &format.Range );
+
+        if( formatDialog.ShowModal() == wxID_OK )
+            m_parent->SetMeasureFormat( m_menuRow, format );
+    }
+    else if( event.GetId() == MYID_DELETE_MEASUREMENT )
+    {
+        m_parent->DeleteMeasurement( m_menuRow );
     }
     else
     {
@@ -201,7 +329,8 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_lastSimPlot( nullptr ),
         m_darkMode( true ),
         m_plotNumber( 0 ),
-        m_simFinished( false )
+        m_simFinished( false ),
+        m_outputCounter( 1 )
 {
     SetKiway( this, aKiway );
 
@@ -219,7 +348,15 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // Get the previous size and position of windows:
     LoadSettings( config() );
 
+    m_filter->SetHint( _( "Filter" ) );
+
     m_signalsGrid->wxGrid::SetLabelFont( KIUI::GetStatusFont( this ) );
+    m_cursorsGrid->wxGrid::SetLabelFont( KIUI::GetStatusFont( this ) );
+    m_measurementsGrid->wxGrid::SetLabelFont( KIUI::GetStatusFont( this ) );
+
+    m_signalsGrid->PushEventHandler( new SIGNALS_GRID_TRICKS( this, m_signalsGrid ) );
+    m_cursorsGrid->PushEventHandler( new CURSORS_GRID_TRICKS( this, m_cursorsGrid ) );
+    m_measurementsGrid->PushEventHandler( new MEASUREMENTS_GRID_TRICKS( this, m_measurementsGrid ) );
 
     wxGridCellAttr* attr = new wxGridCellAttr;
     attr->SetReadOnly();
@@ -230,10 +367,6 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
     attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
     m_signalsGrid->SetColAttr( COL_SIGNAL_SHOW, attr );
-
-    m_signalsGrid->PushEventHandler( new GRID_TRICKS( m_signalsGrid ) );
-
-    m_cursorsGrid->wxGrid::SetLabelFont( KIUI::GetStatusFont( this ) );
 
     attr = new wxGridCellAttr;
     attr->SetReadOnly();
@@ -247,15 +380,15 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     attr->SetReadOnly();
     m_cursorsGrid->SetColAttr( COL_CURSOR_Y, attr );
 
-    m_cursorsGrid->PushEventHandler( new CURSORS_GRID_TRICKS( this, m_cursorsGrid ) );
-
     for( int cursorId = 0; cursorId < 3; ++cursorId )
     {
-        m_cursorPrecision[ cursorId ][ 0 ] = 3;
-        m_cursorRange[ cursorId ][ 0 ] = wxS( "~s" );
-        m_cursorPrecision[ cursorId ][ 1 ] = 3;
-        m_cursorRange[ cursorId ][ 1 ] = wxS( "~V" );
+        m_cursorFormats[ cursorId ][ 0 ] = { 3, wxS( "~s" ) };
+        m_cursorFormats[ cursorId ][ 1 ] = { 3, wxS( "~V" ) };
     }
+
+    attr = new wxGridCellAttr;
+    attr->SetReadOnly();
+    m_measurementsGrid->SetColAttr( COL_MEASUREMENT_VALUE, attr );
 
     // Prepare the color list to plot traces
     SIM_PLOT_COLORS::FillDefaultColorList( m_darkMode );
@@ -314,6 +447,7 @@ SIM_PLOT_FRAME::~SIM_PLOT_FRAME()
     // Delete the GRID_TRICKS.
     m_signalsGrid->PopEventHandler( true );
     m_cursorsGrid->PopEventHandler( true );
+    m_measurementsGrid->PopEventHandler( true );
 
     NULL_REPORTER devnull;
 
@@ -360,6 +494,8 @@ void SIM_PLOT_FRAME::ShowChangedLanguage()
         m_workbook->SetPageText( ii, pageTitle );
     }
 
+    m_filter->SetHint( _( "Filter" ) );
+
     m_signalsGrid->SetColLabelValue( COL_SIGNAL_NAME, _( "Signal" ) );
     m_signalsGrid->SetColLabelValue( COL_SIGNAL_SHOW, _( "Plot" ) );
     m_signalsGrid->SetColLabelValue( COL_SIGNAL_COLOR, _( "Color" ) );
@@ -373,7 +509,8 @@ void SIM_PLOT_FRAME::ShowChangedLanguage()
     wxCommandEvent dummy;
     onCursorUpdate( dummy );
 
-    m_staticTextTune->SetLabel( _( "Tune" ) );
+    for( TUNER_SLIDER* tuner : m_tuners )
+        tuner->ShowChangedLanguage();
 }
 
 
@@ -390,7 +527,8 @@ void SIM_PLOT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
         m_splitterLeftRightSashPosition      = cfg->m_Simulator.plot_panel_width;
         m_splitterPlotAndConsoleSashPosition = cfg->m_Simulator.plot_panel_height;
         m_splitterSignalsSashPosition        = cfg->m_Simulator.signal_panel_height;
-        m_splitterTuneValuesSashPosition     = cfg->m_Simulator.cursors_panel_height;
+        m_splitterCursorsSashPosition        = cfg->m_Simulator.cursors_panel_height;
+        m_splitterTuneValuesSashPosition     = cfg->m_Simulator.measurements_panel_height;
         m_darkMode                           = !cfg->m_Simulator.white_background;
     }
 
@@ -412,11 +550,12 @@ void SIM_PLOT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     {
         EDA_BASE_FRAME::SaveSettings( cfg );
 
-        cfg->m_Simulator.plot_panel_width     = m_splitterLeftRight->GetSashPosition();
-        cfg->m_Simulator.plot_panel_height    = m_splitterPlotAndConsole->GetSashPosition();
-        cfg->m_Simulator.signal_panel_height  = m_splitterSignals->GetSashPosition();
-        cfg->m_Simulator.cursors_panel_height = m_splitterTuneValues->GetSashPosition();
-        cfg->m_Simulator.white_background     = !m_darkMode;
+        cfg->m_Simulator.plot_panel_width          = m_splitterLeftRight->GetSashPosition();
+        cfg->m_Simulator.plot_panel_height         = m_splitterPlotAndConsole->GetSashPosition();
+        cfg->m_Simulator.signal_panel_height       = m_splitterSignals->GetSashPosition();
+        cfg->m_Simulator.cursors_panel_height      = m_splitterCursors->GetSashPosition();
+        cfg->m_Simulator.measurements_panel_height = m_splitterMeasurements->GetSashPosition();
+        cfg->m_Simulator.white_background          = !m_darkMode;
     }
 
     if( !m_isNonUserClose )     // If we're exiting the project has already been released.
@@ -504,8 +643,11 @@ void SIM_PLOT_FRAME::setSubWindowsSashSize()
     if( m_splitterSignalsSashPosition > 0 )
         m_splitterSignals->SetSashPosition( m_splitterSignalsSashPosition );
 
+    if( m_splitterCursorsSashPosition > 0 )
+        m_splitterCursors->SetSashPosition( m_splitterCursorsSashPosition );
+
     if( m_splitterTuneValuesSashPosition > 0 )
-        m_splitterTuneValues->SetSashPosition( m_splitterTuneValuesSashPosition );
+        m_splitterMeasurements->SetSashPosition( m_splitterTuneValuesSashPosition );
 }
 
 
@@ -767,6 +909,17 @@ void SIM_PLOT_FRAME::OnFilterMouseMoved( wxMouseEvent& aEvent )
 }
 
 
+void updateRangeUnits( wxString* aRange, const wxString& aUnits )
+{
+    if( aRange->GetChar( 0 ) == '~' )
+        *aRange = aRange->Left( 1 ) + aUnits;
+    else if( SPICE_VALUE::ParseSIPrefix( aRange->GetChar( 0 ) ) != SPICE_VALUE::PFX_NONE )
+        *aRange = aRange->Left( 1 ) + aUnits;
+    else
+        *aRange = aUnits;
+}
+
+
 void SIM_PLOT_FRAME::onSignalsGridCellChanged( wxGridEvent& aEvent )
 {
     int             row = aEvent.GetRow();
@@ -785,14 +938,14 @@ void SIM_PLOT_FRAME::onSignalsGridCellChanged( wxGridEvent& aEvent )
             {
                 wxString  gainSuffix = _( " (gain)" );
                 wxString  phaseSuffix = _( " (phase)" );
-                wxUniChar firstChar = signalName[0];
+                wxUniChar firstChar = signalName.Upper()[0];
                 int       traceType = SPT_UNKNOWN;
 
-                if( firstChar == 'V' || firstChar == 'v' )
+                if( firstChar == 'V' )
                     traceType = SPT_VOLTAGE;
-                else if( firstChar == 'I' || firstChar == 'i' )
+                else if( firstChar == 'I' )
                     traceType = SPT_CURRENT;
-                else if( firstChar == 'P' || firstChar == 'p' )
+                else if( firstChar == 'P' )
                     traceType = SPT_POWER;
 
                 if( signalName.EndsWith( gainSuffix ) )
@@ -898,6 +1051,97 @@ void SIM_PLOT_FRAME::onCursorsGridCellChanged( wxGridEvent& aEvent )
 }
 
 
+void SIM_PLOT_FRAME::DeleteMeasurement( int aRow )
+{
+    m_measurementsGrid->DeleteRows( aRow, 1 );
+
+    for( int ii = aRow; ii < (int) m_measurementFormats.size() - 1; ++ii )
+        m_measurementFormats[ aRow ] = m_measurementFormats[ aRow + 1 ];
+
+    m_measurementFormats.pop_back();
+}
+
+
+void SIM_PLOT_FRAME::onMeasurementsGridCellChanged( wxGridEvent& aEvent )
+{
+    SIM_PLOT_PANEL* plotPanel = GetCurrentPlot();
+
+    if( !plotPanel )
+        return;
+
+    int      row = aEvent.GetRow();
+    int      col = aEvent.GetCol();
+    wxString text = m_measurementsGrid->GetCellValue( row, col );
+
+    if( col == COL_MEASUREMENT )
+    {
+        if( text.IsEmpty() )
+            DeleteMeasurement( row );
+        else
+            updateMeasurement( row );
+    }
+    else
+    {
+        wxFAIL_MSG( wxT( "All other columns are supposed to be read-only!" ) );
+    }
+}
+
+
+void SIM_PLOT_FRAME::updateMeasurement( int aRow )
+{
+    static wxRegEx measureParamsRegEx( wxT( "^"
+                                            " *"
+                                            "([a-zA-Z]+)"
+                                            " +"
+                                            "([a-zA-Z])\\([a-zA-Z0-9_]+\\)" ) );
+
+    SIM_PLOT_PANEL* plotPanel = GetCurrentPlot();
+
+    if( !plotPanel )
+        return;
+
+    wxString text = m_measurementsGrid->GetCellValue( aRow, COL_MEASUREMENT );
+    wxString simType = m_simulator->TypeToName( plotPanel->GetType(), true );
+    wxString resultName = wxString::Format( wxS( "meas_result_%u" ), m_outputCounter++ );
+    wxString result = wxS( "?" );
+
+    m_simulator->Command( (const char*) wxString::Format( wxS( "meas %s %s %s" ),
+                                                          simType,
+                                                          resultName,
+                                                          text ).c_str() );
+
+    std::vector<double> resultVec = m_simulator->GetMagPlot( (const char*) resultName.c_str() );
+
+    if( resultVec.size() > 0 )
+    {
+        if( measureParamsRegEx.Matches( text ) )
+        {
+            wxString  func = measureParamsRegEx.GetMatch( text, 1 ).Upper();
+            wxUniChar signalType = measureParamsRegEx.GetMatch( text, 2 ).Upper()[0];
+            wxString  units;
+
+            if( signalType == 'I' )
+                units = wxS( "A" );
+            else if( signalType == 'P' )
+                units = wxS( "W" );
+            else
+                units = wxS( "V" );
+
+            if( func.EndsWith( wxS( "_AT" ) ) )
+                units = wxS( "s" );
+            else if( func.StartsWith( wxS( "INTEG" ) ) )
+                units += wxS( "·s" );
+
+            updateRangeUnits( &m_measurementFormats[ aRow ].Range, units );
+        }
+
+        result = SPICE_VALUE( resultVec[0] ).ToString( m_measurementFormats[ aRow ] );
+    }
+
+    m_measurementsGrid->SetCellValue( aRow, COL_MEASUREMENT_VALUE, result );
+}
+
+
 void SIM_PLOT_FRAME::AddVoltagePlot( const wxString& aNetName )
 {
     addTrace( aNetName, SPT_VOLTAGE );
@@ -934,10 +1178,10 @@ void SIM_PLOT_FRAME::AddTuner( const SCH_SHEET_PATH& aSheetPath, SCH_SYMBOL* aSy
 
     try
     {
-        TUNER_SLIDER* tuner = new TUNER_SLIDER( this, m_tunePanel, aSheetPath, aSymbol );
-        m_tuneSizer->Add( tuner );
+        TUNER_SLIDER* tuner = new TUNER_SLIDER( this, m_panelTuners, aSheetPath, aSymbol );
+        m_sizerTuners->Add( tuner );
         m_tuners.push_back( tuner );
-        m_tunePanel->Layout();
+        m_panelTuners->Layout();
     }
     catch( const KI_PARAM_ERROR& e )
     {
@@ -985,7 +1229,26 @@ void SIM_PLOT_FRAME::RemoveTuner( TUNER_SLIDER* aTuner, bool aErase )
         m_tuners.remove( aTuner );
 
     aTuner->Destroy();
-    m_tunePanel->Layout();
+    m_panelTuners->Layout();
+}
+
+
+void SIM_PLOT_FRAME::AddMeasurement( const wxString& aCmd, const wxString& aSignal )
+{
+    SIM_PLOT_PANEL* plotPanel = GetCurrentPlot();
+
+    if( !plotPanel )
+        return;
+
+    wxString simType = m_simulator->TypeToName( plotPanel->GetType(), true );
+    int      row = m_measurementsGrid->GetNumberRows();
+
+    m_measurementFormats.push_back( { 3, wxS( "~V" ) } );
+
+    m_measurementsGrid->AppendRows();
+    m_measurementsGrid->SetCellValue( row, COL_MEASUREMENT, aCmd + wxS( " " ) + aSignal );
+
+    updateMeasurement( row );
 }
 
 
@@ -1797,22 +2060,10 @@ void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
                     return plotPanel->GetLabelY1();
             };
 
-    auto updateRangeUnits =
-            []( wxString* aRange, const wxString& aUnits )
-            {
-                if( aRange->GetChar( 0 ) == '~' )
-                    *aRange = aRange->Left( 1 ) + aUnits;
-                else if( SPICE_VALUE::ParseSIPrefix( aRange->GetChar( 0 ) ) != SPICE_VALUE::PFX_NONE )
-                    *aRange = aRange->Left( 1 ) + aUnits;
-                else
-                    *aRange = aUnits;
-            };
-
     auto formatValue =
             [this]( double aValue, int aCursorId, int aCol ) -> wxString
             {
-                return SPICE_VALUE( aValue ).ToString( m_cursorPrecision[ aCursorId ][ aCol ],
-                                                       m_cursorRange[ aCursorId ][ aCol ] );
+                return SPICE_VALUE( aValue ).ToString( m_cursorFormats[ aCursorId ][ aCol ] );
             };
 
     for( const auto& [name, trace] : plotPanel->GetTraces() )
@@ -1826,8 +2077,8 @@ void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
             wxRealPoint coords = cursor->GetCoords();
             int         row = m_cursorsGrid->GetNumberRows();
 
-            updateRangeUnits( &m_cursorRange[0][0], plotPanel->GetUnitsX() );
-            updateRangeUnits( &m_cursorRange[0][1], cursor1Units );
+            updateRangeUnits( &m_cursorFormats[0][0].Range, plotPanel->GetUnitsX() );
+            updateRangeUnits( &m_cursorFormats[0][1].Range, cursor1Units );
 
             m_cursorsGrid->AppendRows( 1 );
             m_cursorsGrid->SetCellValue( row, COL_CURSOR_NAME, wxS( "1" ) );
@@ -1849,8 +2100,8 @@ void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
             wxRealPoint coords = cursor->GetCoords();
             int         row = m_cursorsGrid->GetNumberRows();
 
-            updateRangeUnits( &m_cursorRange[1][0], plotPanel->GetUnitsX() );
-            updateRangeUnits( &m_cursorRange[1][1], cursor2Units );
+            updateRangeUnits( &m_cursorFormats[1][0].Range, plotPanel->GetUnitsX() );
+            updateRangeUnits( &m_cursorFormats[1][1].Range, cursor2Units );
 
             m_cursorsGrid->AppendRows( 1 );
             m_cursorsGrid->SetCellValue( row, COL_CURSOR_NAME, wxS( "2" ) );
@@ -1866,8 +2117,8 @@ void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
         wxRealPoint coords = cursor2->GetCoords() - cursor1->GetCoords();
         wxString    signal;
 
-        updateRangeUnits( &m_cursorRange[2][0], plotPanel->GetUnitsX() );
-        updateRangeUnits( &m_cursorRange[2][1], cursor1Units );
+        updateRangeUnits( &m_cursorFormats[2][0].Range, plotPanel->GetUnitsX() );
+        updateRangeUnits( &m_cursorFormats[2][1].Range, cursor1Units );
 
         if( cursor1->GetName() == cursor2->GetName() )
             signal = wxString::Format( wxS( "%s[2 - 1]" ), cursor2->GetName() );
