@@ -139,7 +139,8 @@ void SCH_EDIT_FRAME::SaveProjectSettings()
 
     if( !BASE_SCREEN::m_DrawingSheetFileName.IsEmpty() )
     {
-        wxFileName layoutfn( BASE_SCREEN::m_DrawingSheetFileName );
+        wxFileName layoutfn( DS_DATA_MODEL::ResolvePath( BASE_SCREEN::m_DrawingSheetFileName,
+                                                         Prj().GetProjectPath() ) );
 
         bool success = true;
 
