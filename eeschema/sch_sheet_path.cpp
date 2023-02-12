@@ -1138,7 +1138,7 @@ void SCH_SHEET_LIST::UpdateSheetInstanceData( const std::vector<SCH_SHEET_INSTAN
         }
 
         wxLogTrace( traceSchSheetPaths, "Setting sheet '%s' instance '%s' page number '%s'",
-                    ( sheet->GetName().IsEmpty() ) ? wxT( "root" ) : sheet->GetName(),
+                    ( sheet->GetName().IsEmpty() ) ? wxString( wxT( "root" ) ) : sheet->GetName(),
                     path.Path().AsString(), it->m_PageNumber );
         path.SetPageNumber( it->m_PageNumber );
     }

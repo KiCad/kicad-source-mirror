@@ -226,12 +226,12 @@ void PANEL_TRANSLINE::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType )
 
         wxASSERT ( data );
         data->name->SetToolTip( prm->m_ToolTip );
-        data->name->SetLabel( prm->m_DlgLabel != "" ? prm->m_DlgLabel + ':' : "" );
+        data->name->SetLabel( prm->m_DlgLabel != wxS( "" ) ? prm->m_DlgLabel + wxS( ':' ) : wxString( wxS( "" ) ) );
         prm->m_ValueCtrl = data->value;
 
         if( prm->m_Id != DUMMY_PRM )
         {
-            data->value->SetValue( wxString::Format( "%g", prm->m_Value ) );
+            data->value->SetValue( wxString::Format( wxS( "%g" ), prm->m_Value ) );
             data->value->Enable( true );
         }
         else

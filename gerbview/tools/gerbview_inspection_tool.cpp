@@ -130,7 +130,7 @@ int GERBVIEW_INSPECTION_TOOL::ShowDCodes( const TOOL_EVENT& aEvent )
                          pt_D_code->m_Size.y / scale, units,
                          pt_D_code->m_Size.x / scale, units,
                          D_CODE::ShowApertureType( pt_D_code->m_ApertType ),
-                         pt_D_code->m_AperFunction.IsEmpty()? wxT( "none" ) : pt_D_code->m_AperFunction
+                         pt_D_code->m_AperFunction.IsEmpty()? wxString( wxT( "none" ) ) : pt_D_code->m_AperFunction
                          );
 
             if( !pt_D_code->m_Defined )

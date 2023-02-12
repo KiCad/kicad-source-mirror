@@ -292,7 +292,7 @@ void DIALOG_EXPORT_SVG::ExportSVGFile( bool aOnlyOneFile )
     {
         PCB_LAYER_ID layer = *seq;
         wxFileName   fn( boardFilename );
-        wxString     suffix = aOnlyOneFile ? wxT( "brd" ) : m_board->GetStandardLayerName( layer );
+        wxString     suffix = aOnlyOneFile ? wxString( wxT( "brd" ) ) : m_board->GetStandardLayerName( layer );
 
         BuildPlotFileName( &fn, outputDir.GetPath(), suffix, SVGFileExtension );
         wxString svgPath = fn.GetFullPath();

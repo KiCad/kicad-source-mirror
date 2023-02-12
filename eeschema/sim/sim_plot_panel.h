@@ -194,22 +194,22 @@ public:
 
     wxString GetLabelX() const
     {
-        return m_axis_x ? m_axis_x->GetName() : wxS( "" );
+        return m_axis_x ? m_axis_x->GetName() : wxString( wxS( "" ) );
     }
 
     wxString GetLabelY1() const
     {
-        return m_axis_y1 ? m_axis_y1->GetName() : wxS( "" );
+        return m_axis_y1 ? m_axis_y1->GetName() : wxString( wxS( "" ) );
     }
 
     wxString GetLabelY2() const
     {
-        return m_axis_y2 ? m_axis_y2->GetName() : wxS( "" );
+        return m_axis_y2 ? m_axis_y2->GetName() : wxString( wxS( "" ) );
     }
 
     wxString GetLabelY3() const
     {
-        return m_axis_y3 ? m_axis_y3->GetName() : wxS( "" );
+        return m_axis_y3 ? m_axis_y3->GetName() : wxString( wxS( "" ) );
     }
 
     wxString GetUnitsX() const;

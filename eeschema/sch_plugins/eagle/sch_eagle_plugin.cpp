@@ -1871,7 +1871,7 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode,
         // Get Device set information
         EDEVICE_SET edeviceset = EDEVICE_SET( devicesetNode );
 
-        wxString prefix = edeviceset.prefix ? edeviceset.prefix.Get() : wxT( "" );
+        wxString prefix = edeviceset.prefix ? edeviceset.prefix.Get() : wxString( wxT( "" ) );
 
         NODE_MAP   deviceSetChildren = MapChildren( devicesetNode );
         wxXmlNode* deviceNode        = getChildrenNodes( deviceSetChildren, wxT( "devices" ) );
@@ -2380,7 +2380,7 @@ LIB_TEXT* SCH_EAGLE_PLUGIN::loadSymbolText( std::unique_ptr<LIB_SYMBOL>& aSymbol
         adjustedText += tmp;
     }
 
-    libtext->SetText( adjustedText.IsEmpty() ? wxT( "~" ) : adjustedText );
+    libtext->SetText( adjustedText.IsEmpty() ? wxString( wxT( "~" ) ) : adjustedText );
     loadTextAttributes( libtext.get(), etext );
 
     return libtext.release();
@@ -2596,7 +2596,7 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadPlainText( wxXmlNode* aSchText )
         adjustedText += tmp;
     }
 
-    schtext->SetText( adjustedText.IsEmpty() ? wxT( "\" \"" ) : escapeName( adjustedText ) );
+    schtext->SetText( adjustedText.IsEmpty() ? wxString( wxT( "\" \"" ) ) : escapeName( adjustedText ) );
     schtext->SetPosition( VECTOR2I( etext.x.ToSchUnits(), -etext.y.ToSchUnits() ) );
     loadTextAttributes( schtext.get(), etext );
     schtext->SetItalic( false );

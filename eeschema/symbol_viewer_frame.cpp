@@ -692,7 +692,7 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
 
                     for( const wxString& lib : subLibraries )
                     {
-                        wxString suffix = lib.IsEmpty() ? wxT( "" )
+                        wxString suffix = lib.IsEmpty() ? wxString( wxT( "" ) )
                                                         : wxString::Format( wxT( " - %s" ), lib );
                         wxString name = wxString::Format( wxT( "%s%s" ), aLib, suffix );
 
@@ -749,7 +749,7 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
         // If not found, clear current library selection because it can be deleted after a
         // config change.
         m_currentSymbol.SetLibNickname( m_libList->GetCount() > 0
-                                        ? m_libList->GetBaseString( 0 ) : wxT( "" ) );
+                                        ? m_libList->GetBaseString( 0 ) : wxString( wxT( "" ) ) );
         m_currentSymbol.SetLibItemName( wxEmptyString );
         m_unit = 1;
         m_convert = LIB_ITEM::LIB_CONVERT::BASE;

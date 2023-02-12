@@ -1232,7 +1232,7 @@ bool SCH_SHEET::addInstance( const SCH_SHEET_PATH& aSheetPath )
 
     wxLogTrace( traceSchSheetPaths, wxT( "Adding instance `%s` to sheet `%s`." ),
                 aSheetPath.Path().AsString(),
-                ( GetName().IsEmpty() ) ? wxT( "root" ) : GetName() );
+                ( GetName().IsEmpty() ) ? wxString( wxT( "root" ) ) : GetName() );
 
     SCH_SHEET_INSTANCE instance;
 

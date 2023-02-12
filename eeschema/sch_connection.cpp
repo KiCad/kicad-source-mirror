@@ -352,7 +352,7 @@ wxString SCH_CONNECTION::Name( bool aIgnoreSheet ) const
 void SCH_CONNECTION::recacheName()
 {
     m_cached_name =
-            m_name.IsEmpty() ? wxT( "<NO NET>" ) : wxString( m_prefix ) << m_name << m_suffix;
+            m_name.IsEmpty() ? wxString( wxT( "<NO NET>" ) ) : wxString( m_prefix ) << m_name << m_suffix;
 
     bool prepend_path = true;
 

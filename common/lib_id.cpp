@@ -276,7 +276,7 @@ bool LIB_ID::isLegalLibraryNameChar( unsigned aUniChar )
 const wxString LIB_ID::GetFullLibraryName() const
 {
     wxString suffix = m_subLibraryName.wx_str().IsEmpty()
-                              ? wxS( "" )
+                              ? wxString( wxS( "" ) )
                               : wxString::Format( wxT( " - %s" ), m_subLibraryName.wx_str() );
     return wxString::Format( wxT( "%s%s" ), m_libraryName.wx_str(), suffix );
 }

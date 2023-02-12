@@ -345,7 +345,7 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommi
             [editFrame]( bool constrained )
             {
                 editFrame->DisplayConstraintsMsg( constrained ? _( "Constrain to H, V, 45" )
-                                                              : wxT( "" ) );
+                                                              : wxString( wxT( "" ) ) );
             };
 
     auto updateStatusPopup =

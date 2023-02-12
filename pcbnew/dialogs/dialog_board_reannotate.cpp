@@ -532,7 +532,7 @@ void DIALOG_BOARD_REANNOTATE::LogChangePlan()
                                      change.NewRefDes,
                                      ActionMessage[change.Action],
                                      UpdateRefDes != change.Action ? _( " will be ignored" )
-                                                                   : wxT( "" ) );
+                                                                   : wxString( wxT( "" ) ) );
     }
 
     ShowReport( message, RPT_SEVERITY_INFO );

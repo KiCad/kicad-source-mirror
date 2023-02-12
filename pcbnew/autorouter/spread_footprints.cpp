@@ -135,7 +135,7 @@ void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, VECTOR2I aTargetBox
     for( FOOTPRINT* footprint : *aFootprints )
     {
         wxString path =
-                aGroupBySheet ? footprint->GetPath().AsString().BeforeLast( '/' ) : wxS( "" );
+                aGroupBySheet ? footprint->GetPath().AsString().BeforeLast( '/' ) : wxString( wxS( "" ) );
 
         VECTOR2I size = footprint->GetBoundingBox( false, false ).GetSize();
         size.x += aComponentGap;

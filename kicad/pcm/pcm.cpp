@@ -888,7 +888,7 @@ const wxString PLUGIN_CONTENT_MANAGER::GetPackageUpdateVersion( const PCM_PACKAG
                                            && installed_ver_it->parsed_version < ver.parsed_version;
                                 } );
 
-    return ver_it == aPackage.versions.end() ? wxT( "" ) : ver_it->version;
+    return ver_it == aPackage.versions.end() ? wxString( wxT( "" ) ) : ver_it->version;
 }
 
 time_t PLUGIN_CONTENT_MANAGER::getCurrentTimestamp() const

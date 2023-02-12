@@ -714,7 +714,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponentLibrary()
         SYMDEF_PCB component = symPair.second;
         wxString   fpName = component.ReferenceName + ( ( component.Alternate.size() > 0 ) ?
                                               ( wxT( " (" ) + component.Alternate + wxT( ")" ) ) :
-                                              wxT( "" ) );
+                                              wxString( wxT( "" ) ) );
 
         // Check that we are not loading a documentation symbol.
         // Documentation symbols in CADSTAR are graphical "footprints" that can be assigned

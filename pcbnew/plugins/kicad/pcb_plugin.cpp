@@ -2140,7 +2140,7 @@ void PCB_PLUGIN::format( const ZONE* aZone, int aNestLevel ) const
     m_out->Print( aNestLevel, "(zone%s (net %d) (net_name %s)",
                   locked.c_str(),
                   has_no_net ? 0 : m_mapping->Translate( aZone->GetNetCode() ),
-                  m_out->Quotew( has_no_net ? wxT("") : aZone->GetNetname() ).c_str() );
+                  m_out->Quotew( has_no_net ? wxString( wxT("") ) : aZone->GetNetname() ).c_str() );
 
     // If a zone exists on multiple layers, format accordingly
     if( aZone->GetLayerSet().count() > 1 )

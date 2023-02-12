@@ -1799,7 +1799,7 @@ SCH_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbol( const SYMBOL& aCads
         return nullptr;
     }
 
-    wxString gate = ( aCadstarSymbol.GateID.IsEmpty() ) ? wxT( "A" ) : aCadstarSymbol.GateID;
+    wxString gate = ( aCadstarSymbol.GateID.IsEmpty() ) ? wxString( wxT( "A" ) ) : aCadstarSymbol.GateID;
     wxString partGateIndex = aCadstarSymbol.PartRef.RefID + gate;
 
     //Handle pin swaps

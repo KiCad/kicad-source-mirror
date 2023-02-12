@@ -581,7 +581,7 @@ bool COMPILER::lexDefault( T_TOKEN& aToken )
 
 const wxString formatNode( TREE_NODE* node )
 {
-    return node->value.str ? *(node->value.str) : "";
+    return node->value.str ? *(node->value.str) : wxString( wxEmptyString );
 }
 
 

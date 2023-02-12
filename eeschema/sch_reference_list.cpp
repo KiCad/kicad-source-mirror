@@ -755,7 +755,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
                         first.GetRef(),
                         tmp,
                         first.GetLibPart()->GetUnitCount() > 1 ?
-                            LIB_SYMBOL::SubReference( first.m_unit ) : wxT( "" ) );
+                            LIB_SYMBOL::SubReference( first.m_unit ) : wxString( wxT( "" ) ) );
 
             aHandler( ERCE_DUPLICATE_REFERENCE, msg, &first, &m_flatList[ii+1] );
             error++;
