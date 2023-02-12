@@ -1712,19 +1712,71 @@ bool SIM_PLOT_FRAME::LoadWorkbook( const wxString& aPath )
 
             param = file.GetNextLine();
 
-            #if 0   // no longer in use
-            if( param.IsEmpty() )
-            {
-                DISPLAY_LOAD_ERROR( "Error loading workbook: Line %d is empty." );
-                file.Close();
-
-                return false;
-            }
-            #endif
-
             addTrace( name, (SIM_TRACE_TYPE) traceType );
+
+            TRACE* trace = GetCurrentPlot() ? GetCurrentPlot()->GetTrace( name ) : nullptr;
+
+            if( version >= 4 && trace )
+            {
+                auto readFormat =
+                        []( SPICE_VALUE_FORMAT* format, const wxString& text )
+                        {
+                            long val;
+                            text.Left( 1 ).ToLong( &val );
+                            format->Precision = (int) val;
+                            format->Range = text.Right( text.Length() - 1 );
+                        };
+
+                wxArrayString items = wxSplit( param, '|' );
+
+                for( const wxString& item : items )
+                {
+                    if( item.StartsWith( wxS( "rgb" ) ) )
+                    {
+                        wxColour color;
+                        color.Set( item );
+                        trace->SetTraceColour( color );
+                    }
+                    else if( item.StartsWith( wxS( "cursor1" ) ) )
+                    {
+                        wxArrayString parts = wxSplit( item, '.' );
+
+                        if( parts.size() == 3 )
+                        {
+                            readFormat( &m_cursorFormats[0][0], parts[1] );
+                            readFormat( &m_cursorFormats[0][1], parts[2] );
+                            GetCurrentPlot()->EnableCursor( name, 1, true );
+                        }
+                    }
+                    else if( item.StartsWith( wxS( "cursor2" ) ) )
+                    {
+                        wxArrayString parts = wxSplit( item, '.' );
+
+                        if( parts.size() == 3 )
+                        {
+                            readFormat( &m_cursorFormats[1][0], parts[1] );
+                            readFormat( &m_cursorFormats[1][1], parts[2] );
+                            GetCurrentPlot()->EnableCursor( name, 2, true );
+                        }
+                    }
+                    else if( item.StartsWith( wxS( "cursorD" ) ) )
+                    {
+                        wxArrayString parts = wxSplit( item, '.' );
+
+                        if( parts.size() == 3 )
+                        {
+                            readFormat( &m_cursorFormats[2][0], parts[1] );
+                            readFormat( &m_cursorFormats[2][1], parts[2] );
+                        }
+                    }
+                }
+            }
         }
     }
+
+    updateSignalsGrid();
+    wxCommandEvent dummy;
+    onCursorUpdate( dummy );
 
     file.Close();
 
@@ -1759,7 +1811,7 @@ bool SIM_PLOT_FRAME::SaveWorkbook( const wxString& aPath )
         file.Create();
     }
 
-    file.AddLine( wxT( "version 3" ) );
+    file.AddLine( wxT( "version 4" ) );
 
     file.AddLine( wxString::Format( wxT( "%llu" ), m_workbook->GetPageCount() ) );
 
@@ -1806,7 +1858,37 @@ bool SIM_PLOT_FRAME::SaveWorkbook( const wxString& aPath )
         {
             file.AddLine( wxString::Format( wxT( "%d" ), trace->GetType() ) );
             file.AddLine( trace->GetName() );
-            file.AddLine( trace->GetParam().IsEmpty() ? wxS( " " ) : trace->GetParam() );
+
+            wxString msg = COLOR4D( trace->GetTraceColour() ).ToCSSString();
+
+            if( trace->GetCursor( 1 ) )
+            {
+                msg += wxString::Format( wxS( "|cursor1.%d%s.%d%s" ),
+                                         m_cursorFormats[0][0].Precision,
+                                         m_cursorFormats[0][0].Range,
+                                         m_cursorFormats[0][1].Precision,
+                                         m_cursorFormats[0][1].Range );
+            }
+
+            if( trace->GetCursor( 2 ) )
+            {
+                msg += wxString::Format( wxS( "|cursor2.%d%s.%d%s" ),
+                                         m_cursorFormats[1][0].Precision,
+                                         m_cursorFormats[1][0].Range,
+                                         m_cursorFormats[1][1].Precision,
+                                         m_cursorFormats[1][1].Range );
+            }
+
+            if( trace->GetCursor( 1 ) || trace->GetCursor( 2 ) )
+            {
+                msg += wxString::Format( wxS( "|cursorD.%d%s.%d%s" ),
+                                         m_cursorFormats[2][0].Precision,
+                                         m_cursorFormats[2][0].Range,
+                                         m_cursorFormats[2][1].Precision,
+                                         m_cursorFormats[2][1].Range );
+            }
+
+            file.AddLine( msg );
         }
     }
 

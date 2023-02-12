@@ -176,20 +176,10 @@ public:
         return m_traceColour;
     }
 
-    const wxString& GetParam() const
-    {
-        return m_param;
-    }
-
-
 protected:
     std::map<int, CURSOR*> m_cursors;       // No ownership; the mpWindow owns the CURSORs
     SIM_TRACE_TYPE         m_type;
     wxColour               m_traceColour;
-
-private:
-    ///< Name of the signal parameter
-    wxString               m_param;
 };
 
 
