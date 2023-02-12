@@ -779,6 +779,18 @@ void SIM_PLOT_FRAME::rebuildSignalsList()
         if( directive.Upper().StartsWith( wxS( ".PROBE" ), &directiveParams ) )
             m_signals.push_back( directiveParams.Trim( false ) );
     }
+
+    std::sort( m_signals.begin(), m_signals.end(),
+            []( const wxString& lhs, const wxString& rhs )
+            {
+                // Sort voltages first
+                if( lhs.StartsWith( 'V' ) && !rhs.StartsWith( 'V' ) )
+                    return true;
+                else if( !lhs.StartsWith( 'V' ) && rhs.StartsWith( 'V' ) )
+                    return false;
+
+                return StrNumCmp( lhs, rhs, true /* ignore case */ ) < 0;
+            } );
 }
 
 
