@@ -754,6 +754,12 @@ void SIM_PLOT_PANEL::SetTraceData( TRACE* trace, unsigned int aPoints, const dou
     else
         trace->SetScale( m_axis_x, m_axis_y1 );
 
+    for( auto& [ cursorId, cursor ] : trace->GetCursors() )
+    {
+        if( cursor )
+            cursor->SetCoordX( cursor->GetCoords().x );
+    }
+
     m_plotWin->UpdateAll();
 }
 

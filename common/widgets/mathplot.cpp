@@ -33,7 +33,6 @@
 
 #include <widgets/mathplot.h>
 #include <wx/graphics.h>
-#include <wx/module.h>
 #include <wx/image.h>
 
 #include <cmath>
@@ -1717,11 +1716,8 @@ mpWindow::~mpWindow()
     // Free all the layers:
     DelAllLayers( true, false );
 
-    if( m_buff_bmp )
-    {
-        delete m_buff_bmp;
-        m_buff_bmp = NULL;
-    }
+    delete m_buff_bmp;
+    m_buff_bmp = nullptr;
 }
 
 
@@ -2189,8 +2185,8 @@ void mpWindow::ZoomOut( const wxPoint& centerPoint, double zoomFactor )
     m_desiredYmax   = m_posY;
     m_desiredYmin   = m_posY - (m_scrY - m_marginTop - m_marginBottom) / m_scaleY;  // m_desiredYmin = m_posY - m_scrY / m_scaleY;
 
-    if( !CheckXLimits( m_desiredXmax,
-                m_desiredXmin ) || !CheckYLimits( m_desiredYmax, m_desiredYmin ) )
+    if( !CheckXLimits( m_desiredXmax, m_desiredXmin )
+        || !CheckYLimits( m_desiredYmax, m_desiredYmin ) )
     {
         Fit();
     }
@@ -2286,7 +2282,7 @@ void mpWindow::OnSize( wxSizeEvent& WXUNUSED( event ) )
 
 bool mpWindow::AddLayer( mpLayer* layer, bool refreshDisplay )
 {
-    if( layer != NULL )
+    if( layer )
     {
         m_layers.push_back( layer );
 
@@ -2296,14 +2292,11 @@ bool mpWindow::AddLayer( mpLayer* layer, bool refreshDisplay )
         return true;
     }
 
-    ;
     return false;
 }
 
 
-bool mpWindow::DelLayer( mpLayer* layer,
-        bool alsoDeleteObject,
-        bool refreshDisplay )
+bool mpWindow::DelLayer( mpLayer* layer, bool alsoDeleteObject, bool refreshDisplay )
 {
     wxLayerList::iterator layIt;
 
@@ -2358,9 +2351,7 @@ void mpWindow::OnPaint( wxPaintEvent& WXUNUSED( event ) )
     {
         if( m_last_lx != m_scrX || m_last_ly != m_scrY )
         {
-            if( m_buff_bmp )
-                delete m_buff_bmp;
-
+            delete m_buff_bmp;
             m_buff_bmp = new wxBitmap( m_scrX, m_scrY );
             m_buff_dc.SelectObject( *m_buff_bmp );
             m_last_lx   = m_scrX;

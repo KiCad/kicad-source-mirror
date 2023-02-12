@@ -293,6 +293,11 @@ private:
     void updateSignalsGrid();
 
     /**
+     * Update the cursor values (in the grid) and graphics (in the plot window).
+     */
+    void updateCursors();
+
+    /**
      * Update a measurement in the measurements grid.
      */
     void updateMeasurement( int aRow );

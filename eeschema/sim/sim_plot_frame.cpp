@@ -506,8 +506,7 @@ void SIM_PLOT_FRAME::ShowChangedLanguage()
     m_cursorsGrid->SetColLabelValue( COL_CURSOR_SIGNAL, _( "Signal" ) );
     m_cursorsGrid->SetColLabelValue( COL_CURSOR_X, _( "Time" ) );
     m_cursorsGrid->SetColLabelValue( COL_CURSOR_Y, _( "Value" ) );
-    wxCommandEvent dummy;
-    onCursorUpdate( dummy );
+    updateCursors();
 
     for( TUNER_SLIDER* tuner : m_tuners )
         tuner->ShowChangedLanguage();
@@ -1048,8 +1047,8 @@ void SIM_PLOT_FRAME::onCursorsGridCellChanged( wxGridEvent& aEvent )
         else if( cursorName == _( "Diff" ) && cursor1 && cursor2 )
             cursor2->SetCoordX( cursor1->GetCoords().x + value );
 
-        wxCommandEvent dummy;
-        onCursorUpdate( dummy );
+        updateCursors();
+        m_workbookModified = true;
     }
     else
     {
@@ -1342,8 +1341,7 @@ void SIM_PLOT_FRAME::removeTrace( const wxString& aSignalName )
     plotPanel->GetPlotWin()->Fit();
 
     updateSignalsGrid();
-    wxCommandEvent dummy;
-    onCursorUpdate( dummy );
+    updateCursors();
 }
 
 
@@ -1712,7 +1710,8 @@ bool SIM_PLOT_FRAME::LoadWorkbook( const wxString& aPath )
 
             addTrace( name, (SIM_TRACE_TYPE) traceType );
 
-            TRACE* trace = GetCurrentPlot() ? GetCurrentPlot()->GetTrace( name ) : nullptr;
+            SIM_PLOT_PANEL* plotPanel = GetCurrentPlot();
+            TRACE*          trace = plotPanel ? plotPanel->GetTrace( name ) : nullptr;
 
             if( version >= 4 && trace )
             {
@@ -1723,6 +1722,20 @@ bool SIM_PLOT_FRAME::LoadWorkbook( const wxString& aPath )
                             text.Left( 1 ).ToLong( &val );
                             format->Precision = (int) val;
                             format->Range = text.Right( text.Length() - 1 );
+                        };
+
+                auto addCursor =
+                        []( int aCursorId, SIM_PLOT_PANEL* aPlotPanel, TRACE* aTrace, double x )
+                        {
+                            CURSOR*   cursor = new CURSOR( aTrace, aPlotPanel );
+                            mpWindow* win = aPlotPanel->GetPlotWin();
+
+                            cursor->SetName( aTrace->GetName() );
+                            cursor->SetPen( wxPen( aTrace->GetTraceColour() ) );
+                            cursor->SetCoordX( x );
+
+                            aTrace->SetCursor( aCursorId, cursor );
+                            win->AddLayer( cursor );
                         };
 
                 wxArrayString items = wxSplit( param, '|' );
@@ -1737,29 +1750,33 @@ bool SIM_PLOT_FRAME::LoadWorkbook( const wxString& aPath )
                     }
                     else if( item.StartsWith( wxS( "cursor1" ) ) )
                     {
-                        wxArrayString parts = wxSplit( item, '.' );
+                        wxArrayString parts = wxSplit( item, ':' );
+                        double        val;
 
                         if( parts.size() == 3 )
                         {
+                            parts[0].AfterFirst( '=' ).ToDouble( &val );
                             readFormat( &m_cursorFormats[0][0], parts[1] );
                             readFormat( &m_cursorFormats[0][1], parts[2] );
-                            GetCurrentPlot()->EnableCursor( name, 1, true );
+                            addCursor( 1, plotPanel, trace, val );
                         }
                     }
                     else if( item.StartsWith( wxS( "cursor2" ) ) )
                     {
-                        wxArrayString parts = wxSplit( item, '.' );
+                        wxArrayString parts = wxSplit( item, ':' );
+                        double        val;
 
                         if( parts.size() == 3 )
                         {
+                            parts[0].AfterFirst( '=' ).ToDouble( &val );
                             readFormat( &m_cursorFormats[1][0], parts[1] );
                             readFormat( &m_cursorFormats[1][1], parts[2] );
-                            GetCurrentPlot()->EnableCursor( name, 2, true );
+                            addCursor( 2, plotPanel, trace, val );
                         }
                     }
                     else if( item.StartsWith( wxS( "cursorD" ) ) )
                     {
-                        wxArrayString parts = wxSplit( item, '.' );
+                        wxArrayString parts = wxSplit( item, ':' );
 
                         if( parts.size() == 3 )
                         {
@@ -1768,6 +1785,8 @@ bool SIM_PLOT_FRAME::LoadWorkbook( const wxString& aPath )
                         }
                     }
                 }
+
+                plotPanel->UpdatePlotColors();
             }
         }
     }
@@ -1777,9 +1796,7 @@ bool SIM_PLOT_FRAME::LoadWorkbook( const wxString& aPath )
     rebuildSignalsList();
     rebuildSignalsGrid( m_filter->GetValue() );
     updateSignalsGrid();
-
-    wxCommandEvent dummy;
-    onCursorUpdate( dummy );
+    updateCursors();
 
     file.Close();
 
@@ -1866,18 +1883,20 @@ bool SIM_PLOT_FRAME::SaveWorkbook( const wxString& aPath )
 
             wxString msg = COLOR4D( trace->GetTraceColour() ).ToCSSString();
 
-            if( trace->GetCursor( 1 ) )
+            if( CURSOR* cursor = trace->GetCursor( 1 ) )
             {
-                msg += wxString::Format( wxS( "|cursor1.%d%s.%d%s" ),
+                msg += wxString::Format( wxS( "|cursor1=%E:%d%s:%d%s" ),
+                                         cursor->GetCoords().x,
                                          m_cursorFormats[0][0].Precision,
                                          m_cursorFormats[0][0].Range,
                                          m_cursorFormats[0][1].Precision,
                                          m_cursorFormats[0][1].Range );
             }
 
-            if( trace->GetCursor( 2 ) )
+            if( CURSOR* cursor = trace->GetCursor( 2 ) )
             {
-                msg += wxString::Format( wxS( "|cursor2.%d%s.%d%s" ),
+                msg += wxString::Format( wxS( "|cursor2=%E:%d%s:%d%s" ),
+                                         cursor->GetCoords().x,
                                          m_cursorFormats[1][0].Precision,
                                          m_cursorFormats[1][0].Range,
                                          m_cursorFormats[1][1].Precision,
@@ -1886,7 +1905,7 @@ bool SIM_PLOT_FRAME::SaveWorkbook( const wxString& aPath )
 
             if( trace->GetCursor( 1 ) || trace->GetCursor( 2 ) )
             {
-                msg += wxString::Format( wxS( "|cursorD.%d%s.%d%s" ),
+                msg += wxString::Format( wxS( "|cursorD:%d%s:%d%s" ),
                                          m_cursorFormats[2][0].Precision,
                                          m_cursorFormats[2][0].Range,
                                          m_cursorFormats[2][1].Precision,
@@ -1960,17 +1979,14 @@ void SIM_PLOT_FRAME::onPlotClosed( wxAuiNotebookEvent& event )
 {
     m_signals.clear();
     rebuildSignalsGrid( m_filter->GetValue() );
-
-    wxCommandEvent dummy;
-    onCursorUpdate( dummy );
+    updateCursors();
 }
 
 
 void SIM_PLOT_FRAME::onPlotChanged( wxAuiNotebookEvent& event )
 {
     rebuildSignalsGrid( m_filter->GetValue() );
-    wxCommandEvent dummy;
-    onCursorUpdate( dummy );
+    updateCursors();
 }
 
 
@@ -2101,7 +2117,7 @@ void SIM_PLOT_FRAME::doCloseWindow()
 }
 
 
-void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
+void SIM_PLOT_FRAME::updateCursors()
 {
     m_cursorsGrid->ClearRows();
 
@@ -2225,7 +2241,13 @@ void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
         valColName = cursor1Name;
 
     m_cursorsGrid->SetColLabelValue( COL_CURSOR_Y, valColName );
+}
 
+
+void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& aEvent )
+{
+    updateCursors();
+    m_workbookModified = true;
 }
 
 
