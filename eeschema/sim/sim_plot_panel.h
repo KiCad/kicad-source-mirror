@@ -185,8 +185,6 @@ protected:
 
 class SIM_PLOT_PANEL : public SIM_PANEL_BASE
 {
-    friend class SIM_WORKBOOK;
-
 public:
     SIM_PLOT_PANEL( const wxString& aCommand, int aOptions, wxWindow* parent, wxWindowID id,
                     const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
@@ -303,11 +301,11 @@ public:
         return m_plotWin;
     }
 
-protected:
-    bool addTrace( const wxString& aTitle, const wxString& aName, int aPoints, const double* aX,
-                   const double* aY, SIM_TRACE_TYPE aType );
+    TRACE* AddTrace( const wxString& aTitle, const wxString& aName, SIM_TRACE_TYPE aType );
 
-    bool deleteTrace( const wxString& aName );
+    void SetTraceData( TRACE* aTrace, unsigned int aPoints, const double* aX, const double* aY );
+
+    bool DeleteTrace( const wxString& aName );
 
 private:
     ///< @brief Construct the plot axes for DC simulation plot.

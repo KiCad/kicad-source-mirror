@@ -13,7 +13,7 @@
 class ACTION_TOOLBAR;
 class WX_GRID;
 
-#include "sim_workbook.h"
+#include "sim_notebook.h"
 #include "kiway_player.h"
 #include <wx/gdicmn.h>
 #include <wx/aui/aui.h>
@@ -50,7 +50,7 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		wxSplitterWindow* m_splitterPlotAndConsole;
 		wxPanel* m_plotPanel;
 		wxBoxSizer* m_sizerPlot;
-		SIM_WORKBOOK* m_workbook;
+		SIM_NOTEBOOK* m_plotNotebook;
 		wxPanel* m_panelConsole;
 		wxBoxSizer* m_sizerConsole;
 		wxTextCtrl* m_simConsole;

@@ -551,7 +551,7 @@ void SIM_PLOT_PANEL::updateAxes( SIM_TRACE_TYPE aNewTraceType )
 
 void SIM_PLOT_PANEL::prepareDCAxes()
 {
-    wxString sim_cmd = getSimCommand().Lower();
+    wxString sim_cmd = GetSimCommand().Lower();
     wxString rem;
 
     if( sim_cmd.StartsWith( ".dc", &rem ) )
@@ -676,67 +676,67 @@ void SIM_PLOT_PANEL::UpdateTraceStyle( TRACE* trace )
 }
 
 
-bool SIM_PLOT_PANEL::addTrace( const wxString& aTitle, const wxString& aName, int aPoints,
-                               const double* aX, const double* aY, SIM_TRACE_TYPE aType )
+TRACE* SIM_PLOT_PANEL::AddTrace( const wxString& aTitle, const wxString& aName,
+                                 SIM_TRACE_TYPE aType )
 {
     TRACE* trace = nullptr;
 
+    auto it = m_traces.find( aTitle );
+
+    if( it != m_traces.end() )
+        return it->second;
+
     updateAxes( aType );
 
-    // Find previous entry, if there is one
-    auto prev = m_traces.find( aTitle );
-    bool addedNewEntry = ( prev == m_traces.end() );
-
-    if( addedNewEntry )
+    if( GetType() == ST_TRANSIENT )
     {
-        if( GetType() == ST_TRANSIENT )
+        bool hasVoltageTraces = false;
+
+        for( const auto& [ name, candidate ] : m_traces )
         {
-            bool hasVoltageTraces = false;
-
-            for( const auto& [ name, candidate ] : m_traces )
+            if( candidate->GetType() & SPT_VOLTAGE )
             {
-                if( candidate->GetType() & SPT_VOLTAGE )
-                {
-                    hasVoltageTraces = true;
-                    break;
-                }
-            }
-
-            if( !hasVoltageTraces )
-            {
-                if( m_axis_y2 )
-                    m_axis_y2->SetMasterScale( nullptr );
-
-                if( m_axis_y3 )
-                    m_axis_y3->SetMasterScale( nullptr );
+                hasVoltageTraces = true;
+                break;
             }
         }
 
-        // New entry
-        trace = new TRACE( aName, aType );
-        trace->SetTraceColour( m_colors.GenerateColor( m_traces ) );
-        UpdateTraceStyle( trace );
-        m_traces[ aTitle ] = trace;
+        if( !hasVoltageTraces )
+        {
+            if( m_axis_y2 )
+                m_axis_y2->SetMasterScale( nullptr );
 
-        m_plotWin->AddLayer( (mpLayer*) trace );
-    }
-    else
-    {
-        trace = prev->second;
+            if( m_axis_y3 )
+                m_axis_y3->SetMasterScale( nullptr );
+        }
     }
 
+    trace = new TRACE( aName, aType );
+    trace->SetTraceColour( m_colors.GenerateColor( m_traces ) );
+    UpdateTraceStyle( trace );
+    m_traces[ aTitle ] = trace;
+
+    m_plotWin->AddLayer( (mpLayer*) trace );
+
+    return trace;
+}
+
+
+void SIM_PLOT_PANEL::SetTraceData( TRACE* trace, unsigned int aPoints, const double* aX,
+                                   const double* aY )
+{
     std::vector<double> tmp( aY, aY + aPoints );
 
     if( GetType() == ST_AC )
     {
-        if( aType & SPT_AC_PHASE )
+        if( trace->GetType() & SPT_AC_PHASE )
         {
-            for( int i = 0; i < aPoints; i++ )
+            for( unsigned int i = 0; i < aPoints; i++ )
                 tmp[i] = tmp[i] * 180.0 / M_PI;                 // convert to degrees
         }
         else
         {
-            for( int i = 0; i < aPoints; i++ )
+            for( unsigned int i = 0; i < aPoints; i++ )
             {
                 // log( 0 ) is not valid.
                 if( tmp[i] != 0 )
@@ -747,20 +747,18 @@ bool SIM_PLOT_PANEL::addTrace( const wxString& aTitle, const wxString& aName, in
 
     trace->SetData( std::vector<double>( aX, aX + aPoints ), tmp );
 
-    if( ( aType & SPT_AC_PHASE ) || ( aType & SPT_CURRENT ) )
+    if( ( trace->GetType() & SPT_AC_PHASE ) || ( trace->GetType() & SPT_CURRENT ) )
         trace->SetScale( m_axis_x, m_axis_y2 );
-    else if( aType & SPT_POWER )
+    else if( trace->GetType() & SPT_POWER )
         trace->SetScale( m_axis_x, m_axis_y3 );
     else
         trace->SetScale( m_axis_x, m_axis_y1 );
 
     m_plotWin->UpdateAll();
-
-    return addedNewEntry;
 }
 
 
-bool SIM_PLOT_PANEL::deleteTrace( const wxString& aName )
+bool SIM_PLOT_PANEL::DeleteTrace( const wxString& aName )
 {
     auto it = m_traces.find( aName );
 

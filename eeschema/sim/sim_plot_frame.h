@@ -50,7 +50,7 @@ class NGSPICE_CIRCUIT_MODEL;
 
 #include <sim/sim_plot_panel.h>
 #include <sim/sim_panel_base.h>
-#include <sim/sim_workbook.h>
+#include <sim/sim_notebook.h>
 
 class SIM_THREAD_REPORTER;
 class TUNER_SLIDER;
@@ -61,6 +61,12 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
 public:
     SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent );
     ~SIM_PLOT_FRAME();
+
+    /**
+     * Check and load the current netlist into the simulator.
+     * @return true if document is fully annotated and netlist was loaded successfully.
+     */
+    bool LoadSimulator();
 
     void StartSimulation();
 
@@ -208,18 +214,18 @@ public:
 
     wxString GetCurrentSimCommand() const
     {
-        if( getCurrentPlotWindow() == nullptr )
-            return m_circuitModel->GetSchTextSimCommand();
+        if( getCurrentPlotWindow() )
+            return getCurrentPlotWindow()->GetSimCommand();
         else
-            return m_workbook->GetSimCommand( getCurrentPlotWindow() );
+            return m_circuitModel->GetSchTextSimCommand();
     }
 
     int GetCurrentOptions() const
     {
-        if( getCurrentPlotWindow() == nullptr )
-            return m_circuitModel->GetSimOptions();
+        if( getCurrentPlotWindow() )
+            return getCurrentPlotWindow()->GetSimOptions();
         else
-            return m_workbook->GetSimOptions( getCurrentPlotWindow() );
+            return m_circuitModel->GetSimOptions();
     }
 
     // Simulator doesn't host a tool framework
@@ -266,9 +272,15 @@ private:
      * @param aType describes the type of plot.
      * @param aParam is the parameter for the device/net (e.g. I, Id, V).
      * @param aPlotPanel is the panel that should receive the update.
-     * @return True if a plot was successfully added/updated.
      */
-    bool updateTrace( const wxString& aName, SIM_TRACE_TYPE aType, SIM_PLOT_PANEL* aPlotPanel );
+    void updateTrace( const wxString& aName, SIM_TRACE_TYPE aType, SIM_PLOT_PANEL* aPlotPanel );
+
+    /**
+     * Rebuild the list of signals available from the netlist.
+     *
+     * Note: this is not the filtered list.  See rebuildSignalsGrid() for that.
+     */
+    void rebuildSignalsList();
 
     /**
      * Rebuild the filtered list of signals in the signals grid.
@@ -295,7 +307,7 @@ private:
      */
     SIM_PANEL_BASE* getCurrentPlotWindow() const
     {
-        return dynamic_cast<SIM_PANEL_BASE*>( m_workbook->GetCurrentPage() );
+        return dynamic_cast<SIM_PANEL_BASE*>( m_plotNotebook->GetCurrentPage() );
     }
 
     /**
@@ -319,8 +331,7 @@ private:
     void onCursorsGridCellChanged( wxGridEvent& aEvent ) override;
     void onMeasurementsGridCellChanged( wxGridEvent& aEvent ) override;
 
-    void onWorkbookModified( wxCommandEvent& event );
-    void onWorkbookClrModified( wxCommandEvent& event );
+    void onNotebookModified( wxCommandEvent& event );
 
     bool canCloseWindow( wxCloseEvent& aEvent ) override;
     void doCloseWindow() override;
@@ -364,6 +375,7 @@ private:
     unsigned int          m_plotNumber;
     bool                  m_simFinished;
     unsigned int          m_outputCounter;
+    bool                  m_workbookModified;
 };
 
 // Commands

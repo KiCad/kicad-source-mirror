@@ -354,13 +354,13 @@ if( KICAD_SPICE )
         tools/simulator_control.cpp
         sim/ngspice_circuit_model.cpp
         sim/ngspice.cpp
+        sim/sim_notebook.cpp
         sim/sim_panel_base.cpp
         sim/sim_plot_colors.cpp
         sim/sim_plot_frame.cpp
         sim/sim_plot_frame_base.cpp
         sim/sim_plot_panel.cpp
         sim/sim_property.cpp
-        sim/sim_workbook.cpp
         sim/spice_simulator.cpp
         sim/spice_value.cpp
         sim/toolbars_sim_plot_frame.cpp

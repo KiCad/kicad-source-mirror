@@ -22,28 +22,25 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <sim/sim_workbook.h>
+#include <sim/sim_notebook.h>
 
 
-SIM_WORKBOOK::SIM_WORKBOOK() : wxAuiNotebook()
-{
-    m_modified = false;
-}
+SIM_NOTEBOOK::SIM_NOTEBOOK() :
+        wxAuiNotebook()
+{ }
 
 
-SIM_WORKBOOK::SIM_WORKBOOK( wxWindow* aParent, wxWindowID aId, const wxPoint& aPos, const wxSize&
+SIM_NOTEBOOK::SIM_NOTEBOOK( wxWindow* aParent, wxWindowID aId, const wxPoint& aPos, const wxSize&
                             aSize, long aStyle ) :
         wxAuiNotebook( aParent, aId, aPos, aSize, aStyle )
-{
-    m_modified = false;
-}
+{ }
 
 
-bool SIM_WORKBOOK::AddPage( wxWindow* page, const wxString& caption, bool select, const wxBitmap& bitmap )
+bool SIM_NOTEBOOK::AddPage( wxWindow* page, const wxString& caption, bool select, const wxBitmap& bitmap )
 {
-    if(  wxAuiNotebook::AddPage( page, caption, select, bitmap ) )
+    if( wxAuiNotebook::AddPage( page, caption, select, bitmap ) )
     {
-        setModified();
+        wxPostEvent( GetParent(), wxCommandEvent( EVT_WORKBOOK_MODIFIED ) );
         return true;
     }
 
@@ -51,11 +48,11 @@ bool SIM_WORKBOOK::AddPage( wxWindow* page, const wxString& caption, bool select
 }
 
 
-bool SIM_WORKBOOK::AddPage( wxWindow* page, const wxString& text, bool select, int imageId )
+bool SIM_NOTEBOOK::AddPage( wxWindow* page, const wxString& text, bool select, int imageId )
 {
     if(  wxAuiNotebook::AddPage( page, text, select, imageId ) )
     {
-        setModified();
+        wxPostEvent( GetParent(), wxCommandEvent( EVT_WORKBOOK_MODIFIED ) );
         return true;
     }
 
@@ -63,11 +60,11 @@ bool SIM_WORKBOOK::AddPage( wxWindow* page, const wxString& text, bool select, i
 }
 
 
-bool SIM_WORKBOOK::DeleteAllPages()
+bool SIM_NOTEBOOK::DeleteAllPages()
 {
     if( wxAuiNotebook::DeleteAllPages() )
     {
-        setModified();
+        wxPostEvent( GetParent(), wxCommandEvent( EVT_WORKBOOK_MODIFIED ) );
         return true;
     }
 
@@ -75,57 +72,16 @@ bool SIM_WORKBOOK::DeleteAllPages()
 }
 
 
-bool SIM_WORKBOOK::DeletePage( size_t page )
+bool SIM_NOTEBOOK::DeletePage( size_t page )
 {
     if( wxAuiNotebook::DeletePage( page ) )
     {
-        setModified();
+        wxPostEvent( GetParent(), wxCommandEvent( EVT_WORKBOOK_MODIFIED ) );
         return true;
     }
 
     return false;
-}
-
-
-bool SIM_WORKBOOK::AddTrace( SIM_PLOT_PANEL* aPlotPanel, const wxString& aTitle,
-                             const wxString& aName, int aPoints, const double* aX, const double* aY,
-                             SIM_TRACE_TYPE aType )
-{
-    if( aPoints && aPlotPanel->addTrace( aTitle, aName, aPoints, aX, aY, aType ) )
-    {
-        setModified();
-        return true;
-    }
-
-    return false;
-}
-
-
-bool SIM_WORKBOOK::DeleteTrace( SIM_PLOT_PANEL* aPlotPanel, const wxString& aName )
-{
-    if( aPlotPanel->deleteTrace( aName ) )
-    {
-        setModified();
-        return true;
-    }
-
-    return false;
-}
-
-
-void SIM_WORKBOOK::ClrModified()
-{
-    m_modified = false;
-    wxPostEvent( GetParent(), wxCommandEvent( EVT_WORKBOOK_CLR_MODIFIED ) );
-}
-
-
-void SIM_WORKBOOK::setModified()
-{
-    m_modified = true;
-    wxPostEvent( GetParent(), wxCommandEvent( EVT_WORKBOOK_MODIFIED ) );
 }
 
 
 wxDEFINE_EVENT( EVT_WORKBOOK_MODIFIED, wxCommandEvent );
-wxDEFINE_EVENT( EVT_WORKBOOK_CLR_MODIFIED, wxCommandEvent );
