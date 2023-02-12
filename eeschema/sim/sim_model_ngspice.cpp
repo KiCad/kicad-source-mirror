@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,9 +34,9 @@ std::vector<std::string> SPICE_GENERATOR_NGSPICE::CurrentNames( const SPICE_ITEM
     {
         case SIM_MODEL::DEVICE_T::NPN:
         case SIM_MODEL::DEVICE_T::PNP:
-            return { fmt::format( "I({}:c)", aItem.refName ),
-                     fmt::format( "I({}:b)", aItem.refName ),
-                     fmt::format( "I({}:e)", aItem.refName ) };
+            return { fmt::format( "I({}:c)", ItemName( aItem ) ),
+                     fmt::format( "I({}:b)", ItemName( aItem ) ),
+                     fmt::format( "I({}:e)", ItemName( aItem ) ) };
 
         case SIM_MODEL::DEVICE_T::NJFET:
         case SIM_MODEL::DEVICE_T::PJFET:
@@ -44,9 +44,9 @@ std::vector<std::string> SPICE_GENERATOR_NGSPICE::CurrentNames( const SPICE_ITEM
         case SIM_MODEL::DEVICE_T::PMES:
         case SIM_MODEL::DEVICE_T::NMOS:
         case SIM_MODEL::DEVICE_T::PMOS:
-            return { fmt::format( "I({}:d)", aItem.refName ),
-                     fmt::format( "I({}:g)", aItem.refName ),
-                     fmt::format( "I({}:s)", aItem.refName ) };
+            return { fmt::format( "I({}:d)", ItemName( aItem ) ),
+                     fmt::format( "I({}:g)", ItemName( aItem ) ),
+                     fmt::format( "I({}:s)", ItemName( aItem ) ) };
 
         case SIM_MODEL::DEVICE_T::R:
         case SIM_MODEL::DEVICE_T::C:
