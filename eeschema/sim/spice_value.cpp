@@ -124,6 +124,8 @@ wxString spice_prefix( SPICE_VALUE::UNIT_PREFIX aPrefix )
     case SPICE_VALUE::PFX_GIGA:  return wxT( "G" );
     case SPICE_VALUE::PFX_TERA:  return wxT( "T" );
     }
+
+    return wxEmptyString;
 }
 
 
@@ -142,6 +144,8 @@ wxString si_prefix( SPICE_VALUE::UNIT_PREFIX aPrefix )
     case SPICE_VALUE::PFX_GIGA:  return wxT( "G" );
     case SPICE_VALUE::PFX_TERA:  return wxT( "T" );
     }
+
+    return wxEmptyString;
 }
 
 
