@@ -699,10 +699,10 @@
                                                         </object>
                                                     </object>
                                                     <object class="gbsizeritem" expanded="1">
-                                                        <property name="border">5</property>
+                                                        <property name="border">2</property>
                                                         <property name="colspan">1</property>
                                                         <property name="column">1</property>
-                                                        <property name="flag">wxEXPAND</property>
+                                                        <property name="flag">wxEXPAND|wxTOP|wxBOTTOM</property>
                                                         <property name="row">2</property>
                                                         <property name="rowspan">1</property>
                                                         <object class="wxComboBox" expanded="1">
@@ -905,10 +905,10 @@
                                                         </object>
                                                     </object>
                                                     <object class="gbsizeritem" expanded="1">
-                                                        <property name="border">5</property>
+                                                        <property name="border">1</property>
                                                         <property name="colspan">1</property>
                                                         <property name="column">1</property>
-                                                        <property name="flag">wxEXPAND</property>
+                                                        <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM</property>
                                                         <property name="row">3</property>
                                                         <property name="rowspan">1</property>
                                                         <object class="wxComboBox" expanded="1">
