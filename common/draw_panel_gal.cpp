@@ -212,7 +212,7 @@ void EDA_DRAW_PANEL_GAL::DoRePaint()
     if( !m_drawingEnabled )
         return;
 
-    if( !m_gal->IsVisible() )
+    if( !m_gal->IsInitialized() || !m_gal->IsVisible() )
         return;
 
     m_pendingRefresh = false;
