@@ -76,11 +76,19 @@ void DIALOG_UNUSED_PAD_LAYERS::syncImages( wxCommandEvent& aEvent )
 
 void DIALOG_UNUSED_PAD_LAYERS::onApply( wxCommandEvent& event )
 {
+    updatePadsAndVias( false );
     EndModal( wxID_APPLY );
 }
 
 
-bool DIALOG_UNUSED_PAD_LAYERS::TransferDataFromWindow()
+void DIALOG_UNUSED_PAD_LAYERS::onOK( wxCommandEvent& event )
+{
+    updatePadsAndVias( true );   // called only with wxID_OK
+    event.Skip();
+}
+
+
+void  DIALOG_UNUSED_PAD_LAYERS::updatePadsAndVias( bool aRemoveLayers )
 {
     if( m_cbSelectedOnly->IsChecked() )
     {
@@ -91,7 +99,7 @@ bool DIALOG_UNUSED_PAD_LAYERS::TransferDataFromWindow()
             if( item->Type() == PCB_VIA_T && m_cbVias->IsChecked() )
             {
                 PCB_VIA* via = static_cast<PCB_VIA*>( item );
-                via->SetRemoveUnconnected( GetReturnCode() == wxID_OK );
+                via->SetRemoveUnconnected( aRemoveLayers );
                 via->SetKeepStartEnd( m_cbPreservePads->IsChecked() );
             }
 
@@ -101,7 +109,7 @@ bool DIALOG_UNUSED_PAD_LAYERS::TransferDataFromWindow()
 
                 for( PAD* pad : footprint->Pads() )
                 {
-                    pad->SetRemoveUnconnected( GetReturnCode() == wxID_OK );
+                    pad->SetRemoveUnconnected( aRemoveLayers );
                     pad->SetKeepTopBottom( m_cbPreservePads->IsChecked() );
                 }
             }
@@ -110,7 +118,7 @@ bool DIALOG_UNUSED_PAD_LAYERS::TransferDataFromWindow()
             {
                 PAD* pad = static_cast<PAD*>( item );
 
-                pad->SetRemoveUnconnected( GetReturnCode() == wxID_OK );
+                pad->SetRemoveUnconnected( aRemoveLayers );
                 pad->SetKeepTopBottom( m_cbPreservePads->IsChecked() );
             }
         }
@@ -125,7 +133,7 @@ bool DIALOG_UNUSED_PAD_LAYERS::TransferDataFromWindow()
 
                 for( PAD* pad : footprint->Pads() )
                 {
-                    pad->SetRemoveUnconnected( GetReturnCode() == wxID_OK );
+                    pad->SetRemoveUnconnected( aRemoveLayers );
                     pad->SetKeepTopBottom( m_cbPreservePads->IsChecked() );
                 }
             }
@@ -140,12 +148,11 @@ bool DIALOG_UNUSED_PAD_LAYERS::TransferDataFromWindow()
 
                 m_commit.Modify( item );
                 PCB_VIA* via = static_cast<PCB_VIA*>( item );
-                via->SetRemoveUnconnected( GetReturnCode() == wxID_OK );
+                via->SetRemoveUnconnected( aRemoveLayers );
                 via->SetKeepStartEnd( m_cbPreservePads->IsChecked() );
             }
         }
     }
 
     m_commit.Push( _( "Set Unused Pad Properties" ) );
-    return true;
 }

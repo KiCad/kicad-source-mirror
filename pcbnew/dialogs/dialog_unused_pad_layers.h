@@ -39,11 +39,17 @@ public:
                               COMMIT& aCommit  );
 
 private:
-    bool TransferDataFromWindow() override;
-
     void updateImage();
 
+    /**
+     * Update layers of pads and vias
+     * aRemoveLayers = true to remove not connected layers
+     * false to set all layers to active
+     */
+    void updatePadsAndVias( bool aRemoveLayers );
+
     void onApply( wxCommandEvent& event ) override;
+    void onOK( wxCommandEvent& event ) override;
 
     void syncImages( wxCommandEvent& aEvent ) override;
 

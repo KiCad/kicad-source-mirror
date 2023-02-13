@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -50,6 +50,7 @@ class DIALOG_UNUSED_PAD_LAYERS_BASE : public DIALOG_SHIM
 		// Virtual event handlers, override them in your derived class
 		virtual void syncImages( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onApply( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onOK( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
