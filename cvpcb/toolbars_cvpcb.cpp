@@ -84,6 +84,9 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
     m_tcFilterString = new wxTextCtrl( m_mainToolBar, wxID_ANY, wxEmptyString, wxDefaultPosition,
                                        wxDefaultSize, wxTE_PROCESS_ENTER );
 
+    // Min size on Mac is (a not very useful) single character
+    m_tcFilterString->SetMinSize( wxSize( 150, -1 ) );
+
     m_tcFilterString->Bind( wxEVT_TEXT_ENTER, &CVPCB_MAINFRAME::onTextFilterChanged, this );
 
     m_mainToolBar->AddControl( m_tcFilterString );

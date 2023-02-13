@@ -38,9 +38,8 @@ SYMBOLS_LISTBOX::SYMBOLS_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id ) :
     ITEMS_LISTBOX_BASE( parent, id ),
     m_warningAttr( std::make_unique<wxListItemAttr>() )
 {
-    m_warningAttr->SetBackgroundColour( KIPLATFORM::UI::IsDarkTheme()
-                                        ? wxColour( 112, 96, 32 )
-                                        : *wxYELLOW );
+    m_warningAttr->SetBackgroundColour( KIPLATFORM::UI::IsDarkTheme() ? wxColour( 112, 96, 32 )
+                                                                      : wxColour( 255, 248, 212 ) );
 }
 
 
