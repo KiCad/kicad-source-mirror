@@ -63,7 +63,7 @@ SCH_TEXTBOX::SCH_TEXTBOX( const SCH_TEXTBOX& aText ) :
 
 int SCH_TEXTBOX::GetTextMargin() const
 {
-    return KiROUND( GetTextSize().y * 0.8 );
+    return KiROUND( GetStroke().GetWidth() / 2.0 ) + KiROUND( GetTextSize().y * 0.75 );
 }
 
 

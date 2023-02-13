@@ -53,7 +53,7 @@ FP_TEXTBOX::~FP_TEXTBOX()
 
 int FP_TEXTBOX::GetTextMargin() const
 {
-    return KiROUND( GetTextSize().y * 0.8 );
+    return KiROUND( GetStroke().GetWidth() / 2.0 ) + KiROUND( GetTextSize().y * 0.75 );
 }
 
 

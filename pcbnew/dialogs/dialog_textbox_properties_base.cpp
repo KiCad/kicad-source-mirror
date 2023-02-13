@@ -66,10 +66,10 @@ DIALOG_TEXTBOX_PROPERTIES_BASE::DIALOG_TEXTBOX_PROPERTIES_BASE( wxWindow* parent
 	bMainSizer->Add( m_MultiLineSizer, 20, wxEXPAND|wxALL, 10 );
 
 	wxGridBagSizer* gbSizer1;
-	gbSizer1 = new wxGridBagSizer( 4, 3 );
+	gbSizer1 = new wxGridBagSizer( 2, 3 );
 	gbSizer1->SetFlexibleDirection( wxBOTH );
 	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-	gbSizer1->SetEmptyCellSize( wxSize( 20,8 ) );
+	gbSizer1->SetEmptyCellSize( wxSize( -1,8 ) );
 
 	m_cbLocked = new wxCheckBox( this, wxID_ANY, _("Locked"), wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer1->Add( m_cbLocked, wxGBPosition( 0, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -89,7 +89,7 @@ DIALOG_TEXTBOX_PROPERTIES_BASE::DIALOG_TEXTBOX_PROPERTIES_BASE( wxWindow* parent
 	int m_fontCtrlNChoices = sizeof( m_fontCtrlChoices ) / sizeof( wxString );
 	m_fontCtrl = new FONT_CHOICE( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_fontCtrlNChoices, m_fontCtrlChoices, 0 );
 	m_fontCtrl->SetSelection( 0 );
-	gbSizer1->Add( m_fontCtrl, wxGBPosition( 3, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_fontCtrl, wxGBPosition( 3, 1 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	wxBoxSizer* bSizerButtonBar;
 	bSizerButtonBar = new wxBoxSizer( wxHORIZONTAL );
@@ -135,53 +135,53 @@ DIALOG_TEXTBOX_PROPERTIES_BASE::DIALOG_TEXTBOX_PROPERTIES_BASE( wxWindow* parent
 
 	gbSizer1->Add( bSizerButtonBar, wxGBPosition( 3, 4 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 8 );
 
-	m_SizeXLabel = new wxStaticText( this, wxID_ANY, _("Text Width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SizeXLabel = new wxStaticText( this, wxID_ANY, _("Text width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SizeXLabel->Wrap( -1 );
 	m_SizeXLabel->SetToolTip( _("Text width") );
 
-	gbSizer1->Add( m_SizeXLabel, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	gbSizer1->Add( m_SizeXLabel, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_SizeXCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-	gbSizer1->Add( m_SizeXCtrl, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	gbSizer1->Add( m_SizeXCtrl, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_SizeXUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SizeXUnits->Wrap( -1 );
-	gbSizer1->Add( m_SizeXUnits, wxGBPosition( 4, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_SizeXUnits, wxGBPosition( 5, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_borderCheckbox = new wxCheckBox( this, wxID_ANY, _("Border"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_borderCheckbox, wxGBPosition( 4, 4 ), wxGBSpan( 1, 2 ), wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_borderCheckbox, wxGBPosition( 5, 4 ), wxGBSpan( 1, 2 ), wxLEFT|wxALIGN_CENTER_VERTICAL, 10 );
 
-	m_SizeYLabel = new wxStaticText( this, wxID_ANY, _("Text Height:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SizeYLabel = new wxStaticText( this, wxID_ANY, _("Text height:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SizeYLabel->Wrap( -1 );
 	m_SizeYLabel->SetToolTip( _("Text height") );
 
-	gbSizer1->Add( m_SizeYLabel, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	gbSizer1->Add( m_SizeYLabel, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_SizeYCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-	gbSizer1->Add( m_SizeYCtrl, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	gbSizer1->Add( m_SizeYCtrl, wxGBPosition( 6, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_SizeYUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SizeYUnits->Wrap( -1 );
-	gbSizer1->Add( m_SizeYUnits, wxGBPosition( 5, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_SizeYUnits, wxGBPosition( 6, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_ThicknessLabel = new wxStaticText( this, wxID_ANY, _("Thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ThicknessLabel->Wrap( -1 );
 	m_ThicknessLabel->SetToolTip( _("Text thickness") );
 
-	gbSizer1->Add( m_ThicknessLabel, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	gbSizer1->Add( m_ThicknessLabel, wxGBPosition( 7, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_ThicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-	gbSizer1->Add( m_ThicknessCtrl, wxGBPosition( 6, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	gbSizer1->Add( m_ThicknessCtrl, wxGBPosition( 7, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_ThicknessUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ThicknessUnits->Wrap( -1 );
-	gbSizer1->Add( m_ThicknessUnits, wxGBPosition( 6, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_ThicknessUnits, wxGBPosition( 7, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_OrientLabel = new wxStaticText( this, wxID_ANY, _("Orientation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_OrientLabel->Wrap( -1 );
 	m_OrientLabel->SetToolTip( _("Text orientation") );
 
-	gbSizer1->Add( m_OrientLabel, wxGBPosition( 1, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	gbSizer1->Add( m_OrientLabel, wxGBPosition( 1, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
 
 	m_OrientCtrl = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
 	m_OrientCtrl->Append( _("0.0") );
@@ -192,23 +192,23 @@ DIALOG_TEXTBOX_PROPERTIES_BASE::DIALOG_TEXTBOX_PROPERTIES_BASE( wxWindow* parent
 
 	m_borderWidthLabel = new wxStaticText( this, wxID_ANY, _("Border width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_borderWidthLabel->Wrap( -1 );
-	gbSizer1->Add( m_borderWidthLabel, wxGBPosition( 5, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	gbSizer1->Add( m_borderWidthLabel, wxGBPosition( 6, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
 
 	m_borderWidthCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_borderWidthCtrl, wxGBPosition( 5, 5 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_borderWidthCtrl, wxGBPosition( 6, 5 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_borderWidthUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_borderWidthUnits->Wrap( -1 );
-	gbSizer1->Add( m_borderWidthUnits, wxGBPosition( 5, 6 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_borderWidthUnits, wxGBPosition( 6, 6 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_borderStyleLabel = new wxStaticText( this, wxID_ANY, _("Border style:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_borderStyleLabel->Wrap( -1 );
-	gbSizer1->Add( m_borderStyleLabel, wxGBPosition( 6, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	gbSizer1->Add( m_borderStyleLabel, wxGBPosition( 7, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
 
 	m_borderStyleCombo = new wxBitmapComboBox( this, wxID_ANY, _("Combo!"), wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
 	m_borderStyleCombo->SetMinSize( wxSize( 240,-1 ) );
 
-	gbSizer1->Add( m_borderStyleCombo, wxGBPosition( 6, 5 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxEXPAND, 5 );
+	gbSizer1->Add( m_borderStyleCombo, wxGBPosition( 7, 5 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxEXPAND, 5 );
 
 
 	gbSizer1->AddGrowableCol( 3 );
