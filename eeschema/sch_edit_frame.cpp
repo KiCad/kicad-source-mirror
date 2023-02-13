@@ -1283,6 +1283,10 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
     SCHEMATIC_SETTINGS& settings = m_schematic->Settings();
     SIM_LIB_MGR         simLibMgr( &Prj() );
 
+    // Patch for bug early in V7.99 dev
+    if( settings.m_OPO_VRange.EndsWith( 'A' ) )
+        settings.m_OPO_VRange[ settings.m_OPO_VRange.Length() - 1 ] = 'V';
+
     // Update items which may have ${OP} text variables
     //
     GetCanvas()->GetView()->UpdateAllItemsConditionally(
@@ -1341,7 +1345,7 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
                 wxString op = m_schematic->GetOperatingPoint( ref, settings.m_OPO_IPrecision,
                                                               settings.m_OPO_IRange );
 
-                if( !op.IsEmpty() && op != wxS( "?" ) )
+                if( !op.IsEmpty() && op != wxS( "--" ) && op != wxS( "?" ) )
                     pins[0]->SetOperatingPoint( op );
             }
             else
@@ -1356,7 +1360,7 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
                                                                   settings.m_OPO_IPrecision,
                                                                   settings.m_OPO_IRange );
 
-                    if( symbolPin && !op.IsEmpty() && op != wxS( "?" ) )
+                    if( symbolPin && !op.IsEmpty() && op != wxS( "--" ) && op != wxS( "?" ) )
                     {
                         symbolPin->SetOperatingPoint( op );
                         GetCanvas()->GetView()->Update( symbol );
@@ -1371,7 +1375,7 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
         wxString op = m_schematic->GetOperatingPoint( key.Name, settings.m_OPO_VPrecision,
                                                       settings.m_OPO_VRange );
 
-        if( !op.IsEmpty() )
+        if( !op.IsEmpty() && op != wxS( "--" ) && op != wxS( "?" ) )
         {
             for( CONNECTION_SUBGRAPH* subgraph : subgraphList )
             {
