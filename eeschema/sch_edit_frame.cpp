@@ -1352,6 +1352,10 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
             {
                 SIM_MODEL& model = simLibMgr.CreateModel( &GetCurrentSheet(), *symbol ).model;
 
+                SPICE_ITEM spiceItem;
+                spiceItem.refName = ref;
+                ref = model.SpiceGenerator().ItemName( spiceItem );
+
                 for( const auto& modelPin : model.GetPins() )
                 {
                     SCH_PIN* symbolPin = symbol->GetPin( modelPin.get().symbolPinNumber );

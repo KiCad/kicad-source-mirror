@@ -1357,7 +1357,7 @@ void SCH_PAINTER::draw( const LIB_PIN *aPin, int aLayer, bool aDimmed )
         int             textOffset = KiROUND( textSize * 0.22 );
         TEXT_ATTRIBUTES attrs;
 
-        if( len > KiROUND( textSize * 1.8 ) )
+        if( len > textSize )
         {
             if( dir.x == 0 )
             {
