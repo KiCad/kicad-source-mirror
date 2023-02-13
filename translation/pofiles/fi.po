@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-10 15:35-0800\n"
-"PO-Revision-Date: 2023-02-13 00:59+0000\n"
-"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
+"PO-Revision-Date: 2023-02-13 14:10+0000\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
 "Language: fi\n"
@@ -24550,7 +24550,7 @@ msgstr "Kääntöpuoli"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:208
 msgid "Front reference start:"
-msgstr "Etupuolen referenssien alku:"
+msgstr "Etupuolen viitemerkintöjen alku:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:210
 msgid "Starting reference designation for front."
@@ -24584,7 +24584,7 @@ msgid ""
 "Blank continues from front or enter a number greater than the highest "
 "reference designation on the front."
 msgstr ""
-"Tyhjä jatkuu etupuolelta, tai syötä luku, joka on suurempi kuin korkein "
+"Jatkuu etupuolelta jos tyhjä, tai syötä luku, joka on suurempi kuin korkein "
 "etupuolen viitemerkintä."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:227
@@ -30840,7 +30840,7 @@ msgstr "Ulkoinen, testaus"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:67
 msgid "If you want a fabrication layer for the front side of the board"
-msgstr "Jos haluat valmistuskerroksen levyn etupuolelle"
+msgstr "Jos haluat valmistuskerroksen piirilevyn etupuolelle"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:71
 msgid "Fab_Front"
@@ -40522,7 +40522,7 @@ msgstr "Näytä tai piilota tämä kerros"
 
 #: pcbnew/widgets/appearance_controls.cpp:1612
 msgid "Adhesive on board's front"
-msgstr "Sidosaine levyn etupuolella"
+msgstr "Sidosaine piirilevyn etupuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1613
 msgid "Adhesive on board's back"
@@ -40530,7 +40530,7 @@ msgstr "Sidosaine piirilevyn kääntöpuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1614
 msgid "Solder paste on board's front"
-msgstr "Juotospasta levyn etupuolella"
+msgstr "Juotospasta piirilevyn etupuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1615
 msgid "Solder paste on board's back"
@@ -40538,7 +40538,7 @@ msgstr "Juotospasta piirilevyn kääntöpuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1616
 msgid "Silkscreen on board's front"
-msgstr "Silkkipaino levyn etupuolella"
+msgstr "Silkkipaino piirilevyn etupuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1617
 msgid "Silkscreen on board's back"
@@ -40546,7 +40546,7 @@ msgstr "Silkkipaino piirilevyn kääntöpuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1618
 msgid "Solder mask on board's front"
-msgstr "Juotosmaski levyn etupuolella"
+msgstr "Juotosmaski piirilevyn etupuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1619
 msgid "Solder mask on board's back"
@@ -40575,7 +40575,7 @@ msgstr "Piirilevyn reunan ääriviivan vähimmäisetäisyys"
 
 #: pcbnew/widgets/appearance_controls.cpp:1626
 msgid "Footprint courtyards on board's front"
-msgstr "Jalanjäljen komponettipihat piirilevyn etupuolella"
+msgstr "Jalanjälkien komponettipihat piirilevyn etupuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1627
 msgid "Footprint courtyards on board's back"
@@ -40583,7 +40583,7 @@ msgstr "Jalanjäljen komponenttipihat piirilevyn kääntöpuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1628
 msgid "Footprint assembly on board's front"
-msgstr "Jalanjäljen asennus levyn etupuolelle"
+msgstr "Jalanjälkien asennus piirilevyn etupuolelle"
 
 #: pcbnew/widgets/appearance_controls.cpp:1629
 msgid "Footprint assembly on board's back"
