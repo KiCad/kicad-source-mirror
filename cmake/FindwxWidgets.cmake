@@ -926,8 +926,17 @@ if(wxWidgets_FOUND)
     "\\2" wxWidgets_VERSION_MINOR "${_wx_version_h}" )
   string(REGEX REPLACE "^(.*\n)?#define +wxRELEASE_NUMBER +([0-9]+).*"
     "\\2" wxWidgets_VERSION_PATCH "${_wx_version_h}" )
-  set(wxWidgets_VERSION_STRING
-    "${wxWidgets_VERSION_MAJOR}.${wxWidgets_VERSION_MINOR}.${wxWidgets_VERSION_PATCH}" )
+  string(REGEX REPLACE "^(.*\n)?#define +wxSUBRELEASE_NUMBER +([0-9]+).*"
+    "\\2" wxWidgets_VERSION_SUBRELEASE "${_wx_version_h}" )
+
+  if( ${wxWidgets_VERSION_SUBRELEASE} GREATER 0 )
+    set(wxWidgets_VERSION_STRING
+      "${wxWidgets_VERSION_MAJOR}.${wxWidgets_VERSION_MINOR}.${wxWidgets_VERSION_PATCH}.${wxWidgets_VERSION_SUBRELEASE}" )
+  else()
+    set(wxWidgets_VERSION_STRING
+      "${wxWidgets_VERSION_MAJOR}.${wxWidgets_VERSION_MINOR}.${wxWidgets_VERSION_PATCH}" )
+  endif()
+
   DBG_MSG("wxWidgets_VERSION_STRING:    ${wxWidgets_VERSION_STRING}")
 endif()
 
