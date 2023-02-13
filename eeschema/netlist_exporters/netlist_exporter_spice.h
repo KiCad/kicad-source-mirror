@@ -130,7 +130,7 @@ public:
 
 protected:
     void ReadDirectives( unsigned aNetlistOptions );
-    virtual void WriteDirectives( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions ) const;
+    virtual void WriteDirectives( OUTPUTFORMATTER& candidate, unsigned aNetlistOptions ) const;
 
     virtual std::string GenerateItemPinNetName( const std::string& aNetName,
                                                 int& aNcCounter ) const;

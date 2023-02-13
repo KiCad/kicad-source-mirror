@@ -387,49 +387,55 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
             wxStringTokenizer tokenizer( text, wxT( "\r\n" ), wxTOKEN_STRTOK );
             bool              foundDirective = false;
 
+            auto isDirective =
+                    []( const wxString& line, const wxString& dir )
+                    {
+                        return line == dir || line.StartsWith( dir + wxS( " " ) );
+                    };
+
             while( tokenizer.HasMoreTokens() )
             {
                 wxString line = tokenizer.GetNextToken().Upper();
 
                 if( line.StartsWith( wxT( "." ) ) )
                 {
-                    if(    line.StartsWith( wxT( ".AC" ) )
-                        || line.StartsWith( wxT( ".CONTROL" ) )
-                        || line.StartsWith( wxT( ".CSPARAM" ) )
-                        || line.StartsWith( wxT( ".DISTO" ) )
-                        || line.StartsWith( wxT( ".ELSE" ) )
-                        || line.StartsWith( wxT( ".ELSEIF" ) )
-                        || line.StartsWith( wxT( ".END" ) )
-                        || line.StartsWith( wxT( ".ENDC" ) )
-                        || line.StartsWith( wxT( ".ENDIF" ) )
-                        || line.StartsWith( wxT( ".ENDS" ) )
-                        || line.StartsWith( wxT( ".FOUR" ) )
-                        || line.StartsWith( wxT( ".FUNC" ) )
-                        || line.StartsWith( wxT( ".GLOBAL" ) )
-                        || line.StartsWith( wxT( ".IC" ) )
-                        || line.StartsWith( wxT( ".IF" ) )
-                        || line.StartsWith( wxT( ".INCLUDE" ) )
-                        || line.StartsWith( wxT( ".LIB" ) )
-                        || line.StartsWith( wxT( ".MEAS" ) )
-                        || line.StartsWith( wxT( ".MODEL" ) )
-                        || line.StartsWith( wxT( ".NODESET" ) )
-                        || line.StartsWith( wxT( ".NOISE" ) )
-                        || line.StartsWith( wxT( ".OP" ) )
-                        || line.StartsWith( wxT( ".OPTIONS" ) )
-                        || line.StartsWith( wxT( ".PARAM" ) )
-                        || line.StartsWith( wxT( ".PLOT" ) )
-                        || line.StartsWith( wxT( ".PRINT" ) )
-                        || line.StartsWith( wxT( ".PROBE" ) )
-                        || line.StartsWith( wxT( ".PZ" ) )
-                        || line.StartsWith( wxT( ".SAVE" ) )
-                        || line.StartsWith( wxT( ".SENS" ) )
-                        || line.StartsWith( wxT( ".SP" ) )
-                        || line.StartsWith( wxT( ".SUBCKT" ) )
-                        || line.StartsWith( wxT( ".TEMP" ) )
-                        || line.StartsWith( wxT( ".TF" ) )
-                        || line.StartsWith( wxT( ".TITLE" ) )
-                        || line.StartsWith( wxT( ".TRAN" ) )
-                        || line.StartsWith( wxT( ".WIDTH" ) ) )
+                    if(    isDirective( line, wxS( ".AC" ) )
+                        || isDirective( line, wxS( ".CONTROL" ) )
+                        || isDirective( line, wxS( ".CSPARAM" ) )
+                        || isDirective( line, wxS( ".DISTO" ) )
+                        || isDirective( line, wxS( ".ELSE" ) )
+                        || isDirective( line, wxS( ".ELSEIF" ) )
+                        || isDirective( line, wxS( ".END" ) )
+                        || isDirective( line, wxS( ".ENDC" ) )
+                        || isDirective( line, wxS( ".ENDIF" ) )
+                        || isDirective( line, wxS( ".ENDS" ) )
+                        || isDirective( line, wxS( ".FOUR" ) )
+                        || isDirective( line, wxS( ".FUNC" ) )
+                        || isDirective( line, wxS( ".GLOBAL" ) )
+                        || isDirective( line, wxS( ".IC" ) )
+                        || isDirective( line, wxS( ".IF" ) )
+                        || isDirective( line, wxS( ".INCLUDE" ) )
+                        || isDirective( line, wxS( ".LIB" ) )
+                        || isDirective( line, wxS( ".MEAS" ) )
+                        || isDirective( line, wxS( ".MODEL" ) )
+                        || isDirective( line, wxS( ".NODESET" ) )
+                        || isDirective( line, wxS( ".NOISE" ) )
+                        || isDirective( line, wxS( ".OP" ) )
+                        || isDirective( line, wxS( ".OPTIONS" ) )
+                        || isDirective( line, wxS( ".PARAM" ) )
+                        || isDirective( line, wxS( ".PLOT" ) )
+                        || isDirective( line, wxS( ".PRINT" ) )
+                        || isDirective( line, wxS( ".PROBE" ) )
+                        || isDirective( line, wxS( ".PZ" ) )
+                        || isDirective( line, wxS( ".SAVE" ) )
+                        || isDirective( line, wxS( ".SENS" ) )
+                        || isDirective( line, wxS( ".SP" ) )
+                        || isDirective( line, wxS( ".SUBCKT" ) )
+                        || isDirective( line, wxS( ".TEMP" ) )
+                        || isDirective( line, wxS( ".TF" ) )
+                        || isDirective( line, wxS( ".TITLE" ) )
+                        || isDirective( line, wxS( ".TRAN" ) )
+                        || isDirective( line, wxS( ".WIDTH" ) ) )
                     {
                         foundDirective = true;
                         break;
@@ -632,6 +638,12 @@ void NETLIST_EXPORTER_SPICE::WriteDirectives( OUTPUTFORMATTER& aFormatter,
     if( aNetlistOptions & OPTION_SAVE_ALL_CURRENTS )
         aFormatter.Print( 0, ".probe alli\n" );
 
+    auto isSimCommand =
+            []( const wxString& candidate, const wxString& dir )
+            {
+                return candidate == dir || candidate.StartsWith( dir + wxS( " " ) );
+            };
+
     for( const wxString& directive : m_directives )
     {
         bool simCommand = false;
@@ -640,15 +652,15 @@ void NETLIST_EXPORTER_SPICE::WriteDirectives( OUTPUTFORMATTER& aFormatter,
         {
             wxString candidate = directive.Upper();
 
-            simCommand = ( candidate.StartsWith( wxT( ".AC" ) )
-                        || candidate.StartsWith( wxT( ".DC" ) )
-                        || candidate.StartsWith( wxT( ".TRAN" ) )
-                        || candidate.StartsWith( wxT( ".OP" ) )
-                        || candidate.StartsWith( wxT( ".DISTO" ) )
-                        || candidate.StartsWith( wxT( ".NOISE" ) )
-                        || candidate.StartsWith( wxT( ".PZ" ) )
-                        || candidate.StartsWith( wxT( ".SENS" ) )
-                        || candidate.StartsWith( wxT( ".TF" ) ) );
+            simCommand = ( isSimCommand( candidate, wxS( ".AC" ) )
+                        || isSimCommand( candidate, wxS( ".DC" ) )
+                        || isSimCommand( candidate, wxS( ".TRAN" ) )
+                        || isSimCommand( candidate, wxS( ".OP" ) )
+                        || isSimCommand( candidate, wxS( ".DISTO" ) )
+                        || isSimCommand( candidate, wxS( ".NOISE" ) )
+                        || isSimCommand( candidate, wxS( ".PZ" ) )
+                        || isSimCommand( candidate, wxS( ".SENS" ) )
+                        || isSimCommand( candidate, wxS( ".TF" ) ) );
         }
 
         if( !simCommand || ( aNetlistOptions & OPTION_SIM_COMMAND ) )
