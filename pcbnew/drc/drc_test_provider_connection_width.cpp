@@ -252,10 +252,16 @@ private:
 
             std::sort( queue.begin(), queue.end(), []( const Vertex* a, const Vertex* b )
             {
-                return a->z < b->z || ( a->z == b->z
-                            && ( ( a->x < b->x )
-                              || ( a->y < b->y )
-                              || ( a->i < b->i ) ) );
+                if( a->z != b->z )
+                    return a->z < b->z;
+
+                if( a->x != b->x )
+                    return a->x < b->x;
+
+                if( a->y != b->y )
+                    return a->y < b->y;
+
+                return a->i < b->i;
             } );
 
             Vertex* prev_elem = nullptr;
