@@ -337,17 +337,19 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataFromWindow()
 
         if( ibismodel )
         {
-            SIM_MODEL::SetFieldValue(
-                    m_fields, SIM_LIBRARY_KIBIS::PIN_FIELD,
-                    ibismodel->GetIbisPins().at( m_ibisPinCombobox->GetSelection() ).first );
+            std::string pins;
+            std::string modelName = std::string( m_ibisModelCombobox->GetValue().c_str() );
+            std::string differential;
 
-            SIM_MODEL::SetFieldValue(
-                    m_fields, SIM_LIBRARY_KIBIS::MODEL_FIELD,
-                    std::string( m_ibisModelCombobox->GetValue().c_str() ) );
+            if( m_ibisPinCombobox->GetSelection() >= 0 )
+                pins = ibismodel->GetIbisPins().at( m_ibisPinCombobox->GetSelection() ).first;
 
-            SIM_MODEL::SetFieldValue(
-                    m_fields, SIM_LIBRARY_KIBIS::DIFF_FIELD,
-                    ibismodel->CanDifferential() && m_differentialCheckbox->GetValue() ? "1" : "" );
+            if( ibismodel->CanDifferential() && m_differentialCheckbox->GetValue() )
+                differential = "1";
+
+            SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY_KIBIS::PIN_FIELD, pins );
+            SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY_KIBIS::MODEL_FIELD, modelName );
+            SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY_KIBIS::DIFF_FIELD, differential );
         }
     }
 
@@ -1219,10 +1221,18 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::onTypeChoice( wxCommandEvent& aEvent )
             {
                 int idx = m_modelNameChoice->GetSelection();
 
-                auto& kibisModel = static_cast<SIM_MODEL_KIBIS&>( m_libraryModelsMgr.GetModels().at( idx ).get() );
+                auto& baseModel = static_cast<SIM_MODEL_KIBIS&>( m_libraryModelsMgr.GetModels().at( idx ).get() );
 
-                m_libraryModelsMgr.SetModel( idx, std::make_unique<SIM_MODEL_KIBIS>( type, kibisModel,
-                                                                                     m_fields, sourcePins ) );
+                m_libraryModelsMgr.SetModel( idx, std::make_unique<SIM_MODEL_KIBIS>( type, baseModel ) );
+
+                try
+                {
+                    m_libraryModelsMgr.GetModels().at( idx ).get().ReadDataFields( &m_fields, sourcePins );
+                }
+                catch( IO_ERROR& err )
+                {
+                    DisplayErrorMessage( this, err.What() );
+                }
             }
 
             m_curModelType = type;

@@ -278,24 +278,6 @@ SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType, const SIM_MODEL_KIBIS& aSource ) :
 }
 
 
-SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType, SIM_MODEL_KIBIS& aSource,
-                                  const std::vector<LIB_FIELD>& aFields,
-                                  const std::vector<LIB_PIN*>& aPins  ) :
-        SIM_MODEL_KIBIS( aType, aSource )
-{
-    ReadDataFields( &aFields, aPins );
-}
-
-
-SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType, SIM_MODEL_KIBIS& aSource,
-                                  const std::vector<SCH_FIELD>& aFields,
-                                  const std::vector<LIB_PIN*>& aPins  ) :
-        SIM_MODEL_KIBIS( aType, aSource )
-{
-    ReadDataFields( &aFields, aPins );
-}
-
-
 bool SIM_MODEL_KIBIS::ChangePin( const SIM_LIBRARY_KIBIS& aLib, std::string aPinNumber )
 {
     KIBIS_COMPONENT* kcomp = aLib.m_kibis.GetComponent( std::string( GetComponentName() ) );
