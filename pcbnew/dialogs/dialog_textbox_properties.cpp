@@ -407,6 +407,9 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataFromWindow()
     else if( m_pcbTextBox )
         m_pcbTextBox->SetStroke( stroke );
 
+    m_edaText->ClearBoundingBoxCache();
+    m_edaText->ClearRenderCache();
+
     if( pushCommit )
         commit.Push( _( "Change text box properties" ) );
 
