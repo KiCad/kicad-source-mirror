@@ -137,9 +137,13 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
             wxT( "*.g?" ), wxT( "*.g??" ),          // Gerber files
             wxT( "*.gm??" ), wxT( "*.gbrjob" ),
             wxT( "*.pos" ), wxT( "*.drl" ), wxT( "*.nc" ), wxT( "*.xnc" ),  // Fab files
-            wxT( "*.d356" ), wxT( "*.rpt" ),
-            wxT( "*.net" ), wxT( "*.py" ),
-            wxT( "*.pdf" ), wxT( "*.txt" )
+            wxT( "*.d356" ),
+            wxT( "*.rpt" ),
+            wxT( "*.net" ),
+            wxT( "*.py" ),
+            wxT( "*.pdf" ),
+            wxT( "*.txt" ),
+            wxT( "*.cir" ), wxT( "*.sub" ), wxT( "*.model" )    // SPICE files
         };
 
     bool     success = true;
