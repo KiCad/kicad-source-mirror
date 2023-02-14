@@ -143,7 +143,8 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
             wxT( "*.py" ),
             wxT( "*.pdf" ),
             wxT( "*.txt" ),
-            wxT( "*.cir" ), wxT( "*.sub" ), wxT( "*.model" )    // SPICE files
+            wxT( "*.cir" ), wxT( "*.sub" ), wxT( "*.model" ),    // SPICE files
+            wxT( "*.ibs" )
         };
 
     bool     success = true;
@@ -175,6 +176,19 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
     {
         for( unsigned ii = 0; ii < arrayDim( extraExtensionList ); ii++ )
             wxDir::GetAllFiles( aSrcDir, &files, extraExtensionList[ii] );
+    }
+
+    for( unsigned ii = 0; ii < files.GetCount(); ++ii )
+    {
+        if( files[ii].EndsWith( wxS( ".ibs" ) ) )
+        {
+            wxFileName package( files[ ii ] );
+            package.MakeRelativeTo( aSrcDir );
+            package.SetExt( wxS( "pkg" ) );
+
+            if( package.Exists() )
+                files.push_back( package.GetFullName() );
+        }
     }
 
     files.Sort();
