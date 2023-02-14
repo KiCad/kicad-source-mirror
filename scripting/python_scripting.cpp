@@ -50,6 +50,7 @@
 #include <kiplatform/environment.h>
 
 #include <wx/app.h>
+#include <wx/regex.h>
 #include <wx/utils.h>
 
 #include <config.h>
@@ -128,7 +129,39 @@ except:
                                            wxVI.GetMajor(), wxVI.GetMinor(), wxVI.GetMicro() );
         version = version.Mid( idx + 10 );
 
-        if( wxVersion.Cmp( version ) != 0 )
+        int wxPy_major = 0;
+        int wxPy_minor = 0;
+        int wxPy_micro = 0;
+        int wxPy_rev   = 0;
+
+        // Compile a regex to extract the wxPython version
+        wxRegEx re( "([0-9]+)\\.([0-9]+)\\.?([0-9]+)?\\.?([0-9]+)?" );
+        wxASSERT( re.IsValid() );
+
+        if( re.Matches( version ) )
+        {
+            wxString v = re.GetMatch( version, 1 );
+
+            if( !v.IsEmpty() )
+                v.ToInt( &wxPy_major );
+
+            v = re.GetMatch( version, 2 );
+
+            if( !v.IsEmpty() )
+                v.ToInt( &wxPy_minor );
+
+            v = re.GetMatch( version, 3 );
+
+            if( !v.IsEmpty() )
+                v.ToInt( &wxPy_micro );
+
+            v = re.GetMatch( version, 4 );
+
+            if( !v.IsEmpty() )
+                v.ToInt( &wxPy_rev );
+        }
+
+        if( ( wxVI.GetMajor() != wxPy_major ) || ( wxVI.GetMinor() != wxPy_minor ) )
         {
             wxString msg = wxT( "The wxPython library was compiled against wxWidgets %s but KiCad is "
                                 "using %s.  Python plugins will not be available." );
