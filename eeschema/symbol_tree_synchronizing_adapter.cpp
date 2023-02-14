@@ -245,33 +245,35 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataVie
 
         break;
 
-    case DESC_COL:
-        if( m_frame->GetCurSymbol() && m_frame->GetCurSymbol()->GetLibId() == node->m_LibId )
+    default:
+        if( m_colIdxMap.count( aCol ) )
         {
-            node->m_Desc = m_frame->GetCurSymbol()->GetDescription();
+            if( node->m_Type == LIB_TREE_NODE::LIB )
+            {
+                LIB_SYMBOL_LIBRARY_MANAGER& libMgr = m_frame->GetLibManager();
+                SYMBOL_LIB_TABLE_ROW*   lib = libMgr.GetLibrary( node->m_LibId.GetLibNickname() );
+
+                if( lib )
+                    node->m_Desc = lib->GetDescr();
+
+                if( !m_libMgr->IsLibraryLoaded( node->m_Name ) )
+                    aVariant = _( "(failed to load)" ) + wxS( " " ) + aVariant.GetString();
+            }
+
+            const wxString& key = m_colIdxMap.at( aCol );
+
+            if( m_frame->GetCurSymbol() && m_frame->GetCurSymbol()->GetLibId() == node->m_LibId )
+            {
+                node->m_Desc = m_frame->GetCurSymbol()->GetDescription();
+            }
+
+            if( node->m_Fields.count( key ) )
+                aVariant = node->m_Fields.at( key );
+            else if( key == wxT( "Description" ) )
+                aVariant = node->m_Desc;
+            else
+                aVariant = wxEmptyString;
         }
-        else if( node->m_Type == LIB_TREE_NODE::LIB )
-        {
-            LIB_SYMBOL_LIBRARY_MANAGER& libMgr = m_frame->GetLibManager();
-            SYMBOL_LIB_TABLE_ROW*   lib = libMgr.GetLibrary( node->m_LibId.GetLibNickname() );
-
-            if( lib )
-                node->m_Desc = lib->GetDescr();
-        }
-
-        aVariant = node->m_Desc;
-
-        // Annotate that the library failed to load in the description column
-        if( node->m_Type == LIB_TREE_NODE::LIB )
-        {
-            if( !m_libMgr->IsLibraryLoaded( node->m_Name ) )
-                aVariant = _( "(failed to load)" ) + wxS( " " ) + aVariant.GetString();
-        }
-
-        break;
-
-    default:    // column == -1 is used for default Compare function
-        aVariant = node->m_Name;
         break;
     }
 }
