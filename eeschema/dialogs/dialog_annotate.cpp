@@ -148,9 +148,9 @@ void DIALOG_ANNOTATE::InitValues()
         switch( cfg->m_AnnotatePanel.scope )
         {
         default:
-        case 0: m_rbScope_Schematic->SetValue( true ); break;
-        case 1: m_rbScope_Sheet->SetValue( true );     break;
-        case 2: m_rbScope_Selection->SetValue( true ); break;
+        case ANNOTATE_ALL:           m_rbScope_Schematic->SetValue( true ); break;
+        case ANNOTATE_CURRENT_SHEET: m_rbScope_Sheet->SetValue( true );     break;
+        case ANNOTATE_SELECTION:     m_rbScope_Selection->SetValue( true ); break;
         }
 
         m_checkRecursive->SetValue( cfg->m_AnnotatePanel.recursive );
@@ -164,8 +164,8 @@ void DIALOG_ANNOTATE::InitValues()
     switch( option )
     {
     default:
-    case 0: m_rbSortBy_X_Position->SetValue( true ); break;
-    case 1: m_rbSortBy_Y_Position->SetValue( true ); break;
+    case SORT_BY_X_POSITION: m_rbSortBy_X_Position->SetValue( true ); break;
+    case SORT_BY_Y_POSITION: m_rbSortBy_Y_Position->SetValue( true ); break;
     }
 
     option = cfg->m_AnnotatePanel.method;
@@ -173,9 +173,9 @@ void DIALOG_ANNOTATE::InitValues()
     switch( option )
     {
     default:
-    case 0: m_rbFirstFree->SetValue( true );  break;
-    case 1: m_rbSheetX100->SetValue( true );  break;
-    case 2: m_rbSheetX1000->SetValue( true ); break;
+    case INCREMENTAL_BY_REF:  m_rbFirstFree->SetValue( true );  break;
+    case SHEET_NUMBER_X_100:  m_rbSheetX100->SetValue( true );  break;
+    case SHEET_NUMBER_X_1000: m_rbSheetX1000->SetValue( true ); break;
     }
 
     int annotateStartNum = 0; // Default "start after" value for annotation
