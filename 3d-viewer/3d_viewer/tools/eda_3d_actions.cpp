@@ -192,7 +192,7 @@ TOOL_ACTION EDA_3D_ACTIONS::materialDiffuse( "3DViewer.Control.materialDiffuse",
         AS_ACTIVE,
         0, "",
         _( "Render Solid Colors" ),
-        _( "Use only the diffuse color property from model 3D model file" ),
+        _( "Use only the diffuse color property from 3D model file" ),
         BITMAPS::INVALID_BITMAP, AF_NONE, (void*) MATERIAL_MODE::DIFFUSE_ONLY );
 
 TOOL_ACTION EDA_3D_ACTIONS::materialCAD( "3DViewer.Control.materialCAD",

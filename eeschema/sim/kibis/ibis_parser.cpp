@@ -251,7 +251,7 @@ bool IbisComponent::Check()
         if( status )
             Report( message.str(), RPT_SEVERITY_ACTION );
 
-       Report( _( "Component name cannot be empty." ), RPT_SEVERITY_ERROR );
+        Report( _( "Component: name cannot be empty." ), RPT_SEVERITY_ERROR );
         status = false;
     }
 
@@ -269,7 +269,7 @@ bool IbisComponent::Check()
         if( status )
             Report( message.str(), RPT_SEVERITY_ACTION );
 
-        Report( _( "Component: Invalid Package." ), RPT_SEVERITY_ERROR );
+        Report( _( "Component: invalid package." ), RPT_SEVERITY_ERROR );
         status = false;
     }
 
@@ -393,7 +393,7 @@ bool IVtable::Check()
     {
         if( isnan( entry.V ) )
         {
-            Report( _( "There is a Nan voltage in an IV table" ), RPT_SEVERITY_ERROR );
+            Report( _( "There is an invalid voltage in an IV table" ), RPT_SEVERITY_ERROR );
             status = false;
             break;
         }
@@ -447,12 +447,12 @@ bool IbisRamp::Check()
     }
     if( !m_falling.Check() )
     {
-        Report( _( "Invalid falling dv/dt." ), RPT_SEVERITY_ERROR );
+        Report( _( "Invalid falling dV/dt." ), RPT_SEVERITY_ERROR );
         status = false;
     }
     if( !m_rising.Check() )
     {
-        Report( _( "Invalid rising dv/dt." ), RPT_SEVERITY_ERROR );
+        Report( _( "Invalid rising dV/dt." ), RPT_SEVERITY_ERROR );
         status = false;
     }
 
@@ -479,7 +479,7 @@ bool IbisModel::Check()
         if( status )
             Report( message.str(), RPT_SEVERITY_ACTION );
 
-        Report( _( "Undefined model type" ), RPT_SEVERITY_ERROR );
+        Report( _( "Undefined model type." ), RPT_SEVERITY_ERROR );
         status = false;
     }
 
@@ -520,7 +520,7 @@ bool IbisModel::Check()
         if( status )
             Report( message.str(), RPT_SEVERITY_ACTION );
 
-        Report( _( "invalid V_ref value." ), RPT_SEVERITY_ERROR );
+        Report( _( "Invalid V_ref value." ), RPT_SEVERITY_ERROR );
         status = false;
     }
     if( isnan( m_vmeas ) && !isNumberNA( m_vmeas ) )
@@ -709,7 +709,7 @@ bool IbisPackageModel::Check()
         if( status )
             Report( message.str(), RPT_SEVERITY_ACTION );
 
-        Report( "Number of pins does not match [Pin Numbers] size", RPT_SEVERITY_ERROR );
+        Report( "Number of pins does not match [Pin Numbers] size.", RPT_SEVERITY_ERROR );
         status = false;
     }
 
@@ -720,7 +720,7 @@ bool IbisPackageModel::Check()
             if( status )
                 Report( message.str(), RPT_SEVERITY_ACTION );
 
-            Report( _( "Empty pin number" ), RPT_SEVERITY_ERROR );
+            Report( _( "Empty pin number." ), RPT_SEVERITY_ERROR );
             status = false;
         }
     }
@@ -731,7 +731,7 @@ bool IbisPackageModel::Check()
         if( status )
             Report( message.str(), RPT_SEVERITY_ACTION );
 
-        Report( _( "Resistance matrix is incorrect" ), RPT_SEVERITY_ERROR );
+        Report( _( "Resistance matrix is incorrect." ), RPT_SEVERITY_ERROR );
         status = false;
     }
 
@@ -742,7 +742,7 @@ bool IbisPackageModel::Check()
             if( status )
                 Report( message.str(), RPT_SEVERITY_ACTION );
 
-            Report( _( "Capacitance matrix is undefined" ), RPT_SEVERITY_ERROR );
+            Report( _( "Capacitance matrix is undefined." ), RPT_SEVERITY_ERROR );
             status = false;
         }
 
@@ -751,7 +751,7 @@ bool IbisPackageModel::Check()
             if( status )
                 Report( message.str(), RPT_SEVERITY_ACTION );
 
-            Report( _( "Capacitance matrix is incorrect" ), RPT_SEVERITY_ERROR );
+            Report( _( "Capacitance matrix is incorrect." ), RPT_SEVERITY_ERROR );
             status = false;
         }
     }
@@ -760,7 +760,7 @@ bool IbisPackageModel::Check()
         if( status )
             Report( message.str(), RPT_SEVERITY_ACTION );
 
-        Report( _( "Capacitance matrix is nullptr" ), RPT_SEVERITY_ERROR );
+        Report( _( "Capacitance matrix is nullptr." ), RPT_SEVERITY_ERROR );
         status = false;
     }
 
@@ -771,7 +771,7 @@ bool IbisPackageModel::Check()
             if( status )
                 Report( message.str(), RPT_SEVERITY_ACTION );
 
-            Report( _( "Inductance matrix is undefined" ), RPT_SEVERITY_ERROR );
+            Report( _( "Inductance matrix is undefined." ), RPT_SEVERITY_ERROR );
             status = false;
         }
 
@@ -780,7 +780,7 @@ bool IbisPackageModel::Check()
             if( status )
                 Report( message.str(), RPT_SEVERITY_ACTION );
 
-            Report( _( "Inductance matrix is incorrect" ), RPT_SEVERITY_ERROR );
+            Report( _( "Inductance matrix is incorrect." ), RPT_SEVERITY_ERROR );
             status = false;
         }
     }
@@ -789,7 +789,7 @@ bool IbisPackageModel::Check()
         if( status )
             Report( message.str(), RPT_SEVERITY_ACTION );
 
-        Report( _( "Inductance matrix is nullptr" ), RPT_SEVERITY_ERROR );
+        Report( _( "Inductance matrix is nullptr." ), RPT_SEVERITY_ERROR );
         status = false;
     }
     return status;

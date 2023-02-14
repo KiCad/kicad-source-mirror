@@ -44,7 +44,7 @@ PANEL_SYM_EDITING_OPTIONS_BASE::PANEL_SYM_EDITING_OPTIONS_BASE( wxWindow* parent
 	m_lineWidthUnits->Wrap( -1 );
 	gbSizer1->Add( m_lineWidthUnits, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_widthHelpText = new wxStaticText( this, wxID_ANY, _("Set to 0 to allow symbols to inherit their line widths from\ntheir parent Schematic"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_widthHelpText = new wxStaticText( this, wxID_ANY, _("Set to 0 to allow symbols to inherit line width properties\nfrom Schematic"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_widthHelpText->Wrap( -1 );
 	gbSizer1->Add( m_widthHelpText, wxGBPosition( 1, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxLEFT, 5 );
 

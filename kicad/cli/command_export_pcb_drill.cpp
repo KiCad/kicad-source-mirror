@@ -70,7 +70,7 @@ CLI::EXPORT_PCB_DRILL_COMMAND::EXPORT_PCB_DRILL_COMMAND() : EXPORT_PCB_BASE_COMM
             .default_value( false );
 
     m_argParser.add_argument( ARG_EXCELLON_SEPARATE_TH )
-            .help( UTF8STDSTR( _( "PTH and NPTH in separate files file" ) ) )
+            .help( UTF8STDSTR( _( "PTH and NPTH in separate files" ) ) )
             .implicit_value( true )
             .default_value( false );
 

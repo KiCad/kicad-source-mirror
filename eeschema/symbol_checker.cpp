@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -206,7 +206,7 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                 && pin->GetType() != ELECTRICAL_PINTYPE::PT_POWER_OUT )
         {
             msg.Printf( _( "<b>Suspicious Power Symbol</b><br>"
-                           "Only a input or output power pin has meaning<br><br>" ) );
+                           "Only an input or output power pin has meaning<br><br>" ) );
             aMessages.push_back( msg );
         }
 

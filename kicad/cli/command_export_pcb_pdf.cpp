@@ -57,7 +57,7 @@ CLI::EXPORT_PCB_PDF_COMMAND::EXPORT_PCB_PDF_COMMAND() : EXPORT_PCB_BASE_COMMAND(
 
     m_argParser.add_argument( "-t", ARG_THEME )
             .default_value( std::string() )
-            .help( UTF8STDSTR( _( "Color theme to use (will default to pcbnew settings)" ) ) );
+            .help( UTF8STDSTR( _( "Color theme to use (will default to PCB Editor settings)" ) ) );
 }
 
 

@@ -67,7 +67,7 @@ CLI::EXPORT_PCB_GERBER_COMMAND::EXPORT_PCB_GERBER_COMMAND( const std::string& aN
             .default_value( false );
 
     m_argParser.add_argument( ARG_DISABLE_APERTURE_MACROS )
-            .help( UTF8STDSTR( _( "Disable aperature macros" ) ) )
+            .help( UTF8STDSTR( _( "Disable aperture macros" ) ) )
             .implicit_value( true )
             .default_value( false );
 

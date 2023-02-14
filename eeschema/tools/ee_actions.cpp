@@ -738,7 +738,7 @@ TOOL_ACTION EE_ACTIONS::lineModeNext( "eeschema.EditorControl.lineModeNext",
 
 TOOL_ACTION EE_ACTIONS::toggleAnnotateAuto( "eeschema.EditorControl.annotateAutomatically",
         AS_GLOBAL, 0, "",
-        _( "Annotate Automatically" ), _( "Toggle automatic annotation of new parts symbols" ),
+        _( "Annotate Automatically" ), _( "Toggle automatic annotation of new symbols" ),
         BITMAPS::annotate );
 
 TOOL_ACTION EE_ACTIONS::repairSchematic( "eeschema.EditorControl.repairSchematic",
