@@ -1409,7 +1409,7 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
         }
     }
 
-    GetCanvas()->ForceRefresh();
+    GetCanvas()->Refresh();
 }
 
 
