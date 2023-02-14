@@ -484,7 +484,7 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM *aItem, int aLayer, bool aDr
         color = color.Darken( 0.5f );
     }
 
-    if( aDimmed )
+    if( aDimmed && !( aItem->IsSelected() && aDrawingShadows ) )
     {
         COLOR4D sheetColour = m_schSettings.GetLayerColor( LAYER_SCHEMATIC_BACKGROUND );
         color.Desaturate();
