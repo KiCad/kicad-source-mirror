@@ -489,7 +489,22 @@ bool PLOT_CONTROLLER::PlotLayer()
 
     // Fully delegated to the parent
     PlotOneBoardLayer( m_board, m_plotter, ToLAYER_ID( GetLayer() ), GetPlotOptions() );
+    PlotInteractiveLayer( m_board, m_plotter );
+    return true;
+}
 
+
+bool PLOT_CONTROLLER::PlotLayers( const LSEQ& aLayerSequence )
+{
+    LOCALE_IO toggle;
+
+    // No plot open, nothing to do...
+    if( !m_plotter )
+        return false;
+
+    // Fully delegated to the parent
+    PlotBoardLayers( m_board, m_plotter, aLayerSequence, GetPlotOptions() );
+    PlotInteractiveLayer( m_board, m_plotter );
     return true;
 }
 

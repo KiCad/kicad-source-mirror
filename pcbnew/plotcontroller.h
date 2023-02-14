@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Lorenzo Marcantonio, <l.marcantonio@logossrl.com>
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,6 +89,15 @@ public:
     bool PlotLayer();
 
     /**
+     * Plot a sequence of board layer IDs in the given order.
+     *
+     * @param aLayerSequence is the sequence of layer IDs to plot.
+     *
+     * @return true if the layers plotted correctly othewise false.
+     */
+    bool PlotLayers( const LSEQ& aLayerSequence );
+
+    /**
      * @return the current plot full filename, set by OpenPlotfile
      */
     const wxString GetPlotFileName() { return m_plotFile.GetFullPath(); }
@@ -110,6 +119,8 @@ public:
      *         mode is black and white.
      */
     bool GetColorMode();
+
+    PLOTTER* GetPlotter() { return m_plotter; }
 
 private:
     int             m_plotLayer;
