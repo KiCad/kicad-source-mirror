@@ -129,10 +129,10 @@ except:
                                            wxVI.GetMajor(), wxVI.GetMinor(), wxVI.GetMicro() );
         version = version.Mid( idx + 10 );
 
-        int wxPy_major = 0;
-        int wxPy_minor = 0;
-        int wxPy_micro = 0;
-        int wxPy_rev   = 0;
+        long wxPy_major = 0;
+        long wxPy_minor = 0;
+        long wxPy_micro = 0;
+        long wxPy_rev   = 0;
 
         // Compile a regex to extract the wxPython version
         wxRegEx re( "([0-9]+)\\.([0-9]+)\\.?([0-9]+)?\\.?([0-9]+)?" );
@@ -143,22 +143,22 @@ except:
             wxString v = re.GetMatch( version, 1 );
 
             if( !v.IsEmpty() )
-                v.ToInt( &wxPy_major );
+                v.ToLong( &wxPy_major );
 
             v = re.GetMatch( version, 2 );
 
             if( !v.IsEmpty() )
-                v.ToInt( &wxPy_minor );
+                v.ToLong( &wxPy_minor );
 
             v = re.GetMatch( version, 3 );
 
             if( !v.IsEmpty() )
-                v.ToInt( &wxPy_micro );
+                v.ToLong( &wxPy_micro );
 
             v = re.GetMatch( version, 4 );
 
             if( !v.IsEmpty() )
-                v.ToInt( &wxPy_rev );
+                v.ToLong( &wxPy_rev );
         }
 
         if( ( wxVI.GetMajor() != wxPy_major ) || ( wxVI.GetMinor() != wxPy_minor ) )
