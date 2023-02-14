@@ -338,7 +338,7 @@ TOOL_ACTION PCB_ACTIONS::mirrorV( "pcbnew.InteractiveEdit.mirrorVertically",
 
 TOOL_ACTION PCB_ACTIONS::swap( "pcbnew.InteractiveEdit.swap",
         AS_GLOBAL,
-        MD_SHIFT + 'S', "",
+        'S', "",
         _( "Swap" ), _( "Swaps selected items' positions" ),
         BITMAPS::swap );
 

@@ -420,7 +420,7 @@ TOOL_ACTION EE_ACTIONS::mirrorH( "eeschema.InteractiveEdit.mirrorH",
 
 TOOL_ACTION EE_ACTIONS::swap( "eeschema.InteractiveEdit.swap",
         AS_GLOBAL,
-        MD_SHIFT + 'S', "",
+        'S', "",
         _( "Swap" ), _( "Swaps selected items' positions" ),
         BITMAPS::swap );
 
