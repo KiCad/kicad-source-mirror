@@ -364,12 +364,6 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_signalsGrid->SetColAttr( COL_SIGNAL_NAME, attr );
 
     attr = new wxGridCellAttr;
-    attr->SetRenderer( new wxGridCellBoolRenderer() );
-    attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
-    attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-    m_signalsGrid->SetColAttr( COL_SIGNAL_SHOW, attr );
-
-    attr = new wxGridCellAttr;
     attr->SetReadOnly();
     m_cursorsGrid->SetColAttr( COL_CURSOR_NAME, attr );
 
@@ -557,16 +551,13 @@ void SIM_PLOT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         cfg->m_Simulator.white_background          = !m_darkMode;
     }
 
-    if( !m_isNonUserClose )     // If we're exiting the project has already been released.
-    {
-        PROJECT_FILE& project = Prj().GetProjectFile();
+    PROJECT_FILE& project = Prj().GetProjectFile();
 
-        if( project.m_SchematicSettings )
-            project.m_SchematicSettings->m_NgspiceSimulatorSettings->SaveToFile();
+    if( project.m_SchematicSettings )
+        project.m_SchematicSettings->m_NgspiceSimulatorSettings->SaveToFile();
 
-        if( m_schematicFrame )
-            m_schematicFrame->SaveProjectSettings();
-    }
+    if( m_schematicFrame )
+        m_schematicFrame->SaveProjectSettings();
 }
 
 
@@ -588,6 +579,14 @@ void SIM_PLOT_FRAME::initWorkbook()
 
         if( !LoadWorkbook( filename.GetFullPath() ) )
             m_simulator->Settings()->SetWorkbookFilename( "" );
+    }
+    else if( LoadSimulator() )
+    {
+        if( !m_circuitModel->GetSchTextSimCommand().IsEmpty() )
+            NewPlotPanel( m_circuitModel->GetSchTextSimCommand(), m_circuitModel->GetSimOptions() );
+
+        rebuildSignalsList();
+        rebuildSignalsGrid( m_filter->GetValue() );
     }
 }
 
@@ -649,13 +648,11 @@ void SIM_PLOT_FRAME::rebuildSignalsGrid( wxString aFilter )
 {
     m_signalsGrid->ClearRows();
 
-    if( !GetCurrentPlot() )
-        return;
-
     if( aFilter.IsEmpty() )
         aFilter = wxS( "*" );
 
     EDA_COMBINED_MATCHER matcher( aFilter, CTX_SIGNAL );
+    SIM_PLOT_PANEL*      plotPanel = GetCurrentPlot();
     int                  row = 0;
 
     for( const wxString& signal : m_signals )
@@ -665,15 +662,48 @@ void SIM_PLOT_FRAME::rebuildSignalsGrid( wxString aFilter )
 
         if( matcher.Find( signal, matches, offset ) && offset == 0 )
         {
-            m_signalsGrid->AppendRows( 1 );
+            TRACE* trace = plotPanel ? plotPanel->GetTrace( signal ) : nullptr;
 
+            m_signalsGrid->AppendRows( 1 );
             m_signalsGrid->SetCellValue( row, COL_SIGNAL_NAME, signal );
 
-            if( TRACE* trace = GetCurrentPlot()->GetTrace( signal ) )
+            if( !plotPanel )
             {
+                wxGridCellAttr* attr = new wxGridCellAttr;
+                attr->SetReadOnly();
+                m_signalsGrid->SetAttr( row, COL_SIGNAL_SHOW, attr );
+            }
+            else
+            {
+                wxGridCellAttr* attr = new wxGridCellAttr;
+                attr->SetRenderer( new wxGridCellBoolRenderer() );
+                attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
+                attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+                m_signalsGrid->SetAttr( row, COL_SIGNAL_SHOW, attr );
+            }
+
+            if( trace )
                 m_signalsGrid->SetCellValue( row, COL_SIGNAL_SHOW, wxS( "1" ) );
 
+            if( !plotPanel || !trace )
+            {
                 wxGridCellAttr* attr = new wxGridCellAttr;
+                attr->SetReadOnly();
+                m_signalsGrid->SetAttr( row, COL_SIGNAL_COLOR, attr );
+                m_signalsGrid->SetCellValue( row, COL_SIGNAL_COLOR, wxEmptyString );
+
+                attr = new wxGridCellAttr;
+                attr->SetReadOnly();
+                m_signalsGrid->SetAttr( row, COL_CURSOR_1, attr );
+
+                attr = new wxGridCellAttr;
+                attr->SetReadOnly();
+                m_signalsGrid->SetAttr( row, COL_CURSOR_2, attr );
+            }
+            else
+            {
+                wxGridCellAttr* attr = new wxGridCellAttr;
+                attr = new wxGridCellAttr;
                 attr->SetRenderer( new GRID_CELL_COLOR_RENDERER( this ) );
                 attr->SetEditor( new GRID_CELL_COLOR_SELECTOR( this, m_signalsGrid ) );
                 attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
@@ -693,21 +723,6 @@ void SIM_PLOT_FRAME::rebuildSignalsGrid( wxString aFilter )
                 attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
                 m_signalsGrid->SetAttr( row, COL_CURSOR_2, attr );
             }
-            else
-            {
-                wxGridCellAttr* attr = new wxGridCellAttr;
-                attr->SetReadOnly();
-                m_signalsGrid->SetAttr( row, COL_SIGNAL_COLOR, attr );
-                m_signalsGrid->SetCellValue( row, COL_SIGNAL_COLOR, wxEmptyString );
-
-                attr = new wxGridCellAttr;
-                attr->SetReadOnly();
-                m_signalsGrid->SetAttr( row, COL_CURSOR_1, attr );
-
-                attr = new wxGridCellAttr;
-                attr->SetReadOnly();
-                m_signalsGrid->SetAttr( row, COL_CURSOR_2, attr );
-            }
 
             row++;
         }
@@ -722,6 +737,9 @@ void SIM_PLOT_FRAME::rebuildSignalsList()
     int      options = GetCurrentOptions();
     SIM_TYPE simType = NGSPICE_CIRCUIT_MODEL::CommandToSimType( GetCurrentSimCommand() );
     wxString unconnected = wxString( wxS( "unconnected-(" ) );
+
+    if( simType == ST_UNKNOWN )
+        simType = ST_TRANSIENT;
 
     unconnected.Replace( '(', '_' );    // Convert to SPICE markup
 
@@ -804,8 +822,7 @@ bool SIM_PLOT_FRAME::LoadSimulator()
 
     if( !m_simulator->Attach( m_circuitModel, reporter ) )
     {
-        DisplayErrorMessage( this, _( "Errors during netlist generation.\n\n" )
-                                   + errors );
+        DisplayErrorMessage( this, _( "Errors during netlist generation.\n\n" ) + errors );
         return false;
     }
 
@@ -1305,7 +1322,7 @@ void SIM_PLOT_FRAME::addTrace( const wxString& aName, SIM_TRACE_TYPE aType )
         return;
     }
 
-    SIM_TYPE simType = m_circuitModel->GetSimType();
+    SIM_TYPE simType = NGSPICE_CIRCUIT_MODEL::CommandToSimType( plotPanel->GetSimCommand() );
 
     if( simType == ST_UNKNOWN )
     {
@@ -1357,20 +1374,20 @@ void SIM_PLOT_FRAME::removeTrace( const wxString& aSignalName )
 }
 
 
-void SIM_PLOT_FRAME::updateTrace( const wxString& aName, SIM_TRACE_TYPE aType,
+void SIM_PLOT_FRAME::updateTrace( const wxString& aName, SIM_TRACE_TYPE aTraceType,
                                   SIM_PLOT_PANEL* aPlotPanel )
 {
-    SIM_TYPE simType = m_circuitModel->GetSimType();
+    SIM_TYPE simType = NGSPICE_CIRCUIT_MODEL::CommandToSimType( aPlotPanel->GetSimCommand() );
 
     wxString traceTitle = aName;
     wxString vectorName = aName;
 
-    if( aType & SPT_AC_MAG )
+    if( aTraceType & SPT_AC_MAG )
         traceTitle += _( " (gain)" );
-    else if( aType & SPT_AC_PHASE )
+    else if( aTraceType & SPT_AC_PHASE )
         traceTitle += _( " (phase)" );
 
-    if( aType & SPT_POWER )
+    if( aTraceType & SPT_POWER )
         vectorName = vectorName.AfterFirst( '(' ).BeforeLast( ')' ) + wxS( ":power" );
 
     if( !SIM_PANEL_BASE::IsPlottable( simType ) )
@@ -1393,15 +1410,15 @@ void SIM_PLOT_FRAME::updateTrace( const wxString& aName, SIM_TRACE_TYPE aType,
     std::vector<double> data_y;
 
     // Now, Y axis data
-    switch( m_circuitModel->GetSimType() )
+    switch( simType )
     {
     case ST_AC:
-        wxASSERT_MSG( !( ( aType & SPT_AC_MAG ) && ( aType & SPT_AC_PHASE ) ),
+        wxASSERT_MSG( !( ( aTraceType & SPT_AC_MAG ) && ( aTraceType & SPT_AC_PHASE ) ),
                       wxT( "Cannot set both AC_PHASE and AC_MAG bits" ) );
 
-        if( aType & SPT_AC_MAG )
+        if( aTraceType & SPT_AC_MAG )
             data_y = m_simulator->GetMagPlot( (const char*) vectorName.c_str() );
-        else if( aType & SPT_AC_PHASE )
+        else if( aTraceType & SPT_AC_PHASE )
             data_y = m_simulator->GetPhasePlot( (const char*) vectorName.c_str() );
         else
             wxFAIL_MSG( wxT( "Plot type missing AC_PHASE or AC_MAG bit" ) );
@@ -1422,7 +1439,7 @@ void SIM_PLOT_FRAME::updateTrace( const wxString& aName, SIM_TRACE_TYPE aType,
     // for each input step
     SPICE_DC_PARAMS source1, source2;
 
-    if( m_circuitModel->GetSimType() == ST_DC
+    if( simType == ST_DC
         && m_circuitModel->ParseDCCommand( m_circuitModel->GetSimCommand(), &source1, &source2 )
         && !source2.m_source.IsEmpty() )
     {
@@ -1443,7 +1460,7 @@ void SIM_PLOT_FRAME::updateTrace( const wxString& aName, SIM_TRACE_TYPE aType,
                                      source2.m_source,
                                      v.ToString() );
 
-            if( TRACE* trace = aPlotPanel->AddTrace( name, aName, aType ) )
+            if( TRACE* trace = aPlotPanel->AddTrace( name, aName, aTraceType ) )
             {
                 if( data_y.size() >= size )
                 {
@@ -1460,7 +1477,7 @@ void SIM_PLOT_FRAME::updateTrace( const wxString& aName, SIM_TRACE_TYPE aType,
             offset += inner;
         }
     }
-    else if( TRACE* trace = aPlotPanel->AddTrace( traceTitle, aName, aType ) )
+    else if( TRACE* trace = aPlotPanel->AddTrace( traceTitle, aName, aTraceType ) )
     {
         if( data_y.size() >= size )
             aPlotPanel->SetTraceData( trace, size, data_x.data(), data_y.data() );
@@ -1818,9 +1835,14 @@ bool SIM_PLOT_FRAME::LoadWorkbook( const wxString& aPath )
     // Remember the loaded workbook filename.
     m_simulator->Settings()->SetWorkbookFilename( filename.GetFullPath() );
 
-    // Successfully loading a workbook does not count as modifying it.
-    m_workbookModified = false;
     updateTitle();
+
+    // Successfully loading a workbook does not count as modifying it.  Clear the modified
+    // flag after all the EVT_WORKBOOK_MODIFIED events have been processed.
+    CallAfter( [=]()
+               {
+                   m_workbookModified = false;
+               } );
 
     return true;
 }

@@ -269,11 +269,11 @@ private:
      * trace, then add it.
      *
      * @param aName is the device/net name.
-     * @param aType describes the type of plot.
+     * @param aTraceType describes the type of plot.
      * @param aParam is the parameter for the device/net (e.g. I, Id, V).
      * @param aPlotPanel is the panel that should receive the update.
      */
-    void updateTrace( const wxString& aName, SIM_TRACE_TYPE aType, SIM_PLOT_PANEL* aPlotPanel );
+    void updateTrace( const wxString& aName, SIM_TRACE_TYPE aTraceType, SIM_PLOT_PANEL* aPlotPanel );
 
     /**
      * Rebuild the list of signals available from the netlist.
