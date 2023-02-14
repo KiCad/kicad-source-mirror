@@ -1000,13 +1000,15 @@ bool processLabel( const TDF_Label& aLabel, DATA& aData, SGNODE* aParent,
                     ret = true;
                 }
 
+                // Get all shells, avoid those that may be attached to solids
                 for( xp.Init( shape, TopAbs_SHELL, TopAbs_SOLID ); xp.More(); xp.Next() )
                 {
                     processShell( xp.Current(), aData, pptr, aItems, nullptr );
                     ret = true;
                 }
 
-                for( xp.Init( shape, TopAbs_FACE ); xp.More(); xp.Next() )
+                // Get all faces, avoid those that may be attached to shells
+                for( xp.Init( shape, TopAbs_FACE, TopAbs_SHELL ); xp.More(); xp.Next() )
                 {
                     const TopoDS_Face& face = TopoDS::Face( xp.Current() );
                     processFace( face, aData, pptr, aItems, nullptr );
