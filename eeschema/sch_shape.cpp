@@ -311,9 +311,15 @@ void SCH_SHAPE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
 {
     int      penWidth = GetPenWidth();
     wxDC*    DC = aSettings->GetPrintDC();
-    COLOR4D  color;
+    COLOR4D  color = GetStroke().GetColor();
 
-    penWidth = std::max( penWidth, aSettings->GetMinPenWidth() );
+    if( color == COLOR4D::UNSPECIFIED )
+        color = aSettings->GetLayerColor( LAYER_NOTES );
+
+    COLOR4D bg = aSettings->GetBackgroundColor();
+
+    if( bg == COLOR4D::UNSPECIFIED || GetGRForceBlackPenState() )
+        bg = COLOR4D::WHITE;
 
     unsigned ptCount = 0;
     VECTOR2I* buffer = nullptr;
@@ -337,33 +343,35 @@ void SCH_SHAPE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
             buffer[ii] = m_bezierPoints[ii];
     }
 
-    if( GetStroke().GetColor() == COLOR4D::UNSPECIFIED )
-        color = aSettings->GetLayerColor( LAYER_NOTES );
-    else
-        color = GetStroke().GetColor();
+    COLOR4D fillColor = COLOR4D::UNSPECIFIED;
 
-    if( GetEffectiveLineStyle() == PLOT_DASH_TYPE::SOLID )
+    if( GetFillMode() == FILL_T::FILLED_SHAPE )
+        fillColor = color;
+    else if( GetFillMode() == FILL_T::FILLED_WITH_COLOR )
+        fillColor = GetFillColor();
+
+    if( fillColor != COLOR4D::UNSPECIFIED )
     {
         switch( GetShape() )
         {
         case SHAPE_T::ARC:
-            GRArc( DC, GetEnd(), GetStart(), getCenter(), penWidth, color );
+            GRFilledArc( DC, GetEnd(), GetStart(), getCenter(), 0, fillColor, fillColor );
             break;
 
         case SHAPE_T::CIRCLE:
-            GRCircle( DC, GetStart(), GetRadius(), penWidth, color );
+            GRFilledCircle( DC, GetStart(), GetRadius(), 0, fillColor, fillColor );
             break;
 
         case SHAPE_T::RECT:
-            GRRect( DC, GetStart(), GetEnd(), penWidth, color );
+            GRFilledRect( DC, GetStart(), GetEnd(), 0, fillColor, fillColor );
             break;
 
         case SHAPE_T::POLY:
-            GRPoly( DC, ptCount, buffer, false, penWidth, color, color );
+            GRPoly( DC, ptCount, buffer, true, 0, fillColor, fillColor );
             break;
 
         case SHAPE_T::BEZIER:
-            GRPoly( DC, ptCount, buffer, false, penWidth, color, color );
+            GRPoly( DC, ptCount, buffer, true, 0, fillColor, fillColor );
             break;
 
         default:
@@ -372,19 +380,55 @@ void SCH_SHAPE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
     }
     else
     {
-        std::vector<SHAPE*> shapes = MakeEffectiveShapes( true );
+        penWidth = std::max( penWidth, aSettings->GetMinPenWidth() );
+    }
 
-        for( SHAPE* shape : shapes )
+    if( penWidth > 0 )
+    {
+        if( GetEffectiveLineStyle() == PLOT_DASH_TYPE::SOLID )
         {
-            STROKE_PARAMS::Stroke( shape, GetEffectiveLineStyle(), penWidth, aSettings,
-                                   [&]( const VECTOR2I& a, const VECTOR2I& b )
-                                   {
-                                       GRLine( DC, a.x, a.y, b.x, b.y, penWidth, color );
-                                   } );
-        }
+            switch( GetShape() )
+            {
+            case SHAPE_T::ARC:
+                GRArc( DC, GetEnd(), GetStart(), getCenter(), penWidth, color );
+                break;
 
-        for( SHAPE* shape : shapes )
-            delete shape;
+            case SHAPE_T::CIRCLE:
+                GRCircle( DC, GetStart(), GetRadius(), penWidth, color );
+                break;
+
+            case SHAPE_T::RECT:
+                GRRect( DC, GetStart(), GetEnd(), penWidth, color );
+                break;
+
+            case SHAPE_T::POLY:
+                GRPoly( DC, ptCount, buffer, false, penWidth, color, color );
+                break;
+
+            case SHAPE_T::BEZIER:
+                GRPoly( DC, ptCount, buffer, false, penWidth, color, color );
+                break;
+
+            default:
+                UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+            }
+        }
+        else
+        {
+            std::vector<SHAPE*> shapes = MakeEffectiveShapes( true );
+
+            for( SHAPE* shape : shapes )
+            {
+                STROKE_PARAMS::Stroke( shape, GetEffectiveLineStyle(), penWidth, aSettings,
+                                       [&]( const VECTOR2I& a, const VECTOR2I& b )
+                                       {
+                                           GRLine( DC, a.x, a.y, b.x, b.y, penWidth, color );
+                                       } );
+            }
+
+            for( SHAPE* shape : shapes )
+                delete shape;
+        }
     }
 
     delete[] buffer;

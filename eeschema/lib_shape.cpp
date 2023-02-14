@@ -389,54 +389,59 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
             UNIMPLEMENTED_FOR( SHAPE_T_asString() );
         }
     }
-
-    penWidth = std::max( penWidth, aSettings->GetDefaultPenWidth() );
-
-    if( GetEffectiveLineStyle() == PLOT_DASH_TYPE::SOLID )
-    {
-        switch( GetShape() )
-        {
-        case SHAPE_T::ARC:
-            GRArc( DC, pt1, pt2, c, penWidth, color );
-            break;
-
-        case SHAPE_T::CIRCLE:
-            GRCircle( DC, pt1, GetRadius(), penWidth, color );
-            break;
-
-        case SHAPE_T::RECT:
-            GRRect( DC, pt1, pt2, penWidth, color );
-            break;
-
-        case SHAPE_T::POLY:
-            GRPoly( DC, ptCount, buffer, false, penWidth, color, color );
-            break;
-
-        case SHAPE_T::BEZIER:
-            GRPoly( DC, ptCount, buffer, false, penWidth, color, color );
-            break;
-
-        default:
-            UNIMPLEMENTED_FOR( SHAPE_T_asString() );
-        }
-    }
     else
     {
-        std::vector<SHAPE*> shapes = MakeEffectiveShapes( true );
+        penWidth = std::max( penWidth, aSettings->GetDefaultPenWidth() );
+    }
 
-        for( SHAPE* shape : shapes )
+    if( penWidth > 0 )
+    {
+        if( GetEffectiveLineStyle() == PLOT_DASH_TYPE::SOLID )
         {
-            STROKE_PARAMS::Stroke( shape, GetEffectiveLineStyle(), penWidth, aSettings,
-                                   [&]( const VECTOR2I& a, const VECTOR2I& b )
-                                   {
-                                       VECTOR2I pts = aTransform.TransformCoordinate( a ) + aOffset;
-                                       VECTOR2I pte = aTransform.TransformCoordinate( b ) + aOffset;
-                                       GRLine( DC, pts.x, pts.y, pte.x, pte.y, penWidth, color );
-                                   } );
-        }
+            switch( GetShape() )
+            {
+            case SHAPE_T::ARC:
+                GRArc( DC, pt1, pt2, c, penWidth, color );
+                break;
 
-        for( SHAPE* shape : shapes )
-            delete shape;
+            case SHAPE_T::CIRCLE:
+                GRCircle( DC, pt1, GetRadius(), penWidth, color );
+                break;
+
+            case SHAPE_T::RECT:
+                GRRect( DC, pt1, pt2, penWidth, color );
+                break;
+
+            case SHAPE_T::POLY:
+                GRPoly( DC, ptCount, buffer, false, penWidth, color, color );
+                break;
+
+            case SHAPE_T::BEZIER:
+                GRPoly( DC, ptCount, buffer, false, penWidth, color, color );
+                break;
+
+            default:
+                UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+            }
+        }
+        else
+        {
+            std::vector<SHAPE*> shapes = MakeEffectiveShapes( true );
+
+            for( SHAPE* shape : shapes )
+            {
+                STROKE_PARAMS::Stroke( shape, GetEffectiveLineStyle(), penWidth, aSettings,
+                                       [&]( const VECTOR2I& a, const VECTOR2I& b )
+                                       {
+                                           VECTOR2I pts = aTransform.TransformCoordinate( a ) + aOffset;
+                                           VECTOR2I pte = aTransform.TransformCoordinate( b ) + aOffset;
+                                           GRLine( DC, pts.x, pts.y, pte.x, pte.y, penWidth, color );
+                                       } );
+            }
+
+            for( SHAPE* shape : shapes )
+                delete shape;
+        }
     }
 
     delete[] buffer;
