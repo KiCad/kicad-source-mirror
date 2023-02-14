@@ -91,6 +91,11 @@ void GRSetColorPen( wxDC* DC, const COLOR4D& Color, int width, wxPenStyle style 
     if( s_ForceBlackPen )
         color = COLOR4D::BLACK;
 
+    // wxWidgets will enforce a minimum pen width when printing, so we have to make the pen
+    // transparent when we don't want the object stroked.
+    if( width == 0 )
+        color = COLOR4D::UNSPECIFIED;
+
     const wxPen& curr_pen = DC->GetPen();
 
     if( !curr_pen.IsOk() || curr_pen.GetColour() != color.ToColour()
