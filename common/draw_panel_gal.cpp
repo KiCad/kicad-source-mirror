@@ -58,7 +58,13 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
                                         const wxPoint& aPosition, const wxSize& aSize,
                                         KIGFX::GAL_DISPLAY_OPTIONS& aOptions, GAL_TYPE aGalType ) :
         wxScrolledCanvas( aParentWindow, aWindowId, aPosition, aSize ),
+        m_MouseCapturedLost( false ),
+        m_parent( aParentWindow ),
         m_edaFrame( nullptr ),
+        m_lastRefresh( 0 ),
+        m_pendingRefresh( false ),
+        m_drawing( false ),
+        m_drawingEnabled( false ),
         m_gal( nullptr ),
         m_view( nullptr ),
         m_painter( nullptr ),
@@ -70,10 +76,9 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
         m_stealsFocus( true ),
         m_statusPopup( nullptr )
 {
-    m_parent = aParentWindow;
-    m_MouseCapturedLost = false;
-
     m_PaintEventCounter = std::make_unique<PROF_COUNTER>( "Draw panel paint events" );
+
+    m_minRefreshPeriod = 13; // 77 FPS (minus render time) by default
 
     SetLayoutDirection( wxLayout_LeftToRight );
 
@@ -145,12 +150,6 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     for( wxEventType eventType : events )
         Connect( eventType, wxEventHandler( EDA_DRAW_PANEL_GAL::OnEvent ), nullptr,
                  m_eventDispatcher );
-
-    m_pendingRefresh = false;
-    m_drawing = false;
-    m_drawingEnabled = false;
-
-    m_minRefreshPeriod = 13; // 77 FPS (minus render time) by default
 
     // Set up timer that prevents too frequent redraw commands
     m_refreshTimer.SetOwner( this );
