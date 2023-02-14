@@ -20,13 +20,14 @@
 # Huanyin Liu <13316560709@189.cn>, 2022.
 # Eric <hamburger1024@duck.com>, 2022.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2023.
+# wh201906 <wh201906@yandex.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-10 15:35-0800\n"
-"PO-Revision-Date: 2023-02-06 07:25+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"PO-Revision-Date: 2023-02-14 23:08+0000\n"
+"Last-Translator: wh201906 <wh201906@yandex.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -3753,7 +3754,7 @@ msgstr "网络类分配："
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:136
 msgid "Pattern"
-msgstr "图案"
+msgstr "匹配模式"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:137
 #: eeschema/sch_field.cpp:870 eeschema/sch_label.cpp:188
@@ -17175,7 +17176,7 @@ msgstr "关联网络类..."
 
 #: eeschema/tools/ee_actions.cpp:483 pcbnew/tools/pcb_actions.cpp:709
 msgid "Assign a netclass to nets matching a pattern"
-msgstr "将网络类分配给匹配模式的网络"
+msgstr "为匹配模式的网络分配一个网络类"
 
 #: eeschema/tools/ee_actions.cpp:488
 msgid "De Morgan Conversion"
