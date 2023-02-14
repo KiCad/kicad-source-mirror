@@ -90,12 +90,15 @@ wxString OUTLINE_FONT::FontLibraryVersion()
 
 OUTLINE_FONT* OUTLINE_FONT::LoadFont( const wxString& aFontName, bool aBold, bool aItalic )
 {
-    OUTLINE_FONT* font = new OUTLINE_FONT();
+    std::unique_ptr<OUTLINE_FONT> font = std::make_unique<OUTLINE_FONT>();
 
     wxString fontFile;
     using fc = fontconfig::FONTCONFIG;
 
     fc::FF_RESULT retval = Fontconfig()->FindFont( aFontName, fontFile, aBold, aItalic );
+
+    if( retval == fc::FF_RESULT::FF_ERROR )
+        return nullptr;
 
     if( retval == fc::FF_RESULT::FF_MISSING_BOLD || retval == fc::FF_RESULT::FF_MISSING_BOLD_ITAL )
         font->SetFakeBold();
@@ -103,13 +106,13 @@ OUTLINE_FONT* OUTLINE_FONT::LoadFont( const wxString& aFontName, bool aBold, boo
     if( retval == fc::FF_RESULT::FF_MISSING_ITAL || retval == fc::FF_RESULT::FF_MISSING_BOLD_ITAL )
         font->SetFakeItal();
 
-    if( retval != fc::FF_RESULT::FF_ERROR )
-        (void) font->loadFace( fontFile );
+    if( font->loadFace( fontFile ) != 0 )
+        return nullptr;
 
     font->m_fontName = aFontName;       // Keep asked-for name, even if we substituted.
     font->m_fontFileName = fontFile;
 
-    return font;
+    return font.release();
 }
 
 
