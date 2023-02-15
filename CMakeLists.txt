@@ -95,12 +95,12 @@ option( KICAD_I18N_UNIX_STRICT_PATH
 
 # Not supported by all platforms (for instance mingw)
 option( KICAD_SANITIZE_ADDRESS
-    "Build KiCad with sanitizer options. WARNING: Not compatible with gold linker"
+    "Build KiCad with address sanitizer options. WARNING: Not compatible with gold linker"
     OFF )
 
 # Not supported by all platforms (for instance mingw)
 option( KICAD_SANITIZE_THREADS
-    "Build KiCad with sanitizer options. WARNING: Not compatible with gold linker"
+    "Build KiCad with thread sanitizer options. WARNING: Not compatible with gold linker"
     OFF )
 
 option( KICAD_SIGNAL_INTEGRITY
