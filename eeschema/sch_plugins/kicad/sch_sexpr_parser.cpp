@@ -2967,7 +2967,7 @@ SCH_BITMAP* SCH_SEXPR_PARSER::parseImage()
             wxImage*             image = new wxImage();
             wxMemoryInputStream  istream( stream );
             image->LoadFile( istream, wxBITMAP_TYPE_PNG );
-            bitmap->GetImage()->SetImage( image );
+            bitmap->SetImage( image );
             break;
         }
 
