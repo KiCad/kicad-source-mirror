@@ -217,10 +217,13 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
 
     for( wxPropertyGridIterator it = m_grid->GetIterator(); !it.AtEnd(); it.Next() )
     {
-        wxPGProperty* pgProp = it.GetProperty();
-
+        wxPGProperty*  pgProp   = it.GetProperty();
         PROPERTY_BASE* property = propMgr.GetProperty( TYPE_HASH( *firstItem ), pgProp->GetName() );
-        wxCHECK2( property, continue );
+
+        // Switching item types?  Property may no longer be valid
+        if( !property )
+            continue;
+
         wxVariant commonVal;
 
         extractValueAndWritability( aSelection, property, commonVal, writeable );
