@@ -800,7 +800,7 @@ bool processShell( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
 }
 
 
-bool processSolid( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
+bool processSolidOrShell( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
                    std::vector< SGNODE* >* items )
 {
     TDF_Label label;
@@ -887,21 +887,31 @@ bool processSolid( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
             items->push_back( pptr );
     }
 
-    // instantiate the solid
-    std::vector< SGNODE* > itemList;
+    // instantiate resulting object
+    std::vector<SGNODE*> itemList;
 
-    for( it.Initialize( shape, false, false ); it.More(); it.Next() )
+    TopAbs_ShapeEnum stype = shape.ShapeType();
+    if( stype == TopAbs_SHELL )
     {
-        const TopoDS_Shape& subShape = it.Value();
+        if( processShell( shape, data, pptr, &itemList, lcolor ) )
+            ret = true;
+    }
+    else
+    {
 
-        if( subShape.ShapeType() == TopAbs_SHELL )
+        for( it.Initialize( shape, false, false ); it.More(); it.Next() )
         {
-            if( processShell( subShape, data, pptr, &itemList, lcolor ) )
-                ret = true;
-        }
-        else
-        {
-            wxLogTrace( MASK_OCE, wxT( "Unsupported subshape in solid" ) );
+            const TopoDS_Shape& subShape = it.Value();
+
+            if( subShape.ShapeType() == TopAbs_SHELL )
+            {
+                if( processShell( subShape, data, pptr, &itemList, lcolor ) )
+                    ret = true;
+            }
+            else
+            {
+                wxLogTrace( MASK_OCE, wxT( "Unsupported subshape in solid" ) );
+            }
         }
     }
 
@@ -996,14 +1006,14 @@ bool processLabel( const TDF_Label& aLabel, DATA& aData, SGNODE* aParent,
 
                 for( xp.Init( shape, TopAbs_SOLID ); xp.More(); xp.Next() )
                 {
-                    processSolid( xp.Current(), aData, pptr, aItems );
+                processSolidOrShell( xp.Current(), aData, pptr, aItems );
                     ret = true;
                 }
 
                 // Get all shells, avoid those that may be attached to solids
                 for( xp.Init( shape, TopAbs_SHELL, TopAbs_SOLID ); xp.More(); xp.Next() )
                 {
-                    processShell( xp.Current(), aData, pptr, aItems, nullptr );
+                    processSolidOrShell( xp.Current(), aData, pptr, aItems );
                     ret = true;
                 }
 
@@ -1019,13 +1029,13 @@ bool processLabel( const TDF_Label& aLabel, DATA& aData, SGNODE* aParent,
         break;
 
     case TopAbs_SOLID:
-        if( processSolid( shape, aData, pptr, aItems ) )
+        if( processSolidOrShell( shape, aData, pptr, aItems ) )
             ret = true;
 
         break;
 
     case TopAbs_SHELL:
-        if( processShell( shape, aData, pptr, aItems, nullptr ) )
+        if( processSolidOrShell( shape, aData, pptr, aItems ) )
             ret = true;
 
         break;
@@ -1130,18 +1140,10 @@ bool processFace( const TopoDS_Face& face, DATA& data, SGNODE* parent, std::vect
     Quantity_ColorRGBA lcolor;
 
     // check for a face color; this has precedence over SOLID colors
-    do
-    {
-        TDF_Label L;
-
-        if( data.m_color->ShapeTool()->Search( face, L ) )
-        {
-            if( data.m_color->GetColor( L, XCAFDoc_ColorGen, lcolor )
-                || data.m_color->GetColor( L, XCAFDoc_ColorCurv, lcolor )
-                || data.m_color->GetColor( L, XCAFDoc_ColorSurf, lcolor ) )
-                color = &lcolor;
-        }
-    } while( 0 );
+    if( data.m_color->GetColor( face, XCAFDoc_ColorGen, lcolor )
+        || data.m_color->GetColor( face, XCAFDoc_ColorCurv, lcolor )
+        || data.m_color->GetColor( face, XCAFDoc_ColorSurf, lcolor ) )
+            color = &lcolor;
 
     SGNODE* ocolor = data.GetColor( color );
 
