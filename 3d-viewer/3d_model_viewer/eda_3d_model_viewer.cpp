@@ -257,6 +257,13 @@ void EDA_3D_MODEL_VIEWER::OnPaint( wxPaintEvent& event )
     if( m_glRC == nullptr )
         m_glRC = GL_CONTEXT_MANAGER::Get().CreateCtx( this );
 
+    // CreateCtx could and does fail per sentry crash events, lets be graceful
+    if( m_glRC == nullptr )
+    {
+        wxLogTrace( m_logTrace, wxT( "EDA_3D_MODEL_VIEWER::OnPaint creating gl context failed" ) );
+        return;
+    }
+
     GL_CONTEXT_MANAGER::Get().LockCtx( m_glRC, this );
 
     // Set the OpenGL viewport according to the client size of this canvas.
