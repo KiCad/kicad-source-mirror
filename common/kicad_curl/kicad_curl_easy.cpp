@@ -264,7 +264,7 @@ bool KICAD_CURL_EASY::SetTransferCallback( const TRANSFER_CALLBACK& aCallback, s
 {
     progress = std::make_unique<CURL_PROGRESS>( this, aCallback,
                                                 static_cast<curl_off_t>( aInterval ) );
-#ifdef CURLOPT_XFERINFOFUNCTION
+#if LIBCURL_VERSION_NUM >= 0x072000
     setOption( CURLOPT_XFERINFOFUNCTION, xferinfo );
     setOption( CURLOPT_XFERINFODATA, progress.get() );
 #else
