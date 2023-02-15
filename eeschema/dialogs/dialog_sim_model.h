@@ -70,18 +70,18 @@ private:
     bool TransferDataFromWindow() override;
 
     void updateWidgets();
-    void updateIbisWidgets();
-    void updateInstanceWidgets();
-    void updateModelParamsTab();
-    void updateModelCodeTab();
-    void updatePinAssignments();
+    void updateIbisWidgets( SIM_MODEL* aModel );
+    void updateInstanceWidgets( SIM_MODEL* aModel );
+    void updateModelParamsTab( SIM_MODEL* aModel );
+    void updateModelCodeTab( SIM_MODEL* aModel );
+    void updatePinAssignments( SIM_MODEL* aModel );
 
-    void removeOrphanedPinAssignments();
+    void removeOrphanedPinAssignments( SIM_MODEL* aModel );
 
     bool loadLibrary( const wxString& aLibraryPath, bool aForceReload = false );
 
-    void addParamPropertyIfRelevant( int aParamIndex );
-    wxPGProperty* newParamProperty( int aParamIndex ) const;
+    void addParamPropertyIfRelevant( SIM_MODEL* aModel, int aParamIndex );
+    wxPGProperty* newParamProperty( SIM_MODEL* aModel, int aParamIndex ) const;
 
     int findSymbolPinRow( const wxString& aSymbolPinNumber ) const;
 
@@ -89,7 +89,7 @@ private:
     const SIM_LIBRARY* library() const;
 
     wxString getSymbolPinString( int aSymbolPinNumber ) const;
-    wxString getModelPinString( int aModelPinIndex ) const;
+    wxString getModelPinString( SIM_MODEL* aModel, int aModelPinIndex ) const;
     int getModelPinIndex( const wxString& aModelPinString ) const;
 
     void onRadioButton( wxCommandEvent& aEvent ) override;
@@ -122,6 +122,7 @@ private:
 
     SIM_LIB_MGR            m_libraryModelsMgr;
     SIM_LIB_MGR            m_builtinModelsMgr;
+    wxString               m_prevLibrary;
     const SIM_MODEL*       m_prevModel;
 
     std::vector<LIB_PIN*>                          m_sortedPartPins; //< Pins of the current part.
