@@ -2446,6 +2446,8 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
         VECTOR2I        pt1 = bbox.GetOrigin();
         VECTOR2I        pt2 = bbox.GetEnd();
 
+        m_gal->PushDepth();
+        m_gal->AdvanceDepth();
         m_gal->SetIsStroke( true );
         m_gal->SetIsFill( true );
         m_gal->SetStrokeColor( colors->GetColor( LAYER_ERC_ERR ) );
@@ -2454,6 +2456,7 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
         m_gal->DrawSegment( pt1, pt2, 3.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ) );
         std::swap( pt1.x, pt2.x );
         m_gal->DrawSegment( pt1, pt2, 3.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ) );
+        m_gal->PopDepth();
     }
 }
 
