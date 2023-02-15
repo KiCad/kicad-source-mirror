@@ -236,6 +236,8 @@ private:
      */
     void rebuildBitmap( bool aResetID = true );
 
+    void updatePPI();
+
     double    m_scale;              // The scaling factor of the bitmap
                                     // With m_pixelSizeIu, controls the actual draw size
     wxImage*  m_image;              // the raw image data (png format)

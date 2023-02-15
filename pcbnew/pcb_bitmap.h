@@ -50,11 +50,21 @@ public:
 
     PCB_BITMAP& operator=( const BOARD_ITEM& aItem );
 
-    BITMAP_BASE* GetImage() const
+    const BITMAP_BASE* GetImage() const
     {
         wxCHECK_MSG( m_image != nullptr, nullptr, "Invalid PCB_BITMAP init, m_image is NULL." );
         return m_image;
     }
+
+    /**
+     * Only use this if you really need to modify the underlying image
+     */
+    BITMAP_BASE* MutableImage() const
+    {
+        return m_image;
+    }
+
+    void SetImage( wxImage* aImage );
 
     /**
      * @return the image "zoom" value.

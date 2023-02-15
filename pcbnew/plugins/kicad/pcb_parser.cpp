@@ -2876,10 +2876,10 @@ PCB_BITMAP* PCB_PARSER::parsePCB_BITMAP( BOARD_ITEM* aParent )
             break;
 
         case T_scale:
-            bitmap->GetImage()->SetScale( parseDouble( "image scale factor" ) );
+            bitmap->SetImageScale( parseDouble( "image scale factor" ) );
 
             if( !std::isnormal( bitmap->GetImage()->GetScale() ) )
-                bitmap->GetImage()->SetScale( 1.0 );
+                bitmap->SetImageScale( 1.0 );
 
             NeedRIGHT();
             break;
@@ -2908,7 +2908,7 @@ PCB_BITMAP* PCB_PARSER::parsePCB_BITMAP( BOARD_ITEM* aParent )
             wxImage*             image = new wxImage();
             wxMemoryInputStream  istream( stream );
             image->LoadFile( istream, wxBITMAP_TYPE_PNG );
-            bitmap->GetImage()->SetImage( image );
+            bitmap->SetImage( image );
             break;
         }
 

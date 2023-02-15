@@ -75,6 +75,7 @@ void BITMAP_BASE::SetImage( wxImage* aImage )
     delete m_originalImage;
     m_originalImage = new wxImage( *aImage );
     rebuildBitmap();
+    updatePPI();
 }
 
 
@@ -87,6 +88,21 @@ void BITMAP_BASE::rebuildBitmap( bool aResetID )
 
     if( aResetID )
         m_imageId = KIID();
+}
+
+
+void BITMAP_BASE::updatePPI()
+{
+    // Todo: eventually we need to support dpi / scaling in both dimensions
+    int dpiX = m_originalImage->GetOptionInt( wxIMAGE_OPTION_RESOLUTIONX );
+
+    if( dpiX > 1 )
+    {
+        if( m_originalImage->GetOptionInt( wxIMAGE_OPTION_RESOLUTIONUNIT ) == wxIMAGE_RESOLUTION_CM )
+            m_ppi = KiROUND( dpiX * 2.54 );
+        else
+            m_ppi = dpiX;
+    }
 }
 
 
@@ -116,6 +132,7 @@ bool BITMAP_BASE::ReadImageFile( wxInputStream& aInStream )
     delete m_originalImage;
     m_originalImage = new wxImage( *m_image );
     rebuildBitmap();
+    updatePPI();
 
     return true;
 }
@@ -136,17 +153,7 @@ bool BITMAP_BASE::ReadImageFile( const wxString& aFullFilename )
     delete m_originalImage;
     m_originalImage = new wxImage( *m_image );
     rebuildBitmap();
-
-    // Todo: eventually we need to support dpi / scaling in both dimensions
-    int dpiX = m_originalImage->GetOptionInt( wxIMAGE_OPTION_RESOLUTIONX );
-
-    if( dpiX > 1 )
-    {
-        if( m_originalImage->GetOptionInt( wxIMAGE_OPTION_RESOLUTIONUNIT ) == wxIMAGE_RESOLUTION_CM )
-            m_ppi = KiROUND( dpiX * 2.54 );
-        else
-            m_ppi = dpiX;
-    }
+    updatePPI();
 
     return true;
 }
