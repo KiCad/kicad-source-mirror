@@ -235,6 +235,17 @@ bool PNS_PCBNEW_RULE_RESOLVER::IsNetTieExclusion( const PNS::ITEM* aItem,
     std::shared_ptr<DRC_ENGINE> drcEngine = m_board->GetDesignSettings().m_DRCEngine;
     BOARD_ITEM*                 collidingItem = aCollidingItem->Parent();
 
+    FOOTPRINT* collidingFp = static_cast<FOOTPRINT*>( collidingItem->GetParentFootprint() );
+    FOOTPRINT* itemFp      = aItem->Parent()
+                                ? static_cast<FOOTPRINT*>( aItem->Parent()->GetParentFootprint() )
+                                : nullptr;
+
+    if( collidingFp && itemFp && ( collidingFp == itemFp ) && itemFp->IsNetTie() )
+    {
+        // Two items colliding from the same net tie footprint are not checked
+        return true;
+    }
+
     if( drcEngine && collidingItem )
     {
         return drcEngine->IsNetTieExclusion( aItem->Net(), ToLAYER_ID( aItem->Layer() ),
