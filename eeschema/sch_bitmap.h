@@ -57,6 +57,8 @@ public:
         return m_image;
     }
 
+    void SetImage( wxImage* aImage );
+
     /**
      * @return the image "zoom" value.
      *  scale = 1.0 = original size of bitmap.
