@@ -217,7 +217,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
 
         return false;
     };
-    
+
     // Determine state of conditional via flashing
     for( PCB_TRACK* track : m_board->Tracks() )
     {
@@ -1809,7 +1809,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
 
         // If the spokes are at a cardinal angle then we can generate them from a bounding box
         // without trig.
-        if( pad->GetThermalSpokeAngle().IsCardinal() )
+        if( ( pad->GetOrientation() + pad->GetThermalSpokeAngle() ).IsCardinal() )
         {
             BOX2I spokesBox = pad->GetBoundingBox();
             spokesBox.Inflate( thermalReliefGap + epsilon );
