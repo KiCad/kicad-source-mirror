@@ -47,18 +47,20 @@ std::string SPICE_GENERATOR_SOURCE::ModelLine( const SPICE_ITEM& aItem ) const
 
 std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
 {
-    SPICE_ITEM item = aItem;
-    item.modelName = "";
-
-    std::string inlineType = m_model.GetSpiceInfo().inlineTypeString;
+    SPICE_ITEM  item = aItem;
     std::string ac = m_model.FindParam( "ac" )->value->ToSpiceString();
-    std::string ph = m_model.FindParam( "ph" )->value->ToSpiceString();
 
     if( ac != "" )
-        item.modelName.append( fmt::format( "AC {} {} ", ac, ph ) );
+    {
+        std::string dc = m_model.FindParam( "dc" )->value->ToSpiceString();
+        std::string ph = m_model.FindParam( "ph" )->value->ToSpiceString();
 
-
-    if( inlineType != "" && inlineType != "DC" )
+        if( dc != "" )
+            item.modelName = fmt::format( "DC {} AC {} {} ", dc, ac, ph );
+        else
+            item.modelName = fmt::format( "AC {} {} ", ac, ph );
+    }
+    else if( m_model.GetSpiceInfo().inlineTypeString != "" )
     {
         std::string args = "";
         
@@ -95,8 +97,9 @@ std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
                     }
                 }
             }
-        }
+
             break;
+        }
 
         // TODO: dt should be tstep by default.
 
@@ -146,8 +149,9 @@ std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
 
             args.append( range.ToSpiceString() + " " );
             args.append( offset.ToSpiceString() + " " );
-        }
+
             break;
+        }
 
         case SIM_MODEL::TYPE::V_RANDNORMAL:
         case SIM_MODEL::TYPE::I_RANDNORMAL:
@@ -184,16 +188,15 @@ std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
                 if( argStr != "" )
                     args.append( argStr + " " );
             }
+
             break;
         }
 
-        item.modelName.append( fmt::format( "{}( {})",
-                                            m_model.GetSpiceInfo().inlineTypeString,
-                                            args ) );
+        item.modelName = fmt::format( "{}( {})", m_model.GetSpiceInfo().inlineTypeString, args );
     }
     else
     {
-        item.modelName.append( m_model.GetParam( 0 ).value->ToSpiceString() );
+        item.modelName = m_model.GetParam( 0 ).value->ToSpiceString();
     }
 
     return SPICE_GENERATOR::ItemLine( item );
