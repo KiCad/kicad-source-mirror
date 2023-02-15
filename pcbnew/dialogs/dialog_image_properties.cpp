@@ -37,7 +37,7 @@ DIALOG_IMAGE_PROPERTIES::DIALOG_IMAGE_PROPERTIES( PCB_BASE_FRAME* aParent, PCB_B
         m_posY( aParent, m_YPosLabel, m_ModPositionY, m_YPosUnit )
 {
     // Create the image editor page
-    m_imageEditor = new PANEL_IMAGE_EDITOR( m_Notebook, aBitmap->GetImage() );
+    m_imageEditor = new PANEL_IMAGE_EDITOR( m_Notebook, aBitmap->MutableImage() );
     m_Notebook->AddPage( m_imageEditor, _( "Image" ), false );
 
     m_posX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
@@ -97,7 +97,7 @@ bool DIALOG_IMAGE_PROPERTIES::TransferDataFromWindow()
             m_frame->SaveCopyInUndoList( m_bitmap, UNDO_REDO::CHANGED );
 
         // Update our bitmap from the editor
-        m_imageEditor->TransferToImage( m_bitmap->GetImage() );
+        m_imageEditor->TransferToImage( m_bitmap->MutableImage() );
 
         // Set position, etc.
         m_bitmap->SetPosition( VECTOR2I( m_posX.GetValue(), m_posY.GetValue() ) );
