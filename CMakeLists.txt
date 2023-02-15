@@ -53,13 +53,6 @@ set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
 set( KICAD_CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" )
 set( CMAKE_MODULE_PATH       "${KICAD_CMAKE_MODULE_PATH}" )
 
-# On Windows, binaries created by link option -g3 are very large (more than 1Gb for pcbnew,
-# and more than 3Gb for the full kicad suite)
-# This option create binaries using link option -g1 that create much smaller files, but
-# there are less info in debug (but the file names and line numbers are available)
-cmake_dependent_option( BUILD_SMALL_DEBUG_FILES "In debug build: create smaller binaries." OFF "NOT MSVC" OFF )
-
-
 #
 # KiCad build options should be added below.
 #
@@ -68,30 +61,91 @@ cmake_dependent_option( BUILD_SMALL_DEBUG_FILES "In debug build: create smaller 
 # so that build option settings can be included in bug reports.
 #
 
-option( KICAD_SCRIPTING_WXPYTHON
-    "Build wxPython implementation for wx interface building in Python and py.shell (default ON)."
-    ON )
-mark_as_advanced( KICAD_SCRIPTING_WXPYTHON )
-
-option( KICAD_INSTALL_DEMOS
-    "Install KiCad demos and examples (default ON)"
-    ON )
-
-option( KICAD_BUILD_QA_TESTS
-    "Build software Quality assurance unit tests (default ON)"
-    ON )
-
+####################################
+# Feature flags
+####################################
 option( KICAD_SPICE
     "Build KiCad with internal Spice simulator."
+    ON )
+
+option( KICAD_USE_SENTRY
+    "Build KiCad with support for sentry app metrics"
+    OFF )
+
+option( KICAD_USE_3DCONNEXION
+    "Build KiCad with support for 3Dconnexion devices (Currently only for Mac/MSW)"
+    OFF )
+
+option( KICAD_SIGNAL_INTEGRITY
+    "Build tools for signal integrity analysis ( default ON )"
     ON )
 
 option( KICAD_BUILD_I18N
     "Build the translation libraries."
     OFF )
 
+option( KICAD_BUILD_QA_TESTS
+    "Build software Quality assurance unit tests (default ON)"
+    ON )
+
+option( KICAD_SCRIPTING_WXPYTHON
+    "Build wxPython implementation for wx interface building in Python and py.shell (default ON)."
+    ON )
+mark_as_advanced( KICAD_SCRIPTING_WXPYTHON )
+
+option( KICAD_USE_EGL
+    "Build KiCad with EGL backend support for Wayland."
+    OFF )
+
+cmake_dependent_option( KICAD_USE_BUNDLED_GLEW
+    "Use the bundled version of GLEW - only available when KICAD_USE_EGL is set"
+    ON "KICAD_USE_EGL"
+    OFF )
+
+cmake_dependent_option( KICAD_WIN32_DPI_AWARE
+    "Turn on DPI awareness for Windows builds only"
+    OFF "WIN32"
+    OFF )
+
+cmake_dependent_option( KICAD_WIN32_CONTEXT_WINFIBER
+    "Use win32 fibers for libcontext"
+    OFF "WIN32"
+    OFF )
+
+cmake_dependent_option( KICAD_WIN32_VERIFY_CODESIGN
+    "When enabled, verifies the code signing signature of certain DLLs loaded during runtime."
+    OFF "WIN32"
+    OFF )
+
+# On Windows, binaries created by link option -g3 are very large (more than 1Gb for pcbnew,
+# and more than 3Gb for the full kicad suite)
+# This option create binaries using link option -g1 that create much smaller files, but
+# there are less info in debug (but the file names and line numbers are available)
+cmake_dependent_option( KICAD_BUILD_SMALL_DEBUG_FILES
+    "Create smaller binaries in debug builds."
+    OFF "NOT MSVC"
+    OFF )
+
+####################################
+# Installation options
+####################################
+option( KICAD_INSTALL_DEMOS
+    "Install KiCad demos and examples (default ON)"
+    ON )
+
 option( KICAD_I18N_UNIX_STRICT_PATH
     "Use standard Unix locale lookup path (default OFF)."
     OFF )
+
+cmake_dependent_option( KICAD_WIN32_INSTALL_PDBS
+    "Installs debug pdb to the bin folder, DO NOT USE (NOR REQUIRED) FOR DEBUGGING THE SOURCE ON MSVC. This is purely for release building.
+    MSVC can find the PDBs without this."
+    OFF "WIN32"
+    OFF )
+
+####################################
+# Compiler options/tools
+####################################
 
 # Not supported by all platforms (for instance mingw)
 option( KICAD_SANITIZE_ADDRESS
@@ -103,9 +157,9 @@ option( KICAD_SANITIZE_THREADS
     "Build KiCad with thread sanitizer options. WARNING: Not compatible with gold linker"
     OFF )
 
-option( KICAD_SIGNAL_INTEGRITY
-    "Build tools for signal integrity analysis ( default ON )"
-    ON )
+option( KICAD_USE_VALGRIND
+    "Build KiCad with valgrind stack tracking enabled."
+    OFF )
 
 option( KICAD_STDLIB_DEBUG
     "Build KiCad with libstdc++ debug flags enabled."
@@ -117,33 +171,12 @@ option( KICAD_STDLIB_LIGHT_DEBUG
 
 cmake_dependent_option( KICAD_WIN32_BUILD_PARALLEL_CL_MP
     "Build in parallel using the /MP compiler option (default OFF for safety reasons)"
-    OFF "WIN32" OFF )
-
-option( KICAD_USE_VALGRIND
-    "Build KiCad with valgrind stack tracking enabled."
+    OFF "WIN32"
     OFF )
 
-option( KICAD_NETLIST_QA
-    "Run eeschema netlist QA tests (requires Python 3)"
-    OFF )
-
-cmake_dependent_option( KICAD_WIN32_DPI_AWARE
-    "Turn on DPI awareness for Windows builds only"
-    OFF "WIN32" OFF )
-
-cmake_dependent_option( KICAD_WIN32_CONTEXT_WINFIBER
-    "Use win32 fibers for libcontext"
-    OFF "WIN32" OFF )
-
-option( KICAD_USE_EGL
-    "Build KiCad with EGL backend support for Wayland."
-    OFF )
-
-cmake_dependent_option( KICAD_USE_BUNDLED_GLEW
-    "Use the bundled version of GLEW - only available when KICAD_USE_EGL is set"
-    ON "KICAD_USE_EGL"
-    OFF )
-
+####################################
+# Debugging/profiling
+####################################
 option( KICAD_DRC_PROTO
     "Build the DRC prototype QA tool"
     OFF )
@@ -160,24 +193,6 @@ option( KICAD_GAL_PROFILE
     "Enable profiling info for GAL"
     OFF )
 
-cmake_dependent_option( KICAD_WIN32_INSTALL_PDBS
-    "Installs debug pdb to the bin folder, DO NOT USE (NOR REQUIRED) FOR DEBUGGING THE SOURCE ON MSVC. This is purely for release building.
-    MSVC can find the PDBs without this."
-    OFF "WIN32"
-    OFF )
-
-option( KICAD_USE_3DCONNEXION
-    "Build KiCad with support for 3Dconnexion devices (Currently only for Mac/MSW)"
-    OFF )
-
-cmake_dependent_option( KICAD_WIN32_VERIFY_CODESIGN
-    "When enabled, verifies the code signing signature of certain DLLs loaded during runtime."
-    OFF "WIN32"
-    OFF )
-
-option( KICAD_USE_SENTRY
-    "Build KiCad with support for sentry app metrics"
-    OFF )
 
 if( KICAD_USE_3DCONNEXION )
     if( WIN32 )
@@ -362,7 +377,7 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     # This includes descriptions of functions and external variables, and line number tables,
     # but no information about local variables.
     # Level 3 includes full information, but binaries are much larger.
-    if( BUILD_SMALL_DEBUG_FILES )
+    if( KICAD_BUILD_SMALL_DEBUG_FILES )
         set( CMAKE_C_FLAGS_DEBUG   "-g1 -ggdb1" )
         set( CMAKE_CXX_FLAGS_DEBUG "-g1 -ggdb1" )
     else()
