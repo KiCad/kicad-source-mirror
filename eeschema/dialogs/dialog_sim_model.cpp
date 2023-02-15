@@ -370,11 +370,13 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataFromWindow()
 template <typename T_symbol, typename T_field>
 void DIALOG_SIM_MODEL<T_symbol, T_field>::updateWidgets()
 {
-    updateIbisWidgets();
-    updateInstanceWidgets();
-    updateModelParamsTab();
-    updateModelCodeTab();
-    updatePinAssignments();
+    SIM_MODEL* model = &curModel();
+
+    updateIbisWidgets( model );
+    updateInstanceWidgets( model );
+    updateModelParamsTab( model );
+    updateModelCodeTab( model );
+    updatePinAssignments( model );
 
     std::string ref = SIM_MODEL::GetFieldValue( &m_fields, SIM_REFERENCE_FIELD );
 
@@ -390,9 +392,9 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateWidgets()
 
 
 template <typename T_symbol, typename T_field>
-void DIALOG_SIM_MODEL<T_symbol, T_field>::updateIbisWidgets()
+void DIALOG_SIM_MODEL<T_symbol, T_field>::updateIbisWidgets( SIM_MODEL* aModel )
 {
-    SIM_MODEL_KIBIS* modelkibis = isIbisLoaded() ? dynamic_cast<SIM_MODEL_KIBIS*>( &curModel() )
+    SIM_MODEL_KIBIS* modelkibis = isIbisLoaded() ? dynamic_cast<SIM_MODEL_KIBIS*>( aModel )
                                                  : nullptr;
 
     m_ibisModelCombobox->Show( isIbisLoaded() );
@@ -406,16 +408,16 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateIbisWidgets()
 
 
 template <typename T_symbol, typename T_field>
-void DIALOG_SIM_MODEL<T_symbol, T_field>::updateInstanceWidgets()
+void DIALOG_SIM_MODEL<T_symbol, T_field>::updateInstanceWidgets( SIM_MODEL* aModel )
 {
     // Change the Type choice to match the current device type.
-    if( &curModel() != m_prevModel )
+    if( aModel != m_prevModel )
     {
         m_deviceTypeChoice->Clear();
 
         if( m_useLibraryModelRadioButton->GetValue() )
         {
-            m_deviceTypeChoice->Append( curModel().GetDeviceInfo().description );
+            m_deviceTypeChoice->Append( aModel->GetDeviceInfo().description );
             m_deviceTypeChoice->SetSelection( 0 );
         }
         else
@@ -427,7 +429,7 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateInstanceWidgets()
 
                 m_deviceTypeChoice->Append( SIM_MODEL::DeviceInfo( deviceType ).description );
 
-                if( deviceType == curModel().GetDeviceType() )
+                if( deviceType == aModel->GetDeviceType() )
                     m_deviceTypeChoice->SetSelection( m_deviceTypeChoice->GetCount() - 1 );
             }
         }
@@ -436,11 +438,11 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateInstanceWidgets()
 
         for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
         {
-            if( SIM_MODEL::TypeInfo( type ).deviceType == curModel().GetDeviceType() )
+            if( SIM_MODEL::TypeInfo( type ).deviceType == aModel->GetDeviceType() )
             {
                 m_typeChoice->Append( SIM_MODEL::TypeInfo( type ).description );
 
-                if( type == curModel().GetType() )
+                if( type == aModel->GetType() )
                     m_typeChoice->SetSelection( m_typeChoice->GetCount() - 1 );
             }
         }
@@ -448,8 +450,8 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateInstanceWidgets()
 
     m_typeChoice->Enable( !m_useLibraryModelRadioButton->GetValue() || isIbisLoaded() );
 
-    if( dynamic_cast<SIM_MODEL_RAW_SPICE*>( &curModel() )
-            || dynamic_cast<SIM_MODEL_SPICE_FALLBACK*>( &curModel() ) )
+    if( dynamic_cast<SIM_MODEL_RAW_SPICE*>( aModel )
+            || dynamic_cast<SIM_MODEL_SPICE_FALLBACK*>( aModel ) )
     {
         m_modelNotebook->SetSelection( 1 );
     }
@@ -458,9 +460,9 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateInstanceWidgets()
         m_modelNotebook->SetSelection( 0 );
     }
 
-    if( curModel().HasPrimaryValue() )
+    if( aModel->HasPrimaryValue() )
     {
-        const SIM_MODEL::PARAM& primary = curModel().GetParam( 0 );
+        const SIM_MODEL::PARAM& primary = aModel->GetParam( 0 );
 
         m_saveInValueCheckbox->SetLabel( wxString::Format( _( "Save parameter '%s (%s)' in Value "
                                                               "field" ),
@@ -478,9 +480,9 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateInstanceWidgets()
 
 
 template <typename T_symbol, typename T_field>
-void DIALOG_SIM_MODEL<T_symbol, T_field>::updateModelParamsTab()
+void DIALOG_SIM_MODEL<T_symbol, T_field>::updateModelParamsTab( SIM_MODEL* aModel )
 {
-    if( &curModel() != m_prevModel )
+    if( aModel != m_prevModel )
     {
         // This wxPropertyGridManager column and header stuff has to be here because it segfaults in
         // the constructor.
@@ -532,8 +534,8 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateModelParamsTab()
 
         m_paramGrid->CollapseAll();
 
-        for( int i = 0; i < curModel().GetParamCount(); ++i )
-            addParamPropertyIfRelevant( i );
+        for( int i = 0; i < aModel->GetParamCount(); ++i )
+            addParamPropertyIfRelevant( aModel, i );
 
         m_paramGrid->CollapseAll();
         m_paramGrid->Expand( "AC" );
@@ -565,14 +567,14 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateModelParamsTab()
         // Model values other than the currently edited value may have changed. Update them.
         // This feature is called "autofill" and present only in certain models. Don't do it for
         // models that don't have it for performance reasons.
-        if( curModel().HasAutofill() )
+        if( aModel->HasAutofill() )
             ( *it )->SetValueFromString( param.value->ToString() );
     }
 }
 
 
 template <typename T_symbol, typename T_field>
-void DIALOG_SIM_MODEL<T_symbol, T_field>::updateModelCodeTab()
+void DIALOG_SIM_MODEL<T_symbol, T_field>::updateModelCodeTab( SIM_MODEL* aModel )
 {
     wxString   text;
     SPICE_ITEM item;
@@ -582,7 +584,7 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateModelCodeTab()
     if( m_useInstanceModelRadioButton->GetValue() || item.modelName == "" )
         item.modelName = m_fields.at( REFERENCE_FIELD ).GetText();
 
-    text << curModel().SpiceGenerator().Preview( item );
+    text << aModel->SpiceGenerator().Preview( item );
 
     m_codePreview->SetText( text );
     m_codePreview->SelectNone();
@@ -590,9 +592,9 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateModelCodeTab()
 
 
 template <typename T_symbol, typename T_field>
-void DIALOG_SIM_MODEL<T_symbol, T_field>::updatePinAssignments()
+void DIALOG_SIM_MODEL<T_symbol, T_field>::updatePinAssignments( SIM_MODEL* aModel )
 {
-    removeOrphanedPinAssignments();
+    removeOrphanedPinAssignments( aModel );
 
     // Reset the grid.
 
@@ -603,9 +605,9 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updatePinAssignments()
         m_pinAssignmentsGrid->SetCellValue( row, PIN_COLUMN::MODEL, _( "Not Connected" ) );
 
     // Now set up the grid values in the Model column.
-    for( int modelPinIndex = 0; modelPinIndex < curModel().GetPinCount(); ++modelPinIndex )
+    for( int modelPinIndex = 0; modelPinIndex < aModel->GetPinCount(); ++modelPinIndex )
     {
-        wxString symbolPinNumber = curModel().GetPin( modelPinIndex ).symbolPinNumber;
+        wxString symbolPinNumber = aModel->GetPin( modelPinIndex ).symbolPinNumber;
 
         if( symbolPinNumber == "" )
             continue;
@@ -615,7 +617,7 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updatePinAssignments()
         if( symbolPinRow == -1 )
             continue;
 
-        wxString modelPinString = getModelPinString( modelPinIndex );
+        wxString modelPinString = getModelPinString( aModel, modelPinIndex );
         m_pinAssignmentsGrid->SetCellValue( symbolPinRow, PIN_COLUMN::MODEL, modelPinString );
     }
 
@@ -632,14 +634,14 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updatePinAssignments()
         std::vector<BITMAPS> modelPinIcons;
         wxArrayString        modelPinChoices;
 
-        for( int jj = 0; jj < curModel().GetPinCount(); ++jj )
+        for( int jj = 0; jj < aModel->GetPinCount(); ++jj )
         {
-            if( curModel().GetPin( jj ).symbolPinNumber != "" )
+            if( aModel->GetPin( jj ).symbolPinNumber != "" )
                 modelPinIcons.push_back( PinShapeGetBitmap( GRAPHIC_PINSHAPE::LINE ) );
             else
                 modelPinIcons.push_back( BITMAPS::INVALID_BITMAP );
 
-            modelPinChoices.Add( getModelPinString( jj ) );
+            modelPinChoices.Add( getModelPinString( aModel, jj ) );
         }
 
         modelPinIcons.push_back( BITMAPS::INVALID_BITMAP );
@@ -654,11 +656,9 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updatePinAssignments()
 
     // TODO: Show a preview of the symbol with the pin numbers shown.
 
-    SIM_MODEL* model = &curModel();
-
-    if( model->GetType() == SIM_MODEL::TYPE::SUBCKT )
+    if( aModel->GetType() == SIM_MODEL::TYPE::SUBCKT )
     {
-        SIM_MODEL_SUBCKT* subckt = static_cast<SIM_MODEL_SUBCKT*>( model );
+        SIM_MODEL_SUBCKT* subckt = static_cast<SIM_MODEL_SUBCKT*>( aModel );
         m_subckt->SetText( subckt->GetSpiceCode() );
     }
     else
@@ -670,12 +670,12 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updatePinAssignments()
 
 
 template <typename T_symbol, typename T_field>
-void DIALOG_SIM_MODEL<T_symbol, T_field>::removeOrphanedPinAssignments()
+void DIALOG_SIM_MODEL<T_symbol, T_field>::removeOrphanedPinAssignments( SIM_MODEL* aModel )
 {
-    for( int i = 0; i < curModel().GetPinCount(); ++i )
+    for( int i = 0; i < aModel->GetPinCount(); ++i )
     {
-        if( !m_symbol.GetPin( curModel().GetPin( i ).symbolPinNumber ) )
-            curModel().SetPinSymbolPinNumber( i, "" );
+        if( !m_symbol.GetPin( aModel->GetPin( i ).symbolPinNumber ) )
+            aModel->SetPinSymbolPinNumber( i, "" );
     }
 }
 
@@ -684,6 +684,9 @@ template <typename T_symbol, typename T_field>
 bool DIALOG_SIM_MODEL<T_symbol, T_field>::loadLibrary( const wxString& aLibraryPath,
                                                        bool aForceReload )
 {
+    if( m_prevLibrary == aLibraryPath && !aForceReload )
+        return true;
+
     wxString           msg;
     WX_STRING_REPORTER reporter( &msg );
 
@@ -737,75 +740,77 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::loadLibrary( const wxString& aLibraryP
         m_ibisPinCombobox->SetSelection( -1 );
     }
 
+    m_prevLibrary = aLibraryPath;
     return true;
 }
 
 
 template <typename T_symbol, typename T_field>
-void DIALOG_SIM_MODEL<T_symbol, T_field>::addParamPropertyIfRelevant( int aParamIndex )
+void DIALOG_SIM_MODEL<T_symbol, T_field>::addParamPropertyIfRelevant( SIM_MODEL* aModel,
+                                                                      int aParamIndex )
 {
-    if( curModel().GetParam( aParamIndex ).info.dir == SIM_MODEL::PARAM::DIR_OUT )
+    if( aModel->GetParam( aParamIndex ).info.dir == SIM_MODEL::PARAM::DIR_OUT )
         return;
 
-    switch( curModel().GetParam( aParamIndex ).info.category )
+    switch( aModel->GetParam( aParamIndex ).info.category )
     {
     case CATEGORY::AC:
         m_paramGrid->HideProperty( "AC", false );
-        m_paramGrid->AppendIn( "AC", newParamProperty( aParamIndex ) );
+        m_paramGrid->AppendIn( "AC", newParamProperty( aModel, aParamIndex ) );
         break;
 
     case CATEGORY::DC:
         m_paramGrid->HideProperty( "DC", false );
-        m_paramGrid->AppendIn( "DC", newParamProperty( aParamIndex ) );
+        m_paramGrid->AppendIn( "DC", newParamProperty( aModel, aParamIndex ) );
         break;
 
     case CATEGORY::CAPACITANCE:
         m_paramGrid->HideProperty( "Capacitance", false );
-        m_paramGrid->AppendIn( "Capacitance", newParamProperty( aParamIndex ) );
+        m_paramGrid->AppendIn( "Capacitance", newParamProperty( aModel, aParamIndex ) );
         break;
 
     case CATEGORY::TEMPERATURE:
         m_paramGrid->HideProperty( "Temperature", false );
-        m_paramGrid->AppendIn( "Temperature", newParamProperty( aParamIndex ) );
+        m_paramGrid->AppendIn( "Temperature", newParamProperty( aModel, aParamIndex ) );
         break;
 
     case CATEGORY::NOISE:
         m_paramGrid->HideProperty( "Noise", false );
-        m_paramGrid->AppendIn( "Noise", newParamProperty( aParamIndex ) );
+        m_paramGrid->AppendIn( "Noise", newParamProperty( aModel, aParamIndex ) );
         break;
 
     case CATEGORY::DISTRIBUTED_QUANTITIES:
         m_paramGrid->HideProperty( "Distributed Quantities", false );
-        m_paramGrid->AppendIn( "Distributed Quantities", newParamProperty( aParamIndex ) );
+        m_paramGrid->AppendIn( "Distributed Quantities", newParamProperty( aModel, aParamIndex ) );
         break;
 
     case CATEGORY::WAVEFORM:
         m_paramGrid->HideProperty( "Waveform", false );
-        m_paramGrid->AppendIn( "Waveform", newParamProperty( aParamIndex ) );
+        m_paramGrid->AppendIn( "Waveform", newParamProperty( aModel, aParamIndex ) );
         break;
 
     case CATEGORY::GEOMETRY:
         m_paramGrid->HideProperty( "Geometry", false );
-        m_paramGrid->AppendIn( "Geometry", newParamProperty( aParamIndex ) );
+        m_paramGrid->AppendIn( "Geometry", newParamProperty( aModel, aParamIndex ) );
         break;
 
     case CATEGORY::LIMITING_VALUES:
         m_paramGrid->HideProperty( "Limiting Values", false );
-        m_paramGrid->AppendIn( "Limiting Values", newParamProperty( aParamIndex ) );
+        m_paramGrid->AppendIn( "Limiting Values", newParamProperty( aModel, aParamIndex ) );
         break;
 
     case CATEGORY::ADVANCED:
         m_paramGrid->HideProperty( "Advanced", false );
-        m_paramGrid->AppendIn( "Advanced", newParamProperty( aParamIndex ) );
+        m_paramGrid->AppendIn( "Advanced", newParamProperty( aModel, aParamIndex ) );
         break;
 
     case CATEGORY::FLAGS:
         m_paramGrid->HideProperty( "Flags", false );
-        m_paramGrid->AppendIn( "Flags", newParamProperty( aParamIndex ) );
+        m_paramGrid->AppendIn( "Flags", newParamProperty( aModel, aParamIndex ) );
         break;
 
     default:
-        m_paramGrid->Insert( m_firstCategory, newParamProperty( aParamIndex ) );
+        m_paramGrid->Insert( m_firstCategory, newParamProperty( aModel, aParamIndex ) );
         break;
 
     case CATEGORY::INITIAL_CONDITIONS:
@@ -816,9 +821,10 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::addParamPropertyIfRelevant( int aParam
 
 
 template <typename T_symbol, typename T_field>
-wxPGProperty* DIALOG_SIM_MODEL<T_symbol, T_field>::newParamProperty( int aParamIndex ) const
+wxPGProperty* DIALOG_SIM_MODEL<T_symbol, T_field>::newParamProperty( SIM_MODEL* aModel ,
+                                                                     int aParamIndex ) const
 {
-    const SIM_MODEL::PARAM& param = curModel().GetParam( aParamIndex );
+    const SIM_MODEL::PARAM& param = aModel->GetParam( aParamIndex );
     wxString paramDescription;
 
     if( param.info.description == "" )
@@ -832,18 +838,18 @@ wxPGProperty* DIALOG_SIM_MODEL<T_symbol, T_field>::newParamProperty( int aParamI
     {
     case SIM_VALUE::TYPE_BOOL:
         // TODO.
-        prop = new SIM_BOOL_PROPERTY( paramDescription, param.info.name, curModel(), aParamIndex );
+        prop = new SIM_BOOL_PROPERTY( paramDescription, param.info.name, *aModel, aParamIndex );
         prop->SetAttribute( wxPG_BOOL_USE_CHECKBOX, true );
         break;
 
     case SIM_VALUE::TYPE_INT:
-        prop = new SIM_STRING_PROPERTY( paramDescription, param.info.name, curModel(),
-                                        aParamIndex, SIM_VALUE::TYPE_INT );
+        prop = new SIM_STRING_PROPERTY( paramDescription, param.info.name, *aModel, aParamIndex,
+                                        SIM_VALUE::TYPE_INT );
         break;
 
     case SIM_VALUE::TYPE_FLOAT:
-        prop = new SIM_STRING_PROPERTY( paramDescription, param.info.name, curModel(),
-                                        aParamIndex, SIM_VALUE::TYPE_FLOAT );
+        prop = new SIM_STRING_PROPERTY( paramDescription, param.info.name, *aModel, aParamIndex,
+                                        SIM_VALUE::TYPE_FLOAT );
         break;
 
     //case TYPE_COMPLEX:
@@ -852,13 +858,12 @@ wxPGProperty* DIALOG_SIM_MODEL<T_symbol, T_field>::newParamProperty( int aParamI
     case SIM_VALUE::TYPE_STRING:
         if( param.info.enumValues.empty() )
         {
-            prop = new SIM_STRING_PROPERTY( paramDescription, param.info.name, curModel(),
+            prop = new SIM_STRING_PROPERTY( paramDescription, param.info.name, *aModel,
                                             aParamIndex, SIM_VALUE::TYPE_STRING );
         }
         else
         {
-            prop = new SIM_ENUM_PROPERTY( paramDescription, param.info.name, curModel(),
-                                          aParamIndex );
+            prop = new SIM_ENUM_PROPERTY( paramDescription, param.info.name, *aModel, aParamIndex );
         }
         break;
 
@@ -969,9 +974,10 @@ wxString DIALOG_SIM_MODEL<T_symbol, T_field>::getSymbolPinString( int symbolPinI
 
 
 template <typename T_symbol, typename T_field>
-wxString DIALOG_SIM_MODEL<T_symbol, T_field>::getModelPinString( int aModelPinIndex ) const
+wxString DIALOG_SIM_MODEL<T_symbol, T_field>::getModelPinString( SIM_MODEL* aModel,
+                                                                 int aModelPinIndex ) const
 {
-    const wxString& pinName = curModel().GetPin( aModelPinIndex ).name;
+    const wxString& pinName = aModel->GetPin( aModelPinIndex ).name;
 
     LOCALE_IO toggle;
 
@@ -1253,7 +1259,7 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::onPageChanging( wxBookCtrlEvent& event
     m_paramGrid->GetGrid()->EditorsValueWasModified();
     m_paramGrid->GetGrid()->CommitChangesFromEditor();
 
-    updateModelCodeTab();
+    updateModelCodeTab( &curModel() );
 }
 
 
@@ -1276,7 +1282,7 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::onPinAssignmentsGridCellChange( wxGrid
             std::string( m_sortedPartPins.at( symbolPinIndex )->GetShownNumber().ToUTF8() ) );
     }
 
-    updatePinAssignments();
+    updatePinAssignments( &curModel() );
 
     aEvent.Skip();
 }
