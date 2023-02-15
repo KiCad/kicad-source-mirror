@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-10 15:35-0800\n"
-"PO-Revision-Date: 2023-02-13 14:10+0000\n"
+"PO-Revision-Date: 2023-02-15 20:10+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -20062,7 +20062,9 @@ msgstr "Plik schematu nie istnieje lub nie posiadasz do niego dostępu\n"
 
 #: kicad/cli/command_export_sch_pdf.cpp:38
 msgid "Color theme to use (will default to schematic settings)"
-msgstr "Użyty motyw kolorystyczny (będzie domyślnym ustawieniem dla schematu)"
+msgstr ""
+"Użyty motyw kolorystyczny (zostanie domyślnie ustawiony w ustawieniach "
+"schematu)"
 
 #: kicad/cli/command_export_sch_pdf.cpp:51
 #: kicad/cli/command_export_sch_svg.cpp:51
@@ -31427,7 +31429,7 @@ msgstr "Jeśli potrzebna jest oddzielna warstwa dla komentarzy i uwag"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:697
 msgid "Comments"
-msgstr "Comments"
+msgstr "Komentarzy"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:705
 msgid "If you want a layer for documentation drawings"
