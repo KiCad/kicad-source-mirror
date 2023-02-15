@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -105,11 +105,12 @@ BOOST_AUTO_TEST_CASE( Empty )
     BITMAP_BASE empty;
     // Const to test we can get this data from a const object
     const BITMAP_BASE& cempty = empty;
+    const int expected_ppi = 300;
 
     BOOST_CHECK_EQUAL( cempty.GetImageData(), nullptr );
-    BOOST_CHECK_EQUAL( cempty.GetPPI(), 300 );
+    BOOST_CHECK_EQUAL( cempty.GetPPI(), expected_ppi );
     BOOST_CHECK_EQUAL( cempty.GetScale(), 1.0 );
-    BOOST_CHECK_EQUAL( cempty.GetPixelSizeIu(), 254000.0 / 300.0 );
+    BOOST_CHECK_EQUAL( cempty.GetPixelSizeIu(), 254000.0 / expected_ppi );
 
     // can do this on an empty image
     empty.Rotate( true );
@@ -150,7 +151,8 @@ BOOST_AUTO_TEST_CASE( BasicProps )
     BOOST_REQUIRE_NE( img.GetImageData(), nullptr );
 
     // still default props here
-    BOOST_CHECK_EQUAL( img.GetPPI(), 300 );
+    const int expected_ppi = 94;
+    BOOST_CHECK_EQUAL( img.GetPPI(), expected_ppi );
     BOOST_CHECK_EQUAL( img.GetScale(), 5.0 );
 
     // we changed this, make sure it's right
