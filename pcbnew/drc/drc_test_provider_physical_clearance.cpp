@@ -71,7 +71,7 @@ public:
     }
 
 private:
-    bool testItemAgainstItem( BOARD_ITEM* aItem, SHAPE* aItemShape, PCB_LAYER_ID aLayer,
+    int testItemAgainstItem( BOARD_ITEM* aItem, SHAPE* aItemShape, PCB_LAYER_ID aLayer,
                               BOARD_ITEM* other );
 
     void testItemAgainstZones( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer );
@@ -218,8 +218,22 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
                                 // Visitor:
                                 [&]( BOARD_ITEM* other ) -> bool
                                 {
-                                    return testItemAgainstItem( item, itemShape.get(), layer,
-                                                                other );
+                                    if( testItemAgainstItem( item, itemShape.get(), layer,
+                                                                other ) > 0 )
+                                    {
+                                        BOARD_ITEM* a = item;
+                                        BOARD_ITEM* b = other;
+
+                                        // store canonical order
+                                        if( static_cast<void*>( a ) > static_cast<void*>( b ) )
+                                            std::swap( a, b );
+
+                                        // Once we record one DRC for error for physical clearance
+                                        // we don't need to record more
+                                        checkedPairs[ { a, b } ].set();
+                                    }
+
+                                    return !m_drcEngine->IsCancelled();
                                 },
                                 m_board->m_DRCMaxPhysicalClearance );
 
@@ -575,7 +589,7 @@ void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testZoneLayer( ZONE* aZone, PCB_LAYER
 }
 
 
-bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* aItem,
+int DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* aItem,
                                                                 SHAPE* aItemShape,
                                                                 PCB_LAYER_ID aLayer,
                                                                 BOARD_ITEM* other )
@@ -585,6 +599,7 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* aIte
     DRC_CONSTRAINT constraint;
     int            clearance = 0;
     int            actual;
+    int            violations = 0;
     VECTOR2I       pos;
 
     std::shared_ptr<SHAPE> otherShape = other->GetEffectiveShape( aLayer );
@@ -610,6 +625,7 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* aIte
             drce->SetViolatingRule( constraint.GetParentRule() );
 
             reportViolation( drce, pos, aLayer );
+            ++violations;
         }
     }
 
@@ -623,6 +639,8 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* aIte
         {
             if( aItem->GetLayerSet().Contains( aLayer ) )
                 itemHoleShape = aItem->GetEffectiveHoleShape();
+            else
+                return violations;
         }
         else if( aItem->HasHole() )
         {
@@ -633,6 +651,8 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* aIte
         {
             if( other->GetLayerSet().Contains( aLayer ) )
                 otherHoleShape = other->GetEffectiveHoleShape();
+            else
+                return violations;
         }
         else if( other->HasHole() )
         {
@@ -661,6 +681,7 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* aIte
                 drce->SetViolatingRule( constraint.GetParentRule() );
 
                 reportViolation( drce, pos, aLayer );
+                ++violations;
             }
 
             if( otherHoleShape && otherHoleShape->Collide( aItemShape, clearance, &actual, &pos ) )
@@ -676,11 +697,12 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* aIte
                 drce->SetViolatingRule( constraint.GetParentRule() );
 
                 reportViolation( drce, pos, aLayer );
+                ++violations;
             }
         }
     }
 
-    return !m_drcEngine->IsCancelled();
+    return violations;
 }
 
 
