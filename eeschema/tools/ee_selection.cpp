@@ -115,3 +115,18 @@ BOX2I EE_SELECTION::GetBoundingBox() const
 }
 
 
+const std::vector<KIGFX::VIEW_ITEM*> EE_SELECTION::updateDrawList() const
+{
+    std::vector<VIEW_ITEM*> items;
+
+    auto addItem =
+            [&]( EDA_ITEM* item )
+            {
+                items.push_back( item );
+            };
+
+    for( EDA_ITEM* item : m_items )
+        addItem( item );
+
+    return items;
+}

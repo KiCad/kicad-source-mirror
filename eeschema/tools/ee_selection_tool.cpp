@@ -1906,10 +1906,13 @@ void EE_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, SELECTION* aGroup
                 } );
     }
 
+    if( aGroup && aMode != BRIGHTENED )
+        getView()->Hide( aItem, true );
+
     if( itemType == SCH_PIN_T || itemType == SCH_FIELD_T || itemType == SCH_SHEET_PIN_T )
-        getView()->Update( aItem->GetParent() );
+        getView()->Update( aItem->GetParent(), KIGFX::REPAINT );
     else
-        getView()->Update( aItem );
+        getView()->Update( aItem, KIGFX::REPAINT );
 }
 
 
@@ -1923,6 +1926,9 @@ void EE_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, SELECTION* aGro
         // Lines need endpoints cleared here
         if( aItem->Type() == SCH_LINE_T )
             aItem->ClearFlags( STARTPOINT | ENDPOINT );
+
+        if( aMode != BRIGHTENED )
+            getView()->Hide( aItem, false );
     }
     else if( aMode == BRIGHTENED )
         aItem->ClearBrightened();
@@ -1945,9 +1951,9 @@ void EE_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, SELECTION* aGro
     }
 
     if( itemType == SCH_PIN_T || itemType == SCH_FIELD_T || itemType == SCH_SHEET_PIN_T )
-        getView()->Update( aItem->GetParent() );
+        getView()->Update( aItem->GetParent(), KIGFX::REPAINT );
     else
-        getView()->Update( aItem );
+        getView()->Update( aItem, KIGFX::REPAINT );
 }
 
 

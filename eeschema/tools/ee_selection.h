@@ -50,6 +50,8 @@ public:
 
     void SetScreen( SCH_SCREEN* aScreen ) { m_screen = aScreen; }
     SCH_SCREEN* GetScreen() { return m_screen; }
+
+    const std::vector<KIGFX::VIEW_ITEM*> updateDrawList() const override;
 };
 
 #endif  //  EE_SELECTION_H
