@@ -383,6 +383,15 @@ void EDA_3D_CANVAS::DoRePaint()
     if( m_glRC == nullptr )
         m_glRC = GL_CONTEXT_MANAGER::Get().CreateCtx( this );
 
+    // CreateCtx could and does fail per sentry crash events, lets be graceful
+    if( m_glRC == nullptr )
+    {
+        warningReporter.Report( _( "OpenGL context creation error" ), RPT_SEVERITY_ERROR );
+        warningReporter.Finalize();
+        m_is_currently_painting.clear();
+        return;
+    }
+
     GL_CONTEXT_MANAGER::Get().LockCtx( m_glRC, this );
 
     // Set the OpenGL viewport according to the client size of this canvas.
