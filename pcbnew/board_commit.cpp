@@ -130,6 +130,8 @@ void BOARD_COMMIT::dirtyIntersectingZones( BOARD_ITEM* item, int aChangeType )
                 {
                     if( aChangeType != CHT_MODIFY || ( child->GetFlags() & IS_MODIFIED_CHILD ) )
                         dirtyIntersectingZones( child, aChangeType );
+
+                    child->ClearFlags( IS_MODIFIED_CHILD );
                 } );
     }
     else if( item->Type() == PCB_GROUP_T )
@@ -138,6 +140,7 @@ void BOARD_COMMIT::dirtyIntersectingZones( BOARD_ITEM* item, int aChangeType )
                 [&]( BOARD_ITEM* child )
                 {
                     dirtyIntersectingZones( child, aChangeType );
+                    child->ClearFlags( IS_MODIFIED_CHILD );
                 } );
     }
     else
@@ -165,6 +168,8 @@ void BOARD_COMMIT::dirtyIntersectingZones( BOARD_ITEM* item, int aChangeType )
                 }
             }
         }
+
+        item->ClearFlags( IS_MODIFIED_CHILD );
     }
 }
 
