@@ -264,7 +264,7 @@ bool KICAD_CURL_EASY::SetTransferCallback( const TRANSFER_CALLBACK& aCallback, s
 {
     progress = std::make_unique<CURL_PROGRESS>( this, aCallback,
                                                 static_cast<curl_off_t>( aInterval ) );
-#if LIBCURL_VERSION_NUM >= 0x072000
+#if LIBCURL_VERSION_NUM >= 0x072000 // 7.32.0
     setOption( CURLOPT_XFERINFOFUNCTION, xferinfo );
     setOption( CURLOPT_XFERINFODATA, progress.get() );
 #else
@@ -286,7 +286,7 @@ bool KICAD_CURL_EASY::SetOutputStream( const std::ostream* aOutput )
 
 int KICAD_CURL_EASY::GetTransferTotal( uint64_t& aDownloadedBytes ) const
 {
-#ifdef CURLINFO_SIZE_DOWNLOAD_T
+#if LIBCURL_VERSION_NUM >= 0x073700 // 7.55.0
     curl_off_t dl;
     int        result = curl_easy_getinfo( m_CURL, CURLINFO_SIZE_DOWNLOAD_T, &dl );
     aDownloadedBytes  = static_cast<uint64_t>( dl );
