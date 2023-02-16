@@ -772,8 +772,17 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
                 reportCompileError( r );
 
             r->Report( "" );
-            r->Report( wxString::Format( _( "Resolved clearance: %s." ),
-                                         m_frame->StringFromValue( clearance, true ) ) );
+
+            if( clearance < 0 )
+            {
+                r->Report( wxString::Format( _( "Resolved clearance: %s; clearance will not be tested." ),
+                                             m_frame->StringFromValue( clearance, true ) ) );
+            }
+            else
+            {
+                r->Report( wxString::Format( _( "Resolved clearance: %s." ),
+                                             m_frame->StringFromValue( clearance, true ) ) );
+            }
         }
 
         r->Flush();

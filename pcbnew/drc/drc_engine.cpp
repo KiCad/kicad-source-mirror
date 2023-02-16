@@ -881,14 +881,6 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                     REPORT( wxString::Format( _( "Checking %s clearance: %s." ),
                                               EscapeHTML( c->constraint.GetName() ),
                                               MessageTextFromValue( c->constraint.m_Value.Min() ) ) )
-
-                    if( c->constraint.GetValue().Min() < 0 )
-                    {
-                        REPORT( implicit ? _( "Negative clearance specified; constraint ignored." )
-                                         : _( "Negative clearance specified; rule ignored." ) )
-                        return true;
-                    }
-
                     break;
 
                 case DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT:
