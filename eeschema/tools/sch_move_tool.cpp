@@ -1564,7 +1564,6 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
         break;
     }
 
-    getView()->Hide( aItem, false );
     aItem->SetFlags( IS_MOVING );
 }
 

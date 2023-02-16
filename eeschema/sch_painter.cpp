@@ -477,6 +477,13 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM *aItem, int aLayer, bool aDr
         if( aDrawingShadows )
             color = m_schSettings.GetLayerColor( LAYER_SELECTION_SHADOWS );
     }
+    else if( aItem->IsSelected()
+                && ( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_SHEET_BACKGROUND ) )
+    {
+        // Selected items will be painted over all other items, so make backgrounds translucent so
+        // that non-selected overlapping objects are visible
+        color = color.WithAlpha( 0.5 );
+    }
 
     if( m_schSettings.m_ShowDisabled
             || ( m_schSettings.m_ShowGraphicsDisabled && aItem->Type() != LIB_FIELD_T ) )
