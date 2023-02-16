@@ -90,7 +90,7 @@ void LIB_TREE_NODE::SortNodes()
     std::sort( m_Children.begin(), m_Children.end(),
                []( std::unique_ptr<LIB_TREE_NODE>& a, std::unique_ptr<LIB_TREE_NODE>& b )
                {
-                   return Compare( *a, *b ) > 0;
+                   return Compare( *a, *b );
                } );
 
     for( std::unique_ptr<LIB_TREE_NODE>& node: m_Children )
@@ -98,27 +98,38 @@ void LIB_TREE_NODE::SortNodes()
 }
 
 
-int LIB_TREE_NODE::Compare( LIB_TREE_NODE const& aNode1, LIB_TREE_NODE const& aNode2 )
+bool LIB_TREE_NODE::Compare( LIB_TREE_NODE const& aNode1, LIB_TREE_NODE const& aNode2 )
 {
     if( aNode1.m_Type != aNode2.m_Type )
-        return 0;
+        return aNode1.m_Type < aNode2.m_Type;
 
     // Recently used sorts at top
     if( aNode1.m_Name.StartsWith( wxT( "-- " ) ) )
-        return 1;
+    {
+        if( aNode2.m_Name.StartsWith( wxT( "-- " ) ) )
+        {
+            return aNode1.m_IntrinsicRank > aNode2.m_IntrinsicRank;
+        }
+        else
+        {
+            return true;
+        }
+    }
     else if( aNode2.m_Name.StartsWith( wxT( "-- " ) ) )
-        return 0;
+    {
+        return false;
+    }
 
     // Pinned nodes go next
     if( aNode1.m_Pinned && !aNode2.m_Pinned )
-        return 1;
+        return true;
     else if( aNode2.m_Pinned && !aNode1.m_Pinned )
-        return -1;
+        return false;
 
-    if( aNode1.m_Parent != aNode2.m_Parent )
-        return 0;
+    if( aNode1.m_IntrinsicRank != aNode2.m_IntrinsicRank )
+        return aNode1.m_IntrinsicRank > aNode2.m_IntrinsicRank;
 
-    return aNode1.m_IntrinsicRank - aNode2.m_IntrinsicRank;
+    return reinterpret_cast<const void*>( &aNode1 ) < reinterpret_cast<const void*>( &aNode2 );
 }
 
 
