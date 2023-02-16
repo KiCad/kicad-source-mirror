@@ -101,10 +101,9 @@ public:
     void SortNodes();
 
     /**
-     * Compare two nodes. Returns negative if aNode1 < aNode2, zero if aNode1 ==
-     * aNode2, or positive if aNode1 > aNode2.
+     * Compare two nodes. Returns true if aNode1 < aNode2.
      */
-    static int Compare( LIB_TREE_NODE const& aNode1, LIB_TREE_NODE const& aNode2 );
+    static bool Compare( LIB_TREE_NODE const& aNode1, LIB_TREE_NODE const& aNode2 );
 
     LIB_TREE_NODE();
     virtual ~LIB_TREE_NODE() {}
