@@ -10,10 +10,9 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-10 15:35-0800\n"
-"PO-Revision-Date: 2023-01-30 07:26+0000\n"
+"PO-Revision-Date: 2023-02-17 15:17+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v7/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -35,7 +34,7 @@ msgstr "Alla filer"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:312
 msgid "Build board outline"
-msgstr "Bygg mönsterkortes konturer"
+msgstr "Bygg mönsterkortets konturer"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:520
 msgid "Create layers"
@@ -51,13 +50,14 @@ msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
-"Fotavtryckskontur saknas eller är felformad. Kör Fotavtryckskontroll för en "
-"fullständig analys."
+"Fotavtryckets kontur saknas eller är felformad. Kör fotavtryckskontroll för "
+"en fullständig analys."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:694
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
-"Mönsterkortets kontur saknas/är felaktig. Kör DRC för en fullständig analys."
+"Mönsterkortets kontur saknas eller är felaktig. Kör designregelkontroll för "
+"en fullständig analys."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:226
 msgid "Create tracks and vias"
@@ -69,7 +69,7 @@ msgstr "Skapa zoner"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:745
 msgid "Simplifying copper layers polygons"
-msgstr "Förenklar polygoner av kopparlager"
+msgstr "Förenklar polygoner på kopparlager"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:754
 msgid "Simplifying polygons on F_Cu"
@@ -99,11 +99,11 @@ msgstr "Bygg tekniskt lager %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1063
 msgid "Build BVH for holes and vias"
-msgstr "Bygg omslutande volym-hierarki för hål och vior"
+msgstr "Bygg omslutande-volym-hierarki för hål och vior"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:411
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
-msgstr "Din OpenGL-version stöds inte. Minimumkravet är 1,5."
+msgstr "Din OpenGL-version stöds inte. Minimumkravet är 1.5."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:547
 #, c-format
@@ -303,14 +303,14 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
-"Spara och återställ visningens riktning och zoom.\n"
+"Spara och återställ visningens position och zoom.\n"
 "Använd %s+Tab för att aktivera väljare.\n"
 "Följande tryck på Tab medan %s hålls ner stegar genom visningsytorna i "
 "popupmenyn."
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:83
 msgid "Reload board"
-msgstr "Ladda om mönsterkort"
+msgstr "Läs in mönsterkortet på nytt"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:88
 msgid "Copy 3D image to clipboard"
@@ -378,7 +378,7 @@ msgstr "Fel"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:828
 msgid "Failed to copy image to clipboard"
-msgstr "Misslyckades att kopiera bild till urklipp"
+msgstr "Kopiering av bild till urklipp misslyckades"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:839
 msgid "Can't save file"
@@ -446,7 +446,7 @@ msgstr "Vänd Mönsterkortet"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:115
 msgid "Flip the board view"
-msgstr "Vänd mönsterkortsvyn"
+msgstr "Vänd mönsterkortet (visa andra sidan)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:120
 msgid "Toggle orthographic projection"
@@ -459,11 +459,11 @@ msgstr "Aktivera/inaktivera ortografisk projektion"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:126
 msgid "View Front"
-msgstr "Visa Framsida"
+msgstr "Visa framsidan"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:132
 msgid "View Back"
-msgstr "Visa Baksida"
+msgstr "Visa baksidan"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:138
 msgid "View Left"
@@ -503,7 +503,7 @@ msgstr "3D-Rutnät 1mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:187
 msgid "Render Realistic Materials"
-msgstr "Rendera Realistiska Material"
+msgstr "Rendera realistiska material"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:188
 msgid "Use all material properties from each 3D model file"
@@ -511,7 +511,7 @@ msgstr "Använd alla materialegenskaper från varje 3D-modellfil"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:194
 msgid "Render Solid Colors"
-msgstr "Rendera Solida Färger"
+msgstr "Rendera solida färger"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:195
 msgid "Use only the diffuse color property from model 3D model file"
@@ -519,7 +519,7 @@ msgstr "Använd endast den diffusa färgegenskapen från modell 3D-modellfilen"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:201
 msgid "Render CAD Colors"
-msgstr "Rendera CAD-Färger"
+msgstr "Rendera CAD-färger"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:202
 msgid "Use a CAD color style based on the diffuse color of the material"
@@ -527,7 +527,7 @@ msgstr "Använd en CAD-färgstil baserat på materialets diffusa färg"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:208
 msgid "Toggle Through Hole 3D models"
-msgstr "Växla Hålmonterade 3D-modeller"
+msgstr "Växla visning av hålmonterade 3D-modeller"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:209
 msgid "Toggle 3D models for 'Through hole' type components"
@@ -535,7 +535,7 @@ msgstr "Växla visning av 3D-modeller för hålmonterade komponenter"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:215
 msgid "Toggle SMD 3D models"
-msgstr "Växla Ytmonterade 3D-modeller"
+msgstr "Växla visning av ytmonterade 3D-modeller"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:216
 msgid "Toggle 3D models for 'Surface mount' type components"
@@ -543,7 +543,7 @@ msgstr "Växla visning av 3D-modeller för ytmonterade komponenter"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
 msgid "Toggle unspecified 3D models"
-msgstr "Växla ospecificerade 3D-modeller"
+msgstr "Växla visning av ospecificerade 3D-modeller"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
 msgid "Toggle 3D models for 'unspecified' type components"
@@ -638,7 +638,7 @@ msgstr "Konfigurera sökvägar"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.h:63
 msgid "Select 3D Model"
-msgstr "Välj 3D-Modell"
+msgstr "Välj 3D-modell"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:19
 msgid "Environment Colors"
@@ -841,7 +841,8 @@ msgstr "8x"
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:52
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
 msgstr ""
-"3D-Viewer måste stängas och öppnas igen för att tillämpa denna inställning"
+"3D-visningen måste stängas och öppnas igen för att verkställa denna "
+"inställning"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:56
 msgid "Selection color:"
@@ -849,7 +850,7 @@ msgstr "Urvalsfärg:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:72
 msgid "While Moving"
-msgstr "Under Rörelse"
+msgstr "Under pågående rörelse"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:85
 msgid "Disable anti-aliasing"
@@ -907,25 +908,26 @@ msgid ""
 "Number of rays that will be cast, into light direction, to evaluate a shadow "
 "point"
 msgstr ""
-"Antal strålar som kommer att kastas i ljusriktning för att utvärdera en "
+"Antal strålar som kommer att kastas i ljusets riktning för att utvärdera en "
 "skuggpunkt"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:81
 msgid "Reflections:"
-msgstr "Avspeglingar:"
+msgstr "Reflexioner:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:86
 msgid "Number of rays that will be cast to evaluate a reflection point"
 msgstr ""
-"Antal strålar som kommer att kastas för att utvärdera en reflektionspunkt"
+"Antal strålar som kommer att kastas för att utvärdera en reflexionspunkt"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:94
 msgid ""
 "Interactions number that a ray can travel through objects. (higher number of "
 "levels improve results, specially on very transparent boards)"
 msgstr ""
-"Interaktionsnummer som en stråle kan färdas genom föremål. (högre antal "
-"nivåer förbättrar resultaten, speciellt på mycket transparenta kort)"
+"Interaktionsantal, anger hur många gånger en stråle kan färdas genom "
+"föremål. (högre antal förbättrar resultaten, speciellt på mycket "
+"transparenta mönsterkort)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:98
 msgid "Refractions:"
@@ -937,11 +939,11 @@ msgstr "Antal strålar som kommer att kastas för att utvärdera en brytpunkt"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:111
 msgid "Number of bounces that a ray can hit reflective objects"
-msgstr "Antal studsar som en stråle kan träffa reflekterande föremål"
+msgstr "Antal gånger en stråle kan studsa på reflekterande föremål den träffar"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:121
 msgid "Lights Configuration"
-msgstr "Ljuskonfiguration"
+msgstr "Belysningskonfiguration"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:134
 msgid "Ambient camera light:"
@@ -1207,7 +1209,7 @@ msgstr "Förhandsgranskning"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:237
 msgid "Reload board and 3D models"
-msgstr "Ladda om mönsterkort och 3D-modeller"
+msgstr "Läs in mönsterkort och 3D-modeller på nytt"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:152
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
@@ -1224,7 +1226,7 @@ msgstr "Öppna..."
 
 #: bitmap2component/bitmap2cmp_gui.cpp:219
 msgid "Load source image"
-msgstr "Ladda källbild"
+msgstr "Läs in källbild"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:228 common/hotkey_store.cpp:57
 #: common/tool/action_menu.cpp:226 common/tool/actions.cpp:114
@@ -1239,7 +1241,7 @@ msgstr "Avsluta bildkonverterare"
 #: eeschema/tools/sch_drawing_tools.cpp:594
 #: pagelayout_editor/pl_editor_frame.cpp:860 pcbnew/tools/drawing_tool.cpp:665
 msgid "Choose Image"
-msgstr "Välj Bild"
+msgstr "Välj bild"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:375
 #: eeschema/tools/sch_drawing_tools.cpp:595
@@ -1249,7 +1251,7 @@ msgstr "Bildfiler"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:713
 msgid "Unable to export to the Clipboard"
-msgstr "Det gick inte att exportera till Urklipp"
+msgstr "Det gick inte att exportera till urklipp"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:738
 msgid "Create Logo File"
@@ -1265,11 +1267,11 @@ msgstr "Filen '%s' kunde inte skapas."
 
 #: bitmap2component/bitmap2cmp_gui.cpp:775
 msgid "Create PostScript File"
-msgstr "Skapa PostScript-Fil"
+msgstr "Skapa PostScript-fil"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:811
 msgid "Create Symbol Library"
-msgstr "Skapa Symbolbibliotek"
+msgstr "Skapa symbolbibliotek"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:846
 msgid "Create Footprint Library"
@@ -1295,7 +1297,7 @@ msgstr "Originalbild"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:27
 msgid "Greyscale Picture"
-msgstr "Bild i Gråskala"
+msgstr "Bild i gråskala"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:30
 msgid "Black && White Picture"
@@ -1382,13 +1384,14 @@ msgstr "Inställningar"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:145
 msgid "Black / white threshold:"
-msgstr "Svart/Vit tröskelvärde:"
+msgstr "Svart/vit tröskelvärde:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:150
 msgid ""
 "Adjust the level to convert the greyscale picture to a black and white "
 "picture."
-msgstr "Justera nivån för att konvertera gråskalebilden till en svartvit bild."
+msgstr ""
+"Justera gränsnivån för att konvertera gråskalebilden till en svartvit bild."
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:154
 #: gerbview/gerber_file_image.cpp:338
@@ -1415,7 +1418,7 @@ msgstr "Användarlager Eco2"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:162
 msgid "Board Layer for Outline"
-msgstr "Mönsterkortslager för Kortkant"
+msgstr "Lager för mönsterkortets kantkontur"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:164
 msgid ""
@@ -1450,12 +1453,12 @@ msgstr "Utdataformat"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:174
 msgid "Export to File"
-msgstr "Exportera till Fil"
+msgstr "Exportera till fil"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:177
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:147
 msgid "Export to Clipboard"
-msgstr "Exportera till Urklipp"
+msgstr "Exportera till urklipp"
 
 #: bitmap2component/bitmap2cmp_gui_base.h:96
 #: kicad/tools/kicad_manager_actions.cpp:110
@@ -1532,11 +1535,13 @@ msgstr "Varning"
 
 #: common/confirm.cpp:181 common/confirm.cpp:187
 msgid "File Open Warning"
-msgstr "Filöppningsvarning"
+msgstr "Varning: Filen öppen"
 
 #: common/confirm.cpp:183 common/confirm.cpp:189
 msgid "Interleaved saves may produce very unexpected results."
-msgstr "Sammanflätad sparning kan orsaka mycket oväntade resultat."
+msgstr ""
+"Att spara samma fil omväxlande från olika instanser av KiCad kan orsaka "
+"mycket oväntade resultat."
 
 #: common/confirm.cpp:185 common/confirm.cpp:190 common/confirm.cpp:254
 #: common/confirm.cpp:281 common/tool/actions.cpp:121
@@ -1555,7 +1560,7 @@ msgstr "Öppna ändå"
 
 #: common/confirm.cpp:201 common/confirm.cpp:238
 msgid "Save Changes?"
-msgstr "Spara Ändringar?"
+msgstr "Spara ändringar?"
 
 #: common/confirm.cpp:203 common/confirm.cpp:240
 msgid "If you don't save, all your changes will be permanently lost."
@@ -1570,7 +1575,7 @@ msgstr "Spara"
 
 #: common/confirm.cpp:205 common/confirm.cpp:241
 msgid "Discard Changes"
-msgstr "Ignorera Ändringar"
+msgstr "Ignorera ändringar"
 
 #: common/confirm.cpp:208 common/confirm.cpp:287
 msgid "Apply to all"
@@ -1683,7 +1688,7 @@ msgstr "Felspårare"
 
 #: common/dialog_about/AboutDialog_main.cpp:155
 msgid "Report or examine bugs - "
-msgstr "Rapportera eller undersök buggar - "
+msgstr "Rapportera eller undersök programvarufel (buggar) - "
 
 #: common/dialog_about/AboutDialog_main.cpp:161
 msgid "KiCad users group and community"
@@ -1691,11 +1696,11 @@ msgstr "KiCad-användargrupp och community"
 
 #: common/dialog_about/AboutDialog_main.cpp:166
 msgid "KiCad forum - "
-msgstr "KiCad forum - "
+msgstr "KiCad diskussionsforum - "
 
 #: common/dialog_about/AboutDialog_main.cpp:180
 msgid "The complete KiCad EDA Suite is released under the"
-msgstr "Hela KiCad EDA Suite släpps under"
+msgstr "Hela programvarupaketet KiCad EDA är licensierat enligt"
 
 #: common/dialog_about/AboutDialog_main.cpp:182
 msgid "GNU General Public License (GPL) version 3 or any later version"
@@ -1787,7 +1792,7 @@ msgstr "Urklippsfel"
 
 #: common/dialog_about/dialog_about.cpp:474
 msgid "Copied..."
-msgstr "Kopierad ..."
+msgstr "Kopierad..."
 
 #: common/dialog_about/dialog_about_base.cpp:31
 msgid "App Title"
@@ -2931,7 +2936,7 @@ msgstr "Nytt temanamn:"
 
 #: common/dialogs/panel_color_settings.cpp:133
 msgid "Add Color Theme"
-msgstr "Lägg till Färgtema"
+msgstr "Lägg till färgtema"
 
 #: common/dialogs/panel_color_settings.cpp:145
 msgid "Theme already exists!"
@@ -3130,8 +3135,7 @@ msgstr "Använd ikoner framtagna för mörka fönsterbakgrunder"
 #: common/dialogs/panel_common_settings_base.cpp:179
 msgid ""
 "Automatically choose light or dark icons based on the system color theme"
-msgstr ""
-"Välj ljusa eller mörka ikoner automatiskt baserat på systemets färgschema"
+msgstr "Välj ljusa eller mörka ikoner automatiskt baserat på systemets färgtema"
 
 #: common/dialogs/panel_common_settings_base.cpp:190
 msgid "Canvas scale:"
@@ -6460,7 +6464,7 @@ msgid ""
 "For information on how to help the KiCad project, visit %s"
 msgstr ""
 "Det gick inte att starta standardwebbläsaren.\n"
-"Besök %s för information om hur du hjälper KiCad-projektet."
+"Besök %s för information om hur du stödjer KiCad-projektet."
 
 #: common/tool/common_control.cpp:263
 msgid "Get involved with KiCad"
@@ -19829,8 +19833,8 @@ msgstr ""
 #: kicad/cli/command_sym_export_svg.cpp:40
 msgid "Color theme to use (will default to pcbnew settings)"
 msgstr ""
-"Färgschema som kommer att användas (om inget annat väljs används "
-"inställningarna i pcbnew)"
+"Färgtema som kommer att användas (om inget annat väljs används "
+"inställningarna i mönsterkortsredigeraren)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:44
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:64
@@ -19963,11 +19967,10 @@ msgid "Schematic file does not exist or is not accessible\n"
 msgstr "Kretsschemafil finns inte eller är inte tillgänglig\n"
 
 #: kicad/cli/command_export_sch_pdf.cpp:38
-#, fuzzy
 msgid "Color theme to use (will default to schematic settings)"
 msgstr ""
-"Färgschema som kommer att användas (om inget annat väljs används "
-"inställningarna i pcbnew)"
+"Färgtema som kommer att användas (om inget annat väljs används "
+"inställningarna i kretsschemat)"
 
 #: kicad/cli/command_export_sch_pdf.cpp:51
 #: kicad/cli/command_export_sch_svg.cpp:51
@@ -25157,10 +25160,10 @@ msgid ""
 "* If its priority is higher, its outlines are removed from the other zone.\n"
 "* If its priority is equal, a DRC error is set."
 msgstr ""
-"Zoner fylls med prioritetsnivå, nivå 3 har högre prioritet än nivå 2.\n"
-"När en zon befinner sig i en annan zon:\n"
+"Zoner fylls enligt prioritetsnivå, nivå 3 har högre prioritet än nivå 2.\n"
+"När en zon befinner sig inne i en annan zon:\n"
 "* Om dess prioritet är högre tas dess konturer bort från den andra zonen.\n"
-"* Om dess prioritet är lika, ställs ett DRC-fel in."
+"* Om zonernas prioritet är lika, registreras ett designregelbrott."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:130
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:116
@@ -35166,7 +35169,7 @@ msgstr "Överträdelse"
 #: pcbnew/pcb_marker.cpp:199 pcbnew/pcb_marker.cpp:202
 #: pcbnew/pcb_marker.cpp:205
 msgid "Severity"
-msgstr "Allvarlighet"
+msgstr "Allvarlighetsgrad"
 
 #: pcbnew/pcb_marker.cpp:263
 #, c-format
