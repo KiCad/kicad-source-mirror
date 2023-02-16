@@ -1130,7 +1130,7 @@ void SIM_PLOT_FRAME::updateMeasurement( int aRow )
                                             " *"
                                             "([a-zA-Z]+)"
                                             " +"
-                                            "([a-zA-Z])\\([a-zA-Z0-9_]+\\)" ) );
+                                            "([a-zA-Z])\\([^\\)]+\\)" ) );
 
     m_workbookModified = true;
 
