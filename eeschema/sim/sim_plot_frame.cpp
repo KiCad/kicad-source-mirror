@@ -2279,12 +2279,15 @@ void SIM_PLOT_FRAME::updateCursors()
 
     wxString valColName = _( "Value" );
 
-    if( !cursor1Name.IsEmpty() && cursor2Name.IsEmpty() )
-        valColName = cursor1Name;
-    else if( !cursor2Name.IsEmpty() && cursor1Name.IsEmpty() )
+    if( !cursor1Name.IsEmpty() )
+    {
+        if( cursor2Name.IsEmpty() || cursor1Name == cursor2Name )
+            valColName = cursor1Name;
+    }
+    else if( !cursor2Name.IsEmpty() )
+    {
         valColName = cursor2Name;
-    else if( cursor1Name == cursor2Name )
-        valColName = cursor1Name;
+    }
 
     m_cursorsGrid->SetColLabelValue( COL_CURSOR_Y, valColName );
 }
