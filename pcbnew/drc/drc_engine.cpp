@@ -884,9 +884,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
                     if( c->constraint.GetValue().Min() < 0 )
                     {
-                        // JEY TODO: translate for 8.0....
-                        REPORT( implicit ? wxS( "Negative clearance specified; constraint ignored." )
-                                         : wxS( "Negative clearance specified; rule ignored." ) )
+                        REPORT( implicit ? _( "Negative clearance specified; constraint ignored." )
+                                         : _( "Negative clearance specified; rule ignored." ) )
                         return true;
                     }
 
@@ -1177,8 +1176,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                 {
                     if( implicit )
                     {
-                        // JEY TODO: translate for 8.0....
-                        REPORT( wxS( "Constraint layer not matched." ) )
+                        REPORT( _( "Constraint layer not matched." ) )
                     }
                     else if( c->parentRule )
                     {
