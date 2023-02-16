@@ -26,7 +26,7 @@ send_envelope(const sentry_envelope_t *envelope, void *data)
         SENTRY_VALUE_TYPE_STRING);
     TEST_CHECK_STRING_EQUAL(
         sentry_value_as_string(sentry_value_get_by_key(session, "status")),
-        "exited");
+        *called == 2 ? "crashed" : "exited");
     TEST_CHECK_STRING_EQUAL(
         sentry_value_as_string(sentry_value_get_by_key(session, "did")),
         *called == 1 ? "foo@blabla.invalid" : "swatinem");
@@ -83,9 +83,12 @@ SENTRY_TEST(session_basics)
         user, "username", sentry_value_new_string("swatinem"));
     sentry_set_user(user);
 
+    sentry_end_session_with_status(SENTRY_SESSION_STATUS_CRASHED);
+    sentry_start_session();
+
     sentry_close();
 
-    TEST_CHECK_INT_EQUAL(called, 2);
+    TEST_CHECK_INT_EQUAL(called, 3);
 }
 
 typedef struct {

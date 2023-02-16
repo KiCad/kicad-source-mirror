@@ -99,7 +99,7 @@ target_compile_definitions(crashpad_interface INTERFACE
     CRASHPAD_LSS_SOURCE_EMBEDDED
 )
 
-if(MSVC)
+if(WIN32)
     target_compile_definitions(crashpad_interface INTERFACE
         NOMINMAX
         UNICODE
@@ -108,6 +108,8 @@ if(MSVC)
         _HAS_EXCEPTIONS=0
         _UNICODE
     )
+endif()
+if(MSVC)
     string(REGEX REPLACE "/[Ww][0123]" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
     string(REGEX REPLACE "/[Ww][0123]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
     target_compile_options(crashpad_interface INTERFACE
@@ -135,6 +137,11 @@ elseif(MINGW)
     # redirect to wmain
     # FIXME: cmake 3.13 added target_link_options
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -municode")
+    if(CRASHPAD_WER_ENABLED)
+        message(STATUS "WER support enabled")
+    else()
+        message(STATUS "WER support disabled. Define CRASHPAD_WER_ENABLED = TRUE to enable.")
+    endif()
 endif()
 add_library(crashpad::interface ALIAS crashpad_interface)
 

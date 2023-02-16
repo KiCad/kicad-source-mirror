@@ -24,7 +24,7 @@ from .assertions import (
 pytestmark = pytest.mark.skipif(not has_http, reason="tests need http")
 
 auth_header = (
-    "Sentry sentry_key=uiaeosnrtdy, sentry_version=7, sentry_client=sentry.native/0.5.4"
+    "Sentry sentry_key=uiaeosnrtdy, sentry_version=7, sentry_client=sentry.native/0.6.0"
 )
 
 

@@ -143,7 +143,7 @@ def cmake(cwd, targets, options=None):
     cflags = []
     if os.environ.get("ERROR_ON_WARNINGS"):
         cflags.append("-Werror")
-    if sys.platform == "win32":
+    if sys.platform == "win32" and not os.environ.get("TEST_MINGW"):
         # MP = object level parallelism, WX = warnings as errors
         cpus = os.cpu_count()
         cflags.append("/WX /MP{}".format(cpus))

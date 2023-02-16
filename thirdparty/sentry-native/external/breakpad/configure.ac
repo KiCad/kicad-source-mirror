@@ -75,7 +75,7 @@ AC_CHECK_FUNCS([arc4random getcontext getrandom memfd_create])
 AM_CONDITIONAL([HAVE_GETCONTEXT], [test "x$ac_cv_func_getcontext" = xyes])
 AM_CONDITIONAL([HAVE_MEMFD_CREATE], [test "x$ac_cv_func_memfd_create" = xyes])
 
-AX_CXX_COMPILE_STDCXX(17, noext, mandatory)
+AX_CXX_COMPILE_STDCXX(17, , mandatory)
 
 dnl Test supported warning flags.
 WARN_CXXFLAGS=

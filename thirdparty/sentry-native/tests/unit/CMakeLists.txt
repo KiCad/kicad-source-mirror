@@ -54,6 +54,7 @@ target_link_libraries(sentry_test_unit PRIVATE
 	${SENTRY_LINK_LIBRARIES}
 	${SENTRY_INTERFACE_LINK_LIBRARIES}
 	"$<$<PLATFORM_ID:Linux>:rt>"
+	"$<$<OR:$<PLATFORM_ID:Linux>,$<PLATFORM_ID:Android>>:-Wl,-E,--build-id=sha1>"
 )
 
 if(MINGW)

@@ -63,6 +63,16 @@ void Error(const char* format, ...) {
 
 // Do nothing for async safe.
 void AsyncSafe(const char*, ...) {}
+#ifdef SENTRY_REMOVED
+void AsyncSafe(const char* format, ...) {
+  va_list args;
+  va_start(args, format);
+  // Only call vprintf to avoid allocating as much as possible, PrintToStdout uses a std::string.
+  vprintf(format, args);
+  printf("\n");
+  va_end(args);
+}
+#endif // SENTRY_REMOVED
 
 }  // namespace Log
 

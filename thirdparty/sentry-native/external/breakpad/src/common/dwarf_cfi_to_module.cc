@@ -33,7 +33,9 @@
 // Implementation of google_breakpad::DwarfCFIToModule.
 // See dwarf_cfi_to_module.h for details.
 
+#include <memory>
 #include <sstream>
+#include <utility>
 
 #include "common/dwarf_cfi_to_module.h"
 
@@ -151,7 +153,7 @@ bool DwarfCFIToModule::Entry(size_t offset, uint64_t address, uint64_t length,
   // need to check them here.
 
   // Get ready to collect entries.
-  entry_ = new Module::StackFrameEntry;
+  entry_ = std::make_unique<Module::StackFrameEntry>();
   entry_->address = address;
   entry_->size = length;
   entry_offset_ = offset;
@@ -258,8 +260,7 @@ bool DwarfCFIToModule::ValExpressionRule(uint64_t address, int reg,
 }
 
 bool DwarfCFIToModule::End() {
-  module_->AddStackFrameEntry(entry_);
-  entry_ = NULL;
+  module_->AddStackFrameEntry(std::move(entry_));
   return true;
 }
 

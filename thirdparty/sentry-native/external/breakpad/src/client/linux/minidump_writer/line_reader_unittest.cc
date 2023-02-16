@@ -32,7 +32,7 @@
 
 #include "client/linux/minidump_writer/line_reader.h"
 #include "breakpad_googletest_includes.h"
-#include "common/linux/tests/auto_testfile.h"
+#include "common/linux/scoped_tmpfile.h"
 
 using namespace google_breakpad;
 
@@ -40,22 +40,11 @@ namespace {
 
 typedef testing::Test LineReaderTest;
 
-class ScopedTestFile : public AutoTestFile {
-public:
-  explicit ScopedTestFile(const char* text)
-    : AutoTestFile("line_reader", text) {
-  }
-
-  ScopedTestFile(const char* text, size_t text_len)
-    : AutoTestFile("line_reader", text, text_len) {
-  }
-};
-
 }
 
 TEST(LineReaderTest, EmptyFile) {
-  ScopedTestFile file("");
-  ASSERT_TRUE(file.IsOk());
+  ScopedTmpFile file;
+  ASSERT_TRUE(file.InitString(""));
   LineReader reader(file.GetFd());
 
   const char* line;
@@ -64,8 +53,8 @@ TEST(LineReaderTest, EmptyFile) {
 }
 
 TEST(LineReaderTest, OneLineTerminated) {
-  ScopedTestFile file("a\n");
-  ASSERT_TRUE(file.IsOk());
+  ScopedTmpFile file;
+  ASSERT_TRUE(file.InitString("a\n"));
   LineReader reader(file.GetFd());
 
   const char* line;
@@ -80,8 +69,8 @@ TEST(LineReaderTest, OneLineTerminated) {
 }
 
 TEST(LineReaderTest, OneLine) {
-  ScopedTestFile file("a");
-  ASSERT_TRUE(file.IsOk());
+  ScopedTmpFile file;
+  ASSERT_TRUE(file.InitString("a"));
   LineReader reader(file.GetFd());
 
   const char* line;
@@ -96,8 +85,8 @@ TEST(LineReaderTest, OneLine) {
 }
 
 TEST(LineReaderTest, TwoLinesTerminated) {
-  ScopedTestFile file("a\nb\n");
-  ASSERT_TRUE(file.IsOk());
+  ScopedTmpFile file;
+  ASSERT_TRUE(file.InitString("a\nb\n"));
   LineReader reader(file.GetFd());
 
   const char* line;
@@ -118,8 +107,8 @@ TEST(LineReaderTest, TwoLinesTerminated) {
 }
 
 TEST(LineReaderTest, TwoLines) {
-  ScopedTestFile file("a\nb");
-  ASSERT_TRUE(file.IsOk());
+  ScopedTmpFile file;
+  ASSERT_TRUE(file.InitString("a\nb"));
   LineReader reader(file.GetFd());
 
   const char* line;
@@ -142,8 +131,8 @@ TEST(LineReaderTest, TwoLines) {
 TEST(LineReaderTest, MaxLength) {
   char l[LineReader::kMaxLineLen-1];
   memset(l, 'a', sizeof(l));
-  ScopedTestFile file(l, sizeof(l));
-  ASSERT_TRUE(file.IsOk());
+  ScopedTmpFile file;
+  ASSERT_TRUE(file.InitData(l, sizeof(l)));
   LineReader reader(file.GetFd());
 
   const char* line;
@@ -158,8 +147,8 @@ TEST(LineReaderTest, TooLong) {
   // Note: this writes kMaxLineLen 'a' chars in the test file.
   char l[LineReader::kMaxLineLen];
   memset(l, 'a', sizeof(l));
-  ScopedTestFile file(l, sizeof(l));
-  ASSERT_TRUE(file.IsOk());
+  ScopedTmpFile file;
+  ASSERT_TRUE(file.InitData(l, sizeof(l)));
   LineReader reader(file.GetFd());
 
   const char* line;

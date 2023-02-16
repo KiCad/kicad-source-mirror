@@ -334,16 +334,6 @@ target_include_directories(sentry
 		"$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>"
 )
 
-# The modulefinder and symbolizer need these two settings, and they are exported
-# as `PUBLIC`, so libraries that depend on sentry get these too:
-# `-E`: To have all symbols in the dynamic symbol table.
-# `--build-id`: To have a build-id in the ELF object.
-# FIXME: cmake 3.13 introduced target_link_options
-option(SENTRY_EXPORT_SYMBOLS "Export symbols for modulefinder and symbolizer" ON)
-if(SENTRY_EXPORT_SYMBOLS)
-	target_link_libraries(sentry PUBLIC
-		"$<$<OR:$<PLATFORM_ID:Linux>,$<PLATFORM_ID:Android>>:-Wl,-E,--build-id=sha1>")
-endif()
 
 #respect CMAKE_SYSTEM_VERSION
 if(WIN32)
@@ -600,4 +590,17 @@ if(SENTRY_BUILD_EXAMPLES)
 	endif()
 
 	add_test(NAME sentry_example COMMAND sentry_example)
+endif()
+
+# Limit the exported symbols when sentry is built as a shared library to those with a "sentry_" prefix:
+# - we do this at the end of the file as to not affect subdirectories reading target_link_libraries from the parent.
+# - we do this as PRIVATE since our version script does not make sense in any other project that adds us.
+#
+# Used linker parameters:
+# `--build-id`: To have a build-id in the ELF object.
+# `--version-script`: version script either hides "foreign" symbols or defers them as unknown ("U") to system libraries.
+# FIXME: cmake 3.13 introduced target_link_options (blocked by Android)
+if(SENTRY_BUILD_SHARED_LIBS)
+	target_link_libraries(sentry PRIVATE
+			"$<$<OR:$<PLATFORM_ID:Linux>,$<PLATFORM_ID:Android>>:-Wl,--build-id=sha1,--version-script=${PROJECT_SOURCE_DIR}/src/exports.map>")
 endif()

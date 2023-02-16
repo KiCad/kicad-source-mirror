@@ -1,22 +1,24 @@
 /*
-* Copyright (C) 2016 The Android Open Source Project
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*      http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+ * Copyright (C) 2016 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
+#ifndef SENTRY_ADDED
 #ifndef _GNU_SOURCE
 #    define _GNU_SOURCE 1
 #endif
+#endif // SENTRY_ADDED
 #include <errno.h>
 #include <fcntl.h>
 #include <stdint.h>
@@ -27,8 +29,10 @@
 #include <sys/types.h>
 #include <sys/uio.h>
 #include <unistd.h>
+#ifndef SENTRY_ADDED
 #include "unistdfix.h"
 #include <sys/syscall.h>
+#endif // SENTRY_ADDED
 
 #include <algorithm>
 #include <memory>
@@ -50,6 +54,7 @@
 #include "MemoryRange.h"
 #include "MemoryRemote.h"
 
+#ifndef SENTRY_ADDED
 #if defined(__ANDROID_API__) && __ANDROID_API__ < 23
 static ssize_t
 process_vm_readv(pid_t __pid, const struct iovec *__local_iov,
@@ -60,150 +65,151 @@ process_vm_readv(pid_t __pid, const struct iovec *__local_iov,
        __remote_iov, __remote_iov_count, __flags);
 }
 #endif
+#endif // SENTRY_ADDED
 
 namespace unwindstack {
 
 static size_t ProcessVmRead(pid_t pid, uint64_t remote_src, void* dst, size_t len) {
 
-   // Split up the remote read across page boundaries.
-   // From the manpage:
-   //   A partial read/write may result if one of the remote_iov elements points to an invalid
-   //   memory region in the remote process.
-   //
-   //   Partial transfers apply at the granularity of iovec elements.  These system calls won't
-   //   perform a partial transfer that splits a single iovec element.
-   constexpr size_t kMaxIovecs = 64;
-   struct iovec src_iovs[kMaxIovecs];
+  // Split up the remote read across page boundaries.
+  // From the manpage:
+  //   A partial read/write may result if one of the remote_iov elements points to an invalid
+  //   memory region in the remote process.
+  //
+  //   Partial transfers apply at the granularity of iovec elements.  These system calls won't
+  //   perform a partial transfer that splits a single iovec element.
+  constexpr size_t kMaxIovecs = 64;
+  struct iovec src_iovs[kMaxIovecs];
 
-   uint64_t cur = remote_src;
-   size_t total_read = 0;
-   while (len > 0) {
-       struct iovec dst_iov = {
-           .iov_base = &reinterpret_cast<uint8_t*>(dst)[total_read], .iov_len = len,
-       };
+  uint64_t cur = remote_src;
+  size_t total_read = 0;
+  while (len > 0) {
+    struct iovec dst_iov = {
+        .iov_base = &reinterpret_cast<uint8_t*>(dst)[total_read], .iov_len = len,
+    };
 
-       size_t iovecs_used = 0;
-       while (len > 0) {
-           if (iovecs_used == kMaxIovecs) {
-               break;
-           }
+    size_t iovecs_used = 0;
+    while (len > 0) {
+      if (iovecs_used == kMaxIovecs) {
+        break;
+      }
 
-           // struct iovec uses void* for iov_base.
-           if (cur >= UINTPTR_MAX) {
-               errno = EFAULT;
-               return total_read;
-           }
+      // struct iovec uses void* for iov_base.
+      if (cur >= UINTPTR_MAX) {
+        errno = EFAULT;
+        return total_read;
+      }
 
-           src_iovs[iovecs_used].iov_base = reinterpret_cast<void*>(cur);
+      src_iovs[iovecs_used].iov_base = reinterpret_cast<void*>(cur);
 
-           uintptr_t misalignment = cur & (getpagesize() - 1);
-           size_t iov_len = getpagesize() - misalignment;
-           iov_len = std::min(iov_len, len);
+      uintptr_t misalignment = cur & (getpagesize() - 1);
+      size_t iov_len = getpagesize() - misalignment;
+      iov_len = std::min(iov_len, len);
 
-           len -= iov_len;
-           if (__builtin_add_overflow(cur, iov_len, &cur)) {
-               errno = EFAULT;
-               return total_read;
-           }
+      len -= iov_len;
+      if (__builtin_add_overflow(cur, iov_len, &cur)) {
+        errno = EFAULT;
+        return total_read;
+      }
 
-           src_iovs[iovecs_used].iov_len = iov_len;
-           ++iovecs_used;
-       }
+      src_iovs[iovecs_used].iov_len = iov_len;
+      ++iovecs_used;
+    }
 
-       ssize_t rc = process_vm_readv(pid, &dst_iov, 1, src_iovs, iovecs_used, 0);
-       if (rc == -1) {
-           return total_read;
-       }
-       total_read += rc;
-   }
-   return total_read;
+    ssize_t rc = process_vm_readv(pid, &dst_iov, 1, src_iovs, iovecs_used, 0);
+    if (rc == -1) {
+      return total_read;
+    }
+    total_read += rc;
+  }
+  return total_read;
 }
 
 static bool PtraceReadLong(pid_t pid, uint64_t addr, long* value) {
-   // ptrace() returns -1 and sets errno when the operation fails.
-   // To disambiguate -1 from a valid result, we clear errno beforehand.
-   errno = 0;
-   *value = ptrace(PTRACE_PEEKTEXT, pid, reinterpret_cast<void*>(addr), nullptr);
-   if (*value == -1 && errno) {
-       return false;
-   }
-   return true;
+  // ptrace() returns -1 and sets errno when the operation fails.
+  // To disambiguate -1 from a valid result, we clear errno beforehand.
+  errno = 0;
+  *value = ptrace(PTRACE_PEEKTEXT, pid, reinterpret_cast<void*>(addr), nullptr);
+  if (*value == -1 && errno) {
+    return false;
+  }
+  return true;
 }
 
 static size_t PtraceRead(pid_t pid, uint64_t addr, void* dst, size_t bytes) {
-   // Make sure that there is no overflow.
-   uint64_t max_size;
-   if (__builtin_add_overflow(addr, bytes, &max_size)) {
-       return 0;
-   }
+  // Make sure that there is no overflow.
+  uint64_t max_size;
+  if (__builtin_add_overflow(addr, bytes, &max_size)) {
+    return 0;
+  }
 
-   size_t bytes_read = 0;
-   long data;
-   size_t align_bytes = addr & (sizeof(long) - 1);
-   if (align_bytes != 0) {
-       if (!PtraceReadLong(pid, addr & ~(sizeof(long) - 1), &data)) {
-           return 0;
-       }
-       size_t copy_bytes = std::min(sizeof(long) - align_bytes, bytes);
-       memcpy(dst, reinterpret_cast<uint8_t*>(&data) + align_bytes, copy_bytes);
-       addr += copy_bytes;
-       dst = reinterpret_cast<void*>(reinterpret_cast<uintptr_t>(dst) + copy_bytes);
-       bytes -= copy_bytes;
-       bytes_read += copy_bytes;
-   }
+  size_t bytes_read = 0;
+  long data;
+  size_t align_bytes = addr & (sizeof(long) - 1);
+  if (align_bytes != 0) {
+    if (!PtraceReadLong(pid, addr & ~(sizeof(long) - 1), &data)) {
+      return 0;
+    }
+    size_t copy_bytes = std::min(sizeof(long) - align_bytes, bytes);
+    memcpy(dst, reinterpret_cast<uint8_t*>(&data) + align_bytes, copy_bytes);
+    addr += copy_bytes;
+    dst = reinterpret_cast<void*>(reinterpret_cast<uintptr_t>(dst) + copy_bytes);
+    bytes -= copy_bytes;
+    bytes_read += copy_bytes;
+  }
 
-   for (size_t i = 0; i < bytes / sizeof(long); i++) {
-       if (!PtraceReadLong(pid, addr, &data)) {
-           return bytes_read;
-       }
-       memcpy(dst, &data, sizeof(long));
-       dst = reinterpret_cast<void*>(reinterpret_cast<uintptr_t>(dst) + sizeof(long));
-       addr += sizeof(long);
-       bytes_read += sizeof(long);
-   }
+  for (size_t i = 0; i < bytes / sizeof(long); i++) {
+    if (!PtraceReadLong(pid, addr, &data)) {
+      return bytes_read;
+    }
+    memcpy(dst, &data, sizeof(long));
+    dst = reinterpret_cast<void*>(reinterpret_cast<uintptr_t>(dst) + sizeof(long));
+    addr += sizeof(long);
+    bytes_read += sizeof(long);
+  }
 
-   size_t left_over = bytes & (sizeof(long) - 1);
-   if (left_over) {
-       if (!PtraceReadLong(pid, addr, &data)) {
-           return bytes_read;
-       }
-       memcpy(dst, &data, left_over);
-       bytes_read += left_over;
-   }
-   return bytes_read;
+  size_t left_over = bytes & (sizeof(long) - 1);
+  if (left_over) {
+    if (!PtraceReadLong(pid, addr, &data)) {
+      return bytes_read;
+    }
+    memcpy(dst, &data, left_over);
+    bytes_read += left_over;
+  }
+  return bytes_read;
 }
 
 bool Memory::ReadFully(uint64_t addr, void* dst, size_t size) {
-   size_t rc = Read(addr, dst, size);
-   return rc == size;
+  size_t rc = Read(addr, dst, size);
+  return rc == size;
 }
 
 bool Memory::ReadString(uint64_t addr, std::string* dst, size_t max_read) {
-   char buffer[256];  // Large enough for 99% of symbol names.
-   size_t size = 0;   // Number of bytes which were read into the buffer.
-   for (size_t offset = 0; offset < max_read; offset += size) {
-       // Look for null-terminator first, so we can allocate string of exact size.
-       // If we know the end of valid memory range, do the reads in larger blocks.
-       size_t read = std::min(sizeof(buffer), max_read - offset);
-       size = Read(addr + offset, buffer, read);
-       if (size == 0) {
-           return false;  // We have not found end of string yet and we can not read more data.
-       }
-       size_t length = strnlen(buffer, size);  // Index of the null-terminator.
-       if (length < size) {
-           // We found the null-terminator. Allocate the string and set its content.
-           if (offset == 0) {
-               // We did just single read, so the buffer already contains the whole string.
-               dst->assign(buffer, length);
-               return true;
-           } else {
-               // The buffer contains only the last block. Read the whole string again.
-               dst->assign(offset + length, '\0');
-               return ReadFully(addr, dst->data(), dst->size());
-           }
-       }
-   }
-   return false;
+  char buffer[256];  // Large enough for 99% of symbol names.
+  size_t size = 0;   // Number of bytes which were read into the buffer.
+  for (size_t offset = 0; offset < max_read; offset += size) {
+    // Look for null-terminator first, so we can allocate string of exact size.
+    // If we know the end of valid memory range, do the reads in larger blocks.
+    size_t read = std::min(sizeof(buffer), max_read - offset);
+    size = Read(addr + offset, buffer, read);
+    if (size == 0) {
+      return false;  // We have not found end of string yet and we can not read more data.
+    }
+    size_t length = strnlen(buffer, size);  // Index of the null-terminator.
+    if (length < size) {
+      // We found the null-terminator. Allocate the string and set its content.
+      if (offset == 0) {
+        // We did just single read, so the buffer already contains the whole string.
+        dst->assign(buffer, length);
+        return true;
+      } else {
+        // The buffer contains only the last block. Read the whole string again.
+        dst->assign(offset + length, '\0');
+        return ReadFully(addr, dst->data(), dst->size());
+      }
+    }
+  }
+  return false;
 }
 
 std::unique_ptr<Memory> Memory::CreateFileMemory(const std::string& path, uint64_t offset,
@@ -359,6 +365,7 @@ size_t MemoryRemote::Read(uint64_t addr, void* dst, size_t size) {
 }
 
 size_t MemoryLocal::Read(uint64_t addr, void* dst, size_t size) {
+#ifndef SENTRY_MODIFIED
    errno = 0;
    size_t rv = ProcessVmRead(getpid(), addr, dst, size);
    // The syscall is only available in Linux 3.2, meaning Android 17.
@@ -370,6 +377,7 @@ size_t MemoryLocal::Read(uint64_t addr, void* dst, size_t size) {
    }
 #endif
    return rv;
+#endif // SENTRY_MODIFIED
 }
 
 MemoryRange::MemoryRange(const std::shared_ptr<Memory>& memory, uint64_t begin, uint64_t length,

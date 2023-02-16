@@ -70,6 +70,8 @@ class ThreadEntry {
 
   static std::mutex entries_mutex_;
   static std::map<pid_t, ThreadEntry*> entries_;
+
+  static const char* GetWaitTypeName(WaitType type);
 };
 
 }  // namespace unwindstack

@@ -1014,13 +1014,13 @@ fail:
 }
 
 int
-sentry_get_crashed_last_run()
+sentry_get_crashed_last_run(void)
 {
     return g_last_crash;
 }
 
 int
-sentry_clear_crashed_last_run()
+sentry_clear_crashed_last_run(void)
 {
     bool success = false;
     sentry_options_t *options = sentry__options_lock();

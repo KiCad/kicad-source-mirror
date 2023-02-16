@@ -26,7 +26,11 @@
 #include "client/annotation_list.h"
 #include "client/simple_string_dictionary.h"
 #include "snapshot/snapshot_constants.h"
+#if BUILDFLAG(IS_FUCHSIA)
+#include "util/fuchsia/traits.h"
+#else
 #include "util/linux/traits.h"
+#endif
 
 namespace crashpad {
 
@@ -39,6 +43,8 @@ struct Annotation {
   typename Traits::Address value;
   uint32_t size;
   uint16_t type;
+  crashpad::Annotation::ConcurrentAccessGuardMode concurrent_access_guard_mode;
+  bool spin_guard_state;
 };
 
 template <class Traits>

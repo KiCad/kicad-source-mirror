@@ -39,6 +39,9 @@
 #include "third_party/curl/curl.h"
 
 namespace google_breakpad {
+
+// This class is only safe to be used on single-threaded code because of its
+// usage of libcurl's curl_global_cleanup().
 class LibcurlWrapper {
  public:
   LibcurlWrapper();
@@ -111,6 +114,7 @@ class LibcurlWrapper {
   CURLcode (*easy_getinfo_)(CURL*, CURLINFO info, ...);
   void (*easy_reset_)(CURL*);
   void (*formfree_)(struct curl_httppost*);
+  void (*global_cleanup_)(void);
 
 };
 }

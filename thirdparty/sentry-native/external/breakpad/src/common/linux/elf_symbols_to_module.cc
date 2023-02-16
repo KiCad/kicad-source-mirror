@@ -36,6 +36,9 @@
 #include <elf.h>
 #include <string.h>
 
+#include <memory>
+#include <utility>
+
 #include "common/byte_cursor.h"
 #include "common/module.h"
 
@@ -156,7 +159,7 @@ bool ELFSymbolsToModule(const uint8_t* symtab_section,
   while(!iterator->at_end) {
     if (ELF32_ST_TYPE(iterator->info) == STT_FUNC &&
         iterator->shndx != SHN_UNDEF) {
-      Module::Extern* ext = new Module::Extern(iterator->value);
+      auto ext = std::make_unique<Module::Extern>(iterator->value);
       ext->name = SymbolString(iterator->name_offset, strings);
 #if !defined(__ANDROID__)  // Android NDK doesn't provide abi::__cxa_demangle.
       int status = 0;
@@ -168,7 +171,7 @@ bool ELFSymbolsToModule(const uint8_t* symtab_section,
         free(demangled);
       }
 #endif
-      module->AddExtern(ext);
+      module->AddExtern(std::move(ext));
     }
     ++iterator;
   }

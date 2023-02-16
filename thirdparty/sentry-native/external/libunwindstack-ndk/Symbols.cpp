@@ -32,10 +32,20 @@ namespace unwindstack {
 Symbols::Symbols(uint64_t offset, uint64_t size, uint64_t entry_size, uint64_t str_offset,
                  uint64_t str_size)
     : offset_(offset),
-      count_(entry_size != 0 ? size / entry_size : 0),
+      count_(entry_size != 0 ? ((size / entry_size > kMaxSymbols) ? kMaxSymbols : size / entry_size)
+                             : 0),
       entry_size_(entry_size),
-      str_offset_(str_offset),
-      str_end_(str_offset_ + str_size) {}
+      str_offset_(str_offset) {
+  if (__builtin_add_overflow(str_offset_, str_size, &str_end_)) {
+    // Set to the max so that the code will still try to get symbol names.
+    // Any reads that might be invalid will simply return no data, so
+    // this will not result in crashes.
+    // The assumption is that this value might have been corrupted, but
+    // enough of the elf data is valid such that the code can still
+    // get symbol information.
+    str_end_ = UINT64_MAX;
+  }
+}
 
 template <typename SymType>
 static bool IsFunc(const SymType* entry) {
@@ -66,8 +76,13 @@ Symbols::Info* Symbols::BinarySearch(uint64_t addr, Memory* elf_memory, uint64_t
   while (first < last) {
     uint32_t current = first + (last - first) / 2;
     uint32_t symbol_index = RemapIndices ? remap_.value()[current] : current;
+    uint64_t offset = symbol_index * entry_size_;
+    if (__builtin_add_overflow(offset, offset_, &offset)) {
+      // The elf data might be malformed.
+      return nullptr;
+    }
     SymType sym;
-    if (!elf_memory->ReadFully(offset_ + symbol_index * entry_size_, &sym, sizeof(sym))) {
+    if (!elf_memory->ReadFully(offset, &sym, sizeof(sym))) {
       return nullptr;
     }
     // There shouldn't be multiple symbols with same end address, but in case there are,
@@ -96,13 +111,21 @@ void Symbols::BuildRemapTable(Memory* elf_memory) {
   for (size_t symbol_idx = 0; symbol_idx < count_;) {
     // Read symbols from memory.  We intentionally bypass the cache to save memory.
     // Do the reads in batches so that we minimize the number of memory read calls.
+    uint64_t read_bytes = (count_ - symbol_idx) * entry_size_;
     uint8_t buffer[1024];
-    size_t read = std::min<size_t>(sizeof(buffer), (count_ - symbol_idx) * entry_size_);
-    size_t size = elf_memory->Read(offset_ + symbol_idx * entry_size_, buffer, read);
-    if (size < sizeof(SymType)) {
-      break;  // Stop processing, something looks like it is corrupted.
+    read_bytes = std::min<size_t>(sizeof(buffer), read_bytes);
+    uint64_t offset = symbol_idx * entry_size_;
+    if (__builtin_add_overflow(offset, offset_, &offset)) {
+      // The elf data might be malformed.
+      break;
     }
-    for (size_t offset = 0; offset + sizeof(SymType) <= size; offset += entry_size_, symbol_idx++) {
+    read_bytes = elf_memory->Read(offset, buffer, read_bytes);
+    if (read_bytes < sizeof(SymType)) {
+      // The elf data might be malformed.
+      break;
+    }
+    for (uint64_t offset = 0; offset <= read_bytes - sizeof(SymType);
+         offset += entry_size_, symbol_idx++) {
       SymType sym;
       memcpy(&sym, &buffer[offset], sizeof(SymType));  // Copy to ensure alignment.
       addrs.push_back(sym.st_value);  // Always insert so it is indexable by symbol index.
@@ -146,7 +169,12 @@ bool Symbols::GetName(uint64_t addr, Memory* elf_memory, SharedString* name,
   if (info->name.is_null()) {
     SymType sym;
     uint32_t symbol_index = remap_.has_value() ? remap_.value()[info->index] : info->index;
-    if (!elf_memory->ReadFully(offset_ + symbol_index * entry_size_, &sym, sizeof(sym))) {
+    uint64_t offset = symbol_index * entry_size_;
+    if (__builtin_add_overflow(offset, offset_, &offset)) {
+      // The elf data might be malformed.
+      return false;
+    }
+    if (!elf_memory->ReadFully(offset, &sym, sizeof(sym))) {
       return false;
     }
     std::string symbol_name;
@@ -177,14 +205,23 @@ bool Symbols::GetGlobal(Memory* elf_memory, const std::string& name, uint64_t* m
 
   // Linear scan of all symbols.
   for (uint32_t i = 0; i < count_; i++) {
+    uint64_t offset = i * entry_size_;
+    if (__builtin_add_overflow(offset_, offset, &offset)) {
+      // The elf data might be malformed.
+      return false;
+    }
     SymType entry;
-    if (!elf_memory->ReadFully(offset_ + i * entry_size_, &entry, sizeof(entry))) {
+    if (!elf_memory->ReadFully(offset, &entry, sizeof(entry))) {
       return false;
     }
 
     if (entry.st_shndx != SHN_UNDEF && ELF32_ST_TYPE(entry.st_info) == STT_OBJECT &&
         ELF32_ST_BIND(entry.st_info) == STB_GLOBAL) {
       uint64_t str_offset = str_offset_ + entry.st_name;
+      if (__builtin_add_overflow(str_offset_, entry.st_name, &str_offset)) {
+        // The elf data might be malformed.
+        return false;
+      }
       if (str_offset < str_end_) {
         std::string symbol;
         if (elf_memory->ReadString(str_offset, &symbol, str_end_ - str_offset) && symbol == name) {

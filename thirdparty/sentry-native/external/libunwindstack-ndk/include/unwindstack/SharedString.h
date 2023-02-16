@@ -18,6 +18,7 @@
 
 #include <memory>
 #include <string>
+#include <type_traits>
 
 namespace unwindstack {
 
@@ -46,7 +47,8 @@ class SharedString {
   std::shared_ptr<const std::string> data_;
 };
 
-static inline bool operator==(const SharedString& a, SharedString& b) {
+template <typename T, typename = std::enable_if_t<std::is_same_v<T, SharedString>>>
+static inline bool operator==(const T& a, const T& b) {
   return static_cast<std::string_view>(a) == static_cast<std::string_view>(b);
 }
 static inline bool operator==(const SharedString& a, std::string_view b) {
@@ -55,7 +57,8 @@ static inline bool operator==(const SharedString& a, std::string_view b) {
 static inline bool operator==(std::string_view a, const SharedString& b) {
   return a == static_cast<std::string_view>(b);
 }
-static inline bool operator!=(const SharedString& a, SharedString& b) {
+template <typename T, typename = std::enable_if_t<std::is_same_v<T, SharedString>>>
+static inline bool operator!=(const T& a, const T& b) {
   return !(a == b);
 }
 static inline bool operator!=(const SharedString& a, std::string_view b) {

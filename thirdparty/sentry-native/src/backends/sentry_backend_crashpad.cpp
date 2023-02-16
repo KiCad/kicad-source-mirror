@@ -33,7 +33,7 @@ extern "C" {
 #include "client/crashpad_info.h"
 #include "client/prune_crash_reports.h"
 #include "client/settings.h"
-#if defined(_MSC_VER)
+#if defined(_WIN32)
 #    include "util/win/termination_codes.h"
 #endif
 

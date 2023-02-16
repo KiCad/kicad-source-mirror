@@ -131,11 +131,11 @@ host_triplet = @host@
 # Build as PIC on Linux, for linux_client_unittest_shlib
 @LINUX_HOST_TRUE@am__append_2 = -fPIC
 @LINUX_HOST_TRUE@am__append_3 = -fPIC
-libexec_PROGRAMS = $(am__EXEEXT_10)
+libexec_PROGRAMS = $(am__EXEEXT_11)
 bin_PROGRAMS = $(am__EXEEXT_2) $(am__EXEEXT_3) $(am__EXEEXT_4)
 check_PROGRAMS = src/common/safe_math_unittest$(EXEEXT) \
 	$(am__EXEEXT_5) $(am__EXEEXT_6) $(am__EXEEXT_7) \
-	$(am__EXEEXT_8) $(am__EXEEXT_9)
+	$(am__EXEEXT_8) $(am__EXEEXT_9) $(am__EXEEXT_10)
 noinst_PROGRAMS =
 EXTRA_PROGRAMS = $(am__EXEEXT_1)
 
@@ -164,7 +164,6 @@ EXTRA_PROGRAMS = $(am__EXEEXT_1)
 @DISABLE_PROCESSOR_FALSE@	src/processor/basic_source_line_resolver_unittest \
 @DISABLE_PROCESSOR_FALSE@	src/processor/cfi_frame_info_unittest \
 @DISABLE_PROCESSOR_FALSE@	src/processor/contained_range_map_unittest \
-@DISABLE_PROCESSOR_FALSE@	src/processor/disassembler_objdump_unittest \
 @DISABLE_PROCESSOR_FALSE@	src/processor/disassembler_x86_unittest \
 @DISABLE_PROCESSOR_FALSE@	src/processor/exploitability_unittest \
 @DISABLE_PROCESSOR_FALSE@	src/processor/fast_source_line_resolver_unittest \
@@ -193,7 +192,12 @@ EXTRA_PROGRAMS = $(am__EXEEXT_1)
 @DISABLE_PROCESSOR_FALSE@	src/processor/stackwalker_x86_unittest \
 @DISABLE_PROCESSOR_FALSE@	src/processor/synth_minidump_unittest
 
-@DISABLE_PROCESSOR_FALSE@@SELFTEST_TRUE@am__append_10 = \
+@DISABLE_PROCESSOR_FALSE@@LINUX_HOST_TRUE@am__append_10 = \
+@DISABLE_PROCESSOR_FALSE@@LINUX_HOST_TRUE@	src/processor/disassembler_objdump_unittest \
+@DISABLE_PROCESSOR_FALSE@@LINUX_HOST_TRUE@	src/common/linux/scoped_pipe_unittest \
+@DISABLE_PROCESSOR_FALSE@@LINUX_HOST_TRUE@	src/common/linux/scoped_tmpfile_unittest
+
+@DISABLE_PROCESSOR_FALSE@@SELFTEST_TRUE@am__append_11 = \
 @DISABLE_PROCESSOR_FALSE@@SELFTEST_TRUE@	src/processor/stackwalker_selftest
 
 
@@ -203,17 +207,17 @@ EXTRA_PROGRAMS = $(am__EXEEXT_1)
 # Currently Linux only, the macOS client
 # is built using an Xcode project instead.
 #
-@LINUX_HOST_TRUE@am__append_11 = src/client/linux/libbreakpad_client.a
-@LINUX_HOST_TRUE@am__append_12 = breakpad-client.pc
-@LINUX_HOST_TRUE@am__append_13 = \
+@LINUX_HOST_TRUE@am__append_12 = src/client/linux/libbreakpad_client.a
+@LINUX_HOST_TRUE@am__append_13 = breakpad-client.pc
+@LINUX_HOST_TRUE@am__append_14 = \
 @LINUX_HOST_TRUE@	src/client/linux/linux_client_unittest \
 @LINUX_HOST_TRUE@	src/common/linux/google_crashdump_uploader_test
 
-@LINUX_HOST_TRUE@am__append_14 = \
+@LINUX_HOST_TRUE@am__append_15 = \
 @LINUX_HOST_TRUE@	src/client/linux/linux_dumper_unittest_helper \
 @LINUX_HOST_TRUE@	src/client/linux/linux_client_unittest_shlib
 
-@LINUX_HOST_TRUE@am__append_15 = \
+@LINUX_HOST_TRUE@am__append_16 = \
 @LINUX_HOST_TRUE@	src/client/linux/linux_dumper_unittest_helper \
 @LINUX_HOST_TRUE@	src/client/linux/linux_client_unittest_shlib
 
@@ -222,7 +226,7 @@ EXTRA_PROGRAMS = $(am__EXEEXT_1)
 # Various Breakpad tools
 # This includes symbol dumpers and uploaders
 #
-@DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@am__append_16 = \
+@DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@am__append_17 = \
 @DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/tools/linux/core2md/core2md \
 @DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/tools/linux/pid2md/pid2md \
 @DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/tools/linux/dump_syms/dump_syms \
@@ -230,30 +234,68 @@ EXTRA_PROGRAMS = $(am__EXEEXT_1)
 @DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/tools/linux/symupload/minidump_upload \
 @DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/tools/linux/symupload/sym_upload
 
-@DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@@X86_HOST_TRUE@am__append_17 = \
+@DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@@X86_HOST_TRUE@am__append_18 = \
 @DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@@X86_HOST_TRUE@	src/tools/mac/dump_syms/dump_syms_mac
 
-@DISABLE_TOOLS_FALSE@@HAVE_MEMFD_CREATE_TRUE@@LINUX_HOST_TRUE@am__append_18 = \
+@DISABLE_TOOLS_FALSE@@HAVE_MEMFD_CREATE_TRUE@@LINUX_HOST_TRUE@am__append_19 = \
 @DISABLE_TOOLS_FALSE@@HAVE_MEMFD_CREATE_TRUE@@LINUX_HOST_TRUE@	src/tools/linux/core_handler/core_handler
 
-@DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@am__append_19 = \
+@DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@am__append_20 = \
 @DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/dumper_unittest \
 @DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/tools/linux/md2core/minidump_2_core_unittest
 
-@DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@@X86_HOST_TRUE@am__append_20 = \
+@DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@@X86_HOST_TRUE@am__append_21 = \
 @DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@@X86_HOST_TRUE@	src/common/mac/macho_reader_unittest
 
-@HAVE_GETCONTEXT_FALSE@am__append_21 = \
+@LINUX_HOST_TRUE@am__append_22 = \
+@LINUX_HOST_TRUE@	src/common/linux/scoped_pipe.h \
+@LINUX_HOST_TRUE@	src/common/linux/scoped_pipe.cc \
+@LINUX_HOST_TRUE@	src/common/linux/scoped_tmpfile.h \
+@LINUX_HOST_TRUE@	src/common/linux/scoped_tmpfile.cc \
+@LINUX_HOST_TRUE@	src/processor/disassembler_objdump.h \
+@LINUX_HOST_TRUE@	src/processor/disassembler_objdump.cc
+
+@HAVE_GETCONTEXT_FALSE@am__append_23 = \
 @HAVE_GETCONTEXT_FALSE@	src/common/linux/breakpad_getcontext.S
 
-@HAVE_GETCONTEXT_FALSE@am__append_22 =  \
+@HAVE_GETCONTEXT_FALSE@am__append_24 =  \
 @HAVE_GETCONTEXT_FALSE@	src/common/linux/breakpad_getcontext.S \
 @HAVE_GETCONTEXT_FALSE@	src/common/linux/breakpad_getcontext_unittest.cc
-@ANDROID_HOST_TRUE@am__append_23 = \
+@ANDROID_HOST_TRUE@am__append_25 = \
 @ANDROID_HOST_TRUE@	-llog -lm
 
-@ANDROID_HOST_TRUE@am__append_24 = \
+@ANDROID_HOST_TRUE@am__append_26 = \
 @ANDROID_HOST_TRUE@        -llog
+
+@LINUX_HOST_TRUE@am__append_27 = \
+@LINUX_HOST_TRUE@	src/common/linux/scoped_pipe.o \
+@LINUX_HOST_TRUE@	src/common/linux/scoped_tmpfile.o \
+@LINUX_HOST_TRUE@	src/processor/disassembler_objdump.o
+
+@LINUX_HOST_TRUE@am__append_28 = \
+@LINUX_HOST_TRUE@	src/common/linux/scoped_pipe.o \
+@LINUX_HOST_TRUE@	src/common/linux/scoped_tmpfile.o \
+@LINUX_HOST_TRUE@	src/processor/disassembler_objdump.o
+
+@LINUX_HOST_TRUE@am__append_29 = \
+@LINUX_HOST_TRUE@	src/common/linux/scoped_pipe.o \
+@LINUX_HOST_TRUE@	src/common/linux/scoped_tmpfile.o \
+@LINUX_HOST_TRUE@	src/processor/disassembler_objdump.o
+
+@LINUX_HOST_TRUE@am__append_30 = \
+@LINUX_HOST_TRUE@	src/common/linux/scoped_pipe.o \
+@LINUX_HOST_TRUE@	src/common/linux/scoped_tmpfile.o \
+@LINUX_HOST_TRUE@	src/processor/disassembler_objdump.o
+
+@LINUX_HOST_TRUE@am__append_31 = \
+@LINUX_HOST_TRUE@	src/common/linux/scoped_pipe.o \
+@LINUX_HOST_TRUE@	src/common/linux/scoped_tmpfile.o \
+@LINUX_HOST_TRUE@	src/processor/disassembler_objdump.o
+
+@LINUX_HOST_TRUE@am__append_32 = \
+@LINUX_HOST_TRUE@	src/common/linux/scoped_pipe.o \
+@LINUX_HOST_TRUE@	src/common/linux/scoped_tmpfile.o \
+@LINUX_HOST_TRUE@	src/processor/disassembler_objdump.o
 
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -306,7 +348,6 @@ am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(libexecdir)" \
 @DISABLE_PROCESSOR_FALSE@	src/processor/basic_source_line_resolver_unittest$(EXEEXT) \
 @DISABLE_PROCESSOR_FALSE@	src/processor/cfi_frame_info_unittest$(EXEEXT) \
 @DISABLE_PROCESSOR_FALSE@	src/processor/contained_range_map_unittest$(EXEEXT) \
-@DISABLE_PROCESSOR_FALSE@	src/processor/disassembler_objdump_unittest$(EXEEXT) \
 @DISABLE_PROCESSOR_FALSE@	src/processor/disassembler_x86_unittest$(EXEEXT) \
 @DISABLE_PROCESSOR_FALSE@	src/processor/exploitability_unittest$(EXEEXT) \
 @DISABLE_PROCESSOR_FALSE@	src/processor/fast_source_line_resolver_unittest$(EXEEXT) \
@@ -334,13 +375,16 @@ am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(libexecdir)" \
 @DISABLE_PROCESSOR_FALSE@	src/processor/stackwalker_riscv64_unittest$(EXEEXT) \
 @DISABLE_PROCESSOR_FALSE@	src/processor/stackwalker_x86_unittest$(EXEEXT) \
 @DISABLE_PROCESSOR_FALSE@	src/processor/synth_minidump_unittest$(EXEEXT)
-@DISABLE_PROCESSOR_FALSE@@SELFTEST_TRUE@am__EXEEXT_6 = src/processor/stackwalker_selftest$(EXEEXT)
-@LINUX_HOST_TRUE@am__EXEEXT_7 = src/client/linux/linux_client_unittest$(EXEEXT) \
+@DISABLE_PROCESSOR_FALSE@@LINUX_HOST_TRUE@am__EXEEXT_6 = src/processor/disassembler_objdump_unittest$(EXEEXT) \
+@DISABLE_PROCESSOR_FALSE@@LINUX_HOST_TRUE@	src/common/linux/scoped_pipe_unittest$(EXEEXT) \
+@DISABLE_PROCESSOR_FALSE@@LINUX_HOST_TRUE@	src/common/linux/scoped_tmpfile_unittest$(EXEEXT)
+@DISABLE_PROCESSOR_FALSE@@SELFTEST_TRUE@am__EXEEXT_7 = src/processor/stackwalker_selftest$(EXEEXT)
+@LINUX_HOST_TRUE@am__EXEEXT_8 = src/client/linux/linux_client_unittest$(EXEEXT) \
 @LINUX_HOST_TRUE@	src/common/linux/google_crashdump_uploader_test$(EXEEXT)
-@DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@am__EXEEXT_8 = src/common/dumper_unittest$(EXEEXT) \
+@DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@am__EXEEXT_9 = src/common/dumper_unittest$(EXEEXT) \
 @DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/tools/linux/md2core/minidump_2_core_unittest$(EXEEXT)
-@DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@@X86_HOST_TRUE@am__EXEEXT_9 = src/common/mac/macho_reader_unittest$(EXEEXT)
-@DISABLE_TOOLS_FALSE@@HAVE_MEMFD_CREATE_TRUE@@LINUX_HOST_TRUE@am__EXEEXT_10 = src/tools/linux/core_handler/core_handler$(EXEEXT)
+@DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@@X86_HOST_TRUE@am__EXEEXT_10 = src/common/mac/macho_reader_unittest$(EXEEXT)
+@DISABLE_TOOLS_FALSE@@HAVE_MEMFD_CREATE_TRUE@@LINUX_HOST_TRUE@am__EXEEXT_11 = src/tools/linux/core_handler/core_handler$(EXEEXT)
 PROGRAMS = $(bin_PROGRAMS) $(libexec_PROGRAMS) $(noinst_PROGRAMS)
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
@@ -436,13 +480,132 @@ src_client_linux_libbreakpad_client_a_OBJECTS =  \
 	$(am_src_client_linux_libbreakpad_client_a_OBJECTS)
 src_libbreakpad_a_AR = $(AR) $(ARFLAGS)
 src_libbreakpad_a_LIBADD =
+am__src_libbreakpad_a_SOURCES_DIST =  \
+	src/google_breakpad/common/breakpad_types.h \
+	src/google_breakpad/common/minidump_format.h \
+	src/google_breakpad/common/minidump_size.h \
+	src/google_breakpad/processor/basic_source_line_resolver.h \
+	src/google_breakpad/processor/call_stack.h \
+	src/google_breakpad/processor/code_module.h \
+	src/google_breakpad/processor/code_modules.h \
+	src/google_breakpad/processor/dump_context.h \
+	src/google_breakpad/processor/dump_object.h \
+	src/google_breakpad/processor/exploitability.h \
+	src/google_breakpad/processor/fast_source_line_resolver.h \
+	src/google_breakpad/processor/memory_region.h \
+	src/google_breakpad/processor/microdump.h \
+	src/google_breakpad/processor/microdump_processor.h \
+	src/google_breakpad/processor/minidump.h \
+	src/google_breakpad/processor/minidump_processor.h \
+	src/google_breakpad/processor/process_result.h \
+	src/google_breakpad/processor/process_state.h \
+	src/google_breakpad/processor/proc_maps_linux.h \
+	src/google_breakpad/processor/source_line_resolver_base.h \
+	src/google_breakpad/processor/source_line_resolver_interface.h \
+	src/google_breakpad/processor/stack_frame.h \
+	src/google_breakpad/processor/stack_frame_cpu.h \
+	src/google_breakpad/processor/stack_frame_symbolizer.h \
+	src/google_breakpad/processor/stackwalker.h \
+	src/google_breakpad/processor/symbol_supplier.h \
+	src/google_breakpad/processor/system_info.h \
+	src/processor/address_map-inl.h src/processor/address_map.h \
+	src/processor/basic_code_module.h \
+	src/processor/basic_code_modules.cc \
+	src/processor/basic_code_modules.h \
+	src/processor/basic_source_line_resolver_types.h \
+	src/processor/basic_source_line_resolver.cc \
+	src/processor/call_stack.cc src/processor/cfi_frame_info.cc \
+	src/processor/cfi_frame_info.h \
+	src/processor/contained_range_map-inl.h \
+	src/processor/contained_range_map.h \
+	src/processor/convert_old_arm64_context.cc \
+	src/processor/convert_old_arm64_context.h \
+	src/processor/disassembler_x86.h \
+	src/processor/disassembler_x86.cc \
+	src/processor/dump_context.cc src/processor/dump_object.cc \
+	src/processor/exploitability.cc \
+	src/processor/exploitability_linux.h \
+	src/processor/exploitability_linux.cc \
+	src/processor/exploitability_win.h \
+	src/processor/exploitability_win.cc \
+	src/processor/fast_source_line_resolver_types.h \
+	src/processor/fast_source_line_resolver.cc \
+	src/processor/linked_ptr.h src/processor/logging.h \
+	src/processor/logging.cc src/processor/map_serializers-inl.h \
+	src/processor/map_serializers.h src/processor/microdump.cc \
+	src/processor/microdump_processor.cc src/processor/minidump.cc \
+	src/processor/minidump_processor.cc \
+	src/processor/module_comparer.cc \
+	src/processor/module_comparer.h src/processor/module_factory.h \
+	src/processor/module_serializer.cc \
+	src/processor/module_serializer.h \
+	src/processor/pathname_stripper.cc \
+	src/processor/pathname_stripper.h \
+	src/processor/postfix_evaluator-inl.h \
+	src/processor/postfix_evaluator.h \
+	src/processor/process_state.cc \
+	src/processor/proc_maps_linux.cc src/processor/range_map-inl.h \
+	src/processor/range_map.h \
+	src/processor/simple_serializer-inl.h \
+	src/processor/simple_serializer.h \
+	src/processor/simple_symbol_supplier.cc \
+	src/processor/simple_symbol_supplier.h \
+	src/processor/windows_frame_info.h \
+	src/processor/source_line_resolver_base_types.h \
+	src/processor/source_line_resolver_base.cc \
+	src/processor/stack_frame_cpu.cc \
+	src/processor/stack_frame_symbolizer.cc \
+	src/processor/stackwalk_common.cc \
+	src/processor/stackwalk_common.h src/processor/stackwalker.cc \
+	src/processor/stackwalker_amd64.cc \
+	src/processor/stackwalker_amd64.h \
+	src/processor/stackwalker_arm.cc \
+	src/processor/stackwalker_arm.h \
+	src/processor/stackwalker_arm64.cc \
+	src/processor/stackwalker_arm64.h \
+	src/processor/stackwalker_address_list.cc \
+	src/processor/stackwalker_address_list.h \
+	src/processor/stackwalker_mips.cc \
+	src/processor/stackwalker_mips.h \
+	src/processor/stackwalker_ppc.cc \
+	src/processor/stackwalker_ppc.h \
+	src/processor/stackwalker_ppc64.cc \
+	src/processor/stackwalker_ppc64.h \
+	src/processor/stackwalker_riscv.cc \
+	src/processor/stackwalker_riscv.h \
+	src/processor/stackwalker_riscv64.cc \
+	src/processor/stackwalker_riscv64.h \
+	src/processor/stackwalker_sparc.cc \
+	src/processor/stackwalker_sparc.h \
+	src/processor/stackwalker_x86.cc \
+	src/processor/stackwalker_x86.h \
+	src/processor/static_address_map-inl.h \
+	src/processor/static_address_map.h \
+	src/processor/static_contained_range_map-inl.h \
+	src/processor/static_contained_range_map.h \
+	src/processor/static_map_iterator-inl.h \
+	src/processor/static_map_iterator.h \
+	src/processor/static_map-inl.h src/processor/static_map.h \
+	src/processor/static_range_map-inl.h \
+	src/processor/static_range_map.h \
+	src/processor/symbolic_constants_win.cc \
+	src/processor/symbolic_constants_win.h \
+	src/processor/tokenize.cc src/processor/tokenize.h \
+	src/common/linux/scoped_pipe.h src/common/linux/scoped_pipe.cc \
+	src/common/linux/scoped_tmpfile.h \
+	src/common/linux/scoped_tmpfile.cc \
+	src/processor/disassembler_objdump.h \
+	src/processor/disassembler_objdump.cc
+@LINUX_HOST_TRUE@am__objects_2 =  \
+@LINUX_HOST_TRUE@	src/common/linux/scoped_pipe.$(OBJEXT) \
+@LINUX_HOST_TRUE@	src/common/linux/scoped_tmpfile.$(OBJEXT) \
+@LINUX_HOST_TRUE@	src/processor/disassembler_objdump.$(OBJEXT)
 am_src_libbreakpad_a_OBJECTS =  \
 	src/processor/basic_code_modules.$(OBJEXT) \
 	src/processor/basic_source_line_resolver.$(OBJEXT) \
 	src/processor/call_stack.$(OBJEXT) \
 	src/processor/cfi_frame_info.$(OBJEXT) \
 	src/processor/convert_old_arm64_context.$(OBJEXT) \
-	src/processor/disassembler_objdump.$(OBJEXT) \
 	src/processor/disassembler_x86.$(OBJEXT) \
 	src/processor/dump_context.$(OBJEXT) \
 	src/processor/dump_object.$(OBJEXT) \
@@ -478,14 +641,18 @@ am_src_libbreakpad_a_OBJECTS =  \
 	src/processor/stackwalker_sparc.$(OBJEXT) \
 	src/processor/stackwalker_x86.$(OBJEXT) \
 	src/processor/symbolic_constants_win.$(OBJEXT) \
-	src/processor/tokenize.$(OBJEXT)
+	src/processor/tokenize.$(OBJEXT) $(am__objects_2)
 src_libbreakpad_a_OBJECTS = $(am_src_libbreakpad_a_OBJECTS)
 src_testing_libtesting_a_AR = $(AR) $(ARFLAGS)
 src_testing_libtesting_a_LIBADD =
-am_src_testing_libtesting_a_OBJECTS =  \
-	src/testing/googletest/src/libtesting_a-gtest-all.$(OBJEXT) \
-	src/testing/googletest/src/libtesting_a-gtest_main.$(OBJEXT) \
-	src/testing/googlemock/src/libtesting_a-gmock-all.$(OBJEXT)
+am__src_testing_libtesting_a_SOURCES_DIST =  \
+	src/breakpad_googletest_includes.h \
+	src/testing/googletest/src/gtest-all.cc \
+	src/testing/googletest/src/gtest_main.cc \
+	src/testing/googlemock/src/gmock-all.cc
+@SYSTEM_TEST_LIBS_FALSE@am_src_testing_libtesting_a_OBJECTS = src/testing/googletest/src/libtesting_a-gtest-all.$(OBJEXT) \
+@SYSTEM_TEST_LIBS_FALSE@	src/testing/googletest/src/libtesting_a-gtest_main.$(OBJEXT) \
+@SYSTEM_TEST_LIBS_FALSE@	src/testing/googlemock/src/libtesting_a-gmock-all.$(OBJEXT)
 src_testing_libtesting_a_OBJECTS =  \
 	$(am_src_testing_libtesting_a_OBJECTS)
 src_third_party_libdisasm_libdisasm_a_AR = $(AR) $(ARFLAGS)
@@ -536,7 +703,9 @@ am__src_client_linux_linux_client_unittest_shlib_SOURCES_DIST =  \
 	src/client/linux/minidump_writer/proc_cpuinfo_reader_unittest.cc \
 	src/common/linux/elf_core_dump.cc \
 	src/common/linux/linux_libc_support_unittest.cc \
-	src/common/linux/tests/auto_testfile.h \
+	src/common/linux/scoped_pipe.h src/common/linux/scoped_pipe.cc \
+	src/common/linux/scoped_tmpfile.h \
+	src/common/linux/scoped_tmpfile.cc \
 	src/common/linux/tests/crash_generator.cc \
 	src/common/memory_allocator_unittest.cc \
 	src/common/tests/auto_tempdir.h src/common/tests/file_utils.cc \
@@ -549,13 +718,13 @@ am__src_client_linux_linux_client_unittest_shlib_SOURCES_DIST =  \
 	src/processor/proc_maps_linux.cc \
 	src/common/linux/breakpad_getcontext.S \
 	src/common/linux/breakpad_getcontext_unittest.cc
-am__objects_2 = src/testing/googletest/src/client_linux_linux_client_unittest_shlib-gtest-all.$(OBJEXT) \
-	src/testing/googletest/src/client_linux_linux_client_unittest_shlib-gtest_main.$(OBJEXT) \
-	src/testing/googlemock/src/client_linux_linux_client_unittest_shlib-gmock-all.$(OBJEXT)
-@HAVE_GETCONTEXT_FALSE@am__objects_3 = src/common/linux/client_linux_linux_client_unittest_shlib-breakpad_getcontext.$(OBJEXT) \
+@SYSTEM_TEST_LIBS_FALSE@am__objects_3 = src/testing/googletest/src/client_linux_linux_client_unittest_shlib-gtest-all.$(OBJEXT) \
+@SYSTEM_TEST_LIBS_FALSE@	src/testing/googletest/src/client_linux_linux_client_unittest_shlib-gtest_main.$(OBJEXT) \
+@SYSTEM_TEST_LIBS_FALSE@	src/testing/googlemock/src/client_linux_linux_client_unittest_shlib-gmock-all.$(OBJEXT)
+@HAVE_GETCONTEXT_FALSE@am__objects_4 = src/common/linux/client_linux_linux_client_unittest_shlib-breakpad_getcontext.$(OBJEXT) \
 @HAVE_GETCONTEXT_FALSE@	src/common/linux/client_linux_linux_client_unittest_shlib-breakpad_getcontext_unittest.$(OBJEXT)
 am_src_client_linux_linux_client_unittest_shlib_OBJECTS =  \
-	$(am__objects_2) \
+	$(am__objects_3) \
 	src/client/linux/handler/linux_client_unittest_shlib-exception_handler_unittest.$(OBJEXT) \
 	src/client/linux/microdump_writer/linux_client_unittest_shlib-microdump_writer_unittest.$(OBJEXT) \
 	src/client/linux/minidump_writer/linux_client_unittest_shlib-directory_reader_unittest.$(OBJEXT) \
@@ -570,6 +739,8 @@ am_src_client_linux_linux_client_unittest_shlib_OBJECTS =  \
 	src/client/linux/minidump_writer/linux_client_unittest_shlib-proc_cpuinfo_reader_unittest.$(OBJEXT) \
 	src/common/linux/client_linux_linux_client_unittest_shlib-elf_core_dump.$(OBJEXT) \
 	src/common/linux/client_linux_linux_client_unittest_shlib-linux_libc_support_unittest.$(OBJEXT) \
+	src/common/linux/client_linux_linux_client_unittest_shlib-scoped_pipe.$(OBJEXT) \
+	src/common/linux/client_linux_linux_client_unittest_shlib-scoped_tmpfile.$(OBJEXT) \
 	src/common/linux/tests/client_linux_linux_client_unittest_shlib-crash_generator.$(OBJEXT) \
 	src/common/client_linux_linux_client_unittest_shlib-memory_allocator_unittest.$(OBJEXT) \
 	src/common/tests/client_linux_linux_client_unittest_shlib-file_utils.$(OBJEXT) \
@@ -581,7 +752,7 @@ am_src_client_linux_linux_client_unittest_shlib_OBJECTS =  \
 	src/processor/client_linux_linux_client_unittest_shlib-minidump.$(OBJEXT) \
 	src/processor/client_linux_linux_client_unittest_shlib-pathname_stripper.$(OBJEXT) \
 	src/processor/client_linux_linux_client_unittest_shlib-proc_maps_linux.$(OBJEXT) \
-	$(am__objects_3)
+	$(am__objects_4)
 src_client_linux_linux_client_unittest_shlib_OBJECTS =  \
 	$(am_src_client_linux_linux_client_unittest_shlib_OBJECTS)
 src_client_linux_linux_client_unittest_shlib_LINK = $(CXXLD) \
@@ -673,6 +844,18 @@ src_common_linux_google_crashdump_uploader_test_OBJECTS =  \
 src_common_linux_google_crashdump_uploader_test_DEPENDENCIES =  \
 	$(am__DEPENDENCIES_2) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1)
+am_src_common_linux_scoped_pipe_unittest_OBJECTS = src/common/linux/scoped_pipe_unittest-scoped_pipe_unittest.$(OBJEXT)
+src_common_linux_scoped_pipe_unittest_OBJECTS =  \
+	$(am_src_common_linux_scoped_pipe_unittest_OBJECTS)
+src_common_linux_scoped_pipe_unittest_DEPENDENCIES =  \
+	src/common/linux/scoped_pipe.o $(am__DEPENDENCIES_2) \
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+am_src_common_linux_scoped_tmpfile_unittest_OBJECTS = src/common/linux/scoped_tmpfile_unittest-scoped_tmpfile_unittest.$(OBJEXT)
+src_common_linux_scoped_tmpfile_unittest_OBJECTS =  \
+	$(am_src_common_linux_scoped_tmpfile_unittest_OBJECTS)
+src_common_linux_scoped_tmpfile_unittest_DEPENDENCIES =  \
+	src/common/linux/scoped_tmpfile.o $(am__DEPENDENCIES_2) \
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
 am_src_common_mac_macho_reader_unittest_OBJECTS = src/common/mac_macho_reader_unittest-dwarf_cfi_to_module.$(OBJEXT) \
 	src/common/mac_macho_reader_unittest-dwarf_cu_to_module.$(OBJEXT) \
 	src/common/mac_macho_reader_unittest-dwarf_line_to_module.$(OBJEXT) \
@@ -747,6 +930,8 @@ am_src_processor_disassembler_objdump_unittest_OBJECTS = src/processor/disassemb
 src_processor_disassembler_objdump_unittest_OBJECTS =  \
 	$(am_src_processor_disassembler_objdump_unittest_OBJECTS)
 src_processor_disassembler_objdump_unittest_DEPENDENCIES =  \
+	src/common/linux/scoped_pipe.o \
+	src/common/linux/scoped_tmpfile.o \
 	src/processor/disassembler_objdump.o \
 	src/processor/dump_context.o src/processor/dump_object.o \
 	src/processor/logging.o src/processor/pathname_stripper.o \
@@ -765,9 +950,7 @@ src_processor_exploitability_unittest_OBJECTS =  \
 src_processor_exploitability_unittest_DEPENDENCIES =  \
 	src/processor/convert_old_arm64_context.o \
 	src/processor/minidump_processor.o \
-	src/processor/process_state.o \
-	src/processor/disassembler_objdump.o \
-	src/processor/disassembler_x86.o \
+	src/processor/process_state.o src/processor/disassembler_x86.o \
 	src/processor/exploitability.o \
 	src/processor/exploitability_linux.o \
 	src/processor/exploitability_win.o \
@@ -797,7 +980,7 @@ src_processor_exploitability_unittest_DEPENDENCIES =  \
 	src/processor/symbolic_constants_win.o \
 	src/processor/tokenize.o src/third_party/libdisasm/libdisasm.a \
 	$(am__DEPENDENCIES_2) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1)
+	$(am__DEPENDENCIES_1) $(am__append_27)
 am_src_processor_fast_source_line_resolver_unittest_OBJECTS = src/processor/fast_source_line_resolver_unittest-fast_source_line_resolver_unittest.$(OBJEXT)
 src_processor_fast_source_line_resolver_unittest_OBJECTS = $(am_src_processor_fast_source_line_resolver_unittest_OBJECTS)
 src_processor_fast_source_line_resolver_unittest_DEPENDENCIES =  \
@@ -845,7 +1028,7 @@ src_processor_microdump_processor_unittest_DEPENDENCIES =  \
 	src/processor/stackwalker_sparc.o \
 	src/processor/stackwalker_x86.o src/processor/tokenize.o \
 	$(am__DEPENDENCIES_2) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1)
+	$(am__DEPENDENCIES_1) $(am__append_28)
 am_src_processor_microdump_stackwalk_OBJECTS =  \
 	src/processor/microdump_stackwalk.$(OBJEXT)
 src_processor_microdump_stackwalk_OBJECTS =  \
@@ -877,7 +1060,7 @@ src_processor_microdump_stackwalk_DEPENDENCIES =  \
 	src/processor/stackwalker_riscv64.o \
 	src/processor/stackwalker_sparc.o \
 	src/processor/stackwalker_x86.o src/processor/tokenize.o \
-	src/third_party/libdisasm/libdisasm.a
+	src/third_party/libdisasm/libdisasm.a $(am__append_31)
 am_src_processor_minidump_dump_OBJECTS =  \
 	src/processor/minidump_dump.$(OBJEXT)
 src_processor_minidump_dump_OBJECTS =  \
@@ -897,7 +1080,6 @@ src_processor_minidump_processor_unittest_DEPENDENCIES =  \
 	src/processor/basic_source_line_resolver.o \
 	src/processor/call_stack.o src/processor/cfi_frame_info.o \
 	src/processor/convert_old_arm64_context.o \
-	src/processor/disassembler_objdump.o \
 	src/processor/disassembler_x86.o src/processor/dump_context.o \
 	src/processor/dump_object.o src/processor/exploitability.o \
 	src/processor/exploitability_linux.o \
@@ -923,7 +1105,7 @@ src_processor_minidump_processor_unittest_DEPENDENCIES =  \
 	src/processor/symbolic_constants_win.o \
 	src/processor/tokenize.o src/third_party/libdisasm/libdisasm.a \
 	$(am__DEPENDENCIES_2) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1)
+	$(am__DEPENDENCIES_1) $(am__append_29)
 am_src_processor_minidump_stackwalk_OBJECTS =  \
 	src/processor/minidump_stackwalk.$(OBJEXT)
 src_processor_minidump_stackwalk_OBJECTS =  \
@@ -933,7 +1115,6 @@ src_processor_minidump_stackwalk_DEPENDENCIES =  \
 	src/processor/basic_source_line_resolver.o \
 	src/processor/call_stack.o src/processor/cfi_frame_info.o \
 	src/processor/convert_old_arm64_context.o \
-	src/processor/disassembler_objdump.o \
 	src/processor/disassembler_x86.o src/processor/dump_context.o \
 	src/processor/dump_object.o src/processor/exploitability.o \
 	src/processor/exploitability_linux.o \
@@ -958,7 +1139,8 @@ src_processor_minidump_stackwalk_DEPENDENCIES =  \
 	src/processor/stackwalker_sparc.o \
 	src/processor/stackwalker_x86.o \
 	src/processor/symbolic_constants_win.o \
-	src/processor/tokenize.o src/third_party/libdisasm/libdisasm.a
+	src/processor/tokenize.o src/third_party/libdisasm/libdisasm.a \
+	$(am__append_32)
 am_src_processor_minidump_unittest_OBJECTS = src/common/processor_minidump_unittest-test_assembler.$(OBJEXT) \
 	src/processor/minidump_unittest-minidump_unittest.$(OBJEXT) \
 	src/processor/minidump_unittest-synth_minidump.$(OBJEXT)
@@ -1078,9 +1260,7 @@ src_processor_stackwalker_selftest_OBJECTS =  \
 src_processor_stackwalker_selftest_DEPENDENCIES =  \
 	src/processor/basic_code_modules.o \
 	src/processor/basic_source_line_resolver.o \
-	src/processor/call_stack.o \
-	src/processor/disassembler_objdump.o \
-	src/processor/disassembler_x86.o \
+	src/processor/call_stack.o src/processor/disassembler_x86.o \
 	src/processor/exploitability.o \
 	src/processor/exploitability_linux.o \
 	src/processor/exploitability_win.o src/processor/logging.o \
@@ -1101,7 +1281,7 @@ src_processor_stackwalker_selftest_DEPENDENCIES =  \
 	src/processor/stackwalker_riscv64.o \
 	src/processor/stackwalker_sparc.o \
 	src/processor/stackwalker_x86.o src/processor/tokenize.o \
-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) $(am__append_30)
 am_src_processor_stackwalker_x86_unittest_OBJECTS = src/common/processor_stackwalker_x86_unittest-test_assembler.$(OBJEXT) \
 	src/processor/stackwalker_x86_unittest-stackwalker_x86_unittest.$(OBJEXT)
 src_processor_stackwalker_x86_unittest_OBJECTS =  \
@@ -1390,6 +1570,8 @@ am__depfiles_remade = src/client/$(DEPDIR)/minidump_file_writer.Po \
 	src/common/linux/$(DEPDIR)/client_linux_linux_client_unittest_shlib-breakpad_getcontext_unittest.Po \
 	src/common/linux/$(DEPDIR)/client_linux_linux_client_unittest_shlib-elf_core_dump.Po \
 	src/common/linux/$(DEPDIR)/client_linux_linux_client_unittest_shlib-linux_libc_support_unittest.Po \
+	src/common/linux/$(DEPDIR)/client_linux_linux_client_unittest_shlib-scoped_pipe.Po \
+	src/common/linux/$(DEPDIR)/client_linux_linux_client_unittest_shlib-scoped_tmpfile.Po \
 	src/common/linux/$(DEPDIR)/dumper_unittest-crc32.Po \
 	src/common/linux/$(DEPDIR)/dumper_unittest-dump_symbols.Po \
 	src/common/linux/$(DEPDIR)/dumper_unittest-dump_symbols_unittest.Po \
@@ -1419,6 +1601,10 @@ am__depfiles_remade = src/client/$(DEPDIR)/minidump_file_writer.Po \
 	src/common/linux/$(DEPDIR)/linux_libc_support.Po \
 	src/common/linux/$(DEPDIR)/memory_mapped_file.Po \
 	src/common/linux/$(DEPDIR)/safe_readlink.Po \
+	src/common/linux/$(DEPDIR)/scoped_pipe.Po \
+	src/common/linux/$(DEPDIR)/scoped_pipe_unittest-scoped_pipe_unittest.Po \
+	src/common/linux/$(DEPDIR)/scoped_tmpfile.Po \
+	src/common/linux/$(DEPDIR)/scoped_tmpfile_unittest-scoped_tmpfile_unittest.Po \
 	src/common/linux/$(DEPDIR)/symbol_collector_client.Po \
 	src/common/linux/$(DEPDIR)/symbol_upload.Po \
 	src/common/linux/$(DEPDIR)/tools_linux_dump_syms_dump_syms-crc32.Po \
@@ -1613,6 +1799,8 @@ SOURCES = $(src_client_linux_libbreakpad_client_a_SOURCES) \
 	$(src_common_dwarf_dwarf2reader_lineinfo_unittest_SOURCES) \
 	$(src_common_dwarf_dwarf2reader_splitfunctions_unittest_SOURCES) \
 	$(src_common_linux_google_crashdump_uploader_test_SOURCES) \
+	$(src_common_linux_scoped_pipe_unittest_SOURCES) \
+	$(src_common_linux_scoped_tmpfile_unittest_SOURCES) \
 	$(src_common_mac_macho_reader_unittest_SOURCES) \
 	$(src_common_safe_math_unittest_SOURCES) \
 	$(src_common_test_assembler_unittest_SOURCES) \
@@ -1663,8 +1851,8 @@ SOURCES = $(src_client_linux_libbreakpad_client_a_SOURCES) \
 	$(src_tools_mac_dump_syms_dump_syms_mac_SOURCES)
 DIST_SOURCES =  \
 	$(am__src_client_linux_libbreakpad_client_a_SOURCES_DIST) \
-	$(src_libbreakpad_a_SOURCES) \
-	$(src_testing_libtesting_a_SOURCES) \
+	$(am__src_libbreakpad_a_SOURCES_DIST) \
+	$(am__src_testing_libtesting_a_SOURCES_DIST) \
 	$(src_third_party_libdisasm_libdisasm_a_SOURCES) \
 	$(src_client_linux_linux_client_unittest_SOURCES) \
 	$(am__src_client_linux_linux_client_unittest_shlib_SOURCES_DIST) \
@@ -1673,6 +1861,8 @@ DIST_SOURCES =  \
 	$(src_common_dwarf_dwarf2reader_lineinfo_unittest_SOURCES) \
 	$(src_common_dwarf_dwarf2reader_splitfunctions_unittest_SOURCES) \
 	$(src_common_linux_google_crashdump_uploader_test_SOURCES) \
+	$(src_common_linux_scoped_pipe_unittest_SOURCES) \
+	$(src_common_linux_scoped_tmpfile_unittest_SOURCES) \
 	$(src_common_mac_macho_reader_unittest_SOURCES) \
 	$(src_common_safe_math_unittest_SOURCES) \
 	$(src_common_test_assembler_unittest_SOURCES) \
@@ -2128,7 +2318,7 @@ includec_HEADERS = $(top_srcdir)/src/common/*.h
 includepdir = $(includedir)/$(PACKAGE)/processor
 includep_HEADERS = $(top_srcdir)/src/processor/*.h
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = $(am__append_6) $(am__append_12)
+pkgconfig_DATA = $(am__append_6) $(am__append_13)
 @SYSTEM_TEST_LIBS_FALSE@TEST_CFLAGS = \
 @SYSTEM_TEST_LIBS_FALSE@	-I$(top_srcdir)/src/testing/include \
 @SYSTEM_TEST_LIBS_FALSE@	-I$(top_srcdir)/src/testing/googletest/include \
@@ -2152,17 +2342,17 @@ pkgconfig_DATA = $(am__append_6) $(am__append_12)
 @ANDROID_HOST_TRUE@LOG_DRIVER = $(top_srcdir)/android/test-driver
 check_LIBRARIES = $(am__append_4)
 noinst_LIBRARIES = $(am__append_7)
-lib_LIBRARIES = $(am__append_5) $(am__append_11)
+lib_LIBRARIES = $(am__append_5) $(am__append_12)
 noinst_SCRIPTS = $(check_SCRIPTS)
-CLEANFILES = $(am__append_15)
-src_testing_libtesting_a_SOURCES = \
-	src/breakpad_googletest_includes.h \
-	src/testing/googletest/src/gtest-all.cc \
-	src/testing/googletest/src/gtest_main.cc \
-	src/testing/googlemock/src/gmock-all.cc
+CLEANFILES = $(am__append_16)
+@SYSTEM_TEST_LIBS_FALSE@src_testing_libtesting_a_SOURCES = \
+@SYSTEM_TEST_LIBS_FALSE@	src/breakpad_googletest_includes.h \
+@SYSTEM_TEST_LIBS_FALSE@	src/testing/googletest/src/gtest-all.cc \
+@SYSTEM_TEST_LIBS_FALSE@	src/testing/googletest/src/gtest_main.cc \
+@SYSTEM_TEST_LIBS_FALSE@	src/testing/googlemock/src/gmock-all.cc
 
-src_testing_libtesting_a_CPPFLAGS = \
-	$(AM_CPPFLAGS) $(TEST_CFLAGS)
+@SYSTEM_TEST_LIBS_FALSE@src_testing_libtesting_a_CPPFLAGS = \
+@SYSTEM_TEST_LIBS_FALSE@	$(AM_CPPFLAGS) $(TEST_CFLAGS)
 
 @DISABLE_PROCESSOR_FALSE@check_SCRIPTS = \
 @DISABLE_PROCESSOR_FALSE@	src/processor/microdump_stackwalk_test \
@@ -2192,7 +2382,7 @@ src_common_safe_math_unittest_LDADD = \
 
 
 # Breakpad processor library
-src_libbreakpad_a_SOURCES = \
+src_libbreakpad_a_SOURCES =  \
 	src/google_breakpad/common/breakpad_types.h \
 	src/google_breakpad/common/minidump_format.h \
 	src/google_breakpad/common/minidump_size.h \
@@ -2220,26 +2410,21 @@ src_libbreakpad_a_SOURCES = \
 	src/google_breakpad/processor/stackwalker.h \
 	src/google_breakpad/processor/symbol_supplier.h \
 	src/google_breakpad/processor/system_info.h \
-	src/processor/address_map-inl.h \
-	src/processor/address_map.h \
+	src/processor/address_map-inl.h src/processor/address_map.h \
 	src/processor/basic_code_module.h \
 	src/processor/basic_code_modules.cc \
 	src/processor/basic_code_modules.h \
 	src/processor/basic_source_line_resolver_types.h \
 	src/processor/basic_source_line_resolver.cc \
-	src/processor/call_stack.cc \
-	src/processor/cfi_frame_info.cc \
+	src/processor/call_stack.cc src/processor/cfi_frame_info.cc \
 	src/processor/cfi_frame_info.h \
 	src/processor/contained_range_map-inl.h \
 	src/processor/contained_range_map.h \
 	src/processor/convert_old_arm64_context.cc \
 	src/processor/convert_old_arm64_context.h \
-	src/processor/disassembler_objdump.h \
-	src/processor/disassembler_objdump.cc \
 	src/processor/disassembler_x86.h \
 	src/processor/disassembler_x86.cc \
-	src/processor/dump_context.cc \
-	src/processor/dump_object.cc \
+	src/processor/dump_context.cc src/processor/dump_object.cc \
 	src/processor/exploitability.cc \
 	src/processor/exploitability_linux.h \
 	src/processor/exploitability_linux.cc \
@@ -2247,18 +2432,13 @@ src_libbreakpad_a_SOURCES = \
 	src/processor/exploitability_win.cc \
 	src/processor/fast_source_line_resolver_types.h \
 	src/processor/fast_source_line_resolver.cc \
-	src/processor/linked_ptr.h \
-	src/processor/logging.h \
-	src/processor/logging.cc \
-	src/processor/map_serializers-inl.h \
-	src/processor/map_serializers.h \
-	src/processor/microdump.cc \
-	src/processor/microdump_processor.cc \
-	src/processor/minidump.cc \
+	src/processor/linked_ptr.h src/processor/logging.h \
+	src/processor/logging.cc src/processor/map_serializers-inl.h \
+	src/processor/map_serializers.h src/processor/microdump.cc \
+	src/processor/microdump_processor.cc src/processor/minidump.cc \
 	src/processor/minidump_processor.cc \
 	src/processor/module_comparer.cc \
-	src/processor/module_comparer.h \
-	src/processor/module_factory.h \
+	src/processor/module_comparer.h src/processor/module_factory.h \
 	src/processor/module_serializer.cc \
 	src/processor/module_serializer.h \
 	src/processor/pathname_stripper.cc \
@@ -2266,8 +2446,7 @@ src_libbreakpad_a_SOURCES = \
 	src/processor/postfix_evaluator-inl.h \
 	src/processor/postfix_evaluator.h \
 	src/processor/process_state.cc \
-	src/processor/proc_maps_linux.cc \
-	src/processor/range_map-inl.h \
+	src/processor/proc_maps_linux.cc src/processor/range_map-inl.h \
 	src/processor/range_map.h \
 	src/processor/simple_serializer-inl.h \
 	src/processor/simple_serializer.h \
@@ -2279,8 +2458,7 @@ src_libbreakpad_a_SOURCES = \
 	src/processor/stack_frame_cpu.cc \
 	src/processor/stack_frame_symbolizer.cc \
 	src/processor/stackwalk_common.cc \
-	src/processor/stackwalk_common.h \
-	src/processor/stackwalker.cc \
+	src/processor/stackwalk_common.h src/processor/stackwalker.cc \
 	src/processor/stackwalker_amd64.cc \
 	src/processor/stackwalker_amd64.h \
 	src/processor/stackwalker_arm.cc \
@@ -2309,15 +2487,13 @@ src_libbreakpad_a_SOURCES = \
 	src/processor/static_contained_range_map.h \
 	src/processor/static_map_iterator-inl.h \
 	src/processor/static_map_iterator.h \
-	src/processor/static_map-inl.h \
-	src/processor/static_map.h \
+	src/processor/static_map-inl.h src/processor/static_map.h \
 	src/processor/static_range_map-inl.h \
 	src/processor/static_range_map.h \
 	src/processor/symbolic_constants_win.cc \
 	src/processor/symbolic_constants_win.h \
-	src/processor/tokenize.cc \
-	src/processor/tokenize.h
-
+	src/processor/tokenize.cc src/processor/tokenize.h \
+	$(am__append_22)
 
 # libdisasm 3rd party library
 src_third_party_libdisasm_libdisasm_a_SOURCES = \
@@ -2378,7 +2554,7 @@ src_client_linux_libbreakpad_client_a_SOURCES =  \
 	src/common/linux/guid_creator.h \
 	src/common/linux/linux_libc_support.cc \
 	src/common/linux/memory_mapped_file.cc \
-	src/common/linux/safe_readlink.cc $(am__append_21)
+	src/common/linux/safe_readlink.cc $(am__append_23)
 
 # Client tests
 src_client_linux_linux_dumper_unittest_helper_SOURCES = \
@@ -2406,7 +2582,9 @@ src_client_linux_linux_client_unittest_shlib_SOURCES =  \
 	src/client/linux/minidump_writer/proc_cpuinfo_reader_unittest.cc \
 	src/common/linux/elf_core_dump.cc \
 	src/common/linux/linux_libc_support_unittest.cc \
-	src/common/linux/tests/auto_testfile.h \
+	src/common/linux/scoped_pipe.h src/common/linux/scoped_pipe.cc \
+	src/common/linux/scoped_tmpfile.h \
+	src/common/linux/scoped_tmpfile.cc \
 	src/common/linux/tests/crash_generator.cc \
 	src/common/memory_allocator_unittest.cc \
 	src/common/tests/auto_tempdir.h src/common/tests/file_utils.cc \
@@ -2416,12 +2594,12 @@ src_client_linux_linux_client_unittest_shlib_SOURCES =  \
 	src/processor/dump_context.cc src/processor/dump_object.cc \
 	src/processor/logging.cc src/processor/minidump.cc \
 	src/processor/pathname_stripper.cc \
-	src/processor/proc_maps_linux.cc $(am__append_22)
+	src/processor/proc_maps_linux.cc $(am__append_24)
 src_client_linux_linux_client_unittest_shlib_CPPFLAGS = \
 	$(AM_CPPFLAGS) $(TEST_CFLAGS)
 
 src_client_linux_linux_client_unittest_shlib_LDFLAGS = -shared \
-	-Wl,-h,linux_client_unittest_shlib $(am__append_23)
+	-Wl,-h,linux_client_unittest_shlib $(am__append_25)
 src_client_linux_linux_client_unittest_shlib_LDADD = \
 	src/client/linux/crash_generation/crash_generation_client.o \
 	src/client/linux/dump_writer_common/thread_info.o \
@@ -2457,7 +2635,7 @@ src_client_linux_linux_client_unittest_SOURCES =
 src_client_linux_linux_client_unittest_LDFLAGS =  \
 	-Wl,-rpath,'$$ORIGIN' \
 	-Wl,--build-id=0x000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f \
-	$(am__append_24)
+	$(am__append_26)
 src_client_linux_linux_client_unittest_LDADD = \
 	src/client/linux/linux_client_unittest_shlib \
 	$(TEST_LIBS)
@@ -2761,23 +2939,18 @@ src_processor_exploitability_unittest_SOURCES = \
 src_processor_exploitability_unittest_CPPFLAGS = \
 	$(AM_CPPFLAGS) $(TEST_CFLAGS)
 
-src_processor_exploitability_unittest_LDADD = \
+src_processor_exploitability_unittest_LDADD =  \
 	src/processor/convert_old_arm64_context.o \
 	src/processor/minidump_processor.o \
-	src/processor/process_state.o \
-	src/processor/disassembler_objdump.o \
-	src/processor/disassembler_x86.o \
+	src/processor/process_state.o src/processor/disassembler_x86.o \
 	src/processor/exploitability.o \
 	src/processor/exploitability_linux.o \
 	src/processor/exploitability_win.o \
 	src/processor/basic_code_modules.o \
 	src/processor/basic_source_line_resolver.o \
-	src/processor/call_stack.o \
-	src/processor/cfi_frame_info.o \
-	src/processor/dump_context.o \
-	src/processor/dump_object.o \
-	src/processor/logging.o \
-	src/processor/minidump.o \
+	src/processor/call_stack.o src/processor/cfi_frame_info.o \
+	src/processor/dump_context.o src/processor/dump_object.o \
+	src/processor/logging.o src/processor/minidump.o \
 	src/processor/pathname_stripper.o \
 	src/processor/proc_maps_linux.o \
 	src/processor/simple_symbol_supplier.o \
@@ -2797,8 +2970,28 @@ src_processor_exploitability_unittest_LDADD = \
 	src/processor/stackwalker_sparc.o \
 	src/processor/stackwalker_x86.o \
 	src/processor/symbolic_constants_win.o \
-	src/processor/tokenize.o \
-	src/third_party/libdisasm/libdisasm.a \
+	src/processor/tokenize.o src/third_party/libdisasm/libdisasm.a \
+	$(TEST_LIBS) $(PTHREAD_CFLAGS) $(PTHREAD_LIBS) \
+	$(am__append_27)
+src_common_linux_scoped_pipe_unittest_SOURCES = \
+	src/common/linux/scoped_pipe_unittest.cc
+
+src_common_linux_scoped_pipe_unittest_CPPFLAGS = \
+	$(AM_CPPFLAGS) $(TEST_CFLAGS)
+
+src_common_linux_scoped_pipe_unittest_LDADD = \
+	src/common/linux/scoped_pipe.o \
+	$(TEST_LIBS) \
+	$(PTHREAD_CFLAGS) $(PTHREAD_LIBS)
+
+src_common_linux_scoped_tmpfile_unittest_SOURCES = \
+	src/common/linux/scoped_tmpfile_unittest.cc
+
+src_common_linux_scoped_tmpfile_unittest_CPPFLAGS = \
+	$(AM_CPPFLAGS) $(TEST_CFLAGS)
+
+src_common_linux_scoped_tmpfile_unittest_LDADD = \
+	src/common/linux/scoped_tmpfile.o \
 	$(TEST_LIBS) \
 	$(PTHREAD_CFLAGS) $(PTHREAD_LIBS)
 
@@ -2809,6 +3002,8 @@ src_processor_disassembler_objdump_unittest_CPPFLAGS = \
 	$(AM_CPPFLAGS) $(TEST_CFLAGS)
 
 src_processor_disassembler_objdump_unittest_LDADD = \
+	src/common/linux/scoped_pipe.o \
+	src/common/linux/scoped_tmpfile.o \
 	src/processor/disassembler_objdump.o \
 	src/processor/dump_context.o \
 	src/processor/dump_object.o \
@@ -2866,17 +3061,14 @@ src_processor_microdump_processor_unittest_SOURCES = \
 src_processor_microdump_processor_unittest_CPPFLAGS = \
 	$(AM_CPPFLAGS) $(TEST_CFLAGS)
 
-src_processor_microdump_processor_unittest_LDADD = \
+src_processor_microdump_processor_unittest_LDADD =  \
 	src/processor/basic_code_modules.o \
 	src/processor/basic_source_line_resolver.o \
 	src/processor/call_stack.o \
-        src/processor/convert_old_arm64_context.o \
-	src/processor/cfi_frame_info.o \
-	src/processor/dump_context.o \
-	src/processor/dump_object.o \
-	src/processor/logging.o \
-	src/processor/microdump.o \
-	src/processor/microdump_processor.o \
+	src/processor/convert_old_arm64_context.o \
+	src/processor/cfi_frame_info.o src/processor/dump_context.o \
+	src/processor/dump_object.o src/processor/logging.o \
+	src/processor/microdump.o src/processor/microdump_processor.o \
 	src/processor/pathname_stripper.o \
 	src/processor/process_state.o \
 	src/processor/simple_symbol_supplier.o \
@@ -2893,36 +3085,27 @@ src_processor_microdump_processor_unittest_LDADD = \
 	src/processor/stackwalker_riscv.o \
 	src/processor/stackwalker_riscv64.o \
 	src/processor/stackwalker_sparc.o \
-	src/processor/stackwalker_x86.o \
-	src/processor/tokenize.o \
-	$(TEST_LIBS) \
-	$(PTHREAD_CFLAGS) $(PTHREAD_LIBS)
-
+	src/processor/stackwalker_x86.o src/processor/tokenize.o \
+	$(TEST_LIBS) $(PTHREAD_CFLAGS) $(PTHREAD_LIBS) \
+	$(am__append_28)
 src_processor_minidump_processor_unittest_SOURCES = \
 	src/processor/minidump_processor_unittest.cc
 
 src_processor_minidump_processor_unittest_CPPFLAGS = \
 	$(AM_CPPFLAGS) $(TEST_CFLAGS)
 
-src_processor_minidump_processor_unittest_LDADD = \
+src_processor_minidump_processor_unittest_LDADD =  \
 	src/processor/basic_code_modules.o \
 	src/processor/basic_source_line_resolver.o \
-	src/processor/call_stack.o \
-	src/processor/cfi_frame_info.o \
+	src/processor/call_stack.o src/processor/cfi_frame_info.o \
 	src/processor/convert_old_arm64_context.o \
-	src/processor/disassembler_objdump.o \
-	src/processor/disassembler_x86.o \
-	src/processor/dump_context.o \
-	src/processor/dump_object.o \
-	src/processor/exploitability.o \
+	src/processor/disassembler_x86.o src/processor/dump_context.o \
+	src/processor/dump_object.o src/processor/exploitability.o \
 	src/processor/exploitability_linux.o \
-	src/processor/exploitability_win.o \
-	src/processor/logging.o \
-	src/processor/minidump_processor.o \
-	src/processor/minidump.o \
+	src/processor/exploitability_win.o src/processor/logging.o \
+	src/processor/minidump_processor.o src/processor/minidump.o \
 	src/processor/pathname_stripper.o \
-	src/processor/process_state.o \
-	src/processor/proc_maps_linux.o \
+	src/processor/process_state.o src/processor/proc_maps_linux.o \
 	src/processor/source_line_resolver_base.o \
 	src/processor/stack_frame_cpu.o \
 	src/processor/stack_frame_symbolizer.o \
@@ -2939,11 +3122,9 @@ src_processor_minidump_processor_unittest_LDADD = \
 	src/processor/stackwalker_sparc.o \
 	src/processor/stackwalker_x86.o \
 	src/processor/symbolic_constants_win.o \
-	src/processor/tokenize.o \
-	src/third_party/libdisasm/libdisasm.a \
-	$(TEST_LIBS) \
-	$(PTHREAD_CFLAGS) $(PTHREAD_LIBS)
-
+	src/processor/tokenize.o src/third_party/libdisasm/libdisasm.a \
+	$(TEST_LIBS) $(PTHREAD_CFLAGS) $(PTHREAD_LIBS) \
+	$(am__append_29)
 src_processor_minidump_unittest_SOURCES = \
 	src/common/test_assembler.cc \
 	src/processor/minidump_unittest.cc \
@@ -3076,18 +3257,14 @@ src_processor_range_map_unittest_LDADD = \
 src_processor_stackwalker_selftest_SOURCES = \
 	src/processor/stackwalker_selftest.cc
 
-src_processor_stackwalker_selftest_LDADD = \
+src_processor_stackwalker_selftest_LDADD =  \
 	src/processor/basic_code_modules.o \
 	src/processor/basic_source_line_resolver.o \
-	src/processor/call_stack.o \
-	src/processor/disassembler_objdump.o \
-	src/processor/disassembler_x86.o \
+	src/processor/call_stack.o src/processor/disassembler_x86.o \
 	src/processor/exploitability.o \
 	src/processor/exploitability_linux.o \
-	src/processor/exploitability_win.o \
-	src/processor/logging.o \
-	src/processor/minidump.o \
-	src/processor/pathname_stripper.o \
+	src/processor/exploitability_win.o src/processor/logging.o \
+	src/processor/minidump.o src/processor/pathname_stripper.o \
 	src/processor/proc_maps_linux.o \
 	src/processor/source_line_resolver_base.o \
 	src/processor/stack_frame_cpu.o \
@@ -3103,10 +3280,8 @@ src_processor_stackwalker_selftest_LDADD = \
 	src/processor/stackwalker_riscv.o \
 	src/processor/stackwalker_riscv64.o \
 	src/processor/stackwalker_sparc.o \
-	src/processor/stackwalker_x86.o \
-	src/processor/tokenize.o \
-	$(PTHREAD_CFLAGS) $(PTHREAD_LIBS)
-
+	src/processor/stackwalker_x86.o src/processor/tokenize.o \
+	$(PTHREAD_CFLAGS) $(PTHREAD_LIBS) $(am__append_30)
 src_processor_stackwalker_amd64_unittest_SOURCES = \
 	src/common/test_assembler.cc \
 	src/processor/stackwalker_amd64_unittest.cc
@@ -3286,27 +3461,22 @@ src_processor_minidump_dump_LDADD = \
 src_processor_microdump_stackwalk_SOURCES = \
 	src/processor/microdump_stackwalk.cc
 
-src_processor_microdump_stackwalk_LDADD = \
-	src/common/path_helper.o \
+src_processor_microdump_stackwalk_LDADD = src/common/path_helper.o \
 	src/processor/basic_code_modules.o \
 	src/processor/basic_source_line_resolver.o \
 	src/processor/call_stack.o \
 	src/processor/convert_old_arm64_context.o \
 	src/processor/cfi_frame_info.o \
-	src/processor/disassembler_x86.o \
-	src/processor/dump_context.o \
-	src/processor/dump_object.o \
-	src/processor/logging.o \
-	src/processor/microdump.o \
-	src/processor/microdump_processor.o \
+	src/processor/disassembler_x86.o src/processor/dump_context.o \
+	src/processor/dump_object.o src/processor/logging.o \
+	src/processor/microdump.o src/processor/microdump_processor.o \
 	src/processor/pathname_stripper.o \
 	src/processor/process_state.o \
 	src/processor/simple_symbol_supplier.o \
 	src/processor/source_line_resolver_base.o \
 	src/processor/stack_frame_cpu.o \
 	src/processor/stack_frame_symbolizer.o \
-	src/processor/stackwalk_common.o \
-	src/processor/stackwalker.o \
+	src/processor/stackwalk_common.o src/processor/stackwalker.o \
 	src/processor/stackwalker_address_list.o \
 	src/processor/stackwalker_amd64.o \
 	src/processor/stackwalker_arm.o \
@@ -3317,39 +3487,28 @@ src_processor_microdump_stackwalk_LDADD = \
 	src/processor/stackwalker_riscv.o \
 	src/processor/stackwalker_riscv64.o \
 	src/processor/stackwalker_sparc.o \
-	src/processor/stackwalker_x86.o \
-	src/processor/tokenize.o \
-	src/third_party/libdisasm/libdisasm.a
-
+	src/processor/stackwalker_x86.o src/processor/tokenize.o \
+	src/third_party/libdisasm/libdisasm.a $(am__append_31)
 src_processor_minidump_stackwalk_SOURCES = \
 	src/processor/minidump_stackwalk.cc
 
-src_processor_minidump_stackwalk_LDADD = \
-	src/common/path_helper.o \
+src_processor_minidump_stackwalk_LDADD = src/common/path_helper.o \
 	src/processor/basic_code_modules.o \
 	src/processor/basic_source_line_resolver.o \
-	src/processor/call_stack.o \
-	src/processor/cfi_frame_info.o \
+	src/processor/call_stack.o src/processor/cfi_frame_info.o \
 	src/processor/convert_old_arm64_context.o \
-	src/processor/disassembler_objdump.o \
-	src/processor/disassembler_x86.o \
-	src/processor/dump_context.o \
-	src/processor/dump_object.o \
-	src/processor/exploitability.o \
+	src/processor/disassembler_x86.o src/processor/dump_context.o \
+	src/processor/dump_object.o src/processor/exploitability.o \
 	src/processor/exploitability_linux.o \
-	src/processor/exploitability_win.o \
-	src/processor/logging.o \
-	src/processor/minidump.o \
-	src/processor/minidump_processor.o \
+	src/processor/exploitability_win.o src/processor/logging.o \
+	src/processor/minidump.o src/processor/minidump_processor.o \
 	src/processor/pathname_stripper.o \
-	src/processor/process_state.o \
-	src/processor/proc_maps_linux.o \
+	src/processor/process_state.o src/processor/proc_maps_linux.o \
 	src/processor/simple_symbol_supplier.o \
 	src/processor/source_line_resolver_base.o \
 	src/processor/stack_frame_cpu.o \
 	src/processor/stack_frame_symbolizer.o \
-	src/processor/stackwalk_common.o \
-	src/processor/stackwalker.o \
+	src/processor/stackwalk_common.o src/processor/stackwalker.o \
 	src/processor/stackwalker_address_list.o \
 	src/processor/stackwalker_amd64.o \
 	src/processor/stackwalker_arm.o \
@@ -3362,9 +3521,8 @@ src_processor_minidump_stackwalk_LDADD = \
 	src/processor/stackwalker_sparc.o \
 	src/processor/stackwalker_x86.o \
 	src/processor/symbolic_constants_win.o \
-	src/processor/tokenize.o \
-	src/third_party/libdisasm/libdisasm.a
-
+	src/processor/tokenize.o src/third_party/libdisasm/libdisasm.a \
+	$(am__append_32)
 EXTRA_DIST = \
 	$(SCRIPTS) \
 	src/client/linux/data/linux-gate-amd.sym \
@@ -3961,9 +4119,6 @@ src/processor/cfi_frame_info.$(OBJEXT): src/processor/$(am__dirstamp) \
 src/processor/convert_old_arm64_context.$(OBJEXT):  \
 	src/processor/$(am__dirstamp) \
 	src/processor/$(DEPDIR)/$(am__dirstamp)
-src/processor/disassembler_objdump.$(OBJEXT):  \
-	src/processor/$(am__dirstamp) \
-	src/processor/$(DEPDIR)/$(am__dirstamp)
 src/processor/disassembler_x86.$(OBJEXT):  \
 	src/processor/$(am__dirstamp) \
 	src/processor/$(DEPDIR)/$(am__dirstamp)
@@ -4062,6 +4217,15 @@ src/processor/symbolic_constants_win.$(OBJEXT):  \
 	src/processor/$(am__dirstamp) \
 	src/processor/$(DEPDIR)/$(am__dirstamp)
 src/processor/tokenize.$(OBJEXT): src/processor/$(am__dirstamp) \
+	src/processor/$(DEPDIR)/$(am__dirstamp)
+src/common/linux/scoped_pipe.$(OBJEXT):  \
+	src/common/linux/$(am__dirstamp) \
+	src/common/linux/$(DEPDIR)/$(am__dirstamp)
+src/common/linux/scoped_tmpfile.$(OBJEXT):  \
+	src/common/linux/$(am__dirstamp) \
+	src/common/linux/$(DEPDIR)/$(am__dirstamp)
+src/processor/disassembler_objdump.$(OBJEXT):  \
+	src/processor/$(am__dirstamp) \
 	src/processor/$(DEPDIR)/$(am__dirstamp)
 src/$(am__dirstamp):
 	@$(MKDIR_P) src
@@ -4206,6 +4370,12 @@ src/common/linux/client_linux_linux_client_unittest_shlib-elf_core_dump.$(OBJEXT
 	src/common/linux/$(am__dirstamp) \
 	src/common/linux/$(DEPDIR)/$(am__dirstamp)
 src/common/linux/client_linux_linux_client_unittest_shlib-linux_libc_support_unittest.$(OBJEXT):  \
+	src/common/linux/$(am__dirstamp) \
+	src/common/linux/$(DEPDIR)/$(am__dirstamp)
+src/common/linux/client_linux_linux_client_unittest_shlib-scoped_pipe.$(OBJEXT):  \
+	src/common/linux/$(am__dirstamp) \
+	src/common/linux/$(DEPDIR)/$(am__dirstamp)
+src/common/linux/client_linux_linux_client_unittest_shlib-scoped_tmpfile.$(OBJEXT):  \
 	src/common/linux/$(am__dirstamp) \
 	src/common/linux/$(DEPDIR)/$(am__dirstamp)
 src/common/linux/tests/$(am__dirstamp):
@@ -4454,6 +4624,20 @@ src/common/linux/google_crashdump_uploader_test-libcurl_wrapper.$(OBJEXT):  \
 src/common/linux/google_crashdump_uploader_test$(EXEEXT): $(src_common_linux_google_crashdump_uploader_test_OBJECTS) $(src_common_linux_google_crashdump_uploader_test_DEPENDENCIES) $(EXTRA_src_common_linux_google_crashdump_uploader_test_DEPENDENCIES) src/common/linux/$(am__dirstamp)
 	@rm -f src/common/linux/google_crashdump_uploader_test$(EXEEXT)
 	$(AM_V_CXXLD)$(CXXLINK) $(src_common_linux_google_crashdump_uploader_test_OBJECTS) $(src_common_linux_google_crashdump_uploader_test_LDADD) $(LIBS)
+src/common/linux/scoped_pipe_unittest-scoped_pipe_unittest.$(OBJEXT):  \
+	src/common/linux/$(am__dirstamp) \
+	src/common/linux/$(DEPDIR)/$(am__dirstamp)
+
+src/common/linux/scoped_pipe_unittest$(EXEEXT): $(src_common_linux_scoped_pipe_unittest_OBJECTS) $(src_common_linux_scoped_pipe_unittest_DEPENDENCIES) $(EXTRA_src_common_linux_scoped_pipe_unittest_DEPENDENCIES) src/common/linux/$(am__dirstamp)
+	@rm -f src/common/linux/scoped_pipe_unittest$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(src_common_linux_scoped_pipe_unittest_OBJECTS) $(src_common_linux_scoped_pipe_unittest_LDADD) $(LIBS)
+src/common/linux/scoped_tmpfile_unittest-scoped_tmpfile_unittest.$(OBJEXT):  \
+	src/common/linux/$(am__dirstamp) \
+	src/common/linux/$(DEPDIR)/$(am__dirstamp)
+
+src/common/linux/scoped_tmpfile_unittest$(EXEEXT): $(src_common_linux_scoped_tmpfile_unittest_OBJECTS) $(src_common_linux_scoped_tmpfile_unittest_DEPENDENCIES) $(EXTRA_src_common_linux_scoped_tmpfile_unittest_DEPENDENCIES) src/common/linux/$(am__dirstamp)
+	@rm -f src/common/linux/scoped_tmpfile_unittest$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(src_common_linux_scoped_tmpfile_unittest_OBJECTS) $(src_common_linux_scoped_tmpfile_unittest_LDADD) $(LIBS)
 src/common/mac_macho_reader_unittest-dwarf_cfi_to_module.$(OBJEXT):  \
 	src/common/$(am__dirstamp) \
 	src/common/$(DEPDIR)/$(am__dirstamp)
@@ -5244,6 +5428,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@src/common/linux/$(DEPDIR)/client_linux_linux_client_unittest_shlib-breakpad_getcontext_unittest.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/common/linux/$(DEPDIR)/client_linux_linux_client_unittest_shlib-elf_core_dump.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/common/linux/$(DEPDIR)/client_linux_linux_client_unittest_shlib-linux_libc_support_unittest.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@src/common/linux/$(DEPDIR)/client_linux_linux_client_unittest_shlib-scoped_pipe.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@src/common/linux/$(DEPDIR)/client_linux_linux_client_unittest_shlib-scoped_tmpfile.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/common/linux/$(DEPDIR)/dumper_unittest-crc32.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/common/linux/$(DEPDIR)/dumper_unittest-dump_symbols.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/common/linux/$(DEPDIR)/dumper_unittest-dump_symbols_unittest.Po@am__quote@ # am--include-marker
@@ -5273,6 +5459,10 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@src/common/linux/$(DEPDIR)/linux_libc_support.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/common/linux/$(DEPDIR)/memory_mapped_file.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/common/linux/$(DEPDIR)/safe_readlink.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@src/common/linux/$(DEPDIR)/scoped_pipe.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@src/common/linux/$(DEPDIR)/scoped_pipe_unittest-scoped_pipe_unittest.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@src/common/linux/$(DEPDIR)/scoped_tmpfile.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@src/common/linux/$(DEPDIR)/scoped_tmpfile_unittest-scoped_tmpfile_unittest.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/common/linux/$(DEPDIR)/symbol_collector_client.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/common/linux/$(DEPDIR)/symbol_upload.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/common/linux/$(DEPDIR)/tools_linux_dump_syms_dump_syms-crc32.Po@am__quote@ # am--include-marker
@@ -5768,6 +5958,34 @@ src/common/linux/client_linux_linux_client_unittest_shlib-linux_libc_support_uni
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/common/linux/linux_libc_support_unittest.cc' object='src/common/linux/client_linux_linux_client_unittest_shlib-linux_libc_support_unittest.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_client_linux_linux_client_unittest_shlib_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/common/linux/client_linux_linux_client_unittest_shlib-linux_libc_support_unittest.obj `if test -f 'src/common/linux/linux_libc_support_unittest.cc'; then $(CYGPATH_W) 'src/common/linux/linux_libc_support_unittest.cc'; else $(CYGPATH_W) '$(srcdir)/src/common/linux/linux_libc_support_unittest.cc'; fi`
+
+src/common/linux/client_linux_linux_client_unittest_shlib-scoped_pipe.o: src/common/linux/scoped_pipe.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_client_linux_linux_client_unittest_shlib_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/common/linux/client_linux_linux_client_unittest_shlib-scoped_pipe.o -MD -MP -MF src/common/linux/$(DEPDIR)/client_linux_linux_client_unittest_shlib-scoped_pipe.Tpo -c -o src/common/linux/client_linux_linux_client_unittest_shlib-scoped_pipe.o `test -f 'src/common/linux/scoped_pipe.cc' || echo '$(srcdir)/'`src/common/linux/scoped_pipe.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/common/linux/$(DEPDIR)/client_linux_linux_client_unittest_shlib-scoped_pipe.Tpo src/common/linux/$(DEPDIR)/client_linux_linux_client_unittest_shlib-scoped_pipe.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/common/linux/scoped_pipe.cc' object='src/common/linux/client_linux_linux_client_unittest_shlib-scoped_pipe.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_client_linux_linux_client_unittest_shlib_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/common/linux/client_linux_linux_client_unittest_shlib-scoped_pipe.o `test -f 'src/common/linux/scoped_pipe.cc' || echo '$(srcdir)/'`src/common/linux/scoped_pipe.cc
+
+src/common/linux/client_linux_linux_client_unittest_shlib-scoped_pipe.obj: src/common/linux/scoped_pipe.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_client_linux_linux_client_unittest_shlib_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/common/linux/client_linux_linux_client_unittest_shlib-scoped_pipe.obj -MD -MP -MF src/common/linux/$(DEPDIR)/client_linux_linux_client_unittest_shlib-scoped_pipe.Tpo -c -o src/common/linux/client_linux_linux_client_unittest_shlib-scoped_pipe.obj `if test -f 'src/common/linux/scoped_pipe.cc'; then $(CYGPATH_W) 'src/common/linux/scoped_pipe.cc'; else $(CYGPATH_W) '$(srcdir)/src/common/linux/scoped_pipe.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/common/linux/$(DEPDIR)/client_linux_linux_client_unittest_shlib-scoped_pipe.Tpo src/common/linux/$(DEPDIR)/client_linux_linux_client_unittest_shlib-scoped_pipe.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/common/linux/scoped_pipe.cc' object='src/common/linux/client_linux_linux_client_unittest_shlib-scoped_pipe.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_client_linux_linux_client_unittest_shlib_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/common/linux/client_linux_linux_client_unittest_shlib-scoped_pipe.obj `if test -f 'src/common/linux/scoped_pipe.cc'; then $(CYGPATH_W) 'src/common/linux/scoped_pipe.cc'; else $(CYGPATH_W) '$(srcdir)/src/common/linux/scoped_pipe.cc'; fi`
+
+src/common/linux/client_linux_linux_client_unittest_shlib-scoped_tmpfile.o: src/common/linux/scoped_tmpfile.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_client_linux_linux_client_unittest_shlib_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/common/linux/client_linux_linux_client_unittest_shlib-scoped_tmpfile.o -MD -MP -MF src/common/linux/$(DEPDIR)/client_linux_linux_client_unittest_shlib-scoped_tmpfile.Tpo -c -o src/common/linux/client_linux_linux_client_unittest_shlib-scoped_tmpfile.o `test -f 'src/common/linux/scoped_tmpfile.cc' || echo '$(srcdir)/'`src/common/linux/scoped_tmpfile.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/common/linux/$(DEPDIR)/client_linux_linux_client_unittest_shlib-scoped_tmpfile.Tpo src/common/linux/$(DEPDIR)/client_linux_linux_client_unittest_shlib-scoped_tmpfile.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/common/linux/scoped_tmpfile.cc' object='src/common/linux/client_linux_linux_client_unittest_shlib-scoped_tmpfile.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_client_linux_linux_client_unittest_shlib_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/common/linux/client_linux_linux_client_unittest_shlib-scoped_tmpfile.o `test -f 'src/common/linux/scoped_tmpfile.cc' || echo '$(srcdir)/'`src/common/linux/scoped_tmpfile.cc
+
+src/common/linux/client_linux_linux_client_unittest_shlib-scoped_tmpfile.obj: src/common/linux/scoped_tmpfile.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_client_linux_linux_client_unittest_shlib_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/common/linux/client_linux_linux_client_unittest_shlib-scoped_tmpfile.obj -MD -MP -MF src/common/linux/$(DEPDIR)/client_linux_linux_client_unittest_shlib-scoped_tmpfile.Tpo -c -o src/common/linux/client_linux_linux_client_unittest_shlib-scoped_tmpfile.obj `if test -f 'src/common/linux/scoped_tmpfile.cc'; then $(CYGPATH_W) 'src/common/linux/scoped_tmpfile.cc'; else $(CYGPATH_W) '$(srcdir)/src/common/linux/scoped_tmpfile.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/common/linux/$(DEPDIR)/client_linux_linux_client_unittest_shlib-scoped_tmpfile.Tpo src/common/linux/$(DEPDIR)/client_linux_linux_client_unittest_shlib-scoped_tmpfile.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/common/linux/scoped_tmpfile.cc' object='src/common/linux/client_linux_linux_client_unittest_shlib-scoped_tmpfile.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_client_linux_linux_client_unittest_shlib_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/common/linux/client_linux_linux_client_unittest_shlib-scoped_tmpfile.obj `if test -f 'src/common/linux/scoped_tmpfile.cc'; then $(CYGPATH_W) 'src/common/linux/scoped_tmpfile.cc'; else $(CYGPATH_W) '$(srcdir)/src/common/linux/scoped_tmpfile.cc'; fi`
 
 src/common/linux/tests/client_linux_linux_client_unittest_shlib-crash_generator.o: src/common/linux/tests/crash_generator.cc
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_client_linux_linux_client_unittest_shlib_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/common/linux/tests/client_linux_linux_client_unittest_shlib-crash_generator.o -MD -MP -MF src/common/linux/tests/$(DEPDIR)/client_linux_linux_client_unittest_shlib-crash_generator.Tpo -c -o src/common/linux/tests/client_linux_linux_client_unittest_shlib-crash_generator.o `test -f 'src/common/linux/tests/crash_generator.cc' || echo '$(srcdir)/'`src/common/linux/tests/crash_generator.cc
@@ -6706,6 +6924,34 @@ src/common/linux/google_crashdump_uploader_test-libcurl_wrapper.obj: src/common/
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/common/linux/libcurl_wrapper.cc' object='src/common/linux/google_crashdump_uploader_test-libcurl_wrapper.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_common_linux_google_crashdump_uploader_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/common/linux/google_crashdump_uploader_test-libcurl_wrapper.obj `if test -f 'src/common/linux/libcurl_wrapper.cc'; then $(CYGPATH_W) 'src/common/linux/libcurl_wrapper.cc'; else $(CYGPATH_W) '$(srcdir)/src/common/linux/libcurl_wrapper.cc'; fi`
+
+src/common/linux/scoped_pipe_unittest-scoped_pipe_unittest.o: src/common/linux/scoped_pipe_unittest.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_common_linux_scoped_pipe_unittest_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/common/linux/scoped_pipe_unittest-scoped_pipe_unittest.o -MD -MP -MF src/common/linux/$(DEPDIR)/scoped_pipe_unittest-scoped_pipe_unittest.Tpo -c -o src/common/linux/scoped_pipe_unittest-scoped_pipe_unittest.o `test -f 'src/common/linux/scoped_pipe_unittest.cc' || echo '$(srcdir)/'`src/common/linux/scoped_pipe_unittest.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/common/linux/$(DEPDIR)/scoped_pipe_unittest-scoped_pipe_unittest.Tpo src/common/linux/$(DEPDIR)/scoped_pipe_unittest-scoped_pipe_unittest.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/common/linux/scoped_pipe_unittest.cc' object='src/common/linux/scoped_pipe_unittest-scoped_pipe_unittest.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_common_linux_scoped_pipe_unittest_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/common/linux/scoped_pipe_unittest-scoped_pipe_unittest.o `test -f 'src/common/linux/scoped_pipe_unittest.cc' || echo '$(srcdir)/'`src/common/linux/scoped_pipe_unittest.cc
+
+src/common/linux/scoped_pipe_unittest-scoped_pipe_unittest.obj: src/common/linux/scoped_pipe_unittest.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_common_linux_scoped_pipe_unittest_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/common/linux/scoped_pipe_unittest-scoped_pipe_unittest.obj -MD -MP -MF src/common/linux/$(DEPDIR)/scoped_pipe_unittest-scoped_pipe_unittest.Tpo -c -o src/common/linux/scoped_pipe_unittest-scoped_pipe_unittest.obj `if test -f 'src/common/linux/scoped_pipe_unittest.cc'; then $(CYGPATH_W) 'src/common/linux/scoped_pipe_unittest.cc'; else $(CYGPATH_W) '$(srcdir)/src/common/linux/scoped_pipe_unittest.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/common/linux/$(DEPDIR)/scoped_pipe_unittest-scoped_pipe_unittest.Tpo src/common/linux/$(DEPDIR)/scoped_pipe_unittest-scoped_pipe_unittest.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/common/linux/scoped_pipe_unittest.cc' object='src/common/linux/scoped_pipe_unittest-scoped_pipe_unittest.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_common_linux_scoped_pipe_unittest_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/common/linux/scoped_pipe_unittest-scoped_pipe_unittest.obj `if test -f 'src/common/linux/scoped_pipe_unittest.cc'; then $(CYGPATH_W) 'src/common/linux/scoped_pipe_unittest.cc'; else $(CYGPATH_W) '$(srcdir)/src/common/linux/scoped_pipe_unittest.cc'; fi`
+
+src/common/linux/scoped_tmpfile_unittest-scoped_tmpfile_unittest.o: src/common/linux/scoped_tmpfile_unittest.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_common_linux_scoped_tmpfile_unittest_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/common/linux/scoped_tmpfile_unittest-scoped_tmpfile_unittest.o -MD -MP -MF src/common/linux/$(DEPDIR)/scoped_tmpfile_unittest-scoped_tmpfile_unittest.Tpo -c -o src/common/linux/scoped_tmpfile_unittest-scoped_tmpfile_unittest.o `test -f 'src/common/linux/scoped_tmpfile_unittest.cc' || echo '$(srcdir)/'`src/common/linux/scoped_tmpfile_unittest.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/common/linux/$(DEPDIR)/scoped_tmpfile_unittest-scoped_tmpfile_unittest.Tpo src/common/linux/$(DEPDIR)/scoped_tmpfile_unittest-scoped_tmpfile_unittest.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/common/linux/scoped_tmpfile_unittest.cc' object='src/common/linux/scoped_tmpfile_unittest-scoped_tmpfile_unittest.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_common_linux_scoped_tmpfile_unittest_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/common/linux/scoped_tmpfile_unittest-scoped_tmpfile_unittest.o `test -f 'src/common/linux/scoped_tmpfile_unittest.cc' || echo '$(srcdir)/'`src/common/linux/scoped_tmpfile_unittest.cc
+
+src/common/linux/scoped_tmpfile_unittest-scoped_tmpfile_unittest.obj: src/common/linux/scoped_tmpfile_unittest.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_common_linux_scoped_tmpfile_unittest_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/common/linux/scoped_tmpfile_unittest-scoped_tmpfile_unittest.obj -MD -MP -MF src/common/linux/$(DEPDIR)/scoped_tmpfile_unittest-scoped_tmpfile_unittest.Tpo -c -o src/common/linux/scoped_tmpfile_unittest-scoped_tmpfile_unittest.obj `if test -f 'src/common/linux/scoped_tmpfile_unittest.cc'; then $(CYGPATH_W) 'src/common/linux/scoped_tmpfile_unittest.cc'; else $(CYGPATH_W) '$(srcdir)/src/common/linux/scoped_tmpfile_unittest.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/common/linux/$(DEPDIR)/scoped_tmpfile_unittest-scoped_tmpfile_unittest.Tpo src/common/linux/$(DEPDIR)/scoped_tmpfile_unittest-scoped_tmpfile_unittest.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/common/linux/scoped_tmpfile_unittest.cc' object='src/common/linux/scoped_tmpfile_unittest-scoped_tmpfile_unittest.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_common_linux_scoped_tmpfile_unittest_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/common/linux/scoped_tmpfile_unittest-scoped_tmpfile_unittest.obj `if test -f 'src/common/linux/scoped_tmpfile_unittest.cc'; then $(CYGPATH_W) 'src/common/linux/scoped_tmpfile_unittest.cc'; else $(CYGPATH_W) '$(srcdir)/src/common/linux/scoped_tmpfile_unittest.cc'; fi`
 
 src/common/mac_macho_reader_unittest-dwarf_cfi_to_module.o: src/common/dwarf_cfi_to_module.cc
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_common_mac_macho_reader_unittest_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/common/mac_macho_reader_unittest-dwarf_cfi_to_module.o -MD -MP -MF src/common/$(DEPDIR)/mac_macho_reader_unittest-dwarf_cfi_to_module.Tpo -c -o src/common/mac_macho_reader_unittest-dwarf_cfi_to_module.o `test -f 'src/common/dwarf_cfi_to_module.cc' || echo '$(srcdir)/'`src/common/dwarf_cfi_to_module.cc
@@ -8762,13 +9008,6 @@ src/processor/contained_range_map_unittest.log: src/processor/contained_range_ma
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
 	"$$tst" $(AM_TESTS_FD_REDIRECT)
-src/processor/disassembler_objdump_unittest.log: src/processor/disassembler_objdump_unittest$(EXEEXT)
-	@p='src/processor/disassembler_objdump_unittest$(EXEEXT)'; \
-	b='src/processor/disassembler_objdump_unittest'; \
-	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
-	--log-file $$b.log --trs-file $$b.trs \
-	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
-	"$$tst" $(AM_TESTS_FD_REDIRECT)
 src/processor/disassembler_x86_unittest.log: src/processor/disassembler_x86_unittest$(EXEEXT)
 	@p='src/processor/disassembler_x86_unittest$(EXEEXT)'; \
 	b='src/processor/disassembler_x86_unittest'; \
@@ -8954,6 +9193,27 @@ src/processor/stackwalker_x86_unittest.log: src/processor/stackwalker_x86_unitte
 src/processor/synth_minidump_unittest.log: src/processor/synth_minidump_unittest$(EXEEXT)
 	@p='src/processor/synth_minidump_unittest$(EXEEXT)'; \
 	b='src/processor/synth_minidump_unittest'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+src/processor/disassembler_objdump_unittest.log: src/processor/disassembler_objdump_unittest$(EXEEXT)
+	@p='src/processor/disassembler_objdump_unittest$(EXEEXT)'; \
+	b='src/processor/disassembler_objdump_unittest'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+src/common/linux/scoped_pipe_unittest.log: src/common/linux/scoped_pipe_unittest$(EXEEXT)
+	@p='src/common/linux/scoped_pipe_unittest$(EXEEXT)'; \
+	b='src/common/linux/scoped_pipe_unittest'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+src/common/linux/scoped_tmpfile_unittest.log: src/common/linux/scoped_tmpfile_unittest$(EXEEXT)
+	@p='src/common/linux/scoped_tmpfile_unittest$(EXEEXT)'; \
+	b='src/common/linux/scoped_tmpfile_unittest'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
@@ -9450,6 +9710,8 @@ distclean: distclean-am
 	-rm -f src/common/linux/$(DEPDIR)/client_linux_linux_client_unittest_shlib-breakpad_getcontext_unittest.Po
 	-rm -f src/common/linux/$(DEPDIR)/client_linux_linux_client_unittest_shlib-elf_core_dump.Po
 	-rm -f src/common/linux/$(DEPDIR)/client_linux_linux_client_unittest_shlib-linux_libc_support_unittest.Po
+	-rm -f src/common/linux/$(DEPDIR)/client_linux_linux_client_unittest_shlib-scoped_pipe.Po
+	-rm -f src/common/linux/$(DEPDIR)/client_linux_linux_client_unittest_shlib-scoped_tmpfile.Po
 	-rm -f src/common/linux/$(DEPDIR)/dumper_unittest-crc32.Po
 	-rm -f src/common/linux/$(DEPDIR)/dumper_unittest-dump_symbols.Po
 	-rm -f src/common/linux/$(DEPDIR)/dumper_unittest-dump_symbols_unittest.Po
@@ -9479,6 +9741,10 @@ distclean: distclean-am
 	-rm -f src/common/linux/$(DEPDIR)/linux_libc_support.Po
 	-rm -f src/common/linux/$(DEPDIR)/memory_mapped_file.Po
 	-rm -f src/common/linux/$(DEPDIR)/safe_readlink.Po
+	-rm -f src/common/linux/$(DEPDIR)/scoped_pipe.Po
+	-rm -f src/common/linux/$(DEPDIR)/scoped_pipe_unittest-scoped_pipe_unittest.Po
+	-rm -f src/common/linux/$(DEPDIR)/scoped_tmpfile.Po
+	-rm -f src/common/linux/$(DEPDIR)/scoped_tmpfile_unittest-scoped_tmpfile_unittest.Po
 	-rm -f src/common/linux/$(DEPDIR)/symbol_collector_client.Po
 	-rm -f src/common/linux/$(DEPDIR)/symbol_upload.Po
 	-rm -f src/common/linux/$(DEPDIR)/tools_linux_dump_syms_dump_syms-crc32.Po
@@ -9804,6 +10070,8 @@ maintainer-clean: maintainer-clean-am
 	-rm -f src/common/linux/$(DEPDIR)/client_linux_linux_client_unittest_shlib-breakpad_getcontext_unittest.Po
 	-rm -f src/common/linux/$(DEPDIR)/client_linux_linux_client_unittest_shlib-elf_core_dump.Po
 	-rm -f src/common/linux/$(DEPDIR)/client_linux_linux_client_unittest_shlib-linux_libc_support_unittest.Po
+	-rm -f src/common/linux/$(DEPDIR)/client_linux_linux_client_unittest_shlib-scoped_pipe.Po
+	-rm -f src/common/linux/$(DEPDIR)/client_linux_linux_client_unittest_shlib-scoped_tmpfile.Po
 	-rm -f src/common/linux/$(DEPDIR)/dumper_unittest-crc32.Po
 	-rm -f src/common/linux/$(DEPDIR)/dumper_unittest-dump_symbols.Po
 	-rm -f src/common/linux/$(DEPDIR)/dumper_unittest-dump_symbols_unittest.Po
@@ -9833,6 +10101,10 @@ maintainer-clean: maintainer-clean-am
 	-rm -f src/common/linux/$(DEPDIR)/linux_libc_support.Po
 	-rm -f src/common/linux/$(DEPDIR)/memory_mapped_file.Po
 	-rm -f src/common/linux/$(DEPDIR)/safe_readlink.Po
+	-rm -f src/common/linux/$(DEPDIR)/scoped_pipe.Po
+	-rm -f src/common/linux/$(DEPDIR)/scoped_pipe_unittest-scoped_pipe_unittest.Po
+	-rm -f src/common/linux/$(DEPDIR)/scoped_tmpfile.Po
+	-rm -f src/common/linux/$(DEPDIR)/scoped_tmpfile_unittest-scoped_tmpfile_unittest.Po
 	-rm -f src/common/linux/$(DEPDIR)/symbol_collector_client.Po
 	-rm -f src/common/linux/$(DEPDIR)/symbol_upload.Po
 	-rm -f src/common/linux/$(DEPDIR)/tools_linux_dump_syms_dump_syms-crc32.Po

@@ -117,19 +117,14 @@ class DumpSymbols {
     return NULL;
   }
 
-  // Read the selected object file's debugging information, and write it out to
-  // |stream|. Return true on success; if an error occurs, report it and
-  // return false.
-  bool WriteSymbolFile(std::ostream& stream);
-
   // Read the selected object file's debugging information, and write out the
   // header only to |stream|. Return true on success; if an error occurs, report
   // it and return false.
   bool WriteSymbolFileHeader(std::ostream& stream);
 
-  // As above, but simply return the debugging information in module
-  // instead of writing it to a stream. The caller owns the resulting
-  // module object and must delete it when finished.
+  // Read the selected object file's debugging information and store it in
+  // `module`. The caller owns the resulting module object and must delete
+  // it when finished.
   bool ReadSymbolData(Module** module);
 
   // Return an identifier string for the file this DumpSymbols is dumping.
