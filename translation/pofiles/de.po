@@ -19,10 +19,9 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-10 15:35-0800\n"
-"PO-Revision-Date: 2023-02-09 11:36+0000\n"
-"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2023-02-17 15:17+0000\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/v7/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1562,7 +1561,7 @@ msgstr "Warnung"
 
 #: common/confirm.cpp:181 common/confirm.cpp:187
 msgid "File Open Warning"
-msgstr "Warnung beim Öffnen der Datei"
+msgstr "Warnung: Datei offen"
 
 #: common/confirm.cpp:183 common/confirm.cpp:189
 msgid "Interleaved saves may produce very unexpected results."
