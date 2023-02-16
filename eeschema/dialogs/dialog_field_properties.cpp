@@ -532,6 +532,8 @@ DIALOG_SCH_FIELD_PROPERTIES::DIALOG_SCH_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
 
     m_StyledTextCtrl->Bind( wxEVT_STC_CHARADDED, &DIALOG_SCH_FIELD_PROPERTIES::onScintillaCharAdded,
                             this );
+    m_StyledTextCtrl->Bind( wxEVT_STC_AUTOCOMP_CHAR_DELETED,
+                            &DIALOG_SCH_FIELD_PROPERTIES::onScintillaCharAdded, this );
 
     m_nameVisible->Show();
     m_cbAllowAutoPlace->Show();

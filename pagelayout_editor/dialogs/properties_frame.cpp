@@ -123,6 +123,8 @@ PROPERTIES_FRAME::PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent ) :
     m_swGeneralOpts->Fit();
 
     m_stcText->Bind( wxEVT_STC_CHARADDED, &PROPERTIES_FRAME::onScintillaCharAdded, this );
+    m_stcText->Bind( wxEVT_STC_AUTOCOMP_CHAR_DELETED, &PROPERTIES_FRAME::onScintillaCharAdded,
+                     this );
     m_alignLeft->Bind( wxEVT_BUTTON, &PROPERTIES_FRAME::onHAlignButton, this );
     m_alignCenter->Bind( wxEVT_BUTTON, &PROPERTIES_FRAME::onHAlignButton, this );
     m_alignRight->Bind( wxEVT_BUTTON, &PROPERTIES_FRAME::onHAlignButton, this );

@@ -170,6 +170,8 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_ITE
     Layout();
 
     m_textCtrl->Bind( wxEVT_STC_CHARADDED, &DIALOG_TEXT_PROPERTIES::onScintillaCharAdded, this );
+    m_textCtrl->Bind( wxEVT_STC_AUTOCOMP_CHAR_DELETED,
+                      &DIALOG_TEXT_PROPERTIES::onScintillaCharAdded, this );
     m_hAlignLeft->Bind( wxEVT_BUTTON, &DIALOG_TEXT_PROPERTIES::onHAlignButton, this );
     m_hAlignCenter->Bind( wxEVT_BUTTON, &DIALOG_TEXT_PROPERTIES::onHAlignButton, this );
     m_hAlignRight->Bind( wxEVT_BUTTON, &DIALOG_TEXT_PROPERTIES::onHAlignButton, this );
