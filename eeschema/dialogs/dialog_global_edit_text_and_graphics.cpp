@@ -489,6 +489,16 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
                 processItem( aSheetPath, pin );
         }
     }
+    else if( m_wires->GetValue() && aItem->IsType( { SCH_ITEM_LOCATE_WIRE_T,
+                                                     SCH_LABEL_LOCATE_WIRE_T } ) )
+    {
+        processItem( aSheetPath, aItem );
+    }
+    else if( m_buses->GetValue() && aItem->IsType( { SCH_ITEM_LOCATE_BUS_T,
+                                                     SCH_LABEL_LOCATE_BUS_T } ) )
+    {
+        processItem( aSheetPath, aItem );
+    }
     else if( aItem->IsType( { SCH_LABEL_LOCATE_ANY_T } ) )
     {
         if( m_globalLabels->GetValue() && aItem->Type() == SCH_GLOBAL_LABEL_T )
@@ -528,16 +538,6 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
                 break;
             }
         }
-    }
-    else if( m_wires->GetValue() && aItem->IsType( { SCH_ITEM_LOCATE_WIRE_T,
-                                                     SCH_LABEL_LOCATE_WIRE_T } ) )
-    {
-        processItem( aSheetPath, aItem );
-    }
-    else if( m_buses->GetValue() && aItem->IsType( { SCH_ITEM_LOCATE_BUS_T,
-                                                     SCH_LABEL_LOCATE_BUS_T } ) )
-    {
-        processItem( aSheetPath, aItem );
     }
     else if( m_schTextAndGraphics->GetValue() && aItem->IsType( { SCH_TEXT_T, SCH_TEXTBOX_T,
                                                                   SCH_ITEM_LOCATE_GRAPHIC_LINE_T,
