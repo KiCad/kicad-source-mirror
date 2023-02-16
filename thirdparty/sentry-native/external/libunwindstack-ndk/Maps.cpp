@@ -183,7 +183,7 @@ bool LocalUpdatableMaps::Reparse(/*out*/ bool* any_changed) {
     uint64_t start = new_map_info->start();
     uint64_t end = new_map_info->end();
     uint64_t flags = new_map_info->flags();
-    const std::string& name = new_map_info->name();
+    const SharedString& name = new_map_info->name();
     for (size_t old_map_idx = search_map_idx; old_map_idx < last_map_idx; old_map_idx++) {
       auto& info = maps_[old_map_idx];
       if (start == info->start() && end == info->end() && flags == info->flags() &&

@@ -495,9 +495,42 @@ bool LoadDwarfCFI(const string& dwarf_filename,
 
   google_breakpad::CallFrameInfo::Reporter dwarf_reporter(dwarf_filename,
                                                        section_name);
-  google_breakpad::CallFrameInfo parser(cfi, cfi_size,
-                                     &byte_reader, &handler, &dwarf_reporter,
-                                     eh_frame);
+  if (!IsCompressedHeader<ElfClass>(section)) {
+    google_breakpad::CallFrameInfo parser(cfi, cfi_size,
+                                          &byte_reader, &handler,
+                                          &dwarf_reporter, eh_frame);
+    parser.Start();
+    return true;
+  }
+
+  typename ElfClass::Chdr chdr;
+  uint32_t compression_header_size =
+    GetCompressionHeader<ElfClass>(chdr, cfi, cfi_size);
+
+  if (compression_header_size == 0 || chdr.ch_size == 0) {
+    fprintf(stderr, "%s: decompression failed at header\n",
+            dwarf_filename.c_str());
+    return false;
+  }
+  if (compression_header_size > cfi_size) {
+    fprintf(stderr, "%s: decompression error, compression_header too large\n",
+            dwarf_filename.c_str());
+    return false;
+  }
+
+  cfi += compression_header_size;
+  cfi_size -= compression_header_size;
+
+  std::pair<uint8_t *, uint64_t> uncompressed =
+    UncompressSectionContents(cfi, cfi_size, chdr.ch_size);
+
+  if (uncompressed.first == nullptr || uncompressed.second == 0) {
+    fprintf(stderr, "%s: decompression failed\n", dwarf_filename.c_str());
+    return false;
+  }
+  google_breakpad::CallFrameInfo parser(uncompressed.first, uncompressed.second,
+                                        &byte_reader, &handler, &dwarf_reporter,
+                                        eh_frame);
   parser.Start();
   return true;
 }

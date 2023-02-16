@@ -1097,9 +1097,22 @@ typedef struct {
 } MDRawSimpleStringDictionary;
 
 typedef struct {
+  MDRVA name;
+  uint16_t type;
+  uint16_t reserved;
+  MDRVA value;
+} MDRawCrashpadAnnotation;
+
+typedef struct {
+  uint32_t count;
+  MDLocationDescriptor objects[0]; /* MDRawCrashpadAnnotation */
+} MDRawCrashpadAnnotationList;
+
+typedef struct {
   uint32_t version;
   MDLocationDescriptor list_annotations;
   MDLocationDescriptor simple_annotations;  /* MDRawSimpleStringDictionary */
+  MDLocationDescriptor annotation_objects;  /* MDRawCrashpadAnnotationList */
 } MDRawModuleCrashpadInfo;
 
 typedef struct {
@@ -1118,6 +1131,8 @@ typedef struct {
   MDGUID client_id;
   MDLocationDescriptor simple_annotations;  /* MDRawSimpleStringDictionary */
   MDLocationDescriptor module_list;  /* MDRawModuleCrashpadInfoList */
+  uint32_t reserved;
+  uint64_t address_mask;
 } MDRawCrashpadInfo;
 
 #if defined(_MSC_VER)

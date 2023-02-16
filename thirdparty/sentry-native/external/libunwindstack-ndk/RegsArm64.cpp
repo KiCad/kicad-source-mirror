@@ -19,6 +19,12 @@
 
 #include <functional>
 
+#ifdef SENTRY_REMOVED
+#if defined(__BIONIC__)
+#include <bionic/pac.h>
+#endif
+#endif // SENTRY_REMOVED
+
 #include <unwindstack/Elf.h>
 #include <unwindstack/MachineArm64.h>
 #include <unwindstack/MapInfo.h>
@@ -55,6 +61,12 @@ static uint64_t strip_pac(uint64_t pc, uint64_t mask) {
   // pre-Armv8.3-A architectures.
   if (mask) {
     pc &= ~mask;
+  } else {
+#ifdef SENTRY_REMOVED
+#if defined(__BIONIC__)
+    pc = __bionic_clear_pac_bits(pc);
+#endif
+#endif // SENTRY_REMOVED
   }
   return pc;
 }

@@ -21,8 +21,15 @@
 #include <string>
 
 #define LOG_TAG "unwind"
+#ifndef SENTRY_MODIFIED
 #include <android/log.h>
+#endif // SENTRY_MODIFIED
 
+#ifdef SENTRY_REMOVED
+#if defined(__BIONIC__)
+#include <async_safe/log.h>
+#endif
+#endif // SENTRY_REMOVED
 #include <android-base/stringprintf.h>
 
 #include <unwindstack/Log.h>
@@ -39,7 +46,9 @@ static void LogWithPriority(int priority, uint8_t indent, const char* format, va
   } else {
     real_format = format;
   }
+#ifndef SENTRY_MODIFIED
   __android_log_vprint(priority, LOG_TAG, real_format.c_str(), args);
+#endif // SENTRY_MODIFIED
 }
 
 void Info(const char* format, ...) {
@@ -64,6 +73,24 @@ void Error(const char* format, ...) {
 }
 
 void AsyncSafe(const char*, ...) {}
+#ifdef SENTRY_REMOVED
+#if defined(__BIONIC__)
+void AsyncSafe(const char* format, ...) {
+  va_list args;
+  va_start(args, format);
+  async_safe_format_log_va_list(ANDROID_LOG_ERROR, "libunwindstack", format, args);
+  va_end(args);
+}
+#else
+void AsyncSafe(const char* format, ...) {
+  va_list args;
+  va_start(args, format);
+  vprintf(format, args);
+  printf("\n");
+  va_end(args);
+}
+#endif
+#endif // SENTRY_REMOVED
 
 }  // namespace Log
 

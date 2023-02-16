@@ -33,6 +33,12 @@
 #define EM_AARCH64 183
 #endif
 
+#ifdef SENTRY_REMOVED
+#if !defined(EM_RISCV)
+#define EM_RISCV 243
+#endif
+#endif // SENTRY_REMOVED
+
 namespace unwindstack {
 
 // Forward declaration.

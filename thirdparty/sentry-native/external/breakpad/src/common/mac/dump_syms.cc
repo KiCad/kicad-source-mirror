@@ -268,7 +268,8 @@ SuperFatArch* DumpSymbols::FindBestMatchForArchitecture(
         return &object_files_[i];
     }
     assert(best_match == NULL);
-    return NULL;
+    // Fall through since NXFindBestFatArch can't find arm slices on x86_64
+    // macOS 13. See FB11955188.
   }
 
   // Check for an exact match with cpu_type and cpu_subtype.
@@ -276,7 +277,8 @@ SuperFatArch* DumpSymbols::FindBestMatchForArchitecture(
        it != object_files_.end();
        ++it) {
     if (static_cast<cpu_type_t>(it->cputype) == cpu_type &&
-        static_cast<cpu_subtype_t>(it->cpusubtype) == cpu_subtype)
+        (static_cast<cpu_subtype_t>(it->cpusubtype) & ~CPU_SUBTYPE_MASK) ==
+            (cpu_subtype & ~CPU_SUBTYPE_MASK))
       return &*it;
   }
 
@@ -285,8 +287,11 @@ SuperFatArch* DumpSymbols::FindBestMatchForArchitecture(
   // NXFindBestFatArch, located at
   // http://web.mit.edu/darwin/src/modules/cctools/libmacho/arch.c.
   fprintf(stderr, "Failed to find an exact match for an object file with cpu "
-      "type: %d and cpu subtype: %d. Furthermore, at least one object file is "
-      "larger than 2**32.\n", cpu_type, cpu_subtype);
+      "type: %d and cpu subtype: %d.\n", cpu_type, cpu_subtype);
+  if (!can_convert_to_fat_arch) {
+    fprintf(stderr, "Furthermore, at least one object file is larger "
+        "than 2**32.\n");
+  }
   return NULL;
 }
 
@@ -676,18 +681,6 @@ bool DumpSymbols::ReadSymbolData(Module** out_module) {
   *out_module = module.release();
 
   return true;
-}
-
-bool DumpSymbols::WriteSymbolFile(std::ostream& stream) {
-  Module* module = NULL;
-
-  if (ReadSymbolData(&module) && module) {
-    bool res = module->Write(stream, symbol_data_);
-    delete module;
-    return res;
-  }
-
-  return false;
 }
 
 // Read the selected object file's debugging information, and write out the

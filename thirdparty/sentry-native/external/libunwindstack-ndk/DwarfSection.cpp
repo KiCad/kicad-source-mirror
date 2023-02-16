@@ -16,6 +16,12 @@
 
 #include <stdint.h>
 
+#include <algorithm>
+#include <optional>
+#include <tuple>
+#include <utility>
+#include <vector>
+
 #include <unwindstack/DwarfError.h>
 #include <unwindstack/DwarfLocation.h>
 #include <unwindstack/DwarfMemory.h>

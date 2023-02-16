@@ -151,22 +151,20 @@ void DoStackWalk(ProcessReaderWin::Thread* thread,
   stack_frame.AddrStack.Mode = AddrModeFlat;
 
   int machine_type = IMAGE_FILE_MACHINE_I386;
-  LPVOID ctx = NULL;
+  CONTEXT ctx;
 #if defined(ARCH_CPU_X86)
-  const CONTEXT* ctx_ = thread->context.context<CONTEXT>();
-  stack_frame.AddrPC.Offset = ctx_->Eip;
-  stack_frame.AddrFrame.Offset = ctx_->Ebp;
-  stack_frame.AddrStack.Offset = ctx_->Esp;
-  ctx = (LPVOID)ctx_;
+  ctx = *thread->context.context<CONTEXT>();
+  stack_frame.AddrPC.Offset = ctx.Eip;
+  stack_frame.AddrFrame.Offset = ctx.Ebp;
+  stack_frame.AddrStack.Offset = ctx.Esp;
 #elif defined(ARCH_CPU_X86_64)
   // if (!is_64_reading_32) {
   machine_type = IMAGE_FILE_MACHINE_AMD64;
 
-  const CONTEXT* ctx_ = thread->context.context<CONTEXT>();
-  stack_frame.AddrPC.Offset = ctx_->Rip;
-  stack_frame.AddrFrame.Offset = ctx_->Rbp;
-  stack_frame.AddrStack.Offset = ctx_->Rsp;
-  ctx = (LPVOID)ctx_;
+  ctx = *thread->context.context<CONTEXT>();
+  stack_frame.AddrPC.Offset = ctx.Rip;
+  stack_frame.AddrFrame.Offset = ctx.Rbp;
+  stack_frame.AddrStack.Offset = ctx.Rsp;
   // } else {
   //   const WOW64_CONTEXT* ctx_ = &thread->context.wow64;
   //   stack_frame.AddrPC.Offset = ctx_->Eip;
@@ -176,7 +174,7 @@ void DoStackWalk(ProcessReaderWin::Thread* thread,
   // }
 
 // TODO: we dont support this right away, maybe in the future
-//#elif defined(ARCH_CPU_ARM64)
+// #elif defined(ARCH_CPU_ARM64)
 //  machine_type = IMAGE_FILE_MACHINE_ARM64;
 #else
 #error Unsupported Windows Arch
@@ -192,7 +190,7 @@ void DoStackWalk(ProcessReaderWin::Thread* thread,
                      process,
                      thread_handle,
                      &stack_frame,
-                     ctx,
+                     &ctx,
                      NULL,
                      SymFunctionTableAccess64,
                      SymGetModuleBase64,

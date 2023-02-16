@@ -43,6 +43,7 @@
 
 #include <set>
 #include <string>
+#include <memory>
 #include <vector>
 
 #include "common/module.h"
@@ -131,9 +132,9 @@ class DwarfCFIToModule: public CallFrameInfo::Handler {
   DwarfCFIToModule(Module* module, const vector<string>& register_names,
                    Reporter* reporter)
       : module_(module), register_names_(register_names), reporter_(reporter),
-        entry_(NULL), return_address_(-1), cfa_name_(".cfa"), ra_name_(".ra") {
+        return_address_(-1), cfa_name_(".cfa"), ra_name_(".ra") {
   }
-  virtual ~DwarfCFIToModule() { delete entry_; }
+  virtual ~DwarfCFIToModule() = default;
 
   virtual bool Entry(size_t offset, uint64_t address, uint64_t length,
                      uint8_t version, const string& augmentation,
@@ -170,7 +171,7 @@ class DwarfCFIToModule: public CallFrameInfo::Handler {
   Reporter* reporter_;
 
   // The current entry we're constructing.
-  Module::StackFrameEntry* entry_;
+  std::unique_ptr<Module::StackFrameEntry> entry_;
 
   // The section offset of the current frame description entry, for
   // use in error messages.

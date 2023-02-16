@@ -63,10 +63,8 @@ static void SignalHandler(int, siginfo_t*, void* sigcontext) {
     // Do not remove the entry here because that can result in a deadlock
     // if the code cannot properly send a signal to the thread under test.
     entry->Wake();
-  } else {
-    // At this point, it is possible that entry has been freed, so just exit.
-    Log::AsyncSafe("Timed out waiting for unwind thread to indicate it completed.");
   }
+  // If the wait fails, the entry might have been freed, so only exit.
 }
 
 ThreadUnwinder::ThreadUnwinder(size_t max_frames, Maps* maps)
@@ -141,7 +139,6 @@ ThreadEntry* ThreadUnwinder::SendSignalToThread(int signal, pid_t tid) {
     last_error_.code = ERROR_THREAD_DOES_NOT_EXIST;
   } else {
     last_error_.code = ERROR_THREAD_TIMEOUT;
-    Log::AsyncSafe("Timed out waiting for signal handler to get ucontext data.");
   }
 
   ThreadEntry::Remove(entry);
@@ -178,10 +175,8 @@ void ThreadUnwinder::UnwindWithSignal(int signal, pid_t tid, std::unique_ptr<Reg
   entry->Wake();
 
   // Wait for the thread to indicate it is done with the ThreadEntry.
-  if (!entry->Wait(WAIT_FOR_THREAD_TO_RESTART)) {
-    // Send a warning, but do not mark as a failure to unwind.
-    Log::AsyncSafe("Timed out waiting for signal handler to indicate it finished.");
-  }
+  // If this fails, the Wait command will log an error message.
+  entry->Wait(WAIT_FOR_THREAD_TO_RESTART);
 
   ThreadEntry::Remove(entry);
 }

@@ -64,13 +64,16 @@ class Symbols {
   const uint64_t count_;
   const uint64_t entry_size_;
   const uint64_t str_offset_;
-  const uint64_t str_end_;
+  uint64_t str_end_;
 
   std::map<uint64_t, Info> symbols_;  // Cache of read symbols (keyed by function *end* address).
   std::optional<std::vector<uint32_t>> remap_;  // Indices of function symbols sorted by address.
 
   // Cache of global data (non-function) symbols.
   std::unordered_map<std::string, std::optional<uint64_t>> global_variables_;
+
+  // Do not allow the total number of symbols to go above this.
+  constexpr static size_t kMaxSymbols = 1000000;
 };
 
 }  // namespace unwindstack

@@ -1,5 +1,36 @@
 # Changelog
 
+## 0.6.0
+
+**Breaking changes**:
+
+- When built as a shared library for Android or Linux, the Native SDK limits the export of symbols to the `sentry_`-prefix. The option `SENTRY_EXPORT_SYMBOLS` is no longer available and the linker settings are constrained to the Native SDK and no longer `PUBLIC` to parent projects. ([#363](https://github.com/getsentry/sentry-native/pull/363))
+
+**Features**:
+
+- A session may be ended with a different status code. ([#801](https://github.com/getsentry/sentry-native/pull/801))
+
+**Fixes**:
+
+- Switch Crashpad transport on Linux to use libcurl ([#803](https://github.com/getsentry/sentry-native/pull/803), [crashpad#75](https://github.com/getsentry/crashpad/pull/75), [crashpad#79](https://github.com/getsentry/crashpad/pull/79))
+- Avoid accidentally mutating CONTEXT when client-side stack walking in Crashpad ([#803](https://github.com/getsentry/sentry-native/pull/803), [crashpad#77](https://github.com/getsentry/crashpad/pull/77))
+- Fix various mingw compilation issues ([#794](https://github.com/getsentry/sentry-native/pull/794), [crashpad#78](https://github.com/getsentry/crashpad/pull/78))
+
+**Internal**:
+
+- Updated Crashpad backend to 2023-02-07. ([#803](https://github.com/getsentry/sentry-native/pull/803), [crashpad#80](https://github.com/getsentry/crashpad/pull/80))
+- CI: Updated GitHub Actions to test on LLVM-mingw. ([#797](https://github.com/getsentry/sentry-native/pull/797))
+- Updated Breakpad backend to 2023-02-08. ([#805](https://github.com/getsentry/sentry-native/pull/805), [breakpad#34](https://github.com/getsentry/breakpad/pull/34))
+- Updated libunwindstack to 2023-02-09. ([#807](https://github.com/getsentry/sentry-native/pull/807), [libunwindstack-ndk#7](https://github.com/getsentry/libunwindstack-ndk/pull/7))
+
+**Thank you**:
+
+Features, fixes and improvements in this release have been contributed by:
+
+- [@BogdanLivadariu](https://github.com/BogdanLivadariu)
+- [@ShawnCZek](https://github.com/ShawnCZek)
+- [@past-due](https://github.com/past-due)
+
 ## 0.5.4
 
 **Fixes**:

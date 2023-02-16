@@ -117,12 +117,6 @@ Module::~Module() {
        it != functions_.end(); ++it) {
     delete *it;
   }
-  for (vector<StackFrameEntry*>::iterator it = stack_frame_entries_.begin();
-       it != stack_frame_entries_.end(); ++it) {
-    delete *it;
-  }
-  for (ExternSet::iterator it = externs_.begin(); it != externs_.end(); ++it)
-    delete *it;
 }
 
 void Module::SetLoadAddress(Address address) {
@@ -155,12 +149,11 @@ bool Module::AddFunction(Function* function) {
   }
   if (it_ext != externs_.end()) {
     if (enable_multiple_field_) {
-      Extern* found_ext = *it_ext;
+      Extern* found_ext = it_ext->get();
       // If the PUBLIC is for the same symbol as the FUNC, don't mark multiple.
       function->is_multiple |=
           found_ext->name != function->name || found_ext->is_multiple;
     }
-    delete *it_ext;
     externs_.erase(it_ext);
   }
 #if _DEBUG
@@ -194,25 +187,22 @@ bool Module::AddFunction(Function* function) {
   return true;
 }
 
-void Module::AddStackFrameEntry(StackFrameEntry* stack_frame_entry) {
+void Module::AddStackFrameEntry(std::unique_ptr<StackFrameEntry> stack_frame_entry) {
   if (!AddressIsInModule(stack_frame_entry->address)) {
     return;
   }
 
-  stack_frame_entries_.push_back(stack_frame_entry);
+  stack_frame_entries_.push_back(std::move(stack_frame_entry));
 }
 
-void Module::AddExtern(Extern* ext) {
+void Module::AddExtern(std::unique_ptr<Extern> ext) {
   if (!AddressIsInModule(ext->address)) {
     return;
   }
 
-  std::pair<ExternSet::iterator,bool> ret = externs_.insert(ext);
+  std::pair<ExternSet::iterator,bool> ret = externs_.emplace(std::move(ext));
   if (!ret.second && enable_multiple_field_) {
     (*ret.first)->is_multiple = true;
-    // Free the duplicate that was not inserted because this Module
-    // now owns it.
-    delete ext;
   }
 }
 
@@ -223,7 +213,11 @@ void Module::GetFunctions(vector<Function*>* vec,
 
 void Module::GetExterns(vector<Extern*>* vec,
                         vector<Extern*>::iterator i) {
-  vec->insert(i, externs_.begin(), externs_.end());
+  auto pos = vec->insert(i, externs_.size(), nullptr);
+  for (const std::unique_ptr<Extern>& ext : externs_) {
+    *pos = ext.get();
+    ++pos;
+  }
 }
 
 Module::File* Module::FindFile(const string& name) {
@@ -265,7 +259,11 @@ void Module::GetFiles(vector<File*>* vec) {
 }
 
 void Module::GetStackFrameEntries(vector<StackFrameEntry*>* vec) const {
-  *vec = stack_frame_entries_;
+  vec->clear();
+  vec->reserve(stack_frame_entries_.size());
+  for (const auto& ent : stack_frame_entries_) {
+    vec->push_back(ent.get());
+  }
 }
 
 void Module::AssignSourceIds(
@@ -441,7 +439,7 @@ bool Module::Write(std::ostream& stream, SymbolData symbol_data) {
     // Write out 'PUBLIC' records.
     for (ExternSet::const_iterator extern_it = externs_.begin();
          extern_it != externs_.end(); ++extern_it) {
-      Extern* ext = *extern_it;
+      Extern* ext = extern_it->get();
       stream << "PUBLIC " << (ext->is_multiple ? "m " : "") << hex
              << (ext->address - load_address_) << " 0 " << ext->name << dec
              << "\n";
@@ -450,10 +448,9 @@ bool Module::Write(std::ostream& stream, SymbolData symbol_data) {
 
   if (symbol_data & CFI) {
     // Write out 'STACK CFI INIT' and 'STACK CFI' records.
-    vector<StackFrameEntry*>::const_iterator frame_it;
-    for (frame_it = stack_frame_entries_.begin();
+    for (auto frame_it = stack_frame_entries_.begin();
          frame_it != stack_frame_entries_.end(); ++frame_it) {
-      StackFrameEntry* entry = *frame_it;
+      StackFrameEntry* entry = frame_it->get();
       stream << "STACK CFI INIT " << hex
              << (entry->address - load_address_) << " "
              << entry->size << " " << dec;

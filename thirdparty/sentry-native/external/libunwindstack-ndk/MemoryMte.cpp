@@ -17,6 +17,16 @@
 #include <sys/ptrace.h>
 #include <sys/uio.h>
 
+#ifdef SENTRY_REMOVED
+// #if defined(__BIONIC__)
+// #include <bionic/mte.h>
+// #else
+#endif // SENTRY_REMOVED
+#define mte_supported() false
+#ifdef SENTRY_REMOVED
+// #endif
+#endif // SENTRY_REMOVED
+
 #include "MemoryLocal.h"
 #include "MemoryRemote.h"
 
@@ -38,8 +48,20 @@ long MemoryRemote::ReadTag(uint64_t addr) {
 }
 
 long MemoryLocal::ReadTag(uint64_t addr) {
+#if defined(__aarch64__)
+  // Check that the memory is readable first. This is racy with the ldg but there's not much
+  // we can do about it.
+  char data;
+  if (!mte_supported() || !Read(addr, &data, 1)) {
+    return -1;
+  }
+
+  __asm__ __volatile__(".arch_extension mte; ldg %0, [%0]" : "+r"(addr) : : "memory");
+  return (addr >> 56) & 0xf;
+#else
   (void)addr;
   return -1;
+#endif
 }
 
 }  // namespace unwindstack

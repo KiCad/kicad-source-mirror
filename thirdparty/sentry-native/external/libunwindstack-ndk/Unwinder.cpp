@@ -25,10 +25,14 @@
 
 #include <algorithm>
 #include <memory>
+#include <string>
 
 #include <android-base/file.h>
 #include <android-base/stringprintf.h>
 
+#ifdef SENTRY_REMOVED
+#include <unwindstack/Demangle.h>
+#endif // SENTRY_REMOVED
 #include <unwindstack/DexFiles.h>
 #include <unwindstack/Elf.h>
 #include <unwindstack/JitDebug.h>
@@ -39,8 +43,10 @@
 
 #include "Check.h"
 
+#ifndef SENTRY_ADDED
 // Use the demangler from libc++.
 extern "C" char* __cxa_demangle(const char*, char*, size_t*, int* status);
+#endif // SENTRY_ADDED
 
 namespace unwindstack {
 
@@ -326,6 +332,7 @@ std::string Unwinder::FormatFrame(ArchEnum arch, const FrameData& frame, bool di
   }
 
   if (!frame.function_name.empty()) {
+#ifndef SENTRY_MODIFIED
     char* demangled_name = __cxa_demangle(frame.function_name.c_str(), nullptr, nullptr, nullptr);
     if (demangled_name == nullptr) {
       data += " (";
@@ -335,6 +342,7 @@ std::string Unwinder::FormatFrame(ArchEnum arch, const FrameData& frame, bool di
       data += demangled_name;
       free(demangled_name);
     }
+#endif // SENTRY_MODIFIED
     if (frame.function_offset != 0) {
       data += android::base::StringPrintf("+%" PRId64, frame.function_offset);
     }

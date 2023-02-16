@@ -100,6 +100,7 @@ class AndroidUnwinder {
   std::vector<std::string> initial_map_names_to_skip_;
   std::vector<std::string> map_suffixes_to_ignore_;
   std::once_flag initialize_;
+  bool initialize_status_ = false;
 
   ArchEnum arch_ = ARCH_UNKNOWN;
 

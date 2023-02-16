@@ -65,6 +65,10 @@ typedef enum {
   MD_EXCEPTION_MAC_MACH_SYSCALL    = 8,
       /* EXC_MACH_SYSCALL */
   MD_EXCEPTION_MAC_RPC_ALERT       = 9,
+      /* EXC_RESOURCE */
+  MD_EXCEPTION_MAC_RESOURCE        = 11,
+      /* EXC_GUARD */
+  MD_EXCEPTION_MAC_GUARD           = 12,
       /* EXC_RPC_ALERT */
   MD_EXCEPTION_MAC_SIMULATED       = 0x43507378,
       /* Fake exception code used by Crashpad's SimulateCrash ('CPsx'). */
