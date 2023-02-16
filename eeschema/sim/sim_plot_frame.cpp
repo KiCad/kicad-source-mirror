@@ -792,10 +792,16 @@ void SIM_PLOT_FRAME::rebuildSignalsList()
     // Add .PROBE directives
     for( const wxString& directive : m_circuitModel->GetDirectives() )
     {
-        wxString directiveParams;
+        wxStringTokenizer tokenizer( directive, wxT( "\r\n" ), wxTOKEN_STRTOK );
 
-        if( directive.Upper().StartsWith( wxS( ".PROBE" ), &directiveParams ) )
-            m_signals.push_back( directiveParams.Trim( false ) );
+        while( tokenizer.HasMoreTokens() )
+        {
+            wxString line = tokenizer.GetNextToken().Upper();
+            wxString directiveParams;
+
+            if( line.Upper().StartsWith( wxS( ".PROBE" ), &directiveParams ) )
+                m_signals.push_back( directiveParams.Trim( false ) );
+        }
     }
 
     std::sort( m_signals.begin(), m_signals.end(),
