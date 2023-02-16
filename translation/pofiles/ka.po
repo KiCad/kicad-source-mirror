@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-14 12:27-0800\n"
+"POT-Creation-Date: 2023-02-15 16:29-0800\n"
 "PO-Revision-Date: 2023-02-10 17:07+0200\n"
 "Language: ka\n"
 "MIME-Version: 1.0\n"
@@ -78,31 +78,35 @@ msgstr ""
 msgid "Build BVH for holes and vias"
 msgstr ""
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:411
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:389
+msgid "OpenGL context creation error"
+msgstr ""
+
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:420
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
 msgstr ""
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:547
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:556
 #, c-format
 msgid "Last render time %.0f ms"
 msgstr ""
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:654
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:663
 #, c-format
 msgid "Net %s\tNet class %s"
 msgstr ""
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:678
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:687
 #, c-format
 msgid "Pad %s\t"
 msgstr ""
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:709
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:718
 #, c-format
 msgid "Rule area %s\t"
 msgstr ""
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:711
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:720
 #, c-format
 msgid "Zone %s\t"
 msgstr ""
@@ -491,7 +495,7 @@ msgid "Render Solid Colors"
 msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:195
-msgid "Use only the diffuse color property from model 3D model file"
+msgid "Use only the diffuse color property from 3D model file"
 msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:201
@@ -966,7 +970,7 @@ msgid "Light 8:"
 msgstr ""
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:21
-#: common/dialogs/dialog_print_generic_base.cpp:56 pcbnew/pcb_bitmap.cpp:247
+#: common/dialogs/dialog_print_generic_base.cpp:56 pcbnew/pcb_bitmap.cpp:254
 msgid "Scale"
 msgstr ""
 
@@ -3646,7 +3650,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:70
 #: eeschema/dialogs/dialog_junction_props.cpp:46
 #: eeschema/dialogs/dialog_line_properties.cpp:56
-#: eeschema/dialogs/dialog_sim_model.cpp:492
+#: eeschema/dialogs/dialog_sim_model.cpp:494
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:59
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:149
 #: eeschema/lib_field.cpp:542 eeschema/lib_text.cpp:427
@@ -3766,8 +3770,8 @@ msgstr ""
 #: common/drawing_sheet/ds_data_item.cpp:373
 #: common/drawing_sheet/ds_draw_item.cpp:129
 #: common/drawing_sheet/ds_draw_item.cpp:468 common/eda_item.cpp:390
-#: eeschema/dialogs/dialog_image_properties.cpp:40 eeschema/sch_bitmap.h:129
-#: pcbnew/dialogs/dialog_image_properties.cpp:41 pcbnew/pcb_bitmap.h:110
+#: eeschema/dialogs/dialog_image_properties.cpp:40 eeschema/sch_bitmap.h:131
+#: pcbnew/dialogs/dialog_image_properties.cpp:41 pcbnew/pcb_bitmap.h:120
 msgid "Image"
 msgstr ""
 
@@ -4159,8 +4163,8 @@ msgstr ""
 msgid "Graphic"
 msgstr ""
 
-#: common/eda_item.cpp:328 common/eda_item.cpp:361 eeschema/sch_bitmap.cpp:211
-#: pcbnew/pcb_bitmap.cpp:222
+#: common/eda_item.cpp:328 common/eda_item.cpp:361 eeschema/sch_bitmap.cpp:218
+#: pcbnew/pcb_bitmap.cpp:229
 msgid "Bitmap"
 msgstr ""
 
@@ -4383,26 +4387,26 @@ msgid "Points"
 msgstr ""
 
 #: common/eda_shape.cpp:657 common/eda_text.cpp:1060
-#: eeschema/sch_bitmap.cpp:213 pcbnew/dialogs/dialog_board_statistics.cpp:671
+#: eeschema/sch_bitmap.cpp:220 pcbnew/dialogs/dialog_board_statistics.cpp:671
 #: pcbnew/dialogs/dialog_board_statistics.cpp:681
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:55
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:40
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:169
 #: pcbnew/fp_text.cpp:311 pcbnew/fp_text_grid_table.cpp:102 pcbnew/pad.cpp:1015
-#: pcbnew/pcb_bitmap.cpp:224 pcbnew/pcb_target.cpp:156
+#: pcbnew/pcb_bitmap.cpp:231 pcbnew/pcb_target.cpp:156
 #: pcbnew/pcb_target.cpp:201 pcbnew/pcb_text.cpp:127 pcbnew/pcb_track.cpp:869
 #: pcbnew/pcb_track.cpp:1275 pcbnew/pcb_track.cpp:1305
 msgid "Width"
 msgstr ""
 
 #: common/eda_shape.cpp:660 common/eda_text.cpp:1065
-#: eeschema/sch_bitmap.cpp:214 pcbnew/dialogs/dialog_board_statistics.cpp:673
+#: eeschema/sch_bitmap.cpp:221 pcbnew/dialogs/dialog_board_statistics.cpp:673
 #: pcbnew/dialogs/dialog_board_statistics.cpp:682
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:56
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:56
 #: pcbnew/fp_text.cpp:312 pcbnew/fp_text_grid_table.cpp:103 pcbnew/pad.cpp:1016
-#: pcbnew/pcb_bitmap.cpp:225 pcbnew/pcb_dimension.cpp:736
+#: pcbnew/pcb_bitmap.cpp:232 pcbnew/pcb_dimension.cpp:736
 #: pcbnew/pcb_text.cpp:128
 msgid "Height"
 msgstr ""
@@ -5284,7 +5288,7 @@ msgstr ""
 #: common/lib_tree_model.cpp:148
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
-#: eeschema/dialogs/dialog_sim_model.cpp:491 eeschema/lib_item.cpp:58
+#: eeschema/dialogs/dialog_sim_model.cpp:493 eeschema/lib_item.cpp:58
 #: eeschema/symbol_editor/symbol_editor.cpp:1259
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:67
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:78
@@ -6533,12 +6537,12 @@ msgstr ""
 msgid "No objects selected"
 msgstr ""
 
-#: common/widgets/properties_panel.cpp:264
+#: common/widgets/properties_panel.cpp:267
 #, c-format
 msgid "%d objects selected"
 msgstr ""
 
-#: common/widgets/properties_panel.cpp:271
+#: common/widgets/properties_panel.cpp:274
 msgid "Basic Properties"
 msgstr ""
 
@@ -10824,31 +10828,31 @@ msgstr ""
 msgid "Failed to read simulation model from fields."
 msgstr ""
 
-#: eeschema/dialogs/dialog_sim_model.cpp:404
+#: eeschema/dialogs/dialog_sim_model.cpp:406
 msgid "Component:"
 msgstr ""
 
-#: eeschema/dialogs/dialog_sim_model.cpp:404
+#: eeschema/dialogs/dialog_sim_model.cpp:406
 #: eeschema/dialogs/dialog_sim_model_base.cpp:54
 #: eeschema/dialogs/dialog_sim_model_base.cpp:82
 msgid "Model:"
 msgstr ""
 
-#: eeschema/dialogs/dialog_sim_model.cpp:465
+#: eeschema/dialogs/dialog_sim_model.cpp:467
 #, c-format
 msgid "Save parameter '%s (%s)' in Value field"
 msgstr ""
 
-#: eeschema/dialogs/dialog_sim_model.cpp:473
+#: eeschema/dialogs/dialog_sim_model.cpp:475
 msgid "Save primary parameter in Value field"
 msgstr ""
 
-#: eeschema/dialogs/dialog_sim_model.cpp:490
+#: eeschema/dialogs/dialog_sim_model.cpp:492
 #: pcbnew/footprint_wizard_frame.cpp:325
 msgid "Parameter"
 msgstr ""
 
-#: eeschema/dialogs/dialog_sim_model.cpp:493 eeschema/lib_item.cpp:51
+#: eeschema/dialogs/dialog_sim_model.cpp:495 eeschema/lib_item.cpp:51
 #: eeschema/lib_pin.cpp:1163 eeschema/sch_label.cpp:907
 #: eeschema/sch_pin.cpp:207 eeschema/sch_pin.cpp:220
 #: eeschema/symbol_editor/symbol_editor.cpp:1273
@@ -10862,12 +10866,12 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
-#: eeschema/dialogs/dialog_sim_model.cpp:603
-#: eeschema/dialogs/dialog_sim_model.cpp:646
+#: eeschema/dialogs/dialog_sim_model.cpp:605
+#: eeschema/dialogs/dialog_sim_model.cpp:648
 msgid "Not Connected"
 msgstr ""
 
-#: eeschema/dialogs/dialog_sim_model.cpp:1073
+#: eeschema/dialogs/dialog_sim_model.cpp:1079
 msgid "Browse Models"
 msgstr ""
 
@@ -11991,8 +11995,8 @@ msgstr ""
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:47
 msgid ""
-"Set to 0 to allow symbols to inherit their line widths from\n"
-"their parent Schematic"
+"Set to 0 to allow symbols to inherit line width properties\n"
+"from Schematic"
 msgstr ""
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:62
@@ -13181,7 +13185,7 @@ msgstr ""
 msgid "Choose Symbol (%d items loaded)"
 msgstr ""
 
-#: eeschema/picksymbol.cpp:289
+#: eeschema/picksymbol.cpp:291
 #, c-format
 msgid "No alternate body style found for symbol '%s' in library '%s'."
 msgstr ""
@@ -14707,7 +14711,7 @@ msgid "Checking component "
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:254
-msgid "Component name cannot be empty."
+msgid "Component: name cannot be empty."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:263
@@ -14715,7 +14719,7 @@ msgid "Component: manufacturer cannot be empty."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:272
-msgid "Component: Invalid Package."
+msgid "Component: invalid package."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:281
@@ -14727,7 +14731,7 @@ msgid "Cannot interpolate the current based on this IV table."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:396
-msgid "There is a Nan voltage in an IV table"
+msgid "There is an invalid voltage in an IV table"
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:403
@@ -14739,11 +14743,11 @@ msgid "Invalid R_load."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:450
-msgid "Invalid falling dv/dt."
+msgid "Invalid falling dV/dt."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:455
-msgid "Invalid rising dv/dt."
+msgid "Invalid rising dV/dt."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:470
@@ -14755,7 +14759,7 @@ msgid "Checking model "
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:482
-msgid "Undefined model type"
+msgid "Undefined model type."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:491
@@ -14775,7 +14779,7 @@ msgid "Invalid C_ref value."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:523
-msgid "invalid V_ref value."
+msgid "Invalid V_ref value."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:531
@@ -14855,35 +14859,35 @@ msgid "Negative number of pins."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:723
-msgid "Empty pin number"
+msgid "Empty pin number."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:734
-msgid "Resistance matrix is incorrect"
+msgid "Resistance matrix is incorrect."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:745
-msgid "Capacitance matrix is undefined"
+msgid "Capacitance matrix is undefined."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:754
-msgid "Capacitance matrix is incorrect"
+msgid "Capacitance matrix is incorrect."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:763
-msgid "Capacitance matrix is nullptr"
+msgid "Capacitance matrix is nullptr."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:774
-msgid "Inductance matrix is undefined"
+msgid "Inductance matrix is undefined."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:783
-msgid "Inductance matrix is incorrect"
+msgid "Inductance matrix is incorrect."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:792
-msgid "Inductance matrix is nullptr"
+msgid "Inductance matrix is nullptr."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:808
@@ -15604,7 +15608,7 @@ msgstr ""
 
 #: eeschema/symbol_checker.cpp:208
 msgid ""
-"<b>Suspicious Power Symbol</b><br>Only a input or output power pin has "
+"<b>Suspicious Power Symbol</b><br>Only an input or output power pin has "
 "meaning<br><br>"
 msgstr ""
 
@@ -16059,7 +16063,7 @@ msgstr ""
 msgid "Error saving symbol %s to library '%s'."
 msgstr ""
 
-#: eeschema/symbol_tree_synchronizing_adapter.cpp:268
+#: eeschema/symbol_tree_synchronizing_adapter.cpp:260
 msgid "(failed to load)"
 msgstr ""
 
@@ -16130,7 +16134,8 @@ msgstr ""
 
 #: eeschema/tools/backannotate.cpp:97
 msgid ""
-"Cannot fetch PCB netlist because eeschema is opened in stand-alone mode.\n"
+"Cannot fetch PCB netlist because Schematic Editor is opened in stand-alone "
+"mode.\n"
 "You must launch the KiCad project manager and create a project."
 msgstr ""
 
@@ -17098,7 +17103,7 @@ msgid "Annotate Automatically"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:741
-msgid "Toggle automatic annotation of new parts symbols"
+msgid "Toggle automatic annotation of new symbols"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:746
@@ -17915,7 +17920,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:50
 #: pcbnew/footprint.cpp:2914 pcbnew/footprint.cpp:2917 pcbnew/fp_text.cpp:302
 #: pcbnew/fp_text_grid_table.cpp:106 pcbnew/fp_textbox.cpp:311
-#: pcbnew/pad.cpp:987 pcbnew/pad.cpp:1742 pcbnew/pcb_bitmap.cpp:226
+#: pcbnew/pad.cpp:987 pcbnew/pad.cpp:1742 pcbnew/pcb_bitmap.cpp:233
 #: pcbnew/pcb_dimension.cpp:365 pcbnew/pcb_dimension.cpp:1093
 #: pcbnew/pcb_marker.cpp:360 pcbnew/pcb_shape.cpp:311 pcbnew/pcb_shape.cpp:410
 #: pcbnew/pcb_shape.cpp:412 pcbnew/pcb_target.cpp:153 pcbnew/pcb_text.cpp:119
@@ -18980,7 +18985,7 @@ msgid "Minimal header"
 msgstr ""
 
 #: kicad/cli/command_export_pcb_drill.cpp:73
-msgid "PTH and NPTH in separate files file"
+msgid "PTH and NPTH in separate files"
 msgstr ""
 
 #: kicad/cli/command_export_pcb_drill.cpp:78
@@ -19078,7 +19083,7 @@ msgid "Subtract soldermask from silkscreen"
 msgstr ""
 
 #: kicad/cli/command_export_pcb_gerber.cpp:70
-msgid "Disable aperature macros"
+msgid "Disable aperture macros"
 msgstr ""
 
 #: kicad/cli/command_export_pcb_gerber.cpp:75
@@ -19096,11 +19101,7 @@ msgid "Use the gerber plot settings already configured in the board file"
 msgstr ""
 
 #: kicad/cli/command_export_pcb_pdf.cpp:60
-#: kicad/cli/command_export_pcb_svg.cpp:49
-#: kicad/cli/command_export_sch_svg.cpp:38
-#: kicad/cli/command_fp_export_svg.cpp:40
-#: kicad/cli/command_sym_export_svg.cpp:40
-msgid "Color theme to use (will default to pcbnew settings)"
+msgid "Color theme to use (will default to PCB Editor settings)"
 msgstr ""
 
 #: kicad/cli/command_export_pcb_pos.cpp:44
@@ -19192,6 +19193,13 @@ msgstr ""
 
 #: kicad/cli/command_export_pcb_svg.cpp:43
 msgid "Mirror the board (useful for trying to show bottom layers)"
+msgstr ""
+
+#: kicad/cli/command_export_pcb_svg.cpp:49
+#: kicad/cli/command_export_sch_svg.cpp:38
+#: kicad/cli/command_fp_export_svg.cpp:40
+#: kicad/cli/command_sym_export_svg.cpp:40
+msgid "Color theme to use (will default to pcbnew settings)"
 msgstr ""
 
 #: kicad/cli/command_export_pcb_svg.cpp:57
@@ -27993,8 +28001,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions.cpp:65
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions.cpp:66
-#: pcbnew/router/pns_kicad_iface.cpp:645 pcbnew/router/pns_kicad_iface.cpp:718
-#: pcbnew/router/pns_kicad_iface.cpp:719
+#: pcbnew/router/pns_kicad_iface.cpp:656 pcbnew/router/pns_kicad_iface.cpp:729
+#: pcbnew/router/pns_kicad_iface.cpp:730
 msgid "user choice"
 msgstr ""
 
@@ -31188,12 +31196,12 @@ msgstr ""
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:232
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:265
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:124
-#: pcbnew/drc/drc_test_provider_physical_clearance.cpp:546
-#: pcbnew/drc/drc_test_provider_physical_clearance.cpp:603
-#: pcbnew/drc/drc_test_provider_physical_clearance.cpp:654
-#: pcbnew/drc/drc_test_provider_physical_clearance.cpp:669
-#: pcbnew/drc/drc_test_provider_physical_clearance.cpp:756
-#: pcbnew/drc/drc_test_provider_physical_clearance.cpp:795
+#: pcbnew/drc/drc_test_provider_physical_clearance.cpp:560
+#: pcbnew/drc/drc_test_provider_physical_clearance.cpp:618
+#: pcbnew/drc/drc_test_provider_physical_clearance.cpp:674
+#: pcbnew/drc/drc_test_provider_physical_clearance.cpp:690
+#: pcbnew/drc/drc_test_provider_physical_clearance.cpp:778
+#: pcbnew/drc/drc_test_provider_physical_clearance.cpp:817
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:240
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:278
 #, c-format
@@ -31381,7 +31389,7 @@ msgstr ""
 msgid "Checking physical clearances..."
 msgstr ""
 
-#: pcbnew/drc/drc_test_provider_physical_clearance.cpp:497
+#: pcbnew/drc/drc_test_provider_physical_clearance.cpp:511
 #, c-format
 msgid "Internal clearance violation (%s clearance %s; actual %s)"
 msgstr ""
@@ -33111,11 +33119,11 @@ msgstr ""
 msgid "Error loading project footprint libraries."
 msgstr ""
 
-#: pcbnew/pcb_bitmap.cpp:245
+#: pcbnew/pcb_bitmap.cpp:252
 msgid "Bitmap Properties"
 msgstr ""
 
-#: pcbnew/pcb_bitmap.cpp:252
+#: pcbnew/pcb_bitmap.cpp:259
 msgid "Greyscale"
 msgstr ""
 
@@ -34707,36 +34715,36 @@ msgstr ""
 msgid "?"
 msgstr ""
 
-#: pcbnew/router/pns_kicad_iface.cpp:601 pcbnew/router/pns_kicad_iface.cpp:682
+#: pcbnew/router/pns_kicad_iface.cpp:612 pcbnew/router/pns_kicad_iface.cpp:693
 #: pcbnew/router/router_tool.cpp:768
 msgid "board minimum clearance"
 msgstr ""
 
-#: pcbnew/router/pns_kicad_iface.cpp:615 pcbnew/router/pns_kicad_iface.cpp:681
+#: pcbnew/router/pns_kicad_iface.cpp:626 pcbnew/router/pns_kicad_iface.cpp:692
 #: pcbnew/router/router_tool.cpp:733 pcbnew/router/router_tool.cpp:755
 msgid "board minimum track width"
 msgstr ""
 
-#: pcbnew/router/pns_kicad_iface.cpp:622 pcbnew/router/router_tool.cpp:735
+#: pcbnew/router/pns_kicad_iface.cpp:633 pcbnew/router/router_tool.cpp:735
 msgid "existing track"
 msgstr ""
 
-#: pcbnew/router/pns_kicad_iface.cpp:643
+#: pcbnew/router/pns_kicad_iface.cpp:654
 msgid "netclass 'Default'"
 msgstr ""
 
-#: pcbnew/router/pns_kicad_iface.cpp:1239
+#: pcbnew/router/pns_kicad_iface.cpp:1250
 #, c-format
 msgid "%s is malformed."
 msgstr ""
 
-#: pcbnew/router/pns_kicad_iface.cpp:1242
+#: pcbnew/router/pns_kicad_iface.cpp:1253
 msgid ""
 "This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
 msgstr ""
 
-#: pcbnew/router/pns_kicad_iface.cpp:1916 pcbnew/router/router_tool.cpp:453
+#: pcbnew/router/pns_kicad_iface.cpp:1927 pcbnew/router/router_tool.cpp:453
 msgid "Interactive Router"
 msgstr ""
 
