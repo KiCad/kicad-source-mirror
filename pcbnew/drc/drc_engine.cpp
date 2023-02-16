@@ -863,7 +863,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
             };
 
     auto processConstraint =
-            [&]( const DRC_ENGINE_CONSTRAINT* c ) -> bool
+            [&]( const DRC_ENGINE_CONSTRAINT* c )
             {
                 bool implicit = c->parentRule && c->parentRule->m_Implicit;
 
@@ -1065,7 +1065,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                     {
                         REPORT( _( "Board and netclass clearances apply only between copper "
                                    "items." ) );
-                        return true;
+                        return;
                     }
                 }
                 else if( c->constraint.m_Type == DISALLOW_CONSTRAINT )
@@ -1127,7 +1127,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                         else
                             REPORT( _( "Disallow constraint not met." ) )
 
-                        return false;
+                        return;
                     }
 
                     LSET itemLayers = a->GetLayerSet();
@@ -1159,7 +1159,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                             REPORT( _( "Rule layer not matched; rule ignored." ) )
                         }
 
-                        return false;
+                        return;
                     }
                 }
 
@@ -1179,11 +1179,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                     {
                         REPORT( _( "Rule layer not matched; rule ignored." ) )
                     }
-
-                    return false;
                 }
-
-                if( c->constraint.m_Type == HOLE_TO_HOLE_CONSTRAINT
+                else if( c->constraint.m_Type == HOLE_TO_HOLE_CONSTRAINT
                         && ( !hasDrilledHole( a ) || !hasDrilledHole( b ) ) )
                 {
                     // Report non-drilled-holes as an implicit condition
@@ -1194,8 +1191,6 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                         REPORT( wxString::Format( _( "%s is not a drilled hole; rule ignored." ),
                                                   x->GetItemDescription( this ) ) )
                     }
-
-                    return false;
                 }
                 else if( !c->condition || c->condition->GetExpression().IsEmpty() )
                 {
@@ -1217,7 +1212,6 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                     }
 
                     constraint = c->constraint;
-                    return true;
                 }
                 else
                 {
@@ -1267,15 +1261,11 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                         constraint.m_ZoneConnection = c->constraint.m_ZoneConnection;
 
                         constraint.SetParentRule( c->constraint.GetParentRule() );
-
-                        return true;
                     }
                     else
                     {
                         REPORT( implicit ? _( "Membership not satisfied; constraint ignored." )
                                          : _( "Condition not satisfied; rule ignored." ) )
-
-                        return false;
                     }
                 }
             };
