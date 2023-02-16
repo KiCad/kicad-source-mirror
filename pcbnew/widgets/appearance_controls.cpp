@@ -1153,7 +1153,7 @@ void APPEARANCE_CONTROLS::OnDarkModeToggle()
     m_layerPanelColour = m_panelLayers->GetBackgroundColour().ChangeLightness( 110 );
 
     m_windowLayers->SetBackgroundColour( m_layerPanelColour );
-    
+
     for( wxSizerItem* child : m_layersOuterSizer->GetChildren() )
     {
         if( child && child->GetWindow() )
@@ -1829,14 +1829,20 @@ void APPEARANCE_CONTROLS::OnLayerContextMenu( wxCommandEvent& aEvent )
 
     PCB_LAYER_ID current = m_frame->GetActiveLayer();
 
+    // The new preset. We keep the visibility state of objects:
+    LAYER_PRESET preset;
+    preset.renderLayers = getVisibleObjects();
+
     switch( aEvent.GetId() )
     {
     case ID_PRESET_NO_LAYERS:
-        ApplyLayerPreset( presetNoLayers );
+        preset.layers = presetNoLayers.layers;
+        ApplyLayerPreset( preset );
         return;
 
     case ID_PRESET_ALL_LAYERS:
-        ApplyLayerPreset( presetAllLayers );
+        preset.layers &presetAllLayers.layers;
+        ApplyLayerPreset( preset );
         return;
 
     case ID_SHOW_ALL_COPPER_LAYERS:
@@ -1845,8 +1851,8 @@ void APPEARANCE_CONTROLS::OnLayerContextMenu( wxCommandEvent& aEvent )
         break;
 
     case ID_HIDE_ALL_BUT_ACTIVE:
-        ApplyLayerPreset( presetNoLayers );
-        SetLayerVisible( current, true );
+        preset.layers = presetNoLayers.layers | LSET( current );
+        ApplyLayerPreset( preset );
         break;
 
     case ID_HIDE_ALL_COPPER_LAYERS:
@@ -1874,23 +1880,28 @@ void APPEARANCE_CONTROLS::OnLayerContextMenu( wxCommandEvent& aEvent )
         break;
 
     case ID_PRESET_FRONT_ASSEMBLY:
-        ApplyLayerPreset( presetFrontAssembly );
+        preset.layers = presetFrontAssembly.layers;
+        ApplyLayerPreset( preset );
         return;
 
     case ID_PRESET_FRONT:
-        ApplyLayerPreset( presetFront );
+        preset.layers = presetFront.layers;
+        ApplyLayerPreset( preset );
         return;
 
     case ID_PRESET_INNER_COPPER:
-        ApplyLayerPreset( presetInnerCopper );
+        preset.layers = presetInnerCopper.layers;
+        ApplyLayerPreset( preset );
         return;
 
     case ID_PRESET_BACK:
-        ApplyLayerPreset( presetBack );
+        preset.layers = presetBack.layers;
+        ApplyLayerPreset( preset );
         return;
 
     case ID_PRESET_BACK_ASSEMBLY:
-        ApplyLayerPreset( presetBackAssembly );
+        preset.layers = presetBackAssembly.layers;
+        ApplyLayerPreset( preset );
         return;
     }
 
