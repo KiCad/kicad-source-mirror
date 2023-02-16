@@ -169,28 +169,32 @@ static struct BOARD_CONNECTED_ITEM_DESC
         layer->SetChoices( layerEnum.Choices() );
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ), layer );
 
-        auto netCode = new PROPERTY_ENUM<BOARD_CONNECTED_ITEM, int>( _HKI( "Net" ),
-                &BOARD_CONNECTED_ITEM::SetNetCode, &BOARD_CONNECTED_ITEM::GetNetCode );
-        netCode->SetIsDeprecated(); // Not really, but hide from rule editor suggestions
-        propMgr.AddProperty( netCode );
+        // Not really deprecated, but hidden from rule editor suggestions
+        propMgr.AddProperty( new PROPERTY_ENUM<BOARD_CONNECTED_ITEM, int>( _HKI( "Net" ),
+                             &BOARD_CONNECTED_ITEM::SetNetCode,
+                             &BOARD_CONNECTED_ITEM::GetNetCode ) )
+                .SetIsDeprecated()
+                .SetIsHiddenFromLibraryEditors();
 
-        auto netClass = new PROPERTY<BOARD_CONNECTED_ITEM, wxString>( _HKI( "Net Class" ),
-                NO_SETTER( BOARD_CONNECTED_ITEM, wxString ),
-                &BOARD_CONNECTED_ITEM::GetNetClassName );
-        netClass->SetIsDeprecated(); // Not really, but hide from rule editor suggestions
-        propMgr.AddProperty( netClass );
+        // Not really deprecated, but hidden from rule editor suggestions
+        propMgr.AddProperty( new PROPERTY<BOARD_CONNECTED_ITEM, wxString>( _HKI( "Net Class" ),
+                             NO_SETTER( BOARD_CONNECTED_ITEM, wxString ),
+                             &BOARD_CONNECTED_ITEM::GetNetClassName ) )
+                .SetIsDeprecated()
+                .SetIsHiddenFromLibraryEditors();
 
         // Compatibility alias for DRC engine
-        auto oldNetClass = new PROPERTY<BOARD_CONNECTED_ITEM, wxString>( _HKI( "NetClass" ),
-                NO_SETTER( BOARD_CONNECTED_ITEM, wxString ),
-                &BOARD_CONNECTED_ITEM::GetNetClassName );
-        oldNetClass->SetIsInternal();
-        propMgr.AddProperty( oldNetClass );
+        propMgr.AddProperty( new PROPERTY<BOARD_CONNECTED_ITEM, wxString>( _HKI( "NetClass" ),
+                             NO_SETTER( BOARD_CONNECTED_ITEM, wxString ),
+                             &BOARD_CONNECTED_ITEM::GetNetClassName ) )
+                .SetIsInternal()
+                .SetIsHiddenFromLibraryEditors();
 
         // Used only in DRC engine
-        auto oldNetName = new PROPERTY<BOARD_CONNECTED_ITEM, wxString>( _HKI( "NetName" ),
-                NO_SETTER( BOARD_CONNECTED_ITEM, wxString ), &BOARD_CONNECTED_ITEM::GetNetname );
-        oldNetName->SetIsInternal();
-        propMgr.AddProperty( oldNetName );
+        propMgr.AddProperty( new PROPERTY<BOARD_CONNECTED_ITEM, wxString>( _HKI( "NetName" ),
+                             NO_SETTER( BOARD_CONNECTED_ITEM, wxString ),
+                             &BOARD_CONNECTED_ITEM::GetNetname ) )
+                .SetIsInternal()
+                .SetIsHiddenFromLibraryEditors();
     }
 } _BOARD_CONNECTED_ITEM_DESC;

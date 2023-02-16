@@ -62,8 +62,11 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
         wxPGEditor_DatePickerCtrl = nullptr;
     }
 
-    delete wxPGGlobalVars->m_defaultRenderer;
-    wxPGGlobalVars->m_defaultRenderer = new PG_CELL_RENDERER();
+    if( !dynamic_cast<PG_CELL_RENDERER*>( wxPGGlobalVars->m_defaultRenderer ) )
+    {
+        delete wxPGGlobalVars->m_defaultRenderer;
+        wxPGGlobalVars->m_defaultRenderer = new PG_CELL_RENDERER();
+    }
 
     m_caption = new wxStaticText( this, wxID_ANY, _( "No objects selected" ) );
     mainSizer->Add( m_caption, 0, wxALL | wxEXPAND, 5 );
@@ -201,11 +204,15 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
     }
 
     EDA_ITEM* firstItem = aSelection.Front();
+    bool isFootprintEditor = m_frame->IsType( FRAME_FOOTPRINT_EDITOR );
 
     // Find a set of properties that is common to all selected items
     for( PROPERTY_BASE* property : commonProps )
     {
         if( property->IsInternal() )
+            continue;
+
+        if( isFootprintEditor && property->IsHiddenFromLibraryEditors() )
             continue;
 
         if( propMgr.IsAvailableFor( TYPE_HASH( *firstItem ), property, firstItem ) )

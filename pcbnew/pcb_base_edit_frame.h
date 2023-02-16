@@ -221,6 +221,8 @@ public:
 
     void UpdateProperties();
 
+    void ToggleProperties();
+
 protected:
     /**
      * Prompts a user to select global or project library tables
@@ -255,6 +257,7 @@ protected:
     wxAuiNotebook*          m_tabbedPanel;        /// Panel with Layers and Object Inspector tabs
 
     bool                    m_darkMode;
+    bool                    m_show_properties;
 };
 
 #endif

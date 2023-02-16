@@ -35,11 +35,19 @@ PG_UNIT_EDITOR::PG_UNIT_EDITOR( EDA_DRAW_FRAME* aFrame ) :
 {
     m_unitBinder = std::make_unique<PROPERTY_EDITOR_UNIT_BINDER>( m_frame );
     m_unitBinder->SetUnits( m_frame->GetUserUnits() );
+
+    m_editorName = BuildEditorName( m_frame );
 }
 
 
 PG_UNIT_EDITOR::~PG_UNIT_EDITOR()
 {
+}
+
+
+wxString PG_UNIT_EDITOR::BuildEditorName( EDA_DRAW_FRAME* aFrame )
+{
+    return EDITOR_NAME + aFrame->GetName();
 }
 
 

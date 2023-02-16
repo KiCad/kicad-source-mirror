@@ -187,6 +187,7 @@ PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = PT_DEFAULT,
         m_coordType( aCoordType ),
         m_isInternal( false ),
         m_isDeprecated( false ),
+        m_hideFromLibraryEditors( false ),
         m_availFunc( [](INSPECTABLE*)->bool { return true; } ),
         m_writeableFunc( [](INSPECTABLE*)->bool { return true; } ),
         m_validator( NullValidator )
@@ -293,6 +294,13 @@ PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = PT_DEFAULT,
         return *this;
     }
 
+    bool IsHiddenFromLibraryEditors() const { return m_hideFromLibraryEditors; }
+    PROPERTY_BASE& SetIsHiddenFromLibraryEditors( bool aIsHidden = true )
+    {
+        m_hideFromLibraryEditors = aIsHidden;
+        return *this;
+    }
+
     wxString Group() const { return m_group; }
     PROPERTY_BASE& SetGroup( const wxString& aGroup ) { m_group = aGroup; return *this; }
 
@@ -374,6 +382,9 @@ private:
 
     /// Deprecated properties are hidden from the GUI and rules editor autocomplete
     bool m_isDeprecated;
+
+    /// This property should only be shown in the design editor, not the library editor
+    bool m_hideFromLibraryEditors;
 
     /// Optional group identifier
     wxString m_group;

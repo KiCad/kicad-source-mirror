@@ -797,31 +797,6 @@ void PCB_EDIT_FRAME::ToggleLayersManager()
 }
 
 
-void PCB_EDIT_FRAME::ToggleProperties()
-{
-    if( !m_propertiesPanel )
-        return;
-
-    PCBNEW_SETTINGS* settings = GetPcbNewSettings();
-
-    m_show_properties = !m_show_properties;
-
-    wxAuiPaneInfo& propertiesPaneInfo = m_auimgr.GetPane( "PropertiesManager" );
-    propertiesPaneInfo.Show( m_show_properties );
-
-    if( m_show_properties )
-    {
-        SetAuiPaneSize( m_auimgr, propertiesPaneInfo,
-                        settings->m_AuiPanels.properties_panel_width, -1 );
-    }
-    else
-    {
-        settings->m_AuiPanels.properties_panel_width = m_propertiesPanel->GetSize().x;
-        m_auimgr.Update();
-    }
-}
-
-
 void PCB_EDIT_FRAME::ToggleSearch()
 {
     PCBNEW_SETTINGS* settings = GetPcbNewSettings();

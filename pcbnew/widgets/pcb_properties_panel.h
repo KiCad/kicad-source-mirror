@@ -25,7 +25,7 @@
 
 class SELECTION;
 class BOARD;
-class PCB_EDIT_FRAME;
+class PCB_BASE_EDIT_FRAME;
 class PROPERTY_MANAGER;
 class PG_UNIT_EDITOR;
 class PG_CHECKBOX_EDITOR;
@@ -33,7 +33,7 @@ class PG_CHECKBOX_EDITOR;
 class PCB_PROPERTIES_PANEL : public PROPERTIES_PANEL
 {
 public:
-    PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_EDIT_FRAME* aFrame );
+    PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_BASE_EDIT_FRAME* aFrame );
 
     virtual ~PCB_PROPERTIES_PANEL();
 
@@ -52,7 +52,7 @@ protected:
     ///> Regenerates caches storing layer and net names
     void updateLists( const BOARD* aBoard );
 
-    PCB_EDIT_FRAME* m_frame;
+    PCB_BASE_EDIT_FRAME* m_frame;
     PROPERTY_MANAGER& m_propMgr;
     PG_UNIT_EDITOR* m_unitEditorInstance;
     PG_CHECKBOX_EDITOR* m_checkboxEditorInstance;

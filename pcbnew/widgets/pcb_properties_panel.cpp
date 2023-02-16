@@ -21,7 +21,7 @@
 
 #include "pcb_properties_panel.h"
 
-#include <pcb_edit_frame.h>
+#include <pcb_base_edit_frame.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_selection_tool.h>
 #include <properties/property_mgr.h>
@@ -36,7 +36,7 @@
 #include <string_utils.h>
 
 
-PCB_PROPERTIES_PANEL::PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_EDIT_FRAME* aFrame ) :
+PCB_PROPERTIES_PANEL::PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_BASE_EDIT_FRAME* aFrame ) :
         PROPERTIES_PANEL( aParent, aFrame ),
         m_frame( aFrame ),
         m_propMgr( PROPERTY_MANAGER::Instance() )
@@ -46,7 +46,9 @@ PCB_PROPERTIES_PANEL::PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_EDIT_FRAME* a
 
     wxASSERT( wxPGGlobalVars );
 
-    auto it = wxPGGlobalVars->m_mapEditorClasses.find( PG_UNIT_EDITOR::EDITOR_NAME );
+    wxString editorKey = PG_UNIT_EDITOR::BuildEditorName( m_frame );
+
+    auto it = wxPGGlobalVars->m_mapEditorClasses.find( editorKey );
 
     if( it != wxPGGlobalVars->m_mapEditorClasses.end() )
     {
@@ -144,7 +146,7 @@ wxPGProperty* PCB_PROPERTIES_PANEL::createPGProperty( const PROPERTY_BASE* aProp
         return ret;
     }
 
-    return PGPropertyFactory( aProperty );
+    return PGPropertyFactory( aProperty, m_frame );
 }
 
 

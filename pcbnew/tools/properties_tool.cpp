@@ -25,7 +25,7 @@
 
 int PROPERTIES_TOOL::UpdateProperties( const TOOL_EVENT& aEvent )
 {
-    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+    PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
 
     if( editFrame )
         editFrame->UpdateProperties();

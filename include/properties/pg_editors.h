@@ -37,7 +37,7 @@ public:
 
     virtual ~PG_UNIT_EDITOR();
 
-    wxString GetName() const override { return EDITOR_NAME; }
+    wxString GetName() const override { return m_editorName; }
 
     wxPGWindowList CreateControls( wxPropertyGrid* aPropGrid, wxPGProperty* aProperty,
                                    const wxPoint& aPos, const wxSize& aSize ) const override;
@@ -58,10 +58,14 @@ public:
      */
     void UpdateFrame( EDA_DRAW_FRAME* aFrame );
 
+    static wxString BuildEditorName( EDA_DRAW_FRAME* aFrame );
+
 protected:
     EDA_DRAW_FRAME* m_frame;
 
     std::unique_ptr<PROPERTY_EDITOR_UNIT_BINDER> m_unitBinder;
+
+    wxString m_editorName;
 };
 
 

@@ -428,6 +428,7 @@ static struct FP_SHAPE_DESC
         propMgr.InheritsAfter( TYPE_HASH( FP_SHAPE ), TYPE_HASH( PCB_SHAPE ) );
 
         propMgr.AddProperty( new PROPERTY<FP_SHAPE, wxString>( _HKI( "Parent" ),
-                    NO_SETTER( FP_SHAPE, wxString ), &FP_SHAPE::GetParentAsString ) );
+                             NO_SETTER( FP_SHAPE, wxString ), &FP_SHAPE::GetParentAsString ) )
+                .SetIsHiddenFromLibraryEditors();
     }
 } _FP_SHAPE_DESC;

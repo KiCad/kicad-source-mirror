@@ -263,6 +263,17 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         if( boardItem->IsSelected() )
             selectedModified = true;
 
+        // If we're the footprint editor, the boardItem will always be the containing footprint
+        if( m_isFootprintEditor && boardItem->Type() == PCB_FOOTPRINT_T )
+        {
+            static_cast<FOOTPRINT*>( boardItem )->RunOnChildren(
+                    [&selectedModified]( BOARD_ITEM* aItem )
+                    {
+                        if( aItem->HasFlag( IS_MODIFIED_CHILD ) )
+                            selectedModified = true;
+                    } );
+        }
+
         switch( changeType )
         {
         case CHT_ADD:

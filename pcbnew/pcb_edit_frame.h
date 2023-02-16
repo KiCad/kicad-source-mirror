@@ -304,7 +304,6 @@ public:
     void PrepareLayerIndicator( bool aForceRebuild = false );
 
     void ToggleLayersManager();
-    void ToggleProperties();
     void ToggleSearch();
 
     /**
@@ -814,7 +813,6 @@ public:
     wxChoice* m_SelViaSizeBox;           // a choice box to display and select current via diameter
 
     bool m_show_layer_manager_tools;
-    bool m_show_properties;
     bool m_show_search;
 
     bool m_ZoneFillsDirty;               // Board has been modified since last zone fill.

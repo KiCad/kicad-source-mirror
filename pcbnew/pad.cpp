@@ -1790,9 +1790,11 @@ static struct PAD_DESC
         propMgr.AddProperty( padNumber, groupPad );
 
         propMgr.AddProperty( new PROPERTY<PAD, wxString>( _HKI( "Pin Name" ),
-                    NO_SETTER( PAD, wxString ), &PAD::GetPinFunction ), groupPad );
+                             NO_SETTER( PAD, wxString ), &PAD::GetPinFunction ), groupPad )
+                .SetIsHiddenFromLibraryEditors();
         propMgr.AddProperty( new PROPERTY<PAD, wxString>( _HKI( "Pin Type" ),
-                    NO_SETTER( PAD, wxString ), &PAD::GetPinType ), groupPad );
+                             NO_SETTER( PAD, wxString ), &PAD::GetPinType ), groupPad )
+                .SetIsHiddenFromLibraryEditors();
 
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Size X" ),
                     &PAD::SetSizeX, &PAD::GetSizeX,

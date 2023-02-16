@@ -42,6 +42,7 @@
 #include <dialogs/eda_view_switcher.h>
 #include <wildcards_and_files_ext.h>
 #include <collectors.h>
+#include <widgets/wx_aui_utils.h>
 
 
 PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
@@ -53,7 +54,8 @@ PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
         m_selectionFilterPanel( nullptr ),
         m_appearancePanel( nullptr ),
         m_propertiesPanel( nullptr ),
-        m_tabbedPanel( nullptr )
+        m_tabbedPanel( nullptr ),
+        m_show_properties( false )
 {
     m_darkMode = KIPLATFORM::UI::IsDarkTheme();
 
@@ -300,3 +302,27 @@ void PCB_BASE_EDIT_FRAME::UpdateProperties()
     m_propertiesPanel->UpdateData();
 }
 
+
+void PCB_BASE_EDIT_FRAME::ToggleProperties()
+{
+    if( !m_propertiesPanel )
+        return;
+
+    PCBNEW_SETTINGS* settings = GetPcbNewSettings();
+
+    m_show_properties = !m_show_properties;
+
+    wxAuiPaneInfo& propertiesPaneInfo = m_auimgr.GetPane( "PropertiesManager" );
+    propertiesPaneInfo.Show( m_show_properties );
+
+    if( m_show_properties )
+    {
+        SetAuiPaneSize( m_auimgr, propertiesPaneInfo,
+                        settings->m_AuiPanels.properties_panel_width, -1 );
+    }
+    else
+    {
+        settings->m_AuiPanels.properties_panel_width = m_propertiesPanel->GetSize().x;
+        m_auimgr.Update();
+    }
+}

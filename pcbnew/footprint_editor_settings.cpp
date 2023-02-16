@@ -71,6 +71,15 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "aui.appearance_panel_tab",
             &m_AuiPanels.appearance_panel_tab, 0, 0, 2 ) );
 
+    m_params.emplace_back( new PARAM<int>( "aui.properties_panel_width",
+            &m_AuiPanels.properties_panel_width, -1 ) );
+
+    m_params.emplace_back( new PARAM<float>( "aui.properties_splitter_proportion",
+            &m_AuiPanels.properties_splitter_proportion, 0.5f ) );
+
+    m_params.emplace_back( new PARAM<bool>( "aui.show_properties",
+            &m_AuiPanels.show_properties, false ) );
+
     m_params.emplace_back( new PARAM<wxString>( "system.last_import_export_path",
             &m_LastImportExportPath, "" ) );
 

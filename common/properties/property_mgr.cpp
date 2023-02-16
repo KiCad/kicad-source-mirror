@@ -348,8 +348,9 @@ void PROPERTY_MANAGER::CLASS_DESC::collectPropsRecur( PROPERTY_LIST& aResult,
         aResult.push_back( property );
     }
 
-    for( const std::reference_wrapper<CLASS_DESC>& base : m_bases )
-        base.get().collectPropsRecur( aResult, aReplaced, aDisplayOrder, aMasked );
+    // Iterate backwards so that replaced properties appear before base properties
+    for( auto it = m_bases.rbegin(); it != m_bases.rend(); ++it )
+        it->get().collectPropsRecur( aResult, aReplaced, aDisplayOrder, aMasked );
 }
 
 

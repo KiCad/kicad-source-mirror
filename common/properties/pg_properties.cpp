@@ -24,6 +24,7 @@
 
 #include <macros.h>
 #include <validators.h>
+#include <eda_draw_frame.h>
 #include <eda_units.h>
 #include <properties/eda_angle_variant.h>
 #include <properties/pg_properties.h>
@@ -76,7 +77,7 @@ wxAnyValueTypeScopedPtr wxAnyToEDA_ANGLE_VARIANTRegistrationImpl::s_instance( ne
 static wxAnyToEDA_ANGLE_VARIANTRegistrationImpl s_wxAnyToEDA_ANGLE_VARIANTRegistration( &EDA_ANGLE_VARIANT_DATA::VariantDataFactory );
 
 
-wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty )
+wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty, EDA_DRAW_FRAME* aFrame )
 {
     wxPGProperty* ret = nullptr;
     PROPERTY_DISPLAY display = aProperty->Display();
@@ -85,13 +86,13 @@ wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty )
     {
     case PROPERTY_DISPLAY::PT_SIZE:
         ret = new PGPROPERTY_SIZE();
-        ret->SetEditor( PG_UNIT_EDITOR::EDITOR_NAME );
+        ret->SetEditor( PG_UNIT_EDITOR::BuildEditorName( aFrame ) );
         break;
 
     case PROPERTY_DISPLAY::PT_COORD:
         ret = new PGPROPERTY_COORD();
         static_cast<PGPROPERTY_COORD*>( ret )->SetCoordType( aProperty->CoordType() );
-        ret->SetEditor( PG_UNIT_EDITOR::EDITOR_NAME );
+        ret->SetEditor( PG_UNIT_EDITOR::BuildEditorName( aFrame ) );
         break;
 
     case PROPERTY_DISPLAY::PT_DECIDEGREE:
@@ -103,7 +104,7 @@ wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty )
             prop->SetScale( 10.0 );
 
         ret = prop;
-        ret->SetEditor( PG_UNIT_EDITOR::EDITOR_NAME );
+        ret->SetEditor( PG_UNIT_EDITOR::BuildEditorName( aFrame ) );
         break;
     }
 

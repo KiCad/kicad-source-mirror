@@ -31,6 +31,7 @@
 #include "tools/placement_tool.h"
 #include "tools/pcb_point_editor.h"
 #include "tools/pcb_selection_tool.h"
+#include "tools/properties_tool.h"
 #include <python/scripting/pcb_scripting_tool.h>
 #include <3d_viewer/eda_3d_viewer_frame.h>
 #include <bitmaps.h>
@@ -68,6 +69,7 @@
 #include <widgets/appearance_controls.h>
 #include <widgets/lib_tree.h>
 #include <widgets/panel_selection_filter.h>
+#include <widgets/pcb_properties_panel.h>
 #include <widgets/wx_progress_reporters.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/filedlg.h>
@@ -176,11 +178,15 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_selectionFilterPanel = new PANEL_SELECTION_FILTER( this );
     m_appearancePanel = new APPEARANCE_CONTROLS( this, GetCanvas(), true );
+    m_propertiesPanel = new PCB_PROPERTIES_PANEL( this, this );
 
     // LoadSettings() *after* creating m_LayersManager, because LoadSettings() initialize
     // parameters in m_LayersManager
     // NOTE: KifaceSettings() will return PCBNEW_SETTINGS if we started from pcbnew
     LoadSettings( GetSettings() );
+
+    float proportion = GetFootprintEditorSettings()->m_AuiPanels.properties_splitter_proportion;
+    m_propertiesPanel->SetSplitterProportion( proportion );
 
     // Must be set after calling LoadSettings() to be sure these parameters are not dependent
     // on what is read in stored settings.  Enable one internal layer, because footprints
@@ -214,9 +220,12 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     // Columns; layers 1 - 3
     m_auimgr.AddPane( m_treePane, EDA_PANE().Palette().Name( "Footprints" )
-                      .Left().Layer( 3 )
+                      .Left().Layer( 4 )
                       .Caption( _( "Libraries" ) )
                       .MinSize( 250, -1 ).BestSize( 250, -1 ) );
+    m_auimgr.AddPane( m_propertiesPanel, EDA_PANE().Name( wxS( "PropertiesManager" ) )
+                      .Left().Layer( 3 ).Caption( _( "Properties" ) )
+                      .PaneBorder( false ).MinSize( 240, -1 ).BestSize( 300, -1 ) );
     m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" )
                       .Left().Layer( 2 ) );
 
@@ -237,6 +246,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_auimgr.GetPane( "LayersManager" ).Show( m_show_layer_manager_tools );
     m_auimgr.GetPane( "SelectionFilter" ).Show( m_show_layer_manager_tools );
+    m_auimgr.GetPane( "PropertiesManager" ).Show( m_show_properties );
 
     // The selection filter doesn't need to grow in the vertical direction when docked
     m_auimgr.GetPane( "SelectionFilter" ).dock_proportion = 0;
@@ -605,6 +615,7 @@ void FOOTPRINT_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     m_displayOptions = cfg->m_Display;
     m_show_layer_manager_tools = cfg->m_AuiPanels.show_layer_manager;
+    m_show_properties          = cfg->m_AuiPanels.show_properties;
 
     GetToolManager()->GetTool<PCB_SELECTION_TOOL>()->GetFilter() = cfg->m_SelectionFilter;
     m_selectionFilterPanel->SetCheckboxesFromFilter( cfg->m_SelectionFilter );
@@ -630,6 +641,12 @@ void FOOTPRINT_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     cfg->m_AuiPanels.show_layer_manager   = m_show_layer_manager_tools;
     cfg->m_AuiPanels.right_panel_width    = m_appearancePanel->GetSize().x;
     cfg->m_AuiPanels.appearance_panel_tab = m_appearancePanel->GetTabIndex();
+
+    cfg->m_AuiPanels.show_properties        = m_show_properties;
+    cfg->m_AuiPanels.properties_panel_width = m_propertiesPanel->GetSize().x;
+
+    cfg->m_AuiPanels.properties_splitter_proportion =
+            m_propertiesPanel->SplitterProportion();
 }
 
 
@@ -1071,6 +1088,7 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new GROUP_TOOL );
     m_toolManager->RegisterTool( new CONVERT_TOOL );
     m_toolManager->RegisterTool( new SCRIPTING_TOOL );
+    m_toolManager->RegisterTool( new PROPERTIES_TOOL );
 
     for( TOOL_BASE* tool : m_toolManager->Tools() )
     {
@@ -1177,6 +1195,12 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
                 return m_auimgr.GetPane( "LayersManager" ).IsShown();
             };
 
+    auto propertiesCond =
+            [this] ( const SELECTION& )
+            {
+                return m_auimgr.GetPane( "PropertiesManager" ).IsShown();
+            };
+
     mgr->SetConditions( PCB_ACTIONS::toggleHV45Mode,        CHECK( constrainedDrawingModeCond ) );
     mgr->SetConditions( ACTIONS::highContrastMode,          CHECK( highContrastCond ) );
     mgr->SetConditions( PCB_ACTIONS::flipBoard,             CHECK( boardFlippedCond ) );
@@ -1184,6 +1208,7 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
 
     mgr->SetConditions( PCB_ACTIONS::showFootprintTree,     CHECK( footprintTreeCond ) );
     mgr->SetConditions( PCB_ACTIONS::showLayersManager,     CHECK( layerManagerCond ) );
+    mgr->SetConditions( PCB_ACTIONS::showProperties,        CHECK( propertiesCond ) );
 
     mgr->SetConditions( ACTIONS::print,                     ENABLE( haveFootprintCond ) );
     mgr->SetConditions( PCB_ACTIONS::exportFootprint,       ENABLE( haveFootprintCond ) );

@@ -29,8 +29,9 @@
 
 class PROPERTY_BASE;
 class REGEX_VALIDATOR;
+class EDA_DRAW_FRAME;
 
-wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty );
+wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty, EDA_DRAW_FRAME* aFrame );
 
 ///> Customized abstract wxPGProperty class to handle coordinate/size units
 class PGPROPERTY_DISTANCE
