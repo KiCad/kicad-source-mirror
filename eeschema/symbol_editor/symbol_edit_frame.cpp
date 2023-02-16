@@ -1215,6 +1215,10 @@ void SYMBOL_EDIT_FRAME::ShowChangedLanguage()
 void SYMBOL_EDIT_FRAME::SetScreen( BASE_SCREEN* aScreen )
 {
     SCH_BASE_FRAME::SetScreen( aScreen );
+
+    // Let tools add things to the view if necessary
+    if( m_toolManager )
+        m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 }
 
 
@@ -1227,6 +1231,10 @@ void SYMBOL_EDIT_FRAME::RebuildView()
     GetCanvas()->DisplaySymbol( m_symbol );
     GetCanvas()->GetView()->HideDrawingSheet();
     GetCanvas()->GetView()->ClearHiddenFlags();
+
+    // Let tools add things to the view if necessary
+    if( m_toolManager )
+        m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
     GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
     GetCanvas()->Refresh();
