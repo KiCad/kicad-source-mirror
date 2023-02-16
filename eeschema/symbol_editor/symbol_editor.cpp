@@ -304,10 +304,6 @@ bool SYMBOL_EDIT_FRAME::LoadOneLibrarySymbolAux( LIB_SYMBOL* aEntry, const wxStr
 
     ClearUndoRedoList();
 
-    // Let tools add things to the view if necessary
-    if( m_toolManager )
-        m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
-
     // Display the document information based on the entry selected just in
     // case the entry is an alias.
     UpdateMsgPanel();
