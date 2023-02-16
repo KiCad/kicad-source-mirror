@@ -336,6 +336,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
 
     KIID lastRolloverItem = niluuid;
+    EE_GRID_HELPER grid( m_toolMgr );
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -351,7 +352,6 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                            evt->Modifier( MD_ALT ) );
 
         MOUSE_DRAG_ACTION drag_action = m_frame->GetDragAction();
-        EE_GRID_HELPER grid( m_toolMgr );
 
         if( evt->IsMouseDown( BUT_LEFT ) )
         {
@@ -1900,9 +1900,14 @@ void EE_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, SELECTION* aGroup
                 [&]( SCH_ITEM* aChild )
                 {
                     if( aMode == SELECTED )
+                    {
                         aChild->SetSelected();
+                        getView()->Hide( aChild, true );
+                    }
                     else if( aMode == BRIGHTENED )
+                    {
                         aChild->SetBrightened();
+                    }
                 } );
     }
 
@@ -1931,7 +1936,9 @@ void EE_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, SELECTION* aGro
             getView()->Hide( aItem, false );
     }
     else if( aMode == BRIGHTENED )
+    {
         aItem->ClearBrightened();
+    }
 
     if( aGroup )
         aGroup->Remove( aItem );
@@ -1944,9 +1951,14 @@ void EE_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, SELECTION* aGro
                 [&]( SCH_ITEM* aChild )
                 {
                     if( aMode == SELECTED )
+                    {
                         aChild->ClearSelected();
+                        getView()->Hide( aChild, false );
+                    }
                     else if( aMode == BRIGHTENED )
+                    {
                         aChild->ClearBrightened();
+                    }
                 } );
     }
 

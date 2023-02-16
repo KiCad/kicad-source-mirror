@@ -2043,6 +2043,9 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
 
     HardRedraw();   // Ensure all items are redrawn (especially the drawing-sheet items)
 
+    // Allow tools to re-add their VIEW_ITEMs after the last call to Clear in HardRedraw
+    m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+
     SCH_EDITOR_CONTROL* editTool = m_toolManager->GetTool<SCH_EDITOR_CONTROL>();
     TOOL_EVENT dummy;
     editTool->UpdateNetHighlighting( dummy );
