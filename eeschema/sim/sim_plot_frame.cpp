@@ -743,6 +743,20 @@ void SIM_PLOT_FRAME::rebuildSignalsList()
 
     unconnected.Replace( '(', '_' );    // Convert to SPICE markup
 
+    auto addSignal =
+            [&]( const wxString& aSignal )
+            {
+                if( simType == ST_AC )
+                {
+                    m_signals.push_back( wxString::Format( _( "%s (gain)" ), aSignal ) );
+                    m_signals.push_back( wxString::Format( _( "%s (phase)" ), aSignal ) );
+                }
+                else
+                {
+                    m_signals.push_back( aSignal );
+                }
+            };
+
     if( options & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES )
     {
         for( const std::string& net : m_circuitModel->GetNets() )
@@ -753,15 +767,7 @@ void SIM_PLOT_FRAME::rebuildSignalsList()
             if( netname == "GND" || netname == "0" || netname.StartsWith( unconnected ) )
                 continue;
 
-            if( simType == ST_AC )
-            {
-                m_signals.push_back( wxString::Format( _( "V(%s) (gain)" ), netname ) );
-                m_signals.push_back( wxString::Format( _( "V(%s) (phase)" ), netname ) );
-            }
-            else
-            {
-                m_signals.push_back( wxString::Format( "V(%s)", netname ) );
-            }
+            addSignal( wxString::Format( wxS( "V(%s)" ), netname ) );
         }
     }
 
@@ -772,7 +778,7 @@ void SIM_PLOT_FRAME::rebuildSignalsList()
         {
             // Add all possible currents for the device.
             for( const std::string& name : item.model->SpiceGenerator().CurrentNames( item ) )
-                m_signals.push_back( name );
+                addSignal( name );
         }
     }
 
@@ -784,7 +790,7 @@ void SIM_PLOT_FRAME::rebuildSignalsList()
             if( item.model->GetPinCount() >= 2 )
             {
                 wxString name = item.model->SpiceGenerator().ItemName( item );
-                m_signals.push_back( wxString::Format( wxS( "P(%s)" ), name ) );
+                addSignal( wxString::Format( wxS( "P(%s)" ), name ) );
             }
         }
     }
@@ -796,11 +802,11 @@ void SIM_PLOT_FRAME::rebuildSignalsList()
 
         while( tokenizer.HasMoreTokens() )
         {
-            wxString line = tokenizer.GetNextToken().Upper();
+            wxString line = tokenizer.GetNextToken();
             wxString directiveParams;
 
             if( line.Upper().StartsWith( wxS( ".PROBE" ), &directiveParams ) )
-                m_signals.push_back( directiveParams.Trim( false ) );
+                addSignal( directiveParams.Trim( true ).Trim( false ) );
         }
     }
 
