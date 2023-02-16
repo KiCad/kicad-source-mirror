@@ -1646,9 +1646,6 @@ void SCH_EDIT_FRAME::SetScreen( BASE_SCREEN* aScreen )
 
     SCH_BASE_FRAME::SetScreen( aScreen );
     GetCanvas()->DisplaySheet( static_cast<SCH_SCREEN*>( aScreen ) );
-
-    if( m_toolManager )
-        m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 }
 
 
