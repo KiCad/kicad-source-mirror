@@ -774,6 +774,9 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
             r->Report( "" );
             r->Report( wxString::Format( _( "Resolved clearance: %s." ),
                                          m_frame->StringFromValue( clearance, true ) ) );
+
+            if( clearance < 0 )
+                r->Report( wxS( "Negative clearance value; clearance will not be tested." ) );
         }
 
         r->Flush();
