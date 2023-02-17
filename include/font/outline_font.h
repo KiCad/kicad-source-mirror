@@ -137,9 +137,14 @@ protected:
 
 private:
     // FreeType variables
+
+    /**
+     * Mutex for freetype access, FT_Library and FT_Face are not thread safe
+     */
     static std::mutex m_freeTypeMutex;
     static FT_Library m_freeType;
     FT_Face           m_face;
+
     const int         m_faceSize;
     bool              m_fakeBold;
     bool              m_fakeItal;
