@@ -2976,6 +2976,14 @@ SCH_BITMAP* SCH_SEXPR_PARSER::parseImage()
         }
     }
 
+    // 20230121 or older file format versions assumed 300 image PPI at load/save.
+    // Let's keep compatibility by changing image scale.
+    if( m_requiredVersion <= 20230121 )
+    {
+        BITMAP_BASE* image = bitmap->GetImage();
+        image->SetScale( image->GetScale() * image->GetPPI() / 300.0 );
+    }
+
     return bitmap.release();
 }
 
