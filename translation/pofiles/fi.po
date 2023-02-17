@@ -1572,7 +1572,7 @@ msgstr "Varoitus"
 
 #: common/confirm.cpp:181 common/confirm.cpp:187
 msgid "File Open Warning"
-msgstr "Varoitus: Tiedosto auki"
+msgstr "Varoitus, tiedosto on jo auki"
 
 #: common/confirm.cpp:183 common/confirm.cpp:189
 msgid "Interleaved saves may produce very unexpected results."
