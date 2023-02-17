@@ -414,6 +414,9 @@ private:
      */
     bool unloadProjectFile( PROJECT* aProject, bool aSave );
 
+    // Helper to create built-in colors and register them
+    void registerBuiltinColorSettings();
+
 private:
 
     /// True if running outside a UI context

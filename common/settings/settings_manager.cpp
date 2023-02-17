@@ -66,6 +66,10 @@ SETTINGS_MANAGER::SETTINGS_MANAGER( bool aHeadless ) :
 
     // create the common settings shared by all applications.  Not loaded immediately
     m_common_settings = RegisterSettings( new COMMON_SETTINGS, false );
+
+    // Create the built-in color settings
+    // Here to allow the Python API to access the built-in colors
+    registerBuiltinColorSettings();
 }
 
 SETTINGS_MANAGER::~SETTINGS_MANAGER()
@@ -305,11 +309,17 @@ COLOR_SETTINGS* SETTINGS_MANAGER::GetMigratedColorSettings()
 }
 
 
+void SETTINGS_MANAGER::registerBuiltinColorSettings()
+{
+    for( COLOR_SETTINGS* settings : COLOR_SETTINGS::CreateBuiltinColorSettings() )
+        m_color_settings[settings->GetFilename()] = RegisterSettings( settings, false );
+}
+
+
 void SETTINGS_MANAGER::loadAllColorSettings()
 {
     // Create the built-in color settings
-    for( COLOR_SETTINGS* settings : COLOR_SETTINGS::CreateBuiltinColorSettings() )
-        m_color_settings[settings->GetFilename()] = RegisterSettings( settings, false );
+    registerBuiltinColorSettings();
 
     wxFileName third_party_path;
     const ENV_VAR_MAP& env = Pgm().GetLocalEnvVariables();
