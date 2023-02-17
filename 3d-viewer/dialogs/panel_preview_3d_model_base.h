@@ -68,6 +68,7 @@ class PANEL_PREVIEW_3D_MODEL_BASE : public wxPanel
 		wxSlider* m_opacity;
 		wxTextCtrl* m_boardThicknessCtrl;
 		wxStaticText* m_boardThicknessUnits;
+		wxStaticText* m_previewLabel;
 		wxBoxSizer* m_SizerPanelView;
 		wxBitmapButton* m_bpvISO;
 		wxBitmapButton* m_bpvLeft;

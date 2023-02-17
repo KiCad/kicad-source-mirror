@@ -70,6 +70,8 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
 
     m_selected = -1;
 
+    m_previewLabel->SetFont( KIUI::GetStatusFont( this ) );
+
     // Set the bitmap of 3D view buttons:
     m_bpvTop->SetBitmap( KiBitmap( BITMAPS::axis3d_top ) );
     m_bpvFront->SetBitmap( KiBitmap( BITMAPS::axis3d_front ) );
