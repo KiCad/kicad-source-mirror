@@ -572,6 +572,7 @@ int DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
             {
                 m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
                 m_view->ClearPreview();
+                m_view->RecacheAllItems();
                 delete image;
                 image = nullptr;
             };
