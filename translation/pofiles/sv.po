@@ -1732,11 +1732,11 @@ msgstr "KiCad-användargrupp och community"
 
 #: common/dialog_about/AboutDialog_main.cpp:166
 msgid "KiCad forum - "
-msgstr "KiCad forum - "
+msgstr "KiCad diskussionsforum - "
 
 #: common/dialog_about/AboutDialog_main.cpp:180
 msgid "The complete KiCad EDA Suite is released under the"
-msgstr "Hela KiCad EDA Suite släpps under"
+msgstr "Hela programvarupaketet KiCad EDA är licensierat enligt"
 
 #: common/dialog_about/AboutDialog_main.cpp:182
 msgid "GNU General Public License (GPL) version 3 or any later version"
@@ -1828,7 +1828,7 @@ msgstr "Urklippsfel"
 
 #: common/dialog_about/dialog_about.cpp:474
 msgid "Copied..."
-msgstr "Kopierad ..."
+msgstr "Kopierad..."
 
 #: common/dialog_about/dialog_about_base.cpp:31
 msgid "App Title"
