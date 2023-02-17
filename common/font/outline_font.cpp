@@ -335,6 +335,8 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
                                         TEXT_STYLE_FLAGS aTextStyle ) const
 {
     VECTOR2D glyphSize = aSize;
+    
+    std::lock_guard<std::mutex> guard( m_freeTypeMutex );
     FT_Face  face = m_face;
     double   scaler = faceSize();
 
@@ -562,6 +564,9 @@ void OUTLINE_FONT::RenderToOpenGLCanvas( KIGFX::OPENGL_GAL& aGal, const wxString
     unsigned int         glyphCount;
     hb_glyph_info_t*     glyphInfo = hb_buffer_get_glyph_infos( buf, &glyphCount );
     hb_glyph_position_t* glyphPos = hb_buffer_get_glyph_positions( buf, &glyphCount );
+    
+    std::lock_guard<std::mutex> guard( m_freeTypeMutex );
+
     hb_font_t*           referencedFont = hb_ft_font_create_referenced( m_face );
 
     hb_ft_font_set_funcs( referencedFont );
