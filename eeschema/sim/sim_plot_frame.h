@@ -355,6 +355,9 @@ private:
     // frame is initialized (end of the Ctor)
     void setSubWindowsSashSize();
 
+public:
+    int                                    m_SuppressGridEvents;
+
 private:
     SCH_EDIT_FRAME*                        m_schematicFrame;
     std::shared_ptr<NGSPICE_CIRCUIT_MODEL> m_circuitModel;

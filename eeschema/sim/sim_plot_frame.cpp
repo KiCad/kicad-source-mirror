@@ -324,8 +324,28 @@ void MEASUREMENTS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
 }
 
 
+class SUPPRESS_GRID_CELL_EVENTS
+{
+public:
+    SUPPRESS_GRID_CELL_EVENTS( SIM_PLOT_FRAME* aFrame ) :
+            m_frame( aFrame )
+    {
+        m_frame->m_SuppressGridEvents++;
+    }
+
+    ~SUPPRESS_GRID_CELL_EVENTS()
+    {
+        m_frame->m_SuppressGridEvents--;
+    }
+
+private:
+    SIM_PLOT_FRAME* m_frame;
+};
+
+
 SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         SIM_PLOT_FRAME_BASE( aParent ),
+        m_SuppressGridEvents( 0 ),
         m_lastSimPlot( nullptr ),
         m_darkMode( true ),
         m_plotNumber( 0 ),
@@ -646,6 +666,8 @@ void SIM_PLOT_FRAME::setSubWindowsSashSize()
 
 void SIM_PLOT_FRAME::rebuildSignalsGrid( wxString aFilter )
 {
+    SUPPRESS_GRID_CELL_EVENTS raii( this );
+
     m_signalsGrid->ClearRows();
 
     if( aFilter.IsEmpty() )
@@ -970,6 +992,9 @@ void updateRangeUnits( wxString* aRange, const wxString& aUnits )
 
 void SIM_PLOT_FRAME::onSignalsGridCellChanged( wxGridEvent& aEvent )
 {
+    if( m_SuppressGridEvents > 0 )
+        return;
+
     int             row = aEvent.GetRow();
     int             col = aEvent.GetCol();
     wxString        text = m_signalsGrid->GetCellValue( row, col );
@@ -1055,6 +1080,9 @@ void SIM_PLOT_FRAME::onSignalsGridCellChanged( wxGridEvent& aEvent )
 
 void SIM_PLOT_FRAME::onCursorsGridCellChanged( wxGridEvent& aEvent )
 {
+    if( m_SuppressGridEvents > 0 )
+        return;
+
     SIM_PLOT_PANEL* plotPanel = GetCurrentPlot();
 
     if( !plotPanel )
@@ -1788,6 +1816,7 @@ bool SIM_PLOT_FRAME::LoadWorkbook( const wxString& aPath )
                         wxColour color;
                         color.Set( item );
                         trace->SetTraceColour( color );
+                        plotPanel->UpdateTraceStyle( trace );
                     }
                     else if( item.StartsWith( wxS( "cursor1" ) ) )
                     {
@@ -2165,6 +2194,8 @@ void SIM_PLOT_FRAME::doCloseWindow()
 
 void SIM_PLOT_FRAME::updateCursors()
 {
+    SUPPRESS_GRID_CELL_EVENTS raii( this );
+
     m_cursorsGrid->ClearRows();
 
     SIM_PLOT_PANEL* plotPanel = GetCurrentPlot();
