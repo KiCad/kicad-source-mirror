@@ -1450,36 +1450,37 @@ void SIM_PLOT_FRAME::updateTrace( const wxString& aName, SIM_TRACE_TYPE aTraceTy
     if( xAxisName.IsEmpty() )
         return;
 
-    std::vector<double> data_x = m_simulator->GetMagPlot( (const char*) xAxisName.c_str() );
-    unsigned int        size = data_x.size();
-
+    std::vector<double> data_x;
     std::vector<double> data_y;
 
-    // Now, Y axis data
-    switch( simType )
+    if( m_simFinished )
     {
-    case ST_AC:
-        wxASSERT_MSG( !( ( aTraceType & SPT_AC_MAG ) && ( aTraceType & SPT_AC_PHASE ) ),
-                      wxT( "Cannot set both AC_PHASE and AC_MAG bits" ) );
+        data_x = m_simulator->GetMagPlot( (const char*) xAxisName.c_str() );
 
-        if( aTraceType & SPT_AC_MAG )
+        switch( simType )
+        {
+        case ST_AC:
+            if( aTraceType & SPT_AC_MAG )
+                data_y = m_simulator->GetMagPlot( (const char*) vectorName.c_str() );
+            else if( aTraceType & SPT_AC_PHASE )
+                data_y = m_simulator->GetPhasePlot( (const char*) vectorName.c_str() );
+            else
+                wxFAIL_MSG( wxT( "Plot type missing AC_PHASE or AC_MAG bit" ) );
+
+            break;
+
+        case ST_NOISE:
+        case ST_DC:
+        case ST_TRANSIENT:
             data_y = m_simulator->GetMagPlot( (const char*) vectorName.c_str() );
-        else if( aTraceType & SPT_AC_PHASE )
-            data_y = m_simulator->GetPhasePlot( (const char*) vectorName.c_str() );
-        else
-            wxFAIL_MSG( wxT( "Plot type missing AC_PHASE or AC_MAG bit" ) );
+            break;
 
-        break;
-
-    case ST_NOISE:
-    case ST_DC:
-    case ST_TRANSIENT:
-        data_y = m_simulator->GetMagPlot( (const char*) vectorName.c_str() );
-        break;
-
-    default:
-        wxFAIL_MSG( wxT( "Unhandled plot type" ) );
+        default:
+            wxFAIL_MSG( wxT( "Unhandled plot type" ) );
+        }
     }
+
+    unsigned int size = data_x.size();
 
     // If we did a two-source DC analysis, we need to split the resulting vector and add traces
     // for each input step
@@ -2018,13 +2019,11 @@ SIM_TRACE_TYPE SIM_PLOT_FRAME::getXAxisType( SIM_TYPE aType ) const
 {
     switch( aType )
     {
-        /// @todo SPT_LOG_FREQUENCY
-        case ST_AC:        return SPT_LIN_FREQUENCY;
-        case ST_DC:        return SPT_SWEEP;
-        case ST_TRANSIENT: return SPT_TIME;
-        default:
-            wxASSERT_MSG( false, wxT( "Unhandled simulation type" ) );
-            return (SIM_TRACE_TYPE) 0;
+    /// @todo SPT_LOG_FREQUENCY
+    case ST_AC:        return SPT_LIN_FREQUENCY;
+    case ST_DC:        return SPT_SWEEP;
+    case ST_TRANSIENT: return SPT_TIME;
+    default:           wxFAIL_MSG( wxS( "Unhandled simulation type" ) ); return SPT_UNKNOWN;
     }
 }
 
@@ -2458,6 +2457,8 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
     }
     // Is a warning message useful if the simulatior is still running?
 
+    m_simFinished = true;
+
     // If there are any signals plotted, update them
     if( SIM_PANEL_BASE::IsPlottable( simType ) )
     {
@@ -2531,7 +2532,6 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
     }
 
     m_lastSimPlot = plotPanelWindow;
-    m_simFinished = true;
 }
 
 
