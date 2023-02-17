@@ -920,8 +920,18 @@ void SCH_SEXPR_PLUGIN::saveBitmap( SCH_BITMAP* aBitmap, int aNestLevel )
                   EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
                                                        aBitmap->GetPosition().y ).c_str() );
 
-    if( aBitmap->GetImage()->GetScale() != 1.0 )
-        m_out->Print( 0, " (scale %g)", aBitmap->GetImage()->GetScale() );
+    double scale = aBitmap->GetImage()->GetScale();
+
+    // 20230121 or older file format versions assumed 300 image PPI at load/save.
+    // Let's keep compatibility by changing image scale.
+    if( SEXPR_SCHEMATIC_FILE_VERSION <= 20230121 )
+    {
+        BITMAP_BASE* image = aBitmap->GetImage();
+        scale = scale * 300.0 / image->GetPPI();
+    }
+
+    if( scale != 1.0 )
+        m_out->Print( 0, " (scale %g)", scale );
 
     m_out->Print( 0, "\n" );
 
