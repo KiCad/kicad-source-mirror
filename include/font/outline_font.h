@@ -41,6 +41,8 @@
 #include <font/glyph.h>
 #include <font/outline_decomposer.h>
 
+#include <mutex>
+
 namespace KIFONT
 {
 /**
@@ -135,6 +137,7 @@ protected:
 
 private:
     // FreeType variables
+    static std::mutex m_freeTypeMutex;
     static FT_Library m_freeType;
     FT_Face           m_face;
     const int         m_faceSize;

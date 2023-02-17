@@ -44,6 +44,7 @@ using namespace KIFONT;
 
 
 FT_Library OUTLINE_FONT::m_freeType = nullptr;
+std::mutex OUTLINE_FONT::m_freeTypeMutex;
 
 OUTLINE_FONT::OUTLINE_FONT() :
         m_face(NULL),
@@ -51,6 +52,8 @@ OUTLINE_FONT::OUTLINE_FONT() :
         m_fakeBold( false ),
         m_fakeItal( false )
 {
+    std::lock_guard<std::mutex> guard( m_freeTypeMutex );
+
     if( !m_freeType )
         FT_Init_FreeType( &m_freeType );
 }
@@ -58,6 +61,8 @@ OUTLINE_FONT::OUTLINE_FONT() :
 
 wxString OUTLINE_FONT::FreeTypeVersion()
 {
+    std::lock_guard<std::mutex> guard( m_freeTypeMutex );
+
     if( !m_freeType )
         FT_Init_FreeType( &m_freeType );
 
@@ -118,6 +123,8 @@ OUTLINE_FONT* OUTLINE_FONT::LoadFont( const wxString& aFontName, bool aBold, boo
 
 FT_Error OUTLINE_FONT::loadFace( const wxString& aFontFileName )
 {
+    std::lock_guard<std::mutex> guard( m_freeTypeMutex );
+
     // TODO: check that going from wxString to char* with UTF-8
     // conversion for filename makes sense on any/all platforms
     FT_Error e = FT_New_Face( m_freeType, aFontFileName.mb_str( wxConvUTF8 ), 0, &m_face );
@@ -369,7 +376,7 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
             {
                 FT_Matrix matrix;
                 // Create a 12 degree slant
-                const float angle = ( -M_PI * 12 ) / 180.0f;
+                const float angle = (float)( -M_PI * 12.0f ) / 180.0f;
                 matrix.xx = (FT_Fixed) ( cos( angle ) * 0x10000L );
                 matrix.xy = (FT_Fixed) ( -sin( angle ) * 0x10000L );
                 matrix.yx = (FT_Fixed) ( 0 * 0x10000L );  // Don't rotate in the y direction
