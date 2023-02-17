@@ -269,6 +269,9 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
                                                /* allow_exceptions = */ true,
                                                /* ignore_comments  = */ true );
 
+                // Save whatever we loaded, before doing any migration etc
+                m_internals->m_original = *static_cast<nlohmann::json*>( m_internals.get() );
+
                 // If parse succeeds, check if schema migration is required
                 int filever = -1;
 
@@ -438,10 +441,14 @@ bool JSON_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
     LOCALE_IO dummy;
     bool success = true;
 
+    nlohmann::json toSave = m_internals->m_original;
+
+    toSave.update( m_internals->begin(), m_internals->end(), /* merge_objects = */ true );
+
     try
     {
         std::stringstream buffer;
-        buffer << std::setw( 2 ) << *m_internals << std::endl;
+        buffer << std::setw( 2 ) << toSave << std::endl;
 
         wxFFileOutputStream fileStream( path.GetFullPath(), "wb" );
 

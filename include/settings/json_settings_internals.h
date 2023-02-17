@@ -73,6 +73,10 @@ public:
         nlohmann::json::json_pointer root( "" );
         this->nlohmann::json::operator[]( root ) = aOther.nlohmann::json::operator[]( root );
     }
+
+private:
+
+    nlohmann::json m_original;
 };
 
 #endif // KICAD_JSON_SETTINGS_INTERNALS_H
