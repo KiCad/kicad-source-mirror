@@ -501,6 +501,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
             {
                 m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
                 m_view->ClearPreview();
+                m_view->RecacheAllItems();
                 delete image;
                 image = nullptr;
             };
