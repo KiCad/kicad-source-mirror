@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -923,10 +923,10 @@ int KICAD_MANAGER_CONTROL::ShowPluginManager( const TOOL_EVENT& aEvent )
         // Reset state containing global lib tables
         KIFACE* kiface;
 
-        if( kiface = kiway.KiFACE( KIWAY::FACE_SCH, false ) )
+        if( ( kiface = kiway.KiFACE( KIWAY::FACE_SCH, false ) ) )
             kiface->Reset();
 
-        if( kiface = kiway.KiFACE( KIWAY::FACE_PCB, false ) )
+        if( ( kiface = kiway.KiFACE( KIWAY::FACE_PCB, false ) ) )
             kiface->Reset();
 
         // Reload lib tables
