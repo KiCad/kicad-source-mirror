@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-10 15:35-0800\n"
-"PO-Revision-Date: 2023-02-17 15:17+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"PO-Revision-Date: 2023-02-18 18:36+0000\n"
+"Last-Translator: Jan Sobków <sobkow.jan@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v7/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -20403,7 +20403,7 @@ msgstr "Motywy kolorystyczne (%d)"
 #: kicad/pcm/dialogs/dialog_pcm.cpp:75
 #, c-format
 msgid "Are you sure you want to update pinned package from version %s to %s?"
-msgstr "Czy chcesz uaktualnić przypiętą obudowę z wersji %s na %s?"
+msgstr "Czy chcesz uaktualnić przypięty pakiet z wersji %s na %s?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:78
 msgid "Confirm update"
