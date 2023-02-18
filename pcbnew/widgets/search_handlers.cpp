@@ -359,3 +359,9 @@ void NETS_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
     m_frame->GetCanvas()->GetView()->UpdateAllLayersColor();
     m_frame->GetCanvas()->Refresh();
 }
+
+
+void NETS_SEARCH_HANDLER::ActivateItem( long aItemRow )
+{
+    m_frame->ShowBoardSetupDialog( _( "Net Classes" ) );
+}
