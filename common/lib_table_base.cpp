@@ -193,6 +193,8 @@ LIB_TABLE_ROW* LIB_TABLE::findRow( const wxString& aNickName, bool aCheckIfEnabl
     {
         cur->ensureIndex();
 
+        std::shared_lock<std::shared_mutex> lock( m_nickIndexMutex );
+
         for( const std::pair<const wxString, int>& entry : cur->m_nickIndex )
         {
             if( entry.first == aNickName )
@@ -303,7 +305,7 @@ bool LIB_TABLE::InsertRow( LIB_TABLE_ROW* aRow, bool doReplace )
 {
     ensureIndex();
 
-    std::lock_guard<std::mutex> lock( m_nickIndexMutex );
+    std::lock_guard<std::shared_mutex> lock( m_nickIndexMutex );
 
     INDEX_CITER it = m_nickIndex.find( aRow->GetNickName() );
 

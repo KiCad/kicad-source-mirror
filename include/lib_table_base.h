@@ -30,7 +30,7 @@
 #include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <memory>
-#include <mutex>
+#include <shared_mutex>
 #include <project.h>
 #include <string_utf8_map.h>
 #include <richio.h>
@@ -329,7 +329,7 @@ public:
     /// Delete all rows.
     void Clear()
     {
-        std::lock_guard<std::mutex> lock( m_nickIndexMutex );
+        std::lock_guard<std::shared_mutex> lock( m_nickIndexMutex );
 
         m_rows.clear();
         m_nickIndex.clear();
@@ -541,7 +541,7 @@ protected:
 
     void reindex()
     {
-        std::lock_guard<std::mutex> lock( m_nickIndexMutex );
+        std::lock_guard<std::shared_mutex> lock( m_nickIndexMutex );
 
         m_nickIndex.clear();
 
@@ -580,7 +580,7 @@ protected:
     mutable int m_version;
 
     /// Mutex to protect access to the nickIndex variable
-    mutable std::mutex m_nickIndexMutex;
+    mutable std::shared_mutex m_nickIndexMutex;
 };
 
 #endif  // _LIB_TABLE_BASE_H_
