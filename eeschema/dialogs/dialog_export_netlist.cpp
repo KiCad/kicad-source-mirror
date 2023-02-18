@@ -213,6 +213,7 @@ EXPORT_NETLIST_PAGE::EXPORT_NETLIST_PAGE( wxNotebook* aParent, const wxString& a
     m_SaveAllVoltages     = nullptr;
     m_SaveAllCurrents     = nullptr;
     m_SaveAllDissipations = nullptr;
+    m_RunExternalSpiceCommand = nullptr;
     m_custom              = aCustom;
 
     aParent->AddPage( this, aTitle, false );

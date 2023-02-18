@@ -74,11 +74,15 @@ void SIM_PLOT_FRAME::ReCreateHToolbar()
 void SIM_PLOT_FRAME::doReCreateMenuBar()
 {
     COMMON_CONTROL* tool = m_toolManager->GetTool<COMMON_CONTROL>();
+    EDA_BASE_FRAME* base_frame = dynamic_cast<EDA_BASE_FRAME*>( this );
+
+    // base_frame == nullptr should not happen, but it makes Coverity happy
+    wxCHECK( base_frame, /* void */ );
+
     // wxWidgets handles the OSX Application menu behind the scenes, but that means
     // we always have to start from scratch with a new wxMenuBar.
-    wxMenuBar*  oldMenuBar = dynamic_cast<EDA_BASE_FRAME*>( this )->GetMenuBar();
+    wxMenuBar*  oldMenuBar = base_frame->GetMenuBar();
     WX_MENUBAR* menuBar    = new WX_MENUBAR();
-
 
     //-- File menu -----------------------------------------------------------
     //
@@ -153,8 +157,8 @@ void SIM_PLOT_FRAME::doReCreateMenuBar()
     menuBar->Append( viewMenu, _( "&View" ) );
     menuBar->Append( simulationMenu, _( "&Simulation" ) );
     menuBar->Append( prefsMenu, _( "&Preferences" ) );
-    dynamic_cast<EDA_BASE_FRAME*>( this )->AddStandardHelpMenu( menuBar );
+    base_frame->AddStandardHelpMenu( menuBar );
 
-    dynamic_cast<EDA_BASE_FRAME*>( this )->SetMenuBar( menuBar );
+    base_frame->SetMenuBar( menuBar );
     delete oldMenuBar;
 }
