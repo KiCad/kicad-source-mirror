@@ -736,10 +736,13 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
     aSizes.SetDiffPairViaGapSameAsTraceGap( false );
 
     int      holeToHoleMin = bds.m_HoleToHoleMin;
-    PNS::VIA dummyVia;
+    PNS::VIA dummyVia, coupledVia;
 
     if( aStartItem )
+    {
         dummyVia.SetNet( aStartItem->Net() );
+        coupledVia.SetNet( m_ruleResolver->DpCoupledNet( aStartItem->Net() ) );
+    }
 
     if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE, &dummyVia,
                                          &dummyVia, UNDEFINED_LAYER, &constraint ) )
@@ -748,6 +751,14 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
     }
 
     aSizes.SetHoleToHole( holeToHoleMin );
+
+    if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE, &dummyVia,
+                                         &coupledVia, UNDEFINED_LAYER, &constraint ) )
+    {
+        holeToHoleMin = constraint.m_Value.Min();
+    }
+
+    aSizes.SetDiffPairHoleToHole( holeToHoleMin );
 
     return true;
 }

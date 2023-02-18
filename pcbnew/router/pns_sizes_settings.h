@@ -122,6 +122,9 @@ public:
     wxString GetDiffPairGapSource() const { return m_diffPairGapSource; }
     void SetDiffPairGapSource( const wxString& aSource ) { m_diffPairGapSource = aSource; }
 
+    void SetDiffPairHoleToHole( int aHoleToHole ) { m_diffPairHoleToHole = aHoleToHole; }
+    int GetDiffPairHoleToHole() const { return m_diffPairHoleToHole; }
+
 private:
     int     m_clearance;
     int     m_minClearance;
@@ -138,6 +141,7 @@ private:
     bool    m_diffPairViaGapSameAsTraceGap;
 
     int     m_holeToHole;
+    int     m_diffPairHoleToHole;
 
     std::map<int, int> m_layerPairs;
 
