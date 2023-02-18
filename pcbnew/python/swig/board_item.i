@@ -68,6 +68,7 @@ class PCB_ARC;
 class ZONE;
 class FP_ZONE;
 class PCB_TARGET;
+class PCB_BITMAP;
 
 // Anything targeted to the %wrapper section is extern "C" whereas code targeted
 // to %header section is C++.
@@ -97,6 +98,7 @@ static PCB_ARC*              Cast_to_PCB_ARC( BOARD_ITEM* );
 static ZONE*                 Cast_to_ZONE( BOARD_ITEM* );
 static FP_ZONE*              Cast_to_FP_ZONE( BOARD_ITEM* );
 static PCB_TARGET*           Cast_to_PCB_TARGET( BOARD_ITEM* );
+static PCB_BITMAP*           Cast_to_PCB_BITMAP( BOARD_ITEM* );
 
 #ifdef __cplusplus
 }   // extern "C"
@@ -126,6 +128,7 @@ static PCB_ARC*              Cast_to_PCB_ARC( BOARD_ITEM* );
 static ZONE*                 Cast_to_ZONE( BOARD_ITEM* );
 static FP_ZONE*              Cast_to_FP_ZONE( BOARD_ITEM* );
 static PCB_TARGET*           Cast_to_PCB_TARGET( BOARD_ITEM* );
+static PCB_BITMAP*           Cast_to_PCB_BITMAP( BOARD_ITEM* );
 
 
 %extend BOARD_ITEM
@@ -174,6 +177,8 @@ static PCB_TARGET*           Cast_to_PCB_TARGET( BOARD_ITEM* );
             return Cast_to_PCB_ARC(self)
         elif ct=="PCB_TARGET":
             return Cast_to_PCB_TARGET(self)
+        elif ct=="PCB_BITMAP":
+            return Cast_to_PCB_BITMAP(self)
         elif ct=="ZONE":
             return Cast_to_ZONE(self)
         else:
@@ -226,4 +231,5 @@ static PCB_ARC*              Cast_to_PCB_ARC( BOARD_ITEM* self )              { 
 static ZONE*                 Cast_to_ZONE( BOARD_ITEM* self )                 { return dynamic_cast<ZONE*>(self);                 }
 static FP_ZONE*              Cast_to_FP_ZONE( BOARD_ITEM* self )              { return dynamic_cast<FP_ZONE*>(self);              }
 static PCB_TARGET*           Cast_to_PCB_TARGET( BOARD_ITEM* self )           { return dynamic_cast<PCB_TARGET*>(self);           }
+static PCB_BITMAP*           Cast_to_PCB_BITMAP( BOARD_ITEM* self )           { return dynamic_cast<PCB_BITMAP*>(self);           }
 %}
