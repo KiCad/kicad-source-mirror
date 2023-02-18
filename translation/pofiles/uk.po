@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-15 16:29-0800\n"
-"PO-Revision-Date: 2023-01-30 07:26+0000\n"
+"PO-Revision-Date: 2023-02-21 00:56+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
-"source/uk/>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
+"master-source/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -93,9 +93,8 @@ msgid "Build BVH for holes and vias"
 msgstr "Побудова глухих/внутрішніх перехідних отворів"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:389
-#, fuzzy
 msgid "OpenGL context creation error"
-msgstr "Кількість термічних переходів для:"
+msgstr "Помилка створення контексту OpenGL"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:420
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
@@ -514,9 +513,8 @@ msgid "Render Solid Colors"
 msgstr "Візуалізувати повні кольори"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:195
-#, fuzzy
 msgid "Use only the diffuse color property from 3D model file"
-msgstr "Використовувати лише значення кольору з файлу 3D моделі"
+msgstr "Використовуйте властивість дифузії кольору лише з файлу 3D-моделі"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:201
 msgid "Render CAD Colors"
@@ -5333,14 +5331,12 @@ msgid "Page limits"
 msgstr "Межі сторінки"
 
 #: common/layer_id.cpp:150
-#, fuzzy
 msgid "Operating point voltages"
-msgstr "Робоча точка"
+msgstr "Напруги в робочих точках"
 
 #: common/layer_id.cpp:151
-#, fuzzy
 msgid "Operating point currents"
-msgstr "Робоча точка"
+msgstr "Струми в робочих точках"
 
 #: common/layer_id.cpp:155
 msgid "Footprints front"
@@ -6036,9 +6032,8 @@ msgid "Find Previous"
 msgstr "Знайти попереднє"
 
 #: common/tool/actions.cpp:234
-#, fuzzy
 msgid "Find previous match"
-msgstr "Знайти попереднє"
+msgstr "Знайти попередній збіг"
 
 #: common/tool/actions.cpp:240
 msgid "Find Next Marker"
@@ -8677,9 +8672,8 @@ msgstr "Написати директиву для збереження всіх
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:305
 #: eeschema/dialogs/dialog_sim_command_base.cpp:441
-#, fuzzy
 msgid "Save all power dissipations"
-msgstr "Максимально допустиме відхилення:"
+msgstr "Зберегти всі втрати потужності"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:306
 #, fuzzy
