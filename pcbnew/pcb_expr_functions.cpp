@@ -896,6 +896,9 @@ static void inDiffPairFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                 {
                     NETINFO_ITEM* netinfo = static_cast<BOARD_CONNECTED_ITEM*>( item )->GetNet();
 
+                    if( !netinfo )
+                        return 0.0;
+
                     wxString refName = netinfo->GetNetname();
                     wxString arg = argv->AsString();
                     wxString baseName, coupledNet;
