@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,8 @@
 class wxConfigBase;
 
 /**
+ * @defgroup advanced_config Advanced Configuration Variables
+ *
  * Class containing "advanced" configuration options.
  *
  * Options set here are for developer or advanced users only. If a general user
@@ -55,6 +57,7 @@ class wxConfigBase;
  * config files, and why you might want to set them, see #AC_KEYS
  *
  */
+
 class ADVANCED_CFG
 {
 public:
@@ -65,6 +68,9 @@ public:
      * their config files at ~/.config/kicad/advanced, or the platform equivalent.
      */
     static const ADVANCED_CFG& GetCfg();
+
+///@{
+/// \ingroup advanced_config
 
     /**
      * Distance from an arc end point and the estimated end point, when rotating from the
@@ -146,7 +152,7 @@ public:
     bool m_DrawTriangulationOutlines;
 
     /**
-     * When true, adds zone-diaplay-modes for stroking the zone fracture boundaries and the zone
+     * When true, adds zone-display-modes for stroking the zone fracture boundaries and the zone
      * triangulation.
      */
     bool m_ExtraZoneDisplayModes;
@@ -197,7 +203,8 @@ public:
 
     /**
      * Skip reading/writing 3d model memory caches
-     * This ensures 3d models are always reloaded from disk even if we previously opened the 3d viewer.
+     * This ensures 3d models are always reloaded from disk even if we previously opened the 3d
+     * viewer.
      */
     bool m_Skip3DModelMemoryCache;
 
@@ -224,20 +231,23 @@ public:
     /**
      * 3D-Viewer, Raytracing
      * Bevel height of layer items. Controls the start of curvature normal on the edge.
-     * Value is in micrometre. Good values should be arround or less than the copper thickness.
+     * Value is in micrometer. Good values should be around or less than the copper thickness.
      */
     int m_3DRT_BevelHeight_um;
 
     /**
-     * 3D-Viewer, Raytracing
-     * Factor applied to Extent.z of the item layer, used on calculation of the bevel's height.
+     * 3D-Viewer raytracing factor applied to Extent.z of the item layer.
+     *
+     * This is  used on calculation of the bevel's height.
      */
     double m_3DRT_BevelExtentFactor;
 
     /**
-     * User Clipper2 instead of Clipper1
+     * Use Clipper2 instead of Clipper1
      */
     bool m_UseClipper2;
+
+///@}
 
 
 private:
