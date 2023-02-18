@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-15 16:29-0800\n"
 "PO-Revision-Date: 2023-02-21 00:55+0000\n"
-"Last-Translator: Jan Sobków <sobkow.jan@gmail.com>\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
 "Language: pl\n"
@@ -103,9 +103,8 @@ msgid "Build BVH for holes and vias"
 msgstr "Tworzenie BVH dla otworów i przelotek"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:389
-#, fuzzy
 msgid "OpenGL context creation error"
-msgstr "Analiza ilości łącz termicznych dla:"
+msgstr "Wystąpił błąd OpenGL przy tworzeniu kontekstu"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:420
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
@@ -524,7 +523,6 @@ msgid "Render Solid Colors"
 msgstr "Renderuj pełne kolory"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:195
-#, fuzzy
 msgid "Use only the diffuse color property from 3D model file"
 msgstr "Użyj tylko właściwości rozpraszania koloru z pliku modelu 3D"
 
@@ -5355,14 +5353,12 @@ msgid "Page limits"
 msgstr "Granice strony"
 
 #: common/layer_id.cpp:150
-#, fuzzy
 msgid "Operating point voltages"
-msgstr "Punkt pracy"
+msgstr "Napięcia w punkcie pracy"
 
 #: common/layer_id.cpp:151
-#, fuzzy
 msgid "Operating point currents"
-msgstr "Punkt pracy"
+msgstr "Prądy w punkcie pracy"
 
 #: common/layer_id.cpp:155
 msgid "Footprints front"
@@ -6059,9 +6055,8 @@ msgid "Find Previous"
 msgstr "Znajdź poprzedni"
 
 #: common/tool/actions.cpp:234
-#, fuzzy
 msgid "Find previous match"
-msgstr "Znajdź poprzedni"
+msgstr "Znajdź poprzednie spasowanie"
 
 #: common/tool/actions.cpp:240
 msgid "Find Next Marker"
@@ -8724,31 +8719,29 @@ msgstr "Umieszcza dyrektywę by zapisać wszystkie prądy (.probe alli)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:305
 #: eeschema/dialogs/dialog_sim_command_base.cpp:441
-#, fuzzy
 msgid "Save all power dissipations"
-msgstr "Maksymalna dopuszczalna odchyłka:"
+msgstr "Zapisz wszystkie straty mocy"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:306
-#, fuzzy
 msgid ""
 "Write directives to save power dissipation of all items (.probe p(<item>))"
-msgstr "Umieszcza dyrektywę by zapisać wszystkie prądy (.probe alli)"
+msgstr ""
+"Umieszcza dyrektywę symulacji by zapisać wszystkie straty mocy wszystkich "
+"elementów (.probe p(<element>))"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:312
-#, fuzzy
 msgid "Run external simulator command:"
-msgstr "Polecenie zewnętrznego symulatora:"
+msgstr "Uruchom polecenie zewnętrznego symulatora:"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:314
-#, fuzzy
 msgid ""
 "Enter the command line to run SPICE\n"
 "Usually '<path to SPICE binary> \"%I\"'\n"
 "%I will be replaced by the netlist filepath"
 msgstr ""
 "Wprowadź linię polecenia by uruchomić Spice\n"
-"Zwykle <ścieżka do pliku spice> %I\n"
-"%I zostanie zastąpione przez aktualną listę sieci Spice"
+"Zwykle '<ścieżka do pliku spice> \"%I\"'\n"
+"%I zostanie zastąpione przez aktualną ścieżkę listy sieci Spice"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:387
 msgid "Netlist command:"
@@ -8771,23 +8764,23 @@ msgstr ""
 "ponumerowane."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:560
-#, fuzzy
 msgid "external simulator not found"
-msgstr "Polecenie zewnętrznego symulatora:"
+msgstr "nie znaleziono zewnętrznego symulatora"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:561
 msgid ""
 "Note: command line is usually: <tt>&lt;path to SPICE binary&gt; \"%I\"</tt>"
 msgstr ""
+"Uwaga: linia poleceń zwykle jest następująca: <tt>&lt;ścieżka do pliku "
+"binarnego SPICE&gt; \"%I\"</tt>"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:567
 msgid "external simulator has the wrong format or architecture"
-msgstr ""
+msgstr "zewnętrzny symulator posiada zły format lub architekturę"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:572
-#, fuzzy
 msgid "permission denied"
-msgstr "Błąd uprawnień?"
+msgstr "odmowa uprawnień"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:707
 msgid "This plugin already exists."
@@ -10695,9 +10688,8 @@ msgid "Search the current &sheet only"
 msgstr "Przeszukaj wyłącznie bieżący arkusz"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:101
-#, fuzzy
 msgid "Search the current selection &only"
-msgstr "Przeszukaj wyłącznie bieżący arkusz"
+msgstr "Przeszukaj wyłącznie bieżące zaznaczenie"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:104
 msgid "Replace matches in reference designators"
@@ -11281,7 +11273,7 @@ msgstr "Faza"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:25
 msgid "Significant digits:"
-msgstr ""
+msgstr "Cyfry znaczące:"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:32
 msgid "Range:"
@@ -11312,33 +11304,29 @@ msgid "m"
 msgstr "m"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "K"
-msgstr "OK"
+msgstr "K"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "M"
-msgstr "MB"
+msgstr "M"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 msgid "G"
-msgstr ""
+msgstr "G"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "T"
-msgstr "T:"
+msgstr "T"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "P"
-msgstr "Typu Pi"
+msgstr "P"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.h:47
-#, fuzzy, c-format
+#, c-format
 msgid "Format %s"
-msgstr "Format"
+msgstr "Format %s"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:192
 #, c-format
@@ -12005,14 +11993,12 @@ msgid "Show ERC exclusions"
 msgstr "Pokaż wyjątki ERC"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:68
-#, fuzzy
 msgid "Show OP voltages"
-msgstr "Pokaż Stronę %s"
+msgstr "Pokaż napięcia punktu pracy"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:71
-#, fuzzy
 msgid "Show OP currents"
-msgstr "Zapisz wszystkie prądy"
+msgstr "Pokaż prądy punktu pracy"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:74
 msgid "Show page limi&ts"
@@ -12446,38 +12432,32 @@ msgid "Dash and dot lengths are ratios of the line width."
 msgstr "Długości myślników i kropek są proporcjonalne do szerokości linii."
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:253
-#, fuzzy
 msgid "Operating-point Overlay"
-msgstr "Punkt pracy"
+msgstr "Nakładka na punkt pracy"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:262
 msgid "Significant digits (voltages):"
-msgstr ""
+msgstr "Cyfry znaczące (napięcia):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:270
-#, fuzzy
 msgid "Range (voltages):"
-msgstr "Zapisz wszystkie napięcia"
+msgstr "Zakres (napięcia):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "fV"
-msgstr "V"
+msgstr "fV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "pV"
-msgstr "V"
+msgstr "pV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "nV"
-msgstr "V"
+msgstr "nV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "uV"
-msgstr "V"
+msgstr "uV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:71
@@ -12486,53 +12466,44 @@ msgid "mV"
 msgstr "mV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "KV"
-msgstr "V"
+msgstr "KV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "MV"
-msgstr "V"
+msgstr "MV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "GV"
-msgstr "V"
+msgstr "GV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "TV"
-msgstr "V"
+msgstr "TV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "PV"
-msgstr "V"
+msgstr "PV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:281
 msgid "Significant digits (currents):"
-msgstr ""
+msgstr "Cyfry znaczące (prądy):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:289
-#, fuzzy
 msgid "Range (currents):"
-msgstr "Zapisz wszystkie prądy"
+msgstr "Zakres (prądy):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "fA"
-msgstr "A"
+msgstr "fA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "pA"
-msgstr "A"
+msgstr "pA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "nA"
-msgstr "A"
+msgstr "nA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:208
@@ -12541,34 +12512,28 @@ msgid "uA"
 msgstr "μA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "mA"
-msgstr "A"
+msgstr "mA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "KA"
-msgstr "A"
+msgstr "KA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "MA"
-msgstr "A"
+msgstr "MA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "GA"
-msgstr "BGA"
+msgstr "GA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "TA"
-msgstr "A"
+msgstr "TA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "PA"
-msgstr "A"
+msgstr "PA"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:220
 msgid "No error or warning"
@@ -12595,13 +12560,13 @@ msgid "&Default line width:"
 msgstr "Domyślna szerokość linii:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:47
-#, fuzzy
 msgid ""
 "Set to 0 to allow symbols to inherit line width properties\n"
 "from Schematic"
 msgstr ""
-"Ustaw na 0, aby symbole dziedziczyły szerokość linii z\n"
-"ich schematu nadrzędnego"
+"Ustaw na 0, aby umożliwić symbolom dziedziczenie właściwości szerokości "
+"linii\n"
+"ze schematu"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:62
 msgid "D&efault pin length:"
@@ -12879,9 +12844,8 @@ msgstr "Migracja bibliotek"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:169
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:157
-#, fuzzy
 msgid "Available path substitutions:"
-msgstr "Dostępne ścieżki:"
+msgstr "Dostępne zastępstwa ścieżek:"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:203
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:191
@@ -15699,18 +15663,16 @@ msgid "Checking component "
 msgstr "Sprawdzanie komponentu "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:254
-#, fuzzy
 msgid "Component: name cannot be empty."
-msgstr "Nazwa komponentu nie może być pusta."
+msgstr "Komponent: Nazwa nie może być pusta."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:263
 msgid "Component: manufacturer cannot be empty."
 msgstr "Komponent: Nazwa producenta nie może być pusta."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:272
-#, fuzzy
 msgid "Component: invalid package."
-msgstr "Komponent: Niepoprawna obudowa."
+msgstr "Komponent: Niepoprawny pakiet."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:281
 msgid "Component: no pin"
@@ -15721,9 +15683,8 @@ msgid "Cannot interpolate the current based on this IV table."
 msgstr "Nie można interpolować prądu na podstawie tej tabeli IV."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:396
-#, fuzzy
 msgid "There is an invalid voltage in an IV table"
-msgstr "W tabeli IV występuje napięcie o wartości NaN"
+msgstr "W tabeli IV występuje nieprawidłowe napięcie"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:403
 msgid "There is an invalid current in an IV table"
@@ -15734,14 +15695,12 @@ msgid "Invalid R_load."
 msgstr "Niepoprawny R_load."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:450
-#, fuzzy
 msgid "Invalid falling dV/dt."
-msgstr "Niepoprawne opadanie dv/dt."
+msgstr "Niepoprawne opadanie dV/dt."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:455
-#, fuzzy
 msgid "Invalid rising dV/dt."
-msgstr "Niepoprawna narastanie dv/dt."
+msgstr "Niepoprawna narastanie dV/dt."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:470
 msgid "Model name cannot be empty"
@@ -15752,9 +15711,8 @@ msgid "Checking model "
 msgstr "Sprawdzanie modelu "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:482
-#, fuzzy
 msgid "Undefined model type."
-msgstr "Niezdefiniowany typ modelu"
+msgstr "Niezdefiniowany typ modelu."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:491
 msgid "Invalid Vinh value."
@@ -15773,7 +15731,6 @@ msgid "Invalid C_ref value."
 msgstr "Niepoprawna wartość C_ref."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:523
-#, fuzzy
 msgid "Invalid V_ref value."
 msgstr "Niepoprawna wartość V_ref."
 
@@ -15854,44 +15811,36 @@ msgid "Negative number of pins."
 msgstr "Ujemna liczba wyprowadzeń."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:723
-#, fuzzy
 msgid "Empty pin number."
-msgstr "Pusty numer pinu"
+msgstr "Pusty numer pinu."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:734
-#, fuzzy
 msgid "Resistance matrix is incorrect."
-msgstr "Matryca rezystancji nie jest prawidłowa"
+msgstr "Matryca rezystancji nie jest prawidłowa."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:745
-#, fuzzy
 msgid "Capacitance matrix is undefined."
-msgstr "Matryca pojemności nie jest zdefiniowana"
+msgstr "Matryca pojemności nie jest zdefiniowana."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:754
-#, fuzzy
 msgid "Capacitance matrix is incorrect."
-msgstr "Matryca pojemności nie jest prawidłowa"
+msgstr "Matryca pojemności nie jest prawidłowa."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:763
-#, fuzzy
 msgid "Capacitance matrix is nullptr."
-msgstr "Matryca pojemności to pusty wskaźnik"
+msgstr "Matryca pojemności to pusty wskaźnik."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:774
-#, fuzzy
 msgid "Inductance matrix is undefined."
-msgstr "Matryca indukcyjności nie została zdefiniowana"
+msgstr "Matryca indukcyjności nie została zdefiniowana."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:783
-#, fuzzy
 msgid "Inductance matrix is incorrect."
-msgstr "Matryca indukcyjności jest nieprawidłowa"
+msgstr "Matryca indukcyjności jest nieprawidłowa."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:792
-#, fuzzy
 msgid "Inductance matrix is nullptr."
-msgstr "Matryca indukcyjności posiada wartość nullptr"
+msgstr "Matryca indukcyjności posiada wartość nullptr."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:808
 msgid "Cannot open file "
@@ -16184,9 +16133,9 @@ msgid "Bitrate could be too high for rising / falling edges"
 msgstr "Bitrate może być zbyt duży dla zboczy narastających / opadających"
 
 #: eeschema/sim/sim_lib_mgr.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "Simulation model library not found at '%s'"
-msgstr "Nie znaleziono biblioteki z modelem symulacji na '%s' lub '%s'"
+msgstr "Nie znaleziono biblioteki z modelem symulacji na '%s'"
 
 #: eeschema/sim/sim_lib_mgr.cpp:84
 #, c-format
@@ -16329,54 +16278,45 @@ msgstr ""
 "poszukiwaniu wyników."
 
 #: eeschema/sim/sim_plot_frame.cpp:182
-#, fuzzy
 msgid "Measure Min"
-msgstr "Węzeł pomiarowy"
+msgstr "Pomiar minimalny"
 
 #: eeschema/sim/sim_plot_frame.cpp:183
-#, fuzzy
 msgid "Measure Max"
-msgstr "Miarka"
+msgstr "Pomiar maksymalny"
 
 #: eeschema/sim/sim_plot_frame.cpp:184
-#, fuzzy
 msgid "Measure Average"
-msgstr "Pomiar odległości"
+msgstr "Pomiar średni"
 
 #: eeschema/sim/sim_plot_frame.cpp:185
-#, fuzzy
 msgid "Measure RMS"
-msgstr "Miarka"
+msgstr "Pomiar RMS"
 
 #: eeschema/sim/sim_plot_frame.cpp:186
-#, fuzzy
 msgid "Measure Peak-to-peak"
-msgstr "Węzeł pomiarowy"
+msgstr "Pomiar międzyszczytowy"
 
 #: eeschema/sim/sim_plot_frame.cpp:187
-#, fuzzy
 msgid "Measure Time of Min"
-msgstr "Miarka"
+msgstr "Pomiar czasu minimalnego"
 
 #: eeschema/sim/sim_plot_frame.cpp:188
-#, fuzzy
 msgid "Measure Time of Max"
-msgstr "Miarka"
+msgstr "Pomiar czasu maksymalnego"
 
 #: eeschema/sim/sim_plot_frame.cpp:245
-#, fuzzy, c-format
+#, c-format
 msgid "Format %s..."
-msgstr "Format"
+msgstr "Format %s..."
 
 #: eeschema/sim/sim_plot_frame.cpp:297
-#, fuzzy
 msgid "Format Value..."
-msgstr "Edytuj wartość..."
+msgstr "Format wartości..."
 
 #: eeschema/sim/sim_plot_frame.cpp:299
-#, fuzzy
 msgid "Delete Measurement"
-msgstr "Usuń znacznik"
+msgstr "Usuń pomiar"
 
 #: eeschema/sim/sim_plot_frame.cpp:486 eeschema/sim/sim_plot_frame.cpp:919
 #, c-format
@@ -16390,14 +16330,12 @@ msgid "Signal"
 msgstr "Sygnał"
 
 #: eeschema/sim/sim_plot_frame.cpp:496 eeschema/sim/sim_plot_frame_base.cpp:121
-#, fuzzy
 msgid "Cursor 1"
-msgstr "Kursor"
+msgstr "Kursor 1"
 
 #: eeschema/sim/sim_plot_frame.cpp:497 eeschema/sim/sim_plot_frame_base.cpp:122
-#, fuzzy
 msgid "Cursor 2"
-msgstr "Kursor"
+msgstr "Kursor 2"
 
 #: eeschema/sim/sim_plot_frame.cpp:622 eeschema/sim/sim_plot_frame_base.h:88
 msgid "Spice Simulator"
@@ -16406,12 +16344,12 @@ msgstr "Symulator Spice"
 #: eeschema/sim/sim_plot_frame.cpp:758
 #, c-format
 msgid "V(%s) (gain)"
-msgstr ""
+msgstr "V(%s) (gain)"
 
 #: eeschema/sim/sim_plot_frame.cpp:759
-#, fuzzy, c-format
+#, c-format
 msgid "V(%s) (phase)"
-msgstr " (faza)"
+msgstr "V(%s) (faza)"
 
 #: eeschema/sim/sim_plot_frame.cpp:820
 msgid "Simulator requires a fully annotated schematic."
@@ -16419,12 +16357,11 @@ msgstr ""
 "Symulator wymaga by elementy na schemacie zostały w pełni ponumerowane."
 
 #: eeschema/sim/sim_plot_frame.cpp:825
-#, fuzzy
 msgid ""
 "Errors during netlist generation.\n"
 "\n"
 msgstr ""
-"Podczas tworzenia listy sieci wykryto błędy, symulacja została przerwana.\n"
+"Podczas tworzenia listy sieci wykryto błędy.\n"
 "\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:860
@@ -16441,16 +16378,15 @@ msgstr "Inna symulacja jest obecnie uruchomiona."
 
 #: eeschema/sim/sim_plot_frame.cpp:975 eeschema/sim/sim_plot_frame.cpp:1386
 msgid " (gain)"
-msgstr ""
+msgstr " (gain)"
 
 #: eeschema/sim/sim_plot_frame.cpp:976 eeschema/sim/sim_plot_frame.cpp:1388
 msgid " (phase)"
 msgstr " (faza)"
 
 #: eeschema/sim/sim_plot_frame.cpp:1076 eeschema/sim/sim_plot_frame.cpp:2259
-#, fuzzy
 msgid "Diff"
-msgstr "Para różnicowa"
+msgstr "Różnica"
 
 #: eeschema/sim/sim_plot_frame.cpp:1243 eeschema/sim/sim_plot_frame.cpp:1255
 #: eeschema/sim/sim_plot_frame.cpp:1587
@@ -16463,19 +16399,16 @@ msgid "%s is not tunable"
 msgstr "%s nie może być dostrajany"
 
 #: eeschema/sim/sim_plot_frame.cpp:1320
-#, fuzzy
 msgid "Error: no current simulation.\n"
-msgstr "Zasilanie, prąd oraz izolacja"
+msgstr "Błąd: nie ma symulacji prądu.\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:1329
-#, fuzzy
 msgid "Error: simulation type not defined.\n"
-msgstr "Błąd: nie określono typu symulacji!\n"
+msgstr "Błąd: nie określono typu symulacji.\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:1335
-#, fuzzy
 msgid "Error: simulation type doesn't support plotting.\n"
-msgstr "Błąd: typ symulacji nie wspiera możliwości zrobienia wykresu!\n"
+msgstr "Błąd: typ symulacji nie wspiera możliwości wykonania wykresu.\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:2049
 msgid ""
@@ -16502,23 +16435,21 @@ msgstr ""
 "\n"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:227
-#, fuzzy
 msgid "Measurement"
-msgstr "Węzeł pomiarowy"
+msgstr "Pomiar"
 
 #: eeschema/sim/sim_plot_panel.cpp:268
-#, fuzzy, c-format
+#, c-format
 msgid "%d"
-msgstr "%"
+msgstr "%d"
 
 #: eeschema/sim/sim_plot_panel.cpp:507
 msgid "noise [(V or A)^2/Hz]"
 msgstr "szum [(V lub A)^2/Hz]"
 
 #: eeschema/sim/sim_plot_panel.cpp:542
-#, fuzzy
 msgid "Power"
-msgstr "Dodaj port zasilania"
+msgstr "Port zasilania"
 
 #: eeschema/sim/sim_plot_panel.cpp:584
 msgid "Voltage (swept)"
@@ -16589,12 +16520,10 @@ msgid "'%s' is not a valid Spice value."
 msgstr "'%s' to nie jest poprawna wartość programu Spice."
 
 #: eeschema/sim/toolbars_sim_plot_frame.cpp:99
-#, fuzzy
 msgid "Simulator"
-msgstr "Symulator..."
+msgstr "Symulator"
 
 #: eeschema/sim/toolbars_sim_plot_frame.cpp:154
-#, fuzzy
 msgid "&Simulation"
 msgstr "Symulacja"
 
@@ -16676,7 +16605,6 @@ msgid "<b>A Power Symbol should have only one pin</b><br><br>"
 msgstr "<b>Symbol zasilania powinien posiadać tylko jeden pin</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:208
-#, fuzzy
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Only an input or output power pin has "
 "meaning<br><br>"
@@ -17248,14 +17176,13 @@ msgid "Select at least one property to back annotate."
 msgstr "Wybierz przynajmniej jedną właściwość by dokonać numeracji wstecznej."
 
 #: eeschema/tools/backannotate.cpp:97
-#, fuzzy
 msgid ""
 "Cannot fetch PCB netlist because Schematic Editor is opened in stand-alone "
 "mode.\n"
 "You must launch the KiCad project manager and create a project."
 msgstr ""
-"Nie można pobrać listy sieci PCB ponieważ Eeschema został uruchomiony jako "
-"samodzielna aplikacja.\n"
+"Nie można pobrać listy sieci PCB ponieważ edytor schematów został "
+"uruchomiony jako samodzielna aplikacja.\n"
 "Należy uruchomić Menedżer programu KiCad oraz utworzyć projekt."
 
 #: eeschema/tools/backannotate.cpp:164
@@ -18205,22 +18132,20 @@ msgstr ""
 "Pokazuje znaczniki gdzie znajdują się wyjątki kontroli reguł projektowych"
 
 #: eeschema/tools/ee_actions.cpp:709
-#, fuzzy
 msgid "Show OP Voltages"
-msgstr "Pokaż Stronę %s"
+msgstr "Pokaż napięcia punktu pracy"
 
 #: eeschema/tools/ee_actions.cpp:710
 msgid "Show operating point voltage data from simulation"
-msgstr ""
+msgstr "Pokazuje dane o napięciach w punkcie pracy pochodzące z symulacji"
 
 #: eeschema/tools/ee_actions.cpp:714
-#, fuzzy
 msgid "Show OP Currents"
-msgstr "Pokaż kursor"
+msgstr "Pokaż prądy punktu pracy"
 
 #: eeschema/tools/ee_actions.cpp:715
 msgid "Show operating point current data from simulation"
-msgstr ""
+msgstr "Pokazuje dane o prądach w punkcie pracy pochodzące z symulacji"
 
 #: eeschema/tools/ee_actions.cpp:719 eeschema/tools/ee_actions.cpp:724
 #: eeschema/tools/ee_actions.cpp:730 eeschema/tools/ee_actions.cpp:736
@@ -18252,7 +18177,6 @@ msgid "Annotate Automatically"
 msgstr "Numeruj automatycznie"
 
 #: eeschema/tools/ee_actions.cpp:741
-#, fuzzy
 msgid "Toggle automatic annotation of new symbols"
 msgstr "Przełącza funkcję automatycznej numeracji dla nowych symboli"
 
@@ -18484,7 +18408,6 @@ msgid "Export Current Plot as CSV..."
 msgstr "Eksportuj bieżący wykres jako plik CSV..."
 
 #: eeschema/tools/ee_actions.cpp:945
-#, fuzzy
 msgid "Show Legend"
 msgstr "Pokaż legendę"
 
@@ -18495,58 +18418,51 @@ msgstr "Prąd/Faza kropkowane"
 #: eeschema/tools/ee_actions.cpp:951
 msgid "Draw secondary signal trace (current or phase) with a dotted line"
 msgstr ""
+"Rysuj linią przerywaną ścieżkę sygnału wtórnego (prądowego lub fazowego)"
 
 #: eeschema/tools/ee_actions.cpp:955
-#, fuzzy
 msgid "Dark Mode Plots"
-msgstr "Modele 3D"
+msgstr "Tryb ciemnego wykresu"
 
 #: eeschema/tools/ee_actions.cpp:956
-#, fuzzy
 msgid "Draw plots with a black background"
-msgstr "Przełącza pomiędzy białym a czarnym tłem arkusza"
+msgstr "Przełącza pomiędzy białym a czarnym tłem wykresu"
 
 #: eeschema/tools/ee_actions.cpp:960
-#, fuzzy
 msgid "Simulation Command..."
-msgstr "Polecenie symulacji"
+msgstr "Polecenie symulacji..."
 
 #: eeschema/tools/ee_actions.cpp:961
-#, fuzzy
 msgid "Edit the simulation command for the current plot tab"
-msgstr "Usuwa ostatni punkt dodany do bieżącego elementu"
+msgstr "Edytuj polecenie symulacji dla bieżącej karty wykresu"
 
 #: eeschema/tools/ee_actions.cpp:967
 msgid "Run Simulation"
 msgstr "Uruchom Symulację"
 
 #: eeschema/tools/ee_actions.cpp:972
-#, fuzzy
 msgid "Stop Simulation"
-msgstr "Uruchom/Zatrzymaj Symulację"
+msgstr "Zatrzymaj Symulację"
 
 #: eeschema/tools/ee_actions.cpp:978
-#, fuzzy
 msgid "Probe Schematic..."
-msgstr "Numeruj schemat..."
+msgstr "Probuj schemat..."
 
 #: eeschema/tools/ee_actions.cpp:978
 msgid "Add a simulator probe"
 msgstr "Dodaj sondę symulacyjną"
 
 #: eeschema/tools/ee_actions.cpp:984
-#, fuzzy
 msgid "Add Tuned Value..."
-msgstr "Edytuj wartość..."
+msgstr "Dodaj regulowaną wartość..."
 
 #: eeschema/tools/ee_actions.cpp:984
 msgid "Select a value to be tuned"
 msgstr "Wybierz wartość jaka ma być dostrajana"
 
 #: eeschema/tools/ee_actions.cpp:989
-#, fuzzy
 msgid "Show SPICE Netlist"
-msgstr "Pokaż listę sieci SPICE..."
+msgstr "Pokaż listę sieci SPICE"
 
 #: eeschema/tools/ee_inspection_tool.cpp:222
 msgid "No symbol issues found."
@@ -18919,16 +18835,16 @@ msgstr ""
 "z liczbą całkowitą zapewniającą brak duplikatów w wpisach tabeli."
 
 #: eeschema/widgets/tuner_slider.cpp:57 eeschema/widgets/tuner_slider.cpp:113
-#, fuzzy, c-format
+#, c-format
 msgid "Tune %s"
-msgstr "Dostrajanie"
+msgstr "Dostrajanie %s"
 
 #: eeschema/widgets/tuner_slider.cpp:74
-#, fuzzy, c-format
+#, c-format
 msgid "%s has simulation model of type '%s %s'; only RLC passives be tuned"
 msgstr ""
-"Symbol '%s' posiada model symulacji typu '%s %s', który nie może być "
-"dostrajany"
+"%s posiada model symulacji typu '%s %s', tylko elementy pasywne RLC mogą być "
+"dostrajane"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -20187,7 +20103,6 @@ msgid "Minimal header"
 msgstr "Nagłówek minimalny"
 
 #: kicad/cli/command_export_pcb_drill.cpp:73
-#, fuzzy
 msgid "PTH and NPTH in separate files"
 msgstr "Otwory PTH i NPTH w oddzielnych plikach"
 
@@ -20286,7 +20201,6 @@ msgid "Subtract soldermask from silkscreen"
 msgstr "Odejmij maskę lutowniczą od warstwy opisowej"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:70
-#, fuzzy
 msgid "Disable aperture macros"
 msgstr "Wyłącz makra apertur"
 
@@ -20307,9 +20221,8 @@ msgid "Use the gerber plot settings already configured in the board file"
 msgstr "Użyj ustawień rysunku w formacie Gerber skonfigurowanych już na płytce"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:60
-#, fuzzy
 msgid "Color theme to use (will default to PCB Editor settings)"
-msgstr "Kolorystyka w użyciu (domyślną ustawia Pcbnew)"
+msgstr "Kolorystyka w użyciu (domyślną ustawia edytor PCB)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:44
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:64
@@ -30514,21 +30427,18 @@ msgid "Track and Via Dimensions"
 msgstr "Rozmiary ścieżek i przelotek"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:51
-#, fuzzy
 msgid "Remove Unused Layers"
 msgstr "Usuń nieużywane warstwy"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:52
-#, fuzzy
 msgid "Restore All Layers"
-msgstr "Przeładuj wszystkie warstwy"
+msgstr "Przywróć wszystkie warstwy"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:157
 msgid "Set Unused Pad Properties"
 msgstr "Ustal nieużywane właściwości pola lutowniczego"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:33
-#, fuzzy
 msgid "&Selected only"
 msgstr "Tylko zaznaczone"
 
@@ -30537,9 +30447,8 @@ msgid "Keep &outside layers"
 msgstr "Zachowaj warstwy zewnętrzne"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.h:58
-#, fuzzy
 msgid "Unused Pads"
-msgstr "Nieużywane pary warstw"
+msgstr "Nieużywane pola lutownicze"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:32
 msgid "Delete footprints with no symbols"
@@ -31981,7 +31890,6 @@ msgid "Check rule syntax"
 msgstr "Sprawdź składnię reguł"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -32489,8 +32397,8 @@ msgstr ""
 "\n"
 "    A.inDiffPair('<nazwa_sieci>')\n"
 "Prawdziwe jeśli `A` posiada sieć, która jest składnikiem pary różnicowej.\n"
-"`<nazwa_sieci>` to nazwa bazowa pary różnicowej.  Na przykład `inDiffPair('/"
-"CLK')`\n"
+"`<nazwa_sieci>` to nazwa bazowa pary różnicowej.  Na przykład "
+"`inDiffPair('/CLK')`\n"
 "odnosi się do sieci zarówno `/CLK_P` jak i `/CLK_N`.\n"
 "<br><br>\n"
 "\n"
@@ -32512,8 +32420,8 @@ msgstr ""
 "\n"
 "UWAGA: Zwraca prawdę, jeśli `A` znajduje się na danej warstwie, \n"
 "niezależnie czy reguła jest oceniana dla tej warstwy.\n"
-"W tym ostatnim przypadku użyj w regule klauzuli `(layer "
-"\"nazwa_warstwy\")`.\n"
+"W tym ostatnim przypadku użyj w regule klauzuli `(layer \"nazwa_warstwy\")`."
+"\n"
 "<br><br><br>\n"
 "\n"
 "    !!! A.insideCourtyard('<oznaczenie_footprintu>') !!!\n"
@@ -32640,7 +32548,12 @@ msgstr ""
 "    (rule high-current\n"
 "        (constraint track_width (min 1.0mm))\n"
 "        (constraint connection_width (min 0.8mm))\n"
-"        (condition \"A.NetClass == 'Power'\"))"
+"        (condition \"A.NetClass == 'Power'\"))\n"
+"\n"
+"### Dokumentacja\n"
+"\n"
+"By uzyskać więcej informacji zobacz [https://docs.kicad.org](https://docs."
+"kicad.org/GetMajorMinorVersion/pcbnew/#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:75
 msgid "Default properties for new dimension objects:"
@@ -32701,9 +32614,8 @@ msgid "7"
 msgstr "7"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:88
-#, fuzzy
 msgid "Vias:"
-msgstr "Przelotki"
+msgstr "Przelotki:"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:104 pcbnew/pad.cpp:1011
 #: pcbnew/pcb_track.cpp:942 pcbnew/pcb_track.cpp:1306
@@ -32718,9 +32630,8 @@ msgid "Hole"
 msgstr "Otwór"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:153
-#, fuzzy
 msgid "Differential pairs:"
-msgstr "Pary różnicowe"
+msgstr "Pary różnicowe:"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:170
 msgid "Gap"
@@ -38464,7 +38375,7 @@ msgstr "Kopiuj szerokość linii z pierwszego obiektu"
 
 #: pcbnew/tools/convert_tool.cpp:79
 msgid "Gap:"
-msgstr ""
+msgstr "Prześwit:"
 
 #: pcbnew/tools/convert_tool.cpp:235
 msgid "Create from Selection"
