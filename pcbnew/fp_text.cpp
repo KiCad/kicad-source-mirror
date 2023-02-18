@@ -528,6 +528,7 @@ static struct FP_TEXT_DESC
         propMgr.InheritsAfter( TYPE_HASH( FP_TEXT ), TYPE_HASH( EDA_TEXT ) );
 
         propMgr.AddProperty( new PROPERTY<FP_TEXT, wxString>( _HKI( "Parent" ),
-                    NO_SETTER( FP_TEXT, wxString ), &FP_TEXT::GetParentAsString ) );
+                    NO_SETTER( FP_TEXT, wxString ), &FP_TEXT::GetParentAsString ) )
+                .SetIsHiddenFromLibraryEditors();
     }
 } _FP_TEXT_DESC;

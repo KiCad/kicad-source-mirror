@@ -1782,7 +1782,8 @@ static struct PAD_DESC
         propMgr.AddProperty( shape, groupPad );
 
         propMgr.AddProperty( new PROPERTY<PAD, wxString>( _HKI( "Parent" ),
-                     NO_SETTER( PAD, wxString ), &PAD::GetParentAsString ), groupPad );
+                     NO_SETTER( PAD, wxString ), &PAD::GetParentAsString ), groupPad )
+                .SetIsHiddenFromLibraryEditors();
 
         auto padNumber = new PROPERTY<PAD, wxString>( _HKI( "Pad Number" ),
                                                       &PAD::SetNumber, &PAD::GetNumber );

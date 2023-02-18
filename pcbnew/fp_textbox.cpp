@@ -518,6 +518,7 @@ static struct FP_TEXTBOX_DESC
         propMgr.InheritsAfter( TYPE_HASH( FP_TEXTBOX ), TYPE_HASH( EDA_TEXT ) );
 
         propMgr.AddProperty( new PROPERTY<FP_TEXTBOX, wxString>( _HKI( "Parent" ),
-                    NO_SETTER( FP_TEXTBOX, wxString ), &FP_TEXTBOX::GetParentAsString ) );
+                    NO_SETTER( FP_TEXTBOX, wxString ), &FP_TEXTBOX::GetParentAsString ) )
+                .SetIsHiddenFromLibraryEditors();
     }
 } _FP_TEXTBOX_DESC;
