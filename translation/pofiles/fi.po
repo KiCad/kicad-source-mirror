@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-15 16:29-0800\n"
-"PO-Revision-Date: 2023-02-15 20:10+0000\n"
+"PO-Revision-Date: 2023-02-21 00:55+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -115,9 +115,8 @@ msgid "Build BVH for holes and vias"
 msgstr "Rakenna BVH reikiä ja läpivientejä varten"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:389
-#, fuzzy
 msgid "OpenGL context creation error"
-msgstr "Lämpopinnan määrän tarkkuus:"
+msgstr "OpenGL-kontekstin luontivirhe"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:420
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:411
@@ -550,9 +549,8 @@ msgid "Render Solid Colors"
 msgstr "Renderöi Kiinteillä Väreillä"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:195
-#, fuzzy
 msgid "Use only the diffuse color property from 3D model file"
-msgstr "Käytä ainoastaan 3D mallitiedoston diffuusi väriominaisuutta"
+msgstr "Käytä ainoastaan 3D-mallitiedoston diffuusi väriominaisuutta"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:201
 msgid "Render CAD Colors"
@@ -1572,7 +1570,7 @@ msgstr "Varoitus"
 
 #: common/confirm.cpp:181 common/confirm.cpp:187
 msgid "File Open Warning"
-msgstr "Varoitus, tiedosto on jo auki"
+msgstr "Tiedoston avaamisvaroitus"
 
 #: common/confirm.cpp:183 common/confirm.cpp:189
 msgid "Interleaved saves may produce very unexpected results."
@@ -5418,14 +5416,12 @@ msgid "Page limits"
 msgstr "Sivurajoitukset"
 
 #: common/layer_id.cpp:150
-#, fuzzy
 msgid "Operating point voltages"
-msgstr "Toimintapiste"
+msgstr "Toimintapisteen jännitteet"
 
 #: common/layer_id.cpp:151
-#, fuzzy
 msgid "Operating point currents"
-msgstr "Toimintapiste"
+msgstr "Toimintapisteen virrat"
 
 #: common/layer_id.cpp:155 common/layer_id.cpp:153
 msgid "Footprints front"
@@ -6135,7 +6131,6 @@ msgid "Find Previous"
 msgstr "Etsi edellinen"
 
 #: common/tool/actions.cpp:234
-#, fuzzy
 msgid "Find previous match"
 msgstr "Etsi edellinen"
 
@@ -8817,31 +8812,29 @@ msgstr "Kirjoita ohje kaikkien virtojen tallentamiseksi (.probe alli)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:305
 #: eeschema/dialogs/dialog_sim_command_base.cpp:441
-#, fuzzy
 msgid "Save all power dissipations"
-msgstr "Suurin sallittu poikkeama:"
+msgstr "Tallenna kaikki tehohäviöt"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:306
-#, fuzzy
 msgid ""
 "Write directives to save power dissipation of all items (.probe p(<item>))"
-msgstr "Kirjoita ohje kaikkien virtojen tallentamiseksi (.probe alli)"
+msgstr ""
+"Kirjoita käskyjä säästääksesi kaikkien kohteiden virrankulutusta (.probe "
+"p(<kohde>))"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:312
-#, fuzzy
 msgid "Run external simulator command:"
-msgstr "Ulkoisen simulaattorin komento:"
+msgstr "Suorita ulkoinen simulaattorikomento:"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:314
-#, fuzzy
 msgid ""
 "Enter the command line to run SPICE\n"
 "Usually '<path to SPICE binary> \"%I\"'\n"
 "%I will be replaced by the netlist filepath"
 msgstr ""
-"Suorita spice kirjoittamalla komentorivi\n"
-"Yleensä <polku spice binaariin>% I\n"
-"% I korvataan varsinaisella spice netlist-nimellä"
+"Suorita SPICE kirjoittamalla komentorivi\n"
+"Yleensä '<polku SPICE-binaariin> \"%I\"'\n"
+"%I korvataan verkkolista-tiedostopolulla"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:387
 #: eeschema/dialogs/dialog_export_netlist.cpp:446
@@ -8866,23 +8859,23 @@ msgid "Exporting netlist requires a fully annotated schematic."
 msgstr "Netlistin vienti vaatii täysin merkityn kytkentäkaavion."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:560
-#, fuzzy
 msgid "external simulator not found"
-msgstr "Ulkoisen simulaattorin komento:"
+msgstr "Ulkoista simulaattoria ei löydy"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:561
 msgid ""
 "Note: command line is usually: <tt>&lt;path to SPICE binary&gt; \"%I\"</tt>"
 msgstr ""
+"Huomautus: komentorivi on yleensä: <tt>&lt;polku binaariin SPICE&gt; \"%I\""
+"</tt>"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:567
 msgid "external simulator has the wrong format or architecture"
-msgstr ""
+msgstr "ulkoisella simulaattorilla on väärä muoto tai arkkitehtuuri"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:572
-#, fuzzy
 msgid "permission denied"
-msgstr "Lupavirhe?"
+msgstr "Lupa evätty"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:707
 #: eeschema/dialogs/dialog_export_netlist.cpp:697
@@ -10799,9 +10792,8 @@ msgid "Search the current &sheet only"
 msgstr "Hae vain nykyisestä & taulukosta"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:101
-#, fuzzy
 msgid "Search the current selection &only"
-msgstr "Hae vain nykyisestä & taulukosta"
+msgstr "Etsi nykyisestä valinnasta& ainoastaan"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:104
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:101
@@ -11398,7 +11390,7 @@ msgstr "Vaihe"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:25
 msgid "Significant digits:"
-msgstr ""
+msgstr "Merkitsevät luvut:"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:32
 msgid "Range:"
@@ -11406,17 +11398,15 @@ msgstr "Alue:"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 msgid "f"
-msgstr ""
+msgstr "f"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "p"
-msgstr "Ylös"
+msgstr "p"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "n"
-msgstr "ei"
+msgstr "n"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:32
@@ -11431,33 +11421,29 @@ msgid "m"
 msgstr "m"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "K"
-msgstr "Hyväksy"
+msgstr "K"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "M"
-msgstr "Mt"
+msgstr "M"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 msgid "G"
-msgstr ""
+msgstr "G"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "T"
-msgstr "T:"
+msgstr "T"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "P"
-msgstr "Pi"
+msgstr "P"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.h:47
-#, fuzzy, c-format
+#, c-format
 msgid "Format %s"
-msgstr "Muoto"
+msgstr "Muoto %s"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:192
 #, c-format
@@ -12138,14 +12124,12 @@ msgid "Show ERC exclusions"
 msgstr "Näytä ERC poissulkemiset"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:68
-#, fuzzy
 msgid "Show OP voltages"
-msgstr "Näytä Sivu %s"
+msgstr "Näytä OP jännitteet"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:71
-#, fuzzy
 msgid "Show OP currents"
-msgstr "Tallenna kaikki virrat"
+msgstr "Näytä OP virrat"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:74
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:68
@@ -12592,38 +12576,32 @@ msgid "Dash and dot lengths are ratios of the line width."
 msgstr "Viivan ja pisteen pituudet ovat viivan leveyden suhteita."
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:253
-#, fuzzy
 msgid "Operating-point Overlay"
-msgstr "Toimintapiste"
+msgstr "Toimintapisteen peitto"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:262
 msgid "Significant digits (voltages):"
-msgstr ""
+msgstr "Merkitsevät luvut (jännitteet):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:270
-#, fuzzy
 msgid "Range (voltages):"
-msgstr "Tallenna kaikki jännitteet"
+msgstr "Alue (jännitteet):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "fV"
-msgstr "V"
+msgstr "fV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "pV"
-msgstr "V"
+msgstr "pV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "nV"
-msgstr "V"
+msgstr "nV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "uV"
-msgstr "V"
+msgstr "uV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:71
@@ -12632,53 +12610,44 @@ msgid "mV"
 msgstr "mV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "KV"
-msgstr "V"
+msgstr "KV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "MV"
-msgstr "V"
+msgstr "MV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "GV"
-msgstr "V"
+msgstr "GV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "TV"
-msgstr "V"
+msgstr "TV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "PV"
-msgstr "V"
+msgstr "PV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:281
 msgid "Significant digits (currents):"
-msgstr ""
+msgstr "Merkitsevät luvut (virrat):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:289
-#, fuzzy
 msgid "Range (currents):"
-msgstr "Tallenna kaikki virrat"
+msgstr "Alue (virrat):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "fA"
-msgstr "A"
+msgstr "fA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "pA"
-msgstr "A"
+msgstr "pA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "nA"
-msgstr "A"
+msgstr "nA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:208
@@ -12687,34 +12656,28 @@ msgid "uA"
 msgstr "uA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "mA"
-msgstr "A"
+msgstr "mA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "KA"
-msgstr "A"
+msgstr "KA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "MA"
-msgstr "A"
+msgstr "MA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "GA"
-msgstr "BGA"
+msgstr "GA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "TA"
-msgstr "A"
+msgstr "TA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "PA"
-msgstr "A"
+msgstr "PA"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:220
 msgid "No error or warning"
@@ -12741,12 +12704,11 @@ msgid "&Default line width:"
 msgstr "Oletusviivan leveys:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:47
-#, fuzzy
 msgid ""
 "Set to 0 to allow symbols to inherit line width properties\n"
 "from Schematic"
 msgstr ""
-"Aseta arvoksi 0, jotta symbolit voivat periä rivin leveyden\n"
+"Aseta arvoksi 0, jotta symbolit voivat periä rivin leveysasetukset\n"
 "kytkentäkaaviosta"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:62
@@ -13021,9 +12983,8 @@ msgstr "Muunna kirjastot uuteen muotoon"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:169
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:157
-#, fuzzy
 msgid "Available path substitutions:"
-msgstr "Saatavilla olevat polut:"
+msgstr "Saatavilla olevat polkuvaihtoehdot:"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:203
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:191
@@ -15843,18 +15804,16 @@ msgid "Checking component "
 msgstr "Tarkistetaan komponenttia "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:254
-#, fuzzy
 msgid "Component: name cannot be empty."
-msgstr "Komponentin nimi ei voi olla tyhjä."
+msgstr "Komponentti: nimi ei voi olla tyhjä."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:263
 msgid "Component: manufacturer cannot be empty."
 msgstr "Komponentti: valmistaja ei voi olla tyhjä."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:272
-#, fuzzy
 msgid "Component: invalid package."
-msgstr "Komponentti: Virheellinen paketti."
+msgstr "Komponentti: virheellinen paketti."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:281
 msgid "Component: no pin"
@@ -15865,9 +15824,8 @@ msgid "Cannot interpolate the current based on this IV table."
 msgstr "Virtaa ei voi interpoloida tämän IV-taulukon perusteella."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:396
-#, fuzzy
 msgid "There is an invalid voltage in an IV table"
-msgstr "IV-taulukossa on Nan-jännite"
+msgstr "IV-taulukossa on virheellinen jännite"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:403
 msgid "There is an invalid current in an IV table"
@@ -15878,14 +15836,12 @@ msgid "Invalid R_load."
 msgstr "Virheellinen R_load."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:450
-#, fuzzy
 msgid "Invalid falling dV/dt."
-msgstr "Virhellinen laskeva dv/dt."
+msgstr "Virheellinen laskeva dV/dt."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:455
-#, fuzzy
 msgid "Invalid rising dV/dt."
-msgstr "Virheellinen nouseva dv/dt."
+msgstr "Virheellinen nouseva dV/dt."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:470
 msgid "Model name cannot be empty"
@@ -15896,9 +15852,8 @@ msgid "Checking model "
 msgstr "Tarkistetaan mallia "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:482
-#, fuzzy
 msgid "Undefined model type."
-msgstr "Määrittelemätön mallityyppi"
+msgstr "Määrittelemätön mallityyppi."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:491
 msgid "Invalid Vinh value."
@@ -15917,7 +15872,6 @@ msgid "Invalid C_ref value."
 msgstr "Virheellinen C_ref arvo."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:523
-#, fuzzy
 msgid "Invalid V_ref value."
 msgstr "Virheellinen V_ref arvo."
 
@@ -15998,44 +15952,36 @@ msgid "Negative number of pins."
 msgstr "Nastojen määrä negatiivinen."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:723
-#, fuzzy
 msgid "Empty pin number."
-msgstr "Tyhjä nastan numero"
+msgstr "Tyhjä nastan numero."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:734
-#, fuzzy
 msgid "Resistance matrix is incorrect."
-msgstr "Vastusmatriisi on väärä"
+msgstr "Vastusmatriisi on väärä."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:745
-#, fuzzy
 msgid "Capacitance matrix is undefined."
-msgstr "Kapasitanssimatriisia ei ole määritelty"
+msgstr "Kapasitanssimatriisia ei ole määritelty."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:754
-#, fuzzy
 msgid "Capacitance matrix is incorrect."
-msgstr "Kapasitanssimatriisi on väärä"
+msgstr "Kapasitanssimatriisi on väärä."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:763
-#, fuzzy
 msgid "Capacitance matrix is nullptr."
-msgstr "Kapasitanssimatriisi on nollaosoitin"
+msgstr "Kapasitanssimatriisi on nollaosoitin."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:774
-#, fuzzy
 msgid "Inductance matrix is undefined."
-msgstr "Induktanssimatriisia ei ole määritelty"
+msgstr "Induktanssimatriisia ei ole määritelty."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:783
-#, fuzzy
 msgid "Inductance matrix is incorrect."
-msgstr "Induktanssimatriisi on väärää"
+msgstr "Induktanssimatriisi on väärää."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:792
-#, fuzzy
 msgid "Inductance matrix is nullptr."
-msgstr "Induktanssimatriisi on nollaosoitin"
+msgstr "Induktanssimatriisi on nollaosoitin."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:808
 msgid "Cannot open file "
@@ -16324,9 +16270,9 @@ msgid "Bitrate could be too high for rising / falling edges"
 msgstr "Bittinopeus voi olla liian korkea nouseville / laskeville reunoille"
 
 #: eeschema/sim/sim_lib_mgr.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "Simulation model library not found at '%s'"
-msgstr "Simulaatiomallikirjastoa ei löydy kohteesta '%s' tai '%s'"
+msgstr "Simulaatiomallikirjastoa ei löydy kohteesta '%s'"
 
 #: eeschema/sim/sim_lib_mgr.cpp:84 eeschema/sim/sim_lib_mgr.cpp:77
 #, c-format
@@ -16469,54 +16415,45 @@ msgid ""
 msgstr "Tämä simulaatio ei näytä kuvaajaa. Katso tulokset konsolin ikkunasta."
 
 #: eeschema/sim/sim_plot_frame.cpp:182
-#, fuzzy
 msgid "Measure Min"
-msgstr "Mitattu solmu"
+msgstr "Mittaa Minimi"
 
 #: eeschema/sim/sim_plot_frame.cpp:183
-#, fuzzy
 msgid "Measure Max"
-msgstr "Mittaustyökalu"
+msgstr "Mittaa Maksimi"
 
 #: eeschema/sim/sim_plot_frame.cpp:184
-#, fuzzy
 msgid "Measure Average"
-msgstr "Mitattu solmu"
+msgstr "Mittaa Keskiarvo"
 
 #: eeschema/sim/sim_plot_frame.cpp:185
-#, fuzzy
 msgid "Measure RMS"
-msgstr "Mittaustyökalu"
+msgstr "Mittaa Neliöllinen keskiarvo (RMS)"
 
 #: eeschema/sim/sim_plot_frame.cpp:186
-#, fuzzy
 msgid "Measure Peak-to-peak"
-msgstr "Mitattu solmu"
+msgstr "Mittaa Huipusta-huippuun"
 
 #: eeschema/sim/sim_plot_frame.cpp:187
-#, fuzzy
 msgid "Measure Time of Min"
-msgstr "Mittaustyökalu"
+msgstr "Mittaa Minimiaika"
 
 #: eeschema/sim/sim_plot_frame.cpp:188
-#, fuzzy
 msgid "Measure Time of Max"
-msgstr "Mittaustyökalu"
+msgstr "Mittaa Maksimiaika"
 
 #: eeschema/sim/sim_plot_frame.cpp:245
-#, fuzzy, c-format
+#, c-format
 msgid "Format %s..."
-msgstr "Muoto"
+msgstr "Muoto %s..."
 
 #: eeschema/sim/sim_plot_frame.cpp:297
-#, fuzzy
 msgid "Format Value..."
-msgstr "Muokkaa arvoa ..."
+msgstr "Alusta arvo..."
 
 #: eeschema/sim/sim_plot_frame.cpp:299
-#, fuzzy
 msgid "Delete Measurement"
-msgstr "Poista segmentti"
+msgstr "Poista Mittaus"
 
 #: eeschema/sim/sim_plot_frame.cpp:486 eeschema/sim/sim_plot_frame.cpp:919
 #: eeschema/sim/sim_plot_frame.cpp:534
@@ -16532,14 +16469,12 @@ msgid "Signal"
 msgstr "Signaali"
 
 #: eeschema/sim/sim_plot_frame.cpp:496 eeschema/sim/sim_plot_frame_base.cpp:121
-#, fuzzy
 msgid "Cursor 1"
-msgstr "Kohdistin"
+msgstr "Kohdistin 1"
 
 #: eeschema/sim/sim_plot_frame.cpp:497 eeschema/sim/sim_plot_frame_base.cpp:122
-#, fuzzy
 msgid "Cursor 2"
-msgstr "Kohdistin"
+msgstr "Kohdistin 2"
 
 #: eeschema/sim/sim_plot_frame.cpp:622 eeschema/sim/sim_plot_frame_base.h:88
 #: eeschema/sim/sim_plot_frame.cpp:354 eeschema/sim/sim_plot_frame_base.h:130
@@ -16549,12 +16484,12 @@ msgstr "Spice-Simulaattori"
 #: eeschema/sim/sim_plot_frame.cpp:758
 #, c-format
 msgid "V(%s) (gain)"
-msgstr ""
+msgstr "V(%s) (vahvistus)"
 
 #: eeschema/sim/sim_plot_frame.cpp:759
-#, fuzzy, c-format
+#, c-format
 msgid "V(%s) (phase)"
-msgstr " (vaihe)"
+msgstr "V(%s) (vaihe)"
 
 #: eeschema/sim/sim_plot_frame.cpp:820
 #: eeschema/dialogs/dialog_export_netlist.cpp:320
@@ -16563,12 +16498,11 @@ msgid "Simulator requires a fully annotated schematic."
 msgstr "Simulaattori vaatii täysin merkityn kytkentäkaavion."
 
 #: eeschema/sim/sim_plot_frame.cpp:825
-#, fuzzy
 msgid ""
 "Errors during netlist generation.\n"
 "\n"
 msgstr ""
-"Virheitä verkkolistan luomisen aikana; simulointi keskeytetty.\n"
+"Virheitä verkkolistan luomisen aikana.\n"
 "\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:860 eeschema/sim/sim_plot_frame.cpp:483
@@ -16586,7 +16520,7 @@ msgstr "Toinen simulaatio on jo käynnissä."
 
 #: eeschema/sim/sim_plot_frame.cpp:975 eeschema/sim/sim_plot_frame.cpp:1386
 msgid " (gain)"
-msgstr ""
+msgstr " (vahvistus)"
 
 #: eeschema/sim/sim_plot_frame.cpp:976 eeschema/sim/sim_plot_frame.cpp:1388
 #: eeschema/sim/sim_plot_frame.cpp:734
@@ -16594,9 +16528,8 @@ msgid " (phase)"
 msgstr " (vaihe)"
 
 #: eeschema/sim/sim_plot_frame.cpp:1076 eeschema/sim/sim_plot_frame.cpp:2259
-#, fuzzy
 msgid "Diff"
-msgstr "Differentiaalipari"
+msgstr "Differentiaali"
 
 #: eeschema/sim/sim_plot_frame.cpp:1243 eeschema/sim/sim_plot_frame.cpp:1255
 #: eeschema/sim/sim_plot_frame.cpp:1587 eeschema/sim/sim_plot_frame.cpp:598
@@ -16611,19 +16544,16 @@ msgid "%s is not tunable"
 msgstr "%s ei ole viritettävä"
 
 #: eeschema/sim/sim_plot_frame.cpp:1320
-#, fuzzy
 msgid "Error: no current simulation.\n"
-msgstr "Teho, virta ja eristys"
+msgstr "Virhe: ei nykyistä simulaatiota.\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:1329
-#, fuzzy
 msgid "Error: simulation type not defined.\n"
-msgstr "Virhe: simulointityyppiä ei ole määritelty!\n"
+msgstr "Virhe: simulointityyppiä ei ole määritelty.\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:1335
-#, fuzzy
 msgid "Error: simulation type doesn't support plotting.\n"
-msgstr "Virhe: simulointityyppi ei tue piirtämistä!\n"
+msgstr "Virhe: simulointityyppi ei tue piirtämistä.\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:2049 eeschema/sim/sim_plot_frame.cpp:466
 #: eeschema/sim/sim_plot_frame.cpp:1563
@@ -16651,23 +16581,21 @@ msgstr ""
 "\n"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:227
-#, fuzzy
 msgid "Measurement"
-msgstr "Mitattu solmu"
+msgstr "Mittaus"
 
 #: eeschema/sim/sim_plot_panel.cpp:268
-#, fuzzy, c-format
+#, c-format
 msgid "%d"
-msgstr "%"
+msgstr "%d"
 
 #: eeschema/sim/sim_plot_panel.cpp:507 eeschema/sim/sim_plot_panel.cpp:363
 msgid "noise [(V or A)^2/Hz]"
 msgstr "melu [(V tai A) ^ 2 / Hz]"
 
 #: eeschema/sim/sim_plot_panel.cpp:542
-#, fuzzy
 msgid "Power"
-msgstr "Lisää Virta"
+msgstr "Virta"
 
 #: eeschema/sim/sim_plot_panel.cpp:584 eeschema/sim/sim_plot_panel.cpp:424
 msgid "Voltage (swept)"
@@ -16738,14 +16666,12 @@ msgid "'%s' is not a valid Spice value."
 msgstr "'%s' ei ole kelvollinen Spice-arvo."
 
 #: eeschema/sim/toolbars_sim_plot_frame.cpp:99
-#, fuzzy
 msgid "Simulator"
-msgstr "Simulaattori..."
+msgstr "Simulaattori"
 
 #: eeschema/sim/toolbars_sim_plot_frame.cpp:154
-#, fuzzy
 msgid "&Simulation"
-msgstr "Simulointi"
+msgstr "&Simulaatio"
 
 #: eeschema/symbol_async_loader.cpp:108
 #, c-format
@@ -16822,7 +16748,6 @@ msgid "<b>A Power Symbol should have only one pin</b><br><br>"
 msgstr "<b>Virtasymbolissa saa olla vain yksi nasta</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:208
-#, fuzzy
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Only an input or output power pin has "
 "meaning<br><br>"
@@ -17393,14 +17318,13 @@ msgid "Select at least one property to back annotate."
 msgstr "Valitse vähintään yksi ominaisuus merkinnän takaamiseksi."
 
 #: eeschema/tools/backannotate.cpp:97
-#, fuzzy
 msgid ""
 "Cannot fetch PCB netlist because Schematic Editor is opened in stand-alone "
 "mode.\n"
 "You must launch the KiCad project manager and create a project."
 msgstr ""
-"Piirilevyn verkkoluetteloa ei voi noutaa, koska eeschema on avattu "
-"erillisessä tilassa.\n"
+"Piirilevyn verkkoluetteloa ei voi noutaa, koska kytkentäkaavioeditori on "
+"avattu erillisessä tilassa.\n"
 "Sinun on käynnistettävä KiCad-projektinhallinta ja luotava projekti."
 
 #: eeschema/tools/backannotate.cpp:164
@@ -18352,22 +18276,20 @@ msgid "Show markers for excluded electrical rules checker violations"
 msgstr "Näytä merkinnät sähkösääntöjen tarkastusrikkeistä"
 
 #: eeschema/tools/ee_actions.cpp:709
-#, fuzzy
 msgid "Show OP Voltages"
-msgstr "Näytä Sivu %s"
+msgstr "Näytä OP Jännitteet"
 
 #: eeschema/tools/ee_actions.cpp:710
 msgid "Show operating point voltage data from simulation"
-msgstr ""
+msgstr "Näytä toimintapisteen jännitetiedot simulaatiosta"
 
 #: eeschema/tools/ee_actions.cpp:714
-#, fuzzy
 msgid "Show OP Currents"
-msgstr "Näytä kohdistin"
+msgstr "Näytä OP Virrat"
 
 #: eeschema/tools/ee_actions.cpp:715
 msgid "Show operating point current data from simulation"
-msgstr ""
+msgstr "Näytä toimintapisteen virtatiedot simulaatiosta"
 
 #: eeschema/tools/ee_actions.cpp:719 eeschema/tools/ee_actions.cpp:724
 #: eeschema/tools/ee_actions.cpp:730 eeschema/tools/ee_actions.cpp:736
@@ -18402,9 +18324,8 @@ msgid "Annotate Automatically"
 msgstr "Selitykset Automaattisesti"
 
 #: eeschema/tools/ee_actions.cpp:741
-#, fuzzy
 msgid "Toggle automatic annotation of new symbols"
-msgstr "Vaihda uusien symbolien automaattinen huomautus päälle/pois"
+msgstr "Kytke uusien symbolien automaattinen huomautus (päälle/pois)"
 
 #: eeschema/tools/ee_actions.cpp:746 eeschema/tools/ee_actions.cpp:744
 msgid "Repair Schematic"
@@ -18637,9 +18558,8 @@ msgid "Export Current Plot as CSV..."
 msgstr "Vie Nykyinen Piirros CVS-muodossa..."
 
 #: eeschema/tools/ee_actions.cpp:945
-#, fuzzy
 msgid "Show Legend"
-msgstr "Show &Selite"
+msgstr "Näytä Selite"
 
 #: eeschema/tools/ee_actions.cpp:950 eeschema/sim/sim_plot_frame_base.cpp:111
 msgid "Dotted Current/Phase"
@@ -18647,26 +18567,23 @@ msgstr "Pistevirta/Vaihe"
 
 #: eeschema/tools/ee_actions.cpp:951
 msgid "Draw secondary signal trace (current or phase) with a dotted line"
-msgstr ""
+msgstr "Piirrä toissijaisen signaalin jälki (virta tai vaihe) katkoviivalla"
 
 #: eeschema/tools/ee_actions.cpp:955
-#, fuzzy
 msgid "Dark Mode Plots"
-msgstr "3D-Mallit"
+msgstr "Pimeätilapiirto"
 
 #: eeschema/tools/ee_actions.cpp:956
 msgid "Draw plots with a black background"
-msgstr ""
+msgstr "Piirrä kuvioita mustalla taustalla"
 
 #: eeschema/tools/ee_actions.cpp:960
-#, fuzzy
 msgid "Simulation Command..."
-msgstr "Simulaatiokomento"
+msgstr "Simulaatiokomento..."
 
 #: eeschema/tools/ee_actions.cpp:961
-#, fuzzy
 msgid "Edit the simulation command for the current plot tab"
-msgstr "Poista nykyiseen kohteeseen viimeksi lisätty piste"
+msgstr "Muokkaa nykyisen kuvaajan välilehden simulaatiokomentoa"
 
 #: eeschema/tools/ee_actions.cpp:967 eeschema/sim/sim_plot_frame.cpp:163
 #: eeschema/sim/sim_plot_frame_base.cpp:55
@@ -18674,32 +18591,28 @@ msgid "Run Simulation"
 msgstr "Suorita simulointi"
 
 #: eeschema/tools/ee_actions.cpp:972
-#, fuzzy
 msgid "Stop Simulation"
-msgstr "Suorita / pysäytä simulointi"
+msgstr "Pysäytä Simulointi"
 
 #: eeschema/tools/ee_actions.cpp:978
-#, fuzzy
 msgid "Probe Schematic..."
-msgstr "Merkitse Kytkentäkaavio..."
+msgstr "Testaa Kytkentäkaavio..."
 
 #: eeschema/tools/ee_actions.cpp:978 eeschema/tools/ee_actions.cpp:568
 msgid "Add a simulator probe"
 msgstr "Lisää simulaattorianturi"
 
 #: eeschema/tools/ee_actions.cpp:984
-#, fuzzy
 msgid "Add Tuned Value..."
-msgstr "Kentän arvo"
+msgstr "Lisää Säädetty Arvo..."
 
 #: eeschema/tools/ee_actions.cpp:984 eeschema/tools/ee_actions.cpp:572
 msgid "Select a value to be tuned"
 msgstr "Valitse viritettävä arvo"
 
 #: eeschema/tools/ee_actions.cpp:989
-#, fuzzy
 msgid "Show SPICE Netlist"
-msgstr "Näytä SPICE Netlist ..."
+msgstr "Näytä SPICE Verkkolista"
 
 #: eeschema/tools/ee_inspection_tool.cpp:222
 msgid "No symbol issues found."
@@ -19087,16 +19000,14 @@ msgstr ""
 "kokonaisluku, jolla estetään päällekkäiset taulukkomerkinnät."
 
 #: eeschema/widgets/tuner_slider.cpp:57 eeschema/widgets/tuner_slider.cpp:113
-#, fuzzy, c-format
+#, c-format
 msgid "Tune %s"
-msgstr "Virittää"
+msgstr "Viritys %s"
 
 #: eeschema/widgets/tuner_slider.cpp:74
-#, fuzzy, c-format
+#, c-format
 msgid "%s has simulation model of type '%s %s'; only RLC passives be tuned"
-msgstr ""
-"Symbolilla '%s' on tyyppiä '%s %s' oleva simulaatiomalli, jota ei voida "
-"virittää"
+msgstr "%s on simulaatiomalli tyyppiä '%s %s'; vain RLC-passiiviset säädetään"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -20378,7 +20289,6 @@ msgid "Minimal header"
 msgstr "Minimaalinen otsikko"
 
 #: kicad/cli/command_export_pcb_drill.cpp:73
-#, fuzzy
 msgid "PTH and NPTH in separate files"
 msgstr "PTH ja NPTH erillisissä tiedostoissa"
 
@@ -20477,9 +20387,8 @@ msgid "Subtract soldermask from silkscreen"
 msgstr "Vähennä juotteenestopinnoitekerros silkkipainokerrokselta"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:70
-#, fuzzy
 msgid "Disable aperture macros"
-msgstr "Poista aukkomakrot käytöstä"
+msgstr "Kytke aukkomakrot pois käytöstä"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:75
 msgid "Precision of gerber coordinates, valid options: 5 or 6"
@@ -20500,9 +20409,8 @@ msgstr ""
 "piirilevytiedostossa"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:60
-#, fuzzy
 msgid "Color theme to use (will default to PCB Editor settings)"
-msgstr "Käytettävä väriteema (oletuksena piirilevyeditorin asetukset)"
+msgstr "Käytettävä väriteema (Asettaa teeman piirilevyeditorin vakioasetuksiin)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:44
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:64
@@ -24289,7 +24197,7 @@ msgstr "Anturat"
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:29
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:86
 msgid "Vias"
-msgstr "Läpivientejä"
+msgstr "Läpiviennit"
 
 #: pcbnew/board.cpp:1342 pcbnew/pcb_draw_panel_gal.cpp:529
 #: pcbnew/board.cpp:1328
@@ -24440,7 +24348,7 @@ msgstr "Kuparipinnoite:"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:40
 msgid "Edge card connectors:"
-msgstr "Edge-kortin liittimet:"
+msgstr "Reunakorttiliittimet:"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
 msgid "Yes, bevelled"
@@ -24448,7 +24356,7 @@ msgstr "Kyllä, viistottu"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:48
 msgid "Options for edge card connectors."
-msgstr "Reunakorttiliittimien vaihtoehdot."
+msgstr "Reunakorttiliittimien asetukset."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:119
 msgid "Core"
@@ -24520,7 +24428,7 @@ msgstr ""
 msgid ""
 "Incorrect value for Loss tg (Loss tg must be positive or null if not used)"
 msgstr ""
-"Väärä arvo häviö tg: lle (Häviö tg: n on oltava positiivinen tai nolla, jos "
+"Väärä arvo Häviö tg: lle (Häviö tg: n on oltava positiivinen tai nolla, jos "
 "sitä ei käytetä)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1203
@@ -30746,14 +30654,12 @@ msgid "Track and Via Dimensions"
 msgstr "Johtimen ja Läpiviennin mitat"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:51
-#, fuzzy
 msgid "Remove Unused Layers"
-msgstr "&Poista käyttämättömät kerrokset"
+msgstr "Poista Käyttämättömät Kerrokset"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:52
-#, fuzzy
 msgid "Restore All Layers"
-msgstr "Lataa kaikki kerrokset uudelleen"
+msgstr "Palauta Kaikki Kerrokset"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:157
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:150
@@ -30761,7 +30667,6 @@ msgid "Set Unused Pad Properties"
 msgstr "Aseta käyttämättömät anturan ominaisuudet"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:33
-#, fuzzy
 msgid "&Selected only"
 msgstr "&Valinta ainoastaan"
 
@@ -30771,9 +30676,8 @@ msgid "Keep &outside layers"
 msgstr "Säilytä &ulkopuoliset kerrokset"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.h:58
-#, fuzzy
 msgid "Unused Pads"
-msgstr "Käyttämättömät pad-kerrokset"
+msgstr "Käyttämättömät Anturat"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:32
 msgid "Delete footprints with no symbols"
@@ -32190,7 +32094,6 @@ msgid "Check rule syntax"
 msgstr "Tarkista säännön syntaksit"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -32661,8 +32564,8 @@ msgstr ""
 "\n"
 "### Lausekefunktiot\n"
 "\n"
-"Kaikki funktioparametrit tukevat yksinkertaisia jokerimerkkejä (`*` ja `?"
-"`).\n"
+"Kaikki funktioparametrit tukevat yksinkertaisia jokerimerkkejä (`*` ja `?`)."
+"\n"
 "<br><br>\n"
 "\n"
 "     A.intersectsCourtyard('<footprint_refdes>')\n"
@@ -32695,8 +32598,8 @@ msgstr ""
 " \n"
 "    A.inDiffPair('<verkon_nimi>')\n"
 "Tosi, jos A:lla on verkko, joka on osa määritettyä differentiaaliparia.\n"
-"`<verkon_nimi>` on differentiaaliparin perusnimi. Esimerkiksi \"inDiffPair('/"
-"CLK')\".\n"
+"`<verkon_nimi>` on differentiaaliparin perusnimi. Esimerkiksi \"inDiffPair"
+"('/CLK')\".\n"
 "vastaa kohteita `/CLK_P` ja `/CLK_N` verkoissa.\n"
 "<br><br>\n"
 "\n"
@@ -32841,7 +32744,12 @@ msgstr ""
 "    (sääntö suurvirta\n"
 "        (rajoite track_width (vähintään 1,0 mm))\n"
 "        (rajoite connect_width (vähintään 0,8 mm))\n"
-"        (ehto \"A.NetClass == 'Teho\"))"
+"        (ehto \"A.NetClass == 'Teho\"))\n"
+"\n"
+"### Dokumentaatio\n"
+"\n"
+"Täydellinen dokumentaatio, katso [https://docs.kicad.org](https://docs.kicad."
+"org/GetMajorMinorVersion/pcbnew/#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:75
 msgid "Default properties for new dimension objects:"
@@ -32906,9 +32814,8 @@ msgid "7"
 msgstr "7"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:88
-#, fuzzy
 msgid "Vias:"
-msgstr "Läpivientejä"
+msgstr "Läpiviennit:"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:104 pcbnew/pad.cpp:1011
 #: pcbnew/pcb_track.cpp:942 pcbnew/pcb_track.cpp:1306
@@ -32925,9 +32832,8 @@ msgid "Hole"
 msgstr "Reikä"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:153
-#, fuzzy
 msgid "Differential pairs:"
-msgstr "Differentiaaliparit"
+msgstr "Differentiaaliparit:"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:170
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:167
