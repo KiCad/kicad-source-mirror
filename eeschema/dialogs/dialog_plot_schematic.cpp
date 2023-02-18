@@ -338,7 +338,10 @@ COLOR_SETTINGS* DIALOG_PLOT_SCHEMATIC::getColorSettings()
     int selection = m_colorTheme->GetSelection();
 
     if( selection < 0 )
-        return m_parent->GetSettingsManager()->GetColorSettings( "_builtin_default" );
+    {
+        return m_parent->GetSettingsManager()->GetColorSettings(
+                COLOR_SETTINGS::COLOR_BUILTIN_DEFAULT );
+    }
 
     return static_cast<COLOR_SETTINGS*>( m_colorTheme->GetClientData( selection ) );
 }
