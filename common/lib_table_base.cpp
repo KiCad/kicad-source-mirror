@@ -193,7 +193,7 @@ LIB_TABLE_ROW* LIB_TABLE::findRow( const wxString& aNickName, bool aCheckIfEnabl
     {
         cur->ensureIndex();
 
-        std::shared_lock<std::shared_mutex> lock( m_nickIndexMutex );
+        std::shared_lock<std::shared_mutex> lock( cur->m_nickIndexMutex );
 
         for( const std::pair<const wxString, int>& entry : cur->m_nickIndex )
         {

@@ -454,7 +454,7 @@ public:
             if( *iter == *aRow )
             {
                 m_rows.erase( iter, iter + 1 );
-                reindex();
+                reindex( true );
                 return true;
             }
         }
@@ -539,9 +539,21 @@ protected:
      */
     bool migrate();
 
-    void reindex()
+    /**
+     * Rebuilds the m_nickIndex
+     *
+     * @param aForce is to avoid rebuilding the index multiple times because multiple threads hit ensureIndex
+     * at the same time
+     */
+    void reindex( bool aForce )
     {
         std::lock_guard<std::shared_mutex> lock( m_nickIndexMutex );
+
+        if( !aForce )
+        {
+            if( m_nickIndex.size() )
+                return;
+        }
 
         m_nickIndex.clear();
 
@@ -555,7 +567,7 @@ protected:
         // Lazy indexing may be required.  To handle lazy indexing, we must enforce
         // that "nickIndex" is either empty or accurate, but never inaccurate.
         if( !m_nickIndex.size() )
-            reindex();
+            reindex( false );
     }
 
 private:
