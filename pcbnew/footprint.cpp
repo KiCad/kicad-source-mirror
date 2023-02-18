@@ -850,6 +850,13 @@ const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisible
         if( item->Type() == PCB_FP_TEXT_T )
             continue;
 
+        // Treat dimension objects as text
+        if( !aIncludeText
+            && ( item->Type() == PCB_FP_DIM_ALIGNED_T || item->Type() == PCB_FP_DIM_CENTER_T
+                 || item->Type() == PCB_FP_DIM_LEADER_T || item->Type() == PCB_FP_DIM_ORTHOGONAL_T
+                 || item->Type() == PCB_FP_DIM_RADIAL_T ) )
+            continue;
+
         bbox.Merge( item->GetBoundingBox() );
     }
 
