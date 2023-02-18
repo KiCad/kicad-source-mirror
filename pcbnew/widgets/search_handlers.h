@@ -93,6 +93,7 @@ public:
     int Search( const wxString& aQuery ) override;
     wxString GetResultCell( int aRow, int aCol ) override;
     void     SelectItems( std::vector<long>& aItemRows ) override;
+    void     ActivateItem( long aItemRow ) override;
 
 private:
     std::vector<NETINFO_ITEM*> m_hitlist;
