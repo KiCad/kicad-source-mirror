@@ -141,8 +141,8 @@ struct RAYSEG2D
 bool IntersectSegment( const SFVEC2F &aStartA, const SFVEC2F &aEnd_minus_startA,
                        const SFVEC2F &aStartB, const SFVEC2F &aEnd_minus_startB );
 
-#if(GLM_ARCH != GLM_ARCH_PURE)
 /*
+#if(GLM_ARCH != GLM_ARCH_PURE)
 struct RAY4
 {
     glm::simdVec4 m_orgX;   ///< x coordinate of ray origin
@@ -155,9 +155,10 @@ struct RAY4
 
     glm::simdVec4 m_tnear;  ///< Start of ray segment
     glm::simdVec4 m_tfar;   ///< End of ray segment
-};*/
+};
 
 #endif
+*/
 
 
 #endif // RAY_H

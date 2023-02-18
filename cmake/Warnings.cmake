@@ -21,7 +21,7 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #
 
-# Only configure warnings for Clang and GCC
+# Configure warnings for Clang and GCC
 if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     # The SWIG-generated files tend to throw a lot of warnings, so
     # we do not add the warnings directly to the flags here but instead
@@ -188,4 +188,55 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         message( STATUS "Adding additional warning flags: ${KICAD_ADDITIONAL_WARN_FLAGS}")
     endif()
 
+endif()
+
+# MSVC specific warnings
+if( MSVC )
+    set( COMPILER_SUPPORTS_WARNINGS TRUE )
+
+    # Establish /Wall early and selectively disable some very common warnings in kicad code
+    # or warnings that really shouldn't be warnings. Also some warnings like implicit fallthrough
+    # in case statements happen in msvc std lib and despite /external:env:INCLUDE leak
+    # into build log generating thousands of noise entries.
+
+    # Unlike gcc /Wall actually enables all warnings on msvc.
+
+    # Warnings for C are not enabled since C files are mostly generated
+    # set( WARN_FLAGS_C   "/external:W0 /external:env:INCLUDE /external:I${CMAKE_SOURCE_DIR}/thirdparty /Wall" )
+    set( WARN_FLAGS_CXX "/external:W0 /external:env:INCLUDE /external:I${CMAKE_SOURCE_DIR}/thirdparty /Wall" )
+
+    # disable "function not inlined"
+    string( APPEND WARN_FLAGS_CXX " /wd4710" )
+    # disable "bytes padding added"
+    string( APPEND WARN_FLAGS_CXX " /wd4820" )
+    # disable "unreferenced formal parameter"
+    string( APPEND WARN_FLAGS_CXX " /wd4100" )
+    # disable default/copy/move constructor/assignment implicitly defined as deleted
+    string( APPEND WARN_FLAGS_CXX " /wd4623 /wd4625 /wd5026 /wd4626 /wd5027" )
+    # disable "compiler will insert Spectre mitigation for..."
+    string( APPEND WARN_FLAGS_CXX " /wd5045" )
+    # disable "enumerator in switch for enum is not explicitly handled"
+    string( APPEND WARN_FLAGS_CXX " /wd4061" )
+    # disable "conversion from 'type_1' to 'type_2', signed/unsigned mismatch"
+    string( APPEND WARN_FLAGS_CXX " /wd4245 /wd4365" )
+    # disable "conversion from 'type1' to 'type2', possible loss of data"
+    string( APPEND WARN_FLAGS_CXX " /wd4242 /wd5219" )
+    # disable "no override available for virtual member function, function is hidden"
+    string( APPEND WARN_FLAGS_CXX " /wd4266" )
+    # disable "class has virtual functions, but its (non)trivial destructor is not virtual"
+    string( APPEND WARN_FLAGS_CXX " /wd5204 /wd4265" )
+    # disable "layout of class may have changed from a previous version of the compiler"
+    string( APPEND WARN_FLAGS_CXX " /wd4371" )
+    # disable "relative include path contains '..'"
+    string( APPEND WARN_FLAGS_CXX " /wd4464" )
+    # disable "'const' variable is not used"
+    string( APPEND WARN_FLAGS_CXX " /wd5264" )
+    # disable "implicit fall-through occurs here" in case statement
+    string( APPEND WARN_FLAGS_CXX " /wd5262" )
+    # disable "unreferenced inline function has been removed"
+    string( APPEND WARN_FLAGS_CXX " /wd4514" )
+    # disable "compiler may not enforce left-to-right evaluation order in ..."
+    string( APPEND WARN_FLAGS_CXX " /wd4868 /wd4866" )
+    # disable "XXX is not defined as a preprocessor macro, replacing with '0'"
+    string( APPEND WARN_FLAGS_CXX " /wd4668" )
 endif()

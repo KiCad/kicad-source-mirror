@@ -128,10 +128,3 @@ double CONSTANT_ZOOM_CONTROLLER::GetScaleForRotation( int aRotation )
 
     return zoom_scale;
 }
-
-// need these until C++17
-constexpr ACCELERATING_ZOOM_CONTROLLER::TIMEOUT ACCELERATING_ZOOM_CONTROLLER::DEFAULT_TIMEOUT;
-
-constexpr double CONSTANT_ZOOM_CONTROLLER::MAC_SCALE;
-constexpr double CONSTANT_ZOOM_CONTROLLER::GTK3_SCALE;
-constexpr double CONSTANT_ZOOM_CONTROLLER::MSW_SCALE;

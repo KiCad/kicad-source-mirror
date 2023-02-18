@@ -264,7 +264,7 @@ public:
      */
     char SetStringDelimiter( char aStringDelimiter )
     {
-        int old = stringDelimiter;
+        char old = stringDelimiter;
 
         if( specctraMode )
             stringDelimiter = aStringDelimiter;

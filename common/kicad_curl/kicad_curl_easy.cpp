@@ -82,6 +82,7 @@ static size_t stream_write_callback( void* aContents, size_t aSize, size_t aNmem
     return realsize;
 }
 
+#if LIBCURL_VERSION_NUM >= 0x072000 // 7.32.0
 
 static int xferinfo( void* aProgress, curl_off_t aDLtotal, curl_off_t aDLnow, curl_off_t aULtotal,
                      curl_off_t aULnow )
@@ -100,12 +101,14 @@ static int xferinfo( void* aProgress, curl_off_t aDLtotal, curl_off_t aDLnow, cu
     return CURLE_OK;
 }
 
-#if LIBCURL_VERSION_NUM < 0x072000 // 7.32.0
+#else
+
 static int progressinfo( void* aProgress, double aDLtotal, double aDLnow, double aULtotal, double aULnow )
 {
     return xferinfo( aProgress, static_cast<curl_off_t>( aDLtotal ), static_cast<curl_off_t>( aDLnow ),
                      static_cast<curl_off_t>( aULtotal ), static_cast<curl_off_t>( aULnow ) );
 }
+
 #endif
 
 
