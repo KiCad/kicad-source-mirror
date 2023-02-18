@@ -235,7 +235,7 @@ std::string SPICE_GENERATOR_SOURCE::getParamValueString( const std::string& aPar
     std::string result = "";
     
     if ( m_model.FindParam( aParamName ) )
-        m_model.FindParam( aParamName )->value->ToSpiceString();
+        result = m_model.FindParam( aParamName )->value->ToSpiceString();
 
     if( result == "" )
         result = aDefaultValue;
