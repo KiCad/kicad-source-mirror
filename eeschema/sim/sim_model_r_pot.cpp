@@ -28,8 +28,14 @@
 
 std::string SPICE_GENERATOR_R_POT::ModelLine( const SPICE_ITEM& aItem ) const
 {
-    std::string r = m_model.FindParam( "r" )->value->ToSpiceString();
-    std::string position = m_model.FindParam( "pos" )->value->ToSpiceString();
+    std::string r = "0";
+    std::string position = "";
+    
+    if ( m_model.FindParam( "r" ) )
+        r = m_model.FindParam( "r" )->value->ToSpiceString();
+
+    if ( m_model.FindParam( "pos" ) )
+        position = m_model.FindParam( "pos" )->value->ToSpiceString();
 
     if( position != "" )
     {

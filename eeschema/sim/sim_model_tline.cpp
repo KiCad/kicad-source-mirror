@@ -31,7 +31,7 @@ using PARAM = SIM_MODEL::PARAM;
 
 std::string SPICE_GENERATOR_TLINE::ModelLine( const SPICE_ITEM& aItem ) const
 {
-    std::string r, l, g, c, len;
+    std::string r="0" , l="0", g="0", c="0", len="1";
 
     switch( m_model.GetType() )
     {
@@ -50,15 +50,20 @@ std::string SPICE_GENERATOR_TLINE::ModelLine( const SPICE_ITEM& aItem ) const
         len = SIM_VALUE_FLOAT( 1 ).ToSpiceString();
         break;
     }
-
     case SIM_MODEL::TYPE::TLINE_RLGC:
-        r = m_model.FindParam( "r" )->value->ToSpiceString();
-        l = m_model.FindParam( "l" )->value->ToSpiceString();
-        g = m_model.FindParam( "g" )->value->ToSpiceString();
-        c = m_model.FindParam( "c" )->value->ToSpiceString();
-        len = m_model.FindParam( "len" )->value->ToSpiceString();
+    {
+        if( m_model.FindParam( "r" ) )
+            r = m_model.FindParam( "r" )->value->ToSpiceString();
+        if( m_model.FindParam( "l" ) )
+            l = m_model.FindParam( "l" )->value->ToSpiceString();
+        if( m_model.FindParam( "g" ) )
+            g = m_model.FindParam( "g" )->value->ToSpiceString();
+        if( m_model.FindParam( "c" ) )
+            c = m_model.FindParam( "c" )->value->ToSpiceString();
+        if( m_model.FindParam( "len" ) )
+            len = m_model.FindParam( "len" )->value->ToSpiceString();
         break;
-
+    }
     default:
         wxFAIL_MSG( "Unhandled SIM_MODEL type in SIM_MODEL_TLINE" );
         return "";

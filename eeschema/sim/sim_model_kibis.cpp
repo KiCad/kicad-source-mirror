@@ -110,10 +110,18 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const PR
 
     KIBIS_PARAMETER kparams;
 
-    kparams.SetCornerFromString( kparams.m_supply, m_model.FindParam( "vcc" )->value->ToString() );
-    kparams.SetCornerFromString( kparams.m_Rpin, m_model.FindParam( "rpin" )->value->ToString() );
+    if ( m_model.FindParam( "vcc" ) )
+        kparams.SetCornerFromString( kparams.m_supply, m_model.FindParam( "vcc" )->value->ToString() );
+    
+    if ( m_model.FindParam( "rpin" ) )
+        kparams.SetCornerFromString( kparams.m_Rpin, m_model.FindParam( "rpin" )->value->ToString() );
+
+    if ( m_model.FindParam( "lpin" ) )
     kparams.SetCornerFromString( kparams.m_Lpin, m_model.FindParam( "lpin" )->value->ToString() );
+
+    if ( m_model.FindParam( "cpin" ) )
     kparams.SetCornerFromString( kparams.m_Cpin, m_model.FindParam( "cpin" )->value->ToString() );
+
     //kparams.SetCornerFromString( kparams.m_Ccomp, FindParam( "ccomp" )->value->ToString() );
 
     std::string result;
@@ -129,7 +137,10 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const PR
 
     case SIM_MODEL::TYPE::KIBIS_DRIVER_DC:
     {
-        std::string paramValue = m_model.FindParam( "dc" )->value->ToString();
+        std::string paramValue = "";
+
+        if ( m_model.FindParam( "dc" ) )
+            paramValue = m_model.FindParam( "dc" )->value->ToString();
 
         if( paramValue == "hi-Z" )
         {
