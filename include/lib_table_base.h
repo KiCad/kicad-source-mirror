@@ -30,6 +30,7 @@
 #include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <memory>
+#include <mutex>
 #include <shared_mutex>
 #include <project.h>
 #include <string_utf8_map.h>
