@@ -397,15 +397,13 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeSinParamInfos( std::st
     paramInfo.description = "Damping factor";
     paramInfos.push_back( paramInfo );
 
-    // "phase" is not needed. "td" is enough.
-
-    /*paramInfo.name = "phase";
+    paramInfo.name = "phase";
     paramInfo.type = SIM_VALUE::TYPE_FLOAT;
     paramInfo.unit = "°";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
     paramInfo.description = "Phase";
-    paramInfos.push_back( paramInfo );*/
+    paramInfos.push_back( paramInfo );
 
     appendAcParamInfos( paramInfos, aUnit );
     return paramInfos;
