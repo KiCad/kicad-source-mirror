@@ -72,7 +72,8 @@ std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
         item.modelName += fmt::format( "DC {} ", dc );
     }
 
-    if( m_model.GetSpiceInfo().inlineTypeString != "" )
+    if( m_model.GetSpiceInfo().inlineTypeString != ""
+        && m_model.GetType() != SIM_MODEL::TYPE::V ) // DC-only sources are already processed
     {
         std::string args = "";
         
@@ -231,7 +232,10 @@ std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
 std::string SPICE_GENERATOR_SOURCE::getParamValueString( const std::string& aParamName,
                                                          const std::string& aDefaultValue ) const
 {
-    std::string result = m_model.FindParam( aParamName )->value->ToSpiceString();
+    std::string result = "";
+    
+    if ( m_model.FindParam( aParamName ) )
+        m_model.FindParam( aParamName )->value->ToSpiceString();
 
     if( result == "" )
         result = aDefaultValue;
