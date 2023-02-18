@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-10 15:35-0800\n"
-"PO-Revision-Date: 2023-02-17 15:17+0000\n"
+"PO-Revision-Date: 2023-02-18 18:36+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v7/sv/>\n"
 "Language: sv\n"
@@ -1808,7 +1808,7 @@ msgstr "Byggversions-info"
 
 #: common/dialog_about/dialog_about_base.cpp:45
 msgid "Lib Version Info"
-msgstr "Biblioteksversions-info"
+msgstr "Versionsinformation för bibliotek"
 
 #: common/dialog_about/dialog_about_base.cpp:58
 msgid "&Copy Version Info"
