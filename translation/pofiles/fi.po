@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-10 15:35-0800\n"
-"PO-Revision-Date: 2023-02-17 18:28+0000\n"
+"PO-Revision-Date: 2023-02-18 18:36+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v7/fi/>\n"
 "Language: fi\n"
@@ -1544,7 +1544,7 @@ msgstr "Varoitus"
 
 #: common/confirm.cpp:181 common/confirm.cpp:187
 msgid "File Open Warning"
-msgstr "Varoitus, tiedosto on jo auki"
+msgstr "Tiedoston avaamisvaroitus"
 
 #: common/confirm.cpp:183 common/confirm.cpp:189
 msgid "Interleaved saves may produce very unexpected results."
@@ -23637,7 +23637,7 @@ msgstr "Anturat"
 #: pcbnew/widgets/panel_selection_filter.cpp:189
 #: pcbnew/widgets/panel_selection_filter_base.cpp:41
 msgid "Vias"
-msgstr "Läpivientejä"
+msgstr "Läpiviennit"
 
 #: pcbnew/board.cpp:1328 pcbnew/pcb_draw_panel_gal.cpp:529
 msgid "Track Segments"
@@ -23785,7 +23785,7 @@ msgstr "Kuparipinnoite:"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:40
 msgid "Edge card connectors:"
-msgstr "Edge-kortin liittimet:"
+msgstr "Reunakorttiliittimet:"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
 msgid "Yes, bevelled"
@@ -23793,7 +23793,7 @@ msgstr "Kyllä, viistottu"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:48
 msgid "Options for edge card connectors."
-msgstr "Reunakorttiliittimien vaihtoehdot."
+msgstr "Reunakorttiliittimien asetukset."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:119
 msgid "Core"
@@ -23865,7 +23865,7 @@ msgstr ""
 msgid ""
 "Incorrect value for Loss tg (Loss tg must be positive or null if not used)"
 msgstr ""
-"Väärä arvo häviö tg: lle (Häviö tg: n on oltava positiivinen tai nolla, jos "
+"Väärä arvo Häviö tg: lle (Häviö tg: n on oltava positiivinen tai nolla, jos "
 "sitä ei käytetä)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1203
