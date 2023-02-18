@@ -48,19 +48,31 @@ std::string SPICE_GENERATOR_SOURCE::ModelLine( const SPICE_ITEM& aItem ) const
 std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
 {
     SPICE_ITEM  item = aItem;
-    std::string ac = m_model.FindParam( "ac" )->value->ToSpiceString();
 
-    if( ac != "" )
+    std::string ac = "";
+    std::string dc = "";
+
+    if( m_model.FindParam( "ac" ) )
+        ac = m_model.FindParam( "ac" )->value->ToSpiceString();
+    if( m_model.FindParam( "dc" ) )
+        dc = m_model.FindParam( "dc" )->value->ToSpiceString();
+
+    bool emptyLine = true;
+    item.modelName = "";
+
+    // @FIXME
+    // the keyword "DC" refers to both offset of a sine source, and value for DC analysis
+    // Because of this, both values are always equal in a sine source.
+    //
+    // suggestion: rename the sine parameter from "DC" to "offset"
+
+    if( dc != "" )
     {
-        std::string dc = m_model.FindParam( "dc" )->value->ToSpiceString();
-        std::string ph = m_model.FindParam( "ph" )->value->ToSpiceString();
-
-        if( dc != "" )
-            item.modelName = fmt::format( "DC {} AC {} {} ", dc, ac, ph );
-        else
-            item.modelName = fmt::format( "AC {} {} ", ac, ph );
+        emptyLine = false;
+        item.modelName += fmt::format( "DC {} ", dc );
     }
-    else if( m_model.GetSpiceInfo().inlineTypeString != "" )
+
+    if( m_model.GetSpiceInfo().inlineTypeString != "" )
     {
         std::string args = "";
         
@@ -192,9 +204,22 @@ std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
             break;
         }
 
-        item.modelName = fmt::format( "{}( {})", m_model.GetSpiceInfo().inlineTypeString, args );
+        emptyLine = false;
+        item.modelName += fmt::format( "{}( {}) ", m_model.GetSpiceInfo().inlineTypeString, args );
     }
-    else
+
+    if( ac != "" )
+    {
+        std::string ph = "";
+
+        if( m_model.FindParam( "ph" ) )
+            ph = m_model.FindParam( "ph" )->value->ToSpiceString();
+
+        emptyLine = false;
+        item.modelName += fmt::format( "AC {} {}", ac, ph );
+    }
+
+    if( emptyLine )
     {
         item.modelName = m_model.GetParam( 0 ).value->ToSpiceString();
     }
