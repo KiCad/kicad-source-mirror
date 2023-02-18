@@ -207,7 +207,7 @@ COLOR_SETTINGS* SETTINGS_MANAGER::GetColorSettings( const wxString& aName )
         if( !ret )
         {
             ret = registerColorSettings( aName );
-            *ret = *m_color_settings.at( "_builtin_default" );
+            *ret = *m_color_settings.at( COLOR_SETTINGS::COLOR_BUILTIN_DEFAULT );
             ret->SetFilename( wxT( "user" ) );
             ret->SetReadOnly( false );
         }
@@ -216,7 +216,7 @@ COLOR_SETTINGS* SETTINGS_MANAGER::GetColorSettings( const wxString& aName )
     }
 
     // This had better work
-    return m_color_settings.at( "_builtin_default" );
+    return m_color_settings.at( COLOR_SETTINGS::COLOR_BUILTIN_DEFAULT );
 }
 
 

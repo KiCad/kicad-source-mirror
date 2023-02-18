@@ -31,6 +31,8 @@
 
 ///! Update the schema version whenever a migration is required
 const int colorsSchemaVersion = 5;
+const wxString COLOR_SETTINGS::COLOR_BUILTIN_DEFAULT = "_builtin_default";
+const wxString COLOR_SETTINGS::COLOR_BUILTIN_CLASSIC = "_builtin_classic";
 
 
 COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) :
@@ -380,12 +382,12 @@ void COLOR_SETTINGS::SetColor( int aLayer, const COLOR4D& aColor )
 
 std::vector<COLOR_SETTINGS*> COLOR_SETTINGS::CreateBuiltinColorSettings()
 {
-    COLOR_SETTINGS* defaultTheme = new COLOR_SETTINGS( wxT( "_builtin_default" ) );
+    COLOR_SETTINGS* defaultTheme = new COLOR_SETTINGS( COLOR_BUILTIN_DEFAULT );
     defaultTheme->SetName( _( "KiCad Default" ) );
     defaultTheme->m_writeFile = false;
     defaultTheme->Load();   // We can just get the colors out of the param defaults for this one
 
-    COLOR_SETTINGS* classicTheme = new COLOR_SETTINGS( wxT( "_builtin_classic" ) );
+    COLOR_SETTINGS* classicTheme = new COLOR_SETTINGS( COLOR_BUILTIN_CLASSIC );
     classicTheme->SetName( _( "KiCad Classic" ) );
     classicTheme->m_writeFile = false;
 

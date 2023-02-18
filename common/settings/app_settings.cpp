@@ -25,6 +25,7 @@
 #include <pgm_base.h>
 #include <settings/app_settings.h>
 #include <settings/json_settings_internals.h>
+#include <settings/color_settings.h>
 #include <settings/common_settings.h>
 #include <settings/parameters.h>
 
@@ -147,7 +148,7 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
             &m_System.last_imperial_units, static_cast<int>( EDA_UNITS::INCHES ) ) );
 
     m_params.emplace_back( new PARAM<wxString>( "appearance.color_theme",
-            &m_ColorTheme, wxS( "_builtin_default" ) ) );
+            &m_ColorTheme, COLOR_SETTINGS::COLOR_BUILTIN_DEFAULT ) );
 
     addParamsForWindow( &m_Window, "window" );
 
