@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2021 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -183,7 +183,7 @@ private:
     /**
      * Compute the 2 points on pad/via of the teardrop shape
      * @return false if these 2 points are not found
-     * @param aTrack is the reference track included in teardrop
+     * @param aLayer is the layer for the teardrop
      * @param aViaPad is the teardrop anchor
      * teardrop height = aViaPad size * aHeightRatio
      * @param aPts is the buffer that contains initial and final teardrop polygonal shape
@@ -194,7 +194,7 @@ private:
      * m_heightRatio is the factor to calculate the aViaPad teardrop size
     */
     bool ComputePointsOnPadVia( TEARDROP_PARAMETERS* aCurrParams,
-                                PCB_TRACK* aTrack, VIAPAD& aViaPad,
+                                PCB_LAYER_ID aLayer, VIAPAD& aViaPad,
                                 std::vector<VECTOR2I>& aPts ) const;
 
     /**

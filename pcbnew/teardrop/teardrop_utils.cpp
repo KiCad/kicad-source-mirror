@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2021 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -401,7 +401,7 @@ void TEARDROP_MANAGER::computeCurvedForRectShape(  TEARDROP_PARAMETERS* aCurrPar
 
 
 bool TEARDROP_MANAGER::ComputePointsOnPadVia( TEARDROP_PARAMETERS* aCurrParams,
-                                              PCB_TRACK* aTrack,
+                                              PCB_LAYER_ID aLayer,
                                               VIAPAD& aViaPad,
                                               std::vector<VECTOR2I>& aPts ) const
 {
@@ -441,7 +441,7 @@ bool TEARDROP_MANAGER::ComputePointsOnPadVia( TEARDROP_PARAMETERS* aCurrParams,
         force_clip_shape = true;
 
         preferred_height = aViaPad.m_Width * aCurrParams->m_HeightRatio;
-        pad->TransformShapeToPolygon( c_buffer, aTrack->GetLayer(), 0, ARC_LOW_DEF, ERROR_INSIDE );
+        pad->TransformShapeToPolygon( c_buffer, aLayer, 0, ARC_LOW_DEF, ERROR_INSIDE );
     }
 
     // Clip the pad/via shape to match the m_TdMaxHeight constraint, and for
@@ -593,8 +593,8 @@ bool TEARDROP_MANAGER::findAnchorPointsOnTrack( TEARDROP_PARAMETERS* aCurrParams
                                                 TRACK_BUFFER& aTrackLookupList ) const
 {
     bool found = true;
-    VECTOR2I start = aTrack->GetStart();
-    VECTOR2I end = aTrack->GetEnd();
+    VECTOR2I start = aTrack->GetStart();    // the anchor point on the track, inside teardrop
+    VECTOR2I end = aTrack->GetEnd();        // the anchor point on the track, outside teardrop
     int radius = aViaPad.m_Width / 2;
 
     // Requested length of the teardrop:
@@ -604,11 +604,13 @@ bool TEARDROP_MANAGER::findAnchorPointsOnTrack( TEARDROP_PARAMETERS* aCurrParams
         targetLength = std::min( aCurrParams->m_TdMaxLen, targetLength );
 
     int actualTdLen;    // The actual teardrop length, limited by the available track length
+    bool need_swap = false;     // true if the start and end points of the current track are swapped
 
     // ensure that start is at the via/pad end
     if( SEG( end, aViaPad.m_Pos ).Length() < radius )
     {
         std::swap( start, end );
+        need_swap = true;
     }
 
     SHAPE_POLY_SET shapebuffer;
@@ -639,9 +641,10 @@ bool TEARDROP_MANAGER::findAnchorPointsOnTrack( TEARDROP_PARAMETERS* aCurrParams
         return false;
 
     VECTOR2I intersect = pts[0].p;
-    start.x = intersect.x;
-    start.y = intersect.y;
+    start = intersect;
+
     actualTdLen = std::min( targetLength, SEG( start, end ).Length() );
+    VECTOR2I ref_lenght_point = start;    // the reference point of actualTdLen
 
     // If the first track is too short to allow a teardrop having the requested length
     // explore the connected track(s)
@@ -664,17 +667,78 @@ bool TEARDROP_MANAGER::findAnchorPointsOnTrack( TEARDROP_PARAMETERS* aCurrParams
             aTrack = connected_track;
             end = connected_track->GetEnd();
             start = connected_track->GetStart();
+            need_swap = false;
 
             if( matchType != STARTPOINT )
+            {
                 std::swap( start, end );
+                need_swap = true;
+            }
 
             // If we do not want to explore more than one connected track, stop search here
             break;
         }
     }
 
+    // if aTrack is an arc, find the best teardrop end point on the arc
+    // It is currently on the segment from arc start point to arc end point,
+    // therefore not really on the arc, because we have used only the track end points.
+    if( aTrack->Type() == PCB_ARC_T )
+    {
+        // To find the best start and end points to build the teardrop shape, we convert
+        // the arc to segments, and search for the segment havig its start point at a dist
+        // < actualTdLen, and its end point at adist > actualTdLen:
+        SHAPE_ARC arc( aTrack->GetStart(), static_cast<PCB_ARC*>( aTrack )->GetMid(),
+                       aTrack->GetEnd(), aTrack->GetWidth() );
+
+        if( need_swap )
+            arc.Reverse();
+
+        SHAPE_LINE_CHAIN poly = arc.ConvertToPolyline();
+
+        // Now, find the segment of the arc at a distance < actualTdLen from ref_lenght_point.
+        // We just search for the first segment (starting from the farest segment) with its
+        // start point at a distance < actualTdLen dist
+        // This is basic, but it is probably enough.
+        if( poly.PointCount() > 2 )
+        {
+            // Note: the first point is inside or near the pad/via shape
+            // The last point is outside and the farest from the ref_lenght_point
+            // So we explore segments from the last to the first
+            for( int ii = poly.PointCount()-1; ii >= 0 ; ii-- )
+            {
+                int dist_from_start = ( poly.CPoint( ii ) - ref_lenght_point ).EuclideanNorm();
+
+                // The first segment at a distance of the reference point < actualTdLen is OK
+                if( dist_from_start < actualTdLen )
+                {
+                    start = poly.CPoint( ii );
+
+                    if( ii < poly.PointCount()-1 )
+                        end = poly.CPoint( ii+1 );
+
+                    // actualTdLen is the distance between start (the segment start point)
+                    // and the point on track of the teardrop.
+                    // This is the difference between the initial actualTdLen value and the
+                    // distance between start and ref_lenght_point.
+                    actualTdLen -= (start - ref_lenght_point).EuclideanNorm();
+
+                    if( actualTdLen < 0 )
+                        actualTdLen = 0;
+
+                    break;
+                }
+            }
+        }
+    }
+
+    // aStartPoint and aEndPoint will define later a segment to build the 2 anchors points
+    // of the teardrop on the aTrack shape.
+    // they are the end point of aTrack if aTrack is a segment,
+    // or a small segment on aTrack if aTrack is an ARC
     aStartPoint = start;
     aEndPoint = end;
+
     *aEffectiveTeardropLen = actualTdLen;
     return found;
 }
@@ -733,7 +797,7 @@ bool TEARDROP_MANAGER::computeTeardropPolygonPoints( TEARDROP_PARAMETERS* aCurrP
     VECTOR2I pointC, pointE;     // Point on PADVIA outlines
     std::vector<VECTOR2I> pts = {pointA, pointB, pointC, pointD, pointE};
 
-    ComputePointsOnPadVia( aCurrParams, aTrack, aViaPad, pts );
+    ComputePointsOnPadVia( aCurrParams, aTrack->GetLayer(), aViaPad, pts );
 
     if( !aCurrParams->IsCurved() )
     {
