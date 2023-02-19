@@ -193,7 +193,7 @@ void CADSTAR_ARCHIVE_PARSER::LINECODE::Parse( XNODE* aNode, PARSER_CONTEXT* aCon
 
     XNODE* cNode = aNode->GetChildren();
 
-    if( cNode->GetName() != wxT( "STYLE" ) )
+    if( !cNode || cNode->GetName() != wxT( "STYLE" ) )
         THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), wxString::Format( "LINECODE -> %s", Name ) );
 
     wxString styleStr = GetXmlAttributeIDString( cNode, 0 );

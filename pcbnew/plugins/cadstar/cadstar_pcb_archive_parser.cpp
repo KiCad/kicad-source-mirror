@@ -1266,7 +1266,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::TEXTFORMAT::Parse( XNODE* aNode,
 
     XNODE* cNode = aNode->GetChildren();
 
-    if( cNode->GetName() != wxT( "TXTSTYLE" ) )
+    if( !cNode || cNode->GetName() != wxT( "TXTSTYLE" ) )
         THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), wxT( "DIMTEXT" ) );
 
     wxString styleStr = GetXmlAttributeIDString( cNode, 0 );
