@@ -165,7 +165,7 @@ void SHADER::SetParameter( int parameterNumber, float f0, float f1, float f2, fl
 void SHADER::SetParameter( int aParameterNumber, const VECTOR2D& aValue ) const
 {
     assert( (unsigned) aParameterNumber < parameterLocation.size() );
-    glUniform2f( parameterLocation[aParameterNumber], aValue.x, aValue.y );
+    glUniform2f( parameterLocation[aParameterNumber], static_cast<GLfloat>( aValue.x ), static_cast<GLfloat>( aValue.y ) );
 }
 
 

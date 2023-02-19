@@ -128,7 +128,7 @@ bool DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG::TransferDataFromWindow()
         if( !SYMBOL_LIB_TABLE::LoadGlobalTable( SYMBOL_LIB_TABLE::GetGlobalLibTable() ) )
             return false;
     }
-    catch( const IO_ERROR& ioe )
+    catch( const IO_ERROR& )
     {
         return false;
     }

@@ -242,7 +242,7 @@ VECTOR2<T>::VECTOR2( T aX, T aY )
 template <class T>
 T VECTOR2<T>::EuclideanNorm() const
 {
-    return sqrt( (extended_type) x * x + (extended_type) y * y );
+    return static_cast<T>( sqrt( (extended_type) x * x + (extended_type) y * y ) );
 }
 
 
@@ -421,7 +421,7 @@ VECTOR2<T> VECTOR2<T>::operator/( double aFactor ) const
     if( std::is_integral<T>::value )
         return VECTOR2<T>( KiROUND( x / aFactor ), KiROUND( y / aFactor ) );
     else
-        return VECTOR2<T>( x / aFactor, y / aFactor );
+        return VECTOR2<T>( static_cast<T>( x / aFactor ), static_cast<T>( y / aFactor ) );
 }
 
 

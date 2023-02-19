@@ -27,7 +27,7 @@
 #include <trigo.h>
 #include <wx/debug.h>   // For the wxASSERT
 
-#define RADPERDEG 0.0174533
+#define RADPERDEG 0.0174533f
 
 void DrawRoundArrow( SFVEC3F aPosition, SFVEC3F aTargetPos, float aSize )
 {
@@ -155,7 +155,7 @@ void DrawHalfOpenCylinder( unsigned int aNrSidesPerCircle )
         {
             SFVEC2D corner = SFVEC2D( 0.0, radius );
             RotatePoint( &corner.x, &corner.y, ii );
-            glVertex3f( corner.x, corner.y, 0.0 );
+            glVertex3f( static_cast<GLfloat>( corner.x ), static_cast<GLfloat>( corner.y ), 0.0 );
         }
 
         glVertex3d( 0.0, -radius, 0.0 );
@@ -171,7 +171,7 @@ void DrawHalfOpenCylinder( unsigned int aNrSidesPerCircle )
             SFVEC2D corner = SFVEC2D( 0.0, radius );
 
             RotatePoint( &corner.x, &corner.y, ii );
-            glVertex3f( corner.x, corner.y, 1.0 );
+            glVertex3f( static_cast<GLfloat>( corner.x ), static_cast<GLfloat>( corner.y ), 1.0 );
         }
 
         glVertex3f( 0.0, radius, 1.0 );
@@ -185,9 +185,10 @@ void DrawHalfOpenCylinder( unsigned int aNrSidesPerCircle )
             SFVEC2D corner = SFVEC2D( 0.0, radius );
 
             RotatePoint( &corner.x, &corner.y, ii );
-            glNormal3f( corner.x * 2.0f, corner.y * 2.0f, 0.0f );
-            glVertex3f( corner.x, corner.y, 1.0 );
-            glVertex3f( corner.x, corner.y, 0.0 );
+            glNormal3f( static_cast<GLfloat>( corner.x * 2.0f ),
+                        static_cast<GLfloat>( corner.y * 2.0f ), 0.0f );
+            glVertex3f( static_cast<GLfloat>( corner.x ), static_cast<GLfloat>( corner.y ), 1.0f );
+            glVertex3f( static_cast<GLfloat>( corner.x ), static_cast<GLfloat>( corner.y ), 0.0f );
         }
 
         glNormal3f( 0.0, 1.0f, 0.0f );

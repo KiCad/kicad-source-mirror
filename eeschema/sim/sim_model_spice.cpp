@@ -67,7 +67,7 @@ std::unique_ptr<SIM_MODEL_SPICE> SIM_MODEL_SPICE::Create( const SIM_LIBRARY_SPIC
             spiceModel->m_spiceModelParser->ReadModel( aLibrary, aSpiceCode );
             return std::unique_ptr<SIM_MODEL_SPICE>( spiceModel );
         }
-        catch( const IO_ERROR& e )
+        catch( const IO_ERROR& )
         {
             // Fall back to raw spice code
         }
