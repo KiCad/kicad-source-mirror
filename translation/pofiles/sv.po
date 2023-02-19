@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-10 15:35-0800\n"
-"PO-Revision-Date: 2023-02-18 18:36+0000\n"
+"PO-Revision-Date: 2023-02-19 15:28+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v7/sv/>\n"
 "Language: sv\n"
@@ -1988,8 +1988,7 @@ msgstr ""
 "Ange namn och värde för varje miljövariabel. Grå poster är namn som har "
 "definierats externt på system- eller användarnivå. Miljövariabler som "
 "definierats på system- eller användarnivå har företräde framför de som "
-"definieras i denna tabell. Detta innebär att värdena i denna tabell "
-"ignoreras."
+"definieras i denna tabell. Det innebär att värdena i denna tabell ignoreras."
 
 #: common/dialogs/dialog_configure_paths.cpp:405
 msgid ""
@@ -2153,7 +2152,7 @@ msgstr "dummy"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:51
 msgid "Select a file"
-msgstr "Välj fil"
+msgstr "Välj en fil"
 
 #: common/dialogs/dialog_global_lib_table_config_base.h:54
 msgid "Configure Global Library Table"
@@ -2196,11 +2195,11 @@ msgstr "en sida"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:67
 msgid "Current Grid"
-msgstr "Nuvarande Rutnät"
+msgstr "Nuvarande rutnät"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:83
 msgid "User Defined Grid"
-msgstr "Användardefinierat Rutnät"
+msgstr "Användardefinierat rutnät"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:91
 msgid "Size X:"
@@ -2266,7 +2265,7 @@ msgstr "Urvalet innehåller %d låsta objekt."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
-msgstr "Dessa objekt hoppas över om du inte åsidosätter lås."
+msgstr "Dessa objekt hoppas över om du inte åsidosätter låsningarna."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
 msgid "Remember decision for this session."
@@ -2282,15 +2281,15 @@ msgstr ""
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:55
 msgid "Override Locks"
-msgstr "Åsidosätt lås"
+msgstr "Åsidosätt låsningar"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:56
 msgid ""
 "Override locks and apply the operation on all the items selected.\n"
 "Any locked items will remain locked after the operation is complete."
 msgstr ""
-"Åsidosätt lås och applicera operationen på alla valda objekt.\n"
-"Alla låsta objekt förblir låsta tills operationen genomförts."
+"Åsidosätt låsningar och applicera operationen på alla valda objekt.\n"
+"Alla låsta objekt förblir låsta efter att operationen genomförts."
 
 #: common/dialogs/dialog_locked_items_query_base.h:56
 msgid "Locked Items"
@@ -2312,7 +2311,7 @@ msgstr "Importera inställningar från en tidigare version (ingen hittades)"
 
 #: common/dialogs/dialog_migrate_settings.cpp:137
 msgid "Select Settings Path"
-msgstr "Välj Inställningssökväg"
+msgstr "Välj sökväg för inställningar"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:32
 msgid "How would you like to configure KiCad?"
@@ -2453,7 +2452,7 @@ msgstr "Landskap"
 
 #: common/dialogs/dialog_page_settings.cpp:795
 msgid "Select Drawing Sheet File"
-msgstr "Välj Ritningsarksfil"
+msgstr "Välj ritningsarksfil"
 
 #: common/dialogs/dialog_page_settings_base.cpp:38
 msgid "dummy text"
@@ -2622,7 +2621,7 @@ msgstr "Antal ark: %d"
 #: common/dialogs/dialog_page_settings_base.cpp:191
 #, c-format
 msgid "Sheet number: %d"
-msgstr "Bladnummer: %d"
+msgstr "Arknummer: %d"
 
 #: common/dialogs/dialog_page_settings_base.cpp:204
 msgid "Issue Date:"
@@ -2696,7 +2695,7 @@ msgstr "Ersätter referensbeteckningar med '%s'."
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Assign unique reference designators to pasted symbols"
-msgstr "Tilldela unika referensbeteckningar för inklistrade symboler"
+msgstr "Tilldela unika referensbeteckningar till inklistrade symboler"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Keep existing reference designators, even if they are duplicated"
@@ -2704,7 +2703,7 @@ msgstr "Behåll befintliga referensbeteckningar, även om de dupliceras"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Clear reference designators on all pasted symbols"
-msgstr "Rensa referensbeteckningarna på alla inklistrade symboler"
+msgstr "Rensa referensbeteckningarna för alla inklistrade symboler"
 
 #: common/dialogs/dialog_paste_special_base.cpp:24
 msgid "Paste Options"
@@ -2726,7 +2725,7 @@ msgstr "Skriv ut"
 #: common/dialogs/dialog_print_generic.cpp:247
 #: eeschema/dialogs/dialog_print_using_printer.cpp:145
 msgid "Print Preview"
-msgstr "Förhandsgranskning"
+msgstr "Förhandsgranskning av utskrift"
 
 #: common/dialogs/dialog_print_generic.cpp:97 common/hotkey_store.cpp:55
 #: common/tool/action_menu.cpp:207 common/tool/action_menu.cpp:212
@@ -2767,7 +2766,7 @@ msgid ""
 "Warning: Scale option set to a very large value.\n"
 " Clamped to %f"
 msgstr ""
-"Varning: Skalalternativet är inställt på ett mycket stort värde.\n"
+"Varning: Skalningsfaktorn är satt till ett mycket högt värde.\n"
 " Begränsat till %f"
 
 #: common/dialogs/dialog_print_generic.cpp:172
@@ -2776,7 +2775,7 @@ msgid ""
 "Warning: Scale option set to a very small value.\n"
 " Clamped to %f"
 msgstr ""
-"Varning: Skalalternativet är inställt på ett mycket litet värde.\n"
+"Varning: Skalningsfaktorn är satt till ett mycket litet värde.\n"
 " Begränsat till %f"
 
 #: common/dialogs/dialog_print_generic.cpp:242
@@ -2787,7 +2786,7 @@ msgstr "Inget att skriva ut"
 #: common/dialogs/dialog_print_generic.cpp:284
 #: eeschema/dialogs/dialog_print_using_printer.cpp:319
 msgid "Previous print job not yet complete."
-msgstr "Tidigare utskriftsjobb ännu inte slutfört."
+msgstr "Tidigare utskriftsjobb är ännu inte slutfört."
 
 #: common/dialogs/dialog_print_generic.cpp:309
 msgid "There was a problem printing."
@@ -2849,11 +2848,11 @@ msgstr "Anpassa till sida"
 
 #: common/dialogs/dialog_print_generic_base.cpp:73
 msgid "Custom:"
-msgstr "Anpassning:"
+msgstr "Anpassad:"
 
 #: common/dialogs/dialog_print_generic_base.cpp:77
 msgid "Set X scale adjust for exact scale plotting"
-msgstr "Ställ in X-skala för att justera exakt skala"
+msgstr "Ställ in korrekturfaktor för X-skala, för att plotta i exakt skala"
 
 #: common/dialogs/dialog_print_generic_base.cpp:96
 msgid "Info text"
@@ -2882,7 +2881,7 @@ msgstr "Filtrera"
 
 #: common/dialogs/eda_list_dialog_base.cpp:22
 msgid "Items:"
-msgstr "Föremål:"
+msgstr "Objekt:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:25
 msgid "Available:"
@@ -2928,11 +2927,11 @@ msgstr "Visa Förvalsväljare"
 
 #: common/dialogs/panel_color_settings.cpp:51
 msgid "Reveal Themes in Finder"
-msgstr "Avslöja Teman i Finder"
+msgstr "Visa teman i Finder"
 
 #: common/dialogs/panel_color_settings.cpp:133
 msgid "New theme name:"
-msgstr "Nytt temanamn:"
+msgstr "Namn på nytt tema:"
 
 #: common/dialogs/panel_color_settings.cpp:133
 msgid "Add Color Theme"
@@ -2989,7 +2988,7 @@ msgstr "Öppna mappen som innehåller färgteman"
 
 #: common/dialogs/panel_common_settings.cpp:86
 msgid "Icon scale:"
-msgstr "Ikonskala:"
+msgstr "Ikonskalning:"
 
 #: common/dialogs/panel_common_settings.cpp:96
 #: common/dialogs/panel_common_settings_base.cpp:177
@@ -2998,7 +2997,7 @@ msgstr "Ikonskala:"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:122
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:91
 msgid "Automatic"
-msgstr "Automatiskt"
+msgstr "Automatisk"
 
 #: common/dialogs/panel_common_settings.cpp:116
 msgid ""
@@ -3011,7 +3010,7 @@ msgid ""
 "If this does not match the system DPI scaling, the canvas will not match the "
 "window size and cursor position."
 msgstr ""
-"Ställ in skalan för duken.\n"
+"Ställ in skalan för ritytan.\n"
 "\n"
 "På vissa plattformar kan KiCad inte bestämma skalningsfaktorn för skärmar "
 "med hög DPI. I så fall kan du behöva ställa in detta till ett värde som "
@@ -3027,7 +3026,7 @@ msgid ""
 "On some platforms, the automatic value is incorrect and should be set "
 "manually."
 msgstr ""
-"Använd ett automatiskt värde för canvasskalan.\n"
+"Använd ett automatiskt värde för ritytans skala.\n"
 "\n"
 "På vissa plattformar är det automatiska värdet felaktigt och bör ställas in "
 "manuellt."
@@ -3077,7 +3076,7 @@ msgstr "Textredigerare:"
 
 #: common/dialogs/panel_common_settings_base.cpp:103
 msgid "System default PDF viewer"
-msgstr "Systemets standard PDF-visningsprogram"
+msgstr "Systemets förvalda PDF-visningsprogram"
 
 #: common/dialogs/panel_common_settings_base.cpp:112
 msgid "Other:"
@@ -3139,11 +3138,11 @@ msgstr "Välj ljusa eller mörka ikoner automatiskt baserat på systemets färgt
 
 #: common/dialogs/panel_common_settings_base.cpp:190
 msgid "Canvas scale:"
-msgstr "Kanvasskala:"
+msgstr "Ritytans skala:"
 
 #: common/dialogs/panel_common_settings_base.cpp:207
 msgid "Apply icon scaling to fonts"
-msgstr "Tillämpa ikonskalning till typsnitt"
+msgstr "Tillämpa ikonskalning på typsnitt"
 
 #: common/dialogs/panel_common_settings_base.cpp:210
 msgid "(This workaround will improve some GTK HiDPI font scaling issues.)"
@@ -3189,7 +3188,7 @@ msgstr "Redigering"
 
 #: common/dialogs/panel_common_settings_base.cpp:250
 msgid "Warp mouse to origin of moved object"
-msgstr "Förflytta musen till det flyttade objektets ursprung"
+msgstr "Förflytta musen till det flyttade objektets origo"
 
 #: common/dialogs/panel_common_settings_base.cpp:254
 msgid "First hotkey selects tool"
@@ -3229,8 +3228,8 @@ msgid ""
 "Delay after the first change to create a backup file of the board on disk.\n"
 "If set to 0, auto backup is disabled"
 msgstr ""
-"Fördröj efter den första ändringen för att skapa en säkerhetskopia av "
-"kretskortet.\n"
+"Fördröjning efter den första ändringen innan en säkerhetskopia av "
+"mönsterkortet skapas på disk.\n"
 "Om värdet är 0 inaktiveras automatisk säkerhetskopiering"
 
 #: common/dialogs/panel_common_settings_base.cpp:300
@@ -3240,11 +3239,11 @@ msgstr "minuter"
 
 #: common/dialogs/panel_common_settings_base.cpp:304
 msgid "File history size:"
-msgstr "Filhistorikstorlek:"
+msgstr "Storlek på filhistorik:"
 
 #: common/dialogs/panel_common_settings_base.cpp:311
 msgid "3D cache file duration:"
-msgstr "3D-cachefils varaktighet:"
+msgstr "Varaktighet för 3D-cachefiler :"
 
 #: common/dialogs/panel_common_settings_base.cpp:316
 msgid ""
@@ -3282,8 +3281,8 @@ msgid ""
 "Create backups when the auto save feature is enabled.  If not checked, "
 "backups will only be created when you manually save a file."
 msgstr ""
-"Skapa säkerhetskopior när funktionen för automatisk spara är aktiverad. Om "
-"det inte är markerat skapas säkerhetskopior endast när du sparar en fil "
+"Skapa säkerhetskopior när funktionen för att spara automatiskt är aktiverad. "
+"Om det inte är markerat skapas säkerhetskopior endast när du sparar en fil "
 "manuellt."
 
 #: common/dialogs/panel_common_settings_base.cpp:360
@@ -3380,7 +3379,7 @@ msgstr "Skriv filtertext"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:114
 msgid "Undo All Changes"
-msgstr "Ångra Alla Ändringar"
+msgstr "Ångra alla Ändringar"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:115
 msgid "Undo all changes made so far in this dialog"
@@ -3394,12 +3393,12 @@ msgstr "Importera Snabbtangenter..."
 msgid ""
 "Import hotkey definitions from an external file, replacing the current values"
 msgstr ""
-"Importera snabbtangentdefinitioner från en extern fil och ersätt de aktuella "
-"värdena"
+"Importera snabbtangentsdefinitioner från en extern fil och ersätt de "
+"aktuella värdena"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:187
 msgid "Import Hotkeys File:"
-msgstr "Importera Snabbkommandofil:"
+msgstr "Importera fil för snabbtangentsdefinitioner:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:235
 msgid "| Action | Default Hotkey | Description"
@@ -3436,7 +3435,7 @@ msgstr "Bildskala:"
 #: common/dialogs/panel_mouse_settings.cpp:47
 #: pcbnew/dialogs/panel_edit_options_base.cpp:224
 msgid "Cmd"
-msgstr "Cmd"
+msgstr "Kommando"
 
 #: common/dialogs/panel_mouse_settings.cpp:48
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:228
@@ -3447,7 +3446,7 @@ msgstr "Alternativ"
 
 #: common/dialogs/panel_mouse_settings.cpp:85
 msgid "Only one action can be assigned to each vertical scroll setting"
-msgstr "Endast en åtgärd kan tilldelas varje vertikal rullinställning"
+msgstr "Endast en åtgärd kan tilldelas varje inställning för vertikal rullning"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:20
 msgid "Pan and Zoom"
@@ -3470,8 +3469,8 @@ msgid ""
 "When drawing a track or moving an item, pan when approaching the edge of the "
 "display."
 msgstr ""
-"När du ritar en ledare eller flyttar ett objekt, panorera när du närmar dig "
-"skärmkanten."
+"Medan du ritar en ledare eller flyttar ett objekt, panorera när du närmar "
+"dig skärmkanten."
 
 #: common/dialogs/panel_mouse_settings_base.cpp:48
 msgid "Use zoom acceleration"
@@ -3487,7 +3486,7 @@ msgstr "Zoomhastighet:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:61
 msgid "How far to zoom in for each rotation of the mouse wheel"
-msgstr "Hur långt att zooma in för varje rotation av mushjulet"
+msgstr "Hur mycket varje rotation av mushjulet zoomar in"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:68
 msgid "Pick the zoom speed automatically"
@@ -3503,7 +3502,7 @@ msgstr "Hur snabbt panorering sker när ett objekt förflyttas över skärmkante
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag Gestures"
-msgstr "Drag-gester"
+msgstr "Musgester"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:122
 msgid "Left button drag:"
@@ -3519,7 +3518,7 @@ msgstr "Dra markerade objekt; annars rita urvalsrektangel"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:126
 msgid "Drag any object (selected or not)"
-msgstr "Dra något objekt (vald eller ej)"
+msgstr "Dra valfritt objekt (valt eller ej)"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:135
 msgid "Middle button drag:"
@@ -3571,7 +3570,7 @@ msgstr "Rull-gester"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:186
 msgid "Vertical touchpad or scroll wheel movement:"
-msgstr "Vertikal pekplatte- eller rullhjulsrörelse:"
+msgstr "Vertikal pekplatte- eller mushjulsrörelse:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:191
 msgid "Only one action can be assigned to each column"
@@ -3623,11 +3622,11 @@ msgstr ""
 
 #: common/dialogs/panel_mouse_settings_base.cpp:301
 msgid "Reset to Mouse Defaults"
-msgstr "Återställ till standardvärden för Mus"
+msgstr "Återställ till standardvärden för mus"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:304
 msgid "Reset to Trackpad Defaults"
-msgstr "Återställ till standardvärden för Pekplatta"
+msgstr "Återställ till standardvärden för pekplatta"
 
 #: common/dialogs/panel_setup_netclasses.cpp:91 common/eda_shape.cpp:1682
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:353
@@ -3685,7 +3684,7 @@ msgstr "Kragdiameter för via"
 
 #: common/dialogs/panel_setup_netclasses.cpp:503
 msgid "Via plated hole diameter"
-msgstr "Diameter för pläterat via"
+msgstr "Diameter för viats genompläterade hål"
 
 #: common/dialogs/panel_setup_netclasses.cpp:504
 msgid "Microvia pad diameter"
@@ -3693,7 +3692,7 @@ msgstr "Kragdiameter för mikrovia"
 
 #: common/dialogs/panel_setup_netclasses.cpp:505
 msgid "Microvia plated hole diameter"
-msgstr "Diameter för pläterat mikrovia"
+msgstr "Diameter för mikroviats genompläterade hål"
 
 #: common/dialogs/panel_setup_netclasses.cpp:506
 msgid "Differential pair track width"
@@ -3701,7 +3700,7 @@ msgstr "Ledarbredd för differentialpar"
 
 #: common/dialogs/panel_setup_netclasses.cpp:507
 msgid "Differential pair gap"
-msgstr "Mellanrum mellan differentialpar"
+msgstr "Isolationsavstånd för differentialpar"
 
 #: common/dialogs/panel_setup_netclasses.cpp:508
 msgid "Schematic wire thickness"
@@ -3756,32 +3755,32 @@ msgstr "Via-storlek"
 #: common/dialogs/panel_setup_netclasses_base.cpp:55
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:230
 msgid "Via Hole"
-msgstr "Via-hål"
+msgstr "Viahål"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:56
 msgid "uVia Size"
-msgstr "uVia-storlek"
+msgstr "Mikroviastorlek"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:57
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:232
 msgid "uVia Hole"
-msgstr "uVia-hål"
+msgstr "Mikroviahål"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:58
 msgid "DP Width"
-msgstr "DP-bredd"
+msgstr "Diff.pars bredd"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:59
 msgid "DP Gap"
-msgstr "DP-gap"
+msgstr "Diff.pars gap"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
 msgid "Wire Thickness"
-msgstr "Trådtjocklek"
+msgstr "Trådbredd"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "Bus Thickness"
-msgstr "Busstjocklek"
+msgstr "Bussbredd"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:63
 #: common/stroke_params.cpp:210 eeschema/sch_line.cpp:909
@@ -3926,19 +3925,19 @@ msgstr "Fel vid skrivning av ritningsarksfil"
 
 #: common/drawing_sheet/ds_draw_item.cpp:135
 msgid "First Page Only"
-msgstr "Endast Första Sidan"
+msgstr "Endast första sidan"
 
 #: common/drawing_sheet/ds_draw_item.cpp:136
 msgid "Subsequent Pages"
-msgstr "Efterföljande Sidor"
+msgstr "Efterföljande sidor"
 
 #: common/drawing_sheet/ds_draw_item.cpp:137
 msgid "All Pages"
-msgstr "Alla Sidor"
+msgstr "Alla sidor"
 
 #: common/drawing_sheet/ds_draw_item.cpp:140
 msgid "First Page Option"
-msgstr "Alternativ för Första Sidan"
+msgstr "Alternativ för första sidan"
 
 #: common/drawing_sheet/ds_draw_item.cpp:144
 msgid "Repeat Count"
@@ -4019,7 +4018,7 @@ msgstr "Oavslutad avgränsad sträng"
 
 #: common/dsnlexer.cpp:718
 msgid "String delimiter must be a single character of ', \", or $"
-msgstr "Strängavgränsare måste bestå av enstaka tecken på ', \"eller $"
+msgstr "Strängavgränsare måste bestå av enstaka tecken av ', \"eller $"
 
 #: common/dsnlexer.cpp:840
 #, c-format
@@ -4195,7 +4194,7 @@ msgstr "Insticksmoduls- och innehålls-hanterare"
 #: common/eda_base_frame.cpp:1208
 #, c-format
 msgid "Insufficient permissions to folder '%s'."
-msgstr "Otillräckliga behörigheter till mappen '%s'."
+msgstr "Otillräckliga behörigheter för mappen '%s'."
 
 #: common/eda_base_frame.cpp:1249
 #, c-format
@@ -4216,7 +4215,8 @@ msgstr ""
 
 #: common/eda_base_frame.cpp:1266
 msgid "The auto save file could not be renamed to the board file name."
-msgstr "Kunde inte byta namn på den autosparade filen till kortets filnamn."
+msgstr ""
+"Kunde inte byta namn på den autosparade filen till mönsterkortets filnamn."
 
 #: common/eda_doc.cpp:130
 msgid "Documentation File"
@@ -4252,11 +4252,11 @@ msgstr "Begränsa till H, V, 45"
 
 #: common/eda_draw_frame.cpp:372
 msgid "Edit User Grid..."
-msgstr "Redigera användarnät ..."
+msgstr "Redigera användardefinierat rutnät..."
 
 #: common/eda_draw_frame.cpp:524
 msgid "Zoom Auto"
-msgstr "Zoom Auto"
+msgstr "Automatisk zoom"
 
 #: common/eda_draw_frame.cpp:533
 #, c-format
@@ -4342,7 +4342,7 @@ msgstr "Måttsättning"
 #: common/eda_item.cpp:338 common/eda_item.cpp:348 pcbnew/pcb_dimension.cpp:962
 #: pcbnew/pcb_dimension.cpp:1082
 msgid "Leader"
-msgstr "Ledare"
+msgstr "Hänvisningslinje"
 
 #: common/eda_item.cpp:339 common/eda_item.cpp:350
 #: pcbnew/tools/board_inspection_tool.cpp:634
@@ -4356,7 +4356,7 @@ msgstr "Ledare"
 #: common/eda_item.cpp:342 pcbnew/dialogs/dialog_board_statistics.cpp:501
 #: pcbnew/pcb_track.cpp:851 pcbnew/pcb_track.cpp:934
 msgid "Via"
-msgstr "via"
+msgstr "Via"
 
 #: common/eda_item.cpp:343 common/eda_item.cpp:355 pcbnew/pcb_marker.cpp:193
 msgid "Marker"
@@ -4430,12 +4430,12 @@ msgstr "Ben"
 
 #: common/eda_item.cpp:371
 msgid "Sheet Pin"
-msgstr "Stift (Blad)"
+msgstr "Stift (Ark)"
 
 #: common/eda_item.cpp:372 eeschema/dialogs/dialog_migrate_buses.cpp:103
 #: pcbnew/tools/pcb_actions.cpp:1360
 msgid "Sheet"
-msgstr "Blad"
+msgstr "Ark"
 
 #: common/eda_item.cpp:379
 msgid "SCH Screen"
@@ -4460,7 +4460,7 @@ msgstr "Nummerruta"
 
 #: common/eda_shape.cpp:65 pcbnew/pad.cpp:1218
 msgid "Rect"
-msgstr "Rätt"
+msgstr "Rektangel"
 
 #: common/eda_shape.cpp:66 common/eda_shape.cpp:616 common/eda_shape.cpp:1676
 #: gerbview/gerber_draw_item.cpp:213
@@ -4589,12 +4589,12 @@ msgstr "Start Y"
 #: common/eda_shape.cpp:1699 pcbnew/pcb_textbox.cpp:513
 #: pcbnew/pcb_track.cpp:1285
 msgid "End X"
-msgstr "Avsluta X"
+msgstr "Slut X"
 
 #: common/eda_shape.cpp:1702 pcbnew/pcb_textbox.cpp:514
 #: pcbnew/pcb_track.cpp:1288
 msgid "End Y"
-msgstr "Avsluta Y"
+msgstr "Slut Y"
 
 #: common/eda_shape.cpp:1706 common/stroke_params.cpp:214
 #: pcbnew/pcb_textbox.cpp:515
@@ -4789,7 +4789,7 @@ msgstr ""
 
 #: common/env_vars.cpp:74
 msgid "The base path of system footprint 3D shapes (.3Dshapes folders)."
-msgstr "Grundsökvägen för 3D-former för systemfotavtryck (.3Dshapes mappar)."
+msgstr "Grundsökvägen för 3D-modeller för systemfotavtryck (.3Dshapes mappar)."
 
 #: common/env_vars.cpp:76
 msgid "The base path of the locally installed symbol libraries."
@@ -4886,7 +4886,7 @@ msgstr ""
 
 #: common/exceptions.cpp:126
 msgid "Full error text:"
-msgstr "Hela feltexten:"
+msgstr "Fullständig felmeddelandetext:"
 
 #: common/file_history.cpp:155
 msgid "No Files"
@@ -4910,7 +4910,7 @@ msgstr "Befintlig sökväg:"
 
 #: common/filename_resolver.cpp:489
 msgid "Bad alias (duplicate name)"
-msgstr "Dåligt alias (dubblettnamn)"
+msgstr "Felaktigt alias (dubblettnamn)"
 
 #: common/font/font.cpp:90 common/widgets/font_choice.cpp:47
 #: eeschema/dialogs/dialog_field_properties_base.cpp:122
@@ -4939,11 +4939,11 @@ msgstr "Typsnitt '%s' hittades inte; ersätts med '%s'."
 #: eeschema/symbol_tree_model_adapter.cpp:108
 #: eeschema/symbol_viewer_frame.cpp:363
 msgid "Load Error"
-msgstr "Fel vid Laddning"
+msgstr "Fel vid inläsning"
 
 #: common/footprint_info.cpp:101
 msgid "Errors were encountered loading footprints:"
-msgstr "Fel uppstod vid laddning av fotavtryck:"
+msgstr "Fel uppstod vid inläsning av fotavtryck:"
 
 #: common/fp_lib_table.cpp:218
 #, c-format
@@ -4981,7 +4981,7 @@ msgstr "Det gick inte att hitta en PDF-visare för '%s'."
 #: common/gestfich.cpp:185
 #, c-format
 msgid "Problem while running the PDF viewer '%s'."
-msgstr "Problem under körning av PDF-visaren '%s'."
+msgstr "Problem vid körning av PDF-visaren '%s'."
 
 #: common/gestfich.cpp:223 eeschema/eeschema.cpp:517 eeschema/eeschema.cpp:552
 #: gerbview/gerbview.cpp:245 kicad/project_template.cpp:279
@@ -4998,7 +4998,7 @@ msgstr "Klipp ut"
 
 #: common/grid_tricks.cpp:326
 msgid "Clear selected cells placing original contents on clipboard"
-msgstr "Rensa markerade celler och placera originalinnehållet i urklipp"
+msgstr "Töm markerade celler och placera originalinnehållet i urklipp"
 
 #: common/grid_tricks.cpp:327 common/tool/actions.cpp:159
 #: eeschema/tools/ee_actions.cpp:162 pcbnew/dialogs/panel_setup_rules.cpp:114
@@ -5016,7 +5016,7 @@ msgstr "Klistra In"
 
 #: common/grid_tricks.cpp:330
 msgid "Paste clipboard cells to matrix at current cell"
-msgstr "Klistra in urklippsceller i matris vid aktuell cell"
+msgstr "Klistra in celler i urklipp vid aktuell cell i matris"
 
 #: common/grid_tricks.cpp:331 common/tool/actions.cpp:192
 #: kicad/project_tree_pane.cpp:762 pcbnew/dialogs/panel_setup_rules.cpp:116
@@ -5037,7 +5037,7 @@ msgstr "Radera markerade celler"
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:83
 #: pcbnew/dialogs/panel_setup_rules.cpp:120
 msgid "Select All"
-msgstr "Markera Allt"
+msgstr "Markera allt"
 
 #: common/grid_tricks.cpp:332
 msgid "Select all cells"
@@ -5053,11 +5053,11 @@ msgstr "Panorera Upp/Ner"
 
 #: common/hotkey_store.cpp:45 eeschema/tools/ee_actions.cpp:263
 msgid "Finish Drawing"
-msgstr "Sluta Rita"
+msgstr "Sluta rita"
 
 #: common/hotkey_store.cpp:46
 msgid "Add to Selection"
-msgstr "Lägg till i Markering"
+msgstr "Lägg till i urval"
 
 #: common/hotkey_store.cpp:47 eeschema/tools/ee_actions.cpp:577
 #: gerbview/tools/gerbview_actions.cpp:119 pcbnew/tools/pcb_actions.cpp:790
@@ -5067,11 +5067,11 @@ msgstr "Markera nät"
 
 #: common/hotkey_store.cpp:48
 msgid "Remove from Selection"
-msgstr "Ta Bort från Markering"
+msgstr "Ta bort från markering"
 
 #: common/hotkey_store.cpp:49
 msgid "Ignore Grid Snaps"
-msgstr "Ignorera Rutnätssnäpp"
+msgstr "Ignorera fäst mot rutnät"
 
 #: common/hotkey_store.cpp:50
 msgid "Ignore Other Snaps"
@@ -8071,27 +8071,27 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:64
 msgid "Change all symbols in schematic"
-msgstr "Ändra alla symboler i schemat"
+msgstr "Ersätt alla symboler i schemat"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:65
 msgid "Change Symbols"
-msgstr "Ändra Symboler"
+msgstr "Ersätt symboler"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:74
 msgid "Change selected symbol(s)"
-msgstr "Ändra vald symbol(er)"
+msgstr "Ersätt vald(a) symbol(er)"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:91
 msgid "Change symbols matching reference designator:"
-msgstr "Ändra symboler som matchar referensbeteckning:"
+msgstr "Ersätt symboler som matchar referensbeteckning:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:92
 msgid "Change symbols matching value:"
-msgstr "Ändra symboler som matchar värdet:"
+msgstr "Ersätt symboler som matchar värdet:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:93
 msgid "Change symbols matching library identifier:"
-msgstr "Ändra symboler som matchar biblioteksidentifieraren:"
+msgstr "Ersätt symboler som matchar biblioteksidentifieraren:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:130
 msgid "Update Fields"
@@ -8128,7 +8128,7 @@ msgstr "Uppdatera symbolattribut"
 #: eeschema/dialogs/dialog_change_symbols.cpp:152
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:157
 msgid "Change"
-msgstr "Ändra"
+msgstr "Ersätt"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:152
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:44
@@ -8742,7 +8742,7 @@ msgstr "Skriptgeneratoregenskaper"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:188
 msgid "Power symbol value field text cannot be changed."
-msgstr "Fälttexten för kraftsymbolens värde kan inte ändras."
+msgstr "Fälttexten för strömförsörjningssymbolens värde kan inte ändras."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:362
 msgid "Illegal reference designator value!"
@@ -11483,7 +11483,7 @@ msgstr "Uppdatera symbol från bibliotek ..."
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:233
 #: eeschema/tools/ee_actions.cpp:471
 msgid "Change Symbol..."
-msgstr "Ändra symbol ..."
+msgstr "Ersätt symbol..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:236
 msgid "Edit Symbol..."
@@ -11543,9 +11543,9 @@ msgstr ""
 "som uppslagsmetod för att ladda bibliotekssymboler. KiCad kommer att försöka "
 "mappa de befintliga symbolerna för att använda den nya "
 "symbolbibliotekstabellen. Om mappning ändrar vissa projektfiler och "
-"kretsscheman är kanske inte kompatibla med äldre versioner av KiCad. Alla "
-"filer som ändras säkerhetskopieras till mappen \"remap_backup\" i "
-"projektmappen om du skulle behöva återställa alla ändringar. Om du väljer "
+"kretsscheman är de kanske inte längre kompatibla med äldre versioner av "
+"KiCad. Alla filer som ändras säkerhetskopieras till mappen \"remap_backup\" "
+"i projektmappen om du skulle behöva återställa alla ändringar. Om du väljer "
 "att hoppa över det här steget är du ansvarig för att manuellt mappa om "
 "symbolerna."
 
@@ -17484,7 +17484,7 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:459
 msgid "Change Symbols..."
-msgstr "Ändra symboler..."
+msgstr "Ersätt symboler..."
 
 #: eeschema/tools/ee_actions.cpp:460
 msgid "Assign different symbols from the library"
@@ -21472,7 +21472,7 @@ msgstr "KiCad-ritningsarksredigerare"
 
 #: pagelayout_editor/pl_editor_frame.cpp:158
 msgid "coord origin: Right Bottom page corner"
-msgstr "koord origo: Höger nedre sidhörn"
+msgstr "koord. origo: Höger nedre sidhörn"
 
 #: pagelayout_editor/pl_editor_frame.cpp:188 pcbnew/pcb_edit_frame.cpp:298
 #: pcbnew/pcb_edit_frame.cpp:1474
@@ -21495,7 +21495,7 @@ msgstr "[inget ritningsark laddat]"
 #: pagelayout_editor/pl_editor_frame.cpp:777
 #, c-format
 msgid "coord origin: %s"
-msgstr "koord origo: %s"
+msgstr "koord. origo: %s"
 
 #: pagelayout_editor/pl_editor_frame.cpp:918
 msgid "New drawing sheet file is unsaved"
@@ -27236,7 +27236,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:139
 msgid "Use drill/place file origin as origin"
-msgstr "Använd borr- / placeringsfilens origo som origo"
+msgstr "Använd borr- / placeringsfilens origo som origo vid export"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:140
 msgid "Save the origin coordinates in the file"
@@ -29612,11 +29612,11 @@ msgstr "Återställ till aktuell Y-förskjutning från referenspositionen."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:229
 msgid "Reference location: grid origin"
-msgstr "Referensplats: rutnätets origo"
+msgstr "Referenspunkt: rutnätets origo"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:233
 msgid "Reference location: local coordinates origin"
-msgstr "Referensplats: origo för lokala koordinater"
+msgstr "Referenspunkt: origo för lokala koordinater"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:239
 msgid "<none selected>"
