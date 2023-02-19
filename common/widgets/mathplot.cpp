@@ -327,7 +327,7 @@ void mpInfoLegend::Plot( wxDC& dc, mpWindow& w )
         int plotCount = 0;
         int posY    = 0;
         int tmpX    = 0, tmpY = 0;
-        mpLayer* ly = NULL;
+        mpLayer*  ly = nullptr;
         wxPen lpen;
         wxString label;
 
@@ -541,8 +541,8 @@ mpFXY::mpFXY( const wxString& name, int flags )
     SetName( name );
     m_flags     = flags;
     m_type      = mpLAYER_PLOT;
-    m_scaleX    = NULL;
-    m_scaleY    = NULL;
+    m_scaleX    = nullptr;
+    m_scaleY    = nullptr;
 
     // Avoid not initialized members:
     maxDrawX = minDrawX = maxDrawY = minDrawY = 0;
@@ -562,6 +562,10 @@ void mpFXY::UpdateViewBoundary( wxCoord xnew, wxCoord ynew )
 
 void mpFXY::Plot( wxDC& dc, mpWindow& w )
 {
+    wxCHECK_RET( m_scaleX, wxS( "X scale was not set" ) );
+
+    wxCHECK_RET( m_scaleY, wxS( "Y scale was not set" ) );
+
     if( m_visible )
     {
         dc.SetPen( m_pen );
@@ -1395,7 +1399,7 @@ mpScaleY::mpScaleY( const wxString& name, int flags, bool ticks )
     m_flags = flags;
     m_ticks = ticks;
     m_type  = mpLAYER_AXIS;
-    m_masterScale = NULL;
+    m_masterScale = nullptr;
     m_nameFlags = mpALIGN_BORDER_LEFT;
 }
 
@@ -1662,11 +1666,11 @@ mpWindow::mpWindow( wxWindow* parent,
     m_minX  = m_minY = 0;
     m_maxX  = m_maxY = 0;
     m_last_lx   = m_last_ly = 0;
-    m_buff_bmp  = NULL;
+    m_buff_bmp = nullptr;
     m_enableDoubleBuffer = false;
     m_enableMouseNavigation = true;
     m_enableLimitedView = false;
-    m_movingInfoLayer = NULL;
+    m_movingInfoLayer = nullptr;
     // Set margins to 0
     m_marginTop = 0; m_marginRight = 0; m_marginBottom = 0; m_marginLeft = 0;
 
@@ -1914,10 +1918,10 @@ void mpWindow::OnMouseLeftRelease( wxMouseEvent& event )
 
     m_zooming = false;
 
-    if( m_movingInfoLayer != NULL )
+    if( m_movingInfoLayer != nullptr )
     {
         m_movingInfoLayer->UpdateReference();
-        m_movingInfoLayer = NULL;
+        m_movingInfoLayer = nullptr;
     }
     else
     {
@@ -1953,7 +1957,7 @@ void mpWindow::Fit( double xMin, double xMax, double yMin, double yMax,
     yMin    -= yExtra;
     yMax    += yExtra;
 
-    if( printSizeX != NULL && printSizeY != NULL )
+    if( printSizeX != nullptr && printSizeY != nullptr )
     {
         // Printer:
         m_scrX  = *printSizeX;
@@ -1994,7 +1998,7 @@ void mpWindow::Fit( double xMin, double xMax, double yMin, double yMax,
 
     // It is VERY IMPORTANT to DO NOT call Refresh if we are drawing to the printer!!
     // Otherwise, the DC dimensions will be those of the window instead of the printer device
-    if( printSizeX == NULL || printSizeY == NULL )
+    if( printSizeX == nullptr || printSizeY == nullptr )
         UpdateAll();
 }
 
@@ -2634,7 +2638,7 @@ unsigned int mpWindow::CountLayers() const
 mpLayer* mpWindow::GetLayer( int position ) const
 {
     if( ( position >= (int) m_layers.size() ) || position < 0 )
-        return NULL;
+        return nullptr;
 
     return m_layers[position];
 }
@@ -2648,7 +2652,7 @@ const mpLayer* mpWindow::GetLayerByName( const wxString& name ) const
             return layer;
     }
 
-    return NULL;    // Not found
+    return nullptr; // Not found
 }
 
 
@@ -2735,7 +2739,7 @@ mpInfoLayer* mpWindow::IsInsideInfoLayer( wxPoint& point )
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -3078,9 +3082,9 @@ bool mpPrintout::OnPrintPage( int page )
         // Restore colours
         plotWindow->SetColourTheme( oldBgColour, oldFgColour, oldAxColour );
         // Restore drawing
-        plotWindow->Fit( plotWindow->GetDesiredXmin(),
-                plotWindow->GetDesiredXmax(), plotWindow->GetDesiredYmin(),
-                plotWindow->GetDesiredYmax(), NULL, NULL );
+        plotWindow->Fit( plotWindow->GetDesiredXmin(), plotWindow->GetDesiredXmax(),
+                         plotWindow->GetDesiredYmin(), plotWindow->GetDesiredYmax(), nullptr,
+                         nullptr );
         plotWindow->UpdateAll();
     }
 
