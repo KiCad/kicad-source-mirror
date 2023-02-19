@@ -18,10 +18,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-15 16:29-0800\n"
-"PO-Revision-Date: 2023-02-06 07:25+0000\n"
+"PO-Revision-Date: 2023-02-21 00:55+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -104,9 +104,8 @@ msgid "Build BVH for holes and vias"
 msgstr "Sestavuji BVH pro díry a prokovy"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:389
-#, fuzzy
 msgid "OpenGL context creation error"
-msgstr "Rozlišení zakázané zóny pro:"
+msgstr "Chyba vytváření kontextu OpenGL"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:420
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
@@ -521,9 +520,8 @@ msgid "Render Solid Colors"
 msgstr "Vykreslení plných barev"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:195
-#, fuzzy
 msgid "Use only the diffuse color property from 3D model file"
-msgstr "Použít pouze vlastnosti difúzní barvy z 3D modelu"
+msgstr "Použít pouze vlastnost difúzní barvy ze souboru 3D modelu"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:201
 msgid "Render CAD Colors"
@@ -5318,14 +5316,12 @@ msgid "Page limits"
 msgstr "Okraje strany"
 
 #: common/layer_id.cpp:150
-#, fuzzy
 msgid "Operating point voltages"
-msgstr "Provozní bod"
+msgstr "Napětí provozního bodu"
 
 #: common/layer_id.cpp:151
-#, fuzzy
 msgid "Operating point currents"
-msgstr "Provozní bod"
+msgstr "Proudy provozního bodu"
 
 #: common/layer_id.cpp:155
 msgid "Footprints front"
@@ -6021,9 +6017,8 @@ msgid "Find Previous"
 msgstr "Najít předchozí"
 
 #: common/tool/actions.cpp:234
-#, fuzzy
 msgid "Find previous match"
-msgstr "Najít předchozí"
+msgstr "Najít předchozí shodu"
 
 #: common/tool/actions.cpp:240
 msgid "Find Next Marker"
@@ -8661,20 +8656,18 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:312
-#, fuzzy
 msgid "Run external simulator command:"
-msgstr "Příkaz externího simulátoru:"
+msgstr "Spustit příkaz externího simulátoru:"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:314
-#, fuzzy
 msgid ""
 "Enter the command line to run SPICE\n"
 "Usually '<path to SPICE binary> \"%I\"'\n"
 "%I will be replaced by the netlist filepath"
 msgstr ""
-"Zadejte příkazový řádek a spusťte spice\n"
-"Obvykle <cesta k binárnímu spice> %I\n"
-"%I Budu nahrazen skutečným názvem netlist spice"
+"Zadejte příkazový řádek a spusťte SPICE\n"
+"Obvykle <cesta k binárce SPICE > \"%I\"\n"
+"%I bude nahrazeno cestou k souboru netlistu"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:387
 msgid "Netlist command:"
@@ -8695,9 +8688,8 @@ msgid "Exporting netlist requires a fully annotated schematic."
 msgstr "Exportování netlistu vyžaduje plně očíslované schéma."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:560
-#, fuzzy
 msgid "external simulator not found"
-msgstr "Příkaz externího simulátoru:"
+msgstr "externí simulátor nenalezen"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:561
 msgid ""
@@ -8709,9 +8701,8 @@ msgid "external simulator has the wrong format or architecture"
 msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:572
-#, fuzzy
 msgid "permission denied"
-msgstr "Chyba oprávnění?"
+msgstr "přístup odepřen"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:707
 msgid "This plugin already exists."
@@ -10605,9 +10596,8 @@ msgid "Search the current &sheet only"
 msgstr "Hledat pouze na aktuálním &listu"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:101
-#, fuzzy
 msgid "Search the current selection &only"
-msgstr "Hledat pouze na aktuálním &listu"
+msgstr "Hledat &pouze v aktuálním výběru"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:104
 msgid "Replace matches in reference designators"
@@ -11219,33 +11209,29 @@ msgid "m"
 msgstr "m"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "K"
-msgstr "OK"
+msgstr "K"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "M"
-msgstr "MB"
+msgstr "M"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 msgid "G"
-msgstr ""
+msgstr "G"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "T"
-msgstr "T:"
+msgstr "T"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "P"
-msgstr "Pi"
+msgstr "P"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.h:47
-#, fuzzy, c-format
+#, c-format
 msgid "Format %s"
-msgstr "Formát"
+msgstr "Formát %s"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:192
 #, c-format
@@ -11904,14 +11890,12 @@ msgid "Show ERC exclusions"
 msgstr "Zobrazit ERC vyloučení"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:68
-#, fuzzy
 msgid "Show OP voltages"
-msgstr "Zobrazit stránku %s"
+msgstr "Zobrazit napětí provozního bodu"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:71
-#, fuzzy
 msgid "Show OP currents"
-msgstr "Uložit všechny proudy"
+msgstr "Zobrazit proudy provozního bodu"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:74
 msgid "Show page limi&ts"
@@ -12349,29 +12333,24 @@ msgid "Significant digits (voltages):"
 msgstr ""
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:270
-#, fuzzy
 msgid "Range (voltages):"
-msgstr "Uložit všechna napětí"
+msgstr "Rozsah (napětí):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "fV"
-msgstr "V"
+msgstr "fV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "pV"
-msgstr "V"
+msgstr "pV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "nV"
-msgstr "V"
+msgstr "nV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "uV"
-msgstr "V"
+msgstr "uV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:71
@@ -12380,53 +12359,44 @@ msgid "mV"
 msgstr "mV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "KV"
-msgstr "V"
+msgstr "KV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "MV"
-msgstr "V"
+msgstr "MV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "GV"
-msgstr "V"
+msgstr "GV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "TV"
-msgstr "V"
+msgstr "TV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "PV"
-msgstr "V"
+msgstr "PV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:281
 msgid "Significant digits (currents):"
 msgstr ""
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:289
-#, fuzzy
 msgid "Range (currents):"
-msgstr "Uložit všechny proudy"
+msgstr "Rozsah (proudy):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "fA"
-msgstr "A"
+msgstr "fA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "pA"
-msgstr "A"
+msgstr "pA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "nA"
-msgstr "A"
+msgstr "nA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:208
@@ -12435,34 +12405,28 @@ msgid "uA"
 msgstr "uA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "mA"
-msgstr "A"
+msgstr "mA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "KA"
-msgstr "A"
+msgstr "KA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "MA"
-msgstr "A"
+msgstr "MA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "GA"
-msgstr "BGA"
+msgstr "GA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "TA"
-msgstr "A"
+msgstr "TA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "PA"
-msgstr "A"
+msgstr "PA"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:220
 msgid "No error or warning"
@@ -16219,7 +16183,7 @@ msgstr "Spice Simulátor"
 #: eeschema/sim/sim_plot_frame.cpp:758
 #, c-format
 msgid "V(%s) (gain)"
-msgstr ""
+msgstr "V(%s) (zisk)"
 
 #: eeschema/sim/sim_plot_frame.cpp:759
 #, fuzzy, c-format
@@ -16251,7 +16215,7 @@ msgstr "Již běží jiná simulace."
 
 #: eeschema/sim/sim_plot_frame.cpp:975 eeschema/sim/sim_plot_frame.cpp:1386
 msgid " (gain)"
-msgstr ""
+msgstr " (zisk)"
 
 #: eeschema/sim/sim_plot_frame.cpp:976 eeschema/sim/sim_plot_frame.cpp:1388
 msgid " (phase)"
@@ -21445,7 +21409,7 @@ msgstr "Texty mohou zahrnovat klíčová slova."
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:670
 msgid "Keyword notation is ${keyword}"
-msgstr "Způsob psaní klíčového slova je ${klíčovéslovo}"
+msgstr "Způsob psaní klíčového slova je ${keyword}"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:671
 msgid "Each keyword is replaced by its value"
@@ -32494,14 +32458,12 @@ msgid "Pad net doesn't match schematic"
 msgstr "Načíst směrnice ze schématu"
 
 #: pcbnew/drc/drc_item.cpp:185
-#, fuzzy
 msgid "Footprint not found in libraries"
-msgstr "Pouzdro nenalezeno v seznamu změn"
+msgstr "Pouzdro nenalezeno v knihovnách"
 
 #: pcbnew/drc/drc_item.cpp:189
-#, fuzzy
 msgid "Footprint doesn't match copy in library"
-msgstr "Editor pouzder - Vytvoření/úprava pouzder"
+msgstr "Pouzdro se neshoduje s kopií v knihovně"
 
 #: pcbnew/drc/drc_item.cpp:197
 msgid "Assertion failure"
@@ -32822,14 +32784,14 @@ msgid "(%s maximum uncoupled length %s; actual %s)"
 msgstr "(%s %s; aktuální %s)"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:521
-#, fuzzy, c-format
+#, c-format
 msgid "(%s minimum gap %s; actual %s)"
-msgstr "(%s min %s; aktuální %s)"
+msgstr "(%s minimální mezera %s; skutečná %s)"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:528
-#, fuzzy, c-format
+#, c-format
 msgid "(%s maximum gap %s; actual %s)"
-msgstr "(%s max. šířka %s; aktuální %s)"
+msgstr "(%s maximální mezera %s; skutečná %s)"
 
 #: pcbnew/drc/drc_test_provider_disallow.cpp:72
 #, fuzzy
@@ -32886,14 +32848,12 @@ msgid "No project loaded, skipping library parity tests."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:463
-#, fuzzy
 msgid "Loading footprint library table..."
-msgstr "Chyba načtení tabulky knihovny pouzder."
+msgstr "Načítání tabulky knihoven pouzder..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:473
-#, fuzzy
 msgid "Checking board footprints against library..."
-msgstr "Kontrola pouzder..."
+msgstr "Kontrola pouzder desky proti knihovně..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:505
 #, c-format
@@ -32906,35 +32866,34 @@ msgid "The library '%s' is not enabled in the current configuration."
 msgstr "Knihovna „%s“ není v aktuální konfiguraci povolena."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:555
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in library '%s'."
-msgstr "Pouzdro nenalezeno v seznamu změn"
+msgstr "Pouzdro '%s' nenalezeno v knihovně '%s'."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:568
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' does not match copy in library '%s'."
-msgstr "Editor pouzder - Vytvoření/úprava pouzder"
+msgstr "Pouzdro '%s' se neshoduje s kopií v knihovně '%s'."
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min length %s; actual %s)"
-msgstr "(%s min. délka: %s; skutečná: %s)"
+msgstr "(%s min délka %s; skutečná %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max length %s; actual %s)"
-msgstr "(%s max délka: %s; skutečná: %s)"
+msgstr "(%s max délka %s; skutečná %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:160
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max skew %s; actual %s; average net length %s; actual %s)"
-msgstr ""
-"(%s max. zkosení: %s; skutečné: %s; průměrná délka sítě: %s;skutečná: %s)"
+msgstr "(%s max. zkosení %s; skutečné %s; průměrná délka sítě %s;skutečná %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:189
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max count %d; actual %d)"
-msgstr "(max počet %s: %d; skutečný: %d)"
+msgstr "(max počet %s %d; skutečný %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:221
 #, fuzzy
@@ -33045,9 +33004,8 @@ msgid "Rear solder mask aperture bridges items with different nets"
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:730
-#, fuzzy
 msgid "Building solder mask..."
-msgstr "Sestavování zón..."
+msgstr "Sestavování pájecí masky..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:738
 #, fuzzy
@@ -33065,28 +33023,28 @@ msgid "Checking text dimensions..."
 msgstr "Kontrola textových proměnných..."
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min height %s; actual %s)"
-msgstr "(%s min. šířka %s; aktuální %s)"
+msgstr "(%s min výška %s; skutečná %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max height %s; actual %s)"
-msgstr "(%s max. šířka %s; aktuální %s)"
+msgstr "(%s max výška %s; skutečná %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:211
 msgid "(TrueType font characters with insufficient stroke weight)"
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:227
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min thickness %s; actual %s)"
-msgstr "(%s min. šířka %s; aktuální %s)"
+msgstr "(%s min tloušťka %s; skutečná %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max thickness %s; actual %s)"
-msgstr "(%s max. šířka %s; aktuální %s)"
+msgstr "(%s max tloušťka %s; skutečná %s)"
 
 #: pcbnew/drc/drc_test_provider_track_width.cpp:76
 msgid "Checking track widths..."
@@ -33107,14 +33065,13 @@ msgid "(%s max diameter %s; actual %s)"
 msgstr "(%s max průměr %s; aktuální %s)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:170
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min spoke count %d; actual %d)"
-msgstr "(max počet %s: %d; skutečný: %d)"
+msgstr "(%s min počet paprsků v %d; skutečných %d)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:192
-#, fuzzy
 msgid "Checking thermal reliefs..."
-msgstr "Kontrola textových proměnných..."
+msgstr "Kontrola tepelných reliéfů..."
 
 #: pcbnew/edit_zone_helpers.cpp:84 pcbnew/edit_zone_helpers.cpp:106
 msgid "Modify zone properties"
@@ -33159,9 +33116,8 @@ msgid "No project when exporting the VRML file"
 msgstr "Žádný projekt při exportu souboru VRML"
 
 #: pcbnew/exporters/exporter_vrml.cpp:1301
-#, fuzzy
 msgid "VRML Export Failed:\n"
-msgstr "IDF Export selhal:\n"
+msgstr "VRML export selhal:\n"
 
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:127
 #, c-format
@@ -33200,27 +33156,25 @@ msgstr ""
 "** Chyba sestavení STEP modelu desky. Export přerušen. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:339
-#, fuzzy
 msgid "Writing STEP file\n"
-msgstr "STEP soubory\n"
+msgstr "Zápis STEP souboru\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:343
-#, fuzzy
 msgid ""
 "\n"
 "** Error writing STEP file. **\n"
 msgstr ""
 "\n"
-"Chyba při zápisu do souboru '%s'.\n"
+"** Chyba při zápisu do souboru STEP. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:348
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "STEP file '%s' created.\n"
 msgstr ""
 "\n"
-"Soubor hlášení '%s' vytvořen.\n"
+"Soubor STEP '%s' vytvořen.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:354
 #: pcbnew/exporters/step/exporter_step.cpp:359
@@ -33339,9 +33293,8 @@ msgid "Converting zone fills"
 msgstr "Kontrola vyplňování zón..."
 
 #: pcbnew/files.cpp:1001
-#, fuzzy
 msgid "Convert Zone(s)"
-msgstr "Převést na zónu"
+msgstr "Převést zónu(y)"
 
 #: pcbnew/files.cpp:1038 pcbnew/files.cpp:1173
 #: pcbnew/footprint_libraries_utils.cpp:367
@@ -33496,9 +33449,8 @@ msgid "Inherited"
 msgstr "Dědičný"
 
 #: pcbnew/footprint.cpp:2890 pcbnew/pad.cpp:1735 pcbnew/zone.cpp:1384
-#, fuzzy
 msgid "Thermal reliefs for PTH"
-msgstr "Teplotní profily"
+msgstr "Teplotní profily pro PTH"
 
 #: pcbnew/footprint.cpp:2932
 msgid "Library link"
@@ -34170,9 +34122,8 @@ msgid "Auto-Place Footprints"
 msgstr "Automatické umístění pouzdra"
 
 #: pcbnew/menubar_pcb_editor.cpp:417
-#, fuzzy
 msgid "Add Teardrops..."
-msgstr "Přidat označení"
+msgstr "Přidat slzy..."
 
 #: pcbnew/menubar_pcb_editor.cpp:418
 #, fuzzy
@@ -34657,9 +34608,8 @@ msgid "Heat sink"
 msgstr "Chladič"
 
 #: pcbnew/pad.cpp:1003
-#, fuzzy
 msgid "Castellated"
-msgstr "Vypočítat"
+msgstr "Půldíry"
 
 #: pcbnew/pad.cpp:1032
 msgid "Length in Package"
@@ -34711,14 +34661,14 @@ msgid "Pad %s of %s on %s"
 msgstr "Ploška %s na %s z %s"
 
 #: pcbnew/pad.cpp:1255
-#, fuzzy, c-format
+#, c-format
 msgid "NPTH pad of %s"
-msgstr "Ploška na %s z %s"
+msgstr "NPTH ploška z %s"
 
 #: pcbnew/pad.cpp:1259
-#, fuzzy, c-format
+#, c-format
 msgid "PTH pad %s of %s"
-msgstr "Ploška na %s pouzdra %s"
+msgstr "PTH ploška %s z %s"
 
 #: pcbnew/pad.cpp:1268
 #, c-format
@@ -37455,9 +37405,8 @@ msgid "Resolved diameter constraints: min %s; max %s."
 msgstr "Omezení průměru: min %s; opt %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:361
-#, fuzzy
 msgid "Via Annulus"
-msgstr "Šířka prstence prokovu"
+msgstr "Prstenec prokovu"
 
 #: pcbnew/tools/board_inspection_tool.cpp:362
 #: pcbnew/tools/board_inspection_tool.cpp:1188
@@ -40772,13 +40721,12 @@ msgid "Do not prefix path with footprint UUID."
 msgstr ""
 
 #: pcbnew/widgets/legacyfiledlg_save_project.h:36
-#, fuzzy
 msgid ""
 "Creating a project will enable features such as design rules, net classes, "
 "and layer presets"
 msgstr ""
-"Vytvoření projektu umožní funkce, jako jsou textové proměnné, třídy spojů a "
-"vyloučení ERC"
+"Vytvoření projektu umožní takové funkce, jako jsou pravidla návrhu, třídy "
+"sítě a předvolby vrstev"
 
 #: pcbnew/widgets/panel_selection_filter.cpp:146
 #, c-format
@@ -40811,14 +40759,12 @@ msgid "Other items"
 msgstr "Další položky"
 
 #: pcbnew/widgets/pcb_properties_panel.cpp:210
-#, fuzzy
 msgid "Change property"
-msgstr "Změnit vlastnosti textu"
+msgstr "Změnit vlastnost"
 
 #: pcbnew/widgets/search_handlers.cpp:251
-#, fuzzy
 msgid "Textbox"
-msgstr "Text"
+msgstr "Textové pole"
 
 #: pcbnew/widgets/search_handlers.cpp:328
 msgid "No Net"
@@ -40950,9 +40896,8 @@ msgid "thermal reliefs"
 msgstr "teplotní profily"
 
 #: pcbnew/zones.h:66
-#, fuzzy
 msgid "solid"
-msgstr "Pevné"
+msgstr "pevný"
 
 #: pcbnew/zones.h:67
 msgid "thermal reliefs for PTH"
@@ -41056,9 +41001,8 @@ msgid "EDA"
 msgstr "EDA"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
-#, fuzzy
 msgid "Circuit board"
-msgstr "Tisknout desku"
+msgstr "Deska s plošnými spoji"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
