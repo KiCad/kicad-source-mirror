@@ -946,7 +946,16 @@ std::vector<PROJECT_TREE_ITEM*> PROJECT_TREE_PANE::GetSelectedData()
     m_TreeProject->GetSelections( selection );
 
     for( auto it = selection.begin(); it != selection.end(); it++ )
-        data.push_back( GetItemIdData( *it ) );
+    {
+        PROJECT_TREE_ITEM* item = GetItemIdData( *it );
+        if( !item )
+        {
+            wxLogDebug( "Null tree item returned for selection, dynamic_cast failed?" );
+            continue;
+        }
+
+        data.push_back( item );
+    }
 
     return data;
 }
@@ -1107,7 +1116,7 @@ void PROJECT_TREE_PANE::onFileSystemEvent( wxFileSystemWatcherEvent& event )
         // of the event, even though the file isn't there anymore.
         PROJECT_TREE_ITEM* rootData = GetItemIdData( root_id );
 
-        if( newpath.Exists() && ( newfn != rootData->GetFileName() ) )
+        if( rootData && newpath.Exists() && ( newfn != rootData->GetFileName() ) )
         {
             wxTreeItemId newroot_id = findSubdirTreeItem( newdir );
             wxTreeItemId newitem = addItemToProjectTree( newfn, newroot_id, nullptr, true );
