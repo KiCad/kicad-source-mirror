@@ -106,7 +106,7 @@ int CLI::EXPORT_PCB_POS_COMMAND::doPerform( KIWAY& aKiway )
     aPosJob->m_smdOnly = m_argParser.get<bool>( ARG_SMD_ONLY );
     aPosJob->m_excludeFootprintsWithTh = m_argParser.get<bool>( ARG_EXCLUDE_FOOTPRINTS_TH );
     aPosJob->m_useDrillPlaceFileOrigin = m_argParser.get<bool>( ARG_USE_DRILL_FILE_ORIGIN );
-    aPosJob->m_useDrillPlaceFileOrigin = m_argParser.get<bool>( ARG_GERBER_BOARD_EDGE );
+    aPosJob->m_gerberBoardEdge = m_argParser.get<bool>( ARG_GERBER_BOARD_EDGE );
 
     wxString format = FROM_UTF8( m_argParser.get<std::string>( ARG_FORMAT ).c_str() );
     if( format == wxS( "ascii" ) )
