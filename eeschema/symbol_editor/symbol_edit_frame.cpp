@@ -1441,7 +1441,7 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol )
 
         libField.SetText( field.GetText() );
         libField.SetAttributes( field );
-        libField.SetPosition( wxPoint( pos.x, -pos.y ) );
+        libField.SetPosition( VECTOR2I( pos.x, -pos.y ) );
 
         fullSetOfFields.emplace_back( std::move( libField ) );
     }

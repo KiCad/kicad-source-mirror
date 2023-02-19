@@ -109,14 +109,9 @@ public:
         m_end = aPosition;
     }
 
-    inline void SetEndPosition( const wxPoint& aPosition )
+    inline const VECTOR2I GetEndPosition() const
     {
-        m_end = VECTOR2D( aPosition );
-    }
-
-    inline const wxPoint GetEndPosition() const
-    {
-        return wxPoint( m_end.x, m_end.y );
+        return VECTOR2I( m_end.x, m_end.y );
     }
 
     inline void SetSize( int aSize )

@@ -34,6 +34,7 @@
 #include <drawing_sheet/ds_data_model.h>
 #include <drawing_sheet/ds_painter.h>
 #include <dialogs/dialog_page_settings.h>
+#include <math/vector2wx.h>
 
 #include "invoke_pl_editor_dialog.h"
 #include "pl_editor_frame.h"
@@ -168,7 +169,7 @@ void PLEDITOR_PRINTOUT::PrintPage( int aPageNum )
     old_org = screen->m_DrawOrg;
 
     // Change scale factor and offset to print the whole page.
-    pageSizeIU = m_parent->GetPageSettings().GetSizeIU( drawSheetIUScale.IU_PER_MILS );
+    pageSizeIU = ToWxSize( m_parent->GetPageSettings().GetSizeIU( drawSheetIUScale.IU_PER_MILS ) );
     FitThisSizeToPaper( pageSizeIU );
     fitRect = GetLogicalPaperRect();
 

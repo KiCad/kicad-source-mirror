@@ -68,8 +68,8 @@ public:
 
     VECTOR2I GetEnd() const;
 
-    wxSize GetSize() const { return m_size; }
-    void SetSize( const wxSize& aSize ) { m_size = aSize; }
+    VECTOR2I GetSize() const { return m_size; }
+    void SetSize( const VECTOR2I& aSize ) { m_size = aSize; }
 
     void SetPenWidth( int aWidth );
 
@@ -133,7 +133,7 @@ private:
 
 protected:
     VECTOR2I      m_pos;
-    wxSize        m_size;
+    VECTOR2I      m_size;
     bool          m_isDanglingStart;
     bool          m_isDanglingEnd;
     STROKE_PARAMS m_stroke;

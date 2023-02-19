@@ -192,7 +192,7 @@ public:
 
     void SetLayer( PCB_LAYER_ID aLayer ) override;
 
-    void SetTextSize( const wxSize& aTextSize )
+    void SetTextSize( const VECTOR2I& aTextSize )
     {
         m_text.SetTextSize( aTextSize );
     }

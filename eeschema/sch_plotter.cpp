@@ -218,9 +218,9 @@ void SCH_PLOTTER::plotOneSheetPDF( PLOTTER* aPlotter, SCH_SCREEN* aScreen,
     if( aPlotSettings.m_useBackgroundColor && aPlotter->GetColorMode() )
     {
         aPlotter->SetColor( aPlotter->RenderSettings()->GetBackgroundColor() );
-        wxPoint end( aPlotter->PageSettings().GetWidthIU( schIUScale.IU_PER_MILS ),
-                     aPlotter->PageSettings().GetHeightIU( schIUScale.IU_PER_MILS ) );
-        aPlotter->Rect( wxPoint( 0, 0 ), end, FILL_T::FILLED_SHAPE, 1.0 );
+        VECTOR2I end( aPlotter->PageSettings().GetWidthIU( schIUScale.IU_PER_MILS ),
+                      aPlotter->PageSettings().GetHeightIU( schIUScale.IU_PER_MILS ) );
+        aPlotter->Rect( VECTOR2I( 0, 0 ), end, FILL_T::FILLED_SHAPE, 1.0 );
     }
 
     if( aPlotSettings.m_plotDrawingSheet )
@@ -278,7 +278,7 @@ void SCH_PLOTTER::setupPlotPagePDF( PLOTTER* aPlotter, SCH_SCREEN* aScreen,
     aPlotter->SetPageSettings( plotPage );
 
     // Currently, plot units are in decimil
-    aPlotter->SetViewport( wxPoint( 0, 0 ), schIUScale.IU_PER_MILS/10, scale, false );
+    aPlotter->SetViewport( VECTOR2I( 0, 0 ), schIUScale.IU_PER_MILS / 10, scale, false );
 }
 
 
@@ -340,7 +340,7 @@ void SCH_PLOTTER::createPSFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
         double  scalex = (double) plotPage.GetWidthMils() / actualPage.GetWidthMils();
         double  scaley = (double) plotPage.GetHeightMils() / actualPage.GetHeightMils();
         double  scale = std::min( scalex, scaley );
-        wxPoint plot_offset;
+        VECTOR2I plot_offset;
 
         try
         {
@@ -406,7 +406,7 @@ void SCH_PLOTTER::createPSFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
 
 bool SCH_PLOTTER::plotOneSheetPS( const wxString& aFileName, SCH_SCREEN* aScreen,
                                             RENDER_SETTINGS* aRenderSettings,
-                                            const PAGE_INFO& aPageInfo, const wxPoint& aPlot0ffset,
+                                            const PAGE_INFO& aPageInfo, const VECTOR2I& aPlot0ffset,
                                             double aScale, const SCH_PLOT_SETTINGS& aPlotSettings )
 {
     PS_PLOTTER* plotter = new PS_PLOTTER();
@@ -434,9 +434,9 @@ bool SCH_PLOTTER::plotOneSheetPS( const wxString& aFileName, SCH_SCREEN* aScreen
     {
         plotter->SetColor( plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
 
-        wxPoint end( plotter->PageSettings().GetWidthIU( schIUScale.IU_PER_MILS ),
-                     plotter->PageSettings().GetHeightIU( schIUScale.IU_PER_MILS ) );
-        plotter->Rect( wxPoint( 0, 0 ), end, FILL_T::FILLED_SHAPE, 1.0 );
+        VECTOR2I end( plotter->PageSettings().GetWidthIU( schIUScale.IU_PER_MILS ),
+                      plotter->PageSettings().GetHeightIU( schIUScale.IU_PER_MILS ) );
+        plotter->Rect( VECTOR2I( 0, 0 ), end, FILL_T::FILLED_SHAPE, 1.0 );
     }
 
     if( aPlotSettings.m_plotDrawingSheet )
@@ -588,7 +588,7 @@ bool SCH_PLOTTER::plotOneSheetSVG( const wxString& aFileName, SCH_SCREEN* aScree
     plotter->SetRenderSettings( aRenderSettings );
     plotter->SetPageSettings( plotPage );
     plotter->SetColorMode( aPlotSettings.m_blackAndWhite ? false : true );
-    wxPoint plot_offset;
+    VECTOR2I plot_offset;
 
     double  scalex = (double) plotPage.GetWidthMils() / actualPage.GetWidthMils();
     double  scaley = (double) plotPage.GetHeightMils() / actualPage.GetHeightMils();
@@ -613,9 +613,9 @@ bool SCH_PLOTTER::plotOneSheetSVG( const wxString& aFileName, SCH_SCREEN* aScree
     if( aPlotSettings.m_useBackgroundColor && plotter->GetColorMode() )
     {
         plotter->SetColor( plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
-        wxPoint end( plotter->PageSettings().GetWidthIU( schIUScale.IU_PER_MILS ),
-                     plotter->PageSettings().GetHeightIU( schIUScale.IU_PER_MILS ) );
-        plotter->Rect( wxPoint( 0, 0 ), end, FILL_T::FILLED_SHAPE, 1.0 );
+        VECTOR2I end( plotter->PageSettings().GetWidthIU( schIUScale.IU_PER_MILS ),
+                      plotter->PageSettings().GetHeightIU( schIUScale.IU_PER_MILS ) );
+        plotter->Rect( VECTOR2I( 0, 0 ), end, FILL_T::FILLED_SHAPE, 1.0 );
     }
 
     if( aPlotSettings.m_plotDrawingSheet )
@@ -690,7 +690,7 @@ void SCH_PLOTTER::createHPGLFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
         double  plot_scale = (double) plotPage.GetWidthMils() / curPage.GetWidthMils();
 
         // Calculate offsets
-        wxPoint plotOffset;
+        VECTOR2I plotOffset;
         wxString msg;
 
         if( aPlotSettings.m_HPGLPlotOrigin == HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER )
@@ -759,11 +759,11 @@ void SCH_PLOTTER::createHPGLFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
 }
 
 
-bool SCH_PLOTTER::plotOneSheetHpgl( const wxString& aFileName,
+bool SCH_PLOTTER::plotOneSheetHpgl( const wxString&   aFileName,
                                     SCH_SCREEN*       aScreen,
                                     const PAGE_INFO&  aPageInfo,
                                     RENDER_SETTINGS*  aRenderSettings,
-                                    const wxPoint&    aPlot0ffset,
+                                    const VECTOR2I&   aPlot0ffset,
                                     double            aScale,
                                     const SCH_PLOT_SETTINGS&   aPlotSettings )
 {
@@ -817,7 +817,7 @@ bool SCH_PLOTTER::plotOneSheetHpgl( const wxString& aFileName,
         wxString sheetName = m_schematic->CurrentSheet().Last()->GetName();
         wxString sheetPath = m_schematic->CurrentSheet().PathHumanReadable();
 
-        PlotDrawingSheet( plotter, &m_schematic->Prj(), 
+        PlotDrawingSheet( plotter, &m_schematic->Prj(),
                           aScreen->GetTitleBlock(),
                           aPageInfo,
                           aScreen->Schematic()->GetProperties(), aScreen->GetPageNumber(),
@@ -868,7 +868,7 @@ void SCH_PLOTTER::createDXFFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
         m_schematic->SetSheetNumberAndCount();
 
         SCH_SCREEN* screen = m_schematic->CurrentSheet().LastScreen();
-        wxPoint     plot_offset;
+        VECTOR2I    plot_offset;
         wxString    msg;
 
         try
@@ -941,7 +941,7 @@ void SCH_PLOTTER::createDXFFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
 
 
 bool SCH_PLOTTER::plotOneSheetDXF( const wxString& aFileName, SCH_SCREEN* aScreen,
-                                   RENDER_SETTINGS* aRenderSettings, const wxPoint& aPlotOffset,
+                                   RENDER_SETTINGS* aRenderSettings, const VECTOR2I& aPlotOffset,
                                    double aScale, const SCH_PLOT_SETTINGS& aPlotSettings )
 {
     aRenderSettings->LoadColors( m_colorSettings );
@@ -976,7 +976,7 @@ bool SCH_PLOTTER::plotOneSheetDXF( const wxString& aFileName, SCH_SCREEN* aScree
         wxString sheetPath = m_schematic->CurrentSheet().PathHumanReadable();
         COLOR4D  color = plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_DRAWINGSHEET );
 
-        PlotDrawingSheet( plotter, &m_schematic->Prj(), 
+        PlotDrawingSheet( plotter, &m_schematic->Prj(),
                           aScreen->GetTitleBlock(),
                           pageInfo,
                           aScreen->Schematic()->GetProperties(), aScreen->GetPageNumber(),

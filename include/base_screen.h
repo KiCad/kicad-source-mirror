@@ -42,7 +42,7 @@ class BASE_SCREEN : public EDA_ITEM
 public:
     BASE_SCREEN( EDA_ITEM* aParent, KICAD_T aType = SCREEN_T );
 
-    BASE_SCREEN( const wxSize& aPageSizeIU, KICAD_T aType = SCREEN_T ) :
+    BASE_SCREEN( const VECTOR2I& aPageSizeIU, KICAD_T aType = SCREEN_T ) :
             BASE_SCREEN( nullptr, aType )
     {
         InitDataPoints( aPageSizeIU );
@@ -54,7 +54,7 @@ public:
 
     ~BASE_SCREEN() override { }
 
-    void InitDataPoints( const wxSize& aPageSizeInternalUnits );
+    void InitDataPoints( const VECTOR2I& aPageSizeInternalUnits );
 
     void SetContentModified( bool aModified = true )    { m_flagModified = aModified; }
     bool IsContentModified() const                      { return m_flagModified; }

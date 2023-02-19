@@ -342,7 +342,7 @@ void BOARD_ADAPTER::createPadWithMargin( const PAD* aPad, CONTAINER_2D_BASE* aCo
             return;
 
         PAD dummy( *aPad );
-        dummy.SetSize( wxSize( dummySize.x, dummySize.y ) );
+        dummy.SetSize( VECTOR2I( dummySize.x, dummySize.y ) );
         dummy.TransformShapeToPolygon( poly, aLayer, 0, maxError, ERROR_INSIDE );
         clearance = { 0, 0 };
     }
@@ -503,7 +503,7 @@ void BOARD_ADAPTER::addPads( const FOOTPRINT* aFootprint, CONTAINER_2D_BASE* aCo
         // NPTH pads are not drawn on layers if the shape size and pos is the same as their hole:
         if( aSkipNPTHPadsWihNoCopper && ( pad->GetAttribute() == PAD_ATTRIB::NPTH ) )
         {
-            if( pad->GetDrillSize() == pad->GetSize() && pad->GetOffset() == wxPoint( 0, 0 ) )
+            if( pad->GetDrillSize() == pad->GetSize() && pad->GetOffset() == VECTOR2I( 0, 0 ) )
             {
                 switch( pad->GetShape() )
                 {

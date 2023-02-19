@@ -114,7 +114,7 @@ void FOOTPRINT_WIZARD_FRAME::ReloadFootprint()
     {
         //  Add the object to board
         GetBoard()->Add( footprint, ADD_MODE::APPEND );
-        footprint->SetPosition( wxPoint( 0, 0 ) );
+        footprint->SetPosition( VECTOR2I( 0, 0 ) );
     }
 
     updateView();

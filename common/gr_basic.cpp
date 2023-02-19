@@ -23,6 +23,7 @@
 #include <trigo.h>
 #include <eda_item.h>
 #include <wx/graphics.h>
+#include <math/vector2wx.h>
 
 #include <algorithm>
 
@@ -237,7 +238,7 @@ void GRCSegm( wxDC* DC, const VECTOR2I& A, const VECTOR2I& B, int width, const C
     start += org;
     end += org;
 
-    DC->DrawLine( (wxPoint) start, (wxPoint) end );
+    DC->DrawLine( ToWxPoint( start ), ToWxPoint( end ) );
 
     // first rounded end
     end.x = 0;
@@ -246,9 +247,9 @@ void GRCSegm( wxDC* DC, const VECTOR2I& A, const VECTOR2I& B, int width, const C
     end += org;
 
     if( !mirrored )
-        DC->DrawArc( (wxPoint) end, (wxPoint) start, (wxPoint) org );
+        DC->DrawArc( ToWxPoint(end ), ToWxPoint(start ), ToWxPoint(org ) );
     else
-        DC->DrawArc( (wxPoint) start, (wxPoint) end, (wxPoint) org );
+        DC->DrawArc( ToWxPoint(start ), ToWxPoint(end ), ToWxPoint(org ) );
 
     // second edge
     start.x = len;
@@ -256,7 +257,7 @@ void GRCSegm( wxDC* DC, const VECTOR2I& A, const VECTOR2I& B, int width, const C
     RotatePoint( start, angle );
     start += org;
 
-    DC->DrawLine( (wxPoint) start, (wxPoint) end );
+    DC->DrawLine( ToWxPoint( start ), ToWxPoint( end ) );
 
     // second rounded end
     end.x = len;

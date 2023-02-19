@@ -120,7 +120,7 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MISSING_FOOTPRINT );
 
             drcItem->SetErrorMessage( msg );
-            reportViolation( drcItem, wxPoint(), UNDEFINED_LAYER );
+            reportViolation( drcItem, VECTOR2I(), UNDEFINED_LAYER );
         }
         else
         {

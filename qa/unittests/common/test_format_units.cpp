@@ -44,7 +44,7 @@ BOOST_FIXTURE_TEST_SUITE( UnitConversion, UnitFixture )
 /**
  * Check formatting the point
  */
-BOOST_AUTO_TEST_CASE( wxPointUnitFormat )
+BOOST_AUTO_TEST_CASE( VECTOR2IUnitFormat )
 {
     LOCALE_IO   toggle;
 
@@ -56,11 +56,11 @@ BOOST_AUTO_TEST_CASE( wxPointUnitFormat )
     const EDA_IU_SCALE& iuScale = pcbIUScale;
 #endif
 
-    std::string str = EDA_UNIT_UTILS::FormatInternalUnits( iuScale, wxPoint( 123456, 52525252 ) );
-    std::string strZero = EDA_UNIT_UTILS::FormatInternalUnits( iuScale, wxPoint( 0, 0 ) );
-    std::string strNeg = EDA_UNIT_UTILS::FormatInternalUnits( iuScale, wxPoint( -123456, -52525252 ) );
-    std::string strOddNeg = EDA_UNIT_UTILS::FormatInternalUnits( iuScale, wxPoint( -350000, -0 ) );
-    std::string strMax = EDA_UNIT_UTILS::FormatInternalUnits( iuScale, wxPoint( std::numeric_limits<int>::min(), std::numeric_limits<int>::max() ) );
+    std::string str = EDA_UNIT_UTILS::FormatInternalUnits( iuScale, VECTOR2I( 123456, 52525252 ) );
+    std::string strZero = EDA_UNIT_UTILS::FormatInternalUnits( iuScale, VECTOR2I( 0, 0 ) );
+    std::string strNeg = EDA_UNIT_UTILS::FormatInternalUnits( iuScale, VECTOR2I( -123456, -52525252 ) );
+    std::string strOddNeg = EDA_UNIT_UTILS::FormatInternalUnits( iuScale, VECTOR2I( -350000, -0 ) );
+    std::string strMax = EDA_UNIT_UTILS::FormatInternalUnits( iuScale, VECTOR2I( std::numeric_limits<int>::min(), std::numeric_limits<int>::max() ) );
 
     BOOST_CHECK_EQUAL( strZero, "0 0" );
 

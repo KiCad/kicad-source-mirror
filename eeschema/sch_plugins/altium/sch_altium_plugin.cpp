@@ -1865,7 +1865,7 @@ void SCH_ALTIUM_PLUGIN::ParseHarnessEntry( const std::map<wxString, wxString>& a
     sheetPin->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED );
 
     VECTOR2I pos = sheetIt->second->GetPosition();
-    wxSize   size = sheetIt->second->GetSize();
+    VECTOR2I size = sheetIt->second->GetSize();
 
     switch( elem.Side )
     {
@@ -2051,7 +2051,7 @@ void SCH_ALTIUM_PLUGIN::ParseSheetEntry( const std::map<wxString, wxString>& aPr
     //sheetPin->SetPosition( getKiCadPoint( term.Position ) );
 
     VECTOR2I pos = sheetIt->second->GetPosition();
-    wxSize  size = sheetIt->second->GetSize();
+    VECTOR2I size = sheetIt->second->GetSize();
 
     switch( elem.side )
     {

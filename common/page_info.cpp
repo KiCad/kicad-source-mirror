@@ -64,7 +64,7 @@ const wxChar PAGE_INFO::Custom[]   = wxT( "User" );
 // also see: wx/defs.h
 
 // local readability macro for millimeter wxSize
-#define MMsize( x, y ) wxSize( EDA_UNIT_UTILS::Mm2mils( x ), EDA_UNIT_UTILS::Mm2mils( y ) )
+#define MMsize( x, y ) VECTOR2I( EDA_UNIT_UTILS::Mm2mils( x ), EDA_UNIT_UTILS::Mm2mils( y ) )
 
 // All MUST be defined as landscape.
 const PAGE_INFO  PAGE_INFO::pageA5(     MMsize( 210,   148 ),   wxT( "A5" ),    wxPAPER_A5 );
@@ -74,19 +74,20 @@ const PAGE_INFO  PAGE_INFO::pageA2(     MMsize( 594,   420 ),   wxT( "A2" ),    
 const PAGE_INFO  PAGE_INFO::pageA1(     MMsize( 841,   594 ),   wxT( "A1" ),    PAPER_A1 );
 const PAGE_INFO  PAGE_INFO::pageA0(     MMsize( 1189,  841 ),   wxT( "A0" ),    PAPER_A0 );
 
-const PAGE_INFO  PAGE_INFO::pageA(      wxSize( 11000,  8500 ), wxT( "A" ), wxPAPER_LETTER );
-const PAGE_INFO  PAGE_INFO::pageB(      wxSize( 17000, 11000 ), wxT( "B" ), wxPAPER_TABLOID );
-const PAGE_INFO  PAGE_INFO::pageC(      wxSize( 22000, 17000 ), wxT( "C" ), wxPAPER_CSHEET );
-const PAGE_INFO  PAGE_INFO::pageD(      wxSize( 34000, 22000 ), wxT( "D" ), wxPAPER_DSHEET );
-const PAGE_INFO  PAGE_INFO::pageE(      wxSize( 44000, 34000 ), wxT( "E" ), wxPAPER_ESHEET );
+const PAGE_INFO  PAGE_INFO::pageA( VECTOR2I( 11000, 8500 ), wxT( "A" ), wxPAPER_LETTER );
+const PAGE_INFO  PAGE_INFO::pageB( VECTOR2I( 17000, 11000 ), wxT( "B" ), wxPAPER_TABLOID );
+const PAGE_INFO  PAGE_INFO::pageC( VECTOR2I( 22000, 17000 ), wxT( "C" ), wxPAPER_CSHEET );
+const PAGE_INFO  PAGE_INFO::pageD( VECTOR2I( 34000, 22000 ), wxT( "D" ), wxPAPER_DSHEET );
+const PAGE_INFO  PAGE_INFO::pageE( VECTOR2I( 44000, 34000 ), wxT( "E" ), wxPAPER_ESHEET );
 
-const PAGE_INFO  PAGE_INFO::pageGERBER( wxSize( 32000, 32000 ), wxT( "GERBER" ), wxPAPER_NONE  );
-const PAGE_INFO  PAGE_INFO::pageUser(   wxSize( 17000, 11000 ), Custom,         wxPAPER_NONE );
+const PAGE_INFO PAGE_INFO::pageGERBER( VECTOR2I( 32000, 32000 ), wxT( "GERBER" ), wxPAPER_NONE );
+const PAGE_INFO PAGE_INFO::pageUser( VECTOR2I( 17000, 11000 ), Custom, wxPAPER_NONE );
 
 // US paper sizes
-const PAGE_INFO  PAGE_INFO::pageUSLetter( wxSize( 11000, 8500  ),  wxT( "USLetter" ), wxPAPER_LETTER );
-const PAGE_INFO  PAGE_INFO::pageUSLegal(  wxSize( 14000, 8500  ),  wxT( "USLegal" ),  wxPAPER_LEGAL );
-const PAGE_INFO  PAGE_INFO::pageUSLedger( wxSize( 17000, 11000 ),  wxT( "USLedger" ), wxPAPER_TABLOID );
+const PAGE_INFO  PAGE_INFO::pageUSLetter( VECTOR2I( 11000, 8500  ),  wxT( "USLetter" ), wxPAPER_LETTER );
+const PAGE_INFO PAGE_INFO::pageUSLegal( VECTOR2I( 14000, 8500 ), wxT( "USLegal" ), wxPAPER_LEGAL );
+const PAGE_INFO  PAGE_INFO::pageUSLedger( VECTOR2I( 17000, 11000 ), wxT( "USLedger" ),
+                                          wxPAPER_TABLOID );
 
 // Custom paper size for next instantiation of type "User"
 int PAGE_INFO::s_user_width  = 17000;
@@ -100,7 +101,7 @@ inline void PAGE_INFO::updatePortrait()
 }
 
 
-PAGE_INFO::PAGE_INFO( const wxSize& aSizeMils, const wxString& aType, wxPaperSize aPaperId ) :
+PAGE_INFO::PAGE_INFO( const VECTOR2I& aSizeMils, const wxString& aType, wxPaperSize aPaperId ) :
     m_type( aType ), m_size( aSizeMils ), m_paper_id( aPaperId )
 {
     updatePortrait();
@@ -170,7 +171,7 @@ bool PAGE_INFO::SetType( const wxString& aType, bool aIsPortrait )
     if( aIsPortrait )
     {
         // all private PAGE_INFOs are landscape, must swap x and y
-        m_size = wxSize( m_size.y, m_size.x );
+        m_size = VECTOR2I( m_size.y, m_size.x );
         updatePortrait();
     }
 
@@ -189,7 +190,7 @@ void PAGE_INFO::SetPortrait( bool aIsPortrait )
     if( m_portrait != aIsPortrait )
     {
         // swap x and y in m_size
-        m_size = wxSize( m_size.y, m_size.x );
+        m_size = VECTOR2I( m_size.y, m_size.x );
 
         m_portrait = aIsPortrait;
 

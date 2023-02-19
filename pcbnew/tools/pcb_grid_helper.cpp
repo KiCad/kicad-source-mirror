@@ -343,8 +343,8 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
     {
         if( nearest->Distance( aOrigin ) <= snapRange )
         {
-            m_viewSnapPoint.SetPosition( wxPoint( nearest->pos ) );
-            m_viewSnapLine.SetPosition( wxPoint( nearest->pos ) );
+            m_viewSnapPoint.SetPosition( nearest->pos );
+            m_viewSnapLine.SetPosition( nearest->pos );
             m_toolMgr->GetView()->SetVisible( &m_viewSnapLine, false );
 
             if( m_toolMgr->GetView()->IsVisible( &m_viewSnapPoint ) )

@@ -295,8 +295,8 @@ int BOARD_EDITOR_CONTROL::PageSettings( const TOOL_EVENT& aEvent )
     undoCmd.PushItem( wrapper );
     m_frame->SaveCopyInUndoList( undoCmd, UNDO_REDO::PAGESETTINGS );
 
-    DIALOG_PAGES_SETTINGS dlg( m_frame, pcbIUScale.IU_PER_MILS, wxSize( MAX_PAGE_SIZE_PCBNEW_MILS,
-                                                                        MAX_PAGE_SIZE_PCBNEW_MILS ) );
+    DIALOG_PAGES_SETTINGS dlg( m_frame, pcbIUScale.IU_PER_MILS, VECTOR2I( MAX_PAGE_SIZE_PCBNEW_MILS,
+                                                                          MAX_PAGE_SIZE_PCBNEW_MILS ) );
     dlg.SetWksFileName( BASE_SCREEN::m_DrawingSheetFileName );
 
     if( dlg.ShowModal() == wxID_OK )
@@ -1415,9 +1415,9 @@ int BOARD_EDITOR_CONTROL::ZoneDuplicate( const TOOL_EVENT& aEvent )
     // If the new zone is on the same layer(s) as the initial zone,
     // offset it a bit so it can more easily be picked.
     if( oldZone->GetIsRuleArea() && ( oldZone->GetLayerSet() == zoneSettings.m_Layers ) )
-        newZone->Move( wxPoint( pcbIUScale.IU_PER_MM, pcbIUScale.IU_PER_MM ) );
+        newZone->Move( VECTOR2I( pcbIUScale.IU_PER_MM, pcbIUScale.IU_PER_MM ) );
     else if( !oldZone->GetIsRuleArea() && zoneSettings.m_Layers.test( oldZone->GetLayer() ) )
-        newZone->Move( wxPoint( pcbIUScale.IU_PER_MM, pcbIUScale.IU_PER_MM ) );
+        newZone->Move( VECTOR2I( pcbIUScale.IU_PER_MM, pcbIUScale.IU_PER_MM ) );
 
     commit.Add( newZone.release() );
     commit.Push( _( "Duplicate zone" ) );
@@ -1567,7 +1567,7 @@ int BOARD_EDITOR_CONTROL::EditFpInFpEditor( const TOOL_EVENT& aEvent )
 void BOARD_EDITOR_CONTROL::DoSetDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
                                              EDA_ITEM* originViewItem, const VECTOR2D& aPosition )
 {
-    aFrame->GetDesignSettings().SetAuxOrigin( wxPoint( aPosition ) );
+    aFrame->GetDesignSettings().SetAuxOrigin( VECTOR2I( aPosition ) );
     originViewItem->SetPosition( aPosition );
     aView->MarkDirty();
     aFrame->OnModify();

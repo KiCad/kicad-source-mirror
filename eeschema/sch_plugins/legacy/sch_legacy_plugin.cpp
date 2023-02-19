@@ -546,10 +546,10 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( LINE_READER& aReader )
             position.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
             sheet->SetPosition( position );
 
-            wxSize  size;
+            VECTOR2I size;
 
-            size.SetWidth( schIUScale.MilsToIU( parseInt( aReader, line, &line ) ) );
-            size.SetHeight( schIUScale.MilsToIU( parseInt( aReader, line, &line ) ) );
+            size.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+            size.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
             sheet->SetSize( size );
         }
         else if( strCompare( "U", line, &line ) )   // Sheet UUID.
@@ -575,7 +575,7 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( LINE_READER& aReader )
 
                 SCH_FIELD& field = sheet->GetFields()[ fieldId ];
                 field.SetText( text );
-                field.SetTextSize( wxSize( size, size ) );
+                field.SetTextSize( VECTOR2I( size, size ) );
             }
             else                                   // Sheet pin.
             {
@@ -620,7 +620,7 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( LINE_READER& aReader )
 
                 size = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
 
-                sheetPin->SetTextSize( wxSize( size, size ) );
+                sheetPin->SetTextSize( VECTOR2I( size, size ) );
 
                 sheet->AddPin( sheetPin.release() );
             }
@@ -910,7 +910,7 @@ SCH_BUS_ENTRY_BASE* SCH_LEGACY_PLUGIN::loadBusEntry( LINE_READER& aReader )
     line = aReader.ReadLine();
 
     VECTOR2I pos;
-    wxSize size;
+    VECTOR2I size;
 
     pos.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
     pos.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
@@ -1009,7 +1009,7 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( LINE_READER& aReader )
 
     int size = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
 
-    text->SetTextSize( wxSize( size, size ) );
+    text->SetTextSize( VECTOR2I( size, size ) );
 
     // Parse the global and hierarchical label type.
     if( text->Type() == SCH_HIER_LABEL_T || text->Type() == SCH_GLOBAL_LABEL_T )
@@ -1329,7 +1329,7 @@ SCH_SYMBOL* SCH_LEGACY_PLUGIN::loadSymbol( LINE_READER& aReader )
             field.SetText( text );
             field.SetTextPos( pos );
             field.SetVisible( !attributes );
-            field.SetTextSize( wxSize( size, size ) );
+            field.SetTextSize( VECTOR2I( size, size ) );
 
             if( orientation == 'H' )
                 field.SetTextAngle( ANGLE_HORIZONTAL );

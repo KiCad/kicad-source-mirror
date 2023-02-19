@@ -428,9 +428,9 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
                                                           m_italic->IsChecked() ) );
     }
 
-    m_edaText->SetTextSize( wxSize( m_textWidth.GetValue(), m_textHeight.GetValue() ) );
+    m_edaText->SetTextSize( VECTOR2I( m_textWidth.GetValue(), m_textHeight.GetValue() ) );
     m_edaText->SetTextThickness( m_thickness.GetValue() );
-    m_edaText->SetTextPos( wxPoint( m_posX.GetValue(), m_posY.GetValue() ) );
+    m_edaText->SetTextPos( VECTOR2I( m_posX.GetValue(), m_posY.GetValue() ) );
 
     if( m_fpText )
         m_fpText->SetLocalCoord();

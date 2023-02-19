@@ -128,7 +128,7 @@ public:
 
     virtual void SetPageSettings( const PAGE_INFO& aPageSettings ) override;
     const PAGE_INFO& GetPageSettings() const override;
-    const wxSize GetPageSizeIU() const override;
+    const VECTOR2I GetPageSizeIU() const override;
 
     const VECTOR2I& GetGridOrigin() const override;
     void            SetGridOrigin( const VECTOR2I& aPoint ) override;

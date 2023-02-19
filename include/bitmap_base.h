@@ -109,12 +109,12 @@ public:
     /**
      * @return the size in pixels of the image
      */
-    wxSize GetSizePixels() const
+    VECTOR2I GetSizePixels() const
     {
         if( m_image )
-            return wxSize( m_image->GetWidth(), m_image->GetHeight() );
+            return VECTOR2I( m_image->GetWidth(), m_image->GetHeight() );
         else
-            return wxSize( 0, 0 );
+            return VECTOR2I( 0, 0 );
     }
 
     /**

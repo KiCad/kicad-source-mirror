@@ -679,9 +679,9 @@ ETEXT::ETEXT( wxXmlNode* aText )
 }
 
 
-wxSize ETEXT::ConvertSize() const
+VECTOR2I ETEXT::ConvertSize() const
 {
-    wxSize textsize;
+    VECTOR2I textsize;
 
     if( font )
     {
@@ -689,20 +689,20 @@ wxSize ETEXT::ConvertSize() const
 
         if( fontName == "vector" )
         {
-            textsize = wxSize( size.ToSchUnits(), size.ToSchUnits() );
+            textsize = VECTOR2I( size.ToSchUnits(), size.ToSchUnits() );
         }
         else if( fontName == "fixed" )
         {
-            textsize = wxSize( size.ToSchUnits(), size.ToSchUnits() * 0.80 );
+            textsize = VECTOR2I( size.ToSchUnits(), size.ToSchUnits() * 0.80 );
         }
         else
         {
-            textsize = wxSize( size.ToSchUnits(), size.ToSchUnits() );
+            textsize = VECTOR2I( size.ToSchUnits(), size.ToSchUnits() );
         }
     }
     else
     {
-        textsize = wxSize( size.ToSchUnits() * 0.85, size.ToSchUnits() );
+        textsize = VECTOR2I( size.ToSchUnits() * 0.85, size.ToSchUnits() );
     }
 
     return textsize;

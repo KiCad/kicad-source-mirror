@@ -63,7 +63,7 @@ void SYMBOL_EDIT_FRAME::SVGPlotSymbol( const wxString& aFullFileName, VECTOR2I a
     {
         constexpr bool background = true;
         TRANSFORM      temp;                 // Uses default transform
-        wxPoint        plotPos;
+        VECTOR2I        plotPos;
 
         plotPos.x = aOffset.x;
         plotPos.y = aOffset.y;
@@ -89,13 +89,13 @@ void SYMBOL_EDIT_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
     if( !m_symbol )
         return;
 
-    wxSize pagesize = GetScreen()->GetPageSettings().GetSizeIU( schIUScale.IU_PER_MILS );
+    VECTOR2I pagesize = GetScreen()->GetPageSettings().GetSizeIU( schIUScale.IU_PER_MILS );
 
     /* Plot item centered to the page
      * In symbol_editor, the symbol is centered at 0,0 coordinates.
      * So we must plot it with an offset = pagesize/2.
      */
-    wxPoint plot_offset;
+    VECTOR2I plot_offset;
     plot_offset.x = pagesize.x / 2;
     plot_offset.y = pagesize.y / 2;
 

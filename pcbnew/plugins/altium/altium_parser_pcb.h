@@ -600,9 +600,9 @@ struct APAD6
     uint16_t     component;
 
     VECTOR2I position;
-    wxSize   topsize;
-    wxSize   midsize;
-    wxSize   botsize;
+    VECTOR2I topsize;
+    VECTOR2I midsize;
+    VECTOR2I botsize;
     uint32_t holesize;
 
     ALTIUM_PAD_SHAPE topshape;

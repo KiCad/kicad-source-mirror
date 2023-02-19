@@ -35,10 +35,6 @@
 
 #include <math/util.h>
 
-#ifdef WX_COMPATIBILITY
-#include <wx/gdicmn.h>
-#endif
-
 /**
  * Traits class for VECTOR2.
  */
@@ -84,14 +80,6 @@ public:
     /// Construct a 2D-vector with x, y = 0
     VECTOR2();
 
-#ifdef WX_COMPATIBILITY
-    /// Constructor with a wxPoint as argument
-    VECTOR2( const wxPoint& aPoint );
-
-    /// Constructor with a wxSize as argument
-    VECTOR2( const wxSize& aSize );
-#endif
-
     /// Construct a vector with given components x, y
     VECTOR2( T x, T y );
 
@@ -115,26 +103,6 @@ public:
     VECTOR2<CastedType> operator()() const
     {
         return VECTOR2<CastedType>( (CastedType) x, (CastedType) y );
-    }
-
-    /**
-     * Implement the cast to wxPoint.
-     *
-     * @return the vector cast to wxPoint.
-     */
-    explicit operator wxPoint() const
-    {
-        return wxPoint( x, y );
-    }
-
-    /**
-     * Implement the cast to wxPoint.
-     *
-     * @return the vector cast to wxPoint.
-     */
-    explicit operator wxSize() const
-    {
-        return wxSize( x, y );
     }
 
     // virtual ~VECTOR2();
@@ -258,28 +226,10 @@ public:
 // ----------------------
 
 template <class T>
-VECTOR2<T>::VECTOR2()
+VECTOR2<T>::VECTOR2() : x{}, y{}
 {
-    x = y = 0.0;
 }
 
-
-#ifdef WX_COMPATIBILITY
-template <class T>
-VECTOR2<T>::VECTOR2( const wxPoint& aPoint )
-{
-    x = T( aPoint.x );
-    y = T( aPoint.y );
-}
-
-
-template <class T>
-VECTOR2<T>::VECTOR2( const wxSize& aSize )
-{
-    x = T( aSize.x );
-    y = T( aSize.y );
-}
-#endif
 
 template <class T>
 VECTOR2<T>::VECTOR2( T aX, T aY )

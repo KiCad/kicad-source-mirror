@@ -121,7 +121,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_acceptedExts.emplace( DrawingSheetFileExtension, nullptr );
     DragAcceptFiles( true );
 
-    wxSize pageSizeIU = GetPageLayout().GetPageSettings().GetSizeIU( drawSheetIUScale.IU_PER_MILS );
+    VECTOR2I pageSizeIU = GetPageLayout().GetPageSettings().GetSizeIU( drawSheetIUScale.IU_PER_MILS );
     SetScreen( new BASE_SCREEN( pageSizeIU ) );
 
     setupTools();
@@ -595,7 +595,7 @@ const PAGE_INFO& PL_EDITOR_FRAME::GetPageSettings() const
 }
 
 
-const wxSize PL_EDITOR_FRAME::GetPageSizeIU() const
+const VECTOR2I PL_EDITOR_FRAME::GetPageSizeIU() const
 {
     // this function is only needed because EDA_DRAW_FRAME is not compiled
     // with either -DPCBNEW or -DEESCHEMA, so the virtual is used to route

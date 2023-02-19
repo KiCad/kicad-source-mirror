@@ -465,7 +465,7 @@ struct ASCH_HARNESS_CONNECTOR
     int OwnerPartID; // always -1, can be safely ignored I think
 
     VECTOR2I Location;
-    wxSize   Size;
+    VECTOR2I Size;
 
     int AreaColor;
     int Color;
@@ -539,7 +539,7 @@ struct ASCH_RECTANGLE : ASCH_SHAPE_INTERFACE
 struct ASCH_SHEET_SYMBOL
 {
     VECTOR2I location;
-    wxSize  size;
+    VECTOR2I size;
 
     bool isSolid;
 

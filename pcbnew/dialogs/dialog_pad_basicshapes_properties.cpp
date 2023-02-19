@@ -428,7 +428,7 @@ void DIALOG_PAD_PRIMITIVE_POLY_PROPS::OnButtonAdd( wxCommandEvent& event )
     if( m_currPoints.size() == 0 || row >= (int) m_currPoints.size() )
         m_currPoints.emplace_back( 0, 0 );
     else
-        m_currPoints.insert( m_currPoints.begin() + row, wxPoint( 0, 0 ) );
+        m_currPoints.insert( m_currPoints.begin() + row, VECTOR2I( 0, 0 ) );
 
     Validate();
     TransferDataToWindow();

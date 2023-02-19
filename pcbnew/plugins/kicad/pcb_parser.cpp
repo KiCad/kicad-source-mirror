@@ -425,9 +425,9 @@ void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
 
                 case T_size:
                 {
-                    wxSize sz;
-                    sz.SetHeight( parseBoardUnits( "text height" ) );
-                    sz.SetWidth( parseBoardUnits( "text width" ) );
+                    VECTOR2I sz;
+                    sz.y = parseBoardUnits( "text height" );
+                    sz.x = parseBoardUnits( "text width" );
                     aText->SetTextSize( sz );
                     NeedRIGHT();
 
@@ -517,7 +517,7 @@ void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
     {
         const double defaultTextSize = 1.524 * pcbIUScale.IU_PER_MM;
 
-        aText->SetTextSize( wxSize( defaultTextSize, defaultTextSize ) );
+        aText->SetTextSize( VECTOR2I( defaultTextSize, defaultTextSize ) );
     }
 }
 
@@ -2074,9 +2074,9 @@ void PCB_PARSER::parseSetup()
 
         case T_pad_size:
         {
-            wxSize sz;
-            sz.SetWidth( parseBoardUnits( "master pad width" ) );
-            sz.SetHeight( parseBoardUnits( "master pad height" ) );
+            VECTOR2I sz;
+            sz.x = parseBoardUnits( "master pad width" );
+            sz.y = parseBoardUnits( "master pad height" );
             bds.m_Pad_Master->SetSize( sz );
             m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
@@ -2086,7 +2086,7 @@ void PCB_PARSER::parseSetup()
         case T_pad_drill:
         {
             int drillSize = parseBoardUnits( T_pad_drill );
-            bds.m_Pad_Master->SetDrillSize( wxSize( drillSize, drillSize ) );
+            bds.m_Pad_Master->SetDrillSize( VECTOR2I( drillSize, drillSize ) );
             m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
@@ -4697,9 +4697,9 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
 
         case T_rect_delta:
         {
-            wxSize delta;
-            delta.SetWidth( parseBoardUnits( "rectangle delta width" ) );
-            delta.SetHeight( parseBoardUnits( "rectangle delta height" ) );
+            VECTOR2I delta;
+            delta.x = parseBoardUnits( "rectangle delta width" );
+            delta.y = parseBoardUnits( "rectangle delta height" );
             pad->SetDelta( delta );
             NeedRIGHT();
             break;
@@ -4757,7 +4757,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
                 && ( pad->GetAttribute() != PAD_ATTRIB::CONN ) )
                 pad->SetDrillSize( drillSize );
             else
-                pad->SetDrillSize( wxSize( 0, 0 ) );
+                pad->SetDrillSize( VECTOR2I( 0, 0 ) );
 
             break;
         }

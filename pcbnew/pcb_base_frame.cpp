@@ -49,6 +49,7 @@
 #include <collectors.h>
 #include <pcb_draw_panel_gal.h>
 #include <math/vector2d.h>
+#include <math/vector2wx.h>
 #include <pcb_group.h>
 
 #include <pcb_painter.h>
@@ -235,7 +236,7 @@ void PCB_BASE_FRAME::AddFootprintToBoard( FOOTPRINT* aFootprint )
         GetBoard()->Add( aFootprint, ADD_MODE::APPEND );
 
         aFootprint->SetFlags( IS_NEW );
-        aFootprint->SetPosition( wxPoint( 0, 0 ) ); // cursor in GAL may not be initialized yet
+        aFootprint->SetPosition( VECTOR2I( 0, 0 ) ); // cursor in GAL may not be initialized yet
 
         // Put it on FRONT layer (note that it might be stored flipped if the lib is an archive
         // built from a board)
@@ -367,8 +368,8 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
     for( wxWindow* dialog : findDialogs() )
     {
         wxPoint dialogPos = GetCanvas()->ScreenToClient( dialog->GetScreenPosition() );
-        SHAPE_POLY_SET dialogPoly( BOX2D( view->ToWorld( dialogPos, true ),
-                                          view->ToWorld( dialog->GetSize(), false ) ) );
+        SHAPE_POLY_SET dialogPoly( BOX2D( view->ToWorld( ToVECTOR2D( dialogPos ), true ),
+                                          view->ToWorld( ToVECTOR2D( dialog->GetSize() ), false ) ) );
 
         try
         {
@@ -581,7 +582,7 @@ const PAGE_INFO& PCB_BASE_FRAME::GetPageSettings() const
 }
 
 
-const wxSize PCB_BASE_FRAME::GetPageSizeIU() const
+const VECTOR2I PCB_BASE_FRAME::GetPageSizeIU() const
 {
     // this function is only needed because EDA_DRAW_FRAME is not compiled
     // with either -DPCBNEW or -DEESCHEMA, so the virtual is used to route
@@ -684,7 +685,7 @@ BOX2I PCB_BASE_FRAME::GetBoardBoundingBox( bool aBoardEdgesOnly ) const
 
     if( area.GetWidth() == 0 && area.GetHeight() == 0 )
     {
-        wxSize pageSize = GetPageSizeIU();
+        VECTOR2I pageSize = GetPageSizeIU();
 
         if( m_showBorderAndTitleBlock )
         {

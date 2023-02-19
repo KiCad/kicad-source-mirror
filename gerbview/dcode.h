@@ -187,11 +187,11 @@ public:
     int GetShapeDim( GERBER_DRAW_ITEM* aParent );
 
 public:
-    wxSize                m_Size;           ///< Horizontal and vertical dimensions.
+    VECTOR2I                m_Size;         ///< Horizontal and vertical dimensions.
     APERTURE_T            m_ApertType;      ///< Aperture type ( Line, rectangle, circle,
                                             ///< oval poly, macro )
     int                   m_Num_Dcode;      ///< D code value ( >= 10 )
-    wxSize                m_Drill;          ///< dimension of the hole (if any) (drill file)
+    VECTOR2I              m_Drill;          ///< dimension of the hole (if any) (drill file)
     APERTURE_DEF_HOLETYPE m_DrillShape;     ///< shape of the hole (0 = no hole, round = 1,
                                             ///< rect = 2).
     EDA_ANGLE             m_Rotation;       ///< shape rotation

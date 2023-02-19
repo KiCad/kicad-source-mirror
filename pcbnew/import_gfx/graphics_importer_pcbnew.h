@@ -83,7 +83,7 @@ public:
      *
      * @param aCoordinate is the imported coordinate in mm.
      */
-    wxPoint MapCoordinate( const VECTOR2D& aCoordinate );
+    VECTOR2I MapCoordinate( const VECTOR2D& aCoordinate );
 
     /**
      * If aLineWidth < 0, the default line thickness value is returned.

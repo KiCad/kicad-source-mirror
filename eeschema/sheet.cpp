@@ -26,6 +26,7 @@
 #include <confirm.h>
 #include <kiface_base.h>
 #include <project.h>
+#include <math/vector2wx.h>
 #include <wildcards_and_files_ext.h>
 #include <tool/tool_manager.h>
 #include <sch_edit_frame.h>
@@ -542,10 +543,10 @@ bool SCH_EDIT_FRAME::EditSheetProperties( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHi
 
 void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard()
 {
-    wxRect  DrawArea;
+    wxRect       drawArea;
     BASE_SCREEN* screen = GetScreen();
 
-    DrawArea.SetSize( GetPageSizeIU() );
+    drawArea.SetSize( ToWxSize( GetPageSizeIU() ) );
 
     // Calculate a reasonable dc size, in pixels, and the dc scale to fit
     // the drawings into the dc size
@@ -554,7 +555,7 @@ void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard()
     double inch2Iu = 1000.0 * schIUScale.IU_PER_MILS;
     double scale = ppi / inch2Iu;
 
-    wxSize dcsize = DrawArea.GetSize();
+    wxSize dcsize = drawArea.GetSize();
 
     int maxdim = std::max( dcsize.x, dcsize.y );
 

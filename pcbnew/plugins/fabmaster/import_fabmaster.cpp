@@ -1999,7 +1999,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
             fpID.Parse( key, true );
             fp->SetFPID( fpID );
 
-            fp->SetPosition( wxPoint( src->x, src->y ) );
+            fp->SetPosition( VECTOR2I( src->x, src->y ) );
             fp->SetOrientationDegrees( -src->rotate );
 
             // KiCad netlisting requires parts to have non-digit + digit annotation.
@@ -2039,12 +2039,12 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                     if( src->mirror )
                     {
                         txt->SetLayer( FlipLayer( layer ) );
-                        txt->SetTextPos( wxPoint( lsrc->start_x, 2 * src->y - ( lsrc->start_y - lsrc->height / 2 ) ) );
+                        txt->SetTextPos( VECTOR2I( lsrc->start_x, 2 * src->y - ( lsrc->start_y - lsrc->height / 2 ) ) );
                     }
                     else
                     {
                         txt->SetLayer( layer );
-                        txt->SetTextPos( wxPoint( lsrc->start_x, lsrc->start_y - lsrc->height / 2 ) );
+                        txt->SetTextPos( VECTOR2I( lsrc->start_x, lsrc->start_y - lsrc->height / 2 ) );
                     }
 
                     txt->SetText( lsrc->text );
@@ -2097,14 +2097,14 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         if( src->mirror )
                         {
                             line->SetLayer( FlipLayer( layer ) );
-                            line->SetStart( wxPoint( lsrc->start_x, 2 * src->y - lsrc->start_y ) );
-                            line->SetEnd( wxPoint( lsrc->end_x, 2 * src->y - lsrc->end_y ) );
+                            line->SetStart( VECTOR2I( lsrc->start_x, 2 * src->y - lsrc->start_y ) );
+                            line->SetEnd( VECTOR2I( lsrc->end_x, 2 * src->y - lsrc->end_y ) );
                         }
                         else
                         {
                             line->SetLayer( layer );
-                            line->SetStart( wxPoint( lsrc->start_x, lsrc->start_y ) );
-                            line->SetEnd( wxPoint( lsrc->end_x, lsrc->end_y ) );
+                            line->SetStart( VECTOR2I( lsrc->start_x, lsrc->start_y ) );
+                            line->SetEnd( VECTOR2I( lsrc->end_x, lsrc->end_y ) );
                         }
 
                         line->SetStroke( STROKE_PARAMS( lsrc->width, PLOT_DASH_TYPE::SOLID ) );
@@ -2123,8 +2123,8 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         FP_SHAPE* circle = new FP_SHAPE( fp, SHAPE_T::CIRCLE );
 
                         circle->SetLayer( layer );
-                        circle->SetCenter( wxPoint( lsrc->center_x, lsrc->center_y ) );
-                        circle->SetEnd( wxPoint( lsrc->end_x, lsrc->end_y ) );
+                        circle->SetCenter( VECTOR2I( lsrc->center_x, lsrc->center_y ) );
+                        circle->SetEnd( VECTOR2I( lsrc->end_x, lsrc->end_y ) );
                         circle->SetWidth( lsrc->width );
                         circle->SetLocalCoord();
 
@@ -2169,14 +2169,14 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         if( src->mirror )
                         {
                             rect->SetLayer( FlipLayer( layer ) );
-                            rect->SetStart( wxPoint( lsrc->start_x, 2 * src->y - lsrc->start_y ) );
-                            rect->SetEnd( wxPoint( lsrc->end_x, 2 * src->y - lsrc->end_y ) );
+                            rect->SetStart( VECTOR2I( lsrc->start_x, 2 * src->y - lsrc->start_y ) );
+                            rect->SetEnd( VECTOR2I( lsrc->end_x, 2 * src->y - lsrc->end_y ) );
                         }
                         else
                         {
                             rect->SetLayer( layer );
-                            rect->SetStart( wxPoint( lsrc->start_x, lsrc->start_y ) );
-                            rect->SetEnd( wxPoint( lsrc->end_x, lsrc->end_y ) );
+                            rect->SetStart( VECTOR2I( lsrc->start_x, lsrc->start_y ) );
+                            rect->SetEnd( VECTOR2I( lsrc->end_x, lsrc->end_y ) );
                         }
 
                         rect->SetStroke( defaultStroke );
@@ -2195,12 +2195,12 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         if( src->mirror )
                         {
                             txt->SetLayer( FlipLayer( layer ) );
-                            txt->SetTextPos( wxPoint( lsrc->start_x, 2 * src->y - ( lsrc->start_y - lsrc->height / 2 ) ) );
+                            txt->SetTextPos( VECTOR2I( lsrc->start_x, 2 * src->y - ( lsrc->start_y - lsrc->height / 2 ) ) );
                         }
                         else
                         {
                             txt->SetLayer( layer );
-                            txt->SetTextPos( wxPoint( lsrc->start_x, lsrc->start_y - lsrc->height / 2 ) );
+                            txt->SetTextPos( VECTOR2I( lsrc->start_x, lsrc->start_y - lsrc->height / 2 ) );
                         }
 
                         txt->SetText( lsrc->text );
@@ -2274,7 +2274,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                             // is fully hidden by the custom pad
                             int pad_size = std::min( pad.width, pad.height );
 
-                            newpad->SetSize( wxSize( pad_size / 2, pad_size / 2 ) );
+                            newpad->SetSize( VECTOR2I( pad_size / 2, pad_size / 2 ) );
 
                             std::string custom_name = pad.custom_name + "_" + pin->refdes + "_" + pin->pin_number;
                             auto custom_it = pad_shapes.find( custom_name );
@@ -2371,7 +2371,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                             }
                         }
                         else
-                            newpad->SetSize( wxSize( pad.width, pad.height ) );
+                            newpad->SetSize( VECTOR2I( pad.width, pad.height ) );
 
                         if( pad.drill )
                         {
@@ -2391,7 +2391,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                             else
                                 newpad->SetDrillShape( PAD_DRILL_SHAPE_OBLONG );
 
-                            newpad->SetDrillSize( wxSize( pad.drill_size_x, pad.drill_size_y ) );
+                            newpad->SetDrillSize( VECTOR2I( pad.drill_size_x, pad.drill_size_y ) );
                         }
                         else
                         {
@@ -2481,7 +2481,7 @@ bool FABMASTER::loadVias( BOARD* aBoard )
 
         PCB_VIA* new_via = new PCB_VIA( aBoard );
 
-        new_via->SetPosition( wxPoint( via->x, via->y ) );
+        new_via->SetPosition( VECTOR2I( via->x, via->y ) );
 
         if( net_it != netinfo.end() )
             new_via->SetNet( net_it->second );
@@ -2549,8 +2549,8 @@ bool FABMASTER::loadEtch( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>
                 PCB_TRACK* trk = new PCB_TRACK( aBoard );
 
                 trk->SetLayer( layer );
-                trk->SetStart( wxPoint( src->start_x, src->start_y ) );
-                trk->SetEnd( wxPoint( src->end_x, src->end_y ) );
+                trk->SetStart( VECTOR2I( src->start_x, src->start_y ) );
+                trk->SetEnd( VECTOR2I( src->end_x, src->end_y ) );
                 trk->SetWidth( src->width );
 
                 if( net_it != netinfo.end() )
@@ -2790,8 +2790,8 @@ bool FABMASTER::loadOutline( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
 
             PCB_SHAPE*     line = new PCB_SHAPE( aBoard, SHAPE_T::SEGMENT );
             line->SetLayer( layer );
-            line->SetStart( wxPoint( src->start_x, src->start_y ) );
-            line->SetEnd( wxPoint( src->end_x, src->end_y ) );
+            line->SetStart( VECTOR2I( src->start_x, src->start_y ) );
+            line->SetEnd( VECTOR2I( src->end_x, src->end_y ) );
             line->SetStroke( STROKE_PARAMS( src->width, PLOT_DASH_TYPE::SOLID ) );
 
             if( line->GetWidth() == 0 )
@@ -2807,8 +2807,8 @@ bool FABMASTER::loadOutline( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
             PCB_SHAPE* circle = new PCB_SHAPE( aBoard, SHAPE_T::CIRCLE );
 
             circle->SetLayer( layer );
-            circle->SetCenter( wxPoint( lsrc->center_x, lsrc->center_y ) );
-            circle->SetEnd( wxPoint( lsrc->end_x, lsrc->end_y ) );
+            circle->SetCenter( VECTOR2I( lsrc->center_x, lsrc->center_y ) );
+            circle->SetEnd( VECTOR2I( lsrc->end_x, lsrc->end_y ) );
             circle->SetWidth( lsrc->width );
 
             if( lsrc->width == 0 )
@@ -2841,8 +2841,8 @@ bool FABMASTER::loadOutline( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
 
             PCB_SHAPE* rect = new PCB_SHAPE( aBoard, SHAPE_T::RECT );
             rect->SetLayer( layer );
-            rect->SetStart( wxPoint( src->start_x, src->start_y ) );
-            rect->SetEnd( wxPoint( src->end_x, src->end_y ) );
+            rect->SetStart( VECTOR2I( src->start_x, src->start_y ) );
+            rect->SetEnd( VECTOR2I( src->end_x, src->end_y ) );
             rect->SetStroke( defaultStroke );
 
             aBoard->Add( rect, ADD_MODE::APPEND );
@@ -2854,7 +2854,7 @@ bool FABMASTER::loadOutline( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
 
             PCB_TEXT* txt = new PCB_TEXT( aBoard );
             txt->SetLayer( layer );
-            txt->SetTextPos( wxPoint( src->start_x, src->start_y - src->height / 2 ) );
+            txt->SetTextPos( VECTOR2I( src->start_x, src->start_y - src->height / 2 ) );
             txt->SetText( src->text );
             txt->SetItalic( src->ital );
             txt->SetTextThickness( src->thickness );
@@ -2925,8 +2925,8 @@ bool FABMASTER::loadGraphics( BOARD* aBoard )
 
                 PCB_SHAPE*     line = new PCB_SHAPE( aBoard, SHAPE_T::SEGMENT );
                 line->SetLayer( layer );
-                line->SetStart( wxPoint( src->start_x, src->start_y ) );
-                line->SetEnd( wxPoint( src->end_x, src->end_y ) );
+                line->SetStart( VECTOR2I( src->start_x, src->start_y ) );
+                line->SetEnd( VECTOR2I( src->end_x, src->end_y ) );
                 line->SetStroke( STROKE_PARAMS( src->width, PLOT_DASH_TYPE::SOLID ) );
 
                 aBoard->Add( line, ADD_MODE::APPEND );
@@ -2939,8 +2939,8 @@ bool FABMASTER::loadGraphics( BOARD* aBoard )
                 PCB_SHAPE* circle = new PCB_SHAPE( aBoard, SHAPE_T::CIRCLE );
 
                 circle->SetLayer( layer );
-                circle->SetCenter( wxPoint( src->center_x, src->center_y ) );
-                circle->SetEnd( wxPoint( src->end_x, src->end_y ) );
+                circle->SetCenter( VECTOR2I( src->center_x, src->center_y ) );
+                circle->SetEnd( VECTOR2I( src->end_x, src->end_y ) );
                 circle->SetWidth( src->width );
 
                 aBoard->Add( circle, ADD_MODE::APPEND );
@@ -2967,8 +2967,8 @@ bool FABMASTER::loadGraphics( BOARD* aBoard )
 
                 PCB_SHAPE* rect = new PCB_SHAPE( aBoard, SHAPE_T::RECT );
                 rect->SetLayer( layer );
-                rect->SetStart( wxPoint( src->start_x, src->start_y ) );
-                rect->SetEnd( wxPoint( src->end_x, src->end_y ) );
+                rect->SetStart( VECTOR2I( src->start_x, src->start_y ) );
+                rect->SetEnd( VECTOR2I( src->end_x, src->end_y ) );
                 rect->SetStroke( STROKE_PARAMS( 0 ) );
                 rect->SetFilled( true );
                 aBoard->Add( rect, ADD_MODE::APPEND );
@@ -2981,7 +2981,7 @@ bool FABMASTER::loadGraphics( BOARD* aBoard )
 
                 PCB_TEXT* txt = new PCB_TEXT( aBoard );
                 txt->SetLayer( layer );
-                txt->SetTextPos( wxPoint( src->start_x, src->start_y - src->height / 2 ) );
+                txt->SetTextPos( VECTOR2I( src->start_x, src->start_y - src->height / 2 ) );
                 txt->SetText( src->text );
                 txt->SetItalic( src->ital );
                 txt->SetTextThickness( src->thickness );

@@ -218,11 +218,11 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
         // When exporting to pdf, CADSTAR applies a margin of 3% of the longest dimension (height
         // or width) to all 4 sides (top, bottom, left right). For the import, we are also rounding
         // the margin to the nearest grid, ensuring all items remain on the grid.
-        wxSize targetSheetSize = (wxSize)sheetBoundingBox.GetSize();
+        VECTOR2I targetSheetSize = sheetBoundingBox.GetSize();
         int    longestSide = std::max( targetSheetSize.x, targetSheetSize.y );
         int    margin = ( (double) longestSide * 0.03 );
         margin = roundToNearestGrid( margin );
-        targetSheetSize.IncBy( margin * 2, margin * 2 );
+        targetSheetSize += margin * 2;
 
         // Update page size always
         PAGE_INFO pageInfo = sheet->GetScreen()->GetPageSettings();
@@ -232,7 +232,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
         // Set the new sheet size.
         sheet->GetScreen()->SetPageSettings( pageInfo );
 
-        wxSize   pageSizeIU = sheet->GetScreen()->GetPageSettings().GetSizeIU( schIUScale.IU_PER_MILS );
+        VECTOR2I pageSizeIU = sheet->GetScreen()->GetPageSettings().GetSizeIU( schIUScale.IU_PER_MILS );
         VECTOR2I sheetcentre( pageSizeIU.x / 2, pageSizeIU.y / 2 );
         VECTOR2I itemsCentre = sheetBoundingBox.Centre();
 
@@ -282,7 +282,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSheets()
         for( LAYER_ID sheetID : orphanSheets )
         {
             VECTOR2I pos( x * schIUScale.MilsToIU( 1000 ), y * schIUScale.MilsToIU( 1000 ) );
-            wxSize   siz( schIUScale.MilsToIU( 1000 ), schIUScale.MilsToIU( 1000 ) );
+            VECTOR2I siz( schIUScale.MilsToIU( 1000 ), schIUScale.MilsToIU( 1000 ) );
 
             loadSheetAndChildSheets( sheetID, pos, siz, rootPath );
 
@@ -663,7 +663,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                 SCH_GLOBALLABEL* netLabel = new SCH_GLOBALLABEL;
                 netLabel->SetPosition( getKiCadPoint( (VECTOR2I)sym.Origin + terminalPosOffset ) );
                 netLabel->SetText( "***UNKNOWN NET****" ); // This should be later updated when we load the netlist
-                netLabel->SetTextSize( wxSize( schIUScale.MilsToIU( 50 ), schIUScale.MilsToIU( 50 ) ) );
+                netLabel->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 50 ), schIUScale.MilsToIU( 50 ) ) );
 
                 SYMDEF_SCM symbolDef = Library.SymbolDefinitions.at( sym.SymdefID );
 
@@ -923,7 +923,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
 
             VECTOR2I size =
                     getKiCadPoint( busTerm.SecondPoint ) - getKiCadPoint( busTerm.FirstPoint );
-            busEntry->SetSize( wxSize( size.x, size.y ) );
+            busEntry->SetSize( VECTOR2I( size.x, size.y ) );
 
             m_sheetMap.at( bus.LayerID )->GetScreen()->Append( busEntry );
 
@@ -945,7 +945,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
             }
             else
             {
-                label->SetTextSize( wxSize( SMALL_LABEL_SIZE, SMALL_LABEL_SIZE ) );
+                label->SetTextSize( VECTOR2I( SMALL_LABEL_SIZE, SMALL_LABEL_SIZE ) );
             }
 
             netlabels.insert( { busTerm.ID, label } );
@@ -1024,7 +1024,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
                             && SCH_SHEET::ClassOf( sheetPin->GetParent() ) )
                     {
                         SCH_SHEET* parentSheet   = static_cast<SCH_SHEET*>( sheetPin->GetParent() );
-                        wxSize     sheetSize     = parentSheet->GetSize();
+                        VECTOR2I   sheetSize = parentSheet->GetSize();
                         VECTOR2I   sheetPosition = parentSheet->GetPosition();
 
                         int leftSide  = sheetPosition.x;
@@ -1652,7 +1652,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
 
 
 void CADSTAR_SCH_ARCHIVE_LOADER::loadLibrarySymbolShapeVertices( const std::vector<VERTEX>& aCadstarVertices,
-                                                                 wxPoint aSymbolOrigin,
+                                                                 VECTOR2I aSymbolOrigin,
                                                                  LIB_SYMBOL* aSymbol,
                                                                  int aGateNumber,
                                                                  int aLineThickness )
@@ -1726,7 +1726,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadLibrarySymbolShapeVertices( const std::vect
 
 
 void CADSTAR_SCH_ARCHIVE_LOADER::applyToLibraryFieldAttribute(
-        const ATTRIBUTE_LOCATION& aCadstarAttrLoc, wxPoint aSymbolOrigin, LIB_FIELD* aKiCadField )
+        const ATTRIBUTE_LOCATION& aCadstarAttrLoc, VECTOR2I aSymbolOrigin, LIB_FIELD* aKiCadField )
 {
     aKiCadField->SetTextPos( getKiCadLibraryPoint( aCadstarAttrLoc.Position, aSymbolOrigin ) );
 
@@ -2180,7 +2180,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSheetAndChildSheets( LAYER_ID              
     SCH_SHEET*     sheet = new SCH_SHEET(
         /* aParent */ aParentSheet.Last(),
         /* aPosition */ aPosition,
-        /* aSize */ wxSize( aSheetSize ) );
+        /* aSize */ VECTOR2I( aSheetSize ) );
     SCH_SCREEN*    screen = new SCH_SCREEN( m_schematic );
     SCH_SHEET_PATH instance( aParentSheet );
 
@@ -2251,7 +2251,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadChildSheets( LAYER_ID aCadstarSheetID,
             // In KiCad you can only draw rectangular shapes whereas in Cadstar arbitrary shapes
             // are allowed. We will calculate the extents of the Cadstar shape and draw a rectangle
 
-            std::pair<VECTOR2I, wxSize> blockExtents;
+            std::pair<VECTOR2I, VECTOR2I> blockExtents;
 
             if( block.Figures.size() > 0 )
             {
@@ -2790,7 +2790,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( EDA_TEXT*            aKiCadT
         setAlignment( aKiCadTextItem, textAlignment );
         BOX2I    bb = textEdaItem->GetBoundingBox();
         int      off = static_cast<SCH_TEXT*>( aKiCadTextItem )->GetTextOffset();
-        wxPoint  pos;
+        VECTOR2I pos;
 
         // Change the anchor point of the text item to make it match the same bounding box
         // And correct the error introduced by the text offsetting in KiCad
@@ -3002,7 +3002,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::fixUpLibraryPins( LIB_SYMBOL* aSymbolToFix, int
 }
 
 
-std::pair<VECTOR2I, wxSize>
+std::pair<VECTOR2I, VECTOR2I>
 CADSTAR_SCH_ARCHIVE_LOADER::getFigureExtentsKiCad( const FIGURE& aCadstarFigure )
 {
     VECTOR2I upperLeft( Assignments.Settings.DesignLimit.x, 0 );
@@ -3046,7 +3046,7 @@ CADSTAR_SCH_ARCHIVE_LOADER::getFigureExtentsKiCad( const FIGURE& aCadstarFigure 
 
     VECTOR2I size = lowerRightKiCad - upperLeftKiCad;
 
-    return { upperLeftKiCad, wxSize( abs( size.x ), abs( size.y ) ) };
+    return { upperLeftKiCad, VECTOR2I( abs( size.x ), abs( size.y ) ) };
 }
 
 
@@ -3097,7 +3097,7 @@ VECTOR2I CADSTAR_SCH_ARCHIVE_LOADER::applyTransform( const VECTOR2I& aPoint,
     if( !aRotation.IsZero() )
         RotatePoint( retVal, aTransformCentre, aRotation );
 
-    if( aMoveVector != wxPoint{ 0, 0 } )
+    if( aMoveVector != VECTOR2I{ 0, 0 } )
         retVal += aMoveVector;
 
     return retVal;

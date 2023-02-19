@@ -102,7 +102,7 @@ public:
 
     void SetPageSettings(const PAGE_INFO&) override;
     const PAGE_INFO& GetPageSettings () const override;
-    const wxSize GetPageSizeIU() const override;
+    const VECTOR2I   GetPageSizeIU() const override;
 
     PL_DRAW_PANEL_GAL* GetCanvas() const override;
     SELECTION& GetCurrentSelection() override;

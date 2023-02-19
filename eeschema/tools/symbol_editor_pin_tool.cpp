@@ -418,7 +418,7 @@ int SYMBOL_EDITOR_PIN_TOOL::PushPinProperties( const TOOL_EVENT& aEvent )
 LIB_PIN* SYMBOL_EDITOR_PIN_TOOL::RepeatPin( const LIB_PIN* aSourcePin )
 {
     LIB_PIN* pin = (LIB_PIN*) aSourcePin->Clone();
-    wxPoint  step;
+    VECTOR2I step;
 
     pin->ClearFlags();
     pin->SetFlags( IS_NEW );

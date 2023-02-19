@@ -573,7 +573,7 @@ void BACK_ANNOTATE::processNetNameChange( const wxString& aRef, SCH_PIN* aPin,
             SCHEMATIC_SETTINGS& settings = m_frame->Schematic().Settings();
             SCH_LABEL* label = new SCH_LABEL( driver->GetPosition(), aNewName );
             label->SetParent( &m_frame->Schematic() );
-            label->SetTextSize( wxSize( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
+            label->SetTextSize( VECTOR2I( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
             label->SetTextSpinStyle( spin );
             label->SetFlags( IS_NEW );
 

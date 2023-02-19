@@ -380,14 +380,14 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
             // the mouse move and search pads that are on the line.
             int distance = ( cursorPos - oldCursorPos ).EuclideanNorm();
             // Search will be made every 0.1 mm:
-            int           segments = distance / int( 0.1 * pcbIUScale.IU_PER_MM ) + 1;
-            const wxPoint line_step( ( cursorPos - oldCursorPos ) / segments );
+            int            segments = distance / int( 0.1 * pcbIUScale.IU_PER_MM ) + 1;
+            const VECTOR2I line_step( ( cursorPos - oldCursorPos ) / segments );
 
             collector.Empty();
 
             for( int j = 0; j < segments; ++j )
             {
-                wxPoint testpoint( cursorPos.x - j * line_step.x, cursorPos.y - j * line_step.y );
+                VECTOR2I testpoint( cursorPos.x - j * line_step.x, cursorPos.y - j * line_step.y );
                 collector.Collect( board(), { PCB_PAD_T }, testpoint, guide );
 
                 for( int i = 0; i < collector.GetCount(); ++i )
@@ -527,7 +527,7 @@ int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
             {
                 pad->SetAttribute( PAD_ATTRIB::PTH );
                 pad->SetShape( PAD_SHAPE::CIRCLE );
-                pad->SetSize( wxSize( pad->GetSizeX(), pad->GetSizeX() ) );
+                pad->SetSize( VECTOR2I( pad->GetSizeX(), pad->GetSizeX() ) );
                 pad->SetLayerSet( PAD::PTHMask() );
             }
 

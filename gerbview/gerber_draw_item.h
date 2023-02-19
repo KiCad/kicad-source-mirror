@@ -236,7 +236,7 @@ public:
     VECTOR2I           m_ArcCentre;         // for arcs only: Center of arc
     SHAPE_POLY_SET     m_ShapeAsPolygon;    // Polygon shape data from G36 to G37 coordinates
                                             // or for complex shapes which are converted to polygon
-    wxSize             m_Size;              // Flashed shapes: size of the shape
+    VECTOR2I           m_Size;              // Flashed shapes: size of the shape
                                             // Lines : m_Size.x = m_Size.y = line width
     bool               m_Flashed;           // True for flashed items
     int                m_DCode;             // DCode used to draw this item.

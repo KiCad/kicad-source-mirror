@@ -95,10 +95,10 @@ public:
         {
             FP_ZONE* fpZone = new FP_ZONE( &m_footprint );
 
-            fpZone->AppendCorner( wxPoint( pcbIUScale.mmToIU( -100 ), pcbIUScale.mmToIU( -50 ) ), -1 );
-            fpZone->AppendCorner( wxPoint( pcbIUScale.mmToIU( -100 ), pcbIUScale.mmToIU( 50 ) ), -1 );
-            fpZone->AppendCorner( wxPoint( pcbIUScale.mmToIU( 100 ), pcbIUScale.mmToIU( 50 ) ), -1 );
-            fpZone->AppendCorner( wxPoint( pcbIUScale.mmToIU( 100 ), pcbIUScale.mmToIU( -50 ) ), -1 );
+            fpZone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( -100 ), pcbIUScale.mmToIU( -50 ) ), -1 );
+            fpZone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( -100 ), pcbIUScale.mmToIU( 50 ) ), -1 );
+            fpZone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 100 ), pcbIUScale.mmToIU( 50 ) ), -1 );
+            fpZone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 100 ), pcbIUScale.mmToIU( -50 ) ), -1 );
 
             return fpZone;
         }
@@ -106,7 +106,7 @@ public:
         case PCB_TRACE_T:             return new PCB_TRACK( &m_board );
         case PCB_VIA_T:               return new PCB_VIA( &m_board );
         case PCB_ARC_T:               return new PCB_ARC( &m_board );
-        case PCB_MARKER_T:            return new PCB_MARKER( m_drcItem, wxPoint( 0, 0 ) );
+        case PCB_MARKER_T:            return new PCB_MARKER( m_drcItem, VECTOR2I( 0, 0 ) );
         case PCB_DIM_ALIGNED_T:       return new PCB_DIM_ALIGNED( &m_board, PCB_DIM_ALIGNED_T );
         case PCB_DIM_LEADER_T:        return new PCB_DIM_LEADER( &m_board );
         case PCB_DIM_CENTER_T:        return new PCB_DIM_CENTER( &m_board );
@@ -117,10 +117,10 @@ public:
         {
             ZONE* zone = new ZONE( &m_board );
 
-            zone->AppendCorner( wxPoint( pcbIUScale.mmToIU( -100 ), pcbIUScale.mmToIU( -50 ) ), -1 );
-            zone->AppendCorner( wxPoint( pcbIUScale.mmToIU( -100 ), pcbIUScale.mmToIU( 50 ) ), -1 );
-            zone->AppendCorner( wxPoint( pcbIUScale.mmToIU( 100 ), pcbIUScale.mmToIU( 50 ) ), -1 );
-            zone->AppendCorner( wxPoint( pcbIUScale.mmToIU( 100 ), pcbIUScale.mmToIU( -50 ) ), -1 );
+            zone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( -100 ), pcbIUScale.mmToIU( -50 ) ), -1 );
+            zone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( -100 ), pcbIUScale.mmToIU( 50 ) ), -1 );
+            zone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 100 ), pcbIUScale.mmToIU( 50 ) ), -1 );
+            zone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 100 ), pcbIUScale.mmToIU( -50 ) ), -1 );
 
             return zone;
         }
@@ -181,7 +181,7 @@ BOOST_AUTO_TEST_CASE( Move )
         {
             IterateOverPositionsAndReferences<BOARD_ITEM>(
                     item.get(),
-                    []( BOARD_ITEM* aOriginalItem, wxPoint aRef )
+                    []( BOARD_ITEM* aOriginalItem, VECTOR2I aRef )
                     {
                         FP_SHAPE* originalFpShape = dynamic_cast<FP_SHAPE*>( aOriginalItem );
 
@@ -240,7 +240,7 @@ BOOST_AUTO_TEST_CASE( Rotate )
 
             IterateOverPositionsAndReferences<BOARD_ITEM>(
                     item.get(),
-                    []( BOARD_ITEM* aOriginalItem, wxPoint aRef )
+                    []( BOARD_ITEM* aOriginalItem, VECTOR2I aRef )
                     {
                         FP_SHAPE* originalFpShape = dynamic_cast<FP_SHAPE*>( aOriginalItem );
 
@@ -291,7 +291,7 @@ BOOST_AUTO_TEST_CASE( FlipLeftRight )
         {
             IterateOverPositionsAndReferences<BOARD_ITEM>(
                     item.get(),
-                    []( BOARD_ITEM* aOriginalItem, wxPoint aRef )
+                    []( BOARD_ITEM* aOriginalItem, VECTOR2I aRef )
                     {
                         FP_SHAPE* originalFpShape = dynamic_cast<FP_SHAPE*>( aOriginalItem );
 
@@ -340,7 +340,7 @@ BOOST_AUTO_TEST_CASE( FlipUpDown )
         {
             IterateOverPositionsAndReferences<BOARD_ITEM>(
                     item.get(),
-                    []( BOARD_ITEM* aOriginalItem, wxPoint aRef )
+                    []( BOARD_ITEM* aOriginalItem, VECTOR2I aRef )
                     {
                         FP_SHAPE* originalFpShape = dynamic_cast<FP_SHAPE*>( aOriginalItem );
 

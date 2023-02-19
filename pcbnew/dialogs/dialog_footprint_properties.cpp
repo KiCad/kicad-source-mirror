@@ -514,7 +514,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
     }
 
     // Set Footprint Position
-    wxPoint pos( m_posX.GetValue(), m_posY.GetValue() );
+    VECTOR2I pos( m_posX.GetValue(), m_posY.GetValue() );
     m_footprint->SetPosition( pos );
     m_footprint->SetLocked( m_cbLocked->GetValue() );
 

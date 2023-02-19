@@ -116,8 +116,6 @@ namespace EDA_UNIT_UTILS
      * @return A std::string object containing the converted value.
      */
     std::string FormatInternalUnits( const EDA_IU_SCALE& aIuScale, int aValue );
-    std::string FormatInternalUnits( const EDA_IU_SCALE& aIuScale, const wxPoint& aPoint );
-    std::string FormatInternalUnits( const EDA_IU_SCALE& aIuScale, const wxSize& aSize );
     std::string FormatInternalUnits( const EDA_IU_SCALE& aIuScale, const VECTOR2I& aPoint );
 
     constexpr inline int Mils2IU( const EDA_IU_SCALE& aIuScale, int mils )

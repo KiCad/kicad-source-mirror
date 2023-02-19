@@ -38,6 +38,7 @@
 #include <gal/definitions.h>
 #include <gl_context_mgr.h>
 #include <geometry/shape_poly_set.h>
+#include <math/vector2wx.h>
 #include <bitmap_base.h>
 #include <bezier_curves.h>
 #include <math/util.h> // for KiROUND
@@ -323,7 +324,7 @@ OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
 #endif
 
     SetSize( aParent->GetClientSize() );
-    m_screenSize = VECTOR2I( GetNativePixelSize() );
+    m_screenSize = ToVECTOR2I( GetNativePixelSize() );
 
     // Grid color settings are different in Cairo and OpenGL
     SetGridColor( COLOR4D( 0.8, 0.8, 0.8, 0.1 ) );

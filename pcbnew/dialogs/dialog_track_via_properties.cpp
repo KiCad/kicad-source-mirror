@@ -539,16 +539,16 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 PCB_TRACK* t = static_cast<PCB_TRACK*>( item );
 
                 if( !m_trackStartX.IsIndeterminate() )
-                    t->SetStart( wxPoint( m_trackStartX.GetValue(), t->GetStart().y ) );
+                    t->SetStart( VECTOR2I( m_trackStartX.GetValue(), t->GetStart().y ) );
 
                 if( !m_trackStartY.IsIndeterminate() )
-                    t->SetStart( wxPoint( t->GetStart().x, m_trackStartY.GetValue() ) );
+                    t->SetStart( VECTOR2I( t->GetStart().x, m_trackStartY.GetValue() ) );
 
                 if( !m_trackEndX.IsIndeterminate() )
-                    t->SetEnd( wxPoint( m_trackEndX.GetValue(), t->GetEnd().y ) );
+                    t->SetEnd( VECTOR2I( m_trackEndX.GetValue(), t->GetEnd().y ) );
 
                 if( !m_trackEndY.IsIndeterminate() )
-                    t->SetEnd( wxPoint( t->GetEnd().x, m_trackEndY.GetValue() ) );
+                    t->SetEnd( VECTOR2I( t->GetEnd().x, m_trackEndY.GetValue() ) );
 
                 if( m_trackNetclass->IsChecked() )
                     t->SetWidth( t->GetEffectiveNetClass()->GetTrackWidth() );
@@ -572,10 +572,10 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 PCB_VIA* v = static_cast<PCB_VIA*>( item );
 
                 if( !m_viaX.IsIndeterminate() )
-                    v->SetPosition( wxPoint( m_viaX.GetValue(), v->GetPosition().y ) );
+                    v->SetPosition( VECTOR2I( m_viaX.GetValue(), v->GetPosition().y ) );
 
                 if( !m_viaY.IsIndeterminate() )
-                    v->SetPosition( wxPoint( v->GetPosition().x, m_viaY.GetValue() ) );
+                    v->SetPosition( VECTOR2I( v->GetPosition().x, m_viaY.GetValue() ) );
 
                 if( m_viaNotFree->Get3StateValue() != wxCHK_UNDETERMINED )
                     v->SetIsFree( !m_viaNotFree->GetValue() );

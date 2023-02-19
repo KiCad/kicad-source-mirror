@@ -481,7 +481,7 @@ ASCH_HARNESS_CONNECTOR::ASCH_HARNESS_CONNECTOR( const std::map<wxString, wxStrin
 
     Location = VECTOR2I( ReadKiCadUnitFrac( aProps, "LOCATION.X" ),
                          -ReadKiCadUnitFrac( aProps, "LOCATION.Y" ) );
-    Size = wxSize( ReadKiCadUnitFrac( aProps, "XSIZE" ), ReadKiCadUnitFrac( aProps, "YSIZE" ) );
+    Size = VECTOR2I( ReadKiCadUnitFrac( aProps, "XSIZE" ), ReadKiCadUnitFrac( aProps, "YSIZE" ) );
 
     Color = ALTIUM_PARSER::ReadInt( aProps, "COLOR", 0 );
     AreaColor = ALTIUM_PARSER::ReadInt( aProps, "AREACOLOR", 0 );
@@ -569,8 +569,8 @@ ASCH_SHEET_SYMBOL::ASCH_SHEET_SYMBOL( const std::map<wxString, wxString>& aProps
 
     location = VECTOR2I( ReadKiCadUnitFrac( aProps, "LOCATION.X" ),
                          -ReadKiCadUnitFrac( aProps, "LOCATION.Y" ) );
-    size     = wxSize( ReadKiCadUnitFrac( aProps, "XSIZE" ),
-                       ReadKiCadUnitFrac( aProps, "YSIZE" ) );
+    size     = VECTOR2I( ReadKiCadUnitFrac( aProps, "XSIZE" ),
+                        ReadKiCadUnitFrac( aProps, "YSIZE" ) );
 
     isSolid = ALTIUM_PARSER::ReadBool( aProps, "ISSOLID", false );
 

@@ -398,10 +398,10 @@ public:
     /**
      * @brief Represents a point in x,y coordinates
      */
-    struct POINT : wxPoint, PARSER
+    struct POINT : VECTOR2I, PARSER
     {
-        POINT() : wxPoint( UNDEFINED_VALUE, UNDEFINED_VALUE ) {}
-        POINT( int aX, int aY ) : wxPoint( aX, aY ) {}
+        POINT() : VECTOR2I( UNDEFINED_VALUE, UNDEFINED_VALUE ) {}
+        POINT( int aX, int aY ) : VECTOR2I( aX, aY ) {}
 
         void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };

@@ -111,7 +111,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
     case PLOT_FORMAT::SVG:
     {
         PAGE_INFO pageA4( wxT( "A4" ) );
-        wxSize    pageSizeIU = pageA4.GetSizeIU( pcbIUScale.IU_PER_MILS );
+        VECTOR2I  pageSizeIU = pageA4.GetSizeIU( pcbIUScale.IU_PER_MILS );
 
         // Reserve a 10 mm margin around the page.
         int margin = pcbIUScale.mmToIU( 10 );
@@ -267,7 +267,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
     // Plot title  "Info"
     wxString Text = wxT( "Drill Map:" );
     plotter->Text( VECTOR2I( plotX, plotY ), COLOR4D::UNSPECIFIED, Text, ANGLE_HORIZONTAL,
-                   wxSize( KiROUND( charSize * charScale ), KiROUND( charSize * charScale ) ),
+                   VECTOR2I( KiROUND( charSize * charScale ), KiROUND( charSize * charScale ) ),
                    GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER, TextWidth, false, false,
                    false, nullptr /* stroke font */ );
 

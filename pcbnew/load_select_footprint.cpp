@@ -143,7 +143,7 @@ bool FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( FOOTPRINT* aFootprint )
 
     GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
     PlaceFootprint( newFootprint );
-    newFootprint->SetPosition( wxPoint( 0, 0 ) ); // cursor in GAL may not yet be initialized
+    newFootprint->SetPosition( VECTOR2I( 0, 0 ) ); // cursor in GAL may not yet be initialized
 
     // Put it on FRONT layer,
     // because this is the default in Footprint Editor, and in libs

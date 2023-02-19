@@ -307,7 +307,7 @@ FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
     SetMsgPanel( footprint );
     PlaceFootprint( footprint );
 
-    footprint->SetPosition( wxPoint( 0, 0 ) );
+    footprint->SetPosition( VECTOR2I( 0, 0 ) );
 
     GetBoard()->BuildListOfNets();
     UpdateView();
@@ -1010,7 +1010,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
         commit.Add( newFootprint );
         viewControls->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
         pcbframe->PlaceFootprint( newFootprint );
-        newFootprint->SetPosition( wxPoint( 0, 0 ) );
+        newFootprint->SetPosition( VECTOR2I( 0, 0 ) );
         viewControls->SetCrossHairCursorPosition( cursorPos, false );
         const_cast<KIID&>( newFootprint->m_Uuid ) = KIID();
         commit.Push( wxT( "Insert footprint" ) );
@@ -1294,7 +1294,7 @@ FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( const wxString& aFootprintName, b
     footprint->SetAttributes( footprintTranslated );
 
     PCB_LAYER_ID txt_layer;
-    wxPoint default_pos;
+    VECTOR2I default_pos;
     BOARD_DESIGN_SETTINGS& settings = GetDesignSettings();
 
     footprint->Reference().SetText( settings.m_DefaultFPTextItems[0].m_Text );

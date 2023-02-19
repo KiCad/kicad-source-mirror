@@ -185,14 +185,14 @@ public:
         return -ReadKicadUnit();
     }
 
-    VECTOR2I ReadVector2I()
+    VECTOR2I ReadVector2IPos()
     {
         int32_t x = ReadKicadUnitX();
         int32_t y = ReadKicadUnitY();
         return { x, y };
     }
 
-    wxSize ReadWxSize()
+    VECTOR2I ReadVector2ISize()
     {
         int32_t x = ReadKicadUnit();
         int32_t y = ReadKicadUnit();

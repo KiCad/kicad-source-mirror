@@ -414,7 +414,7 @@ void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( PCB_DIMENSION_BASE*
 
     if( tpm == DIM_TEXT_POSITION::MANUAL )
     {
-        wxPoint pos( m_textPosX.GetValue(), m_textPosY.GetValue() );
+        VECTOR2I pos( m_textPosX.GetValue(), m_textPosY.GetValue() );
         text.SetPosition( pos );
     }
 

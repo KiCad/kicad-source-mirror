@@ -24,6 +24,7 @@
 #include <board.h>
 #include <layer_ids.h>
 #include <panel_pcbnew_color_settings.h>
+#include <math/vector2wx.h>
 #include <widgets/wx_panel.h>
 #include <pcbnew_settings.h>
 #include <settings/settings_manager.h>
@@ -553,7 +554,7 @@ void PANEL_PCBNEW_COLOR_SETTINGS::zoomFitPreview()
         BOX2I        defaultBox = m_preview->GetDefaultViewBBox();
 
         view->SetScale( 1.0 );
-        VECTOR2D screenSize = view->ToWorld( m_preview->GetClientSize(), false );
+        VECTOR2D screenSize = view->ToWorld( ToVECTOR2D( m_preview->GetClientSize() ), false );
 
         if( bBox.GetWidth() == 0 || bBox.GetHeight() == 0 )
             bBox = defaultBox;

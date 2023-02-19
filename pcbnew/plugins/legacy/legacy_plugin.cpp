@@ -999,7 +999,7 @@ void LEGACY_PLUGIN::loadSETUP()
             BIU x = biuParse( line + SZ( "TextPcbSize" ), &data );
             BIU y = biuParse( data );
 
-            bds.m_TextSize[ LAYER_CLASS_COPPER ] = wxSize( x, y );
+            bds.m_TextSize[ LAYER_CLASS_COPPER ] = VECTOR2I( x, y );
         }
         else if( TESTLINE( "EdgeModWidth" ) )
         {
@@ -1018,20 +1018,20 @@ void LEGACY_PLUGIN::loadSETUP()
             BIU x = biuParse( line + SZ( "TextModSize" ), &data );
             BIU y = biuParse( data );
 
-            bds.m_TextSize[ LAYER_CLASS_SILK ] = wxSize( x, y );
-            bds.m_TextSize[ LAYER_CLASS_OTHERS ] = wxSize( x, y );
+            bds.m_TextSize[LAYER_CLASS_SILK] = VECTOR2I( x, y );
+            bds.m_TextSize[LAYER_CLASS_OTHERS] = VECTOR2I( x, y );
         }
         else if( TESTLINE( "PadSize" ) )
         {
             BIU x = biuParse( line + SZ( "PadSize" ), &data );
             BIU y = biuParse( data );
 
-            bds.m_Pad_Master->SetSize( wxSize( x, y ) );
+            bds.m_Pad_Master->SetSize( VECTOR2I( x, y ) );
         }
         else if( TESTLINE( "PadDrill" ) )
         {
             BIU tmp = biuParse( line + SZ( "PadDrill" ) );
-            bds.m_Pad_Master->SetDrillSize( wxSize( tmp, tmp ) );
+            bds.m_Pad_Master->SetDrillSize( VECTOR2I( tmp, tmp ) );
         }
         else if( TESTLINE( "Pad2MaskClearance" ) )
         {
@@ -1372,8 +1372,8 @@ void LEGACY_PLUGIN::loadPAD( FOOTPRINT* aFootprint )
 
             pad->SetNumber( padNumber );
             pad->SetShape( static_cast<PAD_SHAPE>( padshape ) );
-            pad->SetSize( wxSize( size_x, size_y ) );
-            pad->SetDelta( wxSize( delta_x, delta_y ) );
+            pad->SetSize( VECTOR2I( size_x, size_y ) );
+            pad->SetDelta( VECTOR2I( delta_x, delta_y ) );
             pad->SetOrientation( orient );
         }
         else if( TESTLINE( "Dr" ) )         // (Dr)ill
@@ -1404,7 +1404,7 @@ void LEGACY_PLUGIN::loadPAD( FOOTPRINT* aFootprint )
 
             pad->SetDrillShape( drShape );
             pad->SetOffset( VECTOR2I( offs_x, offs_y ) );
-            pad->SetDrillSize( wxSize( drill_x, drill_y ) );
+            pad->SetDrillSize( VECTOR2I( drill_x, drill_y ) );
         }
         else if( TESTLINE( "At" ) )         // (At)tribute
         {
@@ -1710,7 +1710,7 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( FP_TEXT* aText )
     aText->SetType( static_cast<FP_TEXT::TEXT_TYPE>( type ) );
 
     aText->SetPos0( VECTOR2I( pos0_x, pos0_y ) );
-    aText->SetTextSize( wxSize( size0_x, size0_y ) );
+    aText->SetTextSize( VECTOR2I( size0_x, size0_y ) );
 
     orient -= ( static_cast<FOOTPRINT*>( aText->GetParentFootprint() ) )->GetOrientation();
 
@@ -2024,7 +2024,7 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
         }
         else if( TESTLINE( "Po" ) )
         {
-            wxSize size;
+            VECTOR2I size;
             BIU    pos_x = biuParse( line + SZ( "Po" ), &data );
             BIU    pos_y = biuParse( data, &data );
 
@@ -2675,7 +2675,7 @@ void LEGACY_PLUGIN::loadDIMENSION()
             char*     mirror = strtok_r( (char*) data, delims, (char**) &data );
 
             dim->Text().SetTextPos( VECTOR2I( pos_x, pos_y ) );
-            dim->Text().SetTextSize( wxSize( width, height ) );
+            dim->Text().SetTextSize( VECTOR2I( width, height ) );
             dim->Text().SetMirrored( mirror && *mirror == '0' );
             dim->Text().SetTextThickness( thickn );
             dim->Text().SetTextAngle( orient );

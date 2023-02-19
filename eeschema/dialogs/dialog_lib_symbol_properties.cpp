@@ -537,8 +537,8 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnAddField( wxCommandEvent& event )
     int       fieldID = (int) m_fields->size();
     LIB_FIELD newField( m_libEntry, fieldID );
 
-    newField.SetTextSize( wxSize( schIUScale.MilsToIU( settings->m_Defaults.text_size ),
-                                  schIUScale.MilsToIU( settings->m_Defaults.text_size ) ) );
+    newField.SetTextSize( VECTOR2I( schIUScale.MilsToIU( settings->m_Defaults.text_size ),
+                                    schIUScale.MilsToIU( settings->m_Defaults.text_size ) ) );
 
     m_fields->push_back( newField );
 

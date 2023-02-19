@@ -20,6 +20,7 @@
 #include "symbol_preview_widget.h"
 #include <sch_view.h>
 #include <gal/gal_display_options.h>
+#include <math/vector2wx.h>
 #include <symbol_lib_table.h>
 #include <sch_preview_panel.h>
 #include <pgm_base.h>
@@ -152,7 +153,7 @@ void SYMBOL_PREVIEW_WIDGET::fitOnDrawArea()
 
     // Calculate the drawing area size, in internal units, for a scaling factor = 1.0
     view->SetScale( 1.0 );
-    VECTOR2D  clientSize = view->ToWorld( m_preview->GetClientSize(), false );
+    VECTOR2D clientSize = view->ToWorld( ToVECTOR2D( m_preview->GetClientSize() ), false );
     // Calculate the draw scale to fit the drawing area
     double    scale = std::min( fabs( clientSize.x / m_itemBBox.GetWidth() ),
                                 fabs( clientSize.y / m_itemBBox.GetHeight() ) );

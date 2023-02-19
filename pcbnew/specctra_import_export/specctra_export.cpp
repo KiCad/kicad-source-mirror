@@ -689,7 +689,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
             EDA_ANGLE angle = pad->GetOrientation() - aFootprint->GetOrientation();
             pin->SetRotation( angle.Normalize().AsDegrees() );
 
-            wxPoint pos( pad->GetPos0() );
+            VECTOR2I pos( pad->GetPos0() );
 
             pin->SetVertex( mapPt( pos ) );
         }
@@ -1039,12 +1039,12 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
 
         for( int ii = 0; ii < outline.PointCount(); ii++ )
         {
-            wxPoint pos( outline.CPoint( ii ).x, outline.CPoint( ii ).y );
+            VECTOR2I pos( outline.CPoint( ii ).x, outline.CPoint( ii ).y );
             path->AppendPoint( mapPt( pos ) );
         }
 
         // Close polygon:
-        wxPoint pos0( outline.CPoint( 0 ).x, outline.CPoint( 0 ).y );
+        VECTOR2I pos0( outline.CPoint( 0 ).x, outline.CPoint( 0 ).y );
         path->AppendPoint( mapPt( pos0 ) );
 
         // Generate holes as keepout:
@@ -1062,12 +1062,12 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
 
             for( int jj = 0; jj < hole.PointCount(); jj++ )
             {
-                wxPoint pos( hole.CPoint( jj ).x, hole.CPoint( jj ).y );
+                VECTOR2I pos( hole.CPoint( jj ).x, hole.CPoint( jj ).y );
                 poly_ko->AppendPoint( mapPt( pos ) );
             }
 
             // Close polygon:
-            wxPoint pos( hole.CPoint( 0 ).x, hole.CPoint( 0 ).y );
+            VECTOR2I pos( hole.CPoint( 0 ).x, hole.CPoint( 0 ).y );
             poly_ko->AppendPoint( mapPt( pos ) );
         }
     }
@@ -1260,12 +1260,12 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
             // Handle the main outlines
             SHAPE_POLY_SET::ITERATOR iterator;
-            wxPoint startpoint;
+            VECTOR2I                 startpoint;
             bool is_first_point = true;
 
             for( iterator = zone->IterateWithHoles(); iterator; iterator++ )
             {
-                wxPoint point( iterator->x, iterator->y );
+                VECTOR2I point( iterator->x, iterator->y );
 
                 if( is_first_point )
                 {
@@ -1310,7 +1310,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                 wxASSERT( window );
                 wxASSERT( cutout );
 
-                wxPoint point(iterator->x, iterator->y );
+                VECTOR2I point( iterator->x, iterator->y );
 
                 if( is_first_point )
                 {
@@ -1370,12 +1370,12 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
                 // Handle the main outlines
                 SHAPE_POLY_SET::ITERATOR iterator;
-                bool is_first_point = true;
-                wxPoint startpoint;
+                bool                     is_first_point = true;
+                VECTOR2I                 startpoint;
 
                 for( iterator = zone->IterateWithHoles(); iterator; iterator++ )
                 {
-                    wxPoint point( iterator->x, iterator->y );
+                    VECTOR2I point( iterator->x, iterator->y );
 
                     if( is_first_point )
                     {
@@ -1417,7 +1417,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                     wxASSERT( window );
                     wxASSERT( cutout );
 
-                    wxPoint point(iterator->x, iterator->y );
+                    VECTOR2I point( iterator->x, iterator->y );
 
                     if( is_first_point )
                     {

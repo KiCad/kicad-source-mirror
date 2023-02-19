@@ -125,7 +125,7 @@ void PAD::AddPrimitiveCircle( const VECTOR2I& aCenter, int aRadius, int aThickne
     PCB_SHAPE* item = new PCB_SHAPE( nullptr, SHAPE_T::CIRCLE );
     item->SetFilled( aFilled );
     item->SetStart( aCenter );
-    item->SetEnd( wxPoint( aCenter.x + aRadius, aCenter.y ) );
+    item->SetEnd( VECTOR2I( aCenter.x + aRadius, aCenter.y ) );
     item->SetStroke( STROKE_PARAMS( aThickness, PLOT_DASH_TYPE::SOLID ) );
     item->SetParent( this );
     m_editPrimitives.emplace_back( item );
@@ -243,7 +243,7 @@ void PAD::MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon, ERROR_LOC aE
 
     default:
     case PAD_SHAPE::CIRCLE:
-        TransformCircleToPolygon( *aMergedPolygon, wxPoint( 0, 0 ), GetSize().x / 2, maxError,
+        TransformCircleToPolygon( *aMergedPolygon, VECTOR2I( 0, 0 ), GetSize().x / 2, maxError,
                                   aErrorLoc );
         break;
     }

@@ -170,26 +170,12 @@ std::string EDA_UNIT_UTILS::FormatInternalUnits( const EDA_IU_SCALE& aIuScale, i
 
 
 std::string EDA_UNIT_UTILS::FormatInternalUnits( const EDA_IU_SCALE& aIuScale,
-                                                 const wxPoint&      aPoint )
-{
-    return FormatInternalUnits( aIuScale, aPoint.x ) + " "
-           + FormatInternalUnits( aIuScale, aPoint.y );
-}
-
-
-std::string EDA_UNIT_UTILS::FormatInternalUnits( const EDA_IU_SCALE& aIuScale,
                                                  const VECTOR2I&     aPoint )
 {
     return FormatInternalUnits( aIuScale, aPoint.x ) + " "
            + FormatInternalUnits( aIuScale, aPoint.y );
 }
 
-
-std::string EDA_UNIT_UTILS::FormatInternalUnits( const EDA_IU_SCALE& aIuScale, const wxSize& aSize )
-{
-    return FormatInternalUnits( aIuScale, aSize.GetWidth() ) + " "
-           + FormatInternalUnits( aIuScale, aSize.GetHeight() );
-}
 
 #define IU_TO_MM( x, scale ) ( x / scale.IU_PER_MM )
 #define IU_TO_IN( x, scale ) ( x / scale.IU_PER_MILS / 1000 )

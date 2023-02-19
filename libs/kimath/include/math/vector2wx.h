@@ -1,8 +1,7 @@
 /*
- * This program source code file is part of KiCad, a free EDA CAD application.
+ * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2009-2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,26 +21,40 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PCB_SCREEN_H
-#define PCB_SCREEN_H
+#ifndef VECTOR2WX_H_
+#define VECTOR2WX_H_
 
+#include <wx/gdicmn.h>
+#include "vector2d.h"
 
-#include <base_screen.h>
-#include <board_item.h>
-
-
-/* Handle info to display a board */
-class PCB_SCREEN : public BASE_SCREEN
+inline VECTOR2I ToVECTOR2I(const wxSize& aSize)
 {
-public:
-    /**
-     * @param aPageSizeIU is the size of the initial paper page in internal units.
-     */
-    PCB_SCREEN( const VECTOR2I& aPageSizeIU );
+    return { aSize.x, aSize.y };
+}
 
-    PCB_LAYER_ID m_Active_Layer;
-    PCB_LAYER_ID m_Route_Layer_TOP;
-    PCB_LAYER_ID m_Route_Layer_BOTTOM;
-};
+inline VECTOR2I ToVECTOR2I( const wxPoint & aSize )
+{
+    return { aSize.x, aSize.y };
+}
 
-#endif  // PCB_SCREEN_H
+inline VECTOR2D ToVECTOR2D( const wxPoint& aPoint )
+{
+    return VECTOR2D( aPoint.x, aPoint.y );
+}
+
+inline VECTOR2D ToVECTOR2D( const wxSize& aPoint )
+{
+    return VECTOR2D( aPoint.x, aPoint.y );
+}
+
+inline wxPoint ToWxPoint( const VECTOR2I& aSize )
+{
+    return wxPoint( aSize.x, aSize.y );
+}
+
+inline wxSize ToWxSize( const VECTOR2I& aSize )
+{
+    return wxSize( aSize.x, aSize.y );
+}
+
+#endif

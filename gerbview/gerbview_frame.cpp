@@ -850,7 +850,7 @@ const PAGE_INFO& GERBVIEW_FRAME::GetPageSettings() const
 }
 
 
-const wxSize GERBVIEW_FRAME::GetPageSizeIU() const
+const VECTOR2I GERBVIEW_FRAME::GetPageSizeIU() const
 {
     // this function is only needed because EDA_DRAW_FRAME is not compiled
     // with either -DPCBNEW or -DEESCHEMA, so the virtual is used to route

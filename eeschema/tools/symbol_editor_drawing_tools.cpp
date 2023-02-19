@@ -222,8 +222,8 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                         text->SetConvert( m_frame->GetConvert() );
 
                     text->SetPosition( VECTOR2I( cursorPos.x, -cursorPos.y ) );
-                    text->SetTextSize( wxSize( schIUScale.MilsToIU( settings->m_Defaults.text_size ),
-                                               schIUScale.MilsToIU( settings->m_Defaults.text_size ) ) );
+                    text->SetTextSize( VECTOR2I( schIUScale.MilsToIU( settings->m_Defaults.text_size ),
+                                                 schIUScale.MilsToIU( settings->m_Defaults.text_size ) ) );
                     text->SetTextAngle( m_lastTextAngle );
 
                     DIALOG_LIB_TEXT_PROPERTIES dlg( m_frame, text );
@@ -432,8 +432,8 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
                 textbox->SetBold( m_lastTextBold );
                 textbox->SetItalic( m_lastTextItalic );
-                textbox->SetTextSize( wxSize( schIUScale.MilsToIU( settings->m_Defaults.text_size ),
-                                              schIUScale.MilsToIU( settings->m_Defaults.text_size ) ) );
+                textbox->SetTextSize( VECTOR2I( schIUScale.MilsToIU( settings->m_Defaults.text_size ),
+                                                schIUScale.MilsToIU( settings->m_Defaults.text_size ) ) );
                 textbox->SetTextAngle( m_lastTextAngle );
                 textbox->SetHorizJustify( m_lastTextJust );
 

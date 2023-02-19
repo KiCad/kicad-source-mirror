@@ -395,7 +395,7 @@ private:
     /**
      * @return the distance from \a wWhere to \a aItem, up to and including \a aMaxDistance.
      */
-    int hitTestDistance( const wxPoint& aWhere, BOARD_ITEM* aItem, int aMaxDistance ) const;
+    int hitTestDistance( const VECTOR2I& aWhere, BOARD_ITEM* aItem, int aMaxDistance ) const;
 
     /**
      * Event handler to update the selection VIEW_ITEM.

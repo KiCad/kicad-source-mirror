@@ -158,7 +158,7 @@ int FOOTPRINT_EDITOR_CONTROL::NewFootprint( const TOOL_EVENT& aEvent )
     // Initialize data relative to nets and netclasses (for a new footprint the defaults are
     // used).  This is mandatory to handle and draw pads.
     board()->BuildListOfNets();
-    newFootprint->SetPosition( wxPoint( 0, 0 ) );
+    newFootprint->SetPosition( VECTOR2I( 0, 0 ) );
     newFootprint->ClearFlags();
 
     m_frame->Zoom_Automatique( false );
@@ -218,7 +218,7 @@ int FOOTPRINT_EDITOR_CONTROL::CreateFootprint( const TOOL_EVENT& aEvent )
             // Initialize data relative to nets and netclasses (for a new footprint the defaults
             // are used).  This is mandatory to handle and draw pads.
             board()->BuildListOfNets();
-            newFootprint->SetPosition( wxPoint( 0, 0 ) );
+            newFootprint->SetPosition( VECTOR2I( 0, 0 ) );
             newFootprint->ClearFlags();
 
             m_frame->Zoom_Automatique( false );

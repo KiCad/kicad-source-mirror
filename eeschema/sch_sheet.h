@@ -57,7 +57,7 @@ class SCH_SHEET : public SCH_ITEM
 {
 public:
     SCH_SHEET( EDA_ITEM* aParent = nullptr, const VECTOR2I& aPos = VECTOR2I( 0, 0 ),
-               wxSize aSize = wxSize( schIUScale.MilsToIU( MIN_SHEET_WIDTH ),
+               VECTOR2I aSize = VECTOR2I( schIUScale.MilsToIU( MIN_SHEET_WIDTH ),
                                       schIUScale.MilsToIU( MIN_SHEET_HEIGHT ) ),
                FIELDS_AUTOPLACED aAutoplaceFields = FIELDS_AUTOPLACED_AUTO );
 
@@ -105,8 +105,8 @@ public:
 
     SCH_SCREEN* GetScreen() const { return m_screen; }
 
-    wxSize GetSize() const { return m_size; }
-    void SetSize( const wxSize& aSize ) { m_size = aSize; }
+    VECTOR2I GetSize() const { return m_size; }
+    void     SetSize( const VECTOR2I& aSize ) { m_size = aSize; }
 
     int GetBorderWidth() const { return m_borderWidth; }
     void SetBorderWidth( int aWidth ) { m_borderWidth = aWidth; }
@@ -329,7 +329,7 @@ public:
      *
      * @param[in] aSize The new size for this sheet.
      */
-    void Resize( const wxSize& aSize );
+    void Resize( const VECTOR2I& aSize );
 
     void AutoplaceFields( SCH_SCREEN* aScreen, bool aManual ) override;
 
@@ -498,7 +498,7 @@ private:
     std::vector<SCH_FIELD>      m_fields;
 
     VECTOR2I                    m_pos;          // The position of the sheet.
-    wxSize                      m_size;         // The size of the sheet.
+    VECTOR2I                    m_size;         // The size of the sheet.
     int                         m_borderWidth;
     KIGFX::COLOR4D              m_borderColor;
     KIGFX::COLOR4D              m_backgroundColor;

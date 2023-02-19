@@ -428,7 +428,7 @@ public:
 
     void SetPageSettings( const PAGE_INFO& aPageSettings ) override;
     const PAGE_INFO& GetPageSettings() const override;
-    const wxSize GetPageSizeIU() const override;
+    const VECTOR2I   GetPageSizeIU() const override;
 
     const VECTOR2I& GetGridOrigin() const override { return m_grid_origin; }
     void            SetGridOrigin( const VECTOR2I& aPoint ) override { m_grid_origin = aPoint; }

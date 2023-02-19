@@ -693,7 +693,7 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aE
         aOutlines.RemoveAllContours();
         aOutlines.NewOutline();
 
-        wxPoint corner;
+        VECTOR2I corner;
         aOutlines.Append( bbbox.GetOrigin() );
 
         corner.x = bbbox.GetOrigin().x;

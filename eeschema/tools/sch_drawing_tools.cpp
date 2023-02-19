@@ -745,8 +745,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-    cursorPos = static_cast<wxPoint>( aEvent.HasPosition() ? aEvent.Position()
-                                                           : controls->GetMousePosition() );
+    cursorPos = aEvent.HasPosition() ? aEvent.Position() : controls->GetMousePosition();
 
     m_frame->PushTool( aEvent );
 
@@ -998,7 +997,7 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
     }
 
     textItem->SetTextSpinStyle( m_lastTextOrientation );
-    textItem->SetTextSize( wxSize( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
+    textItem->SetTextSize( VECTOR2I( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
     textItem->SetFlags( IS_NEW | IS_MOVING );
 
     if( !labelItem )
@@ -1087,7 +1086,7 @@ SCH_SHEET_PIN* SCH_DRAWING_TOOLS::createSheetPin( SCH_SHEET* aSheet, SCH_HIERLAB
 
     sheetPin = new SCH_SHEET_PIN( aSheet, VECTOR2I( 0, 0 ), text );
     sheetPin->SetFlags( IS_NEW );
-    sheetPin->SetTextSize( wxSize( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
+    sheetPin->SetTextSize( VECTOR2I( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
     sheetPin->SetShape( m_lastSheetPinType );
 
     if( !aLabel )
@@ -1352,8 +1351,8 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                         labelItem->SetBold( m_lastTextBold );
                         labelItem->SetItalic( m_lastTextItalic );
                         labelItem->SetTextSpinStyle( m_lastTextOrientation );
-                        labelItem->SetTextSize( wxSize( sch_settings.m_DefaultTextSize,
-                                                        sch_settings.m_DefaultTextSize ) );
+                        labelItem->SetTextSize( VECTOR2I( sch_settings.m_DefaultTextSize,
+                                                          sch_settings.m_DefaultTextSize ) );
                         labelItem->SetFlags( IS_NEW | IS_MOVING );
                         labelItem->SetText( netName );
                         item = labelItem;
@@ -1603,8 +1602,8 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
                 textbox->SetBold( m_lastTextBold );
                 textbox->SetItalic( m_lastTextItalic );
-                textbox->SetTextSize( wxSize( sch_settings.m_DefaultTextSize,
-                                              sch_settings.m_DefaultTextSize ) );
+                textbox->SetTextSize( VECTOR2I( sch_settings.m_DefaultTextSize,
+                                                sch_settings.m_DefaultTextSize ) );
                 textbox->SetTextAngle( m_lastTextAngle );
                 textbox->SetHorizJustify( m_lastTextJust );
                 textbox->SetStroke( m_lastTextboxStroke );
@@ -1909,7 +1908,7 @@ void SCH_DRAWING_TOOLS::sizeSheet( SCH_SHEET* aSheet, const VECTOR2I& aPos )
     size.y = std::max( size.y, schIUScale.MilsToIU( MIN_SHEET_HEIGHT ) );
 
     VECTOR2I grid = m_frame->GetNearestGridPosition( pos + size );
-    aSheet->Resize( wxSize( grid.x - pos.x, grid.y - pos.y ) );
+    aSheet->Resize( VECTOR2I( grid.x - pos.x, grid.y - pos.y ) );
 }
 
 

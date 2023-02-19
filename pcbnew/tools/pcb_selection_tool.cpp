@@ -67,6 +67,7 @@ using namespace std::placeholders;
 #include <wx/timer.h>
 #include <wx/log.h>
 #include <profile.h>
+#include <math/vector2wx.h>
 
 
 class SELECT_MENU : public ACTION_MENU
@@ -1826,7 +1827,7 @@ void PCB_SELECTION_TOOL::zoomFitSelection()
     BOX2I        selectionBox = m_selection.GetBoundingBox();
     KIGFX::VIEW* view = getView();
 
-    VECTOR2D     screenSize = view->ToWorld( m_frame->GetCanvas()->GetClientSize(), false );
+    VECTOR2D     screenSize = view->ToWorld( ToVECTOR2D( m_frame->GetCanvas()->GetClientSize() ), false );
     screenSize.x = std::max( 10.0, screenSize.x );
     screenSize.y = std::max( 10.0, screenSize.y );
 
@@ -1872,7 +1873,7 @@ void PCB_SELECTION_TOOL::ZoomFitCrossProbeBBox( const BOX2I& aBBox )
 
 #ifndef DEFAULT_PCBNEW_CODE // Do the scaled zoom
     auto bbSize = bbox.Inflate( KiROUND( bbox.GetWidth() * 0.2 ) ).GetSize();
-    auto screenSize = view->ToWorld( m_frame->GetCanvas()->GetClientSize(), false );
+    VECTOR2D screenSize = view->ToWorld( ToVECTOR2D( m_frame->GetCanvas()->GetClientSize() ), false );
 
     // This code tries to come up with a zoom factor that doesn't simply zoom in
     // to the cross probed component, but instead shows a reasonable amount of the
@@ -2775,7 +2776,7 @@ bool PCB_SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
 }
 
 
-int PCB_SELECTION_TOOL::hitTestDistance( const wxPoint& aWhere, BOARD_ITEM* aItem,
+int PCB_SELECTION_TOOL::hitTestDistance( const VECTOR2I& aWhere, BOARD_ITEM* aItem,
                                          int aMaxDistance ) const
 {
     BOX2D viewportD = getView()->GetViewport();
@@ -2902,7 +2903,7 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
 
     std::set<BOARD_ITEM*>  preferred;
     std::set<BOARD_ITEM*>  rejected;
-    wxPoint                where( aWhere.x, aWhere.y );
+    VECTOR2I               where( aWhere.x, aWhere.y );
     const RENDER_SETTINGS* settings = getView()->GetPainter()->GetSettings();
     PCB_LAYER_ID           activeLayer = m_frame->GetActiveLayer();
 

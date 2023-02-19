@@ -34,6 +34,8 @@
 #include <wx/clipbrd.h>
 #include <wx/app.h>
 
+#include <math/vector2wx.h>
+
 #include <view/view.h>
 #include <eda_base_frame.h>
 #include <tool/tool_base.h>
@@ -304,7 +306,7 @@ VECTOR2D TOOL_MANAGER::GetMousePosition() const
     if( m_viewControls )
         return m_viewControls->GetMousePosition();
     else
-        return wxGetMousePosition();
+        return ToVECTOR2D( wxGetMousePosition() );
 }
 
 
@@ -313,7 +315,7 @@ VECTOR2D TOOL_MANAGER::GetCursorPosition() const
    if( m_viewControls )
        return m_viewControls->GetCursorPosition();
    else
-       return wxGetMousePosition();
+       return ToVECTOR2D( wxGetMousePosition() );
 }
 
 

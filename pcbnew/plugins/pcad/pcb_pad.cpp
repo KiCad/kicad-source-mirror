@@ -210,8 +210,8 @@ void PCB_PAD::AddToFootprint( FOOTPRINT* aFootprint, const EDA_ANGLE& aRotation,
         pad->SetAttribute( PAD_ATTRIB::NPTH );
 
         pad->SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );
-        pad->SetDrillSize( wxSize( m_Hole, m_Hole ) );
-        pad->SetSize( wxSize( m_Hole, m_Hole ) );
+        pad->SetDrillSize( VECTOR2I( m_Hole, m_Hole ) );
+        pad->SetSize( VECTOR2I( m_Hole, m_Hole ) );
 
         // Mounting Hole: Solder Mask Margin from Top Layer Width size.
         // Used the default zone clearance (simplify)

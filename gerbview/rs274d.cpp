@@ -100,7 +100,7 @@ void fillFlashedGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
                           APERTURE_T        aAperture,
                           int               Dcode_index,
                           const VECTOR2I&   aPos,
-                          wxSize            aSize,
+                          VECTOR2I          aSize,
                           bool              aLayerNegative )
 {
     aGbrItem->m_Size  = aSize;
@@ -154,7 +154,7 @@ void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
                        int               Dcode_index,
                        const VECTOR2I&   aStart,
                        const VECTOR2I&   aEnd,
-                       wxSize            aPenSize,
+                       VECTOR2I          aPenSize,
                        bool              aLayerNegative )
 {
     aGbrItem->m_Flashed = false;
@@ -200,7 +200,7 @@ void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
  * @param aLayerNegative set to true if the current layer is negative.
  */
 void fillArcGBRITEM( GERBER_DRAW_ITEM* aGbrItem, int Dcode_index, const VECTOR2I& aStart,
-                     const VECTOR2I& aEnd, const VECTOR2I& aRelCenter, wxSize aPenSize,
+                     const VECTOR2I& aEnd, const VECTOR2I& aRelCenter, VECTOR2I aPenSize,
                      bool aClockwise, bool aMultiquadrant, bool aLayerNegative )
 {
     VECTOR2I center, delta;
@@ -336,7 +336,7 @@ static void fillArcPOLY( GERBER_DRAW_ITEM* aGbrItem, const VECTOR2I& aStart, con
 
     aGbrItem->SetLayerPolarity( aLayerNegative );
 
-    fillArcGBRITEM( &dummyGbrItem, 0, aStart, aEnd, rel_center, wxSize( 0, 0 ),
+    fillArcGBRITEM( &dummyGbrItem, 0, aStart, aEnd, rel_center, VECTOR2I( 0, 0 ),
                     aClockwise, aMultiquadrant, aLayerNegative );
 
     aGbrItem->SetNetAttributes( aGbrItem->m_GerberImageFile->m_NetAttributeDict );
@@ -556,7 +556,7 @@ bool GERBER_FILE_IMAGE::Execute_G_Command( char*& text, int G_command )
 
 bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
 {
-    wxSize            size( 15, 15 );
+    VECTOR2I          size( 15, 15 );
 
     APERTURE_T        aperture = APT_CIRCLE;
     GERBER_DRAW_ITEM* gbritem;

@@ -455,7 +455,7 @@ FOOTPRINT* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintNam
     if( footprint )
     {
         footprint->SetParent( (EDA_ITEM*) GetBoard() );
-        footprint->SetPosition( wxPoint( 0, 0 ) );
+        footprint->SetPosition( VECTOR2I( 0, 0 ) );
         return footprint;
     }
 

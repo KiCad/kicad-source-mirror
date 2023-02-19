@@ -255,7 +255,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
     if( EDA_TEXT* eda_text = dynamic_cast<EDA_TEXT*>( aItem ) )
     {
         if( !m_textSize.IsIndeterminate() )
-            eda_text->SetTextSize( wxSize( m_textSize.GetValue(), m_textSize.GetValue() ) );
+            eda_text->SetTextSize( VECTOR2I( m_textSize.GetValue(), m_textSize.GetValue() ) );
 
         if( m_setTextColor->GetValue() )
             eda_text->SetTextColor( m_textColorSwatch->GetSwatchColor() );

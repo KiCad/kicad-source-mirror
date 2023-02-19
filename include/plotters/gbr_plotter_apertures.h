@@ -73,7 +73,7 @@ public:
                                 // only one parameter: rotation
     };
 
-    void SetSize( const wxSize& aSize )
+    void SetSize( const VECTOR2I& aSize )
     {
         m_Size = aSize;
     }

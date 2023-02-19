@@ -143,11 +143,11 @@ private:
             const GATE_ID& aGateID, LIB_SYMBOL* aSymbol );
 
     void loadLibrarySymbolShapeVertices( const std::vector<VERTEX>& aCadstarVertices,
-                                         wxPoint aSymbolOrigin, LIB_SYMBOL* aSymbol,
+                                         VECTOR2I aSymbolOrigin, LIB_SYMBOL* aSymbol,
                                          int aGateNumber, int aLineThickness );
 
     void applyToLibraryFieldAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
-            wxPoint aSymbolOrigin, LIB_FIELD* aKiCadField );
+                                       VECTOR2I aSymbolOrigin, LIB_FIELD* aKiCadField );
 
     //Helper Functions for loading symbols in schematic
     SCH_SYMBOL* loadSchematicSymbol( const SYMBOL& aCadstarSymbol, const LIB_SYMBOL& aKiCadPart,
@@ -231,7 +231,7 @@ private:
 
     void fixUpLibraryPins( LIB_SYMBOL* aSymbolToFix, int aGateNumber );
 
-    std::pair<VECTOR2I, wxSize> getFigureExtentsKiCad( const FIGURE& aCadstarFigure );
+    std::pair<VECTOR2I, VECTOR2I> getFigureExtentsKiCad( const FIGURE& aCadstarFigure );
 
     VECTOR2I getKiCadPoint( const VECTOR2I& aCadstarPoint );
 

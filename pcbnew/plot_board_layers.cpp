@@ -434,7 +434,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                     // Be sure the anchor pad is not bigger than the deflated shape because this
                     // anchor will be added to the pad shape when plotting the pad. So now the
                     // polygonal shape is built, we can clamp the anchor size
-                    dummy.SetSize( wxSize( 0,0 ) );
+                    dummy.SetSize( VECTOR2I( 0, 0 ) );
 
                     itemplotter.PlotPad( &dummy, color, padPlotMode );
                 }
@@ -488,7 +488,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                     // Be sure the anchor pad is not bigger than the deflated shape because this
                     // anchor will be added to the pad shape when plotting the pad.
                     // So we set the anchor size to 0
-                    dummy.SetSize( wxSize( 0,0 ) );
+                    dummy.SetSize( VECTOR2I( 0, 0 ) );
                     dummy.SetPosition( pad->GetPosition() );
                     dummy.SetOrientation( pad->GetOrientation() );
 
@@ -1008,8 +1008,8 @@ static void initializePlotter( PLOTTER* aPlotter, const BOARD* aBoard,
     const PAGE_INFO& pageInfo = aBoard->GetPageSettings();
     const PAGE_INFO* sheet_info;
     double paperscale; // Page-to-paper ratio
-    wxSize paperSizeIU;
-    wxSize           pageSizeIU( pageInfo.GetSizeIU( pcbIUScale.IU_PER_MILS ) );
+    VECTOR2I paperSizeIU;
+    VECTOR2I pageSizeIU( pageInfo.GetSizeIU( pcbIUScale.IU_PER_MILS ) );
     bool autocenter = false;
 
     // Special options: to fit the sheet to an A4 sheet replace the paper size. However there

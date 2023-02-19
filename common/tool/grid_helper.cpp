@@ -77,7 +77,7 @@ void GRID_HELPER::SetAuxAxes( bool aEnable, const VECTOR2I& aOrigin )
     if( aEnable )
     {
         m_auxAxis = aOrigin;
-        m_viewAxis.SetPosition( wxPoint( aOrigin ) );
+        m_viewAxis.SetPosition( aOrigin );
         m_toolMgr->GetView()->SetVisible( &m_viewAxis, true );
     }
     else

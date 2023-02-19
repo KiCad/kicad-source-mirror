@@ -399,13 +399,13 @@ public:
                 break;
 
             case COL_POSX:
-                pin->SetPosition( wxPoint( m_frame->ValueFromString( value ),
-                                           pin->GetPosition().y ) );
+                pin->SetPosition( VECTOR2I( m_frame->ValueFromString( value ),
+                                            pin->GetPosition().y ) );
                 break;
 
             case COL_POSY:
-                pin->SetPosition( wxPoint( pin->GetPosition().x,
-                                           -m_frame->ValueFromString( value ) ) );
+                pin->SetPosition( VECTOR2I( pin->GetPosition().x,
+                                            -m_frame->ValueFromString( value ) ) );
                 break;
 
             case COL_VISIBLE:

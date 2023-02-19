@@ -58,7 +58,7 @@ static const std::vector<unsigned char> png_data_4tile = { //
 };
 
 ///< 4tile is an 8x8 image
-static const wxSize size_4tile{ 8, 8 };
+static const VECTOR2I size_4tile{ 8, 8 };
 
 static const KIGFX::COLOR4D col_red{ 1.0, 0.0, 0.0, 1.0 };
 static const KIGFX::COLOR4D col_green{ 0.0, 1.0, 0.0, 1.0 };
@@ -162,8 +162,8 @@ BOOST_AUTO_TEST_CASE( BasicProps )
     BOOST_CHECK( img.GetSize() == size_4tile * 10 );
 
     const BOX2I bb = img.GetBoundingBox();
-    BOOST_CHECK( bb.GetPosition() == wxPoint( -40, -40 ) );
-    BOOST_CHECK( bb.GetEnd() == wxPoint( 40, 40 ) );
+    BOOST_CHECK( bb.GetPosition() == VECTOR2I( -40, -40 ) );
+    BOOST_CHECK( bb.GetEnd() == VECTOR2I( 40, 40 ) );
 }
 
 

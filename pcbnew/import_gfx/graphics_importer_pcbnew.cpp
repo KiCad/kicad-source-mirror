@@ -40,10 +40,10 @@ GRAPHICS_IMPORTER_PCBNEW::GRAPHICS_IMPORTER_PCBNEW()
 }
 
 
-wxPoint GRAPHICS_IMPORTER_PCBNEW::MapCoordinate( const VECTOR2D& aCoordinate )
+VECTOR2I GRAPHICS_IMPORTER_PCBNEW::MapCoordinate( const VECTOR2D& aCoordinate )
 {
     VECTOR2D coord = ( aCoordinate + GetImportOffsetMM() ) * ImportScalingFactor();
-    return wxPoint( KiROUND( coord.x ), KiROUND( coord.y ) );
+    return VECTOR2I( KiROUND( coord.x ), KiROUND( coord.y ) );
 }
 
 

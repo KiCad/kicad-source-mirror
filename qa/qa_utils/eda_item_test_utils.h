@@ -30,7 +30,7 @@
 
 
 template <typename T>
-static void IterateOverPositionsAndReferences( T* aItem, void ( *aCallback )( T*, wxPoint ) )
+static void IterateOverPositionsAndReferences( T* aItem, void ( *aCallback )( T*, VECTOR2I ) )
 {
     constexpr int XSTEP = static_cast<int>( schIUScale.mmToIU( 100 ) );
     constexpr int YSTEP = static_cast<int>( schIUScale.mmToIU( 50 ) );
@@ -50,8 +50,8 @@ static void IterateOverPositionsAndReferences( T* aItem, void ( *aCallback )( T*
                     BOOST_TEST_CONTEXT( wxString::Format( "Position: %d %d, Reference: %d %d",
                                                           posX, posY, refX, refY ) )
                     {
-                        aItem->SetPosition( wxPoint( posX, posY ) );
-                        aCallback( aItem, wxPoint( refX, refY ) );
+                        aItem->SetPosition( VECTOR2I( posX, posY ) );
+                        aCallback( aItem, VECTOR2I( refX, refY ) );
                     }
                 }
             }

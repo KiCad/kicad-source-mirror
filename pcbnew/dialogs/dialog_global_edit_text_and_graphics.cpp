@@ -343,10 +343,10 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
         if( edaText )
         {
             if( !m_textWidth.IsIndeterminate() )
-                edaText->SetTextSize( wxSize( m_textWidth.GetValue(), edaText->GetTextSize().y ) );
+                edaText->SetTextSize( VECTOR2I( m_textWidth.GetValue(), edaText->GetTextSize().y ) );
 
             if( !m_textHeight.IsIndeterminate() )
-                edaText->SetTextSize( wxSize( edaText->GetTextSize().x, m_textHeight.GetValue() ) );
+                edaText->SetTextSize( VECTOR2I( edaText->GetTextSize().x, m_textHeight.GetValue() ) );
 
             if( !m_thickness.IsIndeterminate() )
                 edaText->SetTextThickness( m_thickness.GetValue() );

@@ -334,7 +334,7 @@ bool DIALOG_PIN_PROPERTIES::TransferDataFromWindow()
     if( !DIALOG_SHIM::TransferDataFromWindow() )
         return false;
 
-    wxPoint newPos( m_posX.GetValue(), -m_posY.GetValue() );
+    VECTOR2I newPos( m_posX.GetValue(), -m_posY.GetValue() );
 
     const int standard_grid = 50;
 

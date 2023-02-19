@@ -143,9 +143,9 @@ private:
         return parseInternalUnits( GetTokenText( aToken ) );
     }
 
-    inline wxPoint parseXY()
+    inline VECTOR2I parseXY()
     {
-        wxPoint xy;
+        VECTOR2I xy;
 
         xy.x = parseInternalUnits( "X coordinate" );
         xy.y = parseInternalUnits( "Y coordinate" );

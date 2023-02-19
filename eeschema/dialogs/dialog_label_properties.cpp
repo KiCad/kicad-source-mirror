@@ -527,7 +527,7 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
     if( m_currentLabel->Type() == SCH_DIRECTIVE_LABEL_T )
         static_cast<SCH_DIRECTIVE_LABEL*>( m_currentLabel )->SetPinLength( m_textSize.GetValue() );
     else if( m_currentLabel->GetTextWidth() != m_textSize.GetValue() )
-        m_currentLabel->SetTextSize( wxSize( m_textSize.GetValue(), m_textSize.GetValue() ) );
+        m_currentLabel->SetTextSize( VECTOR2I( m_textSize.GetValue(), m_textSize.GetValue() ) );
 
     if( m_bold->IsChecked() != m_currentLabel->IsBold() )
     {
@@ -616,7 +616,7 @@ void DIALOG_LABEL_PROPERTIES::OnAddField( wxCommandEvent& event )
         fieldName = SCH_LABEL_BASE::GetDefaultFieldName( fieldName, true );
     }
 
-    SCH_FIELD newField( wxPoint( 0, 0 ), fieldID, m_currentLabel, fieldName );
+    SCH_FIELD newField( VECTOR2I( 0, 0 ), fieldID, m_currentLabel, fieldName );
 
     if( m_fields->size() > 0 )
     {

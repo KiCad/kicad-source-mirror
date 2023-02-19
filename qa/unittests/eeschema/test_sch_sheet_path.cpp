@@ -44,7 +44,7 @@ public:
     {
         for( unsigned i = 0; i < 4; ++i )
         {
-            m_sheets.emplace_back( nullptr, wxPoint( i, i ) );
+            m_sheets.emplace_back( nullptr, VECTOR2I( i, i ) );
 
             std::ostringstream ss;
             ss << "Sheet" << i;

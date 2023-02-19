@@ -41,6 +41,7 @@ using namespace std::placeholders;
 #include <dialogs/dialog_pns_settings.h>
 #include <dialogs/dialog_pns_diff_pair_dimensions.h>
 #include <dialogs/dialog_track_via_size.h>
+#include <math/vector2wx.h>
 #include <widgets/wx_infobar.h>
 #include <widgets/appearance_controls.h>
 #include <connectivity/connectivity_data.h>
@@ -978,7 +979,7 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
         // ask the user for a target layer
         if( selectLayer )
         {
-            wxPoint endPoint = (wxPoint) view()->ToScreen( m_endSnapPoint );
+            wxPoint endPoint = ToWxPoint( view()->ToScreen( m_endSnapPoint ) );
             endPoint = frame()->GetCanvas()->ClientToScreen( endPoint );
 
             // Build the list of not allowed layer for the target layer

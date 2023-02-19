@@ -1596,7 +1596,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::SYMDEF_PCB::Parse( XNODE* aNode, PARSER_CONTEXT
         }
     }
 
-    if( !Stub && !Origin.IsFullySpecified() )
+    if( !Stub && ( Origin.x == UNDEFINED_VALUE || Origin.y == UNDEFINED_VALUE ) )
         THROW_MISSING_PARAMETER_IO_ERROR( wxT( "PT" ), aNode->GetName() );
 }
 

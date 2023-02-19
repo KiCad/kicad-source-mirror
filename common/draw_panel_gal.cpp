@@ -41,6 +41,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <gal/opengl/opengl_gal.h>
 #include <gal/cairo/cairo_gal.h>
+#include <math/vector2wx.h>
 
 
 #include <tool/tool_dispatcher.h>
@@ -349,7 +350,7 @@ void EDA_DRAW_PANEL_GAL::onSize( wxSizeEvent& aEvent )
     wxSize                    clientSize = GetClientSize();
     WX_INFOBAR* infobar = GetParentEDAFrame() ? GetParentEDAFrame()->GetInfoBar() : nullptr;
 
-    if( VECTOR2I( clientSize ) == m_gal->GetScreenPixelSize() )
+    if( ToVECTOR2I( clientSize ) == m_gal->GetScreenPixelSize() )
         return;
 
     clientSize.x = std::max( 10, clientSize.x );
@@ -365,7 +366,7 @@ void EDA_DRAW_PANEL_GAL::onSize( wxSizeEvent& aEvent )
     if( m_view )
     {
         if( infobar && infobar->IsLocked() )
-            m_view->SetCenter( bottom - m_view->ToWorld( clientSize, false ) / 2.0 );
+            m_view->SetCenter( bottom - m_view->ToWorld( ToVECTOR2I(clientSize), false ) / 2.0 );
 
         m_view->MarkTargetDirty( KIGFX::TARGET_CACHED );
         m_view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );

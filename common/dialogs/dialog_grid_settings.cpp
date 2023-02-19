@@ -119,7 +119,7 @@ bool DIALOG_GRID_SETTINGS::TransferDataFromWindow()
     GRID_SETTINGS&     gridCfg = cfg->m_Window.grid;
 
     gridCfg.last_size_idx = m_currentGridCtrl->GetSelection();
-    m_parent->SetGridOrigin( wxPoint( m_gridOriginX.GetValue(), m_gridOriginY.GetValue() ) );
+    m_parent->SetGridOrigin( VECTOR2I( m_gridOriginX.GetValue(), m_gridOriginY.GetValue() ) );
     gridCfg.user_grid_x = m_parent->StringFromValue( m_userGridX.GetValue(), true );
     gridCfg.user_grid_y = m_parent->StringFromValue( m_userGridY.GetValue(), true );
     gridCfg.fast_grid_1 = m_grid1Ctrl->GetSelection();

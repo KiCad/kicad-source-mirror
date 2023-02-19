@@ -28,6 +28,7 @@
  */
 
 #include <wx/settings.h>
+#include <math/vector2wx.h>
 #include <status_popup.h>
 #include <eda_draw_frame.h>
 
@@ -83,7 +84,7 @@ void STATUS_POPUP::PopupFor( int aMsecs )
 
 void STATUS_POPUP::Move( const VECTOR2I& aWhere )
 {
-    SetPosition( wxPoint( aWhere.x, aWhere.y ) );
+    SetPosition( ToWxPoint( aWhere ) );
 }
 
 

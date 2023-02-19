@@ -2036,7 +2036,7 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     {
         // Set zoom to last used in this screen
         GetCanvas()->GetView()->SetScale( GetScreen()->m_LastZoomLevel );
-        RedrawScreen( (wxPoint) GetScreen()->m_ScrollCenter, false );
+        RedrawScreen( GetScreen()->m_ScrollCenter, false );
     }
 
     updateTitle();

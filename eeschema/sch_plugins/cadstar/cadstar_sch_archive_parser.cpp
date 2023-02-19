@@ -390,7 +390,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::PIN_NUM_LABEL_LOC::Parse( XNODE* aNode, PARSER_
             THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), aNode->GetName() );
     }
 
-    if( !Position.IsFullySpecified() )
+    if( Position.x == UNDEFINED_VALUE || Position.y == UNDEFINED_VALUE )
         THROW_MISSING_NODE_IO_ERROR( wxT( "PT" ), aNode->GetName() );
 }
 
@@ -435,7 +435,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SYMDEF_SCM::Parse( XNODE* aNode, PARSER_CONTEXT
         }
     }
 
-    if( !Stub && !Origin.IsFullySpecified() )
+    if( !Stub && ( Origin.x == UNDEFINED_VALUE || Origin.y == UNDEFINED_VALUE ) )
         THROW_MISSING_PARAMETER_IO_ERROR( wxT( "PT" ), aNode->GetName() );
 }
 
@@ -668,7 +668,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SIGNALREFERENCELINK::Parse( XNODE* aNode, PARSE
             THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), aNode->GetName() );
     }
 
-    if( !Position.IsFullySpecified() )
+    if( Position.x == UNDEFINED_VALUE || Position.y == UNDEFINED_VALUE )
         THROW_MISSING_NODE_IO_ERROR( wxT( "PT" ), aNode->GetName() );
 }
 
@@ -813,7 +813,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SIGLOC::Parse( XNODE* aNode, PARSER_CONTEXT* aC
             THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), aNode->GetName() );
     }
 
-    if( !Position.IsFullySpecified() )
+    if( Position.x == UNDEFINED_VALUE || Position.y == UNDEFINED_VALUE )
         THROW_MISSING_NODE_IO_ERROR( wxT( "PT" ), aNode->GetName() );
 }
 

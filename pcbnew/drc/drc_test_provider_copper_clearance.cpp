@@ -908,7 +908,6 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                     for( auto it = smoothed_polys[ia].IterateWithHoles(); it; it++ )
                     {
                         VECTOR2I currentVertex = *it;
-                        wxPoint pt( currentVertex.x, currentVertex.y );
 
                         if( smoothed_polys[ia2].Contains( currentVertex ) )
                         {
@@ -916,7 +915,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                             drce->SetItems( zoneA, zoneB );
                             drce->SetViolatingRule( constraint.GetParentRule() );
 
-                            reportViolation( drce, pt, layer );
+                            reportViolation( drce, currentVertex, layer );
                         }
                     }
 
@@ -924,7 +923,6 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                     for( auto it = smoothed_polys[ia2].IterateWithHoles(); it; it++ )
                     {
                         VECTOR2I currentVertex = *it;
-                        wxPoint pt( currentVertex.x, currentVertex.y );
 
                         if( smoothed_polys[ia].Contains( currentVertex ) )
                         {
@@ -932,7 +930,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                             drce->SetItems( zoneB, zoneA );
                             drce->SetViolatingRule( constraint.GetParentRule() );
 
-                            reportViolation( drce, pt, layer );
+                            reportViolation( drce, currentVertex, layer );
                         }
                     }
                 }

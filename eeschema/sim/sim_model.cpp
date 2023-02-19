@@ -666,7 +666,7 @@ void SIM_MODEL::SetFieldValue( std::vector<T>& aFields, const wxString& aFieldNa
         wxASSERT( aFields.size() >= 1 );
 
         SCH_ITEM* parent = static_cast<SCH_ITEM*>( aFields.at( 0 ).GetParent() );
-        aFields.emplace_back( wxPoint(), aFields.size(), parent, aFieldName );
+        aFields.emplace_back( VECTOR2I(), aFields.size(), parent, aFieldName );
     }
     else if constexpr( std::is_same<T, LIB_FIELD>::value )
     {

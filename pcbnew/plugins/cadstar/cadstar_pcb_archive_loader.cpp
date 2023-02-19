@@ -1189,7 +1189,7 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
             if( editedPadOutline.Contains( { 0, 0 } ) )
             {
                 pad->SetAnchorPadShape( PAD_SHAPE::RECT );
-                pad->SetSize( wxSize( { 4, 4 } ) );
+                pad->SetSize( VECTOR2I( { 4, 4 } ) );
                 pad->SetShape( PAD_SHAPE::CUSTOM );
                 pad->AddPrimitive( padShape );
                 padOffset   = { 0, 0 };

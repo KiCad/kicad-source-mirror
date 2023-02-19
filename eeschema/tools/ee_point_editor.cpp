@@ -981,7 +981,7 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
         VECTOR2I       botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
         VECTOR2I       botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
         VECTOR2I       sheetNewPos = sheet->GetPosition();
-        wxSize         sheetNewSize = sheet->GetSize();
+        VECTOR2I       sheetNewSize = sheet->GetSize();
 
         gridHelper.SetSnap( aSnapToGrid );
 
@@ -1004,25 +1004,25 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
                 || isModified( m_editPoints->Point( RECT_BOTLEFT ) ) )
         {
             sheetNewPos = topLeft;
-            sheetNewSize = wxSize( botRight.x - topLeft.x, botRight.y - topLeft.y );
+            sheetNewSize = VECTOR2I( botRight.x - topLeft.x, botRight.y - topLeft.y );
         }
         else if( isModified( m_editPoints->Line( RECT_TOP ) ) )
         {
             sheetNewPos = VECTOR2I( sheet->GetPosition().x, topLeft.y );
-            sheetNewSize = wxSize( sheet->GetSize().x, botRight.y - topLeft.y );
+            sheetNewSize = VECTOR2I( sheet->GetSize().x, botRight.y - topLeft.y );
         }
         else if( isModified( m_editPoints->Line( RECT_LEFT ) ) )
         {
             sheetNewPos = VECTOR2I( topLeft.x, sheet->GetPosition().y );
-            sheetNewSize = wxSize( botRight.x - topLeft.x, sheet->GetSize().y );
+            sheetNewSize = VECTOR2I( botRight.x - topLeft.x, sheet->GetSize().y );
         }
         else if( isModified( m_editPoints->Line( RECT_BOT ) ) )
         {
-            sheetNewSize = wxSize( sheet->GetSize().x, botRight.y - topLeft.y );
+            sheetNewSize = VECTOR2I( sheet->GetSize().x, botRight.y - topLeft.y );
         }
         else if( isModified( m_editPoints->Line( RECT_RIGHT ) ) )
         {
-            sheetNewSize = wxSize( botRight.x - topLeft.x, sheet->GetSize().y );
+            sheetNewSize = VECTOR2I( botRight.x - topLeft.x, sheet->GetSize().y );
         }
 
         for( unsigned i = 0; i < m_editPoints->LinesSize(); ++i )
@@ -1049,8 +1049,8 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
                 case SHEET_SIDE::BOTTOM:
                     pin->Move( VECTOR2I( sheet->GetPosition().x - sheetNewPos.x, 0 ) );
                     break;
-                case SHEET_SIDE::UNDEFINED:     
-                    break;    
+                case SHEET_SIDE::UNDEFINED:
+                    break;
                 }
             }
 

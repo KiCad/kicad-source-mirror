@@ -758,8 +758,8 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
         break;
 
     case FDC_TEXT_SIZE:
-        field.SetTextSize( wxSize( m_frame->ValueFromString( value ),
-                                   m_frame->ValueFromString( value ) ) );
+        field.SetTextSize( VECTOR2I( m_frame->ValueFromString( value ),
+                                     m_frame->ValueFromString( value ) ) );
         break;
 
     case FDC_ORIENTATION:

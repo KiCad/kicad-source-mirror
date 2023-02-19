@@ -382,8 +382,8 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos
     wxDC*         DC = aSettings->GetPrintDC();
     KIFONT::FONT* font = KIFONT::FONT::GetFont( aSettings->GetDefaultFont(), false, false );
 
-    wxSize pinNameSize( m_nameTextSize, m_nameTextSize );
-    wxSize pinNumSize( m_numTextSize, m_numTextSize );
+    VECTOR2I pinNameSize( m_nameTextSize, m_nameTextSize );
+    VECTOR2I pinNumSize( m_numTextSize, m_numTextSize );
 
     int    namePenWidth = std::max( Clamp_Text_PenSize( GetPenWidth(), m_nameTextSize, true ),
                                     aSettings->GetDefaultPenWidth() );
@@ -607,7 +607,7 @@ void LIB_PIN::printPinElectricalTypeName( const RENDER_SETTINGS* aSettings, VECT
         break;
     }
 
-    GRPrintText( DC, txtpos, color, typeName, orient, wxSize( textSize, textSize ), hjustify,
+    GRPrintText( DC, txtpos, color, typeName, orient, VECTOR2I( textSize, textSize ), hjustify,
                  GR_TEXT_V_ALIGN_CENTER, pensize, false, false, font );
 }
 
@@ -1061,7 +1061,7 @@ void LIB_PIN::ChangeLength( int aLength )
         break;
     }
 
-    wxPoint offset = wxPoint( offsetX, offsetY );
+    VECTOR2I offset = VECTOR2I( offsetX, offsetY );
     Offset( offset );
 
     m_length = aLength;
@@ -1359,9 +1359,9 @@ BITMAPS LIB_PIN::GetMenuImage() const
 
 wxString LIB_PIN::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
-    // This code previously checked "m_name.IsEmpty()" to choose the correct 
+    // This code previously checked "m_name.IsEmpty()" to choose the correct
     // formatting path, but that check fails if the pin is called "~" which is
-    // the default for an empty pin name.  Instead we get the final display string 
+    // the default for an empty pin name.  Instead we get the final display string
     // that will be shown and check if it's empty.
 
     wxString shownName = UnescapeString( GetShownName() );

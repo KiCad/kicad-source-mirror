@@ -415,7 +415,7 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
 
     footprint->Reference().SetTextPos( textPos );
     footprint->Reference().SetPos0( textPos );
-    footprint->Reference().SetTextSize( wxSize( twsize, thsize ) );
+    footprint->Reference().SetTextSize( VECTOR2I( twsize, thsize ) );
     footprint->Reference().SetTextThickness( thickness );
 
     // gEDA/pcb shows only one of value/reference/description at a time. Which
@@ -592,7 +592,7 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
 
             VECTOR2I padPos( ( x1 + x2 ) / 2, ( y1 + y2 ) / 2 );
 
-            pad->SetSize( wxSize( KiROUND( EuclideanNorm( delta ) ) + width, width ) );
+            pad->SetSize( VECTOR2I( KiROUND( EuclideanNorm( delta ) ) + width, width ) );
 
             // Set the relative position before adjusting the absolute position
             pad->SetPos0( padPos );
@@ -657,7 +657,7 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
 
             int padSize = parseInt( parameters[4], conv_unit );
 
-            pad->SetSize( wxSize( padSize, padSize ) );
+            pad->SetSize( VECTOR2I( padSize, padSize ) );
 
             int drillSize = 0;
 
@@ -684,7 +684,7 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
                 drillSize = parseInt( parameters[5], conv_unit );
             }
 
-            pad->SetDrillSize( wxSize( drillSize, drillSize ) );
+            pad->SetDrillSize( VECTOR2I( drillSize, drillSize ) );
 
             // Set the relative position before adjusting the absolute position
             pad->SetPos0( padPos );

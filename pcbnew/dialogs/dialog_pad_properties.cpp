@@ -537,7 +537,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     m_sizeX.ChangeValue( m_dummyPad->GetSize().x );
     m_sizeY.ChangeValue( m_dummyPad->GetSize().y );
 
-    m_offsetShapeOpt->SetValue( m_dummyPad->GetOffset() != wxPoint() );
+    m_offsetShapeOpt->SetValue( m_dummyPad->GetOffset() != VECTOR2I() );
     m_offsetX.ChangeValue( m_dummyPad->GetOffset().x );
     m_offsetY.ChangeValue( m_dummyPad->GetOffset().y );
 
@@ -1759,28 +1759,28 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     case 3: aPad->SetZoneConnection( ZONE_CONNECTION::NONE );      break;
     }
 
-    aPad->SetPosition( wxPoint( m_posX.GetValue(), m_posY.GetValue() ) );
+    aPad->SetPosition( VECTOR2I( m_posX.GetValue(), m_posY.GetValue() ) );
 
     if( m_holeShapeCtrl->GetSelection() == CHOICE_SHAPE_CIRCLE )
     {
         aPad->SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );
-        aPad->SetDrillSize( wxSize( m_holeX.GetValue(), m_holeX.GetValue() ) );
+        aPad->SetDrillSize( VECTOR2I( m_holeX.GetValue(), m_holeX.GetValue() ) );
     }
     else
     {
         aPad->SetDrillShape( PAD_DRILL_SHAPE_OBLONG );
-        aPad->SetDrillSize( wxSize( m_holeX.GetValue(), m_holeY.GetValue() ) );
+        aPad->SetDrillSize( VECTOR2I( m_holeX.GetValue(), m_holeY.GetValue() ) );
     }
 
     if( aPad->GetShape() == PAD_SHAPE::CIRCLE )
-        aPad->SetSize( wxSize( m_sizeX.GetValue(), m_sizeX.GetValue() ) );
+        aPad->SetSize( VECTOR2I( m_sizeX.GetValue(), m_sizeX.GetValue() ) );
     else
-        aPad->SetSize( wxSize( m_sizeX.GetValue(), m_sizeY.GetValue() ) );
+        aPad->SetSize( VECTOR2I( m_sizeX.GetValue(), m_sizeY.GetValue() ) );
 
     // For a trapezoid, test delta value (be sure delta is not too large for pad size)
     // remember DeltaSize.x is the Y size variation
     bool   error    = false;
-    wxSize delta( 0, 0 );
+    VECTOR2I delta( 0, 0 );
 
     if( aPad->GetShape() == PAD_SHAPE::TRAPEZOID )
     {
@@ -1818,9 +1818,9 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     aPad->SetDelta( delta );
 
     if( m_offsetShapeOpt->GetValue() )
-        aPad->SetOffset( wxPoint( m_offsetX.GetValue(), m_offsetY.GetValue() ) );
+        aPad->SetOffset( VECTOR2I( m_offsetX.GetValue(), m_offsetY.GetValue() ) );
     else
-        aPad->SetOffset( wxPoint() );
+        aPad->SetOffset( VECTOR2I() );
 
     // Read pad length die
     if( m_padToDieOpt->GetValue() )
@@ -1870,7 +1870,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
         // diameter is acceptable, and is used in Gerber files as flashed area
         // reference
         if( aPad->GetAnchorPadShape() == PAD_SHAPE::CIRCLE )
-            aPad->SetSize( wxSize( m_sizeX.GetValue(), m_sizeX.GetValue() ) );
+            aPad->SetSize( VECTOR2I( m_sizeX.GetValue(), m_sizeX.GetValue() ) );
     }
 
     // Define the way the clearance area is defined in zones.  Since all non-custom pad
@@ -1893,7 +1893,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
         // and are intended to be used in virtual edge board connectors
         // However we can accept a non null offset,
         // mainly to allow complex pads build from a set of basic pad shapes
-        aPad->SetDrillSize( wxSize( 0, 0 ) );
+        aPad->SetDrillSize( VECTOR2I( 0, 0 ) );
         break;
 
     case PAD_ATTRIB::NPTH:

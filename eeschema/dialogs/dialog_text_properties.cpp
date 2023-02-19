@@ -503,7 +503,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     }
 
     if( m_currentText->GetTextWidth() != m_textSize.GetValue() )
-        m_currentText->SetTextSize( wxSize( m_textSize.GetValue(), m_textSize.GetValue() ) );
+        m_currentText->SetTextSize( VECTOR2I( m_textSize.GetValue(), m_textSize.GetValue() ) );
 
     if( m_fontCtrl->HaveFontSelection() )
     {

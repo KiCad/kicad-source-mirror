@@ -1147,7 +1147,7 @@ void CADSTAR_ARCHIVE_PARSER::ATTRIBUTE_LOCATION::Parse( XNODE* aNode, PARSER_CON
             THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), wxT( "ATTRLOC" ) );
     }
 
-    if( !Position.IsFullySpecified() )
+    if( Position.x == UNDEFINED_VALUE || Position.y == UNDEFINED_VALUE )
         THROW_MISSING_NODE_IO_ERROR( wxT( "PT" ), wxT( "ATTRLOC" ) );
 }
 
@@ -1396,7 +1396,7 @@ void CADSTAR_ARCHIVE_PARSER::TEXT_LOCATION::Parse( XNODE* aNode, PARSER_CONTEXT*
         }
     }
 
-    if( !Position.IsFullySpecified() )
+    if( Position.x == UNDEFINED_VALUE || Position.y == UNDEFINED_VALUE )
         THROW_MISSING_NODE_IO_ERROR( wxT( "PT" ), wxT( "TEXTLOC" ) );
 }
 

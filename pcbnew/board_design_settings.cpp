@@ -74,15 +74,15 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_DefaultFPTextItems.emplace_back( wxT( "${REFERENCE}" ), true, F_Fab );
 
     m_LineThickness[ LAYER_CLASS_SILK ] = pcbIUScale.mmToIU( DEFAULT_SILK_LINE_WIDTH );
-    m_TextSize[ LAYER_CLASS_SILK ] = wxSize( pcbIUScale.mmToIU( DEFAULT_SILK_TEXT_SIZE ),
-                                             pcbIUScale.mmToIU( DEFAULT_SILK_TEXT_SIZE ) );
+    m_TextSize[ LAYER_CLASS_SILK ] = VECTOR2I( pcbIUScale.mmToIU( DEFAULT_SILK_TEXT_SIZE ),
+                                               pcbIUScale.mmToIU( DEFAULT_SILK_TEXT_SIZE ) );
     m_TextThickness[ LAYER_CLASS_SILK ] = pcbIUScale.mmToIU( DEFAULT_SILK_TEXT_WIDTH );
     m_TextItalic[ LAYER_CLASS_SILK ] = false;
     m_TextUpright[ LAYER_CLASS_SILK ] = false;
 
     m_LineThickness[ LAYER_CLASS_COPPER ] = pcbIUScale.mmToIU( DEFAULT_COPPER_LINE_WIDTH );
-    m_TextSize[ LAYER_CLASS_COPPER ] = wxSize( pcbIUScale.mmToIU( DEFAULT_COPPER_TEXT_SIZE ),
-                                               pcbIUScale.mmToIU( DEFAULT_COPPER_TEXT_SIZE ) );
+    m_TextSize[ LAYER_CLASS_COPPER ] = VECTOR2I( pcbIUScale.mmToIU( DEFAULT_COPPER_TEXT_SIZE ),
+                                                 pcbIUScale.mmToIU( DEFAULT_COPPER_TEXT_SIZE ) );
     m_TextThickness[ LAYER_CLASS_COPPER ] = pcbIUScale.mmToIU( DEFAULT_COPPER_TEXT_WIDTH );
     m_TextItalic[ LAYER_CLASS_COPPER ] = false;
     m_TextUpright[ LAYER_CLASS_COPPER ] = false;
@@ -90,29 +90,29 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     // Edges & Courtyards; text properties aren't used but better to have them holding
     // reasonable values than not.
     m_LineThickness[ LAYER_CLASS_EDGES ] = pcbIUScale.mmToIU( DEFAULT_EDGE_WIDTH );
-    m_TextSize[ LAYER_CLASS_EDGES ] = wxSize( pcbIUScale.mmToIU( DEFAULT_TEXT_SIZE ),
-                                              pcbIUScale.mmToIU( DEFAULT_TEXT_SIZE ) );
+    m_TextSize[ LAYER_CLASS_EDGES ] = VECTOR2I( pcbIUScale.mmToIU( DEFAULT_TEXT_SIZE ),
+                                                pcbIUScale.mmToIU( DEFAULT_TEXT_SIZE ) );
     m_TextThickness[ LAYER_CLASS_EDGES ] = pcbIUScale.mmToIU( DEFAULT_TEXT_WIDTH );
     m_TextItalic[ LAYER_CLASS_EDGES ] = false;
     m_TextUpright[ LAYER_CLASS_EDGES ] = false;
 
     m_LineThickness[ LAYER_CLASS_COURTYARD ] = pcbIUScale.mmToIU( DEFAULT_COURTYARD_WIDTH );
-    m_TextSize[ LAYER_CLASS_COURTYARD ] = wxSize( pcbIUScale.mmToIU( DEFAULT_TEXT_SIZE ),
-                                                  pcbIUScale.mmToIU( DEFAULT_TEXT_SIZE ) );
+    m_TextSize[ LAYER_CLASS_COURTYARD ] = VECTOR2I( pcbIUScale.mmToIU( DEFAULT_TEXT_SIZE ),
+                                                    pcbIUScale.mmToIU( DEFAULT_TEXT_SIZE ) );
     m_TextThickness[ LAYER_CLASS_COURTYARD ] = pcbIUScale.mmToIU( DEFAULT_TEXT_WIDTH );
     m_TextItalic[ LAYER_CLASS_COURTYARD ] = false;
     m_TextUpright[ LAYER_CLASS_COURTYARD ] = false;
 
     m_LineThickness[ LAYER_CLASS_FAB ] = pcbIUScale.mmToIU( DEFAULT_LINE_WIDTH );
-    m_TextSize[ LAYER_CLASS_FAB ] = wxSize( pcbIUScale.mmToIU( DEFAULT_TEXT_SIZE ),
-                                                  pcbIUScale.mmToIU( DEFAULT_TEXT_SIZE ) );
+    m_TextSize[LAYER_CLASS_FAB] = VECTOR2I( pcbIUScale.mmToIU( DEFAULT_TEXT_SIZE ),
+                                            pcbIUScale.mmToIU( DEFAULT_TEXT_SIZE ) );
     m_TextThickness[ LAYER_CLASS_FAB ] = pcbIUScale.mmToIU( DEFAULT_TEXT_WIDTH );
     m_TextItalic[ LAYER_CLASS_FAB ] = false;
     m_TextUpright[ LAYER_CLASS_FAB ] = false;
 
     m_LineThickness[ LAYER_CLASS_OTHERS ] = pcbIUScale.mmToIU( DEFAULT_LINE_WIDTH );
-    m_TextSize[ LAYER_CLASS_OTHERS ] = wxSize( pcbIUScale.mmToIU( DEFAULT_TEXT_SIZE ),
-                                               pcbIUScale.mmToIU( DEFAULT_TEXT_SIZE ) );
+    m_TextSize[ LAYER_CLASS_OTHERS ] = VECTOR2I( pcbIUScale.mmToIU( DEFAULT_TEXT_SIZE ),
+                                                 pcbIUScale.mmToIU( DEFAULT_TEXT_SIZE ) );
     m_TextThickness[ LAYER_CLASS_OTHERS ] = pcbIUScale.mmToIU( DEFAULT_TEXT_WIDTH );
     m_TextItalic[ LAYER_CLASS_OTHERS ] = false;
     m_TextUpright[ LAYER_CLASS_OTHERS ] = false;
@@ -725,15 +725,15 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                 if( aJson.contains( "width" ) && aJson.contains( "height" )
                         && aJson.contains( "drill" ) )
                 {
-                    wxSize sz;
-                    sz.SetWidth( pcbIUScale.mmToIU( aJson["width"].get<double>() ) );
-                    sz.SetHeight( pcbIUScale.mmToIU( aJson["height"].get<double>() ) );
+                    VECTOR2I sz;
+                    sz.x = pcbIUScale.mmToIU( aJson["width"].get<double>() );
+                    sz.y = pcbIUScale.mmToIU( aJson["height"].get<double>() );
 
                     m_Pad_Master->SetSize( sz );
 
                     int drill = pcbIUScale.mmToIU( aJson["drill"].get<double>() );
 
-                    m_Pad_Master->SetDrillSize( wxSize( drill, drill ) );
+                    m_Pad_Master->SetDrillSize( VECTOR2I( drill, drill ) );
                 }
             }, {} ) );
 
@@ -1245,7 +1245,7 @@ int BOARD_DESIGN_SETTINGS::GetLineThickness( PCB_LAYER_ID aLayer ) const
 }
 
 
-wxSize BOARD_DESIGN_SETTINGS::GetTextSize( PCB_LAYER_ID aLayer ) const
+VECTOR2I BOARD_DESIGN_SETTINGS::GetTextSize( PCB_LAYER_ID aLayer ) const
 {
     return m_TextSize[ GetLayerClass( aLayer ) ];
 }

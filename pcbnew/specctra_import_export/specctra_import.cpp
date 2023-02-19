@@ -141,10 +141,10 @@ static int scale( double distance, UNIT_RES* aResolution )
  * @param aResolution - The amount to scale the point.
  * @return wxPoint - The KiCad coordinate system point.
  */
-static wxPoint mapPt( const POINT& aPoint, UNIT_RES* aResolution )
+static VECTOR2I mapPt( const POINT& aPoint, UNIT_RES* aResolution )
 {
-    wxPoint ret(  scale( aPoint.x, aResolution ),
-                 -scale( aPoint.y, aResolution ) );    // negate y
+    VECTOR2I ret( scale( aPoint.x, aResolution ),
+                  -scale( aPoint.y, aResolution ) );    // negate y
 
     return ret;
 }
@@ -399,7 +399,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
                 UNIT_RES* resolution = place->GetUnits();
                 wxASSERT( resolution );
 
-                wxPoint newPos = mapPt( place->vertex, resolution );
+                VECTOR2I newPos = mapPt( place->vertex, resolution );
                 footprint->SetPosition( newPos );
 
                 if( place->side == T_front )

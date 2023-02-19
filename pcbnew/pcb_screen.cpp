@@ -28,7 +28,7 @@
 #include <layer_ids.h>
 
 
-PCB_SCREEN::PCB_SCREEN( const wxSize& aPageSizeIU ) :
+PCB_SCREEN::PCB_SCREEN( const VECTOR2I& aPageSizeIU ) :
     BASE_SCREEN( aPageSizeIU )
 {
     m_Active_Layer       = F_Cu;     // default active layer = front layer

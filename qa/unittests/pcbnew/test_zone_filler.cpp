@@ -62,7 +62,7 @@ BOOST_FIXTURE_TEST_CASE( BasicZoneFills, ZONE_FILL_TEST_FIXTURE )
     for( PAD* pad : m_board->Footprints()[0]->Pads() )
     {
         if( pad->GetNumber() == "2" || pad->GetNumber() == "4" || pad->GetNumber() == "6" )
-            pad->SetSize( pad->GetSize() + wxSize( delta, delta ) );
+            pad->SetSize( pad->GetSize() + VECTOR2I( delta, delta ) );
     }
 
     int  ii = 0;
@@ -83,7 +83,7 @@ BOOST_FIXTURE_TEST_CASE( BasicZoneFills, ZONE_FILL_TEST_FIXTURE )
             else if( ii == 12 )
             {
                 arc12 = track->m_Uuid;
-                track->Move( wxPoint( -delta, -delta ) );
+                track->Move( VECTOR2I( -delta, -delta ) );
             }
         }
     }

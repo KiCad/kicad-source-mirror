@@ -232,20 +232,6 @@ void RotatePoint( int* pX, int* pY, int cx, int cy, const EDA_ANGLE& angle )
 }
 
 
-void RotatePoint( wxPoint* point, const wxPoint& centre, const EDA_ANGLE& angle )
-{
-    int ox, oy;
-
-    ox = point->x - centre.x;
-    oy = point->y - centre.y;
-
-    RotatePoint( &ox, &oy, angle );
-
-    point->x = ox + centre.x;
-    point->y = oy + centre.y;
-}
-
-
 void RotatePoint( double* pX, double* pY, double cx, double cy, const EDA_ANGLE& angle )
 {
     double ox, oy;

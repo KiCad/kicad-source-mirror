@@ -540,7 +540,7 @@ BOX2I EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
 
     // Creates bounding box (rectangle) for horizontal, left and top justified text. The
     // bounding box will be moved later according to the actual text options
-    wxSize   textsize = wxSize( extents.x, extents.y );
+    VECTOR2I textsize = VECTOR2I( extents.x, extents.y );
     VECTOR2I pos = drawPos;
 
     if( IsMultilineAllowed() && aLine > 0 && aLine < (int) strings.GetCount() )

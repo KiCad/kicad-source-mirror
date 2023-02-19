@@ -165,7 +165,7 @@ bool DIALOG_SHEET_PIN_PROPERTIES::TransferDataFromWindow()
 
     // Currently, eeschema uses only the text width as text size,
     // and expects text width = text height
-    m_sheetPin->SetTextSize( wxSize( m_textSize.GetValue(), m_textSize.GetValue() ) );
+    m_sheetPin->SetTextSize( VECTOR2I( m_textSize.GetValue(), m_textSize.GetValue() ) );
 
     m_sheetPin->SetTextColor( m_textColorSwatch->GetSwatchColor() );
 

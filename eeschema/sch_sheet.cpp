@@ -74,7 +74,7 @@ const wxString SCH_SHEET::GetDefaultFieldName( int aFieldNdx, bool aTranslated )
 }
 
 
-SCH_SHEET::SCH_SHEET( EDA_ITEM* aParent, const VECTOR2I& aPos, wxSize aSize,
+SCH_SHEET::SCH_SHEET( EDA_ITEM* aParent, const VECTOR2I& aPos, VECTOR2I aSize,
                       FIELDS_AUTOPLACED aAutoplaceFields ) :
         SCH_ITEM( aParent, SCH_SHEET_T )
 {
@@ -912,7 +912,7 @@ void SCH_SHEET::SetPosition( const VECTOR2I& aPosition )
 }
 
 
-void SCH_SHEET::Resize( const wxSize& aSize )
+void SCH_SHEET::Resize( const VECTOR2I& aSize )
 {
     if( aSize == m_size )
         return;

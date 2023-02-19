@@ -352,7 +352,7 @@ FOOTPRINT* MICROWAVE_TOOL::createPolygonShape()
     polyPoints.reserve( g_PolyEdges.size() + 2 );
 
     // Init start point coord:
-    polyPoints.emplace_back( wxPoint( offset.x, 0 ) );
+    polyPoints.emplace_back( VECTOR2I( offset.x, 0 ) );
 
     VECTOR2I last_coordinate;
 
@@ -366,7 +366,7 @@ FOOTPRINT* MICROWAVE_TOOL::createPolygonShape()
 
     // finish the polygonal shape
     if( last_coordinate.y != 0 )
-        polyPoints.emplace_back( wxPoint( last_coordinate.x, 0 ) );
+        polyPoints.emplace_back( VECTOR2I( last_coordinate.x, 0 ) );
 
     switch( g_PolyShapeType )
     {

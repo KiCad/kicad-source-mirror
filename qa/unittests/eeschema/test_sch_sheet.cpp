@@ -79,7 +79,7 @@ BOOST_FIXTURE_TEST_SUITE( SchSheet, TEST_SCH_SHEET_FIXTURE )
  */
 BOOST_AUTO_TEST_CASE( Default )
 {
-    BOOST_CHECK_EQUAL( m_csheet.GetPosition(), wxPoint( 0, 0 ) );
+    BOOST_CHECK_EQUAL( m_csheet.GetPosition(), VECTOR2I( 0, 0 ) );
 
     BOOST_CHECK_EQUAL( m_sheet.GetParent(), nullptr );
     BOOST_CHECK_EQUAL( m_sheet.CountSheets(), 1 );
@@ -108,7 +108,7 @@ BOOST_AUTO_TEST_CASE( SchematicParent )
  */
 BOOST_AUTO_TEST_CASE( AddPins )
 {
-    const wxPoint pinPos{ 42, 13 };
+    const VECTOR2I pinPos{ 42, 13 };
 
     // we should catch null insertions
     CHECK_WX_ASSERT( m_sheet.AddPin( nullptr ) );
@@ -151,7 +151,7 @@ BOOST_AUTO_TEST_CASE( PinRenumbering )
 {
     for( int i = 0; i < 5; ++i )
     {
-        SCH_SHEET_PIN* pin = new SCH_SHEET_PIN( &m_sheet, wxPoint{ i, i }, "name" );
+        SCH_SHEET_PIN* pin = new SCH_SHEET_PIN( &m_sheet, VECTOR2I{ i, i }, "name" );
 
         // set the pins to have the same number going in
         pin->SetNumber( 2 );
@@ -174,7 +174,7 @@ BOOST_AUTO_TEST_CASE( PinRenumbering )
 struct TEST_END_CONN_PIN
 {
     std::string m_pin_name;
-    wxPoint     m_pos;
+    VECTOR2I    m_pos;
 };
 
 
@@ -225,7 +225,7 @@ BOOST_AUTO_TEST_CASE( EndconnectionPoints )
 
     // And check the connection getter
     {
-        std::vector<wxPoint> expectedConnections;
+        std::vector<VECTOR2I> expectedConnections;
 
         // we want to see every pin that we just added
         for( const auto& pin : pin_defs )

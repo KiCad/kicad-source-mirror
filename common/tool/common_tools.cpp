@@ -32,6 +32,7 @@
 #include <eda_draw_frame.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <id.h>
+#include <math/vector2wx.h>
 #include <kiface_base.h>
 #include <settings/app_settings.h>
 #include <tool/actions.h>
@@ -300,7 +301,7 @@ int COMMON_TOOLS::doZoomFit( ZOOM_FIT_TYPE_T aFitType )
     view->SetScale( 1.0 );  // The best scale will be determined later, but this initial
                             // value ensures all view parameters are up to date (especially
                             // at init time)
-    VECTOR2D screenSize = view->ToWorld( canvas->GetClientSize(), false );
+    VECTOR2D screenSize = view->ToWorld( ToVECTOR2I( canvas->GetClientSize() ), false );
 
     // Currently "Zoom to Objects" is only supported in Eeschema & Pcbnew.  Support for other
     // programs in the suite can be added as needed.
@@ -371,7 +372,7 @@ int COMMON_TOOLS::CenterContents( const TOOL_EVENT& aEvent )
     getView()->SetCenter( bBox.Centre() );
 
     // Take scrollbars into account
-    VECTOR2D scrollbarSize = VECTOR2D( canvas->GetSize() - canvas->GetClientSize() );
+    VECTOR2D scrollbarSize = VECTOR2D( ToVECTOR2D( canvas->GetSize() - canvas->GetClientSize() ) );
     VECTOR2D worldScrollbarSize = getView()->ToWorld( scrollbarSize, false );
     getView()->SetCenter( getView()->GetCenter() + worldScrollbarSize / 2.0 );
 

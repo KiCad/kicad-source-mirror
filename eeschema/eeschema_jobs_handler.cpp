@@ -403,7 +403,7 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
         plotter->SetPageSettings( pageInfo );
         plotter->SetColorMode( !aSvgJob->m_blackAndWhite );
 
-        wxPoint      plot_offset;
+        VECTOR2I     plot_offset;
         const double scale = 1.0;
 
         // Currently, plot units are in decimil

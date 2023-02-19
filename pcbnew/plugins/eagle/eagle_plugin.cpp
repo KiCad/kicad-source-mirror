@@ -275,11 +275,11 @@ void EAGLE_PLUGIN::checkpoint()
 }
 
 
-wxSize inline EAGLE_PLUGIN::kicad_fontz( const ECOORD& d, int aTextThickness ) const
+VECTOR2I inline EAGLE_PLUGIN::kicad_fontsize( const ECOORD& d, int aTextThickness ) const
 {
     // Eagle includes stroke thickness in the text size, KiCAD does not
     int kz = d.ToPcbUnits();
-    return wxSize( kz - aTextThickness, kz - aTextThickness );
+    return VECTOR2I( kz - aTextThickness, kz - aTextThickness );
 }
 
 
@@ -693,7 +693,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 double ratio = t.ratio ? *t.ratio : 8;     // DTD says 8 is default
                 int textThickness = KiROUND( t.size.ToPcbUnits() * ratio / 100 );
                 pcbtxt->SetTextThickness( textThickness );
-                pcbtxt->SetTextSize( kicad_fontz( t.size, textThickness ) );
+                pcbtxt->SetTextSize( kicad_fontsize( t.size, textThickness ) );
 
                 int align = t.align ? *t.align : ETEXT::BOTTOM_LEFT;
 
@@ -931,14 +931,14 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
             VECTOR2I     pt1( kicad_x( d.x1 ), kicad_y( d.y1 ) );
             VECTOR2I     pt2( kicad_x( d.x2 ), kicad_y( d.y2 ) );
             VECTOR2I     pt3( kicad_x( d.x3 ), kicad_y( d.y3 ) );
-            wxSize       textSize = designSettings.GetTextSize( layer );
+            VECTOR2I     textSize = designSettings.GetTextSize( layer );
             int          textThickness = designSettings.GetLineThickness( layer );
 
             if( d.textsize )
             {
                 double ratio = 8;     // DTD says 8 is default
                 textThickness = KiROUND( d.textsize->ToPcbUnits() * ratio / 100 );
-                textSize = kicad_fontz( *d.textsize, textThickness );
+                textSize = kicad_fontsize( *d.textsize, textThickness );
             }
 
             if( layer != UNDEFINED_LAYER )
@@ -1609,7 +1609,7 @@ void EAGLE_PLUGIN::orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, FP_TE
         aFPText->SetTextThickness( textThickness );
         if( a.size )
         {
-            fontz = kicad_fontz( *a.size, textThickness );
+            fontz = kicad_fontsize( *a.size, textThickness );
             aFPText->SetTextSize( fontz );
         }
 
@@ -1864,7 +1864,7 @@ void EAGLE_PLUGIN::packagePad( FOOTPRINT* aFootprint, wxXmlNode* aTree )
     else if( aFootprint->GetLayer() == B_Cu && m_rules->psBottom != EPAD::UNDEF )
         shape = m_rules->psBottom;
 
-    pad->SetDrillSize( wxSize( eagleDrillz, eagleDrillz ) );
+    pad->SetDrillSize( VECTOR2I( eagleDrillz, eagleDrillz ) );
     pad->SetLayerSet( LSET::AllCuMask() );
 
     if( eagleDrillz < m_min_hole )
@@ -1912,7 +1912,7 @@ void EAGLE_PLUGIN::packagePad( FOOTPRINT* aFootprint, wxXmlNode* aTree )
     if( e.diameter && e.diameter->value > 0 )
     {
         int diameter = e.diameter->ToPcbUnits();
-        pad->SetSize( wxSize( diameter, diameter ) );
+        pad->SetSize( VECTOR2I( diameter, diameter ) );
     }
     else
     {
@@ -1920,7 +1920,7 @@ void EAGLE_PLUGIN::packagePad( FOOTPRINT* aFootprint, wxXmlNode* aTree )
         double annulus = drillz * m_rules->rvPadTop;   // copper annulus, eagle "restring"
         annulus = eagleClamp( m_rules->rlMinPadTop, annulus, m_rules->rlMaxPadTop );
         int diameter = KiROUND( drillz + 2 * annulus );
-        pad->SetSize( wxSize( KiROUND( diameter ), KiROUND( diameter ) ) );
+        pad->SetSize( VECTOR2I( KiROUND( diameter ), KiROUND( diameter ) ) );
     }
 
     if( pad->GetShape() == PAD_SHAPE::OVAL )
@@ -1998,7 +1998,7 @@ void EAGLE_PLUGIN::packageText( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
     int    textThickness = KiROUND( t.size.ToPcbUnits() * ratio / 100 );
 
     textItem->SetTextThickness( textThickness );
-    textItem->SetTextSize( kicad_fontz( t.size, textThickness ) );
+    textItem->SetTextSize( kicad_fontsize( t.size, textThickness ) );
 
     int align = t.align ? *t.align : ETEXT::BOTTOM_LEFT;  // bottom-left is eagle default
 
@@ -2371,7 +2371,7 @@ void EAGLE_PLUGIN::packageHole( FOOTPRINT* aFootprint, wxXmlNode* aTree, bool aC
         pad->SetPosition( padpos + aFootprint->GetPosition() );
     }
 
-    wxSize  sz( e.drill.ToPcbUnits(), e.drill.ToPcbUnits() );
+    VECTOR2I sz( e.drill.ToPcbUnits(), e.drill.ToPcbUnits() );
 
     pad->SetDrillSize( sz );
     pad->SetSize( sz );
@@ -2397,7 +2397,7 @@ void EAGLE_PLUGIN::packageSMD( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
     pad->SetShape( PAD_SHAPE::RECT );
     pad->SetAttribute( PAD_ATTRIB::SMD );
 
-    wxSize padSize( e.dx.ToPcbUnits(), e.dy.ToPcbUnits() );
+    VECTOR2I padSize( e.dx.ToPcbUnits(), e.dy.ToPcbUnits() );
     pad->SetSize( padSize );
     pad->SetLayer( layer );
 

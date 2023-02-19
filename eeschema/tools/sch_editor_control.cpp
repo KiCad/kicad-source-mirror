@@ -178,8 +178,8 @@ int SCH_EDITOR_CONTROL::PageSetup( const TOOL_EVENT& aEvent )
     undoCmd.PushItem( wrapper );
     m_frame->SaveCopyInUndoList( undoCmd, UNDO_REDO::PAGESETTINGS, false, false );
 
-    DIALOG_EESCHEMA_PAGE_SETTINGS dlg( m_frame, wxSize( MAX_PAGE_SIZE_EESCHEMA_MILS,
-                                                        MAX_PAGE_SIZE_EESCHEMA_MILS ) );
+    DIALOG_EESCHEMA_PAGE_SETTINGS dlg( m_frame, VECTOR2I( MAX_PAGE_SIZE_EESCHEMA_MILS,
+                                                          MAX_PAGE_SIZE_EESCHEMA_MILS ) );
     dlg.SetWksFileName( BASE_SCREEN::m_DrawingSheetFileName );
 
     if( dlg.ShowModal() == wxID_OK )
@@ -1513,7 +1513,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     catch( IO_ERROR& )
     {
         // If it wasn't content, then paste as text object.
-        SCH_TEXT* text_item = new SCH_TEXT( wxPoint( 0, 0 ), content );
+        SCH_TEXT* text_item = new SCH_TEXT( VECTOR2I( 0, 0 ), content );
         text_item->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT ); // Left alignment
         tempScreen->Append( text_item );
     }

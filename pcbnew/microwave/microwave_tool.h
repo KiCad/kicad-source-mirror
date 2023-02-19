@@ -43,10 +43,10 @@ enum class MICROWAVE_FOOTPRINT_SHAPE
 struct MICROWAVE_INDUCTOR_PATTERN
 {
 public:
-    wxPoint m_Start;
-    wxPoint m_End;
-    int     m_Length;       // full length trace.
-    int     m_Width;        // Trace width.
+    VECTOR2I m_Start;
+    VECTOR2I m_End;
+    int      m_Length;       // full length trace.
+    int      m_Width;        // Trace width.
 };
 
 

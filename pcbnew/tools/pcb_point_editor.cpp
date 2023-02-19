@@ -1311,7 +1311,7 @@ void PCB_POINT_EDITOR::updateItem() const
             VECTOR2I end = m_editPoints->Point( 0 ).GetPosition();
             int      diameter = (int) EuclideanNorm( end - pad->GetPosition() ) * 2;
 
-            pad->SetSize( wxSize( diameter, diameter ) );
+            pad->SetSize( VECTOR2I( diameter, diameter ) );
             break;
         }
 
@@ -1354,7 +1354,7 @@ void PCB_POINT_EDITOR::updateItem() const
                     dist[3] = botLeft.y - center.y;
                 }
 
-                wxSize   padSize( dist[0] + dist[2], dist[1] + dist[3] );
+                VECTOR2I padSize( dist[0] + dist[2], dist[1] + dist[3] );
                 VECTOR2I deltaOffset( padSize.x / 2 - dist[2], padSize.y / 2 - dist[3] );
 
                 if( pad->GetOrientation() == ANGLE_90 || pad->GetOrientation() == ANGLE_270 )
@@ -1387,7 +1387,7 @@ void PCB_POINT_EDITOR::updateItem() const
                     bottom = botLeft.y;
                 }
 
-                wxSize padSize( abs( right - left ), abs( bottom - top ) );
+                VECTOR2I padSize( abs( right - left ), abs( bottom - top ) );
 
                 if( pad->GetOrientation() == ANGLE_90 || pad->GetOrientation() == ANGLE_270 )
                     std::swap( padSize.x, padSize.y );

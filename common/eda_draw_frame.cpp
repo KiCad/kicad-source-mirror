@@ -34,6 +34,7 @@
 #include <kiface_base.h>
 #include <lockfile.h>
 #include <macros.h>
+#include <math/vector2wx.h>
 #include <page_info.h>
 #include <paths.h>
 #include <pgm_base.h>
@@ -951,8 +952,8 @@ void EDA_DRAW_FRAME::FocusOnLocation( const VECTOR2I& aPos )
 
     for( wxWindow* dialog : findDialogs() )
     {
-        dialogScreenRects.emplace_back( GetCanvas()->ScreenToClient( dialog->GetScreenPosition() ),
-                                        dialog->GetSize() );
+        dialogScreenRects.emplace_back( ToVECTOR2D( GetCanvas()->ScreenToClient( dialog->GetScreenPosition() ) ),
+                                        ToVECTOR2D( dialog->GetSize() ) );
     }
 
     // Center if we're behind an obscuring dialog, or within 10% of its edge

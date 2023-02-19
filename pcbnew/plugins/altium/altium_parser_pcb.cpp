@@ -586,7 +586,7 @@ AARC6::AARC6( ALTIUM_PARSER& aReader )
     subpolyindex = aReader.Read<uint16_t>();
     component    = aReader.Read<uint16_t>();
     aReader.Skip( 4 );
-    center     = aReader.ReadVector2I();
+    center     = aReader.ReadVector2IPos();
     radius     = aReader.ReadKicadUnit();
     startangle = aReader.Read<double>();
     endangle   = aReader.Read<double>();
@@ -706,10 +706,10 @@ APAD6::APAD6( ALTIUM_PARSER& aReader )
     component = aReader.Read<uint16_t>();
     aReader.Skip( 4 );
 
-    position = aReader.ReadVector2I();
-    topsize  = aReader.ReadWxSize();
-    midsize  = aReader.ReadWxSize();
-    botsize  = aReader.ReadWxSize();
+    position = aReader.ReadVector2IPos();
+    topsize  = aReader.ReadVector2ISize();
+    midsize  = aReader.ReadVector2ISize();
+    botsize  = aReader.ReadVector2ISize();
     holesize = aReader.ReadKicadUnit();
 
     topshape = static_cast<ALTIUM_PAD_SHAPE>( aReader.Read<uint8_t>() );
@@ -813,7 +813,7 @@ AVIA6::AVIA6( ALTIUM_PARSER& aReader )
 
     net = aReader.Read<uint16_t>();
     aReader.Skip( 8 );
-    position = aReader.ReadVector2I();
+    position = aReader.ReadVector2IPos();
     diameter = aReader.ReadKicadUnit();
     holesize = aReader.ReadKicadUnit();
 
@@ -859,8 +859,8 @@ ATRACK6::ATRACK6( ALTIUM_PARSER& aReader )
     subpolyindex = aReader.Read<uint16_t>();
     component    = aReader.Read<uint16_t>();
     aReader.Skip( 4 );
-    start = aReader.ReadVector2I();
-    end   = aReader.ReadVector2I();
+    start = aReader.ReadVector2IPos();
+    end   = aReader.ReadVector2IPos();
     width = aReader.ReadKicadUnit();
 
     if( aReader.GetRemainingSubrecordBytes() >= 13 )
@@ -893,7 +893,7 @@ ATEXT6::ATEXT6( ALTIUM_PARSER& aReader, std::map<uint32_t, wxString>& aStringTab
     aReader.Skip( 6 );
     component = aReader.Read<uint16_t>();
     aReader.Skip( 4 );
-    position = aReader.ReadVector2I();
+    position = aReader.ReadVector2IPos();
     height   = aReader.ReadKicadUnit();
     aReader.Skip( 2 );
     rotation     = aReader.Read<double>();
@@ -963,8 +963,8 @@ AFILL6::AFILL6( ALTIUM_PARSER& aReader )
     aReader.Skip( 2 );
     component = aReader.Read<uint16_t>();
     aReader.Skip( 4 );
-    pos1     = aReader.ReadVector2I();
-    pos2     = aReader.ReadVector2I();
+    pos1     = aReader.ReadVector2IPos();
+    pos2     = aReader.ReadVector2IPos();
     rotation = aReader.Read<double>();
 
     if( aReader.GetRemainingSubrecordBytes() >= 10 )
@@ -1060,8 +1060,8 @@ AREGION6::AREGION6( ALTIUM_PARSER& aReader, bool aExtendedVertices )
         if( aExtendedVertices )
         {
             bool     isRound  = aReader.Read<uint8_t>() != 0;
-            VECTOR2I position = aReader.ReadVector2I();
-            VECTOR2I center   = aReader.ReadVector2I();
+            VECTOR2I position = aReader.ReadVector2IPos();
+            VECTOR2I center   = aReader.ReadVector2IPos();
             int32_t  radius   = aReader.ReadKicadUnit();
             double   angle1   = aReader.Read<double>();
             double   angle2   = aReader.Read<double>();

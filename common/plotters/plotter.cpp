@@ -740,8 +740,8 @@ void PLOTTER::Text( const VECTOR2I&             aPos,
             // Stroke callback
             [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
             {
-                MoveTo( (wxPoint) aPt1 );
-                LineTo( (wxPoint) aPt2 );
+                MoveTo( aPt1 );
+                LineTo( aPt2 );
                 PenFinish();
             },
             // Polygon callback

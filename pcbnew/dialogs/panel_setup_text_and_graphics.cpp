@@ -211,8 +211,8 @@ bool PANEL_SETUP_TEXT_AND_GRAPHICS::TransferDataFromWindow()
         if( i == ROW_EDGES || i == ROW_COURTYARD )
             continue;
 
-        m_BrdSettings->m_TextSize[ i ] = wxSize( m_grid->GetUnitValue( i, COL_TEXT_WIDTH ),
-                                                 m_grid->GetUnitValue( i, COL_TEXT_HEIGHT ) );
+        m_BrdSettings->m_TextSize[ i ] = VECTOR2I( m_grid->GetUnitValue( i, COL_TEXT_WIDTH ),
+                                                   m_grid->GetUnitValue( i, COL_TEXT_HEIGHT ) );
         m_BrdSettings->m_TextThickness[ i ] = m_grid->GetUnitValue( i, COL_TEXT_THICKNESS );
         m_BrdSettings->m_TextItalic[ i ] =
                 wxGridCellBoolEditor::IsTrueValue( m_grid->GetCellValue( i, COL_TEXT_ITALIC ) );

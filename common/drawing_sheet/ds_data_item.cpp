@@ -552,7 +552,7 @@ void DS_DATA_ITEM_TEXT::SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::VIE
         pensize = aCollector ? aCollector->GetDefaultPenSize() : 1;
 
     SetConstrainedTextSize();
-    wxSize textsize;
+    VECTOR2I textsize;
 
     textsize.x = KiROUND( m_ConstrainedTextSize.x * DS_DATA_MODEL::GetTheInstance().m_WSunits2Iu );
     textsize.y = KiROUND( m_ConstrainedTextSize.y * DS_DATA_MODEL::GetTheInstance().m_WSunits2Iu );
@@ -688,7 +688,7 @@ void DS_DATA_ITEM_TEXT::SetConstrainedTextSize()
         // EDA_TEXT::GetTextBox()
         // but this function uses integers
         // So, to avoid truncations with our unit in mm, use microns.
-        wxSize size_micron;
+        VECTOR2I size_micron;
         #define FSCALE 1000.0
         int linewidth = 0;
         size_micron.x = KiROUND( m_ConstrainedTextSize.x * FSCALE );

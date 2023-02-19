@@ -329,7 +329,7 @@ int ERC_TESTER::TestConflictingBusAliases()
                     std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_BUS_ALIAS_CONFLICT );
                     ercItem->SetErrorMessage( msg );
 
-                    SCH_MARKER* marker = new SCH_MARKER( ercItem, wxPoint() );
+                    SCH_MARKER* marker = new SCH_MARKER( ercItem, VECTOR2I() );
                     test->GetParent()->Append( marker );
 
                     ++err_count;

@@ -660,13 +660,13 @@ bool TRACKS_CLEANER::mergeCollinearSegments( PCB_TRACK* aSeg1, PCB_TRACK* aSeg2 
     // our replacement track is still connected
     for( auto& pt : pts )
     {
-        if( !dummy_seg.IsPointOnEnds( wxPoint( pt.x, pt.y ) ) )
+        if( !dummy_seg.IsPointOnEnds( VECTOR2I( pt.x, pt.y ) ) )
         {
             if( ( VECTOR2I( dummy_seg.GetStart() ) - pt ).SquaredEuclideanNorm() <
                     ( VECTOR2I( dummy_seg.GetEnd() ) - pt ).SquaredEuclideanNorm() )
-                dummy_seg.SetStart( wxPoint( pt.x, pt.y ) );
+                dummy_seg.SetStart( VECTOR2I( pt.x, pt.y ) );
             else
-                dummy_seg.SetEnd( wxPoint( pt.x, pt.y ) );
+                dummy_seg.SetEnd( VECTOR2I( pt.x, pt.y ) );
         }
     }
 

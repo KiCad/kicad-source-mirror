@@ -140,7 +140,7 @@ FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprint
         pad->SetNumber( wxT( "1" ) );
         pad = *( it + 1 );
         pad->SetY0( -( gap_size + pad->GetSize().y ) / 2 );
-        pad->SetSize( wxSize( pad->GetSize().x, gap_size ) );
+        pad->SetSize( VECTOR2I( pad->GetSize().x, gap_size ) );
         pad->SetY( pad->GetPos0().y + pad->GetPosition().y );
         break;
 
@@ -153,13 +153,13 @@ FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprint
         std::vector<VECTOR2I> polyPoints;
         polyPoints.reserve( numPoints );
 
-        polyPoints.emplace_back( wxPoint( 0, 0 ) );
+        polyPoints.emplace_back( VECTOR2I( 0, 0 ) );
 
         EDA_ANGLE theta = -angle / 2;
 
         for( int ii = 1; ii < numPoints - 1; ii++ )
         {
-            wxPoint pt( 0, -gap_size );
+            VECTOR2I pt( 0, -gap_size );
             RotatePoint( &pt.x, &pt.y, theta );
             polyPoints.push_back( pt );
 
@@ -198,9 +198,9 @@ FOOTPRINT* MICROWAVE_TOOL::createBaseFootprint( const wxString& aValue,
 
     if( aTextSize > 0 )
     {
-        footprint->Reference().SetTextSize( wxSize( aTextSize, aTextSize ) );
+        footprint->Reference().SetTextSize( VECTOR2I( aTextSize, aTextSize ) );
         footprint->Reference().SetTextThickness( aTextSize / 5 );
-        footprint->Value().SetTextSize( wxSize( aTextSize, aTextSize ) );
+        footprint->Value().SetTextSize( VECTOR2I( aTextSize, aTextSize ) );
         footprint->Value().SetTextThickness( aTextSize / 5 );
     }
 
@@ -215,7 +215,7 @@ FOOTPRINT* MICROWAVE_TOOL::createBaseFootprint( const wxString& aValue,
         footprint->Add( pad, ADD_MODE::INSERT );
 
         int tw = editFrame.GetDesignSettings().GetCurrentTrackWidth();
-        pad->SetSize( wxSize( tw, tw ) );
+        pad->SetSize( VECTOR2I( tw, tw ) );
 
         pad->SetPosition( footprint->GetPosition() );
         pad->SetShape( PAD_SHAPE::RECT );

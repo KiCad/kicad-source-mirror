@@ -24,6 +24,7 @@
 #include <gal/gal_display_options.h>
 #include <layer_ids.h>
 #include <lib_shape.h>
+#include <math/vector2wx.h>
 #include <page_info.h>
 #include <panel_eeschema_color_settings.h>
 #include <pgm_base.h>
@@ -429,7 +430,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
     SCH_SHEET* s = new SCH_SHEET(
         /* aParent */ nullptr,
         /* aPosition */ MILS_POINT( 4000, 1300 ),
-        /* aSize */ wxSize( schIUScale.MilsToIU( 800 ), schIUScale.MilsToIU( 1300 ) ) );
+            /* aSize */ VECTOR2I( schIUScale.MilsToIU( 800 ), schIUScale.MilsToIU( 1300 ) ) );
     s->GetFields().at( SHEETNAME ).SetText( wxT( "SHEET" ) );
     s->GetFields().at( SHEETFILENAME ).SetText( _( "/path/to/sheet" ) );
     s->AutoplaceFields( nullptr, false );
@@ -498,7 +499,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::zoomFitPreview()
         KIGFX::VIEW* view = m_preview->GetView();
 
         view->SetScale( 1.0 );
-        VECTOR2D screenSize = view->ToWorld( m_preview->GetClientSize(), false );
+        VECTOR2D screenSize = view->ToWorld( ToVECTOR2D( m_preview->GetClientSize() ), false );
 
         VECTOR2I psize( m_page->GetWidthIU( schIUScale.IU_PER_MILS ), m_page->GetHeightIU( schIUScale.IU_PER_MILS ) );
         double scale = view->GetScale() / std::max( fabs( psize.x / screenSize.x ),

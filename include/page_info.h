@@ -159,9 +159,9 @@ public:
      * variable being passed. Note, this constexpr variable changes depending
      * on application, hence why it is passed.
      */
-    const wxSize GetSizeIU( double aIUScale ) const
+    const VECTOR2I GetSizeIU( double aIUScale ) const
     {
-        return wxSize( GetWidthIU( aIUScale ), GetHeightIU( aIUScale ) );
+        return VECTOR2I( GetWidthIU( aIUScale ), GetHeightIU( aIUScale ) );
     }
 
     /**
@@ -198,7 +198,7 @@ public:
 
 protected:
     // only the class implementation(s) may use this constructor
-    PAGE_INFO( const wxSize& aSizeMils, const wxString& aName, wxPaperSize aPaperId );
+    PAGE_INFO( const VECTOR2I& aSizeMils, const wxString& aName, wxPaperSize aPaperId );
 
 private:
     // standard pre-defined sizes

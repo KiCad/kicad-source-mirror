@@ -34,6 +34,7 @@
 #include <gal/cairo/cairo_compositor.h>
 #include <gal/definitions.h>
 #include <geometry/shape_poly_set.h>
+#include <math/vector2wx.h>
 #include <math/util.h> // for KiROUND
 #include <trigo.h>
 #include <bitmap_base.h>
@@ -1363,7 +1364,7 @@ CAIRO_GAL::CAIRO_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
 #endif
 
     SetSize( aParent->GetClientSize() );
-    m_screenSize = VECTOR2I( aParent->GetClientSize() );
+    m_screenSize = ToVECTOR2I( aParent->GetClientSize() );
 
     // Allocate memory for pixel storage
     allocateBitmaps();

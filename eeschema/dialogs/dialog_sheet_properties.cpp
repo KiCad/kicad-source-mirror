@@ -50,7 +50,7 @@ DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
     m_clearAnnotationNewItems( aClearAnnotationNewItems ),
     m_borderWidth( aParent, m_borderWidthLabel, m_borderWidthCtrl, m_borderWidthUnits ),
     m_dummySheet( *aSheet ),
-    m_dummySheetNameField( wxDefaultPosition, SHEETNAME, &m_dummySheet )
+    m_dummySheetNameField( VECTOR2I( -1, -1 ), SHEETNAME, &m_dummySheet )
 {
     m_sheet = aSheet;
     m_fields = new FIELDS_GRID_TABLE<SCH_FIELD>( this, aParent, m_grid, m_sheet );
@@ -709,7 +709,7 @@ void DIALOG_SHEET_PROPERTIES::OnAddField( wxCommandEvent& event )
         return;
 
     int       fieldID = m_fields->size();
-    SCH_FIELD newField( wxPoint( 0, 0 ), fieldID, m_sheet,
+    SCH_FIELD newField( VECTOR2I( 0, 0 ), fieldID, m_sheet,
                         SCH_SHEET::GetDefaultFieldName( fieldID ) );
 
     newField.SetTextAngle( m_fields->at( SHEETNAME ).GetTextAngle() );

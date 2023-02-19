@@ -579,9 +579,9 @@ void SCH_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOverbarSynta
 
                 case T_size:
                 {
-                    wxSize sz;
-                    sz.SetHeight( parseInternalUnits( "text height" ) );
-                    sz.SetWidth( parseInternalUnits( "text width" ) );
+                    VECTOR2I sz;
+                    sz.y = parseInternalUnits( "text height" );
+                    sz.x = parseInternalUnits( "text width" );
                     aText->SetTextSize( sz );
                     NeedRIGHT();
                     break;
@@ -1946,7 +1946,7 @@ SCH_FIELD* SCH_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
     // Empty property values are valid.
     wxString value = FromUTF8();
 
-    std::unique_ptr<SCH_FIELD> field = std::make_unique<SCH_FIELD>( wxDefaultPosition, -1,
+    std::unique_ptr<SCH_FIELD> field = std::make_unique<SCH_FIELD>( VECTOR2I(-1,-1), -1,
                                                                     aParent, name );
 
     field->SetText( value );
@@ -3020,9 +3020,9 @@ SCH_SHEET* SCH_SEXPR_PARSER::parseSheet()
 
         case T_size:
         {
-            wxSize size;
-            size.SetWidth( parseInternalUnits( "sheet width" ) );
-            size.SetHeight( parseInternalUnits( "sheet height" ) );
+            VECTOR2I size;
+            size.x = parseInternalUnits( "sheet width" );
+            size.y = parseInternalUnits( "sheet height" );
             sheet->SetSize( size );
             NeedRIGHT();
             break;
@@ -3297,10 +3297,10 @@ SCH_BUS_WIRE_ENTRY* SCH_SEXPR_PARSER::parseBusEntry()
 
         case T_size:
         {
-            wxSize size;
+            VECTOR2I size;
 
-            size.SetWidth( parseInternalUnits( "bus entry height" ) );
-            size.SetHeight( parseInternalUnits( "bus entry width" ) );
+            size.x = parseInternalUnits( "bus entry height" );
+            size.y = parseInternalUnits( "bus entry width" );
             busEntry->SetSize( size );
             NeedRIGHT();
             break;

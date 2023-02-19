@@ -1658,7 +1658,7 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
                 doMoveItem( sheet, tl_gridpt );
 
                 VECTOR2I newSize = (VECTOR2I) sheet->GetSize() - tl_gridpt + br_gridpt;
-                sheet->SetSize( wxSize( newSize.x, newSize.y ) );
+                sheet->SetSize( VECTOR2I( newSize.x, newSize.y ) );
                 updateItem( sheet, true );
 
                 for( SCH_SHEET_PIN* pin : sheet->GetPins() )

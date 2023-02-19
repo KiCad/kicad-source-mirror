@@ -164,14 +164,14 @@ extern void fillFlashedGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
                                  APERTURE_T        aAperture,
                                  int               Dcode_index,
                                  const VECTOR2I&   aPos,
-                                 wxSize            aSize,
+                                 VECTOR2I          aSize,
                                  bool              aLayerNegative );
 
 extern void fillLineGBRITEM( GERBER_DRAW_ITEM* aGbrItem,
                              int Dcode_index,
                              const VECTOR2I& aStart,
                              const VECTOR2I& aEnd,
-                             wxSize aPenSize,
+                             VECTOR2I aPenSize,
                              bool aLayerNegative );
 
 extern void fillArcGBRITEM( GERBER_DRAW_ITEM* aGbrItem,
@@ -179,7 +179,7 @@ extern void fillArcGBRITEM( GERBER_DRAW_ITEM* aGbrItem,
                             const VECTOR2I& aStart,
                             const VECTOR2I& aEnd,
                             const VECTOR2I& aRelCenter,
-                            wxSize aPenSize,
+                            VECTOR2I aPenSize,
                             bool aClockwise,
                             bool aMultiquadrant,
                             bool aLayerNegative );

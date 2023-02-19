@@ -152,7 +152,7 @@ const PAGE_INFO& SCH_BASE_FRAME::GetPageSettings () const
 }
 
 
-const wxSize SCH_BASE_FRAME::GetPageSizeIU() const
+const VECTOR2I SCH_BASE_FRAME::GetPageSizeIU() const
 {
     // GetSizeIU is compile time dependent:
     return GetScreen()->GetPageSettings().GetSizeIU( schIUScale.IU_PER_MILS );

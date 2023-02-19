@@ -379,7 +379,7 @@ bool DIALOG_FIELD_PROPERTIES::TransferDataFromWindow()
         }
     }
 
-    m_position = wxPoint( m_posX.GetValue(), m_posY.GetValue() );
+    m_position = VECTOR2I( m_posX.GetValue(), m_posY.GetValue() );
     m_size = m_textSize.GetValue();
 
     if( m_fontCtrl->HaveFontSelection() )
@@ -416,7 +416,7 @@ bool DIALOG_FIELD_PROPERTIES::TransferDataFromWindow()
 void DIALOG_FIELD_PROPERTIES::updateText( EDA_TEXT* aText )
 {
     if( aText->GetTextWidth() != m_size )
-        aText->SetTextSize( wxSize( m_size, m_size ) );
+        aText->SetTextSize( VECTOR2I( m_size, m_size ) );
 
     aText->SetVisible( m_isVisible );
     aText->SetTextAngle( m_isVertical ? ANGLE_VERTICAL : ANGLE_HORIZONTAL );

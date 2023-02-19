@@ -73,7 +73,7 @@ bool PANEL_IMAGE_EDITOR::CheckValues()
     }
 
     // Test value correctness
-    wxSize psize = m_workingImage->GetSizePixels();
+    VECTOR2I psize = m_workingImage->GetSizePixels();
     int    size_min = (int) std::min( ( psize.x * tmp ), ( psize.y * tmp ) );
 
     if( size_min < MIN_SIZE ) // if the size is too small, the image will be hard to locate
@@ -115,7 +115,7 @@ void PANEL_IMAGE_EDITOR::OnRedrawPanel( wxPaintEvent& event )
 
     double scale = 1.0 / m_workingImage->GetScalingFactor();
     dc.SetUserScale( scale, scale );
-    m_workingImage->DrawBitmap( &dc, wxPoint( 0, 0 ) );
+    m_workingImage->DrawBitmap( &dc, VECTOR2I( 0, 0 ) );
 }
 
 

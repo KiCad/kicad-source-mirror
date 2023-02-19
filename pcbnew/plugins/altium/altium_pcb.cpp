@@ -1316,7 +1316,7 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
                                                           : DIM_UNITS_FORMAT::BARE_SUFFIX );
 
     dimension->Text().SetTextThickness( aElem.textlinewidth );
-    dimension->Text().SetTextSize( wxSize( aElem.textheight, aElem.textheight ) );
+    dimension->Text().SetTextSize( VECTOR2I( aElem.textheight, aElem.textheight ) );
     dimension->Text().SetItalic( aElem.textitalic );
 
 #if 0  // we don't currently support bold; map to thicker text
@@ -1403,7 +1403,7 @@ void ALTIUM_PCB::HelperParseDimensions6Radial(const ADIMENSION6 &aElem)
 
     dimension->Text().SetPosition( aElem.textPoint.at( 0 ) );
     dimension->Text().SetTextThickness( aElem.textlinewidth );
-    dimension->Text().SetTextSize( wxSize( aElem.textheight, aElem.textheight ) );
+    dimension->Text().SetTextSize( VECTOR2I( aElem.textheight, aElem.textheight ) );
     dimension->Text().SetItalic( aElem.textitalic );
 
 #if 0  // we don't currently support bold; map to thicker text
@@ -1495,7 +1495,7 @@ void ALTIUM_PCB::HelperParseDimensions6Leader( const ADIMENSION6& aElem )
     text->SetText( aElem.textformat );
     text->SetPosition( aElem.textPoint.at( 0 ) );
     text->SetLayer( klayer );
-    text->SetTextSize( wxSize( aElem.textheight, aElem.textheight ) ); // TODO: parse text width
+    text->SetTextSize( VECTOR2I( aElem.textheight, aElem.textheight ) ); // TODO: parse text width
     text->SetTextThickness( aElem.textlinewidth );
     text->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
     text->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
@@ -2449,7 +2449,7 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
         if( !aElem.sizeAndShape || aElem.sizeAndShape->holeshape == ALTIUM_PAD_HOLE_SHAPE::ROUND )
         {
             pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_CIRCLE );
-            pad->SetDrillSize( wxSize( aElem.holesize, aElem.holesize ) );
+            pad->SetDrillSize( VECTOR2I( aElem.holesize, aElem.holesize ) );
         }
         else
         {
@@ -2465,7 +2465,7 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
                               aElem.name );
 
                 pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_CIRCLE );
-                pad->SetDrillSize( wxSize( aElem.holesize, aElem.holesize ) ); // Workaround
+                pad->SetDrillSize( VECTOR2I( aElem.holesize, aElem.holesize ) ); // Workaround
                 // TODO: elem.sizeAndShape->slotsize was 0 in testfile. Either use holesize in
                 //  this case or rect holes have a different id
                 break;
@@ -2479,11 +2479,11 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
 
                 if( slotRotation.IsHorizontal() )
                 {
-                    pad->SetDrillSize( wxSize( aElem.sizeAndShape->slotsize, aElem.holesize ) );
+                    pad->SetDrillSize( VECTOR2I( aElem.sizeAndShape->slotsize, aElem.holesize ) );
                 }
                 else if( slotRotation.IsVertical() )
                 {
-                    pad->SetDrillSize( wxSize( aElem.holesize, aElem.sizeAndShape->slotsize ) );
+                    pad->SetDrillSize( VECTOR2I( aElem.holesize, aElem.sizeAndShape->slotsize ) );
                 }
                 else
                 {
@@ -2505,7 +2505,7 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
                             aElem.sizeAndShape->holeshape );
 
                 pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_CIRCLE );
-                pad->SetDrillSize( wxSize( aElem.holesize, aElem.holesize ) ); // Workaround
+                pad->SetDrillSize( VECTOR2I( aElem.holesize, aElem.holesize ) ); // Workaround
                 break;
             }
         }
@@ -3180,11 +3180,11 @@ void ALTIUM_PCB::ConvertTexts6ToEdaTextSettings( const ATEXT6& aElem, EDA_TEXT* 
     if( aElem.fonttype == ALTIUM_TEXT_TYPE::TRUETYPE )
     {
         // TODO: why is this required? Somehow, truetype size is calculated differently
-        aEdaText->SetTextSize( wxSize( aElem.height / 2, aElem.height / 2 ) );
+        aEdaText->SetTextSize( VECTOR2I( aElem.height / 2, aElem.height / 2 ) );
     }
     else
     {
-        aEdaText->SetTextSize( wxSize( aElem.height, aElem.height ) ); // TODO: parse text width
+        aEdaText->SetTextSize( VECTOR2I( aElem.height, aElem.height ) ); // TODO: parse text width
     }
 
     aEdaText->SetTextThickness( aElem.strokewidth );

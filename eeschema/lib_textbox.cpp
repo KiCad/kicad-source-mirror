@@ -47,7 +47,8 @@ LIB_TEXTBOX::LIB_TEXTBOX( LIB_SYMBOL* aParent, int aLineWidth, FILL_T aFillType,
         LIB_SHAPE( aParent, SHAPE_T::RECT, aLineWidth, aFillType, LIB_TEXTBOX_T ),
         EDA_TEXT( schIUScale, text )
 {
-    SetTextSize( wxSize( schIUScale.MilsToIU( DEFAULT_TEXT_SIZE ), schIUScale.MilsToIU( DEFAULT_TEXT_SIZE ) ) );
+    SetTextSize( VECTOR2I( schIUScale.MilsToIU( DEFAULT_TEXT_SIZE ),
+                           schIUScale.MilsToIU( DEFAULT_TEXT_SIZE ) ) );
     SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
     SetVertJustify( GR_TEXT_V_ALIGN_TOP );
     SetMultilineAllowed( true );

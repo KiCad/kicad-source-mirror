@@ -229,7 +229,7 @@ bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataFromWindow()
         }
 
         if( m_textSize.GetValue() != m_graphicText->GetTextWidth() )
-            m_graphicText->SetTextSize( wxSize( m_textSize.GetValue(), m_textSize.GetValue() ) );
+            m_graphicText->SetTextSize( VECTOR2I( m_textSize.GetValue(), m_textSize.GetValue() ) );
 
         if( m_horizontal->IsChecked() )
             m_graphicText->SetTextAngle( ANGLE_HORIZONTAL );

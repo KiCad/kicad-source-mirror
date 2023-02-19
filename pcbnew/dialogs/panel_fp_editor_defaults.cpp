@@ -359,7 +359,7 @@ bool PANEL_FP_EDITOR_DEFAULTS::TransferDataFromWindow()
         if( i == ROW_EDGES || i == ROW_COURTYARD )
             continue;
 
-        cfg.m_TextSize[ i ] = wxSize( m_graphicsGrid->GetUnitValue( i, COL_TEXT_WIDTH ),
+        cfg.m_TextSize[i] = VECTOR2I( m_graphicsGrid->GetUnitValue( i, COL_TEXT_WIDTH ),
                                       m_graphicsGrid->GetUnitValue( i, COL_TEXT_HEIGHT ) );
         cfg.m_TextThickness[ i ] = m_graphicsGrid->GetUnitValue( i, COL_TEXT_THICKNESS );
 

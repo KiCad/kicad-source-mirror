@@ -504,7 +504,7 @@ int PCB_CONTROL::LayerAlphaDec( const TOOL_EVENT& aEvent )
 void PCB_CONTROL::DoSetGridOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
                                    EDA_ITEM* originViewItem, const VECTOR2D& aPoint )
 {
-    aFrame->GetDesignSettings().SetGridOrigin( wxPoint( aPoint ) );
+    aFrame->GetDesignSettings().SetGridOrigin( VECTOR2I( aPoint ) );
     aView->GetGAL()->SetGridOrigin( aPoint );
     originViewItem->SetPosition( aPoint );
     aView->MarkDirty();

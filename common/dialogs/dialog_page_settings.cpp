@@ -74,7 +74,7 @@ static const wxString pageFmts[] =
 };
 
 DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* aParent, double aIuPerMils,
-                                              const wxSize& aMaxUserSizeMils ) :
+                                              const VECTOR2I& aMaxUserSizeMils ) :
         DIALOG_PAGES_SETTINGS_BASE( aParent ),
         m_parent( aParent ),
         m_screen( m_parent->GetScreen() ),
@@ -745,7 +745,7 @@ void DIALOG_PAGES_SETTINGS::GetPageLayoutInfoFromDialog()
         wxASSERT( i != arrayDim(papers) );   // dialog UI match the above list?
 
         VECTOR2I sz = pageInfo.GetSizeMils();
-        m_layout_size = wxSize( sz.x, sz.y );
+        m_layout_size = VECTOR2I( sz.x, sz.y );
 
         // swap sizes to match orientation
         bool isPortrait = (bool) m_orientationComboBox->GetSelection();
@@ -753,7 +753,7 @@ void DIALOG_PAGES_SETTINGS::GetPageLayoutInfoFromDialog()
         if( ( isPortrait  && m_layout_size.x >= m_layout_size.y ) ||
             ( !isPortrait && m_layout_size.x <  m_layout_size.y ) )
         {
-            m_layout_size.Set( m_layout_size.y, m_layout_size.x );
+            std::swap( m_layout_size.x, m_layout_size.y );
         }
     }
 }
@@ -767,7 +767,7 @@ void DIALOG_PAGES_SETTINGS::GetCustomSizeMilsFromDialog()
     // Prepare to painless double -> int conversion.
     customSizeX = Clamp( double( INT_MIN ), customSizeX, double( INT_MAX ) );
     customSizeY = Clamp( double( INT_MIN ), customSizeY, double( INT_MAX ) );
-    m_layout_size = wxSize( KiROUND( customSizeX ), KiROUND( customSizeY ) );
+    m_layout_size = VECTOR2I( KiROUND( customSizeX ), KiROUND( customSizeY ) );
 }
 
 

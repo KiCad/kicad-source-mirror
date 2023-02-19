@@ -569,7 +569,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr<LIB_SYMBOL>& aSymbol,
     pos.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
     field->SetPosition( pos );
 
-    wxSize textSize;
+    VECTOR2I textSize;
 
     textSize.x = textSize.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
     field->SetTextSize( textSize );
@@ -882,7 +882,7 @@ LIB_TEXT* SCH_LEGACY_PLUGIN_CACHE::loadText( std::unique_ptr<LIB_SYMBOL>& aSymbo
     center.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
     text->SetPosition( center );
 
-    wxSize size;
+    VECTOR2I size;
 
     size.x = size.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
     text->SetTextSize( size );

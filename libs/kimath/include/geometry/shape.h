@@ -32,6 +32,7 @@
 #include <geometry/eda_angle.h>
 #include <math/vector2d.h>
 #include <math/box2.h>
+#include <wx/string.h>
 
 class SHAPE_LINE_CHAIN;
 

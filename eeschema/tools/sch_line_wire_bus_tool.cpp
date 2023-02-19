@@ -394,7 +394,7 @@ SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet, const VECTO
     m_frame->AddToScreen( m_busUnfold.entry, m_frame->GetScreen() );
 
     m_busUnfold.label = new SCH_LABEL( m_busUnfold.entry->GetEnd(), aNet );
-    m_busUnfold.label->SetTextSize( wxSize( cfg.m_DefaultTextSize, cfg.m_DefaultTextSize ) );
+    m_busUnfold.label->SetTextSize( VECTOR2I( cfg.m_DefaultTextSize, cfg.m_DefaultTextSize ) );
     m_busUnfold.label->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );
     m_busUnfold.label->SetParent( m_frame->GetScreen() );
     m_busUnfold.label->SetFlags( IS_NEW | IS_MOVING );
@@ -629,7 +629,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, int aType, 
     if( !m_wires.empty() )
         segment = m_wires.back();
 
-    wxPoint contextMenuPos;
+    VECTOR2I contextMenuPos;
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -852,7 +852,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, int aType, 
                 // Erase and redraw if necessary
                 if( flipX != m_busUnfold.flipX || flipY != m_busUnfold.flipY )
                 {
-                    wxSize size  = entry->GetSize();
+                    VECTOR2I size  = entry->GetSize();
                     int    ySign = flipY ? -1 : 1;
                     int    xSign = flipX ? -1 : 1;
 
@@ -975,7 +975,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, int aType, 
             if( !segment )
                 m_toolMgr->VetoContextMenuMouseWarp();
 
-            contextMenuPos = (wxPoint) cursorPos;
+            contextMenuPos = cursorPos;
             m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
         else if( evt->Category() == TC_COMMAND && evt->Action() == TA_CHOICE_MENU_CHOICE )

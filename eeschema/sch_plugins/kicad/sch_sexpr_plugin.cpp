@@ -976,9 +976,9 @@ void SCH_SEXPR_PLUGIN::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
                   EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
                                                        aSheet->GetPosition().y ).c_str(),
                   EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
-                                                       aSheet->GetSize().GetWidth() ).c_str(),
+                                                       aSheet->GetSize().x ).c_str(),
                   EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
-                                                       aSheet->GetSize().GetHeight() ).c_str() );
+                                                       aSheet->GetSize().y ).c_str() );
 
     if( aSheet->GetFieldsAutoplaced() != FIELDS_AUTOPLACED_NO )
         m_out->Print( 0, " (fields_autoplaced)" );
@@ -1159,9 +1159,9 @@ void SCH_SEXPR_PLUGIN::saveBusEntry( SCH_BUS_ENTRY_BASE* aBusEntry, int aNestLev
                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
                                                            aBusEntry->GetPosition().y ).c_str(),
                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
-                                                           aBusEntry->GetSize().GetWidth() ).c_str(),
+                                                           aBusEntry->GetSize().x ).c_str(),
                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
-                                                           aBusEntry->GetSize().GetHeight() ).c_str() );
+                                                           aBusEntry->GetSize().y ).c_str() );
 
         aBusEntry->GetStroke().Format( m_out, schIUScale, aNestLevel + 1 );
 

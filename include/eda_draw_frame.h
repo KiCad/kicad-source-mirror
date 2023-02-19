@@ -112,7 +112,7 @@ public:
      * Works off of GetPageSettings() to return the size of the paper page in
      * the internal units of this particular view.
      */
-    virtual const wxSize GetPageSizeIU() const = 0;
+    virtual const VECTOR2I GetPageSizeIU() const = 0;
 
     /**
      * For those frames that support polar coordinates.

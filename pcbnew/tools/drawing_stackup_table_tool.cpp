@@ -206,10 +206,10 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawSpecificationStackup( const VECTOR2I&
     // Style : Header
     std::unique_ptr<PCB_TEXT> headStyle = std::make_unique<PCB_TEXT>( footprint );
     headStyle->SetLayer( Eco1_User );
-    headStyle->SetTextSize( wxSize( pcbIUScale.mmToIU( 1.5 ), pcbIUScale.mmToIU( 1.5 ) ) );
+    headStyle->SetTextSize( VECTOR2I( pcbIUScale.mmToIU( 1.5 ), pcbIUScale.mmToIU( 1.5 ) ) );
     headStyle->SetTextThickness( pcbIUScale.mmToIU( 0.3 ) );
     headStyle->SetItalic( false );
-    headStyle->SetTextPos( wxPoint( 0, 0 ) );
+    headStyle->SetTextPos( VECTOR2I( 0, 0 ) );
     headStyle->SetText( _( "Layer" ) );
     headStyle->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
     headStyle->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
@@ -217,10 +217,10 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawSpecificationStackup( const VECTOR2I&
     // Style : data
     std::unique_ptr<PCB_TEXT> dataStyle = std::make_unique<PCB_TEXT>( footprint );
     dataStyle->SetLayer( Eco1_User );
-    dataStyle->SetTextSize( wxSize( pcbIUScale.mmToIU( 1.5 ), pcbIUScale.mmToIU( 1.5 ) ) );
+    dataStyle->SetTextSize( VECTOR2I( pcbIUScale.mmToIU( 1.5 ), pcbIUScale.mmToIU( 1.5 ) ) );
     dataStyle->SetTextThickness( pcbIUScale.mmToIU( 0.1 ) );
     dataStyle->SetItalic( false );
-    dataStyle->SetTextPos( wxPoint( 0, 0 ) );
+    dataStyle->SetTextPos( VECTOR2I( 0, 0 ) );
     dataStyle->SetText( _( "Layer" ) );
     dataStyle->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
     dataStyle->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
@@ -373,10 +373,10 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawBoardCharacteristics( const VECTOR2I&
     std::unique_ptr<PCB_TEXT> headStyle =
             std::make_unique<PCB_TEXT>( static_cast<FOOTPRINT*>( m_frame->GetModel() ) );
     headStyle->SetLayer( Eco1_User );
-    headStyle->SetTextSize( wxSize( pcbIUScale.mmToIU( 2.0 ), pcbIUScale.mmToIU( 2.0 ) ) );
+    headStyle->SetTextSize( VECTOR2I( pcbIUScale.mmToIU( 2.0 ), pcbIUScale.mmToIU( 2.0 ) ) );
     headStyle->SetTextThickness( pcbIUScale.mmToIU( 0.4 ) );
     headStyle->SetItalic( false );
-    headStyle->SetTextPos( wxPoint( 0, 0 ) );
+    headStyle->SetTextPos( VECTOR2I( 0, 0 ) );
     headStyle->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
     headStyle->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
 
@@ -384,10 +384,10 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawBoardCharacteristics( const VECTOR2I&
     std::unique_ptr<PCB_TEXT> dataStyle =
             std::make_unique<PCB_TEXT>( static_cast<FOOTPRINT*>( m_frame->GetModel() ) );
     dataStyle->SetLayer( Eco1_User );
-    dataStyle->SetTextSize( wxSize( pcbIUScale.mmToIU( 1.5 ), pcbIUScale.mmToIU( 1.5 ) ) );
+    dataStyle->SetTextSize( VECTOR2I( pcbIUScale.mmToIU( 1.5 ), pcbIUScale.mmToIU( 1.5 ) ) );
     dataStyle->SetTextThickness( pcbIUScale.mmToIU( 0.2 ) );
     dataStyle->SetItalic( false );
-    dataStyle->SetTextPos( wxPoint( 0, 0 ) );
+    dataStyle->SetTextPos( VECTOR2I( 0, 0 ) );
     dataStyle->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
     dataStyle->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
 

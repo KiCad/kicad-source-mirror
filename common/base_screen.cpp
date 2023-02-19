@@ -43,7 +43,7 @@ BASE_SCREEN::BASE_SCREEN( EDA_ITEM* aParent, KICAD_T aType ) :
 }
 
 
-void BASE_SCREEN::InitDataPoints( const wxSize& aPageSizeIU )
+void BASE_SCREEN::InitDataPoints( const VECTOR2I& aPageSizeIU )
 {
     if( m_Center )
     {

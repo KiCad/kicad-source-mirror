@@ -758,7 +758,7 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
 
     // Calculate the already placed items bounding box and the page size to determine
     // placement for the new symbols
-    wxSize   pageSizeIU = m_rootSheet->GetScreen()->GetPageSettings().GetSizeIU( schIUScale.IU_PER_MILS );
+    VECTOR2I pageSizeIU = m_rootSheet->GetScreen()->GetPageSettings().GetSizeIU( schIUScale.IU_PER_MILS );
     BOX2I    sheetBbox  = getSheetBbox( m_rootSheet );
     VECTOR2I newCmpPosition( sheetBbox.GetLeft(), sheetBbox.GetBottom() );
     int      maxY = sheetBbox.GetY();
@@ -792,7 +792,7 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
             newCmpPosition.x += cmpBbox.GetWidth();
             maxY = std::max( maxY, posY );
 
-            if( newCmpPosition.x >= pageSizeIU.GetWidth() )            // reached the page boundary?
+            if( newCmpPosition.x >= pageSizeIU.x )            // reached the page boundary?
                 newCmpPosition = VECTOR2I( sheetBbox.GetLeft(), maxY ); // then start a new row
 
             // Add the global net labels to recreate the implicit connections
@@ -964,7 +964,7 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
     targetSheetSize += VECTOR2I( schIUScale.MilsToIU( 1500 ), schIUScale.MilsToIU( 1500 ) );
 
     // Get current Eeschema sheet size.
-    wxSize    pageSizeIU = screen->GetPageSettings().GetSizeIU( schIUScale.IU_PER_MILS );
+    VECTOR2I  pageSizeIU = screen->GetPageSettings().GetSizeIU( schIUScale.IU_PER_MILS );
     PAGE_INFO pageInfo   = screen->GetPageSettings();
 
     // Increase if necessary
@@ -1074,8 +1074,8 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<SCH_ITEM*>&
             legendText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
             legendText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
             legendText->SetText( wxString( legendChar ) );
-            legendText->SetTextSize( wxSize( schIUScale.MilsToIU( 90 ),
-                                             schIUScale.MilsToIU( 100 ) ) );
+            legendText->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 90 ),
+                                               schIUScale.MilsToIU( 100 ) ) );
             aItems.push_back( legendText );
             legendChar++;
             legendPosY += rowSpacing;
@@ -1117,8 +1117,8 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<SCH_ITEM*>&
             legendText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
             legendText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
             legendText->SetText( wxString( legendChar ) );
-            legendText->SetTextSize( wxSize( schIUScale.MilsToIU( 90 ),
-                                             schIUScale.MilsToIU( 100 ) ) );
+            legendText->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 90 ),
+                                               schIUScale.MilsToIU( 100 ) ) );
             aItems.push_back( legendText );
             legendChar++;
             legendPosY += rowSpacing;
@@ -1160,8 +1160,8 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<SCH_ITEM*>&
             legendText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
             legendText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
             legendText->SetText( wxString( legendChar ) );
-            legendText->SetTextSize( wxSize( schIUScale.MilsToIU( 90 ),
-                                             schIUScale.MilsToIU( 100 ) ) );
+            legendText->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 90 ),
+                                               schIUScale.MilsToIU( 100 ) ) );
             aItems.push_back( legendText );
             legendChar++;
             legendPosX += columnSpacing;
@@ -1203,8 +1203,8 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<SCH_ITEM*>&
             legendText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
             legendText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
             legendText->SetText( wxString( legendChar ) );
-            legendText->SetTextSize( wxSize( schIUScale.MilsToIU( 90 ),
-                                             schIUScale.MilsToIU( 100 ) ) );
+            legendText->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 90 ),
+                                               schIUScale.MilsToIU( 100 ) ) );
             aItems.push_back( legendText );
             legendChar++;
             legendPosX += columnSpacing;
@@ -1338,8 +1338,8 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
             {
                 label->SetPosition( firstWire.A );
                 label->SetText( escapeName( netName ) );
-                label->SetTextSize( wxSize( schIUScale.MilsToIU( 40 ),
-                                            schIUScale.MilsToIU( 40 ) ) );
+                label->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 40 ),
+                                              schIUScale.MilsToIU( 40 ) ) );
 
                 if( firstWire.B.x > firstWire.A.x )
                     label->SetTextSpinStyle( TEXT_SPIN_STYLE::LEFT );
@@ -1503,8 +1503,8 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadLabel( wxXmlNode* aLabelNode, const wxString& aN
     bool                      global = m_netCounts[aNetName] > 1;
     std::unique_ptr<SCH_TEXT> label;
 
-    wxSize textSize = wxSize( KiROUND( elabel.size.ToSchUnits() * 0.7 ),
-                              KiROUND( elabel.size.ToSchUnits() * 0.7 ) );
+    VECTOR2I textSize = VECTOR2I( KiROUND( elabel.size.ToSchUnits() * 0.7 ),
+                                  KiROUND( elabel.size.ToSchUnits() * 0.7 ) );
 
     if( global )
         label = std::make_unique<SCH_GLOBALLABEL>();
@@ -2443,8 +2443,8 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
             LIB_TEXT* legendText = new LIB_TEXT( nullptr );
             legendText->SetPosition( VECTOR2I( legendPosX, KiROUND( legendPosY ) ) );
             legendText->SetText( wxString( legendChar ) );
-            legendText->SetTextSize( wxSize( schIUScale.MilsToIU( 90 ),
-                                             schIUScale.MilsToIU( 100 ) ) );
+            legendText->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 90 ),
+                                               schIUScale.MilsToIU( 100 ) ) );
             aItems.push_back( legendText );
             legendChar++;
             legendPosY -= rowSpacing;
@@ -2484,8 +2484,8 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
             LIB_TEXT* legendText = new LIB_TEXT( nullptr );
             legendText->SetPosition( VECTOR2I( legendPosX, KiROUND( legendPosY ) ) );
             legendText->SetText( wxString( legendChar ) );
-            legendText->SetTextSize( wxSize( schIUScale.MilsToIU( 90 ),
-                                             schIUScale.MilsToIU( 100 ) ) );
+            legendText->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 90 ),
+                                               schIUScale.MilsToIU( 100 ) ) );
             aItems.push_back( legendText );
             legendChar++;
             legendPosY -= rowSpacing;
@@ -2525,8 +2525,8 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
             LIB_TEXT* legendText = new LIB_TEXT( nullptr );
             legendText->SetPosition( VECTOR2I( KiROUND( legendPosX ), legendPosY ) );
             legendText->SetText( wxString( legendChar ) );
-            legendText->SetTextSize( wxSize( schIUScale.MilsToIU( 90 ),
-                                             schIUScale.MilsToIU( 100 ) ) );
+            legendText->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 90 ),
+                                               schIUScale.MilsToIU( 100 ) ) );
             aItems.push_back( legendText );
             legendChar++;
             legendPosX += columnSpacing;
@@ -2566,8 +2566,8 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
             LIB_TEXT* legendText = new LIB_TEXT( nullptr );
             legendText->SetPosition( VECTOR2I( KiROUND( legendPosX ), legendPosY ) );
             legendText->SetText( wxString( legendChar ) );
-            legendText->SetTextSize( wxSize( schIUScale.MilsToIU( 90 ),
-                                             schIUScale.MilsToIU( 100 ) ) );
+            legendText->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 90 ),
+                                               schIUScale.MilsToIU( 100 ) ) );
             aItems.push_back( legendText );
             legendChar++;
             legendPosX += columnSpacing;
@@ -3366,8 +3366,8 @@ void SCH_EAGLE_PLUGIN::addImplicitConnections( SCH_SYMBOL* aSymbol, SCH_SCREEN* 
                     SCH_GLOBALLABEL* netLabel = new SCH_GLOBALLABEL;
                     netLabel->SetPosition( aSymbol->GetPinPhysicalPosition( pin ) );
                     netLabel->SetText( extractNetName( pin->GetName() ) );
-                    netLabel->SetTextSize( wxSize( schIUScale.MilsToIU( 40 ),
-                                                   schIUScale.MilsToIU( 40 ) ) );
+                    netLabel->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 40 ),
+                                                     schIUScale.MilsToIU( 40 ) ) );
 
                     switch( pin->GetOrientation() )
                     {

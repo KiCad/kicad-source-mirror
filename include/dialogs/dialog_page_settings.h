@@ -36,7 +36,7 @@ class DIALOG_PAGES_SETTINGS: public DIALOG_PAGES_SETTINGS_BASE
 {
 public:
     DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* aParent, double aIuPerMils,
-                           const wxSize& aMaxUserSizeMils );
+                           const VECTOR2I& aMaxUserSizeMils );
     virtual ~DIALOG_PAGES_SETTINGS();
 
     const wxString GetWksFileName()
@@ -121,8 +121,8 @@ protected:
     bool            m_initialized;
     bool            m_localPrjConfigChanged; /// the page layuout filename was changed
     wxBitmap*       m_pageBitmap;            /// Temporary bitmap for the drawing sheet example.
-    wxSize          m_layout_size;           /// Logical drawing sheet size.
-    wxSize          m_maxPageSizeMils;       /// The max page size allowed by the caller frame
+    VECTOR2I        m_layout_size;           /// Logical drawing sheet size.
+    VECTOR2I        m_maxPageSizeMils;       /// The max page size allowed by the caller frame
     PAGE_INFO       m_pageInfo;              /// Temporary page info.
     bool            m_customFmt;             /// true if the page selection is custom
     TITLE_BLOCK     m_tb;                    /// Temporary title block (basic inscriptions).

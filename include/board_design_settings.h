@@ -610,7 +610,7 @@ public:
     /**
      * Return the default text size from the layer class for the given layer.
      */
-    wxSize GetTextSize( PCB_LAYER_ID aLayer ) const;
+    VECTOR2I GetTextSize( PCB_LAYER_ID aLayer ) const;
 
     /**
      * Return the default text thickness from the layer class for the given layer.
@@ -697,7 +697,7 @@ public:
 
     // Arrays of default values for the various layer classes.
     int        m_LineThickness[ LAYER_CLASS_COUNT ];
-    wxSize     m_TextSize[ LAYER_CLASS_COUNT ];
+    VECTOR2I   m_TextSize[LAYER_CLASS_COUNT];
     int        m_TextThickness[ LAYER_CLASS_COUNT ];
     bool       m_TextItalic[ LAYER_CLASS_COUNT ];
     bool       m_TextUpright[ LAYER_CLASS_COUNT ];

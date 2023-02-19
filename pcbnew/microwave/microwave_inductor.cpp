@@ -357,7 +357,7 @@ FOOTPRINT* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& 
     PAD*            pad;
     PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
 
-    wxPoint pt      = aInductorPattern.m_End - aInductorPattern.m_Start;
+    VECTOR2I pt = aInductorPattern.m_End - aInductorPattern.m_Start;
     int     min_len = KiROUND( EuclideanNorm( pt ) );
     aInductorPattern.m_Length = min_len;
 

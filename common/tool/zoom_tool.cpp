@@ -24,6 +24,7 @@
 #include <tool/tool_manager.h>
 #include <tool/zoom_tool.h>
 #include <view/view.h>
+#include <math/vector2wx.h>
 
 
 ZOOM_TOOL::ZOOM_TOOL() :
@@ -140,7 +141,7 @@ bool ZOOM_TOOL::selectRegion()
             }
             else
             {
-                VECTOR2D sSize = view->ToWorld( canvas->GetClientSize(), false );
+                VECTOR2D sSize = view->ToWorld( ToVECTOR2I( canvas->GetClientSize() ), false );
                 VECTOR2D vSize = selectionBox.GetSize();
                 double scale;
                 double ratio = std::max( fabs( vSize.x / sSize.x ), fabs( vSize.y / sSize.y ) );

@@ -90,7 +90,7 @@ static LIB_SYMBOL* dummy()
 
         LIB_TEXT* text = new LIB_TEXT( symbol );
 
-        text->SetTextSize( wxSize( schIUScale.MilsToIU( 150 ), schIUScale.MilsToIU( 150 ) ) );
+        text->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 150 ), schIUScale.MilsToIU( 150 ) ) );
         text->SetText( wxString( wxT( "??" ) ) );
 
         symbol->AddDrawItem( square );

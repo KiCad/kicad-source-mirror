@@ -65,8 +65,8 @@ public:
             m_pin( &m_symbol ),
             m_ercItem( ERC_ITEM::Create( ERCE_DRIVER_CONFLICT ) )
     {
-        m_sheet.SetPosition( wxPoint( schIUScale.mmToIU( 5 ), schIUScale.mmToIU( 10 ) ) );
-        m_sheet.SetSize( wxSize( schIUScale.mmToIU( 50 ), schIUScale.mmToIU( 100 ) ) );
+        m_sheet.SetPosition( VECTOR2I( schIUScale.mmToIU( 5 ), schIUScale.mmToIU( 10 ) ) );
+        m_sheet.SetSize( VECTOR2I( schIUScale.mmToIU( 50 ), schIUScale.mmToIU( 100 ) ) );
     }
 
     EDA_ITEM* Instantiate( KICAD_T aType )
@@ -79,7 +79,7 @@ public:
 
         switch( aType )
         {
-        case SCH_MARKER_T:          return new SCH_MARKER( m_ercItem, wxPoint( 0, 0 ) );
+        case SCH_MARKER_T:          return new SCH_MARKER( m_ercItem, VECTOR2I( 0, 0 ) );
         case SCH_JUNCTION_T:        return new SCH_JUNCTION();
         case SCH_NO_CONNECT_T:      return new SCH_NO_CONNECT();
         case SCH_BUS_WIRE_ENTRY_T:  return new SCH_BUS_WIRE_ENTRY();
@@ -87,20 +87,20 @@ public:
         case SCH_LINE_T:            return new SCH_LINE();
         case SCH_SHAPE_T:           return new SCH_SHAPE( SHAPE_T::ARC );
         case SCH_BITMAP_T:          return new SCH_BITMAP();
-        case SCH_TEXT_T:            return new SCH_TEXT( wxPoint( 0, 0 ), "test text" );
+        case SCH_TEXT_T:            return new SCH_TEXT( VECTOR2I( 0, 0 ), "test text" );
         case SCH_TEXTBOX_T:         return new SCH_TEXTBOX( 0, FILL_T::NO_FILL, "test textbox" );
-        case SCH_LABEL_T:           return new SCH_LABEL( wxPoint( 0, 0 ), "test label" );
-        case SCH_DIRECTIVE_LABEL_T: return new SCH_DIRECTIVE_LABEL( wxPoint( 0, 0 ) );
+        case SCH_LABEL_T:           return new SCH_LABEL( VECTOR2I( 0, 0 ), "test label" );
+        case SCH_DIRECTIVE_LABEL_T: return new SCH_DIRECTIVE_LABEL( VECTOR2I( 0, 0 ) );
         case SCH_GLOBAL_LABEL_T:    return new SCH_GLOBALLABEL();
         case SCH_HIER_LABEL_T:      return new SCH_HIERLABEL();
-        case SCH_FIELD_T:           return new SCH_FIELD( wxPoint( 0, 0 ), 0, nullptr );
+        case SCH_FIELD_T:           return new SCH_FIELD( VECTOR2I( 0, 0 ), 0, nullptr );
         case SCH_SYMBOL_T:          return new SCH_SYMBOL();
 
         case SCH_SHEET_PIN_T:
             // XXX: m_sheet pins currently have to have their initial positions calculated manually.
             return new SCH_SHEET_PIN( &m_sheet,
-                                      wxPoint( m_sheet.GetPosition().x,
-                                               m_sheet.GetPosition().y + schIUScale.mmToIU( 40 ) ),
+                                      VECTOR2I( m_sheet.GetPosition().x,
+                                                m_sheet.GetPosition().y + schIUScale.mmToIU( 40 ) ),
                                       "test aPin" );
 
         case SCH_SHEET_T:           return new SCH_SHEET();
@@ -156,7 +156,7 @@ BOOST_AUTO_TEST_CASE( Move )
         {
             IterateOverPositionsAndReferences<EDA_ITEM>(
                     item.get(),
-                    []( EDA_ITEM* aOriginalItem, wxPoint aRef )
+                    []( EDA_ITEM* aOriginalItem, VECTOR2I aRef )
                     {
                         auto item = std::unique_ptr<EDA_ITEM>( aOriginalItem->Clone() );
                         VECTOR2I originalPos = item->GetPosition();
@@ -237,7 +237,7 @@ BOOST_AUTO_TEST_CASE( Rotate )
             {
                 IterateOverPositionsAndReferences<EDA_ITEM>(
                         item.get(),
-                        []( EDA_ITEM* aOriginalItem, wxPoint aRef )
+                        []( EDA_ITEM* aOriginalItem, VECTOR2I aRef )
                         {
                             auto item = std::unique_ptr<EDA_ITEM>( aOriginalItem->Clone() );
 
@@ -284,7 +284,7 @@ BOOST_AUTO_TEST_CASE( MirrorHorizontally )
         {
             IterateOverPositionsAndReferences<EDA_ITEM>(
                     item.get(),
-                    []( EDA_ITEM* aOriginalItem, wxPoint aRef )
+                    []( EDA_ITEM* aOriginalItem, VECTOR2I aRef )
                     {
                         auto item = std::unique_ptr<EDA_ITEM>( aOriginalItem->Clone() );
 
@@ -328,7 +328,7 @@ BOOST_AUTO_TEST_CASE( MirrorVertically )
         {
             IterateOverPositionsAndReferences<EDA_ITEM>(
                     item.get(),
-                    []( EDA_ITEM* aOriginalItem, wxPoint aRef )
+                    []( EDA_ITEM* aOriginalItem, VECTOR2I aRef )
                     {
                         auto item = std::unique_ptr<EDA_ITEM>( aOriginalItem->Clone() );
 

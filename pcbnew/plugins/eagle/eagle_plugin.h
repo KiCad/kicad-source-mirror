@@ -189,7 +189,7 @@ private:
     int kicad_x( const ECOORD& x ) const { return x.ToPcbUnits(); }
 
     /// create a font size (fontz) from an eagle font size scalar and KiCad font thickness
-    wxSize  kicad_fontz( const ECOORD& d, int aTextThickness ) const;
+    VECTOR2I kicad_fontsize( const ECOORD& d, int aTextThickness ) const;
 
     /**
      * Generate mapping between Eagle and KiCad layers.

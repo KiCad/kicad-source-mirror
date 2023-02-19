@@ -228,7 +228,7 @@ void DIALOG_INSPECTOR::ReCreateDesignList()
     // Display page format name.
     GetGridList()->SetCellValue( row, COL_COMMENT, page_info.GetType() );
     GetGridList()->SetCellValue( row, COL_REPEAT_NUMBER, "-" );
-    wxSize page_sizeIU = m_editorFrame->GetPageSizeIU();
+    VECTOR2I page_sizeIU = m_editorFrame->GetPageSizeIU();
     GetGridList()->SetCellValue( row, COL_TEXTSTRING,
                                  wxString::Format( _( "Size: %.1fx%.1fmm" ),
                                                    drawSheetIUScale.IUTomm( page_sizeIU.x ),

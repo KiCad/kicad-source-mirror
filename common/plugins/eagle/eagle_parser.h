@@ -668,7 +668,7 @@ struct ETEXT
     ETEXT( wxXmlNode* aText );
 
     /// Calculate text size based on font type and size
-    wxSize ConvertSize() const;
+    VECTOR2I ConvertSize() const;
 };
 
 

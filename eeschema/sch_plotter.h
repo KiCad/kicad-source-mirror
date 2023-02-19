@@ -161,7 +161,7 @@ protected:
     void createDXFFiles( const SCH_PLOT_SETTINGS& aPlotSettings, RENDER_SETTINGS* aRenderSettings,
                          REPORTER* aReporter );
     bool plotOneSheetDXF( const wxString& aFileName, SCH_SCREEN* aScreen,
-                          RENDER_SETTINGS* aRenderSettings, const wxPoint& aPlotOffset,
+                          RENDER_SETTINGS* aRenderSettings, const VECTOR2I& aPlotOffset,
                           double aScale, const SCH_PLOT_SETTINGS& aPlotSettings );
 
 
@@ -170,7 +170,7 @@ protected:
                           REPORTER* aReporter );
     bool plotOneSheetHpgl( const wxString& aFileName, SCH_SCREEN* aScreen,
                            const PAGE_INFO& aPageInfo, RENDER_SETTINGS* aRenderSettings,
-                           const wxPoint& aPlot0ffset, double aScale,
+                           const VECTOR2I& aPlot0ffset, double aScale,
                            const SCH_PLOT_SETTINGS&   aPlotSettings );
 
     // PS
@@ -178,7 +178,7 @@ protected:
                         REPORTER* aReporter );
     bool plotOneSheetPS( const wxString& aFileName, SCH_SCREEN* aScreen,
                          RENDER_SETTINGS* aRenderSettings, const PAGE_INFO& aPageInfo,
-                         const wxPoint& aPlot0ffset, double aScale,
+                         const VECTOR2I& aPlot0ffset, double aScale,
                          const SCH_PLOT_SETTINGS& aPlotSettings );
 
     // SVG

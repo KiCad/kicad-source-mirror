@@ -340,7 +340,7 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataFromWindow()
                                                           m_italic->IsChecked() ) );
     }
 
-    m_edaText->SetTextSize( wxSize( m_textWidth.GetValue(), m_textHeight.GetValue() ) );
+    m_edaText->SetTextSize( VECTOR2I( m_textWidth.GetValue(), m_textHeight.GetValue() ) );
     m_edaText->SetTextThickness( m_thickness.GetValue() );
 
     if( m_fpTextBox )
