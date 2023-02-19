@@ -269,8 +269,9 @@ public:
      * @param aNetCode is the net code.
      * @param aTypes allows one to filter by item types.
      */
+    // We don't use std::initializer_list<KICAD_T>& to allow the use from Python
     const std::vector<BOARD_CONNECTED_ITEM*>
-    GetNetItems( int aNetCode, const std::initializer_list<KICAD_T>& aTypes ) const;
+    GetNetItems( int aNetCode, const std::vector<KICAD_T>& aTypes ) const;
 
     void BlockRatsnestItems( const std::vector<BOARD_ITEM*>& aItems );
 

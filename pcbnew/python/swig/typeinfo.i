@@ -29,5 +29,34 @@
 #include <core/typeinfo.h>
 %}
 
+// Methods like CONNECTIVITY_DATA::GetNetItems take an std::vector<KICAD_T>
+// This typemap allows any of the following:
+//    conn = board.GetConnectivity()
+//    conn.GetNetItems(net.GetNet(), (pcbnew.PCB_PAD_T, pcbnew.PCB_TRACE_T))
+//    conn.GetNetItems(net.GetNet(), [pcbnew.PCB_PAD_T, pcbnew.PCB_TRACE_T])
+//    conn.GetNetItems(net.GetNet(), pcbnew.PCB_PAD_T)
 
+%typemap(in) std::vector< KICAD_T,std::allocator< KICAD_T > > const & ( std::vector<KICAD_T> vec ) {
+    $1 = &vec;
 
+    // Try with a single element
+    int value;
+    int ecode = SWIG_AsVal_int( $input, &value );
+
+    if ( SWIG_IsOK( ecode ) ) {
+        vec.push_back( static_cast<KICAD_T>( value ) );
+    } else if ( PySequence_Check( $input ) ) {  // Now try with a sequence
+        int elements = PySequence_Size( $input );
+        for(int i=0; i<elements; i++) {
+            int ecode = SWIG_AsVal_int( PySequence_GetItem( $input, i ), &value );
+            if ( !SWIG_IsOK( ecode ) ) {
+                SWIG_exception_fail( SWIG_ArgError( ecode ),
+                                     "expecting KICAD_T enum values" );
+            }
+            vec.push_back( static_cast<KICAD_T>( value ) );
+        }
+    } else {
+        SWIG_exception_fail( SWIG_ArgError( ecode ),
+                             "expecting KICAD_T enum value" );
+    }
+ }

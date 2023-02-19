@@ -556,8 +556,9 @@ CONNECTIVITY_DATA::GetConnectedItems( const BOARD_CONNECTED_ITEM *aItem,
 }
 
 
+// We don't use std::initializer_list<KICAD_T>& to allow the use from Python
 const std::vector<BOARD_CONNECTED_ITEM*>
-CONNECTIVITY_DATA::GetNetItems( int aNetCode, const std::initializer_list<KICAD_T>& aTypes ) const
+CONNECTIVITY_DATA::GetNetItems( int aNetCode, const std::vector<KICAD_T>& aTypes ) const
 {
     std::vector<BOARD_CONNECTED_ITEM*> items;
     items.reserve( 32 );
