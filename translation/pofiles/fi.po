@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-10 15:35-0800\n"
-"PO-Revision-Date: 2023-02-19 15:28+0000\n"
+"PO-Revision-Date: 2023-02-21 00:55+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v7/fi/>\n"
 "Language: fi\n"
@@ -8607,7 +8607,7 @@ msgstr "Testit ovat käynnissä ..."
 #: eeschema/dialogs/dialog_erc_base.cpp:78
 #: pcbnew/dialogs/dialog_drc_base.cpp:99
 msgid "Click on items to highlight them on the board."
-msgstr "Napsauta kohteita korostaaksesi ne taululla."
+msgstr "Napsauta kohteita korostaaksesi ne piirilevyllä."
 
 #: eeschema/dialogs/dialog_erc_base.cpp:87
 #: pcbnew/dialogs/dialog_drc_base.cpp:107
