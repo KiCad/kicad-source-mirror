@@ -86,7 +86,6 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
                                 long aStyle, const wxString& aFrameName, const EDA_IU_SCALE& aIuScale ) :
     KIWAY_PLAYER( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName, aIuScale )
 {
-    m_socketServer        = nullptr;
     m_mainToolBar         = nullptr;
     m_drawToolBar         = nullptr;
     m_optionsToolBar      = nullptr;
@@ -187,14 +186,6 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 
 EDA_DRAW_FRAME::~EDA_DRAW_FRAME()
 {
-    delete m_socketServer;
-
-    for( wxSocketBase* socket : m_sockets )
-    {
-        socket->Shutdown();
-        socket->Destroy();
-    }
-
     saveCanvasTypeSetting( m_canvasType );
 
     delete m_actions;

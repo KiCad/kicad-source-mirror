@@ -80,6 +80,7 @@ KIWAY_PLAYER::~KIWAY_PLAYER() throw() {
         m_socketServer->Notify( false );
 
         delete m_socketServer;
+        m_socketServer = nullptr;
     }
 }
 

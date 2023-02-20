@@ -486,7 +486,6 @@ protected:
 
 
     wxSocketServer*             m_socketServer;
-    std::vector<wxSocketBase*>  m_sockets;         ///< interprocess communication
 
     ///< Prevents opening same file multiple times.
     std::unique_ptr<wxSingleInstanceChecker> m_file_checker;
