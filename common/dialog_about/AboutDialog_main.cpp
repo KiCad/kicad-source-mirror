@@ -1129,7 +1129,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     #define SYMBOL_LIB_CONTRIBUTION _( "Symbols by" )
     aInfo.AddLibrarian( new CONTRIBUTOR( wxS( "GitLab contributors" ),
                                       wxEmptyString,
-                                      wxS( "https://gitlab.com/kicad/libraries/kicad-symbols/-/graphs/v7" ),
+                                      wxS( "https://gitlab.com/kicad/libraries/kicad-symbols/-/graphs/master" ),
                                       SYMBOL_LIB_CONTRIBUTION,
                                       aInfo.CreateKiBitmap( BITMAPS::add_component ) ) );
 
