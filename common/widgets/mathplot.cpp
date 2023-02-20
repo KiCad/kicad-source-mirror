@@ -3579,23 +3579,23 @@ void mpFXY::UpdateScales()
 
 double mpFXY::s2x( double plotCoordX ) const
 {
-    return m_scaleX->TransformFromPlot( plotCoordX );
+    return m_scaleX ? m_scaleX->TransformFromPlot( plotCoordX ) : plotCoordX;
 }
 
 
 double mpFXY::s2y( double plotCoordY ) const
 {
-    return m_scaleY->TransformFromPlot( plotCoordY );
+    return m_scaleY ? m_scaleY->TransformFromPlot( plotCoordY ) : plotCoordY;
 }
 
 
 double mpFXY::x2s( double x ) const
 {
-    return m_scaleX->TransformToPlot( x );
+    return m_scaleX ? m_scaleX->TransformToPlot( x ) : x;
 }
 
 
 double mpFXY::y2s( double y ) const
 {
-    return m_scaleY->TransformToPlot( y );
+    return m_scaleY ? m_scaleY->TransformToPlot( y ) : y;
 }
