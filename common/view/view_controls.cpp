@@ -62,6 +62,7 @@ void VC_SETTINGS::Reset()
     m_cursorCaptured                  = false;
     m_snappingEnabled                 = true;
     m_grabMouse                       = false;
+    m_focusFollowSchPcb               = false;
     m_autoPanEnabled                  = false;
     m_autoPanSettingEnabled           = false;
     m_autoPanMargin                   = 0.02f;

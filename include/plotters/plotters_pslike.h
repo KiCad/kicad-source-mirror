@@ -244,7 +244,8 @@ public:
             m_fontResDictHandle( 0 ),
             m_pageStreamHandle( 0 ),
             m_streamLengthHandle( 0 ),
-            m_workFile( nullptr )
+            m_workFile( nullptr ),
+            m_totalOutlineNodes( 0 )
     {
     }
 

@@ -283,6 +283,9 @@ int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
 {
     JOB_EXPORT_SCH_PYTHONBOM* aNetJob = dynamic_cast<JOB_EXPORT_SCH_PYTHONBOM*>( aJob );
 
+    if( !aNetJob )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
     SCHEMATIC* sch = EESCHEMA_HELPERS::LoadSchematic( aNetJob->m_filename, SCH_IO_MGR::SCH_KICAD );
 
     if( sch == nullptr )
@@ -449,6 +452,9 @@ int EESCHEMA_JOBS_HANDLER::JobSymExportSvg( JOB* aJob )
 {
     JOB_SYM_EXPORT_SVG* svgJob = dynamic_cast<JOB_SYM_EXPORT_SVG*>( aJob );
 
+    if( !svgJob )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
     wxFileName fn( svgJob->m_libraryPath );
     fn.MakeAbsolute();
 
@@ -511,6 +517,9 @@ int EESCHEMA_JOBS_HANDLER::JobSymExportSvg( JOB* aJob )
 int EESCHEMA_JOBS_HANDLER::JobSymUpgrade( JOB* aJob )
 {
     JOB_SYM_UPGRADE* upgradeJob = dynamic_cast<JOB_SYM_UPGRADE*>( aJob );
+
+    if( !upgradeJob )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
 
     wxFileName fn( upgradeJob->m_libraryPath );
     fn.MakeAbsolute();
