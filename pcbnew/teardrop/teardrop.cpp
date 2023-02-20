@@ -426,9 +426,6 @@ int TEARDROP_MANAGER::RemoveTeardrops( BOARD_COMMIT* aCommitter, bool aCommitAft
 
     if( count )
     {
-        ZONE_FILLER filler( m_board, aCommitter );
-        (void)filler.Fill( m_board->Zones() );
-
         if( aCommitter && aCommitAfterRemove )
             aCommitter->Push( _( "Remove teardrops" ), SKIP_CONNECTIVITY );
 

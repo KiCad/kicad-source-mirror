@@ -593,8 +593,8 @@ bool TEARDROP_MANAGER::findAnchorPointsOnTrack( TEARDROP_PARAMETERS* aCurrParams
                                                 TRACK_BUFFER& aTrackLookupList ) const
 {
     bool found = true;
-    VECTOR2I start = aTrack->GetStart();    // the anchor point on the track, inside teardrop
-    VECTOR2I end = aTrack->GetEnd();        // the anchor point on the track, outside teardrop
+    VECTOR2I start = aTrack->GetStart();    // one reference point on the track, inside teardrop
+    VECTOR2I end = aTrack->GetEnd();        // the second reference point on the track, outside teardrop
     int radius = aViaPad.m_Width / 2;
 
     // Requested length of the teardrop:
@@ -603,7 +603,8 @@ bool TEARDROP_MANAGER::findAnchorPointsOnTrack( TEARDROP_PARAMETERS* aCurrParams
     if( aCurrParams->m_TdMaxLen > 0 )
         targetLength = std::min( aCurrParams->m_TdMaxLen, targetLength );
 
-    int actualTdLen;    // The actual teardrop length, limited by the available track length
+    // actualTdLen is the distance between start and the teardrop point on the segment from start to end
+    int actualTdLen;
     bool need_swap = false;     // true if the start and end points of the current track are swapped
 
     // ensure that start is at the via/pad end
@@ -636,18 +637,20 @@ bool TEARDROP_MANAGER::findAnchorPointsOnTrack( TEARDROP_PARAMETERS* aCurrParams
     int pt_count = outline.Intersect( SEG( start, end ), pts );
 
     // Ensure a intersection point was found, otherwise we cannot built the teardrop
-    // using this track
+    // using this track (it is fully outside or inside the pad/via shape)
     if( pt_count < 1 )
         return false;
 
     VECTOR2I intersect = pts[0].p;
-    start = intersect;
+    start = intersect;      // This is currently the reference point of the teardrop lenght
 
+    // actualTdLen for now the distance between start and the teardrop point on the (start end)segment
+    // It cannot be bigger than the lenght of this segment
     actualTdLen = std::min( targetLength, SEG( start, end ).Length() );
     VECTOR2I ref_lenght_point = start;    // the reference point of actualTdLen
 
     // If the first track is too short to allow a teardrop having the requested length
-    // explore the connected track(s)
+    // explore the connected track(s), and try to find a anchor point at targetLength from initial start
     if( actualTdLen < targetLength && aFollowTracks )
     {
         int consumed = 0;
@@ -663,6 +666,7 @@ bool TEARDROP_MANAGER::findAnchorPointsOnTrack( TEARDROP_PARAMETERS* aCurrParams
 
             // TODO: stop if angle between old and new segment is > 45 deg to avoid bad shape
             consumed += actualTdLen;
+            // actualTdLen is the new distance from new start point and the teardrop anchor point
             actualTdLen = std::min( targetLength-consumed, int( connected_track->GetLength() ) );
             aTrack = connected_track;
             end = connected_track->GetEnd();
@@ -707,24 +711,28 @@ bool TEARDROP_MANAGER::findAnchorPointsOnTrack( TEARDROP_PARAMETERS* aCurrParams
             // So we explore segments from the last to the first
             for( int ii = poly.PointCount()-1; ii >= 0 ; ii-- )
             {
-                int dist_from_start = ( poly.CPoint( ii ) - ref_lenght_point ).EuclideanNorm();
+                int dist_from_start = ( poly.CPoint( ii ) - start ).EuclideanNorm();
 
                 // The first segment at a distance of the reference point < actualTdLen is OK
-                if( dist_from_start < actualTdLen )
+                // and is suitable to define the reference segment of the teardrop anchor.
+                if( dist_from_start < actualTdLen || ii == 0 )
                 {
                     start = poly.CPoint( ii );
 
                     if( ii < poly.PointCount()-1 )
                         end = poly.CPoint( ii+1 );
 
-                    // actualTdLen is the distance between start (the segment start point)
+                    // actualTdLen is the distance between start (the reference segment start point)
                     // and the point on track of the teardrop.
                     // This is the difference between the initial actualTdLen value and the
                     // distance between start and ref_lenght_point.
                     actualTdLen -= (start - ref_lenght_point).EuclideanNorm();
 
-                    if( actualTdLen < 0 )
+                    // Ensure validity of actualTdLen: >= 0, and <= segment lenght
+                    if( actualTdLen < 0 )   // should not happen, but...
                         actualTdLen = 0;
+
+                    actualTdLen = std::min( actualTdLen, (end - start).EuclideanNorm() );
 
                     break;
                 }
@@ -734,7 +742,7 @@ bool TEARDROP_MANAGER::findAnchorPointsOnTrack( TEARDROP_PARAMETERS* aCurrParams
 
     // aStartPoint and aEndPoint will define later a segment to build the 2 anchors points
     // of the teardrop on the aTrack shape.
-    // they are the end point of aTrack if aTrack is a segment,
+    // they are two points (both outside the pad/via shape) of aTrack if aTrack is a segment,
     // or a small segment on aTrack if aTrack is an ARC
     aStartPoint = start;
     aEndPoint = end;
