@@ -28,10 +28,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-15 16:29-0800\n"
-"PO-Revision-Date: 2023-02-04 10:00+0000\n"
+"PO-Revision-Date: 2023-02-21 00:55+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2419,7 +2419,7 @@ msgstr "USLedger 11x17in"
 
 #: common/dialogs/dialog_page_settings.cpp:72
 msgid "User (Custom)"
-msgstr "사용자(사용자 정의)"
+msgstr "사용자 (사용자 정의)"
 
 #: common/dialogs/dialog_page_settings.cpp:104
 msgid "Preview Settings"
@@ -20194,9 +20194,8 @@ msgid "Schematic file does not exist or is not accessible\n"
 msgstr "회로도 파일이 없거나 액세스할 수 없습니다.\n"
 
 #: kicad/cli/command_export_sch_pdf.cpp:38
-#, fuzzy
 msgid "Color theme to use (will default to schematic settings)"
-msgstr "사용할 색상 테마(기본값은 pcbnew 설정임)"
+msgstr "사용할 색상 테마(기본값은 회로도 설정임)"
 
 #: kicad/cli/command_export_sch_pdf.cpp:51
 #: kicad/cli/command_export_sch_svg.cpp:51
