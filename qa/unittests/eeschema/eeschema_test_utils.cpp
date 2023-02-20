@@ -104,6 +104,9 @@ void KI_TEST::SCHEMATIC_TEST_FIXTURE::LoadSchematic( const wxString& aBaseName )
             screen->MigrateSimModels();
     }
 
+    if( m_schematic.RootScreen()->GetFileFormatVersionAtLoad() < 20230221 )
+        screens.FixLegacyPowerSymbolMismatches();
+
     sheets.AnnotatePowerSymbols();
 
     // NOTE: This is required for multi-unit symbols to be correct

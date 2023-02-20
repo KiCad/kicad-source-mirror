@@ -94,4 +94,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20221110  // Move sheet instance  data to sheet definition.
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20221126  // Remove value and footprint from instance data.
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20221206  // Simulation model fields V6 -> V7
-#define SEXPR_SCHEMATIC_FILE_VERSION 20230121 // SCH_MARKER specific sheet path serialisation
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20230121  // SCH_MARKER specific sheet path serialisation
+#define SEXPR_SCHEMATIC_FILE_VERSION 20230221    // Modern power symbols (editable value = net)

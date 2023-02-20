@@ -1,0 +1,48 @@
+(export (version D)
+  (design
+    (source Z:/legacy_power4/legacy_power4.sch)
+    (date "2/22/2023 9:37:06 AM")
+    (tool "Eeschema 4.0.7")
+    (sheet (number 1) (name /) (tstamps /)
+      (title_block
+        (title)
+        (company)
+        (rev)
+        (date)
+        (source legacy_power4.sch)
+        (comment (number 1) (value ""))
+        (comment (number 2) (value ""))
+        (comment (number 3) (value ""))
+        (comment (number 4) (value "")))))
+  (components
+    (comp (ref R1)
+      (value R)
+      (libsource (lib symbols) (part R))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 63F628CC))
+    (comp (ref R2)
+      (value R)
+      (libsource (lib symbols) (part R))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 63F6292B)))
+  (libparts
+    (libpart (lib symbols) (part R)
+      (footprints
+        (fp R_*)
+        (fp R_*))
+      (fields
+        (field (name Reference) R)
+        (field (name Value) R))
+      (pins
+        (pin (num 1) (name ~) (type passive))
+        (pin (num 2) (name ~) (type passive)))))
+  (libraries
+    (library (logical symbols)
+      (uri Z:\legacy_power4\symbols.lib)))
+  (nets
+    (net (code 1) (name VCC)
+      (node (ref R1) (pin 1))
+      (node (ref R2) (pin 1)))
+    (net (code 2) (name GND)
+      (node (ref R1) (pin 2))
+      (node (ref R2) (pin 2)))))

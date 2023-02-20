@@ -1576,6 +1576,26 @@ void SCH_SCREEN::SetLegacySymbolInstanceData()
 }
 
 
+void SCH_SCREEN::FixLegacyPowerSymbolMismatches()
+{
+    for( SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
+    {
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+        // Fix pre-8.0 legacy power symbols with invisible pins
+        // that have mismatched pin names and value fields
+        if( symbol->GetLibSymbolRef()
+            && symbol->GetLibSymbolRef()->IsPower()
+            && symbol->GetAllLibPins().size() > 0
+            && symbol->GetAllLibPins()[0]->IsGlobalPower()
+            && !symbol->GetAllLibPins()[0]->IsVisible() )
+        {
+            symbol->SetValueFieldText( symbol->GetAllLibPins()[0]->GetName() );
+        }
+    }
+}
+
+
 size_t SCH_SCREEN::getLibSymbolNameMatches( const SCH_SYMBOL& aSymbol,
                                             std::vector<wxString>& aMatches )
 {
@@ -1999,6 +2019,13 @@ void SCH_SCREENS::SetLegacySymbolInstanceData()
 {
     for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
         screen->SetLegacySymbolInstanceData();
+}
+
+
+void SCH_SCREENS::FixLegacyPowerSymbolMismatches()
+{
+    for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
+        screen->FixLegacyPowerSymbolMismatches();
 }
 
 

@@ -432,6 +432,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             // to the s-expression format.
             schematic.ReplaceDuplicateTimeStamps();
 
+            for( SCH_SCREEN* screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
+                screen->FixLegacyPowerSymbolMismatches();
+
             // Allow the schematic to be saved to new file format without making any edits.
             OnModify();
         }
@@ -455,6 +458,10 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
             if( Schematic().RootScreen()->GetFileFormatVersionAtLoad() < 20221110 )
                 sheetList.UpdateSheetInstanceData( Schematic().RootScreen()->GetSheetInstances());
+
+            if( Schematic().RootScreen()->GetFileFormatVersionAtLoad() < 20230221 )
+                for( SCH_SCREEN* screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
+                    screen->FixLegacyPowerSymbolMismatches();
 
             for( SCH_SCREEN* screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
                 screen->MigrateSimModels();

@@ -184,6 +184,9 @@ void LoadSchematic( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath
     sheets.UpdateSymbolInstanceData( aSchematic->RootScreen()->GetSymbolInstances() );
     sheets.UpdateSheetInstanceData( aSchematic->RootScreen()->GetSheetInstances() );
 
+    if( aSchematic->RootScreen()->GetFileFormatVersionAtLoad() < 20230221 )
+        screens.FixLegacyPowerSymbolMismatches();
+
     if( aSchematic->RootScreen()->GetFileFormatVersionAtLoad() < 20221206 )
     {
         for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )

@@ -78,6 +78,7 @@ set( QA_EESCHEMA_SRCS
     test_netlist_exporter_kicad.cpp
     test_netlist_exporter_spice.cpp
     test_ee_item.cpp
+    test_legacy_power_symbols.cpp
     test_pin_numbers.cpp
     test_sch_pin.cpp
     test_sch_rtree.cpp

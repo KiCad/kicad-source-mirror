@@ -171,4 +171,14 @@ BOOST_AUTO_TEST_CASE( BusEntries )
     doNetlistTest( "bus_entries" );
 }
 
+BOOST_AUTO_TEST_CASE( LegacyPower )
+{
+    doNetlistTest( "legacy_power" );
+}
+
+BOOST_AUTO_TEST_CASE( LegacyPower4 )
+{
+    doNetlistTest( "legacy_power4" );
+}
+
 BOOST_AUTO_TEST_SUITE_END()

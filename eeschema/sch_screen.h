@@ -533,6 +533,12 @@ public:
     void SetLegacySymbolInstanceData();
 
     /**
+     * Fix legacy power symbols that have mismatched value text fields
+     * and invisible power pin names.
+     */
+    void FixLegacyPowerSymbolMismatches();
+
+    /**
      * Check all symbol default instance to see if they are not set yet.
      */
     bool AllSymbolDefaultInstancesNotSet();
@@ -781,6 +787,12 @@ public:
      * Update the symbol value and footprint instance data for legacy designs.
      */
     void SetLegacySymbolInstanceData();
+
+    /**
+     * Fix legacy power symbols that have mismatched value text fields
+     * and invisible power pin names.
+     */
+    void FixLegacyPowerSymbolMismatches();
 
 private:
     void addScreenToList( SCH_SCREEN* aScreen, SCH_SHEET* aSheet );

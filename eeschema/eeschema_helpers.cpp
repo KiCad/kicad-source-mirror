@@ -146,6 +146,9 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( wxString& aFileName, SCH_IO_MGR::SCH
 
     sheetList.UpdateSheetInstanceData( schematic->RootScreen()->GetSheetInstances());
 
+    if( schematic->RootScreen()->GetFileFormatVersionAtLoad() < 20230221 )
+        screens.FixLegacyPowerSymbolMismatches();
+
     for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
         screen->MigrateSimModels();
 
