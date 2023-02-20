@@ -75,16 +75,12 @@ public:
         if( m_SaveVoltages )
             options |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES;
 
-        if( m_SavesDissipations )
-            options |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_DISSIPATIONS;
-
         return options;
     }
 
 public:
-    bool  m_SavesDissipations = false;
-    bool  m_SaveVoltages      = true;
-    bool  m_SaveCurrents      = true;
+    bool  m_SaveVoltages = true;
+    bool  m_SaveCurrents = true;
 };
 
 
