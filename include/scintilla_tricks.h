@@ -37,7 +37,14 @@ class SCINTILLA_TRICKS : public wxEvtHandler
 public:
 
     SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString& aBraces, bool aSingleLine,
-                      std::function<void()> m_enterCallback = [](){ } );
+                      std::function<void()> aReturnCallback =
+                            []()
+                            { },
+                      std::function<void( wxStyledTextEvent& )> aCharCallback =
+                            []( wxStyledTextEvent& )
+                            { } );
+
+    wxStyledTextCtrl* Scintilla() const { return m_te; }
 
     void DoAutocomplete( const wxString& aPartial, const wxArrayString& aTokens );
 
@@ -49,6 +56,7 @@ protected:
     int firstNonWhitespace( int aLine, int* aWhitespaceCount = nullptr );
 
     void onCharHook( wxKeyEvent& aEvent );
+    void onChar( wxStyledTextEvent& aEvent );
     void onScintillaUpdateUI( wxStyledTextEvent& aEvent );
     void onThemeChanged( wxSysColourChangedEvent &aEvent );
 
@@ -61,8 +69,11 @@ protected:
     bool                  m_suppressAutocomplete;
     bool                  m_singleLine;            // Treat <return> as OK, and skip special tab
                                                    //  stop handling (including monospaced font).
+
     std::function<void()> m_returnCallback;        // Process <return> in singleLine, and
                                                    //  <shift> + <return> irrespective.
+
+    std::function<void( wxStyledTextEvent& aEvent )> m_charCallback;
 };
 
 #endif  // SCINTILLA_TRICKS_H

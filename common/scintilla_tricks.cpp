@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2022 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,8 @@
 #include <confirm.h>
 
 SCINTILLA_TRICKS::SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString& aBraces,
-                                    bool aSingleLine, std::function<void()> aReturnCallback ) :
+                                    bool aSingleLine, std::function<void()> aReturnCallback,
+                                    std::function<void( wxStyledTextEvent& )> aCharCallback ) :
         m_te( aScintilla ),
         m_braces( aBraces ),
         m_lastCaretPos( -1 ),
@@ -41,7 +42,8 @@ SCINTILLA_TRICKS::SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString
         m_lastSelEnd( -1 ),
         m_suppressAutocomplete( false ),
         m_singleLine( aSingleLine ),
-        m_returnCallback( aReturnCallback )
+        m_returnCallback( aReturnCallback ),
+        m_charCallback( aCharCallback )
 {
     // Always use LF as eol char, regardless the platform
     m_te->SetEOLMode( wxSTC_EOL_LF );
@@ -55,11 +57,17 @@ SCINTILLA_TRICKS::SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString
 
     // Set up autocomplete
     m_te->AutoCompSetIgnoreCase( true );
-    m_te->AutoCompSetFillUps( m_braces[1] );
     m_te->AutoCompSetMaxHeight( 20 );
+
+    if( aBraces.Length() >= 2 )
+        m_te->AutoCompSetFillUps( m_braces[1] );
 
     // Hook up events
     m_te->Bind( wxEVT_STC_UPDATEUI, &SCINTILLA_TRICKS::onScintillaUpdateUI, this );
+
+    // Handle autocomplete
+    m_te->Bind( wxEVT_STC_CHARADDED, &SCINTILLA_TRICKS::onChar, this );
+    m_te->Bind( wxEVT_STC_AUTOCOMP_CHAR_DELETED, &SCINTILLA_TRICKS::onChar, this );
 
     // Dispatch command-keys in Scintilla control.
     m_te->Bind( wxEVT_CHAR_HOOK, &SCINTILLA_TRICKS::onCharHook, this );
@@ -152,6 +160,12 @@ bool isCtrlSlash( wxKeyEvent& aEvent )
     // another hack....
 
     return false;
+}
+
+
+void SCINTILLA_TRICKS::onChar( wxStyledTextEvent& aEvent )
+{
+    m_charCallback( aEvent );
 }
 
 

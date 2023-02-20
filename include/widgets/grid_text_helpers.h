@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -24,6 +24,9 @@
 #include <wx/generic/gridctrl.h>
 
 class wxGrid;
+class wxStyledTextCtrl;
+class wxStyledTextEvent;
+class SCINTILLA_TRICKS;
 
 /**
  * A text renderer that can unescape text for display
@@ -34,11 +37,44 @@ class GRID_CELL_ESCAPED_TEXT_RENDERER : public wxGridCellStringRenderer
 public:
     GRID_CELL_ESCAPED_TEXT_RENDERER();
 
-    void Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDC,
-               const wxRect& aRect, int aRow, int aCol, bool isSelected ) override;
+    void Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDC, const wxRect& aRect, int aRow,
+               int aCol, bool isSelected ) override;
 
-    wxSize GetBestSize( wxGrid & grid, wxGridCellAttr & attr, wxDC & dc,
-                        int row, int col ) override;
+    wxSize GetBestSize( wxGrid& grid, wxGridCellAttr& attr, wxDC& dc, int row, int col ) override;
 };
+
+
+class GRID_CELL_STC_EDITOR : public wxGridCellEditor
+{
+public:
+    GRID_CELL_STC_EDITOR( std::function<void( wxStyledTextEvent&, SCINTILLA_TRICKS* )> aOnChar );
+
+    void Create( wxWindow* aParent, wxWindowID aId, wxEvtHandler* aEventHandler ) override;
+
+    wxGridCellEditor* Clone() const override
+    {
+        return new GRID_CELL_STC_EDITOR( m_onChar );
+    }
+
+    wxString GetValue() const override;
+
+    void Show( bool aShow, wxGridCellAttr *aAttr = nullptr ) override;
+    void BeginEdit( int aRow, int aCol, wxGrid* aGrid ) override;
+    bool EndEdit( int aRow, int aCol, const wxGrid*, const wxString&, wxString* aNewVal ) override;
+    void ApplyEdit( int aRow, int aCol, wxGrid* aGrid ) override;
+    void Reset() override {}
+
+protected:
+    void onFocusLoss( wxFocusEvent& aEvent );
+
+    wxStyledTextCtrl* stc_ctrl() const;
+
+protected:
+    SCINTILLA_TRICKS* m_scintillaTricks;
+    wxString          m_value;
+
+    std::function<void( wxStyledTextEvent&, SCINTILLA_TRICKS* )> m_onChar;
+};
+
 
 #endif // KICAD_GRID_TEXT_HELPERS_H
