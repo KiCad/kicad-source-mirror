@@ -619,7 +619,10 @@ void NETLIST_EXPORTER_SPICE::WriteDirectives( OUTPUTFORMATTER& aFormatter,
     {
         for( const SPICE_ITEM& item : m_items )
         {
-            if( item.model->GetPinCount() >= 2 )
+            // ngspice (v39) does not support power measurement for XSPICE devices
+            // XPSICE devices are marked with 'A'
+            if( ( item.model->GetPinCount() >= 2 ) && ( item.refName.size() > 0 )
+                && ( item.refName[0] != 'A' ) )
             {
                 aFormatter.Print( 0, ".probe p(%s)\n",
                                   item.model->SpiceGenerator().ItemName( item ).c_str() );
