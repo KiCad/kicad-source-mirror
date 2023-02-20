@@ -71,6 +71,9 @@ public:
         if( !m_saveAllCurrents->GetValue() )
             options &= ~NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS;
 
+        if( !m_saveAllDissipations->GetValue() )
+            options &= ~NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_DISSIPATIONS;
+
         return options;
     }
 
