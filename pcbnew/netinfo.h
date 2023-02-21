@@ -111,6 +111,11 @@ public:
      */
     NETCLASS* GetNetClass() { return m_netClass.get(); }
 
+    /**
+     * @note Slow version for swig access
+    */
+    std::shared_ptr<NETCLASS> GetNetClassSlow() { return m_netClass; }
+
     int GetNetCode() const { return m_netCode; }
     void SetNetCode( int aNetCode ) { m_netCode = aNetCode; }
 
