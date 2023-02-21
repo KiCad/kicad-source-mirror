@@ -278,7 +278,9 @@ class MEASUREMENTS_GRID_TRICKS : public GRID_TRICKS
 public:
     MEASUREMENTS_GRID_TRICKS( SIM_PLOT_FRAME* aParent, WX_GRID* aGrid ) :
             GRID_TRICKS( aGrid ),
-            m_parent( aParent )
+            m_parent( aParent ),
+            m_menuRow( 0 ),
+            m_menuCol( 0 )
     {}
 
 protected:

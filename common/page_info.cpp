@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -171,7 +171,7 @@ bool PAGE_INFO::SetType( const wxString& aType, bool aIsPortrait )
     if( aIsPortrait )
     {
         // all private PAGE_INFOs are landscape, must swap x and y
-        m_size = VECTOR2I( m_size.y, m_size.x );
+        std::swap( m_size.y, m_size.x );
         updatePortrait();
     }
 
@@ -190,7 +190,7 @@ void PAGE_INFO::SetPortrait( bool aIsPortrait )
     if( m_portrait != aIsPortrait )
     {
         // swap x and y in m_size
-        m_size = VECTOR2I( m_size.y, m_size.x );
+        std::swap( m_size.y, m_size.x );
 
         m_portrait = aIsPortrait;
 

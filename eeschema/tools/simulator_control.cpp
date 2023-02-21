@@ -389,7 +389,7 @@ int SIMULATOR_CONTROL::ShowNetlist( const TOOL_EVENT& aEvent )
     m_circuitModel->SetSimOptions( m_plotFrame->GetCurrentOptions() );
     m_circuitModel->GetNetlist( &formatter, reporter );
 
-    NETLIST_VIEW_DIALOG dlg( m_plotFrame, errors.IsEmpty() ? formatter.GetString() : errors );
+    NETLIST_VIEW_DIALOG dlg( m_plotFrame, errors.IsEmpty() ? wxString( formatter.GetString() ) : errors );
     dlg.ShowModal();
 
     return 0;
