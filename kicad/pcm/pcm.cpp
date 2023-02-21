@@ -451,9 +451,18 @@ const bool PLUGIN_CONTENT_MANAGER::CacheRepository( const wxString& aRepositoryI
 
     if( repo_cache.FileExists() && packages_cache.FileExists() )
     {
-        std::ifstream repo_stream( repo_cache.GetFullPath().ToUTF8() );
-        repo_stream >> js;
-        PCM_REPOSITORY saved_repo = js.get<PCM_REPOSITORY>();
+        std::ifstream  repo_stream( repo_cache.GetFullPath().ToUTF8() );
+        PCM_REPOSITORY saved_repo;
+        try
+        {
+            repo_stream >> js;
+            saved_repo = js.get<PCM_REPOSITORY>();
+        }
+        catch( ... )
+        {
+            if( m_dialog )
+                wxLogError( _( "Failed to parse locally stored repository.json." ) );
+        }
 
         if( saved_repo.packages.update_timestamp == current_repo.packages.update_timestamp )
         {
