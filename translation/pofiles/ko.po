@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-15 16:29-0800\n"
-"PO-Revision-Date: 2023-02-21 00:55+0000\n"
+"PO-Revision-Date: 2023-02-23 00:30+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -124,9 +124,8 @@ msgid "Build BVH for holes and vias"
 msgstr "홀과 비아용 BVH 생성"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:389
-#, fuzzy
 msgid "OpenGL context creation error"
-msgstr "스포크 수 해상도:"
+msgstr "OpenGL 컨텍스트 생성 오류"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:420
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
@@ -5441,7 +5440,7 @@ msgstr "잠긴 항목"
 
 #: common/layer_id.cpp:188
 msgid "Courtyard collision shadow"
-msgstr "마당자리 겹침 그림자"
+msgstr "부품자리 겹침 그림자"
 
 #: common/lib_id.cpp:144
 msgid "Illegal character found in logical library name"
@@ -8642,9 +8641,8 @@ msgstr "모든 전류를 저장하는 지시문 작성(.probe alli)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:305
 #: eeschema/dialogs/dialog_sim_command_base.cpp:441
-#, fuzzy
 msgid "Save all power dissipations"
-msgstr "최대 허용 편차:"
+msgstr "모든 전원 분산 저장"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:306
 #, fuzzy
@@ -8687,23 +8685,21 @@ msgid "Exporting netlist requires a fully annotated schematic."
 msgstr "네트리스트를 내보내기 위해선 완전히 주석 처리된 회로도가 필요합니다."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:560
-#, fuzzy
 msgid "external simulator not found"
-msgstr "외부 시뮬레이터 명령:"
+msgstr "외부 시뮬레이터를 찾을 수 없음"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:561
 msgid ""
 "Note: command line is usually: <tt>&lt;path to SPICE binary&gt; \"%I\"</tt>"
-msgstr ""
+msgstr "참고 : 명령 줄은 일반적으로 <tt> &lt; SPICE 바이너리 경로 &gt; \"%I\"</tt>임"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:567
 msgid "external simulator has the wrong format or architecture"
-msgstr ""
+msgstr "외부 시뮬레이터에 잘못된 형식 또는 아키텍처가 있음"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:572
-#, fuzzy
 msgid "permission denied"
-msgstr "권한 오류?"
+msgstr "권한이 거부됨"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:707
 msgid "This plugin already exists."
@@ -11169,7 +11165,7 @@ msgstr "위상"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:25
 msgid "Significant digits:"
-msgstr ""
+msgstr "유효 자릿수:"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:32
 msgid "Range:"
@@ -11177,7 +11173,7 @@ msgstr "범위:"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 msgid "f"
-msgstr ""
+msgstr "f"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 #, fuzzy
@@ -11213,12 +11209,11 @@ msgstr "MB"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 msgid "G"
-msgstr ""
+msgstr "G"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "T"
-msgstr "T:"
+msgstr "T"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 #, fuzzy
@@ -11226,9 +11221,9 @@ msgid "P"
 msgstr "파이"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.h:47
-#, fuzzy, c-format
+#, c-format
 msgid "Format %s"
-msgstr "형식"
+msgstr "형식 %s"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:192
 #, c-format
@@ -12323,12 +12318,11 @@ msgstr "동작점"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:262
 msgid "Significant digits (voltages):"
-msgstr ""
+msgstr "유효 자릿수(전압):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:270
-#, fuzzy
 msgid "Range (voltages):"
-msgstr "모든 전압 저장"
+msgstr "범위(전압):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
 #, fuzzy
@@ -12383,12 +12377,11 @@ msgstr "V"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:281
 msgid "Significant digits (currents):"
-msgstr ""
+msgstr "유효 자릿수(전류):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:289
-#, fuzzy
 msgid "Range (currents):"
-msgstr "모든 전류 저장"
+msgstr "범위(전류):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
 #, fuzzy
@@ -15550,9 +15543,8 @@ msgid "Checking model "
 msgstr "모델 확인 중 "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:482
-#, fuzzy
 msgid "Undefined model type."
-msgstr "정의되지 않은 모델 유형"
+msgstr "정의되지 않은 모델 유형."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:491
 msgid "Invalid Vinh value."
@@ -15652,44 +15644,36 @@ msgid "Negative number of pins."
 msgstr "핀 개수가 음수입니다."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:723
-#, fuzzy
 msgid "Empty pin number."
-msgstr "핀번호가 비었습니다"
+msgstr "핀번호가 비었음."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:734
-#, fuzzy
 msgid "Resistance matrix is incorrect."
-msgstr "저항 매트릭스가 잘못되었습니다"
+msgstr "저항 행렬이 올바르지 않음."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:745
-#, fuzzy
 msgid "Capacitance matrix is undefined."
-msgstr "정전 용량이 정의되지 않음"
+msgstr "커패시턴스 행렬이 정의되지 않음."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:754
-#, fuzzy
 msgid "Capacitance matrix is incorrect."
-msgstr "정전 용량이 잘못되었습니다"
+msgstr "커패시턴스 행렬이 올바르지 않음."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:763
-#, fuzzy
 msgid "Capacitance matrix is nullptr."
-msgstr "정전 용량 행렬이 널 포인터입니다"
+msgstr "커패시턴스 행렬이 널 포인터임."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:774
-#, fuzzy
 msgid "Inductance matrix is undefined."
-msgstr "인덕턴스 행렬이 정의되지 않았습니다"
+msgstr "인덕턴스 행렬이 정의되지 않음."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:783
-#, fuzzy
 msgid "Inductance matrix is incorrect."
-msgstr "인덕턴스 행렬이 잘못되었습니다"
+msgstr "인덕턴스 행렬이 올바르지 않음."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:792
-#, fuzzy
 msgid "Inductance matrix is nullptr."
-msgstr "인덕턴스 행렬이 널 포인터입니다"
+msgstr "인덕턴스 행렬이 널 포인터임."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:808
 msgid "Cannot open file "
@@ -15978,9 +15962,9 @@ msgid "Bitrate could be too high for rising / falling edges"
 msgstr "비트 전송률이 상승/하강 에지에 비해 너무 높을 수 있음"
 
 #: eeschema/sim/sim_lib_mgr.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "Simulation model library not found at '%s'"
-msgstr "시뮬레이션 모델 라이브러리를 '%s' 또는 '%s'에서 찾을 수 없음"
+msgstr "'%s' 에서 시뮬레이션 모델 라이브러리를 찾을 수 없음"
 
 #: eeschema/sim/sim_lib_mgr.cpp:84
 #, c-format
@@ -16154,9 +16138,9 @@ msgid "Measure Time of Max"
 msgstr "측정 도구"
 
 #: eeschema/sim/sim_plot_frame.cpp:245
-#, fuzzy, c-format
+#, c-format
 msgid "Format %s..."
-msgstr "형식"
+msgstr "형식 %s..."
 
 #: eeschema/sim/sim_plot_frame.cpp:297
 #, fuzzy
@@ -16196,12 +16180,12 @@ msgstr "Spice 시뮬레이터"
 #: eeschema/sim/sim_plot_frame.cpp:758
 #, c-format
 msgid "V(%s) (gain)"
-msgstr ""
+msgstr "V(%s) (게인)"
 
 #: eeschema/sim/sim_plot_frame.cpp:759
-#, fuzzy, c-format
+#, c-format
 msgid "V(%s) (phase)"
-msgstr " (상)"
+msgstr "V(%s) (위상)"
 
 #: eeschema/sim/sim_plot_frame.cpp:820
 msgid "Simulator requires a fully annotated schematic."
@@ -16230,7 +16214,7 @@ msgstr "다른 시뮬레이션이 이미 실행 중입니다."
 
 #: eeschema/sim/sim_plot_frame.cpp:975 eeschema/sim/sim_plot_frame.cpp:1386
 msgid " (gain)"
-msgstr ""
+msgstr " (게인)"
 
 #: eeschema/sim/sim_plot_frame.cpp:976 eeschema/sim/sim_plot_frame.cpp:1388
 msgid " (phase)"
@@ -16252,9 +16236,8 @@ msgid "%s is not tunable"
 msgstr "%s는 조정할 수 없음"
 
 #: eeschema/sim/sim_plot_frame.cpp:1320
-#, fuzzy
 msgid "Error: no current simulation.\n"
-msgstr "전력, 전류 및 절연"
+msgstr "오류: 현재 시뮬레이션 없음.\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:1329
 #, fuzzy
@@ -16296,9 +16279,9 @@ msgid "Measurement"
 msgstr "측정 노드"
 
 #: eeschema/sim/sim_plot_panel.cpp:268
-#, fuzzy, c-format
+#, c-format
 msgid "%d"
-msgstr "%"
+msgstr "%d"
 
 #: eeschema/sim/sim_plot_panel.cpp:507
 msgid "noise [(V or A)^2/Hz]"
@@ -16377,9 +16360,8 @@ msgid "'%s' is not a valid Spice value."
 msgstr "'%s'은(는) 유효한 Spice 값이 아닙니다."
 
 #: eeschema/sim/toolbars_sim_plot_frame.cpp:99
-#, fuzzy
 msgid "Simulator"
-msgstr "시뮬레이터..."
+msgstr "시뮬레이터"
 
 #: eeschema/sim/toolbars_sim_plot_frame.cpp:154
 #, fuzzy
@@ -17979,7 +17961,7 @@ msgstr "페이지 표시 %s"
 
 #: eeschema/tools/ee_actions.cpp:710
 msgid "Show operating point voltage data from simulation"
-msgstr ""
+msgstr "시뮬레이션에서 동작점 전압 데이터 표시"
 
 #: eeschema/tools/ee_actions.cpp:714
 #, fuzzy
@@ -17988,7 +17970,7 @@ msgstr "커서 표시"
 
 #: eeschema/tools/ee_actions.cpp:715
 msgid "Show operating point current data from simulation"
-msgstr ""
+msgstr "시뮬레이션에서 동작점 현재 데이터 표시"
 
 #: eeschema/tools/ee_actions.cpp:719 eeschema/tools/ee_actions.cpp:724
 #: eeschema/tools/ee_actions.cpp:730 eeschema/tools/ee_actions.cpp:736
@@ -18258,7 +18240,7 @@ msgstr "점선 전류/위상"
 
 #: eeschema/tools/ee_actions.cpp:951
 msgid "Draw secondary signal trace (current or phase) with a dotted line"
-msgstr ""
+msgstr "점선으로 2차 신호 트레이스(전류 또는 위상) 그리기"
 
 #: eeschema/tools/ee_actions.cpp:955
 #, fuzzy
@@ -18267,12 +18249,11 @@ msgstr "3D 모델"
 
 #: eeschema/tools/ee_actions.cpp:956
 msgid "Draw plots with a black background"
-msgstr ""
+msgstr "검은색 배경으로 플롯 그리기"
 
 #: eeschema/tools/ee_actions.cpp:960
-#, fuzzy
 msgid "Simulation Command..."
-msgstr "시뮬레이션 명령"
+msgstr "시뮬레이션 명령..."
 
 #: eeschema/tools/ee_actions.cpp:961
 #, fuzzy
@@ -18298,18 +18279,16 @@ msgid "Add a simulator probe"
 msgstr "시뮬레이터 프로브 추가"
 
 #: eeschema/tools/ee_actions.cpp:984
-#, fuzzy
 msgid "Add Tuned Value..."
-msgstr "사각형 추가"
+msgstr "조정된 값 추가..."
 
 #: eeschema/tools/ee_actions.cpp:984
 msgid "Select a value to be tuned"
 msgstr "조정하고 싶은 값을 선택하세요"
 
 #: eeschema/tools/ee_actions.cpp:989
-#, fuzzy
 msgid "Show SPICE Netlist"
-msgstr "SPICE 네트리스트 보기..."
+msgstr "SPICE 네트리스트 보기"
 
 #: eeschema/tools/ee_inspection_tool.cpp:222
 msgid "No symbol issues found."
@@ -18681,9 +18660,9 @@ msgstr ""
 "이는 테이블 항목들이 겹치지 않도록 합니다."
 
 #: eeschema/widgets/tuner_slider.cpp:57 eeschema/widgets/tuner_slider.cpp:113
-#, fuzzy, c-format
+#, c-format
 msgid "Tune %s"
-msgstr "조정"
+msgstr "조정 %s"
 
 #: eeschema/widgets/tuner_slider.cpp:74
 #, fuzzy, c-format
@@ -19478,7 +19457,7 @@ msgstr "RS274X: 명령어 \"IR\" 회전값은 허용되지 않습니다"
 
 #: gerbview/rs274x.cpp:650
 msgid "RS274X: Command KNOCKOUT ignored by GerbView"
-msgstr "RS274X: GerbView에서 KNOCKOUT 명령을 무시함"
+msgstr "RS274X: GerbView에서 밑색빼기 명령을 무시함"
 
 #: gerbview/toolbars_gerber.cpp:131
 msgid "Highlight items belonging to this component"
@@ -20068,7 +20047,7 @@ msgstr "사용할 색상 테마(기본값은 pcbnew 설정임)"
 #: kicad/cli/command_export_pcb_pos.cpp:44
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:64
 msgid "Generate Position File"
-msgstr "위치 파일 생성"
+msgstr "배치 파일 생성"
 
 #: kicad/cli/command_export_pcb_pos.cpp:49
 msgid "Valid options: front,back,both. Gerber format only supports \"both\"."
@@ -26865,12 +26844,12 @@ msgstr "부품 배치 파일에서 제외"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:211
 #: pcbnew/footprint.cpp:2956
 msgid "Exempt from courtyard requirement"
-msgstr "마당자리 요구 사항 면제"
+msgstr "부품자리 요구 사항 면제"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:208
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:212
 msgid "Will not generate \"missing courtyard\" DRC violations"
-msgstr "\"누락된 마당자리\" DRC 위반을 생성하지 않습니다"
+msgstr "\"누락된 부품자리\" DRC 위반을 생성하지 않습니다"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:224
 msgid "Update Footprint from Library..."
@@ -27672,7 +27651,7 @@ msgstr "기판 외형"
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:142
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:60
 msgid "Courtyards"
-msgstr "마당자리"
+msgstr "부품자리"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:259
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:143
@@ -28976,7 +28955,7 @@ msgstr "상위 풋프린트에서"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:722
 msgid "Zone knockout:"
-msgstr "영역 녹아웃:"
+msgstr "영역 밑색빼기:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:726
 msgid "Pad shape"
@@ -29894,7 +29873,7 @@ msgstr "풋프린트 금지"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:94
 msgid "Raise a DRC error if a footprint courtyard overlaps this area"
-msgstr "풋프린트 마당자리가 해당 영역과 겹칠 때 DRC 오류를 발생시킵니다"
+msgstr "풋프린트 부품자리가 해당 영역과 겹칠 때 DRC 오류를 발생시킵니다"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.h:68
 msgid "Rule Area Properties"
@@ -29964,7 +29943,7 @@ msgstr "선택한 레이어에 위치할 텍스트를 입력하세요."
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:101 pcbnew/pcb_text.cpp:345
 msgid "Knockout"
-msgstr "녹아웃"
+msgstr "밑색빼기"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:105
 msgid "Keep text upright"
@@ -30425,7 +30404,7 @@ msgstr "시트 크기를 보여주기 위해 외곽선을 그립니다."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:396
 msgid "Show courtyard collisions when moving/dragging"
-msgstr "이동/끌기 시 마당자리 겹침 표시"
+msgstr "이동/끌기 시 부품자리 겹침 표시"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:400
 msgid "Auto-refill zones"
@@ -32262,9 +32241,8 @@ msgid "7"
 msgstr "7"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:88
-#, fuzzy
 msgid "Vias:"
-msgstr "비아"
+msgstr "비아:"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:104 pcbnew/pad.cpp:1011
 #: pcbnew/pcb_track.cpp:942 pcbnew/pcb_track.cpp:1306
@@ -32279,9 +32257,8 @@ msgid "Hole"
 msgstr "홀"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:153
-#, fuzzy
 msgid "Differential pairs:"
-msgstr "차동 쌍"
+msgstr "차동 쌍:"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:170
 msgid "Gap"
@@ -32325,7 +32302,7 @@ msgstr "기판 구성 제약 모서리"
 
 #: pcbnew/drc/drc_engine.cpp:208
 msgid "board setup constraints courtyard"
-msgstr "기판 설정 마당자리 제약조건"
+msgstr "부품자리 제약조건 기판 설정"
 
 #: pcbnew/drc/drc_engine.cpp:215
 msgid "board setup micro-via constraints"
@@ -32741,23 +32718,23 @@ msgstr "마이크로 비아 드릴 허용 범위 초과"
 
 #: pcbnew/drc/drc_item.cpp:141
 msgid "Courtyards overlap"
-msgstr "마당자리 겹침"
+msgstr "부품자리 겹침"
 
 #: pcbnew/drc/drc_item.cpp:145
 msgid "Footprint has no courtyard defined"
-msgstr "풋프린트에 마당자리가 정의되지 않음"
+msgstr "풋프린트에 부품자리가 정의되지 않음"
 
 #: pcbnew/drc/drc_item.cpp:149
 msgid "Footprint has malformed courtyard"
-msgstr "풋프린트에 잘못된 마당자리가 있음"
+msgstr "풋프린트에 잘못된 부품자리가 있음"
 
 #: pcbnew/drc/drc_item.cpp:153
 msgid "PTH inside courtyard"
-msgstr "마당자리 내부에 PTH 있음"
+msgstr "부품자리 내부에 PTH 있음"
 
 #: pcbnew/drc/drc_item.cpp:157
 msgid "NPTH inside courtyard"
-msgstr "마당자리 내부에 NPTH 있음"
+msgstr "부품자리 내부에 NPTH 있음"
 
 #: pcbnew/drc/drc_item.cpp:161
 msgid "Item on a disabled copper layer"
@@ -33078,15 +33055,15 @@ msgstr "(네트 %s 와 %s)"
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:85
 msgid "Checking footprint courtyard definitions..."
-msgstr "풋프린트 마당자리 정의 확인 중..."
+msgstr "풋프린트 부품자리 정의 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:90
 msgid "Gathering footprint courtyards..."
-msgstr "풋프린트 마당자리 모으는 중..."
+msgstr "풋프린트 부품자리 모으는 중..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:150
 msgid "Checking footprints for overlapping courtyards..."
-msgstr "겹치는 마당자리 풋프린트 확인 중..."
+msgstr "겹치는 부품자리 풋프린트 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:455
 #, c-format
@@ -35167,15 +35144,15 @@ msgstr "%s에 대한 풋프린트 인수(A, B 또는 참조 지정자)가 누락
 
 #: pcbnew/pcb_expr_functions.cpp:446
 msgid "Footprint's courtyard is not a single, closed shape."
-msgstr "풋프린트의 마당자리는 하나의 닫힌 형태가 아닙니다."
+msgstr "풋프린트의 부품자리는 하나의 닫힌 형태가 아닙니다."
 
 #: pcbnew/pcb_expr_functions.cpp:458
 msgid "Footprint has no front courtyard."
-msgstr "풋프린트에 전면 마당자리가 없습니다."
+msgstr "풋프린트에 전면 부품자리가 없습니다."
 
 #: pcbnew/pcb_expr_functions.cpp:473
 msgid "Footprint has no back courtyard."
-msgstr "풋프린트에 후면 마당자리가 없습니다."
+msgstr "풋프린트에 후면 부품자리가 없습니다."
 
 #: pcbnew/pcb_expr_functions.cpp:589
 #, c-format
@@ -37869,7 +37846,7 @@ msgstr "다음을 위한 실크스크린 클리어런스 계산:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:887
 msgid "Courtyard clearance resolution for:"
-msgstr "다음을 위한 마당자리 클리어런스 해결:"
+msgstr "다음을 위한 부품자리 클리어런스 해결:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1015
 msgid "Physical Clearances"
@@ -37924,7 +37901,7 @@ msgstr "다음을 위한 킵아웃 계산:"
 #: pcbnew/tools/board_inspection_tool.cpp:1274
 #: pcbnew/tools/board_inspection_tool.cpp:1296
 msgid "Report may be incomplete: some footprint courtyards are malformed."
-msgstr "기록이 불완전할 수 있습니다: 일부 풋프린트 마당자리가 잘못되었습니다."
+msgstr "보고서가 불완전할 수 있음: 일부 풋프린트 부품자리가 잘못되었습니다."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1275
 #: pcbnew/tools/board_inspection_tool.cpp:1297
@@ -37953,7 +37930,7 @@ msgstr "첫 번째 개체의 선 너비 복사"
 
 #: pcbnew/tools/convert_tool.cpp:79
 msgid "Gap:"
-msgstr ""
+msgstr "간격:"
 
 #: pcbnew/tools/convert_tool.cpp:235
 msgid "Create from Selection"
@@ -40587,11 +40564,11 @@ msgstr "기판의 모서리 오프셋 외곽선"
 
 #: pcbnew/widgets/appearance_controls.cpp:1626
 msgid "Footprint courtyards on board's front"
-msgstr "기판 전면의 풋프린트 마당자리"
+msgstr "기판 전면의 풋프린트 부품자리"
 
 #: pcbnew/widgets/appearance_controls.cpp:1627
 msgid "Footprint courtyards on board's back"
-msgstr "기판 후면의 풋프린트 코트야드"
+msgstr "기판 후면의 풋프린트 부품자리"
 
 #: pcbnew/widgets/appearance_controls.cpp:1628
 msgid "Footprint assembly on board's front"
