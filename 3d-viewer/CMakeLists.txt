@@ -1,5 +1,5 @@
 #add_definitions(-DPRINT_STATISTICS_3D_VIEWER)
-add_definitions(-DPCBNEW)
+add_compile_definitions( PCBNEW )
 
 include_directories(BEFORE ${INC_BEFORE})
 include_directories(

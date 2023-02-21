@@ -8,7 +8,7 @@ if( UNIX AND NOT APPLE )
     mark_as_advanced( PCBNEW_LINK_MAPS )
 endif()
 
-add_definitions( -DPCBNEW )
+add_compile_definitions( PCBNEW )
 
 add_subdirectory(connectivity)
 

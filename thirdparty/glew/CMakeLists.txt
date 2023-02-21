@@ -7,9 +7,9 @@ add_library( glew STATIC )
 target_include_directories( glew PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include" )
 
 # Definitions for compiling GLEW staticly for EGL (extracted from the main GLEW CMakeLists.txt file)
-add_definitions( -DGLEW_STATIC )
-add_definitions( -DGLEW_EGL )
-add_definitions( -DGLEW_NO_GLU )
+add_compile_definitions( GLEW_STATIC )
+add_compile_definitions( GLEW_EGL )
+add_compile_definitions( GLEW_NO_GLU )
 
 target_sources( glew PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src/glew.c

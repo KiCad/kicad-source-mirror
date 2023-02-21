@@ -4,7 +4,7 @@ if( COMPILER_SUPPORTS_WARNINGS )
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${WARN_FLAGS_C}")
 endif()
 
-add_definitions( -DCVPCB )
+add_compile_definitions( CVPCB )
 
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(

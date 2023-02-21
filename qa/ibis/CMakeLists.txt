@@ -25,7 +25,7 @@ find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc REQUIRED )
 
 
-add_definitions(-DBOOST_TEST_DYN_LINK -DEESCHEMA -DDRC_PROTO -DTEST_APP_NO_MAIN)
+add_compile_definitions( BOOST_TEST_DYN_LINK EESCHEMA DRC_PROTO TEST_APP_NO_MAIN)
 
 add_executable( ibis_proto
     qaIbisParser.cpp

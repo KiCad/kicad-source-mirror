@@ -6,7 +6,7 @@ endif()
 
 include_directories( BEFORE ${INC_BEFORE} )
 
-add_definitions( -DPCM )
+add_compile_definitions( PCM )
 
 set ( PCM_SETTINGS_SRCS
     dialogs/panel_pcm_settings_base.cpp

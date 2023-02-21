@@ -157,6 +157,7 @@ option( KICAD_SANITIZE_THREADS
     "Build KiCad with thread sanitizer options. WARNING: Not compatible with gold linker"
     OFF )
 
+# Enable additional valgrind instrumentation for stack tracking in libcontext
 option( KICAD_USE_VALGRIND
     "Build KiCad with valgrind stack tracking enabled."
     OFF )
@@ -193,17 +194,6 @@ option( KICAD_GAL_PROFILE
     "Enable profiling info for GAL"
     OFF )
 
-
-if( KICAD_USE_3DCONNEXION )
-    if( WIN32 )
-        add_definitions( -DKICAD_USE_3DCONNEXION )
-    elseif( APPLE )
-        add_definitions( -DKICAD_USE_3DCONNEXION )
-    else()
-        remove_definitions( -DKICAD_USE_3DCONNEXION )
-    endif()
-endif()
-
 # Global setting: exports are explicit
 set( CMAKE_CXX_VISIBILITY_PRESET "hidden" )
 set( CMAKE_VISIBILITY_INLINES_HIDDEN ON )
@@ -216,30 +206,36 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Enable additional valgrind instrumentation for stack tracking in libcontext
-if( KICAD_USE_VALGRIND )
-    add_definitions( -DKICAD_USE_VALGRIND )
+# Pass defines into KiCad code based on the build options set
+add_compile_definitions( $<$<BOOL:${KICAD_SCRIPTING_WXPYTHON}>:KICAD_SCRIPTING_WXPYTHON> )
+add_compile_definitions( $<$<BOOL:${KICAD_SPICE}>:KICAD_SPICE> )
+add_compile_definitions( $<$<BOOL:${KICAD_SIGNAL_INTEGRITY}>:KICAD_SIGNAL_INTEGRITY> )
+
+add_compile_definitions( $<$<BOOL:${KICAD_USE_VALGRIND}>:KICAD_USE_VALGRIND> )
+add_compile_definitions( $<$<BOOL:${KICAD_GAL_PROFILE}>:KICAD_GAL_PROFILE> )
+add_compile_definitions( $<$<BOOL:${KICAD_WIN32_VERIFY_CODESIGN}>:KICAD_WIN32_VERIFY_CODESIGN> )
+
+# 3D mouse is only available on Windows and macOS
+if( WIN32 OR APPLE )
+    add_compile_definitions( $<$<BOOL:${KICAD_USE_3DCONNEXION}>:KICAD_USE_3DCONNEXION> )
 endif()
 
-if( KICAD_GAL_PROFILE )
-    add_definitions( -DKICAD_GAL_PROFILE )
-endif()
-
-if( KICAD_WIN32_VERIFY_CODESIGN )
-    add_definitions( -DKICAD_WIN32_VERIFY_CODESIGN )
+if( KICAD_USE_EGL AND UNIX AND NOT APPLE )
+    message( STATUS "Configuring KiCad for the wxGLCanvas EGL backend" )
+    add_compile_definitions( KICAD_USE_EGL )
+elseif( KICAD_USE_EGL )
+    message( STATUS "Ignoring KICAD_USE_EGL since not on Linux" )
 endif()
 
 # Ensure DEBUG is defined for all platforms in Debug builds
-# change to add_compile_definitions() after minimum required CMake version is 3.12
-set_property( DIRECTORY APPEND PROPERTY COMPILE_DEFINITIONS $<$<CONFIG:Debug>:DEBUG> )
-
+add_compile_definitions( $<$<CONFIG:Debug>:DEBUG> )
 
 # Add option to add user directories for linker, if any
-LINK_DIRECTORIES( ${LINK_DIRECTORIES_PATH} )
+link_directories( ${LINK_DIRECTORIES_PATH} )
 
 set( KICAD_CONFIG_DIR "kicad" CACHE STRING "Location of user specific KiCad config files" )
 mark_as_advanced( KICAD_CONFIG_DIR )
-add_definitions( -DKICAD_CONFIG_DIR=${KICAD_CONFIG_DIR} )
+add_compile_definitions( KICAD_CONFIG_DIR=${KICAD_CONFIG_DIR} )
 
 # Set default data file path to CMAKE_INSTALL_PREFIX if it wasn't specified during the
 # CMake configuration.  The value of DEFAULT_INSTALL_PATH is expanded in config.h and
@@ -262,21 +258,17 @@ perform_feature_checks()
 # Setup the compiler warnings
 include( ${KICAD_CMAKE_MODULE_PATH}/Warnings.cmake )
 
-if( KICAD_WIN32_CONTEXT_WINFIBER )
-    set(LIBCONTEXT_USE_WINFIBER true)
-    add_compile_definitions(LIBCONTEXT_USE_WINFIBER)
-else()
-    set(LIBCONTEXT_USE_WINFIBER false)
-endif()
+add_compile_definitions( $<$<BOOL:${KICAD_WIN32_CONTEXT_WINFIBER}>:LIBCONTEXT_USE_WINFIBER> )
+set( LIBCONTEXT_USE_WINFIBER $<IF:$<BOOL:${KICAD_WIN32_CONTEXT_WINFIBER}>,true,false> )
 
 if( WIN32 )
     # define UNICODE and_UNICODE definition on Windows. KiCad uses unicode.
     # Both definitions are required
-    add_definitions(-DUNICODE -D_UNICODE)
+    add_compile_definitions( UNICODE _UNICODE)
 
     # In fully standards-compliant mode, M_PI et al. are defined only if
     # _USE_MATH_DEFINES is set.
-    add_definitions( -D_USE_MATH_DEFINES )
+    add_compile_definitions( _USE_MATH_DEFINES )
 
     # Used for the resource compiler and other arch dependent steps
     if( MSVC )
@@ -307,22 +299,15 @@ if( WIN32 )
         endif()
     endif()
 
-    add_definitions( -DKICAD_BUILD_ARCH=${KICAD_BUILD_ARCH} )
+    add_compile_definitions( KICAD_BUILD_ARCH=${KICAD_BUILD_ARCH} )
 
-    if( KICAD_WIN32_DPI_AWARE )
-        add_definitions( -DKICAD_WIN32_DPI_AWARE=1 )
-    endif()
+    add_compile_definitions( $<$<BOOL:${KICAD_WIN32_DPI_AWARE}>:KICAD_WIN32_DPI_AWARE=1> )
 endif()
 
-if(KICAD_BUILD_ARCH_X64)
-    add_definitions( -DKICAD_BUILD_ARCH_X64 )
-elseif(KICAD_BUILD_ARCH_X86)
-    add_definitions( -DKICAD_BUILD_ARCH_X86 )
-elseif(KICAD_BUILD_ARCH_ARM64)
-    add_definitions( -DKICAD_BUILD_ARCH_ARM64 )
-elseif(KICAD_BUILD_ARCH_ARM)
-    add_definitions( -DKICAD_BUILD_ARCH_ARM )
-endif()
+add_compile_definitions( $<$<BOOL:${KICAD_BUILD_ARCH_X86}>:KICAD_BUILD_ARCH_X86> )
+add_compile_definitions( $<$<BOOL:${KICAD_BUILD_ARCH_X64}>:KICAD_BUILD_ARCH_X64> )
+add_compile_definitions( $<$<BOOL:${KICAD_BUILD_ARCH_ARM}>:KICAD_BUILD_ARCH_ARM> )
+add_compile_definitions( $<$<BOOL:${KICAD_BUILD_ARCH_ARM64}>:KICAD_BUILD_ARCH_ARM64> )
 
 #================================================
 # Provide access to CCACHE
@@ -362,20 +347,22 @@ endif(USE_DISTCC)
 
 
 #================================================
-# Set flags for GCC, or treat llvm as GCC
+# Setup compiler-specific flags
 #================================================
-
 if( CMAKE_COMPILER_IS_GNUCXX )
-    # Set 32-bit flag for GCC to prevent excess precision
-    # clang des not know this flag, so keep this separate
+    # Set 32-bit flag for GCC to prevent excess precision (not needed for Clang)
     if( CMAKE_SIZEOF_VOID_P EQUAL 4 )
         set( CMAKE_CXX_FLAGS "-ffloat-store ${CMAKE_CXX_FLAGS}" )
     endif()
 endif( CMAKE_COMPILER_IS_GNUCXX )
 
+if( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
+    # Clang needs this flag or wxStrings, etc. won't be viewable in the debugger
+    set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fstandalone-debug" )
+    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstandalone-debug" )
+endif()
 
 if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
-
     # Link flags in Debug: -g1 and -ggdb1 or -g1 and -ggdb3 can be used.
     # Level 1 produces minimal information, enough for making basic backtraces.
     # This includes descriptions of functions and external variables, and line number tables,
@@ -389,14 +376,9 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         set( CMAKE_CXX_FLAGS_DEBUG "-g3 -ggdb3" )
     endif()
 
-    # Clang needs this flag or wxStrings, etc. won't be viewable in the debugger
-    if( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
-        set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fstandalone-debug" )
-        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstandalone-debug" )
-    endif()
 
     if( KICAD_SANITIZE_ADDRESS )
-        add_definitions( -DKICAD_SANITIZE_ADDRESS )
+        add_compile_definitions( KICAD_SANITIZE_ADDRESS )
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_SANITIZE_VECTOR -fsanitize=address -fno-optimize-sibling-calls -fsanitize-address-use-after-scope -fno-omit-frame-pointer" )
 
         # ASAN shouldn't be used with these options (https://github.com/google/sanitizers/wiki/AddressSanitizer#faq)
@@ -404,7 +386,7 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     endif()
 
     if( KICAD_SANITIZE_THREADS )
-        add_definitions( -DKICAD_SANITIZE_THREADS )
+        add_compile_definitions( KICAD_SANITIZE_THREADS )
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_SANITIZE_VECTOR -fsanitize=thread -fno-optimize-sibling-calls -fno-omit-frame-pointer" )
 
         # Based on this warning https://github.com/JuliaLang/julia/blob/29d5158d27ddc3983ae2e373c4cd05569b9ead6c/src/julia.h#L77
@@ -418,12 +400,12 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     endif()
 
     if( KICAD_STDLIB_DEBUG )
-        add_definitions( -DKICAD_STDLIB_DEBUG )
+        add_compile_definitions( KICAD_STDLIB_DEBUG )
         set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_GLIBCXX_DEBUG" )
     elseif( KICAD_STDLIB_LIGHT_DEBUG )
         # useless if KICAD_STDLIB_DEBUG is ON.
         # this option makes some controls to trap out of bound memory access.
-        add_definitions( -DKICAD_STDLIB_LIGHT_DEBUG )
+        add_compile_definitions( KICAD_STDLIB_LIGHT_DEBUG )
         set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wp,-D_GLIBCXX_ASSERTIONS" )
     endif()
 
@@ -441,12 +423,12 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         # for some reasons, cmake does do use always a response file to send the list of objects
         # to the archiver, and because this list can be very long, and can create issue
         # when it is used in a command line, force use of a response file to store it
-        SET( CMAKE_CXX_USE_RESPONSE_FILE_FOR_OBJECTS 1 )
+        set( CMAKE_CXX_USE_RESPONSE_FILE_FOR_OBJECTS 1 )
 
         # The MinGW compiler can use the microsoft system snprintf as standard and it has a broken
         # API with respect to the C99 standard, so make sure we force it to use its own compliant
         # snprintf
-        add_definitions(-D__USE_MINGW_ANSI_STDIO=1)
+        add_compile_definitions( __USE_MINGW_ANSI_STDIO=1 )
 
         # Allow linking for Boost for the UUID against bcrypt
         set( EXTRA_LIBS "bcrypt" )
@@ -462,13 +444,13 @@ if( MSVC )
     include_directories( ${CMAKE_SOURCE_DIR}/resources/msw/ )
 
     # Disallow implicit linking for Boost
-    add_definitions( -DBOOST_ALL_NO_LIB )
+    add_compile_definitions( BOOST_ALL_NO_LIB )
     # But allow it for the UUID so that it will link against bcrypt
-    add_definitions( -DBOOST_UUID_FORCE_AUTO_LINK )
+    add_compile_definitions( BOOST_UUID_FORCE_AUTO_LINK )
     # Disable MSVC's deprecation warnings
-    add_definitions( -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_SCL_SECURE_NO_WARNINGS )
+    add_compile_definitions( _CRT_SECURE_NO_WARNINGS _CRT_NONSTDC_NO_DEPRECATE _SCL_SECURE_NO_WARNINGS )
     # Hide Windows's min() and max() macros
-    add_definitions( -DNOMINMAX )
+    add_compile_definitions( NOMINMAX )
     # source and execution charset are UTF-8
     string( APPEND CMAKE_CXX_FLAGS " /utf-8" )
     # C4290: throw() is interpreted as declspec(nothrow)
@@ -493,12 +475,12 @@ if( MSVC )
     # Remove the potential default EHsc option cmake doesn't allow us to remove easily
     string( REPLACE "/EHsc" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} )
     if( KICAD_WIN32_CONTEXT_WINFIBER )
-    # /EHsc: ensure standard exception C++ unwinding is enabled, "extern C" can never throw exceptions
-    string( APPEND CMAKE_CXX_FLAGS " /EHsc" )
+        # /EHsc: ensure standard exception C++ unwinding is enabled, "extern C" can never throw exceptions
+        string( APPEND CMAKE_CXX_FLAGS " /EHsc" )
     else()
-    # the asm libcontext implementation a slight change of rules
-    # /EHs: ensure standard exception C++ unwinding is enabled, "extern C" MAY throw exceptions
-    string( APPEND CMAKE_CXX_FLAGS " /EHs" )
+        # the asm libcontext implementation a slight change of rules
+        # /EHs: ensure standard exception C++ unwinding is enabled, "extern C" MAY throw exceptions
+        string( APPEND CMAKE_CXX_FLAGS " /EHs" )
     endif()
 
     foreach( type EXE SHARED MODULE)
@@ -516,26 +498,6 @@ if( MSVC )
     if( KICAD_WIN32_BUILD_PARALLEL_CL_MP )
         string( APPEND CMAKE_CXX_FLAGS " /MP" )
     endif()
-endif()
-
-if( KICAD_SCRIPTING_WXPYTHON )
-    add_definitions( -DKICAD_SCRIPTING_WXPYTHON )
-endif()
-
-if( KICAD_SPICE )
-    add_definitions( -DKICAD_SPICE )
-endif()
-
-if( KICAD_SIGNAL_INTEGRITY )
-    add_definitions( -DKICAD_SIGNAL_INTEGRITY )
-endif()
-
-
-if( KICAD_USE_EGL AND UNIX AND NOT APPLE )
-    message( STATUS "Configuring KiCad for the wxGLCanvas EGL backend" )
-    add_definitions( -DKICAD_USE_EGL )
-elseif( KICAD_USE_EGL )
-    message( STATUS "Ignoring KICAD_USE_EGL since not on Linux" )
 endif()
 
 # KIFACE_SUFFIX is the file extension used for top level program modules which
@@ -744,7 +706,7 @@ endif()
 # Find GLM library, required
 #
 find_package( GLM 0.9.8 REQUIRED )
-add_definitions( -DGLM_FORCE_CTOR_INIT )
+add_compile_definitions( GLM_FORCE_CTOR_INIT )
 include_directories( SYSTEM ${GLM_INCLUDE_DIR} )
 
 #
@@ -864,8 +826,8 @@ if( APPLE )
     set( PYTHON_DEST "${OSX_BUNDLE_BUILD_DIR}/${OSX_BUNDLE_PYTHON_SITE_PACKAGES_DIR}"
         CACHE PATH "Python module install path."
         )
-    # change to add_compile_definitions() after minimum required CMake version is 3.12
-    set_property( DIRECTORY APPEND PROPERTY COMPILE_DEFINITIONS OSX_BUNDLE_PYTHON_SITE_PACKAGES_DIR="${OSX_BUNDLE_PYTHON_SITE_PACKAGES_DIR}")
+
+    add_compile_definitions( OSX_BUNDLE_PYTHON_SITE_PACKAGES_DIR="${OSX_BUNDLE_PYTHON_SITE_PACKAGES_DIR}" )
 elseif( VCPKG_TOOLCHAIN )
     set( PYTHON_DEST "${CMAKE_INSTALL_PREFIX}/bin/Lib/site-packages"
         CACHE PATH "Python module install path."
@@ -928,7 +890,7 @@ endif()
 #
 
 # Turn on wxWidgets compatibility mode for some classes
-add_definitions( -DWX_COMPATIBILITY )
+add_compile_definitions( WX_COMPATIBILITY )
 
 
 # Check if '--toolkit=xxx' option has been passed
@@ -991,7 +953,7 @@ endif()
 if( KICAD_USE_SENTRY )
     set( CRASHPAD_WER_ENABLED ON )
     add_subdirectory( thirdparty/sentry-native )
-    add_definitions( -DKICAD_USE_SENTRY )
+    add_compile_definitions( KICAD_USE_SENTRY )
 endif()
 
 #================================================

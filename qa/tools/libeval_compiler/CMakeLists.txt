@@ -24,7 +24,7 @@
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc REQUIRED )
 
-add_definitions(-DBOOST_TEST_DYN_LINK -DPCBNEW)
+add_compile_definitions( BOOST_TEST_DYN_LINK PCBNEW)
 
 add_dependencies( pnsrouter pcbcommon ${PCBNEW_IO_LIBRARIES} )
 

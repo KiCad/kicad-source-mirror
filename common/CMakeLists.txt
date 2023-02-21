@@ -23,9 +23,7 @@ include_directories(
 add_subdirectory( gal )
 
 # Only for win32 cross compilation using MXE
-if( WIN32 AND MSYS )
-    add_definitions( -DGLEW_STATIC )
-endif()
+add_compile_definitions( $<$<AND:$<BOOL:${WIN32}>,$<BOOL:${MSYS}>>:GLEW_STATIC> )
 
 # A shared library subsetted from common which restricts what can go into
 # a single_top link image.  By not linking to common, we control what does

@@ -65,10 +65,7 @@ macro( perform_feature_checks )
     # included in pyport.h which is where the problem ocurrs without this
     # fix.
     check_include_file( "stdint.h" HAVE_STDINT_H )
-
-    if( HAVE_STDINT_H )
-        add_definitions( -DHAVE_STDINT_H )
-    endif()
+    add_compile_definitions( $<$<BOOL:${HAVE_STDINT_H}>:HAVE_STDINT_H> )
 
     # no place is this used, and "HAVE_STRINGS_H", if present in config.h then
     # conflicts with /usr/include/python2.6/Python.h.  Please rename the macro if
