@@ -26,19 +26,19 @@
 
 #include <dialog_sim_format_value_base.h>
 
+struct SPICE_VALUE_FORMAT;
 
 class DIALOG_SIM_FORMAT_VALUE : public DIALOG_SIM_FORMAT_VALUE_BASE
 {
 public:
-    DIALOG_SIM_FORMAT_VALUE( wxWindow* aParent, int* aPrecision, wxString* aRange );
+    DIALOG_SIM_FORMAT_VALUE( wxWindow* aParent, SPICE_VALUE_FORMAT* aFormat );
 
 private:
     bool TransferDataFromWindow() override;
 
 private:
-    int*      m_precision;
-    wxString* m_range;
-    wxString  m_units;
+    SPICE_VALUE_FORMAT* m_format;
+    wxString            m_units;
 };
 
 #endif /* DIALOG_SIM_FORMAT_VALUE_H */

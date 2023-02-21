@@ -32,6 +32,11 @@
 
 struct SPICE_VALUE_FORMAT
 {
+    void FromString( const wxString& aString );
+    wxString ToString() const;
+
+    void UpdateUnits( const wxString& aUnits );
+
     int      Precision;
     wxString Range;
 };

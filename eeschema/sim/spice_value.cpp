@@ -36,6 +36,32 @@
 #include <locale_io.h>
 
 
+void SPICE_VALUE_FORMAT::FromString( const wxString& aString )
+{
+    long val;
+    aString.Left( 1 ).ToLong( &val );
+    Precision = (int) val;
+    Range = aString.Right( aString.Length() - 1 );
+}
+
+
+wxString SPICE_VALUE_FORMAT::ToString() const
+{
+    return wxString::Format( wxS( "%d%s" ), std::max( 0, std::min( Precision, 9 ) ), Range );
+}
+
+
+void SPICE_VALUE_FORMAT::UpdateUnits( const wxString& aUnits )
+{
+    if( Range.GetChar( 0 ) == '~' )
+        Range = Range.Left( 1 ) + aUnits;
+    else if( SPICE_VALUE::ParseSIPrefix( Range.GetChar( 0 ) ) != SPICE_VALUE::PFX_NONE )
+        Range = Range.Left( 1 ) + aUnits;
+    else
+        Range = aUnits;
+}
+
+
 SPICE_VALUE::SPICE_VALUE( const wxString& aString )
 {
     char buf[8] = { 0, };

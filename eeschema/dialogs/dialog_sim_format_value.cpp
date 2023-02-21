@@ -22,75 +22,78 @@
  */
 
 #include <dialog_sim_format_value.h>
-#include "sim/spice_value.h"
+#include <sim/spice_value.h>
 
 
-DIALOG_SIM_FORMAT_VALUE::DIALOG_SIM_FORMAT_VALUE( wxWindow* aParent, int* aPrecision,
-                                                  wxString* aRange ) :
+DIALOG_SIM_FORMAT_VALUE::DIALOG_SIM_FORMAT_VALUE( wxWindow* aParent, SPICE_VALUE_FORMAT* aFormat ) :
         DIALOG_SIM_FORMAT_VALUE_BASE( aParent ),
-        m_precision( aPrecision ),
-        m_range( aRange )
+        m_format( aFormat )
 {
-    m_units = aRange->Right( 1 );
-
-    if( m_units == wxS( "V" ) )
+    if( aFormat->Range.EndsWith( wxS( "V" ) ) )
     {
+        m_units = aFormat->Range.Right( 1 );
         SetTitle( wxString::Format( GetTitle(), _( "Voltage" ) ) );
     }
-    else if( m_units == wxS( "A" ) )
+    else if( aFormat->Range.EndsWith( wxS( "A" ) ) )
     {
+        m_units = aFormat->Range.Right( 1 );
         SetTitle( wxString::Format( GetTitle(), _( "Current" ) ) );
     }
-    else if( m_units == wxS( "s" ) )
+    else if( aFormat->Range.EndsWith( wxS( "s" ) ) )
     {
+        m_units = aFormat->Range.Right( 1 );
         SetTitle( wxString::Format( GetTitle(), _( "Time" ) ) );
     }
-    else if( aRange->Right( 2 ) == wxS( "Hz" ) )
+    else if( aFormat->Range.EndsWith( wxS( "Hz" ) ) )
     {
-        m_units = aRange->Right( 2 );
+        m_units = aFormat->Range.Right( 2 );
         SetTitle( wxString::Format( GetTitle(), _( "Frequency" ) ) );
     }
-    else if( aRange->Right( 3 ) == wxS( "dBV" ) )
+    else if( aFormat->Range.EndsWith( wxS( "dBV" ) ) )
     {
-        m_units = aRange->Right( 3 );
+        m_units = aFormat->Range.Right( 3 );
         SetTitle( wxString::Format( GetTitle(), _( "Gain" ) ) );
     }
-    else if( m_units == wxS( "°" ) )
+    else if( aFormat->Range.EndsWith( wxS( "°" ) ) )
     {
+        m_units = aFormat->Range.Right( 1 );
         SetTitle( wxString::Format( GetTitle(), _( "Phase" ) ) );
+    }
+    else if( aFormat->Range.StartsWith( wxS( "~" ), &m_units ) )
+    {
+        // m_units set as remainder in StartsWith() call....
+        SetTitle( wxString::Format( GetTitle(), _( "Value" ) ) );
     }
     else
     {
-        if( aRange->GetChar( 0 ) == '~' )
-            m_units = aRange->Right( aRange->Length() - 1 );
-        else if( SPICE_VALUE::ParseSIPrefix( aRange->GetChar( 0 ) ) != SPICE_VALUE::PFX_NONE )
-            m_units = aRange->Right( aRange->Length() - 1 );
+        if( SPICE_VALUE::ParseSIPrefix( aFormat->Range.GetChar( 0 ) ) != SPICE_VALUE::PFX_NONE )
+            m_units = aFormat->Range.Right( aFormat->Range.Length() - 1 );
         else
-            m_units = *aRange;
+            m_units = aFormat->Range;
 
         SetTitle( wxString::Format( GetTitle(), _( "Value" ) ) );
     }
 
-    m_precisionCtrl->SetValue( *aPrecision );
+    m_precisionCtrl->SetValue( aFormat->Precision );
 
     for( int ii = 1; ii < (int) m_rangeCtrl->GetCount(); ++ii )
         m_rangeCtrl->SetString( ii, m_rangeCtrl->GetString( ii ) + m_units );
 
-    if( aRange->GetChar( 0 ) == '~' )
+    if( aFormat->Range.GetChar( 0 ) == '~' )
         m_rangeCtrl->SetSelection( 0 );
     else
-        m_rangeCtrl->SetStringSelection( *aRange );
+        m_rangeCtrl->SetStringSelection( aFormat->Range );
 }
 
 
 bool DIALOG_SIM_FORMAT_VALUE::TransferDataFromWindow()
 {
-    *m_precision = m_precisionCtrl->GetValue();
+    m_format->Precision = std::max( 1, std::min( m_precisionCtrl->GetValue(), 9 ) );
 
     if( m_rangeCtrl->GetSelection() == 0 )
-        *m_range = wxS( "~" ) + m_units;
+        m_format->Range = wxS( "~" ) + m_units;
     else
-        *m_range = m_rangeCtrl->GetStringSelection();
+        m_format->Range = m_rangeCtrl->GetStringSelection();
 
     return true;
 }

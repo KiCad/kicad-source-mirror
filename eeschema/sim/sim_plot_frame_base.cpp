@@ -108,9 +108,9 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_signalsGrid->SetMargins( 0, 0 );
 
 	// Columns
-	m_signalsGrid->SetColSize( 0, 200 );
-	m_signalsGrid->SetColSize( 1, 36 );
-	m_signalsGrid->SetColSize( 2, 42 );
+	m_signalsGrid->SetColSize( 0, 207 );
+	m_signalsGrid->SetColSize( 1, 33 );
+	m_signalsGrid->SetColSize( 2, 38 );
 	m_signalsGrid->SetColSize( 3, 55 );
 	m_signalsGrid->SetColSize( 4, 55 );
 	m_signalsGrid->EnableDragColMove( false );
@@ -213,7 +213,7 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_measurementsGrid = new WX_GRID( m_panelMeasurements, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
 	// Grid
-	m_measurementsGrid->CreateGrid( 0, 2 );
+	m_measurementsGrid->CreateGrid( 1, 3 );
 	m_measurementsGrid->EnableEditing( true );
 	m_measurementsGrid->EnableGridLines( true );
 	m_measurementsGrid->EnableDragGridSize( false );
@@ -222,10 +222,12 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	// Columns
 	m_measurementsGrid->SetColSize( 0, 297 );
 	m_measurementsGrid->SetColSize( 1, 90 );
+	m_measurementsGrid->SetColSize( 2, 0 );
 	m_measurementsGrid->EnableDragColMove( false );
 	m_measurementsGrid->EnableDragColSize( true );
 	m_measurementsGrid->SetColLabelValue( 0, _("Measurement") );
 	m_measurementsGrid->SetColLabelValue( 1, _("Value") );
+	m_measurementsGrid->SetColLabelValue( 2, _("Format") );
 	m_measurementsGrid->SetColLabelSize( -1 );
 	m_measurementsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 

@@ -122,17 +122,6 @@ public:
         onCursorUpdate( dummy );
     }
 
-    SPICE_VALUE_FORMAT GetMeasureFormat( int aRow ) const
-    {
-        return m_measurementFormats[ aRow ];
-    }
-
-    void SetMeasureFormat( int aRow, const SPICE_VALUE_FORMAT& aFormat )
-    {
-        m_measurementFormats[ aRow ] = aFormat;
-        updateMeasurement( aRow );
-    }
-
     /**
      * Add a tuner for a symbol.
      */
@@ -169,6 +158,17 @@ public:
      * Delete a row from the measurements grid.
      */
     void DeleteMeasurement( int aRow );
+
+    /**
+     * Get/Set the format of a value in the measurements grid.
+     */
+    SPICE_VALUE_FORMAT GetMeasureFormat( int aRow ) const;
+    void SetMeasureFormat( int aRow, const SPICE_VALUE_FORMAT& aFormat );
+
+    /**
+     * Update a measurement in the measurements grid.
+     */
+    void UpdateMeasurement( int aRow );
 
     /**
      * Return the currently opened plot panel (or NULL if there is none).
@@ -310,11 +310,6 @@ private:
     void updateCursors();
 
     /**
-     * Update a measurement in the measurements grid.
-     */
-    void updateMeasurement( int aRow );
-
-    /**
      * Apply user-defined signals to the SPICE session.
      */
     void applyUserDefinedSignals();
@@ -395,7 +390,6 @@ private:
     SIM_PANEL_BASE*                        m_lastSimPlot;
 
     SPICE_VALUE_FORMAT                     m_cursorFormats[3][2];
-    std::vector<SPICE_VALUE_FORMAT>        m_measurementFormats;
 
     // Variables for temporary storage:
     int                   m_splitterLeftRightSashPosition;
@@ -406,7 +400,6 @@ private:
     bool                  m_darkMode;
     unsigned int          m_plotNumber;
     bool                  m_simFinished;
-    unsigned int          m_outputCounter;
     bool                  m_workbookModified;
 };
 

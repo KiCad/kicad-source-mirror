@@ -134,7 +134,8 @@ enum CURSORS_GRID_COLUMNS
 enum MEASUREMENTS_GIRD_COLUMNS
 {
     COL_MEASUREMENT = 0,
-    COL_MEASUREMENT_VALUE
+    COL_MEASUREMENT_VALUE,
+    COL_MEASUREMENT_FORMAT
 };
 
 
@@ -263,7 +264,7 @@ void CURSORS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
         int                     cursorId = m_menuRow;
         int                     cursorAxis = m_menuCol - COL_CURSOR_X;
         SPICE_VALUE_FORMAT      format = m_parent->GetCursorFormat( cursorId, cursorAxis );
-        DIALOG_SIM_FORMAT_VALUE formatDialog( m_parent, &format.Precision, &format.Range );
+        DIALOG_SIM_FORMAT_VALUE formatDialog( m_parent, &format );
 
         if( formatDialog.ShowModal() == wxID_OK )
             m_parent->SetCursorFormat( cursorId, cursorAxis, format );
@@ -316,10 +317,13 @@ void MEASUREMENTS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
     if( event.GetId() == MYID_FORMAT_VALUE )
     {
         SPICE_VALUE_FORMAT      format = m_parent->GetMeasureFormat( m_menuRow );
-        DIALOG_SIM_FORMAT_VALUE formatDialog( m_parent, &format.Precision, &format.Range );
+        DIALOG_SIM_FORMAT_VALUE formatDialog( m_parent, &format );
 
         if( formatDialog.ShowModal() == wxID_OK )
+        {
             m_parent->SetMeasureFormat( m_menuRow, format );
+            m_parent->UpdateMeasurement( m_menuRow );
+        }
     }
     else if( event.GetId() == MYID_DELETE_MEASUREMENT )
     {
@@ -358,7 +362,6 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_darkMode( true ),
         m_plotNumber( 0 ),
         m_simFinished( false ),
-        m_outputCounter( 1 ),
         m_workbookModified( false )
 {
     SetKiway( this, aKiway );
@@ -1014,17 +1017,6 @@ void SIM_PLOT_FRAME::OnFilterMouseMoved( wxMouseEvent& aEvent )
 }
 
 
-void updateRangeUnits( wxString* aRange, const wxString& aUnits )
-{
-    if( aRange->GetChar( 0 ) == '~' )
-        *aRange = aRange->Left( 1 ) + aUnits;
-    else if( SPICE_VALUE::ParseSIPrefix( aRange->GetChar( 0 ) ) != SPICE_VALUE::PFX_NONE )
-        *aRange = aRange->Left( 1 ) + aUnits;
-    else
-        *aRange = aUnits;
-}
-
-
 wxString SIM_PLOT_FRAME::getTraceName( int aRow )
 {
     wxString signalName = m_signalsGrid->GetCellValue( aRow, COL_SIGNAL_NAME );
@@ -1134,15 +1126,23 @@ void SIM_PLOT_FRAME::onCursorsGridCellChanged( wxGridEvent& aEvent )
 }
 
 
+SPICE_VALUE_FORMAT SIM_PLOT_FRAME::GetMeasureFormat( int aRow ) const
+{
+    SPICE_VALUE_FORMAT result;
+    result.FromString( m_measurementsGrid->GetCellValue( aRow, COL_MEASUREMENT_FORMAT ) );
+    return result;
+}
+
+
+void SIM_PLOT_FRAME::SetMeasureFormat( int aRow, const SPICE_VALUE_FORMAT& aFormat )
+{
+    m_measurementsGrid->SetCellValue( aRow, COL_MEASUREMENT_FORMAT, aFormat.ToString() );
+}
+
+
 void SIM_PLOT_FRAME::DeleteMeasurement( int aRow )
 {
     m_measurementsGrid->DeleteRows( aRow, 1 );
-
-    for( int ii = aRow; ii < (int) m_measurementFormats.size() - 1; ++ii )
-        m_measurementFormats[ aRow ] = m_measurementFormats[ aRow + 1 ];
-
-    m_measurementFormats.pop_back();
-
     m_workbookModified = true;
 }
 
@@ -1159,20 +1159,19 @@ void SIM_PLOT_FRAME::onMeasurementsGridCellChanged( wxGridEvent& aEvent )
     wxString text = m_measurementsGrid->GetCellValue( row, col );
 
     if( col == COL_MEASUREMENT )
-    {
-        if( text.IsEmpty() )
-            DeleteMeasurement( row );
-        else
-            updateMeasurement( row );
-    }
+        UpdateMeasurement( row );
     else
-    {
         wxFAIL_MSG( wxT( "All other columns are supposed to be read-only!" ) );
-    }
+
+    // Always leave at least one empty row for type-in:
+    row = m_measurementsGrid->GetNumberRows() - 1;
+
+    if( !m_measurementsGrid->GetCellValue( row, COL_MEASUREMENT ).IsEmpty() )
+        m_measurementsGrid->AppendRows( 1 );
 }
 
 
-void SIM_PLOT_FRAME::updateMeasurement( int aRow )
+void SIM_PLOT_FRAME::UpdateMeasurement( int aRow )
 {
     static wxRegEx measureParamsRegEx( wxT( "^"
                                             " *"
@@ -1188,41 +1187,50 @@ void SIM_PLOT_FRAME::updateMeasurement( int aRow )
         return;
 
     wxString text = m_measurementsGrid->GetCellValue( aRow, COL_MEASUREMENT );
+
+    if( text.IsEmpty() )
+    {
+        m_measurementsGrid->SetCellValue( aRow, COL_MEASUREMENT_VALUE, wxEmptyString );
+        return;
+    }
+
     wxString simType = m_simulator->TypeToName( plotPanel->GetType(), true );
-    wxString resultName = wxString::Format( wxS( "meas_result_%u" ), m_outputCounter++ );
+    wxString resultName = wxString::Format( wxS( "meas_result_%u" ), aRow );
     wxString result = wxS( "?" );
 
-    m_simulator->Command( (const char*) wxString::Format( wxS( "meas %s %s %s" ),
-                                                          simType,
-                                                          resultName,
-                                                          text ).c_str() );
-
-    std::vector<double> resultVec = m_simulator->GetMagPlot( (const char*) resultName.c_str() );
-
-    if( resultVec.size() > 0 )
+    if( measureParamsRegEx.Matches( text ) )
     {
-        if( measureParamsRegEx.Matches( text ) )
-        {
-            wxString  func = measureParamsRegEx.GetMatch( text, 1 ).Upper();
-            wxUniChar signalType = measureParamsRegEx.GetMatch( text, 2 ).Upper()[0];
-            wxString  units;
+        wxString           func = measureParamsRegEx.GetMatch( text, 1 ).Upper();
+        wxUniChar          signalType = measureParamsRegEx.GetMatch( text, 2 ).Upper()[0];
+        wxString           units;
+        SPICE_VALUE_FORMAT fmt = GetMeasureFormat( aRow );
 
-            if( signalType == 'I' )
-                units = wxS( "A" );
-            else if( signalType == 'P' )
-                units = wxS( "W" );
-            else
-                units = wxS( "V" );
+        if( signalType == 'I' )
+            units = wxS( "A" );
+        else if( signalType == 'P' )
+            units = wxS( "W" );
+        else
+            units = wxS( "V" );
 
-            if( func.EndsWith( wxS( "_AT" ) ) )
-                units = wxS( "s" );
-            else if( func.StartsWith( wxS( "INTEG" ) ) )
-                units += wxS( "·s" );
+        if( func.EndsWith( wxS( "_AT" ) ) )
+            units = wxS( "s" );
+        else if( func.StartsWith( wxS( "INTEG" ) ) )
+            units += wxS( "·s" );
 
-            updateRangeUnits( &m_measurementFormats[ aRow ].Range, units );
-        }
+        fmt.UpdateUnits( units );
+        SetMeasureFormat( aRow, fmt );
+    }
 
-        result = SPICE_VALUE( resultVec[0] ).ToString( m_measurementFormats[ aRow ] );
+    if( m_simFinished )
+    {
+        wxString cmd = wxString::Format( wxS( "meas %s %s %s" ), simType, resultName, text );
+        m_simulator->Command( "echo " + cmd.ToStdString() );
+        m_simulator->Command( cmd.ToStdString() );
+
+        std::vector<double> resultVec = m_simulator->GetMagPlot( resultName.ToStdString() );
+
+        if( resultVec.size() > 0 )
+            result = SPICE_VALUE( resultVec[0] ).ToString( GetMeasureFormat( aRow ) );
     }
 
     m_measurementsGrid->SetCellValue( aRow, COL_MEASUREMENT_VALUE, result );
@@ -1330,15 +1338,31 @@ void SIM_PLOT_FRAME::AddMeasurement( const wxString& aCmd, const wxString& aSign
         return;
 
     wxString simType = m_simulator->TypeToName( plotPanel->GetType(), true );
-    int      row = m_measurementsGrid->GetNumberRows();
+    int      row;
 
-    m_measurementFormats.push_back( { 3, wxS( "~V" ) } );
+    for( row = 0; row < m_measurementsGrid->GetNumberRows(); ++row )
+    {
+        if( m_measurementsGrid->GetCellValue( row, COL_MEASUREMENT ).IsEmpty() )
+            break;
+    }
 
-    m_measurementsGrid->AppendRows();
+    if( !m_measurementsGrid->GetCellValue( row, COL_MEASUREMENT ).IsEmpty() )
+    {
+        m_measurementsGrid->AppendRows( 1 );
+        row = m_measurementsGrid->GetNumberRows() - 1;
+    }
+
     m_measurementsGrid->SetCellValue( row, COL_MEASUREMENT, aCmd + wxS( " " ) + aSignal );
+    SetMeasureFormat( row, { 3, wxS( "~V" ) } );
 
-    updateMeasurement( row );
+    UpdateMeasurement( row );
     m_workbookModified = true;
+
+    // Always leave at least one empty row for type-in:
+    row = m_measurementsGrid->GetNumberRows() - 1;
+
+    if( !m_measurementsGrid->GetCellValue( row, COL_MEASUREMENT ).IsEmpty() )
+        m_measurementsGrid->AppendRows( 1 );
 }
 
 
@@ -1844,15 +1868,6 @@ bool SIM_PLOT_FRAME::LoadWorkbook( const wxString& aPath )
 
             if( version >= 4 && trace )
             {
-                auto readFormat =
-                        []( SPICE_VALUE_FORMAT* format, const wxString& text )
-                        {
-                            long val;
-                            text.Left( 1 ).ToLong( &val );
-                            format->Precision = (int) val;
-                            format->Range = text.Right( text.Length() - 1 );
-                        };
-
                 auto addCursor =
                         []( int aCursorId, SIM_PLOT_PANEL* aPlotPanel, TRACE* aTrace, double x )
                         {
@@ -1886,8 +1901,8 @@ bool SIM_PLOT_FRAME::LoadWorkbook( const wxString& aPath )
                         if( parts.size() == 3 )
                         {
                             parts[0].AfterFirst( '=' ).ToDouble( &val );
-                            readFormat( &m_cursorFormats[0][0], parts[1] );
-                            readFormat( &m_cursorFormats[0][1], parts[2] );
+                            m_cursorFormats[0][0].FromString( parts[1] );
+                            m_cursorFormats[0][1].FromString( parts[2] );
                             addCursor( 1, plotPanel, trace, val );
                         }
                     }
@@ -1899,8 +1914,8 @@ bool SIM_PLOT_FRAME::LoadWorkbook( const wxString& aPath )
                         if( parts.size() == 3 )
                         {
                             parts[0].AfterFirst( '=' ).ToDouble( &val );
-                            readFormat( &m_cursorFormats[1][0], parts[1] );
-                            readFormat( &m_cursorFormats[1][1], parts[2] );
+                            m_cursorFormats[1][0].FromString( parts[1] );
+                            m_cursorFormats[1][1].FromString( parts[2] );
                             addCursor( 2, plotPanel, trace, val );
                         }
                     }
@@ -1910,8 +1925,8 @@ bool SIM_PLOT_FRAME::LoadWorkbook( const wxString& aPath )
 
                         if( parts.size() == 3 )
                         {
-                            readFormat( &m_cursorFormats[2][0], parts[1] );
-                            readFormat( &m_cursorFormats[2][1], parts[2] );
+                            m_cursorFormats[2][0].FromString( parts[1] );
+                            m_cursorFormats[2][1].FromString( parts[2] );
                         }
                     }
                 }
@@ -2020,31 +2035,25 @@ bool SIM_PLOT_FRAME::SaveWorkbook( const wxString& aPath )
 
             if( CURSOR* cursor = trace->GetCursor( 1 ) )
             {
-                msg += wxString::Format( wxS( "|cursor1=%E:%d%s:%d%s" ),
+                msg += wxString::Format( wxS( "|cursor1=%E:%s:%s" ),
                                          cursor->GetCoords().x,
-                                         m_cursorFormats[0][0].Precision,
-                                         m_cursorFormats[0][0].Range,
-                                         m_cursorFormats[0][1].Precision,
-                                         m_cursorFormats[0][1].Range );
+                                         m_cursorFormats[0][0].ToString(),
+                                         m_cursorFormats[0][1].ToString() );
             }
 
             if( CURSOR* cursor = trace->GetCursor( 2 ) )
             {
-                msg += wxString::Format( wxS( "|cursor2=%E:%d%s:%d%s" ),
+                msg += wxString::Format( wxS( "|cursor2=%E:%s:%s" ),
                                          cursor->GetCoords().x,
-                                         m_cursorFormats[1][0].Precision,
-                                         m_cursorFormats[1][0].Range,
-                                         m_cursorFormats[1][1].Precision,
-                                         m_cursorFormats[1][1].Range );
+                                         m_cursorFormats[1][0].ToString(),
+                                         m_cursorFormats[1][1].ToString() );
             }
 
             if( trace->GetCursor( 1 ) || trace->GetCursor( 2 ) )
             {
-                msg += wxString::Format( wxS( "|cursorD:%d%s:%d%s" ),
-                                         m_cursorFormats[2][0].Precision,
-                                         m_cursorFormats[2][0].Range,
-                                         m_cursorFormats[2][1].Precision,
-                                         m_cursorFormats[2][1].Range );
+                msg += wxString::Format( wxS( "|cursorD:%s:%s" ),
+                                         m_cursorFormats[2][0].ToString(),
+                                         m_cursorFormats[2][1].ToString() );
             }
 
             file.AddLine( msg );
@@ -2308,8 +2317,8 @@ void SIM_PLOT_FRAME::updateCursors()
             wxRealPoint coords = cursor->GetCoords();
             int         row = m_cursorsGrid->GetNumberRows();
 
-            updateRangeUnits( &m_cursorFormats[0][0].Range, plotPanel->GetUnitsX() );
-            updateRangeUnits( &m_cursorFormats[0][1].Range, cursor1Units );
+            m_cursorFormats[0][0].UpdateUnits( plotPanel->GetUnitsX() );
+            m_cursorFormats[0][1].UpdateUnits( cursor1Units );
 
             m_cursorsGrid->AppendRows( 1 );
             m_cursorsGrid->SetCellValue( row, COL_CURSOR_NAME, wxS( "1" ) );
@@ -2331,8 +2340,8 @@ void SIM_PLOT_FRAME::updateCursors()
             wxRealPoint coords = cursor->GetCoords();
             int         row = m_cursorsGrid->GetNumberRows();
 
-            updateRangeUnits( &m_cursorFormats[1][0].Range, plotPanel->GetUnitsX() );
-            updateRangeUnits( &m_cursorFormats[1][1].Range, cursor2Units );
+            m_cursorFormats[1][0].UpdateUnits( plotPanel->GetUnitsX() );
+            m_cursorFormats[1][1].UpdateUnits( cursor2Units );
 
             m_cursorsGrid->AppendRows( 1 );
             m_cursorsGrid->SetCellValue( row, COL_CURSOR_NAME, wxS( "2" ) );
@@ -2348,8 +2357,8 @@ void SIM_PLOT_FRAME::updateCursors()
         wxRealPoint coords = cursor2->GetCoords() - cursor1->GetCoords();
         wxString    signal;
 
-        updateRangeUnits( &m_cursorFormats[2][0].Range, plotPanel->GetUnitsX() );
-        updateRangeUnits( &m_cursorFormats[2][1].Range, cursor1Units );
+        m_cursorFormats[2][0].UpdateUnits( plotPanel->GetUnitsX() );
+        m_cursorFormats[2][1].UpdateUnits( cursor1Units );
 
         if( cursor1->GetName() == cursor2->GetName() )
             signal = wxString::Format( wxS( "%s[2 - 1]" ), cursor2->GetName() );
@@ -2587,6 +2596,9 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
 
         m_schematicFrame->RefreshOperatingPointDisplay();
     }
+
+    for( int row = 0; row < m_measurementsGrid->GetNumberRows(); ++row )
+        UpdateMeasurement( row );
 
     m_lastSimPlot = plotPanelWindow;
 }
