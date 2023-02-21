@@ -149,12 +149,12 @@ std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
 
             SIM_VALUE_FLOAT min = dynamic_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "max" )->value );
 
-            if( !min.HasValue() )
+            if( !min.ToString().empty() )
                 min.FromString( "0" );
 
             SIM_VALUE_FLOAT max = dynamic_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "min" )->value );
 
-            if( !max.HasValue() )
+            if( !max.ToString().empty() )
                 max.FromString( "0" );
 
             SIM_VALUE_FLOAT range = max - min;
@@ -257,7 +257,7 @@ void SIM_MODEL_SOURCE::SetParamValue( int aParamIndex, const SIM_VALUE& aValue )
 {
     // Sources are special. All preceding parameter values must be filled. If they are not, fill
     // them out automatically. If a value is nulled, delete everything after it.
-    if( !aValue.HasValue() )
+    if( aValue.ToString().empty() )
     {
         for( int paramIndex = static_cast<int>( aParamIndex );
              paramIndex < GetParamCount();

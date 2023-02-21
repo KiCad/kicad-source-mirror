@@ -379,12 +379,10 @@ public:
 
         std::unique_ptr<SIM_VALUE> value;
         const INFO&                info;
-        bool                       isOtherVariant = false; // Legacy.
 
-        PARAM( const INFO& aInfo, bool aIsOtherVariant = false )
+        PARAM( const INFO& aInfo )
             : value( SIM_VALUE::Create( aInfo.type ) ),
-              info( aInfo ),
-              isOtherVariant( aIsOtherVariant )
+              info( aInfo )
         {}
     };
 
@@ -453,7 +451,7 @@ public:
     void ClearPins();
 
     int FindModelPinIndex( const std::string& aSymbolPinNumber );
-    void AddParam( const PARAM::INFO& aInfo, bool aIsOtherVariant = false );
+    void AddParam( const PARAM::INFO& aInfo );
 
     DEVICE_INFO GetDeviceInfo() const { return DeviceInfo( GetDeviceType() ); }
     INFO GetTypeInfo() const { return TypeInfo( GetType() ); }
