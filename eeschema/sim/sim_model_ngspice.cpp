@@ -72,12 +72,12 @@ SIM_MODEL_NGSPICE::SIM_MODEL_NGSPICE( TYPE aType ) :
         if( paramInfo.category == SIM_MODEL::PARAM::CATEGORY::PRINCIPAL
             || paramInfo.category == SIM_MODEL::PARAM::CATEGORY::GEOMETRY )
         {
-            AddParam( paramInfo, getIsOtherVariant() );
+            AddParam( paramInfo );
         }
     }
 
     for( const SIM_MODEL::PARAM::INFO& paramInfo : modelInfo.modelParams )
-        AddParam( paramInfo, getIsOtherVariant() );
+        AddParam( paramInfo );
 }
 
 

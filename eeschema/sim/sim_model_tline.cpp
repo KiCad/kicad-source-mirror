@@ -40,7 +40,7 @@ std::string SPICE_GENERATOR_TLINE::ModelLine( const SPICE_ITEM& aItem ) const
         auto z0 = static_cast<const SIM_VALUE_FLOAT&>( *m_model.FindParam( "z0" )->value );
         auto td = static_cast<const SIM_VALUE_FLOAT&>( *m_model.FindParam( "td" )->value );
 
-        if( !z0.HasValue() || !td.HasValue() )
+        if( !z0.ToString().empty() || !td.ToString().empty() )
             return fmt::format( ".model {} LTRA()\n", aItem.modelName );
 
         r = SIM_VALUE_FLOAT( 0 ).ToSpiceString();

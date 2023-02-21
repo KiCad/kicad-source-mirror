@@ -425,13 +425,6 @@ template <> SIM_VALUE::TYPE SIM_VALUE_FLOAT_VECTOR::GetType() const { return TYP
 template <> SIM_VALUE::TYPE SIM_VALUE_COMPLEX_VECTOR::GetType() const { return TYPE_COMPLEX; }*/
 
 
-template <typename T>
-bool SIM_VALUE_INST<T>::HasValue() const
-{
-    return m_value.has_value();
-}
-
-
 template <>
 bool SIM_VALUE_BOOL::FromString( const std::string& aString, NOTATION aNotation )
 {

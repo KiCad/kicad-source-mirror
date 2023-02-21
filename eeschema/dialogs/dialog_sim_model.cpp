@@ -876,15 +876,9 @@ wxPGProperty* DIALOG_SIM_MODEL<T_symbol, T_field>::newParamProperty( SIM_MODEL* 
 
     // Legacy due to the way we extracted the parameters from Ngspice.
     #if wxCHECK_VERSION( 3, 1, 0 )
-        if( param.isOtherVariant )
-            prop->SetCell( 3, wxString::FromUTF8( param.info.defaultValueOfOtherVariant ) );
-        else
-            prop->SetCell( 3, wxString::FromUTF8( param.info.defaultValue ) );
+        prop->SetCell( 3, wxString::FromUTF8( param.info.defaultValue ) );
     #else
-        if( param.isOtherVariant )
-            prop->SetCell( 3, wxString::FromUTF8( param.info.defaultValueOfOtherVariant.c_str() ) );
-        else
-            prop->SetCell( 3, wxString::FromUTF8( param.info.defaultValue.c_str() ) );
+        prop->SetCell( 3, wxString::FromUTF8( param.info.defaultValue.c_str() ) );
     #endif
 
     wxString typeStr;

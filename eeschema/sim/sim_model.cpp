@@ -711,9 +711,9 @@ int SIM_MODEL::FindModelPinIndex( const std::string& aSymbolPinNumber )
 }
 
 
-void SIM_MODEL::AddParam( const PARAM::INFO& aInfo, bool aIsOtherVariant )
+void SIM_MODEL::AddParam( const PARAM::INFO& aInfo )
 {
-    m_params.emplace_back( aInfo, aIsOtherVariant );
+    m_params.emplace_back( aInfo );
 
     // Enums are initialized with their default values.
     if( aInfo.enumValues.size() >= 1 )
@@ -1740,9 +1740,6 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
                             {
                                 model->SetParamValue( ii, tokenizer.GetNextToken().ToStdString(),
                                                       SIM_VALUE_GRAMMAR::NOTATION::SPICE );
-
-                                if( !model->GetParam( ii ).value->HasValue() )
-                                    THROW_IO_ERROR( "fall back to raw SPICE" );
                             }
 
                             spiceTypeInfo.m_Text = SIM_MODEL::TypeInfo( type ).fieldValue;

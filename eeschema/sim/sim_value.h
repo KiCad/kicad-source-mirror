@@ -85,8 +85,6 @@ public:
 
     virtual TYPE GetType() const = 0;
 
-    virtual bool HasValue() const = 0;
-
     SIM_VALUE& operator=( const std::string& aString );
     virtual SIM_VALUE& operator=( const SIM_VALUE& aValue ) = 0;
     virtual bool operator==( const SIM_VALUE& aOther ) const = 0;
@@ -109,7 +107,6 @@ public:
     SIM_VALUE_INST( const T& aValue );
 
     TYPE GetType() const override;
-    bool HasValue() const override;
 
     // TODO: Don't pass aNotation. Make a FromSpiceString() function instead.
     // TODO: Don't use FromString(). Use assignment. Values should be immutable.
