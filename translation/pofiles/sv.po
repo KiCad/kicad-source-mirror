@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-10 15:35-0800\n"
-"PO-Revision-Date: 2023-02-21 00:55+0000\n"
+"PO-Revision-Date: 2023-02-23 00:29+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v7/sv/>\n"
 "Language: sv\n"
@@ -3221,7 +3221,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:290
 msgid "&Auto save:"
-msgstr "Autospara:"
+msgstr "&Autospara:"
 
 #: common/dialogs/panel_common_settings_base.cpp:295
 msgid ""
@@ -6868,9 +6868,8 @@ msgid "Warnings"
 msgstr "Varningar"
 
 #: common/widgets/wx_html_report_panel_base.cpp:59
-#, fuzzy
 msgid "Actions"
-msgstr "Handlingar"
+msgstr "Åtgärder"
 
 #: common/widgets/wx_html_report_panel_base.cpp:65
 msgid "Infos"
@@ -9437,9 +9436,8 @@ msgstr "Textstorlek för namn"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:132
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:100
-#, fuzzy
 msgid "De Morgan"
-msgstr "De Morgan-standard"
+msgstr "De Morgan variant"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:826
 #: eeschema/dialogs/dialog_lib_shape_properties.cpp:72
@@ -9508,7 +9506,7 @@ msgstr "Gruppera efter namn"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:140
 msgid "Group Selected"
-msgstr "Grupp vald"
+msgstr "Gruppera valda"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:151
 msgid "Filter by unit:"
@@ -9528,12 +9526,12 @@ msgid ""
 "The symbol name in library and also the default\n"
 "symbol value when loaded in the schematic."
 msgstr ""
-"Detta är symbolnamnet i biblioteket,\n"
-"och även standardkomponentvärdet när det laddas i schemat."
+"Detta är symbolnamnet i biblioteket, samt även\n"
+"standardkomponentvärdet när symbolen läses in i kretsschemat."
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:42
 msgid "Derive from existing symbol:"
-msgstr "Hämta från befintlig symbol:"
+msgstr "Härled från befintlig symbol:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:46
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:84
@@ -9568,12 +9566,12 @@ msgstr "U"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:58
 msgid "Number of units per package:"
-msgstr "Antal enheter per paket:"
+msgstr "Antal enheter per kapsling:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:71
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:190
 msgid "All units are interchangeable"
-msgstr "Alla enheter är utbytbara"
+msgstr "Alla enheter är sinsemellan utbytbara"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:72
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:191
@@ -9586,16 +9584,16 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:76
 msgid "Create symbol with alternate body style (De Morgan)"
-msgstr "Skapa symbol med alternativ kroppsstil (De Morgan)"
+msgstr "Skapa symbol med alternativ symbolform (De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:79
 msgid "Create symbol as power symbol"
-msgstr "Skapa symbol som kraftsymbol"
+msgstr "Skapa symbol för strömförsörjning"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:82
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:284
 msgid "Exclude from schematic bill of materials"
-msgstr "Uteslut från kretsschemats materialförteckning"
+msgstr "Uteslut från kretsschemats komponentlista"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:85
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:287
@@ -9605,19 +9603,19 @@ msgstr "Uteslut från mönsterkort"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:103
 msgid "Pin name position offset:"
-msgstr "Förskjutning av pin-namn position:"
+msgstr "Förskjutning av stiftnamnets position:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:120
 msgid "Show pin number text"
-msgstr "Visa textnummer"
+msgstr "Visa text för stiftnummer"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:124
 msgid "Show pin name text"
-msgstr "Visa text för pin-namn"
+msgstr "Visa text för stiftnamn"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:128
 msgid "Pin name inside"
-msgstr "Fäst namn inuti"
+msgstr "Stiftnamn inuti"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.h:74
 msgid "New Symbol"
@@ -9649,7 +9647,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:103
 #: pcbnew/zone.cpp:1447
 msgid "Fill Style"
-msgstr "Fyll stil"
+msgstr "Fyllningstyp"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:110
 msgid "Do not fill"
@@ -9657,11 +9655,11 @@ msgstr "Fyll inte"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:113
 msgid "Fill with body outline color"
-msgstr "Fyll med kroppens kontureringsfärg"
+msgstr "Fyll med färg för symbolens kontur"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:116
 msgid "Fill with body background color"
-msgstr "Fyll med kroppsbakgrundsfärg"
+msgstr "Fyll med bakgrundsfärg för symbolkroppen"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:119
 msgid "Fill with:"
@@ -9675,12 +9673,12 @@ msgstr "Privat för Symbolredigeraren"
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:143
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:154
 msgid "Common to all &units in symbol"
-msgstr "Gemensamt för alla & enheter i symbol"
+msgstr "Gemensamt för alla &enheter i symbol"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:149
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:157
 msgid "Common to all body &styles (De Morgan)"
-msgstr "Gemensamt för alla symbolvarianter (De Morgan)"
+msgstr "Gemensamt för alla &symbolvarianter (De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.h:86
 msgid "Drawing Properties"
@@ -9689,7 +9687,7 @@ msgstr "Ritningsegenskaper"
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:286
 #: eeschema/dialogs/dialog_symbol_properties.cpp:668
 msgid "References must start with a letter."
-msgstr "Referenser måste börja med en bokstav."
+msgstr "Referensbeteckningar måste börja med en bokstav."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:306
 #: eeschema/dialogs/dialog_sheet_properties.cpp:217
@@ -9699,7 +9697,7 @@ msgstr "Fält måste ha ett namn."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:323
 msgid "Derived symbol must have a parent selected"
-msgstr "Härledd symbolen måste ha en vald överordnad symbol"
+msgstr "Härledd symbol måste ha en vald överordnad symbol"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:335
 msgid "Delete extra units from symbol?"
@@ -9707,7 +9705,7 @@ msgstr "Radera extra enheter från symbolen?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:341
 msgid "Delete alternate body style (De Morgan) from symbol?"
-msgstr "Radera alternativ kroppsstil (De Morgan) från symbol?"
+msgstr "Radera alternativ symbolform (De Morgan) från symbol?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:368
 #: eeschema/tools/symbol_editor_control.cpp:345
@@ -9729,7 +9727,7 @@ msgstr "De första %d fälten är obligatoriska."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:750
 msgid "Add Footprint Filter"
-msgstr "Lägg till Footprint Filter"
+msgstr "Lägg till filter för fotavtryck"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:793
 msgid "Edit Footprint Filter"
@@ -9747,11 +9745,11 @@ msgstr "Nyckelord:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:152
 msgid "Derive from symbol:"
-msgstr "Hämta från symbol:"
+msgstr "Härled från symbol:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:156
 msgid "<None>"
-msgstr "<None>"
+msgstr "<Ingen>"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:157
 msgid ""
@@ -9763,13 +9761,13 @@ msgid ""
 "derived from another symbols or they stand alone as\n"
 "root symbols."
 msgstr ""
-"Välj symbol för att härleda denna symbol från eller välj\n"
+"Välj symbol att härleda denna symbol från eller välj\n"
 "<Ingen> för rotsymbol.\n"
 "\n"
-"Avledda symboler kallades tidigare alias.\n"
-"Detta är inte längre fallet och alla symboler är det heller\n"
-"härledda från andra symboler eller de står ensamma som\n"
-"rot symboler."
+"Härledda symboler kallades tidigare alias.\n"
+"Detta är inte längre fallet och alla symboler är antingen\n"
+"härledda från andra symboler eller fristående som\n"
+"rotsymboler."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:178
 msgid "Number of Units:"
@@ -9781,17 +9779,17 @@ msgstr "Ange antalet enheter för en symbol som innehåller mer än en enhet"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:198
 msgid "Has alternate body style (De Morgan)"
-msgstr "Har alternativ symbol (De Morgan)"
+msgstr "Har alternativ symbolform (De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:199
 msgid "Check this option if the symbol has an alternate body style (De Morgan)"
 msgstr ""
-"Markera det här alternativet om symbolen har en alternativ kroppsstil (De "
+"Markera det här alternativet om symbolen har en alternativ symbolform (De "
 "Morgan)"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:206
 msgid "Define as power symbol"
-msgstr "Definiera som kraftsymbol"
+msgstr "Definiera som strömförsörjningssymbol"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:207
 msgid ""
@@ -9843,11 +9841,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:247
 msgid "Position offset:"
-msgstr "Positionsförskjutning:"
+msgstr "Förskjutning av placering:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:249
 msgid "Margin between the pin name position and the symbol body."
-msgstr "Marginal mellan pin-namnets position och symbolkroppen."
+msgstr "Marginal mellan stiftnamnets position och symbolkroppen."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:256
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:120
@@ -9869,12 +9867,12 @@ msgstr "enheter"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:276
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:199
 msgid "Attributes"
-msgstr "Attributer"
+msgstr "Egenskaper"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:278
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:201
 msgid "Exclude from simulation"
-msgstr "Exkludera från simulering"
+msgstr "Uteslut från simulering"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:311
 msgid "Footprint filters:"
@@ -9892,7 +9890,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:324
 msgid "Add footprint filter"
-msgstr "Lägg till Footprint Filter"
+msgstr "Lägg till fotavtrycksfilter"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:329
 msgid "Edit footprint filter"
@@ -9904,7 +9902,7 @@ msgstr "Ta bort filter för fotavtryck"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:351
 msgid "Footprint Filters"
-msgstr "Fotavtrycksfilter"
+msgstr "Filter för fotavtryck"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:364
 msgid "Edit Simulation Model..."
@@ -9912,7 +9910,7 @@ msgstr "Redigera simulationsmodell..."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.h:118
 msgid "Library Symbol Properties"
-msgstr "Biblioteksegenskaper"
+msgstr "Bibliotekssybolens egenskaper"
 
 #: eeschema/dialogs/dialog_lib_text_properties.cpp:217
 #: eeschema/dialogs/dialog_text_properties.cpp:487
@@ -9969,17 +9967,16 @@ msgid ""
 "This schematic has one or more buses with more than one label.\n"
 "This was allowed in previous KiCad versions but is no longer permitted."
 msgstr ""
-"Denna schemat har en eller flera bussar med mer än en etikett.\n"
-"Detta var tillåtet i tidigare KiCad-versioner men är inte längre tillåtet."
+"Kretsschemat har en eller flera bussar med mer än en etikett.\n"
+"Det var tillåtet i tidigare KiCad-versioner men är inte längre tillåtet."
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:23
 msgid ""
 "Please select a new name for each of the buses below.\n"
 "A name has been suggested for you based on the labels attached to the bus."
 msgstr ""
-"Välj ett nytt namn för var och en av bussarna nedan.\n"
-"Ett namn har föreslagits för dig baserat på etiketterna som är fästa vid "
-"bussen."
+"Vänligen välj ett nytt namn för var och en av bussarna nedan.\n"
+"Ett namn har föreslagits baserat på etiketterna som är fästa vid bussen."
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:32
 msgid "Proposed new name:"
@@ -9996,7 +9993,7 @@ msgstr "Migrera bussar"
 #: eeschema/dialogs/dialog_pin_properties.cpp:53
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:212
 msgid "Alternate Pin Name"
-msgstr "Alternativt pin-namn"
+msgstr "Alternativt stiftnamn"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:203
 #: eeschema/dialogs/dialog_symbol_properties.cpp:346
@@ -10018,7 +10015,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:300
 msgid "If checked, this pin will exist in all units."
-msgstr "Om vald kommer denna pin finnas i alla enheter."
+msgstr "Om vald kommer detta stift att finnas i alla enheter."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:304
 msgid "This symbol only has one unit. This control has no effect."
@@ -10036,7 +10033,7 @@ msgid ""
 "Do you wish to continue?"
 msgstr ""
 "Detta stift är inte placerat på ett %d mils rutnät, vilket kommer att göra "
-"det svårt att ansluta till i schemat.\n"
+"det svårt att ansluta till i kretsschemat.\n"
 "Vill du fortsätta?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:439
@@ -10055,11 +10052,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:44
 msgid "Pin &name:"
-msgstr "Pin & namn:"
+msgstr "Stift&namn:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:51
 msgid "Pin num&ber:"
-msgstr "Pin-nummer:"
+msgstr "Stiftnu&mmer:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:53
 msgid "Pin number: 1 to 4 ASCII letters and/or digits"
@@ -10067,23 +10064,23 @@ msgstr "Stiftnummer: 1 till 4 ASCII-bokstäver och / eller siffror"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:60
 msgid "&X position:"
-msgstr "& X-position:"
+msgstr "&X-position:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:69
 msgid "&Y position:"
-msgstr "& Y-position:"
+msgstr "&Y-position:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:76
 msgid "&Pin length:"
-msgstr "&Stiftlängd:"
+msgstr "S&tiftlängd:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:83
 msgid "N&ame text size:"
-msgstr "N & ame textstorlek:"
+msgstr "&Textstorlek för namn:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:90
 msgid "Number text si&ze:"
-msgstr "Nummertext si & ze:"
+msgstr "Textstorlek n&ummer:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:97
 msgid "Electrical type:"
@@ -10112,7 +10109,7 @@ msgstr "Alternativa stiftdefinitioner"
 
 #: eeschema/dialogs/dialog_pin_properties_base.h:104
 msgid "Pin Properties"
-msgstr "Fästegenskaper"
+msgstr "Egenskaper för stift"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:74
 msgid "Plot All Pages"
@@ -10137,7 +10134,7 @@ msgid ""
 "Do you want to use a path relative to\n"
 "'%s'?"
 msgstr ""
-"Vill du använda en sökväg i relativ till\n"
+"Vill du använda en sökväg relativ till\n"
 "'%s'?"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:197
@@ -10224,7 +10221,7 @@ msgstr "Kunde inte normalisera sökväg '%s%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:464
 msgid "No project or path defined for the current schematic."
-msgstr "Inget projekt eller sökväg definierad för det aktuella schemat."
+msgstr "Inget projekt eller sökväg definierad för det aktuella kretsschemat."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:25
 #: kicad/cli/command_export_pcb_base.cpp:43
@@ -10309,14 +10306,14 @@ msgstr "Välj det färgtema som ska användas för plottning"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:111
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:183
 msgid "Default line width:"
-msgstr "Standardradbredd:"
+msgstr "Förinställd linjebredd:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:104
 msgid ""
 "Selection of the default pen thickness used to draw items, when their "
 "thickness is set to 0."
 msgstr ""
-"Val av standardtjocklek för pennor som används för att rita objekt när deras "
+"Val av förinställd penntjocklek som används för att rita objekt vars "
 "tjocklek är inställd på 0."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:123
@@ -10326,7 +10323,7 @@ msgstr "HPGL-alternativ"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Position and units:"
-msgstr "Position och enhet:"
+msgstr "Position och enheter:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:134
 msgid "Bottom left, plotter units"
@@ -10400,7 +10397,7 @@ msgid ""
 "\n"
 "The following changes are recommended to update the project."
 msgstr ""
-"Detta kretsschema skapades med ett äldre symbolbibliotek som kan bryta "
+"Detta kretsschema skapades med äldre symbolbibliotek, vilket kan bryta "
 "kretsschemat. Vissa symboler kan behöva kopplas till ett annat symbolnamn. "
 "Vissa symboler kan behöva \"räddas\" (kopieras och byta namn) till ett nytt "
 "bibliotek.\n"
@@ -10425,7 +10422,7 @@ msgstr "Åtgärder som vidtagits"
 #: eeschema/sch_symbol.cpp:1633 eeschema/sch_symbol.cpp:1677
 #: pcbnew/footprint.cpp:2920 pcbnew/fp_text.cpp:279
 msgid "Reference"
-msgstr "Referens"
+msgstr "Referensbeteckning"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:150
 #: eeschema/dialogs/dialog_rescue_each.cpp:300
@@ -10439,7 +10436,7 @@ msgstr "Hoppa över att rädda symboler"
 #: eeschema/dialogs/dialog_rescue_each.cpp:233
 #, c-format
 msgid "Instances of this symbol (%d items):"
-msgstr "Exempel på denna symbol (%d artiklar):"
+msgstr "Instanser av denna symbol (%d artiklar):"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:296
 msgid ""
@@ -10461,11 +10458,11 @@ msgstr "Symboler som ska uppdateras:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:38
 msgid "Instances of this symbol:"
-msgstr "Exempel på denna symbol:"
+msgstr "Instanser av denna symbol:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:57
 msgid "Cached Symbol:"
-msgstr "Cachad symbol:"
+msgstr "Cachelagrad symbol:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:78
 msgid "Library Symbol:"
@@ -10485,7 +10482,7 @@ msgstr "Projekträddningsassistent"
 #: pcbnew/dialogs/dialog_import_settings.cpp:53
 #: pcbnew/dialogs/dialog_import_settings_base.h:67
 msgid "Import Settings"
-msgstr "Importinställningar"
+msgstr "Importera inställningar"
 
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:60
 #: pcbnew/dialogs/dialog_import_settings.cpp:114
@@ -10510,7 +10507,7 @@ msgid ""
 "Target directory for plot files. Can be absolute or relative to the board "
 "file location."
 msgstr ""
-"Målkatalog för plotfiler. Kan vara absolut eller relativt till "
+"Målkatalog för plottfiler. Kan vara absolut eller relativt till "
 "mönsterkortsfilens sökväg."
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:44
@@ -10542,7 +10539,7 @@ msgstr "Nätklasser"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:31
 msgid "&Search for:"
-msgstr "&Söka efter:"
+msgstr "Sö&k efter:"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:36
 #: pcbnew/dialogs/dialog_find_base.cpp:33
@@ -10551,15 +10548,15 @@ msgstr "Text med valfria jokertecken"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:41
 msgid "Replace &with:"
-msgstr "Ersätt med:"
+msgstr "Ersätt &med:"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:52
 msgid "Direction:"
-msgstr "Vägvisning:"
+msgstr "Riktning:"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:61
 msgid "F&orward"
-msgstr "Fram"
+msgstr "&Framåt"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:66
 msgid "&Backward"
@@ -10567,7 +10564,7 @@ msgstr "&Bakåt"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:82
 msgid "&Match case"
-msgstr "Skilj p? versaler/gemena"
+msgstr "S&kilj på versaler/gemena"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:85
 #: pcbnew/dialogs/dialog_find_base.cpp:46
@@ -10581,15 +10578,15 @@ msgstr "Jokertecken"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:92
 msgid "Search pin &names and numbers"
-msgstr "Sök efter pin & namn och nummer"
+msgstr "Sök efter stift&namn och -nummer"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:95
 msgid "Search hidden fields"
-msgstr "Sök dolda fält"
+msgstr "Genomsök &dolda fält"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:98
 msgid "Search the current &sheet only"
-msgstr "Sök bara i det aktuella & arket"
+msgstr "Sök bara i det aktuella a&rket"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:101
 msgid "Replace matches in reference designators"
@@ -10605,7 +10602,7 @@ msgstr "&Ersätt"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:125
 msgid "Replace &All"
-msgstr "Ersätt Alla"
+msgstr "Ersätt &Alla"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:41
 msgid "Schematic Setup"
@@ -10613,7 +10610,7 @@ msgstr "Kretsschema-inställningar"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:42
 msgid "Import Settings from Another Project..."
-msgstr "Importera inställningar från ett annat projekt ..."
+msgstr "Importera inställningar från ett annat projekt..."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:79
 msgid "Electrical Rules"
@@ -10656,7 +10653,7 @@ msgid ""
 "Project file %s could not be loaded."
 msgstr ""
 "Fel vid import av inställningar från projekt:\n"
-"Projektfilen %s kunde inte laddas."
+"Projektfilen %s kunde inte läsas in."
 
 #: eeschema/dialogs/dialog_shape_properties.cpp:58
 #: eeschema/dialogs/dialog_sheet_properties.cpp:78
@@ -10688,7 +10685,7 @@ msgstr "%s-egenskaper"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.h:84
 msgid "Sheet Pin Properties"
-msgstr "Egenskaper för arksnålar"
+msgstr "Egenskaper för arkstift"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:272
 msgid "A sheet must have a valid file name."
@@ -10696,15 +10693,15 @@ msgstr "Ett ark måste ha ett giltigt filnamn."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:282
 msgid "Sheet file must have a '.kicad_sch' extension."
-msgstr "Arkfilen måste ha ett \".kicad_sch\" -tillägg."
+msgstr "Arkfilen måste ha filändelsen \".kicad_sch\"."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:316
 msgid "Use relative path for sheet file?"
-msgstr "Använd relativ sökväg för bladfil?"
+msgstr "Använd relativ sökväg för arkfil?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:317
 msgid "Sheet File Path"
-msgstr "Bladfilssökväg"
+msgstr "Sökväg för kretsschemaarket"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:320
 msgid ""
@@ -10726,7 +10723,7 @@ msgstr "Använd absolut sökväg"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:356
 msgid "Untitled Sheet"
-msgstr "Namnlöst blad"
+msgstr "Namnlöst ark"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:382
 msgid "Note: item colors are overridden in the current color theme."
@@ -10739,7 +10736,7 @@ msgid ""
 "in Preferences > Schematic Editor > Colors."
 msgstr ""
 "Avmarkera '%s' i Inställningar > Kretsschemaredigerare > Färger\n"
-"för att se färger för enskilda objekt."
+"för att se enskilda objekts färger."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:426
 #, c-format
@@ -10758,9 +10755,9 @@ msgid ""
 "against parent sheet schematic file path:\n"
 "'%s'."
 msgstr ""
-"Kunde inte normalisera den nya schemabladssökvägen:\n"
+"Kunde inte normalisera den nya sökvägen för kretsschemaarket:\n"
 "'%s'\n"
-"gentemot det överordnade schemabladets sökväg:\n"
+"gentemot det överordnade kretsschemaarkets sökväg:\n"
 "'%s'."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:491
@@ -10797,7 +10794,7 @@ msgstr "Ett fel uppstod när kretsschemafilen '%s' skulle sparas."
 #: eeschema/dialogs/dialog_sheet_properties.cpp:593
 #, c-format
 msgid "Failed to save schematic '%s'"
-msgstr "Det gick inte att spara schemat '%s'"
+msgstr "Det gick inte att spara kretsschemat '%s'"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:679
 msgid "A sheet must have a name."
@@ -10947,7 +10944,7 @@ msgstr "Hertz"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:60
 msgid "Stop frequency:"
-msgstr "Stoppfrekvens:"
+msgstr "Slutfrekvens:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:81
 msgid "AC"
@@ -11030,15 +11027,15 @@ msgstr "Referensnod"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:245
 msgid "(optional; default GND)"
-msgstr "(valfritt; standard GND)"
+msgstr "(valfritt; förinställning GND)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:249
 msgid "Noise source"
-msgstr "Bullerkälla"
+msgstr "Bruskälla"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:279
 msgid "Number of points"
-msgstr "Antal poäng"
+msgstr "Antal punkter"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:286
 msgid "Start frequency [Hz]"
@@ -11046,12 +11043,12 @@ msgstr "Startfrekvens [Hz]"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:293
 msgid "Stop frequency [Hz]"
-msgstr "Stoppfrekvens [Hz]"
+msgstr "Slutfrekvens [Hz]"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:310
 #: eeschema/sim/spice_simulator.cpp:72
 msgid "Noise"
-msgstr "Ljud"
+msgstr "Brus"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:318
 msgid "This tab has no settings"
@@ -11060,7 +11057,7 @@ msgstr "Den här fliken har inga inställningar"
 #: eeschema/dialogs/dialog_sim_command_base.cpp:329
 #: eeschema/sim/spice_simulator.cpp:57
 msgid "Operating Point"
-msgstr "Driftpunkt"
+msgstr "Arbetspunkt"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:333
 msgid "Pole-Zero"
@@ -11095,28 +11092,28 @@ msgstr "Starttid:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:392
 msgid "(optional; default 0)"
-msgstr "(valfritt; standard 0)"
+msgstr "(valfritt; förinställning 0)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:403
 #: eeschema/sim/spice_simulator.cpp:66
 msgid "Transient"
-msgstr "Övergående"
+msgstr "Transient"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:408
 msgid "Spice directives:"
-msgstr "Spice-direktiv:"
+msgstr "SPICE-direktiv:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:417
 msgid "Load directives from schematic"
-msgstr "Ladda riktlinjer från kretsschemat"
+msgstr "Ladda direktiv från kretsschemat"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:424 pcbnew/pad.cpp:1714
 msgid "Custom"
-msgstr "Skräddarsydd"
+msgstr "Användardefinierat"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:431
 msgid "Add full path for .include library directives"
-msgstr "Lägg till hela sökvägen för. Inkludera biblioteksdirektiv"
+msgstr "Lägg till hela sökvägen för. include biblioteksdirektiv"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:444
 msgid "Compatibility mode:"
@@ -11172,11 +11169,11 @@ msgstr "Modell:"
 #: eeschema/dialogs/dialog_sim_model.cpp:463
 #, c-format
 msgid "Save parameter '%s (%s)' in Value field"
-msgstr "Spara parameter '%s (%s)' i värde-fältet"
+msgstr "Spara parameter '%s (%s)' i värdefältet"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:471
 msgid "Save primary parameter in Value field"
-msgstr "Spara primär parameter i värde-fältet"
+msgstr "Spara primär parameter i värdefältet"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:488
 #: pcbnew/footprint_wizard_frame.cpp:325
@@ -11275,7 +11272,7 @@ msgstr "Simualtionsmodellredigerare"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:86
 #: eeschema/fields_grid_table.cpp:863
 msgid "Select Footprint..."
-msgstr "Välj fotavtryck ..."
+msgstr "Välj fotavtryck..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:87
 #: eeschema/fields_grid_table.cpp:864
@@ -11349,7 +11346,7 @@ msgstr "Spara som CSV"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:34
 msgid "Add Field..."
-msgstr "Lägg till fält ..."
+msgstr "Lägg till fält..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:37
 msgid "Remove Field..."
@@ -11365,7 +11362,7 @@ msgstr "Dela in symboler i grupper baserat på deras gemensamma egenskaper"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:127
 msgid "Export as CSV..."
-msgstr "Exportera som CSV ..."
+msgstr "Exportera som CSV..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.h:89
 msgid "Symbol Fields Table"
@@ -11373,7 +11370,7 @@ msgstr "Symbolfältstabell"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:160
 msgid "Base Name"
-msgstr "Basnamn"
+msgstr "Grundnamn"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:161
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:282
@@ -11393,8 +11390,8 @@ msgid ""
 "Use the alternate shape of this symbol.\n"
 "For gates, this is the \"De Morgan\" conversion"
 msgstr ""
-"Använd den alternativa formen på denna symbol.\n"
-"För portar är detta \"De Morgan\" -omvandlingen"
+"Använd den alternativa formen för denna symbol.\n"
+"För grindar är detta \"De Morgan\"-omvandlingen"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:149
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:352
@@ -11451,7 +11448,7 @@ msgstr "Visa stiftnamn"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:208
 #: pcbnew/footprint.cpp:2944
 msgid "Exclude from bill of materials"
-msgstr "Uteslut från materialförteckningen"
+msgstr "Uteslut från komponentlistan"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:209
 msgid ""
@@ -11470,7 +11467,7 @@ msgid ""
 "not required to layout the board such as mechanical fasteners and enclosures"
 msgstr ""
 "Detta är användbart för att lägga till symboler som bara exporteras till "
-"materiallistan men\n"
+"komponentlistan men\n"
 "inte behöver placeras på mönsterkortet, såsom mekaniska fästelement och "
 "kapslingar"
 
@@ -11480,7 +11477,7 @@ msgstr "Monteras ej"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:230
 msgid "Update Symbol from Library..."
-msgstr "Uppdatera symbol från bibliotek ..."
+msgstr "Uppdatera symbol från bibliotek..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:233
 #: eeschema/tools/ee_actions.cpp:471
@@ -11489,20 +11486,20 @@ msgstr "Ersätt symbol..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:236
 msgid "Edit Symbol..."
-msgstr "Redigera symbol ..."
+msgstr "Redigera symbol..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:242
 #: eeschema/tools/ee_actions.cpp:601
 msgid "Edit Library Symbol..."
-msgstr "Redigera bibliotekssymbol ..."
+msgstr "Redigera bibliotekssymbol..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:280
 msgid "Pin Number"
-msgstr "Pinkod"
+msgstr "Stiftnummer"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:281
 msgid "Base Pin Name"
-msgstr "Basstiftets namn"
+msgstr "Grundstiftets namn"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:308
 msgid "Alternate Pin Assignments"
@@ -11757,7 +11754,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.h:69
 msgid "Wire & Bus Properties"
-msgstr "Lednings- och bussegenskaper"
+msgstr "Lednings- & bussegenskaper"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:20
 msgid "Automatically annotate symbols"
@@ -11798,11 +11795,11 @@ msgstr "Standardtypsnitt:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:53
 msgid "S&how hidden pins"
-msgstr "Visa dolda stift"
+msgstr "Visa &dolda stift"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:56
 msgid "Show hidden fields"
-msgstr "Visa dolda fält"
+msgstr "Visa dolda &fält"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:59
 msgid "Show ERC errors"
@@ -11818,7 +11815,7 @@ msgstr "Visa ERC-undantag"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:68
 msgid "Show page limi&ts"
-msgstr "Visa sidgränser"
+msgstr "Visa sidgränse&r"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:78
 msgid "Selection && Highlighting"
@@ -12025,15 +12022,15 @@ msgstr "Automatisk placering av symbolfält"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:266
 msgid "A&utomatically place symbol fields"
-msgstr "Autoplacera symbolfält"
+msgstr "A&utoplacera symbolfält"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:269
 msgid "A&llow field autoplace to change justification"
-msgstr "Tillåt autoplacering av fält att ändra justering"
+msgstr "&Tillåt autoplacering av fält att ändra justering"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:272
 msgid "Al&ways align autoplaced fields to the 50 mil grid"
-msgstr "Anpassar alltid autoplacerade fält till 50 mil rutnätet"
+msgstr "&Anpassar alltid autoplacerade fält till 50 mil rutnätet"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:281
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:104
@@ -12051,7 +12048,7 @@ msgstr "&Vertikal förskjutning:"
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:318
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:134
 msgid "Label increment:"
-msgstr "Steg för referensbeteckning:"
+msgstr "&Steg för referensbeteckning:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:337
 msgid "Dialog Preferences"
@@ -12263,7 +12260,7 @@ msgstr "Använd tema:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:36
 msgid "&Default line width:"
-msgstr "& Standardradbredd:"
+msgstr "&Förinställd radbredd:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:47
 msgid ""
@@ -12275,15 +12272,15 @@ msgstr ""
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:62
 msgid "D&efault pin length:"
-msgstr "S&tandard stiftlängd:"
+msgstr "Förinställd &stiftlängd:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:73
 msgid "De&fault pin number size:"
-msgstr "Standardstorlek för stiftnummer:"
+msgstr "Standardstorlek för stiftnu&mmer:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:84
 msgid "Def&ault pin name size:"
-msgstr "Standardstorlek för stiftnamn:"
+msgstr "Standardstorlek för stift&namn:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:98
 msgid "Show pin &electrical type"
@@ -12291,7 +12288,7 @@ msgstr "Visa &elektrisk typ för stift"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:120
 msgid "&Pitch of repeated pins:"
-msgstr "&Förskjutning för upprepade stift:"
+msgstr "Förskjutning för &upprepade stift:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:124
 msgid "100"
@@ -13468,7 +13465,7 @@ msgstr "&Placera"
 #: pagelayout_editor/menubar.cpp:173 pcbnew/menubar_footprint_editor.cpp:256
 #: pcbnew/menubar_pcb_editor.cpp:475
 msgid "&Inspect"
-msgstr "&Inspektera"
+msgstr "Inspe&ktera"
 
 #: eeschema/menubar.cpp:320 gerbview/menubar.cpp:239 kicad/menubar.cpp:216
 #: pcbnew/menubar_footprint_editor.cpp:257 pcbnew/menubar_pcb_editor.cpp:476
@@ -13480,7 +13477,7 @@ msgstr "&Verktyg"
 #: pagelayout_editor/menubar.cpp:174 pcbnew/menubar_footprint_editor.cpp:258
 #: pcbnew/menubar_pcb_editor.cpp:477
 msgid "P&references"
-msgstr "&Inställningar"
+msgstr "I&nställningar"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:98
 #, c-format
@@ -14458,7 +14455,7 @@ msgstr "Ogiltig URL i hyperlänk '%s'"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:743
 msgid "Invalid pin names definition"
-msgstr "Ogiltig definition på stiftnamn"
+msgstr "Ogiltig definition av stiftnamn"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:764
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1926
@@ -14485,7 +14482,7 @@ msgstr "Ogiltigt stiftnummer"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1455
 msgid "Invalid alternate pin name"
-msgstr "Ogiltigt namn på alternativt stift"
+msgstr "Ogiltigt alternativt namn på stift"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1630
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1690
@@ -15664,11 +15661,11 @@ msgstr "Fel antal kolumner för stiftmappning."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2386
 msgid "Incorrect diff pin name"
-msgstr "Felaktigt differentialstiftnamn"
+msgstr "Felaktigt namn på differentiellt stift"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2391
 msgid "Incorrect inv_pin name"
-msgstr "Felaktigt inv_pin namn"
+msgstr "Felaktigt namn på inv_pin"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2471
 msgid "Unknown waveform type"
@@ -16143,7 +16140,7 @@ msgstr "Visa stö&drutor"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:105
 msgid "Show &Legend"
-msgstr "Visa förklaringar"
+msgstr "&Visa förklaringar"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:111
 msgid "Dotted Current/Phase"
@@ -16192,7 +16189,7 @@ msgstr "Spänning"
 
 #: eeschema/sim/sim_plot_panel.cpp:369 eeschema/sim/sim_plot_panel.cpp:442
 msgid "Current"
-msgstr "Nuvarande"
+msgstr "Ström"
 
 #: eeschema/sim/sim_plot_panel.cpp:424
 msgid "Voltage (swept)"
@@ -17235,7 +17232,7 @@ msgstr "Avsluta ritningsformen"
 
 #: eeschema/tools/ee_actions.cpp:270
 msgid "Push Pin Length"
-msgstr "Push Pin Längd"
+msgstr "Klona stiftlängd"
 
 #: eeschema/tools/ee_actions.cpp:270
 msgid "Copy pin length to other pins in symbol"
@@ -17243,7 +17240,7 @@ msgstr "Kopiera stiftlängd till andra stift i symbol"
 
 #: eeschema/tools/ee_actions.cpp:275
 msgid "Push Pin Name Size"
-msgstr "Push Pin Namn Storlek"
+msgstr "Klona stiftnamnets storlek"
 
 #: eeschema/tools/ee_actions.cpp:275
 msgid "Copy pin name size to other pins in symbol"
@@ -17251,7 +17248,7 @@ msgstr "Kopiera stiftnamnsstorlek till andra stift i symbol"
 
 #: eeschema/tools/ee_actions.cpp:280
 msgid "Push Pin Number Size"
-msgstr "Tryckstiftsnummerstorlek"
+msgstr "Klona stiftsnumrets storlek"
 
 #: eeschema/tools/ee_actions.cpp:280
 msgid "Copy pin number size to other pins in symbol"
@@ -17530,7 +17527,7 @@ msgstr "Växla mellan De Morgan-representationer"
 
 #: eeschema/tools/ee_actions.cpp:493
 msgid "De Morgan Standard"
-msgstr "De Morgan-standard"
+msgstr "De Morgan standard"
 
 #: eeschema/tools/ee_actions.cpp:493
 msgid "Switch to standard De Morgan representation"
@@ -17602,7 +17599,7 @@ msgstr "Ta bort arksnålar utan referenser"
 
 #: eeschema/tools/ee_actions.cpp:537 pcbnew/tools/pcb_actions.cpp:504
 msgid "Edit Text & Graphics Properties..."
-msgstr "Redigera text- och grafikegenskaper ..."
+msgstr "Redigera text- och grafikegenskaper..."
 
 #: eeschema/tools/ee_actions.cpp:538
 msgid "Edit text and graphics properties globally across schematic"
@@ -20234,7 +20231,7 @@ msgstr "Importera EAGLE CAD XML-schemat och kort"
 
 #: kicad/menubar.cpp:119
 msgid "&Archive Project..."
-msgstr "& Arkivera projektfiler..."
+msgstr "&Arkivera projektfiler..."
 
 #: kicad/menubar.cpp:120
 msgid "Archive all needed project files into zip archive"
@@ -24705,7 +24702,7 @@ msgstr "Lödmask / lodpasta"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:102
 msgid "Text & Graphics"
-msgstr "Text & Grafik"
+msgstr "Text och grafik"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:103
 msgid "Defaults"
@@ -25003,7 +25000,7 @@ msgstr "Städa mönsterkortet"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:25
 msgid "Delete &tracks connecting different nets"
-msgstr "Ta bort &ledare som ansluter olika nät"
+msgstr "Ta &bort ledare som ansluter olika nät"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:26
 msgid ""
@@ -26479,19 +26476,19 @@ msgstr "Alla objekt"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:30
 msgid "Include &footprints"
-msgstr "Inkludera & fotavtryck"
+msgstr "Inkludera &fotavtryck"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:33
 msgid "Include t&ext items"
-msgstr "Inkludera t & ext-objekt"
+msgstr "Inkludera t&extobjekt"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:36
 msgid "Include &locked footprints"
-msgstr "Inkludera & låsta fotavtryck"
+msgstr "Inkludera låsta &fotavtryck"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:39
 msgid "Include &drawings"
-msgstr "Inkludera & ritningar"
+msgstr "Inkludera &ritningar"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:42
 msgid "Include &tracks"
@@ -26499,7 +26496,7 @@ msgstr "Inkludera &ledare"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:45
 msgid "Include &board outline layer"
-msgstr "Inkludera & kartlägg konturlager"
+msgstr "Inkludera &konturlager"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:48
 msgid "Include &vias"
@@ -26507,7 +26504,7 @@ msgstr "Inkludera &vior"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:51
 msgid "Include &zones"
-msgstr "Inkludera & zoner"
+msgstr "Inkludera &zoner"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.h:57
 msgid "Filter Selected Items"
@@ -27928,7 +27925,7 @@ msgstr "Designregler"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:66
 msgid "Predefined track && via dimensions"
-msgstr "Fördefinierade ledar- och via-dimensioner"
+msgstr "Fördefinierade ledar- och viadimensioner"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:243
 #: pcbnew/dialogs/dialog_imported_layers.cpp:251
@@ -29324,7 +29321,7 @@ msgstr "användarval"
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:43
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:58
 msgid "u"
-msgstr "g"
+msgstr "µ"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:36
 msgid "Trace gap:"
@@ -30026,7 +30023,7 @@ msgstr "Början, slut och anslutna lager"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:114
 msgid "Track & Via Properties"
-msgstr "Ledar- & Via-egenskaper"
+msgstr "Ledar- & viaegenskaper"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.h:53
 msgid "Track and Via Dimensions"
@@ -30046,11 +30043,11 @@ msgstr "Å&terställ oanvända lager"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:44
 msgid "&Selection only"
-msgstr "& Endast val"
+msgstr "&Endast val"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:47
 msgid "Keep &outside layers"
-msgstr "Behåll yttre lager"
+msgstr "&Behåll yttre lager"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.h:58
 msgid "Remove Unused Pads"
@@ -30138,7 +30135,7 @@ msgstr "Visa alltid"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:77
 msgid "Track && Via Clearances"
-msgstr "Ledar- && via-avstånd"
+msgstr "Isolationsavstånd för ledare && vior"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:79
 msgid ""
@@ -32960,7 +32957,7 @@ msgstr "Kontrollerar nätanslutningar ..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:134
 msgid "Checking track & via clearances..."
-msgstr "Kontrollerar isolationsavstånd mellan ledare och vias..."
+msgstr "Kontrollerar isolationsavstånd för ledare och vior..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:141
 msgid "Checking hole clearances..."
@@ -33041,7 +33038,7 @@ msgstr "(%s maximalt mellanrum %s; faktiskt %s)"
 
 #: pcbnew/drc/drc_test_provider_disallow.cpp:72
 msgid "Checking keepouts & disallow constraints..."
-msgstr "Kontrollerar spärrzons- och förbudsbegränsningar..."
+msgstr "Kontrollerar spärrzoner och förbudsbegränsningar..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:148
 msgid "Checking copper to board edge clearances..."
@@ -34210,7 +34207,7 @@ msgstr "Fotavtryck..."
 
 #: pcbnew/menubar_footprint_editor.cpp:69 pcbnew/menubar_pcb_editor.cpp:117
 msgid "Graphics..."
-msgstr "&Grafik..."
+msgstr "Grafik..."
 
 #: pcbnew/menubar_footprint_editor.cpp:78
 msgid "View as &PNG..."
@@ -34222,15 +34219,15 @@ msgstr "Skapa en PNG-fil från den aktuella vyn"
 
 #: pcbnew/menubar_footprint_editor.cpp:150 pcbnew/menubar_pcb_editor.cpp:264
 msgid "&Drawing Mode"
-msgstr "& Ritningsläge"
+msgstr "&Ritningsläge"
 
 #: pcbnew/menubar_footprint_editor.cpp:160 pcbnew/menubar_pcb_editor.cpp:289
 msgid "&Contrast Mode"
-msgstr "& Kontrastläge"
+msgstr "&Kontrastläge"
 
 #: pcbnew/menubar_footprint_editor.cpp:218
 msgid "&Load Footprint from PCB..."
-msgstr "& Ladda fotavtryck från kretskort ..."
+msgstr "&Läs in fotavtryck från mönsterkort..."
 
 #: pcbnew/menubar_footprint_editor.cpp:219
 msgid "Load a footprint from the current board into the editor"
@@ -34246,7 +34243,7 @@ msgstr "Sätt in fotavtryck på det aktuella mönsterkortet"
 
 #: pcbnew/menubar_pcb_editor.cpp:105
 msgid "Resc&ue"
-msgstr "Rädda"
+msgstr "Rä&dda"
 
 #: pcbnew/menubar_pcb_editor.cpp:106
 msgid "Clear board and get last rescue file automatically saved by PCB editor"
@@ -34376,7 +34373,7 @@ msgstr "Externa insticksprogram"
 
 #: pcbnew/menubar_pcb_editor.cpp:474
 msgid "Ro&ute"
-msgstr "Dra ledare"
+msgstr "&Dra ledare"
 
 #: pcbnew/microwave/microwave_footprint.cpp:56
 msgid "Gap Size:"
@@ -34819,7 +34816,7 @@ msgstr "lödyta"
 
 #: pcbnew/pad.cpp:969 pcbnew/pad.cpp:1779
 msgid "Pin Name"
-msgstr "Pin-namn"
+msgstr "Stiftnamn"
 
 #: pcbnew/pad.cpp:972 pcbnew/pad.cpp:1781
 msgid "Pin Type"
@@ -38599,7 +38596,7 @@ msgstr "Ändra ledarbredd"
 
 #: pcbnew/tools/pcb_actions.cpp:360
 msgid "Updates selected track & via sizes"
-msgstr "Uppdaterar valda ledar- och via-storlekar"
+msgstr "Uppdaterar valda ledar- och viastorlekar"
 
 #: pcbnew/tools/pcb_actions.cpp:364
 msgid "Adds arcs tangent to the selected straight track segments"
@@ -38758,7 +38755,7 @@ msgstr "Flytta ledare eller ritningar från ett lager till ett annat"
 
 #: pcbnew/tools/pcb_actions.cpp:498
 msgid "Edit Track & Via Properties..."
-msgstr "Ändra egenskaper för ledare och vior..."
+msgstr "Redigera egenskaper för ledare och vior..."
 
 #: pcbnew/tools/pcb_actions.cpp:499
 msgid "Edit track and via properties globally across board"
