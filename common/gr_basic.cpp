@@ -102,18 +102,24 @@ void GRSetColorPen( wxDC* DC, const COLOR4D& Color, int width, wxPenStyle style 
     if( !curr_pen.IsOk() || curr_pen.GetColour() != color.ToColour()
        || curr_pen.GetWidth() != width || curr_pen.GetStyle() != style )
     {
-        wxPen pen;
-        pen.SetColour( color.ToColour() );
-
-        if( style == wxPENSTYLE_DOT )
+        if( width == 0 )
+            // COLOR4D::UNSPECIFIED (i.e. opacity = 0) does not work on all platforms
+            // So ensure the pen is transparent
+            DC->SetPen( *wxTRANSPARENT_PEN );
+        else
         {
-            style = wxPENSTYLE_USER_DASH;
-            pen.SetDashes( 2, dots );
-        }
+            wxPen pen;
+            pen.SetColour( color.ToColour() );
 
-        pen.SetWidth( width );
-        pen.SetStyle( style );
-        DC->SetPen( pen );
+            if( style == wxPENSTYLE_DOT )
+            {
+                style = wxPENSTYLE_USER_DASH;
+                pen.SetDashes( 2, dots );
+            }
+
+            pen.SetWidth( width );
+            pen.SetStyle( style );
+        }
     }
     else
     {
