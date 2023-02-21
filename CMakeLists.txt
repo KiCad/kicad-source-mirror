@@ -365,12 +365,16 @@ endif(USE_DISTCC)
 # Set flags for GCC, or treat llvm as GCC
 #================================================
 
-if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
-
+if( CMAKE_COMPILER_IS_GNUCXX )
     # Set 32-bit flag for GCC to prevent excess precision
+    # clang des not know this flag, so keep this separate
     if( CMAKE_SIZEOF_VOID_P EQUAL 4 )
         set( CMAKE_CXX_FLAGS "-ffloat-store ${CMAKE_CXX_FLAGS}" )
     endif()
+endif( CMAKE_COMPILER_IS_GNUCXX )
+
+
+if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
 
     # Link flags in Debug: -g1 and -ggdb1 or -g1 and -ggdb3 can be used.
     # Level 1 produces minimal information, enough for making basic backtraces.
