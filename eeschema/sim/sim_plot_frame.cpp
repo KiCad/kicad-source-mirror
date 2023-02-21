@@ -200,20 +200,22 @@ void SIGNALS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 
 void SIGNALS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
 {
+    wxString signal = m_grid->GetCellValue( m_menuRow, m_menuCol );
+
     if( event.GetId() == MYID_MEASURE_MIN )
-        m_parent->AddMeasurement( wxS( "MIN" ), m_grid->GetCellValue( m_menuRow, m_menuCol ) );
+        m_parent->AddMeasurement( wxString::Format( wxS( "MIN %s" ), signal ) );
     else if( event.GetId() == MYID_MEASURE_MAX )
-        m_parent->AddMeasurement( wxS( "MAX" ), m_grid->GetCellValue( m_menuRow, m_menuCol ) );
+        m_parent->AddMeasurement( wxString::Format( wxS( "MAX %s" ), signal ) );
     else if( event.GetId() == MYID_MEASURE_AVE )
-        m_parent->AddMeasurement( wxS( "AVE" ), m_grid->GetCellValue( m_menuRow, m_menuCol ) );
+        m_parent->AddMeasurement( wxString::Format( wxS( "AVE %s" ), signal ) );
     else if( event.GetId() == MYID_MEASURE_RMS )
-        m_parent->AddMeasurement( wxS( "RMS" ), m_grid->GetCellValue( m_menuRow, m_menuCol ) );
+        m_parent->AddMeasurement( wxString::Format( wxS( "RMS %s" ), signal ) );
     else if( event.GetId() == MYID_MEASURE_PP )
-        m_parent->AddMeasurement( wxS( "PP" ), m_grid->GetCellValue( m_menuRow, m_menuCol ) );
+        m_parent->AddMeasurement( wxString::Format( wxS( "PP %s" ), signal ) );
     else if( event.GetId() == MYID_MEASURE_MIN_AT )
-        m_parent->AddMeasurement( wxS( "MIN_AT" ), m_grid->GetCellValue( m_menuRow, m_menuCol ) );
+        m_parent->AddMeasurement( wxString::Format( wxS( "MIN_AT %s" ), signal ) );
     else if( event.GetId() == MYID_MEASURE_MAX_AT )
-        m_parent->AddMeasurement( wxS( "MAX_AT" ), m_grid->GetCellValue( m_menuRow, m_menuCol ) );
+        m_parent->AddMeasurement( wxString::Format( wxS( "MAX_AT %s" ), signal ) );
     else
         GRID_TRICKS::doPopupSelection( event );
 }
@@ -877,9 +879,9 @@ void SIM_PLOT_FRAME::rebuildSignalsList()
             []( const wxString& lhs, const wxString& rhs )
             {
                 // Sort voltages first
-                if( lhs.StartsWith( 'V' ) && !rhs.StartsWith( 'V' ) )
+                if( lhs.Upper().StartsWith( 'V' ) && !rhs.Upper().StartsWith( 'V' ) )
                     return true;
-                else if( !lhs.StartsWith( 'V' ) && rhs.StartsWith( 'V' ) )
+                else if( !lhs.Upper().StartsWith( 'V' ) && rhs.Upper().StartsWith( 'V' ) )
                     return false;
 
                 return StrNumCmp( lhs, rhs, true /* ignore case */ ) < 0;
@@ -1137,6 +1139,7 @@ SPICE_VALUE_FORMAT SIM_PLOT_FRAME::GetMeasureFormat( int aRow ) const
 void SIM_PLOT_FRAME::SetMeasureFormat( int aRow, const SPICE_VALUE_FORMAT& aFormat )
 {
     m_measurementsGrid->SetCellValue( aRow, COL_MEASUREMENT_FORMAT, aFormat.ToString() );
+    m_workbookModified = true;
 }
 
 
@@ -1159,9 +1162,14 @@ void SIM_PLOT_FRAME::onMeasurementsGridCellChanged( wxGridEvent& aEvent )
     wxString text = m_measurementsGrid->GetCellValue( row, col );
 
     if( col == COL_MEASUREMENT )
+    {
         UpdateMeasurement( row );
+        m_workbookModified = true;
+    }
     else
+    {
         wxFAIL_MSG( wxT( "All other columns are supposed to be read-only!" ) );
+    }
 
     // Always leave at least one empty row for type-in:
     row = m_measurementsGrid->GetNumberRows() - 1;
@@ -1178,8 +1186,6 @@ void SIM_PLOT_FRAME::UpdateMeasurement( int aRow )
                                             "([a-zA-Z]+)"
                                             " +"
                                             "([a-zA-Z])\\([^\\)]+\\)" ) );
-
-    m_workbookModified = true;
 
     SIM_PLOT_PANEL* plotPanel = GetCurrentPlot();
 
@@ -1330,7 +1336,7 @@ void SIM_PLOT_FRAME::RemoveTuner( TUNER_SLIDER* aTuner, bool aErase )
 }
 
 
-void SIM_PLOT_FRAME::AddMeasurement( const wxString& aCmd, const wxString& aSignal )
+void SIM_PLOT_FRAME::AddMeasurement( const wxString& aCmd )
 {
     SIM_PLOT_PANEL* plotPanel = GetCurrentPlot();
 
@@ -1352,7 +1358,7 @@ void SIM_PLOT_FRAME::AddMeasurement( const wxString& aCmd, const wxString& aSign
         row = m_measurementsGrid->GetNumberRows() - 1;
     }
 
-    m_measurementsGrid->SetCellValue( row, COL_MEASUREMENT, aCmd + wxS( " " ) + aSignal );
+    m_measurementsGrid->SetCellValue( row, COL_MEASUREMENT, aCmd );
     SetMeasureFormat( row, { 3, wxS( "~V" ) } );
 
     UpdateMeasurement( row );
@@ -1694,7 +1700,7 @@ void SIM_PLOT_FRAME::applyUserDefinedSignals()
 
     for( int ii = 0; ii < (int) m_userDefinedSignals.size(); ++ii )
     {
-        wxString    signal = m_userDefinedSignals[ii].Lower();
+        wxString    signal = m_userDefinedSignals[ii];
         std::string cmd = "let user{} = {}";
 
         m_simulator->Command( "echo " + fmt::format(cmd, ii, signal.ToStdString() ) );
@@ -1774,7 +1780,7 @@ bool SIM_PLOT_FRAME::LoadWorkbook( const wxString& aPath )
 
     long plotsCount;
 
-    if( !plotCountLine.ToLong( &plotsCount ) ) // GetFirstLine instead of GetNextLine
+    if( !plotCountLine.ToLong( &plotsCount ) )
     {
         DISPLAY_LOAD_ERROR( "Error loading workbook: Line %d is not an integer." );
         file.Close();
@@ -1936,6 +1942,26 @@ bool SIM_PLOT_FRAME::LoadWorkbook( const wxString& aPath )
         }
     }
 
+    long userDefinedSignalCount;
+    long measurementCount;
+
+    if( file.GetNextLine().ToLong( &userDefinedSignalCount ) )
+    {
+        for( long i = 0; i < userDefinedSignalCount; ++i )
+            m_userDefinedSignals.push_back( file.GetNextLine() );
+
+        file.GetNextLine().ToLong( &measurementCount );
+
+        m_measurementsGrid->ClearRows();
+        m_measurementsGrid->AppendRows( (int) measurementCount + 1 /* empty row at end */ );
+
+        for( int row = 0; row < (int) measurementCount; ++row )
+        {
+            m_measurementsGrid->SetCellValue( row, COL_MEASUREMENT, file.GetNextLine() );
+            m_measurementsGrid->SetCellValue( row, COL_MEASUREMENT_FORMAT, file.GetNextLine() );
+        }
+    }
+
     LoadSimulator();
 
     rebuildSignalsList();
@@ -2058,6 +2084,31 @@ bool SIM_PLOT_FRAME::SaveWorkbook( const wxString& aPath )
 
             file.AddLine( msg );
         }
+    }
+
+    file.AddLine( wxString::Format( wxT( "%llu" ), m_userDefinedSignals.size() ) );
+
+    for( const wxString& signal : m_userDefinedSignals )
+        file.AddLine( signal );
+
+    std::vector<wxString> measurements;
+    std::vector<wxString> formats;
+
+    for( int i = 0; i < m_measurementsGrid->GetNumberRows(); ++i )
+    {
+        if( !m_measurementsGrid->GetCellValue( i, COL_MEASUREMENT ).IsEmpty() )
+        {
+            measurements.push_back( m_measurementsGrid->GetCellValue( i, COL_MEASUREMENT ) );
+            formats.push_back( m_measurementsGrid->GetCellValue( i, COL_MEASUREMENT_FORMAT ) );
+        }
+    }
+
+    file.AddLine( wxString::Format( wxT( "%llu" ), measurements.size() ) );
+
+    for( size_t i = 0; i < measurements.size(); i++ )
+    {
+        file.AddLine( measurements[i] );
+        file.AddLine( formats[i] );
     }
 
     bool res = file.Write();

@@ -149,10 +149,8 @@ public:
 
     /**
      * Add a measurement to the measurements grid.
-     * @param aCmd AVG, MIN, MAX, PP, RMS, MIN_AT, or MAX_AT
-     * @param aSignal
      */
-    void AddMeasurement( const wxString& aCmd, const wxString& aSignal );
+    void AddMeasurement( const wxString& aCmd );
 
     /**
      * Delete a row from the measurements grid.
