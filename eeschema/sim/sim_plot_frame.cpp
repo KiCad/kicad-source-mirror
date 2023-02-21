@@ -143,7 +143,7 @@ enum
 {
     MYID_MEASURE_MIN = GRIDTRICKS_FIRST_CLIENT_ID,
     MYID_MEASURE_MAX,
-    MYID_MEASURE_AVE,
+    MYID_MEASURE_AVG,
     MYID_MEASURE_RMS,
     MYID_MEASURE_PP,
     MYID_MEASURE_MIN_AT,
@@ -186,7 +186,7 @@ void SIGNALS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 
         menu.Append( MYID_MEASURE_MIN, _( "Measure Min" ) );
         menu.Append( MYID_MEASURE_MAX, _( "Measure Max" ) );
-        menu.Append( MYID_MEASURE_AVE, _( "Measure Average" ) );
+        menu.Append( MYID_MEASURE_AVG, _( "Measure Average" ) );
         menu.Append( MYID_MEASURE_RMS, _( "Measure RMS" ) );
         menu.Append( MYID_MEASURE_PP, _( "Measure Peak-to-peak" ) );
         menu.Append( MYID_MEASURE_MIN_AT, _( "Measure Time of Min" ) );
@@ -206,8 +206,8 @@ void SIGNALS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
         m_parent->AddMeasurement( wxString::Format( wxS( "MIN %s" ), signal ) );
     else if( event.GetId() == MYID_MEASURE_MAX )
         m_parent->AddMeasurement( wxString::Format( wxS( "MAX %s" ), signal ) );
-    else if( event.GetId() == MYID_MEASURE_AVE )
-        m_parent->AddMeasurement( wxString::Format( wxS( "AVE %s" ), signal ) );
+    else if( event.GetId() == MYID_MEASURE_AVG )
+        m_parent->AddMeasurement( wxString::Format( wxS( "AVG %s" ), signal ) );
     else if( event.GetId() == MYID_MEASURE_RMS )
         m_parent->AddMeasurement( wxString::Format( wxS( "RMS %s" ), signal ) );
     else if( event.GetId() == MYID_MEASURE_PP )
@@ -1183,7 +1183,7 @@ void SIM_PLOT_FRAME::UpdateMeasurement( int aRow )
 {
     static wxRegEx measureParamsRegEx( wxT( "^"
                                             " *"
-                                            "([a-zA-Z]+)"
+                                            "([a-zA-Z_]+)"
                                             " +"
                                             "([a-zA-Z])\\([^\\)]+\\)" ) );
 
