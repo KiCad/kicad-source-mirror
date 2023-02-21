@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-10 15:35-0800\n"
 "PO-Revision-Date: 2023-02-23 00:29+0000\n"
-"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v7/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
@@ -6508,7 +6508,7 @@ msgstr "Valitse & Kaikki A"
 
 #: common/tool/selection_tool.cpp:297
 msgid "&Expand Selection\tE"
-msgstr "& Laajenna valinta E"
+msgstr "&Laajenna valinta\tE"
 
 #: common/tool/zoom_menu.cpp:67
 #, c-format
@@ -10498,12 +10498,12 @@ msgstr "Projektin pelastusapu"
 #: pcbnew/dialogs/dialog_import_settings.cpp:53
 #: pcbnew/dialogs/dialog_import_settings_base.h:67
 msgid "Import Settings"
-msgstr "Tuonnin asetukset"
+msgstr "Tuo asetukset"
 
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:60
 #: pcbnew/dialogs/dialog_import_settings.cpp:114
 msgid "Import Settings From"
-msgstr "Tuo asetukset"
+msgstr "Tuo asetukset kohteesta"
 
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:72
 #: pcbnew/dialogs/dialog_import_settings.cpp:126
@@ -10602,7 +10602,7 @@ msgstr "Etsi piilotettuja kenttiä"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:98
 msgid "Search the current &sheet only"
-msgstr "Hae vain nykyisestä & taulukosta"
+msgstr "Hae vain nykyisestä &taulukosta"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:101
 msgid "Replace matches in reference designators"
@@ -11139,7 +11139,7 @@ msgstr "Käyttäjäasetukset"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:448
 msgid "Spice"
-msgstr "Integroitujen piirien simulaatio-ohjelma (SPICE)"
+msgstr "Spice"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:448
 msgid "PSpice"
@@ -16210,7 +16210,7 @@ msgstr "Jännite"
 
 #: eeschema/sim/sim_plot_panel.cpp:369 eeschema/sim/sim_plot_panel.cpp:442
 msgid "Current"
-msgstr "Nykyinen"
+msgstr "Virta"
 
 #: eeschema/sim/sim_plot_panel.cpp:424
 msgid "Voltage (swept)"
