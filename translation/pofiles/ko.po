@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-10 15:35-0800\n"
-"PO-Revision-Date: 2023-02-21 00:55+0000\n"
+"PO-Revision-Date: 2023-02-23 00:29+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v7/ko/>\n"
 "Language: ko\n"
@@ -5412,7 +5412,7 @@ msgstr "잠긴 항목"
 
 #: common/layer_id.cpp:186
 msgid "Courtyard collision shadow"
-msgstr "마당자리 겹침 그림자"
+msgstr "부품자리 겹침 그림자"
 
 #: common/lib_id.cpp:144
 msgid "Illegal character found in logical library name"
@@ -19098,7 +19098,7 @@ msgstr "RS274X: 명령어 \"IR\" 회전값은 허용되지 않습니다"
 
 #: gerbview/rs274x.cpp:650
 msgid "RS274X: Command KNOCKOUT ignored by GerbView"
-msgstr "RS274X: GerbView에서 KNOCKOUT 명령을 무시함"
+msgstr "RS274X: GerbView에서 밑색빼기 명령을 무시함"
 
 #: gerbview/toolbars_gerber.cpp:131
 msgid "Highlight items belonging to this component"
@@ -19689,7 +19689,7 @@ msgstr "사용할 색상 테마(기본값은 pcbnew 설정임)"
 #: kicad/cli/command_export_pcb_pos.cpp:44
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:64
 msgid "Generate Position File"
-msgstr "위치 파일 생성"
+msgstr "배치 파일 생성"
 
 #: kicad/cli/command_export_pcb_pos.cpp:49
 msgid "Valid options: front,back,both. Gerber format only supports \"both\"."
@@ -26501,12 +26501,12 @@ msgstr "부품 배치 파일에서 제외"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:211
 #: pcbnew/footprint.cpp:2951
 msgid "Exempt from courtyard requirement"
-msgstr "마당자리 요구 사항 면제"
+msgstr "부품자리 요구 사항 면제"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:208
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:212
 msgid "Will not generate \"missing courtyard\" DRC violations"
-msgstr "\"누락된 마당자리\" DRC 위반을 생성하지 않습니다"
+msgstr "\"누락된 부품자리\" DRC 위반을 생성하지 않습니다"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:224
 msgid "Update Footprint from Library..."
@@ -27308,7 +27308,7 @@ msgstr "기판 외형"
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:142
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:60
 msgid "Courtyards"
-msgstr "마당자리"
+msgstr "부품자리"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:259
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:143
@@ -28612,7 +28612,7 @@ msgstr "상위 풋프린트에서"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:722
 msgid "Zone knockout:"
-msgstr "영역 녹아웃:"
+msgstr "영역 밑색빼기:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:726
 msgid "Pad shape"
@@ -29536,7 +29536,7 @@ msgstr "풋프린트 금지"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:94
 msgid "Raise a DRC error if a footprint courtyard overlaps this area"
-msgstr "풋프린트 마당자리가 해당 영역과 겹칠 때 DRC 오류를 발생시킵니다"
+msgstr "풋프린트 부품자리가 해당 영역과 겹칠 때 DRC 오류를 발생시킵니다"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.h:68
 msgid "Rule Area Properties"
@@ -29606,7 +29606,7 @@ msgstr "선택한 레이어에 위치할 텍스트를 입력하세요."
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:101 pcbnew/pcb_text.cpp:345
 msgid "Knockout"
-msgstr "녹아웃"
+msgstr "밑색빼기"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:105
 msgid "Keep text upright"
@@ -30071,7 +30071,7 @@ msgstr "시트 크기를 보여주기 위해 외곽선을 그립니다."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:396
 msgid "Show courtyard collisions when moving/dragging"
-msgstr "이동/끌기 시 마당자리 겹침 표시"
+msgstr "이동/끌기 시 부품자리 겹침 표시"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:400
 msgid "Auto-refill zones"
@@ -31954,7 +31954,7 @@ msgstr "기판 구성 제약 모서리"
 
 #: pcbnew/drc/drc_engine.cpp:208
 msgid "board setup constraints courtyard"
-msgstr "기판 설정 마당자리 제약조건"
+msgstr "부품자리 제약조건 기판 설정"
 
 #: pcbnew/drc/drc_engine.cpp:215
 msgid "board setup micro-via constraints"
@@ -32370,23 +32370,23 @@ msgstr "마이크로 비아 드릴 허용 범위 초과"
 
 #: pcbnew/drc/drc_item.cpp:141
 msgid "Courtyards overlap"
-msgstr "마당자리 겹침"
+msgstr "부품자리 겹침"
 
 #: pcbnew/drc/drc_item.cpp:145
 msgid "Footprint has no courtyard defined"
-msgstr "풋프린트에 마당자리가 정의되지 않음"
+msgstr "풋프린트에 부품자리가 정의되지 않음"
 
 #: pcbnew/drc/drc_item.cpp:149
 msgid "Footprint has malformed courtyard"
-msgstr "풋프린트에 잘못된 마당자리가 있음"
+msgstr "풋프린트에 잘못된 부품자리가 있음"
 
 #: pcbnew/drc/drc_item.cpp:153
 msgid "PTH inside courtyard"
-msgstr "마당자리 내부에 PTH 있음"
+msgstr "부품자리 내부에 PTH 있음"
 
 #: pcbnew/drc/drc_item.cpp:157
 msgid "NPTH inside courtyard"
-msgstr "마당자리 내부에 NPTH 있음"
+msgstr "부품자리 내부에 NPTH 있음"
 
 #: pcbnew/drc/drc_item.cpp:161
 msgid "Item on a disabled copper layer"
@@ -32707,15 +32707,15 @@ msgstr "(네트 %s 와 %s)"
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:85
 msgid "Checking footprint courtyard definitions..."
-msgstr "풋프린트 마당자리 정의 확인 중..."
+msgstr "풋프린트 부품자리 정의 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:90
 msgid "Gathering footprint courtyards..."
-msgstr "풋프린트 마당자리 모으는 중..."
+msgstr "풋프린트 부품자리 모으는 중..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:150
 msgid "Checking footprints for overlapping courtyards..."
-msgstr "겹치는 마당자리 풋프린트 확인 중..."
+msgstr "겹치는 부품자리 풋프린트 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:455
 #, c-format
@@ -34796,15 +34796,15 @@ msgstr "%s에 대한 풋프린트 인수(A, B 또는 참조 지정자)가 누락
 
 #: pcbnew/pcb_expr_functions.cpp:446
 msgid "Footprint's courtyard is not a single, closed shape."
-msgstr "풋프린트의 마당자리는 하나의 닫힌 형태가 아닙니다."
+msgstr "풋프린트의 부품자리는 하나의 닫힌 형태가 아닙니다."
 
 #: pcbnew/pcb_expr_functions.cpp:458
 msgid "Footprint has no front courtyard."
-msgstr "풋프린트에 전면 마당자리가 없습니다."
+msgstr "풋프린트에 전면 부품자리가 없습니다."
 
 #: pcbnew/pcb_expr_functions.cpp:473
 msgid "Footprint has no back courtyard."
-msgstr "풋프린트에 후면 마당자리가 없습니다."
+msgstr "풋프린트에 후면 부품자리가 없습니다."
 
 #: pcbnew/pcb_expr_functions.cpp:589
 #, c-format
@@ -37502,7 +37502,7 @@ msgstr "다음을 위한 실크스크린 클리어런스 계산:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:887
 msgid "Courtyard clearance resolution for:"
-msgstr "다음을 위한 마당자리 클리어런스 해결:"
+msgstr "다음을 위한 부품자리 클리어런스 해결:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1015
 msgid "Physical Clearances"
@@ -37557,7 +37557,7 @@ msgstr "다음을 위한 킵아웃 계산:"
 #: pcbnew/tools/board_inspection_tool.cpp:1274
 #: pcbnew/tools/board_inspection_tool.cpp:1296
 msgid "Report may be incomplete: some footprint courtyards are malformed."
-msgstr "기록이 불완전할 수 있습니다: 일부 풋프린트 마당자리가 잘못되었습니다."
+msgstr "보고서가 불완전할 수 있음: 일부 풋프린트 부품자리가 잘못되었습니다."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1275
 #: pcbnew/tools/board_inspection_tool.cpp:1297
@@ -40216,11 +40216,11 @@ msgstr "기판의 모서리 오프셋 외곽선"
 
 #: pcbnew/widgets/appearance_controls.cpp:1626
 msgid "Footprint courtyards on board's front"
-msgstr "기판 전면의 풋프린트 마당자리"
+msgstr "기판 전면의 풋프린트 부품자리"
 
 #: pcbnew/widgets/appearance_controls.cpp:1627
 msgid "Footprint courtyards on board's back"
-msgstr "기판 후면의 풋프린트 코트야드"
+msgstr "기판 후면의 풋프린트 부품자리"
 
 #: pcbnew/widgets/appearance_controls.cpp:1628
 msgid "Footprint assembly on board's front"
