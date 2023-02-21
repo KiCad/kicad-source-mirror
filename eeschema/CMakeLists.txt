@@ -351,6 +351,8 @@ if( KICAD_SPICE )
         dialogs/dialog_sim_format_value_base.cpp
         dialogs/dialog_sim_model.cpp
         dialogs/dialog_sim_model_base.cpp
+        dialogs/dialog_user_defined_signals.cpp
+        dialogs/dialog_user_defined_signals_base.cpp
         tools/simulator_control.cpp
         sim/ngspice_circuit_model.cpp
         sim/ngspice.cpp

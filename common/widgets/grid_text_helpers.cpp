@@ -60,8 +60,10 @@ wxSize GRID_CELL_ESCAPED_TEXT_RENDERER::GetBestSize( wxGrid & aGrid, wxGridCellA
 //-------- GRID_CELL_STC_EDITOR -----------------------------------------------------------------
 //
 
-GRID_CELL_STC_EDITOR::GRID_CELL_STC_EDITOR( std::function<void( wxStyledTextEvent&,
+GRID_CELL_STC_EDITOR::GRID_CELL_STC_EDITOR( bool aIgnoreCase,
+                                            std::function<void( wxStyledTextEvent&,
                                                                 SCINTILLA_TRICKS* )> aOnChar ) :
+        m_ignoreCase( aIgnoreCase ),
         m_onChar( aOnChar )
 { }
 
@@ -79,6 +81,7 @@ void GRID_CELL_STC_EDITOR::Create( wxWindow* aParent, wxWindowID aId, wxEvtHandl
     stc_ctrl()->SetMarginWidth( 1, 0 ); // Line-number margin
     stc_ctrl()->SetEOLMode( wxSTC_EOL_LF );
     stc_ctrl()->AutoCompSetMaxWidth( 25 );
+    stc_ctrl()->AutoCompSetIgnoreCase( m_ignoreCase );
     stc_ctrl()->UsePopUp( 0 );
 
     // A hack which causes Scintilla to auto-size the text editor canvas

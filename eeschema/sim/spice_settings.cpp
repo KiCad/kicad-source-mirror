@@ -50,10 +50,10 @@ bool SPICE_SIMULATOR_SETTINGS::operator==( const SPICE_SIMULATOR_SETTINGS &aRhs 
 NGSPICE_SIMULATOR_SETTINGS::NGSPICE_SIMULATOR_SETTINGS(
         JSON_SETTINGS* aParent, const std::string& aPath ) :
     SPICE_SIMULATOR_SETTINGS( aParent, aPath ),
-    m_modelMode( NGSPICE_MODEL_MODE::USER_CONFIG )
+    m_modelMode( NGSPICE_MODEL_MODE::LT_PSPICE )
 {
     m_params.emplace_back( new PARAM_ENUM<NGSPICE_MODEL_MODE>( "model_mode", &m_modelMode,
-                                                               NGSPICE_MODEL_MODE::USER_CONFIG,
+                                                               NGSPICE_MODEL_MODE::LT_PSPICE,
                                                                NGSPICE_MODEL_MODE::USER_CONFIG,
                                                                NGSPICE_MODEL_MODE::HSPICE ) );
 }

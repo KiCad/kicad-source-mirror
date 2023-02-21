@@ -62,6 +62,7 @@ void SIM_PLOT_FRAME::ReCreateHToolbar()
     m_toolBar->Add( EE_ACTIONS::simTune );
 
     m_toolBar->AddScaledSeparator( this );
+    m_toolBar->Add( EE_ACTIONS::editUserDefinedSignals );
     m_toolBar->Add( EE_ACTIONS::showNetlist );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes

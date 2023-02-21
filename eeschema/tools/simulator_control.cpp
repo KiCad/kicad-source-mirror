@@ -36,6 +36,7 @@
 #include <tools/ee_actions.h>
 #include <tools/simulator_control.h>
 #include <scintilla_tricks.h>
+#include <dialogs/dialog_user_defined_signals.h>
 
 
 bool SIMULATOR_CONTROL::Init()
@@ -377,6 +378,19 @@ public:
 };
 
 
+int SIMULATOR_CONTROL::EditUserDefinedSignals( const TOOL_EVENT& aEvent )
+{
+    std::vector<wxString> userSignals = m_plotFrame->UserDefinedSignals();
+
+    DIALOG_USER_DEFINED_SIGNALS dlg( m_plotFrame, &userSignals );
+
+    if( dlg.ShowQuasiModal() == wxID_OK )
+        m_plotFrame->SetUserDefinedSignals( userSignals );
+
+    return 0;
+}
+
+
 int SIMULATOR_CONTROL::ShowNetlist( const TOOL_EVENT& aEvent )
 {
     if( m_schematicFrame == nullptr || m_simulator == nullptr )
@@ -420,5 +434,6 @@ void SIMULATOR_CONTROL::setTransitions()
     Go( &SIMULATOR_CONTROL::Probe,                  EE_ACTIONS::simProbe.MakeEvent() );
     Go( &SIMULATOR_CONTROL::Tune,                   EE_ACTIONS::simTune.MakeEvent() );
 
+    Go( &SIMULATOR_CONTROL::EditUserDefinedSignals, EE_ACTIONS::editUserDefinedSignals.MakeEvent() );
     Go( &SIMULATOR_CONTROL::ShowNetlist,            EE_ACTIONS::showNetlist.MakeEvent() );
 }

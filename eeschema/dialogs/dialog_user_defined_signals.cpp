@@ -1,0 +1,226 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+#include <scintilla_tricks.h>
+#include <widgets/std_bitmap_button.h>
+#include <widgets/grid_text_helpers.h>
+#include <grid_tricks.h>
+#include <dialogs/html_message_box.h>
+#include <../sim/sim_plot_frame.h>
+#include <dialog_user_defined_signals.h>
+
+
+DIALOG_USER_DEFINED_SIGNALS::DIALOG_USER_DEFINED_SIGNALS( SIM_PLOT_FRAME* aParent,
+                                                          std::vector<wxString>* aSignals ) :
+        DIALOG_USER_DEFINED_SIGNALS_BASE( aParent ),
+        m_frame( aParent ),
+        m_signals( aSignals ),
+        m_helpWindow( nullptr )
+{
+    m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
+
+    for( const wxString& signal : *m_signals )
+        addGridRow( signal );
+
+    m_addButton->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
+    m_deleteButton->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
+
+    SetupStandardButtons();
+    Layout();
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    finishDialogSettings();
+}
+
+
+DIALOG_USER_DEFINED_SIGNALS::~DIALOG_USER_DEFINED_SIGNALS()
+{
+    // Delete the GRID_TRICKS.
+    m_grid->PopEventHandler( true );
+
+    if( m_helpWindow )
+        m_helpWindow->Destroy();
+}
+
+
+bool DIALOG_USER_DEFINED_SIGNALS::TransferDataToWindow()
+{
+    if( !wxDialog::TransferDataToWindow() )
+        return false;
+
+    return true;
+}
+
+
+void DIALOG_USER_DEFINED_SIGNALS::addGridRow( const wxString& aText )
+{
+    int row = m_grid->GetNumberRows();
+
+    m_grid->AppendRows();
+    m_grid->SetCellValue( row, 0, aText );
+
+    wxGridCellAttr* attr = new wxGridCellAttr;
+    attr->SetEditor( new GRID_CELL_STC_EDITOR( true,
+            [this]( wxStyledTextEvent& aEvent, SCINTILLA_TRICKS* aScintillaTricks )
+            {
+                onScintillaCharAdded( aEvent, aScintillaTricks );
+            } ) );
+
+    m_grid->SetAttr( row, 0, attr );
+}
+
+
+void DIALOG_USER_DEFINED_SIGNALS::onAddSignal( wxCommandEvent& event )
+{
+    if( !m_grid->CommitPendingChanges() )
+        return;
+
+    addGridRow( wxEmptyString );
+
+    m_grid->MakeCellVisible( m_grid->GetNumberRows() - 1, 0 );
+    m_grid->SetGridCursor( m_grid->GetNumberRows() - 1, 0 );
+
+    m_grid->EnableCellEditControl( true );
+    m_grid->ShowCellEditControl();
+}
+
+
+void DIALOG_USER_DEFINED_SIGNALS::onDeleteSignal( wxCommandEvent& event )
+{
+    int curRow = m_grid->GetGridCursorRow();
+
+    if( curRow < 0 || m_grid->GetNumberRows() <= curRow )
+        return;
+
+    m_grid->CommitPendingChanges( true /* silent mode; we don't care if it's valid */ );
+    m_grid->DeleteRows( curRow, 1 );
+
+    m_grid->MakeCellVisible( std::max( 0, curRow-1 ), m_grid->GetGridCursorCol() );
+    m_grid->SetGridCursor( std::max( 0, curRow-1 ), m_grid->GetGridCursorCol() );
+}
+
+
+void DIALOG_USER_DEFINED_SIGNALS::onScintillaCharAdded( wxStyledTextEvent &aEvent,
+                                                        SCINTILLA_TRICKS* aTricks )
+{
+    wxStyledTextCtrl* textCtrl = aTricks->Scintilla();
+    wxArrayString     tokens;
+
+    for( const wxString& signal : m_frame->Signals() )
+        tokens.push_back( signal );
+
+    tokens.push_back( wxS( "sqrt(x)" ) );
+    tokens.push_back( wxS( "sin(x)" ) );
+    tokens.push_back( wxS( "cos(x)" ) );
+    tokens.push_back( wxS( "tan(x)" ) );
+    tokens.push_back( wxS( "sinh(x)" ) );
+    tokens.push_back( wxS( "cosh(x)" ) );
+    tokens.push_back( wxS( "tanh(x)" ) );
+    tokens.push_back( wxS( "asin(x)" ) );
+    tokens.push_back( wxS( "acos(x)" ) );
+    tokens.push_back( wxS( "atan(x)" ) );
+    tokens.push_back( wxS( "asinh(x)" ) );
+    tokens.push_back( wxS( "acosh(x)" ) );
+    tokens.push_back( wxS( "atanh(x)" ) );
+    tokens.push_back( wxS( "arctan(x)" ) );
+    tokens.push_back( wxS( "exp(x)" ) );
+    tokens.push_back( wxS( "ln(x)" ) );
+    tokens.push_back( wxS( "log(x)" ) );
+    tokens.push_back( wxS( "abs(x)" ) );
+    tokens.push_back( wxS( "nint(x)" ) );
+    tokens.push_back( wxS( "int(x)" ) );
+    tokens.push_back( wxS( "floor(x)" ) );
+    tokens.push_back( wxS( "ceil(x)" ) );
+    tokens.push_back( wxS( "pow(x,y)" ) );
+    tokens.push_back( wxS( "pwr(x,y)" ) );
+    tokens.push_back( wxS( "min(x,y)" ) );
+    tokens.push_back( wxS( "max(x,y)" ) );
+    tokens.push_back( wxS( "sgn(x)" ) );
+    tokens.push_back( wxS( "ternary_fcn(x,y,z)" ) );
+    tokens.push_back( wxS( "gauss(nom,rvar,sigma)" ) );
+    tokens.push_back( wxS( "agauss(nom,avar,sigma)" ) );
+    tokens.push_back( wxS( "unif(nom,rvar)" ) );
+    tokens.push_back( wxS( "aunif(nom,avar)" ) );
+    tokens.push_back( wxS( "limit(nom,avar)" ) );
+
+    int text_pos = textCtrl->GetCurrentPos();
+    int start = textCtrl->WordStartPosition( text_pos, true );
+    int parenCount = 0;
+
+    for( start = text_pos - 1; start > 0; start-- )
+    {
+        wxUniChar c = textCtrl->GetCharAt( start );
+
+        if( c == '(' )
+        {
+            if( parenCount )
+            {
+                start += 1;
+                break;
+            }
+            else
+            {
+                parenCount++;
+            }
+        }
+        else if( wxIsalpha( c ) && parenCount )
+        {
+            break;
+        }
+        else if( !wxIsalnum( c ) && c != '/' )
+        {
+            start += 1;
+            break;
+        }
+    }
+
+    wxString partial = textCtrl->GetRange( start, text_pos );
+
+    aTricks->DoAutocomplete( partial, tokens );
+    textCtrl->SetFocus();
+}
+
+
+bool DIALOG_USER_DEFINED_SIGNALS::TransferDataFromWindow()
+{
+    if( !wxDialog::TransferDataFromWindow() )
+        return false;
+
+    if( !m_grid->CommitPendingChanges() )
+        return false;
+
+    m_signals->clear();
+
+    for( int ii = 0; ii < m_grid->GetNumberRows(); ++ii )
+        m_signals->push_back( m_grid->GetCellValue( ii, 0 ) );
+
+    return true;
+}
+
+
+void DIALOG_USER_DEFINED_SIGNALS::OnFormattingHelp( wxHyperlinkEvent& aEvent )
+{
+    m_helpWindow = SCH_TEXT::ShowSyntaxHelp( this );
+}
+
+

@@ -355,7 +355,7 @@ void CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
 
 bool CURSOR::Inside( const wxPoint& aPoint ) const
 {
-    if( !m_window )
+    if( !m_window || !m_trace )
         return false;
 
     return ( std::abs( (double) aPoint.x -

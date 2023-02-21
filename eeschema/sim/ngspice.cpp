@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016-2022 CERN
- * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -567,7 +567,9 @@ void NGSPICE::init_dll()
 
     // Workarounds to avoid hang ups on certain errors
     // These commands have to be called, no matter what is in the spinit file
-    Command( "unset interactive" );
+    // We have to allow interactive for user-defined signals.  Hopefully whatever bug this was
+    // meant to address has gone away in the last 5 years...
+    //Command( "unset interactive" );
     Command( "set noaskquit" );
     Command( "set nomoremode" );
 

@@ -85,6 +85,11 @@ public:
      */
     bool EditSimCommand();
 
+    const std::vector<wxString>& Signals() { return m_signals; }
+
+    const std::vector<wxString>& UserDefinedSignals() { return m_userDefinedSignals; }
+    void SetUserDefinedSignals( const std::vector<wxString>& aSignals );
+
     /**
      * Add a voltage plot for a given net name.
      *
@@ -255,7 +260,14 @@ private:
      * @param aType describes the type of plot.
      * @param aParam is the parameter for the device/net (e.g. I, Id, V).
      */
-    void addTrace( const wxString& aName, SIM_TRACE_TYPE aType );
+    void doAddPlot( const wxString& aName, SIM_TRACE_TYPE aType );
+
+    void addTrace( const wxString& aSignalName );
+
+    /**
+     * For user-defined traces we have a separate SPICE vector name.
+     */
+    wxString getTraceName( int aRow );
 
     /**
      * Remove a plot with a specific title.
@@ -301,6 +313,11 @@ private:
      * Update a measurement in the measurements grid.
      */
     void updateMeasurement( int aRow );
+
+    /**
+     * Apply user-defined signals to the SPICE session.
+     */
+    void applyUserDefinedSignals();
 
     /**
      * Apply component values specified using tuner sliders to the current netlist.
@@ -365,7 +382,14 @@ private:
     SIM_THREAD_REPORTER*                   m_reporter;
 
     std::vector<wxString>                  m_signals;
+    std::vector<wxString>                  m_userDefinedSignals;
+    std::map<wxString, wxString>           m_userDefinedSignalToSpiceVecName;
     std::list<TUNER_SLIDER*>               m_tuners;
+
+    ///< SPICE expressions need quoted versions of the netnames since KiCad allows '-' and '/'
+    ///< in netnames.
+    std::map<wxString, wxString>           m_quotedNetnames;
+
 
     ///< Panel that was used as the most recent one for simulations
     SIM_PANEL_BASE*                        m_lastSimPlot;

@@ -56,6 +56,8 @@
 #include "sim_plot_panel.h"
 #include "spice_simulator.h"
 #include "spice_reporter.h"
+#include "core/kicad_algo.h"
+#include "fmt/format.h"
 #include <dialog_sim_format_value.h>
 #include <eeschema_settings.h>
 
@@ -772,16 +774,28 @@ void SIM_PLOT_FRAME::rebuildSignalsList()
     unconnected.Replace( '(', '_' );    // Convert to SPICE markup
 
     auto addSignal =
-            [&]( const wxString& aSignal )
+            [&]( const wxString& aSignal, const wxString& aSpiceVecName = wxEmptyString )
             {
                 if( simType == ST_AC )
                 {
-                    m_signals.push_back( wxString::Format( _( "%s (gain)" ), aSignal ) );
-                    m_signals.push_back( wxString::Format( _( "%s (phase)" ), aSignal ) );
+                    wxString gain = _( " (gain)" );
+                    wxString phase = _( " (phase)" );
+
+                    m_signals.push_back( aSignal + gain );
+                    m_signals.push_back( aSignal + phase );
+
+                    if( !aSpiceVecName.IsEmpty() )
+                    {
+                        m_userDefinedSignalToSpiceVecName[ aSignal + gain ] = aSpiceVecName + gain;
+                        m_userDefinedSignalToSpiceVecName[ aSignal + phase ] = aSpiceVecName + phase;
+                    }
                 }
                 else
                 {
                     m_signals.push_back( aSignal );
+
+                    if( !aSpiceVecName.IsEmpty() )
+                        m_userDefinedSignalToSpiceVecName[ aSignal ] = aSpiceVecName;
                 }
             };
 
@@ -795,6 +809,7 @@ void SIM_PLOT_FRAME::rebuildSignalsList()
             if( netname == "GND" || netname == "0" || netname.StartsWith( unconnected ) )
                 continue;
 
+            m_quotedNetnames[ netname ] = wxString::Format( wxS( "\"%s\"" ), netname );
             addSignal( wxString::Format( wxS( "V(%s)" ), netname ) );
         }
     }
@@ -835,6 +850,23 @@ void SIM_PLOT_FRAME::rebuildSignalsList()
 
             if( line.Upper().StartsWith( wxS( ".PROBE" ), &directiveParams ) )
                 addSignal( directiveParams.Trim( true ).Trim( false ) );
+        }
+    }
+
+    // JEY TODO: find and add LET commands
+
+    // Add user-defined signals
+    for( int ii = 0; ii < (int) m_userDefinedSignals.size(); ++ii )
+    {
+        static wxRegEx  regEx( wxS( "(^|[^a-z0-9_])([VIP])\\(" ), wxRE_ICASE );
+        const wxString& signal = m_userDefinedSignals[ii];
+
+        if( regEx.Matches( signal ) )
+        {
+            wxString vecType = regEx.GetMatch( signal, 2 );
+            wxString spiceVecName = wxString::Format( wxS( "%s(user%d)" ), vecType, ii );
+
+            addSignal( signal, spiceVecName );
         }
     }
 
@@ -911,9 +943,6 @@ void SIM_PLOT_FRAME::StartSimulation()
 
     if( !LoadSimulator() )
         return;
-
-    rebuildSignalsList();
-    rebuildSignalsGrid( m_filter->GetValue() );
 
     std::unique_lock<std::mutex> simulatorLock( m_simulator->GetMutex(), std::try_to_lock );
 
@@ -996,6 +1025,17 @@ void updateRangeUnits( wxString* aRange, const wxString& aUnits )
 }
 
 
+wxString SIM_PLOT_FRAME::getTraceName( int aRow )
+{
+    wxString signalName = m_signalsGrid->GetCellValue( aRow, COL_SIGNAL_NAME );
+
+    if( alg::contains( m_userDefinedSignals, signalName ) )
+        signalName = m_userDefinedSignalToSpiceVecName[ signalName ];
+
+    return signalName;
+}
+
+
 void SIM_PLOT_FRAME::onSignalsGridCellChanged( wxGridEvent& aEvent )
 {
     if( m_SuppressGridEvents > 0 )
@@ -1009,55 +1049,18 @@ void SIM_PLOT_FRAME::onSignalsGridCellChanged( wxGridEvent& aEvent )
     if( col == COL_SIGNAL_SHOW )
     {
         if( text == wxS( "1" ) )
-        {
-            wxString signalName = m_signalsGrid->GetCellValue( row, COL_SIGNAL_NAME );
-            wxString baseSignal = signalName;
-
-            if( !signalName.IsEmpty() )
-            {
-                wxString  gainSuffix = _( " (gain)" );
-                wxString  phaseSuffix = _( " (phase)" );
-                wxUniChar firstChar = signalName.Upper()[0];
-                int       traceType = SPT_UNKNOWN;
-
-                if( firstChar == 'V' )
-                    traceType = SPT_VOLTAGE;
-                else if( firstChar == 'I' )
-                    traceType = SPT_CURRENT;
-                else if( firstChar == 'P' )
-                    traceType = SPT_POWER;
-
-                if( signalName.EndsWith( gainSuffix ) )
-                {
-                    traceType |= SPT_AC_MAG;
-                    baseSignal = signalName.Left( signalName.Length() - gainSuffix.Length() );
-                }
-                else if( signalName.EndsWith( phaseSuffix ) )
-                {
-                    traceType |= SPT_AC_PHASE;
-                    baseSignal = signalName.Left( signalName.Length() - phaseSuffix.Length() );
-                }
-
-                if( traceType != SPT_UNKNOWN )
-                {
-                    addTrace( baseSignal, (SIM_TRACE_TYPE) traceType );
-                    m_workbookModified = true;
-                }
-            }
-        }
+            addTrace( getTraceName( row ) );
         else
-        {
-            removeTrace( m_signalsGrid->GetCellValue( row, COL_SIGNAL_NAME ) );
-        }
+            removeTrace( getTraceName( row ) );
 
         // Update enabled/visible states of other controls
         updateSignalsGrid();
+        m_workbookModified = true;
     }
     else if( col == COL_SIGNAL_COLOR )
     {
         KIGFX::COLOR4D color( m_signalsGrid->GetCellValue( row, COL_SIGNAL_COLOR ) );
-        wxString       signalName = m_signalsGrid->GetCellValue( row, COL_SIGNAL_NAME );
-        TRACE*         trace = plot->GetTrace( signalName );
+        TRACE*         trace = plot->GetTrace( getTraceName( row ) );
 
         if( trace )
         {
@@ -1071,10 +1074,9 @@ void SIM_PLOT_FRAME::onSignalsGridCellChanged( wxGridEvent& aEvent )
     {
         for( int ii = 0; ii < m_signalsGrid->GetNumberRows(); ++ii )
         {
-            wxString signalName = m_signalsGrid->GetCellValue( ii, COL_SIGNAL_NAME );
-            bool     enable = ii == row && text == wxS( "1" );
+            bool enable = ii == row && text == wxS( "1" );
 
-            plot->EnableCursor( signalName, col == COL_CURSOR_1 ? 1 : 2, enable );
+            plot->EnableCursor( getTraceName( ii ), col == COL_CURSOR_1 ? 1 : 2, enable );
             m_workbookModified = true;
         }
 
@@ -1229,15 +1231,13 @@ void SIM_PLOT_FRAME::updateMeasurement( int aRow )
 
 void SIM_PLOT_FRAME::AddVoltagePlot( const wxString& aNetName )
 {
-    addTrace( aNetName, SPT_VOLTAGE );
-    m_workbookModified = true;
+    doAddPlot( aNetName, SPT_VOLTAGE );
 }
 
 
 void SIM_PLOT_FRAME::AddCurrentPlot( const wxString& aDeviceName )
 {
-    addTrace( aDeviceName, SPT_CURRENT );
-    m_workbookModified = true;
+    doAddPlot( aDeviceName, SPT_CURRENT );
 }
 
 
@@ -1357,7 +1357,7 @@ const NGSPICE_CIRCUIT_MODEL* SIM_PLOT_FRAME::GetExporter() const
 }
 
 
-void SIM_PLOT_FRAME::addTrace( const wxString& aName, SIM_TRACE_TYPE aType )
+void SIM_PLOT_FRAME::doAddPlot( const wxString& aName, SIM_TRACE_TYPE aType )
 {
     SIM_PLOT_PANEL* plotPanel = GetCurrentPlot();
 
@@ -1398,6 +1398,64 @@ void SIM_PLOT_FRAME::addTrace( const wxString& aName, SIM_TRACE_TYPE aType )
     }
 
     updateSignalsGrid();
+    m_workbookModified = true;
+}
+
+
+void SIM_PLOT_FRAME::SetUserDefinedSignals( const std::vector<wxString>& aNewSignals )
+{
+    for( const wxString& signal : m_userDefinedSignals )
+    {
+        if( !alg::contains( aNewSignals, signal ) )
+            removeTrace( m_userDefinedSignalToSpiceVecName[ signal ] );
+    }
+
+    m_userDefinedSignals = aNewSignals;
+
+    if( m_simFinished )
+        applyUserDefinedSignals();
+
+    rebuildSignalsList();
+    rebuildSignalsGrid( m_filter->GetValue() );
+    updateSignalsGrid();
+    m_workbookModified = true;
+}
+
+
+void SIM_PLOT_FRAME::addTrace( const wxString& aSignalName )
+{
+    if( aSignalName.IsEmpty() )
+        return;
+
+    wxString  baseSignal = aSignalName;
+    wxString  gainSuffix = _( " (gain)" );
+    wxString  phaseSuffix = _( " (phase)" );
+    wxUniChar firstChar = aSignalName.Upper()[0];
+    int       traceType = SPT_UNKNOWN;
+
+    if( firstChar == 'V' )
+        traceType = SPT_VOLTAGE;
+    else if( firstChar == 'I' )
+        traceType = SPT_CURRENT;
+    else if( firstChar == 'P' )
+        traceType = SPT_POWER;
+
+    if( aSignalName.EndsWith( gainSuffix ) )
+    {
+        traceType |= SPT_AC_MAG;
+        baseSignal = aSignalName.Left( aSignalName.Length() - gainSuffix.Length() );
+    }
+    else if( aSignalName.EndsWith( phaseSuffix ) )
+    {
+        traceType |= SPT_AC_PHASE;
+        baseSignal = aSignalName.Left( aSignalName.Length() - phaseSuffix.Length() );
+    }
+
+    if( traceType != SPT_UNKNOWN )
+    {
+        if( SIM_PLOT_PANEL* plotPanel = GetCurrentPlot()  )
+            updateTrace( baseSignal, (SIM_TRACE_TYPE) traceType, plotPanel );
+    }
 }
 
 
@@ -1424,6 +1482,9 @@ void SIM_PLOT_FRAME::updateTrace( const wxString& aName, SIM_TRACE_TYPE aTraceTy
                                   SIM_PLOT_PANEL* aPlotPanel )
 {
     SIM_TYPE simType = NGSPICE_CIRCUIT_MODEL::CommandToSimType( aPlotPanel->GetSimCommand() );
+
+    aTraceType = (SIM_TRACE_TYPE) ( aTraceType & SPT_Y_AXIS_MASK );
+    aTraceType = (SIM_TRACE_TYPE) ( aTraceType | getXAxisType( simType ) );
 
     wxString traceTitle = aName;
     wxString vectorName = aName;
@@ -1538,9 +1599,7 @@ void SIM_PLOT_FRAME::updateSignalsGrid()
 
     for( int row = 0; row < m_signalsGrid->GetNumberRows(); ++row )
     {
-        wxString signal = m_signalsGrid->GetCellValue( row, COL_SIGNAL_NAME );
-
-        if( TRACE* trace = plot->GetTrace( signal ) )
+        if( TRACE* trace = plot->GetTrace( getTraceName( row ) ) )
         {
             m_signalsGrid->SetCellValue( row, COL_SIGNAL_SHOW, wxS( "1" ) );
 
@@ -1597,6 +1656,27 @@ void SIM_PLOT_FRAME::updateSignalsGrid()
     }
 }
 
+
+void SIM_PLOT_FRAME::applyUserDefinedSignals()
+{
+    auto quoteNetNames =
+            [&]( wxString aExpression ) -> wxString
+            {
+                for( const auto& [netname, quotedNetname] : m_quotedNetnames )
+                    aExpression.Replace( netname, quotedNetname );
+
+                return aExpression;
+            };
+
+    for( int ii = 0; ii < (int) m_userDefinedSignals.size(); ++ii )
+    {
+        wxString    signal = m_userDefinedSignals[ii].Lower();
+        std::string cmd = "let user{} = {}";
+
+        m_simulator->Command( "echo " + fmt::format(cmd, ii, signal.ToStdString() ) );
+        m_simulator->Command( fmt::format( cmd, ii, quoteNetNames( signal ).ToStdString() ) );
+    }
+}
 
 void SIM_PLOT_FRAME::applyTuners()
 {
@@ -1745,33 +1825,6 @@ bool SIM_PLOT_FRAME::LoadWorkbook( const wxString& aPath )
                 return false;
             }
 
-            if( version <= 2 )
-            {
-                long legacyTraceType = traceType;
-                traceType = 0;
-
-                if( legacyTraceType & LEGACY_SPT_VOLTAGE )
-                    traceType |= SPT_VOLTAGE;
-
-                if( legacyTraceType & LEGACY_SPT_CURRENT )
-                    traceType |= SPT_CURRENT;
-
-                if( legacyTraceType & LEGACY_SPT_AC_PHASE )
-                    traceType |= SPT_AC_PHASE;
-
-                if( legacyTraceType & LEGACY_SPT_AC_MAG )
-                    traceType |= SPT_AC_MAG;
-
-                if( legacyTraceType & LEGACY_SPT_TIME )
-                    traceType |= SPT_TIME;
-
-                if( legacyTraceType & LEGACY_SPT_LIN_FREQUENCY )
-                    traceType |= SPT_LIN_FREQUENCY;
-
-                if( legacyTraceType & LEGACY_SPT_SWEEP )
-                    traceType |= SPT_SWEEP;
-            }
-
             name = file.GetNextLine();
 
             if( name.IsEmpty() )
@@ -1784,7 +1837,7 @@ bool SIM_PLOT_FRAME::LoadWorkbook( const wxString& aPath )
 
             param = file.GetNextLine();
 
-            addTrace( name, (SIM_TRACE_TYPE) traceType );
+            addTrace( name );
 
             SIM_PLOT_PANEL* plotPanel = GetCurrentPlot();
             TRACE*          trace = plotPanel ? plotPanel->GetTrace( name ) : nullptr;
@@ -2459,6 +2512,8 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
 
     m_simFinished = true;
 
+    applyUserDefinedSignals();
+
     // If there are any signals plotted, update them
     if( SIM_PANEL_BASE::IsPlottable( simType ) )
     {
@@ -2487,6 +2542,8 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
             updateTrace( trace.m_name, trace.m_type, plotPanel );
 
         rebuildSignalsGrid( m_filter->GetValue() );
+        updateSignalsGrid();
+
         plotPanel->GetPlotWin()->UpdateAll();
         plotPanel->ResetScales();
     }

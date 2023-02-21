@@ -989,3 +989,9 @@ TOOL_ACTION EE_ACTIONS::showNetlist( "eeschema.Simulation.showNetlist",
         _( "Show SPICE Netlist" ), "",
         BITMAPS::netlist );
 
+TOOL_ACTION EE_ACTIONS::editUserDefinedSignals( "eeschema.Simulation.editUserDefinedSignals",
+        AS_GLOBAL, 0, "",
+        _( "User-defined Signals" ),
+        _( "Add, edit or delete user-defined simulation signals" ),
+        BITMAPS::sim_add_signal );
+

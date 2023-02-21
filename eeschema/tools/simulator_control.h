@@ -70,6 +70,7 @@ public:
     int Probe( const TOOL_EVENT& aEvent );
     int Tune( const TOOL_EVENT& aEvent );
 
+    int EditUserDefinedSignals( const TOOL_EVENT& aEvent );
     int ShowNetlist( const TOOL_EVENT& aEvent );
 
 private:
