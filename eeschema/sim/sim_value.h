@@ -93,9 +93,6 @@ public:
     virtual bool FromString( const std::string& aString, NOTATION aNotation = NOTATION::SI ) = 0;
     virtual std::string ToString( NOTATION aNotation = NOTATION::SI ) const = 0;
     std::string ToSpiceString() const { return ToString( NOTATION::SPICE ); }
-
-    // For parsers that don't accept strings with our suffixes.
-    virtual std::string ToSimpleString() const = 0;
 };
 
 
@@ -112,7 +109,6 @@ public:
     // TODO: Don't use FromString(). Use assignment. Values should be immutable.
     bool FromString( const std::string& aString, NOTATION aNotation = NOTATION::SI ) override;
     std::string ToString( NOTATION aNotation = NOTATION::SI ) const override;
-    std::string ToSimpleString() const override;
 
     SIM_VALUE_INST& operator=( const SIM_VALUE& aOther ) override;
     bool operator==( const T& aOther ) const;
@@ -186,19 +182,19 @@ namespace SIM_VALUE_GRAMMAR
 
 
     template <SIM_VALUE::TYPE ValueType, NOTATION Notation>
-    struct metricSuffix;
+    struct unitPrefix;
 
-    template <> struct metricSuffix<SIM_VALUE::TYPE_INT, NOTATION::SI>
+    template <> struct unitPrefix<SIM_VALUE::TYPE_INT, NOTATION::SI>
         : one<'k', 'K', 'M', 'G', 'T', 'P', 'E'> {};
-    template <> struct metricSuffix<SIM_VALUE::TYPE_INT, NOTATION::SPICE>
+    template <> struct unitPrefix<SIM_VALUE::TYPE_INT, NOTATION::SPICE>
         : sor<TAO_PEGTL_ISTRING( "k" ),
               TAO_PEGTL_ISTRING( "Meg" ),
               TAO_PEGTL_ISTRING( "G" ),
               TAO_PEGTL_ISTRING( "T" )> {};
 
-    template <> struct metricSuffix<SIM_VALUE::TYPE_FLOAT, NOTATION::SI>
+    template <> struct unitPrefix<SIM_VALUE::TYPE_FLOAT, NOTATION::SI>
         : one<'a', 'f', 'p', 'n', 'u', 'm', 'k', 'K', 'M', 'G', 'T', 'P', 'E'> {};
-    template <> struct metricSuffix<SIM_VALUE::TYPE_FLOAT, NOTATION::SPICE>
+    template <> struct unitPrefix<SIM_VALUE::TYPE_FLOAT, NOTATION::SPICE>
         : sor<TAO_PEGTL_ISTRING( "f" ),
               TAO_PEGTL_ISTRING( "p" ),
               TAO_PEGTL_ISTRING( "n" ),
@@ -221,7 +217,7 @@ namespace SIM_VALUE_GRAMMAR
     template <SIM_VALUE::TYPE ValueType, NOTATION Notation>
     struct number : seq<opt<significand<ValueType>>,
                         opt<exponentWithPrefix>,
-                        opt<metricSuffix<ValueType, Notation>>,
+                        opt<unitPrefix<ValueType, Notation>>,
                         garbageSuffix<Notation>> {};
 
     template <SIM_VALUE::TYPE ValueType, NOTATION Notation>

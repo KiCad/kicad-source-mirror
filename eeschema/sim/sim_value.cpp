@@ -87,33 +87,33 @@ namespace SIM_VALUE_PARSER
     template <> struct numberSelector<intPart> : std::true_type {};
     template <> struct numberSelector<fracPart> : std::true_type {};
     template <> struct numberSelector<exponent> : std::true_type {};
-    template <> struct numberSelector<metricSuffix<SIM_VALUE::TYPE_INT, NOTATION::SI>>
+    template <> struct numberSelector<unitPrefix<SIM_VALUE::TYPE_INT, NOTATION::SI>>
         : std::true_type {};
-    template <> struct numberSelector<metricSuffix<SIM_VALUE::TYPE_INT, NOTATION::SPICE>>
+    template <> struct numberSelector<unitPrefix<SIM_VALUE::TYPE_INT, NOTATION::SPICE>>
         : std::true_type {};
-    template <> struct numberSelector<metricSuffix<SIM_VALUE::TYPE_FLOAT, NOTATION::SI>>
+    template <> struct numberSelector<unitPrefix<SIM_VALUE::TYPE_FLOAT, NOTATION::SI>>
         : std::true_type {};
-    template <> struct numberSelector<metricSuffix<SIM_VALUE::TYPE_FLOAT, NOTATION::SPICE>>
+    template <> struct numberSelector<unitPrefix<SIM_VALUE::TYPE_FLOAT, NOTATION::SPICE>>
         : std::true_type {};
 
     struct PARSE_RESULT
     {
-        bool isOk = true;
-        bool isEmpty = true;
-        std::string significand;
+        bool                   isOk = true;
+        bool                   isEmpty = true;
+        std::string            significand;
         std::optional<int64_t> intPart;
         std::optional<int64_t> fracPart;
         std::optional<int>     exponent;
-        std::optional<int>     metricSuffixExponent;
+        std::optional<int>     unitPrefixExponent;
     };
 
     PARSE_RESULT Parse( const std::string& aString,
                         NOTATION aNotation = NOTATION::SI,
                         SIM_VALUE::TYPE aValueType = SIM_VALUE::TYPE_FLOAT );
 
-    int MetricSuffixToExponent( std::string aMetricSuffix, NOTATION aNotation = NOTATION::SI );
-    std::string ExponentToMetricSuffix( double aExponent, int& aReductionExponent,
-                                        NOTATION aNotation = NOTATION::SI );
+    int UnitPrefixToExponent( std::string aPrefix, NOTATION aNotation = NOTATION::SI );
+    std::string ExponentToUnitPrefix( double aExponent, int& aExponentReduction,
+                                      NOTATION aNotation = NOTATION::SI );
     }
 
 
@@ -124,9 +124,8 @@ static inline void doIsValid( tao::pegtl::string_input<>& aIn )
 }
 
 
-bool SIM_VALUE_GRAMMAR::IsValid( const std::string& aString,
-                                SIM_VALUE::TYPE aValueType,
-                                NOTATION aNotation )
+bool SIM_VALUE_GRAMMAR::IsValid( const std::string& aString, SIM_VALUE::TYPE aValueType,
+                                 NOTATION aNotation )
 {
     tao::pegtl::string_input<> in( aString, "from_content" );
 
@@ -175,10 +174,10 @@ static inline void handleNodeForParse( tao::pegtl::parse_tree::node& aNode,
         aParseResult.exponent = std::stoi( aNode.string() );
         aParseResult.isEmpty = false;
     }
-    else if( aNode.is_type<SIM_VALUE_PARSER::metricSuffix<ValueType, Notation>>() )
+    else if( aNode.is_type<SIM_VALUE_PARSER::unitPrefix<ValueType, Notation>>() )
     {
-        aParseResult.metricSuffixExponent =
-            SIM_VALUE_PARSER::MetricSuffixToExponent( aNode.string(), Notation );
+        aParseResult.unitPrefixExponent =
+                SIM_VALUE_PARSER::UnitPrefixToExponent( aNode.string(), Notation );
         aParseResult.isEmpty = false;
     }
     else
@@ -225,15 +224,15 @@ SIM_VALUE_PARSER::PARSE_RESULT SIM_VALUE_PARSER::Parse( const std::string& aStri
 }
 
 
-int SIM_VALUE_PARSER::MetricSuffixToExponent( std::string aMetricSuffix, NOTATION aNotation )
+int SIM_VALUE_PARSER::UnitPrefixToExponent( std::string aPrefix, NOTATION aNotation )
 {
     switch( aNotation )
     {
     case NOTATION::SI:
-        if( aMetricSuffix.empty() )
+        if( aPrefix.empty() )
             return 0;
 
-        switch( aMetricSuffix[0] )
+        switch( aPrefix[0] )
         {
         case 'a': return -18;
         case 'f': return -15;
@@ -253,108 +252,108 @@ int SIM_VALUE_PARSER::MetricSuffixToExponent( std::string aMetricSuffix, NOTATIO
         break;
 
     case NOTATION::SPICE:
-        std::transform( aMetricSuffix.begin(), aMetricSuffix.end(), aMetricSuffix.begin(),
+        std::transform( aPrefix.begin(), aPrefix.end(), aPrefix.begin(),
                         ::tolower );
 
-        if( aMetricSuffix == "f" )
+        if( aPrefix == "f" )
             return -15;
-        else if( aMetricSuffix == "p" )
+        else if( aPrefix == "p" )
             return -12;
-        else if( aMetricSuffix == "n" )
+        else if( aPrefix == "n" )
             return -9;
-        else if( aMetricSuffix == "u" )
+        else if( aPrefix == "u" )
             return -6;
-        else if( aMetricSuffix == "m" )
+        else if( aPrefix == "m" )
             return -3;
-        else if( aMetricSuffix == "" )
+        else if( aPrefix == "" )
             return 0;
-        else if( aMetricSuffix == "k" )
+        else if( aPrefix == "k" )
             return 3;
-        else if( aMetricSuffix == "meg" )
+        else if( aPrefix == "meg" )
             return 6;
-        else if( aMetricSuffix == "g" )
+        else if( aPrefix == "g" )
             return 9;
-        else if( aMetricSuffix == "t" )
+        else if( aPrefix == "t" )
             return 12;
 
         break;
     }
 
-    wxFAIL_MSG( fmt::format( "Unknown simulator value suffix: '{:s}'", aMetricSuffix ) );
+    wxFAIL_MSG( fmt::format( "Unknown simulator value suffix: '{:s}'", aPrefix ) );
     return 0;
 }
 
 
-std::string SIM_VALUE_PARSER::ExponentToMetricSuffix( double aExponent, int& aReductionExponent,
+std::string SIM_VALUE_PARSER::ExponentToUnitPrefix( double aExponent, int& aExponentReduction,
                                                       NOTATION aNotation )
 {
     if( aNotation == NOTATION::SI && aExponent >= -18 && aExponent <= -15 )
     {
-        aReductionExponent = -18;
+        aExponentReduction = -18;
         return "a";
     }
     else if( aExponent >= -15 && aExponent < -12 )
     {
-        aReductionExponent = -15;
+        aExponentReduction = -15;
         return "f";
     }
     else if( aExponent >= -12 && aExponent < -9 )
     {
-        aReductionExponent = -12;
+        aExponentReduction = -12;
         return "p";
     }
     else if( aExponent >= -9 && aExponent < -6 )
     {
-        aReductionExponent = -9;
+        aExponentReduction = -9;
         return "n";
     }
     else if( aExponent >= -6 && aExponent < -3 )
     {
-        aReductionExponent = -6;
+        aExponentReduction = -6;
         return "u";
     }
     else if( aExponent >= -3 && aExponent < 0 )
     {
-        aReductionExponent = -3;
+        aExponentReduction = -3;
         return "m";
     }
     else if( aExponent >= 0 && aExponent < 3 )
     {
-        aReductionExponent = 0;
+        aExponentReduction = 0;
         return "";
     }
     else if( aExponent >= 3 && aExponent < 6 )
     {
-        aReductionExponent = 3;
+        aExponentReduction = 3;
         return "k";
     }
     else if( aExponent >= 6 && aExponent < 9 )
     {
-        aReductionExponent = 6;
+        aExponentReduction = 6;
         return ( aNotation == NOTATION::SI ) ? "M" : "Meg";
     }
     else if( aExponent >= 9 && aExponent < 12 )
     {
-        aReductionExponent = 9;
+        aExponentReduction = 9;
         return "G";
     }
     else if( aExponent >= 12 && aExponent < 15 )
     {
-        aReductionExponent = 12;
+        aExponentReduction = 12;
         return "T";
     }
     else if( aNotation == NOTATION::SI && aExponent >= 15 && aExponent < 18 )
     {
-        aReductionExponent = 15;
+        aExponentReduction = 15;
         return "P";
     }
     else if( aNotation == NOTATION::SI && aExponent >= 18 && aExponent <= 21 )
     {
-        aReductionExponent = 18;
+        aExponentReduction = 18;
         return "E";
     }
 
-    aReductionExponent = 0;
+    aExponentReduction = 0;
     return "";
 }
 
@@ -441,7 +440,7 @@ bool SIM_VALUE_BOOL::FromString( const std::string& aString, NOTATION aNotation 
         || ( *parseResult.intPart != 0 && *parseResult.intPart != 1 )
         || parseResult.fracPart
         || parseResult.exponent
-        || parseResult.metricSuffixExponent )
+        || parseResult.unitPrefixExponent )
     {
         return false;
     }
@@ -467,7 +466,7 @@ bool SIM_VALUE_INT::FromString( const std::string& aString, NOTATION aNotation )
         return false;
 
     int exponent = parseResult.exponent ? *parseResult.exponent : 0;
-    exponent += parseResult.metricSuffixExponent ? *parseResult.metricSuffixExponent : 0;
+    exponent += parseResult.unitPrefixExponent ? *parseResult.unitPrefixExponent : 0;
 
     m_value = static_cast<double>( *parseResult.intPart ) * std::pow( 10, exponent );
     return true;
@@ -498,7 +497,7 @@ bool SIM_VALUE_FLOAT::FromString( const std::string& aString, NOTATION aNotation
         return false;
 
     int exponent = parseResult.exponent ? *parseResult.exponent : 0;
-    exponent += parseResult.metricSuffixExponent ? *parseResult.metricSuffixExponent : 0;
+    exponent += parseResult.unitPrefixExponent ? *parseResult.unitPrefixExponent : 0;
 
     try
     {
@@ -582,9 +581,9 @@ std::string SIM_VALUE_INT::ToString( NOTATION aNotation ) const
         }
 
         int         dummy = 0;
-        std::string metricSuffix = SIM_VALUE_PARSER::ExponentToMetricSuffix(
-                static_cast<double>( exponent ), dummy, aNotation );
-        return fmt::format( "{:d}{:s}", value, metricSuffix );
+        std::string prefix = SIM_VALUE_PARSER::ExponentToUnitPrefix( (double) exponent, dummy,
+                                                                     aNotation );
+        return fmt::format( "{:d}{:s}", value, prefix );
     }
 
     return "";
@@ -599,11 +598,11 @@ std::string SIM_VALUE_FLOAT::ToString( NOTATION aNotation ) const
         double exponent = std::log10( std::abs( *m_value ) );
         int    reductionExponent = 0;
 
-        std::string metricSuffix =
-                SIM_VALUE_PARSER::ExponentToMetricSuffix( exponent, reductionExponent, aNotation );
+        std::string prefix = SIM_VALUE_PARSER::ExponentToUnitPrefix( exponent, reductionExponent,
+                                                                     aNotation );
         double reducedValue = *m_value / std::pow( 10, reductionExponent );
 
-        return fmt::format( "{:g}{}", reducedValue, metricSuffix );
+        return fmt::format( "{:g}{}", reducedValue, prefix );
     }
     else
         return "";
@@ -627,29 +626,6 @@ std::string SIM_VALUE_STRING::ToString( NOTATION aNotation ) const
         return *m_value;
 
     return ""; // Empty string is completely equivalent to null string.
-}
-
-
-template <typename T>
-std::string SIM_VALUE_INST<T>::ToSimpleString() const
-{
-    if( m_value )
-        return fmt::format( "{}", *m_value );
-
-    return "";
-}
-
-
-template <>
-std::string SIM_VALUE_COMPLEX::ToSimpleString() const
-{
-    // TODO
-
-    /*std::string result = "";
-    result << *m_value;
-
-    return result;*/
-    return "";
 }
 
 
