@@ -10,6 +10,15 @@
 #include <netinfo.h>
 %}
 
+%extend NETINFO_ITEM
+{
+    %pythoncode
+    %{
+    def GetNetClassName(self):
+        return self.GetNetClassSlow().GetName()
+    %}
+}
+
 // http://swig.10945.n7.nabble.com/std-containers-and-pointers-td3728.html
 %{
     namespace swig {
