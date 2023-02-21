@@ -193,8 +193,8 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
 
         # Copy the NETCLASS_MAP so the one in the BOARD isn't modified
         # when we add the Default net class.
-        netclassmap = {k:v for k,v in self.GetNetClasses().NetClasses().items()}
-        netclassmap['Default'] = self.GetNetClasses().GetDefault()
+        netclassmap = {k:v for k,v in self.GetNetClasses().items()}
+        netclassmap['Default'] = self.GetDesignSettings().m_NetSettings.m_DefaultNetClass
         return netclassmap
     %}
 }
