@@ -1084,7 +1084,15 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
     m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
 
     // Load or reload wizard plugins in case they changed since the last time the frame opened
-    m_toolManager->RunAction( PCB_ACTIONS::pluginsReload, true );
+    // Because the board editor has also a plugin python menu,
+    // call the PCB_EDIT_FRAME RunAction() if the board editor is running
+    // Otherwise run the current RunAction().
+    PCB_EDIT_FRAME* pcbframe = static_cast<PCB_EDIT_FRAME*>( Kiway().Player( FRAME_PCB_EDITOR, false ) );
+
+    if( pcbframe )
+        pcbframe->GetToolManager()->RunAction( PCB_ACTIONS::pluginsReload, true );
+    else
+        m_toolManager->RunAction( PCB_ACTIONS::pluginsReload, true );
 }
 
 
