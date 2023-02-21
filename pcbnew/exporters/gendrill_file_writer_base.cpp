@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean_Pierre Charras <jp.charras at wanadoo.fr>
  * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -320,7 +320,7 @@ void GENDRILL_WRITER_BASE::CreateMapFilesSet( const wxString& aPlotDirectory,
         // is created (do not create any PTH drill file can be seen as not working drill generator).
         if( getHolesCount() > 0 || doing_npth || pair == DRILL_LAYER_PAIR( F_Cu, B_Cu ) )
         {
-            fn = getDrillFileName( pair, doing_npth, m_merge_PTH_NPTH );
+            fn = GENDRILL_WRITER_BASE::getDrillFileName( pair, doing_npth, m_merge_PTH_NPTH );
             fn.SetPath( aPlotDirectory );
 
             fn.SetExt( wxEmptyString ); // Will be added by GenDrillMap
