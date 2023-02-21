@@ -94,7 +94,10 @@ void GRSetColorPen( wxDC* DC, const COLOR4D& Color, int width, wxPenStyle style 
     // wxWidgets will enforce a minimum pen width when printing, so we have to make the pen
     // transparent when we don't want the object stroked.
     if( width == 0 )
+    {
         color = COLOR4D::UNSPECIFIED;
+        style = wxPENSTYLE_TRANSPARENT;
+    }
 
     const wxPen& curr_pen = DC->GetPen();
 
