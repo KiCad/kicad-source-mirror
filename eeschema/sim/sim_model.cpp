@@ -1446,6 +1446,8 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
         FIELD_INFO()
         {
             m_Attributes.m_Visible = false;
+            m_Attributes.m_Size = VECTOR2I( DEFAULT_SIZE_TEXT * schIUScale.IU_PER_MILS,
+                                            DEFAULT_SIZE_TEXT * schIUScale.IU_PER_MILS );
         };
 
         FIELD_INFO( const wxString& aText, T_field* aField ) :
