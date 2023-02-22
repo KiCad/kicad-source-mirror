@@ -253,7 +253,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
             {
                 // edge-clearances are for milling tolerances (drilling tolerances are handled
                 // by hole-clearances)
-                if( pad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG )
+                if( pad->GetDrillSizeX() != pad->GetDrillSizeY() )
                     edgesTree.Insert( pad, Edge_Cuts, m_largestEdgeClearance );
             }
 

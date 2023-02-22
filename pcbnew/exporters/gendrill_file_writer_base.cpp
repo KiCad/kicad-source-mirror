@@ -146,8 +146,12 @@ void GENDRILL_WRITER_BASE::buildHolesList( DRILL_LAYER_PAIR aLayerPair,
                 new_hole.m_Hole_Diameter  = std::min( pad->GetDrillSize().x, pad->GetDrillSize().y );
                 new_hole.m_Hole_Size.x    = new_hole.m_Hole_Size.y = new_hole.m_Hole_Diameter;
 
-                if( pad->GetDrillShape() != PAD_DRILL_SHAPE_CIRCLE )
+                // Convert oblong holes that are actually circular into drill hits
+                if( pad->GetDrillShape() != PAD_DRILL_SHAPE_CIRCLE &&
+                        pad->GetDrillSizeX() != pad->GetDrillSizeY() )
+                {
                     new_hole.m_Hole_Shape = 1; // oval flag set
+                }
 
                 new_hole.m_Hole_Size         = pad->GetDrillSize();
                 new_hole.m_Hole_Pos          = pad->GetPosition();  // hole position
