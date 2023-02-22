@@ -102,9 +102,11 @@ option( KICAD_SCRIPTING_WXPYTHON
     ON )
 mark_as_advanced( KICAD_SCRIPTING_WXPYTHON )
 
-option( KICAD_USE_EGL
+# EGL is only needed on Linux with Wayland
+cmake_dependent_option( KICAD_USE_EGL
     "Build KiCad with EGL backend support for Wayland."
-    OFF )
+    OFF "UNIX_NOT_APPLE"
+    OFF)
 
 cmake_dependent_option( KICAD_USE_BUNDLED_GLEW
     "Use the bundled version of GLEW - only available when KICAD_USE_EGL is set"
@@ -236,11 +238,9 @@ if( WIN32 OR APPLE )
     add_compile_definitions( $<$<BOOL:${KICAD_USE_3DCONNEXION}>:KICAD_USE_3DCONNEXION> )
 endif()
 
-if( KICAD_USE_EGL AND UNIX AND NOT APPLE )
+if( KICAD_USE_EGL )
     message( STATUS "Configuring KiCad for the wxGLCanvas EGL backend" )
     add_compile_definitions( KICAD_USE_EGL )
-elseif( KICAD_USE_EGL )
-    message( STATUS "Ignoring KICAD_USE_EGL since not on Linux" )
 endif()
 
 # Ensure DEBUG is defined for all platforms in Debug builds

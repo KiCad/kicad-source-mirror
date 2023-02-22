@@ -84,10 +84,8 @@ target_include_directories( cvpcb_kiface PRIVATE
     $<TARGET_PROPERTY:thread-pool,INTERFACE_INCLUDE_DIRECTORIES>
     )
 
-if( UNIX AND NOT APPLE )
-    # -lrt must follow Boost
-    target_link_libraries( cvpcb_kiface rt )
-endif()
+# -lrt must follow Boost on Linux platforms
+target_link_libraries( cvpcb_kiface $<$<BOOL:${UNIX_NOT_APPLE}>:rt> )
 
 set_source_files_properties( cvpcb.cpp PROPERTIES
     # The KIFACE is in cvpcb.cpp, export it:
