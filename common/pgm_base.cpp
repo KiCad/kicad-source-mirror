@@ -783,7 +783,11 @@ wxString PGM_BASE::GetLanguageTag()
         return "";
     else
     {
+#if wxCHECK_VERSION( 3, 1, 6 )
         wxString str = langInfo->GetCanonicalWithRegion();
+#else
+        wxString str = langInfo->CanonicalName;
+#endif
         str.Replace( "_", "-" );
 
         return str;

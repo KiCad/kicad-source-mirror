@@ -19,12 +19,12 @@
  */
 
 
-#include <font/fontconfig.h>
 #include <pgm_base.h>
 #include <wx/log.h>
 #include <trace_helpers.h>
 #include <string_utils.h>
 #include <macros.h>
+#include <font/fontconfig.h>
 
 using namespace fontconfig;
 
