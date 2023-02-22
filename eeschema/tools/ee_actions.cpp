@@ -127,6 +127,11 @@ TOOL_ACTION EE_ACTIONS::newSymbol( "eeschema.SymbolLibraryControl.newSymbol",
         _( "New Symbol..." ), _( "Create a new symbol" ),
         BITMAPS::new_component );
 
+TOOL_ACTION EE_ACTIONS::deriveFromExistingSymbol( "eeschema.SymbolLibraryControl.deriveFromExistingSymbol",
+        AS_GLOBAL, 0, "",
+        _( "Derive from existing symbol" ), _( "Create a new symbol, derived from an existing symbol" ),
+        BITMAPS::new_component );
+
 TOOL_ACTION EE_ACTIONS::editSymbol( "eeschema.SymbolLibraryControl.editSymbol",
         AS_GLOBAL, 0, "",
         _( "Edit Symbol" ), _( "Show selected symbol on editor canvas" ),

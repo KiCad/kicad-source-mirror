@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,13 +10,16 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class WX_INFOBAR;
+
 #include "dialog_shim.h"
-#include <wx/string.h>
-#include <wx/stattext.h>
+#include <wx/infobar.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/string.h>
+#include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/combobox.h>
 #include <wx/spinctrl.h>
@@ -41,6 +44,7 @@ class DIALOG_LIB_NEW_SYMBOL_BASE : public DIALOG_SHIM
 
 
 	protected:
+		WX_INFOBAR* m_infoBar;
 		wxStaticText* m_staticTextName;
 		wxTextCtrl* m_textName;
 		wxStaticText* m_staticText5;
@@ -64,7 +68,7 @@ class DIALOG_LIB_NEW_SYMBOL_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnParentSymbolSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPowerCheckBox( wxCommandEvent& event ) { event.Skip(); }
 
@@ -72,6 +76,7 @@ class DIALOG_LIB_NEW_SYMBOL_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_LIB_NEW_SYMBOL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("New Symbol"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_LIB_NEW_SYMBOL_BASE();
 
 };

@@ -324,7 +324,7 @@ void SYMBOL_EDIT_FRAME::SaveAll()
 }
 
 
-void SYMBOL_EDIT_FRAME::CreateNewSymbol()
+void SYMBOL_EDIT_FRAME::CreateNewSymbol( const wxString& inheritFromSymbolName )
 {
     m_toolManager->RunAction( ACTIONS::cancelInteractive, true );
 
@@ -343,7 +343,31 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol()
 
     rootSymbols.Sort();
 
-    DIALOG_LIB_NEW_SYMBOL dlg( this, &rootSymbols );
+    wxString _inheritSymbolName;
+    wxString _infoMessage;
+
+    // if the symbol being inherited from isn't a root symbol, find its root symbol
+    // and use that symbol instead
+    if( !inheritFromSymbolName.IsEmpty() )
+    {
+        LIB_SYMBOL* inheritFromSymbol = m_libMgr->GetBufferedSymbol( inheritFromSymbolName, lib );
+
+        if( inheritFromSymbol && !inheritFromSymbol->IsRoot() )
+        {
+            std::shared_ptr<LIB_SYMBOL> parent = inheritFromSymbol->GetParent().lock();
+            wxString rootSymbolName = parent->GetName();
+            _inheritSymbolName = rootSymbolName;
+            _infoMessage = wxString::Format( _( "Deriving from '%s', the root symbol of '%s'." ),
+                                            _inheritSymbolName,
+                                            inheritFromSymbolName);
+        }
+        else
+        {
+            _inheritSymbolName = inheritFromSymbolName;
+        }
+    }
+
+    DIALOG_LIB_NEW_SYMBOL dlg( this, _infoMessage, &rootSymbols, _inheritSymbolName );
     dlg.SetMinSize( dlg.GetSize() );
 
     if( dlg.ShowModal() == wxID_CANCEL )

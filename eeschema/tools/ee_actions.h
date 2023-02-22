@@ -181,6 +181,7 @@ public:
     static TOOL_ACTION saveLibraryAs;
     static TOOL_ACTION saveSymbolAs;
     static TOOL_ACTION newSymbol;
+    static TOOL_ACTION deriveFromExistingSymbol;
     static TOOL_ACTION editSymbol;
     static TOOL_ACTION duplicateSymbol;
     static TOOL_ACTION renameSymbol;

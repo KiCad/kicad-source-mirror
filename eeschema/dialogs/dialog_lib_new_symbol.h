@@ -36,7 +36,9 @@ class DIALOG_LIB_NEW_SYMBOL : public DIALOG_LIB_NEW_SYMBOL_BASE
 {
 public:
     DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME* parent,
-                           const wxArrayString* aRootSymbolNames = nullptr );
+                           const wxString& message,
+                           const wxArrayString* aRootSymbolNames = nullptr,
+                           const wxString& inheritFromSymbolName = wxEmptyString );
 
     void SetName( const wxString& name ) override
     {

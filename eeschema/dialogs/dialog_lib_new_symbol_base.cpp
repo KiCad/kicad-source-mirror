@@ -1,9 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
+
+#include "widgets/wx_infobar.h"
 
 #include "dialog_lib_new_symbol_base.h"
 
@@ -20,6 +22,13 @@ DIALOG_LIB_NEW_SYMBOL_BASE::DIALOG_LIB_NEW_SYMBOL_BASE( wxWindow* parent, wxWind
 
 	wxBoxSizer* bSizerMain;
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
+
+	m_infoBar = new WX_INFOBAR( this );
+	m_infoBar->SetShowHideEffects( wxSHOW_EFFECT_NONE, wxSHOW_EFFECT_NONE );
+	m_infoBar->SetEffectDuration( 500 );
+	m_infoBar->Hide();
+
+	bSizerMain->Add( m_infoBar, 0, wxBOTTOM|wxEXPAND, 5 );
 
 	wxBoxSizer* bSizerTop;
 	bSizerTop = new wxBoxSizer( wxVERTICAL );

@@ -29,7 +29,9 @@
 #include <template_fieldnames.h>
 
 DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME* aParent,
-                                              const wxArrayString* aRootSymbolNames ) :
+                                              const wxString& message,
+                                              const wxArrayString* aRootSymbolNames,
+                                              const wxString& inheritFromSymbolName ) :
     DIALOG_LIB_NEW_SYMBOL_BASE( dynamic_cast<wxWindow*>( aParent ) ),
     m_pinTextPosition( aParent, m_staticPinTextPositionLabel, m_textPinTextPosition,
                        m_staticPinTextPositionUnits, true )
@@ -42,6 +44,18 @@ DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME* aParent,
             escapedNames.Add( UnescapeString( name ) );
 
         m_comboInheritanceSelect->Append( escapedNames );
+
+        if( !inheritFromSymbolName.IsEmpty() )
+        {
+            m_comboInheritanceSelect->SetStringSelection( inheritFromSymbolName );
+            syncControls( !m_comboInheritanceSelect->GetValue().IsEmpty() );
+        }
+    }
+
+    if( !message.IsEmpty() )
+    {
+        m_infoBar->RemoveAllButtons();
+        m_infoBar->ShowMessage( message );
     }
 
     m_textName->SetValidator( SCH_FIELD_VALIDATOR( true, VALUE_FIELD ) );

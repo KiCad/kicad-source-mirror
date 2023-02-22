@@ -134,7 +134,7 @@ public:
     /**
      * Create a new symbol in the selected library.
      */
-    void CreateNewSymbol();
+    void CreateNewSymbol( const wxString& inheritFromSymbolName = wxEmptyString );
 
     void ImportSymbol();
     void ExportSymbol();

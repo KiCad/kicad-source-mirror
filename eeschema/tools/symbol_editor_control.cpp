@@ -102,6 +102,7 @@ bool SYMBOL_EDITOR_CONTROL::Init()
 
         ctxMenu.AddSeparator();
         ctxMenu.AddItem( EE_ACTIONS::newSymbol,          libInferredCondition );
+        ctxMenu.AddItem( EE_ACTIONS::deriveFromExistingSymbol, symbolSelectedCondition );
 
         ctxMenu.AddSeparator();
         ctxMenu.AddItem( ACTIONS::save,                  symbolSelectedCondition || libInferredCondition );
@@ -190,9 +191,17 @@ int SYMBOL_EDITOR_CONTROL::AddSymbol( const TOOL_EVENT& aEvent )
         }
 
         if( aEvent.IsAction( &EE_ACTIONS::newSymbol ) )
+        {
             editFrame->CreateNewSymbol();
+        }
+        else if( aEvent.IsAction( &EE_ACTIONS::deriveFromExistingSymbol ) )
+        {
+            editFrame->CreateNewSymbol( sel.GetLibItemName() );
+        }
         else if( aEvent.IsAction( &EE_ACTIONS::importSymbol ) )
+        {
             editFrame->ImportSymbol();
+        }
     }
 
     return 0;
@@ -680,6 +689,7 @@ void SYMBOL_EDITOR_CONTROL::setTransitions()
     Go( &SYMBOL_EDITOR_CONTROL::AddLibrary,            ACTIONS::newLibrary.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::AddLibrary,            ACTIONS::addLibrary.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::AddSymbol,             EE_ACTIONS::newSymbol.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::AddSymbol,             EE_ACTIONS::deriveFromExistingSymbol.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::AddSymbol,             EE_ACTIONS::importSymbol.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::EditSymbol,            EE_ACTIONS::editSymbol.MakeEvent() );
 
