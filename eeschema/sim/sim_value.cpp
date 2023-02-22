@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,6 +28,7 @@
 #include <locale_io.h>
 #include <pegtl/contrib/parse_tree.hpp>
 #include <fmt/core.h>
+#include <math/util.h>
 
 
 #define CALL_INSTANCE( ValueType, Notation, func, ... )                  \
@@ -176,8 +177,8 @@ static inline void handleNodeForParse( tao::pegtl::parse_tree::node& aNode,
     }
     else if( aNode.is_type<SIM_VALUE_PARSER::unitPrefix<ValueType, Notation>>() )
     {
-        aParseResult.unitPrefixExponent =
-                SIM_VALUE_PARSER::UnitPrefixToExponent( aNode.string(), Notation );
+        aParseResult.unitPrefixExponent = SIM_VALUE_PARSER::UnitPrefixToExponent( aNode.string(),
+                                                                                  Notation );
         aParseResult.isEmpty = false;
     }
     else
@@ -358,364 +359,82 @@ std::string SIM_VALUE_PARSER::ExponentToUnitPrefix( double aExponent, int& aExpo
 }
 
 
-std::unique_ptr<SIM_VALUE> SIM_VALUE::Create( TYPE aType, const std::string& aString,
-                                              NOTATION aNotation )
-{
-    std::unique_ptr<SIM_VALUE> value = SIM_VALUE::Create( aType );
-    value->FromString( aString, aNotation );
-    return value;
-}
-
-
-std::unique_ptr<SIM_VALUE> SIM_VALUE::Create( TYPE aType )
-{
-    switch( aType )
-    {
-    case TYPE_BOOL:           return std::make_unique<SIM_VALUE_BOOL>();
-    case TYPE_INT:            return std::make_unique<SIM_VALUE_INT>();
-    case TYPE_FLOAT:          return std::make_unique<SIM_VALUE_FLOAT>();
-    case TYPE_COMPLEX:        return std::make_unique<SIM_VALUE_COMPLEX>();
-    case TYPE_STRING:         return std::make_unique<SIM_VALUE_STRING>();
-    case TYPE_BOOL_VECTOR:    return std::make_unique<SIM_VALUE_BOOL>();
-    case TYPE_INT_VECTOR:     return std::make_unique<SIM_VALUE_INT>();
-    case TYPE_FLOAT_VECTOR:   return std::make_unique<SIM_VALUE_FLOAT>();
-    case TYPE_COMPLEX_VECTOR: return std::make_unique<SIM_VALUE_COMPLEX>();
-    }
-
-    wxFAIL_MSG( _( "Unknown SIM_VALUE type" ) );
-    return nullptr;
-}
-
-
-SIM_VALUE& SIM_VALUE::operator=( const std::string& aString )
-{
-    FromString( aString );
-    return *this;
-}
-
-
-bool SIM_VALUE::operator!=( const SIM_VALUE& aOther ) const
-{
-    return !( *this == aOther );
-}
-
-
-template <typename T>
-SIM_VALUE_INST<T>::SIM_VALUE_INST( const T& aValue ) : m_value( aValue )
-{
-}
-
-template SIM_VALUE_BOOL::SIM_VALUE_INST( const bool& aValue );
-template SIM_VALUE_INT::SIM_VALUE_INST( const int& aValue );
-template SIM_VALUE_FLOAT::SIM_VALUE_INST( const double& aValue );
-template SIM_VALUE_COMPLEX::SIM_VALUE_INST( const std::complex<double>& aValue );
-template SIM_VALUE_STRING::SIM_VALUE_INST( const std::string& aValue );
-
-
-template <> SIM_VALUE::TYPE SIM_VALUE_BOOL::GetType() const { return TYPE_BOOL; }
-template <> SIM_VALUE::TYPE SIM_VALUE_INT::GetType() const { return TYPE_INT; }
-template <> SIM_VALUE::TYPE SIM_VALUE_FLOAT::GetType() const { return TYPE_FLOAT; }
-template <> SIM_VALUE::TYPE SIM_VALUE_COMPLEX::GetType() const { return TYPE_FLOAT; }
-template <> SIM_VALUE::TYPE SIM_VALUE_STRING::GetType() const { return TYPE_STRING; }
-// TODO
-/*template <> SIM_VALUE::TYPE SIM_VALUE_BOOL_VECTOR::GetType() const { return TYPE_BOOL; }
-template <> SIM_VALUE::TYPE SIM_VALUE_INT_VECTOR::GetType() const { return TYPE_INT; }
-template <> SIM_VALUE::TYPE SIM_VALUE_FLOAT_VECTOR::GetType() const { return TYPE_FLOAT; }
-template <> SIM_VALUE::TYPE SIM_VALUE_COMPLEX_VECTOR::GetType() const { return TYPE_COMPLEX; }*/
-
-
-template <>
-bool SIM_VALUE_BOOL::FromString( const std::string& aString, NOTATION aNotation )
-{
-    SIM_VALUE_PARSER::PARSE_RESULT parseResult = SIM_VALUE_PARSER::Parse( aString, aNotation );
-    m_value = std::nullopt;
-
-    if( !parseResult.isOk )
-        return false;
-
-    if( parseResult.isEmpty )
-        return true;
-
-    if( !parseResult.intPart
-        || ( *parseResult.intPart != 0 && *parseResult.intPart != 1 )
-        || parseResult.fracPart
-        || parseResult.exponent
-        || parseResult.unitPrefixExponent )
-    {
-        return false;
-    }
-
-    m_value = *parseResult.intPart;
-    return true;
-}
-
-
-template <>
-bool SIM_VALUE_INT::FromString( const std::string& aString, NOTATION aNotation )
-{
-    SIM_VALUE_PARSER::PARSE_RESULT parseResult = SIM_VALUE_PARSER::Parse( aString, aNotation );
-    m_value = std::nullopt;
-
-    if( !parseResult.isOk )
-        return false;
-
-    if( parseResult.isEmpty )
-        return true;
-
-    if( !parseResult.intPart || ( parseResult.fracPart && *parseResult.fracPart != 0 ) )
-        return false;
-
-    int exponent = parseResult.exponent ? *parseResult.exponent : 0;
-    exponent += parseResult.unitPrefixExponent ? *parseResult.unitPrefixExponent : 0;
-
-    m_value = static_cast<double>( *parseResult.intPart ) * std::pow( 10, exponent );
-    return true;
-}
-
-
-template <>
-bool SIM_VALUE_FLOAT::FromString( const std::string& aString, NOTATION aNotation )
+std::string SIM_VALUE::ConvertNotation( const std::string& aString, NOTATION aFromNotation,
+                                        NOTATION aToNotation )
 {
     wxString buf( aString );
-
-    // Convert any entered decimal point separators to the one our PEGTL grammar expects
-    buf.Replace( wxT( "," ), wxT( "." ) );
+    buf.Replace( ',', '.' );
 
     SIM_VALUE_PARSER::PARSE_RESULT parseResult = SIM_VALUE_PARSER::Parse( buf.ToStdString(),
-                                                                          aNotation );
-    m_value = std::nullopt;
+                                                                          aFromNotation );
 
-    if( !parseResult.isOk )
-        return false;
-
-    if( parseResult.isEmpty )
-        return true;
-
-    // Single dot should be allowed in fields.
-    // TODO: disallow single dot in models.
-    if( parseResult.significand.empty() || parseResult.significand == "." )
-        return false;
-
-    int exponent = parseResult.exponent ? *parseResult.exponent : 0;
-    exponent += parseResult.unitPrefixExponent ? *parseResult.unitPrefixExponent : 0;
-
-    try
+    if( parseResult.isOk && !parseResult.isEmpty && !parseResult.significand.empty() )
     {
-        LOCALE_IO toggle;
+        int exponent = parseResult.exponent ? *parseResult.exponent : 0;
+        exponent += parseResult.unitPrefixExponent ? *parseResult.unitPrefixExponent : 0;
 
-        m_value = std::stod( parseResult.significand ) * std::pow( 10, exponent );
-    }
-    catch( const std::invalid_argument& )
-    {
-        return false;
-    }
-
-    return true;
-}
-
-
-template <>
-bool SIM_VALUE_COMPLEX::FromString( const std::string& aString, NOTATION aNotation )
-{
-    // TODO
-
-    /*LOCALE_IO toggle;
-
-    double value = 0;
-
-    if( !aString.ToDouble( &value ) )
-        throw KI_PARAM_ERROR( _( "Invalid complex sim value string" ) );
-
-    m_value = value;*/
-    return true;
-}
-
-
-template <>
-bool SIM_VALUE_STRING::FromString( const std::string& aString, NOTATION aNotation )
-{
-    m_value = aString;
-    return true;
-}
-
-
-template <typename T>
-std::string SIM_VALUE_INST<T>::ToString( NOTATION aNotation ) const
-{
-    static_assert( std::is_same<T, std::vector<T>>::value );
-
-    std::string string;
-
-    for( auto it = m_value.cbegin(); it != m_value.cend(); it++ )
-    {
-        string += SIM_VALUE_INST<T>( *it ).ToString();
-        string += ",";
-    }
-
-    return string;
-}
-
-
-template <>
-std::string SIM_VALUE_BOOL::ToString( NOTATION aNotation ) const
-{
-    if( m_value )
-        return fmt::format( "{:d}", *m_value );
-
-    return "";
-}
-
-
-template <>
-std::string SIM_VALUE_INT::ToString( NOTATION aNotation ) const
-{
-    if( m_value )
-    {
-        int value = std::abs( *m_value );
-        int exponent = 0;
-
-        while( value != 0 && value % 1000 == 0 )
+        try
         {
-            exponent += 3;
-            value /= 1000;
+            LOCALE_IO   toggle;
+            int         expReduction = 0;
+            std::string prefix = SIM_VALUE_PARSER::ExponentToUnitPrefix( exponent, expReduction,
+                                                                         aToNotation );
+
+            exponent -= expReduction;
+            return fmt::format( "{:g}{}",
+                                std::stod( parseResult.significand ) * std::pow( 10, exponent ),
+                                prefix );
         }
-
-        int         dummy = 0;
-        std::string prefix = SIM_VALUE_PARSER::ExponentToUnitPrefix( (double) exponent, dummy,
-                                                                     aNotation );
-        return fmt::format( "{:d}{:s}", value, prefix );
+        catch( const std::invalid_argument& )
+        {
+            // best efforts
+        }
     }
 
-    return "";
+    return aString;
 }
 
 
-template <>
-std::string SIM_VALUE_FLOAT::ToString( NOTATION aNotation ) const
+double SIM_VALUE::ToDouble( const std::string& aString, double aDefault )
 {
-    if( m_value )
+    SIM_VALUE_PARSER::PARSE_RESULT parseResult = SIM_VALUE_PARSER::Parse( aString, NOTATION::SI );
+
+    if( parseResult.isOk && !parseResult.isEmpty && !parseResult.significand.empty() )
     {
-        double exponent = std::log10( std::abs( *m_value ) );
-        int    reductionExponent = 0;
+        try
+        {
+            LOCALE_IO toggle;
+            int       exponent = parseResult.exponent ? *parseResult.exponent : 0;
 
-        std::string prefix = SIM_VALUE_PARSER::ExponentToUnitPrefix( exponent, reductionExponent,
-                                                                     aNotation );
-        double reducedValue = *m_value / std::pow( 10, reductionExponent );
+            exponent += parseResult.unitPrefixExponent ? *parseResult.unitPrefixExponent : 0;
 
-        return fmt::format( "{:g}{}", reducedValue, prefix );
+            return std::stod( parseResult.significand ) * std::pow( 10, exponent );
+        }
+        catch( const std::invalid_argument& )
+        {
+            // best efforts
+        }
     }
-    else
-        return "";
+
+    return aDefault;
 }
 
 
-template <>
-std::string SIM_VALUE_COMPLEX::ToString( NOTATION aNotation ) const
+int SIM_VALUE::ToInt( const std::string& aString, int aDefault )
 {
-    if( m_value )
-        return fmt::format( "{:g}+{:g}i", m_value->real(), m_value->imag() );
+    SIM_VALUE_PARSER::PARSE_RESULT parseResult = SIM_VALUE_PARSER::Parse( aString, NOTATION::SI );
 
-    return "";
+    if( parseResult.isOk
+        && !parseResult.isEmpty
+        && parseResult.intPart
+        && ( !parseResult.fracPart || *parseResult.fracPart == 0 ) )
+    {
+        int exponent = parseResult.exponent ? *parseResult.exponent : 0;
+        exponent += parseResult.unitPrefixExponent ? *parseResult.unitPrefixExponent : 0;
+
+        if( exponent >= 0 )
+            return (int) *parseResult.intPart * (int) std::pow( 10, exponent );
+    }
+
+    return aDefault;
 }
-
-
-template <>
-std::string SIM_VALUE_STRING::ToString( NOTATION aNotation ) const
-{
-    if( m_value )
-        return *m_value;
-
-    return ""; // Empty string is completely equivalent to null string.
-}
-
-
-template <typename T>
-SIM_VALUE_INST<T>& SIM_VALUE_INST<T>::operator=( const SIM_VALUE& aOther )
-{
-    auto other = dynamic_cast<const SIM_VALUE_INST<T>*>( &aOther );
-    m_value = other->m_value;
-    return *this;
-}
-
-
-template <typename T>
-bool SIM_VALUE_INST<T>::operator==( const T& aOther ) const
-{
-    return m_value == aOther;
-}
-
-
-template <>
-bool SIM_VALUE_BOOL::operator==( const bool& aOther ) const
-{
-    // Note that we take nullopt as the same as false here.
-
-    if( !m_value )
-        return false == aOther;
-
-    return m_value == aOther;
-}
-
-
-template bool SIM_VALUE_INT::operator==( const int& aOther ) const;
-template bool SIM_VALUE_FLOAT::operator==( const double& aOther ) const;
-template bool SIM_VALUE_COMPLEX::operator==( const std::complex<double>& aOther ) const;
-template bool SIM_VALUE_STRING::operator==( const std::string& aOther ) const;
-
-
-template <typename T>
-bool SIM_VALUE_INST<T>::operator==( const SIM_VALUE& aOther ) const
-{
-    const SIM_VALUE_INST<T>* otherValue = dynamic_cast<const SIM_VALUE_INST<T>*>( &aOther );
-
-    if( otherValue )
-        return m_value == otherValue->m_value;
-
-    return false;
-}
-
-template <typename T>
-SIM_VALUE_INST<T> operator+( const SIM_VALUE_INST<T>& aLeft, const SIM_VALUE_INST<T>& aRight )
-{
-    return SIM_VALUE_INST( aLeft.m_value.value() + aRight.m_value.value() );
-}
-
-template SIM_VALUE_INT operator+( const SIM_VALUE_INT& aLeft,
-                                  const SIM_VALUE_INT& aRight );
-template SIM_VALUE_FLOAT operator+( const SIM_VALUE_FLOAT& aLeft,
-                                    const SIM_VALUE_FLOAT& aRight );
-
-
-template <typename T>
-SIM_VALUE_INST<T> operator-( const SIM_VALUE_INST<T>& aLeft, const SIM_VALUE_INST<T>& aRight )
-{
-    return SIM_VALUE_INST( aLeft.m_value.value() - aRight.m_value.value() );
-}
-
-template SIM_VALUE_INT operator-( const SIM_VALUE_INT& aLeft,
-                                  const SIM_VALUE_INT& aRight );
-template SIM_VALUE_FLOAT operator-( const SIM_VALUE_FLOAT& aLeft,
-                                    const SIM_VALUE_FLOAT& aRight );
-
-
-    template <typename T>
-SIM_VALUE_INST<T> operator*( const SIM_VALUE_INST<T>& aLeft, const SIM_VALUE_INST<T>& aRight )
-{
-    return SIM_VALUE_INST( aLeft.m_value.value() * aRight.m_value.value() );
-}
-
-template SIM_VALUE_INT operator*( const SIM_VALUE_INT& aLeft,
-                                  const SIM_VALUE_INT& aRight );
-template SIM_VALUE_FLOAT operator*( const SIM_VALUE_FLOAT& aLeft,
-                                    const SIM_VALUE_FLOAT& aRight );
-
-    template <typename T>
-SIM_VALUE_INST<T> operator/( const SIM_VALUE_INST<T>& aLeft, const SIM_VALUE_INST<T>& aRight )
-{
-    return SIM_VALUE_INST( aLeft.m_value.value() / aRight.m_value.value() );
-}
-
-template SIM_VALUE_INT operator/( const SIM_VALUE_INT& aLeft,
-                                  const SIM_VALUE_INT& aRight );
-template SIM_VALUE_FLOAT operator/( const SIM_VALUE_FLOAT& aLeft,
-                                    const SIM_VALUE_FLOAT& aRight );

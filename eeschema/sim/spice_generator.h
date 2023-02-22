@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,7 +58,7 @@ public:
     virtual std::string ItemModelName( const SPICE_ITEM& aItem ) const;
     virtual std::string ItemParams() const;
 
-    virtual std::string TunerCommand( const SPICE_ITEM& aItem, const SIM_VALUE_FLOAT& aValue ) const;
+    virtual std::string TunerCommand( const SPICE_ITEM& aItem, double aValue ) const;
 
     virtual std::vector<std::string> CurrentNames( const SPICE_ITEM& aItem ) const;
 

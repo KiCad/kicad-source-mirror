@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,21 +44,21 @@ std::string SPICE_GENERATOR_BEHAVIORAL::ItemLine( const SPICE_ITEM& aItem ) cons
     case SIM_MODEL::TYPE::L_BEHAVIORAL:
     {
         SPICE_ITEM item = aItem;
-        item.modelName = m_model.GetParam( 0 ).value->ToSpiceString();
+        item.modelName = SIM_VALUE::ToSpice( m_model.GetParam( 0 ).value );
         return SPICE_GENERATOR::ItemLine( item );
     }
 
     case SIM_MODEL::TYPE::V_BEHAVIORAL:
     {
         SPICE_ITEM item = aItem;
-        item.modelName = fmt::format( "V={}", m_model.GetParam( 0 ).value->ToSpiceString() );
+        item.modelName = fmt::format( "V={}", SIM_VALUE::ToSpice( m_model.GetParam( 0 ).value ) );
         return SPICE_GENERATOR::ItemLine( item );
     }
 
     case SIM_MODEL::TYPE::I_BEHAVIORAL:
     {
         SPICE_ITEM item = aItem;
-        item.modelName = fmt::format( "I={}", m_model.GetParam( 0 ).value->ToSpiceString() );
+        item.modelName = fmt::format( "I={}", SIM_VALUE::ToSpice( m_model.GetParam( 0 ).value ) );
         return SPICE_GENERATOR::ItemLine( item );
     }
 

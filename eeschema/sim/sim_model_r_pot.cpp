@@ -32,10 +32,10 @@ std::string SPICE_GENERATOR_R_POT::ModelLine( const SPICE_ITEM& aItem ) const
     std::string position = "";
     
     if ( m_model.FindParam( "r" ) )
-        r = m_model.FindParam( "r" )->value->ToSpiceString();
+        r = SIM_VALUE::ToSpice( m_model.FindParam( "r" )->value );
 
     if ( m_model.FindParam( "pos" ) )
-        position = m_model.FindParam( "pos" )->value->ToSpiceString();
+        position = SIM_VALUE::ToSpice( m_model.FindParam( "pos" )->value );
 
     if( position != "" )
     {
@@ -47,11 +47,11 @@ std::string SPICE_GENERATOR_R_POT::ModelLine( const SPICE_ITEM& aItem ) const
 }
 
 
-std::string SPICE_GENERATOR_R_POT::TunerCommand( const SPICE_ITEM& aItem,
-                                                 const SIM_VALUE_FLOAT& aValue ) const
+std::string SPICE_GENERATOR_R_POT::TunerCommand( const SPICE_ITEM& aItem, double aValue ) const
 {
-    return fmt::format( "altermod @{}[position]={}",
-                        aItem.model->SpiceGenerator().ItemName( aItem ), aValue.ToSpiceString() );
+    return fmt::format( "altermod @{}[position]={:g}",
+                        aItem.model->SpiceGenerator().ItemName( aItem ),
+                        aValue );
 }
 
 

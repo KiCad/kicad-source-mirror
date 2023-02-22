@@ -568,7 +568,7 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateModelParamsTab( SIM_MODEL* aMode
         // This feature is called "autofill" and present only in certain models. Don't do it for
         // models that don't have it for performance reasons.
         if( aModel->HasAutofill() )
-            ( *it )->SetValueFromString( param.value->ToString() );
+            ( *it )->SetValueFromString( param.value );
     }
 }
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,13 +47,12 @@ std::string SPICE_GENERATOR_RAW_SPICE::ModelLine( const SPICE_ITEM& aItem ) cons
 
 std::string SPICE_GENERATOR_RAW_SPICE::ItemName( const SPICE_ITEM& aItem ) const
 {
-    std::string elementType = m_model.GetParam(
-        static_cast<int>( SIM_MODEL_RAW_SPICE::SPICE_PARAM::TYPE ) ).value->ToString();
+    std::string type = m_model.GetParam( (int) SIM_MODEL_RAW_SPICE::SPICE_PARAM::TYPE ).value;
 
-    if( aItem.refName != "" && boost::starts_with( aItem.refName, elementType ) )
+    if( aItem.refName != "" && boost::starts_with( aItem.refName, type ) )
         return aItem.refName;
     else
-        return fmt::format( "{}{}", elementType, aItem.refName );
+        return fmt::format( "{}{}", type, aItem.refName );
 }
 
 
@@ -105,7 +104,7 @@ std::string SPICE_GENERATOR_RAW_SPICE::ItemParams() const
     for( const SIM_MODEL::PARAM& param : GetInstanceParams() )
     {
         if( param.info.name == "model" )
-            result.append( " " + param.value->ToString() );
+            result.append( " " + param.value );
     }
 
     return result;

@@ -31,37 +31,34 @@ using PARAM = SIM_MODEL::PARAM;
 
 std::string SPICE_GENERATOR_TLINE::ModelLine( const SPICE_ITEM& aItem ) const
 {
-    std::string r="0" , l="0", g="0", c="0", len="1";
+    std::string r="0", l="0", g="0", c="0", len="1";
 
     switch( m_model.GetType() )
     {
     case SIM_MODEL::TYPE::TLINE_Z0:
     {
-        auto z0 = static_cast<const SIM_VALUE_FLOAT&>( *m_model.FindParam( "z0" )->value );
-        auto td = static_cast<const SIM_VALUE_FLOAT&>( *m_model.FindParam( "td" )->value );
+        double z0 = SIM_VALUE::ToDouble( m_model.FindParam( "z0" )->value );
+        double td = SIM_VALUE::ToDouble( m_model.FindParam( "td" )->value );
 
-        if( !z0.ToString().empty() || !td.ToString().empty() )
+        if( isnan( z0 ) || isnan( td ) )
             return fmt::format( ".model {} LTRA()\n", aItem.modelName );
 
-        r = SIM_VALUE_FLOAT( 0 ).ToSpiceString();
-        l = ( td * z0 ).ToSpiceString();
-        g = SIM_VALUE_FLOAT( 0 ).ToSpiceString();
-        c = ( td / z0 ).ToSpiceString();
-        len = SIM_VALUE_FLOAT( 1 ).ToSpiceString();
+        l = fmt::format( "{:g}", td * z0 );
+        c = fmt::format( "{:g}", td / z0 );
         break;
     }
     case SIM_MODEL::TYPE::TLINE_RLGC:
     {
         if( m_model.FindParam( "r" ) )
-            r = m_model.FindParam( "r" )->value->ToSpiceString();
+            r = SIM_VALUE::ToSpice( m_model.FindParam( "r" )->value );
         if( m_model.FindParam( "l" ) )
-            l = m_model.FindParam( "l" )->value->ToSpiceString();
+            l = SIM_VALUE::ToSpice( m_model.FindParam( "l" )->value );
         if( m_model.FindParam( "g" ) )
-            g = m_model.FindParam( "g" )->value->ToSpiceString();
+            g = SIM_VALUE::ToSpice( m_model.FindParam( "g" )->value );
         if( m_model.FindParam( "c" ) )
-            c = m_model.FindParam( "c" )->value->ToSpiceString();
+            c = SIM_VALUE::ToSpice( m_model.FindParam( "c" )->value );
         if( m_model.FindParam( "len" ) )
-            len = m_model.FindParam( "len" )->value->ToSpiceString();
+            len = SIM_VALUE::ToSpice( m_model.FindParam( "len" )->value );
         break;
     }
     default:

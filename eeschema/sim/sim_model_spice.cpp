@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -93,12 +93,12 @@ SIM_MODEL_SPICE::SIM_MODEL_SPICE( TYPE aType, std::unique_ptr<SPICE_GENERATOR> a
 }
 
 
-void SIM_MODEL_SPICE::SetParamValue( int aParamIndex, const SIM_VALUE& aValue )
+void SIM_MODEL_SPICE::doSetParamValue( int aParamIndex, const std::string& aValue )
 {
     if( m_spiceCode != "" )
         THROW_IO_ERROR( "Could not change model parameters: library models are immutable" );
 
-    SIM_MODEL::SetParamValue( aParamIndex, aValue );
+    SIM_MODEL::doSetParamValue( aParamIndex, aValue );
 }
 
 

@@ -1735,7 +1735,7 @@ void SIM_PLOT_FRAME::applyTuners()
             continue;
         }
 
-        SIM_VALUE_FLOAT floatVal( tuner->GetValue().ToDouble() );
+        double floatVal = tuner->GetValue().ToDouble();
 
         m_simulator->Command( item->model->SpiceGenerator().TunerCommand( *item, floatVal ) );
     }
