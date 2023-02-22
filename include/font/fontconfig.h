@@ -26,6 +26,7 @@
 #include <wx/string.h>
 #include <vector>
 #include <map>
+#include <unordered_map>
 #include <font/fontinfo.h>
 
 namespace fontconfig
