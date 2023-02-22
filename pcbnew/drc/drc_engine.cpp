@@ -651,11 +651,7 @@ bool hasDrilledHole( const BOARD_ITEM* aItem )
     switch( aItem->Type() )
     {
     case PCB_VIA_T:
-    {
-        const PCB_VIA* via = static_cast<const PCB_VIA*>( aItem );
-
-        return via->GetViaType() == VIATYPE::THROUGH;
-    }
+        return true;
 
     case PCB_PAD_T:
     {
