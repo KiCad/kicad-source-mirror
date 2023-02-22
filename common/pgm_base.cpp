@@ -775,6 +775,22 @@ void PGM_BASE::SetLanguageIdentifier( int menu_id )
 }
 
 
+wxString PGM_BASE::GetLanguageTag()
+{
+    const wxLanguageInfo* langInfo = wxLocale::GetLanguageInfo( m_language_id );
+
+    if( !langInfo )
+        return "";
+    else
+    {
+        wxString str = langInfo->GetCanonicalWithRegion();
+        str.Replace( "_", "-" );
+
+        return str;
+    }
+}
+
+
 void PGM_BASE::SetLanguagePath()
 {
     wxLocale::AddCatalogLookupPathPrefix( PATHS::GetLocaleDataPath() );

@@ -46,6 +46,7 @@
 #include <wx/settings.h>
 #include <string_utils.h>
 #include <widgets/grid_combobox.h>
+#include <pgm_base.h>
 
 
 enum
@@ -275,7 +276,7 @@ void FIELDS_GRID_TABLE<T>::initGrid( WX_GRID* aGrid )
 
     wxArrayString            fonts;
     std::vector<std::string> fontNames;
-    Fontconfig()->ListFonts( fontNames );
+    Fontconfig()->ListFonts( fontNames, std::string( Pgm().GetLanguageTag().utf8_str() ) );
 
     for( const std::string& name : fontNames )
         fonts.Add( wxString( name ) );
