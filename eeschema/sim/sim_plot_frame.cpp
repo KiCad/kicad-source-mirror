@@ -366,7 +366,9 @@ void MEASUREMENTS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent 
     if( m_menuCol == COL_MEASUREMENT_VALUE )
         menu.Append( MYID_FORMAT_VALUE, _( "Format Value..." ) );
 
-    menu.Append( MYID_DELETE_MEASUREMENT, _( "Delete Measurement" ) );
+    if( m_menuRow < ( m_grid->GetNumberRows() - 1 ) )
+        menu.Append( MYID_DELETE_MEASUREMENT, _( "Delete Measurement" ) );
+
     menu.AppendSeparator();
 
     GRID_TRICKS::showPopupMenu( menu, aEvent );
@@ -1212,8 +1214,11 @@ void SIM_PLOT_FRAME::SetMeasureFormat( int aRow, const SPICE_VALUE_FORMAT& aForm
 
 void SIM_PLOT_FRAME::DeleteMeasurement( int aRow )
 {
-    m_measurementsGrid->DeleteRows( aRow, 1 );
-    m_workbookModified = true;
+    if( aRow < ( m_measurementsGrid->GetNumberRows() - 1 ) )
+    {
+        m_measurementsGrid->DeleteRows( aRow, 1 );
+        m_workbookModified = true;
+    }
 }
 
 
