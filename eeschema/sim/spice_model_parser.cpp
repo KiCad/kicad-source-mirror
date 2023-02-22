@@ -291,8 +291,3 @@ SIM_MODEL::TYPE SPICE_MODEL_PARSER::ReadTypeFromSpiceStrings( const std::string&
     return SIM_MODEL::TYPE::RAWSPICE;
 }
 
-
-void SPICE_MODEL_PARSER::CopyModelFromLibrary( const SIM_LIBRARY_SPICE& aSourceLibrary,
-                                               const std::string& aModelName )
-{
-}

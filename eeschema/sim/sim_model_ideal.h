@@ -52,7 +52,8 @@ public:
     std::vector<std::string> GetPinNames() const override { return { "+", "-" }; }
 
 private:
-    static PARAM::INFO makeParamInfo( std::string aName, std::string aDescription, std::string aUnit );
+    static PARAM::INFO makeParamInfo( const std::string& aName, const std::string& aDescription,
+                                      const std::string& aUnit );
 };
 
 #endif // SIM_MODEL_IDEAL_H

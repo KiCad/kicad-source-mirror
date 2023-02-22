@@ -50,7 +50,8 @@ public:
 private:
     bool parseValueField( const std::string& aValueField );
 
-    static PARAM::INFO makeParams( std::string aName, std::string aDescription, std::string aUnit );
+    static PARAM::INFO makeParams( const std::string& aName, const std::string& aDescription,
+                                   const std::string& aUnit );
 };
 
 #endif // SIM_MODEL_BEHAVIORAL_H

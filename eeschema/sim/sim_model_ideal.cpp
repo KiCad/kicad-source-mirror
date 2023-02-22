@@ -72,15 +72,13 @@ SIM_MODEL_IDEAL::SIM_MODEL_IDEAL( TYPE aType ) :
 }
 
 
-SIM_MODEL::PARAM::INFO SIM_MODEL_IDEAL::makeParamInfo( std::string aName, std::string aDescription,
-                                                       std::string aUnit )
+SIM_MODEL::PARAM::INFO SIM_MODEL_IDEAL::makeParamInfo( const std::string& aName,
+                                                       const std::string& aDescription,
+                                                       const std::string& aUnit )
 {
-    SIM_MODEL::PARAM::INFO paramInfo = {};
+    PARAM::INFO paramInfo( aName, 0, PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, aUnit,
+                           PARAM::CATEGORY::PRINCIPAL );
 
-    paramInfo.name = aName;
-    paramInfo.type = SIM_VALUE::TYPE_FLOAT;
-    paramInfo.unit = aUnit;
-    paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.description = aDescription;
 
     return paramInfo;
