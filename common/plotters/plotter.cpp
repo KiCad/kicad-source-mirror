@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -758,6 +758,13 @@ void PLOTTER::Text( const VECTOR2I&             aPos,
     attributes.m_Halign = aH_justify;
     attributes.m_Valign = aV_justify;
     attributes.m_Size = aSize;
+
+    // if Size.x is < 0, the text is mirrored (we have no other param to know a text is mirrored)
+    if( attributes.m_Size.x < 0 )
+    {
+        attributes.m_Size.x = -attributes.m_Size.x;
+        attributes.m_Mirrored = true;
+    }
 
     if( !aFont )
         aFont = KIFONT::FONT::GetFont();
