@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-15 16:29-0800\n"
 "PO-Revision-Date: 2023-02-23 00:30+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
 "Language: fi\n"
@@ -4467,9 +4467,8 @@ msgid "Wire Entry"
 msgstr "Johdon Syöttö"
 
 #: common/eda_item.cpp:359
-#, fuzzy
 msgid "Bus Entry"
-msgstr "Linja-autoyhteys"
+msgstr "Väyläliitäntä"
 
 #: common/eda_item.cpp:364
 msgid "Net Label"
@@ -35844,7 +35843,7 @@ msgstr "PCB Teksti"
 #: pcbnew/pcb_text.cpp:240
 #, c-format
 msgid "PCB Text '%s' on %s"
-msgstr "PCB Teksti '%s' kohteessa %s"
+msgstr "PCB Teksti '%s' > %s"
 
 #: pcbnew/pcb_textbox.cpp:400
 #, c-format
