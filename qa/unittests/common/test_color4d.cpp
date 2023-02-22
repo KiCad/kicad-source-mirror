@@ -29,9 +29,7 @@
 
 #include <gal/color4d.h>
 
-#ifdef WX_COMPATIBILITY
 #include <wx/colour.h>
-#endif
 
 // All these tests are of a class in KIGFX
 using namespace KIGFX;
@@ -259,8 +257,6 @@ BOOST_AUTO_TEST_CASE( FromHsl )
 }
 
 
-#ifdef WX_COMPATIBILITY
-
 struct WX_CONV_CASE
 {
     wxColour wx;
@@ -308,7 +304,5 @@ BOOST_AUTO_TEST_CASE( FromWx )
         BOOST_CHECK_PREDICATE( KI_TEST::IsColorNear, ( col )( c.c4d )( tol ) );
     }
 }
-
-#endif // WX_COMPATIBILITY
 
 BOOST_AUTO_TEST_SUITE_END()

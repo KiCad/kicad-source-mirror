@@ -905,10 +905,6 @@ endif()
 # Find wxWidgets library, required
 #
 
-# Turn on wxWidgets compatibility mode for some classes
-add_compile_definitions( WX_COMPATIBILITY )
-
-
 # Check if '--toolkit=xxx' option has been passed
 string( REGEX MATCH "--toolkit=([a-zA-Z0-9]+)"
     WXWIDGETS_REQUESTED_TOOLKIT "${wxWidgets_CONFIG_OPTIONS}" )

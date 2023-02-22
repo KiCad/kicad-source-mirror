@@ -19,9 +19,7 @@
 #ifndef GAL_PRINT_H
 #define GAL_PRINT_H
 
-#ifdef WX_COMPATIBILITY
 class wxDC;
-#endif /* WX_COMPATIBILITY */
 
 namespace KIGFX {
 class GAL;
@@ -43,9 +41,8 @@ public:
 class GAL_PRINT
 {
 public:
-#ifdef WX_COMPATIBILITY
     static std::unique_ptr<GAL_PRINT> Create( GAL_DISPLAY_OPTIONS& aOptions, wxDC* aDC );
-#endif /* WX_COMPATIBILITY */
+
     virtual ~GAL_PRINT() {}
 
     virtual GAL* GetGAL() = 0;

@@ -28,12 +28,10 @@
 #define COLOR4D_H_
 
 #include <wx/debug.h>
-#include <nlohmann/json_fwd.hpp>
-
-#ifdef WX_COMPATIBILITY
 #include <wx/colour.h>
 #include <wx/string.h>
-#endif
+#include <nlohmann/json_fwd.hpp>
+
 
 /**
  * Legacy color enumeration. Also contains a flag and the alpha value in the upper bits
@@ -145,8 +143,6 @@ public:
      */
     COLOR4D& FromCSSRGBA( int aRed, int aGreen, int aBlue, double aAlpha = 1.0 );
 
-#ifdef WX_COMPATIBILITY
-
     /**
      * Defines a color from a CSS or HTML-type string
      * @param aColorStr input string
@@ -182,8 +178,6 @@ public:
      * @param aColor The color to mix with this one
      */
     COLOR4D LegacyMix( const COLOR4D& aColor ) const;
-#endif /* WX_COMPATIBILITY */
-
 
     /**
      * Converts current color (stored in RGB) to HSL format.

@@ -109,7 +109,6 @@ COLOR4D::COLOR4D( EDA_COLOR_T aColor )
 }
 
 
-#ifdef WX_COMPATIBILITY
 COLOR4D::COLOR4D( const wxString& aColorStr )
 {
     if( !SetFromHexString( aColorStr ) )
@@ -242,7 +241,7 @@ COLOR4D COLOR4D::LegacyMix( const COLOR4D& aColor ) const
 
     return candidate;
 }
-#endif
+
 
 namespace KIGFX {
 
