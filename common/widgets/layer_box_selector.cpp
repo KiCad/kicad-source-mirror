@@ -27,6 +27,7 @@
 #include <wx/odcombo.h>
 #include <wx/menuitem.h>
 
+#include <gal/dpi_scaling.h>
 #include <layer_ids.h>
 #include <widgets/layer_box_selector.h>
 
@@ -140,9 +141,12 @@ int LAYER_BOX_SELECTOR::SetLayerSelection( int layer )
 
 void LAYER_BOX_SELECTOR::ResyncBitmapOnly()
 {
+    DPI_SCALING dpi( nullptr, this );
+    int size = static_cast<int>( dpi.GetScaleFactor() * 14 );
+
     for( int i = 0; i < (int) GetCount(); ++i )
     {
-        wxBitmap layerbmp( 14, 14 );
+        wxBitmap layerbmp( size, size );
         DrawColorSwatch( layerbmp, getLayerColor( LAYER_PCB_BACKGROUND ), getLayerColor( i ) );
     }
 }
