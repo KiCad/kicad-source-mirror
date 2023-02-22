@@ -275,7 +275,12 @@ perform_feature_checks()
 include( ${KICAD_CMAKE_MODULE_PATH}/Warnings.cmake )
 
 add_compile_definitions( $<$<BOOL:${KICAD_WIN32_CONTEXT_WINFIBER}>:LIBCONTEXT_USE_WINFIBER> )
-set( LIBCONTEXT_USE_WINFIBER $<IF:$<BOOL:${KICAD_WIN32_CONTEXT_WINFIBER}>,true,false> )
+
+if( KICAD_WIN32_CONTEXT_WINFIBER )
+    set(LIBCONTEXT_USE_WINFIBER true)
+else()
+    set(LIBCONTEXT_USE_WINFIBER false)
+endif()
 
 if( WIN32 )
     # define UNICODE and_UNICODE definition on Windows. KiCad uses unicode.
