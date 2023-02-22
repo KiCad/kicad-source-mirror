@@ -45,6 +45,7 @@
 #include <eda_base_frame.h>
 #include <eda_draw_frame.h>
 #include <paths.h>
+#include <kiplatform/ui.h>
 
 
 static std::unique_ptr<BITMAP_STORE> s_BitmapStore;

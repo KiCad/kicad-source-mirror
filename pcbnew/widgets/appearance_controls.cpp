@@ -406,7 +406,9 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
         m_lastSelectedUserPreset( nullptr ),
         m_layerContextMenu( nullptr )
 {
-    int indicatorSize = ConvertDialogToPixels( wxSize( 6, 6 ) ).x;
+    DPI_SCALING dpi( nullptr, m_frame );
+
+    int indicatorSize = ConvertDialogToPixels( wxSize( 6, 6 ) ).x / dpi.GetContentScaleFactor();
     int screenHeight  = wxSystemSettings::GetMetric( wxSYS_SCREEN_Y );
     m_iconProvider    = new ROW_ICON_PROVIDER( indicatorSize );
     m_pointSize       = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ).GetPointSize();
@@ -802,8 +804,8 @@ void APPEARANCE_CONTROLS::createControls()
 
 wxSize APPEARANCE_CONTROLS::GetBestSize() const
 {
-    wxSize size( 220, 480 );
-    // TODO(JE) appropriate logic
+    DPI_SCALING dpi( nullptr, m_frame );
+    wxSize      size( 220 * dpi.GetScaleFactor(), 480 * dpi.GetScaleFactor() );
     return size;
 }
 
