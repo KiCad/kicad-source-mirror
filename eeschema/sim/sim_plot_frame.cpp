@@ -148,6 +148,7 @@ enum
     MYID_MEASURE_PP,
     MYID_MEASURE_MIN_AT,
     MYID_MEASURE_MAX_AT,
+    MYID_MEASURE_INTEGRAL,
 
     MYID_FORMAT_VALUE,
     MYID_DELETE_MEASUREMENT
@@ -191,6 +192,8 @@ void SIGNALS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
         menu.Append( MYID_MEASURE_PP, _( "Measure Peak-to-peak" ) );
         menu.Append( MYID_MEASURE_MIN_AT, _( "Measure Time of Min" ) );
         menu.Append( MYID_MEASURE_MAX_AT, _( "Measure Time of Max" ) );
+        menu.Append( MYID_MEASURE_INTEGRAL, _( "Measure Integral" ) );
+
         menu.AppendSeparator();
     }
 
@@ -216,6 +219,8 @@ void SIGNALS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
         m_parent->AddMeasurement( wxString::Format( wxS( "MIN_AT %s" ), signal ) );
     else if( event.GetId() == MYID_MEASURE_MAX_AT )
         m_parent->AddMeasurement( wxString::Format( wxS( "MAX_AT %s" ), signal ) );
+    else if( event.GetId() == MYID_MEASURE_INTEGRAL )
+        m_parent->AddMeasurement( wxString::Format( wxS( "INTEG %s" ), signal ) );
     else
         GRID_TRICKS::doPopupSelection( event );
 }
@@ -1224,7 +1229,7 @@ void SIM_PLOT_FRAME::UpdateMeasurement( int aRow )
                                             " *"
                                             "([a-zA-Z_]+)"
                                             " +"
-                                            "([a-zA-Z])\\([^\\)]+\\)" ) );
+                                            "([a-zA-Z])\\(([^\\)]+)\\)" ) );
 
     SIM_PLOT_PANEL* plotPanel = GetCurrentPlot();
 
@@ -1247,20 +1252,49 @@ void SIM_PLOT_FRAME::UpdateMeasurement( int aRow )
     {
         wxString           func = measureParamsRegEx.GetMatch( text, 1 ).Upper();
         wxUniChar          signalType = measureParamsRegEx.GetMatch( text, 2 ).Upper()[0];
+        wxString           deviceName = measureParamsRegEx.GetMatch( text, 3 );
         wxString           units;
         SPICE_VALUE_FORMAT fmt = GetMeasureFormat( aRow );
 
         if( signalType == 'I' )
             units = wxS( "A" );
         else if( signalType == 'P' )
+        {
             units = wxS( "W" );
+            // Our syntax is different from ngspice for power signals
+            text = func + " " + deviceName + ":power";
+        }
         else
             units = wxS( "V" );
 
         if( func.EndsWith( wxS( "_AT" ) ) )
             units = wxS( "s" );
         else if( func.StartsWith( wxS( "INTEG" ) ) )
-            units += wxS( "·s" );
+        {
+            switch( plotPanel->GetType() )
+            {
+                case SIM_TYPE::ST_TRANSIENT:
+                    if ( signalType == 'P' )
+                        units = wxS( "J" );
+                    else
+                        units += wxS( ".s" );
+                    break;
+                case SIM_TYPE::ST_AC:
+                case SIM_TYPE::ST_DISTORTION:
+                case SIM_TYPE::ST_NOISE:
+                case SIM_TYPE::ST_SENSITIVITY: // If there is a vector, it is frequency
+                    units += wxS( "·Hz" );
+                    break;
+                case SIM_TYPE::ST_DC: // Could be a lot of things : V, A, deg C, ohm, ...
+                case SIM_TYPE::ST_OP: // There is no vector for integration
+                case SIM_TYPE::ST_POLE_ZERO: // There is no vector for integration
+                case SIM_TYPE::ST_TRANS_FUNC: // There is no vector for integration
+                default:
+                    
+                    units += wxS( "·?" );
+                    break;
+            }
+        }
 
         fmt.UpdateUnits( units );
         SetMeasureFormat( aRow, fmt );
