@@ -35,6 +35,7 @@
 #include <xnode.h>
 
 #include <math/vector2d.h>
+#include <plugins/cadstar/cadstar_archive_objects.h>
 
 // THROW_IO_ERROR definitions to ensure consistent wording is used in the error messages
 
@@ -968,23 +969,7 @@ public:
 
     struct PART : PARSER
     {
-        enum class PIN_TYPE
-        {
-            UNCOMMITTED,        ///< Uncommitted pin (default)
-            INPUT,              ///< Input pin
-            OUTPUT_OR,          ///< Output pin OR tieable
-            OUTPUT_NOT_OR,      ///< Output pin not OR tieable
-            OUTPUT_NOT_NORM_OR, ///< Output pin not normally OR tieable
-            POWER,              ///< Power pin
-            GROUND,             ///< Ground pin
-            TRISTATE_BIDIR,     ///< Tristate bi-directional driver pin
-            TRISTATE_INPUT,     ///< Tristate input pin
-            TRISTATE_DRIVER     ///< Tristate output pin
-        };
-
-
-        static PIN_TYPE GetPinType( XNODE* aNode );
-
+        static CADSTAR_PIN_TYPE GetPinType( XNODE* aNode );
 
         struct DEFINITION : PARSER ///< "PARTDEFINITION" node name
         {
@@ -1001,17 +986,6 @@ public:
 
             struct PIN : PARSER ///< "PARTDEFINITIONPIN" node name
             {
-                /**
-                 * @brief Positioning of pin names can be in one of four quadrants
-                */
-                enum class POSITION
-                {
-                    TOP_RIGHT    = 0, ///< Default
-                    TOP_LEFT     = 1,
-                    BOTTOM_LEFT  = 2,
-                    BOTTOM_RIGHT = 3
-                };
-
                 PART_DEFINITION_PIN_ID ID = UNDEFINED_VALUE;
 
                 wxString Identifier = wxEmptyString;      ///< This should match a pad identifier
@@ -1043,15 +1017,18 @@ public:
                                                           ///< (subnode="PINSIGNAL")
                 GATE_ID     TerminalGate;                 ///< (subnode="PINTERM", param0)
                 TERMINAL_ID TerminalPin;                  ///< (subnode="PINTERM", param1)
-                PIN_TYPE    Type = PIN_TYPE::UNCOMMITTED; ///< subnode="PINTYPE"
-                long        Load = UNDEFINED_VALUE;       ///< The electrical current expected on
+
+                CADSTAR_PIN_TYPE Type = CADSTAR_PIN_TYPE::UNCOMMITTED; ///< subnode="PINTYPE"
+
+                long Load = UNDEFINED_VALUE;              ///< The electrical current expected on
                                                           ///< the pin (It is unclear what the units
                                                           ///< are, but only accepted values are
                                                           ///< integers) subnode ="PINLOAD"
-                POSITION Position =
-                        POSITION::TOP_RIGHT; ///< The pin names will use these positions when
-                                             ///< the symbol is added to a schematic design
-                                             ///< subnode="PINPOSITION"
+                                                          ///
+                CADSTAR_PIN_POSITION Position =
+                    CADSTAR_PIN_POSITION::TOP_RIGHT; ///< The pin names will use these positions
+                                                     ///< when the symbol is added to a design
+                                                     ///< subnode="PINPOSITION"
 
                 void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
             };
@@ -1131,9 +1108,9 @@ public:
         struct PART_PIN : PARSER ///< "PARTPIN" node name
         {
             PART_PIN_ID ID;
-            wxString    Name       = wxEmptyString;
-            PIN_TYPE    Type       = PIN_TYPE::UNCOMMITTED;
-            wxString    Identifier = wxEmptyString;
+            wxString         Name = wxEmptyString;
+            CADSTAR_PIN_TYPE Type = CADSTAR_PIN_TYPE::UNCOMMITTED;
+            wxString         Identifier = wxEmptyString;
 
             void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         };

@@ -206,7 +206,7 @@ private:
                                                 const TERMINAL_ID& aTerminalID );
 
     //Helper Functions for obtaining individual elements as KiCad elements:
-    ELECTRICAL_PINTYPE getKiCadPinType( const PART::PIN_TYPE& aPinType );
+    ELECTRICAL_PINTYPE getKiCadPinType( const CADSTAR_PIN_TYPE& aPinType );
 
     int             getKiCadUnitNumberFromGate( const GATE_ID& aCadstarGateID );
     TEXT_SPIN_STYLE getSpinStyle( const long long& aCadstarOrientation, bool aMirror );

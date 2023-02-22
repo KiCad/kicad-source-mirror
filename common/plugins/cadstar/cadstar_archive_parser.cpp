@@ -1768,20 +1768,22 @@ void CADSTAR_ARCHIVE_PARSER::PART::DEFINITION::GATE::Parse( XNODE* aNode, PARSER
 }
 
 
-CADSTAR_ARCHIVE_PARSER::PART::PIN_TYPE CADSTAR_ARCHIVE_PARSER::PART::GetPinType( XNODE* aNode )
+CADSTAR_PIN_TYPE CADSTAR_ARCHIVE_PARSER::PART::GetPinType( XNODE* aNode )
 {
     wxASSERT( aNode->GetName() == wxT( "PINTYPE" ) );
 
     wxString pinTypeStr = GetXmlAttributeIDString( aNode, 0 );
 
-    std::map<wxString, PIN_TYPE> pinTypeMap = { { wxT( "INPUT" ), PIN_TYPE::INPUT },
-        { wxT( "OUTPUT_OR" ), PIN_TYPE::OUTPUT_OR },
-        { wxT( "OUTPUT_NOT_OR" ), PIN_TYPE::OUTPUT_NOT_OR },
-        { wxT( "OUTPUT_NOT_NORM_OR" ), PIN_TYPE::OUTPUT_NOT_NORM_OR },
-        { wxT( "POWER" ), PIN_TYPE::POWER }, { wxT( "GROUND" ), PIN_TYPE::GROUND },
-        { wxT( "TRISTATE_BIDIR" ), PIN_TYPE::TRISTATE_BIDIR },
-        { wxT( "TRISTATE_INPUT" ), PIN_TYPE::TRISTATE_INPUT },
-        { wxT( "TRISTATE_DRIVER" ), PIN_TYPE::TRISTATE_DRIVER } };
+    std::map<wxString, CADSTAR_PIN_TYPE> pinTypeMap = {
+        { wxT( "INPUT" ),               CADSTAR_PIN_TYPE::INPUT },
+        { wxT( "OUTPUT_OR" ),           CADSTAR_PIN_TYPE::OUTPUT_OR },
+        { wxT( "OUTPUT_NOT_OR" ),       CADSTAR_PIN_TYPE::OUTPUT_NOT_OR },
+        { wxT( "OUTPUT_NOT_NORM_OR" ),  CADSTAR_PIN_TYPE::OUTPUT_NOT_NORM_OR },
+        { wxT( "POWER" ),               CADSTAR_PIN_TYPE::POWER },
+        { wxT( "GROUND" ),              CADSTAR_PIN_TYPE::GROUND },
+        { wxT( "TRISTATE_BIDIR" ),      CADSTAR_PIN_TYPE::TRISTATE_BIDIR },
+        { wxT( "TRISTATE_INPUT" ),      CADSTAR_PIN_TYPE::TRISTATE_INPUT },
+        { wxT( "TRISTATE_DRIVER" ),     CADSTAR_PIN_TYPE::TRISTATE_DRIVER } };
 
     if( pinTypeMap.find( pinTypeStr ) == pinTypeMap.end() )
         THROW_UNKNOWN_PARAMETER_IO_ERROR( pinTypeStr, aNode->GetName() );
@@ -1829,7 +1831,7 @@ void CADSTAR_ARCHIVE_PARSER::PART::DEFINITION::PIN::Parse( XNODE* aNode, PARSER_
         }
         else if( cNodeName == wxT( "PINPOSITION" ) )
         {
-            Position = (POSITION) GetXmlAttributeIDLong( cNode, 0 );
+            Position = CADSTAR_PIN_POSITION( GetXmlAttributeIDLong( cNode, 0 ) );
         }
         else if( cNodeName == wxT( "PINIDENTIFIER" ) )
         {
