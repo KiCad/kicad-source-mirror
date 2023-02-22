@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-88b0f50)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -102,7 +102,7 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 
 	// Grid
 	m_signalsGrid->CreateGrid( 0, 5 );
-	m_signalsGrid->EnableEditing( true );
+	m_signalsGrid->EnableEditing( false );
 	m_signalsGrid->EnableGridLines( true );
 	m_signalsGrid->EnableDragGridSize( false );
 	m_signalsGrid->SetMargins( 0, 0 );
