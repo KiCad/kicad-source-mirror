@@ -20,6 +20,7 @@
 #include <widgets/font_choice.h>
 #include <wx/fontenum.h>
 #include <font/fontconfig.h>
+#include <pgm_base.h>
 
 // The "official" name of the building Kicad stroke font (always existing)
 #include <font/kicad_font_name.h>
@@ -32,7 +33,7 @@ FONT_CHOICE::FONT_CHOICE( wxWindow* aParent, int aId, wxPoint aPosition, wxSize 
     m_systemFontCount = wxChoice::GetCount();
 
     std::vector<std::string> fontNames;
-    Fontconfig()->ListFonts( fontNames );
+    Fontconfig()->ListFonts( fontNames, std::string( Pgm().GetLanguageTag().utf8_str() ) );
 
     wxArrayString menuList;
 

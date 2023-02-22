@@ -220,6 +220,11 @@ public:
      */
     virtual int GetSelectedLanguageIdentifier() const { return m_language_id; }
 
+    /**
+     * @return the current selected language in rfc3066 format
+     */
+    virtual wxString GetLanguageTag();
+
     virtual void SetLanguagePath();
 
     /**

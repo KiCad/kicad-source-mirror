@@ -21,6 +21,8 @@
 #ifndef KICAD_FONTCONFIG_H
 #define KICAD_FONTCONFIG_H
 
+#include <fontconfig/fontconfig.h>
+
 #include <wx/string.h>
 #include <vector>
 #include <map>
@@ -28,6 +30,8 @@
 
 namespace fontconfig
 {
+
+struct FONTCONFIG_PAT;
 
 class FONTCONFIG
 {
@@ -56,11 +60,54 @@ public:
 
     /**
      * List the current available font families.
+     *
+     * @param aDesiredLang The desired language of font name to report back if available, otherwise it will fallback
      */
-    void ListFonts( std::vector<std::string>& aFonts );
+    void ListFonts( std::vector<std::string>& aFonts, const std::string& aDesiredLang );
 
 private:
-    std::map<std::string, FONTINFO> m_fonts;
+    std::map<std::string, FONTINFO> m_fontInfoCache;
+    wxString                        m_fontCacheLastLang;
+
+    /**
+     * Matches the two rfc 3306 language entries, used for when searching for matching family names
+     *
+     * The overall logic is simple, either both language tags matched exactly or one tag is "single" level
+     * that the other language tag contains.
+     * There's nuances to language tags beyond this but font tags will most likely never be more complex than
+     * say "zh-CN" or single tag "en".
+     *
+     * @param aSearchLang the language being searched for
+     * @param aSupportedLang the language being offered
+     */
+    bool isLanguageMatch( const wxString& aSearchLang, const wxString& aSupportedLang );
+
+    /**
+     * Gets a list of all family name strings maped to lang
+     *
+     * @param aPat reference to FcPattern container
+     * @param aFamStringMap Map to be populated with key, value pairs representing lang to family name
+     */
+    void getAllFamilyStrings( FONTCONFIG_PAT&                               aPat,
+                              std::unordered_map<std::string, std::string>& aFamStringMap );
+
+    /**
+     * Gets a family name based on desired language.
+     * This will fallback to english or first available string if no language matching string is found.
+     *
+     * @param aPat reference to FcPattern container
+     * @param aDesiredLang Language to research for (RFC3066 format)
+     */
+    std::string getFamilyStringByLang( FONTCONFIG_PAT& APat, const wxString& aDesiredLang );
+
+    /**
+     * Wrapper of FcPatternGetString to return a std::string
+     *
+     * @param aPat reference to FcPattern container
+     * @param aObj The fontconfig property object like FC_FAMILY, FC_STYLE, etc
+     * @param aIdx The ith value associated with the property object
+     */
+    std::string getFcString( FONTCONFIG_PAT& aPat, const char* aObj, int aIdx );
 };
 
 } // namespace fontconfig
