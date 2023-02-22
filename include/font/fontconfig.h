@@ -25,6 +25,7 @@
 
 #include <wx/string.h>
 #include <vector>
+#include <unordered_map>
 #include <map>
 #include <font/fontinfo.h>
 
