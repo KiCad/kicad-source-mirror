@@ -1019,14 +1019,22 @@ void SIM_PLOT_FRAME::OnFilterMouseMoved( wxMouseEvent& aEvent )
 }
 
 
+/**
+ * For user-defined signals we display the expression such as "V(out)-V(in)", but the SPICE
+ * signal we actually have to plot will be "user0" or some-such.
+ */
+wxString SIM_PLOT_FRAME::getTraceName( const wxString& aSignalName )
+{
+    if( alg::contains( m_userDefinedSignals, aSignalName ) )
+        return m_userDefinedSignalToSpiceVecName[ aSignalName ];
+
+    return aSignalName;
+}
+
+
 wxString SIM_PLOT_FRAME::getTraceName( int aRow )
 {
-    wxString signalName = m_signalsGrid->GetCellValue( aRow, COL_SIGNAL_NAME );
-
-    if( alg::contains( m_userDefinedSignals, signalName ) )
-        signalName = m_userDefinedSignalToSpiceVecName[ signalName ];
-
-    return signalName;
+    return getTraceName( m_signalsGrid->GetCellValue( aRow, COL_SIGNAL_NAME ) );
 }
 
 
@@ -2573,6 +2581,7 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
     m_simFinished = true;
 
     applyUserDefinedSignals();
+    rebuildSignalsList();
 
     // If there are any signals plotted, update them
     if( SIM_PANEL_BASE::IsPlottable( simType ) )
@@ -2588,14 +2597,22 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
 
         std::vector<struct TRACE_DESC> traceInfo;
 
-        // Get information about all the traces on the plot, remove and add again
+        // Get information about all the traces on the plot, remove any no longer in the
+        // signals list, and then update the remainder
         for( const auto& [name, trace] : plotPanel->GetTraces() )
         {
             struct TRACE_DESC placeholder;
             placeholder.m_name = trace->GetName();
             placeholder.m_type = trace->GetType();
 
-            traceInfo.push_back( placeholder );
+            for( const wxString& signal : m_signals )
+            {
+                if( getTraceName( signal ) == placeholder.m_name )
+                {
+                    traceInfo.push_back( placeholder );
+                    break;
+                }
+            }
         }
 
         for( const struct TRACE_DESC& trace : traceInfo )

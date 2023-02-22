@@ -265,6 +265,7 @@ private:
     /**
      * For user-defined traces we have a separate SPICE vector name.
      */
+    wxString getTraceName( const wxString& aSignalName );
     wxString getTraceName( int aRow );
 
     /**
