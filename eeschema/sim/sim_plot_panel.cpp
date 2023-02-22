@@ -528,7 +528,7 @@ void SIM_PLOT_PANEL::updateAxes( SIM_TRACE_TYPE aNewTraceType )
             m_axis_y1->SetName( _( "Voltage" ) );
             m_axis_y2->SetName( _( "Current" ) );
 
-            if( aNewTraceType == SPT_POWER && !m_axis_y3 )
+            if( ( aNewTraceType & SPT_POWER ) && !m_axis_y3 )
             {
                 m_plotWin->SetMargins( 35, 140, 35, 70 );
 
