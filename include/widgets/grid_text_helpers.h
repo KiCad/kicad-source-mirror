@@ -21,6 +21,7 @@
 #ifndef KICAD_GRID_TEXT_HELPERS_H
 #define KICAD_GRID_TEXT_HELPERS_H
 
+#include <functional>
 #include <wx/generic/gridctrl.h>
 
 class wxGrid;
