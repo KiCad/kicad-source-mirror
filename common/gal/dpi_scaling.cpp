@@ -57,11 +57,6 @@ static std::optional<double> getKiCadConfiguredScale( const COMMON_SETTINGS& aCo
         scale = canvas_scale;
     }
 
-    if( scale )
-    {
-        wxLogTrace( traceHiDpi, wxS( "Scale factor (configured): %f" ), *scale );
-    }
-
     return scale;
 }
 
@@ -83,11 +78,6 @@ static std::optional<double> getEnvironmentScale()
         scale = ENV_VAR::GetEnvVar<double>( wxS( "GDK_SCALE" ) );
     }
 
-    if( scale )
-    {
-        wxLogTrace( traceHiDpi, wxS( "Scale factor (environment): %f" ), *scale );
-    }
-
     return scale;
 }
 
@@ -101,15 +91,18 @@ DPI_SCALING::DPI_SCALING( COMMON_SETTINGS* aConfig, const wxWindow* aWindow )
 double DPI_SCALING::GetScaleFactor() const
 {
     std::optional<double> val;
+    wxString              src;
 
     if( m_config )
     {
         val = getKiCadConfiguredScale( *m_config );
+        src = wxS( "config" );
     }
 
     if( !val )
     {
         val = getEnvironmentScale();
+        src = wxS( "env" );
     }
 
     if( !val && m_window )
@@ -117,16 +110,57 @@ double DPI_SCALING::GetScaleFactor() const
         // Use the native WX reporting.
         // On Linux, this will not work until WX 3.2 and GTK >= 3.10
         // Otherwise it returns 1.0
-        val = KIPLATFORM::UI::GetSystemScaleFactor( m_window );
-        wxLogTrace( traceHiDpi, wxS( "Scale factor (WX): %f" ), *val );
+        val = KIPLATFORM::UI::GetPixelScaleFactor( m_window );
+        src = wxS( "platform" );
     }
 
     if( !val )
     {
         // Nothing else we can do, give it a default value
         val = GetDefaultScaleFactor();
-        wxLogTrace( traceHiDpi, wxS( "Scale factor (default): %f" ), *val );
+        src = wxS( "default" );
     }
+
+    wxLogTrace( traceHiDpi, wxS( "Scale factor (%s): %f" ), src, *val );
+
+    return *val;
+}
+
+
+double DPI_SCALING::GetContentScaleFactor() const
+{
+    std::optional<double> val;
+    wxString              src;
+
+    if( m_config )
+    {
+        val = getKiCadConfiguredScale( *m_config );
+        src = wxS( "config" );
+    }
+
+    if( !val )
+    {
+        val = getEnvironmentScale();
+        src = wxS( "env" );
+    }
+
+    if( !val && m_window )
+    {
+        // Use the native WX reporting.
+        // On Linux, this will not work until WX 3.2 and GTK >= 3.10
+        // Otherwise it returns 1.0
+        val = KIPLATFORM::UI::GetContentScaleFactor( m_window );
+        src = wxS( "platform" );
+    }
+
+    if( !val )
+    {
+        // Nothing else we can do, give it a default value
+        val = GetDefaultScaleFactor();
+        src = wxS( "default" );
+    }
+
+    wxLogTrace( traceHiDpi, wxS( "Content scale factor (%s): %f" ), src, *val );
 
     return *val;
 }

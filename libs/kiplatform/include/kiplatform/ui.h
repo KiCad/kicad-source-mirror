@@ -95,12 +95,19 @@ namespace KIPLATFORM
         void EllipsizeChoiceBox( wxChoice* aChoice );
 
         /**
-         * Tries to determine the system scaling factor currently in use for the window.  Under wx3.0, GTK
+         * Tries to determine the pixel scaling factor currently in use for the window.  Under wx3.0, GTK
          * fails to properly detect the scale factor.
          * @param aWindow pointer to the window to check
-         * @return System scale factor in use, defaulting to the wxWidgets method
+         * @return Pixel scale factor in use, defaulting to the wxWidgets method
          */
-        double GetSystemScaleFactor( const wxWindow* aWindow );
+        double GetPixelScaleFactor( const wxWindow* aWindow );
+
+        /**
+         * Tries to determine the content scaling factor currently in use for the window.
+         * The content scaling factor is typically settable by the user and may differ from the
+         * pixel scaling factor.
+         */
+        double GetContentScaleFactor( const wxWindow* aWindow );
 
         /**
          * Tries to determine the size of the viewport of a scrollable widget (wxDataViewCtrl, wxGrid) 

@@ -116,9 +116,15 @@ void KIPLATFORM::UI::EllipsizeChoiceBox( wxChoice* aChoice )
 }
 
 
-double KIPLATFORM::UI::GetSystemScaleFactor( const wxWindow* aWindow )
+double KIPLATFORM::UI::GetPixelScaleFactor( const wxWindow* aWindow )
 {
     return aWindow->GetContentScaleFactor();
+}
+
+
+double KIPLATFORM::UI::GetContentScaleFactor( const wxWindow* aWindow )
+{
+    return aWindow->GetDPIScaleFactor();
 }
 
 

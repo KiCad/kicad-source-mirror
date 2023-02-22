@@ -110,7 +110,7 @@ void KIPLATFORM::UI::EllipsizeChoiceBox( wxChoice* aChoice )
 }
 
 
-double KIPLATFORM::UI::GetSystemScaleFactor( const wxWindow* aWindow )
+double KIPLATFORM::UI::GetPixelScaleFactor( const wxWindow* aWindow )
 {
     double val = 1.0;
 
@@ -120,6 +120,13 @@ double KIPLATFORM::UI::GetSystemScaleFactor( const wxWindow* aWindow )
         val = gtk_widget_get_scale_factor( widget );
 
     return val;
+}
+
+
+double KIPLATFORM::UI::GetContentScaleFactor( const wxWindow* aWindow )
+{
+    // TODO: Do we need something different here?
+    return GetPixelScaleFactor( aWindow );
 }
 
 

@@ -56,6 +56,14 @@ public:
     double GetScaleFactor() const;
 
     /**
+     * Get the content scale factor, which may be different from the scale
+     * factor on some platforms.  This value should be used for scaling
+     * user interface elements (fonts, icons, etc) whereas the scale
+     * factor should be used for scaling canvases.
+     */
+    double GetContentScaleFactor() const;
+
+    /**
      * Is the current value auto scaled, or is it user-set in the config
      */
     bool GetCanvasIsAutoScaled() const;

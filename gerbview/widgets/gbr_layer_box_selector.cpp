@@ -26,13 +26,23 @@
 #include <gerbview_frame.h>
 #include <gerber_file_image_list.h>
 
+#ifdef __WXMSW__
+#include <gal/dpi_scaling.h>
+#endif
+
 #include "gbr_layer_box_selector.h"
 
 void GBR_LAYER_BOX_SELECTOR::Resync()
 {
-    #define BM_SIZE 14
     Freeze();
     Clear();
+
+#ifdef __WXMSW__
+    DPI_SCALING dpi( nullptr, this );
+    int size = static_cast<int>( 14 / dpi.GetContentScaleFactor() );
+#else
+    const int size = 14;
+#endif7
 
     GERBER_FILE_IMAGE_LIST& images = GERBER_FILE_IMAGE_LIST::GetImagesList();
 
@@ -46,7 +56,7 @@ void GBR_LAYER_BOX_SELECTOR::Resync()
             continue;
 
         // Prepare Bitmap
-        wxBitmap bmp( BM_SIZE, BM_SIZE );
+        wxBitmap bmp( size, size );
         DrawColorSwatch( bmp, getLayerColor( LAYER_PCB_BACKGROUND ), getLayerColor( layerid ) );
 
         Append( getLayerName( layerid ), bmp, (void*)(intptr_t) layerid );
@@ -65,7 +75,7 @@ void GBR_LAYER_BOX_SELECTOR::Resync()
         SetMinSize( wxSize( -1, -1 ) );
         wxSize bestSize = GetBestSize();
 
-        bestSize.x = GetBestSize().x + BM_SIZE + 10;
+        bestSize.x = GetBestSize().x + size + 10;
         SetMinSize( bestSize );
 
         SetSelection( wxNOT_FOUND );

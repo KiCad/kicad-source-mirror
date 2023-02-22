@@ -84,8 +84,12 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
     Freeze();
     Clear();
 
+#ifdef __WXMSW__
     DPI_SCALING dpi( nullptr, this );
-    int size = static_cast<int>( 14 / dpi.GetScaleFactor() );
+    int size = static_cast<int>( 14 / dpi.GetContentScaleFactor() );
+#else
+    const int size = 14;
+#endif
 
     LSET show = LSET::AllLayersMask() & ~m_layerMaskDisable;
     LSET activated = getEnabledLayers() & ~m_layerMaskDisable;
