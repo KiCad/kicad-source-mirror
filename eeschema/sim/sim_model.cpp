@@ -120,10 +120,10 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     case TYPE::PNP_VBIC:             return { DEVICE_T::PNP,    "VBIC",           "VBIC"                       };
     case TYPE::NPN_GUMMELPOON:       return { DEVICE_T::NPN,    "GUMMELPOON",     "Gummel-Poon"                };
     case TYPE::PNP_GUMMELPOON:       return { DEVICE_T::PNP,    "GUMMELPOON",     "Gummel-Poon"                };
-    //case TYPE::BJT_MEXTRAM:          return {};
+  //case TYPE::BJT_MEXTRAM:          return {};
     case TYPE::NPN_HICUM2:           return { DEVICE_T::NPN,    "HICUML2",        "HICUM level 2"              };
     case TYPE::PNP_HICUM2:           return { DEVICE_T::PNP,    "HICUML2",        "HICUM level 2"              };
-    //case TYPE::BJT_HICUM_L0:         return {};
+  //case TYPE::BJT_HICUM_L0:         return {};
 
     case TYPE::NJFET_SHICHMANHODGES: return { DEVICE_T::NJFET,  "SHICHMANHODGES", "Shichman-Hodges"            };
     case TYPE::PJFET_SHICHMANHODGES: return { DEVICE_T::PJFET,  "SHICHMANHODGES", "Shichman-Hodges"            };
@@ -161,18 +161,18 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     case TYPE::PMOS_B4SOI:           return { DEVICE_T::PMOS,   "B4SOI",          "BSIM4 SOI (B4SOI)"          };
     case TYPE::NMOS_BSIM4:           return { DEVICE_T::NMOS,   "BSIM4",          "BSIM4"                      };
     case TYPE::PMOS_BSIM4:           return { DEVICE_T::PMOS,   "BSIM4",          "BSIM4"                      };
-    //case TYPE::NMOS_EKV2_6:          return {};
-    //case TYPE::PMOS_EKV2_6:          return {};
-    //case TYPE::NMOS_PSP:             return {};
-    //case TYPE::PMOS_PSP:             return {};
+  //case TYPE::NMOS_EKV2_6:          return {};
+  //case TYPE::PMOS_EKV2_6:          return {};
+  //case TYPE::NMOS_PSP:             return {};
+  //case TYPE::PMOS_PSP:             return {};
     case TYPE::NMOS_B3SOIFD:         return { DEVICE_T::NMOS,   "B3SOIFD",        "B3SOIFD (BSIM3 FD-SOI)"     };
     case TYPE::PMOS_B3SOIFD:         return { DEVICE_T::PMOS,   "B3SOIFD",        "B3SOIFD (BSIM3 FD-SOI)"     };
     case TYPE::NMOS_B3SOIDD:         return { DEVICE_T::NMOS,   "B3SOIDD",        "B3SOIDD (BSIM3 SOI)"        };
     case TYPE::PMOS_B3SOIDD:         return { DEVICE_T::PMOS,   "B3SOIDD",        "B3SOIDD (BSIM3 SOI)"        };
     case TYPE::NMOS_B3SOIPD:         return { DEVICE_T::NMOS,   "B3SOIPD",        "B3SOIPD (BSIM3 PD-SOI)"     };
     case TYPE::PMOS_B3SOIPD:         return { DEVICE_T::PMOS,   "B3SOIPD",        "B3SOIPD (BSIM3 PD-SOI)"     };
-    //case TYPE::NMOS_STAG:            return {};
-    //case TYPE::PMOS_STAG:            return {};
+  //case TYPE::NMOS_STAG:            return {};
+  //case TYPE::PMOS_STAG:            return {};
     case TYPE::NMOS_HISIM2:          return { DEVICE_T::NMOS,   "HISIM2",         "HiSIM2"                     };
     case TYPE::PMOS_HISIM2:          return { DEVICE_T::PMOS,   "HISIM2",         "HiSIM2"                     };
     case TYPE::NMOS_HISIMHV1:        return { DEVICE_T::NMOS,   "HISIMHV1",       "HiSIM_HV1"                  };
@@ -184,8 +184,8 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     case TYPE::V_SIN:                return { DEVICE_T::V,      "SIN",            "Sine"                       };
     case TYPE::V_PULSE:              return { DEVICE_T::V,      "PULSE",          "Pulse"                      };
     case TYPE::V_EXP:                return { DEVICE_T::V,      "EXP",            "Exponential"                };
-    //case TYPE::V_SFAM:               return { DEVICE_TYPE::V,      "SFAM",           "Single-frequency AM"        };
-    //case TYPE::V_SFFM:               return { DEVICE_TYPE::V,      "SFFM",           "Single-frequency FM"        };
+  //case TYPE::V_SFAM:               return { DEVICE_TYPE::V,   "SFAM",           "Single-frequency AM"        };
+  //case TYPE::V_SFFM:               return { DEVICE_TYPE::V,   "SFFM",           "Single-frequency FM"        };
     case TYPE::V_PWL:                return { DEVICE_T::V,      "PWL",            "Piecewise linear"           };
     case TYPE::V_WHITENOISE:         return { DEVICE_T::V,      "WHITENOISE",     "White noise"                };
     case TYPE::V_PINKNOISE:          return { DEVICE_T::V,      "PINKNOISE",      "Pink noise (1/f)"           };
@@ -193,15 +193,15 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     case TYPE::V_RANDUNIFORM:        return { DEVICE_T::V,      "RANDUNIFORM",    "Random uniform"             };
     case TYPE::V_RANDNORMAL:         return { DEVICE_T::V,      "RANDNORMAL",     "Random normal"              };
     case TYPE::V_RANDEXP:            return { DEVICE_T::V,      "RANDEXP",        "Random exponential"         };
-    //case TYPE::V_RANDPOISSON:        return { DEVICE_TYPE::V,      "RANDPOISSON",    "Random Poisson"             };
+  //case TYPE::V_RANDPOISSON:        return { DEVICE_TYPE::V,   "RANDPOISSON",    "Random Poisson"             };
     case TYPE::V_BEHAVIORAL:         return { DEVICE_T::V,      "=",              "Behavioral"                 };
 
     case TYPE::I:                    return { DEVICE_T::I,      "DC",             "DC",                        };
     case TYPE::I_SIN:                return { DEVICE_T::I,      "SIN",            "Sine"                       };
     case TYPE::I_PULSE:              return { DEVICE_T::I,      "PULSE",          "Pulse"                      };
     case TYPE::I_EXP:                return { DEVICE_T::I,      "EXP",            "Exponential"                };
-    //case TYPE::I_SFAM:               return { DEVICE_TYPE::I,      "SFAM",           "Single-frequency AM"        };
-    //case TYPE::I_SFFM:               return { DEVICE_TYPE::I,      "SFFM",           "Single-frequency FM"        };
+  //case TYPE::I_SFAM:               return { DEVICE_TYPE::I,   "SFAM",           "Single-frequency AM"        };
+  //case TYPE::I_SFFM:               return { DEVICE_TYPE::I,   "SFFM",           "Single-frequency FM"        };
     case TYPE::I_PWL:                return { DEVICE_T::I,      "PWL",            "Piecewise linear"           };
     case TYPE::I_WHITENOISE:         return { DEVICE_T::I,      "WHITENOISE",     "White noise"                };
     case TYPE::I_PINKNOISE:          return { DEVICE_T::I,      "PINKNOISE",      "Pink noise (1/f)"           };
@@ -209,7 +209,7 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     case TYPE::I_RANDUNIFORM:        return { DEVICE_T::I,      "RANDUNIFORM",    "Random uniform"             };
     case TYPE::I_RANDNORMAL:         return { DEVICE_T::I,      "RANDNORMAL",     "Random normal"              };
     case TYPE::I_RANDEXP:            return { DEVICE_T::I,      "RANDEXP",        "Random exponential"         };
-    //case TYPE::I_RANDPOISSON:        return { DEVICE_TYPE::I,      "RANDPOISSON",    "Random Poisson"             };
+  //case TYPE::I_RANDPOISSON:        return { DEVICE_TYPE::I,   "RANDPOISSON",    "Random Poisson"             };
     case TYPE::I_BEHAVIORAL:         return { DEVICE_T::I,      "=",              "Behavioral"                 };
 
     case TYPE::SUBCKT:               return { DEVICE_T::SUBCKT, "",               "Subcircuit"                 };
@@ -258,13 +258,13 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     case TYPE::NPN_HICUM2:           return { "Q", "NPN",         "",        "8"   };
     case TYPE::PNP_HICUM2:           return { "Q", "PNP",         "",        "8"   };
 
-    case TYPE::NJFET_SHICHMANHODGES: return { "J", "NJF",         "",        "1"   };
-    case TYPE::PJFET_SHICHMANHODGES: return { "J", "PJF",         "",        "1"   };
+    case TYPE::NJFET_SHICHMANHODGES: return { "J", "NJF",         "",        "1",  true   };
+    case TYPE::PJFET_SHICHMANHODGES: return { "J", "PJF",         "",        "1",  true   };
     case TYPE::NJFET_PARKERSKELLERN: return { "J", "NJF",         "",        "2"   };
     case TYPE::PJFET_PARKERSKELLERN: return { "J", "PJF",         "",        "2"   };
 
-    case TYPE::NMES_STATZ:           return { "Z", "NMF",         "",        "1"   };
-    case TYPE::PMES_STATZ:           return { "Z", "PMF",         "",        "1"   };
+    case TYPE::NMES_STATZ:           return { "Z", "NMF",         "",        "1",  true   };
+    case TYPE::PMES_STATZ:           return { "Z", "PMF",         "",        "1",  true   };
     case TYPE::NMES_YTTERDAL:        return { "Z", "NMF",         "",        "2"   };
     case TYPE::PMES_YTTERDAL:        return { "Z", "PMF",         "",        "2"   };
     case TYPE::NMES_HFET1:           return { "Z", "NMF",         "",        "5"   };
@@ -274,8 +274,8 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
 
     case TYPE::NMOS_VDMOS:           return { "M", "VDMOS NCHAN", };
     case TYPE::PMOS_VDMOS:           return { "M", "VDMOS PCHAN", };
-    case TYPE::NMOS_MOS1:            return { "M", "NMOS",        "",        "1"   };
-    case TYPE::PMOS_MOS1:            return { "M", "PMOS",        "",        "1"   };
+    case TYPE::NMOS_MOS1:            return { "M", "NMOS",        "",        "1",  true   };
+    case TYPE::PMOS_MOS1:            return { "M", "PMOS",        "",        "1",  true   };
     case TYPE::NMOS_MOS2:            return { "M", "NMOS",        "",        "2"   };
     case TYPE::PMOS_MOS2:            return { "M", "PMOS",        "",        "2"   };
     case TYPE::NMOS_MOS3:            return { "M", "NMOS",        "",        "3"   };
@@ -294,18 +294,18 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     case TYPE::PMOS_B4SOI:           return { "M", "PMOS",        "",        "10"  };
     case TYPE::NMOS_BSIM4:           return { "M", "NMOS",        "",        "14"  };
     case TYPE::PMOS_BSIM4:           return { "M", "PMOS",        "",        "14"  };
-    //case TYPE::NMOS_EKV2_6:          return {};
-    //case TYPE::PMOS_EKV2_6:          return {};
-    //case TYPE::NMOS_PSP:             return {};
-    //case TYPE::PMOS_PSP:             return {};
+  //case TYPE::NMOS_EKV2_6:          return {};
+  //case TYPE::PMOS_EKV2_6:          return {};
+  //case TYPE::NMOS_PSP:             return {};
+  //case TYPE::PMOS_PSP:             return {};
     case TYPE::NMOS_B3SOIFD:         return { "M", "NMOS",        "",        "55"  };
     case TYPE::PMOS_B3SOIFD:         return { "M", "PMOS",        "",        "55"  };
     case TYPE::NMOS_B3SOIDD:         return { "M", "NMOS",        "",        "56"  };
     case TYPE::PMOS_B3SOIDD:         return { "M", "PMOS",        "",        "56"  };
     case TYPE::NMOS_B3SOIPD:         return { "M", "NMOS",        "",        "57"  };
     case TYPE::PMOS_B3SOIPD:         return { "M", "PMOS",        "",        "57"  };
-    //case TYPE::NMOS_STAG:            return {};
-    //case TYPE::PMOS_STAG:            return {};
+  //case TYPE::NMOS_STAG:            return {};
+  //case TYPE::PMOS_STAG:            return {};
     case TYPE::NMOS_HISIM2:          return { "M", "NMOS",        "",        "68"  };
     case TYPE::PMOS_HISIM2:          return { "M", "PMOS",        "",        "68"  };
     case TYPE::NMOS_HISIMHV1:        return { "M", "NMOS",        "",        "73", false, false, "1.2.4" };
@@ -317,8 +317,8 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     case TYPE::V_SIN:                return { "V", "",            "SIN"      };
     case TYPE::V_PULSE:              return { "V", "",            "PULSE"    };
     case TYPE::V_EXP:                return { "V", "",            "EXP"      };
-    //case TYPE::V_SFAM:               return { "V", "",            "AM"       };
-    //case TYPE::V_SFFM:               return { "V", "",            "SFFM"     };
+  //case TYPE::V_SFAM:               return { "V", "",            "AM"       };
+  //case TYPE::V_SFFM:               return { "V", "",            "SFFM"     };
     case TYPE::V_PWL:                return { "V", "",            "PWL"      };
     case TYPE::V_WHITENOISE:         return { "V", "",            "TRNOISE"  };
     case TYPE::V_PINKNOISE:          return { "V", "",            "TRNOISE"  };
@@ -326,15 +326,15 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     case TYPE::V_RANDUNIFORM:        return { "V", "",            "TRRANDOM" };
     case TYPE::V_RANDNORMAL:         return { "V", "",            "TRRANDOM" };
     case TYPE::V_RANDEXP:            return { "V", "",            "TRRANDOM" };
-    //case TYPE::V_RANDPOISSON:        return { "V", "",            "TRRANDOM" };
+  //case TYPE::V_RANDPOISSON:        return { "V", "",            "TRRANDOM" };
     case TYPE::V_BEHAVIORAL:         return { "B"  };
 
     case TYPE::I:                    return { "I", "",            "DC"       };
     case TYPE::I_PULSE:              return { "I", "",            "PULSE"    };
     case TYPE::I_SIN:                return { "I", "",            "SIN"      };
     case TYPE::I_EXP:                return { "I", "",            "EXP"      };
-    //case TYPE::I_SFAM:               return { "V", "",            "AM"       };
-    //case TYPE::I_SFFM:               return { "V", "",            "SFFM"     };
+  //case TYPE::I_SFAM:               return { "V", "",            "AM"       };
+  //case TYPE::I_SFFM:               return { "V", "",            "SFFM"     };
     case TYPE::I_PWL:                return { "I", "",            "PWL"      };
     case TYPE::I_WHITENOISE:         return { "I", "",            "TRNOISE"  };
     case TYPE::I_PINKNOISE:          return { "I", "",            "TRNOISE"  };
@@ -342,7 +342,7 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     case TYPE::I_RANDUNIFORM:        return { "I", "",            "TRRANDOM" };
     case TYPE::I_RANDNORMAL:         return { "I", "",            "TRRANDOM" };
     case TYPE::I_RANDEXP:            return { "I", "",            "TRRANDOM" };
-    //case TYPE::I_RANDPOISSON:        return { "I", "",            "TRRANDOM" };
+  //case TYPE::I_RANDPOISSON:        return { "I", "",            "TRRANDOM" };
     case TYPE::I_BEHAVIORAL:         return { "B"  };
 
     case TYPE::SUBCKT:               return { "X"  };
