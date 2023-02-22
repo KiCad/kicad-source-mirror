@@ -1465,6 +1465,13 @@ void SIM_PLOT_FRAME::RemoveTuner( TUNER_SLIDER* aTuner, bool aErase )
 
 void SIM_PLOT_FRAME::AddMeasurement( const wxString& aCmd )
 {
+    // -1 because the last one is for user inpu
+    for ( int i = 0; i < m_measurementsGrid->GetNumberRows(); i++ )
+    {
+        if ( m_measurementsGrid->GetCellValue( i, COL_MEASUREMENT ) == aCmd )
+            return; // Don't create duplicates
+    }
+
     SIM_PLOT_PANEL* plotPanel = GetCurrentPlot();
 
     if( !plotPanel )
