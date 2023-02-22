@@ -1670,7 +1670,6 @@ void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
             }
 
             outline.Inflate( clearance, numSegs );
-            outline.Simplify( SHAPE_POLY_SET::PM_FAST );
             outline.Fracture( SHAPE_POLY_SET::PM_FAST );
         }
 
