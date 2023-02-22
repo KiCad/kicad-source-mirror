@@ -96,7 +96,7 @@ SIM_TYPE NGSPICE_CIRCUIT_MODEL::GetSimType()
 
 SIM_TYPE NGSPICE_CIRCUIT_MODEL::CommandToSimType( const wxString& aCmd )
 {
-    wxString cmd = aCmd.Lower();
+    wxString cmd = aCmd.Lower().Trim();
 
     if( cmd.StartsWith( wxT( ".ac" ) ) )
         return ST_AC;
