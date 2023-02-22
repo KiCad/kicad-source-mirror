@@ -496,6 +496,10 @@ void SCH_ALTIUM_PLUGIN::ParseAdditional( const ALTIUM_COMPOUND_FILE& aAltiumSchF
             ParseSignalHarness( properties );
             break;
 
+        case ALTIUM_SCH_RECORD::BLANKET:
+            m_reporter->Report( _( "Blanket not currently supported." ), RPT_SEVERITY_ERROR );
+            break;
+
         default:
             m_reporter->Report( wxString::Format( _( "Unknown or unexpected record ID %d found "
                                                      "inside \"Additional\" section." ),

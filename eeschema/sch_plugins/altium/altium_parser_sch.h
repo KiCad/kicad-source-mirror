@@ -103,6 +103,7 @@ enum class ALTIUM_SCH_RECORD
     HARNESS_ENTRY       = 216,
     HARNESS_TYPE        = 217,
     SIGNAL_HARNESS      = 218,
+    BLANKET             = 225,
     RECORD_226          = 226,
 };
 
