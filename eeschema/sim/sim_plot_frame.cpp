@@ -363,6 +363,11 @@ void MEASUREMENTS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent 
     m_menuRow = aEvent.GetRow();
     m_menuCol = aEvent.GetCol();
 
+    if( !( m_grid->IsInSelection( m_menuRow, m_menuCol ) ) )
+        m_grid->ClearSelection();
+
+    m_grid->SetGridCursor( m_menuRow, m_menuCol );
+
     if( m_menuCol == COL_MEASUREMENT_VALUE )
         menu.Append( MYID_FORMAT_VALUE, _( "Format Value..." ) );
 
@@ -390,7 +395,41 @@ void MEASUREMENTS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
     }
     else if( event.GetId() == MYID_DELETE_MEASUREMENT )
     {
-        m_parent->DeleteMeasurement( m_menuRow );
+        std::vector<int> measurements;
+
+        wxGridCellCoordsArray cells1 = m_grid->GetSelectionBlockTopLeft();
+        wxGridCellCoordsArray cells2 = m_grid->GetSelectionBlockBottomRight();
+
+        for( int i = 0; i < cells1.Count(); i++ )
+        {
+            if( cells1[i].GetCol() == COL_MEASUREMENT )
+            {
+                for( int j = cells1[i].GetRow(); j < cells2[i].GetRow() + 1; j++ )
+                {
+                    measurements.push_back( j );
+                }
+            }
+        }
+
+        wxGridCellCoordsArray cells3 = m_grid->GetSelectedCells();
+
+        for( int i = 0; i < cells3.Count(); i++ )
+        {
+            if( cells3[i].GetCol() == COL_MEASUREMENT )
+                measurements.push_back( cells3[i].GetRow() );
+        }
+
+        if( measurements.size() < 1 )
+            measurements.push_back( m_menuRow );
+
+        // When deleting a row, we'll change the indexes.
+        // To avoid problems, we can start with the highest indexes.
+        sort( measurements.begin(), measurements.end(), std::greater<>() );
+
+        for( int row : measurements )
+            m_parent->DeleteMeasurement( row );
+
+        m_grid->ClearSelection();
     }
     else
     {
