@@ -182,18 +182,6 @@ public:
      * @param aColor The color to mix with this one
      */
     COLOR4D LegacyMix( const COLOR4D& aColor ) const;
-
-    /**
-     * Packs the color into an unsigned int for compatibility with legacy canvas.
-     *
-     * @note This is a lossy downsampling and also that the alpha channel is lost.
-     */
-    unsigned int ToU32() const;
-
-    /**
-     * Unpack from a unsigned int in the legacy EDA_COLOR_T format.
-     */
-    void FromU32( unsigned int aPackedColor );
 #endif /* WX_COMPATIBILITY */
 
 

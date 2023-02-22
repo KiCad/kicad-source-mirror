@@ -227,8 +227,6 @@ wxColour COLOR4D::ToColour() const
     return colour;
 }
 
-#endif
-
 
 COLOR4D COLOR4D::LegacyMix( const COLOR4D& aColor ) const
 {
@@ -244,24 +242,7 @@ COLOR4D COLOR4D::LegacyMix( const COLOR4D& aColor ) const
 
     return candidate;
 }
-
-
-unsigned int COLOR4D::ToU32() const
-{
-    return ToColour().GetRGB();
-}
-
-
-void COLOR4D::FromU32( unsigned int aPackedColor )
-{
-    wxColour c;
-    c.SetRGB( aPackedColor );
-    r = c.Red() / 255.0;
-    g = c.Green() / 255.0;
-    b = c.Blue() / 255.0;
-    a = c.Alpha() / 255.0;
-}
-
+#endif
 
 namespace KIGFX {
 
