@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -189,7 +189,7 @@ void SPICE_MODEL_PARSER::ReadModel( const SIM_LIBRARY_SPICE& aLibrary,
             }
 
             for( int i = 0; i < static_cast<int>( sourceModel->GetParamCount() ); ++i )
-                m_model.SetParamValue( i, *sourceModel->GetParam( i ).value );
+                m_model.SetParamValue( i, sourceModel->GetParam( i ).value );
 
             std::string paramName;
 
@@ -265,7 +265,7 @@ SIM_MODEL::TYPE SPICE_MODEL_PARSER::ReadTypeFromSpiceStrings( const std::string&
                                                               const std::string& aVersion,
                                                               bool aSkipDefaultLevel )
 {
-    std::unique_ptr<SIM_VALUE> readLevel = SIM_VALUE::Create( SIM_VALUE::TYPE_INT, aLevel );
+    std::string readLevel = wxString( aLevel ).BeforeFirst( '.' ).ToStdString();
 
     for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
     {
@@ -279,8 +279,7 @@ SIM_MODEL::TYPE SPICE_MODEL_PARSER::ReadTypeFromSpiceStrings( const std::string&
 
         // Check if `aTypeString` starts with `typePrefix`.
         if( boost::starts_with( boost::to_upper_copy( aTypeString ), typePrefix )
-            && ( level == readLevel->ToString()
-                 || ( !aSkipDefaultLevel && isDefaultLevel && aLevel == "" ) )
+            && ( level == readLevel || ( !aSkipDefaultLevel && isDefaultLevel && aLevel == "" ) )
             && version == aVersion )
         {
             return type;

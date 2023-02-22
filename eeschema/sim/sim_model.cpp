@@ -717,7 +717,7 @@ void SIM_MODEL::AddParam( const PARAM::INFO& aInfo )
 
     // Enums are initialized with their default values.
     if( aInfo.enumValues.size() >= 1 )
-        m_params.back().value->FromString( aInfo.defaultValue );
+        m_params.back().value = aInfo.defaultValue;
 }
 
 
@@ -790,7 +790,7 @@ void SIM_MODEL::SetPinSymbolPinNumber( const std::string& aPinName,
 
 const SIM_MODEL::PARAM& SIM_MODEL::GetParam( unsigned aParamIndex ) const
 {
-    if( m_baseModel && m_params.at( aParamIndex ).value->ToString() == "" )
+    if( m_baseModel && m_params.at( aParamIndex ).value == "" )
         return m_baseModel->GetParam( aParamIndex );
     else
         return m_params.at( aParamIndex );
@@ -847,17 +847,16 @@ const SIM_MODEL::PARAM& SIM_MODEL::GetBaseParam( unsigned aParamIndex ) const
 }
 
 
-void SIM_MODEL::SetParamValue( int aParamIndex, const SIM_VALUE& aValue )
+void SIM_MODEL::doSetParamValue( int aParamIndex, const std::string& aValue )
 {
-    *m_params.at( aParamIndex ).value = aValue;
+    m_params.at( aParamIndex ).value = aValue;
 }
 
 
 void SIM_MODEL::SetParamValue( int aParamIndex, const std::string& aValue,
                                SIM_VALUE::NOTATION aNotation )
 {
-    const SIM_VALUE& value = *GetParam( aParamIndex ).value;
-    SetParamValue( aParamIndex, *SIM_VALUE::Create( value.GetType(), aValue, aNotation ) );
+    doSetParamValue( aParamIndex, SIM_VALUE::Normalize( aValue, aNotation ) );
 }
 
 
@@ -882,7 +881,7 @@ bool SIM_MODEL::HasOverrides() const
 {
     for( const PARAM& param : m_params )
     {
-        if( param.value->ToString() != "" )
+        if( param.value != "" )
             return true;
     }
 
@@ -894,7 +893,7 @@ bool SIM_MODEL::HasNonInstanceOverrides() const
 {
     for( const PARAM& param : m_params )
     {
-        if( !param.info.isInstanceParam && param.value->ToString() != "" )
+        if( !param.info.isInstanceParam && param.value != "" )
             return true;
     }
 
@@ -906,7 +905,7 @@ bool SIM_MODEL::HasSpiceNonInstanceOverrides() const
 {
     for( const PARAM& param : m_params )
     {
-        if( !param.info.isSpiceInstanceParam && param.value->ToString() != "" )
+        if( !param.info.isSpiceInstanceParam && param.value != "" )
             return true;
     }
 

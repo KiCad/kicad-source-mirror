@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,73 +76,24 @@ public:
         TYPE_COMPLEX_VECTOR
     };
 
-    static std::unique_ptr<SIM_VALUE> Create( TYPE aType, const std::string& aString,
-                                              NOTATION aNotation = NOTATION::SI );
-    static std::unique_ptr<SIM_VALUE> Create( TYPE aType );
+    static std::string ConvertNotation( const std::string& aString, NOTATION aFromNotation,
+                                        NOTATION aToNotation );
 
-    virtual ~SIM_VALUE() = default;
-    SIM_VALUE() = default;
+    static std::string Normalize( const std::string& aString, NOTATION aNotation )
+    {
+        // Note: also converts decimal separators to '.'
+        return ConvertNotation( aString, aNotation, NOTATION::SI );
+    }
 
-    virtual TYPE GetType() const = 0;
+    static std::string ToSpice( const std::string& aString )
+    {
+        return ConvertNotation( aString, NOTATION::SI, NOTATION::SPICE );
+    }
 
-    SIM_VALUE& operator=( const std::string& aString );
-    virtual SIM_VALUE& operator=( const SIM_VALUE& aValue ) = 0;
-    virtual bool operator==( const SIM_VALUE& aOther ) const = 0;
-    bool operator!=( const SIM_VALUE& aOther ) const;
+    static double ToDouble( const std::string& aString, double aDefault = NAN );
 
-    virtual bool FromString( const std::string& aString, NOTATION aNotation = NOTATION::SI ) = 0;
-    virtual std::string ToString( NOTATION aNotation = NOTATION::SI ) const = 0;
-    std::string ToSpiceString() const { return ToString( NOTATION::SPICE ); }
+    static int ToInt( const std::string& aString, int aDefault = -1 );
 };
-
-
-template <typename T>
-class SIM_VALUE_INST : public SIM_VALUE
-{
-public:
-    SIM_VALUE_INST() = default;
-    SIM_VALUE_INST( const T& aValue );
-
-    TYPE GetType() const override;
-
-    // TODO: Don't pass aNotation. Make a FromSpiceString() function instead.
-    // TODO: Don't use FromString(). Use assignment. Values should be immutable.
-    bool FromString( const std::string& aString, NOTATION aNotation = NOTATION::SI ) override;
-    std::string ToString( NOTATION aNotation = NOTATION::SI ) const override;
-
-    SIM_VALUE_INST& operator=( const SIM_VALUE& aOther ) override;
-    bool operator==( const T& aOther ) const;
-    bool operator==( const SIM_VALUE& aOther ) const override;
-
-    template <typename Type>
-    friend SIM_VALUE_INST<Type> operator+( const SIM_VALUE_INST<Type>& aLeft,
-                                           const SIM_VALUE_INST<Type>& aRight );
-
-    template <typename Type>
-    friend SIM_VALUE_INST<Type> operator-( const SIM_VALUE_INST<Type>& aLeft,
-                                           const SIM_VALUE_INST<Type>& aRight );
-
-    template <typename Type>
-    friend SIM_VALUE_INST<Type> operator*( const SIM_VALUE_INST<Type>& aLeft,
-                                           const SIM_VALUE_INST<Type>& aRight );
-
-    template <typename Type>
-    friend SIM_VALUE_INST<Type> operator/( const SIM_VALUE_INST<Type>& aLeft,
-                                           const SIM_VALUE_INST<Type>& aRight );
-
-    std::optional<T> Get() { return m_value; };
-
-private:
-    std::string getMetricSuffix();
-
-    std::optional<T> m_value = std::nullopt;
-};
-
-typedef SIM_VALUE_INST<bool> SIM_VALUE_BOOL;
-typedef SIM_VALUE_INST<int> SIM_VALUE_INT;
-typedef SIM_VALUE_INST<double> SIM_VALUE_FLOAT;
-typedef SIM_VALUE_INST<std::complex<double>> SIM_VALUE_COMPLEX;
-typedef SIM_VALUE_INST<std::string> SIM_VALUE_STRING;
 
 
 namespace SIM_VALUE_GRAMMAR

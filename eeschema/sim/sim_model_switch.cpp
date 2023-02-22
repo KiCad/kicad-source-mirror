@@ -69,7 +69,7 @@ std::string SPICE_GENERATOR_SWITCH::ItemParams() const
     for( const SIM_MODEL::PARAM& param : GetInstanceParams() )
     {
         // The only instance param is "ic", which is positional.
-        std::string value = param.value->ToSpiceString();
+        std::string value = param.value;
 
         if( value != "none" )
             result.append( value );

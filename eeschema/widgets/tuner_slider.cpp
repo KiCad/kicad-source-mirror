@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -68,7 +68,7 @@ TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent,
     // Special case for potentiometers because we don't have value ranges implemented yet.
     if( item->model->GetType() == SIM_MODEL::TYPE::R_POT )
     {
-        std::string valueStr = item->model->GetTunerParam()->value->ToSpiceString();
+        std::string valueStr = SIM_VALUE::ToSpice( item->model->GetTunerParam()->value );
 
         if( valueStr != "" )
             m_value = SPICE_VALUE( valueStr );
@@ -80,7 +80,7 @@ TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent,
     }
     else
     {
-        m_value = SPICE_VALUE( item->model->GetTunerParam()->value->ToSpiceString() );
+        m_value = SPICE_VALUE( SIM_VALUE::ToSpice( item->model->GetTunerParam()->value ) );
         m_min = SPICE_VALUE( 0.5 ) * m_value;
         m_max = SPICE_VALUE( 2.0 ) * m_value;
     }

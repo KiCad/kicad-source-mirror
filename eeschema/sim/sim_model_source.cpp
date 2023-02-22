@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,9 +53,9 @@ std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
     std::string dc = "";
 
     if( m_model.FindParam( "ac" ) )
-        ac = m_model.FindParam( "ac" )->value->ToSpiceString();
+        ac = SIM_VALUE::ToSpice( m_model.FindParam( "ac" )->value );
     if( m_model.FindParam( "dc" ) )
-        dc = m_model.FindParam( "dc" )->value->ToSpiceString();
+        dc = SIM_VALUE::ToSpice( m_model.FindParam( "dc" )->value );
 
     bool emptyLine = true;
     item.modelName = "";
@@ -82,8 +82,7 @@ std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
         case SIM_MODEL::TYPE::V_PWL:
         case SIM_MODEL::TYPE::I_PWL:
         {
-            tao::pegtl::string_input<> in( m_model.GetParam( 0 ).value->ToString(),
-                                           "from_content" );
+            tao::pegtl::string_input<> in( m_model.GetParam( 0 ).value, "from_content" );
             std::unique_ptr<tao::pegtl::parse_tree::node> root;
 
             try
@@ -104,9 +103,7 @@ std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
                     if( node->is_type<SIM_MODEL_SOURCE_PARSER::number<SIM_VALUE::TYPE_FLOAT,
                                                                       SIM_VALUE::NOTATION::SI>>() )
                     {
-                        std::unique_ptr<SIM_VALUE> value = SIM_VALUE::Create( SIM_VALUE::TYPE_FLOAT,
-                                                                              node->string() );
-                        args.append( value->ToString( SIM_VALUE::NOTATION::SPICE ) + " " );
+                        args.append( SIM_VALUE::ToSpice( node->string() ) + " " );
                     }
                 }
             }
@@ -143,16 +140,17 @@ std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
         case SIM_MODEL::TYPE::V_RANDUNIFORM:
         case SIM_MODEL::TYPE::I_RANDUNIFORM:
         {
+            /* JEY TODO
             args.append( "1 " );
             args.append( getParamValueString( "dt", "0" ) + " " );
             args.append( getParamValueString( "td", "0" ) + " " );
 
-            SIM_VALUE_FLOAT min = dynamic_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "max" )->value );
+            SIM_VALUE_FLOAT min = dynamic_cast<SIM_VALUE_FLOAT&>( m_model.FindParam( "max" )->value );
 
             if( !min.ToString().empty() )
                 min.FromString( "0" );
 
-            SIM_VALUE_FLOAT max = dynamic_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "min" )->value );
+            SIM_VALUE_FLOAT max = dynamic_cast<SIM_VALUE_FLOAT&>( m_model.FindParam( "min" )->value );
 
             if( !max.ToString().empty() )
                 max.FromString( "0" );
@@ -162,7 +160,7 @@ std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
 
             args.append( range.ToSpiceString() + " " );
             args.append( offset.ToSpiceString() + " " );
-
+            */
             break;
         }
 
@@ -196,7 +194,7 @@ std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
         default:
             for( const SIM_MODEL::PARAM& param : m_model.GetParams() )
             {
-                std::string argStr = param.value->ToString( SIM_VALUE_GRAMMAR::NOTATION::SPICE );
+                std::string argStr = SIM_VALUE::ToSpice( param.value );
 
                 if( argStr != "" )
                     args.append( argStr + " " );
@@ -214,7 +212,7 @@ std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
         std::string ph = "";
 
         if( m_model.FindParam( "ph" ) )
-            ph = m_model.FindParam( "ph" )->value->ToSpiceString();
+            ph = SIM_VALUE::ToSpice( m_model.FindParam( "ph" )->value );
 
         emptyLine = false;
         item.modelName += fmt::format( "AC {} {}", ac, ph );
@@ -222,7 +220,7 @@ std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
 
     if( emptyLine )
     {
-        item.modelName = m_model.GetParam( 0 ).value->ToSpiceString();
+        item.modelName = SIM_VALUE::ToSpice( m_model.GetParam( 0 ).value );
     }
 
     return SPICE_GENERATOR::ItemLine( item );
@@ -235,7 +233,7 @@ std::string SPICE_GENERATOR_SOURCE::getParamValueString( const std::string& aPar
     std::string result = "";
 
     if ( m_model.FindParam( aParamName ) )
-        result = m_model.FindParam( aParamName )->value->ToSpiceString();
+        result = SIM_VALUE::ToSpice( m_model.FindParam( aParamName )->value );
 
     if( result == "" )
         result = aDefaultValue;
@@ -253,32 +251,32 @@ SIM_MODEL_SOURCE::SIM_MODEL_SOURCE( TYPE aType ) :
 }
 
 
-void SIM_MODEL_SOURCE::SetParamValue( int aParamIndex, const SIM_VALUE& aValue )
+void SIM_MODEL_SOURCE::doSetParamValue( int aParamIndex, const std::string& aValue )
 {
     // Sources are special. All preceding parameter values must be filled. If they are not, fill
     // them out automatically. If a value is nulled, delete everything after it.
-    if( aValue.ToString().empty() )
+    if( aValue.empty() )
     {
         for( int paramIndex = static_cast<int>( aParamIndex );
              paramIndex < GetParamCount();
              ++paramIndex )
         {
-            m_params.at( aParamIndex ).value->FromString( "" );
+            m_params.at( aParamIndex ).value = "";
         }
     }
     else
     {
         for( int paramIndex = 0; paramIndex < aParamIndex; ++paramIndex )
         {
-            if( GetParam( paramIndex ).value->ToString() == "" )
+            if( GetParam( paramIndex ).value == "" )
             {
-                m_params.at( aParamIndex ).value->FromString( "0" );
+                m_params.at( aParamIndex ).value = "0";
                 SIM_MODEL::SetParamValue( paramIndex, "0" );
             }
         }
     }
 
-    return SIM_MODEL::SetParamValue( aParamIndex, aValue );
+    return SIM_MODEL::doSetParamValue( aParamIndex, aValue );
 }
 
 

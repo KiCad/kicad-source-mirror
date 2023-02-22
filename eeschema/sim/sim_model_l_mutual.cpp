@@ -30,7 +30,7 @@ std::string SPICE_GENERATOR_L_MUTUAL::ItemParams() const
     std::string result;
 
     for( const SIM_MODEL::PARAM& param : GetInstanceParams() )
-        result.append( " " + param.value->ToSpiceString() );
+        result.append( " " + SIM_VALUE::ToSpice( param.value ) );
 
     return result;
 }

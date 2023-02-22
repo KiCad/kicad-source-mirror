@@ -111,18 +111,18 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const PR
     KIBIS_PARAMETER kparams;
 
     if ( m_model.FindParam( "vcc" ) )
-        kparams.SetCornerFromString( kparams.m_supply, m_model.FindParam( "vcc" )->value->ToString() );
+        kparams.SetCornerFromString( kparams.m_supply, m_model.FindParam( "vcc" )->value );
     
     if ( m_model.FindParam( "rpin" ) )
-        kparams.SetCornerFromString( kparams.m_Rpin, m_model.FindParam( "rpin" )->value->ToString() );
+        kparams.SetCornerFromString( kparams.m_Rpin, m_model.FindParam( "rpin" )->value );
 
     if ( m_model.FindParam( "lpin" ) )
-    kparams.SetCornerFromString( kparams.m_Lpin, m_model.FindParam( "lpin" )->value->ToString() );
+        kparams.SetCornerFromString( kparams.m_Lpin, m_model.FindParam( "lpin" )->value );
 
     if ( m_model.FindParam( "cpin" ) )
-    kparams.SetCornerFromString( kparams.m_Cpin, m_model.FindParam( "cpin" )->value->ToString() );
+        kparams.SetCornerFromString( kparams.m_Cpin, m_model.FindParam( "cpin" )->value );
 
-    //kparams.SetCornerFromString( kparams.m_Ccomp, FindParam( "ccomp" )->value->ToString() );
+    //kparams.SetCornerFromString( kparams.m_Ccomp, FindParam( "ccomp" )->value );
 
     std::string result;
 
@@ -140,7 +140,7 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const PR
         std::string paramValue = "";
 
         if ( m_model.FindParam( "dc" ) )
-            paramValue = m_model.FindParam( "dc" )->value->ToString();
+            paramValue = m_model.FindParam( "dc" )->value;
 
         if( paramValue == "hi-Z" )
         {
@@ -167,16 +167,16 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const PR
         KIBIS_WAVEFORM_RECTANGULAR* waveform = new KIBIS_WAVEFORM_RECTANGULAR( &kibis );
 
         if ( m_model.FindParam( "ton" ) )
-            waveform->m_ton = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "ton" )->value ).Get().value_or( 1 );
+            waveform->m_ton = SIM_VALUE::ToDouble( m_model.FindParam( "ton" )->value, 1 );
 
         if ( m_model.FindParam( "toff" ) )
-            waveform->m_toff = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "toff" )->value ).Get().value_or( 1 );
+            waveform->m_toff = SIM_VALUE::ToDouble( m_model.FindParam( "toff" )->value, 1 );
 
         if ( m_model.FindParam( "td" ) )
-            waveform->m_delay = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "td" )->value ).Get().value_or( 0 );
+            waveform->m_delay = SIM_VALUE::ToDouble( m_model.FindParam( "td" )->value, 0 );
 
         if ( m_model.FindParam( "n" ) )
-            waveform->m_cycles = static_cast<SIM_VALUE_INT&>( *m_model.FindParam( "n" )->value ).Get().value_or( 1 );
+            waveform->m_cycles = SIM_VALUE::ToInt( m_model.FindParam( "n" )->value, 1 );
 
         kparams.m_waveform = waveform;
 
@@ -192,13 +192,13 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const PR
         KIBIS_WAVEFORM_PRBS* waveform = new KIBIS_WAVEFORM_PRBS( &kibis );
 
         if ( m_model.FindParam( "f0" ) )
-            waveform->m_bitrate = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "f0" )->value ).Get().value_or( 0 );
+            waveform->m_bitrate = SIM_VALUE::ToDouble( m_model.FindParam( "f0" )->value, 0 );
 
         if ( m_model.FindParam( "td" ) )
-            waveform->m_delay = static_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "td" )->value ).Get().value_or( 0 );
+            waveform->m_delay = SIM_VALUE::ToDouble( m_model.FindParam( "td" )->value, 0 );
 
         if ( m_model.FindParam( "n" ) )
-            waveform->m_bits = static_cast<SIM_VALUE_INT&>( *m_model.FindParam( "n" )->value ).Get().value_or( 0 );
+            waveform->m_bits = SIM_VALUE::ToInt( m_model.FindParam( "n" )->value, 0 );
 
         kparams.m_waveform = waveform;
 
@@ -276,7 +276,7 @@ SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType, const SIM_MODEL_KIBIS& aSource ) :
             const PARAM& param2 = param2refwrap.get();
 
             if( param1.info.name == param2.info.name )
-                *( param1.value ) = *( param2.value );
+                param1.value = param2.value;
         }
     }
 

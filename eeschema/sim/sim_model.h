@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2022 Mikolaj Wielgus
  * Copyright (C) 2022 CERN
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -377,12 +377,11 @@ public:
             }
         };
 
-        std::unique_ptr<SIM_VALUE> value;
-        const INFO&                info;
+        std::string  value;
+        const INFO&  info;
 
-        PARAM( const INFO& aInfo )
-            : value( SIM_VALUE::Create( aInfo.type ) ),
-              info( aInfo )
+        PARAM( const INFO& aInfo ) :
+                info( aInfo )
         {}
     };
 
@@ -487,7 +486,6 @@ public:
     const PARAM& GetBaseParam( unsigned aParamIndex ) const; // Always return base parameter if it exists.
 
 
-    virtual void SetParamValue( int aParamIndex, const SIM_VALUE& aValue );
     void SetParamValue( int aParamIndex, const std::string& aValue,
                         SIM_VALUE::NOTATION aNotation = SIM_VALUE::NOTATION::SI );
     void SetParamValue( const std::string& aParamName, const std::string& aValue,
@@ -532,6 +530,7 @@ protected:
     void createPins( const std::vector<LIB_PIN*>& aSymbolPins );
 
     virtual int doFindParam( const std::string& aParamName ) const;
+    virtual void doSetParamValue( int aParamIndex, const std::string& aValue );
 
 private:
     template <typename T>

@@ -501,7 +501,7 @@ void NETLIST_EXPORTER_SPICE::readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSym
     if( auto rawSpiceModel = dynamic_cast<const SIM_MODEL_RAW_SPICE*>( aItem.model ) )
     {
         int      libParamIndex = static_cast<int>( SIM_MODEL_RAW_SPICE::SPICE_PARAM::LIB );
-        wxString path = rawSpiceModel->GetParam( libParamIndex ).value->ToString();
+        wxString path = rawSpiceModel->GetParam( libParamIndex ).value;
 
         if( !path.IsEmpty() )
             m_rawIncludes.insert( path );

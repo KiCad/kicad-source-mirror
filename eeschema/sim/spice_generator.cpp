@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -85,7 +85,7 @@ std::string SPICE_GENERATOR::ModelLine( const SPICE_ITEM& aItem ) const
                 name = param.info.name;
         }
 
-        value = param.value->ToSpiceString();
+        value = SIM_VALUE::ToSpice( param.value );
 
         if( value == "" )
             continue;
@@ -174,7 +174,7 @@ std::string SPICE_GENERATOR::ItemParams() const
     {
         std::string name = param.info.spiceInstanceName.empty() ? param.info.name
                                                                 : param.info.spiceInstanceName;
-        std::string value = param.value->ToSpiceString();
+        std::string value = SIM_VALUE::ToSpice( param.value );
 
         if( value != "" )
             result.append( fmt::format( " {}={}", name, value ) );
@@ -184,8 +184,7 @@ std::string SPICE_GENERATOR::ItemParams() const
 }
 
 
-std::string SPICE_GENERATOR::TunerCommand( const SPICE_ITEM& aItem,
-                                           const SIM_VALUE_FLOAT& aValue ) const
+std::string SPICE_GENERATOR::TunerCommand( const SPICE_ITEM& aItem, double aValue ) const
 {
     // No tuning available by default.
     return "";

@@ -58,12 +58,12 @@ public:
                            fmt::format( "{}{}_Usual",
                                         boost::to_upper_copy( aModel.GetSpiceInfo().modelType ),
                                         aModelIndex ) );
-        BOOST_CHECK_EQUAL( aModel.FindParam( "bv" )->value->ToString(), "1.1u" );
-        BOOST_CHECK_EQUAL( aModel.FindParam( "cjo" )->value->ToString(), "2.2m" );
-        BOOST_CHECK_EQUAL( aModel.FindParam( "ibv" )->value->ToString(), "3.3" );
-        BOOST_CHECK_EQUAL( aModel.FindParam( "is" )->value->ToString(), "4.4k" );
-        BOOST_CHECK_EQUAL( aModel.FindParam( "m_" )->value->ToString(), "5.5M" );
-        BOOST_CHECK_EQUAL( aModel.FindParam( "n" )->value->ToString(), "6.6G" );
+        BOOST_CHECK_EQUAL( aModel.FindParam( "bv" )->value, "1.1u" );
+        BOOST_CHECK_EQUAL( aModel.FindParam( "cjo" )->value, "2.2m" );
+        BOOST_CHECK_EQUAL( aModel.FindParam( "ibv" )->value, "3.3" );
+        BOOST_CHECK_EQUAL( aModel.FindParam( "is" )->value, "4.4k" );
+        BOOST_CHECK_EQUAL( aModel.FindParam( "m_" )->value, "5.5M" );
+        BOOST_CHECK_EQUAL( aModel.FindParam( "n" )->value, "6.6G" );
     }
 
     void CompareToEmptyModel( const SIM_MODEL& aModel, const std::string& aModelName, int aModelIndex )
@@ -79,7 +79,7 @@ public:
             {
                 BOOST_TEST_CONTEXT( "Param name: " << aModel.GetParam( i ).info.name )
                 {
-                    BOOST_CHECK_EQUAL( aModel.GetParamOverride( i ).value->ToString(), "" );
+                    BOOST_CHECK_EQUAL( aModel.GetParamOverride( i ).value, "" );
                 }
             }
         }
@@ -125,16 +125,19 @@ public:
                 BOOST_TEST_CONTEXT( "Param name: " << paramName )
                 {
                     if( i % 10 == 0 )
-                        BOOST_CHECK_EQUAL( aModel.FindParam( paramName )->value->ToString(), "0" );
+                    {
+                        BOOST_CHECK( aModel.FindParam( paramName )->value == "0M"
+                                     || aModel.FindParam( paramName )->value == "0" );
+                    }
                     else if( aModel.FindParam( paramName )->info.type == SIM_VALUE::TYPE_INT )
                     {
-                        BOOST_CHECK_EQUAL( aModel.FindParam( paramName )->value->ToString(),
+                        BOOST_CHECK_EQUAL( aModel.FindParam( paramName )->value,
                                            fmt::format( "{:d}", i % 10 ) );
                     }
                     else
                     {
-                        BOOST_CHECK_EQUAL( aModel.FindParam( paramName )->value->ToString(),
-                                           fmt::format( "{}.0000{}G", i % 10, i % 10 ) );
+                        BOOST_CHECK_EQUAL( aModel.FindParam( paramName )->value,
+                                           fmt::format( "{}000.0{}M", i % 10, i % 10 ) );
                     }
                 }
             }
@@ -253,35 +256,35 @@ BOOST_AUTO_TEST_CASE( Diodes )
         case 0:
             BOOST_CHECK( model.GetType() == SIM_MODEL::TYPE::D );
             BOOST_CHECK_EQUAL( modelName, "1N4148" );
-            BOOST_CHECK_EQUAL( model.FindParam( "bv" )->value->ToString(), "100" );
-            BOOST_CHECK_EQUAL( model.FindParam( "cjo" )->value->ToString(), "4p" );
-            BOOST_CHECK_EQUAL( model.FindParam( "ibv" )->value->ToString(), "100u" );
-            BOOST_CHECK_EQUAL( model.FindParam( "is" )->value->ToString(), "4n" );
-            BOOST_CHECK_EQUAL( model.FindParam( "m_" )->value->ToString(), "330m" );
-            BOOST_CHECK_EQUAL( model.FindParam( "n" )->value->ToString(), "2" );
-            BOOST_CHECK_EQUAL( model.FindParam( "rs" )->value->ToString(), "500m" );
-            BOOST_CHECK_EQUAL( model.FindParam( "tt" )->value->ToString(), "10n" );
-            BOOST_CHECK_EQUAL( model.FindParam( "vj" )->value->ToString(), "800m" );
+            BOOST_CHECK_EQUAL( model.FindParam( "bv" )->value, "100" );
+            BOOST_CHECK_EQUAL( model.FindParam( "cjo" )->value, "4p" );
+            BOOST_CHECK_EQUAL( model.FindParam( "ibv" )->value, "100u" );
+            BOOST_CHECK_EQUAL( model.FindParam( "is" )->value, "4n" );
+            BOOST_CHECK_EQUAL( model.FindParam( "m_" )->value, "0.33" );
+            BOOST_CHECK_EQUAL( model.FindParam( "n" )->value, "2" );
+            BOOST_CHECK_EQUAL( model.FindParam( "rs" )->value, "0.5" );
+            BOOST_CHECK_EQUAL( model.FindParam( "tt" )->value, "10n" );
+            BOOST_CHECK_EQUAL( model.FindParam( "vj" )->value, "0.8" );
             break;
 
         case 1:
             BOOST_CHECK( model.GetType() == SIM_MODEL::TYPE::D );
             BOOST_CHECK_EQUAL( modelName, "D1" );
-            BOOST_CHECK_EQUAL( model.FindParam( "is" )->value->ToString(), "1.23n" );
-            BOOST_CHECK_EQUAL( model.FindParam( "n" )->value->ToString(), "1.23" );
-            BOOST_CHECK_EQUAL( model.FindParam( "rs" )->value->ToString(), "789m" );
-            BOOST_CHECK_EQUAL( model.FindParam( "ikf" )->value->ToString(), "12.34m" );
-            BOOST_CHECK_EQUAL( model.FindParam( "xti" )->value->ToString(), "3" );
-            BOOST_CHECK_EQUAL( model.FindParam( "eg" )->value->ToString(), "1.23" );
-            BOOST_CHECK_EQUAL( model.FindParam( "cjo" )->value->ToString(), "900f" );
-            BOOST_CHECK_EQUAL( model.FindParam( "m_" )->value->ToString(), "560m" );
-            BOOST_CHECK_EQUAL( model.FindParam( "vj" )->value->ToString(), "780m" );
-            BOOST_CHECK_EQUAL( model.FindParam( "fc" )->value->ToString(), "900m" );
-            BOOST_CHECK_EQUAL( model.FindParam( "isr" )->value->ToString(), "12.34n" );
-            BOOST_CHECK_EQUAL( model.FindParam( "nr" )->value->ToString(), "2.345" );
-            BOOST_CHECK_EQUAL( model.FindParam( "bv" )->value->ToString(), "100" );
-            BOOST_CHECK_EQUAL( model.FindParam( "ibv" )->value->ToString(), "100u" );
-            BOOST_CHECK_EQUAL( model.FindParam( "tt" )->value->ToString(), "12.34n" );
+            BOOST_CHECK_EQUAL( model.FindParam( "is" )->value, "1.23n" );
+            BOOST_CHECK_EQUAL( model.FindParam( "n" )->value, "1.23" );
+            BOOST_CHECK_EQUAL( model.FindParam( "rs" )->value, "0.789" );
+            BOOST_CHECK_EQUAL( model.FindParam( "ikf" )->value, "12.34m" );
+            BOOST_CHECK_EQUAL( model.FindParam( "xti" )->value, "3" );
+            BOOST_CHECK_EQUAL( model.FindParam( "eg" )->value, "1.23" );
+            BOOST_CHECK_EQUAL( model.FindParam( "cjo" )->value, "0.9p" );
+            BOOST_CHECK_EQUAL( model.FindParam( "m_" )->value, "0.56" );
+            BOOST_CHECK_EQUAL( model.FindParam( "vj" )->value, "0.78" );
+            BOOST_CHECK_EQUAL( model.FindParam( "fc" )->value, "0.9" );
+            BOOST_CHECK_EQUAL( model.FindParam( "isr" )->value, "12.34n" );
+            BOOST_CHECK_EQUAL( model.FindParam( "nr" )->value, "2.345" );
+            BOOST_CHECK_EQUAL( model.FindParam( "bv" )->value, "100" );
+            BOOST_CHECK_EQUAL( model.FindParam( "ibv" )->value, "100u" );
+            BOOST_CHECK_EQUAL( model.FindParam( "tt" )->value, "12.34n" );
             break;
 
         case 2:
@@ -292,12 +295,12 @@ BOOST_AUTO_TEST_CASE( Diodes )
         case 4:
             BOOST_CHECK( model.GetType() == SIM_MODEL::TYPE::D );
             BOOST_CHECK_EQUAL( modelName, "D4" );
-            BOOST_CHECK_EQUAL( model.FindParam( "is" )->value->ToString(), "100f" );
-            BOOST_CHECK_EQUAL( model.FindParam( "rs" )->value->ToString(), "2" );
-            BOOST_CHECK_EQUAL( model.FindParam( "cjo" )->value->ToString(), "3p" );
-            BOOST_CHECK_EQUAL( model.FindParam( "tt" )->value->ToString(), "45n" );
-            BOOST_CHECK_EQUAL( model.FindParam( "bv" )->value->ToString(), "678" );
-            BOOST_CHECK_EQUAL( model.FindParam( "ibv" )->value->ToString(), "100f" );
+            BOOST_CHECK_EQUAL( model.FindParam( "is" )->value, "0.1p" );
+            BOOST_CHECK_EQUAL( model.FindParam( "rs" )->value, "2" );
+            BOOST_CHECK_EQUAL( model.FindParam( "cjo" )->value, "3p" );
+            BOOST_CHECK_EQUAL( model.FindParam( "tt" )->value, "45n" );
+            BOOST_CHECK_EQUAL( model.FindParam( "bv" )->value, "678" );
+            BOOST_CHECK_EQUAL( model.FindParam( "ibv" )->value, "0.1p" );
             break;
 
         case 5:
@@ -322,12 +325,12 @@ BOOST_AUTO_TEST_CASE( Diodes )
         case 18:
             BOOST_CHECK( model.GetType() == SIM_MODEL::TYPE::D );
             BOOST_CHECK_EQUAL( modelName, "D<>/?:\\|[]!@#$%^&-_18" );
-            BOOST_CHECK_EQUAL( model.FindParam( "n" )->value->ToString(), "-1.1" );
-            BOOST_CHECK_EQUAL( model.FindParam( "m_" )->value->ToString(), "2.2" );
-            BOOST_CHECK_EQUAL( model.FindParam( "is" )->value->ToString(), "-3.3m" );
-            BOOST_CHECK_EQUAL( model.FindParam( "ibv" )->value->ToString(), "44k" );
-            BOOST_CHECK_EQUAL( model.FindParam( "cjo" )->value->ToString(), "55u" );
-            BOOST_CHECK_EQUAL( model.FindParam( "bv" )->value->ToString(), "6.6M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "n" )->value, "-1.1" );
+            BOOST_CHECK_EQUAL( model.FindParam( "m_" )->value, "2.2" );
+            BOOST_CHECK_EQUAL( model.FindParam( "is" )->value, "-3.3m" );
+            BOOST_CHECK_EQUAL( model.FindParam( "ibv" )->value, "44k" );
+            BOOST_CHECK_EQUAL( model.FindParam( "cjo" )->value, "55u" );
+            BOOST_CHECK_EQUAL( model.FindParam( "bv" )->value, "6.6M" );
             break;
 
         case 19:
@@ -339,115 +342,115 @@ BOOST_AUTO_TEST_CASE( Diodes )
         case 22:
             BOOST_CHECK( model.GetType() == SIM_MODEL::TYPE::D );
             BOOST_CHECK_EQUAL( modelName, "D22" );
-            BOOST_CHECK_EQUAL( model.FindParam( "is" )->value->ToString(), "11.1n" );
-            BOOST_CHECK_EQUAL( model.FindParam( "n" )->value->ToString(), "2.2" );
-            BOOST_CHECK_EQUAL( model.FindParam( "rs" )->value->ToString(), "33.3m" );
-            BOOST_CHECK_EQUAL( model.FindParam( "ikf" )->value->ToString(), "99.9" );
-            BOOST_CHECK_EQUAL( model.FindParam( "xti" )->value->ToString(), "3" );
-            BOOST_CHECK_EQUAL( model.FindParam( "eg" )->value->ToString(), "1.1" );
+            BOOST_CHECK_EQUAL( model.FindParam( "is" )->value, "11.1n" );
+            BOOST_CHECK_EQUAL( model.FindParam( "n" )->value, "2.2" );
+            BOOST_CHECK_EQUAL( model.FindParam( "rs" )->value, "33.3m" );
+            BOOST_CHECK_EQUAL( model.FindParam( "ikf" )->value, "99.9" );
+            BOOST_CHECK_EQUAL( model.FindParam( "xti" )->value, "3" );
+            BOOST_CHECK_EQUAL( model.FindParam( "eg" )->value, "1.1" );
             break;
 
         case 23:
             BOOST_CHECK( model.GetType() == SIM_MODEL::TYPE::D );
             BOOST_CHECK_EQUAL( modelName, "D23" );
-            BOOST_CHECK_EQUAL( model.FindParam( "is" )->value->ToString(), "11.1n" );
-            BOOST_CHECK_EQUAL( model.FindParam( "n" )->value->ToString(), "2.2" );
-            BOOST_CHECK_EQUAL( model.FindParam( "rs" )->value->ToString(), "33.3m" );
-            BOOST_CHECK_EQUAL( model.FindParam( "ikf" )->value->ToString(), "111.1" );
-            BOOST_CHECK_EQUAL( model.FindParam( "xti" )->value->ToString(), "3" );
-            BOOST_CHECK_EQUAL( model.FindParam( "eg" )->value->ToString(), "2.2" );
-            BOOST_CHECK_EQUAL( model.FindParam( "m_" )->value->ToString(), "300m" );
+            BOOST_CHECK_EQUAL( model.FindParam( "is" )->value, "11.1n" );
+            BOOST_CHECK_EQUAL( model.FindParam( "n" )->value, "2.2" );
+            BOOST_CHECK_EQUAL( model.FindParam( "rs" )->value, "33.3m" );
+            BOOST_CHECK_EQUAL( model.FindParam( "ikf" )->value, "111.1" );
+            BOOST_CHECK_EQUAL( model.FindParam( "xti" )->value, "3" );
+            BOOST_CHECK_EQUAL( model.FindParam( "eg" )->value, "2.2" );
+            BOOST_CHECK_EQUAL( model.FindParam( "m_" )->value, "0.3" );
             break;
 
         case 24:
             BOOST_CHECK( model.GetType() == SIM_MODEL::TYPE::D );
             BOOST_CHECK_EQUAL( modelName, "D24" );
-            BOOST_CHECK_EQUAL( model.FindParam( "is" )->value->ToString(), "11.1n" );
-            BOOST_CHECK_EQUAL( model.FindParam( "n" )->value->ToString(), "1.1" );
-            BOOST_CHECK_EQUAL( model.FindParam( "rs" )->value->ToString(), "33.3m" );
-            BOOST_CHECK_EQUAL( model.FindParam( "ikf" )->value->ToString(), "99.9" );
-            BOOST_CHECK_EQUAL( model.FindParam( "xti" )->value->ToString(), "3" );
-            BOOST_CHECK_EQUAL( model.FindParam( "eg" )->value->ToString(), "1.1" );
+            BOOST_CHECK_EQUAL( model.FindParam( "is" )->value, "11.1n" );
+            BOOST_CHECK_EQUAL( model.FindParam( "n" )->value, "1.1" );
+            BOOST_CHECK_EQUAL( model.FindParam( "rs" )->value, "33.3m" );
+            BOOST_CHECK_EQUAL( model.FindParam( "ikf" )->value, "99.9" );
+            BOOST_CHECK_EQUAL( model.FindParam( "xti" )->value, "3" );
+            BOOST_CHECK_EQUAL( model.FindParam( "eg" )->value, "1.1" );
             break;
 
         case 25:
             BOOST_CHECK( model.GetType() == SIM_MODEL::TYPE::D );
             BOOST_CHECK_EQUAL( modelName, "D25" );
             //level
-            BOOST_CHECK_EQUAL( model.FindParam( "is" )->value->ToString(), "0" );
+            BOOST_CHECK_EQUAL( model.FindParam( "is" )->value, "0M" );
             //js
-            BOOST_CHECK_EQUAL( model.FindParam( "jsw" )->value->ToString(), "1.00001G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "tnom" )->value->ToString(), "2.00002G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "jsw" )->value, "1000.01M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "tnom" )->value, "2000.02M" );
             //tref
-            BOOST_CHECK_EQUAL( model.FindParam( "rs" )->value->ToString(), "3.00003G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "trs" )->value->ToString(), "4.00004G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "rs" )->value, "3000.03M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "trs" )->value, "4000.04M" );
             //trs1
-            BOOST_CHECK_EQUAL( model.FindParam( "trs2" )->value->ToString(), "5.00005G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "n" )->value->ToString(), "6.00006G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "ns" )->value->ToString(), "7.00007G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "tt" )->value->ToString(), "8.00008G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "ttt1" )->value->ToString(), "9.00009G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "ttt2" )->value->ToString(), "0" );
-            BOOST_CHECK_EQUAL( model.FindParam( "cjo" )->value->ToString(), "1.00001G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "trs2" )->value, "5000.05M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "n" )->value, "6000.06M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "ns" )->value, "7000.07M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "tt" )->value, "8000.08M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "ttt1" )->value, "9000.09M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "ttt2" )->value, "0M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "cjo" )->value, "1000.01M" );
             //cj0
             //cj
-            BOOST_CHECK_EQUAL( model.FindParam( "vj" )->value->ToString(), "2.00002G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "vj" )->value, "2000.02M" );
             //pb
-            BOOST_CHECK_EQUAL( model.FindParam( "m_" )->value->ToString(), "3.00003G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "m_" )->value, "3000.03M" );
             //mj
-            BOOST_CHECK_EQUAL( model.FindParam( "tm1" )->value->ToString(), "4.00004G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "tm2" )->value->ToString(), "5.00005G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "cjp" )->value->ToString(), "6.00006G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "tm1" )->value, "4000.04M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "tm2" )->value, "5000.05M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "cjp" )->value, "6000.06M" );
             //cjsw
-            BOOST_CHECK_EQUAL( model.FindParam( "php" )->value->ToString(), "7.00007G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "mjsw" )->value->ToString(), "8.00008G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "ikf" )->value->ToString(), "9.00009G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "php" )->value, "7000.07M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "mjsw" )->value, "8000.08M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "ikf" )->value, "9000.09M" );
             //ik
-            BOOST_CHECK_EQUAL( model.FindParam( "ikr" )->value->ToString(), "0" );
-            BOOST_CHECK_EQUAL( model.FindParam( "nbv" )->value->ToString(), "1.00001G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "area_" )->value->ToString(), "2.00002G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "pj_" )->value->ToString(), "3.00003G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "tlev" )->value->ToString(), "4" ); //"4.00004G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "tlevc" )->value->ToString(), "5" ); //"5.00005G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "eg" )->value->ToString(), "6.00006G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "xti" )->value->ToString(), "7.00007G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "cta" )->value->ToString(), "8.00008G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "ikr" )->value, "0M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "nbv" )->value, "1000.01M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "area_" )->value, "2000.02M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "pj_" )->value, "3000.03M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "tlev" )->value, "4" );
+            BOOST_CHECK_EQUAL( model.FindParam( "tlevc" )->value, "5" );
+            BOOST_CHECK_EQUAL( model.FindParam( "eg" )->value, "6000.06M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "xti" )->value, "7000.07M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "cta" )->value, "8000.08M" );
             //ctc
-            BOOST_CHECK_EQUAL( model.FindParam( "ctp" )->value->ToString(), "9.00009G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "tpb" )->value->ToString(), "0" );
+            BOOST_CHECK_EQUAL( model.FindParam( "ctp" )->value, "9000.09M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "tpb" )->value, "0M" );
             //tvj
-            BOOST_CHECK_EQUAL( model.FindParam( "tphp" )->value->ToString(), "1.00001G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "jtun" )->value->ToString(), "2.00002G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "jtunsw" )->value->ToString(), "3.00003G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "ntun" )->value->ToString(), "4.00004G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "xtitun" )->value->ToString(), "5.00005G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "keg" )->value->ToString(), "6.00006G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "kf" )->value->ToString(), "7.00007G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "af" )->value->ToString(), "8.00008G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "fc" )->value->ToString(), "9.00009G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "fcs" )->value->ToString(), "0" );
-            BOOST_CHECK_EQUAL( model.FindParam( "bv" )->value->ToString(), "1.00001G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "ibv" )->value->ToString(), "2.00002G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "tphp" )->value, "1000.01M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "jtun" )->value, "2000.02M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "jtunsw" )->value, "3000.03M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "ntun" )->value, "4000.04M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "xtitun" )->value, "5000.05M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "keg" )->value, "6000.06M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "kf" )->value, "7000.07M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "af" )->value, "8000.08M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "fc" )->value, "9000.09M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "fcs" )->value, "0M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "bv" )->value, "1000.01M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "ibv" )->value, "2000.02M" );
             //ib
-            BOOST_CHECK_EQUAL( model.FindParam( "tcv" )->value->ToString(), "3.00003G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "cond" )->value->ToString(), "4.00004G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "isr" )->value->ToString(), "5.00005G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "nr" )->value->ToString(), "6.00006G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "fv_max" )->value->ToString(), "7.00007G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "bv_max" )->value->ToString(), "8.00008G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "id_max" )->value->ToString(), "9.00009G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "te_max" )->value->ToString(), "0" );
-            BOOST_CHECK_EQUAL( model.FindParam( "pd_max" )->value->ToString(), "1.00001G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "rth0" )->value->ToString(), "2.00002G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "cth0" )->value->ToString(), "3.00003G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "lm_" )->value->ToString(), "4.00004G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "lp_" )->value->ToString(), "5.00005G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "wm_" )->value->ToString(), "6.00006G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "wp_" )->value->ToString(), "7.00007G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "xom" )->value->ToString(), "8.00008G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "xoi" )->value->ToString(), "9.00009G" );
-            BOOST_CHECK_EQUAL( model.FindParam( "xm" )->value->ToString(), "0" );
-            BOOST_CHECK_EQUAL( model.FindParam( "xp" )->value->ToString(), "1.00001G" );
+            BOOST_CHECK_EQUAL( model.FindParam( "tcv" )->value, "3000.03M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "cond" )->value, "4000.04M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "isr" )->value, "5000.05M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "nr" )->value, "6000.06M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "fv_max" )->value, "7000.07M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "bv_max" )->value, "8000.08M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "id_max" )->value, "9000.09M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "te_max" )->value, "0M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "pd_max" )->value, "1000.01M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "rth0" )->value, "2000.02M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "cth0" )->value, "3000.03M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "lm_" )->value, "4000.04M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "lp_" )->value, "5000.05M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "wm_" )->value, "6000.06M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "wp_" )->value, "7000.07M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "xom" )->value, "8000.08M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "xoi" )->value, "9000.09M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "xm" )->value, "0M" );
+            BOOST_CHECK_EQUAL( model.FindParam( "xp" )->value, "1000.01M" );
             //d
             break;
 

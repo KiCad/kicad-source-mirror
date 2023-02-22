@@ -37,7 +37,7 @@ std::string SPICE_GENERATOR_IDEAL::ModelLine( const SPICE_ITEM& aItem ) const
 std::string SPICE_GENERATOR_IDEAL::ItemLine( const SPICE_ITEM& aItem ) const
 {
     SPICE_ITEM item = aItem;
-    item.modelName = m_model.GetParam( 0 ).value->ToString( SIM_VALUE::NOTATION::SPICE );
+    item.modelName = SIM_VALUE::ToSpice( m_model.GetParam( 0 ).value );
 
     if( item.modelName != "" )
         return SPICE_GENERATOR::ItemLine( item );
@@ -46,12 +46,11 @@ std::string SPICE_GENERATOR_IDEAL::ItemLine( const SPICE_ITEM& aItem ) const
 }
 
 
-std::string SPICE_GENERATOR_IDEAL::TunerCommand( const SPICE_ITEM& aItem,
-                                                 const SIM_VALUE_FLOAT& aValue ) const
+std::string SPICE_GENERATOR_IDEAL::TunerCommand( const SPICE_ITEM& aItem, double aValue ) const
 {
-    return fmt::format( "alter @{}={}",
+    return fmt::format( "alter @{}={:g}",
                         aItem.model->SpiceGenerator().ItemName( aItem ),
-                        aValue.ToSpiceString() );
+                        aValue );
 }
 
 

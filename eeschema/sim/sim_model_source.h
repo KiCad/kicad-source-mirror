@@ -71,12 +71,13 @@ class SIM_MODEL_SOURCE : public SIM_MODEL
 public:
     SIM_MODEL_SOURCE( TYPE aType );
 
-    void SetParamValue( int aParamIndex, const SIM_VALUE& aValue ) override;
-
     bool HasAutofill() const override { return true; }
     bool HasPrimaryValue() const override { return GetType() == TYPE::V || GetType() == TYPE::I; }
 
     std::vector<std::string> GetPinNames() const override { return { "+", "-" }; }
+
+protected:
+    void doSetParamValue( int aParamIndex, const std::string& aValue ) override;
 
 private:
     static const std::vector<PARAM::INFO>& makeParamInfos( TYPE aType );

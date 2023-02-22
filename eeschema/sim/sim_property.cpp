@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,11 +52,8 @@ SIM_BOOL_PROPERTY::SIM_BOOL_PROPERTY( const wxString& aLabel, const wxString& aN
         wxBoolProperty( aLabel, aName ),
         SIM_PROPERTY( aModel, aParamIndex )
 {
-    auto simValue = dynamic_cast<SIM_VALUE_INST<bool>*>( m_model.GetParam( m_paramIndex ).value.get() );
-
-    wxCHECK( simValue, /*void*/ );
-
-    SetValue( *simValue == true );
+    std::string value = m_model.GetParam( m_paramIndex ).value;
+    SetValue( value == "1" );
 }
 
 
@@ -73,14 +70,7 @@ void SIM_BOOL_PROPERTY::OnSetValue()
     if( m_disabled )
         return;
 
-    auto simValue = dynamic_cast<SIM_VALUE_INST<bool>*>( m_model.GetParam( m_paramIndex ).value.get() );
-
-    wxCHECK( simValue, /*void*/ );
-
-    if( m_model.GetBaseModel() && *simValue == m_value.GetBool() )
-        m_model.SetParamValue( m_paramIndex, "" );
-    else
-        m_model.SetParamValue( m_paramIndex, m_value.GetBool() ? "1" : "0" );
+    m_model.SetParamValue( m_paramIndex, m_value.GetBool() ? "1" : "0" );
 }
 
 
@@ -93,7 +83,7 @@ SIM_STRING_PROPERTY::SIM_STRING_PROPERTY( const wxString& aLabel, const wxString
         m_valueType( aValueType ),
         m_notation( aNotation )
 {
-    SetValueFromString( GetParam().value->ToString() );
+    SetValueFromString( GetParam().value );
 }
 
 
@@ -176,7 +166,7 @@ bool SIM_STRING_PROPERTY::StringToValue( wxVariant& aVariant, const wxString& aT
         text = aText;
 
     m_model.SetParamValue( m_paramIndex, std::string( text.ToUTF8() ) );
-    aVariant = GetParam().value->ToString();
+    aVariant = GetParam().value;
 
     return true;
 }
@@ -201,7 +191,7 @@ SIM_ENUM_PROPERTY::SIM_ENUM_PROPERTY( const wxString& aLabel, const wxString& aN
 {
     for( int ii = 0; ii < (int) GetParam().info.enumValues.size(); ++ii )
     {
-        if( GetParam().info.enumValues[ii] == GetParam().value->ToString() )
+        if( GetParam().info.enumValues[ii] == GetParam().value )
         {
             SetValue( ii );
             return;

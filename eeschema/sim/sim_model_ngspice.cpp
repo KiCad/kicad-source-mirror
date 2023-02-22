@@ -127,8 +127,7 @@ void SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const std::string& aParamName,
             && param.info.category != PARAM::CATEGORY::SUPERFLUOUS
             && ( param.info.name == lowerParamName || param.info.name == lowerParamName + "_" ) )
         {
-            const SIM_VALUE& value = *GetParam( ii ).value;
-            SetParamValue( ii, *SIM_VALUE::Create( value.GetType(), aValue, aNotation ) );
+            SetParamValue( ii, aValue, aNotation );
             return;
         }
     }
@@ -151,8 +150,7 @@ void SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const std::string& aParamName,
                 if( param.info.id == ngspiceParamInfo.id
                         && param.info.category != PARAM::CATEGORY::SUPERFLUOUS )
                 {
-                    const SIM_VALUE& value = *GetParam( ii ).value;
-                    SetParamValue( ii, *SIM_VALUE::Create( value.GetType(), aValue, aNotation ) );
+                    SetParamValue( ii, aValue, aNotation );
                     return;
                 }
             }

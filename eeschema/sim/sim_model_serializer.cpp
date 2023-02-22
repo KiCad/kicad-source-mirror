@@ -67,7 +67,7 @@ std::string SIM_MODEL_SERIALIZER::GenerateType() const
 std::string SIM_MODEL_SERIALIZER::GenerateValue() const
 {
     const SIM_MODEL::PARAM& param = m_model.GetParamOverride( 0 );
-    std::string result = param.value->ToString();
+    std::string result = param.value;
 
     if( result == "" )
         result = m_model.GetDeviceInfo().fieldValue;
@@ -88,14 +88,14 @@ std::string SIM_MODEL_SERIALIZER::GenerateParams() const
 
         const SIM_MODEL::PARAM& param = m_model.GetParamOverride( i );
 
-        if( param.value->ToString() == ""
+        if( param.value == ""
             && !( i == 0 && m_model.HasPrimaryValue() && !m_model.IsStoredInValue() ) )
         {
             continue;
         }
 
         // If the parameter is an enum and the value is default, don't write anything.
-        if( param.info.enumValues.size() >= 1 && param.value->ToString() == param.info.defaultValue )
+        if( param.info.enumValues.size() >= 1 && param.value == param.info.defaultValue )
             continue;
 
         std::string paramValuePair = generateParamValuePair( param );
@@ -296,7 +296,7 @@ std::string SIM_MODEL_SERIALIZER::generateParamValuePair( const SIM_MODEL::PARAM
     if( boost::ends_with( aParam.info.name, "_" ) )
         name = aParam.info.name.substr( 0, aParam.info.name.length() - 1 );
 
-    std::string value = aParam.value->ToString();
+    std::string value = aParam.value;
     
     if( value == "" || value.find( ' ' ) != std::string::npos )
         value = fmt::format( "\"{}\"", value );
