@@ -183,6 +183,11 @@ void SIGNALS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 
     if( m_menuCol == COL_SIGNAL_NAME )
     {
+        if( !( m_grid->IsInSelection( m_menuRow, m_menuCol ) ) )
+            m_grid->ClearSelection();
+
+        m_grid->SetGridCursor( m_menuRow, m_menuCol );
+
         wxString msg = m_grid->GetCellValue( m_menuRow, m_menuCol );
 
         menu.Append( MYID_MEASURE_MIN, _( "Measure Min" ) );
@@ -203,24 +208,73 @@ void SIGNALS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 
 void SIGNALS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
 {
-    wxString signal = m_grid->GetCellValue( m_menuRow, m_menuCol );
+    std::vector<wxString> signals;
+
+    wxGridCellCoordsArray cells1 = m_grid->GetSelectionBlockTopLeft();
+    wxGridCellCoordsArray cells2 = m_grid->GetSelectionBlockBottomRight();
+
+    for( int i = 0; i < cells1.Count(); i++ )
+    {
+        if( cells1[i].GetCol() == COL_SIGNAL_NAME )
+        {
+            for( int j = cells1[i].GetRow(); j < cells2[i].GetRow() + 1; j++ )
+            {
+                signals.push_back( m_grid->GetCellValue( j, cells1[i].GetCol() ) );
+            }
+        }
+    }
+
+    wxGridCellCoordsArray cells3 = m_grid->GetSelectedCells();
+
+    for( int i = 0; i < cells3.Count(); i++ )
+    {
+        if( cells3[i].GetCol() == COL_SIGNAL_NAME )
+            signals.push_back( m_grid->GetCellValue( cells3[i].GetRow(), cells3[i].GetCol() ) );
+    }
+
+    if( signals.size() < 1 )
+        signals.push_back( m_grid->GetCellValue( m_menuRow, m_menuCol ) );
 
     if( event.GetId() == MYID_MEASURE_MIN )
-        m_parent->AddMeasurement( wxString::Format( wxS( "MIN %s" ), signal ) );
+    {
+        for( wxString signal : signals )
+            m_parent->AddMeasurement( wxString::Format( wxS( "MIN %s" ), signal ) );
+    }
     else if( event.GetId() == MYID_MEASURE_MAX )
-        m_parent->AddMeasurement( wxString::Format( wxS( "MAX %s" ), signal ) );
+    {
+        for( wxString signal : signals )
+            m_parent->AddMeasurement( wxString::Format( wxS( "MAX %s" ), signal ) );
+    }
     else if( event.GetId() == MYID_MEASURE_AVG )
-        m_parent->AddMeasurement( wxString::Format( wxS( "AVG %s" ), signal ) );
+    {
+        for( wxString signal : signals )
+            m_parent->AddMeasurement( wxString::Format( wxS( "AVG %s" ), signal ) );
+    }
     else if( event.GetId() == MYID_MEASURE_RMS )
-        m_parent->AddMeasurement( wxString::Format( wxS( "RMS %s" ), signal ) );
+    {
+        for( wxString signal : signals )
+            m_parent->AddMeasurement( wxString::Format( wxS( "RMS %s" ), signal ) );
+    }
     else if( event.GetId() == MYID_MEASURE_PP )
-        m_parent->AddMeasurement( wxString::Format( wxS( "PP %s" ), signal ) );
+    {
+        for( wxString signal : signals )
+            m_parent->AddMeasurement( wxString::Format( wxS( "PP %s" ), signal ) );
+    }
     else if( event.GetId() == MYID_MEASURE_MIN_AT )
-        m_parent->AddMeasurement( wxString::Format( wxS( "MIN_AT %s" ), signal ) );
+    {
+        for( wxString signal : signals )
+            m_parent->AddMeasurement( wxString::Format( wxS( "MIN_AT %s" ), signal ) );
+    }
     else if( event.GetId() == MYID_MEASURE_MAX_AT )
-        m_parent->AddMeasurement( wxString::Format( wxS( "MAX_AT %s" ), signal ) );
+    {
+        for( wxString signal : signals )
+            m_parent->AddMeasurement( wxString::Format( wxS( "MAX_AT %s" ), signal ) );
+    }
     else if( event.GetId() == MYID_MEASURE_INTEGRAL )
-        m_parent->AddMeasurement( wxString::Format( wxS( "INTEG %s" ), signal ) );
+    {
+        for( wxString signal : signals )
+            m_parent->AddMeasurement( wxString::Format( wxS( "INTEG %s" ), signal ) );
+    }
     else
         GRID_TRICKS::doPopupSelection( event );
 }
