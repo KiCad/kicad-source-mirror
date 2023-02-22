@@ -42,7 +42,7 @@ void GBR_LAYER_BOX_SELECTOR::Resync()
     int size = static_cast<int>( 14 / dpi.GetContentScaleFactor() );
 #else
     const int size = 14;
-#endif7
+#endif
 
     GERBER_FILE_IMAGE_LIST& images = GERBER_FILE_IMAGE_LIST::GetImagesList();
 
