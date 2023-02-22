@@ -84,7 +84,8 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
     Freeze();
     Clear();
 
-    const int BM_SIZE = 14;
+    DPI_SCALING dpi( nullptr, this );
+    int size = static_cast<int>( 14 / dpi.GetScaleFactor() );
 
     LSET show = LSET::AllLayersMask() & ~m_layerMaskDisable;
     LSET activated = getEnabledLayers() & ~m_layerMaskDisable;
@@ -99,7 +100,7 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
         else
             layerstatus.Empty();
 
-        wxBitmap bmp( BM_SIZE, BM_SIZE );
+        wxBitmap bmp( size, size );
         DrawColorSwatch( bmp, getLayerColor( LAYER_PCB_BACKGROUND ), getLayerColor( layerid ) );
 
         wxString layername = getLayerName( layerid ) + layerstatus;
@@ -129,7 +130,7 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
     SetMinSize( wxSize( -1, -1 ) );
     wxSize bestSize = GetBestSize();
 
-    bestSize.x = GetBestSize().x + BM_SIZE + 10;
+    bestSize.x = GetBestSize().x + size + 10;
     SetMinSize( bestSize );
 
     SetSelection( wxNOT_FOUND );
