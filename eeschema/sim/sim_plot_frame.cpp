@@ -858,7 +858,7 @@ void SIM_PLOT_FRAME::rebuildSignalsList()
         }
     }
 
-    // JEY TODO: find and add LET commands
+    // JEY TODO: find and add SPICE "LET" commands
 
     // Add user-defined signals
     for( int ii = 0; ii < (int) m_userDefinedSignals.size(); ++ii )
@@ -1179,14 +1179,45 @@ void SIM_PLOT_FRAME::onMeasurementsGridCellChanged( wxGridEvent& aEvent )
         wxFAIL_MSG( wxT( "All other columns are supposed to be read-only!" ) );
     }
 
-    // Always leave at least one empty row for type-in:
-    row = m_measurementsGrid->GetNumberRows() - 1;
+    // Always leave a single empty row for type-in
 
-    if( !m_measurementsGrid->GetCellValue( row, COL_MEASUREMENT ).IsEmpty() )
+    int rowCount = (int) m_measurementsGrid->GetNumberRows();
+    int emptyRows = 0;
+
+    for( row = rowCount - 1; row >= 0; row-- )
+    {
+        if( m_measurementsGrid->GetCellValue( row, COL_MEASUREMENT ).IsEmpty() )
+            emptyRows++;
+        else
+            break;
+    }
+
+    if( emptyRows > 1 )
+    {
+        int killRows = emptyRows - 1;
+        m_measurementsGrid->DeleteRows( rowCount - killRows, killRows );
+    }
+    else if( emptyRows == 0 )
+    {
         m_measurementsGrid->AppendRows( 1 );
+    }
 }
 
 
+/**
+ * The user measurement looks something like:
+ *    MAX V(out)
+ *
+ * We need to send ngspice a "MEAS" command with the analysis type, an output variable name,
+ * and the signal name.  For our example above, this looks something like:
+ *    MEAS TRAN meas_result_0 MAX V(out)
+ *
+ * This is also a good time to harvest the signal name prefix so we know what units to show on
+ * the result.  For instance, for:
+ *    MAX P(out)
+ * we want to show:
+ *    15W
+ */
 void SIM_PLOT_FRAME::UpdateMeasurement( int aRow )
 {
     static wxRegEx measureParamsRegEx( wxT( "^"
@@ -2591,32 +2622,41 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
 
         struct TRACE_DESC
         {
-            wxString      m_name;    ///< Name of the measured net/device
+            wxString       m_name;    ///< Name of the measured net/device
             SIM_TRACE_TYPE m_type;    ///< Type of the signal
+            bool           m_current;
         };
 
         std::vector<struct TRACE_DESC> traceInfo;
 
-        // Get information about all the traces on the plot, remove any no longer in the
-        // signals list, and then update the remainder
+        // Get information about all the traces on the plot; update those that are still in
+        // the signals list and remove any that aren't
         for( const auto& [name, trace] : plotPanel->GetTraces() )
         {
             struct TRACE_DESC placeholder;
             placeholder.m_name = trace->GetName();
             placeholder.m_type = trace->GetType();
+            placeholder.m_current = false;
 
             for( const wxString& signal : m_signals )
             {
                 if( getTraceName( signal ) == placeholder.m_name )
                 {
-                    traceInfo.push_back( placeholder );
+                    placeholder.m_current = true;
                     break;
                 }
             }
+
+            traceInfo.push_back( placeholder );
         }
 
         for( const struct TRACE_DESC& trace : traceInfo )
-            updateTrace( trace.m_name, trace.m_type, plotPanel );
+        {
+            if( trace.m_current )
+                updateTrace( trace.m_name, trace.m_type, plotPanel );
+            else
+                removeTrace( trace.m_name );
+        }
 
         rebuildSignalsGrid( m_filter->GetValue() );
         updateSignalsGrid();

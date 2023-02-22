@@ -30,6 +30,15 @@
 #include <wx/string.h>
 #include <wx/valtext.h>
 
+
+/**
+ * A SPICE_VALUE_FORMAT holds precision and range info for formatting values.
+ *
+ * The Precision field indicates the number of significant digits to show in the result.
+ *
+ * The range field gives the SI unit prefix for the range or '~' for auto-range, and the
+ * units.  For instance "mV" or "~Hz".
+ */
 struct SPICE_VALUE_FORMAT
 {
     void FromString( const wxString& aString );
