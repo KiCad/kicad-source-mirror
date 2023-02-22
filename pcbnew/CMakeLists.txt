@@ -604,7 +604,7 @@ target_link_libraries( pcbnew
     )
 
 target_link_options( pcbnew PRIVATE
-    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,-cref,-Map=pcbnew.map>
+    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,--cref,-Map=pcbnew.map>
     )
 
 # the main pcbnew program, in DSO form.
@@ -697,7 +697,7 @@ set_source_files_properties( pcbnew.cpp PROPERTIES
     )
 
 target_link_options( pcbnew_kiface PRIVATE
-    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,-cref,-Map=_pcbnew.kiface.map>
+    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,--cref,-Map=_pcbnew.kiface.map>
     )
 
 # if building pcbnew, then also build pcbnew_kiface if out of date.

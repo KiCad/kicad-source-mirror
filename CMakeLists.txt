@@ -189,7 +189,7 @@ cmake_dependent_option( KICAD_WIN32_BUILD_PARALLEL_CL_MP
 # Advanced option to make link maps (only available on linux)
 cmake_dependent_option( KICAD_MAKE_LINK_MAPS
     "Create link maps for artifacts"
-    ON "UNIX_NOT_APPLE"
+    OFF "UNIX_NOT_APPLE"
     OFF )
 mark_as_advanced( KICAD_MAKE_LINK_MAPS )
 

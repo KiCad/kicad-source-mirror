@@ -94,6 +94,6 @@ endif()
 
 if( false )     # linker map with cross reference
     set_target_properties( bitmap2component PROPERTIES
-        LINK_FLAGS "-Wl,-cref,-Map=bitmap2component.map"
+        LINK_FLAGS "-Wl,--cref,-Map=bitmap2component.map"
         )
 endif()

@@ -93,7 +93,7 @@ set_source_files_properties( cvpcb.cpp PROPERTIES
     )
 
 target_link_options( cvpcb_kiface PRIVATE
-    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,-cref,-Map=_cvpcb.kiface.map>
+    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,--cref,-Map=_cvpcb.kiface.map>
     )
 
 # these 2 binaries are a matched set, keep them together:

@@ -121,7 +121,7 @@ target_include_directories( gerbview PRIVATE
     )
 
 target_link_options( gerbview PRIVATE
-    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,-cref,-Map=gerbview.map>
+    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,--cref,-Map=gerbview.map>
     )
 
 # The objects for the main gerbview program
@@ -163,7 +163,7 @@ set_source_files_properties( gerbview.cpp PROPERTIES
     )
 
 target_link_options( gerbview_kiface PRIVATE
-    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,-cref,-Map=_gerbview.kiface.map>
+    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,--cref,-Map=_gerbview.kiface.map>
     )
 
 # if building gerbview, then also build gerbview_kiface if out of date.

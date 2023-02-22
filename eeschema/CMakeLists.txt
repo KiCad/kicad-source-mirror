@@ -527,10 +527,10 @@ add_dependencies( eeschema eeschema_kiface )
 
 # Generate link map with cross reference
 target_link_options( eeschema_kiface PRIVATE
-    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,-cref,-Map=${KIFACE_PREFIX}eeschema${KIFACE_SUFFIX}.map>
+    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,--cref,-Map=${KIFACE_PREFIX}eeschema${KIFACE_SUFFIX}.map>
     )
 target_link_options( eeschema PRIVATE
-    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,-cref,-Map=eeschema.map>
+    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,--cref,-Map=eeschema.map>
     )
 
 # these 2 binaries are a matched set, keep them together:

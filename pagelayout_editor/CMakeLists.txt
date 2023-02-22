@@ -89,7 +89,7 @@ target_link_libraries( pl_editor
     )
 
 target_link_options( pl_editor PRIVATE
-    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,-cref,-Map=pl_editor.map>
+    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,--cref,-Map=pl_editor.map>
     )
 
 # the main pl_editor program, in DSO form.
@@ -120,7 +120,7 @@ set_source_files_properties( pl_editor.cpp PROPERTIES
     )
 
 target_link_options( pl_editor_kiface PRIVATE
-    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,-cref,-Map=_pl_editor.kiface.map>
+    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,--cref,-Map=_pl_editor.kiface.map>
     )
 
 # if building pl_editor, then also build pl_editor_kiface if out of date.

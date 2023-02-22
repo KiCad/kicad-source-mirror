@@ -93,7 +93,7 @@ target_link_libraries( pcb_calculator
     )
 
 target_link_options( pcb_calculator PRIVATE
-    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,-cref,-Map=pcb_calculator.map>
+    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,--cref,-Map=pcb_calculator.map>
     )
 
 # the main pcb_calculator program, in DSO form.
@@ -118,7 +118,7 @@ set_source_files_properties( pcb_calculator.cpp PROPERTIES
     )
 
 target_link_options( pcb_calculator_kiface PRIVATE
-    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,-cref,-Map=_pcb_calculator.kiface.map>
+    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,--cref,-Map=_pcb_calculator.kiface.map>
     )
 
 # if building pcb_calculator, then also build pcb_calculator_kiface if out of date.
