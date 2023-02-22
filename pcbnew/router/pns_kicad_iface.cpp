@@ -961,7 +961,7 @@ public:
 
     void AddItem( const PNS::ITEM* aItem, const KIGFX::COLOR4D& aColor, int aOverrideWidth = 0,
                   const wxString&          aName = wxT( "" ),
-                  const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() )
+                  const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override
     {
         if( !m_view || !aItem )
             return;
@@ -999,7 +999,7 @@ public:
 
     void AddShape( const SHAPE* aShape, const KIGFX::COLOR4D& aColor, int aOverrideWidth = 0,
                    const wxString&          aName = wxT( "" ),
-                   const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() )
+                   const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override
     {
         if( !m_view || !aShape )
             return;
