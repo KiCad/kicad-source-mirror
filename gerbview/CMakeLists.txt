@@ -120,11 +120,9 @@ target_include_directories( gerbview PRIVATE
     $<TARGET_PROPERTY:thread-pool,INTERFACE_INCLUDE_DIRECTORIES>
     )
 
-if( MAKE_LINK_MAPS )
-    set_target_properties( gerbview PROPERTIES
-        LINK_FLAGS "-Wl,-cref,-Map=gerbview.map" )
-endif()
-
+target_link_options( gerbview PRIVATE
+    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,-cref,-Map=gerbview.map>
+    )
 
 # The objects for the main gerbview program
 add_library( gerbview_kiface_objects OBJECT
@@ -164,10 +162,9 @@ set_source_files_properties( gerbview.cpp PROPERTIES
     COMPILE_DEFINITIONS     "BUILD_KIWAY_DLL;COMPILING_DLL"
     )
 
-if( MAKE_LINK_MAPS )
-    set_target_properties( gerbview_kiface PROPERTIES
-        LINK_FLAGS "-Wl,-cref,-Map=_gerbview.kiface.map" )
-endif()
+target_link_options( gerbview_kiface PRIVATE
+    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,-cref,-Map=_gerbview.kiface.map>
+    )
 
 # if building gerbview, then also build gerbview_kiface if out of date.
 add_dependencies( gerbview gerbview_kiface )

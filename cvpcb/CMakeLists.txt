@@ -94,10 +94,9 @@ set_source_files_properties( cvpcb.cpp PROPERTIES
     COMPILE_DEFINITIONS     "BUILD_KIWAY_DLL;COMPILING_DLL"
     )
 
-if( MAKE_LINK_MAPS )
-    set_target_properties( cvpcb_kiface PROPERTIES
-        LINK_FLAGS "-Wl,-cref,-Map=_cvpcb.kiface.map" )
-endif()
+target_link_options( cvpcb_kiface PRIVATE
+    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,-cref,-Map=_cvpcb.kiface.map>
+    )
 
 # these 2 binaries are a matched set, keep them together:
 if( APPLE )

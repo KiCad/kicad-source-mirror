@@ -61,10 +61,9 @@ set_target_properties( scripting_kiface PROPERTIES
     SUFFIX          ${KIFACE_SUFFIX}
     )
 
-if( MAKE_LINK_MAPS )
-    set_target_properties( scripting_kiface PROPERTIES
-        LINK_FLAGS "-Wl,-cref,-Map=_scripting.kiface.map" )
-endif()
+target_link_options( scripting_kiface PRIVATE
+    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,-cref,-Map=_scripting.kiface.map>
+    )
 
 if( APPLE )
     set_target_properties( scripting_kiface PROPERTIES

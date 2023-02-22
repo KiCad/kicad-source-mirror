@@ -88,10 +88,9 @@ target_link_libraries( pl_editor
     ${wxWidgets_LIBRARIES}
     )
 
-if( MAKE_LINK_MAPS )
-    set_target_properties( pl_editor PROPERTIES
-        LINK_FLAGS "-Wl,-cref,-Map=pl_editor.map" )
-endif()
+target_link_options( pl_editor PRIVATE
+    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,-cref,-Map=pl_editor.map>
+    )
 
 # the main pl_editor program, in DSO form.
 add_library( pl_editor_kiface MODULE
@@ -120,10 +119,9 @@ set_source_files_properties( pl_editor.cpp PROPERTIES
     COMPILE_DEFINITIONS     "BUILD_KIWAY_DLL;COMPILING_DLL"
     )
 
-if( MAKE_LINK_MAPS )
-    set_target_properties( pl_editor_kiface PROPERTIES
-        LINK_FLAGS "-Wl,-cref,-Map=_pl_editor.kiface.map" )
-endif()
+target_link_options( pl_editor_kiface PRIVATE
+    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,-cref,-Map=_pl_editor.kiface.map>
+    )
 
 # if building pl_editor, then also build pl_editor_kiface if out of date.
 add_dependencies( pl_editor pl_editor_kiface )

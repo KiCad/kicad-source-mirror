@@ -1,13 +1,3 @@
-
-if( UNIX AND NOT APPLE )
-    # Setting this ON slows down linking and is a advanced (=hidden) developer option for
-    # linux, not a user option.
-    option( PCBNEW_LINK_MAPS
-        "Developer: create linker map files for pcbnew binaries, not typical for Debug builds"
-        )
-    mark_as_advanced( PCBNEW_LINK_MAPS )
-endif()
-
 add_compile_definitions( PCBNEW )
 
 add_subdirectory(connectivity)
@@ -613,10 +603,9 @@ target_link_libraries( pcbnew
     ${wxWidgets_LIBRARIES}
     )
 
-if( PCBNEW_LINK_MAPS )
-    set_target_properties( pcbnew PROPERTIES
-        LINK_FLAGS "-Wl,-cref,-Map=pcbnew.map" )
-endif()
+target_link_options( pcbnew PRIVATE
+    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,-cref,-Map=pcbnew.map>
+    )
 
 # the main pcbnew program, in DSO form.
 add_library( pcbnew_kiface_objects OBJECT
@@ -707,14 +696,9 @@ set_source_files_properties( pcbnew.cpp PROPERTIES
     COMPILE_DEFINITIONS     "BUILD_KIWAY_DLL;COMPILING_DLL"
     )
 
-if( PCBNEW_LINK_MAPS )
-    set_target_properties( pcbnew_kiface PROPERTIES
-        LINK_FLAGS "-Wl,-cref,-Map=_pcbnew.kiface.map"
-        )
-    set_target_properties( pcbnew PROPERTIES
-        LINK_FLAGS "-Wl,-cref,-Map=pcbnew.map"
-        )
-endif()
+target_link_options( pcbnew_kiface PRIVATE
+    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,-cref,-Map=_pcbnew.kiface.map>
+    )
 
 # if building pcbnew, then also build pcbnew_kiface if out of date.
 add_dependencies( pcbnew pcbnew_kiface )

@@ -53,6 +53,15 @@ set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
 set( KICAD_CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" )
 set( CMAKE_MODULE_PATH       "${KICAD_CMAKE_MODULE_PATH}" )
 
+
+# Create a flag to identify the non-Apple unix systems
+if( UNIX AND NOT APPLE )
+    set( UNIX_NOT_APPLE ON )
+else()
+    set( UNIX_NOT_APPLE OFF )
+endif()
+
+
 #
 # KiCad build options should be added below.
 #
@@ -174,6 +183,13 @@ cmake_dependent_option( KICAD_WIN32_BUILD_PARALLEL_CL_MP
     "Build in parallel using the /MP compiler option (default OFF for safety reasons)"
     OFF "WIN32"
     OFF )
+
+# Advanced option to make link maps (only available on linux)
+cmake_dependent_option( KICAD_MAKE_LINK_MAPS
+    "Create link maps for artifacts"
+    ON "UNIX_NOT_APPLE"
+    OFF )
+mark_as_advanced( KICAD_MAKE_LINK_MAPS )
 
 ####################################
 # Debugging/profiling
@@ -967,17 +983,6 @@ add_subdirectory( doxygen )
 configure_file( ${PROJECT_SOURCE_DIR}/cmake/config.h.cmake
     ${CMAKE_BINARY_DIR}/config.h )
 
-###
-# Generate Map file
-###
-if( KICAD_MAKE_LINK_MAPS )
-    # Currently only works on linux/gcc
-    if( UNIX AND NOT APPLE )
-        set( MAKE_LINK_MAPS true )
-    else()
-        set( MAKE_LINK_MAPS false )
-    endif()
-endif()
 
 #================================================
 # "make uninstall" rules

@@ -92,10 +92,9 @@ target_link_libraries( pcb_calculator
     ${wxWidgets_LIBRARIES}
     )
 
-if( MAKE_LINK_MAPS )
-    set_target_properties( pcb_calculator PROPERTIES
-        LINK_FLAGS "-Wl,-cref,-Map=pcb_calculator.map" )
-endif()
+target_link_options( pcb_calculator PRIVATE
+    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,-cref,-Map=pcb_calculator.map>
+    )
 
 # the main pcb_calculator program, in DSO form.
 add_library( pcb_calculator_kiface MODULE
@@ -118,10 +117,9 @@ set_source_files_properties( pcb_calculator.cpp PROPERTIES
     COMPILE_DEFINITIONS     "BUILD_KIWAY_DLL;COMPILING_DLL"
     )
 
-if( MAKE_LINK_MAPS )
-    set_target_properties( pcb_calculator_kiface PROPERTIES
-        LINK_FLAGS "-Wl,-cref,-Map=_pcb_calculator.kiface.map" )
-endif()
+target_link_options( pcb_calculator_kiface PRIVATE
+    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,-cref,-Map=_pcb_calculator.kiface.map>
+    )
 
 # if building pcb_calculator, then also build pcb_calculator_kiface if out of date.
 add_dependencies( pcb_calculator pcb_calculator_kiface )

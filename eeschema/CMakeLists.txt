@@ -525,15 +525,13 @@ set_source_files_properties( eeschema.cpp PROPERTIES
 # if building eeschema, then also build eeschema_kiface if out of date.
 add_dependencies( eeschema eeschema_kiface )
 
-if( MAKE_LINK_MAPS )
-    # generate link map with cross reference
-    set_target_properties( eeschema_kiface PROPERTIES
-        LINK_FLAGS "-Wl,-cref,-Map=${KIFACE_PREFIX}eeschema${KIFACE_SUFFIX}.map"
-        )
-    set_target_properties( eeschema PROPERTIES
-        LINK_FLAGS "-Wl,-cref,-Map=eeschema.map"
-        )
-endif()
+# Generate link map with cross reference
+target_link_options( eeschema_kiface PRIVATE
+    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,-cref,-Map=${KIFACE_PREFIX}eeschema${KIFACE_SUFFIX}.map>
+    )
+target_link_options( eeschema PRIVATE
+    $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,-cref,-Map=eeschema.map>
+    )
 
 # these 2 binaries are a matched set, keep them together:
 if( APPLE )
