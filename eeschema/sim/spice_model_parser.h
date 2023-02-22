@@ -48,9 +48,6 @@ protected:
                                                      const std::string& aVersion = "",
                                                      bool aSkipDefaultLevel = true );
 
-    void CopyModelFromLibrary( const SIM_LIBRARY_SPICE& aSourceLibrary,
-                               const std::string& aModelName );
-
     SIM_MODEL_SPICE& m_model;
 };
 

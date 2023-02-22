@@ -279,8 +279,8 @@ public:
         std::string modelType = "";
         std::string inlineTypeString = "";
         std::string level = "";
-        bool isDefaultLevel = false;
-        bool hasExpression = false;
+        bool        isDefaultLevel = false;
+        bool        hasExpression = false;
         std::string version = "";
     };
 
@@ -288,7 +288,7 @@ public:
     struct PIN
     {
         const std::string name;
-        std::string symbolPinNumber;
+        std::string       symbolPinNumber;
 
         static constexpr auto NOT_CONNECTED = -1;
     };
@@ -322,59 +322,50 @@ public:
             SUPERFLUOUS
         };
 
-        struct FLAGS {}; // Legacy.
-
         struct INFO
         {
-            std::string name = "";
-            unsigned id = 0; // Legacy (don't remove).
-            DIR dir = DIR_INOUT;
-            SIM_VALUE::TYPE type = SIM_VALUE::TYPE_FLOAT;
-            FLAGS flags = {}; // Legacy (don't remove).
-            std::string unit = "";
-            CATEGORY category = CATEGORY::PRINCIPAL;
-            std::string defaultValue = "";
-            std::string defaultValueOfOtherVariant = ""; // Legacy (don't remove).
-            std::string description = "";
-            bool isSpiceInstanceParam = false;
-            bool isInstanceParam = false;
-            std::string spiceModelName = "";
-            std::string spiceInstanceName = "";
-            std::vector<std::string> enumValues = {};
-
-            // TODO: Stop using brace-initializers, use this constructor for all info structs.
-            INFO( std::string aName = "",
-                  unsigned aId = 0,
-                  DIR aDir = DIR_INOUT,
-                  SIM_VALUE::TYPE aType = SIM_VALUE::TYPE_FLOAT,
-                  FLAGS aFlags = {},
-                  const std::string& aUnit = "",
-                  CATEGORY aCategory = CATEGORY::PRINCIPAL,
-                  const std::string& aDefaultValue = "",
-                  const std::string& aDefaultValueOfOtherVariant = "",
-                  const std::string& aDescription = "",
-                  bool aIsSpiceInstanceParam = false,
-                  bool aIsInstanceParam = false,
-                  const std::string& aSpiceModelName = "",
-                  const std::string& aSpiceInstanceName = "",
+            INFO( const std::string& aName = "",
+                  unsigned                 aId = 0,
+                  DIR                      aDir = DIR_INOUT,
+                  SIM_VALUE::TYPE          aType = SIM_VALUE::TYPE_FLOAT,
+                  const std::string&       aUnit = "",
+                  CATEGORY                 aCategory = CATEGORY::PRINCIPAL,
+                  const std::string&       aDefaultValue = "",
+                  const std::string&       legacy_unused_value = "",
+                  const std::string&       aDescription = "",
+                  bool                     aIsSpiceInstanceParam = false,
+                  bool                     aIsInstanceParam = false,
+                  const std::string&       aSpiceModelName = "",
+                  const std::string&       aSpiceInstanceName = "",
                   std::vector<std::string> aEnumValues = {} ) :
                 name( aName ),
                 id( aId ),
                 dir( aDir ),
                 type( aType ),
-                flags( aFlags ),
                 unit( aUnit ),
                 category( aCategory ),
                 defaultValue( aDefaultValue ),
-                defaultValueOfOtherVariant( aDefaultValueOfOtherVariant ),
                 description( aDescription ),
                 isSpiceInstanceParam( aIsSpiceInstanceParam ),
                 isInstanceParam( aIsInstanceParam ),
                 spiceModelName( aSpiceModelName ),
                 spiceInstanceName( aSpiceInstanceName ),
                 enumValues( std::move( aEnumValues ) )
-            {
-            }
+            {}
+
+            std::string              name;
+            unsigned                 id;
+            DIR                      dir;
+            SIM_VALUE::TYPE          type;
+            std::string              unit;
+            CATEGORY                 category;
+            std::string              defaultValue;
+            std::string              description;
+            bool                     isSpiceInstanceParam;
+            bool                     isInstanceParam;
+            std::string              spiceModelName;
+            std::string              spiceInstanceName;
+            std::vector<std::string> enumValues;
         };
 
         std::string  value;
@@ -441,8 +432,6 @@ public:
 
     template <typename T>
     void WriteFields( std::vector<T>& aFields ) const;
-
-    virtual bool HasToIncludeSpiceLibrary() const { return GetBaseModel() && !HasOverrides(); }
 
     SPICE_INFO GetSpiceInfo() const { return SpiceInfo( GetType() ); }
 

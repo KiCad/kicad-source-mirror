@@ -105,15 +105,13 @@ bool SIM_MODEL_BEHAVIORAL::parseValueField( const std::string& aValueField )
 }
 
 
-SIM_MODEL::PARAM::INFO SIM_MODEL_BEHAVIORAL::makeParams( std::string aName, std::string aDescription,
-                                                         std::string aUnit )
+SIM_MODEL::PARAM::INFO SIM_MODEL_BEHAVIORAL::makeParams( const std::string& aName,
+                                                         const std::string& aDescription,
+                                                         const std::string& aUnit )
 {
-    PARAM::INFO paramInfo = {};
+    PARAM::INFO paramInfo( aName, 0, PARAM::DIR_INOUT, SIM_VALUE::TYPE_STRING, aUnit,
+                           PARAM::CATEGORY::PRINCIPAL );
 
-    paramInfo.name = aName;
-    paramInfo.type = SIM_VALUE::TYPE_STRING;
-    paramInfo.unit = aUnit;
-    paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
     paramInfo.description = aDescription;
 
     return paramInfo;
