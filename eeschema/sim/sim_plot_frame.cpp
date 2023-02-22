@@ -2243,9 +2243,21 @@ void SIM_PLOT_FRAME::onPlotClose( wxAuiNotebookEvent& event )
 
 void SIM_PLOT_FRAME::onPlotClosed( wxAuiNotebookEvent& event )
 {
-    m_signals.clear();
-    rebuildSignalsGrid( m_filter->GetValue() );
-    updateCursors();
+    CallAfter( [this]()
+               {
+                   rebuildSignalsList();
+                   rebuildSignalsGrid( m_filter->GetValue() );
+                   updateCursors();
+
+                   SIM_PANEL_BASE* panel = getCurrentPlotWindow();
+
+                   if( !panel || panel->GetType() != ST_OP )
+                   {
+                       SCHEMATIC& schematic = m_schematicFrame->Schematic();
+                       schematic.ClearOperatingPoints();
+                       m_schematicFrame->RefreshOperatingPointDisplay();
+                   }
+               } );
 }
 
 
@@ -2648,6 +2660,9 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
     applyUserDefinedSignals();
     rebuildSignalsList();
 
+    SCHEMATIC& schematic = m_schematicFrame->Schematic();
+    schematic.ClearOperatingPoints();
+
     // If there are any signals plotted, update them
     if( SIM_PANEL_BASE::IsPlottable( simType ) )
     {
@@ -2700,9 +2715,6 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
     }
     else if( simType == ST_OP )
     {
-        SCHEMATIC& schematic = m_schematicFrame->Schematic();
-        schematic.ClearOperatingPoints();
-
         m_simConsole->AppendText( _( "\n\nSimulation results:\n\n" ) );
         m_simConsole->SetInsertionPointEnd();
 
@@ -2735,9 +2747,9 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
 
             schematic.SetOperatingPoint( signal, val_list.at( 0 ) );
         }
-
-        m_schematicFrame->RefreshOperatingPointDisplay();
     }
+
+    m_schematicFrame->RefreshOperatingPointDisplay();
 
     for( int row = 0; row < m_measurementsGrid->GetNumberRows(); ++row )
         UpdateMeasurement( row );

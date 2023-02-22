@@ -96,27 +96,28 @@ SIM_TYPE NGSPICE_CIRCUIT_MODEL::GetSimType()
 
 SIM_TYPE NGSPICE_CIRCUIT_MODEL::CommandToSimType( const wxString& aCmd )
 {
-    const std::vector<std::pair<wxString, SIM_TYPE>> simCmds = {
-        { wxT( "^.ac\\M.*"    ), ST_AC },
-        { wxT( "^.dc\\M.*"    ), ST_DC },
-        { wxT( "^.tran\\M.*"  ), ST_TRANSIENT },
-        { wxT( "^.op\\M.*"    ), ST_OP },
-        { wxT( "^.disto\\M.*" ), ST_DISTORTION },
-        { wxT( "^.noise\\M.*" ), ST_NOISE },
-        { wxT( "^.pz\\M.*"    ), ST_POLE_ZERO },
-        { wxT( "^.sens\\M.*"  ), ST_SENSITIVITY },
-        { wxT( "^.tf\\M.*"    ), ST_TRANS_FUNC } };
-    wxRegEx simCmd;
+    wxString cmd = aCmd.Lower();
 
-    for( const std::pair<wxString, SIM_TYPE>& c : simCmds )
-    {
-        simCmd.Compile( c.first, wxRE_ADVANCED | wxRE_NOSUB | wxRE_ICASE );
-
-        if( simCmd.Matches( aCmd ) )
-            return c.second;
-    }
-
-    return ST_UNKNOWN;
+    if( cmd.StartsWith( wxT( ".ac" ) ) )
+        return ST_AC;
+    else if( cmd.StartsWith( wxT( ".dc" ) ) )
+        return ST_DC;
+    else if( cmd.StartsWith( wxT( ".tran" ) ) )
+        return ST_TRANSIENT;
+    else if( cmd == wxT( ".op" ) )
+        return ST_OP;
+    else if( cmd.StartsWith( wxT( ".disto" ) ) )
+        return ST_DISTORTION;
+    else if( cmd.StartsWith( wxT( ".noise" ) ) )
+        return ST_NOISE;
+    else if( cmd.StartsWith( wxT( ".pz" ) ) )
+        return ST_POLE_ZERO;
+    else if( cmd.StartsWith( wxT( ".sens" ) ) )
+        return ST_SENSITIVITY;
+    else if( cmd.StartsWith( wxT( ".tf" ) ) )
+        return ST_TRANS_FUNC;
+    else
+        return ST_UNKNOWN;
 }
 
 

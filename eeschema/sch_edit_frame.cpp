@@ -1328,7 +1328,12 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
     {
         if( item->Type() == SCH_LINE_T )
         {
-            static_cast<SCH_LINE*>( item )->SetOperatingPoint( wxEmptyString );
+            SCH_LINE* line = static_cast<SCH_LINE*>( item );
+
+            if( !line->GetOperatingPoint().IsEmpty() )
+                GetCanvas()->GetView()->Update( line );
+
+            line->SetOperatingPoint( wxEmptyString );
             // update value from netlist, below
         }
         else if( item->Type() == SCH_SYMBOL_T )
@@ -1338,7 +1343,12 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
             std::vector<SCH_PIN*> pins = symbol->GetPins( &GetCurrentSheet() );
 
             for( SCH_PIN* pin : pins )
+            {
+                if( !pin->GetOperatingPoint().IsEmpty() )
+                    GetCanvas()->GetView()->Update( pin );
+
                 pin->SetOperatingPoint( wxEmptyString );
+            }
 
             if( pins.size() == 2 )
             {
@@ -1346,7 +1356,10 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
                                                               settings.m_OPO_IRange );
 
                 if( !op.IsEmpty() && op != wxS( "--" ) && op != wxS( "?" ) )
+                {
                     pins[0]->SetOperatingPoint( op );
+                    GetCanvas()->GetView()->Update( symbol );
+                }
             }
             else
             {
