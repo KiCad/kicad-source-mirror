@@ -43,7 +43,7 @@
 
 
 ///! Update the schema version whenever a migration is required
-const int pcbnewSchemaVersion = 4;
+const int pcbnewSchemaVersion = 5;
 
 
 PCBNEW_SETTINGS::PCBNEW_SETTINGS()
@@ -168,7 +168,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             &m_Use45DegreeLimit, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "editing.auto_fill_zones",
-            &m_AutoRefillZones, true ) );
+            &m_AutoRefillZones, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "editing.allow_free_pads",
             &m_AllowFreePads, false ) );
@@ -619,6 +619,14 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
                        {
                            // This is actually a migration for APP_SETTINGS_BASE::m_LibTree
                            return migrateLibTreeWidth();
+                       } );
+
+    registerMigration( 4, 5,
+                       [&]() -> bool
+                       {
+                           // This default proved to be unpopular; bump it off for everyone
+                           Set( "editing.auto_fill_zones", false );
+                           return true;
                        } );
 }
 
