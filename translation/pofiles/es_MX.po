@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-15 16:29-0800\n"
-"PO-Revision-Date: 2023-02-23 00:30+0000\n"
+"PO-Revision-Date: 2023-02-24 23:41+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -6069,9 +6069,8 @@ msgid "Find Previous"
 msgstr "Buscar anterior"
 
 #: common/tool/actions.cpp:234
-#, fuzzy
 msgid "Find previous match"
-msgstr "Buscar anterior"
+msgstr "Buscar coincidencia anterior"
 
 #: common/tool/actions.cpp:240
 msgid "Find Next Marker"
@@ -8740,9 +8739,8 @@ msgstr "Escribe una directiva para guardar todas las corrientes (.probe alli)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:305
 #: eeschema/dialogs/dialog_sim_command_base.cpp:441
-#, fuzzy
 msgid "Save all power dissipations"
-msgstr "Desviación máxima permitida:"
+msgstr "Guarda todas las disipaciones de energía"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:306
 #, fuzzy
