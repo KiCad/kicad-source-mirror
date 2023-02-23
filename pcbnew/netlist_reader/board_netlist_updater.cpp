@@ -419,7 +419,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint
     // Create a copy only if the footprint has not been added during this update
     FOOTPRINT* copy = nullptr;
 
-    if( m_commit.GetStatus( aFootprint ) )
+    if( !m_commit.GetStatus( aFootprint ) )  
     {
         copy = static_cast<FOOTPRINT*>( aFootprint->Clone() );
         copy->SetParentGroup( nullptr );
