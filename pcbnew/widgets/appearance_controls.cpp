@@ -1841,7 +1841,7 @@ void APPEARANCE_CONTROLS::OnLayerContextMenu( wxCommandEvent& aEvent )
         return;
 
     case ID_PRESET_ALL_LAYERS:
-        preset.layers &presetAllLayers.layers;
+        preset.layers = presetAllLayers.layers;
         ApplyLayerPreset( preset );
         return;
 
