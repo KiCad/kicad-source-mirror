@@ -334,9 +334,19 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
                                         bool aMirror, const VECTOR2I& aOrigin,
                                         TEXT_STYLE_FLAGS aTextStyle ) const
 {
-    VECTOR2D glyphSize = aSize;
-    
     std::lock_guard<std::mutex> guard( m_freeTypeMutex );
+
+    return getTextAsGlyphsUnlocked( aBBox, aGlyphs, aText, aSize, aPosition, aAngle, aMirror,
+            aOrigin, aTextStyle );
+}
+
+VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
+        const wxString& aText, const VECTOR2I& aSize,
+        const VECTOR2I& aPosition, const EDA_ANGLE& aAngle,
+        bool aMirror, const VECTOR2I& aOrigin,
+        TEXT_STYLE_FLAGS aTextStyle ) const
+{
+    VECTOR2D glyphSize = aSize;
     FT_Face  face = m_face;
     double   scaler = faceSize();
 
@@ -478,7 +488,7 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
     {
         std::vector<std::unique_ptr<GLYPH>> underscoreGlyphs;
 
-        getTextAsGlyphs( nullptr, &underscoreGlyphs, wxT( "_" ), aSize, { 0, 0 }, ANGLE_0, false,
+        getTextAsGlyphsUnlocked( nullptr, &underscoreGlyphs, wxT( "_" ), aSize, { 0, 0 }, ANGLE_0, false,
                          { 0, 0 }, aTextStyle & ~TEXT_STYLE::OVERBAR );
 
         OUTLINE_GLYPH* underscoreGlyph = static_cast<OUTLINE_GLYPH*>( underscoreGlyphs[0].get() );
