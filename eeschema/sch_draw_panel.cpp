@@ -173,8 +173,8 @@ void SCH_DRAW_PANEL::setDefaultLayerDeps()
     m_view->SetLayerTarget( LAYER_OP_CURRENTS, KIGFX::TARGET_OVERLAY );
     m_view->SetLayerDisplayOnly( LAYER_OP_CURRENTS );
 
-//    m_view->SetLayerTarget( LAYER_SELECTION_SHADOWS, KIGFX::TARGET_NONCACHED );
-//    m_view->SetLayerDisplayOnly( LAYER_SELECTION_SHADOWS ) ;
+    m_view->SetLayerTarget( LAYER_SELECTION_SHADOWS, KIGFX::TARGET_OVERLAY );
+    m_view->SetLayerDisplayOnly( LAYER_SELECTION_SHADOWS ) ;
 }
 
 
