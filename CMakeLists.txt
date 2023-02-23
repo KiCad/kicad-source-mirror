@@ -45,6 +45,7 @@ set(CMAKE_CXX_FLAGS_QABUILD "-Os -g1 -ggdb1")
 
 include( GNUInstallDirs )
 include( CMakeDependentOption )
+include( CheckCXXCompilerFlag )
 
 # Output compile_commands.json for various LSP and other users
 set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
@@ -192,6 +193,13 @@ cmake_dependent_option( KICAD_MAKE_LINK_MAPS
     OFF "UNIX_NOT_APPLE"
     OFF )
 mark_as_advanced( KICAD_MAKE_LINK_MAPS )
+
+set( KICAD_INIT_VARIABLES "Default" CACHE STRING "Specify how compiler should initialize variables" )
+set_property( CACHE KICAD_INIT_VARIABLES PROPERTY STRINGS
+              "Default"         # Equivalent to pattern in debug mode (but not when Valgrind is used), zero in release mode
+              "Off"             # Don't initialize anything
+              "Zero"            # Initialize trivial variables to 0
+              "Pattern" )       # Initialize trivial variables to a non-zero pattern to flag them (usually 0xAA...)
 
 ####################################
 # Debugging/profiling
@@ -397,6 +405,45 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         set( CMAKE_CXX_FLAGS_DEBUG "-g3 -ggdb3" )
     endif()
 
+    check_cxx_compiler_flag( "-ftrivial-auto-var-init=pattern" COMPILER_SUPPORTS_TRIVIAL_PATTERN_INIT )
+    if( COMPILER_SUPPORTS_TRIVIAL_PATTERN_INIT )
+        set( VAR_PATTERN_INIT_FLAGS -ftrivial-auto-var-init=pattern )
+    endif()
+
+    check_cxx_compiler_flag( "-ftrivial-auto-var-init=zero" COMPILER_SUPPORTS_TRIVIAL_ZERO_INIT )
+    if( COMPILER_SUPPORTS_TRIVIAL_ZERO_INIT )
+        set( VAR_ZERO_INIT_FLAGS -ftrivial-auto-var-init=zero )
+    else()
+        # Clang 15 and below required a special flag to enable the zero-init flag, so try that
+        check_cxx_compiler_flag( "-ftrivial-auto-var-init=zero -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang"
+                                 COMPILER_REQUIRES_ENABLE_TRIVIAL_ZERO_INIT )
+        if( COMPILER_REQUIRES_ENABLE_TRIVIAL_ZERO_INIT )
+            set( VAR_ZERO_INIT_FLAGS -ftrivial-auto-var-init=zero -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang )
+        endif()
+    endif()
+
+    if( NOT KICAD_INIT_VARIABLES STREQUAL "Off" )
+        if( KICAD_INIT_VARIABLES STREQUAL "Default" )
+            # Disable when using valgrind to preserve reporting of uninitialized variables
+            if( NOT KICAD_USE_VALGRIND )
+                # Use pattern init in debug mode only, use zero init every other time
+                if( CMAKE_BUILD_TYPE STREQUAL "Debug" )
+                    set( VAR_INIT_FLAGS ${VAR_PATTERN_INIT_FLAGS} )
+                else()
+                    set( VAR_INIT_FLAGS ${VAR_ZERO_INIT_FLAGS} )
+                endif()
+            endif()
+        elseif( KICAD_INIT_VARIABLES STREQUAL "Zero" )
+            set( VAR_INIT_FLAGS ${VAR_ZERO_INIT_FLAGS} )
+        elseif( KICAD_INIT_VARIABLES STREQUAL "Pattern" )
+            set( VAR_INIT_FLAGS ${VAR_PATTERN_INIT_FLAGS} )
+        endif()
+
+        if( VAR_INIT_FLAGS )
+            add_compile_options( ${VAR_INIT_FLAGS} )
+            message( STATUS "Initializing trivial variables (${VAR_INIT_FLAGS})" )
+        endif()
+    endif()
 
     if( KICAD_SANITIZE_ADDRESS )
         add_compile_definitions( KICAD_SANITIZE_ADDRESS )

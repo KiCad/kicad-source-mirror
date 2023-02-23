@@ -23,9 +23,6 @@
 
 # Only configure warnings for Clang and GCC
 if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
-    include( CheckCXXCompilerFlag )
-
-
     # The SWIG-generated files tend to throw a lot of warnings, so
     # we do not add the warnings directly to the flags here but instead
     # keep track of them and add them to the flags later in a controlled manner
