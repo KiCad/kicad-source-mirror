@@ -52,7 +52,8 @@ static constexpr double UNDERLINE_POSITION_FACTOR = -0.16;
 ///< Scale factor for a glyph
 static constexpr double STROKE_FONT_SCALE = 1.0 / 21.0;
 
-static constexpr int FONT_OFFSET = -10;
+///< Offset (in stroke font units) to move the origin to the baseline.
+static constexpr int FONT_OFFSET = -8;
 
 
 bool                                g_defaultFontInitialized = false;
