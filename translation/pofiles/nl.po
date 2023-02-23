@@ -11,10 +11,9 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-10 15:35-0800\n"
-"PO-Revision-Date: 2023-02-01 03:03+0000\n"
-"Last-Translator: Christiaan Nieuwlaat <krizzje@gmail.com>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/master-"
-"source/nl/>\n"
+"PO-Revision-Date: 2023-02-23 18:22+0000\n"
+"Last-Translator: Tom Niesse <tomniesse@gmail.com>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/v7/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -31490,8 +31489,9 @@ msgstr "signaal"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:542
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:556
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:574
+#, fuzzy
 msgid "power plane"
-msgstr "krachtvliegtuig"
+msgstr "vermogensvlak"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:136
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:150
