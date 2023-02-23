@@ -633,7 +633,13 @@ void SVG_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double
     {
         wxMemoryOutputStream img_stream;
 
-        aImage.SaveFile( img_stream, wxBITMAP_TYPE_PNG );
+        if( m_colorMode )
+            aImage.SaveFile( img_stream, wxBITMAP_TYPE_PNG );
+        else    // Plot in B&W
+        {
+            wxImage image = aImage.ConvertToGreyscale();
+            image.SaveFile( img_stream, wxBITMAP_TYPE_PNG );
+        }
         size_t input_len = img_stream.GetOutputStreamBuffer()->GetBufferSize();
         std::vector<uint8_t> buffer( input_len );
         std::vector<uint8_t> encoded;
