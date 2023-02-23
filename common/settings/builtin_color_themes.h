@@ -58,8 +58,8 @@ static const std::map<int, COLOR4D> s_defaultTheme =
             { LAYER_PINNUM,               CSS_COLOR( 169, 0,   0,   1 ) },
             { LAYER_REFERENCEPART,        CSS_COLOR( 0,   100, 100, 1 ) },
 #ifdef __WXMAC__
-            // Macs look better with a lighter shadow
-            { LAYER_SELECTION_SHADOWS,      COLOR4D( .78, .92, 1.0, 0.8 ) },
+            // Try to mimic the system highlight color on Mac
+            { LAYER_SELECTION_SHADOWS,      COLOR4D( .3, .7, 1.0, 0.6 ) },
 #else
             { LAYER_SELECTION_SHADOWS,      COLOR4D( .4, .7, 1.0, 0.8 ) },
 #endif
