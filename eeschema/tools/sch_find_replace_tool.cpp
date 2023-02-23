@@ -64,50 +64,50 @@ int SCH_FIND_REPLACE_TOOL::UpdateFind( const TOOL_EVENT& aEvent )
                 }
             };
 
+    auto visitAll =
+            [&]()
+            {
+                for( SCH_ITEM* item : m_frame->GetScreen()->Items() )
+                {
+                    visit( item, &m_frame->GetCurrentSheet() );
+
+                    item->RunOnChildren(
+                            [&]( SCH_ITEM* aChild )
+                            {
+                                visit( aChild, &m_frame->GetCurrentSheet() );
+                            } );
+                }
+            };
+
     if( aEvent.IsAction( &ACTIONS::find ) || aEvent.IsAction( &ACTIONS::findAndReplace )
         || aEvent.IsAction( &ACTIONS::updateFind ) )
     {
         m_foundItemHighlighted = false;
-
-        for( SCH_ITEM* item : m_frame->GetScreen()->Items() )
-        {
-            visit( item, &m_frame->GetCurrentSheet() );
-
-            item->RunOnChildren(
-                    [&]( SCH_ITEM* aChild )
-                    {
-                        visit( aChild, &m_frame->GetCurrentSheet() );
-                    } );
-        }
+        visitAll();
     }
-    else if( aEvent.Matches( EVENTS::SelectedItemsModified )
-             || aEvent.Matches( EVENTS::PointSelectedEvent )
+    else if( aEvent.Matches( EVENTS::SelectedItemsModified ) )
+    {
+        for( EDA_ITEM* item : m_selectionTool->GetSelection() )
+            visit( item, &m_frame->GetCurrentSheet() );
+    }
+    else if( aEvent.Matches( EVENTS::PointSelectedEvent )
              || aEvent.Matches( EVENTS::SelectedEvent )
-             || aEvent.Matches( EVENTS::UnselectedEvent ) )
+             || aEvent.Matches( EVENTS::UnselectedEvent )
+             || aEvent.Matches( EVENTS::ClearedEvent ) )
     {
         // Normal find modifies the selection, but selection-based find does
         // not so we want to start over in the items we are searching through when
         // the selection changes
         if( selectedOnly )
+        {
             m_afterItem = nullptr;
-
-        for( EDA_ITEM* item : m_selectionTool->GetSelection() )
-            visit( item, &m_frame->GetCurrentSheet() );
+            visitAll();
+        }
     }
     else if( m_foundItemHighlighted )
     {
         m_foundItemHighlighted = false;
-
-        for( SCH_ITEM* item : m_frame->GetScreen()->Items() )
-        {
-            visit( item, &m_frame->GetCurrentSheet() );
-
-            item->RunOnChildren(
-                    [&]( SCH_ITEM* aChild )
-                    {
-                        visit( aChild, &m_frame->GetCurrentSheet() );
-                    } );
-        }
+        visitAll();
     }
 
     getView()->UpdateItems();
