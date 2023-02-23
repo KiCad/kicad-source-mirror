@@ -1807,13 +1807,14 @@ bool DRC_ENGINE::IsNetTieExclusion( int aTrackNetCode, PCB_LAYER_ID aTrackLayer,
 
     if( parentFootprint && parentFootprint->IsNetTie() )
     {
+        int                     epsilon = GetDesignSettings()->GetDRCEpsilon();
         std::map<wxString, int> padToNetTieGroupMap = parentFootprint->MapPadNumbersToNetTieGroups();
 
         for( PAD* pad : parentFootprint->Pads() )
         {
             if( padToNetTieGroupMap[ pad->GetNumber() ] >= 0 && aTrackNetCode == pad->GetNetCode() )
             {
-                if( pad->GetEffectiveShape( aTrackLayer )->Collide( aCollisionPos, 0 ) )
+                if( pad->GetEffectiveShape( aTrackLayer )->Collide( aCollisionPos, epsilon ) )
                     return true;
             }
         }
