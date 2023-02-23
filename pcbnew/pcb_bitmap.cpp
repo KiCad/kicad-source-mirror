@@ -152,7 +152,7 @@ const BOX2I PCB_BITMAP::GetBoundingBox() const
 std::shared_ptr<SHAPE> PCB_BITMAP::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
 {
     BOX2I box = GetBoundingBox();
-    return std::shared_ptr<SHAPE_RECT>( new SHAPE_RECT( box.GetCenter(), box.GetWidth(),
+    return std::shared_ptr<SHAPE_RECT>( new SHAPE_RECT( box.GetPosition(), box.GetWidth(),
                                                         box.GetHeight() ) );
 }
 
