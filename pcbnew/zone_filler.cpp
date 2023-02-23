@@ -1524,7 +1524,7 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
      */
 
     if( half_min_width - epsilon > epsilon )
-        aFillPolys.Deflate( half_min_width - epsilon, numSegs, cornerStrategy );
+        aFillPolys.Deflate( half_min_width - epsilon, numSegs, fastCornerStrategy );
 
     // Min-thickness is the web thickness.  On the other hand, a blob min-thickness by
     // min-thickness is not useful.  Since there's no obvious definition of web vs. blob, we

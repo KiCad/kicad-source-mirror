@@ -1012,7 +1012,7 @@ public:
                   CORNER_STRATEGY aCornerStrategy = ROUND_ALL_CORNERS );
 
     void Deflate( int aAmount, int aCircleSegmentsCount,
-                  CORNER_STRATEGY aCornerStrategy = ROUND_ALL_CORNERS )
+                  CORNER_STRATEGY aCornerStrategy = CHAMFER_ALL_CORNERS )
     {
         Inflate( -aAmount, aCircleSegmentsCount, aCornerStrategy );
     }
