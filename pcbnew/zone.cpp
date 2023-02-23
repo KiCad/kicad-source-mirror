@@ -905,7 +905,7 @@ void ZONE::HatchBorder()
     int     layer = GetFirstLayer();
     int     slope_flag = (layer & 1) ? 1 : -1;  // 1 or -1
     double  slope = 0.707106 * slope_flag;      // 45 degrees slope
-    int     max_a, min_a;
+    int64_t max_a, min_a;
 
     if( slope_flag == 1 )
     {
@@ -929,7 +929,7 @@ void ZONE::HatchBorder()
     std::vector<VECTOR2I> pointbuffer;
     pointbuffer.reserve( 256 );
 
-    for( int a = min_a; a < max_a; a += spacing )
+    for( int64_t a = min_a; a < max_a; a += spacing )
     {
         pointbuffer.clear();
 
