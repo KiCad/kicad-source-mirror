@@ -25,10 +25,13 @@
 #include <optional>
 #include <string>
 #include <vector>
+#include <plugins/cadstar/cadstar_archive_objects.h>
 
 struct CADSTAR_PART_ENTRY;
 struct CADSTAR_SWAP_GROUP;
 struct CADSTAR_ATTRIBUTE_VALUE;
+struct CADSTAR_PART_SYMBOL_ENTRY;
+struct CADSTAR_PART_PIN;
 
 /**
  * CADSTAR Parts Library (*.lib) model - a data structure describing the contents of the
@@ -65,16 +68,16 @@ struct CADSTAR_PART_ENTRY
     bool m_PinsVisible = true;
 
     /**
-     * Map of pin numbers to alphanumeric pin names
+     * Map of pin identifiers to alphanumeric pin names
      * Pin names can be a maximum of 10 characters
-     * (Typically used for naming of BGA pads)
+     * (Typically used for naming of BGA pads - equivalent to KiCad Pin Numbers)
      *
      * E.g: *PNM 1=A1 2=A2 3=A3 4=B1 5=B2 6=B3
      */
     std::map<long, std::string> m_PinNamesMap;
 
     /**
-     * Map of pin numbers to alphanumeric pin labels
+     * Map of pin identifiers to alphanumeric pin labels. Equivalent to KiCad Pin Names
      *
      * E.g: *PLB 1=STROBE 2=OFFSET 3=OFFSET 5=+ 6=+v
      */
@@ -152,6 +155,61 @@ struct CADSTAR_PART_ENTRY
      * Is set to read-only if exclamation mark (!) is present
      */
     std::map<std::string, CADSTAR_ATTRIBUTE_VALUE> m_PartAttributes;
+
+    /**
+     * Symbols that form this part
+     */
+    std::vector<CADSTAR_PART_SYMBOL_ENTRY> m_Symbols;
+
+    /**
+     * Pins with an implied electrical connection to a net, not part of any symbol
+     * (Note: we probably will need to import these into the first gate or something)
+     */
+    std::vector<CADSTAR_PART_PIN> m_HiddenPins;
+};
+
+
+struct CADSTAR_PART_SYMBOL_ENTRY
+{
+    CADSTAR_PART_SYMBOL_ENTRY() {};
+
+    CADSTAR_PART_SYMBOL_ENTRY( std::string aName, std::optional<std::string> aAlternate,
+                               std::vector<CADSTAR_PART_PIN> aPins ) :
+            m_SymbolName( aName ),
+            m_SymbolAlternateName( aAlternate ),
+            m_Pins( aPins )
+    {};
+
+    std::string                   m_SymbolName;
+    std::optional<std::string>    m_SymbolAlternateName;
+    std::vector<CADSTAR_PART_PIN> m_Pins;
+};
+
+
+struct CADSTAR_PART_PIN
+{
+    CADSTAR_PART_PIN() :
+            m_Identifier( 0 ),
+            m_Position( CADSTAR_PIN_POSITION::TOP_RIGHT ),
+            m_Type( CADSTAR_PIN_TYPE::UNCOMMITTED ),
+            m_Loading(),
+            m_Signal()
+    {};
+
+    CADSTAR_PART_PIN( long aId, CADSTAR_PIN_POSITION aPos, CADSTAR_PIN_TYPE aType,
+                      std::optional<long> aLoading, std::optional<std::string> aSignal ) :
+            m_Identifier( aId ),
+            m_Position( aPos ),
+            m_Type( aType ),
+            m_Loading( aLoading ),
+            m_Signal( aSignal )
+    {};
+
+    long                       m_Identifier;
+    CADSTAR_PIN_POSITION       m_Position;
+    CADSTAR_PIN_TYPE           m_Type;
+    std::optional<long>        m_Loading;
+    std::optional<std::string> m_Signal; // e.g. GND or VCC
 };
 
 
@@ -167,7 +225,7 @@ struct CADSTAR_SWAP_GROUP
     std::optional<std::string> m_Name;
 
     /**
-     * Each gate is a list of pin numbers. The order of the pins is important
+     * Each gate is a list of pin identifiers. The order of the pins is important
      * as it defines the equivalence between gates
      */
     std::vector<std::vector<long>> m_Gates;

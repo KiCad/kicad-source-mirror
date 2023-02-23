@@ -35,14 +35,18 @@ using namespace CADSTAR_PARTS_LIB;
  */
 struct CADSTAR_LIB_PARSER_STATE
 {
-    std::string             m_CurrentString;
-    std::string             m_CurrentAttrName;
-    long                    m_CurrentLong = 0;
-    std::vector<long>       m_CurrentPinEquivalenceGroup;
-    std::set<std::string>   m_CurrentElementsParsed;
-    bool                    m_ReadOnly = false;
-    CADSTAR_SWAP_GROUP      m_CurrentSwapGroup;
-    CADSTAR_PART_ENTRY      m_CurrentPart;
+    std::string                   m_CurrentString;
+    std::string                   m_CurrentAttrName;
+    long                          m_CurrentLong = 0;
+    std::vector<long>             m_CurrentPinEquivalenceGroup;
+    std::set<std::string>         m_CurrentElementsParsed;
+    bool                          m_ReadOnly = false;
+    CADSTAR_SWAP_GROUP            m_CurrentSwapGroup;
+    CADSTAR_PART_PIN              m_CurrentPin;
+    std::vector<CADSTAR_PART_PIN> m_CurrentPinList;
+    CADSTAR_PART_SYMBOL_ENTRY     m_CurrentSymbol;
+    CADSTAR_PART_ENTRY            m_CurrentPart;
+
     CADSTAR_PARTS_LIB_MODEL m_ParsedModel;
 };
 
@@ -82,6 +86,9 @@ struct CADSTAR_LIB_PARSER_ACTION<Rule>                                          
 DEFINE_CONTENT_TO_NUMBER_ACTION( CURRENT_FORMAT_NUMBER, m_ParsedModel.m_FormatNumber );
 DEFINE_CONTENT_TO_NUMBER_ACTION( PINNUM,                m_CurrentLong );
 DEFINE_CONTENT_TO_NUMBER_ACTION( MAX_PIN_COUNT,         m_CurrentPart.m_MaxPinCount );
+DEFINE_CONTENT_TO_NUMBER_ACTION( PIN_IDENTIFIER,        m_CurrentPin.m_Identifier );
+DEFINE_CONTENT_TO_NUMBER_ACTION( PIN_LOADING,           m_CurrentPin.m_Loading );
+
 
 // unfortunately the one below needs to be defined separately
 template <>
@@ -147,6 +154,9 @@ DEFINE_STRING_ACTION( ATTRIBUTE_NAME,           m_CurrentAttrName );
 DEFINE_STRING_ACTION( ACCEPTANCE_PART_NAME,     m_CurrentPart.m_AcceptancePartName );
 DEFINE_STRING_ACTION( ACCEPTANCE_TEXT,          m_CurrentPart.m_AcceptanceText );
 DEFINE_STRING_ACTION( SPICE_PART_NAME,          m_CurrentPart.m_SpicePartName );
+DEFINE_STRING_ACTION( SCH_NAME,                 m_CurrentSymbol.m_SymbolName );
+DEFINE_STRING_ACTION( SCH_ALTERNATE,            m_CurrentSymbol.m_SymbolAlternateName );
+DEFINE_STRING_ACTION( PIN_SIGNAL_NAME,          m_CurrentPin.m_Signal );
 
 // Might become m_SpiceModel if SPICE_SECOND is found
 DEFINE_STRING_ACTION( SPICE_FIRST,              m_CurrentPart.m_SpiceValue );
@@ -323,34 +333,33 @@ DEFINE_SWAP_GROUP_ACTION( INTERNAL_SWAP_GROUP, m_CurrentPart.m_InternalSwapGroup
 DEFINE_SWAP_GROUP_ACTION( EXTERNAL_SWAP_GROUP, m_CurrentPart.m_ExternalSwapGroup );
 
 
-/**
- * The format allows user defined "part" attrbutes, but the ones listed here are in-built with
- * special meaning
- */
-static const std::set<std::string> ReservedWordsStarLines = { "VALUE", "PNM", "PLB", "EQU", "SYM",
-                                                              "INT",   "EXT", "DFN", "NGS", "NPV",
-                                                              "STM",   "MXP", "SPI", "PAC" };
-
 template <>
 struct CADSTAR_LIB_PARSER_ACTION<USER_PART_ATTRIBUTE>
 {
     template <typename ActionInput>
     static void apply( const ActionInput& in, CADSTAR_LIB_PARSER_STATE& s )
     {
+        // The format allows user defined "part" attrbutes, but the ones listed here are in-built
+        // with special meaning
+        static const std::set<std::string> reservedWordsStarLines = { "VALUE", "PNM", "PLB", "EQU",
+                                                                      "SYM",   "INT", "EXT", "DFN",
+                                                                      "NGS",   "NPV", "STM", "MXP",
+                                                                      "SPI",   "PAC" };
+
         if( s.m_CurrentPart.m_UserAttributes.count( s.m_CurrentAttrName ) )
         {
             throw parse_error( fmt::format( "Duplicate attribute name '{}'", s.m_CurrentAttrName ),
                                in );
         }
 
-        if( ReservedWordsStarLines.count( s.m_CurrentAttrName ) )
+        if( reservedWordsStarLines.count( s.m_CurrentAttrName ) )
         {
-                throw parse_error(
-                        fmt::format(
-                                "Invalid use of in-built attribute name '{}'. Either the attribute "
-                                "was already defined for this part or it has an unexpected syntax.",
-                                s.m_CurrentAttrName ),
-                        in );
+            throw parse_error(
+                    fmt::format(
+                            "Invalid use of in-built attribute name '{}'. Either the attribute "
+                            "was already defined for this part or it has an unexpected syntax.",
+                            s.m_CurrentAttrName ),
+                    in );
         }
 
         s.m_CurrentPart.m_UserAttributes.insert( { s.m_CurrentAttrName, s.m_CurrentString } );
@@ -388,6 +397,81 @@ DEFINE_ATTRIBUTE_ACTION( SCM_ATTRIBUTE, m_CurrentPart.m_SchAttributes );
 DEFINE_ATTRIBUTE_ACTION( PCB_ATTRIBUTE, m_CurrentPart.m_PcbAttributes );
 DEFINE_ATTRIBUTE_ACTION( PART_ATTRIBUTE, m_CurrentPart.m_PartAttributes );
 DEFINE_ATTRIBUTE_ACTION( SCH_PCB_ATTRIBUTE, m_CurrentPart.m_SchAndPcbAttributes );
+
+
+template <>
+struct CADSTAR_LIB_PARSER_ACTION<SYMBOL_ENTRY>
+{
+    static void apply0( CADSTAR_LIB_PARSER_STATE& s )
+    {
+        s.m_CurrentSymbol.m_Pins.swap( s.m_CurrentPinList );
+        s.m_CurrentPart.m_Symbols.push_back( std::move( s.m_CurrentSymbol ) );
+        s.m_CurrentSymbol = CADSTAR_PART_SYMBOL_ENTRY();
+    }
+};
+
+
+template <>
+struct CADSTAR_LIB_PARSER_ACTION<PIN_ENTRY>
+{
+    static void apply0( CADSTAR_LIB_PARSER_STATE& s )
+    {
+        s.m_CurrentPinList.push_back( std::move( s.m_CurrentPin ) );
+        s.m_CurrentPin = CADSTAR_PART_PIN();
+    }
+};
+
+
+template <>
+struct CADSTAR_LIB_PARSER_ACTION<HIDDEN_PIN_ENTRY>
+{
+    static void apply0( CADSTAR_LIB_PARSER_STATE& s )
+    {
+        s.m_CurrentPart.m_HiddenPins.push_back( std::move( s.m_CurrentPinList[0] ) );
+        s.m_CurrentPinList.clear();
+    }
+};
+
+
+template <>
+struct CADSTAR_LIB_PARSER_ACTION<PIN_POSITION>
+{
+    template <typename ActionInput>
+    static void apply( const ActionInput& in, CADSTAR_LIB_PARSER_STATE& s )
+    {
+        s.m_CurrentPin.m_Position = CADSTAR_PIN_POSITION( helperStringToLong( in.string() ) );
+    }
+};
+
+
+template <>
+struct CADSTAR_LIB_PARSER_ACTION<PIN_TYPE>
+{
+    template <typename ActionInput>
+    static void apply( const ActionInput& in, CADSTAR_LIB_PARSER_STATE& s )
+    {
+        // The format allows user defined "part" attrbutes, but the ones listed here are in-built
+        // with special meaning
+        static const std::map<std::string, CADSTAR_PIN_TYPE> tokenToPinType = {
+            { "U", CADSTAR_PIN_TYPE::UNCOMMITTED },
+            { "I", CADSTAR_PIN_TYPE::INPUT },
+            { "N", CADSTAR_PIN_TYPE::OUTPUT_NOT_OR },
+            { "Y", CADSTAR_PIN_TYPE::OUTPUT_OR },
+            { "Q", CADSTAR_PIN_TYPE::OUTPUT_NOT_NORM_OR },
+            { "P", CADSTAR_PIN_TYPE::POWER },
+            { "G", CADSTAR_PIN_TYPE::GROUND },
+            { "T", CADSTAR_PIN_TYPE::TRISTATE_BIDIR },
+            { "TI", CADSTAR_PIN_TYPE::TRISTATE_INPUT },
+            { "TD", CADSTAR_PIN_TYPE::TRISTATE_DRIVER }
+        };
+
+        if( !tokenToPinType.count( in.string() ) )
+            throw parse_error( fmt::format( "Unexpected pin type '{}'", in.string() ), in );
+
+        s.m_CurrentPin.m_Type = tokenToPinType.at( in.string() );
+    }
+};
+
 
 template <typename INPUT_TYPE>
 bool checkHeaderHelper( INPUT_TYPE& aInput )

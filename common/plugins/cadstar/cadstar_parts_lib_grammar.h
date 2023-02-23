@@ -56,13 +56,32 @@ struct STR_SEGMENT_EXCLUDING : plus<not_at<sor<eolf, LINE_CONTINUATION, EXCLUSIO
 template <typename... EXCLUSION_RULES>
 struct STRING_EXCLUDING : plus<STR_SEGMENT_EXCLUDING<EXCLUSION_RULES...>, opt<LINE_CONTINUATION>> {};
 
-struct QUOTED_STRING : seq<one<'"'>, STRING_EXCLUDING<one<'"'>>, one<'"'>> {};
 
 /**
  * Control character with or without preceding whitespace
  */
 template <char... CHAR_TO_FIND>
 struct spaced_ch : seq<star<WHITESPACE>, one<CHAR_TO_FIND...>>{};
+
+/**
+ * String inside quotation marks
+ */
+struct QUOTED_STRING : seq<one<'"'>, STRING_EXCLUDING<one<'"'>>, one<'"'>> {};
+
+/**
+ * String inside brackets with preceding spaces
+ */
+struct STRING_IN_BRACKETS :
+                seq
+                <
+                    spaced_ch<'('>,
+                    sor<
+                        QUOTED_STRING,
+                        STRING_EXCLUDING<one<')'>>
+                    >,
+                    one<')'>
+                >
+{};
 
 
 // **************
@@ -81,7 +100,8 @@ struct FORMAT : seq
                     star<WHITESPACE>,
                     CURRENT_FORMAT_NUMBER,
                     opt<eol>
-                > {};
+                >
+ {};
 
 
 // **************
@@ -100,7 +120,7 @@ struct PART_VERSION_FILTER : spaced_ch<';'>{};
 
     // part header elements:
 struct PART_NAME : STRING_EXCLUDING<PART_NAME_FILTER> {};
-struct PART_NUMBER : STRING_EXCLUDING<PART_NUMBER_FILTER> {};
+struct PART_NUMBER : STRING_IN_BRACKETS {};
 struct PART_VERSION : STRING_EXCLUDING<PART_VERSION_FILTER> {};
 struct PART_DESCRIPTION : STRING_EXCLUDING<> {};
 
@@ -110,7 +130,7 @@ struct PART_HEADER :
                     bol,
                     one<'.'>,
                     must<PART_NAME>,
-                    opt<seq<spaced_ch<'('>, PART_NUMBER, one<')'>>>,
+                    opt<PART_NUMBER>,
                     opt<seq<spaced_ch<':'>, PART_VERSION>>,
                     opt<seq<spaced_ch<';'>, PART_DESCRIPTION>>,
                     opt<eol>
@@ -127,14 +147,14 @@ struct PCB_ALTERNATE_FILTER : one<')'>{};
 
     // pcb component elements
 struct PCB_COMPONENT : STRING_EXCLUDING<PCB_COMPONENT_FILTER> {};
-struct PCB_ALTERNATE : STRING_EXCLUDING<PCB_ALTERNATE_FILTER> {};
+struct PCB_ALTERNATE : STRING_IN_BRACKETS {};
 
 struct PART_PCB_COMPONENT :
                 seq
                 <
                     bol,
                     PCB_COMPONENT,
-                    opt<seq<spaced_ch<'('>, PCB_ALTERNATE, one<')'>>>,
+                    opt<PCB_ALTERNATE>,
                     opt<eol>
                 >
 {};
@@ -362,7 +382,7 @@ struct MXP_LINE :
 {};
 
 //[*SPI_[(<Part name>)]_[<Model>]_<Component Value>]
-struct SPICE_PART_NAME : STRING_EXCLUDING< one<')'> > {};
+struct SPICE_PART_NAME : STRING_IN_BRACKETS {};
 struct SPICE_FIRST : sor<QUOTED_STRING, STRING_EXCLUDING<WHITESPACE>> {};
 struct SPICE_SECOND : sor<QUOTED_STRING, STRING_EXCLUDING<WHITESPACE>> {};
 struct SPI_LINE :
@@ -371,7 +391,7 @@ struct SPI_LINE :
                     bol,
                     TAO_PEGTL_ISTRING( "*SPI"),
                     plus<WHITESPACE>,
-                    opt<seq<spaced_ch<'('>, SPICE_PART_NAME, one<')'>>>,
+                    opt<SPICE_PART_NAME>,
                     plus<WHITESPACE>,
                     SPICE_FIRST, // Spice Value or Model
                     opt<plus<WHITESPACE>, SPICE_SECOND>, // Spice Value
@@ -381,7 +401,7 @@ struct SPI_LINE :
 
 
 //[*PAC_(<Part name>)_<Acceptance Text>]
-struct ACCEPTANCE_PART_NAME : STRING_EXCLUDING< one<')'> > {};
+struct ACCEPTANCE_PART_NAME : STRING_IN_BRACKETS {};
 struct ACCEPTANCE_TEXT : STRING_EXCLUDING<> {};
 struct PAC_LINE :
                 seq
@@ -389,7 +409,7 @@ struct PAC_LINE :
                     bol,
                     TAO_PEGTL_ISTRING( "*PAC"),
                     plus<WHITESPACE>,
-                    opt<seq<spaced_ch<'('>, ACCEPTANCE_PART_NAME, one<')'>>>,
+                    opt<ACCEPTANCE_PART_NAME>,
                     plus<WHITESPACE>,
                     ACCEPTANCE_TEXT,
                     opt<eol>
@@ -418,7 +438,7 @@ struct USER_PART_ATTRIBUTE :
 //----------------------------------------------------
 struct READONLY : one <'!'>{};
 struct ATTRIBUTE_NAME : sor<QUOTED_STRING, STRING_EXCLUDING< spaced_ch<'('>>> {};
-struct ATTRIBUTE_VALUE : sor<QUOTED_STRING, STRING_EXCLUDING< one<')'>>> {};
+struct ATTRIBUTE_VALUE : STRING_IN_BRACKETS {};
 
 template<char START_TOKEN>
 struct GENERIC_ATTRIBUTE :
@@ -428,9 +448,7 @@ struct GENERIC_ATTRIBUTE :
                     one<START_TOKEN>,
                     opt<READONLY>,
                     ATTRIBUTE_NAME,
-                    spaced_ch<'('>,
                     ATTRIBUTE_VALUE,
-                    one<')'>,
                     opt<eol>
                 >
 {};
@@ -449,6 +467,49 @@ struct PART_ATTRIBUTE : GENERIC_ATTRIBUTE<'~'>{};
 
 //[@[!]<SCM/PCB Attribute name>(<Attribute value>)]
 struct SCH_PCB_ATTRIBUTE : GENERIC_ATTRIBUTE<'@'>{};
+
+
+//[<SCM Symbol Refname>][_(<SCM Alternate Refname>)]
+struct SCH_NAME : STRING_EXCLUDING<spaced_ch<'('>> {};
+struct SCH_ALTERNATE : STRING_IN_BRACKETS {};
+struct SCH_SYMBOL_LINE : seq<SCH_NAME, opt<SCH_ALTERNATE>, opt<eol>>{};
+
+//[<PinIdentifier>[.<Position>] [!<Pintype>] [:<Loading>]]
+struct PIN_IDENTIFIER : plus<digit>{};
+struct PIN_POSITION : range<'0', '3'>{};
+struct PIN_TYPE : star<alpha>{};
+struct PIN_LOADING : plus<digit>{};
+
+struct PIN_ENTRY :
+                seq
+                <
+                    PIN_IDENTIFIER,
+                    one<'.'>,
+                    PIN_POSITION,
+                    opt< one<'!'>, PIN_TYPE>,
+                    opt< one<':'>, PIN_LOADING>
+                >
+{};
+
+
+struct SYMBOL_ENTRY :
+                seq
+                <
+                    SCH_SYMBOL_LINE,
+                    plus
+                    <
+                        PIN_ENTRY,
+                        star<WHITESPACE>,
+                        opt<LINE_CONTINUATION>
+                    >,
+                    opt<eol>
+                >
+{};
+
+
+///<Signame>_<PinIdentifier>[.<Position>][!<Pintype>][:<Loading>]
+struct PIN_SIGNAL_NAME : seq<one<'/'>, STRING_EXCLUDING<WHITESPACE>> {};
+struct HIDDEN_PIN_ENTRY : seq<PIN_SIGNAL_NAME, plus<WHITESPACE>, PIN_ENTRY, opt<eol>>{};
 
 
 //******************
@@ -480,7 +541,12 @@ struct PART_ENTRY :
                         PCB_ATTRIBUTE,         //[%[!]<PCB Attribute name>(<Attribute value>)]
                         PART_ATTRIBUTE,        //[~[!]<Parts Library Attribute Name>(<Attribute Value>)]
                         SCH_PCB_ATTRIBUTE      //[@[!]<SCM/PCB Attribute name>(<Attribute value>)]
-                    >>
+                    >>,
+                    star<SYMBOL_ENTRY>,        //[<SCM Symbol Refname>][_(<SCM Alternate Refname>)]
+                                               //[Pin entry] [Pin entry] ...
+
+                    star<HIDDEN_PIN_ENTRY>     //[/<Signame>_<Pin entry>]
+
                 >
 {};
 
@@ -497,7 +563,7 @@ struct GRAMMAR :
                         sor
                         <
                             PART_ENTRY,
-                            UNMATCHED_CONTENT, //@todo remove once parser is complete
+                            //UNMATCHED_CONTENT, //@todo remove once parser is complete
                             EMPTY_LINE // optional empty line
                         >,
                         opt<eol>

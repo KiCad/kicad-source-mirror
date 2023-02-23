@@ -20,6 +20,7 @@
 
 #include <iostream>
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <algorithm>
 
 #include <pegtl/contrib/analyze.hpp>
 #include <pegtl/contrib/trace.hpp>
@@ -170,6 +171,18 @@ BOOST_AUTO_TEST_CASE( ReadFile )
         BOOST_CHECK_EQUAL( partEntry.m_SchAndPcbAttributes["SCH and PCB val2"].m_Value,
                            "readOnly" + std::to_string( i ) );
 
+        // Check symbol name and pins
+        BOOST_REQUIRE_EQUAL( partEntry.m_Symbols.size(), 1 );
+        BOOST_CHECK_EQUAL( partEntry.m_Symbols[0].m_SymbolName, "Symbol" + std::to_string( i ) );
+        BOOST_CHECK_EQUAL( partEntry.m_Symbols[0].m_SymbolAlternateName,
+                           std::optional<std::string>() );
+        BOOST_REQUIRE_EQUAL( partEntry.m_Symbols[0].m_Pins.size(), 2 );
+        BOOST_CHECK_EQUAL( partEntry.m_Symbols[0].m_Pins[0].m_Identifier, 1 );
+        BOOST_CHECK_EQUAL( partEntry.m_Symbols[0].m_Pins[1].m_Identifier, 2 );
+
+        // Check hidden pins
+        BOOST_REQUIRE_EQUAL( partEntry.m_HiddenPins.size(), 1 );
+        BOOST_CHECK_EQUAL( partEntry.m_HiddenPins[0].m_Signal, "GND" );
         i++;
     }
 }
@@ -213,11 +226,13 @@ BOOST_AUTO_TEST_CASE( ReadContent )
             "~<Parts Attribute name1>(<Attribute value1>)\r\n"
             "~!<Parts Attribute name2>(<Attribute value2>)\r\n"
             "@<SCM/PCB Attribute name1>(<Attribute value1>)\r\n"
-            "@!<SCM/PCB Attribute name2>(<Attribute value2>)\r\n";
-    //"etc ...\r\n"
-    //"<SCM Symbol Refname> (<SCM Alternate Refname>)\r\n"
-    //"<PinIdentifier>.<Position> !<Pintype> :<Loading> etc\r\n"
-    //"<PinIdentifier>.<Position> !<Pintype> :<Loading> etc ...\r\n"
+            "@!<SCM/PCB Attribute name2>(<Attribute value2>)\r\n"
+            "<SCM Symbol Refname1> (<SCM Alternate Refname>)\r\n"
+            "1.0!TD:2000 2.1!TI 3.2!T\r\n"
+            "<SCM Symbol Refname2>\r\n"
+            "4.2!U:1000 5.1!I 6.3!Q\r\n"
+            "/GND 7.0!G:2000\r\n"
+            "/VCC 8.0!P:2000\r\n";
     //"etc ...\r\n"
     //"/<Signame> <PinIdentifier>.<Position>!<Pintype>:<Loading>\r\n"
     //"/<Signame> <PinIdentifier>.<Position>!<Pintype>:<Loading>\r\n";
@@ -376,7 +391,9 @@ BOOST_AUTO_TEST_CASE( ReadContent )
     BOOST_CHECK_EQUAL( partAtts["<Parts Attribute name2>"].m_ReadOnly, true );
     BOOST_CHECK_EQUAL( partAtts["<Parts Attribute name2>"].m_Value, "<Attribute value2>" );
 
-   // Check Compbined Sch/PCB attributes (@ lines)
+   // Check Combined Sch/PCB attributes (@ lines)
+    BOOST_REQUIRE_EQUAL( result.m_PartEntries[0].m_SchAndPcbAttributes.size(), 2 );
+
     std::map<std::string, CADSTAR_ATTRIBUTE_VALUE>schAndPcbAtts =
             result.m_PartEntries[0].m_SchAndPcbAttributes;
 
@@ -385,6 +402,95 @@ BOOST_AUTO_TEST_CASE( ReadContent )
 
     BOOST_CHECK_EQUAL( schAndPcbAtts["<SCM/PCB Attribute name2>"].m_ReadOnly, true );
     BOOST_CHECK_EQUAL( schAndPcbAtts["<SCM/PCB Attribute name2>"].m_Value, "<Attribute value2>" );
+
+   // Check symbols
+    std::vector<CADSTAR_PART_SYMBOL_ENTRY> symbols = result.m_PartEntries[0].m_Symbols;
+
+    std::vector<CADSTAR_PART_SYMBOL_ENTRY> expectedSymbols = {
+        { "<SCM Symbol Refname1>",
+          "<SCM Alternate Refname>",
+          { CADSTAR_PART_PIN( 1, CADSTAR_PIN_POSITION::TOP_RIGHT, CADSTAR_PIN_TYPE::TRISTATE_DRIVER,
+                              2000, std::optional<std::string>() ),
+            CADSTAR_PART_PIN( 2, CADSTAR_PIN_POSITION::TOP_LEFT, CADSTAR_PIN_TYPE::TRISTATE_INPUT,
+                              std::optional<long>(), std::optional<std::string>() ),
+            CADSTAR_PART_PIN( 3, CADSTAR_PIN_POSITION::BOTTOM_LEFT, CADSTAR_PIN_TYPE::TRISTATE_BIDIR,
+                              std::optional<long>(), std::optional<std::string>() ) }
+        },
+        { "<SCM Symbol Refname2>",
+          std::optional<std::string>(),
+          { CADSTAR_PART_PIN( 4, CADSTAR_PIN_POSITION::BOTTOM_LEFT, CADSTAR_PIN_TYPE::UNCOMMITTED,
+                              1000, std::optional<std::string>() ),
+            CADSTAR_PART_PIN( 5, CADSTAR_PIN_POSITION::TOP_LEFT, CADSTAR_PIN_TYPE::INPUT,
+                              std::optional<long>(), std::optional<std::string>() ),
+            CADSTAR_PART_PIN( 6, CADSTAR_PIN_POSITION::BOTTOM_RIGHT, CADSTAR_PIN_TYPE::OUTPUT_NOT_NORM_OR,
+                              std::optional<long>(), std::optional<std::string>() ) }
+        }
+    };
+
+    BOOST_REQUIRE_EQUAL( result.m_PartEntries[0].m_Symbols.size(), expectedSymbols.size() );
+
+    auto itA = symbols.begin();
+    auto itB = expectedSymbols.begin();
+
+    while( itA != symbols.end() || itB != expectedSymbols.end() )
+    {
+        BOOST_TEST_CONTEXT( "With symbol = " << itB->m_SymbolName
+                                             << " Alternate = " << itB->m_SymbolAlternateName )
+        {
+            BOOST_CHECK_EQUAL( itA->m_SymbolName, itB->m_SymbolName );
+            BOOST_CHECK_EQUAL( itA->m_SymbolAlternateName, itB->m_SymbolAlternateName );
+
+            BOOST_REQUIRE_EQUAL( itA->m_Pins.size(), itB->m_Pins.size() );
+
+            auto itPinsA = itA->m_Pins.begin();
+            auto itPinsB = itB->m_Pins.begin();
+
+            while( itPinsA != itA->m_Pins.end() || itPinsB != itB->m_Pins.end() )
+            {
+                BOOST_TEST_CONTEXT( "Pin Identifier = " << itPinsA->m_Identifier )
+                {
+                    BOOST_CHECK_EQUAL( itPinsA->m_Identifier, itPinsB->m_Identifier );
+                    BOOST_CHECK( itPinsA->m_Position == itPinsB->m_Position );
+                    BOOST_CHECK( itPinsA->m_Type == itPinsB->m_Type );
+                    BOOST_CHECK_EQUAL( itPinsA->m_Loading, itPinsB->m_Loading );
+                    BOOST_CHECK_EQUAL( itPinsA->m_Signal, itPinsB->m_Signal );
+                }
+
+                ++itPinsA;
+                ++itPinsB;
+            }
+
+            ++itA;
+            ++itB;
+        }
+    }
+
+    // Compare hidden pins
+    std::vector<CADSTAR_PART_PIN> expectedHiddenPins = {
+        { 7, CADSTAR_PIN_POSITION::TOP_RIGHT, CADSTAR_PIN_TYPE::GROUND, 2000, "GND" },
+        { 8, CADSTAR_PIN_POSITION::TOP_RIGHT, CADSTAR_PIN_TYPE::POWER, 2000, "VCC" }
+    };
+
+    BOOST_REQUIRE_EQUAL( result.m_PartEntries[0].m_HiddenPins.size(), expectedHiddenPins.size() );
+
+    auto itPinsA = result.m_PartEntries[0].m_HiddenPins.begin();
+    auto itPinsB = expectedHiddenPins.begin();
+
+    while( itPinsA != result.m_PartEntries[0].m_HiddenPins.end()
+           || itPinsB != expectedHiddenPins.end() )
+    {
+        BOOST_TEST_CONTEXT( "Pin Identifier = " << itPinsB->m_Signal )
+        {
+            BOOST_CHECK_EQUAL( itPinsA->m_Identifier, itPinsB->m_Identifier );
+            BOOST_CHECK( itPinsA->m_Position == itPinsB->m_Position );
+            BOOST_CHECK( itPinsA->m_Type == itPinsB->m_Type );
+            BOOST_CHECK_EQUAL( itPinsA->m_Loading, itPinsB->m_Loading );
+            BOOST_CHECK_EQUAL( itPinsA->m_Signal, itPinsB->m_Signal );
+        }
+
+        ++itPinsA;
+        ++itPinsB;
+    }
 }
 
 BOOST_AUTO_TEST_SUITE_END()

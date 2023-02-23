@@ -18,6 +18,9 @@ $!SCH val2 (readOnly0)
 ~!Part val2 (readOnly0)
 @SCH and PCB val1 (val0)
 @!SCH and PCB val2 (readOnly0)
+Symbol0
+1.0 2.0
+/GND 3.0
 
 .PartName1 (5) :2 ;Part 1 Description
 FOOTPRINT1 (variant5)
@@ -39,6 +42,9 @@ $!SCH val2 (readOnly1)
 @SCH and PCB val1 (val1)
 ~!Part val2 (readOnly1)
 ~"Part val1" (val1)
+Symbol1
+1.0 2.0
+/GND 3.0
 
 .PartName2 (10) :2 ;Part 2 Description
 FOOTPRINT2 (variant10)
@@ -58,6 +64,9 @@ $!SCH val2 (readOnly2)
 @!SCH and PCB val2 (readOnly2)
 %"PCB val1" (val2)
 ~!Part val2 (readOnly2)
+Symbol2
+1.0 2.0
+/GND 3.0
 
 .PartName3 (15) :2 ;Part 3 Description
 FOOTPRINT3 (variant15)
@@ -77,6 +86,9 @@ $!SCH val2 (readOnly3)
 %!PCB val2 (readOnly3)
 @!SCH and PCB val2 (readOnly3)
 %"PCB val1" (val3)
+Symbol3
+1.0 2.0
+/GND 3.0
 
 .PartName4 (20) :2 ;Part 4 Description
 FOOTPRINT4 (variant20)
@@ -96,6 +108,9 @@ $!SCH val2 (readOnly4)
 ~"Part val1" (val4)
 %"PCB val1" (val4)
 @SCH and PCB val1 (val4)
+Symbol4
+1.0 2.0
+/GND 3.0
 
 .PartName5 (25) :2 ;Part 5 Description
 FOOTPRINT5 (variant25)
@@ -115,6 +130,9 @@ $!SCH val2 (readOnly5)
 ~"Part val1" (val5)
 @!SCH and PCB val2 (readOnly5)
 ~!Part val2 (readOnly5)
+Symbol5
+1.0 2.0
+/GND 3.0
 
 .PartName6 (30) :2 ;Part 6 Description
 FOOTPRINT6 (variant30)
@@ -135,6 +153,9 @@ $!SCH val2 (readOnly6)
 %!PCB val2 (readOnly6)
 ~!Part val2 (readOnly6)
 @SCH and PCB val1 (val6)
+Symbol6
+1.0 2.0
+/GND 3.0
 
 .PartName7 (35) :2 ;Part 7 Description
 FOOTPRINT7 (variant35)
@@ -154,6 +175,9 @@ $!SCH val2 (readOnly7)
 ~!Part val2 (readOnly7)
 ~"Part val1" (val7)
 %"PCB val1" (val7)
+Symbol7
+1.0 2.0
+/GND 3.0
 
 .PartName8 (40) :2 ;Part 8 Description
 FOOTPRINT8 (variant40)
@@ -173,6 +197,9 @@ $!SCH val2 (readOnly8)
 @!SCH and PCB val2 (readOnly8)
 %!PCB val2 (readOnly8)
 ~"Part val1" (val8)
+Symbol8
+1.0 2.0
+/GND 3.0
 
 .PartName9 (45) :2 ;Part 9 Description
 FOOTPRINT9 (variant45)
@@ -192,6 +219,9 @@ $"SCH val1" (val9)
 ~"Part val1" (val9)
 @SCH and PCB val1 (val9)
 $!SCH val2 (readOnly9)
+Symbol9
+1.0 2.0
+/GND 3.0
 
 .PartName10 (50) :2 ;Part 10 Description
 FOOTPRINT10 (variant50)
@@ -211,6 +241,9 @@ $!SCH val2 (readOnly10)
 @SCH and PCB val1 (val10)
 %!PCB val2 (readOnly10)
 @!SCH and PCB val2 (readOnly10)
+Symbol10
+1.0 2.0
+/GND 3.0
 
 .PartName11 (55) :2 ;Part 11 Description
 FOOTPRINT11 (variant55)
@@ -232,6 +265,9 @@ $"SCH val1" (val11)
 $!SCH val2 (readOnly11)
 @!SCH and PCB val2 (readOnly11)
 @SCH and PCB val1 (val11)
+Symbol11
+1.0 2.0
+/GND 3.0
 
 .PartName12 (60) :2 ;Part 12 Description
 FOOTPRINT12 (variant60)
@@ -251,6 +287,9 @@ $!SCH val2 (readOnly12)
 %!PCB val2 (readOnly12)
 ~"Part val1" (val12)
 @!SCH and PCB val2 (readOnly12)
+Symbol12
+1.0 2.0
+/GND 3.0
 
 .PartName13 (65) :2 ;Part 13 Description
 FOOTPRINT13 (variant65)
@@ -270,6 +309,9 @@ $"SCH val1" (val13)
 ~!Part val2 (readOnly13)
 %!PCB val2 (readOnly13)
 $!SCH val2 (readOnly13)
+Symbol13
+1.0 2.0
+/GND 3.0
 
 .PartName14 (70) :2 ;Part 14 Description
 FOOTPRINT14 (variant70)
@@ -289,6 +331,9 @@ $"SCH val1" (val14)
 ~"Part val1" (val14)
 $!SCH val2 (readOnly14)
 %!PCB val2 (readOnly14)
+Symbol14
+1.0 2.0
+/GND 3.0
 
 .PartName15 (75) :2 ;Part 15 Description
 FOOTPRINT15 (variant75)
@@ -308,6 +353,9 @@ $!SCH val2 (readOnly15)
 ~!Part val2 (readOnly15)
 @!SCH and PCB val2 (readOnly15)
 ~"Part val1" (val15)
+Symbol15
+1.0 2.0
+/GND 3.0
 
 .PartName16 (80) :2 ;Part 16 Description
 FOOTPRINT16 (variant80)
@@ -328,6 +376,9 @@ $"SCH val1" (val16)
 @SCH and PCB val1 (val16)
 $!SCH val2 (readOnly16)
 @!SCH and PCB val2 (readOnly16)
+Symbol16
+1.0 2.0
+/GND 3.0
 
 .PartName17 (85) :2 ;Part 17 Description
 FOOTPRINT17 (variant85)
@@ -347,6 +398,9 @@ $"SCH val1" (val17)
 $!SCH val2 (readOnly17)
 @!SCH and PCB val2 (readOnly17)
 ~!Part val2 (readOnly17)
+Symbol17
+1.0 2.0
+/GND 3.0
 
 .PartName18 (90) :2 ;Part 18 Description
 FOOTPRINT18 (variant90)
@@ -366,6 +420,9 @@ $!SCH val2 (readOnly18)
 %"PCB val1" (val18)
 ~"Part val1" (val18)
 @SCH and PCB val1 (val18)
+Symbol18
+1.0 2.0
+/GND 3.0
 
 .PartName19 (95) :2 ;Part 19 Description
 FOOTPRINT19 (variant95)
@@ -385,6 +442,9 @@ $"SCH val1" (val19)
 ~"Part val1" (val19)
 %"PCB val1" (val19)
 $!SCH val2 (readOnly19)
+Symbol19
+1.0 2.0
+/GND 3.0
 
 .PartName20 (100) :2 ;Part 20 Description
 FOOTPRINT20 (variant100)
@@ -404,6 +464,9 @@ $!SCH val2 (readOnly20)
 ~!Part val2 (readOnly20)
 %"PCB val1" (val20)
 ~"Part val1" (val20)
+Symbol20
+1.0 2.0
+/GND 3.0
 
 .PartName21 (105) :2 ;Part 21 Description
 FOOTPRINT21 (variant105)
@@ -425,6 +488,9 @@ $"SCH val1" (val21)
 ~"Part val1" (val21)
 @SCH and PCB val1 (val21)
 $!SCH val2 (readOnly21)
+Symbol21
+1.0 2.0
+/GND 3.0
 
 .PartName22 (110) :2 ;Part 22 Description
 FOOTPRINT22 (variant110)
@@ -444,6 +510,9 @@ $!SCH val2 (readOnly22)
 %!PCB val2 (readOnly22)
 %"PCB val1" (val22)
 @!SCH and PCB val2 (readOnly22)
+Symbol22
+1.0 2.0
+/GND 3.0
 
 .PartName23 (115) :2 ;Part 23 Description
 FOOTPRINT23 (variant115)
@@ -463,6 +532,9 @@ $"SCH val1" (val23)
 $!SCH val2 (readOnly23)
 @SCH and PCB val1 (val23)
 ~!Part val2 (readOnly23)
+Symbol23
+1.0 2.0
+/GND 3.0
 
 .PartName24 (120) :2 ;Part 24 Description
 FOOTPRINT24 (variant120)
@@ -482,6 +554,9 @@ $!SCH val2 (readOnly24)
 ~!Part val2 (readOnly24)
 @SCH and PCB val1 (val24)
 @!SCH and PCB val2 (readOnly24)
+Symbol24
+1.0 2.0
+/GND 3.0
 
 .PartName25 (125) :2 ;Part 25 Description
 FOOTPRINT25 (variant125)
@@ -501,6 +576,9 @@ $!SCH val2 (readOnly25)
 @!SCH and PCB val2 (readOnly25)
 @SCH and PCB val1 (val25)
 %!PCB val2 (readOnly25)
+Symbol25
+1.0 2.0
+/GND 3.0
 
 .PartName26 (130) :2 ;Part 26 Description
 FOOTPRINT26 (variant130)
@@ -521,6 +599,9 @@ $"SCH val1" (val26)
 @SCH and PCB val1 (val26)
 $!SCH val2 (readOnly26)
 %!PCB val2 (readOnly26)
+Symbol26
+1.0 2.0
+/GND 3.0
 
 .PartName27 (135) :2 ;Part 27 Description
 FOOTPRINT27 (variant135)
@@ -540,6 +621,9 @@ $"SCH val1" (val27)
 %"PCB val1" (val27)
 @!SCH and PCB val2 (readOnly27)
 $!SCH val2 (readOnly27)
+Symbol27
+1.0 2.0
+/GND 3.0
 
 .PartName28 (140) :2 ;Part 28 Description
 FOOTPRINT28 (variant140)
@@ -559,6 +643,9 @@ $"SCH val1" (val28)
 %"PCB val1" (val28)
 $!SCH val2 (readOnly28)
 ~!Part val2 (readOnly28)
+Symbol28
+1.0 2.0
+/GND 3.0
 
 .PartName29 (145) :2 ;Part 29 Description
 FOOTPRINT29 (variant145)
@@ -578,6 +665,9 @@ $!SCH val2 (readOnly29)
 %!PCB val2 (readOnly29)
 @!SCH and PCB val2 (readOnly29)
 @SCH and PCB val1 (val29)
+Symbol29
+1.0 2.0
+/GND 3.0
 
 .PartName30 (150) :2 ;Part 30 Description
 FOOTPRINT30 (variant150)
@@ -597,6 +687,9 @@ $"SCH val1" (val30)
 $!SCH val2 (readOnly30)
 @SCH and PCB val1 (val30)
 @!SCH and PCB val2 (readOnly30)
+Symbol30
+1.0 2.0
+/GND 3.0
 
 .PartName31 (155) :2 ;Part 31 Description
 FOOTPRINT31 (variant155)
@@ -618,6 +711,9 @@ $!SCH val2 (readOnly31)
 @!SCH and PCB val2 (readOnly31)
 @SCH and PCB val1 (val31)
 %"PCB val1" (val31)
+Symbol31
+1.0 2.0
+/GND 3.0
 
 .PartName32 (160) :2 ;Part 32 Description
 FOOTPRINT32 (variant160)
@@ -637,6 +733,9 @@ $"SCH val1" (val32)
 @SCH and PCB val1 (val32)
 $!SCH val2 (readOnly32)
 %"PCB val1" (val32)
+Symbol32
+1.0 2.0
+/GND 3.0
 
 .PartName33 (165) :2 ;Part 33 Description
 FOOTPRINT33 (variant165)
@@ -656,6 +755,9 @@ $"SCH val1" (val33)
 %"PCB val1" (val33)
 %!PCB val2 (readOnly33)
 $!SCH val2 (readOnly33)
+Symbol33
+1.0 2.0
+/GND 3.0
 
 .PartName34 (170) :2 ;Part 34 Description
 FOOTPRINT34 (variant170)
@@ -675,6 +777,9 @@ $!SCH val2 (readOnly34)
 %!PCB val2 (readOnly34)
 %"PCB val1" (val34)
 @!SCH and PCB val2 (readOnly34)
+Symbol34
+1.0 2.0
+/GND 3.0
 
 .PartName35 (175) :2 ;Part 35 Description
 FOOTPRINT35 (variant175)
@@ -694,6 +799,9 @@ $"SCH val1" (val35)
 $!SCH val2 (readOnly35)
 @SCH and PCB val1 (val35)
 ~"Part val1" (val35)
+Symbol35
+1.0 2.0
+/GND 3.0
 
 .PartName36 (180) :2 ;Part 36 Description
 FOOTPRINT36 (variant180)
@@ -714,6 +822,9 @@ $!SCH val2 (readOnly36)
 %"PCB val1" (val36)
 ~"Part val1" (val36)
 @!SCH and PCB val2 (readOnly36)
+Symbol36
+1.0 2.0
+/GND 3.0
 
 .PartName37 (185) :2 ;Part 37 Description
 FOOTPRINT37 (variant185)
@@ -733,6 +844,9 @@ $!SCH val2 (readOnly37)
 @!SCH and PCB val2 (readOnly37)
 ~"Part val1" (val37)
 %!PCB val2 (readOnly37)
+Symbol37
+1.0 2.0
+/GND 3.0
 
 .PartName38 (190) :2 ;Part 38 Description
 FOOTPRINT38 (variant190)
@@ -752,6 +866,9 @@ $"SCH val1" (val38)
 ~"Part val1" (val38)
 $!SCH val2 (readOnly38)
 %!PCB val2 (readOnly38)
+Symbol38
+1.0 2.0
+/GND 3.0
 
 .PartName39 (195) :2 ;Part 39 Description
 FOOTPRINT39 (variant195)
@@ -771,6 +888,9 @@ $!SCH val2 (readOnly39)
 ~"Part val1" (val39)
 ~!Part val2 (readOnly39)
 %"PCB val1" (val39)
+Symbol39
+1.0 2.0
+/GND 3.0
 
 .PartName40 (200) :2 ;Part 40 Description
 FOOTPRINT40 (variant200)
@@ -790,6 +910,9 @@ $"SCH val1" (val40)
 %!PCB val2 (readOnly40)
 $!SCH val2 (readOnly40)
 @!SCH and PCB val2 (readOnly40)
+Symbol40
+1.0 2.0
+/GND 3.0
 
 .PartName41 (205) :2 ;Part 41 Description
 FOOTPRINT41 (variant205)
@@ -811,6 +934,9 @@ $"SCH val1" (val41)
 $!SCH val2 (readOnly41)
 @!SCH and PCB val2 (readOnly41)
 %"PCB val1" (val41)
+Symbol41
+1.0 2.0
+/GND 3.0
 
 .PartName42 (210) :2 ;Part 42 Description
 FOOTPRINT42 (variant210)
@@ -830,6 +956,9 @@ $"SCH val1" (val42)
 $!SCH val2 (readOnly42)
 %!PCB val2 (readOnly42)
 ~"Part val1" (val42)
+Symbol42
+1.0 2.0
+/GND 3.0
 
 .PartName43 (215) :2 ;Part 43 Description
 FOOTPRINT43 (variant215)
@@ -849,6 +978,9 @@ $!SCH val2 (readOnly43)
 ~!Part val2 (readOnly43)
 ~"Part val1" (val43)
 %!PCB val2 (readOnly43)
+Symbol43
+1.0 2.0
+/GND 3.0
 
 .PartName44 (220) :2 ;Part 44 Description
 FOOTPRINT44 (variant220)
@@ -868,6 +1000,9 @@ $!SCH val2 (readOnly44)
 @SCH and PCB val1 (val44)
 ~"Part val1" (val44)
 ~!Part val2 (readOnly44)
+Symbol44
+1.0 2.0
+/GND 3.0
 
 .PartName45 (225) :2 ;Part 45 Description
 FOOTPRINT45 (variant225)
@@ -887,6 +1022,9 @@ $"SCH val1" (val45)
 ~"Part val1" (val45)
 ~!Part val2 (readOnly45)
 $!SCH val2 (readOnly45)
+Symbol45
+1.0 2.0
+/GND 3.0
 
 .PartName46 (230) :2 ;Part 46 Description
 FOOTPRINT46 (variant230)
@@ -907,6 +1045,9 @@ $"SCH val1" (val46)
 %"PCB val1" (val46)
 $!SCH val2 (readOnly46)
 @SCH and PCB val1 (val46)
+Symbol46
+1.0 2.0
+/GND 3.0
 
 .PartName47 (235) :2 ;Part 47 Description
 FOOTPRINT47 (variant235)
@@ -926,6 +1067,9 @@ $"SCH val1" (val47)
 $!SCH val2 (readOnly47)
 ~!Part val2 (readOnly47)
 %"PCB val1" (val47)
+Symbol47
+1.0 2.0
+/GND 3.0
 
 .PartName48 (240) :2 ;Part 48 Description
 FOOTPRINT48 (variant240)
@@ -945,6 +1089,9 @@ $!SCH val2 (readOnly48)
 %"PCB val1" (val48)
 ~"Part val1" (val48)
 @SCH and PCB val1 (val48)
+Symbol48
+1.0 2.0
+/GND 3.0
 
 .PartName49 (245) :2 ;Part 49 Description
 FOOTPRINT49 (variant245)
@@ -964,6 +1111,9 @@ $!SCH val2 (readOnly49)
 ~!Part val2 (readOnly49)
 ~"Part val1" (val49)
 %!PCB val2 (readOnly49)
+Symbol49
+1.0 2.0
+/GND 3.0
 
 .PartName50 (250) :2 ;Part 50 Description
 FOOTPRINT50 (variant250)
@@ -983,6 +1133,9 @@ $"SCH val1" (val50)
 @!SCH and PCB val2 (readOnly50)
 ~"Part val1" (val50)
 @SCH and PCB val1 (val50)
+Symbol50
+1.0 2.0
+/GND 3.0
 
 .PartName51 (255) :2 ;Part 51 Description
 FOOTPRINT51 (variant255)
@@ -1004,6 +1157,9 @@ $"SCH val1" (val51)
 ~"Part val1" (val51)
 @SCH and PCB val1 (val51)
 %!PCB val2 (readOnly51)
+Symbol51
+1.0 2.0
+/GND 3.0
 
 .PartName52 (260) :2 ;Part 52 Description
 FOOTPRINT52 (variant260)
@@ -1023,6 +1179,9 @@ $"SCH val1" (val52)
 ~"Part val1" (val52)
 %"PCB val1" (val52)
 ~!Part val2 (readOnly52)
+Symbol52
+1.0 2.0
+/GND 3.0
 
 .PartName53 (265) :2 ;Part 53 Description
 FOOTPRINT53 (variant265)
@@ -1042,6 +1201,9 @@ $"SCH val1" (val53)
 %!PCB val2 (readOnly53)
 @!SCH and PCB val2 (readOnly53)
 ~!Part val2 (readOnly53)
+Symbol53
+1.0 2.0
+/GND 3.0
 
 .PartName54 (270) :2 ;Part 54 Description
 FOOTPRINT54 (variant270)
@@ -1061,6 +1223,9 @@ $"SCH val1" (val54)
 %"PCB val1" (val54)
 @SCH and PCB val1 (val54)
 @!SCH and PCB val2 (readOnly54)
+Symbol54
+1.0 2.0
+/GND 3.0
 
 .PartName55 (275) :2 ;Part 55 Description
 FOOTPRINT55 (variant275)
@@ -1080,6 +1245,9 @@ $"SCH val1" (val55)
 @!SCH and PCB val2 (readOnly55)
 ~!Part val2 (readOnly55)
 %"PCB val1" (val55)
+Symbol55
+1.0 2.0
+/GND 3.0
 
 .PartName56 (280) :2 ;Part 56 Description
 FOOTPRINT56 (variant280)
@@ -1100,6 +1268,9 @@ $"SCH val1" (val56)
 @SCH and PCB val1 (val56)
 %!PCB val2 (readOnly56)
 ~"Part val1" (val56)
+Symbol56
+1.0 2.0
+/GND 3.0
 
 .PartName57 (285) :2 ;Part 57 Description
 FOOTPRINT57 (variant285)
@@ -1119,6 +1290,9 @@ $"SCH val1" (val57)
 %!PCB val2 (readOnly57)
 ~"Part val1" (val57)
 %"PCB val1" (val57)
+Symbol57
+1.0 2.0
+/GND 3.0
 
 .PartName58 (290) :2 ;Part 58 Description
 FOOTPRINT58 (variant290)
@@ -1138,6 +1312,9 @@ $"SCH val1" (val58)
 ~!Part val2 (readOnly58)
 ~"Part val1" (val58)
 @SCH and PCB val1 (val58)
+Symbol58
+1.0 2.0
+/GND 3.0
 
 .PartName59 (295) :2 ;Part 59 Description
 FOOTPRINT59 (variant295)
@@ -1157,6 +1334,9 @@ $!SCH val2 (readOnly59)
 $"SCH val1" (val59)
 @!SCH and PCB val2 (readOnly59)
 ~!Part val2 (readOnly59)
+Symbol59
+1.0 2.0
+/GND 3.0
 
 .PartName60 (300) :2 ;Part 60 Description
 FOOTPRINT60 (variant300)
@@ -1176,6 +1356,9 @@ $!SCH val2 (readOnly60)
 $"SCH val1" (val60)
 %!PCB val2 (readOnly60)
 @!SCH and PCB val2 (readOnly60)
+Symbol60
+1.0 2.0
+/GND 3.0
 
 .PartName61 (305) :2 ;Part 61 Description
 FOOTPRINT61 (variant305)
@@ -1197,6 +1380,9 @@ $!SCH val2 (readOnly61)
 @!SCH and PCB val2 (readOnly61)
 ~"Part val1" (val61)
 $"SCH val1" (val61)
+Symbol61
+1.0 2.0
+/GND 3.0
 
 .PartName62 (310) :2 ;Part 62 Description
 FOOTPRINT62 (variant310)
@@ -1216,6 +1402,9 @@ $"SCH val1" (val62)
 ~!Part val2 (readOnly62)
 %!PCB val2 (readOnly62)
 ~"Part val1" (val62)
+Symbol62
+1.0 2.0
+/GND 3.0
 
 .PartName63 (315) :2 ;Part 63 Description
 FOOTPRINT63 (variant315)
@@ -1235,6 +1424,9 @@ $"SCH val1" (val63)
 ~!Part val2 (readOnly63)
 @SCH and PCB val1 (val63)
 ~"Part val1" (val63)
+Symbol63
+1.0 2.0
+/GND 3.0
 
 .PartName64 (320) :2 ;Part 64 Description
 FOOTPRINT64 (variant320)
@@ -1254,6 +1446,9 @@ $!SCH val2 (readOnly64)
 ~"Part val1" (val64)
 $"SCH val1" (val64)
 ~!Part val2 (readOnly64)
+Symbol64
+1.0 2.0
+/GND 3.0
 
 .PartName65 (325) :2 ;Part 65 Description
 FOOTPRINT65 (variant325)
@@ -1273,6 +1468,9 @@ $"SCH val1" (val65)
 %"PCB val1" (val65)
 @!SCH and PCB val2 (readOnly65)
 ~"Part val1" (val65)
+Symbol65
+1.0 2.0
+/GND 3.0
 
 .PartName66 (330) :2 ;Part 66 Description
 FOOTPRINT66 (variant330)
@@ -1293,6 +1491,9 @@ $!SCH val2 (readOnly66)
 $"SCH val1" (val66)
 ~"Part val1" (val66)
 @SCH and PCB val1 (val66)
+Symbol66
+1.0 2.0
+/GND 3.0
 
 .PartName67 (335) :2 ;Part 67 Description
 FOOTPRINT67 (variant335)
@@ -1312,6 +1513,9 @@ $!SCH val2 (readOnly67)
 @SCH and PCB val1 (val67)
 ~!Part val2 (readOnly67)
 $"SCH val1" (val67)
+Symbol67
+1.0 2.0
+/GND 3.0
 
 .PartName68 (340) :2 ;Part 68 Description
 FOOTPRINT68 (variant340)
@@ -1331,6 +1535,9 @@ $"SCH val1" (val68)
 @!SCH and PCB val2 (readOnly68)
 ~"Part val1" (val68)
 @SCH and PCB val1 (val68)
+Symbol68
+1.0 2.0
+/GND 3.0
 
 .PartName69 (345) :2 ;Part 69 Description
 FOOTPRINT69 (variant345)
@@ -1350,6 +1557,9 @@ $"SCH val1" (val69)
 ~!Part val2 (readOnly69)
 @!SCH and PCB val2 (readOnly69)
 %"PCB val1" (val69)
+Symbol69
+1.0 2.0
+/GND 3.0
 
 .PartName70 (350) :2 ;Part 70 Description
 FOOTPRINT70 (variant350)
@@ -1369,6 +1579,9 @@ $!SCH val2 (readOnly70)
 %"PCB val1" (val70)
 $"SCH val1" (val70)
 ~!Part val2 (readOnly70)
+Symbol70
+1.0 2.0
+/GND 3.0
 
 .PartName71 (355) :2 ;Part 71 Description
 FOOTPRINT71 (variant355)
@@ -1390,6 +1603,9 @@ $!SCH val2 (readOnly71)
 $"SCH val1" (val71)
 ~"Part val1" (val71)
 %"PCB val1" (val71)
+Symbol71
+1.0 2.0
+/GND 3.0
 
 .PartName72 (360) :2 ;Part 72 Description
 FOOTPRINT72 (variant360)
@@ -1409,6 +1625,9 @@ $"SCH val1" (val72)
 %!PCB val2 (readOnly72)
 ~!Part val2 (readOnly72)
 @!SCH and PCB val2 (readOnly72)
+Symbol72
+1.0 2.0
+/GND 3.0
 
 .PartName73 (365) :2 ;Part 73 Description
 FOOTPRINT73 (variant365)
@@ -1428,6 +1647,9 @@ $"SCH val1" (val73)
 @!SCH and PCB val2 (readOnly73)
 @SCH and PCB val1 (val73)
 %!PCB val2 (readOnly73)
+Symbol73
+1.0 2.0
+/GND 3.0
 
 .PartName74 (370) :2 ;Part 74 Description
 FOOTPRINT74 (variant370)
@@ -1447,6 +1669,9 @@ $!SCH val2 (readOnly74)
 @!SCH and PCB val2 (readOnly74)
 $"SCH val1" (val74)
 @SCH and PCB val1 (val74)
+Symbol74
+1.0 2.0
+/GND 3.0
 
 .PartName75 (375) :2 ;Part 75 Description
 FOOTPRINT75 (variant375)
@@ -1466,6 +1691,9 @@ $"SCH val1" (val75)
 %!PCB val2 (readOnly75)
 @!SCH and PCB val2 (readOnly75)
 %"PCB val1" (val75)
+Symbol75
+1.0 2.0
+/GND 3.0
 
 .PartName76 (380) :2 ;Part 76 Description
 FOOTPRINT76 (variant380)
@@ -1486,6 +1714,9 @@ $!SCH val2 (readOnly76)
 %"PCB val1" (val76)
 $"SCH val1" (val76)
 %!PCB val2 (readOnly76)
+Symbol76
+1.0 2.0
+/GND 3.0
 
 .PartName77 (385) :2 ;Part 77 Description
 FOOTPRINT77 (variant385)
@@ -1505,6 +1736,9 @@ $"SCH val1" (val77)
 %"PCB val1" (val77)
 ~!Part val2 (readOnly77)
 %!PCB val2 (readOnly77)
+Symbol77
+1.0 2.0
+/GND 3.0
 
 .PartName78 (390) :2 ;Part 78 Description
 FOOTPRINT78 (variant390)
@@ -1524,6 +1758,9 @@ $!SCH val2 (readOnly78)
 $"SCH val1" (val78)
 %!PCB val2 (readOnly78)
 @SCH and PCB val1 (val78)
+Symbol78
+1.0 2.0
+/GND 3.0
 
 .PartName79 (395) :2 ;Part 79 Description
 FOOTPRINT79 (variant395)
@@ -1543,6 +1780,9 @@ $"SCH val1" (val79)
 @!SCH and PCB val2 (readOnly79)
 @SCH and PCB val1 (val79)
 %"PCB val1" (val79)
+Symbol79
+1.0 2.0
+/GND 3.0
 
 .PartName80 (400) :2 ;Part 80 Description
 FOOTPRINT80 (variant400)
@@ -1562,6 +1802,9 @@ $!SCH val2 (readOnly80)
 @!SCH and PCB val2 (readOnly80)
 $"SCH val1" (val80)
 ~"Part val1" (val80)
+Symbol80
+1.0 2.0
+/GND 3.0
 
 .PartName81 (405) :2 ;Part 81 Description
 FOOTPRINT81 (variant405)
@@ -1583,6 +1826,9 @@ $"SCH val1" (val81)
 ~"Part val1" (val81)
 @SCH and PCB val1 (val81)
 %"PCB val1" (val81)
+Symbol81
+1.0 2.0
+/GND 3.0
 
 .PartName82 (410) :2 ;Part 82 Description
 FOOTPRINT82 (variant410)
@@ -1602,6 +1848,9 @@ $"SCH val1" (val82)
 @SCH and PCB val1 (val82)
 %!PCB val2 (readOnly82)
 @!SCH and PCB val2 (readOnly82)
+Symbol82
+1.0 2.0
+/GND 3.0
 
 .PartName83 (415) :2 ;Part 83 Description
 FOOTPRINT83 (variant415)
@@ -1621,6 +1870,9 @@ $!SCH val2 (readOnly83)
 $"SCH val1" (val83)
 @SCH and PCB val1 (val83)
 %!PCB val2 (readOnly83)
+Symbol83
+1.0 2.0
+/GND 3.0
 
 .PartName84 (420) :2 ;Part 84 Description
 FOOTPRINT84 (variant420)
@@ -1640,6 +1892,9 @@ $!SCH val2 (readOnly84)
 $"SCH val1" (val84)
 %"PCB val1" (val84)
 @!SCH and PCB val2 (readOnly84)
+Symbol84
+1.0 2.0
+/GND 3.0
 
 .PartName85 (425) :2 ;Part 85 Description
 FOOTPRINT85 (variant425)
@@ -1659,6 +1914,9 @@ $!SCH val2 (readOnly85)
 @SCH and PCB val1 (val85)
 %"PCB val1" (val85)
 $"SCH val1" (val85)
+Symbol85
+1.0 2.0
+/GND 3.0
 
 .PartName86 (430) :2 ;Part 86 Description
 FOOTPRINT86 (variant430)
@@ -1679,6 +1937,9 @@ $"SCH val1" (val86)
 ~!Part val2 (readOnly86)
 %"PCB val1" (val86)
 ~"Part val1" (val86)
+Symbol86
+1.0 2.0
+/GND 3.0
 
 .PartName87 (435) :2 ;Part 87 Description
 FOOTPRINT87 (variant435)
@@ -1698,6 +1959,9 @@ $"SCH val1" (val87)
 ~!Part val2 (readOnly87)
 @!SCH and PCB val2 (readOnly87)
 ~"Part val1" (val87)
+Symbol87
+1.0 2.0
+/GND 3.0
 
 .PartName88 (440) :2 ;Part 88 Description
 FOOTPRINT88 (variant440)
@@ -1717,6 +1981,9 @@ $"SCH val1" (val88)
 ~!Part val2 (readOnly88)
 %"PCB val1" (val88)
 @!SCH and PCB val2 (readOnly88)
+Symbol88
+1.0 2.0
+/GND 3.0
 
 .PartName89 (445) :2 ;Part 89 Description
 FOOTPRINT89 (variant445)
@@ -1736,6 +2003,9 @@ $!SCH val2 (readOnly89)
 $"SCH val1" (val89)
 ~!Part val2 (readOnly89)
 %"PCB val1" (val89)
+Symbol89
+1.0 2.0
+/GND 3.0
 
 .PartName90 (450) :2 ;Part 90 Description
 FOOTPRINT90 (variant450)
@@ -1755,6 +2025,9 @@ $!SCH val2 (readOnly90)
 $"SCH val1" (val90)
 %"PCB val1" (val90)
 %!PCB val2 (readOnly90)
+Symbol90
+1.0 2.0
+/GND 3.0
 
 .PartName91 (455) :2 ;Part 91 Description
 FOOTPRINT91 (variant455)
@@ -1776,6 +2049,9 @@ $!SCH val2 (readOnly91)
 ~"Part val1" (val91)
 %"PCB val1" (val91)
 $"SCH val1" (val91)
+Symbol91
+1.0 2.0
+/GND 3.0
 
 .PartName92 (460) :2 ;Part 92 Description
 FOOTPRINT92 (variant460)
@@ -1795,6 +2071,9 @@ $"SCH val1" (val92)
 ~!Part val2 (readOnly92)
 %"PCB val1" (val92)
 ~"Part val1" (val92)
+Symbol92
+1.0 2.0
+/GND 3.0
 
 .PartName93 (465) :2 ;Part 93 Description
 FOOTPRINT93 (variant465)
@@ -1814,6 +2093,9 @@ $"SCH val1" (val93)
 ~!Part val2 (readOnly93)
 @SCH and PCB val1 (val93)
 %"PCB val1" (val93)
+Symbol93
+1.0 2.0
+/GND 3.0
 
 .PartName94 (470) :2 ;Part 94 Description
 FOOTPRINT94 (variant470)
@@ -1833,6 +2115,9 @@ $"SCH val1" (val94)
 ~"Part val1" (val94)
 %!PCB val2 (readOnly94)
 @SCH and PCB val1 (val94)
+Symbol94
+1.0 2.0
+/GND 3.0
 
 .PartName95 (475) :2 ;Part 95 Description
 FOOTPRINT95 (variant475)
@@ -1852,6 +2137,9 @@ $!SCH val2 (readOnly95)
 $"SCH val1" (val95)
 ~"Part val1" (val95)
 %!PCB val2 (readOnly95)
+Symbol95
+1.0 2.0
+/GND 3.0
 
 .PartName96 (480) :2 ;Part 96 Description
 FOOTPRINT96 (variant480)
@@ -1872,6 +2160,9 @@ $"SCH val1" (val96)
 %"PCB val1" (val96)
 ~"Part val1" (val96)
 ~!Part val2 (readOnly96)
+Symbol96
+1.0 2.0
+/GND 3.0
 
 .PartName97 (485) :2 ;Part 97 Description
 FOOTPRINT97 (variant485)
@@ -1891,6 +2182,9 @@ $"SCH val1" (val97)
 @SCH and PCB val1 (val97)
 %!PCB val2 (readOnly97)
 %"PCB val1" (val97)
+Symbol97
+1.0 2.0
+/GND 3.0
 
 .PartName98 (490) :2 ;Part 98 Description
 FOOTPRINT98 (variant490)
@@ -1910,6 +2204,9 @@ $!SCH val2 (readOnly98)
 @SCH and PCB val1 (val98)
 $"SCH val1" (val98)
 ~"Part val1" (val98)
+Symbol98
+1.0 2.0
+/GND 3.0
 
 .PartName99 (495) :2 ;Part 99 Description
 FOOTPRINT99 (variant495)
@@ -1929,5 +2226,8 @@ $!SCH val2 (readOnly99)
 %!PCB val2 (readOnly99)
 ~!Part val2 (readOnly99)
 $"SCH val1" (val99)
+Symbol99
+1.0 2.0
+/GND 3.0
 
 .END

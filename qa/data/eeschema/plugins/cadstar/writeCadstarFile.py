@@ -36,8 +36,6 @@ with open('cadstarDummy.lib', 'w', newline='\r\n') as f:
         currentPartData.append(f'~!Part val2 (readOnly{i})\n')
         currentPartData.append(f'@SCH and PCB val1 (val{i})\n')
         currentPartData.append(f'@!SCH and PCB val2 (readOnly{i})\n')
-        #currentPartData.append(f'Symbol{i}\n')
-        #currentPartData.append('1.0 2.0\n')
 
         # Change ordering to test parser works
         nth=(i*101)%factorial(len(currentPartData)) # make a permutation that exists
@@ -45,6 +43,11 @@ with open('cadstarDummy.lib', 'w', newline='\r\n') as f:
 
         for data in permutatedData:
             f.write(data)
+
+        # Symbol should always be at the end in fileformat anyway
+        f.write(f'Symbol{i}\n')
+        f.write('1.0 2.0\n')
+        f.write('/GND 3.0\n')
 
 
     f.write('\n.END\n')
