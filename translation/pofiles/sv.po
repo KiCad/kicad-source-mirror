@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-15 16:29-0800\n"
-"PO-Revision-Date: 2023-02-23 00:30+0000\n"
+"PO-Revision-Date: 2023-02-23 18:22+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -3015,7 +3015,7 @@ msgstr "Tema:"
 
 #: common/dialogs/panel_color_settings_base.cpp:35
 msgid "Override individual item colors"
-msgstr "Åsidosätt individuella objekts färger"
+msgstr "Åsidosätt objekts individuella färger"
 
 #: common/dialogs/panel_color_settings_base.cpp:36
 msgid ""
@@ -10855,7 +10855,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_sheet_properties.cpp:78
 #: eeschema/dialogs/dialog_text_properties.cpp:74
 msgid "Note: individual item colors overridden in Preferences."
-msgstr "Obs! Individuella objektfärger åsidosätts i inställningar."
+msgstr "Obs! Objekts Individuella färger åsidosätts i inställningarna."
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:88
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:158
@@ -11840,11 +11840,11 @@ msgid ""
 msgstr ""
 "Detta kretsschema använder för närvarande projektets symbolbibliotekslista "
 "som uppslagsmetod för att ladda bibliotekssymboler. KiCad kommer att försöka "
-"mappa de befintliga symbolerna för att använda den nya "
-"symbolbibliotekstabellen. Om mappning ändrar vissa projektfiler och "
-"kretsscheman är de kanske inte längre kompatibla med äldre versioner av "
-"KiCad. Alla filer som ändras säkerhetskopieras till mappen \"remap_backup\" "
-"i projektmappen om du skulle behöva återställa alla ändringar. Om du väljer "
+"mappa om de befintliga symbolerna till att använda den nya "
+"symbolbibliotekstabellen. Ommappning ändrar vissa projektfiler och "
+"kretsscheman är kanske inte längre kompatibla med äldre versioner av KiCad. "
+"Alla filer som ändras säkerhetskopieras till mappen \"remap_backup\" i "
+"projektmappen om du skulle behöva återställa alla ändringar. Om du väljer "
 "att hoppa över det här steget är du ansvarig för att manuellt mappa om "
 "symbolerna."
 
@@ -11871,7 +11871,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:238
 msgid "Created project symbol library table.\n"
-msgstr "Skapat projektsymbols biblioteksbord.\n"
+msgstr "Skapade projektspecifik symbolbibliotekstabell.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:263
 #, c-format
@@ -11885,13 +11885,14 @@ msgstr "Symbolen '%s' mappad till symbolbiblioteket '%s'."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:278
 msgid "Symbol library table mapping complete!"
-msgstr "Kartläggning av symbolbibliotekstabell komplett!"
+msgstr "Mappning av symbolbibliotekstabell slutförd!"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:348
 #, c-format
 msgid "Cannot create project remap back up folder '%s'."
 msgstr ""
-"Det gick inte att skapa säkerhetskopieringsmappen '%s' för projektmapp."
+"Det gick inte att skapa katalog '%s' för säkerhetskopiering vid ommappning "
+"av projekt."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:351
 #: eeschema/dialogs/dialog_symbol_remap.cpp:503
@@ -11901,7 +11902,7 @@ msgstr "Säkerhetskopieringsfel"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:353
 #: eeschema/dialogs/dialog_symbol_remap.cpp:507
 msgid "Continue with Rescue"
-msgstr "Fortsätt med Rescue"
+msgstr "Fortsätt att rädda symboler"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:354
 #: eeschema/dialogs/dialog_symbol_remap.cpp:508
@@ -11931,7 +11932,7 @@ msgstr "Det gick inte att säkerhetskopiera filen '%s'.\n"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:416
 #, c-format
 msgid "Failed to create backup folder '%s'.\n"
-msgstr "Det gick inte att skapa säkerhetskopieringsmappen '%s'.\n"
+msgstr "Det gick inte att skapa katalog '%s' för säkerhetskopiering.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:502
 msgid "Some of the project files could not be backed up."
@@ -11940,7 +11941,7 @@ msgstr "Vissa av projektfilerna kunde inte säkerhetskopieras."
 #: eeschema/dialogs/dialog_symbol_remap_base.cpp:30
 #: eeschema/dialogs/dialog_symbol_remap_base.h:54
 msgid "Remap Symbols"
-msgstr "Remap-symboler"
+msgstr "Mappa om symboler"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:157 eeschema/schematic.cpp:365
 #: eeschema/schematic.cpp:363
@@ -11958,8 +11959,8 @@ msgid ""
 "or http(s)://) or \"#<page number>\" to create a hyperlink to a page in this "
 "schematic."
 msgstr ""
-"Ogiltig destination för hyperlänk. Vänligen mata in endera en giltig URL (t."
-"ex. file:// eller http(s):// eller \"#<sidnummer>\" för att skapa en "
+"Ogiltig destination för hyperlänk. Vänligen mata in endera en giltig URL ("
+"t.ex. file:// eller http(s)://) eller \"#<sidnummer>\" för att skapa en "
 "hyperlänk till en sida i detta kretsschema."
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:289
@@ -11978,7 +11979,7 @@ msgstr "Ändringar att verkställa"
 
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:65
 msgid "Update Schematic"
-msgstr "Uppdatera Kretsschemat"
+msgstr "Uppdatera kretsschemat"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:32
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:27
@@ -11995,18 +11996,19 @@ msgid ""
 "Select this option only if you want to reset the footprint linkages based on "
 "their reference designators."
 msgstr ""
-"Normalt är fotavtryck länkade till sina symboler via deras unika ID. Välj "
-"det här alternativet endast om du vill återställa fotavtryckslänkarna "
-"baserat på deras referensbeteckning."
+"Normalt är fotavtryck länkade till sina symboler via sina unika ID. Välj det "
+"här alternativet endast om du vill återställa fotavtryckslänkarna baserat på "
+"deras referensbeteckning."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:55
 msgid "Update references of symbols that have been changed in the PCB editor."
 msgstr ""
-"Uppdatera referenser för symboler som har ändrats i mönsterkortsredigeraren."
+"Uppdatera referensbeteckningar för symboler som har ändrats i "
+"mönsterkortsredigeraren."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:59
 msgid "Footprint assignments"
-msgstr "Fotavtrycksuppdrag"
+msgstr "Fotavtryckstilldelningar"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:60
 msgid ""
@@ -12014,7 +12016,7 @@ msgid ""
 "with different footprints in PCB."
 msgstr ""
 "Uppdatera fotavtrycksassociationer för symboler vars fotavtryck har ersatts "
-"med andra fotavtryck i mönsterkortet."
+"med andra fotavtryck på mönsterkortet."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:65
 msgid "Update symbols values that have been replaced in the PCB editor."
@@ -12038,7 +12040,7 @@ msgstr "Ta bort fält som inte finns i överordnad symbol"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:66
 msgid "Reset fields if empty in parent symbol"
-msgstr "Återställ fält som är tomma i överordnad symbol"
+msgstr "Töm fält som är tomma i överordnad symbol"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.h:68
 msgid "Update Symbol Fields"
@@ -12068,21 +12070,21 @@ msgid ""
 "sure you want to use these colors?"
 msgstr ""
 "Vissa objekt har samma färg som bakgrunden\n"
-"och de kommer inte att ses på skärmen. Är du\n"
+"och de kommer inte att synas på skärmen. Är du\n"
 "är du säker på att du vill använda dessa färger?"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:201
 msgid "(symbol editor only)"
-msgstr "(endast symbolredigerare)"
+msgstr "(endast symbolredigeraren)"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:245
 #: pcbnew/dialogs/panel_pcbnew_color_settings.cpp:485
 msgid "Color Preview"
-msgstr "Förhandsgranska färg"
+msgstr "Förhandsgranska färger"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:434
 msgid "/path/to/sheet"
-msgstr "/ sökväg / till / ark"
+msgstr "/sökväg/till/kretsschemaark"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:27
 #: pcbnew/footprint_edit_frame.cpp:227 pcbnew/footprint_edit_frame.cpp:850
@@ -12151,7 +12153,7 @@ msgstr "Linjebredd för urval:"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:114
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:108
 msgid "(selection color can be edited in the \"Colors\" page)"
-msgstr "(markeringens färg kan redigeras på sidan \"Färger\")"
+msgstr "(färg för valda objekt kan redigeras på sidan \"Färger\")"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:118
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:112
@@ -12183,7 +12185,7 @@ msgstr "Centrera vy på korsrefererade objekt"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:153
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:147
 msgid "Ensures that cross-probed symbols are visible in the current view"
-msgstr "Säkerställer att korsprobade symboler är synliga i den aktuella vyn"
+msgstr "Säkerställer att korsrefererade symboler är synliga i den aktuella vyn"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:157
 #: pcbnew/dialogs/panel_display_options_base.cpp:114
@@ -12200,7 +12202,8 @@ msgstr "Markera korsrefererade nät"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:163
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:157
 msgid "Highlight nets when they are highlighted in the PCB editor"
-msgstr "Markera nät när de är markerade i mönsterkortsredigeraren"
+msgstr ""
+"Markera nät i kretsschemat när de är markerade i mönsterkortsredigeraren"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
 msgid "Line Drawing Mode:"
@@ -12220,7 +12223,7 @@ msgstr "45 graders vinkel"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:46
 msgid "Mouse drag performs Drag (G) operation"
-msgstr "Musdragning utför dragoperation (G)"
+msgstr "Musdragning utför dragåtgärd (G)"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:47
 msgid "If unchecked, mouse drag will perform move (M) operation"
@@ -12228,7 +12231,7 @@ msgstr "Om det inte är markerat kommer musdragningen att utföra flyttning (M)"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:51
 msgid "Automatically start wires on unconnected pins"
-msgstr "Starta automatiskt ledare på okopplade stift"
+msgstr "Starta automatiskt ledning på okopplade stift"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:52
 msgid ""
@@ -12236,7 +12239,7 @@ msgid ""
 "the wire tool is not active"
 msgstr ""
 "När aktiverat, kan du starta ledningar genom att klicka på okopplade stift "
-"även när trådverktyget inte är aktivt"
+"även när ledningsverktyget inte är aktivt"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:56
 #: pcbnew/dialogs/panel_edit_options_base.cpp:386
@@ -12256,11 +12259,11 @@ msgstr "Standardvärden för nya objekt"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:77
 msgid "Sheet border:"
-msgstr "Arkgräns:"
+msgstr "Arkkontur:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:86
 msgid "Sheet background:"
-msgstr "Ark bakgrund:"
+msgstr "Arkbakgrund:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:111
 msgid "Clicking on a pin selects the symbol"
@@ -12272,7 +12275,7 @@ msgid ""
 "If enabled, clicking on a pin select the parent symbol.\n"
 "If disabled, clicking on a pin select only the pin."
 msgstr ""
-"I kretsschemaredigerare:\n"
+"I kretsschemaredigeraren:\n"
 "Om aktiverat, väljs överordnad symbol vid klick på ett stift.\n"
 "Om inaktiverat, väljer klick på ett stift bara det stiftet."
 
@@ -12306,7 +12309,7 @@ msgstr "Långklick"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:199
 #: pcbnew/dialogs/panel_edit_options_base.cpp:240
 msgid "Clarify selection from menu."
-msgstr "Förtydliga urvalet från menyn."
+msgstr "Förtydliga urvalet från meny."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:158
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:216
@@ -12325,7 +12328,7 @@ msgstr "Ctrl + Skift"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:147
 #: pcbnew/dialogs/panel_edit_options_base.cpp:219
 msgid "Remove item(s) from selection."
-msgstr "Ta bort objekt från markeringen."
+msgstr "Ta bort objekt från urvalet."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:195
 #: pcbnew/dialogs/panel_edit_options_base.cpp:170
@@ -12347,7 +12350,7 @@ msgstr "Automatisk placering av symbolfält"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:266
 msgid "A&utomatically place symbol fields"
-msgstr "A&utoplacera symbolfält"
+msgstr "A&utoplacera symbolers textfält"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:269
 msgid "A&llow field autoplace to change justification"
@@ -12364,11 +12367,11 @@ msgstr "Upprepade objekt"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:296
 msgid "&Horizontal pitch:"
-msgstr "&Horisontell förskjutning:"
+msgstr "&Horisontell delning:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:307
 msgid "&Vertical pitch:"
-msgstr "&Vertikal förskjutning:"
+msgstr "&Vertikal delning:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:318
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:134
@@ -12381,7 +12384,7 @@ msgstr "Dialoginställningar"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:347
 msgid "Show footprint previews in Symbol Chooser"
-msgstr "Visa förhandsgranskningar av fotavtryck i Symbolväljare"
+msgstr "Visa förhandsgranskning av fotavtryck i symbolväljaren"
 
 #: eeschema/dialogs/panel_setup_buses.cpp:266
 #, c-format
@@ -12417,11 +12420,11 @@ msgstr "Namn för nät / nästlad buss"
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:27
 #: pcbnew/dialogs/panel_display_options_base.cpp:37
 msgid "Annotations"
-msgstr "Anteckningar"
+msgstr "Referensbeteckningar"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:30
 msgid "Symbol unit notation:"
-msgstr "Symbolenhet notation:"
+msgstr "Symbolenhetsmärkning:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid ".A"
@@ -12462,7 +12465,7 @@ msgid ""
 "Percentage of the text size to offset labels above (or below) a wire, bus, "
 "or pin"
 msgstr ""
-"Textens avstånd över (eller under) tråd, buss eller stift, i procent av "
+"Textens marginal över (eller under) tråd, buss eller stift, i procent av "
 "textstorleken"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
@@ -30731,7 +30734,7 @@ msgstr "Visa lödytenummer"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:65
 msgid "Clearance Outlines"
-msgstr "Clearance konturer"
+msgstr "Isolationsavståndskonturer"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:75
 msgid "Show when routing"
