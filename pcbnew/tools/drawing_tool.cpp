@@ -2854,7 +2854,8 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
             for( PCB_LAYER_ID layer : aOther->GetLayerSet().Seq() )
             {
-                if( !IsCopperLayer( layer ) )
+                // Bitmaps are "on" a copper layer but are not actually part of it
+                if( !IsCopperLayer( layer ) || aOther->Type() == PCB_BITMAP_T )
                     continue;
 
                 constraint = m_drcEngine->EvalRules( CLEARANCE_CONSTRAINT, aVia,  aOther, layer );
