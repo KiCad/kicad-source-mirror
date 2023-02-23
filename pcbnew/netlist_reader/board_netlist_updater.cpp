@@ -650,8 +650,10 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
             {
                 if( m_isDryRun )
                 {
+                    wxString originalNetname = via->GetNetname();
+
                     msg.Printf( _( "Reconnect via from %s to %s." ),
-                                UnescapeString( via->GetNetname() ),
+                                UnescapeString( originalNetname ),
                                 UnescapeString( updatedNetname ) );
 
                     m_reporter->Report( msg, RPT_SEVERITY_ACTION );
@@ -665,11 +667,13 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
 
                     if( netinfo )
                     {
+                        wxString originalNetname = via->GetNetname();
+
                         m_commit.Modify( via );
                         via->SetNet( netinfo );
 
                         msg.Printf( _( "Reconnected via from %s to %s." ),
-                                    UnescapeString( via->GetNetname() ),
+                                    UnescapeString( originalNetname ),
                                     UnescapeString( updatedNetname ) );
 
                         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
@@ -719,17 +723,19 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
             {
                 if( m_isDryRun )
                 {
+                    wxString originalNetname = zone->GetNetname();
+
                     if( !zone->GetZoneName().IsEmpty() )
                     {
                         msg.Printf( _( "Reconnect copper zone '%s' from %s to %s." ),
                                     zone->GetZoneName(),
-                                    UnescapeString( zone->GetNetname() ),
+                                    UnescapeString( originalNetname ),
                                     UnescapeString( updatedNetname ) );
                     }
                     else
                     {
                         msg.Printf( _( "Reconnect copper zone from %s to %s." ),
-                                    UnescapeString( zone->GetNetname() ),
+                                    UnescapeString( originalNetname ),
                                     UnescapeString( updatedNetname ) );
                     }
 
@@ -744,6 +750,8 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
 
                     if( netinfo )
                     {
+                        wxString originalNetname = zone->GetNetname();
+
                         m_commit.Modify( zone );
                         zone->SetNet( netinfo );
 
@@ -751,13 +759,13 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
                         {
                             msg.Printf( _( "Reconnected copper zone '%s' from %s to %s." ),
                                         zone->GetZoneName(),
-                                        UnescapeString( zone->GetNetname() ),
+                                        UnescapeString( originalNetname ),
                                         UnescapeString( updatedNetname ) );
                         }
                         else
                         {
                             msg.Printf( _( "Reconnected copper zone from %s to %s." ),
-                                        UnescapeString( zone->GetNetname() ),
+                                        UnescapeString( originalNetname ),
                                         UnescapeString( updatedNetname ) );
                         }
 
