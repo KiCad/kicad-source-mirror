@@ -213,7 +213,7 @@ void SIGNALS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
     wxGridCellCoordsArray cells1 = m_grid->GetSelectionBlockTopLeft();
     wxGridCellCoordsArray cells2 = m_grid->GetSelectionBlockBottomRight();
 
-    for( int i = 0; i < cells1.Count(); i++ )
+    for( size_t i = 0; i < cells1.Count(); i++ )
     {
         if( cells1[i].GetCol() == COL_SIGNAL_NAME )
         {
@@ -226,7 +226,7 @@ void SIGNALS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
 
     wxGridCellCoordsArray cells3 = m_grid->GetSelectedCells();
 
-    for( int i = 0; i < cells3.Count(); i++ )
+    for( size_t i = 0; i < cells3.Count(); i++ )
     {
         if( cells3[i].GetCol() == COL_SIGNAL_NAME )
             signals.push_back( m_grid->GetCellValue( cells3[i].GetRow(), cells3[i].GetCol() ) );
@@ -400,7 +400,7 @@ void MEASUREMENTS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
         wxGridCellCoordsArray cells1 = m_grid->GetSelectionBlockTopLeft();
         wxGridCellCoordsArray cells2 = m_grid->GetSelectionBlockBottomRight();
 
-        for( int i = 0; i < cells1.Count(); i++ )
+        for( size_t i = 0; i < cells1.Count(); i++ )
         {
             if( cells1[i].GetCol() == COL_MEASUREMENT )
             {
@@ -413,7 +413,7 @@ void MEASUREMENTS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
 
         wxGridCellCoordsArray cells3 = m_grid->GetSelectedCells();
 
-        for( int i = 0; i < cells3.Count(); i++ )
+        for( size_t i = 0; i < cells3.Count(); i++ )
         {
             if( cells3[i].GetCol() == COL_MEASUREMENT )
                 measurements.push_back( cells3[i].GetRow() );
@@ -1388,7 +1388,7 @@ void SIM_PLOT_FRAME::UpdateMeasurement( int aRow )
                 case SIM_TYPE::ST_POLE_ZERO: // There is no vector for integration
                 case SIM_TYPE::ST_TRANS_FUNC: // There is no vector for integration
                 default:
-                    
+
                     units += wxS( "·?" );
                     break;
             }
