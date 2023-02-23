@@ -198,8 +198,8 @@ public:
      * Check if the given collision between a track and another item occurs during the track's
      * entry into a net-tie pad.
      */
-    static bool IsNetTieExclusion( int aTrackNetCode, PCB_LAYER_ID aTrackLayer,
-                                   const VECTOR2I& aCollisionPos, BOARD_ITEM* aCollidingItem );
+    bool IsNetTieExclusion( int aTrackNetCode, PCB_LAYER_ID aTrackLayer,
+                            const VECTOR2I& aCollisionPos, BOARD_ITEM* aCollidingItem );
 
 private:
     void addRule( std::shared_ptr<DRC_RULE>& rule )
