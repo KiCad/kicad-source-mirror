@@ -58,6 +58,7 @@ private:
 
     void OnColSort( wxGridEvent& aEvent );
     void OnColMove( wxGridEvent& aEvent );
+    void OnColLabelChange( wxDataViewEvent& aEvent );
 
     void OnColumnItemToggled( wxDataViewEvent& event ) override;
     void OnGroupSymbolsToggled( wxCommandEvent& event ) override;
@@ -102,6 +103,8 @@ private:
     static BOM_PRESET              bomPresetGroupedByValueFootprint;
 
     SCH_EDIT_FRAME*                m_parent;
+    int                            m_fieldNameColWidth;
+    int                            m_labelColWidth;
     int                            m_showColWidth;
     int                            m_groupByColWidth;
 
