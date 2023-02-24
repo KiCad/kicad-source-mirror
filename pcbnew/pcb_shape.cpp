@@ -410,5 +410,21 @@ static struct PCB_SHAPE_DESC
                 _HKI( "Layer" ), &PCB_SHAPE::SetLayer, &PCB_SHAPE::GetLayer );
 
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ), layerProperty );
+
+        // Only polygons have meaningful Position properties.
+        // On other shapes, these are duplicates of the Start properties.
+        auto isPolygon =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( aItem ) )
+                        return shape->GetShape() == SHAPE_T::POLY;
+
+                    return false;
+                };
+
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( BOARD_ITEM ),
+                                      _HKI( "Position X" ), isPolygon );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( BOARD_ITEM ),
+                                      _HKI( "Position Y" ), isPolygon );
     }
 } _PCB_SHAPE_DESC;
