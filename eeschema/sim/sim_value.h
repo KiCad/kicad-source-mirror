@@ -79,11 +79,7 @@ public:
     static std::string ConvertNotation( const std::string& aString, NOTATION aFromNotation,
                                         NOTATION aToNotation );
 
-    static std::string Normalize( const std::string& aString, NOTATION aNotation )
-    {
-        // Note: also converts decimal separators to '.'
-        return ConvertNotation( aString, aNotation, NOTATION::SI );
-    }
+    static std::string Normalize( double aValue );
 
     static std::string ToSpice( const std::string& aString )
     {
