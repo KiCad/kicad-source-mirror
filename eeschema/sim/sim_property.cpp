@@ -134,6 +134,21 @@ bool SIM_STRING_PROPERTY::OnEvent( wxPropertyGrid* propgrid, wxWindow* wnd_prima
         }
     }
 
+    if( wxPropertyGrid* propGrid = dynamic_cast<wxPropertyGrid*>( wnd_primary->GetParent() ) )
+    {
+        // This doesn't seem like it should be required, as wxPGTextCtrlEditor::OnTextCtrlEvent()
+        // should be setting the value to modified.  But it doesn't (or the modified flag is
+        // cleared at some point later), and even if it is set, the changes don't get committed.
+        // (We used to have code in DIALOG_SIM_MODEL to commit things on *some* actions, but it
+        // wasn't complete and this appears to have at least a better hit rate.)
+        propGrid->CallAfter(
+                [propGrid]()
+                {
+                    propGrid->EditorsValueWasModified();
+                    propGrid->CommitChangesFromEditor();
+                } );
+    }
+
     return false;
 }
 
