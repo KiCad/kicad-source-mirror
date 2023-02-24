@@ -295,11 +295,6 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataFromWindow()
 {
     m_pinAssignmentsGrid->CommitPendingChanges();
 
-    // This should have been done in wxPGTextCtrlEditor::OnTextCtrlEvent(), but something must
-    // be clearing it before we get here, resulting in CommitChangesFromEditor() doing nothing
-    m_paramGrid->GetGrid()->EditorsValueWasModified();
-    m_paramGrid->GetGrid()->CommitChangesFromEditor();
-
     if( !DIALOG_SIM_MODEL_BASE::TransferDataFromWindow() )
         return false;
 
@@ -1241,11 +1236,6 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::onTypeChoice( wxCommandEvent& aEvent )
 template <typename T_symbol, typename T_field>
 void DIALOG_SIM_MODEL<T_symbol, T_field>::onPageChanging( wxBookCtrlEvent& event )
 {
-    // This should have been done in wxPGTextCtrlEditor::OnTextCtrlEvent(), but something must
-    // be clearing it before we get here, resulting in CommitChangesFromEditor() doing nothing
-    m_paramGrid->GetGrid()->EditorsValueWasModified();
-    m_paramGrid->GetGrid()->CommitChangesFromEditor();
-
     updateModelCodeTab( &curModel() );
 }
 
@@ -1295,10 +1285,7 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::onParamGridSetFocus( wxFocusEvent& aEv
     // Tab key is pressed. This is inconvenient, so we fix that here.
 
     wxPropertyGrid* grid = m_paramGrid->GetGrid();
-
-    grid->CommitChangesFromEditor();
-
-    wxPGProperty* selected = grid->GetSelection();
+    wxPGProperty*   selected = grid->GetSelection();
 
     if( !selected )
         selected = grid->wxPropertyGridInterface::GetFirst();
@@ -1314,8 +1301,6 @@ template <typename T_symbol, typename T_field>
 void DIALOG_SIM_MODEL<T_symbol, T_field>::onParamGridSelectionChange( wxPropertyGridEvent& aEvent )
 {
     wxPropertyGrid* grid = m_paramGrid->GetGrid();
-
-    grid->CommitChangesFromEditor();
 
     // Jump over categories.
     if( grid->GetSelection() && grid->GetSelection()->IsCategory() )
@@ -1395,10 +1380,7 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::onUpdateUI( wxUpdateUIEvent& aEvent )
         wxRect gridRect = grid->GetScreenRect();
 
         if( ctrlRect.GetTop() < gridRect.GetTop() || ctrlRect.GetBottom() > gridRect.GetBottom() )
-        {
-            grid->CommitChangesFromEditor();
             grid->ClearSelection();
-        }
     }
 #endif
 }
