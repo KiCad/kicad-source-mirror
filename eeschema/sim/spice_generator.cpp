@@ -44,7 +44,7 @@ std::string SPICE_GENERATOR::ModelName( const SPICE_ITEM& aItem ) const
 
 std::string SPICE_GENERATOR::ModelLine( const SPICE_ITEM& aItem ) const
 {
-    if( !m_model.HasSpiceNonInstanceOverrides() && !m_model.requiresSpiceModelLine() )
+    if( !m_model.requiresSpiceModelLine() )
         return "";
 
     std::string result;

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -109,15 +109,11 @@ protected:
     int doFindParam( const std::string& aParamName ) const override;
 
 private:
-    bool requiresSpiceModelLine() const override
-    {
-        return getModelType() != MODEL_TYPE::NONE;
-    }
+    bool requiresSpiceModelLine() const override;
 
     bool canSilentlyIgnoreParam( const std::string& aParamName );
 
     MODEL_TYPE getModelType() const;
-    bool getIsOtherVariant();
 };
 
 #endif /* SIM_MODEL_NGSPICE_H */
