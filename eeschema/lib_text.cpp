@@ -326,9 +326,10 @@ void LIB_TEXT::Plot( PLOTTER* plotter, bool aBackground, const VECTOR2I& offset,
     if( !font )
         font = KIFONT::FONT::GetFont( settings->GetDefaultFont(), IsBold(), IsItalic() );
 
-    plotter->Text( pos, color, GetText(), t1 ? ANGLE_HORIZONTAL : ANGLE_VERTICAL, GetTextSize(),
-                   GetHorizJustify(), GetVertJustify(), penWidth, IsItalic(), IsBold(),
-                   true, font );
+    attrs.m_StrokeWidth = penWidth;
+    attrs.m_Angle = t1 ? ANGLE_HORIZONTAL : ANGLE_VERTICAL;
+
+    plotter->PlotText( pos, color, GetText(), attrs, font );
 }
 
 

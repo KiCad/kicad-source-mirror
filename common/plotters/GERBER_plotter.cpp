@@ -2004,6 +2004,20 @@ void GERBER_PLOTTER::Text( const VECTOR2I&             aPos,
 }
 
 
+void GERBER_PLOTTER::PlotText( const VECTOR2I& aPos, const COLOR4D& aColor,
+                    const wxString& aText,
+                    const TEXT_ATTRIBUTES& aAttributes,
+                    KIFONT::FONT* aFont,
+                    void* aData )
+{
+    GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
+
+    if( gbr_metadata )
+        formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
+
+    PLOTTER::PlotText( aPos, aColor, aText, aAttributes, aFont, aData );
+}
+
 void GERBER_PLOTTER::SetLayerPolarity( bool aPositive )
 {
     if( aPositive )

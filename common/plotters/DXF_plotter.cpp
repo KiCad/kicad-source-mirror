@@ -861,145 +861,186 @@ void DXF_PLOTTER::Text( const VECTOR2I&             aPos,
     }
     else
     {
-        /* Emit text as a text entity. This loses formatting and shape but it's
-           more useful as a CAD object */
-        VECTOR2D origin_dev = userToDeviceCoordinates( aPos );
-        SetColor( aColor );
-        wxString cname = getDXFColorName( m_currentColor );
-        VECTOR2D size_dev = userToDeviceSize( aSize );
-        int h_code = 0, v_code = 0;
-
-        switch( aH_justify )
-        {
-        case GR_TEXT_H_ALIGN_LEFT:   h_code = 0; break;
-        case GR_TEXT_H_ALIGN_CENTER: h_code = 1; break;
-        case GR_TEXT_H_ALIGN_RIGHT:  h_code = 2; break;
-        }
-
-        switch( aV_justify )
-        {
-        case GR_TEXT_V_ALIGN_TOP:    v_code = 3; break;
-        case GR_TEXT_V_ALIGN_CENTER: v_code = 2; break;
-        case GR_TEXT_V_ALIGN_BOTTOM: v_code = 1; break;
-        }
-
-        // Position, size, rotation and alignment
-        // The two alignment point usages is somewhat idiot (see the DXF ref)
-        // Anyway since we don't use the fit/aligned options, they're the same
-        fprintf( m_outputFile,
-                 "  0\n"
-                 "TEXT\n"
-                 "  7\n"
-                 "%s\n"          // Text style
-                 "  8\n"
-                 "%s\n"          // Layer name
-                 "  10\n"
-                 "%g\n"          // First point X
-                 "  11\n"
-                 "%g\n"          // Second point X
-                 "  20\n"
-                 "%g\n"          // First point Y
-                 "  21\n"
-                 "%g\n"          // Second point Y
-                 "  40\n"
-                 "%g\n"          // Text height
-                 "  41\n"
-                 "%g\n"          // Width factor
-                 "  50\n"
-                 "%g\n"          // Rotation
-                 "  51\n"
-                 "%g\n"          // Oblique angle
-                 "  71\n"
-                 "%d\n"          // Mirror flags
-                 "  72\n"
-                 "%d\n"          // H alignment
-                 "  73\n"
-                 "%d\n",         // V alignment
-                 aBold ? (aItalic ? "KICADBI" : "KICADB") : (aItalic ? "KICADI" : "KICAD"),
-                 TO_UTF8( cname ),
-                 origin_dev.x, origin_dev.x,
-                 origin_dev.y, origin_dev.y,
-                 size_dev.y, fabs( size_dev.x / size_dev.y ),
-                 aOrient.AsDegrees(),
-                 aItalic ? DXF_OBLIQUE_ANGLE : 0,
-                 size_dev.x < 0 ? 2 : 0, // X mirror flag
-                 h_code, v_code );
-
-        /* There are two issue in emitting the text:
-           - Our overline character (~) must be converted to the appropriate
-           control sequence %%O or %%o
-           - Text encoding in DXF is more or less unspecified since depends on
-           the DXF declared version, the acad version reading it *and* some
-           system variables to be put in the header handled only by newer acads
-           Also before R15 unicode simply is not supported (you need to use
-           bigfonts which are a massive PITA). Common denominator solution:
-           use Latin1 (and however someone could choke on it, anyway). Sorry
-           for the extended latin people. If somewant want to try fixing this
-           recent version seems to use UTF-8 (and not UCS2 like the rest of
-           Windows)
-
-           XXX Actually there is a *third* issue: older DXF formats are limited
-           to 255 bytes records (it was later raised to 2048); since I'm lazy
-           and text so long is not probable I just don't implement this rule.
-           If someone is interested in fixing this, you have to emit the first
-           partial lines with group code 3 (max 250 bytes each) and then finish
-           with a group code 1 (less than 250 bytes). The DXF refs explains it
-           in no more details...
-         */
-
-        int braceNesting = 0;
-        int overbarDepth = -1;
-
-        fputs( "  1\n", m_outputFile );
-
-        for( unsigned int i = 0; i < aText.length(); i++ )
-        {
-            /* Here I do a bad thing: writing the output one byte at a time!
-               but today I'm lazy and I have no idea on how to coerce a Unicode
-               wxString to spit out latin1 encoded text ...
-
-               At least stdio is *supposed* to do output buffering, so there is
-               hope is not too slow */
-            wchar_t ch = aText[i];
-
-            if( ch > 255 )
-            {
-                // I can't encode this...
-                putc( '?', m_outputFile );
-            }
-            else
-            {
-                if( aText[i] == '~' && i+1 < aText.length() && aText[i+1] == '{' )
-                {
-                    fputs( "%%o", m_outputFile );
-                    overbarDepth = braceNesting;
-
-                    // Skip the '{'
-                    i++;
-                    continue;
-                }
-                else if( aText[i] == '{' )
-                {
-                    braceNesting++;
-                }
-                else if( aText[i] == '}' )
-                {
-                    if( braceNesting > 0 )
-                        braceNesting--;
-
-                    if( braceNesting == overbarDepth )
-                    {
-                        fputs( "%%O", m_outputFile );
-                        overbarDepth = -1;
-                        continue;
-                    }
-                }
-
-                putc( ch, m_outputFile );
-            }
-        }
-
-        putc( '\n', m_outputFile );
+        TEXT_ATTRIBUTES attrs;
+        attrs.m_Halign = aH_justify;
+        attrs.m_Valign =aV_justify;
+        attrs.m_StrokeWidth = aWidth;
+        attrs.m_Angle = aOrient;
+        attrs.m_Italic = aItalic;
+        attrs.m_Bold = aBold;
+        attrs.m_Mirrored = aSize.x < 0;
+        attrs.m_Multiline = false;
+        plotOneLineOfText( aPos, aColor, aText, attrs );
     }
 }
 
+
+void DXF_PLOTTER::PlotText( const VECTOR2I& aPos, const COLOR4D& aColor,
+                    const wxString& aText,
+                    const TEXT_ATTRIBUTES& aAttributes,
+                    KIFONT::FONT* aFont,
+                    void* aData )
+{
+    TEXT_ATTRIBUTES attrs = aAttributes;
+    // Fix me: see how to use DXF text mode for multiline texts
+    if( attrs.m_Multiline && !aText.Contains( wxT( "\n" ) ) )
+        attrs.m_Multiline = false;  // the text has only one line.
+
+    bool processSuperSub = aText.Contains( wxT( "^{" ) ) || aText.Contains( wxT( "_{" ) );
+
+    if( m_textAsLines || containsNonAsciiChars( aText ) || attrs.m_Multiline || processSuperSub )
+    {
+        // output text as graphics.
+        // Perhaps multiline texts could be handled as DXF text entity
+        // but I do not want spend time about that (JPC)
+        PLOTTER::PlotText( aPos, aColor, aText, aAttributes, aFont, aData );
+    }
+    else
+       plotOneLineOfText( aPos, aColor, aText, attrs );
+}
+
+void DXF_PLOTTER::plotOneLineOfText( const VECTOR2I& aPos, const COLOR4D& aColor,
+                                    const wxString& aText,
+                                    const TEXT_ATTRIBUTES& aAttributes )
+{
+    /* Emit text as a text entity. This loses formatting and shape but it's
+       more useful as a CAD object */
+    VECTOR2D origin_dev = userToDeviceCoordinates( aPos );
+    SetColor( aColor );
+    wxString cname = getDXFColorName( m_currentColor );
+    VECTOR2D size_dev = userToDeviceSize( aAttributes.m_Size );
+    int h_code = 0, v_code = 0;
+
+    switch( aAttributes.m_Halign )
+    {
+    case GR_TEXT_H_ALIGN_LEFT:   h_code = 0; break;
+    case GR_TEXT_H_ALIGN_CENTER: h_code = 1; break;
+    case GR_TEXT_H_ALIGN_RIGHT:  h_code = 2; break;
+    }
+
+    switch( aAttributes.m_Valign )
+    {
+    case GR_TEXT_V_ALIGN_TOP:    v_code = 3; break;
+    case GR_TEXT_V_ALIGN_CENTER: v_code = 2; break;
+    case GR_TEXT_V_ALIGN_BOTTOM: v_code = 1; break;
+    }
+
+    // Position, size, rotation and alignment
+    // The two alignment point usages is somewhat idiot (see the DXF ref)
+    // Anyway since we don't use the fit/aligned options, they're the same
+    fprintf( m_outputFile,
+             "  0\n"
+             "TEXT\n"
+             "  7\n"
+             "%s\n"          // Text style
+             "  8\n"
+             "%s\n"          // Layer name
+             "  10\n"
+             "%g\n"          // First point X
+             "  11\n"
+             "%g\n"          // Second point X
+             "  20\n"
+             "%g\n"          // First point Y
+             "  21\n"
+             "%g\n"          // Second point Y
+             "  40\n"
+             "%g\n"          // Text height
+             "  41\n"
+             "%g\n"          // Width factor
+             "  50\n"
+             "%g\n"          // Rotation
+             "  51\n"
+             "%g\n"          // Oblique angle
+             "  71\n"
+             "%d\n"          // Mirror flags
+             "  72\n"
+             "%d\n"          // H alignment
+             "  73\n"
+             "%d\n",         // V alignment
+             aAttributes.m_Bold ?
+                (aAttributes.m_Italic ? "KICADBI" : "KICADB")
+                : (aAttributes.m_Italic ? "KICADI" : "KICAD"), TO_UTF8( cname ),
+             origin_dev.x, origin_dev.x,
+             origin_dev.y, origin_dev.y,
+             size_dev.y, fabs( size_dev.x / size_dev.y ),
+             aAttributes.m_Angle.AsDegrees(),
+             aAttributes.m_Italic ? DXF_OBLIQUE_ANGLE : 0,
+             aAttributes.m_Mirrored ? 2 : 0, // X mirror flag
+             h_code, v_code );
+
+    /* There are two issue in emitting the text:
+       - Our overline character (~) must be converted to the appropriate
+       control sequence %%O or %%o
+       - Text encoding in DXF is more or less unspecified since depends on
+       the DXF declared version, the acad version reading it *and* some
+       system variables to be put in the header handled only by newer acads
+       Also before R15 unicode simply is not supported (you need to use
+       bigfonts which are a massive PITA). Common denominator solution:
+       use Latin1 (and however someone could choke on it, anyway). Sorry
+       for the extended latin people. If somewant want to try fixing this
+       recent version seems to use UTF-8 (and not UCS2 like the rest of
+       Windows)
+
+       XXX Actually there is a *third* issue: older DXF formats are limited
+       to 255 bytes records (it was later raised to 2048); since I'm lazy
+       and text so long is not probable I just don't implement this rule.
+       If someone is interested in fixing this, you have to emit the first
+       partial lines with group code 3 (max 250 bytes each) and then finish
+       with a group code 1 (less than 250 bytes). The DXF refs explains it
+       in no more details...
+     */
+
+    int braceNesting = 0;
+    int overbarDepth = -1;
+
+    fputs( "  1\n", m_outputFile );
+
+    for( unsigned int i = 0; i < aText.length(); i++ )
+    {
+        /* Here I do a bad thing: writing the output one byte at a time!
+           but today I'm lazy and I have no idea on how to coerce a Unicode
+           wxString to spit out latin1 encoded text ...
+
+           At least stdio is *supposed* to do output buffering, so there is
+           hope is not too slow */
+        wchar_t ch = aText[i];
+
+        if( ch > 255 )
+        {
+            // I can't encode this...
+            putc( '?', m_outputFile );
+        }
+        else
+        {
+            if( aText[i] == '~' && i+1 < aText.length() && aText[i+1] == '{' )
+            {
+                fputs( "%%o", m_outputFile );
+                overbarDepth = braceNesting;
+
+                // Skip the '{'
+                i++;
+                continue;
+            }
+            else if( aText[i] == '{' )
+            {
+                braceNesting++;
+            }
+            else if( aText[i] == '}' )
+            {
+                if( braceNesting > 0 )
+                    braceNesting--;
+
+                if( braceNesting == overbarDepth )
+                {
+                    fputs( "%%O", m_outputFile );
+                    overbarDepth = -1;
+                    continue;
+                }
+            }
+
+            putc( ch, m_outputFile );
+        }
+    }
+
+    putc( '\n', m_outputFile );
+}

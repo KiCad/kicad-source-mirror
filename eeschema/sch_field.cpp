@@ -958,6 +958,9 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground ) const
 
     penWidth = std::max( penWidth, settings->GetMinPenWidth() );
 
+    // clamp the pen width to be sure the text is readable
+    penWidth = std::min( penWidth, std::min( GetTextSize().x, GetTextSize().y ) / 4 );
+
     if( !IsVisible() )
         return;
 
@@ -1011,8 +1014,14 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground ) const
     if( !font )
         font = KIFONT::FONT::GetFont( settings->GetDefaultFont(), IsBold(), IsItalic() );
 
-    aPlotter->Text( textpos, color, GetShownText(), orient, GetTextSize(),  hjustify, vjustify,
-                    penWidth, IsItalic(), IsBold(), false, font );
+    TEXT_ATTRIBUTES attrs = GetAttributes();
+    attrs.m_StrokeWidth = penWidth;
+    attrs.m_Halign = hjustify;
+    attrs.m_Valign = vjustify;
+    attrs.m_Angle = orient;
+    attrs.m_Multiline = false;
+
+    aPlotter->PlotText( textpos, color, GetShownText(), attrs, font );
 
     if( IsHypertext() )
     {

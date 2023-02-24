@@ -1376,7 +1376,9 @@ void PDF_PLOTTER::Text( const VECTOR2I&             aPos,
     double ctm_a, ctm_b, ctm_c, ctm_d, ctm_e, ctm_f;
     double wideningFactor, heightFactor;
 
-    computeTextParameters( aPos, aText, aOrient, aSize, m_plotMirror, aH_justify,
+    VECTOR2I t_size( std::abs( aSize.x ), std::abs( aSize.y ) );
+
+    computeTextParameters( aPos, aText, aOrient, t_size, m_plotMirror, aH_justify,
                            aV_justify, aWidth, aItalic, aBold, &wideningFactor, &ctm_a,
                            &ctm_b, &ctm_c, &ctm_d, &ctm_e, &ctm_f, &heightFactor );
 
@@ -1389,7 +1391,7 @@ void PDF_PLOTTER::Text( const VECTOR2I&             aPos,
     if( !aFont )
         aFont = KIFONT::FONT::GetFont();
 
-    VECTOR2I full_box( aFont->StringBoundaryLimits( aText, aSize, aWidth, aBold, aItalic ) );
+    VECTOR2I full_box( aFont->StringBoundaryLimits( aText, t_size, aWidth, aBold, aItalic ) );
     VECTOR2I box_x( full_box.x, 0 );
     VECTOR2I box_y( 0, full_box.y );
 
@@ -1410,13 +1412,13 @@ void PDF_PLOTTER::Text( const VECTOR2I&             aPos,
     {
         wxString word = str_tok.GetNextToken();
 
-        computeTextParameters( pos, word, aOrient, aSize, m_plotMirror, GR_TEXT_H_ALIGN_LEFT,
+        computeTextParameters( pos, word, aOrient, t_size, m_plotMirror, GR_TEXT_H_ALIGN_LEFT,
                                GR_TEXT_V_ALIGN_BOTTOM, aWidth, aItalic, aBold, &wideningFactor, &ctm_a,
                                &ctm_b, &ctm_c, &ctm_d, &ctm_e, &ctm_f, &heightFactor );
 
         // Extract the changed width and rotate by the orientation to get the offset for the
         // next word
-        VECTOR2I bbox( aFont->StringBoundaryLimits( word, aSize, aWidth, aBold, aItalic ).x, 0 );
+        VECTOR2I bbox( aFont->StringBoundaryLimits( word, t_size, aWidth, aBold, aItalic ).x, 0 );
         RotatePoint( bbox, aOrient );
         pos += bbox;
 
@@ -1441,6 +1443,30 @@ void PDF_PLOTTER::Text( const VECTOR2I&             aPos,
     // Plot the stroked text (if requested)
     PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aWidth, aItalic,
                    aBold, aMultilineAllowed, aFont );
+}
+
+
+void PDF_PLOTTER::PlotText( const VECTOR2I& aPos, const COLOR4D& aColor,
+                    const wxString& aText,
+                    const TEXT_ATTRIBUTES& aAttributes,
+                    KIFONT::FONT* aFont,
+                    void* aData )
+{
+    VECTOR2I size = aAttributes.m_Size;
+
+    // PDF files do not like 0 sized texts which create broken files.
+    if( size.x == 0 || size.y == 0 )
+        return;
+
+    if( aAttributes.m_Mirrored )
+        size.x = -size.x;
+
+    PDF_PLOTTER::Text( aPos, aColor, aText, aAttributes.m_Angle, size,
+                       aAttributes.m_Halign, aAttributes.m_Valign,
+                       aAttributes.m_StrokeWidth,
+                       aAttributes.m_Italic, aAttributes.m_Bold,
+                       aAttributes.m_Multiline,
+                       aFont, aData );
 }
 
 

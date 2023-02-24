@@ -853,3 +853,23 @@ void SVG_PLOTTER::Text( const VECTOR2I&             aPos,
 
     fputs( "</g>", m_outputFile );
 }
+
+
+void SVG_PLOTTER::PlotText( const VECTOR2I& aPos, const COLOR4D& aColor,
+                    const wxString& aText,
+                    const TEXT_ATTRIBUTES& aAttributes,
+                    KIFONT::FONT* aFont,
+                    void* aData )
+{
+    VECTOR2I size = aAttributes.m_Size;
+
+    if( aAttributes.m_Mirrored )
+        size.x = -size.x;
+
+    SVG_PLOTTER::Text( aPos, aColor, aText, aAttributes.m_Angle, size,
+                       aAttributes.m_Halign, aAttributes.m_Valign,
+                       aAttributes.m_StrokeWidth,
+                       aAttributes.m_Italic, aAttributes.m_Bold,
+                       aAttributes.m_Multiline,
+                       aFont, aData );
+}

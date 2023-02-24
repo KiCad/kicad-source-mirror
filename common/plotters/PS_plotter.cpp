@@ -967,6 +967,28 @@ void PS_PLOTTER::Text( const VECTOR2I&             aPos,
 }
 
 
+void PS_PLOTTER::PlotText( const VECTOR2I&          aPos,
+                           const COLOR4D&           aColor,
+                           const wxString&          aText,
+                           const TEXT_ATTRIBUTES&   aAttributes,
+                           KIFONT::FONT*            aFont,
+                           void*                    aData )
+{
+    SetCurrentLineWidth( aAttributes.m_StrokeWidth );
+    SetColor( aColor );
+
+    // Draw the hidden postscript text (if requested)
+    if( m_textMode == PLOT_TEXT_MODE::PHANTOM )
+    {
+        std::string ps_test = encodeStringForPlotter( aText );
+        VECTOR2D pos_dev = userToDeviceCoordinates( aPos );
+        fprintf( m_outputFile, "%s %g %g phantomshow\n", ps_test.c_str(), pos_dev.x, pos_dev.y );
+    }
+
+    PLOTTER::PlotText( aPos, aColor, aText, aAttributes, aFont, aData );
+}
+
+
 /**
  * Character widths for Helvetica
  */

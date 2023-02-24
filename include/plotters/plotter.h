@@ -409,8 +409,22 @@ public:
     /**
      * Draw text with the plotter.
      *
-     * For convenience it accept the color to use for specific plotters (GERBER) aData is used
-     * to pass extra parameters.
+     * For convenience it accept the color to use for specific plotters
+     * aData is used to pass extra parameters (GERBER).
+     *
+     * @param aPos is the text position (according to aH_justify, aV_justify).
+     * @param aColor is the text color.
+     * @param aText is the text to draw.
+     * @param aOrient is the angle.
+     * @param aSize is the text size (size.x or size.y can be < 0 for mirrored texts).
+     * @param aH_justify is the horizontal justification (Left, center, right).
+     * @param aV_justify is the vertical justification (bottom, center, top).
+     * @param aPenWidth is the line width (if = 0, use plot default line width).
+     * @param aItalic is the true to simulate an italic font.
+     * @param aBold use true to use a bold font Useful only with default width value (aPenWidth = 0).
+     * @param aMultilineAllowed use true to plot text as multiline, otherwise single line.
+     * @param aData is a parameter used by some plotters in SetCurrentLineWidth(),
+     *              not directly used here.
      */
     virtual void Text( const VECTOR2I&             aPos,
                        const COLOR4D&              aColor,
@@ -426,6 +440,12 @@ public:
                        KIFONT::FONT*               aFont,
                        void*                       aData = nullptr );
 
+    virtual void PlotText( const VECTOR2I&          aPos,
+                           const COLOR4D&           aColor,
+                           const wxString&          aText,
+                           const TEXT_ATTRIBUTES&   aAttributes,
+                           KIFONT::FONT*            aFont,
+                           void*                    aData = nullptr );
     /**
      * Create a clickable hyperlink with a rectangular click area
      *

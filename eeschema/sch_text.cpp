@@ -462,12 +462,15 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter, bool aBackground ) const
 
     GetLinePositions( positions, (int) strings_list.Count() );
 
+    TEXT_ATTRIBUTES attrs = GetAttributes();
+    attrs.m_StrokeWidth = penWidth;
+    attrs.m_Multiline = false;
+
     for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
     {
         VECTOR2I  textpos = positions[ii] + text_offset;
         wxString& txt = strings_list.Item( ii );
-        aPlotter->Text( textpos, color, txt, GetTextAngle(), GetTextSize(), GetHorizJustify(),
-                        GetVertJustify(), penWidth, IsItalic(), IsBold(), false, font );
+        aPlotter->PlotText( textpos, color, txt, attrs, font );
     }
 
     if( HasHyperlink() )

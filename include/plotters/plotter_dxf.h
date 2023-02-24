@@ -166,7 +166,12 @@ public:
                        KIFONT::FONT*          aFont = nullptr,
                        void*                  aData = nullptr ) override;
 
-
+    virtual void PlotText( const VECTOR2I&          aPos,
+                           const COLOR4D&           aColor,
+                           const wxString&          aText,
+                           const TEXT_ATTRIBUTES&   aAttributes,
+                           KIFONT::FONT*            aFont,
+                           void*                    aData = nullptr ) override;
     /**
      * Set the units to use for plotting the DXF file.
      *
@@ -209,6 +214,10 @@ protected:
     virtual void Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
                       const EDA_ANGLE& aEndAngle, int aRadius, FILL_T aFill,
                       int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
+
+    void plotOneLineOfText( const VECTOR2I& aPos, const COLOR4D& aColor,
+                            const wxString& aText,
+                            const TEXT_ATTRIBUTES& aAttributes );
 
     bool           m_textAsLines;
     COLOR4D        m_currentColor;
