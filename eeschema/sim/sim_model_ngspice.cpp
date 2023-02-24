@@ -215,6 +215,43 @@ bool SIM_MODEL_NGSPICE::canSilentlyIgnoreParam( const std::string& aParamName )
 }
 
 
+bool SIM_MODEL_NGSPICE::requiresSpiceModelLine() const
+{
+    for( int ii = 0; ii < GetParamCount(); ++ii )
+    {
+        const PARAM& param = m_params[ii];
+
+        // Instance parameters are written in item lines
+        if( param.info.isSpiceInstanceParam )
+            continue;
+
+        // Empty parameters are interpreted as default-value
+        if ( param.value == "" )
+            continue;
+
+        // Any non-empty parameter must be written if there's no base model
+        if( !m_baseModel )
+            return true;
+
+        const SIM_MODEL_NGSPICE* baseModel = dynamic_cast<const SIM_MODEL_NGSPICE*>( m_baseModel );
+        std::string              baseValue = baseModel->m_params[ii].value;
+
+        if( param.value == baseValue )
+            continue;
+
+        // One more check for equivalence, mostly for early 7.0 files which wrote all parameters
+        // to the Sim.Params field in normalized format
+        if( param.value == SIM_VALUE::Normalize( SIM_VALUE::ToDouble( baseValue ) ) )
+            continue;
+
+        // Overrides must be written
+        return true;
+    }
+
+    return false;
+}
+
+
 std::vector<std::string> SIM_MODEL_NGSPICE::GetPinNames() const
 {
     return ModelInfo( getModelType() ).pinNames;
@@ -287,43 +324,5 @@ SIM_MODEL_NGSPICE::MODEL_TYPE SIM_MODEL_NGSPICE::getModelType() const
     default:
         wxFAIL_MSG( "Unhandled SIM_MODEL type in SIM_MODEL_NGSPICE" );
         return MODEL_TYPE::NONE;
-    }
-}
-
-
-bool SIM_MODEL_NGSPICE::getIsOtherVariant()
-{
-    switch( GetType() )
-    {
-    case TYPE::PNP_GUMMELPOON:
-    case TYPE::PNP_VBIC:
-    case TYPE::PNP_HICUM2:
-    case TYPE::PJFET_SHICHMANHODGES:
-    case TYPE::PJFET_PARKERSKELLERN:
-    case TYPE::PMES_STATZ:
-    case TYPE::PMES_YTTERDAL:
-    case TYPE::PMES_HFET1:
-    case TYPE::PMES_HFET2:
-    case TYPE::PMOS_VDMOS:
-    case TYPE::PMOS_MOS1:
-    case TYPE::PMOS_MOS2:
-    case TYPE::PMOS_MOS3:
-    case TYPE::PMOS_BSIM1:
-    case TYPE::PMOS_BSIM2:
-    case TYPE::PMOS_MOS6:
-    case TYPE::PMOS_BSIM3:
-    case TYPE::PMOS_MOS9:
-    case TYPE::PMOS_B4SOI:
-    case TYPE::PMOS_BSIM4:
-    case TYPE::PMOS_B3SOIFD:
-    case TYPE::PMOS_B3SOIDD:
-    case TYPE::PMOS_B3SOIPD:
-    case TYPE::PMOS_HISIM2:
-    case TYPE::PMOS_HISIMHV1:
-    case TYPE::PMOS_HISIMHV2:
-        return true;
-
-    default:
-        return false;
     }
 }

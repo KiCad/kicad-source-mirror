@@ -480,10 +480,6 @@ public:
     void SetParamValue( const std::string& aParamName, const std::string& aValue,
                         SIM_VALUE::NOTATION aNotation = SIM_VALUE::NOTATION::SI );
 
-    bool HasOverrides() const;
-    bool HasNonInstanceOverrides() const;
-    bool HasSpiceNonInstanceOverrides() const;
-
     // Can modifying a model parameter also modify other parameters?
     virtual bool HasAutofill() const { return false; }
     virtual bool HasPrimaryValue() const { return false; }

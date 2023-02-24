@@ -883,42 +883,6 @@ void SIM_MODEL::SetParamValue( const std::string& aParamName, const std::string&
 }
 
 
-bool SIM_MODEL::HasOverrides() const
-{
-    for( const PARAM& param : m_params )
-    {
-        if( param.value != "" )
-            return true;
-    }
-
-    return false;
-}
-
-
-bool SIM_MODEL::HasNonInstanceOverrides() const
-{
-    for( const PARAM& param : m_params )
-    {
-        if( !param.info.isInstanceParam && param.value != "" )
-            return true;
-    }
-
-    return false;
-}
-
-
-bool SIM_MODEL::HasSpiceNonInstanceOverrides() const
-{
-    for( const PARAM& param : m_params )
-    {
-        if( !param.info.isSpiceInstanceParam && param.value != "" )
-            return true;
-    }
-
-    return false;
-}
-
-
 std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType )
 {
     switch( aType )
