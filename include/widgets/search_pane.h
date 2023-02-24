@@ -66,7 +66,6 @@ protected:
     SEARCH_PANE_TAB* GetCurrentTab() const;
 
 private:
-    EDA_DRAW_FRAME*               m_frame;
     std::vector<SEARCH_HANDLER*>  m_handlers;
     std::vector<SEARCH_PANE_TAB*> m_tabs;
     wxString                      m_lastQuery;

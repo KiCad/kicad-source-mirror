@@ -24,8 +24,7 @@
 
 
 SEARCH_PANE::SEARCH_PANE( EDA_DRAW_FRAME* aFrame ) :
-	SEARCH_PANE_BASE( aFrame ),
-	m_frame( aFrame )
+	SEARCH_PANE_BASE( aFrame )
 {
 }
 
