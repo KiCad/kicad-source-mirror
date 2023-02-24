@@ -402,6 +402,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItem( const FP_TEXT* aText, const COLOR4
     m_plotter->SetColor( color );
 
     // calculate some text parameters :
+    TEXT_ATTRIBUTES attrs = aText->GetAttributes();
     VECTOR2I      size = aText->GetTextSize();
     VECTOR2I      pos = aText->GetTextPos();
     int           thickness = aText->GetEffectiveTextPenWidth();
@@ -433,11 +434,40 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItem( const FP_TEXT* aText, const COLOR4
     const FOOTPRINT* parent = static_cast<const FOOTPRINT*> ( aText->GetParent() );
     gbr_metadata.SetCmpReference( parent->GetReference() );
 
-    m_plotter->SetCurrentLineWidth( thickness );
+    if( aText->IsKnockout() )
+    {
+        KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
+        SHAPE_POLY_SET             knockouts;
 
-    m_plotter->Text( pos, aColor, aText->GetShownText(), aText->GetDrawRotation(), size,
-                     aText->GetHorizJustify(), aText->GetVertJustify(), thickness,
-                     aText->IsItalic(), allow_bold, false, font, &gbr_metadata );
+        CALLBACK_GAL callback_gal( empty_opts,
+                // Polygon callback
+                [&]( const SHAPE_LINE_CHAIN& aPoly )
+                {
+                    knockouts.AddOutline( aPoly );
+                } );
+
+        callback_gal.SetIsFill( font->IsOutline() );
+        callback_gal.SetIsStroke( font->IsStroke() );
+        font->Draw( &callback_gal, aText->GetShownText(), aText->GetDrawPos(), attrs );
+
+        SHAPE_POLY_SET finalPoly;
+        int            margin = attrs.m_StrokeWidth * 1.5
+                                    + GetKnockoutTextMargin( attrs.m_Size, attrs.m_StrokeWidth );
+
+        aText->TransformBoundingBoxToPolygon( &finalPoly, margin );
+        finalPoly.BooleanSubtract( knockouts, SHAPE_POLY_SET::PM_FAST );
+        finalPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
+
+        for( int ii = 0; ii < finalPoly.OutlineCount(); ++ii )
+            m_plotter->PlotPoly( finalPoly.Outline( ii ), FILL_T::FILLED_SHAPE, 0, &gbr_metadata );
+    }
+    else
+    {
+        m_plotter->SetCurrentLineWidth( thickness );
+        m_plotter->Text( pos, aColor, aText->GetShownText(), aText->GetDrawRotation(), size,
+                         aText->GetHorizJustify(), aText->GetVertJustify(), thickness,
+                         aText->IsItalic(), allow_bold, false, font, &gbr_metadata );
+    }
 }
 
 
