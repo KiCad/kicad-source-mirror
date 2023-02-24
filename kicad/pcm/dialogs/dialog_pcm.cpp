@@ -57,6 +57,8 @@ DIALOG_PCM::DIALOG_PCM( wxWindow* parent, std::shared_ptr<PLUGIN_CONTENT_MANAGER
         DIALOG_PCM_BASE( parent ),
         m_pcm( pcm )
 {
+    SetDoubleBuffered( true );
+
     m_defaultBitmap = KiBitmap( BITMAPS::icon_pcm );
 
     m_pcm->SetDialogWindow( this );
@@ -313,6 +315,8 @@ void DIALOG_PCM::OnRepositoryChoice( wxCommandEvent& event )
 
 void DIALOG_PCM::setRepositoryData( const wxString& aRepositoryId )
 {
+    m_dialogNotebook->Freeze();
+
     if( m_pcm->CacheRepository( aRepositoryId ) )
     {
         for( const auto& [ packageType, packagesView ] : m_repositoryContentPanels )
@@ -378,6 +382,8 @@ void DIALOG_PCM::setRepositoryData( const wxString& aRepositoryId )
         m_dialogNotebook->SetPageText( 0, wxString::Format( _( "Repository (%d)" ),
                                                             (int) packages.size() ) );
     }
+
+    m_dialogNotebook->Thaw();
 }
 
 
