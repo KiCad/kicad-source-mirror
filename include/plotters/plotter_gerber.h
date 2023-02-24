@@ -124,6 +124,14 @@ public:
                        KIFONT::FONT*               aFont = nullptr,
                        void*                       aData = nullptr ) override;
 
+
+    virtual void PlotText( const VECTOR2I&          aPos,
+                           const COLOR4D&           aColor,
+                           const wxString&          aText,
+                           const TEXT_ATTRIBUTES&   aAttributes,
+                           KIFONT::FONT*            aFont,
+                           void*                    aData = nullptr ) override;
+
     /**
      * Filled circular flashes are stored as apertures
      */

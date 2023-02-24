@@ -694,23 +694,6 @@ void PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill, int a
 }
 
 
-/**
- * Same as GRText, but plot graphic text instead of draw it.
- *
- * @param aPos is the text position (according to aH_justify, aV_justify).
- * @param aColor is the text color.
- * @param aText is the text to draw.
- * @param aOrient is the angle.
- * @param aSize is the text size (size.x or size.y can be < 0 for mirrored texts).
- * @param aH_justify is the horizontal justification (Left, center, right).
- * @param aV_justify is the vertical justification (bottom, center, top).
- * @param aPenWidth is the line width (if = 0, use plot default line width).
- * @param aItalic is the true to simulate an italic font.
- * @param aBold use true to use a bold font Useful only with default width value (aPenWidth = 0).
- * @param aMultilineAllowed use true to plot text as multiline, otherwise single line.
- * @param aData is a parameter used by some plotters in SetCurrentLineWidth(),
- *              not directly used here.
- */
 void PLOTTER::Text( const VECTOR2I&             aPos,
                     const COLOR4D&              aColor,
                     const wxString&             aText,
@@ -765,6 +748,48 @@ void PLOTTER::Text( const VECTOR2I&             aPos,
         attributes.m_Size.x = -attributes.m_Size.x;
         attributes.m_Mirrored = true;
     }
+
+    if( !aFont )
+        aFont = KIFONT::FONT::GetFont();
+
+    aFont->Draw( &callback_gal, aText, aPos, attributes );
+}
+
+void PLOTTER::PlotText( const VECTOR2I& aPos, const COLOR4D& aColor,
+                    const wxString& aText,
+                    const TEXT_ATTRIBUTES& aAttributes,
+                    KIFONT::FONT* aFont,
+                    void* aData )
+{
+    KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
+
+    TEXT_ATTRIBUTES attributes = aAttributes;
+    int penWidth = attributes.m_StrokeWidth;
+
+    SetColor( aColor );
+    SetCurrentLineWidth( penWidth, aData );
+
+    if( penWidth == 0 && attributes.m_Bold ) // Use default values if aPenWidth == 0
+        penWidth = GetPenSizeForBold( std::min( attributes.m_Size.x, attributes.m_Size.y ) );
+
+    if( penWidth < 0 )
+        penWidth = -penWidth;
+
+    attributes.m_StrokeWidth = penWidth;
+
+    CALLBACK_GAL callback_gal( empty_opts,
+            // Stroke callback
+            [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
+            {
+                MoveTo( aPt1 );
+                LineTo( aPt2 );
+                PenFinish();
+            },
+            // Polygon callback
+            [&]( const SHAPE_LINE_CHAIN& aPoly )
+            {
+                PlotPoly( aPoly, FILL_T::FILLED_SHAPE, 0, aData );
+            } );
 
     if( !aFont )
         aFont = KIFONT::FONT::GetFont();

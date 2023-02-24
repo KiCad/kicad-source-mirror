@@ -402,8 +402,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItem( const FP_TEXT* aText, const COLOR4
     m_plotter->SetColor( color );
 
     // calculate some text parameters :
-    TEXT_ATTRIBUTES attrs = aText->GetAttributes();
-    VECTOR2I      size = aText->GetTextSize();
+    //VECTOR2I      size = aText->GetTextSize();
     VECTOR2I      pos = aText->GetTextPos();
     int           thickness = aText->GetEffectiveTextPenWidth();
     KIFONT::FONT* font = aText->GetFont();
@@ -416,14 +415,15 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItem( const FP_TEXT* aText, const COLOR4
                                       aText->IsBold(), aText->IsItalic() );
     }
 
-    if( aText->IsMirrored() )
-        size.x = -size.x;  // Text is mirrored
-
     // Non bold texts thickness is clamped at 1/6 char size by the low level draw function.
     // but in Pcbnew we do not manage bold texts and thickness up to 1/4 char size
     // (like bold text) and we manage the thickness.
     // So we set bold flag to true
-    bool allow_bold = true;
+    TEXT_ATTRIBUTES attrs = aText->GetAttributes();
+    attrs.m_StrokeWidth = thickness;
+    attrs.m_Angle = aText->GetDrawRotation();
+    attrs.m_Bold = true;
+    attrs.m_Multiline = false;
 
     GBR_METADATA gbr_metadata;
 
@@ -433,6 +433,8 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItem( const FP_TEXT* aText, const COLOR4
     gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_CMP );
     const FOOTPRINT* parent = static_cast<const FOOTPRINT*> ( aText->GetParent() );
     gbr_metadata.SetCmpReference( parent->GetReference() );
+
+    m_plotter->SetCurrentLineWidth( thickness );
 
     if( aText->IsKnockout() )
     {
@@ -462,12 +464,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItem( const FP_TEXT* aText, const COLOR4
             m_plotter->PlotPoly( finalPoly.Outline( ii ), FILL_T::FILLED_SHAPE, 0, &gbr_metadata );
     }
     else
-    {
-        m_plotter->SetCurrentLineWidth( thickness );
-        m_plotter->Text( pos, aColor, aText->GetShownText(), aText->GetDrawRotation(), size,
-                         aText->GetHorizJustify(), aText->GetVertJustify(), thickness,
-                         aText->IsItalic(), allow_bold, false, font, &gbr_metadata );
-    }
+        m_plotter->PlotText( pos, aColor, aText->GetShownText(), attrs, font, &gbr_metadata );
 }
 
 
@@ -840,7 +837,6 @@ void BRDITEMS_PLOTTER::PlotPcbText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, 
     }
 
     wxString        shownText( aText->GetShownText() );
-    TEXT_ATTRIBUTES attrs = aText->GetAttributes();
 
     if( shownText.IsEmpty() )
         return;
@@ -856,13 +852,16 @@ void BRDITEMS_PLOTTER::PlotPcbText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, 
     COLOR4D color = getColor( aLayer );
     m_plotter->SetColor( color );
 
-    VECTOR2I size = aText->GetTextSize();
+    //VECTOR2I size = aText->GetTextSize();
     VECTOR2I pos = aText->GetTextPos();
 
+    TEXT_ATTRIBUTES attrs = aText->GetAttributes();
     attrs.m_StrokeWidth = aText->GetEffectiveTextPenWidth();
+    attrs.m_Angle = aText->GetDrawRotation();
+    attrs.m_Multiline = false;
 
-    if( aText->IsMirrored() )
-        size.x = -size.x;
+    //if( aText->IsMirrored() )
+    //    size.x = -size.x;
 
     m_plotter->SetCurrentLineWidth( attrs.m_StrokeWidth );
 
@@ -905,16 +904,12 @@ void BRDITEMS_PLOTTER::PlotPcbText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, 
         for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
         {
             wxString& txt =  strings_list.Item( ii );
-            m_plotter->Text( positions[ii], color, txt, aText->GetDrawRotation(), size,
-                             attrs.m_Halign, attrs.m_Valign, attrs.m_StrokeWidth, attrs.m_Italic,
-                             attrs.m_Bold, false, font, &gbr_metadata );
+            m_plotter->PlotText( positions[ii], color, txt, attrs, font, &gbr_metadata );
         }
     }
     else
     {
-        m_plotter->Text( pos, color, shownText, aText->GetDrawRotation(), size, attrs.m_Halign,
-                         attrs.m_Valign, attrs.m_StrokeWidth, attrs.m_Italic, attrs.m_Bold, false,
-                         font, &gbr_metadata );
+        m_plotter->PlotText( pos, color, shownText, attrs, font, &gbr_metadata );
     }
 }
 

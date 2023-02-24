@@ -812,8 +812,15 @@ void LIB_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, int aPin
                  int size, GR_TEXT_H_ALIGN_T hJustify, GR_TEXT_V_ALIGN_T vJustify, int penWidth )
 
             {
-                aPlotter->Text( VECTOR2I( px, py ), color, text, angle, VECTOR2I( size, size ),
-                                hJustify, vJustify, penWidth, false, false, false, font );
+                TEXT_ATTRIBUTES attrs;
+                attrs.m_StrokeWidth = std::min( penWidth, size / 5 );  // Keep text readable
+                attrs.m_Angle = angle;
+                attrs.m_Size = VECTOR2I( size, size );
+                attrs.m_Halign = hJustify;
+                attrs.m_Valign = vJustify;
+                attrs.m_Multiline = false;
+
+                aPlotter->PlotText( VECTOR2I( px, py ), color, text, attrs, font );
             };
 
     /* Draw the text inside, but the pin numbers outside. */

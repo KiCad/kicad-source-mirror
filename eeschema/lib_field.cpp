@@ -383,8 +383,14 @@ void LIB_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
     if( !font )
         font = KIFONT::FONT::GetFont( renderSettings->GetDefaultFont(), IsBold(), IsItalic() );
 
-    aPlotter->Text( textpos, color, GetShownText(), orient, GetTextSize(), hjustify, vjustify,
-                    penWidth, IsItalic(), IsBold(), false, font );
+    TEXT_ATTRIBUTES attrs = GetAttributes();
+    attrs.m_StrokeWidth = penWidth;
+    attrs.m_Halign = hjustify;
+    attrs.m_Valign = vjustify;
+    attrs.m_Angle = orient;
+    attrs.m_Multiline = false;
+
+    aPlotter->PlotText( textpos, color, GetShownText(), attrs, font );
 }
 
 

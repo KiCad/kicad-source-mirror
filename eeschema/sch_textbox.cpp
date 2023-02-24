@@ -410,11 +410,13 @@ void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground ) const
 
     GetLinePositions( positions, (int) strings_list.Count() );
 
+    TEXT_ATTRIBUTES attrs = GetAttributes();
+    attrs.m_StrokeWidth = penWidth;
+    attrs.m_Multiline = false;
+
     for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
     {
-        aPlotter->Text( positions[ii], color, strings_list.Item( ii ), GetTextAngle(),
-                        GetTextSize(), GetHorizJustify(), GetVertJustify(), penWidth, IsItalic(),
-                        IsBold(), false, font );
+        aPlotter->PlotText( positions[ii], color, strings_list.Item( ii ), attrs, font );
     }
 
     if( HasHyperlink() )

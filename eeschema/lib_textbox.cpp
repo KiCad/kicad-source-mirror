@@ -465,11 +465,13 @@ void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOf
 
     text.GetLinePositions( positions, (int) strings_list.Count() );
 
+    TEXT_ATTRIBUTES attrs = GetAttributes();
+    attrs.m_StrokeWidth = penWidth;
+    attrs.m_Multiline = false;
+
     for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
     {
-        aPlotter->Text( positions[ii], color, strings_list.Item( ii ), text.GetTextAngle(),
-                        text.GetTextSize(), text.GetHorizJustify(), text.GetVertJustify(),
-                        penWidth, text.IsItalic(), text.IsBold(), false, font );
+        aPlotter->PlotText( positions[ii], color, strings_list.Item( ii ), attrs, font );
     }
 }
 

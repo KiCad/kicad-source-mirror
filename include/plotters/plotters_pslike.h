@@ -231,6 +231,14 @@ public:
                        KIFONT::FONT*               aFont = nullptr,
                        void*                       aData = nullptr ) override;
 
+    virtual void PlotText( const VECTOR2I&          aPos,
+                           const COLOR4D&           aColor,
+                           const wxString&          aText,
+                           const TEXT_ATTRIBUTES&   aAttributes,
+                           KIFONT::FONT*            aFont,
+                           void*                    aData = nullptr ) override;
+
+
 protected:
     virtual void emitSetRGBColor( double r, double g, double b, double a ) override;
 };
@@ -351,6 +359,13 @@ public:
                        bool                        aMultilineAllowed = false,
                        KIFONT::FONT*               aFont = nullptr,
                        void*                       aData = nullptr ) override;
+
+    virtual void PlotText( const VECTOR2I&          aPos,
+                           const COLOR4D&           aColor,
+                           const wxString&          aText,
+                           const TEXT_ATTRIBUTES&   aAttributes,
+                           KIFONT::FONT*            aFont,
+                           void*                    aData = nullptr ) override;
 
     void HyperlinkBox( const BOX2I& aBox, const wxString& aDestinationURL ) override;
 
@@ -598,6 +613,14 @@ public:
                        bool                        aMultilineAllowed = false,
                        KIFONT::FONT*               aFont = nullptr,
                        void*                       aData = nullptr ) override;
+
+
+    virtual void PlotText( const VECTOR2I&          aPos,
+                           const COLOR4D&           aColor,
+                           const wxString&          aText,
+                           const TEXT_ATTRIBUTES&   aAttributes,
+                           KIFONT::FONT*            aFont,
+                           void*                    aData = nullptr ) override;
 
 protected:
     virtual void Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
