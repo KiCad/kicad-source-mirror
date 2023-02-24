@@ -512,21 +512,18 @@ int DIALOG_CHANGE_SYMBOLS::processMatchingSymbols()
 
 
 int DIALOG_CHANGE_SYMBOLS::processSymbols( const std::map<SCH_SYMBOL*,
-                                           SYMBOL_CHANGE_INFO>& aSymbols )
+                                                          SYMBOL_CHANGE_INFO>& aSymbols )
 {
     wxCHECK( !aSymbols.empty(), 0 );
 
     int             matchesProcessed = 0;
     SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( GetParent() );
-    SCH_SCREEN*     screen = nullptr;
-    LIB_SYMBOL*     libSymbol = nullptr;
-    std::map<SCH_SYMBOL*, SYMBOL_CHANGE_INFO> symbols = aSymbols;
+    wxString        msg;
 
     wxCHECK( frame, 0 );
 
-    wxString  msg;
-
-    auto it = symbols.begin();
+    std::map<SCH_SYMBOL*, SYMBOL_CHANGE_INFO>           symbols = aSymbols;
+    std::map<SCH_SYMBOL*, SYMBOL_CHANGE_INFO>::iterator it = symbols.begin();
 
     // Remove all symbols that don't have a valid library symbol link or enough units to
     // satify the library symbol update.
@@ -536,7 +533,7 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( const std::map<SCH_SYMBOL*,
 
         wxCHECK2( symbol && it->second.m_LibId.IsValid(), continue );
 
-        libSymbol = frame->GetLibSymbol( it->second.m_LibId );
+        LIB_SYMBOL* libSymbol = frame->GetLibSymbol( it->second.m_LibId );
 
         if( !libSymbol )
         {
@@ -562,18 +559,21 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( const std::map<SCH_SYMBOL*,
         }
     }
 
+    bool appendUndo = false;
+
     // Removing the symbol needs to be done before the LIB_SYMBOL is changed to prevent stale
     // library symbols in the schematic file.
     for( const auto& [ symbol, symbol_change_info ] : symbols )
     {
         wxCHECK( symbol && !symbol_change_info.m_Instances.empty(), 0 );
 
-        screen = symbol_change_info.m_Instances[0].LastScreen();
+        SCH_SCREEN* screen = symbol_change_info.m_Instances[0].LastScreen();
 
         wxCHECK( screen, 0 );
 
         screen->Remove( symbol );
-        frame->SaveCopyInUndoList( screen, symbol, UNDO_REDO::CHANGED, true );
+        frame->SaveCopyInUndoList( screen, symbol, UNDO_REDO::CHANGED, appendUndo );
+        appendUndo = true;
     }
 
     for( const auto& [ symbol, symbol_change_info ] : symbols )
@@ -581,8 +581,9 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( const std::map<SCH_SYMBOL*,
         if( symbol_change_info.m_LibId != symbol->GetLibId() )
             symbol->SetLibId( symbol_change_info.m_LibId );
 
-        libSymbol = frame->GetLibSymbol( symbol_change_info.m_LibId );
+        LIB_SYMBOL*                 libSymbol = frame->GetLibSymbol( symbol_change_info.m_LibId );
         std::unique_ptr<LIB_SYMBOL> flattenedSymbol = libSymbol->Flatten();
+        SCH_SCREEN*                 screen = symbol_change_info.m_Instances[0].LastScreen();
 
         symbol->SetLibSymbol( flattenedSymbol.release() );
 
@@ -696,7 +697,6 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( const std::map<SCH_SYMBOL*,
         }
 
         symbol->SetSchSymbolLibraryName( wxEmptyString );
-        screen = symbol_change_info.m_Instances[0].LastScreen();
         screen->Append( symbol );
         frame->GetCanvas()->GetView()->Update( symbol );
 
