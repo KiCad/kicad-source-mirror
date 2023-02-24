@@ -74,26 +74,19 @@ DIALOG_SIM_MODEL<T_symbol, T_field>::DIALOG_SIM_MODEL( wxWindow* aParent, T_symb
                    return StrNumCmp( lhs->GetNumber(), rhs->GetNumber(), true ) < 0;
                } );
 
-
     m_typeChoice->Clear();
 
     m_scintillaTricks = new SCINTILLA_TRICKS( m_codePreview, wxT( "{}" ), false );
 
     m_paramGridMgr->Bind( wxEVT_PG_SELECTED, &DIALOG_SIM_MODEL::onParamGridSelectionChange, this );
 
-    m_paramGrid->SetValidationFailureBehavior( wxPG_VFB_STAY_IN_PROPERTY
-                                               | wxPG_VFB_BEEP
-                                               | wxPG_VFB_MARK_CELL );
-
     wxPropertyGrid* grid = m_paramGrid->GetGrid();
-
-    //grid->SetCellBackgroundColour( grid->GetPropertyDefaultCell().GetBgCol() );
-    //grid->SetCellTextColour( grid->GetPropertyDefaultCell().GetFgCol();
 
     // In wx 3.0 the color will be wrong sometimes.
     grid->SetCellDisabledTextColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
 
     grid->Bind( wxEVT_SET_FOCUS, &DIALOG_SIM_MODEL::onParamGridSetFocus, this );
+    grid->Bind( wxEVT_UPDATE_UI, &DIALOG_SIM_MODEL::onUpdateUI, this );
 
     grid->AddActionTrigger( wxPG_ACTION_EDIT, WXK_RETURN );
     grid->DedicateKey( WXK_RETURN );
@@ -1369,6 +1362,7 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::onParamGridSelectionChange( wxProperty
     }
 
     wxWindow* editorControl = grid->GetEditorControl();
+
     if( !editorControl )
     {
         m_prevParamGridSelection = grid->GetSelection();
@@ -1378,6 +1372,35 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::onParamGridSelectionChange( wxProperty
     // Without this the user had to press tab before they could edit the field.
     editorControl->SetFocus();
     m_prevParamGridSelection = grid->GetSelection();
+}
+
+
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::onUpdateUI( wxUpdateUIEvent& aEvent )
+{
+    // This is currently patched in wxPropertyGrid::ScrollWindow() in the Mac wxWidgets fork.
+    // However, we may need this version if it turns out to be an issue on other platforms and
+    // we can't get it upstreamed.
+#if 0
+    // It's a shame to do this on the UpdateUI event, but neither the wxPropertyGridManager,
+    // wxPropertyGridPage, wxPropertyGrid, nor the wxPropertyGrid's GetCanvas() window appear
+    // to get scroll events.
+
+    wxPropertyGrid* grid = m_paramGrid->GetGrid();
+    wxTextCtrl*     ctrl = grid->GetEditorTextCtrl();
+
+    if( ctrl )
+    {
+        wxRect ctrlRect = ctrl->GetScreenRect();
+        wxRect gridRect = grid->GetScreenRect();
+
+        if( ctrlRect.GetTop() < gridRect.GetTop() || ctrlRect.GetBottom() > gridRect.GetBottom() )
+        {
+            grid->CommitChangesFromEditor();
+            grid->ClearSelection();
+        }
+    }
+#endif
 }
 
 

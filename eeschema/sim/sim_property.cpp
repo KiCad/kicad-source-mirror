@@ -80,8 +80,7 @@ SIM_STRING_PROPERTY::SIM_STRING_PROPERTY( const wxString& aLabel, const wxString
                                           SIM_VALUE_GRAMMAR::NOTATION aNotation ) :
         wxStringProperty( aLabel, aName ),
         SIM_PROPERTY( aModel, aParamIndex ),
-        m_valueType( aValueType ),
-        m_notation( aNotation )
+        m_valueType( aValueType )
 {
     SetValueFromString( GetParam().value );
 }

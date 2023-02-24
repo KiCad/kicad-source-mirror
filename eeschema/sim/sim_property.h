@@ -98,8 +98,7 @@ protected:
     bool allowEval() const;
 
 protected:
-    SIM_VALUE::TYPE              m_valueType;
-    SIM_VALUE_GRAMMAR::NOTATION  m_notation;
+    SIM_VALUE::TYPE m_valueType;
 };
 
 

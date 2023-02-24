@@ -111,6 +111,7 @@ private:
 
     void onParamGridSetFocus( wxFocusEvent& aEvent );
     void onParamGridSelectionChange( wxPropertyGridEvent& aEvent );
+    void onUpdateUI( wxUpdateUIEvent& aEvent );
 
     void adjustParamGridColumns( int aWidth, bool aForce );
 
