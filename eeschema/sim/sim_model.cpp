@@ -859,7 +859,10 @@ void SIM_MODEL::doSetParamValue( int aParamIndex, const std::string& aValue )
 void SIM_MODEL::SetParamValue( int aParamIndex, const std::string& aValue,
                                SIM_VALUE::NOTATION aNotation )
 {
-    doSetParamValue( aParamIndex, SIM_VALUE::Normalize( aValue, aNotation ) );
+    // Note: also converts decimal separators to '.'
+    std::string value = SIM_VALUE::ConvertNotation( aValue, aNotation, SIM_VALUE::NOTATION::SI );
+
+    doSetParamValue( aParamIndex, value );
 }
 
 

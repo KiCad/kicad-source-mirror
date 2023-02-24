@@ -158,16 +158,24 @@ bool SIM_STRING_PROPERTY::StringToValue( wxVariant& aVariant, const wxString& aT
     if( m_disabled )
         return false;
 
-    wxString text;
+    wxString text = aText;
 
     if( allowEval() && m_needsEval && m_eval.Process( aText ) )
-        text = m_eval.Result();
-    else
-        text = aText;
+    {
+        double value = SIM_VALUE::ToDouble( m_eval.Result().ToStdString() );
 
-    m_model.SetParamValue( m_paramIndex, std::string( text.ToUTF8() ) );
-    aVariant = GetParam().value;
+        if( isnan( value ) || value == SIM_VALUE::ToDouble( aText.ToStdString() ) )
+        {
+            // Don't mess up user formatting if eval'ing didn't actually change the value.
+        }
+        else
+        {
+            text = SIM_VALUE::Normalize( value );
+        }
+    }
 
+    m_model.SetParamValue( m_paramIndex, text.ToStdString() );
+    aVariant = text.ToStdString();
     return true;
 }
 

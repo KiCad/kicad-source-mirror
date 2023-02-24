@@ -395,6 +395,19 @@ std::string SIM_VALUE::ConvertNotation( const std::string& aString, NOTATION aFr
 }
 
 
+std::string SIM_VALUE::Normalize( double aValue )
+{
+    double exponent = std::log10( std::abs( aValue ) );
+    int    expReduction = 0;
+
+    std::string prefix = SIM_VALUE_PARSER::ExponentToUnitPrefix( exponent, expReduction,
+                                                                 NOTATION::SI );
+    double reducedValue = aValue / std::pow( 10, expReduction );
+
+    return fmt::format( "{:g}{}", reducedValue, prefix );
+}
+
+
 double SIM_VALUE::ToDouble( const std::string& aString, double aDefault )
 {
     SIM_VALUE_PARSER::PARSE_RESULT parseResult = SIM_VALUE_PARSER::Parse( aString, NOTATION::SI );
