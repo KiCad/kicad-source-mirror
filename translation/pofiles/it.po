@@ -110,7 +110,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-10 15:35-0800\n"
-"PO-Revision-Date: 2023-01-31 15:39+0100\n"
+"PO-Revision-Date: 2023-02-24 14:12+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -20128,9 +20128,8 @@ msgid "Schematic file does not exist or is not accessible\n"
 msgstr "Il file schema non esiste o non è accessibile\n"
 
 #: kicad/cli/command_export_sch_pdf.cpp:38
-#, fuzzy
 msgid "Color theme to use (will default to schematic settings)"
-msgstr "Tema colore da usare (predefinito per le impostazioni pcbnew)"
+msgstr "Tema colore da usare (predef. per le impostazioni schema)"
 
 #: kicad/cli/command_export_sch_pdf.cpp:51
 #: kicad/cli/command_export_sch_svg.cpp:51
@@ -33898,11 +33897,11 @@ msgstr "Scavalcamento distanze"
 
 #: pcbnew/footprint.cpp:2958 pcbnew/pad.cpp:1824
 msgid "Solderpaste Margin Override"
-msgstr "Scavalcamento margine pastasalda"
+msgstr "Sc.nto margine pastasalda"
 
 #: pcbnew/footprint.cpp:2963 pcbnew/pad.cpp:1827
 msgid "Solderpaste Margin Ratio Override"
-msgstr "Scavalcamento rapporto margine pastasalda"
+msgstr "Sc.nto rapporto margine pastasalda"
 
 #: pcbnew/footprint.cpp:2968 pcbnew/pad.cpp:1831
 msgid "Zone Connection Style"
@@ -35185,7 +35184,7 @@ msgstr "Lunghezza da piazzola a die"
 
 #: pcbnew/pad.cpp:1821
 msgid "Soldermask Margin Override"
-msgstr "Scavalcamento margine maschera di saldatura"
+msgstr "Sc.nto margine masch. di sald."
 
 #: pcbnew/pad.cpp:1833 pcbnew/zone.cpp:1504
 msgid "Thermal Relief Spoke Width"
@@ -41382,6 +41381,3 @@ msgstr "Schema KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "Circuito stampato KiCad"
-
-#~ msgid "Reading file "
-#~ msgstr "Lettura file "
