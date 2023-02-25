@@ -901,18 +901,16 @@ void GERBER_PLOTTER::plotArc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAn
 }
 
 
-void GERBER_PLOTTER::PlotGerberRegion( const SHAPE_LINE_CHAIN& aPoly, void* aData )
+void GERBER_PLOTTER::PlotGerberRegion( const SHAPE_LINE_CHAIN& aPoly, GBR_METADATA* aGbrMetadata )
 {
     if( aPoly.PointCount() <= 2 )
         return;
 
-    GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
-
     bool clearTA_AperFunction = false;     // true if a TA.AperFunction is used
 
-    if( gbr_metadata )
+    if( aGbrMetadata )
     {
-        std::string attrib = gbr_metadata->m_ApertureMetadata.FormatAttribute( !m_useX2format );
+        std::string attrib = aGbrMetadata->m_ApertureMetadata.FormatAttribute( !m_useX2format );
 
         if( !attrib.empty() )
         {
@@ -921,7 +919,7 @@ void GERBER_PLOTTER::PlotGerberRegion( const SHAPE_LINE_CHAIN& aPoly, void* aDat
         }
     }
 
-    PlotPoly( aPoly, FILL_T::FILLED_SHAPE, 0 , gbr_metadata );
+    PlotPoly( aPoly, FILL_T::FILLED_SHAPE, 0 , aGbrMetadata );
 
     // Clear the TA attribute, to avoid the next item to inherit it:
     if( clearTA_AperFunction )
@@ -938,18 +936,17 @@ void GERBER_PLOTTER::PlotGerberRegion( const SHAPE_LINE_CHAIN& aPoly, void* aDat
 }
 
 
-void GERBER_PLOTTER::PlotGerberRegion( const std::vector<VECTOR2I>& aCornerList, void* aData )
+void GERBER_PLOTTER::PlotGerberRegion( const std::vector<VECTOR2I>& aCornerList,
+                                       GBR_METADATA* aGbrMetadata )
 {
     if( aCornerList.size() <= 2 )
         return;
 
-    GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
-
     bool clearTA_AperFunction = false;     // true if a TA.AperFunction is used
 
-    if( gbr_metadata )
+    if( aGbrMetadata )
     {
-        std::string attrib = gbr_metadata->m_ApertureMetadata.FormatAttribute( !m_useX2format );
+        std::string attrib = aGbrMetadata->m_ApertureMetadata.FormatAttribute( !m_useX2format );
 
         if( !attrib.empty() )
         {
@@ -958,7 +955,7 @@ void GERBER_PLOTTER::PlotGerberRegion( const std::vector<VECTOR2I>& aCornerList,
         }
     }
 
-    PlotPoly( aCornerList, FILL_T::FILLED_SHAPE, 0, gbr_metadata );
+    PlotPoly( aCornerList, FILL_T::FILLED_SHAPE, 0, aGbrMetadata );
 
     // Clear the TA attribute, to avoid the next item to inherit it:
     if( clearTA_AperFunction )
@@ -972,6 +969,19 @@ void GERBER_PLOTTER::PlotGerberRegion( const std::vector<VECTOR2I>& aCornerList,
             fputs( "G04 #@! TD.AperFunction*\n", m_outputFile );
         }
     }
+}
+
+
+void GERBER_PLOTTER::PlotPolyAsRegion( const SHAPE_LINE_CHAIN& aPoly, FILL_T aFill,
+                                       int aWidth, GBR_METADATA* aGbrMetadata )
+{
+    // plot a filled polygon using Gerber region, therefore adding X2 attributes
+    // to the solid polygon
+    if( aWidth )
+        PlotPoly( aPoly, FILL_T::NO_FILL, aWidth, aGbrMetadata );
+
+    if( aFill != FILL_T::NO_FILL )
+        PlotGerberRegion( aPoly, aGbrMetadata );
 }
 
 

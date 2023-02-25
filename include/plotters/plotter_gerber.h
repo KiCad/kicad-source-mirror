@@ -30,6 +30,7 @@
 #include "gbr_plotter_apertures.h"
 
 class SHAPE_ARC;
+class GBR_METADATA;
 
 class GERBER_PLOTTER : public PLOTTER
 {
@@ -100,6 +101,13 @@ public:
     virtual void PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill,
                            int aWidth = USE_DEFAULT_LINE_WIDTH, void* aData = nullptr ) override;
 
+    /**
+     * Similar to PlotPoly(), plot a filled polygon using Gerber region,
+     * therefore adding X2 attributes to the region object, like TA.xxx
+     */
+    void PlotPolyAsRegion( const SHAPE_LINE_CHAIN& aPoly, FILL_T aFill,
+                           int aWidth, GBR_METADATA* aGbrMetadata );
+
     virtual void PenTo( const VECTOR2I& pos, char plume ) override;
 
     virtual void Text( const VECTOR2I&             aPos,
@@ -169,12 +177,12 @@ public:
 
     /**
      * Plot a Gerber region: similar to PlotPoly but plot only filled polygon,
-     * and add the TA.AperFunction if aData contains this attribute, and clear it
+     * and add the TA.AperFunction if aGbrMetadata contains this attribute, and clear it
      * after plotting.
      */
-    void PlotGerberRegion( const std::vector<VECTOR2I>& aCornerList, void* aData = nullptr );
+    void PlotGerberRegion( const std::vector<VECTOR2I>& aCornerList, GBR_METADATA* aGbrMetadata );
 
-    void PlotGerberRegion( const SHAPE_LINE_CHAIN& aPoly, void* aData = nullptr );
+    void PlotGerberRegion( const SHAPE_LINE_CHAIN& aPoly, GBR_METADATA* aGbrMetadata );
 
     /**
      * Change the plot polarity and begin a new layer.
