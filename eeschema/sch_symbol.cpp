@@ -1159,7 +1159,12 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
             precision = precisionStr[0] - '0';
 
         if( range.IsEmpty() )
-            range = wxS( "~A" );
+        {
+            if( port == wxS( ":power" ) )
+                range = wxS( "~W" );
+            else
+                range = wxS( "~A" );
+        }
 
         *token = Schematic()->GetOperatingPoint( signal.Lower(), precision, range );
 
