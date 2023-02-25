@@ -2377,6 +2377,7 @@ void SIM_PLOT_FRAME::onPlotClosed( wxAuiNotebookEvent& event )
 
 void SIM_PLOT_FRAME::onPlotChanged( wxAuiNotebookEvent& event )
 {
+    rebuildSignalsList();
     rebuildSignalsGrid( m_filter->GetValue() );
     updateCursors();
 }

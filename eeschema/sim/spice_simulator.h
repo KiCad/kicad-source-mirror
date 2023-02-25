@@ -78,7 +78,7 @@ public:
     virtual bool Command( const std::string& aCmd ) = 0;
 
     ///< Return X axis name for a given simulation type
-    virtual std::string GetXAxis( SIM_TYPE aType ) const = 0;
+    virtual wxString GetXAxis( SIM_TYPE aType ) const = 0;
 
     ///< Set a #SPICE_REPORTER object to receive the simulation log.
     virtual void SetReporter( SPICE_REPORTER* aReporter )

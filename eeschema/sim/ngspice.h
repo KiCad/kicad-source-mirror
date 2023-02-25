@@ -78,7 +78,7 @@ public:
     bool Command( const std::string& aCmd ) override final;
 
     ///< @copydoc SPICE_SIMULATOR::GetXAxis()
-    std::string GetXAxis( SIM_TYPE aType ) const override final;
+    wxString GetXAxis( SIM_TYPE aType ) const override final;
 
     ///< @copydoc SPICE_SIMULATOR::AllPlots()
     std::vector<std::string> AllPlots() const override final;

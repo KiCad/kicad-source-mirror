@@ -339,37 +339,30 @@ bool NGSPICE::Command( const std::string& aCmd )
 }
 
 
-std::string NGSPICE::GetXAxis( SIM_TYPE aType ) const
+wxString NGSPICE::GetXAxis( SIM_TYPE aType ) const
 {
     switch( aType )
     {
     case ST_AC:
     case ST_NOISE:
-        return std::string( "frequency" );
+        return wxS( "frequency" );
 
     case ST_DC:
         // find plot, which ends with "-sweep"
-        for( auto& plot : AllPlots() )
+        for( wxString plot : AllPlots() )
         {
-            const std::string sweepEnding = "-sweep";
-            unsigned int len = sweepEnding.length();
-
-            if( plot.length() > len
-                && plot.substr( plot.length() - len, len ).compare( sweepEnding ) == 0 )
-            {
-                return std::string( plot );
-            }
+            if( plot.Lower().EndsWith( wxS( "-sweep" ) ) )
+                return plot;
         }
-        break;
+
+        return wxS( "sweep" );
 
     case ST_TRANSIENT:
-        return std::string( "time" );
+        return wxS( "time" );
 
     default:
-        break;
+        return wxEmptyString;
     }
-
-    return std::string( "" );
 }
 
 
