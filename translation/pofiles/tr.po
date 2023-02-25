@@ -9,15 +9,16 @@
 # Gökhan Koçmarlı <gokhankocmarli@gmail.com>, 2022.
 # prometheus <181903185@ogrenci.ibu.edu.tr>, 2022.
 # Mustafa Selçuk ÇAVDAR <mselcuk@gmail.com>, 2022, 2023.
+# turkce <turkceceviri@protonmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-15 16:29-0800\n"
-"PO-Revision-Date: 2023-02-13 00:59+0000\n"
-"Last-Translator: Mustafa Selçuk ÇAVDAR <mselcuk@gmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"PO-Revision-Date: 2023-02-26 10:48+0000\n"
+"Last-Translator: turkce <turkceceviri@protonmail.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
+"master-source/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1871,7 +1872,7 @@ msgstr "Rapor"
 
 #: common/dialogs/dialog_assign_netclass.cpp:107
 msgid "<b>Currently matching nets:</b>"
-msgstr ""
+msgstr "<b>Şu anda eşleşen ağlar</b>"
 
 #: common/dialogs/dialog_color_picker.cpp:94
 msgid "Clear Color"
@@ -3102,17 +3103,19 @@ msgstr "Menülerde simgeleri göster"
 
 #: common/dialogs/panel_common_settings_base.cpp:148
 msgid "This change takes effect when relaunching the editor."
-msgstr ""
+msgstr "Bu değişiklik, düzenleyiciyi yeniden başlatırken etkili olur."
 
 #: common/dialogs/panel_common_settings_base.cpp:152
 msgid "Focus follows mouse between schematic and PCB editors"
-msgstr ""
+msgstr "Odak, şematik ve PCB düzenleyicileri arasındaki fareyi takip eder"
 
 #: common/dialogs/panel_common_settings_base.cpp:153
 msgid ""
 "If the mouse cursor is moved over the canvas of a schematic or PCB editor "
 "window, that window is raised."
 msgstr ""
+"Fare imleci bir şematik veya PCB düzenleyici penceresinin tuvalinin üzerine "
+"getirilirse, bu pencere kaldırılır."
 
 #: common/dialogs/panel_common_settings_base.cpp:163
 msgid "Icon theme:"
@@ -3352,10 +3355,24 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are not shared in this process."
 msgstr ""
+"KiCad, kullanıcı tabanındaki kritik hataların daha etkin bir şekilde "
+"belirlenmesine yardımcı olmak ve iyileştirmelere rehberlik etmek için profil "
+"işlevselliğine yardımcı olmak için kilitlenmeleri ve özel etkinlik "
+"verilerini geliştiricilere anonim olarak bildirebilir\n"
+"\n"
+"Aynı KiCad kurulumundan otomatik raporları bağlamak için, tamamen rastgele "
+"olan benzersiz bir tanımlayıcı oluşturulur, yalnızca kilitlenme raporlaması "
+"amacıyla kullanılır. IP adresi de dahil olmak üzere hiçbir kişisel kimlik "
+"bilgisi (KTB) bu tanımlayıcıya kaydedilmez veya bu tanımlayıcıya bağlanmaz. "
+"Verilen düğme ile bu kimliği istediğiniz zaman sıfırlayabilirsiniz.\n"
+"\n"
+"Gönüllü olarak katılmayı seçerseniz, çökmeler veya olaylar meydana "
+"geldiğinde KiCad söz konusu raporları göndermeyi otomatik olarak halleder. "
+"Şematik veya PCB gibi tasarım dosyalarınız bu süreçte paylaşılmaz."
 
 #: common/dialogs/panel_data_collection_base.cpp:24
 msgid "I agree to provide anonymous reports"
-msgstr ""
+msgstr "Anonim raporlar vermeyi kabul ediyorum"
 
 #: common/dialogs/panel_data_collection_base.cpp:35
 #, fuzzy
@@ -3710,7 +3727,7 @@ msgstr "Varsayılan net sınıfı gereklidir."
 #: common/dialogs/panel_setup_netclasses.cpp:706
 #, c-format
 msgid "<b>Nets matching '%s':</b>"
-msgstr ""
+msgstr "<b>Eşleşen ağlar%s':</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:32
 #, fuzzy
@@ -3803,7 +3820,7 @@ msgstr "Şematik atama"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:136
 msgid "Pattern"
-msgstr ""
+msgstr "Desen"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:137
 #: eeschema/sch_field.cpp:870 eeschema/sch_label.cpp:188
@@ -4015,6 +4032,10 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
+"Geçersiz kayan nokta sayısı\n"
+"dosya: '%s'\n"
+"çizgi: %d\n"
+"offset: %d"
 
 #: common/dsnlexer.cpp:849
 #, c-format
@@ -4024,6 +4045,10 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
+"Kayan nokta sayısı eksik\n"
+"file: '%s'\n"
+"line: %d\n"
+"offset: %d"
 
 #: common/dsnlexer.cpp:874
 #, fuzzy
@@ -4171,7 +4196,7 @@ msgstr "Çizim Sayfası Düzenleyici"
 #: common/eda_base_frame.cpp:1124 kicad/pcm/dialogs/dialog_pcm.cpp:204
 #: kicad/tools/kicad_manager_actions.cpp:127
 msgid "Plugin and Content Manager"
-msgstr ""
+msgstr "Eklenti ve İçerik Yöneticisi"
 
 #: common/eda_base_frame.cpp:1208
 #, c-format
@@ -4948,7 +4973,7 @@ msgstr "fp-lib-table dosyaları '%s' adlı kitaplık içermiyor."
 
 #: common/fp_lib_table.cpp:546 eeschema/symbol_lib_table.cpp:583
 msgid "Added by Plugin and Content Manager"
-msgstr ""
+msgstr "Eklenti ve içerik Yöneticisi tarafından eklendi"
 
 #: common/fp_lib_table.cpp:572 eeschema/symbol_lib_table.cpp:611
 #, c-format
@@ -5444,7 +5469,7 @@ msgstr "Kilitli Öğeler"
 
 #: common/layer_id.cpp:188
 msgid "Courtyard collision shadow"
-msgstr ""
+msgstr "Avlu çarpışma gölgesi"
 
 #: common/lib_id.cpp:144
 msgid "Illegal character found in logical library name"
@@ -5987,7 +6012,7 @@ msgstr "Gerçekçi modu aç/kapat"
 
 #: common/tool/actions.cpp:205
 msgid "Switch to a different method of editing arcs"
-msgstr ""
+msgstr "Yayları düzenlemek için farklı bir yönteme geçin"
 
 #: common/tool/actions.cpp:210
 #, fuzzy
@@ -7776,7 +7801,7 @@ msgstr "Seçim"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:51
 msgid "Recurse into subsheets"
-msgstr ""
+msgstr "Alt sayfalara yinele"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:58
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:27
@@ -8015,6 +8040,80 @@ msgid ""
 "Double quotes (`\"`) around the arguments are recommended in case filenames "
 "contain spaces or special characters.\n"
 msgstr ""
+"Malzeme Listesi aracı, tasarımdaki tüm bileşenleri listeleyen bir ürün "
+"reçetesi oluşturur.\n"
+"\n"
+"Araç, istenen çıktı biçiminde bir ürün reçetesi oluşturmak için harici bir "
+"komut dosyası kullanır. Farklı bir komut dosyası seçmek, Ürün reçetesinin "
+"nasıl biçimlendirileceğini değiştirir.\n"
+"\n"
+"Bir Ürün Reçetesi oluşturmak, Şematik Düzenleyici kılavuzunda daha ayrıntılı "
+"olarak açıklanmıştır.\n"
+"\n"
+"# 2. Kullanım\n"
+"\n"
+"**MALZEME Listesi oluşturucu komut dosyaları** listesinden bir oluşturucu "
+"komut dosyası seçin. Seçilen jeneratör için ayrıntılar iletişim kutusunun "
+"sağında gösterilir.\n"
+"\n"
+"** Üret ** düğmesine tıklamak, seçilen üreteci içeren bir ürün reçetesi "
+"dosyası oluşturur.\n"
+"\n"
+"Varsayılan ayarlar birkaç jeneratör komut dosyası seçeneği sunar, ancak bazı "
+"ek komut dosyaları KiCad ile yüklenir ve listeye **+** düğmesiyle "
+"eklenebilir.\n"
+"\n"
+"** Not: ** Windows'ta ek bir seçenek vardır ** Konsol penceresini göster **. "
+"Bu seçenek işaretlenmediğinde, ürün reçetesi oluşturucuları gizli bir konsol "
+"penceresinde çalışır ve tüm çıktılar yeniden yönlendirilir ve iletişim "
+"kutusuna yazdırılır. Bu seçenek işaretlendiğinde, ÜRÜN reçetesi "
+"oluşturucuları görünür bir konsol penceresinde çalışır.\n"
+"\n"
+"# 3. Özel jeneratörler ve komut satırları\n"
+"\n"
+"Dahili olarak KiCad, tasarımdaki tüm bileşenler hakkında bilgi içeren XML "
+"biçiminde bir ara netlist dosyası oluşturur. Ürün reçetesi oluşturucu komut "
+"dosyası, ara netlist dosyasını istenen çıktı biçimine dönüştürür. KiCad, "
+"ÜRÜN reçetesi oluşturucu komut dosyalarını ÜRÜN REÇETESİ iletişim kutusunun "
+"altına girilen komut satırına göre çalıştırır.\n"
+"\n"
+"Komut satırı biçimi, dosya adları için parametreleri kabul eder. Her "
+"biçimlendirme parametresi, projeye özgü bir yol veya dosya adıyla "
+"değiştirilir. Desteklenen biçimlendirme parametreleri şunlardır:\n"
+"\n"
+"* '%İ': Ürün reçetesi oluşturucunun girdisi olan ara netlist dosyasının "
+"mutlak yolu ve dosya adı\n"
+"* '%O': çıktı MALZEME listesi dosyasının mutlak yolu ve dosya adı (dosya "
+"uzantısı olmadan)\n"
+"* '%B': çıktı MALZEME listesi dosyasının temel dosya adı (dosya uzantısı "
+"olmadan)\n"
+"* '%P': eğik çizgi izlemeden proje dizininin mutlak yolu\n"
+"\n"
+"** Not: ** `%O' çıktı dosyası parametresi bir dosya uzantısı içermez. KiCad, "
+"komut satırına otomatik olarak uygun bir uzantı eklemeye çalışacaktır, ancak "
+"bir uzantının elle eklenmesi gerekebilir.\n"
+"\n"
+"Python, BOM oluşturucu komut dosyaları için önerilen araçtır, ancak başka "
+"araçlar da kullanılabilir.\n"
+"\n"
+"## Python betikleri için örnek komut satırları\n"
+"\n"
+"Bir Python betiğinin komut satırı biçimi şu şekildedir:\n"
+"\n"
+"python <komut dosyası adı> <girdi dosya adı> <çıktı dosya adı>\n"
+"\n"
+"Windows'ta, bir CSV BOM için istenen oluşturucu komut dosyası `C:\\Users"
+"\\username\\kicad\\my_python_script.py ', komut satırı şöyle olurdu:\n"
+"\n"
+"piton.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O.csv\"\n"
+"\n"
+"Linux'ta, bir CSV BOM için istenen jeneratör betiği `/home/username/kicad/"
+"my_python_script.py ', komut satırı şöyle olurdu:\n"
+"\n"
+"python /home/username/kicad/my_python_script.py \"%I\" \"%O.csv\"\n"
+"\n"
+"Dosya adlarının boşluk veya özel karakterler içermesi durumunda bağımsız "
+"değişkenlerin etrafında çift tırnak işareti (`\"`) kullanılması önerilir.\n"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:64
 msgid "Change all symbols in schematic"
@@ -8596,7 +8695,7 @@ msgstr "Tüm değişiklikleri kaydet"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:294
 msgid "Write a directive to save all voltages (.save all)"
-msgstr ""
+msgstr "Tüm gerilimleri kaydetmek için bir yönerge yazın (.tümünü kaydet)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:299
 #: eeschema/dialogs/dialog_sim_command_base.cpp:438
@@ -8606,7 +8705,7 @@ msgstr "Tüm değişiklikleri kaydet"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:300
 msgid "Write a directive to save all currents (.probe alli)"
-msgstr ""
+msgstr "Tüm akımları kaydetmek için bir yönerge yazın (.alli'yi araştırın)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:305
 #: eeschema/dialogs/dialog_sim_command_base.cpp:441
@@ -8733,6 +8832,8 @@ msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
 "> General > Formatting"
 msgstr ""
+"Sayfalar arası referans görünürlüğü, Şematik Kurulum> Genel> "
+"Biçimlendirme'den genel olarak kontrol edilir"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:32
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:32
@@ -8757,7 +8858,7 @@ msgstr "Bacak adını göster"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:95
 msgid "Show the field name in addtion to its value"
-msgstr ""
+msgstr "Alan adını değerine ek olarak göster"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:102
 #, fuzzy
@@ -8766,7 +8867,7 @@ msgstr "otomatik yerleştirilmiş"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:105
 msgid "Allow automatic placement of this field in the schematic"
-msgstr ""
+msgstr "Bu alanın şemaya otomatik olarak yerleştirilmesine izin ver"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:118
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:173
@@ -9117,11 +9218,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter.cpp:31
 msgid "Ibis parser log"
-msgstr ""
+msgstr "Ibis ayrıştırıcı günlüğü"
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter_base.h:46
 msgid "Ibis parser"
-msgstr ""
+msgstr "Ibis ayrıştırıcı"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
@@ -9430,7 +9531,7 @@ msgstr "Ad Metin Boyutu"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:132
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:100
 msgid "De Morgan"
-msgstr ""
+msgstr "De Morgan"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:826
 #: eeschema/dialogs/dialog_lib_shape_properties.cpp:72
@@ -10008,25 +10109,28 @@ msgstr "Alternatif Bacak Adı"
 #: eeschema/dialogs/dialog_pin_properties.cpp:203
 #: eeschema/dialogs/dialog_symbol_properties.cpp:346
 msgid "Alternate pin assignments are not available for De Morgan symbols."
-msgstr ""
+msgstr "De Morgan sembolleri için alternatif pın atamaları mevcut değildir."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:280
 msgid "Exit sync pins mode"
-msgstr ""
+msgstr "Senkronizasyon pimleri modundan çıkın"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:295
 msgid ""
 "Synchronized pins mode is enabled.\n"
 "Similar pins will be edited regardless of this option."
 msgstr ""
+"Senkronize pinler modu etkindir.\n"
+"Bu seçeneğe bakılmaksızın benzer pinler düzenlenecektir."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:300
 msgid "If checked, this pin will exist in all units."
-msgstr ""
+msgstr "İşaretlenirse, bu pın tüm birimlerde bulunur."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:304
 msgid "This symbol only has one unit. This control has no effect."
 msgstr ""
+"Bu sembolün yalnızca bir birimi vardır. Bu kontrolün hiçbir etkisi yoktur."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:325
 msgid "Alternate pin definitions must have a name."
@@ -10039,18 +10143,22 @@ msgid ""
 "in the schematic.\n"
 "Do you wish to continue?"
 msgstr ""
+"Bu pim, şemada bağlanmayı zorlaştıracak %d mils ızgarasında değildir.\n"
+"\n"
+"Devam etmek istiyor musun?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:439
 msgid "Synchronized Pins Mode."
-msgstr ""
+msgstr "Senkronize Pim Modu."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:441
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
-msgstr ""
+msgstr "Senkronize Pim Modu. Tüm birimlere yeni pın eklenecektir."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:443
 msgid "Synchronized Pins Mode.  Matching pins in other units will be updated."
 msgstr ""
+"Senkronize Pim Modu. Diğer birimlerdeki eşleşen pimler güncellenecektir."
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:44
 msgid "Pin &name:"
@@ -10138,6 +10246,8 @@ msgid ""
 "Do you want to use a path relative to\n"
 "'%s'?"
 msgstr ""
+"Aşağıdakilere göre bir yol kullanmak ister misiniz\n"
+"'%s'?"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:197
 #: pcbnew/dialogs/dialog_export_svg.cpp:210
@@ -10214,7 +10324,7 @@ msgstr "E"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:411
 #, c-format
 msgid "Falling back to user path '%s'."
-msgstr ""
+msgstr "Kullanıcı yoluna geri dönmek'%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:439
 #: eeschema/dialogs/dialog_plot_schematic.cpp:477
@@ -10335,19 +10445,19 @@ msgstr "Konum X:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:134
 msgid "Bottom left, plotter units"
-msgstr ""
+msgstr "Sol alt, plotter üniteleri"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:134
 msgid "Centered, plotter units"
-msgstr ""
+msgstr "Ortalanmış, çizici birimler"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:134
 msgid "Page fit, user units"
-msgstr ""
+msgstr "Sayfa uyumu, kullanıcı birimleri"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:134
 msgid "Content fit, user units"
-msgstr ""
+msgstr "İçerik uyumu, kullanıcı birimleri"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:140
 msgid "Pen width:"
@@ -10365,7 +10475,7 @@ msgstr "Filtre metni yazın"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:163
 msgid "Open output file with associated application after successful plot"
-msgstr ""
+msgstr "Başarılı bir çizimden sonra çıktı dosyasını ilişkili uygulamayla açın"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:89
 msgid "Plot Schematic Options"
@@ -10410,6 +10520,12 @@ msgid ""
 "\n"
 "The following changes are recommended to update the project."
 msgstr ""
+"Bu şema, şemayı kırabilecek eski sembol kitaplıkları kullanılarak "
+"yapılmıştır..  Sbazı sembollerin farklı bir sembol adına bağlanması "
+"gerekebilir.  Bazı sembollerin yeni bir kütüphaneye \"kurtarılması\" ("
+"kopyalanması ve yeniden adlandırılması) gerekebilir.\n"
+"\n"
+"Projeyi güncellemek için aşağıdaki değişiklikler önerilir."
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:108
 msgid "Accept"
@@ -10444,7 +10560,7 @@ msgstr "Sembol Ağacı'nı Gizle"
 #: eeschema/dialogs/dialog_rescue_each.cpp:233
 #, c-format
 msgid "Instances of this symbol (%d items):"
-msgstr ""
+msgstr "Bu sembolün örnekleri (%d items):"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:296
 msgid ""
@@ -10454,6 +10570,11 @@ msgid ""
 "This setting can be changed from the \"Symbol Libraries\" dialog,\n"
 "and the tool can be activated manually from the \"Tools\" menu."
 msgstr ""
+"Bu aracı göstermeyi bırak?\n"
+"Hiçbir değişiklik yapılmayacak.\n"
+"\n"
+"Bu ayar \"Sembol Kitaplıkları\" iletişim kutusundan değiştirilebilir,\n"
+"ve araç \"Araçlar\" menüsünden manuel olarak etkinleştirilebilir."
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:28
 #, fuzzy
@@ -10462,7 +10583,7 @@ msgstr "Sembol adı:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:38
 msgid "Instances of this symbol:"
-msgstr ""
+msgstr "Bu sembolün örnekleri:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:57
 msgid "Cached Symbol:"
@@ -10474,7 +10595,7 @@ msgstr "Kütüphane Sembolü:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:102
 msgid "Never Show Again"
-msgstr ""
+msgstr "Bir Daha Asla Gösterme"
 
 #: eeschema/dialogs/dialog_rescue_each_base.h:67
 #: eeschema/project_rescue.cpp:596 eeschema/project_rescue.cpp:611
@@ -10554,7 +10675,7 @@ msgstr "&Ara:"
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:36
 #: pcbnew/dialogs/dialog_find_base.cpp:33
 msgid "Text with optional wildcards"
-msgstr ""
+msgstr "İsteğe bağlı joker karakterler içeren metin"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:41
 msgid "Replace &with:"
@@ -10663,7 +10784,7 @@ msgstr "Metin Değişkenleri"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:97
 msgid "Project is missing or read-only. Settings will not be editable."
-msgstr ""
+msgstr "Proje eksik veya salt okunur. Ayarlar düzenlenemez."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:134
 #, c-format
@@ -10671,12 +10792,14 @@ msgid ""
 "Error importing settings from project:\n"
 "Project file %s could not be loaded."
 msgstr ""
+"Projeden ayarları içe aktarırken hata oluştu:\n"
+"Proje dosyası %s yüklenemedi."
 
 #: eeschema/dialogs/dialog_shape_properties.cpp:58
 #: eeschema/dialogs/dialog_sheet_properties.cpp:78
 #: eeschema/dialogs/dialog_text_properties.cpp:74
 msgid "Note: individual item colors overridden in Preferences."
-msgstr ""
+msgstr "Not: Tercihlerde tek tek öğe renkleri geçersiz kılınır."
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:88
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:158
@@ -10716,11 +10839,11 @@ msgstr "Ağsınıfı'nın bir adı olmalıdır."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:282
 msgid "Sheet file must have a '.kicad_sch' extension."
-msgstr ""
+msgstr "Sayfa dosyasında bir olmalıdır '.kicad_sch' uzantısı."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:316
 msgid "Use relative path for sheet file?"
-msgstr ""
+msgstr "Sayfa dosyası için göreli yolu kullan?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:317
 msgid "Sheet File Path"
@@ -10732,6 +10855,9 @@ msgid ""
 "portability across systems and platforms.  Using absolute paths can result "
 "in portability issues."
 msgstr ""
+"Göreceli hiyerarşik sayfa dosya adı yollarının kullanılması, sistemler ve "
+"platformlar arasında şematik taşınabilirliği artırır. Mutlak yolların "
+"kullanılması taşınabilirlik sorunlarına neden olabilir."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:324
 #, fuzzy
@@ -10749,7 +10875,7 @@ msgstr "Adsız Sayfa"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:382
 msgid "Note: item colors are overridden in the current color theme."
-msgstr ""
+msgstr "Not: öğe renkleri geçerli renk temasında geçersiz kılınır."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:384
 #, c-format
@@ -10757,11 +10883,13 @@ msgid ""
 "To see individual item colors uncheck '%s'\n"
 "in Preferences > Schematic Editor > Colors."
 msgstr ""
+"Tek tek öğe renklerini görmek için işaretini kaldırın '%s'\n"
+"Tercihler> Şematik Düzenleyici> Renkler'de."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:426
 #, c-format
 msgid "The file '%s' does not appear to be a valid schematic file."
-msgstr ""
+msgstr "'%s'  dosyası geçerli bir şema dosyası gibi görünmüyor."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:428
 #, fuzzy
@@ -10776,6 +10904,10 @@ msgid ""
 "against parent sheet schematic file path:\n"
 "'%s'."
 msgstr ""
+"Cannot normalize new sheet schematic file path:\n"
+"'%s'\n"
+"üst sayfa şematik dosya yoluna karşı:\n"
+"'%s'."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:491
 #: kicad/tools/kicad_manager_control.cpp:659
@@ -10786,7 +10918,7 @@ msgstr "'%s' dosyası listede zaten var."
 #: eeschema/dialogs/dialog_sheet_properties.cpp:494
 #, c-format
 msgid "Link '%s' to this file?"
-msgstr ""
+msgstr "Bu dosyaya '%s' bağlantısı mı?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:534
 #, c-format
@@ -10802,7 +10934,7 @@ msgstr "'%s' zip dosyası açılamıyor."
 #: eeschema/dialogs/dialog_sheet_properties.cpp:551
 #, c-format
 msgid "Create new file '%s' with contents of '%s'?"
-msgstr ""
+msgstr "'%s' içeriğiyle yeni '%s' dosyası oluşturalım mı?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:589
 #, c-format
@@ -10821,7 +10953,7 @@ msgstr "Ağsınıfı'nın bir adı olmalıdır."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:687
 msgid "A sheet must have a file specified."
-msgstr ""
+msgstr "Bir sayfanın belirtilen bir dosyası olmalıdır."
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:128
 #: eeschema/lib_field.cpp:544 eeschema/lib_pin.cpp:1164
@@ -10859,7 +10991,7 @@ msgstr "Hiyerarşik yol:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:197
 msgid "path"
-msgstr ""
+msgstr "path"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.h:83
 msgid "Sheet Properties"
@@ -10867,21 +10999,24 @@ msgstr "Sayfa Özellikleri"
 
 #: eeschema/dialogs/dialog_sim_command.cpp:116
 msgid "You need to select DC source"
-msgstr ""
+msgstr "DC kaynağını seçmeniz gerekiyor"
 
 #: eeschema/dialogs/dialog_sim_command.cpp:220
 msgid "Source 1 and Source 2 must be different"
-msgstr ""
+msgstr "Kaynak 1 ve Kaynak 2 farklı olmalıdır"
 
 #: eeschema/dialogs/dialog_sim_command.cpp:282
 msgid "No valid simulation is configured."
-msgstr ""
+msgstr "Geçerli bir benzetim yapılandırılmamıştır."
 
 #: eeschema/dialogs/dialog_sim_command.cpp:285
 msgid ""
 "A valid simulation can be configured by selecting a simulation tab, setting "
 "the simulation parameters and clicking the OK button with the tab selected."
 msgstr ""
+"Geçerli bir benzetim, bir benzetim sekmesi seçilerek, benzetim parametreleri "
+"ayarlanarak ve sekme seçiliyken Tamam düğmesine tıklanarak "
+"yapılandırılabilir."
 
 #: eeschema/dialogs/dialog_sim_command.cpp:289
 #, fuzzy
@@ -11039,7 +11174,7 @@ msgstr "Referans düğümü"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:245
 msgid "(optional; default GND)"
-msgstr ""
+msgstr "(isteğe bağlı; varsayılan GND)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:249
 msgid "Noise source"
@@ -11067,7 +11202,7 @@ msgstr "Gürültü"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:318
 msgid "This tab has no settings"
-msgstr ""
+msgstr "Bu sekmede ayar yok"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:329
 #: eeschema/sim/spice_simulator.cpp:58
@@ -11107,7 +11242,7 @@ msgstr "Başlangıç zamanı:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:392
 msgid "(optional; default 0)"
-msgstr ""
+msgstr "(optional; default 0)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:403
 #: eeschema/sim/spice_simulator.cpp:69
@@ -11129,7 +11264,7 @@ msgstr "Özel"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:431
 msgid "Add full path for .include library directives"
-msgstr ""
+msgstr "Tam yol ekle .include kütüphane direktiflerini dahil et"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:447
 #, fuzzy
@@ -11154,7 +11289,7 @@ msgstr "LTSpice"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:451
 msgid "PSpice and LTSpice"
-msgstr ""
+msgstr "PSpice and LTSpice"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:451
 msgid "HSpice"
@@ -11285,11 +11420,11 @@ msgstr "Model:"
 #: eeschema/dialogs/dialog_sim_model.cpp:467
 #, c-format
 msgid "Save parameter '%s (%s)' in Value field"
-msgstr ""
+msgstr "Parametreyi kaydet '%s (%s)' in Değer alanı"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:475
 msgid "Save primary parameter in Value field"
-msgstr ""
+msgstr "Birincil parametreyi Değer alanına kaydet"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:492
 #: pcbnew/footprint_wizard_frame.cpp:325
@@ -11323,11 +11458,11 @@ msgstr "Kod Modeli"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:30
 msgid "SPICE model from file (*.lib, *.sub or *.ibs)"
-msgstr ""
+msgstr "SPICE model dosyadan (*.lib, *.sub or *.ibs)"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:66
 msgid "Pin:"
-msgstr ""
+msgstr "Pin:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:77
 #, fuzzy
@@ -11370,7 +11505,7 @@ msgstr "DCode:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:207
 msgid "Save {} in Value field as \"{}\""
-msgstr ""
+msgstr "Kaydet {} in Değer alanı olarak\"{}\""
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:220
 msgid "Model"
@@ -11421,7 +11556,7 @@ msgstr "Veri Sayfası Göster"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:130
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1205
 msgid "The Reference column cannot be hidden."
-msgstr ""
+msgstr "Başvuru sütunu gizlenemez."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:252
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:266
@@ -11460,7 +11595,7 @@ msgstr "'%s' takma adı zaten kullanılıyor."
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1119
 #, c-format
 msgid "Are you sure you want to remove the field '%s'?"
-msgstr ""
+msgstr "Alanı kaldırmak istediğinizden emin misiniz '%s'?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1392
 #, fuzzy
@@ -11469,7 +11604,7 @@ msgstr "[Kaydedilmemiş]"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1393
 msgid "Changes are unsaved. Export unsaved data?"
-msgstr ""
+msgstr "Değişiklikler kaydedilmez. Kaydedilmemiş verileri dışa aktarma yapma?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1403
 #, fuzzy
@@ -11491,7 +11626,7 @@ msgstr "Grup sembolleri"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:69
 msgid "Group symbols together based on common properties"
-msgstr ""
+msgstr "Sembolleri ortak özelliklere göre birlikte gruplayın"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:127
 #, fuzzy
@@ -11525,6 +11660,8 @@ msgid ""
 "Use the alternate shape of this symbol.\n"
 "For gates, this is the \"De Morgan\" conversion"
 msgstr ""
+"Bu sembolün alternatif şeklini kullanın.\n"
+"For gates, this is the \"De Morgan\" dönüşme"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:149
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:352
@@ -11562,11 +11699,11 @@ msgstr "Yansıtılmamış"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:163
 msgid "Around X axis"
-msgstr ""
+msgstr "X ekseni etrafında"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:163
 msgid "Around Y axis"
-msgstr ""
+msgstr "Y ekseni etrafında"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:177
 #, fuzzy
@@ -11591,6 +11728,9 @@ msgid ""
 "This is useful for adding symbols for board footprints such as fiducials\n"
 "and logos that you do not want to appear in the bill of materials export"
 msgstr ""
+"Bu, mutemetler gibi tahta ayak izlerine semboller eklemek için "
+"kullanışlıdır\n"
+"ve malzeme listesinde görünmesini istemediğiniz logoları dışa aktarın"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:214
 msgid ""
@@ -11598,6 +11738,10 @@ msgid ""
 "materials but\n"
 "not required to layout the board such as mechanical fasteners and enclosures"
 msgstr ""
+"Bu, yalnızca malzeme listesine dışa aktarılan semboller eklemek için "
+"kullanışlıdır, ancak\n"
+"mekanik bağlantı elemanları ve muhafazalar gibi tahtayı yerleştirmek için "
+"gerekli değildir"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:218
 #, fuzzy
@@ -11658,6 +11802,8 @@ msgid ""
 "Remapping is not possible because you have insufficient privileges to the "
 "project folder '%s'."
 msgstr ""
+"Proje klasörüne yeterli ayrıcalıklarınız olmadığı için yeniden eşleme mümkün "
+"değildir '%s'."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:68
 msgid ""
@@ -11670,6 +11816,14 @@ msgid ""
 "to skip this step, you will be responsible for manually remapping the "
 "symbols."
 msgstr ""
+"Bu şema şu anda kitaplık sembollerini yüklemek için proje sembol kitaplığı "
+"listesi arama yöntemini kullanmaktadır.  KiCad, yeni sembol kitaplığı "
+"tablosunu kullanmak için mevcut sembolleri eşleştirmeye çalışacaktır.  "
+"Yeniden eşleme bazı proje dosyalarını değiştirir ve şemalar kicad'in eski "
+"sürümleriyle uyumlu olmayabilir.  Değiştirilen tüm dosyalar, herhangi bir "
+"değişikliği geri almanız gerektiğinde proje klasöründeki \"remap_backup\" "
+"klasörüne yedeklenir.  Bu adımı atlamayı seçerseniz, sembolleri manuel "
+"olarak yeniden eşleştirmekten siz sorumlu olacaksınız."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:208
 #, fuzzy, c-format
@@ -11731,7 +11885,7 @@ msgstr "Yedekleme Hatası"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:353
 #: eeschema/dialogs/dialog_symbol_remap.cpp:507
 msgid "Continue with Rescue"
-msgstr ""
+msgstr "Kurtarma ile devam edin"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:354
 #: eeschema/dialogs/dialog_symbol_remap.cpp:508
@@ -11775,7 +11929,7 @@ msgstr "Sembolleri Yeniden Eşle"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:157 eeschema/schematic.cpp:365
 msgid "<root sheet>"
-msgstr ""
+msgstr "<root sheet>"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:160
 #, fuzzy, c-format
@@ -11788,14 +11942,17 @@ msgid ""
 "or http(s)://) or \"#<page number>\" to create a hyperlink to a page in this "
 "schematic."
 msgstr ""
+"Geçersiz köprü hedefi. Bu şemadaki bir sayfaya köprü oluşturmak için lütfen "
+"geçerli bir URL (ör. Dosya:// veya http (s): //) veya \"#<sayfa numarası>\" "
+"girin."
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:289
 msgid "Link:"
-msgstr ""
+msgstr "Link:"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:291
 msgid "Make this text item a clickable hyperlink"
-msgstr ""
+msgstr "Bu metin öğesini tıklanabilir bir köprü yapın"
 
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:43
 #: pcbnew/dialogs/dialog_import_netlist.cpp:77
@@ -11822,10 +11979,13 @@ msgid ""
 "Select this option only if you want to reset the footprint linkages based on "
 "their reference designators."
 msgstr ""
+"Normalde ayak izleri, Benzersiz Kimlikleri aracılığıyla sembollerine "
+"bağlanır.  Bu seçeneği yalnızca ayak izi bağlantılarını referans "
+"belirleyicilerine göre sıfırlamak istiyorsanız seçin."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:55
 msgid "Update references of symbols that have been changed in the PCB editor."
-msgstr ""
+msgstr "PCB düzenleyicide değiştirilen sembollerin referanslarını güncelleyin."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:59
 msgid "Footprint assignments"
@@ -11836,10 +11996,12 @@ msgid ""
 "Update footprint associations of symbols whose footprints have been replaced "
 "with different footprints in PCB."
 msgstr ""
+"PCB'de ayak izleri farklı ayak izleriyle değiştirilen sembollerin ayak izi "
+"ilişkilerini güncelleyin."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:65
 msgid "Update symbols values that have been replaced in the PCB editor."
-msgstr ""
+msgstr "PCB düzenleyicide değiştirilen sembol değerlerini güncelleyin."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:69
 msgid "Net names"
@@ -11897,6 +12059,9 @@ msgid ""
 "and they will not be seen on the screen.  Are you\n"
 "sure you want to use these colors?"
 msgstr ""
+"Bazı öğeler arka planla aynı renge sahiptir\n"
+"ve ekranda görünmeyecekler.  Bu renkleri \n"
+"kullanmak istediğinizden emin misiniz?"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:201
 #, fuzzy
@@ -11981,7 +12146,7 @@ msgstr "Seçim kalınlığı:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:114
 msgid "(selection color can be edited in the \"Colors\" page)"
-msgstr ""
+msgstr "(seçim rengi \"Renkler\" sayfasında düzenlenebilir)"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:118
 msgid "Highlight thickness:"
@@ -12005,16 +12170,16 @@ msgstr "Seçili sembollere ayak izi atama"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:151
 #: pcbnew/dialogs/panel_display_options_base.cpp:108
 msgid "Center view on cross-probed items"
-msgstr ""
+msgstr "Çapraz problanmış öğeler üzerinde orta görünüm"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:153
 msgid "Ensures that cross-probed symbols are visible in the current view"
-msgstr ""
+msgstr "Çapraz problu sembollerin geçerli görünümde görünür olmasını sağlar"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:157
 #: pcbnew/dialogs/panel_display_options_base.cpp:114
 msgid "Zoom to fit cross-probed items"
-msgstr ""
+msgstr "Çapraz problanmış öğelere uyacak şekilde yakınlaştırın"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:161
 #: pcbnew/dialogs/panel_display_options_base.cpp:118
@@ -12024,7 +12189,7 @@ msgstr "Ağı Vurgula"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:163
 msgid "Highlight nets when they are highlighted in the PCB editor"
-msgstr ""
+msgstr "PCB düzenleyicide vurgulandıklarında ağları vurgulayın"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
 #, fuzzy
@@ -12048,11 +12213,11 @@ msgstr "Serbest açılı"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:46
 msgid "Mouse drag performs Drag (G) operation"
-msgstr ""
+msgstr "Fare sürükleme, Sürükleme (G) işlemini gerçekleştirir"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:47
 msgid "If unchecked, mouse drag will perform move (M) operation"
-msgstr ""
+msgstr "İşaretlenmezse, fare sürüklemesi taşıma (M) işlemini gerçekleştirir"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:51
 #, fuzzy
@@ -12064,21 +12229,24 @@ msgid ""
 "When enabled, you can start wiring by clicking on unconnected pins even when "
 "the wire tool is not active"
 msgstr ""
+"Etkinleştirildiğinde, kablo aracı etkin olmasa bile bağlantısız pimlere "
+"tıklayarak kablolamaya başlayabilirsiniz"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:56
 #: pcbnew/dialogs/panel_edit_options_base.cpp:386
 msgid "<ESC> clears net highlighting"
-msgstr ""
+msgstr "<ESC> net vurgulamayı temizler"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:57
 msgid ""
 "First <ESC> in selection tool clears selection, next clears net highlighting"
 msgstr ""
+"Seçim aracındaki ilk <ESC> seçimi temizler, sonraki net vurgulamayı temizler"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:67
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:20
 msgid "Defaults for New Objects"
-msgstr ""
+msgstr "Yeni Nesneler için Varsayılanlar"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:77
 msgid "Sheet border:"
@@ -12099,13 +12267,16 @@ msgid ""
 "If enabled, clicking on a pin select the parent symbol.\n"
 "If disabled, clicking on a pin select only the pin."
 msgstr ""
+"Şematik düzenleyicide:\n"
+"Etkinleştirilmişse, bir pın'e tıkladığınızda ana sembolü seçin.\n"
+"Devre dışı bırakılmışsa, bir pın'e tıklamak yalnızca pın'i seçer."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:127
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:185
 #: pcbnew/dialogs/panel_edit_options_base.cpp:96
 #: pcbnew/dialogs/panel_edit_options_base.cpp:168
 msgid "Left Click Mouse Commands"
-msgstr ""
+msgstr "Sol Tıklama Fare Komutları"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:137
 #: pcbnew/dialogs/panel_edit_options_base.cpp:98
@@ -12113,6 +12284,8 @@ msgid ""
 "Left click (and drag) actions depend on 2 modifier keys:\n"
 "Shift and Ctrl."
 msgstr ""
+"Sol tıklama (ve sürükleme) eylemleri 2 değiştirici tuşa bağlıdır:\n"
+"Shift ve Ctrl."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:146
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:204
@@ -12129,7 +12302,7 @@ msgstr "Tıklama"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:199
 #: pcbnew/dialogs/panel_edit_options_base.cpp:240
 msgid "Clarify selection from menu."
-msgstr ""
+msgstr "Menüden seçimi netleştirin."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:158
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:216
@@ -12156,6 +12329,8 @@ msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
 "Option, Shift and Cmd."
 msgstr ""
+"Sol tıklama (ve sürükleme) eylemleri 3 değiştirici tuşa bağlıdır:\n"
+"Seçenek, Shift ve Cmd."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:220
 #: pcbnew/dialogs/panel_edit_options_base.cpp:214
@@ -12174,11 +12349,12 @@ msgstr "Ayak izlerini otomatik olarak atayın"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:269
 msgid "A&llow field autoplace to change justification"
-msgstr ""
+msgstr "Yaslamayı değiştirmek için A&llow alanı otomatik yerleştir"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:272
 msgid "Al&ways align autoplaced fields to the 50 mil grid"
 msgstr ""
+"Otomatik olarak yerleştirilen alanları her zaman 50 mil ızgaraya hizalayın"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:281
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:104
@@ -12293,6 +12469,8 @@ msgid ""
 "Percentage of the text size to offset labels above (or below) a wire, bus, "
 "or pin"
 msgstr ""
+"Bir kablo, veri yolu veya pimin üstündeki (veya altındaki) etiketleri "
+"kaydırmak için metin boyutunun yüzdesi"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
 #, fuzzy
@@ -12303,6 +12481,7 @@ msgstr "Genel Etiket"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:88
 msgid "Percentage of the text size to use as space around a global label"
 msgstr ""
+"Genel etiketin çevresinde boşluk olarak kullanılacak metin boyutunun yüzdesi"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:122
 #, fuzzy
@@ -12395,7 +12574,7 @@ msgstr "Boşluk uzunluğu:"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:245
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:45
 msgid "Dash and dot lengths are ratios of the line width."
-msgstr ""
+msgstr "Çizgi ve nokta uzunlukları çizgi genişliğinin oranlarıdır."
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:253
 #, fuzzy
@@ -12525,7 +12704,7 @@ msgstr "A"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:220
 msgid "No error or warning"
-msgstr ""
+msgstr "Hata veya uyarı yok"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:225
 msgid "Generate warning"
@@ -12591,17 +12770,17 @@ msgstr "50"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:356
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:540
 msgid "A library table row nickname and path cells are empty."
-msgstr ""
+msgstr "Kitaplık tablosu satır takma adı ve yol hücreleri boştur."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:358
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:542
 msgid "A library table row nickname cell is empty."
-msgstr ""
+msgstr "Kitaplık tablosu satır takma adı hücresi boştur."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:360
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:544
 msgid "A library table row path cell is empty."
-msgstr ""
+msgstr "Kitaplık tablosu satır yolu hücresi boştur."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:362
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:546
@@ -12615,6 +12794,8 @@ msgid ""
 "Empty cells will result in all rows that are invalid to be removed from the "
 "table."
 msgstr ""
+"Boş hücreler, geçersiz olan tüm satırların tablodan kaldırılmasına neden "
+"olur."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:366
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:550
@@ -12645,7 +12826,7 @@ msgstr "Oluşturanın takma adı:"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:609
 #, c-format
 msgid "Multiple libraries cannot share the same nickname ('%s')."
-msgstr ""
+msgstr "Birden çok kitaplık aynı takma adı paylaşamaz ('%s')."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:468 eeschema/symbol_library.cpp:534
 #, c-format
@@ -12672,6 +12853,8 @@ msgstr "'%s' sembol kitaplığı zaten var."
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:905
 msgid "One of the nicknames will need to be changed after adding this library."
 msgstr ""
+"Bu kitaplığı ekledikten sonra takma adlardan birinin değiştirilmesi "
+"gerekecektir."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:538 eeschema/sch_base_frame.cpp:283
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:923
@@ -12689,6 +12872,8 @@ msgid ""
 "Select one or more rows containing libraries in Legacy format (*.lib) to "
 "save as current KiCad format (*.kicad_sym)."
 msgstr ""
+"Eski biçimdeki kitaplıkları içeren bir veya daha fazla satır seçin (*.lib) "
+"geçerli KiCad biçimi olarak kaydetmek için (*.kıcad_sym)."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:750
 #, c-format
@@ -12696,6 +12881,8 @@ msgid ""
 "Save '%s' as current KiCad format (*.kicad_sym) and replace legacy entry in "
 "table?"
 msgstr ""
+"'%s' değerini geçerli KiCad biçimi olarak kaydedin (*.kicad_sym) ve "
+"tablodaki eski girdiyi değiştir?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:756
 #, c-format
@@ -12703,6 +12890,8 @@ msgid ""
 "Save %d Legacy format libraries as current KiCad format (*.kicad_sym) and "
 "replace legacy entries in table?"
 msgstr ""
+"%d Eski biçim kitaplıklarını geçerli KiCad biçimi olarak kaydedin (*."
+"kıcad_sym) ve tablodaki eski girdileri değiştirin?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:784
 #: pcbnew/dialogs/dialog_export_step.cpp:354
@@ -12726,6 +12915,9 @@ msgid ""
 "Changes must be saved or discarded before the symbol library table can be "
 "modified."
 msgstr ""
+"Bir veya daha fazla sembol kütüphanesinde değişiklikler yapılmıştır.\n"
+"Sembol kitaplığı tablosu değiştirilmeden önce değişikliklerin kaydedilmesi "
+"veya atılması gerekir."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1056
 msgid "Symbol Libraries"
@@ -12808,7 +13000,7 @@ msgstr "Ayak izi(Footprint) Kütüphaneleri"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:129
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:126
 msgid "Add empty row to table"
-msgstr ""
+msgstr "Tabloya boş satır ekle"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:134
 #, fuzzy
@@ -12834,7 +13026,7 @@ msgstr "Kullanılabilir yollar:"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:203
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:191
 msgid "This is a read-only table which shows pertinent environment variables."
-msgstr ""
+msgstr "Bu, ilgili ortam değişkenlerini gösteren salt okunur bir tablodur."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:41
 #, fuzzy
@@ -12874,6 +13066,8 @@ msgstr ""
 msgid ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
 msgstr ""
+"Yeni kök sayfa dosyasının üzerine yazılacağı için '%s' dosyası "
+"kopyalanamıyor."
 
 #: eeschema/eeschema_config.cpp:76 eeschema/eeschema_jobs_handler.cpp:97
 #: pcbnew/pcbnew_config.cpp:55
@@ -12899,11 +13093,13 @@ msgid ""
 "Warning: schematic has annotation errors, please use the schematic editor to "
 "fix them\n"
 msgstr ""
+"Uyarı: şematik açıklama hatalarına sahiptir, lütfen bunları düzeltmek için "
+"şematik düzenleyiciyi kullanın\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:215
 #: eeschema/eeschema_jobs_handler.cpp:315
 msgid "Warning: duplicate sheet names.\n"
-msgstr ""
+msgstr "Uyarı: yinelenen sayfa adları.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:257
 #, fuzzy
@@ -12940,7 +13136,7 @@ msgstr "Sembol seçilmedi"
 
 #: eeschema/eeschema_jobs_handler.cpp:534 pcbnew/pcbnew_jobs_handler.cpp:597
 msgid "Output path must not conflict with existing path\n"
-msgstr ""
+msgstr "Çıktı yolu mevcut yolla çakışmamalıdır\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:544
 #, fuzzy
@@ -13010,12 +13206,12 @@ msgstr "Bağlantı Yok"
 
 #: eeschema/erc.cpp:287
 msgid "Unresolved text variable in drawing sheet"
-msgstr ""
+msgstr "Çizim sayfasında çözümlenmemiş metin değişkeni"
 
 #: eeschema/erc.cpp:324
 #, c-format
 msgid "Bus alias %s has conflicting definitions on %s and %s"
-msgstr ""
+msgstr "Veri yolu diğer adı %s, %s ve %s üzerinde çakışan tanımlara sahiptir"
 
 #: eeschema/erc.cpp:393
 #, fuzzy, c-format
@@ -13044,12 +13240,12 @@ msgstr "Ayak izi değişikliklerinin sembolü kaydedilmedi"
 
 #: eeschema/erc.cpp:582
 msgid "Pins with 'no connection' type are connected"
-msgstr ""
+msgstr "'Bağlantı yok' tipi pimler bağlanır"
 
 #: eeschema/erc.cpp:712
 #, c-format
 msgid "Pins of type %s and %s are connected"
-msgstr ""
+msgstr "%s ve %s tipi pimler bağlı"
 
 #: eeschema/erc.cpp:782
 #, fuzzy, c-format
@@ -13087,11 +13283,11 @@ msgstr "Çeşitli"
 
 #: eeschema/erc_item.cpp:47
 msgid "Duplicate sheet names within a given sheet"
-msgstr ""
+msgstr "Belirli bir sayfa içindeki sayfa adlarını çoğaltın"
 
 #: eeschema/erc_item.cpp:51
 msgid "Symbol pin or wire end off grid"
-msgstr ""
+msgstr "Sembol pimi veya tel ucu şebekeden çıkar"
 
 #: eeschema/erc_item.cpp:55
 #, fuzzy
@@ -13100,15 +13296,15 @@ msgstr "Bağlantı yok"
 
 #: eeschema/erc_item.cpp:59
 msgid "Input pin not driven by any Output pins"
-msgstr ""
+msgstr "Giriş pimi herhangi bir Çıkış pimi tarafından sürülmez"
 
 #: eeschema/erc_item.cpp:63
 msgid "Input Power pin not driven by any Output Power pins"
-msgstr ""
+msgstr "Giriş Güç pimi herhangi bir Çıkış Güç pimi tarafından sürülmez"
 
 #: eeschema/erc_item.cpp:67 eeschema/erc_item.cpp:71
 msgid "Conflict problem between pins"
-msgstr ""
+msgstr "Pinler arasındaki çakışma sorunu"
 
 #: eeschema/erc_item.cpp:75
 #, fuzzy
@@ -13117,7 +13313,7 @@ msgstr "İngiliz ve metrik birimler arasında geçiş yapın"
 
 #: eeschema/erc_item.cpp:79
 msgid "A pin with a \"no connection\" flag is connected"
-msgstr ""
+msgstr "\"Bağlantı yok\" bayrağı olan bir pın bağlı"
 
 #: eeschema/erc_item.cpp:83
 #, fuzzy
@@ -13126,15 +13322,15 @@ msgstr "Bölge %s ayak bağlantısı: %s."
 
 #: eeschema/erc_item.cpp:87
 msgid "Label not connected to anything"
-msgstr ""
+msgstr "Etiket hiçbir şeye bağlı değil"
 
 #: eeschema/erc_item.cpp:91
 msgid "Global label not connected anywhere else in the schematic"
-msgstr ""
+msgstr "Şemada başka hiçbir yere bağlı olmayan genel etiket"
 
 #: eeschema/erc_item.cpp:95
 msgid "Labels are similar (lower/upper case difference only)"
-msgstr ""
+msgstr "Etiketler benzerdir (yalnızca küçük / büyük harf farkı)"
 
 #: eeschema/erc_item.cpp:99
 #, fuzzy
@@ -13143,15 +13339,15 @@ msgstr "Sembolü olmayan iz düşümleri sil"
 
 #: eeschema/erc_item.cpp:103
 msgid "Different net assigned to a shared pin in another unit of the symbol"
-msgstr ""
+msgstr "Sembolün başka bir birimindeki paylaşılan bir pın'e atanan farklı ağ"
 
 #: eeschema/erc_item.cpp:107
 msgid "Conflict between bus alias definitions across schematic sheets"
-msgstr ""
+msgstr "Şematik sayfalarda veri yolu diğer ad tanımları arasındaki çakışma"
 
 #: eeschema/erc_item.cpp:111
 msgid "More than one name given to this bus or net"
-msgstr ""
+msgstr "Bu otobüse veya ağa birden fazla isim verilir"
 
 #: eeschema/erc_item.cpp:115
 #, fuzzy
@@ -13166,7 +13362,7 @@ msgstr ""
 
 #: eeschema/erc_item.cpp:123
 msgid "Label attached to bus item does not describe a bus"
-msgstr ""
+msgstr "Veri yolu öğesine eklenen etiket, bir veri yolunu tanımlamaz"
 
 #: eeschema/erc_item.cpp:127
 #, fuzzy
@@ -13176,7 +13372,7 @@ msgstr ""
 
 #: eeschema/erc_item.cpp:131
 msgid "Invalid connection between bus and net items"
-msgstr ""
+msgstr "Veri yolu ve ağ öğeleri arasında geçersiz bağlantı"
 
 #: eeschema/erc_item.cpp:135 pcbnew/drc/drc_item.cpp:193
 #, fuzzy
@@ -13190,7 +13386,7 @@ msgstr "SPICE netlist dosyası"
 
 #: eeschema/erc_item.cpp:143
 msgid "Wires not connected to anything"
-msgstr ""
+msgstr "Hiçbir şeye bağlı olmayan teller"
 
 #: eeschema/erc_item.cpp:147
 #, fuzzy
@@ -13229,7 +13425,7 @@ msgstr "Ayak izi değişikliklerinin sembolü kaydedilmedi"
 
 #: eeschema/erc_item.cpp:175
 msgid "Units of same symbol have different values"
-msgstr ""
+msgstr "Aynı sembolün birimleri farklı değerlere sahiptir"
 
 #: eeschema/erc_item.cpp:179
 #, fuzzy
@@ -13271,7 +13467,7 @@ msgstr "Şema bağlantı rengi"
 #: eeschema/files-io.cpp:123
 #, c-format
 msgid "Schematic '%s' does not exist.  Do you wish to create it?"
-msgstr ""
+msgstr "Şematik '%s' mevcut değil.    Onu üretmek ister misin?"
 
 #: eeschema/files-io.cpp:141
 msgid "Creating Schematic"
@@ -13291,6 +13487,8 @@ msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheets."
 msgstr ""
+"Şemanın tamamı yüklenemedi.   Hiyerarşik sayfalar yüklenmeye çalışılırken "
+"hatalar oluştu."
 
 #: eeschema/files-io.cpp:249 eeschema/files-io.cpp:257
 #: eeschema/files-io.cpp:1273 eeschema/sheet.cpp:161
@@ -13315,6 +13513,9 @@ msgid ""
 "fixed.  Please save the schematic to repair the broken file or it may not be "
 "usable with other versions of KiCad."
 msgstr ""
+"Otomatik olarak düzeltilen şemayı yüklerken bir hata bulundu.   Lütfen bozuk "
+"dosyayı onarmak için şemayı kaydedin veya kicad'in diğer sürümleriyle "
+"kullanılamayabilir."
 
 #: eeschema/files-io.cpp:361
 #, fuzzy
@@ -13333,6 +13534,11 @@ msgid ""
 "\n"
 "This may cause broken symbol library links under certain conditions."
 msgstr ""
+"Proje dosyası sembol kitaplığı listesinde tanımlanan sembol kitaplıkları "
+"artık desteklenmiyor ve kaldırılacak.\n"
+"\n"
+"Bu, belirli koşullar altında sembol kitaplığı bağlantılarının kopmasına "
+"neden olabilir"
 
 #: eeschema/files-io.cpp:369
 #, fuzzy
@@ -13352,6 +13558,11 @@ msgid ""
 "missing symbols, either manual recovery of the schematic or recovery of the "
 "symbol cache library file and reloading the schematic is required."
 msgstr ""
+"Bu, belirli koşullar altında bozuk bir şemaya neden olabilir.   Açıldıktan "
+"sonra şemada eksik sembol yoksa, veri kaybını önlemek için herhangi bir "
+"değişiklik yapmadan hemen önce kaydedin.   Eksik semboller varsa, şemanın "
+"manuel olarak kurtarılması veya sembol önbellek kitaplığı dosyasının "
+"kurtarılması ve şemanın yeniden yüklenmesi gerekir."
 
 #: eeschema/files-io.cpp:411
 #, fuzzy
@@ -13368,6 +13579,8 @@ msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
 msgstr ""
+"Bu dosya kicad'in eski bir sürümü tarafından oluşturuldu. Kaydedildiğinde "
+"yeni biçime dönüştürülecektir."
 
 #: eeschema/files-io.cpp:515
 msgid "Schematic is read only."
@@ -13383,6 +13596,9 @@ msgid ""
 "\n"
 "Do you want to save the current document before proceeding?"
 msgstr ""
+"Bu işlem geri alınamaz.\n"
+"\n"
+"Devam etmeden önce geçerli belgeyi kaydetmek ister misiniz?"
 
 #: eeschema/files-io.cpp:618 pcbnew/files.cpp:173
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:191
@@ -13447,10 +13663,13 @@ msgid ""
 "\n"
 "Make sure you have write permissions and try again."
 msgstr ""
+"'%s' klasörü oluşturulamadı.\n"
+"\n"
+"Yazma izinleriniz olduğundan emin olun ve tekrar deneyin."
 
 #: eeschema/files-io.cpp:990
 msgid "Saving will overwrite existing files."
-msgstr ""
+msgstr "Kaydetme, mevcut dosyaların üzerine yazacaktır."
 
 #: eeschema/files-io.cpp:991
 msgid "Save Warning"
@@ -13461,6 +13680,8 @@ msgid ""
 "The following files will be overwritten:\n"
 "\n"
 msgstr ""
+"Aşağıdaki dosyaların üzerine yazılır:\n"
+"\n"
 
 #: eeschema/files-io.cpp:995
 msgid "Overwrite Files"
@@ -13507,6 +13728,8 @@ msgid ""
 "The file '%s` could not be opened.\n"
 "Manual recovery of automatically saved files is required."
 msgstr ""
+"'%s' dosyası açılamadı.\n"
+"Otomatik olarak kaydedilen dosyaların manuel olarak kurtarılması gerekir."
 
 #: eeschema/files-io.cpp:1471
 msgid "The following automatically saved file(s) could not be restored\n"
@@ -13515,6 +13738,7 @@ msgstr "Aşağıdaki otomatik olarak kaydedilen dosya(lar) geri yüklenemedi\n"
 #: eeschema/files-io.cpp:1476
 msgid "Manual recovery will be required to restore the file(s) above."
 msgstr ""
+"Yukarıdaki dosya (lar) ı geri yüklemek için manuel kurtarma gerekecektir."
 
 #: eeschema/files-io.cpp:1496
 msgid "The following automatically saved file(s) could not be removed\n"
@@ -13522,7 +13746,7 @@ msgstr "Aşağıdaki otomatik olarak kaydedilen dosya(lar) kaldırılamadı\n"
 
 #: eeschema/files-io.cpp:1501
 msgid "Manual removal will be required for the file(s) above."
-msgstr ""
+msgstr "Yukarıdaki dosya (lar) için manuel kaldırma gerekli olacaktır."
 
 #: eeschema/files-io.cpp:1512
 #, c-format
@@ -13540,6 +13764,9 @@ msgid ""
 "This file must be manually removed or the auto save feature will be\n"
 "shown every time the schematic editor is launched."
 msgstr ""
+"Bu dosya manuel olarak kaldırılmalıdır, aksi takdirde otomatik kaydetme "
+"özelliği\n"
+"şematik düzenleyici her başlatıldığında gösterilir."
 
 #: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1681
 #, fuzzy
@@ -13598,17 +13825,17 @@ msgstr "%s için %s %s ayak %s"
 #: eeschema/lib_pin.cpp:1381
 #, c-format
 msgid "Pin %s [%s, %s]"
-msgstr ""
+msgstr "Pin %s [%s, %s]"
 
 #: eeschema/lib_pin.cpp:1391
 #, c-format
 msgid "Hidden pin %s [%s, %s, %s]"
-msgstr ""
+msgstr "gizli pin %s [%s, %s, %s]"
 
 #: eeschema/lib_pin.cpp:1399
 #, c-format
 msgid "Hidden pin %s [%s, %s]"
-msgstr ""
+msgstr "gizli pin %s [%s, %s]"
 
 #: eeschema/lib_shape.cpp:474 eeschema/sch_shape.cpp:451
 #, fuzzy, c-format
@@ -13618,12 +13845,12 @@ msgstr "yarıçap"
 #: eeschema/lib_shape.cpp:478 eeschema/sch_shape.cpp:455
 #, c-format
 msgid "Circle, radius %s"
-msgstr ""
+msgstr "Daire, yarıçap %s"
 
 #: eeschema/lib_shape.cpp:487 eeschema/sch_shape.cpp:464
 #, c-format
 msgid "Polyline, %d points"
-msgstr ""
+msgstr "Çoklu çizgi,%d noktaları"
 
 #: eeschema/lib_shape.cpp:491 eeschema/sch_shape.cpp:468
 #, fuzzy, c-format
@@ -13691,7 +13918,7 @@ msgstr "Son Kullanılanları Aç"
 #: eeschema/menubar.cpp:73 include/file_history.h:54
 #: pagelayout_editor/menubar.cpp:65 pcbnew/menubar_pcb_editor.cpp:75
 msgid "Clear Recent Files"
-msgstr ""
+msgstr "Son Dosyaları Temizle"
 
 #: eeschema/menubar.cpp:98
 #, fuzzy
@@ -13701,7 +13928,7 @@ msgstr "Şema ekle"
 #: eeschema/menubar.cpp:99
 msgid ""
 "Append schematic sheet content from another project to the current sheet"
-msgstr ""
+msgstr "Şematik sayfa içeriğini başka bir projeden geçerli sayfaya ekleme"
 
 #: eeschema/menubar.cpp:107 pcbnew/menubar_footprint_editor.cpp:65
 #: pcbnew/menubar_pcb_editor.cpp:112
@@ -13716,6 +13943,7 @@ msgstr "KiCad Olmayan Şematik..."
 msgid ""
 "Replace current schematic sheet with one imported from another application"
 msgstr ""
+"Geçerli şematik sayfayı başka bir uygulamadan içe aktarılanla değiştirin"
 
 #: eeschema/menubar.cpp:114
 #, fuzzy
@@ -13784,7 +14012,7 @@ msgstr "&Tercihler"
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:98
 #, c-format
 msgid "Failed to generate a name for '%s': exceeded UINT64_MAX"
-msgstr ""
+msgstr "'%s' için bir ad oluşturulamadı: UİNT64_MAX aşıldı"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:256
 #, fuzzy, c-format
@@ -13806,7 +14034,7 @@ msgstr "%s kütüphane dosyası bulunamadı."
 #: eeschema/netlist_exporters/netlist_generator.cpp:142
 #, c-format
 msgid "Command error. Return code %d."
-msgstr ""
+msgstr "Komut hatası. %d dönüş kodu."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:147
 msgid "Success."
@@ -13814,7 +14042,7 @@ msgstr "Başarılı."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:194
 msgid "Error: duplicate sheet names. Continue?"
-msgstr ""
+msgstr "Hata: yinelenen sayfa adları. Devam mı?"
 
 #: eeschema/picksymbol.cpp:169 pcbnew/load_select_footprint.cpp:256
 msgid "Recently Used"
@@ -13823,12 +14051,12 @@ msgstr "Son zamanlarda kullanılmış"
 #: eeschema/picksymbol.cpp:192
 #, c-format
 msgid "Choose Power Symbol (%d items loaded)"
-msgstr ""
+msgstr "Güç Sembolünü Seçin (%d öğeler yüklendi)"
 
 #: eeschema/picksymbol.cpp:194 eeschema/symbol_viewer_frame.cpp:1136
 #, c-format
 msgid "Choose Symbol (%d items loaded)"
-msgstr ""
+msgstr "Sembol Seç (%d öğeler yüklendi)"
 
 #: eeschema/picksymbol.cpp:291
 #, fuzzy, c-format
@@ -13895,7 +14123,7 @@ msgstr "Çıkış düşük"
 
 #: eeschema/pin_type.cpp:86
 msgid "Falling edge clock"
-msgstr ""
+msgstr "Düşen kenar saati"
 
 #: eeschema/pin_type.cpp:87
 msgid "NonLogic"
@@ -13911,6 +14139,7 @@ msgstr "%s Varsayılanlara Sıfırla"
 msgid ""
 "Cannot rescue symbol %s which is not available in any library or the cache."
 msgstr ""
+"Herhangi bir kitaplıkta veya önbellekte bulunmayan %s sembolü kurtarılamıyor."
 
 #: eeschema/project_rescue.cpp:319 eeschema/project_rescue.cpp:495
 #, fuzzy, c-format
@@ -13924,7 +14153,7 @@ msgstr "%s sembolünü '%s' yerine '%s' olarak değiştirin"
 
 #: eeschema/project_rescue.cpp:595
 msgid "This project has nothing to rescue."
-msgstr ""
+msgstr "Bu projenin kurtaracak hiçbir şeyi yok."
 
 #: eeschema/project_rescue.cpp:610
 #, fuzzy
@@ -14077,6 +14306,9 @@ msgid ""
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
 "and create a project."
 msgstr ""
+"Şematik Düzenleyici bağımsız modda açıldığından PCB'yi güncelleyemiyor. "
+"Şemalardan PCB oluşturmak / güncellemek için KiCad kabuğunu başlatın ve bir "
+"proje oluşturun."
 
 #: eeschema/sch_edit_frame.cpp:1106 eeschema/sch_plotter.cpp:1028
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
@@ -14145,7 +14377,7 @@ msgstr "Sayfa Başvuruları"
 #: eeschema/sch_io_mgr.cpp:36 pcbnew/io_mgr.cpp:42
 #, c-format
 msgid "Plugin \"%s\" does not implement the \"%s\" function."
-msgstr ""
+msgstr "\"%s\" eklentisi \"%s\" işlevini uygulamaz."
 
 #: eeschema/sch_io_mgr.cpp:37 pcbnew/io_mgr.cpp:43
 #, fuzzy, c-format
@@ -14326,29 +14558,33 @@ msgstr "'%s' klasörüne çizim dosyaları yazılamadı."
 #: eeschema/sch_plugin.cpp:138
 msgid "Enable <b>debug</b> logging for Symbol*() functions in this SCH_PLUGIN."
 msgstr ""
+"Bu SCH_PLUGİN içindeki Symbol*() işlevleri için <b>debug</b> günlüğünü "
+"etkinleştirin."
 
 #: eeschema/sch_plugin.cpp:142
 msgid "Regular expression <b>symbol name</b> filter."
-msgstr ""
+msgstr "Normal ifade <b> sembol adı </b> filtresi."
 
 #: eeschema/sch_plugin.cpp:146 pcbnew/plugin.cpp:155
 msgid ""
 "Enable transaction logging. The mere presence of this option turns on the "
 "logging, no need to set a Value."
 msgstr ""
+"İşlem günlüğünü etkinleştir. Bu seçeneğin yalnızca varlığı günlüğü açar, bir "
+"Değer ayarlamanıza gerek yoktur."
 
 #: eeschema/sch_plugin.cpp:151 pcbnew/plugin.cpp:160
 msgid "User name for <b>login</b> to some special library server."
-msgstr ""
+msgstr "Özel bir kitaplık sunucusuna <b>giriş</b> için kullanıcı adı."
 
 #: eeschema/sch_plugin.cpp:155 pcbnew/plugin.cpp:163
 msgid "Password for <b>login</b> to some special library server."
-msgstr ""
+msgstr "Özel bir kütüphane sunucusuna <b>giriş</b> için parola."
 
 #: eeschema/sch_plugin.cpp:163
 msgid ""
 "Enter the python symbol which implements the SCH_PLUGIN::Symbol*() functions."
-msgstr ""
+msgstr "SCH_PLUGİN::Symbol*() işlevlerini uygulayan python sembolünü girin."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:374
 #, c-format
@@ -14356,76 +14592,86 @@ msgid ""
 "The file name for sheet %s is undefined, this is probably an Altium signal "
 "harness that got converted to a sheet."
 msgstr ""
+"%s sayfasının dosya adı tanımsızdır, bu muhtemelen bir sayfaya dönüştürülen "
+"bir Altium sinyal demetidir."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:440
 #, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
-msgstr ""
+msgstr "Depolama dosyası tam olarak ayrıştırılmadı (%d bayt kaldı)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:500
 #, c-format
 msgid "Unknown or unexpected record ID %d found inside \"Additional\" section."
-msgstr ""
+msgstr "\"Ek\" bölümünde bilinmeyen veya beklenmeyen kayıt kimliği %d bulundu."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:573
 msgid "Record 'IEEE_SYMBOL' not handled."
-msgstr ""
+msgstr "'IEEE_SYMBOL' kaydı işlenmedi."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:598
 msgid "Record 'PIECHART' not handled."
-msgstr ""
+msgstr "'PİECHART' kaydı işlenmedi."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:717
 msgid "Compile mask not currently supported."
-msgstr ""
+msgstr "Derleme maskesi şu anda desteklenmiyor."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:724
 #, c-format
 msgid "Unknown or unexpected record id %d found inside \"FileHeader\" section."
 msgstr ""
+"Bilinmeyen veya beklenmeyen kayıt kimliği %d \"Dosya okuyucusu\" bölümünde "
+"bulundu."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:824
-#, c-format
+#, c-format, fuzzy
 msgid "Symbol \"%s\" in sheet \"%s\" at index %d replaced with symbol \"%s\"."
 msgstr ""
+"%d dizinindeki \"%s\" sayfasındaki \"%s\" sembolü, \"%s\" sembolü ile "
+"değiştirildi."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:928
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2404
 msgid "Pin has unexpected orientation."
-msgstr ""
+msgstr "Pın'in beklenmedik bir yönü var."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:975
 msgid "Pin has unexpected electrical type."
-msgstr ""
+msgstr "Pim beklenmedik bir elektrik tipine sahiptir."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:980
 msgid "Pin has unexpected outer edge type."
-msgstr ""
+msgstr "Pim beklenmedik dış kenar tipine sahiptir."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:983
 msgid "Pin has unexpected inner edge type."
-msgstr ""
+msgstr "Pim beklenmedik iç kenar tipine sahiptir."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1272
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
-msgstr ""
+msgstr "Bezier'in %d kontrol noktaları var. En az 2 bekleniyor."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1675
 #, c-format
 msgid "Unsupported ellipse was not imported at (X = %d; Y = %d)."
-msgstr ""
+msgstr "Desteklenmeyen elips içe aktarılmadı (X = %d; Y = %d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1935
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Altium's harness connector (%s) was imported as a hierarchical sheet. Please "
 "review the imported schematic."
 msgstr ""
+"Altium'un kablo demeti konnektörü (% s) hiyerarşik bir sayfa olarak içe "
+"aktarıldı. Lütfen içe aktarılan şemayı gözden geçirin."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2291
 msgid "Power Port with unknown style imported as 'Bar' type."
 msgstr ""
+"'Çubuk' türü olarak içe aktarılan bilinmeyen stile sahip güç bağlantı "
+"noktası."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2332
 #, fuzzy, c-format
@@ -14438,6 +14684,8 @@ msgid ""
 "Altium's harness port (%s) was imported as a text box. Please review the "
 "imported schematic."
 msgstr ""
+"Altium'un kablo demeti bağlantı noktası (%s) metin kutusu olarak içe "
+"aktarıldı. Lütfen içe aktarılan şemayı gözden geçirin."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2525
 #, fuzzy, c-format
@@ -14470,6 +14718,12 @@ msgid ""
 "Current Design size: %.2f, %.2f millimeters. \n"
 "Maximum permitted design size: %.2f, %.2f millimeters.\n"
 msgstr ""
+"Tasarım çok büyük ve kicad'e aktarılamaz.\n"
+"Lütfen şu adrese giderek cadstar'daki maksimum tasarım boyutunu küçültün::\n"
+"Tasarım Sekmesi -> Özellikler -> Tasarım Seçenekleri -> Maksimum Tasarım "
+"Boyutu.\n"
+"Mevcut Tasarım boyutu:%.2f, %.2f milimetre.\n"
+"İzin verilen maksimum tasarım boyutu:%.2f, %.2f milimetre.\n"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:130
 #, c-format
@@ -14477,12 +14731,16 @@ msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "master variant ('%s') was loaded."
 msgstr ""
+"CADSTAR tasarımı, KiCad eşdeğeri olmayan varyantlar içerir. Yalnızca ana "
+"değişken ('%s') yüklendi."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:139
 msgid ""
 "The CADSTAR design contains grouped items which has no KiCad equivalent. Any "
 "grouped items have been ungrouped."
 msgstr ""
+"CADSTAR tasarımı, KiCad eşdeğeri olmayan gruplandırılmış öğeler içerir. "
+"Gruplandırılmış tüm öğeler gruplandırılmadı."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:146
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:161
@@ -14490,6 +14748,8 @@ msgid ""
 "The CADSTAR design contains re-use blocks which has no KiCad equivalent. The "
 "re-use block information has been discarded during the import."
 msgstr ""
+"CADSTAR tasarımı, KiCad eşdeğeri olmayan yeniden kullanım blokları içerir. "
+"İçe aktarma sırasında yeniden kullanım bloğu bilgileri atıldı."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:260
 msgid ""
@@ -14497,6 +14757,9 @@ msgid ""
 "alignment issues. Please review the imported text elements carefully and "
 "correct manually if required."
 msgstr ""
+"CADSTAR yazı tipleri kicad'dakilerden farklıdır. Bu muhtemelen uyum "
+"sorunlarına neden olacaktır. Lütfen içe aktarılan metin öğelerini dikkatlice "
+"inceleyin ve gerekirse manuel olarak düzeltin."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:265
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:170
@@ -14504,10 +14767,12 @@ msgid ""
 "The CADSTAR design has been imported successfully.\n"
 "Please review the import errors and warnings (if any)."
 msgstr ""
+"CADSTAR tasarımı başarıyla içe aktarıldı.\n"
+"Lütfen içe aktarma hatalarını ve uyarılarını (varsa) gözden geçirin."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:318
 msgid "The CADSTAR schematic might be corrupt: there is no root sheet."
-msgstr ""
+msgstr "CADSTAR şeması bozulmuş olabilir: kök sayfası yok."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:392
 #, c-format
@@ -14516,6 +14781,8 @@ msgid ""
 "be found in the symbol library. The part has not been loaded into the KiCad "
 "library."
 msgstr ""
+"Parça tanımı '%s', sembol kitaplığında bulunamayan '%s' sembolüne ("
+"alternatif '%s') başvurur. Parça KiCad kütüphanesine yüklenmedi."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:423
 #, c-format
@@ -14523,6 +14790,8 @@ msgid ""
 "Part definition '%s' has an incomplete definition (no symbol definitions are "
 "associated with it). The part has not been loaded into the KiCad library."
 msgstr ""
+"'%s' parça tanımının eksik bir tanımı vardır (bununla hiçbir sembol tanımı "
+"ilişkilendirilmez). Parça KiCad kütüphanesine yüklenmedi."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:454
 #, c-format
@@ -14530,6 +14799,7 @@ msgid ""
 "Symbol '%s' references part '%s' which could not be found in the library. "
 "The symbol was not loaded"
 msgstr ""
+"'%s' sembolü, kitaplıkta bulunamayan '%s' kısmına başvurur. Sembol yüklenmedi"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:561
 #, c-format
@@ -14537,6 +14807,8 @@ msgid ""
 "Symbol ID '%s' references library symbol '%s' which could not be found in "
 "the library. Did you export all items of the design?"
 msgstr ""
+"'%s' sembol kimliği, kitaplıkta bulunamayan '%s' kütüphane sembolüne "
+"başvurur. Tasarımın tüm öğelerini dışa aktardınız mı?"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:571
 #, c-format
@@ -14544,6 +14816,8 @@ msgid ""
 "Symbol ID '%s' is a signal reference or global signal but it has too many "
 "pins. The expected number of pins is 1 but %d were found."
 msgstr ""
+"Sembol Kimliği '%s' bir sinyal referansı veya genel sinyaldir, ancak çok "
+"fazla pimi vardır. Beklenen pin sayısı 1'dir ancak%d bulunmuştur."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:703
 #, c-format
@@ -14551,6 +14825,8 @@ msgid ""
 "Symbol ID '%s' is of an unknown type. It is neither a symbol or a net "
 "power / symbol. The symbol was not loaded."
 msgstr ""
+"Sembol Kimliği '%s' bilinmeyen bir türdedir. Ne bir sembol ne de net bir güç "
+"/ semboldür. Sembol yüklenmedi."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:719
 #, c-format
@@ -14559,6 +14835,9 @@ msgid ""
 "supported in KiCad. When the symbol is reloaded from the library, it will "
 "revert to the original 1:1 scale."
 msgstr ""
+"'%s' sembolü orijinal CADSTAR şemasında ölçeklendirilmiştir, ancak bu "
+"kıcad'de desteklenmemektedir. Sembol kitaplıktan yeniden yüklendiğinde, "
+"orijinal 1:1 ölçeğine geri döner."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1193
 #, c-format
@@ -14566,10 +14845,12 @@ msgid ""
 "Documentation Symbol '%s' refers to symbol definition ID '%s' which does not "
 "exist in the library. The symbol was not loaded."
 msgstr ""
+"Dokümantasyon Sembolü '%s', kütüphanede bulunmayan '%s' sembol tanım "
+"kimliğini ifade eder. Sembol yüklenmedi."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1302
 msgid "Text Variables could not be set as there is no project attached."
-msgstr ""
+msgstr "Ekli proje olmadığı için Metin Değişkenleri ayarlanamadı."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1777
 #, c-format
@@ -14578,6 +14859,9 @@ msgid ""
 "design but KiCad only supports rotation angles multiples of 90 degrees. The "
 "connecting wires will need manual fixing."
 msgstr ""
+"'%s' sembolü %.1f derece'lik bir açıyla döndürülür.orijinal CADSTAR "
+"tasarımında , ancak KıCad yalnızca 90 derecenin katları dönme açılarını "
+"destekler. Bağlantı kablolarının manuel olarak sabitlenmesi gerekecektir."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1791
 #, c-format
@@ -14585,6 +14869,8 @@ msgid ""
 "Symbol '%s' references sheet ID '%s' which does not exist in the design. The "
 "symbol was not loaded."
 msgstr ""
+"'%s' sembolü, tasarımda bulunmayan '%s' sayfa kimliğine başvurur. Sembol "
+"yüklenmedi."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1928
 #, c-format
@@ -14592,6 +14878,8 @@ msgid ""
 "Net %s references unknown net element %s. The net was not properly loaded "
 "and may require manual fixing."
 msgstr ""
+"Net %s bilinmeyen net öğeye başvurur %s. Ağ düzgün yüklenmedi ve manuel "
+"sabitleme gerektirebilir."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:2237
 #, c-format
@@ -14600,6 +14888,9 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
+"Blok Kimliği %s (Blok adı: '%s') '%s' sayfasında çizilir, ancak tasarımdaki "
+"başka bir sayfaya bağlı değildir. KiCad, tüm sayfa sembollerinin bir "
+"sayfayla ilişkilendirilmesini gerektirir, bu nedenle blok yüklenmedi."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:2262
 #, c-format
@@ -14607,6 +14898,8 @@ msgid ""
 "The CADSTAR schematic might be corrupt: Block %s references a child sheet "
 "but has no Figure defined."
 msgstr ""
+"CADSTAR şeması bozulmuş olabilir:%s bloğu bir alt sayfaya başvurur, ancak "
+"tanımlanmış bir Rakamı yoktur."
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:80
 #, fuzzy, c-format
@@ -14616,12 +14909,12 @@ msgstr "%s resmi okunurken hata oluştu."
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:218
 #, c-format
 msgid "Could not load database library: settings file %s missing or invalid"
-msgstr ""
+msgstr "Veritabanı kitaplığı yüklenemedi: %s ayar dosyası eksik veya geçersiz"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:281
 #, c-format
 msgid "Could not load database library: could not connect to database %s (%s)"
-msgstr ""
+msgstr "Veritabanı kitaplığı yüklenemedi: %s (%s) veritabanına bağlanılamadı"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:438
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:3108
@@ -14635,6 +14928,8 @@ msgid ""
 "Error parsing Eagle file. Could not find '%s' instance but it is referenced "
 "in the schematic."
 msgstr ""
+"Kartal dosyası ayrıştırılırken hata oluştu. '%s' örneği bulunamadı, ancak "
+"şemada referans alınmıştır."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1642
 #, fuzzy, c-format
@@ -14651,7 +14946,7 @@ msgstr "'%s' kütüphane dosyası bulunamadı."
 #: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:1816
 #, c-format
 msgid "library %s does not contain a symbol named %s"
-msgstr ""
+msgstr "%s kitaplığı %s adlı bir simge içermiyor"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:188
 #, fuzzy
@@ -14760,7 +15055,7 @@ msgstr "Geçersiz"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1901
 msgid "Invalid title block comment number"
-msgstr ""
+msgstr "Geçersiz başlık bloğu yorum numarası"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2033
 #, fuzzy
@@ -14786,6 +15081,8 @@ msgid ""
 "Could not load sheet '%s' because it already appears as a direct ancestor in "
 "the schematic hierarchy."
 msgstr ""
+"Şematik hiyerarşide zaten doğrudan bir ata olarak göründüğü için '%s' "
+"sayfası yüklenemedi."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1520
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2169
@@ -14826,22 +15123,22 @@ msgstr "Sembol kitaplığı dosyası '%s' kaydedildi."
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin_helpers.cpp:257
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin_helpers.cpp:276
 msgid "unexpected end of line"
-msgstr ""
+msgstr "beklenmeyen satır sonu"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:370
 #, c-format
 msgid "'%s' does not appear to be an Eeschema file."
-msgstr ""
+msgstr "'%s' bir Eeschema dosyası gibi görünmüyor."
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:400
 msgid "Missing 'EELAYER END'"
-msgstr ""
+msgstr "Eksik 'EELAYER SONU'"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:448
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:719
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:729
 msgid "unexpected end of file"
-msgstr ""
+msgstr "beklenmeyen dosya sonu"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:683
 #, fuzzy
@@ -14855,11 +15152,11 @@ msgstr "Beklenmeyen '%s'"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1303
 msgid "symbol field text attributes must be 3 characters wide"
-msgstr ""
+msgstr "sembol alanı metin öznitelikleri 3 karakter genişliğinde olmalıdır"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin_helpers.cpp:222
 msgid "expected unquoted string"
-msgstr ""
+msgstr "beklenen alıntılanmamış dize"
 
 #: eeschema/sch_reference_list.cpp:690
 #, fuzzy, c-format
@@ -14902,6 +15199,8 @@ msgid ""
 "Schematic symbol reference '%s' library identifier is not valid. Unable to "
 "link library symbol."
 msgstr ""
+"Şematik sembol referansı '%s' kitaplık tanımlayıcısı geçerli değil. Kitaplık "
+"simgesi bağlanamıyor."
 
 #: eeschema/sch_screen.cpp:948
 #, c-format
@@ -14909,21 +15208,23 @@ msgid ""
 "Symbol library '%s' not found and no fallback cache library available.  "
 "Unable to link library symbol."
 msgstr ""
+"Sembol kitaplığı '%s' bulunamadı ve geri dönüş önbellek kitaplığı mevcut "
+"değil. Kitaplık simgesi bağlanamıyor."
 
 #: eeschema/sch_screen.cpp:967
 #, c-format
 msgid "I/O error %s resolving library symbol %s"
-msgstr ""
+msgstr "G/Ç hatası %s kitaplık simgesi çözümleniyor %s"
 
 #: eeschema/sch_screen.cpp:987
 #, c-format
 msgid "Falling back to cache to set symbol '%s:%s' link '%s'."
-msgstr ""
+msgstr "'%s:%s' link '%s' sembolünü ayarlamak için önbelleğe geri dönülüyor."
 
 #: eeschema/sch_screen.cpp:1019
 #, c-format
 msgid "No library symbol found for schematic symbol '%s %s'."
-msgstr ""
+msgstr "'%s %s' şematik sembolü için kitaplık sembolü bulunamadı."
 
 #: eeschema/sch_sheet.cpp:799
 msgid "Sheet Name"
@@ -15148,6 +15449,145 @@ msgid ""
 "<i>Note that markup has precedence over bus definitions.</i>\n"
 "\n"
 msgstr ""
+"<table>\n"
+"    <tr>\n"
+"        <th>Markup</th>\n"
+"        <th></th>\n"
+"        <th>Result</th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>^{superscript}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sup>superscript</sup>&nbsp;</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>Driver Board^{Rev A}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Driver Board<sup>Rev A</sup></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>_{subscript}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sub>subscript</sub>&nbsp;</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>15</sub></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td> &nbsp;<br><samp>~{overbar}</samp><br> "
+"&nbsp;<br><samp>~{CLK}</samp></td>\n"
+"        <td></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>CLK</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${variable}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>variable_value</i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${REVISION}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>2020.1</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> of symbol "
+"<i>refdes</i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>150K</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Bus Definition</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
+"        <th>Resultant Nets</th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>prefix[m..n]</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>prefixm to prefixn</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>D[0..7]</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>D0, D1, D2, D3, D4, D5, D6, D7</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>{SCL SDA}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>SCL, SDA</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>prefix{net1 net2 ...}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>prefix.net1, prefix.net2, ...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>USB1{D+ D-}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>USB1.D+, USB1.D-</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>MEM{D[1..2] LATCH}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br> <samp>MEM.D1, MEM.D2, MEM.LATCH</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
+"        <td></td>\n"
+"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"</table>\n"
+"<p></p>\n"
+"<p></p>\n"
+"<i>Note that markup has precedence over bus definitions.</i>\n"
+"\n"
 
 #: eeschema/sch_validators.cpp:101
 #, fuzzy, c-format
@@ -15221,7 +15661,7 @@ msgstr " veya "
 
 #: eeschema/sch_validators.cpp:188
 msgid "The reference designator cannot contain text variable references"
-msgstr ""
+msgstr "Referans belirteci metin değişkeni referansları içeremez"
 
 #: eeschema/sch_validators.cpp:195
 #, fuzzy
@@ -15230,11 +15670,12 @@ msgstr "Kitaplık Tanımlayıcı Doğrulama Hatası"
 
 #: eeschema/sch_validators.cpp:225
 msgid "Signal name contains '{' and '}' but is not a valid bus name"
-msgstr ""
+msgstr "Sinyal adı '{' ve '}' içerir, ancak geçerli bir veri yolu adı değildir"
 
 #: eeschema/sch_validators.cpp:230
 msgid "Signal name contains '[' or ']' but is not a valid bus name."
 msgstr ""
+"Sinyal adı '[' veya ']' içerir, ancak geçerli bir veri yolu adı değildir."
 
 #: eeschema/sheet.cpp:63
 #, c-format
@@ -15243,6 +15684,9 @@ msgid ""
 "the sheet '%s' or one of its subsheets as a parent somewhere in the "
 "schematic hierarchy."
 msgstr ""
+"Sayfa değişiklikleri yapılamaz, çünkü hedef sayfada zaten '%s' sayfası veya "
+"alt sayfalarından biri şematik hiyerarşide bir yerde üst sayfa olarak "
+"bulunur."
 
 #: eeschema/sheet.cpp:84
 #, c-format
@@ -15251,12 +15695,17 @@ msgid ""
 "symbol library table.  The project this schematic belongs to must first be "
 "remapped before it can be imported into the current project."
 msgstr ""
+"'%s' şemasının sembol kitaplığı bağlantıları sembol kitaplığı tablosuyla "
+"yeniden eşlenmemiştir. Bu şemanın ait olduğu proje, mevcut projeye "
+"aktarılmadan önce yeniden eşleştirilmelidir."
 
 #: eeschema/sheet.cpp:146
 msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheet schematics."
 msgstr ""
+"Şemanın tamamı yüklenemedi. Hiyerarşik sayfa şemaları yüklenmeye "
+"çalışılırken hatalar oluştu."
 
 #: eeschema/sheet.cpp:149
 #, fuzzy
@@ -15309,6 +15758,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"Seçili şemada geçerli proje kitaplığı tablosunda eksik olan kitaplık adları "
+"vardır. Bu, yüklenen şema için sembol kitaplığı referanslarının bozulmasına "
+"neden olabilir.\n"
+"\n"
+"Devam etmek istiyor musun?"
 
 #: eeschema/sheet.cpp:313
 msgid ""
@@ -15318,6 +15772,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"Seçilen dosya farklı bir projenin parçası olarak oluşturuldu. Dosyayı bu "
+"projeye bağlamak, eksik veya yanlış sembol kitaplığı başvurularına neden "
+"olabilir.\n"
+"\n"
+"Devam etmek istiyor musun?"
 
 #: eeschema/sheet.cpp:362
 msgid ""
@@ -15327,6 +15786,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"Seçili şemada, seçili şematik proje kitaplığı tablosunda eksik olan sembol "
+"kitaplığı adları vardır. Bu, sembol kitaplığı başvurularının bozulmasına "
+"neden olabilir.\n"
+"\n"
+"Devam etmek istiyor musun?"
 
 #: eeschema/sheet.cpp:423
 msgid ""
@@ -15336,6 +15800,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"Geçerli kitaplık tablosunda farklı bir kitaplığa başvuran yinelenen kitaplık "
+"adı bulunur. Bu çakışma çözülemez ve sembol kitaplığı başvurularının "
+"bozulmasına neden olabilir.\n"
+"\n"
+"Devam etmek istiyor musun?"
 
 #: eeschema/sheet.cpp:634
 #, c-format
@@ -15348,6 +15817,14 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"'%s' dosya adı, varolan bir dosya adıyla ilgili sorunlara neden olabilir\n"
+"vakayı destekleyen sistemlerde şemada zaten tanımlanmıştır\n"
+"duyarsız dosya adları. Bunu kopyalarsanız bu sorunlara neden olur\n"
+"büyük/küçük harfe duyarlı dosyayı destekleyen bir işletim sistemine "
+"yansıtma\n"
+"adlar.\n"
+"\n"
+"Devam etmek istiyor musun?"
 
 #: eeschema/sheet.cpp:643
 #, fuzzy
@@ -15367,16 +15844,16 @@ msgstr "Değişiklikleri At"
 #: eeschema/sim/kibis/ibis_parser.cpp:67 eeschema/sim/kibis/ibis_parser.cpp:96
 #: eeschema/sim/kibis/ibis_parser.cpp:119
 msgid "Dimension of matrices should be >= 1."
-msgstr ""
+msgstr "Matrislerin boyutu>= 1 olmalıdır."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:73
 msgid "Bandwidth of banded matrices should be >= 1."
-msgstr ""
+msgstr "Bantlı matrislerin bant genişliği> = 1 olmalıdır."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:81 eeschema/sim/kibis/ibis_parser.cpp:104
 #: eeschema/sim/kibis/ibis_parser.cpp:127
 msgid "There are NaN elements in a matrix."
-msgstr ""
+msgstr "Bir matriste NaN öğeleri vardır."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:162
 #, fuzzy
@@ -15455,7 +15932,7 @@ msgstr "Eleman türü:"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:378
 msgid "Cannot interpolate the current based on this IV table."
-msgstr ""
+msgstr "Bu IV tablosuna dayanarak akımı enterpolasyon yapamaz."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:396
 msgid "There is an invalid voltage in an IV table"
@@ -15463,7 +15940,7 @@ msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:403
 msgid "There is an invalid current in an IV table"
-msgstr ""
+msgstr "IV tablosunda geçersiz bir akım var"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:446
 #, fuzzy
@@ -15577,7 +16054,7 @@ msgstr "Dosya Adı"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:629
 msgid "The parser does not handle this IBIS version"
-msgstr ""
+msgstr "Ayrıştırıcı bu IBIS sürümünü işlemez"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:638
 #, fuzzy
@@ -15654,7 +16131,7 @@ msgstr "'%s' dosyası açılamıyor"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:832
 msgid "Unexpected end of file. Missing [END] ?"
-msgstr ""
+msgstr "Beklenmeyen dosya sonu. Eksik [SON] ?"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:844
 #, fuzzy
@@ -15663,12 +16140,12 @@ msgstr "Paket indirilirken hata oluştu"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:872
 msgid "A line did not end properly."
-msgstr ""
+msgstr "Bir çizgi düzgün bitmedi."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1008
 #: eeschema/sim/kibis/ibis_parser.cpp:1025
 msgid "Line exceeds maximum length."
-msgstr ""
+msgstr "Hat maksimum uzunluğu aşıyor."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1051
 #, fuzzy
@@ -15698,11 +16175,11 @@ msgstr "Sıcaklık artışı"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1201
 msgid "Invalid syntax. Should be |_char or &_char, etc..."
-msgstr ""
+msgstr "Geçersiz sözdizimi. |_char veya &_char vb. Olmalıdır..."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1212
 msgid "No extra argument was expected"
-msgstr ""
+msgstr "Fazladan bir tartışma beklenmiyordu"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1364
 #, fuzzy
@@ -15711,7 +16188,7 @@ msgstr "'%s' içinde bilinmeyen düğüm '%s'"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1364
 msgid " context: "
-msgstr ""
+msgstr " bağlam: "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1430
 #, fuzzy
@@ -15720,7 +16197,7 @@ msgstr "Geçersiz sinyal adı"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1514
 msgid "Cannot specify a bandwidth for that kind of matrix"
-msgstr ""
+msgstr "Bu tür bir matris için bant genişliği belirtilemiyor"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1533
 #, fuzzy
@@ -15729,20 +16206,20 @@ msgstr "Geçersiz arşiv dosyası biçimi."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1563
 msgid "Too much data for this matrix row."
-msgstr ""
+msgstr "Bu matris satırı için çok fazla veri var."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1571
 msgid "Too much data for this matrix."
-msgstr ""
+msgstr "Bu matris için çok fazla veri var."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1576
 #: eeschema/sim/kibis/ibis_parser.cpp:1609
 msgid "Can't read a matrix element"
-msgstr ""
+msgstr "Bir matris öğesi okunamıyor"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1614
 msgid "Can't read a matrix index"
-msgstr ""
+msgstr "Matris dizini okunamıyor"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1682
 #, fuzzy
@@ -15756,19 +16233,19 @@ msgstr "Kayıp ebeveyn"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1696
 msgid " Matrix is already init. But m_continue was not set ( internal error )"
-msgstr ""
+msgstr " Matrix zaten içinde. Ancak m_continue ayarlanmadı (dahili hata)"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1722
 msgid "Tried to read a row from an undefined matrix"
-msgstr ""
+msgstr "Tanımlanmamış bir matristen bir satır okumaya çalıştım"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1728
 msgid "matrix pointer is null"
-msgstr ""
+msgstr "matris işaretçisi boş"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1877
 msgid "Typ-Min-Max Values requires at least Typ."
-msgstr ""
+msgstr "Typ-Min-Max Değerleri en az Tür gerektirir."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1970
 #, fuzzy
@@ -15798,19 +16275,19 @@ msgstr "Özelliğin bilinmeyen üst öğesi"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2051
 msgid "Continued reading a model that did not begin. ( internal error )"
-msgstr ""
+msgstr "Başlamayan bir modeli okumaya devam edin. (dahili hata)"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2218
 msgid "A [Package] line requires exactly 4 elements."
-msgstr ""
+msgstr "Bir [Paket] satırı tam olarak 4 öğe gerektirir."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2271
 msgid "Invalid pin entry: 6 values from a table with only 3."
-msgstr ""
+msgstr "Geçersiz pın girişi: Yalnızca 3 olan bir tablodan 6 değer."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2281
 msgid "Can't read a R, L or C value for a pin."
-msgstr ""
+msgstr "Bir pın için R, L veya C değeri okunamıyor."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2304
 #, fuzzy
