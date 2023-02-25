@@ -157,8 +157,9 @@ void DIALOG_FIELD_PROPERTIES::init()
 
     // Predefined fields cannot contain some chars, or cannot be empty,
     // and need a SCH_FIELD_VALIDATOR (m_StyledTextCtrl cannot use a SCH_FIELD_VALIDATOR).
+    // VALUE_FIELD does not use the validator so that it uses the Scintilla text control, since we
+    // allow text replacement for this field (but not the other predefined fields)
     bool use_validator = m_fieldId == REFERENCE_FIELD
-                         || m_fieldId == VALUE_FIELD
                          || m_fieldId == FOOTPRINT_FIELD
                          || m_fieldId == DATASHEET_FIELD
                          || m_fieldId == SHEETNAME_V
@@ -190,10 +191,12 @@ void DIALOG_FIELD_PROPERTIES::init()
                                                                    "cannot be changed." ) ) );
         m_note->Show( true );
         m_TextCtrl->Enable( false );
+        m_StyledTextCtrl->Enable( false );
     }
     else
     {
         m_TextCtrl->Enable( true );
+        m_StyledTextCtrl->Enable( true );
     }
 
     GetSizer()->SetSizeHints( this );
