@@ -220,7 +220,7 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
             if( !symbol || symbol->GetFieldText( SIM_ENABLE_FIELD ) == wxT( "0" ) )
                 continue;
 
-            CreatePinList( symbol, &sheet, true );
+            std::vector<PIN_INFO> pins = CreatePinList( symbol, &sheet, true );
 
             SPICE_ITEM spiceItem;
 
@@ -267,8 +267,8 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
             {
                 readRefName( sheet, *symbol, spiceItem, refNames );
                 readModel( sheet, *symbol, spiceItem );
-                readPinNumbers( *symbol, spiceItem );
-                readPinNetNames( *symbol, spiceItem, ncCounter );
+                readPinNumbers( *symbol, spiceItem, pins );
+                readPinNetNames( *symbol, spiceItem, pins, ncCounter );
 
                 // TODO: transmission line handling?
 
@@ -533,20 +533,20 @@ void NETLIST_EXPORTER_SPICE::readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSym
 }
 
 
-void NETLIST_EXPORTER_SPICE::readPinNumbers( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem )
+void NETLIST_EXPORTER_SPICE::readPinNumbers( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem,
+                                             const std::vector<PIN_INFO>& aPins  )
 {
-    for( const PIN_INFO& pin : m_sortedSymbolPinList )
-        aItem.pinNumbers.emplace_back( std::string( pin.num.ToUTF8() ) );
+    for( const PIN_INFO& pin : aPins )
+        aItem.pinNumbers.emplace_back( pin.num.ToStdString() );
 }
 
 
 void NETLIST_EXPORTER_SPICE::readPinNetNames( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem,
-                                              int& aNcCounter )
+                                              const std::vector<PIN_INFO>& aPins, int& aNcCounter )
 {
-    for( const PIN_INFO& pinInfo : m_sortedSymbolPinList )
+    for( const PIN_INFO& pinInfo : aPins )
     {
-        std::string netName = GenerateItemPinNetName( std::string( pinInfo.netName.ToUTF8() ),
-                                                      aNcCounter );
+        std::string netName = GenerateItemPinNetName( pinInfo.netName.ToStdString(), aNcCounter );
 
         aItem.pinNetNames.push_back( netName );
         m_nets.insert( netName );
