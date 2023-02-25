@@ -363,25 +363,28 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
     // Restrict zoom handling to the vertical axis, otherwise horizontal
     // scrolling events (e.g. touchpads and some mice) end up interpreted
     // as vertical scroll events and confuse the user.
-    if( axis == wxMOUSE_WHEEL_VERTICAL && modifiers == m_settings.m_scrollModifierZoom )
+    if( modifiers == m_settings.m_scrollModifierZoom )
     {
-        const int    rotation  = aEvent.GetWheelRotation();
-        const double zoomScale = m_zoomController->GetScaleForRotation( rotation );
-
-        if( IsCursorWarpingEnabled() )
+        if ( axis == wxMOUSE_WHEEL_VERTICAL )
         {
-            CenterOnCursor();
-            m_view->SetScale( m_view->GetScale() * zoomScale );
-        }
-        else
-        {
-            const VECTOR2D anchor = m_view->ToWorld( VECTOR2D( aEvent.GetX(), aEvent.GetY() ) );
-            m_view->SetScale( m_view->GetScale() * zoomScale, anchor );
-        }
+            const int    rotation  = aEvent.GetWheelRotation();
+            const double zoomScale = m_zoomController->GetScaleForRotation( rotation );
 
-        // Refresh the zoom level and mouse position on message panel
-        // (mouse position has not changed, only the zoom level has changed):
-        refreshMouse( true );
+            if( IsCursorWarpingEnabled() )
+            {
+                CenterOnCursor();
+                m_view->SetScale( m_view->GetScale() * zoomScale );
+            }
+            else
+            {
+                const VECTOR2D anchor = m_view->ToWorld( VECTOR2D( aEvent.GetX(), aEvent.GetY() ) );
+                m_view->SetScale( m_view->GetScale() * zoomScale, anchor );
+            }
+
+            // Refresh the zoom level and mouse position on message panel
+            // (mouse position has not changed, only the zoom level has changed):
+            refreshMouse( true );
+        }
     }
     else
     {
