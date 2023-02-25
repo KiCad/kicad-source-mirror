@@ -60,7 +60,7 @@ public:
     std::string GetSpiceCode() const;
 
 private:
-    bool requiresSpiceModelLine() const override { return true; }
+    bool requiresSpiceModelLine( const SPICE_ITEM& aItem ) const override { return true; }
 
     std::vector<std::unique_ptr<PARAM::INFO>> m_paramInfos;
 };

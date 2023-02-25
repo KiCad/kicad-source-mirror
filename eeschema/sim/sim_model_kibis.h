@@ -89,7 +89,7 @@ public:
     bool m_enableDiff;
 
 private:
-    bool requiresSpiceModelLine() const override { return true; }
+    bool requiresSpiceModelLine( const SPICE_ITEM& aItem ) const override { return true; }
 
     static std::vector<PARAM::INFO> makeParamInfos( TYPE aType );
     static std::vector<PARAM::INFO> makeDcWaveformParamInfos();

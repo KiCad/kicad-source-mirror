@@ -40,6 +40,7 @@
 #include <enum_vector.h>
 
 class SIM_LIBRARY;
+class SPICE_ITEM;
 class SPICE_GENERATOR;
 class SIM_MODEL_SERIALIZER;
 class PROJECT;
@@ -524,7 +525,7 @@ private:
     template <typename T>
     void doWriteFields( std::vector<T>& aFields ) const;
 
-    virtual bool requiresSpiceModelLine() const;
+    virtual bool requiresSpiceModelLine( const SPICE_ITEM& aItem ) const;
 
 protected:
     std::vector<PARAM>                    m_params;

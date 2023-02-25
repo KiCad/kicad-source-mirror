@@ -79,7 +79,7 @@ public:
 
 private:
     static std::vector<PARAM::INFO> makeParamInfos();
-    bool requiresSpiceModelLine() const override { return false; }
+    bool requiresSpiceModelLine( const SPICE_ITEM& aItem ) const override { return false; }
 
 private:
     std::string m_spiceCode;
