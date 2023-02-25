@@ -302,9 +302,9 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSheets()
 
         wxFileName loadedFilePath = wxFileName( Filename );
 
-        std::string filename = wxString::Format( "%s_%02d",
-                                                 loadedFilePath.GetName(),
-                                                 getSheetNumber( rootSheetID ) ).ToStdString();
+        std::string filename = wxString::Format( "%s_%02d", loadedFilePath.GetName(),
+                                                 getSheetNumber( rootSheetID ) )
+                                       .ToStdString();
         ReplaceIllegalFileNameChars( &filename );
         filename += wxT( "." ) + KiCadSchematicFileExtension;
 
@@ -313,6 +313,11 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSheets()
 
         m_sheetMap.insert( { rootSheetID, m_rootSheet } );
         loadChildSheets( rootSheetID, rootPath );
+    }
+    else if( Header.Format.Type == "SYMBOL" )
+    {
+        THROW_IO_ERROR( _( "The selected file is a CADSTAR symbol library. It does not contain a "
+                           "schematic design so cannot be imported/opened in this way." ) );
     }
     else
     {
