@@ -51,7 +51,7 @@ public:
     }
 
 private:
-    bool requiresSpiceModelLine() const override { return true; }
+    bool requiresSpiceModelLine( const SPICE_ITEM& aItem ) const override { return true; }
 
     static const std::vector<PARAM::INFO> makeSwVParamInfos();
     static const std::vector<PARAM::INFO> makeSwIParamInfos();

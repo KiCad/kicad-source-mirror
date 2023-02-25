@@ -298,25 +298,23 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataFromWindow()
     if( !DIALOG_SIM_MODEL_BASE::TransferDataFromWindow() )
         return false;
 
-    if( !m_modelNameChoice->IsEmpty() )
-    {
-        std::string modelName = m_modelNameChoice->GetStringSelection().ToStdString();
-
-        SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY::NAME_FIELD, modelName );
-    }
-
     std::string path;
+    std::string name;
 
-    if( m_useLibraryModelRadioButton->GetValue() || isIbisLoaded() )
+    if( m_useLibraryModelRadioButton->GetValue() )
     {
         path = m_libraryPathText->GetValue();
         wxFileName fn( path );
 
         if( fn.MakeRelativeTo( Prj().GetProjectPath() ) && !fn.GetFullPath().StartsWith( ".." ) )
             path = fn.GetFullPath();
+
+        if( !m_modelNameChoice->IsEmpty() )
+            name = m_modelNameChoice->GetStringSelection().ToStdString();
     }
 
     SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY::LIBRARY_FIELD, path );
+    SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY::NAME_FIELD, name );
 
     if( isIbisLoaded() )
     {

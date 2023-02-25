@@ -215,8 +215,12 @@ bool SIM_MODEL_NGSPICE::canSilentlyIgnoreParam( const std::string& aParamName )
 }
 
 
-bool SIM_MODEL_NGSPICE::requiresSpiceModelLine() const
+bool SIM_MODEL_NGSPICE::requiresSpiceModelLine( const SPICE_ITEM& aItem ) const
 {
+    // Model must be written if there's no base model or the base model is an internal model
+    if( !m_baseModel || aItem.baseModelName == "" )
+        return true;
+
     for( int ii = 0; ii < GetParamCount(); ++ii )
     {
         const PARAM& param = m_params[ii];
@@ -228,10 +232,6 @@ bool SIM_MODEL_NGSPICE::requiresSpiceModelLine() const
         // Empty parameters are interpreted as default-value
         if ( param.value == "" )
             continue;
-
-        // Any non-empty parameter must be written if there's no base model
-        if( !m_baseModel )
-            return true;
 
         const SIM_MODEL_NGSPICE* baseModel = dynamic_cast<const SIM_MODEL_NGSPICE*>( m_baseModel );
         std::string              baseValue = baseModel->m_params[ii].value;

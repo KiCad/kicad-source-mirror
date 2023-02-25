@@ -1053,7 +1053,7 @@ void SIM_MODEL::doWriteFields( std::vector<T>& aFields ) const
 }
 
 
-bool SIM_MODEL::requiresSpiceModelLine() const
+bool SIM_MODEL::requiresSpiceModelLine( const SPICE_ITEM& aItem ) const
 {
     for( const PARAM& param : GetParams() )
     {
