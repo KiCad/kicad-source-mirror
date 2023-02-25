@@ -776,10 +776,20 @@ void BRDITEMS_PLOTTER::PlotFootprintShape( const FP_SHAPE* aShape )
 
                     for( int jj = 0; jj < tmpPoly.OutlineCount(); ++jj )
                     {
-                        SHAPE_LINE_CHAIN &poly = tmpPoly.Outline( jj );
-                        m_plotter->PlotPoly( poly, aShape->IsFilled() ? FILL_T::FILLED_SHAPE
-                                                                      : FILL_T::NO_FILL,
-                                             thickness, &gbr_metadata );
+                        SHAPE_LINE_CHAIN& poly = tmpPoly.Outline( jj );
+                        FILL_T fill_mode = aShape->IsFilled() ? FILL_T::FILLED_SHAPE
+                                                              : FILL_T::NO_FILL;
+                        // Plot the current filled area
+                        // (as region for Gerber plotter to manage attributes)
+                        if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
+                        {
+                            static_cast<GERBER_PLOTTER*>( m_plotter )->
+                                            PlotPolyAsRegion( poly, fill_mode,
+                                                              thickness, &gbr_metadata );
+                        }
+                        else
+                            m_plotter->PlotPoly( poly, fill_mode,
+                                                 thickness, &gbr_metadata );
                     }
                 }
             }
@@ -1073,7 +1083,15 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
                         // Ensure the polygon is closed:
                         poly.SetClosed( true );
 
-                        m_plotter->PlotPoly( poly, fill, thickness, &gbr_metadata );
+                        // Plot the current filled area
+                        // (as region for Gerber plotter to manage attributes)
+                        if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
+                        {
+                            static_cast<GERBER_PLOTTER*>( m_plotter )->
+                                        PlotPolyAsRegion( poly, fill, thickness, &gbr_metadata );
+                        }
+                        else
+                            m_plotter->PlotPoly( poly, fill, thickness, &gbr_metadata );
                     }
                 }
             }
@@ -1084,22 +1102,32 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
         {
             std::vector<VECTOR2I> pts = aShape->GetRectCorners();
 
-            if( sketch || thickness > 0 )
+            if( sketch )
             {
                 m_plotter->ThickSegment( pts[0], pts[1], thickness, GetPlotMode(), &gbr_metadata );
                 m_plotter->ThickSegment( pts[1], pts[2], thickness, GetPlotMode(), &gbr_metadata );
                 m_plotter->ThickSegment( pts[2], pts[3], thickness, GetPlotMode(), &gbr_metadata );
                 m_plotter->ThickSegment( pts[3], pts[0], thickness, GetPlotMode(), &gbr_metadata );
             }
-
-            if( !sketch && aShape->IsFilled() )
+            else
             {
                 SHAPE_LINE_CHAIN poly;
 
                 for( const VECTOR2I& pt : pts )
                     poly.Append( pt );
 
-                m_plotter->PlotPoly( poly, FILL_T::FILLED_SHAPE, -1, &gbr_metadata );
+                poly.Append( pts[0] );  // Close polygon.
+
+                FILL_T fill_mode = aShape->IsFilled() ? FILL_T::FILLED_SHAPE
+                                                      : FILL_T::NO_FILL;
+
+                if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
+                {
+                    static_cast<GERBER_PLOTTER*>( m_plotter )->
+                                PlotPolyAsRegion( poly, fill_mode, thickness, &gbr_metadata );
+                }
+                else
+                    m_plotter->PlotPoly( poly, fill_mode, thickness, &gbr_metadata );
             }
 
             break;
