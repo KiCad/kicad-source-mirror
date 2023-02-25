@@ -86,13 +86,35 @@ void GRID_TRICKS::init()
 }
 
 
-bool GRID_TRICKS::toggleCell( int aRow, int aCol, bool aPreserveSelection )
+bool GRID_TRICKS::isTextEntry( int aRow, int aCol )
+{
+    wxGridCellEditor* editor = m_grid->GetCellEditor( aRow, aCol );
+    bool              retval = ( dynamic_cast<wxTextEntry*>( editor ) );
+
+    editor->DecRef();
+    return retval;
+}
+
+
+bool GRID_TRICKS::isCheckbox( int aRow, int aCol )
 {
     wxGridCellRenderer* renderer = m_grid->GetCellRenderer( aRow, aCol );
-    bool                isCheckbox = ( dynamic_cast<wxGridCellBoolRenderer*>( renderer ) );
-    renderer->DecRef();
+    bool                retval = ( dynamic_cast<wxGridCellBoolRenderer*>( renderer ) );
 
-    if( isCheckbox )
+    renderer->DecRef();
+    return retval;
+}
+
+
+bool GRID_TRICKS::isReadOnly( int aRow, int aCol )
+{
+    return !m_grid->IsEditable() || m_grid->IsReadOnly( aRow, aCol );
+}
+
+
+bool GRID_TRICKS::toggleCell( int aRow, int aCol, bool aPreserveSelection )
+{
+    if( isCheckbox( aRow, aCol ) )
     {
         if( !aPreserveSelection )
         {
@@ -135,7 +157,7 @@ bool GRID_TRICKS::showEditor( int aRow, int aCol )
     if( m_grid->GetGridCursorRow() != aRow || m_grid->GetGridCursorCol() != aCol )
         m_grid->SetGridCursor( aRow, aCol );
 
-    if( m_grid->IsEditable() && !m_grid->IsReadOnly( aRow, aCol ) )
+    if( !isReadOnly( aRow, aCol ) )
     {
         m_grid->ClearSelection();
 
@@ -328,7 +350,7 @@ void GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
                  _( "Copy selected cells to clipboard" ) );
     menu.Append( GRIDTRICKS_ID_PASTE, _( "Paste" ) + "\tCtrl+V",
                  _( "Paste clipboard cells to matrix at current cell" ) );
-    menu.Append( GRIDTRICKS_ID_DELETE, _( "Delete" ) + "\tDel", _( "Delete selected cells" ) );
+    menu.Append( GRIDTRICKS_ID_DELETE, _( "Delete" ) + "\tDel", _( "Clear contents of selected cells" ) );
     menu.Append( GRIDTRICKS_ID_SELECT, _( "Select All" ) + "\tCtrl+A",  _( "Select all cells" ) );
 
     getSelectedArea();
@@ -340,25 +362,43 @@ void GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
         menu.Enable( GRIDTRICKS_ID_COPY, false );
         menu.Enable( GRIDTRICKS_ID_DELETE, false );
     }
-    else if( !m_grid->IsEditable() )
-    {
-        menu.Enable( GRIDTRICKS_ID_CUT,  false );
-        menu.Enable( GRIDTRICKS_ID_DELETE, false );
-    }
 
+    menu.Enable( GRIDTRICKS_ID_CUT,  false );
+    menu.Enable( GRIDTRICKS_ID_DELETE, false );
     menu.Enable( GRIDTRICKS_ID_PASTE, false );
 
-    wxLogNull doNotLog; // disable logging of failed clipboard actions
+    auto anyCellsWritable =
+            [&]()
+            {
+                for( int row = m_sel_row_start; row < m_sel_row_start + m_sel_row_count; ++row )
+                {
+                    for( int col = m_sel_col_start; col < m_sel_col_start + m_sel_col_count; ++col )
+                    {
+                        if( !isReadOnly( row, col ) && isTextEntry( row, col ) )
+                            return true;
+                    }
+                }
 
-    if( m_grid->IsEditable() && wxTheClipboard->Open() )
+                return false;
+            };
+
+    if( anyCellsWritable() )
     {
-        if( wxTheClipboard->IsSupported( wxDF_TEXT )
-            || wxTheClipboard->IsSupported( wxDF_UNICODETEXT ) )
-        {
-            menu.Enable( GRIDTRICKS_ID_PASTE, true );
-        }
+        menu.Enable( GRIDTRICKS_ID_CUT,  true );
+        menu.Enable( GRIDTRICKS_ID_DELETE, true );
 
-        wxTheClipboard->Close();
+        wxLogNull doNotLog; // disable logging of failed clipboard actions
+
+        if( wxTheClipboard->Open() )
+        {
+            if( wxTheClipboard->IsSupported( wxDF_TEXT )
+                || wxTheClipboard->IsSupported( wxDF_UNICODETEXT ) )
+            {
+                menu.Enable( GRIDTRICKS_ID_PASTE, true );
+            }
+
+            wxTheClipboard->Close();
+        }
     }
 
     m_grid->PopupMenu( &menu );
@@ -730,7 +770,9 @@ void GRID_TRICKS::paste_text( const wxString& cb_text )
 
             wxString cellTxt = cols.GetNextToken();
 
-            if( tbl->CanSetValueAs( row, col, wxGRID_VALUE_STRING ) )
+            // Allow paste to anything that can take a string, including things like color
+            // swatches and checkboxes
+            if( tbl->CanSetValueAs( row, col, wxGRID_VALUE_STRING ) && !isReadOnly( row, col ) )
             {
                 tbl->SetValue( row, col, cellTxt );
 
@@ -765,9 +807,11 @@ void GRID_TRICKS::cutcopy( bool doCopy, bool doDelete )
             if( col < m_sel_col_start + m_sel_col_count - 1 )   // that was not last column
                 txt += COL_SEP;
 
-            if( doDelete && m_grid->IsEditable() )
+            if( doDelete )
             {
-                if( tbl->CanSetValueAs( row, col, wxGRID_VALUE_STRING ) )
+                // Do NOT allow clear of things that can take strings but aren't textEntries
+                // (ie: color swatches, textboxes, etc.).
+                if( isTextEntry( row, col ) && !isReadOnly( row, col ) )
                     tbl->SetValue( row, col, wxEmptyString );
             }
         }

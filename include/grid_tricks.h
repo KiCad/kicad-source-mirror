@@ -110,6 +110,10 @@ protected:
     virtual void showPopupMenu( wxMenu& menu, wxGridEvent& aEvent );
     virtual void doPopupSelection( wxCommandEvent& event );
 
+    bool isTextEntry( int aRow, int aCol );
+    bool isCheckbox( int aRow, int aCol );
+    bool isReadOnly( int aRow, int aCol );
+
     bool toggleCell( int aRow, int aCol, bool aPreserveSelection = false );
     bool showEditor( int aRow, int aCol );
 
