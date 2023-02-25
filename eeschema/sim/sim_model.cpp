@@ -1003,12 +1003,21 @@ void SIM_MODEL::createPins( const std::vector<LIB_PIN*>& aSymbolPins )
 
     for( unsigned modelPinIndex = 0; modelPinIndex < pinNames.size(); ++modelPinIndex )
     {
+        wxString pinName = pinNames[ modelPinIndex ];
+        bool     optional = false;
+
+        if( pinName.StartsWith( '<' ) && pinName.EndsWith( '>' ) )
+        {
+            pinName = pinName.Mid( 1, pinName.Length() - 2 );
+            optional = true;
+        }
+
         if( modelPinIndex < aSymbolPins.size() )
         {
             AddPin( { pinNames.at( modelPinIndex ),
                       aSymbolPins[ modelPinIndex ]->GetNumber().ToStdString() } );
         }
-        else
+        else if( !optional )
         {
             AddPin( { pinNames.at( modelPinIndex ), "" } );
         }
