@@ -112,7 +112,18 @@ bool SIM_STRING_PROPERTY::OnEvent( wxPropertyGrid* propgrid, wxWindow* wnd_prima
 
         if( textEntry && m_eval.Process( textEntry->GetValue() ) )
         {
-            SetValueInEvent( m_eval.Result() );
+            double value = SIM_VALUE::ToDouble( m_eval.Result().ToStdString() );
+
+            if( isnan( value )
+                    || value == SIM_VALUE::ToDouble( textEntry->GetValue().ToStdString() ) )
+            {
+                // Don't mess up user formatting if eval'ing didn't actually change the value.
+            }
+            else
+            {
+                SetValueInEvent( m_eval.Result() );
+            }
+
             m_needsEval = false;
             return true;
         }
