@@ -86,7 +86,7 @@
 #define DEFAULT_HOLETOHOLEMIN         0.25    // minimum web thickness between two drilled holes
 #define DEFAULT_HOLECLEARANCE         0.25    // copper-to-hole clearance (from IPC level A)
 
-#define DEFAULT_COPPEREDGECLEARANCE   0.01    // clearance between copper items and edge cuts
+#define DEFAULT_COPPEREDGECLEARANCE   0.5     // clearance between copper items and edge cuts
 #define LEGACY_COPPEREDGECLEARANCE   -0.01    // A flag to indicate the legacy method (based
                                               // on edge cut line thicknesses) should be used.
 #define DEFAULT_SILKCLEARANCE         0.0
