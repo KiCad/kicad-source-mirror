@@ -40,7 +40,7 @@
 #include <enum_vector.h>
 
 class SIM_LIBRARY;
-class SPICE_ITEM;
+struct SPICE_ITEM;
 class SPICE_GENERATOR;
 class SIM_MODEL_SERIALIZER;
 class PROJECT;
