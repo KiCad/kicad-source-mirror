@@ -158,6 +158,7 @@ void DIALOG_FIELD_PROPERTIES::init()
     // Predefined fields cannot contain some chars, or cannot be empty,
     // and need a SCH_FIELD_VALIDATOR (m_StyledTextCtrl cannot use a SCH_FIELD_VALIDATOR).
     bool use_validator = m_fieldId == REFERENCE_FIELD
+                         || m_fieldId == VALUE_FIELD
                          || m_fieldId == FOOTPRINT_FIELD
                          || m_fieldId == DATASHEET_FIELD
                          || m_fieldId == SHEETNAME_V
