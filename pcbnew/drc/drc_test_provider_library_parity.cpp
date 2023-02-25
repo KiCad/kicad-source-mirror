@@ -355,7 +355,13 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint )
         std::unique_ptr<FOOTPRINT> temp( static_cast<FOOTPRINT*>( Clone() ) );
         temp->Flip( {0,0}, false );
         temp->SetParentGroup( nullptr );
-        return temp->FootprintNeedsUpdate( aLibFootprint );
+
+        bool needsUpdate = temp->FootprintNeedsUpdate( aLibFootprint );
+
+        // This temporary footprint must not have a parent when it goes out of scope because it must
+        // not trigger then IncrementTimestamp call in ~FOOTPRINT.
+        temp->SetParent( nullptr );
+        return needsUpdate;
     }
 
     TEST( GetDescription(), aLibFootprint->GetDescription() );
