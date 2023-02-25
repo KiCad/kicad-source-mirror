@@ -1,7 +1,7 @@
 #
 # This program source code file is part of KiCad, a free EDA CAD application.
 #
-# Copyright (C) 2012-2014 KiCad Developers, see change_log.txt for contributors.
+# Copyright (C) 2012-2023 KiCad Developers
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -197,7 +197,7 @@ class TouchSliderWizard(FootprintWizardBase.FootprintWizard):
         xpos = -0.5 * (steps - 1) * step_length
         ypos = -0.5 * (bands - 1) * band_width
 
-        pos = VECTOR2I(wxPointMM(pcbnew.ToMM(xpos), pcbnew.ToMM(ypos)))
+        pos = VECTOR2I( int(xpos), int(ypos) )
 
         for b in range(bands):
             self.AddStrip(pos,steps,band_width,step_length,touch_clearance)
