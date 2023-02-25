@@ -590,8 +590,13 @@ void DIALOG_SCH_FIELD_PROPERTIES::onScintillaCharAdded( wxStyledTextEvent &aEven
                     SIM_LIB_MGR mgr( &Prj() );
                     SIM_MODEL&  model = mgr.CreateModel( &sheet, *symbol ).model;
 
-                    for( const std::string& pin : model.GetPinNames() )
-                        autocompleteTokens.push_back( pin );
+                    for( wxString pin : model.GetPinNames() )
+                    {
+                        if( pin.StartsWith( '<' ) && pin.EndsWith( '>' ) )
+                            autocompleteTokens.push_back( pin.Mid( 1, pin.Length() - 2 ) );
+                        else
+                            autocompleteTokens.push_back( pin );
+                    }
                 }
             }
             else

@@ -190,7 +190,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::DIODE].instanceParams.emplace_back( "sens_cplx",  16, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_COMPLEX, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "ac sensitivity", true );
 
 
-        modelInfos[MODEL_TYPE::BJT] = { "BJT", "NPN", "PNP", { "C", "B", "E", "S" }, "Bipolar Junction Transistor", {}, {} };
+        modelInfos[MODEL_TYPE::BJT] = { "BJT", "NPN", "PNP", { "C", "B", "E", "<S>" }, "Bipolar Junction Transistor", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::BJT].modelParams.emplace_back( "type",  309, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_STRING, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "npn", "pnp", "NPN or PNP" );
         modelInfos[MODEL_TYPE::BJT].modelParams.emplace_back( "npn",  101, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_BOOL, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "NaN", "NaN", "NPN type device" );
@@ -400,7 +400,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::BJT].instanceParams.emplace_back( "dtemp",  8, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "°C", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "instance temperature delta from circuit", true );
 
 
-        modelInfos[MODEL_TYPE::VBIC] = { "VBIC", "NPN", "PNP", { "C", "B", "E", "S", "TJ" }, "Vertical Bipolar Inter-Company Model", {}, {} };
+        modelInfos[MODEL_TYPE::VBIC] = { "VBIC", "NPN", "PNP", { "C", "B", "E", "<S>", "<TJ>" }, "Vertical Bipolar Inter-Company Model", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::VBIC].modelParams.emplace_back( "type",  305, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_STRING, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "npn", "pnp", "NPN or PNP" );
         modelInfos[MODEL_TYPE::VBIC].modelParams.emplace_back( "npn",  101, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_BOOL, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "NaN", "NaN", "NPN type device" );
