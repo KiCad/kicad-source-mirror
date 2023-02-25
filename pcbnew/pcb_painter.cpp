@@ -1203,22 +1203,42 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         VECTOR2I textpos( 0, 0 );
 
         // Divide the space, to display both pad numbers and netnames and set the Y text
-        // position to display 2 lines
+        // offset position to display 2 lines
+        int Y_offset_numpad = 0;
+        int Y_offset_netname = 0;
+
         if( !netname.IsEmpty() && !padNumber.IsEmpty() )
         {
-            size = size / 2.2;
-            textpos.y = size / 1.7;
+            // The magic numbers are defined experimentally for a better look.
+            size = size / 2.5;
+            Y_offset_netname = size / 1.4;  // netname size is usually smaller than num pad
+                                            // so the offset can be smaller
+            Y_offset_numpad = size / 1.7;
         }
+
+        // We are using different fonts to display names, depending on the graphic
+        // engine (OpenGL or Cairo).
+        // Xscale_for_stroked_font adjust the text X size for cairo (stroke fonts) engine
+        const double Xscale_for_stroked_font = 0.9;
 
         if( !netname.IsEmpty() )
         {
             // approximate the size of net name text:
-            double tsize = 1.5 * padsize.x / std::max( PrintableCharCount( netname ), 1 );
+            // We use a size for at least 5 chars, to give a good look even for short names
+            // (like VCC, GND...)
+            double tsize = 1.5 * padsize.x / std::max( PrintableCharCount( netname )+1, 5 );
             tsize = std::min( tsize, size );
 
             // Use a smaller text size to handle interline, pen size...
             tsize *= 0.85;
-            VECTOR2D namesize( tsize, tsize );
+
+            // Round and oval pads have less room to display the net name than other
+            // (i.e RECT) shapes, so reduce the text size for these shapes
+            if( aPad->GetShape() == PAD_SHAPE::CIRCLE || aPad->GetShape() == PAD_SHAPE::OVAL )
+                tsize *= 0.9;
+
+            VECTOR2D namesize( tsize*Xscale_for_stroked_font, tsize );
+            textpos.y = std::min( tsize * 1.4, double( Y_offset_netname ) );
 
             m_gal->SetGlyphSize( namesize );
             m_gal->SetLineWidth( namesize.x / 6.0 );
@@ -1228,16 +1248,16 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
         if( !padNumber.IsEmpty() )
         {
-            textpos.y = -textpos.y;
-
             // approximate the size of the pad number text:
-            double tsize = 1.5 * padsize.x / std::max( PrintableCharCount( padNumber ), 1 );
+            // We use a size for at least 3 chars, to give a good look even for short numbers
+            double tsize = 1.5 * padsize.x / std::max( PrintableCharCount( padNumber ), 3 );
             tsize = std::min( tsize, size );
 
             // Use a smaller text size to handle interline, pen size...
             tsize *= 0.85;
             tsize = std::min( tsize, size );
-            VECTOR2D numsize( tsize, tsize );
+            VECTOR2D numsize( tsize*Xscale_for_stroked_font, tsize );
+            textpos.y = -Y_offset_numpad;
 
             m_gal->SetGlyphSize( numsize );
             m_gal->SetLineWidth( numsize.x / 6.0 );
