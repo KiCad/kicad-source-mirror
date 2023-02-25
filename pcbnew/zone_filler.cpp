@@ -1263,6 +1263,10 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
         if( checkForCancel( m_progressReporter ) )
             return;
 
+        // Negative clearance permits zones to short
+        if( evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, otherZone, aLayer ) < 0 )
+            continue;
+
         if( otherZone->GetIsRuleArea() )
         {
             if( otherZone->GetDoNotAllowCopperPour() && !aZone->IsTeardropArea() )
