@@ -79,7 +79,7 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
             if( !symbol->GetIncludeOnBoard() )
                 continue;
 
-            CreatePinList( symbol, &sheet, true );
+            std::vector<PIN_INFO> pins = CreatePinList( symbol, &sheet, true );
 
             if( symbol->GetLibSymbolRef()
                   && symbol->GetLibSymbolRef()->GetFPFilters().GetCount() != 0  )
@@ -110,7 +110,7 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
             ret |= fprintf( f, "\n" );
 
             // Write pin list:
-            for( const PIN_INFO& pin : m_sortedSymbolPinList )
+            for( const PIN_INFO& pin : pins )
             {
                 if( pin.num.IsEmpty() )     // Erased pin in list
                     continue;

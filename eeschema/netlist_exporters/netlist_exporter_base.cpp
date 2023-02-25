@@ -113,16 +113,18 @@ SCH_SYMBOL* NETLIST_EXPORTER_BASE::findNextSymbol( EDA_ITEM* aItem, SCH_SHEET_PA
 }
 
 
-void NETLIST_EXPORTER_BASE::CreatePinList( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPath,
-                                           bool aKeepUnconnectedPins )
+std::vector<PIN_INFO> NETLIST_EXPORTER_BASE::CreatePinList( SCH_SYMBOL* aSymbol,
+                                                            SCH_SHEET_PATH* aSheetPath,
+                                                            bool aKeepUnconnectedPins )
 {
-    wxString ref( aSymbol->GetRef( aSheetPath ) );
+    wxString              ref( aSymbol->GetRef( aSheetPath ) );
+    std::vector<PIN_INFO> pins;
 
     // Power symbols and other symbols which have the reference starting with "#" are not
     // included in netlist (pseudo or virtual symbols)
 
     if( ref[0] == wxChar( '#' ) )
-        return;
+        return pins;
 
     // if( aSymbol->m_FlagControlMulti == 1 )
     //    continue;                                      /* yes */
@@ -130,9 +132,7 @@ void NETLIST_EXPORTER_BASE::CreatePinList( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* 
     // 1 screen), this will be erroneously be toggled.
 
     if( !aSymbol->GetLibSymbolRef() )
-        return;
-
-    m_sortedSymbolPinList.clear();
+        return pins;
 
     // If symbol is a "multi parts per package" type
     if( aSymbol->GetLibSymbolRef()->GetUnitCount() > 1 )
@@ -140,7 +140,7 @@ void NETLIST_EXPORTER_BASE::CreatePinList( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* 
         // Collect all pins for this reference designator by searching the entire design for
         // other parts with the same reference designator.
         // This is only done once, it would be too expensive otherwise.
-        findAllUnitsOfSymbol( aSymbol, aSheetPath, aKeepUnconnectedPins );
+        findAllUnitsOfSymbol( aSymbol, aSheetPath, pins, aKeepUnconnectedPins );
     }
 
     else // GetUnitCount() <= 1 means one part per package
@@ -161,31 +161,33 @@ void NETLIST_EXPORTER_BASE::CreatePinList( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* 
                         continue;
                 }
 
-                m_sortedSymbolPinList.emplace_back( pin->GetShownNumber(), netName );
+                pins.emplace_back( pin->GetShownNumber(), netName );
             }
         }
     }
 
     // Sort pins in m_SortedSymbolPinList by pin number
-    std::sort( m_sortedSymbolPinList.begin(), m_sortedSymbolPinList.end(),
+    std::sort( pins.begin(), pins.end(),
                []( const PIN_INFO& lhs, const PIN_INFO& rhs )
                {
                    return StrNumCmp( lhs.num, rhs.num, true ) < 0;
                } );
 
     // Remove duplicate Pins in m_SortedSymbolPinList
-    eraseDuplicatePins();
+    eraseDuplicatePins( pins );
 
     // record the usage of this library symbol
     m_libParts.insert( aSymbol->GetLibSymbolRef().get() ); // rejects non-unique pointers
+
+    return pins;
 }
 
 
-void NETLIST_EXPORTER_BASE::eraseDuplicatePins()
+void NETLIST_EXPORTER_BASE::eraseDuplicatePins( std::vector<PIN_INFO>& aPins )
 {
-    for( unsigned ii = 0; ii < m_sortedSymbolPinList.size(); ii++ )
+    for( unsigned ii = 0; ii < aPins.size(); ii++ )
     {
-        if( m_sortedSymbolPinList[ii].num.empty() ) /* already deleted */
+        if( aPins[ii].num.empty() ) /* already deleted */
             continue;
 
         /* Search for duplicated pins
@@ -198,17 +200,17 @@ void NETLIST_EXPORTER_BASE::eraseDuplicatePins()
          */
         int idxref = ii;
 
-        for( unsigned jj = ii + 1; jj < m_sortedSymbolPinList.size(); jj++ )
+        for( unsigned jj = ii + 1; jj < aPins.size(); jj++ )
         {
-            if(  m_sortedSymbolPinList[jj].num.empty() )   // Already removed
+            if(  aPins[jj].num.empty() )   // Already removed
                 continue;
 
             // if other pin num, stop search,
             // because all pins having the same number are consecutive in list.
-            if( m_sortedSymbolPinList[idxref].num != m_sortedSymbolPinList[jj].num )
+            if( aPins[idxref].num != aPins[jj].num )
                 break;
 
-            m_sortedSymbolPinList[jj].num.clear();
+            aPins[jj].num.clear();
         }
     }
 }
@@ -216,6 +218,7 @@ void NETLIST_EXPORTER_BASE::eraseDuplicatePins()
 
 void NETLIST_EXPORTER_BASE::findAllUnitsOfSymbol( SCH_SYMBOL* aSchSymbol,
                                                   SCH_SHEET_PATH* aSheetPath,
+                                                  std::vector<PIN_INFO>& aPins,
                                                   bool aKeepUnconnectedPins )
 {
     wxString    ref = aSchSymbol->GetRef( aSheetPath );
@@ -251,7 +254,7 @@ void NETLIST_EXPORTER_BASE::findAllUnitsOfSymbol( SCH_SYMBOL* aSchSymbol,
                             continue;
                     }
 
-                    m_sortedSymbolPinList.emplace_back( pin->GetShownNumber(), netName );
+                    aPins.emplace_back( pin->GetShownNumber(), netName );
                 }
             }
         }

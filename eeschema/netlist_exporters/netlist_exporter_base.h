@@ -147,7 +147,7 @@ public:
 
 protected:
     /**
-     * Find a symbol from the DrawList and builds its pin list in m_sortedSymbolPinList.
+     * Find a symbol from the DrawList and builds its pin list.
      *
      * This list is sorted by pin number. The symbol is the next actual symbol after \a aSymbol.
      * Power symbols and virtual symbols that have their reference designators starting with
@@ -155,8 +155,8 @@ protected:
      * if aKeepUnconnectedPins = false, unconnected pins will be removed from list
      * but usually we need all pins in netlists.
      */
-    void CreatePinList( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPath,
-                        bool aKeepUnconnectedPins );
+    std::vector<PIN_INFO> CreatePinList( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPath,
+                                         bool aKeepUnconnectedPins );
 
     /**
      * Check if the given symbol should be processed for netlisting.
@@ -170,7 +170,7 @@ protected:
     SCH_SYMBOL* findNextSymbol( EDA_ITEM* aItem, SCH_SHEET_PATH* aSheetPath );
 
     /**
-     * Erase duplicate pins from m_sortedSymbolPinList (i.e. set pointer in this list to NULL).
+     * Erase duplicate pins.
      *
      * (This is a list of pins found in the whole schematic, for a single symbol.) These
      * duplicate pins were put in list because some pins (power pins...) are found more than
@@ -179,24 +179,18 @@ protected:
      * Note: this list *MUST* be sorted by pin number (.m_PinNum member value)
      * Also set the m_Flag member of "removed" NETLIST_OBJECT pin item to 1
      */
-    void eraseDuplicatePins();
+    void eraseDuplicatePins( std::vector<PIN_INFO>& pins );
 
     /**
      * Find all units for symbols with multiple symbols per package.
      *
      * Search the entire design for all units of \a aSymbol based on matching reference
-     * designator, and for each unit, add all its pins to the temporary sorted pin list,
-     * m_sortedSymbolPinList.
+     * designator, and for each unit, add all its pins to the sorted pin list.
      * if aKeepUnconnectedPins = false, unconnected pins will be removed from list
      * but usually we need all pins in netlists.
      */
     void findAllUnitsOfSymbol( SCH_SYMBOL* aSchSymbol, SCH_SHEET_PATH* aSheetPath,
-                               bool aKeepUnconnectedPins );
-
-    /// Used to temporarily store and filter the list of pins of a schematic symbol when
-    /// generating schematic symbol data in netlist (comp section). No ownership of members.
-    /// TODO(snh): Descope this object
-    std::vector<PIN_INFO> m_sortedSymbolPinList;
+                               std::vector<PIN_INFO>& aPins, bool aKeepUnconnectedPins );
 
     /// Used for "multiple symbols per package" symbols to avoid processing a lib symbol more than
     /// once
