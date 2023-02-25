@@ -1816,7 +1816,7 @@ void SIM_PLOT_FRAME::updateSignalsGrid()
 
     for( int row = 0; row < m_signalsGrid->GetNumberRows(); ++row )
     {
-        if( TRACE* trace = plot->GetTrace( getTraceName( row ) ) )
+        if( TRACE* trace = plot ? plot->GetTrace( getTraceName( row ) ) : nullptr )
         {
             m_signalsGrid->SetCellValue( row, COL_SIGNAL_SHOW, wxS( "1" ) );
 
