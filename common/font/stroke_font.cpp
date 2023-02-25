@@ -226,11 +226,8 @@ VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr
                                        bool aMirror, const VECTOR2I& aOrigin,
                                        TEXT_STYLE_FLAGS aTextStyle ) const
 {
-    constexpr double SPACE_WIDTH = 0.6;
+    constexpr int    TAB_WIDTH = 4;
     constexpr double INTER_CHAR = 0.2;
-    constexpr double TAB_WIDTH = 4 * 0.82;  // Not quite as wide as 5.1/6.0 tab formatting, but
-                                            // a better match for Scintilla, and closer to the
-                                            // nominal SPACE_WIDTH + INTER_CHAR
     constexpr double SUPER_SUB_SIZE_MULTIPLIER = 0.7;
     constexpr double SUPER_HEIGHT_OFFSET = 0.5;
     constexpr double SUB_HEIGHT_OFFSET = 0.3;
@@ -238,6 +235,8 @@ VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr
     VECTOR2I cursor( aPosition );
     VECTOR2D glyphSize( aSize );
     double   tilt = ( aTextStyle & TEXT_STYLE::ITALIC ) ? ITALIC_TILT : 0.0;
+    double   space_width = m_glyphBoundingBoxes->front().GetWidth(); // First char is space
+    int      char_count = 0;
 
     if( aTextStyle & TEXT_STYLE::SUBSCRIPT || aTextStyle & TEXT_STYLE::SUPERSCRIPT )
     {
@@ -251,18 +250,26 @@ VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr
 
     for( wxUniChar c : aText )
     {
-        // Handle tabs as locked to the nearest 4th column (in space-widths).
+        // Handle tabs as locked to the next 4th column (in base-widths).
         if( c == '\t' )
         {
-            int tabWidth = KiROUND( glyphSize.x * TAB_WIDTH );
-            int currentIntrusion = ( cursor.x - aOrigin.x ) % tabWidth;
+            char_count = ( char_count / TAB_WIDTH + 1 ) * TAB_WIDTH - 1;
 
-            cursor.x += tabWidth - currentIntrusion;
+            int new_cursor = aPosition.x + aSize.x * char_count
+                    + aSize.x * space_width;
+
+            while( new_cursor <= cursor.x )
+            {
+                char_count += TAB_WIDTH;
+                new_cursor += aSize.x * TAB_WIDTH;
+            }
+
+            cursor.x = new_cursor;
         }
         else if( c == ' ' )
         {
             // 'space' character - draw nothing, advance cursor position
-            cursor.x += KiROUND( glyphSize.x * SPACE_WIDTH );
+            cursor.x += KiROUND( glyphSize.x * space_width );
         }
         else
         {
@@ -293,6 +300,8 @@ VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr
 
             cursor.x += KiROUND( glyphExtents.x );
         }
+
+        ++char_count;
     }
 
     VECTOR2D barOffset( 0.0, 0.0 );
