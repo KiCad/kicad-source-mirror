@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-10 15:35-0800\n"
-"PO-Revision-Date: 2023-02-25 13:01+0000\n"
+"PO-Revision-Date: 2023-02-26 10:48+0000\n"
 "Last-Translator: turkce <turkceceviri@protonmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v7/tr/>\n"
 "Language: tr\n"
@@ -14587,6 +14587,9 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
+"Blok Kimliği %s (Blok adı: '%s') '%s' sayfasında çizilir, ancak tasarımdaki "
+"başka bir sayfaya bağlı değildir. KiCad, tüm sayfa sembollerinin bir "
+"sayfayla ilişkilendirilmesini gerektirir, bu nedenle blok yüklenmedi."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:2262
 #, c-format
@@ -14594,6 +14597,8 @@ msgid ""
 "The CADSTAR schematic might be corrupt: Block %s references a child sheet "
 "but has no Figure defined."
 msgstr ""
+"CADSTAR şeması bozulmuş olabilir:%s bloğu bir alt sayfaya başvurur, ancak "
+"tanımlanmış bir Rakamı yoktur."
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:80
 #, fuzzy, c-format
@@ -14603,12 +14608,12 @@ msgstr "%s resmi okunurken hata oluştu."
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:218
 #, c-format
 msgid "Could not load database library: settings file %s missing or invalid"
-msgstr ""
+msgstr "Veritabanı kitaplığı yüklenemedi: %s ayar dosyası eksik veya geçersiz"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:281
 #, c-format
 msgid "Could not load database library: could not connect to database %s (%s)"
-msgstr ""
+msgstr "Veritabanı kitaplığı yüklenemedi: %s (%s) veritabanına bağlanılamadı"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:438
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:3108
@@ -14622,6 +14627,8 @@ msgid ""
 "Error parsing Eagle file. Could not find '%s' instance but it is referenced "
 "in the schematic."
 msgstr ""
+"Kartal dosyası ayrıştırılırken hata oluştu. '%s' örneği bulunamadı, ancak "
+"şemada referans alınmıştır."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1642
 #, fuzzy, c-format
@@ -14638,7 +14645,7 @@ msgstr "'%s' kütüphane dosyası bulunamadı."
 #: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:1816
 #, c-format
 msgid "library %s does not contain a symbol named %s"
-msgstr ""
+msgstr "%s kitaplığı %s adlı bir simge içermiyor"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:188
 #, fuzzy
@@ -14747,7 +14754,7 @@ msgstr "Geçersiz"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1901
 msgid "Invalid title block comment number"
-msgstr ""
+msgstr "Geçersiz başlık bloğu yorum numarası"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2033
 #, fuzzy
@@ -14773,6 +14780,8 @@ msgid ""
 "Could not load sheet '%s' because it already appears as a direct ancestor in "
 "the schematic hierarchy."
 msgstr ""
+"Şematik hiyerarşide zaten doğrudan bir ata olarak göründüğü için '%s' "
+"sayfası yüklenemedi."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1520
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2169
@@ -14813,22 +14822,22 @@ msgstr "Sembol kitaplığı dosyası '%s' kaydedildi."
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin_helpers.cpp:257
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin_helpers.cpp:276
 msgid "unexpected end of line"
-msgstr ""
+msgstr "beklenmeyen satır sonu"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:370
 #, c-format
 msgid "'%s' does not appear to be an Eeschema file."
-msgstr ""
+msgstr "'%s' bir Eeschema dosyası gibi görünmüyor."
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:400
 msgid "Missing 'EELAYER END'"
-msgstr ""
+msgstr "Eksik 'EELAYER SONU'"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:448
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:719
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:729
 msgid "unexpected end of file"
-msgstr ""
+msgstr "beklenmeyen dosya sonu"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:683
 #, fuzzy
@@ -14842,11 +14851,11 @@ msgstr "Beklenmeyen '%s'"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1303
 msgid "symbol field text attributes must be 3 characters wide"
-msgstr ""
+msgstr "sembol alanı metin öznitelikleri 3 karakter genişliğinde olmalıdır"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin_helpers.cpp:222
 msgid "expected unquoted string"
-msgstr ""
+msgstr "beklenen alıntılanmamış dize"
 
 #: eeschema/sch_reference_list.cpp:690
 #, fuzzy, c-format
@@ -14889,6 +14898,8 @@ msgid ""
 "Schematic symbol reference '%s' library identifier is not valid. Unable to "
 "link library symbol."
 msgstr ""
+"Şematik sembol referansı '%s' kitaplık tanımlayıcısı geçerli değil. Kitaplık "
+"simgesi bağlanamıyor."
 
 #: eeschema/sch_screen.cpp:948
 #, c-format
@@ -14896,21 +14907,23 @@ msgid ""
 "Symbol library '%s' not found and no fallback cache library available.  "
 "Unable to link library symbol."
 msgstr ""
+"Sembol kitaplığı '%s' bulunamadı ve geri dönüş önbellek kitaplığı mevcut "
+"değil. Kitaplık simgesi bağlanamıyor."
 
 #: eeschema/sch_screen.cpp:967
 #, c-format
 msgid "I/O error %s resolving library symbol %s"
-msgstr ""
+msgstr "G/Ç hatası %s kitaplık simgesi çözümleniyor %s"
 
 #: eeschema/sch_screen.cpp:987
 #, c-format
 msgid "Falling back to cache to set symbol '%s:%s' link '%s'."
-msgstr ""
+msgstr "'%s:%s' link '%s' sembolünü ayarlamak için önbelleğe geri dönülüyor."
 
 #: eeschema/sch_screen.cpp:1019
 #, c-format
 msgid "No library symbol found for schematic symbol '%s %s'."
-msgstr ""
+msgstr "'%s %s' şematik sembolü için kitaplık sembolü bulunamadı."
 
 #: eeschema/sch_sheet.cpp:799
 msgid "Sheet Name"
@@ -15135,6 +15148,145 @@ msgid ""
 "<i>Note that markup has precedence over bus definitions.</i>\n"
 "\n"
 msgstr ""
+"<table>\n"
+"    <tr>\n"
+"        <th>Markup</th>\n"
+"        <th></th>\n"
+"        <th>Result</th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>^{superscript}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sup>superscript</sup>&nbsp;</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>Driver Board^{Rev A}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Driver Board<sup>Rev A</sup></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>_{subscript}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sub>subscript</sub>&nbsp;</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>15</sub></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td> &nbsp;<br><samp>~{overbar}</samp><br> "
+"&nbsp;<br><samp>~{CLK}</samp></td>\n"
+"        <td></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>CLK</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${variable}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>variable_value</i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${REVISION}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>2020.1</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> of symbol "
+"<i>refdes</i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>150K</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Bus Definition</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
+"        <th>Resultant Nets</th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>prefix[m..n]</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>prefixm to prefixn</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>D[0..7]</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>D0, D1, D2, D3, D4, D5, D6, D7</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>{SCL SDA}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>SCL, SDA</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>prefix{net1 net2 ...}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>prefix.net1, prefix.net2, ...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>USB1{D+ D-}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>USB1.D+, USB1.D-</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>MEM{D[1..2] LATCH}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br> <samp>MEM.D1, MEM.D2, MEM.LATCH</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
+"        <td></td>\n"
+"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"</table>\n"
+"<p></p>\n"
+"<p></p>\n"
+"<i>Note that markup has precedence over bus definitions.</i>\n"
+"\n"
 
 #: eeschema/sch_validators.cpp:101
 #, fuzzy, c-format
@@ -15208,7 +15360,7 @@ msgstr " veya "
 
 #: eeschema/sch_validators.cpp:188
 msgid "The reference designator cannot contain text variable references"
-msgstr ""
+msgstr "Referans belirteci metin değişkeni referansları içeremez"
 
 #: eeschema/sch_validators.cpp:195
 #, fuzzy
@@ -15217,11 +15369,12 @@ msgstr "Kitaplık Tanımlayıcı Doğrulama Hatası"
 
 #: eeschema/sch_validators.cpp:225
 msgid "Signal name contains '{' and '}' but is not a valid bus name"
-msgstr ""
+msgstr "Sinyal adı '{' ve '}' içerir, ancak geçerli bir veri yolu adı değildir"
 
 #: eeschema/sch_validators.cpp:230
 msgid "Signal name contains '[' or ']' but is not a valid bus name."
 msgstr ""
+"Sinyal adı '[' veya ']' içerir, ancak geçerli bir veri yolu adı değildir."
 
 #: eeschema/sheet.cpp:63
 #, c-format
@@ -15230,6 +15383,9 @@ msgid ""
 "the sheet '%s' or one of its subsheets as a parent somewhere in the "
 "schematic hierarchy."
 msgstr ""
+"Sayfa değişiklikleri yapılamaz, çünkü hedef sayfada zaten '%s' sayfası veya "
+"alt sayfalarından biri şematik hiyerarşide bir yerde üst sayfa olarak "
+"bulunur."
 
 #: eeschema/sheet.cpp:84
 #, c-format
@@ -15238,12 +15394,17 @@ msgid ""
 "symbol library table.  The project this schematic belongs to must first be "
 "remapped before it can be imported into the current project."
 msgstr ""
+"'%s' şemasının sembol kitaplığı bağlantıları sembol kitaplığı tablosuyla "
+"yeniden eşlenmemiştir. Bu şemanın ait olduğu proje, mevcut projeye "
+"aktarılmadan önce yeniden eşleştirilmelidir."
 
 #: eeschema/sheet.cpp:146
 msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheet schematics."
 msgstr ""
+"Şemanın tamamı yüklenemedi. Hiyerarşik sayfa şemaları yüklenmeye "
+"çalışılırken hatalar oluştu."
 
 #: eeschema/sheet.cpp:149
 #, fuzzy
@@ -15296,6 +15457,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"Seçili şemada geçerli proje kitaplığı tablosunda eksik olan kitaplık adları "
+"vardır. Bu, yüklenen şema için sembol kitaplığı referanslarının bozulmasına "
+"neden olabilir.\n"
+"\n"
+"Devam etmek istiyor musun?"
 
 #: eeschema/sheet.cpp:313
 msgid ""
@@ -15305,6 +15471,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"Seçilen dosya farklı bir projenin parçası olarak oluşturuldu. Dosyayı bu "
+"projeye bağlamak, eksik veya yanlış sembol kitaplığı başvurularına neden "
+"olabilir.\n"
+"\n"
+"Devam etmek istiyor musun?"
 
 #: eeschema/sheet.cpp:362
 msgid ""
@@ -15314,6 +15485,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"Seçili şemada, seçili şematik proje kitaplığı tablosunda eksik olan sembol "
+"kitaplığı adları vardır. Bu, sembol kitaplığı başvurularının bozulmasına "
+"neden olabilir.\n"
+"\n"
+"Devam etmek istiyor musun?"
 
 #: eeschema/sheet.cpp:423
 msgid ""
@@ -15323,6 +15499,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"Geçerli kitaplık tablosunda farklı bir kitaplığa başvuran yinelenen kitaplık "
+"adı bulunur. Bu çakışma çözülemez ve sembol kitaplığı başvurularının "
+"bozulmasına neden olabilir.\n"
+"\n"
+"Devam etmek istiyor musun?"
 
 #: eeschema/sheet.cpp:634
 #, c-format
@@ -15335,6 +15516,14 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"'%s' dosya adı, varolan bir dosya adıyla ilgili sorunlara neden olabilir\n"
+"vakayı destekleyen sistemlerde şemada zaten tanımlanmıştır\n"
+"duyarsız dosya adları. Bunu kopyalarsanız bu sorunlara neden olur\n"
+"büyük/küçük harfe duyarlı dosyayı destekleyen bir işletim sistemine "
+"yansıtma\n"
+"adlar.\n"
+"\n"
+"Devam etmek istiyor musun?"
 
 #: eeschema/sheet.cpp:643
 #, fuzzy
@@ -15354,16 +15543,16 @@ msgstr "Değişiklikleri At"
 #: eeschema/sim/kibis/ibis_parser.cpp:67 eeschema/sim/kibis/ibis_parser.cpp:96
 #: eeschema/sim/kibis/ibis_parser.cpp:119
 msgid "Dimension of matrices should be >= 1."
-msgstr ""
+msgstr "Matrislerin boyutu>= 1 olmalıdır."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:73
 msgid "Bandwidth of banded matrices should be >= 1."
-msgstr ""
+msgstr "Bantlı matrislerin bant genişliği> = 1 olmalıdır."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:81 eeschema/sim/kibis/ibis_parser.cpp:104
 #: eeschema/sim/kibis/ibis_parser.cpp:127
 msgid "There are NaN elements in a matrix."
-msgstr ""
+msgstr "Bir matriste NaN öğeleri vardır."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:162
 #, fuzzy
@@ -15432,7 +15621,7 @@ msgstr "Değişken adı boş olamaz."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:272
 msgid "Component: Invalid Package."
-msgstr ""
+msgstr "Bileşen: Geçersiz Paket."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:281
 #, fuzzy
@@ -15441,15 +15630,15 @@ msgstr "Eleman türü:"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:378
 msgid "Cannot interpolate the current based on this IV table."
-msgstr ""
+msgstr "Bu IV tablosuna dayanarak akımı enterpolasyon yapamaz."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:396
 msgid "There is a Nan voltage in an IV table"
-msgstr ""
+msgstr "IV tablosunda bir Nan voltajı vardır"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:403
 msgid "There is an invalid current in an IV table"
-msgstr ""
+msgstr "IV tablosunda geçersiz bir akım var"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:446
 #, fuzzy
@@ -15563,7 +15752,7 @@ msgstr "Dosya Adı"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:629
 msgid "The parser does not handle this IBIS version"
-msgstr ""
+msgstr "Ayrıştırıcı bu IBIS sürümünü işlemez"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:638
 #, fuzzy
@@ -15607,31 +15796,31 @@ msgstr "Bacak numarasını göster"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:734
 msgid "Resistance matrix is incorrect"
-msgstr ""
+msgstr "Direnç matrisi yanlış"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:745
 msgid "Capacitance matrix is undefined"
-msgstr ""
+msgstr "Kapasitans matrisi tanımsızdır"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:754
 msgid "Capacitance matrix is incorrect"
-msgstr ""
+msgstr "Kapasitans matrisi yanlış"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:763
 msgid "Capacitance matrix is nullptr"
-msgstr ""
+msgstr "Kapasitans matrisi nullptr"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:774
 msgid "Inductance matrix is undefined"
-msgstr ""
+msgstr "Endüktans matrisi tanımsızdır"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:783
 msgid "Inductance matrix is incorrect"
-msgstr ""
+msgstr "Endüktans matrisi yanlış"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:792
 msgid "Inductance matrix is nullptr"
-msgstr ""
+msgstr "Endüktans matrisi nullptr"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:808
 #, fuzzy
@@ -15640,7 +15829,7 @@ msgstr "'%s' dosyası açılamıyor"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:832
 msgid "Unexpected end of file. Missing [END] ?"
-msgstr ""
+msgstr "Beklenmeyen dosya sonu. Eksik [SON] ?"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:844
 #, fuzzy
@@ -15649,12 +15838,12 @@ msgstr "Paket indirilirken hata oluştu"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:872
 msgid "A line did not end properly."
-msgstr ""
+msgstr "Bir çizgi düzgün bitmedi."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1008
 #: eeschema/sim/kibis/ibis_parser.cpp:1025
 msgid "Line exceeds maximum length."
-msgstr ""
+msgstr "Hat maksimum uzunluğu aşıyor."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1051
 #, fuzzy
@@ -15684,11 +15873,11 @@ msgstr "Sıcaklık artışı"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1201
 msgid "Invalid syntax. Should be |_char or &_char, etc..."
-msgstr ""
+msgstr "Geçersiz sözdizimi. |_char veya &_char vb. Olmalıdır..."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1212
 msgid "No extra argument was expected"
-msgstr ""
+msgstr "Fazladan bir tartışma beklenmiyordu"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1364
 #, fuzzy
@@ -15697,7 +15886,7 @@ msgstr "'%s' içinde bilinmeyen düğüm '%s'"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1364
 msgid " context: "
-msgstr ""
+msgstr " bağlam: "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1430
 #, fuzzy
@@ -15706,7 +15895,7 @@ msgstr "Geçersiz sinyal adı"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1514
 msgid "Cannot specify a bandwidth for that kind of matrix"
-msgstr ""
+msgstr "Bu tür bir matris için bant genişliği belirtilemiyor"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1533
 #, fuzzy
@@ -15715,20 +15904,20 @@ msgstr "Geçersiz arşiv dosyası biçimi."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1563
 msgid "Too much data for this matrix row."
-msgstr ""
+msgstr "Bu matris satırı için çok fazla veri var."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1571
 msgid "Too much data for this matrix."
-msgstr ""
+msgstr "Bu matris için çok fazla veri var."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1576
 #: eeschema/sim/kibis/ibis_parser.cpp:1609
 msgid "Can't read a matrix element"
-msgstr ""
+msgstr "Bir matris öğesi okunamıyor"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1614
 msgid "Can't read a matrix index"
-msgstr ""
+msgstr "Matris dizini okunamıyor"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1682
 #, fuzzy
@@ -15742,19 +15931,19 @@ msgstr "Kayıp ebeveyn"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1696
 msgid " Matrix is already init. But m_continue was not set ( internal error )"
-msgstr ""
+msgstr " Matrix zaten içinde. Ancak m_continue ayarlanmadı (dahili hata)"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1722
 msgid "Tried to read a row from an undefined matrix"
-msgstr ""
+msgstr "Tanımlanmamış bir matristen bir satır okumaya çalıştım"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1728
 msgid "matrix pointer is null"
-msgstr ""
+msgstr "matris işaretçisi boş"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1877
 msgid "Typ-Min-Max Values requires at least Typ."
-msgstr ""
+msgstr "Typ-Min-Max Değerleri en az Tür gerektirir."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1970
 #, fuzzy
@@ -15784,19 +15973,19 @@ msgstr "Özelliğin bilinmeyen üst öğesi"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2051
 msgid "Continued reading a model that did not begin. ( internal error )"
-msgstr ""
+msgstr "Başlamayan bir modeli okumaya devam edin. (dahili hata)"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2218
 msgid "A [Package] line requires exactly 4 elements."
-msgstr ""
+msgstr "Bir [Paket] satırı tam olarak 4 öğe gerektirir."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2271
 msgid "Invalid pin entry: 6 values from a table with only 3."
-msgstr ""
+msgstr "Geçersiz pın girişi: Yalnızca 3 olan bir tablodan 6 değer."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2281
 msgid "Can't read a R, L or C value for a pin."
-msgstr ""
+msgstr "Bir pın için R, L veya C değeri okunamıyor."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2304
 #, fuzzy
