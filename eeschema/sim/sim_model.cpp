@@ -859,8 +859,10 @@ void SIM_MODEL::doSetParamValue( int aParamIndex, const std::string& aValue )
 void SIM_MODEL::SetParamValue( int aParamIndex, const std::string& aValue,
                                SIM_VALUE::NOTATION aNotation )
 {
-    // Note: also converts decimal separators to '.'
-    std::string value = SIM_VALUE::ConvertNotation( aValue, aNotation, SIM_VALUE::NOTATION::SI );
+    std::string value = aValue;
+
+    if( aNotation != SIM_VALUE::NOTATION::SI || aValue.find( ',' ) >= 0 )
+        value = SIM_VALUE::ConvertNotation( value, aNotation, SIM_VALUE::NOTATION::SI );
 
     doSetParamValue( aParamIndex, value );
 }

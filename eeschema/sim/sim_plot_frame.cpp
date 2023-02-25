@@ -1138,6 +1138,20 @@ wxString SIM_PLOT_FRAME::getTraceName( int aRow )
 }
 
 
+/**
+ * AC-small-signal analyses have two traces per signal, so we suffix the names.
+ */
+wxString SIM_PLOT_FRAME::getTraceTitle( const wxString& aName, SIM_TRACE_TYPE aTraceType )
+{
+    if( aTraceType & SPT_AC_MAG )
+        return aName + _( " (gain)" );
+    else if( aTraceType & SPT_AC_PHASE )
+        return aName + _( " (phase)" );
+    else
+        return aName;
+}
+
+
 void SIM_PLOT_FRAME::onSignalsGridCellChanged( wxGridEvent& aEvent )
 {
     if( m_SuppressGridEvents > 0 )
@@ -1694,13 +1708,8 @@ void SIM_PLOT_FRAME::updateTrace( const wxString& aName, SIM_TRACE_TYPE aTraceTy
     aTraceType = (SIM_TRACE_TYPE) ( aTraceType & SPT_Y_AXIS_MASK );
     aTraceType = (SIM_TRACE_TYPE) ( aTraceType | getXAxisType( simType ) );
 
-    wxString traceTitle = aName;
+    wxString traceTitle = getTraceTitle( aName, aTraceType );
     wxString vectorName = aName;
-
-    if( aTraceType & SPT_AC_MAG )
-        traceTitle += _( " (gain)" );
-    else if( aTraceType & SPT_AC_PHASE )
-        traceTitle += _( " (phase)" );
 
     if( aTraceType & SPT_POWER )
         vectorName = vectorName.AfterFirst( '(' ).BeforeLast( ')' ) + wxS( ":power" );
@@ -2233,7 +2242,7 @@ bool SIM_PLOT_FRAME::SaveWorkbook( const wxString& aPath )
         for( const auto& [name, trace] : plotPanel->GetTraces() )
         {
             file.AddLine( wxString::Format( wxT( "%d" ), trace->GetType() ) );
-            file.AddLine( trace->GetName() );
+            file.AddLine( getTraceTitle( trace->GetName(), trace->GetType() ) );
 
             wxString msg = COLOR4D( trace->GetTraceColour() ).ToCSSString();
 
@@ -2776,12 +2785,13 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
 
         struct TRACE_DESC
         {
-            wxString       m_name;    ///< Name of the measured net/device
+            wxString       m_name;    ///< Name of the measured SPICE vector
+            wxString       m_title;   ///< User-friendly signal name
             SIM_TRACE_TYPE m_type;    ///< Type of the signal
             bool           m_current;
         };
 
-        std::vector<struct TRACE_DESC> traceInfo;
+        std::vector<struct TRACE_DESC> placeholders;
 
         // Get information about all the traces on the plot; update those that are still in
         // the signals list and remove any that aren't
@@ -2789,27 +2799,28 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
         {
             struct TRACE_DESC placeholder;
             placeholder.m_name = trace->GetName();
+            placeholder.m_title = getTraceTitle( trace->GetName(), trace->GetType() );
             placeholder.m_type = trace->GetType();
             placeholder.m_current = false;
 
             for( const wxString& signal : m_signals )
             {
-                if( getTraceName( signal ) == placeholder.m_name )
+                if( getTraceName( signal ) == placeholder.m_title )
                 {
                     placeholder.m_current = true;
                     break;
                 }
             }
 
-            traceInfo.push_back( placeholder );
+            placeholders.push_back( placeholder );
         }
 
-        for( const struct TRACE_DESC& trace : traceInfo )
+        for( const struct TRACE_DESC& placeholder : placeholders )
         {
-            if( trace.m_current )
-                updateTrace( trace.m_name, trace.m_type, plotPanel );
+            if( placeholder.m_current )
+                updateTrace( placeholder.m_name, placeholder.m_type, plotPanel );
             else
-                removeTrace( trace.m_name );
+                removeTrace( placeholder.m_name );
         }
 
         rebuildSignalsGrid( m_filter->GetValue() );

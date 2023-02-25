@@ -269,6 +269,12 @@ private:
     wxString getTraceName( int aRow );
 
     /**
+     * AC-small-signal analyses have specific trace titles.  Other analyses use the raw signal
+     * names.
+     */
+     wxString getTraceTitle( const wxString& aSignalName, SIM_TRACE_TYPE aTraceType );
+
+    /**
      * Remove a plot with a specific title.
      *
      * @param aSignalName is the full plot title (e.g. I(Net-C1-Pad1)).
@@ -326,9 +332,6 @@ private:
         return dynamic_cast<SIM_PANEL_BASE*>( m_plotNotebook->GetCurrentPage() );
     }
 
-    /**
-     *
-     */
     /**
      * Return X axis for a given simulation type.
      */

@@ -563,6 +563,11 @@ void mpFXY::UpdateViewBoundary( wxCoord xnew, wxCoord ynew )
 
 void mpFXY::Plot( wxDC& dc, mpWindow& w )
 {
+    // If trace doesn't have any data yet then it won't have any scale set.  In any case, there's
+    // nothing to plot.
+    if( !GetCount() )
+        return;
+
     wxCHECK_RET( m_scaleX, wxS( "X scale was not set" ) );
 
     wxCHECK_RET( m_scaleY, wxS( "Y scale was not set" ) );
