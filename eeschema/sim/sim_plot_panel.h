@@ -309,7 +309,7 @@ public:
 
 private:
     ///< @brief Construct the plot axes for DC simulation plot.
-    void prepareDCAxes();
+    void prepareDCAxes( SIM_TRACE_TYPE aNewTraceType );
 
     ///> Create/Ensure axes are available for plotting
     void updateAxes( SIM_TRACE_TYPE aNewTraceType = SIM_TRACE_TYPE::SPT_UNKNOWN );

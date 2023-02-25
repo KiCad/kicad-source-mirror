@@ -488,7 +488,7 @@ void SIM_PLOT_PANEL::updateAxes( SIM_TRACE_TYPE aNewTraceType )
             break;
 
         case ST_DC:
-            prepareDCAxes();
+            prepareDCAxes( aNewTraceType );
             break;
 
         case ST_NOISE:
@@ -549,7 +549,7 @@ void SIM_PLOT_PANEL::updateAxes( SIM_TRACE_TYPE aNewTraceType )
     }
 }
 
-void SIM_PLOT_PANEL::prepareDCAxes()
+void SIM_PLOT_PANEL::prepareDCAxes( SIM_TRACE_TYPE aNewTraceType )
 {
     wxString sim_cmd = GetSimCommand().Lower();
     wxString rem;
@@ -634,6 +634,19 @@ void SIM_PLOT_PANEL::prepareDCAxes()
 
         m_axis_y1->SetName( _( "Voltage (measured)" ) );
         m_axis_y2->SetName( _( "Current" ) );
+
+        if( ( aNewTraceType & SPT_POWER ) && !m_axis_y3 )
+        {
+            m_plotWin->SetMargins( 35, 140, 35, 70 );
+
+            m_axis_y3 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "W" ), mpALIGN_FAR_RIGHT );
+            m_axis_y3->SetNameAlign( mpALIGN_FAR_RIGHT );
+            m_axis_y3->SetMasterScale( m_axis_y1 );
+            m_plotWin->AddLayer( m_axis_y3 );
+        }
+
+        if( m_axis_y3 )
+            m_axis_y3->SetName( _( "Power" ) );
     }
 }
 
@@ -688,7 +701,7 @@ TRACE* SIM_PLOT_PANEL::AddTrace( const wxString& aTitle, const wxString& aName,
 
     updateAxes( aType );
 
-    if( GetType() == ST_TRANSIENT )
+    if( GetType() == ST_TRANSIENT || GetType() == ST_DC )
     {
         bool hasVoltageTraces = false;
 
