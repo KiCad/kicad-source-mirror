@@ -53,10 +53,10 @@
 const wxString PartNameFieldName = "Part Name";
 
 
-void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
-                                       SCH_PLUGIN::SCH_PLUGIN_RELEASER* aSchPlugin,
-                                       const wxFileName& aLibraryFileName )
+void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet )
 {
+    wxCHECK( aSchematic );
+
     if( m_progressReporter )
         m_progressReporter->SetNumPhases( 3 ); // (0) Read file, (1) Parse file, (2) Load file
 
@@ -88,10 +88,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
     // Assume the center at 0,0 since we are going to be translating the design afterwards anyway
     m_designCenter = { 0, 0 };
 
-    m_schematic       = aSchematic;
-    m_rootSheet       = aRootSheet;
-    m_plugin          = aSchPlugin;
-    m_libraryFileName = aLibraryFileName;
+    m_schematic = aSchematic;
+    m_rootSheet = aRootSheet;
 
     if( m_progressReporter )
     {
@@ -414,12 +412,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadPartsLibrary()
 
         if( ok && part.Definition.GateSymbols.size() != 0 )
         {
-            ( *m_plugin )->SaveSymbol( m_libraryFileName.GetFullPath(), kiPart );
-
-            LIB_SYMBOL* loadedPart =
-                    ( *m_plugin )->LoadSymbol( m_libraryFileName.GetFullPath(), kiPart->GetName() );
-
-            m_partMap.insert( { partID, loadedPart } );
+            m_loadedSymbols.push_back( kiPart );
+            m_partMap.insert( { partID, kiPart } );
         }
         else
         {
@@ -636,7 +630,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
 
                     kiPart->GetReferenceField().SetText( "#PWR" );
                     kiPart->GetReferenceField().SetVisible( false );
-                    ( *m_plugin )->SaveSymbol( m_libraryFileName.GetFullPath(), kiPart );
+                    m_loadedSymbols.push_back( kiPart );
                     m_powerSymLibMap.insert( { libPartName, kiPart } );
                 }
                 else
@@ -1749,8 +1743,10 @@ SCH_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbol( const SYMBOL& aCads
                                                              const LIB_SYMBOL& aKiCadPart,
                                                              EDA_ANGLE& aComponentOrientation )
 {
-    LIB_ID  libId( m_libraryFileName.GetName(), aKiCadPart.GetName() );
-    int     unit = getKiCadUnitNumberFromGate( aCadstarSymbol.GateID );
+    LIB_ID libId;
+    libId.SetLibItemName( aKiCadPart.GetName() );
+
+    int unit = getKiCadUnitNumberFromGate( aCadstarSymbol.GateID );
 
     SCH_SHEET_PATH sheetpath;
     SCH_SHEET* kiSheet = m_sheetMap.at( aCadstarSymbol.LayerID );

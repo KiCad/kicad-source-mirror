@@ -62,7 +62,6 @@ public:
     {
         m_schematic = nullptr;
         m_rootSheet = nullptr;
-        m_plugin = nullptr;
         m_designCenter.x = 0;
         m_designCenter.y = 0;
         m_reporter = aReporter;
@@ -74,13 +73,14 @@ public:
     {
     }
 
+    const std::vector<LIB_SYMBOL*>& GetLoadedSymbols() const { return m_loadedSymbols; }
+
     /**
-     * @brief Loads a CADSTAR PCB Archive file into the KiCad BOARD object given
+     * @brief Loads a CADSTAR Schematic Archive file into the KiCad SCHEMATIC object given
      * @param aSchematic Schematic to add the design onto
      * @param aRootSheet Root sheet to add the design onto
      */
-    void Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
-            SCH_PLUGIN::SCH_PLUGIN_RELEASER* aSchPlugin, const wxFileName& aLibraryFileName );
+    void Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet );
 
 
 private:
@@ -96,8 +96,6 @@ private:
     REPORTER*                        m_reporter;
     SCHEMATIC*                       m_schematic;
     SCH_SHEET*                       m_rootSheet;
-    SCH_PLUGIN::SCH_PLUGIN_RELEASER* m_plugin;
-    wxFileName                       m_libraryFileName;
     wxPoint                          m_designCenter; ///< Used for calculating the required
                                                      ///< offset to apply to the Cadstar design
                                                      ///< so that it fits in KiCad canvas
@@ -105,6 +103,7 @@ private:
     std::map<BLOCK_PIN_ID, SCH_HIERLABEL*>
                                  m_sheetPinMap; ///< Map between Cadstar and KiCad Sheets Pins
     std::map<PART_ID, LIB_SYMBOL*> m_partMap;     ///< Map between Cadstar and KiCad Parts
+    std::vector<LIB_SYMBOL*> m_loadedSymbols; ///< Loaded symbols so far
     std::map<PART_GATE_ID, SYMDEF_ID> m_partSymbolsMap; ///< Map holding the symbols loaded so far
                                                         ///  for a particular PART_ID and GATE_ID
     std::map<PART_ID, TERMINAL_TO_PINNUM_MAP> m_pinNumsMap; ///< Map of pin numbers in CADSTAR parts

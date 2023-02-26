@@ -31,6 +31,7 @@
 #include <sch_screen.h>
 #include <sch_sheet.h>
 #include <schematic.h>
+#include <sch_plugins/kicad/sch_sexpr_plugin.h>
 #include <wildcards_and_files_ext.h>
 
 
@@ -61,7 +62,7 @@ int CADSTAR_SCH_ARCHIVE_PLUGIN::GetModifyHash() const
 SCH_SHEET* CADSTAR_SCH_ARCHIVE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchematic,
         SCH_SHEET* aAppendToMe, const STRING_UTF8_MAP* aProperties )
 {
-    wxASSERT( !aFileName || aSchematic != NULL );
+    wxCHECK( !aFileName.IsEmpty() && aSchematic, nullptr );
 
     SCH_SHEET* rootSheet = nullptr;
 
@@ -78,7 +79,6 @@ SCH_SHEET* CADSTAR_SCH_ARCHIVE_PLUGIN::Load( const wxString& aFileName, SCHEMATI
         aSchematic->SetRoot( rootSheet );
     }
 
-
     if( !rootSheet->GetScreen() )
     {
         SCH_SCREEN* screen = new SCH_SCREEN( aSchematic );
@@ -86,9 +86,13 @@ SCH_SHEET* CADSTAR_SCH_ARCHIVE_PLUGIN::Load( const wxString& aFileName, SCHEMATI
         rootSheet->SetScreen( screen );
     }
 
+    CADSTAR_SCH_ARCHIVE_LOADER csaLoader( aFileName, m_reporter, m_progressReporter );
+    csaLoader.Load( aSchematic, rootSheet );
+
+    // SAVE SYMBOLS TO PROJECT LIBRARY:
     SYMBOL_LIB_TABLE* libTable = aSchematic->Prj().SchSymbolLibTable();
 
-    wxCHECK_MSG( libTable, NULL, "Could not load symbol lib table." );
+    wxCHECK_MSG( libTable, nullptr, "Could not load symbol lib table." );
 
     // Lets come up with a nice library name
     wxString libName = aSchematic->Prj().GetProjectName();
@@ -104,8 +108,8 @@ SCH_SHEET* CADSTAR_SCH_ARCHIVE_PLUGIN::Load( const wxString& aFileName, SCHEMATI
 
     libName = LIB_ID::FixIllegalChars( libName, true );
 
-    wxFileName libFileName(
-            aSchematic->Prj().GetProjectPath(), libName, KiCadSymbolLibFileExtension );
+    wxFileName libFileName( aSchematic->Prj().GetProjectPath(), libName,
+                            KiCadSymbolLibFileExtension );
 
     SCH_PLUGIN::SCH_PLUGIN_RELEASER sch_plugin;
     sch_plugin.set( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
@@ -121,8 +125,8 @@ SCH_SHEET* CADSTAR_SCH_ARCHIVE_PLUGIN::Load( const wxString& aFileName, SCHEMATI
                 new SYMBOL_LIB_TABLE_ROW( libName, libTableUri, wxString( "KiCad" ) ) );
 
         // Save project symbol library table.
-        wxFileName fn(
-                aSchematic->Prj().GetProjectPath(), SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
+        wxFileName fn( aSchematic->Prj().GetProjectPath(),
+                       SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
 
         // So output formatter goes out of scope and closes the file before reloading.
         {
@@ -135,10 +139,30 @@ SCH_SHEET* CADSTAR_SCH_ARCHIVE_PLUGIN::Load( const wxString& aFileName, SCHEMATI
         aSchematic->Prj().SchSymbolLibTable();
     }
 
-    CADSTAR_SCH_ARCHIVE_LOADER csaFile( aFileName, m_reporter, m_progressReporter );
-    csaFile.Load( aSchematic, rootSheet, &sch_plugin, libFileName );
+    // set properties to prevent save file on every symbol save
+    STRING_UTF8_MAP properties;
+    properties.emplace( SCH_SEXPR_PLUGIN::PropBuffering, "" );
+
+    for( LIB_SYMBOL* const& symbol : csaLoader.GetLoadedSymbols() )
+        sch_plugin->SaveSymbol( libFileName.GetFullPath(), symbol, &properties );
 
     sch_plugin->SaveLibrary( libFileName.GetFullPath() );
+
+    // Link up all symbols in the design to the newly created library
+    for( SCH_SHEET_PATH& sheet : aSchematic->GetSheets() )
+    {
+        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL* sym = static_cast<SCH_SYMBOL*>( item );
+
+            if( sym->GetLibId().IsLegacy() )
+            {
+                LIB_ID libid = sym->GetLibId();
+                libid.SetLibNickname( libName );
+                sym->SetLibId( libid );
+            }
+        };
+    }
 
     // Need to fix up junctions after import to retain connectivity
     aSchematic->FixupJunctions();
