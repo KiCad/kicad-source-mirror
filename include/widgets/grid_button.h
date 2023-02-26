@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,20 +17,30 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "grid_tricks.h"
+#ifndef KICAD_GRID_BUTTON_H
+#define KICAD_GRID_BUTTON_H
 
-class LIB_TABLE_GRID_TRICKS : public GRID_TRICKS
+#include <wx/button.h>
+#include <wx/grid.h>
+
+
+class GRID_BUTTON_RENDERER : public wxGridCellRenderer
 {
-    enum
-    {
-        LIB_TABLE_GRID_TRICKS_ACTIVATE_SELECTED = GRIDTRICKS_FIRST_CLIENT_ID,
-        LIB_TABLE_GRID_TRICKS_DEACTIVATE_SELECTED,
-        LIB_TABLE_GRID_TRICKS_LIBRARY_SETTINGS
-    };
-
 public:
-    explicit LIB_TABLE_GRID_TRICKS( WX_GRID* aGrid );
+    GRID_BUTTON_RENDERER( const wxString& aLabel );
 
-    void showPopupMenu( wxMenu& menu, wxGridEvent& aEvent ) override;
-    void doPopupSelection( wxCommandEvent& event ) override;
+    virtual ~GRID_BUTTON_RENDERER() = default;
+
+    GRID_BUTTON_RENDERER* Clone() const override;
+
+    void Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDc, const wxRect& aRect,
+               int aRow, int aCol, bool aIsSelected ) override;
+
+    wxSize GetBestSize( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDc,
+                        int aRow, int aCol) override;
+
+private:
+    wxButton m_button;
 };
+
+#endif //KICAD_GRID_BUTTON_H

@@ -43,6 +43,7 @@ class LIB_TABLE_ROW;
 class LIB_TABLE_GRID;
 class LIB_TABLE;
 class IO_ERROR;
+class wxWindow;
 
 
 typedef boost::ptr_vector< LIB_TABLE_ROW > LIB_TABLE_ROWS;
@@ -129,6 +130,8 @@ public:
 
     void SetVisible( bool aVisible = true ) { visible = aVisible; }
 
+    virtual bool Refresh() { return false; }
+
     /**
      * Return the type of library represented by this row.
      */
@@ -139,6 +142,10 @@ public:
      * derived object to provide the library table row type.
      */
     virtual void SetType( const wxString& aType ) = 0;
+
+    virtual bool SupportsSettingsDialog() const { return false; }
+
+    virtual void ShowSettingsDialog( wxWindow* aParent ) const {}
 
     /**
      * Return the full location specifying URI for the LIB, either in original UI form or

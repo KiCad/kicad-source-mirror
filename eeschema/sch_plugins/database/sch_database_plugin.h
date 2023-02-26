@@ -94,10 +94,16 @@ public:
         m_libTable = aTable;
     }
 
+    DATABASE_LIB_SETTINGS* Settings() const { return m_settings.get(); }
+
+    bool TestConnection( wxString* aErrorMsg = nullptr );
+
 private:
     void ensureSettings( const wxString& aSettingsPath );
 
     void ensureConnection();
+
+    void connect();
 
     LIB_SYMBOL* loadSymbolFromRow( const wxString& aSymbolName,
                                    const DATABASE_LIB_TABLE& aTable,

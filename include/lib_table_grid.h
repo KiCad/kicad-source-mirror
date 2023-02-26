@@ -209,6 +209,11 @@ public:
         return false;
     }
 
+    LIB_TABLE_ROW* At( size_t aIndex )
+    {
+        return at( aIndex );
+    }
+
 protected:
     virtual LIB_TABLE_ROW* at( size_t aIndex ) = 0;
 

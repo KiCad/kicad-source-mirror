@@ -208,6 +208,20 @@ bool SCH_DATABASE_PLUGIN::CheckHeader( const wxString& aFileName )
 }
 
 
+bool SCH_DATABASE_PLUGIN::TestConnection( wxString* aErrorMsg )
+{
+    if( m_conn && m_conn->IsConnected() )
+        return true;
+
+    connect();
+
+    if( aErrorMsg && m_conn && !m_conn->IsConnected() )
+        *aErrorMsg = m_conn->GetLastError();
+
+    return m_conn && m_conn->IsConnected();
+}
+
+
 void SCH_DATABASE_PLUGIN::ensureSettings( const wxString& aSettingsPath )
 {
     auto tryLoad =
@@ -252,6 +266,24 @@ void SCH_DATABASE_PLUGIN::ensureConnection()
 {
     wxCHECK_RET( m_settings, "Call ensureSettings before ensureConnection!" );
 
+    connect();
+
+    if( !m_conn || !m_conn->IsConnected() )
+    {
+        wxString msg = wxString::Format(
+                    _( "Could not load database library: could not connect to database %s (%s)" ),
+                    m_settings->m_Source.dsn,
+                    m_conn->GetLastError() );
+
+        THROW_IO_ERROR( msg );
+    }
+}
+
+
+void SCH_DATABASE_PLUGIN::connect()
+{
+    wxCHECK_RET( m_settings, "Call ensureSettings before connect()!" );
+
     if( m_conn && !m_conn->IsConnected() )
         m_conn.reset();
 
@@ -278,14 +310,8 @@ void SCH_DATABASE_PLUGIN::ensureConnection()
 
         if( !m_conn->IsConnected() )
         {
-            wxString msg = wxString::Format(
-                    _( "Could not load database library: could not connect to database %s (%s)" ),
-                    m_settings->m_Source.dsn,
-                    m_conn->GetLastError() );
-
             m_conn.reset();
-
-            THROW_IO_ERROR( msg );
+            return;
         }
 
         m_conn->SetCacheParams( m_settings->m_Cache.max_size, m_settings->m_Cache.max_age );

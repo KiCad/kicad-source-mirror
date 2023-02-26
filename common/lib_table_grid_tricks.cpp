@@ -51,7 +51,17 @@ void LIB_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
     if( showDeactivate )
         menu.Append( LIB_TABLE_GRID_TRICKS_DEACTIVATE_SELECTED, _( "Deactivate selected" ) );
 
-    if( showActivate || showDeactivate )
+    bool showSettings = false;
+
+    if( m_sel_row_count == 1 && tbl->At( m_sel_row_start )->SupportsSettingsDialog() )
+    {
+        showSettings = true;
+        menu.Append( LIB_TABLE_GRID_TRICKS_LIBRARY_SETTINGS,
+                     wxString::Format( _( "Library settings for %s..." ),
+                                       tbl->GetValue( m_sel_row_start, 2 ) ) );
+    }
+
+    if( showActivate || showDeactivate || showSettings )
         menu.AppendSeparator();
 
     GRID_TRICKS::showPopupMenu( menu, aEvent );
@@ -61,12 +71,11 @@ void LIB_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 void LIB_TABLE_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
 {
     int menu_id = event.GetId();
+    LIB_TABLE_GRID* tbl = (LIB_TABLE_GRID*) m_grid->GetTable();
 
     if( menu_id == LIB_TABLE_GRID_TRICKS_ACTIVATE_SELECTED
         || menu_id == LIB_TABLE_GRID_TRICKS_DEACTIVATE_SELECTED )
     {
-        LIB_TABLE_GRID* tbl = (LIB_TABLE_GRID*) m_grid->GetTable();
-
         bool selected_state = menu_id == LIB_TABLE_GRID_TRICKS_ACTIVATE_SELECTED;
 
         for( int row = m_sel_row_start; row < m_sel_row_start + m_sel_row_count; ++row )
@@ -74,6 +83,12 @@ void LIB_TABLE_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
 
         // Ensure the new state (on/off) of the widgets is immediately shown:
         m_grid->Refresh();
+    }
+    else if( menu_id == LIB_TABLE_GRID_TRICKS_LIBRARY_SETTINGS )
+    {
+        LIB_TABLE_ROW* row = tbl->At( m_sel_row_start );
+        row->Refresh();
+        row->ShowSettingsDialog( m_grid->GetParent() );
     }
     else
     {

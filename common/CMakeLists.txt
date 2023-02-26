@@ -175,6 +175,7 @@ set( COMMON_WIDGET_SRCS
     widgets/footprint_select_widget.cpp
     widgets/gal_options_panel.cpp
     widgets/grid_bitmap_toggle.cpp
+    widgets/grid_button.cpp
     widgets/grid_color_swatch_helpers.cpp
     widgets/grid_combobox.cpp
     widgets/grid_icon_text_helpers.cpp

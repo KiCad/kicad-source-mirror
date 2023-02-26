@@ -80,9 +80,17 @@ public:
      * @return true if a reload was required.
      * @throw IO_ERROR if the reload was unsuccessful.
      */
-    bool Refresh();
+    bool Refresh() override;
 
     bool SupportsSubLibraries() const { return plugin ? plugin->SupportsSubLibraries() : false; }
+
+    bool SupportsSettingsDialog() const override
+    {
+        // Only database libraries have dialog-configurable options at the moment
+        return type == SCH_IO_MGR::SCH_FILE_T::SCH_DATABASE;
+    }
+
+    void ShowSettingsDialog( wxWindow* aWindow ) const override;
 
     void GetSubLibraryNames( std::vector<wxString>& aNames ) const;
 
