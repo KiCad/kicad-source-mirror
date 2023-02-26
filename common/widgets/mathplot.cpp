@@ -566,205 +566,212 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
 
     wxCHECK_RET( m_scaleY, wxS( "Y scale was not set" ) );
 
-    if( m_visible )
+    if( !m_visible )
+        return;
+
+    wxCoord startPx = m_drawOutsideMargins ? 0 : w.GetMarginLeft();
+    wxCoord endPx   = m_drawOutsideMargins ? w.GetScrX() : w.GetScrX() - w.GetMarginRight();
+    wxCoord minYpx  = m_drawOutsideMargins ? 0 : w.GetMarginTop();
+    wxCoord maxYpx  = m_drawOutsideMargins ? w.GetScrY() : w.GetScrY() - w.GetMarginBottom();
+
+    // Check for a collapsed window before we try to allocate a negative number of points
+    if( endPx <= startPx || minYpx >= maxYpx )
+        return;
+
+    dc.SetPen( m_pen );
+
+    double x, y;
+    // Do this to reset the counters to evaluate bounding box for label positioning
+    Rewind();
+    GetNextXY( x, y );
+    maxDrawX = x;
+    minDrawX = x;
+    maxDrawY = y;
+    minDrawY = y;
+    // drawnPoints = 0;
+    Rewind();
+
+    dc.SetClippingRegion( startPx, minYpx, endPx - startPx + 1, maxYpx - minYpx + 1 );
+
+    if( !m_continuous )
     {
-        dc.SetPen( m_pen );
+        bool first = true;
+        wxCoord ix = 0;
+        std::set<wxCoord> ys;
 
-        double x, y;
-        // Do this to reset the counters to evaluate bounding box for label positioning
-        Rewind(); GetNextXY( x, y );
-        maxDrawX = x; minDrawX = x; maxDrawY = y; minDrawY = y;
-        // drawnPoints = 0;
-        Rewind();
-
-        wxCoord startPx = m_drawOutsideMargins ? 0 : w.GetMarginLeft();
-        wxCoord endPx   = m_drawOutsideMargins ? w.GetScrX() : w.GetScrX() - w.GetMarginRight();
-        wxCoord minYpx  = m_drawOutsideMargins ? 0 : w.GetMarginTop();
-        wxCoord maxYpx  = m_drawOutsideMargins ? w.GetScrY() : w.GetScrY() - w.GetMarginBottom();
-
-        dc.SetClippingRegion( startPx, minYpx, endPx - startPx + 1, maxYpx - minYpx + 1 );
-
-        if( !m_continuous )
+        while( GetNextXY( x, y ) )
         {
-            bool first = true;
-            wxCoord ix = 0;
-            std::set<wxCoord> ys;
+            double px = m_scaleX->TransformToPlot( x );
+            double py = m_scaleY->TransformToPlot( y );
+            wxCoord newX = w.x2p( px );
 
-            while( GetNextXY( x, y ) )
+            if( first )
             {
-                double px = m_scaleX->TransformToPlot( x );
-                double py = m_scaleY->TransformToPlot( y );
-                wxCoord newX = w.x2p( px );
-
-                if( first )
-                {
-                    ix = newX;
-                    first = false;
-                }
-
-                if( newX == ix )    // continue until a new X coordinate is reached
-                {
-                    // collect all unique points
-                    ys.insert( w.y2p( py ) );
-                    continue;
-                }
-
-                for( auto& iy: ys )
-                {
-                    if( m_drawOutsideMargins
-                        || ( (ix >= startPx) && (ix <= endPx) && (iy >= minYpx)
-                             && (iy <= maxYpx) ) )
-                    {
-                        // for some reason DrawPoint does not use the current pen,
-                        // so we use DrawLine for fat pens
-                        if( m_pen.GetWidth() <= 1 )
-                        {
-                            dc.DrawPoint( ix, iy );
-                        }
-                        else
-                        {
-                            dc.DrawLine( ix, iy, ix, iy );
-                        }
-
-                        UpdateViewBoundary( ix, iy );
-                    }
-                }
-
-                ys.clear();
                 ix = newX;
+                first = false;
+            }
+
+            if( newX == ix )    // continue until a new X coordinate is reached
+            {
+                // collect all unique points
                 ys.insert( w.y2p( py ) );
+                continue;
             }
-        }
-        else
-        {
-            int count = 0;
-            int x0=0;               // X position of merged current vertical line
-            int ymin0=0;            // y min coord of merged current vertical line
-            int ymax0=0;            // y max coord of merged current vertical line
-            int dupx0 = 0;          // count of currently merged vertical lines
-            wxPoint line_start;     // starting point of the current line to draw
 
-            // A buffer to store coordinates of lines to draw
-            std::vector<wxPoint>pointList;
-            pointList.reserve( endPx - startPx + 1 );
-
-            // Note: we can use dc.DrawLines() only for a reasonable number or points (<10000),
-            // because at least on Windows dc.DrawLines() can hang for a lot of points.
-            // (> 10000 points) (can happens when a lot of points is calculated)
-            // To avoid long draw time (and perhaps hanging) one plot only not redundant lines.
-            // To avoid artifacts when skipping points to the same x coordinate, for each
-            // group of points at a give, x coordinate we also draw a vertical line at this coord,
-            // from the ymin to the ymax vertical coordinates of skipped points
-            while( GetNextXY( x, y ) )
+            for( auto& iy: ys )
             {
-                double px = m_scaleX->TransformToPlot( x );
-                double py = m_scaleY->TransformToPlot( y );
-
-                wxCoord x1 = w.x2p( px );
-                wxCoord y1 = w.y2p( py );
-
-                // Store only points on the drawing area, to speed up the drawing time
-                // Note: x1 is a value truncated from px by w.x2p(). So to be sure the
-                // first point is drawn, the x1 low limit is startPx-1 in plot coordinates
-                if( x1 >= startPx-1 && x1 <= endPx )
+                if( m_drawOutsideMargins
+                    || ( (ix >= startPx) && (ix <= endPx) && (iy >= minYpx) && (iy <= maxYpx) ) )
                 {
-                    if( !count || line_start.x != x1 )
-                    {
-                        if( count && dupx0 > 1 && ymin0 != ymax0 )
-                        {
-                            // Vertical points are merged, draw the pending vertical line
-                            // However, if the line is one pixel length, it is not drawn,
-                            // because the main trace show this point
-                            dc.DrawLine( x0, ymin0, x0, ymax0 );
-                        }
-
-                        x0 = x1;
-                        ymin0 = ymax0 = y1;
-                        dupx0 = 0;
-
-                        pointList.emplace_back( wxPoint( x1, y1 ) );
-
-                        line_start.x = x1;
-                        line_start.y = y1;
-                        count++;
-                    }
+                    // for some reason DrawPoint does not use the current pen, so we use
+                    // DrawLine for fat pens
+                    if( m_pen.GetWidth() <= 1 )
+                        dc.DrawPoint( ix, iy );
                     else
-                    {
-                        ymin0 = std::min( ymin0, y1 );
-                        ymax0 = std::max( ymax0, y1 );
-                        x0 = x1;
-                        dupx0++;
-                    }
+                        dc.DrawLine( ix, iy, ix, iy );
+
+                    UpdateViewBoundary( ix, iy );
                 }
             }
 
-            if( pointList.size() > 1 )
-            {
-                // For a better look (when using dashed lines) and more optimization,
-                // try to merge horizontal segments, in order to plot longer lines
-                // we are merging horizontal segments because this is easy,
-                // and horizontal segments are a frequent cases
-                std::vector<wxPoint> drawPoints;
-                drawPoints.reserve( endPx - startPx + 1 );
-
-                drawPoints.push_back( pointList[0] );   // push the first point in list
-
-                for( size_t ii = 1; ii < pointList.size()-1; ii++ )
-                {
-                    // Skip intermediate points between the first point and the last
-                    // point of the segment candidate
-                    if( drawPoints.back().y == pointList[ii].y &&
-                        drawPoints.back().y == pointList[ii+1].y )
-                        continue;
-                    else
-                        drawPoints.push_back( pointList[ii] );
-                }
-
-                // push the last point to draw in list
-                if( drawPoints.back() != pointList.back() )
-                    drawPoints.push_back( pointList.back() );
-
-                dc.DrawLines( drawPoints.size(), &drawPoints[0] );
-            }
+            ys.clear();
+            ix = newX;
+            ys.insert( w.y2p( py ) );
         }
+    }
+    else
+    {
+        int count = 0;
+        int x0=0;               // X position of merged current vertical line
+        int ymin0=0;            // y min coord of merged current vertical line
+        int ymax0=0;            // y max coord of merged current vertical line
+        int dupx0 = 0;          // count of currently merged vertical lines
+        wxPoint line_start;     // starting point of the current line to draw
 
-        if( !m_name.IsEmpty() && m_showName )
+        // A buffer to store coordinates of lines to draw
+        std::vector<wxPoint>pointList;
+        pointList.reserve( endPx - startPx + 1 );
+
+        // Note: we can use dc.DrawLines() only for a reasonable number or points (<10000),
+        // because at least on Windows dc.DrawLines() can hang for a lot of points.
+        // (> 10000 points) (can happens when a lot of points is calculated)
+        // To avoid long draw time (and perhaps hanging) one plot only not redundant lines.
+        // To avoid artifacts when skipping points to the same x coordinate, for each group of
+        // points at a give, x coordinate we also draw a vertical line at this coord, from the
+        // ymin to the ymax vertical coordinates of skipped points
+        while( GetNextXY( x, y ) )
         {
-            dc.SetFont( m_font );
+            double px = m_scaleX->TransformToPlot( x );
+            double py = m_scaleY->TransformToPlot( y );
 
-            wxCoord tx, ty;
-            dc.GetTextExtent( m_name, &tx, &ty );
+            wxCoord x1 = w.x2p( px );
+            wxCoord y1 = w.y2p( py );
 
-            // xxx implement else ... if (!HasBBox())
+            // Store only points on the drawing area, to speed up the drawing time
+            // Note: x1 is a value truncated from px by w.x2p(). So to be sure the first point
+            // is drawn, the x1 low limit is startPx-1 in plot coordinates
+            if( x1 >= startPx-1 && x1 <= endPx )
             {
-                // const int sx = w.GetScrX();
-                // const int sy = w.GetScrY();
+                if( !count || line_start.x != x1 )
+                {
+                    if( count && dupx0 > 1 && ymin0 != ymax0 )
+                    {
+                        // Vertical points are merged, draw the pending vertical line
+                        // However, if the line is one pixel length, it is not drawn, because
+                        // the main trace show this point
+                        dc.DrawLine( x0, ymin0, x0, ymax0 );
+                    }
 
-                if( (m_flags & mpALIGNMASK) == mpALIGN_NW )
-                {
-                    tx  = minDrawX + 8;
-                    ty  = maxDrawY + 8;
-                }
-                else if( (m_flags & mpALIGNMASK) == mpALIGN_NE )
-                {
-                    tx  = maxDrawX - tx - 8;
-                    ty  = maxDrawY + 8;
-                }
-                else if( (m_flags & mpALIGNMASK) == mpALIGN_SE )
-                {
-                    tx  = maxDrawX - tx - 8;
-                    ty  = minDrawY - ty - 8;
+                    x0 = x1;
+                    ymin0 = ymax0 = y1;
+                    dupx0 = 0;
+
+                    pointList.emplace_back( wxPoint( x1, y1 ) );
+
+                    line_start.x = x1;
+                    line_start.y = y1;
+                    count++;
                 }
                 else
                 {
-                    // mpALIGN_SW
-                    tx  = minDrawX + 8;
-                    ty  = minDrawY - ty - 8;
+                    ymin0 = std::min( ymin0, y1 );
+                    ymax0 = std::max( ymax0, y1 );
+                    x0 = x1;
+                    dupx0++;
+                }
+            }
+        }
+
+        if( pointList.size() > 1 )
+        {
+            // For a better look (when using dashed lines) and more optimization, try to merge
+            // horizontal segments, in order to plot longer lines
+            // We are merging horizontal segments because this is easy, and horizontal segments
+            // are a frequent cases
+            std::vector<wxPoint> drawPoints;
+            drawPoints.reserve( endPx - startPx + 1 );
+
+            drawPoints.push_back( pointList[0] );   // push the first point in list
+
+            for( size_t ii = 1; ii < pointList.size()-1; ii++ )
+            {
+                // Skip intermediate points between the first point and the last point of the
+                // segment candidate
+                if( drawPoints.back().y == pointList[ii].y &&
+                    drawPoints.back().y == pointList[ii+1].y )
+                {
+                    continue;
+                }
+                else
+                {
+                    drawPoints.push_back( pointList[ii] );
                 }
             }
 
-            dc.DrawText( m_name, tx, ty );
+            // push the last point to draw in list
+            if( drawPoints.back() != pointList.back() )
+                drawPoints.push_back( pointList.back() );
+
+            dc.DrawLines( drawPoints.size(), &drawPoints[0] );
         }
+    }
+
+    if( !m_name.IsEmpty() && m_showName )
+    {
+        dc.SetFont( m_font );
+
+        wxCoord tx, ty;
+        dc.GetTextExtent( m_name, &tx, &ty );
+
+        // xxx implement else ... if (!HasBBox())
+        {
+            // const int sx = w.GetScrX();
+            // const int sy = w.GetScrY();
+
+            if( (m_flags & mpALIGNMASK) == mpALIGN_NW )
+            {
+                tx  = minDrawX + 8;
+                ty  = maxDrawY + 8;
+            }
+            else if( (m_flags & mpALIGNMASK) == mpALIGN_NE )
+            {
+                tx  = maxDrawX - tx - 8;
+                ty  = maxDrawY + 8;
+            }
+            else if( (m_flags & mpALIGNMASK) == mpALIGN_SE )
+            {
+                tx  = maxDrawX - tx - 8;
+                ty  = minDrawY - ty - 8;
+            }
+            else
+            {
+                // mpALIGN_SW
+                tx  = minDrawX + 8;
+                ty  = minDrawY - ty - 8;
+            }
+        }
+
+        dc.DrawText( m_name, tx, ty );
     }
 
     dc.DestroyClippingRegion();
