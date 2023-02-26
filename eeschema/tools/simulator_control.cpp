@@ -237,7 +237,10 @@ int SIMULATOR_CONTROL::ToggleGrid( const TOOL_EVENT& aEvent )
     SIM_PLOT_PANEL* plot = m_plotFrame->GetCurrentPlot();
 
     if( plot )
+    {
         plot->ShowGrid( !plot->IsGridShown() );
+        m_plotFrame->OnModify();
+    }
 
     return 0;
 }
@@ -248,7 +251,10 @@ int SIMULATOR_CONTROL::ToggleLegend( const TOOL_EVENT& aEvent )
     SIM_PLOT_PANEL* plot = m_plotFrame->GetCurrentPlot();
 
     if( plot )
+    {
         plot->ShowLegend( !plot->IsLegendShown() );
+        m_plotFrame->OnModify();
+    }
 
     return 0;
 }
@@ -259,7 +265,10 @@ int SIMULATOR_CONTROL::ToggleDottedSecondary( const TOOL_EVENT& aEvent )
     SIM_PLOT_PANEL* plot = m_plotFrame->GetCurrentPlot();
 
     if( plot )
+    {
         plot->SetDottedSecondary( !plot->GetDottedSecondary() );
+        m_plotFrame->OnModify();
+    }
 
     return 0;
 }

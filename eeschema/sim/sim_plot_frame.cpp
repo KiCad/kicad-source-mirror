@@ -1025,7 +1025,7 @@ void SIM_PLOT_FRAME::StartSimulation()
     if( !plotWindow )
     {
         plotWindow = NewPlotPanel( schTextSimCommand, m_circuitModel->GetSimOptions() );
-        m_workbookModified = true;
+        OnModify();
     }
     else
     {
@@ -1039,7 +1039,7 @@ void SIM_PLOT_FRAME::StartSimulation()
             {
                 m_circuitModel->SetSimCommandOverride( wxEmptyString );
                 plotWindow->SetSimCommand( schTextSimCommand );
-                m_workbookModified = true;
+                OnModify();
             }
         }
     }
@@ -1094,6 +1094,7 @@ SIM_PANEL_BASE* SIM_PLOT_FRAME::NewPlotPanel( const wxString& aSimCommand, int a
 
     m_plotNotebook->AddPage( dynamic_cast<wxWindow*>( plotPanel ), pageTitle, true );
 
+    OnModify();
     return plotPanel;
 }
 
@@ -1171,7 +1172,7 @@ void SIM_PLOT_FRAME::onSignalsGridCellChanged( wxGridEvent& aEvent )
 
         // Update enabled/visible states of other controls
         updateSignalsGrid();
-        m_workbookModified = true;
+        OnModify();
     }
     else if( col == COL_SIGNAL_COLOR )
     {
@@ -1183,7 +1184,7 @@ void SIM_PLOT_FRAME::onSignalsGridCellChanged( wxGridEvent& aEvent )
             trace->SetTraceColour( color.ToColour() );
             plot->UpdateTraceStyle( trace );
             plot->UpdatePlotColors();
-            m_workbookModified = true;
+            OnModify();
         }
     }
     else if( col == COL_CURSOR_1 || col == COL_CURSOR_2 )
@@ -1193,7 +1194,7 @@ void SIM_PLOT_FRAME::onSignalsGridCellChanged( wxGridEvent& aEvent )
             bool enable = ii == row && text == wxS( "1" );
 
             plot->EnableCursor( getTraceName( ii ), col == COL_CURSOR_1 ? 1 : 2, enable );
-            m_workbookModified = true;
+            OnModify();
         }
 
         // Update cursor checkboxes (which are really radio buttons)
@@ -1241,7 +1242,7 @@ void SIM_PLOT_FRAME::onCursorsGridCellChanged( wxGridEvent& aEvent )
             cursor2->SetCoordX( cursor1->GetCoords().x + value );
 
         updateCursors();
-        m_workbookModified = true;
+        OnModify();
     }
     else
     {
@@ -1261,7 +1262,7 @@ SPICE_VALUE_FORMAT SIM_PLOT_FRAME::GetMeasureFormat( int aRow ) const
 void SIM_PLOT_FRAME::SetMeasureFormat( int aRow, const SPICE_VALUE_FORMAT& aFormat )
 {
     m_measurementsGrid->SetCellValue( aRow, COL_MEASUREMENT_FORMAT, aFormat.ToString() );
-    m_workbookModified = true;
+    OnModify();
 }
 
 
@@ -1270,7 +1271,7 @@ void SIM_PLOT_FRAME::DeleteMeasurement( int aRow )
     if( aRow < ( m_measurementsGrid->GetNumberRows() - 1 ) )
     {
         m_measurementsGrid->DeleteRows( aRow, 1 );
-        m_workbookModified = true;
+        OnModify();
     }
 }
 
@@ -1289,7 +1290,7 @@ void SIM_PLOT_FRAME::onMeasurementsGridCellChanged( wxGridEvent& aEvent )
     if( col == COL_MEASUREMENT )
     {
         UpdateMeasurement( row );
-        m_workbookModified = true;
+        OnModify();
     }
     else
     {
@@ -1468,7 +1469,7 @@ void SIM_PLOT_FRAME::AddTuner( const SCH_SHEET_PATH& aSheetPath, SCH_SYMBOL* aSy
         m_sizerTuners->Add( tuner );
         m_tuners.push_back( tuner );
         m_panelTuners->Layout();
-        m_workbookModified = true;
+        OnModify();
     }
     catch( const KI_PARAM_ERROR& e )
     {
@@ -1517,7 +1518,7 @@ void SIM_PLOT_FRAME::RemoveTuner( TUNER_SLIDER* aTuner, bool aErase )
 
     aTuner->Destroy();
     m_panelTuners->Layout();
-    m_workbookModified = true;
+    OnModify();
 }
 
 
@@ -1554,7 +1555,7 @@ void SIM_PLOT_FRAME::AddMeasurement( const wxString& aCmd )
     SetMeasureFormat( row, { 3, wxS( "~V" ) } );
 
     UpdateMeasurement( row );
-    m_workbookModified = true;
+    OnModify();
 
     // Always leave at least one empty row for type-in:
     row = m_measurementsGrid->GetNumberRows() - 1;
@@ -1620,7 +1621,7 @@ void SIM_PLOT_FRAME::doAddPlot( const wxString& aName, SIM_TRACE_TYPE aType )
     }
 
     updateSignalsGrid();
-    m_workbookModified = true;
+    OnModify();
 }
 
 
@@ -1640,7 +1641,7 @@ void SIM_PLOT_FRAME::SetUserDefinedSignals( const std::vector<wxString>& aNewSig
     rebuildSignalsList();
     rebuildSignalsGrid( m_filter->GetValue() );
     updateSignalsGrid();
-    m_workbookModified = true;
+    OnModify();
 }
 
 
@@ -1691,7 +1692,7 @@ void SIM_PLOT_FRAME::removeTrace( const wxString& aSignalName )
     wxASSERT( plotPanel->TraceShown( aSignalName ) );
 
     if( plotPanel->DeleteTrace( aSignalName ) )
-        m_workbookModified = true;
+        OnModify();
 
     plotPanel->GetPlotWin()->Fit();
 
@@ -2122,6 +2123,18 @@ bool SIM_PLOT_FRAME::LoadWorkbook( const wxString& aPath )
                             m_cursorFormats[2][1].FromString( parts[2] );
                         }
                     }
+                    else if( item == wxS( "dottedSecondary" ) )
+                    {
+                        plotPanel->SetDottedSecondary( true );
+                    }
+                    else if( item == wxS( "showLegend" ) )
+                    {
+                        plotPanel->ShowLegend( true );
+                    }
+                    else if( item == wxS( "hideGrid" ) )
+                    {
+                        plotPanel->ShowGrid( false );
+                    }
                 }
 
                 plotPanel->UpdatePlotColors();
@@ -2269,6 +2282,15 @@ bool SIM_PLOT_FRAME::SaveWorkbook( const wxString& aPath )
                                          m_cursorFormats[2][1].ToString() );
             }
 
+            if( plotPanel->GetDottedSecondary() )
+                msg += wxS( "|dottedSecondary" );
+
+            if( plotPanel->IsLegendShown() )
+                msg += wxS( "|showLegend" );
+
+            if( !plotPanel->IsGridShown() )
+                msg += wxS( "|hideGrid" );
+
             file.AddLine( msg );
         }
     }
@@ -2390,7 +2412,7 @@ void SIM_PLOT_FRAME::onPlotDragged( wxAuiNotebookEvent& event )
 
 void SIM_PLOT_FRAME::onNotebookModified( wxCommandEvent& event )
 {
-    m_workbookModified = true;
+    OnModify();
     updateTitle();
 }
 
@@ -2457,7 +2479,7 @@ bool SIM_PLOT_FRAME::EditSimCommand()
             plotPanelWindow->SetSimOptions( newOptions );
         }
 
-        m_workbookModified = true;
+        OnModify();
         m_simulator->Init();
         return true;
     }
@@ -2645,7 +2667,7 @@ void SIM_PLOT_FRAME::updateCursors()
 void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& aEvent )
 {
     updateCursors();
-    m_workbookModified = true;
+    OnModify();
 }
 
 
@@ -2927,6 +2949,13 @@ void SIM_PLOT_FRAME::onSimReport( wxCommandEvent& aEvent )
 void SIM_PLOT_FRAME::onExit( wxCommandEvent& event )
 {
     Kiway().OnKiCadExit();
+}
+
+
+void SIM_PLOT_FRAME::OnModify()
+{
+    KIWAY_PLAYER::OnModify();
+    m_workbookModified = true;
 }
 
 

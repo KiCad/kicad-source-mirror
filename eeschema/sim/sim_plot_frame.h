@@ -234,6 +234,8 @@ public:
     // Simulator doesn't host a tool framework
     wxWindow* GetToolCanvas() const override { return nullptr; }
 
+    void OnModify() override;
+
 private:
     void setupTools();
     void doReCreateMenuBar() override;
