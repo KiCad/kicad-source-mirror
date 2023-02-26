@@ -642,13 +642,16 @@ void PCM_TASK_MANAGER::RunQueue( wxWindow* aParent )
             } );
 
     m_reporter->KeepRefreshing( true );
+
+    download_thread.join();
+    install_thread.join();
+
+    // Destroy the reporter only after the threads joined
+    // Incase the reporter terminated due to cancellation
     m_reporter->Destroy();
     m_reporter.reset();
 
     aParent->Raise();
-
-    download_thread.join();
-    install_thread.join();
 }
 
 
