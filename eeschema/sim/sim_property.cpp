@@ -185,7 +185,7 @@ bool SIM_STRING_PROPERTY::StringToValue( wxVariant& aVariant, const wxString& aT
 
     wxString text = aText;
 
-    if( allowEval() && m_needsEval && m_eval.Process( aText ) )
+    if( !aText.IsEmpty() && allowEval() && m_needsEval && m_eval.Process( aText ) )
     {
         double value = SIM_VALUE::ToDouble( m_eval.Result().ToStdString() );
 
