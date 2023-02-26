@@ -194,13 +194,13 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
             sheetBoundingBox.Merge( bbox );
         }
 
-        // Find the working grid of the original CADSTAR design
-        int grid = Assignments.Grids.WorkingGrid.Param1;
+        // Find the screen grid of the original CADSTAR design
+        int grid = Assignments.Grids.ScreenGrid.Param1;
 
-        if( Assignments.Grids.WorkingGrid.Type == GRID_TYPE::FRACTIONALGRID )
-            grid = grid / Assignments.Grids.WorkingGrid.Param2;
-        else if( Assignments.Grids.WorkingGrid.Param2 > grid )
-            grid = Assignments.Grids.WorkingGrid.Param2;
+        if( Assignments.Grids.ScreenGrid.Type == GRID_TYPE::FRACTIONALGRID )
+            grid = grid / Assignments.Grids.ScreenGrid.Param2;
+        else if( Assignments.Grids.ScreenGrid.Param2 > grid )
+            grid = Assignments.Grids.ScreenGrid.Param2;
 
         grid = getKiCadLength( grid );
 
