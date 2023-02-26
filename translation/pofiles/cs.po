@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-15 16:29-0800\n"
-"PO-Revision-Date: 2023-02-21 00:55+0000\n"
+"PO-Revision-Date: 2023-02-27 11:37+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -15729,7 +15729,7 @@ msgstr "Nový znak komentáře je neplatný."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1201
 msgid "Invalid syntax. Should be |_char or &_char, etc..."
-msgstr ""
+msgstr "Neplatná syntaxe. Mělo by to být |_char nebo &_char, atd..."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1212
 msgid "No extra argument was expected"
@@ -15749,7 +15749,7 @@ msgstr "Neplatná ramp data"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1514
 msgid "Cannot specify a bandwidth for that kind of matrix"
-msgstr ""
+msgstr "Nelze určit šířku pásma pro tento druh matice"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1533
 msgid "Invalid row in matrix"
@@ -15766,11 +15766,11 @@ msgstr "Příliš mnoho dat pro tuto matici."
 #: eeschema/sim/kibis/ibis_parser.cpp:1576
 #: eeschema/sim/kibis/ibis_parser.cpp:1609
 msgid "Can't read a matrix element"
-msgstr ""
+msgstr "Nelze číst prvek matice"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1614
 msgid "Can't read a matrix index"
-msgstr ""
+msgstr "Nelze číst index matice"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1682
 msgid "Unknown matrix type"
@@ -15783,18 +15783,20 @@ msgstr "Chybí typ matice"
 #: eeschema/sim/kibis/ibis_parser.cpp:1696
 msgid " Matrix is already init. But m_continue was not set ( internal error )"
 msgstr ""
+" Matice je již inicializována. Ale m_continue nebyl nastaven ( vnitřní chyba "
+")"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1722
 msgid "Tried to read a row from an undefined matrix"
-msgstr ""
+msgstr "Pokus o načtení řádku z nedefinované matice"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1728
 msgid "matrix pointer is null"
-msgstr ""
+msgstr "ukazatel matice je nula"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1877
 msgid "Typ-Min-Max Values requires at least Typ."
-msgstr ""
+msgstr "Hodnoty Typ-Min-MAX vyžadují alespoň Typ."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1970
 msgid "Unknown Model_type "
@@ -15819,15 +15821,15 @@ msgstr "Neznámá polarita "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2051
 msgid "Continued reading a model that did not begin. ( internal error )"
-msgstr ""
+msgstr "Pokračování čtení modelu, který nezačal. ( interní chyba )"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2218
 msgid "A [Package] line requires exactly 4 elements."
-msgstr ""
+msgstr "Řádek [balíček] vyžaduje přesně 4 prvky."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2271
 msgid "Invalid pin entry: 6 values from a table with only 3."
-msgstr ""
+msgstr "Neplatný vstup vývodu: 6 hodnot z tabulky s pouze 3."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2281
 msgid "Can't read a R, L or C value for a pin."
@@ -15843,7 +15845,7 @@ msgstr "V [Pin] chybí argument"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2346
 msgid "Wrong number of columns for pin mapping."
-msgstr ""
+msgstr "Chybný počet sloupců pro mapování vývodů."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2386
 msgid "Incorrect diff pin name"
@@ -15890,14 +15892,15 @@ msgid ""
 "Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
 "pdf"
 msgstr ""
+"Kibis zatím nepodporuje hodnoty DUT. https://ibis.org/summits/nov16a/chen.pdf"
 
 #: eeschema/sim/kibis/kibis.cpp:877
 msgid "Model has only one waveform pair, reduced accuracy"
-msgstr ""
+msgstr "Model má pouze jeden pár tvarů vlny, snížená přesnost"
 
 #: eeschema/sim/kibis/kibis.cpp:897 eeschema/sim/kibis/kibis.cpp:1102
 msgid "Driver needs at least a pullup or a pulldown"
-msgstr ""
+msgstr "Řadič vyžaduje alespoň jeden pullup nebo pulldown"
 
 #: eeschema/sim/kibis/kibis.cpp:1085 eeschema/sim/kibis/kibis.cpp:1094
 msgid ""
@@ -16434,15 +16437,15 @@ msgstr ""
 
 #: eeschema/symbol_checker.cpp:187
 msgid "<b>A Power Symbol should have only one unit</b><br><br>"
-msgstr ""
+msgstr "<b>Symbol napájení by měl mít pouze jednu jednotku</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:193
 msgid "<b>A Power Symbol should have no convert option</b><br><br>"
-msgstr ""
+msgstr "<b>Symbol napájení by neměl mít možnost převodu</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:199
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
-msgstr ""
+msgstr "<b>Symbol napájení by měl mít jen jeden vývod</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:208
 msgid ""
@@ -16455,6 +16458,8 @@ msgid ""
 "<b>Suspicious Power Symbol</b><br>Only invisible input power pins are "
 "automatically connected<br><br>"
 msgstr ""
+"<b>Podezřelý symbol napájení</b><br>Automaticky připojeny pouze neviditelné "
+"vstupní napájecí vývody<br><br>"
 
 #: eeschema/symbol_checker.cpp:240
 #, c-format
@@ -26912,7 +26917,7 @@ msgid "Solder paste relative clearance:"
 msgstr "Relativní izolační mezera pájecí pasty:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:317
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -27097,8 +27102,8 @@ msgid ""
 msgstr ""
 "To je poměr místní izolační mezery v jako procento šířky a výšky plošky pro "
 "toto pouzdro.\n"
-"Hodnota 10 znamená, že hodnota horizontální mezery je 10 procent šířky "
-"plošky a hodnota vertikální mezery je 10 procent výšky plošky.\n"
+"Hodnota 10 znamená, že hodnota horizontální mezery je 10% šířky plošky a "
+"hodnota vertikální mezery je 10% výšky plošky.\n"
 "Konečná hodnota izolační mezery je součtem této hodnoty a hodnoty izolační "
 "mezery.\n"
 "Záporná hodnota znamená, že maska je menší než velikost plošky.\n"
@@ -32989,9 +32994,8 @@ msgid "Running sliver detection on copper layers..."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:55
-#, fuzzy
 msgid "board setup solder mask min width"
-msgstr "Minimální šířka masky:"
+msgstr "nastavení desky pájecí maska min šířka"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:511
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:605
@@ -37013,23 +37017,20 @@ msgstr "Kulaté tvary:"
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:48
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:152
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:256
-#, fuzzy
 msgid "Best length:"
-msgstr "Délka sítě"
+msgstr "Nejlepší délka:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:60
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:164
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:268
-#, fuzzy
 msgid "Best height:"
-msgstr "Výška textu"
+msgstr "Nejlepší výška:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:72
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:176
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:280
-#, fuzzy
 msgid "Max length:"
-msgstr "Maximální délka"
+msgstr "Max délka:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:105
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:209
@@ -37057,9 +37058,8 @@ msgid "Curved"
 msgstr "Oblouk"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:138
-#, fuzzy
 msgid "Rect shapes:"
-msgstr "Vyplnit vybrané tvary"
+msgstr "Obdélníkové tvary:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:349
 #, fuzzy
@@ -39860,34 +39860,28 @@ msgstr ""
 "%s"
 
 #: pcbnew/tools/pcb_control.cpp:1416
-#, fuzzy
 msgid "Resolved clearance"
-msgstr "Izolační mezera zóny: %s."
+msgstr "Vyřešená izolační mezera"
 
 #: pcbnew/tools/pcb_control.cpp:1421
-#, fuzzy
 msgid "Actual clearance"
-msgstr "Izolační mezera:"
+msgstr "Aktuální izolační mezera"
 
 #: pcbnew/tools/pcb_control.cpp:1464
-#, fuzzy
 msgid "Resolved hole clearance"
-msgstr "Izolační mezera zóny: %s."
+msgstr "Vyřešená izolační mezera díry"
 
 #: pcbnew/tools/pcb_control.cpp:1469
-#, fuzzy
 msgid "Actual hole clearance"
-msgstr "Izolační mezera mezi dírami:"
+msgstr "Izolační mezera díry"
 
 #: pcbnew/tools/pcb_control.cpp:1502
-#, fuzzy
 msgid "Resolved edge clearance"
-msgstr "Izolační mezera zóny: %s."
+msgstr "Vyřešená izolační mezera okraje"
 
 #: pcbnew/tools/pcb_control.cpp:1507
-#, fuzzy
 msgid "Resolved margin clearance"
-msgstr "Izolační mezera zóny: %s."
+msgstr "Vyřešeno izolační mezera pro vrstvu \\ \"margin \\\""
 
 #: pcbnew/tools/pcb_control.cpp:1518
 msgid "Selected Items"
