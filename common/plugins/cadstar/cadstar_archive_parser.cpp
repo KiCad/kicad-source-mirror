@@ -486,18 +486,28 @@ void CADSTAR_ARCHIVE_PARSER::VERTEX::AppendToChain( SHAPE_LINE_CHAIN* aChainToAp
         const std::function<VECTOR2I( const VECTOR2I& )> aCadstarToKicadPointCallback,
         double aAccuracy ) const
 {
-    VECTOR2I endPoint = aCadstarToKicadPointCallback( End );
-
     if( Type == VERTEX_TYPE::POINT )
     {
-        aChainToAppendTo->Append( endPoint );
+        aChainToAppendTo->Append( aCadstarToKicadPointCallback( End ) );
         return;
     }
 
     wxCHECK_MSG( aChainToAppendTo->PointCount() > 0, /*void*/,
                  "Can't append an arc to vertex to an empty chain" );
 
-    VECTOR2I startPoint = aChainToAppendTo->GetPoint( -1 );
+    aChainToAppendTo->Append( BuildArc( aChainToAppendTo->GetPoint( -1 ), aCadstarToKicadPointCallback),
+                              aAccuracy );
+}
+
+
+SHAPE_ARC CADSTAR_ARCHIVE_PARSER::VERTEX::BuildArc( const VECTOR2I& aPrevPoint,
+        const std::function<VECTOR2I( const VECTOR2I& )> aCadstarToKicadPointCallback ) const
+{
+    wxCHECK_MSG( Type != VERTEX_TYPE::POINT, SHAPE_ARC(),
+                 "Can't build an arc for a straight segment!" );
+
+    VECTOR2I startPoint = aPrevPoint;
+    VECTOR2I endPoint = aCadstarToKicadPointCallback( End );
     VECTOR2I centerPoint;
 
     if( Type == VERTEX_TYPE::ANTICLOCKWISE_SEMICIRCLE || Type == VERTEX_TYPE::CLOCKWISE_SEMICIRCLE )
@@ -516,9 +526,8 @@ void CADSTAR_ARCHIVE_PARSER::VERTEX::AppendToChain( SHAPE_LINE_CHAIN* aChainToAp
         clockwise = !clockwise;
 
     SHAPE_ARC arc;
-    arc.ConstructFromStartEndCenter( startPoint, endPoint, centerPoint, clockwise );
 
-    aChainToAppendTo->Append( arc, aAccuracy );
+    return arc.ConstructFromStartEndCenter( startPoint, endPoint, centerPoint, clockwise );
 }
 
 

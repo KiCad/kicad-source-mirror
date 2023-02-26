@@ -165,16 +165,6 @@ private:
     wxString getNetName( const NET_SCH& aNet );
 
     //Helper functions for loading figures / graphical items
-    void loadGraphicStaightSegment( const VECTOR2I& aStartPoint, const VECTOR2I& aEndPoint,
-                                    const LINECODE_ID& aCadstarLineCodeID,
-                                    const LAYER_ID& aCadstarSheetID,
-                                    const SCH_LAYER_ID& aKiCadSchLayerID,
-                                    const VECTOR2I& aMoveVector = { 0, 0 },
-                                    const EDA_ANGLE& aRotation = ANGLE_0,
-                                    const double& aScalingFactor = 1.0,
-                                    const VECTOR2I& aTransformCentre = { 0, 0 },
-                                    const bool& aMirrorInvert = false );
-
     void loadShapeVertices( const std::vector<VERTEX>& aCadstarVertices,
                             LINECODE_ID aCadstarLineCodeID, LAYER_ID aCadstarSheetID,
                             SCH_LAYER_ID aKiCadSchLayerID, const VECTOR2I& aMoveVector = { 0, 0 },

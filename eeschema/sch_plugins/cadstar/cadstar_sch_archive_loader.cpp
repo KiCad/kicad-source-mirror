@@ -40,6 +40,7 @@
 #include <sch_junction.h>
 #include <sch_line.h>
 #include <sch_screen.h>
+#include <sch_shape.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_sheet_pin.h>
@@ -2033,36 +2034,6 @@ wxString CADSTAR_SCH_ARCHIVE_LOADER::getNetName( const NET_SCH& aNet )
 }
 
 
-void CADSTAR_SCH_ARCHIVE_LOADER::loadGraphicStaightSegment( const VECTOR2I& aStartPoint,
-                                                            const VECTOR2I& aEndPoint,
-                                                            const LINECODE_ID& aCadstarLineCodeID,
-                                                            const LAYER_ID& aCadstarSheetID,
-                                                            const SCH_LAYER_ID& aKiCadSchLayerID,
-                                                            const VECTOR2I& aMoveVector,
-                                                            const EDA_ANGLE& aRotation,
-                                                            const double& aScalingFactor,
-                                                            const VECTOR2I& aTransformCentre,
-                                                            const bool& aMirrorInvert )
-{
-    SCH_LINE* segment = new SCH_LINE();
-
-    segment->SetLayer( aKiCadSchLayerID );
-    segment->SetLineWidth( KiROUND( getLineThickness( aCadstarLineCodeID ) * aScalingFactor ) );
-    segment->SetLineStyle( getLineStyle( aCadstarLineCodeID ) );
-
-    //Apply transforms
-    VECTOR2I startPoint = applyTransform( aStartPoint, aMoveVector, aRotation, aScalingFactor,
-                                          aTransformCentre, aMirrorInvert );
-    VECTOR2I endPoint = applyTransform( aEndPoint, aMoveVector, aRotation, aScalingFactor,
-                                        aTransformCentre, aMirrorInvert );
-
-    segment->SetStartPoint( startPoint );
-    segment->SetEndPoint( endPoint );
-
-    loadItemOntoKiCadSheet( aCadstarSheetID, segment );
-}
-
-
 void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices( const std::vector<VERTEX>& aCadstarVertices,
                                                     LINECODE_ID aCadstarLineCodeID,
                                                     LAYER_ID aCadstarSheetID,
@@ -2073,68 +2044,58 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices( const std::vector<VERTEX>& a
                                                     const VECTOR2I& aTransformCentre,
                                                     const bool& aMirrorInvert )
 {
+    int lineWidth = KiROUND( getLineThickness( aCadstarLineCodeID ) * aScalingFactor );
+    PLOT_DASH_TYPE lineStyle = getLineStyle( aCadstarLineCodeID );
+
     const VERTEX* prev = &aCadstarVertices.at( 0 );
     const VERTEX* cur;
 
     wxASSERT_MSG( prev->Type == VERTEX_TYPE::POINT,
                   "First vertex should always be a point vertex" );
 
+    auto pointTransform =
+        [&]( const VECTOR2I& aV )
+        {
+            return applyTransform( getKiCadPoint( aV ), aMoveVector, aRotation,
+                                   aScalingFactor, aTransformCentre, aMirrorInvert );
+        };
+
     for( size_t ii = 1; ii < aCadstarVertices.size(); ii++ )
     {
         cur = &aCadstarVertices.at( ii );
 
-        VECTOR2I  startPoint = getKiCadPoint( prev->End );
-        VECTOR2I  endPoint = getKiCadPoint( cur->End );
-        VECTOR2I  centerPoint = getKiCadPoint( cur->Center );
-        bool      cw          = false;
-
-        if( cur->Type == VERTEX_TYPE::ANTICLOCKWISE_SEMICIRCLE
-                || cur->Type == VERTEX_TYPE::CLOCKWISE_SEMICIRCLE )
-        {
-            centerPoint = ( startPoint + endPoint ) / 2;
-        }
+        VECTOR2I transformedStartPoint = pointTransform( prev->End );
+        VECTOR2I transformedEndPoint = pointTransform( cur->End );
 
         switch( cur->Type )
         {
         case VERTEX_TYPE::CLOCKWISE_SEMICIRCLE:
         case VERTEX_TYPE::CLOCKWISE_ARC:
-            cw = true;
-            KI_FALLTHROUGH;
         case VERTEX_TYPE::ANTICLOCKWISE_SEMICIRCLE:
         case VERTEX_TYPE::ANTICLOCKWISE_ARC:
         {
-            EDA_ANGLE arcStartAngle( startPoint - centerPoint );
-            EDA_ANGLE arcEndAngle( endPoint - centerPoint );
-            EDA_ANGLE arcAngle = arcEndAngle - arcStartAngle;
+            SHAPE_ARC tempArc = cur->BuildArc( transformedStartPoint, pointTransform );
 
-            if( cw )
-                arcAngle = arcAngle.Normalize();
-            else
-                arcAngle = -arcAngle.Normalize();
+            SCH_SHAPE* arcShape = new SCH_SHAPE( SHAPE_T::ARC, lineWidth );
+            arcShape->SetArcGeometry( tempArc.GetP0(), tempArc.GetArcMid(), tempArc.GetP1() );
 
-            // TODO: Load as arc...
-
-            SHAPE_ARC        tempArc( centerPoint, startPoint, arcAngle );
-            SHAPE_LINE_CHAIN arcSegments = tempArc.ConvertToPolyline( ARC_ACCURACY );
-
-            // Load the arc as a series of piece-wise segments
-
-            for( int jj = 0; jj < arcSegments.SegmentCount(); jj++ )
-            {
-                VECTOR2I segStart = arcSegments.Segment( jj ).A;
-                VECTOR2I segEnd = arcSegments.Segment( jj ).B;
-
-                loadGraphicStaightSegment( segStart, segEnd, aCadstarLineCodeID, aCadstarSheetID,
-                                           aKiCadSchLayerID, aMoveVector, aRotation, aScalingFactor,
-                                           aTransformCentre, aMirrorInvert );
-            }
+            loadItemOntoKiCadSheet( aCadstarSheetID, arcShape );
         }
             break;
 
         case VERTEX_TYPE::POINT:
-            loadGraphicStaightSegment( startPoint, endPoint, aCadstarLineCodeID, aCadstarSheetID,
-                                       aKiCadSchLayerID, aMoveVector, aRotation, aScalingFactor,
-                                       aTransformCentre, aMirrorInvert );
+        {
+            SCH_LINE* segment = new SCH_LINE();
+
+            segment->SetLayer( aKiCadSchLayerID );
+            segment->SetLineWidth( lineWidth );
+            segment->SetLineStyle( lineStyle );
+
+            segment->SetStartPoint( transformedStartPoint );
+            segment->SetEndPoint( transformedEndPoint );
+
+            loadItemOntoKiCadSheet( aCadstarSheetID, segment );
+         }
             break;
 
         default:

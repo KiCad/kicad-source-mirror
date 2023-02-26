@@ -83,6 +83,7 @@ class wxXmlAttribute;
 class PROGRESS_REPORTER;
 class SHAPE_LINE_CHAIN;
 class SHAPE_POLY_SET;
+class SHAPE_ARC;
 
 /**
  * @brief Helper functions and common structures for CADSTAR PCB and Schematic archive files.
@@ -451,6 +452,10 @@ public:
         void AppendToChain( SHAPE_LINE_CHAIN* aChainToAppendTo,
                 const std::function<VECTOR2I( const VECTOR2I& )> aCadstarToKicadPointCallback,
                 double aAccuracy ) const;
+
+        SHAPE_ARC BuildArc( const VECTOR2I& aPrevPoint,
+                            const std::function<VECTOR2I( const VECTOR2I& )>
+                                    aCadstarToKicadPointCallback ) const;
     };
 
     /**
