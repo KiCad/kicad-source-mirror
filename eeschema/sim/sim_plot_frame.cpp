@@ -237,42 +237,42 @@ void SIGNALS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
 
     if( event.GetId() == MYID_MEASURE_MIN )
     {
-        for( wxString signal : signals )
+        for( const wxString& signal : signals )
             m_parent->AddMeasurement( wxString::Format( wxS( "MIN %s" ), signal ) );
     }
     else if( event.GetId() == MYID_MEASURE_MAX )
     {
-        for( wxString signal : signals )
+        for( const wxString& signal : signals )
             m_parent->AddMeasurement( wxString::Format( wxS( "MAX %s" ), signal ) );
     }
     else if( event.GetId() == MYID_MEASURE_AVG )
     {
-        for( wxString signal : signals )
+        for( const wxString& signal : signals )
             m_parent->AddMeasurement( wxString::Format( wxS( "AVG %s" ), signal ) );
     }
     else if( event.GetId() == MYID_MEASURE_RMS )
     {
-        for( wxString signal : signals )
+        for( const wxString& signal : signals )
             m_parent->AddMeasurement( wxString::Format( wxS( "RMS %s" ), signal ) );
     }
     else if( event.GetId() == MYID_MEASURE_PP )
     {
-        for( wxString signal : signals )
+        for( const wxString& signal : signals )
             m_parent->AddMeasurement( wxString::Format( wxS( "PP %s" ), signal ) );
     }
     else if( event.GetId() == MYID_MEASURE_MIN_AT )
     {
-        for( wxString signal : signals )
+        for( const wxString& signal : signals )
             m_parent->AddMeasurement( wxString::Format( wxS( "MIN_AT %s" ), signal ) );
     }
     else if( event.GetId() == MYID_MEASURE_MAX_AT )
     {
-        for( wxString signal : signals )
+        for( const wxString& signal : signals )
             m_parent->AddMeasurement( wxString::Format( wxS( "MAX_AT %s" ), signal ) );
     }
     else if( event.GetId() == MYID_MEASURE_INTEGRAL )
     {
-        for( wxString signal : signals )
+        for( const wxString& signal : signals )
             m_parent->AddMeasurement( wxString::Format( wxS( "INTEG %s" ), signal ) );
     }
     else
@@ -963,16 +963,7 @@ void SIM_PLOT_FRAME::rebuildSignalsList()
     // Add user-defined signals
     for( int ii = 0; ii < (int) m_userDefinedSignals.size(); ++ii )
     {
-        static wxRegEx  regEx( wxS( "(^|[^a-z0-9_])([VIP])\\(" ), wxRE_ICASE );
-        const wxString& signal = m_userDefinedSignals[ii];
-
-        if( regEx.Matches( signal ) )
-        {
-            wxString vecType = regEx.GetMatch( signal, 2 );
-            wxString spiceVecName = wxString::Format( wxS( "%s(user%d)" ), vecType, ii );
-
-            addSignal( signal, spiceVecName );
-        }
+        addSignal( m_userDefinedSignals[ii], wxString::Format( wxS( "user%d" ), ii ) );
     }
 
     std::sort( m_signals.begin(), m_signals.end(),
@@ -1133,12 +1124,6 @@ wxString SIM_PLOT_FRAME::getTraceName( const wxString& aSignalName )
 }
 
 
-wxString SIM_PLOT_FRAME::getTraceName( int aRow )
-{
-    return getTraceName( m_signalsGrid->GetCellValue( aRow, COL_SIGNAL_NAME ) );
-}
-
-
 /**
  * AC-small-signal analyses have two traces per signal, so we suffix the names.
  */
@@ -1165,10 +1150,35 @@ void SIM_PLOT_FRAME::onSignalsGridCellChanged( wxGridEvent& aEvent )
 
     if( col == COL_SIGNAL_SHOW )
     {
+        wxString  gainSuffix = _( " (gain)" );
+        wxString  phaseSuffix = _( " (phase)" );
+        wxString  signal = m_signalsGrid->GetCellValue( row, COL_SIGNAL_NAME );
+        wxUniChar firstChar = signal.Upper()[0];
+        wxString  traceName = getTraceName( signal );
+        int       traceType = SPT_UNKNOWN;
+
+        if( firstChar == 'V' )
+            traceType = SPT_VOLTAGE;
+        else if( firstChar == 'I' )
+            traceType = SPT_CURRENT;
+        else if( firstChar == 'P' )
+            traceType = SPT_POWER;
+
+        if( traceName.EndsWith( gainSuffix ) )
+        {
+            traceType |= SPT_AC_MAG;
+            traceName = traceName.Left( traceName.Length() - gainSuffix.Length() );
+        }
+        else if( traceName.EndsWith( phaseSuffix ) )
+        {
+            traceType |= SPT_AC_PHASE;
+            traceName = traceName.Left( traceName.Length() - phaseSuffix.Length() );
+        }
+
         if( text == wxS( "1" ) )
-            addTrace( getTraceName( row ) );
+            addTrace( traceName, (SIM_TRACE_TYPE) traceType );
         else
-            removeTrace( getTraceName( row ) );
+            removeTrace( traceName, (SIM_TRACE_TYPE) traceType );
 
         // Update enabled/visible states of other controls
         updateSignalsGrid();
@@ -1177,7 +1187,8 @@ void SIM_PLOT_FRAME::onSignalsGridCellChanged( wxGridEvent& aEvent )
     else if( col == COL_SIGNAL_COLOR )
     {
         KIGFX::COLOR4D color( m_signalsGrid->GetCellValue( row, COL_SIGNAL_COLOR ) );
-        TRACE*         trace = plot->GetTrace( getTraceName( row ) );
+        wxString       signal = m_signalsGrid->GetCellValue( row, COL_SIGNAL_NAME );
+        TRACE*         trace = plot->GetTrace( getTraceName( signal ) );
 
         if( trace )
         {
@@ -1191,9 +1202,11 @@ void SIM_PLOT_FRAME::onSignalsGridCellChanged( wxGridEvent& aEvent )
     {
         for( int ii = 0; ii < m_signalsGrid->GetNumberRows(); ++ii )
         {
-            bool enable = ii == row && text == wxS( "1" );
+            wxString signal = m_signalsGrid->GetCellValue( ii, COL_SIGNAL_NAME );
+            int      id = col == COL_CURSOR_1 ? 1 : 2;
+            bool     enable = ii == row && text == wxS( "1" );
 
-            plot->EnableCursor( getTraceName( ii ), col == COL_CURSOR_1 ? 1 : 2, enable );
+            plot->EnableCursor( signal, getTraceName( signal ), id, enable );
             OnModify();
         }
 
@@ -1627,10 +1640,17 @@ void SIM_PLOT_FRAME::doAddPlot( const wxString& aName, SIM_TRACE_TYPE aType )
 
 void SIM_PLOT_FRAME::SetUserDefinedSignals( const std::vector<wxString>& aNewSignals )
 {
-    for( const wxString& signal : m_userDefinedSignals )
+    SIM_PLOT_PANEL* plotPanel = GetCurrentPlot();
+
+    if( plotPanel )
     {
-        if( !alg::contains( aNewSignals, signal ) )
-            removeTrace( m_userDefinedSignalToSpiceVecName[ signal ] );
+        for( const wxString& signal : m_userDefinedSignals )
+        {
+            if( !alg::contains( aNewSignals, signal ) )
+                plotPanel->DeleteTrace( m_userDefinedSignalToSpiceVecName[ signal ] );
+        }
+
+        plotPanel->GetPlotWin()->Fit();
     }
 
     m_userDefinedSignals = aNewSignals;
@@ -1645,59 +1665,27 @@ void SIM_PLOT_FRAME::SetUserDefinedSignals( const std::vector<wxString>& aNewSig
 }
 
 
-void SIM_PLOT_FRAME::addTrace( const wxString& aSignalName )
+void SIM_PLOT_FRAME::addTrace( const wxString& aSignalName, SIM_TRACE_TYPE aTraceType )
 {
     if( aSignalName.IsEmpty() )
         return;
 
-    wxString  baseSignal = aSignalName;
-    wxString  gainSuffix = _( " (gain)" );
-    wxString  phaseSuffix = _( " (phase)" );
-    wxUniChar firstChar = aSignalName.Upper()[0];
-    int       traceType = SPT_UNKNOWN;
-
-    if( firstChar == 'V' )
-        traceType = SPT_VOLTAGE;
-    else if( firstChar == 'I' )
-        traceType = SPT_CURRENT;
-    else if( firstChar == 'P' )
-        traceType = SPT_POWER;
-
-    if( aSignalName.EndsWith( gainSuffix ) )
-    {
-        traceType |= SPT_AC_MAG;
-        baseSignal = aSignalName.Left( aSignalName.Length() - gainSuffix.Length() );
-    }
-    else if( aSignalName.EndsWith( phaseSuffix ) )
-    {
-        traceType |= SPT_AC_PHASE;
-        baseSignal = aSignalName.Left( aSignalName.Length() - phaseSuffix.Length() );
-    }
-
-    if( traceType != SPT_UNKNOWN )
-    {
-        if( SIM_PLOT_PANEL* plotPanel = GetCurrentPlot()  )
-            updateTrace( baseSignal, (SIM_TRACE_TYPE) traceType, plotPanel );
-    }
+    if( SIM_PLOT_PANEL* plotPanel = GetCurrentPlot() )
+        updateTrace( aSignalName, (SIM_TRACE_TYPE) aTraceType, plotPanel );
 }
 
 
-void SIM_PLOT_FRAME::removeTrace( const wxString& aSignalName )
+void SIM_PLOT_FRAME::removeTrace( const wxString& aSignalName, SIM_TRACE_TYPE aTraceType )
 {
-    SIM_PLOT_PANEL* plotPanel = GetCurrentPlot();
-
-    if( !plotPanel )
-        return;
-
-    wxASSERT( plotPanel->TraceShown( aSignalName ) );
-
-    if( plotPanel->DeleteTrace( aSignalName ) )
-        OnModify();
-
-    plotPanel->GetPlotWin()->Fit();
+    if( SIM_PLOT_PANEL* plotPanel = GetCurrentPlot() )
+    {
+        plotPanel->DeleteTrace( getTraceTitle( aSignalName, aTraceType ) );
+        plotPanel->GetPlotWin()->Fit();
+    }
 
     updateSignalsGrid();
     updateCursors();
+    OnModify();
 }
 
 
@@ -1817,7 +1805,9 @@ void SIM_PLOT_FRAME::updateSignalsGrid()
 
     for( int row = 0; row < m_signalsGrid->GetNumberRows(); ++row )
     {
-        if( TRACE* trace = plot ? plot->GetTrace( getTraceName( row ) ) : nullptr )
+        wxString signal = m_signalsGrid->GetCellValue( row, COL_SIGNAL_NAME );
+
+        if( TRACE* trace = plot ? plot->GetTrace( getTraceName( signal ) ) : nullptr )
         {
             m_signalsGrid->SetCellValue( row, COL_SIGNAL_SHOW, wxS( "1" ) );
 
@@ -2053,9 +2043,18 @@ bool SIM_PLOT_FRAME::LoadWorkbook( const wxString& aPath )
                 return false;
             }
 
-            param = file.GetNextLine();
+            wxString  baseName = name;
+            wxString  gainSuffix = _( " (gain)" );
+            wxString  phaseSuffix = _( " (phase)" );
 
-            addTrace( name );
+            if( baseName.EndsWith( gainSuffix ) )
+                baseName = baseName.Left( baseName.Length() - gainSuffix.Length() );
+            else if( baseName.EndsWith( phaseSuffix ) )
+                baseName = baseName.Left( baseName.Length() - phaseSuffix.Length() );
+
+            addTrace( baseName, (SIM_TRACE_TYPE) traceType );
+
+            param = file.GetNextLine();
 
             SIM_PLOT_PANEL* plotPanel = GetCurrentPlot();
             TRACE*          trace = plotPanel ? plotPanel->GetTrace( name ) : nullptr;
@@ -2063,17 +2062,16 @@ bool SIM_PLOT_FRAME::LoadWorkbook( const wxString& aPath )
             if( version >= 4 && trace )
             {
                 auto addCursor =
-                        []( int aCursorId, SIM_PLOT_PANEL* aPlotPanel, TRACE* aTrace, double x )
+                        [&]( int aCursorId, TRACE* aTrace, double x )
                         {
-                            CURSOR*   cursor = new CURSOR( aTrace, aPlotPanel );
-                            mpWindow* win = aPlotPanel->GetPlotWin();
+                            CURSOR* cursor = new CURSOR( aTrace, plotPanel );
 
-                            cursor->SetName( aTrace->GetName() );
+                            cursor->SetName( name );
                             cursor->SetPen( wxPen( aTrace->GetTraceColour() ) );
                             cursor->SetCoordX( x );
 
                             aTrace->SetCursor( aCursorId, cursor );
-                            win->AddLayer( cursor );
+                            plotPanel->GetPlotWin()->AddLayer( cursor );
                         };
 
                 wxArrayString items = wxSplit( param, '|' );
@@ -2097,7 +2095,7 @@ bool SIM_PLOT_FRAME::LoadWorkbook( const wxString& aPath )
                             parts[0].AfterFirst( '=' ).ToDouble( &val );
                             m_cursorFormats[0][0].FromString( parts[1] );
                             m_cursorFormats[0][1].FromString( parts[2] );
-                            addCursor( 1, plotPanel, trace, val );
+                            addCursor( 1, trace, val );
                         }
                     }
                     else if( item.StartsWith( wxS( "cursor2" ) ) )
@@ -2110,7 +2108,7 @@ bool SIM_PLOT_FRAME::LoadWorkbook( const wxString& aPath )
                             parts[0].AfterFirst( '=' ).ToDouble( &val );
                             m_cursorFormats[1][0].FromString( parts[1] );
                             m_cursorFormats[1][1].FromString( parts[2] );
-                            addCursor( 2, plotPanel, trace, val );
+                            addCursor( 2, trace, val );
                         }
                     }
                     else if( item.StartsWith( wxS( "cursorD" ) ) )
@@ -2165,6 +2163,28 @@ bool SIM_PLOT_FRAME::LoadWorkbook( const wxString& aPath )
     LoadSimulator();
 
     rebuildSignalsList();
+    
+    if( SIM_PLOT_PANEL* plotPanel = GetCurrentPlot() )
+    {
+        for( const auto& [ traceName, trace ] : plotPanel->GetTraces() )
+        {
+            for( int cursorId : { 1, 2 } )
+            {
+                if( CURSOR* cursor = trace->GetCursor( cursorId ) )
+                {
+                    for( const auto& [ signalName, vecName ] : m_userDefinedSignalToSpiceVecName )
+                    {
+                        if( vecName == traceName )
+                        {
+                            cursor->SetName( signalName );
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     rebuildSignalsGrid( m_filter->GetValue() );
     updateSignalsGrid();
     updateCursors();
@@ -2576,7 +2596,10 @@ void SIM_PLOT_FRAME::updateCursors()
     auto formatValue =
             [this]( double aValue, int aCursorId, int aCol ) -> wxString
             {
-                return SPICE_VALUE( aValue ).ToString( m_cursorFormats[ aCursorId ][ aCol ] );
+                if( !m_simFinished && aCol == 1 )
+                    return wxS( "--" );
+                else
+                    return SPICE_VALUE( aValue ).ToString( m_cursorFormats[ aCursorId ][ aCol ] );
             };
 
     for( const auto& [name, trace] : plotPanel->GetTraces() )
@@ -2843,7 +2866,7 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
             if( placeholder.m_current )
                 updateTrace( placeholder.m_name, placeholder.m_type, plotPanel );
             else
-                removeTrace( placeholder.m_name );
+                removeTrace( placeholder.m_name, placeholder.m_type );
         }
 
         rebuildSignalsGrid( m_filter->GetValue() );
@@ -2889,6 +2912,8 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
     }
 
     m_schematicFrame->RefreshOperatingPointDisplay();
+
+    updateCursors();
 
     for( int row = 0; row < m_measurementsGrid->GetNumberRows(); ++row )
         UpdateMeasurement( row );

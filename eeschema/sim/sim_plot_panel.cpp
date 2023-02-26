@@ -802,9 +802,10 @@ bool SIM_PLOT_PANEL::DeleteTrace( const wxString& aName )
 }
 
 
-void SIM_PLOT_PANEL::EnableCursor( const wxString& aName, int aCursorId, bool aEnable )
+void SIM_PLOT_PANEL::EnableCursor( const wxString& aSignalName, const wxString aTraceName,
+                                   int aCursorId, bool aEnable )
 {
-    TRACE* t = GetTrace( aName );
+    TRACE* t = GetTrace( aTraceName );
 
     if( t == nullptr || t->HasCursor( aCursorId ) == aEnable )
         return;
@@ -816,7 +817,7 @@ void SIM_PLOT_PANEL::EnableCursor( const wxString& aName, int aCursorId, bool aE
         int       width = win->GetXScreen() - win->GetMarginLeft() - win->GetMarginRight();
         int       center = win->GetMarginLeft() + KiROUND( width * ( aCursorId == 1 ? 0.4 : 0.6 ) );
 
-        cursor->SetName( aName );
+        cursor->SetName( aSignalName );
         cursor->SetX( center );
         cursor->SetPen( wxPen( m_colors.GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::CURSOR ) ) );
 

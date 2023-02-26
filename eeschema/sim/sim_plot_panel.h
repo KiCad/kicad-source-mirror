@@ -282,7 +282,7 @@ public:
     }
 
     ///< Toggle cursor for a particular trace.
-    void EnableCursor( const wxString& aName, int aCursorId, bool aEnable );
+    void EnableCursor( const wxString& aSignalName, const wxString aTraceName, int aCursorId, bool aEnable );
 
     ///< Reset scale ranges to fit the current traces.
     void ResetScales();

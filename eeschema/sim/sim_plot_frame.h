@@ -262,13 +262,12 @@ private:
      */
     void doAddPlot( const wxString& aName, SIM_TRACE_TYPE aType );
 
-    void addTrace( const wxString& aSignalName );
+    void addTrace( const wxString& aSignalName, SIM_TRACE_TYPE aType );
 
     /**
      * For user-defined traces we have a separate SPICE vector name.
      */
     wxString getTraceName( const wxString& aSignalName );
-    wxString getTraceName( int aRow );
 
     /**
      * AC-small-signal analyses have specific trace titles.  Other analyses use the raw signal
@@ -279,17 +278,16 @@ private:
     /**
      * Remove a plot with a specific title.
      *
-     * @param aSignalName is the full plot title (e.g. I(Net-C1-Pad1)).
+     * @param aName is the SPICE vector name, such as "I(Net-C1-Pad1)".
      */
-    void removeTrace( const wxString& aSignalName );
+    void removeTrace( const wxString& aName, SIM_TRACE_TYPE aTraceType );
 
     /**
      * Update a trace in a particular SIM_PLOT_PANEL.  If the panel does not contain the given
      * trace, then add it.
      *
-     * @param aName is the device/net name.
+     * @param aName is the SPICE vector name, such as "I(Net-C1-Pad1)".
      * @param aTraceType describes the type of plot.
-     * @param aParam is the parameter for the device/net (e.g. I, Id, V).
      * @param aPlotPanel is the panel that should receive the update.
      */
     void updateTrace( const wxString& aName, SIM_TRACE_TYPE aTraceType, SIM_PLOT_PANEL* aPlotPanel );
