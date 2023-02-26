@@ -55,35 +55,14 @@ const wxString PartNameFieldName = "Part Name";
 
 void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet )
 {
-    wxCHECK( aSchematic );
+    wxCHECK( aSchematic, /* void */ );
 
     if( m_progressReporter )
         m_progressReporter->SetNumPhases( 3 ); // (0) Read file, (1) Parse file, (2) Load file
 
     Parse();
 
-    LONGPOINT designLimit = Assignments.Settings.DesignLimit;
-
-    //Note: can't use getKiCadPoint() due VECTOR2I being int - need long long to make the check
-    long long designSizeXkicad = (long long) designLimit.x / KiCadUnitDivider;
-    long long designSizeYkicad = (long long) designLimit.y / KiCadUnitDivider;
-
-    // Max size limited by the positive dimension of VECTOR2I (which is an int)
-    constexpr long long maxDesignSizekicad = std::numeric_limits<int>::max();
-
-    if( designSizeXkicad > maxDesignSizekicad || designSizeYkicad > maxDesignSizekicad )
-    {
-        THROW_IO_ERROR( wxString::Format(
-                _( "The design is too large and cannot be imported into KiCad. \n"
-                   "Please reduce the maximum design size in CADSTAR by navigating to: \n"
-                   "Design Tab -> Properties -> Design Options -> Maximum Design Size. \n"
-                   "Current Design size: %.2f, %.2f millimeters. \n"
-                   "Maximum permitted design size: %.2f, %.2f millimeters.\n" ),
-                (double) designSizeXkicad / SCH_IU_PER_MM,
-                (double) designSizeYkicad / SCH_IU_PER_MM,
-                (double) maxDesignSizekicad / SCH_IU_PER_MM,
-                (double) maxDesignSizekicad / SCH_IU_PER_MM ) );
-    }
+    checkDesignLimits(); // Throws if error found
 
     // Assume the center at 0,0 since we are going to be translating the design afterwards anyway
     m_designCenter = { 0, 0 };
@@ -263,6 +242,33 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
 
     m_reporter->Report( _( "The CADSTAR design has been imported successfully.\n"
                            "Please review the import errors and warnings (if any)." ) );
+}
+
+
+void CADSTAR_SCH_ARCHIVE_LOADER::checkDesignLimits()
+{
+    LONGPOINT designLimit = Assignments.Settings.DesignLimit;
+
+    //Note: can't use getKiCadPoint() due VECTOR2I being int - need long long to make the check
+    long long designSizeXkicad = (long long) designLimit.x / KiCadUnitDivider;
+    long long designSizeYkicad = (long long) designLimit.y / KiCadUnitDivider;
+
+    // Max size limited by the positive dimension of VECTOR2I (which is an int)
+    constexpr long long maxDesignSizekicad = std::numeric_limits<int>::max();
+
+    if( designSizeXkicad > maxDesignSizekicad || designSizeYkicad > maxDesignSizekicad )
+    {
+        THROW_IO_ERROR( wxString::Format(
+                _( "The design is too large and cannot be imported into KiCad. \n"
+                   "Please reduce the maximum design size in CADSTAR by navigating to: \n"
+                   "Design Tab -> Properties -> Design Options -> Maximum Design Size. \n"
+                   "Current Design size: %.2f, %.2f millimeters. \n"
+                   "Maximum permitted design size: %.2f, %.2f millimeters.\n" ),
+                (double) designSizeXkicad / SCH_IU_PER_MM,
+                (double) designSizeYkicad / SCH_IU_PER_MM,
+                (double) maxDesignSizekicad / SCH_IU_PER_MM,
+                (double) maxDesignSizekicad / SCH_IU_PER_MM ) );
+    }
 }
 
 

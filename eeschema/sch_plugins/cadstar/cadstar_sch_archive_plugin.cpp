@@ -27,6 +27,8 @@
 #include <sch_plugins/cadstar/cadstar_sch_archive_loader.h>
 #include <sch_plugins/cadstar/cadstar_sch_archive_plugin.h>
 
+#include <lib_symbol.h>
+#include <progress_reporter.h>
 #include <string_utf8_map.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
@@ -43,13 +45,13 @@ const wxString CADSTAR_SCH_ARCHIVE_PLUGIN::GetName() const
 
 const wxString CADSTAR_SCH_ARCHIVE_PLUGIN::GetFileExtension() const
 {
-    return wxT( "csa" );
+    return CadstarSchematicFileExtension;
 }
 
 
 const wxString CADSTAR_SCH_ARCHIVE_PLUGIN::GetLibraryFileExtension() const
 {
-    return wxT( "lib" );
+    return CadstarPartsLibraryFileExtension;
 }
 
 
@@ -176,4 +178,64 @@ bool CADSTAR_SCH_ARCHIVE_PLUGIN::CheckHeader( const wxString& aFileName )
     // TODO: write a parser for the cpa header. For now assume it is valid
     // and throw exceptions when parsing
     return true;
+}
+
+
+void CADSTAR_SCH_ARCHIVE_PLUGIN::EnumerateSymbolLib( wxArrayString&         aSymbolNameList,
+                                                     const wxString&        aLibraryPath,
+                                                     const STRING_UTF8_MAP* aProperties )
+{
+    std::vector<LIB_SYMBOL*> symbols;
+    EnumerateSymbolLib( symbols, aLibraryPath, aProperties );
+
+    for( LIB_SYMBOL*& sym : symbols )
+        aSymbolNameList.Add( sym->GetName() );
+}
+
+
+void CADSTAR_SCH_ARCHIVE_PLUGIN::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
+                                                     const wxString&           aLibraryPath,
+                                                     const STRING_UTF8_MAP* aProperties )
+{
+    wxFileName fn( aLibraryPath );
+    fn.SetExt( "csa" );
+    fn.SetName( "symbol" );
+
+    CADSTAR_SCH_ARCHIVE_LOADER csaLoader( fn.GetFullPath(), m_reporter, m_progressReporter );
+
+    if( m_progressReporter )
+        m_progressReporter->SetNumPhases( 2 ); // (0) Read file, (1) Parse file
+
+    csaLoader.Parse();
+    printf( "symbols: %zd", csaLoader.Library.SymbolDefinitions.size() );
+}
+
+
+LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_PLUGIN::LoadSymbol( const wxString&        aLibraryPath,
+                                                    const wxString&        aAliasName,
+                                                    const STRING_UTF8_MAP* aProperties )
+{
+    return nullptr;
+}
+
+
+void CADSTAR_SCH_ARCHIVE_PLUGIN::GetAvailableSymbolFields( std::vector<wxString>& aNames )
+{
+    std::set<wxString> fieldNames;
+
+    for( auto& [libnameStr, libSymbol] : m_libCache )
+    {
+        std::vector<LIB_FIELD*> fields;
+        libSymbol->GetFields( fields );
+
+        for( LIB_FIELD* field : fields )
+        {
+            if( field->IsMandatory() )
+                continue;
+
+            fieldNames.insert( field->GetName() );
+        }
+    }
+
+    std::copy( fieldNames.begin(), fieldNames.end(), std::back_inserter( aNames ) );
 }

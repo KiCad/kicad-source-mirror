@@ -114,16 +114,8 @@ public:
         // If setting a filepath, attempt to auto-detect the format
         if( aCol == COL_URI )
         {
-            wxFileName fn( aValue );
-
-            for( SCH_IO_MGR::SCH_FILE_T piType : SCH_IO_MGR::SCH_FILE_T_vector )
-            {
-                if( SCH_IO_MGR::GetLibraryFileExtension( piType ).Lower() == fn.GetExt().Lower() )
-                {
-                    SetValue( aRow, COL_TYPE, SCH_IO_MGR::ShowType( piType ) );
-                    break;
-                }
-            }
+            SCH_IO_MGR::SCH_FILE_T pluginType = SCH_IO_MGR::GuessPluginTypeFromLibPath( aValue );
+            SetValue( aRow, COL_TYPE, SCH_IO_MGR::ShowType( pluginType ) );
         }
     }
 
@@ -216,6 +208,7 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
     pluginChoices.Add( SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_KICAD ) );
     pluginChoices.Add( SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_LEGACY ) );
     pluginChoices.Add( SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_DATABASE ) );
+    pluginChoices.Add( SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_CADSTAR_ARCHIVE ) );
 
     EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
 
@@ -549,14 +542,8 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
             m_cur_grid->SetCellValue( last_row, COL_NICKNAME, nickname );
 
             // attempt to auto-detect the plugin type
-            for( SCH_IO_MGR::SCH_FILE_T piType : SCH_IO_MGR::SCH_FILE_T_vector )
-            {
-                if( SCH_IO_MGR::GetLibraryFileExtension( piType ).Lower() == fn.GetExt().Lower() )
-                {
-                    m_cur_grid->SetCellValue( last_row, COL_TYPE, SCH_IO_MGR::ShowType( piType ) );
-                    break;
-                }
-            }
+            SCH_IO_MGR::SCH_FILE_T pluginType = SCH_IO_MGR::GuessPluginTypeFromLibPath( filePath );
+            m_cur_grid->SetCellValue( last_row, COL_TYPE, SCH_IO_MGR::ShowType( pluginType ) );
 
             // try to use path normalized to an environmental variable or project path
             wxString path = NormalizePath( filePath, &envVars, m_project->GetProjectPath() );

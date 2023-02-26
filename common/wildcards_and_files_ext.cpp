@@ -137,6 +137,7 @@ const std::string ProjectLocalSettingsFileExtension( "kicad_prl" );
 const std::string LegacySchematicFileExtension( "sch" );
 const std::string EagleSchematicFileExtension( "sch" );
 const std::string CadstarSchematicFileExtension( "csa" );
+const std::string CadstarPartsLibraryFileExtension( "lib" );
 const std::string KiCadSchematicFileExtension( "kicad_sch" );
 const std::string SpiceFileExtension( "cir" );
 const std::string CadstarNetlistFileExtension( "frp" );

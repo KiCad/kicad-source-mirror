@@ -122,6 +122,7 @@ extern const std::string ProjectLocalSettingsFileExtension;
 extern const std::string LegacySchematicFileExtension;
 extern const std::string EagleSchematicFileExtension;
 extern const std::string CadstarSchematicFileExtension;
+extern const std::string CadstarPartsLibraryFileExtension;
 extern const std::string KiCadSchematicFileExtension;
 extern const std::string SpiceFileExtension;
 extern const std::string CadstarNetlistFileExtension;

@@ -144,17 +144,18 @@ bool SYMBOL_EDIT_FRAME::LoadSymbol( const LIB_ID& aLibId, int aUnit, int aConver
 {
     LIB_ID libId = aLibId;
 
-    // Database library symbols can't be edited, so load the underlying chosen symbol
+    // Some libraries can't be edited, so load the underlying chosen symbol
     if( SYMBOL_LIB_TABLE_ROW* lib = m_libMgr->GetLibrary( aLibId.GetLibNickname() ) )
     {
-        if( lib->SchLibType() == SCH_IO_MGR::SCH_DATABASE )
+        if( lib->SchLibType() == SCH_IO_MGR::SCH_DATABASE
+            || lib->SchLibType() == SCH_IO_MGR::SCH_CADSTAR_ARCHIVE )
         {
             try
             {
-                LIB_SYMBOL* dbSym = Prj().SchSymbolLibTable()->LoadSymbol( aLibId );
+                LIB_SYMBOL* readOnlySym = Prj().SchSymbolLibTable()->LoadSymbol( aLibId );
 
-                if( dbSym && dbSym->GetSourceLibId().IsValid() )
-                    libId = dbSym->GetSourceLibId();
+                if( readOnlySym && readOnlySym->GetSourceLibId().IsValid() )
+                    libId = readOnlySym->GetSourceLibId();
             }
             catch( const IO_ERROR& ioe )
             {

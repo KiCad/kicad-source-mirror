@@ -156,15 +156,37 @@ const wxString SCH_IO_MGR::GetLibraryFileExtension( SCH_FILE_T aFileType )
 SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::GuessPluginTypeFromLibPath( const wxString& aLibPath )
 {
     SCH_FILE_T  ret = SCH_KICAD;        // default guess, unless detected otherwise.
-    wxFileName  fn( aLibPath );
+    wxFileName fn( aLibPath );
+    wxString   ext = fn.GetExt().Lower();
 
-    if( fn.GetExt() == LegacySymbolLibFileExtension )
+    // .lib is shared between CADSTAR and Legacy KiCad file formats. Let's read the header
+    if( ext == LegacySymbolLibFileExtension )
     {
-        ret = SCH_LEGACY;
+        for( SCH_FILE_T pluginType : { SCH_LEGACY, SCH_CADSTAR_ARCHIVE } )
+        {
+            SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( pluginType ) );
+
+            if( pi )
+            {
+                if( pi->CheckHeader( aLibPath ) )
+                    return pluginType;
+            }
+        }
+
     }
-    else if( fn.GetExt() == KiCadSymbolLibFileExtension )
+
+    for( SCH_IO_MGR::SCH_FILE_T piType : SCH_IO_MGR::SCH_FILE_T_vector )
     {
-        ret = SCH_KICAD;
+
+        if( ext == LegacySymbolLibFileExtension )
+        {
+            break;
+        }
+        else if( SCH_IO_MGR::GetLibraryFileExtension( piType ).Lower() == fn.GetExt().Lower() )
+        {
+            ret = piType;
+            break;
+        }
     }
 
     return ret;

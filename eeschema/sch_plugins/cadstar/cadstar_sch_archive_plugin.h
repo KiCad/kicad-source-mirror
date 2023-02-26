@@ -27,17 +27,26 @@
 #ifndef CADSTAR_SCH_ARCHIVE_PLUGIN_H_
 #define CADSTAR_SCH_ARCHIVE_PLUGIN_H_
 
-
+#include <map>
 #include <sch_io_mgr.h>
 #include <reporter.h>
 
 
+class LIB_SYMBOL;
 class SCH_SHEET;
 class SCH_SCREEN;
 
 class CADSTAR_SCH_ARCHIVE_PLUGIN : public SCH_PLUGIN
 {
 public:
+    CADSTAR_SCH_ARCHIVE_PLUGIN()
+    {
+        m_reporter = &WXLOG_REPORTER::GetInstance();
+        m_progressReporter = nullptr;
+    }
+
+    virtual ~CADSTAR_SCH_ARCHIVE_PLUGIN() {}
+
     const wxString GetName() const override;
 
     void SetReporter( REPORTER* aReporter ) override { m_reporter = aReporter; }
@@ -59,17 +68,29 @@ public:
 
     bool CheckHeader( const wxString& aFileName ) override;
 
-    CADSTAR_SCH_ARCHIVE_PLUGIN()
+    void EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
+                             const wxString&   aLibraryPath,
+                             const STRING_UTF8_MAP* aProperties = nullptr ) override;
+
+    void EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
+                             const wxString&           aLibraryPath,
+                             const STRING_UTF8_MAP*         aProperties = nullptr ) override;
+
+    LIB_SYMBOL* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
+                            const STRING_UTF8_MAP* aProperties = nullptr ) override;
+
+    void GetAvailableSymbolFields( std::vector<wxString>& aNames ) override;
+
+
+    // Writing to CADSTAR libraries is not supported
+    bool IsSymbolLibWritable( const wxString& aLibraryPath ) override
     {
-        m_reporter = &WXLOG_REPORTER::GetInstance();
-        m_progressReporter = nullptr;
+        return false;
     }
 
-    ~CADSTAR_SCH_ARCHIVE_PLUGIN()
-    {
-    }
 
 private:
+    std::map<wxString, LIB_SYMBOL*> m_libCache;
     REPORTER* m_reporter; // current reporter for warnings/errors
     PROGRESS_REPORTER* m_progressReporter;  // optional; may be nullptr
 };

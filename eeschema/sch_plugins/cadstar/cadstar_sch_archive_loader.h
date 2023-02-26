@@ -232,6 +232,8 @@ private:
                              const VECTOR2I&  aTransformCentre = { 0, 0 },
                              const bool&      aMirrorInvert = false );
 
+    void checkDesignLimits();
+
     int getKiCadLength( long long aCadstarLength )
     {
         int mod = aCadstarLength % KiCadUnitDivider;
