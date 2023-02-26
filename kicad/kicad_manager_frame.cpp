@@ -710,8 +710,7 @@ void KICAD_MANAGER_FRAME::OnOpenFileInTextEditor( wxCommandEvent& event )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    wxString filename = wxT( "\"" );
-    filename += dlg.GetPath() + wxT( "\"" );
+    wxString filename = dlg.GetPath();
 
     if( !dlg.GetPath().IsEmpty() && !Pgm().GetTextEditor().IsEmpty() )
         m_toolManager->RunAction( KICAD_MANAGER_ACTIONS::openTextEditor, true, &filename );
