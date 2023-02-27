@@ -264,7 +264,7 @@ public:
     /** Set layer name
      *  @param name Name, will be copied to internal class member
      */
-    void SetName( wxString name ) { m_name = name; }
+    virtual void SetName( wxString name ) { m_name = name; }
 
     /** Set layer font
      *  @param font Font, will be copied to internal class member

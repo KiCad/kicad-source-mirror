@@ -31,7 +31,7 @@
 
 
 DIALOG_USER_DEFINED_SIGNALS::DIALOG_USER_DEFINED_SIGNALS( SIM_PLOT_FRAME* aParent,
-                                                          std::vector<wxString>* aSignals ) :
+                                                          std::map<int, wxString>* aSignals ) :
         DIALOG_USER_DEFINED_SIGNALS_BASE( aParent ),
         m_frame( aParent ),
         m_signals( aSignals ),
@@ -39,8 +39,12 @@ DIALOG_USER_DEFINED_SIGNALS::DIALOG_USER_DEFINED_SIGNALS( SIM_PLOT_FRAME* aParen
 {
     m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
 
-    for( const wxString& signal : *m_signals )
-        addGridRow( signal );
+    wxGridCellAttr* attr = new wxGridCellAttr;
+    attr->SetReadOnly();
+    m_grid->SetColAttr( 1, attr );
+
+    for( const auto& [ id, signal ] : *m_signals )
+        addGridRow( signal, id );
 
     m_addButton->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
     m_deleteButton->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
@@ -72,12 +76,13 @@ bool DIALOG_USER_DEFINED_SIGNALS::TransferDataToWindow()
 }
 
 
-void DIALOG_USER_DEFINED_SIGNALS::addGridRow( const wxString& aText )
+void DIALOG_USER_DEFINED_SIGNALS::addGridRow( const wxString& aText, int aId )
 {
     int row = m_grid->GetNumberRows();
 
     m_grid->AppendRows();
     m_grid->SetCellValue( row, 0, aText );
+    m_grid->SetCellValue( row, 1, wxString::Format( wxS( "%d" ), aId ) );
 
     wxGridCellAttr* attr = new wxGridCellAttr;
     attr->SetEditor( new GRID_CELL_STC_EDITOR( true,
@@ -95,7 +100,18 @@ void DIALOG_USER_DEFINED_SIGNALS::onAddSignal( wxCommandEvent& event )
     if( !m_grid->CommitPendingChanges() )
         return;
 
-    addGridRow( wxEmptyString );
+    long newId = 0;
+
+    for( int ii = 0; ii < m_grid->GetNumberRows(); ++ii )
+    {
+        long usedId;
+        m_grid->GetCellValue( ii, 1 ).ToLong( &usedId );
+
+        if( usedId > newId )
+            newId = usedId + 1;
+    }
+
+    addGridRow( wxEmptyString, (int) newId );
 
     m_grid->MakeCellVisible( m_grid->GetNumberRows() - 1, 0 );
     m_grid->SetGridCursor( m_grid->GetNumberRows() - 1, 0 );
@@ -212,7 +228,16 @@ bool DIALOG_USER_DEFINED_SIGNALS::TransferDataFromWindow()
     m_signals->clear();
 
     for( int ii = 0; ii < m_grid->GetNumberRows(); ++ii )
-        m_signals->push_back( m_grid->GetCellValue( ii, 0 ) );
+    {
+        wxString signal = m_grid->GetCellValue( ii, 0 );
+
+        if( !signal.IsEmpty() )
+        {
+            long id;
+            m_grid->GetCellValue( ii, 1 ).ToLong( &id );
+            (*m_signals)[ (int) id ] = signal;
+        }
+    }
 
     return true;
 }

@@ -28,6 +28,7 @@
 #include "sim_plot_colors.h"
 #include "sim_plot_panel.h"
 #include "sim_plot_frame.h"
+#include "core/kicad_algo.h"
 
 #include <algorithm>
 #include <limits>
@@ -461,7 +462,7 @@ wxString SIM_PLOT_PANEL::GetUnitsY3() const
 }
 
 
-void SIM_PLOT_PANEL::updateAxes( SIM_TRACE_TYPE aNewTraceType )
+void SIM_PLOT_PANEL::updateAxes( int aNewTraceType )
 {
     switch( GetType() )
     {
@@ -549,7 +550,7 @@ void SIM_PLOT_PANEL::updateAxes( SIM_TRACE_TYPE aNewTraceType )
     }
 }
 
-void SIM_PLOT_PANEL::prepareDCAxes( SIM_TRACE_TYPE aNewTraceType )
+void SIM_PLOT_PANEL::prepareDCAxes( int aNewTraceType )
 {
     wxString sim_cmd = GetSimCommand().Lower();
     wxString rem;
@@ -689,47 +690,44 @@ void SIM_PLOT_PANEL::UpdateTraceStyle( TRACE* trace )
 }
 
 
-TRACE* SIM_PLOT_PANEL::AddTrace( const wxString& aTitle, const wxString& aName,
-                                 SIM_TRACE_TYPE aType )
+TRACE* SIM_PLOT_PANEL::AddTrace( const wxString& aVecName, int aType )
 {
-    TRACE* trace = nullptr;
+    TRACE* trace = GetTrace( aVecName, aType );
 
-    auto it = m_traces.find( aTitle );
-
-    if( it != m_traces.end() )
-        return it->second;
-
-    updateAxes( aType );
-
-    if( GetType() == ST_TRANSIENT || GetType() == ST_DC )
+    if( !trace )
     {
-        bool hasVoltageTraces = false;
+        updateAxes( aType );
 
-        for( const auto& [ name, candidate ] : m_traces )
+        if( GetType() == ST_TRANSIENT || GetType() == ST_DC )
         {
-            if( candidate->GetType() & SPT_VOLTAGE )
+            bool hasVoltageTraces = false;
+
+            for( const auto& [ id, candidate ] : m_traces )
             {
-                hasVoltageTraces = true;
-                break;
+                if( candidate->GetType() & SPT_VOLTAGE )
+                {
+                    hasVoltageTraces = true;
+                    break;
+                }
+            }
+
+            if( !hasVoltageTraces )
+            {
+                if( m_axis_y2 )
+                    m_axis_y2->SetMasterScale( nullptr );
+
+                if( m_axis_y3 )
+                    m_axis_y3->SetMasterScale( nullptr );
             }
         }
 
-        if( !hasVoltageTraces )
-        {
-            if( m_axis_y2 )
-                m_axis_y2->SetMasterScale( nullptr );
+        trace = new TRACE( aVecName, (SIM_TRACE_TYPE) aType );
+        trace->SetTraceColour( m_colors.GenerateColor( m_traces ) );
+        UpdateTraceStyle( trace );
+        m_traces[ getTraceId( aVecName, aType ) ] = trace;
 
-            if( m_axis_y3 )
-                m_axis_y3->SetMasterScale( nullptr );
-        }
+        m_plotWin->AddLayer( (mpLayer*) trace );
     }
-
-    trace = new TRACE( aName, aType );
-    trace->SetTraceColour( m_colors.GenerateColor( m_traces ) );
-    UpdateTraceStyle( trace );
-    m_traces[ aTitle ] = trace;
-
-    m_plotWin->AddLayer( (mpLayer*) trace );
 
     return trace;
 }
@@ -777,24 +775,33 @@ void SIM_PLOT_PANEL::SetTraceData( TRACE* trace, unsigned int aPoints, const dou
 }
 
 
-bool SIM_PLOT_PANEL::DeleteTrace( const wxString& aName )
+void SIM_PLOT_PANEL::DeleteTrace( TRACE* aTrace )
 {
-    auto it = m_traces.find( aName );
-
-    if( it != m_traces.end() )
+    for( const auto& [ name, trace ] : m_traces )
     {
-        TRACE* trace = it->second;
-        m_traces.erase( it );
-
-        for( const auto& [ id, cursor ] : trace->GetCursors() )
+        if( trace == aTrace )
         {
-            if( cursor )
-                m_plotWin->DelLayer( cursor, true );
+            m_traces.erase( name );
+            break;
         }
+    }
 
-        m_plotWin->DelLayer( trace, true, true );
-        ResetScales();
+    for( const auto& [ id, cursor ] : aTrace->GetCursors() )
+    {
+        if( cursor )
+            m_plotWin->DelLayer( cursor, true );
+    }
 
+    m_plotWin->DelLayer( aTrace, true, true );
+    ResetScales();
+}
+
+
+bool SIM_PLOT_PANEL::DeleteTrace( const wxString& aVectorName, int aTraceType )
+{
+    if( TRACE* trace = GetTrace( aVectorName, aTraceType ) )
+    {
+        DeleteTrace( trace );
         return true;
     }
 
@@ -802,10 +809,10 @@ bool SIM_PLOT_PANEL::DeleteTrace( const wxString& aName )
 }
 
 
-void SIM_PLOT_PANEL::EnableCursor( const wxString& aSignalName, const wxString aTraceName,
-                                   int aCursorId, bool aEnable )
+void SIM_PLOT_PANEL::EnableCursor( const wxString& aVectorName, int aType, int aCursorId,
+                                   bool aEnable, const wxString& aSignalName )
 {
-    TRACE* t = GetTrace( aTraceName );
+    TRACE* t = GetTrace( aVectorName, aType );
 
     if( t == nullptr || t->HasCursor( aCursorId ) == aEnable )
         return;

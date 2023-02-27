@@ -30,7 +30,7 @@ DIALOG_USER_DEFINED_SIGNALS_BASE::DIALOG_USER_DEFINED_SIGNALS_BASE( wxWindow* pa
 	m_grid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
 	// Grid
-	m_grid->CreateGrid( 0, 1 );
+	m_grid->CreateGrid( 0, 2 );
 	m_grid->EnableEditing( true );
 	m_grid->EnableGridLines( true );
 	m_grid->EnableDragGridSize( false );
@@ -38,6 +38,7 @@ DIALOG_USER_DEFINED_SIGNALS_BASE::DIALOG_USER_DEFINED_SIGNALS_BASE( wxWindow* pa
 
 	// Columns
 	m_grid->SetColSize( 0, 400 );
+	m_grid->SetColSize( 1, 0 );
 	m_grid->EnableDragColMove( false );
 	m_grid->EnableDragColSize( true );
 	m_grid->SetColLabelSize( 0 );

@@ -35,11 +35,11 @@ class HTML_MESSAGE_BOX;
 class DIALOG_USER_DEFINED_SIGNALS : public DIALOG_USER_DEFINED_SIGNALS_BASE
 {
 public:
-    DIALOG_USER_DEFINED_SIGNALS( SIM_PLOT_FRAME* parent, std::vector<wxString>* aSignals );
+    DIALOG_USER_DEFINED_SIGNALS( SIM_PLOT_FRAME* parent, std::map<int, wxString>* aSignals );
     ~DIALOG_USER_DEFINED_SIGNALS();
 
 private:
-    void addGridRow( const wxString& aValue );
+    void addGridRow( const wxString& aValue, int aId );
 
     void onAddSignal( wxCommandEvent& event ) override;
     void onDeleteSignal( wxCommandEvent& event ) override;
@@ -50,10 +50,10 @@ private:
     bool TransferDataFromWindow() override;
 
 private:
-    SIM_PLOT_FRAME*        m_frame;
-    std::vector<wxString>* m_signals;
+    SIM_PLOT_FRAME*          m_frame;
+    std::map<int, wxString>* m_signals;
 
-    HTML_MESSAGE_BOX*      m_helpWindow;
+    HTML_MESSAGE_BOX*        m_helpWindow;
 };
 
 

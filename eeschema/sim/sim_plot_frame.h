@@ -87,8 +87,8 @@ public:
 
     const std::vector<wxString>& Signals() { return m_signals; }
 
-    const std::vector<wxString>& UserDefinedSignals() { return m_userDefinedSignals; }
-    void SetUserDefinedSignals( const std::vector<wxString>& aSignals );
+    const std::map<int, wxString>& UserDefinedSignals() { return m_userDefinedSignals; }
+    void SetUserDefinedSignals( const std::map<int, wxString>& aSignals );
 
     /**
      * Add a voltage plot for a given net name.
@@ -262,35 +262,20 @@ private:
      */
     void doAddPlot( const wxString& aName, SIM_TRACE_TYPE aType );
 
-    void addTrace( const wxString& aSignalName, SIM_TRACE_TYPE aType );
-
     /**
-     * For user-defined traces we have a separate SPICE vector name.
+     * Get the simulator output vector name for a given signal name and type.
      */
-    wxString getTraceName( const wxString& aSignalName );
-
-    /**
-     * AC-small-signal analyses have specific trace titles.  Other analyses use the raw signal
-     * names.
-     */
-     wxString getTraceTitle( const wxString& aSignalName, SIM_TRACE_TYPE aTraceType );
-
-    /**
-     * Remove a plot with a specific title.
-     *
-     * @param aName is the SPICE vector name, such as "I(Net-C1-Pad1)".
-     */
-    void removeTrace( const wxString& aName, SIM_TRACE_TYPE aTraceType );
+    wxString vectorNameFromSignalName( const wxString& aSignalName, int* aTraceType );
 
     /**
      * Update a trace in a particular SIM_PLOT_PANEL.  If the panel does not contain the given
      * trace, then add it.
      *
-     * @param aName is the SPICE vector name, such as "I(Net-C1-Pad1)".
+     * @param aVectorName is the SPICE vector name, such as "I(Net-C1-Pad1)".
      * @param aTraceType describes the type of plot.
      * @param aPlotPanel is the panel that should receive the update.
      */
-    void updateTrace( const wxString& aName, SIM_TRACE_TYPE aTraceType, SIM_PLOT_PANEL* aPlotPanel );
+    void updateTrace( const wxString& aVectorName, int aTraceType, SIM_PLOT_PANEL* aPlotPanel );
 
     /**
      * Rebuild the list of signals available from the netlist.
@@ -337,6 +322,9 @@ private:
      */
     SIM_TRACE_TYPE getXAxisType( SIM_TYPE aType ) const;
 
+    void parseTraceParams( SIM_PLOT_PANEL* aPlotPanel, TRACE* aTrace, const wxString& aSignalName,
+                           const wxString& aParams );
+
     // Event handlers
     void onPlotClose( wxAuiNotebookEvent& event ) override;
     void onPlotClosed( wxAuiNotebookEvent& event ) override;
@@ -379,8 +367,7 @@ private:
     SIM_THREAD_REPORTER*                   m_reporter;
 
     std::vector<wxString>                  m_signals;
-    std::vector<wxString>                  m_userDefinedSignals;
-    std::map<wxString, wxString>           m_userDefinedSignalToSpiceVecName;
+    std::map<int, wxString>                m_userDefinedSignals;
     std::list<TUNER_SLIDER*>               m_tuners;
 
     ///< SPICE expressions need quoted versions of the netnames since KiCad allows '-' and '/'

@@ -389,7 +389,7 @@ public:
 
 int SIMULATOR_CONTROL::EditUserDefinedSignals( const TOOL_EVENT& aEvent )
 {
-    std::vector<wxString> userSignals = m_plotFrame->UserDefinedSignals();
+    std::map<int, wxString> userSignals = m_plotFrame->UserDefinedSignals();
 
     DIALOG_USER_DEFINED_SIGNALS dlg( m_plotFrame, &userSignals );
 

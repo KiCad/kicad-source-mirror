@@ -114,6 +114,17 @@ public:
         ShowName( false );
     }
 
+    void SetName( wxString aName ) override
+    {
+        for( auto& [ idx, cursor ] : m_cursors )
+        {
+            if( cursor )
+                cursor->SetName( aName );
+        }
+
+        mpFXYVector::SetName( aName );
+    }
+
     /**
      * Assigns new data set for the trace. aX and aY need to have the same length.
      *
@@ -131,50 +142,19 @@ public:
         mpFXYVector::SetData( aX, aY );
     }
 
-    const std::vector<double>& GetDataX() const
-    {
-        return m_xs;
-    }
+    const std::vector<double>& GetDataX() const { return m_xs; }
+    const std::vector<double>& GetDataY() const { return m_ys; }
 
-    const std::vector<double>& GetDataY() const
-    {
-        return m_ys;
-    }
+    bool HasCursor( int aCursorId ) { return m_cursors[ aCursorId ] != nullptr; }
 
-    bool HasCursor( int aCursorId )
-    {
-        return m_cursors[ aCursorId ] != nullptr;
-    }
+    void SetCursor( int aCursorId, CURSOR* aCursor ) { m_cursors[ aCursorId ] = aCursor; }
+    CURSOR* GetCursor( int aCursorId ) { return m_cursors[ aCursorId ]; }
+    std::map<int, CURSOR*>& GetCursors() { return m_cursors; }
 
-    void SetCursor( int aCursorId, CURSOR* aCursor )
-    {
-        m_cursors[ aCursorId ] = aCursor;
-    }
+    SIM_TRACE_TYPE GetType() const { return m_type; }
 
-    CURSOR* GetCursor( int aCursorId )
-    {
-        return m_cursors[ aCursorId ];
-    }
-
-    std::map<int, CURSOR*>& GetCursors()
-    {
-        return m_cursors;
-    }
-
-    SIM_TRACE_TYPE GetType() const
-    {
-        return m_type;
-    }
-
-    void SetTraceColour( const wxColour& aColour )
-    {
-        m_traceColour = aColour;
-    }
-
-    wxColour GetTraceColour() const
-    {
-        return m_traceColour;
-    }
+    void SetTraceColour( const wxColour& aColour ) { m_traceColour = aColour; }
+    wxColour GetTraceColour() const { return m_traceColour; }
 
 protected:
     std::map<int, CURSOR*> m_cursors;       // No ownership; the mpWindow owns the CURSORs
@@ -217,19 +197,14 @@ public:
     wxString GetUnitsY2() const;
     wxString GetUnitsY3() const;
 
-    bool TraceShown( const wxString& aName ) const
-    {
-        return m_traces.count( aName ) > 0;
-    }
-
     const std::map<wxString, TRACE*>& GetTraces() const
     {
         return m_traces;
     }
 
-    TRACE* GetTrace( const wxString& aName ) const
+    TRACE* GetTrace( const wxString& aVecName, int aType ) const
     {
-        auto trace = m_traces.find( aName );
+        auto trace = m_traces.find( getTraceId( aVecName, aType ) );
 
         return trace == m_traces.end() ? nullptr : trace->second;
     }
@@ -282,7 +257,8 @@ public:
     }
 
     ///< Toggle cursor for a particular trace.
-    void EnableCursor( const wxString& aSignalName, const wxString aTraceName, int aCursorId, bool aEnable );
+    void EnableCursor( const wxString& aVectorName, int aType, int aCursorId, bool aEnable,
+                       const wxString& aSignalName );
 
     ///< Reset scale ranges to fit the current traces.
     void ResetScales();
@@ -301,18 +277,24 @@ public:
         return m_plotWin;
     }
 
-    TRACE* AddTrace( const wxString& aTitle, const wxString& aName, SIM_TRACE_TYPE aType );
+    TRACE* AddTrace( const wxString& aVecName, int aType );
 
     void SetTraceData( TRACE* aTrace, unsigned int aPoints, const double* aX, const double* aY );
 
-    bool DeleteTrace( const wxString& aName );
+    bool DeleteTrace( const wxString& aVectorName, int aTraceType );
+    void DeleteTrace( TRACE* aTrace );
 
 private:
+    wxString getTraceId( const wxString& aVecName, int aType ) const
+    {
+        return wxString::Format( wxS( "%s%d" ), aVecName, aType & SPT_Y_AXIS_MASK );
+    }
+
     ///< @brief Construct the plot axes for DC simulation plot.
-    void prepareDCAxes( SIM_TRACE_TYPE aNewTraceType );
+    void prepareDCAxes( int aNewTraceType );
 
     ///> Create/Ensure axes are available for plotting
-    void updateAxes( SIM_TRACE_TYPE aNewTraceType = SIM_TRACE_TYPE::SPT_UNKNOWN );
+    void updateAxes( int aNewTraceType = SIM_TRACE_TYPE::SPT_UNKNOWN );
 
 private:
     SIM_PLOT_COLORS            m_colors;
