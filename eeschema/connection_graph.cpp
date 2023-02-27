@@ -1308,7 +1308,8 @@ void CONNECTION_GRAPH::processSubGraphs()
                         {
                             auto pin = static_cast<SCH_PIN*>( driver );
 
-                            if( pin->IsGlobalPower() && pin->GetShownName() == test_name )
+                            if( pin->IsGlobalPower()
+                                && pin->GetDefaultNetName( sheet ) == test_name )
                             {
                                 match = true;
                                 break;
