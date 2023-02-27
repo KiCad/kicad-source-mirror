@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-15 16:29-0800\n"
-"PO-Revision-Date: 2023-02-21 00:56+0000\n"
+"PO-Revision-Date: 2023-02-28 22:38+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 4.16-rc\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -8676,26 +8676,25 @@ msgid "Save all power dissipations"
 msgstr "Зберегти всі втрати потужності"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:306
-#, fuzzy
 msgid ""
 "Write directives to save power dissipation of all items (.probe p(<item>))"
-msgstr "Написати директиву для збереження всіх струмів (.probe alli)"
+msgstr ""
+"Написати директиви для збереження розсіюваної потужності всіх елементів (."
+"probe p(<елемент>))"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:312
-#, fuzzy
 msgid "Run external simulator command:"
-msgstr "Команда зовнішнього симулятора:"
+msgstr "Запуск команди зовнішнього симулятора:"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:314
-#, fuzzy
 msgid ""
 "Enter the command line to run SPICE\n"
 "Usually '<path to SPICE binary> \"%I\"'\n"
 "%I will be replaced by the netlist filepath"
 msgstr ""
-"Ввести в командний рядок, щоб запустити spice\n"
-"Зазвичай <шлях до двійкового файлу spice> %I\n"
-"%Буде замінено фактичною назвою зв'язків spice"
+"Ввести в командний рядок, щоб запустити SPICE\n"
+"Зазвичай <шлях до двійкового файлу SPICE>\"%I\"'\n"
+"%Буде замінено на поточний шлях до списку зв'язків"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:387
 msgid "Netlist command:"
@@ -8716,23 +8715,23 @@ msgid "Exporting netlist requires a fully annotated schematic."
 msgstr "Експорт списку зв'язків вимагає повністю анотованої схеми."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:560
-#, fuzzy
 msgid "external simulator not found"
-msgstr "Команда зовнішнього симулятора:"
+msgstr "зовнішній симулятор не знайдено"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:561
 msgid ""
 "Note: command line is usually: <tt>&lt;path to SPICE binary&gt; \"%I\"</tt>"
 msgstr ""
+"Примітка: командний рядок зазвичай: <tt>&lt;шлях до бінарних SPICE &gt; \"%"
+"I\"</tt>"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:567
 msgid "external simulator has the wrong format or architecture"
-msgstr ""
+msgstr "зовнішній симулятор має неправильний формат або архітектуру"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:572
-#, fuzzy
 msgid "permission denied"
-msgstr "Помилка дозволів?"
+msgstr "у дозволі відмовлено"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:707
 msgid "This plugin already exists."
@@ -10629,9 +10628,8 @@ msgid "Search the current &sheet only"
 msgstr "Шукати тільки на &поточному листу"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:101
-#, fuzzy
 msgid "Search the current selection &only"
-msgstr "Шукати тільки на &поточному листу"
+msgstr "Шукати тільки на поточному листу"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:104
 msgid "Replace matches in reference designators"
@@ -11212,7 +11210,7 @@ msgstr "Фаза"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:25
 msgid "Significant digits:"
-msgstr ""
+msgstr "Багатозначні цифри:"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:32
 msgid "Range:"
@@ -11220,17 +11218,15 @@ msgstr "Діапазон:"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 msgid "f"
-msgstr ""
+msgstr "f"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "p"
-msgstr "px"
+msgstr "p"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "n"
-msgstr "ні"
+msgstr "n"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:32
@@ -11245,33 +11241,29 @@ msgid "m"
 msgstr "м"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "K"
-msgstr "OK"
+msgstr "K"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "M"
-msgstr "Мбайт"
+msgstr "M"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 msgid "G"
-msgstr ""
+msgstr "G"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "T"
-msgstr "T:"
+msgstr "T"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "P"
-msgstr "Pi"
+msgstr "P"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.h:47
-#, fuzzy, c-format
+#, c-format
 msgid "Format %s"
-msgstr "Формат"
+msgstr "Формат %s"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:192
 #, c-format
@@ -11937,14 +11929,12 @@ msgid "Show ERC exclusions"
 msgstr "Показати ERC винятки"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:68
-#, fuzzy
 msgid "Show OP voltages"
-msgstr "Показати сторінку %s"
+msgstr "Показати напруги робочої точки"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:71
-#, fuzzy
 msgid "Show OP currents"
-msgstr "Зберегти всі струми"
+msgstr "Показати струми робочої точки"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:74
 msgid "Show page limi&ts"
@@ -12377,38 +12367,32 @@ msgid "Dash and dot lengths are ratios of the line width."
 msgstr "Довжина штрихів та пунктирів щодо товщини лінії."
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:253
-#, fuzzy
 msgid "Operating-point Overlay"
-msgstr "Робоча точка"
+msgstr "Накладення робочої точки"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:262
 msgid "Significant digits (voltages):"
-msgstr ""
+msgstr "Значущі цифри (напруги):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:270
-#, fuzzy
 msgid "Range (voltages):"
-msgstr "Зберегти всі напруги"
+msgstr "Діапазон (напруги):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "fV"
-msgstr "V"
+msgstr "fV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "pV"
-msgstr "V"
+msgstr "pV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "nV"
-msgstr "V"
+msgstr "nV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "uV"
-msgstr "V"
+msgstr "uV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:71
@@ -12417,53 +12401,44 @@ msgid "mV"
 msgstr "mV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "KV"
-msgstr "V"
+msgstr "KV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "MV"
-msgstr "V"
+msgstr "MV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "GV"
-msgstr "V"
+msgstr "GV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "TV"
-msgstr "V"
+msgstr "TV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "PV"
-msgstr "V"
+msgstr "PV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:281
 msgid "Significant digits (currents):"
-msgstr ""
+msgstr "Значущі цифри (струми):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:289
-#, fuzzy
 msgid "Range (currents):"
-msgstr "Зберегти всі струми"
+msgstr "Діапазон (струми):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "fA"
-msgstr "A"
+msgstr "fA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "pA"
-msgstr "A"
+msgstr "pA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "nA"
-msgstr "A"
+msgstr "nA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:208
@@ -12472,34 +12447,28 @@ msgid "uA"
 msgstr "мкА"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "mA"
-msgstr "A"
+msgstr "mA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "KA"
-msgstr "A"
+msgstr "KA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "MA"
-msgstr "A"
+msgstr "MA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "GA"
-msgstr "BGA"
+msgstr "GA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "TA"
-msgstr "A"
+msgstr "TA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "PA"
-msgstr "A"
+msgstr "PA"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:220
 msgid "No error or warning"
@@ -12526,13 +12495,12 @@ msgid "&Default line width:"
 msgstr "&Типова товщин лінії:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:47
-#, fuzzy
 msgid ""
 "Set to 0 to allow symbols to inherit line width properties\n"
 "from Schematic"
 msgstr ""
 "Встановіть значення 0, щоб дозволити символам наслідувати ширину ліній\n"
-"від вихідної схеми"
+"зі схеми"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:62
 msgid "D&efault pin length:"
@@ -12807,9 +12775,8 @@ msgstr "Конвертувати бібліотеку"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:169
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:157
-#, fuzzy
 msgid "Available path substitutions:"
-msgstr "Доступні шляхи:"
+msgstr "Доступні заміни шляху:"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:203
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:191
@@ -15585,16 +15552,14 @@ msgid "Checking component "
 msgstr "Перевірка компоненту "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:254
-#, fuzzy
 msgid "Component: name cannot be empty."
-msgstr "Поле імені компоненту не може бути незаповненим."
+msgstr "Компонент: ім'я не може бути пустим."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:263
 msgid "Component: manufacturer cannot be empty."
 msgstr "Компонент: поле виробника не може бути незаповненим."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:272
-#, fuzzy
 msgid "Component: invalid package."
 msgstr "Компонент: некоректний пакет."
 
@@ -15607,9 +15572,8 @@ msgid "Cannot interpolate the current based on this IV table."
 msgstr "Неможливо інтерполювати струм на основі цієї IV таблиці."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:396
-#, fuzzy
 msgid "There is an invalid voltage in an IV table"
-msgstr "У IV таблиці є напруга Nan"
+msgstr "Некоректна напруга в IV таблиці"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:403
 msgid "There is an invalid current in an IV table"
@@ -15620,14 +15584,12 @@ msgid "Invalid R_load."
 msgstr "Некоректне R_load."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:450
-#, fuzzy
 msgid "Invalid falling dV/dt."
-msgstr "Недійсне падіння dv/dt."
+msgstr "Недійсне падіння dV/dt."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:455
-#, fuzzy
 msgid "Invalid rising dV/dt."
-msgstr "Недійсне зростання dv/dt."
+msgstr "Недійсне зростання dV/dt."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:470
 msgid "Model name cannot be empty"
@@ -15638,9 +15600,8 @@ msgid "Checking model "
 msgstr "Перевірка міток "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:482
-#, fuzzy
 msgid "Undefined model type."
-msgstr "Невизначений тип моделі"
+msgstr "Невизначений тип моделі."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:491
 msgid "Invalid Vinh value."
@@ -15659,7 +15620,6 @@ msgid "Invalid C_ref value."
 msgstr "Недійсне значення C_ref."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:523
-#, fuzzy
 msgid "Invalid V_ref value."
 msgstr "Недійсне значення V_ref."
 
@@ -15740,44 +15700,36 @@ msgid "Negative number of pins."
 msgstr "Від'ємна кількість контактів."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:723
-#, fuzzy
 msgid "Empty pin number."
-msgstr "Незаповненим номер виводу"
+msgstr "Незаповненим номер виводу."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:734
-#, fuzzy
 msgid "Resistance matrix is incorrect."
-msgstr "Матриця опору некоректна"
+msgstr "Матриця опору некоректна."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:745
-#, fuzzy
 msgid "Capacitance matrix is undefined."
-msgstr "Ємність матриці не визначено"
+msgstr "Ємність матриці не визначено."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:754
-#, fuzzy
 msgid "Capacitance matrix is incorrect."
-msgstr "Ємність матриці некоректна"
+msgstr "Ємність матриці некоректна."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:763
-#, fuzzy
 msgid "Capacitance matrix is nullptr."
-msgstr "Ємність матриці є nullptr"
+msgstr "Ємність матриці є nullptr."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:774
-#, fuzzy
 msgid "Inductance matrix is undefined."
-msgstr "Індуктивність матриці не визначено"
+msgstr "Індуктивність матриці не визначено."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:783
-#, fuzzy
 msgid "Inductance matrix is incorrect."
-msgstr "Індуктивність матриці некоректна"
+msgstr "Індуктивність матриці некоректна."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:792
-#, fuzzy
 msgid "Inductance matrix is nullptr."
-msgstr "Індуктивність матриці э nullptr"
+msgstr "Індуктивність матриці є nullptr."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:808
 msgid "Cannot open file "
@@ -16067,9 +16019,9 @@ msgid "Bitrate could be too high for rising / falling edges"
 msgstr "Бітрейт може бути занадто високим для наростаючих/спадаючих фронтів"
 
 #: eeschema/sim/sim_lib_mgr.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "Simulation model library not found at '%s'"
-msgstr "Модель симуляції не знайдена в бібліотеці '%s' або '%s'"
+msgstr "Модель симуляції не знайдена в бібліотеці '%s'"
 
 #: eeschema/sim/sim_lib_mgr.cpp:84
 #, c-format
@@ -16211,54 +16163,45 @@ msgstr ""
 "для отримання результатів."
 
 #: eeschema/sim/sim_plot_frame.cpp:182
-#, fuzzy
 msgid "Measure Min"
-msgstr "Вимірюваний вузол"
+msgstr "Мінімальний замір"
 
 #: eeschema/sim/sim_plot_frame.cpp:183
-#, fuzzy
 msgid "Measure Max"
-msgstr "Інструмент вимірювання"
+msgstr "Максимальний замір"
 
 #: eeschema/sim/sim_plot_frame.cpp:184
-#, fuzzy
 msgid "Measure Average"
-msgstr "Вимірюваний вузол"
+msgstr "Середній замір"
 
 #: eeschema/sim/sim_plot_frame.cpp:185
-#, fuzzy
 msgid "Measure RMS"
-msgstr "Інструмент вимірювання"
+msgstr "RMS вимірювання"
 
 #: eeschema/sim/sim_plot_frame.cpp:186
-#, fuzzy
 msgid "Measure Peak-to-peak"
-msgstr "Вимірюваний вузол"
+msgstr "Вимірювання між точками"
 
 #: eeschema/sim/sim_plot_frame.cpp:187
-#, fuzzy
 msgid "Measure Time of Min"
-msgstr "Інструмент вимірювання"
+msgstr "Замір мінімального часу"
 
 #: eeschema/sim/sim_plot_frame.cpp:188
-#, fuzzy
 msgid "Measure Time of Max"
-msgstr "Інструмент вимірювання"
+msgstr "Замір максимального часу"
 
 #: eeschema/sim/sim_plot_frame.cpp:245
-#, fuzzy, c-format
+#, c-format
 msgid "Format %s..."
-msgstr "Формат"
+msgstr "Формат %s..."
 
 #: eeschema/sim/sim_plot_frame.cpp:297
-#, fuzzy
 msgid "Format Value..."
-msgstr "Редагувати значення..."
+msgstr "Формат значення..."
 
 #: eeschema/sim/sim_plot_frame.cpp:299
-#, fuzzy
 msgid "Delete Measurement"
-msgstr "Видалити маркер"
+msgstr "Видалити замір"
 
 #: eeschema/sim/sim_plot_frame.cpp:486 eeschema/sim/sim_plot_frame.cpp:919
 #, c-format
@@ -16272,14 +16215,12 @@ msgid "Signal"
 msgstr "Сигнал"
 
 #: eeschema/sim/sim_plot_frame.cpp:496 eeschema/sim/sim_plot_frame_base.cpp:121
-#, fuzzy
 msgid "Cursor 1"
-msgstr "Курсор"
+msgstr "Курсор 1"
 
 #: eeschema/sim/sim_plot_frame.cpp:497 eeschema/sim/sim_plot_frame_base.cpp:122
-#, fuzzy
 msgid "Cursor 2"
-msgstr "Курсор"
+msgstr "Курсор 2"
 
 #: eeschema/sim/sim_plot_frame.cpp:622 eeschema/sim/sim_plot_frame_base.h:88
 msgid "Spice Simulator"
@@ -16288,24 +16229,23 @@ msgstr "Spice симулятор"
 #: eeschema/sim/sim_plot_frame.cpp:758
 #, c-format
 msgid "V(%s) (gain)"
-msgstr ""
+msgstr "V(%s) (gain)"
 
 #: eeschema/sim/sim_plot_frame.cpp:759
-#, fuzzy, c-format
+#, c-format
 msgid "V(%s) (phase)"
-msgstr " (фаза)"
+msgstr "V(%s) (фаза)"
 
 #: eeschema/sim/sim_plot_frame.cpp:820
 msgid "Simulator requires a fully annotated schematic."
 msgstr "Симулятор потребує повністю анотовану схему."
 
 #: eeschema/sim/sim_plot_frame.cpp:825
-#, fuzzy
 msgid ""
 "Errors during netlist generation.\n"
 "\n"
 msgstr ""
-"Помилки під час створення списку зв'язків; моделювання перервано.\n"
+"Помилки під час створення списку зв'язків.\n"
 "\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:860
@@ -16322,16 +16262,15 @@ msgstr "Інша симуляція вже запущена."
 
 #: eeschema/sim/sim_plot_frame.cpp:975 eeschema/sim/sim_plot_frame.cpp:1386
 msgid " (gain)"
-msgstr ""
+msgstr " (gain)"
 
 #: eeschema/sim/sim_plot_frame.cpp:976 eeschema/sim/sim_plot_frame.cpp:1388
 msgid " (phase)"
 msgstr " (фаза)"
 
 #: eeschema/sim/sim_plot_frame.cpp:1076 eeschema/sim/sim_plot_frame.cpp:2259
-#, fuzzy
 msgid "Diff"
-msgstr "Диференційна пара"
+msgstr "Різниця"
 
 #: eeschema/sim/sim_plot_frame.cpp:1243 eeschema/sim/sim_plot_frame.cpp:1255
 #: eeschema/sim/sim_plot_frame.cpp:1587
@@ -16344,19 +16283,16 @@ msgid "%s is not tunable"
 msgstr "%s не налаштовується"
 
 #: eeschema/sim/sim_plot_frame.cpp:1320
-#, fuzzy
 msgid "Error: no current simulation.\n"
-msgstr "Потужність, струм і ізоляція"
+msgstr "Помилка: немає симуляції струму.\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:1329
-#, fuzzy
 msgid "Error: simulation type not defined.\n"
-msgstr "Помилка: не визначено типу симуляції!\n"
+msgstr "Помилка: не визначено типу симуляції.\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:1335
-#, fuzzy
 msgid "Error: simulation type doesn't support plotting.\n"
-msgstr "Помилка: тип симуляції не підтримує діаграми!\n"
+msgstr "Помилка: тип симуляції не підтримує діаграми.\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:2049
 msgid ""
@@ -16383,23 +16319,21 @@ msgstr ""
 "\n"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:227
-#, fuzzy
 msgid "Measurement"
-msgstr "Вимірюваний вузол"
+msgstr "Вимірювання"
 
 #: eeschema/sim/sim_plot_panel.cpp:268
-#, fuzzy, c-format
+#, c-format
 msgid "%d"
-msgstr "%"
+msgstr "%d"
 
 #: eeschema/sim/sim_plot_panel.cpp:507
 msgid "noise [(V or A)^2/Hz]"
 msgstr "шум [(V або А)^2/Гц]"
 
 #: eeschema/sim/sim_plot_panel.cpp:542
-#, fuzzy
 msgid "Power"
-msgstr "Додати живлення"
+msgstr "Живлення"
 
 #: eeschema/sim/sim_plot_panel.cpp:584
 msgid "Voltage (swept)"
@@ -16469,14 +16403,12 @@ msgid "'%s' is not a valid Spice value."
 msgstr "'%s' є неприпустимим значенням Spice."
 
 #: eeschema/sim/toolbars_sim_plot_frame.cpp:99
-#, fuzzy
 msgid "Simulator"
-msgstr "Симулятор..."
+msgstr "Симулятор"
 
 #: eeschema/sim/toolbars_sim_plot_frame.cpp:154
-#, fuzzy
 msgid "&Simulation"
-msgstr "Симуляція"
+msgstr "&Симуляція"
 
 #: eeschema/symbol_async_loader.cpp:108
 #, c-format
@@ -16553,13 +16485,12 @@ msgid "<b>A Power Symbol should have only one pin</b><br><br>"
 msgstr "<b>Символ потужності повинен мати один вивід</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:208
-#, fuzzy
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Only an input or output power pin has "
 "meaning<br><br>"
 msgstr ""
-"<b>Підозрілий символ живлення</b><br>Значення має лише вхідний або вихідний "
-"вивід живлення<br><br>"
+"<b>Підозрілий символ живлення</b><br>Лише вхідний або вихідний контакт "
+"живлення має значення<br><br>"
 
 #: eeschema/symbol_checker.cpp:215
 msgid ""
@@ -17127,13 +17058,12 @@ msgstr ""
 "стороні."
 
 #: eeschema/tools/backannotate.cpp:97
-#, fuzzy
 msgid ""
 "Cannot fetch PCB netlist because Schematic Editor is opened in stand-alone "
 "mode.\n"
 "You must launch the KiCad project manager and create a project."
 msgstr ""
-"Неможливо отримати список з’єднань PCB, оскільки eeschema відкрито в "
+"Не вдається отримати список з’єднань PCB, оскільки редактор схем відкрито в "
 "автономному режимі.\n"
 "Ви повинні запустити менеджер проектів KiCad і створити проект."
 
@@ -18080,22 +18010,20 @@ msgid "Show markers for excluded electrical rules checker violations"
 msgstr "Показувати маркери для виключень порушень електричних правил"
 
 #: eeschema/tools/ee_actions.cpp:709
-#, fuzzy
 msgid "Show OP Voltages"
-msgstr "Показати сторінку %s"
+msgstr "Показати напруги в робочій точці"
 
 #: eeschema/tools/ee_actions.cpp:710
 msgid "Show operating point voltage data from simulation"
-msgstr ""
+msgstr "Показати дані напруги робочої точки з симуляції"
 
 #: eeschema/tools/ee_actions.cpp:714
-#, fuzzy
 msgid "Show OP Currents"
-msgstr "Показати курсор"
+msgstr "Показати струми в робочій точці"
 
 #: eeschema/tools/ee_actions.cpp:715
 msgid "Show operating point current data from simulation"
-msgstr ""
+msgstr "Показати дані струми робочої точки з симуляції"
 
 #: eeschema/tools/ee_actions.cpp:719 eeschema/tools/ee_actions.cpp:724
 #: eeschema/tools/ee_actions.cpp:730 eeschema/tools/ee_actions.cpp:736
@@ -18129,9 +18057,8 @@ msgid "Annotate Automatically"
 msgstr "Автоматична анотація"
 
 #: eeschema/tools/ee_actions.cpp:741
-#, fuzzy
 msgid "Toggle automatic annotation of new symbols"
-msgstr "Увімкнути автоматичне позначення нових частин символів"
+msgstr "Увімкнути автоматичне анотування нових символів"
 
 #: eeschema/tools/ee_actions.cpp:746
 msgid "Repair Schematic"
@@ -18359,7 +18286,6 @@ msgid "Export Current Plot as CSV..."
 msgstr "Експортувати поточний графік як CSV..."
 
 #: eeschema/tools/ee_actions.cpp:945
-#, fuzzy
 msgid "Show Legend"
 msgstr "Показати легенду"
 
@@ -18369,58 +18295,51 @@ msgstr "Пунктиром струм/фаза"
 
 #: eeschema/tools/ee_actions.cpp:951
 msgid "Draw secondary signal trace (current or phase) with a dotted line"
-msgstr ""
+msgstr "Накреслити вторинний сигнал (струм або фазу) пунктирною лінією"
 
 #: eeschema/tools/ee_actions.cpp:955
-#, fuzzy
 msgid "Dark Mode Plots"
-msgstr "3D моделі"
+msgstr "Креслення в темному режимі"
 
 #: eeschema/tools/ee_actions.cpp:956
 msgid "Draw plots with a black background"
-msgstr ""
+msgstr "Креслити з фоном чорного кольору"
 
 #: eeschema/tools/ee_actions.cpp:960
-#, fuzzy
 msgid "Simulation Command..."
-msgstr "Команда симуляції"
+msgstr "Команда симуляції..."
 
 #: eeschema/tools/ee_actions.cpp:961
-#, fuzzy
 msgid "Edit the simulation command for the current plot tab"
-msgstr "Видалити останню точку додано до поточного елемента"
+msgstr "Відредагуйте команду моделювання для поточної вкладки креслення"
 
 #: eeschema/tools/ee_actions.cpp:967
 msgid "Run Simulation"
 msgstr "Запуск симуляції"
 
 #: eeschema/tools/ee_actions.cpp:972
-#, fuzzy
 msgid "Stop Simulation"
-msgstr "Запустити/Зупинити симуляцію"
+msgstr "Зупинити симуляцію"
 
 #: eeschema/tools/ee_actions.cpp:978
-#, fuzzy
 msgid "Probe Schematic..."
-msgstr "Анотувати компоненти на схемі..."
+msgstr "Схема зонда..."
 
 #: eeschema/tools/ee_actions.cpp:978
 msgid "Add a simulator probe"
 msgstr "Додати пробник симулятора"
 
 #: eeschema/tools/ee_actions.cpp:984
-#, fuzzy
 msgid "Add Tuned Value..."
-msgstr "Редагувати значення..."
+msgstr "Додати налаштоване значення..."
 
 #: eeschema/tools/ee_actions.cpp:984
 msgid "Select a value to be tuned"
 msgstr "Оберіть значення для точного налаштування"
 
 #: eeschema/tools/ee_actions.cpp:989
-#, fuzzy
 msgid "Show SPICE Netlist"
-msgstr "Показати список звʼязків SPICE..."
+msgstr "Показати SPICE список зв'язків"
 
 #: eeschema/tools/ee_inspection_tool.cpp:222
 msgid "No symbol issues found."
@@ -18793,15 +18712,15 @@ msgstr ""
 "ціле число, щоб запобігти дублюванню записів таблиці."
 
 #: eeschema/widgets/tuner_slider.cpp:57 eeschema/widgets/tuner_slider.cpp:113
-#, fuzzy, c-format
+#, c-format
 msgid "Tune %s"
-msgstr "Підлаштовувати"
+msgstr "Підлаштовувати %s"
 
 #: eeschema/widgets/tuner_slider.cpp:74
-#, fuzzy, c-format
+#, c-format
 msgid "%s has simulation model of type '%s %s'; only RLC passives be tuned"
 msgstr ""
-"Символ '%s' має імітаційну модель типу '%s %s', яку неможливо налаштувати"
+"%s має імітаційну модель типу '%s %s'; налаштовувати можна лише пасивні RLC"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -20056,7 +19975,6 @@ msgid "Minimal header"
 msgstr "Мінімальний заголовок"
 
 #: kicad/cli/command_export_pcb_drill.cpp:73
-#, fuzzy
 msgid "PTH and NPTH in separate files"
 msgstr "PTH і NPTH в розділених файлах"
 
@@ -20155,7 +20073,6 @@ msgid "Subtract soldermask from silkscreen"
 msgstr "Відняти паяльну маску з шару шовкографії"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:70
-#, fuzzy
 msgid "Disable aperture macros"
 msgstr "Вимкнути макроси апертури"
 
@@ -20176,9 +20093,8 @@ msgid "Use the gerber plot settings already configured in the board file"
 msgstr "Використати параметри креслення gerber, уже налаштовані у файлі плати"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:60
-#, fuzzy
 msgid "Color theme to use (will default to PCB Editor settings)"
-msgstr "Використати кольорову тему (по замовчуванню pcbnew налаштування)"
+msgstr "Використати кольорову тему (типове налаштування в редакторі PCB)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:44
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:64
@@ -30369,21 +30285,18 @@ msgid "Track and Via Dimensions"
 msgstr "Розміри доріжки і перехідного отвору"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:51
-#, fuzzy
 msgid "Remove Unused Layers"
-msgstr "&Видалити невикористані шари"
+msgstr "Видалити невикористані шари"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:52
-#, fuzzy
 msgid "Restore All Layers"
-msgstr "Перезавантажити всі шари"
+msgstr "Відновлення всіx шарів"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:157
 msgid "Set Unused Pad Properties"
 msgstr "Встановити властивості невикористаної контактної площадки"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:33
-#, fuzzy
 msgid "&Selected only"
 msgstr "&Тільки виділене"
 
@@ -30392,9 +30305,8 @@ msgid "Keep &outside layers"
 msgstr "Залишити зовнішні шари"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.h:58
-#, fuzzy
 msgid "Unused Pads"
-msgstr "Видалити невикористані контактні площадки"
+msgstr "Невикористані контактні площадки"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:32
 msgid "Delete footprints with no symbols"
@@ -32549,9 +32461,8 @@ msgid "7"
 msgstr "7"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:88
-#, fuzzy
 msgid "Vias:"
-msgstr "Перехідні отвори"
+msgstr "Перехідні отвори:"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:104 pcbnew/pad.cpp:1011
 #: pcbnew/pcb_track.cpp:942 pcbnew/pcb_track.cpp:1306
@@ -32566,9 +32477,8 @@ msgid "Hole"
 msgstr "Отвір"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:153
-#, fuzzy
 msgid "Differential pairs:"
-msgstr "Диференційні пари"
+msgstr "Диференційні пари:"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:170
 msgid "Gap"
@@ -38297,7 +38207,7 @@ msgstr "Скопіюйте ширину лінії першого об’єкт�
 
 #: pcbnew/tools/convert_tool.cpp:79
 msgid "Gap:"
-msgstr ""
+msgstr "Відступ:"
 
 #: pcbnew/tools/convert_tool.cpp:235
 msgid "Create from Selection"
