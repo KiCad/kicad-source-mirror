@@ -25,16 +25,16 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-10 15:35-0800\n"
-"PO-Revision-Date: 2023-02-06 07:25+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"PO-Revision-Date: 2023-02-28 19:36+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
-"kicad/master-source/zh_Hans/>\n"
+"kicad/v7/zh_Hans/>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 4.16-rc\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -62,11 +62,11 @@ msgstr "未加载任何封装。"
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
-msgstr "封装轮廓缺失或畸形。运行封装检查器进行全面分析。"
+msgstr "封装轮廓缺失或格式不正确。可使用封装检查器进行全面分析。"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:694
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
-msgstr "电路板轮廓缺失或畸形。运行设计规则检查 (DRC) 进行全面分析。"
+msgstr "电路板轮廓缺失或格式不正确。可使用设计规则检查 (DRC) 进行全面分析。"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:226
 msgid "Create tracks and vias"
@@ -286,7 +286,7 @@ msgstr "视图 (&V)"
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:149 cvpcb/menubar.cpp:89
 #: gerbview/menubar.cpp:240 kicad/menubar.cpp:217
 msgid "&Preferences"
-msgstr "偏好设置 (&P)"
+msgstr "设置 (&P)"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:59
 #: pcbnew/widgets/appearance_controls.cpp:2731
@@ -1652,7 +1652,7 @@ msgstr "描述"
 msgid ""
 "The KiCad EDA Suite is a set of open source applications for the creation of "
 "electronic schematics and printed circuit boards."
-msgstr "KiCad EDA 工具箱是一套用于创建电路原理图和印刷电路板的开源应用软件。"
+msgstr "KiCad EDA 套件是一组开源应用程序，用于设计电路原理图和印刷电路板。"
 
 #: common/dialog_about/AboutDialog_main.cpp:127
 msgid "KiCad on the web"
@@ -1816,12 +1816,12 @@ msgstr "报告 KiCad 的问题"
 
 #: common/dialog_about/dialog_about_base.cpp:68 common/tool/actions.cpp:673
 msgid "Donate"
-msgstr "捐款"
+msgstr "捐赠"
 
 #: common/dialog_about/dialog_about_base.cpp:69
 #: common/tool/common_control.cpp:278
 msgid "Donate to KiCad"
-msgstr "向 KiCad 捐款"
+msgstr "向 KiCad 捐赠"
 
 #: common/dialog_about/dialog_about_base.cpp:94 common/dialog_shim.cpp:665
 msgid "&OK"
@@ -4003,7 +4003,7 @@ msgstr "偏好设置"
 #: common/eda_base_frame.cpp:1015 common/hotkey_store.cpp:71
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:20
 msgid "Common"
-msgstr "共同"
+msgstr "通用"
 
 #: common/eda_base_frame.cpp:1016
 msgid "Mouse and Touchpad"
@@ -6341,7 +6341,7 @@ msgstr "在 Web 浏览器中打开“参与 KiCad”"
 
 #: common/tool/actions.cpp:674
 msgid "Open \"Donate to KiCad\" in a web browser"
-msgstr "在 Web 浏览器中打开“向 KiCad 捐款”"
+msgstr "在 Web 浏览器中打开“向 KiCad 捐赠”"
 
 #: common/tool/actions.cpp:678
 msgid "Report Bug"
@@ -6391,7 +6391,7 @@ msgid ""
 "To donate to the KiCad project, visit %s"
 msgstr ""
 "无法启动默认浏览器。\n"
-"有关如何向 KiCad 项目捐款，请访问 %s"
+"有关如何向 KiCad 项目捐赠，请访问 %s"
 
 #: common/tool/grid_menu.cpp:100
 #, c-format
@@ -8491,7 +8491,7 @@ msgstr "导出网表"
 #: eeschema/dialogs/dialog_export_netlist.cpp:320
 #: eeschema/sim/sim_plot_frame.cpp:463
 msgid "Simulator requires a fully annotated schematic."
-msgstr "仿真器需要一张完整批注的原理图。"
+msgstr "仿真器需要一张批注完整的原理图。"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:348
 #: eeschema/dialogs/dialog_export_netlist.cpp:395
@@ -19342,15 +19342,15 @@ msgstr "将金属化孔 (PTH) 和非金属化孔 (NPTH) 放在不同文件中"
 
 #: kicad/cli/command_export_pcb_drill.cpp:78
 msgid "Generate map / summary of drill hits"
-msgstr "生成钻击图/概述"
+msgstr "生成钻孔的映射/摘要"
 
 #: kicad/cli/command_export_pcb_drill.cpp:84
 msgid "Valid options: pdf,gerberx2,ps,dxf,svg"
-msgstr "有效选项：pdf、gerberx2、ps、dxf、svg"
+msgstr "可用选项：pdf,gerberx2,ps,dxf,svg"
 
 #: kicad/cli/command_export_pcb_drill.cpp:87
 msgid "Generate independent files for NPTH and PTH holes"
-msgstr "生成非金属化孔和金属化孔的独立文件"
+msgstr "为非金属化孔（NPTH）和金属化孔（PTH）生成独立文件"
 
 #: kicad/cli/command_export_pcb_drill.cpp:92
 msgid "Precision of gerber coordinates (5 or 6)"
@@ -19581,9 +19581,8 @@ msgid "Schematic file does not exist or is not accessible\n"
 msgstr "原理图文件不存在或不可访问\n"
 
 #: kicad/cli/command_export_sch_pdf.cpp:38
-#, fuzzy
 msgid "Color theme to use (will default to schematic settings)"
-msgstr "要使用的颜色主题（默认使用 pcbnew 设置）"
+msgstr "使用的颜色主题（默认为原理图设置）"
 
 #: kicad/cli/command_export_sch_pdf.cpp:51
 #: kicad/cli/command_export_sch_svg.cpp:51
@@ -24764,15 +24763,15 @@ msgstr ""
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:2883
 #: pcbnew/pad.cpp:1732 pcbnew/zone.cpp:1376
 msgid "Thermal reliefs"
-msgstr "防散热 (花焊盘)"
+msgstr "缓散热焊盘 (花焊盘)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 msgid "Reliefs for PTH"
-msgstr "金属化孔 (PTH) 防散热"
+msgstr "仅金属化孔 (PTH) 使用缓散热焊盘 (花焊盘)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:238
 msgid "Thermal relief gap:"
-msgstr "防散热间距："
+msgstr "缓散热焊盘 (花焊盘) 间距："
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:240
 msgid ""
@@ -24786,11 +24785,11 @@ msgstr "在同一网中的焊盘和填充敷铜之间进行间隙处理。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:253
 msgid "Thermal spoke width:"
-msgstr "防散热导线宽度："
+msgstr "缓散热焊盘 (花焊盘) 引线宽度："
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:258
 msgid "Width of copper in thermal reliefs."
-msgstr "防散热 (花焊盘) 连接线的宽度。"
+msgstr "缓散热焊盘 (花焊盘) 连接线的宽度。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:278
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:117
@@ -26377,7 +26376,7 @@ msgstr "使用敷铜设置"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:329
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:716
 msgid "Thermal relief"
-msgstr "防散热 (花焊盘)"
+msgstr "缓散热焊盘 (花焊盘)"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:371
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:396
@@ -27912,7 +27911,7 @@ msgstr "警告：测试点属性在\"非导通孔\"(NPTH)焊盘上没有意义�
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1404
 msgid "Warning: Heatsink property makes no sense of NPTH pads."
-msgstr "警告：防散热片属性在\"非导通孔\"(NPTH) 焊盘上没有意义。"
+msgstr "警告：散热属性对于非金属化孔 (NPTH) 焊盘没有意义。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1410
 msgid "Warning: Castellated property is for PTH pads."
@@ -28324,7 +28323,7 @@ msgstr "花焊盘覆盖"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:747
 msgid "Relief gap:"
-msgstr "防散热间距："
+msgstr "缓散热焊盘 (花焊盘) 间距："
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:758
 msgid "Spoke width:"
@@ -31755,12 +31754,12 @@ msgstr "%s 上的本地覆盖；敷铜连接：%s。"
 #: pcbnew/drc/drc_engine.cpp:811
 #, c-format
 msgid "Local override on %s; thermal relief gap: %s."
-msgstr "%s 上的本地覆盖；防散热间距：%s。"
+msgstr "%s 上的本地覆盖；缓散热焊盘 (花焊盘) 间距：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:828
 #, c-format
 msgid "Local override on %s; thermal spoke width: %s."
-msgstr "%s 上的本地覆盖；防散热导线宽度：%s。"
+msgstr "%s 上的本地覆盖；缓散热焊盘 (花焊盘) 引线宽度：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:837
 #, c-format
@@ -32728,7 +32727,7 @@ msgstr "(%s 最小辐条数 %d；实际 %d)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:192
 msgid "Checking thermal reliefs..."
-msgstr "正在检查防散热..."
+msgstr "正在检查缓散热焊盘 (花焊盘) ..."
 
 #: pcbnew/edit_zone_helpers.cpp:84 pcbnew/edit_zone_helpers.cpp:106
 msgid "Modify zone properties"
@@ -33104,7 +33103,7 @@ msgstr "继承"
 
 #: pcbnew/footprint.cpp:2885 pcbnew/pad.cpp:1734 pcbnew/zone.cpp:1378
 msgid "Thermal reliefs for PTH"
-msgstr "用于金属化孔 (PTH) 的防散热"
+msgstr "用于金属化孔 (PTH) 的缓散热焊盘 (花焊盘)"
 
 #: pcbnew/footprint.cpp:2927
 msgid "Library link"
@@ -34380,15 +34379,15 @@ msgstr "阻焊层边界覆盖"
 
 #: pcbnew/pad.cpp:1833 pcbnew/zone.cpp:1504
 msgid "Thermal Relief Spoke Width"
-msgstr "防散热辐条宽度"
+msgstr "缓散热焊盘 (花焊盘) 引线宽度"
 
 #: pcbnew/pad.cpp:1836
 msgid "Thermal Relief Spoke Angle"
-msgstr "防散热辐条角度"
+msgstr "缓散热焊盘 (花焊盘) 引线角度"
 
 #: pcbnew/pad.cpp:1839 pcbnew/zone.cpp:1499
 msgid "Thermal Relief Gap"
-msgstr "防散热 (花焊盘) 间距"
+msgstr "缓散热焊盘 (花焊盘) 间距"
 
 #: pcbnew/pcb_base_frame.cpp:194
 msgid "Error loading project footprint libraries."
@@ -35247,8 +35246,8 @@ msgid ""
 "and vias. KiCad only supports one single setting for both. The setting for "
 "pads has been applied."
 msgstr ""
-"CADSTAR 模板 '%s' 在焊盘和过孔中具有不同的防散热设置。KiCad 仅支持这两种设置"
-"的单一设置。已应用焊盘的设置。"
+"CADSTAR 模板 '%s' 在焊盘和过孔中具有不同的缓散热焊盘 (花焊盘) 设置。KiCad "
+"仅支持这两种设置的单一设置。已应用焊盘的设置。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1945
 #, c-format
@@ -37056,12 +37055,12 @@ msgstr "敷铜连接解像度，用于："
 
 #: pcbnew/tools/board_inspection_tool.cpp:643
 msgid "Thermal relief gap resolution for:"
-msgstr "下列项目的防散热间距："
+msgstr "下列项目的缓散热焊盘 (花焊盘) 间距："
 
 #: pcbnew/tools/board_inspection_tool.cpp:652
 #, c-format
 msgid "Resolved thermal relief gap: %s."
-msgstr "已解决的防散热间隙：%s。"
+msgstr "已解决的缓散热焊盘 (花焊盘) 间隙：%s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:657
 msgid "Spoke width resolution for:"
@@ -37070,7 +37069,7 @@ msgstr "下列项目的辐条宽度分辨率："
 #: pcbnew/tools/board_inspection_tool.cpp:666
 #, c-format
 msgid "Resolved thermal relief spoke width: %s."
-msgstr "已解析的防散热辐条宽度：%s。"
+msgstr "已解析的缓散热焊盘 (花焊盘) 引线宽度：%s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:671
 msgid "Spoke count resolution for:"
@@ -40221,7 +40220,7 @@ msgstr "继承"
 
 #: pcbnew/zones.h:66
 msgid "thermal reliefs"
-msgstr "防散热 (花焊盘)"
+msgstr "缓散热焊盘 (花焊盘)"
 
 #: pcbnew/zones.h:67
 msgid "solid"
@@ -40229,7 +40228,7 @@ msgstr "实心"
 
 #: pcbnew/zones.h:68
 msgid "thermal reliefs for PTH"
-msgstr "用于金属化孔 (PTH) 的防散热"
+msgstr "用于金属化孔 (PTH) 的缓散热焊盘 (花焊盘)"
 
 #: plugins/3d/vrml/vrml.cpp:228
 msgid "[INFO] load failed: input line too long\n"
@@ -40286,7 +40285,7 @@ msgstr "KiCad"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 msgid "EDA Suite"
-msgstr "EDA 工具箱"
+msgstr "EDA 套件"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "Suite of tools for schematic design and circuit board layout"
