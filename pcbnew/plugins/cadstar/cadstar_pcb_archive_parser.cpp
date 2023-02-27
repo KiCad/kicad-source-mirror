@@ -124,6 +124,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::Parse()
     }
 
     delete m_rootNode;
+    m_rootNode = nullptr;
 }
 
 
