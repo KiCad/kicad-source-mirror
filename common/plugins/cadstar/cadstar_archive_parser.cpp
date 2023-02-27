@@ -2428,7 +2428,9 @@ XNODE* CADSTAR_ARCHIVE_PARSER::LoadArchiveFile( const wxString& aFileName,
                                                 const wxString& aFileTypeIdentifier, PROGRESS_REPORTER* aProgressReporter )
 {
     KEYWORD   emptyKeywords[1] = {};
-    XNODE *   iNode = nullptr, *cNode = nullptr;
+    XNODE*    rootNode = nullptr;
+    XNODE*    cNode = nullptr;
+    XNODE*    iNode = nullptr;
     int       tok;
     bool      cadstarFileCheckDone = false;
     wxString  str;
@@ -2460,7 +2462,10 @@ XNODE* CADSTAR_ARCHIVE_PARSER::LoadArchiveFile( const wxString& aFileName,
         if( aProgressReporter && ( currentProgress() - previousReportedProgress ) > 0.01 )
         {
             if( !aProgressReporter->KeepRefreshing() )
+            {
+                delete rootNode;
                 THROW_IO_ERROR( _( "File import cancelled by user." ) );
+            }
 
             aProgressReporter->SetCurrentProgress( currentProgress() );
             previousReportedProgress = currentProgress();
@@ -2476,6 +2481,7 @@ XNODE* CADSTAR_ARCHIVE_PARSER::LoadArchiveFile( const wxString& aFileName,
             else
             {
                 //too many closing brackets
+                delete rootNode;
                 THROW_IO_ERROR( _( "The selected file is not valid or might be corrupt!" ) );
             }
         }
@@ -2484,6 +2490,9 @@ XNODE* CADSTAR_ARCHIVE_PARSER::LoadArchiveFile( const wxString& aFileName,
             tok   = lexer.NextTok();
             str   = wxString( lexer.CurText(), *conv );
             cNode = new XNODE( wxXML_ELEMENT_NODE, str );
+
+            if( !rootNode )
+                rootNode = cNode;
 
             if( iNode )
             {
@@ -2494,7 +2503,10 @@ XNODE* CADSTAR_ARCHIVE_PARSER::LoadArchiveFile( const wxString& aFileName,
             else if( !cadstarFileCheckDone )
             {
                 if( cNode->GetName() != aFileTypeIdentifier )
+                {
+                    delete rootNode;
                     THROW_IO_ERROR( _( "The selected file is not valid or might be corrupt!" ) );
+                }
 
                 cadstarFileCheckDone = true;
             }
@@ -2510,19 +2522,28 @@ XNODE* CADSTAR_ARCHIVE_PARSER::LoadArchiveFile( const wxString& aFileName,
         else
         {
             //not enough closing brackets
+            delete rootNode;
             THROW_IO_ERROR( _( "The selected file is not valid or might be corrupt!" ) );
         }
     }
 
     // Not enough closing brackets
     if( iNode != nullptr )
+    {
+        delete rootNode;
         THROW_IO_ERROR( _( "The selected file is not valid or might be corrupt!" ) );
+    }
 
     // Throw if no data was parsed
-    if( cNode )
-        return cNode;
+    if( rootNode )
+    {
+        return rootNode;
+    }
     else
+    {
+        delete rootNode;
         THROW_IO_ERROR( _( "The selected file is not valid or might be corrupt!" ) );
+    }
 
     return nullptr;
 }

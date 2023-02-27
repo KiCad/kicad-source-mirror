@@ -93,6 +93,8 @@ class CADSTAR_ARCHIVE_PARSER
 public:
     CADSTAR_ARCHIVE_PARSER() { m_progressReporter = nullptr; }
 
+    virtual ~CADSTAR_ARCHIVE_PARSER() {}
+
 
     typedef wxString LINECODE_ID;
     typedef wxString HATCHCODE_ID;

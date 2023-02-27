@@ -35,7 +35,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::Parse()
     if( m_progressReporter )
         m_progressReporter->BeginPhase( 0 ); // Read file
 
-    XNODE* fileRootNode = LoadArchiveFile( Filename, wxT( "CADSTARPCB" ), m_progressReporter );
+    m_rootNode = LoadArchiveFile( Filename, wxT( "CADSTARPCB" ), m_progressReporter );
 
     if( m_progressReporter )
     {
@@ -44,13 +44,13 @@ void CADSTAR_PCB_ARCHIVE_PARSER::Parse()
         std::vector<wxString> subNodeChildrenToCount = { wxT( "LIBRARY" ), wxT( "PARTS" ),
                                                          wxT( "LAYOUT" ) };
 
-        long numOfSteps = GetNumberOfStepsForReporting( fileRootNode, subNodeChildrenToCount );
+        long numOfSteps = GetNumberOfStepsForReporting( m_rootNode, subNodeChildrenToCount );
         m_progressReporter->SetMaxProgress( numOfSteps );
     }
 
     m_context.CheckPointCallback = [&](){ checkPoint(); };
 
-    XNODE* cNode = fileRootNode->GetChildren();
+    XNODE* cNode = m_rootNode->GetChildren();
 
     if( !cNode )
         THROW_MISSING_NODE_IO_ERROR( wxT( "HEADER" ), wxT( "CADSTARPCB" ) );
@@ -123,7 +123,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::Parse()
         checkPoint();
     }
 
-    delete fileRootNode;
+    delete m_rootNode;
 }
 
 

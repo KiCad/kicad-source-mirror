@@ -42,10 +42,18 @@
 class CADSTAR_PCB_ARCHIVE_PARSER : public CADSTAR_ARCHIVE_PARSER
 {
 public:
-    explicit CADSTAR_PCB_ARCHIVE_PARSER( const wxString& aFilename )
-            : Filename( aFilename ), Header(), Assignments(), CADSTAR_ARCHIVE_PARSER()
+    explicit CADSTAR_PCB_ARCHIVE_PARSER( const wxString& aFilename ) :
+            Filename( aFilename ), Header(), Assignments(),
+            m_rootNode( nullptr ), CADSTAR_ARCHIVE_PARSER()
     {
         KiCadUnitMultiplier = 10; // assume hundredth micron
+    }
+
+
+    virtual ~CADSTAR_PCB_ARCHIVE_PARSER()
+    {
+        if( m_rootNode )
+            delete m_rootNode;
     }
 
     /**
@@ -1214,6 +1222,9 @@ public:
     LAYOUT      Layout;
 
     int KiCadUnitMultiplier; ///<Use this value to convert units in this CPA file to KiCad units
+
+private:
+    XNODE* m_rootNode; // Currently parsed root node
 
 }; //CADSTAR_PCB_ARCHIVE_PARSER
 
