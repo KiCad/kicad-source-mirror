@@ -262,8 +262,11 @@ void PANEL_COLOR_SETTINGS::createSwatch( int aLayer, const wxString& aName )
                                              defaultColor, SWATCH_MEDIUM );
     swatch->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 
-    m_colorsGridSizer->Add( label, 0, wxALIGN_CENTER_VERTICAL | wxALIGN_LEFT | wxLEFT, 5 );
+    // Display the swatches in the left column and the layer name in the right column
+    // The right column is sometimes (depending on the translation) truncated for long texts.
+    // We cannot allow swatches to be truncated or not shown
     m_colorsGridSizer->Add( swatch, 0, wxALIGN_CENTER_VERTICAL | wxALL, 3 );
+    m_colorsGridSizer->Add( label, 0, wxALIGN_CENTER_VERTICAL | wxALIGN_LEFT | wxLEFT, 5 );
 
     m_labels[aLayer]   = label;
     m_swatches[aLayer] = swatch;
