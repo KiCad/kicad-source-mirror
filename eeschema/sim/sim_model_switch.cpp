@@ -154,7 +154,7 @@ const std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SWITCH::makeSwVParamInfos()
     paramInfo.unit = "Ω";
     paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "1";
-    paramInfo.description = "Resistance when open";
+    paramInfo.description = "Resistance when closed";
     paramInfo.isSpiceInstanceParam = false;
     paramInfo.spiceModelName = "";
     paramInfo.enumValues = {};
@@ -165,7 +165,7 @@ const std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SWITCH::makeSwVParamInfos()
     paramInfo.unit = "Ω";
     paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "1e+12";
-    paramInfo.description = "Resistance when closed";
+    paramInfo.description = "Resistance when open";
     paramInfo.isSpiceInstanceParam = false;
     paramInfo.spiceModelName = "";
     paramInfo.enumValues = {};
@@ -218,7 +218,7 @@ const std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SWITCH::makeSwIParamInfos()
     paramInfo.unit = "Ω";
     paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "1";
-    paramInfo.description = "Resistance when open";
+    paramInfo.description = "Resistance when closed";
     paramInfo.isSpiceInstanceParam = false;
     paramInfo.spiceModelName = "";
     paramInfo.enumValues = {};
@@ -229,7 +229,7 @@ const std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SWITCH::makeSwIParamInfos()
     paramInfo.unit = "Ω";
     paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "1e+12";
-    paramInfo.description = "Resistance when closed";
+    paramInfo.description = "Resistance when open";
     paramInfo.isSpiceInstanceParam = false;
     paramInfo.spiceModelName = "";
     paramInfo.enumValues = {};
