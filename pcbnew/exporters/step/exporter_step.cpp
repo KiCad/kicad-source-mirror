@@ -298,7 +298,11 @@ void EXPORTER_STEP::determinePcbThickness()
             switch( item->GetType() )
             {
             case BS_ITEM_TYPE_DIELECTRIC:
-                thickness += item->GetThickness();
+                // Dielectric can have sub-layers. Layer 0 is the main layer
+                // Not frequent, but possible
+                for( int idx = 0; idx < item->GetSublayersCount(); idx++ )
+                    thickness += item->GetThickness( idx );
+
                 break;
 
             case BS_ITEM_TYPE_COPPER:
@@ -325,6 +329,9 @@ bool EXPORTER_STEP::Export()
 
     ReportMessage( _( "Determining PCB data\n" ) );
     determinePcbThickness();
+    wxString msg;
+    msg.Printf( _( "Board Thickness from stackup: %.3f mm\n" ), m_boardThickness );
+    ReportMessage( msg );
 
     try
     {
@@ -362,8 +369,6 @@ bool EXPORTER_STEP::Export()
 
     if( m_fail || m_error )
     {
-        wxString msg;
-
         if( m_fail )
         {
             msg = _( "Unable to create STEP file.\n"
