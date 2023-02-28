@@ -926,8 +926,8 @@ void SCH_SEXPR_PLUGIN::saveBitmap( SCH_BITMAP* aBitmap, int aNestLevel )
     // Let's keep compatibility by changing image scale.
     if( SEXPR_SCHEMATIC_FILE_VERSION <= 20230121 )
     {
-        BITMAP_BASE* image = aBitmap->GetImage();
-        scale = scale * 300.0 / image->GetPPI();
+        BITMAP_BASE* bm_image = aBitmap->GetImage();
+        scale = scale * 300.0 / bm_image->GetPPI();
     }
 
     if( scale != 1.0 )
