@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,11 +23,18 @@
 
 #include <sim/sim_model_spice_fallback.h>
 #include <fmt/format.h>
+#include <boost/algorithm/string/case_conv.hpp>
 
 
 SIM_MODEL_SPICE_FALLBACK::SIM_MODEL_SPICE_FALLBACK( TYPE aType, const std::string& aRawSpiceCode ) :
         SIM_MODEL_SPICE( aType, std::make_unique<SPICE_GENERATOR_SPICE>( *this ) )
 {
+    // Create the model we *should* have had to copy its parameter list
+    std::unique_ptr<SIM_MODEL> model = SIM_MODEL::Create( aType );
+
+    for( const SIM_MODEL::PARAM& param : model->GetParams() )
+        AddParam( param.info );
+
     m_spiceCode = aRawSpiceCode;
 }
 
@@ -54,3 +61,25 @@ std::vector<std::string> SIM_MODEL_SPICE_FALLBACK::GetPinNames() const
     std::unique_ptr<SIM_MODEL> model = SIM_MODEL::Create( GetType() );
     return model->GetPinNames();
 }
+
+
+int SIM_MODEL_SPICE_FALLBACK::doFindParam( const std::string& aParamName ) const
+{
+    // Special case to allow escaped model parameters (suffixed with "_")
+
+    std::string lowerParamName = boost::to_lower_copy( aParamName );
+
+    std::vector<std::reference_wrapper<const PARAM>> params = GetParams();
+
+    for( int ii = 0; ii < (int) params.size(); ++ii )
+    {
+        const PARAM& param = params[ii];
+
+        if( param.info.name == lowerParamName || param.info.name == lowerParamName + "_" )
+            return ii;
+    }
+
+    return -1;
+}
+
+
