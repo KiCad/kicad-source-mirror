@@ -154,7 +154,6 @@ void GERBER_PLOTTER::SetGerberCoordinatesFormat( int aResolution, bool aUseInche
 
 void GERBER_PLOTTER::emitDcode( const VECTOR2D& pt, int dcode )
 {
-
     fprintf( m_outputFile, "X%dY%dD%02d*\n", KiROUND( pt.x ), KiROUND( pt.y ), dcode );
 }
 
@@ -1332,7 +1331,7 @@ void GERBER_PLOTTER::FlashPadOval( const VECTOR2I& aPos, const VECTOR2I& aSize,
         if( orient.IsCardinal90() )
             std::swap( size.x, size.y );
 
-        VECTOR2I pos_device = userToDeviceCoordinates( aPos );
+        VECTOR2D pos_device = userToDeviceCoordinates( aPos );
         int      aperture_attrib = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;
         selectAperture( size, 0, ANGLE_0, APERTURE::AT_OVAL, aperture_attrib );
 
@@ -1363,7 +1362,7 @@ void GERBER_PLOTTER::FlashPadOval( const VECTOR2I& aPos, const VECTOR2I& aSize,
                         orient -= ANGLE_180;
                 }
 
-                VECTOR2I pos_device = userToDeviceCoordinates( aPos );
+                VECTOR2D pos_device = userToDeviceCoordinates( aPos );
                 int      aperture_attrib = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;
                 selectAperture( size, 0, orient, APERTURE::AM_ROTATED_OVAL, aperture_attrib );
 
@@ -1426,7 +1425,7 @@ void GERBER_PLOTTER::FlashPadRect( const VECTOR2I& pos, const VECTOR2I& aSize,
         }
         else
         {
-            VECTOR2I pos_device = userToDeviceCoordinates( pos );
+            VECTOR2D pos_device = userToDeviceCoordinates( pos );
             int      aperture_attrib = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;
             selectAperture( size, 0, ANGLE_0, APERTURE::AT_RECT, aperture_attrib );
 
@@ -1443,7 +1442,7 @@ void GERBER_PLOTTER::FlashPadRect( const VECTOR2I& pos, const VECTOR2I& aSize,
         {
             m_hasApertureRotRect = true;
 
-            VECTOR2I pos_device = userToDeviceCoordinates( pos );
+            VECTOR2D pos_device = userToDeviceCoordinates( pos );
             int      aperture_attrib = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;
             selectAperture( size, 0, aOrient, APERTURE::AM_ROT_RECT, aperture_attrib );
 
@@ -1765,7 +1764,7 @@ void GERBER_PLOTTER::FlashPadChamferRoundRect( const VECTOR2I& aShapePos, const 
     if( aData )
         gbr_metadata = *static_cast<GBR_METADATA*>( aData );
 
-    VECTOR2I              pos_device = userToDeviceCoordinates( aShapePos );
+    VECTOR2D              pos_device = userToDeviceCoordinates( aShapePos );
     SHAPE_POLY_SET        outline;
     std::vector<VECTOR2I> cornerList;
 
