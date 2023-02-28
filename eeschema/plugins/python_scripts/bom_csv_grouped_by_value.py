@@ -86,7 +86,8 @@ partfields -= set( ['Reference', 'Value', 'Datasheet', 'Footprint'] )
 columnset = compfields | partfields     # union
 
 # prepend an initial 'hard coded' list and put the enchillada into list 'columns'
-columns = ['Item', 'Qty', 'Reference(s)', 'Value', 'LibPart', 'Footprint', 'Datasheet', 'DNP'] + sorted(list(columnset))
+hardcoded_columns = ['Item', 'Qty', 'Reference(s)', 'Value', 'LibPart', 'Footprint', 'Datasheet', 'DNP']
+columns = hardcoded_columns + sorted(list(columnset))
 
 # Create a new csv writer object to use as the output formatter
 out = csv.writer( f, lineterminator='\n', delimiter=',', quotechar='\"', quoting=csv.QUOTE_ALL )
@@ -122,7 +123,7 @@ item = 0
 for group in grouped:
     del row[:]
     refs = ""
-    
+
     # Add the reference of every component in the group and keep a reference
     # to the component so that the other data can be filled in once per group
     for component in group:
@@ -143,8 +144,8 @@ for group in grouped:
     row.append( net.getGroupDatasheet(group) )
     row.append( c.getDNPString() )
 
-    # from column 7 upwards, use the fieldnames to grab the data
-    for field in columns[7:]:
+    # add user fields by name
+    for field in columns[len(hardcoded_columns):]:
         row.append( net.getGroupField(group, field) );
 
     writerow( out, row  )
