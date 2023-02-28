@@ -91,10 +91,32 @@ COMMIT& BOARD_COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType )
                         child->SetFlags( IS_MODIFIED_CHILD );
                     } );
         }
-        else if( FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aItem->GetParent() ) )
+        else if( aItem->GetParent() && aItem->GetParent()->Type() == PCB_FOOTPRINT_T )
         {
-            aItem->SetFlags( IS_MODIFIED_CHILD );
-            aItem = fp;
+            if( aItem->Type() == PCB_GROUP_T )
+            {
+                static_cast<PCB_GROUP*>( aItem )->RunOnChildren(
+                        [&]( BOARD_ITEM* child )
+                        {
+                            child->SetFlags( IS_MODIFIED_CHILD );
+                        } );
+            }
+            else
+            {
+                aItem->SetFlags( IS_MODIFIED_CHILD );
+            }
+
+            aItem = aItem->GetParent();
+        }
+        else if( aItem->Type() == PCB_GROUP_T )
+        {
+            // Many operations on group (move, rotate, etc.) are applied directly to their
+            // children, so it's the children that must be staged.
+            static_cast<PCB_GROUP*>( aItem )->RunOnChildren(
+                    [&]( BOARD_ITEM* child )
+                    {
+                        COMMIT::Stage( child, aChangeType );
+                    } );
         }
     }
 
