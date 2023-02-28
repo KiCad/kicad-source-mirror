@@ -162,6 +162,14 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
         m_fields[ VALUE_FIELD ].SetText( wxT( "${SIM.PARAMS}" ) );
     }
 
+    std::vector<LIB_PIN*> sourcePins = m_symbol.GetAllLibPins();
+
+    std::sort( sourcePins.begin(), sourcePins.end(),
+               []( const LIB_PIN* lhs, const LIB_PIN* rhs )
+               {
+                   return StrNumCmp( lhs->GetNumber(), rhs->GetNumber(), true ) < 0;
+               } );
+
     std::string libraryFilename = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::LIBRARY_FIELD );
 
     if( libraryFilename != "" )
@@ -172,8 +180,11 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
         if( !loadLibrary( libraryFilename ) )
         {
             m_libraryPathText->ChangeValue( libraryFilename );
-            m_modelNameChoice->SetSelection( -1 );
             m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields );
+            m_libraryModelsMgr.CreateModel( nullptr, sourcePins, m_fields );
+
+            m_modelNameChoice->Append( _( "<unknown>" ) );
+            m_modelNameChoice->SetSelection( 0 );
         }
         else
         {
@@ -248,14 +259,6 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
         m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields );
     }
 
-    std::vector<LIB_PIN*> sourcePins = m_symbol.GetAllLibPins();
-
-    std::sort( sourcePins.begin(), sourcePins.end(),
-               []( const LIB_PIN* lhs, const LIB_PIN* rhs )
-               {
-                   return StrNumCmp( lhs->GetNumber(), rhs->GetNumber(), true ) < 0;
-               } );
-
     for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
     {
         wxString           msg;
@@ -309,7 +312,9 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataFromWindow()
         if( fn.MakeRelativeTo( Prj().GetProjectPath() ) && !fn.GetFullPath().StartsWith( ".." ) )
             path = fn.GetFullPath();
 
-        if( !m_modelNameChoice->IsEmpty() )
+        if( dynamic_cast<SIM_MODEL_SPICE_FALLBACK*>( &curModel() ) )
+            name = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD, false );
+        else if( !m_modelNameChoice->IsEmpty() )
             name = m_modelNameChoice->GetStringSelection().ToStdString();
     }
 
@@ -436,15 +441,10 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateInstanceWidgets( SIM_MODEL* aMod
 
     m_typeChoice->Enable( !m_useLibraryModelRadioButton->GetValue() || isIbisLoaded() );
 
-    if( dynamic_cast<SIM_MODEL_RAW_SPICE*>( aModel )
-            || dynamic_cast<SIM_MODEL_SPICE_FALLBACK*>( aModel ) )
-    {
+    if( dynamic_cast<SIM_MODEL_RAW_SPICE*>( aModel ) )
         m_modelNotebook->SetSelection( 1 );
-    }
     else
-    {
         m_modelNotebook->SetSelection( 0 );
-    }
 
     if( aModel->HasPrimaryValue() )
     {
@@ -562,6 +562,9 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateModelParamsTab( SIM_MODEL* aMode
 template <typename T_symbol, typename T_field>
 void DIALOG_SIM_MODEL<T_symbol, T_field>::updateModelCodeTab( SIM_MODEL* aModel )
 {
+    if( dynamic_cast<SIM_MODEL_SPICE_FALLBACK*>( aModel ) )
+        return;
+
     wxString   text;
     SPICE_ITEM item;
 
