@@ -141,6 +141,8 @@ bool DIALOG_LIB_TEXTBOX_PROPERTIES::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
+    LIB_SYMBOL* symbol = m_currentText->GetParent();
+
     m_textCtrl->SetValue( m_currentText->GetText() );
     m_textCtrl->EmptyUndoBuffer();
 
@@ -204,7 +206,9 @@ bool DIALOG_LIB_TEXTBOX_PROPERTIES::TransferDataToWindow()
     m_fillColorSwatch->Enable( m_currentText->IsFilled() );
 
     m_privateCheckbox->SetValue( m_currentText->IsPrivate() );
-    m_CommonUnit->SetValue( m_currentText->GetUnit() == 0 );
+    m_CommonUnit->SetValue(
+            symbol && symbol->GetUnitCount() > 1 && m_currentText->GetUnit() == 0 );
+    m_CommonUnit->Enable( symbol && symbol->GetUnitCount() > 1 );
     m_CommonConvert->SetValue( m_currentText->GetConvert() == 0 );
 
     return true;

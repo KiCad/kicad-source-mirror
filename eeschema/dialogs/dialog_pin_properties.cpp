@@ -266,7 +266,7 @@ bool DIALOG_PIN_PROPERTIES::TransferDataToWindow()
     m_numberSize.SetValue( m_pin->GetNumberTextSize() );
     m_pinLength.SetValue( m_pin->GetLength() );
     m_checkApplyToAllParts->Enable( m_pin->GetParent()->IsMulti() );
-    m_checkApplyToAllParts->SetValue( m_pin->GetUnit() == 0 );
+    m_checkApplyToAllParts->SetValue( m_pin->GetParent()->IsMulti() && m_pin->GetUnit() == 0 );
     m_checkApplyToAllConversions->SetValue( m_pin->GetConvert() == 0 );
     m_checkShow->SetValue( m_pin->IsVisible() );
 
