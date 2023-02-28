@@ -122,6 +122,8 @@ DIALOG_LIB_TEXT_PROPERTIES::~DIALOG_LIB_TEXT_PROPERTIES()
 
 bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataToWindow()
 {
+    LIB_SYMBOL* symbol = m_graphicText->GetParent();
+
     if( m_graphicText )
     {
         m_textSize.SetValue( m_graphicText->GetTextWidth() );
@@ -135,7 +137,8 @@ bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataToWindow()
         m_bold->Check( m_graphicText->IsBold() );
 
         m_privateCheckbox->SetValue( m_graphicText->IsPrivate() );
-        m_CommonUnit->SetValue( m_graphicText->GetUnit() == 0 );
+        m_CommonUnit->SetValue(
+                symbol && symbol->GetUnitCount() > 1 && m_graphicText->GetUnit() == 0 );
         m_CommonConvert->SetValue( m_graphicText->GetConvert() == 0 );
 
         if( m_graphicText->GetTextAngle().IsHorizontal() )
@@ -164,7 +167,8 @@ bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataToWindow()
 
         m_textSize.SetValue( schIUScale.MilsToIU( cfg->m_Defaults.text_size ) );
 
-        m_CommonUnit->SetValue( !tools->GetDrawSpecificUnit() );
+        m_CommonUnit->SetValue(
+                symbol && symbol->GetUnitCount() > 1 && !tools->GetDrawSpecificUnit() );
         m_CommonConvert->SetValue( !tools->GetDrawSpecificConvert() );
 
         if( tools->GetLastTextAngle().IsHorizontal() )
@@ -172,6 +176,8 @@ bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataToWindow()
         else
             m_vertical->Check();
     }
+
+    m_CommonUnit->Enable( symbol && symbol->GetUnitCount() > 1 );
 
     return true;
 }

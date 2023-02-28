@@ -119,7 +119,8 @@ bool DIALOG_LIB_SHAPE_PROPERTIES::TransferDataToWindow()
         wxFAIL_MSG( "Line type not found in the type lookup map" );
 
     m_privateCheckbox->SetValue( m_shape->IsPrivate() );
-    m_checkApplyToAllUnits->SetValue( m_shape->GetUnit() == 0 );
+    m_checkApplyToAllUnits->SetValue(
+            symbol && symbol->GetUnitCount() > 1 && m_shape->GetUnit() == 0 );
     m_checkApplyToAllUnits->Enable( symbol && symbol->GetUnitCount() > 1 );
     m_checkApplyToAllConversions->SetValue( m_shape->GetConvert() == 0 );
 
