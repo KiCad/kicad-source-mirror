@@ -523,7 +523,12 @@ private:
         // z-order range for the current point ± limit bounding box
         const int32_t     maxZ = zOrder( aPt->x + m_limit, aPt->y + m_limit );
         const int32_t     minZ = zOrder( aPt->x - m_limit, aPt->y - m_limit );
-        const SEG::ecoord limit2 = SEG::Square( m_limit );
+
+        // Subtract 1 to account for rounding inaccuracies in SquaredEuclideanNorm()
+        // below.  We would usually test for rounding in the final value but since we
+        // are working in squared integers here, we allow the 1nm slop rather than
+        // force a separate calculation
+        const SEG::ecoord limit2 = SEG::Square( m_limit - 1 );
 
         // first look for points in increasing z-order
         Vertex* p = aPt->nextZ;
