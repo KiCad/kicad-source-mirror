@@ -72,7 +72,7 @@ std::string SPICE_GENERATOR_SWITCH::ItemParams() const
         std::string value = param.value;
 
         if( value != "none" )
-            result.append( value );
+            result.append( " " + value );
     }
 
     return result;
