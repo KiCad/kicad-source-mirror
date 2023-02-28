@@ -260,6 +260,7 @@ set( EESCHEMA_SRCS
     erc_item.cpp
     erc_sch_pin_context.cpp
     erc_settings.cpp
+    fields_data_model.cpp
     fields_grid_table.cpp
     files-io.cpp
     generate_alias_info.cpp
