@@ -67,8 +67,9 @@ namespace EDA_UNIT_UTILS
 
     /**
      * Writes any unit info found in the string to aUnits.
+     * @return true - when unit was found, false - when unit could not be determined
      */
-    void FetchUnitsFromString( const wxString& aTextValue, EDA_UNITS& aUnits );
+    bool FetchUnitsFromString( const wxString& aTextValue, EDA_UNITS& aUnits );
 
     /**
      * Get the units string for a given units type.

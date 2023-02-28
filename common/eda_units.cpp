@@ -65,7 +65,7 @@ int EDA_UNIT_UTILS::Mils2mm( double aVal )
 }
 
 
-void EDA_UNIT_UTILS::FetchUnitsFromString( const wxString& aTextValue, EDA_UNITS& aUnits )
+bool EDA_UNIT_UTILS::FetchUnitsFromString( const wxString& aTextValue, EDA_UNITS& aUnits )
 {
     wxString buf( aTextValue.Strip( wxString::both ) );
     unsigned brk_point = 0;
@@ -92,6 +92,9 @@ void EDA_UNIT_UTILS::FetchUnitsFromString( const wxString& aTextValue, EDA_UNITS
         aUnits = EDA_UNITS::INCHES;
     else if( unit == wxT( "de" ) || unit == wxT( "ra" ) ) // "deg" or "rad"
         aUnits = EDA_UNITS::DEGREES;
+    else
+        return false;
+    return true;
 }
 
 

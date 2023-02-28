@@ -3226,8 +3226,11 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
 
             if( isLegacyDimension )
             {
-                EDA_UNITS units   = EDA_UNITS::INCHES;
-                EDA_UNIT_UTILS::FetchUnitsFromString( text->GetText(), units );
+                EDA_UNITS units = EDA_UNITS::MILLIMETRES;
+
+                if( !EDA_UNIT_UTILS::FetchUnitsFromString( text->GetText(), units ) )
+                    dim->SetAutoUnits( true ); //Not determined => use automatic units
+
                 dim->SetUnits( units );
             }
 
