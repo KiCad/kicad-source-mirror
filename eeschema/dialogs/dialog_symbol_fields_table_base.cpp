@@ -19,7 +19,12 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_splitterMainWindow = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_LIVE_UPDATE|wxSP_NO_XP_THEME );
+	m_notebook1 = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_panelEdit = new wxPanel( m_notebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bEditSizer;
+	bEditSizer = new wxBoxSizer( wxVERTICAL );
+
+	m_splitterMainWindow = new wxSplitterWindow( m_panelEdit, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_LIVE_UPDATE|wxSP_NO_XP_THEME );
 	m_splitterMainWindow->SetMinimumPaneSize( 200 );
 
 	m_leftPanel = new wxPanel( m_splitterMainWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -47,18 +52,20 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 
 	bLeftSizer->Add( m_fieldsCtrl, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
-	m_addFieldButton = new wxButton( m_leftPanel, wxID_ANY, _("Add Field..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bLeftSizer->Add( m_addFieldButton, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	wxBoxSizer* bFieldsButtons;
+	bFieldsButtons = new wxBoxSizer( wxHORIZONTAL );
 
-	m_removeFieldButton = new wxButton( m_leftPanel, wxID_ANY, _("Remove Field..."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_removeFieldButton->Enable( false );
+	m_addFieldButton = new wxBitmapButton( m_leftPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bFieldsButtons->Add( m_addFieldButton, 0, wxALL, 5 );
 
-	bLeftSizer->Add( m_removeFieldButton, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	m_removeFieldButton = new wxBitmapButton( m_leftPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bFieldsButtons->Add( m_removeFieldButton, 0, wxALL, 5 );
 
-	m_renameFieldButton = new wxButton( m_leftPanel, wxID_ANY, _("Rename Field..."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_renameFieldButton->Enable( false );
+	m_renameFieldButton = new wxBitmapButton( m_leftPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bFieldsButtons->Add( m_renameFieldButton, 0, wxALL, 5 );
 
-	bLeftSizer->Add( m_renameFieldButton, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+
+	bLeftSizer->Add( bFieldsButtons, 0, wxEXPAND, 5 );
 
 
 	m_leftPanel->SetSizer( bLeftSizer );
@@ -102,7 +109,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	bControls->Add( m_bRefresh, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	bRightSizer->Add( bControls, 0, wxEXPAND, 5 );
+	bRightSizer->Add( bControls, 0, wxEXPAND|wxLEFT, 5 );
 
 	m_grid = new WX_GRID( m_rightPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
@@ -130,14 +137,124 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	m_grid->SetMinSize( wxSize( 600,240 ) );
 
-	bRightSizer->Add( m_grid, 1, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	bRightSizer->Add( m_grid, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 
 	m_rightPanel->SetSizer( bRightSizer );
 	m_rightPanel->Layout();
 	bRightSizer->Fit( m_rightPanel );
 	m_splitterMainWindow->SplitVertically( m_leftPanel, m_rightPanel, -1 );
-	bMainSizer->Add( m_splitterMainWindow, 1, wxALL|wxEXPAND, 5 );
+	bEditSizer->Add( m_splitterMainWindow, 1, wxALL|wxEXPAND, 5 );
+
+
+	m_panelEdit->SetSizer( bEditSizer );
+	m_panelEdit->Layout();
+	bEditSizer->Fit( m_panelEdit );
+	m_notebook1->AddPage( m_panelEdit, _("Edit"), true );
+	m_panelExport = new wxPanel( m_notebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxGridBagSizer* gbExport;
+	gbExport = new wxGridBagSizer( 0, 0 );
+	gbExport->SetFlexibleDirection( wxBOTH );
+	gbExport->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	wxFlexGridSizer* fgExportOptions;
+	fgExportOptions = new wxFlexGridSizer( 6, 2, 0, 0 );
+	fgExportOptions->AddGrowableRow( 5 );
+	fgExportOptions->SetFlexibleDirection( wxBOTH );
+	fgExportOptions->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_labelBomExportPresets = new wxStaticText( m_panelExport, wxID_ANY, _("Presets:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelBomExportPresets->Wrap( -1 );
+	fgExportOptions->Add( m_labelBomExportPresets, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+
+	wxString m_cbBomExportPresetsChoices[] = { _("CSV"), _("Semicolons"), _("(unsaved)") };
+	int m_cbBomExportPresetsNChoices = sizeof( m_cbBomExportPresetsChoices ) / sizeof( wxString );
+	m_cbBomExportPresets = new wxChoice( m_panelExport, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbBomExportPresetsNChoices, m_cbBomExportPresetsChoices, 0 );
+	m_cbBomExportPresets->SetSelection( 1 );
+	fgExportOptions->Add( m_cbBomExportPresets, 0, wxALL|wxEXPAND, 5 );
+
+	m_labelFieldDelimiter = new wxStaticText( m_panelExport, wxID_ANY, _("Field Delimeter:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelFieldDelimiter->Wrap( -1 );
+	fgExportOptions->Add( m_labelFieldDelimiter, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+
+	m_textFieldDelimiter = new wxTextCtrl( m_panelExport, wxID_ANY, _(","), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_TAB );
+	fgExportOptions->Add( m_textFieldDelimiter, 0, wxALL|wxEXPAND, 5 );
+
+	m_labelStringDelimiter = new wxStaticText( m_panelExport, wxID_ANY, _("String Delimeter:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelStringDelimiter->Wrap( -1 );
+	fgExportOptions->Add( m_labelStringDelimiter, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+
+	m_textStringDelimiter = new wxTextCtrl( m_panelExport, wxID_ANY, _("\""), wxDefaultPosition, wxDefaultSize, 0 );
+	#ifdef __WXGTK__
+	if ( !m_textStringDelimiter->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_textStringDelimiter->SetMaxLength( 1 );
+	}
+	#else
+	m_textStringDelimiter->SetMaxLength( 1 );
+	#endif
+	fgExportOptions->Add( m_textStringDelimiter, 0, wxALL|wxEXPAND, 5 );
+
+	m_labelExcludeDNP = new wxStaticText( m_panelExport, wxID_ANY, _("Exclude DNP:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelExcludeDNP->Wrap( -1 );
+	fgExportOptions->Add( m_labelExcludeDNP, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+
+	m_checkExludeDNP = new wxCheckBox( m_panelExport, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkExludeDNP->SetValue(true);
+	fgExportOptions->Add( m_checkExludeDNP, 0, wxALL, 5 );
+
+
+	gbExport->Add( fgExportOptions, wxGBPosition( 0, 0 ), wxGBSpan( 3, 1 ), wxEXPAND, 5 );
+
+	wxBoxSizer* bOutputDirectory;
+	bOutputDirectory = new wxBoxSizer( wxHORIZONTAL );
+
+	m_labelOutputDirectory = new wxStaticText( m_panelExport, wxID_ANY, _("Output folder:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelOutputDirectory->Wrap( -1 );
+	bOutputDirectory->Add( m_labelOutputDirectory, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_outputDirectoryName = new wxTextCtrl( m_panelExport, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bOutputDirectory->Add( m_outputDirectoryName, 1, wxALL|wxEXPAND, 5 );
+
+	m_browseButton = new wxBitmapButton( m_panelExport, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_browseButton->SetMinSize( wxSize( 30,30 ) );
+
+	bOutputDirectory->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+
+	gbExport->Add( bOutputDirectory, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+
+	wxBoxSizer* bPreview;
+	bPreview = new wxBoxSizer( wxHORIZONTAL );
+
+	m_labelPreview = new wxStaticText( m_panelExport, wxID_ANY, _("Preview:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelPreview->Wrap( -1 );
+	bPreview->Add( m_labelPreview, 0, wxALIGN_BOTTOM|wxALL, 5 );
+
+
+	bPreview->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_bRefreshPreview = new wxBitmapButton( m_panelExport, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bRefreshPreview->SetMinSize( wxSize( 30,30 ) );
+
+	bPreview->Add( m_bRefreshPreview, 0, wxALL, 5 );
+
+
+	gbExport->Add( bPreview, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+
+	m_textOutput = new wxTextCtrl( m_panelExport, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxTE_MULTILINE|wxTE_READONLY );
+	gbExport->Add( m_textOutput, wxGBPosition( 2, 1 ), wxGBSpan( 2, 1 ), wxALL|wxEXPAND, 5 );
+
+
+	gbExport->AddGrowableCol( 1 );
+	gbExport->AddGrowableRow( 3 );
+
+	m_panelExport->SetSizer( gbExport );
+	m_panelExport->Layout();
+	gbExport->Fit( m_panelExport );
+	m_notebook1->AddPage( m_panelExport, _("Export"), false );
+
+	bMainSizer->Add( m_notebook1, 1, wxEXPAND | wxALL, 5 );
 
 	wxBoxSizer* bButtonsSizer;
 	bButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -145,11 +262,11 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 
 	bButtonsSizer->Add( 0, 0, 9, wxEXPAND, 5 );
 
-	m_buttonExport = new wxButton( this, wxID_ANY, _("Export as CSV..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bButtonsSizer->Add( m_buttonExport, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_buttonExport = new wxButton( this, wxID_ANY, _("Export"), wxDefaultPosition, wxDefaultSize, 0 );
+	bButtonsSizer->Add( m_buttonExport, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_buttonApply = new wxButton( this, wxID_ANY, _("Apply, Save Schematic && Continue"), wxDefaultPosition, wxDefaultSize, 0 );
-	bButtonsSizer->Add( m_buttonApply, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	bButtonsSizer->Add( m_buttonApply, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -158,7 +275,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 
-	bButtonsSizer->Add( m_sdbSizer, 0, wxBOTTOM|wxLEFT, 5 );
+	bButtonsSizer->Add( m_sdbSizer, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
 	bMainSizer->Add( bButtonsSizer, 0, wxEXPAND, 5 );
@@ -188,6 +305,8 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	m_grid->Connect( wxEVT_GRID_CELL_RIGHT_CLICK, wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnTableItemContextMenu ), NULL, this );
 	m_grid->Connect( wxEVT_GRID_COL_SIZE, wxGridSizeEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnTableColSize ), NULL, this );
 	m_grid->Connect( wxEVT_GRID_RANGE_SELECT, wxGridRangeSelectEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnTableRangeSelected ), NULL, this );
+	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnRegroupSymbols ), NULL, this );
+	m_bRefreshPreview->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnRegroupSymbols ), NULL, this );
 	m_buttonExport->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnExport ), NULL, this );
 	m_buttonApply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnSaveAndContinue ), NULL, this );
 	m_sdbSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnCancel ), NULL, this );
@@ -213,6 +332,8 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::~DIALOG_SYMBOL_FIELDS_TABLE_BASE()
 	m_grid->Disconnect( wxEVT_GRID_CELL_RIGHT_CLICK, wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnTableItemContextMenu ), NULL, this );
 	m_grid->Disconnect( wxEVT_GRID_COL_SIZE, wxGridSizeEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnTableColSize ), NULL, this );
 	m_grid->Disconnect( wxEVT_GRID_RANGE_SELECT, wxGridRangeSelectEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnTableRangeSelected ), NULL, this );
+	m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnRegroupSymbols ), NULL, this );
+	m_bRefreshPreview->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnRegroupSymbols ), NULL, this );
 	m_buttonExport->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnExport ), NULL, this );
 	m_buttonApply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnSaveAndContinue ), NULL, this );
 	m_sdbSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnCancel ), NULL, this );

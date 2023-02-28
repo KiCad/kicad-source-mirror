@@ -23,16 +23,19 @@ class WX_GRID;
 #include <wx/choice.h>
 #include <wx/sizer.h>
 #include <wx/dataview.h>
-#include <wx/button.h>
+#include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <wx/button.h>
 #include <wx/panel.h>
 #include <wx/srchctrl.h>
-#include <wx/bmpbuttn.h>
 #include <wx/checkbox.h>
 #include <wx/grid.h>
 #include <wx/splitter.h>
+#include <wx/textctrl.h>
+#include <wx/gbsizer.h>
+#include <wx/notebook.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -47,14 +50,16 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
+		wxNotebook* m_notebook1;
+		wxPanel* m_panelEdit;
 		wxSplitterWindow* m_splitterMainWindow;
 		wxPanel* m_leftPanel;
 		wxStaticText* m_bomPresetsLabel;
 		wxChoice* m_cbBomPresets;
 		wxDataViewListCtrl* m_fieldsCtrl;
-		wxButton* m_addFieldButton;
-		wxButton* m_removeFieldButton;
-		wxButton* m_renameFieldButton;
+		wxBitmapButton* m_addFieldButton;
+		wxBitmapButton* m_removeFieldButton;
+		wxBitmapButton* m_renameFieldButton;
 		wxPanel* m_rightPanel;
 		wxSearchCtrl* m_filter;
 		BITMAP_BUTTON* m_separator1;
@@ -62,6 +67,21 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		BITMAP_BUTTON* m_separator2;
 		wxBitmapButton* m_bRefresh;
 		WX_GRID* m_grid;
+		wxPanel* m_panelExport;
+		wxStaticText* m_labelBomExportPresets;
+		wxChoice* m_cbBomExportPresets;
+		wxStaticText* m_labelFieldDelimiter;
+		wxTextCtrl* m_textFieldDelimiter;
+		wxStaticText* m_labelStringDelimiter;
+		wxTextCtrl* m_textStringDelimiter;
+		wxStaticText* m_labelExcludeDNP;
+		wxCheckBox* m_checkExludeDNP;
+		wxStaticText* m_labelOutputDirectory;
+		wxTextCtrl* m_outputDirectoryName;
+		wxBitmapButton* m_browseButton;
+		wxStaticText* m_labelPreview;
+		wxBitmapButton* m_bRefreshPreview;
+		wxTextCtrl* m_textOutput;
 		wxButton* m_buttonExport;
 		wxButton* m_buttonApply;
 		wxStdDialogButtonSizer* m_sdbSizer;

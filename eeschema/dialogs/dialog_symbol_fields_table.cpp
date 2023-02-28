@@ -863,6 +863,15 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
     m_separator1->SetIsSeparator();
     m_separator2->SetIsSeparator();
     m_bRefresh->SetBitmap( KiBitmap( BITMAPS::small_refresh ) );
+    m_bRefreshPreview->SetBitmap( KiBitmap( BITMAPS::small_refresh ) );
+    m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
+
+    m_addFieldButton->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
+    m_removeFieldButton->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
+    m_renameFieldButton->SetBitmap( KiBitmap( BITMAPS::small_edit ) );
+
+    m_removeFieldButton->Enable( false );
+    m_renameFieldButton->Enable( false );
 
     m_fieldsCtrl->AppendTextColumn( _( "Field" ), wxDATAVIEW_CELL_INERT, 0, wxALIGN_LEFT, 0 );
     m_fieldsCtrl->AppendTextColumn( _( "Label" ), wxDATAVIEW_CELL_EDITABLE, 0, wxALIGN_LEFT, 0 );
