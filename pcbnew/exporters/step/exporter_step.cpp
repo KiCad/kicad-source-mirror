@@ -138,6 +138,13 @@ bool EXPORTER_STEP::composePCB( FOOTPRINT* aFootprint, VECTOR2D aOrigin )
 {
     bool hasdata = false;
 
+    // Dump the pad holes into the PCB
+    for( PAD* pad : aFootprint->Pads() )
+    {
+        if( m_pcbModel->AddPadHole( pad, aOrigin ) )
+            hasdata = true;
+    }
+
     if( ( aFootprint->GetAttributes() & FP_EXCLUDE_FROM_BOM ) && !m_params.m_includeExcludedBom )
     {
         return hasdata;
@@ -166,13 +173,6 @@ bool EXPORTER_STEP::composePCB( FOOTPRINT* aFootprint, VECTOR2D aOrigin )
         {
             // Do nothing if the libraryName is not found in lib table
         }
-    }
-
-    // Dump the pad holes into the PCB
-    for( PAD* pad : aFootprint->Pads() )
-    {
-        if( m_pcbModel->AddPadHole( pad, aOrigin ) )
-            hasdata = true;
     }
 
     // Exit early if we don't want to include footprint models
