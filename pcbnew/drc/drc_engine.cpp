@@ -345,7 +345,7 @@ void DRC_ENGINE::loadImplicitRules()
                 if( nc->GetuViaDiameter() || nc->GetuViaDrill() )
                 {
                     std::shared_ptr<DRC_RULE> netclassRule = std::make_shared<DRC_RULE>();
-                    netclassRule->m_Name = wxString::Format( _( "netclass '%s'" ), ncName );
+                    netclassRule->m_Name = wxString::Format( _( "netclass '%s' (uvia)" ), ncName );
                     netclassRule->m_Implicit = true;
 
                     expr = wxString::Format( wxT( "A.NetClass == '%s' && A.Via_Type == 'Micro'" ),
@@ -712,6 +712,28 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     DRC_CONSTRAINT constraint;
     constraint.m_Type = aConstraintType;
 
+    auto applyConstraint =
+            [&]( const DRC_ENGINE_CONSTRAINT* c )
+            {
+                if( c->constraint.m_Value.HasMin() )
+                    constraint.m_Value.SetMin( c->constraint.m_Value.Min() );
+
+                if( c->constraint.m_Value.HasOpt() )
+                    constraint.m_Value.SetOpt( c->constraint.m_Value.Opt() );
+
+                if( c->constraint.m_Value.HasMax() )
+                    constraint .m_Value.SetMax( c->constraint.m_Value.Max() );
+
+                // While the expectation would be to OR the disallow flags, we've already
+                // masked them down to aItem's type -- so we're really only looking for a
+                // boolean here.
+                constraint.m_DisallowFlags = c->constraint.m_DisallowFlags;
+
+                constraint.m_ZoneConnection = c->constraint.m_ZoneConnection;
+
+                constraint.SetParentRule( c->constraint.GetParentRule() );
+            };
+
     // Local overrides take precedence over everything *except* board min clearance
     if( aConstraintType == CLEARANCE_CONSTRAINT || aConstraintType == HOLE_CLEARANCE_CONSTRAINT )
     {
@@ -953,8 +975,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                                 }
                                 else if( c->constraint.m_Value.HasMin() )
                                 {
-                                    REPORT( wxString::Format( _( "Checking board setup constraints "
-                                                                 "track width: min %s." ),
+                                    REPORT( wxString::Format( _( "Checking %s track width: min %s." ),
+                                                              EscapeHTML( c->constraint.GetName() ),
                                                               min ) )
                                 }
 
@@ -975,8 +997,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                                 }
                                 else if( c->constraint.m_Value.HasMin() )
                                 {
-                                    REPORT( wxString::Format( _( "Checking board setup constraints "
-                                                                 "via diameter: min %s." ),
+                                    REPORT( wxString::Format( _( "Checking %s via diameter: min %s." ),
+                                                              EscapeHTML( c->constraint.GetName() ),
                                                               min ) )
                                 }
                                 break;
@@ -990,8 +1012,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                                 }
                                 else if( c->constraint.m_Value.HasMin() )
                                 {
-                                    REPORT( wxString::Format( _( "Checking board setup constraints "
-                                                                 "hole size: min %s." ),
+                                    REPORT( wxString::Format( _( "Checking %s hole size: min %s." ),
+                                                              EscapeHTML( c->constraint.GetName() ),
                                                               min ) )
                                 }
 
@@ -1008,23 +1030,22 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                             case DIFF_PAIR_GAP_CONSTRAINT:
                                 if( c->constraint.m_Value.HasOpt() )
                                 {
-                                    REPORT( wxString::Format( _( "Checking %s diff pair gap: "
-                                                                 "opt %s." ),
+                                    REPORT( wxString::Format( _( "Checking %s diff pair gap: opt %s." ),
                                                               EscapeHTML( c->constraint.GetName() ),
                                                               opt ) )
                                 }
                                 else if( c->constraint.m_Value.HasMin() )
                                 {
-                                    REPORT( wxString::Format( _( "Checking board setup constraints "
-                                                                 "clearance: min %s." ),
+                                    REPORT( wxString::Format( _( "Checking %s clearance: min %s." ),
+                                                              EscapeHTML( c->constraint.GetName() ),
                                                               min ) )
                                 }
 
                                 break;
 
                             case HOLE_TO_HOLE_CONSTRAINT:
-                                REPORT( wxString::Format( _( "Checking board setup constraints "
-                                                             "hole to hole: min %s." ),
+                                REPORT( wxString::Format( _( "Checking %s hole to hole: min %s." ),
+                                                          EscapeHTML( c->constraint.GetName() ),
                                                           min ) )
                                 break;
 
@@ -1211,7 +1232,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                         }
                     }
 
-                    constraint = c->constraint;
+                    applyConstraint( c );
                 }
                 else
                 {
@@ -1244,23 +1265,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                             }
                         }
 
-                        if( c->constraint.m_Value.HasMin() )
-                            constraint.m_Value.SetMin( c->constraint.m_Value.Min() );
-
-                        if( c->constraint.m_Value.HasOpt() )
-                            constraint.m_Value.SetOpt( c->constraint.m_Value.Opt() );
-
-                        if( c->constraint.m_Value.HasMax() )
-                            constraint .m_Value.SetMax( c->constraint.m_Value.Max() );
-
-                        // While the expectation would be to OR the disallow flags, we've already
-                        // masked them down to aItem's type -- so we're really only looking for a
-                        // boolean here.
-                        constraint.m_DisallowFlags = c->constraint.m_DisallowFlags;
-
-                        constraint.m_ZoneConnection = c->constraint.m_ZoneConnection;
-
-                        constraint.SetParentRule( c->constraint.GetParentRule() );
+                        applyConstraint( c );
                     }
                     else
                     {
