@@ -2490,9 +2490,6 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
     if( shownText.IsEmpty() )
         return;
 
-    if( drawingShadows && !eeconfig()->m_Selection.draw_selected_children )
-        return;
-
     // Calculate the text orientation according to the parent orientation.
     EDA_ANGLE orient = aField->GetTextAngle();
 
