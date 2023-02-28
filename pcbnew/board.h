@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,6 +60,10 @@ class CONNECTIVITY_DATA;
 class COMPONENT;
 class PROJECT;
 class PROGRESS_REPORTER;
+
+// The default value for m_outlinesChainingEpsilon to convert a board outlines to polygons
+// It is the max dist between 2 end points to see them connected
+#define DEFAULT_CHAINING_EPSILON_MM 0.01
 
 // Forward declare endpoint from class_track.h
 enum ENDPOINT_T : int;
@@ -652,6 +656,16 @@ public:
                                   OUTLINE_ERROR_HANDLER* aErrorHandler = nullptr );
 
     /**
+     * @return a epsilon value that is the max distance between 2 points to see them
+     * at the same coordinate when building the board outlines and tray to connect 2 end points
+     * when buildind the outlines of the board
+     * Too small value do not allow connecting 2 shapes (i.e. segments) not exactly connected
+     * Too large value do not allow safely connecting 2 shapes like very short segments.
+     */
+    int GetOutlinesChainingEpsilon() { return( m_outlinesChainingEpsilon ); }
+    void SetOutlinesChainingEpsilon( int aValue) { m_outlinesChainingEpsilon = aValue; }
+
+   /**
      * Build a set of polygons which are the outlines of copper items (pads, tracks, vias, texts,
      * zones).
      *
@@ -1170,6 +1184,10 @@ private:
     }
 
     friend class PCB_EDIT_FRAME;
+
+
+    /// the max distance between 2 end point to see them connected when building the board outlines
+    int m_outlinesChainingEpsilon;
 
     /// What is this board being used for
     BOARD_USE           m_boardUse;

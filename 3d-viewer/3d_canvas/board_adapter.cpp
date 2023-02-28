@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2022 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -671,7 +671,8 @@ bool BOARD_ADAPTER::createBoardPolygon( wxString* aErrorMsg )
             return false;
         }
 
-        int chainingEpsilon = pcbIUScale.mmToIU( 0.02 ); // max dist from one endPt to next startPt
+        // max dist from one endPt to next startPt
+        int chainingEpsilon = m_board->GetOutlinesChainingEpsilon();
 
         success = BuildFootprintPolygonOutlines( m_board, m_board_poly,
                                                  m_board->GetDesignSettings().m_MaxError,
