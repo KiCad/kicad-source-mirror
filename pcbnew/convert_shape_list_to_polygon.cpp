@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -400,11 +400,21 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
                             reverse = true;
                         }
 
+                        // Ensure the approximated Bezier shape is built
+                        // a good value is between (Bezier curve width / 2) and (Bezier curve width)
+                        // ( and at least 0.05 mm to avoid very small segments)
+                        int min_segm_lenght = std::max( pcbIUScale.mmToIU( 0.05 ), graphic->GetWidth() );
+                        graphic->RebuildBezierToSegmentsPointsList( min_segm_lenght );
+
                         if( reverse )
                         {
                             for( int jj = graphic->GetBezierPoints().size()-1; jj >= 0; jj-- )
                             {
                                 const VECTOR2I& pt = graphic->GetBezierPoints()[jj];
+
+                                if( prevPt == pt )
+                                    continue;
+
                                 currContour.Append( pt );
                                 shapeOwners[ std::make_pair( prevPt, pt ) ] = graphic;
                                 prevPt = pt;
@@ -414,6 +424,9 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
                         {
                             for( const VECTOR2I& pt : graphic->GetBezierPoints() )
                             {
+                                if( prevPt == pt )
+                                    continue;
+
                                 currContour.Append( pt );
                                 shapeOwners[ std::make_pair( prevPt, pt ) ] = graphic;
                                 prevPt = pt;

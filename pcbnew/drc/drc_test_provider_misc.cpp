@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2022 KiCad Developers.
+ * Copyright (C) 2004-2023 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -94,9 +94,9 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
                 errorHandled = true;
             };
 
-    // Use a really tight chaining epsilon here so that we report errors that might affect
+    // Use the standard chaining epsilon here so that we report errors that might affect
     // other tools (such as STEP export).
-    constexpr int chainingEpsilon = pcbIUScale.mmToIU( 0.02 ) / 100;
+    int chainingEpsilon = m_board->GetOutlinesChainingEpsilon();
 
     if( !BuildBoardPolygonOutlines( m_board, dummyOutline, m_board->GetDesignSettings().m_MaxError,
                                     chainingEpsilon, &errorHandler ) )

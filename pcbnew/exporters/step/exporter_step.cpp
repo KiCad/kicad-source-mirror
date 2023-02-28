@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -263,8 +263,10 @@ bool EXPORTER_STEP::composePCB()
     m_pcbModel->SetBoardColor( m_solderMaskColor.r, m_solderMaskColor.g, m_solderMaskColor.b );
 
     m_pcbModel->SetPCBThickness( m_boardThickness );
-    m_pcbModel->SetMinDistance(
-            std::max( m_params.m_minDistance, STEPEXPORT_MIN_ACCEPTABLE_DISTANCE ) );
+
+    // Set the min distance betewenn 2 points for OCC to see these 2 points as merged
+    double minDistmm = std::max( m_params.m_minDistance, STEPEXPORT_MIN_ACCEPTABLE_DISTANCE );
+    m_pcbModel->SetMinDistance( minDistmm );
 
     m_pcbModel->SetMaxError( m_board->GetDesignSettings().m_MaxError );
 
@@ -272,6 +274,10 @@ bool EXPORTER_STEP::composePCB()
         composePCB( i, origin );
 
     ReportMessage( wxT( "Create PCB solid model\n" ) );
+
+    wxString msg;
+    msg.Printf( wxT( "Board outline: find %d initial points\n" ), pcbOutlines.FullPointCount() );
+    ReportMessage( msg );
 
     if( !m_pcbModel->CreatePCB( pcbOutlines, origin ) )
     {

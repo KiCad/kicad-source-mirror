@@ -78,6 +78,10 @@ BOARD::BOARD() :
         m_designSettings( new BOARD_DESIGN_SETTINGS( nullptr, "board.design_settings" ) ),
         m_NetInfo( this )
 {
+    // A too small value do not allow connecting 2 shapes (i.e. segments) not exactly connected
+    // A too large value do not allow safely connecting 2 shapes like very short segments.
+    m_outlinesChainingEpsilon = pcbIUScale.mmToIU( DEFAULT_CHAINING_EPSILON_MM );
+
     // we have not loaded a board yet, assume latest until then.
     m_fileFormatVersionAtLoad = LEGACY_BOARD_FILE_VERSION;
 
@@ -1968,7 +1972,8 @@ ZONE* BOARD::AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode, PCB_LAYER_
 bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines,
                                      OUTLINE_ERROR_HANDLER* aErrorHandler )
 {
-    int chainingEpsilon = pcbIUScale.mmToIU( 0.02 ); // max dist from one endPt to next startPt
+    // max dist from one endPt to next startPt: use the current value
+    int chainingEpsilon = GetOutlinesChainingEpsilon();
 
     bool success = BuildBoardPolygonOutlines( this, aOutlines, GetDesignSettings().m_MaxError,
                                               chainingEpsilon, aErrorHandler );
