@@ -1217,7 +1217,24 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                         }
                     }
 
-                    constraint = c->constraint;
+                    if( c->constraint.m_Value.HasMin() )
+                        constraint.m_Value.SetMin( c->constraint.m_Value.Min() );
+
+                    if( c->constraint.m_Value.HasOpt() )
+                        constraint.m_Value.SetOpt( c->constraint.m_Value.Opt() );
+
+                    if( c->constraint.m_Value.HasMax() )
+                        constraint .m_Value.SetMax( c->constraint.m_Value.Max() );
+
+                    // While the expectation would be to OR the disallow flags, we've already
+                    // masked them down to aItem's type -- so we're really only looking for a
+                    // boolean here.
+                    constraint.m_DisallowFlags = c->constraint.m_DisallowFlags;
+
+                    constraint.m_ZoneConnection = c->constraint.m_ZoneConnection;
+
+                    constraint.SetParentRule( c->constraint.GetParentRule() );
+
                     return true;
                 }
                 else
