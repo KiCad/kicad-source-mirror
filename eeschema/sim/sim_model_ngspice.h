@@ -109,8 +109,6 @@ protected:
     int doFindParam( const std::string& aParamName ) const override;
 
 private:
-    bool requiresSpiceModelLine( const SPICE_ITEM& aItem ) const override;
-
     bool canSilentlyIgnoreParam( const std::string& aParamName );
 
     MODEL_TYPE getModelType() const;
