@@ -1064,10 +1064,35 @@ void SIM_MODEL::doWriteFields( std::vector<T>& aFields ) const
 
 bool SIM_MODEL::requiresSpiceModelLine( const SPICE_ITEM& aItem ) const
 {
-    for( const PARAM& param : GetParams() )
+    // Model must be written if there's no base model or the base model is an internal model
+    if( !m_baseModel || aItem.baseModelName == "" )
+        return true;
+
+    for( int ii = 0; ii < GetParamCount(); ++ii )
     {
-        if( !param.info.isSpiceInstanceParam )
-            return true;
+        const PARAM& param = m_params[ii];
+
+        // Instance parameters are written in item lines
+        if( param.info.isSpiceInstanceParam )
+            continue;
+
+        // Empty parameters are interpreted as default-value
+        if ( param.value == "" )
+            continue;
+
+        const SIM_MODEL* baseModel = dynamic_cast<const SIM_MODEL*>( m_baseModel );
+        std::string      baseValue = baseModel->m_params[ii].value;
+
+        if( param.value == baseValue )
+            continue;
+
+        // One more check for equivalence, mostly for early 7.0 files which wrote all parameters
+        // to the Sim.Params field in normalized format
+        if( param.value == SIM_VALUE::Normalize( SIM_VALUE::ToDouble( baseValue ) ) )
+            continue;
+
+        // Overrides must be written
+        return true;
     }
 
     return false;

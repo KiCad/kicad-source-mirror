@@ -34,8 +34,7 @@ std::string SPICE_GENERATOR::ModelName( const SPICE_ITEM& aItem ) const
     if( aItem.baseModelName == "" )
         return fmt::format( "__{}", aItem.refName );
 
-    // FIXME: This ModelLine() call is relatively expensive.
-    if( ModelLine( aItem ) != "" )
+    if( m_model.requiresSpiceModelLine( aItem ) )
         return fmt::format( "{}.{}", aItem.refName, aItem.baseModelName );
 
     return aItem.baseModelName;

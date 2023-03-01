@@ -215,43 +215,6 @@ bool SIM_MODEL_NGSPICE::canSilentlyIgnoreParam( const std::string& aParamName )
 }
 
 
-bool SIM_MODEL_NGSPICE::requiresSpiceModelLine( const SPICE_ITEM& aItem ) const
-{
-    // Model must be written if there's no base model or the base model is an internal model
-    if( !m_baseModel || aItem.baseModelName == "" )
-        return true;
-
-    for( int ii = 0; ii < GetParamCount(); ++ii )
-    {
-        const PARAM& param = m_params[ii];
-
-        // Instance parameters are written in item lines
-        if( param.info.isSpiceInstanceParam )
-            continue;
-
-        // Empty parameters are interpreted as default-value
-        if ( param.value == "" )
-            continue;
-
-        const SIM_MODEL_NGSPICE* baseModel = dynamic_cast<const SIM_MODEL_NGSPICE*>( m_baseModel );
-        std::string              baseValue = baseModel->m_params[ii].value;
-
-        if( param.value == baseValue )
-            continue;
-
-        // One more check for equivalence, mostly for early 7.0 files which wrote all parameters
-        // to the Sim.Params field in normalized format
-        if( param.value == SIM_VALUE::Normalize( SIM_VALUE::ToDouble( baseValue ) ) )
-            continue;
-
-        // Overrides must be written
-        return true;
-    }
-
-    return false;
-}
-
-
 std::vector<std::string> SIM_MODEL_NGSPICE::GetPinNames() const
 {
     return ModelInfo( getModelType() ).pinNames;
