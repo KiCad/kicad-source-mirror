@@ -156,8 +156,8 @@ BOM_PRESET DIALOG_SYMBOL_FIELDS_TABLE::bomPresetGroupedByValue(
                 std::pair<std::string, bool>( "Footprint", false ),
                 std::pair<std::string, bool>( "Quantity", false ),
         } ),
-        std::map<std::string, int>(), std::map<std::string, bool>(), std::vector<wxString>(),
-        _HKI( "" ), true );
+        std::map<std::string, int>(), std::vector<wxString>(), _( "Reference" ), true, _HKI( "" ),
+        true );
 
 
 BOM_PRESET DIALOG_SYMBOL_FIELDS_TABLE::bomPresetGroupedByValueFootprint(
@@ -176,8 +176,8 @@ BOM_PRESET DIALOG_SYMBOL_FIELDS_TABLE::bomPresetGroupedByValueFootprint(
                 std::pair<std::string, bool>( "Footprint", true ),
                 std::pair<std::string, bool>( "Quantity", false ),
         } ),
-        std::map<std::string, int>(), std::map<std::string, bool>(), std::vector<wxString>(),
-        _HKI( "" ), true );
+        std::map<std::string, int>(), std::vector<wxString>(), _( "Reference" ), true, _HKI( "" ),
+        true );
 
 
 DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent ) :
@@ -270,8 +270,6 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
                "cycle through presets in the popup." ),
             KeyNameFromKeyCode( PRESET_SWITCH_KEY ), KeyNameFromKeyCode( PRESET_SWITCH_KEY ) ) );
 
-    m_dataModel->RebuildRows( m_filter, m_groupSymbolsBox, m_fieldsCtrl );
-
     m_grid->UseNativeColHeader( true );
     m_grid->SetTable( m_dataModel, true );
 
@@ -288,8 +286,6 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
     SetUserBomPresets( m_schSettings.m_BomPresets );
     ApplyBomPreset( m_schSettings.m_BomSettings );
     syncBomPresetSelection();
-
-    SetupColumnProperties();
 
     m_grid->SelectRow( 0 );
     m_grid->SetGridCursor( 0, 1 );
@@ -378,12 +374,12 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupColumnProperties()
                 else
                     m_grid->SetColSize( col, Clamp( 100, textWidth, maxWidth ) );
             }
+        }
 
-            if( m_schSettings.m_BomSettings.column_sorts.count( key ) )
-            {
-                sortCol = col;
-                sortAscending = m_schSettings.m_BomSettings.column_sorts[key];
-            }
+        if( m_schSettings.m_BomSettings.sort_field == m_dataModel->GetColFieldName( col ) )
+        {
+            sortCol = col;
+            sortAscending = m_schSettings.m_BomSettings.sort_asc;
         }
     }
 
@@ -395,13 +391,16 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupColumnProperties()
         if( col == -1 )
             continue;
 
-        if( m_fieldsCtrl->GetToggleValue( i, SHOW_FIELD_COLUMN ) )
+        bool show = m_fieldsCtrl->GetToggleValue( i, SHOW_FIELD_COLUMN );
+        m_dataModel->SetShowColumn( col, show );
+
+        if( show )
             m_grid->ShowCol( col );
         else
             m_grid->HideCol( col );
     }
 
-    m_dataModel->Sort( sortCol, sortAscending );
+    m_dataModel->SetSorting( sortCol, sortAscending );
     m_grid->SetSortingColumn( sortCol, sortAscending );
 }
 
@@ -717,8 +716,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRenameField( wxCommandEvent& event )
 void DIALOG_SYMBOL_FIELDS_TABLE::OnFilterText( wxCommandEvent& aEvent )
 {
     m_schSettings.m_BomSettings.filter_string = m_filter->GetValue();
-    m_dataModel->RebuildRows( m_filter, m_groupSymbolsBox, m_fieldsCtrl );
-    m_dataModel->Sort( m_grid->GetSortingColumn(), m_grid->IsSortOrderAscending() );
+    m_dataModel->SetFilter( m_filter->GetValue() );
+    m_dataModel->RebuildRows();
     m_grid->ForceRefresh();
 
     syncBomPresetSelection();
@@ -771,6 +770,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnColumnItemToggled( wxDataViewEvent& event )
         m_schSettings.m_BomSettings.fields_show[fieldName] = value;
 
         int dataCol = m_dataModel->GetFieldNameCol( fieldName );
+        m_dataModel->SetShowColumn( dataCol, value );
 
         if( dataCol != -1 )
         {
@@ -795,11 +795,12 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnColumnItemToggled( wxDataViewEvent& event )
             m_fieldsCtrl->SetToggleValue( value, row, col );
         }
 
-        std::string fieldName( m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN ).ToUTF8() );
-        m_schSettings.m_BomSettings.fields_group_by[fieldName] = value;
+        wxString    fieldName = m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN );
+        std::string fieldNameStr( fieldName.ToUTF8() );
+        m_schSettings.m_BomSettings.fields_group_by[fieldNameStr] = value;
 
-        m_dataModel->RebuildRows( m_filter, m_groupSymbolsBox, m_fieldsCtrl );
-        m_dataModel->Sort( m_grid->GetSortingColumn(), m_grid->IsSortOrderAscending() );
+        m_dataModel->SetGroupColumn( m_dataModel->GetFieldNameCol( fieldName ), value );
+        m_dataModel->RebuildRows();
         m_grid->ForceRefresh();
         break;
     }
@@ -815,8 +816,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnColumnItemToggled( wxDataViewEvent& event )
 void DIALOG_SYMBOL_FIELDS_TABLE::OnGroupSymbolsToggled( wxCommandEvent& event )
 {
     m_schSettings.m_BomSettings.group_symbols = m_groupSymbolsBox->GetValue();
-    m_dataModel->RebuildRows( m_filter, m_groupSymbolsBox, m_fieldsCtrl );
-    m_dataModel->Sort( m_grid->GetSortingColumn(), m_grid->IsSortOrderAscending() );
+    m_dataModel->SetGroupingEnabled( m_groupSymbolsBox->GetValue() );
+    m_dataModel->RebuildRows();
     m_grid->ForceRefresh();
 
     syncBomPresetSelection();
@@ -843,10 +844,11 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnColSort( wxGridEvent& aEvent )
     }
 
     // We only support sorting on one column at this time
-    m_schSettings.m_BomSettings.column_sorts.clear();
-    m_schSettings.m_BomSettings.column_sorts[key] = ascending;
+    m_schSettings.m_BomSettings.sort_field = m_dataModel->GetColFieldName( sortCol );
+    m_schSettings.m_BomSettings.sort_asc = ascending;
 
-    m_dataModel->Sort( sortCol, ascending );
+    m_dataModel->SetSorting( sortCol, ascending );
+    m_dataModel->RebuildRows();
     m_grid->ForceRefresh();
 
     syncBomPresetSelection();
@@ -919,8 +921,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableColSize( wxGridSizeEvent& aEvent )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnRegroupSymbols( wxCommandEvent& aEvent )
 {
-    m_dataModel->RebuildRows( m_filter, m_groupSymbolsBox, m_fieldsCtrl );
-    m_dataModel->Sort( m_grid->GetSortingColumn(), m_grid->IsSortOrderAscending() );
+    m_dataModel->RebuildRows();
     m_grid->ForceRefresh();
 }
 
@@ -1017,9 +1018,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSaveAndContinue( wxCommandEvent& aEvent )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnPreviewRefresh( wxCommandEvent& event )
 {
-
-
-
 }
 
 
@@ -1243,7 +1241,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::syncBomPresetSelection()
                             {
                                 return ( aPair.second.fields_show == current.fields_show
                                          && aPair.second.fields_group_by == current.fields_group_by
-                                         && aPair.second.column_sorts == current.column_sorts
+                                         && aPair.second.sort_field == current.sort_field
+                                         && aPair.second.sort_asc == current.sort_asc
                                          && aPair.second.column_order == current.column_order
                                          && aPair.second.filter_string == current.filter_string
                                          && aPair.second.group_symbols == current.group_symbols );
@@ -1345,8 +1344,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged( wxCommandEvent& aEvent )
             m_bomPresets[name] = BOM_PRESET( name, m_schSettings.m_BomSettings.fields_show,
                                              m_schSettings.m_BomSettings.fields_group_by,
                                              m_schSettings.m_BomSettings.column_widths,
-                                             m_schSettings.m_BomSettings.column_sorts,
                                              m_schSettings.m_BomSettings.column_order,
+                                             m_schSettings.m_BomSettings.sort_field,
+                                             m_schSettings.m_BomSettings.sort_asc,
                                              m_schSettings.m_BomSettings.filter_string,
                                              m_schSettings.m_BomSettings.group_symbols );
         }
@@ -1363,8 +1363,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged( wxCommandEvent& aEvent )
             preset->fields_show = m_schSettings.m_BomSettings.fields_show;
             preset->fields_group_by = m_schSettings.m_BomSettings.fields_group_by;
             preset->column_widths = m_schSettings.m_BomSettings.column_widths;
-            preset->column_sorts = m_schSettings.m_BomSettings.column_sorts;
             preset->column_order = m_schSettings.m_BomSettings.column_order;
+            preset->sort_field = m_schSettings.m_BomSettings.sort_field;
+            preset->sort_asc = m_schSettings.m_BomSettings.sort_asc;
             preset->filter_string = m_schSettings.m_BomSettings.filter_string;
             preset->group_symbols = m_schSettings.m_BomSettings.group_symbols;
 
@@ -1441,7 +1442,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged( wxCommandEvent& aEvent )
 void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
 {
     // Set a good default sort
-    m_dataModel->Sort( m_dataModel->GetFieldNameCol( _( "Reference" ) ), false );
+    int fieldNameCol = m_dataModel->GetFieldNameCol( _( "Reference" ) );
+    m_dataModel->SetSorting( fieldNameCol, false );
+    m_grid->SetSortingColumn( fieldNameCol, false );
 
     for( int i = 0; i < m_fieldsCtrl->GetItemCount(); i++ )
     {
@@ -1457,32 +1460,49 @@ void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
         int width = aPreset.column_widths.count( fieldName ) ? aPreset.column_widths.at( fieldName )
                                                              : -1;
 
+        // Set shown colums
         m_fieldsCtrl->SetToggleValue( show, i, SHOW_FIELD_COLUMN );
+        m_dataModel->SetShowColumn( col, show );
 
         if( show )
             m_grid->ShowCol( col );
         else
             m_grid->HideCol( col );
 
+        // Set grouped columns
         m_fieldsCtrl->SetToggleValue( groupBy, i, GROUP_BY_COLUMN );
+        m_dataModel->SetGroupColumn( col, groupBy );
 
-        if( aPreset.column_sorts.count( fieldName ) )
-            m_dataModel->Sort( col, false );
+        // Set sorting
+        if( aPreset.sort_field == fieldName )
+        {
+            m_dataModel->SetSorting( col, aPreset.sort_asc );
+            m_grid->SetSortingColumn( col, aPreset.sort_asc );
+        }
 
+        // Set grid column sizes
         if( width != -1 )
             m_grid->SetColSize( col, width );
     }
 
+    m_dataModel->SetGroupingEnabled( aPreset.group_symbols );
+    m_groupSymbolsBox->SetValue( aPreset.group_symbols );
+
     m_dataModel->SetFieldsOrder( aPreset.column_order );
+
+    m_dataModel->SetFilter( aPreset.filter_string );
+    m_filter->ChangeValue( aPreset.filter_string );
+
     SetupColumnProperties();
 
-    m_filter->ChangeValue( aPreset.filter_string );
-    m_groupSymbolsBox->SetValue( aPreset.group_symbols );
+    m_dataModel->RebuildRows();
+    m_grid->ForceRefresh();
 
     m_schSettings.m_BomSettings.fields_show = aPreset.fields_show;
     m_schSettings.m_BomSettings.fields_group_by = aPreset.fields_group_by;
     m_schSettings.m_BomSettings.column_widths = aPreset.column_widths;
-    m_schSettings.m_BomSettings.column_sorts = aPreset.column_sorts;
+    m_schSettings.m_BomSettings.sort_field = aPreset.sort_field;
+    m_schSettings.m_BomSettings.sort_asc = aPreset.sort_asc;
     m_schSettings.m_BomSettings.column_order = aPreset.column_order;
     m_schSettings.m_BomSettings.filter_string = aPreset.filter_string;
     m_schSettings.m_BomSettings.group_symbols = aPreset.group_symbols;

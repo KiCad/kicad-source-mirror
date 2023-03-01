@@ -31,14 +31,15 @@ class NGSPICE_SIMULATOR_SETTINGS;
 struct BOM_PRESET
 {
     BOM_PRESET( const wxString& aName = wxEmptyString ) :
-        name( aName ), readOnly(false), group_symbols( false) { }
+        name( aName ), readOnly(false), sort_asc( true ), group_symbols( false)  { }
 
     BOM_PRESET( const wxString&                     aName,
                 const std::map<std::string, bool>&  aFieldsShow,
                 const std::map<std::string, bool>&  aFieldsGroupBy,
                 const std::map<std::string, int>&   aColumnWidths,
-                const std::map<std::string, bool>&  aColumnSorts,
                 const std::vector<wxString>&        aColumnOrder,
+                const wxString&                     aSortField,
+                bool                                aSortAscending,
                 const wxString&                     aFilterString,
                 bool                                aGroupSymbols
                 ) :
@@ -47,7 +48,6 @@ struct BOM_PRESET
             fields_show( aFieldsShow ),
             fields_group_by( aFieldsGroupBy ),
             column_widths( aColumnWidths ),
-            column_sorts( aColumnSorts ),
             column_order( aColumnOrder ),
             filter_string( aFilterString ),
             group_symbols( aGroupSymbols )
@@ -59,8 +59,9 @@ struct BOM_PRESET
     std::map<std::string, bool> fields_show;
     std::map<std::string, bool> fields_group_by;
     std::map<std::string, int>  column_widths;
-    std::map<std::string, bool> column_sorts;
     std::vector<wxString>       column_order;
+    wxString                    sort_field;
+    bool                        sort_asc;
     wxString                    filter_string;
     bool                        group_symbols;
 };

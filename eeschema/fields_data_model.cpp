@@ -1,6 +1,4 @@
 #include <wx/string.h>
-#include <wx/srchctrl.h>
-#include <wx/checkbox.h>
 #include <wx/debug.h>
 #include <wx/grid.h>
 #include <widgets/wx_grid.h>
@@ -35,6 +33,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::AddColumn( const wxString& aFieldName, const
     }
 }
 
+
 void FIELDS_EDITOR_GRID_DATA_MODEL::RemoveColumn( int aCol )
 {
     for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
@@ -45,6 +44,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RemoveColumn( int aCol )
 
     m_cols.erase( m_cols.begin() + aCol );
 }
+
 
 void FIELDS_EDITOR_GRID_DATA_MODEL::RenameColumn( int aCol, const wxString& newName )
 {
@@ -85,6 +85,7 @@ const std::vector<wxString> FIELDS_EDITOR_GRID_DATA_MODEL::GetFieldsOrder()
     return fields;
 }
 
+
 void FIELDS_EDITOR_GRID_DATA_MODEL::SetFieldsOrder( const std::vector<wxString>& aNewOrder )
 {
     size_t foundCount = 0;
@@ -122,6 +123,7 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( int aRow, int aCol )
         return GetValue( m_rows[aRow], aCol );
     }
 }
+
 
 wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const DATA_MODEL_ROW& group, int aCol )
 {
@@ -186,6 +188,7 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const DATA_MODEL_ROW& group, i
     return fieldValue;
 }
 
+
 void FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxString& aValue )
 {
     if( ColIsReference( aCol ) || ColIsQuantity( aCol ) )
@@ -198,6 +201,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxString
 
     m_edited = true;
 }
+
 
 bool FIELDS_EDITOR_GRID_DATA_MODEL::cmp( const DATA_MODEL_ROW&          lhGroup,
                                          const DATA_MODEL_ROW&          rhGroup,
@@ -238,14 +242,9 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::cmp( const DATA_MODEL_ROW&          lhGroup,
     }
 }
 
-void FIELDS_EDITOR_GRID_DATA_MODEL::Sort( int aColumn, bool ascending )
+
+void FIELDS_EDITOR_GRID_DATA_MODEL::Sort()
 {
-    if( aColumn < 0 )
-        aColumn = 0;
-
-    m_sortColumn = aColumn;
-    m_sortAscending = ascending;
-
     CollapseForSort();
 
     // We're going to sort the rows based on their first reference, so the first reference
@@ -270,6 +269,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::Sort( int aColumn, bool ascending )
     ExpandAfterSort();
 }
 
+
 bool FIELDS_EDITOR_GRID_DATA_MODEL::unitMatch( const SCH_REFERENCE& lhRef,
                                                const SCH_REFERENCE& rhRef )
 {
@@ -281,14 +281,15 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::unitMatch( const SCH_REFERENCE& lhRef,
 }
 
 bool FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRef,
-                                                const SCH_REFERENCE& rhRef,
-                                                wxDataViewListCtrl*  fieldsCtrl )
+                                                const SCH_REFERENCE& rhRef )
+
 {
+    int  refCol = GetFieldNameCol( _( "Reference" ) );
     bool matchFound = false;
 
     // First check the reference column.  This can be done directly out of the
     // SCH_REFERENCEs as the references can't be edited in the grid.
-    if( fieldsCtrl->GetToggleValue( REFERENCE_FIELD, GROUP_BY_COLUMN ) )
+    if( m_cols[refCol].m_group )
     {
         // if we're grouping by reference, then only the prefix must match
         if( lhRef.GetRef() != rhRef.GetRef() )
@@ -302,12 +303,16 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRef,
 
     // Now check all the other columns.  This must be done out of the dataStore
     // for the refresh button to work after editing.
-    for( int i = REFERENCE_FIELD + 1; i < fieldsCtrl->GetItemCount(); ++i )
+    for( size_t i = 0; i < m_cols.size(); ++i )
     {
-        if( !fieldsCtrl->GetToggleValue( i, GROUP_BY_COLUMN ) )
+        //Handled already
+        if( (int) i == refCol )
             continue;
 
-        wxString fieldName = fieldsCtrl->GetTextValue( i, FIELD_NAME_COLUMN );
+        if( !m_cols[i].m_group )
+            continue;
+
+        wxString fieldName = m_cols[i].m_fieldName;
 
         if( m_dataStore[lhRefID][fieldName] != m_dataStore[rhRefID][fieldName] )
             return false;
@@ -318,9 +323,8 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRef,
     return matchFound;
 }
 
-void FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows( wxSearchCtrl*       aFilter,
-                                                 wxCheckBox*         aGroupSymbolsBox,
-                                                 wxDataViewListCtrl* aFieldsCtrl )
+
+void FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
 {
     if( GetView() )
     {
@@ -338,8 +342,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows( wxSearchCtrl*       aFilter,
     {
         SCH_REFERENCE ref = m_symbolsList[i];
 
-        if( !aFilter->GetValue().IsEmpty()
-            && !WildCompareString( aFilter->GetValue(), ref.GetFullRef(), false ) )
+        if( !m_filter.IsEmpty() && !WildCompareString( m_filter, ref.GetFullRef(), false ) )
         {
             continue;
         }
@@ -358,7 +361,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows( wxSearchCtrl*       aFilter,
                 row.m_Refs.push_back( ref );
                 break;
             }
-            else if( aGroupSymbolsBox->GetValue() && groupMatch( ref, rowRef, aFieldsCtrl ) )
+            else if( m_groupingEnabled && groupMatch( ref, rowRef ) )
             {
                 matchFound = true;
                 row.m_Refs.push_back( ref );
@@ -376,6 +379,8 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows( wxSearchCtrl*       aFilter,
         wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, m_rows.size() );
         GetView()->ProcessTableMessage( msg );
     }
+
+    Sort();
 }
 
 void FIELDS_EDITOR_GRID_DATA_MODEL::ExpandRow( int aRow )

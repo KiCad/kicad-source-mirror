@@ -1,6 +1,5 @@
 #include <sch_reference_list.h>
 #include <wx/grid.h>
-#include <wx/srchctrl.h>
 
 // The field name in the data model (translated)
 #define DISPLAY_NAME_COLUMN   0
@@ -45,16 +44,12 @@ struct DATA_MODEL_COL
 };
 
 
-
 class FIELDS_EDITOR_GRID_DATA_MODEL : public wxGridTableBase
 {
 public:
     FIELDS_EDITOR_GRID_DATA_MODEL( SCH_EDIT_FRAME* aFrame, SCH_REFERENCE_LIST& aSymbolsList ) :
-            m_frame( aFrame ),
-            m_symbolsList( aSymbolsList ),
-            m_edited( false ),
-            m_sortColumn( 0 ),
-            m_sortAscending( false )
+            m_frame( aFrame ), m_symbolsList( aSymbolsList ), m_edited( false ), m_sortColumn( 0 ),
+            m_sortAscending( false ), m_groupingEnabled( false )
     {
         m_symbolsList.SplitReferences();
     }
@@ -62,20 +57,34 @@ public:
     void AddColumn( const wxString& aFieldName, const wxString& aLabel, bool aAddedByUser );
     void RemoveColumn( int aCol );
     void RenameColumn( int aCol, const wxString& newName );
-    void MoveColumn( int aCol, int aNewPos ) { std::swap( m_cols[aCol], m_cols[aNewPos] ); }
+    void MoveColumn( int aCol, int aNewPos )
+    {
+        wxCHECK_RET( aCol >= 0 && aCol < (int) m_cols.size(), "Invalid Column Number" );
+        std::swap( m_cols[aCol], m_cols[aNewPos] );
+    }
 
     int GetNumberRows() override { return (int) m_rows.size(); }
     int GetNumberCols() override { return (int) m_cols.size(); }
 
     void SetColLabelValue( int aCol, const wxString& aLabel ) override
     {
+        wxCHECK_RET( aCol >= 0 && aCol < (int) m_cols.size(), "Invalid Column Number" );
         m_cols[aCol].m_label = aLabel;
     }
 
 
-    wxString GetColLabelValue( int aCol ) override { return m_cols[aCol].m_label; }
+    wxString GetColLabelValue( int aCol ) override
+    {
+        wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), wxString() );
+        return m_cols[aCol].m_label;
+    }
 
-    wxString GetColFieldName( int aCol ) { return m_cols[aCol].m_fieldName; }
+    wxString GetColFieldName( int aCol )
+    {
+        wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), wxString() );
+        return m_cols[aCol].m_fieldName;
+    }
+
     int      GetFieldNameCol( wxString aFieldName );
 
     const std::vector<wxString> GetFieldsOrder();
@@ -95,24 +104,30 @@ public:
 
     std::vector<SCH_REFERENCE> GetRowReferences( int aRow ) const
     {
-        wxCHECK( aRow < (int) m_rows.size(), std::vector<SCH_REFERENCE>() );
+        wxCHECK( aRow >= 0 && aRow < (int) m_rows.size(), std::vector<SCH_REFERENCE>() );
         return m_rows[aRow].m_Refs;
     }
 
     bool ColIsReference( int aCol )
     {
-        return ( aCol < (int) m_cols.size() ) && m_cols[aCol].m_fieldName == _( "Reference" );
+        wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), false );
+        return m_cols[aCol].m_fieldName == _( "Reference" );
     }
 
     bool ColIsQuantity( int aCol )
     {
-        return ( aCol < (int) m_cols.size() ) && m_cols[aCol].m_fieldName == _( "Qty" );
+        wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), false );
+        return m_cols[aCol].m_fieldName == _( "Qty" );
     }
 
-    void Sort( int aColumn, bool ascending );
+    void SetSorting( int aCol, bool ascending )
+    {
+        wxCHECK_RET( aCol >= 0 && aCol < (int) m_cols.size(), "Invalid Column Number" );
+        m_sortColumn = aCol;
+        m_sortAscending = ascending;
+    }
 
-    void RebuildRows( wxSearchCtrl* aFilter, wxCheckBox* aGroupSymbolsBox,
-                      wxDataViewListCtrl* aFieldsCtrl );
+    void RebuildRows();
     void ExpandRow( int aRow );
     void CollapseRow( int aRow );
     void ExpandCollapseRow( int aRow );
@@ -125,12 +140,28 @@ public:
 
     int GetDataWidth( int aCol );
 
+    void SetFilter( const wxString& aFilter ) { m_filter = aFilter; }
+    void SetGroupingEnabled( bool group ) { m_groupingEnabled = group; }
+    void SetGroupColumn( int aCol, bool group )
+    {
+        wxCHECK_RET( aCol >= 0 && aCol < (int) m_cols.size(), "Invalid Column Number" );
+        m_cols[aCol].m_group = group;
+    }
+
+    void SetShowColumn( int aCol, bool show )
+    {
+        wxCHECK_RET( aCol >= 0 && aCol < (int) m_cols.size(), "Invalid Column Number" );
+        m_cols[aCol].m_show = show;
+    }
+
 private:
     static bool cmp( const DATA_MODEL_ROW& lhGroup, const DATA_MODEL_ROW& rhGroup,
                      FIELDS_EDITOR_GRID_DATA_MODEL* dataModel, int sortCol, bool ascending );
     bool        unitMatch( const SCH_REFERENCE& lhRef, const SCH_REFERENCE& rhRef );
-    bool        groupMatch( const SCH_REFERENCE& lhRef, const SCH_REFERENCE& rhRef,
-                            wxDataViewListCtrl* fieldsCtrl );
+    bool        groupMatch( const SCH_REFERENCE& lhRef, const SCH_REFERENCE& rhRef );
+
+    void Sort();
+
 
 protected:
     SCH_EDIT_FRAME*    m_frame;
@@ -138,6 +169,8 @@ protected:
     bool               m_edited;
     int                m_sortColumn;
     bool               m_sortAscending;
+    wxString           m_filter;
+    bool               m_groupingEnabled;
 
     std::vector<DATA_MODEL_COL> m_cols;
     std::vector<DATA_MODEL_ROW> m_rows;
