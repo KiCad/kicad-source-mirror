@@ -172,7 +172,7 @@ std::vector<PARAM::INFO> SIM_MODEL_TLINE::makeRlgcParamInfos()
 
     paramInfo.name = "c";
     paramInfo.type = SIM_VALUE::TYPE_FLOAT;
-    paramInfo.unit = "C/m";
+    paramInfo.unit = "F/m";
     paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
     paramInfo.description = "Capacitance per length";
