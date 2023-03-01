@@ -780,12 +780,7 @@ void SIM_MODEL::SetPinSymbolPinNumber( const std::string& aPinName,
     int aPinIndex = (int) strtol( aPinName.c_str(), nullptr, 10 );
 
     if( aPinIndex < 1 || aPinIndex > (int) m_pins.size() )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Could not find a pin named '%s' in simulation "
-                                             "model of type '%s'" ),
-                                          aPinName,
-                                          GetTypeInfo().fieldValue ) );
-    }
+        THROW_IO_ERROR( wxString::Format( _( "Unknown simulation model pin '%s'" ), aPinName ) );
 
     m_pins[ --aPinIndex /* convert to 0-based */ ].symbolPinNumber = aSymbolPinNumber;
 }
@@ -874,12 +869,7 @@ void SIM_MODEL::SetParamValue( const std::string& aParamName, const std::string&
     int idx = doFindParam( aParamName );
 
     if( idx < 0 )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Could not find a parameter named '%s' in "
-                                             "simulation model of type '%s'" ),
-                                          aParamName,
-                                          GetTypeInfo().fieldValue ) );
-    }
+        THROW_IO_ERROR( wxString::Format( "Unknown simulation model parameter '%s'", aParamName ) );
 
     SetParamValue( idx, aValue, aNotation );
 }

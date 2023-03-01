@@ -93,15 +93,6 @@ SIM_MODEL_SPICE::SIM_MODEL_SPICE( TYPE aType, std::unique_ptr<SPICE_GENERATOR> a
 }
 
 
-void SIM_MODEL_SPICE::doSetParamValue( int aParamIndex, const std::string& aValue )
-{
-    if( m_spiceCode != "" )
-        THROW_IO_ERROR( "Could not change model parameters: library models are immutable" );
-
-    SIM_MODEL::doSetParamValue( aParamIndex, aValue );
-}
-
-
 void SIM_MODEL_SPICE::SetParamFromSpiceCode( const std::string& aParamName,
                                              const std::string& aParamValue,
                                              SIM_VALUE_GRAMMAR::NOTATION aNotation )

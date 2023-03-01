@@ -160,11 +160,7 @@ void SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const std::string& aParamName,
     }
 
     if( !canSilentlyIgnoreParam( paramName ) )
-    {
-        THROW_IO_ERROR( wxString::Format( "Failed to set parameter '%s' to value '%s'",
-                                          aParamName,
-                                          aValue ) );
-    }
+        THROW_IO_ERROR( wxString::Format( "Unknown simulation model parameter '%s'", aParamName ) );
 }
 
 
