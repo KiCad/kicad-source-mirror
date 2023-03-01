@@ -1170,7 +1170,7 @@ void SIM_PLOT_FRAME::onSignalsGridCellChanged( wxGridEvent& aEvent )
     if( col == COL_SIGNAL_SHOW )
     {
         if( text == wxS( "1" ) )
-            plot->AddTrace( vectorName, traceType );
+            updateTrace( vectorName, traceType, plot );
         else
             plot->DeleteTrace( vectorName, traceType );
 
