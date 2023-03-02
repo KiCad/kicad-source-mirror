@@ -229,6 +229,16 @@ bool BBOX_2D::Inside( const SFVEC2F& aPoint ) const
 }
 
 
+bool BBOX_2D::Inside( const BBOX_2D& aBBox ) const
+{
+    wxASSERT( IsInitialized() );
+    wxASSERT( aBBox.IsInitialized() );
+
+    return Inside( aBBox.Min() ) &&
+           Inside( aBBox.Max() );
+}
+
+
 float BBOX_2D::Area() const
 {
     SFVEC2F extent = GetExtent();

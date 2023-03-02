@@ -126,6 +126,14 @@ public:
     bool Inside( const SFVEC3F& aPoint ) const;
 
     /**
+     * Check if a bounding box is inside this bounding box.
+     *
+     * @param aBBox the bounding box to test if it is inside
+     * @return true if aBBox is smaller and all points are inside
+     */
+    bool Inside( const BBOX_3D& aBBox ) const;
+
+    /**
      * Apply a transformation matrix to the box points.
      *
      * @param aTransformMatrix matrix to apply to the points of the bounding box

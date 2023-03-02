@@ -133,6 +133,14 @@ public:
     bool Inside( const SFVEC2F& aPoint ) const;
 
     /**
+     * Check if a bounding box is inside this bounding box.
+     *
+     * @param aBBox the bounding box to test if it is inside
+     * @return true if aBBox is smaller and all points are inside
+     */
+    bool Inside( const BBOX_2D& aBBox ) const;
+
+    /**
      * Calculate the area of a bounding box.
      *
      * @return area of this bounding box.
