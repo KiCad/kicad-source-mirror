@@ -142,17 +142,17 @@ bool SCH_FIELD_VALIDATOR::Validate( wxWindow* aParent )
     {
         wxArrayString badCharsFound;
 
-        for( const wxString& excludeChar : GetExcludes() )
+        for( const wxUniCharRef& excludeChar : GetCharExcludes() )
         {
             if( val.Find( excludeChar ) != wxNOT_FOUND )
             {
-                if( excludeChar == wxT( "\r" ) )
+                if( excludeChar == '\r' )
                     badCharsFound.Add( _( "carriage return" ) );
-                else if( excludeChar == wxT( "\n" ) )
+                else if( excludeChar == '\n' )
                     badCharsFound.Add( _( "line feed" ) );
-                else if( excludeChar == wxT( "\t" ) )
+                else if( excludeChar == '\t' )
                     badCharsFound.Add( _( "tab" ) );
-                else if( excludeChar == wxT( " " ) )
+                else if( excludeChar == ' ' )
                     badCharsFound.Add( _( "space" ) );
                 else
                     badCharsFound.Add( wxString::Format( wxT( "'%s'" ), excludeChar ) );

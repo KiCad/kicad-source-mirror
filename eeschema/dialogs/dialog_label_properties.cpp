@@ -110,7 +110,11 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_L
     m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
 
     m_grid->SetTable( m_fields );
-    m_grid->PushEventHandler( new FIELDS_GRID_TRICKS( m_grid, this ) );
+    m_grid->PushEventHandler( new FIELDS_GRID_TRICKS( m_grid, this,
+                                                      [&]( wxCommandEvent& aEvent )
+                                                      {
+                                                          OnAddField( aEvent );
+                                                      } ) );
     m_grid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
     // Show/hide columns according to user's preference
@@ -603,7 +607,7 @@ void DIALOG_LABEL_PROPERTIES::OnAddField( wxCommandEvent& event )
     if( !m_grid->CommitPendingChanges() )
         return;
 
-    int      fieldID = m_fields->size();
+    int      fieldID = (int) m_fields->size();
     wxString fieldName;
 
     if( (int) fieldID == m_currentLabel->GetMandatoryFieldCount()
@@ -637,8 +641,8 @@ void DIALOG_LABEL_PROPERTIES::OnAddField( wxCommandEvent& event )
     wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1 );
     m_grid->ProcessTableMessage( msg );
 
-    m_grid->MakeCellVisible( m_fields->size() - 1, 0 );
-    m_grid->SetGridCursor( m_fields->size() - 1, fieldName == wxT( "Netclass" ) ? 1 : 0 );
+    m_grid->MakeCellVisible( (int) m_fields->size() - 1, 0 );
+    m_grid->SetGridCursor( (int) m_fields->size() - 1, 0 );
 
     m_grid->EnableCellEditControl();
     m_grid->ShowCellEditControl();

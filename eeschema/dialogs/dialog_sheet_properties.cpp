@@ -61,7 +61,11 @@ DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
     m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
 
     m_grid->SetTable( m_fields );
-    m_grid->PushEventHandler( new FIELDS_GRID_TRICKS( m_grid, this ) );
+    m_grid->PushEventHandler( new FIELDS_GRID_TRICKS( m_grid, this,
+                                                      [&]( wxCommandEvent& aEvent )
+                                                      {
+                                                          OnAddField( aEvent );
+                                                      } ) );
     m_grid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
     // Show/hide columns according to user's preference
