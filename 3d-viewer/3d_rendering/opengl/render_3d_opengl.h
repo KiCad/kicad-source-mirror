@@ -129,18 +129,44 @@ private:
      */
     void load3dModels( REPORTER* aStatusReporter );
 
-    /**
-     * @param aRenderTopOrBot true will render Top, false will render bottom
-     * @param aRenderTransparentOnly true will render only the transparent objects, false will
-     *                               render opaque
-     */
-    void render3dModels( bool aRenderTopOrBot, bool aRenderTransparentOnly );
+    struct MODELTORENDER
+    {
+        glm::mat4 m_modelWorldMat;
+        const MODEL_3D* m_model;
+        float m_opacity;
+        bool m_isTransparent;
+        bool m_isSelected;
 
-    void render3dModelsSelected( bool aRenderTopOrBot, bool aRenderTransparentOnly,
-                                 bool aRenderSelectedOnly );
+        MODELTORENDER( glm::mat4 aModelWorldMat,
+                       const MODEL_3D* aNodel,
+                       float aOpacity,
+                       bool aIsTransparent,
+                       bool aIsSelected ) :
+                       m_modelWorldMat( std::move( aModelWorldMat ) ),
+                       m_model( aNodel ),
+                       m_opacity( aOpacity ),
+                       m_isTransparent( aIsTransparent ),
+                       m_isSelected( aIsSelected )
+        {
+        }
+    };
 
-    void renderFootprint( const FOOTPRINT* aFootprint, bool aRenderTransparentOnly,
-                          bool aIsSelected );
+    void renderOpaqueModels( const glm::mat4 &aCameraViewMatrix );
+    void renderTransparentModels( const glm::mat4 &aCameraViewMatrix );
+
+    void renderModel( const glm::mat4 &aCameraViewMatrix,
+                      const MODELTORENDER &aModelToRender,
+                      const SFVEC3F &aSelColor,
+                      const SFVEC3F *aCameraWorldPos );
+
+
+    void get3dModelsSelected( std::list<MODELTORENDER> &aDstRenderList,
+                              bool aGetTop, bool aGetBot, bool aRenderTransparentOnly,
+                              bool aRenderSelectedOnly );
+
+    void get3dModelsFromFootprint( std::list<MODELTORENDER> &aDstRenderList,
+                                   const FOOTPRINT* aFootprint, bool aRenderTransparentOnly,
+                                   bool aIsSelected );
 
     void setLightFront( bool enabled );
     void setLightTop( bool enabled );
@@ -210,7 +236,7 @@ private:
 
     // Caches
     std::map< wxString, MODEL_3D* >            m_3dModelMap;
-    std::map< std::vector<double>, glm::mat4 > m_3dModelMatrixMap;
+    std::map< std::vector<float>, glm::mat4 > m_3dModelMatrixMap;
 
     BOARD_ITEM*         m_currentRollOverItem;
 

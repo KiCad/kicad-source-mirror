@@ -238,6 +238,16 @@ bool BBOX_3D::Inside( const SFVEC3F& aPoint ) const
 }
 
 
+bool BBOX_3D::Inside( const BBOX_3D& aBBox ) const
+{
+    wxASSERT( IsInitialized() );
+    wxASSERT( aBBox.IsInitialized() );
+
+    return Inside( aBBox.Min() ) &&
+           Inside( aBBox.Max() );
+}
+
+
 float BBOX_3D::Volume() const
 {
     wxASSERT( IsInitialized() );

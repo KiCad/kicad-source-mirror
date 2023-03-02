@@ -330,7 +330,15 @@ void EDA_3D_MODEL_VIEWER::OnPaint( wxPaintEvent& event )
         m_ogl_3dmodel->BeginDrawMulti( true );
 
         m_ogl_3dmodel->DrawOpaque( false );
+
+        glDepthMask( GL_FALSE );
+        glEnable( GL_BLEND );
+        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+
         m_ogl_3dmodel->DrawTransparent( 1.0f, false );
+
+        glDisable( GL_BLEND );
+        glDepthMask( GL_TRUE );
 
         m_ogl_3dmodel->EndDrawMulti();
 

@@ -27,13 +27,14 @@
  * @file  c_ogl_3dmodel.cpp
  * @brief
  */
+#include <algorithm>
 #include <stdexcept>
 #include <gal/opengl/kiglew.h>    // Must be included first
 
 #include "3d_model.h"
-#include "opengl_utils.h"
 #include "../common_ogl/ogl_utils.h"
 #include "../3d_math.h"
+#include <utility>
 #include <wx/debug.h>
 #include <wx/log.h>
 #include <chrono>
@@ -177,9 +178,11 @@ MODEL_3D::MODEL_3D( const S3DMODEL& a3DModel, MATERIAL_MODE aMaterialMode )
         // use material color for mesh bounding box or some sort of average vertex color.
         glm::vec3 avg_color = material.m_Diffuse;
 
+        BBOX_3D &mesh_bbox = m_meshes_bbox[mesh_i];
+
         for( unsigned int vtx_i = 0; vtx_i < mesh.m_VertexSize; ++vtx_i )
         {
-            m_meshes_bbox[mesh_i].Union( mesh.m_Positions[vtx_i] );
+            mesh_bbox.Union( mesh.m_Positions[vtx_i] );
 
             VERTEX& vtx_out = mesh_group.m_vertices[vtx_offset + vtx_i];
 
@@ -222,16 +225,19 @@ MODEL_3D::MODEL_3D( const S3DMODEL& a3DModel, MATERIAL_MODE aMaterialMode )
             }
         }
 
-        if( m_meshes_bbox[mesh_i].IsInitialized() )
+        if( mesh_bbox.IsInitialized() )
         {
             // generate geometry for the bounding box
-            MakeBbox( m_meshes_bbox[mesh_i], ( mesh_i + 1 ) * bbox_vtx_count,
+            MakeBbox( mesh_bbox, ( mesh_i + 1 ) * bbox_vtx_count,
                       &bbox_tmp_vertices[( mesh_i + 1 ) * bbox_vtx_count],
                       &bbox_tmp_indices[( mesh_i + 1 ) * bbox_idx_count],
                       { avg_color, 1.0f } );
 
             // bump the outer bounding box
-            m_model_bbox.Union( m_meshes_bbox[mesh_i] );
+            m_model_bbox.Union( mesh_bbox );
+
+            // add to the material group
+            material.m_bbox.Union( mesh_bbox );
         }
 
 
@@ -410,7 +416,9 @@ void MODEL_3D::EndDrawMulti()
 
 
 void MODEL_3D::Draw( bool aTransparent, float aOpacity, bool aUseSelectedMaterial,
-                     SFVEC3F& aSelectionColor ) const
+                     const SFVEC3F& aSelectionColor,
+                     const glm::mat4 *aModelWorldMatrix,
+                     const SFVEC3F *aCameraWorldPos ) const
 {
     if( aOpacity <= FLT_EPSILON )
         return;
@@ -439,27 +447,102 @@ void MODEL_3D::Draw( bool aTransparent, float aOpacity, bool aUseSelectedMateria
 
     glTexEnvfv( GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, (const float*)&param.x );
 
-    for( const MODEL_3D::MATERIAL& mat : m_materials )
+    std::vector<const MODEL_3D::MATERIAL *> materialsToRender;
+    
+    materialsToRender.reserve( m_materials.size() );
+
+    if( aModelWorldMatrix && aCameraWorldPos )
     {
-        if( ( mat.IsTransparent() != aTransparent )
+        // Sort Material groups
+
+        std::vector<std::pair<const MODEL_3D::MATERIAL*, float>> materialsSorted;
+
+        // Calculate the distance to the camera for each material group
+        for( const MODEL_3D::MATERIAL& mat : m_materials )
+        {
+            if( mat.m_render_idx_count == 0 )
+            {
+                continue;
+            }
+
+            if( ( mat.IsTransparent() != aTransparent )
                 && ( aOpacity >= 1.0f )
                 && m_materialMode != MATERIAL_MODE::DIFFUSE_ONLY )
-        {
-            continue;
+            {
+                continue;
+            }
+
+            const BBOX_3D& bBox = mat.m_bbox;
+            const SFVEC3F& bBoxCenter = bBox.GetCenter();
+            const SFVEC3F bBoxWorld = *aModelWorldMatrix * glm::vec4( bBoxCenter, 1.0f );
+
+            const float distanceToCamera = glm::length( *aCameraWorldPos - bBoxWorld );
+
+            materialsSorted.emplace_back( &mat, distanceToCamera  );
         }
 
+        // Sort from back to front
+        std::sort( materialsSorted.begin(), materialsSorted.end(),
+            [&]( std::pair<const MODEL_3D::MATERIAL*, float>& a,
+                 std::pair<const MODEL_3D::MATERIAL*, float>& b ) {
+                    // If A is inside B, then A is rendered first
+                    if( b.first->m_bbox.Inside( a.first->m_bbox ) )
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        if( a.first->m_bbox.Inside( b.first->m_bbox ) )
+                        {
+                            return false;
+                        }
+                    }
+
+                    return a.second > b.second;
+            } );
+
+        for( const std::pair<const MODEL_3D::MATERIAL*, float>& mat : materialsSorted )
+        {
+            materialsToRender.push_back( mat.first );
+        }
+    }
+    else
+    {
+        for( const MODEL_3D::MATERIAL& mat : m_materials )
+        {
+            // There is at least one default material created in case a mesh has no declared materials.
+            // Most meshes have a material, so usually the first material will have nothing to render and is skip.
+            // See S3D::GetModel for more details.
+            if( mat.m_render_idx_count == 0 )
+            {
+                continue;
+            }
+
+            if( ( mat.IsTransparent() != aTransparent )
+                && ( aOpacity >= 1.0f )
+                && m_materialMode != MATERIAL_MODE::DIFFUSE_ONLY )
+            {
+                continue;
+            }
+            
+            materialsToRender.push_back( &mat );
+        }
+    }   
+
+    for( const MODEL_3D::MATERIAL* mat : materialsToRender )
+    {
         switch( m_materialMode )
         {
         case MATERIAL_MODE::NORMAL:
-            OglSetMaterial( mat, aOpacity, aUseSelectedMaterial, aSelectionColor );
+            OglSetMaterial( *mat, aOpacity, aUseSelectedMaterial, aSelectionColor );
             break;
 
         case MATERIAL_MODE::DIFFUSE_ONLY:
-            OglSetDiffuseMaterial( mat.m_Diffuse, aOpacity, aUseSelectedMaterial, aSelectionColor );
+            OglSetDiffuseMaterial( mat->m_Diffuse, aOpacity, aUseSelectedMaterial, aSelectionColor );
             break;
 
         case MATERIAL_MODE::CAD_MODE:
-            OglSetDiffuseMaterial( MaterialDiffuseToColorCAD( mat.m_Diffuse ), aOpacity,
+            OglSetDiffuseMaterial( MaterialDiffuseToColorCAD( mat->m_Diffuse ), aOpacity,
                                    aUseSelectedMaterial, aSelectionColor );
             break;
 
@@ -467,9 +550,9 @@ void MODEL_3D::Draw( bool aTransparent, float aOpacity, bool aUseSelectedMateria
             break;
         }
 
-        glDrawElements( GL_TRIANGLES, mat.m_render_idx_count, m_index_buffer_type,
+        glDrawElements( GL_TRIANGLES, mat->m_render_idx_count, m_index_buffer_type,
                         reinterpret_cast<const void*>(
-                                static_cast<uintptr_t>( mat.m_render_idx_buffer_offset ) ) );
+                                static_cast<uintptr_t>( mat->m_render_idx_buffer_offset ) ) );
     }
 }
 

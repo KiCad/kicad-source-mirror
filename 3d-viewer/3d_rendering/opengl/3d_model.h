@@ -54,7 +54,7 @@ public:
      */
     void DrawOpaque( bool aUseSelectedMaterial, SFVEC3F aSelectionColor = SFVEC3F( 0.0f ) ) const
     {
-        Draw( false, 1.0f, aUseSelectedMaterial, aSelectionColor );
+        Draw( false, 1.0f, aUseSelectedMaterial, aSelectionColor, nullptr, nullptr );
     }
 
     /**
@@ -63,8 +63,18 @@ public:
     void DrawTransparent( float aOpacity, bool aUseSelectedMaterial,
                           SFVEC3F aSelectionColor = SFVEC3F( 0.0f ) ) const
     {
-        Draw( true, aOpacity, aUseSelectedMaterial, aSelectionColor );
+        Draw( true, aOpacity, aUseSelectedMaterial, aSelectionColor, nullptr, nullptr );
     }
+
+    /**
+     * Render the model into the current context.
+     * if aModelWorldMatrix and aCameraWorldPos is provided,
+     * it renders the material groups sorted.
+     */
+    void Draw( bool aTransparent, float aOpacity, bool aUseSelectedMaterial,
+               const SFVEC3F& aSelectionColor,
+               const glm::mat4 *aModelWorldMatrix,
+               const SFVEC3F *aCameraWorldPos ) const;
 
     /**
      * Return true if have opaque meshes to render.
@@ -136,6 +146,8 @@ private:
         unsigned int m_render_idx_buffer_offset = 0;
         unsigned int m_render_idx_count = 0;
 
+        BBOX_3D m_bbox; ///< bounding box for this material group, used for transparent material ordering
+
         MATERIAL( const SMATERIAL& aOther ) : SMATERIAL( aOther ) { }
         bool IsTransparent() const { return m_Transparency > FLT_EPSILON; }
     };
@@ -159,9 +171,6 @@ private:
 
     static void MakeBbox( const BBOX_3D& aBox, unsigned int aIdxOffset, VERTEX* aVtxOut,
                           GLuint* aIdxOut, const glm::vec4& aColor );
-
-    void Draw( bool aTransparent, float aOpacity, bool aUseSelectedMaterial,
-               SFVEC3F& aSelectionColor ) const;
 };
 
 #endif // _MODEL_3D_H_

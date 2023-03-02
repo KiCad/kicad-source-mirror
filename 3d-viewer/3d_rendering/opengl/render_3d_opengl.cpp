@@ -22,14 +22,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <cstdint>
 #include <gal/opengl/kiglew.h>    // Must be included first
 
+#include "plugins/3dapi/xv3d_types.h"
 #include "render_3d_opengl.h"
 #include "opengl_utils.h"
 #include "common_ogl/ogl_utils.h"
 #include <footprint.h>
 #include <3d_math.h>
+#include <glm/geometric.hpp>
 #include <math/util.h>      // for KiROUND
+#include <utility>
+#include <vector>
 #include <wx/log.h>
 
 #include <base_units.h>
@@ -858,9 +863,12 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
         glPopMatrix();
     }
 
+    glm::mat4 cameraViewMatrix;
+
+    glGetFloatv( GL_MODELVIEW_MATRIX, glm::value_ptr( cameraViewMatrix ) );
+
     // Render 3D Models (Non-transparent)
-    render3dModels( false, false );
-    render3dModels( true, false );
+    renderOpaqueModels( cameraViewMatrix );
 
     // Display board body
     if( m_boardAdapter.m_Cfg->m_Render.show_board_body )
@@ -922,8 +930,7 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
     glTexEnvi( GL_TEXTURE_ENV, GL_SRC1_ALPHA, GL_CONSTANT );
     glTexEnvi( GL_TEXTURE_ENV, GL_OPERAND1_ALPHA, GL_SRC_ALPHA );
 
-    render3dModels( false, true );
-    render3dModels( true, true );
+    renderTransparentModels( cameraViewMatrix );
 
     glDisable( GL_BLEND );
     OglResetTextureState();
@@ -1143,13 +1150,14 @@ void RENDER_3D_OPENGL::renderSolderMaskLayer( PCB_LAYER_ID aLayerID, float aZPos
 }
 
 
-void RENDER_3D_OPENGL::render3dModelsSelected( bool aRenderTopOrBot, bool aRenderTransparentOnly,
-                                               bool aRenderSelectedOnly )
+void RENDER_3D_OPENGL::get3dModelsSelected( std::list<MODELTORENDER> &aDstRenderList,
+                                            bool aGetTop, bool aGetBot, bool aRenderTransparentOnly,
+                                            bool aRenderSelectedOnly )
 {
+    wxASSERT( ( aGetTop == true ) || ( aGetBot == true ) );
+
     if( !m_boardAdapter.GetBoard() )
         return;
-
-    MODEL_3D::BeginDrawMulti( !aRenderSelectedOnly );
 
     // Go for all footprints
     for( FOOTPRINT* fp : m_boardAdapter.GetBoard()->Footprints() )
@@ -1175,54 +1183,52 @@ void RENDER_3D_OPENGL::render3dModelsSelected( bool aRenderTopOrBot, bool aRende
         {
             if( m_boardAdapter.IsFootprintShown( (FOOTPRINT_ATTR_T) fp->GetAttributes() ) )
             {
-                if( aRenderTopOrBot == !fp->IsFlipped() )
-                    renderFootprint( fp, aRenderTransparentOnly, highlight );
+                const bool isFlipped = fp->IsFlipped();
+
+                if( ( aGetTop == !isFlipped ) ||
+                    ( aGetBot == isFlipped ) )
+                    get3dModelsFromFootprint( aDstRenderList, fp, aRenderTransparentOnly, highlight );
             }
         }
     }
-
-    MODEL_3D::EndDrawMulti();
 }
 
 
-void RENDER_3D_OPENGL::render3dModels( bool aRenderTopOrBot, bool aRenderTransparentOnly )
-{
-    if( m_boardAdapter.m_IsBoardView )
-        render3dModelsSelected( aRenderTopOrBot, aRenderTransparentOnly, true );
-
-    render3dModelsSelected( aRenderTopOrBot, aRenderTransparentOnly, false );
-}
-
-
-void RENDER_3D_OPENGL::renderFootprint( const FOOTPRINT* aFootprint, bool aRenderTransparentOnly,
-                                        bool aIsSelected )
+void RENDER_3D_OPENGL::get3dModelsFromFootprint( std::list<MODELTORENDER> &aDstRenderList,
+                                                 const FOOTPRINT* aFootprint, bool aRenderTransparentOnly,
+                                                 bool aIsSelected )
 {
     if( !aFootprint->Models().empty() )
     {
         const double zpos = m_boardAdapter.GetFootprintZPos( aFootprint->IsFlipped() );
-        SFVEC3F selColor = m_boardAdapter.GetColor( m_boardAdapter.m_Cfg->m_Render.opengl_selection_color );
-
-
-        glPushMatrix();
 
         VECTOR2I pos = aFootprint->GetPosition();
 
-        glTranslatef( pos.x * m_boardAdapter.BiuTo3dUnits(), -pos.y * m_boardAdapter.BiuTo3dUnits(),
-                      zpos );
+        glm::mat4 fpMatrix( 1.0f );
+
+        fpMatrix = glm::translate( fpMatrix,
+                                    SFVEC3F( pos.x * m_boardAdapter.BiuTo3dUnits(),
+                                            -pos.y * m_boardAdapter.BiuTo3dUnits(),
+                                            zpos ) );
 
         if( !aFootprint->GetOrientation().IsZero() )
-            glRotated( aFootprint->GetOrientation().AsDegrees(), 0.0, 0.0, 1.0 );
+        {
+            fpMatrix = glm::rotate( fpMatrix,
+                                    (float) aFootprint->GetOrientation().AsRadians(),
+                                    SFVEC3F( 0.0f, 0.0f, 1.0f ) );
+        }
 
         if( aFootprint->IsFlipped() )
         {
-            glRotatef( 180.0f, 0.0f, 1.0f, 0.0f );
-            glRotatef( 180.0f, 0.0f, 0.0f, 1.0f );
+            fpMatrix = glm::rotate( fpMatrix, glm::pi<float>(), SFVEC3F( 0.0f, 1.0f, 0.0f ) );
+            fpMatrix = glm::rotate( fpMatrix, glm::pi<float>(), SFVEC3F( 0.0f, 0.0f, 1.0f ) );
         }
 
-        double modelunit_to_3d_units_factor = m_boardAdapter.BiuTo3dUnits() * UNITS3D_TO_UNITSPCB;
+        const double modelunit_to_3d_units_factor = m_boardAdapter.BiuTo3dUnits() *
+                                                    UNITS3D_TO_UNITSPCB;
 
-        glScaled( modelunit_to_3d_units_factor, modelunit_to_3d_units_factor,
-                  modelunit_to_3d_units_factor );
+        fpMatrix = glm::scale( fpMatrix,
+                               SFVEC3F( modelunit_to_3d_units_factor ) );
 
         // Get the list of model files for this model
         for( const FP_3DMODEL& sM : aFootprint->Models() )
@@ -1243,66 +1249,232 @@ void RENDER_3D_OPENGL::renderFootprint( const FOOTPRINT* aFootprint, bool aRende
                 if( ( !aRenderTransparentOnly && modelPtr->HasOpaqueMeshes() && opaque ) ||
                     ( aRenderTransparentOnly && ( modelPtr->HasTransparentMeshes() || !opaque ) ) )
                 {
-                    glPushMatrix();
+                    glm::mat4 modelworldMatrix = fpMatrix;
 
-                    std::vector<double> key = { sM.m_Offset.x, sM.m_Offset.y, sM.m_Offset.z,
-                                                sM.m_Rotation.x, sM.m_Rotation.y, sM.m_Rotation.z,
-                                                sM.m_Scale.x, sM.m_Scale.y, sM.m_Scale.z };
+                    const SFVEC3F offset = SFVEC3F( sM.m_Offset.x, sM.m_Offset.y, sM.m_Offset.z );
+                    const SFVEC3F rotation = SFVEC3F( sM.m_Rotation.x, sM.m_Rotation.y, sM.m_Rotation.z );
+                    const SFVEC3F scale = SFVEC3F( sM.m_Scale.x, sM.m_Scale.y, sM.m_Scale.z );
+                    
+                    std::vector<float> key = { offset.x, offset.y, offset.z,
+                                               rotation.x, rotation.y, rotation.z,
+                                               scale.x, scale.y, scale.z };
 
                     auto it = m_3dModelMatrixMap.find( key );
 
                     if( it != m_3dModelMatrixMap.end() )
                     {
-                        glMultMatrixf( glm::value_ptr( it->second ) );
+                        modelworldMatrix *= it->second;
                     }
                     else
                     {
-                        glm::mat4 mtx( 1 );
-                        mtx = glm::translate( mtx, { sM.m_Offset.x, sM.m_Offset.y, sM.m_Offset.z } );
-                        mtx = glm::rotate( mtx, glm::radians( (float) -sM.m_Rotation.z ), { 0.0f, 0.0f, 1.0f } );
-                        mtx = glm::rotate( mtx, glm::radians( (float) -sM.m_Rotation.y ), { 0.0f, 1.0f, 0.0f } );
-                        mtx = glm::rotate( mtx, glm::radians( (float) -sM.m_Rotation.x ), { 1.0f, 0.0f, 0.0f } );
-                        mtx = glm::scale( mtx, { sM.m_Scale.x, sM.m_Scale.y, sM.m_Scale.z } );
+                        glm::mat4 mtx( 1.0f );
+                        mtx = glm::translate( mtx, offset );
+                        mtx = glm::rotate( mtx, glm::radians( -rotation.z ), { 0.0f, 0.0f, 1.0f } );
+                        mtx = glm::rotate( mtx, glm::radians( -rotation.y ), { 0.0f, 1.0f, 0.0f } );
+                        mtx = glm::rotate( mtx, glm::radians( -rotation.x ), { 1.0f, 0.0f, 0.0f } );
+                        mtx = glm::scale( mtx, scale );
                         m_3dModelMatrixMap[ key ] = mtx;
 
-                        glMultMatrixf( glm::value_ptr( mtx ) );
+                        modelworldMatrix *= mtx;
                     }
-
 
                     if( aRenderTransparentOnly )
                     {
-                        modelPtr->DrawTransparent( sM.m_Opacity,
-                                                   aFootprint->IsSelected() || aIsSelected,
-                                                   selColor );
+                        aDstRenderList.emplace_back( modelworldMatrix,
+                                                     modelPtr,
+                                                     sM.m_Opacity,
+                                                     true,
+                                                     aFootprint->IsSelected() || aIsSelected  );
                     }
                     else
                     {
-                        modelPtr->DrawOpaque( aFootprint->IsSelected() || aIsSelected, selColor );
+                        aDstRenderList.emplace_back( modelworldMatrix,
+                                                     modelPtr,
+                                                     1.0f,
+                                                     false,
+                                                     aFootprint->IsSelected() || aIsSelected );
                     }
+                }
+            }
+        }
+    }
+}
 
-                    if( m_boardAdapter.m_Cfg->m_Render.opengl_show_model_bbox )
-                    {
-                        glEnable( GL_BLEND );
-                        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
-                        glDisable( GL_LIGHTING );
+void RENDER_3D_OPENGL::renderOpaqueModels( const glm::mat4 &aCameraViewMatrix )
+{
+    const SFVEC3F selColor = m_boardAdapter.GetColor( m_boardAdapter.m_Cfg->m_Render.opengl_selection_color );
 
-                        glLineWidth( 1 );
-                        modelPtr->DrawBboxes();
+    glPushMatrix();
 
-                        glLineWidth( 4 );
-                        modelPtr->DrawBbox();
+    std::list<MODELTORENDER> renderList;
 
-                        glEnable( GL_LIGHTING );
-                        glDisable( GL_BLEND );
-                    }
+    if( m_boardAdapter.m_IsBoardView )
+    {
+        renderList.clear();
 
-                    glPopMatrix();
+        get3dModelsSelected( renderList, true, true, false, true );
+
+        if( !renderList.empty() )
+        {
+            MODEL_3D::BeginDrawMulti( false );
+
+            for( const MODELTORENDER& mtr : renderList )
+            {
+                renderModel( aCameraViewMatrix, mtr, selColor, nullptr );
+            }
+
+            MODEL_3D::EndDrawMulti();
+        }
+    }
+
+    renderList.clear();
+    get3dModelsSelected( renderList, true, true, false, false );
+
+    if( !renderList.empty() )
+    {
+        MODEL_3D::BeginDrawMulti( true );
+
+        for( const MODELTORENDER& mtr : renderList )
+        {
+            renderModel( aCameraViewMatrix, mtr, selColor, nullptr );
+        }
+
+        MODEL_3D::EndDrawMulti();
+    }
+
+    glPopMatrix();
+}
+
+
+void RENDER_3D_OPENGL::renderTransparentModels( const glm::mat4 &aCameraViewMatrix )
+{
+    const SFVEC3F selColor = m_boardAdapter.GetColor( m_boardAdapter.m_Cfg->m_Render.opengl_selection_color );
+
+    std::list<MODELTORENDER> renderListModels; // do not clear it until this function returns
+
+    if( m_boardAdapter.m_IsBoardView )
+    {
+        // Get Transparent Selected
+        get3dModelsSelected( renderListModels, true, true, true, true );
+    }
+
+    // Get Transparent Not Selected
+    get3dModelsSelected( renderListModels, true, true, true, false );
+
+    if( renderListModels.empty() )
+        return;
+
+    std::vector<std::pair<const MODELTORENDER *, float>> transparentModelList;
+
+    transparentModelList.reserve( renderListModels.size() );
+
+    // Calculate the distance to the camera for each model
+    const SFVEC3F &cameraPos = m_camera.GetPos();
+
+    for( const MODELTORENDER& mtr : renderListModels )
+    {
+        const BBOX_3D& bBox = mtr.m_model->GetBBox();
+        const SFVEC3F& bBoxCenter = bBox.GetCenter();
+        const SFVEC3F bBoxWorld = mtr.m_modelWorldMat * glm::vec4( bBoxCenter, 1.0f );
+
+        const float distanceToCamera = glm::length( cameraPos - bBoxWorld );
+        
+        transparentModelList.emplace_back( &mtr, distanceToCamera );
+    }
+
+    // Sort from back to front
+    std::sort( transparentModelList.begin(), transparentModelList.end(),
+        [&]( std::pair<const MODELTORENDER *, float>& a,
+             std::pair<const MODELTORENDER *, float>& b ) {
+            return a.second > b.second;
+        } );
+
+    // Start rendering calls
+    glPushMatrix();
+
+    bool isUsingColorInformation = !( transparentModelList.begin()->first->m_isSelected &&
+                                      m_boardAdapter.m_IsBoardView );
+
+    MODEL_3D::BeginDrawMulti( isUsingColorInformation );
+
+    for( const std::pair<const MODELTORENDER *, float>& mtr : transparentModelList )
+    {
+        if( m_boardAdapter.m_IsBoardView )
+        {
+            // Toggle between using model color or the select color
+            if( !isUsingColorInformation && !mtr.first->m_isSelected )
+            {
+                isUsingColorInformation = true;
+
+                glEnableClientState( GL_COLOR_ARRAY );
+                glEnableClientState( GL_TEXTURE_COORD_ARRAY );
+                glEnable( GL_COLOR_MATERIAL );
+            }
+            else
+            {
+                if( isUsingColorInformation && mtr.first->m_isSelected )
+                {
+                    isUsingColorInformation = false;
+
+                    glDisableClientState( GL_COLOR_ARRAY );
+                    glDisableClientState( GL_TEXTURE_COORD_ARRAY );
+                    glDisable( GL_COLOR_MATERIAL );
                 }
             }
         }
 
-        glPopMatrix();
+        // Render model, sort each individuall material group
+        // by passing cameraPos
+        renderModel( aCameraViewMatrix, *mtr.first, selColor, &cameraPos );
+    }
+
+    MODEL_3D::EndDrawMulti();
+
+    glPopMatrix();
+}
+
+
+void RENDER_3D_OPENGL::renderModel( const glm::mat4 &aCameraViewMatrix,
+                                    const MODELTORENDER &aModelToRender,
+                                    const SFVEC3F &aSelColor,
+                                    const SFVEC3F *aCameraWorldPos )
+{
+    const glm::mat4 modelviewMatrix = aCameraViewMatrix * aModelToRender.m_modelWorldMat;
+
+    glLoadMatrixf( glm::value_ptr( modelviewMatrix ) );
+
+    aModelToRender.m_model->Draw( aModelToRender.m_isTransparent,
+                                  aModelToRender.m_opacity,
+                                  aModelToRender.m_isSelected,
+                                  aSelColor,
+                                  &aModelToRender.m_modelWorldMat,
+                                  aCameraWorldPos );
+
+    if( m_boardAdapter.m_Cfg->m_Render.opengl_show_model_bbox )
+    {
+        const bool wasBlendEnabled = glIsEnabled( GL_BLEND );
+
+        if( !wasBlendEnabled )
+        {
+            glEnable( GL_BLEND );
+            glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+        }
+
+        glDisable( GL_LIGHTING );
+
+        glLineWidth( 1 );
+        aModelToRender.m_model->DrawBboxes();
+
+        glLineWidth( 4 );
+        aModelToRender.m_model->DrawBbox();
+
+        glEnable( GL_LIGHTING );
+        
+        if( !wasBlendEnabled )
+        {
+            glDisable( GL_BLEND );
+        }
     }
 }
 
