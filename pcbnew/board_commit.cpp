@@ -76,12 +76,14 @@ BOARD* BOARD_COMMIT::GetBoard() const
 
 COMMIT& BOARD_COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType )
 {
+    wxCHECK( aItem, *this );
+
     aItem->ClearFlags( IS_MODIFIED_CHILD );
 
     // If aItem belongs a footprint, the full footprint will be saved because undo/redo does
     // not handle "sub items" modifications.  This has implications for auto-zone-refill, so
     // we need to store a bit more information.
-    if( aItem && aChangeType == CHT_MODIFY )
+    if( aChangeType == CHT_MODIFY )
     {
         if( aItem->Type() == PCB_FOOTPRINT_T )
         {

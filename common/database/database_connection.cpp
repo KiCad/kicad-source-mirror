@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -178,7 +178,15 @@ bool DATABASE_CONNECTION::Disconnect()
         return false;
     }
 
-    m_conn->disconnect();
+    try
+    {
+        m_conn->disconnect();
+    }
+    catch( boost::locale::conv::conversion_error& exc )
+    {
+        wxLogTrace( traceDatabase, wxT( "Disconnect() error \"%s\" occured." ), exc.what() );
+        return false;
+    }
 
     return !m_conn->connected();
 }

@@ -63,8 +63,9 @@ wxSize GRID_CELL_ESCAPED_TEXT_RENDERER::GetBestSize( wxGrid & aGrid, wxGridCellA
 GRID_CELL_STC_EDITOR::GRID_CELL_STC_EDITOR( bool aIgnoreCase,
                                             std::function<void( wxStyledTextEvent&,
                                                                 SCINTILLA_TRICKS* )> aOnChar ) :
-        m_ignoreCase( aIgnoreCase ),
-        m_onChar( aOnChar )
+    m_scintillaTricks( nullptr ),
+    m_ignoreCase( aIgnoreCase ),
+    m_onChar( aOnChar )
 { }
 
 

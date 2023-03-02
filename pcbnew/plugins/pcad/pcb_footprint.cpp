@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -315,7 +315,6 @@ void PCB_FOOTPRINT::DoLayerContentsObjects( XNODE* aNode, PCB_FOOTPRINT* aFootpr
             if( m_callbacks->GetLayerType( PCadLayer ) == LAYER_TYPE_PLANE )
             {
                 plane_layer_polygon = new VERTICES_ARRAY;
-                wxASSERT( plane_layer );
                 plane_layer->FormPolygon( lNode, plane_layer_polygon, aDefaultMeasurementUnit,
                                           aActualConversion );
                 plane_layer->m_cutouts.Add( plane_layer_polygon );

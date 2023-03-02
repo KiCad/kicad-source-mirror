@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,12 +33,11 @@
 
 // Constructor and destructor
 NETINFO_LIST::NETINFO_LIST( BOARD* aParent ) :
-        m_parent( aParent )
+    m_parent( aParent ),
+    m_newNetCode( 0 )
 {
     // Make sure that the unconnected net has number 0
     AppendNet( new NETINFO_ITEM( aParent, wxEmptyString, 0 ) );
-
-    m_newNetCode = 0;
 }
 
 
@@ -51,6 +50,7 @@ NETINFO_LIST::~NETINFO_LIST()
 void NETINFO_LIST::clear()
 {
     NETNAMES_MAP::iterator it, itEnd;
+
     for( it = m_netNames.begin(), itEnd = m_netNames.end(); it != itEnd; ++it )
         delete it->second;
 

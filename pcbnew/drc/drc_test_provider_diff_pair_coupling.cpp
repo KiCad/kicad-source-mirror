@@ -392,6 +392,8 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
             int length = dp.coupledN.Length();
             int gap = dp.coupledN.Distance( dp.coupledP );
 
+            wxCHECK2( dp.parentN && dp.parentP, continue );
+
             gap -= dp.parentN->GetWidth() / 2;
             gap -= dp.parentP->GetWidth() / 2;
 

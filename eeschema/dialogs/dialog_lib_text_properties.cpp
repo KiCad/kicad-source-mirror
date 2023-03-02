@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2001 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2022 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2023 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -122,10 +122,14 @@ DIALOG_LIB_TEXT_PROPERTIES::~DIALOG_LIB_TEXT_PROPERTIES()
 
 bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataToWindow()
 {
-    LIB_SYMBOL* symbol = m_graphicText->GetParent();
+    LIB_SYMBOL* symbol = nullptr;
 
     if( m_graphicText )
     {
+        symbol = m_graphicText->GetParent();
+
+        wxCHECK( symbol, false );
+
         m_textSize.SetValue( m_graphicText->GetTextWidth() );
         m_StyledTextCtrl->SetValue( m_graphicText->GetText() );
         m_StyledTextCtrl->EmptyUndoBuffer();
