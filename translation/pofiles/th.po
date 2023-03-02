@@ -4,16 +4,15 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-10 15:35-0800\n"
-"PO-Revision-Date: 2023-01-28 22:14+0000\n"
-"Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
-"Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
-"th/>\n"
+"PO-Revision-Date: 2023-03-03 16:39+0000\n"
+"Last-Translator: \"boonchai k.\" <kicadthai@gmail.com>\n"
+"Language-Team: Thai <https://hosted.weblate.org/projects/kicad/v7/th/>\n"
 "Language: th\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -9798,14 +9797,13 @@ msgid "Alternate pin definitions must have a name."
 msgstr "การกำหนดชื่อเรียกอื่นของขาต้องมีชื่อ"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:345
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This pin is not on a %d mils grid which will make it difficult to connect to "
 "in the schematic.\n"
 "Do you wish to continue?"
 msgstr ""
-"ขานี้ไม่ได้อยู่ในตารางมิล %d ซึ่งจะทําให้มัน\n"
-"ยากที่จะเชื่อมต่อในวงจร\n"
+"ขานี้ไม่ได้อยู่บนกริด %d มิลซึ่งจะทําให้ยากต่อการเชื่อมต่อในแผนผังวงร\n"
 "คุณต้องการดําเนินการต่อหรือไม่?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:439
@@ -10929,9 +10927,8 @@ msgid "Failed to read simulation model from fields."
 msgstr "ล้มเหลวที่จะสร้างไฟล์ไลบรารีสัญลักษณ์ '%s'"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:402
-#, fuzzy
 msgid "Component:"
-msgstr "อุปกรณ์"
+msgstr "อุปกรณ์:"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:402
 #: eeschema/dialogs/dialog_sim_model_base.cpp:54
@@ -12395,19 +12392,19 @@ msgid "Unknown netlist format.\n"
 msgstr "เวียที่ไม่รู้จัก %d"
 
 #: eeschema/eeschema_jobs_handler.cpp:386
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
-msgstr "เปลี่ยนสัญลักษณ์ %s จาก '%s' ไปยัง '%s'"
+msgstr "พิมพ์สัญลักษณ์ '%s' หน่วย %d ไปเป็น '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:392
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' to '%s'\n"
-msgstr "เปลี่ยนสัญลักษณ์ %s จาก '%s' ไปยัง '%s'"
+msgstr "พิมพ์สัญลักษณ์ '%s' ไปยัง '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:416
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open destination '%s'"
-msgstr "ไม่สามารถตีความ '%s' ใน '%s'"
+msgstr "ไม่สามารถเปิดเป้าหมาย '%s'"
 
 #: eeschema/eeschema_jobs_handler.cpp:463
 #: eeschema/eeschema_jobs_handler.cpp:526 pcbnew/pcbnew_jobs_handler.cpp:611
@@ -12509,19 +12506,19 @@ msgid "Symbol %s has unplaced units %s"
 msgstr "ไม่พบสัญลักษณ์ %s ในไลบรารี '%s'"
 
 #: eeschema/erc.cpp:531
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has input power pins in units %s that are not placed."
-msgstr "สัญลักษณ์มีหน่วยมากกว่ากำหนดไว้"
+msgstr "สัญลักษณ์ %s มีขากําลังไฟฟ้าในหน่วย %s ที่ไม่ได้วาง"
 
 #: eeschema/erc.cpp:537
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has input pins in units %s that are not placed."
-msgstr "สัญลักษณ์มีหน่วยมากกว่ากำหนดไว้"
+msgstr "สัญลักษณ์ %s มีขาอินพุตในหน่วย %s ที่ไม่ได้วางอยู่"
 
 #: eeschema/erc.cpp:543
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has bidirectional pins in units %s that are not placed."
-msgstr "สัญลักษณ์มีหน่วยมากกว่ากำหนดไว้"
+msgstr "สัญลักษณ์ %s มีขาสองทิศทางในหน่วย %s ที่ไม่ได้วาง"
 
 #: eeschema/erc.cpp:582
 #, fuzzy
@@ -13019,9 +13016,8 @@ msgstr ""
 "จะแสดงทุกครั้งที่คุณเปิดโปรแกรมแก้ไขวงจร"
 
 #: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1651
-#, fuzzy
 msgid "Derived from"
-msgstr "แตกจากสัญลักษณ์:"
+msgstr "ได้มาจาก"
 
 #: eeschema/generate_alias_info.cpp:121 eeschema/sim/spice_simulator.cpp:85
 #: kicad/pcm/pcm.cpp:804 pcbnew/zone.cpp:598
@@ -14613,7 +14609,7 @@ msgstr ""
 "    <tr>\n"
 "        <th>Markup</th>\n"
 "        <th></th>\n"
-"        <th>Result</th>\n"
+"        <th>ผลลัพธ์</th>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>^{superscript}</samp></td>\n"
@@ -14642,8 +14638,8 @@ msgstr ""
 "        <td></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</"
-"samp></td>\n"
+"        <td> &nbsp;<br><samp>~{overbar}</samp><br> "
+"&nbsp;<br><samp>~{CLK}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
 "samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
@@ -14668,8 +14664,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></"
-"samp></td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> of symbol "
+"<i>refdes</i></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -14684,8 +14680,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus Definition</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
 "        <th>Resultant Nets</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -14736,9 +14732,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -14892,7 +14888,6 @@ msgid "Continue Load Schematic"
 msgstr "โหลดวงจรต่อไป"
 
 #: eeschema/sheet.cpp:272
-#, fuzzy
 msgid ""
 "There are library names in the selected schematic that are missing from the "
 "current project library table.  This may result in broken symbol library "
@@ -14900,11 +14895,12 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"มีชื่อไลบรารีในวงจรที่โหลดซึ่งหายไปจากตารางไลบรารีโครงการ "
-"ซึ่งอาจส่งผลให้ลิงก์ไลบรารีสัญลักษณ์ใช้งานไม่ได้สำหรับวงจรที่โหลด คุณต้องการดำเนินการต่อหรือไม่?"
+"มีชื่อไลบรารีในวงจรที่โหลดซึ่งหายไปจากตารางไลบรารีโครงการ  "
+"ซึ่งอาจส่งผลให้ลิงก์ไลบรารีสัญลักษณ์ใช้งานไม่ได้สำหรับวงจรที่โหลด\n"
+"\n"
+" คุณต้องการดำเนินการต่อหรือไม่?"
 
 #: eeschema/sheet.cpp:313
-#, fuzzy
 msgid ""
 "The selected file was created as part of a different project.  Linking the "
 "file to this project may result in missing or incorrect symbol library "
@@ -14912,21 +14908,26 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"ชื่อไลบรารีที่ซ้ำกันซึ่งอ้างอิงถึงไลบรารีอื่นมีอยู่ในตารางไลบรารีปัจจุบัน ข้อขัดแย้งนี้ไม่สามารถแก้ไขได้ "
-"และอาจส่งผลให้ลิงก์ไลบรารีสัญลักษณ์ใช้งานไม่ได้สำหรับวงจร คุณต้องการดำเนินการต่อหรือไม่?"
+"ไฟล์ทีเลือกถูกสร้างจากโปรเจ็คอื่น  "
+"เชื่อมโยงไฟล์เข้าโปรเจ็คนี้จะทำให้การอ้างอิงสัญลักษณ์ไลบรารีไม่พบหรือไม่ถูกต้"
+"อง\n"
+"\n"
+"คุณต้องการไปต่อหรือไม่?"
 
 #: eeschema/sheet.cpp:362
-#, fuzzy
 msgid ""
 "There are symbol library names in the selected schematic that are missing "
 "from the selected schematic project library table.  This may result in "
 "broken symbol library references.\n"
 "\n"
 "Do you wish to continue?"
-msgstr "มีชื่อไลบรารีในวงจตรที่โหลดซึ่งหายไปจากตารางไลบรารีโครงการ\tซึ่งอาจส่งผลให้การเชื่อมโยงไลบรารีสัญลักษณ์ที่ใช้งานไม่ได้สําหรับวงจร\tคุณต้องการดําเนินการต่อหรือไม่?"
+msgstr ""
+"มีชื่อไลบรารีในวงจตรที่โหลดซึ่งหายไปจากตารางไลบรารีโครงการ\tซ"
+"ึ่งอาจส่งผลให้การเชื่อมโยงไลบรารีสัญลักษณ์ที่ใช้งานไม่ได้สําหรับวงจร\n"
+"\n"
+"คุณต้องการดําเนินการต่อหรือไม่?"
 
 #: eeschema/sheet.cpp:423
-#, fuzzy
 msgid ""
 "A duplicate library name that references a different library exists in the "
 "current library table.  This conflict cannot be resolved and may result in "
@@ -14934,8 +14935,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"ชื่อไลบรารีที่ซ้ำกันซึ่งอ้างอิงถึงไลบรารีอื่นมีอยู่ในตารางไลบรารีปัจจุบัน ข้อขัดแย้งนี้ไม่สามารถแก้ไขได้ "
-"และอาจส่งผลให้ลิงก์ไลบรารีสัญลักษณ์ใช้งานไม่ได้สำหรับวงจร คุณต้องการดำเนินการต่อหรือไม่?"
+"ชื่อไลบรารีที่ซ้ำกันซึ่งอ้างอิงถึงไลบรารีอื่นมีอยู่ในตารางไลบรารีปัจจุบัน "
+"ข้อขัดแย้งนี้ไม่สามารถแก้ไขได้ "
+"และอาจส่งผลให้ลิงก์ไลบรารีสัญลักษณ์ใช้งานไม่ได้สำหรับวงจร\n"
+"\n"
+"คุณต้องการดำเนินการต่อหรือไม่?"
 
 #: eeschema/sheet.cpp:634
 #, c-format
@@ -15605,14 +15609,14 @@ msgid ""
 msgstr ""
 
 #: eeschema/sim/sim_model.cpp:781
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find a pin named '%s' in simulation model of type '%s'"
-msgstr "ไม่พบแพ็ดกำหนดเอง '%s'"
+msgstr "ไม่พบขาชื่อ '%s' ในโมเดลจำลองประเภท '%s'"
 
 #: eeschema/sim/sim_model.cpp:871
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find a parameter named '%s' in simulation model of type '%s'"
-msgstr "ไม่พบแพ็ดกำหนดเอง '%s'"
+msgstr "ไม่พบพารามิเตอร์ชื่อ '%s' ในโมเดลจําลองประเภท '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:81
 #, fuzzy, c-format
@@ -15789,9 +15793,8 @@ msgid " (mag)"
 msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:734
-#, fuzzy
 msgid " (phase)"
-msgstr "เฟส AC:"
+msgstr " (เฟส)"
 
 #: eeschema/sim/sim_plot_frame.cpp:844 eeschema/sim/sim_plot_frame.cpp:1807
 msgid "Signal"
@@ -18078,9 +18081,9 @@ msgid "Press <ESC> to cancel move."
 msgstr "กด <ESC> เพื่อยกเลิกการย้าย"
 
 #: eeschema/tools/sch_navigate_tool.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Page '%s' not found."
-msgstr "ไม่พบหน้าที่ '%d'"
+msgstr "ไม่พบหน้า '%s'"
 
 #: eeschema/tools/symbol_editor_control.cpp:180
 msgid "No symbol library selected."
@@ -19451,7 +19454,7 @@ msgstr "ขาทางเข้า"
 #: kicad/cli/command_export_pcb_base.cpp:93
 #, fuzzy, c-format
 msgid "Invalid layer name \"%s\"\n"
-msgstr "ชื่อคุณสมบัติไม่ถูกต้อง"
+msgstr "ชื่อเลเยอร์ไม่ถูกต้อง \"%s\"\n"
 
 #: kicad/cli/command_export_pcb_base.cpp:107
 msgid ""
@@ -19512,9 +19515,8 @@ msgid "Precision of gerber coordinates (5 or 6)"
 msgstr ""
 
 #: kicad/cli/command_export_pcb_drill.cpp:109
-#, fuzzy
 msgid "Output must be a directory\n"
-msgstr "ไดเร็คตอรีทางออก:"
+msgstr "ทางออกต้องเป็นไดเร็คตอรี\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:125
 #, fuzzy
@@ -19576,9 +19578,8 @@ msgstr ""
 #: kicad/cli/command_export_pcb_pdf.cpp:78
 #: kicad/cli/command_export_pcb_pos.cpp:101
 #: kicad/cli/command_export_pcb_svg.cpp:88
-#, fuzzy
 msgid "Board file does not exist or is not accessible\n"
-msgstr "วงจร '%s' ไม่มี คุณต้องการสร้างมันหรือไม่?"
+msgstr "ไม่มีไฟล์บอร์ดหรือไม่สามารถเข้าถึงได้\n"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:50
 #: kicad/cli/command_export_pcb_pdf.cpp:49
@@ -19753,9 +19754,8 @@ msgstr ""
 #: kicad/cli/command_export_sch_pdf.cpp:69
 #: kicad/cli/command_export_sch_pythonbom.cpp:47
 #: kicad/cli/command_export_sch_svg.cpp:69
-#, fuzzy
 msgid "Schematic file does not exist or is not accessible\n"
-msgstr "วงจร '%s' ไม่มี คุณต้องการสร้างมันหรือไม่?"
+msgstr "ไม่มีไฟล์ผังวงจรหรือไม่สามารถเข้าถึงได้\n"
 
 #: kicad/cli/command_export_sch_pdf.cpp:38
 msgid "Color theme to use (will default to schematic settings)"
@@ -19773,18 +19773,16 @@ msgid "Specific symbol to export within the library"
 msgstr "ไม่สามารถส่งออกไปคลิปบอร์ด"
 
 #: kicad/cli/command_fp_export_svg.cpp:68
-#, fuzzy
 msgid "Footprint library does not exist or is not accessible\n"
-msgstr "วงจร '%s' ไม่มี คุณต้องการสร้างมันหรือไม่?"
+msgstr "ไลบรารีฟุ้ทพรินท์ไม่มีอยู่หรือเข้าถึงไม่ได้\n"
 
 #: kicad/cli/command_fp_upgrade.cpp:37
 msgid "Forces the footprint library to be resaved regardless of versioning"
 msgstr ""
 
 #: kicad/cli/command_fp_upgrade.cpp:53
-#, fuzzy
 msgid "Footprint path does not exist or is not accessible\n"
-msgstr "วงจร '%s' ไม่มี คุณต้องการสร้างมันหรือไม่?"
+msgstr "เส้นทางของฟุ้ทพรินท์ไม่มีหรือเข้าถึงไม่ได้\n"
 
 #: kicad/cli/command_sym_export_svg.cpp:52
 #, fuzzy
@@ -19797,9 +19795,8 @@ msgid "Include hidden fields"
 msgstr "เลือกช่องที่ซ่อนไว้"
 
 #: kicad/cli/command_sym_export_svg.cpp:76 kicad/cli/command_sym_upgrade.cpp:53
-#, fuzzy
 msgid "Symbol file does not exist or is not accessible\n"
-msgstr "วงจร '%s' ไม่มี คุณต้องการสร้างมันหรือไม่?"
+msgstr "ไฟล์สัญลักษณ์ไม่มีหรือเข้าถึงไม่ได้\n"
 
 #: kicad/cli/command_sym_upgrade.cpp:37
 msgid "Forces the symbol library to be resaved regardless of versioning"
@@ -22745,14 +22742,12 @@ msgid "Period:"
 msgstr "คาบ:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:51
-#, fuzzy
 msgid "Wavelength in vacuum:"
-msgstr "ความยาวท่อนำคลื่น"
+msgstr "ความยาวคลื่นในสุญญากาศ:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:63
-#, fuzzy
 msgid "Wavelength in medium:"
-msgstr "ความยาวท่อนำคลื่น"
+msgstr "ความยาวคลื่นในตัวกลาง:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:75
 msgid "Speed in medium:"
@@ -26583,17 +26578,13 @@ msgid ""
 "clearance value.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"นี่คืออัตราส่วนระยะห่างคิดเป็นเปอร์เซ็นต์ ระหว่างแพ็ดและโซลเดอร์เพสต์ของฟุ้ทพรินท์\n"
-"ค่า 10 หมายความว่าค่าช่องว่างแนวนอนคือ 10% ของความกว้างแพ็ดและช่องว่างแนวตั้ง 10% "
-"ของความสูงแพ็ด\n"
+"นี่คืออัตราส่วนระยะห่างคิดเป็นเปอร์เซ็นต์ "
+"ระหว่างความกว้างและสูงของแพ็ดของฟุ้ทพรินท์\n"
+"ค่า 10 หมายถึง ช่องว่างแนวนอนคือ 10% o ของความกว้างแพ็ด และช่องว่างแนวตั้ง "
+"10% o ของความสูงแพ็ด\n"
 "ค่านี้สามารถถูกแทนที่ด้วยค่าเฉพาะที่แพ็ด\n"
-"ค่าระยะห่างค่าสุดท้าย คือผลรวมของค่านี้และกำหนดค่าระยะห่าง\n"
-"ค่าลบหมายถึงขนาดมาสก์ที่เล็กกว่าขนาดแพ็ด\n"
-"ค่า 10 หมายความว่า ระยะห่างแนวนอนคือ 10% ของความกว้างแพ็ด และระยะห่างแนวตั้งคือ 10% "
-"ของความสูงแพ็ด \n"
-"ค่านี้สามารถถูกแทนที่ด้วยค่าเฉพาะที่ของแพ็ดเอง \n"
-"ค่าระยะห่างค่าสุดท้าย คือผลรวมของค่านี้และค่าระยะห่างสมบูรณ์ \n"
-"ค่าลบหมายถึงขนาดเปิดสเต็นซิลที่เล็กกว่าขนาดแพ็ด"
+"ค่าระยะห่างค่าสุดท้าย คือผลรวมของค่านี้และค่าเฉพาะที่\n"
+"ค่าลบหมายถึงขนาดมาสก์ที่เล็กกว่าขนาดแพ็ด"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:340
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:311
@@ -26749,7 +26740,7 @@ msgstr ""
 "แท็บการตั้งค่าคุณสมบัติและระยะห่างของแพ็ด"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:288
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -26761,13 +26752,14 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local Clearance "
 "and Settings tab of Pad Properties."
 msgstr ""
-"นี่คือค่าท้องถิ่นสัดส่วนระยะห่างนับเป็นเปอร์เซ็นต์ระหว่างแพ็ด\n"
-"และโซลเดอร์เพสต์สำหรับฟุ้ทพรินท์นี้\n"
-"ค่าเป็น 10 หมายถึงค่าระยะห่าง 10% ของขนาดแพ็ด\n"
-"ค่าระยะห่างสุดท้ายคือผลรวมของค่านี้ และค่าระยะห่าง\n"
+"นี่คือค่าเฉพาะที่สัดส่วนระยะห่างนับเป็นเปอร์เซ็นต์ระหว่างความกว้างและสูงของแพ"
+"็ด สำหรับฟุ้ทพรินท์นี้\n"
+"ค่าเป็น 10 หมายถึงค่าระยะห่างแนวนอนเป็น 10% oของขนาดความกว้างแพ็ด "
+"และค่าระยะห่างแนวตั้งเป็น 10% oของขนาดความสูงแพ็ด\n"
+"ค่าระยะห่างสุดท้ายคือผลรวมของค่านี้ และค่าระยะห่างสัมบูรณ์\n"
 "ค่าลบหมายถึงขนาดมาสก์ที่เล็กกว่าขนาดแพ็ด\n"
-"ค่านี้สามารถแทนที่ได้จากค่าท้องถิ่น บนพื้นฐานแบบแพ็ดต่อแพ็ด\n"
-"แท็บการตั้งค่าคุณสมบัติและระยะห่างของแพ็ด"
+"ค่านี้สามารถแทนที่ได้จากค่าเฉพาะที่ ท้องถิ่น "
+"บนพื้นฐานแบบแพ็ดต่อแพ็ดแท็บการตั้งค่าคุณสมบัติและระยะห่างของแพ็ด"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:339
 #, fuzzy
@@ -29337,9 +29329,9 @@ msgid "<none selected>"
 msgstr "<ไม่ได้เลือก>"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:244
-#, fuzzy, c-format
+#, c-format
 msgid "Reference item: %s"
-msgstr "อ้างอิง '%s'"
+msgstr "อ้างอิง: '%s'"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:22
 msgid "Reference item: <none selected>"
@@ -29580,9 +29572,8 @@ msgid "Enter the text placed on selected layer."
 msgstr "ป้อนข้อความที่วางอยู่บนเลเยอร์ที่เลือก"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:101 pcbnew/pcb_text.cpp:345
-#, fuzzy
 msgid "Knockout"
-msgstr "โซนที่ตัดออก:"
+msgstr "น็อกเอาท์"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:105
 msgid "Keep text upright"
@@ -32572,9 +32563,9 @@ msgid "(%s clearance %s; actual %s)"
 msgstr "(%s ระยะห่าง %s ค่าจริง %s)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:298
-#, fuzzy, c-format
+#, c-format
 msgid "(%s clearance %s; actual < 0)"
-msgstr "(%s ระยะห่าง %s ค่าจริง %s)"
+msgstr "(%s ระยะห่าง %s ;ค่าจริง<0)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:635
 #, c-format
@@ -33271,9 +33262,8 @@ msgid "Thermal reliefs for PTH"
 msgstr "บรรเทาความร้อนสำหรับ PTH"
 
 #: pcbnew/footprint.cpp:2927
-#, fuzzy
 msgid "Library link"
-msgstr "เชื่อมโยงไปไลบรารี:"
+msgstr "เชื่อมโยงไลบรารี"
 
 #: pcbnew/footprint.cpp:2948 pcbnew/pad.cpp:1816 pcbnew/zone.cpp:1483
 #, fuzzy
@@ -33740,7 +33730,7 @@ msgstr "นำเข้าไฟล์กราฟิกเวกเตอร์
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:134
 msgid "Memory was exhausted trying to load the DXF, it may be too large."
-msgstr ""
+msgstr "หน่วยความจำไม่เพียงพอสำหรับอ่านDXF ไฟล์อาจใหญ่เกินไป"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1454
 msgid "Invalid spline definition encountered"
@@ -34235,11 +34225,11 @@ msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
 msgstr "โซนทองแดงบนเลเยอร์ %s ที่ (%s, %s) ไม่มีแพ็ดเชื่อมต่อ"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:821
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol %s has pins with no number.  These pins can not be matched to pads in "
 "%s."
-msgstr "สัญลักษณ์มีหน่วยมากกว่ากำหนดไว้"
+msgstr "สัญลักษณ์ %s มีขาไม่มีหมายเลข  ขาเหล่านี้ไม่สามารถจับคู่กับแพ็ดใน %s"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:831
 #, c-format
@@ -34914,9 +34904,9 @@ msgid "The given footprint could not be found to export."
 msgstr "ไฟล์เสมอเหมือน '%s' ค้นหาไม่พบ"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:745
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting footprint '%s' to '%s'\n"
-msgstr "เปลี่ยนฟุ้ทพรินท์ %s จาก '%s' เป็น '%s'"
+msgstr "พล็อตฟุ้ทพรินท์ '%s' เป็น '%s'\n"
 
 #: pcbnew/pcbnew_printout.cpp:113
 msgid "Multiple Layers"
@@ -35008,14 +34998,12 @@ msgid "Loading extended primitive information data..."
 msgstr "ไม่รู้จักชนิด MIME ของไฟล์เอกสาร '%s'"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:895
-#, fuzzy
 msgid "Loading board data..."
-msgstr "กําลังโหลดขอบเขตบอร์ด..."
+msgstr "กําลังอ่านข้อมูลบอร์ด..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1075
-#, fuzzy
 msgid "Loading netclasses..."
-msgstr "กําลังโหลดเน็ต..."
+msgstr "กําลังอ่านเน็ตคลาส..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1101
 #, c-format
@@ -35023,12 +35011,10 @@ msgid "Duplicate netclass name '%s'."
 msgstr "ชื่อเน็ตคลาส '%s' ซ้ํา"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1120
-#, fuzzy
 msgid "Loading components..."
-msgstr "กําลังโหลดเน็ต..."
+msgstr "กําลังอ่านอุปกรณ์..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1181
-#, fuzzy
 msgid "Loading component 3D models..."
 msgstr "กำลังอ่านโมเดล3มิติ…"
 
@@ -35046,9 +35032,8 @@ msgstr ""
 "Eco1_User"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1557
-#, fuzzy
 msgid "Loading dimension drawings..."
-msgstr "กําลังอ่านข้อความ..."
+msgstr "กําลังอ่านขนาดเขียนแบบ..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1578
 #: pcbnew/plugins/altium/altium_pcb.cpp:1585
@@ -35624,15 +35609,13 @@ msgstr "ละเว้นลวดเนื่องจากเลเยอร
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2420
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:616
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1522
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid zero-sized pad ignored in\n"
 "file: %s"
 msgstr ""
-"ไม่ถูกต้อง แพ็ดขนาดศูนย์กำหนดให้ %s ใน\n"
-"ไฟล์: %s\n"
-"บรรทัด: %d\n"
-"ออฟเซ็ต: %d"
+"ขนาดแพ็ดเป็นศูนย์ไม่ถูกต้อง\n"
+"ไฟล์: %s"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1961
 #, c-format
@@ -37028,32 +37011,27 @@ msgstr "ปลดล็อก"
 
 #: pcbnew/tools/board_editor_control.cpp:1273
 msgid "Zones have insufficient overlap for merging."
-msgstr ""
+msgstr "พื้นที่ทับซ้อนของโซนไม่เพียงพอสำหรับการรวมกัน"
 
 #: pcbnew/tools/board_editor_control.cpp:1319
-#, fuzzy
 msgid "Some zone netcodes did not match and were not merged."
-msgstr "เลเยอร์กฎ '%s' ไม่ตรงกัน กฎถูกละเว้น"
+msgstr "ค่าเน็ทโค้ดของบางโซนไม่เข้ากัน ไม่สามารถรวม"
 
 #: pcbnew/tools/board_editor_control.cpp:1325
-#, fuzzy
 msgid "Some zone priorities did not match and were not merged."
-msgstr "เลเยอร์กฎ '%s' ไม่ตรงกัน กฎถูกละเว้น"
+msgstr "ลำดับความสำคัญบางโซนไม่เข้ากัน ไม่สามารถรวมกัน"
 
 #: pcbnew/tools/board_editor_control.cpp:1331
-#, fuzzy
 msgid "Some zones were rule areas and were not merged."
-msgstr "เลเยอร์กฎ '%s' ไม่ตรงกัน กฎถูกละเว้น"
+msgstr "พื้นที่บางโซนคือกฏพื้นที่ ไม่สามารถรวมกัน"
 
 #: pcbnew/tools/board_editor_control.cpp:1337
-#, fuzzy
 msgid "Some zone layer sets did not match and were not merged."
-msgstr "เลเยอร์กฎ '%s' ไม่ตรงกัน กฎถูกละเว้น"
+msgstr "ชุดเลเยอร์ของบางโซนไม่เข้ากัน ไม่สามารถรวมกัน"
 
 #: pcbnew/tools/board_editor_control.cpp:1354
-#, fuzzy
 msgid "Some zones did not intersect and were not merged."
-msgstr "เลเยอร์กฎ '%s' ไม่ตรงกัน กฎถูกละเว้น"
+msgstr "พื้นที่บางโซนไม่เหลื่อมทับ ไม่สามารถรวมกัน"
 
 #: pcbnew/tools/board_editor_control.cpp:1423
 msgid "Duplicate zone"
@@ -37223,9 +37201,8 @@ msgstr "แก้ปัญหาระยะห่างรูเจาะสำ
 
 #: pcbnew/tools/board_inspection_tool.cpp:425
 #: pcbnew/tools/board_inspection_tool.cpp:1098
-#, fuzzy
 msgid "No 'physical_hole_clearance' constraints defined."
-msgstr "แก้ปัญหาระยะห่างรูเจาะสำหรับ:"
+msgstr "ไม่กำหนดข้อบังคับ'physical_hole_clearance'"
 
 #: pcbnew/tools/board_inspection_tool.cpp:436
 msgid "Hole to Hole"
@@ -37442,9 +37419,8 @@ msgid "Assertions"
 msgstr "การกระทำ"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1288
-#, fuzzy
 msgid "Assertions for:"
-msgstr "การกระทำ"
+msgstr "การยืนยันสำหรับ:"
 
 #: pcbnew/tools/convert_tool.cpp:67
 msgid "Copy line width of first object"
@@ -37718,13 +37694,13 @@ msgid "Pack footprints"
 msgstr "ล็อคฟุ้ทพรินท์"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:354
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Click to place %s (item %ld of %ld)\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
-"คลิกที่แพ็ด %s%d\n"
-"กด <esc> เพื่อยกเลิกหรือคลิกสองครั้งเพื่อยอมรับ"
+"คลิกเพื่อวาง %s (ชิ้นที่ %ld จาก %ld)\n"
+"กด <ESC> เพื่อยกเลิกทั้งหมด;คลิกเมาส์สองครั้งเพื่อเสร็จสิ้น"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:367
 #, fuzzy, c-format
@@ -40264,9 +40240,9 @@ msgid "Show or hide ratsnest for nets in %s"
 msgstr "แสดงหรือซ่อนแร็ทเน็ตของเน็ตใน %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:2476
-#, fuzzy, c-format
+#, c-format
 msgid "Presets (%s+Tab):"
-msgstr "ตั้งค่าไว้ (Ctrl+Tab):"
+msgstr "ตั้งค่า (%s+Tab):"
 
 #: pcbnew/widgets/appearance_controls.cpp:2498
 msgid "Save preset..."
@@ -40480,9 +40456,8 @@ msgid "Zone %s on %s"
 msgstr "โซน %s บน %s"
 
 #: pcbnew/zone.cpp:1490
-#, fuzzy
 msgid "Minimum Width"
-msgstr "ความกว้างขั้นต่ำ:"
+msgstr "ความกว้างขั้นต่ำ"
 
 #: pcbnew/zone.cpp:1495
 msgid "Pad Connections"
