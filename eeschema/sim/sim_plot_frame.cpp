@@ -798,8 +798,8 @@ void SIM_PLOT_FRAME::rebuildSignalsGrid( wxString aFilter )
         if( matcher.Find( signal, matches, offset ) && offset == 0 )
         {
             int      traceType = SPT_UNKNOWN;
-            wxString vecName = vectorNameFromSignalName( signal, &traceType );
-            TRACE*   trace = plotPanel ? plotPanel->GetTrace( vecName, traceType ) : nullptr;
+            wxString vectorName = vectorNameFromSignalName( signal, &traceType );
+            TRACE*   trace = plotPanel ? plotPanel->GetTrace( vectorName, traceType ) : nullptr;
 
             m_signalsGrid->AppendRows( 1 );
             m_signalsGrid->SetCellValue( row, COL_SIGNAL_NAME, signal );
@@ -1139,7 +1139,6 @@ wxString SIM_PLOT_FRAME::vectorNameFromSignalName( const wxString& aSignalName, 
             if( aTraceType )
                 *aTraceType |= type;
 
-            suffix = candidate;
             break;
         }
     }
@@ -1147,10 +1146,10 @@ wxString SIM_PLOT_FRAME::vectorNameFromSignalName( const wxString& aSignalName, 
     for( const auto& [ id, signal ] : m_userDefinedSignals )
     {
         if( name == signal )
-            return vectorNameFromSignalId( id ) + suffix;
+            return vectorNameFromSignalId( id );
     }
 
-    return name + suffix;
+    return name;
 };
 
 

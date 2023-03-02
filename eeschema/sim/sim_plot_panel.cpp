@@ -690,9 +690,9 @@ void SIM_PLOT_PANEL::UpdateTraceStyle( TRACE* trace )
 }
 
 
-TRACE* SIM_PLOT_PANEL::AddTrace( const wxString& aVecName, int aType )
+TRACE* SIM_PLOT_PANEL::AddTrace( const wxString& aVectorName, int aType )
 {
-    TRACE* trace = GetTrace( aVecName, aType );
+    TRACE* trace = GetTrace( aVectorName, aType );
 
     if( !trace )
     {
@@ -721,10 +721,10 @@ TRACE* SIM_PLOT_PANEL::AddTrace( const wxString& aVecName, int aType )
             }
         }
 
-        trace = new TRACE( aVecName, (SIM_TRACE_TYPE) aType );
+        trace = new TRACE( aVectorName, (SIM_TRACE_TYPE) aType );
         trace->SetTraceColour( m_colors.GenerateColor( m_traces ) );
         UpdateTraceStyle( trace );
-        m_traces[ getTraceId( aVecName, aType ) ] = trace;
+        m_traces[ getTraceId( aVectorName, aType ) ] = trace;
 
         m_plotWin->AddLayer( (mpLayer*) trace );
     }

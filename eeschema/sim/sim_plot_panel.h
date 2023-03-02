@@ -277,7 +277,7 @@ public:
         return m_plotWin;
     }
 
-    TRACE* AddTrace( const wxString& aVecName, int aType );
+    TRACE* AddTrace( const wxString& aVectorName, int aType );
 
     void SetTraceData( TRACE* aTrace, unsigned int aPoints, const double* aX, const double* aY );
 
@@ -285,9 +285,9 @@ public:
     void DeleteTrace( TRACE* aTrace );
 
 private:
-    wxString getTraceId( const wxString& aVecName, int aType ) const
+    wxString getTraceId( const wxString& aVectorName, int aType ) const
     {
-        return wxString::Format( wxS( "%s%d" ), aVecName, aType & SPT_Y_AXIS_MASK );
+        return wxString::Format( wxS( "%s%d" ), aVectorName, aType & SPT_Y_AXIS_MASK );
     }
 
     ///< @brief Construct the plot axes for DC simulation plot.
