@@ -219,6 +219,7 @@ endfunction()
     md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/tracks_width_versus_current_formula )
     md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/eseries_help )
     md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/fusing_current_help )
+    md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/galvanic_corrosion_help )
 
 set( DOCS_LIST
         ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/pi_formula.h
@@ -228,6 +229,7 @@ set( DOCS_LIST
         ${CMAKE_CURRENT_SOURCE_DIR}/tracks_width_versus_current_formula.h
         ${CMAKE_CURRENT_SOURCE_DIR}/eseries_help.h
         ${CMAKE_CURRENT_SOURCE_DIR}/fusing_current_help.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/galvanic_corrosion_help.h
     )
 
 set_source_files_properties( attenuators/attenuator_classes.cpp

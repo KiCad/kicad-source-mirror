@@ -21,6 +21,10 @@
 #include <pcb_calculator_settings.h>
 #include <widgets/unit_selector.h>
 #include <math/util.h>      // for KiROUND
+#include <string_utils.h>
+#include <i18n_utility.h>   // For _HKI definition in galvanic_corrosion_help.h
+wxString galvanic_corrosion_help =
+#include "galvanic_corrosion_help.h"
 
 extern double DoubleFromString( const wxString& TextValue );
 
@@ -70,24 +74,14 @@ PANEL_GALVANIC_CORROSION::PANEL_GALVANIC_CORROSION( wxWindow* parent, wxWindowID
     m_table->AppendCols( (int) m_entries.size() );
     m_table->AppendRows( (int) m_entries.size() );
 
-    // This is not currently HTML because we're in string freeze.  But it might be nice to pretty
-    // it up for the next version....
-    wxString help( _( "This table shows the difference in electrochemical potential between "
-                      "various metals and alloys. A positive number indicates that the row is "
-                      "anodic and the column is cathodic.\n"
-                      "Galvanic corrosion affects different metals in contact and under certain "
-                      "conditions.\n"
-                      "The anode of an electrochemical pair gets oxidized and eaten away, while "
-                      "the cathode gets dissolved metals plated onto it but stays protected.\n"
-                      "EN 50310 suggests a voltage difference below 300mV. Known practices make "
-                      "use of a third interface metal in between the main pair(ie the ENIG surface "
-                      "finish)." ) );
+    // show markdown formula explanation in lower help panel
+    wxString msg;
+    ConvertMarkdown2Html( wxGetTranslation( galvanic_corrosion_help ), msg );
+    m_helpText->SetPage( msg );
 
-    help.Replace( "\n", "<br/>" );
-
-    m_helpText->SetPage( help );
-
+    m_symbolicStatus = true;
     m_corFilterValue = 0;
+
     fillTable();
 }
 
@@ -98,6 +92,8 @@ PANEL_GALVANIC_CORROSION::~PANEL_GALVANIC_CORROSION()
 
 void PANEL_GALVANIC_CORROSION::ThemeChanged()
 {
+    // Update the HTML window with the help text
+    m_helpText->ThemeChanged();
 }
 
 
@@ -113,6 +109,21 @@ void PANEL_GALVANIC_CORROSION::SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg )
     aCfg->m_CorrosionTable.threshold_voltage = wxString( "" ) << m_corFilterValue;
 }
 
+void PANEL_GALVANIC_CORROSION::OnNomenclatureChange( wxCommandEvent& aEvent )
+{
+
+    if( m_radioBtnSymbol->GetValue() )
+    {
+        m_symbolicStatus = true;
+    }
+    else if( m_radioBtnName->GetValue() )
+    {
+        m_symbolicStatus = false;
+    }
+
+    fillTable();
+}
+
 
 void PANEL_GALVANIC_CORROSION::OnCorFilterChange( wxCommandEvent& aEvent )
 {
@@ -123,19 +134,40 @@ void PANEL_GALVANIC_CORROSION::OnCorFilterChange( wxCommandEvent& aEvent )
 
 void PANEL_GALVANIC_CORROSION::fillTable()
 {
+
     // Fill the table with data
     int      i = 0;
     wxColour color_ok( 122, 166, 194 );
     wxColour color_text( 0, 0, 0 );
     wxString value;
+    wxString label;
 
     for( const CORROSION_TABLE_ENTRY& entryA : m_entries )
     {
         int      j = 0;
-        wxString label = entryA.m_name;
 
-        if( entryA.m_symbol.size() > 0 )
-            label += " (" + entryA.m_symbol + ")";
+        if( m_symbolicStatus == true )
+        {
+            if( entryA.m_symbol.size() > 0 )
+            {
+                label = entryA.m_symbol;
+            }
+            else
+            {
+                label = entryA.m_name;
+            }
+        }
+        else
+        {
+            if( entryA.m_name.size() > 0 )
+            {
+                label = entryA.m_name;
+            }
+            else
+            {
+                label = entryA.m_symbol;
+            }
+        }
 
         m_table->SetRowLabelAlignment( wxALIGN_RIGHT, wxALIGN_CENTER );
         m_table->SetRowLabelValue( i, label );
@@ -192,5 +224,6 @@ void PANEL_GALVANIC_CORROSION::fillTable()
     m_table->SetRowLabelSize( wxGRID_AUTOSIZE );
     m_table->AutoSizeColumns();
     m_table->AutoSizeRows();
-    Refresh();
+
+    Layout();
 }

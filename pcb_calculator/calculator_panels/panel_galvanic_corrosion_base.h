@@ -23,6 +23,8 @@
 #include <wx/html/htmlwin.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
+#include <wx/statline.h>
+#include <wx/radiobut.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -36,15 +38,20 @@ class PANEL_GALVANIC_CORROSION_BASE : public CALCULATOR_PANEL
 	private:
 
 	protected:
+		wxBoxSizer* bSizer6;
 		wxScrolledWindow* m_scrolledWindow1;
 		wxGrid* m_table;
 		HTML_WINDOW* m_helpText;
 		wxStaticText* m_staticText2;
 		wxTextCtrl* m_corFilterCtrl;
 		wxStaticText* m_staticText3;
+		wxStaticLine* m_staticline1;
+		wxRadioButton* m_radioBtnSymbol;
+		wxRadioButton* m_radioBtnName;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnCorFilterChange( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnNomenclatureChange( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

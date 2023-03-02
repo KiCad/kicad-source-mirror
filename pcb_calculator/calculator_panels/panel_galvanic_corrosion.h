@@ -51,12 +51,14 @@ public:
     void LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg ) override;
     void SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg ) override;
     void ThemeChanged() override;
+    void OnNomenclatureChange( wxCommandEvent& aEvent ) override;
     void OnCorFilterChange( wxCommandEvent& aEvent ) override;
 
 private:
     void fillTable();
 
 private:
+    bool   m_symbolicStatus;
     double m_corFilterValue;
 };
 
