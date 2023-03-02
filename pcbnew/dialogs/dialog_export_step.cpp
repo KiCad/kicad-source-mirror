@@ -107,13 +107,15 @@ private:
     double             m_userOriginY;    // remember last User Origin Y value
     int                m_originUnits;    // remember last units for User Origin
     bool               m_noVirtual;      // remember last preference for No Virtual Component
+    static bool        m_exportTracks;   // remember last preference to export tracks
+                                         // (stored only for the session)
     wxString           m_boardPath;      // path to the exported board file
     static int         m_toleranceLastChoice;  // Store m_tolerance option during a session
 };
 
 
-int DIALOG_EXPORT_STEP::m_toleranceLastChoice = -1;     // Use default
-
+int  DIALOG_EXPORT_STEP::m_toleranceLastChoice = -1;     // Use default
+bool DIALOG_EXPORT_STEP::m_exportTracks = false;
 
 DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString& aBoardPath ) :
     DIALOG_EXPORT_STEP_BASE( aParent )
@@ -172,6 +174,7 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
     m_userOriginY = cfg->m_ExportStep.origin_y;
     m_noVirtual = cfg->m_ExportStep.no_virtual;
 
+    m_cbExportTracks->SetValue( m_exportTracks );
     m_cbRemoveVirtual->SetValue( m_noVirtual );
     m_cbSubstModels->SetValue( cfg->m_ExportStep.replace_models );
     m_cbOverwriteFile->SetValue( cfg->m_ExportStep.overwrite_file );
@@ -224,7 +227,7 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
     }
 
     if( m_toleranceLastChoice >= 0 )
-        m_tolerance->SetSelection( m_toleranceLastChoice );
+        m_choiceTolerance->SetSelection( m_toleranceLastChoice );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
@@ -252,7 +255,8 @@ DIALOG_EXPORT_STEP::~DIALOG_EXPORT_STEP()
 
     cfg->m_ExportStep.no_virtual = m_cbRemoveVirtual->GetValue();
 
-    m_toleranceLastChoice = m_tolerance->GetSelection();
+    m_toleranceLastChoice = m_choiceTolerance->GetSelection();
+    m_exportTracks = m_cbExportTracks->GetValue();
 }
 
 
@@ -318,9 +322,10 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     m_parent->SetLastPath( LAST_PATH_STEP, m_filePickerSTEP->GetPath() );
 
     double tolerance;   // default value in mm
-    m_toleranceLastChoice = m_tolerance->GetSelection();
+    m_toleranceLastChoice = m_choiceTolerance->GetSelection();
+    m_exportTracks = m_cbExportTracks->GetValue();
 
-    switch( m_tolerance->GetSelection() )
+    switch( m_choiceTolerance->GetSelection() )
     {
     case 0:  tolerance = 0.001; break;
     default:
@@ -393,6 +398,9 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
     if( GetSubstOption() )
         cmdK2S.Append( wxT( " --subst-models" ) );
+
+    if( m_exportTracks )
+        cmdK2S.Append( wxT( " --export-tracks" ) );
 
     // Note: for some reason, using \" to insert a quote in a format string, under MacOS
     // wxString::Format does not work. So use a %c format in string

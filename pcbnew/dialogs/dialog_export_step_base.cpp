@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -120,17 +120,22 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	m_cbOverwriteFile = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Overwrite old file"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbOtherOptions->Add( m_cbOverwriteFile, 0, wxBOTTOM|wxRIGHT, 5 );
 
+	m_cbExportTracks = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Export tracks (time consuming)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbExportTracks->SetToolTip( _("Export tracks and vias on external copper layers.\nWarning: this is *extremely* time consuming.") );
+
+	sbOtherOptions->Add( m_cbExportTracks, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+
 	m_staticTextTolerance = new wxStaticText( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Board outline chaining tolerance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextTolerance->Wrap( -1 );
 	sbOtherOptions->Add( m_staticTextTolerance, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 
-	wxString m_toleranceChoices[] = { _("Tight (0.001 mm)"), _("Standard (0.01 mm)"), _("Loose (0.1 mm)") };
-	int m_toleranceNChoices = sizeof( m_toleranceChoices ) / sizeof( wxString );
-	m_tolerance = new wxChoice( sbOtherOptions->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_toleranceNChoices, m_toleranceChoices, 0 );
-	m_tolerance->SetSelection( 1 );
-	m_tolerance->SetToolTip( _("Tolerance sets the distance between two points that are considered joined.") );
+	wxString m_choiceToleranceChoices[] = { _("Tight (0.001 mm)"), _("Standard (0.01 mm)"), _("Loose (0.1 mm)") };
+	int m_choiceToleranceNChoices = sizeof( m_choiceToleranceChoices ) / sizeof( wxString );
+	m_choiceTolerance = new wxChoice( sbOtherOptions->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceToleranceNChoices, m_choiceToleranceChoices, 0 );
+	m_choiceTolerance->SetSelection( 1 );
+	m_choiceTolerance->SetToolTip( _("Tolerance sets the distance between two points that are considered joined when building the board outlines.") );
 
-	sbOtherOptions->Add( m_tolerance, 0, wxALL|wxEXPAND, 5 );
+	sbOtherOptions->Add( m_choiceTolerance, 0, wxALL|wxEXPAND, 5 );
 
 
 	bSizer2->Add( sbOtherOptions, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );

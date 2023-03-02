@@ -37,6 +37,7 @@
 #define ARG_MIN_DISTANCE "--min-distance"
 #define ARG_USER_ORIGIN "--user-origin"
 #define ARG_BOARD_ONLY "--board-only"
+#define ARG_EXPORT_TRACKS "--export-tracks"
 
 #define REGEX_QUANTITY "([\\s]*[+-]?[\\d]*[.]?[\\d]*)"
 #define REGEX_DELIMITER "(?:[\\s]*x)"
@@ -74,6 +75,11 @@ CLI::EXPORT_PCB_STEP_COMMAND::EXPORT_PCB_STEP_COMMAND() : COMMAND( "step" )
             .implicit_value( true )
             .default_value( false );
 
+    m_argParser.add_argument( ARG_EXPORT_TRACKS )
+            .help( UTF8STDSTR( _( "Export tracks (extremely time consuming)" ) ) )
+            .implicit_value( true )
+            .default_value( false );
+
     m_argParser.add_argument( ARG_MIN_DISTANCE )
             .default_value( std::string( "0.01mm" ) )
             .help( UTF8STDSTR( _( "Minimum distance between points to treat them as separate ones" ) ) );
@@ -101,6 +107,7 @@ int CLI::EXPORT_PCB_STEP_COMMAND::doPerform( KIWAY& aKiway )
     step->m_filename = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
     step->m_outputFile = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
     step->m_boardOnly = m_argParser.get<bool>( ARG_BOARD_ONLY );
+    step->m_exportTracks = m_argParser.get<bool>( ARG_EXPORT_TRACKS );
 
     wxString userOrigin = FROM_UTF8( m_argParser.get<std::string>( ARG_USER_ORIGIN ).c_str() );
 
@@ -142,6 +149,7 @@ int CLI::EXPORT_PCB_STEP_COMMAND::doPerform( KIWAY& aKiway )
     }
 
     wxString minDistance = FROM_UTF8( m_argParser.get<std::string>( ARG_MIN_DISTANCE ).c_str() );
+
     if( !minDistance.IsEmpty() )
     {
         std::regex  re_pattern( REGEX_QUANTITY REGEX_UNIT,
@@ -149,7 +157,7 @@ int CLI::EXPORT_PCB_STEP_COMMAND::doPerform( KIWAY& aKiway )
         std::smatch sm;
         std::string str( minDistance.ToUTF8() );
         std::regex_search( str, sm, re_pattern );
-        step->m_minDistance = atof( sm.str( 1 ).c_str() );
+        step->m_BoardOutlinesChainingEpsilon = atof( sm.str( 1 ).c_str() );
 
         std::string tunit( sm[2] );
 
@@ -157,7 +165,7 @@ int CLI::EXPORT_PCB_STEP_COMMAND::doPerform( KIWAY& aKiway )
         {
             if( !tunit.compare( "in" ) || !tunit.compare( "inch" ) )
             {
-                step->m_minDistance *= 25.4;
+                step->m_BoardOutlinesChainingEpsilon *= 25.4;
             }
             else if( tunit.compare( "mm" ) )
             {

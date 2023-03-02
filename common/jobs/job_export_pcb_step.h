@@ -39,7 +39,9 @@ public:
             m_outputFile(),
             m_xOrigin( 0.0 ),
             m_yOrigin( 0.0 ),
-            m_minDistance( 0.01 ) // 0.01 mm is a good value to connect 2 items of the board outlines
+            // max dist to chain 2 items (lines or curves) to build the board outlines
+            m_BoardOutlinesChainingEpsilon( 0.01 ),     // 0.01 mm is a good value
+            m_exportTracks( false )     // Extremely time consuming if true
     {
     }
 
@@ -53,7 +55,8 @@ public:
     wxString m_outputFile;
     double   m_xOrigin;
     double   m_yOrigin;
-    double   m_minDistance;
+    double   m_BoardOutlinesChainingEpsilon;
+    bool     m_exportTracks;
 };
 
 #endif

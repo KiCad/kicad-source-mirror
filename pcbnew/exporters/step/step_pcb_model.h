@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,9 +42,27 @@
 #include <math/vector3.h>
 #include <geometry/shape_poly_set.h>
 
-///< Default minimum distance between points to treat them as separate ones (mm)
-static constexpr double STEPEXPORT_MIN_DISTANCE = 0.01;
-static constexpr double STEPEXPORT_MIN_ACCEPTABLE_DISTANCE = 0.001;
+/**
+ * Default distance between points to treat them as separate ones (mm)
+ * 0.001 mm is a reasonable value. A too large value creates issues by
+ * merging points that should be different.
+ * Remember we are a 3D space, so a thin line can be broken if 2 points
+ * are merged (in X, Y, Z coords) when they should not.
+ * round shapes converted to polygon can also be not good with a to large value
+ */
+static constexpr double OCC_MAX_DISTANCE_TO_MERGE_POINTS = 0.001;
+
+// default PCB thickness in mm
+static constexpr double BOARD_THICKNESS_DEFAULT_MM = 1.6;
+
+// minimum PCB thickness in mm (10 microns assumes a very thin polyimide film)
+static constexpr double BOARD_THICKNESS_MIN_MM = 0.01;
+
+// default copper thickness in mm
+static constexpr double COPPER_THICKNESS_DEFAULT_MM = 0.035;
+
+// Max error to approximate an arc by segments (in mm)
+static constexpr double ARC_TO_SEGMENT_MAX_ERROR_MM = 0.005;
 
 class PAD;
 
@@ -62,6 +80,12 @@ public:
     // add a pad hole or slot (must be in final position)
     bool AddPadHole( const PAD* aPad, const VECTOR2D& aOrigin );
 
+    // add a pad/via shape (must be in final position)
+    bool AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin );
+
+    // add a set of polygons (must be in final position) on top or bottom of the board as copper
+    bool AddCopperPolygonShapes( const SHAPE_POLY_SET* aPolyShapes, bool aOnTop, const VECTOR2D& aOrigin );
+
     // add a component at the given position and orientation
     bool AddComponent( const std::string& aFileName, const std::string& aRefDes, bool aBottom,
                        VECTOR2D aPosition, double aRotation, VECTOR3D aOffset,
@@ -75,8 +99,9 @@ public:
     // aThickness > THICKNESS_MIN == use aThickness
     void SetPCBThickness( double aThickness );
 
-    // Set the minimum distance (in mm) to consider 2 points have the same coordinates
-    void SetMinDistance( double aDistance );
+    // Set the max distance (in mm) to consider 2 points have the same coordinates
+    // and can be merged
+    void OCCSetMergeMaxDistance( double aDistance = OCC_MAX_DISTANCE_TO_MERGE_POINTS );
 
     void SetMaxError( int aMaxError ) { m_maxError = aMaxError; }
 
@@ -84,7 +109,7 @@ public:
     bool CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin );
 
     bool MakeShape( TopoDS_Shape& aShape, const SHAPE_LINE_CHAIN& chain, double aThickness,
-                    const VECTOR2D& aOrigin );
+                    double aZposition, const VECTOR2D& aOrigin );
 
 #ifdef SUPPORTS_IGES
     // write the assembly model in IGES format
@@ -135,19 +160,25 @@ private:
     Handle( TDocStd_Document )      m_doc;
     Handle( XCAFDoc_ShapeTool )     m_assy;
     TDF_Label                       m_assy_label;
-    bool                            m_hasPCB;       // set true if CreatePCB() has been invoked
-    std::vector<TDF_Label>          m_pcb_labels;   // labels for the PCB model (one by main outline)
-    MODEL_MAP                       m_models;       // map of file names to model labels
-    int                             m_components;   // number of successfully loaded components;
-    double                          m_precision;    // model (length unit) numeric precision
-    double                          m_angleprec;    // angle numeric precision
-    double                          m_boardColor[3];// RGB values
-    double                          m_thickness;    // PCB thickness, mm
+    bool                            m_hasPCB;           // set true if CreatePCB() has been invoked
+    std::vector<TDF_Label>          m_pcb_labels;       // labels for the PCB model (one by main outline)
+    MODEL_MAP                       m_models;           // map of file names to model labels
+    int                             m_components;       // number of successfully loaded components;
+    double                          m_precision;        // model (length unit) numeric precision
+    double                          m_angleprec;        // angle numeric precision
+    double                          m_boardColor[3];    // RGB values
+    double                          m_boardThickness;   // PCB thickness, mm
+    double                          m_copperThickness;  // copper thickness, mm
 
-    double                          m_minx;         // leftmost curve point
-    double                          m_minDistance2; // minimum squared distance between items (mm)
+    double                          m_minx;             // leftmost curve point
+    double                          m_mergeOCCMaxDist;  // minimum distance (mm) below which two
+                                                        // points are considered coincident by OCC
 
+    // Holes in main outlines (more than one board)
     std::vector<TopoDS_Shape>       m_cutouts;
+
+    // Main outlines (more than one board)
+    std::vector<TopoDS_Shape>       m_board_outlines;
 
     /// Name of the PCB, which will most likely be the file name of the path.
     wxString                        m_pcbName;

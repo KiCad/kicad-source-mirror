@@ -27,7 +27,10 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <footprint.h>
+#include <pcb_track.h>
+#include <pad.h>
 #include <fp_lib_table.h>
+#include "step_pcb_model.h"
 
 #include <pgm_base.h>
 #include <base_units.h>
@@ -48,7 +51,6 @@
 #include <Message_Messenger.hxx>
 #endif
 
-#define DEFAULT_BOARD_THICKNESS 1.6
 
 void ReportMessage( const wxString& aMessage )
 {
@@ -116,8 +118,7 @@ EXPORTER_STEP::EXPORTER_STEP( BOARD* aBoard, const EXPORTER_STEP_PARAMS& aParams
     m_board( aBoard ),
     m_pcbModel( nullptr ),
     m_pcbName(),
-    m_minDistance( STEPEXPORT_MIN_DISTANCE ),
-    m_boardThickness( DEFAULT_BOARD_THICKNESS )
+    m_boardThickness( DEFAULT_BOARD_THICKNESS_MM )
 {
     m_solderMaskColor = COLOR4D( 0.08, 0.20, 0.14, 0.83 );
 
@@ -143,6 +144,12 @@ bool EXPORTER_STEP::composePCB( FOOTPRINT* aFootprint, VECTOR2D aOrigin )
     {
         if( m_pcbModel->AddPadHole( pad, aOrigin ) )
             hasdata = true;
+
+        if( ExportTracksAndVias() )
+        {
+            if( m_pcbModel->AddPadShape( pad, aOrigin ) )
+                hasdata = true;
+        }
     }
 
     if( ( aFootprint->GetAttributes() & FP_EXCLUDE_FROM_BOM ) && !m_params.m_includeExcludedBom )
@@ -234,6 +241,41 @@ bool EXPORTER_STEP::composePCB( FOOTPRINT* aFootprint, VECTOR2D aOrigin )
 }
 
 
+bool EXPORTER_STEP::composePCB( PCB_TRACK* aTrack, VECTOR2D aOrigin )
+{
+    if( aTrack->Type() == PCB_VIA_T )
+    {
+        PAD dummy( nullptr );
+        int hole = static_cast<PCB_VIA*>( aTrack )->GetDrillValue();
+        dummy.SetDrillSize( VECTOR2I( hole, hole ) );
+        dummy.SetPosition( aTrack->GetStart() );
+        dummy.SetSize( VECTOR2I( aTrack->GetWidth(), aTrack->GetWidth() ) );
+
+        if( m_pcbModel->AddPadHole( &dummy, aOrigin ) )
+        {
+            if( m_pcbModel->AddPadShape( &dummy, aOrigin ) )
+                return false;
+        }
+
+        return true;
+    }
+
+    PCB_LAYER_ID pcblayer = aTrack->GetLayer();
+
+    if( pcblayer != F_Cu && pcblayer != B_Cu )
+        return false;
+
+    SHAPE_POLY_SET copper_shapes;
+    int maxError = m_board->GetDesignSettings().m_MaxError;
+
+    aTrack->TransformShapeToPolygon( copper_shapes, pcblayer, 0, maxError, ERROR_INSIDE );
+
+    m_pcbModel->AddCopperPolygonShapes( &copper_shapes, pcblayer == F_Cu, aOrigin );
+
+    return true;
+}
+
+
 bool EXPORTER_STEP::composePCB()
 {
     if( m_pcbModel )
@@ -264,14 +306,27 @@ bool EXPORTER_STEP::composePCB()
 
     m_pcbModel->SetPCBThickness( m_boardThickness );
 
-    // Set the min distance betewenn 2 points for OCC to see these 2 points as merged
-    double minDistmm = std::max( m_params.m_minDistance, STEPEXPORT_MIN_ACCEPTABLE_DISTANCE );
-    m_pcbModel->SetMinDistance( minDistmm );
+    // Note: m_params.m_BoardOutlinesChainingEpsilon is used only to build the board outlines,
+    // not to set OCC chaining epsilon (much smaller)
+    //
+    // Set the min distance between 2 points for OCC to see these 2 points as merged
+    // OCC_MAX_DISTANCE_TO_MERGE_POINTS is acceptable for OCC, otherwise there are issues
+    // to handle the shapes chaining on copper layers, because the Z dist is 0.035 mm and the
+    // min dist must be much smaller (we use 0.001 mm giving good results)
+    m_pcbModel->OCCSetMergeMaxDistance( OCC_MAX_DISTANCE_TO_MERGE_POINTS );
 
     m_pcbModel->SetMaxError( m_board->GetDesignSettings().m_MaxError );
 
-    for( FOOTPRINT* i : m_board->Footprints() )
-        composePCB( i, origin );
+    // For copper layers, only pads and tracks are added, because adding everything on copper
+    // generate unreasonable file sizes and take a unreasonable calculation time.
+    for( FOOTPRINT* fp : m_board->Footprints() )
+        composePCB( fp, origin );
+
+    if( ExportTracksAndVias() )
+    {
+        for( PCB_TRACK* track : m_board->Tracks() )
+            composePCB( track, origin );
+    }
 
     ReportMessage( wxT( "Create PCB solid model\n" ) );
 
@@ -291,7 +346,7 @@ bool EXPORTER_STEP::composePCB()
 
 void EXPORTER_STEP::determinePcbThickness()
 {
-    m_boardThickness = DEFAULT_BOARD_THICKNESS;
+    m_boardThickness = DEFAULT_BOARD_THICKNESS_MM;
 
     const BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -93,21 +93,11 @@
 static constexpr double USER_PREC = 1e-4;
 static constexpr double USER_ANGLE_PREC = 1e-6;
 
-// minimum PCB thickness in mm (2 microns assumes a very thin polyimide film)
-static constexpr double THICKNESS_MIN = 0.002;
-
-// default PCB thickness in mm
-static constexpr double THICKNESS_DEFAULT = 1.6;
-
 // nominal offset from the board
 static constexpr double BOARD_OFFSET = 0.05;
 
-// min. length**2 below which 2 points are considered coincident
-static constexpr double MIN_LENGTH2 = STEPEXPORT_MIN_DISTANCE * STEPEXPORT_MIN_DISTANCE;
-
-
-// supported file types
-enum FormatType
+// supported file types for 3D models
+enum MODEL3D_FORMAT_TYPE
 {
     FMT_NONE,
     FMT_STEP,
@@ -120,7 +110,7 @@ enum FormatType
 };
 
 
-FormatType fileType( const char* aFileName )
+MODEL3D_FORMAT_TYPE fileType( const char* aFileName )
 {
     wxFileName lfile( wxString::FromUTF8Unchecked( aFileName ) );
 
@@ -194,12 +184,13 @@ STEP_PCB_MODEL::STEP_PCB_MODEL( const wxString& aPcbName )
     m_components = 0;
     m_precision = USER_PREC;
     m_angleprec = USER_ANGLE_PREC;
-    m_thickness = THICKNESS_DEFAULT;
-    m_minDistance2 = MIN_LENGTH2;
+    m_boardThickness = BOARD_THICKNESS_DEFAULT_MM;
+    m_copperThickness = COPPER_THICKNESS_DEFAULT_MM;
+    m_mergeOCCMaxDist = OCC_MAX_DISTANCE_TO_MERGE_POINTS;
     m_minx = 1.0e10;    // absurdly large number; any valid PCB X value will be smaller
     m_pcbName = aPcbName;
-    BRepBuilderAPI::Precision( STEPEXPORT_MIN_DISTANCE );
-    m_maxError = 5000;      // 5 microns
+    BRepBuilderAPI::Precision( m_mergeOCCMaxDist );
+    m_maxError = pcbIUScale.mmToIU( ARC_TO_SEGMENT_MAX_ERROR_MM );
 }
 
 
@@ -208,22 +199,79 @@ STEP_PCB_MODEL::~STEP_PCB_MODEL()
     m_doc->Close();
 }
 
+bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin )
+{
+    TopoDS_Shape curr_shape_top;
+    TopoDS_Shape curr_shape_bottom;
+    const std::shared_ptr<SHAPE_POLY_SET>& pad_shape = aPad->GetEffectivePolygon();
+    bool success = true;
+
+    if( aPad->IsOnLayer( F_Cu ) )
+    {
+        // Make a shape on top copper layer
+        success = MakeShape( curr_shape_top, pad_shape.get()->COutline(0), m_copperThickness, m_boardThickness, aOrigin );
+
+        if( success )
+            m_board_outlines.push_back( curr_shape_top );
+    }
+
+    if( success && aPad->IsOnLayer( B_Cu ) )
+    {
+        success = MakeShape( curr_shape_bottom, pad_shape.get()->COutline(0), m_copperThickness, -m_copperThickness, aOrigin );
+
+        if( success )
+            m_board_outlines.push_back( curr_shape_bottom );
+    }
+
+    if( !success )  // Error
+        ReportMessage( wxT( "OCC error adding pad/via polygon.\n" ) );
+
+    return success;
+}
+
+
+bool STEP_PCB_MODEL::AddCopperPolygonShapes( const SHAPE_POLY_SET* aPolyShapes, bool aOnTop, const VECTOR2D& aOrigin )
+{
+    bool success = true;
+
+    for( int ii = 0; ii < aPolyShapes->OutlineCount(); ii++ )
+    {
+        TopoDS_Shape copper_shape;
+        double z_pos = aOnTop ? m_boardThickness : -m_copperThickness;
+
+        if( MakeShape( copper_shape, aPolyShapes->COutline( ii ), m_copperThickness, z_pos, aOrigin ) )
+        {
+            m_board_outlines.push_back( copper_shape );
+        }
+        else
+        {
+            ReportMessage( wxString::Format( wxT( "Could not add shape (%d points) to copper layer on %s.\n" ),
+                           aPolyShapes->COutline( ii ).PointCount(),
+                           aOnTop ? wxT( "top" ) : wxT( "bottom" ) ) );
+            success = false;
+        }
+    }
+
+    return success;
+}
+
 
 bool STEP_PCB_MODEL::AddPadHole( const PAD* aPad, const VECTOR2D& aOrigin )
 {
-    if( NULL == aPad || !aPad->GetDrillSize().x )
+    if( aPad == nullptr || !aPad->GetDrillSize().x )
         return false;
 
     VECTOR2I pos = aPad->GetPosition();
+    double holeZsize = m_boardThickness + ( m_copperThickness * 2 );
 
     if( aPad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
     {
         TopoDS_Shape s =
-                BRepPrimAPI_MakeCylinder( pcbIUScale.IUTomm( aPad->GetDrillSize().x ) * 0.5, m_thickness * 2.0 ).Shape();
+                BRepPrimAPI_MakeCylinder( pcbIUScale.IUTomm( aPad->GetDrillSize().x ) * 0.5, holeZsize * 2.0 ).Shape();
         gp_Trsf shift;
         shift.SetTranslation( gp_Vec( pcbIUScale.IUTomm( pos.x - aOrigin.x ),
-                                          -pcbIUScale.IUTomm( pos.y - aOrigin.y ),
-                                          -m_thickness * 0.5 ) );
+                                      -pcbIUScale.IUTomm( pos.y - aOrigin.y ),
+                                      -holeZsize * 0.5 ) );
         BRepBuilderAPI_Transform hole( s, shift );
         m_cutouts.push_back( hole.Shape() );
         return true;
@@ -231,6 +279,7 @@ bool STEP_PCB_MODEL::AddPadHole( const PAD* aPad, const VECTOR2D& aOrigin )
 
     // slotted hole
     SHAPE_POLY_SET holeOutlines;
+
     if( !aPad->TransformHoleToPolygon( holeOutlines, 0, m_maxError, ERROR_INSIDE ) )
     {
         return false;
@@ -240,7 +289,7 @@ bool STEP_PCB_MODEL::AddPadHole( const PAD* aPad, const VECTOR2D& aOrigin )
 
     if( holeOutlines.OutlineCount() > 0 )
     {
-        if( MakeShape( hole, holeOutlines.COutline( 0 ), m_thickness, aOrigin ) )
+        if( MakeShape( hole, holeOutlines.COutline( 0 ), holeZsize*2, -holeZsize * 0.5, aOrigin ) )
         {
             m_cutouts.push_back( hole );
         }
@@ -312,11 +361,11 @@ bool STEP_PCB_MODEL::AddComponent( const std::string& aFileNameUTF8, const std::
 void STEP_PCB_MODEL::SetPCBThickness( double aThickness )
 {
     if( aThickness < 0.0 )
-        m_thickness = THICKNESS_DEFAULT;
-    else if( aThickness < THICKNESS_MIN )
-        m_thickness = THICKNESS_MIN;
+        m_boardThickness = BOARD_THICKNESS_DEFAULT_MM;
+    else if( aThickness < BOARD_THICKNESS_MIN_MM )
+        m_boardThickness = BOARD_THICKNESS_MIN_MM;
     else
-        m_thickness = aThickness;
+        m_boardThickness = aThickness;
 }
 
 
@@ -328,14 +377,11 @@ void STEP_PCB_MODEL::SetBoardColor( double r, double g, double b )
 }
 
 
-void STEP_PCB_MODEL::SetMinDistance( double aDistance )
+void STEP_PCB_MODEL::OCCSetMergeMaxDistance( double aDistance )
 {
     // Ensure a minimal value (in mm)
-    aDistance = std::max( aDistance, STEPEXPORT_MIN_ACCEPTABLE_DISTANCE );
-
-    // m_minDistance2 keeps a squared distance value
-    m_minDistance2 = aDistance * aDistance;
-    BRepBuilderAPI::Precision( aDistance );
+    m_mergeOCCMaxDist = aDistance;
+    BRepBuilderAPI::Precision( m_mergeOCCMaxDist );
 }
 
 bool STEP_PCB_MODEL::isBoardOutlineValid()
@@ -345,7 +391,7 @@ bool STEP_PCB_MODEL::isBoardOutlineValid()
 
 
 bool STEP_PCB_MODEL::MakeShape( TopoDS_Shape& aShape, const SHAPE_LINE_CHAIN& aChain,
-                                double aThickness, const VECTOR2D& aOrigin )
+                                double aThickness, double aZposition, const VECTOR2D& aOrigin )
 {
     if( !aShape.IsNull() )
         return false; // there is already data in the shape object
@@ -354,11 +400,12 @@ bool STEP_PCB_MODEL::MakeShape( TopoDS_Shape& aShape, const SHAPE_LINE_CHAIN& aC
         return false; // the loop is not closed
 
     BRepBuilderAPI_MakeWire wire;
-    TopoDS_Edge             edge;
-    bool                    success = true;
+    bool success = true;
 
     gp_Pnt start = gp_Pnt( pcbIUScale.IUTomm( aChain.CPoint( 0 ).x - aOrigin.x ),
-                           -pcbIUScale.IUTomm( aChain.CPoint( 0 ).y - aOrigin.y ), 0.0 );
+                           -pcbIUScale.IUTomm( aChain.CPoint( 0 ).y - aOrigin.y ), aZposition );
+
+    int items_count = 0;
 
     for( int j = 0; j < aChain.PointCount(); j++ )
     {
@@ -367,38 +414,35 @@ bool STEP_PCB_MODEL::MakeShape( TopoDS_Shape& aShape, const SHAPE_LINE_CHAIN& aC
         gp_Pnt end;
 
         if( next >= aChain.PointCount() )
-        {
-            end = gp_Pnt( pcbIUScale.IUTomm( aChain.CPoint( 0 ).x - aOrigin.x ),
-                          -pcbIUScale.IUTomm( aChain.CPoint( 0 ).y - aOrigin.y ), 0.0 );
-        }
-        else
-        {
-            end = gp_Pnt( pcbIUScale.IUTomm( aChain.CPoint( next ).x - aOrigin.x ),
-                          -pcbIUScale.IUTomm( aChain.CPoint( next ).y - aOrigin.y ), 0.0 );
-        }
+            next = 0;
 
-        // Do not export very small segments: they can create broken outlines
-        double seg_len = std::abs( end.X() - start.X()) + std::abs(start.Y() - end.Y() );
-        double min_len = 0.0001;    // In mm, i.e. 0.1 micron
+        end = gp_Pnt( pcbIUScale.IUTomm( aChain.CPoint( next ).x - aOrigin.x ),
+                      -pcbIUScale.IUTomm( aChain.CPoint( next ).y - aOrigin.y ), aZposition );
 
-        if( seg_len < min_len )
+        // Do not export too short segments: they create broken shape because OCC thinks
+        // start point and end point are at the same place
+        double seg_len = std::hypot( end.X() - start.X(), end.Y() - start.Y() );
+
+        if( seg_len <= m_mergeOCCMaxDist )
             continue;
-
         try
         {
+            TopoDS_Edge edge;
             edge = BRepBuilderAPI_MakeEdge( start, end );
             wire.Add( edge );
 
-            if( BRepBuilderAPI_WireDone != wire.Error() )
+            if( wire.Error() != BRepBuilderAPI_WireDone )
             {
                 ReportMessage( wxT( "failed to add curve\n" ) );
                 return false;
             }
+
+            items_count++;
         }
         catch( const Standard_Failure& e )
         {
-            ReportMessage(
-                    wxString::Format( wxT( "OCC exception: %s\n" ), e.GetMessageString() ) );
+            ReportMessage( wxString::Format( wxT( "MakeShape1: OCC exception: %s\n" ),
+                                             e.GetMessageString() ) );
             success = false;
         }
 
@@ -420,7 +464,8 @@ bool STEP_PCB_MODEL::MakeShape( TopoDS_Shape& aShape, const SHAPE_LINE_CHAIN& aC
     catch(  const Standard_Failure& e )
     {
         ReportMessage(
-                wxString::Format( wxT( "OCC exception: %s\n" ), e.GetMessageString() ) );
+                wxString::Format( wxT( "MakeShape2 (items_count %d): OCC exception: %s\n" ),
+                                  items_count, e.GetMessageString() ) );
         return false;
     }
 
@@ -448,9 +493,10 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
 
     m_hasPCB = true; // whether or not operations fail we note that CreatePCB has been invoked
 
-    // Support for more than one main outline (more than one board)
-    std::vector<TopoDS_Shape> board_outlines;
+    // Number of items having the copper color
+    int copper_item_count = m_board_outlines.size();
 
+    // Support for more than one main outline (more than one board)
     for( int cnt = 0; cnt < aOutline.OutlineCount(); cnt++ )
     {
         const SHAPE_LINE_CHAIN& outline = aOutline.COutline( cnt );
@@ -460,7 +506,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
 
         TopoDS_Shape curr_brd;
 
-        if( !MakeShape( curr_brd, outline, m_thickness, aOrigin ) )
+        if( !MakeShape( curr_brd, outline, m_boardThickness, 0.0, aOrigin ) )
         {
             // Error
             ReportMessage( wxString::Format(
@@ -468,7 +514,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
                            cnt+1, outline.PointCount() ) );
         }
         else
-            board_outlines.push_back( curr_brd );
+            m_board_outlines.push_back( curr_brd );
 
         // Generate board cutouts in current main outline:
         if( aOutline.HoleCount( cnt ) > 0 )
@@ -482,7 +528,8 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
             const SHAPE_LINE_CHAIN& holeOutline = aOutline.Hole( cnt, ii );
             TopoDS_Shape hole;
 
-            if( MakeShape( hole, holeOutline, m_thickness, aOrigin ) )
+            if( MakeShape( hole, holeOutline, m_boardThickness + (m_copperThickness*4),
+                           -m_copperThickness*2, aOrigin ) )
             {
                 m_cutouts.push_back( hole );
             }
@@ -501,8 +548,15 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
             holelist.Append( hole );
 
         // Remove holes for each board (usually there is only one board
-        for( TopoDS_Shape& board: board_outlines )
+        int cnt = 0;
+        for( TopoDS_Shape& board: m_board_outlines )
         {
+            cnt++;
+
+            if( cnt % 10 == 0 )
+                ReportMessage( wxString::Format( wxT( "added %d/%d shapes\n" ),
+                                                 cnt, (int)m_board_outlines.size() ) );
+
             BRepAlgoAPI_Cut      Cut;
             TopTools_ListOfShape mainbrd;
 
@@ -521,7 +575,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
     ReportMessage( wxT( "\nGenerate board full shape.\n" ) );
 
     // Dont expand the component or else coloring it gets hard
-    for( TopoDS_Shape& board: board_outlines )
+    for( TopoDS_Shape& board: m_board_outlines )
     {
         m_pcb_labels.push_back( m_assy->AddComponent( m_assy_label, board, false ) );
 
@@ -538,13 +592,15 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
 
     // color the PCB
     Handle( XCAFDoc_ColorTool ) colorTool = XCAFDoc_DocumentTool::ColorTool( m_doc->Main() );
-    Quantity_Color color( m_boardColor[0], m_boardColor[1], m_boardColor[2], Quantity_TOC_RGB );
+    Quantity_Color board_color( m_boardColor[0], m_boardColor[1], m_boardColor[2], Quantity_TOC_RGB );
+    Quantity_Color copper_color( 0.7, 0.61, 0.0, Quantity_TOC_RGB );
 
     int pcbIdx = 1;
+    int copper_objects_cnt = 0;
 
     for( TDF_Label& pcb_label : m_pcb_labels )
     {
-        colorTool->SetColor( pcb_label, color, XCAFDoc_ColorSurf );
+        colorTool->SetColor( pcb_label, board_color, XCAFDoc_ColorSurf );
 
         Handle( TDataStd_TreeNode ) node;
 
@@ -568,15 +624,21 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
             }
         }
 
-        TopExp_Explorer topex;
         // color the PCB
+        TopExp_Explorer topex;
         topex.Init( m_assy->GetShape( pcb_label ), TopAbs_SOLID );
 
         while( topex.More() )
         {
-            colorTool->SetColor( topex.Current(), color, XCAFDoc_ColorSurf );
+            if( copper_objects_cnt < copper_item_count )
+                colorTool->SetColor( topex.Current(), copper_color, XCAFDoc_ColorSurf );
+            else
+                colorTool->SetColor( topex.Current(), board_color, XCAFDoc_ColorSurf );
+
             topex.Next();
         }
+
+        copper_objects_cnt++;
     }
 
 #if( defined OCC_VERSION_HEX ) && ( OCC_VERSION_HEX > 0x070101 )
@@ -711,7 +773,7 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
     m_app->NewDocument( "MDTV-XCAF", doc );
 
     wxString fileName( wxString::FromUTF8( aFileNameUTF8.c_str() ) );
-    FormatType modelFmt = fileType( aFileNameUTF8.c_str() );
+    MODEL3D_FORMAT_TYPE modelFmt = fileType( aFileNameUTF8.c_str() );
 
     switch( modelFmt )
     {
@@ -944,7 +1006,7 @@ bool STEP_PCB_MODEL::getModelLocation( bool aBottom, VECTOR2D aPosition, double 
     }
     else
     {
-        aOffset.z += m_thickness;
+        aOffset.z += m_boardThickness;
         lRot.SetRotation( gp_Ax1( gp_Pnt( 0.0, 0.0, 0.0 ), gp_Dir( 0.0, 0.0, 1.0 ) ), aRotation );
         lPos.Multiply( lRot );
     }

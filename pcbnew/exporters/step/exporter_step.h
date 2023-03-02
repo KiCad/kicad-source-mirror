@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,9 +30,14 @@
 #include <geometry/shape_poly_set.h>
 #include <gal/color4d.h>
 
+// Default value to chain 2 shapes when creating the board outlines
+// from shapes on Edges.Cut layer
+#define BOARD_DEFAULT_CHAINING_EPSILON 0.01
+
 class PCBMODEL;
 class BOARD;
 class FOOTPRINT;
+class PCB_TRACK;
 class FILENAME_RESOLVER;
 
 class EXPORTER_STEP_PARAMS
@@ -45,8 +50,10 @@ public:
             m_useDrillOrigin( false ),
             m_includeExcludedBom( true ),
             m_substModels( true ),
-            m_minDistance( STEPEXPORT_MIN_DISTANCE ),
-            m_boardOnly( false ) {};
+            m_BoardOutlinesChainingEpsilon( BOARD_DEFAULT_CHAINING_EPSILON ),
+            m_boardOnly( false ),
+            m_exportTracks( false )
+    {};
 
     wxString m_outputFile;
 
@@ -57,8 +64,9 @@ public:
     bool     m_useDrillOrigin;
     bool     m_includeExcludedBom;
     bool     m_substModels;
-    double   m_minDistance;
+    double   m_BoardOutlinesChainingEpsilon;
     bool     m_boardOnly;
+    bool     m_exportTracks;
 };
 
 class EXPORTER_STEP
@@ -75,9 +83,13 @@ public:
     void SetFail() { m_fail = true; }
     void SetWarn() { m_warn = true; }
 
+    /// Return rue to export tracks and vias on top and bottom copper layers
+    bool ExportTracksAndVias() { return m_params.m_exportTracks; }
+
 private:
     bool composePCB();
     bool composePCB( FOOTPRINT* aFootprint, VECTOR2D aOrigin );
+    bool composePCB( PCB_TRACK* aTrack, VECTOR2D aOrigin );
     void determinePcbThickness();
 
     EXPORTER_STEP_PARAMS m_params;
@@ -93,10 +105,7 @@ private:
     std::unique_ptr<STEP_PCB_MODEL> m_pcbModel;
     wxString        m_pcbName;
 
-    // minimum distance between points to treat them as separate entities (mm)
-    double   m_minDistance;
-
-    double   m_boardThickness;
+    double m_boardThickness;
 
     KIGFX::COLOR4D m_solderMaskColor;
 };
