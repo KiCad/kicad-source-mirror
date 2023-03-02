@@ -75,7 +75,7 @@ public:
      * Return 4 corners for a rectangle or rotated rectangle (stored as a poly).  Unimplemented
      * for other shapes.
      */
-    std::vector<VECTOR2I> GetCorners() const;
+    virtual std::vector<VECTOR2I> GetCorners() const;
 
     /**
      * Allows items to return their visual center rather than their anchor. For some shapes this

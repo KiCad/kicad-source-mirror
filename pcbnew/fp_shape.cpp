@@ -282,6 +282,7 @@ void FP_SHAPE::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
     SetLayer( FlipLayer( GetLayer(), GetBoard()->GetCopperLayerCount() ) );
 }
 
+
 bool FP_SHAPE::IsParentFlipped() const
 {
     if( GetParent() &&  GetParent()->GetLayer() == B_Cu )
@@ -289,11 +290,9 @@ bool FP_SHAPE::IsParentFlipped() const
     return false;
 }
 
+
 void FP_SHAPE::Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis )
 {
-    // Mirror an edge of the footprint. the layer is not modified
-    // This is a footprint shape modification.
-
     switch( GetShape() )
     {
     case SHAPE_T::ARC:
@@ -339,6 +338,7 @@ void FP_SHAPE::Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis )
 
     SetDrawCoord();
 }
+
 
 void FP_SHAPE::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
