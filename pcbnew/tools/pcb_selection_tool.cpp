@@ -756,7 +756,18 @@ bool PCB_SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
 
     // Apply some ugly heuristics to avoid disambiguation menus whenever possible
     if( collector.GetCount() > 1 && !m_skip_heuristics )
-        GuessSelectionCandidates( collector, aWhere );
+    {
+        try
+        {
+            GuessSelectionCandidates( collector, aWhere );
+        }
+        catch( const ClipperLib::clipperException& exc )
+        {
+            wxLogWarning( wxS( "Exception \"%s\" occurred attemption to guess selection "
+                               "candidates." ), exc.what() );
+            return false;
+        }
+    }
 
     // If still more than one item we're going to have to ask the user.
     if( collector.GetCount() > 1 )

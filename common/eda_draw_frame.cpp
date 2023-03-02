@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -78,12 +78,16 @@ BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, KIWAY_PLAYER )
     EVT_ACTIVATE( EDA_DRAW_FRAME::onActivate )
 END_EVENT_TABLE()
 
+
 bool EDA_DRAW_FRAME::m_openGLFailureOccured = false;
+
 
 EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
                                 const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
-                                long aStyle, const wxString& aFrameName, const EDA_IU_SCALE& aIuScale ) :
-    KIWAY_PLAYER( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName, aIuScale )
+                                long aStyle, const wxString& aFrameName,
+                                const EDA_IU_SCALE& aIuScale ) :
+    KIWAY_PLAYER( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName, aIuScale ),
+    m_socketServer( nullptr )
 {
     m_socketServer        = nullptr;
     m_mainToolBar         = nullptr;
@@ -171,8 +175,8 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
               OnMove( dummy );
 
               // we need to kludge the msg panel to the correct size again
-              // especially important even for first launches as the constructor of the window here usually doesn't
-              // have the correct dpi awareness yet
+              // especially important even for first launches as the constructor of the window
+              // here usually doesn't have the correct dpi awareness yet
               m_frameSize.y += m_msgFrameHeight;
               m_msgFrameHeight = EDA_MSG_PANEL::GetRequiredHeight( this );
               m_frameSize.y -= m_msgFrameHeight;
@@ -609,7 +613,8 @@ void EDA_DRAW_FRAME::DisplayGridMsg()
 {
     wxString msg;
 
-    msg.Printf( wxS( "grid %s" ), MessageTextFromValue( GetCanvas()->GetGAL()->GetGridSize().x, false ) );
+    msg.Printf( wxS( "grid %s" ), MessageTextFromValue( GetCanvas()->GetGAL()->GetGridSize().x,
+                                                        false ) );
 
     SetStatusText( msg, 4 );
 }

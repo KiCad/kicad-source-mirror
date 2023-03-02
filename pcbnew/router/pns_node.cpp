@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2019 CERN
- * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -275,7 +275,8 @@ int NODE::QueryColliding( const ITEM* aItem, NODE::OBSTACLES& aObstacles, int aK
     if( aItem->IsVirtual() )
         return 0;
 
-    DEFAULT_OBSTACLE_VISITOR visitor( aObstacles, aItem, aKindMask, aDifferentNetsOnly, aOverrideClearance );
+    DEFAULT_OBSTACLE_VISITOR visitor( aObstacles, aItem, aKindMask, aDifferentNetsOnly,
+                                      aOverrideClearance );
 
 #ifdef DEBUG
     assert( allocNodes.find( this ) != allocNodes.end() );
@@ -324,6 +325,7 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
     OBSTACLE nearest;
     nearest.m_item = nullptr;
     nearest.m_distFirst = INT_MAX;
+    nearest.m_maxFanoutWidth = 0;
 
     auto updateNearest =
             [&]( const SHAPE_LINE_CHAIN::INTERSECTION& pt, ITEM* obstacle,
@@ -347,7 +349,6 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
     DEBUG_DECORATOR* debugDecorator = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
     std::vector<SHAPE_LINE_CHAIN::INTERSECTION> intersectingPts;
     int layer = aLine->Layer();
-
 
     for( const OBSTACLE& obstacle : obstacleList )
     {
@@ -720,9 +721,10 @@ void NODE::Add( std::unique_ptr< ITEM > aItem, bool aAllowRedundant )
 
     case ITEM::LINE_T:
     {
-        //fixme(twl): I don't like unique_ptr in this methods as the router has its own garbage collecting
-        //mechanism. This particular case is used exclusively in ROUTER::GetUpdatedItems() for
-        //dumping debug logs. Please don't call Add ( up<LINE> ) otherwise, dragons live here.
+        // fixme(twl): I don't like unique_ptr in this methods as the router has its own garbage
+        // collecting mechanism. This particular case is used exclusively in
+        // ROUTER::GetUpdatedItems() for dumping debug logs. Please don't call Add ( up<LINE> )
+        // otherwise, dragons live here.
         LINE *l = static_cast<LINE*>( aItem.get() );
         Add( *l );
         break;
@@ -1072,7 +1074,7 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex,
     // Remove duplicate verts, but do NOT remove colinear segments here!
     pl.Line().Simplify( false );
 
-    // TODO: maintain actual segment index under simplifcation system
+    // TODO: maintain actual segment index under simplification system
     if( aOriginSegmentIndex && *aOriginSegmentIndex >= pl.SegmentCount() )
         *aOriginSegmentIndex = pl.SegmentCount() - 1;
 
@@ -1275,8 +1277,7 @@ JOINT& NODE::touchJoint( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, int a
                 break;
             }
         }
-    }
-    while( merged );
+    } while( merged );
 
     return m_joints.insert( TagJointPair( tag, jt ) )->second;
 }

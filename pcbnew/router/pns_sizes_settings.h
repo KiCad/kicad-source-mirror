@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016, 2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -49,7 +49,8 @@ public:
             m_diffPairGap( 180000 ),
             m_diffPairViaGap( 180000 ),
             m_diffPairViaGapSameAsTraceGap( true ),
-            m_holeToHole( 0 )
+            m_holeToHole( 0 ),
+            m_diffPairHoleToHole( 0 )
     {};
 
     ~SIZES_SETTINGS() {};
@@ -84,7 +85,11 @@ public:
 
     void SetDiffPairWidth( int aWidth ) { m_diffPairWidth = aWidth; }
     void SetDiffPairGap( int aGap ) { m_diffPairGap = aGap; }
-    void SetDiffPairViaGapSameAsTraceGap ( bool aEnable ) { m_diffPairViaGapSameAsTraceGap = aEnable; }
+    void SetDiffPairViaGapSameAsTraceGap ( bool aEnable )
+    {
+        m_diffPairViaGapSameAsTraceGap = aEnable;
+    }
+
     void SetDiffPairViaGap( int aGap ) { m_diffPairViaGap = aGap; }
 
     int ViaDiameter() const { return m_viaDiameter; }

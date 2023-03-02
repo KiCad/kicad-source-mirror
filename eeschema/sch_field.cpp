@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -189,7 +189,8 @@ wxString SCH_FIELD::GetShownText( int aDepth, bool aAllowExtraText ) const
     std::function<bool( wxString* )> labelResolver =
             [&]( wxString* token ) -> bool
             {
-                return static_cast<SCH_LABEL_BASE*>( m_parent )->ResolveTextVar( token, aDepth + 1 );
+                return static_cast<SCH_LABEL_BASE*>( m_parent )->ResolveTextVar( token,
+                                                                                 aDepth + 1 );
             };
 
     wxString text = EDA_TEXT::GetShownText();
@@ -1039,6 +1040,8 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground ) const
         std::vector<std::pair<wxString, wxString>> pages;
         std::vector<wxString>                      pageHrefs;
         BOX2I                                      bbox = GetBoundingBox();
+
+        wxCHECK( label, /* void */ );
 
         label->GetIntersheetRefs( &pages );
 

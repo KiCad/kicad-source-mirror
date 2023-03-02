@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -41,6 +41,8 @@ void SEARCH_PANE::OnLanguageChange()
     {
         wxWindow* page = m_notebook->GetPage( i );
         SEARCH_PANE_TAB* tab = dynamic_cast<SEARCH_PANE_TAB*>( page );
+
+        wxCHECK( tab, /* void */ );
 
         tab->RefreshColumnNames();
         m_notebook->SetPageText( i, wxGetTranslation( tab->GetSearchHandler()->GetName() ) );

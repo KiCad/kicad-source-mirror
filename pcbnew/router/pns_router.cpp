@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -142,7 +142,9 @@ const ITEM_SET ROUTER::QueryHoverItems( const VECTOR2I& aP, bool aUseClearance )
         }
     }
     else
+    {
         return m_placer->CurrentNode()->HitTest( aP );
+    }
 }
 
 
@@ -776,7 +778,7 @@ bool ROUTER::movePlacing( const VECTOR2I& aP, ITEM* aEndItem )
 void ROUTER::GetUpdatedItems( std::vector<PNS::ITEM*>& aRemoved, std::vector<PNS::ITEM*>& aAdded,
                               std::vector<PNS::ITEM*>& aHeads )
 {
-    NODE *node;
+    NODE *node = nullptr;
     ITEM_SET current;
 
     if( m_state == ROUTE_TRACK )
@@ -789,6 +791,11 @@ void ROUTER::GetUpdatedItems( std::vector<PNS::ITEM*>& aRemoved, std::vector<PNS
         node = m_dragger->CurrentNode();
         current = m_dragger->Traces();
     }
+
+    // There probably should be a debugging assertion and possibly a PNS_LOGGER call here but
+    // I'm not sure how to be proceed WLS.
+    if( !node )
+        return;
 
     node->GetUpdatedItems( aRemoved, aAdded );
 

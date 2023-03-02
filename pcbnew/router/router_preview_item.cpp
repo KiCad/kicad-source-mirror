@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -195,6 +195,8 @@ const BOX2I ROUTER_PREVIEW_ITEM::ViewBBox() const
 
 void ROUTER_PREVIEW_ITEM::drawLineChain( const SHAPE_LINE_CHAIN_BASE* aL, KIGFX::GAL* gal ) const
 {
+    wxCHECK( aL, /* void */ );
+
     gal->SetIsFill( false );
 
     for( int s = 0; s < aL->GetSegmentCount(); s++ )
@@ -211,7 +213,7 @@ void ROUTER_PREVIEW_ITEM::drawLineChain( const SHAPE_LINE_CHAIN_BASE* aL, KIGFX:
         gal->DrawArc( arc.GetCenter(), arc.GetRadius(), start_angle, start_angle + angle);
     }
 
-    if( aL && aL->IsClosed() )
+    if( aL->IsClosed() )
         gal->DrawLine( aL->GetSegment( -1 ).B, aL->GetSegment( 0 ).A );
 }
 

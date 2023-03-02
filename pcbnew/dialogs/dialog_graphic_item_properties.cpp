@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras jp.charras at wanadoo.fr
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -43,22 +43,9 @@
 #include <dialog_graphic_item_properties_base.h>
 #include <tools/drawing_tool.h>
 
+
 class DIALOG_GRAPHIC_ITEM_PROPERTIES : public DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE
 {
-private:
-    PCB_BASE_EDIT_FRAME*  m_parent;
-    PCB_SHAPE*            m_item;
-    FP_SHAPE*             m_fp_item;
-
-    UNIT_BINDER           m_startX, m_startY;
-    UNIT_BINDER           m_endX, m_endY;
-    UNIT_BINDER           m_angle;
-    UNIT_BINDER           m_thickness;
-    UNIT_BINDER           m_bezierCtrl1X, m_bezierCtrl1Y;
-    UNIT_BINDER           m_bezierCtrl2X, m_bezierCtrl2Y;
-
-    bool                  m_flipStartEnd;
-
 public:
     DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BOARD_ITEM* aItem );
     ~DIALOG_GRAPHIC_ITEM_PROPERTIES() {};
@@ -79,6 +66,20 @@ private:
     void onFilledCheckbox( wxCommandEvent& event ) override;
 
     bool Validate() override;
+
+private:
+    PCB_BASE_EDIT_FRAME*  m_parent;
+    PCB_SHAPE*            m_item;
+    FP_SHAPE*             m_fp_item;
+
+    UNIT_BINDER           m_startX, m_startY;
+    UNIT_BINDER           m_endX, m_endY;
+    UNIT_BINDER           m_angle;
+    UNIT_BINDER           m_thickness;
+    UNIT_BINDER           m_bezierCtrl1X, m_bezierCtrl1Y;
+    UNIT_BINDER           m_bezierCtrl2X, m_bezierCtrl2Y;
+
+    bool                  m_flipStartEnd;
 };
 
 DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent,
@@ -441,7 +442,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::Validate()
             double max_offset = std::max( std::abs( center.x ) + radius,
                                           std::abs( center.y ) + radius );
 
-            if( max_offset >= ( std::numeric_limits<VECTOR2I::coord_type>::max() / 2 )
+            if( max_offset >= ( std::numeric_limits<VECTOR2I::coord_type>::max() / 2.0 )
                     || center == start || center == end )
             {
                 errors.Add( wxString::Format( _( "Invalid Arc with radius %f and angle %f." ),
