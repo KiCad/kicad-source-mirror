@@ -33,6 +33,8 @@
 #include <geometry/shape_compound.h>
 #include <callback_gal.h>
 #include <convert_basic_shapes_to_polygon.h>
+#include <macros.h>
+
 
 FP_TEXTBOX::FP_TEXTBOX( FOOTPRINT* aParentFootprint ) :
         FP_SHAPE( aParentFootprint, SHAPE_T::RECT, PCB_FP_TEXTBOX_T ),
@@ -131,12 +133,30 @@ void FP_TEXTBOX::SetRight( int aVal )
 }
 
 
+std::vector<VECTOR2I> FP_TEXTBOX::GetCorners() const
+{
+    std::vector<VECTOR2I> pts = FP_SHAPE::GetCorners();
+
+    // SHAPE_T::POLY doesn't use the DrawCoord/LocalCoord architecture and instead stores fully
+    // resolved points (ie: relative to the board, not parent footprint).
+    if( GetShape() == SHAPE_T::POLY )
+    {
+        if( FOOTPRINT* parentFootprint = PCB_SHAPE::GetParentFootprint() )
+        {
+            for( VECTOR2I& pt : pts )
+                RotatePoint( pt, parentFootprint->GetPosition(), parentFootprint->GetOrientation() );
+        }
+    }
+
+    return pts;
+}
+
+
 EDA_ANGLE FP_TEXTBOX::GetDrawRotation() const
 {
-    FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( m_parent );
-    EDA_ANGLE  rotation = GetTextAngle();
+    EDA_ANGLE rotation = GetTextAngle();
 
-    if( parentFootprint )
+    if( FOOTPRINT* parentFootprint = PCB_SHAPE::GetParentFootprint() )
         rotation += parentFootprint->GetOrientation();
 
     rotation.Normalize();
@@ -145,57 +165,57 @@ EDA_ANGLE FP_TEXTBOX::GetDrawRotation() const
 }
 
 
-std::vector<VECTOR2I> FP_TEXTBOX::GetAnchorAndOppositeCorner() const
+std::vector<VECTOR2I> FP_TEXTBOX::GetNormalizedCorners() const
 {
-    std::vector<VECTOR2I> pts;
     std::vector<VECTOR2I> corners = GetCorners();
     EDA_ANGLE             textAngle( GetDrawRotation() );
 
-    textAngle.Normalize();
+    if( FOOTPRINT* parentFootprint = PCB_SHAPE::GetParentFootprint() )
+    {
+        if( parentFootprint->IsFlipped() )
+            std::swap( corners[1], corners[3] );
+    }
 
-    pts.emplace_back( corners[0] );
+    textAngle.Normalize();
 
     if( textAngle < ANGLE_90 )
     {
-        if( corners[1].y <= corners[0].y )
-            pts.emplace_back( corners[1] );
-        else
-            pts.emplace_back( corners[3] );
+        if( corners[1].y > corners[0].y )
+            std::swap( corners[1], corners[3] );
     }
     else if( textAngle < ANGLE_180 )
     {
-        if( corners[1].x <= corners[0].x )
-            pts.emplace_back( corners[1] );
-        else
-            pts.emplace_back( corners[3] );
+        if( corners[1].x > corners[0].x )
+            std::swap( corners[1], corners[3] );
     }
     else if( textAngle < ANGLE_270 )
     {
-        if( corners[1].y >= corners[0].y )
-            pts.emplace_back( corners[1] );
-        else
-            pts.emplace_back( corners[3] );
+        if( corners[1].y < corners[0].y )
+            std::swap( corners[1], corners[3] );
     }
     else
     {
-        if( corners[1].x >= corners[0].x )
-            pts.emplace_back( corners[1] );
-        else
-            pts.emplace_back( corners[3] );
+        if( corners[1].x < corners[0].x )
+            std::swap( corners[1], corners[3] );
     }
 
-    return pts;
+    return corners;
 }
 
 
 VECTOR2I FP_TEXTBOX::GetDrawPos() const
 {
-    std::vector<VECTOR2I> corners = GetAnchorAndOppositeCorner();
+    std::vector<VECTOR2I> corners = GetNormalizedCorners();
     GR_TEXT_H_ALIGN_T     effectiveAlignment = GetHorizJustify();
     VECTOR2I              textAnchor;
-    VECTOR2I              offset;
+    VECTOR2I              vMargin;
+    VECTOR2I              hMargin;
+    bool                  isFlipped = false;
 
-    if( IsMirrored() )
+    if( FOOTPRINT* parentFootprint = PCB_SHAPE::GetParentFootprint() )
+        isFlipped = parentFootprint->IsFlipped();
+
+    if( IsMirrored() != isFlipped )
     {
         switch( GetHorizJustify() )
         {
@@ -209,20 +229,21 @@ VECTOR2I FP_TEXTBOX::GetDrawPos() const
     {
     case GR_TEXT_H_ALIGN_LEFT:
         textAnchor = corners[0];
-        offset = VECTOR2I( GetTextMargin(), GetTextMargin() );
+        vMargin = ( corners[2] - corners[1] ).Resize( GetTextMargin() );
+        hMargin = ( corners[1] - corners[0] ).Resize( GetTextMargin() );
         break;
     case GR_TEXT_H_ALIGN_CENTER:
         textAnchor = ( corners[0] + corners[1] ) / 2;
-        offset = VECTOR2I( 0, GetTextMargin() );
+        vMargin = ( corners[2] - corners[1] ).Resize( GetTextMargin() );
         break;
     case GR_TEXT_H_ALIGN_RIGHT:
         textAnchor = corners[1];
-        offset = VECTOR2I( -GetTextMargin(), GetTextMargin() );
+        vMargin = ( corners[2] - corners[1] ).Resize( GetTextMargin() );
+        hMargin = ( corners[0] - corners[1] ).Resize( GetTextMargin() );
         break;
     }
 
-    RotatePoint( offset, GetDrawRotation() );
-    return textAnchor + offset;
+    return textAnchor + hMargin + vMargin;
 }
 
 
@@ -265,6 +286,8 @@ void FP_TEXTBOX::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 
 void FP_TEXTBOX::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 {
+    FP_SHAPE::Flip( aCentre, aFlipLeftRight );
+
     // flipping the footprint is relative to the X axis
     if( aFlipLeftRight )
     {
@@ -276,8 +299,6 @@ void FP_TEXTBOX::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
         SetTextY( MIRRORVAL( GetTextPos().y, aCentre.y ) );
         SetTextAngle( ANGLE_180 - GetTextAngle() );
     }
-
-    SetLayer( FlipLayer( GetLayer(), GetBoard()->GetCopperLayerCount() ) );
 
     if( ( GetLayerSet() & LSET::SideSpecificMask() ).any() )
         SetMirrored( !IsMirrored() );
@@ -409,7 +430,7 @@ wxString FP_TEXTBOX::GetShownText( int aDepth, bool aAllowExtraText ) const
     }
 
     KIFONT::FONT*         font = getDrawFont();
-    std::vector<VECTOR2I> corners = GetAnchorAndOppositeCorner();
+    std::vector<VECTOR2I> corners = GetNormalizedCorners();
     int                   colWidth = ( corners[1] - corners[0] ).EuclideanNorm();
 
     colWidth -= GetTextMargin() * 2;
@@ -477,22 +498,74 @@ void FP_TEXTBOX::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID 
     // Don't use FP_SHAPE::TransformShapeToPolygon.  We want to treat the textbox as filled even
     // if there's no background colour.
 
-    std::vector<VECTOR2I> pts = GetRectCorners();
-
-    aBuffer.NewOutline();
-
-    for( const VECTOR2I& pt : pts )
-        aBuffer.Append( pt );
-
     int width = GetWidth() + ( 2 * aClearance );
 
-    if( width > 0 )
+    switch( m_shape )
     {
-        // Add in segments
-        TransformOvalToPolygon( aBuffer, pts[0], pts[1], width, aError, aErrorLoc );
-        TransformOvalToPolygon( aBuffer, pts[1], pts[2], width, aError, aErrorLoc );
-        TransformOvalToPolygon( aBuffer, pts[2], pts[3], width, aError, aErrorLoc );
-        TransformOvalToPolygon( aBuffer, pts[3], pts[0], width, aError, aErrorLoc );
+    case SHAPE_T::RECT:
+    {
+        std::vector<VECTOR2I> pts = GetRectCorners();
+
+        aBuffer.NewOutline();
+
+        for( const VECTOR2I& pt : pts )
+            aBuffer.Append( pt );
+
+        if( width > 0 )
+        {
+            // Add in segments
+            TransformOvalToPolygon( aBuffer, pts[0], pts[1], width, aError, aErrorLoc );
+            TransformOvalToPolygon( aBuffer, pts[1], pts[2], width, aError, aErrorLoc );
+            TransformOvalToPolygon( aBuffer, pts[2], pts[3], width, aError, aErrorLoc );
+            TransformOvalToPolygon( aBuffer, pts[3], pts[0], width, aError, aErrorLoc );
+        }
+
+        break;
+    }
+
+    case SHAPE_T::POLY:
+    {
+        if( !IsPolyShapeValid() )
+            break;
+
+        // The polygon is expected to be a simple polygon; not self intersecting, no hole.
+        EDA_ANGLE orientation = getParentOrientation();
+        VECTOR2I  offset = getParentPosition();
+
+        // Build the polygon with the actual position and orientation:
+        std::vector<VECTOR2I> poly;
+        DupPolyPointsList( poly );
+
+        for( VECTOR2I& point : poly )
+        {
+            RotatePoint( point, orientation );
+            point += offset;
+        }
+
+        aBuffer.NewOutline();
+
+        for( const VECTOR2I& point : poly )
+            aBuffer.Append( point.x, point.y );
+
+        if( width > 0 )
+        {
+            VECTOR2I pt1( poly[poly.size() - 1] );
+
+            for( const VECTOR2I& pt2 : poly )
+            {
+                if( pt2 != pt1 )
+                    TransformOvalToPolygon( aBuffer, pt1, pt2, width, aError, aErrorLoc );
+
+                pt1 = pt2;
+            }
+        }
+
+        break;
+    }
+
+    default:
+        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+        break;
     }
 }
 

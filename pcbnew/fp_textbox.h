@@ -84,7 +84,8 @@ public:
 
     VECTOR2I GetDrawPos() const override;
 
-    std::vector<VECTOR2I> GetAnchorAndOppositeCorner() const;
+    std::vector<VECTOR2I> GetCorners() const override;
+    std::vector<VECTOR2I> GetNormalizedCorners() const;
 
     void Move( const VECTOR2I& aMoveVector ) override;
 
@@ -96,10 +97,6 @@ public:
      * Mirror the textbox's position, but not the text (or its justification).
      */
     void Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis ) override;
-
-    // The Pos0 accessors are for footprint-relative coordinates.
-    void SetPos0( const VECTOR2I& aPos ) { m_Pos0 = aPos; SetDrawCoord(); }
-    const VECTOR2I& GetPos0() const      { return m_Pos0; }
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
