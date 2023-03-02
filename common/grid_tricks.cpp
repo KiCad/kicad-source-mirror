@@ -464,6 +464,7 @@ void GRID_TRICKS::onCharHook( wxKeyEvent& ev )
         {
             wxCommandEvent dummy;
             m_addHandler( dummy );
+            handled = true;
         }
     }
     else if( ev.GetModifiers() == wxMOD_CONTROL && ev.GetKeyCode() == 'V' )

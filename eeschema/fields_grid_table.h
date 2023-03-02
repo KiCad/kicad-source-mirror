@@ -38,8 +38,9 @@ class SCH_LABEL_BASE;
 class FIELDS_GRID_TRICKS : public GRID_TRICKS
 {
 public:
-    FIELDS_GRID_TRICKS( WX_GRID* aGrid, DIALOG_SHIM* aDialog ) :
-        GRID_TRICKS( aGrid ),
+    FIELDS_GRID_TRICKS( WX_GRID* aGrid, DIALOG_SHIM* aDialog,
+                        std::function<void( wxCommandEvent& )> aAddHandler ) :
+        GRID_TRICKS( aGrid, std::move( aAddHandler ) ),
         m_dlg( aDialog )
     {}
 
