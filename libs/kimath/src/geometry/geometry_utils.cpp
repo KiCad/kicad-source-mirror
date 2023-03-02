@@ -46,6 +46,7 @@ int GetArcToSegmentCount( int aRadius, int aErrorMax, const EDA_ANGLE& aArcAngle
 
     // avoid divide-by-zero
     aRadius = std::max( 1, aRadius );
+    aErrorMax = std::max( 1, aErrorMax );
 
     // error relative to the radius value:
     double rel_error = (double)aErrorMax / aRadius;
