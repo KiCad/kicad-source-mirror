@@ -14,7 +14,11 @@ list(APPEND LIBCONTEXT_SOURCES
     )
 
 if( MSVC )
-    enable_language(ASM_MASM)
+    if( KICAD_BUILD_ARCH_ARM64 )
+        enable_language(ASM_ARMASM)
+    else()
+        enable_language(ASM_MASM)
+    endif()
 
     if( NOT LIBCONTEXT_USE_WINFIBER )
         if ( KICAD_BUILD_ARCH_X86 )
@@ -27,6 +31,11 @@ if( MSVC )
             list(APPEND LIBCONTEXT_SOURCES
                 make_x86_64_ms_pe_masm.asm
                 jump_x86_64_ms_pe_masm.asm
+                )
+        elseif( KICAD_BUILD_ARCH_ARM64 )
+            list(APPEND LIBCONTEXT_SOURCES
+                make_arm64_aapcs_pe_armasm.asm
+                jump_arm64_aapcs_pe_armasm.asm
                 )
         endif()
     else()
