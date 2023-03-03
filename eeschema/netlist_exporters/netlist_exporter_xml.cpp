@@ -678,13 +678,13 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
 
         for( CONNECTION_SUBGRAPH* subgraph : subgraphs )
         {
-            bool nc = subgraph->m_no_connect && subgraph->m_no_connect->Type() == SCH_NO_CONNECT_T;
-            const SCH_SHEET_PATH& sheet = subgraph->m_sheet;
+            bool nc = subgraph->GetNoConnect() && subgraph->GetNoConnect()->Type() == SCH_NO_CONNECT_T;
+            const SCH_SHEET_PATH& sheet = subgraph->GetSheet();
 
             if( nc )
                 net_record->m_HasNoConnect = true;
 
-            for( SCH_ITEM* item : subgraph->m_items )
+            for( SCH_ITEM* item : subgraph->GetItems() )
             {
                 if( item->Type() == SCH_PIN_T )
                 {

@@ -157,7 +157,7 @@ std::vector<PIN_INFO> NETLIST_EXPORTER_BASE::CreatePinList( SCH_SYMBOL* aSymbol,
                 {
                     CONNECTION_SUBGRAPH* sg = graph->FindSubgraphByName( netName, *aSheetPath );
 
-                    if( !sg || sg->m_no_connect || sg->m_items.size() < 2 )
+                    if( !sg || sg->GetNoConnect() || sg->GetItems().size() < 2 )
                         continue;
                 }
 
@@ -250,7 +250,7 @@ void NETLIST_EXPORTER_BASE::findAllUnitsOfSymbol( SCH_SYMBOL* aSchSymbol,
                     {
                         CONNECTION_SUBGRAPH* sg = graph->FindSubgraphByName( netName, sheet );
 
-                        if( !sg || sg->m_no_connect || sg->m_items.size() < 2 )
+                        if( !sg || sg->GetNoConnect() || sg->GetItems().size() < 2 )
                             continue;
                     }
 

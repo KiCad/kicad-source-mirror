@@ -311,7 +311,7 @@ std::set<wxString> SCHEMATIC::GetNetClassAssignmentCandidates()
     {
         CONNECTION_SUBGRAPH* firstSubgraph = subgraphList[0];
 
-        if( !firstSubgraph->m_driver_connection->IsBus()
+        if( !firstSubgraph->GetDriverConnection()->IsBus()
                 && firstSubgraph->GetDriverPriority() >= CONNECTION_SUBGRAPH::PRIORITY::PIN )
         {
             names.insert( key.Name );

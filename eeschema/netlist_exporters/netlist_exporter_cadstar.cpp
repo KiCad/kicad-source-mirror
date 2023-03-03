@@ -127,9 +127,9 @@ bool NETLIST_EXPORTER_CADSTAR::writeListOfNets( FILE* f )
 
         for( CONNECTION_SUBGRAPH* subgraph : subgraphs )
         {
-            SCH_SHEET_PATH sheet = subgraph->m_sheet;
+            SCH_SHEET_PATH sheet = subgraph->GetSheet();
 
-            for( SCH_ITEM* item : subgraph->m_items )
+            for( SCH_ITEM* item : subgraph->GetItems() )
             {
                 if( item->Type() == SCH_PIN_T )
                     sorted_items.emplace_back( static_cast<SCH_PIN*>( item ), sheet );

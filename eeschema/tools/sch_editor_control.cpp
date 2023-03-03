@@ -1053,7 +1053,7 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
 
             if( selectedIsNoNet && selectedSubgraph )
             {
-                for( SCH_ITEM* subgraphItem : selectedSubgraph->m_items )
+                for( SCH_ITEM* subgraphItem : selectedSubgraph->GetItems() )
                 {
                     if( item == subgraphItem )
                     {

@@ -606,15 +606,15 @@ int ERC_TESTER::TestPinToPin()
 
         for( CONNECTION_SUBGRAPH* subgraph: net.second )
         {
-            if( subgraph->m_no_connect )
+            if( subgraph->GetNoConnect() )
                 has_noconnect = true;
 
-            for( EDA_ITEM* item : subgraph->m_items )
+            for( SCH_ITEM* item : subgraph->GetItems() )
             {
                 if( item->Type() == SCH_PIN_T )
                 {
-                    pins.emplace_back( static_cast<SCH_PIN*>( item ), subgraph->m_sheet );
-                    pinToScreenMap[item] = subgraph->m_sheet.LastScreen();
+                    pins.emplace_back( static_cast<SCH_PIN*>( item ), subgraph->GetSheet() );
+                    pinToScreenMap[item] = subgraph->GetSheet().LastScreen();
                 }
             }
         }
@@ -757,16 +757,17 @@ int ERC_TESTER::TestMultUnitPinConflicts()
 
         for( CONNECTION_SUBGRAPH* subgraph : net.second )
         {
-            for( EDA_ITEM* item : subgraph->m_items )
+            for( SCH_ITEM* item : subgraph->GetItems() )
             {
                 if( item->Type() == SCH_PIN_T )
                 {
                     SCH_PIN* pin = static_cast<SCH_PIN*>( item );
+                    const SCH_SHEET_PATH& sheet = subgraph->GetSheet();
 
                     if( !pin->GetLibPin()->GetParent()->IsMulti() )
                         continue;
 
-                    wxString name = pin->GetParentSymbol()->GetRef( &subgraph->m_sheet ) +
+                    wxString name = pin->GetParentSymbol()->GetRef( &sheet ) +
                                       + ":" + pin->GetShownNumber();
 
                     if( !pinToNetMap.count( name ) )
@@ -785,12 +786,12 @@ int ERC_TESTER::TestMultUnitPinConflicts()
                                 pinToNetMap[name].first ) );
 
                         ercItem->SetItems( pin, pinToNetMap[name].second );
-                        ercItem->SetSheetSpecificPath( subgraph->m_sheet );
-                        ercItem->SetItemsSheetPaths( subgraph->m_sheet, subgraph->m_sheet );
+                        ercItem->SetSheetSpecificPath( sheet );
+                        ercItem->SetItemsSheetPaths( sheet, sheet );
 
                         SCH_MARKER* marker = new SCH_MARKER( ercItem,
                                                              pin->GetTransformedPosition() );
-                        subgraph->m_sheet.LastScreen()->Append( marker );
+                        sheet.LastScreen()->Append( marker );
                         errors += 1;
                     }
                 }
@@ -814,7 +815,7 @@ int ERC_TESTER::TestSimilarLabels()
     {
         for( CONNECTION_SUBGRAPH* subgraph : net.second )
         {
-            for( EDA_ITEM* item : subgraph->m_items )
+            for( SCH_ITEM* item : subgraph->GetItems() )
             {
                 switch( item->Type() )
                 {
@@ -836,7 +837,7 @@ int ERC_TESTER::TestSimilarLabels()
                         ercItem->SetItems( label, labelMap.at( normalized ) );
 
                         SCH_MARKER* marker = new SCH_MARKER( ercItem, label->GetPosition() );
-                        subgraph->m_sheet.LastScreen()->Append( marker );
+                        subgraph->GetSheet().LastScreen()->Append( marker );
                         errors += 1;
                     }
 

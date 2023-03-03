@@ -207,7 +207,7 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         wxString netName = FROM_UTF8( text );
 
         if( auto sg = Schematic().ConnectionGraph()->FindFirstSubgraphByName( netName ) )
-            m_highlightedConn = sg->m_driver_connection;
+            m_highlightedConn = sg->GetDriverConnection();
         else
             m_highlightedConn = nullptr;
 

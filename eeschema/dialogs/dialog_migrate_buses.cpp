@@ -113,7 +113,7 @@ void DIALOG_MIGRATE_BUSES::updateUi()
 
         auto i = m_migration_list->InsertItem( m_migration_list->GetItemCount(), wxEmptyString );
 
-        m_migration_list->SetItem( i, 0, item.subgraph->m_sheet.PathHumanReadable() );
+        m_migration_list->SetItem( i, 0, item.subgraph->GetSheet().PathHumanReadable() );
         m_migration_list->SetItem( i, 1, old );
         m_migration_list->SetItem( i, 2, item.possible_labels[0] );
         m_migration_list->SetItem( i, 3, "" );
@@ -172,8 +172,8 @@ void DIALOG_MIGRATE_BUSES::onItemSelected( wxListEvent& aEvent )
     m_selected_index = sel;
 
     const CONNECTION_SUBGRAPH* subgraph = m_items[sel].subgraph;
-    const SCH_SHEET_PATH&      sheet = subgraph->m_sheet;
-    SCH_ITEM*                  driver = subgraph->m_driver;
+    const SCH_SHEET_PATH&      sheet = subgraph->GetSheet();
+    const SCH_ITEM*            driver = subgraph->GetDriver();
 
     if( sheet != m_frame->GetCurrentSheet() )
     {

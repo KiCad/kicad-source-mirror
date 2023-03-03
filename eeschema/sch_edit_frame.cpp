@@ -1399,7 +1399,7 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
                 SCH_LINE* longestWire = nullptr;
                 double    length = 0.0;
 
-                for( SCH_ITEM* item : subgraph->m_items )
+                for( SCH_ITEM* item : subgraph->GetItems() )
                 {
                     if( item->IsType( { SCH_ITEM_LOCATE_WIRE_T } ) )
                     {

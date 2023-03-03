@@ -81,16 +81,18 @@ public:
               m_multiple_drivers( false ),
               m_strong_driver( false ),
               m_local_driver( false ),
-              m_no_connect( nullptr ),
               m_bus_entry( nullptr ),
-              m_driver( nullptr ),
-              m_driver_connection( nullptr ),
               m_hier_parent( nullptr ),
+              m_driver( nullptr ),
               m_first_driver( nullptr ),
-              m_second_driver( nullptr )
+              m_second_driver( nullptr ),
+              m_no_connect( nullptr ),
+              m_driver_connection( nullptr )
     {}
 
     ~CONNECTION_SUBGRAPH() = default;
+
+    friend class CONNECTION_GRAPH;
 
     /**
      * Determines which potential driver should drive the subgraph.
@@ -125,6 +127,12 @@ public:
     /// Updates all items to match the driver connection
     void UpdateItemConnections();
 
+    /// Provides a read-only reference to the items in the subgraph
+    const std::vector<SCH_ITEM*>& GetItems() const
+    {
+        return m_items;
+    }
+
     /**
      * Return the priority (higher is more important) of a candidate driver
      *
@@ -149,10 +157,39 @@ public:
             return PRIORITY::NONE;
     }
 
+    /**
+     * @return pointer to the SCH_ITEM whose name sets the subgraph netname.
+     *         N.B. This item may not be in the subgraph
+     */
+    const SCH_ITEM* GetDriver() const
+    {
+        return m_driver;
+    }
+
+    /**
+     * @return SCH_CONNECTION object for m_driver on m_sheet
+     */
+    const SCH_CONNECTION* GetDriverConnection() const
+    {
+        return m_driver_connection;
+    }
+
+    /**
+     * @return pointer to the item causing a no-connect or nullptr if none
+     */
+    const SCH_ITEM* GetNoConnect() const
+    {
+        return m_no_connect;
+    }
+
+    const SCH_SHEET_PATH& GetSheet() const
+    {
+        return m_sheet;
+    }
+
 private:
     wxString driverName( SCH_ITEM* aItem ) const;
 
-public:
     CONNECTION_GRAPH* m_graph;
 
     bool m_dirty;
@@ -178,22 +215,10 @@ public:
     /// True if the driver is a local (i.e. non-global) type
     bool m_local_driver;
 
-    /// No-connect item in graph, if any
-    SCH_ITEM* m_no_connect;
-
     /// Bus entry in graph, if any
     SCH_ITEM* m_bus_entry;
 
-    std::vector<SCH_ITEM*> m_items;
-
     std::vector<SCH_ITEM*> m_drivers;
-
-    SCH_ITEM* m_driver;
-
-    SCH_SHEET_PATH m_sheet;
-
-    /// Cache for driver connection
-    SCH_CONNECTION* m_driver_connection;
 
     /**
      * If a subgraph is a bus, this map contains links between the bus members and any
@@ -226,6 +251,9 @@ public:
     /// A cache of escaped netnames from schematic items
     mutable std::unordered_map<SCH_ITEM*, wxString> m_driver_name_cache;
 
+    /// Fully-resolved driver for the subgraph (might not exist in this subgraph)
+    SCH_ITEM* m_driver;
+
     /**
      * Stores the primary driver for the multiple drivers ERC check.  This is the chosen driver
      * before subgraphs are absorbed (so m_driver may be different)
@@ -234,6 +262,18 @@ public:
 
     /// Used for multiple drivers ERC message; stores the second possible driver (or nullptr)
     SCH_ITEM* m_second_driver;
+
+    /// Contents of the subgraph
+    std::vector<SCH_ITEM*> m_items;
+
+    /// No-connect item in graph, if any
+    SCH_ITEM* m_no_connect;
+
+    /// On which logical sheet is the subgraph contained
+    SCH_SHEET_PATH m_sheet;
+
+    /// Cache for driver connection
+    SCH_CONNECTION* m_driver_connection;
 };
 
 struct NET_NAME_CODE_CACHE_KEY
