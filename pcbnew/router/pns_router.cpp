@@ -486,18 +486,22 @@ bool ROUTER::getNearestRatnestAnchor( VECTOR2I& aOtherEnd, LAYER_RANGE& aOtherEn
     if( GetCurrentNets().empty() )
         return false;
 
-    PNS::LINE_PLACER* placer = dynamic_cast<PNS::LINE_PLACER*>( Placer() );
+    PLACEMENT_ALGO* placer = Placer();
 
-    if( placer == nullptr )
+    if( placer == nullptr || placer->Traces().Size() == 0 )
         return false;
 
-    PNS::LINE     trace = placer->Trace();
+    LINE* trace = dynamic_cast<LINE*>( placer->Traces()[0] );
+
+    if( trace == nullptr )
+        return false;
+
     PNS::NODE*    lastNode = placer->CurrentNode( true );
     PNS::TOPOLOGY topo( lastNode );
 
     // If the user has drawn a line, get the anchor nearest to the line end
-    if( trace.SegmentCount() > 0 )
-        return topo.NearestUnconnectedAnchorPoint( &trace, aOtherEnd, aOtherEndLayers );
+    if( trace->SegmentCount() > 0 )
+        return topo.NearestUnconnectedAnchorPoint( trace, aOtherEnd, aOtherEndLayers );
 
     // Otherwise, find the closest anchor to our start point
 
@@ -565,12 +569,16 @@ bool ROUTER::Finish()
 
 bool ROUTER::ContinueFromEnd()
 {
-    LINE_PLACER* placer = dynamic_cast<LINE_PLACER*>( Placer() );
+    PLACEMENT_ALGO* placer = Placer();
 
-    if( placer == nullptr )
+    if( placer == nullptr || placer->Traces().Size() == 0 )
         return false;
 
-    LINE        current = placer->Trace();
+    LINE* current = dynamic_cast<LINE*>( placer->Traces()[0] );
+
+    if( current == nullptr )
+        return false;
+
     int         currentLayer = GetCurrentLayer();
     VECTOR2I    currentEnd = placer->CurrentEnd();
     VECTOR2I    otherEnd;
@@ -585,11 +593,11 @@ bool ROUTER::ContinueFromEnd()
     // Commit whatever we've fixed and restart routing from the other end
     int nextLayer = otherEndLayers.Overlaps( currentLayer ) ? currentLayer : otherEndLayers.Start();
 
-    if( !StartRouting( otherEnd, &current, nextLayer ) )
+    if( !StartRouting( otherEnd, current, nextLayer ) )
         return false;
 
     // Attempt to route to our current position
-    Move( currentEnd, &current );
+    Move( currentEnd, current );
 
     return true;
 }
