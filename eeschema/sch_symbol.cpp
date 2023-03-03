@@ -467,7 +467,25 @@ void SCH_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffse
 
     if( m_part )
     {
-        m_part->Print( aSettings, m_pos + aOffset, m_unit, m_convert, opts, GetDNP() );
+        LIB_PINS  libPins;
+        m_part->GetPins( libPins, m_unit, m_convert );
+
+        LIB_SYMBOL tempSymbol( *m_part );
+        LIB_PINS tempPins;
+        tempSymbol.GetPins( tempPins, m_unit, m_convert );
+
+        // Copy the pin info from the symbol to the temp pins
+        for( unsigned i = 0; i < tempPins.size(); ++ i )
+        {
+            SCH_PIN* symbolPin = GetPin( libPins[ i ] );
+            LIB_PIN* tempPin = tempPins[ i ];
+
+            tempPin->SetName( symbolPin->GetShownName() );
+            tempPin->SetType( symbolPin->GetType() );
+            tempPin->SetShape( symbolPin->GetShape() );
+        }
+
+        tempSymbol.Print( aSettings, m_pos + aOffset, m_unit, m_convert, opts, GetDNP() );
     }
     else    // Use dummy() part if the actual cannot be found.
     {
@@ -2165,7 +2183,7 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground ) const
             tempSymbol.Plot( aPlotter, GetUnit(), GetConvert(), local_background, m_pos, temp,
                              GetDNP() );
 
-            for( SCH_FIELD field : m_fields )
+            for( const SCH_FIELD& field : m_fields )
                 field.Plot( aPlotter, local_background );
         }
 
