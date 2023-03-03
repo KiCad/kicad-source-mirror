@@ -171,8 +171,16 @@ bool SEG::intersects( const SEG& aSeg, bool aIgnoreEndpoints, bool aLines, VECTO
 
     if( aPt )
     {
-        *aPt = VECTOR2I( aSeg.A.x + rescale( q, (ecoord) f.x, d ),
-                         aSeg.A.y + rescale( q, (ecoord) f.y, d ) );
+        VECTOR2<ecoord> result( aSeg.A.x + rescale( q, (ecoord) f.x, d ),
+                                aSeg.A.y + rescale( q, (ecoord) f.y, d ) );
+
+        if( abs( result.x ) >= std::numeric_limits<VECTOR2I::coord_type>::max()
+            || abs( result.y ) >= std::numeric_limits<VECTOR2I::coord_type>::max() )
+        {
+            return false;
+        }
+
+        *aPt = VECTOR2I( (int) result.x, (int) result.y );
     }
 
     return true;
@@ -273,10 +281,10 @@ const VECTOR2I SEG::NearestPoint( const VECTOR2I& aP ) const
     else if( t > l_squared )
         return B;
 
-    int xp = rescale( t, (ecoord) d.x, l_squared );
-    int yp = rescale( t, (ecoord) d.y, l_squared );
+    ecoord xp = rescale( t, (ecoord) d.x, l_squared );
+    ecoord yp = rescale( t, (ecoord) d.y, l_squared );
 
-    return A + VECTOR2I( xp, yp );
+    return VECTOR2<ecoord>( A.x + xp, A.y + yp );
 }
 
 
@@ -285,17 +293,19 @@ const VECTOR2I SEG::ReflectPoint( const VECTOR2I& aP ) const
     VECTOR2I                d = B - A;
     VECTOR2I::extended_type l_squared = d.Dot( d );
     VECTOR2I::extended_type t = d.Dot( aP - A );
-    VECTOR2I                c;
+    VECTOR2<ecoord>         c;
 
     if( !l_squared )
+    {
         c = aP;
+    }
     else
     {
         c.x = A.x + rescale( t, static_cast<VECTOR2I::extended_type>( d.x ), l_squared );
         c.y = A.y + rescale( t, static_cast<VECTOR2I::extended_type>( d.y ), l_squared );
     }
 
-    return 2 * c - aP;
+    return VECTOR2<ecoord>( 2 * c.x - aP.x, 2 * c.y - aP.y );
 }
 
 
@@ -309,10 +319,10 @@ VECTOR2I SEG::LineProject( const VECTOR2I& aP ) const
 
     ecoord t = d.Dot( aP - A );
 
-    int xp = rescale( t, ecoord{ d.x }, l_squared );
-    int yp = rescale( t, ecoord{ d.y }, l_squared );
+    ecoord xp = rescale( t, ecoord{ d.x }, l_squared );
+    ecoord yp = rescale( t, ecoord{ d.y }, l_squared );
 
-    return A + VECTOR2I( xp, yp );
+    return VECTOR2<ecoord>( A.x + xp, A.y + yp );
 }
 
 
