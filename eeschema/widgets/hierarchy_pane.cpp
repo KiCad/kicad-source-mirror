@@ -290,8 +290,11 @@ void HIERARCHY_PANE::onRightClick( wxTreeEvent& aEvent )
 
         if( dlg.ShowModal() == wxID_OK && dlg.GetValue() != itemData->m_SheetPath.GetPageNumber() )
         {
-            m_frame->SaveCopyInUndoList( itemData->m_SheetPath.LastScreen(),
-                                         itemData->m_SheetPath.Last(), UNDO_REDO::CHANGED, false );
+            SCH_SHEET_PATH parentPath = itemData->m_SheetPath;
+            parentPath.pop_back();
+
+            m_frame->SaveCopyInUndoList( parentPath.LastScreen(), itemData->m_SheetPath.Last(),
+                                         UNDO_REDO::CHANGED, false );
 
             itemData->m_SheetPath.SetPageNumber( dlg.GetValue() );
 
