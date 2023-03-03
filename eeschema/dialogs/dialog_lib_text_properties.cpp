@@ -164,6 +164,7 @@ bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataToWindow()
     {
         SYMBOL_EDITOR_SETTINGS* cfg = m_parent->GetSettings();
         auto* tools = m_parent->GetToolManager()->GetTool<SYMBOL_EDITOR_DRAWING_TOOLS>();
+        symbol = m_parent->GetCurSymbol();
 
         m_textSize.SetValue( schIUScale.MilsToIU( cfg->m_Defaults.text_size ) );
 
