@@ -34,7 +34,7 @@
 
 #include <wx/timer.h>
 
-class SIM_PLOT_FRAME;
+class SIMULATOR_FRAME;
 class SCH_SYMBOL;
 
 /**
@@ -43,7 +43,7 @@ class SCH_SYMBOL;
 class TUNER_SLIDER : public TUNER_SLIDER_BASE
 {
 public:
-    TUNER_SLIDER( SIM_PLOT_FRAME *aFrame, wxWindow* aParent, const SCH_SHEET_PATH& aSheetPath,
+    TUNER_SLIDER( SIMULATOR_FRAME *aFrame, wxWindow* aParent, const SCH_SHEET_PATH& aSheetPath,
                   SCH_SYMBOL* aSymbol );
 
     wxString GetSymbolRef() const
@@ -102,15 +102,15 @@ private:
     void onMinTextEnter( wxCommandEvent& event ) override;
 
 private:
-    KIID            m_symbol;
-    SCH_SHEET_PATH  m_sheetPath;
-    wxString        m_ref;
+    KIID             m_symbol;
+    SCH_SHEET_PATH   m_sheetPath;
+    wxString         m_ref;
 
-    SPICE_VALUE     m_min;
-    SPICE_VALUE     m_max;
-    SPICE_VALUE     m_value;
+    SPICE_VALUE      m_min;
+    SPICE_VALUE      m_max;
+    SPICE_VALUE      m_value;
 
-    SIM_PLOT_FRAME* m_frame;
+    SIMULATOR_FRAME* m_frame;
 };
 
 #endif /* TUNER_SLIDER_H */

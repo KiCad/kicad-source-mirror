@@ -42,7 +42,7 @@ enum SIM_TYPE
     ST_TRANSIENT
 };
 
-///< Possible plot types
+///< Possible trace types
 enum SIM_TRACE_TYPE
 {
     // Y axis

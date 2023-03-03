@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <sim/sim_notebook.h>
+#include "widgets/sim_notebook.h"
 
 
 SIM_NOTEBOOK::SIM_NOTEBOOK() :

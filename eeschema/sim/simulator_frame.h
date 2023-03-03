@@ -25,11 +25,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __SIM_PLOT_FRAME__
-#define __SIM_PLOT_FRAME__
+#ifndef SIMULATOR_FRAME_H
+#define SIMULATOR_FRAME_H
 
 
-#include <sim/sim_plot_frame_base.h>
+#include <sim/simulator_frame_base.h>
 #include <sim/sim_types.h>
 
 #include <kiway_player.h>
@@ -50,17 +50,36 @@ class NGSPICE_CIRCUIT_MODEL;
 
 #include <sim/sim_plot_panel.h>
 #include <sim/sim_panel_base.h>
-#include <sim/sim_notebook.h>
+#include "widgets/sim_notebook.h"
 
 class SIM_THREAD_REPORTER;
 class TUNER_SLIDER;
 
 
-class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
+/**
+ *
+ * The SIMULATOR_FRAME holds the main user-interface for running simulations.
+ *
+ * It contains a workbook with multiple tabs, each tab holding a SIM_PLOT_PANEL, a specific
+ * simulation command (.TRAN, .AC, etc.), and simulation settings (save all currents, etc.).
+ *
+ * Each plot can have multiple TRACEs.  While internally each TRACE can have multiple cursors,
+ * the GUI supports only two cursors (and a differential cursor) for each plot.
+ *
+ * TRACEs are identified by a signal (V(OUT), I(R2), etc.) and a type (SPT_VOLTAGE, SPT_AC_PHASE,
+ * etc.).
+ *
+ * The simulator outputs simple signals in a vector of the same name.  Complex signals (such as
+ * V(OUT) / V(IN)) are stored in vectors of the format "user%d".
+ *
+ */
+
+
+class SIMULATOR_FRAME : public SIMULATOR_FRAME_BASE
 {
 public:
-    SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent );
-    ~SIM_PLOT_FRAME();
+    SIMULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent );
+    ~SIMULATOR_FRAME();
 
     /**
      * Check and load the current netlist into the simulator.
@@ -71,7 +90,7 @@ public:
     void StartSimulation();
 
     /**
-     * Create a new plot panel for a given simulation type and adds it to the main notebook.
+     * Create a new plot tab for a given simulation type.
      *
      * @param aSimCommand is requested simulation command.
      * @param aSimOptions netlisting options
@@ -91,19 +110,19 @@ public:
     void SetUserDefinedSignals( const std::map<int, wxString>& aSignals );
 
     /**
-     * Add a voltage plot for a given net name.
+     * Add a voltage trace for a given net to the current plot.
      *
      * @param aNetName is the net name for which a voltage plot should be created.
      */
-    void AddVoltagePlot( const wxString& aNetName );
+    void AddVoltageTrace( const wxString& aNetName );
 
     /**
-     * Add a current plot for a particular device.
+     * Add a current trace for a given device to the current plot.
      *
      * @param aDeviceName is the device name (e.g. R1, C1).
      * @param aParam is the current type (e.g. I, Ic, Id).
      */
-    void AddCurrentPlot( const wxString& aDeviceName );
+    void AddCurrentTrace( const wxString& aDeviceName );
 
     /**
      * Get/Set the number of significant digits and the range for formatting a cursor value.
@@ -129,12 +148,8 @@ public:
 
     /**
      * Remove an existing tuner.
-     *
-     * @param aTuner is the tuner to be removed.
-     * @param aErase decides whether the tuner should be also removed from the tuners list.
-     * Otherwise it is removed only from the SIM_PLOT_FRAME pane.
      */
-    void RemoveTuner( TUNER_SLIDER* aTuner, bool aErase = true );
+    void RemoveTuner( TUNER_SLIDER* aTuner );
 
     /**
      * Safely update a field of the associated symbol without dereferencing
@@ -169,7 +184,7 @@ public:
     void UpdateMeasurement( int aRow );
 
     /**
-     * Return the currently opened plot panel (or NULL if there is none).
+     * Return the current tab (or NULL if there is none).
      */
     SIM_PLOT_PANEL* GetCurrentPlot() const;
 
@@ -179,7 +194,7 @@ public:
     const NGSPICE_CIRCUIT_MODEL* GetExporter() const;
 
     /**
-     * Toggle dark-mode of the plot.
+     * Toggle dark-mode of the plot tabs.
      */
     void ToggleDarkModePlots();
 
@@ -188,18 +203,12 @@ public:
     void ReCreateHToolbar();
 
     /**
-     * Load plot settings from a file.
-     *
-     * @param aPath is the file name.
-     * @return True if successful.
+     * Load plot, signal, cursor, measurement, etc. settings from a file.
      */
     bool LoadWorkbook( const wxString& aPath );
 
     /**
-     * Save plot settings to a file.
-     *
-     * @param aPath is the file name.
-     * @return True if successful.
+     * Save plot, signal, cursor, measurement, etc. settings to a file.
      */
     bool SaveWorkbook( const wxString& aPath );
 
@@ -231,7 +240,7 @@ public:
             return m_circuitModel->GetSimOptions();
     }
 
-    // Simulator doesn't host a tool framework
+    // Simulator doesn't host a canvas
     wxWindow* GetToolCanvas() const override { return nullptr; }
 
     void OnModify() override;
@@ -254,13 +263,12 @@ private:
     void updateTitle();
 
     /**
-     * Add a new plot to the current panel.
+     * Add a new trace to the current plot.
      *
      * @param aName is the device/net name.
-     * @param aType describes the type of plot.
-     * @param aParam is the parameter for the device/net (e.g. I, Id, V).
+     * @param aType describes the type of trace.
      */
-    void doAddPlot( const wxString& aName, SIM_TRACE_TYPE aType );
+    void doAddTrace( const wxString& aName, SIM_TRACE_TYPE aType );
 
     /**
      * Get the simulator output vector name for a given signal name and type.
@@ -400,4 +408,4 @@ wxDECLARE_EVENT( EVT_SIM_REPORT, wxCommandEvent );
 wxDECLARE_EVENT( EVT_SIM_STARTED, wxCommandEvent );
 wxDECLARE_EVENT( EVT_SIM_FINISHED, wxCommandEvent );
 
-#endif // __sim_plot_frame__
+#endif // SIMULATOR_FRAME_H

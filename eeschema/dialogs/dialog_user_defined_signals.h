@@ -27,7 +27,7 @@
 #include <dialog_user_defined_signals_base.h>
 
 
-class SIM_PLOT_FRAME;
+class SIMULATOR_FRAME;
 class SCINTILLA_TRICKS;
 class HTML_MESSAGE_BOX;
 
@@ -35,7 +35,7 @@ class HTML_MESSAGE_BOX;
 class DIALOG_USER_DEFINED_SIGNALS : public DIALOG_USER_DEFINED_SIGNALS_BASE
 {
 public:
-    DIALOG_USER_DEFINED_SIGNALS( SIM_PLOT_FRAME* parent, std::map<int, wxString>* aSignals );
+    DIALOG_USER_DEFINED_SIGNALS( SIMULATOR_FRAME* parent, std::map<int, wxString>* aSignals );
     ~DIALOG_USER_DEFINED_SIGNALS();
 
 private:
@@ -50,7 +50,7 @@ private:
     bool TransferDataFromWindow() override;
 
 private:
-    SIM_PLOT_FRAME*          m_frame;
+    SIMULATOR_FRAME*         m_frame;
     std::map<int, wxString>* m_signals;
 
     HTML_MESSAGE_BOX*        m_helpWindow;

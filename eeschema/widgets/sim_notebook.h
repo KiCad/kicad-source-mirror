@@ -25,9 +25,9 @@
 #ifndef SIM_NOTEBOOK_H
 #define SIM_NOTEBOOK_H
 
-#include <dialog_sim_command.h>
-#include <sim/sim_panel_base.h>
-#include <sim/sim_plot_panel.h>
+#include "dialogs/dialog_sim_command.h"
+#include "sim/sim_panel_base.h"
+#include "sim/sim_plot_panel.h"
 
 
 class SIM_NOTEBOOK : public wxAuiNotebook

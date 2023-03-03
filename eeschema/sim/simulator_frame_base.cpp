@@ -8,11 +8,11 @@
 #include "tool/action_toolbar.h"
 #include "widgets/wx_grid.h"
 
-#include "sim_plot_frame_base.h"
+#include "simulator_frame_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : KIWAY_PLAYER( parent, id, title, pos, size, style, name )
+SIMULATOR_FRAME_BASE::SIMULATOR_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : KIWAY_PLAYER( parent, id, title, pos, size, style, name )
 {
 	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 
@@ -25,7 +25,7 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 
 	m_splitterLeftRight = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_LIVE_UPDATE|wxBORDER_NONE );
 	m_splitterLeftRight->SetSashGravity( 0.7 );
-	m_splitterLeftRight->Connect( wxEVT_IDLE, wxIdleEventHandler( SIM_PLOT_FRAME_BASE::m_splitterLeftRightOnIdle ), NULL, this );
+	m_splitterLeftRight->Connect( wxEVT_IDLE, wxIdleEventHandler( SIMULATOR_FRAME_BASE::m_splitterLeftRightOnIdle ), NULL, this );
 	m_splitterLeftRight->SetMinimumPaneSize( 50 );
 
 	m_panelLeft = new wxPanel( m_splitterLeftRight, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -35,7 +35,7 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 
 	m_splitterPlotAndConsole = new wxSplitterWindow( m_panelLeft, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_LIVE_UPDATE );
 	m_splitterPlotAndConsole->SetSashGravity( 0.8 );
-	m_splitterPlotAndConsole->Connect( wxEVT_IDLE, wxIdleEventHandler( SIM_PLOT_FRAME_BASE::m_splitterPlotAndConsoleOnIdle ), NULL, this );
+	m_splitterPlotAndConsole->Connect( wxEVT_IDLE, wxIdleEventHandler( SIMULATOR_FRAME_BASE::m_splitterPlotAndConsoleOnIdle ), NULL, this );
 	m_splitterPlotAndConsole->SetMinimumPaneSize( 50 );
 
 	m_plotPanel = new wxPanel( m_splitterPlotAndConsole, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -44,7 +44,7 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_sizerPlot = new wxBoxSizer( wxHORIZONTAL );
 
 	m_plotNotebook = new SIM_NOTEBOOK( m_plotPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_CLOSE_ON_ALL_TABS|wxAUI_NB_MIDDLE_CLICK_CLOSE|wxAUI_NB_TAB_MOVE|wxAUI_NB_TOP );
-	m_plotNotebook->SetMinSize( wxSize( 200,-1 ) );
+	m_plotNotebook->SetMinSize( wxSize( 200,200 ) );
 
 
 	m_sizerPlot->Add( m_plotNotebook, 1, wxEXPAND, 5 );
@@ -82,7 +82,7 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 
 	m_splitterSignals = new wxSplitterWindow( m_sidePanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_LIVE_UPDATE );
 	m_splitterSignals->SetSashGravity( 0.5 );
-	m_splitterSignals->Connect( wxEVT_IDLE, wxIdleEventHandler( SIM_PLOT_FRAME_BASE::m_splitterSignalsOnIdle ), NULL, this );
+	m_splitterSignals->Connect( wxEVT_IDLE, wxIdleEventHandler( SIMULATOR_FRAME_BASE::m_splitterSignalsOnIdle ), NULL, this );
 	m_splitterSignals->SetMinimumPaneSize( 20 );
 
 	m_panelSignals = new wxPanel( m_splitterSignals, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -146,7 +146,7 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 
 	m_splitterCursors = new wxSplitterWindow( m_panelCMT, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_LIVE_UPDATE|wxBORDER_NONE );
 	m_splitterCursors->SetSashGravity( 0.2 );
-	m_splitterCursors->Connect( wxEVT_IDLE, wxIdleEventHandler( SIM_PLOT_FRAME_BASE::m_splitterCursorsOnIdle ), NULL, this );
+	m_splitterCursors->Connect( wxEVT_IDLE, wxIdleEventHandler( SIMULATOR_FRAME_BASE::m_splitterCursorsOnIdle ), NULL, this );
 	m_splitterCursors->SetMinimumPaneSize( 20 );
 
 	m_panelCursors = new wxPanel( m_splitterCursors, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -201,7 +201,7 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 
 	m_splitterMeasurements = new wxSplitterWindow( m_panelMT, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_LIVE_UPDATE|wxBORDER_NONE );
 	m_splitterMeasurements->SetSashGravity( 0.2 );
-	m_splitterMeasurements->Connect( wxEVT_IDLE, wxIdleEventHandler( SIM_PLOT_FRAME_BASE::m_splitterMeasurementsOnIdle ), NULL, this );
+	m_splitterMeasurements->Connect( wxEVT_IDLE, wxIdleEventHandler( SIMULATOR_FRAME_BASE::m_splitterMeasurementsOnIdle ), NULL, this );
 	m_splitterMeasurements->SetMinimumPaneSize( 20 );
 
 	m_panelMeasurements = new wxPanel( m_splitterMeasurements, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -282,32 +282,33 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 
 	this->SetSizer( m_sizerMain );
 	this->Layout();
+	m_sizerMain->Fit( this );
 
 	this->Centre( wxBOTH );
 
 	// Connect Events
-	m_plotNotebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_END_DRAG, wxAuiNotebookEventHandler( SIM_PLOT_FRAME_BASE::onPlotDragged ), NULL, this );
-	m_plotNotebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( SIM_PLOT_FRAME_BASE::onPlotChanged ), NULL, this );
-	m_plotNotebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, wxAuiNotebookEventHandler( SIM_PLOT_FRAME_BASE::onPlotClose ), NULL, this );
-	m_plotNotebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSED, wxAuiNotebookEventHandler( SIM_PLOT_FRAME_BASE::onPlotClosed ), NULL, this );
-	m_filter->Connect( wxEVT_MOTION, wxMouseEventHandler( SIM_PLOT_FRAME_BASE::OnFilterMouseMoved ), NULL, this );
-	m_filter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::OnFilterText ), NULL, this );
-	m_signalsGrid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( SIM_PLOT_FRAME_BASE::onSignalsGridCellChanged ), NULL, this );
-	m_cursorsGrid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( SIM_PLOT_FRAME_BASE::onCursorsGridCellChanged ), NULL, this );
-	m_measurementsGrid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( SIM_PLOT_FRAME_BASE::onMeasurementsGridCellChanged ), NULL, this );
+	m_plotNotebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_END_DRAG, wxAuiNotebookEventHandler( SIMULATOR_FRAME_BASE::onPlotDragged ), NULL, this );
+	m_plotNotebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( SIMULATOR_FRAME_BASE::onPlotChanged ), NULL, this );
+	m_plotNotebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, wxAuiNotebookEventHandler( SIMULATOR_FRAME_BASE::onPlotClose ), NULL, this );
+	m_plotNotebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSED, wxAuiNotebookEventHandler( SIMULATOR_FRAME_BASE::onPlotClosed ), NULL, this );
+	m_filter->Connect( wxEVT_MOTION, wxMouseEventHandler( SIMULATOR_FRAME_BASE::OnFilterMouseMoved ), NULL, this );
+	m_filter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( SIMULATOR_FRAME_BASE::OnFilterText ), NULL, this );
+	m_signalsGrid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( SIMULATOR_FRAME_BASE::onSignalsGridCellChanged ), NULL, this );
+	m_cursorsGrid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( SIMULATOR_FRAME_BASE::onCursorsGridCellChanged ), NULL, this );
+	m_measurementsGrid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( SIMULATOR_FRAME_BASE::onMeasurementsGridCellChanged ), NULL, this );
 }
 
-SIM_PLOT_FRAME_BASE::~SIM_PLOT_FRAME_BASE()
+SIMULATOR_FRAME_BASE::~SIMULATOR_FRAME_BASE()
 {
 	// Disconnect Events
-	m_plotNotebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_END_DRAG, wxAuiNotebookEventHandler( SIM_PLOT_FRAME_BASE::onPlotDragged ), NULL, this );
-	m_plotNotebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( SIM_PLOT_FRAME_BASE::onPlotChanged ), NULL, this );
-	m_plotNotebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, wxAuiNotebookEventHandler( SIM_PLOT_FRAME_BASE::onPlotClose ), NULL, this );
-	m_plotNotebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSED, wxAuiNotebookEventHandler( SIM_PLOT_FRAME_BASE::onPlotClosed ), NULL, this );
-	m_filter->Disconnect( wxEVT_MOTION, wxMouseEventHandler( SIM_PLOT_FRAME_BASE::OnFilterMouseMoved ), NULL, this );
-	m_filter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::OnFilterText ), NULL, this );
-	m_signalsGrid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( SIM_PLOT_FRAME_BASE::onSignalsGridCellChanged ), NULL, this );
-	m_cursorsGrid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( SIM_PLOT_FRAME_BASE::onCursorsGridCellChanged ), NULL, this );
-	m_measurementsGrid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( SIM_PLOT_FRAME_BASE::onMeasurementsGridCellChanged ), NULL, this );
+	m_plotNotebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_END_DRAG, wxAuiNotebookEventHandler( SIMULATOR_FRAME_BASE::onPlotDragged ), NULL, this );
+	m_plotNotebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( SIMULATOR_FRAME_BASE::onPlotChanged ), NULL, this );
+	m_plotNotebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, wxAuiNotebookEventHandler( SIMULATOR_FRAME_BASE::onPlotClose ), NULL, this );
+	m_plotNotebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSED, wxAuiNotebookEventHandler( SIMULATOR_FRAME_BASE::onPlotClosed ), NULL, this );
+	m_filter->Disconnect( wxEVT_MOTION, wxMouseEventHandler( SIMULATOR_FRAME_BASE::OnFilterMouseMoved ), NULL, this );
+	m_filter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( SIMULATOR_FRAME_BASE::OnFilterText ), NULL, this );
+	m_signalsGrid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( SIMULATOR_FRAME_BASE::onSignalsGridCellChanged ), NULL, this );
+	m_cursorsGrid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( SIMULATOR_FRAME_BASE::onCursorsGridCellChanged ), NULL, this );
+	m_measurementsGrid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( SIMULATOR_FRAME_BASE::onMeasurementsGridCellChanged ), NULL, this );
 
 }

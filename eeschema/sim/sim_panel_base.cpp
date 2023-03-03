@@ -26,7 +26,7 @@
 #include "confirm.h"
 #include "sim_panel_base.h"
 
-#include "sim_plot_frame.h"
+#include "simulator_frame.h"
 #include "ngspice_circuit_model.h"
 
 
@@ -82,9 +82,8 @@ SIM_NOPLOT_PANEL::SIM_NOPLOT_PANEL( const wxString& aCommand, int aOptions, wxWi
     m_sizer->Add( 0, 1, 1, wxEXPAND, 5 );
 
     m_textInfo = new wxStaticText( dynamic_cast<wxWindow*>( this ), wxID_ANY, "", wxDefaultPosition,
-            wxDefaultSize, wxALL | wxEXPAND | wxALIGN_CENTER_HORIZONTAL );
-    m_textInfo->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT,
-            wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+                                   wxDefaultSize, wxALL | wxEXPAND | wxALIGN_CENTER_HORIZONTAL );
+    m_textInfo->SetFont( KIUI::GetControlFont( this ).Bold() );
     m_textInfo->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
     m_textInfo->SetLabel( _( "Simulation provided no plots. Please refer to console window "
                              "for results." ) );

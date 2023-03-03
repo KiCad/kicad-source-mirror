@@ -34,6 +34,13 @@
 #include "libeval/numeric_evaluator.h"
 
 
+/**
+ *
+ * wxPropertyGrid property specializations for simulator.
+ *
+ */
+
+
 class SIM_VALIDATOR : public wxValidator
 {
 private:

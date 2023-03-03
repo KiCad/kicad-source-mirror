@@ -25,7 +25,7 @@
  */
 
 
-#include <sim/sim_plot_frame.h>
+#include <sim/simulator_frame.h>
 #include <sch_symbol.h>
 #include <template_fieldnames.h>
 #include <widgets/bitmap_button.h>
@@ -38,7 +38,7 @@
 #include "tuner_slider.h"
 #include "core/kicad_algo.h"
 
-TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent,
+TUNER_SLIDER::TUNER_SLIDER( SIMULATOR_FRAME* aFrame, wxWindow* aParent,
                             const SCH_SHEET_PATH& aSheetPath, SCH_SYMBOL* aSymbol ) :
         TUNER_SLIDER_BASE( aParent ),
         m_symbol( aSymbol->m_Uuid ),

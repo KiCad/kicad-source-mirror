@@ -36,9 +36,28 @@
 #include "sim_panel_base.h"
 #include "sim_plot_colors.h"
 
-class SIM_PLOT_FRAME;
+class SIMULATOR_FRAME;
 class SIM_PLOT_PANEL;
 class TRACE;
+
+/**
+ *
+ * The SIMULATOR_FRAME holds the main user-interface for running simulations.
+ *
+ * It contains a workbook with multiple tabs, each tab holding a SIM_PLOT_PANEL, a specific
+ * simulation command (.TRAN, .AC, etc.), and simulation settings (save all currents, etc.).
+ *
+ * Each plot can have multiple TRACEs.  While internally each TRACE can have multiple cursors,
+ * the GUI supports only two cursors (and a differential cursor) for each plot.
+ *
+ * TRACEs are identified by a signal (V(OUT), I(R2), etc.) and a type (SPT_VOLTAGE, SPT_AC_PHASE,
+ * etc.).
+ *
+ * The simulator outputs simple signals in a vector of the same name.  Complex signals (such as
+ * V(OUT) / V(IN)) are stored in vectors of the format "user%d".
+ *
+ */
+
 
 ///< Cursor attached to a trace to follow its values:
 class CURSOR : public mpInfoLayer
@@ -106,8 +125,8 @@ class TRACE : public mpFXYVector
 {
 public:
     TRACE( const wxString& aName, SIM_TRACE_TYPE aType ) :
-            mpFXYVector( aName ),
-            m_type( aType )
+           mpFXYVector( aName ),
+           m_type( aType )
     {
         SetContinuity( true );
         SetDrawOutsideMargins( false );
@@ -272,10 +291,7 @@ public:
     void OnLanguageChanged() override;
 
     ///< Getter for math plot window
-    mpWindow* GetPlotWin() const
-    {
-        return m_plotWin;
-    }
+    mpWindow* GetPlotWin() const { return m_plotWin; }
 
     TRACE* AddTrace( const wxString& aVectorName, int aType );
 

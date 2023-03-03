@@ -54,7 +54,7 @@
 #include <sch_view.h>
 #include <schematic.h>
 #include <advanced_config.h>
-#include <sim/sim_plot_frame.h>
+#include <sim/simulator_frame.h>
 #include <sim/spice_generator.h>
 #include <sim/sim_lib_mgr.h>
 #include "symbol_library_manager.h"
@@ -510,8 +510,8 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 {
-    PICKER_TOOL*    picker = m_toolMgr->GetTool<PICKER_TOOL>();
-    SIM_PLOT_FRAME* simFrame = (SIM_PLOT_FRAME*) m_frame->Kiway().Player( FRAME_SIMULATOR, false );
+    PICKER_TOOL*     picker = m_toolMgr->GetTool<PICKER_TOOL>();
+    SIMULATOR_FRAME* simFrame = (SIMULATOR_FRAME*) m_frame->Kiway().Player( FRAME_SIMULATOR, false );
 
     if( !simFrame )     // Defensive coding; shouldn't happen.
         return 0;
@@ -552,25 +552,26 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                             THROW_IO_ERROR( msg );
 
                         SPICE_ITEM spiceItem;
-                        spiceItem.refName = std::string( symbol->GetRef( &sheet ).ToUTF8() );
+                        spiceItem.refName = symbol->GetRef( &sheet ).ToStdString();
                         std::vector<std::string> currentNames =
                                 model.SpiceGenerator().CurrentNames( spiceItem );
 
                         if( currentNames.size() == 0 )
+                        {
                             return true;
+                        }
                         else if( currentNames.size() == 1 )
                         {
-                            simFrame->AddCurrentPlot( currentNames.at( 0 ) );
+                            simFrame->AddCurrentTrace( currentNames.at( 0 ) );
                             return true;
                         }
 
-                        int modelPinIndex =
-                                model.FindModelPinIndex( std::string( pin->GetNumber().ToUTF8() ) );
+                        int modelPinIndex = model.FindModelPinIndex( pin->GetNumber().ToStdString() );
 
                         if( modelPinIndex != SIM_MODEL::PIN::NOT_CONNECTED )
                         {
                             wxString name = currentNames.at( modelPinIndex );
-                            simFrame->AddCurrentPlot( name );
+                            simFrame->AddCurrentTrace( name );
                         }
                     }
                     catch( const IO_ERROR& e )
@@ -583,10 +584,10 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                 {
                     if( SCH_CONNECTION* conn = static_cast<SCH_ITEM*>( item )->Connection() )
                     {
-                        std::string spiceNet = std::string( UnescapeString( conn->Name() ).ToUTF8() );
+                        std::string spiceNet = UnescapeString( conn->Name() ).ToStdString();
                         NETLIST_EXPORTER_SPICE::ConvertToSpiceMarkup( spiceNet );
 
-                        simFrame->AddVoltagePlot( wxString::Format( "V(%s)", spiceNet ) );
+                        simFrame->AddVoltageTrace( wxString::Format( "V(%s)", spiceNet ) );
                     }
                 }
 
@@ -702,7 +703,7 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
                     if( wxWindow* blocking_win = simFrame->Kiway().GetBlockingDialog() )
                         blocking_win->Close( true );
 
-                    static_cast<SIM_PLOT_FRAME*>( simFrame )->AddTuner( sheetPath, symbol );
+                    static_cast<SIMULATOR_FRAME*>( simFrame )->AddTuner( sheetPath, symbol );
                 }
 
                 // We do not really want to keep a symbol selected in schematic,

@@ -35,9 +35,9 @@ class WX_GRID;
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class SIM_PLOT_FRAME_BASE
+/// Class SIMULATOR_FRAME_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
+class SIMULATOR_FRAME_BASE : public KIWAY_PLAYER
 {
 	private:
 
@@ -85,38 +85,38 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 
 	public:
 
-		SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Spice Simulator"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 564,531 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL, const wxString& name = wxT("SIM_PLOT_FRAME") );
+		SIMULATOR_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Spice Simulator"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL, const wxString& name = wxT("SIM_PLOT_FRAME") );
 
-		~SIM_PLOT_FRAME_BASE();
+		~SIMULATOR_FRAME_BASE();
 
 		void m_splitterLeftRightOnIdle( wxIdleEvent& )
 		{
 			m_splitterLeftRight->SetSashPosition( 700 );
-			m_splitterLeftRight->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIM_PLOT_FRAME_BASE::m_splitterLeftRightOnIdle ), NULL, this );
+			m_splitterLeftRight->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIMULATOR_FRAME_BASE::m_splitterLeftRightOnIdle ), NULL, this );
 		}
 
 		void m_splitterPlotAndConsoleOnIdle( wxIdleEvent& )
 		{
 			m_splitterPlotAndConsole->SetSashPosition( 500 );
-			m_splitterPlotAndConsole->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIM_PLOT_FRAME_BASE::m_splitterPlotAndConsoleOnIdle ), NULL, this );
+			m_splitterPlotAndConsole->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIMULATOR_FRAME_BASE::m_splitterPlotAndConsoleOnIdle ), NULL, this );
 		}
 
 		void m_splitterSignalsOnIdle( wxIdleEvent& )
 		{
 			m_splitterSignals->SetSashPosition( 0 );
-			m_splitterSignals->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIM_PLOT_FRAME_BASE::m_splitterSignalsOnIdle ), NULL, this );
+			m_splitterSignals->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIMULATOR_FRAME_BASE::m_splitterSignalsOnIdle ), NULL, this );
 		}
 
 		void m_splitterCursorsOnIdle( wxIdleEvent& )
 		{
 			m_splitterCursors->SetSashPosition( 0 );
-			m_splitterCursors->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIM_PLOT_FRAME_BASE::m_splitterCursorsOnIdle ), NULL, this );
+			m_splitterCursors->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIMULATOR_FRAME_BASE::m_splitterCursorsOnIdle ), NULL, this );
 		}
 
 		void m_splitterMeasurementsOnIdle( wxIdleEvent& )
 		{
 			m_splitterMeasurements->SetSashPosition( 0 );
-			m_splitterMeasurements->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIM_PLOT_FRAME_BASE::m_splitterMeasurementsOnIdle ), NULL, this );
+			m_splitterMeasurements->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIMULATOR_FRAME_BASE::m_splitterMeasurementsOnIdle ), NULL, this );
 		}
 
 };

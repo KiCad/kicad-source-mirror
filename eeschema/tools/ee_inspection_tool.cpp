@@ -32,7 +32,7 @@
 #include <tools/ee_inspection_tool.h>
 #include <tools/ee_selection_tool.h>
 #include <tools/ee_selection.h>
-#include <sim/sim_plot_frame.h>
+#include <sim/simulator_frame.h>
 #include <sch_edit_frame.h>
 #include <symbol_edit_frame.h>
 #include <symbol_viewer_frame.h>
@@ -238,7 +238,7 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
 int EE_INSPECTION_TOOL::RunSimulation( const TOOL_EVENT& aEvent )
 {
 #ifdef KICAD_SPICE
-    SIM_PLOT_FRAME* simFrame = (SIM_PLOT_FRAME*) m_frame->Kiway().Player( FRAME_SIMULATOR, true );
+    SIMULATOR_FRAME* simFrame = (SIMULATOR_FRAME*) m_frame->Kiway().Player( FRAME_SIMULATOR, true );
 
     if( !simFrame )
         return -1;

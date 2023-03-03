@@ -54,7 +54,7 @@
 #include <schematic.h>
 #include <settings/settings_manager.h>
 #include <advanced_config.h>
-#include <sim/sim_plot_frame.h>
+#include <sim/simulator_frame.h>
 #include <sim/spice_settings.h>
 #include <tool/action_manager.h>
 #include <tool/action_toolbar.h>

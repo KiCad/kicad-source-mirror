@@ -59,7 +59,7 @@
 #include <dialogs/panel_gal_display_options.h>
 #include <panel_eeschema_display_options.h>
 #include <panel_sym_display_options.h>
-#include <sim/sim_plot_frame.h>
+#include <sim/simulator_frame.h>
 
 #include <wx/crt.h>
 
@@ -172,7 +172,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 #ifdef KICAD_SPICE
         case FRAME_SIMULATOR:
         {
-            SIM_PLOT_FRAME* frame = new SIM_PLOT_FRAME( aKiway, aParent );
+            SIMULATOR_FRAME* frame = new SIMULATOR_FRAME( aKiway, aParent );
             return frame;
         }
 #endif

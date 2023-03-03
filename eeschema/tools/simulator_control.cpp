@@ -31,7 +31,7 @@
 #include <wildcards_and_files_ext.h>
 #include <project/project_file.h>
 #include <sch_edit_frame.h>
-#include <sim/sim_plot_frame.h>
+#include <sim/simulator_frame.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
 #include <tools/simulator_control.h>
@@ -48,13 +48,13 @@ bool SIMULATOR_CONTROL::Init()
 
 void SIMULATOR_CONTROL::Reset( RESET_REASON aReason )
 {
-    m_plotFrame = getEditFrame<SIM_PLOT_FRAME>();
+    m_simulatorFrame = getEditFrame<SIMULATOR_FRAME>();
 
-    if( m_plotFrame )
+    if( m_simulatorFrame )
     {
-        m_schematicFrame = m_plotFrame->GetSchematicFrame();
-        m_circuitModel = m_plotFrame->GetCircuitModel();
-        m_simulator = m_plotFrame->GetSimulator();
+        m_schematicFrame = m_simulatorFrame->GetSchematicFrame();
+        m_circuitModel = m_simulatorFrame->GetCircuitModel();
+        m_simulator = m_simulatorFrame->GetSimulator();
     }
 }
 
@@ -64,7 +64,10 @@ int SIMULATOR_CONTROL::NewPlot( const TOOL_EVENT& aEvent )
     SIM_TYPE type = m_circuitModel->GetSimType();
 
     if( SIM_PANEL_BASE::IsPlottable( type ) )
-        m_plotFrame->NewPlotPanel( m_circuitModel->GetSimCommand(), m_circuitModel->GetSimOptions() );
+    {
+        m_simulatorFrame->NewPlotPanel( m_circuitModel->GetSimCommand(),
+                                        m_circuitModel->GetSimOptions() );
+    }
 
     return 0;
 }
@@ -72,13 +75,13 @@ int SIMULATOR_CONTROL::NewPlot( const TOOL_EVENT& aEvent )
 
 int SIMULATOR_CONTROL::OpenWorkbook( const TOOL_EVENT& aEvent )
 {
-    wxFileDialog openDlg( m_plotFrame, _( "Open simulation workbook" ), getDefaultPath(), "",
+    wxFileDialog openDlg( m_simulatorFrame, _( "Open simulation workbook" ), getDefaultPath(), "",
                           WorkbookFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( openDlg.ShowModal() == wxID_CANCEL )
         return -1;
 
-    m_plotFrame->LoadWorkbook( openDlg.GetPath() );
+    m_simulatorFrame->LoadWorkbook( openDlg.GetPath() );
     return 0;
 }
 
@@ -89,14 +92,14 @@ wxString SIMULATOR_CONTROL::getDefaultFilename()
 
     if( filename.GetName().IsEmpty() )
     {
-        if( m_plotFrame->Prj().GetProjectName().IsEmpty() )
+        if( m_simulatorFrame->Prj().GetProjectName().IsEmpty() )
         {
             filename.SetName( _( "noname" ) );
             filename.SetExt( WorkbookFileExtension );
         }
         else
         {
-            filename.SetName( m_plotFrame->Prj().GetProjectName() );
+            filename.SetName( m_simulatorFrame->Prj().GetProjectName() );
             filename.SetExt( WorkbookFileExtension );
         }
     }
@@ -109,7 +112,8 @@ wxString SIMULATOR_CONTROL::getDefaultPath()
 {
     wxFileName path = m_simulator->Settings()->GetWorkbookFilename();
 
-    path.Normalize( FN_NORMALIZE_FLAGS|wxPATH_NORM_ENV_VARS, m_plotFrame->Prj().GetProjectPath() );
+    path.Normalize( FN_NORMALIZE_FLAGS|wxPATH_NORM_ENV_VARS,
+                    m_simulatorFrame->Prj().GetProjectPath() );
     return path.GetPath();
 }
 
@@ -123,8 +127,8 @@ int SIMULATOR_CONTROL::SaveWorkbook( const TOOL_EVENT& aEvent )
 
     if( filename.IsEmpty() )
     {
-        wxFileDialog saveAsDlg( m_plotFrame, _( "Save Simulation Workbook As" ), getDefaultPath(),
-                                getDefaultFilename(), WorkbookFileWildcard(),
+        wxFileDialog saveAsDlg( m_simulatorFrame, _( "Save Simulation Workbook As" ),
+                                getDefaultPath(), getDefaultFilename(), WorkbookFileWildcard(),
                                 wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
         if( saveAsDlg.ShowModal() == wxID_CANCEL )
@@ -133,24 +137,24 @@ int SIMULATOR_CONTROL::SaveWorkbook( const TOOL_EVENT& aEvent )
         filename = saveAsDlg.GetPath();
     }
 
-    m_plotFrame->SaveWorkbook( m_plotFrame->Prj().AbsolutePath( filename ) );
+    m_simulatorFrame->SaveWorkbook( m_simulatorFrame->Prj().AbsolutePath( filename ) );
     return 0;
 }
 
 
 int SIMULATOR_CONTROL::ExportPlotAsPNG( const TOOL_EVENT& aEvent )
 {
-    if( !m_plotFrame->GetCurrentPlot() )
+    if( !m_simulatorFrame->GetCurrentPlot() )
         return -1;
 
-    wxFileDialog saveDlg( m_plotFrame, _( "Save Plot as Image" ), "", "", PngFileWildcard(),
+    wxFileDialog saveDlg( m_simulatorFrame, _( "Save Plot as Image" ), "", "", PngFileWildcard(),
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( saveDlg.ShowModal() == wxID_CANCEL )
         return -1;
 
-    m_plotFrame->GetCurrentPlot()->GetPlotWin()->SaveScreenshot( saveDlg.GetPath(),
-                                                                 wxBITMAP_TYPE_PNG );
+    m_simulatorFrame->GetCurrentPlot()->GetPlotWin()->SaveScreenshot( saveDlg.GetPath(),
+                                                                      wxBITMAP_TYPE_PNG );
 
     return 0;
 }
@@ -158,12 +162,12 @@ int SIMULATOR_CONTROL::ExportPlotAsPNG( const TOOL_EVENT& aEvent )
 
 int SIMULATOR_CONTROL::ExportPlotAsCSV( const TOOL_EVENT& aEvent )
 {
-    if( !m_plotFrame->GetCurrentPlot() )
+    if( !m_simulatorFrame->GetCurrentPlot() )
         return -1;
 
     const wxChar SEPARATOR = ';';
 
-    wxFileDialog saveDlg( m_plotFrame, _( "Save Plot Data" ), "", "", CsvFileWildcard(),
+    wxFileDialog saveDlg( m_simulatorFrame, _( "Save Plot Data" ), "", "", CsvFileWildcard(),
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( saveDlg.ShowModal() == wxID_CANCEL )
@@ -171,7 +175,7 @@ int SIMULATOR_CONTROL::ExportPlotAsCSV( const TOOL_EVENT& aEvent )
 
     wxFFile out( saveDlg.GetPath(), "wb" );
 
-    std::map<wxString, TRACE*> traces = m_plotFrame->GetCurrentPlot()->GetTraces();
+    std::map<wxString, TRACE*> traces = m_simulatorFrame->GetCurrentPlot()->GetTraces();
 
     if( traces.size() == 0 )
         return -1;
@@ -211,21 +215,21 @@ int SIMULATOR_CONTROL::ExportPlotAsCSV( const TOOL_EVENT& aEvent )
 
 int SIMULATOR_CONTROL::Close( const TOOL_EVENT& aEvent )
 {
-    m_plotFrame->Close();
+    m_simulatorFrame->Close();
     return 0;
 }
 
 
 int SIMULATOR_CONTROL::Zoom( const TOOL_EVENT& aEvent )
 {
-    if( m_plotFrame->GetCurrentPlot() )
+    if( m_simulatorFrame->GetCurrentPlot() )
     {
         if( aEvent.IsAction( &ACTIONS::zoomInCenter ) )
-            m_plotFrame->GetCurrentPlot()->GetPlotWin()->ZoomIn();
+            m_simulatorFrame->GetCurrentPlot()->GetPlotWin()->ZoomIn();
         else if( aEvent.IsAction( &ACTIONS::zoomOutCenter ) )
-            m_plotFrame->GetCurrentPlot()->GetPlotWin()->ZoomOut();
+            m_simulatorFrame->GetCurrentPlot()->GetPlotWin()->ZoomOut();
         else if( aEvent.IsAction( &ACTIONS::zoomFitScreen ) )
-            m_plotFrame->GetCurrentPlot()->GetPlotWin()->Fit();
+            m_simulatorFrame->GetCurrentPlot()->GetPlotWin()->Fit();
     }
 
     return 0;
@@ -234,12 +238,12 @@ int SIMULATOR_CONTROL::Zoom( const TOOL_EVENT& aEvent )
 
 int SIMULATOR_CONTROL::ToggleGrid( const TOOL_EVENT& aEvent )
 {
-    SIM_PLOT_PANEL* plot = m_plotFrame->GetCurrentPlot();
+    SIM_PLOT_PANEL* plot = m_simulatorFrame->GetCurrentPlot();
 
     if( plot )
     {
         plot->ShowGrid( !plot->IsGridShown() );
-        m_plotFrame->OnModify();
+        m_simulatorFrame->OnModify();
     }
 
     return 0;
@@ -248,12 +252,12 @@ int SIMULATOR_CONTROL::ToggleGrid( const TOOL_EVENT& aEvent )
 
 int SIMULATOR_CONTROL::ToggleLegend( const TOOL_EVENT& aEvent )
 {
-    SIM_PLOT_PANEL* plot = m_plotFrame->GetCurrentPlot();
+    SIM_PLOT_PANEL* plot = m_simulatorFrame->GetCurrentPlot();
 
     if( plot )
     {
         plot->ShowLegend( !plot->IsLegendShown() );
-        m_plotFrame->OnModify();
+        m_simulatorFrame->OnModify();
     }
 
     return 0;
@@ -262,12 +266,12 @@ int SIMULATOR_CONTROL::ToggleLegend( const TOOL_EVENT& aEvent )
 
 int SIMULATOR_CONTROL::ToggleDottedSecondary( const TOOL_EVENT& aEvent )
 {
-    SIM_PLOT_PANEL* plot = m_plotFrame->GetCurrentPlot();
+    SIM_PLOT_PANEL* plot = m_simulatorFrame->GetCurrentPlot();
 
     if( plot )
     {
         plot->SetDottedSecondary( !plot->GetDottedSecondary() );
-        m_plotFrame->OnModify();
+        m_simulatorFrame->OnModify();
     }
 
     return 0;
@@ -276,14 +280,14 @@ int SIMULATOR_CONTROL::ToggleDottedSecondary( const TOOL_EVENT& aEvent )
 
 int SIMULATOR_CONTROL::ToggleDarkModePlots( const TOOL_EVENT& aEvent )
 {
-    m_plotFrame->ToggleDarkModePlots();
+    m_simulatorFrame->ToggleDarkModePlots();
     return 0;
 }
 
 
 int SIMULATOR_CONTROL::EditSimCommand( const TOOL_EVENT& aEvent )
 {
-    m_plotFrame->EditSimCommand();
+    m_simulatorFrame->EditSimCommand();
     return 0;
 }
 
@@ -293,7 +297,7 @@ int SIMULATOR_CONTROL::RunSimulation( const TOOL_EVENT& aEvent )
     if( m_simulator->IsRunning() )
         m_simulator->Stop();
     else
-        m_plotFrame->StartSimulation();
+        m_simulatorFrame->StartSimulation();
 
     return 0;
 }
@@ -389,12 +393,12 @@ public:
 
 int SIMULATOR_CONTROL::EditUserDefinedSignals( const TOOL_EVENT& aEvent )
 {
-    std::map<int, wxString> userSignals = m_plotFrame->UserDefinedSignals();
+    std::map<int, wxString> userSignals = m_simulatorFrame->UserDefinedSignals();
 
-    DIALOG_USER_DEFINED_SIGNALS dlg( m_plotFrame, &userSignals );
+    DIALOG_USER_DEFINED_SIGNALS dlg( m_simulatorFrame, &userSignals );
 
     if( dlg.ShowQuasiModal() == wxID_OK )
-        m_plotFrame->SetUserDefinedSignals( userSignals );
+        m_simulatorFrame->SetUserDefinedSignals( userSignals );
 
     return 0;
 }
@@ -409,10 +413,10 @@ int SIMULATOR_CONTROL::ShowNetlist( const TOOL_EVENT& aEvent )
     WX_STRING_REPORTER reporter( &errors );
     STRING_FORMATTER   formatter;
 
-    m_circuitModel->SetSimOptions( m_plotFrame->GetCurrentOptions() );
+    m_circuitModel->SetSimOptions( m_simulatorFrame->GetCurrentOptions() );
     m_circuitModel->GetNetlist( &formatter, reporter );
 
-    NETLIST_VIEW_DIALOG dlg( m_plotFrame, errors.IsEmpty() ? wxString( formatter.GetString() ) : errors );
+    NETLIST_VIEW_DIALOG dlg( m_simulatorFrame, errors.IsEmpty() ? wxString( formatter.GetString() ) : errors );
     dlg.ShowModal();
 
     return 0;

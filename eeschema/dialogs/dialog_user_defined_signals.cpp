@@ -26,11 +26,11 @@
 #include <widgets/grid_text_helpers.h>
 #include <grid_tricks.h>
 #include <dialogs/html_message_box.h>
-#include <../sim/sim_plot_frame.h>
+#include <../sim/simulator_frame.h>
 #include <dialog_user_defined_signals.h>
 
 
-DIALOG_USER_DEFINED_SIGNALS::DIALOG_USER_DEFINED_SIGNALS( SIM_PLOT_FRAME* aParent,
+DIALOG_USER_DEFINED_SIGNALS::DIALOG_USER_DEFINED_SIGNALS( SIMULATOR_FRAME* aParent,
                                                           std::map<int, wxString>* aSignals ) :
         DIALOG_USER_DEFINED_SIGNALS_BASE( aParent ),
         m_frame( aParent ),

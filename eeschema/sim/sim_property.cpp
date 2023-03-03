@@ -31,6 +31,13 @@
 #include <ki_exception.h>
 
 
+/**
+ *
+ * wxPropertyGrid property specializations for simulator.
+ *
+ */
+
+
 SIM_PROPERTY::SIM_PROPERTY( SIM_MODEL& aModel, int aParamIndex ) :
         m_model( aModel ),
         m_paramIndex( aParamIndex ),

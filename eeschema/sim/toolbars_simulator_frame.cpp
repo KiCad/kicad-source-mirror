@@ -18,7 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <sim/sim_plot_frame.h>
+#include <sim/simulator_frame.h>
 #include <tool/action_menu.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
@@ -28,7 +28,7 @@
 #include "menus_helpers.h"
 
 
-void SIM_PLOT_FRAME::ReCreateHToolbar()
+void SIMULATOR_FRAME::ReCreateHToolbar()
 {
     if( m_toolBar )
     {
@@ -72,7 +72,7 @@ void SIM_PLOT_FRAME::ReCreateHToolbar()
 }
 
 
-void SIM_PLOT_FRAME::doReCreateMenuBar()
+void SIMULATOR_FRAME::doReCreateMenuBar()
 {
     COMMON_CONTROL* tool = m_toolManager->GetTool<COMMON_CONTROL>();
     EDA_BASE_FRAME* base_frame = dynamic_cast<EDA_BASE_FRAME*>( this );

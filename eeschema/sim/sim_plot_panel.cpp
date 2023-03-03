@@ -27,7 +27,7 @@
 
 #include "sim_plot_colors.h"
 #include "sim_plot_panel.h"
-#include "sim_plot_frame.h"
+#include "simulator_frame.h"
 #include "core/kicad_algo.h"
 
 #include <algorithm>

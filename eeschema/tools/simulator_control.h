@@ -27,7 +27,7 @@
 
 #include <tool/tool_interactive.h>
 
-class SIM_PLOT_FRAME;
+class SIMULATOR_FRAME;
 class NGSPICE_CIRCUIT_MODEL;
 class SPICE_SIMULATOR;
 
@@ -39,8 +39,7 @@ class SIMULATOR_CONTROL : public wxEvtHandler, public TOOL_INTERACTIVE
 {
 public:
     SIMULATOR_CONTROL() :
-            TOOL_INTERACTIVE( "eeschema.SimulatorControl" ),
-            m_plotFrame( nullptr ),
+            TOOL_INTERACTIVE( "eeschema.SimulatorControl" ), m_simulatorFrame( nullptr ),
             m_schematicFrame( nullptr )
     { }
 
@@ -88,7 +87,7 @@ private:
     void setTransitions() override;
 
 private:
-    SIM_PLOT_FRAME*                        m_plotFrame;
+    SIMULATOR_FRAME*                       m_simulatorFrame;
     SCH_EDIT_FRAME*                        m_schematicFrame;
     std::shared_ptr<NGSPICE_CIRCUIT_MODEL> m_circuitModel;
     std::shared_ptr<SPICE_SIMULATOR>       m_simulator;
