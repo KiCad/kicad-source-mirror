@@ -87,8 +87,19 @@ public:
     template <typename CastingType>
     VECTOR2( const VECTOR2<CastingType>& aVec )
     {
-        x = (T) aVec.x;
-        y = (T) aVec.y;
+        if( std::is_same<T, int>::value )
+        {
+            CastingType minI = static_cast<CastingType>( std::numeric_limits<int>::min() );
+            CastingType maxI = static_cast<CastingType>( std::numeric_limits<int>::max() );
+
+            x = static_cast<int>( std::max( minI, std::min( aVec.x, maxI ) ) );
+            y = static_cast<int>( std::max( minI, std::min( aVec.y, maxI ) ) );
+        }
+        else
+        {
+            x = static_cast<T>( aVec.x );
+            y = static_cast<T>( aVec.y );
+        }
     }
 
     /// Copy a vector
@@ -102,7 +113,18 @@ public:
     template <typename CastedType>
     VECTOR2<CastedType> operator()() const
     {
-        return VECTOR2<CastedType>( (CastedType) x, (CastedType) y );
+        if( std::is_same<CastedType, int>::value )
+        {
+            T minI = static_cast<T>( std::numeric_limits<int>::min() );
+            T maxI = static_cast<T>( std::numeric_limits<int>::max() );
+
+            return VECTOR2<int>( static_cast<int>( std::max( minI, std::min( x, maxI ) ) ),
+                                 static_cast<int>( std::max( minI, std::min( y, maxI ) ) ) );
+        }
+        else
+        {
+            return VECTOR2<CastedType>( static_cast<CastedType>( x ), static_cast<CastedType>( y ) );
+        }
     }
 
     // virtual ~VECTOR2();
