@@ -104,8 +104,8 @@ public:
             CastingType minI = static_cast<CastingType>( std::numeric_limits<int>::min() );
             CastingType maxI = static_cast<CastingType>( std::numeric_limits<int>::max() );
 
-            x = static_cast<int>( std::max( minI, std::min( aVec.x, maxI ) ) );
-            y = static_cast<int>( std::max( minI, std::min( aVec.y, maxI ) ) );
+            x = static_cast<int>( Clamp( minI, aVec.x, maxI ) );
+            y = static_cast<int>( Clamp( minI, aVec.y, maxI ) );
         }
         else
         {
@@ -130,8 +130,8 @@ public:
             T minI = static_cast<T>( std::numeric_limits<int>::min() );
             T maxI = static_cast<T>( std::numeric_limits<int>::max() );
 
-            return VECTOR2<int>( static_cast<int>( std::max( minI, std::min( x, maxI ) ) ),
-                                 static_cast<int>( std::max( minI, std::min( y, maxI ) ) ) );
+            return VECTOR2<int>( static_cast<int>( Clamp( minI, x, maxI ) ),
+                                 static_cast<int>( Clamp( minI, y, maxI ) ) );
         }
         else
         {

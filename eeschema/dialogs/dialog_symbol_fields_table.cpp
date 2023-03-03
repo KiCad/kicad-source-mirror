@@ -880,9 +880,9 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
                 int maxWidth = defaultDlgSize.x / 3;
 
                 if( col == m_grid->GetNumberCols() - 1 )
-                    m_grid->SetColSize( col, std::min( std::max( 50, textWidth ), maxWidth ) );
+                    m_grid->SetColSize( col, Clamp( 50, textWidth, maxWidth ) );
                 else
-                    m_grid->SetColSize( col, std::min( std::max( 100, textWidth ), maxWidth ) );
+                    m_grid->SetColSize( col, Clamp( 100, textWidth, maxWidth ) );
             }
         }
     }
