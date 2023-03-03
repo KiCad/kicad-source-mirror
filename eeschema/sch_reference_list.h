@@ -585,8 +585,9 @@ public:
     /**
      * Return a shorthand string representing all the references in the list.  For instance,
      * "R1, R2, R4 - R7, U1"
+     * @param spaced Add spaces between references
      */
-    static wxString Shorthand( std::vector<SCH_REFERENCE> aList );
+    static wxString Shorthand( std::vector<SCH_REFERENCE> aList, bool spaced = true );
 
     friend class BACK_ANNOTATION;
 

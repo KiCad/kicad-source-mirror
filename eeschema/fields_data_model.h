@@ -10,6 +10,14 @@
 // The internal field name (untranslated)
 #define FIELD_NAME_COLUMN     4
 
+struct BOM_EXPORT_SETTINGS
+{
+    wxString FieldDelimiter;
+    wxString StringDelimiter;
+    bool     SpacedRefs;
+    bool     RemoveTabs;
+    bool     RemoveLineBreaks;
+};
 
 enum GROUP_TYPE
 {
@@ -96,8 +104,11 @@ public:
     }
 
     wxString GetValue( int aRow, int aCol ) override;
-    wxString GetValue( const DATA_MODEL_ROW& group, int aCol );
-    wxString GetRawValue( int aRow, int aCol ) { return GetValue( m_rows[aRow], aCol ); }
+    wxString GetValue( const DATA_MODEL_ROW& group, int aCol, bool spacedRefs = true );
+    wxString GetRawValue( int aRow, int aCol, bool spacedRefs )
+    {
+        return GetValue( m_rows[aRow], aCol, spacedRefs );
+    }
     void     SetValue( int aRow, int aCol, const wxString& aValue ) override;
 
     GROUP_TYPE GetRowFlags( int aRow ) { return m_rows[aRow].m_Flag; }
@@ -153,6 +164,8 @@ public:
         wxCHECK_RET( aCol >= 0 && aCol < (int) m_cols.size(), "Invalid Column Number" );
         m_cols[aCol].m_show = show;
     }
+
+    wxString Export( const BOM_EXPORT_SETTINGS& settings );
 
 private:
     static bool cmp( const DATA_MODEL_ROW& lhGroup, const DATA_MODEL_ROW& rhGroup,

@@ -1018,13 +1018,20 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSaveAndContinue( wxCommandEvent& aEvent )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnPreviewRefresh( wxCommandEvent& event )
 {
+    BOM_EXPORT_SETTINGS settings = ( BOM_EXPORT_SETTINGS ){
+        .FieldDelimiter = m_textFieldDelimiter->GetValue(),
+        .StringDelimiter = m_textStringDelimiter->GetValue(),
+        .SpacedRefs = m_checkSpacedRefs->GetValue(),
+        .RemoveTabs = m_checkRemoveTabs->GetValue(),
+        .RemoveLineBreaks = m_checkRemoveLineBreaks->GetValue(),
+    };
+
+    m_textOutput->SetValue( m_dataModel->Export( settings ) );
 }
 
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
 {
-    int last_col = m_grid->GetNumberCols() - 1;
-
     if( m_dataModel->IsEdited() )
         if( OKOrCancelDialog( nullptr, _( "Unsaved data" ),
                               _( "Changes are unsaved. Export unsaved data?" ), "", _( "OK" ),
@@ -1048,51 +1055,15 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
     if( !out.IsOpened() )
         return;
 
-    // Find the location for the line terminator
-    for( int col = m_grid->GetNumberCols() - 1; col >=0 ; --col )
-    {
-        if( m_grid->IsColShown( col ) )
-        {
-            last_col = col;
-            break;
-        }
-    }
+    BOM_EXPORT_SETTINGS settings = ( BOM_EXPORT_SETTINGS ){
+        .FieldDelimiter = m_textFieldDelimiter->GetValue(),
+        .StringDelimiter = m_textStringDelimiter->GetValue(),
+        .SpacedRefs = m_checkSpacedRefs->GetValue(),
+        .RemoveTabs = m_checkRemoveTabs->GetValue(),
+        .RemoveLineBreaks = m_checkRemoveLineBreaks->GetValue(),
+    };
 
-    // Column names
-    for( int col = 0; col < m_grid->GetNumberCols(); col++ )
-    {
-        if( !m_grid->IsColShown( col ) )
-            continue;
-
-        wxString escapedValue = m_grid->GetColLabelValue( col );
-        escapedValue.Replace( wxS( "\"" ), wxS( "\"\"" ) );
-
-        wxString format = col == last_col ? wxS( "\"%s\"\r\n" ) : wxS( "\"%s\"," );
-
-        out.Write( wxString::Format( format, escapedValue ) );
-    }
-
-    // Data rows
-    for( int row = 0; row < m_grid->GetNumberRows(); row++ )
-    {
-        // Don't output child rows
-        if( m_dataModel->GetRowFlags( row ) == CHILD_ITEM )
-            continue;
-
-        for( int col = 0; col < m_grid->GetNumberCols(); col++ )
-        {
-            if( !m_grid->IsColShown( col ) )
-                continue;
-
-            // Get the unanottated version of the field, e.g. no ">   " or "v   " by
-            wxString escapedValue = m_dataModel->GetRawValue( row, col );
-            escapedValue.Replace( wxS( "\"" ), wxS( "\"\"" ) );
-
-            wxString format = col == last_col ? wxS( "\"%s\"\r\n" ) : wxS( "\"%s\"," );
-
-            out.Write( wxString::Format( format, escapedValue ) );
-        }
-    }
+    out.Write( m_dataModel->Export( settings ) );
 }
 
 

@@ -922,7 +922,7 @@ bool SCH_REFERENCE::IsSplitNeeded()
 }
 
 
-wxString SCH_REFERENCE_LIST::Shorthand( std::vector<SCH_REFERENCE> aList )
+wxString SCH_REFERENCE_LIST::Shorthand( std::vector<SCH_REFERENCE> aList, bool spaced )
 {
     wxString retVal;
     size_t   i = 0;
@@ -942,7 +942,7 @@ wxString SCH_REFERENCE_LIST::Shorthand( std::vector<SCH_REFERENCE> aList )
         }
 
         if( !retVal.IsEmpty() )
-            retVal << wxT( ", " );
+            retVal << ( spaced ? wxT( ", " ) : wxT( "," ) );
 
         if( range == 1 )
         {
@@ -951,7 +951,7 @@ wxString SCH_REFERENCE_LIST::Shorthand( std::vector<SCH_REFERENCE> aList )
         else if( range == 2 )
         {
             retVal << ref << aList[ i ].GetRefNumber();
-            retVal << wxT( ", " );
+            retVal << ( spaced ? wxT( ", " ) : wxT( "," ) );
             retVal << ref << aList[ i + 1 ].GetRefNumber();
         }
         else

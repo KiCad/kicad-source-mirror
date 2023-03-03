@@ -125,7 +125,8 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( int aRow, int aCol )
 }
 
 
-wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const DATA_MODEL_ROW& group, int aCol )
+wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const DATA_MODEL_ROW& group, int aCol,
+                                                  bool spacedRefs )
 {
     std::vector<SCH_REFERENCE> references;
     wxString                   fieldValue;
@@ -181,7 +182,7 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const DATA_MODEL_ROW& group, i
     }
 
     if( ColIsReference( aCol ) )
-        fieldValue = SCH_REFERENCE_LIST::Shorthand( references );
+        fieldValue = SCH_REFERENCE_LIST::Shorthand( references, spacedRefs );
     else if( ColIsQuantity( aCol ) )
         fieldValue = wxString::Format( wxT( "%d" ), (int) references.size() );
 
@@ -565,4 +566,72 @@ int FIELDS_EDITOR_GRID_DATA_MODEL::GetDataWidth( int aCol )
     }
 
     return width;
+}
+
+
+wxString FIELDS_EDITOR_GRID_DATA_MODEL::Export( const BOM_EXPORT_SETTINGS& settings )
+{
+    wxString out;
+
+    size_t last_col = m_cols.size() - 1;
+
+    // Find the location for the line terminator
+    for( size_t col = m_cols.size() - 1; col >= 0; --col )
+    {
+        if( m_cols[col].m_show )
+        {
+            last_col = col;
+            break;
+        }
+    }
+
+    auto formatField = [&]( wxString field, bool last ) -> wxString
+        {
+            if( settings.RemoveLineBreaks )
+            {
+                field.Replace( wxS( "\r" ), wxS( "" ) );
+                field.Replace( wxS( "\n" ), wxS( "" ) );
+            }
+
+            if( settings.RemoveTabs )
+            {
+                field.Replace( wxS( "\t" ), wxS( "" ) );
+            }
+
+            if( !settings.StringDelimiter.IsEmpty() )
+                field.Replace( settings.StringDelimiter,
+                               settings.StringDelimiter + settings.StringDelimiter );
+
+            return settings.StringDelimiter + field + settings.StringDelimiter
+                   + ( last ? wxS( "\r\n" ) : settings.FieldDelimiter );
+        };
+
+    // Column names
+    for( size_t col = 0; col < m_cols.size(); col++ )
+    {
+        if( !m_cols[col].m_show )
+            continue;
+
+        out.Append( formatField( m_cols[col].m_label, col == last_col ) );
+    }
+
+    // Data rows
+    for( size_t row = 0; row < m_rows.size(); row++ )
+    {
+        // Don't output child rows
+        if( GetRowFlags( (int) row ) == CHILD_ITEM )
+            continue;
+
+        for( size_t col = 0; col < m_cols.size(); col++ )
+        {
+            if( !m_cols[col].m_show )
+                continue;
+
+            // Get the unanottated version of the field, e.g. no ">   " or "v   " by
+            out.Append( formatField( GetRawValue( (int) row, (int) col, settings.SpacedRefs ),
+                                     col == last_col ) );
+        }
+    }
+
+    return out;
 }

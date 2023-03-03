@@ -34,7 +34,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	wxBoxSizer* bPresets;
 	bPresets = new wxBoxSizer( wxVERTICAL );
 
-	m_bomPresetsLabel = new wxStaticText( m_leftPanel, wxID_ANY, _("Presets (Ctrl+Tab):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_bomPresetsLabel = new wxStaticText( m_leftPanel, wxID_ANY, _("View Preset:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_bomPresetsLabel->Wrap( -1 );
 	bPresets->Add( m_bomPresetsLabel, 0, wxLEFT|wxRIGHT, 2 );
 
@@ -92,16 +92,25 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 
 	bControls->Add( m_separator1, 0, wxALL, 5 );
 
+	m_checkExludeDNP = new wxCheckBox( m_rightPanel, wxID_ANY, _("Exclude DNP"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkExludeDNP->SetValue(true);
+	bControls->Add( m_checkExludeDNP, 0, wxALL, 5 );
+
+	m_separator2 = new BITMAP_BUTTON( m_rightPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
+	m_separator2->Enable( false );
+
+	bControls->Add( m_separator2, 0, wxALL, 5 );
+
 	m_groupSymbolsBox = new wxCheckBox( m_rightPanel, OPT_GROUP_COMPONENTS, _("Group symbols"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_groupSymbolsBox->SetValue(true);
 	m_groupSymbolsBox->SetToolTip( _("Group symbols together based on common properties") );
 
 	bControls->Add( m_groupSymbolsBox, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_separator2 = new BITMAP_BUTTON( m_rightPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
-	m_separator2->Enable( false );
+	m_separator3 = new BITMAP_BUTTON( m_rightPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
+	m_separator3->Enable( false );
 
-	bControls->Add( m_separator2, 0, wxALL, 5 );
+	bControls->Add( m_separator3, 0, wxALL, 5 );
 
 	m_bRefresh = new wxBitmapButton( m_rightPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_bRefresh->SetMinSize( wxSize( 30,30 ) );
@@ -163,14 +172,14 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	fgExportOptions->SetFlexibleDirection( wxBOTH );
 	fgExportOptions->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_labelBomExportPresets = new wxStaticText( m_panelExport, wxID_ANY, _("Presets:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelBomExportPresets = new wxStaticText( m_panelExport, wxID_ANY, _("Format Preset:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelBomExportPresets->Wrap( -1 );
 	fgExportOptions->Add( m_labelBomExportPresets, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
 	wxString m_cbBomExportPresetsChoices[] = { _("CSV"), _("Semicolons"), _("(unsaved)") };
 	int m_cbBomExportPresetsNChoices = sizeof( m_cbBomExportPresetsChoices ) / sizeof( wxString );
 	m_cbBomExportPresets = new wxChoice( m_panelExport, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbBomExportPresetsNChoices, m_cbBomExportPresetsChoices, 0 );
-	m_cbBomExportPresets->SetSelection( 1 );
+	m_cbBomExportPresets->SetSelection( 0 );
 	fgExportOptions->Add( m_cbBomExportPresets, 0, wxALL|wxEXPAND, 5 );
 
 	m_labelFieldDelimiter = new wxStaticText( m_panelExport, wxID_ANY, _("Field Delimeter:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -184,24 +193,31 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	m_labelStringDelimiter->Wrap( -1 );
 	fgExportOptions->Add( m_labelStringDelimiter, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
-	m_textStringDelimiter = new wxTextCtrl( m_panelExport, wxID_ANY, _("\""), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_textStringDelimiter->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_textStringDelimiter->SetMaxLength( 1 );
-	}
-	#else
-	m_textStringDelimiter->SetMaxLength( 1 );
-	#endif
+	m_textStringDelimiter = new wxTextCtrl( m_panelExport, wxID_ANY, _("\""), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_TAB );
 	fgExportOptions->Add( m_textStringDelimiter, 0, wxALL|wxEXPAND, 5 );
 
-	m_labelExcludeDNP = new wxStaticText( m_panelExport, wxID_ANY, _("Exclude DNP:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_labelExcludeDNP->Wrap( -1 );
-	fgExportOptions->Add( m_labelExcludeDNP, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	m_labelSpacedRefs = new wxStaticText( m_panelExport, wxID_ANY, _("Spaced References:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelSpacedRefs->Wrap( -1 );
+	fgExportOptions->Add( m_labelSpacedRefs, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
-	m_checkExludeDNP = new wxCheckBox( m_panelExport, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_checkExludeDNP->SetValue(true);
-	fgExportOptions->Add( m_checkExludeDNP, 0, wxALL, 5 );
+	m_checkSpacedRefs = new wxCheckBox( m_panelExport, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgExportOptions->Add( m_checkSpacedRefs, 0, wxALL, 5 );
+
+	m_labelRemoveTabs = new wxStaticText( m_panelExport, wxID_ANY, _("Remove Tabs:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelRemoveTabs->Wrap( -1 );
+	fgExportOptions->Add( m_labelRemoveTabs, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+
+	m_checkRemoveTabs = new wxCheckBox( m_panelExport, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkRemoveTabs->SetValue(true);
+	fgExportOptions->Add( m_checkRemoveTabs, 0, wxALL, 5 );
+
+	m_labelRemoveLineBreaks = new wxStaticText( m_panelExport, wxID_ANY, _("Remove Line Breaks:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelRemoveLineBreaks->Wrap( -1 );
+	fgExportOptions->Add( m_labelRemoveLineBreaks, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+
+	m_checkRemoveLineBreaks = new wxCheckBox( m_panelExport, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkRemoveLineBreaks->SetValue(true);
+	fgExportOptions->Add( m_checkRemoveLineBreaks, 0, wxALL, 5 );
 
 
 	gbExport->Add( fgExportOptions, wxGBPosition( 0, 0 ), wxGBSpan( 3, 1 ), wxEXPAND, 5 );
@@ -243,6 +259,8 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	gbExport->Add( bPreview, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 
 	m_textOutput = new wxTextCtrl( m_panelExport, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxTE_MULTILINE|wxTE_READONLY );
+	m_textOutput->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+
 	gbExport->Add( m_textOutput, wxGBPosition( 2, 1 ), wxGBSpan( 2, 1 ), wxALL|wxEXPAND, 5 );
 
 

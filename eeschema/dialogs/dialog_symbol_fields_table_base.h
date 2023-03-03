@@ -63,8 +63,10 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		wxPanel* m_rightPanel;
 		wxSearchCtrl* m_filter;
 		BITMAP_BUTTON* m_separator1;
-		wxCheckBox* m_groupSymbolsBox;
+		wxCheckBox* m_checkExludeDNP;
 		BITMAP_BUTTON* m_separator2;
+		wxCheckBox* m_groupSymbolsBox;
+		BITMAP_BUTTON* m_separator3;
 		wxBitmapButton* m_bRefresh;
 		WX_GRID* m_grid;
 		wxPanel* m_panelExport;
@@ -74,8 +76,12 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_textFieldDelimiter;
 		wxStaticText* m_labelStringDelimiter;
 		wxTextCtrl* m_textStringDelimiter;
-		wxStaticText* m_labelExcludeDNP;
-		wxCheckBox* m_checkExludeDNP;
+		wxStaticText* m_labelSpacedRefs;
+		wxCheckBox* m_checkSpacedRefs;
+		wxStaticText* m_labelRemoveTabs;
+		wxCheckBox* m_checkRemoveTabs;
+		wxStaticText* m_labelRemoveLineBreaks;
+		wxCheckBox* m_checkRemoveLineBreaks;
 		wxStaticText* m_labelOutputDirectory;
 		wxTextCtrl* m_outputDirectoryName;
 		wxBitmapButton* m_browseButton;
