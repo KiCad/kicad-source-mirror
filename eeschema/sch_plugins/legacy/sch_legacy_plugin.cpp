@@ -691,7 +691,13 @@ SCH_BITMAP* SCH_LEGACY_PLUGIN::loadBitmap( LINE_READER& aReader )
                     wxImage* image = new wxImage();
                     wxMemoryInputStream istream( stream );
                     image->LoadFile( istream, wxBITMAP_TYPE_PNG );
-                    bitmap->GetImage()->SetImage( image );
+
+                    bitmap->SetImage( image );
+
+                    // Legacy file formats assumed 300 image PPI at load.
+                    BITMAP_BASE* bitmapImage = bitmap->GetImage();
+                    bitmapImage->SetScale( bitmapImage->GetScale() * bitmapImage->GetPPI()
+                                           / 300.0 );
                     break;
                 }
 
