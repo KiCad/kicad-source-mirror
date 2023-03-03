@@ -158,7 +158,7 @@ protected:
     wxString GetHtmlFieldRow( const LIB_FIELD& aField ) const
     {
         wxString name = aField.GetCanonicalName();
-        wxString text = aField.GetFullText( m_unit > 0 ? m_unit : 1 );
+        wxString text;
         wxString fieldhtml = FieldFormat;
 
         fieldhtml.Replace( wxS( "__NAME__" ), EscapeHTML( name ) );
@@ -166,7 +166,7 @@ protected:
         switch( aField.GetId() )
         {
         case DATASHEET_FIELD:
-            text = m_symbol->GetDatasheetField().GetText();
+            text = m_symbol->GetDatasheetField().GetShownText( 0, false );
 
             if( text.IsEmpty() || text == wxT( "~" ) )
             {
@@ -191,7 +191,13 @@ protected:
             // showing the value just repeats the name, so that's not much use...
             return wxEmptyString;
 
+        case REFERENCE_FIELD:
+            text = aField.GetFullText( m_unit > 0 ? m_unit : 1 );
+            fieldhtml.Replace( wxS( "__VALUE__" ), EscapeHTML( text ) );
+            break;
+
         default:
+            text = aField.GetShownText( 0, false );
             fieldhtml.Replace( wxS( "__VALUE__" ), EscapeHTML( text ) );
         }
 
