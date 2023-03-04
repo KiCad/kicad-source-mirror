@@ -26,6 +26,7 @@
 #include "pns_solid.h"
 #include "pns_topology.h"
 #include "pns_debug_decorator.h"
+#include "pns_arc.h"
 
 namespace PNS {
 
@@ -439,6 +440,19 @@ OPT_VECTOR2I getDanglingAnchor( NODE* aNode, ITEM* aItem )
         return aItem->Anchor( 0 );
 
     case ITEM::ARC_T:
+    {
+        ARC* a = static_cast<ARC*>( aItem );
+
+        JOINT* jA = aNode->FindJoint( aItem->Anchor( 0 ), aItem );
+        JOINT* jB = aNode->FindJoint( aItem->Anchor( 1 ), aItem );
+
+        if( jA && jA->LinkCount() == 1 )
+            return a->Arc().GetP0();
+        else if( jB && jB->LinkCount() == 1 )
+            return a->Arc().GetP1();
+        else
+            return OPT_VECTOR2I();
+    }
     case ITEM::SEGMENT_T:
     {
         SEGMENT* s = static_cast<SEGMENT*>( aItem );
