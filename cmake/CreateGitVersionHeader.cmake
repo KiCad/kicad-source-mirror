@@ -66,7 +66,7 @@ macro( create_git_version_header _git_src_path )
     # Check to make sure 'git' command did not fail.  Otherwise fallback
     # to KiCadVersion.cmake as the revision level.
     if( _git_describe_result EQUAL 0 )
-        set( KICAD_VERSION "(${_git_DESCRIBE})" )
+        set( KICAD_VERSION "${_git_DESCRIBE}" )
     endif()
 
     if( _git_rev_parse_head_result EQUAL 0 )
