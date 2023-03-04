@@ -277,12 +277,6 @@ int SCH_EDITOR_CONTROL::RemapSymbols( const TOOL_EVENT& aEvent )
 int SCH_EDITOR_CONTROL::Print( const TOOL_EVENT& aEvent )
 {
     InvokeDialogPrintUsingPrinter( m_frame );
-
-    wxFileName fn = m_frame->Prj().AbsolutePath( m_frame->Schematic().RootScreen()->GetFileName() );
-
-    if( fn.GetName() != NAMELESS_PROJECT )
-        m_frame->SaveProjectSettings();
-
     return 0;
 }
 
@@ -295,7 +289,7 @@ int SCH_EDITOR_CONTROL::Plot( const TOOL_EVENT& aEvent )
 
     // save project config if the prj config has changed:
     if( dlg.PrjConfigChanged() )
-        m_frame->SaveProjectSettings();
+        m_frame->OnModify();
 
     return 0;
 }

@@ -128,7 +128,7 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
 }
 
 
-void PCB_EDIT_FRAME::SaveProjectSettings()
+void PCB_EDIT_FRAME::SaveProjectLocalSettings()
 {
     wxFileName fn = Prj().GetProjectFullName();
 
@@ -141,8 +141,7 @@ void PCB_EDIT_FRAME::SaveProjectSettings()
     if( !fn.IsDirWritable() )
         return;
 
-    PROJECT_FILE&           project       = Prj().GetProjectFile();
-    PROJECT_LOCAL_SETTINGS& localSettings = Prj().GetLocalSettings();
+    PROJECT_FILE& project = Prj().GetProjectFile();
 
     // TODO: Can this be pulled out of BASE_SCREEN?
     project.m_BoardDrawingSheetFile = BASE_SCREEN::m_DrawingSheetFileName;
@@ -152,40 +151,12 @@ void PCB_EDIT_FRAME::SaveProjectSettings()
 
     RecordDRCExclusions();
 
-    // Save appearance control settings
-
-    localSettings.m_ActiveLayer       = GetActiveLayer();
-    localSettings.m_ActiveLayerPreset = m_appearancePanel->GetActiveLayerPreset();
-
-    const PCB_DISPLAY_OPTIONS& displayOpts = GetDisplayOptions();
-
-    localSettings.m_ContrastModeDisplay = displayOpts.m_ContrastModeDisplay;
-    localSettings.m_NetColorMode        = displayOpts.m_NetColorMode;
-    localSettings.m_TrackOpacity        = displayOpts.m_TrackOpacity;
-    localSettings.m_ViaOpacity          = displayOpts.m_ViaOpacity;
-    localSettings.m_PadOpacity          = displayOpts.m_PadOpacity;
-    localSettings.m_ZoneOpacity         = displayOpts.m_ZoneOpacity;
-    localSettings.m_ZoneDisplayMode     = displayOpts.m_ZoneDisplayMode;
-    localSettings.m_ImageOpacity        = displayOpts.m_ImageOpacity;
-
-    // Save Design settings
-    const BOARD_DESIGN_SETTINGS& bds = GetDesignSettings();
-    localSettings.m_AutoTrackWidth   = bds.m_UseConnectedTrackWidth;
-
     // Save render settings that aren't stored in PCB_DISPLAY_OPTIONS
 
     std::shared_ptr<NET_SETTINGS>& netSettings = project.NetSettings();
-    KIGFX::RENDER_SETTINGS*        rs = GetCanvas()->GetView()->GetPainter()->GetSettings();
-    KIGFX::PCB_RENDER_SETTINGS*    renderSettings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( rs );
     NETINFO_LIST&                  nets = GetBoard()->GetNetInfo();
-
-    localSettings.m_HiddenNets.clear();
-
-    for( int netcode : renderSettings->GetHiddenNets() )
-    {
-        if( NETINFO_ITEM* net = nets.GetNetItem( netcode ) )
-            localSettings.m_HiddenNets.emplace_back( net->GetNetname() );
-    }
+    KIGFX::RENDER_SETTINGS*     rs = GetCanvas()->GetView()->GetPainter()->GetSettings();
+    KIGFX::PCB_RENDER_SETTINGS* renderSettings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( rs );
 
     netSettings->m_NetColorAssignments.clear();
 
@@ -204,11 +175,6 @@ void PCB_EDIT_FRAME::SaveProjectSettings()
             netclass->SetPcbColor( netclassColors.at( name ) );
     }
 
-    PCB_SELECTION_TOOL*       selTool = GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
-    SELECTION_FILTER_OPTIONS& filterOpts = selTool->GetFilter();
-
-    localSettings.m_SelectionFilter = filterOpts;
-
     /**
      * The below automatically saves the project on exit, which is what we want to do if the project
      * already exists.  If the project doesn't already exist, we don't want to create it through
@@ -220,4 +186,58 @@ void PCB_EDIT_FRAME::SaveProjectSettings()
      */
     if( !Prj().IsNullProject() && fn.Exists() )
         GetSettingsManager()->SaveProject();
+}
+
+
+void PCB_EDIT_FRAME::saveProjectSettings()
+{
+    wxFileName fn = Prj().GetProjectFullName();
+
+    // Check for the filename before checking IsWritable as this
+    // will throw errors on bad names.  Here, we just want to not
+    // save the Settings if we don't have a name
+    if( !fn.IsOk() )
+        return;
+
+    if( !fn.IsDirWritable() )
+        return;
+
+    PROJECT_LOCAL_SETTINGS& localSettings = Prj().GetLocalSettings();
+
+    // Save appearance control settings
+    localSettings.m_ActiveLayer       = GetActiveLayer();
+    localSettings.m_ActiveLayerPreset = m_appearancePanel->GetActiveLayerPreset();
+
+    const PCB_DISPLAY_OPTIONS& displayOpts = GetDisplayOptions();
+
+    localSettings.m_ContrastModeDisplay = displayOpts.m_ContrastModeDisplay;
+    localSettings.m_NetColorMode        = displayOpts.m_NetColorMode;
+    localSettings.m_TrackOpacity        = displayOpts.m_TrackOpacity;
+    localSettings.m_ViaOpacity          = displayOpts.m_ViaOpacity;
+    localSettings.m_PadOpacity          = displayOpts.m_PadOpacity;
+    localSettings.m_ZoneOpacity         = displayOpts.m_ZoneOpacity;
+    localSettings.m_ZoneDisplayMode     = displayOpts.m_ZoneDisplayMode;
+    localSettings.m_ImageOpacity        = displayOpts.m_ImageOpacity;
+
+    // Save Design settings
+    const BOARD_DESIGN_SETTINGS& bds = GetDesignSettings();
+    localSettings.m_AutoTrackWidth   = bds.m_UseConnectedTrackWidth;
+
+    // Net display settings
+    NETINFO_LIST&               nets = GetBoard()->GetNetInfo();
+    KIGFX::RENDER_SETTINGS*     rs = GetCanvas()->GetView()->GetPainter()->GetSettings();
+    KIGFX::PCB_RENDER_SETTINGS* renderSettings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( rs );
+
+    localSettings.m_HiddenNets.clear();
+
+    for( int netcode : renderSettings->GetHiddenNets() )
+    {
+        if( NETINFO_ITEM* net = nets.GetNetItem( netcode ) )
+            localSettings.m_HiddenNets.emplace_back( net->GetNetname() );
+    }
+
+    PCB_SELECTION_TOOL*       selTool = GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
+    SELECTION_FILTER_OPTIONS& filterOpts = selTool->GetFilter();
+
+    localSettings.m_SelectionFilter = filterOpts;
 }

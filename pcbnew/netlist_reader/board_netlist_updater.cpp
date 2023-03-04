@@ -1054,7 +1054,10 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         m_commit.Push( _( "Update netlist" ), m_newFootprintsCount ? ZONE_FILL_OP  : 0 );
 
         m_board->SynchronizeNetsAndNetClasses( true );
-        m_frame->SaveProjectSettings();
+
+        // Although m_commit will probably also set this, it's not guaranteed, and we need to make
+        // sure any modification to netclasses gets persisted to project settings through a save.
+        m_frame->OnModify();
     }
 
     if( m_isDryRun )

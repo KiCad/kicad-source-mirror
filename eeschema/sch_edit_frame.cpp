@@ -822,8 +822,6 @@ void SCH_EDIT_FRAME::doCloseWindow()
     if( m_toolManager )
         m_toolManager->ShutdownAllTools();
 
-    RecordERCExclusions();
-
     // Close the find dialog and preserve its setting if it is displayed.
     if( m_findReplaceDialog )
     {
@@ -841,9 +839,6 @@ void SCH_EDIT_FRAME::doCloseWindow()
         hierarchy_pane.Show( false );
         m_auimgr.Update();
     }
-
-    if( Kiway().Player( FRAME_SIMULATOR, false ) )
-        Prj().GetProjectFile().m_SchematicSettings->m_NgspiceSimulatorSettings->SaveToFile();
 
     SCH_SCREENS screens( Schematic().Root() );
     wxFileName fn;
@@ -873,7 +868,7 @@ void SCH_EDIT_FRAME::doCloseWindow()
         UpdateFileHistory( fileName );
 
     // Make sure local settings are persisted
-    SaveProjectSettings();
+    SaveProjectLocalSettings();
 
     Schematic().RootScreen()->Clear();
 

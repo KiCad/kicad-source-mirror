@@ -291,7 +291,7 @@ void SIM_PLOT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
             project.m_SchematicSettings->m_NgspiceSimulatorSettings->SaveToFile();
 
         if( m_schematicFrame )
-            m_schematicFrame->SaveProjectSettings();
+            m_schematicFrame->OnModify();
     }
 }
 

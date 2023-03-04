@@ -114,7 +114,7 @@ public:
     /**
      * Save changes to the project settings to the project (.pro) file.
      */
-    void SaveProjectSettings() override;
+    void SaveProjectLocalSettings() override;
 
     /**
      * Load the KiCad project file (*.pro) settings specific to Eeschema.
@@ -835,6 +835,8 @@ protected:
     void sendNetlistToCvpcb();
 
     void onSize( wxSizeEvent& aEvent );
+
+    void saveProjectSettings() override;
 
 private:
     // Called when resizing the Hierarchy Navigator panel

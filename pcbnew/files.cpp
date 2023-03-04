@@ -398,13 +398,11 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
                 return false;
         }
 
-        SaveProjectSettings();
+        SaveProjectLocalSettings();
 
         GetBoard()->ClearProject();
 
         SETTINGS_MANAGER* mgr = GetSettingsManager();
-
-        mgr->SaveProject( mgr->Prj().GetProjectFullName() );
         mgr->UnloadProject( &mgr->Prj() );
 
         if( !Clear_Pcb( false ) )
@@ -670,7 +668,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     if( pro.GetFullPath() != mgr->Prj().GetProjectFullName() )
     {
         // calls SaveProject
-        SaveProjectSettings();
+        SaveProjectLocalSettings();
 
         GetBoard()->ClearProject();
         mgr->UnloadProject( &mgr->Prj() );
@@ -1071,7 +1069,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
     {
         // Save various DRC parameters, such as violation severities (which may have been
         // edited via the DRC dialog as well as the Board Setup dialog), DRC exclusions, etc.
-        SaveProjectSettings();
+        saveProjectSettings();
 
         GetBoard()->SynchronizeProperties();
         GetBoard()->SynchronizeNetsAndNetClasses( false );
@@ -1177,7 +1175,7 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject
 
     // Save various DRC parameters, such as violation severities (which may have been
     // edited via the DRC dialog as well as the Board Setup dialog), DRC exclusions, etc.
-    SaveProjectSettings();
+    SaveProjectLocalSettings();
 
     GetBoard()->SynchronizeNetsAndNetClasses( false );
 

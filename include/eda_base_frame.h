@@ -354,14 +354,16 @@ public:
     }
 
     /**
-     * Save changes to the project settings to the project (.pro) file.
+     * Save changes to the project local settings.  These settings are used to save/restore the
+     * view state for a specific project, and should never contain design data.  This method is
+     * normally called automatically at various points in the workflow so that the user's most
+     * recent display settings are automatically persisted.
      *
      * The method is virtual so you can override it to call the suitable save method.
      * The base method does nothing.
      *
-     * @param aAskForSave true to open a dialog before saving the settings.
      */
-    virtual void SaveProjectSettings() {};
+    virtual void SaveProjectLocalSettings() {};
 
     /**
      * Prompt the user for a hotkey file to read, and read it.
@@ -662,6 +664,13 @@ protected:
     void initExitKey();
 
     void ensureWindowIsOnScreen();
+
+    /**
+     * Saves any design-related project settings associated with this frame.
+     * This method should only be called as the result of direct user action, for example from an
+     * explicit "Save Project" command or as a consequence of saving a design document.
+     */
+    virtual void saveProjectSettings() {}
 
     /**
      * Handles event fired when a file is dropped to the window.
