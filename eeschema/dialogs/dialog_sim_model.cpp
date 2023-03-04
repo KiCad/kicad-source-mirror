@@ -1404,21 +1404,15 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::adjustParamGridColumns( int aWidth, bo
 
         for( size_t ii = 0; ii < grid->GetColumnCount(); ii++ )
         {
-            if( ii == 0 )
+            if( ii == PARAM_COLUMN::DESCRIPTION )
                 colWidths.push_back( grid->GetState()->GetColumnWidth( ii ) + margin + indent );
-            else if( ii == 1 )
-                colWidths.push_back( grid->GetState()->GetColumnWidth( ii ) + margin );
+            else if( ii == PARAM_COLUMN::VALUE )
+                colWidths.push_back( std::max( 72, grid->GetState()->GetColumnWidth( ii ) ) + margin );
             else
-                colWidths.push_back( 50 );
+                colWidths.push_back( 60 + margin );
 
             aWidth -= colWidths[ ii ];
         }
-
-        // Account for scroll bars
-        aWidth -= ( grid->GetSize().x - grid->GetClientSize().x );
-
-        if( aWidth > 0 )
-            colWidths[ PARAM_COLUMN::VALUE ] += aWidth;
 
         for( size_t ii = 0; ii < grid->GetColumnCount(); ii++ )
             grid->SetColumnProportion( ii, colWidths[ ii ] );
