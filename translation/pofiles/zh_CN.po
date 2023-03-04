@@ -25,8 +25,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-10 15:35-0800\n"
-"PO-Revision-Date: 2023-02-28 19:36+0000\n"
-"Last-Translator: CloverGit <w991593239@163.com>\n"
+"PO-Revision-Date: 2023-03-06 14:40+0000\n"
+"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v7/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.16-rc\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -26292,7 +26292,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:299
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:270
 msgid "Allow bridged solder mask apertures between pads"
-msgstr "允许焊盘之间的桥接阻焊孔径"
+msgstr "允许不同焊盘的阻焊开窗区域相连"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:302
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:273
@@ -32161,7 +32161,7 @@ msgstr "铜条"
 
 #: pcbnew/drc/drc_item.cpp:205
 msgid "Solder mask aperture bridges items with different nets"
-msgstr "阻焊层孔径可桥接具有不同网络的项目"
+msgstr "阻焊开窗区域与不同网络的元素相连"
 
 #: pcbnew/drc/drc_item.cpp:209
 msgid "Silkscreen clipped by solder mask"
@@ -32655,12 +32655,12 @@ msgstr "电路板设置阻焊层最小宽度"
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:511
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:605
 msgid "Front solder mask aperture bridges items with different nets"
-msgstr "顶层阻焊层孔径桥接具有不同网络的项目"
+msgstr "顶层阻焊开窗区域与不同网络的元素相连"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:513
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:607
 msgid "Rear solder mask aperture bridges items with different nets"
-msgstr "底层阻焊层孔径桥接具有不同网络的项目"
+msgstr "底层阻焊开窗区域与不同网络的元素相连"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:730
 msgid "Building solder mask..."
