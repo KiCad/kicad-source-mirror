@@ -613,6 +613,8 @@ void SIMULATOR_FRAME::ShowChangedLanguage()
     {
         SIM_PANEL_BASE* plot = dynamic_cast<SIM_PLOT_PANEL*>( m_plotNotebook->GetPage( ii ) );
 
+        wxCHECK( plot, /* void */ );
+
         plot->OnLanguageChanged();
 
         wxString pageTitle( m_simulator->TypeToName( plot->GetType(), true ) );

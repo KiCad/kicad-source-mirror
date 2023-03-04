@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2018, 2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,8 +74,11 @@ BOOST_AUTO_TEST_CASE( TabCheck )
                     VECTOR2I( 1000, 1000 ), VECTOR2I( 0, 0 ), EDA_ANGLE::m_Angle0, false,
                     VECTOR2I( 0, 0 ), 0 );
 
-        BOOST_CHECK_MESSAGE( output1.x == output2.x, "Incorrect tab size for \n\t'" << text1.ToStdString() << "' and\n\t'" << text2.ToStdString() << "'" );
+        BOOST_CHECK_MESSAGE( output1.x == output2.x, "Incorrect tab size for \n\t'" <<
+                             text1.ToStdString() << "' and\n\t'" << text2.ToStdString() << "'" );
     }
+
+    delete font;
 }
 
 

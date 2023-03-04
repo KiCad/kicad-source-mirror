@@ -1071,6 +1071,9 @@ bool SIM_MODEL::requiresSpiceModelLine( const SPICE_ITEM& aItem ) const
             continue;
 
         const SIM_MODEL* baseModel = dynamic_cast<const SIM_MODEL*>( m_baseModel );
+
+        wxCHECK( baseModel, false );
+
         std::string      baseValue = baseModel->m_params[ii].value;
 
         if( param.value == baseValue )
@@ -1726,6 +1729,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
 
                         if( spiceTypeInfo.m_Text == wxT( "DC" ) && tokenizer.CountTokens() == 1 )
                         {
+                            wxCHECK( valueField, /* void */ );
                             valueField->SetText( tokenizer.GetNextToken() );
                             modelFromValueField = false;
                         }

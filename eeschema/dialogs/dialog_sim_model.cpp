@@ -1160,6 +1160,9 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::onDifferentialCheckbox( wxCommandEvent
     if( isIbisLoaded() )
     {
         SIM_MODEL_KIBIS* modelkibis = dynamic_cast<SIM_MODEL_KIBIS*>( &curModel() );
+
+        wxCHECK( modelkibis, /* void */ );
+
         bool             diff = m_differentialCheckbox->GetValue() && modelkibis->CanDifferential();
         modelkibis->SwitchSingleEndedDiff( diff );
     }

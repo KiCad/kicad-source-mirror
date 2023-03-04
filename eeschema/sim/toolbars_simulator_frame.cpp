@@ -37,8 +37,11 @@ void SIMULATOR_FRAME::ReCreateHToolbar()
     }
     else
     {
-        m_toolBar = new ACTION_TOOLBAR( dynamic_cast<EDA_BASE_FRAME*>( this ), wxID_ANY,
-                                        wxDefaultPosition, wxDefaultSize,
+        EDA_BASE_FRAME* parent = dynamic_cast<EDA_BASE_FRAME*>( this );
+
+        wxCHECK( parent, /* void */ );
+
+        m_toolBar = new ACTION_TOOLBAR( parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                         KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
     }
 
