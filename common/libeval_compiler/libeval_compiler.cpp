@@ -2,7 +2,7 @@
  * This file is part of libeval, a simple math expression evaluator
  *
  * Copyright (C) 2017 Michael Geselbracht, mgeselbracht3@gmail.com
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -356,10 +356,11 @@ void COMPILER::newString( const wxString& aString )
     m_parseFinished = false;
 }
 
+
 T_TOKEN COMPILER::getToken()
 {
     T_TOKEN rv;
-    rv.value.str = nullptr;
+    rv.value = defaultTokenValue;
 
     bool    done = false;
 

@@ -256,6 +256,7 @@ struct NODE::DEFAULT_OBSTACLE_VISITOR : public OBSTACLE_VISITOR
         obs.m_item = aCandidate;
         obs.m_head = m_item;
         obs.m_distFirst = INT_MAX;
+        obs.m_maxFanoutWidth = 0;
         m_tab.push_back( obs );
 
         m_matchCount++;
@@ -323,6 +324,7 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
         return OPT_OBSTACLE();
 
     OBSTACLE nearest;
+    nearest.m_head = nullptr;
     nearest.m_item = nullptr;
     nearest.m_distFirst = INT_MAX;
     nearest.m_maxFanoutWidth = 0;

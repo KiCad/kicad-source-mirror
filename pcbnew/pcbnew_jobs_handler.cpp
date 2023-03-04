@@ -52,6 +52,7 @@
 
 #include "pcbnew_scripting_helpers.h"
 
+
 PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER()
 {
     Register( "step",
@@ -183,10 +184,10 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
     {
         plotOpts.SetDXFPlotUnits( DXF_UNITS::INCHES );
     }
+
     plotOpts.SetPlotFrameRef( aDxfJob->m_plotBorderTitleBlocks );
     plotOpts.SetPlotValue( aDxfJob->m_plotFootprintValues );
     plotOpts.SetPlotReference( aDxfJob->m_plotRefDes );
-
     plotOpts.SetLayerSelection( aDxfJob->m_printMaskLayer );
 
     DXF_PLOTTER* plotter = (DXF_PLOTTER*) StartPlotBoard(
@@ -353,6 +354,7 @@ void PCBNEW_JOBS_HANDLER::populateGerberPlotOptionsFromJob( PCB_PLOT_PARAMS&    
     aPlotOpts.SetPlotReference( aJob->m_plotRefDes );
 
     aPlotOpts.SetSubtractMaskFromSilk( aJob->m_subtractSolderMaskFromSilk );
+
     // Always disable plot pad holes
     aPlotOpts.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );
 
@@ -409,6 +411,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
 static DRILL_PRECISION precisionListForInches( 2, 4 );
 static DRILL_PRECISION precisionListForMetric( 3, 3 );
 
+
 int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
 {
     JOB_EXPORT_PCB_DRILL* aDrillJob = dynamic_cast<JOB_EXPORT_PCB_DRILL*>( aJob );
@@ -422,6 +425,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
     BOARD* brd = LoadBoard( aDrillJob->m_filename );
 
     std::unique_ptr<GENDRILL_WRITER_BASE> drillWriter;
+
     if( aDrillJob->m_format == JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::EXCELLON )
     {
         drillWriter = std::make_unique<EXCELLON_WRITER>( brd );
@@ -432,13 +436,14 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
     }
 
     VECTOR2I offset;
+
     if( aDrillJob->m_drillOrigin == JOB_EXPORT_PCB_DRILL::DRILL_ORIGIN::ABSOLUTE )
         offset = VECTOR2I( 0, 0 );
     else
         offset = brd->GetDesignSettings().GetAuxOrigin();
 
-
     PLOT_FORMAT mapFormat = PLOT_FORMAT::PDF;
+
     switch( aDrillJob->m_mapFormat )
     {
     case JOB_EXPORT_PCB_DRILL::MAP_FORMAT::POSTSCRIPT: mapFormat = PLOT_FORMAT::POST; break;
@@ -470,27 +475,36 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
         }
 
         DRILL_PRECISION precision;
+
         if( aDrillJob->m_drillUnits == JOB_EXPORT_PCB_DRILL::DRILL_UNITS::INCHES )
             precision = precisionListForInches;
         else
             precision = precisionListForMetric;
 
-
         EXCELLON_WRITER* excellonWriter = dynamic_cast<EXCELLON_WRITER*>( drillWriter.get() );
+
+        if( excellonWriter == nullptr )
+            return CLI::EXIT_CODES::ERR_UNKNOWN;
+
         excellonWriter->SetFormat( aDrillJob->m_drillUnits
                                           == JOB_EXPORT_PCB_DRILL::DRILL_UNITS::MILLIMETERS,
-                                  zeroFmt, precision.m_Lhs, precision.m_Rhs );
-        excellonWriter->SetOptions( aDrillJob->m_excellonMirrorY, aDrillJob->m_excellonMinimalHeader,
-                                   offset, aDrillJob->m_excellonCombinePTHNPTH );
+                                   zeroFmt, precision.m_Lhs, precision.m_Rhs );
+        excellonWriter->SetOptions( aDrillJob->m_excellonMirrorY,
+                                    aDrillJob->m_excellonMinimalHeader,
+                                    offset, aDrillJob->m_excellonCombinePTHNPTH );
         excellonWriter->SetRouteModeForOvalHoles( aDrillJob->m_excellonOvalDrillRoute );
         excellonWriter->SetMapFileFormat( mapFormat );
 
         excellonWriter->CreateDrillandMapFilesSet( aDrillJob->m_outputDir, true,
-                                                  aDrillJob->m_generateMap, nullptr );
+                                                   aDrillJob->m_generateMap, nullptr );
     }
     else if( aDrillJob->m_format == JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::GERBER )
     {
         GERBER_WRITER* gerberWriter = dynamic_cast<GERBER_WRITER*>( drillWriter.get() );
+
+        if( gerberWriter == nullptr )
+            return CLI::EXIT_CODES::ERR_UNKNOWN;
+
         // Set gerber precision: only 5 or 6 digits for mantissa are allowed
         // (SetFormat() accept 5 or 6, and any other value set the precision to 5)
         // the integer part precision is always 4, and units always mm
@@ -499,7 +513,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
         gerberWriter->SetMapFileFormat( mapFormat );
 
         gerberWriter->CreateDrillandMapFilesSet( aDrillJob->m_outputDir, true,
-                                                aDrillJob->m_generateMap, nullptr );
+                                                 aDrillJob->m_generateMap, nullptr );
     }
 
     return CLI::EXIT_CODES::OK;
@@ -533,7 +547,8 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
         aPosJob->m_outputFile = fn.GetFullName();
     }
 
-    if( aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::ASCII || aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::CSV )
+    if( aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::ASCII
+      || aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::CSV )
     {
         FILE* file = nullptr;
         file = wxFopen( aPosJob->m_outputFile, wxS( "wt" ) );
@@ -549,12 +564,13 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
         bool backSide = aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BACK
                          || aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH;
 
-        PLACE_FILE_EXPORTER exporter( brd, aPosJob->m_units == JOB_EXPORT_PCB_POS::UNITS::MILLIMETERS,
-                                        aPosJob->m_smdOnly, aPosJob->m_excludeFootprintsWithTh,
-                                        frontSide, backSide,
-                                        aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::CSV,
-                                        aPosJob->m_useDrillPlaceFileOrigin,
-                                        aPosJob->m_negateBottomX );
+        PLACE_FILE_EXPORTER exporter( brd,
+                                      aPosJob->m_units == JOB_EXPORT_PCB_POS::UNITS::MILLIMETERS,
+                                      aPosJob->m_smdOnly, aPosJob->m_excludeFootprintsWithTh,
+                                      frontSide, backSide,
+                                      aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::CSV,
+                                      aPosJob->m_useDrillPlaceFileOrigin,
+                                      aPosJob->m_negateBottomX );
         data = exporter.GenPositionData();
 
         fputs( data.c_str(), file );
@@ -721,6 +737,9 @@ int PCBNEW_JOBS_HANDLER::doFpExportSvg( JOB_FP_EXPORT_SVG* aSvgJob, const FOOTPR
     brd.reset( CreateEmptyBoard() );
 
     FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aFootprint->Clone() );
+
+    if( fp == nullptr )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
 
     fp->SetLink( niluuid );
     fp->SetFlags( IS_NEW );
