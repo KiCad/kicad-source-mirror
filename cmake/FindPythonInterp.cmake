@@ -76,11 +76,26 @@ if( ${PYTHON_ROOT_DIR} )
         PATHS ${PYTHON_ROOT_DIR}
         NO_DEFAULT_PATH )
 elseif(VCPKG_TOOLCHAIN)
+    # this is a hack for arm64 builds for now
+    # the main problem being nobody seems to actually cross-compile kicad
+    # and insteads compiles it painfully on slow hardware
+    set(INTERP_TRIPLET "${VCPKG_TARGET_TRIPLET}")
+    if(${VCPKG_TARGET_TRIPLET} STREQUAL "arm64-windows")
+        set(INTERP_TRIPLET "x64-windows")
+    endif()
+
     # Our VCPKG usage will always place it in a known location
     find_program(PYTHON_EXECUTABLE
         NAMES ${_Python_NAMES}
-        PATHS "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/tools/python3"
+        PATHS "${VCPKG_INSTALLED_DIR}/${INTERP_TRIPLET}/tools/python3"
+        NO_DEFAULT_PATH
+        NO_PACKAGE_ROOT_PATH
+        NO_CMAKE_PATH
+        NO_CMAKE_ENVIRONMENT_PATH
+        NO_CMAKE_SYSTEM_PATH
+        NO_SYSTEM_ENVIRONMENT_PATH
     )
+
 else()
     # If there is no specific path given, look for python in the path
     find_program(PYTHON_EXECUTABLE NAMES ${_Python_NAMES})

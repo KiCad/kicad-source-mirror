@@ -54,6 +54,7 @@ set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
 set( KICAD_CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" )
 set( CMAKE_MODULE_PATH       "${KICAD_CMAKE_MODULE_PATH}" )
 
+include( ConfigurePlatform )
 
 # Create a flag to identify the non-Apple unix systems
 if( UNIX AND NOT APPLE )
@@ -302,37 +303,6 @@ if( WIN32 )
     # In fully standards-compliant mode, M_PI et al. are defined only if
     # _USE_MATH_DEFINES is set.
     add_compile_definitions( _USE_MATH_DEFINES )
-
-    # Used for the resource compiler and other arch dependent steps
-    if( MSVC )
-        # CMake does not set CMAKE_SYSTEM_PROCESSOR correctly for MSVC
-        # and it will always return the host instead of the target arch
-        if("${MSVC_C_ARCHITECTURE_ID}" STREQUAL "ARM64")
-            set( KICAD_BUILD_ARCH "arm64" )
-            set( KICAD_BUILD_ARCH_ARM64 1 )
-        elseif("${MSVC_C_ARCHITECTURE_ID}" STREQUAL "ARM")
-            set( KICAD_BUILD_ARCH "arm" )
-            set( KICAD_BUILD_ARCH_ARM 1 )
-        elseif("${MSVC_C_ARCHITECTURE_ID}" STREQUAL "X86")
-            set( KICAD_BUILD_ARCH "x86" )
-            set( KICAD_BUILD_ARCH_X86 1 )
-        elseif("${MSVC_C_ARCHITECTURE_ID}" STREQUAL "x64")
-            set( KICAD_BUILD_ARCH "x64" )
-            set( KICAD_BUILD_ARCH_X64 1 )
-        else()
-            message(FATAL_ERROR "Failed to determine the MSVC target architecture: ${MSVC_C_ARCHITECTURE_ID}")
-        endif()
-    else()
-        if ( NOT CMAKE_SIZEOF_VOID_P EQUAL 8 )
-            set( KICAD_BUILD_ARCH "x86" )
-            set( KICAD_BUILD_ARCH_X86 1 )
-        elseif( CMAKE_SIZEOF_VOID_P EQUAL 8 )
-            set( KICAD_BUILD_ARCH "x64" )
-            set( KICAD_BUILD_ARCH_X64 1 )
-        endif()
-    endif()
-
-    add_compile_definitions( KICAD_BUILD_ARCH=${KICAD_BUILD_ARCH} )
 
     add_compile_definitions( $<$<BOOL:${KICAD_WIN32_DPI_AWARE}>:KICAD_WIN32_DPI_AWARE=1> )
 endif()
@@ -884,7 +854,7 @@ check_find_package_result( PYTHONINTERP_FOUND "Python Interpreter" )
 # Get the correct Python site package install path from the Python interpreter found by
 # FindPythonInterp unless the user specifically defined a custom path.
 if( NOT PYTHON_SITE_PACKAGE_PATH )
-    execute_process( COMMAND ${PYTHON_EXECUTABLE} -c "import distutils.sysconfig;print(\"%s\"%distutils.sysconfig.get_python_lib(plat_specific=0, standard_lib=0, prefix=''))"
+    execute_process( COMMAND ${PYTHON_EXECUTABLE} -c "import sysconfig;print(\"%s\"%sysconfig.get_path('purelib'))"
         OUTPUT_VARIABLE PYTHON_SITE_PACKAGE_PATH
         OUTPUT_STRIP_TRAILING_WHITESPACE
         )
@@ -939,15 +909,18 @@ set( INC_AFTER ${INC_AFTER} ${PYTHON_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/s
 
 if( KICAD_SCRIPTING_WXPYTHON )
     # Find the wxPython installation
-    find_package( wxPython REQUIRED )
+    if( NOT VCPKG_TOOLCHAIN AND NOT KICAD_BUILD_ARCH_ARM64 )
+        find_package( wxPython REQUIRED )
 
-    if( WXPYTHON_VERSION VERSION_LESS 4.0.0 )
-        message( FATAL_ERROR "wxPython Phoenix is required" )
+        if( WXPYTHON_VERSION VERSION_LESS 4.0.0 )
+            message( FATAL_ERROR "wxPython Phoenix is required" )
+        endif()
+
+        if( WXPYTHON_WXVERSION VERSION_LESS 3.2.0 )
+            message( FATAL_ERROR "wxWidgets 3.2.0 or greater is required" )
+        endif()
     endif()
 
-    if( WXPYTHON_WXVERSION VERSION_LESS 3.2.0 )
-        message( FATAL_ERROR "wxWidgets 3.2.0 or greater is required" )
-    endif()
 endif()
 
 # GTK3 is required on Linux
