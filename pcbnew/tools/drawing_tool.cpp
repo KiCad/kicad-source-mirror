@@ -1247,7 +1247,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 else if( originalEvent.IsAction( &PCB_ACTIONS::drawLeader ) )
                 {
                     dimension = new PCB_DIM_LEADER( m_frame->GetModel(), m_isFootprintEditor );
-                    dimension->Text().SetPosition( cursorPos );
+                    dimension->SetTextPos( cursorPos );
                 }
                 else
                 {
@@ -1257,9 +1257,9 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 t = dimension->Type();
 
                 dimension->SetLayer( layer );
-                dimension->Text().SetTextSize( boardSettings.GetTextSize( layer ) );
-                dimension->Text().SetTextThickness( boardSettings.GetTextThickness( layer ) );
-                dimension->Text().SetItalic( boardSettings.GetTextItalic( layer ) );
+                dimension->SetTextSize( boardSettings.GetTextSize( layer ) );
+                dimension->SetTextThickness( boardSettings.GetTextThickness( layer ) );
+                dimension->SetItalic( boardSettings.GetTextItalic( layer ) );
                 dimension->SetLineThickness( boardSettings.GetLineThickness( layer ) );
                 dimension->SetArrowLength( boardSettings.m_DimensionArrowLength );
                 dimension->SetExtensionOffset( boardSettings.m_DimensionExtensionOffset );
@@ -1364,7 +1364,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                     if( radialDim->GetEnd().x < radialDim->GetStart().x )
                         textOffset = -textOffset;
 
-                    radialDim->Text().SetPosition( radialDim->GetKnee() + textOffset );
+                    radialDim->SetTextPos( radialDim->GetKnee() + textOffset );
                 }
                 else if( t == PCB_DIM_LEADER_T || t == PCB_FP_DIM_LEADER_T )
                 {
@@ -1373,7 +1373,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                     if( dimension->GetEnd().x < dimension->GetStart().x )
                         textOffset = -textOffset;
 
-                    dimension->Text().SetPosition( dimension->GetEnd() + textOffset );
+                    dimension->SetTextPos( dimension->GetEnd() + textOffset );
                 }
 
                 dimension->Update();
@@ -1447,9 +1447,9 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             }
 
             dimension->SetLayer( layer );
-            dimension->Text().SetTextSize( boardSettings.GetTextSize( layer ) );
-            dimension->Text().SetTextThickness( boardSettings.GetTextThickness( layer ) );
-            dimension->Text().SetItalic( boardSettings.GetTextItalic( layer ) );
+            dimension->SetTextSize( boardSettings.GetTextSize( layer ) );
+            dimension->SetTextThickness( boardSettings.GetTextThickness( layer ) );
+            dimension->SetItalic( boardSettings.GetTextItalic( layer ) );
             dimension->SetLineThickness( boardSettings.GetLineThickness( layer ) );
             dimension->Update();
 

@@ -484,7 +484,7 @@ void BRDITEMS_PLOTTER::PlotDimension( const PCB_DIMENSION_BASE* aDim )
     // the white items are not seen on a white paper or screen
     m_plotter->SetColor( color != WHITE ? color : LIGHTGRAY);
 
-    PlotPcbText( &aDim->Text(), aDim->GetLayer(), false );
+    PlotPcbText( aDim, aDim->GetLayer(), false );
 
     for( const std::shared_ptr<SHAPE>& shape : aDim->GetShapes() )
     {

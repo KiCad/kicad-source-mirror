@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -845,7 +845,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             addAnchor( radialDim->GetStart(), CORNER | SNAPPABLE, aItem );
             addAnchor( radialDim->GetEnd(), CORNER | SNAPPABLE, aItem );
             addAnchor( radialDim->GetKnee(), CORNER | SNAPPABLE, aItem );
-            addAnchor( radialDim->Text().GetPosition(), CORNER | SNAPPABLE, aItem );
+            addAnchor( radialDim->GetTextPos(), CORNER | SNAPPABLE, aItem );
             break;
         }
 
@@ -858,7 +858,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             const PCB_DIM_LEADER* leader = static_cast<const PCB_DIM_LEADER*>( aItem );
             addAnchor( leader->GetStart(), CORNER | SNAPPABLE, aItem );
             addAnchor( leader->GetEnd(), CORNER | SNAPPABLE, aItem );
-            addAnchor( leader->Text().GetPosition(), CORNER | SNAPPABLE, aItem );
+            addAnchor( leader->GetTextPos(), CORNER | SNAPPABLE, aItem );
             break;
         }
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -92,7 +92,7 @@ enum class DIM_TEXT_BORDER
  * - "crossbar" refers to the perpendicular line (usually with arrows at each end) between feature
  *   lines on linear dimensions
  */
-class PCB_DIMENSION_BASE : public BOARD_ITEM
+class PCB_DIMENSION_BASE : public PCB_TEXT
 {
 public:
     PCB_DIMENSION_BASE( BOARD_ITEM* aParent, KICAD_T aType = PCB_DIMENSION_T );
@@ -110,8 +110,6 @@ public:
 
         return false;
     }
-
-    void SetParent( EDA_ITEM* aParent ) override;
 
     /**
      * The dimension's origin is the first feature point for the dimension.  Every dimension has
@@ -132,6 +130,13 @@ public:
 
     wxString GetOverrideText() const { return m_valueString; }
     void SetOverrideText( const wxString& aValue ) { m_valueString = aValue; }
+
+    void ChangeOverrideText( const wxString& aValue )
+    {
+        SetOverrideTextEnabled( true );
+        SetOverrideText( aValue );
+        updateText();
+    }
 
     int GetMeasuredValue() const { return m_measuredValue; }
 
@@ -155,8 +160,20 @@ public:
     wxString GetPrefix() const { return m_prefix; }
     void SetPrefix( const wxString& aPrefix );
 
+    void ChangePrefix( const wxString& aPrefix )
+    {
+        SetPrefix( aPrefix );
+        updateText();
+    }
+
     wxString GetSuffix() const { return m_suffix; }
     void SetSuffix( const wxString& aSuffix );
+
+    void ChangeSuffix( const wxString& aSuffix )
+    {
+        SetSuffix( aSuffix );
+        updateText();
+    }
 
     EDA_UNITS GetUnits() const { return m_units; }
     void SetUnits( EDA_UNITS aUnits );
@@ -164,16 +181,40 @@ public:
     DIM_UNITS_MODE GetUnitsMode() const;
     void SetUnitsMode( DIM_UNITS_MODE aMode );
 
+    void ChangeUnitsMode( DIM_UNITS_MODE aMode )
+    {
+        SetUnitsMode( aMode );
+        updateText();
+    }
+
     void SetAutoUnits( bool aAuto = true ) { m_autoUnits = aAuto; }
 
     DIM_UNITS_FORMAT GetUnitsFormat() const { return m_unitsFormat; }
     void SetUnitsFormat( const DIM_UNITS_FORMAT aFormat ) { m_unitsFormat = aFormat; }
 
+    void ChangeUnitsFormat( const DIM_UNITS_FORMAT aFormat )
+    {
+        SetUnitsFormat( aFormat );
+        updateText();
+    }
+
     int GetPrecision() const { return m_precision; }
     void SetPrecision( int aPrecision ) { m_precision = aPrecision; }
 
+    void ChangePrecision( int aPrecision )
+    {
+        SetPrecision( aPrecision );
+        updateText();
+    }
+
     bool GetSuppressZeroes() const { return m_suppressZeroes; }
     void SetSuppressZeroes( bool aSuppress ) { m_suppressZeroes = aSuppress; }
+
+    void ChangeSuppressZeroes( bool aSuppress )
+    {
+        SetSuppressZeroes( aSuppress );
+        updateText();
+    }
 
     bool GetKeepTextAligned() const { return m_keepTextAligned; }
     void SetKeepTextAligned( bool aKeepAligned ) { m_keepTextAligned = aKeepAligned; }
@@ -189,30 +230,6 @@ public:
 
     int GetLineThickness() const        { return m_lineThickness; }
     void SetLineThickness( int aWidth ) { m_lineThickness = aWidth; }
-
-    void SetLayer( PCB_LAYER_ID aLayer ) override;
-
-    void SetTextSize( const wxSize& aTextSize )
-    {
-        m_text.SetTextSize( aTextSize );
-    }
-
-    /**
-     * Set the override text - has no effect if m_overrideValue == false.
-     *
-     * @param aNewText is the text to use as the value.
-     */
-    void           SetText( const wxString& aNewText );
-
-    /**
-     * Retrieve the value text or override text, not including prefix or suffix.
-     *
-     * @return the value portion of the dimension text (either overridden or not).
-     */
-    const wxString GetText() const;
-
-    PCB_TEXT& Text() { return m_text; }
-    const PCB_TEXT& Text() const { return m_text; }
 
     /**
      * @return a list of line segments that make up this dimension (for drawing, plotting, etc).
@@ -248,6 +265,8 @@ public:
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
 
     const BOX2I ViewBBox() const override;
+
+    void ClearRenderCache() override;
 
     void TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
                                   int aError, ERROR_LOC aErrorLoc,
@@ -303,13 +322,14 @@ protected:
     bool              m_keepTextAligned;  ///< Calculate text orientation to match dimension
 
     // Internal
-    PCB_TEXT          m_text;             ///< The actual text object
     int               m_measuredValue;    ///< value of PCB dimensions
     VECTOR2I          m_start;
     VECTOR2I          m_end;
 
     ///< Internal cache of drawn shapes
     std::vector<std::shared_ptr<SHAPE>> m_shapes;
+
+    bool       m_inClearRenderCache;      ///< re-entrancy guard
 };
 
 
@@ -374,6 +394,12 @@ public:
     void SetHeight( int aHeight ) { m_height = aHeight; }
     int GetHeight() const {  return m_height; }
 
+    void ChangeHeight( int aHeight )
+    {
+        SetHeight( aHeight );
+        updateGeometry();
+    }
+
     /**
      * Update the stored height basing on points coordinates.
      *
@@ -383,6 +409,12 @@ public:
 
     void SetExtensionHeight( int aHeight ) { m_extensionHeight = aHeight; }
     int GetExtensionHeight() const { return m_extensionHeight; }
+
+    void ChangeExtensionHeight( int aHeight )
+    {
+        SetExtensionHeight( aHeight );
+        updateGeometry();
+    }
 
     /**
      * Return the angle of the crossbar.
@@ -511,6 +543,12 @@ public:
     void SetLeaderLength( int aLength ) { m_leaderLength = aLength; }
     int GetLeaderLength() const { return m_leaderLength; }
 
+    void ChangeLeaderLength( int aLength )
+    {
+        SetLeaderLength( aLength );
+        updateGeometry();
+    }
+
     // Returns the point (c).
     VECTOR2I GetKnee() const;
 
@@ -566,8 +604,16 @@ public:
         return wxT( "PCB_DIM_LEADER" );
     }
 
-    void SetTextBorder( DIM_TEXT_BORDER aFrame ) { m_textBorder = aFrame; }
+    void SetTextBorder( DIM_TEXT_BORDER aBorder ) { m_textBorder = aBorder; }
     DIM_TEXT_BORDER GetTextBorder() const { return m_textBorder; }
+
+    void ChangeTextBorder( DIM_TEXT_BORDER aBorder )
+    {
+        SetTextBorder( aBorder );
+        updateGeometry();
+    }
+
+    void ClearRenderCache() override;
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 

@@ -957,9 +957,9 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
 
                     dimension->SetStart( pt1 );
                     dimension->SetEnd( pt2 );
-                    dimension->Text().SetPosition( pt3 );
-                    dimension->Text().SetTextSize( textSize );
-                    dimension->Text().SetTextThickness( textThickness );
+                    dimension->SetTextPos( pt3 );
+                    dimension->SetTextSize( textSize );
+                    dimension->SetTextThickness( textThickness );
                     dimension->SetLineThickness( designSettings.GetLineThickness( layer ) );
                     dimension->SetUnits( EDA_UNITS::MILLIMETRES );
                 }
@@ -973,10 +973,10 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
 
                     leader->SetStart( pt1 );
                     leader->SetEnd( pt2 );
-                    leader->Text().SetPosition( pt3 );
-                    leader->Text().SetTextSize( textSize );
-                    leader->Text().SetTextThickness( textThickness );
-                    leader->SetText( wxEmptyString );
+                    leader->SetTextPos( pt3 );
+                    leader->SetTextSize( textSize );
+                    leader->SetTextThickness( textThickness );
+                    leader->SetOverrideText( wxEmptyString );
                     leader->SetLineThickness( designSettings.GetLineThickness( layer ) );
                 }
                 else    // horizontal, vertical, <default>, diameter
@@ -1009,8 +1009,8 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                     // The origin and end are assumed to always be in this order from eagle
                     dimension->SetStart( pt1 );
                     dimension->SetEnd( pt2 );
-                    dimension->Text().SetTextSize( textSize );
-                    dimension->Text().SetTextThickness( textThickness );
+                    dimension->SetTextSize( textSize );
+                    dimension->SetTextThickness( textThickness );
                     dimension->SetLineThickness( designSettings.GetLineThickness( layer ) );
                     dimension->SetUnits( EDA_UNITS::MILLIMETRES );
 
