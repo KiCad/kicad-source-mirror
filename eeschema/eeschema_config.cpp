@@ -39,6 +39,7 @@
 #include <wildcards_and_files_ext.h>
 #include <drawing_sheet/ds_data_model.h>
 #include <zoom_defines.h>
+#include <sim/spice_settings.h>
 
 
 /// Helper for all the old plotting/printing code while it still exists
@@ -88,7 +89,8 @@ void SCH_EDIT_FRAME::ShowSchematicSetupDialog( const wxString& aInitialPage )
 
     if( dlg.ShowQuasiModal() == wxID_OK )
     {
-        SaveProjectSettings();
+        // Mark document as modified so that project settings can be saved as part of doc save
+        OnModify();
 
         Kiway().CommonSettingsChanged( false, true );
 
@@ -120,7 +122,7 @@ int SCH_EDIT_FRAME::GetSchematicJunctionSize()
 }
 
 
-void SCH_EDIT_FRAME::SaveProjectSettings()
+void SCH_EDIT_FRAME::saveProjectSettings()
 {
     wxFileName fn = Schematic().RootScreen()->GetFileName();  //ConfigFileName
 
@@ -131,6 +133,8 @@ void SCH_EDIT_FRAME::SaveProjectSettings()
 
     RecordERCExclusions();
 
+    if( Kiway().Player( FRAME_SIMULATOR, false ) )
+        Prj().GetProjectFile().m_SchematicSettings->m_NgspiceSimulatorSettings->SaveToFile();
 
     // Save the page layout file if doesn't exist yet (e.g. if we opened a non-kicad schematic)
 
@@ -156,6 +160,12 @@ void SCH_EDIT_FRAME::SaveProjectSettings()
     }
 
     GetSettingsManager()->SaveProject( fn.GetFullPath() );
+}
+
+
+void SCH_EDIT_FRAME::SaveProjectLocalSettings()
+{
+    // No schematic local settings yet
 }
 
 

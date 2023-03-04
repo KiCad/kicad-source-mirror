@@ -1101,7 +1101,7 @@ void PCB_EDIT_FRAME::doCloseWindow()
     }
 
     // Make sure local settings are persisted
-    SaveProjectSettings();
+    SaveProjectLocalSettings();
 
     // Do not show the layer manager during closing to avoid flicker
     // on some platforms (Windows) that generate useless redraw of items in
@@ -1148,7 +1148,8 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
     if( dlg.ShowQuasiModal() == wxID_OK )
     {
         GetBoard()->SynchronizeNetsAndNetClasses( true );
-        SaveProjectSettings();
+        // We don't know if anything was modified, so err on the side of requiring a save
+        OnModify();
 
         Kiway().CommonSettingsChanged( false, true );
 
@@ -1506,7 +1507,7 @@ void PCB_EDIT_FRAME::SetLastPath( LAST_PATH_TYPE aType, const wxString& aLastPat
     if( relativeFileName.GetFullPath() != project.m_PcbLastPath[ aType ] )
     {
         project.m_PcbLastPath[ aType ] = relativeFileName.GetFullPath();
-        SaveProjectSettings();
+        OnModify();
     }
 }
 

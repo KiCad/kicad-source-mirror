@@ -223,7 +223,7 @@ bool DIALOG_PAGES_SETTINGS::TransferDataFromWindow()
         m_screen->SetContentModified();
 
         if( LocalPrjConfigChanged() )
-            m_parent->SaveProjectSettings();
+            m_parent->OnModify();
 
         // Call the post processing (if any) after changes
         m_parent->OnPageSettingsChange();

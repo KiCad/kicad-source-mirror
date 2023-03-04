@@ -689,10 +689,12 @@ void SIMULATOR_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     PROJECT_FILE& project = Prj().GetProjectFile();
 
     if( project.m_SchematicSettings )
-        project.m_SchematicSettings->m_NgspiceSimulatorSettings->SaveToFile();
+    {
+        bool modified = project.m_SchematicSettings->m_NgspiceSimulatorSettings->SaveToFile();
 
-    if( m_schematicFrame )
-        m_schematicFrame->SaveProjectSettings();
+        if( m_schematicFrame && modified )
+            m_schematicFrame->OnModify();
+    }
 }
 
 

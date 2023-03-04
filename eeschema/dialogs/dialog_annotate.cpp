@@ -132,7 +132,7 @@ DIALOG_ANNOTATE::~DIALOG_ANNOTATE()
         if( projSettings.m_AnnotateStartNum != startNum )
         {
             projSettings.m_AnnotateStartNum = startNum;
-            schFrame->SaveProjectSettings();
+            schFrame->OnModify();
         }
     }
 }

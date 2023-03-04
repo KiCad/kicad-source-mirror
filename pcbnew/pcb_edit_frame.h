@@ -196,10 +196,7 @@ public:
      */
     static std::vector<ACTION_PLUGIN*> GetOrderedActionPlugins();
 
-    /**
-     * Save changes to the project settings to the project (.pro) file.
-     */
-    void SaveProjectSettings() override;
+    void SaveProjectLocalSettings() override;
 
     /**
      * Load the current project's file configuration settings which are pertinent
@@ -805,6 +802,8 @@ protected:
     int inferLegacyEdgeClearance( BOARD* aBoard );
 
     void redrawNetnames( wxTimerEvent& aEvent );
+
+    void saveProjectSettings() override;
 
 public:
     PCB_LAYER_BOX_SELECTOR* m_SelLayerBox;  // a combo box to display and select active layer

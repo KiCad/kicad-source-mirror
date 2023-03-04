@@ -55,7 +55,6 @@
 #include <settings/settings_manager.h>
 #include <advanced_config.h>
 #include <sim/simulator_frame.h>
-#include <sim/spice_settings.h>
 #include <tool/action_manager.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
@@ -834,8 +833,6 @@ void SCH_EDIT_FRAME::doCloseWindow()
     if( m_toolManager )
         m_toolManager->ShutdownAllTools();
 
-    RecordERCExclusions();
-
     // Close the find dialog and preserve its setting if it is displayed.
     if( m_findReplaceDialog )
     {
@@ -853,9 +850,6 @@ void SCH_EDIT_FRAME::doCloseWindow()
         hierarchy_pane.Show( false );
         m_auimgr.Update();
     }
-
-    if( Kiway().Player( FRAME_SIMULATOR, false ) )
-        Prj().GetProjectFile().m_SchematicSettings->m_NgspiceSimulatorSettings->SaveToFile();
 
     SCH_SCREENS screens( Schematic().Root() );
     wxFileName fn;
@@ -885,7 +879,7 @@ void SCH_EDIT_FRAME::doCloseWindow()
         UpdateFileHistory( fileName );
 
     // Make sure local settings are persisted
-    SaveProjectSettings();
+    SaveProjectLocalSettings();
 
     Schematic().RootScreen()->Clear();
 
