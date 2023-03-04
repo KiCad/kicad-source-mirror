@@ -2674,11 +2674,11 @@ void LEGACY_PLUGIN::loadDIMENSION()
             EDA_ANGLE orient = degParse( data, &data );
             char*     mirror = strtok_r( (char*) data, delims, (char**) &data );
 
-            dim->Text().SetTextPos( VECTOR2I( pos_x, pos_y ) );
-            dim->Text().SetTextSize( VECTOR2I( width, height ) );
-            dim->Text().SetMirrored( mirror && *mirror == '0' );
-            dim->Text().SetTextThickness( thickn );
-            dim->Text().SetTextAngle( orient );
+            dim->SetTextPos( VECTOR2I( pos_x, pos_y ) );
+            dim->SetTextSize( VECTOR2I( width, height ) );
+            dim->SetMirrored( mirror && *mirror == '0' );
+            dim->SetTextThickness( thickn );
+            dim->SetTextAngle( orient );
         }
         else if( TESTLINE( "Sb" ) )
         {

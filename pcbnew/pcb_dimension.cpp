@@ -4,7 +4,7 @@
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@ static const EDA_ANGLE s_arrowAngle( 27.5, DEGREES_T );
 
 
 PCB_DIMENSION_BASE::PCB_DIMENSION_BASE( BOARD_ITEM* aParent, KICAD_T aType ) :
-        BOARD_ITEM( aParent, aType ),
+        PCB_TEXT( aParent, aType ),
         m_overrideTextEnabled( false ),
         m_units( EDA_UNITS::INCHES ),
         m_autoUnits( false ),
@@ -54,17 +54,10 @@ PCB_DIMENSION_BASE::PCB_DIMENSION_BASE( BOARD_ITEM* aParent, KICAD_T aType ) :
         m_extensionOffset( 0 ),
         m_textPosition( DIM_TEXT_POSITION::OUTSIDE ),
         m_keepTextAligned( true ),
-        m_text( aParent ),
-        m_measuredValue( 0 )
+        m_measuredValue( 0 ),
+        m_inClearRenderCache( false )
 {
     m_layer = Dwgs_User;
-}
-
-
-void PCB_DIMENSION_BASE::SetParent( EDA_ITEM* aParent )
-{
-    BOARD_ITEM::SetParent( aParent );
-    m_text.SetParent( aParent );
 }
 
 
@@ -89,7 +82,23 @@ void PCB_DIMENSION_BASE::updateText()
     text.Prepend( m_prefix );
     text.Append( m_suffix );
 
-    m_text.SetText( text );
+    SetText( text );
+}
+
+
+void PCB_DIMENSION_BASE::ClearRenderCache()
+{
+    PCB_TEXT::ClearRenderCache();
+
+    // We use EDA_TEXT::ClearRenderCache() as a signal that the properties of the EDA_TEXT
+    // have changed and we may need to update the dimension text
+
+    if( !m_inClearRenderCache )
+    {
+        m_inClearRenderCache = true;
+        updateText();
+        m_inClearRenderCache = false;
+    }
 }
 
 
@@ -193,29 +202,9 @@ void PCB_DIMENSION_BASE::SetUnitsMode( DIM_UNITS_MODE aMode )
 }
 
 
-void PCB_DIMENSION_BASE::SetText( const wxString& aNewText )
-{
-    m_valueString = aNewText;
-    updateText();
-}
-
-
-const wxString PCB_DIMENSION_BASE::GetText() const
-{
-    return m_text.GetText();
-}
-
-
-void PCB_DIMENSION_BASE::SetLayer( PCB_LAYER_ID aLayer )
-{
-    m_layer = aLayer;
-    m_text.SetLayer( aLayer );
-}
-
-
 void PCB_DIMENSION_BASE::Move( const VECTOR2I& offset )
 {
-    m_text.Offset( offset );
+    PCB_TEXT::Offset( offset );
 
     m_start += offset;
     m_end   += offset;
@@ -226,15 +215,15 @@ void PCB_DIMENSION_BASE::Move( const VECTOR2I& offset )
 
 void PCB_DIMENSION_BASE::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
-    EDA_ANGLE newAngle = m_text.GetTextAngle() + aAngle;
+    EDA_ANGLE newAngle = GetTextAngle() + aAngle;
 
     newAngle.Normalize();
 
-    m_text.SetTextAngle( newAngle );
+    SetTextAngle( newAngle );
 
-    VECTOR2I pt = m_text.GetTextPos();
+    VECTOR2I pt = GetTextPos();
     RotatePoint( pt, aRotCentre, aAngle );
-    m_text.SetTextPos( pt );
+    SetTextPos( pt );
 
     RotatePoint( m_start, aRotCentre, aAngle );
     RotatePoint( m_end, aRotCentre, aAngle );
@@ -254,7 +243,7 @@ void PCB_DIMENSION_BASE::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 void PCB_DIMENSION_BASE::Mirror( const VECTOR2I& axis_pos, bool aMirrorLeftRight )
 {
     int axis = aMirrorLeftRight ? axis_pos.x : axis_pos.y;
-    VECTOR2I newPos = m_text.GetTextPos();
+    VECTOR2I newPos = GetTextPos();
 
 #define INVERT( pos ) ( ( pos ) = axis - ( ( pos ) - axis ) )
     if( aMirrorLeftRight )
@@ -262,10 +251,10 @@ void PCB_DIMENSION_BASE::Mirror( const VECTOR2I& axis_pos, bool aMirrorLeftRight
     else
         INVERT( newPos.y );
 
-    m_text.SetTextPos( newPos );
+    SetTextPos( newPos );
 
     // invert angle
-    m_text.SetTextAngle( -m_text.GetTextAngle() );
+    SetTextAngle( -GetTextAngle() );
 
     if( aMirrorLeftRight )
     {
@@ -279,7 +268,7 @@ void PCB_DIMENSION_BASE::Mirror( const VECTOR2I& axis_pos, bool aMirrorLeftRight
     }
 
     if( ( GetLayerSet() & LSET::SideSpecificMask() ).any() )
-        m_text.SetMirrored( !m_text.IsMirrored() );
+        SetMirrored( !IsMirrored() );
 
     Update();
 }
@@ -293,7 +282,7 @@ void PCB_DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
 
     wxCHECK_RET( m_parent != nullptr, wxT( "PCB_TEXT::GetMsgPanelInfo() m_Parent is NULL." ) );
 
-    aList.emplace_back( _( "Dimension" ), m_text.GetShownText() );
+    aList.emplace_back( _( "Dimension" ), GetShownText() );
 
     aList.emplace_back( _( "Prefix" ), GetPrefix() );
 
@@ -326,13 +315,10 @@ void PCB_DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
 
     aList.emplace_back( _( "Units" ), EDA_UNIT_UTILS::GetLabel( GetUnits() ) );
 
-    aList.emplace_back( _( "Font" ), m_text.GetFont() ? m_text.GetFont()->GetName() : _( "Default" ) );
-    aList.emplace_back( _( "Text Thickness" ),
-                        unitsProvider.MessageTextFromValue( m_text.GetTextThickness() ) );
-    aList.emplace_back( _( "Text Width" ),
-                        unitsProvider.MessageTextFromValue( m_text.GetTextWidth() ) );
-    aList.emplace_back( _( "Text Height" ),
-                        unitsProvider.MessageTextFromValue( m_text.GetTextHeight() ) );
+    aList.emplace_back( _( "Font" ), GetFont() ? GetFont()->GetName() : _( "Default" ) );
+    aList.emplace_back( _( "Text Thickness" ), unitsProvider.MessageTextFromValue( GetTextThickness() ) );
+    aList.emplace_back( _( "Text Width" ), unitsProvider.MessageTextFromValue( GetTextWidth() ) );
+    aList.emplace_back( _( "Text Height" ), unitsProvider.MessageTextFromValue( GetTextHeight() ) );
 
     ORIGIN_TRANSFORMS originTransforms = aFrame->GetOriginTransforms();
 
@@ -370,7 +356,7 @@ std::shared_ptr<SHAPE> PCB_DIMENSION_BASE::GetEffectiveShape( PCB_LAYER_ID aLaye
 {
     std::shared_ptr<SHAPE_COMPOUND> effectiveShape = std::make_shared<SHAPE_COMPOUND>();
 
-    effectiveShape->AddShape( Text().GetEffectiveTextShape()->Clone() );
+    effectiveShape->AddShape( GetEffectiveTextShape()->Clone() );
 
     for( const std::shared_ptr<SHAPE>& shape : GetShapes() )
         effectiveShape->AddShape( shape->Clone() );
@@ -381,7 +367,7 @@ std::shared_ptr<SHAPE> PCB_DIMENSION_BASE::GetEffectiveShape( PCB_LAYER_ID aLaye
 
 bool PCB_DIMENSION_BASE::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
-    if( m_text.TextHitTest( aPosition ) )
+    if( TextHitTest( aPosition ) )
         return true;
 
     int dist_max = aAccuracy + ( m_lineThickness / 2 );
@@ -420,7 +406,7 @@ const BOX2I PCB_DIMENSION_BASE::GetBoundingBox() const
     BOX2I bBox;
     int   xmin, xmax, ymin, ymax;
 
-    bBox    = m_text.GetTextBox();
+    bBox    = GetTextBox();
     xmin    = bBox.GetX();
     xmax    = bBox.GetRight();
     ymin    = bBox.GetY();
@@ -459,7 +445,7 @@ const BOX2I PCB_DIMENSION_BASE::ViewBBox() const
 {
     BOX2I dimBBox = BOX2I( VECTOR2I( GetBoundingBox().GetPosition() ),
                            VECTOR2I( GetBoundingBox().GetSize() ) );
-    dimBBox.Merge( m_text.ViewBBox() );
+    dimBBox.Merge( PCB_TEXT::ViewBBox() );
 
     return dimBBox;
 }
@@ -639,8 +625,7 @@ void PCB_DIM_ALIGNED::updateGeometry()
 
     // Now that we have the text updated, we can determine how to draw the crossbar.
     // First we need to create an appropriate bounding polygon to collide with
-    BOX2I textBox = m_text.GetTextBox().Inflate( m_text.GetTextWidth() / 2,
-                                                 - m_text.GetEffectiveTextPenWidth() );
+    BOX2I textBox = GetTextBox().Inflate( GetTextWidth() / 2, - GetEffectiveTextPenWidth() );
 
     SHAPE_POLY_SET polyBox;
     polyBox.NewOutline();
@@ -648,7 +633,7 @@ void PCB_DIM_ALIGNED::updateGeometry()
     polyBox.Append( textBox.GetOrigin().x, textBox.GetEnd().y );
     polyBox.Append( textBox.GetEnd() );
     polyBox.Append( textBox.GetEnd().x, textBox.GetOrigin().y );
-    polyBox.Rotate( m_text.GetTextAngle(), textBox.GetCenter() );
+    polyBox.Rotate( GetTextAngle(), textBox.GetCenter() );
 
     // The ideal crossbar, if the text doesn't collide
     SEG crossbar( m_crossBarStart, m_crossBarEnd );
@@ -688,7 +673,7 @@ void PCB_DIM_ALIGNED::updateText()
 
     if( m_textPosition == DIM_TEXT_POSITION::OUTSIDE )
     {
-        int textOffsetDistance = m_text.GetEffectiveTextPenWidth() + m_text.GetTextHeight();
+        int textOffsetDistance = GetEffectiveTextPenWidth() + GetTextHeight();
         EDA_ANGLE rotation;
 
         if( crossbarCenter.x == 0 )
@@ -702,11 +687,11 @@ void PCB_DIM_ALIGNED::updateText()
         RotatePoint( textOffset, rotation );
         textOffset = crossbarCenter + textOffset.Resize( textOffsetDistance );
 
-        m_text.SetTextPos( m_crossBarStart + textOffset );
+        SetTextPos( m_crossBarStart + textOffset );
     }
     else if( m_textPosition == DIM_TEXT_POSITION::INLINE )
     {
-        m_text.SetTextPos( m_crossBarStart + crossbarCenter );
+        SetTextPos( m_crossBarStart + crossbarCenter );
     }
 
     if( m_keepTextAligned )
@@ -717,7 +702,7 @@ void PCB_DIM_ALIGNED::updateText()
         if( textAngle > ANGLE_90 && textAngle <= ANGLE_270 )
             textAngle -= ANGLE_180;
 
-        m_text.SetTextAngle( textAngle );
+        SetTextAngle( textAngle );
     }
 
     PCB_DIMENSION_BASE::updateText();
@@ -822,8 +807,7 @@ void PCB_DIM_ORTHOGONAL::updateGeometry()
 
     // Now that we have the text updated, we can determine how to draw the crossbar.
     // First we need to create an appropriate bounding polygon to collide with
-    BOX2I textBox = m_text.GetTextBox().Inflate( m_text.GetTextWidth() / 2,
-                                                 m_text.GetEffectiveTextPenWidth() );
+    BOX2I textBox = GetTextBox().Inflate( GetTextWidth() / 2, GetEffectiveTextPenWidth() );
 
     SHAPE_POLY_SET polyBox;
     polyBox.NewOutline();
@@ -831,7 +815,7 @@ void PCB_DIM_ORTHOGONAL::updateGeometry()
     polyBox.Append( textBox.GetOrigin().x, textBox.GetEnd().y );
     polyBox.Append( textBox.GetEnd() );
     polyBox.Append( textBox.GetEnd().x, textBox.GetOrigin().y );
-    polyBox.Rotate( m_text.GetTextAngle(), textBox.GetCenter() );
+    polyBox.Rotate( GetTextAngle(), textBox.GetCenter() );
 
     // The ideal crossbar, if the text doesn't collide
     SEG crossbar( m_crossBarStart, m_crossBarEnd );
@@ -872,7 +856,7 @@ void PCB_DIM_ORTHOGONAL::updateText()
 
     if( m_textPosition == DIM_TEXT_POSITION::OUTSIDE )
     {
-        int textOffsetDistance = m_text.GetEffectiveTextPenWidth() + m_text.GetTextHeight();
+        int textOffsetDistance = GetEffectiveTextPenWidth() + GetTextHeight();
 
         VECTOR2I textOffset;
 
@@ -883,22 +867,22 @@ void PCB_DIM_ORTHOGONAL::updateText()
 
         textOffset += crossbarCenter;
 
-        m_text.SetTextPos( m_crossBarStart + textOffset );
+        SetTextPos( m_crossBarStart + textOffset );
     }
     else if( m_textPosition == DIM_TEXT_POSITION::INLINE )
     {
-        m_text.SetTextPos( m_crossBarStart + crossbarCenter );
+        SetTextPos( m_crossBarStart + crossbarCenter );
     }
 
     if( m_keepTextAligned )
     {
         if( abs( crossbarCenter.x ) > abs( crossbarCenter.y ) )
-            m_text.SetTextAngle( ANGLE_HORIZONTAL );
+            SetTextAngle( ANGLE_HORIZONTAL );
         else
-            m_text.SetTextAngle( ANGLE_VERTICAL );
+            SetTextAngle( ANGLE_VERTICAL );
     }
 
-    PCB_DIMENSION_BASE::updateText();
+    PCB_DIM_ALIGNED::updateText();
 }
 
 
@@ -959,7 +943,7 @@ PCB_DIM_LEADER::PCB_DIM_LEADER( BOARD_ITEM* aParent, bool aInFP ) :
     m_overrideTextEnabled = true;
     m_keepTextAligned     = false;
 
-    SetText( _( "Leader" ) );
+    SetOverrideText( _( "Leader" ) );
 }
 
 
@@ -996,8 +980,7 @@ void PCB_DIM_LEADER::updateGeometry()
 
     // Now that we have the text updated, we can determine how to draw the second line
     // First we need to create an appropriate bounding polygon to collide with
-    BOX2I textBox = m_text.GetTextBox().Inflate( m_text.GetTextWidth() / 2,
-                                                 m_text.GetEffectiveTextPenWidth() * 2 );
+    BOX2I textBox = GetTextBox().Inflate( GetTextWidth() / 2, GetEffectiveTextPenWidth() * 2 );
 
     SHAPE_POLY_SET polyBox;
     polyBox.NewOutline();
@@ -1005,20 +988,20 @@ void PCB_DIM_LEADER::updateGeometry()
     polyBox.Append( textBox.GetOrigin().x, textBox.GetEnd().y );
     polyBox.Append( textBox.GetEnd() );
     polyBox.Append( textBox.GetEnd().x, textBox.GetOrigin().y );
-    polyBox.Rotate( m_text.GetTextAngle(), textBox.GetCenter() );
+    polyBox.Rotate( GetTextAngle(), textBox.GetCenter() );
 
     VECTOR2I firstLine( m_end - m_start );
     VECTOR2I start( m_start );
     start += firstLine.Resize( m_extensionOffset );
 
     SEG arrowSeg( m_start, m_end );
-    SEG textSeg( m_end, m_text.GetPosition() );
+    SEG textSeg( m_end, GetTextPos() );
     OPT_VECTOR2I arrowSegEnd;
     OPT_VECTOR2I textSegEnd;
 
     if( m_textBorder == DIM_TEXT_BORDER::CIRCLE )
     {
-        double penWidth = m_text.GetEffectiveTextPenWidth() / 2.0;
+        double penWidth = GetEffectiveTextPenWidth() / 2.0;
         double radius = ( textBox.GetWidth() / 2.0 ) - penWidth;
         CIRCLE circle( textBox.GetCenter(), radius );
 
@@ -1060,7 +1043,7 @@ void PCB_DIM_LEADER::updateGeometry()
 
         case DIM_TEXT_BORDER::CIRCLE:
         {
-            double penWidth = m_text.GetEffectiveTextPenWidth() / 2.0;
+            double penWidth = GetEffectiveTextPenWidth() / 2.0;
             double radius   = ( textBox.GetWidth() / 2.0 ) - penWidth;
             m_shapes.emplace_back( new SHAPE_CIRCLE( textBox.GetCenter(), radius ) );
 
@@ -1077,9 +1060,26 @@ void PCB_DIM_LEADER::updateGeometry()
 }
 
 
+void PCB_DIM_LEADER::ClearRenderCache()
+{
+    PCB_DIMENSION_BASE::ClearRenderCache();
+
+    // We use EDA_TEXT::ClearRenderCache() as a signal that the properties of the EDA_TEXT
+    // have changed and we may need to update the dimension text
+
+    if( !m_inClearRenderCache )
+    {
+        m_inClearRenderCache = true;
+        updateText();
+        updateGeometry();
+        m_inClearRenderCache = false;
+    }
+}
+
+
 void PCB_DIM_LEADER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    aList.emplace_back( _( "Leader" ), m_text.GetShownText() );
+    aList.emplace_back( _( "Leader" ), GetShownText() );
 
     ORIGIN_TRANSFORMS originTransforms = aFrame->GetOriginTransforms();
 
@@ -1143,7 +1143,7 @@ void PCB_DIM_RADIAL::updateText()
 {
     if( m_keepTextAligned )
     {
-        VECTOR2I  textLine( Text().GetPosition() - GetKnee() );
+        VECTOR2I  textLine( GetTextPos() - GetKnee() );
         EDA_ANGLE textAngle = FULL_CIRCLE - EDA_ANGLE( textLine );
 
         textAngle.Normalize();
@@ -1154,7 +1154,7 @@ void PCB_DIM_RADIAL::updateText()
         // Round to nearest degree
         textAngle = EDA_ANGLE( KiROUND( textAngle.AsDegrees() ), DEGREES_T );
 
-        m_text.SetTextAngle( textAngle );
+        SetTextAngle( textAngle );
     }
 
     PCB_DIMENSION_BASE::updateText();
@@ -1185,8 +1185,7 @@ void PCB_DIM_RADIAL::updateGeometry()
 
     // Now that we have the text updated, we can determine how to draw the second line
     // First we need to create an appropriate bounding polygon to collide with
-    BOX2I textBox = m_text.GetTextBox().Inflate( m_text.GetTextWidth() / 2,
-                                                 m_text.GetEffectiveTextPenWidth() );
+    BOX2I textBox = GetTextBox().Inflate( GetTextWidth() / 2, GetEffectiveTextPenWidth() );
 
     SHAPE_POLY_SET polyBox;
     polyBox.NewOutline();
@@ -1194,13 +1193,13 @@ void PCB_DIM_RADIAL::updateGeometry()
     polyBox.Append( textBox.GetOrigin().x, textBox.GetEnd().y );
     polyBox.Append( textBox.GetEnd() );
     polyBox.Append( textBox.GetEnd().x, textBox.GetOrigin().y );
-    polyBox.Rotate( m_text.GetTextAngle(), textBox.GetCenter() );
+    polyBox.Rotate( GetTextAngle(), textBox.GetCenter() );
 
     VECTOR2I radial( m_end - m_start );
     radial = radial.Resize( m_leaderLength );
 
     SEG arrowSeg( m_end, m_end + radial );
-    SEG textSeg( arrowSeg.B, m_text.GetPosition() );
+    SEG textSeg( arrowSeg.B, GetTextPos() );
 
     OPT_VECTOR2I arrowSegEnd = segPolyIntersection( polyBox, arrowSeg );
     OPT_VECTOR2I textSegEnd = segPolyIntersection( polyBox, textSeg );
@@ -1297,14 +1296,228 @@ static struct DIMENSION_DESC
 {
     DIMENSION_DESC()
     {
+        ENUM_MAP<DIM_UNITS_FORMAT>::Instance()
+                    .Map( DIM_UNITS_FORMAT::NO_SUFFIX,    _HKI( "1234.0" ) )
+                    .Map( DIM_UNITS_FORMAT::BARE_SUFFIX,  _HKI( "1234.0 mm" ) )
+                    .Map( DIM_UNITS_FORMAT::PAREN_SUFFIX, _HKI( "1234.0 (mm)" ) );
+
+        ENUM_MAP<DIM_UNITS_MODE>::Instance()
+                    .Map( DIM_UNITS_MODE::INCHES,      _HKI( "Inches" ) )
+                    .Map( DIM_UNITS_MODE::MILS,        _HKI( "Mils" ) )
+                    .Map( DIM_UNITS_MODE::MILLIMETRES, _HKI( "Millimeters" ) )
+                    .Map( DIM_UNITS_MODE::AUTOMATIC,   _HKI( "Automatic" ) );
+
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( PCB_DIMENSION_BASE );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_DIMENSION_BASE, PCB_TEXT> );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_DIMENSION_BASE, BOARD_ITEM> );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_DIMENSION_BASE, EDA_TEXT> );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_DIMENSION_BASE ), TYPE_HASH( PCB_TEXT ) );
         propMgr.InheritsAfter( TYPE_HASH( PCB_DIMENSION_BASE ), TYPE_HASH( BOARD_ITEM ) );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_DIMENSION_BASE ), TYPE_HASH( EDA_TEXT ) );
 
         const wxString groupDimension = _HKI( "Dimension Properties" );
 
+        propMgr.AddProperty( new PROPERTY<PCB_DIMENSION_BASE, wxString>( _HKI( "Prefix" ),
+                &PCB_DIMENSION_BASE::ChangePrefix, &PCB_DIMENSION_BASE::GetPrefix ),
+                groupDimension );
+        propMgr.AddProperty( new PROPERTY<PCB_DIMENSION_BASE, wxString>( _HKI( "Suffix" ),
+                &PCB_DIMENSION_BASE::ChangeSuffix, &PCB_DIMENSION_BASE::GetSuffix ),
+                groupDimension );
         propMgr.AddProperty( new PROPERTY<PCB_DIMENSION_BASE, wxString>( _HKI( "Override Text" ),
-                &PCB_DIMENSION_BASE::SetOverrideText, &PCB_DIMENSION_BASE::GetOverrideText ),
+                &PCB_DIMENSION_BASE::ChangeOverrideText, &PCB_DIMENSION_BASE::GetOverrideText ),
+                groupDimension );
+
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_DIMENSION_BASE, DIM_UNITS_MODE>( _HKI( "Units" ),
+                &PCB_DIMENSION_BASE::ChangeUnitsMode, &PCB_DIMENSION_BASE::GetUnitsMode ),
+                groupDimension );
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_DIMENSION_BASE, DIM_UNITS_FORMAT>( _HKI( "Units Format" ),
+                &PCB_DIMENSION_BASE::ChangeUnitsFormat, &PCB_DIMENSION_BASE::GetUnitsFormat ),
+                groupDimension );
+        propMgr.AddProperty( new PROPERTY<PCB_DIMENSION_BASE, int>( _HKI( "Precision" ),
+                &PCB_DIMENSION_BASE::ChangePrecision, &PCB_DIMENSION_BASE::GetPrecision ),
+                groupDimension );
+        propMgr.AddProperty( new PROPERTY<PCB_DIMENSION_BASE, bool>( _HKI( "Suppress Trailing Zeroes" ),
+                &PCB_DIMENSION_BASE::ChangeSuppressZeroes, &PCB_DIMENSION_BASE::GetSuppressZeroes ),
                 groupDimension );
     }
 } _DIMENSION_DESC;
+
+ENUM_TO_WXANY( DIM_UNITS_FORMAT )
+ENUM_TO_WXANY( DIM_UNITS_MODE )
+
+
+static struct ALIGNED_DIMENSION_DESC
+{
+    ALIGNED_DIMENSION_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( PCB_DIM_ALIGNED );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_DIM_ALIGNED, BOARD_ITEM> );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_DIM_ALIGNED, EDA_TEXT> );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_DIM_ALIGNED, PCB_TEXT> );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_DIM_ALIGNED, PCB_DIMENSION_BASE> );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_DIM_ALIGNED ), TYPE_HASH( BOARD_ITEM ) );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_DIM_ALIGNED ), TYPE_HASH( EDA_TEXT ) );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_DIM_ALIGNED ), TYPE_HASH( PCB_TEXT ) );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_DIM_ALIGNED ), TYPE_HASH( PCB_DIMENSION_BASE ) );
+
+        const wxString groupDimension = _HKI( "Dimension Properties" );
+
+        propMgr.AddProperty( new PROPERTY<PCB_DIM_ALIGNED, int>( _HKI( "Crossbar Height" ),
+                &PCB_DIM_ALIGNED::ChangeHeight, &PCB_DIM_ALIGNED::GetHeight,
+                PROPERTY_DISPLAY::PT_SIZE ),
+                groupDimension );
+        propMgr.AddProperty( new PROPERTY<PCB_DIM_ALIGNED, int>( _HKI( "Extension Line Overshoot" ),
+                &PCB_DIM_ALIGNED::ChangeExtensionHeight, &PCB_DIM_ALIGNED::GetExtensionHeight,
+                PROPERTY_DISPLAY::PT_SIZE ),
+                groupDimension );
+
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_ALIGNED ), TYPE_HASH( EDA_TEXT ),
+                                      _HKI( "Visible" ),
+                                      []( INSPECTABLE* aItem ) { return false; } );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_ALIGNED ), TYPE_HASH( EDA_TEXT ),
+                                      _HKI( "Knockout" ),
+                                      []( INSPECTABLE* aItem ) { return false; } );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_ALIGNED ), TYPE_HASH( EDA_TEXT ),
+                                      _HKI( "Hyperlink" ),
+                                      []( INSPECTABLE* aItem ) { return false; } );
+    }
+} ALIGNED_DIMENSION_DESC;
+
+
+static struct ORTHOGONAL_DIMENSION_DESC
+{
+    ORTHOGONAL_DIMENSION_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( PCB_DIM_ORTHOGONAL );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_DIM_ORTHOGONAL, BOARD_ITEM> );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_DIM_ORTHOGONAL, EDA_TEXT> );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_DIM_ORTHOGONAL, PCB_TEXT> );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_DIM_ORTHOGONAL, PCB_DIMENSION_BASE> );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_DIM_ORTHOGONAL, PCB_DIM_ALIGNED> );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_DIM_ORTHOGONAL ), TYPE_HASH( BOARD_ITEM ) );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_DIM_ORTHOGONAL ), TYPE_HASH( EDA_TEXT ) );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_DIM_ORTHOGONAL ), TYPE_HASH( PCB_TEXT ) );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_DIM_ORTHOGONAL ), TYPE_HASH( PCB_DIMENSION_BASE ) );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_DIM_ORTHOGONAL ), TYPE_HASH( PCB_DIM_ALIGNED ) );
+
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_ALIGNED ), TYPE_HASH( EDA_TEXT ),
+                                      _HKI( "Visible" ),
+                                      []( INSPECTABLE* aItem ) { return false; } );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_ALIGNED ), TYPE_HASH( EDA_TEXT ),
+                                      _HKI( "Knockout" ),
+                                      []( INSPECTABLE* aItem ) { return false; } );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_ALIGNED ), TYPE_HASH( EDA_TEXT ),
+                                      _HKI( "Hyperlink" ),
+                                      []( INSPECTABLE* aItem ) { return false; } );
+    }
+} ORTHOGONAL_DIMENSION_DESC;
+
+
+static struct RADIAL_DIMENSION_DESC
+{
+    RADIAL_DIMENSION_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( PCB_DIM_RADIAL );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_DIM_RADIAL, BOARD_ITEM> );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_DIM_RADIAL, EDA_TEXT> );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_DIM_RADIAL, PCB_TEXT> );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_DIM_RADIAL, PCB_DIMENSION_BASE> );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_DIM_RADIAL ), TYPE_HASH( BOARD_ITEM ) );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_DIM_RADIAL ), TYPE_HASH( EDA_TEXT ) );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_DIM_RADIAL ), TYPE_HASH( PCB_TEXT ) );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_DIM_RADIAL ), TYPE_HASH( PCB_DIMENSION_BASE ) );
+
+        const wxString groupDimension = _HKI( "Dimension Properties" );
+
+        propMgr.AddProperty( new PROPERTY<PCB_DIM_RADIAL, int>( _HKI( "Leader Length" ),
+                &PCB_DIM_RADIAL::ChangeLeaderLength, &PCB_DIM_RADIAL::GetLeaderLength,
+                PROPERTY_DISPLAY::PT_SIZE ),
+                groupDimension );
+
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_ALIGNED ), TYPE_HASH( EDA_TEXT ),
+                                      _HKI( "Visible" ),
+                                      []( INSPECTABLE* aItem ) { return false; } );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_ALIGNED ), TYPE_HASH( EDA_TEXT ),
+                                      _HKI( "Knockout" ),
+                                      []( INSPECTABLE* aItem ) { return false; } );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_ALIGNED ), TYPE_HASH( EDA_TEXT ),
+                                      _HKI( "Hyperlink" ),
+                                      []( INSPECTABLE* aItem ) { return false; } );
+    }
+} RADIAL_DIMENSION_DESC;
+
+
+static struct LEADER_DIMENSION_DESC
+{
+    LEADER_DIMENSION_DESC()
+    {
+        ENUM_MAP<DIM_TEXT_BORDER>::Instance()
+                    .Map( DIM_TEXT_BORDER::NONE,      _HKI( "None" ) )
+                    .Map( DIM_TEXT_BORDER::RECTANGLE, _HKI( "Rectangle" ) )
+                    .Map( DIM_TEXT_BORDER::CIRCLE,    _HKI( "Circle" ) );
+
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( PCB_DIM_LEADER );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_DIM_LEADER, BOARD_ITEM> );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_DIM_LEADER, EDA_TEXT> );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_DIM_LEADER, PCB_TEXT> );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_DIM_LEADER, PCB_DIMENSION_BASE> );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_DIM_LEADER ), TYPE_HASH( BOARD_ITEM ) );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_DIM_LEADER ), TYPE_HASH( EDA_TEXT ) );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_DIM_LEADER ), TYPE_HASH( PCB_TEXT ) );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_DIM_LEADER ), TYPE_HASH( PCB_DIMENSION_BASE ) );
+
+        const wxString groupDimension = _HKI( "Dimension Properties" );
+
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_DIM_LEADER, DIM_TEXT_BORDER>( _HKI( "Text Frame" ),
+                &PCB_DIM_LEADER::ChangeTextBorder, &PCB_DIM_LEADER::GetTextBorder ),
+                groupDimension );
+
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_LEADER ), TYPE_HASH( EDA_TEXT ),
+                                      _HKI( "Visible" ),
+                                      []( INSPECTABLE* aItem ) { return false; } );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_LEADER ), TYPE_HASH( EDA_TEXT ),
+                                      _HKI( "Knockout" ),
+                                      []( INSPECTABLE* aItem ) { return false; } );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_LEADER ), TYPE_HASH( EDA_TEXT ),
+                                      _HKI( "Hyperlink" ),
+                                      []( INSPECTABLE* aItem ) { return false; } );
+    }
+} LEADER_DIMENSION_DESC;
+
+ENUM_TO_WXANY( DIM_TEXT_BORDER )
+
+
+static struct CENTER_DIMENSION_DESC
+{
+    CENTER_DIMENSION_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( PCB_DIM_CENTER );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_DIM_CENTER, BOARD_ITEM> );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_DIM_CENTER, EDA_TEXT> );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_DIM_CENTER, PCB_TEXT> );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_DIM_CENTER, PCB_DIMENSION_BASE> );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_DIM_CENTER ), TYPE_HASH( BOARD_ITEM ) );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_DIM_CENTER ), TYPE_HASH( EDA_TEXT ) );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_DIM_CENTER ), TYPE_HASH( PCB_TEXT ) );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_DIM_CENTER ), TYPE_HASH( PCB_DIMENSION_BASE ) );
+
+
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_CENTER ), TYPE_HASH( EDA_TEXT ),
+                                      _HKI( "Visible" ),
+                                      []( INSPECTABLE* aItem ) { return false; } );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_CENTER ), TYPE_HASH( EDA_TEXT ),
+                                      _HKI( "Knockout" ),
+                                      []( INSPECTABLE* aItem ) { return false; } );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_CENTER ), TYPE_HASH( EDA_TEXT ),
+                                      _HKI( "Hyperlink" ),
+                                      []( INSPECTABLE* aItem ) { return false; } );
+    }
+} CENTER_DIMENSION_DESC;
+
+

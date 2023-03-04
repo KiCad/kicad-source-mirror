@@ -145,7 +145,7 @@ void BOARD_ADAPTER::addText( const EDA_TEXT* aText, CONTAINER_2D_BASE* aContaine
 void BOARD_ADAPTER::addShape( const PCB_DIMENSION_BASE* aDimension, CONTAINER_2D_BASE* aContainer,
                               const BOARD_ITEM* aOwner )
 {
-    addText( &aDimension->Text(), aContainer, aDimension );
+    addText( aDimension, aContainer, aDimension );
 
     const int linewidth = aDimension->GetLineThickness();
 

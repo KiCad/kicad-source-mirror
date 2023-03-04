@@ -35,13 +35,12 @@
 #include <trigo.h>
 #include <string_utils.h>
 #include <geometry/shape_compound.h>
-#include <geometry/shape_rect.h>
 #include <callback_gal.h>
 #include <convert_basic_shapes_to_polygon.h>
 
 
-PCB_TEXT::PCB_TEXT( BOARD_ITEM* parent ) :
-    BOARD_ITEM( parent, PCB_TEXT_T ),
+PCB_TEXT::PCB_TEXT( BOARD_ITEM* parent, KICAD_T idtype ) :
+    BOARD_ITEM( parent, idtype ),
     EDA_TEXT( pcbIUScale )
 {
     SetMultilineAllowed( true );

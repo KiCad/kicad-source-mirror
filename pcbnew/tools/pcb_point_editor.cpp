@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2021 CERN
- * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -326,7 +326,7 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
 
         points->AddPoint( dimension->GetStart() );
         points->AddPoint( dimension->GetEnd() );
-        points->AddPoint( dimension->Text().GetPosition() );
+        points->AddPoint( dimension->GetTextPos() );
         points->AddPoint( dimension->GetCrossbarStart() );
         points->AddPoint( dimension->GetCrossbarEnd() );
 
@@ -371,7 +371,7 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
 
         points->AddPoint( dimension->GetStart() );
         points->AddPoint( dimension->GetEnd() );
-        points->AddPoint( dimension->Text().GetPosition() );
+        points->AddPoint( dimension->GetTextPos() );
         points->AddPoint( dimension->GetKnee() );
 
         points->Point( DIM_START ).SetSnapConstraint( ALL_LAYERS );
@@ -395,7 +395,7 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
 
         points->AddPoint( dimension->GetStart() );
         points->AddPoint( dimension->GetEnd() );
-        points->AddPoint( dimension->Text().GetPosition() );
+        points->AddPoint( dimension->GetTextPos() );
 
         points->Point( DIM_START ).SetSnapConstraint( ALL_LAYERS );
         points->Point( DIM_END ).SetSnapConstraint( ALL_LAYERS );
@@ -1492,7 +1492,7 @@ void PCB_POINT_EDITOR::updateItem() const
         {
             // Force manual mode if we weren't already in it
             dimension->SetTextPositionMode( DIM_TEXT_POSITION::MANUAL );
-            dimension->Text().SetPosition( m_editedPoint->GetPosition() );
+            dimension->SetTextPos( m_editedPoint->GetPosition() );
             dimension->Update();
         }
 
@@ -1557,7 +1557,7 @@ void PCB_POINT_EDITOR::updateItem() const
         {
             // Force manual mode if we weren't already in it
             dimension->SetTextPositionMode( DIM_TEXT_POSITION::MANUAL );
-            dimension->Text().SetPosition( VECTOR2I( m_editedPoint->GetPosition() ) );
+            dimension->SetTextPos( VECTOR2I( m_editedPoint->GetPosition() ) );
         }
 
         dimension->Update();
@@ -1601,7 +1601,7 @@ void PCB_POINT_EDITOR::updateItem() const
             dimension->Update();
 
             VECTOR2I kneeDelta = dimension->GetKnee() - oldKnee;
-            dimension->Text().SetPosition( dimension->Text().GetPosition() + kneeDelta );
+            dimension->SetTextPos( dimension->GetTextPos() + kneeDelta );
             dimension->Update();
 
             m_editPoints->Point( DIM_KNEE ).SetConstraint( new EC_LINE( m_editPoints->Point( DIM_START ),
@@ -1617,12 +1617,12 @@ void PCB_POINT_EDITOR::updateItem() const
             dimension->Update();
 
             VECTOR2I kneeDelta = dimension->GetKnee() - oldKnee;
-            dimension->Text().SetPosition( dimension->Text().GetPosition() + kneeDelta );
+            dimension->SetTextPos( dimension->GetTextPos() + kneeDelta );
             dimension->Update();
         }
         else if( isModified( m_editPoints->Point( DIM_TEXT ) ) )
         {
-            dimension->Text().SetPosition( m_editedPoint->GetPosition() );
+            dimension->SetTextPos( m_editedPoint->GetPosition() );
             dimension->Update();
         }
 
@@ -1644,11 +1644,11 @@ void PCB_POINT_EDITOR::updateItem() const
             VECTOR2I delta = newPoint - dimension->GetEnd();
 
             dimension->SetEnd( newPoint );
-            dimension->Text().SetPosition( dimension->Text().GetPosition() + delta );
+            dimension->SetTextPos( dimension->GetTextPos() + delta );
         }
         else if( isModified( m_editPoints->Point( DIM_TEXT ) ) )
         {
-            dimension->Text().SetPosition( (VECTOR2I) m_editedPoint->GetPosition() );
+            dimension->SetTextPos( (VECTOR2I) m_editedPoint->GetPosition() );
         }
 
         dimension->Update();
@@ -1915,7 +1915,7 @@ void PCB_POINT_EDITOR::updatePoints()
 
         m_editPoints->Point( DIM_START ).SetPosition( dimension->GetStart() );
         m_editPoints->Point( DIM_END ).SetPosition( dimension->GetEnd() );
-        m_editPoints->Point( DIM_TEXT ).SetPosition( dimension->Text().GetPosition() );
+        m_editPoints->Point( DIM_TEXT ).SetPosition( dimension->GetTextPos() );
         m_editPoints->Point( DIM_CROSSBARSTART ).SetPosition( dimension->GetCrossbarStart() );
         m_editPoints->Point( DIM_CROSSBAREND ).SetPosition( dimension->GetCrossbarEnd() );
         break;
@@ -1938,7 +1938,7 @@ void PCB_POINT_EDITOR::updatePoints()
 
         m_editPoints->Point( DIM_START ).SetPosition( dimension->GetStart() );
         m_editPoints->Point( DIM_END ).SetPosition( dimension->GetEnd() );
-        m_editPoints->Point( DIM_TEXT ).SetPosition( dimension->Text().GetPosition() );
+        m_editPoints->Point( DIM_TEXT ).SetPosition( dimension->GetTextPos() );
         m_editPoints->Point( DIM_KNEE ).SetPosition( dimension->GetKnee() );
         break;
     }
@@ -1950,7 +1950,7 @@ void PCB_POINT_EDITOR::updatePoints()
 
         m_editPoints->Point( DIM_START ).SetPosition( dimension->GetStart() );
         m_editPoints->Point( DIM_END ).SetPosition( dimension->GetEnd() );
-        m_editPoints->Point( DIM_TEXT ).SetPosition( dimension->Text().GetPosition() );
+        m_editPoints->Point( DIM_TEXT ).SetPosition( dimension->GetTextPos() );
         break;
     }
 

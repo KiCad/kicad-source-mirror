@@ -810,7 +810,7 @@ void PCB_PLUGIN::format( const PCB_DIMENSION_BASE* aDimension, int aNestLevel ) 
 
     if( !center )
     {
-        Format( &aDimension->Text(), aNestLevel + 1 );
+        format( static_cast<const PCB_TEXT*>( aDimension ), aNestLevel + 1 );
 
         m_out->Print( aNestLevel + 1, "(format (prefix %s) (suffix %s) (units %d) (units_format %d) (precision %d)",
                       m_out->Quotew( aDimension->GetPrefix() ).c_str(),

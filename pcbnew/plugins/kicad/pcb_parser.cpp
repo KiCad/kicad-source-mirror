@@ -3216,13 +3216,11 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
         case T_gr_text:
         {
             PCB_TEXT* text = parsePCB_TEXT();
-            dim->Text() = *text;
 
-            // The text is part of the dim and shares its uuid
-            const_cast<KIID&>( dim->Text().m_Uuid ) = dim->m_Uuid;
+            dim->EDA_TEXT::operator=( *text );
 
             // Fetch other dim properties out of the text item
-            dim->Text().SetTextPos( text->GetTextPos() );
+            dim->SetTextPos( text->GetTextPos() );
 
             if( isLegacyDimension )
             {

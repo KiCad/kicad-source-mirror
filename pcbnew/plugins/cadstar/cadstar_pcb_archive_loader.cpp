@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020-2021 Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>
- * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -1555,16 +1555,16 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDimensions()
                                    endPoint.y );
 
                 leaderDim->SetEnd( getKiCadPoint( endPoint ) );
-                leaderDim->Text().SetTextPos( getKiCadPoint( txtPoint ) );
-                leaderDim->SetText( ParseTextFields( csDim.Text.Text, &m_context ) );
+                leaderDim->SetTextPos( getKiCadPoint( txtPoint ) );
+                leaderDim->SetOverrideText( ParseTextFields( csDim.Text.Text, &m_context ) );
                 leaderDim->SetPrefix( wxEmptyString );
                 leaderDim->SetSuffix( wxEmptyString );
                 leaderDim->SetUnitsFormat( DIM_UNITS_FORMAT::NO_SUFFIX );
 
                 if( orientX == 1 )
-                    leaderDim->Text().SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+                    leaderDim->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
                 else
-                    leaderDim->Text().SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+                    leaderDim->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
 
                 leaderDim->SetExtensionOffset( 0 );
             }
@@ -3635,7 +3635,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::applyDimensionSettings( const DIMENSION&  aCads
     aKiCadDim->SetExtensionOffset( getKiCadLength( aCadstarDim.ExtensionLineParams.Offset ) );
     aKiCadDim->SetLineThickness( getKiCadLength( linecode.Width ) );
 
-    applyTextCode( &aKiCadDim->Text(), aCadstarDim.Text.TextCodeID );
+    applyTextCode( aKiCadDim, aCadstarDim.Text.TextCodeID );
 
     // Find prefix and suffix:
     wxString prefix = wxEmptyString;

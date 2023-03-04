@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019-2020 Thomas Pointhuber <thomas.pointhuber@gmx.at>
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1315,15 +1315,15 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
     dimension->SetUnitsFormat( aElem.textsuffix.IsEmpty() ? DIM_UNITS_FORMAT::NO_SUFFIX
                                                           : DIM_UNITS_FORMAT::BARE_SUFFIX );
 
-    dimension->Text().SetTextThickness( aElem.textlinewidth );
-    dimension->Text().SetTextSize( VECTOR2I( aElem.textheight, aElem.textheight ) );
-    dimension->Text().SetItalic( aElem.textitalic );
+    dimension->SetTextThickness( aElem.textlinewidth );
+    dimension->SetTextSize( VECTOR2I( aElem.textheight, aElem.textheight ) );
+    dimension->SetItalic( aElem.textitalic );
 
 #if 0  // we don't currently support bold; map to thicker text
     dimension->Text().SetBold( aElem.textbold );
 #else
     if( aElem.textbold )
-        dimension->Text().SetTextThickness( dimension->Text().GetTextThickness() * BOLD_FACTOR );
+        dimension->SetTextThickness( dimension->GetTextThickness() * BOLD_FACTOR );
 #endif
 
     switch( aElem.textunit )
@@ -1401,26 +1401,26 @@ void ALTIUM_PCB::HelperParseDimensions6Radial(const ADIMENSION6 &aElem)
         return;
     }
 
-    dimension->Text().SetPosition( aElem.textPoint.at( 0 ) );
-    dimension->Text().SetTextThickness( aElem.textlinewidth );
-    dimension->Text().SetTextSize( VECTOR2I( aElem.textheight, aElem.textheight ) );
-    dimension->Text().SetItalic( aElem.textitalic );
+    dimension->SetTextPos( aElem.textPoint.at( 0 ) );
+    dimension->SetTextThickness( aElem.textlinewidth );
+    dimension->SetTextSize( VECTOR2I( aElem.textheight, aElem.textheight ) );
+    dimension->SetItalic( aElem.textitalic );
 
 #if 0  // we don't currently support bold; map to thicker text
-    dimension->Text().SetBold( aElem.textbold );
+    dimension->SetBold( aElem.textbold );
 #else
     if( aElem.textbold )
-        dimension->Text().SetTextThickness( dimension->Text().GetTextThickness() * BOLD_FACTOR );
+        dimension->SetTextThickness( dimension->GetTextThickness() * BOLD_FACTOR );
 #endif
 
     // It's unclear exactly how Altium figures it's text positioning, but this gets us reasonably
     // close.
-    dimension->Text().SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
-    dimension->Text().SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+    dimension->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+    dimension->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
 
-    int yAdjust = dimension->Text().GetCenter().y - dimension->Text().GetPosition().y;
-    dimension->Text().Move( VECTOR2I( 0, yAdjust + aElem.textgap ) );
-    dimension->Text().SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+    int yAdjust = dimension->GetTextBox().GetCenter().y - dimension->GetTextPos().y;
+    dimension->SetTextPos( dimension->GetTextPos() + VECTOR2I( 0, yAdjust + aElem.textgap ) );
+    dimension->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
 }
 
 

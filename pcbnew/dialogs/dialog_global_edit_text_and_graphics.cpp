@@ -332,9 +332,6 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
     PCB_SHAPE*          shape = dynamic_cast<PCB_SHAPE*>( aItem );
     PCB_DIMENSION_BASE* dimension = dynamic_cast<PCB_DIMENSION_BASE*>( aItem );
 
-    if( dimension )
-        edaText = &dimension->Text();
-
     if( m_setToSpecifiedValues->GetValue() )
     {
         if( m_LayerCtrl->GetLayerSelection() != UNDEFINED_LAYER )

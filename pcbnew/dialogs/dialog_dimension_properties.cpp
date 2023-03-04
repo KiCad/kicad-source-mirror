@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -227,16 +227,14 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
 
     m_cbSuppressZeroes->SetValue( m_dimension->GetSuppressZeroes() );
 
-    PCB_TEXT& text = m_dimension->Text();
+    m_fontCtrl->SetFontSelection( m_dimension->GetFont() );
 
-    m_fontCtrl->SetFontSelection( text.GetFont() );
+    m_textWidth.SetValue( m_dimension->GetTextSize().x );
+    m_textHeight.SetValue( m_dimension->GetTextSize().y );
+    m_textThickness.SetValue( m_dimension->GetTextThickness() );
 
-    m_textWidth.SetValue( text.GetTextSize().x );
-    m_textHeight.SetValue( text.GetTextSize().y );
-    m_textThickness.SetValue( text.GetTextThickness() );
-
-    m_textPosX.SetValue( text.GetTextPos().x );
-    m_textPosY.SetValue( text.GetTextPos().y );
+    m_textPosX.SetValue( m_dimension->GetTextPos().x );
+    m_textPosY.SetValue( m_dimension->GetTextPos().y );
     m_cbTextPositionMode->SetSelection( static_cast<int>( m_dimension->GetTextPositionMode() ) );
 
     if( m_dimension->GetTextPositionMode() != DIM_TEXT_POSITION::MANUAL )
@@ -245,22 +243,22 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
         m_txtTextPosY->Disable();
     }
 
-    EDA_ANGLE orientation = text.GetTextAngle();
+    EDA_ANGLE orientation = m_dimension->GetTextAngle();
     m_orientation.SetAngleValue( orientation.Normalize180() );
     m_cbTextOrientation->Enable( !m_dimension->GetKeepTextAligned() );
     m_cbKeepAligned->SetValue( m_dimension->GetKeepTextAligned() );
 
-    m_bold->Check( text.IsBold() );
-    m_italic->Check( text.IsItalic() );
+    m_bold->Check( m_dimension->IsBold() );
+    m_italic->Check( m_dimension->IsItalic() );
 
-    switch ( text.GetHorizJustify() )
+    switch ( m_dimension->GetHorizJustify() )
     {
     case GR_TEXT_H_ALIGN_LEFT:   m_alignLeft->Check( true );   break;
     case GR_TEXT_H_ALIGN_CENTER: m_alignCenter->Check( true ); break;
     case GR_TEXT_H_ALIGN_RIGHT:  m_alignRight->Check( true );  break;
     }
 
-    m_mirrored->Check( text.IsMirrored() );
+    m_mirrored->Check( m_dimension->IsMirrored() );
 
     m_lineThickness.SetValue( m_dimension->GetLineThickness() );
     m_arrowLength.SetValue( m_dimension->GetArrowLength() );
@@ -407,38 +405,36 @@ void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( PCB_DIMENSION_BASE*
     aTarget->SetPrecision( m_cbPrecision->GetSelection() );
     aTarget->SetSuppressZeroes( m_cbSuppressZeroes->GetValue() );
 
-    PCB_TEXT& text = aTarget->Text();
-
     DIM_TEXT_POSITION tpm = static_cast<DIM_TEXT_POSITION>( m_cbTextPositionMode->GetSelection() );
     aTarget->SetTextPositionMode( tpm );
 
     if( tpm == DIM_TEXT_POSITION::MANUAL )
     {
         VECTOR2I pos( m_textPosX.GetValue(), m_textPosY.GetValue() );
-        text.SetPosition( pos );
+        aTarget->SetTextPos( pos );
     }
 
     aTarget->SetKeepTextAligned( m_cbKeepAligned->GetValue() );
 
-    text.SetTextAngle( m_orientation.GetAngleValue().Normalize() );
-    text.SetTextWidth( m_textWidth.GetValue() );
-    text.SetTextHeight( m_textHeight.GetValue() );
-    text.SetTextThickness( m_textThickness.GetValue() );
+    aTarget->SetTextAngle( m_orientation.GetAngleValue().Normalize() );
+    aTarget->SetTextWidth( m_textWidth.GetValue() );
+    aTarget->SetTextHeight( m_textHeight.GetValue() );
+    aTarget->SetTextThickness( m_textThickness.GetValue() );
 
     if( m_fontCtrl->HaveFontSelection() )
-        text.SetFont( m_fontCtrl->GetFontSelection( m_bold->IsChecked(), m_italic->IsChecked() ) );
+        aTarget->SetFont( m_fontCtrl->GetFontSelection( m_bold->IsChecked(), m_italic->IsChecked() ) );
 
-    text.SetBold( m_bold->IsChecked() );
-    text.SetItalic( m_italic->IsChecked() );
+    aTarget->SetBold( m_bold->IsChecked() );
+    aTarget->SetItalic( m_italic->IsChecked() );
 
     if( m_alignLeft->IsChecked() )
-        text.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        aTarget->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
     else if( m_alignCenter->IsChecked() )
-        text.SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+        aTarget->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
     else
-        text.SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+        aTarget->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
 
-    text.SetMirrored( m_mirrored->IsChecked() );
+    aTarget->SetMirrored( m_mirrored->IsChecked() );
 
     aTarget->SetLineThickness( m_lineThickness.GetValue() );
     aTarget->SetArrowLength( m_arrowLength.GetValue() );
@@ -457,5 +453,5 @@ void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( PCB_DIMENSION_BASE*
 void DIALOG_DIMENSION_PROPERTIES::updatePreviewText()
 {
     updateDimensionFromDialog( m_previewDimension );
-    m_staticTextPreview->SetLabel( m_previewDimension->Text().GetShownText() );
+    m_staticTextPreview->SetLabel( m_previewDimension->GetShownText() );
 }

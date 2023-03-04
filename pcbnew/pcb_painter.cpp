@@ -2560,9 +2560,8 @@ void PCB_PAINTER::draw( const PCB_DIMENSION_BASE* aDimension, int aLayer )
     }
 
     // Draw text
-    const PCB_TEXT& text = aDimension->Text();
-    wxString        resolvedText = text.GetShownText();
-    TEXT_ATTRIBUTES attrs = text.GetAttributes();
+    wxString        resolvedText = aDimension->GetShownText();
+    TEXT_ATTRIBUTES attrs = aDimension->GetAttributes();
 
     if( m_gal->IsFlippedX() && !( aDimension->GetLayerSet() & LSET::SideSpecificMask() ).any() )
         attrs.m_Mirrored = !attrs.m_Mirrored;
@@ -2570,12 +2569,12 @@ void PCB_PAINTER::draw( const PCB_DIMENSION_BASE* aDimension, int aLayer )
     if( outline_mode )
         attrs.m_StrokeWidth = m_pcbSettings.m_outlineWidth;
     else
-        attrs.m_StrokeWidth = getLineThickness( text.GetEffectiveTextPenWidth() );
+        attrs.m_StrokeWidth = getLineThickness( aDimension->GetEffectiveTextPenWidth() );
 
     std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
 
-    if( text.GetFont() && text.GetFont()->IsOutline() )
-        cache = text.GetRenderCache( text.GetFont(), resolvedText );
+    if( aDimension->GetFont() && aDimension->GetFont()->IsOutline() )
+        cache = aDimension->GetRenderCache( aDimension->GetFont(), resolvedText );
 
     if( cache )
     {
@@ -2584,7 +2583,7 @@ void PCB_PAINTER::draw( const PCB_DIMENSION_BASE* aDimension, int aLayer )
     }
     else
     {
-        strokeText( resolvedText, text.GetTextPos(), attrs );
+        strokeText( resolvedText, aDimension->GetTextPos(), attrs );
     }
 }
 
