@@ -89,6 +89,8 @@ public:
     static double ToDouble( const std::string& aString, double aDefault = NAN );
 
     static int ToInt( const std::string& aString, int aDefault = -1 );
+
+    static bool Equal( double aLH, const std::string& aRH );
 };
 
 
