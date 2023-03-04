@@ -71,6 +71,8 @@ public:
     void SetRight( int aVal ) override;
     void SetBottom( int aVal ) override;
 
+    void SetTextAngle( const EDA_ANGLE& aAngle ) override;
+
     wxString GetParentAsString() const;
 
     bool Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const override

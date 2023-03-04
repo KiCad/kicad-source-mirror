@@ -133,6 +133,13 @@ void PCB_TEXTBOX::SetRight( int aVal )
 }
 
 
+void PCB_TEXTBOX::SetTextAngle( const EDA_ANGLE& aAngle )
+{
+    EDA_ANGLE delta = aAngle.Normalized() - GetTextAngle();
+    Rotate( GetPosition(), delta );
+}
+
+
 std::vector<VECTOR2I> PCB_TEXTBOX::GetAnchorAndOppositeCorner() const
 {
     std::vector<VECTOR2I> pts;
@@ -185,6 +192,8 @@ VECTOR2I PCB_TEXTBOX::GetDrawPos() const
 
     if( IsMirrored() )
     {
+        std::swap( corners[0], corners[1] );
+
         switch( GetHorizJustify() )
         {
         case GR_TEXT_H_ALIGN_LEFT:   effectiveAlignment = GR_TEXT_H_ALIGN_RIGHT;  break;
@@ -313,7 +322,7 @@ void PCB_TEXTBOX::Move( const VECTOR2I& aMoveVector )
 void PCB_TEXTBOX::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
     PCB_SHAPE::Rotate( aRotCentre, aAngle );
-    SetTextAngle( GetTextAngle() + aAngle );
+    EDA_TEXT::SetTextAngle( ( GetTextAngle() + aAngle ).Normalized() );
 
     if( GetTextAngle().IsCardinal() && GetShape() != SHAPE_T::RECT )
     {
@@ -356,13 +365,13 @@ void PCB_TEXTBOX::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
     {
         m_start.x = aCentre.x - ( m_start.x - aCentre.x );
         m_end.x   = aCentre.x - ( m_end.x - aCentre.x );
-        SetTextAngle( -GetTextAngle() );
+        EDA_TEXT::SetTextAngle( -GetTextAngle() );
     }
     else
     {
         m_start.y = aCentre.y - ( m_start.y - aCentre.y );
         m_end.y   = aCentre.y - ( m_end.y - aCentre.y );
-        SetTextAngle( ANGLE_180 - GetTextAngle() );
+        EDA_TEXT::SetTextAngle( ANGLE_180 - GetTextAngle() );
     }
 
     SetLayer( FlipLayer( GetLayer(), GetBoard()->GetCopperLayerCount() ) );

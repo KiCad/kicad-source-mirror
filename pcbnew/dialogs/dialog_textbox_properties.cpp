@@ -356,13 +356,6 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataFromWindow()
         m_edaText->SetTextThickness( maxPenWidth );
     }
 
-    EDA_ANGLE delta = m_orientation.GetAngleValue().Normalize() - m_edaText->GetTextAngle();
-
-    if( m_fpTextBox )
-        m_fpTextBox->Rotate( m_fpTextBox->GetPosition(), delta );
-    else if( m_pcbTextBox )
-        m_pcbTextBox->Rotate( m_pcbTextBox->GetPosition(), delta );
-
     m_edaText->SetTextAngle( m_orientation.GetAngleValue().Normalize() );
 
     m_edaText->SetBold( m_bold->IsChecked() );

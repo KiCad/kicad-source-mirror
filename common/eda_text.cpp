@@ -50,6 +50,8 @@
 #include <geometry/shape_simple.h>
 #include <font/outline_font.h>
 #include <geometry/shape_poly_set.h>
+#include <properties/property_validators.h>
+#include <pcbnew.h>          // Text limits are in here for some reason
 
 #include <wx/debug.h>           // for wxASSERT
 #include <wx/string.h>
@@ -1061,12 +1063,18 @@ static struct EDA_TEXT_DESC
                                                           &EDA_TEXT::SetTextWidth,
                                                           &EDA_TEXT::GetTextWidth,
                                                           PROPERTY_DISPLAY::PT_SIZE ),
-                             textProps );
+                             textProps )
+                .SetValidator( PROPERTY_VALIDATORS::RangeIntValidator<TEXTS_MIN_SIZE,
+                                                                      TEXTS_MAX_SIZE> );
+
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, int>( _HKI( "Height" ),
                                                           &EDA_TEXT::SetTextHeight,
                                                           &EDA_TEXT::GetTextHeight,
                                                           PROPERTY_DISPLAY::PT_SIZE ),
-                             textProps );
+                             textProps )
+                .SetValidator( PROPERTY_VALIDATORS::RangeIntValidator<TEXTS_MIN_SIZE,
+                                                                      TEXTS_MAX_SIZE> );
+
         propMgr.AddProperty( new PROPERTY_ENUM<EDA_TEXT,
                              GR_TEXT_H_ALIGN_T>( _HKI( "Horizontal Justification" ),
                                                  &EDA_TEXT::SetHorizJustify,

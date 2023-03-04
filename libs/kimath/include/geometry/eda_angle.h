@@ -257,6 +257,12 @@ public:
         return *this;
     }
 
+    EDA_ANGLE Normalized() const
+    {
+        EDA_ANGLE ret( *this );
+        return ret.Normalize();
+    }
+
     inline EDA_ANGLE NormalizeNegative()
     {
         while( m_value <= -360.0 )

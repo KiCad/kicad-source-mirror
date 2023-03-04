@@ -133,6 +133,13 @@ void FP_TEXTBOX::SetRight( int aVal )
 }
 
 
+void FP_TEXTBOX::SetTextAngle( const EDA_ANGLE& aAngle )
+{
+    EDA_ANGLE delta = aAngle.Normalized() - GetTextAngle();
+    Rotate( GetPosition(), delta );
+}
+
+
 std::vector<VECTOR2I> FP_TEXTBOX::GetCorners() const
 {
     std::vector<VECTOR2I> pts = FP_SHAPE::GetCorners();
@@ -217,6 +224,9 @@ VECTOR2I FP_TEXTBOX::GetDrawPos() const
 
     if( IsMirrored() != isFlipped )
     {
+        std::swap( corners[0], corners[1] );
+        std::swap( corners[2], corners[3] );
+
         switch( GetHorizJustify() )
         {
         case GR_TEXT_H_ALIGN_LEFT:   effectiveAlignment = GR_TEXT_H_ALIGN_RIGHT;  break;
@@ -280,7 +290,7 @@ void FP_TEXTBOX::Move( const VECTOR2I& aMoveVector )
 void FP_TEXTBOX::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
     FP_SHAPE::Rotate( aRotCentre, aAngle );
-    SetTextAngle( GetTextAngle() + aAngle );
+    EDA_TEXT::SetTextAngle( ( GetTextAngle() + aAngle ).Normalized() );
 }
 
 
@@ -292,12 +302,12 @@ void FP_TEXTBOX::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
     if( aFlipLeftRight )
     {
         SetTextX( MIRRORVAL( GetTextPos().x, aCentre.x ) );
-        SetTextAngle( -GetTextAngle() );
+        EDA_TEXT::SetTextAngle( -GetTextAngle() );
     }
     else
     {
         SetTextY( MIRRORVAL( GetTextPos().y, aCentre.y ) );
-        SetTextAngle( ANGLE_180 - GetTextAngle() );
+        EDA_TEXT::SetTextAngle( ANGLE_180 - GetTextAngle() );
     }
 
     if( ( GetLayerSet() & LSET::SideSpecificMask() ).any() )
@@ -593,5 +603,12 @@ static struct FP_TEXTBOX_DESC
         propMgr.AddProperty( new PROPERTY<FP_TEXTBOX, wxString>( _HKI( "Parent" ),
                     NO_SETTER( FP_TEXTBOX, wxString ), &FP_TEXTBOX::GetParentAsString ) )
                 .SetIsHiddenFromLibraryEditors();
+
+        propMgr.Mask( TYPE_HASH( FP_TEXTBOX ), TYPE_HASH( EDA_SHAPE ), _HKI( "Shape" ) );
+        propMgr.Mask( TYPE_HASH( FP_TEXTBOX ), TYPE_HASH( EDA_SHAPE ), _HKI( "Start X" ) );
+        propMgr.Mask( TYPE_HASH( FP_TEXTBOX ), TYPE_HASH( EDA_SHAPE ), _HKI( "Start Y" ) );
+        propMgr.Mask( TYPE_HASH( FP_TEXTBOX ), TYPE_HASH( EDA_SHAPE ), _HKI( "End X" ) );
+        propMgr.Mask( TYPE_HASH( FP_TEXTBOX ), TYPE_HASH( EDA_SHAPE ), _HKI( "End Y" ) );
+        propMgr.Mask( TYPE_HASH( FP_TEXTBOX ), TYPE_HASH( EDA_SHAPE ), _HKI( "Line Width" ) );
     }
 } _FP_TEXTBOX_DESC;

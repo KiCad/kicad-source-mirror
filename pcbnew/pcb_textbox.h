@@ -74,6 +74,8 @@ public:
 
     VECTOR2I GetDrawPos() const override;
 
+    void SetTextAngle( const EDA_ANGLE& aAngle ) override;
+
     wxString GetShownText( int aDepth = 0, bool aAllowExtraText = true ) const override;
 
     /// PCB_TEXTBOXes are always visible:
