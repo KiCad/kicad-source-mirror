@@ -121,8 +121,7 @@ bool SIM_STRING_PROPERTY::OnEvent( wxPropertyGrid* propgrid, wxWindow* wnd_prima
         {
             double value = SIM_VALUE::ToDouble( m_eval.Result().ToStdString() );
 
-            if( isnan( value )
-                    || value == SIM_VALUE::ToDouble( textEntry->GetValue().ToStdString() ) )
+            if( isnan( value ) || SIM_VALUE::Equal( value, textEntry->GetValue().ToStdString() ) )
             {
                 // Don't mess up user formatting if eval'ing didn't actually change the value.
             }
@@ -149,25 +148,23 @@ bool SIM_STRING_PROPERTY::OnEvent( wxPropertyGrid* propgrid, wxWindow* wnd_prima
                 keyEvent.m_keyCode = keyEvent.ShiftDown() ? WXK_UP : WXK_DOWN;
                 keyEvent.m_shiftDown = false;
             }
-        }
-    }
 
 #ifdef __WXMAC__
-    if( wxPropertyGrid* propGrid = dynamic_cast<wxPropertyGrid*>( wnd_primary->GetParent() ) )
-    {
-        // This shouldn't be required, as wxPGTextCtrlEditor::OnTextCtrlEvent() should be setting
-        // the value to modified.  But it doesn't on Mac (or the modified flag is cleared at some
-        // point later), and even if it is set, the changes don't get committed.
-        // (We used to have code in DIALOG_SIM_MODEL to commit things on *some* actions, but it
-        // wasn't complete and this appears to have at least a better hit rate.)
-        propGrid->CallAfter(
-                [propGrid]()
-                {
-                    propGrid->EditorsValueWasModified();
-                    propGrid->CommitChangesFromEditor();
-                } );
-    }
+            // This shouldn't be required, as wxPGTextCtrlEditor::OnTextCtrlEvent() should be
+            // setting the value to modified.  But it doesn't on Mac (or the modified flag is
+            // cleared at some point later), and even if it is set, the changes don't get
+            // committed.
+            // (We used to have code in DIALOG_SIM_MODEL to commit things on *some* actions, but
+            // it wasn't complete and this appears to have at least a better hit rate.)
+            propGrid->CallAfter(
+                    [propGrid]()
+                    {
+                        propGrid->EditorsValueWasModified();
+                        propGrid->CommitChangesFromEditor();
+                    } );
 #endif
+        }
+    }
 
     return false;
 }
@@ -198,7 +195,7 @@ bool SIM_STRING_PROPERTY::StringToValue( wxVariant& aVariant, const wxString& aT
     {
         double value = SIM_VALUE::ToDouble( m_eval.Result().ToStdString() );
 
-        if( isnan( value ) || value == SIM_VALUE::ToDouble( aText.ToStdString() ) )
+        if( isnan( value ) || SIM_VALUE::Equal( value, aText.ToStdString() ) )
         {
             // Don't mess up user formatting if eval'ing didn't actually change the value.
         }

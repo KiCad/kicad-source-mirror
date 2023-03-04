@@ -451,3 +451,9 @@ int SIM_VALUE::ToInt( const std::string& aString, int aDefault )
 
     return aDefault;
 }
+
+
+bool SIM_VALUE::Equal( double aLH, const std::string& aRH )
+{
+    return std::abs( aLH - ToDouble( aRH ) ) <= std::numeric_limits<double>::epsilon();
+}
