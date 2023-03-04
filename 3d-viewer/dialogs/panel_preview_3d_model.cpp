@@ -142,6 +142,9 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
                  this );
     }
 
+    aFrame->Connect( UNITS_CHANGED, wxCommandEventHandler( PANEL_PREVIEW_3D_MODEL::onUnitsChanged ),
+                     nullptr, this );
+
 #ifdef __WXOSX__
     // Call layout once to get the proper button sizes after the bitmaps have been set
     Layout();
@@ -537,6 +540,27 @@ void PANEL_PREVIEW_3D_MODEL::onMouseWheelOffset( wxMouseEvent& event )
     curr_value_mm = std::min( curr_value_mm, MAX_OFFSET );
 
     textCtrl->SetValue( formatOffsetValue( curr_value_mm ) );
+}
+
+
+void PANEL_PREVIEW_3D_MODEL::onUnitsChanged( wxCommandEvent& aEvent )
+{
+    double xoff_mm = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, m_userUnits,
+                                                                xoff->GetValue() )
+                     / pcbIUScale.IU_PER_MM;
+    double yoff_mm = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, m_userUnits,
+                                                                yoff->GetValue() )
+                     / pcbIUScale.IU_PER_MM;
+    double zoff_mm = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, m_userUnits,
+                                                                zoff->GetValue() )
+                     / pcbIUScale.IU_PER_MM;
+
+    PCB_BASE_FRAME* frame = static_cast<PCB_BASE_FRAME*>( aEvent.GetClientData() );
+    m_userUnits = frame->GetUserUnits();
+
+    xoff->SetValue( formatOffsetValue( xoff_mm ) );
+    yoff->SetValue( formatOffsetValue( yoff_mm ) );
+    zoff->SetValue( formatOffsetValue( zoff_mm ) );
 }
 
 

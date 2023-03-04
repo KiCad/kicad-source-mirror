@@ -141,6 +141,8 @@ private:
     void doIncrementRotation( wxSpinEvent& aEvent, double aSign );
     void doIncrementOffset( wxSpinEvent& aEvent, double aSign );
 
+    void onUnitsChanged( wxCommandEvent& aEvent );
+
     wxString formatScaleValue( double aValue );
     wxString formatRotationValue( double aValue );
     wxString formatOffsetValue( double aValue );
