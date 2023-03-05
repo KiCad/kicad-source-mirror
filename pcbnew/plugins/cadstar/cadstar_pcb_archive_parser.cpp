@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -1617,6 +1617,14 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LIBRARY::Parse( XNODE* aNode, PARSER_CONTEXT* a
             SYMDEF_PCB symdef;
             symdef.Parse( cNode, aContext );
             ComponentDefinitions.insert( std::make_pair( symdef.ID, symdef ) );
+        }
+        else if( cNodeName == wxT( "HIERARCHY" ) )
+        {
+            // Ignore for now
+            //
+            // This node doesn't have any equivalent in KiCad so for now we ignore it. In
+            // future, we could parse it in detail, to obtain the tree-structure of
+            // footprints in a cadstar library
         }
         else
         {
