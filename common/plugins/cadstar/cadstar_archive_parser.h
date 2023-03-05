@@ -27,7 +27,7 @@
 #define CADSTAR_ARCHIVE_PARSER_H_
 
 #include <richio.h>
-#include <wx/gdicmn.h>
+#include <wx/string.h>
 #include <functional>
 #include <map>
 #include <set>
@@ -422,7 +422,7 @@ public:
 
     struct TRANSFORM
     {
-        virtual wxPoint Apply( POINT aCadstarPoint ) = 0;
+        virtual VECTOR2I Apply( POINT aCadstarPoint ) = 0;
     };
 
 

@@ -31,14 +31,18 @@
 #include <layer_ids.h>          // SCH_LAYER_ID
 #include <plotters/plotter.h>   // PLOT_DASH_TYPE
 #include <pin_type.h>           // ELECTRICAL_PINTYPE
-#include <sch_io_mgr.h>
+
+#include <map>
+
 #include <wx/filename.h>
+#include <wx/string.h>
 
 class BUS_ALIAS;
 class EDA_TEXT;
 class TEXT_SPIN_STYLE;
 class LIB_FIELD;
 class LIB_SYMBOL;
+class REPORTER;
 class SCH_SYMBOL;
 class SCH_ITEM;
 class SCH_FIELD;
@@ -96,23 +100,26 @@ private:
     REPORTER*                        m_reporter;
     SCHEMATIC*                       m_schematic;
     SCH_SHEET*                       m_rootSheet;
-    wxPoint                          m_designCenter; ///< Used for calculating the required
-                                                     ///< offset to apply to the Cadstar design
-                                                     ///< so that it fits in KiCad canvas
-    std::map<LAYER_ID, SCH_SHEET*> m_sheetMap;       ///< Map between Cadstar and KiCad Sheets
-    std::map<BLOCK_PIN_ID, SCH_HIERLABEL*>
-                                 m_sheetPinMap; ///< Map between Cadstar and KiCad Sheets Pins
-    std::map<PART_ID, LIB_SYMBOL*> m_partMap;     ///< Map between Cadstar and KiCad Parts
+
+    /**
+     * Required for calculating the offset to apply to the Cadstar design so that it fits
+     * in the KiCad canvas
+     */
+    VECTOR2I m_designCenter;
+
+    std::map<LAYER_ID, SCH_SHEET*>         m_sheetMap;    ///< Cadstar->KiCad Sheets
+    std::map<BLOCK_PIN_ID, SCH_HIERLABEL*> m_sheetPinMap; ///< Cadstar->KiCad Sheet Pins
+    std::map<PART_ID, LIB_SYMBOL*>         m_partMap;     ///< Cadstar->KiCad Parts
+    std::map<SYMDEF_ID, LIB_SYMBOL*>       m_symDefMap;   ///< Cadstar->KiCad Loaded Lib Symbols
+    std::map<SYMBOL_ID, SCH_SYMBOL*>       m_powerSymMap; ///< Cadstar->KiCad Loaded Power Symbols
+    std::map<wxString, LIB_SYMBOL*>        m_powerSymLibMap;  ///< NetName->KiCad Power Lib Symbol
+    std::map<SYMBOL_ID, SCH_GLOBALLABEL*>  m_globalLabelsMap; ///< Cadstar->KiCad Global Labels
+    std::map<BUS_ID, std::shared_ptr<BUS_ALIAS>> m_busesMap;  ///< Cadstar->KiCad Buses
+    std::map<PART_ID, TERMINAL_TO_PINNUM_MAP> m_pinNumsMap; ///< Cadstar Part->KiCad Pin number map
+
     std::vector<LIB_SYMBOL*> m_loadedSymbols; ///< Loaded symbols so far
     std::map<PART_GATE_ID, SYMDEF_ID> m_partSymbolsMap; ///< Map holding the symbols loaded so far
                                                         ///  for a particular PART_ID and GATE_ID
-    std::map<PART_ID, TERMINAL_TO_PINNUM_MAP> m_pinNumsMap; ///< Map of pin numbers in CADSTAR parts
-    std::map<wxString, LIB_SYMBOL*> m_powerSymLibMap; ///< Map of KiCad Power Symbol Library items
-    std::map<SYMBOL_ID, SCH_SYMBOL*>
-            m_powerSymMap; ///< Map between Cadstar and KiCad Power Symbols
-    std::map<SYMBOL_ID, SCH_GLOBALLABEL*>
-            m_globalLabelsMap; ///< Map between Cadstar and KiCad Global Labels
-    std::map<BUS_ID, std::shared_ptr<BUS_ALIAS>> m_busesMap; ///< Map of Cadstar and KiCad Buses
 
     void loadSheets();
     void loadHierarchicalSheetPins();
