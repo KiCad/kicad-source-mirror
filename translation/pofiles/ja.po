@@ -11,16 +11,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-15 16:29-0800\n"
-"PO-Revision-Date: 2023-02-13 00:59+0000\n"
+"PO-Revision-Date: 2023-03-06 15:39+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -100,9 +100,8 @@ msgid "Build BVH for holes and vias"
 msgstr "機構穴とビアで BVH (ブラインド ビア ホール) をビルド"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:389
-#, fuzzy
 msgid "OpenGL context creation error"
-msgstr "スポーク数の解決:"
+msgstr "OpenGLコンテキストの作成がエラー"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:420
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
@@ -11242,14 +11241,12 @@ msgid "m"
 msgstr "m"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "K"
-msgstr "OK"
+msgstr "K"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "M"
-msgstr "MB"
+msgstr "M"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 msgid "G"
@@ -11260,14 +11257,13 @@ msgid "T"
 msgstr "T"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "P"
-msgstr "π"
+msgstr "P"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.h:47
-#, fuzzy, c-format
+#, c-format
 msgid "Format %s"
-msgstr "フォーマット"
+msgstr "フォーマット %s"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:192
 #, c-format
@@ -12378,24 +12374,20 @@ msgid "Range (voltages):"
 msgstr "すべての電圧を保存"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "fV"
-msgstr "V"
+msgstr "fV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "pV"
-msgstr "V"
+msgstr "pV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "nV"
-msgstr "V"
+msgstr "nV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "uV"
-msgstr "V"
+msgstr "uV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:71
@@ -12404,29 +12396,24 @@ msgid "mV"
 msgstr "mV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "KV"
-msgstr "V"
+msgstr "KV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "MV"
-msgstr "V"
+msgstr "MV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "GV"
-msgstr "V"
+msgstr "GV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "TV"
-msgstr "V"
+msgstr "TV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "PV"
-msgstr "V"
+msgstr "PV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:281
 msgid "Significant digits (currents):"
@@ -12438,19 +12425,16 @@ msgid "Range (currents):"
 msgstr "すべての電流を保存"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "fA"
-msgstr "A"
+msgstr "fA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "pA"
-msgstr "A"
+msgstr "pA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "nA"
-msgstr "A"
+msgstr "nA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:208
@@ -12459,34 +12443,28 @@ msgid "uA"
 msgstr "μA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "mA"
-msgstr "A"
+msgstr "mA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "KA"
-msgstr "A"
+msgstr "KA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "MA"
-msgstr "A"
+msgstr "MA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "GA"
-msgstr "BGA"
+msgstr "GA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "TA"
-msgstr "A"
+msgstr "TA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "PA"
-msgstr "A"
+msgstr "PA"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:220
 msgid "No error or warning"
@@ -15630,9 +15608,8 @@ msgid "Checking model "
 msgstr "モデルをチェック中 "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:482
-#, fuzzy
 msgid "Undefined model type."
-msgstr "未定義モデルタイプ"
+msgstr "未定義モデルタイプ."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:491
 msgid "Invalid Vinh value."
@@ -15732,44 +15709,36 @@ msgid "Negative number of pins."
 msgstr "ピンの数が負です。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:723
-#, fuzzy
 msgid "Empty pin number."
-msgstr "ピン番号が空です"
+msgstr "ピン番号が空です。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:734
-#, fuzzy
 msgid "Resistance matrix is incorrect."
-msgstr "抵抗の行列が不正です"
+msgstr "抵抗の行列が不正です。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:745
-#, fuzzy
 msgid "Capacitance matrix is undefined."
-msgstr "静電容量行列が未定義です"
+msgstr "静電容量行列が未定義です。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:754
-#, fuzzy
 msgid "Capacitance matrix is incorrect."
-msgstr "静電容量行列が正しくありません"
+msgstr "静電容量行列が不正です。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:763
-#, fuzzy
 msgid "Capacitance matrix is nullptr."
-msgstr "静電容量行列が nullptr です"
+msgstr "静電容量行列が nullptr です。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:774
-#, fuzzy
 msgid "Inductance matrix is undefined."
-msgstr "インダクタンス行列が未定義です"
+msgstr "インダクタンス行列が未定義です。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:783
-#, fuzzy
 msgid "Inductance matrix is incorrect."
-msgstr "インダクタンス行列が正しくありません"
+msgstr "インダクタンス行列が不正です。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:792
-#, fuzzy
 msgid "Inductance matrix is nullptr."
-msgstr "インダクタンス行列は nullptr です"
+msgstr "インダクタンス行列は nullptr です。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:808
 msgid "Cannot open file "
@@ -16064,9 +16033,9 @@ msgstr ""
 "す"
 
 #: eeschema/sim/sim_lib_mgr.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "Simulation model library not found at '%s'"
-msgstr "'%s' もしくは '%s' にシミュレーションモデル ライブラリが見つかりません"
+msgstr "'%s' にシミュレーションモデル ライブラリが見つかりません"
 
 #: eeschema/sim/sim_lib_mgr.cpp:84
 #, c-format
@@ -16244,9 +16213,9 @@ msgid "Measure Time of Max"
 msgstr "計測ツール"
 
 #: eeschema/sim/sim_plot_frame.cpp:245
-#, fuzzy, c-format
+#, c-format
 msgid "Format %s..."
-msgstr "フォーマット"
+msgstr "フォーマット %s..."
 
 #: eeschema/sim/sim_plot_frame.cpp:297
 #, fuzzy
@@ -16386,9 +16355,9 @@ msgid "Measurement"
 msgstr "計測 (&M)"
 
 #: eeschema/sim/sim_plot_panel.cpp:268
-#, fuzzy, c-format
+#, c-format
 msgid "%d"
-msgstr "%"
+msgstr "%d"
 
 #: eeschema/sim/sim_plot_panel.cpp:507
 msgid "noise [(V or A)^2/Hz]"
@@ -18371,9 +18340,8 @@ msgid "Draw plots with a black background"
 msgstr "背景色を白または黒に切り替え"
 
 #: eeschema/tools/ee_actions.cpp:960
-#, fuzzy
 msgid "Simulation Command..."
-msgstr "シミュレーションコマンド"
+msgstr "シミュレーションコマンド..."
 
 #: eeschema/tools/ee_actions.cpp:961
 #, fuzzy
@@ -18408,9 +18376,8 @@ msgid "Select a value to be tuned"
 msgstr "調整された値を選択"
 
 #: eeschema/tools/ee_actions.cpp:989
-#, fuzzy
 msgid "Show SPICE Netlist"
-msgstr "SPICE ネットリストを表示..."
+msgstr "SPICE ネットリストを表示"
 
 #: eeschema/tools/ee_inspection_tool.cpp:222
 msgid "No symbol issues found."
@@ -18780,9 +18747,9 @@ msgstr ""
 "重複しないように整数を接尾辞として付けます。"
 
 #: eeschema/widgets/tuner_slider.cpp:57 eeschema/widgets/tuner_slider.cpp:113
-#, fuzzy, c-format
+#, c-format
 msgid "Tune %s"
-msgstr "調整"
+msgstr "調整 %s"
 
 #: eeschema/widgets/tuner_slider.cpp:74
 #, fuzzy, c-format
@@ -20302,7 +20269,7 @@ msgstr "回路図ファイルは存在しないかアクセス不可です\n"
 
 #: kicad/cli/command_export_sch_pdf.cpp:38
 msgid "Color theme to use (will default to schematic settings)"
-msgstr "カラー テーマを使用する (回路図の設定でのデフォルトになります)"
+msgstr "カラー テーマを使用する (回路図エディターの設定でのデフォルト)"
 
 #: kicad/cli/command_export_sch_pdf.cpp:51
 #: kicad/cli/command_export_sch_svg.cpp:51
@@ -24154,8 +24121,7 @@ msgstr "削除するレイヤーを選択:"
 msgid ""
 "Incorrect value for Epsilon R (Epsilon R must be positive or null if not "
 "used)"
-msgstr ""
-"不正な値の εR (εR は正の値もしくは未使用なら null でなければなりません)"
+msgstr "不正な値の εR (εR は正の値もしくは未使用なら null でなければなりません)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1157
 msgid ""
@@ -32436,7 +32402,7 @@ msgstr "7"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:88
 msgid "Vias:"
-msgstr "ビア"
+msgstr "ビア:"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:104 pcbnew/pad.cpp:1011
 #: pcbnew/pcb_track.cpp:942 pcbnew/pcb_track.cpp:1306
@@ -32451,9 +32417,8 @@ msgid "Hole"
 msgstr "スルーホール"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:153
-#, fuzzy
 msgid "Differential pairs:"
-msgstr "差動ペア"
+msgstr "差動ペア:"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:170
 msgid "Gap"
