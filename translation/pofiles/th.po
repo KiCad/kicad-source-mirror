@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-10 15:35-0800\n"
-"PO-Revision-Date: 2023-03-03 16:39+0000\n"
+"PO-Revision-Date: 2023-03-06 14:40+0000\n"
 "Last-Translator: \"boonchai k.\" <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/v7/th/>\n"
 "Language: th\n"
@@ -5865,9 +5865,8 @@ msgid "Delete clicked items"
 msgstr "ลบชิ้นส่วนที่คลิก"
 
 #: common/tool/actions.cpp:204
-#, fuzzy
 msgid "Cycle arc editing mode"
-msgstr "สลับเปิดปิดโหมดเหมือนจริง"
+msgstr "สลับเปิดปิดโหมดแก้ไขส่วนโค้ง"
 
 #: common/tool/actions.cpp:205
 msgid "Switch to a different method of editing arcs"
@@ -7848,6 +7847,85 @@ msgid ""
 "Double quotes (`\"`) around the arguments are recommended in case filenames "
 "contain spaces or special characters.\n"
 msgstr ""
+"# 1. สรุป\n"
+"\n"
+"The Bill of Materials tool creates a BOM which lists all of the components "
+"in the design.\n"
+"\n"
+"The tool uses an external script to generate a BOM in the desired output "
+"format. Choosing a different script changes how the BOM is formatted.\n"
+"\n"
+"Generating a BOM is described in more detail in the Schematic Editor manual."
+"\n"
+"\n"
+"# 2. การใช้งาน\n"
+"\n"
+"Select a generator script in the **BOM generator scripts** list. Details for "
+"the selected generator are shown on the right of the dialog.\n"
+"\n"
+"Clicking the **Generate** button creates a BOM file with the selected "
+"generator.\n"
+"\n"
+"The default settings present several generator script options, although some "
+"additional scripts are installed with KiCad and can be added to the list "
+"with the **+** button.\n"
+"\n"
+"**Note:** On Windows, there is an additional option **Show console window**. "
+"When this option is unchecked, BOM generators run in a hidden console window "
+"and any output is redirected and printed in the dialog. When this option is "
+"checked, BOM generators run in a visisble console window.\n"
+"\n"
+"# 3. Custom generators and command lines\n"
+"\n"
+"Internally, KiCad creates an intermediate netlist file in XML format that "
+"contains information about all of the components in the design. A BOM "
+"generator script converts the intermediate netlist file to the desired "
+"output format. KiCad runs the BOM generator scripts according to the command "
+"line entered at the bottom of the BOM dialog.\n"
+"\n"
+"The command line format accepts parameters for filenames. Each formatting "
+"parameter is replaced with a project-specific path or filename. The "
+"supported formatting parameters are:\n"
+"\n"
+" * `%I`: absolute path and filename of the intermediate netlist file, which "
+"is the input to the BOM generator\n"
+" * `%O`: absolute path and filename of the output BOM file (without file "
+"extension)\n"
+" * `%B`: base filename of the output BOM file (without file extension)\n"
+" * `%P`: absolute path of the project directory, without trailing slash\n"
+"\n"
+"**Note:** the `%O` output file parameter does not include a file extension. "
+"KiCad will attempt to add an appropriate extension to the command line "
+"automatically, but an extension may need to be added by hand.\n"
+"\n"
+"Python is the recommended tool for BOM generator scripts, but other tools "
+"can also be used.\n"
+"\n"
+"## Example command lines for Python scripts\n"
+"\n"
+"The command line format for a Python script is of the form:\n"
+"\n"
+"```\n"
+"python <script file name> <input filename> <output filename>\n"
+"```\n"
+"\n"
+"On Windows, if the desired generator script for a CSV BOM is `C:\\Users"
+"\\username\\kicad\\my_python_script.py`, the command line would be:\n"
+"\n"
+"```\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O.csv\""
+"\n"
+"```\n"
+"\n"
+"On Linux, if the desired generator script for a CSV BOM is `/home/username/"
+"kicad/my_python_script.py`, the command line would be:\n"
+"\n"
+"```\n"
+"python /home/username/kicad/my_python_script.py \"%I\" \"%O.csv\"\n"
+"```\n"
+"\n"
+"Double quotes (`\"`) around the arguments are recommended in case filenames "
+"contain spaces or special characters.\n"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:64
 msgid "Change all symbols in schematic"
@@ -8729,9 +8807,8 @@ msgid "Buses && bus labels"
 msgstr "บัสและป้ายชื่อบัส"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:51
-#, fuzzy
 msgid "Label fields"
-msgstr "ช่องสัญลักษณ์"
+msgstr "ช่องป้ายชื่อ"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:57
 msgid "Sheet titles"
@@ -8751,9 +8828,8 @@ msgid "Filters"
 msgstr "กรอง"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:87
-#, fuzzy
 msgid "Filter fields by name:"
-msgstr "กรองชิ้นส่วนโดยเน็ต:"
+msgstr "กรองช่องฟิลด์ตามชื่อ:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:99
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:73
@@ -9021,9 +9097,8 @@ msgstr "แสดง"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:62
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:59
 #: eeschema/fields_grid_table.cpp:341
-#, fuzzy
 msgid "Show Name"
-msgstr "แสดงเน็ต"
+msgstr "แสดงชื่อ"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:91
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:63
@@ -9470,9 +9545,8 @@ msgid "Fields must have a name."
 msgstr "ช่องจะต้องมีชื่อ"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:323
-#, fuzzy
 msgid "Derived symbol must have a parent selected"
-msgstr "สัญลักษณ์แฝงต้องมีต้นกำเนิดเลือกไว้"
+msgstr "สัญลักษณ์ที่ได้รับต้องมีต้นกำเนิดที่เลือกไว้"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:335
 msgid "Delete extra units from symbol?"
@@ -9565,16 +9639,15 @@ msgid "Define as power symbol"
 msgstr "กำหนดเป็นสัญลักษณ์พาวเวอร์"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:207
-#, fuzzy
 msgid ""
 "Setting this option makes the symbol in question appear in the\n"
 "\"add power symbol\" dialog.  It will lock the value text to protect it\n"
 "from editing in the schematic.  The symbol will not be included in\n"
 "the BOM and cannot be assigned a footprint."
 msgstr ""
-"การตั้งค่าตัวเลือกนี้จะทำให้สัญลักษณ์ที่เป็นปัญหาปรากฏในส่วน\n"
-"กรอบสนทนา \"เพิ่มพอร์ตพาวเวอร์\" มันจะล็อคค่าเพื่อปกป้องมัน\n"
-"จากการแก้ไขใน Eeschema สัญลักษณ์จะไม่รวมอยู่ใน\n"
+"การตั้งค่าตัวเลือกนี้ ทำให้สัญลักษณ์ที่เป็นปัญหาปรากฏใน\n"
+"กล่องโต้ตอบ \"เพิ่มสัญลักษณ์พลังงาน\" มันจะล็อคข้อความเพื่อป้องกัน\n"
+"จากการแก้ไขในแผนผังวงจร สัญลักษณ์จะไม่รวมอยู่ใน\n"
 "BOM และไม่สามารถกำหนดฟุ้ทพรินท์"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:221
@@ -9643,9 +9716,8 @@ msgstr "คุณลักษณะ"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:278
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:201
-#, fuzzy
 msgid "Exclude from simulation"
-msgstr "ไม่ใช้สัญลักษณ์สำหรับจำลอง"
+msgstr "ยกเว้นจากการจำลอง"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:311
 msgid "Footprint filters:"
@@ -9677,9 +9749,8 @@ msgid "Footprint Filters"
 msgstr "กรองฟุ้ทพรินท์"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:364
-#, fuzzy
 msgid "Edit Simulation Model..."
-msgstr "แก้ไขโมเดลสไปส์…"
+msgstr "แก้ไขโมเดลการจำลอง…"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.h:118
 msgid "Library Symbol Properties"
@@ -9807,20 +9878,16 @@ msgstr ""
 "คุณต้องการดําเนินการต่อหรือไม่?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:439
-#, fuzzy
 msgid "Synchronized Pins Mode."
-msgstr "โหมดแก้ไขขาซิงโครไนซ์"
+msgstr "โหมดขาที่ซิงโครไนซ์"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:441
-#, fuzzy
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
-msgstr ""
-"เปิดใช้งานโหมดแก้ไขขาชนิดซิงโครไนซ์\n"
-"ขาที่คล้ายคลึงกันจะถูกแก้ไข,โดยไม่สนใจทางเลือกนี้"
+msgstr "ใช้รูปแบบการทำงานขาซิงโครไนซ์ ขาใหม่จะถูกเพิ่มในทุกหน่วย"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:443
 msgid "Synchronized Pins Mode.  Matching pins in other units will be updated."
-msgstr ""
+msgstr "โหมดขาที่ซิงโครไนซ์  ขาที่ตรงกันในหน่วยอื่นจะไม่ได้รับการปรับปรุง"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:44
 msgid "Pin &name:"
@@ -10115,18 +10182,16 @@ msgid "Pen width:"
 msgstr "ขนาดปากกา:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:159
-#, fuzzy
 msgid "Other options"
 msgstr "ตัวเลือกอื่น"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:161
-#, fuzzy
 msgid "Open file after plot"
-msgstr "พิมพ์ข้อความกรอง"
+msgstr "เปิดไฟล์หลังจากพล็อต"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:163
 msgid "Open output file with associated application after successful plot"
-msgstr ""
+msgstr "เปิดไฟล์เอาต์พุตด้วยแอปพลิเคชันที่เกี่ยวข้องหลังจากพล็อตสําเร็จ"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:89
 msgid "Plot Schematic Options"
@@ -10200,9 +10265,8 @@ msgid "Rescue Symbols"
 msgstr "สัญลักษณ์กู้ภัย"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:151
-#, fuzzy
 msgid "Skip Symbol Rescue"
-msgstr "แสดงโครงสร้างต้นไม้ของสัญลักษณ์"
+msgstr "ข้ามกู้ภัยสัญลักษณ์"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:233
 #, c-format
@@ -10401,9 +10465,8 @@ msgid "Net Classes"
 msgstr "เน็ตคลาส"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:85
-#, fuzzy
 msgid "Bus Alias Definitions"
-msgstr "ข้อกำหนดบัส"
+msgstr "คําจํากัดความนามแฝงของบัส"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:86
 #: pcbnew/dialogs/dialog_board_setup.cpp:105
@@ -10426,9 +10489,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_shape_properties.cpp:58
 #: eeschema/dialogs/dialog_sheet_properties.cpp:78
 #: eeschema/dialogs/dialog_text_properties.cpp:74
-#, fuzzy
 msgid "Note: individual item colors overridden in Preferences."
-msgstr "บันทึก: สีของชิ้นส่วนจะถูกแทนที่ด้วยสีจากธีมปัจจุบัน"
+msgstr "หมายเหตุ: สีของแต่ละชิ้นส่วนจะแทนที่สีจากการตั้งค่าความชอบ"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:88
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:158
@@ -10438,9 +10500,8 @@ msgid "Filled shape"
 msgstr "เติมเต็มรูปร่าง"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:122
-#, fuzzy
 msgid "Set border width to 0 to use schematic's default line width."
-msgstr "ตั้งความกว้างขอบเขตเป็น 0 เพื่อใช้ค่าปริยายของขนาดเส้นตรงของวงจร"
+msgstr "ตั้งความกว้างขอบเป็น 0 เพื่อใช้ค่าปริยายของขนาดเส้นตรงของแผนผังวงจร"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:126
 #, fuzzy
@@ -11337,14 +11398,13 @@ msgid "Library '%s' not found."
 msgstr "ไลบรารี '%s' ไม่พบ"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:234
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error writing project symbol library table.\n"
 "  %s"
 msgstr ""
-"เกิดความผิดพลาดระหว่างทำตารางไลบรารีสัญลักษณ์ให้ว่าง:\n"
-"\n"
-"%s"
+"เกิดข้อผิดพลาดในการเขียนตารางไลบรารีสัญลักษณ์โครงการ\n"
+"  %s"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:238
 msgid "Created project symbol library table.\n"
@@ -12369,9 +12429,8 @@ msgstr "ผิดพลาดอ่านตารางไลบรารีส
 #: eeschema/eeschema_jobs_handler.cpp:159
 #: eeschema/eeschema_jobs_handler.cpp:195
 #: eeschema/eeschema_jobs_handler.cpp:290
-#, fuzzy
 msgid "Failed to load schematic file\n"
-msgstr "บันทึกวงจร '%s' ไม่สำเร็จ"
+msgstr "โหลดไฟล์แผนผังวงจรไม่สำเร็จ\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:206
 #: eeschema/eeschema_jobs_handler.cpp:305
@@ -12382,14 +12441,12 @@ msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:215
 #: eeschema/eeschema_jobs_handler.cpp:315
-#, fuzzy
 msgid "Warning: duplicate sheet names.\n"
-msgstr "คำเตือน: ชื่อเล่นซ้ำ"
+msgstr "คำเตือน: ชื่อแผงวงจรซ้ำกัน\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:257
-#, fuzzy
 msgid "Unknown netlist format.\n"
-msgstr "เวียที่ไม่รู้จัก %d"
+msgstr "รูปแบบเน็ตลิสต์ที่ไม่รู้จัก\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:386
 #, c-format
@@ -12409,9 +12466,8 @@ msgstr "ไม่สามารถเปิดเป้าหมาย '%s'"
 #: eeschema/eeschema_jobs_handler.cpp:463
 #: eeschema/eeschema_jobs_handler.cpp:526 pcbnew/pcbnew_jobs_handler.cpp:611
 #: pcbnew/pcbnew_jobs_handler.cpp:672
-#, fuzzy
 msgid "Unable to load library\n"
-msgstr "ไม่สามารถโหลด %s ไฟล์"
+msgstr "ไม่สามารถอ่านไลบรารี\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:474
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:123
@@ -12423,19 +12479,16 @@ msgid "Output path must not conflict with existing path\n"
 msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:544
-#, fuzzy
 msgid "Saving symbol library in updated format\n"
-msgstr "ตัวระบุไลบรารีสัญลักษณ์ไม่ถูกต้อง"
+msgstr "การบันทึกไลบรารีสัญลักษณ์ในรูปแบบที่ปรับปรุงแล้ว\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:558 pcbnew/pcbnew_jobs_handler.cpp:640
-#, fuzzy
 msgid "Unable to save library\n"
-msgstr "ล้มเหลวที่จะบันทึกไลบารีกู้ภัย %s"
+msgstr "ไม่สามารถบันทึกไลบรารี\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:564
-#, fuzzy
 msgid "Symbol library was not updated\n"
-msgstr "ไม่ได้เปิดใช้งานไลบรารีสัญลักษณ์"
+msgstr "ไลบรารีสัญลักษณ์ไม่ได้รับการปรับปรุง\n"
 
 #: eeschema/erc.cpp:66 eeschema/erc.cpp:83
 msgid "Input Pin"
@@ -13253,11 +13306,13 @@ msgid "Failed to generate a name for '%s': exceeded UINT64_MAX"
 msgstr ""
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:279
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading simulation model from symbol '%s':\n"
 "%s"
-msgstr "เกิดข้อผิดพลาดโหลดโมเดลไลบรารีการจำลอง '%s':'%s'"
+msgstr ""
+"เกิดข้อผิดพลาด การอ่านแบบจำลองจากสัญลักษณ์ '%s':\n"
+"%s"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:515
 #, fuzzy, c-format
@@ -15749,11 +15804,12 @@ msgid "Spice Simulator"
 msgstr "เครื่องจำลองสไปส์"
 
 #: eeschema/sim/sim_plot_frame.cpp:466 eeschema/sim/sim_plot_frame.cpp:1563
-#, fuzzy
 msgid ""
 "Errors during netlist generation; simulation aborted.\n"
 "\n"
-msgstr "มีข้อผิดพลาดระหว่างการส่งออกรายชื่อเน็ต,ถูกยกเลิก"
+msgstr ""
+"ข้อผิดพลาดระหว่างการสร้างรายชื่อเน็ต; การจำลองถูกยกเลิก\n"
+"\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:483
 msgid ""
@@ -19462,9 +19518,8 @@ msgid ""
 msgstr ""
 
 #: kicad/cli/command_export_pcb_base.cpp:124
-#, fuzzy
 msgid "At least one or more layers must be specified\n"
-msgstr "ต้องเลือกแทร็กส่วนตรงอย่างน้อยสองส่วน"
+msgstr "ต้องระบุเลเยอร์อย่างน้อยหนึ่งชั้นหรือมากกว่า\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:47
 msgid "Valid options excellon, gerber."
@@ -19519,31 +19574,26 @@ msgid "Output must be a directory\n"
 msgstr "ทางออกต้องเป็นไดเร็คตอรี\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:125
-#, fuzzy
 msgid "Invalid drill format\n"
-msgstr "รูปแบบไฟล์หน่วยเก็บถาวรไม่ถูกต้อง"
+msgstr "รูปแบบไฟล์เจาะไม่ถูกต้อง\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:141
 #: kicad/cli/command_export_pcb_dxf.cpp:94
 #: kicad/cli/command_export_pcb_pos.cpp:142
-#, fuzzy
 msgid "Invalid units specified\n"
-msgstr "คำนำหน้าหน่วยไม่ถูกต้อง"
+msgstr "ระบุหน่วยไม่ถูกต้อง\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:165
-#, fuzzy
 msgid "Invalid zeros format specified\n"
-msgstr "ระบุฟุ้ทพรินท์ไม่ถูกต้อง"
+msgstr "ระบุรูปแบบเลขศูนย์ไม่ถูกต้อง\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:193
-#, fuzzy
 msgid "Invalid map format specified\n"
-msgstr "ระบุฟุ้ทพรินท์ไม่ถูกต้อง"
+msgstr "ระบุรูปแบบแผนที่ไม่ถูกต้อง\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:209
-#, fuzzy
 msgid "Invalid origin mode specified\n"
-msgstr "ระบุฟุ้ทพรินท์ไม่ถูกต้อง"
+msgstr "ระบุรูปแบบต้นทางไม่ถูกต้อง\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:220
 #: kicad/cli/command_export_pcb_gerber.cpp:109
@@ -19674,18 +19724,16 @@ msgstr "รวมเลเยอร์ขอบบอร์ด"
 
 #: kicad/cli/command_export_pcb_pos.cpp:126
 #: kicad/cli/command_export_sch_netlist.cpp:81 kicad/cli/command_version.cpp:67
-#, fuzzy
 msgid "Invalid format\n"
-msgstr "ชื่อขาไม่ถูกต้อง"
+msgstr "รูปแบบไม่ถูกต้อง\n"
 
 #: kicad/cli/command_export_pcb_pos.cpp:152
 msgid "\"both\" not supported for gerber format\n"
 msgstr ""
 
 #: kicad/cli/command_export_pcb_pos.cpp:168
-#, fuzzy
 msgid "Invalid side specified\n"
-msgstr "ระบุฟุ้ทพรินท์ไม่ถูกต้อง"
+msgstr "ระบุด้านไม่ถูกต้อง\n"
 
 #: kicad/cli/command_export_pcb_step.cpp:48
 #, fuzzy
@@ -20404,12 +20452,9 @@ msgid "Unable to load repository url"
 msgstr "ไม่สามารถอ่านคลังเก็บจาก url"
 
 #: kicad/pcm/pcm.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse repository: %s"
-msgstr ""
-"ไม่สามารถตีความคลังเก็บข้อมูล:\n"
-"\n"
-"'%s"
+msgstr "ไม่สามารถตีความคลังเก็บข้อมูล:%s"
 
 #: kicad/pcm/pcm.cpp:324
 msgid ""
@@ -21416,7 +21461,6 @@ msgstr ""
 "___R2 = Z<sub>0</sub> / (L&minus;1)___\n"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### Pi Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -21436,7 +21480,8 @@ msgstr ""
 "___Z<sub>in</sub>___ is desired input impedance in &#x2126;<br>\n"
 "___Z<sub>out</sub>___ is desired output impedance in &#x2126;<br>\n"
 "\n"
-"___L = 10<sup>a/20</sup>___<br>\n"
+"___K = V<sub>I</sub>/V<sub>O</sub> = 10<sup>a/20</sup>___<br>\n"
+"___L = K<sup>2</sup> = 10<sup>a/10</sup>___<br>\n"
 "___A = (L+1) / (L&minus;1)___<br><br>\n"
 "___R2 = (L&minus;1) / 2&middot;&radic;(Z<sub>in</sub> &middot; Z<sub>out</"
 "sub> / L)___<br>\n"
@@ -21462,7 +21507,6 @@ msgstr ""
 "___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -21482,10 +21526,11 @@ msgstr ""
 "___Z<sub>in</sub>___ is desired input impedance in &#x2126;<br>\n"
 "___Z<sub>out</sub>___ is desired output impedance in &#x2126;<br>\n"
 "\n"
-"___L = 10<sup>a/20</sup>___<br>\n"
+"___K = V<sub>I</sub>/V<sub>O</sub> = 10<sup>a/20</sup>___<br>\n"
+"___L = K<sup>2</sup> = 10<sup>a/10</sup>___<br>\n"
 "___A = (L+1) / (L&minus;1)___<br><br>\n"
-"___R2 = 2&middot;&radic;(L &middot; Z<sub>in</sub> &middot; Z<sub>out</"
-"sub>) / (L&minus;1)___<br>\n"
+"___R2 = 2&middot;&radic;(L &middot; Z<sub>in</sub> &middot; Z<sub>out</sub>) "
+"/ (L&minus;1)___<br>\n"
 "___R1 = Z<sub>in</sub> &middot; A &minus; R2___<br>\n"
 "___R3 = Z<sub>out</sub> &middot; A &minus; R2___\n"
 
@@ -28975,16 +29020,14 @@ msgid "SVG Options"
 msgstr "ตัวเลือก SVG"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:376
-#, fuzzy
 msgid ""
 "This number defines how many digits are exported that are below 1 mm.\n"
 "User unit is 10^-<N> mm\n"
 "Choose 4 if you are not sure."
 msgstr ""
-"หน่วยผู้ใช้ SVG มีขนาดใหญ่เพียงใด\n"
-"ตัวเลขกำหนดจำนวนหลักที่จะส่งออกซึ่งต่ำกว่า 1 มม. หรือ 1 นิ้ว\n"
-"หน่วยผู้ใช้คือ 10^-<N> มม. หรือ 10^-<N> นิ้ว\n"
-"เลือก 6 ถ้าคุณไม่แน่ใจ"
+"ตัวเลขนี้กำหนดจำนวนหลักที่ส่งออก ซึ่งมีขนาดต่ำกว่า 1 มม.\n"
+"หน่วยของผู้ใช้คือ 10^-<N> mm\n"
+"เลือก 4 หากคุณไม่แน่ใจ"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:396
 #, fuzzy
@@ -34884,19 +34927,16 @@ msgid "Error creating svg file"
 msgstr "เกิดข้อผิดพลาดในการอ่านไฟล์"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:590 pcbnew/pcbnew_jobs_handler.cpp:661
-#, fuzzy
 msgid "Loading footprint library\n"
-msgstr "ข้อผิดพลาดในการโหลดตารางฟุ้ทพรินท์ไลบรารี"
+msgstr "กำลังอ่านไลบรารีฟุ้ทพรินท์\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:627
-#, fuzzy
 msgid "Saving footprint library\n"
-msgstr "ข้อผิดพลาดในการโหลดตารางฟุ้ทพรินท์ไลบรารี"
+msgstr "บันทึกไลบรารี่ฟุ้ทพรินท์\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:646
-#, fuzzy
 msgid "Footprint library was not updated\n"
-msgstr "ไม่ได้เปิดใช้งานไลบรารีฟุ้ทพรินท์"
+msgstr "ไลบรารีฟุ้ทพรินท์ไม่ถูกปรับปรุง\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:710
 #, fuzzy
