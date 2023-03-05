@@ -561,6 +561,8 @@ void PANEL_PREVIEW_3D_MODEL::onUnitsChanged( wxCommandEvent& aEvent )
     xoff->SetValue( formatOffsetValue( xoff_mm ) );
     yoff->SetValue( formatOffsetValue( yoff_mm ) );
     zoff->SetValue( formatOffsetValue( zoff_mm ) );
+
+    aEvent.Skip();
 }
 
 
