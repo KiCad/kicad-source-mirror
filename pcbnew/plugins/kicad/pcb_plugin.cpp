@@ -817,7 +817,7 @@ void PCB_PLUGIN::format( const PCB_DIMENSION_BASE* aDimension, int aNestLevel ) 
                       m_out->Quotew( aDimension->GetSuffix() ).c_str(),
                       static_cast<int>( aDimension->GetUnitsMode() ),
                       static_cast<int>( aDimension->GetUnitsFormat() ),
-                      aDimension->GetPrecision() );
+                      static_cast<int>(  aDimension->GetPrecision() ) );
 
         if( aDimension->GetOverrideTextEnabled() )
         {
