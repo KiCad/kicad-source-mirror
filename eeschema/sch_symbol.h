@@ -798,6 +798,9 @@ private:
     // Defines the hierarchical path and reference of the symbol.  This allows support
     // for multiple references to a single sub-sheet.
     std::vector<SCH_SYMBOL_INSTANCE> m_instanceReferences;
+
+    /// @see SCH_SYMBOL::GetOrientation
+    static std::unordered_map<TRANSFORM, int> s_transformToOrientationCache;
 };
 
 #endif /* __SYMBOL_H__ */

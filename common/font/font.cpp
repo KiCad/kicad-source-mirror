@@ -24,6 +24,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <list>
+#include <mutex>
+#include <unordered_map>
+
 #include <wx/font.h>
 #include <string_utils.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -46,6 +50,75 @@ using namespace KIFONT;
 FONT* FONT::s_defaultFont = nullptr;
 
 std::map< std::tuple<wxString, bool, bool>, FONT*> FONT::s_fontMap;
+
+class MARKUP_CACHE
+{
+public:
+    struct ENTRY
+    {
+        std::string source;
+        std::unique_ptr<MARKUP::NODE> root;
+    };
+
+    typedef std::pair<wxString, ENTRY> CACHE_ENTRY;
+
+    MARKUP_CACHE( size_t aMaxSize ) :
+            m_maxSize( aMaxSize )
+    {
+    }
+
+    ENTRY& Put( const CACHE_ENTRY::first_type& aQuery, ENTRY&& aResult )
+    {
+        auto it = m_cache.find( aQuery );
+
+        m_cacheMru.emplace_front( CACHE_ENTRY( aQuery, std::move( aResult ) ) );
+
+        if( it != m_cache.end() )
+        {
+            m_cacheMru.erase( it->second );
+            m_cache.erase( it );
+        }
+
+        m_cache[aQuery] = m_cacheMru.begin();
+
+        if( m_cache.size() > m_maxSize )
+        {
+            auto last = m_cacheMru.end();
+            last--;
+            m_cache.erase( last->first );
+            m_cacheMru.pop_back();
+        }
+
+        return m_cacheMru.begin()->second;
+    }
+
+    ENTRY* Get( const CACHE_ENTRY::first_type& aQuery )
+    {
+        auto it = m_cache.find( aQuery );
+
+        if( it == m_cache.end() )
+            return nullptr;
+
+        m_cacheMru.splice( m_cacheMru.begin(), m_cacheMru, it->second );
+
+        return &m_cacheMru.begin()->second;
+    }
+
+    void Clear()
+    {
+        m_cacheMru.clear();
+        m_cache.clear();
+    }
+
+private:
+    size_t                                                         m_maxSize;
+    std::list<CACHE_ENTRY>                                         m_cacheMru;
+    std::unordered_map<wxString, std::list<CACHE_ENTRY>::iterator> m_cache;
+};
+
+
+static MARKUP_CACHE s_markupCache( 1024 );
+static std::mutex s_markupCacheMutex;
 
 
 FONT::FONT()
@@ -106,7 +179,7 @@ void FONT::getLinePositions( const wxString& aText, const VECTOR2I& aPosition,
     {
         VECTOR2I pos( aPosition.x, aPosition.y + i * interline );
         VECTOR2I end = boundingBoxSingleLine( nullptr, aTextLines[i], pos, aAttrs.m_Size,
-                                              aAttrs.m_Italic );
+                                                aAttrs.m_Italic );
         VECTOR2I bBox( end - pos );
 
         aExtents.push_back( bBox );
@@ -186,7 +259,7 @@ void FONT::Draw( KIGFX::GAL* aGal, const wxString& aText, const VECTOR2I& aPosit
  * @return position of cursor for drawing next substring
  */
 VECTOR2I drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
-                     const std::unique_ptr<MARKUP::NODE>& aNode, const VECTOR2I& aPosition,
+                     const MARKUP::NODE* aNode, const VECTOR2I& aPosition,
                      const KIFONT::FONT* aFont, const VECTOR2I& aSize, const EDA_ANGLE& aAngle,
                      bool aMirror, const VECTOR2I& aOrigin, TEXT_STYLE_FLAGS aTextStyle )
 {
@@ -221,8 +294,8 @@ VECTOR2I drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* a
 
         for( const std::unique_ptr<MARKUP::NODE>& child : aNode->children )
         {
-            nextPosition = drawMarkup( aBoundingBox, aGlyphs, child, nextPosition, aFont, aSize,
-                                       aAngle, aMirror, aOrigin, textStyle );
+            nextPosition = drawMarkup( aBoundingBox, aGlyphs, child.get(), nextPosition, aFont,
+                                       aSize, aAngle, aMirror, aOrigin, textStyle );
         }
     }
 
@@ -235,11 +308,24 @@ VECTOR2I FONT::drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYP
                            const EDA_ANGLE& aAngle, bool aMirror, const VECTOR2I& aOrigin,
                            TEXT_STYLE_FLAGS aTextStyle ) const
 {
-    MARKUP::MARKUP_PARSER         markupParser( TO_UTF8( aText ) );
-    std::unique_ptr<MARKUP::NODE> root = markupParser.Parse();
+    std::lock_guard<std::mutex> lock( s_markupCacheMutex );
 
-    return ::drawMarkup( aBoundingBox, aGlyphs, root, aPosition, this, aSize, aAngle, aMirror,
-                         aOrigin, aTextStyle );
+    MARKUP_CACHE::ENTRY* markup = s_markupCache.Get( aText );
+
+    if( !markup || !markup->root )
+    {
+        MARKUP_CACHE::ENTRY& cached = s_markupCache.Put( aText, {} );
+
+        cached.source = TO_UTF8( aText );
+        MARKUP::MARKUP_PARSER markupParser( &cached.source );
+        cached.root = markupParser.Parse();
+        markup = &cached;
+    }
+
+    wxASSERT( markup && markup->root );
+
+    return ::drawMarkup( aBoundingBox, aGlyphs, markup->root.get(), aPosition, this, aSize, aAngle,
+                         aMirror, aOrigin, aTextStyle );
 }
 
 

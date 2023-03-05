@@ -44,6 +44,9 @@
 #include "plotters/plotter.h"
 
 
+std::unordered_map<TRANSFORM, int> SCH_SYMBOL::s_transformToOrientationCache;
+
+
 /**
  * Convert a wxString to UTF8 and replace any control characters with a ~,
  * where a control character is one of the first ASCII values up to ' ' 32d.
@@ -1535,6 +1538,13 @@ void SCH_SYMBOL::SetOrientation( int aOrientation )
 
 int SCH_SYMBOL::GetOrientation() const
 {
+    /*
+     * This is slow, but also a bizarre algorithm.  I don't feel like unteasing the algorithm right
+     * now, so let's just cache it for the moment.
+     */
+    if( s_transformToOrientationCache.count( m_transform ) )
+        return s_transformToOrientationCache.at( m_transform );
+
     int rotate_values[] =
     {
         SYM_ORIENT_0,
@@ -1560,7 +1570,10 @@ int SCH_SYMBOL::GetOrientation() const
         temp.SetOrientation( type_rotate );
 
         if( transform == temp.GetTransform() )
+        {
+            s_transformToOrientationCache[m_transform] = type_rotate;
             return type_rotate;
+        }
     }
 
     // Error: orientation not found in list (should not happen)

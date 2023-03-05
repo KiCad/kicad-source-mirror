@@ -30,7 +30,13 @@ std::unique_ptr<NODE> MARKUP_PARSER::Parse()
 {
     try
     {
-        auto root = parse_tree::parse<MARKUP::grammar, MARKUP::NODE, MARKUP::selector>( in );
+        std::unique_ptr<NODE> root;
+
+        if( mem_in )
+            root = parse_tree::parse<MARKUP::grammar, MARKUP::NODE, MARKUP::selector>( *mem_in );
+        else
+            root = parse_tree::parse<MARKUP::grammar, MARKUP::NODE, MARKUP::selector>( *in );
+
         return root;
     }
     catch ( tao::pegtl::parse_error& )

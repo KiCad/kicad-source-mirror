@@ -36,16 +36,21 @@ using namespace TFIELD_T;
 #define FOOTPRINT_CANONICAL "Footprint"
 #define DATASHEET_CANONICAL "Datasheet"
 
+static wxString s_CanonicalReference( REFERENCE_CANONICAL );
+static wxString s_CanonicalValue( VALUE_CANONICAL );
+static wxString s_CanonicalFootprint( FOOTPRINT_CANONICAL );
+static wxString s_CanonicalDatasheet( DATASHEET_CANONICAL );
+
 const wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx, bool aTranslateForHI )
 {
     if( !aTranslateForHI )
     {
         switch( aFieldNdx )
         {
-        case  REFERENCE_FIELD: return REFERENCE_CANONICAL;   // The symbol reference, R1, C1, etc.
-        case  VALUE_FIELD:     return VALUE_CANONICAL;       // The symbol value
-        case  FOOTPRINT_FIELD: return FOOTPRINT_CANONICAL;   // The footprint for use with Pcbnew
-        case  DATASHEET_FIELD: return DATASHEET_CANONICAL;   // Link to a datasheet for symbol
+        case  REFERENCE_FIELD: return s_CanonicalReference;   // The symbol reference, R1, C1, etc.
+        case  VALUE_FIELD:     return s_CanonicalValue;       // The symbol value
+        case  FOOTPRINT_FIELD: return s_CanonicalFootprint;   // The footprint for use with Pcbnew
+        case  DATASHEET_FIELD: return s_CanonicalDatasheet;   // Link to a datasheet for symbol
         default:               return wxString::Format( wxT( "Field%d" ), aFieldNdx );
         }
     }

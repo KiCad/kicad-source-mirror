@@ -98,5 +98,12 @@ public:
    bool MapAngles( EDA_ANGLE* aAngle1, EDA_ANGLE* aAngle2 ) const;
 };
 
+namespace std
+{
+    template <> struct hash<TRANSFORM>
+    {
+        size_t operator() ( const TRANSFORM& k ) const;
+    };
+}
 
 #endif    // _TRANSFORM_H_

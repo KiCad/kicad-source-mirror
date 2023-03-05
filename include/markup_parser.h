@@ -97,13 +97,20 @@ class MARKUP_PARSER
 {
 public:
     MARKUP_PARSER( const std::string& source ) :
-            in( source, "from_input" )
+            in( std::make_unique<string_input<>>( source, "from_input" ) ),
+            mem_in()
+    {}
+
+    MARKUP_PARSER( const std::string* source ) :
+            in(),
+            mem_in( std::make_unique<memory_input<>>( *source, "from_input" ) )
     {}
 
     std::unique_ptr<NODE> Parse();
 
 private:
-    string_input<> in;
+    std::unique_ptr<string_input<>> in;
+    std::unique_ptr<memory_input<>> mem_in;
 };
 
 } // namespace MARKUP

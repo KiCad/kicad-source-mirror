@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <hash.h>
 #include <macros.h>
 #include <trigo.h>
 #include <transform.h>
@@ -124,3 +125,9 @@ bool TRANSFORM::MapAngles( EDA_ANGLE* aAngle1, EDA_ANGLE* aAngle2 ) const
 }
 
 
+size_t std::hash<TRANSFORM>::operator()( const TRANSFORM& s ) const
+{
+    size_t seed = std::hash<int>{}( s.x1 );
+    hash_combine( seed, s.y1, s.x2, s.y2 );
+    return seed;
+}
