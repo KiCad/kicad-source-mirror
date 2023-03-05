@@ -27,28 +27,36 @@ import sys
 # Get extra fields from the command line
 extra_fields = sys.argv[3:]
 
+comp_fields = ['Value', 'Footprint', 'DNP'] + extra_fields
+header_names = ['#', 'Reference', 'Qty'] + comp_fields
+
+def getComponentString(comp, field_name):
+    if field_name == "Value":
+        return comp.getValue()
+    elif field_name == "Footprint":
+        return comp.getFootprint()
+    elif field_name == "DNP":
+        return comp.getDNPString()
+    elif field_name == "Datasheet":
+        return comp.getDatasheet()
+    else:
+        return comp.getField( field_name )
+
 def myEqu(self, other):
     """myEqu is a more advanced equivalence function for components which is
     used by component grouping. Normal operation is to group components based
     on their Value and Footprint.
 
     In this example of a more advanced equivalency operator we also compare the
-    Footprint, Value and all extra fields passed from the command line. If 
+    Footprint, Value, DNP and all extra fields passed from the command line. If
     these fields are not used in some parts they will simply be ignored (they
     will match as both will be empty strings).
 
     """
     result = True
-    if self.getValue() != other.getValue():
-        result = False
-    elif self.getFootprint() != other.getFootprint():
-        result = False
-    elif self.getDNP() != other.getDNP():
-        result = False
-    else:
-        for field_name in extra_fields:
-            if self.getField(field_name) != other.getField(field_name):
-                result = False
+    for field_name in comp_fields:
+        if getComponentString(self, field_name) != getComponentString(other, field_name):
+            result = False
 
     return result
 
@@ -74,7 +82,7 @@ except IOError:
 out = csv.writer(f, lineterminator='\n', delimiter=',', quotechar='\"', quoting=csv.QUOTE_ALL)
 
 # Output a CSV header
-out.writerow(['#', 'Reference', 'Qty', 'Value', 'Footprint', 'DNP'] + extra_fields)
+out.writerow(header_names)
 
 # Get all of the components in groups of matching parts + values
 # (see kicad_netlist_reader.py)
@@ -93,20 +101,17 @@ for group in grouped:
 
     # Remove trailing comma
     refs = refs[:-2]
-    
+
     # Fill in the component groups common data
     row = []
     row.append( index )
     row.append( refs )
     row.append( len(group) )
-    row.append( c.getValue() )
-    row.append( c.getFootprint() )
-    row.append( c.getDNPString() )
-    
-    # Add the values of extra fields
-    for field_name in extra_fields:
-        row.append( c.getField( field_name ) )
+
+    # Add the values of component-specific data
+    for field_name in comp_fields:
+        row.append( getComponentString( c, field_name ) )
 
     out.writerow(row)
-        
+
     index += 1
