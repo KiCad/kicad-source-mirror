@@ -1269,7 +1269,7 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
     PCB_DIM_ALIGNED* dimension = new PCB_DIM_ALIGNED( m_board, PCB_DIM_ALIGNED_T );
     m_board->Add( dimension, ADD_MODE::APPEND );
 
-    dimension->SetPrecision( aElem.textprecision );
+    dimension->SetPrecision( static_cast<DIM_PRECISION>( aElem.textprecision ) );
     dimension->SetLayer( klayer );
     dimension->SetStart( referencePoint0 );
 
@@ -1366,7 +1366,7 @@ void ALTIUM_PCB::HelperParseDimensions6Radial(const ADIMENSION6 &aElem)
     m_board->Add( dimension, ADD_MODE::APPEND );
     m_radialDimensions.push_back( dimension );
 
-    dimension->SetPrecision( aElem.textprecision );
+    dimension->SetPrecision( static_cast<DIM_PRECISION>( aElem.textprecision ) );
     dimension->SetLayer( klayer );
     dimension->SetStart( referencePoint0 );
     dimension->SetEnd( aElem.xy1 );

@@ -54,6 +54,7 @@ FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL( KIWAY* aKiway, wxWindow* aPare
     EnableScrolling( false, false );    // otherwise Zoom Auto disables GAL canvas
 
     m_dummyBoard = std::make_unique<BOARD>();
+    m_dummyBoard->SetUserUnits( m_userUnits );
     UpdateColors();
     SyncLayersVisibility( m_dummyBoard.get() );
 
@@ -111,14 +112,7 @@ void FOOTPRINT_PREVIEW_PANEL::renderFootprint( std::shared_ptr<FOOTPRINT> aFootp
     INSPECTOR_FUNC inspector =
             [&]( EDA_ITEM* descendant, void* aTestData )
             {
-                PCB_DIMENSION_BASE* dimension = static_cast<PCB_DIMENSION_BASE*>( descendant );
-
-                if( dimension->GetUnitsMode() == DIM_UNITS_MODE::AUTOMATIC )
-                {
-                    dimension->SetUnits( m_userUnits );
-                    dimension->Update();
-                }
-
+                static_cast<PCB_DIMENSION_BASE*>( descendant )->UpdateUnits();
                 return INSPECT_RESULT::CONTINUE;
             };
 

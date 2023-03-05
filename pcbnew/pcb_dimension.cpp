@@ -47,7 +47,7 @@ PCB_DIMENSION_BASE::PCB_DIMENSION_BASE( BOARD_ITEM* aParent, KICAD_T aType ) :
         m_units( EDA_UNITS::INCHES ),
         m_autoUnits( false ),
         m_unitsFormat( DIM_UNITS_FORMAT::BARE_SUFFIX ),
-        m_precision( 4 ),
+        m_precision( DIM_PRECISION::X_XXXX ),
         m_suppressZeroes( false ),
         m_lineThickness( pcbIUScale.mmToIU( 0.2 ) ),
         m_arrowLength( pcbIUScale.MilsToIU( 50 ) ),
@@ -115,7 +115,7 @@ wxString PCB_DIMENSION_BASE::GetValueText() const
     wxChar sep = lc->decimal_point[0];
 
     int      val = GetMeasuredValue();
-    int      precision = m_precision;
+    int      precision = static_cast<int>( m_precision );
     wxString text;
 
     if( precision >= 6 )
@@ -190,14 +190,27 @@ DIM_UNITS_MODE PCB_DIMENSION_BASE::GetUnitsMode() const
 
 void PCB_DIMENSION_BASE::SetUnitsMode( DIM_UNITS_MODE aMode )
 {
-    m_autoUnits = false;
-
     switch( aMode )
     {
-    case DIM_UNITS_MODE::INCHES:      m_units = EDA_UNITS::INCHES;      break;
-    case DIM_UNITS_MODE::MILS:        m_units = EDA_UNITS::MILS;        break;
-    case DIM_UNITS_MODE::MILLIMETRES: m_units = EDA_UNITS::MILLIMETRES; break;
-    case DIM_UNITS_MODE::AUTOMATIC:   m_autoUnits = true;               break;
+    case DIM_UNITS_MODE::INCHES:
+        m_autoUnits = false;
+        m_units = EDA_UNITS::INCHES;
+        break;
+
+    case DIM_UNITS_MODE::MILS:
+        m_autoUnits = false;
+        m_units = EDA_UNITS::MILS;
+        break;
+
+    case DIM_UNITS_MODE::MILLIMETRES:
+        m_autoUnits = false;
+        m_units = EDA_UNITS::MILLIMETRES;
+        break;
+
+    case DIM_UNITS_MODE::AUTOMATIC:
+        m_autoUnits = true;
+        m_units = GetBoard()->GetUserUnits();
+        break;
     }
 }
 
@@ -296,11 +309,11 @@ void PCB_DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
 
         switch( GetPrecision() )
         {
-        case 6:  msg = wxT( "0.00 in / 0 mils / 0.0 mm" );          break;
-        case 7:  msg = wxT( "0.000 in / 0 mils / 0.00 mm" );        break;
-        case 8:  msg = wxT( "0.0000 in / 0.0 mils / 0.000 mm" );    break;
-        case 9:  msg = wxT( "0.00000 in / 0.00 mils / 0.0000 mm" ); break;
-        default: msg = wxT( "%" ) + wxString::Format( wxT( "1.%df" ), GetPrecision() );
+        case DIM_PRECISION::V_VV:    msg = wxT( "0.00 in / 0 mils / 0.0 mm" );          break;
+        case DIM_PRECISION::V_VVV:   msg = wxT( "0.000 in / 0 mils / 0.00 mm" );        break;
+        case DIM_PRECISION::V_VVVV:  msg = wxT( "0.0000 in / 0.0 mils / 0.000 mm" );    break;
+        case DIM_PRECISION::V_VVVVV: msg = wxT( "0.00000 in / 0.00 mils / 0.0000 mm" ); break;
+        default:  msg = wxT( "%" ) + wxString::Format( wxT( "1.%df" ), GetPrecision() );
         }
 
         aList.emplace_back( _( "Precision" ), wxString::Format( msg, 0.0 ) );
@@ -972,11 +985,18 @@ BITMAPS PCB_DIM_LEADER::GetMenuImage() const
 }
 
 
+void PCB_DIM_LEADER::updateText()
+{
+    // Our geometry is dependent on the size of the text, so just update the whole shebang
+    updateGeometry();
+}
+
+
 void PCB_DIM_LEADER::updateGeometry()
 {
     m_shapes.clear();
 
-    updateText();
+    PCB_DIMENSION_BASE::updateText();
 
     // Now that we have the text updated, we can determine how to draw the second line
     // First we need to create an appropriate bounding polygon to collide with
@@ -1057,23 +1077,6 @@ void PCB_DIM_LEADER::updateGeometry()
 
     if( textSegEnd && *arrowSegEnd == m_end )
         m_shapes.emplace_back( new SHAPE_SEGMENT( m_end, *textSegEnd ) );
-}
-
-
-void PCB_DIM_LEADER::ClearRenderCache()
-{
-    PCB_DIMENSION_BASE::ClearRenderCache();
-
-    // We use EDA_TEXT::ClearRenderCache() as a signal that the properties of the EDA_TEXT
-    // have changed and we may need to update the dimension text
-
-    if( !m_inClearRenderCache )
-    {
-        m_inClearRenderCache = true;
-        updateText();
-        updateGeometry();
-        m_inClearRenderCache = false;
-    }
 }
 
 
@@ -1296,6 +1299,18 @@ static struct DIMENSION_DESC
 {
     DIMENSION_DESC()
     {
+        ENUM_MAP<DIM_PRECISION>::Instance()
+                    .Map( DIM_PRECISION::X,       _HKI( "0" ) )
+                    .Map( DIM_PRECISION::X_X,     _HKI( "0.0" ) )
+                    .Map( DIM_PRECISION::X_XX,    _HKI( "0.00" ) )
+                    .Map( DIM_PRECISION::X_XXX,   _HKI( "0.000" ) )
+                    .Map( DIM_PRECISION::X_XXXX,  _HKI( "0.0000" ) )
+                    .Map( DIM_PRECISION::X_XXXXX, _HKI( "0.00000" ) )
+                    .Map( DIM_PRECISION::V_VV,    _HKI( "0.00 in / 0 mils / 0.0 mm" ) )
+                    .Map( DIM_PRECISION::V_VVV,   _HKI( "0.000 / 0 / 0.00" ) )
+                    .Map( DIM_PRECISION::V_VVVV,  _HKI( "0.0000 / 0.0 / 0.000" ) )
+                    .Map( DIM_PRECISION::V_VVVVV, _HKI( "0.00000 / 0.00 / 0.0000" ) );
+
         ENUM_MAP<DIM_UNITS_FORMAT>::Instance()
                     .Map( DIM_UNITS_FORMAT::NO_SUFFIX,    _HKI( "1234.0" ) )
                     .Map( DIM_UNITS_FORMAT::BARE_SUFFIX,  _HKI( "1234.0 mm" ) )
@@ -1334,7 +1349,7 @@ static struct DIMENSION_DESC
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_DIMENSION_BASE, DIM_UNITS_FORMAT>( _HKI( "Units Format" ),
                 &PCB_DIMENSION_BASE::ChangeUnitsFormat, &PCB_DIMENSION_BASE::GetUnitsFormat ),
                 groupDimension );
-        propMgr.AddProperty( new PROPERTY<PCB_DIMENSION_BASE, int>( _HKI( "Precision" ),
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_DIMENSION_BASE, DIM_PRECISION>( _HKI( "Precision" ),
                 &PCB_DIMENSION_BASE::ChangePrecision, &PCB_DIMENSION_BASE::GetPrecision ),
                 groupDimension );
         propMgr.AddProperty( new PROPERTY<PCB_DIMENSION_BASE, bool>( _HKI( "Suppress Trailing Zeroes" ),
@@ -1343,6 +1358,7 @@ static struct DIMENSION_DESC
     }
 } _DIMENSION_DESC;
 
+ENUM_TO_WXANY( DIM_PRECISION )
 ENUM_TO_WXANY( DIM_UNITS_FORMAT )
 ENUM_TO_WXANY( DIM_UNITS_MODE )
 

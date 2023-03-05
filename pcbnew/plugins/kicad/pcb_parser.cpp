@@ -2279,7 +2279,8 @@ void PCB_PARSER::parseDefaults( BOARD_DESIGN_SETTINGS& designSettings )
             break;
 
         case T_dimension_precision:
-            designSettings.m_DimensionPrecision = parseInt( "dimension precision" );
+            designSettings.m_DimensionPrecision =
+                    static_cast<DIM_PRECISION>( parseInt( "dimension precision" ) );
             NeedRIGHT();
             break;
 
@@ -3334,7 +3335,7 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
                 }
 
                 case T_precision:
-                    dim->SetPrecision( parseInt( "dim precision" ) );
+                    dim->SetPrecision( static_cast<DIM_PRECISION>( parseInt( "dim precision" ) ) );
                     NeedRIGHT();
                     break;
 

@@ -289,7 +289,7 @@ void EDA_DRAW_FRAME::ToggleUserUnits()
     else
     {
         SetUserUnits( GetUserUnits() == EDA_UNITS::INCHES ? EDA_UNITS::MILLIMETRES
-                                                       : EDA_UNITS::INCHES );
+                                                          : EDA_UNITS::INCHES );
         unitsChangeRefresh();
 
         wxCommandEvent e( UNITS_CHANGED );

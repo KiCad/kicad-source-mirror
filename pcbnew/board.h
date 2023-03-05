@@ -641,6 +641,9 @@ public:
 
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
 
+    EDA_UNITS GetUserUnits()                                { return m_userUnits; }
+    void SetUserUnits( EDA_UNITS aUnits )                   { m_userUnits = aUnits; }
+
     /**
      * Extract the board outlines and build a closed polygon from lines, arcs and circle items
      * on edge cut layer.
@@ -1216,6 +1219,7 @@ private:
     TITLE_BLOCK         m_titles;                   // text in lower right of screen and plots
     PCB_PLOT_PARAMS     m_plotOptions;
     PROJECT*            m_project;                  // project this board is a part of
+    EDA_UNITS           m_userUnits;
 
     /**
      * All of the board design settings are stored as a JSON object inside the project file.  The

@@ -176,16 +176,9 @@ bool PANEL_SETUP_TEXT_AND_GRAPHICS::TransferDataToWindow()
 
     Layout();
 
-    wxASSERT_MSG( m_BrdSettings->m_DimensionPrecision <= 4,
-                  wxT( "Unhandled dimension precision!" ) );
-
-    int mode = static_cast<int>( m_BrdSettings->m_DimensionUnitsMode );
-    m_dimensionUnits->SetSelection( mode );
-
-    int format = static_cast<int>( m_BrdSettings->m_DimensionUnitsFormat );
-    m_dimensionUnitsFormat->SetSelection( format );
-
-    m_dimensionPrecision->SetSelection( m_BrdSettings->m_DimensionPrecision );
+    m_dimensionUnits->SetSelection( static_cast<int>( m_BrdSettings->m_DimensionUnitsMode ) );
+    m_dimensionUnitsFormat->SetSelection( static_cast<int>( m_BrdSettings->m_DimensionUnitsFormat ) );
+    m_dimensionPrecision->SetSelection( static_cast<int>( m_BrdSettings->m_DimensionPrecision ) );
     m_dimensionSuppressZeroes->SetValue( m_BrdSettings->m_DimensionSuppressZeroes );
 
     int position = static_cast<int>( m_BrdSettings->m_DimensionTextPosition );
@@ -226,7 +219,8 @@ bool PANEL_SETUP_TEXT_AND_GRAPHICS::TransferDataFromWindow()
     m_BrdSettings->m_DimensionUnitsMode       = static_cast<DIM_UNITS_MODE>( mode );
     int format                                = m_dimensionUnitsFormat->GetSelection();
     m_BrdSettings->m_DimensionUnitsFormat     = static_cast<DIM_UNITS_FORMAT>( format );
-    m_BrdSettings->m_DimensionPrecision       = m_dimensionPrecision->GetSelection();
+    int precision                             = m_dimensionPrecision->GetSelection();
+    m_BrdSettings->m_DimensionPrecision       = static_cast<DIM_PRECISION>( precision );
     m_BrdSettings->m_DimensionSuppressZeroes  = m_dimensionSuppressZeroes->GetValue();
     int position                              = m_dimensionTextPositionMode->GetSelection();
     m_BrdSettings->m_DimensionTextPosition    = static_cast<DIM_TEXT_POSITION>( position );

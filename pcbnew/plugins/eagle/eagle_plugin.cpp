@@ -610,7 +610,7 @@ void EAGLE_PLUGIN::loadLayerDefs( wxXmlNode* aLayers )
 }
 
 
-#define DIMENSION_PRECISION 2 // 0.01 mm
+#define DIMENSION_PRECISION DIM_PRECISION::X_XX // 0.01 mm
 
 
 void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )

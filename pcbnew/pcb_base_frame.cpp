@@ -211,6 +211,9 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
         delete m_pcb;
         m_pcb = aBoard;
 
+        if( GetBoard() )
+            GetBoard()->SetUserUnits( GetUserUnits() );
+
         if( GetBoard() && GetCanvas() )
         {
             RENDER_SETTINGS* rs = GetCanvas()->GetView()->GetPainter()->GetSettings();
@@ -253,8 +256,7 @@ void PCB_BASE_FRAME::AddFootprintToBoard( FOOTPRINT* aFootprint )
 
 void PCB_BASE_FRAME::UpdateUserUnits( BOARD_ITEM* aItem, bool* aSelectedItemsModified )
 {
-    EDA_UNITS    units = GetUserUnits();
-    KIGFX::VIEW* view  = GetCanvas()->GetView();
+    KIGFX::VIEW* view = GetCanvas()->GetView();
 
     INSPECTOR_FUNC inspector =
             [&]( EDA_ITEM* descendant, void* aTestData )
@@ -263,8 +265,7 @@ void PCB_BASE_FRAME::UpdateUserUnits( BOARD_ITEM* aItem, bool* aSelectedItemsMod
 
                 if( dimension->GetUnitsMode() == DIM_UNITS_MODE::AUTOMATIC )
                 {
-                    dimension->SetUnits( units );
-                    dimension->Update();
+                    dimension->UpdateUnits();
 
                     if( aSelectedItemsModified && dimension->IsSelected() )
                         *aSelectedItemsModified = true;
@@ -890,6 +891,9 @@ void PCB_BASE_FRAME::UpdateStatusBar()
 void PCB_BASE_FRAME::unitsChangeRefresh()
 {
     EDA_DRAW_FRAME::unitsChangeRefresh();    // Update the status bar.
+
+    if( GetBoard() )
+        GetBoard()->SetUserUnits( GetUserUnits() );
 
     UpdateGridSelectBox();
 }
