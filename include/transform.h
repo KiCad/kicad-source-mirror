@@ -30,7 +30,6 @@
 #ifndef _TRANSFORM_H_
 #define _TRANSFORM_H_
 
-#include <wx/gdicmn.h>
 #include <geometry/eda_angle.h>
 #include <math/box2.h>
 
