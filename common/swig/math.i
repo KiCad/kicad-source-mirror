@@ -34,13 +34,18 @@
 
 %rename(getWxPoint) operator wxPoint;
 %rename(getWxSize) operator wxSize;
+%{
 #include <math/vector2d.h>
-%include <math/vector2d.h>
+#include <math/vector3.h>
 #include <math/box2.h>
+%}
+%include <math/vector2d.h>
+%include <math/vector3.h>
 %include <math/box2.h>
 
 %template(VECTOR2I) VECTOR2<int>;
 %template(VECTOR2I_EXTENDED_TYPE) VECTOR2_TRAITS<int>;
+%template(VECTOR3D) VECTOR3<double>;
 %template(BOX2I) BOX2<VECTOR2I>;
 
 %extend VECTOR2<int>
@@ -71,6 +76,41 @@
         else:
             raise IndexError
     def __nonzero__(self):               return self.Get() != (0,0)
+
+    %}
+}
+
+%extend VECTOR3<double>
+{
+    void Set(double x, double y, double z) {  self->x = x; self->y = y; self->z = z; }
+
+    PyObject* Get()
+    {
+        PyObject* tup = PyTuple_New(3);
+        PyTuple_SET_ITEM(tup, 0, PyFloat_FromDouble(self->x));
+        PyTuple_SET_ITEM(tup, 1, PyFloat_FromDouble(self->y));
+        PyTuple_SET_ITEM(tup, 2, PyFloat_FromDouble(self->z));
+        return tup;
+    }
+
+    %pythoncode
+    %{
+    def __eq__(self,other):            return (self.x==other.x and self.y==other.y and self.z==other.z)
+    def __ne__(self,other):            return not (self==other)
+    def __str__(self):                 return str(self.Get())
+    def __repr__(self):                return 'VECTOR3D'+str(self.Get())
+    def __len__(self):                 return len(self.Get())
+    def __getitem__(self, index):      return self.Get()[index]
+    def __setitem__(self, index, val):
+        if index == 0:
+            self.x = val
+        elif index == 1:
+            self.y = val
+        elif index == 2:
+            self.z = val
+        else:
+            raise IndexError
+    def __nonzero__(self):               return self.Get() != (0, 0, 0)
 
     %}
 }

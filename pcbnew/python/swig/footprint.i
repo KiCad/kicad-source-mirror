@@ -33,7 +33,6 @@
 %rename(GetPropertiesNative) FOOTPRINT::GetProperties;
 %rename(GetPropertyNative) FOOTPRINT::GetProperty;
 %rename(SetPropertiesNative) FOOTPRINT::SetProperties;
-%rename(MODULE_3D_SETTINGS_VECTOR3D) MODULE_3D_SETTINGS::VECTOR3D;
 %feature("flatnested");
 %include footprint.h
 %feature("flatnested", "");
