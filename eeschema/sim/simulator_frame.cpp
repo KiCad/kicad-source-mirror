@@ -2065,7 +2065,8 @@ bool SIMULATOR_FRAME::LoadWorkbook( const wxString& aPath )
             simOptions &= ~NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES;
             simOptions &= ~NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS;
         }
-        else if( version >= 3 )
+
+        if( version >= 3 )
         {
             simOptions &= ~NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_DISSIPATIONS;
         }
