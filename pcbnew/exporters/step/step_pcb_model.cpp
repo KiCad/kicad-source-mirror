@@ -201,26 +201,41 @@ STEP_PCB_MODEL::~STEP_PCB_MODEL()
 
 bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin )
 {
-    TopoDS_Shape curr_shape_top;
-    TopoDS_Shape curr_shape_bottom;
     const std::shared_ptr<SHAPE_POLY_SET>& pad_shape = aPad->GetEffectivePolygon();
     bool success = true;
+    VECTOR2I pos = aPad->GetPosition();
 
-    if( aPad->IsOnLayer( F_Cu ) )
+    for( PCB_LAYER_ID pcb_layer = F_Cu; ; pcb_layer = B_Cu )
     {
-        // Make a shape on top copper layer
-        success = MakeShape( curr_shape_top, pad_shape.get()->COutline(0), m_copperThickness, m_boardThickness, aOrigin );
+        TopoDS_Shape curr_shape;
+        double Zpos = pcb_layer == F_Cu ? m_boardThickness : -m_copperThickness;
 
-        if( success )
-            m_board_outlines.push_back( curr_shape_top );
-    }
+        if( aPad->IsOnLayer( pcb_layer ) )
+        {
+            // Make a shape on top/bottom copper layer: a cylinder for rond shapes (pad or via)
+            // and a polygon for other shapes:
+            if( aPad->GetShape() == PAD_SHAPE::CIRCLE )
+            {
+                curr_shape = BRepPrimAPI_MakeCylinder(
+                                pcbIUScale.IUTomm( aPad->GetSizeX() ) * 0.5, m_copperThickness ).Shape();
+                gp_Trsf shift;
+                shift.SetTranslation( gp_Vec( pcbIUScale.IUTomm( pos.x - aOrigin.x ),
+                                              -pcbIUScale.IUTomm( pos.y - aOrigin.y ),
+                                              Zpos ) );
+                BRepBuilderAPI_Transform round_shape( curr_shape, shift );
+                m_board_outlines.push_back( round_shape.Shape() );
+            }
+            else
+            {
+                success = MakeShape( curr_shape, pad_shape.get()->COutline(0), m_copperThickness, Zpos, aOrigin );
 
-    if( success && aPad->IsOnLayer( B_Cu ) )
-    {
-        success = MakeShape( curr_shape_bottom, pad_shape.get()->COutline(0), m_copperThickness, -m_copperThickness, aOrigin );
+                if( success )
+                    m_board_outlines.push_back( curr_shape );
+            }
+        }
 
-        if( success )
-            m_board_outlines.push_back( curr_shape_bottom );
+        if( pcb_layer == B_Cu )
+            break;
     }
 
     if( !success )  // Error
