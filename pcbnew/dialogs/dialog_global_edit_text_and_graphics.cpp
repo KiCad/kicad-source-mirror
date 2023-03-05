@@ -101,6 +101,7 @@ public:
 protected:
     void onActionButtonChange( wxCommandEvent& event ) override;
     void onSpecifiedValueUpdateUI( wxUpdateUIEvent& event ) override;
+    void onDimensionItemCheckbox( wxCommandEvent& aEvent ) override;
 
     void OnLayerFilterSelect( wxCommandEvent& event ) override
     {
@@ -138,6 +139,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( PCB_
     {
         m_otherFields->SetLabel( _( "Other text items" ) );
         m_footprintGraphics->SetLabel( _( "Graphic items" ) );
+        m_footprintDimensions->SetLabel( _( "Dimension items" ) );
 
         m_boardText->Show( false );
         m_boardGraphics->Show( false );
@@ -323,6 +325,15 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::onSpecifiedValueUpdateUI( wxUpdateUIE
 }
 
 
+void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::onDimensionItemCheckbox( wxCommandEvent& aEvent )
+{
+    if( m_footprintDimensions->GetValue() || m_boardDimensions->GetValue() )
+        m_setToLayerDefaults->SetLabel( _( "Set to layer and dimension default values:" ) );
+    else
+        m_setToLayerDefaults->SetLabel( _( "Set to layer default values:" ) );
+}
+
+
 void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, BOARD_ITEM* aItem )
 {
     aCommit.Modify( aItem );
@@ -418,7 +429,16 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
         }
 
         if( dimension )
+        {
             dimension->SetLineThickness( m_brdSettings->GetLineThickness( layer ) );
+            dimension->SetUnitsMode( m_brdSettings->m_DimensionUnitsMode );
+            dimension->SetUnitsFormat( m_brdSettings->m_DimensionUnitsFormat );
+            dimension->SetPrecision( m_brdSettings->m_DimensionPrecision );
+            dimension->SetSuppressZeroes( m_brdSettings->m_DimensionSuppressZeroes );
+            dimension->SetTextPositionMode( m_brdSettings->m_DimensionTextPosition );
+            dimension->SetKeepTextAligned( m_brdSettings->m_DimensionKeepTextAligned );
+            dimension->Update();    // refresh text & geometry
+        }
     }
 }
 
@@ -475,7 +495,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( BOARD_COMMIT& aCommit, BOA
                 if( !WildCompareString( m_footprintFilter->GetValue(), fp->GetFPID().Format(), false ) )
                     return;
             }
-    }
+        }
     }
 
     processItem( aCommit, aItem );
@@ -511,7 +531,12 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
                 if( m_otherFields->GetValue() )
                     visitItem( commit, boardItem );
             }
-            else if( itemType == PCB_FP_SHAPE_T || BaseType( itemType ) == PCB_DIMENSION_T )
+            else if( BaseType( itemType ) == PCB_DIMENSION_T )
+            {
+                if( m_footprintDimensions->GetValue() )
+                    visitItem( commit, boardItem );
+            }
+            else if( itemType == PCB_FP_SHAPE_T )
             {
                 if( m_footprintGraphics->GetValue() )
                     visitItem( commit, boardItem );
@@ -529,6 +554,11 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
             if( itemType == PCB_TEXT_T || itemType == PCB_TEXTBOX_T )
             {
                 if( m_boardText->GetValue() )
+                    visitItem( commit, boardItem );
+            }
+            else if( BaseType( itemType ) == PCB_DIMENSION_T )
+            {
+                if( m_boardDimensions->GetValue() )
                     visitItem( commit, boardItem );
             }
             else if( itemType == PCB_SHAPE_T || BaseType( itemType ) == PCB_DIMENSION_T )

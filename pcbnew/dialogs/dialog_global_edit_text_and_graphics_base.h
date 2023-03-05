@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -49,8 +49,10 @@ class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_values;
 		wxCheckBox* m_otherFields;
 		wxCheckBox* m_footprintGraphics;
+		wxCheckBox* m_footprintDimensions;
 		wxCheckBox* m_boardGraphics;
 		wxCheckBox* m_boardText;
+		wxCheckBox* m_boardDimensions;
 		wxCheckBox* m_layerFilterOpt;
 		PCB_LAYER_BOX_SELECTOR* m_layerFilter;
 		wxCheckBox* m_referenceFilterOpt;
@@ -88,6 +90,7 @@ class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerButtonsCancel;
 
 		// Virtual event handlers, override them in your derived class
+		virtual void onDimensionItemCheckbox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnLayerFilterSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnReferenceFilterText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnFootprintFilterText( wxCommandEvent& event ) { event.Skip(); }

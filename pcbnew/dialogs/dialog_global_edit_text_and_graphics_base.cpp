@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -26,25 +26,31 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	sbScope = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Scope") ), wxVERTICAL );
 
 	m_references = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Reference designators"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbScope->Add( m_references, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbScope->Add( m_references, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
 
 	m_values = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Values"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbScope->Add( m_values, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbScope->Add( m_values, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
 
 	m_otherFields = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Other footprint text items"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbScope->Add( m_otherFields, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbScope->Add( m_otherFields, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
 
 	m_footprintGraphics = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Footprint graphic items"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbScope->Add( m_footprintGraphics, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbScope->Add( m_footprintGraphics, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
+
+	m_footprintDimensions = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Footprint dimension items"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbScope->Add( m_footprintDimensions, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
 
 
 	sbScope->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 	m_boardGraphics = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("PCB graphic items"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbScope->Add( m_boardGraphics, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbScope->Add( m_boardGraphics, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
 
 	m_boardText = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("PCB text items"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbScope->Add( m_boardText, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbScope->Add( m_boardText, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
+
+	m_boardDimensions = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("PCB dimension items"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbScope->Add( m_boardDimensions, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
 
 
 	bSizerTop->Add( sbScope, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
@@ -244,7 +250,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	sbAction->Add( m_specifiedValues, 0, wxEXPAND|wxBOTTOM|wxLEFT, 12 );
 
 	m_setToLayerDefaults = new wxRadioButton( sbAction->GetStaticBox(), ID_ALL_TRACKS_VIAS, _("Set to layer default values:"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbAction->Add( m_setToLayerDefaults, 0, wxTOP|wxBOTTOM, 5 );
+	sbAction->Add( m_setToLayerDefaults, 0, wxTOP|wxBOTTOM|wxEXPAND, 5 );
 
 	m_grid = new wxGrid( sbAction->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE );
 
@@ -304,6 +310,8 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	bMainSizer->Fit( this );
 
 	// Connect Events
+	m_footprintDimensions->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onDimensionItemCheckbox ), NULL, this );
+	m_boardDimensions->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onDimensionItemCheckbox ), NULL, this );
 	m_layerFilter->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::OnLayerFilterSelect ), NULL, this );
 	m_referenceFilter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::OnReferenceFilterText ), NULL, this );
 	m_footprintFilter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::OnFootprintFilterText ), NULL, this );
@@ -322,6 +330,8 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::~DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE()
 {
 	// Disconnect Events
+	m_footprintDimensions->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onDimensionItemCheckbox ), NULL, this );
+	m_boardDimensions->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onDimensionItemCheckbox ), NULL, this );
 	m_layerFilter->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::OnLayerFilterSelect ), NULL, this );
 	m_referenceFilter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::OnReferenceFilterText ), NULL, this );
 	m_footprintFilter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::OnFootprintFilterText ), NULL, this );
