@@ -383,26 +383,14 @@ void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( PCB_DIMENSION_BASE*
 
     switch( m_cbUnits->GetSelection() )
     {
-    case 0:
-        aTarget->SetUnitsMode( DIM_UNITS_MODE::INCHES );
-        break;
-
-    case 1:
-        aTarget->SetUnitsMode( DIM_UNITS_MODE::MILS );
-        break;
-
-    case 2:
-        aTarget->SetUnitsMode( DIM_UNITS_MODE::MILLIMETRES );
-        break;
-
-    case 3:
-        aTarget->SetUnitsMode( DIM_UNITS_MODE::AUTOMATIC );
-        aTarget->SetUnits( m_frame->GetUserUnits() );
-        break;
+    case 0: aTarget->SetUnitsMode( DIM_UNITS_MODE::INCHES );      break;
+    case 1: aTarget->SetUnitsMode( DIM_UNITS_MODE::MILS );        break;
+    case 2: aTarget->SetUnitsMode( DIM_UNITS_MODE::MILLIMETRES ); break;
+    case 3: aTarget->SetUnitsMode( DIM_UNITS_MODE::AUTOMATIC );   break;
     }
 
     aTarget->SetUnitsFormat( static_cast<DIM_UNITS_FORMAT>( m_cbUnitsFormat->GetSelection() ) );
-    aTarget->SetPrecision( m_cbPrecision->GetSelection() );
+    aTarget->SetPrecision( static_cast<DIM_PRECISION>( m_cbPrecision->GetSelection() ) );
     aTarget->SetSuppressZeroes( m_cbSuppressZeroes->GetValue() );
 
     DIM_TEXT_POSITION tpm = static_cast<DIM_TEXT_POSITION>( m_cbTextPositionMode->GetSelection() );

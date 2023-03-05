@@ -1117,17 +1117,6 @@ int PCB_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsNew,
     std::vector<BOARD_ITEM*> itemsToSel;
     itemsToSel.reserve( aItems.size() );
 
-    auto updateDimensionUnits =
-            [this]( PCB_DIMENSION_BASE* dimension )
-            {
-                // Dimensions need to have their units updated if they are automatic
-                if( dimension->GetUnitsMode() == DIM_UNITS_MODE::AUTOMATIC )
-                {
-                    dimension->SetUnits( frame()->GetUserUnits() );
-                    dimension->Update();
-                }
-            };
-
     for( BOARD_ITEM* item : aItems )
     {
         if( aIsNew )
@@ -1144,7 +1133,7 @@ int PCB_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsNew,
         // Update item attributes if needed
         if( BaseType( item->Type() ) == PCB_DIMENSION_T )
         {
-            updateDimensionUnits( static_cast<PCB_DIMENSION_BASE*>( item ) );
+            static_cast<PCB_DIMENSION_BASE*>( item )->UpdateUnits();
         }
         else if( item->Type() == PCB_FOOTPRINT_T )
         {
@@ -1157,7 +1146,7 @@ int PCB_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsNew,
             for( BOARD_ITEM* dwg : footprint->GraphicalItems() )
             {
                 if( BaseType( dwg->Type() ) == PCB_DIMENSION_T )
-                    updateDimensionUnits( static_cast<PCB_DIMENSION_BASE*>( dwg ) );
+                    static_cast<PCB_DIMENSION_BASE*>( dwg )->UpdateUnits();
             }
         }
 

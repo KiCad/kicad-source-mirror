@@ -117,7 +117,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_TextItalic[ LAYER_CLASS_OTHERS ] = false;
     m_TextUpright[ LAYER_CLASS_OTHERS ] = false;
 
-    m_DimensionPrecision       = 4;
+    m_DimensionPrecision       = DIM_PRECISION::X_XXXX;
     m_DimensionUnitsMode       = DIM_UNITS_MODE::AUTOMATIC;
     m_DimensionUnitsFormat     = DIM_UNITS_FORMAT::BARE_SUFFIX;
     m_DimensionSuppressZeroes  = false;
@@ -678,8 +678,8 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             &m_DimensionUnitsMode, DIM_UNITS_MODE::AUTOMATIC, DIM_UNITS_MODE::INCHES,
             DIM_UNITS_MODE::AUTOMATIC ) );
 
-    m_params.emplace_back( new PARAM<int>( "defaults.dimension_precision",
-            &m_DimensionPrecision, 4, 0, 5 ) );
+    m_params.emplace_back( new PARAM_ENUM<DIM_PRECISION>( "defaults.dimension_precision",
+            &m_DimensionPrecision, DIM_PRECISION::X_XXXX, DIM_PRECISION::X, DIM_PRECISION::V_VVVVV ) );
 
     m_params.emplace_back( new PARAM_ENUM<DIM_UNITS_FORMAT>( "defaults.dimensions.units_format",
             &m_DimensionUnitsFormat, DIM_UNITS_FORMAT::BARE_SUFFIX, DIM_UNITS_FORMAT::NO_SUFFIX,

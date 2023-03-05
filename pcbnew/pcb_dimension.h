@@ -43,6 +43,20 @@ enum class DIM_UNITS_FORMAT
     PAREN_SUFFIX    // 1234.0 (mm)
 };
 
+enum class DIM_PRECISION
+{
+    X = 0,          // 0
+    X_X,            // 0.0
+    X_XX,           // 0.00
+    X_XXX,          // 0.000
+    X_XXXX,         // 0.0000
+    X_XXXXX,        // 0.00000
+    V_VV,           // 0.00 / 0 / 0.0
+    V_VVV,          // 0.000 / 0 / 0.00
+    V_VVVV,         // 0.0000 / 0.0 / 0.000
+    V_VVVVV         // 0.00000 / 0.00 / 0.0000
+};
+
 /// Where to place the text on a dimension
 enum class DIM_TEXT_POSITION
 {
@@ -157,6 +171,12 @@ public:
         updateText();
     }
 
+    void UpdateUnits()
+    {
+        SetUnitsMode( GetUnitsMode() );
+        updateText();
+    }
+
     wxString GetPrefix() const { return m_prefix; }
     void SetPrefix( const wxString& aPrefix );
 
@@ -198,10 +218,10 @@ public:
         updateText();
     }
 
-    int GetPrecision() const { return m_precision; }
-    void SetPrecision( int aPrecision ) { m_precision = aPrecision; }
+    DIM_PRECISION GetPrecision() const { return m_precision; }
+    void SetPrecision( DIM_PRECISION aPrecision ) { m_precision = aPrecision; }
 
-    void ChangePrecision( int aPrecision )
+    void ChangePrecision( DIM_PRECISION aPrecision )
     {
         SetPrecision( aPrecision );
         updateText();
@@ -311,7 +331,7 @@ protected:
     EDA_UNITS         m_units;           ///< 0 = inches, 1 = mm
     bool              m_autoUnits;       ///< If true, follow the currently selected UI units
     DIM_UNITS_FORMAT  m_unitsFormat;     ///< How to render the units suffix
-    int               m_precision;       ///< Number of digits to display after decimal
+    DIM_PRECISION     m_precision;       ///< Number of digits to display after decimal
     bool              m_suppressZeroes;  ///< Suppress trailing zeroes
 
     // Geometry
@@ -613,13 +633,12 @@ public:
         updateGeometry();
     }
 
-    void ClearRenderCache() override;
-
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
 protected:
     virtual void swapData( BOARD_ITEM* aImage ) override;
 
+    void updateText() override;
     void updateGeometry() override;
 
 private:

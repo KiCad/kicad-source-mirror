@@ -212,6 +212,7 @@ enum class VIATYPE : int;
 enum class DIM_UNITS_FORMAT : int;
 enum class DIM_TEXT_POSITION : int;
 enum class DIM_UNITS_MODE : int;
+enum class DIM_PRECISION : int;
 
 class PAD;
 
@@ -704,7 +705,7 @@ public:
 
     // Default values for dimension objects
     DIM_UNITS_MODE    m_DimensionUnitsMode;
-    int               m_DimensionPrecision; ///< Number of digits after the decimal
+    DIM_PRECISION     m_DimensionPrecision; ///< Number of digits after the decimal
     DIM_UNITS_FORMAT  m_DimensionUnitsFormat;
     bool              m_DimensionSuppressZeroes;
     DIM_TEXT_POSITION m_DimensionTextPosition;

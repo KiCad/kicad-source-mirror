@@ -3629,7 +3629,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::applyDimensionSettings( const DIMENSION&  aCads
     LINECODE linecode = Assignments.Codedefs.LineCodes.at( aCadstarDim.Line.LineCodeID );
 
     aKiCadDim->SetLayer( getKiCadLayer( aCadstarDim.LayerID ) );
-    aKiCadDim->SetPrecision( aCadstarDim.Precision );
+    aKiCadDim->SetPrecision( static_cast<DIM_PRECISION>( aCadstarDim.Precision ) );
     aKiCadDim->SetStart( getKiCadPoint( aCadstarDim.ExtensionLineParams.Start ) );
     aKiCadDim->SetEnd( getKiCadPoint( aCadstarDim.ExtensionLineParams.End ) );
     aKiCadDim->SetExtensionOffset( getKiCadLength( aCadstarDim.ExtensionLineParams.Offset ) );
@@ -3667,7 +3667,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::applyDimensionSettings( const DIMENSION&  aCads
     {
         // For now we will hardcode the units as per the original CADSTAR design.
         // TODO: update this when KiCad supports design units
-        aKiCadDim->SetPrecision( Assignments.Technology.UnitDisplPrecision );
+        aKiCadDim->SetPrecision( static_cast<DIM_PRECISION>( Assignments.Technology.UnitDisplPrecision ) );
         dimensionUnits = Assignments.Technology.Units;
     }
 

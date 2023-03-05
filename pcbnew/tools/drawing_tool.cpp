@@ -1218,9 +1218,6 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                             aDim->SetSuppressZeroes( boardSettings.m_DimensionSuppressZeroes );
                             aDim->SetTextPositionMode( boardSettings.m_DimensionTextPosition );
                             aDim->SetKeepTextAligned( boardSettings.m_DimensionKeepTextAligned );
-
-                            if( boardSettings.m_DimensionUnitsMode == DIM_UNITS_MODE::AUTOMATIC )
-                                aDim->SetUnits( m_frame->GetUserUnits() );
                         };
 
                 if( originalEvent.IsAction( &PCB_ACTIONS::drawAlignedDimension ) )
