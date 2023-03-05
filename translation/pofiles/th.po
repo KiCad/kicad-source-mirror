@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-15 16:29-0800\n"
-"PO-Revision-Date: 2023-03-03 08:38+0000\n"
+"PO-Revision-Date: 2023-03-06 15:39+0000\n"
 "Last-Translator: \"boonchai k.\" <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -86,9 +86,8 @@ msgid "Build BVH for holes and vias"
 msgstr "สร้าง BVH สำหรับโฮลและเวีย"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:389
-#, fuzzy
 msgid "OpenGL context creation error"
-msgstr "การแก้ปิดกั้นสำหรับ:"
+msgstr "ข้อผิดพลาดในการสร้างบริบท OpenGL"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:420
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
@@ -506,9 +505,8 @@ msgid "Render Solid Colors"
 msgstr "เรนเดอร์สีทึบ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:195
-#, fuzzy
 msgid "Use only the diffuse color property from 3D model file"
-msgstr "ใช้แต่คุณสมบัติสีกระจายจากโมเดล3มิติ"
+msgstr "ใช้แต่คุณสมบัติกระจายสีจากโมเดล3มิติ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:201
 msgid "Render CAD Colors"
@@ -5243,14 +5241,12 @@ msgid "Page limits"
 msgstr "จำกัดหน้ากระดาษ"
 
 #: common/layer_id.cpp:150
-#, fuzzy
 msgid "Operating point voltages"
-msgstr "จุดทำงาน"
+msgstr "แรงดันไฟฟ้าที่จุดปฏิบัติการ"
 
 #: common/layer_id.cpp:151
-#, fuzzy
 msgid "Operating point currents"
-msgstr "จุดทำงาน"
+msgstr "กระแสไฟฟ้าที่จุดปฏิบัติการ"
 
 #: common/layer_id.cpp:155
 msgid "Footprints front"
@@ -5896,9 +5892,8 @@ msgid "Delete clicked items"
 msgstr "ลบชิ้นส่วนที่คลิก"
 
 #: common/tool/actions.cpp:204
-#, fuzzy
 msgid "Cycle arc editing mode"
-msgstr "สลับเปิดปิดโหมดเหมือนจริง"
+msgstr "สลับเปิดปิดโหมดแก้ไขส่วนโค้ง"
 
 #: common/tool/actions.cpp:205
 msgid "Switch to a different method of editing arcs"
@@ -5943,9 +5938,8 @@ msgid "Find Previous"
 msgstr "ค้นหาก่อนหน้า"
 
 #: common/tool/actions.cpp:234
-#, fuzzy
 msgid "Find previous match"
-msgstr "ค้นหาก่อนหน้า"
+msgstr "ค้นหาตรงกันที่ผ่านมา"
 
 #: common/tool/actions.cpp:240
 msgid "Find Next Marker"
@@ -7889,6 +7883,85 @@ msgid ""
 "Double quotes (`\"`) around the arguments are recommended in case filenames "
 "contain spaces or special characters.\n"
 msgstr ""
+"# 1. สรุป\n"
+"\n"
+"The Bill of Materials tool creates a BOM which lists all of the components "
+"in the design.\n"
+"\n"
+"The tool uses an external script to generate a BOM in the desired output "
+"format. Choosing a different script changes how the BOM is formatted.\n"
+"\n"
+"Generating a BOM is described in more detail in the Schematic Editor manual."
+"\n"
+"\n"
+"# 2. การใช้งาน\n"
+"\n"
+"Select a generator script in the **BOM generator scripts** list. Details for "
+"the selected generator are shown on the right of the dialog.\n"
+"\n"
+"Clicking the **Generate** button creates a BOM file with the selected "
+"generator.\n"
+"\n"
+"The default settings present several generator script options, although some "
+"additional scripts are installed with KiCad and can be added to the list "
+"with the **+** button.\n"
+"\n"
+"**Note:** On Windows, there is an additional option **Show console window**. "
+"When this option is unchecked, BOM generators run in a hidden console window "
+"and any output is redirected and printed in the dialog. When this option is "
+"checked, BOM generators run in a visisble console window.\n"
+"\n"
+"# 3. Custom generators and command lines\n"
+"\n"
+"Internally, KiCad creates an intermediate netlist file in XML format that "
+"contains information about all of the components in the design. A BOM "
+"generator script converts the intermediate netlist file to the desired "
+"output format. KiCad runs the BOM generator scripts according to the command "
+"line entered at the bottom of the BOM dialog.\n"
+"\n"
+"The command line format accepts parameters for filenames. Each formatting "
+"parameter is replaced with a project-specific path or filename. The "
+"supported formatting parameters are:\n"
+"\n"
+" * `%I`: absolute path and filename of the intermediate netlist file, which "
+"is the input to the BOM generator\n"
+" * `%O`: absolute path and filename of the output BOM file (without file "
+"extension)\n"
+" * `%B`: base filename of the output BOM file (without file extension)\n"
+" * `%P`: absolute path of the project directory, without trailing slash\n"
+"\n"
+"**Note:** the `%O` output file parameter does not include a file extension. "
+"KiCad will attempt to add an appropriate extension to the command line "
+"automatically, but an extension may need to be added by hand.\n"
+"\n"
+"Python is the recommended tool for BOM generator scripts, but other tools "
+"can also be used.\n"
+"\n"
+"## Example command lines for Python scripts\n"
+"\n"
+"The command line format for a Python script is of the form:\n"
+"\n"
+"```\n"
+"python <script file name> <input filename> <output filename>\n"
+"```\n"
+"\n"
+"On Windows, if the desired generator script for a CSV BOM is `C:\\Users"
+"\\username\\kicad\\my_python_script.py`, the command line would be:\n"
+"\n"
+"```\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O.csv\""
+"\n"
+"```\n"
+"\n"
+"On Linux, if the desired generator script for a CSV BOM is `/home/username/"
+"kicad/my_python_script.py`, the command line would be:\n"
+"\n"
+"```\n"
+"python /home/username/kicad/my_python_script.py \"%I\" \"%O.csv\"\n"
+"```\n"
+"\n"
+"Double quotes (`\"`) around the arguments are recommended in case filenames "
+"contain spaces or special characters.\n"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:64
 msgid "Change all symbols in schematic"
@@ -8475,31 +8548,28 @@ msgstr "เขียนคำสั่งเพื่อบันทึกค่
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:305
 #: eeschema/dialogs/dialog_sim_command_base.cpp:441
-#, fuzzy
 msgid "Save all power dissipations"
-msgstr "ค่าเบี่ยงเบนสูงสุดที่อนุญาต:"
+msgstr "บันทึกการกระจายพลังงานทั้งหมด"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:306
-#, fuzzy
 msgid ""
 "Write directives to save power dissipation of all items (.probe p(<item>))"
-msgstr "เขียนคำสั่งเพื่อบันทึกค่ากระแสทั้งหมด (.probe alli)"
+msgstr ""
+"เขียนคำสั่งเพื่อบันทึกการสิ้นเปลืองพลังงานของรายการทั้งหมด (.probe p(<item>))"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:312
-#, fuzzy
 msgid "Run external simulator command:"
-msgstr "คำสั่งจำลองจากภายนอก:"
+msgstr "เรียกใช้คําสั่งจําลองภายนอก:"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:314
-#, fuzzy
 msgid ""
 "Enter the command line to run SPICE\n"
 "Usually '<path to SPICE binary> \"%I\"'\n"
 "%I will be replaced by the netlist filepath"
 msgstr ""
-"ใส่บรรทัดคําสั่งเพื่อเรียกใช้สไปส์\n"
-"โดยปกติแล้ว<พาธไปยังโปรแกรมสไปส์> %I\n"
-"%l จะถูกแทนที่ด้วยชื่อจริงของรายชื่อเน็ตสไปส์"
+"ใส่คําสั่งบรรทัดเพื่อเรียกใช้ SPICE\n"
+"โดยปกติแล้ว <path to SPICE binary> \"%I\"\n"
+"%l จะถูกแทนที่ด้วยเส้นทางชื่อไฟล์รายการเน็ต"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:387
 msgid "Netlist command:"
@@ -8520,23 +8590,23 @@ msgid "Exporting netlist requires a fully annotated schematic."
 msgstr "การส่งออกรายชื่อเน็ตต้องการวงจรที่ทำอธิบายประกอบสมบูรณ์"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:560
-#, fuzzy
 msgid "external simulator not found"
-msgstr "คำสั่งจำลองจากภายนอก:"
+msgstr "ไม่พบตัวจำลองภายนอก"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:561
 msgid ""
 "Note: command line is usually: <tt>&lt;path to SPICE binary&gt; \"%I\"</tt>"
 msgstr ""
+"หมายเหตุ: บรรทัดคำสั่งมักจะเป็น: <tt>&lt;เส้นทางไปยัง SPICE binary&gt; \"%I\""
+"</tt>"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:567
 msgid "external simulator has the wrong format or architecture"
-msgstr ""
+msgstr "โปรแกรมจำลองภายนอกมีรูปแบบหรือสถาปัตยกรรมที่ไม่ถูกต้อง"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:572
-#, fuzzy
 msgid "permission denied"
-msgstr "ข้อผิดพลาดในการอนุญาต?"
+msgstr "ปฏิเสธการอนุญาต"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:707
 msgid "This plugin already exists."
@@ -8794,9 +8864,8 @@ msgid "Buses && bus labels"
 msgstr "บัสและป้ายชื่อบัส"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:51
-#, fuzzy
 msgid "Label fields"
-msgstr "ช่องสัญลักษณ์"
+msgstr "ช่องป้ายชื่อ"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:57
 msgid "Sheet titles"
@@ -8816,9 +8885,8 @@ msgid "Filters"
 msgstr "กรอง"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:87
-#, fuzzy
 msgid "Filter fields by name:"
-msgstr "กรองชิ้นส่วนโดยเน็ต:"
+msgstr "กรองช่องฟิลด์ตามชื่อ:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:99
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:73
@@ -9087,9 +9155,8 @@ msgstr "แสดง"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:62
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:59
 #: eeschema/fields_grid_table.cpp:341
-#, fuzzy
 msgid "Show Name"
-msgstr "แสดงเน็ต"
+msgstr "แสดงชื่อ"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:91
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:63
@@ -9539,9 +9606,8 @@ msgid "Fields must have a name."
 msgstr "ช่องจะต้องมีชื่อ"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:323
-#, fuzzy
 msgid "Derived symbol must have a parent selected"
-msgstr "สัญลักษณ์แฝงต้องมีต้นกำเนิดเลือกไว้"
+msgstr "สัญลักษณ์ที่ได้รับต้องมีต้นกำเนิดที่เลือกไว้"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:335
 msgid "Delete extra units from symbol?"
@@ -9634,16 +9700,15 @@ msgid "Define as power symbol"
 msgstr "กำหนดเป็นสัญลักษณ์พาวเวอร์"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:207
-#, fuzzy
 msgid ""
 "Setting this option makes the symbol in question appear in the\n"
 "\"add power symbol\" dialog.  It will lock the value text to protect it\n"
 "from editing in the schematic.  The symbol will not be included in\n"
 "the BOM and cannot be assigned a footprint."
 msgstr ""
-"การตั้งค่าตัวเลือกนี้จะทำให้สัญลักษณ์ที่เป็นปัญหาปรากฏในส่วน\n"
-"กรอบสนทนา \"เพิ่มพอร์ตพาวเวอร์\" มันจะล็อคค่าเพื่อปกป้องมัน\n"
-"จากการแก้ไขใน Eeschema สัญลักษณ์จะไม่รวมอยู่ใน\n"
+"การตั้งค่าตัวเลือกนี้ ทำให้สัญลักษณ์ที่เป็นปัญหาปรากฏใน\n"
+"กล่องโต้ตอบ \"เพิ่มสัญลักษณ์พลังงาน\" มันจะล็อคข้อความเพื่อป้องกัน\n"
+"จากการแก้ไขในแผนผังวงจร สัญลักษณ์จะไม่รวมอยู่ใน\n"
 "BOM และไม่สามารถกำหนดฟุ้ทพรินท์"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:221
@@ -9712,9 +9777,8 @@ msgstr "คุณลักษณะ"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:278
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:201
-#, fuzzy
 msgid "Exclude from simulation"
-msgstr "ไม่ใช้สัญลักษณ์สำหรับจำลอง"
+msgstr "ยกเว้นจากการจำลอง"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:311
 msgid "Footprint filters:"
@@ -9746,9 +9810,8 @@ msgid "Footprint Filters"
 msgstr "กรองฟุ้ทพรินท์"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:364
-#, fuzzy
 msgid "Edit Simulation Model..."
-msgstr "แก้ไขโมเดลสไปส์…"
+msgstr "แก้ไขโมเดลการจำลอง…"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.h:118
 msgid "Library Symbol Properties"
@@ -9876,20 +9939,16 @@ msgstr ""
 "คุณต้องการดําเนินการต่อหรือไม่?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:439
-#, fuzzy
 msgid "Synchronized Pins Mode."
-msgstr "โหมดแก้ไขขาซิงโครไนซ์"
+msgstr "โหมดขาที่ซิงโครไนซ์"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:441
-#, fuzzy
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
-msgstr ""
-"เปิดใช้งานโหมดแก้ไขขาชนิดซิงโครไนซ์\n"
-"ขาที่คล้ายคลึงกันจะถูกแก้ไข,โดยไม่สนใจทางเลือกนี้"
+msgstr "ใช้รูปแบบการทำงานขาซิงโครไนซ์ ขาใหม่จะถูกเพิ่มในทุกหน่วย"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:443
 msgid "Synchronized Pins Mode.  Matching pins in other units will be updated."
-msgstr ""
+msgstr "โหมดขาที่ซิงโครไนซ์  ขาที่ตรงกันในหน่วยอื่นจะไม่ได้รับการปรับปรุง"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:44
 msgid "Pin &name:"
@@ -10185,18 +10244,16 @@ msgid "Pen width:"
 msgstr "ขนาดปากกา:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:159
-#, fuzzy
 msgid "Other options"
 msgstr "ตัวเลือกอื่น"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:161
-#, fuzzy
 msgid "Open file after plot"
-msgstr "พิมพ์ข้อความกรอง"
+msgstr "เปิดไฟล์หลังจากพล็อต"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:163
 msgid "Open output file with associated application after successful plot"
-msgstr ""
+msgstr "เปิดไฟล์เอาต์พุตด้วยแอปพลิเคชันที่เกี่ยวข้องหลังจากพล็อตสําเร็จ"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:89
 msgid "Plot Schematic Options"
@@ -10270,9 +10327,8 @@ msgid "Rescue Symbols"
 msgstr "สัญลักษณ์กู้ภัย"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:151
-#, fuzzy
 msgid "Skip Symbol Rescue"
-msgstr "แสดงโครงสร้างต้นไม้ของสัญลักษณ์"
+msgstr "ข้ามกู้ภัยสัญลักษณ์"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:233
 #, c-format
@@ -10428,9 +10484,8 @@ msgid "Search the current &sheet only"
 msgstr "เลือกชีตปัจจุบันเท่านั้น(&s)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:101
-#, fuzzy
 msgid "Search the current selection &only"
-msgstr "เลือกชีตปัจจุบันเท่านั้น(&s)"
+msgstr "ค้นหาเฉพาะการเลือกปัจจุบัน(&o)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:104
 msgid "Replace matches in reference designators"
@@ -10476,9 +10531,8 @@ msgid "Net Classes"
 msgstr "เน็ตคลาส"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:85
-#, fuzzy
 msgid "Bus Alias Definitions"
-msgstr "ข้อกำหนดบัส"
+msgstr "คําจํากัดความนามแฝงของบัส"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:86
 #: pcbnew/dialogs/dialog_board_setup.cpp:105
@@ -10501,9 +10555,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_shape_properties.cpp:58
 #: eeschema/dialogs/dialog_sheet_properties.cpp:78
 #: eeschema/dialogs/dialog_text_properties.cpp:74
-#, fuzzy
 msgid "Note: individual item colors overridden in Preferences."
-msgstr "บันทึก: สีของชิ้นส่วนจะถูกแทนที่ด้วยสีจากธีมปัจจุบัน"
+msgstr "หมายเหตุ: สีของแต่ละชิ้นส่วนจะแทนที่สีจากการตั้งค่าความชอบ"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:88
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:158
@@ -10513,9 +10566,8 @@ msgid "Filled shape"
 msgstr "เติมเต็มรูปร่าง"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:122
-#, fuzzy
 msgid "Set border width to 0 to use schematic's default line width."
-msgstr "ตั้งความกว้างขอบเขตเป็น 0 เพื่อใช้ค่าปริยายของขนาดเส้นตรงของวงจร"
+msgstr "ตั้งความกว้างขอบเป็น 0 เพื่อใช้ค่าปริยายของขนาดเส้นตรงของแผนผังวงจร"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:126
 #, fuzzy
@@ -11061,9 +11113,8 @@ msgid "G"
 msgstr ""
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "T"
-msgstr "T:"
+msgstr "T"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 #, fuzzy
@@ -11496,14 +11547,13 @@ msgid "Library '%s' not found."
 msgstr "ไลบรารี '%s' ไม่พบ"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:234
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error writing project symbol library table.\n"
 "  %s"
 msgstr ""
-"เกิดความผิดพลาดระหว่างทำตารางไลบรารีสัญลักษณ์ให้ว่าง:\n"
-"\n"
-"%s"
+"เกิดข้อผิดพลาดในการเขียนตารางไลบรารีสัญลักษณ์โครงการ\n"
+"  %s"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:238
 msgid "Created project symbol library table.\n"
@@ -12192,9 +12242,8 @@ msgid "Significant digits (voltages):"
 msgstr ""
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:270
-#, fuzzy
 msgid "Range (voltages):"
-msgstr "บันทึกค่าโวลท์ทั้งหมด"
+msgstr "ช่วง (แรงดันไฟฟ้า):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
 #, fuzzy
@@ -12253,9 +12302,8 @@ msgid "Significant digits (currents):"
 msgstr ""
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:289
-#, fuzzy
 msgid "Range (currents):"
-msgstr "บันทึกค่าปัจจุบันทั้งหมด"
+msgstr "ช่วง (กระแส):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
 #, fuzzy
@@ -12666,9 +12714,8 @@ msgstr "ผิดพลาดอ่านตารางไลบรารีส
 #: eeschema/eeschema_jobs_handler.cpp:159
 #: eeschema/eeschema_jobs_handler.cpp:195
 #: eeschema/eeschema_jobs_handler.cpp:290
-#, fuzzy
 msgid "Failed to load schematic file\n"
-msgstr "บันทึกวงจร '%s' ไม่สำเร็จ"
+msgstr "โหลดไฟล์แผนผังวงจรไม่สำเร็จ\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:206
 #: eeschema/eeschema_jobs_handler.cpp:305
@@ -12679,14 +12726,12 @@ msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:215
 #: eeschema/eeschema_jobs_handler.cpp:315
-#, fuzzy
 msgid "Warning: duplicate sheet names.\n"
-msgstr "คำเตือน: ชื่อเล่นซ้ำ"
+msgstr "คำเตือน: ชื่อแผงวงจรซ้ำกัน\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:257
-#, fuzzy
 msgid "Unknown netlist format.\n"
-msgstr "เวียที่ไม่รู้จัก %d"
+msgstr "รูปแบบเน็ตลิสต์ที่ไม่รู้จัก\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:386
 #, c-format
@@ -12706,9 +12751,8 @@ msgstr "ไม่สามารถเปิดเป้าหมาย '%s'"
 #: eeschema/eeschema_jobs_handler.cpp:463
 #: eeschema/eeschema_jobs_handler.cpp:526 pcbnew/pcbnew_jobs_handler.cpp:611
 #: pcbnew/pcbnew_jobs_handler.cpp:672
-#, fuzzy
 msgid "Unable to load library\n"
-msgstr "ไม่สามารถโหลด %s ไฟล์"
+msgstr "ไม่สามารถอ่านไลบรารี\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:474
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:123
@@ -12720,19 +12764,16 @@ msgid "Output path must not conflict with existing path\n"
 msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:544
-#, fuzzy
 msgid "Saving symbol library in updated format\n"
-msgstr "ตัวระบุไลบรารีสัญลักษณ์ไม่ถูกต้อง"
+msgstr "การบันทึกไลบรารีสัญลักษณ์ในรูปแบบที่ปรับปรุงแล้ว\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:558 pcbnew/pcbnew_jobs_handler.cpp:640
-#, fuzzy
 msgid "Unable to save library\n"
-msgstr "ล้มเหลวที่จะบันทึกไลบารีกู้ภัย %s"
+msgstr "ไม่สามารถบันทึกไลบรารี\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:564
-#, fuzzy
 msgid "Symbol library was not updated\n"
-msgstr "ไม่ได้เปิดใช้งานไลบรารีสัญลักษณ์"
+msgstr "ไลบรารีสัญลักษณ์ไม่ได้รับการปรับปรุง\n"
 
 #: eeschema/erc.cpp:66 eeschema/erc.cpp:83
 msgid "Input Pin"
@@ -13550,11 +13591,13 @@ msgid "Failed to generate a name for '%s': exceeded UINT64_MAX"
 msgstr ""
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:256
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading simulation model from symbol '%s':\n"
 "%s"
-msgstr "เกิดข้อผิดพลาดโหลดโมเดลไลบรารีการจำลอง '%s':'%s'"
+msgstr ""
+"เกิดข้อผิดพลาด การอ่านแบบจำลองจากสัญลักษณ์ '%s':\n"
+"%s"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:498
 #, fuzzy, c-format
@@ -15868,9 +15911,9 @@ msgid "Bitrate could be too high for rising / falling edges"
 msgstr ""
 
 #: eeschema/sim/sim_lib_mgr.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "Simulation model library not found at '%s'"
-msgstr "เกิดข้อผิดพลาดโหลดโมเดลไลบรารีการจำลอง '%s':'%s'"
+msgstr "ไม่พบไลบรารีแบบจำลองการจำลองที่ '%s'"
 
 #: eeschema/sim/sim_lib_mgr.cpp:84
 #, fuzzy, c-format
@@ -16050,9 +16093,9 @@ msgid "Measure Time of Max"
 msgstr "เครื่องมือวัด"
 
 #: eeschema/sim/sim_plot_frame.cpp:245
-#, fuzzy, c-format
+#, c-format
 msgid "Format %s..."
-msgstr "รูปแบบ"
+msgstr "รูปแบบ %s..."
 
 #: eeschema/sim/sim_plot_frame.cpp:297
 #, fuzzy
@@ -16095,20 +16138,21 @@ msgid "V(%s) (gain)"
 msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:759
-#, fuzzy, c-format
+#, c-format
 msgid "V(%s) (phase)"
-msgstr "เฟส AC:"
+msgstr "V(%s) (phase)"
 
 #: eeschema/sim/sim_plot_frame.cpp:820
 msgid "Simulator requires a fully annotated schematic."
 msgstr "การจำลองต้องการวงจรที่ทำอธิบายประกอบสมบูรณ์แล้ว"
 
 #: eeschema/sim/sim_plot_frame.cpp:825
-#, fuzzy
 msgid ""
 "Errors during netlist generation.\n"
 "\n"
-msgstr "มีข้อผิดพลาดระหว่างการส่งออกรายชื่อเน็ต,ถูกยกเลิก"
+msgstr ""
+"ข้อผิดพลาดระหว่างการสร้างรายชื่อเน็ต\n"
+"\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:860
 msgid ""
@@ -16144,9 +16188,8 @@ msgid "%s is not tunable"
 msgstr "%s ไม่พบ"
 
 #: eeschema/sim/sim_plot_frame.cpp:1320
-#, fuzzy
 msgid "Error: no current simulation.\n"
-msgstr "กำลัง,กระแสและการแยก"
+msgstr "ข้อผิดพลาด: ไม่มีการจำลองกระแสไฟฟ้า\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:1329
 #, fuzzy
@@ -16159,11 +16202,12 @@ msgid "Error: simulation type doesn't support plotting.\n"
 msgstr "ข้อผิดพลาด: ประเภทการจำลองไม่รองรับการพล็อต!\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:2049
-#, fuzzy
 msgid ""
 "Errors during netlist generation; simulation aborted.\n"
 "\n"
-msgstr "มีข้อผิดพลาดระหว่างการส่งออกรายชื่อเน็ต,ถูกยกเลิก"
+msgstr ""
+"ข้อผิดพลาดระหว่างการสร้างรายชื่อเน็ต; การจำลองถูกยกเลิก\n"
+"\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:2124
 #, fuzzy
@@ -16188,9 +16232,9 @@ msgid "Measurement"
 msgstr "โนดวัดค่า"
 
 #: eeschema/sim/sim_plot_panel.cpp:268
-#, fuzzy, c-format
+#, c-format
 msgid "%d"
-msgstr "%"
+msgstr "%d"
 
 #: eeschema/sim/sim_plot_panel.cpp:507
 msgid "noise [(V or A)^2/Hz]"
@@ -18595,9 +18639,9 @@ msgstr ""
 "จำนวนเต็มเพื่อให้แน่ใจว่าไม่มีรายการตารางที่ซ้ำกัน"
 
 #: eeschema/widgets/tuner_slider.cpp:57 eeschema/widgets/tuner_slider.cpp:113
-#, fuzzy, c-format
+#, c-format
 msgid "Tune %s"
-msgstr "ปรับแต่ง"
+msgstr "ปรับ %s"
 
 #: eeschema/widgets/tuner_slider.cpp:74
 #, c-format
@@ -19826,9 +19870,8 @@ msgid ""
 msgstr ""
 
 #: kicad/cli/command_export_pcb_base.cpp:124
-#, fuzzy
 msgid "At least one or more layers must be specified\n"
-msgstr "ต้องเลือกแทร็กส่วนตรงอย่างน้อยสองส่วน"
+msgstr "ต้องระบุเลเยอร์อย่างน้อยหนึ่งชั้นหรือมากกว่า\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:47
 msgid "Valid options excellon, gerber."
@@ -19883,31 +19926,26 @@ msgid "Output must be a directory\n"
 msgstr "ทางออกต้องเป็นไดเร็คตอรี\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:125
-#, fuzzy
 msgid "Invalid drill format\n"
-msgstr "รูปแบบไฟล์หน่วยเก็บถาวรไม่ถูกต้อง"
+msgstr "รูปแบบไฟล์เจาะไม่ถูกต้อง\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:141
 #: kicad/cli/command_export_pcb_dxf.cpp:94
 #: kicad/cli/command_export_pcb_pos.cpp:142
-#, fuzzy
 msgid "Invalid units specified\n"
-msgstr "คำนำหน้าหน่วยไม่ถูกต้อง"
+msgstr "ระบุหน่วยไม่ถูกต้อง\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:165
-#, fuzzy
 msgid "Invalid zeros format specified\n"
-msgstr "ระบุฟุ้ทพรินท์ไม่ถูกต้อง"
+msgstr "ระบุรูปแบบเลขศูนย์ไม่ถูกต้อง\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:193
-#, fuzzy
 msgid "Invalid map format specified\n"
-msgstr "ระบุฟุ้ทพรินท์ไม่ถูกต้อง"
+msgstr "ระบุรูปแบบแผนที่ไม่ถูกต้อง\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:209
-#, fuzzy
 msgid "Invalid origin mode specified\n"
-msgstr "ระบุฟุ้ทพรินท์ไม่ถูกต้อง"
+msgstr "ระบุรูปแบบต้นทางไม่ถูกต้อง\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:220
 #: kicad/cli/command_export_pcb_gerber.cpp:109
@@ -20034,18 +20072,16 @@ msgstr "รวมเลเยอร์ขอบบอร์ด"
 
 #: kicad/cli/command_export_pcb_pos.cpp:126
 #: kicad/cli/command_export_sch_netlist.cpp:81 kicad/cli/command_version.cpp:67
-#, fuzzy
 msgid "Invalid format\n"
-msgstr "ชื่อขาไม่ถูกต้อง"
+msgstr "รูปแบบไม่ถูกต้อง\n"
 
 #: kicad/cli/command_export_pcb_pos.cpp:152
 msgid "\"both\" not supported for gerber format\n"
 msgstr ""
 
 #: kicad/cli/command_export_pcb_pos.cpp:168
-#, fuzzy
 msgid "Invalid side specified\n"
-msgstr "ระบุฟุ้ทพรินท์ไม่ถูกต้อง"
+msgstr "ระบุด้านไม่ถูกต้อง\n"
 
 #: kicad/cli/command_export_pcb_step.cpp:48
 #, fuzzy
@@ -20770,12 +20806,9 @@ msgid "Unable to load repository url"
 msgstr "ไม่สามารถอ่านคลังเก็บจาก url"
 
 #: kicad/pcm/pcm.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse repository: %s"
-msgstr ""
-"ไม่สามารถตีความคลังเก็บข้อมูล:\n"
-"\n"
-"'%s"
+msgstr "ไม่สามารถตีความคลังเก็บข้อมูล:%s"
 
 #: kicad/pcm/pcm.cpp:324
 msgid ""
@@ -21784,7 +21817,6 @@ msgstr ""
 "___R2 = Z<sub>0</sub> / (L&minus;1)___\n"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### Pi Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -21804,7 +21836,8 @@ msgstr ""
 "___Z<sub>in</sub>___ is desired input impedance in &#x2126;<br>\n"
 "___Z<sub>out</sub>___ is desired output impedance in &#x2126;<br>\n"
 "\n"
-"___L = 10<sup>a/20</sup>___<br>\n"
+"___K = V<sub>I</sub>/V<sub>O</sub> = 10<sup>a/20</sup>___<br>\n"
+"___L = K<sup>2</sup> = 10<sup>a/10</sup>___<br>\n"
 "___A = (L+1) / (L&minus;1)___<br><br>\n"
 "___R2 = (L&minus;1) / 2&middot;&radic;(Z<sub>in</sub> &middot; Z<sub>out</"
 "sub> / L)___<br>\n"
@@ -21830,7 +21863,6 @@ msgstr ""
 "___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -21850,10 +21882,11 @@ msgstr ""
 "___Z<sub>in</sub>___ is desired input impedance in &#x2126;<br>\n"
 "___Z<sub>out</sub>___ is desired output impedance in &#x2126;<br>\n"
 "\n"
-"___L = 10<sup>a/20</sup>___<br>\n"
+"___K = V<sub>I</sub>/V<sub>O</sub> = 10<sup>a/20</sup>___<br>\n"
+"___L = K<sup>2</sup> = 10<sup>a/10</sup>___<br>\n"
 "___A = (L+1) / (L&minus;1)___<br><br>\n"
-"___R2 = 2&middot;&radic;(L &middot; Z<sub>in</sub> &middot; Z<sub>out</"
-"sub>) / (L&minus;1)___<br>\n"
+"___R2 = 2&middot;&radic;(L &middot; Z<sub>in</sub> &middot; Z<sub>out</sub>) "
+"/ (L&minus;1)___<br>\n"
 "___R1 = Z<sub>in</sub> &middot; A &minus; R2___<br>\n"
 "___R3 = Z<sub>out</sub> &middot; A &minus; R2___\n"
 
@@ -29318,16 +29351,14 @@ msgid "SVG Options"
 msgstr "ตัวเลือก SVG"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:376
-#, fuzzy
 msgid ""
 "This number defines how many digits are exported that are below 1 mm.\n"
 "User unit is 10^-<N> mm\n"
 "Choose 4 if you are not sure."
 msgstr ""
-"หน่วยผู้ใช้ SVG มีขนาดใหญ่เพียงใด\n"
-"ตัวเลขกำหนดจำนวนหลักที่จะส่งออกซึ่งต่ำกว่า 1 มม. หรือ 1 นิ้ว\n"
-"หน่วยผู้ใช้คือ 10^-<N> มม. หรือ 10^-<N> นิ้ว\n"
-"เลือก 6 ถ้าคุณไม่แน่ใจ"
+"ตัวเลขนี้กำหนดจำนวนหลักที่ส่งออก ซึ่งมีขนาดต่ำกว่า 1 มม.\n"
+"หน่วยของผู้ใช้คือ 10^-<N> mm\n"
+"เลือก 4 หากคุณไม่แน่ใจ"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:396
 #, fuzzy
@@ -31492,7 +31523,6 @@ msgid "Check rule syntax"
 msgstr "ตรวจสอบไวยากรณ์ของกฎ"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -31828,7 +31858,7 @@ msgstr ""
 "    (rule <rule_name> <rule_clause> ...)\n"
 "\n"
 "\n"
-"<br><br>\n"
+"<br>\n"
 "\n"
 "### Rule Clauses\n"
 "\n"
@@ -31838,35 +31868,57 @@ msgstr ""
 "\n"
 "    (layer \"<layer_name>\")\n"
 "\n"
+"    (severity <severity_name>)\n"
 "\n"
-"<br><br>\n"
+"\n"
+"<br>\n"
 "\n"
 "### Constraint Types\n"
 "\n"
-" * annular_width\n"
+" * annular\\_width\n"
+" * assertion\n"
 " * clearance\n"
+" * connection\\_width\n"
 " * courtyard_clearance\n"
 " * diff\\_pair\\_gap\n"
 " * diff\\_pair\\_uncoupled\n"
 " * disallow\n"
-" * edge_clearance\n"
+" * edge\\_clearance\n"
 " * length\n"
-" * hole\n"
-" * hole_clearance\n"
-" * silk_clearance\n"
+" * hole\\_clearance\n"
+" * hole\\_size\n"
+" * min\\_resolved\\_spokes\n"
+" * physical\\_clearance\n"
+" * physical\\_hole\\_clearance\n"
+" * silk\\_clearance\n"
 " * skew\n"
-" * track_width\n"
-" * via_count\n"
+" * text\\_height\n"
+" * text\\_thickness\n"
+" * thermal\\_relief\\_gap\n"
+" * thermal\\_spoke\\_width\n"
+" * track\\_width\n"
+" * via\\_count\n"
+" * via\\_diameter\n"
+" * zone\\_connection\n"
 "\n"
-"\n"
+"Note: `clearance` and `hole_clearance` rules are not run against items of "
+"the same net; `physical_clearance` and `physical_hole_clearance` rules are.\n"
 "<br><br>\n"
+"\n"
+"### Items\n"
+"\n"
+" * `A` &nbsp;&nbsp; _the first (or only) item under test_\n"
+" * `B` &nbsp;&nbsp; _the second item under test (for binary tests)_\n"
+" * `L` &nbsp;&nbsp; _the layer currently under test_\n"
+"\n"
+"<br>\n"
 "\n"
 "### Item Types\n"
 "\n"
-" * buried_via\n"
+" * buried\\_via\n"
 " * graphic\n"
 " * hole\n"
-" * micro_via\n"
+" * micro\\_via\n"
 " * pad\n"
 " * text\n"
 " * track\n"
@@ -31875,7 +31927,24 @@ msgstr ""
 "\n"
 "<br>\n"
 "\n"
-"### ตัวอย่าง\n"
+"### Zone Connections\n"
+"\n"
+" * solid\n"
+" * thermal\\_reliefs\n"
+" * none\n"
+"\n"
+"<br>\n"
+"\n"
+"### Severity Names\n"
+"\n"
+" * warning\n"
+" * error\n"
+" * exclusion\n"
+" * ignore\n"
+"\n"
+"<br>\n"
+"\n"
+"### Examples\n"
 "\n"
 "    (version 1)\n"
 "\n"
@@ -31898,7 +31967,12 @@ msgstr ""
 "\n"
 "    (rule HV_unshielded\n"
 "       (constraint clearance (min 2mm))\n"
-"       (condition \"A.NetClass == 'HV' && !A.insideArea('Shield*')\"))\n"
+"       (condition \"A.NetClass == 'HV' && !A.enclosedByArea('Shield*')\"))\n"
+"\n"
+"\n"
+"    (rule heavy_thermals\n"
+"       (constraint thermal_spoke_width (min 0.5mm))\n"
+"       (condition \"A.NetClass == 'HV'\"))\n"
 "<br><br>\n"
 "\n"
 "### Notes\n"
@@ -31920,21 +31994,29 @@ msgstr ""
 "All function parameters support simple wildcards (`*` and `?`).\n"
 "<br><br>\n"
 "\n"
-"    A.insideCourtyard('<footprint_refdes>')\n"
+"    A.intersectsCourtyard('<footprint_refdes>')\n"
 "True if any part of `A` lies within the given footprint's principal "
 "courtyard.\n"
 "<br><br>\n"
 "\n"
-"    A.insideFrontCourtyard('<footprint_refdes>')\n"
+"    A.intersectsFrontCourtyard('<footprint_refdes>')\n"
 "True if any part of `A` lies within the given footprint's front courtyard.\n"
 "<br><br>\n"
 "\n"
-"    A.insideBackCourtyard('<footprint_refdes>')\n"
+"    A.intersectsBackCourtyard('<footprint_refdes>')\n"
 "True if any part of `A` lies within the given footprint's back courtyard.\n"
 "<br><br>\n"
 "\n"
-"    A.insideArea('<zone_name>')\n"
+"    A.intersectsArea('<zone_name>')\n"
 "True if any part of `A` lies within the given zone's outline.\n"
+"<br><br>\n"
+"\n"
+"    A.enclosedByArea('<zone_name>')\n"
+"True if all of `A` lies within the given zone's outline.  \n"
+"\n"
+"NB: this is potentially a more expensive call than `intersectsArea()`.  Use "
+"`intersectsArea()` \n"
+"where possible.\n"
 "<br><br>\n"
 "\n"
 "    A.isPlated()\n"
@@ -31942,10 +32024,10 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.inDiffPair('<net_name>')\n"
-"True if `A` has net that is part of the specified differential pair.\n"
+"True if `A` has a net that is part of the specified differential pair.\n"
 "`<net_name>` is the base name of the differential pair.  For example, "
-"`inDiffPair('CLK')`\n"
-"matches items in the `CLK_P` and `CLK_N` nets.\n"
+"`inDiffPair('/CLK')`\n"
+"matches items in the `/CLK_P` and `/CLK_N` nets.\n"
 "<br><br>\n"
 "\n"
 "    AB.isCoupledDiffPair()\n"
@@ -31964,19 +32046,35 @@ msgstr ""
 "NB: this returns true if `A` is on the given layer, independently\n"
 "of whether or not the rule is being evaluated for that layer.\n"
 "For the latter use a `(layer \"layer_name\")` clause in the rule.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideCourtyard('<footprint_refdes>') !!!\n"
+"Deprecated; use `intersectsCourtyard()` instead.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideFrontCourtyard('<footprint_refdes>') !!!\n"
+"Deprecated; use `intersectsFrontCourtyard()` instead.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideBackCourtyard('<footprint_refdes>') !!!\n"
+"Deprecated; use `intersectsBackCourtyard()` instead.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideArea('<zone_name>') !!!\n"
+"Deprecated; use `intersectsArea()` instead.\n"
 "<br><br><br>\n"
 "\n"
-"### More Examples\n"
+"### ตัวอย่างมากกว่า\n"
 "\n"
 "    (rule \"copper keepout\"\n"
 "       (constraint disallow track via zone)\n"
-"       (condition \"A.insideArea('zone3')\"))\n"
+"       (condition \"A.intersectsArea('zone3')\"))\n"
 "\n"
 "\n"
 "    (rule \"BGA neckdown\"\n"
 "       (constraint track_width (min 0.2mm) (opt 0.25mm))\n"
 "       (constraint clearance (min 0.05mm) (opt 0.08mm))\n"
-"       (condition \"A.insideCourtyard('U3')\"))\n"
+"       (condition \"A.intersectsCourtyard('U3')\"))\n"
 "\n"
 "\n"
 "    # prevent silk over tented vias\n"
@@ -31985,47 +32083,100 @@ msgstr ""
 "       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
 "\n"
 "\n"
-"    (rule \"Distance between Vias of Different Nets\"  \n"
+"    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != B.Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
 "\n"
-"    (rule \"Clearance between Pads of Different Nets\"  \n"
+"\n"
+"    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != B.Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
 "\n"
 "\n"
-"    (rule \"Via Hole to Track Clearance\"  \n"
+"\n"
+"    (rule \"Via Hole to Track Clearance\"\n"
 "        (constraint hole_clearance (min 0.254mm))\n"
-"        (condition \"A.Type =='Via' && B.Type =='Track'\"))\n"
-"    \n"
-"    (rule \"Pad to Track Clearance\"  \n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Track'\"))\n"
+"\n"
+"    (rule \"Pad to Track Clearance\"\n"
 "        (constraint clearance (min 0.2mm))\n"
-"        (condition \"A.Type =='Pad' && B.Type =='Track'\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Track'\"))\n"
 "\n"
 "\n"
 "    (rule \"clearance-to-1mm-cutout\"\n"
 "        (constraint clearance (min 0.8mm))\n"
-"        (condition \"A.Layer=='Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
+"        (condition \"A.Layer == 'Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
 "\n"
 "\n"
-"    (rule \"Max Drill Hole Size Mechanical\"  \n"
-"        (constraint hole (max 6.3mm))\n"
+"    (rule \"Max Drill Hole Size Mechanical\"\n"
+"        (constraint hole_size (max 6.3mm))\n"
 "        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
-"    \n"
-"    (rule \"Max Drill Hole Size PTH\"  \n"
-"        (constraint hole (max 6.35mm))\n"
+"\n"
+"    (rule \"Max Drill Hole Size PTH\"\n"
+"        (constraint hole_size (max 6.35mm))\n"
 "        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
 "\n"
 "\n"
 "    # Specify an optimal gap for a particular diff-pair\n"
 "    (rule \"dp clock gap\"\n"
 "        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
-"        (condition \"A.inDiffPair('CLK') && AB.isCoupledDiffPair()\"))\n"
+"        (condition \"A.inDiffPair('/CLK')\"))\n"
 "\n"
 "    # Specify a larger clearance around any diff-pair\n"
 "    (rule \"dp clearance\"\n"
 "        (constraint clearance (min \"1.5mm\"))\n"
 "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
+"\n"
+"\n"
+"    # Don't use thermal reliefs on heatsink pads\n"
+"    (rule heat_sink_pad\n"
+"        (constraint zone_connection solid)\n"
+"        (condition \"A.Fabrication_Property == 'Heatsink pad'\"))\n"
+"\n"
+"    # Require all four thermal relief spokes to connect to parent zone\n"
+"    (rule fully_spoked_pads\n"
+"        (constraint min_resolved_spokes 4))\n"
+"\n"
+"    # Set thermal relief gap & spoke width for all zones\n"
+"    (rule defined_relief\n"
+"        (constraint thermal_relief_gap (min 10mil))\n"
+"        (constraint thermal_spoke_width (min 12mil)))\n"
+"\n"
+"    # Override thermal relief gap & spoke width for GND and PWR zones\n"
+"    (rule defined_relief_pwr\n"
+"        (constraint thermal_relief_gap (min 10mil))\n"
+"        (constraint thermal_spoke_width (min 12mil))\n"
+"        (condition \"A.Name == 'zone_GND' || A.Name == 'zone_PWR'\"))\n"
+"\n"
+"\n"
+"    # Prevent solder wicking from SMD pads\n"
+"    (rule holes_in_pads\n"
+"        (constraint physical_hole_clearance (min 0.2mm))\n"
+"        (condition \"B.Pad_Type == 'SMD'\"))\n"
+"\n"
+"    # Disallow solder mask margin overrides\n"
+"    (rule \"disallow solder mask margin overrides\"\n"
+"        (constraint assertion \"A.Soldermask_Margin_Override == 0mm\")\n"
+"        (condition \"A.Type == 'Pad'\"))\n"
+"\n"
+"\n"
+"    # Enforce a mechanical clearance between components and board edge\n"
+"    (rule front_mechanical_board_edge_clearance\n"
+"        (layer \"F.Courtyard\")\n"
+"        (constraint physical_clearance (min 3mm))\n"
+"        (condition \"B.Layer == 'Edge.Cuts'\"))\n"
+"\n"
+"\n"
+"    # Check current-carrying capacity\n"
+"    (rule high-current\n"
+"        (constraint track_width (min 1.0mm))\n"
+"        (constraint connection_width (min 0.8mm))\n"
+"        (condition \"A.NetClass == 'Power'\"))\n"
+"\n"
+"### เอกสาร\n"
+"\n"
+"For the full documentation see [https://docs.kicad.org](https://docs.kicad."
+"org/GetMajorMinorVersion/pcbnew/#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:75
 msgid "Default properties for new dimension objects:"
@@ -32083,9 +32234,8 @@ msgid "7"
 msgstr "7"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:88
-#, fuzzy
 msgid "Vias:"
-msgstr "เวีย"
+msgstr "เวีย:"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:104 pcbnew/pad.cpp:1011
 #: pcbnew/pcb_track.cpp:942 pcbnew/pcb_track.cpp:1306
@@ -32100,9 +32250,8 @@ msgid "Hole"
 msgstr "รูเจาะ"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:153
-#, fuzzy
 msgid "Differential pairs:"
-msgstr "ดิฟแพร์"
+msgstr "ดิฟแพร์:"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:170
 msgid "Gap"
@@ -35233,19 +35382,16 @@ msgid "Error creating svg file"
 msgstr "เกิดข้อผิดพลาดในการอ่านไฟล์"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:590 pcbnew/pcbnew_jobs_handler.cpp:661
-#, fuzzy
 msgid "Loading footprint library\n"
-msgstr "ข้อผิดพลาดในการโหลดตารางฟุ้ทพรินท์ไลบรารี"
+msgstr "กำลังอ่านไลบรารีฟุ้ทพรินท์\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:627
-#, fuzzy
 msgid "Saving footprint library\n"
-msgstr "ข้อผิดพลาดในการโหลดตารางฟุ้ทพรินท์ไลบรารี"
+msgstr "บันทึกไลบรารี่ฟุ้ทพรินท์\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:646
-#, fuzzy
 msgid "Footprint library was not updated\n"
-msgstr "ไม่ได้เปิดใช้งานไลบรารีฟุ้ทพรินท์"
+msgstr "ไลบรารีฟุ้ทพรินท์ไม่ถูกปรับปรุง\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:710
 #, fuzzy
