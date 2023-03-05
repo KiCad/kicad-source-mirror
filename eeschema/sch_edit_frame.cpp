@@ -1415,8 +1415,6 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
             }
         }
     }
-
-    GetCanvas()->Refresh();
 }
 
 
@@ -1998,7 +1996,13 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
 
     wxASSERT( screen );
 
-    SetScreen( screen );
+    if( m_toolManager )
+        m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
+
+    SCH_BASE_FRAME::SetScreen( screen );
+
+    if( m_toolManager )
+        m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
     // update the References
     GetCurrentSheet().UpdateAllScreenReferences();
@@ -2043,7 +2047,7 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     {
         // Set zoom to last used in this screen
         GetCanvas()->GetView()->SetScale( GetScreen()->m_LastZoomLevel );
-        RedrawScreen( GetScreen()->m_ScrollCenter, false );
+        GetCanvas()->GetView()->SetCenter( GetScreen()->m_ScrollCenter );
     }
 
     updateTitle();

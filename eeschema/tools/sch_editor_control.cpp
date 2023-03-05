@@ -2155,6 +2155,7 @@ int SCH_EDITOR_CONTROL::ToggleOPVoltages( const TOOL_EVENT& aEvent )
 
     getView()->SetLayerVisible( LAYER_OP_VOLTAGES, cfg->m_Appearance.show_op_voltages );
     m_frame->RefreshOperatingPointDisplay();
+    m_frame->GetCanvas()->Refresh();
 
     return 0;
 }
@@ -2167,6 +2168,7 @@ int SCH_EDITOR_CONTROL::ToggleOPCurrents( const TOOL_EVENT& aEvent )
 
     getView()->SetLayerVisible( LAYER_OP_CURRENTS, cfg->m_Appearance.show_op_currents );
     m_frame->RefreshOperatingPointDisplay();
+    m_frame->GetCanvas()->Refresh();
 
     return 0;
 }

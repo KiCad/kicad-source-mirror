@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -261,6 +261,7 @@ void SCH_NAVIGATE_TOOL::changeSheet( SCH_SHEET_PATH aPath )
 
     pushToHistory( aPath );
 
-    m_frame->SetCurrentSheet( aPath );
+    m_frame->FocusOnItem( nullptr );
+    m_frame->Schematic().SetCurrentSheet( aPath );
     m_frame->DisplayCurrentSheet();
 }

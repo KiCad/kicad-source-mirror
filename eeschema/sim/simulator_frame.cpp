@@ -2167,7 +2167,7 @@ bool SIMULATOR_FRAME::LoadWorkbook( const wxString& aPath )
     LoadSimulator();
 
     rebuildSignalsList();
-    
+
     rebuildSignalsGrid( m_filter->GetValue() );
     updateSignalsGrid();
     updateCursors();
@@ -2407,6 +2407,7 @@ void SIMULATOR_FRAME::onPlotClosed( wxAuiNotebookEvent& event )
                        SCHEMATIC& schematic = m_schematicFrame->Schematic();
                        schematic.ClearOperatingPoints();
                        m_schematicFrame->RefreshOperatingPointDisplay();
+                       m_schematicFrame->GetCanvas()->Refresh();
                    }
                } );
 }
@@ -2910,6 +2911,7 @@ void SIMULATOR_FRAME::onSimFinished( wxCommandEvent& aEvent )
     }
 
     m_schematicFrame->RefreshOperatingPointDisplay();
+    m_schematicFrame->GetCanvas()->Refresh();
 
     updateCursors();
 
