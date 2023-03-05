@@ -95,7 +95,9 @@ private:
      * Map between a terminal ID in a symbol definition to the pin number that should
      * be imported into KiCad.
      */
-    typedef std::map<TERMINAL_ID, wxString>  TERMINAL_TO_PINNUM_MAP;
+    typedef std::map<TERMINAL_ID, wxString> TERMINAL_TO_PINNUM_MAP;
+
+    typedef std::map<wxString, TERMINAL_ID> PINNUM_TO_TERMINAL_MAP;
 
     REPORTER*                        m_reporter;
     SCHEMATIC*                       m_schematic;
@@ -110,12 +112,19 @@ private:
     std::map<LAYER_ID, SCH_SHEET*>         m_sheetMap;    ///< Cadstar->KiCad Sheets
     std::map<BLOCK_PIN_ID, SCH_HIERLABEL*> m_sheetPinMap; ///< Cadstar->KiCad Sheet Pins
     std::map<PART_ID, LIB_SYMBOL*>         m_partMap;     ///< Cadstar->KiCad Parts
-    std::map<SYMDEF_ID, LIB_SYMBOL*>       m_symDefMap;   ///< Cadstar->KiCad Loaded Lib Symbols
-    std::map<SYMBOL_ID, SCH_SYMBOL*>       m_powerSymMap; ///< Cadstar->KiCad Loaded Power Symbols
+    std::map<SYMBOL_ID, SCH_SYMBOL*>       m_powerSymMap; ///< Cadstar->KiCad Power Symbols
     std::map<wxString, LIB_SYMBOL*>        m_powerSymLibMap;  ///< NetName->KiCad Power Lib Symbol
     std::map<SYMBOL_ID, SCH_GLOBALLABEL*>  m_globalLabelsMap; ///< Cadstar->KiCad Global Labels
     std::map<BUS_ID, std::shared_ptr<BUS_ALIAS>> m_busesMap;  ///< Cadstar->KiCad Buses
     std::map<PART_ID, TERMINAL_TO_PINNUM_MAP> m_pinNumsMap; ///< Cadstar Part->KiCad Pin number map
+    std::map<SYMDEF_ID, PINNUM_TO_TERMINAL_MAP> m_symDefTerminalsMap;
+
+    /**
+     * Cadstar->KiCad Lib Symbols loaded so far. Note that in CADSTAR each symbol represents just a
+     * gate, so the LIB_SYMBOLs contained here are not imported directly - they are just an interim
+     * step.
+     */
+    std::map<SYMDEF_ID, std::unique_ptr<const LIB_SYMBOL>> m_symDefMap;
 
     std::vector<LIB_SYMBOL*> m_loadedSymbols; ///< Loaded symbols so far
     std::map<PART_GATE_ID, SYMDEF_ID> m_partSymbolsMap; ///< Map holding the symbols loaded so far
@@ -145,8 +154,10 @@ private:
     void loadItemOntoKiCadSheet( LAYER_ID aCadstarSheetID, SCH_ITEM* aItem );
 
     //Helper Functions for loading library items
-    void loadSymDefIntoLibrary( const SYMDEF_ID& aSymdefID, const PART* aCadstarPart,
-            const GATE_ID& aGateID, LIB_SYMBOL* aSymbol );
+    const LIB_SYMBOL* loadSymdef( const SYMDEF_ID& aSymdefID );
+
+    void loadSymbolGateAndPartFields( const SYMDEF_ID& aSymdefID, const PART* aCadstarPart,
+                                      const GATE_ID& aGateID, LIB_SYMBOL* aSymbol );
 
     void loadLibrarySymbolShapeVertices( const std::vector<VERTEX>& aCadstarVertices,
                                          VECTOR2I aSymbolOrigin, LIB_SYMBOL* aSymbol,
@@ -158,6 +169,7 @@ private:
     //Helper Functions for loading symbols in schematic
     SCH_SYMBOL* loadSchematicSymbol( const SYMBOL& aCadstarSymbol, const LIB_SYMBOL& aKiCadPart,
                                      EDA_ANGLE& aComponentOrientation );
+
 
     void loadSymbolFieldAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
                                    const EDA_ANGLE& aComponentOrientation, bool aIsMirrored,
@@ -290,6 +302,9 @@ private:
      * @return Radius of polar representation of the point
      */
     double getPolarRadius( const VECTOR2I& aPoint );
+
+
+    static LIB_FIELD* addNewFieldToSymbol( const wxString& aFieldName, LIB_SYMBOL* aKiCadSymbol );
 
 }; // CADSTAR_SCH_ARCHIVE_LOADER
 

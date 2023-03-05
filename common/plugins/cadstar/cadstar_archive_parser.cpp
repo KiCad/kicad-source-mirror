@@ -1696,6 +1696,12 @@ void CADSTAR_ARCHIVE_PARSER::TEXT::Parse( XNODE* aNode, PARSER_CONTEXT* aContext
 }
 
 
+wxString CADSTAR_ARCHIVE_PARSER::SYMDEF::BuildLibName() const
+{
+    return generateLibName( ReferenceName, Alternate );
+}
+
+
 void CADSTAR_ARCHIVE_PARSER::SYMDEF::ParseIdentifiers( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "SYMDEF" ) );
@@ -2772,6 +2778,17 @@ void CADSTAR_ARCHIVE_PARSER::FixTextPositionNoAlignment( EDA_TEXT* aKiCadTextIte
         aKiCadTextItem->Offset( positionOffset );
     }
 }
+
+
+wxString CADSTAR_ARCHIVE_PARSER::generateLibName( const wxString& aRefName,
+                                                  const wxString& aAlternateName )
+{
+    if( aAlternateName.IsEmpty() )
+        return EscapeString( aRefName, CTX_LIBID );
+    else
+        return EscapeString( aRefName + wxT( " (" ) + aAlternateName + wxT( ")" ), CTX_LIBID );
+}
+
 
 void CADSTAR_ARCHIVE_PARSER::checkPoint()
 {

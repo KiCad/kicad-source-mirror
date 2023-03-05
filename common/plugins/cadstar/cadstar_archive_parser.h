@@ -962,6 +962,7 @@ public:
         std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues; ///< These attributes might also
                                                                  ///< have a location
 
+        wxString BuildLibName() const;
         void ParseIdentifiers( XNODE* aNode, PARSER_CONTEXT* aContext );
         bool ParseSubNode( XNODE* aChildNode, PARSER_CONTEXT* aContext );
     };
@@ -1396,6 +1397,17 @@ public:
     static long GetNumberOfStepsForReporting( XNODE*                aRootNode,
                                               std::vector<wxString> aSubNodeChildrenToCount );
 
+
+    static wxString EscapeFieldText( const wxString& aFieldText )
+    {
+        wxString ret = aFieldText;
+        ret.Replace( wxT( "\n" ), wxT( "\\n" ) );
+        ret.Replace( wxT( "\r" ), wxT( "\\r" ) );
+        ret.Replace( wxT( "\t" ), wxT( "\\t" ) );
+
+        return ret;
+    }
+
     /**
      * @brief Convert a string with CADSTAR overbar characters to equivalent in KiCad
      * @param aCadstarString Input string
@@ -1410,12 +1422,7 @@ public:
      */
     static void FixTextPositionNoAlignment( EDA_TEXT* aKiCadTextItem );
 
-    static wxString generateLibName( const wxString& aRefName, const wxString& aAlternateName )
-    {
-        return aRefName
-               + ( ( aAlternateName.size() > 0 ) ? ( wxT( " (" ) + aAlternateName + wxT( ")" ) )
-                                                 : wxString( wxT( "" ) ) );
-    }
+    static wxString generateLibName( const wxString& aRefName, const wxString& aAlternateName );
 
 
 protected:

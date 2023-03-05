@@ -712,9 +712,6 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponentLibrary()
     {
         SYMDEF_ID  key = symPair.first;
         SYMDEF_PCB component = symPair.second;
-        wxString   fpName = component.ReferenceName + ( ( component.Alternate.size() > 0 ) ?
-                                              ( wxT( " (" ) + component.Alternate + wxT( ")" ) ) :
-                                              wxString( wxT( "" ) ) );
 
         // Check that we are not loading a documentation symbol.
         // Documentation symbols in CADSTAR are graphical "footprints" that can be assigned
@@ -739,7 +736,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponentLibrary()
         footprint->SetPosition( getKiCadPoint( component.Origin ) );
 
         LIB_ID libID;
-        libID.Parse( fpName, true );
+        libID.Parse( component.BuildLibName(), true );
 
         footprint->SetFPID( libID );
         loadLibraryFigures( component, footprint );
