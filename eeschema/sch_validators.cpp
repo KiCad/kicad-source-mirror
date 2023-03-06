@@ -142,6 +142,7 @@ bool SCH_FIELD_VALIDATOR::Validate( wxWindow* aParent )
     {
         wxArrayString badCharsFound;
 
+#if wxCHECK_VERSION( 3, 1, 3 )
         for( const wxUniCharRef& excludeChar : GetCharExcludes() )
         {
             if( val.Find( excludeChar ) != wxNOT_FOUND )
@@ -158,6 +159,24 @@ bool SCH_FIELD_VALIDATOR::Validate( wxWindow* aParent )
                     badCharsFound.Add( wxString::Format( wxT( "'%s'" ), excludeChar ) );
             }
         }
+#else
+        for( const wxString& excludeChar : GetExcludes() )
+        {
+            if( val.Find( excludeChar ) != wxNOT_FOUND )
+            {
+                if( excludeChar == wxT( "\r" ) )
+                    badCharsFound.Add( _( "carriage return" ) );
+                else if( excludeChar == wxT( "\n" ) )
+                    badCharsFound.Add( _( "line feed" ) );
+                else if( excludeChar == wxT( "\t" ) )
+                    badCharsFound.Add( _( "tab" ) );
+                else if( excludeChar == wxT( " " ) )
+                    badCharsFound.Add( _( "space" ) );
+                else
+                    badCharsFound.Add( wxString::Format( wxT( "'%s'" ), excludeChar ) );
+            }
+        }
+#endif
 
         wxString badChars;
 
