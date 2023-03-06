@@ -282,6 +282,9 @@ int PAD_TOOL::pushPadSettings( const TOOL_EVENT& aEvent )
 
 int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
 {
+    if( !m_isFootprintEditor )
+        return 0;
+
     if( !board()->GetFirstFootprint() || board()->GetFirstFootprint()->Pads().empty() )
         return 0;
 
@@ -491,6 +494,9 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
 
 int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
 {
+    if( !m_isFootprintEditor )
+        return 0;
+
     if( !board()->GetFirstFootprint() )
         return 0;
 
@@ -571,6 +577,9 @@ int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
 
 int PAD_TOOL::EditPad( const TOOL_EVENT& aEvent )
 {
+    if( !m_isFootprintEditor )
+        return 0;
+
     PCB_DISPLAY_OPTIONS  opts = frame()->GetDisplayOptions();
     PCB_RENDER_SETTINGS* settings = static_cast<PCB_RENDER_SETTINGS*>( view()->GetPainter()->GetSettings() );
     WX_INFOBAR*          infoBar = frame()->GetInfoBar();
