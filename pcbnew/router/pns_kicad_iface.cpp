@@ -248,7 +248,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::IsNetTieExclusion( const PNS::ITEM* aItem,
         return true;
     }
 
-    if( drcEngine && collidingItem )
+    if( drcEngine )
     {
         return drcEngine->IsNetTieExclusion( aItem->Net(), ToLAYER_ID( aItem->Layer() ),
                                              aCollisionPos, collidingItem );

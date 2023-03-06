@@ -1990,19 +1990,19 @@ void SCH_EDIT_FRAME::UpdateItem( EDA_ITEM* aItem, bool isAddOrDelete, bool aUpda
 
 void SCH_EDIT_FRAME::DisplayCurrentSheet()
 {
+    wxCHECK( m_toolManager, /* void */ );
+
     m_toolManager->RunAction( ACTIONS::cancelInteractive, true );
     m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
     SCH_SCREEN* screen = GetCurrentSheet().LastScreen();
 
-    wxASSERT( screen );
+    wxCHECK( screen, /* void */ );
 
-    if( m_toolManager )
-        m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
+    m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
 
     SCH_BASE_FRAME::SetScreen( screen );
 
-    if( m_toolManager )
-        m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+    m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
     // update the References
     GetCurrentSheet().UpdateAllScreenReferences();
@@ -2010,6 +2010,8 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     RefreshOperatingPointDisplay();
 
     EE_SELECTION_TOOL* selectionTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
+
+    wxCHECK( selectionTool, /* void */ );
 
     auto visit =
             [&]( EDA_ITEM* item )
@@ -2058,6 +2060,9 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
     SCH_EDITOR_CONTROL* editTool = m_toolManager->GetTool<SCH_EDITOR_CONTROL>();
+
+    wxCHECK( editTool, /* void */ );
+
     TOOL_EVENT dummy;
     editTool->UpdateNetHighlighting( dummy );
 
