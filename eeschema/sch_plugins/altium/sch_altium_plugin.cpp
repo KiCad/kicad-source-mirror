@@ -693,7 +693,8 @@ void SCH_ALTIUM_PLUGIN::ParseFileHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchF
             ParseParameter( properties );
             break;
 
-        case ALTIUM_SCH_RECORD::WARNING_SIGN:
+        case ALTIUM_SCH_RECORD::PARAMETER_SET:
+            m_reporter->Report( _( "Parameter Set not currently supported." ), RPT_SEVERITY_ERROR );
             break;
 
         case ALTIUM_SCH_RECORD::IMPLEMENTATION_LIST:

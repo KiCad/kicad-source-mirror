@@ -91,7 +91,7 @@ enum class ALTIUM_SCH_RECORD
     BUS_ENTRY           = 37,
     TEMPLATE            = 39,
     PARAMETER           = 41,
-    WARNING_SIGN        = 43,
+    PARAMETER_SET       = 43,
     IMPLEMENTATION_LIST = 44,
     IMPLEMENTATION      = 45,
     RECORD_46           = 46,
