@@ -17,26 +17,10 @@ The parts of KiCad
 Installation from binary packages
 ---------------------------------
 
-  Compiled KiCad binaries exist for Windows (8.1, 10), macOS (10.14+), and several
-  Linux distributions (Fedora, Debian, Ubuntu, Arch). These are available from the
-  main KiCad website: https://kicad.org/download/
+  Check the KiCad website for packages and installation instructions for
+  all supported platforms: https://kicad.org/download/
 
   Data files (schematics, boards, libraries) are compatible with all platforms.
-
-
-Installation from binary packages for Windows
----------------------------------------------
-
-  KiCad can be installed anywhere on the system as long as the user has write privileges.
-  Pre-made installers are available on the KiCad website: https://kicad.org/download/windows/
-
-
-Installation from binary packages for Linux
--------------------------------------------
-
-  KiCad comes packaged on many Linux platforms including Debian, Fedora, Ubuntu and Arch,
-  and is available in their respective package repositories. More information can be found on
-  the platform's page at https://kicad.org/download/
 
 
 Linux install tree
@@ -59,74 +43,10 @@ Linux install tree
   Do not change the KiCad tree, or the location of binary files.  Otherwise
   KiCad may not be able to find some or all of its required files.
 
-
-macOS KiCad tree
-----------------
-
-  System wide files
-
-  /Library/Application Support/kicad/help
-  /Library/Application Support/kicad/template
-  /Library/Application Support/kicad/library
-  /Library/Application Support/kicad/modules
-  /Library/Application Support/kicad/3dmodels
-
-  User files can be the same as the system wide files but only inside the user's home directory.
-
-  $HOME/Library/Application Support/kicad
-
-  Warning:
-  These paths are hardcoded into KiCad, if you put them somewhere else KiCad will not find
-  them when a new project is created.
-
-
 Installation from source code
 -----------------------------
 
-  Currently the only supported compilers are GCC on Linux and Windows and Clang on macOS.
-
-  Some dependencies must be satisfied for the correct installation of KiCad:
-
-  wxWidgets            >= 3.0.0           http://www.wxwidgets.org/
-
-  CMake                >= 3.10.0          https://www.cmake.org/
-
-  Boost C++ Libraries  >= 1.59            https://www.boost.org/
-
-  OpenGL               >= 2.1
-    Linux:   Mesa 3D Graphics Library     http://www.mesa3d.org/
-    Windows: built-in
-
-  Zlib Compression Library                http://www.zlib.net/
-
-  cairo                >= 1.12            http://cairographics.org/
-
-  GLEW                                    http://glew.sourceforge.net/
-
-  libcurl                                 http://curl.haxx.se/
-
-  OpenMP               (optional)         http://openmp.org/
-
-  GLM                  >= 9.5.4           http://glm.g-truc.net/
-
-  pkg-config                              http://pkgconfig.freedesktop.org/
-
-  Doxygen              (optional)         http://www.doxygen.nl
-
-  Python               >= 2.6 (optional)  https://python.org/
-
-  wxPython             (optional)         http://www.wxpython.org/
-
-  SWIG                 >= 3.0 (optional)  http://swig.org/
-
-  libngspice           (optional)         http://ngspice.sourceforge.net/
-
-  One of:
-    OCE                >= 0.18 (optional) https://github.com/tpaviot/oce
-
-    OCC                >= 6.9.0 (optiona) https://www.opencascade.com/content/latest-release
-
-  Complete documentation for building from source can be found at: https://dev-docs.kicad.org/
+  Current documentation for building from source can be found at: https://dev-docs.kicad.org/
 
 
 Important parameters to CMake
@@ -140,24 +60,8 @@ Important parameters to CMake
   -DCMAKE_INSTALL_PREFIX=<prefix>
   Default to "/usr/local".
 
-  -DwxWidgets_ROOT_DIR=<wxInstallDir>
-  Required for Windows platform.
-
-  -DwxWidgets_USE_DEBUG=ON
-  Can be used only with -DCMAKE_BUILD_TYPE=Debug
-
   -DCMAKE_CXX_FLAGS=<some extra flags>
   Extra flags for the C++ compiler required for your system.
 
   -DCMAKE_VERBOSE_MAKEFILE=ON
   When more output is wanted use this cmake parameter or call "make VERBOSE=1".
-
-
-Extra CFLAGS and linker flags
------------------------------
-
-    If you require extra flags for compiler and linker you may give them via
-    environment variables
-      "CXXFLAGS" (c++ compiler)
-      "LDFLAGS"  (for linker)
-      "CFLAGS"   (for c-compiler, not needed in kdesvn build)

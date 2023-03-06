@@ -938,6 +938,10 @@ if( KICAD_SCRIPTING_WXPYTHON )
     if( WXPYTHON_VERSION VERSION_LESS 4.0.0 )
         message( FATAL_ERROR "wxPython Phoenix is required" )
     endif()
+
+    if( WXPYTHON_WXVERSION VERSION_LESS 3.2.0 )
+        message( FATAL_ERROR "wxWidgets 3.2.0 or greater is required" )
+    endif()
 endif()
 
 # GTK3 is required on Linux
@@ -975,7 +979,11 @@ else()
 endif()
 
 # Require the same wxWidgets version as is used by wxPython
-set( wxWidgets_REQ_VERSION ${WXPYTHON_WXVERSION} )
+if( KICAD_SCRIPTING_WXPYTHON )
+    set( wxWidgets_REQ_VERSION ${WXPYTHON_WXVERSION} )
+else()
+    set( wxWidgets_REQ_VERSION 3.2.0 )
+endif()
 
 # See line 49 of cmake/FindwxWidgets.cmake
 set( wxWidgets_CONFIG_OPTIONS ${wxWidgets_CONFIG_OPTIONS} --static=no )
