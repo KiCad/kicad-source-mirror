@@ -573,7 +573,8 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
         for( TopoDS_Shape& hole : m_cutouts )
             holelist.Append( hole );
 
-        // Remove holes for each board (usually there is only one board)
+        // Remove holes for each item (board body or bodies, one can have more than one board)
+        // and copper items (copper_item_count items)
         int cnt = 0;
         for( TopoDS_Shape& board: m_board_outlines )
         {
@@ -659,7 +660,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
 
         // color the PCB
         TopExp_Explorer topex;
-        topex.Init( m_assy->GetShape( pcb_label ), TopAbs_COMPOUND /*TopAbs_SOLID*/ );
+        topex.Init( m_assy->GetShape( pcb_label ), TopAbs_SOLID );
 
         while( topex.More() )
         {

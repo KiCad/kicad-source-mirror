@@ -36,6 +36,7 @@
 
 class PCBMODEL;
 class BOARD;
+class BOARD_ITEM;
 class FOOTPRINT;
 class PCB_TRACK;
 class FILENAME_RESOLVER;
@@ -90,6 +91,7 @@ private:
     bool buildBoard3DShapes();
     bool buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOrigin );
     bool buildTrack3DShape( PCB_TRACK* aTrack, VECTOR2D aOrigin );
+    bool buildGraphic3DShape( BOARD_ITEM* aItem, VECTOR2D aOrigin );
     void calculatePcbThickness();
 
     EXPORTER_STEP_PARAMS m_params;

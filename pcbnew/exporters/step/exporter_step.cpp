@@ -28,6 +28,7 @@
 #include <board_design_settings.h>
 #include <footprint.h>
 #include <pcb_track.h>
+#include <pcb_shape.h>
 #include <pad.h>
 #include <fp_lib_table.h>
 #include "step_pcb_model.h"
@@ -280,7 +281,6 @@ bool EXPORTER_STEP::buildTrack3DShape( PCB_TRACK* aTrack, VECTOR2D aOrigin )
     if( pcblayer != F_Cu && pcblayer != B_Cu )
         return false;
 
-    SHAPE_POLY_SET copper_shapes;
     int maxError = m_board->GetDesignSettings().m_MaxError;
 
     if( pcblayer == F_Cu )
@@ -288,7 +288,32 @@ bool EXPORTER_STEP::buildTrack3DShape( PCB_TRACK* aTrack, VECTOR2D aOrigin )
     else
         aTrack->TransformShapeToPolygon( m_bottom_copper_shapes, pcblayer, 0, maxError, ERROR_INSIDE );
 
-    //m_pcbModel->AddCopperPolygonShapes( &copper_shapes, pcblayer == F_Cu, aOrigin );
+    return true;
+}
+
+
+bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, VECTOR2D aOrigin )
+{
+    PCB_SHAPE* graphic = dynamic_cast<PCB_SHAPE*>( aItem );
+
+    if( ! graphic )
+        return false;
+
+    PCB_LAYER_ID pcblayer = graphic->GetLayer();
+
+    if( pcblayer != F_Cu && pcblayer != B_Cu )
+        return false;
+
+    SHAPE_POLY_SET copper_shapes;
+    int maxError = m_board->GetDesignSettings().m_MaxError;
+
+
+    if( pcblayer == F_Cu )
+        graphic->TransformShapeToPolygon( m_top_copper_shapes, pcblayer, 0,
+                                          maxError, ERROR_INSIDE );
+    else
+        graphic->TransformShapeToPolygon( m_bottom_copper_shapes, pcblayer, 0,
+                                          maxError, ERROR_INSIDE );
 
     return true;
 }
@@ -345,6 +370,9 @@ bool EXPORTER_STEP::buildBoard3DShapes()
     {
         for( PCB_TRACK* track : m_board->Tracks() )
             buildTrack3DShape( track, origin );
+
+        for( BOARD_ITEM* item : m_board->Drawings() )
+            buildGraphic3DShape( item, origin );
     }
 
     m_top_copper_shapes.Fracture( SHAPE_POLY_SET::PM_FAST );
