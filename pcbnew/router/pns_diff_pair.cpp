@@ -100,7 +100,7 @@ bool DP_PRIMITIVE_PAIR::Directional() const
     if( !m_primP )
         return false;
 
-    return m_primP->OfKind( ITEM::SEGMENT_T );
+    return m_primP->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T );
 }
 
 
@@ -445,7 +445,8 @@ void DP_GATEWAYS::BuildFromPrimitivePair( const DP_PRIMITIVE_PAIR& aPair, bool a
 
         shP = aPair.PrimP()->Shape();
     }
-    else if( aPair.PrimP()->OfKind( ITEM::SEGMENT_T ) && aPair.PrimN()->OfKind( ITEM::SEGMENT_T ) )
+    else if( aPair.PrimP()->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T )
+             && aPair.PrimN()->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) )
     {
         buildDpContinuation( aPair, aPreferDiagonal );
 
