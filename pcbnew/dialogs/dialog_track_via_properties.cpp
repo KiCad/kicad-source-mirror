@@ -551,9 +551,18 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                     t->SetEnd( VECTOR2I( t->GetEnd().x, m_trackEndY.GetValue() ) );
 
                 if( m_trackNetclass->IsChecked() )
-                    t->SetWidth( t->GetEffectiveNetClass()->GetTrackWidth() );
+                {
+                    MINOPTMAX<int> constraint = t->GetWidthConstraint();
+
+                    if( constraint.HasOpt() )
+                        t->SetWidth( constraint.Opt() );
+                    else
+                        t->SetWidth( constraint.Min() );
+                }
                 else if( !m_trackWidth.IsIndeterminate() )
+                {
                     t->SetWidth( m_trackWidth.GetValue() );
+                }
 
                 int layer = m_TrackLayerCtrl->GetLayerSelection();
 
