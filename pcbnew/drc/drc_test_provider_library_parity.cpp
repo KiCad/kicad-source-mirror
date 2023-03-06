@@ -69,49 +69,98 @@ public:
 };
 
 
-#define TEST( a, b ) { if( a != b ) return true; }
-#define TEST_PADS( a, b ) { if( padsNeedUpdate( a, b ) ) return true; }
-#define TEST_SHAPES( a, b ) { if( shapesNeedUpdate( a, b ) ) return true; }
-#define TEST_PRIMITIVES( a, b ) { if( primitivesNeedUpdate( a, b ) ) return true; }
-#define TEST_ZONES( a, b ) { if( zonesNeedUpdate( a, b ) ) return true; }
-#define TEST_MODELS( a, b ) { if( modelsNeedUpdate( a, b ) ) return true; }
+//
+// The TEST*() macros have two modes:
+// In "Report" mode (aReporter != nullptr) all properties are checked and reported on.
+// In "DRC" mode (aReporter == nulltpr) properties are only checked until a difference is found.
+//
+#define TEST( a, b, msg )                               \
+        if( a != b )                                    \
+        {                                               \
+            if( aReporter )                             \
+            {                                           \
+                aReporter->Report( msg );               \
+                diff = true;                            \
+            }                                           \
+            else                                        \
+            {                                           \
+                return true;                            \
+            }                                           \
+        }                                               \
+        /* Prevent binding to else following macro */   \
+        else {}
 
 #define EPSILON 0.000001
-#define TEST_D( a, b ) { if( abs( a - b ) > EPSILON ) return true; }
+#define TEST_D( a, b, msg )                             \
+        if( abs( a - b ) > EPSILON )                    \
+        {                                               \
+            if( aReporter )                             \
+            {                                           \
+                aReporter->Report( msg );               \
+                diff = true;                            \
+            }                                           \
+            else                                        \
+            {                                           \
+                return true;                            \
+            }                                           \
+        }                                               \
+        /* Prevent binding to else following macro */   \
+        else {}
 
-bool primitivesNeedUpdate( const std::shared_ptr<PCB_SHAPE>& a,
+#define TEST_V3D( a, b, msg )                           \
+        if( abs( a.x - b.x ) > EPSILON                  \
+                || abs( a.y - b.y ) > EPSILON           \
+                || abs( a.z - b.z ) > EPSILON )         \
+        {                                               \
+            if( aReporter )                             \
+            {                                           \
+                aReporter->Report( msg );               \
+                diff = true;                            \
+            }                                           \
+            else                                        \
+            {                                           \
+                return true;                            \
+            }                                           \
+        }                                               \
+        /* Prevent binding to else following macro */   \
+        else {}
+
+bool primitiveNeedsUpdate( const std::shared_ptr<PCB_SHAPE>& a,
                            const std::shared_ptr<PCB_SHAPE>& b )
 {
-    TEST( a->GetShape(), b->GetShape() );
+    REPORTER* aReporter = nullptr;
+    bool      diff = false;
+
+    TEST( a->GetShape(), b->GetShape(), wxEmptyString );
 
     switch( a->GetShape() )
     {
     case SHAPE_T::SEGMENT:
     case SHAPE_T::RECT:
     case SHAPE_T::CIRCLE:
-        TEST( a->GetStart(), b->GetStart() );
-        TEST( a->GetEnd(), b->GetEnd() );
+        TEST( a->GetStart(), b->GetStart(), wxEmptyString );
+        TEST( a->GetEnd(), b->GetEnd(), wxEmptyString );
         break;
 
     case SHAPE_T::ARC:
-        TEST( a->GetStart(), b->GetStart() );
-        TEST( a->GetEnd(), b->GetEnd() );
-        TEST( a->GetCenter(), b->GetCenter() );
-        TEST_D( a->GetArcAngle().AsDegrees(), b->GetArcAngle().AsDegrees() );
+        TEST( a->GetStart(), b->GetStart(), wxEmptyString );
+        TEST( a->GetEnd(), b->GetEnd(), wxEmptyString );
+        TEST( a->GetCenter(), b->GetCenter(), wxEmptyString );
+        TEST_D( a->GetArcAngle().AsDegrees(), b->GetArcAngle().AsDegrees(), wxEmptyString );
         break;
 
     case SHAPE_T::BEZIER:
-        TEST( a->GetStart(), b->GetStart() );
-        TEST( a->GetEnd(), b->GetEnd() );
-        TEST( a->GetBezierC1(), b->GetBezierC1() );
-        TEST( a->GetBezierC2(), b->GetBezierC2() );
+        TEST( a->GetStart(), b->GetStart(), wxEmptyString );
+        TEST( a->GetEnd(), b->GetEnd(), wxEmptyString );
+        TEST( a->GetBezierC1(), b->GetBezierC1(), wxEmptyString );
+        TEST( a->GetBezierC2(), b->GetBezierC2(), wxEmptyString );
         break;
 
     case SHAPE_T::POLY:
-        TEST( a->GetPolyShape().TotalVertices(), b->GetPolyShape().TotalVertices() );
+        TEST( a->GetPolyShape().TotalVertices(), b->GetPolyShape().TotalVertices(), wxEmptyString);
 
         for( int ii = 0; ii < a->GetPolyShape().TotalVertices(); ++ii )
-            TEST( a->GetPolyShape().CVertex( ii ), b->GetPolyShape().CVertex( ii ) );
+            TEST( a->GetPolyShape().CVertex( ii ), b->GetPolyShape().CVertex( ii ), wxEmptyString );
 
         break;
 
@@ -119,55 +168,59 @@ bool primitivesNeedUpdate( const std::shared_ptr<PCB_SHAPE>& a,
         UNIMPLEMENTED_FOR( a->SHAPE_T_asString() );
     }
 
-    TEST( a->GetStroke(), b->GetStroke() );
-    TEST( a->IsFilled(), b->IsFilled() );
+    TEST( a->GetStroke(), b->GetStroke(), wxEmptyString );
+    TEST( a->IsFilled(), b->IsFilled(), wxEmptyString );
 
-    return false;
+    return diff;
 }
 
 
-bool padsNeedUpdate( const PAD* a, const PAD* b )
+bool padNeedsUpdate( const PAD* a, const PAD* b )
 {
-    TEST( a->GetPadToDieLength(), b->GetPadToDieLength() );
-    TEST( a->GetPos0(), b->GetPos0() );
+    REPORTER* aReporter = nullptr;
+    bool      diff = false;
 
-    TEST( a->GetNumber(), b->GetNumber() );
+    TEST( a->GetPadToDieLength(), b->GetPadToDieLength(), wxEmptyString );
+    TEST( a->GetPos0(), b->GetPos0(), wxEmptyString );
+
+    TEST( a->GetNumber(), b->GetNumber(), wxEmptyString );
 
     // These are assigned from the schematic and not from the library
     // TEST( a->GetPinFunction(), b->GetPinFunction() );
     // TEST( a->GetPinType(), b->GetPinType() );
 
-    TEST( a->GetRemoveUnconnected(), b->GetRemoveUnconnected() );
+    TEST( a->GetRemoveUnconnected(), b->GetRemoveUnconnected(), wxEmptyString );
 
     // NB: KeepTopBottom is undefined if RemoveUnconnected is NOT set.
     if( a->GetRemoveUnconnected() )
-        TEST( a->GetKeepTopBottom(), b->GetKeepTopBottom() );
+        TEST( a->GetKeepTopBottom(), b->GetKeepTopBottom(), wxEmptyString );
 
-    TEST( a->GetShape(), b->GetShape() );
+    TEST( a->GetShape(), b->GetShape(), wxEmptyString );
 
     // Trim layersets to the current board before comparing
     LSET enabledLayers = a->GetBoard()->GetEnabledLayers();
     LSET aLayers = a->GetLayerSet() & enabledLayers;
     LSET bLayers = b->GetLayerSet() & enabledLayers;
-    TEST( aLayers, bLayers );
+    TEST( aLayers, bLayers, wxEmptyString );
 
-    TEST( a->GetAttribute(), b->GetAttribute() );
-    TEST( a->GetProperty(), b->GetProperty() );
+    TEST( a->GetAttribute(), b->GetAttribute(), wxEmptyString );
+    TEST( a->GetProperty(), b->GetProperty(), wxEmptyString );
 
     // The pad orientation, for historical reasons is the pad rotation + parent rotation.
-    TEST_D(( a->GetOrientation() - a->GetParent()->GetOrientation() ).Normalize().AsDegrees(),
-           ( b->GetOrientation() - b->GetParent()->GetOrientation() ).Normalize().AsDegrees() );
+    TEST_D( ( a->GetOrientation() - a->GetParent()->GetOrientation() ).Normalize().AsDegrees(),
+            ( b->GetOrientation() - b->GetParent()->GetOrientation() ).Normalize().AsDegrees(),
+            wxEmptyString );
 
-    TEST( a->GetSize(), b->GetSize() );
-    TEST( a->GetDelta(), b->GetDelta() );
-    TEST( a->GetRoundRectCornerRadius(), b->GetRoundRectCornerRadius() );
-    TEST_D( a->GetRoundRectRadiusRatio(), b->GetRoundRectRadiusRatio() );
-    TEST_D( a->GetChamferRectRatio(), b->GetChamferRectRatio() );
-    TEST( a->GetChamferPositions(), b->GetChamferPositions() );
-    TEST( a->GetOffset(), b->GetOffset() );
+    TEST( a->GetSize(), b->GetSize(), wxEmptyString );
+    TEST( a->GetDelta(), b->GetDelta(), wxEmptyString );
+    TEST( a->GetRoundRectCornerRadius(), b->GetRoundRectCornerRadius(), wxEmptyString );
+    TEST_D( a->GetRoundRectRadiusRatio(), b->GetRoundRectRadiusRatio(), wxEmptyString );
+    TEST_D( a->GetChamferRectRatio(), b->GetChamferRectRatio(), wxEmptyString );
+    TEST( a->GetChamferPositions(), b->GetChamferPositions(), wxEmptyString );
+    TEST( a->GetOffset(), b->GetOffset(), wxEmptyString );
 
-    TEST( a->GetDrillShape(), b->GetDrillShape() );
-    TEST( a->GetDrillSize(), b->GetDrillSize() );
+    TEST( a->GetDrillShape(), b->GetDrillShape(), wxEmptyString );
+    TEST( a->GetDrillSize(), b->GetDrillSize(), wxEmptyString );
 
     // Clearance and zone connection overrides are as likely to be set at the board level as in
     // the library.
@@ -178,43 +231,61 @@ bool padsNeedUpdate( const PAD* a, const PAD* b )
     // On the other hand, if we report them then boards that override at the board level are
     // going to be VERY noisy.
 #if 0
-    TEST( a->GetLocalClearance(), b->GetLocalClearance() );
-    TEST( a->GetLocalSolderMaskMargin(), b->GetLocalSolderMaskMargin() );
-    TEST( a->GetLocalSolderPasteMargin(), b->GetLocalSolderPasteMargin() );
-    TEST_D( a->GetLocalSolderPasteMarginRatio(), b->GetLocalSolderPasteMarginRatio() );
-
-    TEST( a->GetZoneConnection(), b->GetZoneConnection() );
-    TEST( a->GetThermalGap(), b->GetThermalGap() );
-    TEST( a->GetThermalSpokeWidth(), b->GetThermalSpokeWidth() );
-    TEST_D( a->GetThermalSpokeAngle().AsDegrees(), b->GetThermalSpokeAngle().AsDegrees() );
-    TEST( a->GetCustomShapeInZoneOpt(), b->GetCustomShapeInZoneOpt() );
+    if( padHasOverrides( a, b )
+        return true;
 #endif
 
-    TEST( a->GetPrimitives().size(), b->GetPrimitives().size() );
+    TEST( a->GetPrimitives().size(), b->GetPrimitives().size(), wxEmptyString );
 
     for( size_t ii = 0; ii < a->GetPrimitives().size(); ++ii )
-        TEST_PRIMITIVES( a->GetPrimitives()[ii], b->GetPrimitives()[ii] );
+    {
+        if( primitiveNeedsUpdate( a->GetPrimitives()[ii], b->GetPrimitives()[ii] ) )
+            return true;
+    }
 
-    return false;
+    return diff;
 }
 
 
-bool shapesNeedUpdate( const FP_SHAPE* a, const FP_SHAPE* b )
+bool padHasOverrides( const PAD* a, const PAD* b )
 {
-    TEST( a->GetShape(), b->GetShape() );
+    REPORTER* aReporter = nullptr;
+    bool      diff = false;
+
+    TEST( a->GetLocalClearance(), b->GetLocalClearance(), wxEmptyString );
+    TEST( a->GetLocalSolderMaskMargin(), b->GetLocalSolderMaskMargin(), wxEmptyString );
+    TEST( a->GetLocalSolderPasteMargin(), b->GetLocalSolderPasteMargin(), wxEmptyString );
+    TEST_D( a->GetLocalSolderPasteMarginRatio(), b->GetLocalSolderPasteMarginRatio(), wxEmptyString );
+
+    TEST( a->GetZoneConnection(), b->GetZoneConnection(), wxEmptyString );
+    TEST( a->GetThermalGap(), b->GetThermalGap(), wxEmptyString );
+    TEST( a->GetThermalSpokeWidth(), b->GetThermalSpokeWidth(), wxEmptyString );
+    TEST_D( a->GetThermalSpokeAngle().AsDegrees(), b->GetThermalSpokeAngle().AsDegrees(), wxEmptyString );
+    TEST( a->GetCustomShapeInZoneOpt(), b->GetCustomShapeInZoneOpt(), wxEmptyString );
+
+    return diff;
+}
+
+
+bool shapeNeedsUpdate( const FP_SHAPE* a, const FP_SHAPE* b )
+{
+    REPORTER* aReporter = nullptr;
+    bool      diff = false;
+
+    TEST( a->GetShape(), b->GetShape(), wxEmptyString );
 
     switch( a->GetShape() )
     {
     case SHAPE_T::SEGMENT:
     case SHAPE_T::RECT:
     case SHAPE_T::CIRCLE:
-        TEST( a->GetStart0(), b->GetStart0() );
-        TEST( a->GetEnd0(), b->GetEnd0() );
+        TEST( a->GetStart0(), b->GetStart0(), wxEmptyString );
+        TEST( a->GetEnd0(), b->GetEnd0(), wxEmptyString );
         break;
 
     case SHAPE_T::ARC:
-        TEST( a->GetStart0(), b->GetStart0() );
-        TEST( a->GetEnd0(), b->GetEnd0() );
+        TEST( a->GetStart0(), b->GetStart0(), wxEmptyString );
+        TEST( a->GetEnd0(), b->GetEnd0(), wxEmptyString );
 
         // Arc center is calculated and so may have round-off errors when parents are
         // differentially rotated.
@@ -224,17 +295,17 @@ bool shapesNeedUpdate( const FP_SHAPE* a, const FP_SHAPE* b )
         break;
 
     case SHAPE_T::BEZIER:
-        TEST( a->GetStart0(), b->GetStart0() );
-        TEST( a->GetEnd0(), b->GetEnd0() );
-        TEST( a->GetBezierC1_0(), b->GetBezierC1_0() );
-        TEST( a->GetBezierC2_0(), b->GetBezierC2_0() );
+        TEST( a->GetStart0(), b->GetStart0(), wxEmptyString );
+        TEST( a->GetEnd0(), b->GetEnd0(), wxEmptyString );
+        TEST( a->GetBezierC1_0(), b->GetBezierC1_0(), wxEmptyString );
+        TEST( a->GetBezierC2_0(), b->GetBezierC2_0(), wxEmptyString );
         break;
 
     case SHAPE_T::POLY:
-        TEST( a->GetPolyShape().TotalVertices(), b->GetPolyShape().TotalVertices() );
+        TEST( a->GetPolyShape().TotalVertices(), b->GetPolyShape().TotalVertices(), wxEmptyString );
 
         for( int ii = 0; ii < a->GetPolyShape().TotalVertices(); ++ii )
-            TEST( a->GetPolyShape().CVertex( ii ), b->GetPolyShape().CVertex( ii ) );
+            TEST( a->GetPolyShape().CVertex( ii ), b->GetPolyShape().CVertex( ii ), wxEmptyString );
 
         break;
 
@@ -242,77 +313,83 @@ bool shapesNeedUpdate( const FP_SHAPE* a, const FP_SHAPE* b )
         UNIMPLEMENTED_FOR( a->SHAPE_T_asString() );
     }
 
-    TEST( a->GetStroke(), b->GetStroke() );
-    TEST( a->IsFilled(), b->IsFilled() );
+    TEST( a->GetStroke(), b->GetStroke(), wxEmptyString );
+    TEST( a->IsFilled(), b->IsFilled(), wxEmptyString );
 
-    TEST( a->GetLayer(), b->GetLayer() );
+    TEST( a->GetLayer(), b->GetLayer(), wxEmptyString );
 
-    return false;
+    return diff;
 }
 
 
 bool textsNeedUpdate( const FP_TEXT* a, const FP_TEXT* b )
 {
-    TEST( a->GetLayer(), b->GetLayer() );
-    TEST( a->IsKeepUpright(), b->IsKeepUpright() );
+    REPORTER* aReporter = nullptr;
+    bool      diff = false;
 
-    TEST( a->GetText(), b->GetText() );
+    TEST( a->GetLayer(), b->GetLayer(), wxEmptyString );
+    TEST( a->IsKeepUpright(), b->IsKeepUpright(), wxEmptyString );
 
-    TEST( a->GetTextThickness(), b->GetTextThickness() );
-    TEST( a->GetTextAngle(), b->GetTextAngle() );
-    TEST( a->IsItalic(), b->IsItalic() );
-    TEST( a->IsBold(), b->IsBold() );
-    TEST( a->IsVisible(), b->IsVisible() );
-    TEST( a->IsMirrored(), b->IsMirrored() );
+    TEST( a->GetText(), b->GetText(), wxEmptyString );
 
-    TEST( a->GetHorizJustify(), b->GetHorizJustify() );
-    TEST( a->GetVertJustify(), b->GetVertJustify() );
+    TEST( a->GetTextThickness(), b->GetTextThickness(), wxEmptyString );
+    TEST( a->GetTextAngle(), b->GetTextAngle(), wxEmptyString );
+    TEST( a->IsItalic(), b->IsItalic(), wxEmptyString );
+    TEST( a->IsBold(), b->IsBold(), wxEmptyString );
+    TEST( a->IsVisible(), b->IsVisible(), wxEmptyString );
+    TEST( a->IsMirrored(), b->IsMirrored(), wxEmptyString );
 
-    TEST( a->GetTextSize(), b->GetTextSize() );
-    TEST( a->GetPos0(), b->GetPos0() );
+    TEST( a->GetHorizJustify(), b->GetHorizJustify(), wxEmptyString );
+    TEST( a->GetVertJustify(), b->GetVertJustify(), wxEmptyString );
 
-    return false;
+    TEST( a->GetTextSize(), b->GetTextSize(), wxEmptyString );
+    TEST( a->GetPos0(), b->GetPos0(), wxEmptyString );
+
+    return diff;
 }
 
 
 bool zonesNeedUpdate( const FP_ZONE* a, const FP_ZONE* b )
 {
-    TEST( a->GetCornerSmoothingType(), b->GetCornerSmoothingType() );
-    TEST( a->GetCornerRadius(), b->GetCornerRadius() );
-    TEST( a->GetZoneName(), b->GetZoneName() );
-    TEST( a->GetAssignedPriority(), b->GetAssignedPriority() );
+    REPORTER* aReporter = nullptr;
+    bool      diff = false;
 
-    TEST( a->GetIsRuleArea(), b->GetIsRuleArea() );
-    TEST( a->GetDoNotAllowCopperPour(), b->GetDoNotAllowCopperPour() );
-    TEST( a->GetDoNotAllowFootprints(), b->GetDoNotAllowFootprints() );
-    TEST( a->GetDoNotAllowPads(), b->GetDoNotAllowPads() );
-    TEST( a->GetDoNotAllowTracks(), b->GetDoNotAllowTracks() );
-    TEST( a->GetDoNotAllowVias(), b->GetDoNotAllowVias() );
+    TEST( a->GetCornerSmoothingType(), b->GetCornerSmoothingType(), wxEmptyString );
+    TEST( a->GetCornerRadius(), b->GetCornerRadius(), wxEmptyString );
+    TEST( a->GetZoneName(), b->GetZoneName(), wxEmptyString );
+    TEST( a->GetAssignedPriority(), b->GetAssignedPriority(), wxEmptyString );
 
-    TEST( a->GetLayerSet(), b->GetLayerSet() );
+    TEST( a->GetIsRuleArea(), b->GetIsRuleArea(), wxEmptyString );
+    TEST( a->GetDoNotAllowCopperPour(), b->GetDoNotAllowCopperPour(), wxEmptyString );
+    TEST( a->GetDoNotAllowFootprints(), b->GetDoNotAllowFootprints(), wxEmptyString );
+    TEST( a->GetDoNotAllowPads(), b->GetDoNotAllowPads(), wxEmptyString );
+    TEST( a->GetDoNotAllowTracks(), b->GetDoNotAllowTracks(), wxEmptyString );
+    TEST( a->GetDoNotAllowVias(), b->GetDoNotAllowVias(), wxEmptyString );
 
-    TEST( a->GetPadConnection(), b->GetPadConnection() );
-    TEST( a->GetLocalClearance(), b->GetLocalClearance() );
-    TEST( a->GetThermalReliefGap(), b->GetThermalReliefGap() );
-    TEST( a->GetThermalReliefSpokeWidth(), b->GetThermalReliefSpokeWidth() );
+    TEST( a->GetLayerSet(), b->GetLayerSet(), wxEmptyString );
 
-    TEST( a->GetMinThickness(), b->GetMinThickness() );
+    TEST( a->GetPadConnection(), b->GetPadConnection(), wxEmptyString );
+    TEST( a->GetLocalClearance(), b->GetLocalClearance(), wxEmptyString );
+    TEST( a->GetThermalReliefGap(), b->GetThermalReliefGap(), wxEmptyString );
+    TEST( a->GetThermalReliefSpokeWidth(), b->GetThermalReliefSpokeWidth(), wxEmptyString );
 
-    TEST( a->GetIslandRemovalMode(), b->GetIslandRemovalMode() );
-    TEST( a->GetMinIslandArea(), b->GetMinIslandArea() );
+    TEST( a->GetMinThickness(), b->GetMinThickness(), wxEmptyString );
 
-    TEST( a->GetFillMode(), b->GetFillMode() );
-    TEST( a->GetHatchThickness(), b->GetHatchThickness() );
-    TEST( a->GetHatchGap(), b->GetHatchGap() );
-    TEST_D( a->GetHatchOrientation().AsDegrees(), b->GetHatchOrientation().AsDegrees() );
-    TEST( a->GetHatchSmoothingLevel(), b->GetHatchSmoothingLevel() );
-    TEST( a->GetHatchSmoothingValue(), b->GetHatchSmoothingValue() );
-    TEST( a->GetHatchHoleMinArea(), b->GetHatchHoleMinArea() );
+    TEST( a->GetIslandRemovalMode(), b->GetIslandRemovalMode(), wxEmptyString );
+    TEST( a->GetMinIslandArea(), b->GetMinIslandArea(), wxEmptyString );
+
+    TEST( a->GetFillMode(), b->GetFillMode(), wxEmptyString );
+    TEST( a->GetHatchThickness(), b->GetHatchThickness(), wxEmptyString );
+    TEST( a->GetHatchGap(), b->GetHatchGap(), wxEmptyString );
+    TEST_D( a->GetHatchOrientation().AsDegrees(), b->GetHatchOrientation().AsDegrees(), wxEmptyString );
+    TEST( a->GetHatchSmoothingLevel(), b->GetHatchSmoothingLevel(), wxEmptyString );
+    TEST( a->GetHatchSmoothingValue(), b->GetHatchSmoothingValue(), wxEmptyString );
+    TEST( a->GetHatchHoleMinArea(), b->GetHatchHoleMinArea(), wxEmptyString );
 
     // This is just a display property
     // TEST( a->GetHatchBorderAlgorithm(), b->GetHatchBorderAlgorithm() );
 
-    TEST( a->Outline()->TotalVertices(), b->Outline()->TotalVertices() );
+    TEST( a->Outline()->TotalVertices(), b->Outline()->TotalVertices(), wxEmptyString );
 
     // The footprint's zone will be in board position, so we must translate & rotate the library
     // footprint's zone to match.
@@ -324,31 +401,33 @@ bool zonesNeedUpdate( const FP_ZONE* a, const FP_ZONE* b )
     bPoly.Move( parentFootprint->GetPosition() );
 
     for( int ii = 0; ii < a->Outline()->TotalVertices(); ++ii )
-        TEST( aPoly.CVertex( ii ), bPoly.CVertex( ii ) );
+        TEST( aPoly.CVertex( ii ), bPoly.CVertex( ii ) , wxEmptyString);
 
-    return false;
+    return diff;
 }
 
 
-bool modelsNeedUpdate( const FP_3DMODEL& a, const FP_3DMODEL& b )
+bool modelsNeedUpdate( const FP_3DMODEL& a, const FP_3DMODEL& b, REPORTER* aReporter )
 {
-#define TEST_V3D( a, b ) { TEST_D( a.x, b.x ); TEST_D( a.y, b.y ); TEST_D( a.z, b.z ); }
+    bool diff = false;
 
-    TEST_V3D( a.m_Scale, b.m_Scale );
-    TEST_V3D( a.m_Rotation, b.m_Rotation );
-    TEST_V3D( a.m_Offset, b.m_Offset );
-    TEST( a.m_Opacity, b.m_Opacity );
-    TEST( a.m_Filename, b.m_Filename );
-    TEST( a.m_Show, b.m_Show );
+    TEST_V3D( a.m_Scale, b.m_Scale, _( "3D model scale doesn't match: " ) + a.m_Filename );
+    TEST_V3D( a.m_Rotation, b.m_Rotation, _( "3D model rotation doesn't match: " ) + a.m_Filename );
+    TEST_V3D( a.m_Offset, b.m_Offset, _( "3D model offset doesn't match: " ) + a.m_Filename );
+    TEST( a.m_Opacity, b.m_Opacity, _( "3D model opacity doesn't match: " ) + a.m_Filename );
+    TEST( a.m_Filename, b.m_Filename, _( "3D model doesn't match: " ) + a.m_Filename );
+    TEST( a.m_Show, b.m_Show, _( "3D model visibility doesn't match: " ) + a.m_Filename );
 
-    return false;
+    return diff;
 }
 
 
-bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint )
+bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint, REPORTER* aReporter )
 {
-#define TEST_ATTR( a, b, attr ) TEST( ( a & attr ), ( b & attr ) );
+    UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::MILLIMETRES );
+
     wxASSERT( aLibFootprint );
+    bool diff = false;
 
     if( IsFlipped() )
     {
@@ -356,21 +435,27 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint )
         temp->Flip( {0,0}, false );
         temp->SetParentGroup( nullptr );
 
-        bool needsUpdate = temp->FootprintNeedsUpdate( aLibFootprint );
+        diff = temp->FootprintNeedsUpdate( aLibFootprint );
 
         // This temporary footprint must not have a parent when it goes out of scope because it must
-        // not trigger then IncrementTimestamp call in ~FOOTPRINT.
+        // not trigger the IncrementTimestamp call in ~FOOTPRINT.
         temp->SetParent( nullptr );
-        return needsUpdate;
+        return diff;
     }
 
-    TEST( GetDescription(), aLibFootprint->GetDescription() );
-    TEST( GetKeywords(), aLibFootprint->GetKeywords() );
+    TEST( GetDescription(), aLibFootprint->GetDescription(),
+          _( "Footprint descriptions differ." ) );
+    TEST( GetKeywords(), aLibFootprint->GetKeywords(),
+          _( "Footprint keywords differ." ) );
 
-    TEST_ATTR( GetAttributes(), aLibFootprint->GetAttributes(), FP_THROUGH_HOLE );
-    TEST_ATTR( GetAttributes(), aLibFootprint->GetAttributes(), FP_SMD );
-    TEST_ATTR( GetAttributes(), aLibFootprint->GetAttributes(), FP_ALLOW_SOLDERMASK_BRIDGES );
-    TEST_ATTR( GetAttributes(), aLibFootprint->GetAttributes(), FP_ALLOW_MISSING_COURTYARD );
+#define TEST_ATTR( a, b, attr, msg ) TEST( ( a & attr ), ( b & attr ), msg );
+
+    TEST_ATTR( GetAttributes(), aLibFootprint->GetAttributes(), FP_THROUGH_HOLE | FP_SMD,
+              _( "Footprint types differ." ) );
+    TEST_ATTR( GetAttributes(), aLibFootprint->GetAttributes(), FP_ALLOW_SOLDERMASK_BRIDGES,
+               _( "Allow bridged solder mask apertures between pads settings differ." ) );
+    TEST_ATTR( GetAttributes(), aLibFootprint->GetAttributes(), FP_ALLOW_MISSING_COURTYARD,
+               _( "Exempt from courtyard requirement settings differ." ) );
 
     // Clearance and zone connection overrides are as likely to be set at the board level as in
     // the library.
@@ -380,19 +465,29 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint )
     //
     // On the other hand, if we report them then boards that override at the board level are
     // going to be VERY noisy.
-#if 0
-    TEST( GetLocalClearance(), aLibFootprint->GetLocalClearance() );
-    TEST( GetLocalSolderMaskMargin(), aLibFootprint->GetLocalSolderMaskMargin() );
-    TEST( GetLocalSolderPasteMargin(), aLibFootprint->GetLocalSolderPasteMargin() );
-    TEST_D( GetLocalSolderPasteMarginRatio(), aLibFootprint->GetLocalSolderPasteMarginRatio() );
+    if( aReporter )
+    {
+        TEST( GetLocalClearance(), aLibFootprint->GetLocalClearance(),
+              _( "Pad clearance overridden." ) );
+        TEST( GetLocalSolderMaskMargin(), aLibFootprint->GetLocalSolderMaskMargin(),
+              _( "Solder mask expansion overridden." ) );
+        TEST( GetLocalSolderPasteMargin(), aLibFootprint->GetLocalSolderPasteMargin(),
+              _( "Solder paste absolute clearance overridden." ) );
+        TEST_D( GetLocalSolderPasteMarginRatio(), aLibFootprint->GetLocalSolderPasteMarginRatio(),
+                _( "Solder paste relative clearance overridden." ) );
 
-    TEST( GetZoneConnection(), aLibFootprint->GetZoneConnection() );
-#endif
+        TEST( GetZoneConnection(), aLibFootprint->GetZoneConnection(),
+              _( "Zone connection overridden." ) );
+    }
 
-    TEST( GetNetTiePadGroups().size(), aLibFootprint->GetNetTiePadGroups().size() );
+    TEST( GetNetTiePadGroups().size(), aLibFootprint->GetNetTiePadGroups().size(),
+          _( "Net tie pad groups differ." ) );
 
     for( size_t ii = 0; ii < GetNetTiePadGroups().size(); ++ii )
-        TEST( GetNetTiePadGroups()[ii], aLibFootprint->GetNetTiePadGroups()[ii] );
+    {
+        TEST( GetNetTiePadGroups()[ii], aLibFootprint->GetNetTiePadGroups()[ii],
+              _( "Net tie pad groups differ." ) );
+    }
 
     // Text items are really problematic.  We don't want to test the reference, but after that
     // it gets messy.
@@ -430,28 +525,84 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint )
     std::set<FP_ZONE*, FOOTPRINT::cmp_zones> aZones( Zones().begin(), Zones().end() );
     std::set<FP_ZONE*, FOOTPRINT::cmp_zones> bZones( aLibFootprint->Zones().begin(), aLibFootprint->Zones().end() );
 
-    TEST( aPads.size(), bPads.size() );
-    TEST( aZones.size(), bZones.size() );
-    TEST( aShapes.size(), bShapes.size() );
+    TEST( aPads.size(), bPads.size(), _( "Pad count differs." ) );
+    TEST( aZones.size(), bZones.size(), _( "Rule area count differs." ) );
+    TEST( aShapes.size(), bShapes.size(), _( "Graphic item count differs." ) );
 
     for( auto aIt = aPads.begin(), bIt = bPads.begin(); aIt != aPads.end(); aIt++, bIt++ )
-        TEST_PADS( *aIt, *bIt );
+    {
+        if( padNeedsUpdate( *aIt, *bIt ) )
+        {
+            if( aReporter )
+            {
+                wxString msg = (*aIt)->GetItemDescription( &unitsProvider );
+                aReporter->Report( wxString::Format( _( "%s differs." ), msg ) );
+                diff = true;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        else if( aReporter && padHasOverrides( *aIt, *bIt ) )
+        {
+            wxString msg = (*aIt)->GetItemDescription( &unitsProvider );
+            aReporter->Report( wxString::Format( _( "%s has overrides." ), msg ) );
+            diff = true;
+        }
+    }
 
     for( auto aIt = aShapes.begin(), bIt = bShapes.begin(); aIt != aShapes.end(); aIt++, bIt++ )
     {
         if( ( *aIt )->Type() == PCB_FP_SHAPE_T )
-            TEST_SHAPES( static_cast<FP_SHAPE*>( *aIt ), static_cast<FP_SHAPE*>( *bIt ) );
+        {
+            if( shapeNeedsUpdate( static_cast<FP_SHAPE*>( *aIt ), static_cast<FP_SHAPE*>( *bIt ) ) )
+            {
+                if( aReporter )
+                {
+                    wxString msg = (*aIt)->GetItemDescription( &unitsProvider );
+                    aReporter->Report( wxString::Format( _( "%s differs." ), msg ) );
+                    diff = true;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
     }
 
     for( auto aIt = aZones.begin(), bIt = bZones.begin(); aIt != aZones.end(); aIt++, bIt++ )
-        TEST_ZONES( *aIt, *bIt );
+    {
+        if( zonesNeedUpdate( *aIt, *bIt ) )
+        {
+            if( aReporter )
+            {
+                wxString msg = (*aIt)->GetItemDescription( &unitsProvider );
+                aReporter->Report( wxString::Format( _( "%s differs." ), msg ) );
+                diff = true;
+            }
+            else
+            {
+                return true;
+            }
+        }
+    }
 
-    TEST( Models().size(), aLibFootprint->Models().size() );
+    TEST( Models().size(), aLibFootprint->Models().size(), _( "3D model count differs." ) );
 
     for( size_t ii = 0; ii < Models().size(); ++ii )
-        TEST_MODELS( Models()[ii], aLibFootprint->Models()[ii] );
+    {
+        if( modelsNeedUpdate( Models()[ii], aLibFootprint->Models()[ii], aReporter ) )
+        {
+            if( aReporter )
+                diff = true;
+            else
+                return true;
+        }
+    }
 
-    return false;
+    return diff;
 }
 
 
@@ -487,7 +638,7 @@ bool DRC_TEST_PROVIDER_LIBRARY_PARITY::Run()
             return true;    // Continue with other tests
         }
 
-        if( !reportProgress( ii++, board->Footprints().size(), progressDelta ) )
+        if( !reportProgress( ii++, (int) board->Footprints().size(), progressDelta ) )
             return false;   // DRC cancelled
 
         LIB_ID               fpID = footprint->GetFPID();

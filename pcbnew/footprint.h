@@ -47,6 +47,7 @@ class PAD;
 class BOARD;
 class MSG_PANEL_ITEM;
 class SHAPE;
+class REPORTER;
 
 namespace KIGFX {
 class VIEW;
@@ -748,7 +749,7 @@ public:
     /**
      * Return true if a board footprint differs from the library version.
      */
-    bool FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint );
+    bool FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint, REPORTER* aReporter = nullptr );
 
     /**
      * Take ownership of caller's heap allocated aInitialComments block.

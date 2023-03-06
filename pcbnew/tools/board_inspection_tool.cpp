@@ -34,7 +34,8 @@
 #include <dialogs/dialog_constraints_reporter.h>
 #include <dialogs/panel_setup_rules_base.h>
 #include <string_utils.h>
-#include "board_inspection_tool.h"
+#include <tools/board_inspection_tool.h>
+#include <fp_lib_table.h>
 #include <pcbnew_settings.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/wx_html_report_box.h>
@@ -1316,6 +1317,108 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 }
 
 
+int BOARD_INSPECTION_TOOL::InspectLibraryDiff( const TOOL_EVENT& aEvent )
+{
+    PCB_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+    const PCB_SELECTION& selection = selTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
+            {
+                // Iterate from the back so we don't have to worry about removals.
+                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+                {
+                    BOARD_ITEM* item = aCollector[ i ];
+
+                    if( !dynamic_cast<FOOTPRINT*>( item ) )
+                        aCollector.Remove( item );
+                }
+            },
+            false /* ignore locked flag */ );
+
+    if( selection.Size() != 1 )
+    {
+        m_frame->ShowInfoBarError( _( "Select a footprint to check against its library equivalent." ) );
+        return 0;
+    }
+
+    if( m_inspectConstraintsDialog == nullptr )
+    {
+        m_inspectConstraintsDialog = std::make_unique<DIALOG_CONSTRAINTS_REPORTER>( m_frame );
+        m_inspectConstraintsDialog->SetTitle( _( "Check Footprint against Library" ) );
+
+        m_inspectConstraintsDialog->Connect( wxEVT_CLOSE_WINDOW,
+                wxCommandEventHandler( BOARD_INSPECTION_TOOL::onInspectConstraintsDialogClosed ),
+                nullptr, this );
+    }
+
+    m_inspectConstraintsDialog->DeleteAllPages();
+
+    FOOTPRINT*          footprint = static_cast<FOOTPRINT*>( selection.GetItem( 0 ) );
+    LIB_ID              fpID = footprint->GetFPID();
+    wxString            libName = fpID.GetLibNickname();
+    wxString            fpName = fpID.GetLibItemName();
+    WX_HTML_REPORT_BOX* r = nullptr;
+
+    r = m_inspectConstraintsDialog->AddPage( _( "Diff" ) );
+
+    r->Report( wxT( "<h7>" ) + _( "Board/library check for:" ) + wxT( "</h7>" ) );
+    r->Report( wxT( "<ul><li>" ) + EscapeHTML( getItemDescription( footprint ) ) + wxT( "</li>" )
+             + wxT( "<li>" ) + _( "Library: " ) + EscapeHTML( libName ) + wxT( "</li>" )
+             + wxT( "<li>" ) + _( "Library item: " ) + EscapeHTML( fpName ) + wxT( "</li></ul>" ) );
+
+    r->Report( "" );
+
+    PROJECT*             project = footprint->GetBoard()->GetProject();
+    FP_LIB_TABLE*        libTable = project->PcbFootprintLibs();
+    const LIB_TABLE_ROW* libTableRow = nullptr;
+
+    try
+    {
+        libTableRow = libTable->FindRow( libName );
+    }
+    catch( const IO_ERROR& )
+    {
+    }
+
+    if( !libTableRow )
+    {
+        r->Report( _( "The current configuration does not include the library." ) );
+    }
+    else if( !libTable->HasLibrary( libName, true ) )
+    {
+        r->Report( _( "The library is not enabled in the current configuration." ) );
+    }
+    else
+    {
+        std::shared_ptr<FOOTPRINT> libFootprint;
+
+        try
+        {
+            libFootprint.reset( libTable->FootprintLoad( libName, fpName, true ) );
+        }
+        catch( const IO_ERROR& )
+        {
+        }
+
+        if( !libFootprint )
+        {
+            r->Report( wxString::Format( _( "The library no longer contains the item %s." ),
+                                         fpName) );
+        }
+        else if( !footprint->FootprintNeedsUpdate( libFootprint.get(), r ) )
+        {
+            r->Report( _( "Footprint matches library equivalent." ) );
+        }
+    }
+
+    r->Flush();
+
+    m_inspectConstraintsDialog->FinishInitialization();
+    m_inspectConstraintsDialog->Raise();
+    m_inspectConstraintsDialog->Show( true );
+    return 0;
+}
+
+
 int BOARD_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
 {
     BOARD_ITEM* item = aEvent.Parameter<BOARD_ITEM*>();
@@ -1853,6 +1956,7 @@ void BOARD_INSPECTION_TOOL::setTransitions()
     Go( &BOARD_INSPECTION_TOOL::ShowBoardStatistics, PCB_ACTIONS::boardStatistics.MakeEvent() );
     Go( &BOARD_INSPECTION_TOOL::InspectClearance,    PCB_ACTIONS::inspectClearance.MakeEvent() );
     Go( &BOARD_INSPECTION_TOOL::InspectConstraints,  PCB_ACTIONS::inspectConstraints.MakeEvent() );
+    Go( &BOARD_INSPECTION_TOOL::InspectLibraryDiff,  PCB_ACTIONS::inspectLibraryDiff.MakeEvent() );
 
     Go( &BOARD_INSPECTION_TOOL::HighlightNet,        PCB_ACTIONS::highlightNet.MakeEvent() );
     Go( &BOARD_INSPECTION_TOOL::HighlightNet,        PCB_ACTIONS::highlightNetSelection.MakeEvent() );

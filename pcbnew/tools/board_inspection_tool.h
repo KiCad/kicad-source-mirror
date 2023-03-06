@@ -88,6 +88,8 @@ public:
 
     int InspectConstraints( const TOOL_EVENT& aEvent );
 
+    int InspectLibraryDiff( const TOOL_EVENT& aEvent );
+
     /**
      * @return true if a net or nets to highlight have been set
      */

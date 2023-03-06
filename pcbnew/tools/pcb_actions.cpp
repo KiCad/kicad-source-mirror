@@ -1173,6 +1173,12 @@ TOOL_ACTION PCB_ACTIONS::inspectConstraints( "pcbnew.InspectionTool.InspectConst
         _( "Show constraints resolution for the selected object" ),
         BITMAPS::mw_add_gap );
 
+TOOL_ACTION PCB_ACTIONS::inspectLibraryDiff( "pcbnew.InspectionTool.InspectLibraryDiff",
+        AS_GLOBAL, 0, "",
+        _( "Check Footprint against Library..." ),
+        _( "Check for differences between board footprint and its library equivalent" ),
+        BITMAPS::show_footprint );
+
 //Geographic re-annotation tool
 TOOL_ACTION PCB_ACTIONS::boardReannotate( "pcbnew.ReannotateTool.ShowReannotateDialog",
         AS_GLOBAL, 0, "",
