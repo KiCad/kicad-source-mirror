@@ -101,6 +101,7 @@ PCB_VIA::PCB_VIA( const PCB_VIA& aOther ) :
     PCB_VIA::operator=( aOther );
 
     const_cast<KIID&>( m_Uuid ) = aOther.m_Uuid;
+    m_zoneLayerOverrides = aOther.m_zoneLayerOverrides;
 }
 
 
@@ -142,9 +143,7 @@ wxString PCB_VIA::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
     default:                    formatStr = _( "Via %s on %s" );              break;
     }
 
-    return wxString::Format( formatStr,
-                             GetNetnameMsg(),
-                             layerMaskDescribe() );
+    return wxString::Format( formatStr, GetNetnameMsg(), layerMaskDescribe() );
 }
 
 
@@ -437,7 +436,6 @@ void PCB_VIA::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 }
 
 
-// see class_track.h
 INSPECT_RESULT PCB_TRACK::Visit( INSPECTOR inspector, void* testData,
                                  const std::vector<KICAD_T>& aScanTypes )
 {
@@ -1137,11 +1135,13 @@ VECTOR2I PCB_ARC::GetPosition() const
     return center;
 }
 
+
 double PCB_ARC::GetRadius() const
 {
     auto center = CalcArcCenter( m_Start, m_Mid , m_End );
     return GetLineLength( center, m_Start );
 }
+
 
 EDA_ANGLE PCB_ARC::GetAngle() const
 {
@@ -1152,11 +1152,13 @@ EDA_ANGLE PCB_ARC::GetAngle() const
     return angle1.Normalize180() + angle2.Normalize180();
 }
 
+
 EDA_ANGLE PCB_ARC::GetArcAngleStart() const
 {
     EDA_ANGLE angleStart( m_Start - GetPosition() );
     return angleStart.Normalize();
 }
+
 
 EDA_ANGLE PCB_ARC::GetArcAngleEnd() const
 {

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,8 @@
 #include <functional>
 using namespace std::placeholders;
 
+#include <fmt/format.h>
+
 #include <tool/tool_manager.h>
 #include <tool/actions.h>
 #include <view/view_controls.h>
@@ -45,10 +47,12 @@ enum RECTANGLE_POINTS
     RECT_TOPLEFT, RECT_TOPRIGHT, RECT_BOTLEFT, RECT_BOTRIGHT
 };
 
+
 enum LINE_POINTS
 {
     LINE_START, LINE_END
 };
+
 
 class EDIT_POINTS_FACTORY
 {
@@ -188,7 +192,17 @@ int PL_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
         {
             if( !inDrag )
             {
-                m_frame->SaveCopyInUndoList();
+                try
+                {
+                    m_frame->SaveCopyInUndoList();
+                }
+                catch( const fmt::v9::format_error& exc )
+                {
+                    wxLogWarning( wxS( "Exception \"%s\" serializing string ocurred." ),
+                                  exc.what() );
+                    return 1;
+                }
+
                 controls->ForceCursorPosition( false );
                 inDrag = true;
                 modified = true;
@@ -215,14 +229,17 @@ int PL_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
                 modified = false;
             }
             else if( evt->IsCancelInteractive() )
+            {
                 break;
+            }
 
             if( evt->IsActivate() && !evt->IsMoveTool() )
                 break;
         }
-
         else
+        {
             evt->SetPassEvent();
+        }
 
         controls->SetAutoPan( inDrag );
         controls->CaptureCursor( inDrag );

@@ -122,6 +122,8 @@ DIALOG_LIB_TEXT_PROPERTIES::~DIALOG_LIB_TEXT_PROPERTIES()
 
 bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataToWindow()
 {
+    wxCHECK( m_CommonUnit, false );
+
     LIB_SYMBOL* symbol = nullptr;
 
     if( m_graphicText )
@@ -170,10 +172,11 @@ bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataToWindow()
         auto* tools = m_parent->GetToolManager()->GetTool<SYMBOL_EDITOR_DRAWING_TOOLS>();
         symbol = m_parent->GetCurSymbol();
 
+        wxCHECK( cfg && symbol && tools, false );
+
         m_textSize.SetValue( schIUScale.MilsToIU( cfg->m_Defaults.text_size ) );
 
-        m_CommonUnit->SetValue(
-                symbol && symbol->GetUnitCount() > 1 && !tools->GetDrawSpecificUnit() );
+        m_CommonUnit->SetValue( symbol->GetUnitCount() > 1 && !tools->GetDrawSpecificUnit() );
         m_CommonConvert->SetValue( !tools->GetDrawSpecificConvert() );
 
         if( tools->GetLastTextAngle().IsHorizontal() )

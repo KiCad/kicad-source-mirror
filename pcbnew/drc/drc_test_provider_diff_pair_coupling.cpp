@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2022 KiCad Developers.
+ * Copyright (C) 2004-2023 KiCad Developers.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -497,7 +497,9 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
         {
             for( DIFF_PAIR_COUPLED_SEGMENTS& dp : itemSet.coupled )
             {
-                if( ( dp.couplingFailMin || dp.couplingFailMax ) && ( dp.parentP || dp.parentN ) )
+                wxCHECK2( dp.parentP && dp.parentN, continue );
+
+                if( ( dp.couplingFailMin || dp.couplingFailMax ) )
                 {
                     // We have a candidate violation, now we need to re-query for a constraint
                     // given the actual items, because there may be a location-based rule in play.

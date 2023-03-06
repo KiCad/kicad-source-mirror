@@ -59,14 +59,13 @@ enum ENDPOINT_T : int
     ENDPOINT_END = 1
 };
 
-// Via types
 // Note that this enum must be synchronized to GAL_LAYER_ID
 enum class VIATYPE : int
 {
     THROUGH      = 3, /* Always a through hole via */
     BLIND_BURIED = 2, /* this via can be on internal layers */
     MICROVIA     = 1, /* this via which connect from an external layer
-                                * to the near neighbor internal layer */
+                       * to the near neighbor internal layer */
     NOT_DEFINED  = 0  /* not yet used */
 };
 
@@ -132,22 +131,22 @@ public:
     const BOX2I GetBoundingBox() const override;
 
     /**
-     * Function GetLength
-     * returns the length of the track using the hypotenuse calculation.
-     * @return double - the length of the track
+     * Get the length of the track using the hypotenuse calculation.
+     *
+     * @return the length of the track.
      */
     virtual double GetLength() const;
 
     /**
-     * Function TransformShapeToPolygon
-     * Convert the track shape to a closed polygon
-     * Used in filling zones calculations
-     * Circles (vias) and arcs (ends of tracks) are approximated by segments
-     * @param aBuffer = a buffer to store the polygon
-     * @param aClearance = the clearance around the pad
-     * @param aError = the maximum deviation from true circle
-     * @param ignoreLineWidth = used for edge cut items where the line width is only for
-     *                          visualization
+     * Convert the track shape to a closed polygon.
+     *
+     * Circles (vias) and arcs (ends of tracks) are approximated by segments.
+     *
+     * @param aBuffer is a buffer to store the polygon
+     * @param aClearance is the clearance around the pad
+     * @param aError is the maximum deviation from true circle
+     * @param ignoreLineWidth is used for edge cut items where the line width is only for
+     *                        visualization
      */
     void TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
                                   int aError, ERROR_LOC aErrorLoc,
@@ -158,17 +157,16 @@ public:
                                               FLASHING aFlash = FLASHING::DEFAULT ) const override;
 
     /**
-     * Function IsPointOnEnds
-     * returns STARTPOINT if point if near (dist = min_dist) start point, ENDPOINT if
+     * Return STARTPOINT if point if near (dist = min_dist) start point, ENDPOINT if
      * point if near (dist = min_dist) end point,STARTPOINT|ENDPOINT if point if near
      * (dist = min_dist) both ends, or 0 if none of the above.
-     * if min_dist < 0: min_dist = track_width/2
+     *
+     * If min_dist < 0: min_dist = track_width/2
      */
     EDA_ITEM_FLAGS IsPointOnEnds( const VECTOR2I& point, int min_dist = 0 ) const;
 
     /**
-     * Function IsNull
-     * returns true if segment length is zero.
+     * Return true if segment length is zero.
      */
     bool IsNull() const
     {
@@ -192,8 +190,8 @@ public:
     }
 
     /**
-     * Function GetLocalClearance
-     * returns any local clearance overrides set in the "classic" (ie: pre-rule) system.
+     * Return any local clearance overrides set in the "classic" (ie: pre-rule) system.
+     *
      * @param aSource [out] optionally reports the source as a user-readable string
      * @return int - the clearance in internal units.
      */
@@ -222,7 +220,8 @@ public:
     }
 
     /**
-     * Get last used LOD for the track net name
+     * Get last used LOD for the track net name.
+     *
      * @return LOD from ViewGetLOD()
      */
     double GetCachedLOD()
@@ -231,8 +230,9 @@ public:
     }
 
     /**
-     * Set the cached LOD
-     * @param aLOD value from ViewGetLOD() or 0.0 to always display
+     * Set the cached LOD.
+     *
+     * @param aLOD value from ViewGetLOD() or 0.0 to always display.
      */
     void SetCachedLOD( double aLOD )
     {
@@ -240,7 +240,8 @@ public:
     }
 
     /**
-     * Get last used zoom scale for the track net name
+     * Get last used zoom scale for the track net name.
+     *
      * @return scale from GetScale()
      */
     double GetCachedScale()
@@ -249,7 +250,8 @@ public:
     }
 
     /**
-     * Set the cached scale
+     * Set the cached scale.
+     *
      * @param aScale value from GetScale()
      */
     void SetCachedScale( double aScale )
@@ -269,7 +271,8 @@ public:
 protected:
     virtual void swapData( BOARD_ITEM* aImage ) override;
 
-    void GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) const;
+    void GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame,
+                                     std::vector<MSG_PANEL_ITEM>& aList ) const;
 
 protected:
     int      m_Width; ///< Thickness of track, or via diameter
@@ -277,7 +280,8 @@ protected:
     VECTOR2I m_End;   ///< Line end point
 
     double   m_CachedLOD; ///< Last LOD used to draw this track's net
-    double   m_CachedScale; ///< Last zoom scale used to draw this track's net (we want to redraw when changing zoom)
+
+    double   m_CachedScale;  ///< Last zoom scale used to draw this track's net.
 };
 
 
@@ -327,7 +331,8 @@ public:
     EDA_ANGLE GetArcAngleEnd() const;
     virtual bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
 
-    virtual bool HitTest( const BOX2I& aRect, bool aContained = true, int aAccuracy = 0 ) const override;
+    virtual bool HitTest( const BOX2I& aRect, bool aContained = true,
+                          int aAccuracy = 0 ) const override;
 
     bool IsCCW() const;
 
@@ -341,8 +346,8 @@ public:
                                               FLASHING aFlash = FLASHING::DEFAULT ) const override;
 
     /**
-     * Function GetLength
-     * returns the length of the arc track
+     * Return the length of the arc track.
+     *
      * @return double - the length of the track
      */
     virtual double GetLength() const override
@@ -410,10 +415,10 @@ public:
     virtual void SetLayerSet( LSET aLayers ) override;
 
     /**
-     * Function SetLayerPair
-     * For a via m_layer contains the top layer, the other layer is in m_bottomLayer
-     * @param aTopLayer = first layer connected by the via
-     * @param aBottomLayer = last layer connected by the via
+     * For a via m_layer contains the top layer, the other layer is in m_bottomLayer/
+     *
+     * @param aTopLayer is the first layer connected by the via.
+     * @param aBottomLayer is last layer connected by the via.
      */
     void SetLayerPair( PCB_LAYER_ID aTopLayer, PCB_LAYER_ID aBottomLayer );
 
@@ -421,11 +426,11 @@ public:
     void SetTopLayer( PCB_LAYER_ID aLayer );
 
     /**
-     * Function LayerPair
-     * Return the 2 layers used by  the via (the via actually uses
-     * all layers between these 2 layers)
-     *  @param top_layer = pointer to the first layer (can be null)
-     *  @param bottom_layer = pointer to the last layer (can be null)
+     * Return the 2 layers used by the via (the via actually uses all layers between these
+     * 2 layers)
+     *
+     *  @param[out] top_layer is storage for the first layer of the via (can be null).
+     *  @param[out] bottom_layer is storage for the last layer of the via(can be null).
      */
     void LayerPair( PCB_LAYER_ID* top_layer, PCB_LAYER_ID* bottom_layer ) const;
 
@@ -433,8 +438,7 @@ public:
     PCB_LAYER_ID BottomLayer() const;
 
     /**
-     * Function SanitizeLayers
-     * Check so that the layers are correct dependin on the type of via, and
+     * Check so that the layers are correct depending on the type of via, and
      * so that the top actually is on top.
      */
     void SanitizeLayers();
@@ -495,59 +499,61 @@ public:
     }
 
     /**
-     * Checks to see whether the via should have a pad on the specific layer
+     * Check to see whether the via should have a pad on the specific layer.
+     *
      * @param aLayer Layer to check for connectivity
      * @return true if connected by pad or track (or optionally zone)
      */
     bool FlashLayer( int aLayer ) const;
 
     /**
-     * Checks to see if the via is present on any of the layers in the set
-     * @param aLayers set of layers to check the via against
-     * @return true if connected by pad or track (or optionally zone) on any of the associated layers
+     * Check to see if the via is present on any of the layers in the set.
+     *
+     * @param aLayers is the set of layers to check the via against.
+     * @return true if connected by pad or track (or optionally zone) on any of the associated
+     *         layers.
      */
     bool FlashLayer( LSET aLayers ) const;
 
     /**
-     * Function SetDrill
-     * sets the drill value for vias.
+     * Set the drill value for vias.
+     *
      * @param aDrill is the new drill diameter
-    */
+     */
     void SetDrill( int aDrill )             { m_drill = aDrill; }
 
     /**
-     * Function GetDrill
-     * returns the local drill setting for this PCB_VIA.  If you want the calculated value,
-     * use GetDrillValue() instead.
+     * Return the local drill setting for this PCB_VIA.
+     *
+     * @note Use GetDrillValue() to get the calculated value.
      */
     int GetDrill() const                    { return m_drill; }
 
     /**
-     * Function GetDrillValue
-     * "calculates" the drill value for vias (m-Drill if > 0, or default
-     * drill value for the board.
-     * @return real drill_value
-    */
+     * Calculate the drill value for vias (m-Drill if > 0, or default drill value for the board.
+     *
+     * @return the calculated drill value.
+     */
     int GetDrillValue() const;
 
     /**
-     * Function SetDrillDefault
-     * sets the drill value for vias to the default value #UNDEFINED_DRILL_DIAMETER.
-    */
+     * Set the drill value for vias to the default value #UNDEFINED_DRILL_DIAMETER.
+     */
     void SetDrillDefault()      { m_drill = UNDEFINED_DRILL_DIAMETER; }
 
     /**
-     * Checks if the via is a free via (as opposed to one created on a track by the router).
+     * Check if the via is a free via (as opposed to one created on a track by the router).
+     *
      * Free vias don't have their nets automatically updated by the connectivity algorithm.
+     *
      * @return true if the via is a free via
      */
     bool GetIsFree() const { return m_isFree; }
     void SetIsFree( bool aFree = true ) { m_isFree = aFree; }
 
     /**
-     * Function IsDrillDefault
      * @return true if the drill value is default value (-1)
-    */
+     */
     bool IsDrillDefault() const { return m_drill <= 0; }
 
     // @copydoc BOARD_ITEM::GetEffectiveShape
@@ -555,7 +561,7 @@ public:
                                               FLASHING aFlash = FLASHING::DEFAULT ) const override;
 
     void ClearZoneLayerOverrides()
-    { 
+    {
         m_zoneLayerOverrides.fill( ZLO_NONE );
     }
 

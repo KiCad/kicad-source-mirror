@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -192,6 +192,7 @@ void SCH_MOVE_TOOL::orthoLineDrag( SCH_LINE* line, const VECTOR2I& splitDelta, i
             // start point to be attached to the unselected end of our drag line).
             //
             // Also, new lines are added already so they'll be in the undo list, skip adding them.
+
             if( !foundLine->HasFlag( IS_CHANGED ) && !foundLine->HasFlag( IS_NEW ) )
             {
                 saveCopyInUndoList( (SCH_ITEM*) foundLine, UNDO_REDO::CHANGED, true );
@@ -206,7 +207,6 @@ void SCH_MOVE_TOOL::orthoLineDrag( SCH_LINE* line, const VECTOR2I& splitDelta, i
                 foundLine->MoveEnd( splitDelta );
 
             updateItem( foundLine, true );
-
 
             SCH_LINE* bendLine = nullptr;
 
@@ -362,16 +362,22 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     m_anchorPos.reset();
 
     if( aEvent.IsAction( &EE_ACTIONS::move ) )
+    {
         m_isDrag = false;
+    }
     else if( aEvent.IsAction( &EE_ACTIONS::drag ) )
     {
         m_isDrag = true;
         isSlice = aEvent.Parameter<bool>();
     }
     else if( aEvent.IsAction( &EE_ACTIONS::moveActivate ) )
+    {
         m_isDrag = !cfg->m_Input.drag_is_move;
+    }
     else
+    {
         return 0;
+    }
 
     if( m_moveInProgress )
     {
@@ -383,7 +389,17 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             {
                 // Reset the selected items so we can start again with the current m_isDrag
                 // state.
-                m_frame->RollbackSchematicFromUndo();
+                try
+                {
+                    m_frame->RollbackSchematicFromUndo();
+                }
+                catch( const IO_ERROR& exc )
+                {
+                    wxLogWarning( wxS( "Exception \"%s\" rolling back schematic undo ocurred." ),
+                                  exc.What() );
+                    return 1;
+                }
+
                 m_selectionTool->RemoveItemsFromSel( &m_dragAdditions, QUIET_MODE );
                 m_anchorPos = m_cursor - m_moveOffset;
                 m_moveInProgress = false;
@@ -417,6 +433,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     std::vector<DANGLING_END_ITEM> internalPoints;
 
     Activate();
+
     // Must be done after Activate() so that it gets set into the correct context
     controls->ShowCursor( true );
 
@@ -971,7 +988,8 @@ void SCH_MOVE_TOOL::trimDanglingLines()
                 // Delete newly dangling lines:
                 // Find split segments (one segment is new, the other is changed) that
                 // we aren't dragging and don't have selected
-                if( aChangedItem->HasFlag( IS_BROKEN) && aChangedItem->IsDangling() && !aChangedItem->IsSelected() )
+                if( aChangedItem->HasFlag( IS_BROKEN) && aChangedItem->IsDangling()
+                  && !aChangedItem->IsSelected() )
                 {
                     danglers.insert( aChangedItem );
                 }
