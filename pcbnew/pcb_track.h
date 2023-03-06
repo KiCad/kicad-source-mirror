@@ -197,7 +197,7 @@ public:
      */
     int GetLocalClearance( wxString* aSource ) const override;
 
-    MINOPTMAX<int> GetWidthConstraint( wxString* aSource ) const;
+    MINOPTMAX<int> GetWidthConstraint( wxString* aSource = nullptr ) const;
 
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
 
