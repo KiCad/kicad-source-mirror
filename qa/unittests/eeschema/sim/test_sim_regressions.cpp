@@ -139,4 +139,17 @@ BOOST_FIXTURE_TEST_CASE( DualNMOSAmp, TEST_SIM_REGRESSIONS_FIXTURE )
 }
 
 
+BOOST_FIXTURE_TEST_CASE( VariableSubstitutions, TEST_SIM_REGRESSIONS_FIXTURE )
+{
+    LOCALE_IO dummy;
+
+    const MOCK_PGM_BASE& program = static_cast<MOCK_PGM_BASE&>( Pgm() );
+    MOCK_EXPECT( program.GetLocalEnvVariables ).returns( ENV_VAR_MAP() );
+
+    TestNetlist( "issue12505" );
+    TestTranPoint( 0.015, { { "V(Net-_R1-Pad2_)", -311 } } );
+    TestTranPoint( 0.025, { { "V(Net-_R1-Pad2_)", 311 } } );
+}
+
+
 #endif // KICAD_SPICE
