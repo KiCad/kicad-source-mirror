@@ -336,12 +336,13 @@ private:
         // in the wrong direction from the fracture and should
         // fall through to the next point
         if( same_point( aPt, nz )
-                && !( same_point( nz->next, nz->next->prevZ ) || same_point( nz->next, nz->next->nextZ ) ) )
+                && aPt->y == aPt->next->y )
         {
             return nz->next;
         }
-        else if( same_point( aPt, pz )
-                && !( same_point( pz->next, pz->next->prevZ ) || same_point( pz->next, pz->next->nextZ ) ) )
+
+        if( same_point( aPt, pz )
+                && aPt->y == aPt->next->y )
         {
             return pz->next;
         }
@@ -362,12 +363,13 @@ private:
         // in the wrong direction from the fracture and should
         // fall through to the next point
         if( same_point( aPt, nz )
-                && !( same_point( nz->prev, nz->prev->nextZ ) || same_point( nz->prev, nz->prev->prevZ ) ) )
+                && aPt->y == aPt->prev->y)
         {
             return nz->prev;
         }
-        else if( same_point( aPt, pz )
-                && !( same_point( pz->prev, pz->prev->nextZ ) || same_point( pz->prev, pz->prev->prevZ ) ) )
+
+        if( same_point( aPt, pz )
+                && aPt->y == aPt->prev->y )
         {
             return pz->prev;
         }
@@ -423,12 +425,7 @@ private:
             if( diff_x > m_max_error || diff_y > m_max_error || p == aB )
                 p0 = p;
 
-            if( same_point( p, p->nextZ ) )
-                p = p->nextZ->next;
-            else if( same_point( p, p->prevZ ) )
-                p = p->prevZ->next;
-            else
-                p = p->next;
+            p = getNextOutlineVertex( p );
 
             ++checked;
         }
@@ -463,12 +460,7 @@ private:
             if( diff_x > m_max_error || diff_y > m_max_error || p == aB )
                 p0 = p;
 
-            if( same_point( p, p->nextZ ) )
-                p = p->nextZ->prev;
-            else if( same_point( p, p->prevZ ) )
-                p = p->prevZ->prev;
-            else
-                p = p->prev;
+            p = getPrevOutlineVertex( p );
 
             ++checked;
         }
@@ -542,7 +534,7 @@ private:
             SEG::ecoord dist2 = diff.SquaredEuclideanNorm();
 
             if( delta_i > 1 && dist2 < limit2 && dist2 < min_dist && dist2 > 0.0
-                    && locallyInside( p, aPt ) && isSubstantial( p, aPt ) )
+                    && locallyInside( p, aPt ) && isSubstantial( p, aPt ) && isSubstantial( aPt, p ) )
             {
                 min_dist = dist2;
                 retval = p;
@@ -560,7 +552,7 @@ private:
             SEG::ecoord dist2 = diff.SquaredEuclideanNorm();
 
             if( delta_i > 1 && dist2 < limit2 && dist2 < min_dist && dist2 > 0.0
-                    && locallyInside( p, aPt ) && isSubstantial( p, aPt ) )
+                    && locallyInside( p, aPt ) && isSubstantial( p, aPt ) && isSubstantial( aPt, p ) )
             {
                 min_dist = dist2;
                 retval = p;
