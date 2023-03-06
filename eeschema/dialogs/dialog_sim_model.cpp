@@ -312,10 +312,10 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataFromWindow()
         if( fn.MakeRelativeTo( Prj().GetProjectPath() ) && !fn.GetFullPath().StartsWith( ".." ) )
             path = fn.GetFullPath();
 
-        if( dynamic_cast<SIM_MODEL_SPICE_FALLBACK*>( &curModel() ) )
-            name = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD, false );
-        else if( !m_modelNameChoice->IsEmpty() )
+        if( !m_modelNameChoice->IsEmpty() )
             name = m_modelNameChoice->GetStringSelection().ToStdString();
+        else if( dynamic_cast<SIM_MODEL_SPICE_FALLBACK*>( &curModel() ) )
+            name = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD, false );
     }
 
     SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY::LIBRARY_FIELD, path );
