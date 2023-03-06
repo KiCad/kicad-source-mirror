@@ -408,6 +408,7 @@ std::shared_ptr<NETCLASS> NET_SETTINGS::GetEffectiveNetClass( const wxString& aN
         }
     }
 
+    m_NetClassPatternAssignmentCache[ aNetName ] = wxEmptyString;
     return m_DefaultNetClass;
 }
 
