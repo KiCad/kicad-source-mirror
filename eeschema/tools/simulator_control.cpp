@@ -375,6 +375,8 @@ public:
 
         textCtrl->SetLexer( wxSTC_LEX_SPICE );
 
+        textCtrl->SetEditable( false );
+
         wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
         sizer->Add( textCtrl, 1, wxEXPAND | wxALL, 5 );
         SetSizer( sizer );

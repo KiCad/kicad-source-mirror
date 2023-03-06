@@ -339,7 +339,7 @@ static void selectAllInTextCtrls( wxWindowList& children )
             {
                 // Respect an existing selection
             }
-            else
+            else if( childTextCtrl->IsEditable() )
             {
                 childTextCtrl->SelectAll();
             }
@@ -353,7 +353,7 @@ static void selectAllInTextCtrls( wxWindowList& children )
             {
                 // Respect an existing selection
             }
-            else if( !scintilla->GetText().Contains( wxT( "\n") ) )
+            else if( scintilla->IsEditable() )
             {
                 scintilla->SelectAll();
             }
