@@ -63,6 +63,7 @@
 #include "pns_routing_settings.h"
 #include "pns_sizes_settings.h"
 #include "pns_item.h"
+#include "pns_line.h"
 #include "pns_solid.h"
 #include "pns_segment.h"
 #include "pns_node.h"
@@ -862,11 +863,18 @@ int PNS_PCBNEW_RULE_RESOLVER::DpNetPolarity( int aNet )
 
 bool PNS_PCBNEW_RULE_RESOLVER::DpNetPair( const PNS::ITEM* aItem, int& aNetP, int& aNetN )
 {
-    if( !aItem || !aItem->Parent() || !aItem->Parent()->IsConnected() )
+    if( !aItem )
         return false;
 
-    BOARD_CONNECTED_ITEM* cItem = static_cast<BOARD_CONNECTED_ITEM*>( aItem->Parent() );
-    NETINFO_ITEM*         netInfo = cItem->GetNet();
+    NETINFO_ITEM* netInfo = nullptr;
+
+    if( aItem->Parent() && aItem->Parent()->IsConnected() )
+    {
+        BOARD_CONNECTED_ITEM* cItem = static_cast<BOARD_CONNECTED_ITEM*>( aItem->Parent() );
+        netInfo = cItem->GetNet();
+    }
+    else
+        netInfo = m_board->FindNet( aItem->Net() );
 
     if( !netInfo )
         return false;

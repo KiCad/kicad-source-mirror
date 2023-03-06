@@ -480,7 +480,8 @@ bool ROUTER::Move( const VECTOR2I& aP, ITEM* endItem )
 }
 
 
-bool ROUTER::getNearestRatnestAnchor( VECTOR2I& aOtherEnd, LAYER_RANGE& aOtherEndLayers )
+bool ROUTER::getNearestRatnestAnchor( VECTOR2I& aOtherEnd, LAYER_RANGE& aOtherEndLayers,
+                                      ITEM*& aOtherEndItem )
 {
     // Can't finish something with no connections
     if( GetCurrentNets().empty() )
@@ -501,7 +502,8 @@ bool ROUTER::getNearestRatnestAnchor( VECTOR2I& aOtherEnd, LAYER_RANGE& aOtherEn
 
     // If the user has drawn a line, get the anchor nearest to the line end
     if( trace->SegmentCount() > 0 )
-        return topo.NearestUnconnectedAnchorPoint( trace, aOtherEnd, aOtherEndLayers );
+        return topo.NearestUnconnectedAnchorPoint( trace, aOtherEnd, aOtherEndLayers,
+                                                   aOtherEndItem );
 
     // Otherwise, find the closest anchor to our start point
 
@@ -521,6 +523,7 @@ bool ROUTER::getNearestRatnestAnchor( VECTOR2I& aOtherEnd, LAYER_RANGE& aOtherEn
 
     aOtherEnd = it->Anchor( anchor );
     aOtherEndLayers = it->Layers();
+    aOtherEndItem = it;
 
     return true;
 }
@@ -531,19 +534,24 @@ bool ROUTER::Finish()
     if( m_state != ROUTE_TRACK )
         return false;
 
-    LINE_PLACER* placer = dynamic_cast<LINE_PLACER*>( Placer() );
+    PLACEMENT_ALGO* placer = Placer();
 
-    if( placer == nullptr )
+    if( placer == nullptr || placer->Traces().Size() == 0 )
+        return false;
+
+    LINE* current = dynamic_cast<LINE*>( placer->Traces()[0] );
+
+    if( current == nullptr )
         return false;
 
     // Get our current line and position and nearest ratsnest to them if it exists
-    PNS::LINE   current = placer->Trace();
     VECTOR2I    currentEnd = placer->CurrentEnd();
     VECTOR2I    otherEnd;
     LAYER_RANGE otherEndLayers;
+    ITEM*       otherEndItem = nullptr;
 
     // Get the anchor nearest to the end of the trace the user is routing
-    if( !getNearestRatnestAnchor( otherEnd, otherEndLayers ) )
+    if( !getNearestRatnestAnchor( otherEnd, otherEndLayers, otherEndItem ) )
         return false;
 
     // Keep moving until we don't change position or hit the limit
@@ -553,14 +561,14 @@ bool ROUTER::Finish()
     do
     {
         moveResultPoint = Placer()->CurrentEnd();
-        Move( otherEnd, &current );
+        Move( otherEnd, otherEndItem );
         triesLeft--;
     } while( Placer()->CurrentEnd() != moveResultPoint && triesLeft );
 
     // If we've made it, fix the route and we're done
     if( moveResultPoint == otherEnd && otherEndLayers.Overlaps( GetCurrentLayer() ) )
     {
-        return FixRoute( otherEnd, &current, false );
+        return FixRoute( otherEnd, otherEndItem, false );
     }
 
     return false;
@@ -583,9 +591,10 @@ bool ROUTER::ContinueFromEnd()
     VECTOR2I    currentEnd = placer->CurrentEnd();
     VECTOR2I    otherEnd;
     LAYER_RANGE otherEndLayers;
+    ITEM*       otherEndItem = nullptr;
 
     // Get the anchor nearest to the end of the trace the user is routing
-    if( !getNearestRatnestAnchor( otherEnd, otherEndLayers ) )
+    if( !getNearestRatnestAnchor( otherEnd, otherEndLayers, otherEndItem ) )
         return false;
 
     CommitRouting();
@@ -593,7 +602,7 @@ bool ROUTER::ContinueFromEnd()
     // Commit whatever we've fixed and restart routing from the other end
     int nextLayer = otherEndLayers.Overlaps( currentLayer ) ? currentLayer : otherEndLayers.Start();
 
-    if( !StartRouting( otherEnd, current, nextLayer ) )
+    if( !StartRouting( otherEnd, otherEndItem, nextLayer ) )
         return false;
 
     // Attempt to route to our current position

@@ -50,8 +50,8 @@ public:
     ITEM* NearestUnconnectedItem( JOINT* aStart, int* aAnchor = nullptr,
                                   int aKindMask = ITEM::ANY_T );
 
-    bool NearestUnconnectedAnchorPoint( const LINE* aTrack, VECTOR2I& aPoint,
-                                        LAYER_RANGE& aLayers );
+    bool NearestUnconnectedAnchorPoint( const LINE* aTrack, VECTOR2I& aPoint, LAYER_RANGE& aLayers,
+                                        ITEM*& aItem );
     bool LeadingRatLine( const LINE* aTrack, SHAPE_LINE_CHAIN& aRatLine );
 
     const JOINT_SET ConnectedJoints( JOINT* aStart );

@@ -435,6 +435,15 @@ OPT_VECTOR2I getDanglingAnchor( NODE* aNode, ITEM* aItem )
 {
     switch( aItem->Kind() )
     {
+    case ITEM::LINE_T:
+    {
+        LINE* l = static_cast<LINE*>( aItem );
+
+        if( !l->PointCount() )
+            return OPT_VECTOR2I();
+        else
+            return l->CPoint( 0 );
+    }
     case ITEM::VIA_T:
     case ITEM::SOLID_T:
         return aItem->Anchor( 0 );

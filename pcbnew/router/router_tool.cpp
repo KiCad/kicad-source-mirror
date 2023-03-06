@@ -1369,6 +1369,10 @@ void ROUTER_TOOL::performRouting()
                 // We want the next router commit to be one undo at the UI layer
                 m_iface->SetCommitFlags( needsAppend ? APPEND_UNDO : 0 );
             }
+            else
+            {
+                frame()->ShowInfoBarError( m_router->FailureReason(), true );
+            }
         }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDrag( BUT_LEFT ) || evt->IsAction( &PCB_ACTIONS::routeSingleTrack ) )
         {
