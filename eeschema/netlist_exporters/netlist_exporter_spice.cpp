@@ -148,7 +148,7 @@ bool NETLIST_EXPORTER_SPICE::DoWriteNetlist( OUTPUTFORMATTER& aFormatter, unsign
 
 void NETLIST_EXPORTER_SPICE::WriteHead( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions )
 {
-    aFormatter.Print( 0, "KiCad schematic\n" );
+    aFormatter.Print( 0, ".title KiCad schematic\n" );
 }
 
 
