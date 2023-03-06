@@ -411,6 +411,8 @@ bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
                     std::make_unique<EDA_COMBINED_MATCHER>( pattern, CTX_NETCLASS ),
                     netclass
                 } );
+
+        m_netSettings->m_NetClassPatternAssignmentCache.clear();
     }
 
     return true;

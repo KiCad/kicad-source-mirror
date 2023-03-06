@@ -203,6 +203,7 @@ void BOARD::SetProject( PROJECT* aProject, bool aReferenceOnly )
             projectSettings->m_NetClasses      = legacySettings->m_NetClasses;
             projectSettings->m_NetClassPatternAssignments =
                     std::move( legacySettings->m_NetClassPatternAssignments );
+            projectSettings->m_NetClassPatternAssignmentCache.clear();
         }
 
         // Now update the DesignSettings' netclass pointer to point into the project.

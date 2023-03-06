@@ -43,6 +43,7 @@ public:
 
     std::vector<std::pair<std::unique_ptr<EDA_COMBINED_MATCHER>, wxString>>
                                                   m_NetClassPatternAssignments;
+    mutable std::map<wxString, wxString>          m_NetClassPatternAssignmentCache;
 
     std::map<wxString, wxString>                  m_NetClassLabelAssignments;
 

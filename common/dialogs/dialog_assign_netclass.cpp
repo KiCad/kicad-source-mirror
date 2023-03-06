@@ -86,6 +86,8 @@ bool DIALOG_ASSIGN_NETCLASS::TransferDataFromWindow()
                 m_netclassCtrl->GetStringSelection()
             } );
 
+    netSettings->m_NetClassPatternAssignmentCache.clear();
+
     return true;
 }
 

@@ -391,13 +391,21 @@ std::shared_ptr<NETCLASS> NET_SETTINGS::GetEffectiveNetClass( const wxString& aN
     if( it != m_NetClassLabelAssignments.end() )
         return getNetclass( it->second );
 
+    auto it2 = m_NetClassPatternAssignmentCache.find( aNetName );
+
+    if( it2 != m_NetClassPatternAssignmentCache.end() )
+        return getNetclass( it2->second );
+
     for( const auto& [ matcher, netclassName ] :  m_NetClassPatternAssignments )
     {
         int matches;
         int offset;
 
         if( matcher->Find( aNetName, matches, offset ) && offset == 0 )
+        {
+            m_NetClassPatternAssignmentCache[ aNetName ] = netclassName;
             return getNetclass( netclassName );
+        }
     }
 
     return m_DefaultNetClass;
