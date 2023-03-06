@@ -44,9 +44,9 @@
 
 /**
  * Default distance between points to treat them as separate ones (mm)
- * 0.001 mm is a reasonable value. A too large value creates issues by
+ * 0.001 mm or less is a reasonable value. A too large value creates issues by
  * merging points that should be different.
- * Remember we are a 3D space, so a thin line can be broken if 2 points
+ * Remember we are a 3D space, so a thin shape can be broken if 2 points
  * are merged (in X, Y, Z coords) when they should not.
  * round shapes converted to polygon can also be not good with a to large value
  */
@@ -56,9 +56,11 @@ static constexpr double OCC_MAX_DISTANCE_TO_MERGE_POINTS = 0.001;
 static constexpr double BOARD_THICKNESS_DEFAULT_MM = 1.6;
 
 // minimum PCB thickness in mm (10 microns assumes a very thin polyimide film)
+// must be > OCC_MAX_DISTANCE_TO_MERGE_POINTS
 static constexpr double BOARD_THICKNESS_MIN_MM = 0.01;
 
 // default copper thickness in mm
+// must be > OCC_MAX_DISTANCE_TO_MERGE_POINTS
 static constexpr double COPPER_THICKNESS_DEFAULT_MM = 0.035;
 
 // Max error to approximate an arc by segments (in mm)
@@ -92,6 +94,7 @@ public:
                        VECTOR3D aOrientation, VECTOR3D aScale, bool aSubstituteModels = true );
 
     void SetBoardColor( double r, double g, double b );
+    void SetCopperColor( double r, double g, double b );
 
     // set the thickness of the PCB (mm); the top of the PCB shall be at Z = aThickness
     // aThickness < 0.0 == use default thickness
@@ -166,7 +169,8 @@ private:
     int                             m_components;       // number of successfully loaded components;
     double                          m_precision;        // model (length unit) numeric precision
     double                          m_angleprec;        // angle numeric precision
-    double                          m_boardColor[3];    // RGB values
+    double                          m_boardColor[3];    // board body, RGB values
+    double                          m_copperColor[3];   // copper, RGB values
     double                          m_boardThickness;   // PCB thickness, mm
     double                          m_copperThickness;  // copper thickness, mm
 

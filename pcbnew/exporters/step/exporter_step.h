@@ -87,10 +87,10 @@ public:
     bool ExportTracksAndVias() { return m_params.m_exportTracks; }
 
 private:
-    bool composePCB();
-    bool composePCB( FOOTPRINT* aFootprint, VECTOR2D aOrigin );
-    bool composePCB( PCB_TRACK* aTrack, VECTOR2D aOrigin );
-    void determinePcbThickness();
+    bool buildBoard3DShapes();
+    bool buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOrigin );
+    bool buildTrack3DShape( PCB_TRACK* aTrack, VECTOR2D aOrigin );
+    void calculatePcbThickness();
 
     EXPORTER_STEP_PARAMS m_params;
     std::unique_ptr<FILENAME_RESOLVER> m_resolver;
@@ -107,7 +107,11 @@ private:
 
     double m_boardThickness;
 
+    SHAPE_POLY_SET m_top_copper_shapes;
+    SHAPE_POLY_SET m_bottom_copper_shapes;
+
     KIGFX::COLOR4D m_solderMaskColor;
+    KIGFX::COLOR4D m_copperColor;
 };
 
 #endif

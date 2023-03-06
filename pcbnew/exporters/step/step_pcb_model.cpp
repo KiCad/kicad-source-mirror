@@ -178,7 +178,7 @@ STEP_PCB_MODEL::STEP_PCB_MODEL( const wxString& aPcbName )
 {
     m_app = XCAFApp_Application::GetApplication();
     m_app->NewDocument( "MDTV-XCAF", m_doc );
-    m_assy = XCAFDoc_DocumentTool::ShapeTool ( m_doc->Main() );
+    m_assy = XCAFDoc_DocumentTool::ShapeTool( m_doc->Main() );
     m_assy_label = m_assy->NewShape();
     m_hasPCB = false;
     m_components = 0;
@@ -277,16 +277,19 @@ bool STEP_PCB_MODEL::AddPadHole( const PAD* aPad, const VECTOR2D& aOrigin )
         return false;
 
     VECTOR2I pos = aPad->GetPosition();
-    double holeZsize = m_boardThickness + ( m_copperThickness * 2 );
+    const double margin = 0.01;     // a small margin on the Z axix to be sure the hole
+                                    // is bigget than the board with copper
+                                    // must be > OCC_MAX_DISTANCE_TO_MERGE_POINTS
+    double holeZsize = m_boardThickness + ( m_copperThickness * 2 ) + ( margin * 2 );
 
     if( aPad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
     {
         TopoDS_Shape s =
-                BRepPrimAPI_MakeCylinder( pcbIUScale.IUTomm( aPad->GetDrillSize().x ) * 0.5, holeZsize * 2.0 ).Shape();
+                BRepPrimAPI_MakeCylinder( pcbIUScale.IUTomm( aPad->GetDrillSize().x ) * 0.5, holeZsize ).Shape();
         gp_Trsf shift;
         shift.SetTranslation( gp_Vec( pcbIUScale.IUTomm( pos.x - aOrigin.x ),
                                       -pcbIUScale.IUTomm( pos.y - aOrigin.y ),
-                                      -holeZsize * 0.5 ) );
+                                      -m_copperThickness - margin ) );
         BRepBuilderAPI_Transform hole( s, shift );
         m_cutouts.push_back( hole.Shape() );
         return true;
@@ -304,7 +307,7 @@ bool STEP_PCB_MODEL::AddPadHole( const PAD* aPad, const VECTOR2D& aOrigin )
 
     if( holeOutlines.OutlineCount() > 0 )
     {
-        if( MakeShape( hole, holeOutlines.COutline( 0 ), holeZsize*2, -holeZsize * 0.5, aOrigin ) )
+        if( MakeShape( hole, holeOutlines.COutline( 0 ), holeZsize, -m_copperThickness - margin, aOrigin ) )
         {
             m_cutouts.push_back( hole );
         }
@@ -389,6 +392,14 @@ void STEP_PCB_MODEL::SetBoardColor( double r, double g, double b )
     m_boardColor[0] = r;
     m_boardColor[1] = g;
     m_boardColor[2] = b;
+}
+
+
+void STEP_PCB_MODEL::SetCopperColor( double r, double g, double b )
+{
+    m_copperColor[0] = r;
+    m_copperColor[1] = g;
+    m_copperColor[2] = b;
 }
 
 
@@ -562,7 +573,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
         for( TopoDS_Shape& hole : m_cutouts )
             holelist.Append( hole );
 
-        // Remove holes for each board (usually there is only one board
+        // Remove holes for each board (usually there is only one board)
         int cnt = 0;
         for( TopoDS_Shape& board: m_board_outlines )
         {
@@ -605,18 +616,18 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
     // identically named assemblies.  So we want to avoid having the PCB be generally defaulted
     // to "Component" or "Assembly".
 
-    // color the PCB
+    // Init colors  for the board body and the copper items (if any)
     Handle( XCAFDoc_ColorTool ) colorTool = XCAFDoc_DocumentTool::ColorTool( m_doc->Main() );
-    Quantity_Color board_color( m_boardColor[0], m_boardColor[1], m_boardColor[2], Quantity_TOC_RGB );
-    Quantity_Color copper_color( 0.7, 0.61, 0.0, Quantity_TOC_RGB );
+    Quantity_Color board_color( m_boardColor[0], m_boardColor[1], m_boardColor[2],
+                                Quantity_TOC_RGB );
+    Quantity_Color copper_color( m_copperColor[0], m_copperColor[1], m_copperColor[2],
+                                 Quantity_TOC_RGB );
 
     int pcbIdx = 1;
     int copper_objects_cnt = 0;
 
     for( TDF_Label& pcb_label : m_pcb_labels )
     {
-        colorTool->SetColor( pcb_label, board_color, XCAFDoc_ColorSurf );
-
         Handle( TDataStd_TreeNode ) node;
 
         if( pcb_label.FindAttribute( XCAFDoc::ShapeRefGUID(), node ) )
@@ -628,10 +639,17 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
             {
                 wxString pcbName;
 
-                if( m_pcb_labels.size() == 1 )
-                    pcbName = wxT( "PCB" );
+                if( copper_objects_cnt < copper_item_count )
+                {
+                    pcbName = wxString::Format( wxT( "Copper_Item%d" ), copper_objects_cnt+1 );
+                }
                 else
-                    pcbName = wxString::Format( wxT( "PCB%d" ), pcbIdx++ );
+                {
+                    if( m_pcb_labels.size() == 1 )
+                        pcbName = wxT( "PCB" );
+                    else
+                        pcbName = wxString::Format( wxT( "PCB%d" ), pcbIdx++ );
+                }
 
                 std::string                pcbNameStdString( pcbName.ToUTF8() );
                 TCollection_ExtendedString partname( pcbNameStdString.c_str() );
@@ -641,10 +659,11 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
 
         // color the PCB
         TopExp_Explorer topex;
-        topex.Init( m_assy->GetShape( pcb_label ), TopAbs_SOLID );
+        topex.Init( m_assy->GetShape( pcb_label ), TopAbs_COMPOUND /*TopAbs_SOLID*/ );
 
         while( topex.More() )
         {
+            // First objects are copper objects, last(s) is the board body
             if( copper_objects_cnt < copper_item_count )
                 colorTool->SetColor( topex.Current(), copper_color, XCAFDoc_ColorSurf );
             else

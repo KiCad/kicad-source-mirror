@@ -121,6 +121,7 @@ EXPORTER_STEP::EXPORTER_STEP( BOARD* aBoard, const EXPORTER_STEP_PARAMS& aParams
     m_boardThickness( DEFAULT_BOARD_THICKNESS_MM )
 {
     m_solderMaskColor = COLOR4D( 0.08, 0.20, 0.14, 0.83 );
+    m_copperColor = COLOR4D( 0.7, 0.61, 0.0, 1.0 );
 
     m_resolver = std::make_unique<FILENAME_RESOLVER>();
     m_resolver->Set3DConfigDir( wxT( "" ) );
@@ -135,7 +136,7 @@ EXPORTER_STEP::~EXPORTER_STEP()
 }
 
 
-bool EXPORTER_STEP::composePCB( FOOTPRINT* aFootprint, VECTOR2D aOrigin )
+bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOrigin )
 {
     bool hasdata = false;
 
@@ -150,6 +151,20 @@ bool EXPORTER_STEP::composePCB( FOOTPRINT* aFootprint, VECTOR2D aOrigin )
             if( m_pcbModel->AddPadShape( pad, aOrigin ) )
                 hasdata = true;
         }
+    }
+
+    // Build 3D shapes of the footprint graphic items on external layers:
+    if( ExportTracksAndVias() )
+    {
+        int maxError = m_board->GetDesignSettings().m_MaxError;
+        aFootprint->TransformFPShapesToPolySet( m_top_copper_shapes, F_Cu, 0, maxError, ERROR_INSIDE,
+                                               false, /* include text */
+                                               true, /* include shapes */
+                                               false /* include private items */ );
+        aFootprint->TransformFPShapesToPolySet( m_bottom_copper_shapes, B_Cu, 0, maxError, ERROR_INSIDE,
+                                               false, /* include text */
+                                               true, /* include shapes */
+                                               false /* include private items */ );
     }
 
     if( ( aFootprint->GetAttributes() & FP_EXCLUDE_FROM_BOM ) && !m_params.m_includeExcludedBom )
@@ -241,7 +256,7 @@ bool EXPORTER_STEP::composePCB( FOOTPRINT* aFootprint, VECTOR2D aOrigin )
 }
 
 
-bool EXPORTER_STEP::composePCB( PCB_TRACK* aTrack, VECTOR2D aOrigin )
+bool EXPORTER_STEP::buildTrack3DShape( PCB_TRACK* aTrack, VECTOR2D aOrigin )
 {
     if( aTrack->Type() == PCB_VIA_T )
     {
@@ -268,15 +283,18 @@ bool EXPORTER_STEP::composePCB( PCB_TRACK* aTrack, VECTOR2D aOrigin )
     SHAPE_POLY_SET copper_shapes;
     int maxError = m_board->GetDesignSettings().m_MaxError;
 
-    aTrack->TransformShapeToPolygon( copper_shapes, pcblayer, 0, maxError, ERROR_INSIDE );
+    if( pcblayer == F_Cu )
+        aTrack->TransformShapeToPolygon( m_top_copper_shapes, pcblayer, 0, maxError, ERROR_INSIDE );
+    else
+        aTrack->TransformShapeToPolygon( m_bottom_copper_shapes, pcblayer, 0, maxError, ERROR_INSIDE );
 
-    m_pcbModel->AddCopperPolygonShapes( &copper_shapes, pcblayer == F_Cu, aOrigin );
+    //m_pcbModel->AddCopperPolygonShapes( &copper_shapes, pcblayer == F_Cu, aOrigin );
 
     return true;
 }
 
 
-bool EXPORTER_STEP::composePCB()
+bool EXPORTER_STEP::buildBoard3DShapes()
 {
     if( m_pcbModel )
         return true;
@@ -303,6 +321,7 @@ bool EXPORTER_STEP::composePCB()
 
     // TODO: Handle when top & bottom soldermask colours are different...
     m_pcbModel->SetBoardColor( m_solderMaskColor.r, m_solderMaskColor.g, m_solderMaskColor.b );
+    m_pcbModel->SetCopperColor( m_copperColor.r, m_copperColor.g, m_copperColor.b );
 
     m_pcbModel->SetPCBThickness( m_boardThickness );
 
@@ -320,13 +339,19 @@ bool EXPORTER_STEP::composePCB()
     // For copper layers, only pads and tracks are added, because adding everything on copper
     // generate unreasonable file sizes and take a unreasonable calculation time.
     for( FOOTPRINT* fp : m_board->Footprints() )
-        composePCB( fp, origin );
+        buildFootprint3DShapes( fp, origin );
 
     if( ExportTracksAndVias() )
     {
         for( PCB_TRACK* track : m_board->Tracks() )
-            composePCB( track, origin );
+            buildTrack3DShape( track, origin );
     }
+
+    m_top_copper_shapes.Fracture( SHAPE_POLY_SET::PM_FAST );
+    m_bottom_copper_shapes.Fracture( SHAPE_POLY_SET::PM_FAST );
+
+    m_pcbModel->AddCopperPolygonShapes( &m_top_copper_shapes, true, origin );
+    m_pcbModel->AddCopperPolygonShapes( &m_bottom_copper_shapes, false, origin );
 
     ReportMessage( wxT( "Create PCB solid model\n" ) );
 
@@ -344,7 +369,7 @@ bool EXPORTER_STEP::composePCB()
 }
 
 
-void EXPORTER_STEP::determinePcbThickness()
+void EXPORTER_STEP::calculatePcbThickness()
 {
     m_boardThickness = DEFAULT_BOARD_THICKNESS_MM;
 
@@ -389,7 +414,7 @@ bool EXPORTER_STEP::Export()
     Message::DefaultMessenger()->AddPrinter( new KiCadPrinter( this ) );
 
     ReportMessage( _( "Determining PCB data\n" ) );
-    determinePcbThickness();
+    calculatePcbThickness();
     wxString msg;
     msg.Printf( _( "Board Thickness from stackup: %.3f mm\n" ), m_boardThickness );
     ReportMessage( msg );
@@ -398,7 +423,7 @@ bool EXPORTER_STEP::Export()
     {
         ReportMessage( _( "Build STEP data\n" ) );
 
-        if( !composePCB() )
+        if( !buildBoard3DShapes() )
         {
             ReportMessage( _( "\n** Error building STEP board model. Export aborted. **\n" ) );
             return false;
