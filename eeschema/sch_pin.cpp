@@ -248,10 +248,10 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 bool SCH_PIN::IsStacked( const SCH_PIN* aPin ) const
 {
     return m_parent == aPin->GetParent()
-            && GetTransformedPosition() == aPin->GetTransformedPosition()
-            && ( ( GetType() == aPin->GetType() )
-                    || ( GetType() == ELECTRICAL_PINTYPE::PT_PASSIVE )
-                    || ( aPin->GetType() == ELECTRICAL_PINTYPE::PT_PASSIVE ) );
+           && GetTransformedPosition() == aPin->GetTransformedPosition()
+           && GetName() == aPin->GetName()
+           && ( ( GetType() == aPin->GetType() ) || ( GetType() == ELECTRICAL_PINTYPE::PT_PASSIVE )
+                || ( aPin->GetType() == ELECTRICAL_PINTYPE::PT_PASSIVE ) );
 }
 
 

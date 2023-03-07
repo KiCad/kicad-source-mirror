@@ -208,15 +208,11 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                 {
                     if( unresolved( field.GetShownText() ) )
                     {
-                        VECTOR2I pos = field.GetPosition() - symbol->GetPosition();
-                        pos = symbol->GetTransform().TransformCoordinate( pos );
-                        pos += symbol->GetPosition();
-
                         std::shared_ptr<ERC_ITEM> ercItem =
                                 ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                         ercItem->SetItems( &field );
 
-                        SCH_MARKER* marker = new SCH_MARKER( ercItem, pos );
+                        SCH_MARKER* marker = new SCH_MARKER( ercItem, field.GetPosition() );
                         screen->Append( marker );
                     }
                 }
@@ -683,11 +679,7 @@ int ERC_TESTER::TestPinToPin()
                 // Multiple pins in the same symbol that share a type,
                 // name and position are considered
                 // "stacked" and shouldn't trigger ERC errors
-                if( refPin.Pin()->GetParent() == testPin.Pin()->GetParent()
-                    && refPin.Pin()->GetPosition() == testPin.Pin()->GetPosition()
-                    && refPin.Pin()->GetName() == testPin.Pin()->GetName()
-                    && refPin.Pin()->GetType() == testPin.Pin()->GetType()
-                    && refPin.Sheet() == testPin.Sheet() )
+                if( refPin.Pin()->IsStacked( testPin.Pin() ) && refPin.Sheet() == testPin.Sheet() )
                     continue;
 
                 ELECTRICAL_PINTYPE testType = testPin.Pin()->GetType();
@@ -730,6 +722,8 @@ int ERC_TESTER::TestPinToPin()
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( err_code );
 
                 ercItem->SetItems( needsDriver.Pin() );
+                ercItem->SetSheetSpecificPath( needsDriver.Sheet() );
+                ercItem->SetItemsSheetPaths( needsDriver.Sheet() );
 
                 SCH_MARKER* marker =
                         new SCH_MARKER( ercItem, needsDriver.Pin()->GetTransformedPosition() );
@@ -808,7 +802,7 @@ int ERC_TESTER::TestSimilarLabels()
 
     int errors = 0;
 
-    std::unordered_map<wxString, SCH_LABEL_BASE*> labelMap;
+    std::unordered_map<wxString, std::pair<SCH_LABEL_BASE*, SCH_SHEET_PATH>> labelMap;
 
     for( const std::pair<NET_NAME_CODE_CACHE_KEY, std::vector<CONNECTION_SUBGRAPH*>> net : nets )
     {
@@ -828,12 +822,16 @@ int ERC_TESTER::TestSimilarLabels()
 
                     if( !labelMap.count( normalized ) )
                     {
-                        labelMap[normalized] = label;
+                        labelMap[normalized] = std::make_pair( label, subgraph->GetSheet() );
                     }
-                    else if( labelMap.at( normalized )->GetShownText() != label->GetShownText() )
+                    else if( labelMap.at( normalized ).first->GetShownText()
+                             != label->GetShownText() )
                     {
                         std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_SIMILAR_LABELS );
-                        ercItem->SetItems( label, labelMap.at( normalized ) );
+                        ercItem->SetItems( label, labelMap.at( normalized ).first );
+                        ercItem->SetSheetSpecificPath( subgraph->GetSheet() );
+                        ercItem->SetItemsSheetPaths( subgraph->GetSheet(),
+                                                     labelMap.at( normalized ).second );
 
                         SCH_MARKER* marker = new SCH_MARKER( ercItem, label->GetPosition() );
                         subgraph->m_sheet.LastScreen()->Append( marker );
