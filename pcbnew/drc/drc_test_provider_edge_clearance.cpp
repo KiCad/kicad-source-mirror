@@ -283,18 +283,23 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                 bool testSilk = !m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_EDGE_CLEARANCE );
 
                 if( !testCopper && !testSilk )
-                    return false;    // We're done
+                    return false;       // All limits exceeded; we're done
 
                 if( !reportProgress( ii++, count, progressDelta ) )
-                    return false;    // DRC cancelled; we're done
+                    return false;       // DRC cancelled; we're done
 
                 if( isInvisibleText( item ) )
-                    return true;     // Continue with other items
+                    return true;        // Continue with other items
 
-                if( item->Type() == PCB_PAD_T
-                        && static_cast<PAD*>( item )->GetProperty() == PAD_PROP::CASTELLATED )
+                if( item->Type() == PCB_PAD_T )
                 {
-                    return true;
+                    PAD* pad = static_cast<PAD*>( item );
+
+                    if( pad->GetProperty() == PAD_PROP::CASTELLATED
+                        || pad->GetAttribute() == PAD_ATTRIB::CONN )
+                    {
+                        return true;    // Continue with other items
+                    }
                 }
 
                 const std::shared_ptr<SHAPE>& itemShape = item->GetEffectiveShape();
