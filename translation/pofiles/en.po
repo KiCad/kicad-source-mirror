@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-10 15:35-0800\n"
+"POT-Creation-Date: 2023-03-06 16:53-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -65,6 +65,9 @@ msgstr "Build Tech layer %d"
 
 msgid "Build BVH for holes and vias"
 msgstr "Build BVH for holes and vias"
+
+msgid "OpenGL context creation error"
+msgstr "OpenGL context creation error"
 
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
 msgstr "Your OpenGL version is not supported. Minimum required is 1.5."
@@ -7205,6 +7208,9 @@ msgstr "HSpice"
 msgid "Simulation Command"
 msgstr "Simulation Command"
 
+msgid "<unknown>"
+msgstr "<unknown>"
+
 #, c-format
 msgid "No model named '%s' in library."
 msgstr "No model named '%s' in library."
@@ -11009,9 +11015,6 @@ msgstr "Temperature (swept)"
 msgid "Voltage (measured)"
 msgstr "Voltage (measured)"
 
-msgid "Unknown SIM_VALUE type"
-msgstr "Unknown SIM_VALUE type"
-
 #, c-format
 msgid "Could not find model '%s' to copy for \"A Kind Of\" model '%s'"
 msgstr "Could not find model '%s' to copy for \"A Kind Of\" model '%s'"
@@ -14157,13 +14160,6 @@ msgstr "Automatically remove uninstalled libraries"
 msgid "Library nickname prefix:"
 msgstr "Library nickname prefix:"
 
-msgid ""
-"After packages are (un)installed KiCad may need to be restarted to reflect "
-"changes in the global library table."
-msgstr ""
-"After packages are (un)installed KiCad may need to be restarted to reflect "
-"changes in the global library table."
-
 #, c-format
 msgid "schema file '%s' not found"
 msgstr "schema file '%s' not found"
@@ -14218,6 +14214,9 @@ msgstr ""
 "Unable to parse packages metadata:\n"
 "\n"
 "%s"
+
+msgid "Failed to parse locally stored repository.json."
+msgstr "Failed to parse locally stored repository.json."
 
 msgid ""
 "Packages cache for current repository is corrupted, it will be redownloaded."
@@ -20910,12 +20909,6 @@ msgstr "Parent footprint description"
 msgid "Change text box properties"
 msgstr "Change text box properties"
 
-msgid "Text Width:"
-msgstr "Text Width:"
-
-msgid "Text Height:"
-msgstr "Text Height:"
-
 msgid "Border style:"
 msgstr "Border style:"
 
@@ -23539,6 +23532,10 @@ msgstr "Board stackup settings not up to date."
 
 msgid "Determining PCB data\n"
 msgstr "Determining PCB data\n"
+
+#, c-format
+msgid "Board Thickness from stackup: %.3f mm\n"
+msgstr "Board Thickness from stackup: %.3f mm\n"
 
 msgid "Build STEP data\n"
 msgstr "Build STEP data\n"
@@ -29417,6 +29414,22 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Unknown SIM_VALUE type"
+#~ msgstr "Unknown SIM_VALUE type"
+
+#~ msgid ""
+#~ "After packages are (un)installed KiCad may need to be restarted to "
+#~ "reflect changes in the global library table."
+#~ msgstr ""
+#~ "After packages are (un)installed KiCad may need to be restarted to "
+#~ "reflect changes in the global library table."
+
+#~ msgid "Text Width:"
+#~ msgstr "Text Width:"
+
+#~ msgid "Text Height:"
+#~ msgstr "Text Height:"
 
 #~ msgid "Reading file "
 #~ msgstr "Reading file "
@@ -53351,9 +53364,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "Keepout"
 #~ msgstr "Keepout"
-
-#~ msgid "<unknown>"
-#~ msgstr "<unknown>"
 
 #~ msgid "Non Copper Zone"
 #~ msgstr "Non Copper Zone"
