@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:53-0800\n"
-"PO-Revision-Date: 2023-02-26 10:48+0000\n"
+"PO-Revision-Date: 2023-03-07 09:30+0000\n"
 "Last-Translator: turkce <turkceceviri@protonmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v7/tr/>\n"
 "Language: tr\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -16009,7 +16009,7 @@ msgstr "Kayıp ebeveyn"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2346
 msgid "Wrong number of columns for pin mapping."
-msgstr ""
+msgstr "Pın eşlemesi için yanlış sütun sayısı."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2386
 #, fuzzy
@@ -16028,11 +16028,11 @@ msgstr "Özelliğin bilinmeyen üst öğesi"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2482
 msgid "Internal error detected, a waveform should exist"
-msgstr ""
+msgstr "Dahili hata tespit edildi, bir dalga formu mevcut olmalıdır"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2547
 msgid "Internal error: Bad parser context."
-msgstr ""
+msgstr "İç hata: Hatalı ayrıştırıcı bağlamı."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2584
 #, fuzzy
@@ -16041,7 +16041,7 @@ msgstr "Kayıp ebeveyn"
 
 #: eeschema/sim/kibis/kibis.cpp:454
 msgid "waveform has less than two points"
-msgstr ""
+msgstr "dalga formu ikiden az noktaya sahiptir"
 
 #: eeschema/sim/kibis/kibis.cpp:675 eeschema/sim/kibis/kibis.cpp:740
 #, fuzzy
@@ -16063,28 +16063,34 @@ msgid ""
 "Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
 "pdf"
 msgstr ""
+"Kirby's henüz DUT değerlerini desteklemiyor. https://ibis.org/summits/nov16a/"
+"chen.pdf"
 
 #: eeschema/sim/kibis/kibis.cpp:877
 msgid "Model has only one waveform pair, reduced accuracy"
-msgstr ""
+msgstr "Model sadece bir dalga formu çiftine sahiptir, doğruluğu azaltır"
 
 #: eeschema/sim/kibis/kibis.cpp:897 eeschema/sim/kibis/kibis.cpp:1102
 msgid "Driver needs at least a pullup or a pulldown"
-msgstr ""
+msgstr "Sürücünün en azından yukarı veya aşağı çekmesi gerekiyor"
 
 #: eeschema/sim/kibis/kibis.cpp:1085 eeschema/sim/kibis/kibis.cpp:1094
 msgid ""
 "There are two waveform pairs, but only one transistor. More equations than "
 "unknowns."
 msgstr ""
+"İki dalga formu çifti vardır, ancak yalnızca bir transistör vardır. "
+"Bilinmeyenden daha fazla denklem."
 
 #: eeschema/sim/kibis/kibis.cpp:1202
 msgid "Model has no waveform pair, using [Ramp] instead, poor accuracy"
 msgstr ""
+"Modelin dalga biçimi çifti yoktur, bunun yerine [Rampa] kullanılır, zayıf "
+"doğruluk"
 
 #: eeschema/sim/kibis/kibis.cpp:1215
 msgid "Model has more than 2 waveform pairs, using the first two."
-msgstr ""
+msgstr "Model, ilk ikisini kullanan 2'den fazla dalga formu çiftine sahiptir."
 
 #: eeschema/sim/kibis/kibis.cpp:1253
 #, fuzzy
@@ -16113,19 +16119,19 @@ msgstr "%s, %s'den küçük olmalıdır."
 
 #: eeschema/sim/kibis/kibis.cpp:1545
 msgid "Rising edge is longer than on time."
-msgstr ""
+msgstr "Yükselen kenar, zamandan daha uzundur."
 
 #: eeschema/sim/kibis/kibis.cpp:1554
 msgid "Falling edge is longer than off time."
-msgstr ""
+msgstr "Düşen kenar, kapanma süresinden daha uzundur."
 
 #: eeschema/sim/kibis/kibis.cpp:1591
 msgid "Rising edge is longer than ON time."
-msgstr ""
+msgstr "Yükselen kenar, zamandan daha uzundur."
 
 #: eeschema/sim/kibis/kibis.cpp:1599
 msgid "Falling edge is longer than OFF time."
-msgstr ""
+msgstr "Düşen kenar, kapanma süresinden daha uzundur."
 
 #: eeschema/sim/kibis/kibis.cpp:1613 eeschema/sim/kibis/kibis.cpp:1644
 #, fuzzy
@@ -16139,11 +16145,11 @@ msgstr "%s, %s'den küçük olmalıdır."
 
 #: eeschema/sim/kibis/kibis.cpp:1631
 msgid "Bitrate is too high for rising / falling edges"
-msgstr ""
+msgstr "Yükselen / düşen kenarlar için bit hızı çok yüksek"
 
 #: eeschema/sim/kibis/kibis.cpp:1658
 msgid "Bitrate could be too high for rising / falling edges"
-msgstr ""
+msgstr "Yükselen / düşen kenarlar için bit hızı çok yüksek olabilir"
 
 #: eeschema/sim/sim_lib_mgr.cpp:77
 #, fuzzy, c-format
@@ -16188,6 +16194,7 @@ msgid ""
 "Simulation model type must be the same as of its base class: '%s', but is "
 "'%s'"
 msgstr ""
+"Benzetim modeli türü, temel sınıfınınkiyle aynı olmalıdır: '%s', ancak '%s'"
 
 #: eeschema/sim/sim_model.cpp:784
 #, fuzzy, c-format
@@ -16288,6 +16295,8 @@ msgstr "Birim Sayısı:"
 msgid ""
 "Simulation provided no plots. Please refer to console window for results."
 msgstr ""
+"Simülasyon hiçbir arsa sağlamadı. Sonuçlar için lütfen konsol penceresine "
+"bakın."
 
 #: eeschema/sim/sim_plot_frame.cpp:162
 msgid "Run/Stop Simulation"
@@ -16340,16 +16349,20 @@ msgid ""
 "Errors during netlist generation; simulation aborted.\n"
 "\n"
 msgstr ""
+"Netlist oluşturma sırasındaki hatalar; simülasyon iptal edildi.\n"
+"\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:483
 msgid ""
 "Schematic sheet simulation command directive has changed.  Do you wish to "
 "update the Simulation Command?"
 msgstr ""
+"Şematik sayfa simülasyon komut yönergesi değişti.   Simülasyon Komutunu "
+"güncellemek ister misiniz?"
 
 #: eeschema/sim/sim_plot_frame.cpp:506 eeschema/sim/sim_plot_frame.cpp:1992
 msgid "Another simulation is already running."
-msgstr ""
+msgstr "Başka bir simülasyon zaten çalışıyor."
 
 #: eeschema/sim/sim_plot_frame.cpp:534
 #, c-format
@@ -16359,7 +16372,7 @@ msgstr "Çizim%u - "
 #: eeschema/sim/sim_plot_frame.cpp:598 eeschema/sim/sim_plot_frame.cpp:610
 #: eeschema/sim/sim_plot_frame.cpp:934
 msgid "Could not apply tuned value(s):"
-msgstr ""
+msgstr "Ayarlanmış değer (ler) uygulanamadı:"
 
 #: eeschema/sim/sim_plot_frame.cpp:611 eeschema/sim/sim_plot_frame.cpp:923
 #, fuzzy, c-format
