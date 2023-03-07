@@ -197,17 +197,23 @@ void CADSTAR_SCH_ARCHIVE_PLUGIN::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& a
                                                      const wxString&           aLibraryPath,
                                                      const STRING_UTF8_MAP* aProperties )
 {
+    static std::vector<LIB_SYMBOL*> cached;
+    static wxString                 cachedPath;
+
+    if(cachedPath == aLibraryPath)
+    {
+        aSymbolList = cached;
+        return;
+    }
+
     wxFileName fn( aLibraryPath );
     fn.SetExt( "csa" );
     fn.SetName( "symbol" );
 
     CADSTAR_SCH_ARCHIVE_LOADER csaLoader( fn.GetFullPath(), m_reporter, m_progressReporter );
-
-    if( m_progressReporter )
-        m_progressReporter->SetNumPhases( 2 ); // (0) Read file, (1) Parse file
-
-    csaLoader.Parse();
-    printf( "symbols: %zd", csaLoader.Library.SymbolDefinitions.size() );
+    aSymbolList = csaLoader.LoadPartsLib( aLibraryPath );
+    cachedPath = aLibraryPath;
+    cached = aSymbolList;
 }
 
 
@@ -215,6 +221,15 @@ LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_PLUGIN::LoadSymbol( const wxString&        aLibr
                                                     const wxString&        aAliasName,
                                                     const STRING_UTF8_MAP* aProperties )
 {
+    std::vector<LIB_SYMBOL*> symbols;
+    EnumerateSymbolLib( symbols, aLibraryPath, aProperties );
+
+    for( LIB_SYMBOL*& sym : symbols )
+    {
+        if( sym->GetName() == aAliasName )
+            return sym;
+    }
+
     return nullptr;
 }
 

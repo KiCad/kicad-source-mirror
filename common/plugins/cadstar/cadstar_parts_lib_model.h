@@ -59,10 +59,9 @@ struct CADSTAR_PART_ENTRY
 
     std::optional<std::string> m_SpicePartName;
     std::optional<std::string> m_SpiceModel;
-    std::optional<std::string> m_SpiceValue;
 
-    std::optional<std::string> m_AcceptancePartName;
-    std::optional<std::string> m_AcceptanceText;
+    std::optional<std::string> m_AcceptancePartName; // The part the acceptance text refers to
+    std::optional<std::string> m_AcceptanceText; // "Part Acceptance" has canonical meaning
 
     bool m_GateSwappingAllowed = true;
     bool m_PinsVisible = true;

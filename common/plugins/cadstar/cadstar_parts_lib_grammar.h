@@ -383,8 +383,7 @@ struct MXP_LINE :
 
 //[*SPI_[(<Part name>)]_[<Model>]_<Component Value>]
 struct SPICE_PART_NAME : STRING_IN_BRACKETS {};
-struct SPICE_FIRST : sor<QUOTED_STRING, STRING_EXCLUDING<WHITESPACE>> {};
-struct SPICE_SECOND : sor<QUOTED_STRING, STRING_EXCLUDING<WHITESPACE>> {};
+struct SPICE_MODEL : sor<QUOTED_STRING, STRING_EXCLUDING<>> {};
 struct SPI_LINE :
                 seq
                 <
@@ -392,9 +391,8 @@ struct SPI_LINE :
                     TAO_PEGTL_ISTRING( "*SPI"),
                     plus<WHITESPACE>,
                     opt<SPICE_PART_NAME>,
-                    plus<WHITESPACE>,
-                    SPICE_FIRST, // Spice Value or Model
-                    opt<plus<WHITESPACE>, SPICE_SECOND>, // Spice Value
+                    star<WHITESPACE>,
+                    SPICE_MODEL,
                     opt<eol>
                 >
 {};

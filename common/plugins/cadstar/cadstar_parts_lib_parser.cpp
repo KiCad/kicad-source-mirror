@@ -154,26 +154,11 @@ DEFINE_STRING_ACTION( ATTRIBUTE_NAME,           m_CurrentAttrName );
 DEFINE_STRING_ACTION( ACCEPTANCE_PART_NAME,     m_CurrentPart.m_AcceptancePartName );
 DEFINE_STRING_ACTION( ACCEPTANCE_TEXT,          m_CurrentPart.m_AcceptanceText );
 DEFINE_STRING_ACTION( SPICE_PART_NAME,          m_CurrentPart.m_SpicePartName );
+DEFINE_STRING_ACTION( SPICE_MODEL,              m_CurrentPart.m_SpiceModel );
 DEFINE_STRING_ACTION( SCH_NAME,                 m_CurrentSymbol.m_SymbolName );
 DEFINE_STRING_ACTION( SCH_ALTERNATE,            m_CurrentSymbol.m_SymbolAlternateName );
 DEFINE_STRING_ACTION( PIN_SIGNAL_NAME,          m_CurrentPin.m_Signal );
 
-// Might become m_SpiceModel if SPICE_SECOND is found
-DEFINE_STRING_ACTION( SPICE_FIRST,              m_CurrentPart.m_SpiceValue );
-
-template <>
-struct CADSTAR_LIB_PARSER_ACTION<SPICE_SECOND>
-{
-    /* @todo : convert to use apply0 to improve performance( once fully tested ) */
-    template <typename ActionInput>
-    static void apply( const ActionInput& in, CADSTAR_LIB_PARSER_STATE& s )
-    {
-        assert( in.string().size() >= s.m_CurrentString.size() );
-        s.m_CurrentPart.m_SpiceModel = s.m_CurrentPart.m_SpiceValue; // Parsed by SPICE_FIRST
-        s.m_CurrentPart.m_SpiceValue = s.m_CurrentString;
-        s.m_CurrentString = "";
-    }
-};
 
 // STRING SEGMENT action
 // Any strings we match, append to the current state string (the state string gets

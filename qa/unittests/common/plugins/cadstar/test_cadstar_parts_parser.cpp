@@ -127,8 +127,7 @@ BOOST_AUTO_TEST_CASE( ReadFile )
         BOOST_CHECK_EQUAL( partEntry.m_PinsVisible, i % 5 != 1 );
 
         BOOST_CHECK_EQUAL( partEntry.m_SpicePartName, "PartName" + std::to_string( i ) );
-        BOOST_CHECK_EQUAL( partEntry.m_SpiceModel, std::optional<std::string>() );
-        BOOST_CHECK_EQUAL( partEntry.m_SpiceValue, std::to_string( i ) + "uH" );
+        BOOST_CHECK_EQUAL( partEntry.m_SpiceModel, std::to_string( i ) + "uH" );
 
         BOOST_CHECK_EQUAL( partEntry.m_AcceptancePartName, "PartName" + std::to_string( i ) );
         BOOST_CHECK_EQUAL( partEntry.m_AcceptanceText, "Acceptance" + std::to_string( i ) );
@@ -341,8 +340,7 @@ BOOST_AUTO_TEST_CASE( ReadContent )
 
     // Check *SPI
     BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_SpicePartName, "<Part name>" );
-    BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_SpiceModel, "<Model>" );
-    BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_SpiceValue, "<Value>" );
+    BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_SpiceModel, "<Model> <Value>" );
 
     // Check *PAC
     BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_AcceptancePartName, "<Part name>" );

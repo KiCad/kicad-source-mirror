@@ -24,6 +24,7 @@
  */
 
 #include <sch_plugins/cadstar/cadstar_sch_archive_loader.h>
+#include <plugins/cadstar/cadstar_parts_lib_parser.h>
 
 #include <bus_alias.h>
 #include <core/mirror.h>
@@ -46,11 +47,275 @@
 #include <sch_sheet_pin.h>
 #include <sch_label.h>
 #include <schematic.h>
+#include <sim/sim_model.h>
 #include <trigo.h>
 #include <wildcards_and_files_ext.h>
 
 
 const wxString PartNameFieldName = "Part Name";
+const wxString PartNumberFieldName = "Part Number";
+const wxString PartVersionFieldName = "Part Version";
+const wxString PartAcceptanceFieldName = "Part Acceptance";
+
+
+std::vector<LIB_SYMBOL*> CADSTAR_SCH_ARCHIVE_LOADER::LoadPartsLib( const wxString& aFilename )
+{
+    if( m_progressReporter )
+        m_progressReporter->SetNumPhases( 3 ); // (0) Read csa, (1) Parse csa, (3) Load lib
+
+    Parse();
+
+    CADSTAR_PARTS_LIB_PARSER p;
+
+    if( !p.CheckFileHeader( aFilename.utf8_string() ) )
+        THROW_IO_ERROR(
+                _( "The selected file does not appear to be a CADSTAR parts Library file" ) );
+
+    // TODO: we could add progress reporting for reading .lib
+    CADSTAR_PARTS_LIB_MODEL csLib = p.ReadFile( aFilename.utf8_string() );
+
+    if( m_progressReporter )
+    {
+        m_progressReporter->BeginPhase( 2 );
+        long numSteps = csLib.m_PartEntries.size();
+        m_progressReporter->SetMaxProgress( numSteps );
+    }
+
+    std::vector<LIB_SYMBOL*> retVal;
+
+    for( const CADSTAR_PART_ENTRY& part : csLib.m_PartEntries )
+    {
+        std::unique_ptr<LIB_SYMBOL> loadedPart = loadLibPart( part );
+
+        checkPoint();
+
+        if( loadedPart )
+            retVal.push_back( loadedPart.release() );
+    }
+
+    return retVal;
+}
+
+
+std::unique_ptr<LIB_SYMBOL>
+CADSTAR_SCH_ARCHIVE_LOADER::loadLibPart( const CADSTAR_PART_ENTRY& aPart )
+{
+    wxString                    escapedPartName = EscapeString( aPart.m_Name, CTX_LIBID );
+    std::unique_ptr<LIB_SYMBOL> retSym;
+
+    int unit = 0;
+
+    for( const CADSTAR_PART_SYMBOL_ENTRY& sym : aPart.m_Symbols )
+    {
+        ++unit;
+        wxString  alternateName = sym.m_SymbolAlternateName.value_or( "" );
+        SYMDEF_ID symbolID = getSymDefFromName( sym.m_SymbolName, alternateName );
+
+        if( !Library.SymbolDefinitions.count( symbolID ) )
+        {
+            m_reporter->Report(
+                    wxString::Format( _( "Unable to find symbol %s, referenced by part %s. The "
+                                         "part was not loaded." ),
+                                      generateLibName( sym.m_SymbolName, alternateName ),
+                                      aPart.m_Name ),
+                    RPT_SEVERITY_ERROR );
+
+            return nullptr;
+        }
+
+        // Load the graphical symbol for this gate
+        std::unique_ptr<LIB_SYMBOL> kiSymDef( loadSymdef( symbolID )->Duplicate() );
+
+        if( sym.m_Pins.size() != kiSymDef->GetPinCount() )
+        {
+            m_reporter->Report(
+                    wxString::Format( _( "Inconsitent pin numbers in symbol %s compared to the one "
+                                         "defined in part %s. The part was not loaded." ),
+                                      generateLibName( sym.m_SymbolName, alternateName ),
+                                      aPart.m_Name ),
+                    RPT_SEVERITY_ERROR );
+
+            return nullptr;
+        }
+
+        wxASSERT( m_symDefTerminalsMap.count( symbolID ) ); //loadSymDef should have populated this
+
+
+        // Update the pin numbers to match those defined in the Cadstar part
+        for( auto& [storedPinNum, termID] : m_symDefTerminalsMap[symbolID] )
+        {
+            wxCHECK( termID > 0 && sym.m_Pins.size() >= termID, nullptr );
+            LIB_PIN* pin = kiSymDef->GetPin( storedPinNum );
+            size_t   termIdx = size_t( termID ) - 1;
+
+            // For now leave numerical pin number. Otherwise, when loading the
+            // .cpa file we won't be able to link up to the footprint pads, but if
+            // we solve this, we could then load alphanumeric pin numbers as below:
+            //
+            // if( aPart.m_PinNamesMap.count( termID ) )
+            //  partPinNum = wxString( aPart.m_PinNamesMap.at( termID ) );
+            //
+            wxString partPinNum = wxString::Format( "%ld", sym.m_Pins[termIdx].m_Identifier );
+            pin->SetNumber( partPinNum );
+
+            if( aPart.m_PinNamesMap.count( termID ) )
+                pin->SetName( HandleTextOverbar( aPart.m_PinNamesMap.at( termID ) ) );
+
+            pin->SetType( getKiCadPinType( sym.m_Pins[termIdx].m_Type ) );
+
+            // @todo: Load pin/gate swapping information once kicad supports this
+        }
+
+        if( unit == 1 )
+        {
+            wxCHECK( kiSymDef->GetUnitCount() == 1, nullptr );
+            // The first unit can just be moved to the part symbol
+            retSym = std::move( kiSymDef );
+
+            retSym->SetUnitCount( aPart.m_Symbols.size(), true );
+
+            retSym->SetName( escapedPartName );
+            retSym->GetReferenceField().SetText( aPart.m_ComponentStem );
+            retSym->GetValueField().SetText( aPart.m_Value.value_or( "" ) );
+            addNewFieldToSymbol( PartNameFieldName, retSym )->SetText( aPart.m_Name );
+            retSym->SetDescription( aPart.m_Description.value_or( "" ) );
+
+            auto addFieldIfHasValue =
+                [&]( const wxString& aFieldName, const std::optional<std::string>& aFieldValue )
+                {
+                    if( aFieldValue.has_value() )
+                        addNewFieldToSymbol( aFieldName, retSym )->SetText( aFieldValue.value() );
+                };
+
+            addFieldIfHasValue( PartNumberFieldName,        aPart.m_Number );
+            addFieldIfHasValue( PartVersionFieldName,       aPart.m_Version );
+            addFieldIfHasValue( PartAcceptanceFieldName,    aPart.m_AcceptancePartName );
+
+            setFootprintOnSymbol( retSym, aPart.m_Pcb_component,
+                                  aPart.m_Pcb_alternate.value_or( "" ) );
+
+            if(aPart.m_SpiceModel.has_value())
+            {
+                wxString modelVal = wxString::Format( "model=\"%s\"", aPart.m_SpiceModel.value() );
+                addNewFieldToSymbol( SIM_DEVICE_TYPE_FIELD, retSym )->SetText( "SPICE" );
+                addNewFieldToSymbol( SIM_PARAMS_FIELD, retSym )->SetText( modelVal );
+            }
+
+            // Load all part attributes, regardless of original cadstar type, to the symbol
+
+            // @todo some cadstar part attributes have a "read-only" flag. We should load this
+            // when KiCad supports read-only fields.
+
+            for( auto& [fieldName, value] : aPart.m_UserAttributes )
+                addNewFieldToSymbol( fieldName, retSym )->SetText( value );
+
+            for( auto& [fieldName, attrValue] : aPart.m_SchAttributes )
+                addNewFieldToSymbol( fieldName, retSym )->SetText( attrValue.m_Value );
+
+            for( auto& [fieldName, attrValue] : aPart.m_PcbAttributes )
+                addNewFieldToSymbol( fieldName, retSym )->SetText( attrValue.m_Value );
+
+            for( auto& [fieldName, attrValue] : aPart.m_SchAndPcbAttributes )
+                addNewFieldToSymbol( fieldName, retSym )->SetText( attrValue.m_Value );
+
+            for( auto& [fieldName, attrValue] : aPart.m_PartAttributes )
+                addNewFieldToSymbol( fieldName, retSym )->SetText( attrValue.m_Value );
+
+            // Load all hidden pins onto the first unit of the symbol in KiCad
+            // We load them in a spiral sequence, starting at the center of the symbol BBOX
+            VECTOR2I symCenter = retSym->GetBodyBoundingBox( unit, 0, false, false ).GetCenter();
+            symCenter.y = -symCenter.y; // need to invert the y coord for lib symbols.
+
+            VECTOR2I delta( 0, 1 );
+            VECTOR2I direction( 0, -1 );
+            int spacing = schIUScale.MilsToIU( 50 ); // for now, place on a 50mil grid
+
+            for( const CADSTAR_PART_PIN& csPin : aPart.m_HiddenPins )
+            {
+                std::unique_ptr<LIB_PIN> pin = std::make_unique<LIB_PIN>( retSym.get() );
+
+                long pinNum = csPin.m_Identifier;
+                pin->SetNumber( wxString::Format( "%ld", pinNum ) );
+
+                if( csPin.m_Signal.has_value() )
+                {
+                    // Implied net connection
+                    pin->SetName( csPin.m_Signal.value() );
+                    pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
+                }
+                else if( aPart.m_PinNamesMap.count( pinNum ) )
+                {
+                    pin->SetName( HandleTextOverbar( aPart.m_PinNamesMap.at( pinNum ) ) );
+                    pin->SetType( getKiCadPinType( csPin.m_Type ) );
+                }
+
+                pin->SetVisible( false );
+
+                // Generate the coordinate for the pin. We don't want overlapping pins
+                // and ideally close to the center of the symbol, so we load pins sequentially
+                // in a spiral sequence
+                if( delta.x == delta.y
+                    || ( delta.x < 0 && delta.x == -delta.y )
+                    || ( delta.x > 0 && delta.x == 1 - delta.y ) )
+                {
+                    // change direction
+                    direction = { -direction.y, direction.x };
+                }
+
+                delta += direction;
+                VECTOR2I offset = delta * spacing;
+                pin->SetPosition( symCenter + offset );
+                pin->SetLength( 0 ); //CADSTAR Pins are just a point (have no length)
+                pin->SetShape( GRAPHIC_PINSHAPE::LINE );
+                pin->SetUnit( unit );
+                retSym->AddDrawItem( pin.release() );
+            }
+        }
+        else
+        {                 // Source:   Dest:
+            copySymbolItems( kiSymDef, retSym, unit, false /* aOverrideFields */ );
+        }
+
+
+        retSym->SetShowPinNames( aPart.m_PinsVisible );
+        retSym->SetShowPinNumbers( aPart.m_PinsVisible );
+    }
+
+
+    return retSym;
+}
+
+
+void CADSTAR_SCH_ARCHIVE_LOADER::copySymbolItems( std::unique_ptr<LIB_SYMBOL>& aSourceSym,
+                                                  std::unique_ptr<LIB_SYMBOL>& aDestSym,
+                                                  int aDestUnit, bool aOverrideFields )
+{
+    // Ensure there are no items on the unit we want to load onto
+    for( LIB_ITEM* item : aDestSym->GetUnitDrawItems( aDestUnit, 0 /*aConvert*/ ) )
+        aDestSym->RemoveDrawItem( item );
+
+    // Copy all draw items
+    for( LIB_ITEM* newItem : aSourceSym->GetUnitDrawItems( 1, 0 /*aConvert*/ ) )
+    {
+        LIB_ITEM* itemCopy = static_cast<LIB_ITEM*>( newItem->Clone() );
+        itemCopy->SetParent( aDestSym.get() );
+        itemCopy->SetUnit( aDestUnit );
+        aDestSym->AddDrawItem( itemCopy );
+    }
+
+    //Copy / override all fields
+    if( aOverrideFields )
+    {
+        std::vector<LIB_FIELD*> fieldsToCopy;
+        aSourceSym->GetFields( fieldsToCopy );
+
+        for( LIB_FIELD* templateField : fieldsToCopy )
+        {
+            LIB_FIELD* appliedField = addNewFieldToSymbol( templateField->GetName(), aDestSym );
+            templateField->Copy( appliedField );
+        }
+    }
+}
 
 
 void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet )
@@ -386,9 +651,9 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadPartsLibrary()
         PART    part = partPair.second;
 
         wxString    escapedPartName = EscapeString( part.Name, CTX_LIBID );
-        LIB_SYMBOL* kiPart = new LIB_SYMBOL( escapedPartName );
+        LIB_SYMBOL* kiSym = new LIB_SYMBOL( escapedPartName );
 
-        kiPart->SetUnitCount( part.Definition.GateSymbols.size() );
+        kiSym->SetUnitCount( part.Definition.GateSymbols.size() );
         bool ok = true;
 
         for( std::pair<GATE_ID, PART::DEFINITION::GATE> gatePair : part.Definition.GateSymbols )
@@ -413,12 +678,12 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadPartsLibrary()
             }
 
             m_partSymbolsMap.insert( { { partID, gateID }, symbolID } );
-            loadSymbolGateAndPartFields( symbolID, &part, gateID, kiPart );
+            loadSymbolGateAndPartFields( symbolID, part, gateID, kiSym );
         }
 
         if( ok && part.Definition.GateSymbols.size() != 0 )
         {
-            m_loadedSymbols.push_back( kiPart );
+            m_loadedSymbols.push_back( kiSym );
         }
         else
         {
@@ -437,7 +702,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadPartsLibrary()
             // the part name, which is important to load
         }
 
-        m_partMap.insert( { partID, kiPart } );
+        m_partMap.insert( { partID, kiSym } );
 
         checkPoint();
     }
@@ -471,7 +736,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                 sym.GateID = wxT( "A" ); // Assume Gate "A" if unspecified
 
             PART_GATE_ID partSymbolID = { sym.PartRef.RefID, sym.GateID };
-            LIB_SYMBOL*  kiPart = m_partMap.at( sym.PartRef.RefID );
+            LIB_SYMBOL*  kiSym = m_partMap.at( sym.PartRef.RefID );
             bool         copy = false;
 
             // The symbol definition in the part either does not exist for this gate number
@@ -480,13 +745,13 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
             if( m_partSymbolsMap.find( partSymbolID ) == m_partSymbolsMap.end()
                 || m_partSymbolsMap.at( partSymbolID ) != sym.SymdefID )
             {
-                kiPart = new LIB_SYMBOL( *kiPart ); // Make a copy
+                kiSym = new LIB_SYMBOL( *kiSym ); // Make a copy
                 copy = true;
                 const PART& part = Parts.PartDefinitions.at( sym.PartRef.RefID );
-                loadSymbolGateAndPartFields( sym.SymdefID, &part, sym.GateID, kiPart );
+                loadSymbolGateAndPartFields( sym.SymdefID, part, sym.GateID, kiSym );
             }
 
-            LIB_SYMBOL* scaledPart = getScaledLibPart( kiPart, sym.ScaleRatioNumerator,
+            LIB_SYMBOL* scaledPart = getScaledLibPart( kiSym, sym.ScaleRatioNumerator,
                                                        sym.ScaleRatioDenominator );
 
             EDA_ANGLE   symOrient = ANGLE_0;
@@ -495,7 +760,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
             delete scaledPart;
 
             if( copy )
-                delete kiPart;
+                delete kiSym;
 
             SCH_FIELD* refField = symbol->GetField( REFERENCE_FIELD );
 
@@ -1320,16 +1585,28 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadTextVariables()
 }
 
 
-LIB_FIELD* CADSTAR_SCH_ARCHIVE_LOADER::addNewFieldToSymbol( const wxString& aFieldName,
-                                                            LIB_SYMBOL*     aKiCadSymbol )
+LIB_FIELD*
+CADSTAR_SCH_ARCHIVE_LOADER::addNewFieldToSymbol( const wxString&              aFieldName,
+                                                 std::unique_ptr<LIB_SYMBOL>& aKiCadSymbol )
 {
-    int        fieldID = aKiCadSymbol->GetFieldCount();
-    LIB_FIELD* field = new LIB_FIELD( aKiCadSymbol, fieldID );
-    field->SetName( aFieldName );
-    field->SetVisible( false );
-    aKiCadSymbol->AddField( field );
+    // First Check if field already exists
+    LIB_FIELD* existingField = aKiCadSymbol->FindField( aFieldName );
 
-    return field;
+    if( existingField != nullptr )
+        return existingField;
+
+    int        newfieldID = aKiCadSymbol->GetFieldCount();
+    LIB_FIELD* newfield = new LIB_FIELD( aKiCadSymbol.get(), newfieldID );
+    newfield->SetName( aFieldName );
+    newfield->SetVisible( false );
+    aKiCadSymbol->AddField( newfield );
+    /*
+    @todo we should load that a field is a URL by checking if it starts with "Link"
+    e.g.:
+    if( aFieldName.Lower().StartsWith( "link" ) )
+        newfield->SetAsURL*/
+
+    return newfield;
 }
 
 
@@ -1485,7 +1762,7 @@ const LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSymdef( const SYMDEF_ID& aSymd
     }
 
     // Always add the part name field (even if it doesn't have a specific location defined)
-    addNewFieldToSymbol( PartNameFieldName, kiSym.get() );
+    addNewFieldToSymbol( PartNameFieldName, kiSym );
 
     if( csSym.TextLocations.count( PART_NAME_ATTRID ) )
     {
@@ -1509,7 +1786,7 @@ const LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSymdef( const SYMDEF_ID& aSymd
         }
 
         wxString attributeName = getAttributeName( attributeId );
-        LIB_FIELD* field = addNewFieldToSymbol( attributeName, kiSym.get() );
+        LIB_FIELD* field = addNewFieldToSymbol( attributeName, kiSym );
         applyToLibraryFieldAttribute( textLocation, csSym.Origin, field );
     }
 
@@ -1523,7 +1800,7 @@ const LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSymdef( const SYMDEF_ID& aSymd
         }
 
         wxString   attributeName = getAttributeName( attributeId );
-        LIB_FIELD* field = addNewFieldToSymbol( attributeName, kiSym.get() );
+        LIB_FIELD* field = addNewFieldToSymbol( attributeName, kiSym );
 
         if( attrValue.HasLocation )
             applyToLibraryFieldAttribute( attrValue.AttributeLocation, csSym.Origin, field );
@@ -1537,7 +1814,7 @@ const LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSymdef( const SYMDEF_ID& aSymd
 
 
 void CADSTAR_SCH_ARCHIVE_LOADER::loadSymbolGateAndPartFields( const SYMDEF_ID& aSymdefID,
-                                                 const PART* aCadstarPart,
+                                                 const PART& aCadstarPart,
                                                  const GATE_ID& aGateID,
                                                  LIB_SYMBOL* aSymbol )
 {
@@ -1546,179 +1823,156 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymbolGateAndPartFields( const SYMDEF_ID& a
     std::unique_ptr<LIB_SYMBOL> kiSymDef( loadSymdef( aSymdefID )->Duplicate() );
     wxCHECK( kiSymDef, /*void*/ );
 
-    if( aCadstarPart )
+    //todo: need to use unique_ptr more. For now just create it here and release at end of function
+    std::unique_ptr<LIB_SYMBOL> tempSymbol( aSymbol );
+
+    // Update the pin numbers to match those defined in the Cadstar part
+    TERMINAL_TO_PINNUM_MAP pinNumMap;
+
+    for( auto&& [storedPinNum, termID] : m_symDefTerminalsMap[aSymdefID] )
     {
-        // Update the pin numbers to match those defined in the Cadstar part
+        PART::DEFINITION::PIN csPin = getPartDefinitionPin( aCadstarPart, aGateID, termID );
+        LIB_PIN*              pin = kiSymDef->GetPin( storedPinNum );
 
-        TERMINAL_TO_PINNUM_MAP pinNumMap;
+        wxString pinName = HandleTextOverbar( csPin.Label );
+        wxString pinNum = HandleTextOverbar( csPin.Name );
 
-        for( auto&& [storedPinNum, termID] : m_symDefTerminalsMap[aSymdefID] )
+        if( pinNum.IsEmpty() )
         {
-            PART::DEFINITION::PIN csPin = getPartDefinitionPin( *aCadstarPart, aGateID, termID );
-            LIB_PIN*              pin = kiSymDef->GetPin( storedPinNum );
-
-            wxString pinName = HandleTextOverbar( csPin.Label );
-            wxString pinNum = HandleTextOverbar( csPin.Name );
-
-            if( pinNum.IsEmpty() )
-            {
-                if( !csPin.Identifier.IsEmpty() )
-                    pinNum = csPin.Identifier;
-                else if( csPin.ID == UNDEFINED_VALUE )
-                    pinNum = wxString::Format( "%ld", termID );
-                else
-                    pinNum = wxString::Format( "%ld", csPin.ID );
-            }
-
-            pin->SetType( getKiCadPinType( csPin.Type ) );
-            pin->SetNumber( pinNum );
-            pin->SetName( pinName );
-
-            pinNumMap.insert( { termID, pinNum } );
+            if( !csPin.Identifier.IsEmpty() )
+                pinNum = csPin.Identifier;
+            else if( csPin.ID == UNDEFINED_VALUE )
+                pinNum = wxString::Format( "%ld", termID );
+            else
+                pinNum = wxString::Format( "%ld", csPin.ID );
         }
 
-        m_pinNumsMap.insert( { aCadstarPart->ID + aGateID, pinNumMap } );
+        pin->SetType( getKiCadPinType( csPin.Type ) );
+        pin->SetNumber( pinNum );
+        pin->SetName( pinName );
+
+        pinNumMap.insert( { termID, pinNum } );
     }
+
+    m_pinNumsMap.insert( { aCadstarPart.ID + aGateID, pinNumMap } );
 
     // COPY ITEMS
-    // Copy the items over to aSymbol
     int gateNumber = getKiCadUnitNumberFromGate( aGateID );
-
-    // Ensure there are no items on the unit we want to load onto
-    for( LIB_ITEM* item : aSymbol->GetUnitDrawItems( gateNumber, 0 /*aConvert*/ ) )
-        aSymbol->RemoveDrawItem( item );
-
-    // Copy all draw items
-    for( LIB_ITEM* newItem : kiSymDef->GetUnitDrawItems( 1, 0 /*aConvert*/ ) )
-    {
-        LIB_ITEM* itemCopy = static_cast<LIB_ITEM*>( newItem->Clone() );
-        itemCopy->SetParent( aSymbol );
-        itemCopy->SetUnit( gateNumber );
-        aSymbol->AddDrawItem( itemCopy );
-    }
-
-    //Copy / override all fields
-    std::vector<LIB_FIELD*> fieldsToCopy;
-    kiSymDef->GetFields( fieldsToCopy );
-
-    for( LIB_FIELD* templateField : fieldsToCopy )
-    {
-        LIB_FIELD* appliedField = aSymbol->FindField( templateField->GetName() );
-
-        if( !appliedField )
-            appliedField = addNewFieldToSymbol( templateField->GetName(), aSymbol );
-
-
-        templateField->Copy( appliedField );
-    }
+    copySymbolItems( kiSymDef, tempSymbol, gateNumber );
 
     // Hide the value field for now (it might get unhidden if an attribute exists in the cadstar
     // design with the text "Value"
-    aSymbol->GetValueField().SetVisible( false );
+    tempSymbol->GetValueField().SetVisible( false );
 
 
-    if( aCadstarPart )
+    LIB_FIELD* partNameField = tempSymbol->FindField( PartNameFieldName );
+
+    if( partNameField )
+        partNameField->SetText( EscapeFieldText( aCadstarPart.Name ) );
+
+    const POINT& symDefOrigin = Library.SymbolDefinitions.at( aSymdefID ).Origin;
+    wxString     footprintRefName = wxEmptyString;
+    wxString     footprintAlternateName = wxEmptyString;
+
+    auto loadLibraryField = [&]( const ATTRIBUTE_VALUE& aAttributeVal )
     {
-        LIB_FIELD* partNameField = aSymbol->FindField( PartNameFieldName );
+        wxString attrName = getAttributeName( aAttributeVal.AttributeID );
 
-        if( partNameField )
-            partNameField->SetText( EscapeFieldText( aCadstarPart->Name ) );
+        // Remove invalid field characters
+        wxString attributeValue = aAttributeVal.Value;
+        attributeValue.Replace( wxT( "\n" ), wxT( "\\n" ) );
+        attributeValue.Replace( wxT( "\r" ), wxT( "\\r" ) );
+        attributeValue.Replace( wxT( "\t" ), wxT( "\\t" ) );
 
-        const POINT& symDefOrigin = Library.SymbolDefinitions.at( aSymdefID ).Origin;
-        wxString     footprintRefName = wxEmptyString;
-        wxString     footprintAlternateName = wxEmptyString;
+        //TODO: Handle "links": In cadstar a field can be a "link" if its name starts
+        // with the characters "Link ". Need to figure out how to convert them to
+        // equivalent in KiCad.
 
-        auto loadLibraryField = [&]( const ATTRIBUTE_VALUE& aAttributeVal )
+        if( attrName == wxT( "(PartDefinitionNameStem)" ) )
         {
-            wxString attrName = getAttributeName( aAttributeVal.AttributeID );
-
-            // Remove invalid field characters
-            wxString attributeValue = aAttributeVal.Value;
-            attributeValue.Replace( wxT( "\n" ), wxT( "\\n" ) );
-            attributeValue.Replace( wxT( "\r" ), wxT( "\\r" ) );
-            attributeValue.Replace( wxT( "\t" ), wxT( "\\t" ) );
-
-            //TODO: Handle "links": In cadstar a field can be a "link" if its name starts
-            // with the characters "Link ". Need to figure out how to convert them to
-            // equivalent in KiCad.
-
-            if( attrName == wxT( "(PartDefinitionNameStem)" ) )
-            {
-                //Space not allowed in Reference field
-                attributeValue.Replace( wxT( " " ), "_" );
-                aSymbol->GetReferenceField().SetText( attributeValue );
-                return;
-            }
-            else if( attrName == wxT( "(PartDescription)" ) )
-            {
-                aSymbol->SetDescription( attributeValue );
-                return;
-            }
-            else if( attrName == wxT( "(PartDefinitionReferenceName)" ) )
-            {
-                footprintRefName = attributeValue;
-                return;
-            }
-            else if( attrName == wxT( "(PartDefinitionAlternateName)" ) )
-            {
-                footprintAlternateName = attributeValue;
-                return;
-            }
-
-            LIB_FIELD* attrField = aSymbol->FindField( attrName );
-            bool       existsInSymbol = attrField != nullptr;
-
-            if( !attrField )
-                attrField = addNewFieldToSymbol( attrName, aSymbol );
-
-            wxASSERT( attrField->GetName() == attrName );
-            attrField->SetText( aAttributeVal.Value );
-            attrField->SetUnit( gateNumber );
-
-            const ATTRIBUTE_ID& attrid = aAttributeVal.AttributeID;
-            attrField->SetVisible( isAttributeVisible( attrid ) );
-
-            if( aAttributeVal.HasLocation )
-            {
-                // Check if the part itself defined a location for the field
-                applyToLibraryFieldAttribute( aAttributeVal.AttributeLocation, symDefOrigin,
-                                              attrField );
-            }
-            else if( !existsInSymbol )
-            {
-                attrField->SetVisible( false );
-                applyTextSettings( attrField, wxT( "TC1" ), ALIGNMENT::NO_ALIGNMENT,
-                                   JUSTIFICATION::LEFT );
-            }
-        };
-
-        // Load all attributes in the Part Definition
-        for( auto& [attrId, attrVal] : aCadstarPart->Definition.AttributeValues )
-            loadLibraryField( attrVal );
-
-        // Load all attributes in the Part itself.
-        for( auto& [attrId, attrVal] : aCadstarPart->AttributeValues )
-            loadLibraryField( attrVal );
-
-        wxString fpNameInLibrary = generateLibName( footprintRefName, footprintAlternateName );
-
-        if( !fpNameInLibrary.IsEmpty() )
+            //Space not allowed in Reference field
+            attributeValue.Replace( wxT( " " ), "_" );
+            tempSymbol->GetReferenceField().SetText( attributeValue );
+            return;
+        }
+        else if( attrName == wxT( "(PartDescription)" ) )
         {
-            wxArrayString fpFilters;
+            tempSymbol->SetDescription( attributeValue );
+            return;
+        }
+        else if( attrName == wxT( "(PartDefinitionReferenceName)" ) )
+        {
+            footprintRefName = attributeValue;
+            return;
+        }
+        else if( attrName == wxT( "(PartDefinitionAlternateName)" ) )
+        {
+            footprintAlternateName = attributeValue;
+            return;
+        }
+
+        bool attrIsNew = tempSymbol->FindField( attrName ) == nullptr;
+        LIB_FIELD* attrField = addNewFieldToSymbol( attrName, tempSymbol );
+
+        wxASSERT( attrField->GetName() == attrName );
+        attrField->SetText( aAttributeVal.Value );
+        attrField->SetUnit( gateNumber );
+
+        const ATTRIBUTE_ID& attrid = aAttributeVal.AttributeID;
+        attrField->SetVisible( isAttributeVisible( attrid ) );
+
+        if( aAttributeVal.HasLocation )
+        {
+            // Check if the part itself defined a location for the field
+            applyToLibraryFieldAttribute( aAttributeVal.AttributeLocation, symDefOrigin,
+                                            attrField );
+        }
+        else if( attrIsNew )
+        {
+            attrField->SetVisible( false );
+            applyTextSettings( attrField, wxT( "TC1" ), ALIGNMENT::NO_ALIGNMENT,
+                                JUSTIFICATION::LEFT );
+        }
+    };
+
+    // Load all attributes in the Part Definition
+    for( auto& [attrId, attrVal] : aCadstarPart.Definition.AttributeValues )
+        loadLibraryField( attrVal );
+
+    // Load all attributes in the Part itself.
+    for( auto& [attrId, attrVal] : aCadstarPart.AttributeValues )
+        loadLibraryField( attrVal );
+
+    setFootprintOnSymbol( tempSymbol, footprintRefName, footprintAlternateName );
+
+    if( aCadstarPart.Definition.HidePinNames )
+    {
+        tempSymbol->SetShowPinNames( false );
+        tempSymbol->SetShowPinNumbers( false );
+    }
+
+    aSymbol = tempSymbol.release();
+}
+
+
+void CADSTAR_SCH_ARCHIVE_LOADER::setFootprintOnSymbol( std::unique_ptr<LIB_SYMBOL>& aKiCadSymbol,
+                                                       const wxString& aFootprintName,
+                                                       const wxString& aFootprintAlternate )
+{
+    wxString fpNameInLibrary = generateLibName( aFootprintName, aFootprintAlternate );
+
+    if( !fpNameInLibrary.IsEmpty() )
+    {
+        wxArrayString fpFilters;
+        fpFilters.Add( aFootprintName ); // In cadstar one footprint has several "alternates"
+
+        if( !aFootprintAlternate.IsEmpty() )
             fpFilters.Add( fpNameInLibrary );
-            aSymbol->SetFPFilters( fpFilters );
 
-            // Assume that the PCB footprint library name will be the same as the schematic filename
-            wxFileName schFilename( Filename );
-            wxString   libName = schFilename.GetName();
-            aSymbol->GetFootprintField().SetText( libName + wxT( ":" ) + fpNameInLibrary );
-        }
+        aKiCadSymbol->SetFPFilters( fpFilters );
 
-        if( aCadstarPart->Definition.HidePinNames )
-        {
-            aSymbol->SetShowPinNames( false );
-            aSymbol->SetShowPinNumbers( false );
-        }
+        LIB_ID libID( m_footprintLibName, fpNameInLibrary );
+        aKiCadSymbol->GetFootprintField().SetText( libID.Format() );
     }
 }
 

@@ -38,6 +38,7 @@
 #include <wx/string.h>
 
 class BUS_ALIAS;
+class CADSTAR_PART_ENTRY;
 class EDA_TEXT;
 class TEXT_SPIN_STYLE;
 class LIB_FIELD;
@@ -70,6 +71,10 @@ public:
         m_designCenter.y = 0;
         m_reporter = aReporter;
         m_progressReporter = aProgressReporter;
+
+        // Assume that the PCB footprint library name will be the same as the schematic filename
+        wxFileName schFilename( Filename );
+        m_footprintLibName = schFilename.GetName();
     }
 
 
@@ -77,7 +82,12 @@ public:
     {
     }
 
+    std::vector<LIB_SYMBOL*> LoadPartsLib( const wxString& aFilename );
+
     const std::vector<LIB_SYMBOL*>& GetLoadedSymbols() const { return m_loadedSymbols; }
+
+    void SetFpLibName( const wxString& aLibName ) { m_footprintLibName = aLibName; };
+
 
     /**
      * @brief Loads a CADSTAR Schematic Archive file into the KiCad SCHEMATIC object given
@@ -99,9 +109,10 @@ private:
 
     typedef std::map<wxString, TERMINAL_ID> PINNUM_TO_TERMINAL_MAP;
 
-    REPORTER*                        m_reporter;
-    SCHEMATIC*                       m_schematic;
-    SCH_SHEET*                       m_rootSheet;
+    REPORTER*  m_reporter;
+    SCHEMATIC* m_schematic;
+    SCH_SHEET* m_rootSheet;
+    wxString   m_footprintLibName; ///< Name of the footprint library to prepend all footprints with
 
     /**
      * Required for calculating the offset to apply to the Cadstar design so that it fits
@@ -141,6 +152,12 @@ private:
     void loadDocumentationSymbols();
     void loadTextVariables();
 
+    std::unique_ptr<LIB_SYMBOL> loadLibPart( const CADSTAR_PART_ENTRY& aPart );
+
+    void copySymbolItems( std::unique_ptr<LIB_SYMBOL>& aSourceSym,
+                          std::unique_ptr<LIB_SYMBOL>& aDestSym, int aDestUnit,
+                          bool aOverrideFields = true );
+
     //Helper Functions for loading sheets
     void loadSheetAndChildSheets( LAYER_ID aCadstarSheetID, const VECTOR2I& aPosition,
                                   VECTOR2I aSheetSize, const SCH_SHEET_PATH& aParentSheet );
@@ -156,8 +173,12 @@ private:
     //Helper Functions for loading library items
     const LIB_SYMBOL* loadSymdef( const SYMDEF_ID& aSymdefID );
 
-    void loadSymbolGateAndPartFields( const SYMDEF_ID& aSymdefID, const PART* aCadstarPart,
+    void loadSymbolGateAndPartFields( const SYMDEF_ID& aSymdefID, const PART& aCadstarPart,
                                       const GATE_ID& aGateID, LIB_SYMBOL* aSymbol );
+
+    void setFootprintOnSymbol( std::unique_ptr<LIB_SYMBOL>& aKiCadSymbol,
+                               const wxString&              aFootprintName,
+                               const wxString&              aFootprintAlternate );
 
     void loadLibrarySymbolShapeVertices( const std::vector<VERTEX>& aCadstarVertices,
                                          VECTOR2I aSymbolOrigin, LIB_SYMBOL* aSymbol,
@@ -304,7 +325,8 @@ private:
     double getPolarRadius( const VECTOR2I& aPoint );
 
 
-    static LIB_FIELD* addNewFieldToSymbol( const wxString& aFieldName, LIB_SYMBOL* aKiCadSymbol );
+    static LIB_FIELD* addNewFieldToSymbol( const wxString&              aFieldName,
+                                           std::unique_ptr<LIB_SYMBOL>& aKiCadSymbol );
 
 }; // CADSTAR_SCH_ARCHIVE_LOADER
 
