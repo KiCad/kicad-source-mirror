@@ -78,6 +78,10 @@ option( KICAD_SPICE
     "Build KiCad with internal Spice simulator."
     ON )
 
+option( KICAD_SPICE_QA
+    "Build software Quality assurance unit tests for spice (default ON)"
+    ON )
+
 option( KICAD_USE_SENTRY
     "Build KiCad with support for sentry app metrics"
     OFF )
