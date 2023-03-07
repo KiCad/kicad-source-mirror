@@ -193,7 +193,9 @@ bool padNeedsUpdate( const PAD* a, const PAD* b )
 
     // NB: KeepTopBottom is undefined if RemoveUnconnected is NOT set.
     if( a->GetRemoveUnconnected() )
+    {
         TEST( a->GetKeepTopBottom(), b->GetKeepTopBottom(), wxEmptyString );
+    }
 
     TEST( a->GetShape(), b->GetShape(), wxEmptyString );
 
@@ -448,9 +450,9 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint, REPORTER* 
     TEST( GetKeywords(), aLibFootprint->GetKeywords(),
           _( "Footprint keywords differ." ) );
 
-#define TEST_ATTR( a, b, attr, msg ) TEST( ( a & attr ), ( b & attr ), msg );
+#define TEST_ATTR( a, b, attr, msg ) TEST( ( a & attr ), ( b & attr ), msg )
 
-    TEST_ATTR( GetAttributes(), aLibFootprint->GetAttributes(), FP_THROUGH_HOLE | FP_SMD,
+    TEST_ATTR( GetAttributes(), aLibFootprint->GetAttributes(), (FP_THROUGH_HOLE | FP_SMD),
               _( "Footprint types differ." ) );
     TEST_ATTR( GetAttributes(), aLibFootprint->GetAttributes(), FP_ALLOW_SOLDERMASK_BRIDGES,
                _( "Allow bridged solder mask apertures between pads settings differ." ) );
