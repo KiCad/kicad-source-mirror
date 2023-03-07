@@ -145,7 +145,14 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
                 // Special-case holes and edge-cuts which pierce all physical layers
                 if( item->HasHole() )
                 {
-                    layers |= LSET::PhysicalLayersMask() | courtyards;
+                    if( layers.Contains( F_Cu ) )
+                        layers |= LSET::FrontBoardTechMask().set( F_CrtYd );
+
+                    if( layers.Contains( B_Cu ) )
+                        layers |= LSET::BackBoardTechMask().set( B_CrtYd );
+
+                    if( layers.Contains( F_Cu ) && layers.Contains( B_Cu ) )
+                        layers |= LSET::AllCuMask();
                 }
                 else if( item->Type() == PCB_FOOTPRINT_T )
                 {
@@ -637,10 +644,11 @@ int DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* aItem
 
         if( aItem->Type() == PCB_VIA_T )
         {
-            if( aItem->GetLayerSet().Contains( aLayer ) )
-                itemHoleShape = aItem->GetEffectiveHoleShape();
-            else
-                return violations;
+
+            wxCHECK_MSG( aItem->GetLayerSet().Contains( aLayer ), violations,
+                    wxT( "Bug!  Vias should only be checked for layers on which they exist" ) );
+
+            itemHoleShape = aItem->GetEffectiveHoleShape();
         }
         else if( aItem->HasHole() )
         {
@@ -649,10 +657,10 @@ int DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* aItem
 
         if( other->Type() == PCB_VIA_T )
         {
-            if( other->GetLayerSet().Contains( aLayer ) )
-                otherHoleShape = other->GetEffectiveHoleShape();
-            else
-                return violations;
+            wxCHECK_MSG( other->GetLayerSet().Contains( aLayer ), violations,
+                    wxT( "Bug!  Vias should only be checked for layers on which they exist" ) );
+
+            otherHoleShape = other->GetEffectiveHoleShape();
         }
         else if( other->HasHole() )
         {
