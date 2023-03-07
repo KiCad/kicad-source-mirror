@@ -1423,7 +1423,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
                         cutout = new PATH( window, T_polygon );
                         window->SetShape( cutout );
-                        cutout->layer_id = m_layerIds[ m_kicadLayer2pcb[ zone->GetFirstLayer() ] ];
+                        cutout->layer_id = m_layerIds[ m_kicadLayer2pcb[ layer ] ];
                     }
 
                     isStartContour = iterator.IsEndContour();
