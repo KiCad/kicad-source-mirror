@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:53-0800\n"
-"PO-Revision-Date: 2023-02-23 18:22+0000\n"
+"PO-Revision-Date: 2023-03-12 20:08+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v7/sv/>\n"
 "Language: sv\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -11154,9 +11154,8 @@ msgid "Simulation Command"
 msgstr "Simuleringskommando"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:186
-#, fuzzy
 msgid "<unknown>"
-msgstr "<Okänd>"
+msgstr "<okänd>"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:196
 #, c-format
@@ -20660,9 +20659,8 @@ msgstr ""
 "%s"
 
 #: kicad/pcm/pcm.cpp:464
-#, fuzzy
 msgid "Failed to parse locally stored repository.json."
-msgstr "Kan inte tolka repository: %s"
+msgstr "Kan inte tolka lokalt lagrad repository.json."
 
 #: kicad/pcm/pcm.cpp:492
 msgid ""
@@ -33378,9 +33376,9 @@ msgid "Determining PCB data\n"
 msgstr "Tar reda på data för mönsterkort\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Board Thickness from stackup: %.3f mm\n"
-msgstr "Mönsterkortstjocklek från lageruppbyggnad:"
+msgstr "Mönsterkortstjocklek från lageruppbyggnad: %.3f mm\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:344
 msgid "Build STEP data\n"
