@@ -209,7 +209,7 @@ void PCB_DIMENSION_BASE::SetUnitsMode( DIM_UNITS_MODE aMode )
 
     case DIM_UNITS_MODE::AUTOMATIC:
         m_autoUnits = true;
-        m_units = GetBoard()->GetUserUnits();
+        m_units = GetBoard() ? GetBoard()->GetUserUnits() : EDA_UNITS::MILLIMETRES;
         break;
     }
 }
