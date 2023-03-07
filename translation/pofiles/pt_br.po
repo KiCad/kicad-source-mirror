@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:51-0800\n"
-"PO-Revision-Date: 2023-02-21 00:56+0000\n"
+"PO-Revision-Date: 2023-03-11 14:19+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -115,7 +115,7 @@ msgstr "Monte o BVH para os furos e as vias"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:389
 msgid "OpenGL context creation error"
-msgstr "Erro de criação de contexto do OpenGL"
+msgstr "Erro durante a criação do contexto OpenGL"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:420
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
@@ -5091,9 +5091,8 @@ msgid "Delete"
 msgstr "Exclua"
 
 #: common/grid_tricks.cpp:353
-#, fuzzy
 msgid "Clear contents of selected cells"
-msgstr "Exclua as células selecionadas"
+msgstr "Exclua o conteúdo das células selecionadas"
 
 #: common/grid_tricks.cpp:354 common/tool/actions.cpp:171
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:105
@@ -11984,9 +11983,8 @@ msgstr "Atualize os campos dos símbolos"
 
 #: eeschema/dialogs/dialog_user_defined_signals_base.h:63
 #: eeschema/tools/ee_actions.cpp:999
-#, fuzzy
 msgid "User-defined Signals"
-msgstr "Origem definida pelo utilizador"
+msgstr "Sinais definidos pelo usuário"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:30
 msgid "Wire/bus width:"
@@ -14457,9 +14455,8 @@ msgstr ""
 "O arquivo de armazenamento não foi totalmente analisado (restam %d bytes)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:500
-#, fuzzy
 msgid "Blanket not currently supported."
-msgstr "A máscara de compilação atual ainda não é compatível."
+msgstr "A cobertura não é suportado atualmente."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:504
 #, c-format
@@ -14477,9 +14474,8 @@ msgid "Record 'PIECHART' not handled."
 msgstr "Gravação 'PIECHART' não tratado."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:697
-#, fuzzy
 msgid "Parameter Set not currently supported."
-msgstr "A máscara de compilação atual ainda não é compatível."
+msgstr "O conjunto de parâmetros não é suportado atualmente."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:722
 msgid "Compile mask not currently supported."
@@ -16286,9 +16282,9 @@ msgstr ""
 "mas é '%s'"
 
 #: eeschema/sim/sim_model.cpp:783
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown simulation model pin '%s'"
-msgstr "Nó desconhecido '%s' em '%s'"
+msgstr "Modelo de simulação desconhecido pino '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:81
 #, c-format
@@ -16433,9 +16429,8 @@ msgid "Measure Time of Max"
 msgstr "Medir o tempo de Max"
 
 #: eeschema/sim/simulator_frame.cpp:200
-#, fuzzy
 msgid "Measure Integral"
-msgstr "Medida média"
+msgstr "Medida Integral"
 
 #: eeschema/sim/simulator_frame.cpp:313
 #, c-format
@@ -16704,13 +16699,12 @@ msgstr ""
 "entrada ou de saída faz sentido<br><br>"
 
 #: eeschema/symbol_checker.cpp:215
-#, fuzzy
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Invisible input power pins are no longer "
 "required<br><br>"
 msgstr ""
 "<b>Símbolo de alimentação suspeito</b><br>Apenas os pinos invisíveis de "
-"alimentação da entrada são conectados automaticamente<br><br>"
+"alimentação da entrada não são mais necessários<br><br>"
 
 #: eeschema/symbol_checker.cpp:240
 #, c-format
@@ -16951,7 +16945,7 @@ msgstr "O símbolo atual foi modificado.  Deseja salvar as alterações?"
 #: eeschema/symbol_editor/symbol_editor.cpp:360
 #, c-format
 msgid "Deriving from '%s', the root symbol of '%s'."
-msgstr ""
+msgstr "Derivando de '%s', o símbolo raiz de '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:378
 msgid "This new symbol has no name and cannot be created."
@@ -17432,14 +17426,12 @@ msgid "Create a new symbol"
 msgstr "Criar um novo símbolo"
 
 #: eeschema/tools/ee_actions.cpp:132
-#, fuzzy
 msgid "Derive from existing symbol"
-msgstr "Derive de um símbolo já existente:"
+msgstr "Derivar do símbolo existente"
 
 #: eeschema/tools/ee_actions.cpp:132
-#, fuzzy
 msgid "Create a new symbol, derived from an existing symbol"
-msgstr "Derive de um símbolo já existente:"
+msgstr "Crie um novo símbolo, derivado de um símbolo existente"
 
 #: eeschema/tools/ee_actions.cpp:137
 msgid "Edit Symbol"
@@ -18581,7 +18573,7 @@ msgstr "Mostrar a Netlist SPICE"
 
 #: eeschema/tools/ee_actions.cpp:1000
 msgid "Add, edit or delete user-defined simulation signals"
-msgstr ""
+msgstr "Adicione, edite ou exclua os sinais da simulação definidos pelo usuário"
 
 #: eeschema/tools/ee_inspection_tool.cpp:222
 msgid "No symbol issues found."
@@ -20430,7 +20422,7 @@ msgstr "Gera apenas uma placa sem componentes"
 
 #: kicad/cli/command_export_pcb_step.cpp:79
 msgid "Export tracks (extremely time consuming)"
-msgstr ""
+msgstr "Exportar as faixas (extremamente demorado)"
 
 #: kicad/cli/command_export_pcb_step.cpp:85
 msgid "Minimum distance between points to treat them as separate ones"
@@ -21172,9 +21164,8 @@ msgstr ""
 "%s"
 
 #: kicad/pcm/pcm.cpp:464
-#, fuzzy
 msgid "Failed to parse locally stored repository.json."
-msgstr "Não foi possível analisar o repositório: %s"
+msgstr "Não foi possível analisar o repository.json armazenado localmente."
 
 #: kicad/pcm/pcm.cpp:492
 msgid ""
@@ -22912,9 +22903,8 @@ msgid "Threshold voltage:"
 msgstr "Limiar da tensão:"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:91
-#, fuzzy
 msgid "Names"
-msgstr "Nome"
+msgstr "Nomes"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:154
 msgid "PCB Calculator data file"
@@ -23582,7 +23572,6 @@ msgstr ""
 "fio."
 
 #: pcb_calculator/galvanic_corrosion_help.h:2
-#, fuzzy
 msgid ""
 "This table shows the difference in electrochemical potential between various "
 "metals and alloys. Galvanic corrosion affects different metals in contact "
@@ -23598,16 +23587,18 @@ msgid ""
 "Selected cells shown with the default system's coloring choice after a table "
 "refill.\n"
 msgstr ""
-"Esta tabela mostra a diferença de potencial eletroquímico entre vários "
-"metais e ligas. Um número positivo indica que a linha é anódica e a coluna é "
-"catódica.\n"
-"A corrosão galvânica afeta diferentes metais em contato e sob certas "
-"condições.\n"
+"Esta tabela mostra a diferença de potencial eletroquímico entre vários os "
+"metais e as ligas. A corrosão galvânica afeta diferentes metais em contato e "
+"sob certas condições.<br>\n"
 "O ânodo de um par eletroquímico é oxidado e corroído, enquanto o cátodo "
-"recebe metais dissolvidos, porém, se mantém intacto.\n"
-"A EN 50310 sugere uma diferença de tensão abaixo de 300mV. Práticas "
-"conhecidas fazem uso de um terceiro metal de interface entre o par principal "
-"(ou seja, o acabamento da superfície ENIG)."
+"recebe metais dissolvidos, mas permanece protegido.<br>\n"
+"Um número positivo indica que a linha é anódica (-) e a coluna é catódica (+)"
+", cores frias e quentes também indicam o potencial das linhas.<br>\n"
+"O EN 50310 sugere uma diferença de tensão abaixo de 300mV. As práticas "
+"conhecidas fazem uso de um terceiro metal da interface entre o par principal "
+"(ou seja, o acabamento da superfície ENIG).<br>\n"
+"As células selecionadas mostram a opção padrão de coloração do sistema após "
+"o preenchimento da tabela.\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:72
 msgid "General system design"
@@ -26835,13 +26826,15 @@ msgstr "Sobrescreva o arquivo antigo"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:123
 msgid "Export tracks (time consuming)"
-msgstr ""
+msgstr "Exportar as trilhas (consome tempo)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:124
 msgid ""
 "Export tracks and vias on external copper layers.\n"
 "Warning: this is *extremely* time consuming."
 msgstr ""
+"Exporte as trilhas e as vias em camadas externas de cobre.\n"
+"Aviso: isso é *extremamente* demorado."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:128
 msgid "Board outline chaining tolerance:"
@@ -26860,12 +26853,12 @@ msgid "Loose (0.1 mm)"
 msgstr "Folgado (0,1 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:136
-#, fuzzy
 msgid ""
 "Tolerance sets the distance between two points that are considered joined "
 "when building the board outlines."
 msgstr ""
-"A tolerância define a distância entre dois-pontos considerados como unidos."
+"A tolerância define a distância entre dois-pontos considerados como unidos "
+"ao construir os contornos da placa."
 
 #: pcbnew/dialogs/dialog_export_step_base.h:76
 msgid "Export STEP"
@@ -28092,9 +28085,8 @@ msgid "Graphic items"
 msgstr "Itens gráficos"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:142
-#, fuzzy
 msgid "Dimension items"
-msgstr "Dimensão da linha"
+msgstr "Dimensão dos itens"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:257
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:139
@@ -28167,9 +28159,8 @@ msgid "Upright"
 msgstr "Vertical"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:331
-#, fuzzy
 msgid "Set to layer and dimension default values:"
-msgstr "Ajuste para os valores padrão da camada:"
+msgstr "Defina os valores padrão da camada e da dimensão:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:333
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:252
@@ -28185,9 +28176,8 @@ msgid "Footprint graphic items"
 msgstr "Itens gráficos do footprint"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:40
-#, fuzzy
 msgid "Footprint dimension items"
-msgstr "Itens gráficos do footprint"
+msgstr "Dimensão dos itens do footprint"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
 msgid "PCB graphic items"
@@ -28198,9 +28188,8 @@ msgid "PCB text items"
 msgstr "Itens de texto da PCI"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:52
-#, fuzzy
 msgid "PCB dimension items"
-msgstr "Dimensão da linha"
+msgstr "Dimensão dos itens da PCI"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:67
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:71
@@ -32905,9 +32894,9 @@ msgid "netclass '%s' (diff pair)"
 msgstr "classe da rede '%s' (par diferencial)"
 
 #: pcbnew/drc/drc_engine.cpp:348
-#, fuzzy, c-format
+#, c-format
 msgid "netclass '%s' (uvia)"
-msgstr "classe da rede '%s' (par diferencial)"
+msgstr "netclass '%s' (uvia)"
 
 #: pcbnew/drc/drc_engine.cpp:422
 msgid "keepout area"
@@ -33034,9 +33023,9 @@ msgid "Checking %s track width: opt %s."
 msgstr "Verificando a largura da trilha %s: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:974
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s track width: min %s."
-msgstr "Verificando a largura da trilha %s: opt %s."
+msgstr "Verificando a largura da trilha %s: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:982
 #, c-format
@@ -33049,9 +33038,9 @@ msgid "Checking %s via diameter: opt %s."
 msgstr "Verificando %s o diâmetro via: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:996
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s via diameter: min %s."
-msgstr "Verificando %s o diâmetro via: opt %s."
+msgstr "Verificando %s via diâmetro: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1005
 #, c-format
@@ -33059,9 +33048,9 @@ msgid "Checking %s hole size: opt %s."
 msgstr "Verificando o tamanho do furo %s: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:1011
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s hole size: min %s."
-msgstr "Verificando o tamanho do furo %s: opt %s."
+msgstr "Verificando o tamanho do furo %s: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1021
 #, c-format
@@ -33074,14 +33063,14 @@ msgid "Checking %s diff pair gap: opt %s."
 msgstr "Verificando a diferença da lacuna do par %s: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:1035
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s clearance: min %s."
-msgstr "Verificando %s isolamento: %s."
+msgstr "Verificando %s isolamento: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1043
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s hole to hole: min %s."
-msgstr "Verificando o tamanho do furo %s: opt %s."
+msgstr "Verificando %s furo a furo: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1049 pcbnew/drc/drc_engine.cpp:1075
 #: pcbnew/drc/drc_engine.cpp:1493
@@ -33123,9 +33112,8 @@ msgid "Rule layer not matched; rule ignored."
 msgstr "A camada da regra não bateu; regra ignorada."
 
 #: pcbnew/drc/drc_engine.cpp:1188
-#, fuzzy
 msgid "Constraint layer not matched."
-msgstr "As camada(s) de retenção não coincidem."
+msgstr "A camada de retenção não coincidiu."
 
 #: pcbnew/drc/drc_engine.cpp:1208
 #, c-format
@@ -33726,118 +33714,103 @@ msgid "(%s min %s; actual %s)"
 msgstr "(%s mín %s; atual %s)"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:414
-#, fuzzy
 msgid "3D model scale doesn't match: "
-msgstr "Caminho de busca para os modelos 3D"
+msgstr "A escala do modelo 3D não corresponde: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:415
 msgid "3D model rotation doesn't match: "
-msgstr ""
+msgstr "A rotação do modelo 3D não corresponde: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:416
-#, fuzzy
 msgid "3D model offset doesn't match: "
-msgstr "A rede ilha bate com o esquema"
+msgstr "O deslocamento do modelo 3D não corresponde: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:417
 msgid "3D model opacity doesn't match: "
-msgstr ""
+msgstr "A opacidade do modelo 3D não corresponde: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:418
-#, fuzzy
 msgid "3D model doesn't match: "
-msgstr "Caminho de busca para os modelos 3D"
+msgstr "O modelo 3D não corresponde: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:419
-#, fuzzy
 msgid "3D model visibility doesn't match: "
-msgstr "Visibilidade do modelo 3D"
+msgstr "A visibilidade do modelo 3D não corresponde: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:447
-#, fuzzy
 msgid "Footprint descriptions differ."
-msgstr "Arquivo da associação do footprint"
+msgstr "As descrições dos footprints diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:449
-#, fuzzy
 msgid "Footprint keywords differ."
-msgstr "Ordem do footprint"
+msgstr "As palavras-chave do footprint diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:454
-#, fuzzy
 msgid "Footprint types differ."
-msgstr "Tipo do footprint:"
+msgstr "Os tipos do footprint diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:456
-#, fuzzy
 msgid "Allow bridged solder mask apertures between pads settings differ."
-msgstr "Permite aberturas na máscara de solda com ligações entre as ilhas"
+msgstr ""
+"Permitir que as aberturas da máscara de solda da ponte entre as "
+"configurações das ilhas sejam diferentes."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:458
-#, fuzzy
 msgid "Exempt from courtyard requirement settings differ."
-msgstr "Isento da exigência da região"
+msgstr "As configurações dos requisitos do pedaço são diferentes."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:471
-#, fuzzy
 msgid "Pad clearance overridden."
-msgstr "Substituição do isolamento"
+msgstr "O isolamento da ilha foi substituído."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:473
-#, fuzzy
 msgid "Solder mask expansion overridden."
-msgstr "Expansão da máscara de solda:"
+msgstr "A expansão da máscara de solda foi substituída."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:475
-#, fuzzy
 msgid "Solder paste absolute clearance overridden."
-msgstr "Isolamento absoluto da pasta de solda:"
+msgstr "O isolamento absoluto da pasta de solda substituído."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:477
-#, fuzzy
 msgid "Solder paste relative clearance overridden."
-msgstr "Isolamento relativo da pasta de solda:"
+msgstr "O isolamento relativo da pasta de solda substituído."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:480
-#, fuzzy
 msgid "Zone connection overridden."
-msgstr "Estilo de conexão de região"
+msgstr "A conexão da região foi substituída."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:484
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:489
 msgid "Net tie pad groups differ."
-msgstr ""
+msgstr "Os grupos das ilhas da net são diferentes."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:528
-#, fuzzy
 msgid "Pad count differs."
-msgstr "Número de ilhas"
+msgstr "A contagem das ilhas são diferentes."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:529
-#, fuzzy
 msgid "Rule area count differs."
-msgstr "Regra da região em %s"
+msgstr "A contagem da regra da região é diferente."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:530
-#, fuzzy
 msgid "Graphic item count differs."
-msgstr "Nenhum item gráfico foi encontrado no arquivo."
+msgstr "A contagem dos itens gráficos é diferente."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:539
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:564
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:582
 #, c-format
 msgid "%s differs."
-msgstr ""
+msgstr "%s difere."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:550
-#, fuzzy, c-format
+#, c-format
 msgid "%s has overrides."
-msgstr "Substituição local"
+msgstr "%s possuem substituições."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:592
 msgid "3D model count differs."
-msgstr ""
+msgstr "A contagem dos modelos 3D é diferente."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:616
 msgid "No project loaded, skipping library parity tests."
@@ -34141,9 +34114,9 @@ msgid "Determining PCB data\n"
 msgstr "Determinando os dados da PCI\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:447
-#, fuzzy, c-format
+#, c-format
 msgid "Board Thickness from stackup: %.3f mm\n"
-msgstr "Espessura do empilhamento da placa:"
+msgstr "Espessura da placa do empilhamento: %.3f mm\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:452
 msgid "Build STEP data\n"
@@ -35809,49 +35782,40 @@ msgid "Dimension '%s' on %s"
 msgstr "Dimensão '%s' no %s"
 
 #: pcbnew/pcb_dimension.cpp:1315
-#, fuzzy
 msgid "1234.0"
-msgstr "1234"
+msgstr "1234.0"
 
 #: pcbnew/pcb_dimension.cpp:1316
-#, fuzzy
 msgid "1234.0 mm"
-msgstr "1234 mm"
+msgstr "1234.0 mm"
 
 #: pcbnew/pcb_dimension.cpp:1317
-#, fuzzy
 msgid "1234.0 (mm)"
-msgstr "1234 (mm)"
+msgstr "1234.0 (mm)"
 
 #: pcbnew/pcb_dimension.cpp:1349
-#, fuzzy
 msgid "Units Format"
-msgstr "Formato das unidades:"
+msgstr "Formato das unidades"
 
 #: pcbnew/pcb_dimension.cpp:1355
-#, fuzzy
 msgid "Suppress Trailing Zeroes"
-msgstr "Suprimir zeros à direita"
+msgstr "Suprimir os zeros à direita"
 
 #: pcbnew/pcb_dimension.cpp:1383
-#, fuzzy
 msgid "Crossbar Height"
-msgstr "Cursor direito"
+msgstr "Altura da barra transversal"
 
 #: pcbnew/pcb_dimension.cpp:1387
-#, fuzzy
 msgid "Extension Line Overshoot"
-msgstr "Extensão do deslocamento da linha:"
+msgstr "Extensão excedente da linha"
 
 #: pcbnew/pcb_dimension.cpp:1452
-#, fuzzy
 msgid "Leader Length"
-msgstr "Comprimento da via"
+msgstr "Comprimento da guia"
 
 #: pcbnew/pcb_dimension.cpp:1492
-#, fuzzy
 msgid "Text Frame"
-msgstr "Quadro do texto:"
+msgstr "Quadro de texto"
 
 #: pcbnew/pcb_edit_frame.cpp:203
 msgid "KiCad PCB Editor"
@@ -38662,9 +38626,9 @@ msgid "Overridden by larger physical hole clearance from %s;clearance: %s."
 msgstr "Foi substituído por um furo físico maior de %s;isolamento: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:779
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved clearance: %s; clearance will not be tested."
-msgstr "Isolamento local na%s; isolamento: %s."
+msgstr "Isolamento resolvido: %s; o isolamento não será testado."
 
 #: pcbnew/tools/board_inspection_tool.cpp:801
 msgid "Diff Pair"
@@ -38778,49 +38742,42 @@ msgid "Assertions for:"
 msgstr "Asserções para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1339
-#, fuzzy
 msgid "Select a footprint to check against its library equivalent."
-msgstr "Verificando os footprints da placa com a biblioteca..."
+msgstr ""
+"Selecione um footprint para comparar com o seu equivalente na biblioteca."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1346
-#, fuzzy
 msgid "Check Footprint against Library"
-msgstr "Verificando os footprints da placa com a biblioteca..."
+msgstr "Verifique o footprint em relação à biblioteca"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1363
-#, fuzzy
 msgid "Board/library check for:"
-msgstr "Pasta de biblioteca local:"
+msgstr "Verificação da placa/biblioteca para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1365
-#, fuzzy
 msgid "Library: "
-msgstr "Biblioteca:"
+msgstr "Biblioteca: "
 
 #: pcbnew/tools/board_inspection_tool.cpp:1366
-#, fuzzy
 msgid "Library item: "
-msgstr "Link da biblioteca:"
+msgstr "Item da biblioteca: "
 
 #: pcbnew/tools/board_inspection_tool.cpp:1384
-#, fuzzy
 msgid "The current configuration does not include the library."
-msgstr "A biblioteca '%s' não está inclusa na configuração atual."
+msgstr "A configuração atual não inclui a biblioteca."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1388
-#, fuzzy
 msgid "The library is not enabled in the current configuration."
-msgstr "A biblioteca '%s' não está ativada na configuração atual."
+msgstr "A biblioteca não está ativada na configuração atual."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1404
-#, fuzzy, c-format
+#, c-format
 msgid "The library no longer contains the item %s."
-msgstr "A seleção possuí %d itens bloqueados."
+msgstr "A biblioteca não possuí mais o item %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1409
-#, fuzzy
 msgid "Footprint matches library equivalent."
-msgstr "A biblioteca de footprint não foi ativada."
+msgstr "O footprint corresponde ao equivalente da biblioteca."
 
 #: pcbnew/tools/convert_tool.cpp:68
 msgid "Copy line width of first object"
@@ -40448,15 +40405,15 @@ msgid "Show constraints resolution for the selected object"
 msgstr "Mostre a resolução das restrições par aos objetos selecionados"
 
 #: pcbnew/tools/pcb_actions.cpp:1178
-#, fuzzy
 msgid "Check Footprint against Library..."
-msgstr "Verificando os footprints da placa com a biblioteca..."
+msgstr "Verifique o footprint em relação à biblioteca..."
 
 #: pcbnew/tools/pcb_actions.cpp:1179
-#, fuzzy
 msgid ""
 "Check for differences between board footprint and its library equivalent"
-msgstr "Verificando os footprints da placa com a biblioteca..."
+msgstr ""
+"Verifique as diferenças entre o footprint da placa e o seu equivalente na "
+"biblioteca"
 
 #: pcbnew/tools/pcb_actions.cpp:1185
 msgid "Geographical Reannotate..."
