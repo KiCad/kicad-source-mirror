@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-15 16:29-0800\n"
+"POT-Creation-Date: 2023-03-06 16:51-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -3027,8 +3027,8 @@ msgstr "Paste clipboard cells to matrix at current cell"
 msgid "Delete"
 msgstr "Delete"
 
-msgid "Delete selected cells"
-msgstr "Delete selected cells"
+msgid "Clear contents of selected cells"
+msgstr "Clear contents of selected cells"
 
 msgid "Select All"
 msgstr "Select All"
@@ -5737,9 +5737,6 @@ msgstr "Browse Generators..."
 msgid "Script Generator Properties"
 msgstr "Script Generator Properties"
 
-msgid "Power symbol value field text cannot be changed."
-msgstr "Power symbol value field text cannot be changed."
-
 msgid "Illegal reference designator value!"
 msgstr "Illegal reference designator value!"
 
@@ -7288,6 +7285,9 @@ msgstr "P"
 msgid "Format %s"
 msgstr "Format %s"
 
+msgid "<unknown>"
+msgstr "<unknown>"
+
 #, c-format
 msgid "No model named '%s' in library."
 msgstr "No model named '%s' in library."
@@ -7696,6 +7696,9 @@ msgstr "Reset fields if empty in parent symbol"
 
 msgid "Update Symbol Fields"
 msgstr "Update Symbol Fields"
+
+msgid "User-defined Signals"
+msgstr "User-defined Signals"
 
 msgid "Wire/bus width:"
 msgstr "Wire/bus width:"
@@ -9443,6 +9446,9 @@ msgstr ""
 msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr "Storage file not fully parsed (%d bytes remaining)."
 
+msgid "Blanket not currently supported."
+msgstr "Blanket not currently supported."
+
 #, c-format
 msgid "Unknown or unexpected record ID %d found inside \"Additional\" section."
 msgstr ""
@@ -9453,6 +9459,9 @@ msgstr "Record 'IEEE_SYMBOL' not handled."
 
 msgid "Record 'PIECHART' not handled."
 msgstr "Record 'PIECHART' not handled."
+
+msgid "Parameter Set not currently supported."
+msgstr "Parameter Set not currently supported."
 
 msgid "Compile mask not currently supported."
 msgstr "Compile mask not currently supported."
@@ -10892,12 +10901,8 @@ msgstr ""
 "'%s'"
 
 #, c-format
-msgid "Could not find a pin named '%s' in simulation model of type '%s'"
-msgstr "Could not find a pin named '%s' in simulation model of type '%s'"
-
-#, c-format
-msgid "Could not find a parameter named '%s' in simulation model of type '%s'"
-msgstr "Could not find a parameter named '%s' in simulation model of type '%s'"
+msgid "Unknown simulation model pin '%s'"
+msgstr "Unknown simulation model pin '%s'"
 
 #, c-format
 msgid "Could not find IBIS component '%s'"
@@ -10961,6 +10966,31 @@ msgid ""
 msgstr ""
 "Simulation provided no plots. Please refer to console window for results."
 
+#, c-format
+msgid "%d"
+msgstr "%d"
+
+msgid "noise [(V or A)^2/Hz]"
+msgstr "noise [(V or A)^2/Hz]"
+
+msgid "Power"
+msgstr "Power"
+
+msgid "Voltage (swept)"
+msgstr "Voltage (swept)"
+
+msgid "Current (swept)"
+msgstr "Current (swept)"
+
+msgid "Resistance (swept)"
+msgstr "Resistance (swept)"
+
+msgid "Temperature (swept)"
+msgstr "Temperature (swept)"
+
+msgid "Voltage (measured)"
+msgstr "Voltage (measured)"
+
 msgid "Measure Min"
 msgstr "Measure Min"
 
@@ -10981,6 +11011,9 @@ msgstr "Measure Time of Min"
 
 msgid "Measure Time of Max"
 msgstr "Measure Time of Max"
+
+msgid "Measure Integral"
+msgstr "Measure Integral"
 
 #, c-format
 msgid "Format %s..."
@@ -11008,13 +11041,11 @@ msgstr "Cursor 2"
 msgid "Spice Simulator"
 msgstr "Spice Simulator"
 
-#, c-format
-msgid "V(%s) (gain)"
-msgstr "V(%s) (gain)"
+msgid " (gain)"
+msgstr " (gain)"
 
-#, c-format
-msgid "V(%s) (phase)"
-msgstr "V(%s) (phase)"
+msgid " (phase)"
+msgstr " (phase)"
 
 msgid "Simulator requires a fully annotated schematic."
 msgstr "Simulator requires a fully annotated schematic."
@@ -11035,12 +11066,6 @@ msgstr ""
 
 msgid "Another simulation is already running."
 msgstr "Another simulation is already running."
-
-msgid " (gain)"
-msgstr " (gain)"
-
-msgid " (phase)"
-msgstr " (phase)"
 
 msgid "Diff"
 msgstr "Diff"
@@ -11085,33 +11110,8 @@ msgstr ""
 msgid "Measurement"
 msgstr "Measurement"
 
-#, c-format
-msgid "%d"
-msgstr "%d"
-
-msgid "noise [(V or A)^2/Hz]"
-msgstr "noise [(V or A)^2/Hz]"
-
-msgid "Power"
-msgstr "Power"
-
-msgid "Voltage (swept)"
-msgstr "Voltage (swept)"
-
-msgid "Current (swept)"
-msgstr "Current (swept)"
-
-msgid "Resistance (swept)"
-msgstr "Resistance (swept)"
-
-msgid "Temperature (swept)"
-msgstr "Temperature (swept)"
-
-msgid "Voltage (measured)"
-msgstr "Voltage (measured)"
-
-msgid "Unknown SIM_VALUE type"
-msgstr "Unknown SIM_VALUE type"
+msgid "Format"
+msgstr "Format"
 
 #, c-format
 msgid "Could not find model '%s' to copy for \"A Kind Of\" model '%s'"
@@ -11222,11 +11222,11 @@ msgstr ""
 "meaning<br><br>"
 
 msgid ""
-"<b>Suspicious Power Symbol</b><br>Only invisible input power pins are "
-"automatically connected<br><br>"
+"<b>Suspicious Power Symbol</b><br>Invisible input power pins are no longer "
+"required<br><br>"
 msgstr ""
-"<b>Suspicious Power Symbol</b><br>Only invisible input power pins are "
-"automatically connected<br><br>"
+"<b>Suspicious Power Symbol</b><br>Invisible input power pins are no longer "
+"required<br><br>"
 
 #, c-format
 msgid ""
@@ -11396,6 +11396,10 @@ msgstr "No schematic currently open."
 
 msgid "The current symbol has been modified.  Save changes?"
 msgstr "The current symbol has been modified.  Save changes?"
+
+#, c-format
+msgid "Deriving from '%s', the root symbol of '%s'."
+msgstr "Deriving from '%s', the root symbol of '%s'."
 
 msgid "This new symbol has no name and cannot be created."
 msgstr "This new symbol has no name and cannot be created."
@@ -11744,6 +11748,12 @@ msgstr "New Symbol..."
 
 msgid "Create a new symbol"
 msgstr "Create a new symbol"
+
+msgid "Derive from existing symbol"
+msgstr "Derive from existing symbol"
+
+msgid "Create a new symbol, derived from an existing symbol"
+msgstr "Create a new symbol, derived from an existing symbol"
 
 msgid "Edit Symbol"
 msgstr "Edit Symbol"
@@ -12585,6 +12595,9 @@ msgstr "Select a value to be tuned"
 msgid "Show SPICE Netlist"
 msgstr "Show SPICE Netlist"
 
+msgid "Add, edit or delete user-defined simulation signals"
+msgstr "Add, edit or delete user-defined simulation signals"
+
 msgid "No symbol issues found."
 msgstr "No symbol issues found."
 
@@ -13284,9 +13297,6 @@ msgstr "Cmp:"
 msgid "%s (D%d) on layer %d: %s"
 msgstr "%s (D%d) on layer %d: %s"
 
-msgid "Format"
-msgstr "Format"
-
 msgid "Image name"
 msgstr "Image name"
 
@@ -13867,6 +13877,9 @@ msgstr "Overwrite output file"
 msgid "Only generate a board with no components"
 msgstr "Only generate a board with no components"
 
+msgid "Export tracks (extremely time consuming)"
+msgstr "Export tracks (extremely time consuming)"
+
 msgid "Minimum distance between points to treat them as separate ones"
 msgstr "Minimum distance between points to treat them as separate ones"
 
@@ -14356,13 +14369,6 @@ msgstr "Automatically remove uninstalled libraries"
 msgid "Library nickname prefix:"
 msgstr "Library nickname prefix:"
 
-msgid ""
-"After packages are (un)installed KiCad may need to be restarted to reflect "
-"changes in the global library table."
-msgstr ""
-"After packages are (un)installed KiCad may need to be restarted to reflect "
-"changes in the global library table."
-
 #, c-format
 msgid "schema file '%s' not found"
 msgstr "schema file '%s' not found"
@@ -14417,6 +14423,9 @@ msgstr ""
 "Unable to parse packages metadata:\n"
 "\n"
 "%s"
+
+msgid "Failed to parse locally stored repository.json."
+msgstr "Failed to parse locally stored repository.json."
 
 msgid ""
 "Packages cache for current repository is corrupted, it will be redownloaded."
@@ -15687,34 +15696,14 @@ msgstr "Manganese"
 msgid "Magnesium"
 msgstr "Magnesium"
 
-msgid ""
-"This table shows the difference in electrochemical potential between various "
-"metals and alloys. A positive number indicates that the row is anodic and "
-"the column is cathodic.\n"
-"Galvanic corrosion affects different metals in contact and under certain "
-"conditions.\n"
-"The anode of an electrochemical pair gets oxidized and eaten away, while the "
-"cathode gets dissolved metals plated onto it but stays protected.\n"
-"EN 50310 suggests a voltage difference below 300mV. Known practices make use "
-"of a third interface metal in between the main pair(ie the ENIG surface "
-"finish)."
-msgstr ""
-"This table shows the difference in electrochemical potential between various "
-"metals and alloys. A positive number indicates that the row is anodic and "
-"the column is cathodic.\n"
-"Galvanic corrosion affects different metals in contact and under certain "
-"conditions.\n"
-"The anode of an electrochemical pair gets oxidized and eaten away, while the "
-"cathode gets dissolved metals plated onto it but stays protected.\n"
-"EN 50310 suggests a voltage difference below 300mV. Known practices make use "
-"of a third interface metal in between the main pair(ie the ENIG surface "
-"finish)."
-
 msgid "Copper (Cu)"
 msgstr "Copper (Cu)"
 
 msgid "Threshold voltage:"
 msgstr "Threshold voltage:"
+
+msgid "Names"
+msgstr "Names"
 
 msgid "PCB Calculator data file"
 msgstr "PCB Calculator data file"
@@ -16205,6 +16194,35 @@ msgstr ""
 "to its melting point as well as the energy required for the change of phase."
 "<br>\n"
 "This energy is then compared to the one dissipated by the wire resistance."
+
+msgid ""
+"This table shows the difference in electrochemical potential between various "
+"metals and alloys. Galvanic corrosion affects different metals in contact "
+"and under certain conditions.<br>\n"
+"The anode of an electrochemical pair gets oxidized and eaten away, while the "
+"cathode gets dissolved metals plated onto it but stays protected.<br>\n"
+"A positive number indicates that the row is anodic (-) and the column is "
+"cathodic (+), cold and warm coloring hues also indicate rows' potential."
+"<br>\n"
+"EN 50310 suggests a voltage difference below 300mV. Known practices make use "
+"of a third interface metal in between the main pair(ie the ENIG surface "
+"finish).<br>\n"
+"Selected cells shown with the default system's coloring choice after a table "
+"refill.\n"
+msgstr ""
+"This table shows the difference in electrochemical potential between various "
+"metals and alloys. Galvanic corrosion affects different metals in contact "
+"and under certain conditions.<br>\n"
+"The anode of an electrochemical pair gets oxidized and eaten away, while the "
+"cathode gets dissolved metals plated onto it but stays protected.<br>\n"
+"A positive number indicates that the row is anodic (-) and the column is "
+"cathodic (+), cold and warm coloring hues also indicate rows' potential."
+"<br>\n"
+"EN 50310 suggests a voltage difference below 300mV. Known practices make use "
+"of a third interface metal in between the main pair(ie the ENIG surface "
+"finish).<br>\n"
+"Selected cells shown with the default system's coloring choice after a table "
+"refill.\n"
 
 msgid "General system design"
 msgstr "General system design"
@@ -18466,6 +18484,16 @@ msgstr "Replace VRML models with STEP models of the same name"
 msgid "Overwrite old file"
 msgstr "Overwrite old file"
 
+msgid "Export tracks (time consuming)"
+msgstr "Export tracks (time consuming)"
+
+msgid ""
+"Export tracks and vias on external copper layers.\n"
+"Warning: this is *extremely* time consuming."
+msgstr ""
+"Export tracks and vias on external copper layers.\n"
+"Warning: this is *extremely* time consuming."
+
 msgid "Board outline chaining tolerance:"
 msgstr "Board outline chaining tolerance:"
 
@@ -18479,9 +18507,11 @@ msgid "Loose (0.1 mm)"
 msgstr "Loose (0.1 mm)"
 
 msgid ""
-"Tolerance sets the distance between two points that are considered joined."
+"Tolerance sets the distance between two points that are considered joined "
+"when building the board outlines."
 msgstr ""
-"Tolerance sets the distance between two points that are considered joined."
+"Tolerance sets the distance between two points that are considered joined "
+"when building the board outlines."
 
 msgid "Export STEP"
 msgstr "Export STEP"
@@ -19355,6 +19385,9 @@ msgstr "Other text items"
 msgid "Graphic items"
 msgstr "Graphic items"
 
+msgid "Dimension items"
+msgstr "Dimension items"
+
 msgid "Silk Layers"
 msgstr "Silk Layers"
 
@@ -19388,17 +19421,29 @@ msgstr "Text Thickness"
 msgid "Upright"
 msgstr "Upright"
 
+msgid "Set to layer and dimension default values:"
+msgstr "Set to layer and dimension default values:"
+
+msgid "Set to layer default values:"
+msgstr "Set to layer default values:"
+
 msgid "Other footprint text items"
 msgstr "Other footprint text items"
 
 msgid "Footprint graphic items"
 msgstr "Footprint graphic items"
 
+msgid "Footprint dimension items"
+msgstr "Footprint dimension items"
+
 msgid "PCB graphic items"
 msgstr "PCB graphic items"
 
 msgid "PCB text items"
 msgstr "PCB text items"
+
+msgid "PCB dimension items"
+msgstr "PCB dimension items"
 
 msgid "Filter items by layer:"
 msgstr "Filter items by layer:"
@@ -19411,9 +19456,6 @@ msgstr "Set to specified values:"
 
 msgid "Keep upright"
 msgstr "Keep upright"
-
-msgid "Set to layer default values:"
-msgstr "Set to layer default values:"
 
 msgid "Via Diameter"
 msgstr "Via Diameter"
@@ -22922,6 +22964,10 @@ msgstr "netclass '%s'"
 msgid "netclass '%s' (diff pair)"
 msgstr "netclass '%s' (diff pair)"
 
+#, c-format
+msgid "netclass '%s' (uvia)"
+msgstr "netclass '%s' (uvia)"
+
 msgid "keepout area"
 msgstr "keepout area"
 
@@ -23017,8 +23063,8 @@ msgid "Checking %s track width: opt %s."
 msgstr "Checking %s track width: opt %s."
 
 #, c-format
-msgid "Checking board setup constraints track width: min %s."
-msgstr "Checking board setup constraints track width: min %s."
+msgid "Checking %s track width: min %s."
+msgstr "Checking %s track width: min %s."
 
 #, c-format
 msgid "Checking %s annular width: min %s."
@@ -23029,16 +23075,16 @@ msgid "Checking %s via diameter: opt %s."
 msgstr "Checking %s via diameter: opt %s."
 
 #, c-format
-msgid "Checking board setup constraints via diameter: min %s."
-msgstr "Checking board setup constraints via diameter: min %s."
+msgid "Checking %s via diameter: min %s."
+msgstr "Checking %s via diameter: min %s."
 
 #, c-format
 msgid "Checking %s hole size: opt %s."
 msgstr "Checking %s hole size: opt %s."
 
 #, c-format
-msgid "Checking board setup constraints hole size: min %s."
-msgstr "Checking board setup constraints hole size: min %s."
+msgid "Checking %s hole size: min %s."
+msgstr "Checking %s hole size: min %s."
 
 #, c-format
 msgid "Checking %s: min %s."
@@ -23049,12 +23095,12 @@ msgid "Checking %s diff pair gap: opt %s."
 msgstr "Checking %s diff pair gap: opt %s."
 
 #, c-format
-msgid "Checking board setup constraints clearance: min %s."
-msgstr "Checking board setup constraints clearance: min %s."
+msgid "Checking %s clearance: min %s."
+msgstr "Checking %s clearance: min %s."
 
 #, c-format
-msgid "Checking board setup constraints hole to hole: min %s."
-msgstr "Checking board setup constraints hole to hole: min %s."
+msgid "Checking %s hole to hole: min %s."
+msgstr "Checking %s hole to hole: min %s."
 
 #, c-format
 msgid "Checking %s."
@@ -23082,6 +23128,9 @@ msgstr "Rule layer '%s' not matched; rule ignored."
 
 msgid "Rule layer not matched; rule ignored."
 msgstr "Rule layer not matched; rule ignored."
+
+msgid "Constraint layer not matched."
+msgstr "Constraint layer not matched."
 
 #, c-format
 msgid "%s is not a drilled hole; rule ignored."
@@ -23511,6 +23560,77 @@ msgstr "Checking hole to hole clearances..."
 msgid "(%s min %s; actual %s)"
 msgstr "(%s min %s; actual %s)"
 
+msgid "3D model scale doesn't match: "
+msgstr "3D model scale doesn't match: "
+
+msgid "3D model rotation doesn't match: "
+msgstr "3D model rotation doesn't match: "
+
+msgid "3D model offset doesn't match: "
+msgstr "3D model offset doesn't match: "
+
+msgid "3D model opacity doesn't match: "
+msgstr "3D model opacity doesn't match: "
+
+msgid "3D model doesn't match: "
+msgstr "3D model doesn't match: "
+
+msgid "3D model visibility doesn't match: "
+msgstr "3D model visibility doesn't match: "
+
+msgid "Footprint descriptions differ."
+msgstr "Footprint descriptions differ."
+
+msgid "Footprint keywords differ."
+msgstr "Footprint keywords differ."
+
+msgid "Footprint types differ."
+msgstr "Footprint types differ."
+
+msgid "Allow bridged solder mask apertures between pads settings differ."
+msgstr "Allow bridged solder mask apertures between pads settings differ."
+
+msgid "Exempt from courtyard requirement settings differ."
+msgstr "Exempt from courtyard requirement settings differ."
+
+msgid "Pad clearance overridden."
+msgstr "Pad clearance overridden."
+
+msgid "Solder mask expansion overridden."
+msgstr "Solder mask expansion overridden."
+
+msgid "Solder paste absolute clearance overridden."
+msgstr "Solder paste absolute clearance overridden."
+
+msgid "Solder paste relative clearance overridden."
+msgstr "Solder paste relative clearance overridden."
+
+msgid "Zone connection overridden."
+msgstr "Zone connection overridden."
+
+msgid "Net tie pad groups differ."
+msgstr "Net tie pad groups differ."
+
+msgid "Pad count differs."
+msgstr "Pad count differs."
+
+msgid "Rule area count differs."
+msgstr "Rule area count differs."
+
+msgid "Graphic item count differs."
+msgstr "Graphic item count differs."
+
+#, c-format
+msgid "%s differs."
+msgstr "%s differs."
+
+#, c-format
+msgid "%s has overrides."
+msgstr "%s has overrides."
+
+msgid "3D model count differs."
+msgstr "3D model count differs."
+
 msgid "No project loaded, skipping library parity tests."
 msgstr "No project loaded, skipping library parity tests."
 
@@ -23730,6 +23850,10 @@ msgstr "Board stackup settings not up to date."
 
 msgid "Determining PCB data\n"
 msgstr "Determining PCB data\n"
+
+#, c-format
+msgid "Board Thickness from stackup: %.3f mm\n"
+msgstr "Board Thickness from stackup: %.3f mm\n"
 
 msgid "Build STEP data\n"
 msgstr "Build STEP data\n"
@@ -24995,6 +25119,33 @@ msgstr "Suffix"
 #, c-format
 msgid "Dimension '%s' on %s"
 msgstr "Dimension '%s' on %s"
+
+msgid "1234.0"
+msgstr "1234.0"
+
+msgid "1234.0 mm"
+msgstr "1234.0 mm"
+
+msgid "1234.0 (mm)"
+msgstr "1234.0 (mm)"
+
+msgid "Units Format"
+msgstr "Units Format"
+
+msgid "Suppress Trailing Zeroes"
+msgstr "Suppress Trailing Zeroes"
+
+msgid "Crossbar Height"
+msgstr "Crossbar Height"
+
+msgid "Extension Line Overshoot"
+msgstr "Extension Line Overshoot"
+
+msgid "Leader Length"
+msgstr "Leader Length"
+
+msgid "Text Frame"
+msgstr "Text Frame"
 
 msgid "KiCad PCB Editor"
 msgstr "KiCad PCB Editor"
@@ -27122,6 +27273,10 @@ msgstr "Overridden by larger physical clearance from %s;clearance: %s."
 msgid "Overridden by larger physical hole clearance from %s;clearance: %s."
 msgstr "Overridden by larger physical hole clearance from %s;clearance: %s."
 
+#, c-format
+msgid "Resolved clearance: %s; clearance will not be tested."
+msgstr "Resolved clearance: %s; clearance will not be tested."
+
 msgid "Diff Pair"
 msgstr "Diff Pair"
 
@@ -27203,6 +27358,34 @@ msgstr "Assertions"
 
 msgid "Assertions for:"
 msgstr "Assertions for:"
+
+msgid "Select a footprint to check against its library equivalent."
+msgstr "Select a footprint to check against its library equivalent."
+
+msgid "Check Footprint against Library"
+msgstr "Check Footprint against Library"
+
+msgid "Board/library check for:"
+msgstr "Board/library check for:"
+
+msgid "Library: "
+msgstr "Library: "
+
+msgid "Library item: "
+msgstr "Library item: "
+
+msgid "The current configuration does not include the library."
+msgstr "The current configuration does not include the library."
+
+msgid "The library is not enabled in the current configuration."
+msgstr "The library is not enabled in the current configuration."
+
+#, c-format
+msgid "The library no longer contains the item %s."
+msgstr "The library no longer contains the item %s."
+
+msgid "Footprint matches library equivalent."
+msgstr "Footprint matches library equivalent."
 
 msgid "Copy line width of first object"
 msgstr "Copy line width of first object"
@@ -28408,6 +28591,14 @@ msgstr "Constraints Resolution..."
 msgid "Show constraints resolution for the selected object"
 msgstr "Show constraints resolution for the selected object"
 
+msgid "Check Footprint against Library..."
+msgstr "Check Footprint against Library..."
+
+msgid ""
+"Check for differences between board footprint and its library equivalent"
+msgstr ""
+"Check for differences between board footprint and its library equivalent"
+
 msgid "Geographical Reannotate..."
 msgstr "Geographical Reannotate..."
 
@@ -29608,6 +29799,95 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Delete selected cells"
+#~ msgstr "Delete selected cells"
+
+#~ msgid "Power symbol value field text cannot be changed."
+#~ msgstr "Power symbol value field text cannot be changed."
+
+#, c-format
+#~ msgid "Could not find a pin named '%s' in simulation model of type '%s'"
+#~ msgstr "Could not find a pin named '%s' in simulation model of type '%s'"
+
+#, c-format
+#~ msgid ""
+#~ "Could not find a parameter named '%s' in simulation model of type '%s'"
+#~ msgstr ""
+#~ "Could not find a parameter named '%s' in simulation model of type '%s'"
+
+#, c-format
+#~ msgid "V(%s) (gain)"
+#~ msgstr "V(%s) (gain)"
+
+#, c-format
+#~ msgid "V(%s) (phase)"
+#~ msgstr "V(%s) (phase)"
+
+#~ msgid "Unknown SIM_VALUE type"
+#~ msgstr "Unknown SIM_VALUE type"
+
+#~ msgid ""
+#~ "<b>Suspicious Power Symbol</b><br>Only invisible input power pins are "
+#~ "automatically connected<br><br>"
+#~ msgstr ""
+#~ "<b>Suspicious Power Symbol</b><br>Only invisible input power pins are "
+#~ "automatically connected<br><br>"
+
+#~ msgid ""
+#~ "After packages are (un)installed KiCad may need to be restarted to "
+#~ "reflect changes in the global library table."
+#~ msgstr ""
+#~ "After packages are (un)installed KiCad may need to be restarted to "
+#~ "reflect changes in the global library table."
+
+#~ msgid ""
+#~ "This table shows the difference in electrochemical potential between "
+#~ "various metals and alloys. A positive number indicates that the row is "
+#~ "anodic and the column is cathodic.\n"
+#~ "Galvanic corrosion affects different metals in contact and under certain "
+#~ "conditions.\n"
+#~ "The anode of an electrochemical pair gets oxidized and eaten away, while "
+#~ "the cathode gets dissolved metals plated onto it but stays protected.\n"
+#~ "EN 50310 suggests a voltage difference below 300mV. Known practices make "
+#~ "use of a third interface metal in between the main pair(ie the ENIG "
+#~ "surface finish)."
+#~ msgstr ""
+#~ "This table shows the difference in electrochemical potential between "
+#~ "various metals and alloys. A positive number indicates that the row is "
+#~ "anodic and the column is cathodic.\n"
+#~ "Galvanic corrosion affects different metals in contact and under certain "
+#~ "conditions.\n"
+#~ "The anode of an electrochemical pair gets oxidized and eaten away, while "
+#~ "the cathode gets dissolved metals plated onto it but stays protected.\n"
+#~ "EN 50310 suggests a voltage difference below 300mV. Known practices make "
+#~ "use of a third interface metal in between the main pair(ie the ENIG "
+#~ "surface finish)."
+
+#~ msgid ""
+#~ "Tolerance sets the distance between two points that are considered joined."
+#~ msgstr ""
+#~ "Tolerance sets the distance between two points that are considered joined."
+
+#, c-format
+#~ msgid "Checking board setup constraints track width: min %s."
+#~ msgstr "Checking board setup constraints track width: min %s."
+
+#, c-format
+#~ msgid "Checking board setup constraints via diameter: min %s."
+#~ msgstr "Checking board setup constraints via diameter: min %s."
+
+#, c-format
+#~ msgid "Checking board setup constraints hole size: min %s."
+#~ msgstr "Checking board setup constraints hole size: min %s."
+
+#, c-format
+#~ msgid "Checking board setup constraints clearance: min %s."
+#~ msgstr "Checking board setup constraints clearance: min %s."
+
+#, c-format
+#~ msgid "Checking board setup constraints hole to hole: min %s."
+#~ msgstr "Checking board setup constraints hole to hole: min %s."
 
 #~ msgid "Use only the diffuse color property from model 3D model file"
 #~ msgstr "Use only the diffuse color property from model 3D model file"
@@ -54407,9 +54687,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "Keepout"
 #~ msgstr "Keepout"
-
-#~ msgid "<unknown>"
-#~ msgstr "<unknown>"
 
 #~ msgid "Non Copper Zone"
 #~ msgstr "Non Copper Zone"
