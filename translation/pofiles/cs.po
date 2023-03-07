@@ -18,16 +18,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:51-0800\n"
-"PO-Revision-Date: 2023-02-27 11:37+0000\n"
+"PO-Revision-Date: 2023-03-11 14:18+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -7401,7 +7401,7 @@ msgstr "Typ cesty"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:37
 msgid "Ref"
-msgstr "Ref"
+msgstr "Ref."
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:38
 msgid "Schematic assignment"
@@ -33369,9 +33369,9 @@ msgid "Determining PCB data\n"
 msgstr "Stanovení údajů o DPS\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:447
-#, fuzzy, c-format
+#, c-format
 msgid "Board Thickness from stackup: %.3f mm\n"
-msgstr "Tloušťka desky ze struktury vrstev:"
+msgstr "Tloušťka desky ze struktury vrstev: %.3f mm\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:452
 msgid "Build STEP data\n"
