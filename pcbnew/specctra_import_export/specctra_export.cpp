@@ -1226,7 +1226,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                 continue;
 
             // Currently, we export only copper layers
-            if( ! IsCopperLayer( zone->IsOnCopperLayer() ) )
+            if( ! zone->IsOnCopperLayer() )
                 continue;
 
 
