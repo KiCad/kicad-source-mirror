@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2015-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1226,104 +1226,118 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                 continue;
 
             // Currently, we export only copper layers
-            if( ! IsCopperLayer( zone->GetLayer() ) )
+            if( ! IsCopperLayer( zone->IsOnCopperLayer() ) )
                 continue;
 
-            COPPER_PLANE*   plane = new COPPER_PLANE( m_pcb->structure );
 
-            m_pcb->structure->planes.push_back( plane );
+            // Now, build zone polygon on each copper layer where the zone
+            // is living (zones can live on many copper layers)
+            const int copperCount = aBoard->GetCopperLayerCount();
 
-            PATH* mainPolygon = new PATH( plane, T_polygon );
-
-            plane->SetShape( mainPolygon );
-            plane->name = TO_UTF8( zone->GetNetname() );
-
-            if( plane->name.size() == 0 )
+            for( int layer = 0; layer < copperCount; layer++ )
             {
-                char name[32];
+                if( layer == copperCount-1 )
+                    layer = B_Cu;
 
-                // This is one of those no connection zones, netcode=0, and it has no name.
-                // Create a unique, bogus netname.
-                NET* no_net = new NET( m_pcb->network );
+                if( !zone->IsOnLayer( PCB_LAYER_ID( layer ) ) )
+                    continue;
 
-                sprintf( name, "@:no_net_%d", netlessZones++ );
-                no_net->net_id = name;
+                COPPER_PLANE*   plane = new COPPER_PLANE( m_pcb->structure );
 
-                // add the bogus net name to network->nets.
-                m_pcb->network->nets.push_back( no_net );
+                m_pcb->structure->planes.push_back( plane );
 
-                // use the bogus net name in the netless zone.
-                plane->name = no_net->net_id;
-            }
+                PATH* mainPolygon = new PATH( plane, T_polygon );
 
-            mainPolygon->layer_id = m_layerIds[ m_kicadLayer2pcb[ zone->GetLayer() ] ];
+                plane->SetShape( mainPolygon );
+                plane->name = TO_UTF8( zone->GetNetname() );
 
-            // Handle the main outlines
-            SHAPE_POLY_SET::ITERATOR iterator;
-            VECTOR2I                 startpoint;
-            bool is_first_point = true;
-
-            for( iterator = zone->IterateWithHoles(); iterator; iterator++ )
-            {
-                VECTOR2I point( iterator->x, iterator->y );
-
-                if( is_first_point )
+                if( plane->name.size() == 0 )
                 {
-                    startpoint = point;
-                    is_first_point = false;
+                    char name[32];
+
+                    // This is one of those no connection zones, netcode=0, and it has no name.
+                    // Create a unique, bogus netname.
+                    NET* no_net = new NET( m_pcb->network );
+
+                    sprintf( name, "@:no_net_%d", netlessZones++ );
+                    no_net->net_id = name;
+
+                    // add the bogus net name to network->nets.
+                    m_pcb->network->nets.push_back( no_net );
+
+                    // use the bogus net name in the netless zone.
+                    plane->name = no_net->net_id;
                 }
 
-                mainPolygon->AppendPoint( mapPt( point ) );
+                mainPolygon->layer_id = m_layerIds[ m_kicadLayer2pcb[ layer ] ];
 
-                // this was the end of the main polygon
-                if( iterator.IsEndContour() )
+                // Handle the main outlines
+                SHAPE_POLY_SET::ITERATOR iterator;
+                VECTOR2I                 startpoint;
+                bool is_first_point = true;
+
+                for( iterator = zone->IterateWithHoles(); iterator; iterator++ )
                 {
-                    // Close polygon
-                    mainPolygon->AppendPoint( mapPt( startpoint ) );
-                    break;
-                }
-            }
+                    VECTOR2I point( iterator->x, iterator->y );
 
-            WINDOW* window  = 0;
-            PATH*   cutout  = 0;
+                    if( is_first_point )
+                    {
+                        startpoint = point;
+                        is_first_point = false;
+                    }
 
-            bool isStartContour = true;
+                    mainPolygon->AppendPoint( mapPt( point ) );
 
-            // handle the cutouts
-            for( iterator++; iterator; iterator++ )
-            {
-                if( isStartContour )
-                {
-                    is_first_point = true;
-                    window = new WINDOW( plane );
-                    plane->AddWindow( window );
-
-                    cutout = new PATH( window, T_polygon );
-                    window->SetShape( cutout );
-                    cutout->layer_id = m_layerIds[ m_kicadLayer2pcb[ zone->GetLayer() ] ];
+                    // this was the end of the main polygon
+                    if( iterator.IsEndContour() )
+                    {
+                        // Close polygon
+                        mainPolygon->AppendPoint( mapPt( startpoint ) );
+                        break;
+                    }
                 }
 
-                // If the point in this iteration is the last of the contour, the next iteration
-                // will start with a new contour.
-                isStartContour = iterator.IsEndContour();
+                WINDOW* window  = 0;
+                PATH*   cutout  = 0;
 
-                wxASSERT( window );
-                wxASSERT( cutout );
+                bool isStartContour = true;
 
-                VECTOR2I point( iterator->x, iterator->y );
-
-                if( is_first_point )
+                // handle the cutouts
+                for( iterator++; iterator; iterator++ )
                 {
-                    startpoint = point;
-                    is_first_point = false;
+                    if( isStartContour )
+                    {
+                        is_first_point = true;
+                        window = new WINDOW( plane );
+                        plane->AddWindow( window );
+
+                        cutout = new PATH( window, T_polygon );
+                        window->SetShape( cutout );
+                        cutout->layer_id = m_layerIds[ m_kicadLayer2pcb[ zone->GetLayer() ] ];
+                    }
+
+                    // If the point in this iteration is the last of the contour, the next iteration
+                    // will start with a new contour.
+                    isStartContour = iterator.IsEndContour();
+
+                    wxASSERT( window );
+                    wxASSERT( cutout );
+
+                    VECTOR2I point( iterator->x, iterator->y );
+
+                    if( is_first_point )
+                    {
+                        startpoint = point;
+                        is_first_point = false;
+                    }
+
+                    cutout->AppendPoint( mapPt( point ) );
+
+                    // Close the polygon
+                    if( iterator.IsEndContour() )
+                        cutout->AppendPoint( mapPt( startpoint ) );
                 }
-
-                cutout->AppendPoint( mapPt( point ) );
-
-                // Close the polygon
-                if( iterator.IsEndContour() )
-                    cutout->AppendPoint( mapPt( startpoint ) );
-            }
+            }   // end build zones by layer
         }
     }
 
@@ -1409,7 +1423,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
                         cutout = new PATH( window, T_polygon );
                         window->SetShape( cutout );
-                        cutout->layer_id = m_layerIds[ m_kicadLayer2pcb[ zone->GetLayer() ] ];
+                        cutout->layer_id = m_layerIds[ m_kicadLayer2pcb[ zone->GetFirstLayer() ] ];
                     }
 
                     isStartContour = iterator.IsEndContour();
