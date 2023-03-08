@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:53-0800\n"
-"PO-Revision-Date: 2023-03-06 14:40+0000\n"
+"PO-Revision-Date: 2023-03-12 20:08+0000\n"
 "Last-Translator: \"boonchai k.\" <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/v7/th/>\n"
 "Language: th\n"
@@ -84,9 +84,8 @@ msgid "Build BVH for holes and vias"
 msgstr "สร้าง BVH สำหรับโฮลและเวีย"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:389
-#, fuzzy
 msgid "OpenGL context creation error"
-msgstr "การแก้ปิดกั้นสำหรับ:"
+msgstr "ข้อผิดพลาดในการสร้างบริบท OpenGL"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:420
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
@@ -10509,9 +10508,8 @@ msgid "Set border width to 0 to use schematic's default line width."
 msgstr "ตั้งความกว้างขอบเป็น 0 เพื่อใช้ค่าปริยายของขนาดเส้นตรงของแผนผังวงจร"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:126
-#, fuzzy
 msgid "Clear colors to use Schematic Editor colors."
-msgstr "กำหนดสีเป็นโปร่งใสเพื่อใช้สีจากเครื่องมือแก้ไขวงจร"
+msgstr "ล้างค่าสีเดิมเพื่อใช้ชุดสีของเครื่องมือแก้ไขวงจร"
 
 #: eeschema/dialogs/dialog_shape_properties_base.h:77
 #, c-format
@@ -10564,13 +10562,13 @@ msgid "Note: item colors are overridden in the current color theme."
 msgstr "บันทึก: สีของชิ้นส่วนจะถูกแทนที่ด้วยสีจากธีมปัจจุบัน"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:388
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "To see individual item colors uncheck '%s'\n"
 "in Preferences > Schematic Editor > Colors."
 msgstr ""
-"เมื่อต้องการเห็นสีแต่ละชิ้นส่วน ไม่เช็ค '%s'\n"
-"ใน ตั้งความชอบ>Eeschema>สี"
+"เมื่อต้องการเห็นสีแต่ละชิ้นส่วน ไม่ติ๊ก '%s'\n"
+"ใน Preferences>Schematic Editor >Colors"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:430
 #, c-format
@@ -10673,7 +10671,7 @@ msgstr "เส้นทางลำดับขั้น:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:197
 msgid "path"
-msgstr ""
+msgstr "เส้นทาง"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.h:83
 msgid "Sheet Properties"
@@ -10763,9 +10761,8 @@ msgid "Frequency scale"
 msgstr "อัตราความถี่"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:37
-#, fuzzy
 msgid "Number of points per decade:"
-msgstr "จำนวนหน่วยต่อบรรจุภัณฑ์:"
+msgstr "จำนวนจุดต่อสิบเท่า:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:47
 msgid "Start frequency:"
@@ -10978,24 +10975,21 @@ msgid "HSpice"
 msgstr "เอชสไปส์"
 
 #: eeschema/dialogs/dialog_sim_command_base.h:139
-#, fuzzy
 msgid "Simulation Command"
-msgstr "การจำลอง"
+msgstr "คำสั่งจำลอง"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:186
-#, fuzzy
 msgid "<unknown>"
 msgstr "<ไม่ทราบ>"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:196
-#, fuzzy, c-format
+#, c-format
 msgid "No model named '%s' in library."
-msgstr "ชื่อเน็ต '%s' ถูกใช้แล้ว"
+msgstr "ไม่มีโมเดลชื่อ '%s' ในไลบรารี"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:276
-#, fuzzy
 msgid "Failed to read simulation model from fields."
-msgstr "ล้มเหลวที่จะสร้างไฟล์ไลบรารีสัญลักษณ์ '%s'"
+msgstr "ไม่สามารถอ่านโมเดลจำลองจากฟิลด์"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:397
 msgid "Component:"
@@ -11010,11 +11004,11 @@ msgstr "โมเดล:"
 #: eeschema/dialogs/dialog_sim_model.cpp:453
 #, c-format
 msgid "Save parameter '%s (%s)' in Value field"
-msgstr ""
+msgstr "บันทึกพารามิเตอร์ '%s (%s)' ในช่องมูลค่า"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:461
 msgid "Save primary parameter in Value field"
-msgstr ""
+msgstr "บันทึกพารามิเตอร์หลักในช่องมูลค่า"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:478
 #: pcbnew/footprint_wizard_frame.cpp:325
@@ -11037,37 +11031,32 @@ msgstr "ประเภท"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:594
 #: eeschema/dialogs/dialog_sim_model.cpp:637
-#, fuzzy
 msgid "Not Connected"
-msgstr "ไม่มีการเชื่อมต่อ"
+msgstr "เชื่อมต่อไม่ได้"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:1062
-#, fuzzy
 msgid "Browse Models"
-msgstr "โมเดลโค้ด"
+msgstr "เรียกดูโมเดล"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:30
 msgid "SPICE model from file (*.lib, *.sub or *.ibs)"
-msgstr ""
+msgstr "โมเดล SPICE จากไฟล์ (*.lib, *.sub หรือ *.ibs)"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:66
 msgid "Pin:"
-msgstr ""
+msgstr "ขา:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:77
-#, fuzzy
 msgid "Differential"
-msgstr "ดิฟแพร์"
+msgstr "ดิฟเฟอเรนเชียล"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:101
-#, fuzzy
 msgid "Built-in SPICE model"
-msgstr "กำลังตรวจสอบโซน..."
+msgstr "โมเดล SPICE อยู่ในตัว"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:110
-#, fuzzy
 msgid "Device:"
-msgstr "คำสั่งสไปส์:"
+msgstr "อุปกรณ์:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:119
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:27
@@ -11076,9 +11065,8 @@ msgid "Type:"
 msgstr "ชนิด:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:146
-#, fuzzy
 msgid "Page"
-msgstr "หน้า 1"
+msgstr "หน้า"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:153
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:42
@@ -11094,31 +11082,27 @@ msgstr "โค้ด"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:207
 msgid "Save {} in Value field as \"{}\""
-msgstr ""
+msgstr "บันทึก {} ในช่องค่าเป็น \"{}\""
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:220
 msgid "Model"
 msgstr "โมเดล"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:239
-#, fuzzy
 msgid "Symbol Pin"
-msgstr "หน่วยสัญลักษณ์"
+msgstr "ขาสัญลักษณ์"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:240
-#, fuzzy
 msgid "Model Pin"
-msgstr "โมเดล"
+msgstr "ขาโมเดล"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:301
-#, fuzzy
 msgid "Pin Assignments"
-msgstr "ทางเลือกกำหนดขา"
+msgstr "การกำหนดขา"
 
 #: eeschema/dialogs/dialog_sim_model_base.h:120
-#, fuzzy
 msgid "Simulation Model Editor"
-msgstr "แก้ไขโมเดลสไปส์"
+msgstr "เครื่องมือแก้ไขโมเดลจำลอง"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:86
 #: eeschema/fields_grid_table.cpp:864
@@ -11184,27 +11168,24 @@ msgid "Are you sure you want to remove the field '%s'?"
 msgstr "คุณแน่ใจว่าต้องการลบช่อง '%s'?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1391
-#, fuzzy
 msgid "Unsaved data"
-msgstr "[ยังไม่ได้บันทึก]"
+msgstr "ข้อมูลที่ไม่ได้บันทึก"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1392
 msgid "Changes are unsaved. Export unsaved data?"
-msgstr ""
+msgstr "การเปลี่ยนแปลงไม่ได้บันทึก ต้องการส่งออกข้อมูลไม่บันทึก?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1402
-#, fuzzy
 msgid "Save as CSV"
-msgstr "บันทึกเป็นรูปภาพ"
+msgstr "บันทึกเป็น CSV"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:34
 msgid "Add Field..."
 msgstr "เพิ่มช่อง…"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:37
-#, fuzzy
 msgid "Remove Field..."
-msgstr "เปลี่ยนชื่อไฟล์..."
+msgstr "ลบฟิลด์..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:67
 msgid "Group symbols"
@@ -11215,9 +11196,8 @@ msgid "Group symbols together based on common properties"
 msgstr "จับกลุ่มสัญลักษณ์เข้าด้วยกันตามคุณลักษณะร่วมกัน"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:127
-#, fuzzy
 msgid "Export as CSV..."
-msgstr "ส่งออกสัญลักษณ์เป็น SVG..."
+msgstr "ส่งออกเป็น CSV..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.h:89
 msgid "Symbol Fields Table"
@@ -11323,9 +11303,8 @@ msgstr ""
 "ไม่จำเป็นระหว่างออกแบบบอร์ด เช่น ตัวยึดกลไก และ กล่องบรรจุภัณฑ์"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:218
-#, fuzzy
 msgid "Do not populate"
-msgstr "ไม่ต้องส่งออก"
+msgstr "ไม่ใส่อุปกรณ์"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:230
 msgid "Update Symbol from Library..."
@@ -11363,9 +11342,8 @@ msgid "Library link:"
 msgstr "เชื่อมโยงไปไลบรารี:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:333
-#, fuzzy
 msgid "Simulation Model..."
-msgstr "เครื่องจำลอง..."
+msgstr "โมเดลแบบจําลอง..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.h:111
 msgid "Symbol Properties"
@@ -11493,9 +11471,9 @@ msgid "<root sheet>"
 msgstr "<แผ่นราก>"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:160
-#, fuzzy, c-format
+#, c-format
 msgid "Page %s (%s)"
-msgstr "ไปที่หน้า %s (%s)"
+msgstr "หน้า %s (%s)"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:493
 msgid ""
@@ -11503,14 +11481,16 @@ msgid ""
 "or http(s)://) or \"#<page number>\" to create a hyperlink to a page in this "
 "schematic."
 msgstr ""
+"ลิงก์ปลายทางเชื่อมต่อไม่ถูกต้อง โปรดป้อน URL ที่ถูกต้อง (เช่น file:// หรือ "
+"http(s)://) หรือ \"#<หมายเลขหน้า>\" เพื่อสร้างลิงก์ไปยังหน้าในแผนผังวงจรนี้"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:289
 msgid "Link:"
-msgstr ""
+msgstr "ลิงค์:"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:291
 msgid "Make this text item a clickable hyperlink"
-msgstr ""
+msgstr "ทำให้ข้อความนี้เป็นไฮเปอร์ลิงก์ที่คลิกได้"
 
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:43
 #: pcbnew/dialogs/dialog_import_netlist.cpp:77
@@ -11585,18 +11565,16 @@ msgid "Wire/bus width:"
 msgstr "ความกว้างเส้นลวด/บัส:"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:90
-#, fuzzy
 msgid "Set width to 0 to use netclass's wire/bus widths."
-msgstr "ตั้งความกว้างเป็น 0 เพื่อใช้ขนาดเส้นลวด/ขนาดบัสจากเน็ตคลาส"
+msgstr "ตั้งค่าความกว้างเป็น 0 เพื่อใช้ขนาดเส้นลวด/ขนาดบัสจากค่าเน็ตคลาส"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.h:69
 msgid "Wire & Bus Properties"
 msgstr "คุณสมบัติเส้นลวดและบัส"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:20
-#, fuzzy
 msgid "Automatically annotate symbols"
-msgstr "จัดวางช่องสัญลักษณ์อัตโนมัติ(&u)"
+msgstr "ใส่คําอธิบายประกอบสัญลักษณ์โดยอัตโนมัติ"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:142
 msgid ""
@@ -11685,14 +11663,12 @@ msgid "Cross-probing"
 msgstr "ครอส-โพรบ"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:139
-#, fuzzy
 msgid "Highlight symbols when footprints selected"
-msgstr "สัญลักษณ์แฝงต้องมีต้นกำเนิดเลือกไว้"
+msgstr "เน้นสัญลักษณ์เมื่อเลือกฟุ้ทพรินท์"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:141
-#, fuzzy
 msgid "Highlight symbols corresponding to selected footprints"
-msgstr "เน้นสีชิ้นส่วนทองแดงทั้งหมดบนเน็ตที่เลือก"
+msgstr "เน้นสัญลักษณ์ที่สอดคล้องกับฟุ้ทพรินท์ที่เลือก"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:145
 #: pcbnew/dialogs/panel_display_options_base.cpp:108
@@ -11701,7 +11677,7 @@ msgstr "วางกึ่งกลางมุมมอง ของชิ้�
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:147
 msgid "Ensures that cross-probed symbols are visible in the current view"
-msgstr ""
+msgstr "ตรวจสอบให้แน่ใจว่ามองเห็นสัญลักษณ์ข้ามโพรบในมุมมองปัจจุบัน"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:151
 #: pcbnew/dialogs/panel_display_options_base.cpp:114
@@ -11722,19 +11698,16 @@ msgid "Line Drawing Mode:"
 msgstr "โหมดวาดเส้นตรง:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:37
-#, fuzzy
 msgid "Free Angle"
 msgstr "มุมอิสระ"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:37
-#, fuzzy
 msgid "90 deg Angle"
-msgstr "45 องศา"
+msgstr "มุม 90 องศา"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:37
-#, fuzzy
 msgid "45 deg Angle"
-msgstr "45 องศา"
+msgstr "มุม 45 องศา"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:46
 msgid "Mouse drag performs Drag (G) operation"
@@ -11757,14 +11730,13 @@ msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:56
 #: pcbnew/dialogs/panel_edit_options_base.cpp:386
-#, fuzzy
 msgid "<ESC> clears net highlighting"
-msgstr "ล้างการเน้นสีเน็ต"
+msgstr "<ESC> ล้างการเน้นสีเน็ต"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:57
 msgid ""
 "First <ESC> in selection tool clears selection, next clears net highlighting"
-msgstr ""
+msgstr "อันดับแรกกด <ESC> จะล้างการเลือก ถัดไปจะล้างการเน้นของเน็ต"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:67
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:20
@@ -11901,14 +11873,13 @@ msgid "Show footprint previews in Symbol Chooser"
 msgstr "แสดงพรีวิวฟุ้ทพรินท์ในตัวเลือกสัญลักษณ์"
 
 #: eeschema/dialogs/panel_setup_buses.cpp:266
-#, fuzzy, c-format
+#, c-format
 msgid "Alias name '%s' already in use."
-msgstr "ช่องชื่อ '%s' ถูกใช้แล้ว"
+msgstr "ชื่อนามแฝง '%s' ถูกใช้แล้ว"
 
 #: eeschema/dialogs/panel_setup_buses.cpp:290
-#, fuzzy
 msgid "Member net/alias name cannot be empty."
-msgstr "ชื่อเน็ต ปล่อยว่างไม่ได้"
+msgstr "ชื่อเน็ต/ชื่อแฝง ต้องไม่ว่างเปล่า"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:24
 msgid "Bus definitions:"
@@ -11919,9 +11890,8 @@ msgid "Alias"
 msgstr "ชื่อแฝง"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:76
-#, fuzzy
 msgid "(source)"
-msgstr "แหล่งกำเนิด"
+msgstr "(แหล่งที่มา)"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:94
 #, c-format
@@ -11929,9 +11899,8 @@ msgid "Members of '%s':"
 msgstr "สมาชิกของ '%s':"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:114
-#, fuzzy
 msgid "Net / Nested Bus Name"
-msgstr "ชื่อเน็ตหรือบัส"
+msgstr "ชื่อเน็ต/ชื่อบัสซ้อนกัน"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:25
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:27
@@ -19510,7 +19479,7 @@ msgid "Input file"
 msgstr "ขาทางเข้า"
 
 #: kicad/cli/command_export_pcb_base.cpp:93
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid layer name \"%s\"\n"
 msgstr "ชื่อเลเยอร์ไม่ถูกต้อง \"%s\"\n"
 
@@ -31195,7 +31164,6 @@ msgid "Check rule syntax"
 msgstr "ตรวจสอบไวยากรณ์ของกฎ"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -31526,7 +31494,7 @@ msgstr ""
 "    (rule <rule_name> <rule_clause> ...)\n"
 "\n"
 "\n"
-"<br><br>\n"
+"<br>\n"
 "\n"
 "### Rule Clauses\n"
 "\n"
@@ -31536,40 +31504,79 @@ msgstr ""
 "\n"
 "    (layer \"<layer_name>\")\n"
 "\n"
+"    (severity <severity_name>)\n"
 "\n"
-"<br><br>\n"
+"\n"
+"<br>\n"
 "\n"
 "### Constraint Types\n"
 "\n"
-" * annular_width\n"
+" * annular\\_width\n"
+" * assertion\n"
 " * clearance\n"
+" * connection\\_width\n"
 " * courtyard_clearance\n"
 " * diff\\_pair\\_gap\n"
 " * diff\\_pair\\_uncoupled\n"
 " * disallow\n"
-" * edge_clearance\n"
+" * edge\\_clearance\n"
 " * length\n"
-" * hole\n"
-" * hole_clearance\n"
-" * silk_clearance\n"
+" * hole\\_clearance\n"
+" * hole\\_size\n"
+" * min\\_resolved\\_spokes\n"
+" * physical\\_clearance\n"
+" * physical\\_hole\\_clearance\n"
+" * silk\\_clearance\n"
 " * skew\n"
-" * track_width\n"
-" * via_count\n"
+" * text\\_height\n"
+" * text\\_thickness\n"
+" * thermal\\_relief\\_gap\n"
+" * thermal\\_spoke\\_width\n"
+" * track\\_width\n"
+" * via\\_count\n"
+" * via\\_diameter\n"
+" * zone\\_connection\n"
 "\n"
-"\n"
+"Note: `clearance` and `hole_clearance` rules are not run against items of "
+"the same net; `physical_clearance` and `physical_hole_clearance` rules are.\n"
 "<br><br>\n"
 "\n"
-"### Item Types\n"
+"### Items\n"
 "\n"
-" * buried_via\n"
+" * `A` &nbsp;&nbsp; _the first (or only) item under test_\n"
+" * `B` &nbsp;&nbsp; _the second item under test (for binary tests)_\n"
+" * `L` &nbsp;&nbsp; _the layer currently under test_\n"
+"\n"
+"<br>\n"
+"\n"
+"### ชนิดไอเท็ม\n"
+"\n"
+" * buried\\_via\n"
 " * graphic\n"
 " * hole\n"
-" * micro_via\n"
+" * micro\\_via\n"
 " * pad\n"
 " * text\n"
 " * track\n"
 " * via\n"
 " * zone\n"
+"\n"
+"<br>\n"
+"\n"
+"### Zone Connections\n"
+"\n"
+" * solid\n"
+" * thermal\\_reliefs\n"
+" * none\n"
+"\n"
+"<br>\n"
+"\n"
+"### Severity Names\n"
+"\n"
+" * warning\n"
+" * error\n"
+" * exclusion\n"
+" * ignore\n"
 "\n"
 "<br>\n"
 "\n"
@@ -31596,7 +31603,12 @@ msgstr ""
 "\n"
 "    (rule HV_unshielded\n"
 "       (constraint clearance (min 2mm))\n"
-"       (condition \"A.NetClass == 'HV' && !A.insideArea('Shield*')\"))\n"
+"       (condition \"A.NetClass == 'HV' && !A.enclosedByArea('Shield*')\"))\n"
+"\n"
+"\n"
+"    (rule heavy_thermals\n"
+"       (constraint thermal_spoke_width (min 0.5mm))\n"
+"       (condition \"A.NetClass == 'HV'\"))\n"
 "<br><br>\n"
 "\n"
 "### Notes\n"
@@ -31618,21 +31630,29 @@ msgstr ""
 "All function parameters support simple wildcards (`*` and `?`).\n"
 "<br><br>\n"
 "\n"
-"    A.insideCourtyard('<footprint_refdes>')\n"
+"    A.intersectsCourtyard('<footprint_refdes>')\n"
 "True if any part of `A` lies within the given footprint's principal "
 "courtyard.\n"
 "<br><br>\n"
 "\n"
-"    A.insideFrontCourtyard('<footprint_refdes>')\n"
+"    A.intersectsFrontCourtyard('<footprint_refdes>')\n"
 "True if any part of `A` lies within the given footprint's front courtyard.\n"
 "<br><br>\n"
 "\n"
-"    A.insideBackCourtyard('<footprint_refdes>')\n"
+"    A.intersectsBackCourtyard('<footprint_refdes>')\n"
 "True if any part of `A` lies within the given footprint's back courtyard.\n"
 "<br><br>\n"
 "\n"
-"    A.insideArea('<zone_name>')\n"
+"    A.intersectsArea('<zone_name>')\n"
 "True if any part of `A` lies within the given zone's outline.\n"
+"<br><br>\n"
+"\n"
+"    A.enclosedByArea('<zone_name>')\n"
+"True if all of `A` lies within the given zone's outline.  \n"
+"\n"
+"NB: this is potentially a more expensive call than `intersectsArea()`.  Use "
+"`intersectsArea()` \n"
+"where possible.\n"
 "<br><br>\n"
 "\n"
 "    A.isPlated()\n"
@@ -31640,10 +31660,10 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.inDiffPair('<net_name>')\n"
-"True if `A` has net that is part of the specified differential pair.\n"
+"True if `A` has a net that is part of the specified differential pair.\n"
 "`<net_name>` is the base name of the differential pair.  For example, "
-"`inDiffPair('CLK')`\n"
-"matches items in the `CLK_P` and `CLK_N` nets.\n"
+"`inDiffPair('/CLK')`\n"
+"matches items in the `/CLK_P` and `/CLK_N` nets.\n"
 "<br><br>\n"
 "\n"
 "    AB.isCoupledDiffPair()\n"
@@ -31662,19 +31682,35 @@ msgstr ""
 "NB: this returns true if `A` is on the given layer, independently\n"
 "of whether or not the rule is being evaluated for that layer.\n"
 "For the latter use a `(layer \"layer_name\")` clause in the rule.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideCourtyard('<footprint_refdes>') !!!\n"
+"Deprecated; use `intersectsCourtyard()` instead.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideFrontCourtyard('<footprint_refdes>') !!!\n"
+"Deprecated; use `intersectsFrontCourtyard()` instead.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideBackCourtyard('<footprint_refdes>') !!!\n"
+"Deprecated; use `intersectsBackCourtyard()` instead.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideArea('<zone_name>') !!!\n"
+"Deprecated; use `intersectsArea()` instead.\n"
 "<br><br><br>\n"
 "\n"
 "### More Examples\n"
 "\n"
 "    (rule \"copper keepout\"\n"
 "       (constraint disallow track via zone)\n"
-"       (condition \"A.insideArea('zone3')\"))\n"
+"       (condition \"A.intersectsArea('zone3')\"))\n"
 "\n"
 "\n"
 "    (rule \"BGA neckdown\"\n"
 "       (constraint track_width (min 0.2mm) (opt 0.25mm))\n"
 "       (constraint clearance (min 0.05mm) (opt 0.08mm))\n"
-"       (condition \"A.insideCourtyard('U3')\"))\n"
+"       (condition \"A.intersectsCourtyard('U3')\"))\n"
 "\n"
 "\n"
 "    # prevent silk over tented vias\n"
@@ -31683,47 +31719,95 @@ msgstr ""
 "       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
 "\n"
 "\n"
-"    (rule \"Distance between Vias of Different Nets\"  \n"
+"    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != B.Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
 "\n"
-"    (rule \"Clearance between Pads of Different Nets\"  \n"
+"\n"
+"    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != B.Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
 "\n"
 "\n"
-"    (rule \"Via Hole to Track Clearance\"  \n"
+"\n"
+"    (rule \"Via Hole to Track Clearance\"\n"
 "        (constraint hole_clearance (min 0.254mm))\n"
-"        (condition \"A.Type =='Via' && B.Type =='Track'\"))\n"
-"    \n"
-"    (rule \"Pad to Track Clearance\"  \n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Track'\"))\n"
+"\n"
+"    (rule \"Pad to Track Clearance\"\n"
 "        (constraint clearance (min 0.2mm))\n"
-"        (condition \"A.Type =='Pad' && B.Type =='Track'\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Track'\"))\n"
 "\n"
 "\n"
 "    (rule \"clearance-to-1mm-cutout\"\n"
 "        (constraint clearance (min 0.8mm))\n"
-"        (condition \"A.Layer=='Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
+"        (condition \"A.Layer == 'Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
 "\n"
 "\n"
-"    (rule \"Max Drill Hole Size Mechanical\"  \n"
-"        (constraint hole (max 6.3mm))\n"
+"    (rule \"Max Drill Hole Size Mechanical\"\n"
+"        (constraint hole_size (max 6.3mm))\n"
 "        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
-"    \n"
-"    (rule \"Max Drill Hole Size PTH\"  \n"
-"        (constraint hole (max 6.35mm))\n"
+"\n"
+"    (rule \"Max Drill Hole Size PTH\"\n"
+"        (constraint hole_size (max 6.35mm))\n"
 "        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
 "\n"
 "\n"
 "    # Specify an optimal gap for a particular diff-pair\n"
 "    (rule \"dp clock gap\"\n"
 "        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
-"        (condition \"A.inDiffPair('CLK') && AB.isCoupledDiffPair()\"))\n"
+"        (condition \"A.inDiffPair('/CLK')\"))\n"
 "\n"
 "    # Specify a larger clearance around any diff-pair\n"
 "    (rule \"dp clearance\"\n"
 "        (constraint clearance (min \"1.5mm\"))\n"
 "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
+"\n"
+"\n"
+"    # Don't use thermal reliefs on heatsink pads\n"
+"    (rule heat_sink_pad\n"
+"        (constraint zone_connection solid)\n"
+"        (condition \"A.Fabrication_Property == 'Heatsink pad'\"))\n"
+"\n"
+"    # Require all four thermal relief spokes to connect to parent zone\n"
+"    (rule fully_spoked_pads\n"
+"        (constraint min_resolved_spokes 4))\n"
+"\n"
+"    # Set thermal relief gap & spoke width for all zones\n"
+"    (rule defined_relief\n"
+"        (constraint thermal_relief_gap (min 10mil))\n"
+"        (constraint thermal_spoke_width (min 12mil)))\n"
+"\n"
+"    # Override thermal relief gap & spoke width for GND and PWR zones\n"
+"    (rule defined_relief_pwr\n"
+"        (constraint thermal_relief_gap (min 10mil))\n"
+"        (constraint thermal_spoke_width (min 12mil))\n"
+"        (condition \"A.Name == 'zone_GND' || A.Name == 'zone_PWR'\"))\n"
+"\n"
+"\n"
+"    # Prevent solder wicking from SMD pads\n"
+"    (rule holes_in_pads\n"
+"        (constraint physical_hole_clearance (min 0.2mm))\n"
+"        (condition \"B.Pad_Type == 'SMD'\"))\n"
+"\n"
+"    # Disallow solder mask margin overrides\n"
+"    (rule \"disallow solder mask margin overrides\"\n"
+"        (constraint assertion \"A.Soldermask_Margin_Override == 0mm\")\n"
+"        (condition \"A.Type == 'Pad'\"))\n"
+"\n"
+"\n"
+"    # Enforce a mechanical clearance between components and board edge\n"
+"    (rule front_mechanical_board_edge_clearance\n"
+"        (layer \"F.Courtyard\")\n"
+"        (constraint physical_clearance (min 3mm))\n"
+"        (condition \"B.Layer == 'Edge.Cuts'\"))\n"
+"\n"
+"\n"
+"    # Check current-carrying capacity\n"
+"    (rule high-current\n"
+"        (constraint track_width (min 1.0mm))\n"
+"        (constraint connection_width (min 0.8mm))\n"
+"        (condition \"A.NetClass == 'Power'\"))"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:75
 msgid "Default properties for new dimension objects:"
@@ -32989,9 +33073,9 @@ msgid "Determining PCB data\n"
 msgstr ""
 
 #: pcbnew/exporters/step/exporter_step.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Board Thickness from stackup: %.3f mm\n"
-msgstr "ความหนาของบอร์ดจากสแต็กอัพ:"
+msgstr "ความหนาของบอร์ดจากสแต็กอัพ: %.3f มม\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:344
 msgid "Build STEP data\n"
