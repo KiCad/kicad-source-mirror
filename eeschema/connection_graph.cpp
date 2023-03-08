@@ -290,13 +290,12 @@ wxString CONNECTION_SUBGRAPH::driverName( SCH_ITEM* aItem ) const
     case SCH_LABEL_T:
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIER_LABEL_T:
-    case SCH_SHEET_PIN_T:
-    {
         return EscapeString( static_cast<SCH_TEXT*>( aItem )->GetShownText( &m_sheet ),
                              CTX_NETNAME );
-        break;
-    }
-
+    case SCH_SHEET_PIN_T:
+        // Sheet pins need to use their parent sheet as their starting sheet or they will
+        // resolve variables on the current sheet first
+        return EscapeString( static_cast<SCH_TEXT*>( aItem )->GetShownText(), CTX_NETNAME );
     default:
         wxFAIL_MSG( wxS( "Unhandled item type in GetNameForDriver" ) );
         break;
