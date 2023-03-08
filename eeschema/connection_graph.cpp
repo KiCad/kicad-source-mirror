@@ -292,7 +292,8 @@ wxString CONNECTION_SUBGRAPH::driverName( SCH_ITEM* aItem ) const
     case SCH_HIER_LABEL_T:
     case SCH_SHEET_PIN_T:
     {
-        return EscapeString( static_cast<SCH_TEXT*>( aItem )->GetShownText(), CTX_NETNAME );
+        return EscapeString( static_cast<SCH_TEXT*>( aItem )->GetShownText( &m_sheet ),
+                             CTX_NETNAME );
         break;
     }
 

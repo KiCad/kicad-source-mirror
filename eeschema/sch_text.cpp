@@ -339,12 +339,19 @@ const BOX2I SCH_TEXT::GetBoundingBox() const
 }
 
 
-wxString SCH_TEXT::GetShownText( int aDepth, bool aAllowExtraText ) const
+wxString SCH_TEXT::GetShownText( const SCH_SHEET_PATH* aPath, int aDepth, bool aAllowExtraText ) const
 {
+    SCH_SHEET* sheet = nullptr;
+
+    if( aPath )
+        sheet = aPath->Last();
+    else if( Schematic() )
+        sheet = Schematic()->CurrentSheet().Last();
+
     std::function<bool( wxString* )> textResolver =
             [&]( wxString* token ) -> bool
             {
-                if( SCH_SHEET* sheet = Schematic()->CurrentSheet().Last() )
+                if( sheet )
                 {
                     if( sheet->ResolveTextVar( token, aDepth + 1 ) )
                         return true;
