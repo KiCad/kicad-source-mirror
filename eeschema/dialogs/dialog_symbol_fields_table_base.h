@@ -83,7 +83,7 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		wxStaticText* m_labelRemoveLineBreaks;
 		wxCheckBox* m_checkRemoveLineBreaks;
 		wxStaticText* m_labelOutputDirectory;
-		wxTextCtrl* m_outputDirectoryName;
+		wxTextCtrl* m_outputFileName;
 		wxBitmapButton* m_browseButton;
 		wxStaticText* m_labelPreview;
 		wxBitmapButton* m_bRefreshPreview;
@@ -111,6 +111,7 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		virtual void OnTableItemContextMenu( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnTableColSize( wxGridSizeEvent& event ) { event.Skip(); }
 		virtual void OnTableRangeSelected( wxGridRangeSelectEvent& event ) { event.Skip(); }
+		virtual void OnOutputFileBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPreviewRefresh( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnExport( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSaveAndContinue( wxCommandEvent& event ) { event.Skip(); }

@@ -81,6 +81,7 @@ private:
     void OnFieldsCtrlSelectionChanged( wxDataViewEvent& event ) override;
     bool TryBefore( wxEvent& aEvent ) override;
 
+    void OnOutputFileBrowseClicked( wxCommandEvent& event ) override;
     void OnPreviewRefresh( wxCommandEvent& event ) override;
 
     std::vector<BOM_PRESET> GetUserBomPresets() const;

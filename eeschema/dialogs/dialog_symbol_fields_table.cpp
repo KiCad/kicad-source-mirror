@@ -23,6 +23,7 @@
  */
 
 
+#include <common.h>
 #include <base_units.h>
 #include <bitmaps.h>
 #include <symbol_library.h>
@@ -1030,6 +1031,46 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnPreviewRefresh( wxCommandEvent& event )
 }
 
 
+void DIALOG_SYMBOL_FIELDS_TABLE::OnOutputFileBrowseClicked( wxCommandEvent& event )
+{
+    // Build the absolute path of current output directory to preselect it in the file browser.
+    wxString path = ExpandEnvVarSubstitutions( m_outputFileName->GetValue(), &Prj() );
+    path = Prj().AbsolutePath( path );
+
+
+    // Calculate the export filename
+    wxFileName fn( Prj().AbsolutePath( m_parent->Schematic().GetFileName() ) );
+    fn.SetExt( CsvFileExtension );
+
+    wxFileDialog saveDlg( this, _( "Selected Output Filename" ), path, fn.GetFullName(),
+                          CsvFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    if( saveDlg.ShowModal() == wxID_CANCEL )
+        return;
+
+
+    wxFileName file = wxFileName( saveDlg.GetPath() );
+    wxString   defaultPath = fn.GetPathWithSep();
+    wxString   msg;
+    msg.Printf( _( "Do you want to use a path relative to\n'%s'?" ), defaultPath );
+
+    wxMessageDialog dialog( this, msg, _( "BOM Output File" ),
+                            wxYES_NO | wxICON_QUESTION | wxYES_DEFAULT );
+
+    if( dialog.ShowModal() == wxID_YES )
+    {
+        if( !file.MakeRelativeTo( defaultPath ) )
+        {
+            wxMessageBox( _( "Cannot make path relative (target volume different from schematic "
+                             "file volume)!" ),
+                          _( "BOM Output File" ), wxOK | wxICON_ERROR );
+        }
+    }
+
+    m_outputFileName->SetValue( file.GetFullPath() );
+}
+
+
 void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
 {
     if( m_dataModel->IsEdited() )
@@ -1039,21 +1080,45 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
             == wxID_CANCEL )
             return;
 
+    // Create output directory if it does not exist (also transform it in absolute form).
+    // Bail if it fails.
 
-    // Calculate the netlist filename
-    wxFileName fn = m_parent->Schematic().GetFileName();
-    fn.SetExt( CsvFileExtension );
+    std::function<bool( wxString* )> textResolver =
+            [&]( wxString* token ) -> bool
+            {
+                // Handles m_board->GetTitleBlock() *and* m_board->GetProject()
+                return m_parent->Schematic().ResolveTextVar( token, 0 );
+            };
 
-    wxFileDialog saveDlg( this, _( "Save as CSV" ), wxPathOnly( Prj().GetProjectFullName() ),
-                          fn.GetFullName(), CsvFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+    wxString path = m_outputFileName->GetValue();
+    path = ExpandTextVars( path, &textResolver );
+    path = ExpandEnvVarSubstitutions( path, nullptr );
 
-    if( saveDlg.ShowModal() == wxID_CANCEL )
+    wxFileName outputFile = wxFileName::FileName( path );
+
+    auto displayErr = [&]()
+        {
+            wxString msg;
+            msg.Printf( _( "Could not write BOM output to '%s'." ),
+                        outputFile.GetPath() );
+            DisplayError( this, msg );
+        };
+
+    if( !EnsureFileDirectoryExists( &outputFile,
+                                    Prj().AbsolutePath( m_parent->Schematic().GetFileName() ),
+                                    &NULL_REPORTER::GetInstance() ) )
+    {
+        displayErr();
         return;
+    }
 
-    wxFFile out( saveDlg.GetPath(), "wb" );
+    wxFFile out( outputFile.GetFullPath(), "wb" );
 
     if( !out.IsOpened() )
+    {
+        displayErr();
         return;
+    }
 
     BOM_EXPORT_SETTINGS settings = ( BOM_EXPORT_SETTINGS ){
         .FieldDelimiter = m_textFieldDelimiter->GetValue(),
@@ -1063,7 +1128,15 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
         .RemoveLineBreaks = m_checkRemoveLineBreaks->GetValue(),
     };
 
-    out.Write( m_dataModel->Export( settings ) );
+    if( !out.Write( m_dataModel->Export( settings ) ) )
+    {
+        displayErr();
+        return;
+    }
+
+    wxString msg;
+    msg.Printf( _( "Wrote BOM output to '%s'" ), outputFile.GetFullPath() );
+    DisplayInfoMessage( this, msg );
 }
 
 
