@@ -1,6 +1,6 @@
 # This program source code file is part of KiCad, a free EDA CAD application.
 #
-# Copyright (C) 2018 KiCad Developers, see CHANGELOG.TXT for contributors.
+# Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -40,6 +40,12 @@ add_library( qa_utils STATIC
 
 include_directories( BEFORE ${INC_BEFORE} )
 
+# for some obscure reason, on mingw/msys2 ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} does not work
+# So use the actual the lib filename:
+if( MINGW )
+    set( LIBBOOST_UNIT_TEST_LIB libboost_unit_test_framework-mt )
+endif()
+
 target_link_libraries( qa_utils
     common
     turtle
@@ -47,7 +53,9 @@ target_link_libraries( qa_utils
     ${Boost_FILESYSTEM_LIBRARY}
     ${Boost_SYSTEM_LIBRARY}
     ${wxWidgets_LIBRARIES}
+    ${LIBBOOST_UNIT_TEST_LIB}
 )
+
 
 target_include_directories( qa_utils PUBLIC
     include
