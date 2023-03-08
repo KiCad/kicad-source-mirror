@@ -1229,7 +1229,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             if( ! zone->IsOnCopperLayer() )
                 continue;
 
-
             // Now, build zone polygon on each copper layer where the zone
             // is living (zones can live on many copper layers)
             const int copperCount = aBoard->GetCopperLayerCount();
@@ -1313,7 +1312,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
                         cutout = new PATH( window, T_polygon );
                         window->SetShape( cutout );
-                        cutout->layer_id = m_layerIds[ m_kicadLayer2pcb[ zone->GetLayer() ] ];
+                        cutout->layer_id = m_layerIds[ m_kicadLayer2pcb[ layer ] ];
                     }
 
                     // If the point in this iteration is the last of the contour, the next iteration

@@ -250,6 +250,7 @@ void SPECCTRA_DB::readTIME( time_t* time_stamp )
         Expecting( time_toks );
 
     mytime.tm_year = atoi( CurText() ) - 1900;
+    mytime.tm_isdst = 0;   // useless param here.
 
     *time_stamp = mktime( &mytime );
 }

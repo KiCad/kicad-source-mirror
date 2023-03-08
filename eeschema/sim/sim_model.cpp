@@ -856,7 +856,7 @@ void SIM_MODEL::SetParamValue( int aParamIndex, const std::string& aValue,
 {
     std::string value = aValue;
 
-    if( aNotation != SIM_VALUE::NOTATION::SI || aValue.find( ',' ) >= 0 )
+    if( aNotation != SIM_VALUE::NOTATION::SI || aValue.find( ',' ) != std::string::npos )
         value = SIM_VALUE::ConvertNotation( value, aNotation, SIM_VALUE::NOTATION::SI );
 
     doSetParamValue( aParamIndex, value );
