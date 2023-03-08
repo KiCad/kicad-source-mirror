@@ -1163,6 +1163,9 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
         BOX2I          sameNetBoundingBox = sameNetZone->GetBoundingBox();
         SHAPE_POLY_SET sameNetPoly = sameNetZone->Outline()->CloneDropTriangulation();
 
+        SHAPE_POLY_SET diffNetPoly;
+        SHAPE_POLY_SET sumPoly = Outline()->CloneDropTriangulation();
+
         sameNetPoly.ClearArcs();
 
         // Of course there's always a wrinkle.  The same-net intersecting zone *might* get knocked
@@ -1172,11 +1175,19 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
             if( otherNetZone->HigherPriority( sameNetZone )
                     && otherNetZone->GetBoundingBox().Intersects( sameNetBoundingBox ) )
             {
-                sameNetPoly.BooleanSubtract( *otherNetZone->Outline(), SHAPE_POLY_SET::PM_FAST );
+                diffNetPoly.BooleanAdd( *otherNetZone->Outline(), SHAPE_POLY_SET::PM_FAST );
             }
         }
 
-        aSmoothedPoly.BooleanAdd( sameNetPoly, SHAPE_POLY_SET::PM_FAST );
+        // Second wrinkle.  After unioning the higher priority, different net zones together,
+        // we need to check to see if they completely enclose our zone.  If they do, then
+        // we need to treat the enclosed zone as isolated, not connected to the outer zone
+        // #13915
+        if( diffNetPoly.OutlineCount() )
+            sumPoly.BooleanSubtract( diffNetPoly, SHAPE_POLY_SET::PM_FAST );
+
+        if( sumPoly.OutlineCount() )
+            aSmoothedPoly.BooleanAdd( sameNetPoly, SHAPE_POLY_SET::PM_FAST );
     }
 
     if( aBoardOutline )
