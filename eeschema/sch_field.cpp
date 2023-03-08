@@ -172,12 +172,13 @@ void SCH_FIELD::SetId( int aId )
 }
 
 
-wxString SCH_FIELD::GetShownText( int aDepth, bool aAllowExtraText ) const
+wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, int aDepth,
+                                  bool aAllowExtraText ) const
 {
     std::function<bool( wxString* )> symbolResolver =
             [&]( wxString* token ) -> bool
             {
-                return static_cast<SCH_SYMBOL*>( m_parent )->ResolveTextVar( token, aDepth + 1 );
+                return static_cast<SCH_SYMBOL*>( m_parent )->ResolveTextVar( token, aDepth + 1, aPath );
             };
 
     std::function<bool( wxString* )> sheetResolver =

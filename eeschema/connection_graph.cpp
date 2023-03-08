@@ -552,17 +552,20 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
 
             for( SCH_PIN* pin : symbol->GetPins( &aSheet ) )
             {
-                pin->InitializeConnection( aSheet, this );
+                SCH_CONNECTION* conn = pin->InitializeConnection( aSheet, this );
 
                 VECTOR2I pos = pin->GetPosition();
 
                 // because calling the first time is not thread-safe
-                pin->GetDefaultNetName( aSheet );
+                wxString name = pin->GetDefaultNetName( aSheet );
                 pin->ConnectedItems( aSheet ).clear();
 
                 // power symbol pins need to be post-processed later
                 if( pin->IsGlobalPower() )
+                {
+                    conn->SetName( name );
                     m_global_power_pins.emplace_back( std::make_pair( aSheet, pin ) );
+                }
 
                 connection_map[ pos ].push_back( pin );
                 m_items.emplace_back( pin );
@@ -1000,7 +1003,7 @@ void CONNECTION_GRAPH::generateGlobalPowerPinSubGraphs()
         // in the symbol, but we support legacy non-power symbols with global
         // power connections based on invisible, power-in, pin's names.
         if( pin->GetLibPin()->GetParent()->IsPower() )
-            connection->SetName( pin->GetParentSymbol()->GetValueFieldText( true ) );
+            connection->SetName( pin->GetParentSymbol()->GetValueFieldText( true, &sheet ) );
         else
             connection->SetName( pin->GetShownName() );
 

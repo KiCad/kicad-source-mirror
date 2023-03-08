@@ -274,7 +274,8 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
     if( IsGlobalPower() )
     {
         if( GetLibPin()->GetParent()->IsPower() )
-            return EscapeString( GetParentSymbol()->GetValueFieldText( true ), CTX_NETNAME );
+            return EscapeString( GetParentSymbol()->GetValueFieldText( true, &aPath ),
+                                 CTX_NETNAME );
         else
             return EscapeString( m_libPin->GetName(), CTX_NETNAME );
     }
