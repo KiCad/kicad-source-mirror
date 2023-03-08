@@ -100,6 +100,7 @@ public:
      */
     void SetFields( const std::vector<SCH_FIELD>& aFields );
 
+    wxString GetShownName() const { return m_fields[SHEETNAME].GetShownText(); }
     wxString GetName() const { return m_fields[ SHEETNAME ].GetText(); }
     void SetName( const wxString& aName ) { m_fields[ SHEETNAME ].SetText( aName ); }
 

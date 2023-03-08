@@ -147,7 +147,7 @@ int ERC_TESTER::TestDuplicateSheetNames( bool aCreateMarker )
                 // We have found a second sheet: compare names
                 // we are using case insensitive comparison to avoid mistakes between
                 // similar names like Mysheet and mysheet
-                if( sheet->GetName().CmpNoCase( test_item->GetName() ) == 0 )
+                if( sheet->GetShownName().CmpNoCase( test_item->GetShownName() ) == 0 )
                 {
                     if( aCreateMarker )
                     {
