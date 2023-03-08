@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:53-0800\n"
-"PO-Revision-Date: 2023-02-25 13:01+0000\n"
+"PO-Revision-Date: 2023-03-12 20:08+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v7/fi/>\n"
 "Language: fi\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -1356,7 +1356,7 @@ msgstr "bittiä"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:100
 msgid "Load Source Image"
-msgstr "Valitse Lähdekuva"
+msgstr "Lataa lähdekuva"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:107
 msgid "Output Size"
@@ -11167,9 +11167,8 @@ msgid "Simulation Command"
 msgstr "Simulaatiokomento"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:186
-#, fuzzy
 msgid "<unknown>"
-msgstr "Tuntematon"
+msgstr "<tuntematon>"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:196
 #, c-format
@@ -20669,9 +20668,9 @@ msgstr ""
 "%s"
 
 #: kicad/pcm/pcm.cpp:464
-#, fuzzy
 msgid "Failed to parse locally stored repository.json."
-msgstr "Tietovaraston jäsentäminen epäonnistui: %s"
+msgstr ""
+"Paikallisesti tallennetun repository.json-tiedoston jäsentäminen epäonnistui."
 
 #: kicad/pcm/pcm.cpp:492
 msgid ""
@@ -33364,9 +33363,9 @@ msgid "Determining PCB data\n"
 msgstr "Määritellään piirilevytietoja\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Board Thickness from stackup: %.3f mm\n"
-msgstr "Kortin paksuus kerrospinosta:"
+msgstr "Piirilevyn paksuus pinosta: %.3f mm\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:344
 msgid "Build STEP data\n"
