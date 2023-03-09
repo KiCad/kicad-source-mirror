@@ -166,8 +166,8 @@ public:
 
     void RunEeschema();
 
-    void UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox, bool aEdit = true );
-    void UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, bool aEdit = true );
+    void UpdateTrackWidthSelectBox( wxComboBox* aTrackWidthSelectBox, bool aEdit = true );
+    void UpdateViaSizeSelectBox( wxComboBox* aViaSizeSelectBox, bool aEdit = true );
 
     /**
      * Return the angle used for rotate operations.
@@ -808,8 +808,8 @@ protected:
 public:
     PCB_LAYER_BOX_SELECTOR* m_SelLayerBox;  // a combo box to display and select active layer
 
-    wxChoice* m_SelTrackWidthBox;        // a choice box to display and select current track width
-    wxChoice* m_SelViaSizeBox;           // a choice box to display and select current via diameter
+    wxComboBox* m_SelTrackWidthBox;        // a choice box to display and select current track width
+    wxComboBox* m_SelViaSizeBox;           // a choice box to display and select current via diameter
 
     bool m_show_layer_manager_tools;
     bool m_show_search;

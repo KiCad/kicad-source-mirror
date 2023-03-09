@@ -23,6 +23,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <wx/combobox.h>
+#include <wx/dirdlg.h>
+#include <wx/event.h>
+#include <wx/fdrepdlg.h>
+#include <wx/filedlg.h>
+#include <wx/msgdlg.h>
+#include <wx/snglinst.h>
+#include <wx/socket.h>
+
 #include <base_screen.h>
 #include <bitmaps.h>
 #include <confirm.h>
@@ -56,18 +65,9 @@
 #include <view/view.h>
 #include <drawing_sheet/ds_draw_item.h>
 #include <widgets/msgpanel.h>
-#include <wx/event.h>
-#include <wx/snglinst.h>
 #include <dialogs/dialog_grid_settings.h>
 #include <widgets/ui_common.h>
 #include <widgets/search_pane.h>
-#include <wx/dirdlg.h>
-#include <wx/filedlg.h>
-#include <wx/msgdlg.h>
-#include <wx/socket.h>
-
-#include <wx/snglinst.h>
-#include <wx/fdrepdlg.h>
 
 #define FR_HISTORY_LIST_CNT     10   ///< Maximum size of the find/replace history stacks.
 

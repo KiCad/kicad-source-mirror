@@ -23,6 +23,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <wx/combobox.h>
+#include <wx/debug.h>
+
 #include <bitmaps.h>
 #include <board.h>
 #include <footprint.h>
@@ -55,15 +58,13 @@
 #include <tools/pcb_viewer_tools.h>       // shared tools with other Pcbnew frames
 #include <tools/cvpcb_fpviewer_selection_tool.h>
 #include <widgets/wx_infobar.h>
-#include <wx/choice.h>
-#include <wx/debug.h>
 #include <cvpcb_id.h>
 
 
 BEGIN_EVENT_TABLE( DISPLAY_FOOTPRINTS_FRAME, PCB_BASE_FRAME )
     EVT_CLOSE( DISPLAY_FOOTPRINTS_FRAME::OnCloseWindow )
-    EVT_CHOICE( ID_ON_ZOOM_SELECT, DISPLAY_FOOTPRINTS_FRAME::OnSelectZoom )
-    EVT_CHOICE( ID_ON_GRID_SELECT, DISPLAY_FOOTPRINTS_FRAME::OnSelectGrid )
+    EVT_COMBOBOX( ID_ON_ZOOM_SELECT, DISPLAY_FOOTPRINTS_FRAME::OnSelectZoom )
+    EVT_COMBOBOX( ID_ON_GRID_SELECT, DISPLAY_FOOTPRINTS_FRAME::OnSelectGrid )
     EVT_MENU( ID_GRID_SETTINGS, DISPLAY_FOOTPRINTS_FRAME::OnGridSettings )
 END_EVENT_TABLE()
 
@@ -303,9 +304,10 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddScaledSeparator( this );
 
-    // Grid selection choice box.
+    // Grid selection combo box.
     if( !m_gridSelectBox )
-        m_gridSelectBox = new wxChoice( m_mainToolBar, ID_ON_GRID_SELECT );
+        m_gridSelectBox = new wxComboBox( m_mainToolBar, ID_ON_GRID_SELECT, wxEmptyString, wxDefaultPosition,
+                wxDefaultSize, 0, nullptr, wxCB_READONLY );
 
     UpdateGridSelectBox();
     m_mainToolBar->AddControl( m_gridSelectBox );
@@ -314,7 +316,8 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
 
     // Zoom selection choice box.
     if( !m_zoomSelectBox )
-        m_zoomSelectBox = new wxChoice( m_mainToolBar, ID_ON_ZOOM_SELECT );
+        m_zoomSelectBox = new wxComboBox( m_mainToolBar, ID_ON_ZOOM_SELECT, wxEmptyString, wxDefaultPosition,
+                wxDefaultSize, 0, nullptr, wxCB_READONLY );
 
     UpdateZoomSelectBox();
     m_mainToolBar->AddControl( m_zoomSelectBox );
