@@ -11,10 +11,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:51-0800\n"
-"PO-Revision-Date: 2023-03-06 15:39+0000\n"
-"Last-Translator: co8 j <co8@nifty.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"PO-Revision-Date: 2023-03-11 14:19+0000\n"
+"Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -101,7 +101,7 @@ msgstr "機構穴とビアで BVH (ブラインド ビア ホール) をビル�
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:389
 msgid "OpenGL context creation error"
-msgstr "OpenGLコンテキストの作成がエラー"
+msgstr "OpenGLコンテキストの生成に失敗"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:420
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
@@ -20991,9 +20991,8 @@ msgstr ""
 "%s"
 
 #: kicad/pcm/pcm.cpp:464
-#, fuzzy
 msgid "Failed to parse locally stored repository.json."
-msgstr "リポジトリの解析ができません: %s"
+msgstr "ローカルに保存された repository.json の解析に失敗しました。"
 
 #: kicad/pcm/pcm.cpp:492
 msgid ""
@@ -33807,9 +33806,9 @@ msgid "Determining PCB data\n"
 msgstr "PCB データの判別しています\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:447
-#, fuzzy, c-format
+#, c-format
 msgid "Board Thickness from stackup: %.3f mm\n"
-msgstr "スタックアップからの基板厚:"
+msgstr "スタックアップからの基板厚: %.3f mm\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:452
 msgid "Build STEP data\n"
