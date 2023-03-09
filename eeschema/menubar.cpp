@@ -254,7 +254,7 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     inspectMenu->Add( ACTIONS::excludeMarker );
 
     inspectMenu->AppendSeparator();
-    inspectMenu->Add( EE_ACTIONS::inspectLibraryDiff );
+    inspectMenu->Add( EE_ACTIONS::diffSymbol );
 
 #ifdef KICAD_SPICE
     inspectMenu->AppendSeparator();

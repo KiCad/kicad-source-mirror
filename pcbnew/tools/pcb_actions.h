@@ -491,7 +491,7 @@ public:
     static TOOL_ACTION repairFootprint;
     static TOOL_ACTION inspectClearance;
     static TOOL_ACTION inspectConstraints;
-    static TOOL_ACTION inspectLibraryDiff;
+    static TOOL_ACTION diffFootprint;
 
     // Appearance controls
     static TOOL_ACTION clearHighlight;          // Turns off highlight and resets previous highlight

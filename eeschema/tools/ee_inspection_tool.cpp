@@ -42,8 +42,9 @@
 #include <project.h>
 #include <dialogs/html_message_box.h>
 #include <dialogs/dialog_erc.h>
-#include <dialogs/dialog_constraints_reporter.h>
+#include <dialogs/dialog_book_reporter.h>
 #include <widgets/wx_html_report_box.h>
+#include <widgets/symbol_diff_widget.h>
 #include <math/util.h>      // for KiROUND
 
 
@@ -238,7 +239,7 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
 }
 
 
-int EE_INSPECTION_TOOL::InspectLibraryDiff( const TOOL_EVENT& aEvent )
+int EE_INSPECTION_TOOL::DiffSymbol( const TOOL_EVENT& aEvent )
 {
     if( !m_frame->IsType( FRAME_SCH ) )
         return 0;
@@ -251,17 +252,17 @@ int EE_INSPECTION_TOOL::InspectLibraryDiff( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    if( m_inspectLibraryDiffDialog == nullptr )
+    if( m_diffSymbolDialog == nullptr )
     {
-        m_inspectLibraryDiffDialog = std::make_unique<DIALOG_CONSTRAINTS_REPORTER>( m_frame );
-        m_inspectLibraryDiffDialog->SetTitle( _( "Diff Symbol with Library" ) );
+        m_diffSymbolDialog = std::make_unique<DIALOG_BOOK_REPORTER>( m_frame );
+        m_diffSymbolDialog->SetTitle( _( "Diff Symbol with Library" ) );
 
-        m_inspectLibraryDiffDialog->Connect( wxEVT_CLOSE_WINDOW,
-                wxCommandEventHandler( EE_INSPECTION_TOOL::onInspectLibraryDiffDialogClosed ),
-                nullptr, this );
+        m_diffSymbolDialog->Connect( wxEVT_CLOSE_WINDOW,
+                                     wxCommandEventHandler( EE_INSPECTION_TOOL::onDiffSymbolDialogClosed ),
+                                     nullptr, this );
     }
 
-    m_inspectLibraryDiffDialog->DeleteAllPages();
+    m_diffSymbolDialog->DeleteAllPages();
 
     SCH_SYMBOL* symbol = (SCH_SYMBOL*) selection.Front();
     wxString    symbolDesc = wxString::Format( _( "Symbol %s" ),
@@ -270,7 +271,7 @@ int EE_INSPECTION_TOOL::InspectLibraryDiff( const TOOL_EVENT& aEvent )
     wxString    libName = libId.GetLibNickname();
     wxString    symbolName = libId.GetLibItemName();
 
-    WX_HTML_REPORT_BOX* r = m_inspectLibraryDiffDialog->AddPage( _( "Summary" ) );
+    WX_HTML_REPORT_BOX* r = m_diffSymbolDialog->AddHTMLPage( _( "Summary" ) );
 
     r->Report( wxS( "<h7>" ) + _( "Schematic vs library diff for:" ) + wxS( "</h7>" ) );
     r->Report( wxS( "<ul><li>" ) + EscapeHTML( symbolDesc ) + wxS( "</li>" )
@@ -323,32 +324,54 @@ int EE_INSPECTION_TOOL::InspectLibraryDiff( const TOOL_EVENT& aEvent )
                                                 field.GetName( false ) ) );
                 fields.back().CopyText( field );
                 fields.back().SetAttributes( field );
+                fields.back().Offset( -symbol->GetPosition() );
             }
 
             flattenedSchSymbol->SetFields( fields );
 
             if( flattenedSchSymbol->Compare( *flattenedLibSymbol, 0, r ) == 0 )
                 r->Report( _( "No relevant differences detected." ) );
+
+            wxPanel*            panel = m_diffSymbolDialog->AddBlankPage( _( "Visual" ) );
+            SYMBOL_DIFF_WIDGET* diff = constructDiffPanel( panel );
+
+            diff->DisplayDiff( flattenedSchSymbol.release(), flattenedLibSymbol.release(),
+                               symbol->GetUnit(), symbol->GetConvert() );
         }
     }
 
     r->Flush();
 
-    m_inspectLibraryDiffDialog->FinishInitialization();
-    m_inspectLibraryDiffDialog->Raise();
-    m_inspectLibraryDiffDialog->Show( true );
+    m_diffSymbolDialog->FinishInitialization();
+    m_diffSymbolDialog->Raise();
+    m_diffSymbolDialog->Show( true );
     return 0;
 }
 
 
-void EE_INSPECTION_TOOL::onInspectLibraryDiffDialogClosed( wxCommandEvent& event )
+SYMBOL_DIFF_WIDGET* EE_INSPECTION_TOOL::constructDiffPanel( wxPanel* aParentPanel )
 {
-    m_inspectLibraryDiffDialog->Disconnect( wxEVT_CLOSE_WINDOW,
-            wxCommandEventHandler( EE_INSPECTION_TOOL::onInspectLibraryDiffDialogClosed ),
-                                            nullptr, this );
+    wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
 
-    m_inspectLibraryDiffDialog->Destroy();
-    m_inspectLibraryDiffDialog.release();
+    EDA_DRAW_PANEL_GAL::GAL_TYPE backend = m_frame->GetCanvas()->GetBackend();
+    SYMBOL_DIFF_WIDGET*          diffWidget = new SYMBOL_DIFF_WIDGET( aParentPanel, backend );
+
+   	sizer->Add( diffWidget, 1, wxEXPAND | wxALL, 5 );
+    aParentPanel->SetSizer( sizer );
+    aParentPanel->Layout();
+
+    return diffWidget;
+}
+
+
+void EE_INSPECTION_TOOL::onDiffSymbolDialogClosed( wxCommandEvent& aEvent )
+{
+    m_diffSymbolDialog->Disconnect( wxEVT_CLOSE_WINDOW,
+                                    wxCommandEventHandler( EE_INSPECTION_TOOL::onDiffSymbolDialogClosed ),
+                                    nullptr, this );
+
+    m_diffSymbolDialog->Destroy();
+    m_diffSymbolDialog.release();
 }
 
 
@@ -467,7 +490,7 @@ void EE_INSPECTION_TOOL::setTransitions()
     Go( &EE_INSPECTION_TOOL::ExcludeMarker,       EE_ACTIONS::excludeMarker.MakeEvent() );
 
     Go( &EE_INSPECTION_TOOL::CheckSymbol,         EE_ACTIONS::checkSymbol.MakeEvent() );
-    Go( &EE_INSPECTION_TOOL::InspectLibraryDiff,  EE_ACTIONS::inspectLibraryDiff.MakeEvent() );
+    Go( &EE_INSPECTION_TOOL::DiffSymbol,          EE_ACTIONS::diffSymbol.MakeEvent() );
     Go( &EE_INSPECTION_TOOL::RunSimulation,       EE_ACTIONS::showSimulator.MakeEvent() );
 
     Go( &EE_INSPECTION_TOOL::ShowDatasheet,       EE_ACTIONS::showDatasheet.MakeEvent() );

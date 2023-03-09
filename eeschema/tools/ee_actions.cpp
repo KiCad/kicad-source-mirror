@@ -50,9 +50,9 @@ TOOL_ACTION EE_ACTIONS::checkSymbol( "eeschema.InspectionTool.checkSymbol",
         _( "Symbol Checker" ), _( "Show the symbol checker window" ),
         BITMAPS::erc );
 
-TOOL_ACTION EE_ACTIONS::inspectLibraryDiff( "eeschema.InspectionTool.inspectLibraryDiff",
+TOOL_ACTION EE_ACTIONS::diffSymbol( "eeschema.InspectionTool.diffSymbol",
         AS_GLOBAL, 0, "",
-        _( "Check Symbol against Library..." ),
+        _( "Diff Symbol with Library..." ),
         _( "Check for differences between schematic symbol and its library equivalent" ),
         BITMAPS::library );
 

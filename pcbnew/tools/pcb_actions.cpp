@@ -1173,7 +1173,7 @@ TOOL_ACTION PCB_ACTIONS::inspectConstraints( "pcbnew.InspectionTool.InspectConst
         _( "Show constraints resolution for the selected object" ),
         BITMAPS::mw_add_gap );
 
-TOOL_ACTION PCB_ACTIONS::inspectLibraryDiff( "pcbnew.InspectionTool.InspectLibraryDiff",
+TOOL_ACTION PCB_ACTIONS::diffFootprint( "pcbnew.InspectionTool.DiffFootprint",
         AS_GLOBAL, 0, "",
         _( "Diff Footprint with Library..." ),
         _( "Check for differences between board footprint and its library equivalent" ),

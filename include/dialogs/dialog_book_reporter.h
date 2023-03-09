@@ -21,32 +21,34 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_CONSTRAINTS_REPORTER_H
-#define DIALOG_CONSTRAINTS_REPORTER_H
+#ifndef DIALOG_BOOK_REPORTER_H
+#define DIALOG_BOOK_REPORTER_H
 
-#include <dialogs/dialog_constraints_reporter_base.h>
+#include <dialogs/dialog_book_reporter_base.h>
 
 class KIWAY_PLAYER;
 class WX_HTML_REPORT_BOX;
 class wxHtmlLinkEvent;
 
-class DIALOG_CONSTRAINTS_REPORTER : public DIALOG_CONSTRAINTS_REPORTER_BASE
+class DIALOG_BOOK_REPORTER : public DIALOG_BOOK_REPORTER_BASE
 {
 public:
-    DIALOG_CONSTRAINTS_REPORTER( KIWAY_PLAYER* aParent );
+    DIALOG_BOOK_REPORTER( KIWAY_PLAYER* aParent );
 
     void FinishInitialization();
 
-    void OnOK( wxCommandEvent& event ) override
+    void OnOK( wxCommandEvent& aEvent ) override
     {
         Close();
     }
 
-    void OnErrorLinkClicked( wxHtmlLinkEvent& event );
+    void OnErrorLinkClicked( wxHtmlLinkEvent& aEvent );
 
     void DeleteAllPages();
 
-    WX_HTML_REPORT_BOX* AddPage( const wxString& pageTitle );
+    WX_HTML_REPORT_BOX* AddHTMLPage( const wxString& aTitle );
+
+    wxPanel* AddBlankPage( const wxString& aTitle );
 
     int GetPageCount() const;
 
@@ -54,4 +56,4 @@ protected:
     KIWAY_PLAYER* m_frame;
 };
 
-#endif // DIALOG_CONSTRAINTS_REPORTER_H
+#endif // DIALOG_BOOK_REPORTER_H

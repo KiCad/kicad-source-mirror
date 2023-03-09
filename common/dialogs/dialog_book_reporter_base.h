@@ -25,9 +25,9 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_CONSTRAINTS_REPORTER_BASE
+/// Class DIALOG_BOOK_REPORTER_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_CONSTRAINTS_REPORTER_BASE : public DIALOG_SHIM
+class DIALOG_BOOK_REPORTER_BASE : public DIALOG_SHIM
 {
 	private:
 
@@ -42,9 +42,9 @@ class DIALOG_CONSTRAINTS_REPORTER_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_CONSTRAINTS_REPORTER_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Constraints Resolution Report"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_BOOK_REPORTER_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Report"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
-		~DIALOG_CONSTRAINTS_REPORTER_BASE();
+		~DIALOG_BOOK_REPORTER_BASE();
 
 };
 

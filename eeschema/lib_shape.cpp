@@ -471,24 +471,24 @@ wxString LIB_SHAPE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
     switch( GetShape() )
     {
     case SHAPE_T::ARC:
-        return wxString::Format( _( "Arc, radius %s" ),
+        return wxString::Format( _( "Arc with radius %s" ),
                                  aUnitsProvider->MessageTextFromValue( GetRadius() ) );
 
     case SHAPE_T::CIRCLE:
-        return wxString::Format( _( "Circle, radius %s" ),
+        return wxString::Format( _( "Circle with radius %s" ),
                                  aUnitsProvider->MessageTextFromValue( GetRadius() ) );
 
     case SHAPE_T::RECT:
-        return wxString::Format( _( "Rectangle, width %s height %s" ),
+        return wxString::Format( _( "Rectangle with width %s height %s" ),
                                  aUnitsProvider->MessageTextFromValue( std::abs( m_start.x - m_end.x ) ),
                                  aUnitsProvider->MessageTextFromValue( std::abs( m_start.y - m_end.y ) ) );
 
     case SHAPE_T::POLY:
-        return wxString::Format( _( "Polyline, %d points" ),
+        return wxString::Format( _( "Polyline with %d points" ),
                                  int( m_poly.Outline( 0 ).GetPointCount() ) );
 
     case SHAPE_T::BEZIER:
-        return wxString::Format( _( "Bezier Curve, %d points" ),
+        return wxString::Format( _( "Bezier Curve with %d points" ),
                                  int( m_bezierPoints.size() ) );
 
     default:

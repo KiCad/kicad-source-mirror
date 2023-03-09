@@ -32,11 +32,14 @@
 #include <wx/stattext.h>
 
 
-SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway,
+SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY* aKiway,
                                               EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType ) :
-    wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 ),
-    m_kiway( aKiway ),
-    m_preview( nullptr ), m_status( nullptr ), m_statusSizer( nullptr ), m_previewItem( nullptr )
+        wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 ),
+        m_kiway( aKiway ),
+        m_preview( nullptr ),
+        m_status( nullptr ),
+        m_statusSizer( nullptr ),
+        m_previewItem( nullptr )
 {
     auto common_settings = Pgm().GetCommonSettings();
     auto app_settings = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
@@ -175,7 +178,7 @@ void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit, i
 
     try
     {
-        LIB_SYMBOL* tmp = m_kiway.Prj().SchSymbolLibTable()->LoadSymbol( aSymbolID );
+        LIB_SYMBOL* tmp = m_kiway->Prj().SchSymbolLibTable()->LoadSymbol( aSymbolID );
 
         if( tmp )
             symbol = tmp->Flatten();

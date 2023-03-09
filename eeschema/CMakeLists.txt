@@ -159,6 +159,7 @@ set( EESCHEMA_WIDGETS
     widgets/hierarchy_pane.cpp
     widgets/pin_shape_combobox.cpp
     widgets/pin_type_combobox.cpp
+    widgets/symbol_diff_widget.cpp
     widgets/symbol_preview_widget.cpp
     widgets/symbol_tree_pane.cpp
     )

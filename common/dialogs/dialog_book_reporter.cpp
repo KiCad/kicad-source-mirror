@@ -21,38 +21,38 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <dialogs/dialog_constraints_reporter.h>
+#include <dialogs/dialog_book_reporter.h>
 #include <widgets/wx_html_report_box.h>
 #include <wx/wxhtml.h>
 
 
-DIALOG_CONSTRAINTS_REPORTER::DIALOG_CONSTRAINTS_REPORTER( KIWAY_PLAYER* aParent ) :
-        DIALOG_CONSTRAINTS_REPORTER_BASE( aParent ),
+DIALOG_BOOK_REPORTER::DIALOG_BOOK_REPORTER( KIWAY_PLAYER* aParent ) :
+        DIALOG_BOOK_REPORTER_BASE( aParent ),
         m_frame( aParent )
 {
 }
 
 
-void DIALOG_CONSTRAINTS_REPORTER::FinishInitialization()
+void DIALOG_BOOK_REPORTER::FinishInitialization()
 {
     SetupStandardButtons();
     finishDialogSettings();
 }
 
 
-void DIALOG_CONSTRAINTS_REPORTER::DeleteAllPages()
+void DIALOG_BOOK_REPORTER::DeleteAllPages()
 {
     m_notebook->DeleteAllPages();
 }
 
 
-void DIALOG_CONSTRAINTS_REPORTER::OnErrorLinkClicked( wxHtmlLinkEvent& event )
+void DIALOG_BOOK_REPORTER::OnErrorLinkClicked( wxHtmlLinkEvent& aEvent )
 {
-    m_frame->ExecuteRemoteCommand( event.GetLinkInfo().GetHref().ToStdString().c_str() );
+    m_frame->ExecuteRemoteCommand( aEvent.GetLinkInfo().GetHref().ToStdString().c_str() );
 }
 
 
-WX_HTML_REPORT_BOX* DIALOG_CONSTRAINTS_REPORTER::AddPage( const wxString& aTitle )
+WX_HTML_REPORT_BOX* DIALOG_BOOK_REPORTER::AddHTMLPage( const wxString& aTitle )
 {
     wxPanel* panel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                   wxTAB_TRAVERSAL  );
@@ -69,14 +69,24 @@ WX_HTML_REPORT_BOX* DIALOG_CONSTRAINTS_REPORTER::AddPage( const wxString& aTitle
 
     reporter->SetUnits( m_frame->GetUserUnits() );
     reporter->Connect( wxEVT_COMMAND_HTML_LINK_CLICKED,
-                       wxHtmlLinkEventHandler( DIALOG_CONSTRAINTS_REPORTER::OnErrorLinkClicked ),
+                       wxHtmlLinkEventHandler( DIALOG_BOOK_REPORTER::OnErrorLinkClicked ),
                        nullptr, this );
 
     return reporter;
 }
 
 
-int DIALOG_CONSTRAINTS_REPORTER::GetPageCount() const
+wxPanel* DIALOG_BOOK_REPORTER::AddBlankPage( const wxString& aTitle )
+{
+    wxPanel* panel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                  wxTAB_TRAVERSAL  );
+    m_notebook->AddPage( panel, aTitle );
+
+    return panel;
+}
+
+
+int DIALOG_BOOK_REPORTER::GetPageCount() const
 {
     return m_notebook->GetPageCount();
 }

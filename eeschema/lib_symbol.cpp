@@ -274,9 +274,12 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
 
     CHECKPOINT;
 
-    std::set<const LIB_ITEM*> aShapes;
-    std::set<const LIB_ITEM*> aFields;
-    std::set<const LIB_ITEM*> aPins;
+    // Make sure shapes are sorted, but no need with fields and pins as we're going to
+    // match those up by id/name/number.
+
+    std::set<const LIB_ITEM*, LIB_ITEM::cmp_items> aShapes;
+    std::set<const LIB_ITEM*>                      aFields;
+    std::set<const LIB_ITEM*>                      aPins;
 
     for( auto it = m_drawings.begin(); it != m_drawings.end(); ++it )
     {
@@ -288,9 +291,9 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
             aPins.insert( &(*it) );
     }
 
-    std::set<const LIB_ITEM*> bShapes;
-    std::set<const LIB_ITEM*> bFields;
-    std::set<const LIB_ITEM*> bPins;
+    std::set<const LIB_ITEM*, LIB_ITEM::cmp_items> bShapes;
+    std::set<const LIB_ITEM*>                      bFields;
+    std::set<const LIB_ITEM*>                      bPins;
 
     for( auto it = aRhs.m_drawings.begin(); it != aRhs.m_drawings.end(); ++it )
     {

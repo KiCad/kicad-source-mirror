@@ -278,6 +278,11 @@ public:
     void SetPrivate( bool aPrivate ) { m_private = aPrivate; }
     bool IsPrivate() const { return m_private; }
 
+    struct cmp_items
+    {
+        bool operator()( const LIB_ITEM* aFirst, const LIB_ITEM* aSecond ) const;
+    };
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif

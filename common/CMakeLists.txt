@@ -106,12 +106,12 @@ set( COMMON_ABOUT_DLG_SRCS
 set( COMMON_DLG_SRCS
     dialogs/dialog_assign_netclass.cpp
     dialogs/dialog_assign_netclass_base.cpp
+    dialogs/dialog_book_reporter.cpp
+    dialogs/dialog_book_reporter_base.cpp
     dialogs/dialog_color_picker.cpp
     dialogs/dialog_color_picker_base.cpp
     dialogs/dialog_configure_paths.cpp
     dialogs/dialog_configure_paths_base.cpp
-    dialogs/dialog_constraints_reporter.cpp
-    dialogs/dialog_constraints_reporter_base.cpp
     dialogs/dialog_display_html_text_base.cpp
     dialogs/dialog_edit_library_tables.cpp
     dialogs/dialog_global_lib_table_config.cpp

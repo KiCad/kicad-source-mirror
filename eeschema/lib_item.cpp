@@ -90,6 +90,12 @@ int LIB_ITEM::compare( const LIB_ITEM& aOther, int aCompareFlags ) const
 }
 
 
+bool LIB_ITEM::cmp_items::operator()( const LIB_ITEM* aFirst, const LIB_ITEM* aSecond ) const
+{
+    return aFirst->compare( *aSecond, LIB_ITEM::COMPARE_FLAGS::EQUALITY ) < 0;
+}
+
+
 bool LIB_ITEM::operator==( const LIB_ITEM& aOther ) const
 {
     if( Type() != aOther.Type() )

@@ -26,13 +26,14 @@
 #define EE_INSPECTION_TOOL_H
 
 #include <tools/ee_tool_base.h>
-#include <dialogs/dialog_constraints_reporter.h>
+#include <dialogs/dialog_book_reporter.h>
 #include <sch_base_frame.h>
 
 
 class EE_SELECTION_TOOL;
 class SCH_BASE_FRAME;
 class DIALOG_ERC;
+class SYMBOL_DIFF_WIDGET;
 
 
 class EE_INSPECTION_TOOL : public wxEvtHandler, public EE_TOOL_BASE<SCH_BASE_FRAME>
@@ -59,7 +60,7 @@ public:
     int ExcludeMarker( const TOOL_EVENT& aEvent );
 
     int CheckSymbol( const TOOL_EVENT& aEvent );
-    int InspectLibraryDiff( const TOOL_EVENT& aEvent );
+    int DiffSymbol( const TOOL_EVENT& aEvent );
 
     int RunSimulation( const TOOL_EVENT& aEvent );
 
@@ -69,15 +70,16 @@ public:
     int UpdateMessagePanel( const TOOL_EVENT& aEvent );
 
 private:
-    void onInspectLibraryDiffDialogClosed( wxCommandEvent& aEvent );
+    SYMBOL_DIFF_WIDGET* constructDiffPanel( wxPanel* aParentPanel );
+
+    void onDiffSymbolDialogClosed( wxCommandEvent& aEvent );
 
     ///< @copydoc TOOL_INTERACTIVE::setTransitions();
     void setTransitions() override;
 
 private:
-    DIALOG_ERC*  m_ercDialog;
-
-    std::unique_ptr<DIALOG_CONSTRAINTS_REPORTER> m_inspectLibraryDiffDialog;
+    DIALOG_ERC*                           m_ercDialog;
+    std::unique_ptr<DIALOG_BOOK_REPORTER> m_diffSymbolDialog;
 };
 
 #endif /* EE_INSPECTION_TOOL_H */

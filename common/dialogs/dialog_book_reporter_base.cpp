@@ -5,11 +5,11 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "dialog_constraints_reporter_base.h"
+#include "dialog_book_reporter_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_CONSTRAINTS_REPORTER_BASE::DIALOG_CONSTRAINTS_REPORTER_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+DIALOG_BOOK_REPORTER_BASE::DIALOG_BOOK_REPORTER_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
@@ -37,12 +37,12 @@ DIALOG_CONSTRAINTS_REPORTER_BASE::DIALOG_CONSTRAINTS_REPORTER_BASE( wxWindow* pa
 	this->Centre( wxBOTH );
 
 	// Connect Events
-	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONSTRAINTS_REPORTER_BASE::OnOK ), NULL, this );
+	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOOK_REPORTER_BASE::OnOK ), NULL, this );
 }
 
-DIALOG_CONSTRAINTS_REPORTER_BASE::~DIALOG_CONSTRAINTS_REPORTER_BASE()
+DIALOG_BOOK_REPORTER_BASE::~DIALOG_BOOK_REPORTER_BASE()
 {
 	// Disconnect Events
-	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONSTRAINTS_REPORTER_BASE::OnOK ), NULL, this );
+	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOOK_REPORTER_BASE::OnOK ), NULL, this );
 
 }

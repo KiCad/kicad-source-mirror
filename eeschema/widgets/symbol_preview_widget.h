@@ -43,7 +43,7 @@ public:
      * @param aKiway - an active Kiway instance
      * @param aCanvasType = the type of canvas (GAL_TYPE_OPENGL or GAL_TYPE_CAIRO only)
      */
-    SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway,
+    SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY* aKiway,
                            EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType );
 
     ~SYMBOL_PREVIEW_WIDGET() override;
@@ -60,12 +60,12 @@ public:
 
     void DisplayPart( LIB_SYMBOL* aSymbol, int aUnit, int aConvert = 0 );
 
-private:
+protected:
     void onSize( wxSizeEvent& aEvent );
 
     void fitOnDrawArea();    // set the view scale to fit the item on screen and center
 
-    KIWAY&                     m_kiway;
+    KIWAY*                     m_kiway;
 
     KIGFX::GAL_DISPLAY_OPTIONS m_galDisplayOptions;
     EDA_DRAW_PANEL_GAL*        m_preview;

@@ -197,8 +197,10 @@ public:
      *                setting to determine if the item is to be drawn.
      */
     void SetForceVisible( bool aEnable ) { m_forceVisible = aEnable; }
-
     bool IsForceVisible() const { return m_forceVisible; }
+
+    void SetForceTransparency( double aTransparency ) { m_forceTransparency = aTransparency; }
+    double GetForceTransparency() const { return m_forceTransparency; }
 
     /**
      * Populate \a aList of #MSG_PANEL_ITEM objects with it's internal state for display
@@ -495,6 +497,7 @@ protected:
     EDA_ITEM_FLAGS m_status;
     EDA_ITEM*      m_parent; ///< Linked list: Link (parent struct)
     bool           m_forceVisible;
+    double         m_forceTransparency;
     EDA_ITEM_FLAGS m_flags;
 
 private:
