@@ -36,6 +36,7 @@
 
 class LINE_READER;
 class OUTPUTFORMATTER;
+class REPORTER;
 class SYMBOL_LIB;
 class LIB_SYMBOL;
 class LIB_FIELD;
@@ -657,7 +658,8 @@ public:
      *         1 if this symbol is greater than \a aRhs
      *         0 if this symbol is the same as \a aRhs
      */
-    int Compare( const LIB_SYMBOL& aRhs, int aCompareFlags = 0 ) const;
+    int Compare( const LIB_SYMBOL& aRhs, int aCompareFlags = 0,
+                 REPORTER* aReporter = nullptr ) const;
 
     bool operator==( const LIB_SYMBOL* aSymbol ) const { return this == aSymbol; }
     bool operator==( const LIB_SYMBOL& aSymbol ) const

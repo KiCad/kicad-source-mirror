@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,14 +55,17 @@
 #include <netlist_reader/netlist_reader.h>
 #include <wx/log.h>
 
-/* Execute a remote command send by Eeschema via a socket,
- * port KICAD_PCB_PORT_SERVICE_NUMBER
- * cmdline = received command from Eeschema
+/* Execute a remote command sent via a socket on port KICAD_PCB_PORT_SERVICE_NUMBER
+ *
  * Commands are:
- * $NET: "net name" Highlight the given net
+ *
+ * $NET: "net name"               Highlight the given net
  * $NETS: "net name 1,net name 2" Highlight all given nets
- * $CLEAR Clear existing highlight
- * They are a keyword followed by a quoted string.
+ * $CLEAR                         Clear existing highlight
+ *
+ * $CONFIG       Show the Manage Footprint Libraries dialog
+ * $CUSTOM_RULES Show the "Custom Rules" page of the Board Setup dialog
+ * $DRC          Show the DRC dialog
  */
 void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 {
@@ -91,7 +94,39 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     if( idcmd == nullptr )
         return;
 
-    if( strcmp( idcmd, "$NET:" ) == 0 )
+    if( strcmp( idcmd, "$CONFIG" ) == 0 )
+        {
+            GetToolManager()->RunAction( ACTIONS::showSymbolLibTable, true );
+            return;
+        }
+    else if( strcmp( idcmd, "$CUSTOM_RULES" ) == 0 )
+    {
+        ShowBoardSetupDialog( _( "Custom Rules" ) );
+        return;
+    }
+    else if( strcmp( idcmd, "$DRC" ) == 0 )
+    {
+        GetToolManager()->RunAction( PCB_ACTIONS::runDRC, true );
+        return;
+    }
+    else if( strcmp( idcmd, "$CLEAR" ) == 0 )
+    {
+        if( renderSettings->IsHighlightEnabled() )
+        {
+            renderSettings->SetHighlight( false );
+            view->UpdateAllLayersColor();
+        }
+
+        if( pcb->IsHighLightNetON() )
+        {
+            pcb->ResetNetHighLight();
+            SetMsgPanel( pcb );
+        }
+
+        GetCanvas()->Refresh();
+        return;
+    }
+    else if( strcmp( idcmd, "$NET:" ) == 0 )
     {
         if( !crossProbingSettings.auto_highlight )
             return;
@@ -108,9 +143,10 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
             netinfo->GetMsgPanelInfo( this, items );
             SetMsgPanel( items );
         }
-    }
 
-    if( strcmp( idcmd, "$NETS:" ) == 0 )
+        // fall through to hihglighting section
+    }
+    else if( strcmp( idcmd, "$NETS:" ) == 0 )
     {
         if( !crossProbingSettings.auto_highlight )
             return;
@@ -145,23 +181,8 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         }
 
         netcode = -1;
-    }
-    else if( strcmp( idcmd, "$CLEAR" ) == 0 )
-    {
-        if( renderSettings->IsHighlightEnabled() )
-        {
-            renderSettings->SetHighlight( false );
-            view->UpdateAllLayersColor();
-        }
 
-        if( pcb->IsHighLightNetON() )
-        {
-            pcb->ResetNetHighLight();
-            SetMsgPanel( pcb );
-        }
-
-        GetCanvas()->Refresh();
-        return;
+        // fall through to highlighting section
     }
 
     BOX2I bbox;

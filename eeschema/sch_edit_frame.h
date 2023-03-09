@@ -166,11 +166,11 @@ public:
     wxString GetScreenDesc() const override;
 
     /**
-     * Execute a remote command sent by Pcbnew via a socket connection.
+     * Execute a remote command sent via a socket on port KICAD_SCH_PORT_SERVICE_NUMBER (which
+     * defaults to 4243).
      *
-     * When user selects a footprint or pin in Pcbnew, Eeschema shows that same
-     * symbol or pin and moves cursor on the item.  The socket port used
-     * is #KICAD_SCH_PORT_SERVICE_NUMBER which defaults to 4243.
+     * When user selects a footprint or pin in Pcbnew, Eeschema shows that same symbol or pin
+     * and moves cursor on the item.
      *
      * Valid commands are:
      * \li \c \$PART: \c "reference" Put cursor on symbol.

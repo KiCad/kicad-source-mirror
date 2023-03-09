@@ -1175,9 +1175,9 @@ TOOL_ACTION PCB_ACTIONS::inspectConstraints( "pcbnew.InspectionTool.InspectConst
 
 TOOL_ACTION PCB_ACTIONS::inspectLibraryDiff( "pcbnew.InspectionTool.InspectLibraryDiff",
         AS_GLOBAL, 0, "",
-        _( "Check Footprint against Library..." ),
+        _( "Diff Footprint with Library..." ),
         _( "Check for differences between board footprint and its library equivalent" ),
-        BITMAPS::show_footprint );
+        BITMAPS::library );
 
 //Geographic re-annotation tool
 TOOL_ACTION PCB_ACTIONS::boardReannotate( "pcbnew.ReannotateTool.ShowReannotateDialog",

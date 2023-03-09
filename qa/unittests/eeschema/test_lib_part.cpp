@@ -425,10 +425,10 @@ BOOST_AUTO_TEST_CASE( Compare )
     m_part_no_data.AddDrawItem( new LIB_SHAPE( &m_part_no_data, SHAPE_T::ARC ) );
     BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
     m_part_no_data.RemoveDrawItem( &m_part_no_data.GetDrawItems()[LIB_SHAPE_T].front() );
+    testPart.RemoveDrawItem( &testPart.GetDrawItems()[LIB_SHAPE_T].front() );
     m_part_no_data.AddDrawItem( new LIB_PIN( &m_part_no_data ) );
     BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
     m_part_no_data.RemoveDrawItem( &m_part_no_data.GetDrawItems()[LIB_PIN_T].front() );
-    testPart.RemoveDrawItem( &testPart.GetDrawItems()[LIB_SHAPE_T].front() );
 
     // Footprint filter array comparison tests.
     wxArrayString footPrintFilters;

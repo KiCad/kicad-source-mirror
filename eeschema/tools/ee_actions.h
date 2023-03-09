@@ -162,6 +162,7 @@ public:
     static TOOL_ACTION schematicSetup;
     static TOOL_ACTION editPageNumber;
     static TOOL_ACTION checkSymbol;
+    static TOOL_ACTION inspectLibraryDiff;
 
     static TOOL_ACTION rescueSymbols;
     static TOOL_ACTION remapSymbols;

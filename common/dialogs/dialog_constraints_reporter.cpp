@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,14 +21,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <dialog_constraints_reporter.h>
-#include <pcb_edit_frame.h>
-#include <tool/tool_manager.h>
+#include <dialogs/dialog_constraints_reporter.h>
 #include <widgets/wx_html_report_box.h>
-#include <tools/pcb_actions.h>
 #include <wx/wxhtml.h>
 
-DIALOG_CONSTRAINTS_REPORTER::DIALOG_CONSTRAINTS_REPORTER( PCB_EDIT_FRAME* aParent ) :
+
+DIALOG_CONSTRAINTS_REPORTER::DIALOG_CONSTRAINTS_REPORTER( KIWAY_PLAYER* aParent ) :
         DIALOG_CONSTRAINTS_REPORTER_BASE( aParent ),
         m_frame( aParent )
 {
@@ -50,10 +48,7 @@ void DIALOG_CONSTRAINTS_REPORTER::DeleteAllPages()
 
 void DIALOG_CONSTRAINTS_REPORTER::OnErrorLinkClicked( wxHtmlLinkEvent& event )
 {
-    if( event.GetLinkInfo().GetHref() == wxT( "boardsetup" ) )
-        m_frame->ShowBoardSetupDialog( _( "Custom Rules" ) );
-    else if( event.GetLinkInfo().GetHref() == wxT( "drc" ) )
-        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::runDRC, true );
+    m_frame->ExecuteRemoteCommand( event.GetLinkInfo().GetHref().ToStdString().c_str() );
 }
 
 

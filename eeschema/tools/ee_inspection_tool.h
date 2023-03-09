@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,7 @@
 #define EE_INSPECTION_TOOL_H
 
 #include <tools/ee_tool_base.h>
+#include <dialogs/dialog_constraints_reporter.h>
 #include <sch_base_frame.h>
 
 
@@ -34,7 +35,7 @@ class SCH_BASE_FRAME;
 class DIALOG_ERC;
 
 
-class EE_INSPECTION_TOOL : public EE_TOOL_BASE<SCH_BASE_FRAME>
+class EE_INSPECTION_TOOL : public wxEvtHandler, public EE_TOOL_BASE<SCH_BASE_FRAME>
 {
 public:
     EE_INSPECTION_TOOL();
@@ -58,6 +59,7 @@ public:
     int ExcludeMarker( const TOOL_EVENT& aEvent );
 
     int CheckSymbol( const TOOL_EVENT& aEvent );
+    int InspectLibraryDiff( const TOOL_EVENT& aEvent );
 
     int RunSimulation( const TOOL_EVENT& aEvent );
 
@@ -67,11 +69,15 @@ public:
     int UpdateMessagePanel( const TOOL_EVENT& aEvent );
 
 private:
+    void onInspectLibraryDiffDialogClosed( wxCommandEvent& aEvent );
+
     ///< @copydoc TOOL_INTERACTIVE::setTransitions();
     void setTransitions() override;
 
 private:
     DIALOG_ERC*  m_ercDialog;
+
+    std::unique_ptr<DIALOG_CONSTRAINTS_REPORTER> m_inspectLibraryDiffDialog;
 };
 
 #endif /* EE_INSPECTION_TOOL_H */

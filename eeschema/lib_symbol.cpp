@@ -230,157 +230,257 @@ const LIB_SYMBOL& LIB_SYMBOL::operator=( const LIB_SYMBOL& aSymbol )
 }
 
 
-int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags ) const
+#define REPORT( msg ) { if( aReporter ) aReporter->Report( msg ); }
+#define ITEM_DESC( item ) ( item )->GetItemDescription( &unitsProvider )
+#define CHECKPOINT { if( retv && !aReporter ) return retv; }
+
+int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aReporter ) const
 {
+    UNITS_PROVIDER unitsProvider( schIUScale, EDA_UNITS::MILLIMETRES );
+
     if( m_me == aRhs.m_me )
         return 0;
 
-    int retv = 0;
-
-    if( ( aCompareFlags & LIB_ITEM::COMPARE_FLAGS::ERC ) == 0 )
+    if( !aReporter && ( aCompareFlags & LIB_ITEM::COMPARE_FLAGS::ERC ) == 0 )
     {
-        retv = m_name.Cmp( aRhs.m_name );
+        if( int tmp = m_name.Cmp( aRhs.m_name ) )
+            return tmp;
 
-        if( retv )
-            return retv;
+        if( int tmp = m_libId.compare( aRhs.m_libId ) )
+            return tmp;
 
-        retv = m_libId.compare( aRhs.m_libId );
+        if( m_parent.lock() < aRhs.m_parent.lock() )
+            return -1;
 
-        if( retv )
-            return retv;
+        if( m_parent.lock() > aRhs.m_parent.lock() )
+            return 1;
     }
 
-    if( m_parent.lock() < aRhs.m_parent.lock() )
-        return -1;
-
-    if( m_parent.lock() > aRhs.m_parent.lock() )
-        return 1;
+    int retv = 0;
 
     if( m_options != aRhs.m_options )
-        return ( m_options == ENTRY_NORMAL ) ? -1 : 1;
-
-    if( m_unitCount != aRhs.m_unitCount )
-        return m_unitCount - aRhs.m_unitCount;
-
-    if( m_drawings.size() != aRhs.m_drawings.size() )
-        return m_drawings.size() - aRhs.m_drawings.size();
-
-    LIB_ITEMS_CONTAINER::CONST_ITERATOR lhsItemIt = m_drawings.begin();
-    LIB_ITEMS_CONTAINER::CONST_ITERATOR rhsItemIt = aRhs.m_drawings.begin();
-
-    while( lhsItemIt != m_drawings.end() )
     {
-        const LIB_ITEM* lhsItem = static_cast<const LIB_ITEM*>( &(*lhsItemIt) );
-        const LIB_ITEM* rhsItem = static_cast<const LIB_ITEM*>( &(*rhsItemIt) );
+        retv = ( m_options == ENTRY_NORMAL ) ? -1 : 1;
+        REPORT( _( "Power flag differs." ) );
+    }
 
-        wxCHECK( lhsItem && rhsItem, lhsItem - rhsItem );
+    CHECKPOINT;
 
-        if( lhsItem->Type() != rhsItem->Type() )
-            return lhsItem->Type() - rhsItem->Type();
+    if( int tmp = m_unitCount - aRhs.m_unitCount )
+    {
+        retv = tmp;
+        REPORT( _( "Unit count differs." ) );
+    }
 
-        // Non-mandatory fields are a special case.  They can have different ordinal numbers
-        // and are compared separately below.
-        if( lhsItem->Type() == LIB_FIELD_T )
+    CHECKPOINT;
+
+    std::set<const LIB_ITEM*> aShapes;
+    std::set<const LIB_ITEM*> aFields;
+    std::set<const LIB_ITEM*> aPins;
+
+    for( auto it = m_drawings.begin(); it != m_drawings.end(); ++it )
+    {
+        if( it->Type() == LIB_SHAPE_T )
+            aShapes.insert( &(*it) );
+        else if( it->Type() == LIB_FIELD_T )
+            aFields.insert( &(*it) );
+        else if( it->Type() == LIB_PIN_T )
+            aPins.insert( &(*it) );
+    }
+
+    std::set<const LIB_ITEM*> bShapes;
+    std::set<const LIB_ITEM*> bFields;
+    std::set<const LIB_ITEM*> bPins;
+
+    for( auto it = aRhs.m_drawings.begin(); it != aRhs.m_drawings.end(); ++it )
+    {
+        if( it->Type() == LIB_SHAPE_T )
+            bShapes.insert( &(*it) );
+        else if( it->Type() == LIB_FIELD_T )
+            bFields.insert( &(*it) );
+        else if( it->Type() == LIB_PIN_T )
+            bPins.insert( &(*it) );
+    }
+
+    if( int tmp = static_cast<int>( aShapes.size() - bShapes.size() ) )
+    {
+        retv = tmp;
+        REPORT( _( "Graphic item count differs." ) );
+    }
+    else
+    {
+        for( auto aIt = aShapes.begin(), bIt = bShapes.begin(); aIt != aShapes.end(); aIt++, bIt++ )
         {
-            const LIB_FIELD* lhsField = static_cast<const LIB_FIELD*>( lhsItem );
+            if( int tmp2 = (*aIt)->compare( *(*bIt), aCompareFlags ) )
+            {
+                retv = tmp2;
+                REPORT( wxString::Format( _( "%s differs." ), ITEM_DESC( *aIt ) ) );
+            }
+        }
+    }
 
-            if( lhsField->GetId() == VALUE_FIELD )
-            {
-                if( ( aCompareFlags & LIB_ITEM::COMPARE_FLAGS::ERC ) == 0 || IsPower() )
-                    retv = lhsItem->compare( *rhsItem, aCompareFlags );
-            }
-            else if( lhsField->IsMandatory() )
-            {
-                retv = lhsItem->compare( *rhsItem, aCompareFlags );
-            }
+    CHECKPOINT;
+
+    for( const LIB_ITEM* aPinItem : aPins )
+    {
+        const LIB_PIN* aPin = static_cast<const LIB_PIN*>( aPinItem );
+        const LIB_PIN* bPin = aRhs.GetPin( aPin->GetNumber() );
+        int            tmp = 0;
+
+        if( !bPin )
+            tmp = 1;
+        else
+            tmp = aPinItem->compare( *bPin, aCompareFlags );
+
+        if( tmp )
+        {
+            retv = tmp;
+            REPORT( wxString::Format( _( "Pin %s differs." ), aPin->GetNumber() ) );
+        }
+    }
+
+    if( int tmp = static_cast<int>( aPins.size() - bPins.size() ) )
+    {
+        retv = tmp;
+        REPORT( _( "Pin count differs." ) );
+    }
+
+    for( const LIB_ITEM* aFieldItem : aFields )
+    {
+        const LIB_FIELD* aField = static_cast<const LIB_FIELD*>( aFieldItem );
+        const LIB_FIELD* bField = nullptr;
+        int              tmp = 0;
+
+        if( aField->GetId() < MANDATORY_FIELDS )
+            bField = aRhs.GetFieldById( aField->GetId() );
+        else
+            bField = aRhs.FindField( aField->GetName() );
+
+        if( !bField )
+        {
+            tmp = 1;
+        }
+        else if( aField->GetId() == REFERENCE_FIELD )
+        {
+            if( aCompareFlags & LIB_ITEM::COMPARE_FLAGS::EQUALITY )
+                tmp = aFieldItem->compare( *bField, aCompareFlags );
+        }
+        else if( aField->GetId() == VALUE_FIELD )
+        {
+            if( ( aCompareFlags & LIB_ITEM::COMPARE_FLAGS::ERC ) == 0 || IsPower() )
+                tmp = aFieldItem->compare( *bField, aCompareFlags );
         }
         else
         {
-            retv = lhsItem->compare( *rhsItem, aCompareFlags );
+            tmp = aFieldItem->compare( *bField, aCompareFlags );
         }
 
-        if( retv )
-            return retv;
-
-        ++lhsItemIt;
-        ++rhsItemIt;
+        if( tmp )
+        {
+            retv = tmp;
+            REPORT( wxString::Format( _( "%s field differs." ), aField->GetName( false ) ) );
+        }
     }
 
-    // Compare the optional fields.
-    for( const LIB_ITEM& item : m_drawings[ LIB_FIELD_T ] )
+    CHECKPOINT;
+
+    if( int tmp = static_cast<int>( aFields.size() - bFields.size() ) )
     {
-        const LIB_FIELD* field = dynamic_cast<const LIB_FIELD*>( &item );
-
-        wxCHECK2( field, continue );
-
-        // Mandatory fields were already compared above.
-        if( field->IsMandatory() )
-            continue;
-
-        const LIB_FIELD* foundField = aRhs.FindField( field->GetName() );
-
-        if( foundField == nullptr )
-            return 1;
-
-        retv = item.compare( static_cast<const LIB_ITEM&>( *foundField ), aCompareFlags );
-
-        if( retv )
-            return retv;
+        retv = tmp;
+        REPORT( _( "Field count differs." ) );
     }
 
-    if( m_fpFilters.GetCount() != aRhs.m_fpFilters.GetCount() )
-        return m_fpFilters.GetCount() - aRhs.m_fpFilters.GetCount();
+    CHECKPOINT;
 
-    for( size_t i = 0; i < m_fpFilters.GetCount(); i++ )
+    if( int tmp = static_cast<int>( m_fpFilters.GetCount() - aRhs.m_fpFilters.GetCount() ) )
     {
-        retv = m_fpFilters[i].Cmp( aRhs.m_fpFilters[i] );
-
-        if( retv )
-            return retv;
+        retv = tmp;
+        REPORT( _( "Footprint filters differs." ) );
+    }
+    else
+    {
+        for( size_t i = 0; i < m_fpFilters.GetCount(); i++ )
+        {
+            if( int tmp2 = m_fpFilters[i].Cmp( aRhs.m_fpFilters[i] ) )
+            {
+                retv = tmp2;
+                REPORT( _( "Footprint filters differ." ) );
+                break;
+            }
+        }
     }
 
-    retv = m_description.Cmp( aRhs.m_description );
+    CHECKPOINT;
 
-    if( retv )
-        return retv;
+    if( int tmp = m_description.Cmp( aRhs.m_description ) )
+    {
+        retv = tmp;
+        REPORT( _( "Symbol descriptions differ." ) );
+    }
 
-    retv = m_keyWords.Cmp( aRhs.m_keyWords );
+    CHECKPOINT;
 
-    if( retv )
-        return retv;
+    if( int tmp = m_keyWords.Cmp( aRhs.m_keyWords ) )
+    {
+        retv = tmp;
+        REPORT( _( "Symbol keywords differ." ) );
+    }
 
-    if( m_pinNameOffset != aRhs.m_pinNameOffset )
-        return m_pinNameOffset - aRhs.m_pinNameOffset;
+    CHECKPOINT;
 
-    if( m_unitsLocked != aRhs.m_unitsLocked )
-        return ( m_unitsLocked ) ? 1 : -1;
+    if( int tmp = m_pinNameOffset - aRhs.m_pinNameOffset )
+    {
+        retv = tmp;
+        REPORT( _( "Symbol pin name offsets differ." ) );
+    }
+
+    CHECKPOINT;
 
     if( ( aCompareFlags & LIB_ITEM::COMPARE_FLAGS::ERC ) == 0 )
     {
         if( m_showPinNames != aRhs.m_showPinNames )
-            return ( m_showPinNames ) ? 1 : -1;
+        {
+            retv = ( m_showPinNames ) ? 1 : -1;
+            REPORT( _( "Show pin names settings differ." ) );
+        }
 
         if( m_showPinNumbers != aRhs.m_showPinNumbers )
-            return ( m_showPinNumbers ) ? 1 : -1;
+        {
+            retv = ( m_showPinNumbers ) ? 1 : -1;
+            REPORT( _( "Show pin numbers settings differ." ) );
+        }
 
         if( m_includeInBom != aRhs.m_includeInBom )
-            return ( m_includeInBom ) ? 1 : -1;
+        {
+            retv = ( m_includeInBom ) ? 1 : -1;
+            REPORT( _( "Exclude from bill of materials settings differ." ) );
+        }
 
         if( m_includeOnBoard != aRhs.m_includeOnBoard )
-            return ( m_includeOnBoard ) ? 1 : -1;
+        {
+            retv = ( m_includeOnBoard ) ? 1 : -1;
+            REPORT( _( "Exclude from board settings differ." ) );
+        }
     }
 
-    // Compare unit display names
-    if( m_unitDisplayNames < aRhs.m_unitDisplayNames )
+    CHECKPOINT;
+    if( !aReporter )
     {
-        return -1;
-    }
-    else if( m_unitDisplayNames > aRhs.m_unitDisplayNames )
-    {
-        return 1;
+        if( m_unitsLocked != aRhs.m_unitsLocked )
+            return ( m_unitsLocked ) ? 1 : -1;
+
+        // Compare unit display names
+        if( m_unitDisplayNames < aRhs.m_unitDisplayNames )
+        {
+            return -1;
+        }
+        else if( m_unitDisplayNames > aRhs.m_unitDisplayNames )
+        {
+            return 1;
+        }
     }
 
-    return 0;
+    return retv;
 }
 
 

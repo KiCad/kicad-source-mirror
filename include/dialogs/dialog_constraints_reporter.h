@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,16 +24,16 @@
 #ifndef DIALOG_CONSTRAINTS_REPORTER_H
 #define DIALOG_CONSTRAINTS_REPORTER_H
 
-#include <dialog_constraints_reporter_base.h>
+#include <dialogs/dialog_constraints_reporter_base.h>
 
-class PCB_EDIT_FRAME;
+class KIWAY_PLAYER;
 class WX_HTML_REPORT_BOX;
 class wxHtmlLinkEvent;
 
 class DIALOG_CONSTRAINTS_REPORTER : public DIALOG_CONSTRAINTS_REPORTER_BASE
 {
 public:
-    DIALOG_CONSTRAINTS_REPORTER( PCB_EDIT_FRAME* aParent );
+    DIALOG_CONSTRAINTS_REPORTER( KIWAY_PLAYER* aParent );
 
     void FinishInitialization();
 
@@ -51,7 +51,7 @@ public:
     int GetPageCount() const;
 
 protected:
-    PCB_EDIT_FRAME* m_frame;
+    KIWAY_PLAYER* m_frame;
 };
 
 #endif // DIALOG_CONSTRAINTS_REPORTER_H

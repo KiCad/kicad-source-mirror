@@ -183,6 +183,20 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString* aPath, const wx
 }
 
 
+/* Execute a remote command sent via a socket on port KICAD_PCB_PORT_SERVICE_NUMBER
+ *
+ * Commands are:
+ *
+ * $PART: "reference"                  Put cursor on symbol.
+ * $PART: "reference" $REF: "ref"      Put cursor on symbol reference.
+ * $PART: "reference" $VAL: "value"    Put cursor on symbol value.
+ * $PART: "reference" $PAD: "pin name" Put cursor on the symbol pin.
+ * $NET: "netname"                     Highlight a specified net
+ * $CLEAR: "HIGHLIGHTED"               Clear symbols highlight
+ *
+ * $CONFIG     Show the Manage Symbol Libraries dialog
+ * $ERC        Show the ERC dialog
+ */
 void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 {
     SCH_EDITOR_CONTROL* editor = m_toolManager->GetTool<SCH_EDITOR_CONTROL>();
@@ -199,7 +213,17 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
     CROSS_PROBING_SETTINGS& crossProbingSettings = eeconfig()->m_CrossProbing;
 
-    if( strcmp( idcmd, "$NET:" ) == 0 )
+    if( strcmp( idcmd, "$CONFIG" ) == 0 )
+    {
+        GetToolManager()->RunAction( ACTIONS::showSymbolLibTable, true );
+        return;
+    }
+    else if( strcmp( idcmd, "$ERC" ) == 0 )
+    {
+        GetToolManager()->RunAction( EE_ACTIONS::runERC, true );
+        return;
+    }
+    else if( strcmp( idcmd, "$NET:" ) == 0 )
     {
         if( !crossProbingSettings.auto_highlight )
             return;
@@ -216,8 +240,7 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         SetStatusText( _( "Selected net:" ) + wxS( " " ) + UnescapeString( netName ) );
         return;
     }
-
-    if( strcmp( idcmd, "$CLEAR:" ) == 0 )
+    else if( strcmp( idcmd, "$CLEAR:" ) == 0 )
     {
         // Cross-probing is now done through selection so we no longer need a clear command
         return;

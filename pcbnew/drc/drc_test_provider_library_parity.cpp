@@ -77,16 +77,14 @@ public:
 #define TEST( a, b, msg )                               \
         if( a != b )                                    \
         {                                               \
+            diff = true;                                \
+                                                        \
             if( aReporter )                             \
-            {                                           \
                 aReporter->Report( msg );               \
-                diff = true;                            \
-            }                                           \
-            else                                        \
-            {                                           \
-                return true;                            \
-            }                                           \
         }                                               \
+                                                        \
+        if( diff && !aReporter )                        \
+            return diff;                                \
         /* Prevent binding to else following macro */   \
         else {}
 
@@ -94,16 +92,14 @@ public:
 #define TEST_D( a, b, msg )                             \
         if( abs( a - b ) > EPSILON )                    \
         {                                               \
+            diff = true;                                \
+                                                        \
             if( aReporter )                             \
-            {                                           \
                 aReporter->Report( msg );               \
-                diff = true;                            \
-            }                                           \
-            else                                        \
-            {                                           \
-                return true;                            \
-            }                                           \
         }                                               \
+                                                        \
+        if( diff && !aReporter )                        \
+            return diff;                                \
         /* Prevent binding to else following macro */   \
         else {}
 
@@ -112,16 +108,14 @@ public:
                 || abs( a.y - b.y ) > EPSILON           \
                 || abs( a.z - b.z ) > EPSILON )         \
         {                                               \
+            diff = true;                                \
+                                                        \
             if( aReporter )                             \
-            {                                           \
                 aReporter->Report( msg );               \
-                diff = true;                            \
-            }                                           \
-            else                                        \
-            {                                           \
-                return true;                            \
-            }                                           \
         }                                               \
+                                                        \
+        if( diff && !aReporter )                        \
+            return diff;                                \
         /* Prevent binding to else following macro */   \
         else {}
 
@@ -491,6 +485,10 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint, REPORTER* 
               _( "Net tie pad groups differ." ) );
     }
 
+#define REPORT( msg ) { if( aReporter ) aReporter->Report( msg ); }
+#define ITEM_DESC( item ) ( item )->GetItemDescription( &unitsProvider )
+#define CHECKPOINT { if( diff && !aReporter ) return diff; }
+
     // Text items are really problematic.  We don't want to test the reference, but after that
     // it gets messy.
     //
@@ -521,86 +519,88 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint, REPORTER* 
                       return item->Type() == PCB_FP_SHAPE_T;
                   } );
 
+    if( aShapes.size() != aShapes.size() )
+    {
+        diff = true;
+        REPORT( _( "Graphic item count differs." ) );
+    }
+    else
+    {
+        for( auto aIt = aShapes.begin(), bIt = bShapes.begin(); aIt != aShapes.end(); aIt++, bIt++ )
+        {
+            if( ( *aIt )->Type() == PCB_FP_SHAPE_T )
+            {
+                if( shapeNeedsUpdate( static_cast<FP_SHAPE*>( *aIt ), static_cast<FP_SHAPE*>( *bIt ) ) )
+                {
+                    diff = true;
+                    REPORT( wxString::Format( _( "%s differs." ), ITEM_DESC( *aIt ) ) );
+                }
+            }
+        }
+    }
+
+    CHECKPOINT;
+
     std::set<PAD*, FOOTPRINT::cmp_pads> aPads( Pads().begin(), Pads().end() );
     std::set<PAD*, FOOTPRINT::cmp_pads> bPads( aLibFootprint->Pads().begin(), aLibFootprint->Pads().end() );
+
+    if( aPads.size() != bPads.size() )
+    {
+        diff = true;
+        REPORT( _( "Pad count differs." ) );
+    }
+    else
+    {
+        for( auto aIt = aPads.begin(), bIt = bPads.begin(); aIt != aPads.end(); aIt++, bIt++ )
+        {
+            if( padNeedsUpdate( *aIt, *bIt ) )
+            {
+                diff = true;
+                REPORT( wxString::Format( _( "%s differs." ), ITEM_DESC( *aIt ) ) );
+            }
+            else if( aReporter && padHasOverrides( *aIt, *bIt ) )
+            {
+                diff = true;
+                REPORT( wxString::Format( _( "%s has overrides." ), ITEM_DESC( *aIt ) ) );
+            }
+        }
+    }
+
+    CHECKPOINT;
 
     std::set<FP_ZONE*, FOOTPRINT::cmp_zones> aZones( Zones().begin(), Zones().end() );
     std::set<FP_ZONE*, FOOTPRINT::cmp_zones> bZones( aLibFootprint->Zones().begin(), aLibFootprint->Zones().end() );
 
-    TEST( aPads.size(), bPads.size(), _( "Pad count differs." ) );
-    TEST( aZones.size(), bZones.size(), _( "Rule area count differs." ) );
-    TEST( aShapes.size(), bShapes.size(), _( "Graphic item count differs." ) );
-
-    for( auto aIt = aPads.begin(), bIt = bPads.begin(); aIt != aPads.end(); aIt++, bIt++ )
+    if( aZones.size() != bZones.size() )
     {
-        if( padNeedsUpdate( *aIt, *bIt ) )
-        {
-            if( aReporter )
-            {
-                wxString msg = (*aIt)->GetItemDescription( &unitsProvider );
-                aReporter->Report( wxString::Format( _( "%s differs." ), msg ) );
-                diff = true;
-            }
-            else
-            {
-                return true;
-            }
-        }
-        else if( aReporter && padHasOverrides( *aIt, *bIt ) )
-        {
-            wxString msg = (*aIt)->GetItemDescription( &unitsProvider );
-            aReporter->Report( wxString::Format( _( "%s has overrides." ), msg ) );
-            diff = true;
-        }
+        diff = true;
+        REPORT( _( "Rule area count differs." ) );
     }
-
-    for( auto aIt = aShapes.begin(), bIt = bShapes.begin(); aIt != aShapes.end(); aIt++, bIt++ )
+    else
     {
-        if( ( *aIt )->Type() == PCB_FP_SHAPE_T )
+        for( auto aIt = aZones.begin(), bIt = bZones.begin(); aIt != aZones.end(); aIt++, bIt++ )
         {
-            if( shapeNeedsUpdate( static_cast<FP_SHAPE*>( *aIt ), static_cast<FP_SHAPE*>( *bIt ) ) )
+            if( zonesNeedUpdate( *aIt, *bIt ) )
             {
-                if( aReporter )
-                {
-                    wxString msg = (*aIt)->GetItemDescription( &unitsProvider );
-                    aReporter->Report( wxString::Format( _( "%s differs." ), msg ) );
-                    diff = true;
-                }
-                else
-                {
-                    return true;
-                }
+                diff = true;
+                REPORT( wxString::Format( _( "%s differs." ), ITEM_DESC( *aIt ) ) );
             }
         }
     }
 
-    for( auto aIt = aZones.begin(), bIt = bZones.begin(); aIt != aZones.end(); aIt++, bIt++ )
+    CHECKPOINT;
+
+    if( Models().size() != aLibFootprint->Models().size() )
     {
-        if( zonesNeedUpdate( *aIt, *bIt ) )
-        {
-            if( aReporter )
-            {
-                wxString msg = (*aIt)->GetItemDescription( &unitsProvider );
-                aReporter->Report( wxString::Format( _( "%s differs." ), msg ) );
-                diff = true;
-            }
-            else
-            {
-                return true;
-            }
-        }
+        diff = true;
+        REPORT( _( "3D model count differs." ) );
     }
-
-    TEST( Models().size(), aLibFootprint->Models().size(), _( "3D model count differs." ) );
-
-    for( size_t ii = 0; ii < Models().size(); ++ii )
+    else
     {
-        if( modelsNeedUpdate( Models()[ii], aLibFootprint->Models()[ii], aReporter ) )
+        for( size_t ii = 0; ii < Models().size(); ++ii )
         {
-            if( aReporter )
+            if( modelsNeedUpdate( Models()[ii], aLibFootprint->Models()[ii], aReporter ) )
                 diff = true;
-            else
-                return true;
         }
     }
 

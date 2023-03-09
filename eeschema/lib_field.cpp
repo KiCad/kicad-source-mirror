@@ -260,11 +260,14 @@ int LIB_FIELD::compare( const LIB_ITEM& aOther, int aCompareFlags ) const
     if( retv != 0 )
         return retv;
 
-    if( GetTextPos().x != tmp->GetTextPos().x )
-        return GetTextPos().x - tmp->GetTextPos().x;
+    if( aCompareFlags & LIB_ITEM::COMPARE_FLAGS::EQUALITY )
+    {
+        if( GetTextPos().x != tmp->GetTextPos().x )
+            return GetTextPos().x - tmp->GetTextPos().x;
 
-    if( GetTextPos().y != tmp->GetTextPos().y )
-        return GetTextPos().y - tmp->GetTextPos().y;
+        if( GetTextPos().y != tmp->GetTextPos().y )
+            return GetTextPos().y - tmp->GetTextPos().y;
+    }
 
     if( GetTextWidth() != tmp->GetTextWidth() )
         return GetTextWidth() - tmp->GetTextWidth();

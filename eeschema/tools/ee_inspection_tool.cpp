@@ -26,6 +26,7 @@
 #include <id.h>
 #include <kiway.h>
 #include <confirm.h>
+#include <string_utils.h>
 #include <tool/conditional_menu.h>
 #include <tool/selection_conditions.h>
 #include <tools/ee_actions.h>
@@ -41,6 +42,8 @@
 #include <project.h>
 #include <dialogs/html_message_box.h>
 #include <dialogs/dialog_erc.h>
+#include <dialogs/dialog_constraints_reporter.h>
+#include <widgets/wx_html_report_box.h>
 #include <math/util.h>      // for KiROUND
 
 
@@ -235,6 +238,120 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
 }
 
 
+int EE_INSPECTION_TOOL::InspectLibraryDiff( const TOOL_EVENT& aEvent )
+{
+    if( !m_frame->IsType( FRAME_SCH ) )
+        return 0;
+
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
+
+    if( selection.Empty() )
+    {
+        m_frame->ShowInfoBarError( _( "Select a symbol to diff against its library equivalent." ) );
+        return 0;
+    }
+
+    if( m_inspectLibraryDiffDialog == nullptr )
+    {
+        m_inspectLibraryDiffDialog = std::make_unique<DIALOG_CONSTRAINTS_REPORTER>( m_frame );
+        m_inspectLibraryDiffDialog->SetTitle( _( "Diff Symbol with Library" ) );
+
+        m_inspectLibraryDiffDialog->Connect( wxEVT_CLOSE_WINDOW,
+                wxCommandEventHandler( EE_INSPECTION_TOOL::onInspectLibraryDiffDialogClosed ),
+                nullptr, this );
+    }
+
+    m_inspectLibraryDiffDialog->DeleteAllPages();
+
+    SCH_SYMBOL* symbol = (SCH_SYMBOL*) selection.Front();
+    wxString    symbolDesc = wxString::Format( _( "Symbol %s" ),
+                                               symbol->GetField( REFERENCE_FIELD )->GetText() );
+    LIB_ID      libId = symbol->GetLibId();
+    wxString    libName = libId.GetLibNickname();
+    wxString    symbolName = libId.GetLibItemName();
+
+    WX_HTML_REPORT_BOX* r = m_inspectLibraryDiffDialog->AddPage( _( "Summary" ) );
+
+    r->Report( wxS( "<h7>" ) + _( "Schematic vs library diff for:" ) + wxS( "</h7>" ) );
+    r->Report( wxS( "<ul><li>" ) + EscapeHTML( symbolDesc ) + wxS( "</li>" )
+             + wxS( "<li>" ) + _( "Library: " ) + EscapeHTML( libName ) + wxS( "</li>" )
+             + wxS( "<li>" ) + _( "Library item: " ) + EscapeHTML( symbolName ) + wxS( "</li></ul>" ) );
+
+    r->Report( "" );
+
+    SYMBOL_LIB_TABLE*    libTable = m_frame->Prj().SchSymbolLibTable();
+    const LIB_TABLE_ROW* libTableRow = libTable->FindRow( libName );
+
+    if( !libTableRow )
+    {
+        r->Report( _( "The library is not included in the current configuration." )
+                   + wxS( "&nbsp;&nbsp;&nbsp" )
+                   + wxS( "<a href='$CONFIG'>" ) + _( "Manage Symbol Libraries" ) + wxS( "</a>" ) );
+    }
+    else if( !libTable->HasLibrary( libName, true ) )
+    {
+        r->Report( _( "The library is not enabled in the current configuration." )
+                   + wxS( "&nbsp;&nbsp;&nbsp" )
+                   + wxS( "<a href='$CONFIG'>" ) + _( "Manage Symbol Libraries" ) + wxS( "</a>" ) );
+    }
+    else
+    {
+        std::unique_ptr<LIB_SYMBOL> flattenedLibSymbol;
+        std::unique_ptr<LIB_SYMBOL> flattenedSchSymbol = symbol->GetLibSymbolRef()->Flatten();
+
+        try
+        {
+            if( LIB_SYMBOL* libAlias = libTable->LoadSymbol( libName, symbolName ) )
+                flattenedLibSymbol = libAlias->Flatten();
+        }
+        catch( const IO_ERROR& )
+        {
+        }
+
+        if( !flattenedLibSymbol )
+        {
+            r->Report( wxString::Format( _( "The library no longer contains the item %s." ),
+                                         symbolName ) );
+        }
+        else
+        {
+            std::vector<LIB_FIELD> fields;
+
+            for( SCH_FIELD& field : symbol->GetFields() )
+            {
+                fields.emplace_back( LIB_FIELD( flattenedLibSymbol.get(), field.GetId(),
+                                                field.GetName( false ) ) );
+                fields.back().CopyText( field );
+                fields.back().SetAttributes( field );
+            }
+
+            flattenedSchSymbol->SetFields( fields );
+
+            if( flattenedSchSymbol->Compare( *flattenedLibSymbol, 0, r ) == 0 )
+                r->Report( _( "No relevant differences detected." ) );
+        }
+    }
+
+    r->Flush();
+
+    m_inspectLibraryDiffDialog->FinishInitialization();
+    m_inspectLibraryDiffDialog->Raise();
+    m_inspectLibraryDiffDialog->Show( true );
+    return 0;
+}
+
+
+void EE_INSPECTION_TOOL::onInspectLibraryDiffDialogClosed( wxCommandEvent& event )
+{
+    m_inspectLibraryDiffDialog->Disconnect( wxEVT_CLOSE_WINDOW,
+            wxCommandEventHandler( EE_INSPECTION_TOOL::onInspectLibraryDiffDialogClosed ),
+                                            nullptr, this );
+
+    m_inspectLibraryDiffDialog->Destroy();
+    m_inspectLibraryDiffDialog.release();
+}
+
+
 int EE_INSPECTION_TOOL::RunSimulation( const TOOL_EVENT& aEvent )
 {
 #ifdef KICAD_SPICE
@@ -298,7 +415,7 @@ int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
         tmp->SetNameShown( name_shown );
     }
 
-    if( datasheet.IsEmpty() || datasheet == wxT( "~" ) )
+    if( datasheet.IsEmpty() || datasheet == wxS( "~" ) )
     {
         m_frame->ShowInfoBarError( _( "No datasheet defined." ) );
     }
@@ -350,6 +467,7 @@ void EE_INSPECTION_TOOL::setTransitions()
     Go( &EE_INSPECTION_TOOL::ExcludeMarker,       EE_ACTIONS::excludeMarker.MakeEvent() );
 
     Go( &EE_INSPECTION_TOOL::CheckSymbol,         EE_ACTIONS::checkSymbol.MakeEvent() );
+    Go( &EE_INSPECTION_TOOL::InspectLibraryDiff,  EE_ACTIONS::inspectLibraryDiff.MakeEvent() );
     Go( &EE_INSPECTION_TOOL::RunSimulation,       EE_ACTIONS::showSimulator.MakeEvent() );
 
     Go( &EE_INSPECTION_TOOL::ShowDatasheet,       EE_ACTIONS::showDatasheet.MakeEvent() );

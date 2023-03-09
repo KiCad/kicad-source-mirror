@@ -50,6 +50,12 @@ TOOL_ACTION EE_ACTIONS::checkSymbol( "eeschema.InspectionTool.checkSymbol",
         _( "Symbol Checker" ), _( "Show the symbol checker window" ),
         BITMAPS::erc );
 
+TOOL_ACTION EE_ACTIONS::inspectLibraryDiff( "eeschema.InspectionTool.inspectLibraryDiff",
+        AS_GLOBAL, 0, "",
+        _( "Check Symbol against Library..." ),
+        _( "Check for differences between schematic symbol and its library equivalent" ),
+        BITMAPS::library );
+
 TOOL_ACTION EE_ACTIONS::showSimulator( "eeschema.EditorControl.showSimulator",
         AS_GLOBAL, 0, "",
         _( "Simulator..." ), _( "Simulate circuit in SPICE" ),

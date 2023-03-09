@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -173,8 +173,9 @@ wxString BOARD_INSPECTION_TOOL::getItemDescription( BOARD_ITEM* aItem )
 void BOARD_INSPECTION_TOOL::reportCompileError( REPORTER* r )
 {
     r->Report( "" );
-    r->Report( _( "Report incomplete: could not compile custom design rules.  " )
-               + wxT( "<a href='boardsetup'>" ) + _( "Show design rules." ) + wxT( "</a>" ) );
+    r->Report( _( "Report incomplete: could not compile custom design rules." )
+               + wxS( "&nbsp;&nbsp;" )
+               + wxS( "<a href='$CUSTOM_RULES'>" ) + _( "Show design rules." ) + wxS( "</a>" ) );
 }
 
 
@@ -1282,7 +1283,8 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
     {
         r->Report( "" );
         r->Report( _( "Report may be incomplete: some footprint courtyards are malformed." )
-                   + wxT( "  <a href='drc'>" ) + _( "Run DRC for a full analysis." ) + wxT( "</a>" ) );
+                   + wxS( "&nbsp;&nbsp;" )
+                   + wxS( "<a href='$DRC'>" ) + _( "Run DRC for a full analysis." ) + wxS( "</a>" ) );
     }
 
     r->Report( "" );
@@ -1304,7 +1306,8 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
     {
         r->Report( "" );
         r->Report( _( "Report may be incomplete: some footprint courtyards are malformed." )
-                   + wxT( "  <a href='drc'>" ) + _( "Run DRC for a full analysis." ) + wxT( "</a>" ) );
+                   + wxS( "&nbsp;&nbsp;" )
+                   + wxS( "<a href='$DRC'>" ) + _( "Run DRC for a full analysis." ) + wxS( "</a>" ) );
     }
 
     drcEngine.ProcessAssertions( item, []( const DRC_CONSTRAINT* c ){}, r );
@@ -1336,21 +1339,21 @@ int BOARD_INSPECTION_TOOL::InspectLibraryDiff( const TOOL_EVENT& aEvent )
 
     if( selection.Size() != 1 )
     {
-        m_frame->ShowInfoBarError( _( "Select a footprint to check against its library equivalent." ) );
+        m_frame->ShowInfoBarError( _( "Select a footprint to diff against its library equivalent." ) );
         return 0;
     }
 
-    if( m_inspectConstraintsDialog == nullptr )
+    if( m_inspectLibraryDiffDialog == nullptr )
     {
-        m_inspectConstraintsDialog = std::make_unique<DIALOG_CONSTRAINTS_REPORTER>( m_frame );
-        m_inspectConstraintsDialog->SetTitle( _( "Check Footprint against Library" ) );
+        m_inspectLibraryDiffDialog = std::make_unique<DIALOG_CONSTRAINTS_REPORTER>( m_frame );
+        m_inspectLibraryDiffDialog->SetTitle( _( "Diff Footprint with Library" ) );
 
-        m_inspectConstraintsDialog->Connect( wxEVT_CLOSE_WINDOW,
-                wxCommandEventHandler( BOARD_INSPECTION_TOOL::onInspectConstraintsDialogClosed ),
+        m_inspectLibraryDiffDialog->Connect( wxEVT_CLOSE_WINDOW,
+                wxCommandEventHandler( BOARD_INSPECTION_TOOL::onInspectLibraryDiffDialogClosed ),
                 nullptr, this );
     }
 
-    m_inspectConstraintsDialog->DeleteAllPages();
+    m_inspectLibraryDiffDialog->DeleteAllPages();
 
     FOOTPRINT*          footprint = static_cast<FOOTPRINT*>( selection.GetItem( 0 ) );
     LIB_ID              fpID = footprint->GetFPID();
@@ -1358,12 +1361,12 @@ int BOARD_INSPECTION_TOOL::InspectLibraryDiff( const TOOL_EVENT& aEvent )
     wxString            fpName = fpID.GetLibItemName();
     WX_HTML_REPORT_BOX* r = nullptr;
 
-    r = m_inspectConstraintsDialog->AddPage( _( "Diff" ) );
+    r = m_inspectLibraryDiffDialog->AddPage( _( "Summary" ) );
 
-    r->Report( wxT( "<h7>" ) + _( "Board/library check for:" ) + wxT( "</h7>" ) );
-    r->Report( wxT( "<ul><li>" ) + EscapeHTML( getItemDescription( footprint ) ) + wxT( "</li>" )
-             + wxT( "<li>" ) + _( "Library: " ) + EscapeHTML( libName ) + wxT( "</li>" )
-             + wxT( "<li>" ) + _( "Library item: " ) + EscapeHTML( fpName ) + wxT( "</li></ul>" ) );
+    r->Report( wxS( "<h7>" ) + _( "Board vs library diff for:" ) + wxS( "</h7>" ) );
+    r->Report( wxS( "<ul><li>" ) + EscapeHTML( getItemDescription( footprint ) ) + wxS( "</li>" )
+             + wxS( "<li>" ) + _( "Library: " ) + EscapeHTML( libName ) + wxS( "</li>" )
+             + wxS( "<li>" ) + _( "Library item: " ) + EscapeHTML( fpName ) + wxS( "</li></ul>" ) );
 
     r->Report( "" );
 
@@ -1381,11 +1384,17 @@ int BOARD_INSPECTION_TOOL::InspectLibraryDiff( const TOOL_EVENT& aEvent )
 
     if( !libTableRow )
     {
-        r->Report( _( "The current configuration does not include the library." ) );
+        r->Report( _( "The library is not included in the current configuration." )
+                   + wxS( "&nbsp;&nbsp;&nbsp" )
+                   + wxS( "<a href='$CONFIG'>" ) + _( "Manage Footprint Libraries" ) + wxS( "</a>" ) );
+
     }
     else if( !libTable->HasLibrary( libName, true ) )
     {
-        r->Report( _( "The library is not enabled in the current configuration." ) );
+        r->Report( _( "The library is not enabled in the current configuration." )
+                   + wxS( "&nbsp;&nbsp;&nbsp" )
+                   + wxS( "<a href='$CONFIG'>" ) + _( "Manage Footprint Libraries" ) + wxS( "</a>" ) );
+
     }
     else
     {
@@ -1406,15 +1415,15 @@ int BOARD_INSPECTION_TOOL::InspectLibraryDiff( const TOOL_EVENT& aEvent )
         }
         else if( !footprint->FootprintNeedsUpdate( libFootprint.get(), r ) )
         {
-            r->Report( _( "Footprint matches library equivalent." ) );
+            r->Report( _( "No relevant differences detected." ) );
         }
     }
 
     r->Flush();
 
-    m_inspectConstraintsDialog->FinishInitialization();
-    m_inspectConstraintsDialog->Raise();
-    m_inspectConstraintsDialog->Show( true );
+    m_inspectLibraryDiffDialog->FinishInitialization();
+    m_inspectLibraryDiffDialog->Raise();
+    m_inspectLibraryDiffDialog->Show( true );
     return 0;
 }
 
@@ -1895,6 +1904,17 @@ void BOARD_INSPECTION_TOOL::onInspectConstraintsDialogClosed( wxCommandEvent& ev
 
     m_inspectConstraintsDialog->Destroy();
     m_inspectConstraintsDialog.release();
+}
+
+
+void BOARD_INSPECTION_TOOL::onInspectLibraryDiffDialogClosed( wxCommandEvent& event )
+{
+    m_inspectLibraryDiffDialog->Disconnect( wxEVT_CLOSE_WINDOW,
+            wxCommandEventHandler( BOARD_INSPECTION_TOOL::onInspectLibraryDiffDialogClosed ),
+                                            nullptr, this );
+
+    m_inspectLibraryDiffDialog->Destroy();
+    m_inspectLibraryDiffDialog.release();
 }
 
 
