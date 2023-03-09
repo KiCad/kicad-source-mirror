@@ -341,7 +341,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupColumnProperties()
             attr->SetEditor( new GRID_CELL_URL_EDITOR( this, Prj().SchSearchS() ) );
             m_grid->SetColAttr( col, attr );
         }
-        else if( m_dataModel->GetColFieldName( col ) == _( "Qty" ) )
+        else if( m_dataModel->GetColFieldName( col ) == _( "Quantity" ) )
         {
             attr->SetReadOnly();
             m_grid->SetColAttr( col, attr );
@@ -540,7 +540,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::LoadFieldNames()
     AddField( _( "Value" ),     wxT( "Value" ),     true, true  );
     AddField( _( "Footprint" ), wxT( "Footprint" ), true, true  );
     AddField( _( "Datasheet" ), wxT( "Datasheet" ), true, false );
-    AddField( _( "Quantity" ),  wxT( "Qty" ),  true, false );
+    AddField( _( "Quantity" ),  wxT( "Qty" ),       true, false );
 
     for( const wxString& fieldName : userFieldNames )
         AddField( fieldName, fieldName, true, false );

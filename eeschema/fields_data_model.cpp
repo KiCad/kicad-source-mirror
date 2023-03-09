@@ -492,7 +492,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData()
 
         for( const std::pair<wxString, wxString> srcData : fieldStore )
         {
-            if( srcData.first == _( "Qty" ) )
+            if( srcData.first == _( "Quantity" ) )
                 continue;
 
             const wxString& srcName = srcData.first;

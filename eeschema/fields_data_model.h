@@ -128,7 +128,7 @@ public:
     bool ColIsQuantity( int aCol )
     {
         wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), false );
-        return m_cols[aCol].m_fieldName == _( "Qty" );
+        return m_cols[aCol].m_fieldName == _( "Quantity" );
     }
 
     void SetSorting( int aCol, bool ascending )
