@@ -52,7 +52,7 @@
 #include <widgets/wx_aui_utils.h>
 #include <wx/wupdlock.h>
 #include <wx/dcmemory.h>
-#include <wx/choice.h>
+#include <wx/combobox.h>
 
 #include "../scripting/python_scripting.h"
 
