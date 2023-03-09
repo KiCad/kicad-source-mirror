@@ -181,6 +181,16 @@ BOM_PRESET DIALOG_SYMBOL_FIELDS_TABLE::bomPresetGroupedByValueFootprint(
         true );
 
 
+BOM_FMT_PRESET DIALOG_SYMBOL_FIELDS_TABLE::bomFmtPresetCSV
+    ( _HKI("CSV"), wxS( "," ), wxT( "\"" ), false, true, true);
+
+BOM_FMT_PRESET DIALOG_SYMBOL_FIELDS_TABLE::bomFmtPresetTSV
+    ( _HKI("TSV"), wxS( "\t" ), wxT(""), false, true, true);
+
+BOM_FMT_PRESET DIALOG_SYMBOL_FIELDS_TABLE::bomFmtPresetSemicolons
+    ( _HKI("Semicolons"), wxS( ";" ), wxT("'"), false, true, true);
+
+
 DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent ) :
         DIALOG_SYMBOL_FIELDS_TABLE_BASE( parent ), m_currentBomPreset( nullptr ),
         m_lastSelectedBomPreset( nullptr ), m_parent( parent ),
@@ -285,8 +295,13 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
 
     // Load our BOM view presets
     SetUserBomPresets( m_schSettings.m_BomPresets );
-    ApplyBomPreset( m_schSettings.m_BomSettings );
+    ApplyBomPreset( bomPresetGroupedByValueFootprint );
     syncBomPresetSelection();
+
+    // Load BOM export format presets
+    SetUserBomFmtPresets( m_schSettings.m_BomFmtPresets );
+    ApplyBomFmtPreset( bomFmtPresetCSV );
+    syncBomFmtPresetSelection();
 
     m_grid->SelectRow( 0 );
     m_grid->SetGridCursor( 0, 1 );
@@ -304,6 +319,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
     m_grid->Connect( wxEVT_GRID_COL_MOVE,
                      wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnColMove ), nullptr, this );
     m_cbBomPresets->Bind( wxEVT_CHOICE, &DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged, this );
+    m_cbBomFmtPresets->Bind( wxEVT_CHOICE, &DIALOG_SYMBOL_FIELDS_TABLE::onBomFmtPresetChanged, this );
     m_fieldsCtrl->Bind( wxEVT_DATAVIEW_ITEM_VALUE_CHANGED,
                         &DIALOG_SYMBOL_FIELDS_TABLE::OnColLabelChange, this );
 }
@@ -1017,17 +1033,30 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSaveAndContinue( wxCommandEvent& aEvent )
 }
 
 
+void DIALOG_SYMBOL_FIELDS_TABLE::OnPageChanged( wxNotebookEvent& event )
+{
+    PreviewRefresh();
+}
+
+
 void DIALOG_SYMBOL_FIELDS_TABLE::OnPreviewRefresh( wxCommandEvent& event )
 {
-    BOM_EXPORT_SETTINGS settings = ( BOM_EXPORT_SETTINGS ){
-        .FieldDelimiter = m_textFieldDelimiter->GetValue(),
-        .StringDelimiter = m_textStringDelimiter->GetValue(),
-        .SpacedRefs = m_checkSpacedRefs->GetValue(),
-        .RemoveTabs = m_checkRemoveTabs->GetValue(),
-        .RemoveLineBreaks = m_checkRemoveLineBreaks->GetValue(),
-    };
+    PreviewRefresh();
+    syncBomFmtPresetSelection();
+}
 
-    m_textOutput->SetValue( m_dataModel->Export( settings ) );
+
+void DIALOG_SYMBOL_FIELDS_TABLE::PreviewRefresh()
+{
+    BOM_FMT_PRESET& current = m_parent->Schematic().Settings().m_BomFmtSettings;
+
+    current.fieldDelimiter = m_textFieldDelimiter->GetValue();
+    current.stringDelimiter = m_textStringDelimiter->GetValue();
+    current.spacedRefs = m_checkSpacedRefs->GetValue();
+    current.removeTabs = m_checkRemoveTabs->GetValue();
+    current.removeLineBreaks = m_checkRemoveLineBreaks->GetValue();
+
+    m_textOutput->SetValue( m_dataModel->Export( current ) );
 }
 
 
@@ -1083,12 +1112,11 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
     // Create output directory if it does not exist (also transform it in absolute form).
     // Bail if it fails.
 
-    std::function<bool( wxString* )> textResolver =
-            [&]( wxString* token ) -> bool
-            {
-                // Handles m_board->GetTitleBlock() *and* m_board->GetProject()
-                return m_parent->Schematic().ResolveTextVar( token, 0 );
-            };
+    std::function<bool( wxString* )> textResolver = [&]( wxString* token ) -> bool
+    {
+        // Handles m_board->GetTitleBlock() *and* m_board->GetProject()
+        return m_parent->Schematic().ResolveTextVar( token, 0 );
+    };
 
     wxString path = m_outputFileName->GetValue();
     path = ExpandTextVars( path, &textResolver );
@@ -1097,12 +1125,11 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
     wxFileName outputFile = wxFileName::FileName( path );
 
     auto displayErr = [&]()
-        {
-            wxString msg;
-            msg.Printf( _( "Could not write BOM output to '%s'." ),
-                        outputFile.GetPath() );
-            DisplayError( this, msg );
-        };
+    {
+        wxString msg;
+        msg.Printf( _( "Could not write BOM output to '%s'." ), outputFile.GetPath() );
+        DisplayError( this, msg );
+    };
 
     if( !EnsureFileDirectoryExists( &outputFile,
                                     Prj().AbsolutePath( m_parent->Schematic().GetFileName() ),
@@ -1120,15 +1147,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
         return;
     }
 
-    BOM_EXPORT_SETTINGS settings = ( BOM_EXPORT_SETTINGS ){
-        .FieldDelimiter = m_textFieldDelimiter->GetValue(),
-        .StringDelimiter = m_textStringDelimiter->GetValue(),
-        .SpacedRefs = m_checkSpacedRefs->GetValue(),
-        .RemoveTabs = m_checkRemoveTabs->GetValue(),
-        .RemoveLineBreaks = m_checkRemoveLineBreaks->GetValue(),
-    };
+    PreviewRefresh();
 
-    if( !out.Write( m_dataModel->Export( settings ) ) )
+    if( !out.Write( m_textOutput->GetValue() ) )
     {
         displayErr();
         return;
@@ -1243,8 +1264,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::loadDefaultBomPresets()
 
 void DIALOG_SYMBOL_FIELDS_TABLE::rebuildBomPresetsWidget()
 {
-    m_bomPresetsLabel->SetLabel(
-            wxString::Format( _( "Presets (%s+Tab):" ), KeyNameFromKeyCode( PRESET_SWITCH_KEY ) ) );
     m_cbBomPresets->Clear();
 
     // Build the layers preset list.
@@ -1553,43 +1572,330 @@ void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
 }
 
 
-bool DIALOG_SYMBOL_FIELDS_TABLE::TryBefore( wxEvent& aEvent )
+std::vector<BOM_FMT_PRESET> DIALOG_SYMBOL_FIELDS_TABLE::GetUserBomFmtPresets() const
 {
-    static bool s_presetSwitcherShown = false;
+    std::vector<BOM_FMT_PRESET> ret;
 
-    // wxWidgets generates no key events for the tab key when the ctrl key is held down.  One
-    // way around this is to look at all events and inspect the keyboard state of the tab key.
-    // However, this runs into issues on some linux VMs where querying the keyboard state is
-    // very slow.  Fortunately we only use ctrl-tab on Mac, so we implement this lovely hack:
-#ifdef __WXMAC__
-    if( wxGetKeyState( WXK_TAB ) )
-#else
-    if( ( aEvent.GetEventType() == wxEVT_CHAR || aEvent.GetEventType() == wxEVT_CHAR_HOOK )
-        && static_cast<wxKeyEvent&>( aEvent ).GetKeyCode() == WXK_TAB )
-#endif
+    for( const std::pair<const wxString, BOM_FMT_PRESET>& pair : m_bomFmtPresets )
     {
-        if( !s_presetSwitcherShown && wxGetKeyState( PRESET_SWITCH_KEY ) )
-        {
-            if( this->IsActive() )
-            {
-                if( m_bomPresetMRU.size() > 0 )
-                {
-                    EDA_VIEW_SWITCHER switcher( this, m_bomPresetMRU, PRESET_SWITCH_KEY );
-
-                    s_presetSwitcherShown = true;
-                    switcher.ShowModal();
-                    s_presetSwitcherShown = false;
-
-                    int idx = switcher.GetSelection();
-
-                    if( idx >= 0 && idx < (int) m_bomPresetMRU.size() )
-                        ApplyBomPreset( m_bomPresetMRU[idx] );
-
-                    return true;
-                }
-            }
-        }
+        if( !pair.second.readOnly )
+            ret.emplace_back( pair.second );
     }
 
-    return DIALOG_SYMBOL_FIELDS_TABLE_BASE::TryBefore( aEvent );
+    return ret;
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::SetUserBomFmtPresets( std::vector<BOM_FMT_PRESET>& aPresetList )
+{
+    // Reset to defaults
+    loadDefaultBomFmtPresets();
+
+    for( const BOM_FMT_PRESET& preset : aPresetList )
+    {
+        if( m_bomFmtPresets.count( preset.name ) )
+            continue;
+
+        m_bomFmtPresets[preset.name] = preset;
+
+        m_bomFmtPresetMRU.Add( preset.name );
+    }
+
+    rebuildBomFmtPresetsWidget();
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::ApplyBomFmtPreset( const wxString& aPresetName )
+{
+    updateBomFmtPresetSelection( aPresetName );
+
+    wxCommandEvent dummy;
+    onBomFmtPresetChanged( dummy );
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::ApplyBomFmtPreset( const BOM_FMT_PRESET& aPreset )
+{
+    if( m_bomFmtPresets.count( aPreset.name ) )
+        m_currentBomFmtPreset = &m_bomFmtPresets[aPreset.name];
+    else
+        m_currentBomFmtPreset = nullptr;
+
+    m_lastSelectedBomFmtPreset = ( m_currentBomFmtPreset && !m_currentBomFmtPreset->readOnly )
+                                         ? m_currentBomFmtPreset
+                                         : nullptr;
+
+    updateBomFmtPresetSelection( aPreset.name );
+    doApplyBomFmtPreset( aPreset );
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::loadDefaultBomFmtPresets()
+{
+    m_bomFmtPresets.clear();
+    m_bomFmtPresetMRU.clear();
+
+    // Load the read-only defaults
+    for( const BOM_FMT_PRESET& preset :
+         { bomFmtPresetCSV, bomFmtPresetSemicolons, bomFmtPresetTSV } )
+    {
+        m_bomFmtPresets[preset.name] = preset;
+        m_bomFmtPresets[preset.name].readOnly = true;
+
+        m_bomFmtPresetMRU.Add( preset.name );
+    }
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::rebuildBomFmtPresetsWidget()
+{
+    m_cbBomFmtPresets->Clear();
+
+    // Build the layers preset list.
+    // By default, the presetAllLayers will be selected
+    int idx = 0;
+    int default_idx = 0;
+
+    for( std::pair<const wxString, BOM_FMT_PRESET>& pair : m_bomFmtPresets )
+    {
+        m_cbBomFmtPresets->Append( wxGetTranslation( pair.first ),
+                                   static_cast<void*>( &pair.second ) );
+
+        if( pair.first == bomFmtPresetCSV.name )
+            default_idx = idx;
+
+        idx++;
+    }
+
+    m_cbBomFmtPresets->Append( wxT( "---" ) );
+    m_cbBomFmtPresets->Append( _( "Save preset..." ) );
+    m_cbBomFmtPresets->Append( _( "Delete preset..." ) );
+
+    // At least the built-in presets should always be present
+    wxASSERT( !m_bomFmtPresets.empty() );
+
+    // Default preset: all Boms
+    m_cbBomFmtPresets->SetSelection( default_idx );
+    m_currentBomFmtPreset =
+            static_cast<BOM_FMT_PRESET*>( m_cbBomFmtPresets->GetClientData( default_idx ) );
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::syncBomFmtPresetSelection()
+{
+    BOM_FMT_PRESET& current = m_parent->Schematic().Settings().m_BomFmtSettings;
+
+    auto it = std::find_if( m_bomFmtPresets.begin(), m_bomFmtPresets.end(),
+                            [&]( const std::pair<const wxString, BOM_FMT_PRESET>& aPair )
+                            {
+                                return ( aPair.second.fieldDelimiter == current.fieldDelimiter
+                                         && aPair.second.stringDelimiter == current.stringDelimiter
+                                         && aPair.second.spacedRefs == current.spacedRefs
+                                         && aPair.second.removeTabs == current.removeTabs
+                                         && aPair.second.removeLineBreaks == current.removeLineBreaks );
+                            } );
+
+    if( it != m_bomFmtPresets.end() )
+    {
+        // Select the right m_cbBomFmtPresets item.
+        // but these items are translated if they are predefined items.
+        bool     do_translate = it->second.readOnly;
+        wxString text = do_translate ? wxGetTranslation( it->first ) : it->first;
+
+        m_cbBomFmtPresets->SetStringSelection( text );
+    }
+    else
+    {
+        m_cbBomFmtPresets->SetSelection( m_cbBomFmtPresets->GetCount() - 3 ); // separator
+    }
+
+    m_currentBomFmtPreset = static_cast<BOM_FMT_PRESET*>(
+            m_cbBomFmtPresets->GetClientData( m_cbBomFmtPresets->GetSelection() ) );
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::updateBomFmtPresetSelection( const wxString& aName )
+{
+    // look at m_userBomFmtPresets to know if aName is a read only preset, or a user preset.
+    // Read only presets have translated names in UI, so we have to use
+    // a translated name in UI selection.
+    // But for a user preset name we should search for aName (not translated)
+    wxString ui_label = aName;
+
+    for( std::pair<const wxString, BOM_FMT_PRESET>& pair : m_bomFmtPresets )
+    {
+        if( pair.first != aName )
+            continue;
+
+        if( pair.second.readOnly == true )
+            ui_label = wxGetTranslation( aName );
+
+        break;
+    }
+
+    int idx = m_cbBomFmtPresets->FindString( ui_label );
+
+    if( idx >= 0 && m_cbBomFmtPresets->GetSelection() != idx )
+    {
+        m_cbBomFmtPresets->SetSelection( idx );
+        m_currentBomFmtPreset =
+                static_cast<BOM_FMT_PRESET*>( m_cbBomFmtPresets->GetClientData( idx ) );
+    }
+    else if( idx < 0 )
+    {
+        m_cbBomFmtPresets->SetSelection( m_cbBomFmtPresets->GetCount() - 3 ); // separator
+    }
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::onBomFmtPresetChanged( wxCommandEvent& aEvent )
+{
+    int count = m_cbBomFmtPresets->GetCount();
+    int index = m_cbBomFmtPresets->GetSelection();
+
+    auto resetSelection =
+            [&]()
+            {
+                if( m_currentBomFmtPreset )
+                    m_cbBomFmtPresets->SetStringSelection( m_currentBomFmtPreset->name );
+                else
+                    m_cbBomFmtPresets->SetSelection( m_cbBomFmtPresets->GetCount() - 3 );
+            };
+
+    if( index == count - 3 )
+    {
+        // Separator: reject the selection
+        resetSelection();
+        return;
+    }
+    else if( index == count - 2 )
+    {
+        // Save current state to new preset
+        wxString name;
+
+        if( m_lastSelectedBomFmtPreset )
+            name = m_lastSelectedBomFmtPreset->name;
+
+        wxTextEntryDialog dlg( this, _( "BOM preset name:" ), _( "Save BOM Preset" ), name );
+
+        if( dlg.ShowModal() != wxID_OK )
+        {
+            resetSelection();
+            return;
+        }
+
+        name = dlg.GetValue();
+        bool exists = m_bomFmtPresets.count( name );
+
+        if( !exists )
+        {
+            m_bomFmtPresets[name] = BOM_FMT_PRESET( name,
+                                             m_schSettings.m_BomFmtSettings.fieldDelimiter,
+                                             m_schSettings.m_BomFmtSettings.stringDelimiter,
+                                             m_schSettings.m_BomFmtSettings.spacedRefs,
+                                             m_schSettings.m_BomFmtSettings.removeTabs,
+                                             m_schSettings.m_BomFmtSettings.removeLineBreaks );
+        }
+
+        BOM_FMT_PRESET* preset = &m_bomFmtPresets[name];
+        m_currentBomFmtPreset = preset;
+
+        if( !exists )
+        {
+            index = m_cbBomFmtPresets->Insert( name, index - 1, static_cast<void*>( preset ) );
+        }
+        else
+        {
+            preset->fieldDelimiter = m_schSettings.m_BomFmtSettings.fieldDelimiter;
+            preset->stringDelimiter = m_schSettings.m_BomFmtSettings.stringDelimiter;
+            preset->spacedRefs = m_schSettings.m_BomFmtSettings.spacedRefs;
+            preset->removeTabs = m_schSettings.m_BomFmtSettings.removeTabs;
+            preset->removeLineBreaks = m_schSettings.m_BomFmtSettings.removeLineBreaks;
+
+            index = m_cbBomFmtPresets->FindString( name );
+            m_bomFmtPresetMRU.Remove( name );
+        }
+
+        m_cbBomFmtPresets->SetSelection( index );
+        m_bomFmtPresetMRU.Insert( name, 0 );
+
+        return;
+    }
+    else if( index == count - 1 )
+    {
+        // Delete a preset
+        wxArrayString              headers;
+        std::vector<wxArrayString> items;
+
+        headers.Add( _( "Presets" ) );
+
+        for( std::pair<const wxString, BOM_FMT_PRESET>& pair : m_bomFmtPresets )
+        {
+            if( !pair.second.readOnly )
+            {
+                wxArrayString item;
+                item.Add( pair.first );
+                items.emplace_back( item );
+            }
+        }
+
+        EDA_LIST_DIALOG dlg( this, _( "Delete Preset" ), headers, items );
+        dlg.SetListLabel( _( "Select preset:" ) );
+
+        if( dlg.ShowModal() == wxID_OK )
+        {
+            wxString presetName = dlg.GetTextSelection();
+            int      idx = m_cbBomFmtPresets->FindString( presetName );
+
+            if( idx != wxNOT_FOUND )
+            {
+                m_bomFmtPresets.erase( presetName );
+
+                m_cbBomFmtPresets->Delete( idx );
+                m_currentBomFmtPreset = nullptr;
+
+                m_bomFmtPresetMRU.Remove( presetName );
+            }
+        }
+
+        resetSelection();
+        return;
+    }
+
+    BOM_FMT_PRESET* preset =
+            static_cast<BOM_FMT_PRESET*>( m_cbBomFmtPresets->GetClientData( index ) );
+    m_currentBomFmtPreset = preset;
+
+    m_lastSelectedBomFmtPreset = ( !preset || preset->readOnly ) ? nullptr : preset;
+
+    if( preset )
+    {
+        doApplyBomFmtPreset( *preset );
+        syncBomFmtPresetSelection();
+        m_currentBomFmtPreset = preset;
+
+        if( !m_currentBomFmtPreset->name.IsEmpty() )
+        {
+            m_bomFmtPresetMRU.Remove( preset->name );
+            m_bomFmtPresetMRU.Insert( preset->name, 0 );
+        }
+    }
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomFmtPreset( const BOM_FMT_PRESET& aPreset )
+{
+    m_textFieldDelimiter->ChangeValue( aPreset.fieldDelimiter );
+    m_textStringDelimiter->ChangeValue( aPreset.stringDelimiter );
+    m_checkSpacedRefs->SetValue( aPreset.spacedRefs );
+    m_checkRemoveTabs->SetValue( aPreset.removeTabs );
+    m_checkRemoveLineBreaks->SetValue( aPreset.removeLineBreaks );
+
+    PreviewRefresh();
+
+    m_schSettings.m_BomFmtSettings.fieldDelimiter = aPreset.fieldDelimiter;
+    m_schSettings.m_BomFmtSettings.stringDelimiter = aPreset.stringDelimiter;
+    m_schSettings.m_BomFmtSettings.spacedRefs = aPreset.spacedRefs;
+    m_schSettings.m_BomFmtSettings.removeTabs = aPreset.removeTabs;
+    m_schSettings.m_BomFmtSettings.removeLineBreaks = aPreset.removeLineBreaks;
 }

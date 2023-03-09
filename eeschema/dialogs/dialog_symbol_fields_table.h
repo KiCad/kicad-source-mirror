@@ -32,6 +32,7 @@
 
 class SCHEMATIC_SETTINGS;
 struct BOM_PRESET;
+struct BOM_FMT_PRESET;
 class SCH_EDIT_FRAME;
 class FIELDS_EDITOR_GRID_DATA_MODEL;
 
@@ -79,15 +80,21 @@ private:
     void OnFilterText( wxCommandEvent& aEvent ) override;
     void OnFilterMouseMoved( wxMouseEvent& event ) override;
     void OnFieldsCtrlSelectionChanged( wxDataViewEvent& event ) override;
-    bool TryBefore( wxEvent& aEvent ) override;
 
     void OnOutputFileBrowseClicked( wxCommandEvent& event ) override;
+    void OnPageChanged( wxNotebookEvent& event ) override;
     void OnPreviewRefresh( wxCommandEvent& event ) override;
+    void PreviewRefresh();
 
     std::vector<BOM_PRESET> GetUserBomPresets() const;
     void                    SetUserBomPresets( std::vector<BOM_PRESET>& aPresetList );
     void                    ApplyBomPreset( const wxString& aPresetName );
     void                    ApplyBomPreset( const BOM_PRESET& aPreset );
+
+    std::vector<BOM_FMT_PRESET> GetUserBomFmtPresets() const;
+    void                        SetUserBomFmtPresets( std::vector<BOM_FMT_PRESET>& aPresetList );
+    void                        ApplyBomFmtPreset( const wxString& aPresetName );
+    void                        ApplyBomFmtPreset( const BOM_FMT_PRESET& aPreset );
 
 private:
     void syncBomPresetSelection();
@@ -104,6 +111,22 @@ private:
 
     static BOM_PRESET              bomPresetGroupedByValue;
     static BOM_PRESET              bomPresetGroupedByValueFootprint;
+
+    void syncBomFmtPresetSelection();
+    void rebuildBomFmtPresetsWidget();
+    void updateBomFmtPresetSelection( const wxString& aName );
+    void onBomFmtPresetChanged( wxCommandEvent& aEvent );
+    void doApplyBomFmtPreset( const BOM_FMT_PRESET& aPreset );
+    void loadDefaultBomFmtPresets();
+
+    std::map<wxString, BOM_FMT_PRESET> m_bomFmtPresets;
+    BOM_FMT_PRESET*                    m_currentBomFmtPreset;
+    BOM_FMT_PRESET*                    m_lastSelectedBomFmtPreset;
+    wxArrayString                      m_bomFmtPresetMRU;
+
+    static BOM_FMT_PRESET              bomFmtPresetCSV;
+    static BOM_FMT_PRESET              bomFmtPresetSemicolons;
+    static BOM_FMT_PRESET              bomFmtPresetTSV;
 
     SCH_EDIT_FRAME*                m_parent;
     int                            m_fieldNameColWidth;

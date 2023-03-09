@@ -10,14 +10,6 @@
 // The internal field name (untranslated)
 #define FIELD_NAME_COLUMN     4
 
-struct BOM_EXPORT_SETTINGS
-{
-    wxString FieldDelimiter;
-    wxString StringDelimiter;
-    bool     SpacedRefs;
-    bool     RemoveTabs;
-    bool     RemoveLineBreaks;
-};
 
 enum GROUP_TYPE
 {
@@ -165,7 +157,7 @@ public:
         m_cols[aCol].m_show = show;
     }
 
-    wxString Export( const BOM_EXPORT_SETTINGS& settings );
+    wxString Export( const BOM_FMT_PRESET& settings );
 
 private:
     static bool cmp( const DATA_MODEL_ROW& lhGroup, const DATA_MODEL_ROW& rhGroup,

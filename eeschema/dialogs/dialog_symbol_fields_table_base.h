@@ -71,7 +71,7 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		WX_GRID* m_grid;
 		wxPanel* m_panelExport;
 		wxStaticText* m_labelBomExportPresets;
-		wxChoice* m_cbBomExportPresets;
+		wxChoice* m_cbBomFmtPresets;
 		wxStaticText* m_labelFieldDelimiter;
 		wxTextCtrl* m_textFieldDelimiter;
 		wxStaticText* m_labelStringDelimiter;
@@ -96,6 +96,7 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
+		virtual void OnPageChanged( wxNotebookEvent& event ) { event.Skip(); }
 		virtual void OnColumnItemToggled( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void OnFieldsCtrlSelectionChanged( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void OnSizeFieldList( wxSizeEvent& event ) { event.Skip(); }
@@ -111,8 +112,8 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		virtual void OnTableItemContextMenu( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnTableColSize( wxGridSizeEvent& event ) { event.Skip(); }
 		virtual void OnTableRangeSelected( wxGridRangeSelectEvent& event ) { event.Skip(); }
-		virtual void OnOutputFileBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPreviewRefresh( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOutputFileBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnExport( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSaveAndContinue( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancel( wxCommandEvent& event ) { event.Skip(); }

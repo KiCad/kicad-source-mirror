@@ -66,6 +66,39 @@ struct BOM_PRESET
     bool                        group_symbols;
 };
 
+
+struct BOM_FMT_PRESET
+{
+    BOM_FMT_PRESET( const wxString& aName = wxEmptyString ) :
+            name( aName ), readOnly( false ), fieldDelimiter( wxS( "\"" ) ),
+            stringDelimiter( wxS( "," ) ), spacedRefs( false ), removeTabs( true ),
+            removeLineBreaks( true )
+    {
+    }
+
+    BOM_FMT_PRESET( const wxString& aName, const wxString& aFieldDelimiter,
+                    const wxString& aStringDelimiter, bool spacedRefs, bool removeTabs,
+                    bool removeLineBreaks ) :
+            name( aName ),
+            readOnly( false ),
+            fieldDelimiter( aFieldDelimiter ),
+            stringDelimiter( aStringDelimiter ),
+            spacedRefs( spacedRefs ),
+            removeTabs( removeTabs ),
+            removeLineBreaks( removeLineBreaks )
+    {
+    }
+
+    wxString name;
+    bool     readOnly;
+    wxString fieldDelimiter;
+    wxString stringDelimiter;
+    bool     spacedRefs;
+    bool     removeTabs;
+    bool     removeLineBreaks;
+};
+
+
 /**
  * These settings were stored in SCH_BASE_FRAME previously.
  * The backing store is currently the project file.
@@ -127,6 +160,10 @@ public:
     /// List of stored BOM presets
     BOM_PRESET              m_BomSettings;
     std::vector<BOM_PRESET> m_BomPresets;
+
+    /// List of stored BOM format presets
+    BOM_FMT_PRESET              m_BomFmtSettings;
+    std::vector<BOM_FMT_PRESET> m_BomFmtPresets;
 
     /**
      * Ngspice simulator settings.

@@ -8,6 +8,7 @@
 
 #include "fields_data_model.h"
 
+
 void FIELDS_EDITOR_GRID_DATA_MODEL::AddColumn( const wxString& aFieldName, const wxString& aLabel,
                                                bool aAddedByUser )
 {
@@ -569,7 +570,7 @@ int FIELDS_EDITOR_GRID_DATA_MODEL::GetDataWidth( int aCol )
 }
 
 
-wxString FIELDS_EDITOR_GRID_DATA_MODEL::Export( const BOM_EXPORT_SETTINGS& settings )
+wxString FIELDS_EDITOR_GRID_DATA_MODEL::Export( const BOM_FMT_PRESET& settings )
 {
     wxString out;
 
@@ -587,23 +588,23 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::Export( const BOM_EXPORT_SETTINGS& setti
 
     auto formatField = [&]( wxString field, bool last ) -> wxString
         {
-            if( settings.RemoveLineBreaks )
+            if( settings.removeLineBreaks )
             {
                 field.Replace( wxS( "\r" ), wxS( "" ) );
                 field.Replace( wxS( "\n" ), wxS( "" ) );
             }
 
-            if( settings.RemoveTabs )
+            if( settings.removeTabs )
             {
                 field.Replace( wxS( "\t" ), wxS( "" ) );
             }
 
-            if( !settings.StringDelimiter.IsEmpty() )
-                field.Replace( settings.StringDelimiter,
-                               settings.StringDelimiter + settings.StringDelimiter );
+            if( !settings.stringDelimiter.IsEmpty() )
+                field.Replace( settings.stringDelimiter,
+                               settings.stringDelimiter + settings.stringDelimiter );
 
-            return settings.StringDelimiter + field + settings.StringDelimiter
-                   + ( last ? wxS( "\r\n" ) : settings.FieldDelimiter );
+            return settings.stringDelimiter + field + settings.stringDelimiter
+                   + ( last ? wxS( "\r\n" ) : settings.fieldDelimiter );
         };
 
     // Column names
@@ -628,7 +629,7 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::Export( const BOM_EXPORT_SETTINGS& setti
                 continue;
 
             // Get the unanottated version of the field, e.g. no ">   " or "v   " by
-            out.Append( formatField( GetRawValue( (int) row, (int) col, settings.SpacedRefs ),
+            out.Append( formatField( GetRawValue( (int) row, (int) col, settings.spacedRefs ),
                                      col == last_col ) );
         }
     }
