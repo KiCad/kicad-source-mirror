@@ -29,10 +29,10 @@
 
 #include <math.h>                       // for sqrt
 #include <stdlib.h>                     // for abs
+#include <optional>
 #include <ostream>                      // for operator<<, ostream, basic_os...
 #include <type_traits>                  // for swap
 
-#include <optional>
 #include <math/vector2d.h>
 #include <geometry/eda_angle.h>
 

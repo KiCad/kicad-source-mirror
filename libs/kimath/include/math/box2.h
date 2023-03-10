@@ -27,8 +27,8 @@
 #ifndef __BOX2_H
 #define __BOX2_H
 
-#include <limits>
 #include <algorithm>
+#include <limits>
 #include <optional>
 
 #include <math/vector2d.h>

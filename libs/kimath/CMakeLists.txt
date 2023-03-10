@@ -45,8 +45,7 @@ target_include_directories( kimath PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-# core/optional.h is needed for OPT types
 target_include_directories( kimath PRIVATE
-    ${PROJECT_SOURCE_DIR}/include
+    ${PROJECT_SOURCE_DIR}/include    # core/kicad_algo.h is needed for shape_arc
     ${wxWidgets_LIBRARIES}
 )

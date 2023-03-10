@@ -30,7 +30,6 @@
 
 #include <cstdio>
 #include <deque>                        // for deque
-#include <vector>                       // for vector
 #include <iosfwd>                       // for string, stringstream
 #include <memory>
 #include <set>                          // for set
