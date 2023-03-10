@@ -34,6 +34,9 @@ add_executable( qa_sexpr ${SEXPR_SRCS} )
 target_link_libraries( qa_sexpr
     sexpr
     qa_utils
+    Boost::headers
+    Boost::unit_test_framework
+    Boost::system
     ${wxWidgets_LIBRARIES}
 )
 

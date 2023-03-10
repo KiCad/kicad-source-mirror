@@ -64,7 +64,8 @@ target_link_libraries( test_window
     gal
     common
     ${PCBNEW_IO_LIBRARIES}
-    ${Boost_SYSTEM_LIBRARY}
-    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+    Boost::headers
+    Boost::unit_test_framework
+    Boost::system
     ${wxWidgets_LIBRARIES}
 )

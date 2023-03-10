@@ -94,7 +94,6 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/polygon
     ${CMAKE_SOURCE_DIR}/common/geometry
     ${CMAKE_SOURCE_DIR}/qa/qa_utils
-    ${Boost_INCLUDE_DIR}
     ${INC_AFTER}
 )
 
@@ -119,7 +118,9 @@ target_link_libraries( qa_pcbnew
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
     ${PYTHON_LIBRARIES}
-    ${Boost_LIBRARIES}
+    Boost::headers
+    Boost::unit_test_framework
+    Boost::system
     ${PCBNEW_EXTRA_LIBS}    # -lrt must follow Boost
 )
 

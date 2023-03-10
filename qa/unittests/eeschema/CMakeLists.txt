@@ -130,7 +130,9 @@ PRIVATE
     qa_schematic_utils
     markdown_lib
     ${GDI_PLUS_LIBRARIES}
-    ${Boost_LIBRARIES}
+    Boost::headers
+    Boost::unit_test_framework
+    Boost::system
 )
 
 if( KICAD_SPICE AND KICAD_SPICE_QA AND MSVC )

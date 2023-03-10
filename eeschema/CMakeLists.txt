@@ -489,6 +489,7 @@ target_link_libraries( eeschema_kiface
         markdown_lib
         scripting
         sexpr
+        Boost::headers
         ${wxWidgets_LIBRARIES}
     )
 

@@ -74,11 +74,9 @@ target_link_libraries( cvpcb_kiface
     common
     kimath
     ${PCBNEW_IO_LIBRARIES}
+    Boost::headers
     ${wxWidgets_LIBRARIES}
     )
-
-# Must follow github_plugin
-target_link_libraries( cvpcb_kiface ${Boost_LIBRARIES} )
 
 target_include_directories( cvpcb_kiface PRIVATE
     $<TARGET_PROPERTY:thread-pool,INTERFACE_INCLUDE_DIRECTORIES>

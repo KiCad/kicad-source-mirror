@@ -113,7 +113,7 @@ target_link_libraries( pns_debug_tool
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
     ${PYTHON_LIBRARIES}
-    ${Boost_LIBRARIES}
+    Boost::headers
     ${PCBNEW_EXTRA_LIBS}    # -lrt must follow Boost
 )
 
@@ -137,7 +137,7 @@ target_link_libraries( qa_pns_regressions
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
     ${PYTHON_LIBRARIES}
-    ${Boost_LIBRARIES}
+    Boost::headers
     ${PCBNEW_EXTRA_LIBS}    # -lrt must follow Boost
 )
 
@@ -157,8 +157,6 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/qa/common
     ${CMAKE_SOURCE_DIR}/qa/qa_utils
     ${CMAKE_SOURCE_DIR}/qa/qa_utils/include
-
-    ${Boost_INCLUDE_DIR}
     ${INC_AFTER}
 )
 

@@ -2,7 +2,6 @@ include_directories(
     "${CMAKE_SOURCE_DIR}/include"
     "${CMAKE_SOURCE_DIR}/utils/idftools"
     ${OPENGL_INCLUDE_DIR}
-    ${Boost_INCLUDE_DIR}
 )
 
 set( IDF3_FILES
@@ -20,6 +19,7 @@ endif( MINGW )
 add_library( idf3 STATIC ${IDF3_FILES} )
 target_link_libraries( idf3
     kimath
+    Boost::headers
     )
 
 add_executable( idfcyl idf_cylinder.cpp )

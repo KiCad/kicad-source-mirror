@@ -19,8 +19,6 @@
 # or you may write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 
-find_package( Boost COMPONENTS unit_test_framework system REQUIRED )
-
 set( QA_UTIL_COMMON_SRC
     stdstream_line_reader.cpp
     utility_program.cpp
@@ -49,8 +47,9 @@ endif()
 target_link_libraries( qa_utils
     common
     turtle
-    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
-    ${Boost_SYSTEM_LIBRARY}
+    Boost::headers
+    Boost::unit_test_framework
+    Boost::system
     ${wxWidgets_LIBRARIES}
     ${LIBBOOST_UNIT_TEST_LIB}
 )

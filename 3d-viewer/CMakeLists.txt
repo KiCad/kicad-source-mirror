@@ -115,7 +115,7 @@ target_link_libraries( 3d-viewer
         gal
         kimath
         nlohmann_json
-        ${Boost_LIBRARIES}
+        Boost::headers
         ${wxWidgets_LIBRARIES}
         ${OPENGL_LIBRARIES}
         kicad_3dsg )

@@ -45,7 +45,6 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/eeschema
     ${CMAKE_SOURCE_DIR}/eeschema/sim
     ${CMAKE_SOURCE_DIR}/qa/eeschema_utils/include
-    ${Boost_INCLUDE_DIR}
     ${INC_AFTER}
 )
 
@@ -63,10 +62,10 @@ target_link_libraries( ibis_proto
     tinyspline_lib
     nanosvg
     idf3
+    Boost::headers
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
     ${PYTHON_LIBRARIES}
-    ${Boost_LIBRARIES}
     ${EESCHEMA_EXTRA_LIBS}    # -lrt must follow Boost
 )
 

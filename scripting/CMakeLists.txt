@@ -9,8 +9,8 @@ add_library( scripting STATIC
 
 target_link_libraries( scripting
     ${wxWidgets_LIBRARIES}      # wxLogDebug, wxASSERT
-    ${Boost_LIBRARIES}          # Because of the OPT types
     ${PYTHON_LIBRARIES}
+    Boost::headers
     common
 )
 
@@ -25,7 +25,6 @@ target_include_directories( scripting PRIVATE
     ${PROJECT_SOURCE_DIR}/resources/bitmaps_png/include
     ${PROJECT_SOURCE_DIR}/include
     ${wxWidgets_LIBRARIES}
-    ${Boost_INCLUDE_DIR}
 )
 
 # Setup the KIFACE
@@ -44,7 +43,6 @@ target_include_directories( scripting_kiface PRIVATE
     ${PROJECT_SOURCE_DIR}/resources/bitmaps_png/include
     ${PROJECT_SOURCE_DIR}/include
     ${wxWidgets_LIBRARIES}
-    ${Boost_INCLUDE_DIR}
 )
 
 if( MSVC )

@@ -21,7 +21,6 @@
 # or you may write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 
-find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc REQUIRED )
 
 add_compile_definitions( BOOST_TEST_DYN_LINK PCBNEW)
@@ -49,7 +48,6 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/common/geometry
     ${CMAKE_SOURCE_DIR}/qa/common
     ${CMAKE_SOURCE_DIR}/qa/qa_utils
-    ${Boost_INCLUDE_DIR}
     ${INC_AFTER}
 )
 
@@ -76,7 +74,8 @@ target_link_libraries( libeval_compiler_test
     ${PCBNEW_IO_LIBRARIES}
     common
     pcbcommon
-    ${Boost_SYSTEM_LIBRARY}
-    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+    Boost::headers
+    Boost::unit_test_framework
+    Boost::system
     ${wxWidgets_LIBRARIES}
 )

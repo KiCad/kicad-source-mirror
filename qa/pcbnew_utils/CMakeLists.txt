@@ -60,6 +60,9 @@ add_dependencies( qa_pcbnew_utils
 
 target_link_libraries( qa_pcbnew_utils PUBLIC
     qa_utils
+    Boost::headers
+    Boost::unit_test_framework
+    Boost::system
 )
 #     3d-viewer
 #     connectivity
@@ -75,7 +78,6 @@ target_link_libraries( qa_pcbnew_utils PUBLIC
 #     ${PCBNEW_IO_LIBRARIES}
 #     ${wxWidgets_LIBRARIES}
 #     ${PYTHON_LIBRARIES}
-#     ${Boost_LIBRARIES}      # must follow GITHUB
 #     ${PCBNEW_EXTRA_LIBS}    # -lrt must follow Boost
 #)
 

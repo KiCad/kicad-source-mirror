@@ -68,7 +68,9 @@ target_link_libraries( qa_gerbview
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
     ${PYTHON_LIBRARIES}
-    ${Boost_LIBRARIES}      # must follow GITHUB
+    Boost::headers
+    Boost::unit_test_framework
+    Boost::system
     ${PCBNEW_EXTRA_LIBS}    # -lrt must follow Boost
 )
 

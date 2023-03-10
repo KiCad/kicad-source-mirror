@@ -79,7 +79,6 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/qa/qa_utils
     ${CMAKE_SOURCE_DIR}/qa/qa_utils/include
     ${CMAKE_SOURCE_DIR}/qa/pcbnew_utils/include
-    ${Boost_INCLUDE_DIR}
     ${INC_AFTER}
 )
 
@@ -97,10 +96,10 @@ target_link_libraries( drc_proto
     tinyspline_lib
     nanosvg
     idf3
+    Boost::headers
     ${PCBNEW_IO_LIBRARIES}
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
     ${PYTHON_LIBRARIES}
-    ${Boost_LIBRARIES}
     ${PCBNEW_EXTRA_LIBS}    # -lrt must follow Boost
 )

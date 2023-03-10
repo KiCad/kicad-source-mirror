@@ -489,7 +489,7 @@ target_link_libraries( common
     compoundfilereader
     pcm_settings
     nanodbc # for now; maybe hoist out of common
-    ${Boost_LIBRARIES}
+    Boost::headers
     ${CURL_LIBRARIES}
     ${wxWidgets_LIBRARIES}
     ${EXTRA_LIBS}

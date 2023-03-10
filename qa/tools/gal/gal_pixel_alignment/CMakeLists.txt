@@ -58,7 +58,6 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/polygon
     ${CMAKE_SOURCE_DIR}/common/geometry
     ${CMAKE_SOURCE_DIR}/qa/qa_utils
-    ${Boost_INCLUDE_DIR}
     ${INC_AFTER}
 )
 
@@ -72,8 +71,9 @@ target_link_libraries( test_gal_pixel_alignment
     gal
     common
     ${PCBNEW_IO_LIBRARIES}
-    ${Boost_SYSTEM_LIBRARY}
-    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+    Boost::headers
+    Boost::unit_test_framework
+    Boost::system
     ${wxWidgets_LIBRARIES}
 )
 

@@ -56,7 +56,7 @@ target_link_libraries( qa_pcbnew_tools
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
     ${PYTHON_LIBRARIES}
-    ${Boost_LIBRARIES}
+    Boost::headers
     ${PCBNEW_EXTRA_LIBS}    # -lrt must follow Boost
 )
 

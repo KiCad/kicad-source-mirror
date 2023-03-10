@@ -70,6 +70,9 @@ add_executable( qa_kimath
 target_link_libraries( qa_kimath
     qa_utils
     kimath
+    Boost::headers
+    Boost::unit_test_framework
+    Boost::system
     ${wxWidgets_LIBRARIES}
 )
 

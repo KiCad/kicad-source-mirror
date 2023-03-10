@@ -36,8 +36,8 @@ target_link_libraries( kimath
     clipper2
     othermath
     rtree
+    Boost::headers
     ${wxWidgets_LIBRARIES}      # wxLogDebug, wxASSERT
-    ${Boost_LIBRARIES}          # Because of the OPT types
 )
 
 target_include_directories( kimath PUBLIC
@@ -49,5 +49,4 @@ target_include_directories( kimath PUBLIC
 target_include_directories( kimath PRIVATE
     ${PROJECT_SOURCE_DIR}/include
     ${wxWidgets_LIBRARIES}
-    ${Boost_INCLUDE_DIR}
 )

@@ -62,14 +62,6 @@ if( KICAD_TEST_DATABASE_LIBRARIES )
     set( QA_COMMON_SRCS ${QA_COMMON_SRCS} test_database.cpp )
 endif()
 
-set( QA_COMMON_LIBS
-    common
-    libcontext
-    gal
-    qa_utils
-    ${wxWidgets_LIBRARIES}
-)
-
 if( WIN32 )
     # We want to declare a resource manifest on Windows to enable UTF8 mode
     # Without UTF8 mode, some random IO tests may fail, we set the active code page on normal kicad to UTF8 as well
@@ -86,7 +78,17 @@ endif()
 add_executable( qa_common
     ${QA_COMMON_SRCS}
     ${QA_COMMON_RESOURCES} )
-target_link_libraries( qa_common ${QA_COMMON_LIBS} )
+
+target_link_libraries( qa_common
+    common
+    libcontext
+    gal
+    qa_utils
+    Boost::headers
+    Boost::unit_test_framework
+    Boost::system
+    ${wxWidgets_LIBRARIES}
+    )
 
 include_directories(
     ${CMAKE_SOURCE_DIR}

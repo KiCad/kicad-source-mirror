@@ -631,6 +631,7 @@ target_link_libraries( pcbnew_kiface_objects
         nlohmann_json
         rectpack2d
         gzip-hpp
+        Boost::boost
         ${ZLIB_LIBRARIES}
         ${OCC_LIBRARIES}
     )
@@ -679,7 +680,7 @@ set( PCBNEW_KIFACE_LIBRARIES
     ${PCBNEW_IO_LIBRARIES}
     ${wxWidgets_LIBRARIES}
     ${PYTHON_LIBRARIES}
-    ${Boost_LIBRARIES}
+    Boost::headers
     ${PCBNEW_EXTRA_LIBS}    # -lrt must follow Boost
     )
 
