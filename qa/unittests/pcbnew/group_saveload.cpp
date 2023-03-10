@@ -23,9 +23,9 @@
  */
 
 #include <bitset>
+#include <filesystem>
 #include <string>
 
-#include <boost/filesystem.hpp>
 #include <board.h>
 #include <footprint.h>
 #include <pcb_group.h>
@@ -212,7 +212,7 @@ void testGroupsEqual( const GROUPS& groups1, const GROUPS& groups2 )
 void testSaveLoad( const std::vector<std::vector<ItemType>>& spec )
 {
     std::unique_ptr<BOARD> board1 = createBoard( spec );
-    auto path = boost::filesystem::temp_directory_path() / "group_saveload_tst.kicad_pcb";
+    auto path = std::filesystem::temp_directory_path() / "group_saveload_tst.kicad_pcb";
     ::KI_TEST::DumpBoardToFile( *board1, path.string() );
 
     std::unique_ptr<BOARD> board2 = ::KI_TEST::ReadBoardFromFileOrStream( path.string() );

@@ -21,10 +21,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <filesystem>
+
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <pcbnew_utils/board_test_utils.h>
 #include <pcbnew_utils/board_file_utils.h>
-#include <boost/filesystem.hpp>
 #include <board.h>
 #include <settings/settings_manager.h>
 
@@ -52,7 +53,7 @@ BOOST_FIXTURE_TEST_CASE( RegressionSaveLoadTests, SAVE_LOAD_TEST_FIXTURE )
                                     "issue7267",
                                     "issue8003" };
 
-    auto savePath = boost::filesystem::temp_directory_path() / "group_saveload_tst.kicad_pcb";
+    auto savePath = std::filesystem::temp_directory_path() / "group_saveload_tst.kicad_pcb";
 
     for( const wxString& relPath : tests )
     {

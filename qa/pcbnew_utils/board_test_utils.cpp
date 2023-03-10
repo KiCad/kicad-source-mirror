@@ -23,6 +23,8 @@
 
 #include <pcbnew_utils/board_test_utils.h>
 
+#include <filesystem>
+
 #include <wx/filename.h>
 #include <board.h>
 #include <board_design_settings.h>
@@ -35,11 +37,8 @@
 #include <tool/tool_manager.h>
 #include <zone_filler.h>
 
-// For the temp directory logic: can be std::filesystem in C++17
-#include <boost/filesystem.hpp>
 #include <boost/test/unit_test.hpp>
 #include <board_commit.h>
-
 
 #define CHECK_ENUM_CLASS_EQUAL( L, R )                                                             \
     BOOST_CHECK_EQUAL( static_cast<int>( L ), static_cast<int>( R ) )
@@ -59,7 +58,7 @@ void BOARD_DUMPER::DumpBoardToFile( BOARD& aBoard, const std::string& aName ) co
     if( !m_dump_boards )
         return;
 
-    auto path = boost::filesystem::temp_directory_path() / aName;
+    auto path = std::filesystem::temp_directory_path() / aName;
     path += ".kicad_pcb";
 
     BOOST_TEST_MESSAGE( "Dumping board file: " << path.string() );

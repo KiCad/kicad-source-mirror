@@ -76,7 +76,6 @@ target_link_libraries( libeval_compiler_test
     ${PCBNEW_IO_LIBRARIES}
     common
     pcbcommon
-    ${Boost_FILESYSTEM_LIBRARY}
     ${Boost_SYSTEM_LIBRARY}
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
     ${wxWidgets_LIBRARIES}
