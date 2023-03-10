@@ -97,6 +97,10 @@ DIALOG_SIM_MODEL<T_symbol, T_field>::DIALOG_SIM_MODEL( wxWindow* aParent, T_symb
     grid->DedicateKey( WXK_RETURN );
     grid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_RETURN );
 
+    grid->AddActionTrigger( wxPG_ACTION_EDIT, WXK_NUMPAD_ENTER );
+    grid->DedicateKey( WXK_NUMPAD_ENTER );
+    grid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_NUMPAD_ENTER );
+
     grid->DedicateKey( WXK_UP );
     grid->DedicateKey( WXK_DOWN );
 

@@ -595,7 +595,8 @@ void DIALOG_SHIM::OnCharHook( wxKeyEvent& aEvt )
         }
     }
     // shift-return (Mac default) or Ctrl-Return (GTK) for OK
-    else if( aEvt.GetKeyCode() == WXK_RETURN && ( aEvt.ShiftDown() || aEvt.ControlDown() ) )
+    else if( ( aEvt.GetKeyCode() == WXK_RETURN || aEvt.GetKeyCode() == WXK_NUMPAD_ENTER )
+             && ( aEvt.ShiftDown() || aEvt.ControlDown() ) )
     {
         wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
         return;

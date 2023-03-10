@@ -440,6 +440,7 @@ protected:
             break;
 
         case WXK_RETURN:
+        case WXK_NUMPAD_ENTER:
             Accept();
             break;
 
@@ -582,13 +583,14 @@ void NET_SELECTOR::onKeyDown( wxKeyEvent& aEvt )
     }
 
     // Shift-return accepts dialog
-    else if( key == WXK_RETURN && aEvt.ShiftDown() )
+    else if( ( key == WXK_RETURN || key == WXK_NUMPAD_ENTER ) && aEvt.ShiftDown() )
     {
         wxPostEvent( m_parent, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
     }
 
     // Return, arrow-down and space-bar all open popup
-    else if( key == WXK_RETURN || key == WXK_DOWN || key == WXK_NUMPAD_DOWN || key == WXK_SPACE )
+    else if( key == WXK_RETURN || key == WXK_NUMPAD_ENTER || key == WXK_DOWN
+             || key == WXK_NUMPAD_DOWN || key == WXK_SPACE )
     {
         Popup();
     }

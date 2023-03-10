@@ -124,7 +124,7 @@ void DIALOG_SCH_FIND::OnUpdateReplaceAllUI( wxUpdateUIEvent& aEvent )
 
 void DIALOG_SCH_FIND::OnChar( wxKeyEvent& aEvent )
 {
-    if( aEvent.GetKeyCode() == WXK_RETURN )
+    if( aEvent.GetKeyCode() == WXK_RETURN || aEvent.GetKeyCode() == WXK_NUMPAD_ENTER )
     {
         wxCommandEvent dummyCommand;
         OnFind( dummyCommand );

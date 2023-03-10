@@ -162,7 +162,8 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
     if( !isalpha( aEvent.GetKeyCode() ) )
         m_suppressAutocomplete = false;
 
-    if( aEvent.GetKeyCode() == WXK_RETURN && ( m_singleLine || aEvent.ShiftDown() ) )
+    if( ( aEvent.GetKeyCode() == WXK_RETURN || aEvent.GetKeyCode() == WXK_NUMPAD_ENTER )
+        && ( m_singleLine || aEvent.ShiftDown() ) )
     {
         m_returnCallback();
     }
