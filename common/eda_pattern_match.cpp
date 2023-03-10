@@ -23,10 +23,13 @@
  */
 
 #include <eda_pattern_match.h>
+#include <limits>
 #include <wx/log.h>
 #include <wx/tokenzr.h>
 #include <algorithm>
-#include <climits>
+
+// Helper to make the code cleaner when we want this operation
+#define CLAMPED_VAL_INT_MAX( x ) std::min( x, static_cast<size_t>( std::numeric_limits<int>::max() ) )
 
 bool EDA_PATTERN_MATCH_SUBSTR::SetPattern( const wxString& aPattern )
 {
@@ -114,8 +117,8 @@ EDA_PATTERN_MATCH::FIND_RESULT EDA_PATTERN_MATCH_REGEX::Find( const wxString& aC
             size_t start, len;
             m_regex.GetMatch( &start, &len, 0 );
 
-            return { static_cast<int>( std::min( start, static_cast<size_t>( INT_MAX ) ) ),
-                     static_cast<int>( std::min( len, static_cast<size_t>( INT_MAX ) ) ) };
+            return { static_cast<int>( CLAMPED_VAL_INT_MAX( start ) ),
+                     static_cast<int>( CLAMPED_VAL_INT_MAX( len ) ) };
         }
         else
         {
@@ -295,7 +298,7 @@ EDA_PATTERN_MATCH::FIND_RESULT EDA_PATTERN_MATCH_RELATIONAL::Find( const wxStrin
         if( found_delta != EDA_PATTERN_NOT_FOUND )
         {
             size_t found = (size_t) found_delta + lastpos;
-            return { static_cast<int>( std::min( found, static_cast<size_t>( INT_MAX ) ) ), 0 };
+            return { static_cast<int>( CLAMPED_VAL_INT_MAX( found ) ), 0 };
         }
 
         lastpos = tokenizer.GetPosition();
@@ -318,7 +321,7 @@ int EDA_PATTERN_MATCH_RELATIONAL::FindOne( const wxString& aCandidate ) const
     wxString val = m_regex_description.GetMatch( aCandidate, 2 );
     wxString unit = m_regex_description.GetMatch( aCandidate, 3 );
 
-    int istart = ( start > INT_MAX ) ? INT_MAX : start;
+    int istart = ( start > std::numeric_limits<int>::max() ) ? std::numeric_limits<int>::max() : start;
 
     if( key.Lower() != m_key )
         return EDA_PATTERN_NOT_FOUND;

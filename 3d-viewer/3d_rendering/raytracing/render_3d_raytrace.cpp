@@ -27,7 +27,6 @@
 #include <algorithm>
 #include <atomic>
 #include <chrono>
-#include <climits>
 #include <thread>
 
 #include "render_3d_raytrace.h"

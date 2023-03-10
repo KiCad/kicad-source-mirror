@@ -23,7 +23,6 @@
  */
 
 #include <cstdlib>
-#include <climits>
 
 #include <bitmaps.h>
 #include <core/mirror.h>
