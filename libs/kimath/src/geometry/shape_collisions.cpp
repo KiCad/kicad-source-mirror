@@ -186,7 +186,7 @@ static inline bool Collide( const SHAPE_CIRCLE& aA, const SHAPE_LINE_CHAIN_BASE&
 
         if( aMTV )
         {
-            for( int s = 0; s < aB.GetSegmentCount(); s++ )
+            for( size_t s = 0; s < aB.GetSegmentCount(); s++ )
             {
                 int dist = aB.GetSegment(s).Distance( aA.GetCenter() );
 
@@ -251,7 +251,7 @@ static inline bool Collide( const SHAPE_CIRCLE& aA, const SHAPE_LINE_CHAIN_BASE&
             cmoved.SetCenter( cmoved.GetCenter() + f );
             f_total += f;
 
-            for( int s = 0; s < aB.GetSegmentCount(); s++ )
+            for( size_t s = 0; s < aB.GetSegmentCount(); s++ )
             {
                 VECTOR2I f = pushoutForce( cmoved, aB.GetSegment( s ), aClearance );
                 cmoved.SetCenter( cmoved.GetCenter() + f );

@@ -695,7 +695,7 @@ long long int SHAPE_LINE_CHAIN::Length() const
             l += CSegment( i ).Length();
     }
 
-    for( int i = 0; i < ArcCount(); i++ )
+    for( size_t i = 0; i < ArcCount(); i++ )
         l += CArcs()[i].GetLength();
 
     return l;
@@ -746,7 +746,7 @@ void SHAPE_LINE_CHAIN::Replace( int aStartIndex, int aEndIndex, const SHAPE_LINE
 
     // We only process lines in order in this house
     wxASSERT( aStartIndex <= aEndIndex );
-    wxASSERT( aEndIndex < m_points.size() );
+    wxASSERT( aEndIndex < static_cast<int>( m_points.size() ) );
 
     SHAPE_LINE_CHAIN newLine = aLine;
 
@@ -989,7 +989,7 @@ int SHAPE_LINE_CHAIN::ShapeCount() const
     int numShapes = 0;
     int arcIdx    = -1;
 
-    for( int i = 0; i < m_points.size() - 1; i++ )
+    for( int i = 0; i < static_cast<int>( m_points.size() ) - 1; i++ )
     {
         if( m_shapes[i] == SHAPES_ARE_PT )
         {

@@ -251,7 +251,6 @@ const SHAPE_LINE_CHAIN DIRECTION_45::BuildInitialTrace( const VECTOR2I& aP0, con
          *
          * For the length of the radius we use the shorter of the horizontal and vertical distance.
          */
-        SHAPE_ARC arc;
 
         if( w == h ) // we only need one arc without a straigth line.
         {
