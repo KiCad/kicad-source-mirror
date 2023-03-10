@@ -52,13 +52,13 @@ TOOL_ACTION EE_ACTIONS::checkSymbol( "eeschema.InspectionTool.checkSymbol",
 
 TOOL_ACTION EE_ACTIONS::diffSymbol( "eeschema.InspectionTool.diffSymbol",
         AS_GLOBAL, 0, "",
-        _( "Diff Symbol with Library..." ),
-        _( "Check for differences between schematic symbol and its library equivalent" ),
+        _( "Diff Symbol with Library" ),
+        _( "Show differences between schematic symbol and its library equivalent" ),
         BITMAPS::library );
 
 TOOL_ACTION EE_ACTIONS::showSimulator( "eeschema.EditorControl.showSimulator",
         AS_GLOBAL, 0, "",
-        _( "Simulator..." ), _( "Simulate circuit in SPICE" ),
+        _( "Simulator" ), _( "Show simulation window for running SPICE or IBIS simulations." ),
         BITMAPS::simulator );
 
 TOOL_ACTION EE_ACTIONS::showDatasheet( "eeschema.InspectionTool.showDatasheet",

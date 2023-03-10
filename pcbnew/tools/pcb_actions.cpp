@@ -1163,20 +1163,20 @@ TOOL_ACTION PCB_ACTIONS::boardStatistics( "pcbnew.InspectionTool.ShowBoardStatis
 
 TOOL_ACTION PCB_ACTIONS::inspectClearance( "pcbnew.InspectionTool.InspectClearance",
         AS_GLOBAL, 0, "",
-        _( "Clearance Resolution..." ),
+        _( "Clearance Resolution" ),
         _( "Show clearance resolution for the active layer between two selected objects" ),
         BITMAPS::mw_add_gap );
 
 TOOL_ACTION PCB_ACTIONS::inspectConstraints( "pcbnew.InspectionTool.InspectConstraints",
         AS_GLOBAL, 0, "",
-        _( "Constraints Resolution..." ),
+        _( "Constraints Resolution" ),
         _( "Show constraints resolution for the selected object" ),
         BITMAPS::mw_add_gap );
 
 TOOL_ACTION PCB_ACTIONS::diffFootprint( "pcbnew.InspectionTool.DiffFootprint",
         AS_GLOBAL, 0, "",
-        _( "Diff Footprint with Library..." ),
-        _( "Check for differences between board footprint and its library equivalent" ),
+        _( "Diff Footprint with Library" ),
+        _( "Show differences between board footprint and its library equivalent" ),
         BITMAPS::library );
 
 //Geographic re-annotation tool
