@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
  * Copyright (C) 2016 Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -55,12 +55,16 @@ public:
 
     virtual void SetUserUnits( EDA_UNITS aUnits ) override { m_userUnits = aUnits; }
     virtual bool DisplayFootprint( const LIB_ID& aFPID ) override;
+    virtual void DisplayFootprints( std::shared_ptr<FOOTPRINT> aFootprintA,
+                                    std::shared_ptr<FOOTPRINT> aFootprintB ) override;
 
     virtual const KIGFX::COLOR4D& GetBackgroundColor() const override;
     virtual const KIGFX::COLOR4D& GetForegroundColor() const override;
 
     virtual wxWindow* GetWindow() override;
     BOARD* GetBoard() { return m_dummyBoard.get(); }
+
+    virtual void RefreshAll() override;
 
     static FOOTPRINT_PREVIEW_PANEL* New( KIWAY* aKiway, wxWindow* aParent );
 
@@ -79,11 +83,14 @@ private:
 
     void renderFootprint( std::shared_ptr<FOOTPRINT> aFootprint );
 
+    void fitToCurrentFootprint();
+
 private:
     std::unique_ptr<BOARD>                      m_dummyBoard;
     std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> m_displayOptions;
     EDA_UNITS                                   m_userUnits;
     std::shared_ptr<FOOTPRINT>                  m_currentFootprint;
+    std::shared_ptr<FOOTPRINT>                  m_otherFootprint;
 };
 
 #endif

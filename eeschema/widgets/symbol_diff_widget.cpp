@@ -39,9 +39,9 @@ SYMBOL_DIFF_WIDGET::SYMBOL_DIFF_WIDGET( wxWindow* aParent,
     wxStaticText* libLabel = new wxStaticText( this, wxID_ANY, _( "Library" ) );
     m_slider = new wxSlider( this, wxID_ANY, 50, 0, 100 );
 
-    bottomSizer->Add( schLabel, 0, wxLEFT | wxRIGHT | wxBOTTOM | wxALIGN_CENTRE_VERTICAL, 8 );
+    bottomSizer->Add( schLabel, 0, wxLEFT | wxRIGHT | wxBOTTOM | wxALIGN_CENTRE_VERTICAL, 6 );
     bottomSizer->Add( m_slider, 1, wxLEFT | wxRIGHT | wxALIGN_BOTTOM, 30 );
-    bottomSizer->Add( libLabel, 0, wxLEFT | wxRIGHT | wxBOTTOM | wxALIGN_CENTRE_VERTICAL, 8 );
+    bottomSizer->Add( libLabel, 0, wxLEFT | wxRIGHT | wxBOTTOM | wxALIGN_CENTRE_VERTICAL, 6 );
 
     m_outerSizer->Add( bottomSizer, 0, wxTOP | wxLEFT | wxRIGHT | wxEXPAND, 10 );
 

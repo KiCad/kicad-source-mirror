@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -109,6 +109,20 @@ void FOOTPRINT_PREVIEW_WIDGET::DisplayFootprint( const LIB_ID& aFPID )
         SetStatusText( _( "Footprint not found." ) );
         m_libid.clear();
     }
+}
+
+
+void FOOTPRINT_PREVIEW_WIDGET::DisplayFootprints( std::shared_ptr<FOOTPRINT> aFootprintA,
+                                                  std::shared_ptr<FOOTPRINT> aFootprintB )
+{
+    ClearStatus();
+    m_prev_panel->DisplayFootprints( aFootprintA, aFootprintB );
+}
+
+
+void FOOTPRINT_PREVIEW_WIDGET::RefreshAll()
+{
+    m_prev_panel->RefreshAll();
 }
 
 

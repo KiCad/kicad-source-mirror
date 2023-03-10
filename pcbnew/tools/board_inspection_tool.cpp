@@ -39,6 +39,7 @@
 #include <pcbnew_settings.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/wx_html_report_box.h>
+#include <widgets/footprint_diff_widget.h>
 #include <drc/drc_item.h>
 #include <pad.h>
 
@@ -1413,9 +1414,15 @@ int BOARD_INSPECTION_TOOL::DiffFootprint( const TOOL_EVENT& aEvent )
             r->Report( wxString::Format( _( "The library no longer contains the item %s." ),
                                          fpName) );
         }
-        else if( !footprint->FootprintNeedsUpdate( libFootprint.get(), r ) )
+        else
         {
-            r->Report( _( "No relevant differences detected." ) );
+            if( !footprint->FootprintNeedsUpdate( libFootprint.get(), r ) )
+                r->Report( _( "No relevant differences detected." ) );
+
+            wxPanel*               panel = m_diffFootprintDialog->AddBlankPage( _( "Visual" ) );
+            FOOTPRINT_DIFF_WIDGET* diff = constructDiffPanel( panel );
+
+            diff->DisplayDiff( footprint, libFootprint );
         }
     }
 
@@ -1425,6 +1432,20 @@ int BOARD_INSPECTION_TOOL::DiffFootprint( const TOOL_EVENT& aEvent )
     m_diffFootprintDialog->Raise();
     m_diffFootprintDialog->Show( true );
     return 0;
+}
+
+
+FOOTPRINT_DIFF_WIDGET* BOARD_INSPECTION_TOOL::constructDiffPanel( wxPanel* aParentPanel )
+{
+    wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
+
+    FOOTPRINT_DIFF_WIDGET* diffWidget = new FOOTPRINT_DIFF_WIDGET( aParentPanel, m_frame->Kiway() );
+
+   	sizer->Add( diffWidget, 1, wxEXPAND | wxALL, 5 );
+    aParentPanel->SetSizer( sizer );
+    aParentPanel->Layout();
+
+    return diffWidget;
 }
 
 

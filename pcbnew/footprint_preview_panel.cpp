@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
  * Copyright (C) 2016 Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -72,6 +72,13 @@ FOOTPRINT_PREVIEW_PANEL::~FOOTPRINT_PREVIEW_PANEL( )
         GetView()->Clear();
         m_currentFootprint->SetParent( nullptr );
     }
+
+    if( m_otherFootprint )
+    {
+        GetView()->Remove( m_otherFootprint.get() );
+        GetView()->Clear();
+        m_otherFootprint->SetParent( nullptr );
+    }
 }
 
 
@@ -95,19 +102,7 @@ const COLOR4D& FOOTPRINT_PREVIEW_PANEL::GetForegroundColor() const
 
 void FOOTPRINT_PREVIEW_PANEL::renderFootprint( std::shared_ptr<FOOTPRINT> aFootprint )
 {
-    if( m_currentFootprint )
-    {
-        GetView()->Remove( m_currentFootprint.get() );
-        GetView()->Clear();
-        m_currentFootprint->SetParent( nullptr );
-    }
-
-    m_currentFootprint = aFootprint;
-
-    if( !m_currentFootprint )
-        return;
-
-    m_currentFootprint->SetParent( m_dummyBoard.get() );
+    aFootprint->SetParent( m_dummyBoard.get() );
 
     INSPECTOR_FUNC inspector =
             [&]( EDA_ITEM* descendant, void* aTestData )
@@ -116,20 +111,24 @@ void FOOTPRINT_PREVIEW_PANEL::renderFootprint( std::shared_ptr<FOOTPRINT> aFootp
                 return INSPECT_RESULT::CONTINUE;
             };
 
-    m_currentFootprint->Visit( inspector, nullptr, { PCB_FP_DIM_LEADER_T,
-                                                     PCB_FP_DIM_ORTHOGONAL_T,
-                                                     PCB_FP_DIM_CENTER_T,
-                                                     PCB_FP_DIM_RADIAL_T } );
+    aFootprint->Visit( inspector, nullptr, { PCB_FP_DIM_LEADER_T,
+                                             PCB_FP_DIM_ORTHOGONAL_T,
+                                             PCB_FP_DIM_CENTER_T,
+                                             PCB_FP_DIM_RADIAL_T } );
 
     // Ensure we are not using the high contrast mode to display the selected footprint
     KIGFX::PAINTER* painter = GetView()->GetPainter();
     auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
     settings->m_ContrastModeDisplay = HIGH_CONTRAST_MODE::NORMAL;
 
-    GetView()->Add( m_currentFootprint.get() );
-    GetView()->SetVisible( m_currentFootprint.get(), true );
-    GetView()->Update( m_currentFootprint.get(), KIGFX::ALL );
+    GetView()->Add( aFootprint.get() );
+    GetView()->SetVisible( aFootprint.get(), true );
+    GetView()->Update( aFootprint.get(), KIGFX::ALL );
+}
 
+
+void FOOTPRINT_PREVIEW_PANEL::fitToCurrentFootprint()
+{
     BOX2I bbox = m_currentFootprint->ViewBBox();
     bbox.Merge( m_currentFootprint->Value().ViewBBox() );
     bbox.Merge( m_currentFootprint->Reference().ViewBBox() );
@@ -149,6 +148,13 @@ void FOOTPRINT_PREVIEW_PANEL::renderFootprint( std::shared_ptr<FOOTPRINT> aFootp
 
 bool FOOTPRINT_PREVIEW_PANEL::DisplayFootprint( const LIB_ID& aFPID )
 {
+    if( m_currentFootprint )
+    {
+        GetView()->Remove( m_currentFootprint.get() );
+        GetView()->Clear();
+        m_currentFootprint->SetParent( nullptr );
+    }
+
     FP_LIB_TABLE* fptbl = Prj().PcbFootprintLibs();
 
     try
@@ -166,10 +172,56 @@ bool FOOTPRINT_PREVIEW_PANEL::DisplayFootprint( const LIB_ID& aFPID )
         m_currentFootprint.reset();
     }
 
-    renderFootprint( m_currentFootprint );
+    if( m_currentFootprint )
+    {
+        renderFootprint( m_currentFootprint );
+        fitToCurrentFootprint();
+    }
+
     Refresh();
 
     return m_currentFootprint != nullptr;
+}
+
+
+void FOOTPRINT_PREVIEW_PANEL::DisplayFootprints( std::shared_ptr<FOOTPRINT> aFootprintA,
+                                                 std::shared_ptr<FOOTPRINT> aFootprintB )
+{
+    if( m_currentFootprint )
+    {
+        GetView()->Remove( m_currentFootprint.get() );
+        m_currentFootprint->SetParent( nullptr );
+
+        wxASSERT( m_otherFootprint );
+
+        GetView()->Remove( m_otherFootprint.get() );
+        m_otherFootprint->SetParent( nullptr );
+
+        GetView()->Clear();
+    }
+
+    m_currentFootprint = aFootprintA;
+    m_otherFootprint = aFootprintB;
+
+    if( m_currentFootprint )
+    {
+        wxASSERT( m_otherFootprint );
+
+        renderFootprint( m_currentFootprint );
+        renderFootprint( m_otherFootprint );
+        fitToCurrentFootprint();
+    }
+
+    Show();
+    Layout();
+    RefreshAll();
+}
+
+
+void FOOTPRINT_PREVIEW_PANEL::RefreshAll()
+{
+    GetView()->UpdateAllItems( KIGFX::REPAINT );
+    ForceRefresh();
 }
 
 
@@ -212,6 +264,11 @@ FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* 
     double gridSize = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::MILS,
                                                                  gridCfg.sizes[ gridIdx ] );
     panel->GetGAL()->SetGridSize( VECTOR2D( gridSize, gridSize ) );
+
+    auto painter = static_cast<KIGFX::PCB_PAINTER*>( panel->GetView()->GetPainter() );
+    auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
+    settings->SetHighlight( false );
+    settings->SetNetColorMode( NET_COLOR_MODE::OFF );
 
     return panel;
 }

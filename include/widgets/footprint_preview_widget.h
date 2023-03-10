@@ -29,6 +29,7 @@
 #include <gal/color4d.h>
 
 class FOOTPRINT_PREVIEW_PANEL_BASE;
+class FOOTPRINT;
 class KIWAY;
 class wxStaticText;
 class wxSizer;
@@ -74,7 +75,18 @@ public:
      */
     void DisplayFootprint( const LIB_ID& aFPID );
 
-private:
+    /**
+     * Display a pair of footprints.  (Normally used for diff'ing.)
+     */
+    void DisplayFootprints( std::shared_ptr<FOOTPRINT> aFootprintA,
+                            std::shared_ptr<FOOTPRINT> aFootprintB );
+
+    /**
+     * Force the redrawing of all contents.
+     */
+    void RefreshAll();
+
+protected:
     FOOTPRINT_PREVIEW_PANEL_BASE* m_prev_panel;
 
     wxStaticText*                 m_status;
@@ -101,6 +113,17 @@ public:
      * must have been passed to CacheFootprint before.
      */
     virtual bool DisplayFootprint( LIB_ID const& aFPID ) = 0;
+
+    /**
+     * Display a pair of footprints.  (Normally used for diff'ing.)
+     */
+    virtual void DisplayFootprints( std::shared_ptr<FOOTPRINT> aFootprintA,
+                                    std::shared_ptr<FOOTPRINT> aFootprintB ) = 0;
+
+    /**
+     * Force the redrawing of all contents.
+     */
+    virtual void RefreshAll() = 0;
 
     /**
      * Get the underlying wxWindow.

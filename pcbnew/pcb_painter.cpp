@@ -434,6 +434,9 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
     else if( item->Type() == PCB_BITMAP_T )
         color.a *= m_imageOpacity;
 
+    if( item->GetForceTransparency() > 0.0 )
+        color = color.WithAlpha( color.a * ( 1.0 - item->GetForceTransparency() ) );
+
     // No special modifiers enabled
     return color;
 }

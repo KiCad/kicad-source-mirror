@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2013-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -361,7 +361,8 @@ void EDA_DRAW_PANEL_GAL::onSize( wxSizeEvent& aEvent )
     if( m_view )
         bottom = m_view->ToWorld( m_gal->GetScreenPixelSize(), true );
 
-    m_gal->ResizeScreen( clientSize.GetX(), clientSize.GetY() );
+    // Note: ( +1, +1 ) prevents an ugly black line on right and bottom (at least on Mac)
+    m_gal->ResizeScreen( clientSize.GetX() + 1, clientSize.GetY() + 1 );
 
     if( m_view )
     {

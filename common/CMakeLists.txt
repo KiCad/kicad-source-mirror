@@ -169,10 +169,10 @@ set( COMMON_WIDGET_SRCS
     widgets/bitmap_button.cpp
     widgets/bitmap_toggle.cpp
     widgets/button_row_panel.cpp
-        widgets/wx_collapsible_pane.cpp
     widgets/color_swatch.cpp
     widgets/font_choice.cpp
     widgets/footprint_choice.cpp
+    widgets/footprint_diff_widget.cpp
     widgets/footprint_preview_widget.cpp
     widgets/footprint_select_widget.cpp
     widgets/gal_options_panel.cpp
@@ -206,6 +206,7 @@ set( COMMON_WIDGET_SRCS
     widgets/wx_aui_art_providers.cpp
     widgets/wx_aui_utils.cpp
     widgets/wx_busy_indicator.cpp
+    widgets/wx_collapsible_pane.cpp
     widgets/wx_combobox.cpp
     widgets/wx_ellipsized_static_text.cpp
     widgets/wx_grid.cpp

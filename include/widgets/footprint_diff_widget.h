@@ -17,42 +17,41 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SYMBOL_DIFF_WIDGET_H
-#define SYMBOL_DIFF_WIDGET_H
+#ifndef FOOTPRINT_DIFF_WIDGET_H
+#define FOOTPRINT_DIFF_WIDGET_H
 
-#include <widgets/symbol_preview_widget.h>
+#include <widgets/footprint_preview_widget.h>
 
 
-class LIB_SYMBOL;
+class FOOTPRINT;
 class wxSlider;
 
 
-class SYMBOL_DIFF_WIDGET: public SYMBOL_PREVIEW_WIDGET
+class FOOTPRINT_DIFF_WIDGET: public FOOTPRINT_PREVIEW_WIDGET
 {
 public:
     /**
-     * Construct a symbol diff widget, consisting on a canvas for displaying a schematic and
-     * a library symbol, and a slider for fading between the two.
+     * Construct a footprint diff widget, consisting on a canvas for displaying a board and
+     * a library footprint, and a slider for fading between the two.
      *
      * @param aParent - parent window
-     * @param aCanvasType = the type of canvas (GAL_TYPE_OPENGL or GAL_TYPE_CAIRO only)
+     * @param aKiway - an active Kiway instance
      */
-    SYMBOL_DIFF_WIDGET( wxWindow* aParent, EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType );
-
-    ~SYMBOL_DIFF_WIDGET() override;
+    FOOTPRINT_DIFF_WIDGET( wxWindow* aParent, KIWAY& aKiway );
 
     /**
      * Set the currently displayed symbol.
      */
-    void DisplayDiff( LIB_SYMBOL* aSchSymbol, LIB_SYMBOL* aLibSymbol, int aUnit, int aConvert );
+    void DisplayDiff( FOOTPRINT* aBoardFootprint, std::shared_ptr<FOOTPRINT>& aLibFootprint );
 
 private:
     void onSlider( wxScrollEvent& aEvent );
 
 private:
-    LIB_SYMBOL* m_libraryItem;
-    wxSlider*   m_slider;
+    std::shared_ptr<FOOTPRINT> m_boardItemCopy;
+    std::shared_ptr<FOOTPRINT> m_libraryItem;
+    wxSlider*                  m_slider;
 };
 
 
-#endif // SYMBOL_DIFF_WIDGET_H
+#endif // FOOTPRINT_DIFF_WIDGET_H

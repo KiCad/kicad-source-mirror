@@ -34,6 +34,7 @@
 #include <tools/pcb_tool_base.h>
 
 class CONNECTIVITY_DATA;
+class FOOTPRINT_DIFF_WIDGET;
 
 
 /**
@@ -130,6 +131,8 @@ private:
     void reportHeader( const wxString& aTitle, BOARD_ITEM* a, BOARD_ITEM* b, REPORTER* r );
     void reportHeader( const wxString& aTitle, BOARD_ITEM* a, BOARD_ITEM* b, PCB_LAYER_ID aLayer,
                        REPORTER* r );
+
+    FOOTPRINT_DIFF_WIDGET* constructDiffPanel( wxPanel* aParentPanel );
 
 private:
     PCB_EDIT_FRAME*     m_frame;    // Pointer to the currently used edit frame.
