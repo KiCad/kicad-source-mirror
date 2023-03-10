@@ -2167,6 +2167,35 @@ bool SIMULATOR_FRAME::LoadWorkbook( const wxString& aPath )
 
     LoadSimulator();
 
+    wxString schTextSimCommand = m_circuitModel->GetSchTextSimCommand().Lower();
+    SIM_TYPE schTextSimType = NGSPICE_CIRCUIT_MODEL::CommandToSimType( schTextSimCommand );
+
+    if( schTextSimType != ST_UNKNOWN )
+    {
+        bool found = false;
+
+        for( int ii = 0; ii < (int) m_plotNotebook->GetPageCount(); ++ii )
+        {
+            auto* plot = dynamic_cast<const SIM_PANEL_BASE*>( m_plotNotebook->GetPage( ii ) );
+
+            if( plot && plot->GetType() == schTextSimType )
+            {
+                if( schTextSimType == ST_DC )
+                {
+                    wxString plotSimCommand = plot->GetSimCommand().Lower();
+                    found = plotSimCommand.GetChar( 4 ) == schTextSimCommand.GetChar( 4 );
+                }
+                else
+                {
+                    found = true;
+                }
+            }
+        }
+
+        if( !found )
+            NewPlotPanel( schTextSimCommand, m_circuitModel->GetSimOptions() );
+    }
+
     rebuildSignalsList();
 
     rebuildSignalsGrid( m_filter->GetValue() );
@@ -2444,9 +2473,8 @@ bool SIMULATOR_FRAME::EditSimCommand()
     if( !m_circuitModel->ReadSchematicAndLibraries( NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS,
                                                     reporter ) )
     {
-        DisplayErrorMessage( this, _( "Errors during netlist generation; simulation aborted.\n\n" )
+        DisplayErrorMessage( this, _( "Errors during netlist generation.\n\n" )
                                    + errors );
-        return false;
     }
 
     if( m_plotNotebook->GetPageIndex( plotPanelWindow ) != wxNOT_FOUND )
