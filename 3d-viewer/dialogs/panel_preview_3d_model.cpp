@@ -56,14 +56,16 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
     m_userUnits = aFrame->GetUserUnits();
 
     m_dummyBoard = new BOARD();
+
     m_dummyBoard->SetProject( &aFrame->Prj(), true );
 
     // This board will only be used to hold a footprint for viewing
     m_dummyBoard->SetBoardUse( BOARD_USE::FPHOLDER );
 
     BOARD_DESIGN_SETTINGS parent_bds = aFrame->GetDesignSettings();
-    BOARD_DESIGN_SETTINGS dummy_bds = m_dummyBoard->GetDesignSettings();
+    BOARD_DESIGN_SETTINGS& dummy_bds = m_dummyBoard->GetDesignSettings();
     dummy_bds.SetBoardThickness( parent_bds.GetBoardThickness() );
+    dummy_bds.SetEnabledLayers( LSET::FrontMask() | LSET::BackMask() );
     BOARD_STACKUP& dummy_board_stackup = m_dummyBoard->GetDesignSettings().GetStackupDescriptor();
     dummy_board_stackup.RemoveAll();
     dummy_board_stackup.BuildDefaultStackupList( &dummy_bds, 2 );

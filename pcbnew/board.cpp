@@ -1295,6 +1295,11 @@ BOX2I BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
     bool  showInvisibleText = IsElementVisible( LAYER_MOD_TEXT_INVISIBLE )
                                       && PgmOrNull() && !PgmOrNull()->m_Printing;
 
+    // If the board is just showing a footprint, we want all footprint layers
+    // included in the bounding box
+    if( IsFootprintHolder() )
+        visible.set();
+
     if( aBoardEdgesOnly )
         visible.set( Edge_Cuts );
 

@@ -260,7 +260,8 @@ bool BOARD_ADAPTER::Is3dLayerEnabled( PCB_LAYER_ID aLayer ) const
 
     case B_Cu:
     case F_Cu:
-        return !m_board || m_board->IsLayerVisible( aLayer ) || m_Cfg->m_Render.realistic;
+        return !m_board || m_board->IsLayerVisible( aLayer ) || m_Cfg->m_Render.realistic
+                || m_board->IsFootprintHolder();
 
     default:
         // the layer is an internal copper layer, used the visibility
