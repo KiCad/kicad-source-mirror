@@ -458,7 +458,8 @@ void GRID_TRICKS::onCharHook( wxKeyEvent& ev )
 {
     bool handled = false;
 
-    if( ev.GetKeyCode() == WXK_RETURN && m_grid->GetGridCursorRow() == m_grid->GetNumberRows() - 1 )
+    if( ( ev.GetKeyCode() == WXK_RETURN || ev.GetKeyCode() == WXK_NUMPAD_ENTER )
+        && m_grid->GetGridCursorRow() == m_grid->GetNumberRows() - 1 )
     {
         if( m_grid->CommitPendingChanges() )
         {

@@ -382,6 +382,7 @@ void WX_COLLAPSIBLE_PANE_HEADER::onChar( wxKeyEvent& aEvent )
     {
     case WXK_SPACE:
     case WXK_RETURN:
+    case WXK_NUMPAD_ENTER:
         doSetCollapsed( !m_collapsed );
         break;
 

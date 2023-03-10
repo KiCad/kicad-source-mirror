@@ -1233,7 +1233,8 @@ void SYMBOL_VIEWER_FRAME::OnCharHook( wxKeyEvent& aEvent )
         else
             aEvent.Skip();
     }
-    else if( aEvent.GetKeyCode() == WXK_RETURN && m_symbolList->GetSelection() >= 0 )
+    else if( ( aEvent.GetKeyCode() == WXK_RETURN || aEvent.GetKeyCode() == WXK_NUMPAD_ENTER )
+             && m_symbolList->GetSelection() >= 0 )
     {
         wxCommandEvent dummy;
         DClickOnSymbolList( dummy );
