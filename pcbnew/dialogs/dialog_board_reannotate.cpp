@@ -82,18 +82,18 @@ int BackDirectionsArray[] = {
 
 
 wxString AnnotateString[] = {
-    _( "All" ),          // AnnotateAll
+    _( "All" ),          // ANNOTATE_ALL
     _( "Only front" ),   // AnnotateFront
     _( "Only back" ),    // AnnotateBack
-    _( "Only selected" ) // AnnotateSelected
+    _( "Only selected" ) // ANNOTATE_SELECTED
 };
 
 
 wxString ActionMessage[] = {
-    "",             // UpdateRefDes
-    _( "Empty" ),   // EmptyRefDes
-    _( "Invalid" ), // InvalidRefDes
-    _( "Excluded" ) // Exclude
+    "",             // UPDATE_REFDES
+    _( "Empty" ),   // EMPTY_REFDES
+    _( "Invalid" ), // INVALID_REFDES
+    _( "Excluded" ) // EXCLUDE_REFDES
 };
 
 
@@ -145,7 +145,7 @@ DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame )
     m_selection = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
 
     if( !m_selection.Empty() )
-        m_annotationScope = AnnotateSelected;
+        m_annotationScope = ANNOTATE_SELECTED;
 
     // Ensure m_annotationScope is a valid value (0 .. m_scopeRadioButtons.size()-1)
     m_annotationScope = std::max( 0, m_annotationScope );
@@ -239,7 +239,7 @@ void DIALOG_BOARD_REANNOTATE::FilterPrefix( wxTextCtrl* aPrefix )
 }
 
 
-RefDesTypeStr* DIALOG_BOARD_REANNOTATE::GetOrBuildRefDesInfo( const wxString& aRefDesPrefix,
+REFDES_TYPE_STR* DIALOG_BOARD_REANNOTATE::GetOrBuildRefDesInfo( const wxString& aRefDesPrefix,
                                                               unsigned int    aStartRefDes )
 {
     unsigned int requiredLastRef = ( aStartRefDes == 0 ? 1 : aStartRefDes ) - 1;
@@ -256,7 +256,7 @@ RefDesTypeStr* DIALOG_BOARD_REANNOTATE::GetOrBuildRefDesInfo( const wxString& aR
     }
 
     // Wasn't in the types array so add it
-    RefDesTypeStr newtype;
+    REFDES_TYPE_STR newtype;
     newtype.RefDesType = aRefDesPrefix;
     newtype.LastUsedRefDes = requiredLastRef;
     m_refDesTypes.push_back( newtype );
@@ -417,7 +417,7 @@ void DIALOG_BOARD_REANNOTATE::GetParameters()
         m_sortGridy = m_sortGridx;
     }
 
-    m_annotationScope = AnnotateAll;
+    m_annotationScope = ANNOTATE_ALL;
 
     for( wxRadioButton* button : m_scopeRadioButtons )
     {
@@ -429,7 +429,7 @@ void DIALOG_BOARD_REANNOTATE::GetParameters()
 
     // Ensure m_annotationScope value is valid
     if( m_annotationScope >= (int)m_scopeRadioButtons.size() )
-        m_annotationScope = AnnotateAll;
+        m_annotationScope = ANNOTATE_ALL;
 
     m_MessageWindow->SetLazyUpdate( true );
 }
@@ -453,7 +453,7 @@ int DIALOG_BOARD_REANNOTATE::RoundToGrid( int aCoord, int aGrid )
 
 /// Compare function used to compare ChangeArray element for sort
 /// @return true is A < B
-static bool ChangeArrayCompare( const RefDesChange& aA, const RefDesChange& aB )
+static bool ChangeArrayCompare( const REFDES_CHANGE& aA, const REFDES_CHANGE& aB )
 {
     return ( StrNumCmp( aA.OldRefDesString, aB.OldRefDesString ) < 0 );
 }
@@ -461,7 +461,7 @@ static bool ChangeArrayCompare( const RefDesChange& aA, const RefDesChange& aB )
 
 /// Compare function to sort footprints.
 /// @return true if the first coordinate should be before the second coordinate
-static bool ModuleCompare( const RefDesInfo& aA, const RefDesInfo& aB )
+static bool ModuleCompare( const REFDES_INFO& aA, const REFDES_INFO& aB )
 {
     int X0 = aA.roundedx, X1 = aB.roundedx, Y0 = aA.roundedy, Y1 = aB.roundedy;
 
@@ -501,15 +501,12 @@ wxString DIALOG_BOARD_REANNOTATE::CoordTowxString( int aX, int aY )
 
 void DIALOG_BOARD_REANNOTATE::ShowReport( const wxString& aMessage, SEVERITY aSeverity )
 {
-    size_t pos = 0, prev = 0;
+    wxStringTokenizer msgs( aMessage, wxT( "\n" ) );
 
-    do
+    while( msgs.HasMoreTokens() )
     {
-        pos = aMessage.ToStdString().find( '\n', prev );
-        m_MessageWindow->Report( aMessage.ToStdString().substr( prev, pos - prev ), aSeverity );
-        prev = pos + 1;
-    } while( std::string::npos != pos );
-
+        m_MessageWindow->Report( msgs.GetNextToken(), aSeverity );
+    }
 }
 
 
@@ -522,7 +519,7 @@ void DIALOG_BOARD_REANNOTATE::LogChangePlan()
                        "**********************************************************\n" ),
                     (int) m_refDesTypes.size() );
 
-    for( RefDesTypeStr Type : m_refDesTypes ) // Show all the types of refdes
+    for( REFDES_TYPE_STR Type : m_refDesTypes ) // Show all the types of refdes
         message += Type.RefDesType + ( 0 == ( i++ % 16 ) ? wxT( "\n" ) : wxS( " " ) );
 
     if( !m_excludeArray.empty() )
@@ -537,13 +534,13 @@ void DIALOG_BOARD_REANNOTATE::LogChangePlan()
 
     message += _( "\n    Change Array\n***********************\n" );
 
-    for( const RefDesChange& change : m_changeArray )
+    for( const REFDES_CHANGE& change : m_changeArray )
     {
         message += wxString::Format( wxT( "%s -> %s  %s %s\n" ),
                                      change.OldRefDesString,
                                      change.NewRefDes,
                                      ActionMessage[change.Action],
-                                     UpdateRefDes != change.Action ? _( " will be ignored" )
+                                     UPDATE_REFDES != change.Action ? _( " will be ignored" )
                                                                    : wxString( wxT( "" ) ) );
     }
 
@@ -552,7 +549,7 @@ void DIALOG_BOARD_REANNOTATE::LogChangePlan()
 
 
 void DIALOG_BOARD_REANNOTATE::LogFootprints( const wxString& aMessage,
-                                             const std::vector<RefDesInfo>& aFootprints )
+                                             const std::vector<REFDES_INFO>& aFootprints )
 {
     wxString message = aMessage;
 
@@ -569,7 +566,7 @@ void DIALOG_BOARD_REANNOTATE::LogFootprints( const wxString& aMessage,
 
         message += wxString::Format( _( "\nSort Code %d" ), m_sortCode );
 
-        for( const RefDesInfo& mod : aFootprints )
+        for( const REFDES_INFO& mod : aFootprints )
         {
             message += wxString::Format( _( "\n%d %s UUID: [%s], X, Y: %s, Rounded X, Y, %s" ),
                                          i++,
@@ -586,10 +583,10 @@ void DIALOG_BOARD_REANNOTATE::LogFootprints( const wxString& aMessage,
 
 bool DIALOG_BOARD_REANNOTATE::ReannotateBoard()
 {
-    std::vector<RefDesInfo> BadRefDes;
+    std::vector<REFDES_INFO> BadRefDes;
     wxString                message, badrefdes;
     STRING_FORMATTER        stringformatter;
-    RefDesChange*           newref;
+    REFDES_CHANGE*           newref;
     NETLIST                 netlist;
 
     if( !BuildFootprintList( BadRefDes ) )
@@ -606,7 +603,7 @@ bool DIALOG_BOARD_REANNOTATE::ReannotateBoard()
                            "schematic' checked.\n" ),
                         (int) BadRefDes.size() );
 
-        for( const RefDesInfo& mod : BadRefDes )
+        for( const REFDES_INFO& mod : BadRefDes )
         {
             badrefdes += wxString::Format( _( "\nRefDes: %s Footprint: %s:%s at %s on PCB." ),
                                            mod.RefDesString,
@@ -641,7 +638,7 @@ bool DIALOG_BOARD_REANNOTATE::ReannotateBoard()
 }
 
 
-bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<RefDesInfo>& aBadRefDes )
+bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<REFDES_INFO>& aBadRefDes )
 {
     bool annotateSelected = m_AnnotateSelection->GetValue();
     bool annotateFront = m_AnnotateFront->GetValue(); // Unless only doing back
@@ -685,7 +682,7 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<RefDesInfo>& aBadR
             m_excludeArray.push_back( exclude );
     }
 
-    RefDesInfo fpData;
+    REFDES_INFO fpData;
     bool       useModuleLocation = m_locationChoice->GetSelection() == 0;
 
     for( FOOTPRINT* footprint : m_footprints )
@@ -700,18 +697,18 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<RefDesInfo>& aBadR
         fpData.roundedx     = RoundToGrid( fpData.x, m_sortGridx ); // Round to sort
         fpData.roundedy     = RoundToGrid( fpData.y, m_sortGridy );
         fpData.Front        = footprint->GetLayer() == F_Cu;
-        fpData.Action       = UpdateRefDes; // Usually good
+        fpData.Action       = UPDATE_REFDES; // Usually good
 
         if( fpData.RefDesString.IsEmpty() )
         {
-            fpData.Action = EmptyRefDes;
+            fpData.Action = EMPTY_REFDES;
         }
         else
         {
             firstnum = fpData.RefDesString.find_first_of( wxT( "0123456789" ) );
 
             if( std::string::npos == firstnum )
-                fpData.Action = InvalidRefDes; // do not change ref des such as 12 or +1, or L
+                fpData.Action = INVALID_REFDES; // do not change ref des such as 12 or +1, or L
         }
 
         // Get the type (R, C, etc)
@@ -721,7 +718,7 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<RefDesInfo>& aBadR
         {
             if( excluded == fpData.RefDesType ) // Am I supposed to exclude this type?
             {
-                fpData.Action = Exclude; // Yes
+                fpData.Action = EXCLUDE_REFDES; // Yes
                 break;
             }
         }
@@ -730,18 +727,18 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<RefDesInfo>& aBadR
                 ( !fpData.Front && annotateFront ) ||     // If a back fp and doing front only
                 ( footprint->IsLocked() && skipLocked ) ) // If excluding locked and it is locked
         {
-            fpData.Action = Exclude;
+            fpData.Action = EXCLUDE_REFDES;
         }
 
         if( annotateSelected )
         {                                // If only annotating selected c
-            fpData.Action = Exclude;     // Assume it isn't selected
+            fpData.Action = EXCLUDE_REFDES;     // Assume it isn't selected
 
             for( KIID sel : selected )
             {
                 if( fpData.Uuid == sel )
                 {                                  // Found in selected footprints
-                    fpData.Action = UpdateRefDes;  // Update it
+                    fpData.Action = UPDATE_REFDES;  // Update it
                     break;
                 }
             }
@@ -791,8 +788,8 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<RefDesInfo>& aBadR
 
     for( size_t i = 0; i < changearraysize; i++ ) // Scan through for duplicates if update or skip
     {
-        if( ( m_changeArray[i].Action != EmptyRefDes )
-                && ( m_changeArray[i].Action != InvalidRefDes ) )
+        if( ( m_changeArray[i].Action != EMPTY_REFDES )
+                && ( m_changeArray[i].Action != INVALID_REFDES ) )
         {
             for( size_t j = i + 1; j < changearraysize; j++ )
             {
@@ -820,35 +817,35 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<RefDesInfo>& aBadR
 
 void DIALOG_BOARD_REANNOTATE::BuildUnavailableRefsList()
 {
-    std::vector<RefDesInfo> excludedFootprints;
+    std::vector<REFDES_INFO> excludedFootprints;
 
-    for( RefDesInfo fpData : m_frontFootprints )
+    for( REFDES_INFO fpData : m_frontFootprints )
     {
-        if( fpData.Action == Exclude )
+        if( fpData.Action == EXCLUDE_REFDES )
             excludedFootprints.push_back( fpData );
     }
 
-    for( RefDesInfo fpData : m_backFootprints )
+    for( REFDES_INFO fpData : m_backFootprints )
     {
-        if( fpData.Action == Exclude )
+        if( fpData.Action == EXCLUDE_REFDES )
             excludedFootprints.push_back( fpData );
     }
 
-    for( RefDesInfo fpData : excludedFootprints )
+    for( REFDES_INFO fpData : excludedFootprints )
     {
-        if( fpData.Action == Exclude )
+        if( fpData.Action == EXCLUDE_REFDES )
         {
-            RefDesTypeStr* refDesInfo = GetOrBuildRefDesInfo( fpData.RefDesType );
+            REFDES_TYPE_STR* refDesInfo = GetOrBuildRefDesInfo( fpData.RefDesType );
             refDesInfo->UnavailableRefs.insert( UTIL::GetRefDesNumber( fpData.RefDesString ) );
         }
     }
 }
 
 
-void DIALOG_BOARD_REANNOTATE::BuildChangeArray( std::vector<RefDesInfo>& aFootprints,
+void DIALOG_BOARD_REANNOTATE::BuildChangeArray( std::vector<REFDES_INFO>& aFootprints,
                                                 unsigned int aStartRefDes, const wxString& aPrefix,
                                                 bool aRemovePrefix,
-                                                std::vector<RefDesInfo>& aBadRefDes )
+                                                std::vector<REFDES_INFO>& aBadRefDes )
 {
     size_t   prefixsize = aPrefix.size();
 
@@ -869,9 +866,9 @@ void DIALOG_BOARD_REANNOTATE::BuildChangeArray( std::vector<RefDesInfo>& aFootpr
     }
 
 
-    for( RefDesInfo fpData : aFootprints )
+    for( REFDES_INFO fpData : aFootprints )
     {
-        RefDesChange change;
+        REFDES_CHANGE change;
 
         change.Uuid            = fpData.Uuid;
         change.Action          = fpData.Action;
@@ -880,16 +877,16 @@ void DIALOG_BOARD_REANNOTATE::BuildChangeArray( std::vector<RefDesInfo>& aFootpr
         change.Front           = fpData.Front;
 
         if( fpData.RefDesString.IsEmpty() )
-            fpData.Action = EmptyRefDes;
+            fpData.Action = EMPTY_REFDES;
 
-        if( ( change.Action == EmptyRefDes ) || ( change.Action == InvalidRefDes ) )
+        if( ( change.Action == EMPTY_REFDES ) || ( change.Action == INVALID_REFDES ) )
         {
             m_changeArray.push_back( change );
             aBadRefDes.push_back( fpData );
             continue;
         }
 
-        if( change.Action == UpdateRefDes )
+        if( change.Action == UPDATE_REFDES )
         {
             prefixpresent = ( 0 == fpData.RefDesType.find( aPrefix ) );
 
@@ -899,7 +896,7 @@ void DIALOG_BOARD_REANNOTATE::BuildChangeArray( std::vector<RefDesInfo>& aFootpr
             if( aRemovePrefix && prefixpresent ) // If there is a prefix remove it
                 fpData.RefDesType.erase( 0, prefixsize );
 
-            RefDesTypeStr* refDesInfo = GetOrBuildRefDesInfo( fpData.RefDesType, aStartRefDes );
+            REFDES_TYPE_STR* refDesInfo = GetOrBuildRefDesInfo( fpData.RefDesType, aStartRefDes );
             unsigned int  newRefDesNumber = refDesInfo->LastUsedRefDes + 1;
 
             while( refDesInfo->UnavailableRefs.count( newRefDesNumber ) )
@@ -914,7 +911,7 @@ void DIALOG_BOARD_REANNOTATE::BuildChangeArray( std::vector<RefDesInfo>& aFootpr
 }
 
 
-RefDesChange* DIALOG_BOARD_REANNOTATE::GetNewRefDes( FOOTPRINT* aFootprint )
+REFDES_CHANGE* DIALOG_BOARD_REANNOTATE::GetNewRefDes( FOOTPRINT* aFootprint )
 {
     size_t i;
 

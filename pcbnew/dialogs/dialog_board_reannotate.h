@@ -50,32 +50,32 @@
 #define MAXERROR 10
 #define VALIDPREFIX "_-+=/\\"  // Prefixs can be alpha or these symbols
 
-enum ActionCode
+enum ACTION_CODE
 {
-    UpdateRefDes,
-    EmptyRefDes,
-    InvalidRefDes,
-    Exclude
+    UPDATE_REFDES,
+    EMPTY_REFDES,
+    INVALID_REFDES,
+    EXCLUDE_REFDES
 };
 
-enum AnnotationScope
+enum ANNOTATION_SCOPE
 {
-    AnnotateAll = 0,
-    AnnotateFront,
-    AnnotateBack,
-    AnnotateSelected
+    ANNOTATE_ALL = 0,
+    ANNOTATE_FRONT,
+    ANNOTATE_BACK,
+    ANNOTATE_SELECTED
 };
 
-struct RefDesChange
+struct REFDES_CHANGE
 {
     KIID        Uuid;
     wxString    NewRefDes;          // The new reference designation (F_U21)
     wxString    OldRefDesString;    // What the old refdes preamble + number was
     bool        Front;              // True if on the front of the board
-    ActionCode  Action;             // Used to skip (if #, etc)
+    ACTION_CODE  Action;             // Used to skip (if #, etc)
 };
 
-struct RefDesInfo
+struct REFDES_INFO
 {
     KIID        Uuid;
     bool        Front;              // True if on the front of the board
@@ -83,11 +83,11 @@ struct RefDesInfo
     wxString    RefDesType;         // ie R, C, etc
     int         x, y;               // The coordinates
     int         roundedx, roundedy; // The coordinates after rounding.
-    ActionCode  Action;             // Used to skip (if #, etc)
+    ACTION_CODE  Action;             // Used to skip (if #, etc)
     LIB_ID      FPID;
 };
 
-struct RefDesTypeStr
+struct REFDES_TYPE_STR
 {
     wxString     RefDesType;
     unsigned int LastUsedRefDes;
@@ -145,7 +145,7 @@ private:
     void ShowReport( const wxString& aMessage, SEVERITY aSeverity );
 
 	/// Create a list of the footprints and their coordinates.
-    void LogFootprints( const wxString& aMessage, const std::vector<RefDesInfo>& aFootprints );
+    void LogFootprints( const wxString& aMessage, const std::vector<REFDES_INFO>& aFootprints );
 
     /// Create an audit trail of the changes.
     void LogChangePlan( void );
@@ -156,18 +156,18 @@ private:
 
     /// Build the footprint lists, sort it, filter for excludes, then build the change list.
     /// @return true if success, false if errors
-    bool BuildFootprintList( std::vector<RefDesInfo>& aBadRefDes );
+    bool BuildFootprintList( std::vector<REFDES_INFO>& aBadRefDes );
 
     /// Build list of unavailable references. E.g. unselected footprints or locked footprints.
     void BuildUnavailableRefsList();
 
     /// Scan through the footprint arrays and create the from -> to array.
-    void BuildChangeArray( std::vector<RefDesInfo>& aFootprints, unsigned int aStartRefDes,
+    void BuildChangeArray( std::vector<REFDES_INFO>& aFootprints, unsigned int aStartRefDes,
                            const wxString& aPrefix, bool aRemovePrefix,
-                           std::vector<RefDesInfo>& aBadRefDes );
+                           std::vector<REFDES_INFO>& aBadRefDes );
 
     /// @return the new reference for this footprint.
-    RefDesChange* GetNewRefDes( FOOTPRINT* aFootprint );
+    REFDES_CHANGE* GetNewRefDes( FOOTPRINT* aFootprint );
 
     /// Round an int coordinate to a suitable grid
     int RoundToGrid( int aCoord, int aGrid );
@@ -184,16 +184,16 @@ private:
 
     /// Get the structure representing the information currently held for aRefDesPrefix or create one
     /// if it doesn't exist
-    RefDesTypeStr* GetOrBuildRefDesInfo( const wxString& aRefDesPrefix, unsigned int aStartRefDes = 0 );
+    REFDES_TYPE_STR* GetOrBuildRefDesInfo( const wxString& aRefDesPrefix, unsigned int aStartRefDes = 0 );
 
     PCB_EDIT_FRAME*  m_frame;
     FOOTPRINTS       m_footprints;
     PCB_SELECTION    m_selection;
 
-    std::vector<RefDesChange>  m_changeArray;
-    std::vector<RefDesInfo>    m_frontFootprints;
-    std::vector<RefDesInfo>    m_backFootprints;
-    std::vector<RefDesTypeStr> m_refDesTypes;
+    std::vector<REFDES_CHANGE>  m_changeArray;
+    std::vector<REFDES_INFO>    m_frontFootprints;
+    std::vector<REFDES_INFO>    m_backFootprints;
+    std::vector<REFDES_TYPE_STR> m_refDesTypes;
     std::vector<wxString>      m_excludeArray;
 
     int m_sortCode;
