@@ -26,7 +26,7 @@ set( QA_SCHEMATIC_UTILS_SRCS
 add_library( qa_schematic_utils STATIC ${QA_SCHEMATIC_UTILS_SRCS} )
 
 
-target_include_directories( qa_schematic_utils PUBLIC BEFORE ${INC_BEFORE} )
+target_include_directories( qa_schematic_utils BEFORE PUBLIC ${INC_BEFORE} )
 
 target_include_directories( qa_schematic_utils PUBLIC
     include
