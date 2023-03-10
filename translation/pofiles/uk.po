@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:51-0800\n"
-"PO-Revision-Date: 2023-02-28 22:38+0000\n"
+"PO-Revision-Date: 2023-03-11 14:19+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
-"source/uk/>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
+"master-source/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.16-rc\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -5039,9 +5039,8 @@ msgid "Delete"
 msgstr "Видалити"
 
 #: common/grid_tricks.cpp:353
-#, fuzzy
 msgid "Clear contents of selected cells"
-msgstr "Видалити виділені комірки"
+msgstr "Очистити данні з вибраних чарунок"
 
 #: common/grid_tricks.cpp:354 common/tool/actions.cpp:171
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:105
@@ -11281,9 +11280,8 @@ msgid "Format %s"
 msgstr "Формат %s"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:186
-#, fuzzy
 msgid "<unknown>"
-msgstr "<Невідомо>"
+msgstr "<невідомо>"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:196
 #, c-format
@@ -11880,9 +11878,8 @@ msgstr "Оновити поля символу"
 
 #: eeschema/dialogs/dialog_user_defined_signals_base.h:63
 #: eeschema/tools/ee_actions.cpp:999
-#, fuzzy
 msgid "User-defined Signals"
-msgstr "Початок координат користувача"
+msgstr "Визначені користувачем сигнали"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:30
 msgid "Wire/bus width:"
@@ -14306,9 +14303,8 @@ msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr "Файл сховища не повністю оброблений (залишилося %d байт)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:500
-#, fuzzy
 msgid "Blanket not currently supported."
-msgstr "Маска під час компіляції не підтримується."
+msgstr "Покриття наразі не підтримується."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:504
 #, c-format
@@ -14325,9 +14321,8 @@ msgid "Record 'PIECHART' not handled."
 msgstr "Запис 'PIECHART' не обробляється."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:697
-#, fuzzy
 msgid "Parameter Set not currently supported."
-msgstr "Маска під час компіляції не підтримується."
+msgstr "Набір параметрів наразі не підтримується."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:722
 msgid "Compile mask not currently supported."
@@ -16108,9 +16103,9 @@ msgstr ""
 "'%s'"
 
 #: eeschema/sim/sim_model.cpp:783
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown simulation model pin '%s'"
-msgstr "Невідомий вузол '%s' в '%s'"
+msgstr "Невідома імітаційна модель на виводі '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:81
 #, c-format
@@ -16255,9 +16250,8 @@ msgid "Measure Time of Max"
 msgstr "Замір максимального часу"
 
 #: eeschema/sim/simulator_frame.cpp:200
-#, fuzzy
 msgid "Measure Integral"
-msgstr "Середній замір"
+msgstr "Вимір інтегральності"
 
 #: eeschema/sim/simulator_frame.cpp:313
 #, c-format
