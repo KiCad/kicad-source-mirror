@@ -24,7 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <limits.h>          // for INT_MAX
+#include <limits>
 #include <math.h>            // for hypot
 #include <map>
 #include <string>            // for basic_string
@@ -1884,7 +1884,7 @@ const VECTOR2I SHAPE_LINE_CHAIN::NearestPoint( const VECTOR2I& aP,
         return { 0, 0 };
     }
 
-    int min_d = INT_MAX;
+    int min_d = std::numeric_limits<int>::max();
     int nearest = 0;
 
     for( int i = 0; i < SegmentCount(); i++ )
@@ -1943,7 +1943,7 @@ const VECTOR2I SHAPE_LINE_CHAIN::NearestPoint( const SEG& aSeg, int& dist ) cons
 
     int nearest = 0;
 
-    dist = INT_MAX;
+    dist = std::numeric_limits<int>::max();
 
     for( int i = 0; i < PointCount(); i++ )
     {
@@ -1962,7 +1962,7 @@ const VECTOR2I SHAPE_LINE_CHAIN::NearestPoint( const SEG& aSeg, int& dist ) cons
 
 int SHAPE_LINE_CHAIN::NearestSegment( const VECTOR2I& aP ) const
 {
-    int min_d = INT_MAX;
+    int min_d = std::numeric_limits<int>::max();
     int nearest = 0;
 
     for( int i = 0; i < SegmentCount(); i++ )

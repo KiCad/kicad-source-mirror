@@ -24,7 +24,7 @@
  */
 
 #include <cmath>
-#include <limits.h>                               // for INT_MAX
+#include <limits>
 
 #include <geometry/seg.h>                         // for SEG
 #include <geometry/shape.h>
@@ -174,8 +174,8 @@ static VECTOR2I pushoutForce( const SHAPE_CIRCLE& aA, const SEG& aB, int aCleara
 static inline bool Collide( const SHAPE_CIRCLE& aA, const SHAPE_LINE_CHAIN_BASE& aB,
                             int aClearance, int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
-    int closest_dist = INT_MAX;
-    int closest_mtv_dist = INT_MAX;
+    int closest_dist = std::numeric_limits<int>::max();
+    int closest_mtv_dist = std::numeric_limits<int>::max();
     VECTOR2I nearest;
     int closest_mtv_seg = -1;
 
@@ -293,7 +293,7 @@ static inline bool Collide( const SHAPE_LINE_CHAIN_BASE& aA, const SHAPE_LINE_CH
                                            aA.TypeName(),
                                            aB.TypeName() ) );
 
-    int closest_dist = INT_MAX;
+    int closest_dist = std::numeric_limits<int>::max();
     VECTOR2I nearest;
 
     if( aB.IsClosed() && aA.GetPointCount() > 0 && aB.PointInside( aA.GetPoint( 0 ) ) )
@@ -375,7 +375,7 @@ static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_LINE_CHAIN_BASE& a
                                            aA.TypeName(),
                                            aB.TypeName() ) );
 
-    int closest_dist = INT_MAX;
+    int closest_dist = std::numeric_limits<int>::max();
     VECTOR2I nearest;
 
     if( aB.IsClosed() && aB.PointInside( aA.Centre() ) )
@@ -529,7 +529,7 @@ static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_LINE_CHAIN& aB, int
                                            aA.TypeName(),
                                            aB.TypeName() ) );
 
-    int      closest_dist = INT_MAX;
+    int      closest_dist = std::numeric_limits<int>::max();
     VECTOR2I nearest;
 
     if( aB.IsClosed() && aB.PointInside( aA.GetP0() ) )
@@ -619,7 +619,7 @@ static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_LINE_CHAIN_BASE& aB
                                            aA.TypeName(),
                                            aB.TypeName() ) );
 
-    int      closest_dist = INT_MAX;
+    int      closest_dist = std::numeric_limits<int>::max();
     VECTOR2I nearest;
 
     if( aB.IsClosed() && aB.PointInside( aA.GetP0() ) )

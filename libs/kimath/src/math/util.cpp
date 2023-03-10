@@ -26,7 +26,7 @@
 
 #include <cmath>
 #include <cstdlib>
-#include <climits>
+#include <limits>
 #include <math/util.h>
 #include <wx/log.h>
 #include <wx/string.h>
@@ -126,9 +126,9 @@ int64_t rescale( int64_t aNumerator, int64_t aValue, int64_t aDenominator )
 
     r = c / 2;
 
-    if( b <= INT_MAX && c <= INT_MAX )
+    if( b <= std::numeric_limits<int>::max() && c <= std::numeric_limits<int>::max() )
     {
-        if( a <= INT_MAX )
+        if( a <= std::numeric_limits<int>::max() )
             return sign * ( ( a * b + r ) / c );
         else
             return sign * ( a / c * b + ( a % c * b + r ) / c);
