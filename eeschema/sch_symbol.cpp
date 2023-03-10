@@ -1313,7 +1313,7 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth, const SCH_SHEET_PA
 
     if( sheet )
     {
-        if( sheet->ResolveTextVar( token, aDepth + 1 ) )
+        if( sheet->ResolveTextVar( aPath, token, aDepth + 1 ) )
             return true;
     }
 

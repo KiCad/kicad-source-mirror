@@ -353,7 +353,7 @@ wxString SCH_TEXT::GetShownText( const SCH_SHEET_PATH* aPath, int aDepth, bool a
             {
                 if( sheet )
                 {
-                    if( sheet->ResolveTextVar( token, aDepth + 1 ) )
+                    if( sheet->ResolveTextVar( aPath, token, aDepth + 1 ) )
                         return true;
                 }
 
