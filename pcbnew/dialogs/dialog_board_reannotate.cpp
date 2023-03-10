@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Brian Piccioni brian@documenteddesigns.com
- * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Brian Piccioni <brian@documenteddesigns.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -105,6 +105,16 @@ DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame )
     m_Config = Kiface().KifaceSettings();
     InitValues();
 
+    // Init bitmaps associated to some wxRadioButton
+    reannotate_down_right_bitmap->SetBitmap( KiBitmap( BITMAPS::reannotate_right_down ) );
+    reannotate_right_down_bitmap->SetBitmap( KiBitmap( BITMAPS::reannotate_left_down ) );
+    reannotate_down_left_bitmap->SetBitmap( KiBitmap( BITMAPS::reannotate_right_up ) );
+    reannotate_left_down_bitmap->SetBitmap( KiBitmap( BITMAPS::reannotate_left_up ) );
+    reannotate_up_right_bitmap->SetBitmap( KiBitmap( BITMAPS::reannotate_down_left ) );
+    reannotate_right_up_bitmap->SetBitmap( KiBitmap( BITMAPS::reannotate_up_left ) );
+    reannotate_up_left_bitmap->SetBitmap( KiBitmap( BITMAPS::reannotate_down_right ) );
+    reannotate_left_up_bitmap->SetBitmap( KiBitmap( BITMAPS::reannotate_up_right ) );
+
     m_FrontRefDesStart->SetValidator( wxTextValidator( wxFILTER_DIGITS ) );
     m_BackRefDesStart->SetValidator( wxTextValidator( wxFILTER_DIGITS ) );
 
@@ -125,29 +135,27 @@ DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame )
     m_GridChoice->Set( gridslist );
     m_GridChoice->SetSelection( m_gridIndex );
 
+    // Ensure m_sortCode is a valid value (0 .. m_sortButtons.size()-1)
+    m_sortCode = std::max( 0, m_sortCode );
+    m_sortCode = std::min( m_sortCode, (int)m_sortButtons.size()-1 );
+
     for( wxRadioButton* button : m_sortButtons )
         button->SetValue( false );
-
-    m_sortButtons[m_sortCode]->SetValue( true );
 
     m_selection = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
 
     if( !m_selection.Empty() )
         m_annotationScope = AnnotateSelected;
 
+    // Ensure m_annotationScope is a valid value (0 .. m_scopeRadioButtons.size()-1)
+    m_annotationScope = std::max( 0, m_annotationScope );
+    m_annotationScope = std::min( m_annotationScope, (int)m_scopeRadioButtons.size()-1 );
+
     for( wxRadioButton* button : m_scopeRadioButtons )
         button->SetValue( false );
 
-    m_scopeRadioButtons[m_annotationScope]->SetValue( true );
-
-    reannotate_down_right_bitmap->SetBitmap( KiBitmap( BITMAPS::reannotate_right_down ) );
-    reannotate_right_down_bitmap->SetBitmap( KiBitmap( BITMAPS::reannotate_left_down ) );
-    reannotate_down_left_bitmap->SetBitmap( KiBitmap( BITMAPS::reannotate_right_up ) );
-    reannotate_left_down_bitmap->SetBitmap( KiBitmap( BITMAPS::reannotate_left_up ) );
-    reannotate_up_right_bitmap->SetBitmap( KiBitmap( BITMAPS::reannotate_down_left ) );
-    reannotate_right_up_bitmap->SetBitmap( KiBitmap( BITMAPS::reannotate_up_left ) );
-    reannotate_up_left_bitmap->SetBitmap( KiBitmap( BITMAPS::reannotate_down_right ) );
-    reannotate_left_up_bitmap->SetBitmap( KiBitmap( BITMAPS::reannotate_up_right ) );
+    m_scopeRadioButtons.at( m_annotationScope )->SetValue( true );
+    m_sortButtons.at( m_sortCode )->SetValue( true );
 
     m_ExcludeList->SetToolTip( m_ExcludeListText->GetToolTipText() );
     m_GridChoice->SetToolTip( m_SortGridText->GetToolTipText() );
@@ -418,6 +426,10 @@ void DIALOG_BOARD_REANNOTATE::GetParameters()
         else
             m_annotationScope++;
     }
+
+    // Ensure m_annotationScope value is valid
+    if( m_annotationScope >= (int)m_scopeRadioButtons.size() )
+        m_annotationScope = AnnotateAll;
 
     m_MessageWindow->SetLazyUpdate( true );
 }

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -42,7 +42,7 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 	fgSizerButtons->SetFlexibleDirection( wxBOTH );
 	fgSizerButtons->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_Down_Right = new wxRadioButton( m_StandardOptions, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_Down_Right = new wxRadioButton( m_StandardOptions, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	m_Down_Right->SetValue( true );
 	fgSizerButtons->Add( m_Down_Right, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
@@ -99,7 +99,7 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 	fgSizerButtons->Add( m_Right_Up, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	reannotate_right_up_bitmap = new wxStaticBitmap( m_StandardOptions, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 48,48 ), 0 );
-	reannotate_right_up_bitmap->SetToolTip( _("Vertically: top right to bottom left") );
+	reannotate_right_up_bitmap->SetToolTip( _("Vertically: bottom left to top right") );
 
 	fgSizerButtons->Add( reannotate_right_up_bitmap, 0, wxALL, 5 );
 
@@ -110,7 +110,7 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 	fgSizerButtons->Add( m_Up_Left, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	reannotate_up_left_bitmap = new wxStaticBitmap( m_StandardOptions, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 48,48 ), 0 );
-	reannotate_up_left_bitmap->SetToolTip( _("Vertically: bottom left to top right") );
+	reannotate_up_left_bitmap->SetToolTip( _("Vertically: top right to bottom left") );
 
 	fgSizerButtons->Add( reannotate_up_left_bitmap, 0, wxALL, 5 );
 
@@ -177,7 +177,7 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 	fgSizer6111->SetFlexibleDirection( wxVERTICAL );
 	fgSizer6111->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_NONE );
 
-	m_AnnotateAll = new wxRadioButton( m_StandardOptions, wxID_ANY, _("All"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_AnnotateAll = new wxRadioButton( m_StandardOptions, wxID_ANY, _("All"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	m_AnnotateAll->SetValue( true );
 	fgSizer6111->Add( m_AnnotateAll, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
