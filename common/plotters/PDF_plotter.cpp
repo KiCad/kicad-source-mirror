@@ -513,10 +513,11 @@ void PDF_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double
 
                 if( alpha < 0xFF )
                 {
-                    float a = 1.0 - ( (float) alpha / 255.0 );
-                    r = ( int )( r + ( a * 0xFF ) ) & 0xFF;
-                    g = ( int )( g + ( a * 0xFF ) ) & 0xFF;
-                    b = ( int )( b + ( a * 0xFF ) ) & 0xFF;
+                    float d = alpha / 255.0;
+                    float a = 1.0 - d;
+                    r = std::min( KiROUND( r * d + ( a * 0xFF ) ), 0xFF );
+                    g = std::min( KiROUND( g * d + ( a * 0xFF ) ), 0xFF );
+                    b = std::min( KiROUND( b * d + ( a * 0xFF ) ), 0xFF );
                 }
             }
 
