@@ -489,8 +489,10 @@ target_link_libraries( common
     pybind11::embed
     compoundfilereader
     pcm_settings
-    nanodbc # for now; maybe hoist out of common
     Boost::headers
+    # Database support needs these two
+    nanodbc # for now; maybe hoist out of common
+    Boost::locale
     ${CURL_LIBRARIES}
     ${wxWidgets_LIBRARIES}
     ${EXTRA_LIBS}

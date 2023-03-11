@@ -775,6 +775,13 @@ include_directories( SYSTEM ${PIXMAN_INCLUDE_DIR} )
 
 #
 # Find Boost headers and libraries, required.
+set( BOOST_REQUESTED_COMPONENTS locale )    # locale is required by nanoodbc/database libraries
+
+if( KICAD_BUILD_QA_TESTS )
+    # required by the unit test framework
+    list( APPEND BOOST_REQUESTED_COMPONENTS unit_test_framework system )
+endif()
+
 find_package( Boost 1.71.0 REQUIRED COMPONENTS ${BOOST_REQUESTED_COMPONENTS} )
 
 #

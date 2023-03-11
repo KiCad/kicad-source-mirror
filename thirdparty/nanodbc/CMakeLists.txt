@@ -174,7 +174,7 @@ add_library(nanodbc
         nanodbc/nanodbc.cpp
         nanodbc/nanodbc.h)
 
-target_link_libraries(nanodbc ${Boost_LIBRARIES} ${ODBC_LIBRARIES})
+target_link_libraries(nanodbc Boost::locale ${ODBC_LIBRARIES})
 
 if(APPLE)
   target_link_libraries(nanodbc ${ODBC_LINK_FLAGS})
