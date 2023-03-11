@@ -775,9 +775,6 @@ include_directories( SYSTEM ${PIXMAN_INCLUDE_DIR} )
 
 #
 # Find Boost headers and libraries, required.
-if( KICAD_BUILD_QA_TESTS )
-    list( APPEND BOOST_REQUESTED_COMPONENTS unit_test_framework system )
-endif()
 find_package( Boost 1.71.0 REQUIRED COMPONENTS ${BOOST_REQUESTED_COMPONENTS} )
 
 #

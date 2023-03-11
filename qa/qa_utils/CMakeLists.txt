@@ -38,8 +38,8 @@ add_library( qa_utils STATIC
 
 include_directories( BEFORE ${INC_BEFORE} )
 
-# for some obscure reason, on mingw/msys2 ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} does not work
-# So use the actual the lib filename:
+# for some obscure reason, on mingw/msys2 Boost::unit_test_framework does not work
+# So use the actual lib filename:
 if( MINGW )
     set( LIBBOOST_UNIT_TEST_LIB libboost_unit_test_framework-mt )
 endif()

@@ -19,6 +19,9 @@
 # or you may write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 
+list( APPEND BOOST_REQUESTED_COMPONENTS unit_test_framework system )
+find_package( Boost 1.71.0 REQUIRED COMPONENTS ${BOOST_REQUESTED_COMPONENTS} )
+
 include(KiCadQABuildUtils)
 
 if( KICAD_TEST_XML_OUTPUT )
