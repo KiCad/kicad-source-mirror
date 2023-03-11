@@ -779,7 +779,7 @@ set( BOOST_REQUESTED_COMPONENTS locale )    # locale is required by nanoodbc/dat
 
 if( KICAD_BUILD_QA_TESTS )
     # required by the unit test framework
-    list( APPEND BOOST_REQUESTED_COMPONENTS unit_test_framework system )
+    list( APPEND BOOST_REQUESTED_COMPONENTS unit_test_framework )
 endif()
 
 find_package( Boost 1.71.0 REQUIRED COMPONENTS ${BOOST_REQUESTED_COMPONENTS} )

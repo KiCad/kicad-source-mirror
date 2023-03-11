@@ -70,7 +70,6 @@ target_link_libraries( qa_gerbview
     ${PYTHON_LIBRARIES}
     Boost::headers
     Boost::unit_test_framework
-    Boost::system
     ${PCBNEW_EXTRA_LIBS}    # -lrt must follow Boost
 )
 

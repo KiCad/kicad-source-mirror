@@ -36,7 +36,6 @@ target_link_libraries( qa_sexpr
     qa_utils
     Boost::headers
     Boost::unit_test_framework
-    Boost::system
     ${wxWidgets_LIBRARIES}
 )
 

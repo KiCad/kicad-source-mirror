@@ -76,6 +76,5 @@ target_link_libraries( libeval_compiler_test
     pcbcommon
     Boost::headers
     Boost::unit_test_framework
-    Boost::system
     ${wxWidgets_LIBRARIES}
 )
