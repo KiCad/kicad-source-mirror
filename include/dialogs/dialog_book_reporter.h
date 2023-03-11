@@ -33,13 +33,12 @@ class wxHtmlLinkEvent;
 class DIALOG_BOOK_REPORTER : public DIALOG_BOOK_REPORTER_BASE
 {
 public:
-    DIALOG_BOOK_REPORTER( KIWAY_PLAYER* aParent );
-
-    void FinishInitialization();
+    DIALOG_BOOK_REPORTER( KIWAY_PLAYER* aParent, const wxString& aDialogName,
+                          const wxString& aDialogTitle );
 
     void OnOK( wxCommandEvent& aEvent ) override
     {
-        Close();
+        Destroy();
     }
 
     void OnErrorLinkClicked( wxHtmlLinkEvent& aEvent );

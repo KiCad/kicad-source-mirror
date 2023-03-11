@@ -26,17 +26,22 @@
 #include <wx/wxhtml.h>
 
 
-DIALOG_BOOK_REPORTER::DIALOG_BOOK_REPORTER( KIWAY_PLAYER* aParent ) :
+DIALOG_BOOK_REPORTER::DIALOG_BOOK_REPORTER( KIWAY_PLAYER* aParent, const wxString& aDialogName,
+                                            const wxString& aDialogTitle ) :
         DIALOG_BOOK_REPORTER_BASE( aParent ),
         m_frame( aParent )
 {
-}
+    SetName( aDialogName );
+    SetTitle( aDialogTitle );
 
+    aParent->Bind( wxEVT_CLOSE_WINDOW,
+                   [this]( wxCloseEvent& aEvent )
+                   {
+                       Close();
+                       aEvent.Skip();
+                   } );
 
-void DIALOG_BOOK_REPORTER::FinishInitialization()
-{
     SetupStandardButtons();
-    finishDialogSettings();
 }
 
 

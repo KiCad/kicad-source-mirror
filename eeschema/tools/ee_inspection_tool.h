@@ -72,14 +72,11 @@ public:
 private:
     SYMBOL_DIFF_WIDGET* constructDiffPanel( wxPanel* aParentPanel );
 
-    void onDiffSymbolDialogClosed( wxCommandEvent& aEvent );
-
     ///< @copydoc TOOL_INTERACTIVE::setTransitions();
     void setTransitions() override;
 
 private:
-    DIALOG_ERC*                           m_ercDialog;
-    std::unique_ptr<DIALOG_BOOK_REPORTER> m_diffSymbolDialog;
+    DIALOG_ERC* m_ercDialog;
 };
 
 #endif /* EE_INSPECTION_TOOL_H */

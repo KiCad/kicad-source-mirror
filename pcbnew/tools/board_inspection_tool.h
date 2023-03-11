@@ -117,11 +117,6 @@ private:
     ///< Bind handlers to corresponding TOOL_ACTIONs.
     void setTransitions() override;
 
-    void onListNetsDialogClosed( wxCommandEvent& aEvent );
-    void onInspectClearanceDialogClosed( wxCommandEvent& aEvent );
-    void onInspectConstraintsDialogClosed( wxCommandEvent& aEvent );
-    void onDiffFootprintDialogClosed( wxCommandEvent& event );
-
     DRC_ENGINE makeDRCEngine( bool* aCompileError, bool* aCourtyardError = nullptr );
 
     wxString getItemDescription( BOARD_ITEM* aItem );
@@ -141,13 +136,6 @@ private:
     std::set<int>       m_lastHighlighted;      // For toggling between last two highlighted nets
 
     CONNECTIVITY_DATA*  m_dynamicData;      // Cached connectivity data from the selection
-
-    std::unique_ptr<DIALOG_NET_INSPECTOR> m_listNetsDialog;
-    DIALOG_NET_INSPECTOR::SETTINGS        m_listNetsDialogSettings;
-
-    std::unique_ptr<DIALOG_BOOK_REPORTER> m_inspectClearanceDialog;
-    std::unique_ptr<DIALOG_BOOK_REPORTER> m_inspectConstraintsDialog;
-    std::unique_ptr<DIALOG_BOOK_REPORTER> m_diffFootprintDialog;
 };
 
 #endif //BOARD_INSPECTION_TOOL_H

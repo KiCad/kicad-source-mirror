@@ -44,6 +44,12 @@
 #include <pad.h>
 
 
+#define LIST_NETS_DIALOG_NAME wxT( "ListNetsDialog" )
+#define INSPECT_CLEARANCE_DIALOG_NAME wxT( "InspectClearanceDialog" )
+#define INSPECT_CONSTRAINTS_DIALOG_NAME wxT( "InspectConstraintsDialog" )
+#define DIFF_FOOTPRINTS_DIALOG_NAME wxT( "DiffFootprintsDialog" )
+
+
 BOARD_INSPECTION_TOOL::BOARD_INSPECTION_TOOL() :
         PCB_TOOL_BASE( "pcbnew.InspectionTool" ),
         m_frame( nullptr )
@@ -242,15 +248,13 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
     BOARD_CONNECTED_ITEM* ac = dynamic_cast<BOARD_CONNECTED_ITEM*>( a );
     BOARD_CONNECTED_ITEM* bc = dynamic_cast<BOARD_CONNECTED_ITEM*>( b );
     PCB_LAYER_ID          layer = m_frame->GetActiveLayer();
+    wxWindow*             window = wxWindow::FindWindowByName( INSPECT_CLEARANCE_DIALOG_NAME );
+    DIALOG_BOOK_REPORTER* dialog = dynamic_cast<DIALOG_BOOK_REPORTER*>( window );
 
-    if( m_inspectClearanceDialog == nullptr )
+    if( !dialog )
     {
-        m_inspectClearanceDialog = std::make_unique<DIALOG_BOOK_REPORTER>( m_frame );
-        m_inspectClearanceDialog->SetTitle( _( "Violation Report" ) );
-
-        m_inspectClearanceDialog->Connect( wxEVT_CLOSE_WINDOW,
-                    wxCommandEventHandler( BOARD_INSPECTION_TOOL::onInspectClearanceDialogClosed ),
-                    nullptr, this );
+        dialog = new DIALOG_BOOK_REPORTER( m_frame, INSPECT_CLEARANCE_DIALOG_NAME,
+                                           _( "Violation Report" ) );
     }
 
     WX_HTML_REPORT_BOX* r = nullptr;
@@ -272,7 +276,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
                 break;
         }
 
-        r = m_inspectClearanceDialog->AddHTMLPage( _( "Uncoupled Length" ) );
+        r = dialog->AddHTMLPage( _( "Uncoupled Length" ) );
         reportHeader( _( "Diff pair uncoupled length resolution for:" ), ac, bc, r );
 
         if( compileError )
@@ -287,7 +291,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
     }
 
     case DRCE_TEXT_HEIGHT:
-        r = m_inspectClearanceDialog->AddHTMLPage( _( "Text Height" ) );
+        r = dialog->AddHTMLPage( _( "Text Height" ) );
         reportHeader( _( "Text height resolution for:" ), a, r );
 
         if( compileError )
@@ -302,7 +306,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         break;
 
     case DRCE_TEXT_THICKNESS:
-        r = m_inspectClearanceDialog->AddHTMLPage( _( "Text Thickness" ) );
+        r = dialog->AddHTMLPage( _( "Text Thickness" ) );
         reportHeader( _( "Text thickness resolution for:" ), a, r );
 
         if( compileError )
@@ -317,7 +321,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         break;
 
     case DRCE_TRACK_WIDTH:
-        r = m_inspectClearanceDialog->AddHTMLPage( _( "Track Width" ) );
+        r = dialog->AddHTMLPage( _( "Track Width" ) );
         reportHeader( _( "Track width resolution for:" ), a, r );
 
         if( compileError )
@@ -332,7 +336,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         break;
 
     case DRCE_CONNECTION_WIDTH:
-        r = m_inspectClearanceDialog->AddHTMLPage( _( "Connection Width" ) );
+        r = dialog->AddHTMLPage( _( "Connection Width" ) );
         reportHeader( _( "Connection width resolution for:" ), a, b, r );
 
         if( compileError )
@@ -346,7 +350,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         break;
 
     case DRCE_VIA_DIAMETER:
-        r = m_inspectClearanceDialog->AddHTMLPage( _( "Via Diameter" ) );
+        r = dialog->AddHTMLPage( _( "Via Diameter" ) );
         reportHeader( _( "Via diameter resolution for:" ), a, r );
 
         if( compileError )
@@ -361,7 +365,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         break;
 
     case DRCE_ANNULAR_WIDTH:
-        r = m_inspectClearanceDialog->AddHTMLPage( _( "Via Annulus" ) );
+        r = dialog->AddHTMLPage( _( "Via Annulus" ) );
         reportHeader( _( "Via annular width resolution for:" ), a, r );
 
         if( compileError )
@@ -377,7 +381,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
 
     case DRCE_DRILL_OUT_OF_RANGE:
     case DRCE_MICROVIA_DRILL_OUT_OF_RANGE:
-        r = m_inspectClearanceDialog->AddHTMLPage( _( "Hole Size" ) );
+        r = dialog->AddHTMLPage( _( "Hole Size" ) );
         reportHeader( _( "Hole diameter resolution for:" ), a, r );
 
         if( compileError )
@@ -392,7 +396,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         break;
 
     case DRCE_HOLE_CLEARANCE:
-        r = m_inspectClearanceDialog->AddHTMLPage( _( "Hole Clearance" ) );
+        r = dialog->AddHTMLPage( _( "Hole Clearance" ) );
         reportHeader( _( "Hole clearance resolution for:" ), a, b, r );
 
         if( compileError )
@@ -436,7 +440,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         break;
 
     case DRCE_DRILLED_HOLES_TOO_CLOSE:
-        r = m_inspectClearanceDialog->AddHTMLPage( _( "Hole to Hole" ) );
+        r = dialog->AddHTMLPage( _( "Hole to Hole" ) );
         reportHeader( _( "Hole to hole clearance resolution for:" ), a, b, r );
 
         if( compileError )
@@ -451,7 +455,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         break;
 
     case DRCE_EDGE_CLEARANCE:
-        r = m_inspectClearanceDialog->AddHTMLPage( _( "Edge Clearance" ) );
+        r = dialog->AddHTMLPage( _( "Edge Clearance" ) );
         reportHeader( _( "Edge clearance resolution for:" ), a, b, r );
 
         if( compileError )
@@ -493,7 +497,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
                 layer = B_Cu;
         }
 
-        r = m_inspectClearanceDialog->AddHTMLPage( _( "Clearance" ) );
+        r = dialog->AddHTMLPage( _( "Clearance" ) );
         reportHeader( _( "Clearance resolution for:" ), a, b, layer, r );
 
         if( compileError )
@@ -542,8 +546,8 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
 
     r->Flush();
 
-    m_inspectClearanceDialog->Raise();
-    m_inspectClearanceDialog->Show( true );
+    dialog->Raise();
+    dialog->Show( true );
 }
 
 
@@ -592,17 +596,16 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
     // a and b could be null after group tests above.
     wxCHECK( a && b, 0 );
 
-    if( m_inspectClearanceDialog == nullptr )
-    {
-        m_inspectClearanceDialog = std::make_unique<DIALOG_BOOK_REPORTER>( m_frame );
-        m_inspectClearanceDialog->SetTitle( _( "Clearance Report" ) );
+    wxWindow*             window = wxWindow::FindWindowByName( INSPECT_CLEARANCE_DIALOG_NAME );
+    DIALOG_BOOK_REPORTER* dialog = dynamic_cast<DIALOG_BOOK_REPORTER*>( window );
 
-        m_inspectClearanceDialog->Connect( wxEVT_CLOSE_WINDOW,
-                    wxCommandEventHandler( BOARD_INSPECTION_TOOL::onInspectClearanceDialogClosed ),
-                    nullptr, this );
+    if( !dialog )
+    {
+        dialog = new DIALOG_BOOK_REPORTER( m_frame, INSPECT_CLEARANCE_DIALOG_NAME,
+                                           _( "Clearance Report" ) );
     }
 
-    m_inspectClearanceDialog->DeleteAllPages();
+    dialog->DeleteAllPages();
 
     if( a->Type() != PCB_ZONE_T && b->Type() == PCB_ZONE_T )
         std::swap( a, b );
@@ -634,7 +637,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         else if( zone->GetLayerSet().count() > 0 )
             layer = zone->GetLayerSet().Seq().front();
 
-        r = m_inspectClearanceDialog->AddHTMLPage( _( "Zone" ) );
+        r = dialog->AddHTMLPage( _( "Zone" ) );
         reportHeader( _( "Zone connection resolution for:" ), a, b, layer, r );
 
         constraint = drcEngine.EvalZoneConnection( pad, zone, layer, r );
@@ -757,7 +760,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         if( !copperIntersection.test( layer ) )
             layer = copperIntersection.Seq().front();
 
-        r = m_inspectClearanceDialog->AddHTMLPage( m_frame->GetBoard()->GetLayerName( layer ) );
+        r = dialog->AddHTMLPage( m_frame->GetBoard()->GetLayerName( layer ) );
         reportHeader( _( "Clearance resolution for:" ), a, b, layer, r );
 
         if( ac && bc && ac->GetNetCode() > 0 && ac->GetNetCode() == bc->GetNetCode() )
@@ -800,7 +803,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         if( DRC_ENGINE::MatchDpSuffix( refNet->GetNetname(), coupledNet, dummy )
                 && bc->GetNetname() == coupledNet )
         {
-            r = m_inspectClearanceDialog->AddHTMLPage( _( "Diff Pair" ) );
+            r = dialog->AddHTMLPage( _( "Diff Pair" ) );
             reportHeader( _( "Diff pair gap resolution for:" ), ac, bc, active, r );
 
             constraint = drcEngine.EvalRules( DIFF_PAIR_GAP_CONSTRAINT, ac, bc, active, r );
@@ -867,7 +870,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         if( ( a->IsOnLayer( layer ) && isOnCorrespondingLayer( b, layer, &warning ) )
             || ( b->IsOnLayer( layer ) && isOnCorrespondingLayer( a, layer, &warning ) ) )
         {
-            r = m_inspectClearanceDialog->AddHTMLPage( m_frame->GetBoard()->GetLayerName( layer ) );
+            r = dialog->AddHTMLPage( m_frame->GetBoard()->GetLayerName( layer ) );
             reportHeader( _( "Silkscreen clearance resolution for:" ), a, b, layer, r );
 
             constraint = drcEngine.EvalRules( SILK_CLEARANCE_CONSTRAINT, a, b, layer, r );
@@ -895,7 +898,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
         if( aCourtyard && bCourtyard )
         {
-            r = m_inspectClearanceDialog->AddHTMLPage( m_frame->GetBoard()->GetLayerName( layer ) );
+            r = dialog->AddHTMLPage( m_frame->GetBoard()->GetLayerName( layer ) );
             reportHeader( _( "Courtyard clearance resolution for:" ), a, b, layer, r );
 
             constraint = drcEngine.EvalRules( COURTYARD_CLEARANCE_CONSTRAINT, a, b, layer, r );
@@ -930,7 +933,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         {
             if( !pageAdded )
             {
-                r = m_inspectClearanceDialog->AddHTMLPage( _( "Hole" ) );
+                r = dialog->AddHTMLPage( _( "Hole" ) );
                 pageAdded = true;
             }
             else
@@ -959,7 +962,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         {
             if( !pageAdded )
             {
-                r = m_inspectClearanceDialog->AddHTMLPage( _( "Hole" ) );
+                r = dialog->AddHTMLPage( _( "Hole" ) );
                 pageAdded = true;
             }
             else
@@ -1007,7 +1010,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         if( layer >= 0 )
         {
             wxString layerName = m_frame->GetBoard()->GetLayerName( edgeLayer );
-            r = m_inspectClearanceDialog->AddHTMLPage( layerName + wxS( " " ) + _( "Clearance" ) );
+            r = dialog->AddHTMLPage( layerName + wxS( " " ) + _( "Clearance" ) );
             reportHeader( _( "Edge clearance resolution for:" ), a, b, layer, r );
 
             constraint = drcEngine.EvalRules( EDGE_CLEARANCE_CONSTRAINT, a, b, layer, r );
@@ -1024,7 +1027,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         }
     }
 
-    r = m_inspectClearanceDialog->AddHTMLPage( _( "Physical Clearances" ) );
+    r = dialog->AddHTMLPage( _( "Physical Clearances" ) );
 
     auto reportPhysicalClearance =
             [&]( PCB_LAYER_ID aLayer )
@@ -1119,8 +1122,8 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
     r->Flush();
 
-    m_inspectClearanceDialog->Raise();
-    m_inspectClearanceDialog->Show( true );
+    dialog->Raise();
+    dialog->Show( true );
     return 0;
 }
 
@@ -1138,17 +1141,16 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    if( m_inspectConstraintsDialog == nullptr )
-    {
-        m_inspectConstraintsDialog = std::make_unique<DIALOG_BOOK_REPORTER>( m_frame );
-        m_inspectConstraintsDialog->SetTitle( _( "Constraints Report" ) );
+    wxWindow*             window = wxWindow::FindWindowByName( INSPECT_CONSTRAINTS_DIALOG_NAME );
+    DIALOG_BOOK_REPORTER* dialog = dynamic_cast<DIALOG_BOOK_REPORTER*>( window );
 
-        m_inspectConstraintsDialog->Connect( wxEVT_CLOSE_WINDOW,
-                wxCommandEventHandler( BOARD_INSPECTION_TOOL::onInspectConstraintsDialogClosed ),
-                nullptr, this );
+    if( !dialog )
+    {
+        dialog = new DIALOG_BOOK_REPORTER( m_frame, INSPECT_CONSTRAINTS_DIALOG_NAME,
+                                           _( "Constraints Report" ) );
     }
 
-    m_inspectConstraintsDialog->DeleteAllPages();
+    dialog->DeleteAllPages();
 
     BOARD_ITEM*    item = static_cast<BOARD_ITEM*>( selection.GetItem( 0 ) );
     bool           compileError = false;
@@ -1160,7 +1162,7 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 
     if( item->Type() == PCB_TRACE_T )
     {
-        r = m_inspectConstraintsDialog->AddHTMLPage( _( "Track Width" ) );
+        r = dialog->AddHTMLPage( _( "Track Width" ) );
         reportHeader( _( "Track width resolution for:" ), item, r );
 
         constraint = EVAL_RULES( TRACK_WIDTH_CONSTRAINT, item, nullptr, item->GetLayer(), r );
@@ -1179,7 +1181,7 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 
     if( item->Type() == PCB_VIA_T )
     {
-        r = m_inspectConstraintsDialog->AddHTMLPage( _( "Via Diameter" ) );
+        r = dialog->AddHTMLPage( _( "Via Diameter" ) );
         reportHeader( _( "Via diameter resolution for:" ), item, r );
 
         // PADSTACKS TODO: once we have padstacks we'll need to run this per-layer....
@@ -1196,7 +1198,7 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 
         r->Flush();
 
-        r = m_inspectConstraintsDialog->AddHTMLPage( _( "Via Annular Width" ) );
+        r = dialog->AddHTMLPage( _( "Via Annular Width" ) );
         reportHeader( _( "Via annular width resolution for:" ), item, r );
 
         // PADSTACKS TODO: once we have padstacks we'll need to run this per-layer....
@@ -1217,7 +1219,7 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
     if( ( item->Type() == PCB_PAD_T && static_cast<PAD*>( item )->GetDrillSize().x > 0 )
             || item->Type() == PCB_VIA_T )
     {
-        r = m_inspectConstraintsDialog->AddHTMLPage( _( "Hole Size" ) );
+        r = dialog->AddHTMLPage( _( "Hole Size" ) );
         reportHeader( _( "Hole diameter resolution for:" ), item, r );
 
         // PADSTACKS TODO: once we have padstacks we'll need to run this per-layer....
@@ -1239,7 +1241,7 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
             || item->Type() == PCB_TEXTBOX_T
             || item->Type() == PCB_FP_TEXT_T )
     {
-        r = m_inspectConstraintsDialog->AddHTMLPage( _( "Text Size" ) );
+        r = dialog->AddHTMLPage( _( "Text Size" ) );
         reportHeader( _( "Text height resolution for:" ), item, r );
 
         constraint = EVAL_RULES( TEXT_HEIGHT_CONSTRAINT, item, nullptr, UNDEFINED_LAYER, r );
@@ -1272,7 +1274,7 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         r->Flush();
     }
 
-    r = m_inspectConstraintsDialog->AddHTMLPage( _( "Keepouts" ) );
+    r = dialog->AddHTMLPage( _( "Keepouts" ) );
     reportHeader( _( "Keepout resolution for:" ), item, r );
 
     constraint = EVAL_RULES( DISALLOW_CONSTRAINT, item, nullptr, item->GetLayer(), r );
@@ -1297,7 +1299,7 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 
     r->Flush();
 
-    r = m_inspectConstraintsDialog->AddHTMLPage( _( "Assertions" ) );
+    r = dialog->AddHTMLPage( _( "Assertions" ) );
     reportHeader( _( "Assertions for:" ), item, r );
 
     if( compileError )
@@ -1314,9 +1316,8 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
     drcEngine.ProcessAssertions( item, []( const DRC_CONSTRAINT* c ){}, r );
     r->Flush();
 
-    m_inspectConstraintsDialog->FinishInitialization();
-    m_inspectConstraintsDialog->Raise();
-    m_inspectConstraintsDialog->Show( true );
+    dialog->Raise();
+    dialog->Show( true );
     return 0;
 }
 
@@ -1344,17 +1345,16 @@ int BOARD_INSPECTION_TOOL::DiffFootprint( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    if( m_diffFootprintDialog == nullptr )
-    {
-        m_diffFootprintDialog = std::make_unique<DIALOG_BOOK_REPORTER>( m_frame );
-        m_diffFootprintDialog->SetTitle( _( "Diff Footprint with Library" ) );
+    wxWindow*             window = wxWindow::FindWindowByName( DIFF_FOOTPRINTS_DIALOG_NAME );
+    DIALOG_BOOK_REPORTER* dialog = dynamic_cast<DIALOG_BOOK_REPORTER*>( window );
 
-        m_diffFootprintDialog->Connect( wxEVT_CLOSE_WINDOW,
-                wxCommandEventHandler( BOARD_INSPECTION_TOOL::onDiffFootprintDialogClosed ),
-                nullptr, this );
+    if( !dialog )
+    {
+        dialog = new DIALOG_BOOK_REPORTER( m_frame, DIFF_FOOTPRINTS_DIALOG_NAME,
+                                           _( "Diff Footprint with Library" ) );
     }
 
-    m_diffFootprintDialog->DeleteAllPages();
+    dialog->DeleteAllPages();
 
     FOOTPRINT*          footprint = static_cast<FOOTPRINT*>( selection.GetItem( 0 ) );
     LIB_ID              fpID = footprint->GetFPID();
@@ -1362,7 +1362,7 @@ int BOARD_INSPECTION_TOOL::DiffFootprint( const TOOL_EVENT& aEvent )
     wxString            fpName = fpID.GetLibItemName();
     WX_HTML_REPORT_BOX* r = nullptr;
 
-    r = m_diffFootprintDialog->AddHTMLPage( _( "Summary" ) );
+    r = dialog->AddHTMLPage( _( "Summary" ) );
 
     r->Report( wxS( "<h7>" ) + _( "Board vs library diff for:" ) + wxS( "</h7>" ) );
     r->Report( wxS( "<ul><li>" ) + EscapeHTML( getItemDescription( footprint ) ) + wxS( "</li>" )
@@ -1419,7 +1419,7 @@ int BOARD_INSPECTION_TOOL::DiffFootprint( const TOOL_EVENT& aEvent )
             if( !footprint->FootprintNeedsUpdate( libFootprint.get(), r ) )
                 r->Report( _( "No relevant differences detected." ) );
 
-            wxPanel*               panel = m_diffFootprintDialog->AddBlankPage( _( "Visual" ) );
+            wxPanel*               panel = dialog->AddBlankPage( _( "Visual" ) );
             FOOTPRINT_DIFF_WIDGET* diff = constructDiffPanel( panel );
 
             diff->DisplayDiff( footprint, libFootprint );
@@ -1428,9 +1428,8 @@ int BOARD_INSPECTION_TOOL::DiffFootprint( const TOOL_EVENT& aEvent )
 
     r->Flush();
 
-    m_diffFootprintDialog->FinishInitialization();
-    m_diffFootprintDialog->Raise();
-    m_diffFootprintDialog->Show( true );
+    dialog->Raise();
+    dialog->Show( true );
     return 0;
 }
 
@@ -1871,71 +1870,15 @@ void BOARD_INSPECTION_TOOL::calculateSelectionRatsnest( const VECTOR2I& aDelta )
 
 int BOARD_INSPECTION_TOOL::ListNets( const TOOL_EVENT& aEvent )
 {
-    if( m_listNetsDialog == nullptr )
-    {
-        m_listNetsDialog =
-                std::make_unique<DIALOG_NET_INSPECTOR>( m_frame, m_listNetsDialogSettings );
+    wxWindow*             window = wxWindow::FindWindowByName( LIST_NETS_DIALOG_NAME );
+    DIALOG_NET_INSPECTOR* dialog = dynamic_cast<DIALOG_NET_INSPECTOR*>( window );
 
-        m_listNetsDialog->Connect( wxEVT_CLOSE_WINDOW,
-                wxCommandEventHandler( BOARD_INSPECTION_TOOL::onListNetsDialogClosed ), nullptr,
-                this );
+    if( !dialog )
+        dialog = new DIALOG_NET_INSPECTOR( m_frame, LIST_NETS_DIALOG_NAME );
 
-        m_listNetsDialog->Connect( wxEVT_BUTTON,
-                wxCommandEventHandler( BOARD_INSPECTION_TOOL::onListNetsDialogClosed ), nullptr,
-                this );
-    }
-
-    m_listNetsDialog->Raise();
-    m_listNetsDialog->Show( true );
+    dialog->Raise();
+    dialog->Show( true );
     return 0;
-}
-
-
-void BOARD_INSPECTION_TOOL::onListNetsDialogClosed( wxCommandEvent& event )
-{
-    m_listNetsDialogSettings = m_listNetsDialog->Settings();
-
-    m_listNetsDialog->Disconnect( wxEVT_CLOSE_WINDOW,
-            wxCommandEventHandler( BOARD_INSPECTION_TOOL::onListNetsDialogClosed ), nullptr, this );
-
-    m_listNetsDialog->Disconnect( wxEVT_BUTTON,
-            wxCommandEventHandler( BOARD_INSPECTION_TOOL::onListNetsDialogClosed ), nullptr, this );
-
-    m_listNetsDialog->Destroy();
-    m_listNetsDialog.release();
-}
-
-
-void BOARD_INSPECTION_TOOL::onInspectClearanceDialogClosed( wxCommandEvent& event )
-{
-    m_inspectClearanceDialog->Disconnect( wxEVT_CLOSE_WINDOW,
-            wxCommandEventHandler( BOARD_INSPECTION_TOOL::onInspectClearanceDialogClosed ),
-                                          nullptr, this );
-
-    m_inspectClearanceDialog->Destroy();
-    m_inspectClearanceDialog.release();
-}
-
-
-void BOARD_INSPECTION_TOOL::onInspectConstraintsDialogClosed( wxCommandEvent& event )
-{
-    m_inspectConstraintsDialog->Disconnect( wxEVT_CLOSE_WINDOW,
-            wxCommandEventHandler( BOARD_INSPECTION_TOOL::onInspectConstraintsDialogClosed ),
-                                            nullptr, this );
-
-    m_inspectConstraintsDialog->Destroy();
-    m_inspectConstraintsDialog.release();
-}
-
-
-void BOARD_INSPECTION_TOOL::onDiffFootprintDialogClosed( wxCommandEvent& event )
-{
-    m_diffFootprintDialog->Disconnect( wxEVT_CLOSE_WINDOW,
-            wxCommandEventHandler( BOARD_INSPECTION_TOOL::onDiffFootprintDialogClosed ),
-                                       nullptr, this );
-
-    m_diffFootprintDialog->Destroy();
-    m_diffFootprintDialog.release();
 }
 
 

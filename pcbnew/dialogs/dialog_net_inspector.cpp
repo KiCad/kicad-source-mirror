@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2020 Oleg Endo <olegendo@gcc.gnu.org>
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,6 +48,10 @@
 
 #include <bitset>
 #include <vector>
+
+
+static DIALOG_NET_INSPECTOR::SETTINGS g_settings;
+
 
 enum class CSV_COLUMN_DESC : int
 {
@@ -955,12 +959,13 @@ protected:
 };
 
 
-DIALOG_NET_INSPECTOR::DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent,
-                                            const SETTINGS& aSettings ) :
+DIALOG_NET_INSPECTOR::DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent, const wxString& aDialogName ) :
         DIALOG_NET_INSPECTOR_BASE( aParent ),
         m_zero_netitem( nullptr ),
         m_frame( aParent )
 {
+    SetName( aDialogName );
+
     m_columns.emplace_back(  0u, UNDEFINED_LAYER, _( "Net" ), _( "Net Code" ), CSV_COLUMN_DESC::CSV_NONE  );
     m_columns.emplace_back(  1u, UNDEFINED_LAYER, _( "Name" ), _( "Net Name" ), CSV_COLUMN_DESC::CSV_QUOTE  );
     m_columns.emplace_back(  2u, UNDEFINED_LAYER, _( "Pad Count" ), _( "Pad Count" ), CSV_COLUMN_DESC::CSV_NONE  );
@@ -1027,7 +1032,7 @@ DIALOG_NET_INSPECTOR::DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent,
         }
     };
 
-    std::vector<int> col_order = aSettings.column_order;
+    std::vector<int> col_order = g_settings.column_order;
 
     if( col_order.size() != add_col.size() )
     {
@@ -1046,7 +1051,7 @@ DIALOG_NET_INSPECTOR::DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent,
             continue;
 
         m_columns.emplace_back( m_columns.size(), layer, m_brd->GetLayerName( layer ),
-                m_brd->GetLayerName( layer ), CSV_COLUMN_DESC::CSV_NONE );
+                                m_brd->GetLayerName( layer ), CSV_COLUMN_DESC::CSV_NONE );
 
         m_netsList->AppendTextColumn( m_brd->GetLayerName( layer ), m_columns.back(),
                                       wxDATAVIEW_CELL_INERT, -1, wxALIGN_CENTER,
@@ -1059,11 +1064,11 @@ DIALOG_NET_INSPECTOR::DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent,
     // list over and over again.
     m_filter_change_no_rebuild = true;
 
-    m_textCtrlFilter->SetValue( aSettings.filter_string );
-    m_cbShowZeroPad->SetValue( aSettings.show_zero_pad_nets );
-    m_groupBy->SetValue( aSettings.group_by );
-    m_groupByKind->SetSelection( aSettings.group_by_kind );
-    m_groupByText->SetValue( aSettings.group_by_text );
+    m_textCtrlFilter->SetValue( g_settings.filter_string );
+    m_cbShowZeroPad->SetValue( g_settings.show_zero_pad_nets );
+    m_groupBy->SetValue( g_settings.group_by );
+    m_groupByKind->SetSelection( g_settings.group_by_kind );
+    m_groupByText->SetValue( g_settings.group_by_text );
 
     m_filter_change_no_rebuild = false;
     buildNetsList();
@@ -1079,20 +1084,24 @@ DIALOG_NET_INSPECTOR::DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent,
     m_renameNet->Disable();
     m_deleteNet->Disable();
 
-    if( aSettings.sorting_column != -1 )
+    if( g_settings.sorting_column != -1 )
     {
-        if( wxDataViewColumn* c = m_netsList->GetColumn( aSettings.sorting_column ) )
+        if( wxDataViewColumn* c = m_netsList->GetColumn( g_settings.sorting_column ) )
         {
-            c->SetSortOrder( aSettings.sort_order_asc );
+            c->SetSortOrder( g_settings.sort_order_asc );
             m_data_model->Resort();
         }
     }
 
     finishDialogSettings();
 
-    m_frame->Connect( wxEVT_CLOSE_WINDOW,
-                      wxCommandEventHandler( DIALOG_NET_INSPECTOR::onParentWindowClosed ),
-                      nullptr, this );
+    m_frame->Bind( wxEVT_CLOSE_WINDOW,
+                   [this]( wxCloseEvent& aEvent )
+                   {
+                       Close();
+                       aEvent.Skip();
+                   } );
+
     m_frame->Connect( UNITS_CHANGED,
                       wxCommandEventHandler( DIALOG_NET_INSPECTOR::onUnitsChanged ),
                       nullptr, this );
@@ -1112,14 +1121,27 @@ DIALOG_NET_INSPECTOR::DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent,
 
 DIALOG_NET_INSPECTOR::~DIALOG_NET_INSPECTOR()
 {
+    std::vector<int> column_order( m_data_model->columnCount() );
+
+    for( unsigned int i = 0; i < column_order.size(); ++i )
+        column_order[i] = m_netsList->GetColumn( i )->GetModelColumn();
+
+    wxDataViewColumn* sorting_column = m_netsList->GetSortingColumn();
+
+    g_settings.filter_string      = m_textCtrlFilter->GetValue();
+    g_settings.show_zero_pad_nets = m_cbShowZeroPad->IsChecked();
+    g_settings.group_by           = m_groupBy->IsChecked();
+    g_settings.group_by_kind      = m_groupByKind->GetSelection();
+    g_settings.group_by_text      = m_groupByText->GetValue();
+    g_settings.sorting_column     = sorting_column ? static_cast<int>( sorting_column->GetModelColumn() ) : -1;
+    g_settings.sort_order_asc     = sorting_column ? sorting_column->IsSortOrderAscending() : true;
+    g_settings.column_order       = column_order;
+
     // the displayed list elements are going to be deleted before the list view itself.
     // in some cases it might still do queries on the data model, which would crash
     // from now on.  so just disassociate it.
     m_netsList->AssociateModel( nullptr );
 
-    m_frame->Disconnect( wxEVT_CLOSE_WINDOW,
-                         wxCommandEventHandler( DIALOG_NET_INSPECTOR::onParentWindowClosed ),
-                         nullptr, this );
     m_frame->Disconnect( UNITS_CHANGED,
                          wxCommandEventHandler( DIALOG_NET_INSPECTOR::onUnitsChanged ),
                          nullptr, this );
@@ -1131,36 +1153,6 @@ DIALOG_NET_INSPECTOR::~DIALOG_NET_INSPECTOR()
         m_brd->RemoveListener( this );
 
     m_frame->GetCanvas()->SetFocus();
-}
-
-
-DIALOG_NET_INSPECTOR::SETTINGS DIALOG_NET_INSPECTOR::Settings() const
-{
-    std::vector<int> column_order( m_data_model->columnCount() );
-
-    for( unsigned int i = 0; i < column_order.size(); ++i )
-        column_order[i] = m_netsList->GetColumn( i )->GetModelColumn();
-
-    wxDataViewColumn* sorting_column = m_netsList->GetSortingColumn();
-
-    SETTINGS r;
-    r.filter_string      = m_textCtrlFilter->GetValue();
-    r.show_zero_pad_nets = m_cbShowZeroPad->IsChecked();
-    r.group_by           = m_groupBy->IsChecked();
-    r.group_by_kind      = m_groupByKind->GetSelection();
-    r.group_by_text      = m_groupByText->GetValue();
-    r.sorting_column     = sorting_column ? static_cast<int>( sorting_column->GetModelColumn() ) : -1;
-    r.sort_order_asc     = sorting_column ? sorting_column->IsSortOrderAscending() : true;
-    r.column_order       = column_order;
-
-    return r;
-}
-
-
-void DIALOG_NET_INSPECTOR::onParentWindowClosed( wxCommandEvent& event )
-{
-    Close();
-    event.Skip();
 }
 
 
