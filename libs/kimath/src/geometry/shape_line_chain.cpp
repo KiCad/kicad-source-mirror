@@ -1159,11 +1159,11 @@ const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Slice( int aStartIndex, int aEndIndex )
     if( IsArcSegment( aStartIndex ) && !IsArcStart( aStartIndex ) )
     {
         // Cutting in middle of an arc, lets split it
-        ssize_t          arcIndex = ArcIndex( aStartIndex );
-        const SHAPE_ARC& currentArc = Arc( arcIndex );
+        ssize_t          arcToSplitIndex = ArcIndex( aStartIndex );
+        const SHAPE_ARC& arcToSplit = Arc( arcToSplitIndex );
 
         // Copy the points as arc points
-        for( size_t i = aStartIndex; arcIndex == ArcIndex( i ); i++ )
+        for( size_t i = aStartIndex; arcToSplitIndex == ArcIndex( i ); i++ )
         {
             rv.m_points.push_back( m_points[i] );
             rv.m_shapes.push_back( { rv.m_arcs.size(), SHAPE_IS_PT } );
@@ -1175,9 +1175,9 @@ const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Slice( int aStartIndex, int aEndIndex )
 
         VECTOR2I newArcStart = m_points[aStartIndex];
 
-        newArc.ConstructFromStartEndCenter( newArcStart, currentArc.GetP1(),
-                                             currentArc.GetCenter(),
-                                             currentArc.IsClockwise() );
+        newArc.ConstructFromStartEndCenter( newArcStart, arcToSplit.GetP1(),
+                                            arcToSplit.GetCenter(),
+                                            arcToSplit.IsClockwise() );
 
 
         rv.m_arcs.push_back( newArc );
@@ -1192,7 +1192,6 @@ const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Slice( int aStartIndex, int aEndIndex )
 
         if( IsArcStart( i ) )
         {
-            const SHAPE_ARC &currentArc = Arc( ArcIndex( i ) );
             int  nextShape = NextShape( i );
             bool isLastShape = nextShape < 0;
 
@@ -1238,6 +1237,7 @@ const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Slice( int aStartIndex, int aEndIndex )
             else
             {
                 // append the whole arc
+                const SHAPE_ARC& currentArc = Arc( ArcIndex( i ) );
                 rv.Append( currentArc );
             }
 
