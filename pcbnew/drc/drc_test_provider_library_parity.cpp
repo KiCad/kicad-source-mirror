@@ -519,7 +519,7 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint, REPORTER* 
                       return item->Type() == PCB_FP_SHAPE_T;
                   } );
 
-    if( aShapes.size() != aShapes.size() )
+    if( aShapes.size() != bShapes.size() )
     {
         diff = true;
         REPORT( _( "Graphic item count differs." ) );
