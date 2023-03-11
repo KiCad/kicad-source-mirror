@@ -183,7 +183,7 @@ BOOST_AUTO_TEST_CASE( ParamCount )
             break;
         
         case MODEL_TYPE::JFET:
-            BOOST_CHECK_EQUAL( modelParams.size(), 28 );
+            BOOST_CHECK_EQUAL( modelParams.size(), 34 );
             BOOST_CHECK_EQUAL( instanceParams.size(), 28 );
             break;
         
