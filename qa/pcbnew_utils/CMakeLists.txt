@@ -62,7 +62,6 @@ target_link_libraries( qa_pcbnew_utils PUBLIC
     qa_utils
     Boost::headers
     Boost::unit_test_framework
-    Boost::system
 )
 #     3d-viewer
 #     connectivity

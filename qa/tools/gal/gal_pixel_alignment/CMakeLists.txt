@@ -73,7 +73,6 @@ target_link_libraries( test_gal_pixel_alignment
     ${PCBNEW_IO_LIBRARIES}
     Boost::headers
     Boost::unit_test_framework
-    Boost::system
     ${wxWidgets_LIBRARIES}
 )
 

@@ -49,7 +49,6 @@ target_link_libraries( qa_utils
     turtle
     Boost::headers
     Boost::unit_test_framework
-    Boost::system
     ${wxWidgets_LIBRARIES}
     ${LIBBOOST_UNIT_TEST_LIB}
 )
