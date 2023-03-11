@@ -498,8 +498,8 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM *aItem, int aLayer, bool aDr
         color = color.Mix( sheetColour, 0.5f );
     }
 
-    if( aItem->GetForceTransparency() > 0.0 )
-        color = color.WithAlpha( color.a * ( 1.0 - aItem->GetForceTransparency() ) );
+    if( aItem->GetForcedTransparency() > 0.0 )
+        color = color.WithAlpha( color.a * ( 1.0 - aItem->GetForcedTransparency() ) );
 
     return color;
 }

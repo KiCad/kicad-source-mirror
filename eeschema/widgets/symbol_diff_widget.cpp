@@ -131,12 +131,12 @@ void SYMBOL_DIFF_WIDGET::onSlider( wxScrollEvent& aEvent )
         else
             val = ( pct - 0.5 ) * 2;
 
-        m_previewItem->SetForceTransparency( val );
+        m_previewItem->SetForcedTransparency( val );
         view->Update( m_previewItem );
 
         for( LIB_ITEM& child : m_previewItem->GetDrawItems() )
         {
-            child.SetForceTransparency( val );
+            child.SetForcedTransparency( val );
             view->Update( &child );
         }
     }
@@ -150,12 +150,12 @@ void SYMBOL_DIFF_WIDGET::onSlider( wxScrollEvent& aEvent )
         else
             val = 1.0 - ( pct * 2 );
 
-        m_libraryItem->SetForceTransparency( val );
+        m_libraryItem->SetForcedTransparency( val );
         view->Update( m_libraryItem );
 
         for( LIB_ITEM& child : m_libraryItem->GetDrawItems() )
         {
-            child.SetForceTransparency( val );
+            child.SetForcedTransparency( val );
             view->Update( &child );
         }
     }

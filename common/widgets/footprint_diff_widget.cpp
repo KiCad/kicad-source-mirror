@@ -95,12 +95,12 @@ void FOOTPRINT_DIFF_WIDGET::onSlider( wxScrollEvent& aEvent )
         else
             val = ( pct - 0.5 ) * 2;
 
-        m_boardItemCopy->SetForceTransparency( val );
+        m_boardItemCopy->SetForcedTransparency( val );
 
         m_boardItemCopy->RunOnChildren(
                 [&]( BOARD_ITEM* child )
                 {
-                    child->SetForceTransparency( val );
+                    child->SetForcedTransparency( val );
                 } );
     }
 
@@ -113,12 +113,12 @@ void FOOTPRINT_DIFF_WIDGET::onSlider( wxScrollEvent& aEvent )
         else
             val = 1.0 - ( pct * 2 );
 
-        m_libraryItem->SetForceTransparency( val );
+        m_libraryItem->SetForcedTransparency( val );
 
         m_libraryItem->RunOnChildren(
                 [&]( BOARD_ITEM* child )
                 {
-                    child->SetForceTransparency( val );
+                    child->SetForcedTransparency( val );
                 } );
     }
 

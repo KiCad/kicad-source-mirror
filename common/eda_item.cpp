@@ -37,7 +37,6 @@ EDA_ITEM::EDA_ITEM( EDA_ITEM* parent, KICAD_T idType ) :
         m_status( 0 ),
         m_parent( parent ),
         m_forceVisible( false ),
-        m_forceTransparency( 0.0 ),
         m_flags( 0 ),
         m_structType( idType )
 { }
@@ -47,7 +46,6 @@ EDA_ITEM::EDA_ITEM( KICAD_T idType ) :
         m_status( 0 ),
         m_parent( nullptr ),
         m_forceVisible( false ),
-        m_forceTransparency( 0.0 ),
         m_flags( 0 ),
         m_structType( idType )
 { }
@@ -58,10 +56,11 @@ EDA_ITEM::EDA_ITEM( const EDA_ITEM& base ) :
         m_status( base.m_status ),
         m_parent( base.m_parent ),
         m_forceVisible( base.m_forceVisible ),
-        m_forceTransparency( base.m_forceTransparency ),
         m_flags( base.m_flags ),
         m_structType( base.m_structType )
-{ }
+{
+    SetForcedTransparency( base.GetForcedTransparency() );
+}
 
 
 void EDA_ITEM::SetModified()
@@ -244,12 +243,13 @@ EDA_ITEM& EDA_ITEM::operator=( const EDA_ITEM& aItem )
 {
     // do not call initVars()
 
-    m_structType = aItem.m_structType;
-    m_flags      = aItem.m_flags;
-    m_status     = aItem.m_status;
-    m_parent     = aItem.m_parent;
-    m_forceVisible      = aItem.m_forceVisible;
-    m_forceTransparency = aItem.m_forceTransparency;
+    m_structType   = aItem.m_structType;
+    m_flags        = aItem.m_flags;
+    m_status       = aItem.m_status;
+    m_parent       = aItem.m_parent;
+    m_forceVisible = aItem.m_forceVisible;
+
+    SetForcedTransparency( aItem.GetForcedTransparency() );
 
     return *this;
 }

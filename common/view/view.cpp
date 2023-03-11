@@ -927,13 +927,20 @@ struct VIEW::DRAW_ITEM_VISITOR
         view( aView ),
         layer( aLayer ),
         useDrawPriority( aUseDrawPriority ),
-        reverseDrawOrder( aReverseDrawOrder )
+        reverseDrawOrder( aReverseDrawOrder ),
+        drawForcedTransparent( false )
     {
     }
 
     bool operator()( VIEW_ITEM* aItem )
     {
         wxCHECK( aItem->viewPrivData(), false );
+
+        if( aItem->m_forcedTransparency > 0 && !drawForcedTransparent )
+        {
+            foundForcedTransparent = true;
+            return true;
+        }
 
         // Conditions that have to be fulfilled for an item to be drawn
         bool drawCondition = aItem->viewPrivData()->isRenderable()
@@ -976,6 +983,8 @@ struct VIEW::DRAW_ITEM_VISITOR
     int layer, layers[VIEW_MAX_LAYERS];
     bool useDrawPriority, reverseDrawOrder;
     std::vector<VIEW_ITEM*> drawItems;
+    bool drawForcedTransparent;
+    bool foundForcedTransparent;
 };
 
 
@@ -997,7 +1006,6 @@ void VIEW::redrawRect( const BOX2I& aRect )
             else if( l->hasNegatives )
                 m_gal->StartNegativesLayer();
 
-
             l->items->Query( aRect, drawFunc );
 
             if( m_useDrawPriority )
@@ -1007,6 +1015,17 @@ void VIEW::redrawRect( const BOX2I& aRect )
                 m_gal->EndDiffLayer();
             else if( l->hasNegatives )
                 m_gal->EndNegativesLayer();
+
+            if( drawFunc.foundForcedTransparent )
+            {
+                drawFunc.drawForcedTransparent = true;
+
+                m_gal->SetTarget( TARGET_NONCACHED );
+                m_gal->EnableDepthTest( true );
+                m_gal->SetLayerDepth( l->renderingOrder );
+
+                l->items->Query( aRect, drawFunc );
+            }
         }
     }
 }

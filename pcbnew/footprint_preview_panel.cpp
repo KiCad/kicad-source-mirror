@@ -212,9 +212,8 @@ void FOOTPRINT_PREVIEW_PANEL::DisplayFootprints( std::shared_ptr<FOOTPRINT> aFoo
         fitToCurrentFootprint();
     }
 
-    Show();
     Layout();
-    RefreshAll();
+    Show();
 }
 
 

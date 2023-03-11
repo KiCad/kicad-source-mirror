@@ -76,7 +76,9 @@ enum VIEW_VISIBILITY_FLAGS {
 class VIEW_ITEM : public INSPECTABLE
 {
 public:
-    VIEW_ITEM() : m_viewPrivData( nullptr )
+    VIEW_ITEM() :
+            m_viewPrivData( nullptr ),
+            m_forcedTransparency( 0.0 )
     {
     }
 
@@ -145,10 +147,21 @@ public:
         m_viewPrivData = nullptr;
     }
 
+    void SetForcedTransparency( double aForcedTransparency )
+    {
+        m_forcedTransparency = aForcedTransparency;
+    }
+
+    double GetForcedTransparency() const
+    {
+        return m_forcedTransparency;
+    }
+
 private:
     friend class VIEW;
 
     VIEW_ITEM_DATA* m_viewPrivData;
+    double          m_forcedTransparency;  ///< Additional transparency for diff'ing items.
 };
 
 } // namespace KIGFX
