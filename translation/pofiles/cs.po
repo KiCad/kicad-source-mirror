@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:53-0800\n"
-"PO-Revision-Date: 2023-02-27 11:37+0000\n"
+"PO-Revision-Date: 2023-03-12 20:08+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v7/cs/>\n"
 "Language: cs\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -103,9 +103,8 @@ msgid "Build BVH for holes and vias"
 msgstr "Sestavuji BVH pro díry a prokovy"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:389
-#, fuzzy
 msgid "OpenGL context creation error"
-msgstr "Rozlišení zakázané zóny pro:"
+msgstr "Chyba při vytváření kontextu OpenGL"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:420
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
@@ -3144,7 +3143,7 @@ msgstr "(Toto nouzové řešení zlepší určité problémy s písmem GTK HiDPI
 
 #: common/dialogs/panel_common_settings_base.cpp:217
 msgid "High-contrast mode dimming factor:"
-msgstr ""
+msgstr "Koeficient zatemnění v režimu s vysokým kontrastem:"
 
 #: common/dialogs/panel_common_settings_base.cpp:224
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:77
@@ -19825,9 +19824,8 @@ msgid "Schematic file does not exist or is not accessible\n"
 msgstr "Soubor schématu neexistuje nebo není přístupný\n"
 
 #: kicad/cli/command_export_sch_pdf.cpp:38
-#, fuzzy
 msgid "Color theme to use (will default to schematic settings)"
-msgstr "Barevné téma k použití (bude výchozí v nastavení pcbnew)"
+msgstr "Barevné téma k použití (výchozí nastavení schématu)"
 
 #: kicad/cli/command_export_sch_pdf.cpp:51
 #: kicad/cli/command_export_sch_svg.cpp:51
@@ -20490,9 +20488,8 @@ msgstr ""
 "%s"
 
 #: kicad/pcm/pcm.cpp:464
-#, fuzzy
 msgid "Failed to parse locally stored repository.json."
-msgstr "Nelze analyzovat repozitář: %s"
+msgstr "Nepodařilo se analyzovat místně uložené úložiště.json."
 
 #: kicad/pcm/pcm.cpp:492
 msgid ""
@@ -22871,7 +22868,6 @@ msgstr ""
 "\tR1 + (R2|R3)...\t\tjakákoliv kombinace výše uvedených\n"
 
 #: pcb_calculator/fusing_current_help.h:2
-#, fuzzy
 msgid ""
 "You can use this calculator to check if a small track can handle a large "
 "current for a short period of time.<br>\n"
@@ -22883,14 +22879,14 @@ msgid ""
 "<br>\n"
 "This energy is then compared to the one dissipated by the wire resistance."
 msgstr ""
-"Tuto kalkulačku můžete použít k ověření, zda malý spoj vydrží velký proud po "
-"krátkou dobu.<br>\n"
-"Tento nástroj vám umožňuje navrhnout pojistku, ale měl by být použit pouze "
-"pro odhad.\n"
+"Pomocí této kalkulačky můžete zjistit, zda malý spoj zvládne po krátkou dobu "
+"velký proud.<br>\n"
+"Tento nástroj umožňuje navrhnout pojistku spoje, ale měl by být použit pouze "
+"jako odhad.\n"
 "\n"
-"Kalkulátor odhaduje energii potřebnou k ohřevu drátu až do bodu tání <br>\n"
-"a energii potřebnou pro změnu fáze.<br>\n"
-"Tato energie se poté porovná s energií rozptýlenou odporem drátu."
+"Kalkulačka odhaduje energii potřebnou k zahřátí drátu <br>\n"
+"do bodu tání, stejně jako energii potřebnou pro změnu fáze.<br>\n"
+"Tato energie je pak porovnána s tou, která se rozptýlí odporem drátu."
 
 #: pcb_calculator/pcb_calculator_frame.cpp:72
 msgid "General system design"
@@ -32818,7 +32814,7 @@ msgstr "Stanovení údajů o DPS\n"
 #: pcbnew/exporters/step/exporter_step.cpp:339
 #, fuzzy, c-format
 msgid "Board Thickness from stackup: %.3f mm\n"
-msgstr "Tloušťka desky ze struktury vrstev:"
+msgstr "Tloušťka desky ze struktury vrstev:\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:344
 msgid "Build STEP data\n"
