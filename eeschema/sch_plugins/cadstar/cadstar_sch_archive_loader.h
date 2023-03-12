@@ -229,6 +229,8 @@ private:
                      const bool&     aMirrorInvert = false );
 
     //Helper functions for loading text elements
+    void applyTextCodeIfExists( EDA_TEXT* aKiCadTextItem, const TEXTCODE_ID& aCadstarTextCodeID );
+
     void applyTextSettings( EDA_TEXT* aKiCadTextItem,
                             const TEXTCODE_ID& aCadstarTextCodeID,
                             const ALIGNMENT&     aCadstarAlignment,

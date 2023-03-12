@@ -1745,34 +1745,44 @@ const LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSymdef( const SYMDEF_ID& aSymd
         }
     }
 
+    // CADSTAR uses TC1 when fields don't have explicit text/attribute location
+    static const TEXTCODE_ID defaultTextCode = "TC1";
+
     // Load field locations (Attributes in CADSTAR)
+
+    // Symbol name (e.g. R1)
     if( csSym.TextLocations.count( SYMBOL_NAME_ATTRID ) )
     {
         TEXT_LOCATION& textLoc = csSym.TextLocations.at( SYMBOL_NAME_ATTRID );
-        kiSym->GetReferenceField().SetUnit( gateNumber );
         applyToLibraryFieldAttribute( textLoc, csSym.Origin, &kiSym->GetReferenceField() );
+    }
+    else
+    {
+        applyTextCodeIfExists( &kiSym->GetReferenceField(), defaultTextCode );
     }
 
     // Always add the part name field (even if it doesn't have a specific location defined)
-    addNewFieldToSymbol( PartNameFieldName, kiSym );
+    LIB_FIELD* partField = addNewFieldToSymbol( PartNameFieldName, kiSym );
+    wxCHECK( partField, nullptr );
+    wxASSERT( partField->GetName() == PartNameFieldName );
 
     if( csSym.TextLocations.count( PART_NAME_ATTRID ) )
     {
         TEXT_LOCATION& textLoc = csSym.TextLocations.at( PART_NAME_ATTRID );
-        LIB_FIELD*     field = kiSym->FindField( PartNameFieldName );
-        wxCHECK( field, nullptr );
-        wxASSERT( field->GetName() == PartNameFieldName );
-
-        applyToLibraryFieldAttribute( textLoc, csSym.Origin, field );
-        field->SetUnit( gateNumber );
-        field->SetVisible( SymbolPartNameColor.IsVisible );
+        applyToLibraryFieldAttribute( textLoc, csSym.Origin, partField );
     }
+    else
+    {
+        applyTextCodeIfExists( partField, defaultTextCode );
+    }
+
+    partField->SetVisible( SymbolPartNameColor.IsVisible );
 
 
     for( auto& [attributeId, textLocation] : csSym.TextLocations )
     {
         if( attributeId == PART_NAME_ATTRID || attributeId == SYMBOL_NAME_ATTRID
-            || attributeId == SIGNALNAME_ORIGIN_ATTRID )
+            || attributeId == SIGNALNAME_ORIGIN_ATTRID || attributeId == LINK_ORIGIN_ATTRID )
         {
             continue;
         }
@@ -1786,7 +1796,7 @@ const LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSymdef( const SYMDEF_ID& aSymd
     for( auto& [attributeId, attrValue] : csSym.AttributeValues )
     {
         if( attributeId == PART_NAME_ATTRID || attributeId == SYMBOL_NAME_ATTRID
-            || attributeId == SIGNALNAME_ORIGIN_ATTRID )
+            || attributeId == SIGNALNAME_ORIGIN_ATTRID || attributeId == LINK_ORIGIN_ATTRID )
         {
             continue;
         }
@@ -1796,6 +1806,8 @@ const LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSymdef( const SYMDEF_ID& aSymd
 
         if( attrValue.HasLocation )
             applyToLibraryFieldAttribute( attrValue.AttributeLocation, csSym.Origin, field );
+        else
+            applyTextCodeIfExists( field, defaultTextCode );
     }
 
 
@@ -2953,6 +2965,34 @@ CADSTAR_SCH_ARCHIVE_LOADER::rotate180( const ALIGNMENT& aCadstarAlignment )
 }
 
 
+void CADSTAR_SCH_ARCHIVE_LOADER::applyTextCodeIfExists( EDA_TEXT*          aKiCadTextItem,
+                                                        const TEXTCODE_ID& aCadstarTextCodeID )
+{
+    // Ensure we have no Cadstar overbar characters
+    wxString escapedText = HandleTextOverbar( aKiCadTextItem->GetText() );
+    aKiCadTextItem->SetText( escapedText );
+
+    if( !Assignments.Codedefs.TextCodes.count( aCadstarTextCodeID ) )
+        return;
+
+    TEXTCODE textCode = getTextCode( aCadstarTextCodeID );
+    int      textHeight = KiROUND( (double) getKiCadLength( textCode.Height ) * TXT_HEIGHT_RATIO );
+    int      textWidth = getKiCadLength( textCode.Width );
+
+    // The width is zero for all non-cadstar fonts. Using a width equal to 2/3 the height seems
+    // to work well for most fonts.
+    if( textWidth == 0 )
+        textWidth = getKiCadLength( 2LL * textCode.Height / 3LL );
+
+    aKiCadTextItem->SetTextWidth( textWidth );
+    aKiCadTextItem->SetTextHeight( textHeight );
+    aKiCadTextItem->SetTextThickness( getKiCadLength( textCode.LineWidth ) );
+
+    aKiCadTextItem->SetBold( textCode.Font.Modifier1 == FONT_BOLD );
+    aKiCadTextItem->SetItalic( textCode.Font.Italic );
+}
+
+
 void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( EDA_TEXT*            aKiCadTextItem,
                                                     const TEXTCODE_ID&   aCadstarTextCodeID,
                                                     const ALIGNMENT&     aCadstarAlignment,
@@ -2960,30 +3000,12 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( EDA_TEXT*            aKiCadT
                                                     const long long      aCadstarOrientAngle,
                                                     bool                 aMirrored )
 {
+    applyTextCodeIfExists( aKiCadTextItem, aCadstarTextCodeID );
+    aKiCadTextItem->SetTextAngle( getAngle( aCadstarOrientAngle ) );
+
     // Justification ignored for now as not supported in Eeschema, but leaving this code in
     // place for future upgrades.
     // TODO update this when Eeschema supports justification independent of anchor position.
-
-    TEXTCODE textCode = getTextCode( aCadstarTextCodeID );
-    int      textHeight = KiROUND( (double) getKiCadLength( textCode.Height ) * TXT_HEIGHT_RATIO );
-    int      textWidth = getKiCadLength( textCode.Width );
-
-    // Ensure we have no Cadstar overbar characters
-    wxString escapedText = HandleTextOverbar( aKiCadTextItem->GetText() );
-    aKiCadTextItem->SetText( escapedText );
-
-    // The width is zero for all non-cadstar fonts. Using a width equal to 2/3 the height seems
-    // to work well for most fonts.
-    if( textWidth == 0 )
-        textWidth = getKiCadLength( 2 * textCode.Height / 3 );
-
-    aKiCadTextItem->SetTextWidth( textWidth );
-    aKiCadTextItem->SetTextHeight( textHeight );
-    aKiCadTextItem->SetTextThickness( getKiCadLength( textCode.LineWidth ) );
-    aKiCadTextItem->SetTextAngle( getAngle( aCadstarOrientAngle ) );
-    aKiCadTextItem->SetBold( textCode.Font.Modifier1 == FONT_BOLD );
-    aKiCadTextItem->SetItalic( textCode.Font.Italic );
-
     ALIGNMENT textAlignment = aCadstarAlignment;
 
     // KiCad mirrors the justification and alignment when the symbol is mirrored but CADSTAR
