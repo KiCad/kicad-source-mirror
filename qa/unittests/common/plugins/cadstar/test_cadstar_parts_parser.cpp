@@ -181,7 +181,7 @@ BOOST_AUTO_TEST_CASE( ReadFile )
 
         // Check hidden pins
         BOOST_REQUIRE_EQUAL( partEntry.m_HiddenPins.size(), 1 );
-        BOOST_CHECK_EQUAL( partEntry.m_HiddenPins[0].m_Signal, "GND" );
+        BOOST_CHECK_EQUAL( partEntry.m_HiddenPins.count( "GND" ), 1 );
         i++;
     }
 }
@@ -231,7 +231,7 @@ BOOST_AUTO_TEST_CASE( ReadContent )
             "<SCM Symbol Refname2>\r\n"
             "4.2!U:1000 5.1!I 6.3!Q\r\n"
             "/GND 7.0!G:2000\r\n"
-            "/VCC 8.0!P:2000\r\n";
+            "/VCC 8.0!P:2000 9.1 10.0\r\n";
     //"etc ...\r\n"
     //"/<Signame> <PinIdentifier>.<Position>!<Pintype>:<Loading>\r\n"
     //"/<Signame> <PinIdentifier>.<Position>!<Pintype>:<Loading>\r\n";
@@ -404,24 +404,31 @@ BOOST_AUTO_TEST_CASE( ReadContent )
    // Check symbols
     std::vector<CADSTAR_PART_SYMBOL_ENTRY> symbols = result.m_PartEntries[0].m_Symbols;
 
-    std::vector<CADSTAR_PART_SYMBOL_ENTRY> expectedSymbols = {
-        { "<SCM Symbol Refname1>",
-          "<SCM Alternate Refname>",
-          { CADSTAR_PART_PIN( 1, CADSTAR_PIN_POSITION::TOP_RIGHT, CADSTAR_PIN_TYPE::TRISTATE_DRIVER,
-                              2000, std::optional<std::string>() ),
-            CADSTAR_PART_PIN( 2, CADSTAR_PIN_POSITION::TOP_LEFT, CADSTAR_PIN_TYPE::TRISTATE_INPUT,
-                              std::optional<long>(), std::optional<std::string>() ),
-            CADSTAR_PART_PIN( 3, CADSTAR_PIN_POSITION::BOTTOM_LEFT, CADSTAR_PIN_TYPE::TRISTATE_BIDIR,
-                              std::optional<long>(), std::optional<std::string>() ) }
+    std::vector<CADSTAR_PART_SYMBOL_ENTRY> expectedSymbols =
+    {
+        {
+            "<SCM Symbol Refname1>",
+            "<SCM Alternate Refname>",
+            {
+                { 1, CADSTAR_PIN_POSITION::TOP_RIGHT,   CADSTAR_PIN_TYPE::TRISTATE_DRIVER,
+                    2000 },
+                { 2, CADSTAR_PIN_POSITION::TOP_LEFT,    CADSTAR_PIN_TYPE::TRISTATE_INPUT,
+                    std::nullopt },
+                { 3, CADSTAR_PIN_POSITION::BOTTOM_LEFT, CADSTAR_PIN_TYPE::TRISTATE_BIDIR,
+                    std::nullopt }
+            }
         },
-        { "<SCM Symbol Refname2>",
-          std::optional<std::string>(),
-          { CADSTAR_PART_PIN( 4, CADSTAR_PIN_POSITION::BOTTOM_LEFT, CADSTAR_PIN_TYPE::UNCOMMITTED,
-                              1000, std::optional<std::string>() ),
-            CADSTAR_PART_PIN( 5, CADSTAR_PIN_POSITION::TOP_LEFT, CADSTAR_PIN_TYPE::INPUT,
-                              std::optional<long>(), std::optional<std::string>() ),
-            CADSTAR_PART_PIN( 6, CADSTAR_PIN_POSITION::BOTTOM_RIGHT, CADSTAR_PIN_TYPE::OUTPUT_NOT_NORM_OR,
-                              std::optional<long>(), std::optional<std::string>() ) }
+        {
+            "<SCM Symbol Refname2>",
+            std::nullopt,
+            {
+                { 4, CADSTAR_PIN_POSITION::BOTTOM_LEFT,  CADSTAR_PIN_TYPE::UNCOMMITTED,
+                    1000 },
+                { 5, CADSTAR_PIN_POSITION::TOP_LEFT,     CADSTAR_PIN_TYPE::INPUT,
+                    std::nullopt },
+                { 6, CADSTAR_PIN_POSITION::BOTTOM_RIGHT, CADSTAR_PIN_TYPE::OUTPUT_NOT_NORM_OR,
+                    std::nullopt }
+            }
         }
     };
 
@@ -451,7 +458,6 @@ BOOST_AUTO_TEST_CASE( ReadContent )
                     BOOST_CHECK( itPinsA->m_Position == itPinsB->m_Position );
                     BOOST_CHECK( itPinsA->m_Type == itPinsB->m_Type );
                     BOOST_CHECK_EQUAL( itPinsA->m_Loading, itPinsB->m_Loading );
-                    BOOST_CHECK_EQUAL( itPinsA->m_Signal, itPinsB->m_Signal );
                 }
 
                 ++itPinsA;
@@ -464,30 +470,54 @@ BOOST_AUTO_TEST_CASE( ReadContent )
     }
 
     // Compare hidden pins
-    std::vector<CADSTAR_PART_PIN> expectedHiddenPins = {
-        { 7, CADSTAR_PIN_POSITION::TOP_RIGHT, CADSTAR_PIN_TYPE::GROUND, 2000, "GND" },
-        { 8, CADSTAR_PIN_POSITION::TOP_RIGHT, CADSTAR_PIN_TYPE::POWER, 2000, "VCC" }
+    std::map<std::string,std::vector<CADSTAR_PART_PIN>> expectedHiddenPins =
+    {
+        {
+            "GND",
+            {
+                { 7, CADSTAR_PIN_POSITION::TOP_RIGHT, CADSTAR_PIN_TYPE::GROUND, 2000 }
+            }
+        },
+        {
+            "VCC",
+            {
+               { 8,  CADSTAR_PIN_POSITION::TOP_RIGHT, CADSTAR_PIN_TYPE::POWER,       2000 },
+               { 9,  CADSTAR_PIN_POSITION::TOP_LEFT,  CADSTAR_PIN_TYPE::UNCOMMITTED, std::nullopt },
+               { 10, CADSTAR_PIN_POSITION::TOP_RIGHT, CADSTAR_PIN_TYPE::UNCOMMITTED, std::nullopt }
+            }
+        }
     };
 
     BOOST_REQUIRE_EQUAL( result.m_PartEntries[0].m_HiddenPins.size(), expectedHiddenPins.size() );
 
-    auto itPinsA = result.m_PartEntries[0].m_HiddenPins.begin();
-    auto itPinsB = expectedHiddenPins.begin();
+    auto itEntryA = result.m_PartEntries[0].m_HiddenPins.begin();
+    auto itEntryB = expectedHiddenPins.begin();
 
-    while( itPinsA != result.m_PartEntries[0].m_HiddenPins.end()
-           || itPinsB != expectedHiddenPins.end() )
+    while( itEntryA != result.m_PartEntries[0].m_HiddenPins.end()
+           || itEntryB != expectedHiddenPins.end() )
     {
-        BOOST_TEST_CONTEXT( "Pin Identifier = " << itPinsB->m_Signal )
+        BOOST_TEST_CONTEXT( "Check Hidden pins - Signal = " << itEntryB->first )
         {
-            BOOST_CHECK_EQUAL( itPinsA->m_Identifier, itPinsB->m_Identifier );
-            BOOST_CHECK( itPinsA->m_Position == itPinsB->m_Position );
-            BOOST_CHECK( itPinsA->m_Type == itPinsB->m_Type );
-            BOOST_CHECK_EQUAL( itPinsA->m_Loading, itPinsB->m_Loading );
-            BOOST_CHECK_EQUAL( itPinsA->m_Signal, itPinsB->m_Signal );
+            BOOST_CHECK_EQUAL( itEntryA->first, itEntryB->first );
+            BOOST_REQUIRE_EQUAL( itEntryA->second.size(), itEntryB->second.size() );
+
+            auto itPinsA = itEntryA->second.begin();
+            auto itPinsB = itEntryB->second.begin();
+
+            while( itPinsA != itEntryA->second.end() || itPinsB != itEntryB->second.end() )
+            {
+                BOOST_CHECK_EQUAL( itPinsA->m_Identifier, itPinsB->m_Identifier );
+                BOOST_CHECK( itPinsA->m_Position == itPinsB->m_Position );
+                BOOST_CHECK( itPinsA->m_Type == itPinsB->m_Type );
+                BOOST_CHECK_EQUAL( itPinsA->m_Loading, itPinsB->m_Loading );
+
+                ++itPinsA;
+                ++itPinsB;
+            }
         }
 
-        ++itPinsA;
-        ++itPinsB;
+        ++itEntryA;
+        ++itEntryB;
     }
 }
 

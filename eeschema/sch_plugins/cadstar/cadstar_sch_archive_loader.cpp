@@ -230,45 +230,37 @@ CADSTAR_SCH_ARCHIVE_LOADER::loadLibPart( const CADSTAR_PART_ENTRY& aPart )
             VECTOR2I direction( 0, -1 );
             int spacing = schIUScale.MilsToIU( 50 ); // for now, place on a 50mil grid
 
-            for( const CADSTAR_PART_PIN& csPin : aPart.m_HiddenPins )
+            for( auto& [signalName, csPinVector] : aPart.m_HiddenPins )
             {
-                std::unique_ptr<LIB_PIN> pin = std::make_unique<LIB_PIN>( retSym.get() );
-
-                long pinNum = csPin.m_Identifier;
-                pin->SetNumber( wxString::Format( "%ld", pinNum ) );
-
-                if( csPin.m_Signal.has_value() )
+                for(  const CADSTAR_PART_PIN& csPin : csPinVector )
                 {
-                    // Implied net connection
-                    pin->SetName( csPin.m_Signal.value() );
+                    std::unique_ptr<LIB_PIN> pin = std::make_unique<LIB_PIN>( retSym.get() );
+
+                    long pinNum = csPin.m_Identifier;
+                    pin->SetNumber( wxString::Format( "%ld", pinNum ) );
+                    pin->SetName( signalName );
                     pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
-                }
-                else if( aPart.m_PinNamesMap.count( pinNum ) )
-                {
-                    pin->SetName( HandleTextOverbar( aPart.m_PinNamesMap.at( pinNum ) ) );
-                    pin->SetType( getKiCadPinType( csPin.m_Type ) );
-                }
 
-                pin->SetVisible( false );
+                    pin->SetVisible( false );
 
-                // Generate the coordinate for the pin. We don't want overlapping pins
-                // and ideally close to the center of the symbol, so we load pins sequentially
-                // in a spiral sequence
-                if( delta.x == delta.y
-                    || ( delta.x < 0 && delta.x == -delta.y )
-                    || ( delta.x > 0 && delta.x == 1 - delta.y ) )
-                {
-                    // change direction
-                    direction = { -direction.y, direction.x };
+                    // Generate the coordinate for the pin. We don't want overlapping pins
+                    // and ideally close to the center of the symbol, so we load pins
+                    // in a spiral sequence around the center
+                    if( delta.x == delta.y || ( delta.x < 0 && delta.x == -delta.y )
+                        || ( delta.x > 0 && delta.x == 1 - delta.y ) )
+                    {
+                        // change direction
+                        direction = { -direction.y, direction.x };
+                    }
+
+                    delta += direction;
+                    VECTOR2I offset = delta * spacing;
+                    pin->SetPosition( symCenter + offset );
+                    pin->SetLength( 0 ); //CADSTAR Pins are just a point (have no length)
+                    pin->SetShape( GRAPHIC_PINSHAPE::LINE );
+                    pin->SetUnit( unit );
+                    retSym->AddDrawItem( pin.release() );
                 }
-
-                delta += direction;
-                VECTOR2I offset = delta * spacing;
-                pin->SetPosition( symCenter + offset );
-                pin->SetLength( 0 ); //CADSTAR Pins are just a point (have no length)
-                pin->SetShape( GRAPHIC_PINSHAPE::LINE );
-                pin->SetUnit( unit );
-                retSym->AddDrawItem( pin.release() );
             }
         }
         else

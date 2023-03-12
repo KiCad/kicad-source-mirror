@@ -37,6 +37,7 @@ struct CADSTAR_LIB_PARSER_STATE
 {
     std::string                   m_CurrentString;
     std::string                   m_CurrentAttrName;
+    std::string                   m_CurrentSignalName;
     long                          m_CurrentLong = 0;
     std::vector<long>             m_CurrentPinEquivalenceGroup;
     std::set<std::string>         m_CurrentElementsParsed;
@@ -151,13 +152,13 @@ DEFINE_STRING_ACTION( STEM,                     m_CurrentPart.m_ComponentStem );
 DEFINE_STRING_ACTION( SYM_ELEMENT_NAME,         m_CurrentSwapGroup.m_Name );
 DEFINE_STRING_ACTION( USER_PART_ATTRIBUTE_NAME, m_CurrentAttrName );
 DEFINE_STRING_ACTION( ATTRIBUTE_NAME,           m_CurrentAttrName );
+DEFINE_STRING_ACTION( PIN_SIGNAL_NAME,          m_CurrentSignalName );
 DEFINE_STRING_ACTION( ACCEPTANCE_PART_NAME,     m_CurrentPart.m_AcceptancePartName );
 DEFINE_STRING_ACTION( ACCEPTANCE_TEXT,          m_CurrentPart.m_AcceptanceText );
 DEFINE_STRING_ACTION( SPICE_PART_NAME,          m_CurrentPart.m_SpicePartName );
 DEFINE_STRING_ACTION( SPICE_MODEL,              m_CurrentPart.m_SpiceModel );
 DEFINE_STRING_ACTION( SCH_NAME,                 m_CurrentSymbol.m_SymbolName );
 DEFINE_STRING_ACTION( SCH_ALTERNATE,            m_CurrentSymbol.m_SymbolAlternateName );
-DEFINE_STRING_ACTION( PIN_SIGNAL_NAME,          m_CurrentPin.m_Signal );
 
 
 // STRING SEGMENT action
@@ -237,14 +238,6 @@ DECLARE_SINGLE_MATCH_RULE( STM_LINE, );
 DECLARE_SINGLE_MATCH_RULE( MXP_LINE, );
 DECLARE_SINGLE_MATCH_RULE( SPI_LINE, );
 DECLARE_SINGLE_MATCH_RULE( PAC_LINE, );
-
-
-//@todo remove once complete
-template <>
-struct CADSTAR_LIB_PARSER_ACTION<UNMATCHED_CONTENT>
-{
-    static void apply0( CADSTAR_LIB_PARSER_STATE& s ) { s.m_CurrentString = ""; }
-};
 
 
 template <>
@@ -412,7 +405,8 @@ struct CADSTAR_LIB_PARSER_ACTION<HIDDEN_PIN_ENTRY>
 {
     static void apply0( CADSTAR_LIB_PARSER_STATE& s )
     {
-        s.m_CurrentPart.m_HiddenPins.push_back( std::move( s.m_CurrentPinList[0] ) );
+        s.m_CurrentPart.m_HiddenPins.insert(
+                { std::move( s.m_CurrentSignalName ), std::move( s.m_CurrentPinList ) } );
         s.m_CurrentPinList.clear();
     }
 };

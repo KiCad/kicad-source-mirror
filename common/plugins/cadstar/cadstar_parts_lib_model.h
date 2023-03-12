@@ -162,9 +162,12 @@ struct CADSTAR_PART_ENTRY
 
     /**
      * Pins with an implied electrical connection to a net, not part of any symbol
-     * (Note: we probably will need to import these into the first gate or something)
+     * (Note: we probably will need to import these into the first gate)
+     *
+     * First = name of net (e.g. VCC/GND)
+     * Second = list of pins of the part that are connected to this net
      */
-    std::vector<CADSTAR_PART_PIN> m_HiddenPins;
+    std::map<std::string, std::vector<CADSTAR_PART_PIN>> m_HiddenPins;
 };
 
 
@@ -191,24 +194,21 @@ struct CADSTAR_PART_PIN
             m_Identifier( 0 ),
             m_Position( CADSTAR_PIN_POSITION::TOP_RIGHT ),
             m_Type( CADSTAR_PIN_TYPE::UNCOMMITTED ),
-            m_Loading(),
-            m_Signal()
+            m_Loading()
     {};
 
     CADSTAR_PART_PIN( long aId, CADSTAR_PIN_POSITION aPos, CADSTAR_PIN_TYPE aType,
-                      std::optional<long> aLoading, std::optional<std::string> aSignal ) :
+                      std::optional<long> aLoading ) :
             m_Identifier( aId ),
             m_Position( aPos ),
             m_Type( aType ),
-            m_Loading( aLoading ),
-            m_Signal( aSignal )
+            m_Loading( aLoading )
     {};
 
     long                       m_Identifier;
     CADSTAR_PIN_POSITION       m_Position;
     CADSTAR_PIN_TYPE           m_Type;
     std::optional<long>        m_Loading;
-    std::optional<std::string> m_Signal; // e.g. GND or VCC
 };
 
 

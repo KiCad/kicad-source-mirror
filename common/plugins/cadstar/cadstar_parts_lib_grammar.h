@@ -231,7 +231,7 @@ struct EQUIVALENT_PINS_GROUP :
                 <
                     plus<WHITESPACE_OR_CONTINUATION>,
                     EQUIVALENT_PIN,
-                    plus<one<'='>, EQUIVALENT_PIN>
+                    plus<one<'='>, star<WHITESPACE_OR_CONTINUATION>, EQUIVALENT_PIN>
                 >
 {};
 
@@ -489,25 +489,14 @@ struct PIN_ENTRY :
                 >
 {};
 
+struct PIN_LIST : plus<PIN_ENTRY, star<WHITESPACE>, opt<LINE_CONTINUATION>> {};
 
-struct SYMBOL_ENTRY :
-                seq
-                <
-                    SCH_SYMBOL_LINE,
-                    plus
-                    <
-                        PIN_ENTRY,
-                        star<WHITESPACE>,
-                        opt<LINE_CONTINUATION>
-                    >,
-                    opt<eol>
-                >
-{};
+struct SYMBOL_ENTRY : seq<SCH_SYMBOL_LINE, PIN_LIST, opt<eol>>{};
 
 
-///<Signame>_<PinIdentifier>[.<Position>][!<Pintype>][:<Loading>]
+// /<Signame>_<PinIdentifier>[.<Position>][!<Pintype>][:<Loading>]
 struct PIN_SIGNAL_NAME : seq<one<'/'>, STRING_EXCLUDING<WHITESPACE>> {};
-struct HIDDEN_PIN_ENTRY : seq<PIN_SIGNAL_NAME, plus<WHITESPACE>, PIN_ENTRY, opt<eol>>{};
+struct HIDDEN_PIN_ENTRY : seq<PIN_SIGNAL_NAME, plus<WHITESPACE>, PIN_LIST, opt<eol>>{};
 
 
 //******************
@@ -548,7 +537,6 @@ struct PART_ENTRY :
                 >
 {};
 
-struct UNMATCHED_CONTENT : STRING_EXCLUDING<FORMAT, PART_ENTRY> {}; //@todo remove once parser is complete
 
 /**
  * Grammar for CADSTAR Parts Library file format (*.lib)
@@ -561,7 +549,6 @@ struct GRAMMAR :
                         sor
                         <
                             PART_ENTRY,
-                            //UNMATCHED_CONTENT, //@todo remove once parser is complete
                             EMPTY_LINE // optional empty line
                         >,
                         opt<eol>
