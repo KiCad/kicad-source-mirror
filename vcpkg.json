@@ -11,7 +11,8 @@
     "curl",
     {
       "name": "gettext",
-      "features": [ "tools" ]
+      "features": [ "tools" ],
+      "host": true
     },
     "harfbuzz",
     "glm",
@@ -26,7 +27,7 @@
   "overrides": [
     {
       "name": "python3",
-      "version": "3.9.14"
+      "version": "3.9.16"
     },
     {
       "name": "wxwidgets",
@@ -39,10 +40,6 @@
     {
       "name": "ngspice",
       "version": "39"
-    },
-    {
-      "name": "curl",
-      "version": "7.83.1"
     }
   ]
 }
