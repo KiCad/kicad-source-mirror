@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Brian Piccioni brian@documenteddesigns.com
- * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Brian Piccioni <brian@documenteddesigns.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -128,6 +128,9 @@ DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame )
     for( wxRadioButton* button : m_sortButtons )
         button->SetValue( false );
 
+    if( m_sortCode < 0 || m_sortCode >= (int) m_sortButtons.size() )
+        m_sortCode = 0;
+
     m_sortButtons[m_sortCode]->SetValue( true );
 
     m_selection = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
@@ -137,6 +140,9 @@ DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame )
 
     for( wxRadioButton* button : m_scopeRadioButtons )
         button->SetValue( false );
+
+    if( m_annotationScope < 0 || m_annotationScope >= (int) m_scopeRadioButtons.size() )
+        m_annotationScope = 0;
 
     m_scopeRadioButtons[m_annotationScope]->SetValue( true );
 
@@ -418,6 +424,9 @@ void DIALOG_BOARD_REANNOTATE::GetParameters()
         else
             m_annotationScope++;
     }
+
+    if( m_annotationScope >= (int) m_scopeRadioButtons.size() )
+        m_annotationScope = 0;
 
     m_MessageWindow->SetLazyUpdate( true );
 }
