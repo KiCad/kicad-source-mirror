@@ -928,7 +928,8 @@ struct VIEW::DRAW_ITEM_VISITOR
         layer( aLayer ),
         useDrawPriority( aUseDrawPriority ),
         reverseDrawOrder( aReverseDrawOrder ),
-        drawForcedTransparent( false )
+        drawForcedTransparent( false ),
+        foundForcedTransparent( false )
     {
     }
 
