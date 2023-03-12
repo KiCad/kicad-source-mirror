@@ -185,6 +185,7 @@ public:
     void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
 
     virtual wxString GetScreenDesc() const;
+    virtual wxString GetFullScreenDesc() const;
 
     /**
      * Return a pointer to a BASE_SCREEN or one of its derivatives.

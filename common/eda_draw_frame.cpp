@@ -990,8 +990,8 @@ static const wxString productName = wxT( "KiCad E.D.A.  " );
 
 
 void PrintDrawingSheet( const RENDER_SETTINGS* aSettings, const PAGE_INFO& aPageInfo,
-                        const wxString& aFullSheetName, const wxString& aFileName,
-                        const TITLE_BLOCK& aTitleBlock,
+                        const wxString& aSheetName, const wxString& aSheetPath,
+                        const wxString& aFileName, const TITLE_BLOCK& aTitleBlock,
                         const std::map<wxString, wxString>* aProperties, int aSheetCount,
                         const wxString& aPageNumber, double aMils2Iu, const PROJECT* aProject,
                         const wxString& aSheetLayer, bool aIsFirstPage )
@@ -1003,7 +1003,8 @@ void PrintDrawingSheet( const RENDER_SETTINGS* aSettings, const PAGE_INFO& aPage
     drawList.SetPageNumber( aPageNumber );
     drawList.SetSheetCount( aSheetCount );
     drawList.SetFileName( aFileName );
-    drawList.SetSheetName( aFullSheetName );
+    drawList.SetSheetName( aSheetName );
+    drawList.SetSheetPath( aSheetPath );
     drawList.SetSheetLayer( aSheetLayer );
     drawList.SetProject( aProject );
     drawList.SetIsFirstPage( aIsFirstPage );
@@ -1033,9 +1034,10 @@ void EDA_DRAW_FRAME::PrintDrawingSheet( const RENDER_SETTINGS* aSettings, BASE_S
         DC->SetAxisOrientation( true, false );
     }
 
-    ::PrintDrawingSheet( aSettings, GetPageSettings(), GetScreenDesc(), aFilename, GetTitleBlock(),
-                         aProperties, aScreen->GetPageCount(), aScreen->GetPageNumber(), aMils2Iu,
-                         &Prj(), aSheetLayer, aScreen->GetVirtualPageNumber() == 1 );
+    ::PrintDrawingSheet( aSettings, GetPageSettings(), GetScreenDesc(), GetFullScreenDesc(),
+                         aFilename, GetTitleBlock(), aProperties, aScreen->GetPageCount(),
+                         aScreen->GetPageNumber(), aMils2Iu, &Prj(), aSheetLayer,
+                         aScreen->GetVirtualPageNumber() == 1 );
 
     if( origin.y > 0 )
     {
@@ -1046,6 +1048,13 @@ void EDA_DRAW_FRAME::PrintDrawingSheet( const RENDER_SETTINGS* aSettings, BASE_S
 
 
 wxString EDA_DRAW_FRAME::GetScreenDesc() const
+{
+    // Virtual function. Base class implementation returns an empty string.
+    return wxEmptyString;
+}
+
+
+wxString EDA_DRAW_FRAME::GetFullScreenDesc() const
 {
     // Virtual function. Base class implementation returns an empty string.
     return wxEmptyString;

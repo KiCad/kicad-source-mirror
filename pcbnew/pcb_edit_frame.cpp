@@ -568,6 +568,7 @@ void PCB_EDIT_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
                                                                &m_pcb->GetProperties() );
 
     drawingSheet->SetSheetName( std::string( GetScreenDesc().mb_str() ) );
+    drawingSheet->SetSheetPath( std::string( GetFullScreenDesc().mb_str() ) );
 
     // A board is not like a schematic having a main page and sub sheets.
     // So for the drawing sheet, use only the first page option to display items

@@ -164,6 +164,7 @@ public:
      * Return a human-readable description of the current screen.
      */
     wxString GetScreenDesc() const override;
+    wxString GetFullScreenDesc() const override;
 
     /**
      * Execute a remote command sent by Pcbnew via a socket connection.

@@ -648,6 +648,14 @@ SCHEMATIC& SCH_EDIT_FRAME::Schematic() const
 
 wxString SCH_EDIT_FRAME::GetScreenDesc() const
 {
+    wxString s = GetCurrentSheet().Last()->GetName();
+
+    return s;
+}
+
+
+wxString SCH_EDIT_FRAME::GetFullScreenDesc() const
+{
     wxString s = GetCurrentSheet().PathHumanReadable();
 
     return s;
