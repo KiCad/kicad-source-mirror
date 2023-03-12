@@ -818,6 +818,14 @@ bool CADSTAR_ARCHIVE_PARSER::SETTINGS::ParseSubNode( XNODE* aChildNode, PARSER_C
     {
         DesignLimit.Parse( aChildNode->GetChildren(), aContext );
     }
+    else if( cNodeName == wxT( "PINNOOFFSET" ) )
+    {
+        PinNoOffset = GetXmlAttributeIDLong( aChildNode, 0 );
+    }
+    else if( cNodeName == wxT( "PINNOANGLE" ) )
+    {
+        PinNoAngle = GetXmlAttributeIDLong( aChildNode, 0 );
+    }
     else
     {
         return false;

@@ -578,6 +578,9 @@ public:
         bool AllowBarredText = false; ///< Specifies if barring is allowed in the design
         long AngularPrecision; ///< Number of decimal points to display for angular dimensions
 
+        long PinNoOffset; ///< The distance, of a Pin Name/Identifier from its parent terminal.
+        long PinNoAngle; ///< The angle at which the Pin ID is positioned relative to a terminal.
+
         LONGPOINT               DesignOrigin;
         std::pair<POINT, POINT> DesignArea;
         LONGPOINT               DesignRef; ///< Appears to be 0,0 always
