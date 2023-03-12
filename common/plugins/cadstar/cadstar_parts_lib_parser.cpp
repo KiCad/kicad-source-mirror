@@ -39,6 +39,8 @@ struct CADSTAR_LIB_PARSER_STATE
     std::string                   m_CurrentAttrName;
     std::string                   m_CurrentSignalName;
     long                          m_CurrentLong = 0;
+    CADSTAR_PART_NODE             m_CurrentNode;
+    long                          m_CurrentNodeIdx = 0;
     std::vector<long>             m_CurrentPinEquivalenceGroup;
     std::set<std::string>         m_CurrentElementsParsed;
     bool                          m_ReadOnly = false;
@@ -89,6 +91,7 @@ DEFINE_CONTENT_TO_NUMBER_ACTION( PINNUM,                m_CurrentLong );
 DEFINE_CONTENT_TO_NUMBER_ACTION( MAX_PIN_COUNT,         m_CurrentPart.m_MaxPinCount );
 DEFINE_CONTENT_TO_NUMBER_ACTION( PIN_IDENTIFIER,        m_CurrentPin.m_Identifier );
 DEFINE_CONTENT_TO_NUMBER_ACTION( PIN_LOADING,           m_CurrentPin.m_Loading );
+DEFINE_CONTENT_TO_NUMBER_ACTION( HIERARCHY_NODE_INDEX,  m_CurrentLong );
 
 
 // unfortunately the one below needs to be defined separately
@@ -175,6 +178,69 @@ struct CADSTAR_LIB_PARSER_ACTION<STR_SEGMENT_EXCLUDING<EXCLUSION_RULES...>>
         s.m_CurrentString += in.string();
     }
 };
+
+
+//
+// HIERARCHY actions
+//
+template <>
+struct CADSTAR_LIB_PARSER_ACTION<HIERARCHY_NODE_ENTRY>
+{
+    static void apply0( CADSTAR_LIB_PARSER_STATE& s )
+    {
+        assert( s.m_CurrentString == "" && s.m_CurrentAttrName == "" );
+        s.m_ParsedModel.m_HierarchyNodes.insert(
+                { s.m_CurrentNodeIdx, std::move( s.m_CurrentNode ) } );
+        s.m_CurrentNode = CADSTAR_PART_NODE();
+    }
+};
+
+
+template <>
+struct CADSTAR_LIB_PARSER_ACTION<HIERARCHY_CURRENT_NODE>
+{
+    static void apply0( CADSTAR_LIB_PARSER_STATE& s )
+    {
+        assert( s.m_CurrentString == "" && s.m_CurrentAttrName == "" );
+        s.m_CurrentNodeIdx = s.m_CurrentLong;
+    }
+};
+
+
+template <>
+struct CADSTAR_LIB_PARSER_ACTION<HIERARCHY_PARENT_NODE>
+{
+    static void apply0( CADSTAR_LIB_PARSER_STATE& s )
+    {
+        assert( s.m_CurrentString == "" && s.m_CurrentAttrName == "" );
+        s.m_CurrentNode.m_ParentNodeIdx = s.m_CurrentLong;
+    }
+};
+
+
+template <>
+struct CADSTAR_LIB_PARSER_ACTION<HIERARCHY_NODE_NAME>
+{
+    static void apply0( CADSTAR_LIB_PARSER_STATE& s )
+    {
+        assert( s.m_CurrentAttrName == "" );
+        s.m_CurrentNode.m_Name = std::move( s.m_CurrentString );
+        s.m_CurrentString = "";
+    }
+};
+
+
+template <>
+struct CADSTAR_LIB_PARSER_ACTION<HIERARCHY_PART_NAME>
+{
+    static void apply0( CADSTAR_LIB_PARSER_STATE& s )
+    {
+        assert( s.m_CurrentAttrName == "" );
+        s.m_CurrentNode.m_PartNames.push_back( std::move( s.m_CurrentString ) );
+        s.m_CurrentString = "";
+    }
+};
+
 
 // PART_ENTRY action
 // We just push the part to the vector of parts in our state

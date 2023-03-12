@@ -69,6 +69,12 @@ struct spaced_ch : seq<star<WHITESPACE>, one<CHAR_TO_FIND...>>{};
 struct QUOTED_STRING : seq<one<'"'>, STRING_EXCLUDING<one<'"'>>, one<'"'>> {};
 
 /**
+ * String inside single quotation marks
+ */
+struct SINGLE_QUOTED_STRING : seq<one<'\''>, STRING_EXCLUDING<one<'\''>>, one<'\''>> {};
+
+
+/**
  * String inside brackets with preceding spaces
  */
 struct STRING_IN_BRACKETS :
@@ -103,6 +109,33 @@ struct FORMAT : seq
                 >
  {};
 
+
+// Newer Parts files have possibility of specifying a tree-like structure to show hierarchy
+//
+// Example:
+//+N0 'root' &
+//'part1' 'part2'
+//+N1 N0 'subnode1' 'part3' 'part4'
+struct HIERARCHY_NODE_INDEX :   plus<digit>{};
+struct HIERARCHY_CURRENT_NODE : seq<one<'N'>, HIERARCHY_NODE_INDEX>{};
+struct HIERARCHY_PARENT_NODE :  seq<one<'N'>, HIERARCHY_NODE_INDEX>{}; // Different action
+struct HIERARCHY_NODE_NAME :    SINGLE_QUOTED_STRING {};
+struct HIERARCHY_PART_NAME :    SINGLE_QUOTED_STRING {};
+struct HIERARCHY_NODE_ENTRY :
+                seq
+                <
+                    bol,
+                    one<'+'>,
+                    HIERARCHY_CURRENT_NODE,     // N1
+                    plus<WHITESPACE_OR_CONTINUATION>,
+                    opt<HIERARCHY_PARENT_NODE>, // N0
+                    star<WHITESPACE_OR_CONTINUATION>,
+                    HIERARCHY_NODE_NAME,       // 'subnode1'
+                    star<WHITESPACE_OR_CONTINUATION>,
+                    plus<HIERARCHY_PART_NAME, star<WHITESPACE_OR_CONTINUATION>>, // 'part1' 'part2'
+                    opt<eol>
+                >
+ {};
 
 // **************
 // * PART ENTRY *
@@ -542,8 +575,9 @@ struct PART_ENTRY :
  * Grammar for CADSTAR Parts Library file format (*.lib)
  */
 struct GRAMMAR :
-                must<seq<
+                must<
                     opt<FORMAT>,
+                    star<star<EMPTY_LINE>, HIERARCHY_NODE_ENTRY>,
                     plus
                     <
                         sor
@@ -555,8 +589,8 @@ struct GRAMMAR :
                     >,
                     opt<TAO_PEGTL_ISTRING( ".END"), opt<eol>>,
                     star<EMPTY_LINE>,
-                    must<eolf>
-                >>
+                    tao::pegtl::eof // just putting "eof" results in ambiguous symbol
+                >
 {};
 
 

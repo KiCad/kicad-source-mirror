@@ -32,6 +32,7 @@ struct CADSTAR_SWAP_GROUP;
 struct CADSTAR_ATTRIBUTE_VALUE;
 struct CADSTAR_PART_SYMBOL_ENTRY;
 struct CADSTAR_PART_PIN;
+struct CADSTAR_PART_NODE;
 
 /**
  * CADSTAR Parts Library (*.lib) model - a data structure describing the contents of the
@@ -39,8 +40,9 @@ struct CADSTAR_PART_PIN;
  */
 struct CADSTAR_PARTS_LIB_MODEL
 {
-    std::optional<long>             m_FormatNumber;
-    std::vector<CADSTAR_PART_ENTRY> m_PartEntries;
+    std::optional<long>               m_FormatNumber;
+    std::map<long, CADSTAR_PART_NODE> m_HierarchyNodes;
+    std::vector<CADSTAR_PART_ENTRY>   m_PartEntries;
 };
 
 
@@ -228,6 +230,14 @@ struct CADSTAR_SWAP_GROUP
      * as it defines the equivalence between gates
      */
     std::vector<std::vector<long>> m_Gates;
+};
+
+
+struct CADSTAR_PART_NODE
+{
+    std::optional<long>      m_ParentNodeIdx;
+    std::string              m_Name;
+    std::vector<std::string> m_PartNames; ///< Part names belonging to this hierarchy
 };
 
 #endif //CADSTAR_PARTS_LIB_MODEL_H

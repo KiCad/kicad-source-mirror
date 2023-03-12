@@ -193,9 +193,14 @@ BOOST_AUTO_TEST_CASE( ReadContent )
             "# Format 32\r\n"
             "\r\n"
             "\r\n"
-            "  \r\n"
+            "+N0 'root' &\r\n"
+            "'part1' &\r\n"
+            "'part2'\r\n"
+            "+N1 N0 'subnode1' &\r\n"
+            "'part3' &\r\n"
+            "'part4'\r\n"
             "\r\n"
-            "\r\n"
+            " \r\n"
             "\r\n"
             ".<Part name> (<Part number>):<Part version>;<Description>\r\n"
             "<PCB Component Refname> (<PCB Alternate Refname>)\r\n"
@@ -242,6 +247,8 @@ BOOST_AUTO_TEST_CASE( ReadContent )
     std::optional<std::string> nullOptString;
 
     BOOST_CHECK_EQUAL( result.m_FormatNumber, 32 );
+    BOOST_REQUIRE_EQUAL( result.m_HierarchyNodes.size(), 2 ); // root and subnode
+
     BOOST_REQUIRE_EQUAL( result.m_PartEntries.size(), 1 );
 
     BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_Name, "<Part name>" );
