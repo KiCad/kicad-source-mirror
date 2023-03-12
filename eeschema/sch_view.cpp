@@ -113,10 +113,8 @@ void SCH_VIEW::DisplaySheet( const SCH_SCREEN *aScreen )
 
         wxCHECK( editFrame, /* void */ );
 
-        wxString        sheetName = editFrame->GetCurrentSheet().Last()->GetName();
-        wxString        sheetPath = editFrame->GetCurrentSheet().PathHumanReadable();
-        m_drawingSheet->SetSheetName( TO_UTF8( sheetName ) );
-        m_drawingSheet->SetSheetPath( TO_UTF8( sheetPath ) );
+        m_drawingSheet->SetSheetName( TO_UTF8( editFrame->GetScreenDesc() ) );
+        m_drawingSheet->SetSheetPath( TO_UTF8( editFrame->GetFullScreenDesc() ) );
     }
     else
     {

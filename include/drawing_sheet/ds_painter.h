@@ -129,7 +129,8 @@ private:
  *
  * @param aDC The device context.
  * @param aPageInfo for margins and page size (in mils).
- * @param aFullSheetName The sheetpath (full sheet name), for basic inscriptions.
+* @param aSheetName The sheet name, for basic inscriptions.
+* @param aSheetPath The sheetpath (full sheet name), for basic inscriptions.
  * @param aFileName The file name, for basic inscriptions.
  * @param aTitleBlock The sheet title block, for text variable resolution.
  * @param aProperties Optional properties for text variable resolution.
@@ -145,8 +146,8 @@ private:
  * - the RBmargin The right bottom margin of the drawing sheet.
  */
 void PrintDrawingSheet( const RENDER_SETTINGS* aSettings, const PAGE_INFO& aPageInfo,
-                        const wxString& aFullSheetName, const wxString& aFileName,
-                        const TITLE_BLOCK& aTitleBlock,
+                        const wxString& aSheetName, const wxString& aSheetPath,
+                        const wxString& aFileName, const TITLE_BLOCK& aTitleBlock,
                         const std::map<wxString, wxString>* aProperties, int aSheetCount,
                         const wxString& aPageNumber, double aScalar, const PROJECT* aProject,
                         const wxString& aSheetLayer = wxEmptyString, bool aIsFirstPage = true );

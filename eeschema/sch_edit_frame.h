@@ -164,6 +164,7 @@ public:
      * Return a human-readable description of the current screen.
      */
     wxString GetScreenDesc() const override;
+    wxString GetFullScreenDesc() const override;
 
     /**
      * Execute a remote command sent via a socket on port KICAD_SCH_PORT_SERVICE_NUMBER (which
