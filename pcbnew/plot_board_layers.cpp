@@ -8,7 +8,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,12 +38,11 @@
 
 #include <board.h>
 #include <board_design_settings.h>
-#include <core/arraydim.h>
 #include <footprint.h>
 #include <pcb_track.h>
+#include <pcb_text.h>
 #include <fp_shape.h>
 #include <pad.h>
-#include <pcb_text.h>
 #include <zone.h>
 #include <pcb_shape.h>
 #include <pcb_target.h>
@@ -792,11 +791,9 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
  *      mask clearance only (because deflate sometimes creates shape artifacts)
  * 5 - draw result as polygons
  *
- * We have 2 algos:
- * the initial algo, that create polygons for every shape, inflate and deflate polygons
- * with Min Thickness/2, and merges the result.
- * Drawback: pads attributes are lost (annoying in Gerber)
- * the new algo:
+ * The algorithm is somewhat complicated to allow for min web thickness while also preserving
+ * pad attributes in Gerber.
+ *
  * create initial polygons for every shape (pad or polygon),
  * inflate and deflate polygons
  * with Min Thickness/2, and merges the result (like initial algo)
@@ -805,10 +802,7 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
  * plot all initial shapes by flashing (or using regions) for pad and polygons
  * (shapes will be better) and remaining polygons to
  * remove areas with thickness < min thickness from final mask
- *
- * TODO: remove old code after more testing.
  */
-#define NEW_ALGO 1
 
 void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                           const PCB_PLOT_PARAMS& aPlotOpt, int aMinThickness )
@@ -828,9 +822,6 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, aPlotOpt );
     itemplotter.SetLayerSet( aLayerMask );
 
-    for( FOOTPRINT* footprint : aBoard->Footprints() )
-        itemplotter.PlotFootprintTextItems( footprint );
-
     // Build polygons for each pad shape.  The size of the shape on solder mask should be size
     // of pad + clearance around the pad, where clearance = solder mask clearance + extra margin.
     // Extra margin is half the min width for solder mask, which is used to merge too-close shapes
@@ -844,11 +835,28 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     // Will contain exact shapes of all items on solder mask
     SHAPE_POLY_SET initialPolys;
 
-#if NEW_ALGO
+    auto plotFPTextItem =
+            [&]( const FP_TEXT& aText )
+            {
+                if( !aText.IsVisible() && !itemplotter.GetPlotInvisibleText()  )
+                    return;
+
+                if( aText.GetText() == wxT( "${REFERENCE}" ) && !itemplotter.GetPlotReference() )
+                    return;
+
+                if( aText.GetText() == wxT( "${VALUE}" ) && !itemplotter.GetPlotValue() )
+                    return;
+
+                // add shapes with their exact mask layer size in initialPolys
+                aText.TransformTextToPolySet( initialPolys, layer, 0, maxError, ERROR_OUTSIDE );
+
+                // add shapes inflated by aMinThickness/2 in areas
+                aText.TransformTextToPolySet( areas, layer, inflate, maxError, ERROR_OUTSIDE );
+            };
+
     // Generate polygons with arcs inside the shape or exact shape to minimize shape changes
     // created by arc to segment size correction.
     DISABLE_ARC_RADIUS_CORRECTION disabler;
-#endif
     {
         // Plot footprint pads and graphics
         for( const FOOTPRINT* footprint : aBoard->Footprints() )
@@ -858,17 +866,32 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             // add shapes inflated by aMinThickness/2 in areas
             footprint->TransformPadsToPolySet( areas, layer, inflate, maxError, ERROR_OUTSIDE );
 
+            if( itemplotter.GetPlotReference() && footprint->Reference().IsOnLayer( layer ) )
+                plotFPTextItem( footprint->Reference() );
+
+            if( itemplotter.GetPlotValue() && footprint->Value().IsOnLayer( layer ) )
+                plotFPTextItem( footprint->Value() );
+
             for( const BOARD_ITEM* item : footprint->GraphicalItems() )
             {
-                if( item->Type() == PCB_FP_SHAPE_T && item->IsOnLayer( layer ) )
+                if( item->IsOnLayer( layer ) )
                 {
-                    // add shapes with their exact mask layer size in initialPolys
-                    item->TransformShapeToPolygon( initialPolys, layer, 0, maxError, ERROR_OUTSIDE );
+                    if( item->Type() == PCB_FP_TEXT_T )
+                    {
+                        plotFPTextItem( static_cast<const FP_TEXT&>( *item ) );
+                    }
+                    else
+                    {
+                        // add shapes with their exact mask layer size in initialPolys
+                        item->TransformShapeToPolygon( initialPolys, layer, 0, maxError,
+                                                       ERROR_OUTSIDE );
 
-                    // add shapes inflated by aMinThickness/2 in areas
-                    item->TransformShapeToPolygon( areas, layer, inflate, maxError, ERROR_OUTSIDE );
+                        // add shapes inflated by aMinThickness/2 in areas
+                        item->TransformShapeToPolygon( areas, layer, inflate, maxError,
+                                                       ERROR_OUTSIDE );
+                    }
                 }
-                else if( item->Type() == PCB_FP_SHAPE_T && item->IsOnLayer( Edge_Cuts ) )
+                else if( item->IsOnLayer( Edge_Cuts ) )
                 {
                    itemplotter.PlotFootprintShape( static_cast<const FP_SHAPE*>( item ) );
                 }
@@ -905,10 +928,26 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         {
             if( item->IsOnLayer( layer ) )
             {
-                // add shapes with their exact mask layer size in initialPolys
-                item->TransformShapeToPolygon( initialPolys, layer, 0, maxError, ERROR_OUTSIDE );
-                // add shapes inflated by aMinThickness/2 in areas
-                item->TransformShapeToPolygon( areas, layer, inflate, maxError, ERROR_OUTSIDE );
+                if( item->Type() == PCB_TEXT_T )
+                {
+                    const PCB_TEXT* text = static_cast<const PCB_TEXT*>( item );
+
+                    // add shapes with their exact mask layer size in initialPolys
+                    text->TransformTextToPolySet( initialPolys, layer, 0, maxError, ERROR_OUTSIDE );
+
+                    // add shapes inflated by aMinThickness/2 in areas
+                    text->TransformTextToPolySet( areas, layer, inflate, maxError, ERROR_OUTSIDE );
+                }
+                else
+                {
+                    // add shapes with their exact mask layer size in initialPolys
+                    item->TransformShapeToPolygon( initialPolys, layer, 0, maxError,
+                                                   ERROR_OUTSIDE );
+
+                    // add shapes inflated by aMinThickness/2 in areas
+                    item->TransformShapeToPolygon( areas, layer, inflate, maxError,
+                                                   ERROR_OUTSIDE );
+                }
             }
             else if( item->IsOnLayer( Edge_Cuts ) )
             {
@@ -938,7 +977,6 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     areas.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
     areas.Deflate( inflate, numSegs );
 
-#if !NEW_ALGO
     // To avoid a lot of code, use a ZONE to handle and plot polygons, because our polygons look
     // exactly like filled areas in zones.
     // Note, also this code is not optimized: it creates a lot of copy/duplicate data.
@@ -954,44 +992,6 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     areas.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
     itemplotter.PlotFilledAreas( &zone, layer, areas );
-#else
-
-    // Remove initial shapes: each shape will be added later, as flashed item or region
-    // with a suitable attribute.
-    // Do not merge pads is mandatory in Gerber files: They must be identified as pads
-
-    // we deflate areas in polygons, to avoid after subtracting initial shapes
-    // having small artifacts due to approximations during polygon transforms
-    areas.BooleanSubtract( initialPolys, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-
-    // Slightly inflate polygons to avoid any gap between them and other shapes,
-    // These gaps are created by arc to segments approximations
-    areas.Inflate( pcbIUScale.mmToIU( 0.002 ), 6 );
-
-    // Now, only polygons with a too small thickness are stored in areas.
-    areas.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-
-    // Plot each initial shape (pads and polygons on mask layer), with suitable attributes:
-    PlotStandardLayer( aBoard, aPlotter, aLayerMask, aPlotOpt );
-
-    for( int ii = 0; ii < areas.OutlineCount(); ii++ )
-    {
-        const SHAPE_LINE_CHAIN& path = areas.COutline( ii );
-
-        // polygon area in mm^2 :
-        double curr_area = path.Area() / ( pcbIUScale.IU_PER_MM * pcbIUScale.IU_PER_MM );
-
-        // Skip very small polygons: they are certainly artifacts created by
-        // arc approximations and polygon transforms
-        // (inflate/deflate transforms)
-        constexpr double poly_min_area_mm2 = 0.01;     // 0.01 mm^2 gives a good filtering
-
-        if( curr_area < poly_min_area_mm2 )
-            continue;
-
-        aPlotter->PlotPoly( path, FILL_T::FILLED_SHAPE );
-    }
-#endif
 }
 
 
