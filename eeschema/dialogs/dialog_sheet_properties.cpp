@@ -27,6 +27,7 @@
 #include <wx/string.h>
 #include <wx/log.h>
 #include <wx/tooltip.h>
+#include <common.h>
 #include <confirm.h>
 #include <validators.h>
 #include <wx_filename.h>
@@ -277,16 +278,11 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
         return false;
     }
 
-    // Ensure the filename extension is OK.  In normal use will be caught by grid validators,
-    // but unedited data from existing files can be bad.
+    // Ensure the filename extension is OK.  (In normal use will be caught by grid validators,
+    // but unedited data from existing files can be bad.)
+    sheetFileName = EnsureFileExtension( sheetFileName, KiCadSchematicFileExtension );
+
     wxFileName fn( sheetFileName );
-
-    if( fn.GetExt().CmpNoCase( KiCadSchematicFileExtension ) != 0 )
-    {
-        DisplayError( this, _( "Sheet file must have a '.kicad_sch' extension." ) );
-        return false;
-    }
-
     wxString newRelativeFilename = fn.GetFullPath();
 
     // Inside Eeschema, filenames are stored using unix notation
@@ -415,26 +411,11 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
 
 bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilename )
 {
-    wxString msg;
+    wxString   msg;
+    wxFileName sheetFileName( EnsureFileExtension( aNewFilename, KiCadSchematicFileExtension ) );
 
     // Sheet file names are relative to the path of the current sheet.  This allows for
     // nesting of schematic files in subfolders.  Screen file names are always absolute.
-    wxFileName sheetFileName( aNewFilename );
-
-    if( sheetFileName.GetExt().IsEmpty() )
-    {
-        sheetFileName.SetExt( KiCadSchematicFileExtension );
-    }
-    else if( sheetFileName.GetExt().CmpNoCase( KiCadSchematicFileExtension ) != 0 )
-    {
-        msg = wxString::Format( _( "The file '%s' does not appear to be a valid schematic file." ),
-                                sheetFileName.GetFullName() );
-        wxMessageDialog badSchFileDialog( this, msg, _( "Invalid Schematic File" ),
-                                          wxOK | wxCENTRE | wxICON_EXCLAMATION );
-        badSchFileDialog.ShowModal();
-        return false;
-    }
-
     SCHEMATIC&                             schematic = m_frame->Schematic();
     SCH_SHEET_LIST                         fullHierarchy = schematic.GetFullHierarchy();
     wxFileName                             screenFileName( sheetFileName );

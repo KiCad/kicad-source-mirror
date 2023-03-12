@@ -1120,8 +1120,7 @@ void SCH_EDIT_FRAME::NewProject()
     if( dlg.ShowModal() != wxID_CANCEL )
     {
         // Enforce the extension, wxFileDialog is inept.
-        wxFileName create_me = dlg.GetPath();
-        create_me.SetExt( KiCadSchematicFileExtension );
+        wxFileName create_me = EnsureFileExtension( dlg.GetPath(), KiCadSchematicFileExtension );
 
         if( create_me.FileExists() )
         {

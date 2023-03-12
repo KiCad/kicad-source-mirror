@@ -247,12 +247,8 @@ bool AskSaveBoardFileName( PCB_EDIT_FRAME* aParent, wxString* aFileName, bool* a
     if( dlg.ShowModal() != wxID_OK )
         return false;
 
-    fn = dlg.GetPath();
-
-    // always enforce filename extension, user may not have entered it.
-    fn.SetExt( KiCadPcbFileExtension );
-
-    *aFileName = fn.GetFullPath();
+    *aFileName = dlg.GetPath();
+    *aFileName = EnsureFileExtension( *aFileName, KiCadPcbFileExtension );
 
 #if wxCHECK_VERSION( 3, 1, 7 )
     if( newProjectHook.IsAttachedToDialog() )
@@ -1161,10 +1157,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
 
 bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject )
 {
-    wxFileName  pcbFileName = aFileName;
-
-    // Ensure the file ext is the right ext:
-    pcbFileName.SetExt( KiCadPcbFileExtension );
+    wxFileName pcbFileName( EnsureFileExtension( aFileName, KiCadPcbFileExtension ) );
 
     if( !IsWritable( pcbFileName ) )
     {

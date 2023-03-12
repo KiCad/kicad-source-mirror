@@ -26,6 +26,7 @@
 
 #include <symbol_library.h>
 #include <confirm.h>
+#include <common.h>
 #include <connection_graph.h>
 #include <dialog_migrate_buses.h>
 #include <dialog_symbol_remap.h>
@@ -841,8 +842,7 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
         if( dlg.ShowModal() == wxID_CANCEL )
             return false;
 
-        newFileName = dlg.GetPath();
-        newFileName.SetExt( KiCadSchematicFileExtension );
+        newFileName = EnsureFileExtension( dlg.GetPath(), KiCadSchematicFileExtension );
 
         if( ( !newFileName.DirExists() && !newFileName.Mkdir() ) ||
             !newFileName.IsDirWritable() )

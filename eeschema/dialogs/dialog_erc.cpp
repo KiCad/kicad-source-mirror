@@ -39,6 +39,7 @@
 #include <erc.h>
 #include <id.h>
 #include <confirm.h>
+#include <common.h>
 #include <widgets/wx_html_report_box.h>
 #include <wx/ffile.h>
 #include <wx/filedlg.h>
@@ -960,10 +961,7 @@ void DIALOG_ERC::OnSaveReport( wxCommandEvent& aEvent )
     if( dlg.ShowModal() != wxID_OK )
         return;
 
-    fn = dlg.GetPath();
-
-    if( fn.GetExt().IsEmpty() )
-        fn.SetExt( ReportFileExtension );
+    fn = EnsureFileExtension( dlg.GetPath(), ReportFileExtension );
 
     if( !fn.IsAbsolute() )
     {

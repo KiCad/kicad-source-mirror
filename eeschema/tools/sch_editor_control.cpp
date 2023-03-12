@@ -33,7 +33,6 @@
 #include <dialogs/dialog_assign_netclass.h>
 #include <project_rescue.h>
 #include <erc.h>
-#include <fmt.h>
 #include <invoke_sch_dialog.h>
 #include <string_utils.h>
 #include <kiway.h>
@@ -59,7 +58,6 @@
 #include <sim/sim_lib_mgr.h>
 #include "symbol_library_manager.h"
 #include <symbol_viewer_frame.h>
-#include <status_popup.h>
 #include <tool/picker_tool.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
@@ -114,10 +112,9 @@ int SCH_EDITOR_CONTROL::SaveCurrSheetCopyAs( const TOOL_EVENT& aEvent )
     if( dlg.ShowModal() == wxID_CANCEL )
         return false;
 
-    wxFileName newFileName = dlg.GetPath();
-    newFileName.SetExt( KiCadSchematicFileExtension );
+    wxString newFilename = EnsureFileExtension( dlg.GetPath(), KiCadSchematicFileExtension );
 
-    m_frame->saveSchematicFile( curr_sheet, newFileName.GetFullPath() );
+    m_frame->saveSchematicFile( curr_sheet, newFilename );
     return 0;
 }
 

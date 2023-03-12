@@ -30,6 +30,7 @@
 #include <bitmaps.h>
 #include <kiway.h>
 #include <confirm.h>
+#include <common.h>
 #include <string_utils.h>
 #include <sch_base_frame.h>
 #include <sch_edit_frame.h>
@@ -356,15 +357,7 @@ bool DIALOG_FIELD_PROPERTIES::TransferDataFromWindow()
     }
     else if( m_fieldId == SHEETFILENAME_V )
     {
-        wxFileName fn( m_text );
-
-        // It's annoying to throw up nag dialogs when the extension isn't right.  Just
-        // fix it.
-        if( fn.GetExt().CmpNoCase( KiCadSchematicFileExtension ) != 0 )
-        {
-            fn.SetExt( KiCadSchematicFileExtension );
-            m_text = fn.GetFullPath();
-        }
+        m_text = EnsureFileExtension( m_text, KiCadSchematicFileExtension );
     }
 
     m_position = VECTOR2I( m_posX.GetValue(), m_posY.GetValue() );

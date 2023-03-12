@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +31,6 @@
 #include <sch_validators.h>
 #include <validators.h>
 #include <sch_edit_frame.h>
-#include <netclass.h>
 #include <symbol_library.h>
 #include <schematic.h>
 #include <template_fieldnames.h>
@@ -687,15 +686,7 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
     {
         if( m_parentType == SCH_SHEET_T && aRow == SHEETFILENAME )
         {
-            wxFileName fn( value );
-
-            // It's annoying to throw up nag dialogs when the extension isn't right.  Just
-            // fix it.
-            if( fn.GetExt().CmpNoCase( KiCadSchematicFileExtension ) != 0 )
-            {
-                fn.SetExt( KiCadSchematicFileExtension );
-                value = fn.GetFullPath();
-            }
+            value = EnsureFileExtension( value, KiCadSchematicFileExtension );
         }
         else if( m_parentType == LIB_SYMBOL_T && aRow == VALUE_FIELD )
         {

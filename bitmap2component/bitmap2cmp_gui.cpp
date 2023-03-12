@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 1992-2010 jean-pierre.charras
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@
 #include <bitmap2cmp_settings.h>
 #include <bitmap_io.h>
 #include <bitmaps.h>
+#include <common.h>
 #include <kiface_base.h>
 #include <math/util.h>      // for KiROUND
 #include <kiway.h>
@@ -814,8 +815,7 @@ void BM2CMP_FRAME::exportEeschemaFormat()
     if( fileDlg.ShowModal() != wxID_OK )
         return;
 
-    fn = fileDlg.GetPath();
-    fn.SetExt( KiCadSymbolLibFileExtension );
+    fn = EnsureFileExtension( fileDlg.GetPath(), KiCadSymbolLibFileExtension );
     m_ConvertedFileName = fn.GetFullPath();
 
     FILE*    outfile = wxFopen( m_ConvertedFileName, wxT( "w" ) );
@@ -849,8 +849,7 @@ void BM2CMP_FRAME::exportPcbnewFormat()
     if( fileDlg.ShowModal() != wxID_OK )
         return;
 
-    fn = fileDlg.GetPath();
-    fn.SetExt( KiCadFootprintFileExtension );
+    fn = EnsureFileExtension( fileDlg.GetPath(), KiCadFootprintFileExtension );
     m_ConvertedFileName = fn.GetFullPath();
 
     FILE* outfile = wxFopen( m_ConvertedFileName, wxT( "w" ) );

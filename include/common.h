@@ -71,6 +71,11 @@ bool EnsureFileDirectoryExists( wxFileName*     aTargetFullFileName,
                                 REPORTER*       aReporter = nullptr );
 
 /**
+ * It's annoying to throw up nag dialogs when the extension isn't right.  Just fix it.
+ */
+wxString EnsureFileExtension( const wxString& aFilename, const wxString& aExtension );
+
+/**
  * Replace any environment variable & text variable references with their values.
  *
  * @param aString a string containing (perhaps) references to env var

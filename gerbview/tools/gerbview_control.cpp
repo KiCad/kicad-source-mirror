@@ -19,6 +19,7 @@
  */
 
 #include <confirm.h>
+#include <common.h>
 #include <dialogs/dialog_layers_select_to_pcb.h>
 #include <export_to_pcbnew.h>
 #include <gerber_file_image.h>
@@ -129,7 +130,7 @@ int GERBVIEW_CONTROL::ExportToPcbnew( const TOOL_EVENT& aEvent )
     if( filedlg.ShowModal() == wxID_CANCEL )
         return 0;
 
-    wxFileName fileName = filedlg.GetPath();
+    wxFileName fileName = EnsureFileExtension( filedlg.GetPath(), KiCadPcbFileExtension );
 
     /* Install a dialog frame to choose the mapping
      * between gerber layers and Pcbnew layers
@@ -140,10 +141,6 @@ int GERBVIEW_CONTROL::ExportToPcbnew( const TOOL_EVENT& aEvent )
 
     if( ok != wxID_OK )
         return 0;
-
-    // If no extension was entered, then force the extension to be a KiCad PCB file
-    if( !fileName.HasExt() )
-        fileName.SetExt( KiCadPcbFileExtension );
 
     m_frame->SetMruPath( fileName.GetPath() );
 

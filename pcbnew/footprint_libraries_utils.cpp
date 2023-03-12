@@ -341,7 +341,7 @@ void FOOTPRINT_EDIT_FRAME::ExportFootprint( FOOTPRINT* aFootprint )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    fn = dlg.GetPath();
+    fn = EnsureFileExtension( dlg.GetPath(), KiCadFootprintFileExtension );
     cfg->m_LastImportExportPath = fn.GetPath();
 
     try
@@ -430,16 +430,13 @@ wxString PCB_BASE_EDIT_FRAME::createNewLibrary( const wxString& aLibName,
     }
     else
     {
-        fn = aLibName;
+        fn = EnsureFileExtension( aLibName, KiCadFootprintLibPathExtension );
 
         if( !fn.IsAbsolute() )
         {
             fn.SetName( aLibName );
             fn.MakeAbsolute( initialPath );
         }
-
-        // Enforce the .pretty extension:
-        fn.SetExt( KiCadFootprintLibPathExtension );
     }
 
     // We can save fp libs only using IO_MGR::KICAD_SEXP format (.pretty libraries)

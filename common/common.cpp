@@ -377,6 +377,25 @@ bool EnsureFileDirectoryExists( wxFileName*     aTargetFullFileName,
 }
 
 
+wxString EnsureFileExtension( const wxString& aFilename, const wxString& aExtension )
+{
+    wxString newFilename( aFilename );
+
+    // It's annoying to throw up nag dialogs when the extension isn't right.  Just fix it,
+    // but be careful not to destroy existing after-dot-text that isn't actually a bad
+    // extension, such as "Schematic_1.1".
+    if( newFilename.Lower().AfterLast( '.' ) != aExtension )
+    {
+        if( newFilename.Last() != '.' )
+            newFilename.Append( '.' );
+
+        newFilename.Append( aExtension );
+    }
+
+    return newFilename;
+}
+
+
 /**
  * Performance enhancements to file and directory operations.
  *

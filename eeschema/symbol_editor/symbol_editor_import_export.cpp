@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@
  */
 
 #include <confirm.h>
+#include <common.h>
 #include <symbol_lib_table.h>
 #include <symbol_edit_frame.h>
 #include <symbol_library.h>
@@ -57,13 +58,12 @@ void SYMBOL_EDIT_FRAME::ImportSymbol()
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    wxFileName fn = dlg.GetPath();
+    wxFileName fn;
 
-    if( fn.GetExt().IsEmpty() )
-    {
-        fn.SetExt( (dlg.GetFilterIndex() == 0) ? KiCadSymbolLibFileExtension
-                                               : LegacySymbolLibFileExtension );
-    }
+    if( dlg.GetFilterIndex() == 0 )
+        fn = EnsureFileExtension( dlg.GetPath(), KiCadSymbolLibFileExtension );
+    else
+        fn = EnsureFileExtension( dlg.GetPath(), LegacySymbolLibFileExtension );
 
     m_mruPath = fn.GetPath();
 
