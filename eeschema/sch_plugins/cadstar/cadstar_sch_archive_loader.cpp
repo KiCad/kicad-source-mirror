@@ -2683,18 +2683,48 @@ CADSTAR_SCH_ARCHIVE_LOADER::SYMDEF_ID
 CADSTAR_SCH_ARCHIVE_LOADER::getSymDefFromName( const wxString& aSymdefName,
                                                const wxString& aSymDefAlternate )
 {
-    // Do a case-insensitive comparison
-    for( std::pair<SYMDEF_ID, SYMDEF_SCM> symPair : Library.SymbolDefinitions )
+    if( m_SymDefNamesCache.size() != Library.SymbolDefinitions.size() )
     {
-        SYMDEF_ID  id     = symPair.first;
-        SYMDEF_SCM symdef = symPair.second;
+        // Re-initialise
+        m_SymDefNamesCache.clear();
+        m_DefaultSymDefNamesCache.clear();
 
-        if( symdef.ReferenceName.Lower() == aSymdefName.Lower()
-            && symdef.Alternate.Lower() == aSymDefAlternate.Lower() )
+        // Create a lower case cache to avoid searching each time
+        for( auto& [id, symdef] : Library.SymbolDefinitions )
         {
-            return id;
+            wxString refKey = symdef.ReferenceName.Lower();
+            wxString altKey = symdef.Alternate.Lower();
+
+            m_SymDefNamesCache[{ refKey, altKey }] = id;
+
+            // Secondary cache to find symbols just by the Name (e.g. if the alternate
+            // does not exist, we still want to return a symbo - the same behaviour
+            // as CADSTAR
+
+            if( !m_DefaultSymDefNamesCache.count( refKey ) )
+            {
+                m_DefaultSymDefNamesCache.insert( { refKey, id } );
+            }
+            else if( altKey.IsEmpty() )
+            {
+                // Always use the empty alternate if it exists
+                m_DefaultSymDefNamesCache[refKey] = id;
+            }
         }
     }
+
+    wxString refKeyToFind = aSymdefName.Lower();
+    wxString altKeyToFind = aSymDefAlternate.Lower();
+
+    if( m_SymDefNamesCache.count( { refKeyToFind, altKeyToFind } ) )
+    {
+        return m_SymDefNamesCache[{ refKeyToFind, altKeyToFind }];
+    }
+    else if( m_DefaultSymDefNamesCache.count( refKeyToFind ) )
+    {
+        return m_DefaultSymDefNamesCache[refKeyToFind];
+    }
+
 
     return SYMDEF_ID();
 }

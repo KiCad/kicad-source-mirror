@@ -131,6 +131,16 @@ private:
     std::map<SYMDEF_ID, PINNUM_TO_TERMINAL_MAP> m_symDefTerminalsMap;
 
     /**
+     * Cache storing symbol names and alternates to symdef IDs
+     */
+    std::map<std::pair<wxString, wxString>, SYMDEF_ID> m_SymDefNamesCache;
+
+    /**
+     * Cache storing symbol names (default alternate) to symdef IDs
+     */
+    std::map<wxString, SYMDEF_ID> m_DefaultSymDefNamesCache;
+
+    /**
      * Cadstar->KiCad Lib Symbols loaded so far. Note that in CADSTAR each symbol represents just a
      * gate, so the LIB_SYMBOLs contained here are not imported directly - they are just an interim
      * step.
