@@ -12,16 +12,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:51-0800\n"
-"PO-Revision-Date: 2023-02-26 10:48+0000\n"
+"PO-Revision-Date: 2023-03-12 20:08+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
-"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/master-"
-"source/pt/>\n"
+"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/"
+"master-source/pt/>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -16919,7 +16919,7 @@ msgstr "O símbolo atual foi modificado.  Salvar as alterações?"
 #: eeschema/symbol_editor/symbol_editor.cpp:360
 #, c-format
 msgid "Deriving from '%s', the root symbol of '%s'."
-msgstr ""
+msgstr "A derivar de '%s', o símbolo raiz de '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:378
 msgid "This new symbol has no name and cannot be created."
@@ -18550,6 +18550,7 @@ msgstr "Mostrar a Netlist SPICE"
 #: eeschema/tools/ee_actions.cpp:1000
 msgid "Add, edit or delete user-defined simulation signals"
 msgstr ""
+"Adicione, edite ou exclua os sinais da simulação definidos pelo utilizador"
 
 #: eeschema/tools/ee_inspection_tool.cpp:222
 msgid "No symbol issues found."
@@ -20396,7 +20397,7 @@ msgstr "Gera apenas uma placa sem componentes"
 
 #: kicad/cli/command_export_pcb_step.cpp:79
 msgid "Export tracks (extremely time consuming)"
-msgstr ""
+msgstr "Exportar as faixas (extremamente demorado)"
 
 #: kicad/cli/command_export_pcb_step.cpp:85
 msgid "Minimum distance between points to treat them as separate ones"
@@ -26793,13 +26794,15 @@ msgstr "Sobrescreva o arquivo antigo"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:123
 msgid "Export tracks (time consuming)"
-msgstr ""
+msgstr "Exportar as trilhas (consome tempo)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:124
 msgid ""
 "Export tracks and vias on external copper layers.\n"
 "Warning: this is *extremely* time consuming."
 msgstr ""
+"Exporte as trilhas e as vias em camadas externas de cobre.\n"
+"Aviso: isso é *extremamente* demorado."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:128
 msgid "Board outline chaining tolerance:"
@@ -33681,7 +33684,7 @@ msgstr "Caminho de busca para modelos 3D"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:415
 msgid "3D model rotation doesn't match: "
-msgstr ""
+msgstr "A rotação do modelo 3D não corresponde: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:416
 #, fuzzy
@@ -33690,7 +33693,7 @@ msgstr "A rede ilha bate com o esquema"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:417
 msgid "3D model opacity doesn't match: "
-msgstr ""
+msgstr "A opacidade do modelo 3D não corresponde: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:418
 #, fuzzy
@@ -33755,7 +33758,7 @@ msgstr "Estilo de conexão de região"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:484
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:489
 msgid "Net tie pad groups differ."
-msgstr ""
+msgstr "Os grupos das ilhas da net são diferentes."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:528
 #, fuzzy
@@ -33777,7 +33780,7 @@ msgstr "Nenhum item gráfico foi encontrado no arquivo."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:582
 #, c-format
 msgid "%s differs."
-msgstr ""
+msgstr "%s difere."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:550
 #, fuzzy, c-format
@@ -33786,7 +33789,7 @@ msgstr "Substituição local"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:592
 msgid "3D model count differs."
-msgstr ""
+msgstr "A contagem dos modelos 3D é diferente."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:616
 msgid "No project loaded, skipping library parity tests."
