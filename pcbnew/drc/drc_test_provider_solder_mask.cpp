@@ -27,6 +27,7 @@
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_track.h>
+#include <pcb_text.h>
 #include <zone.h>
 #include <geometry/seg.h>
 #include <drc/drc_engine.h>
@@ -153,6 +154,36 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::addItemToRTrees( BOARD_ITEM* aItem )
 
                 via->TransformShapeToPolygon( *solderMask->GetFill( layer ), layer, clearance,
                                               m_maxError, ERROR_OUTSIDE );
+
+                m_itemTree->Insert( aItem, layer, m_largestClearance );
+            }
+        }
+    }
+    else if( aItem->Type() == PCB_TEXT_T )
+    {
+        for( PCB_LAYER_ID layer : { F_Mask, B_Mask } )
+        {
+            if( aItem->IsOnLayer( layer ) )
+            {
+                const PCB_TEXT* text = static_cast<const PCB_TEXT*>( aItem );
+
+                text->TransformTextToPolySet( *solderMask->GetFill( layer ), layer,
+                                              m_webWidth / 2, m_maxError, ERROR_OUTSIDE );
+
+                m_itemTree->Insert( aItem, layer, m_largestClearance );
+            }
+        }
+    }
+    else if( aItem->Type() == PCB_FP_TEXT_T )
+    {
+        for( PCB_LAYER_ID layer : { F_Mask, B_Mask } )
+        {
+            if( aItem->IsOnLayer( layer ) )
+            {
+                const FP_TEXT* text = static_cast<const FP_TEXT*>( aItem );
+
+                text->TransformTextToPolySet( *solderMask->GetFill( layer ), layer,
+                                              m_webWidth / 2, m_maxError, ERROR_OUTSIDE );
 
                 m_itemTree->Insert( aItem, layer, m_largestClearance );
             }
