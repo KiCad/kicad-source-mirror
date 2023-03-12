@@ -154,7 +154,9 @@ bool primitiveNeedsUpdate( const std::shared_ptr<PCB_SHAPE>& a,
         TEST( a->GetPolyShape().TotalVertices(), b->GetPolyShape().TotalVertices(), wxEmptyString);
 
         for( int ii = 0; ii < a->GetPolyShape().TotalVertices(); ++ii )
+        {
             TEST( a->GetPolyShape().CVertex( ii ), b->GetPolyShape().CVertex( ii ), wxEmptyString );
+        }
 
         break;
 
@@ -301,7 +303,9 @@ bool shapeNeedsUpdate( const FP_SHAPE* a, const FP_SHAPE* b )
         TEST( a->GetPolyShape().TotalVertices(), b->GetPolyShape().TotalVertices(), wxEmptyString );
 
         for( int ii = 0; ii < a->GetPolyShape().TotalVertices(); ++ii )
+        {
             TEST( a->GetPolyShape().CVertex( ii ), b->GetPolyShape().CVertex( ii ), wxEmptyString );
+        }
 
         break;
 
@@ -397,7 +401,9 @@ bool zonesNeedUpdate( const FP_ZONE* a, const FP_ZONE* b )
     bPoly.Move( parentFootprint->GetPosition() );
 
     for( int ii = 0; ii < a->Outline()->TotalVertices(); ++ii )
+    {
         TEST( aPoly.CVertex( ii ), bPoly.CVertex( ii ) , wxEmptyString);
+    }
 
     return diff;
 }

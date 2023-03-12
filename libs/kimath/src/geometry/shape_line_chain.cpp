@@ -1550,9 +1550,6 @@ int SHAPE_LINE_CHAIN::Intersect( const SHAPE_LINE_CHAIN& aChain, INTERSECTIONS& 
                 is.is_corner_our = false;
                 is.is_corner_their = false;
 
-                int distA = ( b.A - *p ).EuclideanNorm();
-                int distB = ( b.B - *p ).EuclideanNorm();
-
                 if( p == a.A )
                 {
                     is.is_corner_our = true;

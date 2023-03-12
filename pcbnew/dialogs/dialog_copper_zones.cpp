@@ -382,7 +382,7 @@ void DIALOG_COPPER_ZONE::readNetInformation()
 
     for( NETINFO_ITEM* net : netInfoList )
     {
-        const int& netCode = net->GetNetCode();
+        const int netCode = net->GetNetCode();
         const wxString& netName = getUnescapedNetName( net );
 
         m_netNameToNetCode[netName] = netCode;

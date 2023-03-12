@@ -51,7 +51,7 @@ const SHAPE_LINE_CHAIN DIRECTION_45::BuildInitialTrace( const VECTOR2I& aP0, con
     }
 
     VECTOR2I mp0, mp1;
-    int      tangentLength;
+    int      tangentLength = 0;
 
     if( is90mode )
     {
