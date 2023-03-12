@@ -501,7 +501,7 @@ struct SCH_PCB_ATTRIBUTE : GENERIC_ATTRIBUTE<'@'>{};
 
 
 //[<SCM Symbol Refname>][_(<SCM Alternate Refname>)]
-struct SCH_NAME : STRING_EXCLUDING<spaced_ch<'('>> {};
+struct SCH_NAME : sor<QUOTED_STRING, STRING_EXCLUDING<spaced_ch<'('>>> {};
 struct SCH_ALTERNATE : STRING_IN_BRACKETS {};
 struct SCH_SYMBOL_LINE : seq<SCH_NAME, opt<SCH_ALTERNATE>, opt<eol>>{};
 
