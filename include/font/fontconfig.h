@@ -57,7 +57,7 @@ public:
      *
      * A return value of false indicates a serious error in the font system.
      */
-    FF_RESULT FindFont( const wxString& aFontName, wxString& aFontFile, bool aBold, bool aItalic );
+    FF_RESULT FindFont( const wxString& aFontName, wxString& aFontFile, int& aFaceIndex, bool aBold, bool aItalic );
 
     /**
      * List the current available font families.

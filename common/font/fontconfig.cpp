@@ -152,7 +152,7 @@ std::string FONTCONFIG::getFamilyStringByLang( FONTCONFIG_PAT& aPat, const wxStr
 
 
 FONTCONFIG::FF_RESULT FONTCONFIG::FindFont( const wxString &aFontName, wxString &aFontFile,
-        bool aBold, bool aItalic )
+                                            int& aFaceIndex, bool aBold, bool aItalic )
 {
     FF_RESULT retval = FF_RESULT::FF_ERROR;
     wxString qualifiedFontName = aFontName;
@@ -184,6 +184,8 @@ FONTCONFIG::FF_RESULT FONTCONFIG::FindFont( const wxString &aFontName, wxString 
         if( FcPatternGetString( font, FC_FILE, 0, &file ) == FcResultMatch )
         {
             aFontFile = wxString::FromUTF8( (char*) file );
+            aFaceIndex = 0;
+
             wxString styleStr;
             FcChar8* family = nullptr;
             FcChar8* style = nullptr;
@@ -192,9 +194,13 @@ FONTCONFIG::FF_RESULT FONTCONFIG::FindFont( const wxString &aFontName, wxString 
 
             std::unordered_map<std::string, std::string> famStrings;
             FONTCONFIG_PAT                               patHolder{ font };
+
             getAllFamilyStrings( patHolder, famStrings );
+
             if( FcPatternGetString( font, FC_FAMILY, 0, &family ) == FcResultMatch )
             {
+                FcPatternGetInteger( font, FC_INDEX, 0, &aFaceIndex );
+
                 fontName = wxString::FromUTF8( (char*) family );
 
                 if( FcPatternGetString( font, FC_STYLE, 0, &style ) == FcResultMatch )
@@ -248,8 +254,6 @@ FONTCONFIG::FF_RESULT FONTCONFIG::FindFont( const wxString &aFontName, wxString 
                         break;
                     }
                 }
-
-
             }
         }
 
