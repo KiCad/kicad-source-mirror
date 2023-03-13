@@ -645,6 +645,12 @@ public:
     void SetUserUnits( EDA_UNITS aUnits )                   { m_userUnits = aUnits; }
 
     /**
+     * Update any references within aItem (or its descendants) to the user units.  Primarily
+     * for automatic-unit dimensions.
+     */
+    void UpdateUserUnits( BOARD_ITEM* aItem, KIGFX::VIEW* aView );
+
+    /**
      * Extract the board outlines and build a closed polygon from lines, arcs and circle items
      * on edge cut layer.
      *
