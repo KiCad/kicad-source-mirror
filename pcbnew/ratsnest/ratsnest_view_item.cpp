@@ -158,7 +158,7 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
         RN_NET* net = m_data->GetRatsnestForNet( i );
 
-        if( !net )
+        if( !net || m_data->GetConnectivityAlgo()->IsNetDirty( i ) )
             continue;
 
         if( colorByNet && netColors.count( i ) )
