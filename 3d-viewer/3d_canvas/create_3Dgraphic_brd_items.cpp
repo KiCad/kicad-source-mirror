@@ -275,6 +275,10 @@ void BOARD_ADAPTER::createTrack( const PCB_TRACK* aTrack, CONTAINER_2D_BASE* aDs
         int       arcsegcount = GetArcToSegmentCount( radius, ARC_HIGH_DEF, arc_angle );
         int       circlesegcount;
 
+        // Avoid arcs that cannot be drawn
+        if( radius < std::numeric_limits<double>::min() || arc_angle.IsZero() )
+            break;
+
         // We need a circle to segment count. However, the arc angle can be small, and the
         // radius very big. so we calculate a reasonable value for circlesegcount.
         if( arcsegcount <= 1 )  // The arc will be approximated by a segment
