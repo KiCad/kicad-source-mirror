@@ -124,7 +124,7 @@ public:
 #endif
 
 protected:
-    FT_Error loadFace( const wxString& aFontFileName );
+    FT_Error loadFace( const wxString& aFontFileName, int aFaceIndex );
 
     double getOverbarOffset( int ascender, int height, int thickness ) const;
 
