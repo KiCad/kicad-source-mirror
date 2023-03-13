@@ -4,7 +4,7 @@
  * Copyright (C) 2018 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2022 CERN
  *
  * This program is free software; you can redistribute it and/or
@@ -70,12 +70,13 @@
 using KIGFX::RENDER_SETTINGS;
 using KIGFX::PCB_RENDER_SETTINGS;
 
-wxDEFINE_EVENT( BOARD_CHANGED, wxCommandEvent );
+wxDEFINE_EVENT( EDA_EVT_BOARD_CHANGED, wxCommandEvent );
 
 PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
                                 const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
                                 long aStyle, const wxString& aFrameName ) :
-        EDA_DRAW_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName, pcbIUScale ),
+        EDA_DRAW_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName,
+                        pcbIUScale ),
         m_pcb( nullptr ),
         m_originTransforms( *this ),
         m_spaceMouse( nullptr )
@@ -226,9 +227,41 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
             }
         }
 
-        wxCommandEvent e( BOARD_CHANGED );
+        wxCommandEvent e( EDA_EVT_BOARD_CHANGED );
         ProcessEventLocally( e );
+
+        for( wxEvtHandler* listener : m_boardChangeListeners )
+        {
+            wxCHECK2( listener, continue );
+
+            wxWindow* win = dynamic_cast<wxWindow*>( listener );
+
+            if( win )
+                win->HandleWindowEvent( e );
+            else
+                listener->SafelyProcessEvent( e );
+        }
     }
+}
+
+
+void PCB_BASE_FRAME::AddBoardChangeListener( wxEvtHandler* aListener )
+{
+    auto it = std::find( m_boardChangeListeners.begin(), m_boardChangeListeners.end(), aListener );
+
+    // Don't add duplicate listeners.
+    if( it == m_boardChangeListeners.end() )
+        m_boardChangeListeners.push_back( aListener );
+}
+
+
+void PCB_BASE_FRAME::RemoveBoardChangeListener( wxEvtHandler* aListener )
+{
+    auto it = std::find( m_boardChangeListeners.begin(), m_boardChangeListeners.end(), aListener );
+
+    // Don't add duplicate listeners.
+    if( it != m_boardChangeListeners.end() )
+        m_boardChangeListeners.erase( it );
 }
 
 

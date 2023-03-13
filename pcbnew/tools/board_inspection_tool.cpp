@@ -32,6 +32,7 @@
 #include <drc/drc_engine.h>
 #include <dialogs/dialog_board_statistics.h>
 #include <dialogs/dialog_book_reporter.h>
+#include <dialogs/dialog_net_inspector.h>
 #include <dialogs/panel_setup_rules_base.h>
 #include <string_utils.h>
 #include <tools/board_inspection_tool.h>
@@ -42,12 +43,6 @@
 #include <widgets/footprint_diff_widget.h>
 #include <drc/drc_item.h>
 #include <pad.h>
-
-
-#define LIST_NETS_DIALOG_NAME wxT( "ListNetsDialog" )
-#define INSPECT_CLEARANCE_DIALOG_NAME wxT( "InspectClearanceDialog" )
-#define INSPECT_CONSTRAINTS_DIALOG_NAME wxT( "InspectConstraintsDialog" )
-#define DIFF_FOOTPRINTS_DIALOG_NAME wxT( "DiffFootprintsDialog" )
 
 
 BOARD_INSPECTION_TOOL::BOARD_INSPECTION_TOOL() :
@@ -198,7 +193,7 @@ void BOARD_INSPECTION_TOOL::reportHeader( const wxString& aTitle, BOARD_ITEM* a,
 {
     r->Report( wxT( "<h7>" ) + EscapeHTML( aTitle ) + wxT( "</h7>" ) );
     r->Report( wxT( "<ul><li>" ) + EscapeHTML( getItemDescription( a ) ) + wxT( "</li>" )
-                 + wxT( "<li>" ) + EscapeHTML( getItemDescription( b ) ) + wxT( "</li></ul>" ) );
+               + wxT( "<li>" ) + EscapeHTML( getItemDescription( b ) ) + wxT( "</li></ul>" ) );
 }
 
 
@@ -209,8 +204,8 @@ void BOARD_INSPECTION_TOOL::reportHeader( const wxString& aTitle, BOARD_ITEM* a,
 
     r->Report( wxT( "<h7>" ) + EscapeHTML( aTitle ) + wxT( "</h7>" ) );
     r->Report( wxT( "<ul><li>" ) + EscapeHTML( layerStr ) + wxT( "</li>" )
-                 + wxT( "<li>" ) + EscapeHTML( getItemDescription( a ) ) + wxT( "</li>" )
-                 + wxT( "<li>" ) + EscapeHTML( getItemDescription( b ) ) + wxT( "</li></ul>" ) );
+               + wxT( "<li>" ) + EscapeHTML( getItemDescription( a ) ) + wxT( "</li>" )
+               + wxT( "<li>" ) + EscapeHTML( getItemDescription( b ) ) + wxT( "</li></ul>" ) );
 }
 
 
@@ -248,14 +243,12 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
     BOARD_CONNECTED_ITEM* ac = dynamic_cast<BOARD_CONNECTED_ITEM*>( a );
     BOARD_CONNECTED_ITEM* bc = dynamic_cast<BOARD_CONNECTED_ITEM*>( b );
     PCB_LAYER_ID          layer = m_frame->GetActiveLayer();
-    wxWindow*             window = wxWindow::FindWindowByName( INSPECT_CLEARANCE_DIALOG_NAME );
-    DIALOG_BOOK_REPORTER* dialog = dynamic_cast<DIALOG_BOOK_REPORTER*>( window );
 
-    if( !dialog )
-    {
-        dialog = new DIALOG_BOOK_REPORTER( m_frame, INSPECT_CLEARANCE_DIALOG_NAME,
-                                           _( "Violation Report" ) );
-    }
+    wxCHECK( m_frame, /* void */ );
+
+    DIALOG_BOOK_REPORTER* dialog = m_frame->GetInspectDrcErrorDialog();
+
+    wxCHECK( dialog, /* void */ );
 
     WX_HTML_REPORT_BOX* r = nullptr;
     bool                compileError = false;
@@ -478,7 +471,8 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         {
             layer = b->GetLayer();
         }
-        else if( a->Type() == PCB_PAD_T && static_cast<PAD*>( a )->GetAttribute() == PAD_ATTRIB::SMD )
+        else if( a->Type() == PCB_PAD_T
+               && static_cast<PAD*>( a )->GetAttribute() == PAD_ATTRIB::SMD )
         {
             PAD* pad = static_cast<PAD*>( a );
 
@@ -487,7 +481,8 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
             else
                 layer = B_Cu;
         }
-        else if( b->Type() == PCB_PAD_T && static_cast<PAD*>( a )->GetAttribute() == PAD_ATTRIB::SMD )
+        else if( b->Type() == PCB_PAD_T
+               && static_cast<PAD*>( a )->GetAttribute() == PAD_ATTRIB::SMD )
         {
             PAD* pad = static_cast<PAD*>( b );
 
@@ -553,7 +548,12 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
 
 int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 {
+    wxCHECK( m_frame, 0 );
+
     PCB_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+
+    wxCHECK( selTool, 0 );
+
     const PCB_SELECTION& selection = selTool->GetSelection();
 
     if( selection.Size() != 2 )
@@ -596,14 +596,9 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
     // a and b could be null after group tests above.
     wxCHECK( a && b, 0 );
 
-    wxWindow*             window = wxWindow::FindWindowByName( INSPECT_CLEARANCE_DIALOG_NAME );
-    DIALOG_BOOK_REPORTER* dialog = dynamic_cast<DIALOG_BOOK_REPORTER*>( window );
+    DIALOG_BOOK_REPORTER* dialog = m_frame->GetInspectClearanceDialog();
 
-    if( !dialog )
-    {
-        dialog = new DIALOG_BOOK_REPORTER( m_frame, INSPECT_CLEARANCE_DIALOG_NAME,
-                                           _( "Clearance Report" ) );
-    }
+    wxCHECK( dialog, 0 );
 
     dialog->DeleteAllPages();
 
@@ -722,8 +717,8 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
                     clearance = constraint.m_Value.Min();
 
                     r->Report( "" );
-                    r->Report( wxString::Format( _( "Overridden by larger physical hole clearance from %s;"
-                                                    "clearance: %s." ),
+                    r->Report( wxString::Format( _( "Overridden by larger physical hole clearance "
+                                                    "from %s; clearance: %s." ),
                                                  EscapeHTML( constraint.GetName() ),
                                                  m_frame->StringFromValue( clearance, true ) ) );
                 }
@@ -781,7 +776,8 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
             if( clearance < 0 )
             {
-                r->Report( wxString::Format( _( "Resolved clearance: %s; clearance will not be tested." ),
+                r->Report( wxString::Format( _( "Resolved clearance: %s; clearance will not be "
+                                                "tested." ),
                                              m_frame->StringFromValue( clearance, true ) ) );
             }
             else
@@ -817,7 +813,8 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
             r->Report( "" );
             r->Report( "" );
             r->Report( "" );
-            reportHeader( _( "Diff pair max uncoupled length resolution for:" ), ac, bc, active, r );
+            reportHeader( _( "Diff pair max uncoupled length resolution for:" ), ac, bc,
+                          active, r );
 
             if( !drcEngine.HasRulesForConstraintType( DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT ) )
             {
@@ -1132,7 +1129,12 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 {
 #define EVAL_RULES( constraint, a, b, layer, r ) drcEngine.EvalRules( constraint, a, b, layer, r )
 
+    wxCHECK( m_frame, 0 );
+
     PCB_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+
+    wxCHECK( selTool, 0 );
+
     const PCB_SELECTION& selection = selTool->GetSelection();
 
     if( selection.Size() != 1 )
@@ -1141,14 +1143,9 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    wxWindow*             window = wxWindow::FindWindowByName( INSPECT_CONSTRAINTS_DIALOG_NAME );
-    DIALOG_BOOK_REPORTER* dialog = dynamic_cast<DIALOG_BOOK_REPORTER*>( window );
+    DIALOG_BOOK_REPORTER* dialog = m_frame->GetInspectConstraintsDialog();
 
-    if( !dialog )
-    {
-        dialog = new DIALOG_BOOK_REPORTER( m_frame, INSPECT_CONSTRAINTS_DIALOG_NAME,
-                                           _( "Constraints Report" ) );
-    }
+    wxCHECK( dialog, 0 );
 
     dialog->DeleteAllPages();
 
@@ -1287,7 +1284,8 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         r->Report( "" );
         r->Report( _( "Report may be incomplete: some footprint courtyards are malformed." )
                    + wxS( "&nbsp;&nbsp;" )
-                   + wxS( "<a href='$DRC'>" ) + _( "Run DRC for a full analysis." ) + wxS( "</a>" ) );
+                   + wxS( "<a href='$DRC'>" ) + _( "Run DRC for a full analysis." )
+                   + wxS( "</a>" ) );
     }
 
     r->Report( "" );
@@ -1310,7 +1308,8 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         r->Report( "" );
         r->Report( _( "Report may be incomplete: some footprint courtyards are malformed." )
                    + wxS( "&nbsp;&nbsp;" )
-                   + wxS( "<a href='$DRC'>" ) + _( "Run DRC for a full analysis." ) + wxS( "</a>" ) );
+                   + wxS( "<a href='$DRC'>" ) + _( "Run DRC for a full analysis." )
+                   + wxS( "</a>" ) );
     }
 
     drcEngine.ProcessAssertions( item, []( const DRC_CONSTRAINT* c ){}, r );
@@ -1324,7 +1323,12 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 
 int BOARD_INSPECTION_TOOL::DiffFootprint( const TOOL_EVENT& aEvent )
 {
+    wxCHECK( m_frame, 0 );
+
     PCB_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+
+    wxCHECK( selTool, 0 );
+
     const PCB_SELECTION& selection = selTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
@@ -1341,18 +1345,14 @@ int BOARD_INSPECTION_TOOL::DiffFootprint( const TOOL_EVENT& aEvent )
 
     if( selection.Size() != 1 )
     {
-        m_frame->ShowInfoBarError( _( "Select a footprint to diff against its library equivalent." ) );
+        m_frame->ShowInfoBarError( _( "Select a footprint to diff against its library "
+                                      "equivalent." ) );
         return 0;
     }
 
-    wxWindow*             window = wxWindow::FindWindowByName( DIFF_FOOTPRINTS_DIALOG_NAME );
-    DIALOG_BOOK_REPORTER* dialog = dynamic_cast<DIALOG_BOOK_REPORTER*>( window );
+    DIALOG_BOOK_REPORTER* dialog = m_frame->GetFootprintDiffDialog();
 
-    if( !dialog )
-    {
-        dialog = new DIALOG_BOOK_REPORTER( m_frame, DIFF_FOOTPRINTS_DIALOG_NAME,
-                                           _( "Diff Footprint with Library" ) );
-    }
+    wxCHECK( dialog, 0 );
 
     dialog->DeleteAllPages();
 
@@ -1387,14 +1387,16 @@ int BOARD_INSPECTION_TOOL::DiffFootprint( const TOOL_EVENT& aEvent )
     {
         r->Report( _( "The library is not included in the current configuration." )
                    + wxS( "&nbsp;&nbsp;&nbsp" )
-                   + wxS( "<a href='$CONFIG'>" ) + _( "Manage Footprint Libraries" ) + wxS( "</a>" ) );
+                   + wxS( "<a href='$CONFIG'>" ) + _( "Manage Footprint Libraries" )
+                   + wxS( "</a>" ) );
 
     }
     else if( !libTable->HasLibrary( libName, true ) )
     {
         r->Report( _( "The library is not enabled in the current configuration." )
                    + wxS( "&nbsp;&nbsp;&nbsp" )
-                   + wxS( "<a href='$CONFIG'>" ) + _( "Manage Footprint Libraries" ) + wxS( "</a>" ) );
+                   + wxS( "<a href='$CONFIG'>" ) + _( "Manage Footprint Libraries" )
+                   + wxS( "</a>" ) );
 
     }
     else
@@ -1870,11 +1872,11 @@ void BOARD_INSPECTION_TOOL::calculateSelectionRatsnest( const VECTOR2I& aDelta )
 
 int BOARD_INSPECTION_TOOL::ListNets( const TOOL_EVENT& aEvent )
 {
-    wxWindow*             window = wxWindow::FindWindowByName( LIST_NETS_DIALOG_NAME );
-    DIALOG_NET_INSPECTOR* dialog = dynamic_cast<DIALOG_NET_INSPECTOR*>( window );
+    wxCHECK( m_frame, 0 );
 
-    if( !dialog )
-        dialog = new DIALOG_NET_INSPECTOR( m_frame, LIST_NETS_DIALOG_NAME );
+    DIALOG_NET_INSPECTOR* dialog = m_frame->GetNetInspectorDialog();
+
+    wxCHECK( dialog, 0 );
 
     dialog->Raise();
     dialog->Show( true );

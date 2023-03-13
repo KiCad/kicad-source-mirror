@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2016 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,7 +61,7 @@ struct MAGNETIC_SETTINGS;
 class NL_PCBNEW_PLUGIN;
 class PROGRESS_REPORTER;
 
-wxDECLARE_EVENT( BOARD_CHANGED, wxCommandEvent );
+wxDECLARE_EVENT( EDA_EVT_BOARD_CHANGED, wxCommandEvent );
 
 /**
  * Base PCB main window class for Pcbnew, Gerbview, and CvPcb footprint viewer.
@@ -382,6 +382,10 @@ public:
 
     virtual void ActivateGalCanvas() override;
 
+    void AddBoardChangeListener( wxEvtHandler* aListener );
+
+    void RemoveBoardChangeListener( wxEvtHandler* aListener );
+
 protected:
     bool canCloseWindow( wxCloseEvent& aCloseEvent ) override;
 
@@ -413,6 +417,8 @@ protected:
 
 private:
     NL_PCBNEW_PLUGIN*       m_spaceMouse;
+
+    std::vector<wxEvtHandler*> m_boardChangeListeners;
 };
 
 #endif  // PCB_BASE_FRAME_H

@@ -50,6 +50,9 @@
 #include <vector>
 
 
+wxDEFINE_EVENT( EDA_EVT_CLOSE_NET_INSPECTOR_DIALOG, wxCommandEvent );
+
+
 static DIALOG_NET_INSPECTOR::SETTINGS g_settings;
 
 
@@ -62,9 +65,10 @@ enum class CSV_COLUMN_DESC : int
 
 struct DIALOG_NET_INSPECTOR::COLUMN_DESC
 {
-    COLUMN_DESC( unsigned aNum, PCB_LAYER_ID aLayer, const wxString& aDisp, const wxString& aCsv, CSV_COLUMN_DESC aFlags ) :
-            num( aNum ), layer( aLayer ), display_name( aDisp ), csv_name( aCsv ), csv_flags( aFlags )
-            {}
+    COLUMN_DESC( unsigned aNum, PCB_LAYER_ID aLayer, const wxString& aDisp, const wxString& aCsv,
+                 CSV_COLUMN_DESC aFlags ) :
+        num( aNum ), layer( aLayer ), display_name( aDisp ), csv_name( aCsv ), csv_flags( aFlags )
+    {}
 
     unsigned int num;
     PCB_LAYER_ID layer;
@@ -94,30 +98,6 @@ enum
 
 class DIALOG_NET_INSPECTOR::LIST_ITEM
 {
-private:
-    // an item can be the child of only one parent at a time.
-    // FIXME: could use a more lightweight container like intrusive forward list.
-    LIST_ITEM*              m_parent = nullptr;
-    std::vector<LIST_ITEM*> m_children;
-
-    bool          m_is_group          = false;
-    unsigned int  m_group_number      = 0;
-    NETINFO_ITEM* m_net               = nullptr;
-    unsigned int  m_pad_count         = 0;
-    unsigned int  m_via_count         = 0;
-    uint64_t      m_via_length        = 0;
-    uint64_t      m_chip_wire_length  = 0;
-
-    std::array<uint64_t, MAX_CU_LAYERS> m_layer_wire_length{};
-
-
-    // dirty bits to record when some attribute has changed.  this is to
-    // avoid unnecessary resort operations.
-    std::vector<char> m_column_changed;
-
-    // cached formatted net name for faster display sorting.
-    wxString m_net_name;
-
 public:
     LIST_ITEM( unsigned int aGroupNumber, const wxString& aGroupName ) :
             m_is_group( true ),
@@ -162,7 +142,7 @@ public:
         std::fill( m_column_changed.begin(), m_column_changed.end(), 0 );
     }
 
-    decltype( m_pad_count ) GetPadCount() const
+    unsigned int GetPadCount() const
     {
         return m_pad_count;
     }
@@ -172,7 +152,7 @@ public:
         return m_column_changed[COLUMN_PAD_COUNT];
     }
 
-    void SetPadCount( const decltype( m_pad_count ) &aValue )
+    void SetPadCount( unsigned int aValue )
     {
         if( m_parent )
             m_parent->SetPadCount( m_parent->GetPadCount() - m_pad_count + aValue );
@@ -181,7 +161,7 @@ public:
         m_pad_count = aValue;
     }
 
-    void AddPadCount( const decltype( m_pad_count ) &aValue )
+    void AddPadCount( unsigned int aValue )
     {
         if( m_parent )
             m_parent->AddPadCount( aValue );
@@ -190,7 +170,7 @@ public:
         m_pad_count += aValue;
     }
 
-    void SubPadCount( const decltype( m_pad_count ) &aValue )
+    void SubPadCount( unsigned int aValue )
     {
         if( m_parent )
             m_parent->SubPadCount( aValue );
@@ -209,7 +189,7 @@ public:
         return m_column_changed[COLUMN_VIA_COUNT];
     }
 
-    void SetViaCount( const decltype( m_via_count ) &aValue )
+    void SetViaCount( unsigned int aValue )
     {
         if( m_parent )
             m_parent->SetViaCount( m_parent->GetViaCount() - m_via_count + aValue );
@@ -218,7 +198,7 @@ public:
         m_via_count = aValue;
     }
 
-    void AddViaCount( const decltype( m_via_count ) &aValue )
+    void AddViaCount( unsigned int aValue )
     {
         if( m_parent )
             m_parent->AddViaCount( aValue );
@@ -227,7 +207,7 @@ public:
         m_via_count += aValue;
     }
 
-    void SubViaCount( const decltype( m_via_count ) &aValue )
+    void SubViaCount( unsigned int aValue )
     {
         if( m_parent )
             m_parent->SubViaCount( aValue );
@@ -246,7 +226,7 @@ public:
         return m_column_changed[COLUMN_VIA_LENGTH];
     }
 
-    void SetViaLength( const decltype( m_via_length ) &aValue )
+    void SetViaLength( unsigned int aValue )
     {
         if( m_parent )
             m_parent->SetViaLength( m_parent->GetViaLength() - m_via_length + aValue );
@@ -255,7 +235,7 @@ public:
         m_via_length = aValue;
     }
 
-    void AddViaLength( const decltype( m_via_length ) &aValue )
+    void AddViaLength( unsigned int aValue )
     {
         if( m_parent )
             m_parent->AddViaLength( aValue );
@@ -264,7 +244,7 @@ public:
         m_via_length += aValue;
     }
 
-    void SubViaLength( const decltype( m_via_length ) &aValue )
+    void SubViaLength( uint64_t aValue )
     {
         if( m_parent )
             m_parent->SubViaLength( aValue );
@@ -335,7 +315,7 @@ public:
         return m_column_changed[COLUMN_CHIP_LENGTH];
     }
 
-    void SetChipWireLength( const decltype( m_chip_wire_length ) &aValue )
+    void SetChipWireLength( uint64_t aValue )
     {
         if( m_parent )
             m_parent->SetChipWireLength(
@@ -345,7 +325,7 @@ public:
         m_chip_wire_length = aValue;
     }
 
-    void AddChipWireLength( const decltype( m_chip_wire_length ) &aValue )
+    void AddChipWireLength( uint64_t aValue )
     {
         if( m_parent )
             m_parent->AddChipWireLength( aValue );
@@ -354,7 +334,7 @@ public:
         m_chip_wire_length += aValue;
     }
 
-    void SubChipWireLength( const decltype( m_chip_wire_length ) &aValue )
+    void SubChipWireLength( uint64_t aValue )
     {
         if( m_parent )
             m_parent->SubChipWireLength( aValue );
@@ -362,7 +342,6 @@ public:
         m_column_changed[COLUMN_CHIP_LENGTH] |= ( aValue != 0 );
         m_chip_wire_length -= aValue;
     }
-    ;
 
     // the total length column is always computed, never stored.
     unsigned long long int GetTotalLength() const
@@ -416,6 +395,29 @@ public:
             m_parent->m_children.push_back( this );
         }
     }
+
+private:
+    // an item can be the child of only one parent at a time.
+    // FIXME: could use a more lightweight container like intrusive forward list.
+    LIST_ITEM*              m_parent = nullptr;
+    std::vector<LIST_ITEM*> m_children;
+
+    bool          m_is_group          = false;
+    unsigned int  m_group_number      = 0;
+    NETINFO_ITEM* m_net               = nullptr;
+    unsigned int  m_pad_count         = 0;
+    unsigned int  m_via_count         = 0;
+    uint64_t      m_via_length        = 0;
+    uint64_t      m_chip_wire_length  = 0;
+
+    std::array<uint64_t, MAX_CU_LAYERS> m_layer_wire_length{};
+
+    // dirty bits to record when some attribute has changed.  this is to
+    // avoid unnecessary resort operations.
+    std::vector<char> m_column_changed;
+
+    // cached formatted net name for faster display sorting.
+    wxString m_net_name;
 };
 
 
@@ -443,15 +445,6 @@ struct DIALOG_NET_INSPECTOR::LIST_ITEM_NETCODE_CMP_LESS
 
 class DIALOG_NET_INSPECTOR::DATA_MODEL : public wxDataViewModel
 {
-private:
-    DIALOG_NET_INSPECTOR& m_parent;
-
-    // primary container, sorted by netcode number.
-    // groups have netcode < 0, so they always come first, in the order
-    // of the filter strings as input by the user (group mode 0, 1) or
-    // in order of occurrence (group mode 2, 3).
-    std::vector<std::unique_ptr<LIST_ITEM>> m_items;
-
 public:
 
     DATA_MODEL( DIALOG_NET_INSPECTOR& parent ) : m_parent( parent )
@@ -618,7 +611,8 @@ public:
 
                         if( match )
                         {
-                            wxString match_str = i->GetNetName().substr( match.start, match.length );
+                            wxString match_str = i->GetNetName().substr( match.start,
+                                                                         match.length );
 
                             auto group = std::find_if( groups.begin(), groups.end(),
                                     [&]( const std::unique_ptr<LIST_ITEM>& x )
@@ -956,24 +950,39 @@ protected:
     {
         return wxS( "string" );
     }
+
+private:
+    DIALOG_NET_INSPECTOR& m_parent;
+
+    // primary container, sorted by netcode number.
+    // groups have netcode < 0, so they always come first, in the order
+    // of the filter strings as input by the user (group mode 0, 1) or
+    // in order of occurrence (group mode 2, 3).
+    std::vector<std::unique_ptr<LIST_ITEM>> m_items;
 };
 
 
-DIALOG_NET_INSPECTOR::DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent, const wxString& aDialogName ) :
+DIALOG_NET_INSPECTOR::DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent ) :
         DIALOG_NET_INSPECTOR_BASE( aParent ),
         m_zero_netitem( nullptr ),
         m_frame( aParent )
 {
-    SetName( aDialogName );
-
-    m_columns.emplace_back(  0u, UNDEFINED_LAYER, _( "Net" ), _( "Net Code" ), CSV_COLUMN_DESC::CSV_NONE  );
-    m_columns.emplace_back(  1u, UNDEFINED_LAYER, _( "Name" ), _( "Net Name" ), CSV_COLUMN_DESC::CSV_QUOTE  );
-    m_columns.emplace_back(  2u, UNDEFINED_LAYER, _( "Pad Count" ), _( "Pad Count" ), CSV_COLUMN_DESC::CSV_NONE  );
-    m_columns.emplace_back(  3u, UNDEFINED_LAYER, _( "Via Count" ), _( "Via Count" ), CSV_COLUMN_DESC::CSV_NONE  );
-    m_columns.emplace_back(  4u, UNDEFINED_LAYER, _( "Via Length" ), _( "Via Length" ), CSV_COLUMN_DESC::CSV_NONE  );
-    m_columns.emplace_back(  5u, UNDEFINED_LAYER, _( "Track Length" ), _( "Track Length" ), CSV_COLUMN_DESC::CSV_NONE  );
-    m_columns.emplace_back(  6u, UNDEFINED_LAYER, _( "Die Length" ), _( "Die Length" ), CSV_COLUMN_DESC::CSV_NONE  );
-    m_columns.emplace_back(  7u, UNDEFINED_LAYER, _( "Total Length" ), _( "Net Length" ), CSV_COLUMN_DESC::CSV_NONE );
+    m_columns.emplace_back( 0u, UNDEFINED_LAYER, _( "Net" ), _( "Net Code" ),
+                            CSV_COLUMN_DESC::CSV_NONE  );
+    m_columns.emplace_back( 1u, UNDEFINED_LAYER, _( "Name" ), _( "Net Name" ),
+                            CSV_COLUMN_DESC::CSV_QUOTE );
+    m_columns.emplace_back( 2u, UNDEFINED_LAYER, _( "Pad Count" ), _( "Pad Count" ),
+                            CSV_COLUMN_DESC::CSV_NONE );
+    m_columns.emplace_back( 3u, UNDEFINED_LAYER, _( "Via Count" ), _( "Via Count" ),
+                            CSV_COLUMN_DESC::CSV_NONE );
+    m_columns.emplace_back( 4u, UNDEFINED_LAYER, _( "Via Length" ), _( "Via Length" ),
+                            CSV_COLUMN_DESC::CSV_NONE );
+    m_columns.emplace_back( 5u, UNDEFINED_LAYER, _( "Track Length" ), _( "Track Length" ),
+                            CSV_COLUMN_DESC::CSV_NONE );
+    m_columns.emplace_back( 6u, UNDEFINED_LAYER, _( "Die Length" ), _( "Die Length" ),
+                            CSV_COLUMN_DESC::CSV_NONE );
+    m_columns.emplace_back( 7u, UNDEFINED_LAYER, _( "Total Length" ), _( "Net Length" ),
+                            CSV_COLUMN_DESC::CSV_NONE );
 
     m_brd = aParent->GetBoard();
 
@@ -989,44 +998,51 @@ DIALOG_NET_INSPECTOR::DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent, const wxStr
         },
         [&]()
         {
-            m_netsList->AppendTextColumn( m_columns[COLUMN_NAME].display_name, m_columns[COLUMN_NAME],
+            m_netsList->AppendTextColumn( m_columns[COLUMN_NAME].display_name,
+                                          m_columns[COLUMN_NAME],
                                           wxDATAVIEW_CELL_INERT, -1, wxALIGN_LEFT,
                                           wxDATAVIEW_COL_RESIZABLE | wxDATAVIEW_COL_REORDERABLE |
                                           wxDATAVIEW_COL_SORTABLE );
         },
         [&]()
         {
-            m_netsList->AppendTextColumn( m_columns[COLUMN_PAD_COUNT].display_name, m_columns[COLUMN_PAD_COUNT],
+            m_netsList->AppendTextColumn( m_columns[COLUMN_PAD_COUNT].display_name,
+                                          m_columns[COLUMN_PAD_COUNT],
                                           wxDATAVIEW_CELL_INERT, -1, wxALIGN_CENTER,
                                           wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_SORTABLE );
         },
         [&]()
         {
-            m_netsList->AppendTextColumn( m_columns[COLUMN_VIA_COUNT].display_name, m_columns[COLUMN_VIA_COUNT],
+            m_netsList->AppendTextColumn( m_columns[COLUMN_VIA_COUNT].display_name,
+                                          m_columns[COLUMN_VIA_COUNT],
                                           wxDATAVIEW_CELL_INERT, -1, wxALIGN_CENTER,
                                           wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_SORTABLE );
         },
         [&]()
         {
-            m_netsList->AppendTextColumn( m_columns[COLUMN_VIA_LENGTH].display_name, m_columns[COLUMN_VIA_LENGTH],
+            m_netsList->AppendTextColumn( m_columns[COLUMN_VIA_LENGTH].display_name,
+                                          m_columns[COLUMN_VIA_LENGTH],
                                           wxDATAVIEW_CELL_INERT, -1, wxALIGN_CENTER,
                                           wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_SORTABLE );
         },
         [&]()
         {
-            m_netsList->AppendTextColumn( m_columns[COLUMN_BOARD_LENGTH].display_name, m_columns[COLUMN_BOARD_LENGTH],
+            m_netsList->AppendTextColumn( m_columns[COLUMN_BOARD_LENGTH].display_name,
+                                          m_columns[COLUMN_BOARD_LENGTH],
                                           wxDATAVIEW_CELL_INERT, -1, wxALIGN_CENTER,
                                           wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_SORTABLE );
         },
         [&]()
         {
-            m_netsList->AppendTextColumn( m_columns[COLUMN_CHIP_LENGTH].display_name, m_columns[COLUMN_CHIP_LENGTH],
+            m_netsList->AppendTextColumn( m_columns[COLUMN_CHIP_LENGTH].display_name,
+                                          m_columns[COLUMN_CHIP_LENGTH],
                                           wxDATAVIEW_CELL_INERT, -1, wxALIGN_CENTER,
                                           wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_SORTABLE );
         },
         [&]()
         {
-            m_netsList->AppendTextColumn( m_columns[COLUMN_TOTAL_LENGTH].display_name, m_columns[COLUMN_TOTAL_LENGTH],
+            m_netsList->AppendTextColumn( m_columns[COLUMN_TOTAL_LENGTH].display_name,
+                                          m_columns[COLUMN_TOTAL_LENGTH],
                                           wxDATAVIEW_CELL_INERT, -1, wxALIGN_CENTER,
                                           wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_SORTABLE );
         }
@@ -1095,19 +1111,8 @@ DIALOG_NET_INSPECTOR::DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent, const wxStr
 
     finishDialogSettings();
 
-    m_frame->Bind( wxEVT_CLOSE_WINDOW,
-                   [this]( wxCloseEvent& aEvent )
-                   {
-                       Close();
-                       aEvent.Skip();
-                   } );
-
-    m_frame->Connect( UNITS_CHANGED,
-                      wxCommandEventHandler( DIALOG_NET_INSPECTOR::onUnitsChanged ),
-                      nullptr, this );
-    m_frame->Connect( BOARD_CHANGED,
-                      wxCommandEventHandler( DIALOG_NET_INSPECTOR::onBoardChanged ),
-                      nullptr, this );
+    Bind( EDA_EVT_UNITS_CHANGED, &DIALOG_NET_INSPECTOR::onUnitsChanged, this );
+    Bind( EDA_EVT_BOARD_CHANGED, &DIALOG_NET_INSPECTOR::onBoardChanged, this );
 
     if( m_brd != nullptr )
     {
@@ -1133,7 +1138,8 @@ DIALOG_NET_INSPECTOR::~DIALOG_NET_INSPECTOR()
     g_settings.group_by           = m_groupBy->IsChecked();
     g_settings.group_by_kind      = m_groupByKind->GetSelection();
     g_settings.group_by_text      = m_groupByText->GetValue();
-    g_settings.sorting_column     = sorting_column ? static_cast<int>( sorting_column->GetModelColumn() ) : -1;
+    g_settings.sorting_column     = sorting_column ?
+                                    static_cast<int>( sorting_column->GetModelColumn() ) : -1;
     g_settings.sort_order_asc     = sorting_column ? sorting_column->IsSortOrderAscending() : true;
     g_settings.column_order       = column_order;
 
@@ -1142,23 +1148,17 @@ DIALOG_NET_INSPECTOR::~DIALOG_NET_INSPECTOR()
     // from now on.  so just disassociate it.
     m_netsList->AssociateModel( nullptr );
 
-    m_frame->Disconnect( UNITS_CHANGED,
-                         wxCommandEventHandler( DIALOG_NET_INSPECTOR::onUnitsChanged ),
-                         nullptr, this );
-    m_frame->Disconnect( BOARD_CHANGED,
-                         wxCommandEventHandler( DIALOG_NET_INSPECTOR::onBoardChanged ),
-                         nullptr, this );
+    Unbind( EDA_EVT_UNITS_CHANGED, &DIALOG_NET_INSPECTOR::onUnitsChanged, this );
+    Unbind( EDA_EVT_BOARD_CHANGED, &DIALOG_NET_INSPECTOR::onBoardChanged, this );
 
     if( m_brd != nullptr )
         m_brd->RemoveListener( this );
-
-    m_frame->GetCanvas()->SetFocus();
 }
 
 
 void DIALOG_NET_INSPECTOR::onUnitsChanged( wxCommandEvent& event )
 {
-    this->m_units = m_frame->GetUserUnits();
+    m_units = m_frame->GetUserUnits();
 
     m_data_model->updateAllItems();
 
@@ -1636,7 +1636,8 @@ DIALOG_NET_INSPECTOR::buildNewItem( NETINFO_ITEM* aNet, unsigned int aPadCount,
 
         else if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item ) )
         {
-            new_item->AddLayerWireLength( track->GetLength(), static_cast<int>( track->GetLayer() ) );
+            new_item->AddLayerWireLength( track->GetLength(),
+                                          static_cast<int>( track->GetLayer() ) );
 
             if( item->Type() == PCB_VIA_T )
             {
@@ -2240,4 +2241,22 @@ void DIALOG_NET_INSPECTOR::onReport( wxCommandEvent& aEvent )
 
     f.Write();
     f.Close();
+}
+
+
+void DIALOG_NET_INSPECTOR::onClose( wxCloseEvent& aEvent )
+{
+    // Dialog is mode-less so let the parent know that it needs to be destroyed.
+    if( !IsModal() && !IsQuasiModal() )
+    {
+        wxCommandEvent* evt = new wxCommandEvent( EDA_EVT_CLOSE_NET_INSPECTOR_DIALOG, wxID_ANY );
+
+        evt->SetEventObject( this );
+        wxWindow* parent = GetParent();
+
+        if( parent )
+            wxQueueEvent( parent, evt );
+    }
+
+    aEvent.Skip();
 }

@@ -49,6 +49,10 @@
 #include <string_utils.h>
 #include <kiplatform/ui.h>
 
+
+wxDEFINE_EVENT( EDA_EVT_CLOSE_ERC_DIALOG, wxCommandEvent );
+
+
 // wxWidgets spends *far* too long calcuating column widths (most of it, believe it or
 // not, in repeatedly creating/destroying a wxDC to do the measurement in).
 // Use default column widths instead.
@@ -177,8 +181,6 @@ void DIALOG_ERC::UpdateAnnotationWarning()
 }
 
 
-// PROGRESS_REPORTER calls
-
 bool DIALOG_ERC::updateUI()
 {
     // If ERC checks ever get slow enough we'll want a progress indicator...
@@ -285,8 +287,6 @@ void DIALOG_ERC::OnDeleteOneClick( wxCommandEvent& aEvent )
 }
 
 
-/* Delete the old ERC markers, over the whole hierarchy
- */
 void DIALOG_ERC::OnDeleteAllClick( wxCommandEvent& event )
 {
     bool includeExclusions = false;
@@ -318,7 +318,6 @@ void DIALOG_ERC::OnDeleteAllClick( wxCommandEvent& event )
 }
 
 
-// This is a modeless dialog so we have to handle these ourselves.
 void DIALOG_ERC::OnCancelClick( wxCommandEvent& aEvent )
 {
     if( m_running )
@@ -329,15 +328,26 @@ void DIALOG_ERC::OnCancelClick( wxCommandEvent& aEvent )
 
     m_parent->FocusOnItem( nullptr );
 
-    Close();
+    aEvent.Skip();
 }
 
 
-void DIALOG_ERC::OnCloseErcDialog( wxCloseEvent& event )
+void DIALOG_ERC::OnCloseErcDialog( wxCloseEvent& aEvent )
 {
     m_parent->FocusOnItem( nullptr );
 
-    m_parent->GetToolManager()->GetTool<EE_INSPECTION_TOOL>()->DestroyERCDialog();
+    // Dialog is mode-less so let the parent know that it needs to be destroyed.
+    if( !IsModal() && !IsQuasiModal() )
+    {
+        wxCommandEvent* evt = new wxCommandEvent( EDA_EVT_CLOSE_ERC_DIALOG, wxID_ANY );
+
+        wxWindow* parent = GetParent();
+
+        if( parent )
+            wxQueueEvent( parent, evt );
+    }
+
+    aEvent.Skip();
 }
 
 
@@ -511,8 +521,8 @@ void DIALOG_ERC::testErc()
 
     // Test pins on each net against the pin connection table
     if( settings.IsTestEnabled( ERCE_PIN_TO_PIN_ERROR )
-            || settings.IsTestEnabled( ERCE_POWERPIN_NOT_DRIVEN )
-            || settings.IsTestEnabled( ERCE_PIN_NOT_DRIVEN ) )
+      || settings.IsTestEnabled( ERCE_POWERPIN_NOT_DRIVEN )
+      || settings.IsTestEnabled( ERCE_PIN_NOT_DRIVEN ) )
     {
          tester.TestPinToPin();
     }
@@ -678,7 +688,7 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
     menu.AppendSeparator();
 
     if( rcItem->GetErrorCode() == ERCE_PIN_TO_PIN_WARNING
-        || rcItem->GetErrorCode() == ERCE_PIN_TO_PIN_ERROR )
+      || rcItem->GetErrorCode() == ERCE_PIN_TO_PIN_ERROR )
     {
         // Pin to pin severities edited through pin conflict map
     }

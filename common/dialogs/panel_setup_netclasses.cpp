@@ -218,7 +218,7 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, EDA_DRAW_
                                                    &PANEL_SETUP_NETCLASSES::OnNetclassGridMouseEvent,
                                                    this );
 
-    m_frame->Bind( UNITS_CHANGED, &PANEL_SETUP_NETCLASSES::onUnitsChanged, this );
+    m_frame->Bind( EDA_EVT_UNITS_CHANGED, &PANEL_SETUP_NETCLASSES::onUnitsChanged, this );
 
     m_netclassGrid->EndBatch();
     m_assignmentGrid->EndBatch();
@@ -243,7 +243,7 @@ PANEL_SETUP_NETCLASSES::~PANEL_SETUP_NETCLASSES()
                                 wxGridEventHandler( PANEL_SETUP_NETCLASSES::OnNetclassGridCellChanging ),
                                 nullptr, this );
 
-    m_frame->Unbind( UNITS_CHANGED, &PANEL_SETUP_NETCLASSES::onUnitsChanged, this );
+    m_frame->Unbind( EDA_EVT_UNITS_CHANGED, &PANEL_SETUP_NETCLASSES::onUnitsChanged, this );
 }
 
 
@@ -287,8 +287,8 @@ bool PANEL_SETUP_NETCLASSES::TransferDataToWindow()
                 if( lineStyleIdx >= (int) g_lineStyleNames.size() )
                     lineStyleIdx = 0;
 
-                m_netclassGrid->SetCellValue( aRow, GRID_LINESTYLE, g_lineStyleNames[ lineStyleIdx ] );
-
+                m_netclassGrid->SetCellValue( aRow, GRID_LINESTYLE,
+                                              g_lineStyleNames[ lineStyleIdx ] );
                 m_netclassGrid->SetUnitValue( aRow, GRID_CLEARANCE, nc->GetClearance() );
                 m_netclassGrid->SetUnitValue( aRow, GRID_TRACKSIZE, nc->GetTrackWidth() );
                 m_netclassGrid->SetUnitValue( aRow, GRID_VIASIZE, nc->GetViaDiameter() );
@@ -331,9 +331,6 @@ bool PANEL_SETUP_NETCLASSES::TransferDataToWindow()
 }
 
 
-/*
- * Populates drop-downs with the list of net classes
- */
 void PANEL_SETUP_NETCLASSES::rebuildNetclassDropdowns()
 {
     m_assignmentGrid->CommitPendingChanges( true );

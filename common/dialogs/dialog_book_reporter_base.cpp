@@ -37,12 +37,12 @@ DIALOG_BOOK_REPORTER_BASE::DIALOG_BOOK_REPORTER_BASE( wxWindow* parent, wxWindow
 	this->Centre( wxBOTH );
 
 	// Connect Events
-	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOOK_REPORTER_BASE::OnOK ), NULL, this );
+	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_BOOK_REPORTER_BASE::OnClose ) );
 }
 
 DIALOG_BOOK_REPORTER_BASE::~DIALOG_BOOK_REPORTER_BASE()
 {
 	// Disconnect Events
-	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOOK_REPORTER_BASE::OnOK ), NULL, this );
+	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_BOOK_REPORTER_BASE::OnClose ) );
 
 }

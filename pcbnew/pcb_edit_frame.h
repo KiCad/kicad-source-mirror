@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Jean-Pierre Charras, jp.charras@wanadoo.fr
- * Copyright (C) 2010-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2010-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -30,6 +30,8 @@ class PCB_SCREEN;
 class BOARD;
 class BOARD_COMMIT;
 class BOARD_ITEM_CONTAINER;
+class DIALOG_BOOK_REPORTER;
+class DIALOG_NET_INSPECTOR;
 class FOOTPRINT;
 class PCB_TRACK;
 class PCB_VIA;
@@ -702,6 +704,16 @@ public:
 
     TOOL_ACTION* GetExportNetlistAction() { return m_exportNetlistAction; }
 
+    DIALOG_BOOK_REPORTER* GetInspectDrcErrorDialog();
+
+    DIALOG_BOOK_REPORTER* GetInspectConstraintsDialog();
+
+    DIALOG_BOOK_REPORTER* GetInspectClearanceDialog();
+
+    DIALOG_BOOK_REPORTER* GetFootprintDiffDialog();
+
+    DIALOG_NET_INSPECTOR* GetNetInspectorDialog();
+
     DECLARE_EVENT_TABLE()
 
 protected:
@@ -805,18 +817,24 @@ protected:
 
     void saveProjectSettings() override;
 
-public:
-    PCB_LAYER_BOX_SELECTOR* m_SelLayerBox;  // a combo box to display and select active layer
+    void onCloseModelessBookReporterDialogs( wxCommandEvent& aEvent );
 
-    wxComboBox* m_SelTrackWidthBox;        // a choice box to display and select current track width
-    wxComboBox* m_SelViaSizeBox;           // a choice box to display and select current via diameter
+    void onCloseNetInspectorDialog( wxCommandEvent& aEvent );
+
+    void onUnitsChanged( wxCommandEvent& aEvent );
+
+public:
+    PCB_LAYER_BOX_SELECTOR* m_SelLayerBox; // a combo box to display and select active layer
+
+    wxComboBox* m_SelTrackWidthBox;      // a choice box to display and select current track width
+    wxComboBox* m_SelViaSizeBox;         // a choice box to display and select current via diameter
 
     bool m_show_layer_manager_tools;
     bool m_show_search;
 
-    bool m_ZoneFillsDirty;               // Board has been modified since last zone fill.
+    bool m_ZoneFillsDirty;          // Board has been modified since last zone fill.
 
-    bool m_probingSchToPcb;              // Recursion guard when synchronizing selection from schematic
+    bool m_probingSchToPcb;         // Recursion guard when synchronizing selection from schematic
 
 private:
     friend struct PCB::IFACE;
@@ -832,6 +850,11 @@ private:
     TOOL_ACTION* m_exportNetlistAction;
 
     DIALOG_FIND* m_findDialog;
+    DIALOG_BOOK_REPORTER* m_inspectDrcErrorDlg;
+    DIALOG_BOOK_REPORTER* m_inspectClearanceDlg;
+    DIALOG_BOOK_REPORTER* m_inspectConstraintsDlg;
+    DIALOG_BOOK_REPORTER* m_footprintDiffDlg;
+    DIALOG_NET_INSPECTOR* m_netInspectorDlg;
 
     /**
      * Keep track of viewport so that track net labels can be adjusted when it changes.

@@ -27,7 +27,9 @@
 #include <symbol_library.h>
 #include <confirm.h>
 #include <connection_graph.h>
+#include <dialogs/dialog_erc.h>
 #include <dialogs/dialog_schematic_find.h>
+#include <dialogs/dialog_book_reporter.h>
 #include <eeschema_id.h>
 #include <executable_names.h>
 #include <gestfich.h>
@@ -90,6 +92,9 @@
 #include <drawing_sheet/ds_proxy_view_item.h>
 
 
+#define DIFF_SYMBOLS_DIALOG_NAME wxT( "DiffSymbolsDialog" )
+
+
 BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, SCH_BASE_FRAME )
     EVT_SOCKET( ID_EDA_SOCKET_EVENT_SERV, EDA_DRAW_FRAME::OnSockRequestServer )
     EVT_SOCKET( ID_EDA_SOCKET_EVENT, EDA_DRAW_FRAME::OnSockRequest )
@@ -115,7 +120,9 @@ END_EVENT_TABLE()
 SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         SCH_BASE_FRAME( aKiway, aParent, FRAME_SCH, wxT( "Eeschema" ), wxDefaultPosition,
                         wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, SCH_EDIT_FRAME_NAME ),
-        m_highlightedConn( nullptr )
+    m_highlightedConn( nullptr ),
+    m_ercDialog( nullptr ),
+    m_diffSymbolDialog( nullptr )
 {
     m_maximizeByDefault = true;
     m_schematic = new SCHEMATIC( nullptr );
@@ -286,6 +293,9 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // top-left corner of the canvas
     wxPoint canvas_pos = GetCanvas()->GetScreenPosition();
     hierarchy_pane.FloatingPosition( canvas_pos.x + 10, canvas_pos.y + 10 );
+
+    Bind( EDA_EVT_CLOSE_DIALOG_BOOK_REPORTER, &SCH_EDIT_FRAME::onCloseSymbolDiffDialog, this );
+    Bind( EDA_EVT_CLOSE_ERC_DIALOG, &SCH_EDIT_FRAME::onCloseErcDialog, this );
 }
 
 
@@ -294,22 +304,9 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
     m_hierarchy->Disconnect( wxEVT_SIZE,
                              wxSizeEventHandler( SCH_EDIT_FRAME::OnResizeHierarchyNavigator ),
                              NULL, this );
+
     // Ensure m_canvasType is up to date, to save it in config
     m_canvasType = GetCanvas()->GetBackend();
-
-    // Close modeless dialogs
-    wxWindow* open_dlg = wxWindow::FindWindowByName( DIALOG_ERC_WINDOW_NAME );
-
-    if( open_dlg )
-        open_dlg->Close( true );
-
-    // Shutdown all running tools
-    if( m_toolManager )
-    {
-        m_toolManager->ShutdownAllTools();
-        delete m_toolManager;
-        m_toolManager = nullptr;
-    }
 
     SetScreen( nullptr );
 
@@ -439,9 +436,12 @@ void SCH_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::inchesUnits,         CHECK( cond.Units( EDA_UNITS::INCHES ) ) );
     mgr->SetConditions( ACTIONS::milsUnits,           CHECK( cond.Units( EDA_UNITS::MILS ) ) );
 
-    mgr->SetConditions( EE_ACTIONS::lineModeFree,     CHECK( cond.LineMode( LINE_MODE::LINE_MODE_FREE ) ) );
-    mgr->SetConditions( EE_ACTIONS::lineMode90,       CHECK( cond.LineMode( LINE_MODE::LINE_MODE_90 ) ) );
-    mgr->SetConditions( EE_ACTIONS::lineMode45,       CHECK( cond.LineMode( LINE_MODE::LINE_MODE_45 ) ) );
+    mgr->SetConditions( EE_ACTIONS::lineModeFree,
+                        CHECK( cond.LineMode( LINE_MODE::LINE_MODE_FREE ) ) );
+    mgr->SetConditions( EE_ACTIONS::lineMode90,
+                        CHECK( cond.LineMode( LINE_MODE::LINE_MODE_90 ) ) );
+    mgr->SetConditions( EE_ACTIONS::lineMode45,
+                        CHECK( cond.LineMode( LINE_MODE::LINE_MODE_45 ) ) );
 
     mgr->SetConditions( ACTIONS::cut,                 ENABLE( hasElements ) );
     mgr->SetConditions( ACTIONS::copy,                ENABLE( hasElements ) );
@@ -822,13 +822,6 @@ bool SCH_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         }
     }
 
-    // Close modeless dialogs.  They're trouble when they get destroyed after the frame and/or
-    // board.
-    wxWindow* open_dlg = wxWindow::FindWindowByName( DIALOG_ERC_WINDOW_NAME );
-
-    if( open_dlg )
-        open_dlg->Close( true );
-
     return true;
 }
 
@@ -841,6 +834,15 @@ void SCH_EDIT_FRAME::doCloseWindow()
     if( m_toolManager )
         m_toolManager->ShutdownAllTools();
 
+    // Close modeless dialogs.  They're trouble when they get destroyed after the frame.
+    Unbind( EDA_EVT_CLOSE_DIALOG_BOOK_REPORTER, &SCH_EDIT_FRAME::onCloseSymbolDiffDialog, this );
+    Unbind( EDA_EVT_CLOSE_ERC_DIALOG, &SCH_EDIT_FRAME::onCloseErcDialog, this );
+
+    wxWindow* open_dlg = wxWindow::FindWindowByName( DIALOG_ERC_WINDOW_NAME );
+
+    if( open_dlg )
+        open_dlg->Destroy();
+
     // Close the find dialog and preserve its setting if it is displayed.
     if( m_findReplaceDialog )
     {
@@ -849,6 +851,26 @@ void SCH_EDIT_FRAME::doCloseWindow()
 
         m_findReplaceDialog->Destroy();
         m_findReplaceDialog = nullptr;
+    }
+
+    if( m_diffSymbolDialog )
+    {
+        m_diffSymbolDialog->Destroy();
+        m_diffSymbolDialog = nullptr;
+    }
+
+    if( m_ercDialog )
+    {
+        m_ercDialog->Destroy();
+        m_ercDialog = nullptr;
+    }
+
+    // Shutdown all running tools
+    if( m_toolManager )
+    {
+        m_toolManager->ShutdownAllTools();
+        delete m_toolManager;
+        m_toolManager = nullptr;
     }
 
     wxAuiPaneInfo& hierarchy_pane = m_auimgr.GetPane( SchematicHierarchyPaneName() );
@@ -2074,4 +2096,43 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     editTool->UpdateNetHighlighting( dummy );
 
     m_hierarchy->UpdateHierarchySelection();
+}
+
+
+DIALOG_BOOK_REPORTER* SCH_EDIT_FRAME::GetSymbolDiffDialog()
+{
+    if( !m_diffSymbolDialog )
+        m_diffSymbolDialog = new DIALOG_BOOK_REPORTER( this, DIFF_SYMBOLS_DIALOG_NAME,
+                                                       _( "Diff Symbol with Library" ) );
+
+    return m_diffSymbolDialog;
+}
+
+
+void SCH_EDIT_FRAME::onCloseSymbolDiffDialog( wxCommandEvent& aEvent )
+{
+    if( m_diffSymbolDialog && aEvent.GetString() == DIFF_SYMBOLS_DIALOG_NAME )
+    {
+        m_diffSymbolDialog->Destroy();
+        m_diffSymbolDialog = nullptr;
+    }
+}
+
+
+DIALOG_ERC* SCH_EDIT_FRAME::GetErcDialog()
+{
+    if( !m_ercDialog )
+        m_ercDialog = new DIALOG_ERC( this );
+
+    return m_ercDialog;
+}
+
+
+void SCH_EDIT_FRAME::onCloseErcDialog( wxCommandEvent& aEvent )
+{
+    if( m_ercDialog )
+    {
+        m_ercDialog->Destroy();
+        m_ercDialog = nullptr;
+    }
 }

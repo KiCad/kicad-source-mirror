@@ -48,12 +48,8 @@
 #include <math/util.h>      // for KiROUND
 
 
-#define DIFF_SYMBOLS_DIALOG_NAME wxT( "DiffSymbolsDialog" )
-
-
 EE_INSPECTION_TOOL::EE_INSPECTION_TOOL() :
-    EE_TOOL_BASE<SCH_BASE_FRAME>( "eeschema.InspectionTool" ),
-    m_ercDialog( nullptr )
+    EE_TOOL_BASE<SCH_BASE_FRAME>( "eeschema.InspectionTool" )
 {
 }
 
@@ -79,9 +75,11 @@ void EE_INSPECTION_TOOL::Reset( RESET_REASON aReason )
 {
     EE_TOOL_BASE::Reset( aReason );
 
-    if( aReason == MODEL_RELOAD )
+    if( aReason == MODEL_RELOAD  && m_frame )
     {
-        DestroyERCDialog();
+        wxCommandEvent* evt = new wxCommandEvent( EDA_EVT_CLOSE_ERC_DIALOG, wxID_ANY );
+
+        wxQueueEvent( m_frame, evt );
     }
 }
 
@@ -95,46 +93,35 @@ int EE_INSPECTION_TOOL::RunERC( const TOOL_EVENT& aEvent )
 
 void EE_INSPECTION_TOOL::ShowERCDialog()
 {
-    if( m_frame->IsType( FRAME_SCH ) )
-    {
-        if( m_ercDialog )
-        {
-            // Needed at least on Windows. Raise() is not enough
-            m_ercDialog->Show( true );
-            // Bring it to the top if already open.  Dual monitor users need this.
-            m_ercDialog->Raise();
-        }
-        else
-        {
-            // This is a modeless dialog, so new it rather than instantiating on stack.
-            m_ercDialog = new DIALOG_ERC( static_cast<SCH_EDIT_FRAME*>( m_frame ) );
+    SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
 
-            m_ercDialog->Show( true );
-        }
-    }
-}
+    wxCHECK( frame, /* void */ );
 
+    DIALOG_ERC* dlg = frame->GetErcDialog();
 
-void EE_INSPECTION_TOOL::DestroyERCDialog()
-{
-    if( m_ercDialog )
-        m_ercDialog->Destroy();
+    wxCHECK( dlg, /* void */ );
 
-    m_ercDialog = nullptr;
+    // Needed at least on Windows. Raise() is not enough
+    dlg->Show( true );
+
+    // Bring it to the top if already open.  Dual monitor users need this.
+    dlg->Raise();
 }
 
 
 int EE_INSPECTION_TOOL::PrevMarker( const TOOL_EVENT& aEvent )
 {
-    if( m_ercDialog )
+    SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
+
+    wxCHECK( frame, 0 );
+
+    DIALOG_ERC* dlg = frame->GetErcDialog();
+
+    if( dlg )
     {
-        m_ercDialog->Show( true );
-        m_ercDialog->Raise();
-        m_ercDialog->PrevMarker();
-    }
-    else
-    {
-        ShowERCDialog();
+        dlg->Show( true );
+        dlg->Raise();
+        dlg->PrevMarker();
     }
 
     return 0;
@@ -143,16 +130,17 @@ int EE_INSPECTION_TOOL::PrevMarker( const TOOL_EVENT& aEvent )
 
 int EE_INSPECTION_TOOL::NextMarker( const TOOL_EVENT& aEvent )
 {
-    if( m_ercDialog )
-    {
-        m_ercDialog->Show( true );
-        m_ercDialog->Raise();
-        m_ercDialog->NextMarker();
-    }
-    else
-    {
-        ShowERCDialog();
-    }
+    SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
+
+    wxCHECK( frame, 0 );
+
+    DIALOG_ERC* dlg = frame->GetErcDialog();
+
+    wxCHECK( dlg, 0 );
+
+    dlg->Show( true );
+    dlg->Raise();
+    dlg->NextMarker();
 
     return 0;
 }
@@ -160,18 +148,26 @@ int EE_INSPECTION_TOOL::NextMarker( const TOOL_EVENT& aEvent )
 
 int EE_INSPECTION_TOOL::CrossProbe( const TOOL_EVENT& aEvent )
 {
-    if( m_ercDialog )
+    SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
+
+    wxCHECK( frame, 0 );
+
+    DIALOG_ERC* dlg = frame->GetErcDialog();
+
+    wxCHECK( dlg, 0 );
+
+    EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+
+    wxCHECK( selectionTool, 0 );
+
+    EE_SELECTION&      selection = selectionTool->GetSelection();
+
+    if( selection.GetSize() == 1 && selection.Front()->Type() == SCH_MARKER_T )
     {
-        EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-        EE_SELECTION&      selection = selectionTool->GetSelection();
+        if( !dlg->IsShown() )
+            dlg->Show( true );
 
-        if( selection.GetSize() == 1 && selection.Front()->Type() == SCH_MARKER_T )
-        {
-            if( !m_ercDialog->IsShown() )
-                m_ercDialog->Show( true );
-
-            m_ercDialog->SelectMarker( static_cast<SCH_MARKER*>( selection.Front() ) );
-        }
+        dlg->SelectMarker( static_cast<SCH_MARKER*>( selection.Front() ) );
     }
 
     // Show the item info on a left click on this item
@@ -190,14 +186,20 @@ int EE_INSPECTION_TOOL::ExcludeMarker( const TOOL_EVENT& aEvent )
     if( selection.GetSize() == 1 && selection.Front()->Type() == SCH_MARKER_T )
         marker = static_cast<SCH_MARKER*>( selection.Front() );
 
-    if( m_ercDialog )
-    {
-        // Let the ERC dialog handle it since it has more update hassles to worry about
-        // Note that if marker is nullptr the dialog will exclude whichever marker is selected
-        // in the dialog itself
-        m_ercDialog->ExcludeMarker( marker );
-    }
-    else if( marker != nullptr )
+    SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
+
+    wxCHECK( frame, 0 );
+
+    DIALOG_ERC* dlg = frame->GetErcDialog();
+
+    wxCHECK( dlg, 0 );
+
+    // Let the ERC dialog handle it since it has more update hassles to worry about
+    // Note that if marker is nullptr the dialog will exclude whichever marker is selected
+    // in the dialog itself
+    dlg->ExcludeMarker( marker );
+
+    if( marker != nullptr )
     {
         marker->SetExcluded( true );
         m_frame->GetCanvas()->GetView()->Update( marker );
@@ -244,8 +246,9 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
 
 int EE_INSPECTION_TOOL::DiffSymbol( const TOOL_EVENT& aEvent )
 {
-    if( !m_frame->IsType( FRAME_SCH ) )
-        return 0;
+    SCH_EDIT_FRAME* schEditorFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
+
+    wxCHECK( schEditorFrame, 0 );
 
     EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
 
@@ -255,14 +258,9 @@ int EE_INSPECTION_TOOL::DiffSymbol( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    wxWindow*             window = wxWindow::FindWindowByName( DIFF_SYMBOLS_DIALOG_NAME );
-    DIALOG_BOOK_REPORTER* dialog = dynamic_cast<DIALOG_BOOK_REPORTER*>( window );
+    DIALOG_BOOK_REPORTER* dialog = schEditorFrame->GetSymbolDiffDialog();
 
-    if( !dialog )
-    {
-        dialog = new DIALOG_BOOK_REPORTER( m_frame, DIFF_SYMBOLS_DIALOG_NAME,
-                                           _( "Diff Symbol with Library" ) );
-    }
+    wxCHECK( dialog, 0 );
 
     dialog->DeleteAllPages();
 
@@ -278,7 +276,8 @@ int EE_INSPECTION_TOOL::DiffSymbol( const TOOL_EVENT& aEvent )
     r->Report( wxS( "<h7>" ) + _( "Schematic vs library diff for:" ) + wxS( "</h7>" ) );
     r->Report( wxS( "<ul><li>" ) + EscapeHTML( symbolDesc ) + wxS( "</li>" )
              + wxS( "<li>" ) + _( "Library: " ) + EscapeHTML( libName ) + wxS( "</li>" )
-             + wxS( "<li>" ) + _( "Library item: " ) + EscapeHTML( symbolName ) + wxS( "</li></ul>" ) );
+             + wxS( "<li>" ) + _( "Library item: " ) + EscapeHTML( symbolName )
+             + wxS( "</li></ul>" ) );
 
     r->Report( "" );
 

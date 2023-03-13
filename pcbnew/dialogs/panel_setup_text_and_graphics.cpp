@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2022 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -95,7 +95,7 @@ PANEL_SETUP_TEXT_AND_GRAPHICS::PANEL_SETUP_TEXT_AND_GRAPHICS( PAGED_DIALOG* aPar
 
     m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
 
-    m_Frame->Bind( UNITS_CHANGED, &PANEL_SETUP_TEXT_AND_GRAPHICS::onUnitsChanged, this );
+    m_Frame->Bind( EDA_EVT_UNITS_CHANGED, &PANEL_SETUP_TEXT_AND_GRAPHICS::onUnitsChanged, this );
 }
 
 
@@ -104,7 +104,7 @@ PANEL_SETUP_TEXT_AND_GRAPHICS::~PANEL_SETUP_TEXT_AND_GRAPHICS()
     // destroy GRID_TRICKS before m_grid.
     m_grid->PopEventHandler( true );
 
-    m_Frame->Unbind( UNITS_CHANGED, &PANEL_SETUP_TEXT_AND_GRAPHICS::onUnitsChanged, this );
+    m_Frame->Unbind( EDA_EVT_UNITS_CHANGED, &PANEL_SETUP_TEXT_AND_GRAPHICS::onUnitsChanged, this );
 }
 
 
@@ -151,8 +151,10 @@ bool PANEL_SETUP_TEXT_AND_GRAPHICS::TransferDataToWindow()
             SET_MILS_CELL( i, COL_TEXT_WIDTH, m_BrdSettings->m_TextSize[ i ].x );
             SET_MILS_CELL( i, COL_TEXT_HEIGHT, m_BrdSettings->m_TextSize[ i ].y );
             SET_MILS_CELL( i, COL_TEXT_THICKNESS, m_BrdSettings->m_TextThickness[ i ] );
-            m_grid->SetCellValue( i, COL_TEXT_ITALIC, m_BrdSettings->m_TextItalic[ i ] ? wxT( "1" ) : wxT( "" ) );
-            m_grid->SetCellValue( i, COL_TEXT_UPRIGHT, m_BrdSettings->m_TextUpright[ i ] ? wxT( "1" ) : wxT( "" ) );
+            m_grid->SetCellValue( i, COL_TEXT_ITALIC,
+                                  m_BrdSettings->m_TextItalic[ i ] ? wxT( "1" ) : wxT( "" ) );
+            m_grid->SetCellValue( i, COL_TEXT_UPRIGHT,
+                                  m_BrdSettings->m_TextUpright[ i ] ? wxT( "1" ) : wxT( "" ) );
 
             auto attr = new wxGridCellAttr;
             attr->SetRenderer( new wxGridCellBoolRenderer() );

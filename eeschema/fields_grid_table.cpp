@@ -293,7 +293,7 @@ void FIELDS_GRID_TABLE<T>::initGrid( WX_GRID* aGrid )
 
     m_eval = std::make_unique<NUMERIC_EVALUATOR>( m_frame->GetUserUnits() );
 
-    m_frame->Bind( UNITS_CHANGED, &FIELDS_GRID_TABLE<T>::onUnitsChanged, this );
+    m_frame->Bind( EDA_EVT_UNITS_CHANGED, &FIELDS_GRID_TABLE<T>::onUnitsChanged, this );
 }
 
 
@@ -316,7 +316,7 @@ FIELDS_GRID_TABLE<T>::~FIELDS_GRID_TABLE()
     m_fontAttr->DecRef();
     m_colorAttr->DecRef();
 
-    m_frame->Unbind( UNITS_CHANGED, &FIELDS_GRID_TABLE<T>::onUnitsChanged, this );
+    m_frame->Unbind( EDA_EVT_UNITS_CHANGED, &FIELDS_GRID_TABLE<T>::onUnitsChanged, this );
 }
 
 

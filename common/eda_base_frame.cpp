@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,7 +67,7 @@
 #include <functional>
 #include <kiface_ids.h>
 
-wxDEFINE_EVENT( UNITS_CHANGED, wxCommandEvent );
+wxDEFINE_EVENT( EDA_EVT_UNITS_CHANGED, wxCommandEvent );
 
 
 // Minimum window size
@@ -664,7 +664,8 @@ void EDA_BASE_FRAME::ensureWindowIsOnScreen()
     wxSize    size       = GetWindowSize();
 
     wxLogTrace( traceDisplayLocation,
-                wxS( "ensureWindowIsOnScreen: clientArea (%d, %d) w %d h %d" ), clientSize.x, clientSize.y,
+                wxS( "ensureWindowIsOnScreen: clientArea (%d, %d) w %d h %d" ),
+                clientSize.x, clientSize.y,
                 clientSize.width, clientSize.height );
 
     if( pos.y < clientSize.y )
@@ -678,8 +679,8 @@ void EDA_BASE_FRAME::ensureWindowIsOnScreen()
     if( pos.x < clientSize.x )
     {
         wxLogTrace( traceDisplayLocation,
-                    wxS( "ensureWindowIsOnScreen: x pos %d is off the client rect, setting to %d" ), pos.x,
-                    clientSize.x );
+                    wxS( "ensureWindowIsOnScreen: x pos %d is off the client rect, setting to %d" ),
+                    pos.x, clientSize.x );
         pos.x = clientSize.x;
     }
 
@@ -687,8 +688,8 @@ void EDA_BASE_FRAME::ensureWindowIsOnScreen()
     {
         int newWidth = clientSize.width - ( pos.x - clientSize.x );
         wxLogTrace( traceDisplayLocation,
-                    wxS( "ensureWindowIsOnScreen: effective width %d above available %d, setting to %d" ),
-                    pos.x + size.x, clientSize.width, newWidth );
+                    wxS( "ensureWindowIsOnScreen: effective width %d above available %d, setting "
+                         "to %d" ), pos.x + size.x, clientSize.width, newWidth );
         size.x = newWidth;
     }
 
@@ -696,8 +697,8 @@ void EDA_BASE_FRAME::ensureWindowIsOnScreen()
     {
         int newHeight = clientSize.height - ( pos.y - clientSize.y );
         wxLogTrace( traceDisplayLocation,
-                    wxS( "ensureWindowIsOnScreen: effective height %d above available %d, setting to %d" ),
-                    pos.y + size.y, clientSize.height, newHeight );
+                    wxS( "ensureWindowIsOnScreen: effective height %d above available %d, setting "
+                         "to %d" ), pos.y + size.y, clientSize.height, newHeight );
         size.y = newHeight;
     }
 
@@ -1354,7 +1355,8 @@ void EDA_BASE_FRAME::ChangeUserUnits( EDA_UNITS aUnits )
     SetUserUnits( aUnits );
     unitsChangeRefresh();
 
-    wxCommandEvent e( UNITS_CHANGED );
+    wxCommandEvent e( EDA_EVT_UNITS_CHANGED );
+    e.SetInt( static_cast<int>( aUnits ) );
     e.SetClientData( this );
     ProcessEventLocally( e );
 }

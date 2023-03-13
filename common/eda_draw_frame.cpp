@@ -284,7 +284,7 @@ void EDA_DRAW_FRAME::ToggleUserUnits()
                                                           : EDA_UNITS::INCHES );
         unitsChangeRefresh();
 
-        wxCommandEvent e( UNITS_CHANGED );
+        wxCommandEvent e( EDA_EVT_UNITS_CHANGED );
         ProcessEventLocally( e );
     }
 }

@@ -37,6 +37,11 @@ class CN_ITEM;
 class EDA_PATTERN_MATCH;
 class PCB_TRACK;
 
+/**
+ * Event sent to parent when dialog is mode-less.
+ */
+wxDECLARE_EVENT( EDA_EVT_CLOSE_NET_INSPECTOR_DIALOG, wxCommandEvent );
+
 class DIALOG_NET_INSPECTOR : public DIALOG_NET_INSPECTOR_BASE, public BOARD_LISTENER
 {
 public:
@@ -53,17 +58,22 @@ public:
         std::vector<int> column_order;
     };
 
-    DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent, const wxString& aDialogName );
+    DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent );
     ~DIALOG_NET_INSPECTOR();
 
     virtual void OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aBoardItem ) override;
     virtual void OnBoardItemsAdded( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems ) override;
     virtual void OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoardItem ) override;
-    virtual void OnBoardItemsRemoved( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems ) override;
+    virtual void OnBoardItemsRemoved( BOARD& aBoard,
+                                      std::vector<BOARD_ITEM*>& aBoardItems ) override;
     virtual void OnBoardNetSettingsChanged( BOARD& aBoard ) override;
     virtual void OnBoardItemChanged( BOARD& aBoard, BOARD_ITEM* aBoardItem ) override;
-    virtual void OnBoardItemsChanged( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems ) override;
+    virtual void OnBoardItemsChanged( BOARD& aBoard,
+                                      std::vector<BOARD_ITEM*>& aBoardItems ) override;
     virtual void OnBoardHighlightNetChanged( BOARD& aBoard ) override;
+
+protected:
+    virtual void onClose( wxCloseEvent& aEvent ) override;
 
 private:
     struct COLUMN_DESC;

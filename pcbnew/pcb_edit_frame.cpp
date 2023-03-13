@@ -38,6 +38,7 @@
 #include <dialog_find.h>
 #include <dialog_footprint_properties.h>
 #include <dialogs/dialog_exchange_footprints.h>
+#include <dialogs/dialog_net_inspector.h>
 #include <dialog_board_setup.h>
 #include <invoke_pcb_dialog.h>
 #include <board.h>
@@ -114,6 +115,12 @@
 using namespace std::placeholders;
 
 
+#define INSPECT_DRC_ERROR_DIALOG_NAME   wxT( "InspectDrcErrorDialog" )
+#define INSPECT_CLEARANCE_DIALOG_NAME   wxT( "InspectClearanceDialog" )
+#define INSPECT_CONSTRAINTS_DIALOG_NAME wxT( "InspectConstraintsDialog" )
+#define FOOTPRINT_DIFF_DIALOG_NAME      wxT( "FootprintDiffDialog" )
+
+
 BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_SOCKET( ID_EDA_SOCKET_EVENT_SERV, PCB_EDIT_FRAME::OnSockRequestServer )
     EVT_SOCKET( ID_EDA_SOCKET_EVENT, PCB_EDIT_FRAME::OnSockRequest )
@@ -183,7 +190,13 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         PCB_BASE_EDIT_FRAME( aKiway, aParent, FRAME_PCB_EDITOR, _( "PCB Editor" ),
                              wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE,
                              PCB_EDIT_FRAME_NAME ),
-        m_exportNetlistAction( nullptr ), m_findDialog( nullptr )
+    m_exportNetlistAction( nullptr ),
+    m_findDialog( nullptr ),
+    m_inspectDrcErrorDlg( nullptr ),
+    m_inspectClearanceDlg( nullptr ),
+    m_inspectConstraintsDlg( nullptr ),
+    m_footprintDiffDlg( nullptr ),
+    m_netInspectorDlg( nullptr )
 {
     m_maximizeByDefault = true;
     m_showBorderAndTitleBlock = true;   // true to display sheet references
@@ -407,9 +420,9 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     wxFileName appK2S( strK2S, wxT( "kicad2step" ) );
 
-    #ifdef _WIN32
+#ifdef _WIN32
     appK2S.SetExt( wxT( "exe" ) );
-    #endif
+#endif
 
     // Ensure the window is on top
     Raise();
@@ -457,6 +470,11 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_eventCounterTimer->Start( 1000 );
     }
 
+    Bind( EDA_EVT_CLOSE_DIALOG_BOOK_REPORTER, &PCB_EDIT_FRAME::onCloseModelessBookReporterDialogs,
+          this );
+    Bind( EDA_EVT_CLOSE_NET_INSPECTOR_DIALOG, &PCB_EDIT_FRAME::onCloseNetInspectorDialog, this );
+    Bind( EDA_EVT_UNITS_CHANGED, &PCB_EDIT_FRAME::onUnitsChanged, this );
+
     m_acceptedExts.emplace( KiCadPcbFileExtension, &PCB_ACTIONS::ddAppendBoard );
     m_acceptedExts.emplace( LegacyPcbFileExtension, &PCB_ACTIONS::ddAppendBoard );
     DragAcceptFiles( true );
@@ -467,16 +485,11 @@ PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 {
     if( ADVANCED_CFG::GetCfg().m_ShowEventCounters )
     {
-        // Stop the timer during destruction early to avoid potential event race conditions (that do happen on windows)
+        // Stop the timer during destruction early to avoid potential event race conditions (that
+        // do happen on windows)
         m_eventCounterTimer->Stop();
         delete m_eventCounterTimer;
     }
-
-    // Close modeless dialogs
-    wxWindow* open_dlg = wxWindow::FindWindowByName( DIALOG_DRC_WINDOW_NAME );
-
-    if( open_dlg )
-        open_dlg->Close( true );
 
     // Shutdown all running tools
     if( m_toolManager )
@@ -1059,13 +1072,6 @@ bool PCB_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         }
     }
 
-    // Close modeless dialogs.  They're trouble when they get destroyed after the frame and/or
-    // board.
-    wxWindow* open_dlg = wxWindow::FindWindowByName( DIALOG_DRC_WINDOW_NAME );
-
-    if( open_dlg )
-        open_dlg->Close( true );
-
     return PCB_BASE_EDIT_FRAME::canCloseWindow( aEvent );
 }
 
@@ -1081,6 +1087,54 @@ void PCB_EDIT_FRAME::doCloseWindow()
     GetCanvas()->SetEvtHandlerEnabled( false );
 
     GetCanvas()->StopDrawing();
+
+    // Clean up mode-less dialogs.
+    Unbind( EDA_EVT_CLOSE_DIALOG_BOOK_REPORTER,
+            &PCB_EDIT_FRAME::onCloseModelessBookReporterDialogs, this );
+    Unbind( EDA_EVT_CLOSE_NET_INSPECTOR_DIALOG, &PCB_EDIT_FRAME::onCloseNetInspectorDialog, this );
+    Unbind( EDA_EVT_UNITS_CHANGED, &PCB_EDIT_FRAME::onUnitsChanged, this );
+
+    wxWindow* open_dlg = wxWindow::FindWindowByName( DIALOG_DRC_WINDOW_NAME );
+
+    if( open_dlg )
+        open_dlg->Close( true );
+
+    if( m_findDialog )
+    {
+        m_findDialog->Destroy();
+        m_findDialog = nullptr;
+    }
+
+    if( m_inspectDrcErrorDlg )
+    {
+        m_inspectDrcErrorDlg->Destroy();
+        m_inspectDrcErrorDlg = nullptr;
+    }
+
+    if( m_inspectClearanceDlg )
+    {
+        m_inspectClearanceDlg->Destroy();
+        m_inspectClearanceDlg = nullptr;
+    }
+
+    if( m_inspectConstraintsDlg )
+    {
+        m_inspectConstraintsDlg->Destroy();
+        m_inspectConstraintsDlg = nullptr;
+    }
+
+    if( m_footprintDiffDlg )
+    {
+        m_footprintDiffDlg->Destroy();
+        m_footprintDiffDlg = nullptr;
+    }
+
+    if( m_netInspectorDlg )
+    {
+        RemoveBoardChangeListener( m_netInspectorDlg );
+        m_netInspectorDlg->Destroy();
+        m_netInspectorDlg = nullptr;
+    }
 
     // Delete the auto save file if it exists.
     wxFileName fn = GetBoard()->GetFileName();
@@ -2337,4 +2391,101 @@ void PCB_EDIT_FRAME::onSize( wxSizeEvent& aEvent )
 
     // Skip() is called in the base class.
     EDA_DRAW_FRAME::OnSize( aEvent );
+}
+
+
+DIALOG_BOOK_REPORTER* PCB_EDIT_FRAME::GetInspectDrcErrorDialog()
+{
+    if( !m_inspectDrcErrorDlg )
+        m_inspectDrcErrorDlg = new DIALOG_BOOK_REPORTER( this, INSPECT_DRC_ERROR_DIALOG_NAME,
+                                                         _( "Violation Report" ) );
+
+    return m_inspectDrcErrorDlg;
+}
+
+
+DIALOG_BOOK_REPORTER* PCB_EDIT_FRAME::GetInspectClearanceDialog()
+{
+    if( !m_inspectClearanceDlg )
+        m_inspectClearanceDlg = new DIALOG_BOOK_REPORTER( this, INSPECT_CLEARANCE_DIALOG_NAME,
+                                                          _( "Clearance Report" ) );
+
+    return m_inspectClearanceDlg;
+}
+
+
+DIALOG_BOOK_REPORTER* PCB_EDIT_FRAME::GetInspectConstraintsDialog()
+{
+    if( !m_inspectConstraintsDlg )
+        m_inspectConstraintsDlg = new DIALOG_BOOK_REPORTER( this, INSPECT_CONSTRAINTS_DIALOG_NAME,
+                                                            _( "Constraints Report" ) );
+
+    return m_inspectConstraintsDlg;
+}
+
+
+DIALOG_BOOK_REPORTER* PCB_EDIT_FRAME::GetFootprintDiffDialog()
+{
+    if( !m_footprintDiffDlg )
+        m_footprintDiffDlg = new DIALOG_BOOK_REPORTER( this, FOOTPRINT_DIFF_DIALOG_NAME,
+                                                       _( "Diff Footprint with Library" ) );
+
+    return m_footprintDiffDlg;
+}
+
+
+void PCB_EDIT_FRAME::onCloseModelessBookReporterDialogs( wxCommandEvent& aEvent )
+{
+    if( m_inspectDrcErrorDlg && aEvent.GetString() == INSPECT_DRC_ERROR_DIALOG_NAME )
+    {
+        m_inspectDrcErrorDlg->Destroy();
+        m_inspectDrcErrorDlg = nullptr;
+    }
+    else if( m_inspectClearanceDlg && aEvent.GetString() == INSPECT_CLEARANCE_DIALOG_NAME )
+    {
+        m_inspectClearanceDlg->Destroy();
+        m_inspectClearanceDlg = nullptr;
+    }
+    else if( m_inspectConstraintsDlg && aEvent.GetString() == INSPECT_CONSTRAINTS_DIALOG_NAME )
+    {
+        m_inspectConstraintsDlg->Destroy();
+        m_inspectConstraintsDlg = nullptr;
+    }
+    else if( m_footprintDiffDlg && aEvent.GetString() == INSPECT_CONSTRAINTS_DIALOG_NAME )
+    {
+        m_footprintDiffDlg->Destroy();
+        m_footprintDiffDlg = nullptr;
+    }
+}
+
+
+DIALOG_NET_INSPECTOR* PCB_EDIT_FRAME::GetNetInspectorDialog()
+{
+    if( !m_netInspectorDlg )
+    {
+        m_netInspectorDlg = new DIALOG_NET_INSPECTOR( this );
+        AddBoardChangeListener( m_netInspectorDlg );
+    }
+
+    return m_netInspectorDlg;
+}
+
+
+void PCB_EDIT_FRAME::onCloseNetInspectorDialog( wxCommandEvent& aEvent )
+{
+    if( m_netInspectorDlg )
+    {
+        RemoveBoardChangeListener( m_netInspectorDlg );
+        m_netInspectorDlg->Destroy();
+        m_netInspectorDlg = nullptr;
+    }
+}
+
+
+void PCB_EDIT_FRAME::onUnitsChanged( wxCommandEvent& aEvent )
+{
+    wxCommandEvent evt( EDA_EVT_UNITS_CHANGED );
+
+    if( m_netInspectorDlg )
+        m_netInspectorDlg->HandleWindowEvent( evt );
 }

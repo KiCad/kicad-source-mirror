@@ -4,7 +4,7 @@
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2015-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -144,7 +144,8 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
                  this );
     }
 
-    aFrame->Connect( UNITS_CHANGED, wxCommandEventHandler( PANEL_PREVIEW_3D_MODEL::onUnitsChanged ),
+    aFrame->Connect( EDA_EVT_UNITS_CHANGED,
+                     wxCommandEventHandler( PANEL_PREVIEW_3D_MODEL::onUnitsChanged ),
                      nullptr, this );
 
 #ifdef __WXOSX__
@@ -451,7 +452,8 @@ void PANEL_PREVIEW_3D_MODEL::doIncrementOffset( wxSpinEvent& event, double aSign
 
     double step_mm = OFFSET_INCREMENT_MM;
     double curr_value_mm =
-            EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, m_userUnits, textCtrl->GetValue() )
+            EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, m_userUnits,
+                                                       textCtrl->GetValue() )
             / pcbIUScale.IU_PER_MM;
 
     if( m_userUnits == EDA_UNITS::MILS || m_userUnits == EDA_UNITS::INCHES )

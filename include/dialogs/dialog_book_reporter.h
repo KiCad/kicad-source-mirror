@@ -30,16 +30,18 @@ class KIWAY_PLAYER;
 class WX_HTML_REPORT_BOX;
 class wxHtmlLinkEvent;
 
+/**
+ * Event sent to parent when dialog is mode-less.
+ */
+wxDECLARE_EVENT( EDA_EVT_CLOSE_DIALOG_BOOK_REPORTER, wxCommandEvent );
+
 class DIALOG_BOOK_REPORTER : public DIALOG_BOOK_REPORTER_BASE
 {
 public:
-    DIALOG_BOOK_REPORTER( KIWAY_PLAYER* aParent, const wxString& aDialogName,
+    DIALOG_BOOK_REPORTER( KIWAY_PLAYER* aParent, const wxString& aName,
                           const wxString& aDialogTitle );
 
-    void OnOK( wxCommandEvent& aEvent ) override
-    {
-        Destroy();
-    }
+    void OnClose( wxCloseEvent& aEvent ) override;
 
     void OnErrorLinkClicked( wxHtmlLinkEvent& aEvent );
 

@@ -37,7 +37,7 @@ class DIALOG_BOOK_REPORTER_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerOK;
 
 		// Virtual event handlers, override them in your derived class
-		virtual void OnOK( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 
 
 	public:

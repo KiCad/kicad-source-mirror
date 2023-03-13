@@ -26,22 +26,17 @@
 #include <wx/wxhtml.h>
 
 
-DIALOG_BOOK_REPORTER::DIALOG_BOOK_REPORTER( KIWAY_PLAYER* aParent, const wxString& aDialogName,
-                                            const wxString& aDialogTitle ) :
-        DIALOG_BOOK_REPORTER_BASE( aParent ),
-        m_frame( aParent )
+wxDEFINE_EVENT( EDA_EVT_CLOSE_DIALOG_BOOK_REPORTER, wxCommandEvent );
+
+
+DIALOG_BOOK_REPORTER::DIALOG_BOOK_REPORTER( KIWAY_PLAYER* aParent, const wxString& aName,
+                                            const wxString& aTitle ) :
+    DIALOG_BOOK_REPORTER_BASE( aParent, wxID_ANY, aTitle ),
+    m_frame( aParent )
 {
-    SetName( aDialogName );
-    SetTitle( aDialogTitle );
-
-    aParent->Bind( wxEVT_CLOSE_WINDOW,
-                   [this]( wxCloseEvent& aEvent )
-                   {
-                       Close();
-                       aEvent.Skip();
-                   } );
-
+    SetName( aName );
     SetupStandardButtons();
+    finishDialogSettings();
 }
 
 
@@ -96,3 +91,21 @@ int DIALOG_BOOK_REPORTER::GetPageCount() const
     return m_notebook->GetPageCount();
 }
 
+
+void DIALOG_BOOK_REPORTER::OnClose( wxCloseEvent& aEvent )
+{
+    // Dialog is mode-less so let the parent know that it needs to be destroyed.
+    if( !IsModal() && !IsQuasiModal() )
+    {
+        wxCommandEvent* evt = new wxCommandEvent( EDA_EVT_CLOSE_DIALOG_BOOK_REPORTER, wxID_ANY );
+
+        evt->SetEventObject( this );
+        evt->SetString( GetName() );
+        wxWindow* parent = GetParent();
+
+        if( parent )
+            wxQueueEvent( parent, evt );
+    }
+
+    aEvent.Skip();
+}

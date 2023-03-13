@@ -55,6 +55,7 @@ class DIALOG_NET_INSPECTOR_BASE : public DIALOG_SHIM
 		wxButton* m_ReportButt;
 
 		// Virtual event handlers, override them in your derived class
+		virtual void onClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void onFilterChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSortingChanged( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void onSelChanged( wxDataViewEvent& event ) { event.Skip(); }

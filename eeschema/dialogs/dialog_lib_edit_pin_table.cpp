@@ -91,12 +91,12 @@ public:
     {
         m_eval = std::make_unique<NUMERIC_EVALUATOR>( m_frame->GetUserUnits() );
 
-        m_frame->Bind( UNITS_CHANGED, &PIN_TABLE_DATA_MODEL::onUnitsChanged, this );
+        m_frame->Bind( EDA_EVT_UNITS_CHANGED, &PIN_TABLE_DATA_MODEL::onUnitsChanged, this );
     }
 
     ~PIN_TABLE_DATA_MODEL()
     {
-        m_frame->Unbind( UNITS_CHANGED, &PIN_TABLE_DATA_MODEL::onUnitsChanged, this );
+        m_frame->Unbind( EDA_EVT_UNITS_CHANGED, &PIN_TABLE_DATA_MODEL::onUnitsChanged, this );
     }
 
     void onUnitsChanged( wxCommandEvent& aEvent )

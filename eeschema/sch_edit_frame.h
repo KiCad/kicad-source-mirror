@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,6 +54,8 @@ class SCH_SYMBOL;
 class SCH_FIELD;
 class SCH_JUNCTION;
 class SCHEMATIC;
+class DIALOG_BOOK_REPORTER;
+class DIALOG_ERC;
 class DIALOG_SCH_FIND;
 class wxFindReplaceData;
 class RESCUER;
@@ -271,16 +273,18 @@ public:
     void TestDanglingEnds();
 
     /**
-     * Sends items to Pcbnew for selection
+     * Send items to board editor for selection.
+     *
+     * This is used for when the eeschema user is using the cross-probe tool.
      *
      * @param aItems are the items to select
-     * @param aForce select the element in pcbnew whether or not the user has the select option chosen
-     * This is used for when the eeschema user is using the cross-probe tool
+     * @param aForce select the element in pcbnew whether or not the user has the select option
+     *        chosen
      */
     void SendSelectItemsToPcb( const std::vector<EDA_ITEM*>& aItems, bool aForce );
 
     /**
-     * Sends a net name to Pcbnew for highlighting
+     * Send a net name to Pcbnew for highlighting.
      *
      * @param aNetName is the name of a net, or empty string to clear highlight
      */
@@ -814,6 +818,10 @@ public:
      */
     void ToggleSchematicHierarchy();
 
+    DIALOG_BOOK_REPORTER* GetSymbolDiffDialog();
+
+    DIALOG_ERC* GetErcDialog();
+
     /**
      * @return the name of the wxAuiPaneInfo managing the Hierarchy Navigator panel
      */
@@ -842,6 +850,10 @@ protected:
     void onSize( wxSizeEvent& aEvent );
 
     void saveProjectSettings() override;
+
+    void onCloseSymbolDiffDialog( wxCommandEvent& aEvent );
+
+    void onCloseErcDialog( wxCommandEvent& aEvent );
 
 private:
     // Called when resizing the Hierarchy Navigator panel
@@ -932,7 +944,8 @@ private:
                                                   ///< to call a custom net list generator.
 
     DIALOG_SCH_FIND*        m_findReplaceDialog;
-
+    DIALOG_ERC*             m_ercDialog;
+    DIALOG_BOOK_REPORTER*   m_diffSymbolDialog;
     HIERARCHY_PANE*         m_hierarchy;
 
 	bool m_syncingPcbToSchSelection; // Recursion guard when synchronizing selection from PCB

@@ -34,6 +34,12 @@
 #include <erc_settings.h>
 
 
+/**
+ * Event sent to parent when dialog is mode-less.
+ */
+wxDECLARE_EVENT( EDA_EVT_CLOSE_ERC_DIALOG, wxCommandEvent );
+
+
 #define DIALOG_ERC_WINDOW_NAME "DialogErcWindowName"
 
 

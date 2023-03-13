@@ -73,16 +73,16 @@ DIALOG_NET_INSPECTOR_BASE::DIALOG_NET_INSPECTOR_BASE( wxWindow* parent, wxWindow
 	bSizerListButtons = new wxBoxSizer( wxHORIZONTAL );
 
 	m_addNet = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizerListButtons->Add( m_addNet, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bSizerListButtons->Add( m_addNet, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_renameNet = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizerListButtons->Add( m_renameNet, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bSizerListButtons->Add( m_renameNet, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 
 	bSizerListButtons->Add( 20, 0, 0, wxEXPAND, 5 );
 
 	m_deleteNet = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizerListButtons->Add( m_deleteNet, 0, wxALL, 5 );
+	bSizerListButtons->Add( m_deleteNet, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	bSizerListButtons->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -101,6 +101,7 @@ DIALOG_NET_INSPECTOR_BASE::DIALOG_NET_INSPECTOR_BASE( wxWindow* parent, wxWindow
 	this->Centre( wxBOTH );
 
 	// Connect Events
+	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_NET_INSPECTOR_BASE::onClose ) );
 	m_textCtrlFilter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_NET_INSPECTOR_BASE::onFilterChange ), NULL, this );
 	m_cbShowZeroPad->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_NET_INSPECTOR_BASE::onFilterChange ), NULL, this );
 	m_groupBy->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_NET_INSPECTOR_BASE::onFilterChange ), NULL, this );
@@ -118,6 +119,7 @@ DIALOG_NET_INSPECTOR_BASE::DIALOG_NET_INSPECTOR_BASE( wxWindow* parent, wxWindow
 DIALOG_NET_INSPECTOR_BASE::~DIALOG_NET_INSPECTOR_BASE()
 {
 	// Disconnect Events
+	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_NET_INSPECTOR_BASE::onClose ) );
 	m_textCtrlFilter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_NET_INSPECTOR_BASE::onFilterChange ), NULL, this );
 	m_cbShowZeroPad->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_NET_INSPECTOR_BASE::onFilterChange ), NULL, this );
 	m_groupBy->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_NET_INSPECTOR_BASE::onFilterChange ), NULL, this );

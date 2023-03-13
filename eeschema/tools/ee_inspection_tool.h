@@ -49,7 +49,6 @@ public:
 
     int RunERC( const TOOL_EVENT& aEvent );
     void ShowERCDialog();
-    void DestroyERCDialog();
 
     int PrevMarker( const TOOL_EVENT& aEvent );
     int NextMarker( const TOOL_EVENT& aEvent );
@@ -76,7 +75,6 @@ private:
     void setTransitions() override;
 
 private:
-    DIALOG_ERC* m_ercDialog;
 };
 
 #endif /* EE_INSPECTION_TOOL_H */

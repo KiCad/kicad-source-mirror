@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2015 CERN
- * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -101,7 +101,8 @@ UNIT_BINDER::UNIT_BINDER( UNITS_PROVIDER* aUnitsProvider, wxWindow* aEventSource
 
     if( m_eventSource )
     {
-        m_eventSource->Connect( UNITS_CHANGED, wxCommandEventHandler( UNIT_BINDER::onUnitsChanged ),
+        m_eventSource->Connect( EDA_EVT_UNITS_CHANGED,
+                                wxCommandEventHandler( UNIT_BINDER::onUnitsChanged ),
                                 nullptr, this );
     }
 }
@@ -117,7 +118,8 @@ UNIT_BINDER::~UNIT_BINDER()
 
     if( m_eventSource )
     {
-        m_eventSource->Disconnect( UNITS_CHANGED, wxCommandEventHandler( UNIT_BINDER::onUnitsChanged ),
+        m_eventSource->Disconnect( EDA_EVT_UNITS_CHANGED,
+                                   wxCommandEventHandler( UNIT_BINDER::onUnitsChanged ),
                                    nullptr, this );
     }
 
@@ -126,9 +128,9 @@ UNIT_BINDER::~UNIT_BINDER()
         m_valueCtrl->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( UNIT_BINDER::onSetFocus ),
                               nullptr, this );
         m_valueCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( UNIT_BINDER::onKillFocus ),
-                              nullptr, this );
+                                 nullptr, this );
         m_valueCtrl->Disconnect( wxEVT_LEFT_UP, wxMouseEventHandler( UNIT_BINDER::onClick ),
-                              nullptr, this );
+                                 nullptr, this );
     }
 }
 
@@ -318,7 +320,8 @@ bool UNIT_BINDER::Validate( double aMin, double aMax, EDA_UNITS aUnits )
         m_errorMessage = wxString::Format( _( "%s must be at least %s." ),
                                            valueDescriptionFromLabel( m_label ),
                                            EDA_UNIT_UTILS::UI::StringFromValue( *m_iuScale, m_units,
-                                                                                val_min_iu,  true ) );
+                                                                                val_min_iu,
+                                                                                true ) );
 
         textEntry->SelectAll();
 
@@ -334,7 +337,8 @@ bool UNIT_BINDER::Validate( double aMin, double aMax, EDA_UNITS aUnits )
         m_errorMessage = wxString::Format( _( "%s must be less than %s." ),
                                            valueDescriptionFromLabel( m_label ),
                                            EDA_UNIT_UTILS::UI::StringFromValue( *m_iuScale, m_units,
-                                                                                val_max_iu, true ) );
+                                                                                val_max_iu,
+                                                                                true ) );
 
         textEntry->SelectAll();
 
@@ -395,7 +399,7 @@ void UNIT_BINDER::SetValue( const wxString& aValue )
 
         value += EDA_UNIT_UTILS::GetLabel( m_units, m_dataType );
     }
- 
+
     if( textEntry )
         textEntry->SetValue( value );
     else if( staticText )

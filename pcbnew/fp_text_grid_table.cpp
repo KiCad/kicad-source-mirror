@@ -69,7 +69,7 @@ FP_TEXT_GRID_TABLE::FP_TEXT_GRID_TABLE( PCB_BASE_FRAME* aFrame ) :
 
     m_eval = std::make_unique<NUMERIC_EVALUATOR>( m_frame->GetUserUnits() );
 
-    m_frame->Bind( UNITS_CHANGED, &FP_TEXT_GRID_TABLE::onUnitsChanged, this );
+    m_frame->Bind( EDA_EVT_UNITS_CHANGED, &FP_TEXT_GRID_TABLE::onUnitsChanged, this );
 }
 
 
@@ -80,7 +80,7 @@ FP_TEXT_GRID_TABLE::~FP_TEXT_GRID_TABLE()
     m_orientationColAttr->DecRef();
     m_layerColAttr->DecRef();
 
-    m_frame->Unbind( UNITS_CHANGED, &FP_TEXT_GRID_TABLE::onUnitsChanged, this );
+    m_frame->Unbind( EDA_EVT_UNITS_CHANGED, &FP_TEXT_GRID_TABLE::onUnitsChanged, this );
 }
 
 
