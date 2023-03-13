@@ -73,6 +73,12 @@ void FOOTPRINT_DIFF_WIDGET::DisplayDiff( FOOTPRINT* aBoardFootprint,
 
     m_boardItemCopy->Move( -m_boardItemCopy->GetPosition() );
 
+    if( m_boardItemCopy->IsFlipped() )
+        m_boardItemCopy->Flip( {0,0}, false );
+
+    if( m_boardItemCopy->GetOrientation() != ANGLE_0 )
+        m_boardItemCopy->Rotate( {0,0}, -m_boardItemCopy->GetOrientation() );
+
     m_libraryItem = aLibFootprint;
 
     DisplayFootprints( m_boardItemCopy, m_libraryItem );
