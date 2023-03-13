@@ -61,7 +61,7 @@ public:
      * @throw IO_ERROR if file could not be opened or there was
      * an error while parsing
      */
-    void Parse();
+    void Parse( bool aLibrary = false );
 
     typedef wxString MATERIAL_ID;
     typedef long     PHYSICAL_LAYER_ID;

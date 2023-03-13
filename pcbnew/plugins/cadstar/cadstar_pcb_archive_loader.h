@@ -78,6 +78,13 @@ public:
      */
     void Load( BOARD* aBoard, PROJECT* aProject );
 
+
+    /**
+     * @brief Parse a CADSTAR PCB Archive and load the footprints contained within
+     * @return Container with all the footprint definitions that were loaded (caller owns them)
+     */
+    std::vector<std::unique_ptr<FOOTPRINT>> LoadLibrary();
+
     /**
      * @brief Return a copy of the loaded library footprints (caller owns the objects)
      * @return Container with all the footprint definitions that were loaded

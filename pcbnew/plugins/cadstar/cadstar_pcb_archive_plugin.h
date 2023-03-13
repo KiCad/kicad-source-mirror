@@ -44,11 +44,6 @@ public:
 
     const wxString GetFileExtension() const override;
 
-    long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override
-    {
-        // No support for libraries....
-        return 0;
-    }
 
     std::vector<FOOTPRINT*> GetImportedCachedLibraryFootprints() override;
 
@@ -68,13 +63,42 @@ public:
      */
     void RegisterLayerMappingCallback( LAYER_MAPPING_HANDLER aLayerMappingHandler ) override;
 
+
+    void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
+                             bool aBestEfforts, const STRING_UTF8_MAP* aProperties = nullptr ) override;
+
+    const FOOTPRINT* GetEnumeratedFootprint( const wxString& aLibraryPath,
+                                             const wxString& aFootprintName,
+                                             const STRING_UTF8_MAP* aProperties = nullptr ) override;
+
+    bool FootprintExists( const wxString& aLibraryPath, const wxString& aFootprintName,
+                          const STRING_UTF8_MAP* aProperties = nullptr ) override;
+
+    FOOTPRINT* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
+                              bool  aKeepUUID = false,
+                              const STRING_UTF8_MAP* aProperties = nullptr ) override;
+
+    long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override;
+
+    /**
+     * CADSTAR Plugin is read-only
+     * @return Always false
+     */
+    bool IsFootprintLibWritable( const wxString& aLibraryPath ) override { return false; }
+
     CADSTAR_PCB_ARCHIVE_PLUGIN();
     ~CADSTAR_PCB_ARCHIVE_PLUGIN();
 
 private:
     void clearLoadedFootprints();
+    void ensureLoadedLibrary( const wxString& aLibraryPath );
 
-    const STRING_UTF8_MAP*       m_props;
+    typedef std::map<const wxString, std::unique_ptr<FOOTPRINT>> NAME_TO_FOOTPRINT_MAP;
+
+    std::map<wxString, NAME_TO_FOOTPRINT_MAP> m_cache;
+    std::map<wxString, long long> m_timestamps;
+
+    const STRING_UTF8_MAP*  m_props;
     BOARD*                  m_board;
     std::vector<FOOTPRINT*> m_loaded_footprints;
     bool                    m_show_layer_mapping_warnings;

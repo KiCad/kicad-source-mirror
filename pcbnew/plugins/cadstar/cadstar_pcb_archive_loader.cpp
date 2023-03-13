@@ -184,6 +184,52 @@ std::vector<FOOTPRINT*> CADSTAR_PCB_ARCHIVE_LOADER::GetLoadedLibraryFootpints() 
 }
 
 
+std::vector<std::unique_ptr<FOOTPRINT>> CADSTAR_PCB_ARCHIVE_LOADER::LoadLibrary()
+{
+    // loading the library after parsing takes almost no time in comparison
+    if( m_progressReporter )
+        m_progressReporter->SetNumPhases( 2 ); // (0) Read file, (1) Parse file
+
+    Parse( true /*aLibrary*/);
+
+    // Some memory handling
+    for( std::pair<SYMDEF_ID, FOOTPRINT*> libItem : m_libraryMap )
+    {
+        FOOTPRINT* footprint = libItem.second;
+
+        if( footprint )
+            delete footprint;
+    }
+
+    m_libraryMap.clear();
+
+    if( m_board )
+        delete m_board;
+
+    m_board = new BOARD(); // dummy board for loading
+    loadBoardStackup();
+    remapUnsureLayers();
+    loadComponentLibrary();
+
+    std::vector<std::unique_ptr<FOOTPRINT>> retval;
+
+    for( auto& [id, footprint] : m_libraryMap )
+    {
+        footprint->SetParent( nullptr ); // remove association to m_board
+        retval.emplace_back( footprint );
+    }
+
+    if( m_board )
+        delete m_board;
+
+    // Don't delete the generated footprints, but empty the map
+    // (the destructor of this class would end up deleting them if not)
+    m_libraryMap.clear();
+
+    return retval;
+}
+
+
 void CADSTAR_PCB_ARCHIVE_LOADER::logBoardStackupWarning(
         const wxString& aCadstarLayerName,
                                                          const PCB_LAYER_ID& aKiCadLayer )

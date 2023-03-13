@@ -146,3 +146,105 @@ BOARD* CADSTAR_PCB_ARCHIVE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppe
 
     return m_board;
 }
+
+
+void CADSTAR_PCB_ARCHIVE_PLUGIN::FootprintEnumerate( wxArrayString&         aFootprintNames,
+                                                     const wxString&        aLibraryPath,
+                                                     bool                   aBestEfforts,
+                                                     const STRING_UTF8_MAP* aProperties )
+{
+    ensureLoadedLibrary( aLibraryPath );
+
+    if( !m_cache.count( aLibraryPath ) )
+        return; // not found
+
+    for( const auto& [name, fp] : m_cache.at( aLibraryPath ) )
+        aFootprintNames.Add( name );
+}
+
+
+const FOOTPRINT*
+CADSTAR_PCB_ARCHIVE_PLUGIN::GetEnumeratedFootprint( const wxString&        aLibraryPath,
+                                                    const wxString&        aFootprintName,
+                                                    const STRING_UTF8_MAP* aProperties )
+{
+    ensureLoadedLibrary( aLibraryPath );
+
+    if( !m_cache.count( aLibraryPath ) )
+        return nullptr;
+
+    if( !m_cache.at( aLibraryPath ).count( aFootprintName ) )
+        return nullptr;
+
+    return m_cache.at( aLibraryPath ).at( aFootprintName ).get();
+}
+
+
+bool CADSTAR_PCB_ARCHIVE_PLUGIN::FootprintExists( const wxString&        aLibraryPath,
+                                                  const wxString&        aFootprintName,
+                                                  const STRING_UTF8_MAP* aProperties )
+{
+    ensureLoadedLibrary( aLibraryPath );
+
+    if( !m_cache.count( aLibraryPath ) )
+        return false;
+
+    if( !m_cache.at( aLibraryPath ).count( aFootprintName ) )
+        return false;
+
+    return true;
+}
+
+
+FOOTPRINT* CADSTAR_PCB_ARCHIVE_PLUGIN::FootprintLoad( const wxString&        aLibraryPath,
+                                                      const wxString&        aFootprintName,
+                                                      bool                   aKeepUUID,
+                                                      const STRING_UTF8_MAP* aProperties )
+{
+    ensureLoadedLibrary( aLibraryPath );
+
+    if( !m_cache.count( aLibraryPath ) )
+        return nullptr;
+
+    if( !m_cache.at( aLibraryPath ).count( aFootprintName ) )
+        return nullptr;
+
+    return static_cast<FOOTPRINT*>( m_cache.at( aLibraryPath ).at( aFootprintName )->Duplicate() );
+}
+
+
+long long CADSTAR_PCB_ARCHIVE_PLUGIN::GetLibraryTimestamp( const wxString& aLibraryPath ) const
+{
+    wxFileName fn( aLibraryPath );
+
+    if( fn.IsFileReadable() )
+        return fn.GetModificationTime().GetValue().GetValue();
+    else
+        return wxDateTime( 0.0 ).GetValue().GetValue();
+}
+
+
+void CADSTAR_PCB_ARCHIVE_PLUGIN::ensureLoadedLibrary( const wxString& aLibraryPath )
+{
+    if( m_cache.count( aLibraryPath ) )
+    {
+        wxCHECK( m_timestamps.count( aLibraryPath ), /*void*/ );
+
+        if( m_timestamps.at( aLibraryPath ) == GetLibraryTimestamp( aLibraryPath ) )
+            return;
+    }
+
+    CADSTAR_PCB_ARCHIVE_LOADER csLoader( aLibraryPath, m_layer_mapping_handler,
+                                         false /*don't log stackup warnings*/, nullptr );
+
+    NAME_TO_FOOTPRINT_MAP                   footprintMap;
+    std::vector<std::unique_ptr<FOOTPRINT>> footprints = csLoader.LoadLibrary();
+
+    for( std::unique_ptr<FOOTPRINT>& fp : footprints )
+    {
+        footprintMap.insert( { fp->GetFPID().GetLibItemName(), std::move( fp ) } );
+    }
+
+    m_cache.insert( { aLibraryPath, std::move( footprintMap ) } );
+    m_timestamps[aLibraryPath] = GetLibraryTimestamp( aLibraryPath );
+}

@@ -30,7 +30,7 @@
 #include <wx/translation.h>
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::Parse()
+void CADSTAR_PCB_ARCHIVE_PARSER::Parse( bool aLibrary )
 {
     if( m_progressReporter )
         m_progressReporter->BeginPhase( 0 ); // Read file
@@ -72,13 +72,18 @@ void CADSTAR_PCB_ARCHIVE_PARSER::Parse()
                 break;
             }
 
-            if( Header.Format.Type != wxT( "LAYOUT" ) )
+            if( aLibrary && Header.Format.Type != wxT( "LIBRARY" ) )
+            {
+                THROW_IO_ERROR( wxT( "The selected file is not a valid CADSTAR library file." ) );
+            }
+            else if( !aLibrary && Header.Format.Type != wxT( "LAYOUT" ) )
             {
                 if( Header.Format.Type == wxT( "LIBRARY" ) )
                 {
-                    THROW_IO_ERROR( wxT( "The selected file is a CADSTAR library file (as opposed "
-                                         "to a layout file). CADSTAR libraries cannot yet be "
-                                         "imported into KiCad." ) );
+                    THROW_IO_ERROR(
+                            wxT( "The selected file is a CADSTAR library file (as opposed "
+                                 "to a layout file). You can import this library by adding it "
+                                 "to the library table." ) );
                 }
                 else
                 {

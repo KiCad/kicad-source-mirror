@@ -86,6 +86,7 @@ struct SUPPORTED_FILE_TYPE
 enum {
     ID_PANEL_FPLIB_ADD_KICADMOD = ID_PCBNEW_END_LIST,
     ID_PANEL_FPLIB_ADD_ALTIUM,
+    ID_PANEL_FPLIB_ADD_CADSTAR,
     ID_PANEL_FPLIB_ADD_EAGLE6,
     ID_PANEL_FPLIB_ADD_KICADLEGACY,
     ID_PANEL_FPLIB_ADD_GEDA,
@@ -116,6 +117,12 @@ static const std::map<int, SUPPORTED_FILE_TYPE>& fileTypes()
         { ID_PANEL_FPLIB_ADD_ALTIUM,
             {
                 "Altium (*.PcbLib)", AltiumFootprintLibPathWildcard(), "", true,  IO_MGR::ALTIUM_DESIGNER
+            }
+        },
+        { ID_PANEL_FPLIB_ADD_CADSTAR,
+            {
+                wxT( "CADSTAR (*.cpa)" ), CadstarPcbArchiveFileWildcard(), wxT( "" ),
+                true, IO_MGR::CADSTAR_PCB_ARCHIVE
             }
         },
         { ID_PANEL_FPLIB_ADD_EAGLE6,
@@ -378,6 +385,7 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
     choices.Add( IO_MGR::ShowType( IO_MGR::KICAD_SEXP ) );
     choices.Add( IO_MGR::ShowType( IO_MGR::LEGACY ) );
     choices.Add( IO_MGR::ShowType( IO_MGR::ALTIUM_DESIGNER ) );
+    choices.Add( IO_MGR::ShowType( IO_MGR::CADSTAR_PCB_ARCHIVE ) );
     choices.Add( IO_MGR::ShowType( IO_MGR::EAGLE ) );
     choices.Add( IO_MGR::ShowType( IO_MGR::GEDA_PCB ) );
 
