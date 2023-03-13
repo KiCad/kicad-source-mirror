@@ -90,6 +90,7 @@ public:
     int InspectConstraints( const TOOL_EVENT& aEvent );
 
     int DiffFootprint( const TOOL_EVENT& aEvent );
+    void DiffFootprint( FOOTPRINT* aFootprint );
 
     /**
      * @return true if a net or nets to highlight have been set

@@ -246,6 +246,14 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
 
     wxCHECK( m_frame, /* void */ );
 
+    if( aDRCItem->GetErrorCode() == DRCE_LIB_FOOTPRINT_MISMATCH )
+    {
+        if( FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( a ) )
+            DiffFootprint( footprint );
+
+        return;
+    }
+
     DIALOG_BOOK_REPORTER* dialog = m_frame->GetInspectDrcErrorDialog();
 
     wxCHECK( dialog, /* void */ );
@@ -1343,21 +1351,24 @@ int BOARD_INSPECTION_TOOL::DiffFootprint( const TOOL_EVENT& aEvent )
             },
             false /* ignore locked flag */ );
 
-    if( selection.Size() != 1 )
-    {
-        m_frame->ShowInfoBarError( _( "Select a footprint to diff against its library "
-                                      "equivalent." ) );
-        return 0;
-    }
+    if( selection.Size() == 1 )
+        DiffFootprint( static_cast<FOOTPRINT*>( selection.GetItem( 0 ) ) );
+    else
+        m_frame->ShowInfoBarError( _( "Select a footprint to diff with its library equivalent." ) );
 
+    return 0;
+}
+
+
+void BOARD_INSPECTION_TOOL::DiffFootprint( FOOTPRINT* aFootprint )
+{
     DIALOG_BOOK_REPORTER* dialog = m_frame->GetFootprintDiffDialog();
 
-    wxCHECK( dialog, 0 );
+    wxCHECK( dialog, /* void */ );
 
     dialog->DeleteAllPages();
 
-    FOOTPRINT*          footprint = static_cast<FOOTPRINT*>( selection.GetItem( 0 ) );
-    LIB_ID              fpID = footprint->GetFPID();
+    LIB_ID              fpID = aFootprint->GetFPID();
     wxString            libName = fpID.GetLibNickname();
     wxString            fpName = fpID.GetLibItemName();
     WX_HTML_REPORT_BOX* r = nullptr;
@@ -1365,13 +1376,13 @@ int BOARD_INSPECTION_TOOL::DiffFootprint( const TOOL_EVENT& aEvent )
     r = dialog->AddHTMLPage( _( "Summary" ) );
 
     r->Report( wxS( "<h7>" ) + _( "Board vs library diff for:" ) + wxS( "</h7>" ) );
-    r->Report( wxS( "<ul><li>" ) + EscapeHTML( getItemDescription( footprint ) ) + wxS( "</li>" )
+    r->Report( wxS( "<ul><li>" ) + EscapeHTML( getItemDescription( aFootprint ) ) + wxS( "</li>" )
              + wxS( "<li>" ) + _( "Library: " ) + EscapeHTML( libName ) + wxS( "</li>" )
              + wxS( "<li>" ) + _( "Library item: " ) + EscapeHTML( fpName ) + wxS( "</li></ul>" ) );
 
     r->Report( "" );
 
-    PROJECT*             project = footprint->GetBoard()->GetProject();
+    PROJECT*             project = aFootprint->GetBoard()->GetProject();
     FP_LIB_TABLE*        libTable = project->PcbFootprintLibs();
     const LIB_TABLE_ROW* libTableRow = nullptr;
 
@@ -1418,13 +1429,13 @@ int BOARD_INSPECTION_TOOL::DiffFootprint( const TOOL_EVENT& aEvent )
         }
         else
         {
-            if( !footprint->FootprintNeedsUpdate( libFootprint.get(), r ) )
+            if( !aFootprint->FootprintNeedsUpdate( libFootprint.get(), r ) )
                 r->Report( _( "No relevant differences detected." ) );
 
             wxPanel*               panel = dialog->AddBlankPage( _( "Visual" ) );
             FOOTPRINT_DIFF_WIDGET* diff = constructDiffPanel( panel );
 
-            diff->DisplayDiff( footprint, libFootprint );
+            diff->DisplayDiff( aFootprint, libFootprint );
         }
     }
 
@@ -1432,7 +1443,6 @@ int BOARD_INSPECTION_TOOL::DiffFootprint( const TOOL_EVENT& aEvent )
 
     dialog->Raise();
     dialog->Show( true );
-    return 0;
 }
 
 

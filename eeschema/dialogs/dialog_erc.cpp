@@ -696,13 +696,13 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
     {
         menu.Append( 4, wxString::Format( _( "Change severity to Error for all '%s' violations" ),
                                           rcItem->GetErrorText() ),
-                     _( "Violation severities can also be edited in the Board Setup... dialog" ) );
+                     _( "Violation severities can also be edited in the Schematic Setup... dialog" ) );
     }
     else
     {
         menu.Append( 5, wxString::Format( _( "Change severity to Warning for all '%s' violations" ),
                                           rcItem->GetErrorText() ),
-                     _( "Violation severities can also be edited in the Board Setup... dialog" ) );
+                     _( "Violation severities can also be edited in the Schematic Setup... dialog" ) );
     }
 
     menu.Append( 6, wxString::Format( _( "Ignore all '%s' violations" ), rcItem->GetErrorText() ),

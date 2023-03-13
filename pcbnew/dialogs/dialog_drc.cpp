@@ -596,7 +596,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
             || rcItem->GetErrorCode() == DRCE_HOLE_CLEARANCE
             || rcItem->GetErrorCode() == DRCE_DRILLED_HOLES_TOO_CLOSE )
     {
-        menu.Append( 3, _( "Run clearance resolution tool..." ) );
+        menu.Append( 3, _( "Run Inspect > Clearance Resolution" ) );
     }
     else if( rcItem->GetErrorCode() == DRCE_TEXT_HEIGHT
             || rcItem->GetErrorCode() == DRCE_TEXT_THICKNESS
@@ -608,7 +608,11 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
             || rcItem->GetErrorCode() == DRCE_MICROVIA_DRILL_OUT_OF_RANGE
             || rcItem->GetErrorCode() == DRCE_CONNECTION_WIDTH )
     {
-        menu.Append( 3, _( "Run constraints resolution tool..." ) );
+        menu.Append( 3, _( "Run Inspect > Constraints Resolution" ) );
+    }
+    else if( rcItem->GetErrorCode() == DRCE_LIB_FOOTPRINT_MISMATCH )
+    {
+        menu.Append( 3, _( "Run Inspect > Diff Footprint with Library" ) );
     }
 
     menu.AppendSeparator();
