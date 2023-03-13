@@ -129,9 +129,7 @@ void FOOTPRINT_PREVIEW_PANEL::renderFootprint( std::shared_ptr<FOOTPRINT> aFootp
 
 void FOOTPRINT_PREVIEW_PANEL::fitToCurrentFootprint()
 {
-    BOX2I bbox = m_currentFootprint->ViewBBox();
-    bbox.Merge( m_currentFootprint->Value().ViewBBox() );
-    bbox.Merge( m_currentFootprint->Reference().ViewBBox() );
+    BOX2I bbox = m_currentFootprint->GetBoundingBox( true, false );
 
     if( bbox.GetSize().x > 0 && bbox.GetSize().y > 0 )
     {

@@ -1513,11 +1513,8 @@ const BOX2I FOOTPRINT::ViewBBox() const
 {
     BOX2I area = GetBoundingBox( true, true );
 
-    // Add the Clearance shape size: (shape around the pads when the clearance is shown.  Not
-    // optimized, but the draw cost is small (perhaps smaller than optimization).
-    const BOARD* board = GetBoard();
-
-    if( board )
+    // Inflate in case clearance lines are drawn around pads, etc.
+    if( const BOARD* board = GetBoard() )
     {
         int biggest_clearance = board->GetDesignSettings().GetBiggestClearanceValue();
         area.Inflate( biggest_clearance );
