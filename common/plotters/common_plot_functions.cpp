@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -38,21 +38,13 @@ wxString GetDefaultPlotExtension( PLOT_FORMAT aFormat )
 {
     switch( aFormat )
     {
-    case PLOT_FORMAT::DXF:
-        return DXF_PLOTTER::GetDefaultFileExtension();
-    case PLOT_FORMAT::POST:
-        return PS_PLOTTER::GetDefaultFileExtension();
-    case PLOT_FORMAT::PDF:
-        return PDF_PLOTTER::GetDefaultFileExtension();
-    case PLOT_FORMAT::HPGL:
-        return HPGL_PLOTTER::GetDefaultFileExtension();
-    case PLOT_FORMAT::GERBER:
-        return GERBER_PLOTTER::GetDefaultFileExtension();
-    case PLOT_FORMAT::SVG:
-        return SVG_PLOTTER::GetDefaultFileExtension();
-    default:
-        wxASSERT( false );
-        return wxEmptyString;
+    case PLOT_FORMAT::DXF:    return DXF_PLOTTER::GetDefaultFileExtension();
+    case PLOT_FORMAT::POST:   return PS_PLOTTER::GetDefaultFileExtension();
+    case PLOT_FORMAT::PDF:    return PDF_PLOTTER::GetDefaultFileExtension();
+    case PLOT_FORMAT::HPGL:   return HPGL_PLOTTER::GetDefaultFileExtension();
+    case PLOT_FORMAT::GERBER: return GERBER_PLOTTER::GetDefaultFileExtension();
+    case PLOT_FORMAT::SVG:    return SVG_PLOTTER::GetDefaultFileExtension();
+    default:    wxFAIL;       return wxEmptyString;
     }
 }
 
@@ -174,7 +166,7 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
                 break;
 
             bitmap->m_ImageBitmap->PlotImage( plotter, drawItem->GetPosition(), plotColor,
-                                                  PLOTTER::USE_DEFAULT_LINE_WIDTH );
+                                              PLOTTER::USE_DEFAULT_LINE_WIDTH );
         }
             break;
 

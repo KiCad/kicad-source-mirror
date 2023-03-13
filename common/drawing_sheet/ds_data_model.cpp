@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2018 Jean-Pierre Charras <jp.charras at wanadoo.fr>.
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -137,23 +137,6 @@ void DS_DATA_MODEL::Remove( DS_DATA_ITEM* aItem )
 }
 
 
-int DS_DATA_MODEL::GetItemIndex( DS_DATA_ITEM* aItem ) const
-{
-    unsigned idx = 0;
-
-    while( idx < m_list.size() )
-    {
-        if( m_list[idx] == aItem )
-            return (int) idx;
-
-        idx++;
-    }
-
-    return -1;
-}
-
-/* return the item from its index aIdx, or NULL if does not exist
- */
 DS_DATA_ITEM* DS_DATA_MODEL::GetItem( unsigned aIdx ) const
 {
     if( aIdx < m_list.size() )

@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -88,19 +88,13 @@ public:
      * Can be used to override which layer ID is used for drawing sheet item colors
      * @param aLayerId is the color to use (defaults to LAYER_DRAWINGSHEET if this is not called)
      */
-    void SetColorLayer( int aLayerId )
-    {
-        m_colorLayer = aLayerId;
-    }
+    void SetColorLayer( int aLayerId ) { m_colorLayer = aLayerId; }
 
     /**
      * Overrides the layer used to pick the color of the page border (normally LAYER_GRID)
      * @param aLayerId is the layer to use
      */
-    void SetPageBorderColorLayer( int aLayerId )
-    {
-        m_pageBorderColorLayer = aLayerId;
-    }
+    void SetPageBorderColorLayer( int aLayerId ) { m_pageBorderColorLayer = aLayerId; }
 
     const PAGE_INFO& GetPageInfo() { return *m_pageInfo; }
     const TITLE_BLOCK& GetTitleBlock() { return *m_titleBlock; }
@@ -133,6 +127,7 @@ protected:
     void buildDrawList( KIGFX::VIEW* aView, const std::map<wxString, wxString>* aProperties,
                         DS_DRAW_ITEM_LIST* aDrawList ) const;
 
+protected:
     /// the factor between mils (units used in drawing sheet and internal units)
     /// it is the value IU_PER_MILS used in the caller
     int                m_mils2IUscalefactor;

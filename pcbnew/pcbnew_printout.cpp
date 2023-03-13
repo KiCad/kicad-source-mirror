@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2018 CERN
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
@@ -37,8 +37,8 @@
 
 #include <advanced_config.h>
 
-PCBNEW_PRINTOUT_SETTINGS::PCBNEW_PRINTOUT_SETTINGS( const PAGE_INFO& aPageInfo )
-    : BOARD_PRINTOUT_SETTINGS( aPageInfo )
+PCBNEW_PRINTOUT_SETTINGS::PCBNEW_PRINTOUT_SETTINGS( const PAGE_INFO& aPageInfo ) :
+        BOARD_PRINTOUT_SETTINGS( aPageInfo )
 {
     m_DrillMarks = DRILL_MARKS::SMALL_DRILL_SHAPE;
     m_Pagination = ALL_LAYERS;
@@ -77,7 +77,7 @@ void PCBNEW_PRINTOUT_SETTINGS::Save( APP_SETTINGS_BASE* aConfig )
 
 PCBNEW_PRINTOUT::PCBNEW_PRINTOUT( BOARD* aBoard, const PCBNEW_PRINTOUT_SETTINGS& aParams,
                                   const KIGFX::VIEW* aView, const wxString& aTitle ) :
-    BOARD_PRINTOUT( aParams, aView, aTitle ), m_pcbnewSettings( aParams )
+        BOARD_PRINTOUT( aParams, aView, aTitle ), m_pcbnewSettings( aParams )
 {
     m_board = aBoard;
 }
@@ -309,19 +309,10 @@ int KIGFX::PCB_PRINT_PAINTER::getDrillShape( const PAD* aPad ) const
 
 SHAPE_SEGMENT KIGFX::PCB_PRINT_PAINTER::getPadHoleShape( const PAD* aPad ) const
 {
-    SHAPE_SEGMENT segm;
-
     if( m_drillMarkReal )
-    {
-        segm =  KIGFX::PCB_PAINTER::getPadHoleShape( aPad );
-    }
+        return KIGFX::PCB_PAINTER::getPadHoleShape( aPad );
     else
-    {
-        segm = SHAPE_SEGMENT( aPad->GetPosition(),
-                              aPad->GetPosition(), m_drillMarkSize );
-    }
-
-    return segm;
+        return SHAPE_SEGMENT( aPad->GetPosition(), aPad->GetPosition(), m_drillMarkSize );
 }
 
 

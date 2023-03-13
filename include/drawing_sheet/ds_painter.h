@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -129,8 +129,8 @@ private:
  *
  * @param aDC The device context.
  * @param aPageInfo for margins and page size (in mils).
-* @param aSheetName The sheet name, for basic inscriptions.
-* @param aSheetPath The sheetpath (full sheet name), for basic inscriptions.
+ * @param aSheetName The sheet name, for basic inscriptions.
+ * @param aSheetPath The sheetpath (full sheet name), for basic inscriptions.
  * @param aFileName The file name, for basic inscriptions.
  * @param aTitleBlock The sheet title block, for text variable resolution.
  * @param aProperties Optional properties for text variable resolution.

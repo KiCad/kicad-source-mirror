@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -109,6 +109,7 @@ protected:
         m_flags = 0;
     }
 
+protected:
     DS_DATA_ITEM*  m_peer;       // the parent DS_DATA_ITEM item in the DS_DATA_MODEL
     int            m_index;      // the index in the parent's repeat count
     int            m_penWidth;
@@ -193,7 +194,6 @@ public:
      * have no holes just a main outline.
      */
     SHAPE_POLY_SET m_Polygons;
-
 
 private:
     VECTOR2I m_pos; // position of reference point, from the DS_DATA_ITEM_POLYGONS parent
@@ -287,9 +287,9 @@ public:
 #endif
 
 private:
-    VECTOR2I m_markerPos; // position of the marker
-    VECTOR2I m_pageSize;  // full size of the page
-    double m_markerSize;
+    VECTOR2I m_markerPos;   // position of the marker
+    VECTOR2I m_pageSize;    // full size of the page
+    double   m_markerSize;
 };
 
 
@@ -498,11 +498,6 @@ public:
             return m_graphicList[m_idx];
         else
             return nullptr;
-    }
-
-    void GetAllItems( std::vector<DS_DRAW_ITEM_BASE*>* aList )
-    {
-        *aList = m_graphicList;
     }
 
     /**

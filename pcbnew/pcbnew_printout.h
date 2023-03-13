@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2018 CERN
- * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -50,7 +50,7 @@ class PCBNEW_PRINTOUT : public BOARD_PRINTOUT
 {
 public:
     PCBNEW_PRINTOUT( BOARD* aBoard, const PCBNEW_PRINTOUT_SETTINGS& aParams,
-            const KIGFX::VIEW* aView, const wxString& aTitle );
+                     const KIGFX::VIEW* aView, const wxString& aTitle );
 
     bool OnPrintPage( int aPage ) override;
 
@@ -68,8 +68,7 @@ protected:
     std::unique_ptr<KIGFX::PAINTER> getPainter( KIGFX::GAL* aGal ) override;
 
 private:
-    BOARD* m_board;
-
+    BOARD*                   m_board;
     PCBNEW_PRINTOUT_SETTINGS m_pcbnewSettings;
 };
 
@@ -104,11 +103,9 @@ protected:
 
     int getViaDrillSize( const PCB_VIA* aVia ) const override;
 
-    ///< Flag deciding whether use the actual hole size or user-specified size for drill marks
-    bool m_drillMarkReal;
-
-    ///< User-specified size for drill marks (expressed in internal units)
-    int m_drillMarkSize;
+protected:
+    bool m_drillMarkReal;    ///< Actual hole size or user-specified size for drill marks
+    int  m_drillMarkSize;    ///< User-specified size (in internal units)
 };
 
 }; // namespace KIGFX

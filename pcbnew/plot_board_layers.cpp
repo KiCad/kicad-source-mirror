@@ -726,8 +726,8 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             for( int kk = 0; kk <= outlines.HoleCount(ii); kk++ )
             {
                 cornerList.clear();
-                const SHAPE_LINE_CHAIN& path =
-                        ( kk == 0 ) ? outlines.COutline( ii ) : outlines.CHole( ii, kk - 1 );
+                const SHAPE_LINE_CHAIN& path = ( kk == 0 ) ? outlines.COutline( ii )
+                                                           : outlines.CHole( ii, kk - 1 );
 
                 aPlotter->PlotPoly( path, FILL_T::NO_FILL );
             }
@@ -737,8 +737,8 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         if( aPlotOpt.GetDrillMarksType() != DRILL_MARKS::NO_DRILL_SHAPE )
         {
             int smallDrill = ( aPlotOpt.GetDrillMarksType() == DRILL_MARKS::SMALL_DRILL_SHAPE )
-                             ? pcbIUScale.mmToIU( ADVANCED_CFG::GetCfg().m_SmallDrillMarkSize ) :
-                             INT_MAX;
+                                  ? pcbIUScale.mmToIU( ADVANCED_CFG::GetCfg().m_SmallDrillMarkSize )
+                                  : INT_MAX;
 
             for( FOOTPRINT* footprint : aBoard->Footprints() )
             {
@@ -756,8 +756,7 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                         else
                         {
                             // Note: small drill marks have no significance when applied to slots
-                            aPlotter->ThickSegment( slot->GetSeg().A,
-                                                    slot->GetSeg().B,
+                            aPlotter->ThickSegment( slot->GetSeg().A, slot->GetSeg().B,
                                                     slot->GetWidth(), SKETCH, nullptr );
                         }
                     }
@@ -782,26 +781,16 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
  *
  * Solder mask layers have a minimum thickness value and cannot be drawn like standard layers,
  * unless the minimum thickness is 0.
- * Currently the algo is:
- * 1 - build all pad shapes as polygons with a size inflated by
- *      mask clearance + (min width solder mask /2)
- * 2 - Merge shapes
- * 3 - deflate result by (min width solder mask /2)
- * 4 - ORing result by all pad shapes as polygons with a size inflated by
- *      mask clearance only (because deflate sometimes creates shape artifacts)
- * 5 - draw result as polygons
  *
  * The algorithm is somewhat complicated to allow for min web thickness while also preserving
  * pad attributes in Gerber.
  *
- * create initial polygons for every shape (pad or polygon),
- * inflate and deflate polygons
- * with Min Thickness/2, and merges the result (like initial algo)
- * remove all initial polygons.
- * The remaining polygons are areas with thickness < min thickness
- * plot all initial shapes by flashing (or using regions) for pad and polygons
- * (shapes will be better) and remaining polygons to
- * remove areas with thickness < min thickness from final mask
+ * 1 - create initial polygons for every shape
+ * 2 - inflate and deflate polygons with Min Thickness/2, and merges the result
+ * 3 - substract all initial polygons from (2), leaving the areas where the thickness was less
+ *      than min thickness
+ * 4 - plot all initial shapes by flashing (or using regions), including Gerber attribute data
+ * 5 - plot remaining polygons from (2) (witout any Gerber attributes)
  */
 
 void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
@@ -827,9 +816,8 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     // Extra margin is half the min width for solder mask, which is used to merge too-close shapes
     // (distance < aMinThickness), and will be removed when creating the actual shapes.
 
-    // Will contain shapes inflated by inflate value that will be merged and deflated by
-    // inflate value to build final polygons
-    // After calculations the remaining polygons are polygons to plot
+    // Will contain shapes inflated by inflate value that will be merged and deflated by inflate
+    // value to build final polygons
     SHAPE_POLY_SET areas;
 
     // Will contain exact shapes of all items on solder mask
@@ -972,8 +960,8 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
     int numSegs = GetArcToSegmentCount( inflate, maxError, FULL_CIRCLE );
 
-    // Merge all polygons: After deflating, not merged (not overlapping) polygons
-    // will have the initial shape (with perhaps small changes due to deflating transform)
+    // Merge all polygons: After deflating, not merged (not overlapping) polygons will have the
+    // initial shape (with perhaps small changes due to deflating transform)
     areas.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
     areas.Deflate( inflate, numSegs );
 
