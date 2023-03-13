@@ -126,6 +126,11 @@ public:
 
     using CLUSTERS = std::vector<std::shared_ptr<CN_CLUSTER>>;
 
+    /*
+     * Holds a list of CN_ITEMs for a given BOARD_CONNECTED_ITEM.  For most items (pads, tracks,
+     * etc.) the list will have a single CN_ITEM, but for ZONEs it will have one item for each
+     * distinct outline on each layer.
+     */
     class ITEM_MAP_ENTRY
     {
     public:
