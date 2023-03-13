@@ -1106,7 +1106,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
 
                 // Set parent so that clearance can be loaded
                 fp->SetParent( board );
-                m_frame->UpdateUserUnits( fp );
+                board->UpdateUserUnits( fp, m_frame->GetCanvas()->GetView() );
 
                 for( PAD* pad : fp->Pads() )
                 {

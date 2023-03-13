@@ -249,42 +249,8 @@ void PCB_BASE_FRAME::AddFootprintToBoard( FOOTPRINT* aFootprint )
         // it might be stored in another orientation if the lib is an archive built from a board)
         aFootprint->SetOrientation( ANGLE_0 );
 
-        UpdateUserUnits( aFootprint );
+        GetBoard()->UpdateUserUnits( aFootprint, GetCanvas()->GetView() );
     }
-}
-
-
-void PCB_BASE_FRAME::UpdateUserUnits( BOARD_ITEM* aItem, bool* aSelectedItemsModified )
-{
-    KIGFX::VIEW* view = GetCanvas()->GetView();
-
-    INSPECTOR_FUNC inspector =
-            [&]( EDA_ITEM* descendant, void* aTestData )
-            {
-                PCB_DIMENSION_BASE* dimension = static_cast<PCB_DIMENSION_BASE*>( descendant );
-
-                if( dimension->GetUnitsMode() == DIM_UNITS_MODE::AUTOMATIC )
-                {
-                    dimension->UpdateUnits();
-
-                    if( aSelectedItemsModified && dimension->IsSelected() )
-                        *aSelectedItemsModified = true;
-
-                    view->Update( dimension );
-                }
-
-                return INSPECT_RESULT::CONTINUE;
-            };
-
-    aItem->Visit( inspector, nullptr, { PCB_DIM_ALIGNED_T,
-                                        PCB_DIM_LEADER_T,
-                                        PCB_DIM_ORTHOGONAL_T,
-                                        PCB_DIM_CENTER_T,
-                                        PCB_DIM_RADIAL_T,PCB_FP_DIM_ALIGNED_T,
-                                        PCB_FP_DIM_LEADER_T,
-                                        PCB_FP_DIM_ORTHOGONAL_T,
-                                        PCB_FP_DIM_CENTER_T,
-                                        PCB_FP_DIM_RADIAL_T } );
 }
 
 

@@ -47,6 +47,7 @@
 #include <pcb_bitmap.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
+#include <pcb_dimension.h>
 #include <pgm_base.h>
 #include <pcbnew_settings.h>
 #include <progress_reporter.h>
@@ -974,6 +975,37 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
 wxString BOARD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( _( "PCB" ) );
+}
+
+
+void BOARD::UpdateUserUnits( BOARD_ITEM* aItem, KIGFX::VIEW* aView )
+{
+    INSPECTOR_FUNC inspector =
+            [&]( EDA_ITEM* descendant, void* aTestData )
+            {
+                PCB_DIMENSION_BASE* dimension = static_cast<PCB_DIMENSION_BASE*>( descendant );
+
+                if( dimension->GetUnitsMode() == DIM_UNITS_MODE::AUTOMATIC )
+                {
+                    dimension->UpdateUnits();
+
+                    if( aView )
+                        aView->Update( dimension );
+                }
+
+                return INSPECT_RESULT::CONTINUE;
+            };
+
+    aItem->Visit( inspector, nullptr, { PCB_DIM_ALIGNED_T,
+                                        PCB_DIM_LEADER_T,
+                                        PCB_DIM_ORTHOGONAL_T,
+                                        PCB_DIM_CENTER_T,
+                                        PCB_DIM_RADIAL_T,
+                                        PCB_FP_DIM_ALIGNED_T,
+                                        PCB_FP_DIM_LEADER_T,
+                                        PCB_FP_DIM_ORTHOGONAL_T,
+                                        PCB_FP_DIM_CENTER_T,
+                                        PCB_FP_DIM_RADIAL_T } );
 }
 
 

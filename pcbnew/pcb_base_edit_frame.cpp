@@ -229,12 +229,8 @@ void PCB_BASE_EDIT_FRAME::unitsChangeRefresh()
 
     if( BOARD* board = GetBoard() )
     {
-        bool selectedItemsModified = false;
-
-        UpdateUserUnits( board, &selectedItemsModified );
-
-        if( selectedItemsModified )
-            m_toolManager->PostEvent( EVENTS::SelectedItemsModified );
+        board->UpdateUserUnits( board, GetCanvas()->GetView() );
+        m_toolManager->PostEvent( EVENTS::SelectedItemsModified );
     }
 
     ReCreateAuxiliaryToolbar();

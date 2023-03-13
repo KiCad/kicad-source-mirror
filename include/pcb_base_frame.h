@@ -195,12 +195,6 @@ public:
     }
 
     /**
-     * Update any references within aItem (or its descendants) to the user units.  Primarily
-     * for automatic-unit dimensions.
-     */
-    void UpdateUserUnits( BOARD_ITEM* aItem, bool* aSelectedItemsModified = nullptr );
-
-    /**
      * @return the primary data model.
      */
     virtual BOARD_ITEM_CONTAINER* GetModel() const = 0;
