@@ -275,6 +275,12 @@ bool CN_ANCHOR::Valid() const
 }
 
 
+bool CN_ANCHOR::Dirty() const
+{
+    return !Valid() ||  m_item->Dirty();
+}
+
+
 bool CN_ANCHOR::IsDangling() const
 {
     int accuracy = 0;

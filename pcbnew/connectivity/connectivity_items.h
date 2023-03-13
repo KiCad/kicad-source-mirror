@@ -72,6 +72,8 @@ public:
 
     bool Valid() const;
 
+    bool Dirty() const;
+
     CN_ITEM* Item() const
     {
         return m_item;
