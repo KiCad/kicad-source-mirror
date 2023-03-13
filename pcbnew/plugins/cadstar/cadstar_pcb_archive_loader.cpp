@@ -2742,9 +2742,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarShape( const SHAPE& aCadstarShape,
     case SHAPE_TYPE::SOLID:
     {
         // Special case solid shapes that are effectively a single line
-        if( aCadstarShape.Vertices.size() < 3
-            || ( aCadstarShape.Vertices.size() == 3
-                 && aCadstarShape.Vertices.at( 0 ).End == aCadstarShape.Vertices.at( 2 ).End ) )
+        if( aCadstarShape.Vertices.size() < 3 )
         {
             drawAsOutline();
             break;
