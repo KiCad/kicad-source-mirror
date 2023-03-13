@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:53-0800\n"
-"PO-Revision-Date: 2023-02-17 15:17+0000\n"
+"PO-Revision-Date: 2023-03-14 11:30+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "v7/es_MX/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -104,9 +104,8 @@ msgid "Build BVH for holes and vias"
 msgstr "Construir BVH para orificios y vías"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:389
-#, fuzzy
 msgid "OpenGL context creation error"
-msgstr "Resolución del recuento de radios para:"
+msgstr "Error de creación de contexto OpenGL"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:420
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
@@ -20818,9 +20817,8 @@ msgstr ""
 "\"%s\""
 
 #: kicad/pcm/pcm.cpp:464
-#, fuzzy
 msgid "Failed to parse locally stored repository.json."
-msgstr "No se ha podido analizar el repositorio: %s"
+msgstr "Error al analizar repository.json almacenado localmente."
 
 #: kicad/pcm/pcm.cpp:492
 msgid ""
@@ -33637,9 +33635,9 @@ msgid "Determining PCB data\n"
 msgstr "Determinación de los datos de placa\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Board Thickness from stackup: %.3f mm\n"
-msgstr "Grosor de la placa por el apilado:"
+msgstr "Grosor de la placa desde el apilado: %.3f mm\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:344
 msgid "Build STEP data\n"
