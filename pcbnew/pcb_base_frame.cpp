@@ -234,6 +234,8 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
         {
             wxCHECK2( listener, continue );
 
+            // Use the windows variant when handling event messages in case there is any special
+            // event handler pre and/or post processing specific to windows.
             wxWindow* win = dynamic_cast<wxWindow*>( listener );
 
             if( win )

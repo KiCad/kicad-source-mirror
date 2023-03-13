@@ -382,8 +382,20 @@ public:
 
     virtual void ActivateGalCanvas() override;
 
+    /**
+     * Add \a aListener to post #EDA_EVT_BOARD_CHANGED command events to.
+     *
+     * @warning The caller is reponsible for removing any listeners that are no long valid.
+     *
+     * @note This only gets called when the board editor is in stand alone mode.  Changing
+     *       projects in the project manager closes the board editor when a new project is
+     *       loaded.
+     */
     void AddBoardChangeListener( wxEvtHandler* aListener );
 
+    /**
+     * Remove \a aListener to from the board changed listener list.
+     */
     void RemoveBoardChangeListener( wxEvtHandler* aListener );
 
 protected:
