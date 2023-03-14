@@ -207,6 +207,9 @@ std::vector<std::unique_ptr<FOOTPRINT>> CADSTAR_PCB_ARCHIVE_LOADER::LoadLibrary(
         delete m_board;
 
     m_board = new BOARD(); // dummy board for loading
+    m_project = nullptr;
+    m_designCenter = { 0, 0 }; // load footprints at 0,0
+
     loadBoardStackup();
     remapUnsureLayers();
     loadComponentLibrary();
@@ -791,6 +794,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponentLibrary()
         loadLibraryCoppers( component, footprint ); // Load coppers after pads to ensure correct
                                                     // ordering of pads in footprint->Pads()
 
+        footprint->SetPosition( { 0, 0 } ); // KiCad expects library footprints at 0,0
         m_libraryMap.insert( std::make_pair( key, footprint ) );
     }
 }
@@ -1271,6 +1275,7 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
     RotatePoint( drillOffset, padOrientation );
     pad->SetPos0( getKiCadPoint( aCadstarPad.Position ) - aParent->GetPosition() - padOffset
                   - drillOffset );
+    pad->SetPosition( getKiCadPoint( aCadstarPad.Position ) - padOffset - drillOffset );
     pad->SetOrientation( padOrientation + getAngle( csPadcode.SlotOrientation ) );
 
     //TODO handle csPadcode.Reassigns when KiCad supports full padstacks
