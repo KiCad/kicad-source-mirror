@@ -1099,6 +1099,14 @@ void SCH_SYMBOL::SwapData( SCH_ITEM* aItem )
 
     std::swap( m_lib_id, symbol->m_lib_id );
 
+    m_pins.swap( symbol->m_pins );      // std::vector's swap()
+
+    for( std::unique_ptr<SCH_PIN>& pin : symbol->m_pins )
+        pin->SetParent( symbol );
+
+    for( std::unique_ptr<SCH_PIN>& pin : m_pins )
+        pin->SetParent( this );
+
     LIB_SYMBOL* libSymbol = symbol->m_part.release();
     symbol->m_part = std::move( m_part );
     symbol->UpdatePins();
