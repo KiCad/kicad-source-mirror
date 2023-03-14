@@ -40,6 +40,12 @@ add_library( qa_utils STATIC
 
 include_directories( BEFORE ${INC_BEFORE} )
 
+# for some obscure reason, on mingw/msys2 Boost::unit_test_framework does not work
+# So use the actual lib filename:
+if( MINGW )
+    set( LIBBOOST_UNIT_TEST_LIB libboost_unit_test_framework-mt )
+endif()
+
 target_link_libraries( qa_utils
     common
     turtle
@@ -47,6 +53,7 @@ target_link_libraries( qa_utils
     ${Boost_FILESYSTEM_LIBRARY}
     ${Boost_SYSTEM_LIBRARY}
     ${wxWidgets_LIBRARIES}
+    ${LIBBOOST_UNIT_TEST_LIB}
 )
 
 target_include_directories( qa_utils PUBLIC
