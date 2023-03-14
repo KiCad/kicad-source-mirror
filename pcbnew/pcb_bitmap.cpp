@@ -179,8 +179,15 @@ void PCB_BITMAP::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 
 void PCB_BITMAP::Rotate( const VECTOR2I& aCenter, const EDA_ANGLE& aAngle )
 {
+    EDA_ANGLE norm( aAngle.AsDegrees(), DEGREES_T );
+
     RotatePoint( m_pos, aCenter, aAngle );
-    m_image->Rotate( false );
+
+    norm.Normalize();
+
+    // each call to m_image->Rotate() rotates 90 degrees CCW
+    for( double ang = 45.0; ang < norm.AsDegrees(); ang += 90.0 )
+        m_image->Rotate( false );
 }
 
 
