@@ -110,7 +110,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:53-0800\n"
-"PO-Revision-Date: 2023-03-15 13:31+0100\n"
+"PO-Revision-Date: 2023-03-15 13:35+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -17762,11 +17762,11 @@ msgstr "Cambia l'elemento esistente in riquadro testo"
 
 #: eeschema/tools/ee_actions.cpp:533
 msgid "Cleanup Sheet Pins"
-msgstr "Ripulisci punti di connessione fogli"
+msgstr "Ripulisci pin fogli"
 
 #: eeschema/tools/ee_actions.cpp:533
 msgid "Delete unreferenced sheet pins"
-msgstr "Cancella pin foglio senza riferimenti"
+msgstr "Elimina pin fogli senza riferimenti"
 
 #: eeschema/tools/ee_actions.cpp:537 pcbnew/tools/pcb_actions.cpp:504
 msgid "Edit Text & Graphics Properties..."
