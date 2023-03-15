@@ -1420,6 +1420,11 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol )
     std::unique_ptr<LIB_SYMBOL> symbol = aSymbol->GetLibSymbolRef()->Flatten();
     wxCHECK( symbol, /* void */ );
 
+    // Take in account the symbol orientation and mirroring. to calculate the field
+    // positions in symbol editor (i.e. no rotation, no mirroring)
+    int orientation = aSymbol->GetOrientation() & ~( SYM_MIRROR_X | SYM_MIRROR_Y );
+    int mirror = aSymbol->GetOrientation() & ( SYM_MIRROR_X | SYM_MIRROR_Y );
+
     std::vector<LIB_FIELD> fullSetOfFields;
 
     for( int i = 0; i < (int) aSymbol->GetFields().size(); ++i )
@@ -1433,6 +1438,33 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol )
 
         libField.SetText( field.GetText() );
         libField.SetAttributes( field );
+
+        // The inverse transform is mirroring before, rotate after
+        switch( mirror )
+        {
+        default:; break;
+        case SYM_MIRROR_X: pos.y = -pos.y; break;
+        case SYM_MIRROR_Y: pos.x = -pos.x; break;
+        }
+
+        switch( orientation )
+        {
+        default:
+        case SYM_ORIENT_0: break;
+        case SYM_ORIENT_90:
+            std::swap( pos.x, pos.y );
+            pos.x = - pos.x;
+            break;
+        case SYM_ORIENT_270:
+            std::swap( pos.x, pos.y );
+            pos.y = - pos.y;
+            break;
+        case SYM_ORIENT_180:
+            pos.x = - pos.x;
+            pos.y = - pos.y;
+            break;
+        }
+
         libField.SetPosition( wxPoint( pos.x, -pos.y ) );
 
         fullSetOfFields.emplace_back( std::move( libField ) );
