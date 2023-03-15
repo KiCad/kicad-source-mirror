@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:53-0800\n"
 "PO-Revision-Date: 2023-03-16 17:52+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v7/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
@@ -12386,9 +12386,8 @@ msgid "Error Loading Library"
 msgstr "Virhe Kirjaston Lataamisessa"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:518
-#, fuzzy
 msgid "Warning: Duplicate Nickname"
-msgstr "Varoitus: Kopioi lempinimi"
+msgstr "Varoitus: Kaksoiskappale lempinimi"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:519
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:904
