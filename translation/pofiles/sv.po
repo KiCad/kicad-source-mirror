@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:53-0800\n"
-"PO-Revision-Date: 2023-03-15 15:46+0000\n"
+"PO-Revision-Date: 2023-03-16 17:52+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v7/sv/>\n"
 "Language: sv\n"
@@ -12968,20 +12968,20 @@ msgstr "Tillåt automatisk placering"
 #: eeschema/files-io.cpp:101 eeschema/files-io.cpp:1214
 #, c-format
 msgid "Schematic '%s' is already open."
-msgstr "Schema '%s' är redan öppen."
+msgstr "Kretsschema '%s' är redan öppet."
 
 #: eeschema/files-io.cpp:123
 #, c-format
 msgid "Schematic '%s' does not exist.  Do you wish to create it?"
-msgstr "Schema '%s' finns inte. Vill du skapa den?"
+msgstr "Krestsschema '%s' finns inte. Vill du skapa det?"
 
 #: eeschema/files-io.cpp:141
 msgid "Creating Schematic"
-msgstr "Skapar schema"
+msgstr "Skapar kretsschema"
 
 #: eeschema/files-io.cpp:142
 msgid "Loading Schematic"
-msgstr "Laddar schema"
+msgstr "Läser in kretsschema"
 
 #: eeschema/files-io.cpp:202
 msgid "Schematic file changes are unsaved"
@@ -12992,24 +12992,25 @@ msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheets."
 msgstr ""
-"Hela schemat kunde inte laddas. Fel uppstod vid inläsning av hierarkiska ark."
+"Hela kretsschemat kunde inte laddas. Fel uppstod vid inläsning av "
+"hierarkiska ark."
 
 #: eeschema/files-io.cpp:249 eeschema/files-io.cpp:257
 #: eeschema/files-io.cpp:1273 eeschema/sheet.cpp:161
 #, c-format
 msgid "Error loading schematic '%s'."
-msgstr "Fel vid inläsning av schema '%s'."
+msgstr "Fel vid inläsning av kretsschema '%s'."
 
 #: eeschema/files-io.cpp:265
 #, c-format
 msgid "Memory exhausted loading schematic '%s'."
-msgstr "Slut på minne vid inläsning av schema '%s'."
+msgstr "Slut på minne vid inläsning av kretsschema '%s'."
 
 #: eeschema/files-io.cpp:284 eeschema/files-io.cpp:1276
 #: eeschema/files-io.cpp:1290 eeschema/sheet.cpp:164
 #, c-format
 msgid "Failed to load '%s'."
-msgstr "Det gick inte att ladda '%s'."
+msgstr "Det gick inte att läsa in '%s'."
 
 #: eeschema/files-io.cpp:297
 msgid ""
@@ -13017,17 +13018,17 @@ msgid ""
 "fixed.  Please save the schematic to repair the broken file or it may not be "
 "usable with other versions of KiCad."
 msgstr ""
-"Ett fel hittades vid laddning av schemat som har fixats automatiskt. Spara "
-"schemat för att reparera den trasiga filen, annars kan den inte användas med "
-"andra versioner av KiCad."
+"Ett fel som hittades vid inläsning av kretsschemat har fixats automatiskt. "
+"Spara kretsschemat för att reparera den trasiga filen, annars kan den "
+"eventuellt inte användas med andra versioner av KiCad."
 
 #: eeschema/files-io.cpp:361
 msgid "Illegal entry found in project file symbol library list."
-msgstr "Olaglig post hittades i bibliotekslistan för projektfilsymboler."
+msgstr "Otillåten post hittades i projektfilens symbolbibliotekslista."
 
 #: eeschema/files-io.cpp:362
 msgid "Project Load Warning"
-msgstr "Varning för projektbelastning"
+msgstr "Varning vid inläsning av projekt"
 
 #: eeschema/files-io.cpp:365
 msgid ""
@@ -13048,7 +13049,7 @@ msgstr "Visa inte denna dialog igen."
 #: eeschema/files-io.cpp:398
 #, c-format
 msgid "The project symbol library cache file '%s' was not found."
-msgstr "Projektets symbolbibliotekscache '%s' kunde inte hittas."
+msgstr "Projektets symbolbibliotekscachefil '%s' kunde inte hittas."
 
 #: eeschema/files-io.cpp:400
 msgid ""
@@ -13062,12 +13063,12 @@ msgstr ""
 "kretsschemat inte saknar några symboler vid öppning, spara det direkt utan "
 "att göra några ändringar för att förhindra dataförlust.  Om kretsschemat "
 "saknar symboler krävs antingen manuell återhämtning av kretsschemat, eller "
-"återhämtning av det cachade symbolbiblioteket och därefter omladdning av "
+"återhämtning av symbolcache-biblioteksfilen och därefter ny inläsning av "
 "kretsschemat."
 
 #: eeschema/files-io.cpp:411
 msgid "Load Without Cache File"
-msgstr "Ladda utan cache-fil"
+msgstr "Läs in utan cache-fil"
 
 #: eeschema/files-io.cpp:412
 msgid "Abort"
@@ -13084,11 +13085,11 @@ msgstr ""
 
 #: eeschema/files-io.cpp:515
 msgid "Schematic is read only."
-msgstr "Schemat är skrivskyddat."
+msgstr "Kretsschemat är skrivskyddat."
 
 #: eeschema/files-io.cpp:540
 msgid "Insert Schematic"
-msgstr "Importera schema"
+msgstr "Importera kretsschema"
 
 #: eeschema/files-io.cpp:572
 msgid ""
@@ -13107,7 +13108,7 @@ msgstr "Alla format som stöds"
 
 #: eeschema/files-io.cpp:621
 msgid "Import Schematic"
-msgstr "Importera schemat"
+msgstr "Importera kretsschema"
 
 #: eeschema/files-io.cpp:660
 #, c-format
@@ -13120,7 +13121,7 @@ msgid ""
 "Error saving schematic file '%s'.\n"
 "%s"
 msgstr ""
-"Kunde inte spara schemafil '%s'.\n"
+"Kunde inte spara kretsschemafil '%s'.\n"
 "%s"
 
 #: eeschema/files-io.cpp:718 pcbnew/files.cpp:1096
@@ -13134,8 +13135,8 @@ msgid ""
 "Error saving schematic file '%s'.\n"
 "Failed to rename temporary file '%s'."
 msgstr ""
-"Fel vid sparning av schemafil '%s'.\n"
-"Det gick inte att byta namn på tillfällig fil '%s'."
+"Fel när kretsschemafil '%s' sparades.\n"
+"Det gick inte att byta namn på den tillfälliga filen '%s'."
 
 #: eeschema/files-io.cpp:741 pcbnew/files.cpp:1114
 #, c-format
@@ -13172,7 +13173,7 @@ msgstr ""
 
 #: eeschema/files-io.cpp:991
 msgid "Save Warning"
-msgstr "Sparningsvarning"
+msgstr "Varning vid spara"
 
 #: eeschema/files-io.cpp:994
 msgid ""
@@ -13188,11 +13189,11 @@ msgstr "Skriv över filerna"
 
 #: eeschema/files-io.cpp:996
 msgid "Abort Project Save"
-msgstr "Avbryt projekt Spara"
+msgstr "Avbryt spara projekt"
 
 #: eeschema/files-io.cpp:1224
 msgid "Importing Schematic"
-msgstr "Importerar schema"
+msgstr "Importerar kretsschema"
 
 #: eeschema/files-io.cpp:1286
 #, c-format
@@ -13201,7 +13202,7 @@ msgstr "Ohanterat undantag inträffade vid inläsning av kretsschema '%s'."
 
 #: eeschema/files-io.cpp:1320
 msgid "The current schematic has been modified.  Save changes?"
-msgstr "Den aktuella schemat har modifierats. Spara ändringar?"
+msgstr "Den aktuella kretsschemat har ändrats. Spara ändringar?"
 
 #: eeschema/files-io.cpp:1409
 msgid ""
@@ -13212,8 +13213,8 @@ msgid ""
 "made?"
 msgstr ""
 "Hoppsan, det här är pinsamt!\n"
-"Det verkar som att schemafile(n/rna) inte sparades korrekt senaste gången du "
-"ändrade den/dem.\n"
+"Det verkar som att kretsschemafile(n/rna) inte sparades korrekt förra gången "
+"du ändrade den/dem.\n"
 "Vill du återställa de senast sparade ändringarna du gjort?"
 
 #: eeschema/files-io.cpp:1420
@@ -13248,7 +13249,7 @@ msgid ""
 "'%s'\n"
 "could not be deleted."
 msgstr ""
-"Huvudfilen för automatisk sparning\n"
+"Huvudfilen för att spara automatiskt \n"
 "'%s'\n"
 "kunde inte tas bort."
 
@@ -13338,7 +13339,7 @@ msgstr "Cirkel, radie %s"
 #: eeschema/lib_shape.cpp:487 eeschema/sch_shape.cpp:464
 #, c-format
 msgid "Polyline, %d points"
-msgstr "Polyline, %d poäng"
+msgstr "Polyline, %d punkter"
 
 #: eeschema/lib_shape.cpp:491 eeschema/sch_shape.cpp:468
 #, c-format
