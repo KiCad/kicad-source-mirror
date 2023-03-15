@@ -110,7 +110,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:53-0800\n"
-"PO-Revision-Date: 2023-02-24 14:12+0100\n"
+"PO-Revision-Date: 2023-03-15 10:17+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -214,9 +214,8 @@ msgid "Build BVH for holes and vias"
 msgstr "Crea BVH (Buried Via Holes) per fori e via"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:389
-#, fuzzy
 msgid "OpenGL context creation error"
-msgstr "Risoluzione conteggio raggi per:"
+msgstr "Errore creazione contenuto OpenGL"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:420
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
@@ -8719,9 +8718,7 @@ msgstr ""
 msgid ""
 "\n"
 " ** ERC messages: %d  Errors %d  Warnings %d\n"
-msgstr ""
-"\n"
-" ** messaggi ERC: %d  Errori %d  Avvisi %d\n"
+msgstr "\n ** Messaggi ERC %d,  Errori %d,  Avvisi %d\n"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:59
 #: pcbnew/dialogs/dialog_drc_base.cpp:77
@@ -11290,9 +11287,8 @@ msgid "Simulation Command"
 msgstr "Comando simulazione"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:186
-#, fuzzy
 msgid "<unknown>"
-msgstr "<Sconosciuto>"
+msgstr "<sconosciuto>"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:196
 #, c-format
@@ -20816,9 +20812,8 @@ msgstr ""
 "%s"
 
 #: kicad/pcm/pcm.cpp:464
-#, fuzzy
 msgid "Failed to parse locally stored repository.json."
-msgstr "Impossibile analizzare il repository: %s"
+msgstr "Impossibile analizzare repository.json memorizzato localmente."
 
 #: kicad/pcm/pcm.cpp:492
 msgid ""
@@ -33568,9 +33563,9 @@ msgid "Determining PCB data\n"
 msgstr "Determinazione dati PCB\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Board Thickness from stackup: %.3f mm\n"
-msgstr "Spessore scheda dallo stackup:"
+msgstr "Spessore scheda dallo stackup: %.3f mm\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:344
 msgid "Build STEP data\n"
@@ -41383,19 +41378,3 @@ msgstr "Schema KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "Circuito stampato KiCad"
-
-#~ msgid "Unknown SIM_VALUE type"
-#~ msgstr "Tipo SIM_VALUE sconosciuto"
-
-#~ msgid ""
-#~ "After packages are (un)installed KiCad may need to be restarted to "
-#~ "reflect changes in the global library table."
-#~ msgstr ""
-#~ "Dopo la (dis)installazione pacchetti, potrebbe essere necessario "
-#~ "riavviare KiCad per mostrare i cambiamenti nella tabella librerie globale."
-
-#~ msgid "Text Width:"
-#~ msgstr "Larghezza testo:"
-
-#~ msgid "Text Height:"
-#~ msgstr "Altezza testo:"
