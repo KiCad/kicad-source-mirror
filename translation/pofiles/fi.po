@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:53-0800\n"
-"PO-Revision-Date: 2023-03-12 20:08+0000\n"
-"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
+"PO-Revision-Date: 2023-03-15 15:46+0000\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v7/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
@@ -12386,6 +12386,7 @@ msgid "Error Loading Library"
 msgstr "Virhe Kirjaston Lataamisessa"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:518
+#, fuzzy
 msgid "Warning: Duplicate Nickname"
 msgstr "Varoitus: Kopioi lempinimi"
 
@@ -12445,7 +12446,7 @@ msgstr "Tiedosto %s on jo olemassa. Haluatko korvata tämän tiedoston?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:787
 msgid "Migrate Library"
-msgstr "Muunna kirjastot uuteen muotoon"
+msgstr "Muunna kirjasto uuteen muotoon"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:811 eeschema/libarch.cpp:153
 #: eeschema/libarch.cpp:159
@@ -12575,7 +12576,7 @@ msgstr ""
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:41
 msgid "Project field name templates:"
-msgstr "Projektikentän nimimallit:"
+msgstr "Projektin kenttänimimallit:"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:47
 msgid "Global field name templates:"
