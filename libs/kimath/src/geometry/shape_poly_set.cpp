@@ -499,7 +499,7 @@ bool SHAPE_POLY_SET::IsPolygonSelfIntersecting( int aPolygonIndex ) const
                 break;
 
             int index_diff = std::abs( firstSegment.Index() - secondSegment.Index() );
-            bool adjacent = ( index_diff == 1) || (index_diff == (segments.size() - 1) ); 
+            bool adjacent = ( index_diff == 1) || (index_diff == ((int)segments.size() - 1) );
 
             // Check whether the two segments built collide, only when they are not adjacent.
             if( !adjacent && firstSegment.Collide( secondSegment, 0 ) )
@@ -1008,7 +1008,6 @@ void SHAPE_POLY_SET::inflate2( int aAmount, int aCircleSegCount, CORNER_STRATEGY
     // http://www.angusj.com/delphi/clipper/documentation/Docs/Units/ClipperLib/Types/JoinType.htm
     JoinType joinType = JoinType::Round;    // The way corners are offsetted
     double   miterLimit = 2.0;      // Smaller value when using jtMiter for joinType
-    JoinType miterFallback = JoinType::Square;
 
     switch( aCornerStrategy )
     {

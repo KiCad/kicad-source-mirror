@@ -1609,7 +1609,7 @@ size_t SCH_SCREEN::getLibSymbolNameMatches( const SCH_SYMBOL& aSymbol,
     long tmp;
     wxString suffix;
 
-    for( auto pair : m_libSymbols )
+    for( auto& pair : m_libSymbols )
     {
         if( pair.first.StartsWith( searchName, &suffix ) && suffix.ToLong( &tmp ) )
             aMatches.emplace_back( pair.first );

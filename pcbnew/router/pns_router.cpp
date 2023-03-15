@@ -816,7 +816,7 @@ void ROUTER::GetUpdatedItems( std::vector<PNS::ITEM*>& aRemoved, std::vector<PNS
 
     node->GetUpdatedItems( aRemoved, aAdded );
 
-    for( auto item : current.CItems() )
+    for( auto& item : current.CItems() )
     {
         aHeads.push_back( item.item->Clone() );
     }
