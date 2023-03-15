@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:51-0800\n"
-"PO-Revision-Date: 2023-03-11 14:19+0000\n"
+"PO-Revision-Date: 2023-03-15 15:46+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -12426,7 +12426,7 @@ msgstr "Signifikanta siffror (spänningar):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:270
 msgid "Range (voltages):"
-msgstr "Intervall (spänningar):"
+msgstr "Spänningsområde:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
 msgid "fV"
@@ -12472,11 +12472,11 @@ msgstr "PV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:281
 msgid "Significant digits (currents):"
-msgstr "Signifikanta siffror (strömmar):"
+msgstr "Signifikanta siffror (ström):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:289
 msgid "Range (currents):"
-msgstr "Intervall (strömmar):"
+msgstr "Strömområde:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
 msgid "fA"
@@ -12526,11 +12526,11 @@ msgstr "Inget fel eller varning"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:225
 msgid "Generate warning"
-msgstr "Skapa varning"
+msgstr "Rapportera varning"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:230
 msgid "Generate error"
-msgstr "Skapa fel"
+msgstr "Rapportera fel"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:24
 msgid "Use schematic editor color theme"
@@ -12583,7 +12583,7 @@ msgstr "50"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:356
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:540
 msgid "A library table row nickname and path cells are empty."
-msgstr "Smeknamn- och sökvägsceller är tomma i en bibliotekstabellsrad."
+msgstr "Smeknamns- och sökvägsceller är tomma i en bibliotekstabellsrad."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:358
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:542
@@ -12622,7 +12622,7 @@ msgstr "Avbryt uppdatering av tabell"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:380
 #, c-format
 msgid "Illegal character '%c' in nickname '%s'"
-msgstr "Olaglig karaktär '%c' i smeknamn '%s'"
+msgstr "Otillåtet tecken '%c' i smeknamn '%s'"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:391
 #: eeschema/dialogs/panel_sym_lib_table.cpp:432
@@ -12640,7 +12640,7 @@ msgstr "Flera bibliotek kan inte dela samma smeknamn ('%s')."
 #: eeschema/dialogs/panel_sym_lib_table.cpp:468 eeschema/symbol_library.cpp:534
 #, c-format
 msgid "Symbol library '%s' failed to load."
-msgstr "Symbolbiblioteket '%s' kunde inte laddas."
+msgstr "Symbolbiblioteket '%s' kunde inte läsas in."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:471
 msgid "Error Loading Library"
@@ -12648,7 +12648,7 @@ msgstr "Fel vid inläsning av bibliotek"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:518
 msgid "Warning: Duplicate Nickname"
-msgstr "Varning: Dubblett smeknamn"
+msgstr "Varning: Dubblett av smeknamn"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:519
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:904
@@ -12677,8 +12677,8 @@ msgid ""
 "Select one or more rows containing libraries in Legacy format (*.lib) to "
 "save as current KiCad format (*.kicad_sym)."
 msgstr ""
-"Välj en eller flera tabellrader som innehåller äldre bibliotek för att spara "
-"som aktuellt format (*.kicad_sym)."
+"Välj en eller flera tabellrader som innehåller bibliotek i äldre format (*."
+"lib) för att spara som aktuellt format (*.kicad_sym)."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:750
 #, c-format
@@ -12686,7 +12686,7 @@ msgid ""
 "Save '%s' as current KiCad format (*.kicad_sym) and replace legacy entry in "
 "table?"
 msgstr ""
-"Spara '%s' som aktuellt format (*.kicad_sym) och ersätta äldre post i "
+"Spara '%s' som aktuellt KiCad-format (*.kicad_sym) och ersätt äldre post i "
 "tabellen?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:756
@@ -12695,24 +12695,24 @@ msgid ""
 "Save %d Legacy format libraries as current KiCad format (*.kicad_sym) and "
 "replace legacy entries in table?"
 msgstr ""
-"Spara %d äldre bibliotek som aktuellt format (*.kicad_sym) och ersätta äldre "
-"poster i tabellen?"
+"Spara %d bibliotek i tidigare format som aktuellt format (*.kicad_sym) och "
+"ersätt äldre poster i tabellen?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:784
 #: pcbnew/dialogs/dialog_export_step.cpp:359
 #, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
-msgstr "Filen %s finns redan. Vill du skriva över den här filen?"
+msgstr "Filen '%s' finns redan. Vill du skriva över den här filen?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:787
 msgid "Migrate Library"
-msgstr "Migrera enskilt bibliotek"
+msgstr "Migrera ett bibliotek"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:811 eeschema/libarch.cpp:153
 #: eeschema/libarch.cpp:159
 #, c-format
 msgid "Failed to save symbol library file '%s'."
-msgstr "Det gick inte att skapa symbolbiblioteksfil '%s'."
+msgstr "Det gick inte att spara symbolbiblioteksfil '%s'."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1040
 msgid ""
@@ -12737,7 +12737,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Fel vid sparar global bibliotektabell:\n"
+"Fel vid försök att spara global bibliotekstabell:\n"
 "\n"
 "%s"
 
@@ -12750,7 +12750,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1116
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1129
 msgid "File Save Error"
-msgstr "Filsparningsfel"
+msgstr "Fel vid försök att spara fil"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1089
 #: eeschema/tools/sch_editor_control.cpp:474
@@ -12761,7 +12761,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Fel vid sparande av projektspecifik bibliotektabell:\n"
+"Fel vid försök att spara projektspecifik bibliotekstabell:\n"
 "\n"
 "%s"
 
@@ -12808,16 +12808,16 @@ msgstr "Projektspecifika bibliotek"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:129
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:126
 msgid "Add empty row to table"
-msgstr "Lägg till tom rad i tabellen"
+msgstr "Lägg till en tom rad i tabellen"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:134
 msgid "Add existing library to table"
-msgstr "Lägg till befintligt bibliotek i tabellen"
+msgstr "Lägg till ett befintligt bibliotek i tabellen"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:152
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:149
 msgid "Remove library from table"
-msgstr "Ta bort biblioteket från bordet"
+msgstr "Ta bort biblioteket från tabellen"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:159
 msgid "Migrate Libraries"
@@ -12835,7 +12835,7 @@ msgstr "Detta är en skrivskyddad tabell som visar relevanta miljövariabler."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:41
 msgid "Project field name templates:"
-msgstr "Projektfältnamnsmallar:"
+msgstr "Projektspecifika fältnamnsmallar:"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:47
 msgid "Global field name templates:"
@@ -12885,7 +12885,7 @@ msgstr "Fel vid inläsning av symbolbibliotekstabellen '%s'."
 #: eeschema/eeschema_jobs_handler.cpp:195
 #: eeschema/eeschema_jobs_handler.cpp:293
 msgid "Failed to load schematic file\n"
-msgstr "Det gick inte att läsa in kretsschemafil \"%s\"\n"
+msgstr "Det gick inte att läsa in kretsschemafilen\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:206
 #: eeschema/eeschema_jobs_handler.cpp:308
@@ -12924,12 +12924,12 @@ msgstr "Det går inte att öppna mål '%s'"
 #: eeschema/eeschema_jobs_handler.cpp:535 pcbnew/pcbnew_jobs_handler.cpp:628
 #: pcbnew/pcbnew_jobs_handler.cpp:689
 msgid "Unable to load library\n"
-msgstr "Det gick inte att läsa in bibliotek\n"
+msgstr "Det gick inte att läsa in biblioteket\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:480
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:123
 msgid "There is no symbol selected to save."
-msgstr "Det finns ingen symbol valt att spara."
+msgstr "Det finns ingen vald symbol att spara."
 
 #: eeschema/eeschema_jobs_handler.cpp:543 pcbnew/pcbnew_jobs_handler.cpp:614
 msgid "Output path must not conflict with existing path\n"
@@ -12977,7 +12977,7 @@ msgstr "Ospecificerat stift"
 
 #: eeschema/erc.cpp:73 eeschema/erc.cpp:90
 msgid "Power Input Pin"
-msgstr "Strömingångsstift"
+msgstr "Strömförsörjningsingångsstift"
 
 #: eeschema/erc.cpp:74 eeschema/erc.cpp:91
 msgid "Power Output Pin"
@@ -13079,7 +13079,7 @@ msgstr "Duplikat av arknamn inom ett visst ark"
 
 #: eeschema/erc_item.cpp:51
 msgid "Symbol pin or wire end off grid"
-msgstr "Symbolstifteller ledarända ej på rutnätet"
+msgstr "Symbolstift eller ledningsända ej på rutnätet"
 
 #: eeschema/erc_item.cpp:55
 msgid "Pin not connected"
