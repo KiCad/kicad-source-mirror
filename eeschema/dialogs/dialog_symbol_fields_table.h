@@ -48,8 +48,8 @@ public:
 
 private:
     void SetupColumnProperties();
-    void AddField( const wxString& displayName, const wxString& aCanonicalName, bool defaultShow,
-                   bool defaultSortBy, bool addedByUser = false );
+    void AddField( const wxString& displayName, const wxString& aCanonicalName, bool show,
+                   bool groupBy, bool addedByUser = false );
 
     /**
      * Construct the rows of m_fieldsCtrl and the columns of m_dataModel from a union of all
@@ -109,9 +109,6 @@ private:
     BOM_PRESET*                    m_lastSelectedBomPreset;
     wxArrayString                  m_bomPresetMRU;
 
-    static BOM_PRESET              bomPresetGroupedByValue;
-    static BOM_PRESET              bomPresetGroupedByValueFootprint;
-
     void syncBomFmtPresetSelection();
     void rebuildBomFmtPresetsWidget();
     void updateBomFmtPresetSelection( const wxString& aName );
@@ -123,10 +120,6 @@ private:
     BOM_FMT_PRESET*                    m_currentBomFmtPreset;
     BOM_FMT_PRESET*                    m_lastSelectedBomFmtPreset;
     wxArrayString                      m_bomFmtPresetMRU;
-
-    static BOM_FMT_PRESET              bomFmtPresetCSV;
-    static BOM_FMT_PRESET              bomFmtPresetSemicolons;
-    static BOM_FMT_PRESET              bomFmtPresetTSV;
 
     SCH_EDIT_FRAME*                m_parent;
     int                            m_fieldNameColWidth;

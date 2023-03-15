@@ -41,6 +41,7 @@ class EESCHEMA_JOBS_HANDLER : public JOB_DISPATCHER, REPORTER
 {
 public:
     EESCHEMA_JOBS_HANDLER();
+    int JobExportBom( JOB* aJob );
     int JobExportPythonBom( JOB* aJob );
     int JobExportNetlist( JOB* aJob );
     int JobExportPlot( JOB* aJob );

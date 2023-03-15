@@ -20,6 +20,8 @@
 #ifndef KICAD_SCHEMATIC_SETTINGS_H
 #define KICAD_SCHEMATIC_SETTINGS_H
 
+#include <set>
+
 #include <default_values.h>
 #include <settings/nested_settings.h>
 #include <template_fieldnames.h>
@@ -30,40 +32,30 @@ class NGSPICE_SIMULATOR_SETTINGS;
 
 struct BOM_PRESET
 {
-    BOM_PRESET( const wxString& aName = wxEmptyString ) :
-        name( aName ), readOnly(false), sort_asc( true ), group_symbols( false)  { }
+    BOM_PRESET( const wxString& aName = wxEmptyString ) : name( aName ) {}
 
-    BOM_PRESET( const wxString&                     aName,
-                const std::map<std::string, bool>&  aFieldsShow,
-                const std::map<std::string, bool>&  aFieldsGroupBy,
-                const std::map<std::string, int>&   aColumnWidths,
-                const std::vector<wxString>&        aColumnOrder,
-                const wxString&                     aSortField,
-                bool                                aSortAscending,
-                const wxString&                     aFilterString,
-                bool                                aGroupSymbols
-                ) :
+    BOM_PRESET( const wxString& aName, const std::vector<wxString>& aFieldsOrdered,
+                const std::vector<wxString>& aFieldsLabels,
+                const std::vector<wxString>& aFieldsShow,
+                const std::vector<wxString>& aFieldsGroupBy, const wxString& aSortField,
+                bool aSortAscending, const wxString& aFilterString, bool aGroupSymbols ) :
             name( aName ),
-            readOnly( false ),
-            fields_show( aFieldsShow ),
-            fields_group_by( aFieldsGroupBy ),
-            column_widths( aColumnWidths ),
-            column_order( aColumnOrder ),
-            filter_string( aFilterString ),
-            group_symbols( aGroupSymbols )
+            fieldsOrdered( aFieldsOrdered ), fieldsLabels( aFieldsLabels ),
+            fieldsShow( aFieldsShow ), fieldsGroupBy( aFieldsGroupBy ), sortField( aSortField ),
+            sortAsc( aSortAscending ), filterString( aFilterString ), groupSymbols( aGroupSymbols )
     {
     }
 
     wxString                    name;
-    bool                        readOnly;
-    std::map<std::string, bool> fields_show;
-    std::map<std::string, bool> fields_group_by;
-    std::map<std::string, int>  column_widths;
-    std::vector<wxString>       column_order;
-    wxString                    sort_field;
-    bool                        sort_asc;
-    wxString                    filter_string;
-    bool                        group_symbols;
+    bool                        readOnly = false;
+    std::vector<wxString>       fieldsOrdered;
+    std::vector<wxString>       fieldsLabels;
+    std::vector<wxString>       fieldsShow;
+    std::vector<wxString>       fieldsGroupBy;
+    wxString                    sortField;
+    bool                        sortAsc = true;
+    wxString                    filterString;
+    bool                        groupSymbols = false;
 };
 
 
@@ -71,21 +63,22 @@ struct BOM_FMT_PRESET
 {
     BOM_FMT_PRESET( const wxString& aName = wxEmptyString ) :
             name( aName ), readOnly( false ), fieldDelimiter( wxS( "\"" ) ),
-            stringDelimiter( wxS( "," ) ), spacedRefs( false ), removeTabs( true ),
-            removeLineBreaks( true )
+            stringDelimiter( wxS( "\"" ) ), refDelimiter( "," ), refRangeDelimiter( "" ),
+            keepTabs( true ), keepLineBreaks( true )
     {
     }
 
     BOM_FMT_PRESET( const wxString& aName, const wxString& aFieldDelimiter,
-                    const wxString& aStringDelimiter, bool spacedRefs, bool removeTabs,
-                    bool removeLineBreaks ) :
+                    const wxString& aStringDelimiter, const wxString& aRefDelimiter,
+                    const wxString& aRefRangeDelimiter, bool removeTabs, bool removeLineBreaks ) :
             name( aName ),
             readOnly( false ),
             fieldDelimiter( aFieldDelimiter ),
             stringDelimiter( aStringDelimiter ),
-            spacedRefs( spacedRefs ),
-            removeTabs( removeTabs ),
-            removeLineBreaks( removeLineBreaks )
+            refDelimiter( aRefDelimiter ),
+            refRangeDelimiter( aRefRangeDelimiter ),
+            keepTabs( removeTabs ),
+            keepLineBreaks( removeLineBreaks )
     {
     }
 
@@ -93,9 +86,10 @@ struct BOM_FMT_PRESET
     bool     readOnly;
     wxString fieldDelimiter;
     wxString stringDelimiter;
-    bool     spacedRefs;
-    bool     removeTabs;
-    bool     removeLineBreaks;
+    wxString refDelimiter;
+    wxString refRangeDelimiter;
+    bool     keepTabs;
+    bool     keepLineBreaks;
 };
 
 
@@ -158,10 +152,15 @@ public:
     TEMPLATES m_TemplateFieldNames;
 
     /// List of stored BOM presets
+    static BOM_PRESET       bomPresetGroupedByValue;
+    static BOM_PRESET       bomPresetGroupedByValueFootprint;
     BOM_PRESET              m_BomSettings;
     std::vector<BOM_PRESET> m_BomPresets;
 
     /// List of stored BOM format presets
+    static BOM_FMT_PRESET       bomFmtPresetCSV;
+    static BOM_FMT_PRESET       bomFmtPresetSemicolons;
+    static BOM_FMT_PRESET       bomFmtPresetTSV;
     BOM_FMT_PRESET              m_BomFmtSettings;
     std::vector<BOM_FMT_PRESET> m_BomFmtPresets;
 

@@ -22,6 +22,7 @@
 #include <pgm_base.h>
 #include <cli/exit_codes.h>
 #include <sch_plotter.h>
+#include <jobs/job_export_sch_bom.h>
 #include <jobs/job_export_sch_pythonbom.h>
 #include <jobs/job_export_sch_netlist.h>
 #include <jobs/job_export_sch_plot.h>
@@ -55,9 +56,13 @@
 #include <netlist_exporter_kicad.h>
 #include <netlist_exporter_xml.h>
 
+#include <fields_data_model.h>
+
 
 EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER()
 {
+    Register( "bom",
+              std::bind( &EESCHEMA_JOBS_HANDLER::JobExportBom, this, std::placeholders::_1 ) );
     Register( "pythonbom",
               std::bind( &EESCHEMA_JOBS_HANDLER::JobExportPythonBom, this, std::placeholders::_1 ) );
     Register( "netlist",
@@ -222,6 +227,125 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
     bool res = helper->WriteNetlist( aNetJob->m_outputFile, netlistOption, *this );
 
     if(!res)
+    {
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+    return CLI::EXIT_CODES::OK;
+}
+
+
+int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
+{
+    JOB_EXPORT_SCH_BOM* aBomJob = dynamic_cast<JOB_EXPORT_SCH_BOM*>( aJob );
+
+    if( !aBomJob )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    SCHEMATIC* sch = EESCHEMA_HELPERS::LoadSchematic( aBomJob->m_filename, SCH_IO_MGR::SCH_KICAD );
+
+    if( sch == nullptr )
+    {
+        wxFprintf( stderr, _( "Failed to load schematic file\n" ) );
+        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+    }
+
+    // Annotation warning check
+    SCH_REFERENCE_LIST referenceList;
+    sch->GetSheets().GetSymbols( referenceList, false, false );
+
+    if( referenceList.GetCount() > 0 )
+    {
+        SCH_REFERENCE_LIST copy = referenceList;
+
+        // Check annotation splits references...
+        if( copy.CheckAnnotation( []( ERCE_T, const wxString&, SCH_REFERENCE*, SCH_REFERENCE* ) {} ) > 0 )
+        {
+            wxPrintf( _( "Warning: schematic has annotation errors, please use the schematic "
+                         "editor to fix them\n" ) );
+        }
+    }
+
+    // Test duplicate sheet names:
+    ERC_TESTER erc( sch );
+
+    if( erc.TestDuplicateSheetNames( false ) > 0 )
+    {
+        wxPrintf( _( "Warning: duplicate sheet names.\n" ) );
+    }
+
+
+    // Build our data model
+    FIELDS_EDITOR_GRID_DATA_MODEL dataModel( referenceList );
+
+    // Mandatory fields + quantity virtual field first
+    for( int i = 0; i < MANDATORY_FIELDS; ++i )
+        dataModel.AddColumn( TEMPLATE_FIELDNAME::GetDefaultFieldName( i ),
+                             TEMPLATE_FIELDNAME::GetDefaultFieldName( i, true ), false );
+
+    dataModel.AddColumn( wxS( "Quantity" ), _( "Qty" ), false );
+
+    // User field names in symbols second
+    std::set<wxString> userFieldNames;
+
+    for( size_t i = 0; i < referenceList.GetCount(); ++i )
+    {
+        SCH_SYMBOL* symbol = referenceList[i].GetSymbol();
+
+        for( int j = MANDATORY_FIELDS; j < symbol->GetFieldCount(); ++j )
+            userFieldNames.insert( symbol->GetFields()[j].GetName() );
+    }
+
+    for( const wxString& fieldName : userFieldNames )
+        dataModel.AddColumn( fieldName, fieldName, true );
+
+    // Add any templateFieldNames which aren't already present in the userFieldNames
+    for( const TEMPLATE_FIELDNAME& templateFieldname :
+         sch->Settings().m_TemplateFieldNames.GetTemplateFieldNames() )
+    {
+        if( userFieldNames.count( templateFieldname.m_Name ) == 0 )
+            dataModel.AddColumn( templateFieldname.m_Name, templateFieldname.m_Name, false );
+    }
+
+    BOM_PRESET preset;
+    preset.fieldsOrdered = aBomJob->m_fieldsOrdered;
+    preset.fieldsLabels = aBomJob->m_fieldsLabels;
+    preset.fieldsShow = aBomJob->m_fieldsOrdered;
+    preset.fieldsGroupBy = aBomJob->m_fieldsGroupBy;
+    preset.sortAsc = aBomJob->m_sortAsc;
+    preset.sortField = aBomJob->m_sortField;
+    preset.groupSymbols = aBomJob->m_groupSymbols;
+    preset.filterString = aBomJob->m_filterString;
+
+    dataModel.ApplyBomPreset( preset );
+
+    if( aBomJob->m_outputFile.IsEmpty() )
+    {
+        wxFileName fn = sch->GetFileName();
+        fn.SetName( fn.GetName() );
+        fn.SetExt( CsvFileExtension );
+
+        aBomJob->m_outputFile = fn.GetFullName();
+    }
+
+    wxFile f;
+    if( !f.Open( aBomJob->m_outputFile, wxFile::write ) )
+    {
+        wxFprintf( stderr, _( "Unable to open destination '%s'" ), aBomJob->m_outputFile );
+        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+    }
+
+    BOM_FMT_PRESET fmt;
+    fmt.fieldDelimiter = aBomJob->m_fieldDelimiter;
+    fmt.stringDelimiter = aBomJob->m_stringDelimiter;
+    fmt.refDelimiter = aBomJob->m_refDelimiter;
+    fmt.refRangeDelimiter = aBomJob->m_refRangeDelimiter;
+    fmt.keepTabs = aBomJob->m_keepTabs;
+    fmt.keepLineBreaks = aBomJob->m_keepLineBreaks;
+
+    bool res = f.Write( dataModel.Export( fmt ) );
+
+    if( !res )
     {
         return CLI::EXIT_CODES::ERR_UNKNOWN;
     }

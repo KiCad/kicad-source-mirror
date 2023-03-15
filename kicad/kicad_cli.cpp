@@ -57,6 +57,7 @@
 #include "cli/command_export_pcb_pos.h"
 #include "cli/command_export_pcb_svg.h"
 #include "cli/command_export_pcb_step.h"
+#include "cli/command_export_sch_bom.h"
 #include "cli/command_export_sch_pythonbom.h"
 #include "cli/command_export_sch_netlist.h"
 #include "cli/command_export_sch_plot.h"
@@ -137,6 +138,7 @@ static CLI::EXPORT_PCB_COMMAND           exportPcbCmd{};
 static CLI::PCB_COMMAND                  pcbCmd{};
 static CLI::EXPORT_SCH_COMMAND           exportSchCmd{};
 static CLI::SCH_COMMAND                  schCmd{};
+static CLI::EXPORT_SCH_BOM_COMMAND       exportSchBomCmd{};
 static CLI::EXPORT_SCH_PYTHONBOM_COMMAND exportSchPythonBomCmd{};
 static CLI::EXPORT_SCH_NETLIST_COMMAND   exportSchNetlistCmd{};
 static CLI::EXPORT_SCH_PLOT_COMMAND      exportSchDxfCmd{ "dxf", PLOT_FORMAT::DXF };
@@ -199,6 +201,7 @@ static std::vector<COMMAND_ENTRY> commandStack = {
                     &exportSchNetlistCmd,
                     &exportSchPdfCmd,
                     &exportSchPostscriptCmd,
+                    &exportSchBomCmd,
                     &exportSchPythonBomCmd,
                     &exportSchSvgCmd
                 }

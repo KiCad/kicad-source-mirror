@@ -10,6 +10,8 @@
 // The internal field name (untranslated)
 #define FIELD_NAME_COLUMN     4
 
+struct BOM_PRESET;
+struct BOM_FMT_PRESET;
 
 enum GROUP_TYPE
 {
@@ -47,8 +49,8 @@ struct DATA_MODEL_COL
 class FIELDS_EDITOR_GRID_DATA_MODEL : public wxGridTableBase
 {
 public:
-    FIELDS_EDITOR_GRID_DATA_MODEL( SCH_EDIT_FRAME* aFrame, SCH_REFERENCE_LIST& aSymbolsList ) :
-            m_frame( aFrame ), m_symbolsList( aSymbolsList ), m_edited( false ), m_sortColumn( 0 ),
+    FIELDS_EDITOR_GRID_DATA_MODEL( SCH_REFERENCE_LIST& aSymbolsList ) :
+            m_symbolsList( aSymbolsList ), m_edited( false ), m_sortColumn( 0 ),
             m_sortAscending( false ), m_groupingEnabled( false )
     {
         m_symbolsList.SplitReferences();
@@ -96,10 +98,13 @@ public:
     }
 
     wxString GetValue( int aRow, int aCol ) override;
-    wxString GetValue( const DATA_MODEL_ROW& group, int aCol, bool spacedRefs = true );
-    wxString GetRawValue( int aRow, int aCol, bool spacedRefs )
+    wxString GetValue( const DATA_MODEL_ROW& group, int aCol,
+                       const wxString& refDelimiter = wxT( ", " ),
+                       const wxString& refRangeDelimiter = wxT( "-" ) );
+    wxString GetRawValue( int aRow, int aCol, const wxString& refDelimiter,
+                          const wxString& refRangeDelimiter )
     {
-        return GetValue( m_rows[aRow], aCol, spacedRefs );
+        return GetValue( m_rows[aRow], aCol, refDelimiter, refRangeDelimiter );
     }
     void     SetValue( int aRow, int aCol, const wxString& aValue ) override;
 
@@ -120,6 +125,8 @@ public:
         m_sortColumn = aCol;
         m_sortAscending = ascending;
     }
+    int  GetSortCol() { return m_sortColumn; }
+    bool GetSortAsc() { return m_sortAscending; }
 
     void RebuildRows();
     void ExpandRow( int aRow );
@@ -128,18 +135,27 @@ public:
     void CollapseForSort();
     void ExpandAfterSort();
 
-    void ApplyData();
+    void ApplyData( std::function<void( SCH_SYMBOL&, SCH_SHEET_PATH& )> symbolChangeHandler );
 
     bool IsEdited() { return m_edited; }
 
     int GetDataWidth( int aCol );
 
     void SetFilter( const wxString& aFilter ) { m_filter = aFilter; }
+    const wxString& GetFilter() { return m_filter; }
+
     void SetGroupingEnabled( bool group ) { m_groupingEnabled = group; }
+    bool GetGroupingEnabled() { return m_groupingEnabled; }
+
     void SetGroupColumn( int aCol, bool group )
     {
         wxCHECK_RET( aCol >= 0 && aCol < (int) m_cols.size(), "Invalid Column Number" );
         m_cols[aCol].m_group = group;
+    }
+    bool GetGroupColumn( int aCol )
+    {
+        wxCHECK_MSG( aCol >= 0 && aCol < (int) m_cols.size(), false, "Invalid Column Number" );
+        return m_cols[aCol].m_group;
     }
 
     void SetShowColumn( int aCol, bool show )
@@ -147,7 +163,13 @@ public:
         wxCHECK_RET( aCol >= 0 && aCol < (int) m_cols.size(), "Invalid Column Number" );
         m_cols[aCol].m_show = show;
     }
+    bool GetShowColumn( int aCol )
+    {
+        wxCHECK_MSG( aCol >= 0 && aCol < (int) m_cols.size(), false, "Invalid Column Number" );
+        return m_cols[aCol].m_show;
+    }
 
+    void     ApplyBomPreset( const BOM_PRESET& preset );
     wxString Export( const BOM_FMT_PRESET& settings );
 
 private:
@@ -160,7 +182,6 @@ private:
 
 
 protected:
-    SCH_EDIT_FRAME*    m_frame;
     SCH_REFERENCE_LIST m_symbolsList;
     bool               m_edited;
     int                m_sortColumn;

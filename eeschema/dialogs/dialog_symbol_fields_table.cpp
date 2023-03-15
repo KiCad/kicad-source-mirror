@@ -141,56 +141,6 @@ protected:
 };
 
 
-BOM_PRESET DIALOG_SYMBOL_FIELDS_TABLE::bomPresetGroupedByValue(
-        _HKI( "Grouped By Value" ),
-        std::map<std::string, bool>( {
-                std::pair<std::string, bool>( "Reference", true ),
-                std::pair<std::string, bool>( "Value", true ),
-                std::pair<std::string, bool>( "Datasheet", true ),
-                std::pair<std::string, bool>( "Footprint", true ),
-                std::pair<std::string, bool>( "Quantity", true ),
-        } ),
-        std::map<std::string, bool>( {
-                std::pair<std::string, bool>( "Reference", false ),
-                std::pair<std::string, bool>( "Value", true ),
-                std::pair<std::string, bool>( "Datasheet", false ),
-                std::pair<std::string, bool>( "Footprint", false ),
-                std::pair<std::string, bool>( "Quantity", false ),
-        } ),
-        std::map<std::string, int>(), std::vector<wxString>(), _( "Reference" ), true, _HKI( "" ),
-        true );
-
-
-BOM_PRESET DIALOG_SYMBOL_FIELDS_TABLE::bomPresetGroupedByValueFootprint(
-        _HKI( "Grouped By Value and Footprint" ),
-        std::map<std::string, bool>( {
-                std::pair<std::string, bool>( "Reference", true ),
-                std::pair<std::string, bool>( "Value", true ),
-                std::pair<std::string, bool>( "Datasheet", true ),
-                std::pair<std::string, bool>( "Footprint", true ),
-                std::pair<std::string, bool>( "Quantity", true ),
-        } ),
-        std::map<std::string, bool>( {
-                std::pair<std::string, bool>( "Reference", false ),
-                std::pair<std::string, bool>( "Value", true ),
-                std::pair<std::string, bool>( "Datasheet", false ),
-                std::pair<std::string, bool>( "Footprint", true ),
-                std::pair<std::string, bool>( "Quantity", false ),
-        } ),
-        std::map<std::string, int>(), std::vector<wxString>(), _( "Reference" ), true, _HKI( "" ),
-        true );
-
-
-BOM_FMT_PRESET DIALOG_SYMBOL_FIELDS_TABLE::bomFmtPresetCSV
-    ( _HKI("CSV"), wxS( "," ), wxT( "\"" ), false, true, true);
-
-BOM_FMT_PRESET DIALOG_SYMBOL_FIELDS_TABLE::bomFmtPresetTSV
-    ( _HKI("TSV"), wxS( "\t" ), wxT(""), false, true, true);
-
-BOM_FMT_PRESET DIALOG_SYMBOL_FIELDS_TABLE::bomFmtPresetSemicolons
-    ( _HKI("Semicolons"), wxS( ";" ), wxT("'"), false, true, true);
-
-
 DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent ) :
         DIALOG_SYMBOL_FIELDS_TABLE_BASE( parent ), m_currentBomPreset( nullptr ),
         m_lastSelectedBomPreset( nullptr ), m_parent( parent ),
@@ -241,7 +191,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
     m_fieldsCtrl->SetIndent( 0 );
 
     m_filter->SetDescriptiveText( _( "Filter" ) );
-    m_dataModel = new FIELDS_EDITOR_GRID_DATA_MODEL( m_parent, m_symbolsList );
+    m_dataModel = new FIELDS_EDITOR_GRID_DATA_MODEL( m_symbolsList );
 
     LoadFieldNames();   // loads rows into m_fieldsCtrl and columns into m_dataModel
 
@@ -274,13 +224,6 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
     m_splitterMainWindow->SetMinimumPaneSize( fieldsMinWidth );
     m_splitterMainWindow->SetSashPosition( fieldsMinWidth + 40 );
 
-    m_cbBomPresets->SetToolTip( wxString::Format(
-            _( "Save and restore layer visibility combinations.\n"
-               "Use %s+Tab to activate selector.\n"
-               "Successive Tabs while holding %s down will "
-               "cycle through presets in the popup." ),
-            KeyNameFromKeyCode( PRESET_SWITCH_KEY ), KeyNameFromKeyCode( PRESET_SWITCH_KEY ) ) );
-
     m_grid->UseNativeColHeader( true );
     m_grid->SetTable( m_dataModel, true );
 
@@ -295,12 +238,12 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
 
     // Load our BOM view presets
     SetUserBomPresets( m_schSettings.m_BomPresets );
-    ApplyBomPreset( bomPresetGroupedByValueFootprint );
+    ApplyBomPreset( SCHEMATIC_SETTINGS::bomPresetGroupedByValueFootprint );
     syncBomPresetSelection();
 
     // Load BOM export format presets
     SetUserBomFmtPresets( m_schSettings.m_BomFmtPresets );
-    ApplyBomFmtPreset( bomFmtPresetCSV );
+    ApplyBomFmtPreset( SCHEMATIC_SETTINGS::bomFmtPresetCSV );
     syncBomFmtPresetSelection();
 
     m_grid->SelectRow( 0 );
@@ -377,11 +320,12 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupColumnProperties()
         // become unhidden.
         if( m_grid->IsColShown( col ) )
         {
+            EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
             std::string key( m_dataModel->GetColFieldName( col ).ToUTF8() );
 
-            if( m_schSettings.m_BomSettings.column_widths.count( key ) )
+            if( cfg->m_FieldEditorPanel.field_widths.count( key ) )
             {
-                int width = m_schSettings.m_BomSettings.column_widths.at( key );
+                int width = cfg->m_FieldEditorPanel.field_widths.at( key );
                 m_grid->SetColSize( col, width );
             }
             else
@@ -396,10 +340,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupColumnProperties()
             }
         }
 
-        if( m_schSettings.m_BomSettings.sort_field == m_dataModel->GetColFieldName( col ) )
+        if( m_schSettings.m_BomSettings.sortField == m_dataModel->GetColFieldName( col ) )
         {
             sortCol = col;
-            sortAscending = m_schSettings.m_BomSettings.sort_asc;
+            sortAscending = m_schSettings.m_BomSettings.sortAsc;
         }
     }
 
@@ -500,7 +444,13 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataFromWindow()
 
     SCH_SHEET_PATH currentSheet = m_parent->GetCurrentSheet();
 
-    m_dataModel->ApplyData();
+    std::function<void( SCH_SYMBOL&, SCH_SHEET_PATH & aPath )> changeHandler =
+            [this]( SCH_SYMBOL& aSymbol, SCH_SHEET_PATH& aPath ) -> void
+            {
+                m_parent->SaveCopyInUndoList( aPath.LastScreen(), &aSymbol, UNDO_REDO::CHANGED, true );
+            };
+
+    m_dataModel->ApplyData( changeHandler );
 
     // Reset the view to where we left the user
     m_parent->SetCurrentSheet( currentSheet );
@@ -513,29 +463,20 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataFromWindow()
 }
 
 
-void DIALOG_SYMBOL_FIELDS_TABLE::AddField( const wxString& aFieldName,
-                                           const wxString& aLabelValue,
-                                           bool defaultShow, bool defaultSortBy, bool addedByUser )
+void DIALOG_SYMBOL_FIELDS_TABLE::AddField( const wxString& aFieldName, const wxString& aLabelValue,
+                                           bool show, bool groupBy, bool addedByUser )
 {
     m_dataModel->AddColumn( aFieldName, aLabelValue, addedByUser );
 
     wxVector<wxVariant> fieldsCtrlRow;
-    bool                show    = defaultShow;
-    bool                sort_by = defaultSortBy;
 
     std::string key( aFieldName.ToUTF8() );
-
-    if( m_schSettings.m_BomSettings.fields_show.count( key ) )
-        show = m_schSettings.m_BomSettings.fields_show.at( key );
-
-    if( m_schSettings.m_BomSettings.fields_group_by.count( key ) )
-        sort_by = m_schSettings.m_BomSettings.fields_group_by.at( key );
 
     // Don't change these to emplace_back: some versions of wxWidgets don't support it
     fieldsCtrlRow.push_back( wxVariant( aFieldName ) );
     fieldsCtrlRow.push_back( wxVariant( aLabelValue ) );
     fieldsCtrlRow.push_back( wxVariant( show ) );
-    fieldsCtrlRow.push_back( wxVariant( sort_by ) );
+    fieldsCtrlRow.push_back( wxVariant( groupBy ) );
     fieldsCtrlRow.push_back( wxVariant( aFieldName ) );
 
     m_fieldsCtrl->AppendItem( fieldsCtrlRow );
@@ -622,7 +563,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnAddField( wxCommandEvent& event )
 
     std::string key( fieldName.ToUTF8() );
 
-    m_parent->Schematic().Settings().m_BomSettings.fields_show[key] = true;
+    m_parent->Schematic().Settings().m_BomSettings.fieldsOrdered.emplace_back( key );
     AddField( fieldName, fieldName, true, false, true );
 
     wxGridTableMessage msg( m_dataModel, wxGRIDTABLE_NOTIFY_COLS_APPENDED, 1 );
@@ -740,21 +681,13 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRenameField( wxCommandEvent& event )
     m_dataModel->RenameColumn( col, newFieldName );
     m_fieldsCtrl->SetTextValue( newFieldName, col, 0 );
 
-    std::string oldKey( fieldName.ToUTF8() );
-    std::string newKey( newFieldName.ToUTF8() );
-
-    //In-place rename map key
-    auto node = m_schSettings.m_BomSettings.fields_show.extract( oldKey );
-    node.key() = newKey;
-    m_schSettings.m_BomSettings.fields_show.insert( std::move( node ) );
-
     syncBomPresetSelection();
 }
 
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnFilterText( wxCommandEvent& aEvent )
 {
-    m_schSettings.m_BomSettings.filter_string = m_filter->GetValue();
+    m_schSettings.m_BomSettings.filterString = m_filter->GetValue();
     m_dataModel->SetFilter( m_filter->GetValue() );
     m_dataModel->RebuildRows();
     m_grid->ForceRefresh();
@@ -804,11 +737,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnColumnItemToggled( wxDataViewEvent& event )
     case SHOW_FIELD_COLUMN:
     {
         bool value = m_fieldsCtrl->GetToggleValue( row, col );
+        int  dataCol = m_dataModel->GetFieldNameCol(
+                m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN ) );
 
-        std::string fieldName( m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN ).ToUTF8() );
-        m_schSettings.m_BomSettings.fields_show[fieldName] = value;
-
-        int dataCol = m_dataModel->GetFieldNameCol( fieldName );
         m_dataModel->SetShowColumn( dataCol, value );
 
         if( dataCol != -1 )
@@ -834,9 +765,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnColumnItemToggled( wxDataViewEvent& event )
             m_fieldsCtrl->SetToggleValue( value, row, col );
         }
 
-        wxString    fieldName = m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN );
-        std::string fieldNameStr( fieldName.ToUTF8() );
-        m_schSettings.m_BomSettings.fields_group_by[fieldNameStr] = value;
+        wxString fieldName = m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN );
 
         m_dataModel->SetGroupColumn( m_dataModel->GetFieldNameCol( fieldName ), value );
         m_dataModel->RebuildRows();
@@ -854,7 +783,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnColumnItemToggled( wxDataViewEvent& event )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnGroupSymbolsToggled( wxCommandEvent& event )
 {
-    m_schSettings.m_BomSettings.group_symbols = m_groupSymbolsBox->GetValue();
+    m_schSettings.m_BomSettings.groupSymbols = m_groupSymbolsBox->GetValue();
     m_dataModel->SetGroupingEnabled( m_groupSymbolsBox->GetValue() );
     m_dataModel->RebuildRows();
     m_grid->ForceRefresh();
@@ -883,8 +812,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnColSort( wxGridEvent& aEvent )
     }
 
     // We only support sorting on one column at this time
-    m_schSettings.m_BomSettings.sort_field = m_dataModel->GetColFieldName( sortCol );
-    m_schSettings.m_BomSettings.sort_asc = ascending;
+    m_schSettings.m_BomSettings.sortField = m_dataModel->GetColFieldName( sortCol );
+    m_schSettings.m_BomSettings.sortAsc = ascending;
 
     m_dataModel->SetSorting( sortCol, ascending );
     m_dataModel->RebuildRows();
@@ -905,7 +834,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnColMove( wxGridEvent& aEvent )
 
                 m_dataModel->MoveColumn( origPos, newPos );
 
-                m_schSettings.m_BomSettings.column_order = m_dataModel->GetFieldsOrder();
+                m_schSettings.m_BomSettings.fieldsOrdered = m_dataModel->GetFieldsOrder();
 
                 // "Unmove" the column since we've moved the column internally
                 m_grid->ResetColPos();
@@ -948,9 +877,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableColSize( wxGridSizeEvent& aEvent )
 {
     int         col = aEvent.GetRowOrCol();
     std::string key( m_dataModel->GetColFieldName( col ).ToUTF8() );
-
-    if( m_grid->GetColSize( col ) )
-        m_schSettings.m_BomSettings.column_widths[key] = m_grid->GetColSize( col );
 
     aEvent.Skip();
 
@@ -1074,9 +1000,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::PreviewRefresh()
 
     current.fieldDelimiter = m_textFieldDelimiter->GetValue();
     current.stringDelimiter = m_textStringDelimiter->GetValue();
-    current.spacedRefs = m_checkSpacedRefs->GetValue();
-    current.removeTabs = m_checkRemoveTabs->GetValue();
-    current.removeLineBreaks = m_checkRemoveLineBreaks->GetValue();
+    current.refDelimiter = m_textRefDelimiter->GetValue();
+    current.refRangeDelimiter = m_textRefRangeDelimiter->GetValue();
+    current.keepTabs = m_checkKeepTabs->GetValue();
+    current.keepLineBreaks = m_checkKeepLineBreaks->GetValue();
 
     m_textOutput->SetValue( m_dataModel->Export( current ) );
 }
@@ -1274,7 +1201,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::loadDefaultBomPresets()
     m_bomPresetMRU.clear();
 
     // Load the read-only defaults
-    for( const BOM_PRESET& preset : { bomPresetGroupedByValue, bomPresetGroupedByValueFootprint } )
+    for( const BOM_PRESET& preset : { SCHEMATIC_SETTINGS::bomPresetGroupedByValue,
+                                      SCHEMATIC_SETTINGS::bomPresetGroupedByValueFootprint } )
     {
         m_bomPresets[preset.name] = preset;
         m_bomPresets[preset.name].readOnly = true;
@@ -1298,7 +1226,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::rebuildBomPresetsWidget()
         m_cbBomPresets->Append( wxGetTranslation( pair.first ),
                                 static_cast<void*>( &pair.second ) );
 
-        if( pair.first == bomPresetGroupedByValueFootprint.name )
+        if( pair.first == SCHEMATIC_SETTINGS::bomPresetGroupedByValueFootprint.name )
             default_idx = idx;
 
         idx++;
@@ -1324,13 +1252,15 @@ void DIALOG_SYMBOL_FIELDS_TABLE::syncBomPresetSelection()
     auto it = std::find_if( m_bomPresets.begin(), m_bomPresets.end(),
                             [&]( const std::pair<const wxString, BOM_PRESET>& aPair )
                             {
-                                return ( aPair.second.fields_show == current.fields_show
-                                         && aPair.second.fields_group_by == current.fields_group_by
-                                         && aPair.second.sort_field == current.sort_field
-                                         && aPair.second.sort_asc == current.sort_asc
-                                         && aPair.second.column_order == current.column_order
-                                         && aPair.second.filter_string == current.filter_string
-                                         && aPair.second.group_symbols == current.group_symbols );
+                                return ( aPair.second.fieldsOrdered == current.fieldsOrdered
+                                         && aPair.second.fieldsLabels == current.fieldsLabels
+                                         && aPair.second.fieldsShow == current.fieldsShow
+                                         && aPair.second.fieldsGroupBy == current.fieldsGroupBy
+                                         && aPair.second.sortField == current.sortField
+                                         && aPair.second.sortAsc == current.sortAsc
+                                         && aPair.second.fieldsOrdered == current.fieldsOrdered
+                                         && aPair.second.filterString == current.filterString
+                                         && aPair.second.groupSymbols == current.groupSymbols );
                             } );
 
     if( it != m_bomPresets.end() )
@@ -1426,14 +1356,14 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged( wxCommandEvent& aEvent )
 
         if( !exists )
         {
-            m_bomPresets[name] = BOM_PRESET( name, m_schSettings.m_BomSettings.fields_show,
-                                             m_schSettings.m_BomSettings.fields_group_by,
-                                             m_schSettings.m_BomSettings.column_widths,
-                                             m_schSettings.m_BomSettings.column_order,
-                                             m_schSettings.m_BomSettings.sort_field,
-                                             m_schSettings.m_BomSettings.sort_asc,
-                                             m_schSettings.m_BomSettings.filter_string,
-                                             m_schSettings.m_BomSettings.group_symbols );
+            m_bomPresets[name] = BOM_PRESET( name, m_schSettings.m_BomSettings.fieldsOrdered,
+                                             m_schSettings.m_BomSettings.fieldsLabels,
+                                             m_schSettings.m_BomSettings.fieldsShow,
+                                             m_schSettings.m_BomSettings.fieldsGroupBy,
+                                             m_schSettings.m_BomSettings.sortField,
+                                             m_schSettings.m_BomSettings.sortAsc,
+                                             m_schSettings.m_BomSettings.filterString,
+                                             m_schSettings.m_BomSettings.groupSymbols );
         }
 
         BOM_PRESET* preset = &m_bomPresets[name];
@@ -1445,14 +1375,14 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged( wxCommandEvent& aEvent )
         }
         else
         {
-            preset->fields_show = m_schSettings.m_BomSettings.fields_show;
-            preset->fields_group_by = m_schSettings.m_BomSettings.fields_group_by;
-            preset->column_widths = m_schSettings.m_BomSettings.column_widths;
-            preset->column_order = m_schSettings.m_BomSettings.column_order;
-            preset->sort_field = m_schSettings.m_BomSettings.sort_field;
-            preset->sort_asc = m_schSettings.m_BomSettings.sort_asc;
-            preset->filter_string = m_schSettings.m_BomSettings.filter_string;
-            preset->group_symbols = m_schSettings.m_BomSettings.group_symbols;
+            preset->fieldsOrdered = m_schSettings.m_BomSettings.fieldsOrdered;
+            preset->fieldsLabels = m_schSettings.m_BomSettings.fieldsLabels;
+            preset->fieldsShow = m_schSettings.m_BomSettings.fieldsShow;
+            preset->fieldsGroupBy = m_schSettings.m_BomSettings.fieldsGroupBy;
+            preset->sortField = m_schSettings.m_BomSettings.sortField;
+            preset->sortAsc = m_schSettings.m_BomSettings.sortAsc;
+            preset->filterString = m_schSettings.m_BomSettings.filterString;
+            preset->groupSymbols = m_schSettings.m_BomSettings.groupSymbols;
 
             index = m_cbBomPresets->FindString( name );
             m_bomPresetMRU.Remove( name );
@@ -1526,71 +1456,79 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged( wxCommandEvent& aEvent )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
 {
-    // Set a good default sort
-    int refCol = m_dataModel->GetFieldNameCol(
-            TEMPLATE_FIELDNAME::GetDefaultFieldName( REFERENCE_FIELD ) );
-    m_grid->SetSortingColumn( refCol, false );
+    // Basically, we apply the BOM preset to the data model and then
+    // update our UI to reflect resulting the data model state, not the preset.
+    m_dataModel->ApplyBomPreset( aPreset );
 
+    // BOM Presets can add, but not remove, columns, so make sure the field control
+    // grid has all of them before starting
+    for( int i = 0; i < m_dataModel->GetColsCount(); i++ )
+    {
+        const wxString& fieldName( m_dataModel->GetColFieldName( i ) );
+        bool            found = false;
+
+        for( int j = 0; i < m_fieldsCtrl->GetItemCount(); j++ )
+        {
+            if( m_fieldsCtrl->GetTextValue( j, FIELD_NAME_COLUMN ) == fieldName )
+            {
+                found = true;
+                break;
+            }
+        }
+
+        // Properties like label, etc. will be added in the next loop
+        if( !found )
+            AddField( fieldName, fieldName, false, false );
+    }
+
+    // Sync all fields
     for( int i = 0; i < m_fieldsCtrl->GetItemCount(); i++ )
     {
-        const std::string fieldName( m_fieldsCtrl->GetTextValue( i, FIELD_NAME_COLUMN ).ToUTF8() );
-        int               col = m_dataModel->GetFieldNameCol( fieldName );
+        const wxString& fieldName( m_fieldsCtrl->GetTextValue( i, FIELD_NAME_COLUMN ) );
+        int             col = m_dataModel->GetFieldNameCol( fieldName );
 
         if( col == -1 )
+        {
+            wxASSERT_MSG( true, "Fields control has a field not found in the data model." );
             continue;
+        }
 
-        bool show = aPreset.fields_show.count( fieldName ) && aPreset.fields_show.at( fieldName );
-        bool groupBy = aPreset.fields_group_by.count( fieldName )
-                       && aPreset.fields_group_by.at( fieldName );
-        int width = aPreset.column_widths.count( fieldName ) ? aPreset.column_widths.at( fieldName )
-                                                             : -1;
+        EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+        std::string        fieldNameStr( fieldName.ToUTF8() );
+
+        if( cfg->m_FieldEditorPanel.field_widths.count( fieldNameStr ) )
+            m_grid->SetColMinimalWidth( col,
+                                        cfg->m_FieldEditorPanel.field_widths.at( fieldNameStr ) );
 
         // Set shown colums
+        bool show = m_dataModel->GetShowColumn( col );
         m_fieldsCtrl->SetToggleValue( show, i, SHOW_FIELD_COLUMN );
-        m_dataModel->SetShowColumn( col, show );
 
         if( show )
+        {
             m_grid->ShowCol( col );
+            //m_grid->SetColSize( col, schSettings. );
+        }
         else
             m_grid->HideCol( col );
 
         // Set grouped columns
+        bool groupBy = m_dataModel->GetGroupColumn( col );
         m_fieldsCtrl->SetToggleValue( groupBy, i, GROUP_BY_COLUMN );
-        m_dataModel->SetGroupColumn( col, groupBy );
-
-        // Set sorting
-        if( aPreset.sort_field == fieldName )
-        {
-            m_dataModel->SetSorting( col, aPreset.sort_asc );
-            m_grid->SetSortingColumn( col, aPreset.sort_asc );
-        }
-
-        // Set grid column sizes
-        if( width != -1 )
-            m_grid->SetColSize( col, width );
     }
 
-    m_dataModel->SetGroupingEnabled( aPreset.group_symbols );
-    m_groupSymbolsBox->SetValue( aPreset.group_symbols );
-
-    m_dataModel->SetFieldsOrder( aPreset.column_order );
-
-    m_dataModel->SetFilter( aPreset.filter_string );
-    m_filter->ChangeValue( aPreset.filter_string );
+    m_grid->SetSortingColumn( m_dataModel->GetSortCol(), m_dataModel->GetSortAsc() );
+    m_groupSymbolsBox->SetValue( m_dataModel->GetGroupingEnabled() );
+    m_filter->ChangeValue( m_dataModel->GetFilter() );
 
     SetupColumnProperties();
 
+    // This will rebuild all rows and columns in the model such that the order
+    // and labels are right, then we refresh the shown grid data to match
     m_dataModel->RebuildRows();
     m_grid->ForceRefresh();
 
-    m_schSettings.m_BomSettings.fields_show = aPreset.fields_show;
-    m_schSettings.m_BomSettings.fields_group_by = aPreset.fields_group_by;
-    m_schSettings.m_BomSettings.column_widths = aPreset.column_widths;
-    m_schSettings.m_BomSettings.sort_field = aPreset.sort_field;
-    m_schSettings.m_BomSettings.sort_asc = aPreset.sort_asc;
-    m_schSettings.m_BomSettings.column_order = aPreset.column_order;
-    m_schSettings.m_BomSettings.filter_string = aPreset.filter_string;
-    m_schSettings.m_BomSettings.group_symbols = aPreset.group_symbols;
+    m_schSettings.m_BomSettings = aPreset;
 }
 
 
@@ -1659,7 +1597,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::loadDefaultBomFmtPresets()
 
     // Load the read-only defaults
     for( const BOM_FMT_PRESET& preset :
-         { bomFmtPresetCSV, bomFmtPresetSemicolons, bomFmtPresetTSV } )
+         { SCHEMATIC_SETTINGS::bomFmtPresetCSV, SCHEMATIC_SETTINGS::bomFmtPresetSemicolons,
+           SCHEMATIC_SETTINGS::bomFmtPresetTSV } )
     {
         m_bomFmtPresets[preset.name] = preset;
         m_bomFmtPresets[preset.name].readOnly = true;
@@ -1683,7 +1622,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::rebuildBomFmtPresetsWidget()
         m_cbBomFmtPresets->Append( wxGetTranslation( pair.first ),
                                    static_cast<void*>( &pair.second ) );
 
-        if( pair.first == bomFmtPresetCSV.name )
+        if( pair.first == SCHEMATIC_SETTINGS::bomFmtPresetCSV.name )
             default_idx = idx;
 
         idx++;
@@ -1712,9 +1651,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::syncBomFmtPresetSelection()
                             {
                                 return ( aPair.second.fieldDelimiter == current.fieldDelimiter
                                          && aPair.second.stringDelimiter == current.stringDelimiter
-                                         && aPair.second.spacedRefs == current.spacedRefs
-                                         && aPair.second.removeTabs == current.removeTabs
-                                         && aPair.second.removeLineBreaks == current.removeLineBreaks );
+                                         && aPair.second.refDelimiter == current.refDelimiter
+                                         && aPair.second.refRangeDelimiter == current.refRangeDelimiter
+                                         && aPair.second.keepTabs == current.keepTabs
+                                         && aPair.second.keepLineBreaks == current.keepLineBreaks );
                             } );
 
     if( it != m_bomFmtPresets.end() )
@@ -1811,12 +1751,13 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomFmtPresetChanged( wxCommandEvent& aEvent )
 
         if( !exists )
         {
-            m_bomFmtPresets[name] = BOM_FMT_PRESET( name,
-                                             m_schSettings.m_BomFmtSettings.fieldDelimiter,
-                                             m_schSettings.m_BomFmtSettings.stringDelimiter,
-                                             m_schSettings.m_BomFmtSettings.spacedRefs,
-                                             m_schSettings.m_BomFmtSettings.removeTabs,
-                                             m_schSettings.m_BomFmtSettings.removeLineBreaks );
+            m_bomFmtPresets[name] =
+                    BOM_FMT_PRESET( name, m_schSettings.m_BomFmtSettings.fieldDelimiter,
+                                    m_schSettings.m_BomFmtSettings.stringDelimiter,
+                                    m_schSettings.m_BomFmtSettings.refDelimiter,
+                                    m_schSettings.m_BomFmtSettings.refRangeDelimiter,
+                                    m_schSettings.m_BomFmtSettings.keepTabs,
+                                    m_schSettings.m_BomFmtSettings.keepLineBreaks );
         }
 
         BOM_FMT_PRESET* preset = &m_bomFmtPresets[name];
@@ -1830,9 +1771,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomFmtPresetChanged( wxCommandEvent& aEvent )
         {
             preset->fieldDelimiter = m_schSettings.m_BomFmtSettings.fieldDelimiter;
             preset->stringDelimiter = m_schSettings.m_BomFmtSettings.stringDelimiter;
-            preset->spacedRefs = m_schSettings.m_BomFmtSettings.spacedRefs;
-            preset->removeTabs = m_schSettings.m_BomFmtSettings.removeTabs;
-            preset->removeLineBreaks = m_schSettings.m_BomFmtSettings.removeLineBreaks;
+            preset->refDelimiter = m_schSettings.m_BomFmtSettings.refDelimiter;
+            preset->refRangeDelimiter = m_schSettings.m_BomFmtSettings.refRangeDelimiter;
+            preset->keepTabs = m_schSettings.m_BomFmtSettings.keepTabs;
+            preset->keepLineBreaks = m_schSettings.m_BomFmtSettings.keepLineBreaks;
 
             index = m_cbBomFmtPresets->FindString( name );
             m_bomFmtPresetMRU.Remove( name );
@@ -1909,15 +1851,17 @@ void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomFmtPreset( const BOM_FMT_PRESET& aPre
 {
     m_textFieldDelimiter->ChangeValue( aPreset.fieldDelimiter );
     m_textStringDelimiter->ChangeValue( aPreset.stringDelimiter );
-    m_checkSpacedRefs->SetValue( aPreset.spacedRefs );
-    m_checkRemoveTabs->SetValue( aPreset.removeTabs );
-    m_checkRemoveLineBreaks->SetValue( aPreset.removeLineBreaks );
+    m_textRefDelimiter->SetValue( aPreset.refDelimiter );
+    m_textRefRangeDelimiter->SetValue( aPreset.refRangeDelimiter );
+    m_checkKeepTabs->SetValue( aPreset.keepTabs );
+    m_checkKeepLineBreaks->SetValue( aPreset.keepLineBreaks );
 
     PreviewRefresh();
 
     m_schSettings.m_BomFmtSettings.fieldDelimiter = aPreset.fieldDelimiter;
     m_schSettings.m_BomFmtSettings.stringDelimiter = aPreset.stringDelimiter;
-    m_schSettings.m_BomFmtSettings.spacedRefs = aPreset.spacedRefs;
-    m_schSettings.m_BomFmtSettings.removeTabs = aPreset.removeTabs;
-    m_schSettings.m_BomFmtSettings.removeLineBreaks = aPreset.removeLineBreaks;
+    m_schSettings.m_BomFmtSettings.refDelimiter = aPreset.refDelimiter;
+    m_schSettings.m_BomFmtSettings.refRangeDelimiter = aPreset.refRangeDelimiter;
+    m_schSettings.m_BomFmtSettings.keepTabs = aPreset.keepTabs;
+    m_schSettings.m_BomFmtSettings.keepLineBreaks = aPreset.keepLineBreaks;
 }

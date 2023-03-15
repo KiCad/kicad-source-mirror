@@ -167,8 +167,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	gbExport->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	wxFlexGridSizer* fgExportOptions;
-	fgExportOptions = new wxFlexGridSizer( 6, 2, 0, 0 );
-	fgExportOptions->AddGrowableRow( 5 );
+	fgExportOptions = new wxFlexGridSizer( 7, 2, 0, 0 );
 	fgExportOptions->SetFlexibleDirection( wxBOTH );
 	fgExportOptions->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -196,28 +195,35 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	m_textStringDelimiter = new wxTextCtrl( m_panelExport, wxID_ANY, _("\""), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_TAB );
 	fgExportOptions->Add( m_textStringDelimiter, 0, wxALL|wxEXPAND, 5 );
 
-	m_labelSpacedRefs = new wxStaticText( m_panelExport, wxID_ANY, _("Spaced References:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_labelSpacedRefs->Wrap( -1 );
-	fgExportOptions->Add( m_labelSpacedRefs, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	m_labelRefDelimiter = new wxStaticText( m_panelExport, wxID_ANY, _("Reference Delimiter:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelRefDelimiter->Wrap( -1 );
+	fgExportOptions->Add( m_labelRefDelimiter, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
-	m_checkSpacedRefs = new wxCheckBox( m_panelExport, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgExportOptions->Add( m_checkSpacedRefs, 0, wxALL, 5 );
+	m_textRefDelimiter = new wxTextCtrl( m_panelExport, wxID_ANY, _(","), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_TAB );
+	fgExportOptions->Add( m_textRefDelimiter, 0, wxALL, 5 );
 
-	m_labelRemoveTabs = new wxStaticText( m_panelExport, wxID_ANY, _("Remove Tabs:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_labelRemoveTabs->Wrap( -1 );
-	fgExportOptions->Add( m_labelRemoveTabs, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	m_labelRefRangeDelimiter = new wxStaticText( m_panelExport, wxID_ANY, _("Range Delimiter:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelRefRangeDelimiter->Wrap( -1 );
+	fgExportOptions->Add( m_labelRefRangeDelimiter, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
-	m_checkRemoveTabs = new wxCheckBox( m_panelExport, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_checkRemoveTabs->SetValue(true);
-	fgExportOptions->Add( m_checkRemoveTabs, 0, wxALL, 5 );
+	m_textRefRangeDelimiter = new wxTextCtrl( m_panelExport, wxID_ANY, _("-"), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_TAB );
+	m_textRefRangeDelimiter->SetToolTip( _("Leave blank to disable ranges.") );
 
-	m_labelRemoveLineBreaks = new wxStaticText( m_panelExport, wxID_ANY, _("Remove Line Breaks:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_labelRemoveLineBreaks->Wrap( -1 );
-	fgExportOptions->Add( m_labelRemoveLineBreaks, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	fgExportOptions->Add( m_textRefRangeDelimiter, 0, wxALL, 5 );
 
-	m_checkRemoveLineBreaks = new wxCheckBox( m_panelExport, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_checkRemoveLineBreaks->SetValue(true);
-	fgExportOptions->Add( m_checkRemoveLineBreaks, 0, wxALL, 5 );
+	m_labelKeepTabs = new wxStaticText( m_panelExport, wxID_ANY, _("Keep Tabs:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelKeepTabs->Wrap( -1 );
+	fgExportOptions->Add( m_labelKeepTabs, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+
+	m_checkKeepTabs = new wxCheckBox( m_panelExport, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgExportOptions->Add( m_checkKeepTabs, 0, wxALL, 5 );
+
+	m_labelKeepLineBreaks = new wxStaticText( m_panelExport, wxID_ANY, _("Keep Line Breaks:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelKeepLineBreaks->Wrap( -1 );
+	fgExportOptions->Add( m_labelKeepLineBreaks, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+
+	m_checkKeepLineBreaks = new wxCheckBox( m_panelExport, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgExportOptions->Add( m_checkKeepLineBreaks, 0, wxALL, 5 );
 
 
 	gbExport->Add( fgExportOptions, wxGBPosition( 0, 0 ), wxGBSpan( 3, 1 ), wxEXPAND, 5 );
@@ -326,9 +332,10 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	m_grid->Connect( wxEVT_GRID_RANGE_SELECT, wxGridRangeSelectEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnTableRangeSelected ), NULL, this );
 	m_textFieldDelimiter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnPreviewRefresh ), NULL, this );
 	m_textStringDelimiter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnPreviewRefresh ), NULL, this );
-	m_checkSpacedRefs->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnPreviewRefresh ), NULL, this );
-	m_checkRemoveTabs->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnPreviewRefresh ), NULL, this );
-	m_checkRemoveLineBreaks->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnPreviewRefresh ), NULL, this );
+	m_textRefDelimiter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnPreviewRefresh ), NULL, this );
+	m_textRefRangeDelimiter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnPreviewRefresh ), NULL, this );
+	m_checkKeepTabs->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnPreviewRefresh ), NULL, this );
+	m_checkKeepLineBreaks->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnPreviewRefresh ), NULL, this );
 	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnOutputFileBrowseClicked ), NULL, this );
 	m_bRefreshPreview->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnPreviewRefresh ), NULL, this );
 	m_buttonExport->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnExport ), NULL, this );
@@ -359,9 +366,10 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::~DIALOG_SYMBOL_FIELDS_TABLE_BASE()
 	m_grid->Disconnect( wxEVT_GRID_RANGE_SELECT, wxGridRangeSelectEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnTableRangeSelected ), NULL, this );
 	m_textFieldDelimiter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnPreviewRefresh ), NULL, this );
 	m_textStringDelimiter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnPreviewRefresh ), NULL, this );
-	m_checkSpacedRefs->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnPreviewRefresh ), NULL, this );
-	m_checkRemoveTabs->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnPreviewRefresh ), NULL, this );
-	m_checkRemoveLineBreaks->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnPreviewRefresh ), NULL, this );
+	m_textRefDelimiter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnPreviewRefresh ), NULL, this );
+	m_textRefRangeDelimiter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnPreviewRefresh ), NULL, this );
+	m_checkKeepTabs->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnPreviewRefresh ), NULL, this );
+	m_checkKeepLineBreaks->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnPreviewRefresh ), NULL, this );
 	m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnOutputFileBrowseClicked ), NULL, this );
 	m_bRefreshPreview->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnPreviewRefresh ), NULL, this );
 	m_buttonExport->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnExport ), NULL, this );

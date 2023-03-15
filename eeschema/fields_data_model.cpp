@@ -3,7 +3,7 @@
 #include <wx/grid.h>
 #include <widgets/wx_grid.h>
 #include <sch_reference_list.h>
-#include <sch_edit_frame.h>
+#include <schematic_settings.h>
 #include "string_utils.h"
 
 #include "fields_data_model.h"
@@ -12,6 +12,10 @@
 void FIELDS_EDITOR_GRID_DATA_MODEL::AddColumn( const wxString& aFieldName, const wxString& aLabel,
                                                bool aAddedByUser )
 {
+    // Don't add a field twice
+    if( GetFieldNameCol( aFieldName ) != -1 )
+        return;
+
     m_cols.push_back((struct DATA_MODEL_COL) {
             .m_fieldName = aFieldName,
             .m_label = aLabel,
@@ -127,7 +131,8 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( int aRow, int aCol )
 
 
 wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const DATA_MODEL_ROW& group, int aCol,
-                                                  bool spacedRefs )
+                                                  const wxString& refDelimiter,
+                                                  const wxString& refRangeDelimiter )
 {
     std::vector<SCH_REFERENCE> references;
     wxString                   fieldValue;
@@ -183,7 +188,7 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const DATA_MODEL_ROW& group, i
     }
 
     if( ColIsReference( aCol ) )
-        fieldValue = SCH_REFERENCE_LIST::Shorthand( references, spacedRefs );
+        fieldValue = SCH_REFERENCE_LIST::Shorthand( references, refDelimiter, refRangeDelimiter );
     else if( ColIsQuantity( aCol ) )
         fieldValue = wxString::Format( wxT( "%d" ), (int) references.size() );
 
@@ -493,14 +498,14 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ExpandAfterSort()
 }
 
 
-void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData()
+void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData(
+        std::function<void( SCH_SYMBOL&, SCH_SHEET_PATH& )> symbolChangeHandler )
 {
     for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
     {
         SCH_SYMBOL& symbol = *m_symbolsList[i].GetSymbol();
-        SCH_SCREEN* screen = m_symbolsList[i].GetSheetPath().LastScreen();
 
-        m_frame->SaveCopyInUndoList( screen, &symbol, UNDO_REDO::CHANGED, true );
+        symbolChangeHandler( symbol, m_symbolsList[i].GetSheetPath() );
 
         const std::map<wxString, wxString>& fieldStore = m_dataStore[symbol.m_Uuid];
 
@@ -583,9 +588,66 @@ int FIELDS_EDITOR_GRID_DATA_MODEL::GetDataWidth( int aCol )
 }
 
 
+void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyBomPreset( const BOM_PRESET& aPreset )
+{
+    // Hide and un-group everything by default
+    for( size_t i = 0; i < m_cols.size(); i++ )
+    {
+        SetShowColumn( i, false );
+        SetGroupColumn( i, false );
+    }
+
+    // Set columns that are present and shown
+    for( size_t i = 0; i < aPreset.fieldsOrdered.size(); i++ )
+    {
+        const wxString& fieldName = aPreset.fieldsOrdered[i];
+        const wxString& label =
+                i < aPreset.fieldsLabels.size() ? aPreset.fieldsLabels[i] : fieldName;
+
+        int col = GetFieldNameCol( fieldName );
+
+        // Add any missing fields, if the user doesn't add any data
+        // they won't be saved to the symbols anywa
+        if( col == -1 )
+            AddColumn( fieldName, label, true );
+        else
+            SetColLabelValue( col, label );
+
+        SetShowColumn( col, true );
+    }
+
+    // Set grouping columns
+    SetGroupingEnabled( aPreset.groupSymbols );
+
+    for( auto fieldName : aPreset.fieldsGroupBy )
+    {
+        int col = GetFieldNameCol( fieldName );
+
+        if( col != -1 )
+            SetGroupColumn( col, true );
+    }
+
+    SetFieldsOrder( aPreset.fieldsOrdered );
+
+    // Set our sorting
+    int sortCol = GetFieldNameCol( aPreset.sortField );
+    if( sortCol != -1 )
+        SetSorting( sortCol, aPreset.sortAsc );
+    else
+        SetSorting( GetFieldNameCol( TEMPLATE_FIELDNAME::GetDefaultFieldName( REFERENCE_FIELD ) ),
+                    aPreset.sortAsc );
+
+    SetFilter( aPreset.filterString );
+
+    RebuildRows();
+}
+
 wxString FIELDS_EDITOR_GRID_DATA_MODEL::Export( const BOM_FMT_PRESET& settings )
 {
     wxString out;
+
+    if( m_cols.empty() )
+        return out;
 
     size_t last_col = m_cols.size() - 1;
 
@@ -601,13 +663,13 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::Export( const BOM_FMT_PRESET& settings )
 
     auto formatField = [&]( wxString field, bool last ) -> wxString
         {
-            if( settings.removeLineBreaks )
+            if( !settings.keepLineBreaks )
             {
                 field.Replace( wxS( "\r" ), wxS( "" ) );
                 field.Replace( wxS( "\n" ), wxS( "" ) );
             }
 
-            if( settings.removeTabs )
+            if( !settings.keepTabs )
             {
                 field.Replace( wxS( "\t" ), wxS( "" ) );
             }
@@ -642,7 +704,8 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::Export( const BOM_FMT_PRESET& settings )
                 continue;
 
             // Get the unanottated version of the field, e.g. no ">   " or "v   " by
-            out.Append( formatField( GetRawValue( (int) row, (int) col, settings.spacedRefs ),
+            out.Append( formatField( GetRawValue( (int) row, (int) col, settings.refDelimiter,
+                                                  settings.refRangeDelimiter ),
                                      col == last_col ) );
         }
     }

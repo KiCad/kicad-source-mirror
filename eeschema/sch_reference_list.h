@@ -587,7 +587,8 @@ public:
      * "R1, R2, R4 - R7, U1"
      * @param spaced Add spaces between references
      */
-    static wxString Shorthand( std::vector<SCH_REFERENCE> aList, bool spaced = true );
+    static wxString Shorthand( std::vector<SCH_REFERENCE> aList, const wxString& refDelimiter,
+                               const wxString& refRangeDelimiter );
 
     friend class BACK_ANNOTATION;
 

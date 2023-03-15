@@ -194,6 +194,7 @@ public:
 
     struct PANEL_FIELD_EDITOR
     {
+        std::map<std::string, int> field_widths;
     };
 
     struct PANEL_LIB_VIEW
