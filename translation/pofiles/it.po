@@ -110,7 +110,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:53-0800\n"
-"PO-Revision-Date: 2023-03-15 10:17+0100\n"
+"PO-Revision-Date: 2023-03-15 13:31+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -17794,7 +17794,7 @@ msgstr "Mostra la tabella pin per la modifica in blocco"
 
 #: eeschema/tools/ee_actions.cpp:553
 msgid "Break"
-msgstr "Frantuma"
+msgstr "Rompi"
 
 #: eeschema/tools/ee_actions.cpp:553
 msgid "Divide into connected segments"
