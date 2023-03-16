@@ -755,6 +755,13 @@ public:
 
     bool IsPointClickableAnchor( const VECTOR2I& aPos ) const override;
 
+    /**
+     * @return true if the symbol is equivalent to a global label:
+     * It is a Power symbol
+     * It has only one pin type Power input
+     */
+    bool IsSymbolLikePowerGlobalLabel() const;
+
 private:
     BOX2I doGetBoundingBox( bool aIncludePins, bool aIncludeFields ) const;
 

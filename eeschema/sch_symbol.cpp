@@ -2279,3 +2279,22 @@ bool SCH_SYMBOL::IsPointClickableAnchor( const VECTOR2I& aPos ) const
 
     return false;
 }
+
+
+bool SCH_SYMBOL::IsSymbolLikePowerGlobalLabel() const
+{
+    // return true if the symbol is equivalent to a global label:
+    // It is a Power symbol
+    // It has only one pin type Power input
+
+    if( !GetLibSymbolRef() || !GetLibSymbolRef()->IsPower() )
+        return false;
+
+    std::vector<LIB_PIN*> pin_list = GetAllLibPins();
+
+    if( pin_list.size() != 1 )
+        return false;
+
+    return pin_list[0]->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN;
+}
+
