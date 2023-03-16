@@ -148,9 +148,15 @@ EC_CONVERGING::EC_CONVERGING( EDIT_LINE& aLine, EDIT_POINTS& aPoints ) :
     SEG endSide( end.GetPosition(), nextEnd.GetPosition() );
     SEG dragged( origin.GetPosition(), end.GetPosition() );
 
-    if( dragged.Collinear( originSide ) )
+    // Used to align lines that are almost collinear
+    const int alignAngle = 10;
+
+    m_originCollinear = dragged.Angle( originSide ).AsDegrees() < alignAngle;
+    m_endCollinear = dragged.Angle( endSide ).AsDegrees() < alignAngle;
+
+    if( m_originCollinear )
         m_colinearConstraint = m_originSideConstraint;
-    else if( dragged.Collinear( endSide ) )
+    else if( m_endCollinear )
         m_colinearConstraint = m_endSideConstraint;
 }
 
@@ -174,6 +180,9 @@ void EC_CONVERGING::Apply( EDIT_LINE& aHandle, const GRID_HELPER& aGrid )
         m_colinearConstraint->Apply( origin, aGrid );
         m_colinearConstraint->Apply( end, aGrid );
     }
+
+    if( m_originCollinear && m_endCollinear )
+        return;
 
     // The dragged segment
     SEG dragged( origin.GetPosition(), origin.GetPosition() + m_draggedVector );

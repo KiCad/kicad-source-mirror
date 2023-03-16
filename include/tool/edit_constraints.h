@@ -236,6 +236,10 @@ private:
 
     ///< Vector that represents the initial direction of the dragged segment.
     VECTOR2I m_draggedVector;
+
+    ///< Flags to indicate when dragged and neighbouring lines are (almost) collinear.
+    bool m_originCollinear;
+    bool m_endCollinear;
 };
 
 
