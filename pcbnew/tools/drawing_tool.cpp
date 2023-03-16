@@ -3089,23 +3089,29 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                             track->SetStart( trackStart );
                             track->SetEnd( *joint1 );
 
+                            if( *joint1 != viaPos )
+                            {
+                                PCB_TRACK* newTrack = dynamic_cast<PCB_TRACK*>( track->Clone() );
+                                wxCHECK( newTrack, /* void */ );
+                                const_cast<KIID&>( newTrack->m_Uuid ) = KIID();
+
+                                newTrack->SetStart( *joint1 );
+                                newTrack->SetEnd( viaPos );
+                                aCommit.Add( newTrack );
+                            }
+
+                            if( *joint2 != viaPos )
+                            {
+                                PCB_TRACK* newTrack = dynamic_cast<PCB_TRACK*>( track->Clone() );
+                                wxCHECK( newTrack, /* void */ );
+                                const_cast<KIID&>( newTrack->m_Uuid ) = KIID();
+
+                                newTrack->SetStart( viaPos );
+                                newTrack->SetEnd( *joint2 );
+                                aCommit.Add( newTrack );
+                            }
+
                             PCB_TRACK* newTrack = dynamic_cast<PCB_TRACK*>( track->Clone() );
-                            wxCHECK( newTrack, /* void */ );
-                            const_cast<KIID&>( newTrack->m_Uuid ) = KIID();
-
-                            newTrack->SetStart( *joint1 );
-                            newTrack->SetEnd( viaPos );
-                            aCommit.Add( newTrack );
-
-                            newTrack = dynamic_cast<PCB_TRACK*>( track->Clone() );
-                            wxCHECK( newTrack, /* void */ );
-                            const_cast<KIID&>( newTrack->m_Uuid ) = KIID();
-
-                            newTrack->SetStart( viaPos );
-                            newTrack->SetEnd( *joint2 );
-                            aCommit.Add( newTrack );
-
-                            newTrack = dynamic_cast<PCB_TRACK*>( track->Clone() );
                             wxCHECK( newTrack, /* void */ );
                             const_cast<KIID&>( newTrack->m_Uuid ) = KIID();
 
