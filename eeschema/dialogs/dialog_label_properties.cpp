@@ -286,7 +286,11 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataToWindow()
                 for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_LOCATE_POWER_T ) )
                 {
                     const SCH_SYMBOL* power = static_cast<const SCH_SYMBOL*>( item );
-                    existingLabels.insert( UnescapeString( power->GetValueFieldText( false ) ) );
+
+                    // Ensure the symbol has the Power (i.e. equivalent to a global label
+                    // before adding its value in list
+                    if( power->IsSymbolLikePowerGlobalLabel() )
+                        existingLabels.insert( UnescapeString( power->GetValueFieldText( false ) ) );
                 }
             }
 
