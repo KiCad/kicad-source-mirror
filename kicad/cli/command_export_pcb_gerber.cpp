@@ -71,6 +71,11 @@ CLI::EXPORT_PCB_GERBER_COMMAND::EXPORT_PCB_GERBER_COMMAND( const std::string& aN
             .implicit_value( true )
             .default_value( false );
 
+    m_argParser.add_argument( ARG_AUX_ORIGIN )
+            .help( UTF8STDSTR( _( "Use drill/place file origin" ) ) )
+            .implicit_value( true )
+            .default_value( false );
+
     m_argParser.add_argument( ARG_PRECISION )
             .help( UTF8STDSTR( _( "Precision of gerber coordinates, valid options: 5 or 6" ) ) )
             .scan<'i', int>()
@@ -95,6 +100,7 @@ int CLI::EXPORT_PCB_GERBER_COMMAND::populateJob( JOB_EXPORT_PCB_GERBER* aJob )
     aJob->m_subtractSolderMaskFromSilk = m_argParser.get<bool>( ARG_SUBTRACT_SOLDERMASK );
     aJob->m_includeNetlistAttributes = !m_argParser.get<bool>( ARG_NO_NETLIST );
     aJob->m_useX2Format = !m_argParser.get<bool>( ARG_NO_X2 );
+    aJob->m_useAuxOrigin = !m_argParser.get<bool>( ARG_AUX_ORIGIN );
     aJob->m_precision = m_argParser.get<int>( ARG_PRECISION );
     aJob->m_printMaskLayer = m_selectedLayers;
 

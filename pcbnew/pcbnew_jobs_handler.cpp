@@ -367,6 +367,7 @@ void PCBNEW_JOBS_HANDLER::populateGerberPlotOptionsFromJob( PCB_PLOT_PARAMS&    
     aPlotOpts.SetDisableGerberMacros( aJob->m_disableApertureMacros );
     aPlotOpts.SetUseGerberX2format( aJob->m_useX2Format );
     aPlotOpts.SetIncludeGerberNetlistInfo( aJob->m_includeNetlistAttributes );
+    aPlotOpts.SetUseAuxOrigin( aJob->m_useAuxOrigin );
 
     aPlotOpts.SetGerberPrecision( aJob->m_precision );
 }

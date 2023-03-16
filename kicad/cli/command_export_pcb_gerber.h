@@ -31,6 +31,7 @@ namespace CLI
 #define ARG_NO_NETLIST "--no-netlist"
 #define ARG_SUBTRACT_SOLDERMASK "--subtract-soldermask"
 #define ARG_DISABLE_APERTURE_MACROS "--disable-aperture-macros"
+#define ARG_AUX_ORIGIN "--aux-origin"
 #define ARG_PRECISION "--precision"
 
 class EXPORT_PCB_GERBER_COMMAND : public EXPORT_PCB_BASE_COMMAND
