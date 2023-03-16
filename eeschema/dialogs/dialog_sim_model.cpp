@@ -140,6 +140,9 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
     wxString       pinMap;
     bool           storeInValue = false;
 
+    wxString           msg;
+    WX_STRING_REPORTER reporter( &msg );
+
     // Infer RLC and VI models if they aren't specified
     if( SIM_MODEL::InferSimModel( m_symbol, &m_fields, false, SIM_VALUE_GRAMMAR::NOTATION::SI,
                                   &deviceType, &modelType, &modelParams, &pinMap ) )
@@ -184,7 +187,7 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
         if( !loadLibrary( libraryFilename ) )
         {
             m_libraryPathText->ChangeValue( libraryFilename );
-            m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields );
+            m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields, &reporter );
             m_libraryModelsMgr.CreateModel( nullptr, sourcePins, m_fields );
 
             m_modelNameChoice->Append( _( "<unknown>" ) );
@@ -260,25 +263,32 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
     {
         // The model is sourced from the instance.
         m_useInstanceModelRadioButton->SetValue( true );
-        m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields );
+
+        msg.clear();
+        m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields, &reporter );
+
+        if( reporter.HasMessage() )
+            DisplayErrorMessage( this, msg );
     }
+
+    m_builtinModelsMgr.SetReporter( &reporter );
 
     for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
     {
-        wxString           msg;
-        WX_STRING_REPORTER reporter( &msg );
-
-        m_builtinModelsMgr.SetReporter( &reporter );
-
         if( m_useInstanceModelRadioButton->GetValue() && type == m_curModelType )
-            m_builtinModelsMgr.CreateModel( m_fields, sourcePins, false );
-        else
-            m_builtinModelsMgr.CreateModel( type, sourcePins );
-
-        if( reporter.HasMessage() )
         {
-            DisplayErrorMessage( this, _( "Failed to read simulation model from fields." )
-                                       + wxT( "\n\n" ) + msg );
+            msg.clear();
+            m_builtinModelsMgr.CreateModel( m_fields, sourcePins, false );
+
+            if( reporter.HasMessage() )
+            {
+                DisplayErrorMessage( this, _( "Failed to read simulation model from fields." )
+                                           + wxT( "\n\n" ) + msg );
+            }
+        }
+        else
+        {
+            m_builtinModelsMgr.CreateModel( type, sourcePins );
         }
 
         SIM_MODEL::DEVICE_T deviceTypeT = SIM_MODEL::TypeInfo( type ).deviceType;

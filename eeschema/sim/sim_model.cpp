@@ -361,11 +361,13 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
 }
 
 
-template TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<SCH_FIELD>& aFields );
-template TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<LIB_FIELD>& aFields );
+template TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<SCH_FIELD>& aFields,
+                                             REPORTER* aReporter );
+template TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<LIB_FIELD>& aFields,
+                                             REPORTER* aReporter );
 
 template <typename T>
-TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<T>& aFields )
+TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<T>& aFields, REPORTER* aReporter )
 {
     std::string deviceTypeFieldValue = GetFieldValue( &aFields, SIM_DEVICE_TYPE_FIELD );
     std::string typeFieldValue = GetFieldValue( &aFields, SIM_TYPE_FIELD );
@@ -391,6 +393,22 @@ TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<T>& aFields )
 
     if( typeFromLegacyFields != TYPE::NONE )
         return typeFromLegacyFields;
+
+    if( aReporter )
+    {
+        if( aFields.size() > REFERENCE_FIELD )
+        {
+            aReporter->Report( wxString::Format( _( "No simulation model definition found for "
+                                                    "symbol '%s'." ),
+                               aFields[REFERENCE_FIELD].GetText() ),
+                               RPT_SEVERITY_ERROR );
+        }
+        else
+        {
+            aReporter->Report( _( "No simulation model definition found." ),
+                               RPT_SEVERITY_ERROR );
+        }
+    }
 
     return TYPE::NONE;
 }
@@ -455,10 +473,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType, const std::vector<LIB_
     }
     catch( IO_ERROR& err )
     {
-        if( aReporter )
-            aReporter->Report( err.What(), RPT_SEVERITY_ERROR );
-        else
-            DisplayErrorMessage( nullptr, err.What() );
+        wxFAIL_MSG( "Shouldn't throw reading empty fields!" );
     }
 
     return model;
@@ -481,19 +496,16 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
     else
         model = Create( type );
 
+    if( aBaseModel )
+        model->SetBaseModel( *aBaseModel );
+
     try
     {
-        if( aBaseModel )
-            model->SetBaseModel( *aBaseModel );
-
         model->ReadDataFields( static_cast<const std::vector<SCH_FIELD>*>( nullptr ), aPins );
     }
     catch( IO_ERROR& err )
     {
-        if( aReporter )
-            aReporter->Report( err.What(), RPT_SEVERITY_ERROR );
-        else
-            DisplayErrorMessage( nullptr, err.What() );
+        wxFAIL_MSG( "Shouldn't throw reading empty fields!" );
     }
 
     return model;
@@ -506,7 +518,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
                                               const std::vector<T>& aFields,
                                               REPORTER* aReporter )
 {
-    TYPE type = ReadTypeFromFields( aFields );
+    TYPE type = ReadTypeFromFields( aFields, aReporter );
 
     // If the model has a specified type, it takes priority over the type of its base class.
     if( type == TYPE::NONE && aBaseModel )
@@ -523,19 +535,23 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
     else
         model = Create( type );
 
+    if( aBaseModel )
+        model->SetBaseModel( *aBaseModel );
+
     try
     {
-        if( aBaseModel )
-            model->SetBaseModel( *aBaseModel );
-
         model->ReadDataFields( &aFields, aPins );
     }
     catch( IO_ERROR& err )
     {
         if( aReporter )
-            aReporter->Report( err.What(), RPT_SEVERITY_ERROR );
-        else
-            DisplayErrorMessage( nullptr, err.What() );
+        {
+            aReporter->Report( wxString::Format( _( "Error reading simulation model from "
+                                                    "symbol '%s':\n%s" ),
+                                                 aFields[REFERENCE_FIELD].GetText(),
+                                                 err.Problem() ),
+                               RPT_SEVERITY_ERROR );
+        }
     }
 
     return model;
@@ -557,7 +573,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<T>& aFields,
                                               const std::vector<LIB_PIN*>& aPins,
                                               bool aResolved, REPORTER* aReporter )
 {
-    TYPE type = ReadTypeFromFields( aFields );
+    TYPE type = ReadTypeFromFields( aFields, aReporter );
     std::unique_ptr<SIM_MODEL> model = SIM_MODEL::Create( type );
 
     try
@@ -589,11 +605,15 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<T>& aFields,
         }
         catch( const IO_ERROR& err )
         {
-            // We own the pin syntax, so if we can't parse it then there's an error, full stop.
+            // We own the pin syntax, so if we can't parse it then there's an error.
             if( aReporter )
-                aReporter->Report( err.Problem(), RPT_SEVERITY_ERROR );
-            else
-                THROW_IO_ERROR( err.Problem() );
+            {
+                aReporter->Report( wxString::Format( _( "Error reading simulation model from "
+                                                        "symbol '%s':\n%s" ),
+                                                     aFields[REFERENCE_FIELD].GetText(),
+                                                     err.Problem() ),
+                                   RPT_SEVERITY_ERROR );
+            }
         }
     }
 
@@ -726,21 +746,8 @@ void SIM_MODEL::AddParam( const PARAM::INFO& aInfo )
 
 void SIM_MODEL::SetBaseModel( const SIM_MODEL& aBaseModel )
 {
-    auto describe =
-            []( const SIM_MODEL* aModel )
-            {
-                return fmt::format( "{} ({})",
-                                    aModel->GetDeviceInfo().fieldValue,
-                                    aModel->GetTypeInfo().description );
-            };
-
-    if( GetType() != aBaseModel.GetType() )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Simulation model type must be the same as of its "
-                                             "base class: '%s', but is '%s'" ),
-                                          describe( &aBaseModel ),
-                                          describe( this ) ) );
-    }
+    wxASSERT_MSG( GetType() == aBaseModel.GetType(),
+                  wxS( "Simulation model type must be the same as its base class!" ) );
 
     m_baseModel = &aBaseModel;
 }

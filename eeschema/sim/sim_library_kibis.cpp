@@ -49,7 +49,7 @@ void SIM_LIBRARY_KIBIS::ReadFile( const std::string& aFilePath, REPORTER* aRepor
 
     for( KIBIS_COMPONENT& kcomp : m_kibis.m_components )
     {
-        m_models.push_back( SIM_MODEL::Create( SIM_MODEL::TYPE::KIBIS_DEVICE, pins, nullptr ) );
+        m_models.push_back( SIM_MODEL::Create( SIM_MODEL::TYPE::KIBIS_DEVICE, pins, aReporter ) );
         m_modelNames.emplace_back( kcomp.m_name );
 
         SIM_MODEL_KIBIS* libcomp = dynamic_cast<SIM_MODEL_KIBIS*>( m_models.back().get() );

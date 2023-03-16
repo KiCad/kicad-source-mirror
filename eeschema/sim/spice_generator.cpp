@@ -95,6 +95,10 @@ std::string SPICE_GENERATOR::ModelLine( const SPICE_ITEM& aItem ) const
                                     value ) );
     }
 
+    // Don't send SPICE empty models.
+    if( result.length() == indentLength + 1 /* line ending */ )
+        result.clear();
+
     return result;
 }
 

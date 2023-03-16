@@ -83,20 +83,13 @@ namespace NETLIST_EXPORTER_SPICE_PARSER
 
 std::string NAME_GENERATOR::Generate( const std::string& aProposedName )
 {
-    if( !m_names.count( aProposedName ) )
-        return aProposedName;
+    std::string name = aProposedName;
+    int         ii = 1;
 
-    for( uint64_t i = 1; i < UINT64_MAX; ++i )
-    {
-        std::string name = fmt::format( "{}#{}", aProposedName, i );
+    while( m_names.count( name ) )
+        name = fmt::format( "{}#{}", aProposedName, ii++ );
 
-        if( !m_names.count( name ) )
-            return name;
-    }
-
-    // Should never happen.
-    THROW_IO_ERROR( wxString::Format( _( "Failed to generate a name for '%s': exceeded UINT64_MAX" ),
-                                      aProposedName ) );
+    return name;
 }
 
 
@@ -126,8 +119,7 @@ bool NETLIST_EXPORTER_SPICE::DoWriteNetlist( OUTPUTFORMATTER& aFormatter, unsign
    // Cleanup list to avoid duplicate if the netlist exporter is run more than once.
     m_rawIncludes.clear();
 
-    if( !ReadSchematicAndLibraries( aNetlistOptions, aReporter ) )
-        return false;
+    bool result = ReadSchematicAndLibraries( aNetlistOptions, aReporter );
 
     WriteHead( aFormatter, aNetlistOptions );
 
@@ -142,7 +134,7 @@ bool NETLIST_EXPORTER_SPICE::DoWriteNetlist( OUTPUTFORMATTER& aFormatter, unsign
 
     WriteTail( aFormatter, aNetlistOptions );
 
-    return true;
+    return result;
 }
 
 
@@ -164,6 +156,8 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
     wxString              msg;
     std::set<std::string> refNames; // Set of reference names to check for duplication.
     int                   ncCounter = 1;
+
+    m_libMgr.SetReporter( &aReporter );
 
     ReadDirectives( aNetlistOptions );
 
@@ -240,26 +234,18 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
             wxString modelParams;
             wxString pinMap;
 
-            try
-            {
-                readRefName( sheet, *symbol, spiceItem, refNames );
-                readModel( sheet, *symbol, spiceItem );
-                readPinNumbers( *symbol, spiceItem, pins );
-                readPinNetNames( *symbol, spiceItem, pins, ncCounter );
+            readRefName( sheet, *symbol, spiceItem, refNames );
+            readModel( sheet, *symbol, spiceItem );
+            readPinNumbers( *symbol, spiceItem, pins );
+            readPinNetNames( *symbol, spiceItem, pins, ncCounter );
 
-                // TODO: transmission line handling?
+            // TODO: transmission line handling?
 
-                m_items.push_back( std::move( spiceItem ) );
-            }
-            catch( const IO_ERROR& e )
-            {
-                msg.Printf( _( "Error reading simulation model from symbol '%s':\n%s" ),
-                            symbol->GetRef( &sheet ),
-                            e.Problem() );
-                aReporter.Report( msg, RPT_SEVERITY_ERROR );
-            }
+            m_items.push_back( std::move( spiceItem ) );
         }
     }
+
+    m_libMgr.SetReporter( nullptr );
 
     return !aReporter.HasMessage();
 }

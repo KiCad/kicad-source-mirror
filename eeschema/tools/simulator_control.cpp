@@ -29,6 +29,7 @@
 #include <kiway.h>
 #include <confirm.h>
 #include <wildcards_and_files_ext.h>
+#include <widgets/wx_html_report_box.h>
 #include <project/project_file.h>
 #include <sch_edit_frame.h>
 #include <sim/simulator_frame.h>
@@ -350,44 +351,73 @@ public:
         wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL ) );
     }
 
-    NETLIST_VIEW_DIALOG( wxWindow* parent, const wxString& source) :
+    NETLIST_VIEW_DIALOG( wxWindow* parent ) :
             DIALOG_SHIM( parent, wxID_ANY, _( "SPICE Netlist" ), wxDefaultPosition,
-                         wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
+                         wxSize( 800, 800 ), wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
+            m_textCtrl( nullptr ),
+            m_reporter( nullptr )
     {
-        wxStyledTextCtrl* textCtrl = new wxStyledTextCtrl( this, wxID_ANY );
-        textCtrl->SetMinSize( wxSize( 600, 400 ) );
+        m_splitter = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                           wxSP_LIVE_UPDATE | wxSP_NOBORDER | wxSP_3DSASH );
 
-        textCtrl->SetMarginWidth( MARGIN_LINE_NUMBERS, 50 );
-        textCtrl->StyleSetForeground( wxSTC_STYLE_LINENUMBER, wxColour( 75, 75, 75 ) );
-        textCtrl->StyleSetBackground( wxSTC_STYLE_LINENUMBER, wxColour( 220, 220, 220 ) );
-        textCtrl->SetMarginType( MARGIN_LINE_NUMBERS, wxSTC_MARGIN_NUMBER );
+        //Avoid the splitter window being assigned as the Parent to additional windows
+        m_splitter->SetExtraStyle( wxWS_EX_TRANSIENT );
+
+        m_textCtrl = new wxStyledTextCtrl( m_splitter, wxID_ANY );
+
+        m_textCtrl->SetMarginWidth( MARGIN_LINE_NUMBERS, 50 );
+        m_textCtrl->StyleSetForeground( wxSTC_STYLE_LINENUMBER, wxColour( 75, 75, 75 ) );
+        m_textCtrl->StyleSetBackground( wxSTC_STYLE_LINENUMBER, wxColour( 220, 220, 220 ) );
+        m_textCtrl->SetMarginType( MARGIN_LINE_NUMBERS, wxSTC_MARGIN_NUMBER );
 
         wxFont fixedFont = KIUI::GetMonospacedUIFont();
 
         for( int i = 0; i < wxSTC_STYLE_MAX; ++i )
-            textCtrl->StyleSetFont( i, fixedFont );
+            m_textCtrl->StyleSetFont( i, fixedFont );
 
-        textCtrl->StyleClearAll();  // Addresses a bug in wx3.0 where styles are not correctly set
+        m_textCtrl->StyleClearAll();  // Addresses a bug in wx3.0 where styles are not correctly set
 
-        textCtrl->SetWrapMode( wxSTC_WRAP_WORD );
+        m_textCtrl->SetWrapMode( wxSTC_WRAP_WORD );
+        m_textCtrl->SetLexer( wxSTC_LEX_SPICE );
+        m_textCtrl->SetMinSize( wxSize( 40, 40 ) );
+        m_textCtrl->SetSize( wxSize( 40, 40 ) );
 
-        textCtrl->SetText( source );
+        m_reporter = new WX_HTML_REPORT_BOX( m_splitter, wxID_ANY );
+        m_reporter->SetMinSize( wxSize( 40, 40 ) );
+        m_reporter->SetSize( wxSize( 40, 40 ) );
 
-        textCtrl->SetLexer( wxSTC_LEX_SPICE );
-
-        textCtrl->SetEditable( false );
+        m_splitter->SetMinimumPaneSize( 40 );
+        m_splitter->SetSashPosition( 760 );
+        m_splitter->SetSashGravity( 0.9 );
+        m_splitter->SplitHorizontally( m_textCtrl, m_reporter );
 
         wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
-        sizer->Add( textCtrl, 1, wxEXPAND | wxALL, 5 );
+        sizer->Add( m_splitter, 1, wxEXPAND | wxALL, 5 );
         SetSizer( sizer );
+        Layout();
 
         Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( NETLIST_VIEW_DIALOG::onClose ),
                  nullptr, this );
 
-        m_scintillaTricks = std::make_unique<SCINTILLA_TRICKS>( textCtrl, wxT( "{}" ), false );
+        m_scintillaTricks = std::make_unique<SCINTILLA_TRICKS>( m_textCtrl, wxT( "{}" ), false );
 
         finishDialogSettings();
     }
+
+    void SetNetlist( const wxString& aSource )
+    {
+        m_textCtrl->SetText( aSource );
+        m_textCtrl->SetEditable( false );
+
+        m_reporter->Flush();
+    }
+
+    REPORTER* GetReporter() { return m_reporter; }
+
+private:
+    wxSplitterWindow*                 m_splitter;
+    wxStyledTextCtrl*                 m_textCtrl;
+    WX_HTML_REPORT_BOX*               m_reporter;
 
     std::unique_ptr<SCINTILLA_TRICKS> m_scintillaTricks;
 };
@@ -411,14 +441,13 @@ int SIMULATOR_CONTROL::ShowNetlist( const TOOL_EVENT& aEvent )
     if( m_schematicFrame == nullptr || m_simulator == nullptr )
         return -1;
 
-    wxString           errors;
-    WX_STRING_REPORTER reporter( &errors );
-    STRING_FORMATTER   formatter;
+    STRING_FORMATTER    formatter;
+    NETLIST_VIEW_DIALOG dlg( m_simulatorFrame );
 
     m_circuitModel->SetSimOptions( m_simulatorFrame->GetCurrentOptions() );
-    m_circuitModel->GetNetlist( &formatter, reporter );
+    m_circuitModel->GetNetlist( &formatter, *dlg.GetReporter() );
 
-    NETLIST_VIEW_DIALOG dlg( m_simulatorFrame, errors.IsEmpty() ? wxString( formatter.GetString() ) : errors );
+    dlg.SetNetlist( wxString( formatter.GetString() ) );
     dlg.ShowModal();
 
     return 0;
