@@ -32,6 +32,8 @@
 #include <layer_ids.h> // PCB_LAYER_ID
 #include <plugins/common/plugin_common_layer_mapping.h>
 
+#include <memory>
+
 
 class CADSTAR_PCB_ARCHIVE_PLUGIN : public PLUGIN, public LAYER_REMAPPABLE_PLUGIN
 {
