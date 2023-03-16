@@ -32,13 +32,14 @@
 #include <plotters/plotter.h>   // PLOT_DASH_TYPE
 #include <pin_type.h>           // ELECTRICAL_PINTYPE
 
+#include <memory>
 #include <map>
 
 #include <wx/filename.h>
 #include <wx/string.h>
 
+struct CADSTAR_PART_ENTRY;
 class BUS_ALIAS;
-class CADSTAR_PART_ENTRY;
 class EDA_TEXT;
 class TEXT_SPIN_STYLE;
 class LIB_FIELD;

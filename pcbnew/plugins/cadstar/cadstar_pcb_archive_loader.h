@@ -30,6 +30,8 @@
 #include <cadstar_pcb_archive_plugin.h>
 #include <board.h>
 #include <footprint.h>
+
+#include <memory>
 #include <set>
 
 class BOARD;

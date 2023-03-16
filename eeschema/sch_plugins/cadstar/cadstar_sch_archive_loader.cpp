@@ -144,7 +144,7 @@ CADSTAR_SCH_ARCHIVE_LOADER::loadLibPart( const CADSTAR_PART_ENTRY& aPart )
         // Update the pin numbers to match those defined in the Cadstar part
         for( auto& [storedPinNum, termID] : m_symDefTerminalsMap[symbolID] )
         {
-            wxCHECK( termID > 0 && sym.m_Pins.size() >= termID, nullptr );
+            wxCHECK( termID > 0 && sym.m_Pins.size() >= size_t( termID ), nullptr );
             LIB_PIN* pin = kiSymDef->GetPin( storedPinNum );
             size_t   termIdx = size_t( termID ) - 1;
 
