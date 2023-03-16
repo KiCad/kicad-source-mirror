@@ -54,7 +54,7 @@ namespace SIM_MODEL_SERIALIZER_GRAMMAR
                                      opt<sep>,
                                      tao::pegtl::eof> {};
 
-    struct param : plus<alnum> {};
+    struct param : identifier {};
 
     struct unquotedString : plus<not_at<sep>, any> {};
     struct quotedStringContent : star<not_at<one<'"'>>, any> {}; // TODO: Allow escaping '"'.
