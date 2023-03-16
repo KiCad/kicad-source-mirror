@@ -21,6 +21,7 @@
 #include <iostream>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <algorithm>
+#include <optional>
 
 #include <pegtl/contrib/analyze.hpp>
 #include <pegtl/contrib/trace.hpp>
@@ -28,6 +29,19 @@
 // Modules under test:
 #include <common/plugins/cadstar/cadstar_parts_lib_grammar.h>
 #include <common/plugins/cadstar/cadstar_parts_lib_parser.h>
+
+
+//Todo: move somewhere else?
+template <class T>
+std::ostream& operator<<( std::ostream& aOs, const std::optional<T>& aOptional )
+{
+    if( aOptional.has_value() )
+        aOs << aOptional.value();
+    else
+        aOs << "nullopt";
+
+    return aOs;
+}
 
 
 BOOST_AUTO_TEST_SUITE( CadstarPartParser );
