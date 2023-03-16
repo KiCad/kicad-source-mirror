@@ -149,9 +149,9 @@ const VECTOR2I SEG::NearestPoint( const SEG& aSeg ) const
 
 bool SEG::intersects( const SEG& aSeg, bool aIgnoreEndpoints, bool aLines, VECTOR2I* aPt ) const
 {
-    const VECTOR2I  e( B - A );
-    const VECTOR2I  f( aSeg.B - aSeg.A );
-    const VECTOR2I  ac( aSeg.A - A );
+    const VECTOR2<ecoord> e = VECTOR2<ecoord>( B ) - A;
+    const VECTOR2<ecoord> f = VECTOR2<ecoord>( aSeg.B ) - aSeg.A;
+    const VECTOR2<ecoord> ac = VECTOR2<ecoord>( aSeg.A ) - A;
 
     ecoord d = f.Cross( e );
     ecoord p = f.Cross( ac );
@@ -174,8 +174,8 @@ bool SEG::intersects( const SEG& aSeg, bool aIgnoreEndpoints, bool aLines, VECTO
         VECTOR2<ecoord> result( aSeg.A.x + rescale( q, (ecoord) f.x, d ),
                                 aSeg.A.y + rescale( q, (ecoord) f.y, d ) );
 
-        if( abs( result.x ) >= std::numeric_limits<VECTOR2I::coord_type>::max()
-            || abs( result.y ) >= std::numeric_limits<VECTOR2I::coord_type>::max() )
+        if( abs( result.x ) > std::numeric_limits<VECTOR2I::coord_type>::max()
+            || abs( result.y ) > std::numeric_limits<VECTOR2I::coord_type>::max() )
         {
             return false;
         }
