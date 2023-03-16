@@ -399,6 +399,8 @@ protected:
 
     void doReCreateMenuBar() override;
 
+    void onIdle( wxIdleEvent& aEvent );
+
 private:
     // Set up the tool framework
     void setupTools();
@@ -564,6 +566,7 @@ private:
 
     ///< Flag if the symbol being edited was loaded directly from a schematic.
     bool        m_isSymbolFromSchematic;
+    bool        m_initialRaise;
     KIID        m_schematicSymbolUUID;
 
      ///< RefDes of the symbol (only valid if symbol was loaded from schematic)

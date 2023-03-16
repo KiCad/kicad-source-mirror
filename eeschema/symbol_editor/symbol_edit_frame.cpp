@@ -78,8 +78,6 @@ bool SYMBOL_EDIT_FRAME::m_showDeMorgan = false;
 
 
 BEGIN_EVENT_TABLE( SYMBOL_EDIT_FRAME, SCH_BASE_FRAME )
-    EVT_SIZE( SYMBOL_EDIT_FRAME::OnSize )
-
     EVT_COMBOBOX( ID_LIBEDIT_SELECT_UNIT_NUMBER, SYMBOL_EDIT_FRAME::OnSelectUnit )
 
     // menubar commands
@@ -100,8 +98,9 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         SCH_BASE_FRAME( aKiway, aParent, FRAME_SCH_SYMBOL_EDITOR, _( "Library Editor" ),
                         wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE,
                         LIB_EDIT_FRAME_NAME ),
-        m_unitSelectBox( nullptr ),
-        m_isSymbolFromSchematic( false )
+    m_unitSelectBox( nullptr ),
+    m_isSymbolFromSchematic( false ),
+    m_initialRaise( false )
 {
     SetShowDeMorgan( false );
     m_SyncPinEdit = false;
@@ -221,9 +220,6 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         treePane.MinSize( 250, -1 );
     }
 
-    Raise();
-    Show( true );
-
     SyncView();
     GetCanvas()->GetView()->UseDrawPriority( true );
     GetCanvas()->GetGAL()->SetAxesEnabled( true );
@@ -251,11 +247,14 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     Bind( wxEVT_CHAR, &TOOL_DISPATCHER::DispatchWxEvent, m_toolDispatcher );
     Bind( wxEVT_CHAR_HOOK, &TOOL_DISPATCHER::DispatchWxEvent, m_toolDispatcher );
 
-    // Ensure the window is on top
-    Raise();
-
     if( loadingCancelled )
         ShowInfoBarWarning( _( "Symbol library loading was cancelled by user." ) );
+
+    // This is an ugly hack to ensure that the symbol editor window gets raised to the top when
+    // launched from the schematic editor edit symbol in symbol editor tool.
+    Bind( wxEVT_IDLE, &SYMBOL_EDIT_FRAME::onIdle, this );
+
+    Show( true );
 }
 
 
@@ -282,6 +281,18 @@ SYMBOL_EDIT_FRAME::~SYMBOL_EDIT_FRAME()
     Pgm().GetSettingsManager().Save( libedit );
 
     delete m_libMgr;
+}
+
+
+void SYMBOL_EDIT_FRAME::onIdle( wxIdleEvent& aEvent )
+{
+    if( !m_initialRaise )
+    {
+        Unbind( wxEVT_IDLE, &SYMBOL_EDIT_FRAME::onIdle, this );
+        Raise();
+        GetCanvas()->SetFocus();
+        m_initialRaise = true;
+    }
 }
 
 
