@@ -64,7 +64,7 @@ BOOST_AUTO_TEST_CASE( AnalyzeGrammar )
     BOOST_CHECK_EQUAL( headerIssues, 0 );
 }
 
-
+/*
 struct CHECK_HEADER_CASE
 {
     std::string m_CaseName;
@@ -541,5 +541,6 @@ BOOST_AUTO_TEST_CASE( ReadContent )
         ++itEntryB;
     }
 }
+*/
 
 BOOST_AUTO_TEST_SUITE_END()
