@@ -341,23 +341,26 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupColumnProperties()
         attr->SetReadOnly( false );
 
         // Set some column types to specific editors
-        if( m_dataModel->GetColFieldName( col ) == _( "Reference" ) )
+        if( m_dataModel->GetColFieldName( col )
+            == TEMPLATE_FIELDNAME::GetDefaultFieldName( REFERENCE_FIELD ) )
         {
             attr->SetReadOnly();
             m_grid->SetColAttr( col, attr );
         }
-        else if( m_dataModel->GetColFieldName( col ) == _( "Footprint" ) )
+        else if( m_dataModel->GetColFieldName( col )
+                 == TEMPLATE_FIELDNAME::GetDefaultFieldName( FOOTPRINT_FIELD ) )
         {
             attr->SetEditor( new GRID_CELL_FPID_EDITOR( this, wxEmptyString ) );
             m_grid->SetColAttr( col, attr );
         }
-        else if( m_dataModel->GetColFieldName( col ) == _( "Datasheet" ) )
+        else if( m_dataModel->GetColFieldName( col )
+                 == TEMPLATE_FIELDNAME::GetDefaultFieldName( DATASHEET_FIELD ) )
         {
             // set datasheet column viewer button
             attr->SetEditor( new GRID_CELL_URL_EDITOR( this, Prj().SchSearchS() ) );
             m_grid->SetColAttr( col, attr );
         }
-        else if( m_dataModel->GetColFieldName( col ) == _( "Quantity" ) )
+        else if( m_dataModel->GetColFieldName( col ) == wxS( "Quantity" ) )
         {
             attr->SetReadOnly();
             m_grid->SetColAttr( col, attr );
@@ -541,6 +544,34 @@ void DIALOG_SYMBOL_FIELDS_TABLE::AddField( const wxString& aFieldName,
 
 void DIALOG_SYMBOL_FIELDS_TABLE::LoadFieldNames()
 {
+    // Add mandatory fields first
+    for( int i = 0; i < MANDATORY_FIELDS; ++i )
+    {
+        bool show = false;
+        bool groupBy = false;
+
+        switch( i )
+        {
+        case REFERENCE_FIELD:
+        case VALUE_FIELD:
+        case FOOTPRINT_FIELD:
+            show = true;
+            groupBy = true;
+            break;
+        case DATASHEET_FIELD:
+            show = true;
+            groupBy = false;
+            break;
+        }
+
+        AddField( TEMPLATE_FIELDNAME::GetDefaultFieldName( i ),
+                  TEMPLATE_FIELDNAME::GetDefaultFieldName( i, true ), show, groupBy );
+    }
+
+    // Generated field that isn't in any symbol
+    AddField( wxS( "Quantity" ), _( "Qty" ), true, false );
+
+    // User fields second
     std::set<wxString> userFieldNames;
 
     for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
@@ -550,13 +581,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::LoadFieldNames()
         for( int j = MANDATORY_FIELDS; j < symbol->GetFieldCount(); ++j )
             userFieldNames.insert( symbol->GetFields()[j].GetName() );
     }
-
-
-    AddField( _( "Reference" ), wxT( "Reference" ), true, true  );
-    AddField( _( "Value" ),     wxT( "Value" ),     true, true  );
-    AddField( _( "Footprint" ), wxT( "Footprint" ), true, true  );
-    AddField( _( "Datasheet" ), wxT( "Datasheet" ), true, false );
-    AddField( _( "Quantity" ),  wxT( "Qty" ),       true, false );
 
     for( const wxString& fieldName : userFieldNames )
         AddField( fieldName, fieldName, true, false );
@@ -568,8 +592,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::LoadFieldNames()
         if( userFieldNames.count( templateFieldname.m_Name ) == 0 )
             AddField( templateFieldname.m_Name, templateFieldname.m_Name, false, false );
     }
-
-    m_dataModel->SetFieldsOrder( m_schSettings.m_BomSettings.column_order );
 }
 
 
@@ -1505,9 +1527,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged( wxCommandEvent& aEvent )
 void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
 {
     // Set a good default sort
-    int fieldNameCol = m_dataModel->GetFieldNameCol( _( "Reference" ) );
-    m_dataModel->SetSorting( fieldNameCol, false );
-    m_grid->SetSortingColumn( fieldNameCol, false );
+    int refCol = m_dataModel->GetFieldNameCol(
+            TEMPLATE_FIELDNAME::GetDefaultFieldName( REFERENCE_FIELD ) );
+    m_grid->SetSortingColumn( refCol, false );
 
     for( int i = 0; i < m_fieldsCtrl->GetItemCount(); i++ )
     {

@@ -111,17 +111,8 @@ public:
         return m_rows[aRow].m_Refs;
     }
 
-    bool ColIsReference( int aCol )
-    {
-        wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), false );
-        return m_cols[aCol].m_fieldName == _( "Reference" );
-    }
-
-    bool ColIsQuantity( int aCol )
-    {
-        wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), false );
-        return m_cols[aCol].m_fieldName == _( "Quantity" );
-    }
+    bool ColIsReference( int aCol );
+    bool ColIsQuantity( int aCol );
 
     void SetSorting( int aCol, bool ascending )
     {

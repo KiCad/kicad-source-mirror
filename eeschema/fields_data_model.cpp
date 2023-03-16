@@ -205,6 +205,19 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxString
 }
 
 
+bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsReference( int aCol )
+{
+    wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), false );
+    return m_cols[aCol].m_fieldName == TEMPLATE_FIELDNAME::GetDefaultFieldName( REFERENCE_FIELD );
+}
+
+bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsQuantity( int aCol )
+{
+    wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), false );
+    return m_cols[aCol].m_fieldName == wxS( "Quantity" );
+}
+
+
 bool FIELDS_EDITOR_GRID_DATA_MODEL::cmp( const DATA_MODEL_ROW&          lhGroup,
                                          const DATA_MODEL_ROW&          rhGroup,
                                          FIELDS_EDITOR_GRID_DATA_MODEL* dataModel, int sortCol,
@@ -286,7 +299,7 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRef,
                                                 const SCH_REFERENCE& rhRef )
 
 {
-    int  refCol = GetFieldNameCol( _( "Reference" ) );
+    int  refCol = GetFieldNameCol( TEMPLATE_FIELDNAME::GetDefaultFieldName( REFERENCE_FIELD ) );
     bool matchFound = false;
 
     // First check the reference column.  This can be done directly out of the
