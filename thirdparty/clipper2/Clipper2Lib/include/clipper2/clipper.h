@@ -197,7 +197,7 @@ namespace Clipper2Lib {
     return result;
   }
 
-  inline Paths64 RectClip(const Rect64& rect, 
+  inline Paths64 ClipRect(const Rect64& rect,
     const Paths64& paths, bool convex_only = false)
   {
     if (rect.IsEmpty() || paths.empty()) return Paths64();
@@ -205,7 +205,7 @@ namespace Clipper2Lib {
     return rc.Execute(paths, convex_only);
   }
 
-  inline Paths64 RectClip(const Rect64& rect, 
+  inline Paths64 ClipRect(const Rect64& rect,
     const Path64& path, bool convex_only = false)
   {
     if (rect.IsEmpty() || path.empty()) return Paths64();
@@ -213,7 +213,7 @@ namespace Clipper2Lib {
     return rc.Execute(Paths64{ path }, convex_only);
   }
 
-  inline PathsD RectClip(const RectD& rect, 
+  inline PathsD ClipRect(const RectD& rect,
     const PathsD& paths, bool convex_only = false, int precision = 2)
   {
     if (rect.IsEmpty() || paths.empty()) return PathsD();
@@ -229,30 +229,30 @@ namespace Clipper2Lib {
       rc.Execute(pp, convex_only), 1 / scale, error_code);
   }
 
-  inline PathsD RectClip(const RectD& rect, 
+  inline PathsD ClipRect(const RectD& rect,
     const PathD& path, bool convex_only = false, int precision = 2)
   {
-    return RectClip(rect, PathsD{ path }, convex_only, precision);
+    return ClipRect(rect, PathsD{ path }, convex_only, precision);
   }
 
-  inline Paths64 RectClipLines(const Rect64& rect, const Paths64& lines)
+  inline Paths64 ClipRectLines(const Rect64& rect, const Paths64& lines)
   {
     if (rect.IsEmpty() || lines.empty()) return Paths64();
     class RectClipLines rcl(rect);
     return rcl.Execute(lines);
   }
 
-  inline Paths64 RectClipLines(const Rect64& rect, const Path64& line)
+  inline Paths64 ClipRectLines(const Rect64& rect, const Path64& line)
   {
-    return RectClipLines(rect, Paths64{ line });
+    return ClipRectLines(rect, Paths64{ line });
   }
 
-  inline PathsD RectClipLines(const RectD& rect, const PathD& line, int precision = 2)
+  inline PathsD ClipRectLines(const RectD& rect, const PathD& line, int precision = 2)
   {
-    return RectClip(rect, PathsD{ line }, precision);
+    return ClipRect(rect, PathsD{ line }, precision);
   }
 
-  inline PathsD RectClipLines(const RectD& rect, const PathsD& lines, int precision = 2)
+  inline PathsD ClipRectLines(const RectD& rect, const PathsD& lines, int precision = 2)
   {
     if (rect.IsEmpty() || lines.empty()) return PathsD();
     int error_code = 0;
