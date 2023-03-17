@@ -314,17 +314,8 @@ bool zonesNeedUpdate( const FP_ZONE* a, const FP_ZONE* b )
 
     TEST( a->Outline()->TotalVertices(), b->Outline()->TotalVertices() );
 
-    // The footprint's zone will be in board position, so we must translate & rotate the library
-    // footprint's zone to match.
-    FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( a->GetParentFootprint() );
-    const SHAPE_POLY_SET& aPoly = *a->Outline();
-    SHAPE_POLY_SET        bPoly = b->Outline()->CloneDropTriangulation();
-
-    bPoly.Rotate( parentFootprint->GetOrientation() );
-    bPoly.Move( parentFootprint->GetPosition() );
-
     for( int ii = 0; ii < a->Outline()->TotalVertices(); ++ii )
-        TEST( aPoly.CVertex( ii ), bPoly.CVertex( ii ) );
+        TEST( a->Outline()->CVertex( ii ), b->Outline()->CVertex( ii ) );
 
     return false;
 }
@@ -424,24 +415,32 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint )
                       return item->Type() == PCB_FP_SHAPE_T;
                   } );
 
-    std::set<PAD*, FOOTPRINT::cmp_pads> aPads( Pads().begin(), Pads().end() );
-    std::set<PAD*, FOOTPRINT::cmp_pads> bPads( aLibFootprint->Pads().begin(), aLibFootprint->Pads().end() );
-
-    std::set<FP_ZONE*, FOOTPRINT::cmp_zones> aZones( Zones().begin(), Zones().end() );
-    std::set<FP_ZONE*, FOOTPRINT::cmp_zones> bZones( aLibFootprint->Zones().begin(), aLibFootprint->Zones().end() );
-
-    TEST( aPads.size(), bPads.size() );
-    TEST( aZones.size(), bZones.size() );
     TEST( aShapes.size(), bShapes.size() );
-
-    for( auto aIt = aPads.begin(), bIt = bPads.begin(); aIt != aPads.end(); aIt++, bIt++ )
-        TEST_PADS( *aIt, *bIt );
 
     for( auto aIt = aShapes.begin(), bIt = bShapes.begin(); aIt != aShapes.end(); aIt++, bIt++ )
     {
         if( ( *aIt )->Type() == PCB_FP_SHAPE_T )
             TEST_SHAPES( static_cast<FP_SHAPE*>( *aIt ), static_cast<FP_SHAPE*>( *bIt ) );
     }
+
+    std::set<PAD*, FOOTPRINT::cmp_pads> aPads( Pads().begin(), Pads().end() );
+    std::set<PAD*, FOOTPRINT::cmp_pads> bPads( aLibFootprint->Pads().begin(), aLibFootprint->Pads().end() );
+
+    TEST( aPads.size(), bPads.size() );
+
+    for( auto aIt = aPads.begin(), bIt = bPads.begin(); aIt != aPads.end(); aIt++, bIt++ )
+        TEST_PADS( *aIt, *bIt );
+
+    // Rotate/position a copy of libFootprint so that zones sort the same
+    std::unique_ptr<FOOTPRINT> libCopy( static_cast<FOOTPRINT*>( aLibFootprint->Clone() ) );
+
+    libCopy->SetOrientation( GetOrientation() );
+    libCopy->Move( GetPosition() );
+
+    std::set<FP_ZONE*, FOOTPRINT::cmp_zones> aZones( Zones().begin(), Zones().end() );
+    std::set<FP_ZONE*, FOOTPRINT::cmp_zones> bZones( libCopy->Zones().begin(), libCopy->Zones().end() );
+
+    TEST( aZones.size(), bZones.size() );
 
     for( auto aIt = aZones.begin(), bIt = bZones.begin(); aIt != aZones.end(); aIt++, bIt++ )
         TEST_ZONES( *aIt, *bIt );
