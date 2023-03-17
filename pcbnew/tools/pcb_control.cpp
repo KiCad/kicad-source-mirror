@@ -944,6 +944,21 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
                     }
                 }
 
+                clipBoard->Visit(
+                        [&]( EDA_ITEM* item, void* testData )
+                        {
+                            // Anything still on the clipboard didn't get copied and needs to be
+                            // removed from the pasted groups.
+                            BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
+                            PCB_GROUP*  parentGroup = boardItem->GetParentGroup();
+
+                            if( parentGroup )
+                                parentGroup->RemoveItem( boardItem );
+
+                            return INSPECT_RESULT::CONTINUE;
+                        },
+                        nullptr, GENERAL_COLLECTOR::AllBoardItems );
+
                 delete clipBoard;
 
                 pruneItemLayers( pastedItems );
