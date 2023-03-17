@@ -55,7 +55,6 @@ std::vector<std::string> SPICE_GENERATOR_NGSPICE::CurrentNames( const SPICE_ITEM
             return SPICE_GENERATOR::CurrentNames( aItem );
 
         default:
-            wxFAIL_MSG( "Unhandled model device type in SIM_MODEL_NGSPICE" );
             return {};
     }
 }

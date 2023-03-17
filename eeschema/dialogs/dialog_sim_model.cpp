@@ -136,6 +136,9 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
     wxString       pinMap;
     bool           storeInValue = false;
 
+    wxString           msg;
+    WX_STRING_REPORTER reporter( &msg );
+
     // Infer RLC and VI models if they aren't specified
     if( SIM_MODEL::InferSimModel( m_symbol, &m_fields, false, SIM_VALUE_GRAMMAR::NOTATION::SI,
                                   &deviceType, &modelType, &modelParams, &pinMap ) )
@@ -180,7 +183,7 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
         if( !loadLibrary( libraryFilename ) )
         {
             m_libraryPathText->ChangeValue( libraryFilename );
-            m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields );
+            m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields, &reporter );
             m_libraryModelsMgr.CreateModel( nullptr, sourcePins, m_fields );
 
             m_modelNameChoice->Append( _( "<unknown>" ) );
@@ -256,25 +259,32 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
     {
         // The model is sourced from the instance.
         m_useInstanceModelRadioButton->SetValue( true );
-        m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields );
+
+        msg.clear();
+        m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields, &reporter );
+
+        if( reporter.HasMessage() )
+            DisplayErrorMessage( this, msg );
     }
+
+    m_builtinModelsMgr.SetReporter( &reporter );
 
     for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
     {
-        wxString           msg;
-        WX_STRING_REPORTER reporter( &msg );
-
-        m_builtinModelsMgr.SetReporter( &reporter );
-
         if( m_useInstanceModelRadioButton->GetValue() && type == m_curModelType )
-            m_builtinModelsMgr.CreateModel( m_fields, sourcePins, false );
-        else
-            m_builtinModelsMgr.CreateModel( type, sourcePins );
-
-        if( reporter.HasMessage() )
         {
-            DisplayErrorMessage( this, _( "Failed to read simulation model from fields." )
-                                       + wxT( "\n\n" ) + msg );
+            msg.clear();
+            m_builtinModelsMgr.CreateModel( m_fields, sourcePins, false );
+
+            if( reporter.HasMessage() )
+            {
+                DisplayErrorMessage( this, _( "Failed to read simulation model from fields." )
+                                           + wxT( "\n\n" ) + msg );
+            }
+        }
+        else
+        {
+            m_builtinModelsMgr.CreateModel( type, sourcePins );
         }
 
         SIM_MODEL::DEVICE_T deviceTypeT = SIM_MODEL::TypeInfo( type ).deviceType;
@@ -698,7 +708,7 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::loadLibrary( const wxString& aLibraryP
 
     std::string modelName = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD );
 
-    for( auto& [baseModelName, baseModel] : library()->GetModels() )
+    for( const auto& [baseModelName, baseModel] : library()->GetModels() )
     {
         if( baseModelName == modelName )
             m_libraryModelsMgr.CreateModel( &baseModel, sourcePins, m_fields );
@@ -714,7 +724,7 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::loadLibrary( const wxString& aLibraryP
 
     wxArrayString modelNames;
 
-    for( auto& [name, model] : library()->GetModels() )
+    for( const auto& [name, model] : library()->GetModels() )
         modelNames.Add( name );
 
     m_modelNameChoice->Clear();
@@ -1407,21 +1417,15 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::adjustParamGridColumns( int aWidth, bo
 
         for( size_t ii = 0; ii < grid->GetColumnCount(); ii++ )
         {
-            if( ii == 0 )
+            if( ii == PARAM_COLUMN::DESCRIPTION )
                 colWidths.push_back( grid->GetState()->GetColumnWidth( ii ) + margin + indent );
-            else if( ii == 1 )
-                colWidths.push_back( grid->GetState()->GetColumnWidth( ii ) + margin );
+            else if( ii == PARAM_COLUMN::VALUE )
+                colWidths.push_back( std::max( 72, grid->GetState()->GetColumnWidth( ii ) ) + margin );
             else
-                colWidths.push_back( 50 );
+                colWidths.push_back( 60 + margin );
 
             aWidth -= colWidths[ ii ];
         }
-
-        // Account for scroll bars
-        aWidth -= ( grid->GetSize().x - grid->GetClientSize().x );
-
-        if( aWidth > 0 )
-            colWidths[ PARAM_COLUMN::VALUE ] += aWidth;
 
         for( size_t ii = 0; ii < grid->GetColumnCount(); ii++ )
             grid->SetColumnProportion( ii, colWidths[ ii ] );
