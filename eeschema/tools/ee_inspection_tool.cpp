@@ -148,14 +148,6 @@ int EE_INSPECTION_TOOL::NextMarker( const TOOL_EVENT& aEvent )
 
 int EE_INSPECTION_TOOL::CrossProbe( const TOOL_EVENT& aEvent )
 {
-    SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
-
-    wxCHECK( frame, 0 );
-
-    DIALOG_ERC* dlg = frame->GetErcDialog();
-
-    wxCHECK( dlg, 0 );
-
     EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
 
     wxCHECK( selectionTool, 0 );
@@ -164,10 +156,19 @@ int EE_INSPECTION_TOOL::CrossProbe( const TOOL_EVENT& aEvent )
 
     if( selection.GetSize() == 1 && selection.Front()->Type() == SCH_MARKER_T )
     {
-        if( !dlg->IsShown() )
-            dlg->Show( true );
+        SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
+        DIALOG_ERC* dlg = frame ? frame->GetErcDialog() : nullptr;
 
-        dlg->SelectMarker( static_cast<SCH_MARKER*>( selection.Front() ) );
+        if( dlg )
+        {
+            if( !dlg->IsShown() )
+            {
+                dlg->Show( true );
+                dlg->Raise();
+            }
+
+            dlg->SelectMarker( static_cast<SCH_MARKER*>( selection.Front() ) );
+        }
     }
 
     // Show the item info on a left click on this item
