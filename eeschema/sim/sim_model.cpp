@@ -519,28 +519,34 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
                                               const std::vector<T>& aFields,
                                               REPORTER* aReporter )
 {
-    TYPE type = ReadTypeFromFields( aFields, aReporter );
+    std::unique_ptr<SIM_MODEL> model;
+    TYPE                       type;
 
-    // If the model has a specified type, it takes priority over the type of its base class.
-    if( type == TYPE::NONE && aBaseModel )
+    if( aBaseModel )
+    {
         type = aBaseModel->GetType();
 
-    std::unique_ptr<SIM_MODEL> model;
+        // No REPORTER here; we're just checking to see if we have an override
+        if( ReadTypeFromFields( aFields, nullptr ) != TYPE::NONE )
+            type = ReadTypeFromFields( aFields, nullptr );
 
-    // A null base model means the model wasn't found in the library, so create a fallback
+        if( dynamic_cast<const SIM_MODEL_SPICE_FALLBACK*>( aBaseModel ) )
+            model = std::make_unique<SIM_MODEL_SPICE_FALLBACK>( type );
+        else if( dynamic_cast< const SIM_MODEL_RAW_SPICE*>( aBaseModel ) )
+            model = std::make_unique<SIM_MODEL_RAW_SPICE>();
+        else
+            model = Create( type );
 
-    if( !aBaseModel || dynamic_cast<const SIM_MODEL_SPICE_FALLBACK*>( aBaseModel ) )
+        model->SetBaseModel( *aBaseModel );
+    }
+    else  // No base model means the model wasn't found in the library, so create a fallback
+    {
+        type = ReadTypeFromFields( aFields, aReporter );
         model = std::make_unique<SIM_MODEL_SPICE_FALLBACK>( type );
-    else if( dynamic_cast< const SIM_MODEL_RAW_SPICE*>( aBaseModel ) )
-        model = std::make_unique<SIM_MODEL_RAW_SPICE>();
-    else
-        model = Create( type );
+    }
 
     try
     {
-        if( aBaseModel )
-            model->SetBaseModel( *aBaseModel );
-
         model->ReadDataFields( &aFields, aPins );
     }
     catch( IO_ERROR& err )
