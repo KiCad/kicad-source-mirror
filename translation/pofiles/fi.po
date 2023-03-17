@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:51-0800\n"
 "PO-Revision-Date: 2023-03-19 09:38+0000\n"
-"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
 "Language: fi\n"
@@ -13621,7 +13621,7 @@ msgstr "Ympyrä, säde %s"
 #: eeschema/lib_shape.cpp:487 eeschema/sch_shape.cpp:464
 #, c-format
 msgid "Polyline, %d points"
-msgstr "Polyline, %d pistettä"
+msgstr "Murtoviiva, %d pistettä"
 
 #: eeschema/lib_shape.cpp:491 eeschema/sch_shape.cpp:468
 #, c-format
