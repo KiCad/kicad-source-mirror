@@ -74,50 +74,55 @@ public:
 // In "Report" mode (aReporter != nullptr) all properties are checked and reported on.
 // In "DRC" mode (aReporter == nulltpr) properties are only checked until a difference is found.
 //
-#define TEST( a, b, msg )                               \
-        {                                               \
-            if( a != b )                                \
-            {                                           \
-                diff = true;                            \
-                                                        \
-                if( aReporter )                         \
-                    aReporter->Report( msg );           \
-            }                                           \
-                                                        \
-            if( diff && !aReporter )                    \
-                return diff;                            \
+#define TEST( a, b, msg )                                   \
+        {                                                   \
+            if( a != b )                                    \
+            {                                               \
+                diff = true;                                \
+                                                            \
+                if( aReporter && wxString( msg ).length() ) \
+                    aReporter->Report( msg );               \
+            }                                               \
+                                                            \
+            if( diff && !aReporter )                        \
+                return diff;                                \
         }
 
 #define EPSILON 0.000001
-#define TEST_D( a, b, msg )                             \
-        {                                               \
-            if( abs( a - b ) > EPSILON )                \
-            {                                           \
-                diff = true;                            \
-                                                        \
-                if( aReporter )                         \
-                    aReporter->Report( msg );           \
-            }                                           \
-                                                        \
-            if( diff && !aReporter )                    \
-                return diff;                            \
+#define TEST_D( a, b, msg )                                 \
+        {                                                   \
+            if( abs( a - b ) > EPSILON )                    \
+            {                                               \
+                diff = true;                                \
+                                                            \
+                if( aReporter && wxString( msg ).length() ) \
+                    aReporter->Report( msg );               \
+            }                                               \
+                                                            \
+            if( diff && !aReporter )                        \
+                return diff;                                \
         }
 
-#define TEST_V3D( a, b, msg )                           \
-        {                                               \
-            if( abs( a.x - b.x ) > EPSILON              \
-                    || abs( a.y - b.y ) > EPSILON       \
-                    || abs( a.z - b.z ) > EPSILON )     \
-            {                                           \
-                diff = true;                            \
-                                                        \
-                if( aReporter )                         \
-                    aReporter->Report( msg );           \
-            }                                           \
-                                                        \
-            if( diff && !aReporter )                    \
-                return diff;                            \
+#define TEST_V3D( a, b, msg )                               \
+        {                                                   \
+            if( abs( a.x - b.x ) > EPSILON                  \
+                    || abs( a.y - b.y ) > EPSILON           \
+                    || abs( a.z - b.z ) > EPSILON )         \
+            {                                               \
+                diff = true;                                \
+                                                            \
+                if( aReporter && wxString( msg ).length() ) \
+                    aReporter->Report( msg );               \
+            }                                               \
+                                                            \
+            if( diff && !aReporter )                        \
+                return diff;                                \
         }
+
+#define ITEM_DESC( item ) ( item )->GetItemDescription( &g_unitsProvider )
+
+UNITS_PROVIDER g_unitsProvider( pcbIUScale, EDA_UNITS::MILLIMETRES );
+
 
 bool primitiveNeedsUpdate( const std::shared_ptr<PCB_SHAPE>& a,
                            const std::shared_ptr<PCB_SHAPE>& b )
@@ -125,36 +130,36 @@ bool primitiveNeedsUpdate( const std::shared_ptr<PCB_SHAPE>& a,
     REPORTER* aReporter = nullptr;
     bool      diff = false;
 
-    TEST( a->GetShape(), b->GetShape(), wxEmptyString );
+    TEST( a->GetShape(), b->GetShape(), "" );
 
     switch( a->GetShape() )
     {
     case SHAPE_T::SEGMENT:
     case SHAPE_T::RECT:
     case SHAPE_T::CIRCLE:
-        TEST( a->GetStart(), b->GetStart(), wxEmptyString );
-        TEST( a->GetEnd(), b->GetEnd(), wxEmptyString );
+        TEST( a->GetStart(), b->GetStart(), "" );
+        TEST( a->GetEnd(), b->GetEnd(), "" );
         break;
 
     case SHAPE_T::ARC:
-        TEST( a->GetStart(), b->GetStart(), wxEmptyString );
-        TEST( a->GetEnd(), b->GetEnd(), wxEmptyString );
-        TEST( a->GetCenter(), b->GetCenter(), wxEmptyString );
-        TEST_D( a->GetArcAngle().AsDegrees(), b->GetArcAngle().AsDegrees(), wxEmptyString );
+        TEST( a->GetStart(), b->GetStart(), "" );
+        TEST( a->GetEnd(), b->GetEnd(), "" );
+        TEST( a->GetCenter(), b->GetCenter(), "" );
+        TEST_D( a->GetArcAngle().AsDegrees(), b->GetArcAngle().AsDegrees(), "" );
         break;
 
     case SHAPE_T::BEZIER:
-        TEST( a->GetStart(), b->GetStart(), wxEmptyString );
-        TEST( a->GetEnd(), b->GetEnd(), wxEmptyString );
-        TEST( a->GetBezierC1(), b->GetBezierC1(), wxEmptyString );
-        TEST( a->GetBezierC2(), b->GetBezierC2(), wxEmptyString );
+        TEST( a->GetStart(), b->GetStart(), "" );
+        TEST( a->GetEnd(), b->GetEnd(), "" );
+        TEST( a->GetBezierC1(), b->GetBezierC1(), "" );
+        TEST( a->GetBezierC2(), b->GetBezierC2(), "" );
         break;
 
     case SHAPE_T::POLY:
-        TEST( a->GetPolyShape().TotalVertices(), b->GetPolyShape().TotalVertices(), wxEmptyString);
+        TEST( a->GetPolyShape().TotalVertices(), b->GetPolyShape().TotalVertices(), "" );
 
         for( int ii = 0; ii < a->GetPolyShape().TotalVertices(); ++ii )
-            TEST( a->GetPolyShape().CVertex( ii ), b->GetPolyShape().CVertex( ii ), wxEmptyString );
+            TEST( a->GetPolyShape().CVertex( ii ), b->GetPolyShape().CVertex( ii ), "" );
 
         break;
 
@@ -162,8 +167,8 @@ bool primitiveNeedsUpdate( const std::shared_ptr<PCB_SHAPE>& a,
         UNIMPLEMENTED_FOR( a->SHAPE_T_asString() );
     }
 
-    TEST( a->GetStroke(), b->GetStroke(), wxEmptyString );
-    TEST( a->IsFilled(), b->IsFilled(), wxEmptyString );
+    TEST( a->GetStroke(), b->GetStroke(), "" );
+    TEST( a->IsFilled(), b->IsFilled(), "" );
 
     return diff;
 }
@@ -174,47 +179,47 @@ bool padNeedsUpdate( const PAD* a, const PAD* b )
     REPORTER* aReporter = nullptr;
     bool      diff = false;
 
-    TEST( a->GetPadToDieLength(), b->GetPadToDieLength(), wxEmptyString );
-    TEST( a->GetPos0(), b->GetPos0(), wxEmptyString );
+    TEST( a->GetPadToDieLength(), b->GetPadToDieLength(), "" );
+    TEST( a->GetPos0(), b->GetPos0(), "" );
 
-    TEST( a->GetNumber(), b->GetNumber(), wxEmptyString );
+    TEST( a->GetNumber(), b->GetNumber(), "" );
 
     // These are assigned from the schematic and not from the library
     // TEST( a->GetPinFunction(), b->GetPinFunction() );
     // TEST( a->GetPinType(), b->GetPinType() );
 
-    TEST( a->GetRemoveUnconnected(), b->GetRemoveUnconnected(), wxEmptyString );
+    TEST( a->GetRemoveUnconnected(), b->GetRemoveUnconnected(), "" );
 
     // NB: KeepTopBottom is undefined if RemoveUnconnected is NOT set.
     if( a->GetRemoveUnconnected() )
-        TEST( a->GetKeepTopBottom(), b->GetKeepTopBottom(), wxEmptyString );
+        TEST( a->GetKeepTopBottom(), b->GetKeepTopBottom(), "" );
 
-    TEST( a->GetShape(), b->GetShape(), wxEmptyString );
+    TEST( a->GetShape(), b->GetShape(), "" );
 
     // Trim layersets to the current board before comparing
     LSET enabledLayers = a->GetBoard()->GetEnabledLayers();
     LSET aLayers = a->GetLayerSet() & enabledLayers;
     LSET bLayers = b->GetLayerSet() & enabledLayers;
-    TEST( aLayers, bLayers, wxEmptyString );
+    TEST( aLayers, bLayers, "" );
 
-    TEST( a->GetAttribute(), b->GetAttribute(), wxEmptyString );
-    TEST( a->GetProperty(), b->GetProperty(), wxEmptyString );
+    TEST( a->GetAttribute(), b->GetAttribute(), "" );
+    TEST( a->GetProperty(), b->GetProperty(), "" );
 
     // The pad orientation, for historical reasons is the pad rotation + parent rotation.
     TEST_D( ( a->GetOrientation() - a->GetParent()->GetOrientation() ).Normalize().AsDegrees(),
             ( b->GetOrientation() - b->GetParent()->GetOrientation() ).Normalize().AsDegrees(),
-            wxEmptyString );
+            "" );
 
-    TEST( a->GetSize(), b->GetSize(), wxEmptyString );
-    TEST( a->GetDelta(), b->GetDelta(), wxEmptyString );
-    TEST( a->GetRoundRectCornerRadius(), b->GetRoundRectCornerRadius(), wxEmptyString );
-    TEST_D( a->GetRoundRectRadiusRatio(), b->GetRoundRectRadiusRatio(), wxEmptyString );
-    TEST_D( a->GetChamferRectRatio(), b->GetChamferRectRatio(), wxEmptyString );
-    TEST( a->GetChamferPositions(), b->GetChamferPositions(), wxEmptyString );
-    TEST( a->GetOffset(), b->GetOffset(), wxEmptyString );
+    TEST( a->GetSize(), b->GetSize(), "" );
+    TEST( a->GetDelta(), b->GetDelta(), "" );
+    TEST( a->GetRoundRectCornerRadius(), b->GetRoundRectCornerRadius(), "" );
+    TEST_D( a->GetRoundRectRadiusRatio(), b->GetRoundRectRadiusRatio(), "" );
+    TEST_D( a->GetChamferRectRatio(), b->GetChamferRectRatio(), "" );
+    TEST( a->GetChamferPositions(), b->GetChamferPositions(), "" );
+    TEST( a->GetOffset(), b->GetOffset(), "" );
 
-    TEST( a->GetDrillShape(), b->GetDrillShape(), wxEmptyString );
-    TEST( a->GetDrillSize(), b->GetDrillSize(), wxEmptyString );
+    TEST( a->GetDrillShape(), b->GetDrillShape(), "" );
+    TEST( a->GetDrillSize(), b->GetDrillSize(), "" );
 
     // Clearance and zone connection overrides are as likely to be set at the board level as in
     // the library.
@@ -229,7 +234,7 @@ bool padNeedsUpdate( const PAD* a, const PAD* b )
         return true;
 #endif
 
-    TEST( a->GetPrimitives().size(), b->GetPrimitives().size(), wxEmptyString );
+    TEST( a->GetPrimitives().size(), b->GetPrimitives().size(), "" );
 
     for( size_t ii = 0; ii < a->GetPrimitives().size(); ++ii )
     {
@@ -246,16 +251,16 @@ bool padHasOverrides( const PAD* a, const PAD* b )
     REPORTER* aReporter = nullptr;
     bool      diff = false;
 
-    TEST( a->GetLocalClearance(), b->GetLocalClearance(), wxEmptyString );
-    TEST( a->GetLocalSolderMaskMargin(), b->GetLocalSolderMaskMargin(), wxEmptyString );
-    TEST( a->GetLocalSolderPasteMargin(), b->GetLocalSolderPasteMargin(), wxEmptyString );
-    TEST_D( a->GetLocalSolderPasteMarginRatio(), b->GetLocalSolderPasteMarginRatio(), wxEmptyString );
+    TEST( a->GetLocalClearance(), b->GetLocalClearance(), "" );
+    TEST( a->GetLocalSolderMaskMargin(), b->GetLocalSolderMaskMargin(), "" );
+    TEST( a->GetLocalSolderPasteMargin(), b->GetLocalSolderPasteMargin(), "" );
+    TEST_D( a->GetLocalSolderPasteMarginRatio(), b->GetLocalSolderPasteMarginRatio(), "" );
 
-    TEST( a->GetZoneConnection(), b->GetZoneConnection(), wxEmptyString );
-    TEST( a->GetThermalGap(), b->GetThermalGap(), wxEmptyString );
-    TEST( a->GetThermalSpokeWidth(), b->GetThermalSpokeWidth(), wxEmptyString );
-    TEST_D( a->GetThermalSpokeAngle().AsDegrees(), b->GetThermalSpokeAngle().AsDegrees(), wxEmptyString );
-    TEST( a->GetCustomShapeInZoneOpt(), b->GetCustomShapeInZoneOpt(), wxEmptyString );
+    TEST( a->GetZoneConnection(), b->GetZoneConnection(), "" );
+    TEST( a->GetThermalGap(), b->GetThermalGap(), "" );
+    TEST( a->GetThermalSpokeWidth(), b->GetThermalSpokeWidth(), "" );
+    TEST_D( a->GetThermalSpokeAngle().AsDegrees(), b->GetThermalSpokeAngle().AsDegrees(), "" );
+    TEST( a->GetCustomShapeInZoneOpt(), b->GetCustomShapeInZoneOpt(), "" );
 
     return diff;
 }
@@ -266,20 +271,20 @@ bool shapeNeedsUpdate( const FP_SHAPE* a, const FP_SHAPE* b )
     REPORTER* aReporter = nullptr;
     bool      diff = false;
 
-    TEST( a->GetShape(), b->GetShape(), wxEmptyString );
+    TEST( a->GetShape(), b->GetShape(), "" );
 
     switch( a->GetShape() )
     {
     case SHAPE_T::SEGMENT:
     case SHAPE_T::RECT:
     case SHAPE_T::CIRCLE:
-        TEST( a->GetStart0(), b->GetStart0(), wxEmptyString );
-        TEST( a->GetEnd0(), b->GetEnd0(), wxEmptyString );
+        TEST( a->GetStart0(), b->GetStart0(), "" );
+        TEST( a->GetEnd0(), b->GetEnd0(), "" );
         break;
 
     case SHAPE_T::ARC:
-        TEST( a->GetStart0(), b->GetStart0(), wxEmptyString );
-        TEST( a->GetEnd0(), b->GetEnd0(), wxEmptyString );
+        TEST( a->GetStart0(), b->GetStart0(), "" );
+        TEST( a->GetEnd0(), b->GetEnd0(), "" );
 
         // Arc center is calculated and so may have round-off errors when parents are
         // differentially rotated.
@@ -289,17 +294,17 @@ bool shapeNeedsUpdate( const FP_SHAPE* a, const FP_SHAPE* b )
         break;
 
     case SHAPE_T::BEZIER:
-        TEST( a->GetStart0(), b->GetStart0(), wxEmptyString );
-        TEST( a->GetEnd0(), b->GetEnd0(), wxEmptyString );
-        TEST( a->GetBezierC1_0(), b->GetBezierC1_0(), wxEmptyString );
-        TEST( a->GetBezierC2_0(), b->GetBezierC2_0(), wxEmptyString );
+        TEST( a->GetStart0(), b->GetStart0(), "" );
+        TEST( a->GetEnd0(), b->GetEnd0(), "" );
+        TEST( a->GetBezierC1_0(), b->GetBezierC1_0(), "" );
+        TEST( a->GetBezierC2_0(), b->GetBezierC2_0(), "" );
         break;
 
     case SHAPE_T::POLY:
-        TEST( a->GetPolyShape().TotalVertices(), b->GetPolyShape().TotalVertices(), wxEmptyString );
+        TEST( a->GetPolyShape().TotalVertices(), b->GetPolyShape().TotalVertices(), "" );
 
         for( int ii = 0; ii < a->GetPolyShape().TotalVertices(); ++ii )
-            TEST( a->GetPolyShape().CVertex( ii ), b->GetPolyShape().CVertex( ii ), wxEmptyString );
+            TEST( a->GetPolyShape().CVertex( ii ), b->GetPolyShape().CVertex( ii ), "" );
 
         break;
 
@@ -307,101 +312,129 @@ bool shapeNeedsUpdate( const FP_SHAPE* a, const FP_SHAPE* b )
         UNIMPLEMENTED_FOR( a->SHAPE_T_asString() );
     }
 
-    TEST( a->GetStroke(), b->GetStroke(), wxEmptyString );
-    TEST( a->IsFilled(), b->IsFilled(), wxEmptyString );
+    TEST( a->GetStroke(), b->GetStroke(), "" );
+    TEST( a->IsFilled(), b->IsFilled(), "" );
 
-    TEST( a->GetLayer(), b->GetLayer(), wxEmptyString );
-
-    return diff;
-}
-
-
-bool textsNeedUpdate( const FP_TEXT* a, const FP_TEXT* b )
-{
-    REPORTER* aReporter = nullptr;
-    bool      diff = false;
-
-    TEST( a->GetLayer(), b->GetLayer(), wxEmptyString );
-    TEST( a->IsKeepUpright(), b->IsKeepUpright(), wxEmptyString );
-
-    TEST( a->GetText(), b->GetText(), wxEmptyString );
-
-    TEST( a->GetTextThickness(), b->GetTextThickness(), wxEmptyString );
-    TEST( a->GetTextAngle(), b->GetTextAngle(), wxEmptyString );
-    TEST( a->IsItalic(), b->IsItalic(), wxEmptyString );
-    TEST( a->IsBold(), b->IsBold(), wxEmptyString );
-    TEST( a->IsVisible(), b->IsVisible(), wxEmptyString );
-    TEST( a->IsMirrored(), b->IsMirrored(), wxEmptyString );
-
-    TEST( a->GetHorizJustify(), b->GetHorizJustify(), wxEmptyString );
-    TEST( a->GetVertJustify(), b->GetVertJustify(), wxEmptyString );
-
-    TEST( a->GetTextSize(), b->GetTextSize(), wxEmptyString );
-    TEST( a->GetPos0(), b->GetPos0(), wxEmptyString );
+    TEST( a->GetLayer(), b->GetLayer(), "" );
 
     return diff;
 }
 
 
-bool zonesNeedUpdate( const FP_ZONE* a, const FP_ZONE* b )
+bool textNeedsUpdate( const FP_TEXT* a, const FP_TEXT* b )
 {
     REPORTER* aReporter = nullptr;
     bool      diff = false;
 
-    TEST( a->GetCornerSmoothingType(), b->GetCornerSmoothingType(), wxEmptyString );
-    TEST( a->GetCornerRadius(), b->GetCornerRadius(), wxEmptyString );
-    TEST( a->GetZoneName(), b->GetZoneName(), wxEmptyString );
-    TEST( a->GetAssignedPriority(), b->GetAssignedPriority(), wxEmptyString );
+    TEST( a->GetLayer(), b->GetLayer(), "" );
+    TEST( a->IsKeepUpright(), b->IsKeepUpright(), "" );
 
-    TEST( a->GetIsRuleArea(), b->GetIsRuleArea(), wxEmptyString );
-    TEST( a->GetDoNotAllowCopperPour(), b->GetDoNotAllowCopperPour(), wxEmptyString );
-    TEST( a->GetDoNotAllowFootprints(), b->GetDoNotAllowFootprints(), wxEmptyString );
-    TEST( a->GetDoNotAllowPads(), b->GetDoNotAllowPads(), wxEmptyString );
-    TEST( a->GetDoNotAllowTracks(), b->GetDoNotAllowTracks(), wxEmptyString );
-    TEST( a->GetDoNotAllowVias(), b->GetDoNotAllowVias(), wxEmptyString );
+    TEST( a->GetText(), b->GetText(), "" );
 
-    TEST( a->GetLayerSet(), b->GetLayerSet(), wxEmptyString );
+    TEST( a->GetTextThickness(), b->GetTextThickness(), "" );
+    TEST( a->GetTextAngle(), b->GetTextAngle(), "" );
+    TEST( a->IsItalic(), b->IsItalic(), "" );
+    TEST( a->IsBold(), b->IsBold(), "" );
+    TEST( a->IsVisible(), b->IsVisible(), "" );
+    TEST( a->IsMirrored(), b->IsMirrored(), "" );
 
-    TEST( a->GetPadConnection(), b->GetPadConnection(), wxEmptyString );
-    TEST( a->GetLocalClearance(), b->GetLocalClearance(), wxEmptyString );
-    TEST( a->GetThermalReliefGap(), b->GetThermalReliefGap(), wxEmptyString );
-    TEST( a->GetThermalReliefSpokeWidth(), b->GetThermalReliefSpokeWidth(), wxEmptyString );
+    TEST( a->GetHorizJustify(), b->GetHorizJustify(), "" );
+    TEST( a->GetVertJustify(), b->GetVertJustify(), "" );
 
-    TEST( a->GetMinThickness(), b->GetMinThickness(), wxEmptyString );
+    TEST( a->GetTextSize(), b->GetTextSize(), "" );
+    TEST( a->GetPos0(), b->GetPos0(), "" );
 
-    TEST( a->GetIslandRemovalMode(), b->GetIslandRemovalMode(), wxEmptyString );
-    TEST( a->GetMinIslandArea(), b->GetMinIslandArea(), wxEmptyString );
+    return diff;
+}
 
-    TEST( a->GetFillMode(), b->GetFillMode(), wxEmptyString );
-    TEST( a->GetHatchThickness(), b->GetHatchThickness(), wxEmptyString );
-    TEST( a->GetHatchGap(), b->GetHatchGap(), wxEmptyString );
-    TEST_D( a->GetHatchOrientation().AsDegrees(), b->GetHatchOrientation().AsDegrees(), wxEmptyString );
-    TEST( a->GetHatchSmoothingLevel(), b->GetHatchSmoothingLevel(), wxEmptyString );
-    TEST( a->GetHatchSmoothingValue(), b->GetHatchSmoothingValue(), wxEmptyString );
-    TEST( a->GetHatchHoleMinArea(), b->GetHatchHoleMinArea(), wxEmptyString );
+
+bool zoneNeedsUpdate( const FP_ZONE* a, const FP_ZONE* b, REPORTER* aReporter )
+{
+    bool diff = false;
+
+    TEST( a->GetCornerSmoothingType(), b->GetCornerSmoothingType(),
+          wxString::Format( _( "%s corner smoothing setting differs." ), ITEM_DESC( a ) ) );
+    TEST( a->GetCornerRadius(), b->GetCornerRadius(),
+          wxString::Format( _( "%s corner smoothing radius differs." ), ITEM_DESC( a ) ) );
+    TEST( a->GetZoneName(), b->GetZoneName(),
+          wxString::Format( _( "%s name differs." ), ITEM_DESC( a ) ) );
+    TEST( a->GetAssignedPriority(), b->GetAssignedPriority(),
+          wxString::Format( _( "%s priority differs." ), ITEM_DESC( a ) ) );
+
+    TEST( a->GetIsRuleArea(), b->GetIsRuleArea(),
+          wxString::Format( _( "%s keep-out property differs." ), ITEM_DESC( a ) ) );
+    TEST( a->GetDoNotAllowCopperPour(), b->GetDoNotAllowCopperPour(),
+          wxString::Format( _( "%s keep out copper fill setting differs." ), ITEM_DESC( a ) ) );
+    TEST( a->GetDoNotAllowFootprints(), b->GetDoNotAllowFootprints(),
+          wxString::Format( _( "%s keep out footprints setting differs." ), ITEM_DESC( a ) ) );
+    TEST( a->GetDoNotAllowPads(), b->GetDoNotAllowPads(),
+          wxString::Format( _( "%s keep out pads setting differs." ), ITEM_DESC( a ) ) );
+    TEST( a->GetDoNotAllowTracks(), b->GetDoNotAllowTracks(),
+          wxString::Format( _( "%s keep out tracks setting differs." ), ITEM_DESC( a ) ) );
+    TEST( a->GetDoNotAllowVias(), b->GetDoNotAllowVias(),
+          wxString::Format( _( "%s keep out vias setting differs." ), ITEM_DESC( a ) ) );
+
+    TEST( a->GetLayerSet(), b->GetLayerSet(),
+          wxString::Format( _( "%s layers differ." ), ITEM_DESC( a ) ) );
+
+    TEST( a->GetPadConnection(), b->GetPadConnection(),
+          wxString::Format( _( "%s pad connection property differs." ), ITEM_DESC( a ) ) );
+    TEST( a->GetLocalClearance(), b->GetLocalClearance(),
+          wxString::Format( _( "%s local clearance differs." ), ITEM_DESC( a ) ) );
+    TEST( a->GetThermalReliefGap(), b->GetThermalReliefGap(),
+          wxString::Format( _( "%s thermal relief gap differs." ), ITEM_DESC( a ) ) );
+    TEST( a->GetThermalReliefSpokeWidth(), b->GetThermalReliefSpokeWidth(),
+          wxString::Format( _( "%s thermal relief spoke width differs." ), ITEM_DESC( a ) ) );
+
+    TEST( a->GetMinThickness(), b->GetMinThickness(),
+          wxString::Format( _( "%s min thickness differs." ), ITEM_DESC( a ) ) );
+
+    TEST( a->GetIslandRemovalMode(), b->GetIslandRemovalMode(),
+          wxString::Format( _( "%s remove islands setting differs." ), ITEM_DESC( a ) ) );
+    TEST( a->GetMinIslandArea(), b->GetMinIslandArea(),
+              wxString::Format( _( "%s minimum island size setting differs." ), ITEM_DESC( a ) ) );
+
+    TEST( a->GetFillMode(), b->GetFillMode(),
+          wxString::Format( _( "%s fill type differs." ), ITEM_DESC( a ) ) );
+    TEST( a->GetHatchThickness(), b->GetHatchThickness(),
+          wxString::Format( _( "%s hatch width differs." ), ITEM_DESC( a ) ) );
+    TEST( a->GetHatchGap(), b->GetHatchGap(),
+          wxString::Format( _( "%s hatch gap differs." ), ITEM_DESC( a ) ) );
+    TEST_D( a->GetHatchOrientation().AsDegrees(), b->GetHatchOrientation().AsDegrees(),
+          wxString::Format( _( "%s hatch orientation differs." ), ITEM_DESC( a ) ) );
+    TEST( a->GetHatchSmoothingLevel(), b->GetHatchSmoothingLevel(),
+          wxString::Format( _( "%s hatch smoothing level differs." ), ITEM_DESC( a ) ) );
+    TEST( a->GetHatchSmoothingValue(), b->GetHatchSmoothingValue(),
+          wxString::Format( _( "%s hatch smoothing amount differs." ), ITEM_DESC( a ) ) );
+    TEST( a->GetHatchHoleMinArea(), b->GetHatchHoleMinArea(),
+          wxString::Format( _( "%s minimum hatch hole setting differs." ), ITEM_DESC( a ) ) );
 
     // This is just a display property
     // TEST( a->GetHatchBorderAlgorithm(), b->GetHatchBorderAlgorithm() );
 
-    TEST( a->Outline()->TotalVertices(), b->Outline()->TotalVertices(), wxEmptyString );
+    TEST( a->Outline()->TotalVertices(), b->Outline()->TotalVertices(),
+          wxString::Format( _( "%s outline corner count differs." ), ITEM_DESC( a ) ) );
 
-    // The footprint's zone will be in board position, so we must translate & rotate the library
-    // footprint's zone to match.
-    FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( a->GetParentFootprint() );
-    const SHAPE_POLY_SET& aPoly = *a->Outline();
-    SHAPE_POLY_SET        bPoly = b->Outline()->CloneDropTriangulation();
-
-    bPoly.Rotate( parentFootprint->GetOrientation() );
-    bPoly.Move( parentFootprint->GetPosition() );
+    bool cornersDiffer = false;
 
     for( int ii = 0; ii < a->Outline()->TotalVertices(); ++ii )
-        TEST( aPoly.CVertex( ii ), bPoly.CVertex( ii ) , wxEmptyString);
+    {
+        if( a->Outline()->CVertex( ii ) != b->Outline()->CVertex( ii ) )
+        {
+            diff = true;
+            cornersDiffer = true;
+            break;
+        }
+    }
+
+    if( cornersDiffer && aReporter )
+        aReporter->Report( wxString::Format( _( "%s corners differ." ), ITEM_DESC( a ) ) );
 
     return diff;
 }
 
 
-bool modelsNeedUpdate( const FP_3DMODEL& a, const FP_3DMODEL& b, REPORTER* aReporter )
+bool modelNeedsUpdate( const FP_3DMODEL& a, const FP_3DMODEL& b, REPORTER* aReporter )
 {
     bool diff = false;
 
@@ -484,7 +517,6 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint, REPORTER* 
     }
 
 #define REPORT( msg ) { if( aReporter ) aReporter->Report( msg ); }
-#define ITEM_DESC( item ) ( item )->GetItemDescription( &unitsProvider )
 #define CHECKPOINT { if( diff && !aReporter ) return diff; }
 
     // Text items are really problematic.  We don't want to test the reference, but after that
@@ -566,8 +598,27 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint, REPORTER* 
 
     CHECKPOINT;
 
+    if( Models().size() != aLibFootprint->Models().size() )
+    {
+        diff = true;
+        REPORT( _( "3D model count differs." ) );
+    }
+    else
+    {
+        for( size_t ii = 0; ii < Models().size(); ++ii )
+            diff |= modelNeedsUpdate( Models()[ii], aLibFootprint->Models()[ii], aReporter );
+    }
+
+    CHECKPOINT;
+
+    // Rotate/position a copy of libFootprint so that zones sort the same
+    std::unique_ptr<FOOTPRINT> libCopy( static_cast<FOOTPRINT*>( aLibFootprint->Clone() ) );
+
+    libCopy->SetOrientation( GetOrientation() );
+    libCopy->Move( GetPosition() );
+
     std::set<FP_ZONE*, FOOTPRINT::cmp_zones> aZones( Zones().begin(), Zones().end() );
-    std::set<FP_ZONE*, FOOTPRINT::cmp_zones> bZones( aLibFootprint->Zones().begin(), aLibFootprint->Zones().end() );
+    std::set<FP_ZONE*, FOOTPRINT::cmp_zones> bZones( libCopy->Zones().begin(), libCopy->Zones().end() );
 
     if( aZones.size() != bZones.size() )
     {
@@ -577,29 +628,7 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint, REPORTER* 
     else
     {
         for( auto aIt = aZones.begin(), bIt = bZones.begin(); aIt != aZones.end(); aIt++, bIt++ )
-        {
-            if( zonesNeedUpdate( *aIt, *bIt ) )
-            {
-                diff = true;
-                REPORT( wxString::Format( _( "%s differs." ), ITEM_DESC( *aIt ) ) );
-            }
-        }
-    }
-
-    CHECKPOINT;
-
-    if( Models().size() != aLibFootprint->Models().size() )
-    {
-        diff = true;
-        REPORT( _( "3D model count differs." ) );
-    }
-    else
-    {
-        for( size_t ii = 0; ii < Models().size(); ++ii )
-        {
-            if( modelsNeedUpdate( Models()[ii], aLibFootprint->Models()[ii], aReporter ) )
-                diff = true;
-        }
+            diff |= zoneNeedsUpdate( *aIt, *bIt, aReporter );
     }
 
     return diff;

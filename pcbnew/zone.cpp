@@ -689,7 +689,7 @@ void ZONE::MoveEdge( const VECTOR2I& offset, int aEdge )
 
 void ZONE::Rotate( const VECTOR2I& aCentre, const EDA_ANGLE& aAngle )
 {
-    m_Poly->Rotate( aAngle, VECTOR2I( aCentre ) );
+    m_Poly->Rotate( aAngle, aCentre );
     HatchBorder();
 
     /* rotate filled areas: */
