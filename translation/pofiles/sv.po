@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:53-0800\n"
-"PO-Revision-Date: 2023-03-16 17:52+0000\n"
+"PO-Revision-Date: 2023-03-19 08:40+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v7/sv/>\n"
 "Language: sv\n"
@@ -8942,7 +8942,7 @@ msgstr "Gemensamt för alla enheter"
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:202
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:291
 msgid "Common to all body styles"
-msgstr "Gemensamt för alla kroppsstilar"
+msgstr "Gemensamt för alla symbolformer"
 
 #: eeschema/dialogs/dialog_field_properties_base.h:100
 #: eeschema/dialogs/dialog_lib_text_properties_base.h:88
@@ -9684,7 +9684,7 @@ msgstr "Gemensamt för alla &enheter i symbol"
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:149
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:157
 msgid "Common to all body &styles (De Morgan)"
-msgstr "Gemensamt för alla &symbolvarianter (De Morgan)"
+msgstr "Gemensamt för alla &symbolformer (De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.h:86
 msgid "Drawing Properties"
@@ -13339,7 +13339,7 @@ msgstr "Cirkel, radie %s"
 #: eeschema/lib_shape.cpp:487 eeschema/sch_shape.cpp:464
 #, c-format
 msgid "Polyline, %d points"
-msgstr "Polyline, %d punkter"
+msgstr "Polygontåg, %d punkter"
 
 #: eeschema/lib_shape.cpp:491 eeschema/sch_shape.cpp:468
 #, c-format
@@ -13423,7 +13423,7 @@ msgstr "Importera"
 
 #: eeschema/menubar.cpp:109
 msgid "Non-KiCad Schematic..."
-msgstr "Icke-KiCad-schema..."
+msgstr "Icke-KiCad-kretsschema..."
 
 #: eeschema/menubar.cpp:110
 msgid ""
@@ -13532,27 +13532,26 @@ msgstr "Fel: duplikat av arknamn. Fortsätta?"
 
 #: eeschema/picksymbol.cpp:169 pcbnew/load_select_footprint.cpp:256
 msgid "Recently Used"
-msgstr "Nyligen använd"
+msgstr "Nyligen använda"
 
 #: eeschema/picksymbol.cpp:192
 #, c-format
 msgid "Choose Power Symbol (%d items loaded)"
-msgstr "Välj Power Symbol (%d föremål laddade)"
+msgstr "Välj strömförsörjningssymbol (%d objekt inlästa)"
 
 #: eeschema/picksymbol.cpp:194 eeschema/symbol_viewer_frame.cpp:1137
 #, c-format
 msgid "Choose Symbol (%d items loaded)"
-msgstr "Välj symbol (%d föremål laddade)"
+msgstr "Välj symbol (%d objekt inlästa)"
 
 #: eeschema/picksymbol.cpp:291
 #, c-format
 msgid "No alternate body style found for symbol '%s' in library '%s'."
-msgstr ""
-"Ingen alternativ kroppsstil hittades för symbolen '%s' i biblioteket '%s'."
+msgstr "Ingen alternativ symbolform hittades för symbol '%s' i bibliotek %s'."
 
 #: eeschema/pin_numbers.cpp:124 pcbnew/zones.h:64
 msgid "none"
-msgstr "Ingen"
+msgstr "ingen"
 
 #: eeschema/pin_type.cpp:57 eeschema/pin_type.cpp:249
 msgid "Free"
@@ -13562,15 +13561,15 @@ msgstr "Fri"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:186
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:193
 msgid "Unspecified"
-msgstr "Inte angiven"
+msgstr "Ospecificerad"
 
 #: eeschema/pin_type.cpp:59 eeschema/pin_type.cpp:251
 msgid "Power input"
-msgstr "Strömingång"
+msgstr "Strömförsörjningsingång"
 
 #: eeschema/pin_type.cpp:60 eeschema/pin_type.cpp:252
 msgid "Power output"
-msgstr "Strömutgång"
+msgstr "Strömförsörjningsutgång"
 
 #: eeschema/pin_type.cpp:61 eeschema/pin_type.cpp:253
 msgid "Open collector"
@@ -13582,7 +13581,7 @@ msgstr "Öppen emitter"
 
 #: eeschema/pin_type.cpp:63 eeschema/pin_type.cpp:255
 msgid "Unconnected"
-msgstr "Oanslutna"
+msgstr "Ej ansluten"
 
 #: eeschema/pin_type.cpp:80
 msgid "Inverted"
@@ -13598,23 +13597,23 @@ msgstr "Inverterad klocka"
 
 #: eeschema/pin_type.cpp:83
 msgid "Input low"
-msgstr "Ingången låg"
+msgstr "Ingång låg"
 
 #: eeschema/pin_type.cpp:84
 msgid "Clock low"
-msgstr "Klockan är låg"
+msgstr "Klocka låg"
 
 #: eeschema/pin_type.cpp:85
 msgid "Output low"
-msgstr "Output låg"
+msgstr "Utgång låg"
 
 #: eeschema/pin_type.cpp:86
 msgid "Falling edge clock"
-msgstr "Fallande kantklocka"
+msgstr "Klocka, fallande flank"
 
 #: eeschema/pin_type.cpp:87
 msgid "NonLogic"
-msgstr "IckeLogisk"
+msgstr "Icke logisk"
 
 #: eeschema/project_rescue.cpp:195
 #, c-format
@@ -13632,12 +13631,12 @@ msgstr ""
 #: eeschema/project_rescue.cpp:319 eeschema/project_rescue.cpp:495
 #, c-format
 msgid "Rescue symbol %s found only in cache library to %s."
-msgstr "Räddningssymbol %s hittades endast i cachebiblioteket till %s."
+msgstr "Rädda symbol %s, som bara hittades i cachebiblioteket, till %s."
 
 #: eeschema/project_rescue.cpp:322 eeschema/project_rescue.cpp:501
 #, c-format
 msgid "Rescue modified symbol %s to %s"
-msgstr "Räddningsmodifierad symbol %s till %s"
+msgstr "Rädda modifierad symbol %s till %s"
 
 #: eeschema/project_rescue.cpp:595
 msgid "This project has nothing to rescue."
@@ -13665,7 +13664,7 @@ msgstr ""
 
 #: eeschema/project_sch_specific.cpp:109 pcbnew/board_connected_item.cpp:128
 msgid "Not Found"
-msgstr "Inte Funnen"
+msgstr "Hittades inte"
 
 #: eeschema/project_sch_specific.cpp:111
 msgid "The following libraries were not found:"
@@ -13677,7 +13676,7 @@ msgid ""
 "Error saving global symbol library table:\n"
 "%s"
 msgstr ""
-"Fel vid sparar global bibliotektabell:\n"
+"Fel vid försök att spara global symbolbibliotekstabell:\n"
 "%s"
 
 #: eeschema/sch_base_frame.cpp:245
@@ -13686,16 +13685,16 @@ msgid ""
 "Error saving project-specific symbol library table:\n"
 "%s"
 msgstr ""
-"Fel vid sparande av projektspecifik bibliotektabell:\n"
+"Fel vid försök att spara projektspecifik symbolbibliotekstabell:\n"
 "%s"
 
 #: eeschema/sch_base_frame.cpp:264 pcbnew/footprint_libraries_utils.cpp:512
 msgid "Add the library to the global library table?"
-msgstr "Lägg till biblioteket i den globala bibliotektabellen?"
+msgstr "Lägg till biblioteket i den globala bibliotekstabellen?"
 
 #: eeschema/sch_base_frame.cpp:265 pcbnew/footprint_libraries_utils.cpp:513
 msgid "Add To Global Library Table"
-msgstr "Lägg till i den globala bibliotektabellen"
+msgstr "Lägg till i den globala bibliotekstabellen"
 
 #: eeschema/sch_base_frame.cpp:275 pcbnew/footprint_libraries_utils.cpp:523
 msgid "Global"
@@ -13703,31 +13702,31 @@ msgstr "Global"
 
 #: eeschema/sch_base_frame.cpp:278 pcbnew/footprint_libraries_utils.cpp:526
 msgid "Choose the Library Table to add the library to:"
-msgstr "Välj bibliotektabellen för att lägga till biblioteket i:"
+msgstr "Välj bibliotekstabell att lägga till biblioteket i:"
 
 #: eeschema/sch_base_frame.cpp:279 pcbnew/footprint_libraries_utils.cpp:527
 msgid "Add To Library Table"
-msgstr "Lägg till i bibliotektabellen"
+msgstr "Lägg till i bibliotekstabellen"
 
 #: eeschema/sch_base_frame.cpp:570
 msgid "No symbol libraries are loaded."
-msgstr "Inga symbolbibliotek har laddats."
+msgstr "Inga symbolbibliotek har lästs in."
 
 #: eeschema/sch_base_frame.cpp:615
 msgid "Select Symbol Library"
-msgstr "Välj Symbolbibliotek"
+msgstr "Välj symbolbibliotek"
 
 #: eeschema/sch_bus_entry.cpp:418
 msgid "Bus to Wire Entry"
-msgstr "Buss till Wire Entry"
+msgstr "Buss till ledning-post"
 
 #: eeschema/sch_bus_entry.cpp:424
 msgid "Bus to Bus Entry"
-msgstr "Buss till busspost"
+msgstr "Buss till buss-post"
 
 #: eeschema/sch_bus_entry.cpp:496 eeschema/sch_line.cpp:899
 msgid "Wire"
-msgstr "Tråd"
+msgstr "Ledning"
 
 #: eeschema/sch_bus_entry.cpp:497 eeschema/sch_line.cpp:900
 msgid "Bus"
@@ -13750,7 +13749,7 @@ msgstr "Anslutningens namn"
 #: eeschema/sch_connection.cpp:414 eeschema/sch_connection.cpp:423
 #, c-format
 msgid "Bus Alias %s Members"
-msgstr "Bussalias %s Medlemmar"
+msgstr "Medlemmar för bussalias %s"
 
 #: eeschema/sch_edit_frame.cpp:127
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:63
@@ -13788,24 +13787,24 @@ msgstr ""
 #: eeschema/sch_edit_frame.cpp:1086 eeschema/sch_plotter.cpp:1028
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
-msgstr "Schema"
+msgstr "Kretsschema"
 
 #: eeschema/sch_edit_frame.cpp:1103
 msgid "New Schematic"
-msgstr "Nytt schema"
+msgstr "Nytt kretsschema"
 
 #: eeschema/sch_edit_frame.cpp:1115
 #, c-format
 msgid "Schematic file '%s' already exists."
-msgstr "Schemafil '%s' finns redan."
+msgstr "Kretsschemafil '%s' finns redan."
 
 #: eeschema/sch_edit_frame.cpp:1136
 msgid "Open Schematic"
-msgstr "Öppna schema"
+msgstr "Öppna kretsschema"
 
 #: eeschema/sch_edit_frame.cpp:1205
 msgid "Assigning footprints requires a fully annotated schematic."
-msgstr "Tilldelning av fotavtryck kräver ett fullständigt numrerat schema."
+msgstr "Tilldelning av fotavtryck kräver ett fullständigt numrerat kretsschema."
 
 #: eeschema/sch_edit_frame.cpp:1230
 msgid "Could not open CvPcb"
@@ -13824,7 +13823,7 @@ msgstr "[Osparat]"
 
 #: eeschema/sch_edit_frame.cpp:1420
 msgid "[no schematic loaded]"
-msgstr "[inget schema laddat]"
+msgstr "[inget kretsschema inläst]"
 
 #: eeschema/sch_edit_frame.cpp:1632
 #, c-format
@@ -13916,12 +13915,12 @@ msgstr "Hierarkisk etikett '%s'"
 
 #: eeschema/sch_label.cpp:1657 pcbnew/dialogs/panel_setup_rules.cpp:687
 msgid "Syntax Help"
-msgstr "Syntax Hjälp"
+msgstr "Syntaxhjälp"
 
 #: eeschema/sch_line.cpp:713
 #, c-format
 msgid "Vertical Wire, length %s"
-msgstr "Vertikal tråd, längd %s"
+msgstr "Vertikal ledning, längd %s"
 
 #: eeschema/sch_line.cpp:714
 #, c-format
@@ -13936,7 +13935,7 @@ msgstr "Vertikal grafisk linje, längd %s"
 #: eeschema/sch_line.cpp:722
 #, c-format
 msgid "Horizontal Wire, length %s"
-msgstr "Horisontell tråd, längd %s"
+msgstr "Horisontell ledning, längd %s"
 
 #: eeschema/sch_line.cpp:723
 #, c-format
@@ -13951,7 +13950,7 @@ msgstr "Horisontell grafisk linje, längd %s"
 #: eeschema/sch_line.cpp:731
 #, c-format
 msgid "Wire, length %s"
-msgstr "Tråd, längd %s"
+msgstr "Ledning, längd %s"
 
 #: eeschema/sch_line.cpp:732
 #, c-format
@@ -13965,7 +13964,7 @@ msgstr "Grafisk linje, längd %s"
 
 #: eeschema/sch_line.cpp:901
 msgid "Graphical"
-msgstr "Grafiskt"
+msgstr "Grafisk"
 
 #: eeschema/sch_line.cpp:904
 msgid "Line Type"
@@ -13977,7 +13976,7 @@ msgstr "från nätklass"
 
 #: eeschema/sch_marker.cpp:263
 msgid "Electrical Rule Check Error"
-msgstr "Fel under elektronikkontroll"
+msgstr "Fel vid kontroll av elektriska regler"
 
 #: eeschema/sch_marker.h:99
 msgid "ERC Marker"
@@ -13989,7 +13988,7 @@ msgstr "Ingen anslutning"
 
 #: eeschema/sch_plotter.cpp:175 eeschema/widgets/hierarchy_pane.cpp:319
 msgid "Root"
-msgstr "Rot"
+msgstr "Rotark"
 
 #: eeschema/sch_plotter.cpp:206 pcbnew/pcbnew_jobs_handler.cpp:329
 #, c-format
@@ -14021,36 +14020,34 @@ msgstr "Det gick inte att skriva plot-filer till mappen '%s'."
 #: eeschema/sch_plugin.cpp:138
 msgid "Enable <b>debug</b> logging for Symbol*() functions in this SCH_PLUGIN."
 msgstr ""
-"Aktivera <b> debug </b> -loggning för Symbol * () -funktioner i denna "
-"SCH_PLUGIN."
+"Aktivera <b>debug</b>-loggning för Symbol*() -funktioner i denna SCH_PLUGIN."
 
 #: eeschema/sch_plugin.cpp:142
 msgid "Regular expression <b>symbol name</b> filter."
-msgstr "Regeluttryck <b> filter för symbolnamn </b>."
+msgstr "Reguljärt uttrycks filter för <b>symbolnamn</b>."
 
 #: eeschema/sch_plugin.cpp:146 pcbnew/plugin.cpp:155
 msgid ""
 "Enable transaction logging. The mere presence of this option turns on the "
 "logging, no need to set a Value."
 msgstr ""
-"Aktivera transaktionsloggning. Enbart närvaron av detta alternativ aktiverar "
+"Aktivera transaktionsloggning. Blotta närvaron av detta alternativ aktiverar "
 "loggning, inget behov av att ställa in ett värde."
 
 #: eeschema/sch_plugin.cpp:151 pcbnew/plugin.cpp:160
 msgid "User name for <b>login</b> to some special library server."
 msgstr ""
-"Användarnamn för <b> inloggning </b> till någon speciell biblioteksserver."
+"Användarnamn för <b>inloggning</b> till någon speciell biblioteksserver."
 
 #: eeschema/sch_plugin.cpp:155 pcbnew/plugin.cpp:163
 msgid "Password for <b>login</b> to some special library server."
-msgstr "Lösenord för <b> inloggning </b> till någon speciell biblioteksserver."
+msgstr "Lösenord för <b>inloggning</b> till någon speciell biblioteksserver."
 
 #: eeschema/sch_plugin.cpp:163
 msgid ""
 "Enter the python symbol which implements the SCH_PLUGIN::Symbol*() functions."
 msgstr ""
-"Ange pythonsymbolen som implementerar SCH_PLUGIN :: Symbol * () -"
-"funktionerna."
+"Ange pythonsymbolen som implementerar SCH_PLUGIN::Symbol*() -funktionerna."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:374
 #, c-format
@@ -14064,7 +14061,7 @@ msgstr ""
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:440
 #, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
-msgstr "Lagringsfilen ofullständigt inläst (%d bytes återstår)."
+msgstr "Lagringsfilen ofullständigt tolkad (%d bytes återstår)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:500
 #, c-format
@@ -14081,7 +14078,7 @@ msgstr "Post 'PIECHART' hanterades inte."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:717
 msgid "Compile mask not currently supported."
-msgstr "Kompilering av mask stöds för närvarande inte."
+msgstr "\"Compile mask\" stöds för närvarande inte."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:724
 #, c-format
@@ -14096,7 +14093,7 @@ msgstr "Symbol \"%s\" i ark \"%s\" vid index %d ersatt med symbol \"%s\"."
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:928
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2404
 msgid "Pin has unexpected orientation."
-msgstr "Stift har en oväntad orientering."
+msgstr "Stiftet har en oväntad riktning."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:975
 msgid "Pin has unexpected electrical type."
@@ -14136,7 +14133,7 @@ msgstr "Strömförsörjningsport med okänd stil har importerats som typ 'Bar'."
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2332
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
-msgstr "Power-symbolen skapar en global etikett med namnet '%s'"
+msgstr "Strömförsörjningssymbolen skapar en global etikett med namnet '%s'"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2468
 #, c-format
@@ -14166,7 +14163,7 @@ msgstr "Fel vid inläsning av bild %s."
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2775
 #, c-format
 msgid "File not found %s."
-msgstr "Fil hittades inte %s."
+msgstr "Fil %s hittades inte."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:77
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:74
@@ -14208,7 +14205,7 @@ msgid ""
 "re-use block information has been discarded during the import."
 msgstr ""
 "CADSTAR-designen innehåller återanvändningsblock som inte har någon KiCad-"
-"motsvarighet. Informationen om återanvändningsblock har kasserats under "
+"motsvarighet. Informationen om återanvändningsblock har utelämnats under "
 "importen."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:261
@@ -14227,12 +14224,12 @@ msgid ""
 "The CADSTAR design has been imported successfully.\n"
 "Please review the import errors and warnings (if any)."
 msgstr ""
-"CADSTAR-designen har importerats framgångsrikt.\n"
+"Import av CADSTAR-designen har lyckats.\n"
 "Granska importfel och varningar (om sådana finns)."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:319
 msgid "The CADSTAR schematic might be corrupt: there is no root sheet."
-msgstr "CADSTAR-schemat kan vara korrupt: det finns inget rotark."
+msgstr "CADSTAR-kretsschemat kan vara korrupt: det finns inget rotark."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:393
 #, c-format
@@ -14287,8 +14284,8 @@ msgid ""
 "Symbol ID '%s' is of an unknown type. It is neither a symbol or a net "
 "power / symbol. The symbol was not loaded."
 msgstr ""
-"Symbol-ID '%s' är av okänd typ. Det är varken en symbol eller en nät-/"
-"spänningssymbol. Symbolen laddades inte."
+"Symbol-ID '%s' är av okänd typ. Det är varken en symbol eller en "
+"nätströmförsörjings / symbol. Symbolen laddades inte."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:720
 #, c-format
@@ -14333,7 +14330,7 @@ msgid ""
 "Symbol '%s' references sheet ID '%s' which does not exist in the design. The "
 "symbol was not loaded."
 msgstr ""
-"Symbolen '%s' referensblad ID '%s' som inte finns i designen. Symbolen "
+"Symbolen '%s' refererar till ark-ID '%s' som inte finns i designen. Symbolen "
 "laddades inte."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1929
@@ -14342,8 +14339,8 @@ msgid ""
 "Net %s references unknown net element %s. The net was not properly loaded "
 "and may require manual fixing."
 msgstr ""
-"Net %s refererar till okänt nätelement %s. Nätet var inte korrekt laddat och "
-"kan kräva manuell fixering."
+"Net %s refererar till okänt nätelement %s. Nätet lästes inte in korrekt och "
+"kan behöva fixas manuellt."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:2198
 #, c-format
@@ -14352,9 +14349,9 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
-"Block-ID %s (blocknamn: '%s') ritas på ark '%s' men är inte länkat till ett "
-"annat ark i designen. KiCad kräver att alla arksymboler är associerade till "
-"ett ark, så blocket laddades inte."
+"Block-ID %s (blocknamn: '%s') är ritat på ark '%s' men är inte länkat till "
+"ett annat ark i designen. KiCad kräver att alla arksymboler är associerade "
+"till ett ark, så blocket laddades inte."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:2223
 #, c-format
@@ -14395,8 +14392,8 @@ msgid ""
 "Error parsing Eagle file. Could not find '%s' instance but it is referenced "
 "in the schematic."
 msgstr ""
-"Fel vid inläsning av Eagle-fil. Kunde inte hitta '%s'-instans som refereras "
-"i schemat."
+"Fel vid tolkning av Eagle-fil. Kunde inte hitta '%s'-instans som refereras i "
+"schemat."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1642
 #, c-format
