@@ -75,49 +75,49 @@ public:
 // In "DRC" mode (aReporter == nulltpr) properties are only checked until a difference is found.
 //
 #define TEST( a, b, msg )                               \
-        if( a != b )                                    \
         {                                               \
-            diff = true;                                \
+            if( a != b )                                \
+            {                                           \
+                diff = true;                            \
                                                         \
-            if( aReporter )                             \
-                aReporter->Report( msg );               \
-        }                                               \
+                if( aReporter )                         \
+                    aReporter->Report( msg );           \
+            }                                           \
                                                         \
-        if( diff && !aReporter )                        \
-            return diff;                                \
-        /* Prevent binding to else following macro */   \
-        else {}
+            if( diff && !aReporter )                    \
+                return diff;                            \
+        }
 
 #define EPSILON 0.000001
 #define TEST_D( a, b, msg )                             \
-        if( abs( a - b ) > EPSILON )                    \
         {                                               \
-            diff = true;                                \
+            if( abs( a - b ) > EPSILON )                \
+            {                                           \
+                diff = true;                            \
                                                         \
-            if( aReporter )                             \
-                aReporter->Report( msg );               \
-        }                                               \
+                if( aReporter )                         \
+                    aReporter->Report( msg );           \
+            }                                           \
                                                         \
-        if( diff && !aReporter )                        \
-            return diff;                                \
-        /* Prevent binding to else following macro */   \
-        else {}
+            if( diff && !aReporter )                    \
+                return diff;                            \
+        }
 
 #define TEST_V3D( a, b, msg )                           \
-        if( abs( a.x - b.x ) > EPSILON                  \
-                || abs( a.y - b.y ) > EPSILON           \
-                || abs( a.z - b.z ) > EPSILON )         \
         {                                               \
-            diff = true;                                \
+            if( abs( a.x - b.x ) > EPSILON              \
+                    || abs( a.y - b.y ) > EPSILON       \
+                    || abs( a.z - b.z ) > EPSILON )     \
+            {                                           \
+                diff = true;                            \
                                                         \
-            if( aReporter )                             \
-                aReporter->Report( msg );               \
-        }                                               \
+                if( aReporter )                         \
+                    aReporter->Report( msg );           \
+            }                                           \
                                                         \
-        if( diff && !aReporter )                        \
-            return diff;                                \
-        /* Prevent binding to else following macro */   \
-        else {}
+            if( diff && !aReporter )                    \
+                return diff;                            \
+        }
 
 bool primitiveNeedsUpdate( const std::shared_ptr<PCB_SHAPE>& a,
                            const std::shared_ptr<PCB_SHAPE>& b )
@@ -154,9 +154,7 @@ bool primitiveNeedsUpdate( const std::shared_ptr<PCB_SHAPE>& a,
         TEST( a->GetPolyShape().TotalVertices(), b->GetPolyShape().TotalVertices(), wxEmptyString);
 
         for( int ii = 0; ii < a->GetPolyShape().TotalVertices(); ++ii )
-        {
             TEST( a->GetPolyShape().CVertex( ii ), b->GetPolyShape().CVertex( ii ), wxEmptyString );
-        }
 
         break;
 
@@ -189,9 +187,7 @@ bool padNeedsUpdate( const PAD* a, const PAD* b )
 
     // NB: KeepTopBottom is undefined if RemoveUnconnected is NOT set.
     if( a->GetRemoveUnconnected() )
-    {
         TEST( a->GetKeepTopBottom(), b->GetKeepTopBottom(), wxEmptyString );
-    }
 
     TEST( a->GetShape(), b->GetShape(), wxEmptyString );
 
@@ -303,9 +299,7 @@ bool shapeNeedsUpdate( const FP_SHAPE* a, const FP_SHAPE* b )
         TEST( a->GetPolyShape().TotalVertices(), b->GetPolyShape().TotalVertices(), wxEmptyString );
 
         for( int ii = 0; ii < a->GetPolyShape().TotalVertices(); ++ii )
-        {
             TEST( a->GetPolyShape().CVertex( ii ), b->GetPolyShape().CVertex( ii ), wxEmptyString );
-        }
 
         break;
 
@@ -401,9 +395,7 @@ bool zonesNeedUpdate( const FP_ZONE* a, const FP_ZONE* b )
     bPoly.Move( parentFootprint->GetPosition() );
 
     for( int ii = 0; ii < a->Outline()->TotalVertices(); ++ii )
-    {
         TEST( aPoly.CVertex( ii ), bPoly.CVertex( ii ) , wxEmptyString);
-    }
 
     return diff;
 }
