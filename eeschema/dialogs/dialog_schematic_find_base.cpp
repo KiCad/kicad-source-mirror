@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-133-g388db8e4)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -99,7 +99,7 @@ DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, con
 	gbSizer2->Add( m_checkCurrentSheetOnly, wxGBPosition( 3, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_checkSelectedOnly = new wxCheckBox( this, wxID_ANY, _("Search the current selection &only"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer2->Add( m_checkSelectedOnly, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	gbSizer2->Add( m_checkSelectedOnly, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_checkReplaceReferences = new wxCheckBox( this, wxID_ANY, _("Replace matches in reference designators"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkReplaceReferences->Hide();
@@ -115,17 +115,17 @@ DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, con
 	wxBoxSizer* rightSizer;
 	rightSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_buttonFind = new wxButton( this, wxID_FIND, _("&Find"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonFind = new wxButton( this, wxID_FIND, _("Find"), wxDefaultPosition, wxDefaultSize, 0 );
 
 	m_buttonFind->SetDefault();
 	rightSizer->Add( m_buttonFind, 0, wxALL|wxEXPAND, 6 );
 
-	m_buttonReplace = new wxButton( this, wxID_REPLACE, _("&Replace"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonReplace = new wxButton( this, wxID_REPLACE, _("Replace"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonReplace->Hide();
 
 	rightSizer->Add( m_buttonReplace, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 6 );
 
-	m_buttonReplaceAll = new wxButton( this, wxID_REPLACE_ALL, _("Replace &All"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonReplaceAll = new wxButton( this, wxID_REPLACE_ALL, _("Replace All"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonReplaceAll->Hide();
 
 	rightSizer->Add( m_buttonReplaceAll, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 6 );
