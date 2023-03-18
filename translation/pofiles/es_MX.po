@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:51-0800\n"
-"PO-Revision-Date: 2023-03-14 11:30+0000\n"
+"PO-Revision-Date: 2023-03-19 09:38+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -5069,9 +5069,8 @@ msgid "Delete"
 msgstr "Eliminar"
 
 #: common/grid_tricks.cpp:353
-#, fuzzy
 msgid "Clear contents of selected cells"
-msgstr "Borrar las celdas seleccionadas"
+msgstr "Borrar el contenido de las celdas seleccionadas"
 
 #: common/grid_tricks.cpp:354 common/tool/actions.cpp:171
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:105
@@ -5373,14 +5372,12 @@ msgid "Page limits"
 msgstr "Límites de página"
 
 #: common/layer_id.cpp:150
-#, fuzzy
 msgid "Operating point voltages"
-msgstr "Punto de operación"
+msgstr "Tensiones del punto de operación"
 
 #: common/layer_id.cpp:151
-#, fuzzy
 msgid "Operating point currents"
-msgstr "Punto de operación"
+msgstr "Corrientes del punto de operación"
 
 #: common/layer_id.cpp:155
 msgid "Footprints front"
@@ -8756,10 +8753,11 @@ msgid "Save all power dissipations"
 msgstr "Guarda todas las disipaciones de energía"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:307
-#, fuzzy
 msgid ""
 "Write directives to save power dissipation of all items (.probe p(<item>))"
-msgstr "Escribe una directiva para guardar todas las corrientes (.probe alli)"
+msgstr ""
+"Escribir directivas para guardar la disipación de energía de todos los "
+"elementos (.probe p(<elemento>))"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:313
 #, fuzzy
@@ -8811,9 +8809,8 @@ msgid "external simulator has the wrong format or architecture"
 msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:587
-#, fuzzy
 msgid "permission denied"
-msgstr "¿Error de permisos?"
+msgstr "permiso denegado"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:723
 msgid "This plugin already exists."
@@ -11368,9 +11365,9 @@ msgid "P"
 msgstr "Pi"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.h:47
-#, fuzzy, c-format
+#, c-format
 msgid "Format %s"
-msgstr "Formato"
+msgstr "Formato %s"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:186
 msgid "<unknown>"
@@ -16554,9 +16551,8 @@ msgid "%s is not tunable"
 msgstr "%s no es ajustable"
 
 #: eeschema/sim/simulator_frame.cpp:1599
-#, fuzzy
 msgid "Error: no current simulation.\n"
-msgstr "Potencia, corriente y aislamiento"
+msgstr "Error: ninguna simulación actual.\n"
 
 #: eeschema/sim/simulator_frame.cpp:1608
 #, fuzzy
@@ -23638,7 +23634,6 @@ msgstr ""
 "Esta energía se compara con la disipada por la resistencia del cable."
 
 #: pcb_calculator/galvanic_corrosion_help.h:2
-#, fuzzy
 msgid ""
 "This table shows the difference in electrochemical potential between various "
 "metals and alloys. Galvanic corrosion affects different metals in contact "
@@ -23655,15 +23650,18 @@ msgid ""
 "refill.\n"
 msgstr ""
 "Esta tabla muestra la diferencia de potencial electroquímico entre varios "
-"metales y aleaciones. Un número positivo indica que la fila es anódica y la "
-"columna es catódica.\n"
-"La corrosión galvánica afecta a diferentes metales en contacto y en "
-"determinadas condiciones.\n"
+"metales y aleaciones. La corrosión galvánica afecta a distintos metales en "
+"contacto y en determinadas condiciones.<br>\n"
 "El ánodo de un par electroquímico se oxida y se corroe, mientras que el "
-"cátodo recibe metales disueltos pero permanece protegido.\n"
-"La norma EN 50310 sugiere una diferencia de tensión inferior a 300mV. Las "
-"prácticas conocidas utilizan un tercer metal de interfaz entre el par "
-"principal (es decir, el acabado superficial ENIG)."
+"cátodo se recubre de metales disueltos pero permanece protegido.<br>\n"
+"Un número positivo indica que la fila es anódica (-) y la columna es "
+"catódica (+), los tonos de coloración fríos y cálidos también indican el "
+"potencial de las filas.<br>\n"
+"La norma EN 50310 sugiere una diferencia de tensión inferior a 300 mV. En "
+"prácticas conocidas se hace uso de un tercer metal de interfaz entre el par "
+"principal (es decir, el acabado superficial ENIG).<br>\n"
+"Las celdas seleccionadas se muestran con la opción de coloración "
+"predeterminada del sistema después de rellenar la tabla.\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:72
 msgid "General system design"
@@ -33795,32 +33793,28 @@ msgid "(%s min %s; actual %s)"
 msgstr "(%s mínimo %s; real %s)"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:414
-#, fuzzy
 msgid "3D model scale doesn't match: "
-msgstr "Ruta de búsqueda de modelos 3D"
+msgstr "La escala del modelo 3D no coincide: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:415
 msgid "3D model rotation doesn't match: "
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:416
-#, fuzzy
 msgid "3D model offset doesn't match: "
-msgstr "La red del pad no coincide con el esquema"
+msgstr "El desplazamiento del modelo 3D no coincide: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:417
 msgid "3D model opacity doesn't match: "
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:418
-#, fuzzy
 msgid "3D model doesn't match: "
-msgstr "Ruta de búsqueda de modelos 3D"
+msgstr "El modelo 3D no coincide: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:419
-#, fuzzy
 msgid "3D model visibility doesn't match: "
-msgstr "Visibilidad del modelo 3D"
+msgstr "La visibilidad del modelo 3D no coincide: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:447
 #, fuzzy
@@ -38879,14 +38873,12 @@ msgid "Board/library check for:"
 msgstr "Carpeta local de librerías:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1365
-#, fuzzy
 msgid "Library: "
-msgstr "Librería:"
+msgstr "Biblioteca: "
 
 #: pcbnew/tools/board_inspection_tool.cpp:1366
-#, fuzzy
 msgid "Library item: "
-msgstr "Flitro de librerías:"
+msgstr "Artículo de biblioteca: "
 
 #: pcbnew/tools/board_inspection_tool.cpp:1384
 #, fuzzy
