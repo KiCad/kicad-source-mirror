@@ -1100,7 +1100,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_FIND</property>
-                                        <property name="label">&amp;Find</property>
+                                        <property name="label">Find</property>
                                         <property name="margins"></property>
                                         <property name="markup">0</property>
                                         <property name="max_size"></property>
@@ -1174,7 +1174,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">1</property>
                                         <property name="id">wxID_REPLACE</property>
-                                        <property name="label">&amp;Replace</property>
+                                        <property name="label">Replace</property>
                                         <property name="margins"></property>
                                         <property name="markup">0</property>
                                         <property name="max_size"></property>
@@ -1249,7 +1249,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">1</property>
                                         <property name="id">wxID_REPLACE_ALL</property>
-                                        <property name="label">Replace &amp;All</property>
+                                        <property name="label">Replace All</property>
                                         <property name="margins"></property>
                                         <property name="markup">0</property>
                                         <property name="max_size"></property>

@@ -112,17 +112,17 @@ DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, con
 	wxBoxSizer* rightSizer;
 	rightSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_buttonFind = new wxButton( this, wxID_FIND, _("&Find"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonFind = new wxButton( this, wxID_FIND, _("Find"), wxDefaultPosition, wxDefaultSize, 0 );
 
 	m_buttonFind->SetDefault();
 	rightSizer->Add( m_buttonFind, 0, wxALL|wxEXPAND, 6 );
 
-	m_buttonReplace = new wxButton( this, wxID_REPLACE, _("&Replace"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonReplace = new wxButton( this, wxID_REPLACE, _("Replace"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonReplace->Hide();
 
 	rightSizer->Add( m_buttonReplace, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 6 );
 
-	m_buttonReplaceAll = new wxButton( this, wxID_REPLACE_ALL, _("Replace &All"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonReplaceAll = new wxButton( this, wxID_REPLACE_ALL, _("Replace All"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonReplaceAll->Hide();
 
 	rightSizer->Add( m_buttonReplaceAll, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 6 );
