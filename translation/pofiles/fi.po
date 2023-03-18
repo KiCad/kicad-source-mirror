@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:53-0800\n"
-"PO-Revision-Date: 2023-03-16 17:52+0000\n"
+"PO-Revision-Date: 2023-03-19 08:40+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v7/fi/>\n"
 "Language: fi\n"
@@ -13038,9 +13038,8 @@ msgid "Illegal entry found in project file symbol library list."
 msgstr "Projektitiedostojen symbolikirjastoluettelosta löytyi laiton merkintä."
 
 #: eeschema/files-io.cpp:362
-#, fuzzy
 msgid "Project Load Warning"
-msgstr "Varoitus projektin kuormituksesta"
+msgstr "Projektin Latausvaroitus"
 
 #: eeschema/files-io.cpp:365
 msgid ""
