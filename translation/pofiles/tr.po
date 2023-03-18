@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:53-0800\n"
-"PO-Revision-Date: 2023-03-12 20:08+0000\n"
+"PO-Revision-Date: 2023-03-19 08:40+0000\n"
 "Last-Translator: turkce <turkceceviri@protonmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v7/tr/>\n"
 "Language: tr\n"
@@ -23170,7 +23170,7 @@ msgstr "Hesapla"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:231
 msgid "Current calculation is underestimated due to long fusing time."
-msgstr ""
+msgstr "Uzun kaynaştırma süresi nedeniyle mevcut hesaplama hafife alınmaktadır."
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:31
 #, fuzzy
@@ -23210,23 +23210,23 @@ msgstr "Alüminyum"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:43
 msgid "Gold"
-msgstr ""
+msgstr "Altın"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:44
 msgid "Titanium"
-msgstr ""
+msgstr "Titanyum"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:45
 msgid "Stainless steel 18-9"
-msgstr ""
+msgstr "Paslanmaz çelik 18-9"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:46
 msgid "Silver"
-msgstr ""
+msgstr "Gümüş"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:47
 msgid "Mercury"
-msgstr ""
+msgstr "Cıva"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:48
 #, fuzzy
@@ -23246,11 +23246,11 @@ msgstr "Alüminyum"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:51
 msgid "Brass"
-msgstr ""
+msgstr "Pirinç"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:52
 msgid "Bronze"
-msgstr ""
+msgstr "Bronz"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:53
 #, fuzzy
@@ -23269,11 +23269,11 @@ msgstr "Alüminyum"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:56
 msgid "Cast iron"
-msgstr ""
+msgstr "Sağlamdemir"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:57
 msgid "Carbon steel"
-msgstr ""
+msgstr "Karbon çeliği"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:58
 #, fuzzy
@@ -23282,27 +23282,27 @@ msgstr "Alüminyum"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:59
 msgid "Cadmium"
-msgstr ""
+msgstr "Kadmiyum"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:60
 msgid "Iron"
-msgstr ""
+msgstr "Demir"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:61
 msgid "Chrome"
-msgstr ""
+msgstr "Krom"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:62
 msgid "Zinc"
-msgstr ""
+msgstr "Çinko"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:63
 msgid "Manganese"
-msgstr ""
+msgstr "Manganez"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:64
 msgid "Magnesium"
-msgstr ""
+msgstr "Magnezyum"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:75
 msgid ""
@@ -23317,6 +23317,16 @@ msgid ""
 "of a third interface metal in between the main pair(ie the ENIG surface "
 "finish)."
 msgstr ""
+"Bu tablo, çeşitli metaller ve alaşımlar arasındaki elektrokimyasal "
+"potansiyeldeki farkı göstermektedir. Pozitif bir sayı, sıranın anodik ve "
+"kolonun katodik olduğunu gösterir.\n"
+"Galvanik korozyon, temas halinde ve belirli koşullar altında farklı "
+"metalleri etkiler.\n"
+"Bir elektrokimyasal çiftin anodu oksitlenir ve yok olurken, katot üzerine "
+"kaplanmış çözünmüş metaller alır ancak korunmaya devam eder.\n"
+"EN 50310, 300 mv'nin altında bir voltaj farkı olduğunu göstermektedir. "
+"Bilinen uygulamalar, ana çift arasında (yani ENIG yüzey kaplaması) üçüncü "
+"bir arayüz metalinden yararlanır."
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:34
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:39
@@ -23326,7 +23336,7 @@ msgstr "Bakır"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:62
 msgid "Threshold voltage:"
-msgstr ""
+msgstr "Eşik gerilimi:"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:71
 #: pcb_calculator/widgets/unit_selector.cpp:255
@@ -23341,11 +23351,12 @@ msgstr "KiCad PCB Hesaplayıcı"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:157
 msgid "Select PCB Calculator Data File"
-msgstr ""
+msgstr "PCB Hesap Makinesi Veri Dosyasını Seçin"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:172
 msgid "Do you want to load this file and replace current regulator list?"
 msgstr ""
+"Bu dosyayı yüklemek ve mevcut regülatör listesini değiştirmek ister misiniz?"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:189
 #, c-format
@@ -23354,7 +23365,7 @@ msgstr "'%s' veri dosyası okunamıyor."
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:217
 msgid "This regulator is already in list. Aborted"
-msgstr ""
+msgstr "Bu düzenleyici zaten listede. İptal etmek"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:249
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:117
@@ -23369,7 +23380,7 @@ msgstr "%s, %s'den küçük olmalıdır."
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:340
 msgid "Vref set to 0 !"
-msgstr ""
+msgstr "Vref 0 olarak ayarlandı!"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:346
 #, fuzzy
@@ -23383,6 +23394,10 @@ msgid ""
 "- regulators which have a dedicated sense pin for the voltage regulation.\n"
 "- 3 terminal pins."
 msgstr ""
+"Regülatörün türü.\n"
+"2 Tip vardır:\n"
+"- voltaj regülasyonu için özel bir algılama pimine sahip regülatörler.\n"
+"- 3 terminal pimi."
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:33
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:52
@@ -23412,7 +23427,7 @@ msgstr "Regülatörler"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:88
 msgid "The name of the data file which stores known regulators parameters."
-msgstr ""
+msgstr "Bilinen düzenleyici parametrelerini depolayan veri dosyasının adı."
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:98
 msgid "Browse"
@@ -23435,11 +23450,11 @@ msgstr "Regülatör"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:113
 msgid "Enter a new item to the current list of available regulators"
-msgstr ""
+msgstr "Mevcut düzenleyiciler listesine yeni bir öğe girin"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:118
 msgid "Remove an item from the current list of available regulators"
-msgstr ""
+msgstr "Mevcut düzenleyiciler listesinden bir öğeyi kaldırma"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:141
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:118
@@ -23465,6 +23480,8 @@ msgid ""
 "The internal reference voltage of the regulator.\n"
 "Should not be 0."
 msgstr ""
+"Regülatörün dahili referans voltajı.\n"
+"0 Olmamalıdır."
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:199
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:61
@@ -23473,7 +23490,7 @@ msgstr "Iadj:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:201
 msgid "For 3 terminal regulators only, the  Adjust pin current."
-msgstr ""
+msgstr "Sadece 3 terminal regülatörleri için, Ayar pimi akımı."
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:208
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:68
@@ -23495,11 +23512,11 @@ msgstr "Tee"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:23
 msgid "Bridged tee"
-msgstr ""
+msgstr "koprulu tee"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:23
 msgid "Resistive splitter"
-msgstr ""
+msgstr "Dirençli ayırıcı"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:25
 msgid "Attenuators"
@@ -23575,7 +23592,7 @@ msgstr "Bağlantı Adı"
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:144
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:242
 msgid "mm ^ 2"
-msgstr ""
+msgstr "mm ^ 2"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:148
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:246
@@ -23599,19 +23616,19 @@ msgstr "W"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:191
 msgid "Internal Layer Traces"
-msgstr ""
+msgstr "İç Katman İzleri"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:23
 msgid "Microstrip Line"
-msgstr ""
+msgstr "Mikroşerit Hattı"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:23
 msgid "Coplanar wave guide"
-msgstr ""
+msgstr "Eş düzlemli dalga kılavuzu"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:23
 msgid "Coplanar wave guide w/ ground plane"
-msgstr ""
+msgstr "Yer düzlemi ile eş düzlemli dalga kılavuzu"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:23
 #, fuzzy
@@ -23620,11 +23637,11 @@ msgstr "Dikdörtgen"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:23
 msgid "Coaxial Line"
-msgstr ""
+msgstr "Koaksiyel Hat"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:23
 msgid "Coupled Microstrip Line"
-msgstr ""
+msgstr "Birleştirilmiş Mikroşerit Hattı"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:23
 msgid "Stripline"
@@ -23632,7 +23649,7 @@ msgstr "Şerit Çizgisi"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:23
 msgid "Twisted Pair"
-msgstr ""
+msgstr "Bükümlü Çift"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:25
 #, fuzzy
@@ -23660,7 +23677,7 @@ msgstr "Rho:"
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:90
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:126
 msgid "Specific resistance in ohms * meters"
-msgstr ""
+msgstr "Ohm cinsinden özgül direnç * metre"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:109
 msgid "H:"
@@ -23728,7 +23745,7 @@ msgstr "Dielektrik Katmanı Kaldır..."
 
 #: pcb_calculator/calculator_panels/panel_via_size.cpp:105
 msgid "Electrical Resistivity in Ohm*m"
-msgstr ""
+msgstr "Ohm * m cinsinden Elektriksel Direnç"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:31
 #, fuzzy
@@ -23747,7 +23764,7 @@ msgstr "Bacak uzunluğu:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:59
 msgid "Via length is the board thickness for through hole vias"
-msgstr ""
+msgstr "Geçiş uzunluğu, geçiş delikleri için tahta kalınlığıdır"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:71
 #, fuzzy
@@ -23756,7 +23773,7 @@ msgstr "Geçiş dış çapı"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:73
 msgid "Diameter of pad surrounding via (annular ring)"
-msgstr ""
+msgstr "Aracılığıyla çevreleyen pedin çapı (halka şeklindeki halka)"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:85
 #, fuzzy
@@ -23765,7 +23782,7 @@ msgstr "Asgari delik çapı: "
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:87
 msgid "Diameter of clearance hole in ground plane(s)"
-msgstr ""
+msgstr "Zemin düzlem (ler) indeki boşluk deliğinin çapı"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:99
 msgid "Z0:"
@@ -23773,11 +23790,11 @@ msgstr "Z0:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:101
 msgid "Characteristic impedance of conductor"
-msgstr ""
+msgstr "İletkenin karakteristik empedansı"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:113
 msgid "Applied current:"
-msgstr ""
+msgstr "Uygulanan akım:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:124
 #, fuzzy
@@ -23786,15 +23803,15 @@ msgstr "İletken kayıpları:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:146
 msgid "Substrate relative permittivity:"
-msgstr ""
+msgstr "Substrat bağıl geçirgenliği:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:148
 msgid "Relative dielectric constant (epsilon r)"
-msgstr ""
+msgstr "Bağıl dielektrik sabiti (epsilon r)"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:169
 msgid "Maximum acceptable rise in temperature"
-msgstr ""
+msgstr "Sıcaklıkta kabul edilebilir maksimum artış"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:180
 #, fuzzy
@@ -23803,7 +23820,7 @@ msgstr "Yükselme süresi:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:182
 msgid "Pulse rise time to calculate reactance"
-msgstr ""
+msgstr "Reaktansı hesaplamak için nabız yükselme süresi"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:189
 #: pcb_calculator/widgets/unit_selector.cpp:316
@@ -23820,6 +23837,9 @@ msgid ""
 "Via pad diameter >= Clearance hole diameter.\n"
 "Some parameters cannot be calculated for a via inside a copper zone."
 msgstr ""
+"Uyarı:\n"
+"Ped çapı> = Boşluk deliği çapı ile.\n"
+"Bakır bölge içindeki bir geçiş için bazı parametreler hesaplanamaz."
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:262
 #, fuzzy
@@ -23828,15 +23848,15 @@ msgstr "Direnç:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:264
 msgid "Using thermal conductivity value 401 Watts/(meter-Kelvin)"
-msgstr ""
+msgstr "Termal iletkenlik değeri 401 Watt / (metre-Kelvin) kullanma"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:272
 msgid "deg C/W"
-msgstr ""
+msgstr "derece C/W"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:276
 msgid "Estimated ampacity:"
-msgstr ""
+msgstr "Tahmini ampacity:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:278
 #, fuzzy
@@ -23862,7 +23882,7 @@ msgstr "Yükselme süresi:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:306
 msgid "Rise time degradation for given Z0 and calculated capacitance"
-msgstr ""
+msgstr "Verilen Z0 ve hesaplanan kapasitans için yükselme süresi bozulması"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:314
 #: pcb_calculator/widgets/unit_selector.cpp:317
@@ -23891,11 +23911,11 @@ msgstr "Reaktans:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:336
 msgid "Inductive reactance for given rise time and calculated inductance"
-msgstr ""
+msgstr "Verilen yükselme süresi ve hesaplanan endüktans için endüktif reaktans"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:355
 msgid "Top view of via"
-msgstr ""
+msgstr "Via'nın üstten görünümü"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:39
 msgid "Period:"
@@ -23913,7 +23933,7 @@ msgstr "Boşluk uzunluğu:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:75
 msgid "Speed in medium:"
-msgstr ""
+msgstr "Ortamda hız:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:87
 #, fuzzy
@@ -23922,15 +23942,15 @@ msgstr "Er:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:89
 msgid "relative permittivity (dielectric constant)"
-msgstr ""
+msgstr "bağıl geçirgenlik (dielektrik sabiti)"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:99
 msgid "mur:"
-msgstr ""
+msgstr "mur:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:101
 msgid "relative permeability"
-msgstr ""
+msgstr "bağıl geçirgenlik"
 
 #: pcb_calculator/datafile_read_write.cpp:76
 #, fuzzy
@@ -23974,6 +23994,31 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
+"E serisi IEC 60063'te tanımlanmıştır.\n"
+"\n"
+"Mevcut değerler logaritmik bir ölçekte yaklaşık olarak eşit aralıklıdır.\n"
+"\n"
+"\tE24'ün(5%): 1.0 1.1 1.2 1.3 1.5 1.6 1.8 2.0 2.2 2.4 2.7 3.0 3.3 3.6 3.9 "
+"4.3 4.7 5.1 5.6 6.2 6.8 7.5 8.2 9.1\n"
+"\tE12(10%): 1.0 1.2 1.5 1.8 2.2 2.7 3.3 3.9 4.7 5.6 6.8 8.2\n"
+"\tE6'nın(20%): 1.0 - 1.5 - 2.2 - 3.3 - 4.7 - 6.8  -\n"
+"\tE3'ün(50%): 1.0 - - - 2.2 - - - 4.7  -   -   -\n"
+"\tE1 : 1.0  -   -   -   -   -   -   -   -   -   -   -\n"
+"\n"
+"- Bu hesap makinesi, keyfi değerler oluşturmak için standart E serisi "
+"kombinasyonlarını (10Ω ile 1MΩ arasında) bulur.\n"
+"- Gerekli direnci 0,0025 ila 4000 kΩ arasında girebilirsiniz.\n"
+"- En fazla 4 bileşen kullanan çözümler verilir.\n"
+"\n"
+"İstenen değer her zaman çözüm kümesinin dışında tutulur.<br>\n"
+"Bileşen kullanılabilirliği sorunları olması durumunda isteğe bağlı olarak en "
+"fazla iki ek değer hariç tutulabilir.\n"
+"\n"
+"Çözümler aşağıdaki formatlarda verilmiştir:\n"
+"\n"
+"\tR1 + R2 +...+ Seri olarak Rn dirençleri\n"
+"\tR1 / R2 |.../ Paralel olarak Rn dirençleri\n"
+"\tR1 + (R2|R3)...\t\tyukarıdakilerin herhangi bir kombinasyonu\n"
 
 #: pcb_calculator/fusing_current_help.h:2
 msgid ""
@@ -23987,10 +24032,19 @@ msgid ""
 "<br>\n"
 "This energy is then compared to the one dissipated by the wire resistance."
 msgstr ""
+"Küçük bir parçanın kısa bir süre için büyük bir akımı idare edip "
+"edemeyeceğini kontrol etmek için bu hesap makinesini kullanabilirsiniz.<br>\n"
+"Bu araç, bir iz sigortası tasarlamanıza izin verir, ancak yalnızca bir "
+"tahmin olarak kullanılmalıdır.\n"
+"\n"
+"Hesap makinesi, kabloyu ısıtmak için gereken enerjiyi tahmin eder<br>\n"
+"erime noktasına ve faz değişimi için gereken enerjiye kadar.<br>\n"
+"Bu enerji daha sonra tel direnci tarafından dağıtılan enerjiyle "
+"karşılaştırılır."
 
 #: pcb_calculator/pcb_calculator_frame.cpp:72
 msgid "General system design"
-msgstr ""
+msgstr "Genel sistem tasarımı"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:74
 msgid "Regulators"
@@ -24018,7 +24072,7 @@ msgstr "Delik Büyüklüğü"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:84
 msgid "High speed"
-msgstr ""
+msgstr "Hızlı"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:86
 #, fuzzy
@@ -24037,7 +24091,7 @@ msgstr "TransLine "
 
 #: pcb_calculator/pcb_calculator_frame.cpp:90
 msgid "Memo"
-msgstr ""
+msgstr "Memo"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:92
 msgid "E-Series"
@@ -24055,17 +24109,19 @@ msgstr "Kart Renkleri"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:95
 msgid "Galvanic Corrosion"
-msgstr ""
+msgstr "Galvanik Korozyon"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:244
 msgid "Write Data Failed"
-msgstr ""
+msgstr "Veri Yazılamadı"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:248
 msgid ""
 "No data filename to save modifications.\n"
 "Do you want to exit and abandon your changes?"
 msgstr ""
+"Değişiklikleri kaydetmek için veri dosya adı yok.\n"
+"Değişikliklerinizden çıkmak ve vazgeçmek mi istiyorsunuz?"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:258
 #, c-format
@@ -24073,6 +24129,8 @@ msgid ""
 "Unable to write file '%s'\n"
 "Do you want to exit and abandon your changes?"
 msgstr ""
+"'%s' dosyası yazılamıyor\n"
+"Değişikliklerinizden çıkmak ve vazgeçmek mi istiyorsunuz?"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
 msgid ""
@@ -24099,6 +24157,28 @@ msgid ""
 "___H___ is thickness (height) in mils<br>\n"
 "___K___ is 0.024 for internal traces or 0.048 for external traces\n"
 msgstr ""
+"Maksimum akımı belirtirseniz, izleme genişlikleri buna göre hesaplanacaktır."
+"\n"
+"\n"
+"İzleme genişliklerinden birini belirtirseniz, işleyebileceği maksimum akım "
+"hesaplanır. Daha sonra bu akımı işlemek için diğer iz için genişlik "
+"hesaplanacaktır.\n"
+"\n"
+"Kontrol değeri kalın olarak gösterilir.\n"
+"\n"
+"Hesaplamalar 35 A'ya (harici) veya 17,5 A'ya (dahili) kadar akımlar, 100 ° "
+"C'ye kadar sıcaklık artışları ve 400 mils'e (10 mm) kadar genişlikler için "
+"geçerlidir.\n"
+"\n"
+"IPC 2221'den gelen formül şöyledir\n"
+"<merkez>___İ = K &middot; & Delta;T<sup>0.44</sup> &middot; (G &middot; Y) "
+"<sup>0.725 </sup>___</merkez>\n"
+"nerede:<br>\n"
+"___I___ bir<br> içindeki maksimum akımdır\n"
+"___&Delta;T___, ortam sıcaklığının &deg; C'nin üzerine çıkmasıdır <br>\n"
+"___W___ mil cinsinden genişliktir<br>\n"
+"___H___ mil cinsinden kalınlık (yükseklik) <br>\n"
+"___K___ iç izler için 0,024 veya dış izler için 0,048'dir\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:61
 #, fuzzy
@@ -24112,7 +24192,7 @@ msgstr "Direnç:"
 
 #: pcb_calculator/transline_ident.cpp:92
 msgid "Substrate relative permittivity (dielectric constant)"
-msgstr ""
+msgstr "Substrat bağıl geçirgenliği (dielektrik sabiti)"
 
 #: pcb_calculator/transline_ident.cpp:96
 #, fuzzy
@@ -24124,6 +24204,7 @@ msgid ""
 "Electrical resistivity or specific electrical resistance of conductor "
 "(ohm*meter)"
 msgstr ""
+"İletkenin elektriksel direnci veya spesifik elektriksel direnci (ohm * metre)"
 
 #: pcb_calculator/transline_ident.cpp:109
 msgid "Frequency of the input signal"
@@ -24167,7 +24248,7 @@ msgstr "Dielektrik kayıplar:"
 #: pcb_calculator/transline_ident.cpp:353
 #: pcb_calculator/transline_ident.cpp:387
 msgid "Skin depth:"
-msgstr ""
+msgstr "Cilt derinliği:"
 
 #: pcb_calculator/transline_ident.cpp:124
 #: pcb_calculator/transline_ident.cpp:166
@@ -24181,7 +24262,7 @@ msgstr "alt tabaka"
 #: pcb_calculator/transline_ident.cpp:126
 #: pcb_calculator/transline_ident.cpp:314
 msgid "Height of box top"
-msgstr ""
+msgstr "Kutu üstü yüksekliği"
 
 #: pcb_calculator/transline_ident.cpp:129
 #: pcb_calculator/transline_ident.cpp:168
@@ -24208,7 +24289,7 @@ msgstr "alt tabaka"
 
 #: pcb_calculator/transline_ident.cpp:136
 msgid "Relative permeability (mu) of substrate"
-msgstr ""
+msgstr "Substratın nispi geçirgenliği (mu)"
 
 #: pcb_calculator/transline_ident.cpp:139
 #: pcb_calculator/transline_ident.cpp:171
@@ -24230,7 +24311,7 @@ msgstr "iletken"
 #: pcb_calculator/transline_ident.cpp:365
 #: pcb_calculator/transline_ident.cpp:395
 msgid "Relative permeability (mu) of conductor"
-msgstr ""
+msgstr "İletkenin bağıl geçirgenliği (mu)"
 
 #: pcb_calculator/transline_ident.cpp:144
 #: pcb_calculator/transline_ident.cpp:176
@@ -24258,7 +24339,7 @@ msgstr "Çizgi, uzunluk %s"
 #: pcb_calculator/transline_ident.cpp:373
 #: pcb_calculator/transline_ident.cpp:412
 msgid "Characteristic impedance"
-msgstr ""
+msgstr "Karakteristik empedans"
 
 #: pcb_calculator/transline_ident.cpp:152
 #: pcb_calculator/transline_ident.cpp:186
@@ -24279,7 +24360,7 @@ msgstr "Boşluk genişliği"
 
 #: pcb_calculator/transline_ident.cpp:229
 msgid "ZF(H10) = Ey / Hx:"
-msgstr ""
+msgstr "ZF(H10) = Ey / Hx:"
 
 #: pcb_calculator/transline_ident.cpp:233
 #: pcb_calculator/transline_ident.cpp:268
@@ -24299,15 +24380,15 @@ msgstr "yalıtkan"
 #: pcb_calculator/transline_ident.cpp:239
 #: pcb_calculator/transline_ident.cpp:274
 msgid "Relative permeability (mu) of insulator"
-msgstr ""
+msgstr "Yalıtkanın bağıl geçirgenliği (mu)"
 
 #: pcb_calculator/transline_ident.cpp:247
 msgid "Width of waveguide"
-msgstr ""
+msgstr "Dalga kılavuzunun genişliği"
 
 #: pcb_calculator/transline_ident.cpp:249
 msgid "Height of waveguide"
-msgstr ""
+msgstr "Dalga kılavuzunun yüksekliği"
 
 #: pcb_calculator/transline_ident.cpp:251
 #, fuzzy
@@ -24322,7 +24403,7 @@ msgstr "Din"
 #: pcb_calculator/transline_ident.cpp:283
 #: pcb_calculator/transline_ident.cpp:404
 msgid "Inner diameter (conductor)"
-msgstr ""
+msgstr "İç çap (iletken)"
 
 #: pcb_calculator/transline_ident.cpp:285
 #: pcb_calculator/transline_ident.cpp:406
@@ -24332,7 +24413,7 @@ msgstr "Dout"
 #: pcb_calculator/transline_ident.cpp:286
 #: pcb_calculator/transline_ident.cpp:407
 msgid "Outer diameter (insulator)"
-msgstr ""
+msgstr "Dış çap (izolatör)"
 
 #: pcb_calculator/transline_ident.cpp:302
 #, fuzzy, c-format
@@ -24372,7 +24453,7 @@ msgstr "Zeven"
 
 #: pcb_calculator/transline_ident.cpp:335
 msgid "Even mode impedance (lines driven by common voltages)"
-msgstr ""
+msgstr "Eşit mod empedansı (ortak voltajlarla tahrik edilen hatlar)"
 
 #: pcb_calculator/transline_ident.cpp:338
 msgid "Zodd"
@@ -24380,11 +24461,11 @@ msgstr "Zodd"
 
 #: pcb_calculator/transline_ident.cpp:339
 msgid "Odd mode impedance (lines driven by opposite (differential) voltages)"
-msgstr ""
+msgstr "Tek mod empedansı (zıt (diferansiyel) voltajlarla tahrik edilen hatlar)"
 
 #: pcb_calculator/transline_ident.cpp:358
 msgid "Distance between strip and top metal"
-msgstr ""
+msgstr "Şerit ve üst metal arasındaki mesafe"
 
 #: pcb_calculator/transline_ident.cpp:390
 msgid "Twists"
@@ -24401,7 +24482,7 @@ msgstr "Çevre"
 
 #: pcb_calculator/transline_ident.cpp:400
 msgid "Relative permittivity of environment"
-msgstr ""
+msgstr "Çevrenin göreceli geçirgenliği"
 
 #: pcb_calculator/transline_ident.cpp:409
 #, fuzzy
@@ -24461,7 +24542,7 @@ msgstr "kOhm"
 
 #: pcb_calculator/widgets/unit_selector.cpp:214
 msgid "feet"
-msgstr ""
+msgstr "ayak"
 
 #: pcb_calculator/widgets/unit_selector.cpp:279
 #, fuzzy
@@ -24470,19 +24551,19 @@ msgstr "W"
 
 #: pcb_calculator/widgets/unit_selector.cpp:288
 msgid "m/s"
-msgstr ""
+msgstr "m/s"
 
 #: pcb_calculator/widgets/unit_selector.cpp:289
 msgid "ft/s"
-msgstr ""
+msgstr "ft/s"
 
 #: pcb_calculator/widgets/unit_selector.cpp:290
 msgid "km/h"
-msgstr ""
+msgstr "km/h"
 
 #: pcb_calculator/widgets/unit_selector.cpp:291
 msgid "mi/h"
-msgstr ""
+msgstr "mi/h"
 
 #: pcbnew/array_creator.cpp:211
 #, fuzzy
@@ -24502,7 +24583,7 @@ msgstr "Otomatik kaydırma hızı:"
 #: pcbnew/autorouter/autoplace_tool.cpp:68
 #, c-format
 msgid "Board edges must be defined on the %s layer."
-msgstr ""
+msgstr "Tahta kenarları %s layer'da tanımlanmalıdır."
 
 #: pcbnew/autorouter/autoplace_tool.cpp:89
 #, fuzzy
@@ -24671,7 +24752,7 @@ msgstr "Malzeme"
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:102
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:273
 msgid "Epsilon R"
-msgstr ""
+msgstr "Epsilon R"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:95
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:106
@@ -24681,7 +24762,7 @@ msgstr "kayıp tanjantı"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:35
 msgid "Epsilon R:"
-msgstr ""
+msgstr "Epsilon R:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:39
 #, fuzzy
@@ -24719,11 +24800,11 @@ msgstr "Ped bağlantısı:"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
 msgid "Yes, bevelled"
-msgstr ""
+msgstr "Evet, eğimli"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:48
 msgid "Options for edge card connectors."
-msgstr ""
+msgstr "Kenar kartı konektörleri için seçenekler."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:119
 msgid "Core"
@@ -24750,16 +24831,16 @@ msgstr "Kilidi Açılmış Dielektrik Katmanları Ayarlama"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:198
 #, c-format
 msgid "Value too small (min value %s)."
-msgstr ""
+msgstr "Değer çok küçük (minimum değer %s)."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:211
 msgid "All dielectric  thickness layers are locked"
-msgstr ""
+msgstr "Tüm dielektrik kalınlık katmanları kilitlenir"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:278
 #, c-format
 msgid "Layer '%s' (sublayer %d/%d)"
-msgstr ""
+msgstr "Katman '%s' (alt katman %d /%d)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:293
 #, fuzzy
@@ -24775,7 +24856,7 @@ msgstr "Görünüm penceresini seçin:"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:340
 #, c-format
 msgid "Layer '%s' sublayer %d/%d"
-msgstr ""
+msgstr "Katman '%s' alt katmanı %d/%d"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:350
 #, fuzzy
@@ -24792,15 +24873,19 @@ msgid ""
 "Incorrect value for Epsilon R (Epsilon R must be positive or null if not "
 "used)"
 msgstr ""
+"Epsilon R için yanlış değer (Kullanılmazsa Epsilon R pozitif veya boş "
+"olmalıdır)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1157
 msgid ""
 "Incorrect value for Loss tg (Loss tg must be positive or null if not used)"
 msgstr ""
+"Kayıp tg için yanlış değer (Kayıp tg kullanılmazsa pozitif veya boş "
+"olmalıdır)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1203
 msgid "A layer thickness is < 0. Fix it"
-msgstr ""
+msgstr "Bir katman kalınlığı <0'dır. Düzelt"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1653
 msgid "Custom..."
@@ -24816,7 +24901,7 @@ msgstr "Tüm Bakır Katmanlar"
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:24
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:32
 msgid "Select the number of copper layers in the stackup"
-msgstr ""
+msgstr "Yığındaki bakır katman sayısını seçin"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:28
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:52
@@ -24882,6 +24967,8 @@ msgid ""
 "If Impedance Controlled option is set,\n"
 "Loss tangent and EpsilonR will be added to constraints."
 msgstr ""
+"Empedans Kontrollü seçenek ayarlanmışsa,\n"
+"Kısıtlamalara kayıp teğeti ve Epsilon eklenecektir."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:47
 msgid "Add Dielectric Layer..."
@@ -24915,11 +25002,11 @@ msgstr "ENEPIG"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:40
 msgid "HAL SnPb"
-msgstr ""
+msgstr "HAL SnPb"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:41
 msgid "HAL lead-free"
-msgstr ""
+msgstr "HAL kurşunsuz"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:42
 #, fuzzy
@@ -24933,15 +25020,15 @@ msgstr "Elek Ayarları"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:44
 msgid "Immersion nickel"
-msgstr ""
+msgstr "Daldırma nikel"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:45
 msgid "Immersion silver"
-msgstr ""
+msgstr "Daldırma gümüş"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:46
 msgid "Immersion gold"
-msgstr ""
+msgstr "Daldırma altın"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:47
 msgid "HT_OSP"
@@ -24988,11 +25075,11 @@ msgstr "Sarı"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:78
 msgid "FR4 natural"
-msgstr ""
+msgstr "FR4 doğal"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:79
 msgid "PTFE natural"
-msgstr ""
+msgstr "PTFE doğal"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:80
 msgid "Polyimide"
@@ -25000,7 +25087,7 @@ msgstr "Poliimid"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:81
 msgid "Phenolic natural"
-msgstr ""
+msgstr "Fenolik doğal"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:82
 msgid "Aluminum"
@@ -25015,7 +25102,7 @@ msgstr "Belirtilmemiş"
 
 #: pcbnew/build_BOM_from_board.cpp:79
 msgid "Cannot export BOM: there are no footprints on the PCB."
-msgstr ""
+msgstr "BOM dışa aktarılamıyor: PCB'de ayak izi yok."
 
 #: pcbnew/build_BOM_from_board.cpp:89
 #, fuzzy
@@ -25036,11 +25123,11 @@ msgstr "Tasarım"
 
 #: pcbnew/build_BOM_from_board.cpp:113
 msgid "Supplier and ref"
-msgstr ""
+msgstr "Tedarikçi ve hakem"
 
 #: pcbnew/cleanup_item.cpp:46
 msgid "Remove track shorting two nets"
-msgstr ""
+msgstr "İki ağı kısa devre yapan parçayı çıkarın"
 
 #: pcbnew/cleanup_item.cpp:47
 #, fuzzy
@@ -25064,11 +25151,11 @@ msgstr "Çakışmalar kontrol ediliyor..."
 
 #: pcbnew/cleanup_item.cpp:51
 msgid "Remove track not connected at both ends"
-msgstr ""
+msgstr "Her iki ucunda bağlı olmayan parçayı çıkarın"
 
 #: pcbnew/cleanup_item.cpp:52
 msgid "Remove via connected on less than 2 layers"
-msgstr ""
+msgstr "2 Kattan daha az bağlı olarak çıkarın"
 
 #: pcbnew/cleanup_item.cpp:53
 #, fuzzy
@@ -25082,7 +25169,7 @@ msgstr "Yollar ve geçişler oluştur"
 
 #: pcbnew/cleanup_item.cpp:57
 msgid "Remove zero-size graphic"
-msgstr ""
+msgstr "Sıfır boyutlu grafiği kaldır"
 
 #: pcbnew/cleanup_item.cpp:58
 #, fuzzy
@@ -25101,7 +25188,7 @@ msgstr "Yollar ve geçişler oluştur"
 
 #: pcbnew/cleanup_item.cpp:64
 msgid "Unknown cleanup action"
-msgstr ""
+msgstr "Bilinmeyen temizleme eylemi"
 
 #: pcbnew/connectivity/connectivity_data.cpp:106
 #, fuzzy
@@ -25117,19 +25204,19 @@ msgstr "(kendiliğinden kesişen)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:475
 msgid "(not a closed shape)"
-msgstr ""
+msgstr "(kapalı bir şekil değil)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:530
 msgid "(multiple board outlines not supported)"
-msgstr ""
+msgstr "(çoklu pano anahatları desteklenmez)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:86
 msgid "Only front"
-msgstr ""
+msgstr "Sadece ön"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:87
 msgid "Only back"
-msgstr ""
+msgstr "Sadece geri"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:88
 #, fuzzy
@@ -25155,17 +25242,19 @@ msgstr "Yeniden Numaralandır:"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:278
 msgid "No PCB to reannotate!"
-msgstr ""
+msgstr "Yeniden açıklama yapmak için PCB yok!"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:290
 msgid "PCB successfully reannotated"
-msgstr ""
+msgstr "PCB başarıyla yeniden onaylandı"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:291
 msgid ""
 "PCB annotation changes should be synchronized with schematic using the "
 "\"Update Schematic from PCB\" tool."
 msgstr ""
+"PCB ek açıklama değişiklikleri, \"PCB'den Şemayı Güncelle\" aracı "
+"kullanılarak şematik ile senkronize edilmelidir."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:304
 #, fuzzy, c-format
@@ -25180,6 +25269,8 @@ msgid ""
 "\n"
 "Any reference types %s will not be annotated."
 msgstr ""
+"\n"
+"Herhangi bir referans türü %s açıklamalı olmayacaktır."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:314
 #, fuzzy
@@ -25194,6 +25285,8 @@ msgid ""
 "\n"
 "Front footprints will start at %s"
 msgstr ""
+"\n"
+"Ön ayak izleri %s'den başlayacak"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:327
 #, fuzzy, c-format
@@ -25204,7 +25297,7 @@ msgstr "KiCad ayak izi kitaplığı yolları"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:328
 msgid "the last front footprint + 1"
-msgstr ""
+msgstr "son ön ayak izi + 1"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:336
 #, c-format
@@ -25212,6 +25305,8 @@ msgid ""
 "\n"
 "Front footprints starting with '%s' will have the prefix removed."
 msgstr ""
+"\n"
+"'%s' ile başlayan ön ayak izleri öneki kaldıracaktır."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:342
 #, c-format
@@ -25219,6 +25314,8 @@ msgid ""
 "\n"
 "Front footprints will have '%s' inserted as a prefix."
 msgstr ""
+"\n"
+"Ön ayak izlerine önek olarak '%s' eklenecektir."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:352
 #, c-format
@@ -25226,6 +25323,8 @@ msgid ""
 "\n"
 "Back footprints starting with '%s' will have the prefix removed."
 msgstr ""
+"\n"
+"'%s' ile başlayan arka ayak izleri öneki kaldıracaktır."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:358
 #, c-format
@@ -25233,6 +25332,8 @@ msgid ""
 "\n"
 "Back footprints will have '%s' inserted as a prefix."
 msgstr ""
+"\n"
+"Arka ayak izlerine önek olarak '%s' eklenecektir."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:366
 #, c-format
@@ -25241,6 +25342,9 @@ msgid ""
 "Prior to sorting by %s, the coordinates of which will be rounded to a %s, %s "
 "grid."
 msgstr ""
+"\n"
+"Koordinatları %s, %s ızgarasına yuvarlanacak olan %s'ye göre sıralamadan "
+"önce."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:368
 #, fuzzy
@@ -25260,6 +25364,10 @@ msgid ""
 "There are %i types of reference designations\n"
 "**********************************************************\n"
 msgstr ""
+"\n"
+"\n"
+"%i tür referans tanımlamaları vardır\n"
+"**********************************************************\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:523
 #, c-format
@@ -25268,6 +25376,9 @@ msgid ""
 "Excluding: %s from reannotation\n"
 "\n"
 msgstr ""
+"\n"
+"Hariç: %s yeniden onaylamadan\n"
+"\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:526
 msgid ""
@@ -25275,10 +25386,13 @@ msgid ""
 "    Change Array\n"
 "***********************\n"
 msgstr ""
+"\n"
+"    Diziyi Değiştir\n"
+"***********************\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:534
 msgid " will be ignored"
-msgstr ""
+msgstr " göz ardı edilecek"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:548
 #, fuzzy
@@ -25293,6 +25407,8 @@ msgid ""
 "\n"
 "*********** Sort on %s ***********"
 msgstr ""
+"\n"
+"*********** %s'ye göre sırala ***********"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:555
 #, fuzzy
@@ -25310,6 +25426,8 @@ msgid ""
 "\n"
 "Sort Code %d"
 msgstr ""
+"\n"
+"%d Kodunu Sırala"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:562
 #, c-format
@@ -25317,10 +25435,13 @@ msgid ""
 "\n"
 "%d %s UUID: [%s], X, Y: %s, Rounded X, Y, %s"
 msgstr ""
+"\n"
+"%d %s KULLANICI kimliği: [%s], X, Y: %s, Yuvarlatılmış X, Y, %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:585
 msgid "Selected options resulted in errors! Change them and try again."
 msgstr ""
+"Seçilen seçenekler hatalarla sonuçlandı! Onları değiştir ve tekrar dene."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:592
 #, c-format
@@ -25330,6 +25451,10 @@ msgid ""
 "Recommend running DRC with 'Test for parity between PCB and schematic' "
 "checked.\n"
 msgstr ""
+"\n"
+"PCB %d boş veya geçersiz referans tanımlamalarına sahiptir.\n"
+"drc'yi 'PCB ile şematik arasındaki parite testi' işaretli olarak "
+"çalıştırmanızı öneririz.\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:599
 #, c-format
@@ -25337,6 +25462,8 @@ msgid ""
 "\n"
 "RefDes: %s Footprint: %s:%s at %s on PCB."
 msgstr ""
+"\n"
+"RefDes:%s Ayak İzi:%s: PCB'de%s'de%s."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:607
 #, fuzzy
@@ -25350,7 +25477,7 @@ msgstr "Yinelenen öğeler %s%s\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:795
 msgid "Aborted: too many errors"
-msgstr ""
+msgstr "İptal edildi: çok fazla hata"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:849
 #, fuzzy
@@ -25380,15 +25507,15 @@ msgstr "Ayak İzi(Footprint) Editörü"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:45
 msgid "Horizontally: top left to bottom right"
-msgstr ""
+msgstr "Yatay olarak: sol üstten sağa"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:56
 msgid "Horizontally: top right to bottom left"
-msgstr ""
+msgstr "Yatay olarak: sağ üstten sola"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:67
 msgid "Horizontally: bottom left to top right"
-msgstr ""
+msgstr "Yatay olarak: soldan sağa doğru"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:78
 msgid "Horizontally:: bottom right to top left"
