@@ -754,15 +754,13 @@ int KICAD_MANAGER_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
     }
     catch( const IO_ERROR& err )
     {
-        wxMessageBox( _( "Application failed to load:\n" ) + err.What(), _( "KiCad Error" ),
-                      wxOK | wxICON_ERROR, m_frame );
+        wxLogError( _( "Application failed to load:\n" ) + err.What() );
         return -1;
     }
 
     if ( !player )
     {
-        wxMessageBox( _( "Application failed to load." ), _( "KiCad Error" ),
-                      wxOK | wxICON_ERROR, m_frame );
+        wxLogError( _( "Application failed to load." ) );
         return -1;
     }
 
