@@ -31,19 +31,6 @@
 #include <common/plugins/cadstar/cadstar_parts_lib_parser.h>
 
 
-//Todo: move somewhere else?
-template <class T>
-std::ostream& operator<<( std::ostream& aOs, const std::optional<T>& aOptional )
-{
-    if( aOptional.has_value() )
-        aOs << aOptional.value();
-    else
-        aOs << "nullopt";
-
-    return aOs;
-}
-
-
 BOOST_AUTO_TEST_SUITE( CadstarPartParser );
 
 
@@ -64,7 +51,7 @@ BOOST_AUTO_TEST_CASE( AnalyzeGrammar )
     BOOST_CHECK_EQUAL( headerIssues, 0 );
 }
 
-/*
+
 struct CHECK_HEADER_CASE
 {
     std::string m_CaseName;
@@ -118,33 +105,33 @@ BOOST_AUTO_TEST_CASE( ReadFile )
     // Test a programatically generated file (see writeCadstarFile.py)
     auto ret = p.ReadFile( getCadstarTestFile( "cadstarDummy.lib" ) );
 
-    BOOST_CHECK_EQUAL( ret.m_FormatNumber, 32 );
+    KI_CHECK_OPT_EQUAL( ret.m_FormatNumber, 32 );
     BOOST_CHECK_EQUAL( ret.m_PartEntries.size(), 100 );
 
     int i = 0;
 
     for( CADSTAR_PART_ENTRY& partEntry : ret.m_PartEntries )
     {
-        // Part header
+        // Part header KI_CHECK_OPT_EQUAL
         BOOST_CHECK_EQUAL( partEntry.m_Name, "PartName" + std::to_string( i ) );
-        BOOST_CHECK_EQUAL( partEntry.m_Number, std::to_string( i * 5 ) );
-        BOOST_CHECK_EQUAL( partEntry.m_Version, std::to_string( 2 ) );
-        BOOST_CHECK_EQUAL( partEntry.m_Description,
+        KI_CHECK_OPT_EQUAL( partEntry.m_Number, std::to_string( i * 5 ) );
+        KI_CHECK_OPT_EQUAL( partEntry.m_Version, std::to_string( 2 ) );
+        KI_CHECK_OPT_EQUAL( partEntry.m_Description,
                            "Part " + std::to_string( i ) + " Description" );
 
         BOOST_CHECK_EQUAL( partEntry.m_Pcb_component, "FOOTPRINT" + std::to_string( i ) );
-        BOOST_CHECK_EQUAL( partEntry.m_Pcb_alternate, "variant" + std::to_string( i * 5 ) );
-        BOOST_CHECK_EQUAL( partEntry.m_Value, std::to_string( i ) + " uH" );
+        KI_CHECK_OPT_EQUAL( partEntry.m_Pcb_alternate, "variant" + std::to_string( i * 5 ) );
+        KI_CHECK_OPT_EQUAL( partEntry.m_Value, std::to_string( i ) + " uH" );
         BOOST_CHECK_EQUAL( partEntry.m_ComponentStem, "L" );
-        BOOST_CHECK_EQUAL( partEntry.m_MaxPinCount, i + 10 );
+        KI_CHECK_OPT_EQUAL( partEntry.m_MaxPinCount, i + 10 );
         BOOST_CHECK_EQUAL( partEntry.m_GateSwappingAllowed, i % 10 != 1 );
         BOOST_CHECK_EQUAL( partEntry.m_PinsVisible, i % 5 != 1 );
 
-        BOOST_CHECK_EQUAL( partEntry.m_SpicePartName, "PartName" + std::to_string( i ) );
-        BOOST_CHECK_EQUAL( partEntry.m_SpiceModel, std::to_string( i ) + "uH" );
+        KI_CHECK_OPT_EQUAL( partEntry.m_SpicePartName, "PartName" + std::to_string( i ) );
+        KI_CHECK_OPT_EQUAL( partEntry.m_SpiceModel, std::to_string( i ) + "uH" );
 
-        BOOST_CHECK_EQUAL( partEntry.m_AcceptancePartName, "PartName" + std::to_string( i ) );
-        BOOST_CHECK_EQUAL( partEntry.m_AcceptanceText, "Acceptance" + std::to_string( i ) );
+        KI_CHECK_OPT_EQUAL( partEntry.m_AcceptancePartName, "PartName" + std::to_string( i ) );
+        KI_CHECK_OPT_EQUAL( partEntry.m_AcceptanceText, "Acceptance" + std::to_string( i ) );
 
         // User part attributes (* lines)
         BOOST_CHECK_EQUAL( partEntry.m_UserAttributes["UserFieldpartNo"],
@@ -187,7 +174,7 @@ BOOST_AUTO_TEST_CASE( ReadFile )
         // Check symbol name and pins
         BOOST_REQUIRE_EQUAL( partEntry.m_Symbols.size(), 1 );
         BOOST_CHECK_EQUAL( partEntry.m_Symbols[0].m_SymbolName, "Symbol" + std::to_string( i ) );
-        BOOST_CHECK_EQUAL( partEntry.m_Symbols[0].m_SymbolAlternateName,
+        KI_CHECK_OPT_EQUAL( partEntry.m_Symbols[0].m_SymbolAlternateName,
                            std::optional<std::string>() );
         BOOST_REQUIRE_EQUAL( partEntry.m_Symbols[0].m_Pins.size(), 2 );
         BOOST_CHECK_EQUAL( partEntry.m_Symbols[0].m_Pins[0].m_Identifier, 1 );
@@ -258,20 +245,18 @@ BOOST_AUTO_TEST_CASE( ReadContent )
     CADSTAR_PARTS_LIB_PARSER csParser;
     CADSTAR_PARTS_LIB_MODEL result = csParser.ReadContent( test );
 
-    std::optional<std::string> nullOptString;
-
-    BOOST_CHECK_EQUAL( result.m_FormatNumber, 32 );
+    KI_CHECK_OPT_EQUAL( result.m_FormatNumber, 32 );
     BOOST_REQUIRE_EQUAL( result.m_HierarchyNodes.size(), 2 ); // root and subnode
 
     BOOST_REQUIRE_EQUAL( result.m_PartEntries.size(), 1 );
 
     BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_Name, "<Part name>" );
-    BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_Number, "<Part number>" );
-    BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_Version, "<Part version>" );
-    BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_Description, "<Description>" );
+    BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_Number.value(), "<Part number>" );
+    BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_Version.value(), "<Part version>" );
+    BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_Description.value(), "<Description>" );
     BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_Pcb_component, "<PCB Component Refname>" );
-    BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_Pcb_alternate, "<PCB Alternate Refname>" );
-    BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_Value, "<Value>" );
+    BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_Pcb_alternate.value(), "<PCB Alternate Refname>" );
+    BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_Value.value(), "<Value>" );
 
     // Check pin names (*PNM)
     BOOST_REQUIRE_EQUAL( result.m_PartEntries[0].m_PinNamesMap.size(), 6 );
@@ -315,7 +300,7 @@ BOOST_AUTO_TEST_CASE( ReadContent )
     // Check internal swap groups equivalences (*INT)
     BOOST_REQUIRE_EQUAL( result.m_PartEntries[0].m_InternalSwapGroup.size(), 1 );
 
-    BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_InternalSwapGroup[0].m_Name, "Group1" );
+    BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_InternalSwapGroup[0].m_Name.value(), "Group1" );
 
     std::vector<std::vector<long>>& intgates =
             result.m_PartEntries[0].m_InternalSwapGroup[0].m_Gates;
@@ -331,7 +316,7 @@ BOOST_AUTO_TEST_CASE( ReadContent )
     // Check external swap groups equivalences (*EXT)
     BOOST_REQUIRE_EQUAL( result.m_PartEntries[0].m_ExternalSwapGroup.size(), 1 );
 
-    BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_ExternalSwapGroup[0].m_Name, "Group2" );
+    BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_ExternalSwapGroup[0].m_Name.value(), "Group2" );
 
     std::vector<std::vector<long>>& extgates =
             result.m_PartEntries[0].m_ExternalSwapGroup[0].m_Gates;
@@ -345,7 +330,7 @@ BOOST_AUTO_TEST_CASE( ReadContent )
     BOOST_CHECK_EQUAL( extgates[1][1], 7 );
 
     // Check part Definition
-    BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_PartDefinitionName, "<Definition name>" );
+    BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_PartDefinitionName.value(), "<Definition name>" );
 
     // Check *NGS
     BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_GateSwappingAllowed, false );
@@ -357,15 +342,15 @@ BOOST_AUTO_TEST_CASE( ReadContent )
     BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_ComponentStem, "<Component name stem>" );
 
     // Check *MXP
-    BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_MaxPinCount, 32 );
+    KI_CHECK_OPT_EQUAL( result.m_PartEntries[0].m_MaxPinCount, 32 );
 
     // Check *SPI
-    BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_SpicePartName, "<Part name>" );
-    BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_SpiceModel, "<Model> <Value>" );
+    BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_SpicePartName.value(), "<Part name>" );
+    BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_SpiceModel.value(), "<Model> <Value>" );
 
     // Check *PAC
-    BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_AcceptancePartName, "<Part name>" );
-    BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_AcceptanceText, "<Acceptance Text>" );
+    BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_AcceptancePartName.value(), "<Part name>" );
+    BOOST_CHECK_EQUAL( result.m_PartEntries[0].m_AcceptanceText.value(), "<Acceptance Text>" );
 
     // Check user attributes (* lines)
     BOOST_REQUIRE_EQUAL( result.m_PartEntries[0].m_UserAttributes.size(), 2 );
@@ -461,10 +446,11 @@ BOOST_AUTO_TEST_CASE( ReadContent )
     while( itA != symbols.end() || itB != expectedSymbols.end() )
     {
         BOOST_TEST_CONTEXT( "With symbol = " << itB->m_SymbolName
-                                             << " Alternate = " << itB->m_SymbolAlternateName )
+                                             << " Alternate = "
+                                             << itB->m_SymbolAlternateName.value_or( "[nullopt]" ) )
         {
             BOOST_CHECK_EQUAL( itA->m_SymbolName, itB->m_SymbolName );
-            BOOST_CHECK_EQUAL( itA->m_SymbolAlternateName, itB->m_SymbolAlternateName );
+            KI_CHECK_OPT_EQUAL( itA->m_SymbolAlternateName, itB->m_SymbolAlternateName );
 
             BOOST_REQUIRE_EQUAL( itA->m_Pins.size(), itB->m_Pins.size() );
 
@@ -478,7 +464,7 @@ BOOST_AUTO_TEST_CASE( ReadContent )
                     BOOST_CHECK_EQUAL( itPinsA->m_Identifier, itPinsB->m_Identifier );
                     BOOST_CHECK( itPinsA->m_Position == itPinsB->m_Position );
                     BOOST_CHECK( itPinsA->m_Type == itPinsB->m_Type );
-                    BOOST_CHECK_EQUAL( itPinsA->m_Loading, itPinsB->m_Loading );
+                    KI_CHECK_OPT_EQUAL( itPinsA->m_Loading, itPinsB->m_Loading );
                 }
 
                 ++itPinsA;
@@ -530,7 +516,7 @@ BOOST_AUTO_TEST_CASE( ReadContent )
                 BOOST_CHECK_EQUAL( itPinsA->m_Identifier, itPinsB->m_Identifier );
                 BOOST_CHECK( itPinsA->m_Position == itPinsB->m_Position );
                 BOOST_CHECK( itPinsA->m_Type == itPinsB->m_Type );
-                BOOST_CHECK_EQUAL( itPinsA->m_Loading, itPinsB->m_Loading );
+                KI_CHECK_OPT_EQUAL( itPinsA->m_Loading, itPinsB->m_Loading );
 
                 ++itPinsA;
                 ++itPinsB;
@@ -541,6 +527,6 @@ BOOST_AUTO_TEST_CASE( ReadContent )
         ++itEntryB;
     }
 }
-*/
+
 
 BOOST_AUTO_TEST_SUITE_END()

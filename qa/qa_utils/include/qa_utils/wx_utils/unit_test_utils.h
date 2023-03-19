@@ -138,6 +138,52 @@ BOOST_TEST_PRINT_NAMESPACE_CLOSE
 #endif
 
 
+template<class T>
+struct PRINTABLE_OPT
+{
+    PRINTABLE_OPT( const std::optional<T>& aOpt ) : m_Opt( aOpt ){};
+    PRINTABLE_OPT( const T& aVal ) : m_Opt( aVal ){};
+
+    std::optional<T> m_Opt;
+};
+
+
+/**
+ * Work around to allow printing std::optional types
+ */
+#define KI_CHECK_OPT_EQUAL( lhs, rhs )                                                            \
+    BOOST_CHECK_EQUAL( PRINTABLE_OPT( lhs ), PRINTABLE_OPT( rhs ) )
+
+
+template <class T>
+inline std::ostream& operator<<( std::ostream& aOs, const PRINTABLE_OPT<T>& aOptional )
+{
+    if( aOptional.m_Opt.has_value() )
+        aOs << *aOptional.m_Opt;
+    else
+        aOs << "nullopt";
+
+    return aOs;
+}
+
+
+template <class L, class R>
+inline bool operator==( const PRINTABLE_OPT<L>& aLhs, const PRINTABLE_OPT<R>& aRhs )
+{
+    if( !aLhs.m_Opt.has_value() && !aRhs.m_Opt.has_value() )
+        return true; // both nullopt
+
+    return aLhs.m_Opt.has_value() && aRhs.m_Opt.has_value() && *aLhs.m_Opt == *aRhs.m_Opt;
+}
+
+
+template <class L, class R>
+inline bool operator!=( const PRINTABLE_OPT<L>& aLhs, const PRINTABLE_OPT<R>& aRhs )
+{
+    return !( aLhs == aRhs );
+}
+
+
 namespace BOOST_TEST_PRINT_NAMESPACE_OPEN
 {
 
@@ -158,21 +204,6 @@ struct print_log_value<std::vector<T>>
         }
 
         os << "]";
-    }
-};
-
-/**
- * Boost print helper for std::optional
- */
-template <class T>
-struct print_log_value<std::optional<T>>
-{
-    inline void operator()( std::ostream& os, std::optional<T> const& aOptional )
-    {
-        if( aOptional.has_value() )
-            print_log_value<T>()( os, aOptional.value() );
-        else
-            os << "nullopt";
     }
 };
 
