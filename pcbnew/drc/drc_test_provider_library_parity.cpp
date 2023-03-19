@@ -75,7 +75,7 @@ public:
 // In "DRC" mode (aReporter == nulltpr) properties are only checked until a difference is found.
 //
 #define TEST( a, b, msg )                                   \
-        {                                                   \
+        do {                                                \
             if( a != b )                                    \
             {                                               \
                 diff = true;                                \
@@ -86,11 +86,11 @@ public:
                                                             \
             if( diff && !aReporter )                        \
                 return diff;                                \
-        }
+        } while (0)
 
 #define EPSILON 0.000001
 #define TEST_D( a, b, msg )                                 \
-        {                                                   \
+        do {                                                \
             if( abs( a - b ) > EPSILON )                    \
             {                                               \
                 diff = true;                                \
@@ -101,10 +101,10 @@ public:
                                                             \
             if( diff && !aReporter )                        \
                 return diff;                                \
-        }
+        } while (0)
 
 #define TEST_V3D( a, b, msg )                               \
-        {                                                   \
+        do {                                                \
             if( abs( a.x - b.x ) > EPSILON                  \
                     || abs( a.y - b.y ) > EPSILON           \
                     || abs( a.z - b.z ) > EPSILON )         \
@@ -117,7 +117,7 @@ public:
                                                             \
             if( diff && !aReporter )                        \
                 return diff;                                \
-        }
+        } while (0)
 
 #define ITEM_DESC( item ) ( item )->GetItemDescription( &g_unitsProvider )
 
