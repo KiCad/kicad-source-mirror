@@ -105,6 +105,20 @@ public:
         SetContinuity( true );
         SetDrawOutsideMargins( false );
         ShowName( false );
+
+        SetName( aName );
+    }
+
+    void SetName( const wxString& aName ) override
+    {
+        mpFXYVector::SetName( aName );
+
+        if( m_type & SPT_AC_MAG )
+            m_displayName = aName + _( " (mag)" );
+        else if( m_type & SPT_AC_PHASE )
+            m_displayName = aName + _( " (phase)" );
+        else
+            m_displayName = aName;
     }
 
     /**

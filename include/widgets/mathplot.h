@@ -237,6 +237,11 @@ public:
      */
     const wxString& GetName() const { return m_name; }
 
+    const wxString& GetDisplayName() const
+    {
+        return m_displayName.IsEmpty() ? m_name : m_displayName;
+    }
+
     /** Get font set for this layer.
      *  @return Font
      */
@@ -264,7 +269,7 @@ public:
     /** Set layer name
      *  @param name Name, will be copied to internal class member
      */
-    void SetName( wxString name ) { m_name = name; }
+    virtual void SetName( const wxString& name ) { m_name = name; }
 
     /** Set layer font
      *  @param font Font, will be copied to internal class member
@@ -311,15 +316,17 @@ public:
 
 protected:
 
-    wxFont m_font;                  // !< Layer's font
-    wxPen m_pen;                    // !< Layer's pen
-    wxBrush m_brush;                // !< Layer's brush
-    wxString    m_name;             // !< Layer's name
-    bool    m_continuous;           // !< Specify if the layer will be plotted as a continuous line or a set of points.
-    bool    m_showName;             // !< States whether the name of the layer must be shown (default is true).
-    bool    m_drawOutsideMargins;   // !< select if the layer should draw only inside margins or over all DC
-    mpLayerType m_type;             // !< Define layer type, which is assigned by constructor
-    bool m_visible;                 // !< Toggles layer visibility
+    wxFont      m_font;               // !< Layer's font
+    wxPen       m_pen;                // !< Layer's pen
+    wxBrush     m_brush;              // !< Layer's brush
+    wxString    m_name;               // !< Layer's name
+    wxString    m_displayName;
+    bool        m_continuous;         // !< Specify if the layer will be plotted as a continuous line or a set of points.
+    bool        m_showName;           // !< States whether the name of the layer must be shown (default is true).
+    bool        m_drawOutsideMargins; // !< select if the layer should draw only inside margins or over all DC
+    mpLayerType m_type;               // !< Define layer type, which is assigned by constructor
+    bool        m_visible;            // !< Toggles layer visibility
+
     DECLARE_DYNAMIC_CLASS( mpLayer )
 };
 
