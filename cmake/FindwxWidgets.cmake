@@ -231,7 +231,7 @@ endif()
 #=====================================================================
 if(wxWidgets_FIND_STYLE STREQUAL "win32")
   # Useful common wx libs needed by almost all components.
-  set(wxWidgets_COMMON_LIBRARIES png tiff jpeg zlib regex expat)
+  set(wxWidgets_COMMON_LIBRARIES png tiff jpeg ZLIB::ZLIB regex expat)
 
   # DEPRECATED: Use find_package(wxWidgets COMPONENTS mono) instead.
   if(NOT wxWidgets_FIND_COMPONENTS)

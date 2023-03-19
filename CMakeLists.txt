@@ -750,14 +750,11 @@ include_directories( SYSTEM ${GLM_INCLUDE_DIR} )
 # Find zlib library, required
 #
 find_package(ZLIB REQUIRED)
-check_find_package_result( ZLIB_FOUND "ZLIB" )
-include_directories( SYSTEM ${ZLIB_INCLUDE_DIRS} )
 
 #
-# Find CURL library, required
+# Find libcurl, required
 #
 find_package( CURL REQUIRED )
-include_directories( SYSTEM ${CURL_INCLUDE_DIRS} )
 
 #
 # Find Cairo library, required

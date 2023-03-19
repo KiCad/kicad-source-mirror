@@ -492,7 +492,7 @@ target_link_libraries( common
     # Database support needs these two
     nanodbc # for now; maybe hoist out of common
     Boost::locale
-    ${CURL_LIBRARIES}
+    CURL::libcurl
     ${wxWidgets_LIBRARIES}
     ${EXTRA_LIBS}
     # outline font support
