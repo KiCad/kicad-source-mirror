@@ -131,9 +131,11 @@ public:
         SetContinuity( true );
         SetDrawOutsideMargins( false );
         ShowName( false );
+
+        SetName( aName );
     }
 
-    void SetName( wxString aName ) override
+    void SetName( const wxString& aName ) override
     {
         for( auto& [ idx, cursor ] : m_cursors )
         {
@@ -142,6 +144,13 @@ public:
         }
 
         mpFXYVector::SetName( aName );
+
+        if( m_type & SPT_AC_MAG )
+            m_displayName = aName + _( " (gain)" );
+        else if( m_type & SPT_AC_PHASE )
+            m_displayName = aName + _( " (phase)" );
+        else
+            m_displayName = aName;
     }
 
     /**

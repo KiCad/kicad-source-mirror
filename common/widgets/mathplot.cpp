@@ -345,7 +345,7 @@ void mpInfoLegend::Plot( wxDC& dc, mpWindow& w )
 
             if( layer->GetLayerType() == mpLAYER_PLOT && layer->IsVisible() )
             {
-                label = layer->GetName();
+                label = layer->GetDisplayName();
                 dc.GetTextExtent( label, &tmpX, &tmpY );
                 textX = ( textX > tmpX + baseWidth ) ? textX : tmpX + baseWidth + mpLEGEND_MARGIN;
                 textY += tmpY;
@@ -368,7 +368,7 @@ void mpInfoLegend::Plot( wxDC& dc, mpWindow& w )
 
                 if( layer->GetLayerType() == mpLAYER_PLOT && layer->IsVisible() )
                 {
-                    label   = layer->GetName();
+                    label   = layer->GetDisplayName();
                     lpen    = layer->GetPen();
                     dc.GetTextExtent( label, &tmpX, &tmpY );
                     dc.SetPen( lpen );
