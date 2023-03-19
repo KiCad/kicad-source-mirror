@@ -28,15 +28,15 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:53-0800\n"
-"PO-Revision-Date: 2023-02-23 00:29+0000\n"
-"Last-Translator: 김랑기 <korearf@gmail.com>\n"
+"PO-Revision-Date: 2023-03-21 04:37+0000\n"
+"Last-Translator: \"minsu kim (0xGabriel)\" <rlaalstn9601@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v7/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -123,9 +123,8 @@ msgid "Build BVH for holes and vias"
 msgstr "홀과 비아용 BVH 생성"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:389
-#, fuzzy
 msgid "OpenGL context creation error"
-msgstr "스포크 수 해상도:"
+msgstr "OpenGL context 생성 에러"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:420
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
@@ -1729,7 +1728,7 @@ msgstr "추가 기여자"
 
 #: common/dialog_about/AboutDialog_main.cpp:1084
 msgid "KiCad Librarian Team"
-msgstr "KiCad 사서팀"
+msgstr "KiCad 라이브러리 개발팀"
 
 #: common/dialog_about/AboutDialog_main.cpp:1117
 msgid "3D models by"
@@ -1773,11 +1772,11 @@ msgstr "문서 작성자"
 
 #: common/dialog_about/dialog_about.cpp:140
 msgid "Librarians"
-msgstr "사서"
+msgstr "라이브러리 개발자"
 
 #: common/dialog_about/dialog_about.cpp:143
 msgid "Artists"
-msgstr "예술가"
+msgstr "UI 디자이너"
 
 #: common/dialog_about/dialog_about.cpp:145
 msgid "Translators"
@@ -20482,9 +20481,8 @@ msgstr ""
 "%s"
 
 #: kicad/pcm/pcm.cpp:464
-#, fuzzy
 msgid "Failed to parse locally stored repository.json."
-msgstr "레포지토리를 파싱할 수 없습니다: %s"
+msgstr "로컬에 저장된 레파지토리.json 파일을 불러오는데 실패했습니다 : %s"
 
 #: kicad/pcm/pcm.cpp:492
 msgid ""
@@ -33070,7 +33068,7 @@ msgstr "PCB 데이터 결정\n"
 #: pcbnew/exporters/step/exporter_step.cpp:339
 #, fuzzy, c-format
 msgid "Board Thickness from stackup: %.3f mm\n"
-msgstr "스택업에서 기판 두께:"
+msgstr "스택업에서 기판 두께:\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:344
 msgid "Build STEP data\n"
