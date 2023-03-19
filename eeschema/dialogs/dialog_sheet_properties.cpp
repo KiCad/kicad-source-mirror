@@ -368,6 +368,17 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
     if( positioningChanged( m_fields, m_sheet->GetFields() ) )
         m_sheet->ClearFieldsAutoplaced();
 
+    for( int ii = m_fields->GetNumberRows() - 1; ii >= SHEET_MANDATORY_FIELDS; ii-- )
+    {
+        SCH_FIELD&      field = m_fields->at( ii );
+        const wxString& fieldName = field.GetCanonicalName();
+
+        if( fieldName.IsEmpty() && field.GetText().IsEmpty() )
+            m_fields->erase( m_fields->begin() + ii );
+        else if( fieldName.IsEmpty() )
+            field.SetName( _( "untitled" ) );
+    }
+
     m_sheet->SetFields( *m_fields );
 
     m_sheet->SetBorderWidth( m_borderWidth.GetValue() );

@@ -302,7 +302,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::Validate()
         LIB_FIELD& field = m_fields->at( ii );
         wxString   fieldName = field.GetName( false );
 
-        if( fieldName.IsEmpty() )
+        if( fieldName.IsEmpty() && !field.GetText().IsEmpty() )
         {
             if( m_NoteBook->GetSelection() != 0 )
                 m_NoteBook->SetSelection( 0 );
@@ -391,6 +391,17 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
         pos.y = -pos.y;
         m_fields->at( ii ).SetPosition( pos );
         m_fields->at( ii ).SetId( ii );
+    }
+
+    for( int ii = m_fields->GetNumberRows() - 1; ii >= MANDATORY_FIELDS; ii-- )
+    {
+        LIB_FIELD&      field = m_fields->at( ii );
+        const wxString& fieldName = field.GetCanonicalName();
+
+        if( fieldName.IsEmpty() && field.GetText().IsEmpty() )
+            m_fields->erase( m_fields->begin() + ii );
+        else if( fieldName.IsEmpty() )
+            field.SetName( _( "untitled" ) );
     }
 
     m_libEntry->SetFields( *m_fields );

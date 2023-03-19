@@ -769,8 +769,18 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     fields.clear();
 
-    for( size_t i = 0; i < m_fields->size(); ++i )
-        fields.push_back( m_fields->at( i ) );
+    for( size_t ii = 0; ii < m_fields->size(); ++ii )
+    {
+        SCH_FIELD&      field = m_fields->at( ii );
+        const wxString& fieldName = field.GetCanonicalName();
+
+        if( fieldName.IsEmpty() && field.GetText().IsEmpty() )
+            continue;
+        else if( fieldName.IsEmpty() )
+            field.SetName( _( "untitled" ) );
+
+        fields.push_back( field );
+    }
 
     // Reference has a specific initialization, depending on the current active sheet
     // because for a given symbol, in a complex hierarchy, there are more than one

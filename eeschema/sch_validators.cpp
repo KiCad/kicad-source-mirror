@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Wayne Stambaugh, stambaughw@gmail.com
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,8 +60,7 @@ SCH_FIELD_VALIDATOR::SCH_FIELD_VALIDATOR(  bool aIsLibEditor, int aFieldId, wxSt
     // The reference, sheetname and sheetfilename fields cannot be empty.
     if( aFieldId == REFERENCE_FIELD
       || aFieldId == SHEETNAME_V
-      || aFieldId == SHEETFILENAME_V
-      || aFieldId == FIELD_NAME )
+      || aFieldId == SHEETFILENAME_V )
     {
         style |= wxFILTER_EMPTY;
     }
@@ -91,54 +90,12 @@ bool SCH_FIELD_VALIDATOR::Validate( wxWindow* aParent )
         return false;
 
     wxString val( text->GetValue() );
-
-    // The format of the error message for not allowed chars
-    wxString fieldCharError;
-
-    switch( m_fieldId )
-    {
-    case REFERENCE_FIELD:
-        fieldCharError = _( "The reference designator cannot contain %s character(s)." );
-        break;
-
-    case VALUE_FIELD:
-        fieldCharError = _( "The value field cannot contain %s character(s)." );
-        break;
-
-    case FOOTPRINT_FIELD:
-        fieldCharError = _( "The footprint field cannot contain %s character(s)." );
-        break;
-
-    case DATASHEET_FIELD:
-        fieldCharError = _( "The datasheet field cannot contain %s character(s)." );
-        break;
-
-    case SHEETNAME_V:
-        fieldCharError = _( "The sheet name cannot contain %s character(s)." );
-        break;
-
-    case SHEETFILENAME_V:
-        fieldCharError = _( "The sheet filename cannot contain %s character(s)." );
-        break;
-
-    default:
-        fieldCharError = _( "The field cannot contain %s character(s)." );
-        break;
-    };
-
     wxString msg;
 
-    // We can only do some kinds of validation once the input is complete, so
-    // check for them here:
     if( HasFlag( wxFILTER_EMPTY ) && val.empty() )
-    {
-        // Some fields cannot have an empty value, and user fields require a name:
-        if( m_fieldId == FIELD_NAME )
-            msg.Printf( _( "The name of the field cannot be empty." ) );
-        else    // the FIELD_VALUE id or REFERENCE_FIELD or VALUE_FIELD
-            msg.Printf( _( "The value of the field cannot be empty." ) );
-    }
-    else if( HasFlag( wxFILTER_EXCLUDE_CHAR_LIST ) && ContainsExcludedCharacters( val ) )
+        msg.Printf( _( "The value of the field cannot be empty." ) );
+
+    if( HasFlag( wxFILTER_EXCLUDE_CHAR_LIST ) && ContainsExcludedCharacters( val ) )
     {
         wxArrayString badCharsFound;
 
@@ -200,7 +157,36 @@ bool SCH_FIELD_VALIDATOR::Validate( wxWindow* aParent )
             badChars += badCharsFound.Item( i );
         }
 
-        msg.Printf( fieldCharError, badChars );
+        switch( m_fieldId )
+        {
+        case REFERENCE_FIELD:
+            msg.Printf( _( "The reference designator cannot contain %s character(s)." ), badChars );
+            break;
+
+        case VALUE_FIELD:
+            msg.Printf( _( "The value field cannot contain %s character(s)." ), badChars );
+            break;
+
+        case FOOTPRINT_FIELD:
+            msg.Printf( _( "The footprint field cannot contain %s character(s)." ), badChars );
+            break;
+
+        case DATASHEET_FIELD:
+            msg.Printf( _( "The datasheet field cannot contain %s character(s)." ), badChars );
+            break;
+
+        case SHEETNAME_V:
+            msg.Printf( _( "The sheet name cannot contain %s character(s)." ), badChars );
+            break;
+
+        case SHEETFILENAME_V:
+            msg.Printf( _( "The sheet filename cannot contain %s character(s)." ), badChars );
+            break;
+
+        default:
+            msg.Printf( _( "The field cannot contain %s character(s)." ), badChars );
+            break;
+        };
     }
     else if( m_fieldId == REFERENCE_FIELD && val.Contains( wxT( "${" ) ) )
     {
