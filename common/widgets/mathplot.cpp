@@ -61,7 +61,8 @@ double mpWindow::zoomIncrementalFactor = 1.1;
 
 IMPLEMENT_ABSTRACT_CLASS( mpLayer, wxObject )
 
-mpLayer::mpLayer() : m_type( mpLAYER_UNDEF )
+mpLayer::mpLayer() :
+        m_type( mpLAYER_UNDEF )
 {
     SetPen( (wxPen&) *wxBLACK_PEN );
     SetFont( (wxFont&) *wxNORMAL_FONT );
@@ -197,12 +198,14 @@ wxSize mpInfoLayer::GetSize() const
 }
 
 
-mpInfoCoords::mpInfoCoords() : mpInfoLayer()
+mpInfoCoords::mpInfoCoords() :
+        mpInfoLayer()
 {
 }
 
 
-mpInfoCoords::mpInfoCoords( wxRect rect, const wxBrush* brush ) : mpInfoLayer( rect, brush )
+mpInfoCoords::mpInfoCoords( wxRect rect, const wxBrush* brush ) :
+        mpInfoLayer( rect, brush )
 {
 }
 
@@ -273,12 +276,14 @@ void mpInfoCoords::Plot( wxDC& dc, mpWindow& w )
 }
 
 
-mpInfoLegend::mpInfoLegend() : mpInfoLayer()
+mpInfoLegend::mpInfoLegend() :
+        mpInfoLayer()
 {
 }
 
 
-mpInfoLegend::mpInfoLegend( wxRect rect, const wxBrush* brush ) : mpInfoLayer( rect, brush )
+mpInfoLegend::mpInfoLegend( wxRect rect, const wxBrush* brush ) :
+        mpInfoLayer( rect, brush )
 {
 }
 
@@ -301,7 +306,7 @@ void mpInfoLegend::Plot( wxDC& dc, mpWindow& w )
         int scrx    = w.GetScrX();
         int scry    = w.GetScrY();
 
-        if( (m_winX != scrx) || (m_winY != scry) )
+        if( m_winX != scrx || m_winY != scry )
         {
             if( m_winX > 1 )
                 m_dim.x = (int) floor( (double) (m_dim.x * scrx / m_winX) );
@@ -322,26 +327,27 @@ void mpInfoLegend::Plot( wxDC& dc, mpWindow& w )
         // wxBrush semiWhite(image1);
         dc.SetBrush( m_brush );
         dc.SetFont( m_font );
-        const int baseWidth = (mpLEGEND_MARGIN * 2 + mpLEGEND_LINEWIDTH);
-        int textX = baseWidth, textY = mpLEGEND_MARGIN;
-        int plotCount = 0;
-        int posY    = 0;
-        int tmpX    = 0, tmpY = 0;
-        mpLayer*  ly = nullptr;
-        wxPen lpen;
-        wxString label;
+
+        const int baseWidth = mpLEGEND_MARGIN * 2 + mpLEGEND_LINEWIDTH;
+        int       textX = baseWidth, textY = mpLEGEND_MARGIN;
+        int       plotCount = 0;
+        int       posY = 0;
+        int       tmpX = 0;
+        int       tmpY = 0;
+        mpLayer*  layer = nullptr;
+        wxPen     lpen;
+        wxString  label;
 
         for( unsigned int p = 0; p < w.CountAllLayers(); p++ )
         {
-            ly = w.GetLayer( p );
+            layer = w.GetLayer( p );
 
-            if( (ly->GetLayerType() == mpLAYER_PLOT) && ( ly->IsVisible() ) )
+            if( layer->GetLayerType() == mpLAYER_PLOT && layer->IsVisible() )
             {
-                label = ly->GetName();
+                label = layer->GetName();
                 dc.GetTextExtent( label, &tmpX, &tmpY );
-                textX =
-                    ( textX > (tmpX + baseWidth) ) ? textX : (tmpX + baseWidth + mpLEGEND_MARGIN);
-                textY += (tmpY);
+                textX = ( textX > tmpX + baseWidth ) ? textX : tmpX + baseWidth + mpLEGEND_MARGIN;
+                textY += tmpY;
             }
         }
 
@@ -357,25 +363,25 @@ void mpInfoLegend::Plot( wxDC& dc, mpWindow& w )
 
             for( unsigned int p2 = 0; p2 < w.CountAllLayers(); p2++ )
             {
-                ly = w.GetLayer( p2 );
+                layer = w.GetLayer( p2 );
 
-                if( (ly->GetLayerType() == mpLAYER_PLOT) && ( ly->IsVisible() ) )
+                if( layer->GetLayerType() == mpLAYER_PLOT && layer->IsVisible() )
                 {
-                    label   = ly->GetName();
-                    lpen    = ly->GetPen();
+                    label   = layer->GetName();
+                    lpen    = layer->GetPen();
                     dc.GetTextExtent( label, &tmpX, &tmpY );
                     dc.SetPen( lpen );
                     // textX = (textX > (tmpX + baseWidth)) ? textX : (tmpX + baseWidth);
                     // textY += (tmpY + mpLEGEND_MARGIN);
                     posY = m_dim.y + mpLEGEND_MARGIN + plotCount * tmpY + (tmpY >> 1);
-                    dc.DrawLine( m_dim.x + mpLEGEND_MARGIN,                 // X start coord
-                            posY,                                           // Y start coord
-                            m_dim.x + mpLEGEND_LINEWIDTH + mpLEGEND_MARGIN, // X end coord
-                            posY );
+                    dc.DrawLine( m_dim.x + mpLEGEND_MARGIN,                      // X start coord
+                                 posY,                                           // Y start coord
+                                 m_dim.x + mpLEGEND_LINEWIDTH + mpLEGEND_MARGIN, // X end coord
+                                 posY );
                     // dc.DrawRectangle(m_dim.x + 5, m_dim.y + 5 + plotCount*tmpY, 5, 5);
                     dc.DrawText( label,
-                            m_dim.x + baseWidth,
-                            m_dim.y + mpLEGEND_MARGIN + plotCount * tmpY );
+                                 m_dim.x + baseWidth,
+                                 m_dim.y + mpLEGEND_MARGIN + plotCount * tmpY );
                     plotCount++;
                 }
             }
@@ -1612,7 +1618,8 @@ EVT_MENU( mpID_ZOOM_OUT, mpWindow::OnZoomOut )
 EVT_MENU( mpID_LOCKASPECT, mpWindow::OnLockAspect )
 END_EVENT_TABLE()
 
-mpWindow::mpWindow() : wxWindow(),
+mpWindow::mpWindow() :
+        wxWindow(),
         m_lockaspect( false ),
         m_minX( 0.0 ),
         m_maxX( 0.0 ),
@@ -2826,7 +2833,8 @@ void mpWindow::SetColourTheme( const wxColour& bgColour, const wxColour& drawCol
 IMPLEMENT_DYNAMIC_CLASS( mpFXYVector, mpFXY )
 
 // Constructor
-mpFXYVector::mpFXYVector( const wxString& name, int flags ) : mpFXY( name, flags )
+mpFXYVector::mpFXYVector( const wxString& name, int flags ) :
+        mpFXY( name, flags )
 {
     m_index = 0;
     m_minX  = -1;
@@ -3030,7 +3038,8 @@ void mpText::Plot( wxDC& dc, mpWindow& w )
 // mpPrintout - provided by Davide Rondini
 // -----------------------------------------------------------------------------
 
-mpPrintout::mpPrintout( mpWindow* drawWindow, const wxChar* title ) : wxPrintout( title )
+mpPrintout::mpPrintout( mpWindow* drawWindow, const wxChar* title ) :
+        wxPrintout( title )
 {
     drawn = false;
     plotWindow = drawWindow;
