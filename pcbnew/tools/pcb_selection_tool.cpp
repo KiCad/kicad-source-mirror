@@ -2070,71 +2070,55 @@ void PCB_SELECTION_TOOL::FindItem( BOARD_ITEM* aItem )
 static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem, const BOARD& aBoard,
                                     const DIALOG_FILTER_SELECTION::OPTIONS& aFilterOptions )
 {
-    bool include = true;
-    const PCB_LAYER_ID layer = aItem.GetLayer();
-
-    // if the item needs to be checked against the options
-    if( include )
+    switch( aItem.Type() )
     {
-        switch( aItem.Type() )
-        {
-        case PCB_FOOTPRINT_T:
-        {
-            const FOOTPRINT& footprint = static_cast<const FOOTPRINT&>( aItem );
+    case PCB_FOOTPRINT_T:
+    {
+        const FOOTPRINT& footprint = static_cast<const FOOTPRINT&>( aItem );
 
-            include = aFilterOptions.includeModules;
-
-            if( include && !aFilterOptions.includeLockedModules )
-                include = !footprint.IsLocked();
-
-            break;
-        }
-        case PCB_TRACE_T:
-        case PCB_ARC_T:
-            include = aFilterOptions.includeTracks;
-            break;
-
-        case PCB_VIA_T:
-            include = aFilterOptions.includeVias;
-            break;
-
-        case PCB_FP_ZONE_T:
-        case PCB_ZONE_T:
-            include = aFilterOptions.includeZones;
-            break;
-
-        case PCB_SHAPE_T:
-        case PCB_TARGET_T:
-        case PCB_DIM_ALIGNED_T:
-        case PCB_DIM_CENTER_T:
-        case PCB_DIM_RADIAL_T:
-        case PCB_DIM_ORTHOGONAL_T:
-        case PCB_DIM_LEADER_T:
-        case PCB_FP_DIM_ALIGNED_T:
-        case PCB_FP_DIM_CENTER_T:
-        case PCB_FP_DIM_RADIAL_T:
-        case PCB_FP_DIM_ORTHOGONAL_T:
-        case PCB_FP_DIM_LEADER_T:
-            if( layer == Edge_Cuts )
-                include = aFilterOptions.includeBoardOutlineLayer;
-            else
-                include = aFilterOptions.includeItemsOnTechLayers;
-            break;
-
-        case PCB_FP_TEXT_T:
-        case PCB_FP_TEXTBOX_T:
-        case PCB_TEXT_T:
-        case PCB_TEXTBOX_T:
-            include = aFilterOptions.includePcbTexts;
-            break;
-
-        default:
-            // no filtering, just select it
-            break;
-        }
+        return aFilterOptions.includeModules
+                    && ( aFilterOptions.includeLockedModules || !footprint.IsLocked() );
     }
 
-    return include;
+    case PCB_TRACE_T:
+    case PCB_ARC_T:
+        return aFilterOptions.includeTracks;
+
+    case PCB_VIA_T:
+        return aFilterOptions.includeVias;
+
+    case PCB_FP_ZONE_T:
+    case PCB_ZONE_T:
+        return aFilterOptions.includeZones;
+
+    case PCB_SHAPE_T:
+    case PCB_TARGET_T:
+    case PCB_DIM_ALIGNED_T:
+    case PCB_DIM_CENTER_T:
+    case PCB_DIM_RADIAL_T:
+    case PCB_DIM_ORTHOGONAL_T:
+    case PCB_DIM_LEADER_T:
+    case PCB_FP_DIM_ALIGNED_T:
+    case PCB_FP_DIM_CENTER_T:
+    case PCB_FP_DIM_RADIAL_T:
+    case PCB_FP_DIM_ORTHOGONAL_T:
+    case PCB_FP_DIM_LEADER_T:
+        if( aItem.GetLayer() == Edge_Cuts )
+            return aFilterOptions.includeBoardOutlineLayer;
+        else
+            return aFilterOptions.includeItemsOnTechLayers;
+
+    case PCB_FP_TEXT_T:
+    case PCB_FP_TEXTBOX_T:
+    case PCB_TEXT_T:
+    case PCB_TEXTBOX_T:
+        return aFilterOptions.includePcbTexts;
+
+    default:
+        // Filter dialog is inclusive, not exclusive.  If it's not included, then it doesn't
+        // get selected.
+        return false;
+    }
 }
 
 
