@@ -633,12 +633,12 @@ bool SETTINGS_MANAGER::GetPreviousVersionPaths( std::vector<wxString>* aPaths )
         wxFileName wxGtkPath;
         wxGtkPath.AssignDir( wxS( "~/.config/kicad" ) );
         wxGtkPath.MakeAbsolute();
-        base_paths.emplace_back( wxGtkPath.GetPath() );
+        base_paths.emplace_back( wxGtkPath );
 
         // We also want to pick up regular flatpak if we are nightly
         wxGtkPath.AssignDir( wxS( "~/.var/app/org.kicad.KiCad/config/kicad" ) );
         wxGtkPath.MakeAbsolute();
-        base_paths.emplace_back( wxGtkPath.GetPath() );
+        base_paths.emplace_back( wxGtkPath );
     }
 #endif
 
