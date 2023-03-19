@@ -23,21 +23,22 @@
 # 남우근 <rolru7686@gmail.com>, 2022.
 # 이윤성 <yunslee@student.42seoul.kr>, 2022.
 # KwonHyeokbeom <gurqja3810@naver.com>, 2022.
+# "minsu kim (0xGabriel)" <rlaalstn9601@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:51-0800\n"
-"PO-Revision-Date: 2023-02-23 00:30+0000\n"
-"Last-Translator: 김랑기 <korearf@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"PO-Revision-Date: 2023-03-20 10:00+0000\n"
+"Last-Translator: \"minsu kim (0xGabriel)\" <rlaalstn9601@gmail.com>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -125,7 +126,7 @@ msgstr "홀과 비아용 BVH 생성"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:389
 msgid "OpenGL context creation error"
-msgstr "OpenGL 컨텍스트 생성 오류"
+msgstr "OpenGL context 생성 에러"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:420
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
@@ -1736,7 +1737,7 @@ msgstr "추가 기여자"
 
 #: common/dialog_about/AboutDialog_main.cpp:1084
 msgid "KiCad Librarian Team"
-msgstr "KiCad 사서팀"
+msgstr "KiCad 라이브러리 개발팀"
 
 #: common/dialog_about/AboutDialog_main.cpp:1117
 msgid "3D models by"
@@ -1780,11 +1781,11 @@ msgstr "문서 작성자"
 
 #: common/dialog_about/dialog_about.cpp:140
 msgid "Librarians"
-msgstr "사서"
+msgstr "라이브러리 개발자"
 
 #: common/dialog_about/dialog_about.cpp:143
 msgid "Artists"
-msgstr "예술가"
+msgstr "UI 디자이너"
 
 #: common/dialog_about/dialog_about.cpp:145
 msgid "Translators"
@@ -18339,7 +18340,7 @@ msgstr "SPICE 네트리스트 보기"
 
 #: eeschema/tools/ee_actions.cpp:1000
 msgid "Add, edit or delete user-defined simulation signals"
-msgstr ""
+msgstr "사용자 정의 시뮬레이션 신호들을 추가, 수정 또는 삭제 합니다."
 
 #: eeschema/tools/ee_inspection_tool.cpp:222
 msgid "No symbol issues found."
@@ -20890,9 +20891,8 @@ msgstr ""
 "%s"
 
 #: kicad/pcm/pcm.cpp:464
-#, fuzzy
 msgid "Failed to parse locally stored repository.json."
-msgstr "레포지토리를 파싱할 수 없습니다: %s"
+msgstr "로컬에 저장된 레파지토리.json 파일을 불러오는데 실패했습니다 : %s"
 
 #: kicad/pcm/pcm.cpp:492
 msgid ""
@@ -33648,7 +33648,7 @@ msgstr "PCB 데이터 결정\n"
 #: pcbnew/exporters/step/exporter_step.cpp:447
 #, fuzzy, c-format
 msgid "Board Thickness from stackup: %.3f mm\n"
-msgstr "스택업에서 기판 두께:"
+msgstr "스택업에서 기판 두께:\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:452
 msgid "Build STEP data\n"
