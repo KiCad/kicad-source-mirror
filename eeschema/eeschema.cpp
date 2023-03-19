@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2023 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -363,9 +363,10 @@ bool IFACE::loadGlobalLibTable()
     {
         if( !( m_start_flags & KFCTL_CLI ) )
         {
-            DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG fpDialog( nullptr );
+            DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG symDialog( nullptr );
 
-            fpDialog.ShowModal();
+            if( symDialog.ShowModal() != wxID_OK )
+                return false;
         }
     }
     else

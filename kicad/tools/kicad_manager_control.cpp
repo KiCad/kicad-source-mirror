@@ -760,7 +760,7 @@ int KICAD_MANAGER_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
 
     if ( !player )
     {
-        wxLogError( _( "Application failed to load." ) );
+        wxLogError( _( "Application cannot start." ) );
         return -1;
     }
 

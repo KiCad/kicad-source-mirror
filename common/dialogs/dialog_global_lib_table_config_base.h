@@ -43,6 +43,7 @@ class DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE : public DIALOG_SHIM
 		wxFilePickerCtrl* m_filePicker1;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
+		wxButton* m_sdbSizer1Cancel;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void onUpdateDefaultSelection( wxUpdateUIEvent& event ) { event.Skip(); }
@@ -51,7 +52,7 @@ class DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Configure Global Library Table"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxCAPTION|wxRESIZE_BORDER );
+		DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Configure Global Library Table"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxCAPTION|wxCLOSE_BOX|wxRESIZE_BORDER );
 
 		~DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE();
 

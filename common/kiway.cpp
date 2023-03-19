@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2014-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -296,6 +296,12 @@ KIFACE* KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
 
                 return m_kiface[aFaceId] = kiface;
             }
+            else
+            {
+                // Usually means cancelled initial global library setup
+
+                return nullptr;
+            }
         }
 
         // In any of the failure cases above, dso.Unload() should be called here
@@ -416,6 +422,9 @@ KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate, wxTopLevelWindow
         {
             FACE_T  face_type = KifaceType( aFrameType );
             KIFACE* kiface = KiFACE( face_type );
+
+            if( !kiface )
+                return nullptr;
 
             frame = (KIWAY_PLAYER*) kiface->CreateKiWindow(
                                             aParent,    // Parent window of frame in modal mode,

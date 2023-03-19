@@ -56,6 +56,8 @@ DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE::DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE( wxWind
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
 	m_sdbSizer1->AddButton( m_sdbSizer1OK );
+	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
+	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 
 	bSizer2->Add( m_sdbSizer1, 1, wxEXPAND|wxTOP, 5 );
