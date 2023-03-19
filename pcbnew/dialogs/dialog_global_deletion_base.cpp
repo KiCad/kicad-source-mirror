@@ -40,6 +40,9 @@ DIALOG_GLOBAL_DELETION_BASE::DIALOG_GLOBAL_DELETION_BASE( wxWindow* parent, wxWi
 	m_delTracks = new wxCheckBox( sbSizerLeft->GetStaticBox(), wxID_ANY, _("Tracks && vias"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerLeft->Add( m_delTracks, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
+	m_delTeardrops = new wxCheckBox( sbSizerLeft->GetStaticBox(), wxID_ANY, _("Teardrops"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizerLeft->Add( m_delTeardrops, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
 	m_delMarkers = new wxCheckBox( sbSizerLeft->GetStaticBox(), wxID_ANY, _("Markers"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerLeft->Add( m_delMarkers, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 

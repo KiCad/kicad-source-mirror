@@ -42,6 +42,7 @@ class DIALOG_GLOBAL_DELETION_BASE : public DIALOG_SHIM
 		wxCheckBox* m_delDrawings;
 		wxCheckBox* m_delFootprints;
 		wxCheckBox* m_delTracks;
+		wxCheckBox* m_delTeardrops;
 		wxCheckBox* m_delMarkers;
 		wxCheckBox* m_delAll;
 		wxStaticBoxSizer* sbFilter;

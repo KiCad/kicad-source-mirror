@@ -117,12 +117,6 @@ void DIALOG_GLOBAL_DELETION::DoGlobalDeletions()
     bool gen_rastnest = false;
     bool delete_all = m_delAll->GetValue();
 
-    if( !IsOK( GetParent(), delete_all ? _( "Are you sure you want to delete the entire board?" )
-                                       : _( "Are you sure you want to delete the selected items?" ) ) )
-    {
-        return;
-    }
-
     // Clear selection before removing any items
     m_Parent->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
 
@@ -153,13 +147,20 @@ void DIALOG_GLOBAL_DELETION::DoGlobalDeletions()
                 }
             };
 
-    if( delete_all || m_delZones->GetValue() )
+    for( ZONE* zone : board->Zones() )
     {
-        for( ZONE* zone : board->Zones() )
+        if( delete_all )
         {
-            if( delete_all )
-                processConnectedItem( zone, all_layers );
-            else
+            processConnectedItem( zone, all_layers );
+        }
+        else if( zone->IsTeardropArea() )
+        {
+            if( m_delTeardrops->GetValue() )
+                processConnectedItem( zone, layers_filter );
+        }
+        else
+        {
+            if( m_delZones->GetValue() )
                 processConnectedItem( zone, layers_filter );
         }
     }
