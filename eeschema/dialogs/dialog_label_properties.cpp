@@ -502,6 +502,20 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
     else
         doAutoplace = true;
 
+    for( int ii = m_fields->GetNumberRows() - 1; ii >= 0; ii-- )
+    {
+        SCH_FIELD&      field = m_fields->at( ii );
+        const wxString& fieldName = field.GetCanonicalName();
+        const wxString& fieldText = field.GetText();
+
+        if( fieldName.IsEmpty() && fieldText.IsEmpty() )
+            m_fields->erase( m_fields->begin() + ii );
+        else if( fieldName == wxT( "Netclass" ) && fieldText.IsEmpty() )
+            m_fields->erase( m_fields->begin() + ii );
+        else if( fieldName.IsEmpty() )
+            field.SetName( _( "untitled" ) );
+    }
+
     m_currentLabel->SetFields( *m_fields );
 
     if( m_shapeSizer->AreAnyItemsShown() )
