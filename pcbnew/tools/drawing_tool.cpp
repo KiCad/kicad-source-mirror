@@ -1128,7 +1128,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
-        if( step == SET_HEIGHT )
+        if( step == SET_HEIGHT && t != PCB_DIM_ORTHOGONAL_T && t != PCB_FP_DIM_ORTHOGONAL_T )
         {
             if( dimension->GetStart().x != dimension->GetEnd().x
                     && dimension->GetStart().y != dimension->GetEnd().y )
