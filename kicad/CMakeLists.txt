@@ -181,11 +181,7 @@ if( APPLE )
     # this CMake instance are accessible... use helper to transfer
     set( SCRIPTING_HELPER "1" )
 
-    if( KICAD_SPICE )
-        set( SPICE_HELPER "1" )
-    else()
-        set( SPICE_HELPER "0" )
-    endif()
+    set( SPICE_HELPER "1" )
 
     if( PYTHON_FRAMEWORK )
         set( PYTHON_FRAMEWORK_HELPER "1" )

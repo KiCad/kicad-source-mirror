@@ -21,8 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifdef KICAD_SPICE
-
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <boost/test/results_collector.hpp> // To check if the current test failed (to be moved?).
 #include <eeschema_test_utils.h>
@@ -150,6 +148,3 @@ BOOST_FIXTURE_TEST_CASE( VariableSubstitutions, TEST_SIM_REGRESSIONS_FIXTURE )
     TestTranPoint( 0.015, { { "V(Net-_R1-Pad2_)", -311 } } );
     TestTranPoint( 0.025, { { "V(Net-_R1-Pad2_)", 311 } } );
 }
-
-
-#endif // KICAD_SPICE

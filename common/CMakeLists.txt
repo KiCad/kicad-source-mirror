@@ -4,9 +4,7 @@ if( COMPILER_SUPPORTS_WARNINGS )
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${WARN_FLAGS_C}")
 endif()
 
-if( KICAD_SPICE )
-    set( INC_AFTER ${INC_AFTER} ${NGSPICE_INCLUDE_DIR} )
-endif()
+set( INC_AFTER ${INC_AFTER} ${NGSPICE_INCLUDE_DIR} )
 
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(

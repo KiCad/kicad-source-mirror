@@ -21,8 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifdef KICAD_SPICE
-
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <boost/test/results_collector.hpp> // To check if the current test failed (to be moved?).
 #include <eeschema_test_utils.h>
@@ -283,6 +281,3 @@ public:
     std::unique_ptr<SPICE_TEST_REPORTER> m_reporter;
     bool m_abort;       // set to true to force abort durint a test
 };
-
-
-#endif // KICAD_SPICE

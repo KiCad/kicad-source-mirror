@@ -169,13 +169,12 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             return frame;
         }
 
-#ifdef KICAD_SPICE
         case FRAME_SIMULATOR:
         {
             SIMULATOR_FRAME* frame = new SIMULATOR_FRAME( aKiway, aParent );
             return frame;
         }
-#endif
+
         case FRAME_SCH_VIEWER:
         case FRAME_SCH_VIEWER_MODAL:
         {

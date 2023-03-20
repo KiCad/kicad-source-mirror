@@ -16,18 +16,17 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     endif()
 endif()
 
-if( KICAD_SPICE )
-    set( INC_AFTER ${INC_AFTER} ${NGSPICE_INCLUDE_DIR} )
+# Add ngspice to eeschema
+set( INC_AFTER ${INC_AFTER} ${NGSPICE_INCLUDE_DIR} )
 
-    # Find out the exact libngspice file name
-    get_filename_component( NGSPICE_DLL_ABSPATH "${NGSPICE_DLL}" ABSOLUTE )
-    get_filename_component( NGSPICE_DLL_FILE "${NGSPICE_DLL_ABSPATH}" NAME )
+# Find out the exact libngspice file name
+get_filename_component( NGSPICE_DLL_ABSPATH "${NGSPICE_DLL}" ABSOLUTE )
+get_filename_component( NGSPICE_DLL_FILE "${NGSPICE_DLL_ABSPATH}" NAME )
 
-    set_property( SOURCE sim/ngspice.cpp
-        APPEND PROPERTY COMPILE_DEFINITIONS
-        NGSPICE_DLL_FILE="${NGSPICE_DLL_FILE}"
-        )
-endif()
+set_property( SOURCE sim/ngspice.cpp
+    APPEND PROPERTY COMPILE_DEFINITIONS
+    NGSPICE_DLL_FILE="${NGSPICE_DLL_FILE}"
+    )
 
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
@@ -343,34 +342,33 @@ set( EESCHEMA_COMMON_SRCS
     )
 
 
-if( KICAD_SPICE )
-    set( EESCHEMA_SRCS
-        ${EESCHEMA_SRCS}
-        dialogs/dialog_sim_command.cpp
-        dialogs/dialog_sim_command_base.cpp
-        dialogs/dialog_sim_format_value.cpp
-        dialogs/dialog_sim_format_value_base.cpp
-        dialogs/dialog_sim_model.cpp
-        dialogs/dialog_sim_model_base.cpp
-        dialogs/dialog_user_defined_signals.cpp
-        dialogs/dialog_user_defined_signals_base.cpp
-        tools/simulator_control.cpp
-        sim/ngspice_circuit_model.cpp
-        sim/ngspice.cpp
-        sim/simulator_frame.cpp
-        sim/simulator_frame_base.cpp
-        sim/sim_panel_base.cpp
-        sim/sim_plot_colors.cpp
-        sim/sim_plot_panel.cpp
-        sim/sim_property.cpp
-        sim/spice_simulator.cpp
-        sim/spice_value.cpp
-        sim/toolbars_simulator_frame.cpp
-        widgets/sim_notebook.cpp
-        widgets/tuner_slider.cpp
-        widgets/tuner_slider_base.cpp
-    )
-endif()
+
+set( EESCHEMA_SRCS
+    ${EESCHEMA_SRCS}
+    dialogs/dialog_sim_command.cpp
+    dialogs/dialog_sim_command_base.cpp
+    dialogs/dialog_sim_format_value.cpp
+    dialogs/dialog_sim_format_value_base.cpp
+    dialogs/dialog_sim_model.cpp
+    dialogs/dialog_sim_model_base.cpp
+    dialogs/dialog_user_defined_signals.cpp
+    dialogs/dialog_user_defined_signals_base.cpp
+    tools/simulator_control.cpp
+    sim/ngspice_circuit_model.cpp
+    sim/ngspice.cpp
+    sim/simulator_frame.cpp
+    sim/simulator_frame_base.cpp
+    sim/sim_panel_base.cpp
+    sim/sim_plot_colors.cpp
+    sim/sim_plot_panel.cpp
+    sim/sim_property.cpp
+    sim/spice_simulator.cpp
+    sim/spice_value.cpp
+    sim/toolbars_simulator_frame.cpp
+    widgets/sim_notebook.cpp
+    widgets/tuner_slider.cpp
+    widgets/tuner_slider_base.cpp
+)
 
 if( WIN32 )
     if( MINGW )
@@ -491,24 +489,18 @@ target_link_libraries( eeschema_kiface
         sexpr
         Boost::headers
         ${wxWidgets_LIBRARIES}
+        ${NGSPICE_LIBRARY}
     )
 
-if( KICAD_SPICE )
-    target_link_libraries( eeschema_kiface
-        PRIVATE
-            ${NGSPICE_LIBRARY}
+if( MSVC )
+    # Allow for MSVC to debug ngspice from the build directory
+    add_custom_command( TARGET eeschema_kiface POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${NGSPICE_DLL}" "$<TARGET_FILE_DIR:eeschema_kiface>"
         )
 
-    if( MSVC )
-        # Allow for MSVC to debug ngspice from the build directory
-        add_custom_command( TARGET eeschema_kiface POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different "${NGSPICE_DLL}" "$<TARGET_FILE_DIR:eeschema_kiface>"
-            )
-
-        add_custom_command( TARGET eeschema_kiface POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_directory "${NGSPICE_CM_DIR}" "$<TARGET_FILE_DIR:eeschema_kiface>/ngspice"
-            )
-    endif()
+    add_custom_command( TARGET eeschema_kiface POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory "${NGSPICE_CM_DIR}" "$<TARGET_FILE_DIR:eeschema_kiface>/ngspice"
+        )
 endif()
 
 set_target_properties( eeschema_kiface PROPERTIES
@@ -565,17 +557,15 @@ if( APPLE )
             " COMPONENT Runtime
         )
 
-    if( KICAD_SPICE )
-        # bundle libngspice and codemodels
-        get_filename_component( ABS_LIBNGSPICE ${NGSPICE_LIBRARY} ABSOLUTE )
-        get_filename_component( LIBNGSPICE_PATH ${ABS_LIBNGSPICE} DIRECTORY )
+    # bundle libngspice and codemodels
+    get_filename_component( ABS_LIBNGSPICE ${NGSPICE_LIBRARY} ABSOLUTE )
+    get_filename_component( LIBNGSPICE_PATH ${ABS_LIBNGSPICE} DIRECTORY )
 
-        install( DIRECTORY "${LIBNGSPICE_PATH}/"
-                DESTINATION "${OSX_BUNDLE_INSTALL_PLUGIN_DIR}/sim"
-                FILES_MATCHING PATTERN "*.dylib")
-        install( DIRECTORY "${LIBNGSPICE_PATH}/ngspice"
-                 DESTINATION "${OSX_BUNDLE_INSTALL_PLUGIN_DIR}/sim" )
-    endif()
+    install( DIRECTORY "${LIBNGSPICE_PATH}/"
+            DESTINATION "${OSX_BUNDLE_INSTALL_PLUGIN_DIR}/sim"
+            FILES_MATCHING PATTERN "*.dylib")
+    install( DIRECTORY "${LIBNGSPICE_PATH}/ngspice"
+             DESTINATION "${OSX_BUNDLE_INSTALL_PLUGIN_DIR}/sim" )
 else()
     if( MSVC )
         target_sources( eeschema_kiface PRIVATE ${CMAKE_SOURCE_DIR}/resources/msw/eeschema-dll.rc )

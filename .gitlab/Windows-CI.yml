@@ -31,7 +31,6 @@ win64_build:
       -DCMAKE_BUILD_TYPE=Debug `
       -DKICAD_SCRIPTING_WXPYTHON=OFF `
       -DKICAD_USE_OCC=ON `
-      -DKICAD_SPICE=ON `
       -DKICAD_BUILD_PNS_DEBUG_TOOL=ON `
       -DKICAD_USE_3DCONNEXION=ON `
       ../../

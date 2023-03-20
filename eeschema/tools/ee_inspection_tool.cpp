@@ -367,7 +367,6 @@ SYMBOL_DIFF_WIDGET* EE_INSPECTION_TOOL::constructDiffPanel( wxPanel* aParentPane
 
 int EE_INSPECTION_TOOL::RunSimulation( const TOOL_EVENT& aEvent )
 {
-#ifdef KICAD_SPICE
     SIMULATOR_FRAME* simFrame = (SIMULATOR_FRAME*) m_frame->Kiway().Player( FRAME_SIMULATOR, true );
 
     if( !simFrame )
@@ -383,7 +382,7 @@ int EE_INSPECTION_TOOL::RunSimulation( const TOOL_EVENT& aEvent )
         simFrame->Iconize( false );
 
     simFrame->Raise();
-#endif /* KICAD_SPICE */
+
     return 0;
 }
 

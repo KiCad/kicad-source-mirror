@@ -41,9 +41,7 @@ extern std::string GetCurlLibVersion();
 
 #include <Standard_Version.hxx>
 
-#if defined( KICAD_SPICE )
 #include <ngspice/sharedspice.h>
-#endif
 
 // The include file version.h is always created even if the repo version cannot be
 // determined.  In this case KICAD_VERSION_FULL will default to the KICAD_VERSION
@@ -221,7 +219,6 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
     aMsg << indent4 << "OCC: " << OCC_VERSION_COMPLETE << eol;
     aMsg << indent4 << "Curl: " << GetCurlLibVersion() << eol;
 
-#if defined( KICAD_SPICE )
 #if defined( NGSPICE_BUILD_VERSION )
     aMsg << indent4 << "ngspice: " << NGSPICE_BUILD_VERSION << eol;
 #elif defined( NGSPICE_HAVE_CONFIG_H )
@@ -232,7 +229,6 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
     aMsg << indent4 << "ngspice: " << NGSPICE_PACKAGE_VERSION << eol;
 #else
     aMsg << indent4 << "ngspice: " << "unknown" << eol;
-#endif
 #endif
 
     aMsg << indent4 << "Compiler: ";
@@ -261,13 +257,6 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
 
 #ifdef KICAD_USE_EGL
     aMsg << indent4 << "KICAD_USE_EGL=" << ON;
-#endif
-
-    aMsg << indent4 << "KICAD_SPICE=";
-#ifdef KICAD_SPICE
-    aMsg << ON;
-#else
-    aMsg << OFF;
 #endif
 
 #ifndef NDEBUG

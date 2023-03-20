@@ -59,7 +59,6 @@ Coverity:
       -DCMAKE_BUILD_TYPE=Debug
       -DKICAD_STDLIB_LIGHT_DEBUG=ON
       -DKICAD_SCRIPTING_WXPYTHON=ON
-      -DKICAD_SPICE=ON
     - coverity/bin/cov-build --dir cov-int make -j8
     - *coverity_submit
   artifacts:

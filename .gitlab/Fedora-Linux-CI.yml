@@ -25,7 +25,6 @@
       -G Ninja
       -DCMAKE_BUILD_TYPE=QABUILD
       -DKICAD_STDLIB_LIGHT_DEBUG=ON
-      -DKICAD_SPICE=ON
       -DKICAD_BUILD_I18N=ON
       ../../
     - ninja 2>&1 | tee compilation_log.txt

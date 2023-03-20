@@ -21,8 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifdef KICAD_SPICE
-
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <boost/test/results_collector.hpp> // To check if the current test failed (to be moved?).
 #include <test_netlist_exporter_spice.h>
@@ -278,5 +276,3 @@ BOOST_AUTO_TEST_CASE( LegacyOpamp )
 
 
 BOOST_AUTO_TEST_SUITE_END()
-
-#endif // KICAD_SPICE

@@ -256,10 +256,8 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     inspectMenu->AppendSeparator();
     inspectMenu->Add( EE_ACTIONS::diffSymbol );
 
-#ifdef KICAD_SPICE
     inspectMenu->AppendSeparator();
     inspectMenu->Add( EE_ACTIONS::showSimulator );
-#endif
 
 
     //-- Tools menu -----------------------------------------------

@@ -11,8 +11,7 @@ WORKDIR /src/build
 
 RUN cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo \
       -DKICAD_USE_OCC=ON \
-      -DKICAD_SCRIPTING_WXPYTHON=ON \
-      -DKICAD_SPICE=ON
+      -DKICAD_SCRIPTING_WXPYTHON=ON
 RUN make doxygen-docs
 RUN make doxygen-python
 

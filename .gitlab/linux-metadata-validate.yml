@@ -31,7 +31,6 @@ validate_linux_metadata:
       -DCMAKE_BUILD_TYPE=Debug
       -DKICAD_STDLIB_LIGHT_DEBUG=ON
       -DKICAD_SCRIPTING_WXPYTHON=ON
-      -DKICAD_SPICE=ON
       -DKICAD_BUILD_I18N=ON
       ../../
     - make metadata

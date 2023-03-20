@@ -495,8 +495,6 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
 }
 
 
-#ifdef KICAD_SPICE
-
 #define HITTEST_THRESHOLD_PIXELS 5
 
 int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
@@ -745,7 +743,6 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
 
     return 0;
 }
-#endif /* KICAD_SPICE */
 
 
 // A singleton reference for clearing the highlight
@@ -2323,10 +2320,8 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::CrossProbeToPcb,       EVENTS::ClearedEvent );
     Go( &SCH_EDITOR_CONTROL::ExplicitCrossProbeToPcb, EE_ACTIONS::selectOnPCB.MakeEvent() );
 
-#ifdef KICAD_SPICE
     Go( &SCH_EDITOR_CONTROL::SimProbe,              EE_ACTIONS::simProbe.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::SimTune,               EE_ACTIONS::simTune.MakeEvent() );
-#endif /* KICAD_SPICE */
 
     Go( &SCH_EDITOR_CONTROL::HighlightNet,          EE_ACTIONS::highlightNet.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ClearHighlight,        EE_ACTIONS::clearHighlight.MakeEvent() );

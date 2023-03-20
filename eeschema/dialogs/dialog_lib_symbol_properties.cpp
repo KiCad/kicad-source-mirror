@@ -35,9 +35,7 @@
 #include <widgets/std_bitmap_button.h>
 #include <string_utils.h>
 
-#ifdef KICAD_SPICE
 #include <dialog_sim_model.h>
-#endif /* KICAD_SPICE */
 
 #include <dialog_lib_symbol_properties.h>
 #include <settings/settings_manager.h>
@@ -99,11 +97,6 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
         m_stdSizerButtonOK->SetLabel( _( "Read Only" ) );
         m_stdSizerButtonOK->Enable( false );
     }
-
-#ifndef KICAD_SPICE
-    m_excludeFromSim->Hide();
-    m_spiceFieldsButton->Hide();
-#endif
 
     // wxFormBuilder doesn't include this event...
     m_grid->Connect( wxEVT_GRID_CELL_CHANGING,
@@ -187,10 +180,8 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
 
     m_OptionPower->SetValue( m_libEntry->IsPower() );
 
-#ifdef KICAD_SPICE
     LIB_FIELD* simEnableField = m_libEntry->FindField( SIM_ENABLE_FIELD );
     m_excludeFromSim->SetValue( simEnableField && simEnableField->GetText() == wxT( "0" ) );
-#endif
 
     m_excludeFromBomCheckBox->SetValue( !m_libEntry->GetIncludeInBom() );
     m_excludeFromBoardCheckBox->SetValue( !m_libEntry->GetIncludeOnBoard() );
@@ -236,7 +227,6 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
 
 void DIALOG_LIB_SYMBOL_PROPERTIES::OnExcludeFromSimulation( wxCommandEvent& event )
 {
-#ifdef KICAD_SPICE
     int simEnableFieldRow = -1;
 
     for( int ii = MANDATORY_FIELDS; ii < m_grid->GetNumberRows(); ++ii )
@@ -271,7 +261,6 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnExcludeFromSimulation( wxCommandEvent& even
     }
 
     OnModify();
-#endif
 }
 
 
@@ -669,7 +658,6 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnMoveDown( wxCommandEvent& event )
 
 void DIALOG_LIB_SYMBOL_PROPERTIES::OnEditSpiceModel( wxCommandEvent& event )
 {
-#ifdef KICAD_SPICE
     if( !m_grid->CommitPendingChanges() )
         return;
 
@@ -735,7 +723,6 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnEditSpiceModel( wxCommandEvent& event )
 
     OnModify();
     m_grid->ForceRefresh();
-#endif /* KICAD_SPICE */
 }
 
 
@@ -907,7 +894,6 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
         m_delayedFocusColumn = -1;
     }
 
-#ifdef KICAD_SPICE
     wxString simEnable;
 
     for( int ii = MANDATORY_FIELDS; ii < m_fields->GetNumberRows(); ++ii )
@@ -920,7 +906,6 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
     }
 
     m_excludeFromSim->SetValue( simEnable == wxS( "0" ) );
-#endif
 }
 
 

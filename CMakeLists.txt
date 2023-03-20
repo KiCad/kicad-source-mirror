@@ -75,10 +75,6 @@ endif()
 ####################################
 # Feature flags
 ####################################
-option( KICAD_SPICE
-    "Build KiCad with internal Spice simulator."
-    ON )
-
 option( KICAD_SPICE_QA
     "Build software Quality assurance unit tests for spice (default ON)"
     ON )
@@ -239,7 +235,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Pass defines into KiCad code based on the build options set
 add_compile_definitions( $<$<BOOL:${KICAD_SCRIPTING_WXPYTHON}>:KICAD_SCRIPTING_WXPYTHON> )
-add_compile_definitions( $<$<BOOL:${KICAD_SPICE}>:KICAD_SPICE> )
 add_compile_definitions( $<$<BOOL:${KICAD_SIGNAL_INTEGRITY}>:KICAD_SIGNAL_INTEGRITY> )
 
 add_compile_definitions( $<$<BOOL:${KICAD_USE_VALGRIND}>:KICAD_USE_VALGRIND> )
@@ -803,9 +798,7 @@ find_package( Fontconfig REQUIRED )
 include( MinGWResourceCompiler )
 
 # Find ngspice library, required for integrated circuit simulator
-if( KICAD_SPICE )
-    find_package( ngspice REQUIRED )
-endif()
+find_package( ngspice REQUIRED )
 
 # Find OpenCascade, required for STEP plugin and tools
 find_package(OCC)

@@ -32,11 +32,6 @@
       "ctestCommandArgs": "",
       "variables": [
         {
-          "name": "KICAD_SPICE",
-          "value": "ON",
-          "type": "STRING"
-        },
-        {
           "name": "KICAD_BUILD_QA_TESTS",
           "value": "False",
           "type": "BOOL"
@@ -60,11 +55,6 @@
       "buildCommandArgs": "-v",
       "ctestCommandArgs": "",
       "variables": [
-        {
-          "name": "KICAD_SPICE",
-          "value": "ON",
-          "type": "STRING"
-        },
         {
           "name": "KICAD_BUILD_QA_TESTS",
           "value": "False",
@@ -90,11 +80,6 @@
       "ctestCommandArgs": "",
       "variables": [
         {
-          "name": "KICAD_SPICE",
-          "value": "ON",
-          "type": "STRING"
-        },
-        {
           "name": "KICAD_BUILD_QA_TESTS",
           "value": "False",
           "type": "BOOL"
@@ -118,11 +103,6 @@
       "buildCommandArgs": "-v",
       "ctestCommandArgs": "",
       "variables": [
-        {
-          "name": "KICAD_SPICE",
-          "value": "ON",
-          "type": "STRING"
-        },
         {
           "name": "KICAD_BUILD_QA_TESTS",
           "value": "False",
@@ -156,11 +136,6 @@
         {
           "name": "CMAKE_CXX_COMPILER",
           "value": "${env.BIN_ROOT}/g++.exe"
-        },
-        {
-          "name": "KICAD_SPICE",
-          "value": "ON",
-          "type": "STRING"
         },
         {
           "name": "KICAD_BUILD_QA_TESTS",

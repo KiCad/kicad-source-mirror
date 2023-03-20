@@ -25,7 +25,7 @@
 
 include_directories( BEFORE ${INC_BEFORE} )
 
-if( KICAD_SPICE AND KICAD_SPICE_QA )
+if( KICAD_SPICE_QA )
     set( INC_AFTER ${INC_AFTER} ${NGSPICE_INCLUDE_DIR} )
 
     # Find out the exact libngspice file name
@@ -90,7 +90,7 @@ set( QA_EESCHEMA_SRCS
 
 
 # Spice specific testing routine
-if( KICAD_SPICE AND KICAD_SPICE_QA )
+if( KICAD_SPICE_QA )
     set( QA_EESCHEMA_SRCS
         ${QA_EESCHEMA_SRCS}
         # Simulation tests
@@ -134,7 +134,7 @@ PRIVATE
     Boost::unit_test_framework
 )
 
-if( KICAD_SPICE AND KICAD_SPICE_QA AND MSVC )
+if( KICAD_SPICE_QA AND MSVC )
     # Allow for MSVC to run from the build directory
     add_custom_command( TARGET qa_eeschema POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different "${NGSPICE_DLL}" "$<TARGET_FILE_DIR:qa_eeschema>"

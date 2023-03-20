@@ -48,9 +48,7 @@
 #include <tool/actions.h>
 #include <math/vector2d.h>
 
-#ifdef KICAD_SPICE
 #include <dialog_sim_model.h>
-#endif /* KICAD_SPICE */
 
 
 wxDEFINE_EVENT( SYMBOL_DELAY_FOCUS, wxCommandEvent );
@@ -315,11 +313,6 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
 
     m_fields = new FIELDS_GRID_TABLE<SCH_FIELD>( this, aParent, m_fieldsGrid, m_symbol );
 
-#ifndef KICAD_SPICE
-    m_cbExcludeFromSim->Hide();
-    m_spiceFieldsButton->Hide();
-#endif /* not KICAD_SPICE */
-
     // Give a bit more room for combobox editors
     m_fieldsGrid->SetDefaultRowSize( m_fieldsGrid->GetDefaultRowSize() + 4 );
     m_pinGrid->SetDefaultRowSize( m_pinGrid->GetDefaultRowSize() + 4 );
@@ -518,9 +511,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     case SYM_MIRROR_Y: m_mirrorCtrl->SetSelection( 2 ); break;
     }
 
-#ifdef KICAD_SPICE
     m_cbExcludeFromSim->SetValue( m_symbol->GetFieldText( SIM_ENABLE_FIELD ) == wxS( "0" ) );
-#endif
     m_cbExcludeFromBom->SetValue( !m_symbol->GetIncludeInBom() );
     m_cbExcludeFromBoard->SetValue( !m_symbol->GetIncludeOnBoard() );
     m_cbDNP->SetValue( m_symbol->GetDNP() );
@@ -544,7 +535,6 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
 
 void DIALOG_SYMBOL_PROPERTIES::OnExcludeFromSimulation( wxCommandEvent& event )
 {
-#ifdef KICAD_SPICE
     int simEnableFieldRow = -1;
 
     for( int ii = MANDATORY_FIELDS; ii < m_fieldsGrid->GetNumberRows(); ++ii )
@@ -579,13 +569,11 @@ void DIALOG_SYMBOL_PROPERTIES::OnExcludeFromSimulation( wxCommandEvent& event )
     }
 
     OnModify();
-#endif
 }
 
 
 void DIALOG_SYMBOL_PROPERTIES::OnEditSpiceModel( wxCommandEvent& event )
 {
-#ifdef KICAD_SPICE
     if( !m_fieldsGrid->CommitPendingChanges() )
         return;
 
@@ -648,7 +636,6 @@ void DIALOG_SYMBOL_PROPERTIES::OnEditSpiceModel( wxCommandEvent& event )
 
     OnModify();
     m_fieldsGrid->ForceRefresh();
-#endif /* KICAD_SPICE */
 }
 
 
@@ -1188,7 +1175,6 @@ void DIALOG_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
             AdjustFieldsGridColumns();
     }
 
-#ifdef KICAD_SPICE
     wxString simEnable;
 
     for( int ii = MANDATORY_FIELDS; ii < m_fieldsGrid->GetNumberRows(); ++ii )
@@ -1201,7 +1187,6 @@ void DIALOG_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
     }
 
     m_cbExcludeFromSim->SetValue( simEnable == wxS( "0" ) );
-#endif
 }
 
 
