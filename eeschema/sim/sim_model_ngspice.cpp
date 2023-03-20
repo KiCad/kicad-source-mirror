@@ -206,6 +206,17 @@ bool SIM_MODEL_NGSPICE::canSilentlyIgnoreParam( const std::string& aParamName )
         }
     }
 
+    if( GetType() == TYPE::NMOS_VDMOS || GetType() == TYPE::PMOS_VDMOS )
+    {
+        // Ignore the purely informative LTspice-specific parameters "Vds", "Ron" and "Qg".
+        if( aParamName == "vds"
+            || aParamName == "ron"
+            || aParamName == "qg" )
+        {
+            return true;
+        }
+    }
+
     return false;
 }
 

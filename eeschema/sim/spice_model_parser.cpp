@@ -277,12 +277,32 @@ SIM_MODEL::TYPE SPICE_MODEL_PARSER::ReadTypeFromSpiceStrings( const std::string&
         if( typePrefix == "" )
             continue;
 
-        // Check if `aTypeString` starts with `typePrefix`.
-        if( boost::starts_with( boost::to_upper_copy( aTypeString ), typePrefix )
-            && ( level == readLevel || ( !aSkipDefaultLevel && isDefaultLevel && aLevel == "" ) )
-            && version == aVersion )
+        if( boost::starts_with( typePrefix, "VDMOS" ) )
         {
-            return type;
+            wxString deviceType = wxString( typePrefix ).BeforeFirst( ' ' );   // VDMOS
+            wxString channelType = wxString( typePrefix ).AfterFirst( ' ' );   // NCHAN or PCHAN
+
+            wxStringTokenizer tokenizer( aTypeString, wxT( " \t\n\r+(" ), wxTOKEN_STRTOK );
+
+            if( tokenizer.HasMoreTokens() && tokenizer.GetNextToken().Upper() == deviceType
+                && tokenizer.HasMoreTokens() && tokenizer.GetNextToken().Upper() == channelType )
+            {
+                return type;
+            }
+        }
+        else if( boost::starts_with( boost::to_upper_copy( aTypeString ), typePrefix ) )
+        {
+            if( version != aVersion )
+                continue;
+
+            if( level == readLevel )
+                return type;
+
+            if( aSkipDefaultLevel )
+                continue;
+
+            if( isDefaultLevel && aLevel == "" )
+                return type;
         }
     }
 
