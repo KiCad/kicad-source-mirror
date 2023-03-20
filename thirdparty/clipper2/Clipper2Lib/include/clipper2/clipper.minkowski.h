@@ -1,8 +1,8 @@
 /*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Date      :  15 October 2022                                                 *
+* Date      :  28 January 2023                                                 *
 * Website   :  http://www.angusj.com                                           *
-* Copyright :  Angus Johnson 2010-2022                                         *
+* Copyright :  Angus Johnson 2010-2023                                         *
 * Purpose   :  Minkowski Sum and Difference                                    *
 * License   :  http://www.boost.org/LICENSE_1_0.txt                            *
 *******************************************************************************/
@@ -92,11 +92,12 @@ namespace Clipper2Lib
 
   inline PathsD MinkowskiSum(const PathD& pattern, const PathD& path, bool isClosed, int decimalPlaces = 2)
   {
+    int error_code = 0;
     double scale = pow(10, decimalPlaces);
-    Path64 pat64 = ScalePath<int64_t, double>(pattern, scale);
-    Path64 path64 = ScalePath<int64_t, double>(path, scale);
+    Path64 pat64 = ScalePath<int64_t, double>(pattern, scale, error_code);
+    Path64 path64 = ScalePath<int64_t, double>(path, scale, error_code);
     Paths64 tmp = detail::Union(detail::Minkowski(pat64, path64, true, isClosed), FillRule::NonZero);
-    return ScalePaths<double, int64_t>(tmp, 1 / scale);
+    return ScalePaths<double, int64_t>(tmp, 1 / scale, error_code);
   }
 
   inline Paths64 MinkowskiDiff(const Path64& pattern, const Path64& path, bool isClosed)
@@ -106,11 +107,12 @@ namespace Clipper2Lib
 
   inline PathsD MinkowskiDiff(const PathD& pattern, const PathD& path, bool isClosed, int decimalPlaces = 2)
   {
+    int error_code = 0;
     double scale = pow(10, decimalPlaces);
-    Path64 pat64 = ScalePath<int64_t, double>(pattern, scale); 
-    Path64 path64 = ScalePath<int64_t, double>(path, scale);
+    Path64 pat64 = ScalePath<int64_t, double>(pattern, scale, error_code);
+    Path64 path64 = ScalePath<int64_t, double>(path, scale, error_code);
     Paths64 tmp = detail::Union(detail::Minkowski(pat64, path64, false, isClosed), FillRule::NonZero);
-    return ScalePaths<double, int64_t>(tmp, 1 / scale);
+    return ScalePaths<double, int64_t>(tmp, 1 / scale, error_code);
   }
 
 } // Clipper2Lib namespace
