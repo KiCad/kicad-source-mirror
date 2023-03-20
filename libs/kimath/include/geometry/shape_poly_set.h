@@ -1046,6 +1046,12 @@ public:
     ///< For \a aFastMode meaning, see function booleanOp
     void Simplify( POLYGON_MODE aFastMode );
 
+
+    ///< Simplify the polyset (merges overlapping polys, eliminates degeneracy/self-intersections)
+    ///< @param aMaxError Smooths the output such that points less than aMaxError away from the line through
+    /// the two adjacent points will be removed
+    void Simplify( size_t aMaxError );
+
     /**
      * Convert a self-intersecting polygon to one (or more) non self-intersecting polygon(s).
      *
@@ -1422,10 +1428,10 @@ private:
     void booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET& aShape,
                     const SHAPE_POLY_SET& aOtherShape, POLYGON_MODE aFastMode );
 
-    void booleanOp( Clipper2Lib::ClipType aType, const SHAPE_POLY_SET& aOtherShape );
+    void booleanOp( Clipper2Lib::ClipType aType, const SHAPE_POLY_SET& aOtherShape, size_t aMaxError = 0 );
 
     void booleanOp( Clipper2Lib::ClipType aType, const SHAPE_POLY_SET& aShape,
-                    const SHAPE_POLY_SET& aOtherShape );
+                    const SHAPE_POLY_SET& aOtherShape, size_t aMaxError = 0 );
 
     /**
      * Check whether the point \a aP is inside the \a aSubpolyIndex-th polygon of the polyset. If
