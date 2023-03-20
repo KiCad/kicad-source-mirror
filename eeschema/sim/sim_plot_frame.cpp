@@ -1069,7 +1069,8 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
             }
             #endif
 
-            addPlot( name, (SIM_PLOT_TYPE) traceType );
+            if( traceType != SPT_UNKNOWN )
+                addPlot( name, (SIM_PLOT_TYPE) traceType );
         }
     }
 
