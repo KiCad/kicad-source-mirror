@@ -266,6 +266,17 @@ public:
         return m_legend->IsVisible();
     }
 
+    wxPoint GetLegendPosition() const
+    {
+        return m_legend->GetPosition();
+    }
+
+    void SetLegendPosition( const wxPoint& aPosition )
+    {
+        m_legend->Move( aPosition );
+        m_legend->UpdateReference();
+    }
+
     /**
      * Draw secondary signal traces (current or phase) with dotted lines
      */

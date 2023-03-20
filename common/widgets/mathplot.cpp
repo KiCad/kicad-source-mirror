@@ -1869,7 +1869,10 @@ void mpWindow::OnMouseMove( wxMouseEvent& event )
     {
         if( m_movingInfoLayer )
         {
-            cursor = wxCURSOR_SIZEWE;
+            if( dynamic_cast<mpInfoLegend*>( m_movingInfoLayer ) )
+                cursor = wxCURSOR_SIZING;
+            else
+                cursor = wxCURSOR_SIZEWE;
 
             wxPoint moveVector( event.GetX() - m_mouseLClick.x, event.GetY() - m_mouseLClick.y );
             m_movingInfoLayer->Move( moveVector );
@@ -1903,7 +1906,12 @@ void mpWindow::OnMouseMove( wxMouseEvent& event )
                 mpInfoLayer* infoLayer = (mpInfoLayer*) layer;
 
                 if( infoLayer->Inside( event.GetPosition() ) )
-                    cursor = wxCURSOR_SIZEWE;
+                {
+                    if( dynamic_cast<mpInfoLegend*>( infoLayer ) )
+                        cursor = wxCURSOR_SIZING;
+                    else
+                        cursor = wxCURSOR_SIZEWE;
+                }
             }
         }
 

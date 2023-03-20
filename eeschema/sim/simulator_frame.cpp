@@ -1985,10 +1985,6 @@ void SIMULATOR_FRAME::parseTraceParams( SIM_PLOT_PANEL* aPlotPanel, TRACE* aTrac
         {
             aPlotPanel->SetDottedSecondary( true );
         }
-        else if( item == wxS( "showLegend" ) )
-        {
-            aPlotPanel->ShowLegend( true );
-        }
         else if( item == wxS( "hideGrid" ) )
         {
             aPlotPanel->ShowGrid( false );
@@ -2155,11 +2151,30 @@ bool SIMULATOR_FRAME::LoadWorkbook( const wxString& aPath )
     {
         for( const auto& [ traceType, signalName, param ] : traceInfoVector )
         {
-            wxString vectorName = vectorNameFromSignalName( signalName, nullptr );
-            TRACE*   trace = plotPanel->AddTrace( vectorName, (int) traceType );
+            if( traceType == SPT_UNKNOWN && signalName == wxS( "$LEGEND" ) )
+            {
+                wxArrayString coords = wxSplit( param, ' ' );
 
-            if( version >= 4 && trace )
-                parseTraceParams( plotPanel, trace, signalName, param );
+                if( coords.size() >= 2 )
+                {
+                    long x = 0;
+                    long y = 0;
+
+                    coords[0].ToLong( &x );
+                    coords[1].ToLong( &y );
+                    plotPanel->SetLegendPosition( wxPoint( (int) x, (int) y ) );
+                }
+
+                plotPanel->ShowLegend( true );
+            }
+            else
+            {
+                wxString vectorName = vectorNameFromSignalName( signalName, nullptr );
+                TRACE*   trace = plotPanel->AddTrace( vectorName, (int) traceType );
+
+                if( version >= 4 && trace )
+                    parseTraceParams( plotPanel, trace, signalName, param );
+            }
         }
 
         plotPanel->UpdatePlotColors();
@@ -2283,7 +2298,12 @@ bool SIMULATOR_FRAME::SaveWorkbook( const wxString& aPath )
             continue;
         }
 
-        file.AddLine( wxString::Format( wxT( "%llu" ), plotPanel->GetTraces().size() ) );
+        size_t traceCount = plotPanel->GetTraces().size();
+
+        if( plotPanel->IsLegendShown() )
+            traceCount++;
+
+        file.AddLine( wxString::Format( wxT( "%llu" ), traceCount ) );
 
         auto findSignalName =
                 [&]( const wxString& aVectorName ) -> wxString
@@ -2330,13 +2350,19 @@ bool SIMULATOR_FRAME::SaveWorkbook( const wxString& aPath )
             if( plotPanel->GetDottedSecondary() )
                 msg += wxS( "|dottedSecondary" );
 
-            if( plotPanel->IsLegendShown() )
-                msg += wxS( "|showLegend" );
-
             if( !plotPanel->IsGridShown() )
                 msg += wxS( "|hideGrid" );
 
             file.AddLine( msg );
+        }
+
+        if( plotPanel->IsLegendShown() )
+        {
+            file.AddLine( wxString::Format( wxT( "%d" ), SPT_UNKNOWN ) );
+            file.AddLine( wxT( "$LEGEND" ) );
+            file.AddLine( wxString::Format( wxT( "%d %d" ),
+                                            plotPanel->GetLegendPosition().x,
+                                            plotPanel->GetLegendPosition().y - 40 ) );
         }
     }
 
