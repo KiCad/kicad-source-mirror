@@ -154,6 +154,67 @@ set( EESCHEMA_DLGS
     dialogs/panel_template_fieldnames_base.cpp
     )
 
+# The simulator source files
+set( EESCHEMA_SIM_SRCS
+    dialogs/dialog_sim_command.cpp
+    dialogs/dialog_sim_command_base.cpp
+    dialogs/dialog_sim_format_value.cpp
+    dialogs/dialog_sim_format_value_base.cpp
+    dialogs/dialog_sim_model.cpp
+    dialogs/dialog_sim_model_base.cpp
+    dialogs/dialog_user_defined_signals.cpp
+    dialogs/dialog_user_defined_signals_base.cpp
+    tools/simulator_control.cpp
+
+    sim/sim_library.cpp
+    sim/sim_library_spice.cpp
+    sim/sim_library_kibis.cpp
+    sim/sim_lib_mgr.cpp
+
+    sim/sim_model_serializer.cpp
+    sim/sim_model.cpp
+    sim/sim_model_behavioral.cpp
+    sim/sim_model_ideal.cpp
+    sim/sim_model_l_mutual.cpp
+    sim/sim_model_kibis.cpp
+    sim/sim_model_ngspice.cpp
+    sim/sim_model_ngspice_data.cpp
+    sim/sim_model_r_pot.cpp
+    sim/sim_model_raw_spice.cpp
+    sim/sim_model_source.cpp
+    sim/sim_model_spice.cpp
+    sim/sim_model_spice_fallback.cpp
+    sim/sim_model_subckt.cpp
+    sim/sim_model_switch.cpp
+    sim/sim_model_tline.cpp
+    sim/sim_model_xspice.cpp
+
+    sim/sim_value.cpp
+    sim/spice_settings.cpp
+    sim/spice_generator.cpp
+    sim/spice_library_parser.cpp
+    sim/spice_model_parser.cpp
+
+    sim/kibis/ibis_parser.cpp
+    sim/kibis/kibis.cpp
+
+    sim/ngspice_circuit_model.cpp
+    sim/ngspice.cpp
+    sim/simulator_frame.cpp
+    sim/simulator_frame_base.cpp
+    sim/sim_panel_base.cpp
+    sim/sim_plot_colors.cpp
+    sim/sim_plot_panel.cpp
+    sim/sim_property.cpp
+    sim/spice_simulator.cpp
+    sim/spice_value.cpp
+    sim/toolbars_simulator_frame.cpp
+
+    widgets/sim_notebook.cpp
+    widgets/tuner_slider.cpp
+    widgets/tuner_slider_base.cpp
+    )
+
 set( EESCHEMA_WIDGETS
     widgets/hierarchy_pane.cpp
     widgets/pin_shape_combobox.cpp
@@ -175,13 +236,14 @@ set ( EESCHEMA_LIBEDIT_SRCS
     symbol_editor/symbol_editor_settings.cpp
     symbol_editor/symbol_editor_undo_redo.cpp
     symbol_editor/toolbars_symbol_editor.cpp
+    )
 
-)
 set( EESCHEMA_SRCS
     ${EESCHEMA_DLGS}
     ${EESCHEMA_LIBEDIT_SRCS}
     ${EESCHEMA_SCH_PLUGINS_ALTIUM}
     ${EESCHEMA_SCH_PLUGINS_CADSTAR}
+    ${EESCHEMA_SIM_SRCS}
     ${EESCHEMA_WIDGETS}
     annotate.cpp
     autoplace_fields.cpp
@@ -280,39 +342,6 @@ set( EESCHEMA_SRCS
     sch_plugins/legacy/sch_legacy_plugin_helpers.cpp
     sch_plugins/database/sch_database_plugin.cpp
 
-
-
-    # Some simulation features must be built even if libngspice is not linked.
-    sim/sim_library.cpp
-    sim/sim_library_spice.cpp
-    sim/sim_library_kibis.cpp
-    sim/sim_lib_mgr.cpp
-    sim/sim_model_serializer.cpp
-    sim/sim_model.cpp
-    sim/sim_model_behavioral.cpp
-    sim/sim_model_ideal.cpp
-    sim/sim_model_l_mutual.cpp
-    sim/sim_model_kibis.cpp
-    sim/sim_model_ngspice.cpp
-    sim/sim_model_ngspice_data.cpp
-    sim/sim_model_r_pot.cpp
-    sim/sim_model_raw_spice.cpp
-    sim/sim_model_source.cpp
-    sim/sim_model_spice.cpp
-    sim/sim_model_spice_fallback.cpp
-    sim/sim_model_subckt.cpp
-    sim/sim_model_switch.cpp
-    sim/sim_model_tline.cpp
-    sim/sim_model_xspice.cpp
-    sim/sim_value.cpp
-    sim/spice_settings.cpp
-    sim/spice_generator.cpp
-    sim/spice_library_parser.cpp
-    sim/spice_model_parser.cpp
-
-    sim/kibis/ibis_parser.cpp
-    sim/kibis/kibis.cpp
-
     tools/assign_footprints.cpp
     tools/backannotate.cpp
     tools/ee_actions.cpp
@@ -335,40 +364,6 @@ set( EESCHEMA_SRCS
     tools/symbol_editor_move_tool.cpp
     tools/symbol_editor_pin_tool.cpp
     )
-
-
-set( EESCHEMA_COMMON_SRCS
-
-    )
-
-
-
-set( EESCHEMA_SRCS
-    ${EESCHEMA_SRCS}
-    dialogs/dialog_sim_command.cpp
-    dialogs/dialog_sim_command_base.cpp
-    dialogs/dialog_sim_format_value.cpp
-    dialogs/dialog_sim_format_value_base.cpp
-    dialogs/dialog_sim_model.cpp
-    dialogs/dialog_sim_model_base.cpp
-    dialogs/dialog_user_defined_signals.cpp
-    dialogs/dialog_user_defined_signals_base.cpp
-    tools/simulator_control.cpp
-    sim/ngspice_circuit_model.cpp
-    sim/ngspice.cpp
-    sim/simulator_frame.cpp
-    sim/simulator_frame_base.cpp
-    sim/sim_panel_base.cpp
-    sim/sim_plot_colors.cpp
-    sim/sim_plot_panel.cpp
-    sim/sim_property.cpp
-    sim/spice_simulator.cpp
-    sim/spice_value.cpp
-    sim/toolbars_simulator_frame.cpp
-    widgets/sim_notebook.cpp
-    widgets/tuner_slider.cpp
-    widgets/tuner_slider_base.cpp
-)
 
 if( WIN32 )
     if( MINGW )
