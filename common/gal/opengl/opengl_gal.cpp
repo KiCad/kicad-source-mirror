@@ -506,7 +506,15 @@ void OPENGL_GAL::BeginDrawing()
         // Prepare rendering target buffers
         m_compositor->Initialize();
         m_mainBuffer = m_compositor->CreateBuffer();
-        m_tempBuffer = m_compositor->CreateBuffer();
+        try
+        {
+            m_tempBuffer = m_compositor->CreateBuffer();
+        }
+        catch( const std::runtime_error& )
+        {
+            wxLogVerbose( "Could not create a framebuffer for diff mode blending.\n" );
+            m_tempBuffer = 0;
+        }
         try
         {
             m_overlayBuffer = m_compositor->CreateBuffer();
@@ -1957,7 +1965,8 @@ void OPENGL_GAL::ClearTarget( RENDER_TARGET aTarget )
         break;
 
     case TARGET_TEMP:
-        m_compositor->SetBuffer( m_tempBuffer );
+        if( m_tempBuffer )
+            m_compositor->SetBuffer( m_tempBuffer );
         break;
 
     case TARGET_OVERLAY:
@@ -1981,10 +1990,10 @@ bool OPENGL_GAL::HasTarget( RENDER_TARGET aTarget )
     switch( aTarget )
     {
     default:
-    case TARGET_TEMP:
     case TARGET_CACHED:
     case TARGET_NONCACHED: return true;
     case TARGET_OVERLAY:   return ( m_overlayBuffer != 0 );
+    case TARGET_TEMP:      return ( m_tempBuffer != 0 );
     }
 }
 
@@ -1992,18 +2001,31 @@ bool OPENGL_GAL::HasTarget( RENDER_TARGET aTarget )
 void OPENGL_GAL::StartDiffLayer()
 {
     m_currentManager->EndDrawing();
-    SetTarget( TARGET_TEMP );
-    ClearTarget( TARGET_TEMP );
+    if( m_tempBuffer )
+    {
+        SetTarget( TARGET_TEMP );
+        ClearTarget( TARGET_TEMP );
+    }
 }
 
 
 void OPENGL_GAL::EndDiffLayer()
 {
-    glBlendEquation( GL_MAX );
-    m_currentManager->EndDrawing();
-    glBlendEquation( GL_FUNC_ADD );
+    if( m_tempBuffer )
+    {
+        glBlendEquation( GL_MAX );
+        m_currentManager->EndDrawing();
+        glBlendEquation( GL_FUNC_ADD );
 
-    m_compositor->DrawBuffer( m_tempBuffer, m_mainBuffer );
+        m_compositor->DrawBuffer( m_tempBuffer, m_mainBuffer );
+    }
+    else
+    {
+        // Fall back to imperfect alpha blending on single buffer
+        glBlendFunc( GL_SRC_ALPHA, GL_ONE );
+        m_currentManager->EndDrawing();
+        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+    }
 }
 
 
