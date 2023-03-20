@@ -21,13 +21,14 @@
 # Eric <hamburger1024@duck.com>, 2022.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2023.
 # wh201906 <wh201906@yandex.com>, 2023.
+# Hubert Hu <qinghan.hu@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:51-0800\n"
-"PO-Revision-Date: 2023-03-06 15:39+0000\n"
-"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
+"PO-Revision-Date: 2023-03-20 10:00+0000\n"
+"Last-Translator: Hubert Hu <qinghan.hu@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -4975,9 +4976,8 @@ msgid "Delete"
 msgstr "删除"
 
 #: common/grid_tricks.cpp:353
-#, fuzzy
 msgid "Clear contents of selected cells"
-msgstr "删除所选单元格"
+msgstr "清除所选单元格的内容"
 
 #: common/grid_tricks.cpp:354 common/tool/actions.cpp:171
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:105
@@ -8582,15 +8582,14 @@ msgid "Run external simulator command:"
 msgstr "运行外部模拟器命令："
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:315
-#, fuzzy
 msgid ""
 "Enter the command line to run SPICE\n"
 "Usually '<path to SPICE binary> \"%I\"'\n"
 "%I will be replaced by the netlist filepath"
 msgstr ""
-"输入命令行以运行 SPICE。\n"
-"通常 <SPICE 二进制路径> %I。\n"
-"%I 将被实际的 SPICE 网表名称替换"
+"输入命令行以运行 SPICE\n"
+"通常 是'<path to SPICE binary> \"%I\"'。\n"
+"%I 将被实际的网表文件路径替换"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:388
 msgid "Netlist command:"
@@ -8617,11 +8616,11 @@ msgstr "找不到外部仿真器"
 #: eeschema/dialogs/dialog_export_netlist.cpp:576
 msgid ""
 "Note: command line is usually: <tt>&lt;path to SPICE binary&gt; \"%I\"</tt>"
-msgstr ""
+msgstr "注意: 命令行通常是: <tt>&lt;path to SPICE binary&gt; \"%I\"</tt>"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:582
 msgid "external simulator has the wrong format or architecture"
-msgstr ""
+msgstr "外部仿真器格式或构架错误"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:587
 msgid "permission denied"
@@ -10501,9 +10500,8 @@ msgid "Search the current &sheet only"
 msgstr "仅搜索当前图框 (&S)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:101
-#, fuzzy
 msgid "Search the current selection &only"
-msgstr "仅搜索当前图框 (&S)"
+msgstr "仅搜索当前选择"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:104
 msgid "Replace matches in reference designators"
@@ -11082,7 +11080,7 @@ msgstr "相位"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:25
 msgid "Significant digits:"
-msgstr ""
+msgstr "有效数字:"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:32
 msgid "Range:"
@@ -11113,18 +11111,16 @@ msgid "m"
 msgstr "mm"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "K"
-msgstr "确定"
+msgstr "K"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "M"
-msgstr "MB"
+msgstr "M"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 msgid "G"
-msgstr ""
+msgstr "G"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 #, fuzzy
@@ -11132,14 +11128,13 @@ msgid "T"
 msgstr "T"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "P"
-msgstr "Pi"
+msgstr "P"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.h:47
-#, fuzzy, c-format
+#, c-format
 msgid "Format %s"
-msgstr "格式"
+msgstr "格式 %s"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:186
 msgid "<unknown>"
@@ -11723,9 +11718,8 @@ msgstr "更新符号字段"
 
 #: eeschema/dialogs/dialog_user_defined_signals_base.h:63
 #: eeschema/tools/ee_actions.cpp:999
-#, fuzzy
 msgid "User-defined Signals"
-msgstr "自定义原点"
+msgstr "用户自定义信号"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:30
 msgid "Wire/bus width:"
@@ -11797,14 +11791,12 @@ msgid "Show ERC exclusions"
 msgstr "显示 ERC 排除"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:68
-#, fuzzy
 msgid "Show OP voltages"
-msgstr "显示页面 %s"
+msgstr "显示工作点电压"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:71
-#, fuzzy
 msgid "Show OP currents"
-msgstr "保存所有电流"
+msgstr "显示工作点电流"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:74
 msgid "Show page limi&ts"
@@ -12227,13 +12219,12 @@ msgid "Dash and dot lengths are ratios of the line width."
 msgstr "虚线和点长度是线条宽度的比率。"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:253
-#, fuzzy
 msgid "Operating-point Overlay"
-msgstr "操作点"
+msgstr "工作点叠加"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:262
 msgid "Significant digits (voltages):"
-msgstr ""
+msgstr "有效数字(电压)："
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:270
 msgid "Range (voltages):"
@@ -12627,9 +12618,8 @@ msgstr "迁移库"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:169
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:157
-#, fuzzy
 msgid "Available path substitutions:"
-msgstr "可用路径："
+msgstr "可用的替换路径："
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:203
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:191
@@ -14106,9 +14096,8 @@ msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr "存储文件没有被完全解析 （%d 字节剩余）。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:500
-#, fuzzy
 msgid "Blanket not currently supported."
-msgstr "尚不支持在原理图上编译阻剂。"
+msgstr "尚不支持编译屏蔽。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:504
 #, c-format
@@ -14124,9 +14113,8 @@ msgid "Record 'PIECHART' not handled."
 msgstr "未处理记录 'PIECHART'。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:697
-#, fuzzy
 msgid "Parameter Set not currently supported."
-msgstr "尚不支持在原理图上编译阻剂。"
+msgstr "尚不支持在原理图上使用变量集合。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:722
 msgid "Compile mask not currently supported."
@@ -15329,18 +15317,16 @@ msgid "Checking component "
 msgstr "检查元件 "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:254
-#, fuzzy
 msgid "Component: name cannot be empty."
-msgstr "组件名称不能为空。"
+msgstr "元件：名称不能为空。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:263
 msgid "Component: manufacturer cannot be empty."
 msgstr "元件：制造商不能为空。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:272
-#, fuzzy
 msgid "Component: invalid package."
-msgstr "元件：无效的包。"
+msgstr "元件：无效的封装。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:281
 msgid "Component: no pin"
@@ -15351,9 +15337,8 @@ msgid "Cannot interpolate the current based on this IV table."
 msgstr "无法根据此 IV 表对电流进行插值。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:396
-#, fuzzy
 msgid "There is an invalid voltage in an IV table"
-msgstr "IV 表中有一个 Nan 电压"
+msgstr "IV 表中有一个无效电压"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:403
 msgid "There is an invalid current in an IV table"
@@ -15364,14 +15349,12 @@ msgid "Invalid R_load."
 msgstr "R_load 无效。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:450
-#, fuzzy
 msgid "Invalid falling dV/dt."
-msgstr "无效的下降 dv/dt。"
+msgstr "无效的下降 dV/dt。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:455
-#, fuzzy
 msgid "Invalid rising dV/dt."
-msgstr "无效的上升 dv/dt。"
+msgstr "无效的上升 dV/dt。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:470
 msgid "Model name cannot be empty"
@@ -15382,9 +15365,8 @@ msgid "Checking model "
 msgstr "检查型号 "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:482
-#, fuzzy
 msgid "Undefined model type."
-msgstr "未定义的模型类型"
+msgstr "未定义模型类型。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:491
 msgid "Invalid Vinh value."
@@ -15484,44 +15466,36 @@ msgid "Negative number of pins."
 msgstr "负数的引脚。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:723
-#, fuzzy
 msgid "Empty pin number."
-msgstr "空引脚号"
+msgstr "空引脚编号。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:734
-#, fuzzy
 msgid "Resistance matrix is incorrect."
-msgstr "电阻矩阵不正确"
+msgstr "电阻矩阵不正确。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:745
-#, fuzzy
 msgid "Capacitance matrix is undefined."
-msgstr "电容矩阵未定义"
+msgstr "电容矩阵未定义。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:754
-#, fuzzy
 msgid "Capacitance matrix is incorrect."
-msgstr "电容矩阵不正确"
+msgstr "电容矩阵不正确。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:763
-#, fuzzy
 msgid "Capacitance matrix is nullptr."
-msgstr "电容矩阵为 nullptr"
+msgstr "电容矩阵为 nullptr。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:774
-#, fuzzy
 msgid "Inductance matrix is undefined."
-msgstr "电感矩阵未定义"
+msgstr "电感矩阵未定义。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:783
-#, fuzzy
 msgid "Inductance matrix is incorrect."
-msgstr "电感矩阵不正确"
+msgstr "电感矩阵不正确。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:792
-#, fuzzy
 msgid "Inductance matrix is nullptr."
-msgstr "电感矩阵为 nullptr"
+msgstr "电感矩阵为 nullptr。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:808
 msgid "Cannot open file "
@@ -15804,9 +15778,9 @@ msgid "Bitrate could be too high for rising / falling edges"
 msgstr "比特率对于上升/下降缘可能过高"
 
 #: eeschema/sim/sim_lib_mgr.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "Simulation model library not found at '%s'"
-msgstr "在 '%s' or '%s' 没有找到仿真模型库"
+msgstr "在 '%s' 没有找到仿真模型库"
 
 #: eeschema/sim/sim_lib_mgr.cpp:84
 #, c-format
@@ -15853,9 +15827,9 @@ msgid ""
 msgstr "仿真模型类型必须与其基类相同：应为 '%s'，但实际是 '%s'"
 
 #: eeschema/sim/sim_model.cpp:783
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown simulation model pin '%s'"
-msgstr "未知节点 '%s' (在 '%s' 中)"
+msgstr "未知的仿真模型引脚 '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:81
 #, c-format
@@ -15937,18 +15911,17 @@ msgid ""
 msgstr "仿真没有提供任何绘图。请参考控制台窗口的结果。"
 
 #: eeschema/sim/sim_plot_panel.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "%d"
-msgstr "%"
+msgstr "%d"
 
 #: eeschema/sim/sim_plot_panel.cpp:508
 msgid "noise [(V or A)^2/Hz]"
 msgstr "噪音 [(V 或 A)^2/Hz]"
 
 #: eeschema/sim/sim_plot_panel.cpp:543 eeschema/sim/sim_plot_panel.cpp:650
-#, fuzzy
 msgid "Power"
-msgstr "添加电源端口"
+msgstr "电源"
 
 #: eeschema/sim/sim_plot_panel.cpp:585
 msgid "Voltage (swept)"
@@ -15971,59 +15944,49 @@ msgid "Voltage (measured)"
 msgstr "电压 (测量)"
 
 #: eeschema/sim/simulator_frame.cpp:193
-#, fuzzy
 msgid "Measure Min"
-msgstr "测量节点"
+msgstr "测量最小"
 
 #: eeschema/sim/simulator_frame.cpp:194
-#, fuzzy
 msgid "Measure Max"
-msgstr "测量 (&M)"
+msgstr "测量最大"
 
 #: eeschema/sim/simulator_frame.cpp:195
-#, fuzzy
 msgid "Measure Average"
-msgstr "测量距离"
+msgstr "测量平均"
 
 #: eeschema/sim/simulator_frame.cpp:196
-#, fuzzy
 msgid "Measure RMS"
-msgstr "测量 (&M)"
+msgstr "测量有效值"
 
 #: eeschema/sim/simulator_frame.cpp:197
-#, fuzzy
 msgid "Measure Peak-to-peak"
-msgstr "测量节点"
+msgstr "测量峰峰值"
 
 #: eeschema/sim/simulator_frame.cpp:198
-#, fuzzy
 msgid "Measure Time of Min"
-msgstr "测量工具"
+msgstr "最小测量时间"
 
 #: eeschema/sim/simulator_frame.cpp:199
-#, fuzzy
 msgid "Measure Time of Max"
-msgstr "测量工具"
+msgstr "最大测量时间"
 
 #: eeschema/sim/simulator_frame.cpp:200
-#, fuzzy
 msgid "Measure Integral"
-msgstr "测量距离"
+msgstr "测量积分"
 
 #: eeschema/sim/simulator_frame.cpp:313
-#, fuzzy, c-format
+#, c-format
 msgid "Format %s..."
-msgstr "格式"
+msgstr "格式%s..."
 
 #: eeschema/sim/simulator_frame.cpp:372
-#, fuzzy
 msgid "Format Value..."
-msgstr "编辑值..."
+msgstr "格式值..."
 
 #: eeschema/sim/simulator_frame.cpp:375
-#, fuzzy
 msgid "Delete Measurement"
-msgstr "删除线段"
+msgstr "删除测量"
 
 #: eeschema/sim/simulator_frame.cpp:621 eeschema/sim/simulator_frame.cpp:1076
 #, c-format
@@ -16052,7 +16015,7 @@ msgstr "Spice 仿真器"
 
 #: eeschema/sim/simulator_frame.cpp:892 eeschema/sim/simulator_frame.cpp:1119
 msgid " (gain)"
-msgstr ""
+msgstr " (增益)"
 
 #: eeschema/sim/simulator_frame.cpp:893 eeschema/sim/simulator_frame.cpp:1120
 msgid " (phase)"
@@ -16082,9 +16045,8 @@ msgstr "另一个仿真已经在运行。"
 
 #: eeschema/sim/simulator_frame.cpp:1253 eeschema/sim/simulator_frame.cpp:2662
 #: pcbnew/tools/board_inspection_tool.cpp:1361
-#, fuzzy
 msgid "Diff"
-msgstr "差分对"
+msgstr "差值"
 
 #: eeschema/sim/simulator_frame.cpp:1501 eeschema/sim/simulator_frame.cpp:1513
 #: eeschema/sim/simulator_frame.cpp:1917
@@ -16101,14 +16063,12 @@ msgid "Error: no current simulation.\n"
 msgstr "错误：当前没有进行仿真。\n"
 
 #: eeschema/sim/simulator_frame.cpp:1608
-#, fuzzy
 msgid "Error: simulation type not defined.\n"
-msgstr "错误：未定义仿真类型！\n"
+msgstr "错误：未定义仿真类型。\n"
 
 #: eeschema/sim/simulator_frame.cpp:1614
-#, fuzzy
 msgid "Error: simulation type doesn't support plotting.\n"
-msgstr "错误：仿真类型不支持绘制！\n"
+msgstr "错误：仿真类型不支持绘制。\n"
 
 #: eeschema/sim/simulator_frame.cpp:2447
 msgid ""
@@ -16135,9 +16095,8 @@ msgstr ""
 "\n"
 
 #: eeschema/sim/simulator_frame_base.cpp:228
-#, fuzzy
 msgid "Measurement"
-msgstr "测量 (&M)"
+msgstr "测量"
 
 #: eeschema/sim/simulator_frame_base.cpp:230 gerbview/gerber_file_image.cpp:321
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:51
@@ -16188,9 +16147,8 @@ msgid "'%s' is not a valid Spice value."
 msgstr "\"%s\" 不是有效的 Spice 值。"
 
 #: eeschema/sim/toolbars_simulator_frame.cpp:107
-#, fuzzy
 msgid "Simulator"
-msgstr "仿真..."
+msgstr "仿真器"
 
 #: eeschema/sim/toolbars_simulator_frame.cpp:162
 #, fuzzy
@@ -16277,11 +16235,10 @@ msgid ""
 msgstr "<b>可疑电源符号</b><br>仅一个输入或输出电源引脚有意义<br><br>"
 
 #: eeschema/symbol_checker.cpp:215
-#, fuzzy
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Invisible input power pins are no longer "
 "required<br><br>"
-msgstr "<b>可疑电源符号</b><br>仅不可见输入电源引脚自动连接<br><br>"
+msgstr "<b>可疑电源符号</b><br>不需要不可见的电源输入引脚<br><br>"
 
 #: eeschema/symbol_checker.cpp:240
 #, c-format
@@ -16507,7 +16464,7 @@ msgstr "当前符号已被修改。是否保存变更？"
 #: eeschema/symbol_editor/symbol_editor.cpp:360
 #, c-format
 msgid "Deriving from '%s', the root symbol of '%s'."
-msgstr ""
+msgstr "衍生自 '%s', 根符号为 '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:378
 msgid "This new symbol has no name and cannot be created."
@@ -16825,13 +16782,12 @@ msgid "Select at least one property to back annotate."
 msgstr "选择至少一个要反向批注的属性。"
 
 #: eeschema/tools/backannotate.cpp:97
-#, fuzzy
 msgid ""
 "Cannot fetch PCB netlist because Schematic Editor is opened in stand-alone "
 "mode.\n"
 "You must launch the KiCad project manager and create a project."
 msgstr ""
-"无法获取 PCB 网表，因为 eesschema 是在独立模式下打开的。\n"
+"无法获取 PCB 网表，因为原理图编辑器是在独立模式下打开的。\n"
 "您必须启动 KiCad 项目管理器并创建一个项目。"
 
 #: eeschema/tools/backannotate.cpp:164
@@ -16972,14 +16928,12 @@ msgid "Create a new symbol"
 msgstr "创建一个新符号"
 
 #: eeschema/tools/ee_actions.cpp:132
-#, fuzzy
 msgid "Derive from existing symbol"
-msgstr "从现有符号派生："
+msgstr "从现有符号派生"
 
 #: eeschema/tools/ee_actions.cpp:132
-#, fuzzy
 msgid "Create a new symbol, derived from an existing symbol"
-msgstr "从现有符号派生："
+msgstr "从现有符号派生, 创建一个新符号"
 
 #: eeschema/tools/ee_actions.cpp:137
 msgid "Edit Symbol"
@@ -17772,22 +17726,20 @@ msgid "Show markers for excluded electrical rules checker violations"
 msgstr "显示排除的电气规则检查违规的记号"
 
 #: eeschema/tools/ee_actions.cpp:714
-#, fuzzy
 msgid "Show OP Voltages"
-msgstr "显示页面 %s"
+msgstr "显示工作点电压"
 
 #: eeschema/tools/ee_actions.cpp:715
 msgid "Show operating point voltage data from simulation"
-msgstr ""
+msgstr "显示仿真的工作点电压数据"
 
 #: eeschema/tools/ee_actions.cpp:719
-#, fuzzy
 msgid "Show OP Currents"
-msgstr "显示光标"
+msgstr "显示工作点电流"
 
 #: eeschema/tools/ee_actions.cpp:720
 msgid "Show operating point current data from simulation"
-msgstr ""
+msgstr "显示仿真的工作点电流数据"
 
 #: eeschema/tools/ee_actions.cpp:724 eeschema/tools/ee_actions.cpp:729
 #: eeschema/tools/ee_actions.cpp:735 eeschema/tools/ee_actions.cpp:741
@@ -17817,9 +17769,8 @@ msgid "Annotate Automatically"
 msgstr "自动批注"
 
 #: eeschema/tools/ee_actions.cpp:746
-#, fuzzy
 msgid "Toggle automatic annotation of new symbols"
-msgstr "切换是否自动批注新部件符号"
+msgstr "切换是否为新的符号自动标注"
 
 #: eeschema/tools/ee_actions.cpp:751
 msgid "Repair Schematic"
@@ -18047,9 +17998,8 @@ msgid "Export Current Plot as CSV..."
 msgstr "导出当前绘图为 CSV..."
 
 #: eeschema/tools/ee_actions.cpp:950
-#, fuzzy
 msgid "Show Legend"
-msgstr "显示图例 (&L)"
+msgstr "显示图例"
 
 #: eeschema/tools/ee_actions.cpp:955
 msgid "Dotted Current/Phase"
@@ -18057,41 +18007,35 @@ msgstr "点电流/相位"
 
 #: eeschema/tools/ee_actions.cpp:956
 msgid "Draw secondary signal trace (current or phase) with a dotted line"
-msgstr ""
+msgstr "用虚线绘制辅助信号线(电流或相位)"
 
 #: eeschema/tools/ee_actions.cpp:960
-#, fuzzy
 msgid "Dark Mode Plots"
-msgstr "3D 模型"
+msgstr "暗模式"
 
 #: eeschema/tools/ee_actions.cpp:961
-#, fuzzy
 msgid "Draw plots with a black background"
-msgstr "在白色和黑色背景之间切换"
+msgstr "用黑色背景绘图"
 
 #: eeschema/tools/ee_actions.cpp:965
-#, fuzzy
 msgid "Simulation Command..."
-msgstr "仿真命令"
+msgstr "仿真命令..."
 
 #: eeschema/tools/ee_actions.cpp:966
-#, fuzzy
 msgid "Edit the simulation command for the current plot tab"
-msgstr "删除当前项目中添加的最后一个点"
+msgstr "为当前绘制编辑仿真命令"
 
 #: eeschema/tools/ee_actions.cpp:972
 msgid "Run Simulation"
 msgstr "运行仿真"
 
 #: eeschema/tools/ee_actions.cpp:977
-#, fuzzy
 msgid "Stop Simulation"
-msgstr "运行/停止仿真"
+msgstr "停止仿真"
 
 #: eeschema/tools/ee_actions.cpp:983
-#, fuzzy
 msgid "Probe Schematic..."
-msgstr "批注原理图..."
+msgstr "探测原理图..."
 
 #: eeschema/tools/ee_actions.cpp:983
 msgid "Add a simulator probe"
@@ -18106,13 +18050,12 @@ msgid "Select a value to be tuned"
 msgstr "选择要调整的值"
 
 #: eeschema/tools/ee_actions.cpp:994
-#, fuzzy
 msgid "Show SPICE Netlist"
-msgstr "显示 SPICE 网表..."
+msgstr "显示 SPICE 网表"
 
 #: eeschema/tools/ee_actions.cpp:1000
 msgid "Add, edit or delete user-defined simulation signals"
-msgstr ""
+msgstr "添加，编辑或删除用户自定义的仿真信号"
 
 #: eeschema/tools/ee_inspection_tool.cpp:222
 msgid "No symbol issues found."
@@ -18479,9 +18422,9 @@ msgstr ""
 "一个整数，以确保没有重复的表条目。"
 
 #: eeschema/widgets/tuner_slider.cpp:57 eeschema/widgets/tuner_slider.cpp:113
-#, fuzzy, c-format
+#, c-format
 msgid "Tune %s"
-msgstr "调整"
+msgstr "调整%s"
 
 #: eeschema/widgets/tuner_slider.cpp:74
 #, c-format
@@ -19845,9 +19788,8 @@ msgid "Use the gerber plot settings already configured in the board file"
 msgstr "使用已经在电路板文件中配置的 Gerber 图设置"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:60
-#, fuzzy
 msgid "Color theme to use (will default to PCB Editor settings)"
-msgstr "要使用的颜色主题（默认使用 pcbnew 设置）"
+msgstr "要使用的颜色主题（默认使用PCB编辑器设置）"
 
 #: kicad/cli/command_export_pcb_pos.cpp:44
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:64
@@ -19928,7 +19870,7 @@ msgstr "仅生成没有元件的电路板"
 
 #: kicad/cli/command_export_pcb_step.cpp:79
 msgid "Export tracks (extremely time consuming)"
-msgstr ""
+msgstr "导出布线(非常耗时)"
 
 #: kicad/cli/command_export_pcb_step.cpp:85
 msgid "Minimum distance between points to treat them as separate ones"
@@ -20636,9 +20578,8 @@ msgstr ""
 "%s"
 
 #: kicad/pcm/pcm.cpp:464
-#, fuzzy
 msgid "Failed to parse locally stored repository.json."
-msgstr "无法解析仓库：%s"
+msgstr "无法解析本地存储的仓库.json."
 
 #: kicad/pcm/pcm.cpp:492
 msgid ""
@@ -26194,13 +26135,15 @@ msgstr "覆盖旧的文件"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:123
 msgid "Export tracks (time consuming)"
-msgstr ""
+msgstr "导出布线(耗时)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:124
 msgid ""
 "Export tracks and vias on external copper layers.\n"
 "Warning: this is *extremely* time consuming."
 msgstr ""
+"导出外部层的布线及过孔。\n"
+"警告: 这一操作*非常*耗时。"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:128
 msgid "Board outline chaining tolerance:"
@@ -26219,11 +26162,10 @@ msgid "Loose (0.1 mm)"
 msgstr "松散 (0.1 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:136
-#, fuzzy
 msgid ""
 "Tolerance sets the distance between two points that are considered joined "
 "when building the board outlines."
-msgstr "误差设置被视为连接的两点之间的距离。"
+msgstr "当构建电路板边框时，公差设定了两个被视为联结的点的距离。"
 
 #: pcbnew/dialogs/dialog_export_step_base.h:76
 msgid "Export STEP"
@@ -27408,9 +27350,8 @@ msgid "Graphic items"
 msgstr "图形项"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:142
-#, fuzzy
 msgid "Dimension items"
-msgstr "标注线"
+msgstr "标注项目"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:257
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:139
@@ -27483,9 +27424,8 @@ msgid "Upright"
 msgstr "垂直"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:331
-#, fuzzy
 msgid "Set to layer and dimension default values:"
-msgstr "设置为图层默认值："
+msgstr "设置为图层及标注的默认值："
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:333
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:252
@@ -27501,9 +27441,8 @@ msgid "Footprint graphic items"
 msgstr "封装图形项"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:40
-#, fuzzy
 msgid "Footprint dimension items"
-msgstr "封装图形项"
+msgstr "封装标注项目"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
 msgid "PCB graphic items"
@@ -27514,9 +27453,8 @@ msgid "PCB text items"
 msgstr "PCB 文本项"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:52
-#, fuzzy
 msgid "PCB dimension items"
-msgstr "标注线"
+msgstr "PCB标注项目"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:67
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:71
@@ -32136,9 +32074,9 @@ msgid "netclass '%s' (diff pair)"
 msgstr "网络类 '%s' (差动线对)"
 
 #: pcbnew/drc/drc_engine.cpp:348
-#, fuzzy, c-format
+#, c-format
 msgid "netclass '%s' (uvia)"
-msgstr "网络类 '%s' (差动线对)"
+msgstr "网络类 '%s' (微孔)"
 
 #: pcbnew/drc/drc_engine.cpp:422
 msgid "keepout area"
@@ -32265,9 +32203,9 @@ msgid "Checking %s track width: opt %s."
 msgstr "正检查 %s 布线宽度：最优 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:974
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s track width: min %s."
-msgstr "正检查 %s 布线宽度：最优 %s。"
+msgstr "正检查 %s 布线宽度: 最小%s。"
 
 #: pcbnew/drc/drc_engine.cpp:982
 #, c-format
@@ -32280,9 +32218,9 @@ msgid "Checking %s via diameter: opt %s."
 msgstr "正检查 %s 过孔直径：最优 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:996
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s via diameter: min %s."
-msgstr "正检查 %s 过孔直径：最优 %s。"
+msgstr "正检查 %s 过孔直径: 最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1005
 #, c-format
@@ -32290,9 +32228,9 @@ msgid "Checking %s hole size: opt %s."
 msgstr "正检查 %s 孔尺寸：最优 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1011
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s hole size: min %s."
-msgstr "正检查 %s 孔尺寸：最优 %s。"
+msgstr "正检查 %s 孔尺寸: 最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1021
 #, c-format
@@ -32305,14 +32243,14 @@ msgid "Checking %s diff pair gap: opt %s."
 msgstr "正检查 %s 差分对间距：最优 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1035
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s clearance: min %s."
-msgstr "正检查 %s间隙%s。"
+msgstr "正检查 %s 间隙: 最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1043
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s hole to hole: min %s."
-msgstr "正检查 %s 孔尺寸：最优 %s。"
+msgstr "正检查 %s 孔到孔：最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1049 pcbnew/drc/drc_engine.cpp:1075
 #: pcbnew/drc/drc_engine.cpp:1493
@@ -32352,9 +32290,8 @@ msgid "Rule layer not matched; rule ignored."
 msgstr "规则层不匹配；已忽略规则。"
 
 #: pcbnew/drc/drc_engine.cpp:1188
-#, fuzzy
 msgid "Constraint layer not matched."
-msgstr "禁布层不匹配。"
+msgstr "约束层不匹配。"
 
 #: pcbnew/drc/drc_engine.cpp:1208
 #, c-format
@@ -32954,118 +32891,101 @@ msgid "(%s min %s; actual %s)"
 msgstr "(%s 最小 %s; 实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:414
-#, fuzzy
 msgid "3D model scale doesn't match: "
-msgstr "3D 模型搜索路径"
+msgstr "3D 模型比例不匹配: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:415
 msgid "3D model rotation doesn't match: "
-msgstr ""
+msgstr "3D模型旋转不匹配: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:416
-#, fuzzy
 msgid "3D model offset doesn't match: "
-msgstr "焊盘网络与原理图不匹配"
+msgstr "3D 模型偏移量不匹配: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:417
 msgid "3D model opacity doesn't match: "
-msgstr ""
+msgstr "3D模型透明度不匹配: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:418
-#, fuzzy
 msgid "3D model doesn't match: "
-msgstr "3D 模型搜索路径"
+msgstr "3D 模型不匹配: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:419
-#, fuzzy
 msgid "3D model visibility doesn't match: "
-msgstr "3D 模型可见性"
+msgstr "3D 模型可见性不匹配: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:447
-#, fuzzy
 msgid "Footprint descriptions differ."
-msgstr "封装关联文件"
+msgstr "封装描述有差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:449
-#, fuzzy
 msgid "Footprint keywords differ."
-msgstr "封装外形顺序"
+msgstr "封装关键字有差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:454
-#, fuzzy
 msgid "Footprint types differ."
-msgstr "封装类型："
+msgstr "封装类型有差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:456
-#, fuzzy
 msgid "Allow bridged solder mask apertures between pads settings differ."
-msgstr "允许不同焊盘的阻焊开窗区域相连"
+msgstr "允许焊盘之间的桥接阻焊层孔径设置不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:458
-#, fuzzy
 msgid "Exempt from courtyard requirement settings differ."
-msgstr "排除外框要求"
+msgstr "不要求courtyard设置不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:471
-#, fuzzy
 msgid "Pad clearance overridden."
-msgstr "间隙覆盖"
+msgstr "焊盘间隙被覆盖。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:473
-#, fuzzy
 msgid "Solder mask expansion overridden."
-msgstr "阻焊层扩展："
+msgstr "阻焊层扩展被覆盖。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:475
-#, fuzzy
 msgid "Solder paste absolute clearance overridden."
-msgstr "焊膏绝对间隙："
+msgstr "助焊层绝对间隙被覆盖。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:477
-#, fuzzy
 msgid "Solder paste relative clearance overridden."
-msgstr "焊膏相对间隙："
+msgstr "助焊层相对间隙被覆盖。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:480
-#, fuzzy
 msgid "Zone connection overridden."
-msgstr "区域连接样式"
+msgstr "区域连接被覆盖。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:484
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:489
 msgid "Net tie pad groups differ."
-msgstr ""
+msgstr "网络连接点焊盘组差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:528
-#, fuzzy
 msgid "Pad count differs."
-msgstr "焊盘计数"
+msgstr "焊盘数量差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:529
-#, fuzzy
 msgid "Rule area count differs."
-msgstr "%s 上的规则敷铜"
+msgstr "规则区域数量差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:530
-#, fuzzy
 msgid "Graphic item count differs."
-msgstr "在文件中没找到图形项。"
+msgstr "图形项目数量差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:539
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:564
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:582
 #, c-format
 msgid "%s differs."
-msgstr ""
+msgstr "%s 不同."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:550
-#, fuzzy, c-format
+#, c-format
 msgid "%s has overrides."
-msgstr "本地覆盖"
+msgstr "%s 被覆盖。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:592
 msgid "3D model count differs."
-msgstr ""
+msgstr "3D模型数量不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:616
 msgid "No project loaded, skipping library parity tests."
@@ -33359,9 +33279,9 @@ msgid "Determining PCB data\n"
 msgstr "确定 PCB 数据\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:447
-#, fuzzy, c-format
+#, c-format
 msgid "Board Thickness from stackup: %.3f mm\n"
-msgstr "电路板压层厚度:"
+msgstr "电路板压层厚度: %.3f mm\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:452
 msgid "Build STEP data\n"
@@ -34981,49 +34901,40 @@ msgid "Dimension '%s' on %s"
 msgstr "标注 '%s' 在 %s"
 
 #: pcbnew/pcb_dimension.cpp:1315
-#, fuzzy
 msgid "1234.0"
-msgstr "1234"
+msgstr "1234.0"
 
 #: pcbnew/pcb_dimension.cpp:1316
-#, fuzzy
 msgid "1234.0 mm"
-msgstr "1234 mm"
+msgstr "1234.0 mm"
 
 #: pcbnew/pcb_dimension.cpp:1317
-#, fuzzy
 msgid "1234.0 (mm)"
-msgstr "1234 (mm)"
+msgstr "1234.0 (mm)"
 
 #: pcbnew/pcb_dimension.cpp:1349
-#, fuzzy
 msgid "Units Format"
-msgstr "单位格式："
+msgstr "单位格式"
 
 #: pcbnew/pcb_dimension.cpp:1355
-#, fuzzy
 msgid "Suppress Trailing Zeroes"
-msgstr "隐藏尾随零"
+msgstr "抑制尾随零"
 
 #: pcbnew/pcb_dimension.cpp:1383
-#, fuzzy
 msgid "Crossbar Height"
-msgstr "向右光标"
+msgstr "横杆高度"
 
 #: pcbnew/pcb_dimension.cpp:1387
-#, fuzzy
 msgid "Extension Line Overshoot"
-msgstr "尺寸界线偏移："
+msgstr "延长线过冲"
 
 #: pcbnew/pcb_dimension.cpp:1452
-#, fuzzy
 msgid "Leader Length"
-msgstr "过孔长度"
+msgstr "引线长度"
 
 #: pcbnew/pcb_dimension.cpp:1492
-#, fuzzy
 msgid "Text Frame"
-msgstr "文本框架："
+msgstr "文本框"
 
 #: pcbnew/pcb_edit_frame.cpp:203
 msgid "KiCad PCB Editor"
@@ -37704,9 +37615,9 @@ msgid "Overridden by larger physical hole clearance from %s;clearance: %s."
 msgstr "被来自 %s 的较大物理孔间隙覆盖；间隙：%s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:779
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved clearance: %s; clearance will not be tested."
-msgstr "本地间隙 %s；间隙：%s。"
+msgstr "已解决的间隙问题:  %s; 不被测试的间隙。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:801
 msgid "Diff Pair"
@@ -37819,49 +37730,41 @@ msgid "Assertions for:"
 msgstr "断言："
 
 #: pcbnew/tools/board_inspection_tool.cpp:1339
-#, fuzzy
 msgid "Select a footprint to check against its library equivalent."
-msgstr "正在根据库检查电路板封装…"
+msgstr "选择一个封装并与其对应的库进行检查。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1346
-#, fuzzy
 msgid "Check Footprint against Library"
-msgstr "正在根据库检查电路板封装…"
+msgstr "根据库检查封装"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1363
-#, fuzzy
 msgid "Board/library check for:"
-msgstr "本地库文件夹："
+msgstr "为电路板/库做检查："
 
 #: pcbnew/tools/board_inspection_tool.cpp:1365
-#, fuzzy
 msgid "Library: "
-msgstr "库："
+msgstr "库: "
 
 #: pcbnew/tools/board_inspection_tool.cpp:1366
-#, fuzzy
 msgid "Library item: "
-msgstr "库链接："
+msgstr "库项目: "
 
 #: pcbnew/tools/board_inspection_tool.cpp:1384
-#, fuzzy
 msgid "The current configuration does not include the library."
-msgstr "当前配置不包含库 '%s'。"
+msgstr "当前配置不包含库。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1388
-#, fuzzy
 msgid "The library is not enabled in the current configuration."
-msgstr "当前配置中未启用库 '%s'。"
+msgstr "当前配置中未启用库。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1404
-#, fuzzy, c-format
+#, c-format
 msgid "The library no longer contains the item %s."
-msgstr "选中部分含 %d 个锁定项目。"
+msgstr "库中不再包含项目 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1409
-#, fuzzy
 msgid "Footprint matches library equivalent."
-msgstr "封装库未启用。"
+msgstr "封装与对应的库匹配。"
 
 #: pcbnew/tools/convert_tool.cpp:68
 msgid "Copy line width of first object"
@@ -39451,15 +39354,13 @@ msgid "Show constraints resolution for the selected object"
 msgstr "显示所选对象的约束解析"
 
 #: pcbnew/tools/pcb_actions.cpp:1178
-#, fuzzy
 msgid "Check Footprint against Library..."
-msgstr "正在根据库检查电路板封装…"
+msgstr "根据库检查封装…"
 
 #: pcbnew/tools/pcb_actions.cpp:1179
-#, fuzzy
 msgid ""
 "Check for differences between board footprint and its library equivalent"
-msgstr "正在根据库检查电路板封装…"
+msgstr "检查电路板封装与其对应库的差异"
 
 #: pcbnew/tools/pcb_actions.cpp:1185
 msgid "Geographical Reannotate..."
