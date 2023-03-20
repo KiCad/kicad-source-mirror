@@ -1736,7 +1736,17 @@ static struct EDA_SHAPE_DESC
         filled->SetAvailableFunc(
                       [=]( INSPECTABLE* aItem ) -> bool
                       {
-                          SHAPE_T itemShape = aItem->Get<SHAPE_T>( shape );
+                          SHAPE_T itemShape;
+
+                          try
+                          {
+                            itemShape = aItem->Get<SHAPE_T>( shape );
+                          }
+                          catch( std::runtime_error& err )
+                          {
+                              wxFAIL_MSG( err.what() );
+                              return false;
+                          }
 
                           switch( itemShape )
                           {
