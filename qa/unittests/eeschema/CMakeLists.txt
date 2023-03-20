@@ -129,6 +129,7 @@ PRIVATE
     qa_utils
     qa_schematic_utils
     markdown_lib
+    ${NGSPICE_LIBRARY}
     ${GDI_PLUS_LIBRARIES}
     Boost::headers
     Boost::unit_test_framework
