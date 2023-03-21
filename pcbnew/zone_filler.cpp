@@ -1007,7 +1007,8 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
     auto knockoutPadClearance =
             [&]( PAD* aPad )
             {
-                int  gap = evalRulesForItems( PHYSICAL_CLEARANCE_CONSTRAINT, aZone, aPad, aLayer );
+                int  init_gap = evalRulesForItems( PHYSICAL_CLEARANCE_CONSTRAINT, aZone, aPad, aLayer );
+                int  gap = init_gap;
                 bool hasHole = aPad->GetDrillSize().x > 0;
                 bool flashLayer = aPad->FlashLayer( aLayer );
                 bool platedHole = hasHole && aPad->GetAttribute() == PAD_ATTRIB::PTH;
@@ -1023,6 +1024,10 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
 
                 if( hasHole )
                 {
+                    // NPTH do not need copper clearance gaps to their holes
+                    if( aPad->GetAttribute() == PAD_ATTRIB::NPTH )
+                        gap = init_gap;
+
                     gap = std::max( gap, evalRulesForItems( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT,
                                                             aZone, aPad, aLayer ) );
 
