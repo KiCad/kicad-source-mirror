@@ -39,6 +39,7 @@ public:
             m_includeNetlistAttributes( true ),
             m_useX2Format( true ),
             m_disableApertureMacros( false ),
+            m_useAuxOrigin( false ),
             m_precision( 5 ),
             m_printMaskLayer()
     {
@@ -59,6 +60,7 @@ public:
     bool m_includeNetlistAttributes;
     bool m_useX2Format;
     bool m_disableApertureMacros;
+    bool m_useAuxOrigin;
 
     int m_precision;
 
