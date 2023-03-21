@@ -114,8 +114,8 @@ private:
 class POLYGON_TEST
 {
 public:
-    POLYGON_TEST( int aLimit, int aErrorLimit ) :
-        m_limit( aLimit ), m_max_error( aErrorLimit )
+    POLYGON_TEST( int aLimit ) :
+        m_limit( aLimit )
     {
     };
 
@@ -388,14 +388,8 @@ private:
      */
     bool isSubstantial( const Vertex* aA, const Vertex* aB ) const
     {
-        // `directions` is a bitfield where
-        // bit 0 = pos y
-        // bit 1 = neg y
-        // bit 2 = pos x
-        // bit 3 = neg x
-        // So, once directions = 15, we have all directions
-        int directions = 0;
-        constexpr int all_dirs = 0b1111;
+        bool x_change = false;
+        bool y_change = false;
 
         // This is a failsafe in case of invalid lists.  Never check
         // more than the total number of points in m_vertices
@@ -405,8 +399,7 @@ private:
         const Vertex* p0 = aA;
         const Vertex* p = getNextOutlineVertex( p0 );
 
-
-        while( !same_point( p0, aB ) && checked < total_pts && directions != all_dirs )
+        while( !same_point( p, aB ) && checked < total_pts && !( x_change && y_change ) )
         {
             double diff_x = std::abs( p->x - p0->x );
             double diff_y = std::abs( p->y - p0->y );
@@ -414,16 +407,11 @@ private:
             // Floating point zeros can have a negative sign, so we need to
             // ensure that only substantive diversions count for a direction
             // change
-            if( diff_x > m_max_error )
-                directions |= ( 1 << ( 2 + std::signbit( p->x - p0->x ) ) );
+            if( diff_x > m_limit )
+                x_change = true;
 
-            if( diff_y > m_max_error )
-                directions |= ( 1 << std::signbit( p->y - p0->y ) );
-
-            // In the case of a circle, we need to eventually get the direction
-            // so keep the p0 at the same point
-            if( diff_x > m_max_error || diff_y > m_max_error || p == aB )
-                p0 = p;
+            if( diff_y > m_limit )
+                y_change = true;
 
             p = getNextOutlineVertex( p );
 
@@ -432,16 +420,16 @@ private:
 
         wxCHECK_MSG( checked < total_pts, false, wxT( "Invalid polygon detected.  Missing points to check" ) );
 
-        if( directions != all_dirs )
+        if( !x_change || !y_change )
             return false;
 
-        p0 = aA;
         p = getPrevOutlineVertex( p0 );
 
-        directions = 0;
+        x_change = false;
+        y_change = false;
         checked = 0;
 
-        while( !same_point( p0, aB ) && checked < total_pts && directions != all_dirs )
+        while( !same_point( p, aB ) && checked < total_pts && !( x_change && y_change ) )
         {
             double diff_x = std::abs( p->x - p0->x );
             double diff_y = std::abs( p->y - p0->y );
@@ -449,16 +437,11 @@ private:
             // Floating point zeros can have a negative sign, so we need to
             // ensure that only substantive diversions count for a direction
             // change
-            if( diff_x > m_max_error )
-                directions |= ( 1 << ( 2 + std::signbit( p->x - p0->x ) ) );
+            if( diff_x > m_limit )
+                x_change = true;
 
-            if( diff_y > m_max_error )
-                directions |= ( 1 << std::signbit( p->y - p0->y ) );
-
-            // In the case of a circle, we need to eventually get the direction
-            // so keep the p0 at the same point
-            if( diff_x > m_max_error || diff_y > m_max_error || p == aB )
-                p0 = p;
+            if( diff_y > m_limit )
+                y_change = true;
 
             p = getPrevOutlineVertex( p );
 
@@ -467,7 +450,7 @@ private:
 
         wxCHECK_MSG( checked < total_pts, false, wxT( "Invalid polygon detected.  Missing points to check" ) );
 
-        return ( directions == all_dirs );
+        return ( x_change && y_change );
     }
 
     /**
@@ -622,7 +605,6 @@ private:
 
 private:
     int                             m_limit;
-    double                          m_max_error;
     BOX2I                           m_bbox;
     std::deque<Vertex>              m_vertices;
     std::set<std::pair<int, int>>   m_hits;
@@ -722,7 +704,7 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
                 if( m_drcEngine->IsCancelled() )
                     return 0;
 
-                POLYGON_TEST test( aMinWidth, m_drcEngine->GetDesignSettings()->m_MaxError );
+                POLYGON_TEST test( aMinWidth );
 
                 for( int ii = 0; ii < aItemsPoly.Poly.OutlineCount(); ++ii )
                 {
