@@ -646,10 +646,13 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
                 }
                 else
                 {
+                    // Note, we include the pcb/project name as a prefix
+                    // because several STEP importing CAD software like SolidWorks
+                    // will deduplicate anything imported by it's STEP name
                     if( m_pcb_labels.size() == 1 )
-                        pcbName = wxT( "PCB" );
+                        pcbName = wxString::Format( wxT( "%s PCB" ), m_pcbName );
                     else
-                        pcbName = wxString::Format( wxT( "PCB%d" ), pcbIdx++ );
+                        pcbName = wxString::Format( wxT( "%s PCB%d" ), m_pcbName, pcbIdx++ );
                 }
 
                 std::string                pcbNameStdString( pcbName.ToUTF8() );
