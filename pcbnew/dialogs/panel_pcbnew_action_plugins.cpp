@@ -221,13 +221,11 @@ bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataToWindow()
     {
         m_showErrorsButton->Disable();
         m_showErrorsButton->Hide();
-        m_reloadButton->Disable();
     }
     else
     {
         m_showErrorsButton->Enable();
         m_showErrorsButton->Show();
-        m_reloadButton->Enable();
     }
 
     return true;
