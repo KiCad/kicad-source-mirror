@@ -105,7 +105,10 @@ private:
     bool            m_hasGridOrigin;
     BOARD*          m_board;
     std::unique_ptr<STEP_PCB_MODEL> m_pcbModel;
-    wxString        m_pcbName;
+
+    /// the name of the project (board short filename (no path, no ext)
+    /// used to identify items in step file
+    wxString        m_pcbBaseName;
 
     double m_boardThickness;
 

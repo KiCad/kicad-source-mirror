@@ -118,11 +118,15 @@ EXPORTER_STEP::EXPORTER_STEP( BOARD* aBoard, const EXPORTER_STEP_PARAMS& aParams
     m_hasGridOrigin( false ),
     m_board( aBoard ),
     m_pcbModel( nullptr ),
-    m_pcbName(),
     m_boardThickness( DEFAULT_BOARD_THICKNESS_MM )
 {
     m_solderMaskColor = COLOR4D( 0.08, 0.20, 0.14, 0.83 );
     m_copperColor = COLOR4D( 0.7, 0.61, 0.0, 1.0 );
+
+    // Init m_pcbName to the board short filename (no path, no ext)
+    // m_pcbName is used later to identify items in step file
+    wxFileName fn( aBoard->GetFileName() );
+    m_pcbBaseName = fn.GetName();
 
     m_resolver = std::make_unique<FILENAME_RESOLVER>();
     m_resolver->Set3DConfigDir( wxT( "" ) );
@@ -342,7 +346,7 @@ bool EXPORTER_STEP::buildBoard3DShapes()
     else
         origin = m_params.m_origin;
 
-    m_pcbModel = std::make_unique<STEP_PCB_MODEL>( m_pcbName );
+    m_pcbModel = std::make_unique<STEP_PCB_MODEL>( m_pcbBaseName );
 
     // TODO: Handle when top & bottom soldermask colours are different...
     m_pcbModel->SetBoardColor( m_solderMaskColor.r, m_solderMaskColor.g, m_solderMaskColor.b );

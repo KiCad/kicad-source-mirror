@@ -584,11 +584,10 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
                 ReportMessage( wxString::Format( wxT( "added %d/%d shapes\n" ),
                                                  cnt, (int)m_board_outlines.size() ) );
 
-            BRepAlgoAPI_Cut      Cut;
             TopTools_ListOfShape mainbrd;
-
             mainbrd.Append( board );
 
+            BRepAlgoAPI_Cut      Cut;
             Cut.SetArguments( mainbrd );
 
             Cut.SetTools( holelist );
@@ -640,19 +639,21 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
             {
                 wxString pcbName;
 
+                // Note, we include the pcb/project name as a prefix
+                // because several STEP importing CAD software like SolidWorks
+                // will deduplicate anything imported by it's STEP name
+
                 if( copper_objects_cnt < copper_item_count )
                 {
-                    pcbName = wxString::Format( wxT( "Copper_Item%d" ), copper_objects_cnt+1 );
+                    pcbName = wxString::Format( wxT( "%s_Copper_Item%d" ),
+                                                m_pcbName, copper_objects_cnt+1 );
                 }
                 else
                 {
-                    // Note, we include the pcb/project name as a prefix
-                    // because several STEP importing CAD software like SolidWorks
-                    // will deduplicate anything imported by it's STEP name
                     if( m_pcb_labels.size() == 1 )
-                        pcbName = wxString::Format( wxT( "%s PCB" ), m_pcbName );
+                        pcbName = wxString::Format( wxT( "%s_PCB" ), m_pcbName );
                     else
-                        pcbName = wxString::Format( wxT( "%s PCB%d" ), m_pcbName, pcbIdx++ );
+                        pcbName = wxString::Format( wxT( "%s_PCB%d" ), m_pcbName, pcbIdx++ );
                 }
 
                 std::string                pcbNameStdString( pcbName.ToUTF8() );
