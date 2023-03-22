@@ -25,10 +25,9 @@
 
 #include <wx/filename.h>
 #include <wx/log.h>
-#include <wx/app.h>
 #include <wx/stdpaths.h>
 #include <wx/msgdlg.h>
-#include <wx/wx.h>
+#include <wx/wxcrtvararg.h>     //for wxPrintf
 
 #include <kiway.h>
 #include <macros.h>
@@ -74,6 +73,10 @@
 #include "cli/command_version.h"
 #include "cli/exit_codes.h"
 #include "cli/cli_names.h"
+
+// Add this header after all others, to avoid a collision name in a Windows header
+// on mingw.
+#include <wx/app.h>
 
 // a dummy to quiet linking with EDA_BASE_FRAME::config();
 #include <kiface_base.h>

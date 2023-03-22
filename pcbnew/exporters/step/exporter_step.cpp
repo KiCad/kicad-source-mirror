@@ -123,7 +123,7 @@ EXPORTER_STEP::EXPORTER_STEP( BOARD* aBoard, const EXPORTER_STEP_PARAMS& aParams
     m_solderMaskColor = COLOR4D( 0.08, 0.20, 0.14, 0.83 );
     m_copperColor = COLOR4D( 0.7, 0.61, 0.0, 1.0 );
 
-    // Init m_pcbName to the board short filename (no path, no ext)
+    // Init m_pcbBaseName to the board short filename (no path, no ext)
     // m_pcbName is used later to identify items in step file
     wxFileName fn( aBoard->GetFileName() );
     m_pcbBaseName = fn.GetName();
