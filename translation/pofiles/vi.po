@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:53-0800\n"
-"PO-Revision-Date: 2023-03-21 19:55+0000\n"
+"PO-Revision-Date: 2023-03-23 21:40+0000\n"
 "Last-Translator: Nguyễn Ngọc Khánh <ngockhanhnguyen985@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v7/vi/>"
 "\n"
@@ -1668,9 +1668,8 @@ msgid "Open Anyway"
 msgstr "Mở bằng mọi cách"
 
 #: common/confirm.cpp:201 common/confirm.cpp:238
-#, fuzzy
 msgid "Save Changes?"
-msgstr "Lưu thay đổi?"
+msgstr "Lưu các thay đổi?"
 
 #: common/confirm.cpp:203 common/confirm.cpp:240
 msgid "If you don't save, all your changes will be permanently lost."
@@ -1774,8 +1773,8 @@ msgid ""
 "The KiCad EDA Suite is a set of open source applications for the creation of "
 "electronic schematics and printed circuit boards."
 msgstr ""
-"KiCad EDA là một tập hợp các ứng dụng mã nguồn mở để tạo ra các sơ đồ điện "
-"tử và bo mạch in."
+"KiCad EDA Suite là một tập hợp các ứng dụng nguồn mở để tạo ra các sơ đồ "
+"điện tử và bo mạch in."
 
 #: common/dialog_about/AboutDialog_main.cpp:127
 msgid "KiCad on the web"
@@ -24079,9 +24078,8 @@ msgid ""
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:262
-#, fuzzy
 msgid "Thermal resistance:"
-msgstr "Kiểu dáng đường kẻ:"
+msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:264
 msgid "Using thermal conductivity value 401 Watts/(meter-Kelvin)"
