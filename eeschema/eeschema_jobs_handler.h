@@ -43,8 +43,7 @@ public:
     EESCHEMA_JOBS_HANDLER();
     int JobExportPythonBom( JOB* aJob );
     int JobExportNetlist( JOB* aJob );
-    int JobExportPdf( JOB* aJob );
-    int JobExportSvg( JOB* aJob );
+    int JobExportPlot( JOB* aJob );
     int JobSymUpgrade( JOB* aJob );
     int JobSymExportSvg( JOB* aJob );
 

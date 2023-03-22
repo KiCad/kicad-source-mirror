@@ -18,17 +18,22 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMAND_EXPORT_SCH_PDF_H
-#define COMMAND_EXPORT_SCH_PDF_H
+#ifndef COMMAND_EXPORT_SCH_PLOT_H
+#define COMMAND_EXPORT_SCH_PLOT_H
 
 #include "command_export_pcb_base.h"
+#include <plotters/plotter.h>
 
 namespace CLI
 {
-class EXPORT_SCH_PDF_COMMAND : public EXPORT_PCB_BASE_COMMAND
+class EXPORT_SCH_PLOT_COMMAND : public EXPORT_PCB_BASE_COMMAND
 {
 public:
-    EXPORT_SCH_PDF_COMMAND();
+    EXPORT_SCH_PLOT_COMMAND( const std::string& aName, PLOT_FORMAT aPlotFormat,
+                             bool aOutputIsDir = true );
+
+    PLOT_FORMAT m_plotFormat;
+    bool        m_useDir;
 
 protected:
     int doPerform( KIWAY& aKiway ) override;

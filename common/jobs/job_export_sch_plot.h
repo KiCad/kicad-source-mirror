@@ -18,32 +18,24 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef JOB_EXPORT_SCH_SVG_H
-#define JOB_EXPORT_SCH_SVG_H
+#ifndef JOB_EXPORT_SCH_PLOT_H
+#define JOB_EXPORT_SCH_PLOT_H
 
 #include <wx/string.h>
+#include <plotters/plotter.h>
 #include "job.h"
 
-class JOB_EXPORT_SCH_SVG : public JOB
+class JOB_EXPORT_SCH_PLOT : public JOB
 {
 public:
-    JOB_EXPORT_SCH_SVG( bool aIsCli ) :
-            JOB( "svg", aIsCli ),
-            m_filename(),
-            m_outputDirectory(),
-            m_blackAndWhite( false ),
-            m_useBackgroundColor( false ),
-            m_plotDrawingSheet( false )
+    JOB_EXPORT_SCH_PLOT( bool aIsCli, PLOT_FORMAT aPlotFormat, wxString aFilename ) :
+            JOB( "plot", aIsCli ), m_plotFormat( aPlotFormat ), m_filename( aFilename )
     {
     }
 
-    wxString m_filename;
-    wxString m_outputDirectory;
-    wxString m_colorTheme;
-
-    bool m_blackAndWhite;
-    bool m_useBackgroundColor;
-    bool m_plotDrawingSheet;
+    PLOT_FORMAT       m_plotFormat;
+    wxString          m_filename;
+    SCH_PLOT_SETTINGS settings;
 };
 
 #endif

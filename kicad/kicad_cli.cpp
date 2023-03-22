@@ -46,6 +46,7 @@
 #include <build_version.h>
 #include <kiplatform/app.h>
 #include <kiplatform/environment.h>
+#include <locale_io.h>
 
 #include "cli/command_pcb.h"
 #include "cli/command_pcb_export.h"
@@ -59,8 +60,7 @@
 #include "cli/command_export_pcb_step.h"
 #include "cli/command_export_sch_pythonbom.h"
 #include "cli/command_export_sch_netlist.h"
-#include "cli/command_export_sch_pdf.h"
-#include "cli/command_export_sch_svg.h"
+#include "cli/command_export_sch_plot.h"
 #include "cli/command_fp.h"
 #include "cli/command_fp_export.h"
 #include "cli/command_fp_export_svg.h"
@@ -136,8 +136,11 @@ static CLI::EXPORT_SCH_COMMAND           exportSchCmd{};
 static CLI::SCH_COMMAND                  schCmd{};
 static CLI::EXPORT_SCH_PYTHONBOM_COMMAND exportSchPythonBomCmd{};
 static CLI::EXPORT_SCH_NETLIST_COMMAND   exportSchNetlistCmd{};
-static CLI::EXPORT_SCH_PDF_COMMAND       exportSchPdfCmd{};
-static CLI::EXPORT_SCH_SVG_COMMAND       exportSchSvgCmd{};
+static CLI::EXPORT_SCH_PLOT_COMMAND      exportSchDxfCmd{ "dxf", PLOT_FORMAT::DXF };
+static CLI::EXPORT_SCH_PLOT_COMMAND      exportSchHpglCmd{ "hpgl", PLOT_FORMAT::HPGL };
+static CLI::EXPORT_SCH_PLOT_COMMAND      exportSchPdfCmd{ "pdf", PLOT_FORMAT::PDF, false };
+static CLI::EXPORT_SCH_PLOT_COMMAND      exportSchPostscriptCmd{ "ps", PLOT_FORMAT::POST };
+static CLI::EXPORT_SCH_PLOT_COMMAND      exportSchSvgCmd{ "svg", PLOT_FORMAT::SVG };
 static CLI::FP_COMMAND                   fpCmd{};
 static CLI::FP_EXPORT_COMMAND            fpExportCmd{};
 static CLI::FP_EXPORT_SVG_COMMAND        fpExportSvgCmd{};
@@ -188,8 +191,11 @@ static std::vector<COMMAND_ENTRY> commandStack = {
             {
                 &exportSchCmd,
                 {
+                    &exportSchDxfCmd,
+                    &exportSchHpglCmd,
                     &exportSchNetlistCmd,
                     &exportSchPdfCmd,
+                    &exportSchPostscriptCmd,
                     &exportSchPythonBomCmd,
                     &exportSchSvgCmd
                 }
@@ -311,9 +317,13 @@ int PGM_KICAD::OnPgmRun()
 
     try
     {
+        // Use the C locale to parse arguments
+        // Otherwise the decimal separator for the locale will be applied
+        LOCALE_IO dummy;
         argParser.parse_args( m_argcUtf8, m_argvUtf8 );
     }
-    catch( const std::runtime_error& err )
+    // std::runtime_error doesn't seem to be enough for the scan<>()
+    catch( const std::exception& err )
     {
         wxPrintf( "%s\n", err.what() );
 
