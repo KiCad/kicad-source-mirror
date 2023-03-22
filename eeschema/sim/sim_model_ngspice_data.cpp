@@ -1264,7 +1264,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::HFET2].instanceParams.emplace_back( "p", 8, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Power dissipated by the mesfet", true );
 
 
-        modelInfos[MODEL_TYPE::VDMOS] = { "VDMOS", "NCHAN", "PCHAN", { "D", "G", "S" }, "DMOS model based on Level 1 MOSFET model", {}, {} };
+        modelInfos[MODEL_TYPE::VDMOS] = { "VDMOS", "NCHAN", "PCHAN", { "D", "G", "S", "<TJ>", "<TCASE>" }, "DMOS model based on Level 1 MOSFET model", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::VDMOS].modelParams.emplace_back( "type", 116, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_STRING, "", SIM_MODEL::PARAM::CATEGORY::DC, "vdmosn", "vdmosp", "N-channel or P-channel MOS" );
         modelInfos[MODEL_TYPE::VDMOS].modelParams.emplace_back( "vto", 101, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "V", SIM_MODEL::PARAM::CATEGORY::DC, "0", "0", "Threshold voltage" );
@@ -1336,42 +1336,42 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::VDMOS].modelParams.emplace_back( "rth_ext", 165, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "ohm", SIM_MODEL::PARAM::CATEGORY::TEMPERATURE, "1000", "1000", "thermal resistance case to ambient, incl. heat sink" );
         modelInfos[MODEL_TYPE::VDMOS].modelParams.emplace_back( "derating", 166, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::DC, "0", "0", "thermal derating for power" );
         // Instance parameters
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "m", 9, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::GEOMETRY, "0.5", "0.5", "Multiplier" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "off", 1, SIM_MODEL::PARAM::DIR_IN, SIM_VALUE::TYPE_BOOL, "", SIM_MODEL::PARAM::CATEGORY::FLAGS, "", "", "Device initially off" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "icvds", 3, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "V", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Initial D-S voltage" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "icvgs", 4, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "V", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Initial G-S voltage" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "temp", 8, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "deg C", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Instance temperature" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "dtemp", 10, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "deg C", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Instance temperature difference" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "ic", 2, SIM_MODEL::PARAM::DIR_IN, SIM_VALUE::TYPE_FLOAT_VECTOR, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Vector of D-S, G-S voltages" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "thermal", 11, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_BOOL, "", SIM_MODEL::PARAM::CATEGORY::FLAGS, "", "", "Thermal model switch on/off" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "id", 214, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "A", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Drain current" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "is", 6, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "A", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "1e-14", "1e-14", "Source current" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "ig", 5, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "A", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Gate current" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "vgs", 217, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "V", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Gate-Source voltage" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "vds", 218, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "V", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Drain-Source voltage" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "cgs", 201, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "F", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "0", "0", "Gate-Source capacitance" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "cgd", 202, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "F", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Gate-Drain capacitance" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "cds", 203, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "F", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Drain-Source capacitance" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "idio", 223, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "A", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Body diode current" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "dnode", 204, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_INT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Number of the drain node" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "gnode", 205, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_INT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Number of the gate node" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "snode", 206, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_INT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Number of the source node" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "tempnode", 207, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_INT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Number of temperature node" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "tcasenode", 208, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_INT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Number of 2nd temperature node" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "dnodeprime", 209, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_INT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Number of int. drain node" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "snodeprime", 210, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_INT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Number of int. source node" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "von", 213, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "V", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Device on state voltage" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "rs", 224, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "ohm", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "0", "0", "Source resistance" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "sourceconductance", 211, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Conductance of source" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "rd", 225, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "0", "0", "Drain conductance" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "drainconductance", 212, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Conductance of drain" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "gm", 215, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Transconductance" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "gds", 216, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Drain-Source conductance" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "cqgs", 220, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "F", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Capacitance due to gate-source charge storage" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "cqgd", 222, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "F", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Capacitance due to gate-drain charge storage" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "qgs", 219, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Gate-Source charge storage" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "qgd", 221, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Gate-Drain charge storage" );
-        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "p", 7, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Instantaneous power" );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "m", 9, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::GEOMETRY, "0.5", "0.5", "Multiplier", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "off", 1, SIM_MODEL::PARAM::DIR_IN, SIM_VALUE::TYPE_BOOL, "", SIM_MODEL::PARAM::CATEGORY::FLAGS, "", "", "Device initially off", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "icvds", 3, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "V", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Initial D-S voltage", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "icvgs", 4, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "V", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Initial G-S voltage", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "temp", 8, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "deg C", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Instance temperature", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "dtemp", 10, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "deg C", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Instance temperature difference", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "ic", 2, SIM_MODEL::PARAM::DIR_IN, SIM_VALUE::TYPE_FLOAT_VECTOR, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Vector of D-S, G-S voltages", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "thermal", 11, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_BOOL, "", SIM_MODEL::PARAM::CATEGORY::FLAGS, "", "", "Thermal model switch on/off", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "id", 214, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "A", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Drain current", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "is", 6, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "A", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "1e-14", "1e-14", "Source current", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "ig", 5, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "A", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Gate current", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "vgs", 217, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "V", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Gate-Source voltage", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "vds", 218, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "V", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Drain-Source voltage", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "cgs", 201, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "F", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "0", "0", "Gate-Source capacitance", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "cgd", 202, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "F", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Gate-Drain capacitance", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "cds", 203, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "F", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Drain-Source capacitance", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "idio", 223, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "A", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Body diode current", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "dnode", 204, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_INT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Number of the drain node", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "gnode", 205, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_INT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Number of the gate node", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "snode", 206, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_INT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Number of the source node", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "tempnode", 207, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_INT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Number of temperature node", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "tcasenode", 208, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_INT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Number of 2nd temperature node", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "dnodeprime", 209, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_INT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Number of int. drain node", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "snodeprime", 210, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_INT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Number of int. source node", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "von", 213, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "V", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Device on state voltage", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "rs", 224, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "ohm", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "0", "0", "Source resistance", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "sourceconductance", 211, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Conductance of source", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "rd", 225, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "0", "0", "Drain conductance", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "drainconductance", 212, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Conductance of drain", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "gm", 215, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Transconductance", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "gds", 216, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Drain-Source conductance", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "cqgs", 220, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "F", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Capacitance due to gate-source charge storage", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "cqgd", 222, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "F", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Capacitance due to gate-drain charge storage", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "qgs", 219, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Gate-Source charge storage", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "qgd", 221, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Gate-Drain charge storage", true );
+        modelInfos[MODEL_TYPE::VDMOS].instanceParams.emplace_back( "p", 7, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Instantaneous power", true );
 
 
         modelInfos[MODEL_TYPE::MOS1] = { "Mos1", "NMOS", "PMOS", { "D", "G", "S", "B" }, "Level 1 MOSfet model with Meyer capacitance model", {}, {} };

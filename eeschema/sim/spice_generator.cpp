@@ -89,10 +89,18 @@ std::string SPICE_GENERATOR::ModelLine( const SPICE_ITEM& aItem ) const
         if( value == "" )
             continue;
 
-        result.append( fmt::format( "+{}{}={}\n",
-                                    std::string( indentLength - 1, ' ' ),
-                                    name,
-                                    value ) );
+        if( param.info.category == SIM_MODEL::PARAM::CATEGORY::FLAGS )
+        {
+            if( value == "1" )
+                result.append( fmt::format( "+{}\n", name ) );
+        }
+        else
+        {
+            result.append( fmt::format( "+{}{}={}\n",
+                                        std::string( indentLength - 1, ' ' ),
+                                        name,
+                                        value ) );
+        }
     }
 
     // Don't send SPICE empty models.
@@ -179,8 +187,16 @@ std::string SPICE_GENERATOR::ItemParams() const
                                                                 : param.info.spiceInstanceName;
         std::string value = SIM_VALUE::ToSpice( param.value );
 
-        if( value != "" )
-            result.append( fmt::format( " {}={}", name, value ) );
+        if( param.info.category == SIM_MODEL::PARAM::CATEGORY::FLAGS )
+        {
+            if( value == "1" )
+                result.append( fmt::format( " {}", name ) );
+        }
+        else
+        {
+            if( value != "" )
+                result.append( fmt::format( " {}={}", name, value ) );
+        }
     }
 
     return result;
