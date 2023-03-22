@@ -60,7 +60,8 @@ BOOST_FIXTURE_TEST_CASE( DRCFalsePositiveRegressions, DRC_REGRESSION_TEST_FIXTUR
         "issue8407",    // PCBNEW: Arc for diff pair has clearance DRC error
         "issue10906",   // Soldermask bridge for only one object
         "issue11814",   // Bad cache hit in isInsideArea
-        "issue12609"    // Arc collison edge case
+        "issue12609",   // Arc collison edge case
+        "issue14294"    // Bad Clipper2 fill
     };
 
     for( const wxString& relPath : tests )
