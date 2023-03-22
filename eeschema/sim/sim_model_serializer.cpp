@@ -38,6 +38,7 @@ namespace SIM_MODEL_SERIALIZER_PARSER
 
     template <typename Rule> struct fieldParamValuePairsSelector : std::false_type {};
     template <> struct fieldParamValuePairsSelector<param> : std::true_type {};
+    template <> struct fieldParamValuePairsSelector<flagParam> : std::true_type {};
     template <> struct fieldParamValuePairsSelector<quotedStringContent> : std::true_type {};
     template <> struct fieldParamValuePairsSelector<unquotedString> : std::true_type {};
 
@@ -240,6 +241,12 @@ bool SIM_MODEL_SERIALIZER::ParseParams( const std::string& aParams )
 
             m_model.SetParamValue( paramName, str, SIM_VALUE_GRAMMAR::NOTATION::SI );
         }
+        else if( node->is_type<SIM_MODEL_SERIALIZER_PARSER::flagParam>() )
+        {
+            std::string token = node->string();
+
+            m_model.SetParamValue( token, "1", SIM_VALUE_GRAMMAR::NOTATION::SI );
+        }
         else
         {
             wxFAIL;
@@ -302,7 +309,10 @@ std::string SIM_MODEL_SERIALIZER::generateParamValuePair( const SIM_MODEL::PARAM
         name = aParam.info.name.substr( 0, aParam.info.name.length() - 1 );
 
     std::string value = aParam.value;
-    
+
+    if( aParam.info.category == SIM_MODEL::PARAM::CATEGORY::FLAGS )
+        return value == "1" ? aParam.info.name : "";
+
     if( value == "" || value.find( ' ' ) != std::string::npos )
         value = fmt::format( "\"{}\"", value );
 

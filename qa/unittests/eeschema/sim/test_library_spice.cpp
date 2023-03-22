@@ -112,32 +112,33 @@ public:
                 fieldValue = "VD";
             }
 
-            BOOST_CHECK_EQUAL( aModelName,
-                               fmt::format( "_{}_{}_{}",
-                                            aModelIndex,
-                                            modelType,
-                                            fieldValue ) );
+            BOOST_CHECK_EQUAL( aModelName, fmt::format( "_{}_{}_{}",
+                                                        aModelIndex,
+                                                        modelType,
+                                                        fieldValue ) );
 
             for( int i = 0; i < aParamNames.size(); ++i )
             {
-                std::string paramName = aParamNames.at( i );
+                std::string             paramName = aParamNames.at( i );
+                const SIM_MODEL::PARAM* param = aModel.FindParam( paramName );
 
                 BOOST_TEST_CONTEXT( "Param name: " << paramName )
                 {
                     if( i % 10 == 0 )
                     {
-                        BOOST_CHECK( aModel.FindParam( paramName )->value == "0M"
-                                     || aModel.FindParam( paramName )->value == "0" );
+                        BOOST_CHECK( param->value == "0M" || param->value == "0" );
                     }
-                    else if( aModel.FindParam( paramName )->info.type == SIM_VALUE::TYPE_INT )
+                    else if( param->info.type == SIM_VALUE::TYPE_INT )
                     {
-                        BOOST_CHECK_EQUAL( aModel.FindParam( paramName )->value,
-                                           fmt::format( "{:d}", i % 10 ) );
+                        BOOST_CHECK_EQUAL( param->value, fmt::format( "{:d}", i % 10 ) );
+                    }
+                    else if( param->info.category == SIM_MODEL::PARAM::CATEGORY::FLAGS )
+                    {
+                        BOOST_CHECK_EQUAL( param->value, "" );
                     }
                     else
                     {
-                        BOOST_CHECK_EQUAL( aModel.FindParam( paramName )->value,
-                                           fmt::format( "{}000.0{}M", i % 10, i % 10 ) );
+                        BOOST_CHECK_EQUAL( param->value, fmt::format( "{}000.0{}M", i % 10, i % 10 ) );
                     }
                 }
             }
@@ -1254,7 +1255,7 @@ BOOST_AUTO_TEST_CASE( Fets )
                 "is_",
                 "vj",
                 "cjo",
-                "m",
+                "m_",
                 "fc",
                 "cgdmin",
                 "cgdmax",
@@ -1329,7 +1330,7 @@ BOOST_AUTO_TEST_CASE( Fets )
                 "is_",
                 "vj",
                 "cjo",
-                "m",
+                "m_",
                 "fc",
                 "cgdmin",
                 "cgdmax",

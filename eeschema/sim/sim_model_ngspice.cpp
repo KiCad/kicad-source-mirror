@@ -67,9 +67,10 @@ SIM_MODEL_NGSPICE::SIM_MODEL_NGSPICE( TYPE aType ) :
 
     for( const SIM_MODEL::PARAM::INFO& paramInfo : modelInfo.instanceParams )
     {
-        // For now, only the geometry parameters.
+        // For now, only the geometry and flags parameters.
         if( paramInfo.category == SIM_MODEL::PARAM::CATEGORY::PRINCIPAL
-            || paramInfo.category == SIM_MODEL::PARAM::CATEGORY::GEOMETRY )
+            || paramInfo.category == SIM_MODEL::PARAM::CATEGORY::GEOMETRY
+            || paramInfo.category == SIM_MODEL::PARAM::CATEGORY::FLAGS )
         {
             AddParam( paramInfo );
         }

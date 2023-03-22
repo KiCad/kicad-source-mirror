@@ -62,12 +62,17 @@ namespace SIM_MODEL_SERIALIZER_GRAMMAR
                               quotedStringContent,
                               one<'"'>> {};
 
-    struct fieldParamValuePair : if_must<param,
-                                         opt<sep>,
-                                         one<'='>,
-                                         opt<sep>,
-                                         sor<quotedString,
-                                             unquotedString>> {};
+    struct flagParam : sor<TAO_PEGTL_ISTRING( "off" ),          // VDMOS
+                           TAO_PEGTL_ISTRING( "thermal" ),      // VDMOS
+                           TAO_PEGTL_ISTRING( "xpart" )> {};    // BSIM1
+
+    struct fieldParamValuePair : sor<flagParam,
+                                     if_must<param,
+                                             opt<sep>,
+                                             one<'='>,
+                                             opt<sep>,
+                                             sor<quotedString,
+                                                 unquotedString>>> {};
     struct fieldParamValuePairs : list<fieldParamValuePair, sep> {};
     struct fieldParamValuePairsGrammar : must<opt<sep>,
                                               opt<fieldParamValuePairs>,
