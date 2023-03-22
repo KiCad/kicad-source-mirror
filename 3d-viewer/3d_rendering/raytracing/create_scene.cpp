@@ -1202,7 +1202,8 @@ void RENDER_3D_RAYTRACE::load3DModels( CONTAINER_3D& aDstContainer, bool aSkipMa
     if( !m_boardAdapter.GetBoard() )
         return;
 
-    if( !m_boardAdapter.m_Cfg->m_Render.show_footprints_normal
+    if( !m_boardAdapter.m_IsPreviewer
+          && !m_boardAdapter.m_Cfg->m_Render.show_footprints_normal
           && !m_boardAdapter.m_Cfg->m_Render.show_footprints_insert
           && !m_boardAdapter.m_Cfg->m_Render.show_footprints_virtual )
     {
