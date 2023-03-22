@@ -1586,19 +1586,6 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
         {
             spiceModelInfo = FIELD_INFO( getSIValue( modelField ), modelField );
             aSymbol.RemoveField( modelField );
-
-            if( spiceModelInfo.m_Text.Contains( ' ' ) )
-            {
-                wxString params;
-
-                spiceModelInfo.m_Text = spiceModelInfo.m_Text.BeforeFirst( ' ', &params );
-
-                if( !params.Trim( false ).IsEmpty() )
-                {
-                    spiceParamsInfo = spiceModelInfo;
-                    spiceParamsInfo.m_Text = params.Trim( false );
-                }
-            }
         }
         else
         {
@@ -1802,12 +1789,18 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
         T_field libraryField = spiceLibInfo.CreateField( &aSymbol, SIM_LIBRARY_FIELD );
         aSymbol.AddField( libraryField );
 
+        // Split library model name from any following parameters
+        wxString modelLineParams;
+        spiceModelInfo.m_Text = spiceModelInfo.m_Text.BeforeFirst( ' ', &modelLineParams );
+
         T_field nameField = spiceModelInfo.CreateField( &aSymbol, SIM_NAME_FIELD );
         aSymbol.AddField( nameField );
 
-        // Don't write a paramsField unless we actually have overrides
-        if( !spiceParamsInfo.IsEmpty() )
+        if( !modelLineParams.IsEmpty() )
         {
+            spiceParamsInfo = spiceModelInfo;
+            spiceParamsInfo.m_Text = modelLineParams;
+
             T_field paramsField = spiceParamsInfo.CreateField( &aSymbol, SIM_PARAMS_FIELD );
             aSymbol.AddField( paramsField );
         }
