@@ -94,6 +94,9 @@ std::string SIM_MODEL_SERIALIZER::GenerateParams() const
             continue;
         }
 
+        if( m_model.GetBaseModel() && m_model.GetBaseModel()->GetParam( i ).value == param.value )
+            continue;
+
         // If the parameter is an enum and the value is default, don't write anything.
         if( param.info.enumValues.size() >= 1 && param.value == param.info.defaultValue )
             continue;
