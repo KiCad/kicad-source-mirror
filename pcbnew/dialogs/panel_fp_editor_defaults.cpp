@@ -174,7 +174,8 @@ PANEL_FP_EDITOR_DEFAULTS::PANEL_FP_EDITOR_DEFAULTS( wxWindow* aParent,
                                                     UNITS_PROVIDER* aUnitsProvider ) :
         PANEL_FP_EDITOR_DEFAULTS_BASE( aParent )
 {
-    m_parent = static_cast<PAGED_DIALOG*>( aParent->GetParent() );
+    m_parent = dynamic_cast<PAGED_DIALOG*>( aParent->GetParent()->GetParent() );
+    wxASSERT_MSG( m_parent, wxS( "Incorrect parent window passed" ) );
 
     m_textItemsGrid->SetDefaultRowSize( m_textItemsGrid->GetDefaultRowSize() + 4 );
 
@@ -331,7 +332,9 @@ bool PANEL_FP_EDITOR_DEFAULTS::validateData()
         int textSize = std::min( m_graphicsGrid->GetUnitValue( row, COL_TEXT_WIDTH ),
                                  m_graphicsGrid->GetUnitValue( row, COL_TEXT_HEIGHT ) );
 
-        if( m_graphicsGrid->GetUnitValue( row, COL_TEXT_THICKNESS ) > textSize / 4 )
+        int thickness = m_graphicsGrid->GetUnitValue( row, COL_TEXT_THICKNESS );
+
+        if( thickness > textSize / 4 )
         {
             wxString msg = _( "Text will not be readable with a thickness greater than\n"
                               "1/4 its width or height." );
