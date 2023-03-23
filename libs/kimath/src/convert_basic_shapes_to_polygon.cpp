@@ -593,7 +593,6 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aBuffer, const VECTOR2I& aStart, con
     EDA_ANGLE arc_angle_start = arc.GetStartAngle();
     EDA_ANGLE arc_angle = arc.GetCentralAngle();
     EDA_ANGLE arc_angle_end = arc_angle_start + arc_angle;
-    EDA_ANGLE sweep = arc_angle < ANGLE_0 ? -ANGLE_180 : ANGLE_180;
 
     if( arc_angle < ANGLE_0 )
     {

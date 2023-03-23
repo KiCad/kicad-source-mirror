@@ -222,8 +222,7 @@ std::vector<std::unique_ptr<FOOTPRINT>> CADSTAR_PCB_ARCHIVE_LOADER::LoadLibrary(
         retval.emplace_back( footprint );
     }
 
-    if( m_board )
-        delete m_board;
+    delete m_board;
 
     // Don't delete the generated footprints, but empty the map
     // (the destructor of this class would end up deleting them if not)
