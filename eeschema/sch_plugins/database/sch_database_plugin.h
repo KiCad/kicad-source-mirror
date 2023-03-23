@@ -103,6 +103,8 @@ private:
                                    const DATABASE_LIB_TABLE& aTable,
                                    const DATABASE_CONNECTION::ROW& aRow );
 
+    static std::optional<bool> boolFromAny( const std::any& aVal );
+
     SYMBOL_LIB_TABLE* m_libTable;
 
     std::unique_ptr<DATABASE_LIB_SETTINGS> m_settings;
