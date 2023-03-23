@@ -292,6 +292,55 @@ void SCH_DATABASE_PLUGIN::ensureConnection()
 }
 
 
+std::optional<bool> SCH_DATABASE_PLUGIN::boolFromAny( const std::any& aVal )
+{
+    try
+    {
+        bool val = std::any_cast<bool>( aVal );
+        return val;
+    }
+    catch( const std::bad_any_cast& )
+    {
+    }
+
+    try
+    {
+        int val = std::any_cast<int>( aVal );
+        return static_cast<bool>( val );
+    }
+    catch( const std::bad_any_cast& )
+    {
+    }
+
+    try
+    {
+        wxString strval( std::any_cast<std::string>( aVal ).c_str(), wxConvUTF8 );
+
+        if( strval.IsEmpty() )
+            return std::nullopt;
+
+        strval.MakeLower();
+
+        for( const wxString& trueVal : { wxS( "true" ), wxS( "yes" ), wxS( "y" ), wxS( "1" ) } )
+        {
+            if( strval.Matches( trueVal ) )
+                return true;
+        }
+
+        for( const wxString& falseVal : { wxS( "false" ), wxS( "no" ), wxS( "n" ), wxS( "0" ) } )
+        {
+            if( strval.Matches( falseVal ) )
+                return false;
+        }
+    }
+    catch( const std::bad_any_cast& )
+    {
+    }
+
+    return std::nullopt;
+}
+
+
 LIB_SYMBOL* SCH_DATABASE_PLUGIN::loadSymbolFromRow( const wxString& aSymbolName,
                                                     const DATABASE_LIB_TABLE& aTable,
                                                     const DATABASE_CONNECTION::ROW& aRow )
@@ -300,12 +349,15 @@ LIB_SYMBOL* SCH_DATABASE_PLUGIN::loadSymbolFromRow( const wxString& aSymbolName,
 
     if( aRow.count( aTable.symbols_col ) )
     {
+        LIB_SYMBOL* originalSymbol = nullptr;
+
         // TODO: Support multiple options for symbol
         std::string symbolIdStr = std::any_cast<std::string>( aRow.at( aTable.symbols_col ) );
         LIB_ID symbolId;
         symbolId.Parse( std::any_cast<std::string>( aRow.at( aTable.symbols_col ) ) );
 
-        LIB_SYMBOL* originalSymbol = m_libTable->LoadSymbol( symbolId );
+        if( symbolId.IsValid() )
+            originalSymbol = m_libTable->LoadSymbol( symbolId );
 
         if( originalSymbol )
         {
@@ -313,6 +365,11 @@ LIB_SYMBOL* SCH_DATABASE_PLUGIN::loadSymbolFromRow( const wxString& aSymbolName,
                         symbolIdStr );
             symbol = originalSymbol->Duplicate();
             symbol->SetSourceLibId( symbolId );
+        }
+        else if( !symbolId.IsValid() )
+        {
+            wxLogTrace( traceDatabase, wxT( "loadSymboFromRow: source symbol id '%s' is invalid, "
+                                            "will create empty symbol" ), symbolIdStr );
         }
         else
         {
@@ -376,15 +433,33 @@ LIB_SYMBOL* SCH_DATABASE_PLUGIN::loadSymbolFromRow( const wxString& aSymbolName,
     if( !aTable.properties.exclude_from_board.empty()
         && aRow.count( aTable.properties.exclude_from_board ) )
     {
-        bool exclude = std::any_cast<bool>( aRow.at( aTable.properties.exclude_from_board ) );
-        symbol->SetIncludeOnBoard( !exclude );
+        std::optional<bool> val = boolFromAny( aRow.at( aTable.properties.exclude_from_board ) );
+
+        if( val )
+        {
+            symbol->SetIncludeOnBoard( !( *val ) );
+        }
+        else
+        {
+            wxLogTrace( traceDatabase, wxT( "loadSymbolFromRow: exclude_from_board value for %s "
+                                            "could not be cast to a boolean" ), aSymbolName );
+        }
     }
 
     if( !aTable.properties.exclude_from_bom.empty()
         && aRow.count( aTable.properties.exclude_from_bom ) )
     {
-        bool exclude = std::any_cast<bool>( aRow.at( aTable.properties.exclude_from_bom ) );
-        symbol->SetIncludeInBom( !exclude );
+        std::optional<bool> val = boolFromAny( aRow.at( aTable.properties.exclude_from_bom ) );
+
+        if( val )
+        {
+            symbol->SetIncludeInBom( !( *val ) );
+        }
+        else
+        {
+            wxLogTrace( traceDatabase, wxT( "loadSymbolFromRow: exclude_from_bom value for %s "
+                                            "could not be cast to a boolean" ), aSymbolName );
+        }
     }
 
     std::vector<LIB_FIELD*> fields;
@@ -399,7 +474,7 @@ LIB_SYMBOL* SCH_DATABASE_PLUGIN::loadSymbolFromRow( const wxString& aSymbolName,
     {
         if( !aRow.count( mapping.column ) )
         {
-            wxLogTrace( traceDatabase, wxT( "loadSymboFromRow: field %s not found in result" ),
+            wxLogTrace( traceDatabase, wxT( "loadSymbolFromRow: field %s not found in result" ),
                         mapping.column );
             continue;
         }
