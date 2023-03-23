@@ -117,8 +117,7 @@ void PANEL_COLOR_SETTINGS::OnThemeChanged( wxCommandEvent& event )
 
     if( idx == static_cast<int>( m_cbTheme->GetCount() ) - 2 )
     {
-        // separator; re-select active theme
-        m_cbTheme->SetStringSelection( m_currentSettings->GetName() );
+        m_cbTheme->SetStringSelection( GetSettingsDropdownName( m_currentSettings ) );
         return;
     }
 
@@ -217,10 +216,7 @@ void PANEL_COLOR_SETTINGS::createThemeList( const wxString& aCurrent )
 
     for( COLOR_SETTINGS* settings : Pgm().GetSettingsManager().GetColorSettingsList() )
     {
-        wxString name = settings->GetName();
-
-        if( settings->IsReadOnly() )
-            name += wxS( " " ) + _( "(read-only)" );
+        wxString name = GetSettingsDropdownName( settings );
 
         int pos = m_cbTheme->Append( name, static_cast<void*>( settings ) );
 
@@ -285,6 +281,8 @@ void PANEL_COLOR_SETTINGS::ShowColorContextMenu( wxMouseEvent& aEvent, int aLaye
 {
     auto selected =
             static_cast<COLOR_SETTINGS*>( m_cbTheme->GetClientData( m_cbTheme->GetSelection() ) );
+
+    wxCHECK_RET( selected, wxT( "Invalid color theme selected" ) );
 
     COLOR4D current  = m_currentSettings->GetColor( aLayer );
     COLOR4D saved    = selected->GetColor( aLayer );
@@ -378,4 +376,15 @@ bool PANEL_COLOR_SETTINGS::saveCurrentTheme( bool aValidate )
     settingsMgr.SaveColorSettings( selected, m_colorNamespace );
 
     return true;
+}
+
+
+wxString PANEL_COLOR_SETTINGS::GetSettingsDropdownName(COLOR_SETTINGS* aSettings)
+{
+    wxString name = aSettings->GetName();
+
+    if( aSettings->IsReadOnly() )
+        name += wxS( " " ) + _( "(read-only)" );
+
+    return name;
 }

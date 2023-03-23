@@ -97,6 +97,11 @@ protected:
      */
     virtual void onColorChanged() {}
 
+    /**
+     * Retrieves the drop down name to be displayed for a color setting
+     */
+    wxString GetSettingsDropdownName( COLOR_SETTINGS* aSettings );
+
     COLOR_SETTINGS* m_currentSettings;
 
     std::map<int, wxStaticText*> m_labels;
