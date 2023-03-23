@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright 2017 CERN
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  * @author Bernhard Stegmaier <stegmaier@sw-systems.de>
@@ -28,6 +28,7 @@
 #ifndef MULTIVECTOR_H
 #define MULTIVECTOR_H
 
+#include <wx/debug.h>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <stdexcept>
 

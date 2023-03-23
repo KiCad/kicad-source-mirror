@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,6 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <sim/sim_model.h>
-#include <lib_symbol.h>
 #include <lib_pin.h>
 
 class TEST_SIM_MODEL_INFERENCE

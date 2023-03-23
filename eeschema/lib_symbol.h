@@ -29,7 +29,6 @@
 
 #include <general.h>
 #include <lib_tree_item.h>
-#include <lib_item.h>
 #include <lib_field.h>
 #include <vector>
 #include <multivector.h>

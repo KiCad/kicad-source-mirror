@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jaen-pierre.charras at wanadoo.fr
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2022 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2023 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,8 +29,6 @@
 #include <sch_draw_panel.h>
 #include <widgets/msgpanel.h>
 #include <lib_symbol.h>
-#include <general.h>
-#include <lib_item.h>
 
 const int fill_tab[3] = { 'N', 'F', 'f' };
 

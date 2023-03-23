@@ -39,7 +39,6 @@
 
 #include <symbol_library.h>
 #include <connection_graph.h>
-#include <lib_item.h>
 #include <lib_pin.h>
 #include <lib_shape.h>
 #include <sch_symbol.h>

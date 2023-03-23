@@ -20,7 +20,6 @@
  */
 
 #include <base_units.h>
-#include <lib_field.h>
 #include <lib_shape.h>
 #include <lib_symbol.h>
 #include <lib_text.h>

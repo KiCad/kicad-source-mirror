@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2015, 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015, 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,7 +58,6 @@
 #include <sch_line.h>
 #include <lib_pin.h>
 #include <kiface_base.h>
-#include <vector>
 #include <algorithm>
 #include <tool/tool_manager.h>
 #include <tools/ee_selection_tool.h>

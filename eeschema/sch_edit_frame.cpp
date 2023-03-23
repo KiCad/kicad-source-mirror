@@ -47,7 +47,6 @@
 #include <project.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
-#include <dialog_erc.h>
 #include <python_scripting.h>
 #include <sch_edit_frame.h>
 #include <sch_painter.h>

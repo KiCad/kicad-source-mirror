@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,7 +47,6 @@
 #include <lib_text.h>
 #include <lib_textbox.h>
 #include <lib_pin.h>
-#include <lib_field.h>
 
 #include <erc_settings.h>
 

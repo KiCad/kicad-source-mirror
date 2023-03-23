@@ -40,7 +40,6 @@
 #include <gr_text.h>
 #include <lib_shape.h>
 #include <lib_id.h>
-#include <lib_item.h>
 #include <lib_pin.h>
 #include <lib_text.h>
 #include <project.h>

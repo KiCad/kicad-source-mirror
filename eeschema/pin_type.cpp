@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2022 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2023 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,6 @@
 #include <cstddef>
 #include <core/arraydim.h>
 #include <lib_pin.h>
-#include <pin_type.h>
 #include "pgm_base.h"
 
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2015-2022 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015-2023 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,9 +37,7 @@
  * (if aSilentIfNone is true, the notification is silenced).
  */
 
-#include <vector>
 #include <wx/string.h>
-#include <boost/ptr_container/ptr_vector.hpp>
 
 #include <string_utf8_map.h>
 #include <lib_symbol.h>
