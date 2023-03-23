@@ -1512,7 +1512,13 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol )
     RebuildSymbolUnitsList();
     SetShowDeMorgan( GetCurSymbol()->HasConversion() );
     UpdateSymbolMsgPanelInfo();
-    Refresh();
+
+    // Let tools add things to the view if necessary
+    if( m_toolManager )
+        m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+
+    GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
+    GetCanvas()->Refresh();
 }
 
 
