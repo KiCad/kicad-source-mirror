@@ -721,14 +721,14 @@ void SHAPE_POLY_SET::booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET
 }
 
 
-void SHAPE_POLY_SET::booleanOp( Clipper2Lib::ClipType aType, const SHAPE_POLY_SET& aOtherShape, size_t aMaxError )
+void SHAPE_POLY_SET::booleanOp( Clipper2Lib::ClipType aType, const SHAPE_POLY_SET& aOtherShape )
 {
-    booleanOp( aType, *this, aOtherShape, aMaxError );
+    booleanOp( aType, *this, aOtherShape );
 }
 
 
 void SHAPE_POLY_SET::booleanOp( Clipper2Lib::ClipType aType, const SHAPE_POLY_SET& aShape,
-                                const SHAPE_POLY_SET& aOtherShape, size_t aMaxError )
+                                const SHAPE_POLY_SET& aOtherShape )
 {
     if( ( aShape.OutlineCount() > 1 || aOtherShape.OutlineCount() > 0 )
         && ( aShape.ArcCount() > 0 || aOtherShape.ArcCount() > 0 ) )
@@ -765,8 +765,7 @@ void SHAPE_POLY_SET::booleanOp( Clipper2Lib::ClipType aType, const SHAPE_POLY_SE
     c.AddSubject( paths );
     c.AddClip( clips );
 
-    Clipper2Lib::Paths64 solution;
-    Clipper2Lib::PolyTree64 tree;
+    Clipper2Lib::PolyTree64 solution;
 
     Clipper2Lib::ZCallback64 callback =
             [&]( const Clipper2Lib::Point64 & e1bot, const Clipper2Lib::Point64 & e1top,
@@ -829,24 +828,10 @@ void SHAPE_POLY_SET::booleanOp( Clipper2Lib::ClipType aType, const SHAPE_POLY_SE
 
     c.SetZCallback( callback ); // register callback
 
-    if( aMaxError > 0 )
-    {
-        c.Execute( aType, Clipper2Lib::FillRule::NonZero, solution );
-        Clipper2Lib::Paths64 output = Clipper2Lib::SimplifyPaths( solution, aMaxError, false );
-        Clipper2Lib::Clipper64 c2;
+    c.Execute( aType, Clipper2Lib::FillRule::NonZero, solution );
 
-        c2.PreserveCollinear = false;
-        c2.ReverseSolution = false;
-        c2.AddSubject( output );
-        c2.Execute( Clipper2Lib::ClipType::Union, Clipper2Lib::FillRule::Positive, tree);
-    }
-    else
-    {
-        c.Execute( aType, Clipper2Lib::FillRule::NonZero, tree );
-    }
-
-    importTree( tree, zValues, arcBuffer );
-    tree.Clear(); // Free used memory (not done in dtor)
+    importTree( solution, zValues, arcBuffer );
+    solution.Clear(); // Free used memory (not done in dtor)
 }
 
 
@@ -1609,17 +1594,6 @@ void SHAPE_POLY_SET::Unfracture( POLYGON_MODE aFastMode )
         unfractureSingle( path );
 
     Simplify( aFastMode );    // remove overlapping holes/degeneracy
-}
-
-
-void SHAPE_POLY_SET::Simplify( size_t aMaxError )
-{
-    SHAPE_POLY_SET empty;
-
-    if( ADVANCED_CFG::GetCfg().m_UseClipper2 )
-        booleanOp( Clipper2Lib::ClipType::Union, empty, aMaxError );
-    else
-        booleanOp( ClipperLib::ctUnion, empty, PM_FAST );
 }
 
 

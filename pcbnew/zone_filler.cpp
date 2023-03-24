@@ -1299,7 +1299,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
         }
     }
 
-    aHoles.Simplify( m_maxError );
+    aHoles.Simplify( SHAPE_POLY_SET::PM_FAST );
 }
 
 
