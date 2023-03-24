@@ -164,7 +164,7 @@ public:
     }
 
     /**
-     * @return true if this and \aOther represent a net-tie.
+     * @return true if this and \param aOther represent a net-tie.
      */
     bool SharesNetTieGroup( const PAD* aOther ) const;
 
@@ -677,11 +677,11 @@ public:
      */
     const BOX2I GetBoundingBox() const override;
 
-    ///< Set absolute coordinates.
+    /// Set absolute coordinates.
     void SetDrawCoord();
 
     //todo: Remove SetLocalCoord along with m_pos
-    ///< Set relative coordinates.
+    /// Set relative coordinates.
     void SetLocalCoord();
 
     /**

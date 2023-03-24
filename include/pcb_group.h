@@ -109,16 +109,16 @@ public:
     }
 #endif
 
-    ///< @copydoc EDA_ITEM::GetPosition
+    /// @copydoc EDA_ITEM::GetPosition
     VECTOR2I GetPosition() const override;
 
-    ///< @copydoc EDA_ITEM::SetPosition
+    /// @copydoc EDA_ITEM::SetPosition
     void SetPosition( const VECTOR2I& aNewpos ) override;
 
-    ///< @copydoc BOARD_ITEM::GetLayerSet
+    /// @copydoc BOARD_ITEM::GetLayerSet
     LSET GetLayerSet() const override;
 
-    ///< @copydoc BOARD_ITEM::SetLayer
+    /// @copydoc BOARD_ITEM::SetLayer
     void SetLayer( PCB_LAYER_ID aLayer ) override
     {
         wxFAIL_MSG( wxT( "groups don't support layer SetLayer" ) );
@@ -132,7 +132,7 @@ public:
 
     void SetLocked( bool aLocked ) override;
 
-    ///< @copydoc EDA_ITEM::Clone
+    /// @copydoc EDA_ITEM::Clone
     EDA_ITEM* Clone() const override;
 
     /*
@@ -145,45 +145,45 @@ public:
      */
     PCB_GROUP* DeepDuplicate() const;
 
-    ///< @copydoc BOARD_ITEM::IsOnLayer
+    /// @copydoc BOARD_ITEM::IsOnLayer
     bool IsOnLayer( PCB_LAYER_ID aLayer, bool aIncludeCourtyards = false ) const override;
 
-    ///< @copydoc EDA_ITEM::HitTest
+    /// @copydoc EDA_ITEM::HitTest
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
 
-    ///< @copydoc EDA_ITEM::HitTest
+    /// @copydoc EDA_ITEM::HitTest
     bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
-    ///< @copydoc EDA_ITEM::GetBoundingBox
+    /// @copydoc EDA_ITEM::GetBoundingBox
     const BOX2I GetBoundingBox() const override;
 
     // @copydoc BOARD_ITEM::GetEffectiveShape
     std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
                                               FLASHING aFlash = FLASHING::DEFAULT ) const override;
 
-    ///< @copydoc EDA_ITEM::Visit
+    /// @copydoc EDA_ITEM::Visit
     INSPECT_RESULT Visit( INSPECTOR aInspector, void* aTestData,
                           const std::vector<KICAD_T>& aScanTypes ) override;
 
-    ///< @copydoc VIEW_ITEM::ViewGetLayers
+    /// @copydoc VIEW_ITEM::ViewGetLayers
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-    ///< @copydoc VIEW_ITEM::ViewGetLOD
+    /// @copydoc VIEW_ITEM::ViewGetLOD
     double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 
-    ///< @copydoc BOARD_ITEM::Move
+    /// @copydoc BOARD_ITEM::Move
     void Move( const VECTOR2I& aMoveVector ) override;
 
-    ///< @copydoc BOARD_ITEM::Rotate
+    /// @copydoc BOARD_ITEM::Rotate
     void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override;
 
-    ///< @copydoc BOARD_ITEM::Flip
+    /// @copydoc BOARD_ITEM::Flip
     void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
 
-    ///< @copydoc EDA_ITEM::GetItemDescription
+    /// @copydoc EDA_ITEM::GetItemDescription
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
 
-    ///< @copydoc EDA_ITEM::GetMenuImage
+    /// @copydoc EDA_ITEM::GetMenuImage
     BITMAPS GetMenuImage() const override;
 
 
@@ -202,7 +202,7 @@ public:
     }
 
 
-    ///< @copydoc EDA_ITEM::GetMsgPanelInfo
+    /// @copydoc EDA_ITEM::GetMsgPanelInfo
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     /**
@@ -230,7 +230,7 @@ public:
     static bool IsGroupableType( KICAD_T aType );
 
 protected:
-    ///< @copydoc BOARD_ITEM::swapData
+    /// @copydoc BOARD_ITEM::swapData
     void swapData( BOARD_ITEM* aImage ) override;
 
 private:

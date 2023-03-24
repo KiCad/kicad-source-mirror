@@ -64,9 +64,9 @@
 class SHAPE_POLY_SET : public SHAPE
 {
 public:
-    ///< represents a single polygon outline with holes. The first entry is the outline,
-    ///< the remaining (if any), are the holes
-    ///< N.B. SWIG only supports typedef, so avoid c++ 'using' keyword
+    /// represents a single polygon outline with holes. The first entry is the outline,
+    /// the remaining (if any), are the holes
+    /// N.B. SWIG only supports typedef, so avoid c++ 'using' keyword
     typedef std::vector<SHAPE_LINE_CHAIN> POLYGON;
 
     class TRIANGULATED_POLYGON
@@ -549,31 +549,31 @@ public:
 
     SHAPE_POLY_SET CloneDropTriangulation() const;
 
-    ///< Creates a new empty polygon in the set and returns its index
+    /// Creates a new empty polygon in the set and returns its index
     int NewOutline();
 
-    ///< Creates a new hole in a given outline
+    /// Creates a new hole in a given outline
     int NewHole( int aOutline = -1 );
 
-    ///< Adds a new outline to the set and returns its index
+    /// Adds a new outline to the set and returns its index
     int AddOutline( const SHAPE_LINE_CHAIN& aOutline );
 
-    ///< Adds a new hole to the given outline (default: last) and returns its index
+    /// Adds a new hole to the given outline (default: last) and returns its index
     int AddHole( const SHAPE_LINE_CHAIN& aHole, int aOutline = -1 );
 
-    ///< Return the area of this poly set
+    /// Return the area of this poly set
     double Area();
 
-    ///< Count the number of arc shapes present
+    /// Count the number of arc shapes present
     int ArcCount() const;
 
-    ///< Appends all the arcs in this polyset to \a aArcBuffer
+    /// Appends all the arcs in this polyset to \a aArcBuffer
     void GetArcs( std::vector<SHAPE_ARC>& aArcBuffer ) const;
 
-    ///< Removes all arc references from all the outlines and holes in the polyset
+    /// Removes all arc references from all the outlines and holes in the polyset
     void ClearArcs();
 
-    ///< Appends a vertex at the end of the given outline/hole (default: the last outline)
+    /// Appends a vertex at the end of the given outline/hole (default: the last outline)
     /**
      * Add a new vertex to the contour indexed by \p aOutline and \p aHole (defaults to the
      * outline of the last polygon).
@@ -588,10 +588,10 @@ public:
      */
     int Append( int x, int y, int aOutline = -1, int aHole = -1, bool aAllowDuplication = false );
 
-    ///< Merge polygons from two sets.
+    /// Merge polygons from two sets.
     void Append( const SHAPE_POLY_SET& aSet );
 
-    ///< Append a vertex at the end of the given outline/hole (default: the last outline)
+    /// Append a vertex at the end of the given outline/hole (default: the last outline)
     void Append( const VECTOR2I& aP, int aOutline = -1, int aHole = -1 );
 
     /**
@@ -615,13 +615,13 @@ public:
      */
     void InsertVertex( int aGlobalIndex, const VECTOR2I& aNewVertex );
 
-    ///< Return the index-th vertex in a given hole outline within a given outline
+    /// Return the index-th vertex in a given hole outline within a given outline
     const VECTOR2I& CVertex( int aIndex, int aOutline, int aHole ) const;
 
-    ///< Return the aGlobalIndex-th vertex in the poly set
+    /// Return the aGlobalIndex-th vertex in the poly set
     const VECTOR2I& CVertex( int aGlobalIndex ) const;
 
-    ///< Return the index-th vertex in a given hole outline within a given outline
+    /// Return the index-th vertex in a given hole outline within a given outline
     const VECTOR2I& CVertex( VERTEX_INDEX aIndex ) const;
 
     /**
@@ -654,20 +654,20 @@ public:
      */
     bool IsSelfIntersecting() const;
 
-    ///< Return the number of triangulated polygons
+    /// Return the number of triangulated polygons
     unsigned int TriangulatedPolyCount() const { return m_triangulatedPolys.size(); }
 
-    ///< Return the number of outlines in the set
+    /// Return the number of outlines in the set
     int OutlineCount() const { return m_polys.size(); }
 
-    ///< Return the number of vertices in a given outline/hole
+    /// Return the number of vertices in a given outline/hole
     int VertexCount( int aOutline = -1, int aHole = -1 ) const;
 
-    ///< Return the number of points in the shape poly set.
-    ///< mainly for reports
+    /// Return the number of points in the shape poly set.
+    /// mainly for reports
     int FullPointCount() const;
 
-    ///< Returns the number of holes in a given outline
+    /// Returns the number of holes in a given outline
     int HoleCount( int aOutline ) const
     {
         if( ( aOutline < 0 ) || ( aOutline >= (int) m_polys.size() )
@@ -679,7 +679,7 @@ public:
         return m_polys[aOutline].size() - 1;
     }
 
-    ///< Return the reference to aIndex-th outline in the set
+    /// Return the reference to aIndex-th outline in the set
     SHAPE_LINE_CHAIN& Outline( int aIndex )
     {
         return m_polys[aIndex][0];
@@ -706,13 +706,13 @@ public:
         return Subset( aPolygonIndex, aPolygonIndex + 1 );
     }
 
-    ///< Return the reference to aHole-th hole in the aIndex-th outline
+    /// Return the reference to aHole-th hole in the aIndex-th outline
     SHAPE_LINE_CHAIN& Hole( int aOutline, int aHole )
     {
         return m_polys[aOutline][aHole + 1];
     }
 
-    ///< Return the aIndex-th subpolygon in the set
+    /// Return the aIndex-th subpolygon in the set
     POLYGON& Polygon( int aIndex )
     {
         return m_polys[aIndex];
@@ -859,8 +859,8 @@ public:
         return iter;
     }
 
-    ///< Return an iterator object, for iterating between aFirst and aLast outline, with or
-    ///< without holes (default: without)
+    /// Return an iterator object, for iterating between aFirst and aLast outline, with or
+    /// without holes (default: without)
     SEGMENT_ITERATOR IterateSegments( int aFirst, int aLast, bool aIterateHoles = false )
     {
         SEGMENT_ITERATOR iter;
@@ -875,8 +875,8 @@ public:
         return iter;
     }
 
-    ///< Return an iterator object, for iterating between aFirst and aLast outline, with or
-    ///< without holes (default: without)
+    /// Return an iterator object, for iterating between aFirst and aLast outline, with or
+    /// without holes (default: without)
     CONST_SEGMENT_ITERATOR CIterateSegments( int aFirst, int aLast,
                                              bool aIterateHoles = false ) const
     {
@@ -892,49 +892,49 @@ public:
         return iter;
     }
 
-    ///< Return an iterator object, for iterating aPolygonIdx-th polygon edges.
+    /// Return an iterator object, for iterating aPolygonIdx-th polygon edges.
     SEGMENT_ITERATOR IterateSegments( int aPolygonIdx )
     {
         return IterateSegments( aPolygonIdx, aPolygonIdx );
     }
 
-    ///< Return an iterator object, for iterating aPolygonIdx-th polygon edges.
+    /// Return an iterator object, for iterating aPolygonIdx-th polygon edges.
     CONST_SEGMENT_ITERATOR CIterateSegments( int aPolygonIdx ) const
     {
         return CIterateSegments( aPolygonIdx, aPolygonIdx );
     }
 
-    ///< Return an iterator object, for all outlines in the set (no holes).
+    /// Return an iterator object, for all outlines in the set (no holes).
     SEGMENT_ITERATOR IterateSegments()
     {
         return IterateSegments( 0, OutlineCount() - 1 );
     }
 
-    ///< Returns an iterator object, for all outlines in the set (no holes)
+    /// Returns an iterator object, for all outlines in the set (no holes)
     CONST_SEGMENT_ITERATOR CIterateSegments() const
     {
         return CIterateSegments( 0, OutlineCount() - 1 );
     }
 
-    ///< Returns an iterator object, for all outlines in the set (with holes)
+    /// Returns an iterator object, for all outlines in the set (with holes)
     SEGMENT_ITERATOR IterateSegmentsWithHoles()
     {
         return IterateSegments( 0, OutlineCount() - 1, true );
     }
 
-    ///< Return an iterator object, for the \a aOutline-th outline in the set (with holes).
+    /// Return an iterator object, for the \a aOutline-th outline in the set (with holes).
     SEGMENT_ITERATOR IterateSegmentsWithHoles( int aOutline )
     {
         return IterateSegments( aOutline, aOutline, true );
     }
 
-    ///< Return an iterator object, for the \a aOutline-th outline in the set (with holes).
+    /// Return an iterator object, for the \a aOutline-th outline in the set (with holes).
     CONST_SEGMENT_ITERATOR CIterateSegmentsWithHoles() const
     {
         return CIterateSegments( 0, OutlineCount() - 1, true );
     }
 
-    ///< Return an iterator object, for the \a aOutline-th outline in the set (with holes).
+    /// Return an iterator object, for the \a aOutline-th outline in the set (with holes).
     CONST_SEGMENT_ITERATOR CIterateSegmentsWithHoles( int aOutline ) const
     {
         return CIterateSegments( aOutline, aOutline, true );
@@ -954,34 +954,35 @@ public:
         PM_STRICTLY_SIMPLE = false
     };
 
-    ///< Perform boolean polyset union
-    ///< For \a aFastMode meaning, see function booleanOp
+    /// Perform boolean polyset union
+    /// For \a aFastMode meaning, see function booleanOp
     void BooleanAdd( const SHAPE_POLY_SET& b, POLYGON_MODE aFastMode );
 
-    ///< Perform boolean polyset difference
-    ///< For \a aFastMode meaning, see function booleanOp
+    /// Perform boolean polyset difference
+    /// For \a aFastMode meaning, see function booleanOp
     void BooleanSubtract( const SHAPE_POLY_SET& b, POLYGON_MODE aFastMode );
 
-    ///< Perform boolean polyset intersection
-    ///< For \a aFastMode meaning, see function booleanOp
+    /// Perform boolean polyset intersection
+    /// For \a aFastMode meaning, see function booleanOp
     void BooleanIntersection( const SHAPE_POLY_SET& b, POLYGON_MODE aFastMode );
 
-    ///< Perform boolean polyset union between a and b, store the result in it self
-    ///< For \a aFastMode meaning, see function booleanOp
+    /// Perform boolean polyset union between a and b, store the result in it self
+    /// For \a aFastMode meaning, see function booleanOp
     void BooleanAdd( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b,
                      POLYGON_MODE aFastMode );
 
-    ///< Perform boolean polyset difference between a and b, store the result in it self
-    ///< For \a aFastMode meaning, see function booleanOp
+    /// Perform boolean polyset difference between a and b, store the result in it self
+    /// For \a aFastMode meaning, see function booleanOp
     void BooleanSubtract( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b,
                           POLYGON_MODE aFastMode );
 
-    ///< Perform boolean polyset intersection between a and b, store the result in it self
-    ///< For \a aFastMode meaning, see function booleanOp
+    /// Perform boolean polyset intersection between a and b, store the result in it self
+    /// For \a aFastMode meaning, see function booleanOp
     void BooleanIntersection( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b,
                               POLYGON_MODE aFastMode );
 
-    enum CORNER_STRATEGY        ///< define how inflate transform build inflated polygon
+    /// define how inflate transform build inflated polygon
+    enum CORNER_STRATEGY
     {
         ALLOW_ACUTE_CORNERS,    ///< just inflate the polygon. Acute angles create spikes
         CHAMFER_ACUTE_CORNERS,  ///< Acute angles are chamfered
@@ -1025,24 +1026,24 @@ public:
      */
     void InflateWithLinkedHoles( int aFactor, int aCircleSegmentsCount, POLYGON_MODE aFastMode );
 
-    ///< Convert a set of polygons with holes to a single outline with "slits"/"fractures"
-    ///< connecting the outer ring to the inner holes
-    ///< For \a aFastMode meaning, see function booleanOp
+    /// Convert a set of polygons with holes to a single outline with "slits"/"fractures"
+    /// connecting the outer ring to the inner holes
+    /// For \a aFastMode meaning, see function booleanOp
     void Fracture( POLYGON_MODE aFastMode );
 
-    ///< Convert a single outline slitted ("fractured") polygon into a set ouf outlines
-    ///< with holes.
+    /// Convert a single outline slitted ("fractured") polygon into a set ouf outlines
+    /// with holes.
     void Unfracture( POLYGON_MODE aFastMode );
 
-    ///< Return true if the polygon set has any holes.
+    /// Return true if the polygon set has any holes.
     bool HasHoles() const;
 
-    ///< Return true if the polygon set has any holes that share a vertex.
+    /// Return true if the polygon set has any holes that share a vertex.
     bool HasTouchingHoles() const;
 
 
-    ///< Simplify the polyset (merges overlapping polys, eliminates degeneracy/self-intersections)
-    ///< For \a aFastMode meaning, see function booleanOp
+    /// Simplify the polyset (merges overlapping polys, eliminates degeneracy/self-intersections)
+    /// For \a aFastMode meaning, see function booleanOp
     void Simplify( POLYGON_MODE aFastMode );
 
     /**
@@ -1203,7 +1204,7 @@ public:
     bool Contains( const VECTOR2I& aP, int aSubpolyIndex = -1, int aAccuracy = 0,
                    bool aUseBBoxCaches = false ) const;
 
-    ///< Return true if the set is empty (no polygons at all)
+    /// Return true if the set is empty (no polygons at all)
     bool IsEmpty() const
     {
         return m_polys.empty();
@@ -1223,7 +1224,7 @@ public:
      */
     void RemoveVertex( VERTEX_INDEX aRelativeIndices );
 
-    ///< Remove all outlines & holes (clears) the polygon set.
+    /// Remove all outlines & holes (clears) the polygon set.
     void RemoveAllContours();
 
     /**
@@ -1261,14 +1262,14 @@ public:
      */
     void SetVertex( int aGlobalIndex, const VECTOR2I& aPos );
 
-    ///< Return total number of vertices stored in the set.
+    /// Return total number of vertices stored in the set.
     int TotalVertices() const;
 
-    ///< Delete \a aIdx-th polygon from the set.
+    /// Delete \a aIdx-th polygon from the set.
     void DeletePolygon( int aIdx );
 
-    ///< Delete \a aIdx-th polygon and its triangulation data from the set.
-    ///< If called with \a aUpdateHash false, caller must call UpdateTriangulationDataHash().
+    /// Delete \a aIdx-th polygon and its triangulation data from the set.
+    /// If called with \a aUpdateHash false, caller must call UpdateTriangulationDataHash().
     void DeletePolygonAndTriangulationData( int aIdx, bool aUpdateHash = true );
 
     void UpdateTriangulationDataHash();
@@ -1470,7 +1471,7 @@ private:
     POLYGON chamferFilletPolygon( CORNER_MODE aMode, unsigned int aDistance,
                                   int aIndex, int aErrorMax );
 
-    ///< Return true if the polygon set has any holes that touch share a vertex.
+    /// Return true if the polygon set has any holes that touch share a vertex.
     bool hasTouchingHoles( const POLYGON& aPoly ) const;
 
     MD5_HASH checksum() const;

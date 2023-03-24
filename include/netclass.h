@@ -50,7 +50,7 @@ public:
 
     /**
      * Create a NETCLASS instance with \a aName.
-     *
+     * The units on the optional parameters are Internal Units (1 nm)
      * @param aName is the name of this new netclass.
      */
     NETCLASS( const wxString& aName );
@@ -123,7 +123,7 @@ protected:
     wxString    m_Name;                 ///< Name of the net class
     wxString    m_Description;          ///< what this NETCLASS is for.
 
-    /// The units on these parameters is Internal Units (1 nm)
+
 
     std::optional<int>    m_Clearance;            ///< clearance when routing
 

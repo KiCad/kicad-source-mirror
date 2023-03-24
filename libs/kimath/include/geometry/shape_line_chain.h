@@ -90,27 +90,27 @@ public:
      */
     struct INTERSECTION
     {
-        ///< Point of intersection between our and their.
+        /// Point of intersection between our and their.
         VECTOR2I p;
 
-        ///< Index of the intersecting corner/segment in the 'our' (== this) line.
+        /// Index of the intersecting corner/segment in the 'our' (== this) line.
         int index_our;
 
-        ///< index of the intersecting corner/segment in the 'their' (Intersect() method
-        ///< parameter) line.
+        /// index of the intersecting corner/segment in the 'their' (Intersect() method
+        /// parameter) line.
         int index_their;
 
-        ///< When true, the corner [index_our] of the 'our' line lies exactly on 'their' line.
+        /// When true, the corner [index_our] of the 'our' line lies exactly on 'their' line.
         bool is_corner_our;
 
-        ///< When true, the corner [index_their] of the 'their' line lies exactly on 'our' line.
-        ///< Note that when both is_corner_our and is_corner_their are set, the line chains touch
-        ///< with with corners.
+        /// When true, the corner [index_their] of the 'their' line lies exactly on 'our' line.
+        /// Note that when both is_corner_our and is_corner_their are set, the line chains touch
+        /// with with corners.
         bool is_corner_their;
 
-        ///< Auxiliary flag to avoid copying intersection info to intersection refining code,
-        ///< used by the refining code (e.g. hull handling stuff in the P&S) to reject false
-        ///< intersection points.
+        /// Auxiliary flag to avoid copying intersection info to intersection refining code,
+        /// used by the refining code (e.g. hull handling stuff in the P&S) to reject false
+        /// intersection points.
         bool valid;
 
         INTERSECTION() :

@@ -235,8 +235,8 @@ public:
      */
     int Translate( int aNetCode ) const;
 
-    ///< Wrapper class, so you can iterate through NETINFO_ITEM*s, not
-    ///< std::pair<int/wxString, NETINFO_ITEM*>
+    /// Wrapper class, so you can iterate through NETINFO_ITEM*s, not
+    /// std::pair<int/wxString, NETINFO_ITEM*>
     class iterator
     {
     public:
@@ -382,16 +382,16 @@ public:
     /// Return the netcode map, at least for python.
     const NETCODES_MAP& NetsByNetcode() const   { return m_netCodes; }
 
-    ///< Constant that holds the "unconnected net" number (typically 0)
-    ///< all items "connected" to this net are actually not connected items
+    /// Constant that holds the "unconnected net" number (typically 0)
+    /// all items "connected" to this net are actually not connected items
     static const int UNCONNECTED;
 
-    ///< Constant that forces initialization of a netinfo item to the NETINFO_ITEM ORPHANED
-    ///< (typically -1) when calling SetNetCode on board connected items.
+    /// Constant that forces initialization of a netinfo item to the NETINFO_ITEM ORPHANED
+    /// (typically -1) when calling SetNetCode on board connected items.
     static const int ORPHANED;
 
-    ///< NETINFO_ITEM meaning that there was no net assigned for an item, as there was no
-    ///< board storing net list available.
+    /// NETINFO_ITEM meaning that there was no net assigned for an item, as there was no
+    /// board storing net list available.
     static NETINFO_ITEM* OrphanedItem()
     {
         static NETINFO_ITEM* g_orphanedItem;
@@ -407,8 +407,8 @@ public:
 #endif
 
 #ifndef SWIG
-    ///< Wrapper class, so you can iterate through NETINFO_ITEM*s, not
-    ///< std::pair<int/wxString, NETINFO_ITEM*>
+    /// Wrapper class, so you can iterate through NETINFO_ITEM*s, not
+    /// std::pair<int/wxString, NETINFO_ITEM*>
     class iterator
     {
     public:

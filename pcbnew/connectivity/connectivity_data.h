@@ -91,8 +91,8 @@ struct RN_DYNAMIC_LINE
  */
 enum class PROPAGATE_MODE
 {
-    SKIP_CONFLICTS,     /// Clusters with conflicting drivers are not updated (default)
-    RESOLVE_CONFLICTS   /// Clusters with conflicting drivers are updated to the most popular net
+    SKIP_CONFLICTS,     ///< Clusters with conflicting drivers are not updated (default)
+    RESOLVE_CONFLICTS   ///< Clusters with conflicting drivers are updated to the most popular net
 };
 
 

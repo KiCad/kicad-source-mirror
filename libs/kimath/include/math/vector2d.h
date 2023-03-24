@@ -41,8 +41,8 @@
 template <class T>
 struct VECTOR2_TRAITS
 {
-    ///< extended range/precision types used by operations involving multiple
-    ///< multiplications to prevent overflow.
+    /// extended range/precision types used by operations involving multiple
+    /// multiplications to prevent overflow.
     typedef T extended_type;
 };
 

@@ -29,8 +29,8 @@
 template <class T>
 struct VECTOR3_TRAITS
 {
-    ///< extended range/precision types used by operations involving multiple
-    ///< multiplications to prevent overflow.
+    /// extended range/precision types used by operations involving multiple
+    /// multiplications to prevent overflow.
     typedef T extended_type;
 };
 
@@ -97,10 +97,10 @@ public:
      */
     VECTOR3<T> Normalize();
 
-    ///< Equality operator
+    /// Equality operator
     bool operator==( const VECTOR3<T>& aVector ) const;
 
-    ///< Not equality operator
+    /// Not equality operator
     bool operator!=( const VECTOR3<T>& aVector ) const;
 
     VECTOR3<T>& operator*=( T val );

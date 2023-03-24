@@ -289,11 +289,15 @@ inline GAL_LAYER_ID operator+( const GAL_LAYER_ID& a, int b )
     return t;
 }
 
+
+/// @brief Wraps a std::bitset
 typedef std::bitset<GAL_LAYER_ID_COUNT> GAL_BASE_SET;
+
 
 /// Helper for storing and iterating over GAL_LAYER_IDs
 class GAL_SET : public GAL_BASE_SET
 {
+
 private:
     static constexpr int start = static_cast<int>( GAL_LAYER_ID_START );
 

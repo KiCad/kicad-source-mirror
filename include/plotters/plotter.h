@@ -449,8 +449,8 @@ public:
     /**
      * Create a clickable hyperlink with a rectangular click area
      *
-     * @aBox is the rectangular click target
-     * @aDestinationURL is the target URL
+     * @param aBox is the rectangular click target
+     * @param aDestinationURL is the target URL
      */
     virtual void HyperlinkBox( const BOX2I& aBox, const wxString& aDestinationURL )
     {
@@ -460,8 +460,8 @@ public:
     /**
      * Create a clickable hyperlink menu with a rectangular click area
      *
-     * @aBox is the rectangular click target
-     * @aDestURLs is the list of target URLs for the menu
+     * @param aBox is the rectangular click target
+     * @param aDestURLs is the target URL
      */
     virtual void HyperlinkMenu( const BOX2I& aBox, const std::vector<wxString>& aDestURLs )
     {
@@ -471,8 +471,8 @@ public:
     /**
      * Create a bookmark to a symbol
      *
-     * @aBox is the bounding box of the symbol
-     * @aSymbolReference is the symbol schematic ref
+     * @param aBox is the rectangular click target
+     * @param aSymbolReference is the symbol schematic ref
      */
     virtual void Bookmark( const BOX2I& aBox, const wxString& aName,
                            const wxString& aGroupName = wxEmptyString )

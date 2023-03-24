@@ -496,7 +496,7 @@ public:
      */
     bool ResolveTextVar( wxString* token, int aDepth = 0 ) const;
 
-    ///< @copydoc EDA_ITEM::GetMsgPanelInfo
+    /// @copydoc EDA_ITEM::GetMsgPanelInfo
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
@@ -781,7 +781,7 @@ public:
 
     static double GetCoverageArea( const BOARD_ITEM* aItem, const GENERAL_COLLECTOR& aCollector );
 
-    ///< Return the initial comments block or NULL if none, without transfer of ownership.
+    /// Return the initial comments block or NULL if none, without transfer of ownership.
     const wxArrayString* GetInitialComments() const { return m_initial_comments; }
 
     /**

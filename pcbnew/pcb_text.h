@@ -118,9 +118,9 @@ public:
      * Function TransformTextToPolySet
      * Convert the text to a polygonSet describing the actual character strokes (one per segment).
      * Circles and arcs are approximated by segments.
-     * @aBuffer = SHAPE_POLY_SET to store the polygon corners
-     * @aClearance = the clearance around the text
-     * @aError = the maximum error to allow when approximating curves
+     * @param aBuffer SHAPE_POLY_SET to store the polygon corners
+     * @param aClearance the clearance around the text
+     * @param aError the maximum error to allow when approximating curves
      */
     void TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
                                  int aError, ERROR_LOC aErrorLoc ) const;
