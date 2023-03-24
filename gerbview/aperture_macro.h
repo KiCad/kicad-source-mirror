@@ -68,6 +68,9 @@ class SHAPE_POLY_SET;
 class APERTURE_MACRO
 {
 public:
+    APERTURE_MACRO() :
+        m_paramLevelEval( 0 )
+    {}
     /**
      * Usually, parameters are defined inside the aperture primitive using immediate mode or
      * deferred mode.
@@ -82,17 +85,40 @@ public:
      */
     double GetLocalParam( const D_CODE* aDcode, unsigned aParamId ) const;
 
+    /**
+     * Init m_localParamValues to a initial values coming from aDcode and
+     * clear m_paramLevelEval
+     * must be called once before trying to build the aperture macro shape
+     * corresponding to aDcode
+     */
+    void InitLocalParams( const D_CODE* aDcode );
+
+    /**
+     * Evaluate m_localParamValues from current m_paramLevelEval to
+     * aPrimitive m_LocalParamLevel
+     * if m_paramLevelEval >= m_LocalParamLevel, do nothing
+     * after call, m_paramLevelEval = m_LocalParamLevel
+     */
+    void EvalLocalParams( const AM_PRIMITIVE& aPrimitive );
+
+    /**
+     * @return the local param value stored in m_localParamValues
+     * @param aIndex is the param Id (from $n)
+     * if not found, returns 0
+     */
+    double GetLocalParamValue( int aIndex );
 
     /**
      * Calculate the primitive shape for flashed items.
      *
      * When an item is flashed, this is the shape of the item.
      *
-     * @param aParent is the parent #GERBER_DRAW_ITEM which is actually drawn.
      * @return the shape of the item.
+     * @param aParent is the parent #GERBER_DRAW_ITEM which is actually drawn.
+     * @param aShapePos is the position of the shape to build.
      */
     SHAPE_POLY_SET* GetApertureMacroShape( const GERBER_DRAW_ITEM* aParent,
-                                           const VECTOR2I&         aShapePos );
+                                           const VECTOR2I& aShapePos );
 
     /**
      * The name of the aperture macro as defined like %AMVB_RECTANGLE* (name is VB_RECTANGLE)
@@ -124,6 +150,20 @@ private:
      * m_localparamStack handle a list of local deferred parameters
      */
     AM_PARAMS m_localParamStack;
+
+    /**
+     * m_localParamValues is the current value of local parameters after evaluation
+     * the key is the local param id (from $n) and the value is double
+     */
+    std::map<int, double> m_localParamValues;
+
+    /**
+     * the current level of local param values evaluation
+     * when a primitive is evaluated, if its m_LocalParamLevel is smaller than
+     * m_paramLevelEval, all local params must be evaluated from current m_paramLevelEval
+     * upto m_LocalParamLevel before use in this primitive
+     */
+    int m_paramLevelEval;
 
     SHAPE_POLY_SET m_shape;         ///< The shape of the item, calculated by GetApertureMacroShape
 };

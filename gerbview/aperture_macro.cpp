@@ -32,6 +32,55 @@
 #include <aperture_macro.h>
 #include <gerber_draw_item.h>
 
+void APERTURE_MACRO::InitLocalParams( const D_CODE* aDcode )
+{
+    // store the initial values coming from aDcode into m_localParamValues
+    // for n parameters, they are local params $1 to $n
+    m_localParamValues.clear();
+
+    // Note: id_param = 1... n, not 0
+    for( unsigned id_param = 1; id_param <= aDcode->GetParamCount(); id_param++ )
+        m_localParamValues[id_param] = aDcode->GetParam( id_param );
+
+    m_paramLevelEval = 0;
+}
+
+
+void APERTURE_MACRO::EvalLocalParams( const AM_PRIMITIVE& aPrimitive )
+{
+    // Evaluate m_localParamValues from current m_paramLevelEval to
+    // aPrimitive.m_LocalParamLevel
+    // if m_paramLevelEval >= m_LocalParamLevel, do nothing: the
+    // m_localParamValues are already up to date
+
+    if( m_paramLevelEval >= aPrimitive.m_LocalParamLevel )
+        return;
+
+    for( ; m_paramLevelEval < aPrimitive.m_LocalParamLevel; m_paramLevelEval++ )
+    {
+        AM_PARAM& am_param = m_localParamStack.at( m_paramLevelEval );
+        int prm_index = am_param.GetIndex();
+
+        double value = am_param.GetValueFromMacro( this );
+
+        // if am_param value is not yet stored in m_localParamValues, add it.
+        // if it is already in m_localParamValues, update its value;
+        m_localParamValues[ prm_index ] = value;
+    }
+}
+
+
+double APERTURE_MACRO::GetLocalParamValue( int aIndex )
+{
+    // return the local param value stored in m_localParamValues
+    // if not existing, returns 0
+
+    if( m_localParamValues.find( aIndex ) != m_localParamValues.end() )
+        return m_localParamValues[ aIndex ];
+
+    return 0.0;
+}
+
 
 void APERTURE_MACRO::AddPrimitiveToList( AM_PRIMITIVE& aPrimitive )
 {
@@ -52,25 +101,26 @@ AM_PARAM& APERTURE_MACRO::GetLastLocalParamDefFromStack()
 
 
 SHAPE_POLY_SET* APERTURE_MACRO::GetApertureMacroShape( const GERBER_DRAW_ITEM* aParent,
-                                                       const VECTOR2I&         aShapePos )
+                                                       const VECTOR2I& aShapePos )
 {
     SHAPE_POLY_SET holeBuffer;
 
     m_shape.RemoveAllContours();
-    D_CODE * dcode = aParent->GetDcodeDescr();
+    D_CODE* dcode = aParent->GetDcodeDescr();
+    InitLocalParams( dcode );
 
     for( AM_PRIMITIVE& prim_macro : m_primitivesList )
     {
         if( prim_macro.m_Primitive_id == AMP_COMMENT )
             continue;
 
-        if( prim_macro.IsAMPrimitiveExposureOn( dcode ) )
+        if( prim_macro.IsAMPrimitiveExposureOn( this ) )
         {
-            prim_macro.ConvertBasicShapeToPolygon( dcode, m_shape );
+            prim_macro.ConvertBasicShapeToPolygon( this, m_shape );
         }
         else
         {
-            prim_macro.ConvertBasicShapeToPolygon( dcode, holeBuffer );
+            prim_macro.ConvertBasicShapeToPolygon( this, holeBuffer );
 
             if( holeBuffer.OutlineCount() )     // we have a new hole in shape: remove the hole
             {
@@ -104,28 +154,4 @@ SHAPE_POLY_SET* APERTURE_MACRO::GetApertureMacroShape( const GERBER_DRAW_ITEM* a
     }
 
     return &m_shape;
-}
-
-
-double APERTURE_MACRO::GetLocalParam( const D_CODE* aDcode, unsigned aParamId ) const
-{
-    // find parameter descr.
-    const AM_PARAM * param = nullptr;
-
-    for( unsigned ii = 0; ii < m_localParamStack.size(); ii ++ )
-    {
-        if( m_localParamStack[ii].GetIndex() == aParamId )
-        {
-            param = &m_localParamStack[ii];
-            break;
-        }
-    }
-
-    if ( param == nullptr )    // not found
-        return 0.0;
-
-    // Evaluate parameter
-    double value = param->GetValue( aDcode );
-
-    return value;
 }

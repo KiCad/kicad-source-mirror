@@ -320,7 +320,6 @@ const BOX2I GERBER_DRAW_ITEM::GetBoundingBox() const
 
     case GBR_SPOT_MACRO:
     case GBR_SPOT_POLY:
-    {
         if( code )
         {
             if( code->m_Polygon.OutlineCount() == 0 )
@@ -331,7 +330,6 @@ const BOX2I GERBER_DRAW_ITEM::GetBoundingBox() const
         }
 
         break;
-    }
 
     case GBR_SEGMENT:
     {
@@ -861,12 +859,7 @@ bool GERBER_DRAW_ITEM::HitTest( const VECTOR2I& aRefPos, int aAccuracy ) const
     }
 
     case GBR_SPOT_MACRO:
-    {
-        // Aperture macro polygons are already in absolute coordinates
-        SHAPE_POLY_SET* p =
-            GetDcodeDescr()->GetMacro()->GetApertureMacroShape( this, m_Start );
-        return p->Contains( VECTOR2I( aRefPos ), -1, aAccuracy );
-    }
+        return m_AbsolutePolygon.Contains( VECTOR2I( aRefPos ), -1, aAccuracy );
 
     case GBR_SEGMENT:
     case GBR_CIRCLE:

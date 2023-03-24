@@ -566,21 +566,26 @@ void GERBVIEW_PAINTER::drawFlashedShape( GERBER_DRAW_ITEM* aItem, bool aFilled )
 
 void GERBVIEW_PAINTER::drawApertureMacro( GERBER_DRAW_ITEM* aParent, bool aFilled )
 {
-    D_CODE*         code = aParent->GetDcodeDescr();
-    APERTURE_MACRO* macro = code->GetMacro();
-    SHAPE_POLY_SET* macroShape = macro->GetApertureMacroShape( aParent, aParent->m_Start );
+    if( aParent->m_AbsolutePolygon.OutlineCount() == 0 )
+    {
+        D_CODE* code = aParent->GetDcodeDescr();
+        APERTURE_MACRO* macro = code->GetMacro();
+        aParent->m_AbsolutePolygon = *macro->GetApertureMacroShape( aParent, aParent->m_Start );
+    }
+
+    SHAPE_POLY_SET& polyset = aParent->m_AbsolutePolygon;
 
     if( !gvconfig()->m_Display.m_DisplayPolygonsFill )
         m_gal->SetLineWidth( m_gerbviewSettings.m_outlineWidth );
 
     if( !aFilled )
     {
-        for( int i = 0; i < macroShape->OutlineCount(); i++ )
-            m_gal->DrawPolyline( macroShape->COutline( i ) );
+        for( int i = 0; i < polyset.OutlineCount(); i++ )
+            m_gal->DrawPolyline( polyset.COutline( i ) );
     }
     else
     {
-        m_gal->DrawPolygon( *macroShape );
+        m_gal->DrawPolygon( polyset );
     }
 }
 

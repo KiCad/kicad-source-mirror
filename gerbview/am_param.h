@@ -295,7 +295,7 @@ public:
     void PushOperator( parm_item_type aType, double aValue );
     void PushOperator( parm_item_type aType, int aValue = 0);
 
-    double GetValue( const D_CODE* aDcode ) const;
+    double GetValueFromMacro( APERTURE_MACRO* aApertureMacro ) const;
 
     /**
      * Test if this AM_PARAM holds an immediate parameter or is a pointer into a parameter held
