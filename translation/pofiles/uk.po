@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:53-0800\n"
-"PO-Revision-Date: 2023-03-12 20:08+0000\n"
+"PO-Revision-Date: 2023-03-26 04:41+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/v7/uk/>\n"
 "Language: uk\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.16.2-dev\n"
+"X-Generator: Weblate 4.17-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -20617,9 +20617,8 @@ msgstr ""
 "%s"
 
 #: kicad/pcm/pcm.cpp:464
-#, fuzzy
 msgid "Failed to parse locally stored repository.json."
-msgstr "Неможливо обробити репозиторій: %s"
+msgstr "Не вдалося обробити локальне сховище repository.json."
 
 #: kicad/pcm/pcm.cpp:492
 msgid ""
@@ -33366,9 +33365,9 @@ msgid "Determining PCB data\n"
 msgstr "Визначення даних PCB\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Board Thickness from stackup: %.3f mm\n"
-msgstr "Товщина плати зі стеку:"
+msgstr "Товщина плати зі стеку: %.3f mm\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:344
 msgid "Build STEP data\n"
