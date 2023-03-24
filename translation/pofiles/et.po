@@ -4,16 +4,15 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:53-0800\n"
-"PO-Revision-Date: 2023-01-27 14:28+0000\n"
+"PO-Revision-Date: 2023-03-26 04:41+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
-"Language-Team: Estonian <https://hosted.weblate.org/projects/kicad/master-"
-"source/et/>\n"
+"Language-Team: Estonian <https://hosted.weblate.org/projects/kicad/v7/et/>\n"
 "Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 4.17-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -21,26 +20,29 @@ msgstr "Kõik Failid"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:312
 msgid "Build board outline"
-msgstr ""
+msgstr "Joonestada plaadi kontuur"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:520
 msgid "Create layers"
-msgstr ""
+msgstr "Loo kihid"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:669
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:116
 msgid "No footprint loaded."
-msgstr ""
+msgstr "Jalajälg puudub."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:686
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
+"Jalajälje kontuur puudub või on vigane. Täieliku analüüsi jaoks käivitage "
+"jalajälje kontrollija."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:695
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
+"Plaadi kontuur puudub või on vigane. Täieliku analüüsi jaoks käivitage DRC."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:226
 msgid "Create tracks and vias"
