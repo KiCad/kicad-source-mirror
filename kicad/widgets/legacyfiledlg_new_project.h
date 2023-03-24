@@ -1,7 +1,7 @@
 /*
 * This program source code file is part of KiCad, a free EDA CAD application.
 *
-* Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+* Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
 *
 * This program is free software: you can redistribute it and/or modify it
 * under the terms of the GNU General Public License as published by the
@@ -24,7 +24,7 @@
 #include <wx/panel.h>
 #include <wx/sizer.h>
 
-///> Helper widget to select whether a new directory should be created for a project.
+///< Helper widget to select whether a new directory should be created for a project.
 class LEGACYFILEDLG_NEW_PROJECT : public wxPanel
 {
 public:

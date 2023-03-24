@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,12 +47,12 @@ public:
     {
     }
 
-    ///> Dummy schematic to attach the test sheet to
+    ///< Dummy schematic to attach the test sheet to
     SCHEMATIC m_schematic;
 
     SCH_SHEET m_sheet;
 
-    ///> Can use when you need a const ref (lots of places need fixing here)
+    ///< Can use when you need a const ref (lots of places need fixing here)
     const SCH_SHEET& m_csheet;
 };
 

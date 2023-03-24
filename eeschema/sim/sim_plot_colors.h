@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2021 Sylwester Kocjan <s.kocjan@o2.pl>
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,7 +75,7 @@ public:
     static void FillDefaultColorList( bool aWhiteBg );
 
 private:
-    ///> The color list to draw traces, bg, fg, axis...
+    ///< The color list to draw traces, bg, fg, axis...
     static std::vector<wxColour> m_colorList;
 
     /**

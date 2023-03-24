@@ -2,6 +2,8 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
+ * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -33,7 +35,7 @@ class EDA_DRAW_FRAME;
 
 wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty, EDA_DRAW_FRAME* aFrame );
 
-///> Customized abstract wxPGProperty class to handle coordinate/size units
+///< Customized abstract wxPGProperty class to handle coordinate/size units
 class PGPROPERTY_DISTANCE
 {
 public:
@@ -57,9 +59,10 @@ class PGPROPERTY_SIZE : public wxUIntProperty, public PGPROPERTY_DISTANCE
 {
 public:
     PGPROPERTY_SIZE( const wxString& aLabel = wxPG_LABEL, const wxString& aName = wxPG_LABEL,
-            long aValue = 0 );
+                     long aValue = 0 );
 
-    bool StringToValue( wxVariant& aVariant, const wxString& aText, int aArgFlags = 0 ) const override
+    bool StringToValue( wxVariant& aVariant, const wxString& aText,
+                        int aArgFlags = 0 ) const override
     {
         return StringToDistance( aVariant, aText, aArgFlags );
     }
@@ -80,7 +83,8 @@ public:
                       long aValue = 0,
                       ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType = ORIGIN_TRANSFORMS::NOT_A_COORD );
 
-    bool StringToValue( wxVariant& aVariant, const wxString& aText, int aArgFlags = 0 ) const override
+    bool StringToValue( wxVariant& aVariant, const wxString& aText,
+                        int aArgFlags = 0 ) const override
     {
         return StringToDistance( aVariant, aText, aArgFlags );
     }
@@ -94,7 +98,7 @@ public:
 };
 
 
-///> Customized wxPGProperty class to handle angles
+///< Customized wxPGProperty class to handle angles
 class PGPROPERTY_ANGLE : public wxFloatProperty
 {
 public:
@@ -104,7 +108,8 @@ public:
     {
     }
 
-    bool StringToValue( wxVariant& aVariant, const wxString& aText, int aArgFlags = 0 ) const override;
+    bool StringToValue( wxVariant& aVariant, const wxString& aText,
+                        int aArgFlags = 0 ) const override;
     wxString ValueToString( wxVariant& aVariant, int aArgFlags = 0 ) const override;
 
     void SetScale( double aScale )
@@ -114,16 +119,16 @@ public:
 
     wxValidator* DoGetValidator() const override;
 
-    ///> Do not perform PG validation; the UX is not what we want.
+    ///< Do not perform PG validation; the UX is not what we want.
     bool ValidateValue( wxVariant&, wxPGValidationInfo& ) const override { return true; }
 
 protected:
-    ///> Scale factor to convert between raw and displayed value
+    ///< Scale factor to convert between raw and displayed value
     double m_scale;
 };
 
 
-///> A wxEnumProperty that displays a color next to the enum value
+///< A wxEnumProperty that displays a color next to the enum value
 class PGPROPERTY_COLORENUM : public wxEnumProperty
 {
 public:

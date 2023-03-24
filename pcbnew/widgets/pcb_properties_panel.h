@@ -2,6 +2,8 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
+ * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -49,7 +51,7 @@ protected:
     void valueChanging( wxPropertyGridEvent& aEvent ) override;
     void valueChanged( wxPropertyGridEvent& aEvent ) override;
 
-    ///> Regenerates caches storing layer and net names
+    ///< Regenerates caches storing layer and net names
     void updateLists( const BOARD* aBoard );
 
     PCB_BASE_EDIT_FRAME* m_frame;

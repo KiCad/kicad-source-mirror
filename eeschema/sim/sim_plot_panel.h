@@ -305,7 +305,7 @@ public:
     ///< Update trace line style
     void UpdateTraceStyle( TRACE* trace );
 
-    ///> Update plot colors
+    ///< Update plot colors
     void UpdatePlotColors();
 
     void OnLanguageChanged() override;
@@ -329,7 +329,7 @@ private:
     ///< @brief Construct the plot axes for DC simulation plot.
     void prepareDCAxes( int aNewTraceType );
 
-    ///> Create/Ensure axes are available for plotting
+    ///< Create/Ensure axes are available for plotting
     void updateAxes( int aNewTraceType = SIM_TRACE_TYPE::SPT_UNKNOWN );
 
 private:
