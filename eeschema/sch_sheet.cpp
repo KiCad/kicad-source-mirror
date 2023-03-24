@@ -398,7 +398,7 @@ bool SCH_SHEET::HasPin( const wxString& aName ) const
 {
     for( SCH_SHEET_PIN* pin : m_pins )
     {
-        if( pin->GetText().CmpNoCase( aName ) == 0 )
+        if( pin->GetText().Cmp( aName ) == 0 )
             return true;
     }
 
@@ -448,7 +448,7 @@ bool SCH_SHEET::HasUndefinedPins() const
 
         for( SCH_ITEM* aItem : m_screen->Items().OfType( SCH_HIER_LABEL_T ) )
         {
-            if( !pin->GetText().CmpNoCase( static_cast<SCH_HIERLABEL*>( aItem )->GetText() ) )
+            if( !pin->GetText().Cmp( static_cast<SCH_HIERLABEL*>( aItem )->GetText() ) )
             {
                 HLabel = static_cast<SCH_HIERLABEL*>( aItem );
                 break;
