@@ -118,7 +118,6 @@ void PCB_BITMAP::swapData( BOARD_ITEM* aItem )
     std::swap( m_isKnockout, item->m_isKnockout );
     std::swap( m_isLocked, item->m_isLocked );
     std::swap( m_flags, item->m_flags );
-    std::swap( m_status, item->m_status );
     std::swap( m_parent, item->m_parent );
     std::swap( m_forceVisible, item->m_forceVisible );
     std::swap( m_pos, item->m_pos );

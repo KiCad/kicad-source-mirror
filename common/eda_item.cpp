@@ -34,7 +34,6 @@
 #include <wx/fdrepdlg.h>
 
 EDA_ITEM::EDA_ITEM( EDA_ITEM* parent, KICAD_T idType ) :
-        m_status( 0 ),
         m_parent( parent ),
         m_forceVisible( false ),
         m_flags( 0 ),
@@ -43,7 +42,6 @@ EDA_ITEM::EDA_ITEM( EDA_ITEM* parent, KICAD_T idType ) :
 
 
 EDA_ITEM::EDA_ITEM( KICAD_T idType ) :
-        m_status( 0 ),
         m_parent( nullptr ),
         m_forceVisible( false ),
         m_flags( 0 ),
@@ -53,7 +51,6 @@ EDA_ITEM::EDA_ITEM( KICAD_T idType ) :
 
 EDA_ITEM::EDA_ITEM( const EDA_ITEM& base ) :
         m_Uuid( base.m_Uuid ),
-        m_status( base.m_status ),
         m_parent( base.m_parent ),
         m_forceVisible( base.m_forceVisible ),
         m_flags( base.m_flags ),
@@ -245,7 +242,6 @@ EDA_ITEM& EDA_ITEM::operator=( const EDA_ITEM& aItem )
 
     m_structType   = aItem.m_structType;
     m_flags        = aItem.m_flags;
-    m_status       = aItem.m_status;
     m_parent       = aItem.m_parent;
     m_forceVisible = aItem.m_forceVisible;
 

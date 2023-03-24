@@ -2800,7 +2800,7 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
 
         // We continue to parse the status field but it is no longer written
         case T_status:
-            shape->SetStatus( static_cast<EDA_ITEM_FLAGS>( parseHex() ) );
+            parseHex();
             NeedRIGHT();
             break;
 
@@ -4524,7 +4524,7 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
 
         // We continue to parse the status field but it is no longer written
         case T_status:
-            shape->SetStatus( static_cast<EDA_ITEM_FLAGS>( parseHex() ) );
+            parseHex();
             NeedRIGHT();
             break;
 
@@ -5274,7 +5274,7 @@ PCB_ARC* PCB_PARSER::parseARC()
 
         // We continue to parse the status field but it is no longer written
         case T_status:
-            arc->SetStatus( static_cast<EDA_ITEM_FLAGS>( parseHex() ) );
+            parseHex();
             break;
 
         // Continue to process "(locked)" format which was output during 5.99 development
@@ -5353,7 +5353,7 @@ PCB_TRACK* PCB_PARSER::parsePCB_TRACK()
 
         // We continue to parse the status field but it is no longer written
         case T_status:
-            track->SetStatus( static_cast<EDA_ITEM_FLAGS>( parseHex() ) );
+            parseHex();
             break;
 
         // Continue to process "(locked)" format which was output during 5.99 development
@@ -5481,7 +5481,7 @@ PCB_VIA* PCB_PARSER::parsePCB_VIA()
 
         // We continue to parse the status field but it is no longer written
         case T_status:
-            via->SetStatus( static_cast<EDA_ITEM_FLAGS>( parseHex() ) );
+            parseHex();
             NeedRIGHT();
             break;
 

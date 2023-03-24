@@ -1485,6 +1485,13 @@ void VIEW::UpdateItems()
     if( anyUpdated )
     {
         GAL_UPDATE_CONTEXT ctx( m_gal );
+        std::vector<VIEW_ITEM*> items_to_update( m_allItems->size() );
+
+        std::copy_if( m_allItems->begin(), m_allItems->end(),
+                    std::back_inserter( items_to_update ),
+                    []( VIEW_ITEM *aItem )
+                        { return aItem->viewPrivData() && aItem->viewPrivData()->m_requiredUpdate != NONE; }
+                    );
 
         for( VIEW_ITEM* item : *m_allItems.get() )
         {
@@ -1494,6 +1501,8 @@ void VIEW::UpdateItems()
                 item->viewPrivData()->m_requiredUpdate = NONE;
             }
         }
+
+
     }
 
     KI_TRACE( traceGalProfile, wxS( "View update: total items %u, geom %u anyUpdated %u\n" ), cntTotal,

@@ -120,22 +120,6 @@ public:
 
     void SetModified();
 
-    int GetState( EDA_ITEM_FLAGS type ) const
-    {
-        return m_status & type;
-    }
-
-    void SetState( EDA_ITEM_FLAGS type, bool state )
-    {
-        if( state )
-            m_status |= type; // state = ON or OFF
-        else
-            m_status &= ~type;
-    }
-
-    EDA_ITEM_FLAGS GetStatus() const { return m_status; }
-    void           SetStatus( EDA_ITEM_FLAGS aStatus ) { m_status = aStatus; }
-
     void           SetFlags( EDA_ITEM_FLAGS aMask ) { m_flags |= aMask; }
     void           XorFlags( EDA_ITEM_FLAGS aMask ) { m_flags ^= aMask; }
     void           ClearFlags( EDA_ITEM_FLAGS aMask = EDA_ITEM_ALL_FLAGS ) { m_flags &= ~aMask; }
@@ -491,7 +475,6 @@ public:
     const KIID  m_Uuid;
 
 protected:
-    EDA_ITEM_FLAGS m_status;
     EDA_ITEM*      m_parent; ///< Linked list: Link (parent struct)
     bool           m_forceVisible;
     EDA_ITEM_FLAGS m_flags;

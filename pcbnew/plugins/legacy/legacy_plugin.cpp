@@ -1874,9 +1874,8 @@ void LEGACY_PLUGIN::loadPCB_LINE()
                     break;
                 case 4:
                 {
-                    EDA_ITEM_FLAGS state;
-                    state = static_cast<EDA_ITEM_FLAGS>( hexParse( data ) );
-                    dseg->SetState( state, true );
+                    // Ignore state data
+                    hexParse( data );
                     break;
                 }
                 // Bezier Control Points
@@ -2149,9 +2148,9 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
         int   type      = intParse( data, &data );
         int   net_code  = intParse( data, &data );
         char* uuid      = strtok_r( (char*) data, delims, (char**) &data );
-        int   flags_int = intParse( data, (const char**) &data );
 
-        EDA_ITEM_FLAGS flags = static_cast<EDA_ITEM_FLAGS>( flags_int );
+        // Discard flags data
+        intParse( data, (const char**) &data );
 
         if( aStructType == PCB_TRACE_T )
         {
@@ -2232,7 +2231,6 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
         if( newTrack )
         {
             newTrack->SetNetCode( getNetCode( net_code ) );
-            newTrack->SetState( flags, true );
 
             m_board->Add( newTrack );
         }

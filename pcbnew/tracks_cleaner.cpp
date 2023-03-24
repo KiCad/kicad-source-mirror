@@ -696,13 +696,6 @@ bool TRACKS_CLEANER::mergeCollinearSegments( PCB_TRACK* aSeg1, PCB_TRACK* aSeg2 
 
         m_brd->GetConnectivity()->Update( aSeg1 );
 
-        // Clear the status flags here after update.
-        for( PAD* pad : m_brd->GetConnectivity()->GetConnectedPads( aSeg1 ) )
-        {
-            aSeg1->SetState( BEGIN_ONPAD, pad->HitTest( aSeg1->GetStart() ) );
-            aSeg1->SetState( END_ONPAD, pad->HitTest( aSeg1->GetEnd() ) );
-        }
-
         // Merge successful, seg2 has to go away
         m_brd->Remove( aSeg2 );
         m_commit.Removed( aSeg2 );

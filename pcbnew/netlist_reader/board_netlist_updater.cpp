@@ -873,8 +873,6 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
     //
     if( !m_isDryRun )
     {
-        m_board->SetStatus( 0 );
-
         for( NETINFO_ITEM* net : m_board->GetNetInfo() )
             net->SetIsCurrent( net->GetNetCode() == 0 );
     }

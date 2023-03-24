@@ -359,7 +359,6 @@ void PCB_SHAPE::swapData( BOARD_ITEM* aImage )
     std::swap( m_isKnockout, image->m_isKnockout );
     std::swap( m_isLocked, image->m_isLocked );
     std::swap( m_flags, image->m_flags );
-    std::swap( m_status, image->m_status );
     std::swap( m_parent, image->m_parent );
     std::swap( m_forceVisible, image->m_forceVisible );
 }
