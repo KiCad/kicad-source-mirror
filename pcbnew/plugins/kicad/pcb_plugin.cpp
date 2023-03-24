@@ -45,6 +45,7 @@
 #include <pcb_text.h>
 #include <pcb_textbox.h>
 #include <pcbnew_settings.h>
+#include <pgm_base.h>
 #include <plugins/kicad/pcb_plugin.h>
 #include <plugins/kicad/pcb_parser.h>
 #include <trace_helpers.h>
@@ -2576,7 +2577,9 @@ void PCB_PLUGIN::FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* a
                                                       "Would you like to create it?"),
                                                       aLibraryPath );
 
-            if( !IsGUI() || wxMessageBox( msg, _( "Library Not Found"), wxYES_NO | wxICON_QUESTION ) != wxYES )
+            if( !Pgm().IsGUI()
+                || wxMessageBox( msg, _( "Library Not Found" ), wxYES_NO | wxICON_QUESTION )
+                           != wxYES )
                 return;
 
             // Save throws its own IO_ERROR on failure, so no need to recreate here

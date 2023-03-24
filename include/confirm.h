@@ -194,11 +194,4 @@ int OKOrCancelDialog( wxWindow* aParent, const wxString& aWarning, const wxStrin
 int SelectSingleOption( wxWindow* aParent, const wxString& aTitle, const wxString& aMessage,
                         const wxArrayString& aOptions );
 
-/**
- * Determine if the application is running with a GUI
- *
- * @return true if there is a GUI and false otherwise
- */
-bool IsGUI();
-
 #endif /* __INCLUDE__CONFIRM_H__ */

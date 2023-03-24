@@ -1231,7 +1231,7 @@ bool EDA_BASE_FRAME::IsWritable( const wxFileName& aFileName, bool aVerbose )
 
 void EDA_BASE_FRAME::CheckForAutoSaveFile( const wxFileName& aFileName )
 {
-    if( !IsGUI() )
+    if( !Pgm().IsGUI() )
         return;
 
     wxCHECK_RET( aFileName.IsOk(), wxT( "Invalid file name!" ) );

@@ -1400,7 +1400,7 @@ bool SCH_EDIT_FRAME::updateAutoSaveFile()
 
 void SCH_EDIT_FRAME::CheckForAutoSaveFile( const wxFileName& aFileName )
 {
-    if( !IsGUI() )
+    if( !Pgm().IsGUI() )
         return;
 
     wxCHECK_RET( aFileName.IsOk(), wxT( "Invalid file name!" ) );

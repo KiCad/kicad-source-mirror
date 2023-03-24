@@ -31,28 +31,11 @@
 #include <dialogs/html_message_box.h>
 #include <functional>
 #include <unordered_map>
+#include <pgm_base.h>
 #include "cli/cli_names.h"
 
 // Set of dialogs that have been chosen not to be shown again
 static std::unordered_map<unsigned long, int> doNotShowAgainDlgs;
-
-
-bool IsGUI()
-{
-    if( !wxTheApp )
-        return false;
-
-#if wxCHECK_VERSION( 3, 1, 6 )
-    return wxTheApp->IsGUI();
-#else
-    // wxWidgets older than version 3.1.6 do not have a way to know if the app
-    // has a GUI or is a console application.
-    // So the trick is to set the App class name when starting kicad-cli, and when
-    // the app class name is the kicad-cli class name the app is a console app
-    bool run_gui = wxTheApp->GetClassName() != KICAD_CLI_APP_NAME;
-    return run_gui;
-#endif
-}
 
 
 KIDIALOG::KIDIALOG( wxWindow* aParent, const wxString& aMessage, const wxString& aCaption,
@@ -305,7 +288,7 @@ void DisplayError( wxWindow* aParent, const wxString& aText, int aDisplayTime )
         return;
     }
 
-    if( !IsGUI() )
+    if( !Pgm().IsGUI() )
     {
         wxFprintf( stderr, aText );
         return;
@@ -330,7 +313,7 @@ void DisplayErrorMessage( wxWindow* aParent, const wxString& aText, const wxStri
         return;
     }
 
-    if( !IsGUI() )
+    if( !Pgm().IsGUI() )
     {
         wxFprintf( stderr, aText );
         return;
@@ -357,7 +340,7 @@ void DisplayInfoMessage( wxWindow* aParent, const wxString& aMessage, const wxSt
         return;
     }
 
-    if( !IsGUI() )
+    if( !Pgm().IsGUI() )
     {
         wxFprintf( stdout, "%s %s", aMessage, aExtraInfo );
         return;

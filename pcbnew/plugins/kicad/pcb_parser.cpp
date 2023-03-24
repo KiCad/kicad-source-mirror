@@ -64,6 +64,7 @@
 #include <wx/log.h>
 #include <progress_reporter.h>
 #include <board_stackup_manager/stackup_predefined_prms.h>
+#include <pgm_base.h>
 
 // For some reason wxWidgets is built with wxUSE_BASE64 unset so expose the wxWidgets
 // base64 code. Needed for PCB_BITMAP
@@ -908,92 +909,100 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
 
     if( m_undefinedLayers.size() > 0 )
     {
-        bool deleteItems;
-        std::vector<BOARD_ITEM*> deleteList;
-        wxString msg = wxString::Format( _( "Items found on undefined layers.  Do you wish to\n"
-                                            "rescue them to the User.Comments layer?" ) );
-        wxString details = wxString::Format( _( "Undefined layers:" ) );
-
-        for( const wxString& undefinedLayer : m_undefinedLayers )
-            details += wxT( "\n   " ) + undefinedLayer;
-
-        wxRichMessageDialog dlg( nullptr, msg, _( "Warning" ),
-                                 wxYES_NO | wxCANCEL | wxCENTRE | wxICON_WARNING | wxSTAY_ON_TOP );
-        dlg.ShowDetailedText( details );
-        dlg.SetYesNoCancelLabels( _( "Rescue" ), _( "Delete" ), _( "Cancel" ) );
-
-        switch( dlg.ShowModal() )
+        if( Pgm().IsGUI() )
         {
-        case wxID_YES:    deleteItems = false; break;
-        case wxID_NO:     deleteItems = true;  break;
-        case wxID_CANCEL:
-        default:          THROW_IO_ERROR( wxT( "CANCEL" ) );
-        }
+            bool                     deleteItems;
+            std::vector<BOARD_ITEM*> deleteList;
+            wxString msg = wxString::Format( _( "Items found on undefined layers.  Do you wish to\n"
+                                                "rescue them to the User.Comments layer?" ) );
+            wxString details = wxString::Format( _( "Undefined layers:" ) );
 
-        auto visitItem = [&]( BOARD_ITEM* curr_item )
-                            {
-                                if( curr_item->GetLayer() == Rescue )
-                                {
-                                    if( deleteItems )
-                                        deleteList.push_back( curr_item );
-                                    else
-                                        curr_item->SetLayer( Cmts_User );
-                                }
-                            };
+            for( const wxString& undefinedLayer : m_undefinedLayers )
+                details += wxT( "\n   " ) + undefinedLayer;
 
-        for( PCB_TRACK* track : m_board->Tracks() )
-        {
-            if( track->Type() == PCB_VIA_T )
+            wxRichMessageDialog dlg( nullptr, msg, _( "Warning" ),
+                                     wxYES_NO | wxCANCEL | wxCENTRE | wxICON_WARNING
+                                             | wxSTAY_ON_TOP );
+            dlg.ShowDetailedText( details );
+            dlg.SetYesNoCancelLabels( _( "Rescue" ), _( "Delete" ), _( "Cancel" ) );
+
+            switch( dlg.ShowModal() )
             {
-                PCB_VIA*     via = static_cast<PCB_VIA*>( track );
-                PCB_LAYER_ID top_layer, bottom_layer;
+            case wxID_YES: deleteItems = false; break;
+            case wxID_NO: deleteItems = true; break;
+            case wxID_CANCEL:
+            default: THROW_IO_ERROR( wxT( "CANCEL" ) );
+            }
 
-                if( via->GetViaType() == VIATYPE::THROUGH )
-                    continue;
-
-                via->LayerPair( &top_layer, &bottom_layer );
-
-                if( top_layer == Rescue || bottom_layer == Rescue )
+            auto visitItem = [&]( BOARD_ITEM* curr_item )
+            {
+                if( curr_item->GetLayer() == Rescue )
                 {
                     if( deleteItems )
-                        deleteList.push_back( via );
+                        deleteList.push_back( curr_item );
                     else
+                        curr_item->SetLayer( Cmts_User );
+                }
+            };
+
+            for( PCB_TRACK* track : m_board->Tracks() )
+            {
+                if( track->Type() == PCB_VIA_T )
+                {
+                    PCB_VIA*     via = static_cast<PCB_VIA*>( track );
+                    PCB_LAYER_ID top_layer, bottom_layer;
+
+                    if( via->GetViaType() == VIATYPE::THROUGH )
+                        continue;
+
+                    via->LayerPair( &top_layer, &bottom_layer );
+
+                    if( top_layer == Rescue || bottom_layer == Rescue )
                     {
-                        if( top_layer == Rescue )
-                            top_layer = F_Cu;
+                        if( deleteItems )
+                            deleteList.push_back( via );
+                        else
+                        {
+                            if( top_layer == Rescue )
+                                top_layer = F_Cu;
 
-                        if( bottom_layer == Rescue )
-                            bottom_layer = B_Cu;
+                            if( bottom_layer == Rescue )
+                                bottom_layer = B_Cu;
 
-                        via->SetLayerPair( top_layer, bottom_layer );
+                            via->SetLayerPair( top_layer, bottom_layer );
+                        }
                     }
                 }
+                else
+                {
+                    visitItem( track );
+                }
             }
-            else
-            {
-                visitItem( track );
-            }
-        }
 
-        for( BOARD_ITEM* zone : m_board->Zones() )
-            visitItem( zone );
+            for( BOARD_ITEM* zone : m_board->Zones() )
+                visitItem( zone );
 
-        for( BOARD_ITEM* drawing : m_board->Drawings() )
-            visitItem( drawing );
-
-        for( FOOTPRINT* fp : m_board->Footprints() )
-        {
-            for( BOARD_ITEM* drawing : fp->GraphicalItems() )
+            for( BOARD_ITEM* drawing : m_board->Drawings() )
                 visitItem( drawing );
 
-            for( BOARD_ITEM* zone : fp->Zones() )
-                visitItem( zone );
+            for( FOOTPRINT* fp : m_board->Footprints() )
+            {
+                for( BOARD_ITEM* drawing : fp->GraphicalItems() )
+                    visitItem( drawing );
+
+                for( BOARD_ITEM* zone : fp->Zones() )
+                    visitItem( zone );
+            }
+
+            for( BOARD_ITEM* curr_item : deleteList )
+                m_board->Delete( curr_item );
+
+            m_undefinedLayers.clear();
         }
-
-        for( BOARD_ITEM* curr_item : deleteList )
-            m_board->Delete( curr_item );
-
-        m_undefinedLayers.clear();
+        else
+        {
+            THROW_IO_ERROR( wxT( "One or more undefined layers exists was found, open the project in the PCB Editor to resolve" ) );
+        }
     }
 
     return m_board;
@@ -2166,19 +2175,27 @@ void PCB_PARSER::parseSetup()
             {
                 if( m_showLegacy5ZoneWarning )
                 {
-                    // Thick outline fill mode no longer supported.  Make sure user is OK with
-                    // converting fills.
-                    KIDIALOG dlg( nullptr, _( "The legacy zone fill strategy is no longer "
-                                              "supported.\nConvert zones to smoothed polygon "
-                                              "fills?" ),
-                                  _( "Legacy Zone Warning" ), wxYES_NO | wxICON_WARNING );
+                    if( Pgm().IsGUI() )
+                    {
+                        // Thick outline fill mode no longer supported.  Make sure user is OK with
+                        // converting fills.
+                        KIDIALOG dlg( nullptr,
+                                      _( "The legacy zone fill strategy is no longer "
+                                         "supported.\nConvert zones to smoothed polygon "
+                                         "fills?" ),
+                                      _( "Legacy Zone Warning" ), wxYES_NO | wxICON_WARNING );
 
-                    dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
+                        dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
 
-                    if( dlg.ShowModal() == wxID_NO )
-                        THROW_IO_ERROR( wxT( "CANCEL" ) );
+                        if( dlg.ShowModal() == wxID_NO )
+                            THROW_IO_ERROR( wxT( "CANCEL" ) );
 
-                    m_showLegacy5ZoneWarning = false;
+                        m_showLegacy5ZoneWarning = false;
+                    }
+                    else
+                    {
+                        THROW_IO_ERROR( wxT( "Legacy zone fill strategy found, open the project in the PCB Editor to resolve" ) );
+                    }
                 }
             }
 
