@@ -1001,7 +1001,7 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
         }
         else
         {
-            THROW_IO_ERROR( wxT( "One or more undefined layers exists was found, open the project in the PCB Editor to resolve" ) );
+            THROW_IO_ERROR( wxT( "One or more undefined layers was found, open the project in the PCB Editor to resolve" ) );
         }
     }
 
@@ -2194,7 +2194,7 @@ void PCB_PARSER::parseSetup()
                     }
                     else
                     {
-                        THROW_IO_ERROR( wxT( "Legacy zone fill strategy found, open the project in the PCB Editor to resolve" ) );
+                        THROW_IO_ERROR( wxT( "Legacy zone fill strategy was found, open the project in the PCB Editor to resolve" ) );
                     }
                 }
             }
