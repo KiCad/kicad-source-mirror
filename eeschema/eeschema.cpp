@@ -349,6 +349,9 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 
     m_jobHandler = std::make_unique<EESCHEMA_JOBS_HANDLER>();
 
+    if( m_start_flags & KFCTL_CLI )
+        m_jobHandler->SetReporter( &CLI_REPORTER::GetInstance() );
+
     return true;
 }
 

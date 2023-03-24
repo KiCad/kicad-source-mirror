@@ -240,6 +240,28 @@ public:
 
 
 /**
+ * Reporter forwarding messages to stdout or stderr as appropriate
+ */
+class CLI_REPORTER : public REPORTER
+{
+public:
+    CLI_REPORTER()
+    {
+    }
+
+    virtual ~CLI_REPORTER()
+    {
+    }
+
+    static REPORTER& GetInstance();
+
+    REPORTER& Report( const wxString& aMsg, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
+
+    bool HasMessage() const override { return false; }
+};
+
+
+/**
  * Debug type reporter, forwarding messages to std::cout.
  */
 class STDOUT_REPORTER : public REPORTER

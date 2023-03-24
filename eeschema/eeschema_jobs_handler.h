@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -37,7 +37,7 @@ class LIB_SYMBOL;
 /**
  * Handles eeschema job dispatches
  */
-class EESCHEMA_JOBS_HANDLER : public JOB_DISPATCHER, REPORTER
+class EESCHEMA_JOBS_HANDLER : public JOB_DISPATCHER
 {
 public:
     EESCHEMA_JOBS_HANDLER();
@@ -61,16 +61,6 @@ public:
      */
     void InitRenderSettings( KIGFX::SCH_RENDER_SETTINGS* aRenderSettings, const wxString& aTheme,
                              SCHEMATIC* aSch );
-
-    /*
-     * REPORTER INTERFACE
-     */
-    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
-
-    bool HasMessage() const override
-    {
-        return false;
-    }
 
 };
 

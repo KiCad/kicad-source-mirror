@@ -41,7 +41,6 @@
 #include <board_design_settings.h>
 #include <pad.h>
 #include <pcbnew_settings.h>
-#include <wx/crt.h>
 #include <wx/dir.h>
 #include <pcb_plot_svg.h>
 #include <gendrill_Excellon_writer.h>
@@ -82,7 +81,7 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
     if( aJob->IsCli() )
-        wxPrintf( _( "Loading board\n" ) );
+        m_reporter->Report( _( "Loading board\n" ), RPT_SEVERITY_INFO );
 
     BOARD* brd = LoadBoard( aStepJob->m_filename );
 
@@ -137,16 +136,16 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
     svgPlotOptions.m_plotFrame = aSvgJob->m_plotDrawingSheet;
 
     if( aJob->IsCli() )
-        wxPrintf( _( "Loading board\n" ) );
+        m_reporter->Report( _( "Loading board\n" ), RPT_SEVERITY_INFO );
 
     BOARD* brd = LoadBoard( aSvgJob->m_filename );
 
     if( aJob->IsCli() )
     {
         if( PCB_PLOT_SVG::Plot( brd, svgPlotOptions ) )
-            wxPrintf( _( "Successfully created svg file" ) );
+            m_reporter->Report( _( "Successfully created svg file" ), RPT_SEVERITY_INFO );
         else
-            wxPrintf( _( "Error creating svg file" ) );
+            m_reporter->Report( _( "Error creating svg file" ), RPT_SEVERITY_ERROR );
     }
 
     return CLI::EXIT_CODES::OK;
@@ -161,7 +160,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
     if( aJob->IsCli() )
-        wxPrintf( _( "Loading board\n" ) );
+        m_reporter->Report( _( "Loading board\n" ), RPT_SEVERITY_INFO );
 
     BOARD* brd = LoadBoard( aDxfJob->m_filename );
 
@@ -216,7 +215,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
     if( aJob->IsCli() )
-        wxPrintf( _( "Loading board\n" ) );
+        m_reporter->Report( _( "Loading board\n" ), RPT_SEVERITY_INFO );
 
     BOARD* brd = LoadBoard( aPdfJob->m_filename );
 
@@ -269,7 +268,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
     if( aJob->IsCli() )
-        wxPrintf( _( "Loading board\n" ) );
+        m_reporter->Report( _( "Loading board\n" ), RPT_SEVERITY_INFO );
 
     BOARD*          brd = LoadBoard( aGerberJob->m_filename );
     PCB_PLOT_PARAMS boardPlotOptions = brd->GetPlotOptions();
@@ -333,13 +332,16 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
 
         if( plotter )
         {
-            wxPrintf( _( "Plotted to '%s'.\n" ), fn.GetFullPath() );
+            m_reporter->Report( wxString::Format( _( "Plotted to '%s'.\n" ), fn.GetFullPath() ),
+                                RPT_SEVERITY_ACTION );
             PlotBoardLayers( brd, plotter, plotSequence, plotOpts );
             plotter->EndPlot();
         }
         else
         {
-            wxFprintf( stderr, _( "Failed to plot to '%s'.\n" ), fn.GetFullPath() );
+            m_reporter->Report( wxString::Format( _( "Failed to plot to '%s'.\n" ),
+                                                  fn.GetFullPath() ),
+                                RPT_SEVERITY_ERROR );
             exitCode = CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
         }
 
@@ -387,7 +389,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
     if( aJob->IsCli() )
-        wxPrintf( _( "Loading board\n" ) );
+        m_reporter->Report( _( "Loading board\n" ), RPT_SEVERITY_INFO );
 
     BOARD* brd = LoadBoard( aGerberJob->m_filename );
 
@@ -417,7 +419,9 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
     }
     else
     {
-        wxFprintf( stderr, _( "Failed to plot to '%s'.\n" ), aGerberJob->m_outputFile );
+        m_reporter->Report( wxString::Format( _( "Failed to plot to '%s'.\n" ),
+                                              aGerberJob->m_outputFile ),
+                            RPT_SEVERITY_ERROR );
         exitCode = CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
@@ -438,7 +442,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
     if( aJob->IsCli() )
-        wxPrintf( _( "Loading board\n" ) );
+        m_reporter->Report( _( "Loading board\n" ), RPT_SEVERITY_INFO );
 
     BOARD* brd = LoadBoard( aDrillJob->m_filename );
 
@@ -514,7 +518,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
         excellonWriter->SetMapFileFormat( mapFormat );
 
         if( !excellonWriter->CreateDrillandMapFilesSet( aDrillJob->m_outputDir, true,
-                                                        aDrillJob->m_generateMap, this ) )
+                                                        aDrillJob->m_generateMap, m_reporter ) )
         {
             return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
         }
@@ -534,7 +538,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
         gerberWriter->SetMapFileFormat( mapFormat );
 
         if( !gerberWriter->CreateDrillandMapFilesSet( aDrillJob->m_outputDir, true,
-                                                      aDrillJob->m_generateMap, this ) )
+                                                      aDrillJob->m_generateMap, m_reporter ) )
         {
             return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
         }
@@ -552,7 +556,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
     if( aJob->IsCli() )
-        wxPrintf( _( "Loading board\n" ) );
+        m_reporter->Report( _( "Loading board\n" ), RPT_SEVERITY_INFO );
 
     BOARD* brd = LoadBoard( aPosJob->m_filename );
 
@@ -627,14 +631,15 @@ int PCBNEW_JOBS_HANDLER::JobExportFpUpgrade( JOB* aJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
     if( aJob->IsCli() )
-        wxPrintf( _( "Loading footprint library\n" ) );
+        m_reporter->Report( _( "Loading footprint library\n" ), RPT_SEVERITY_INFO );
 
     if( !upgradeJob->m_outputLibraryPath.IsEmpty() )
     {
         if( wxFile::Exists( upgradeJob->m_outputLibraryPath ) ||
             wxDir::Exists( upgradeJob->m_outputLibraryPath) )
         {
-            wxFprintf( stderr, _( "Output path must not conflict with existing path\n" ) );
+            m_reporter->Report( _( "Output path must not conflict with existing path\n" ),
+                                RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
         }
     }
@@ -648,7 +653,7 @@ int PCBNEW_JOBS_HANDLER::JobExportFpUpgrade( JOB* aJob )
     }
     catch(...)
     {
-        wxFprintf( stderr, _( "Unable to load library\n" ) );
+        m_reporter->Report( _( "Unable to load library\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_UNKNOWN;
     }
 
@@ -664,7 +669,7 @@ int PCBNEW_JOBS_HANDLER::JobExportFpUpgrade( JOB* aJob )
 
     if( shouldSave )
     {
-        wxPrintf( _( "Saving footprint library\n" ) );
+        m_reporter->Report( _( "Saving footprint library\n" ), RPT_SEVERITY_INFO );
 
         try
         {
@@ -677,13 +682,13 @@ int PCBNEW_JOBS_HANDLER::JobExportFpUpgrade( JOB* aJob )
         }
         catch( ... )
         {
-            wxFprintf( stderr, _( "Unable to save library\n" ) );
+            m_reporter->Report( _( "Unable to save library\n" ), RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_UNKNOWN;
         }
     }
     else
     {
-        wxPrintf( _( "Footprint library was not updated\n" ) );
+        m_reporter->Report( _( "Footprint library was not updated\n" ), RPT_SEVERITY_INFO );
     }
 
     return CLI::EXIT_CODES::OK;
@@ -698,7 +703,7 @@ int PCBNEW_JOBS_HANDLER::JobExportFpSvg( JOB* aJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
     if( aJob->IsCli() )
-        wxPrintf( _( "Loading footprint library\n" ) );
+        m_reporter->Report( _( "Loading footprint library\n" ), RPT_SEVERITY_INFO );
 
     PCB_PLUGIN pcb_io( CTL_FOR_LIBRARY );
     FP_CACHE   fpLib( &pcb_io, svgJob->m_libraryPath );
@@ -709,7 +714,7 @@ int PCBNEW_JOBS_HANDLER::JobExportFpSvg( JOB* aJob )
     }
     catch( ... )
     {
-        wxFprintf( stderr, _( "Unable to load library\n" ) );
+        m_reporter->Report( _( "Unable to load library\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_UNKNOWN;
     }
 
@@ -747,7 +752,10 @@ int PCBNEW_JOBS_HANDLER::JobExportFpSvg( JOB* aJob )
     }
 
     if( !svgJob->m_footprint.IsEmpty() && !singleFpPlotted )
-        wxFprintf( stderr, _( "The given footprint could not be found to export." ) );
+    {
+        m_reporter->Report( _( "The given footprint could not be found to export." ),
+                            RPT_SEVERITY_ERROR );
+    }
 
     return CLI::EXIT_CODES::OK;
 }
@@ -785,8 +793,10 @@ int PCBNEW_JOBS_HANDLER::doFpExportSvg( JOB_FP_EXPORT_SVG* aSvgJob, const FOOTPR
     outputFile.SetName( aFootprint->GetFPID().GetLibItemName().wx_str() );
     outputFile.SetExt( SVGFileExtension );
 
-    wxPrintf( _( "Plotting footprint '%s' to '%s'\n" ),
-              aFootprint->GetFPID().GetLibItemName().wx_str(), outputFile.GetFullPath() );
+    m_reporter->Report( wxString::Format( _( "Plotting footprint '%s' to '%s'\n" ),
+                                          aFootprint->GetFPID().GetLibItemName().wx_str(),
+                                          outputFile.GetFullPath() ),
+                        RPT_SEVERITY_ACTION );
 
 
     PCB_PLOT_SVG_OPTIONS svgPlotOptions;
@@ -799,19 +809,9 @@ int PCBNEW_JOBS_HANDLER::doFpExportSvg( JOB_FP_EXPORT_SVG* aSvgJob, const FOOTPR
     svgPlotOptions.m_plotFrame = false;
 
     if( !PCB_PLOT_SVG::Plot( brd.get(), svgPlotOptions ) )
-        wxFprintf( stderr, _( "Error creating svg file" ) );
+        m_reporter->Report( _( "Error creating svg file" ), RPT_SEVERITY_ERROR );
 
 
     return CLI::EXIT_CODES::OK;
 }
 
-
-REPORTER& PCBNEW_JOBS_HANDLER::Report( const wxString& aText, SEVERITY aSeverity )
-{
-    if( aSeverity == RPT_SEVERITY_ERROR )
-        wxFprintf( stderr, wxS( "%s\n" ), aText );
-    else
-        wxPrintf( wxS( "%s\n" ), aText );
-
-    return *this;
-}

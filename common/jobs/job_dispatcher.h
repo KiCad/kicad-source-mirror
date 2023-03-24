@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -26,14 +26,23 @@
 #include <map>
 #include <jobs/job.h>
 
+
+class REPORTER;
+
 class JOB_DISPATCHER
 {
 public:
+    JOB_DISPATCHER();
     void Register( const std::string& aJobTypeName, std::function<int( JOB* job )> aHandler );
-    int RunJob( JOB* job );
+    int  RunJob( JOB* job );
+    void SetReporter( REPORTER* aReporter );
+
+protected:
+    REPORTER* m_reporter; // non-owning
 
 private:
     std::map<std::string, std::function<int( JOB* job )>> m_jobHandlers;
+
 };
 
 #endif

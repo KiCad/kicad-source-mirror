@@ -29,7 +29,6 @@
 #include <jobs/job_sym_export_svg.h>
 #include <jobs/job_sym_upgrade.h>
 #include <schematic.h>
-#include <wx/crt.h>
 #include <wx/dir.h>
 #include <wx/file.h>
 #include <memory>
@@ -96,18 +95,7 @@ void EESCHEMA_JOBS_HANDLER::InitRenderSettings( KIGFX::SCH_RENDER_SETTINGS* aRen
                                                     aSch->Prj().GetProjectPath() );
 
     if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename ) )
-        wxFprintf( stderr, _( "Error loading drawing sheet." ) );
-}
-
-
-REPORTER& EESCHEMA_JOBS_HANDLER::Report( const wxString& aText, SEVERITY aSeverity )
-{
-    if( aSeverity == RPT_SEVERITY_ERROR )
-        wxFprintf( stderr, wxS( "%s\n" ), aText );
-    else
-        wxPrintf( wxS( "%s\n" ), aText );
-
-    return *this;
+        m_reporter->Report( _( "Error loading drawing sheet." ), RPT_SEVERITY_ERROR );
 }
 
 
@@ -122,7 +110,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
 
     if( sch == nullptr )
     {
-        wxFprintf( stderr, _( "Failed to load schematic file\n" ) );
+        m_reporter->Report( _( "Failed to load schematic file\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
 
@@ -131,7 +119,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     InitRenderSettings( renderSettings.get(), aPlotJob->settings.m_theme, sch );
 
     std::unique_ptr<SCH_PLOTTER> schPlotter = std::make_unique<SCH_PLOTTER>( sch );
-    schPlotter->Plot( aPlotJob->m_plotFormat, aPlotJob->settings, renderSettings.get(), this );
+    schPlotter->Plot( aPlotJob->m_plotFormat, aPlotJob->settings, renderSettings.get(), m_reporter );
 
     return CLI::EXIT_CODES::OK;
 }
@@ -148,7 +136,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
 
     if( sch == nullptr )
     {
-        wxFprintf( stderr, _( "Failed to load schematic file\n" ) );
+        m_reporter->Report( _( "Failed to load schematic file\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
 
@@ -165,7 +153,9 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
                     } )
             > 0 )
         {
-            wxPrintf( _( "Warning: schematic has annotation errors, please use the schematic editor to fix them\n" ) );
+            m_reporter->Report( _( "Warning: schematic has annotation errors, please use the "
+                                   "schematic editor to fix them\n" ),
+                                RPT_SEVERITY_WARNING );
         }
     }
 
@@ -174,7 +164,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
 
     if( erc.TestDuplicateSheetNames( false ) > 0 )
     {
-        wxPrintf( _( "Warning: duplicate sheet names.\n" ) );
+        m_reporter->Report( _( "Warning: duplicate sheet names.\n" ), RPT_SEVERITY_WARNING );
     }
 
 
@@ -216,7 +206,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
         helper = std::make_unique<NETLIST_EXPORTER_XML>( sch );
         break;
     default:
-        wxFprintf( stderr, _( "Unknown netlist format.\n" ) );
+        m_reporter->Report( _( "Unknown netlist format.\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_UNKNOWN;
     }
 
@@ -230,7 +220,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
         aNetJob->m_outputFile = fn.GetFullName();
     }
 
-    bool res = helper->WriteNetlist( aNetJob->m_outputFile, netlistOption, *this );
+    bool res = helper->WriteNetlist( aNetJob->m_outputFile, netlistOption, *m_reporter );
 
     if(!res)
     {
@@ -252,7 +242,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
 
     if( sch == nullptr )
     {
-        wxFprintf( stderr, _( "Failed to load schematic file\n" ) );
+        m_reporter->Report( _( "Failed to load schematic file\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
 
@@ -272,8 +262,10 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
                     } )
             > 0 )
         {
-            wxPrintf( _( "Warning: schematic has annotation errors, please use the schematic "
-                         "editor to fix them\n" ) );
+            m_reporter->Report(
+                    _( "Warning: schematic has annotation errors, please use the schematic "
+                       "editor to fix them\n" ),
+                    RPT_SEVERITY_WARNING );
         }
     }
 
@@ -282,7 +274,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
 
     if( erc.TestDuplicateSheetNames( false ) > 0 )
     {
-        wxPrintf( _( "Warning: duplicate sheet names.\n" ) );
+        m_reporter->Report( _( "Warning: duplicate sheet names.\n" ), RPT_SEVERITY_WARNING );
     }
 
 
@@ -358,7 +350,11 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
     wxFile f;
     if( !f.Open( aBomJob->m_outputFile, wxFile::write ) )
     {
-        wxFprintf( stderr, _( "Unable to open destination '%s'" ), aBomJob->m_outputFile );
+        m_reporter->Report(
+                wxString::Format( _( "Unable to open destination '%s'" ), aBomJob->m_outputFile ),
+                RPT_SEVERITY_ERROR
+        );
+
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
 
@@ -392,7 +388,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
 
     if( sch == nullptr )
     {
-        wxFprintf( stderr, _( "Failed to load schematic file\n" ) );
+        m_reporter->Report( _( "Failed to load schematic file\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
 
@@ -409,8 +405,10 @@ int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
                     } )
             > 0 )
         {
-            wxPrintf( _( "Warning: schematic has annotation errors, please use the schematic "
-                         "editor to fix them\n" ) );
+            m_reporter->Report(
+                    _( "Warning: schematic has annotation errors, please use the schematic "
+                       "editor to fix them\n" ),
+                    RPT_SEVERITY_WARNING );
         }
     }
 
@@ -418,7 +416,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
     ERC_TESTER erc( sch );
 
     if( erc.TestDuplicateSheetNames( false ) > 0 )
-        wxPrintf( _( "Warning: duplicate sheet names.\n" ) );
+        m_reporter->Report( _( "Warning: duplicate sheet names.\n" ), RPT_SEVERITY_WARNING );
 
     std::unique_ptr<NETLIST_EXPORTER_XML> xmlNetlist =
             std::make_unique<NETLIST_EXPORTER_XML>( sch );
@@ -432,7 +430,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
         aNetJob->m_outputFile = fn.GetFullName();
     }
 
-    bool res = xmlNetlist->WriteNetlist( aNetJob->m_outputFile, GNL_OPT_BOM, *this );
+    bool res = xmlNetlist->WriteNetlist( aNetJob->m_outputFile, GNL_OPT_BOM, *m_reporter );
 
     if( !res )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
@@ -492,8 +490,9 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
                     filename += wxS( "_demorgan" );
 
                 fn.SetName( filename );
-                wxPrintf( _( "Plotting symbol '%s' unit %d to '%s'\n" ), symbol->GetName(), unit,
-                          fn.GetFullPath() );
+                m_reporter->Report( wxString::Format( _( "Plotting symbol '%s' unit %d to '%s'\n" ),
+                                                      symbol->GetName(), unit, fn.GetFullPath() ),
+                                    RPT_SEVERITY_ACTION );
             }
             else
             {
@@ -503,7 +502,9 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
                     filename += wxS( "_demorgan" );
 
                 fn.SetName( filename );
-                wxPrintf( _( "Plotting symbol '%s' to '%s'\n" ), symbol->GetName(), fn.GetFullPath() );
+                m_reporter->Report( wxString::Format( _( "Plotting symbol '%s' to '%s'\n" ),
+                                                      symbol->GetName(), fn.GetFullPath() ),
+                                    RPT_SEVERITY_ACTION );
             }
 
             // Get the symbol bounding box to fit the plot page to it
@@ -527,7 +528,9 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
 
             if( !plotter->OpenFile( fn.GetFullPath() ) )
             {
-                wxFprintf( stderr, _( "Unable to open destination '%s'" ), fn.GetFullPath() );
+                m_reporter->Report( wxString::Format( _( "Unable to open destination '%s'" ),
+                                                      fn.GetFullPath() ),
+                                    RPT_SEVERITY_ERROR );
 
                 delete plotter;
                 return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
@@ -580,7 +583,7 @@ int EESCHEMA_JOBS_HANDLER::JobSymExportSvg( JOB* aJob )
     }
     catch( ... )
     {
-        wxFprintf( stderr, _( "Unable to load library\n" ) );
+        m_reporter->Report( _( "Unable to load library\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_UNKNOWN;
     }
 
@@ -593,7 +596,7 @@ int EESCHEMA_JOBS_HANDLER::JobSymExportSvg( JOB* aJob )
 
         if( !symbol )
         {
-            wxFprintf( stderr, _( "There is no symbol selected to save." ) );
+            m_reporter->Report( _( "There is no symbol selected to save." ), RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_ARGS;
         }
     }
@@ -650,7 +653,7 @@ int EESCHEMA_JOBS_HANDLER::JobSymUpgrade( JOB* aJob )
     }
     catch( ... )
     {
-        wxFprintf( stderr, _( "Unable to load library\n" ) );
+        m_reporter->Report( _( "Unable to load library\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_UNKNOWN;
     }
 
@@ -658,7 +661,8 @@ int EESCHEMA_JOBS_HANDLER::JobSymUpgrade( JOB* aJob )
     {
         if( wxFile::Exists( upgradeJob->m_outputLibraryPath ) )
         {
-            wxFprintf( stderr, _( "Output path must not conflict with existing path\n" ) );
+            m_reporter->Report(
+                    _( "Output path must not conflict with existing path\n", RPT_SEVERITY_ERROR ) );
             return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
         }
     }
@@ -668,7 +672,7 @@ int EESCHEMA_JOBS_HANDLER::JobSymUpgrade( JOB* aJob )
 
     if( shouldSave )
     {
-        wxPrintf( _( "Saving symbol library in updated format\n" ) );
+        m_reporter->Report( _( "Saving symbol library in updated format\n", RPT_SEVERITY_ACTION ) );
 
         try
         {
@@ -682,13 +686,13 @@ int EESCHEMA_JOBS_HANDLER::JobSymUpgrade( JOB* aJob )
         }
         catch( ... )
         {
-            wxFprintf( stderr, _( "Unable to save library\n" ) );
+            m_reporter->Report( ( "Unable to save library\n" ), RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_UNKNOWN;
         }
     }
     else
     {
-        wxPrintf( _( "Symbol library was not updated\n" ) );
+        m_reporter->Report( _( "Symbol library was not updated\n" ), RPT_SEVERITY_INFO );
     }
 
     return CLI::EXIT_CODES::OK;

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -29,7 +29,7 @@ class JOB_EXPORT_PCB_GERBER;
 class JOB_FP_EXPORT_SVG;
 class FOOTPRINT;
 
-class PCBNEW_JOBS_HANDLER : public JOB_DISPATCHER, REPORTER
+class PCBNEW_JOBS_HANDLER : public JOB_DISPATCHER
 {
 public:
     PCBNEW_JOBS_HANDLER();
@@ -43,13 +43,6 @@ public:
     int JobExportPos( JOB* aJob );
     int JobExportFpUpgrade( JOB* aJob );
     int JobExportFpSvg( JOB* aJob );
-
-    /*
-     * REPORTER INTERFACE
-     */
-    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
-
-    bool HasMessage() const override { return false; }
 
 private:
     void populateGerberPlotOptionsFromJob( PCB_PLOT_PARAMS&       aPlotOpts,

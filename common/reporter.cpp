@@ -29,6 +29,7 @@
 #include <reporter.h>
 #include <widgets/wx_infobar.h>
 #include <widgets/wx_html_report_panel.h>
+#include <wx/crt.h>
 #include <wx/log.h>
 #include <wx/textctrl.h>
 #include <wx/statusbr.h>
@@ -122,6 +123,30 @@ REPORTER& NULL_REPORTER::GetInstance()
         s_nullReporter = new NULL_REPORTER();
 
     return *s_nullReporter;
+}
+
+
+REPORTER& CLI_REPORTER::Report( const wxString& aMsg, SEVERITY aSeverity )
+{
+    FILE* target = stdout;
+
+    if( aSeverity == RPT_SEVERITY_ERROR )
+        target = stderr;
+
+    if( aMsg.EndsWith( wxS( "\n" ) ) )
+        wxFprintf( target, aMsg );
+    else
+        wxFprintf( target, aMsg + wxS( "\n" ) );
+
+    return *this;
+}
+
+
+REPORTER& CLI_REPORTER::GetInstance()
+{
+    static CLI_REPORTER s_cliReporter;
+
+    return s_cliReporter;
 }
 
 

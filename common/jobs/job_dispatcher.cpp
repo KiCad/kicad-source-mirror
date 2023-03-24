@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -20,12 +20,22 @@
 
 #include <cli/exit_codes.h>
 #include <jobs/job_dispatcher.h>
+#include <reporter.h>
+#include <wx/debug.h>
+
+
+JOB_DISPATCHER::JOB_DISPATCHER()
+{
+    m_reporter = &NULL_REPORTER::GetInstance();
+}
+
 
 void JOB_DISPATCHER::Register( const std::string&             aJobTypeName,
                                std::function<int( JOB* job )> aHandler )
 {
     m_jobHandlers.emplace( aJobTypeName, aHandler );
 }
+
 
 int JOB_DISPATCHER::RunJob( JOB* job )
 {
@@ -35,4 +45,11 @@ int JOB_DISPATCHER::RunJob( JOB* job )
     }
 
     return CLI::EXIT_CODES::ERR_UNKNOWN;
+}
+
+
+void JOB_DISPATCHER::SetReporter( REPORTER* aReporter )
+{
+    wxCHECK( aReporter != nullptr, /*void*/ );
+    m_reporter = aReporter;
 }
