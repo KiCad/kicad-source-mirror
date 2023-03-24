@@ -123,7 +123,7 @@ BOOST_AUTO_TEST_CASE( AddPins )
     // now we can find it in the list
     BOOST_CHECK_EQUAL( m_sheet.HasPins(), true );
     BOOST_CHECK_EQUAL( m_sheet.HasPin( "pinname" ), true );
-    BOOST_CHECK_EQUAL( m_sheet.HasPin( "PINname" ), true );
+    BOOST_CHECK_EQUAL( m_sheet.HasPin( "PINname" ), false );
 
     BOOST_CHECK_EQUAL( m_sheet.GetPin( pinPos ), &pinRef );
 
