@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:51-0800\n"
-"PO-Revision-Date: 2023-03-11 14:19+0000\n"
+"PO-Revision-Date: 2023-03-26 04:41+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.16.2-dev\n"
+"X-Generator: Weblate 4.17-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -16517,13 +16517,12 @@ msgstr ""
 "живлення має значення<br><br>"
 
 #: eeschema/symbol_checker.cpp:215
-#, fuzzy
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Invisible input power pins are no longer "
 "required<br><br>"
 msgstr ""
-"<b>Підозрілий символ живлення</b><br>Автоматично підключаються лише невидимі "
-"вхідні контакти живлення<br><br>"
+"<b>Підозрілий символ живлення</b><br>Невидимі вхідні контакти живлення "
+"більше не вимагаються<br><br>"
 
 #: eeschema/symbol_checker.cpp:240
 #, c-format
@@ -16762,7 +16761,7 @@ msgstr "Поточний символ було змінено.  Зберегти
 #: eeschema/symbol_editor/symbol_editor.cpp:360
 #, c-format
 msgid "Deriving from '%s', the root symbol of '%s'."
-msgstr ""
+msgstr "Похідні з '%s', коренного символу '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:378
 msgid "This new symbol has no name and cannot be created."
@@ -17240,14 +17239,12 @@ msgid "Create a new symbol"
 msgstr "Створити новий символ"
 
 #: eeschema/tools/ee_actions.cpp:132
-#, fuzzy
 msgid "Derive from existing symbol"
-msgstr "Похідна від наявного символу:"
+msgstr "Похідна від наявного символу"
 
 #: eeschema/tools/ee_actions.cpp:132
-#, fuzzy
 msgid "Create a new symbol, derived from an existing symbol"
-msgstr "Похідна від наявного символу:"
+msgstr "Створити новий символ, похідний від наявного символу"
 
 #: eeschema/tools/ee_actions.cpp:137
 msgid "Edit Symbol"
@@ -18384,6 +18381,7 @@ msgstr "Показати SPICE список зв'язків"
 #: eeschema/tools/ee_actions.cpp:1000
 msgid "Add, edit or delete user-defined simulation signals"
 msgstr ""
+"Додати, редагувати або видалити сигнали симуляції визначені користувачем"
 
 #: eeschema/tools/ee_inspection_tool.cpp:222
 msgid "No symbol issues found."
@@ -20219,7 +20217,7 @@ msgstr "Генерувати тільки плату без компоненті
 
 #: kicad/cli/command_export_pcb_step.cpp:79
 msgid "Export tracks (extremely time consuming)"
-msgstr ""
+msgstr "Експорт доріжок (довготривалий по часу)"
 
 #: kicad/cli/command_export_pcb_step.cpp:85
 msgid "Minimum distance between points to treat them as separate ones"
@@ -20950,9 +20948,8 @@ msgstr ""
 "%s"
 
 #: kicad/pcm/pcm.cpp:464
-#, fuzzy
 msgid "Failed to parse locally stored repository.json."
-msgstr "Неможливо обробити репозиторій: %s"
+msgstr "Не вдалося обробити локальне сховище repository.json."
 
 #: kicad/pcm/pcm.cpp:492
 msgid ""
@@ -22682,9 +22679,8 @@ msgid "Threshold voltage:"
 msgstr "Порогова напруга:"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:91
-#, fuzzy
 msgid "Names"
-msgstr "Ім'я"
+msgstr "Імена"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:154
 msgid "PCB Calculator data file"
@@ -23338,7 +23334,6 @@ msgstr ""
 "Ця енергія потім порівнюється з тією, що розсіюється опором дроту."
 
 #: pcb_calculator/galvanic_corrosion_help.h:2
-#, fuzzy
 msgid ""
 "This table shows the difference in electrochemical potential between various "
 "metals and alloys. Galvanic corrosion affects different metals in contact "
@@ -23355,14 +23350,17 @@ msgid ""
 "refill.\n"
 msgstr ""
 "Ця таблиця показує різницю електрохімічного потенціалу між різними металами "
-"та сплавами. Позитивне число вказує на те, що рядок анодний, а колонка "
-"катодна.\n"
-"Гальванічна корозія впливає на різні метали при контакті та за певних умов.\n"
-"Анод електрохімічної пари окислюється та з'їдається, тоді як катод отримує "
-"розчинені метали, нанесені на нього, але залишається захищеним.\n"
+"та сплавами. Гальванічна корозія впливає на різні метали при контакті та за "
+"певних умов.<br>\n"
+"Анод електрохімічної пари окислюється та з’їдається, тоді як на катод "
+"потрапляють розчинені метали, але він залишається захищеним.<br>\n"
+"Позитивне число вказує на те, що рядок анодний (-), а стовпець катодний (+), "
+"холодні та теплі відтінки також вказують на потенціал рядків.<br>\n"
 "EN 50310 передбачає різницю напруги нижче 300 мВ. У відомих практиках "
-"використовується третій метал між основною парою (тобто покриття поверхні "
-"ENIG)."
+"використовується третій інтерфейсний метал між основною парою (тобто "
+"покриття поверхні ENIG).<br>\n"
+"Вибрані комірки відображаються з типовим системним кольором після заповнення "
+"таблиці.\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:72
 msgid "General system design"
@@ -26579,13 +26577,15 @@ msgstr "Перезаписати попередній файл"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:123
 msgid "Export tracks (time consuming)"
-msgstr ""
+msgstr "Експорт доріжок (трудомісткий)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:124
 msgid ""
 "Export tracks and vias on external copper layers.\n"
 "Warning: this is *extremely* time consuming."
 msgstr ""
+"Експортувати доріжки і перехідні отвори на зовнішні мідні шари.\n"
+"Попередження: це займе *екстримально* багато часу."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:128
 msgid "Board outline chaining tolerance:"
@@ -26604,13 +26604,12 @@ msgid "Loose (0.1 mm)"
 msgstr "Вільний (0.1 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:136
-#, fuzzy
 msgid ""
 "Tolerance sets the distance between two points that are considered joined "
 "when building the board outlines."
 msgstr ""
 "Толерантність встановлення відстані між двома точками, які вважаються "
-"об'єднаними."
+"об'єднаними під час створення контуру плати."
 
 #: pcbnew/dialogs/dialog_export_step_base.h:76
 msgid "Export STEP"
@@ -27836,9 +27835,8 @@ msgid "Graphic items"
 msgstr "Графічні елементи"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:142
-#, fuzzy
 msgid "Dimension items"
-msgstr "Лінія розмірності"
+msgstr "Розміри елементів"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:257
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:139
@@ -27911,9 +27909,8 @@ msgid "Upright"
 msgstr "Вверх/вправо"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:331
-#, fuzzy
 msgid "Set to layer and dimension default values:"
-msgstr "Встановити типове значення в шарі :"
+msgstr "Встановити типове значення в шару і розмірів :"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:333
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:252
@@ -27929,9 +27926,8 @@ msgid "Footprint graphic items"
 msgstr "Графічні елементи посадкового місця"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:40
-#, fuzzy
 msgid "Footprint dimension items"
-msgstr "Графічні елементи посадкового місця"
+msgstr "Розмір елементів посадкового місця"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
 msgid "PCB graphic items"
@@ -27942,9 +27938,8 @@ msgid "PCB text items"
 msgstr "Текстові елементи PCB"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:52
-#, fuzzy
 msgid "PCB dimension items"
-msgstr "Лінія розмірності"
+msgstr "Розміри елементів PCB"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:67
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:71
@@ -32637,9 +32632,9 @@ msgid "netclass '%s' (diff pair)"
 msgstr "клас звʼязків '%s' (диференційна пара)"
 
 #: pcbnew/drc/drc_engine.cpp:348
-#, fuzzy, c-format
+#, c-format
 msgid "netclass '%s' (uvia)"
-msgstr "клас звʼязків '%s' (диференційна пара)"
+msgstr "клас звʼязків '%s' (мікро перехідний отвір)"
 
 #: pcbnew/drc/drc_engine.cpp:422
 msgid "keepout area"
@@ -32766,9 +32761,9 @@ msgid "Checking %s track width: opt %s."
 msgstr "Перевірка %s ширина доріжки: оптимально %s."
 
 #: pcbnew/drc/drc_engine.cpp:974
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s track width: min %s."
-msgstr "Перевірка %s ширина доріжки: оптимально %s."
+msgstr "Перевірка %s ширина доріжки: мінімально %s."
 
 #: pcbnew/drc/drc_engine.cpp:982
 #, c-format
@@ -32781,9 +32776,9 @@ msgid "Checking %s via diameter: opt %s."
 msgstr "Перевірка %s діаметр перехідного отвору: опт %s."
 
 #: pcbnew/drc/drc_engine.cpp:996
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s via diameter: min %s."
-msgstr "Перевірка %s діаметр перехідного отвору: опт %s."
+msgstr "Перевірка %s діаметр перехідного отвору: мін %s."
 
 #: pcbnew/drc/drc_engine.cpp:1005
 #, c-format
@@ -32791,9 +32786,9 @@ msgid "Checking %s hole size: opt %s."
 msgstr "Перевірка %s розмір отвору: опт %s."
 
 #: pcbnew/drc/drc_engine.cpp:1011
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s hole size: min %s."
-msgstr "Перевірка %s розмір отвору: опт %s."
+msgstr "Перевірка %s розмір отвору: мін %s."
 
 #: pcbnew/drc/drc_engine.cpp:1021
 #, c-format
@@ -32806,14 +32801,14 @@ msgid "Checking %s diff pair gap: opt %s."
 msgstr "Перевірка %s відступу диференційних пар: опт %s."
 
 #: pcbnew/drc/drc_engine.cpp:1035
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s clearance: min %s."
-msgstr "Перевірка %s зазору: %s."
+msgstr "Перевірка %s зазору: мін %s."
 
 #: pcbnew/drc/drc_engine.cpp:1043
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s hole to hole: min %s."
-msgstr "Перевірка %s розмір отвору: опт %s."
+msgstr "Перевірка %s між отворами: мін %s."
 
 #: pcbnew/drc/drc_engine.cpp:1049 pcbnew/drc/drc_engine.cpp:1075
 #: pcbnew/drc/drc_engine.cpp:1493
@@ -32854,9 +32849,8 @@ msgid "Rule layer not matched; rule ignored."
 msgstr "Шар правил не співпадає; правило проігноровано."
 
 #: pcbnew/drc/drc_engine.cpp:1188
-#, fuzzy
 msgid "Constraint layer not matched."
-msgstr "Співпадіння між шаром(и) і забороненої зони відсутні."
+msgstr "Обмеження шару не збігається."
 
 #: pcbnew/drc/drc_engine.cpp:1208
 #, c-format
@@ -33457,116 +33451,103 @@ msgid "(%s min %s; actual %s)"
 msgstr "(%s мінімальна %s; поточна %s)"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:414
-#, fuzzy
 msgid "3D model scale doesn't match: "
-msgstr "Шлях пошуку 3D моделі"
+msgstr "Масштаб 3D моделі не відповідає: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:415
 msgid "3D model rotation doesn't match: "
-msgstr ""
+msgstr "Обертання 3D моделі не відповідає: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:416
-#, fuzzy
 msgid "3D model offset doesn't match: "
-msgstr "Звʼязок контактної площадки не відповідає схемі"
+msgstr "Зміщення 3D моделі не відповідає: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:417
 msgid "3D model opacity doesn't match: "
-msgstr ""
+msgstr "Непрозорість 3D моделі не відповідає: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:418
-#, fuzzy
 msgid "3D model doesn't match: "
-msgstr "Шлях пошуку 3D моделі"
+msgstr "3D модель не відповідає: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:419
 msgid "3D model visibility doesn't match: "
-msgstr ""
+msgstr "Видимість 3D моделі не відповідає: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:447
-#, fuzzy
 msgid "Footprint descriptions differ."
-msgstr "Файл відповідності посадковому місцю"
+msgstr "Опис посадкового місця розрізняється."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:449
-#, fuzzy
 msgid "Footprint keywords differ."
-msgstr "Порядок посадкових місць"
+msgstr "Ключові слова посадкового місця розрізняється."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:454
-#, fuzzy
 msgid "Footprint types differ."
-msgstr "Тип посадкового місця:"
+msgstr "Типи посадкового місця розрізняється."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:456
-#, fuzzy
 msgid "Allow bridged solder mask apertures between pads settings differ."
-msgstr "Дозволяти мостики паяльної маски між контактними площадками"
+msgstr ""
+"Налаштування дозволених мостиків паяльної маски між контактними площадками "
+"відрізняються."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:458
-#, fuzzy
 msgid "Exempt from courtyard requirement settings differ."
-msgstr "Звільнено від вимоги мати зайняте поле"
+msgstr "Налаштування вимог щодо полів контурів відрізняються."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:471
-#, fuzzy
 msgid "Pad clearance overridden."
-msgstr "Перевизначити зазор"
+msgstr "Перевизначено зазору контактної площадки."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:473
-#, fuzzy
 msgid "Solder mask expansion overridden."
-msgstr "Розширення паяльної маски:"
+msgstr "Розширення паяльної маски перевизначено."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:475
-#, fuzzy
 msgid "Solder paste absolute clearance overridden."
-msgstr "Абсолютний зазор паяльної пасти:"
+msgstr "Абсолютний зазор паяльної пасти змінено."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:477
-#, fuzzy
 msgid "Solder paste relative clearance overridden."
-msgstr "Відносний зазор паяльної пасти:"
+msgstr "Перевизначено відносний зазор паяльної пасти."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:480
-#, fuzzy
 msgid "Zone connection overridden."
-msgstr "Стиль зони підключення"
+msgstr "Зона підключення перевизначено."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:484
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:489
 msgid "Net tie pad groups differ."
-msgstr ""
+msgstr "Групи мережевих посилань різні."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:528
 msgid "Pad count differs."
-msgstr ""
+msgstr "Кількість контактних площадок відрізняється."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:529
-#, fuzzy
 msgid "Rule area count differs."
-msgstr "Область з правилами на %s"
+msgstr "Кількість областей правил відрізняється."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:530
-#, fuzzy
 msgid "Graphic item count differs."
-msgstr "Графічні елементи не знайдені у файлі."
+msgstr "Кількість графічних елементів відрізняється."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:539
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:564
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:582
 #, c-format
 msgid "%s differs."
-msgstr ""
+msgstr "%s відмінностей."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:550
-#, fuzzy, c-format
+#, c-format
 msgid "%s has overrides."
-msgstr "Локально перевизначити"
+msgstr "%s потребує перевизначеня."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:592
 msgid "3D model count differs."
-msgstr ""
+msgstr "Кількість 3D-моделей відрізняється."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:616
 msgid "No project loaded, skipping library parity tests."
@@ -33865,9 +33846,9 @@ msgid "Determining PCB data\n"
 msgstr "Визначення даних PCB\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:447
-#, fuzzy, c-format
+#, c-format
 msgid "Board Thickness from stackup: %.3f mm\n"
-msgstr "Товщина плати зі стеку:"
+msgstr "Товщина плати зі стеку: %.3f mm\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:452
 msgid "Build STEP data\n"
@@ -35521,49 +35502,40 @@ msgid "Dimension '%s' on %s"
 msgstr "Розміри '%s' на %s"
 
 #: pcbnew/pcb_dimension.cpp:1315
-#, fuzzy
 msgid "1234.0"
-msgstr "1234"
+msgstr "1234.0"
 
 #: pcbnew/pcb_dimension.cpp:1316
-#, fuzzy
 msgid "1234.0 mm"
-msgstr "1234 mm"
+msgstr "1234.0 mm"
 
 #: pcbnew/pcb_dimension.cpp:1317
-#, fuzzy
 msgid "1234.0 (mm)"
-msgstr "1234 (mm)"
+msgstr "1234.0 (mm)"
 
 #: pcbnew/pcb_dimension.cpp:1349
-#, fuzzy
 msgid "Units Format"
-msgstr "Формат одиниць вимірювання:"
+msgstr "Формат одиниць"
 
 #: pcbnew/pcb_dimension.cpp:1355
-#, fuzzy
 msgid "Suppress Trailing Zeroes"
 msgstr "Приховувати нулі в кінці"
 
 #: pcbnew/pcb_dimension.cpp:1383
-#, fuzzy
 msgid "Crossbar Height"
-msgstr "Курсор правіше"
+msgstr "Висота розмірної лінії"
 
 #: pcbnew/pcb_dimension.cpp:1387
-#, fuzzy
 msgid "Extension Line Overshoot"
-msgstr "Зміщення лінії вимірювання:"
+msgstr "Перетин допоміжної лінії"
 
 #: pcbnew/pcb_dimension.cpp:1452
-#, fuzzy
 msgid "Leader Length"
-msgstr "Довжина перехідного отвору"
+msgstr "Довжина опорної лінії"
 
 #: pcbnew/pcb_dimension.cpp:1492
-#, fuzzy
 msgid "Text Frame"
-msgstr "Рамка тексту:"
+msgstr "Рамка тексту"
 
 #: pcbnew/pcb_edit_frame.cpp:203
 msgid "KiCad PCB Editor"
@@ -38355,9 +38327,9 @@ msgid "Overridden by larger physical hole clearance from %s;clearance: %s."
 msgstr "Замінено на більший фізичний зазор для отвору %s;зазор: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:779
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved clearance: %s; clearance will not be tested."
-msgstr "Локальний зазор на %s; зазор: %s."
+msgstr "Врегулювання зазору: %s; зазор не був протестований."
 
 #: pcbnew/tools/board_inspection_tool.cpp:801
 msgid "Diff Pair"
@@ -38473,48 +38445,41 @@ msgid "Assertions for:"
 msgstr "Дозволи для:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1339
-#, fuzzy
 msgid "Select a footprint to check against its library equivalent."
-msgstr "Перевірка посадкових місць плати на відповідність бібліотекам..."
+msgstr "Вибрати посадкове місце для перевірки на відповідність бібліотеці."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1346
-#, fuzzy
 msgid "Check Footprint against Library"
-msgstr "Перевірка посадкових місць плати на відповідність бібліотекам..."
+msgstr "Перевірка посадкового місця в бібліотеці"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1363
 msgid "Board/library check for:"
-msgstr ""
+msgstr "Перевірка плати/бібліотеки для:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1365
-#, fuzzy
 msgid "Library: "
-msgstr "Бібліотека:"
+msgstr "Бібліотека: "
 
 #: pcbnew/tools/board_inspection_tool.cpp:1366
-#, fuzzy
 msgid "Library item: "
-msgstr "Посилання на бібліотеку:"
+msgstr "Елемент бібліотеки: "
 
 #: pcbnew/tools/board_inspection_tool.cpp:1384
-#, fuzzy
 msgid "The current configuration does not include the library."
-msgstr "Поточна конфігурація не містить бібліотеку '%s'."
+msgstr "Поточна конфігурація не включає бібліотеку."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1388
-#, fuzzy
 msgid "The library is not enabled in the current configuration."
-msgstr "Бібліотека '%s' не включена в поточній конфігурації."
+msgstr "Бібліотека не ввімкнена в поточній конфігурації."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1404
-#, fuzzy, c-format
+#, c-format
 msgid "The library no longer contains the item %s."
-msgstr "Виділення містить %d заблокованих елементів."
+msgstr "Бібліотека більше не містить елемент %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1409
-#, fuzzy
 msgid "Footprint matches library equivalent."
-msgstr "Бібліотека посадкових місць не дозволена."
+msgstr "Посадкове місце відповідає бібліотеці."
 
 #: pcbnew/tools/convert_tool.cpp:68
 msgid "Copy line width of first object"
@@ -40136,15 +40101,15 @@ msgid "Show constraints resolution for the selected object"
 msgstr "Показувати роздільну здатність обмеження для вибраного об'єкта"
 
 #: pcbnew/tools/pcb_actions.cpp:1178
-#, fuzzy
 msgid "Check Footprint against Library..."
-msgstr "Перевірка посадкових місць плати на відповідність бібліотекам..."
+msgstr "Перевірити посадкового місця у бібліотеці..."
 
 #: pcbnew/tools/pcb_actions.cpp:1179
-#, fuzzy
 msgid ""
 "Check for differences between board footprint and its library equivalent"
-msgstr "Перевірка посадкових місць плати на відповідність бібліотекам..."
+msgstr ""
+"Перевірка наявності відмінностей між посадковим місцем на платі і "
+"еквіваленту в бібліотеці"
 
 #: pcbnew/tools/pcb_actions.cpp:1185
 msgid "Geographical Reannotate..."
