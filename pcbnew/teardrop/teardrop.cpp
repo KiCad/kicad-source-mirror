@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2021 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -117,7 +117,7 @@ int TEARDROP_MANAGER::SetTeardrops( BOARD_COMMIT* aCommitter, bool aFollowTracks
         // Build the track list (only straight lines)
         for( PCB_TRACK* track: m_board->Tracks() )
         {
-            if( track->Type() == PCB_TRACE_T )
+            if( track->Type() == PCB_TRACE_T || track->Type() == PCB_ARC_T)
             {
                 int netcode = track->GetNetCode();
                 int layer = track->GetLayer();
@@ -132,7 +132,7 @@ int TEARDROP_MANAGER::SetTeardrops( BOARD_COMMIT* aCommitter, bool aFollowTracks
 
     for( PCB_TRACK* track : m_board->Tracks() )
     {
-        if( track->Type() != PCB_TRACE_T )
+        if( ! (track->Type() == PCB_TRACE_T || track->Type() == PCB_ARC_T ) )
             continue;
 
         // Search for a padvia connected to track, with one end inside and one end outside
@@ -284,7 +284,7 @@ int TEARDROP_MANAGER::addTeardropsOnTracks( BOARD_COMMIT* aCommitter )
     // Build the track list (only straight lines)
     for( PCB_TRACK* track: m_board->Tracks() )
     {
-        if( track->Type() == PCB_TRACE_T )
+        if( track->Type() == PCB_TRACE_T || track->Type() == PCB_ARC_T )
         {
             int netcode = track->GetNetCode();
             int layer = track->GetLayer();
@@ -426,9 +426,6 @@ int TEARDROP_MANAGER::RemoveTeardrops( BOARD_COMMIT* aCommitter, bool aCommitAft
 
     if( count )
     {
-        ZONE_FILLER filler( m_board, aCommitter );
-        (void)filler.Fill( m_board->Zones() );
-
         if( aCommitter && aCommitAfterRemove )
             aCommitter->Push( _( "Remove teardrops" ), SKIP_CONNECTIVITY );
 
