@@ -848,11 +848,16 @@ void GERBER_PLOTTER::plotArc( const SHAPE_ARC& aArc, bool aPlotInRegion )
         LineTo( start );
 
     VECTOR2D devEnd = userToDeviceCoordinates( end );
-    VECTOR2D devCenter = userToDeviceCoordinates( center - start );
+
+    // devRelCenter is the position on arc center relative to the arc start, in Gerber coord.
+    // Warning: it is **not** userToDeviceCoordinates( center -  start ) when the plotter
+    // has an offset.
+    VECTOR2D devRelCenter = userToDeviceCoordinates( center ) - userToDeviceCoordinates( start );
 
     // We need to know if the arc is CW or CCW in device coordinates, so build this arc.
     SHAPE_ARC deviceArc( userToDeviceCoordinates( start ),
-                         userToDeviceCoordinates( aArc.GetArcMid() ), devEnd, 0 );
+                         userToDeviceCoordinates( aArc.GetArcMid() ),
+                         devEnd, 0 );
 
     fprintf( m_outputFile, "G75*\n" );        // Multiquadrant (360 degrees) mode
 
@@ -863,7 +868,7 @@ void GERBER_PLOTTER::plotArc( const SHAPE_ARC& aArc, bool aPlotInRegion )
 
     fprintf( m_outputFile, "X%dY%dI%dJ%dD01*\n",
              KiROUND( devEnd.x ), KiROUND( devEnd.y ),
-             KiROUND( devCenter.x ), KiROUND( devCenter.y ) );
+             KiROUND( devRelCenter.x ), KiROUND( devRelCenter.y ) );
 
     fprintf( m_outputFile, "G01*\n" ); // Back to linear interpolate (perhaps useless here).
 }
@@ -884,7 +889,8 @@ void GERBER_PLOTTER::plotArc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAn
     end.x = aCenter.x + KiROUND( aRadius * aEndAngle.Cos() );
     end.y = aCenter.y - KiROUND( aRadius * aEndAngle.Sin() );
     VECTOR2D devEnd = userToDeviceCoordinates( end );
-    VECTOR2D devCenter = userToDeviceCoordinates( aCenter ) - userToDeviceCoordinates( start );
+    // devRelCenter is the position on arc center relative to the arc start, in Gerber coord.
+    VECTOR2D devRelCenter = userToDeviceCoordinates( aCenter ) - userToDeviceCoordinates( start );
 
     fprintf( m_outputFile, "G75*\n" );        // Multiquadrant (360 degrees) mode
 
@@ -895,7 +901,7 @@ void GERBER_PLOTTER::plotArc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAn
 
     fprintf( m_outputFile, "X%dY%dI%dJ%dD01*\n",
              KiROUND( devEnd.x ), KiROUND( devEnd.y ),
-             KiROUND( devCenter.x ), KiROUND( devCenter.y ) );
+             KiROUND( devRelCenter.x ), KiROUND( devRelCenter.y ) );
 
     fprintf( m_outputFile, "G01*\n" ); // Back to linear interpolate (perhaps useless here).
 }
@@ -1020,7 +1026,7 @@ void GERBER_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aPoly, FILL_T aFill, int 
             {
                 const SHAPE_ARC& arc = aPoly.Arc( arcindex );
 
-                plotArc( arc, ii > 0 );
+                plotArc( arc, true );
 
                 // skip points on arcs, since we plot the arc itself
                 while( ii+1 < aPoly.PointCount() && arcindex == aPoly.ArcIndex( ii+1 ) )
@@ -1054,7 +1060,7 @@ void GERBER_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aPoly, FILL_T aFill, int 
             {
                 const SHAPE_ARC& arc = aPoly.Arc( arcindex );
 
-                plotArc( arc, ii > 0 );
+                plotArc( arc, true );
 
                 // skip points on arcs, since we plot the arc itself
                 while( ii+1 < aPoly.PointCount() && arcindex == aPoly.ArcIndex( ii+1 ) )
