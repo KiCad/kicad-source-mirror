@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -2697,7 +2697,12 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
     m_lastSelectedUserPreset = ( !preset || preset->readOnly ) ? nullptr : preset;
 
     if( preset )
-        doApplyLayerPreset( *preset );
+    {
+        // Change board layers visibility, but do not change objects visibility
+        LAYER_PRESET curr_layers_choice = *preset;
+        curr_layers_choice.renderLayers = getVisibleObjects();
+        doApplyLayerPreset( curr_layers_choice );
+    }
 
     if( !m_currentPreset->name.IsEmpty() )
     {
