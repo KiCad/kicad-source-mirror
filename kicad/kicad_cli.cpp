@@ -486,7 +486,7 @@ struct APP_KICAD_CLI : public wxAppConsole
         }
         catch( const IO_ERROR& ioe )
         {
-            wxLogError( ioe.What() );
+            wxFprintf( stderr, ioe.What() );
         }
         catch( ... )
         {

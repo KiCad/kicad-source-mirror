@@ -304,6 +304,13 @@ public:
 #endif
 
     /**
+     * Determine if the application is running with a GUI
+     *
+     * @return true if there is a GUI and false otherwise
+     */
+    bool IsGUI();
+
+    /**
      * wxWidgets on MSW tends to crash if you spool up more than one print job at a time.
      */
     bool m_Printing;

@@ -857,3 +857,21 @@ ENV_VAR_MAP& PGM_BASE::GetLocalEnvVariables() const
 {
     return GetCommonSettings()->m_Env.vars;
 }
+
+
+bool PGM_BASE::IsGUI()
+{
+    if( !wxTheApp )
+        return false;
+
+#if wxCHECK_VERSION( 3, 1, 6 )
+    return wxTheApp->IsGUI();
+#else
+    // wxWidgets older than version 3.1.6 do not have a way to know if the app
+    // has a GUI or is a console application.
+    // So the trick is to set the App class name when starting kicad-cli, and when
+    // the app class name is the kicad-cli class name the app is a console app
+    bool run_gui = wxTheApp->GetClassName() != KICAD_CLI_APP_NAME;
+    return run_gui;
+#endif
+}
