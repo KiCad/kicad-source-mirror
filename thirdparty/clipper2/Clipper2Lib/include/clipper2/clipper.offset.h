@@ -36,8 +36,8 @@ private:
 		bool is_reversed = false;
 		JoinType join_type;
 		EndType end_type;
-		Group(const Paths64& paths, JoinType _join_type, EndType _end_type) :
-			paths_in(paths), join_type(_join_type), end_type(_end_type) {}
+		Group(const Paths64& paths, JoinType join_type, EndType end_type) :
+			paths_in(paths), join_type(join_type), end_type(end_type) {}
 	};
 
 	int   error_code_ = 0;
