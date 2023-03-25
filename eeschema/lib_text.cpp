@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -276,27 +276,22 @@ void LIB_TEXT::Plot( PLOTTER* plotter, bool aBackground, const VECTOR2I& offset,
     BOX2I bBox = GetBoundingBox();
     // convert coordinates from draw Y axis to symbol_editor Y axis
     bBox.RevertYAxis();
+
+    /*
+     * Calculate the text justification, according to the symbol orientation/mirror.  This is
+     * a bit complicated due to cumulative calculations:
+     *  - numerous cases (mirrored or not, rotation)
+     *  - the plotter's Text() function will also recalculate H and V justifications according
+     *    to the text orientation
+     *  - when a symbol is mirrored the text is not, and justifications become a nightmare
+     *
+     *  So the easier way is to use no justifications (centered text) and use GetBoundingBox to
+     *  know the text coordinate considered as centered.
+     */
     VECTOR2I txtpos = bBox.Centre();
     TEXT_ATTRIBUTES attrs = GetAttributes();
-
-    if( attrs.m_Angle == ANGLE_VERTICAL )
-    {
-        switch( attrs.m_Halign )
-        {
-        case GR_TEXT_H_ALIGN_LEFT:   txtpos.y = bBox.GetTop();   break;
-        case GR_TEXT_H_ALIGN_CENTER: txtpos.y = bBox.GetCenter().y; break;
-        case GR_TEXT_H_ALIGN_RIGHT:  txtpos.y = bBox.GetBottom();      break;
-        }
-    }
-    else
-    {
-        switch( attrs.m_Halign )
-        {
-        case GR_TEXT_H_ALIGN_LEFT:   txtpos.x = bBox.GetLeft();     break;
-        case GR_TEXT_H_ALIGN_CENTER: txtpos.x = bBox.GetCenter().x; break;
-        case GR_TEXT_H_ALIGN_RIGHT:  txtpos.x = bBox.GetRight();    break;
-        }
-    }
+    attrs.m_Halign = GR_TEXT_H_ALIGN_CENTER;
+    attrs.m_Valign = GR_TEXT_V_ALIGN_CENTER;
 
     // The text orientation may need to be flipped if the transformation matrix causes xy
     // axes to be flipped.
