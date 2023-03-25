@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 2015-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -100,12 +100,13 @@ static int xferinfo( void* aProgress, curl_off_t aDLtotal, curl_off_t aDLnow, cu
     return CURLE_OK;
 }
 
-
+#if LIBCURL_VERSION_NUM < 0x072000 // 7.32.0
 static int progressinfo( void* aProgress, double aDLtotal, double aDLnow, double aULtotal, double aULnow )
 {
     return xferinfo( aProgress, static_cast<curl_off_t>( aDLtotal ), static_cast<curl_off_t>( aDLnow ),
                      static_cast<curl_off_t>( aULtotal ), static_cast<curl_off_t>( aULnow ) );
 }
+#endif
 
 
 KICAD_CURL_EASY::KICAD_CURL_EASY() :
@@ -126,7 +127,11 @@ KICAD_CURL_EASY::KICAD_CURL_EASY() :
     curl_easy_setopt( m_CURL, CURLOPT_WRITEDATA, static_cast<void*>( &m_buffer ) );
 
     // Only allow HTTP and HTTPS protocols
+#if LIBCURL_VERSION_NUM >= 0x075500     // version 7.85.0
+    curl_easy_setopt(m_CURL, CURLOPT_PROTOCOLS_STR, "http,https");
+#else
     curl_easy_setopt( m_CURL, CURLOPT_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS );
+#endif
 
     #ifdef _WIN32
     // We need this to use the Windows Certificate store
