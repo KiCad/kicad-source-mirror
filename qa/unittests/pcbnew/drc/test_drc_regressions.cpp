@@ -62,6 +62,7 @@ BOOST_FIXTURE_TEST_CASE( DRCFalsePositiveRegressions, DRC_REGRESSION_TEST_FIXTUR
         "issue11814",   // Bad cache hit in isInsideArea
         "issue12609",   // Arc collison edge case
         "issue14294",   // Bad Clipper2 fill
+        "issue14412"    // Solder mask bridge between pads in a net-tie pad group
     };
 
     for( const wxString& relPath : tests )
