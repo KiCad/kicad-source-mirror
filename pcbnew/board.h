@@ -60,6 +60,7 @@ class CONNECTIVITY_DATA;
 class COMPONENT;
 class PROJECT;
 class PROGRESS_REPORTER;
+struct ISOLATED_ISLANDS;
 
 // The default value for m_outlinesChainingEpsilon to convert a board outlines to polygons
 // It is the max dist between 2 end points to see them connected
@@ -1177,6 +1178,7 @@ public:
     int                   m_DRCMaxClearance;
     int                   m_DRCMaxPhysicalClearance;
     ZONE*                 m_SolderMask;
+    std::map<ZONE*, std::map<PCB_LAYER_ID, ISOLATED_ISLANDS>> m_ZoneIsolatedIslandsMap;
 
 private:
     // The default copy constructor & operator= are inadequate,

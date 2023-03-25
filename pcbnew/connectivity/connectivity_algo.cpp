@@ -613,53 +613,26 @@ void CN_CONNECTIVITY_ALGO::PropagateNets( BOARD_COMMIT* aCommit )
 }
 
 
-void CN_CONNECTIVITY_ALGO::FindIsolatedCopperIslands( ZONE* aZone, PCB_LAYER_ID aLayer,
-                                                      std::vector<int>& aIslands )
-{
-    if( aZone->GetFilledPolysList( aLayer )->IsEmpty() )
-        return;
-
-    aIslands.clear();
-
-    Remove( aZone );
-    Add( aZone );
-
-    m_connClusters = SearchClusters( CSM_CONNECTIVITY_CHECK );
-
-    for( const std::shared_ptr<CN_CLUSTER>& cluster : m_connClusters )
-    {
-        if( cluster->Contains( aZone ) && cluster->IsOrphaned() )
-        {
-            for( CN_ITEM* z : *cluster )
-            {
-                if( z->Parent() == aZone && z->Layer() == aLayer )
-                    aIslands.push_back( static_cast<CN_ZONE_LAYER*>(z)->SubpolyIndex() );
-            }
-        }
-    }
-
-    wxLogTrace( wxT( "CN" ), wxT( "Found %u isolated islands\n" ), (unsigned) aIslands.size() );
-}
-
-void CN_CONNECTIVITY_ALGO::FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLATED_ISLAND_LIST>& aZones,
-                                                      bool aConnectivityAlreadyRebuilt )
+void CN_CONNECTIVITY_ALGO::FillIsolatedIslandsMap(
+                                std::map<ZONE*, std::map<PCB_LAYER_ID, ISOLATED_ISLANDS>>& aMap,
+                                bool aConnectivityAlreadyRebuilt )
 {
     int progressDelta = 50;
     int ii = 0;
 
-    progressDelta = std::max( progressDelta, (int) aZones.size() / 4 );
+    progressDelta = std::max( progressDelta, (int) aMap.size() / 4 );
 
     if( !aConnectivityAlreadyRebuilt )
     {
-        for( CN_ZONE_ISOLATED_ISLAND_LIST& z : aZones )
+        for( const auto& [ zone, islands ] : aMap )
         {
-            Remove( z.m_zone );
-            Add( z.m_zone );
+            Remove( zone );
+            Add( zone );
             ii++;
 
             if( m_progressReporter && ( ii % progressDelta ) == 0 )
             {
-                m_progressReporter->SetCurrentProgress( (double) ii / (double) aZones.size() );
+                m_progressReporter->SetCurrentProgress( (double) ii / (double) aMap.size() );
                 m_progressReporter->KeepRefreshing( false );
             }
 
@@ -670,24 +643,25 @@ void CN_CONNECTIVITY_ALGO::FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLAT
 
     m_connClusters = SearchClusters( CSM_CONNECTIVITY_CHECK );
 
-    for( CN_ZONE_ISOLATED_ISLAND_LIST& zone : aZones )
+    for( auto& [ zone, zoneIslands ] : aMap )
     {
-        for( PCB_LAYER_ID layer : zone.m_zone->GetLayerSet().Seq() )
+        for( auto& [ layer, layerIslands ] : zoneIslands )
         {
-            if( zone.m_zone->GetFilledPolysList( layer )->IsEmpty() )
+            if( zone->GetFilledPolysList( layer )->IsEmpty() )
                 continue;
 
             for( const std::shared_ptr<CN_CLUSTER>& cluster : m_connClusters )
             {
-                if( cluster->Contains( zone.m_zone ) && cluster->IsOrphaned() )
+                for( CN_ITEM* item : *cluster )
                 {
-                    for( CN_ITEM* z : *cluster )
+                    if( item->Parent() == zone && item->Layer() == layer )
                     {
-                        if( z->Parent() == zone.m_zone && z->Layer() == layer )
-                        {
-                            zone.m_islands[layer].push_back(
-                                    static_cast<CN_ZONE_LAYER*>( z )->SubpolyIndex() );
-                        }
+                        CN_ZONE_LAYER* z = static_cast<CN_ZONE_LAYER*>( item );
+
+                        if( cluster->IsOrphaned() )
+                            layerIslands.m_IsolatedOutlines.push_back( z->SubpolyIndex() );
+                        else if( z->HasSingleConnection() )
+                            layerIslands.m_SingleConnectionOutlines.push_back( z->SubpolyIndex() );
                     }
                 }
             }

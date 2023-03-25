@@ -45,6 +45,24 @@ class MSG_PANEL_ITEM;
 
 
 /**
+ * A struct recording the isolated and single-pad islands within a zone.  Each array holds
+ * indexes into the outlines of a SHAPE_POLY_SET for a zone fill on a particular layer.
+ *
+ * Isolated outlines are those whose *connectivity cluster* contains no pads.  These generate
+ * DRC violations.
+ *
+ * Single-connection outlines are those with a *direct* connection to only a single item.  These
+ * participate in thermal spoke counting as a pad spoke to an *otherwise* unconnected island
+ * provides no connectivity to the pad.
+ */
+struct ISOLATED_ISLANDS
+{
+    std::vector<int> m_IsolatedOutlines;
+    std::vector<int> m_SingleConnectionOutlines;
+};
+
+
+/**
  * Handle a list of polygons defining a copper zone.
  *
  * A zone is described by a main polygon, a time stamp, a layer or a layer set, and a net name.

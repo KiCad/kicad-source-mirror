@@ -309,18 +309,10 @@ int CONNECTIVITY_DATA::GetNetCount() const
 }
 
 
-void CONNECTIVITY_DATA::FindIsolatedCopperIslands( ZONE* aZone, std::vector<int>& aIslands )
+void CONNECTIVITY_DATA::FillIsolatedIslandsMap( std::map<ZONE*, std::map<PCB_LAYER_ID, ISOLATED_ISLANDS>>& aMap,
+                                                bool aConnectivityAlreadyRebuilt )
 {
-    // TODO(JE) ZONES
-#if 0
-    m_connAlgo->FindIsolatedCopperIslands( aZone, aIslands );
-#endif
-}
-
-void CONNECTIVITY_DATA::FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLATED_ISLAND_LIST>& aZones,
-                                                   bool aConnectivityAlreadyRebuilt )
-{
-    m_connAlgo->FindIsolatedCopperIslands( aZones, aConnectivityAlreadyRebuilt );
+    m_connAlgo->FillIsolatedIslandsMap( aMap, aConnectivityAlreadyRebuilt );
 }
 
 

@@ -26,7 +26,7 @@
 #include <footprint.h>
 #include <thread_pool.h>
 #include <zone.h>
-
+#include <connectivity/connectivity_data.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_rtree.h>
 #include <drc/drc_cache_generator.h>
@@ -200,6 +200,23 @@ bool DRC_CACHE_GENERATOR::Run()
             status = ret.wait_for( std::chrono::milliseconds( 250 ) );
         }
     }
+
+    m_board->m_ZoneIsolatedIslandsMap.clear();
+
+    for( ZONE* zone : m_board->Zones() )
+    {
+        if( !zone->GetIsRuleArea() )
+        {
+            for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+                m_board->m_ZoneIsolatedIslandsMap[ zone ][ layer ] = ISOLATED_ISLANDS();
+        }
+    }
+
+    std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_board->GetConnectivity();
+
+    connectivity->ClearRatsnest();
+    connectivity->Build( m_board, m_drcEngine->GetProgressReporter() );
+    connectivity->FillIsolatedIslandsMap( m_board->m_ZoneIsolatedIslandsMap, true );
 
     return !m_drcEngine->IsCancelled();
 }

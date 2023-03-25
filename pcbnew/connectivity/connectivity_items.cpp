@@ -109,6 +109,23 @@ const VECTOR2I CN_ZONE_LAYER::GetAnchor( int n ) const
 }
 
 
+bool CN_ZONE_LAYER::HasSingleConnection()
+{
+    int count = 0;
+
+    for( CN_ITEM* item : ConnectedItems() )
+    {
+        if( item->Valid() )
+            count++;
+
+        if( count > 1 )
+            break;
+    }
+
+    return count == 1;
+}
+
+
 void CN_ITEM::RemoveInvalidRefs()
 {
     for( auto it = m_connected.begin(); it != m_connected.end(); /* increment in loop */ )
