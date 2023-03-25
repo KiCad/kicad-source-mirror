@@ -2202,7 +2202,9 @@ void EAGLE_PLUGIN::packagePolygon( FOOTPRINT* aFootprint, wxXmlNode* aTree ) con
         }
     }
 
-    if( p.pour == EPOLYGON::CUTOUT
+    PCB_LAYER_ID layer = kicad_layer( p.layer );
+
+    if( ( p.pour == EPOLYGON::CUTOUT && layer != UNDEFINED_LAYER )
         || p.layer == EAGLE_LAYER::TRESTRICT
         || p.layer == EAGLE_LAYER::BRESTRICT
         || p.layer == EAGLE_LAYER::VRESTRICT )
@@ -2221,8 +2223,6 @@ void EAGLE_PLUGIN::packagePolygon( FOOTPRINT* aFootprint, wxXmlNode* aTree ) con
     }
     else
     {
-        PCB_LAYER_ID layer = kicad_layer( p.layer );
-
         if( layer == UNDEFINED_LAYER )
         {
             wxLogMessage( wxString::Format( _( "Ignoring a polygon since Eagle layer '%s' (%d) "
