@@ -387,13 +387,6 @@ TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<T>& aFields, REPORTER* aRe
     if( typeFieldValue != "" )
         return TYPE::NONE;
 
-    // No type information. Look for legacy (pre-V7) fields.
-
-    TYPE typeFromLegacyFields = InferTypeFromLegacyFields( aFields );
-
-    if( typeFromLegacyFields != TYPE::NONE )
-        return typeFromLegacyFields;
-
     if( aReporter )
     {
         if( aFields.size() > REFERENCE_FIELD )
@@ -411,23 +404,6 @@ TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<T>& aFields, REPORTER* aRe
     }
 
     return TYPE::NONE;
-}
-
-
-template <typename T>
-TYPE SIM_MODEL::InferTypeFromLegacyFields( const std::vector<T>& aFields )
-{
-    if( GetFieldValue( &aFields, SIM_MODEL_RAW_SPICE::LEGACY_TYPE_FIELD ) != ""
-        || GetFieldValue( &aFields, SIM_MODEL_RAW_SPICE::LEGACY_MODEL_FIELD ) != ""
-        || GetFieldValue( &aFields, SIM_MODEL_RAW_SPICE::LEGACY_ENABLED_FIELD ) != ""
-        || GetFieldValue( &aFields, SIM_MODEL_RAW_SPICE::LEGACY_LIB_FIELD ) != "" )
-    {
-        return TYPE::RAWSPICE;
-    }
-    else
-    {
-        return TYPE::NONE;
-    }
 }
 
 

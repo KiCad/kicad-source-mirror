@@ -259,7 +259,8 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
             }
         }
     }
-    else
+    else if( !SIM_MODEL::GetFieldValue( &m_fields, SIM_DEVICE_TYPE_FIELD ).empty()
+                || !SIM_MODEL::GetFieldValue( &m_fields, SIM_TYPE_FIELD ).empty() )
     {
         // The model is sourced from the instance.
         m_useInstanceModelRadioButton->SetValue( true );
@@ -360,6 +361,9 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataFromWindow()
 
     if( curModel().GetType() == SIM_MODEL::TYPE::RAWSPICE )
     {
+        if( m_modelNotebook->GetSelection() == 0 )
+            updateModelCodeTab( &curModel() );
+
         wxString code = m_codePreview->GetText().Trim( true ).Trim( false );
         curModel().SetParamValue( "model", std::string( code.ToUTF8() ) );
     }

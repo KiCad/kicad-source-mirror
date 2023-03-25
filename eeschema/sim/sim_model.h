@@ -386,10 +386,6 @@ public:
     template <typename T>
     static TYPE ReadTypeFromFields( const std::vector<T>& aFields, REPORTER* aReporter );
 
-    template <typename T>
-    static TYPE InferTypeFromLegacyFields( const std::vector<T>& aFields );
-
-
     static std::unique_ptr<SIM_MODEL> Create( TYPE aType, const std::vector<LIB_PIN*>& aPins,
                                               REPORTER* aReporter );
 
