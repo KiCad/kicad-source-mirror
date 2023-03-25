@@ -14,13 +14,14 @@
 # Ettore Atalan <atalanttore@googlemail.com>, 2022, 2023.
 # Ivan Chuba <xtrvweb@gmail.com>, 2022.
 # magical-obama <maschwaerzler@a1.net>, 2022.
+# Luc <some_physics@live.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:51-0800\n"
-"PO-Revision-Date: 2023-03-12 01:44+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"PO-Revision-Date: 2023-03-26 04:41+0000\n"
+"Last-Translator: Luc <some_physics@live.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -28,7 +29,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16.2-dev\n"
+"X-Generator: Weblate 4.17-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -4433,7 +4434,7 @@ msgstr "Ziel"
 
 #: common/eda_item.cpp:351
 msgid "ItemList"
-msgstr "ItemList"
+msgstr "Elementliste"
 
 #: common/eda_item.cpp:352
 msgid "NetInfo"
@@ -4504,7 +4505,7 @@ msgstr "Schaltplanblatt"
 
 #: common/eda_item.cpp:379
 msgid "SCH Screen"
-msgstr "SCH Screen"
+msgstr "SCH Fenster"
 
 #: common/eda_item.cpp:386 eeschema/sch_field.cpp:732
 msgid "Symbol Field"
@@ -5568,7 +5569,6 @@ msgstr "Ausgewählte deaktivieren"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:201
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:212
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:223
-#, fuzzy
 msgid "Unit"
 msgstr "Komponente"
 
@@ -6118,9 +6118,8 @@ msgid "Find Previous"
 msgstr "Vorheriges Element suchen"
 
 #: common/tool/actions.cpp:234
-#, fuzzy
 msgid "Find previous match"
-msgstr "Vorheriges Element suchen"
+msgstr "Vorherigen Treffer suchen"
 
 #: common/tool/actions.cpp:240
 msgid "Find Next Marker"
@@ -8810,19 +8809,17 @@ msgid ""
 msgstr "Schreibt eine Anweisung, alle Stromstärken zu speichern (.probe alli)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:313
-#, fuzzy
 msgid "Run external simulator command:"
-msgstr "Externer Simulator-Befehl:"
+msgstr "Externen Simulator-Befehl ausführen:"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:315
-#, fuzzy
 msgid ""
 "Enter the command line to run SPICE\n"
 "Usually '<path to SPICE binary> \"%I\"'\n"
 "%I will be replaced by the netlist filepath"
 msgstr ""
 "Geben Sie die Befehlszeile ein, um Spice auszuführen\n"
-"Normalerweise <Pfad-zum-Spice-Binärprogramm> %I\n"
+"Normalerweise '<Pfad-zum-Spice-Binärprogramm> \"%I\"'\n"
 "%I wird durch den Namen der Spice-Netzliste ersetzt"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:388
@@ -8845,23 +8842,23 @@ msgstr ""
 "Exportieren der Netzliste benötigt einen vollständig annotierten Schaltplan."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:575
-#, fuzzy
 msgid "external simulator not found"
-msgstr "Externer Simulator-Befehl:"
+msgstr "Externer Simulator nicht gefunden"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:576
 msgid ""
 "Note: command line is usually: <tt>&lt;path to SPICE binary&gt; \"%I\"</tt>"
 msgstr ""
+"Beachte: Befehlszeile ist üblicherweise: <tt>&lt;Pfad zu Spice-Programm&gt; "
+"\"%l\"</tt>"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:582
 msgid "external simulator has the wrong format or architecture"
 msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:587
-#, fuzzy
 msgid "permission denied"
-msgstr "Möglicherweise aufgrund von fehlenden Zugriffsrechten?"
+msgstr "Erlaubnis verweigert"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:723
 msgid "This plugin already exists."
@@ -10774,9 +10771,8 @@ msgid "Search the current &sheet only"
 msgstr "Nur &aktuelles Blatt durchsuchen"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:101
-#, fuzzy
 msgid "Search the current selection &only"
-msgstr "Nur &aktuelles Blatt durchsuchen"
+msgstr "Nur &aktuelle Auswahl durchsuchen"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:104
 msgid "Replace matches in reference designators"
@@ -11365,7 +11361,7 @@ msgstr "Phase"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:25
 msgid "Significant digits:"
-msgstr ""
+msgstr "Signifikante Stellen:"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:32
 msgid "Range:"
@@ -11396,33 +11392,29 @@ msgid "m"
 msgstr "m"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "K"
-msgstr "OK"
+msgstr "K"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "M"
-msgstr "MB"
+msgstr "M"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 msgid "G"
 msgstr ""
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "T"
-msgstr "T:"
+msgstr "T"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "P"
-msgstr "Pi-Glied"
+msgstr "P"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.h:47
-#, fuzzy, c-format
+#, c-format
 msgid "Format %s"
-msgstr "Format"
+msgstr "Format %s"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:186
 msgid "<unknown>"
@@ -12030,9 +12022,8 @@ msgstr "Symbolfelder aktualisieren"
 
 #: eeschema/dialogs/dialog_user_defined_signals_base.h:63
 #: eeschema/tools/ee_actions.cpp:999
-#, fuzzy
 msgid "User-defined Signals"
-msgstr "Benutzerdefinierter Ursprungspunkt"
+msgstr "Benutzerdefinierte Signale"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:30
 msgid "Wire/bus width:"
@@ -12105,14 +12096,12 @@ msgid "Show ERC exclusions"
 msgstr "ERC-Ausnahmen anzeigen"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:68
-#, fuzzy
 msgid "Show OP voltages"
-msgstr "Seite %s anzeigen"
+msgstr "OP-Spannungen anzeigen"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:71
-#, fuzzy
 msgid "Show OP currents"
-msgstr "Alle Ströme speichern"
+msgstr "OP-Ströme anzeigen"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:74
 msgid "Show page limi&ts"
@@ -12554,32 +12543,27 @@ msgstr "Arbeitspunkt"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:262
 msgid "Significant digits (voltages):"
-msgstr ""
+msgstr "Signifikante Stellen (Spannungen):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:270
-#, fuzzy
 msgid "Range (voltages):"
-msgstr "Alle Spannungen speichern"
+msgstr "Bereich (Spannungen):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "fV"
-msgstr "V"
+msgstr "fV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "pV"
-msgstr "V"
+msgstr "pV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "nV"
-msgstr "V"
+msgstr "nV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "uV"
-msgstr "V"
+msgstr "uV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:73
@@ -12588,53 +12572,44 @@ msgid "mV"
 msgstr "mV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "KV"
-msgstr "V"
+msgstr "KV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "MV"
-msgstr "V"
+msgstr "MV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "GV"
-msgstr "V"
+msgstr "GV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "TV"
-msgstr "V"
+msgstr "TV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
-#, fuzzy
 msgid "PV"
-msgstr "V"
+msgstr "PV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:281
 msgid "Significant digits (currents):"
-msgstr ""
+msgstr "Signifikante Stellen (Ströme):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:289
-#, fuzzy
 msgid "Range (currents):"
-msgstr "Alle Ströme speichern"
+msgstr "Bereich (Ströme):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "fA"
-msgstr "A"
+msgstr "fA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "pA"
-msgstr "A"
+msgstr "pA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "nA"
-msgstr "A"
+msgstr "nA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:208
@@ -12643,34 +12618,28 @@ msgid "uA"
 msgstr "µA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "mA"
-msgstr "A"
+msgstr "mA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "KA"
-msgstr "A"
+msgstr "KA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "MA"
-msgstr "A"
+msgstr "MA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "GA"
-msgstr "BGA"
+msgstr "GA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "TA"
-msgstr "A"
+msgstr "TA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
-#, fuzzy
 msgid "PA"
-msgstr "A"
+msgstr "PA"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:220
 msgid "No error or warning"
@@ -12697,12 +12666,11 @@ msgid "&Default line width:"
 msgstr "&Voreinstellung für &Linienbreite:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:47
-#, fuzzy
 msgid ""
 "Set to 0 to allow symbols to inherit line width properties\n"
 "from Schematic"
 msgstr ""
-"Auf 0 setzen, um Linienbreiten der Symbole vom übergeordneten\n"
+"Auf 0 setzen, um Linienbreiten der Symbole vom\n"
 "Schaltplan zu übernehmen"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:62
@@ -14541,9 +14509,8 @@ msgid "Record 'PIECHART' not handled."
 msgstr "Datensatz \"PIECHART\" nicht behandelt."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:697
-#, fuzzy
 msgid "Parameter Set not currently supported."
-msgstr "Compile mask wird derzeit nicht unterstützt."
+msgstr "Set-Parameter wird derzeit nicht unterstützt."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:722
 msgid "Compile mask not currently supported."
@@ -15823,7 +15790,6 @@ msgid "Checking component "
 msgstr "Prüfe Bauteil "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:254
-#, fuzzy
 msgid "Component: name cannot be empty."
 msgstr "Der Bauteilname darf nicht leer sein."
 
@@ -15832,7 +15798,6 @@ msgid "Component: manufacturer cannot be empty."
 msgstr "Bauteil: Hersteller darf nicht leer sein."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:272
-#, fuzzy
 msgid "Component: invalid package."
 msgstr "Bauteil: Ungültige Bauform."
 
@@ -15845,9 +15810,8 @@ msgid "Cannot interpolate the current based on this IV table."
 msgstr "Der Strom kann anhand dieser IV-Tabelle nicht interpoliert werden."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:396
-#, fuzzy
 msgid "There is an invalid voltage in an IV table"
-msgstr "Nicht-numerischer Wert in einer IV-Tabelle"
+msgstr "Ungültiger Spannungswert in einer IV-Tabelle"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:403
 msgid "There is an invalid current in an IV table"
@@ -15858,14 +15822,12 @@ msgid "Invalid R_load."
 msgstr "Ungültige R_load."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:450
-#, fuzzy
 msgid "Invalid falling dV/dt."
-msgstr "Ungültiges fallendes dv/dt."
+msgstr "Ungültiges fallendes dV/dt."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:455
-#, fuzzy
 msgid "Invalid rising dV/dt."
-msgstr "Ungültiges steigendes dv/dt."
+msgstr "Ungültiges steigendes dV/dt."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:470
 msgid "Model name cannot be empty"
@@ -15876,9 +15838,8 @@ msgid "Checking model "
 msgstr "Prüfe Modell "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:482
-#, fuzzy
 msgid "Undefined model type."
-msgstr "Undefinierter Modelltyp"
+msgstr "Undefinierter Modelltyp."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:491
 msgid "Invalid Vinh value."
@@ -15897,7 +15858,6 @@ msgid "Invalid C_ref value."
 msgstr "Ungültiger Wert für C_ref."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:523
-#, fuzzy
 msgid "Invalid V_ref value."
 msgstr "Ungültiger Wert für V_ref."
 
@@ -15978,44 +15938,36 @@ msgid "Negative number of pins."
 msgstr "Negative Anzahl an Pins."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:723
-#, fuzzy
 msgid "Empty pin number."
-msgstr "Leere Pin-Nummer"
+msgstr "Leere Pin-Nummer."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:734
-#, fuzzy
 msgid "Resistance matrix is incorrect."
-msgstr "Widerstandsmatrix ist nicht korrekt"
+msgstr "Widerstandsmatrix ist falsch."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:745
-#, fuzzy
 msgid "Capacitance matrix is undefined."
-msgstr "Kapazitätsmatrix ist nicht definiert"
+msgstr "Kapazitätsmatrix ist nicht definiert."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:754
-#, fuzzy
 msgid "Capacitance matrix is incorrect."
-msgstr "Kapazitätsmatrix ist nicht korrekt"
+msgstr "Kapazitätsmatrix ist falsch."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:763
-#, fuzzy
 msgid "Capacitance matrix is nullptr."
-msgstr "Kapazitätsmatrix ist nullptr"
+msgstr "Kapazitätsmatrix ist nullptr."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:774
-#, fuzzy
 msgid "Inductance matrix is undefined."
-msgstr "Induktivitätsmatrix ist undefiniert"
+msgstr "Induktivitätsmatrix ist undefiniert."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:783
-#, fuzzy
 msgid "Inductance matrix is incorrect."
-msgstr "Induktivitätsmatrix ist falsch"
+msgstr "Induktivitätsmatrix ist falsch."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:792
-#, fuzzy
 msgid "Inductance matrix is nullptr."
-msgstr "Induktivitätsmatrix ist nullptr"
+msgstr "Induktivitätsmatrix ist nullptr."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:808
 msgid "Cannot open file "
@@ -16307,9 +16259,9 @@ msgid "Bitrate could be too high for rising / falling edges"
 msgstr "Bitrate könnte zu hoch sein für steigende / fallende Flanken"
 
 #: eeschema/sim/sim_lib_mgr.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "Simulation model library not found at '%s'"
-msgstr "Simulationsmodellbibliothek nicht gefunden unter \"%s\" oder \"%s\""
+msgstr "Simulationsmodellbibliothek nicht gefunden unter \"%s\""
 
 #: eeschema/sim/sim_lib_mgr.cpp:84
 #, c-format
@@ -16360,9 +16312,9 @@ msgstr ""
 "ist aber \"%s\""
 
 #: eeschema/sim/sim_model.cpp:783
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown simulation model pin '%s'"
-msgstr "Unbekannter Knoten '%s' in '%s'"
+msgstr "Unbekannter Pin '%s' im Simulationsmodell"
 
 #: eeschema/sim/sim_model_kibis.cpp:81
 #, c-format
@@ -16446,18 +16398,17 @@ msgstr ""
 "finden."
 
 #: eeschema/sim/sim_plot_panel.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "%d"
-msgstr "%"
+msgstr "%d"
 
 #: eeschema/sim/sim_plot_panel.cpp:508
 msgid "noise [(V or A)^2/Hz]"
 msgstr "Rauschen [(V oder A)^2/Hz]"
 
 #: eeschema/sim/sim_plot_panel.cpp:543 eeschema/sim/sim_plot_panel.cpp:650
-#, fuzzy
 msgid "Power"
-msgstr "Spannungsquelle hinzufügen"
+msgstr "Leistung"
 
 #: eeschema/sim/sim_plot_panel.cpp:585
 msgid "Voltage (swept)"
@@ -16480,39 +16431,32 @@ msgid "Voltage (measured)"
 msgstr "Spannung (gemessen)"
 
 #: eeschema/sim/simulator_frame.cpp:193
-#, fuzzy
 msgid "Measure Min"
-msgstr "Bemessener Knoten"
+msgstr "Minimum messen"
 
 #: eeschema/sim/simulator_frame.cpp:194
-#, fuzzy
 msgid "Measure Max"
-msgstr "&Messwerkzeug"
+msgstr "Maximum messen"
 
 #: eeschema/sim/simulator_frame.cpp:195
-#, fuzzy
 msgid "Measure Average"
-msgstr "Abstandsmessung"
+msgstr "Mittelwert messen"
 
 #: eeschema/sim/simulator_frame.cpp:196
-#, fuzzy
 msgid "Measure RMS"
-msgstr "&Messwerkzeug"
+msgstr "RMS messen"
 
 #: eeschema/sim/simulator_frame.cpp:197
-#, fuzzy
 msgid "Measure Peak-to-peak"
-msgstr "Bemessener Knoten"
+msgstr "Spitze-Spitze messen"
 
 #: eeschema/sim/simulator_frame.cpp:198
-#, fuzzy
 msgid "Measure Time of Min"
-msgstr "Messwerkzeug"
+msgstr "Dauer des Minimums messen"
 
 #: eeschema/sim/simulator_frame.cpp:199
-#, fuzzy
 msgid "Measure Time of Max"
-msgstr "Messwerkzeug"
+msgstr "Dauer des Maximums messen"
 
 #: eeschema/sim/simulator_frame.cpp:200
 #, fuzzy
@@ -16520,19 +16464,17 @@ msgid "Measure Integral"
 msgstr "Abstandsmessung"
 
 #: eeschema/sim/simulator_frame.cpp:313
-#, fuzzy, c-format
+#, c-format
 msgid "Format %s..."
-msgstr "Format"
+msgstr "Format %s…"
 
 #: eeschema/sim/simulator_frame.cpp:372
-#, fuzzy
 msgid "Format Value..."
-msgstr "Wert bearbeiten..."
+msgstr "Wert formatieren..."
 
 #: eeschema/sim/simulator_frame.cpp:375
-#, fuzzy
 msgid "Delete Measurement"
-msgstr "Marker entfernen"
+msgstr "Messung löschen"
 
 #: eeschema/sim/simulator_frame.cpp:621 eeschema/sim/simulator_frame.cpp:1076
 #, c-format
@@ -16547,15 +16489,13 @@ msgstr "Signal"
 
 #: eeschema/sim/simulator_frame.cpp:631
 #: eeschema/sim/simulator_frame_base.cpp:121
-#, fuzzy
 msgid "Cursor 1"
-msgstr "Fadenkreuz"
+msgstr "Zeiger 1"
 
 #: eeschema/sim/simulator_frame.cpp:632
 #: eeschema/sim/simulator_frame_base.cpp:122
-#, fuzzy
 msgid "Cursor 2"
-msgstr "Fadenkreuz"
+msgstr "Zeiger 2"
 
 #: eeschema/sim/simulator_frame.cpp:759 eeschema/sim/simulator_frame_base.h:88
 msgid "Spice Simulator"
@@ -16563,7 +16503,7 @@ msgstr "Spice-Simulator"
 
 #: eeschema/sim/simulator_frame.cpp:892 eeschema/sim/simulator_frame.cpp:1119
 msgid " (gain)"
-msgstr ""
+msgstr " (Verstärkung)"
 
 #: eeschema/sim/simulator_frame.cpp:893 eeschema/sim/simulator_frame.cpp:1120
 msgid " (phase)"
@@ -16574,13 +16514,11 @@ msgid "Simulator requires a fully annotated schematic."
 msgstr "Simulator benötigt einen vollständig annotierten Schaltplan."
 
 #: eeschema/sim/simulator_frame.cpp:985
-#, fuzzy
 msgid ""
 "Errors during netlist generation.\n"
 "\n"
 msgstr ""
-"Bei der Erstellung der Netzliste sind Fehler aufgetreten; Simulation "
-"abgebrochen.\n"
+"Bei der Erstellung der Netzliste sind Fehler aufgetreten.\n"
 "\n"
 
 #: eeschema/sim/simulator_frame.cpp:1020
@@ -16612,19 +16550,16 @@ msgid "%s is not tunable"
 msgstr "%s ist nicht abstimmbar"
 
 #: eeschema/sim/simulator_frame.cpp:1599
-#, fuzzy
 msgid "Error: no current simulation.\n"
-msgstr "Leistung, Strom und Isolation"
+msgstr "Fehler: keine aktuelle Simulation.\n"
 
 #: eeschema/sim/simulator_frame.cpp:1608
-#, fuzzy
 msgid "Error: simulation type not defined.\n"
-msgstr "Fehler: Simulationstyp nicht definiert!\n"
+msgstr "Fehler: Simulationstyp nicht definiert.\n"
 
 #: eeschema/sim/simulator_frame.cpp:1614
-#, fuzzy
 msgid "Error: simulation type doesn't support plotting.\n"
-msgstr "Fehler: Simulationstyp unterstützt kein Plotten!\n"
+msgstr "Fehler: Simulationstyp unterstützt kein Plotten.\n"
 
 #: eeschema/sim/simulator_frame.cpp:2447
 msgid ""
@@ -16652,9 +16587,8 @@ msgstr ""
 "\n"
 
 #: eeschema/sim/simulator_frame_base.cpp:228
-#, fuzzy
 msgid "Measurement"
-msgstr "&Messwerkzeug"
+msgstr "Messung"
 
 #: eeschema/sim/simulator_frame_base.cpp:230 gerbview/gerber_file_image.cpp:321
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:51
@@ -16707,14 +16641,12 @@ msgid "'%s' is not a valid Spice value."
 msgstr "\"%s\" ist kein gültiger Spice-Wert."
 
 #: eeschema/sim/toolbars_simulator_frame.cpp:107
-#, fuzzy
 msgid "Simulator"
-msgstr "Simulator..."
+msgstr "Simulator"
 
 #: eeschema/sim/toolbars_simulator_frame.cpp:162
-#, fuzzy
 msgid "&Simulation"
-msgstr "Simulation"
+msgstr "&Simulation"
 
 #: eeschema/symbol_async_loader.cpp:108
 #, c-format
@@ -16792,7 +16724,6 @@ msgid "<b>A Power Symbol should have only one pin</b><br><br>"
 msgstr "<b>Ein Spannungssymbol sollte nur einen Pin haben</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:208
-#, fuzzy
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Only an input or output power pin has "
 "meaning<br><br>"
@@ -16801,13 +16732,12 @@ msgstr ""
 "Spannungspin hat Bedeutung<br><br>"
 
 #: eeschema/symbol_checker.cpp:215
-#, fuzzy
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Invisible input power pins are no longer "
 "required<br><br>"
 msgstr ""
-"<b>Verdächtiges Spannungssymbol</b><br>Nur unsichtbare Eingangs-"
-"Spannungspins werden automatisch verbunden<br><br>"
+"<b>Verdächtiges Spannungssymbol</b><br>Unsichtbare Eingangs-Spannungspins "
+"werden nicht länger benötigt<br><br>"
 
 #: eeschema/symbol_checker.cpp:240
 #, c-format
@@ -17382,16 +17312,14 @@ msgid "Select at least one property to back annotate."
 msgstr "Mindestens eine Eigenschaft für die Rückwärts-Annotation auswählen."
 
 #: eeschema/tools/backannotate.cpp:97
-#, fuzzy
 msgid ""
 "Cannot fetch PCB netlist because Schematic Editor is opened in stand-alone "
 "mode.\n"
 "You must launch the KiCad project manager and create a project."
 msgstr ""
-"Die Platinen-Netzliste kann nicht abgerufen werden, da eeschema im "
-"eigenständigen Modus geöffnet ist.\n"
-"Starten Sie die KiCad-Projektverwaltung und erstellen Sie ein neues KiCad "
-"Projekt."
+"Die Platinen-Netzliste kann nicht abgerufen werden, da der Schaltplaneditor "
+"im eigenständigen Modus geöffnet ist.\n"
+"Starten Sie die KiCad-Projektverwaltung und erstellen Sie ein neues Projekt."
 
 #: eeschema/tools/backannotate.cpp:164
 #, c-format
@@ -17535,14 +17463,12 @@ msgid "Create a new symbol"
 msgstr "Neues Symbol (Schaltzeichen) erstellen"
 
 #: eeschema/tools/ee_actions.cpp:132
-#, fuzzy
 msgid "Derive from existing symbol"
-msgstr "Von einem existierenden Symbol ableiten:"
+msgstr "Von einem existierenden Symbol ableiten"
 
 #: eeschema/tools/ee_actions.cpp:132
-#, fuzzy
 msgid "Create a new symbol, derived from an existing symbol"
-msgstr "Von einem existierenden Symbol ableiten:"
+msgstr "Neues Symbol erstellen, abgeleitet von einem existierenden Symbol"
 
 #: eeschema/tools/ee_actions.cpp:137
 msgid "Edit Symbol"
@@ -18354,22 +18280,20 @@ msgstr ""
 "anzeigen"
 
 #: eeschema/tools/ee_actions.cpp:714
-#, fuzzy
 msgid "Show OP Voltages"
-msgstr "Seite %s anzeigen"
+msgstr "OP-Spannungen anzeigen"
 
 #: eeschema/tools/ee_actions.cpp:715
 msgid "Show operating point voltage data from simulation"
-msgstr ""
+msgstr "Spannungswerte des Arbeitspunktes aus der Simulation anzeigen"
 
 #: eeschema/tools/ee_actions.cpp:719
-#, fuzzy
 msgid "Show OP Currents"
-msgstr "Cursor anzeigen"
+msgstr "OP-Spannungen anzeigen"
 
 #: eeschema/tools/ee_actions.cpp:720
 msgid "Show operating point current data from simulation"
-msgstr ""
+msgstr "Stromwerte des Arbeitspunktes aus der SImulation anzeigen"
 
 #: eeschema/tools/ee_actions.cpp:724 eeschema/tools/ee_actions.cpp:729
 #: eeschema/tools/ee_actions.cpp:735 eeschema/tools/ee_actions.cpp:741
@@ -18400,7 +18324,6 @@ msgid "Annotate Automatically"
 msgstr "Automatisch annotieren"
 
 #: eeschema/tools/ee_actions.cpp:746
-#, fuzzy
 msgid "Toggle automatic annotation of new symbols"
 msgstr "Automatische Annotierung von neuen Teilesymbolen umschalten"
 
@@ -18633,9 +18556,8 @@ msgid "Export Current Plot as CSV..."
 msgstr "Aktuelles Diagramm als CSV-Datei exportieren..."
 
 #: eeschema/tools/ee_actions.cpp:950
-#, fuzzy
 msgid "Show Legend"
-msgstr "&Legende anzeigen"
+msgstr "Legende anzeigen"
 
 #: eeschema/tools/ee_actions.cpp:955
 msgid "Dotted Current/Phase"
@@ -18644,21 +18566,20 @@ msgstr "Gepunkteter Strom/Phase"
 #: eeschema/tools/ee_actions.cpp:956
 msgid "Draw secondary signal trace (current or phase) with a dotted line"
 msgstr ""
+"Sekundäre Signalleiterbahn (Strom oder Phase) mit einer gestrichelten Linie "
+"zeichnen"
 
 #: eeschema/tools/ee_actions.cpp:960
-#, fuzzy
 msgid "Dark Mode Plots"
-msgstr "3D-Modelle"
+msgstr "Diagramme (dunkler Modus)"
 
 #: eeschema/tools/ee_actions.cpp:961
-#, fuzzy
 msgid "Draw plots with a black background"
 msgstr "Umschalten Hintergrund Weiß/Schwarz"
 
 #: eeschema/tools/ee_actions.cpp:965
-#, fuzzy
 msgid "Simulation Command..."
-msgstr "Simulationsbefehl"
+msgstr "Simulationsbefehl…"
 
 #: eeschema/tools/ee_actions.cpp:966
 #, fuzzy
@@ -18670,9 +18591,8 @@ msgid "Run Simulation"
 msgstr "Starte Simulation"
 
 #: eeschema/tools/ee_actions.cpp:977
-#, fuzzy
 msgid "Stop Simulation"
-msgstr "Simulation starten/stoppen"
+msgstr "Simulation stoppen"
 
 #: eeschema/tools/ee_actions.cpp:983
 #, fuzzy
@@ -18693,13 +18613,13 @@ msgid "Select a value to be tuned"
 msgstr "Einen Wert wählen, der abgestimmt werden soll"
 
 #: eeschema/tools/ee_actions.cpp:994
-#, fuzzy
 msgid "Show SPICE Netlist"
-msgstr "SPICE-Netzliste anzeigen..."
+msgstr "SPICE-Netzliste anzeigen"
 
 #: eeschema/tools/ee_actions.cpp:1000
 msgid "Add, edit or delete user-defined simulation signals"
 msgstr ""
+"benutzerdefinierte Simulationssignale hinzufügen, bearbeiten oder löschen"
 
 #: eeschema/tools/ee_inspection_tool.cpp:222
 msgid "No symbol issues found."
@@ -19081,16 +19001,16 @@ msgstr ""
 "um doppelte Tabelleneinträge zu verhindern."
 
 #: eeschema/widgets/tuner_slider.cpp:57 eeschema/widgets/tuner_slider.cpp:113
-#, fuzzy, c-format
+#, c-format
 msgid "Tune %s"
-msgstr "Abstimmung"
+msgstr "%s abstimmen"
 
 #: eeschema/widgets/tuner_slider.cpp:74
-#, fuzzy, c-format
+#, c-format
 msgid "%s has simulation model of type '%s %s'; only RLC passives be tuned"
 msgstr ""
-"Symbol \"%s\" hat ein Simulationsmodell vom Typ \"%s %s\", welches nicht "
-"abgestimmt werden kann"
+"\"%s\" hat ein Simulationsmodell vom Typ \"%s %s\"; nur RLC-Werte können "
+"veràndert werden"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -20346,7 +20266,6 @@ msgid "Minimal header"
 msgstr "Minimaler Header"
 
 #: kicad/cli/command_export_pcb_drill.cpp:73
-#, fuzzy
 msgid "PTH and NPTH in separate files"
 msgstr "PTH- und NPTH-Bohrdaten in getrennten Dateien"
 
@@ -20466,9 +20385,10 @@ msgid "Use the gerber plot settings already configured in the board file"
 msgstr "Gerber-Ploteinstellungen aus der Platinendatei verwenden"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:60
-#, fuzzy
 msgid "Color theme to use (will default to PCB Editor settings)"
-msgstr "Zu verwendendes Farbthema (Standard sind pcbnew-Einstellungen)"
+msgstr ""
+"Zu verwendendes Farbthema (als Standard werden Leiterplatten-Editor "
+"Einstellungen verwendet)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:44
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:64
@@ -20554,7 +20474,7 @@ msgstr "Nur Platine ohne Bauteile ausgeben"
 
 #: kicad/cli/command_export_pcb_step.cpp:79
 msgid "Export tracks (extremely time consuming)"
-msgstr ""
+msgstr "Leiterbahnen exportieren (extrem zeitaufwändig)"
 
 #: kicad/cli/command_export_pcb_step.cpp:85
 msgid "Minimum distance between points to treat them as separate ones"
@@ -21302,9 +21222,8 @@ msgstr ""
 "%s"
 
 #: kicad/pcm/pcm.cpp:464
-#, fuzzy
 msgid "Failed to parse locally stored repository.json."
-msgstr "Kann Repository nicht parsen: %s"
+msgstr "Lokal gespeicherte repository.json konnte nicht geparst werden."
 
 #: kicad/pcm/pcm.cpp:492
 msgid ""
@@ -23040,9 +22959,8 @@ msgid "Threshold voltage:"
 msgstr "Schwellwertspannung:"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:91
-#, fuzzy
 msgid "Names"
-msgstr "Name"
+msgstr "Namen"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:154
 msgid "PCB Calculator data file"
@@ -23710,7 +23628,6 @@ msgstr ""
 "Leitungswiderstand abgeführt wird."
 
 #: pcb_calculator/galvanic_corrosion_help.h:2
-#, fuzzy
 msgid ""
 "This table shows the difference in electrochemical potential between various "
 "metals and alloys. Galvanic corrosion affects different metals in contact "
@@ -23727,16 +23644,19 @@ msgid ""
 "refill.\n"
 msgstr ""
 "Diese Tabelle zeigt den Unterschied im elektrochemischen Potential zwischen "
-"verschiedenen Metallen und Legierungen. Eine positive Zahl zeigt an, dass "
-"die Zeile anodisch und die Spalte kathodisch ist.\n"
-"Galvanische Korrosion betrifft verschiedene Metalle in Kontakt und unter "
-"bestimmten Bedingungen.\n"
+"verschiedenen Metallen und Legierungen. Galvanische Korrosion betrifft "
+"verschiedene Metalle in Kontakt und unter bestimmten Bedingungen.<br>\n"
 "Die Anode eines elektrochemischen Paares wird oxidiert und weggefressen, "
 "während die Kathode mit gelösten Metallen plattiert wird, aber geschützt "
-"bleibt.\n"
+"bleibt.<br>\n"
+"Eine positive Zahl zeigt an, dass die Zeile anodisch und die Spalte "
+"kathodisch ist. Kalte und warme Farbtöne geben auch das Potenzial der Zeile "
+"an.<br>\n"
 "EN 50310 empfiehlt eine Spannungsdifferenz von unter 300mV. Bekannte "
-"Verfahren verwenden ein drittes Grenzflächenmetall zwischen dem Hauptpaar "
-"(siehe beispielsweise die ENIG-Oberflächenbeschichtung)."
+"Verfahren verwenden ein drittes Grenzflächenmetall zwischen dem Hauptpaar ("
+"siehe beispielsweise die ENIG-Oberflächenbeschichtung).<br>\n"
+"Ausgewählte Zellen werden nach einem Neubefüllen der Tabelle mit der "
+"Standardfarbe des Systemes angezeigt.\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:72
 msgid "General system design"
@@ -24130,7 +24050,7 @@ msgstr "Differenzielle Impedanz (Zd):"
 
 #: pcb_calculator/transline_ident.cpp:334
 msgid "Zeven"
-msgstr "Zeven"
+msgstr "Z_gerade"
 
 #: pcb_calculator/transline_ident.cpp:335
 msgid "Even mode impedance (lines driven by common voltages)"
@@ -24140,7 +24060,7 @@ msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:338
 msgid "Zodd"
-msgstr "Zodd"
+msgstr "Z_ungerade"
 
 #: pcb_calculator/transline_ident.cpp:339
 msgid "Odd mode impedance (lines driven by opposite (differential) voltages)"
@@ -26971,13 +26891,15 @@ msgstr "Alte Datei überschreiben"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:123
 msgid "Export tracks (time consuming)"
-msgstr ""
+msgstr "Leiterbahnen exportieren (zeitaufwändig)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:124
 msgid ""
 "Export tracks and vias on external copper layers.\n"
 "Warning: this is *extremely* time consuming."
 msgstr ""
+"Leiterbahnen und Vias auf externen Kupferlagen exportieren.\n"
+"Warnung: Dies ist *extrem* zeitaufwändig."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:128
 msgid "Board outline chaining tolerance:"
@@ -26996,13 +26918,12 @@ msgid "Loose (0.1 mm)"
 msgstr "Grob (0,1 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:136
-#, fuzzy
 msgid ""
 "Tolerance sets the distance between two points that are considered joined "
 "when building the board outlines."
 msgstr ""
-"Toleranz legt den Abstand zwischen zwei Punkten fest, die als verbunden "
-"betrachtet werden."
+"Die Toleranz legt den Abstand zwischen zwei Punkten fest, die beim Aufbau "
+"der Platinenumrisse als verbunden betrachtet werden."
 
 #: pcbnew/dialogs/dialog_export_step_base.h:76
 msgid "Export STEP"
@@ -28231,9 +28152,8 @@ msgid "Graphic items"
 msgstr "Grafikelemente"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:142
-#, fuzzy
 msgid "Dimension items"
-msgstr "Bemaßungslinie"
+msgstr "Elemente bemaßen"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:257
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:139
@@ -30772,21 +30692,18 @@ msgid "Track and Via Dimensions"
 msgstr "Leiterbahn- und Via-Maße"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:51
-#, fuzzy
 msgid "Remove Unused Layers"
-msgstr "Nicht verwendete Lagen &entfernen"
+msgstr "Nicht verwendete Lagen entfernen"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:52
-#, fuzzy
 msgid "Restore All Layers"
-msgstr "Alle Lagen neu laden"
+msgstr "Alle Lagen wiederherstellen"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:157
 msgid "Set Unused Pad Properties"
 msgstr "Ungenutzte Pad-Eigenschaften anwenden"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:33
-#, fuzzy
 msgid "&Selected only"
 msgstr "Nur &Auswahl"
 
@@ -30795,9 +30712,8 @@ msgid "Keep &outside layers"
 msgstr "&Behalte äußere Lagen"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.h:58
-#, fuzzy
 msgid "Unused Pads"
-msgstr "Beinhaltende Lagen"
+msgstr "Unbenutzte Pads"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:32
 msgid "Delete footprints with no symbols"
@@ -32981,9 +32897,8 @@ msgid "7"
 msgstr "7"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:88
-#, fuzzy
 msgid "Vias:"
-msgstr "Vias"
+msgstr "Vias:"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:104 pcbnew/pad.cpp:1011
 #: pcbnew/pcb_track.cpp:940 pcbnew/pcb_track.cpp:1308
@@ -33192,9 +33107,9 @@ msgid "Checking %s track width: opt %s."
 msgstr "Leiterbahnbreite %s wird geprüft: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:974
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s track width: min %s."
-msgstr "Leiterbahnbreite %s wird geprüft: opt %s."
+msgstr "Leiterbahnbreite %s wird geprüft: minimum %s."
 
 #: pcbnew/drc/drc_engine.cpp:982
 #, c-format
@@ -33207,9 +33122,9 @@ msgid "Checking %s via diameter: opt %s."
 msgstr "Via-Durchmesser %s wird geprüft: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:996
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s via diameter: min %s."
-msgstr "Via-Durchmesser %s wird geprüft: opt %s."
+msgstr "Via-Durchmesser %s wird geprüft: minimum %s."
 
 #: pcbnew/drc/drc_engine.cpp:1005
 #, c-format
@@ -33217,9 +33132,9 @@ msgid "Checking %s hole size: opt %s."
 msgstr "Lochgröße %s wird geprüft: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:1011
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s hole size: min %s."
-msgstr "Lochgröße %s wird geprüft: opt %s."
+msgstr "Lochgröße %s wird geprüft: minimum %s."
 
 #: pcbnew/drc/drc_engine.cpp:1021
 #, c-format
@@ -33232,14 +33147,14 @@ msgid "Checking %s diff pair gap: opt %s."
 msgstr "Prüfe %s Differenzialpaar-Abstand: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:1035
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s clearance: min %s."
-msgstr "Prüfe %s Freiraum: %s."
+msgstr "Prüfe %s Freiraum: minimum %s."
 
 #: pcbnew/drc/drc_engine.cpp:1043
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s hole to hole: min %s."
-msgstr "Lochgröße %s wird geprüft: opt %s."
+msgstr "Lochabstand %s wird geprüft: minimum %s."
 
 #: pcbnew/drc/drc_engine.cpp:1049 pcbnew/drc/drc_engine.cpp:1075
 #: pcbnew/drc/drc_engine.cpp:1493
@@ -33884,37 +33799,32 @@ msgid "(%s min %s; actual %s)"
 msgstr "(%s min %s; tatsächlich %s)"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:414
-#, fuzzy
 msgid "3D model scale doesn't match: "
-msgstr "3D-Modell-Suchpfad"
+msgstr "3D-Modell-Skalierung weicht ab: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:415
 msgid "3D model rotation doesn't match: "
-msgstr ""
+msgstr "Drehung des 3D Modelles stimmt nicht überein: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:416
-#, fuzzy
 msgid "3D model offset doesn't match: "
-msgstr "Das Pad-Netz stimmt nicht mit dem Schaltplan überein"
+msgstr "Offset des 3D-Modelles stimmt nicht überein: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:417
 msgid "3D model opacity doesn't match: "
-msgstr ""
+msgstr "Transparenz des 3D-Modelles stimmt nicht überein: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:418
-#, fuzzy
 msgid "3D model doesn't match: "
-msgstr "3D-Modell-Suchpfad"
+msgstr "3D-Modell stimmt nicht überein: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:419
-#, fuzzy
 msgid "3D model visibility doesn't match: "
-msgstr "Sichtbarkeit von 3D-Modellen"
+msgstr "Sichtbarkeit des 3D-Modelles stimmt nicht überein: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:447
-#, fuzzy
 msgid "Footprint descriptions differ."
-msgstr "Footprints Assoziierungsdatei"
+msgstr "Footprint-Beschreibungen stimmen nicht überein."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:449
 #, fuzzy
@@ -33922,9 +33832,8 @@ msgid "Footprint keywords differ."
 msgstr "Footprintreihenfolge"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:454
-#, fuzzy
 msgid "Footprint types differ."
-msgstr "Footprint-Typ:"
+msgstr "Footprint-Typen stimmen nicht überein."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:456
 #, fuzzy
@@ -33937,29 +33846,24 @@ msgid "Exempt from courtyard requirement settings differ."
 msgstr "Keine Abstandsfläche erforderlich"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:471
-#, fuzzy
 msgid "Pad clearance overridden."
-msgstr "Überschreibung des Freiraums"
+msgstr "Freiraum um Pads überschrieben."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:473
-#, fuzzy
 msgid "Solder mask expansion overridden."
-msgstr "Lötstoppmaskenerweiterung:"
+msgstr "Erweiterung der Lötstoppmaske überschrieben."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:475
-#, fuzzy
 msgid "Solder paste absolute clearance overridden."
-msgstr "Freiraum (absolut) für Lötpaste:"
+msgstr "Freiraum (absolut) für Lötpaste überschrieben."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:477
-#, fuzzy
 msgid "Solder paste relative clearance overridden."
-msgstr "Freiraumverhältnis (relativ) für Lötpaste:"
+msgstr "Freiraum (relativ) für Lötpaste überschrieben."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:480
-#, fuzzy
 msgid "Zone connection overridden."
-msgstr "Zonenverbindungsstil"
+msgstr "Zonenverbindung überschrieben."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:484
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:489
@@ -33967,9 +33871,8 @@ msgid "Net tie pad groups differ."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:528
-#, fuzzy
 msgid "Pad count differs."
-msgstr "Anzahl Pads"
+msgstr "Padanzahl weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:529
 #, fuzzy
@@ -33977,16 +33880,15 @@ msgid "Rule area count differs."
 msgstr "Regelbereich auf %s"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:530
-#, fuzzy
 msgid "Graphic item count differs."
-msgstr "Keine Grafikelemente in der zu importierenden Datei gefunden."
+msgstr "Anzahl der Grafikelemente weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:539
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:564
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:582
 #, c-format
 msgid "%s differs."
-msgstr ""
+msgstr "%s weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:550
 #, fuzzy, c-format
@@ -33995,7 +33897,7 @@ msgstr "Lokale Überschreibung"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:592
 msgid "3D model count differs."
-msgstr ""
+msgstr "Anzahl der 3D-Modelle weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:616
 msgid "No project loaded, skipping library parity tests."
@@ -34297,9 +34199,9 @@ msgid "Determining PCB data\n"
 msgstr "Bestimme Platinendaten\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:447
-#, fuzzy, c-format
+#, c-format
 msgid "Board Thickness from stackup: %.3f mm\n"
-msgstr "Platinendicke vom Lagenaufbau:"
+msgstr "Platinendicke vom Lagenaufbau: %.3f mm\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:452
 msgid "Build STEP data\n"
@@ -35979,27 +35881,22 @@ msgid "Dimension '%s' on %s"
 msgstr "Bemaßung \"%s\" auf %s"
 
 #: pcbnew/pcb_dimension.cpp:1315
-#, fuzzy
 msgid "1234.0"
-msgstr "1234"
+msgstr "1234.0"
 
 #: pcbnew/pcb_dimension.cpp:1316
-#, fuzzy
 msgid "1234.0 mm"
-msgstr "1234 mm"
+msgstr "1234.0 mm"
 
 #: pcbnew/pcb_dimension.cpp:1317
-#, fuzzy
 msgid "1234.0 (mm)"
-msgstr "1234 (mm)"
+msgstr "1234.0 (mm)"
 
 #: pcbnew/pcb_dimension.cpp:1349
-#, fuzzy
 msgid "Units Format"
-msgstr "Einheitenformat:"
+msgstr "Einheitenformat"
 
 #: pcbnew/pcb_dimension.cpp:1355
-#, fuzzy
 msgid "Suppress Trailing Zeroes"
 msgstr "Nullen am Ende unterdrücken"
 
@@ -36014,14 +35911,12 @@ msgid "Extension Line Overshoot"
 msgstr "Verlängerungslinienversatz:"
 
 #: pcbnew/pcb_dimension.cpp:1452
-#, fuzzy
 msgid "Leader Length"
-msgstr "Via-Länge"
+msgstr "Länge der Hinweislinie"
 
 #: pcbnew/pcb_dimension.cpp:1492
-#, fuzzy
 msgid "Text Frame"
-msgstr "Textrahmen:"
+msgstr "Textrahmen"
 
 #: pcbnew/pcb_edit_frame.cpp:203
 msgid "KiCad PCB Editor"
@@ -38967,14 +38862,14 @@ msgid "Assertions for:"
 msgstr "Zusicherungen für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1339
-#, fuzzy
 msgid "Select a footprint to check against its library equivalent."
-msgstr "Prüfe Platinen-Footprints gegen Bibliothek ..."
+msgstr ""
+"Wähle Footprint aus, um mit dem entsprechenden Footprint aus der Bibliothek "
+"abzugleichen."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1346
-#, fuzzy
 msgid "Check Footprint against Library"
-msgstr "Prüfe Platinen-Footprints gegen Bibliothek ..."
+msgstr "Footprint mit Bibliothek abgleichen"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1363
 #, fuzzy
@@ -38982,35 +38877,29 @@ msgid "Board/library check for:"
 msgstr "Lokaler Ordner der Bibliotheken:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1365
-#, fuzzy
 msgid "Library: "
-msgstr "Bibliothek:"
+msgstr "Bibliothek: "
 
 #: pcbnew/tools/board_inspection_tool.cpp:1366
-#, fuzzy
 msgid "Library item: "
-msgstr "Bibliotheksverknüpfung:"
+msgstr "Bibliothekselement: "
 
 #: pcbnew/tools/board_inspection_tool.cpp:1384
-#, fuzzy
 msgid "The current configuration does not include the library."
-msgstr "Die aktuelle Konfiguration enthält nicht die Bibliothek '%s'."
+msgstr "Die aktuelle Konfiguration enthält die Bibliothek nicht."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1388
-#, fuzzy
 msgid "The library is not enabled in the current configuration."
-msgstr ""
-"Die Bibliothek '%s' ist in der aktuellen Konfiguration nicht aktiviert."
+msgstr "Die Bibliothek ist in der aktuellen Konfiguration nicht aktiviert."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1404
-#, fuzzy, c-format
+#, c-format
 msgid "The library no longer contains the item %s."
-msgstr "Die Auswahl enthält %d gesperrte Elemente."
+msgstr "Die Bibliothek enthält nicht länger das Element %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1409
-#, fuzzy
 msgid "Footprint matches library equivalent."
-msgstr "Footprintbibliothek nicht aktiviert."
+msgstr "Footprint stimmt mit entsprechendem Footprint aus Bibliothek überein."
 
 #: pcbnew/tools/convert_tool.cpp:68
 msgid "Copy line width of first object"
@@ -40638,15 +40527,15 @@ msgid "Show constraints resolution for the selected object"
 msgstr "Zeigt die Ermittlung der Einschränkungen für das ausgewählte Objekt an"
 
 #: pcbnew/tools/pcb_actions.cpp:1178
-#, fuzzy
 msgid "Check Footprint against Library..."
-msgstr "Prüfe Platinen-Footprints gegen Bibliothek ..."
+msgstr "Prüfe Footprint gegen Bibliothek ..."
 
 #: pcbnew/tools/pcb_actions.cpp:1179
-#, fuzzy
 msgid ""
 "Check for differences between board footprint and its library equivalent"
-msgstr "Prüfe Platinen-Footprints gegen Bibliothek ..."
+msgstr ""
+"Prüfe auf Unterschiede zwischen Platinen-Footprint und dessen entsprechedem "
+"Footprint aus der Bibliothek"
 
 #: pcbnew/tools/pcb_actions.cpp:1185
 msgid "Geographical Reannotate..."
