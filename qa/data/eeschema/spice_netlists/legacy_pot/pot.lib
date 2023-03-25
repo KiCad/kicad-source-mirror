@@ -1,0 +1,15 @@
+.SUBCKT pot 1 2 3 r=100k k=0.5
+*
+R1 2 3 {r*(1-k)}
+R2 1 2 {r*(k)}
+.ENDS
+.SUBCKT dualpot 1 2 3 4 5 6 r=100k k=0.5
+*
+X1 1 2 3 pot r=r k=k
+X2 4 5 6 pot r=r k=k
+.ENDS
+.SUBCKT spdt 1 2 3 a=1 b=0 r=1g
+*
+R1 2 3 {r*(1-b)}
+R2 1 2 {r*(1-a)}
+.ENDS
