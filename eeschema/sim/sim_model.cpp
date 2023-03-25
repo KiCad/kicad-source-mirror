@@ -1685,6 +1685,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
     wxString spiceDeviceType = spiceDeviceInfo.m_Text.Trim( true ).Trim( false );
     wxString spiceLib = spiceLibInfo.m_Text.Trim( true ).Trim( false );
     wxString spiceModel = spiceModelInfo.m_Text.Trim( true ).Trim( false );
+    wxString modelLineParams;
 
     bool libraryModel = false;
     bool inferredModel = false;
@@ -1696,6 +1697,10 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
         WX_STRING_REPORTER   reporter( &msg );
         SIM_LIB_MGR          libMgr( aProject, &reporter );
         std::vector<T_field> emptyFields;
+
+        // Pull out any following parameters from model name
+        spiceModel = spiceModel.BeforeFirst( ' ', &modelLineParams );
+        spiceModelInfo.m_Text = spiceModel;
 
         SIM_LIBRARY::MODEL model = libMgr.CreateModel( spiceLib, spiceModel.ToStdString(),
                                                        emptyFields, sourcePins );
@@ -1789,17 +1794,25 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
         T_field libraryField = spiceLibInfo.CreateField( &aSymbol, SIM_LIBRARY_FIELD );
         aSymbol.AddField( libraryField );
 
-        // Split library model name from any following parameters
-        wxString modelLineParams;
-        spiceModelInfo.m_Text = spiceModelInfo.m_Text.BeforeFirst( ' ', &modelLineParams );
-
         T_field nameField = spiceModelInfo.CreateField( &aSymbol, SIM_NAME_FIELD );
         aSymbol.AddField( nameField );
 
         if( !modelLineParams.IsEmpty() )
         {
             spiceParamsInfo = spiceModelInfo;
+            spiceParamsInfo.m_Pos.x += nameField.GetBoundingBox().GetWidth();
             spiceParamsInfo.m_Text = modelLineParams;
+
+            BOX2I nameBBox = nameField.GetBoundingBox();
+            int   nameWidth = nameBBox.GetWidth();
+
+            // Add space between model name and additional parameters
+            nameWidth += KiROUND( nameBBox.GetHeight() * 1.25 );
+
+            if( nameField.GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
+                spiceParamsInfo.m_Pos.x -= nameWidth;
+            else
+                spiceParamsInfo.m_Pos.x += nameWidth;
 
             T_field paramsField = spiceParamsInfo.CreateField( &aSymbol, SIM_PARAMS_FIELD );
             aSymbol.AddField( paramsField );
