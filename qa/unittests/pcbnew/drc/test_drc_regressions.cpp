@@ -61,7 +61,7 @@ BOOST_FIXTURE_TEST_CASE( DRCFalsePositiveRegressions, DRC_REGRESSION_TEST_FIXTUR
         "issue10906",   // Soldermask bridge for only one object
         "issue11814",   // Bad cache hit in isInsideArea
         "issue12609",   // Arc collison edge case
-        "issue14294"    // Bad Clipper2 fill
+        "issue14294",   // Bad Clipper2 fill
     };
 
     for( const wxString& relPath : tests )
@@ -134,6 +134,7 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
         { "issue8003",  2 },
         { "issue9081",  2 },
         { "issue12109", 8 },    // Pads fail annular width test
+        { "issue14334", 2 },    // Thermal spoke to otherwise unconnected island
         { "reverse_via", 3 }    // Via/track ordering
     };
 
@@ -147,7 +148,6 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
 
         // Disable DRC tests not useful in this testcase
         bds.m_DRCSeverities[ DRCE_COPPER_SLIVER ] = SEVERITY::RPT_SEVERITY_IGNORE;
-        bds.m_DRCSeverities[ DRCE_STARVED_THERMAL ] = SEVERITY::RPT_SEVERITY_IGNORE;
         bds.m_DRCSeverities[ DRCE_LIB_FOOTPRINT_ISSUES ] = SEVERITY::RPT_SEVERITY_IGNORE;
         bds.m_DRCSeverities[ DRCE_LIB_FOOTPRINT_MISMATCH ] = SEVERITY::RPT_SEVERITY_IGNORE;
 
