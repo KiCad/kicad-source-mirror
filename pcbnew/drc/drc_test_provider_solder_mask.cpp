@@ -399,6 +399,15 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::checkMaskAperture( BOARD_ITEM* aMaskItem, BO
         return false;
     }
 
+    if( fp && ii->second.first->Type() == PCB_PAD_T && aTestItem->Type() == PCB_PAD_T )
+    {
+        PAD* alreadyEncounteredPad = static_cast<PAD*>( ii->second.first );
+        PAD* thisPad = static_cast<PAD*>( aTestItem );
+
+        if( alreadyEncounteredPad->SharesNetTieGroup( thisPad ) )
+            return false;
+    }
+
     *aCollidingItem = ii->second.first;
     return true;
 }
