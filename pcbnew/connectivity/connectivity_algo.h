@@ -216,18 +216,11 @@ public:
      */
     void PropagateNets( BOARD_COMMIT* aCommit = nullptr );
 
-    void FindIsolatedCopperIslands( ZONE* aZone, PCB_LAYER_ID aLayer, std::vector<int>& aIslands );
-
     /**
-     * Find the copper islands that are not connected to a net.
-     *
-     * These are added to the m_islands vector.
-     * N.B. This must be called after aZones has been refreshed.
-     *
-     * @param: aZones is the set of zones to search for islands.
+     * Fill in the isolated islands map with copper islands that are not connected to a net.
      */
-    void FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLATED_ISLAND_LIST>& aZones,
-                                    bool aConnectivityAlreadyRebuilt );
+    void FillIsolatedIslandsMap( std::map<ZONE*, std::map<PCB_LAYER_ID, ISOLATED_ISLANDS>>& aMap,
+                                 bool aConnectivityAlreadyRebuilt );
 
     const CLUSTERS& GetClusters();
 

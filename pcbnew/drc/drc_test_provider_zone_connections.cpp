@@ -81,6 +81,17 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
     DRC_CONSTRAINT                     constraint;
 
     const std::shared_ptr<SHAPE_POLY_SET>& zoneFill = aZone->GetFilledPolysList( aLayer );
+    ISOLATED_ISLANDS                       isolatedIslands;
+
+    auto zoneIter = board->m_ZoneIsolatedIslandsMap.find( aZone );
+
+    if( zoneIter != board->m_ZoneIsolatedIslandsMap.end() )
+    {
+        auto layerIter = zoneIter->second.find( aLayer );
+
+        if( layerIter != zoneIter->second.end() )
+            isolatedIslands = layerIter->second;
+    }
 
     for( FOOTPRINT* footprint : board->Footprints() )
     {
@@ -132,7 +143,15 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
             std::vector<SHAPE_LINE_CHAIN::INTERSECTION> intersections;
 
             for( int jj = 0; jj < zoneFill->OutlineCount(); ++jj )
+            {
+                // If we connect to an island that only connects to a single item then we *are*
+                // that item.  Thermal spokes to this (otherwise isolated) island don't provide
+                // electrical connectivity to anything, so we don't count them.
+                if( alg::contains( isolatedIslands.m_SingleConnectionOutlines, jj ) )
+                    continue;
+
                 zoneFill->Outline( jj ).Intersect( padOutline, intersections, true, &padBBox );
+            }
 
             int spokes = intersections.size() / 2;
 
@@ -198,10 +217,13 @@ bool DRC_TEST_PROVIDER_ZONE_CONNECTIONS::Run()
 
     for( ZONE* zone : board->m_DRCCopperZones )
     {
-        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+        if( !zone->IsTeardropArea() )
         {
-            zoneLayers.push_back( { zone, layer } );
-            total_effort += zone->GetFilledPolysList( layer )->FullPointCount();
+            for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+            {
+                zoneLayers.push_back( { zone, layer } );
+                total_effort += zone->GetFilledPolysList( layer )->FullPointCount();
+            }
         }
     }
 

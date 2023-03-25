@@ -262,6 +262,7 @@ void BOARD::IncrementTimeStamp()
         m_DRCMaxPhysicalClearance = 0;
         m_DRCZones.clear();
         m_DRCCopperZones.clear();
+        m_ZoneIsolatedIslandsMap.clear();
         m_CopperZoneRTreeCache.clear();
         m_CopperItemRTreeCache = std::make_unique<DRC_RTREE>();
     }

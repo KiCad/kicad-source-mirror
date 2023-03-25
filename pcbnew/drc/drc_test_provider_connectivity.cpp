@@ -26,7 +26,7 @@
 
 #include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_algo.h>
-
+#include <zone.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
@@ -71,25 +71,12 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
     if( !reportPhase( _( "Checking pad, via and zone connections..." ) ) )
         return false;   // DRC cancelled
 
-    BOARD* board = m_drcEngine->GetBoard();
-
-    std::shared_ptr<CONNECTIVITY_DATA>        connectivity = board->GetConnectivity();
-    std::vector<CN_ZONE_ISOLATED_ISLAND_LIST> islandsList;
-
-    for( ZONE* zone : board->Zones() )
-    {
-        if( !zone->GetIsRuleArea() )
-            islandsList.emplace_back( CN_ZONE_ISOLATED_ISLAND_LIST( zone ) );
-    }
-
-    // Rebuild (from scratch, ignoring dirty flags) just in case. This really needs to be reliable.
-    connectivity->ClearRatsnest();
-    connectivity->Build( board, m_drcEngine->GetProgressReporter() );
-    connectivity->FindIsolatedCopperIslands( islandsList, true );
+    BOARD*                             board = m_drcEngine->GetBoard();
+    std::shared_ptr<CONNECTIVITY_DATA> connectivity = board->GetConnectivity();
 
     int progressDelta = 250;
     int ii = 0;
-    int count = board->Tracks().size() + islandsList.size();
+    int count = board->Tracks().size() + board->m_ZoneIsolatedIslandsMap.size();
 
     ii += count;      // We gave half of this phase to CONNECTIVITY_DATA::Build()
     count += count;
@@ -122,7 +109,7 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
     }
 
     /* test starved zones */
-    for( CN_ZONE_ISOLATED_ISLAND_LIST& zone : islandsList )
+    for( const auto& [ zone, zoneIslands ] : board->m_ZoneIsolatedIslandsMap )
     {
         if( m_drcEngine->IsErrorLimitExceeded( DRCE_ISOLATED_COPPER ) )
             break;
@@ -130,21 +117,18 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
         if( !reportProgress( ii++, count, progressDelta ) )
             return false;   // DRC cancelled
 
-        for( PCB_LAYER_ID layer : zone.m_zone->GetLayerSet().Seq() )
+        for( const auto& [ layer, layerIslands ] : zoneIslands )
         {
-            if( !zone.m_islands.count( layer ) )
-                continue;
-
-            std::shared_ptr<SHAPE_POLY_SET> poly = zone.m_zone->GetFilledPolysList( layer );
-
-            for( int idx : zone.m_islands.at( layer ) )
+            for( int polyIdx : layerIslands.m_IsolatedOutlines )
             {
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_ISOLATED_COPPER ) )
                     break;
 
+                std::shared_ptr<SHAPE_POLY_SET> poly = zone->GetFilledPolysList( layer );
+
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ISOLATED_COPPER );
-                drcItem->SetItems( zone.m_zone );
-                reportViolation( drcItem, poly->Outline( idx ).CPoint( 0 ), layer );
+                drcItem->SetItems( zone );
+                reportViolation( drcItem, poly->Outline( polyIdx ).CPoint( 0 ), layer );
             }
         }
     }

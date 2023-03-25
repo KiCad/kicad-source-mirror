@@ -387,6 +387,8 @@ public:
         return collision;
     }
 
+    bool HasSingleConnection();
+
 private:
     int                                 m_subpolyIndex;
     PCB_LAYER_ID                        m_layer;

@@ -90,9 +90,9 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
 {
     std::lock_guard<KISPINLOCK> lock( m_board->GetConnectivity()->GetLock() );
 
-    std::vector<std::pair<ZONE*, PCB_LAYER_ID>>        toFill;
-    std::map<std::pair<ZONE*, PCB_LAYER_ID>, MD5_HASH> oldFillHashes;
-    std::vector<CN_ZONE_ISOLATED_ISLAND_LIST>          islandsList;
+    std::vector<std::pair<ZONE*, PCB_LAYER_ID>>               toFill;
+    std::map<std::pair<ZONE*, PCB_LAYER_ID>, MD5_HASH>        oldFillHashes;
+    std::map<ZONE*, std::map<PCB_LAYER_ID, ISOLATED_ISLANDS>> isolatedIslandsMap;
 
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_board->GetConnectivity();
 
@@ -328,9 +328,9 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
 
             // Add the zone to the list of zones to test or refill
             toFill.emplace_back( std::make_pair( zone, layer ) );
-        }
 
-        islandsList.emplace_back( CN_ZONE_ISOLATED_ISLAND_LIST( zone ) );
+            isolatedIslandsMap[ zone ][ layer ] = ISOLATED_ISLANDS();
+        }
 
         // Remove existing fill first to prevent drawing invalid polygons on some platforms
         zone->UnFill();
@@ -534,7 +534,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
     }
 
     connectivity->SetProgressReporter( m_progressReporter );
-    connectivity->FindIsolatedCopperIslands( islandsList );
+    connectivity->FillIsolatedIslandsMap( isolatedIslandsMap );
     connectivity->SetProgressReporter( nullptr );
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
@@ -552,26 +552,15 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
     // Now remove isolated copper islands according to the isolated islands strategy assigned
     // by the user (always, never, below-certain-size).
     //
-    for( CN_ZONE_ISOLATED_ISLAND_LIST& zone : islandsList )
+    for( const auto& [ zone, zoneIslands ] : isolatedIslandsMap )
     {
         // If *all* the polygons are islands, do not remove any of them
         bool allIslands = true;
 
-        for( PCB_LAYER_ID layer : zone.m_zone->GetLayerSet().Seq() )
+        for( const auto& [ layer, layerIslands ] : zoneIslands )
         {
-            std::shared_ptr<SHAPE_POLY_SET> poly = zone.m_zone->GetFilledPolysList( layer );
-
-            if( !zone.m_islands.count( layer ) )
-            {
-                if( poly->OutlineCount() > 0 )
-                    allIslands = false;
-
-                continue;
-            }
-
-            std::vector<int>& islands = zone.m_islands.at( layer );
-
-            if( islands.size() != static_cast<size_t>( poly->OutlineCount() ) )
+            if( layerIslands.m_IsolatedOutlines.size()
+                    != static_cast<size_t>( zone->GetFilledPolysList( layer )->OutlineCount() ) )
             {
                 allIslands = false;
                 break;
@@ -581,23 +570,23 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
         if( allIslands )
             continue;
 
-        for( PCB_LAYER_ID layer : zone.m_zone->GetLayerSet().Seq() )
+        for( const auto& [ layer, layerIslands ] : zoneIslands )
         {
             if( m_debugZoneFiller && LSET::InternalCuMask().Contains( layer ) )
                 continue;
 
-            if( !zone.m_islands.count( layer ) )
+            if( layerIslands.m_IsolatedOutlines.empty() )
                 continue;
 
-            std::vector<int>& islands = zone.m_islands.at( layer );
+            std::vector<int> islands = layerIslands.m_IsolatedOutlines;
 
             // The list of polygons to delete must be explored from last to first in list,
             // to allow deleting a polygon from list without breaking the remaining of the list
             std::sort( islands.begin(), islands.end(), std::greater<int>() );
 
-            std::shared_ptr<SHAPE_POLY_SET> poly = zone.m_zone->GetFilledPolysList( layer );
-            long long int                   minArea = zone.m_zone->GetMinIslandArea();
-            ISLAND_REMOVAL_MODE             mode = zone.m_zone->GetIslandRemovalMode();
+            std::shared_ptr<SHAPE_POLY_SET> poly = zone->GetFilledPolysList( layer );
+            long long int                   minArea = zone->GetMinIslandArea();
+            ISLAND_REMOVAL_MODE             mode = zone->GetIslandRemovalMode();
 
             for( int idx : islands )
             {
@@ -608,11 +597,11 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
                 else if ( mode == ISLAND_REMOVAL_MODE::AREA && outline.Area( true ) < minArea )
                     poly->DeletePolygonAndTriangulationData( idx, false );
                 else
-                    zone.m_zone->SetIsIsland( layer, idx );
+                    zone->SetIsIsland( layer, idx );
             }
 
             poly->UpdateTriangulationDataHash();
-            zone.m_zone->CalculateFilledArea();
+            zone->CalculateFilledArea();
 
             if( m_progressReporter && m_progressReporter->IsCancelled() )
                 return false;
@@ -646,39 +635,42 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
         }
     }
 
-    auto island_lambda = [&]( int aStart, int aEnd ) -> island_check_return
-        {
-            island_check_return retval;
-
-            for( int ii = aStart; ii < aEnd && !cancelled; ++ii )
+    auto island_lambda =
+            [&]( int aStart, int aEnd ) -> island_check_return
             {
-                auto [poly, minArea] = polys_to_check[ii];
+                island_check_return retval;
 
-                for( int jj = poly->OutlineCount() - 1; jj >= 0; jj-- )
+                for( int ii = aStart; ii < aEnd && !cancelled; ++ii )
                 {
-                    SHAPE_POLY_SET island;
-                    SHAPE_POLY_SET intersection;
-                    const SHAPE_LINE_CHAIN& test_poly = poly->Polygon( jj ).front();
-                    double island_area = test_poly.Area();
+                    auto [poly, minArea] = polys_to_check[ii];
 
-                    if( island_area < minArea )
-                        continue;
+                    for( int jj = poly->OutlineCount() - 1; jj >= 0; jj-- )
+                    {
+                        SHAPE_POLY_SET island;
+                        SHAPE_POLY_SET intersection;
+                        const SHAPE_LINE_CHAIN& test_poly = poly->Polygon( jj ).front();
+                        double island_area = test_poly.Area();
+
+                        if( island_area < minArea )
+                            continue;
 
 
-                    island.AddOutline( test_poly );
-                    intersection.BooleanIntersection( m_boardOutline, island, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+                        island.AddOutline( test_poly );
+                        intersection.BooleanIntersection( m_boardOutline, island,
+                                                          SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
 
-                    // Nominally, all of these areas should be either inside or outside the board outline.  So this test
-                    // should be able to just compare areas (if they are equal, you are inside).  But in practice,
-                    // we sometimes can have slight overlap at the edges.  So testing against half-size area is
-                    // a fail-safe
-                    if( intersection.Area() < island_area / 2.0 )
-                        retval.emplace_back( poly, jj );
+                        // Nominally, all of these areas should be either inside or outside the
+                        // board outline.  So this test should be able to just compare areas (if
+                        // they are equal, you are inside).  But in practice, we sometimes have
+                        // slight overlap at the edges, so testing against half-size area acts as
+                        // a fail-safe.
+                        if( intersection.Area() < island_area / 2.0 )
+                            retval.emplace_back( poly, jj );
+                    }
                 }
-            }
 
-            return retval;
-        };
+                return retval;
+            };
 
     auto island_returns = tp.parallelize_loop( 0, polys_to_check.size(), island_lambda );
     cancelled = false;
@@ -1570,9 +1562,13 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
     DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In15_Cu, wxT( "after-reinflating" ) );
 
     /* -------------------------------------------------------------------------------------
-     * Ensure additive changes (thermal stubs and particularly inflating acute corners) do not
-     * add copper outside the zone boundary or inside the clearance holes
+     * Ensure additive changes (thermal stubs and inflating acute corners) do not add copper
+     * outside the zone boundary, inside the clearance holes, or between otherwise isolated
+     * islands
      */
+
+    for( PAD* pad : thermalConnectionPads )
+        addHoleKnockout( pad, 0, clearanceHoles );
 
     aFillPolys.BooleanIntersection( aMaxExtents, SHAPE_POLY_SET::PM_FAST );
     DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In16_Cu, wxT( "after-trim-to-outline" ) );

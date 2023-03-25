@@ -64,21 +64,6 @@ struct CN_DISJOINT_NET_ENTRY
 };
 
 
-/**
- * A structure used for calculating isolated islands on a given zone across all its layers
- */
-struct CN_ZONE_ISOLATED_ISLAND_LIST
-{
-    CN_ZONE_ISOLATED_ISLAND_LIST( ZONE* aZone ) :
-            m_zone( aZone )
-    {}
-
-    ZONE* m_zone;
-
-    std::map<PCB_LAYER_ID, std::vector<int>> m_islands;
-};
-
-
 struct RN_DYNAMIC_LINE
 {
     int netCode;
@@ -176,14 +161,11 @@ public:
     void PropagateNets( BOARD_COMMIT* aCommit = nullptr );
 
     /**
-     * Function FindIsolatedCopperIslands()
-     * Searches for copper islands in zone aZone that are not connected to any pad.
-     * @param aZone zone to test
-     * @param aIslands list of islands that have no connections (outline indices in the polygon set)
+     * Fill the isolate islands list for each layer of each zone.  Isolated islands are individual
+     * polygons in a zone fill that don't connect to a net.
      */
-    void FindIsolatedCopperIslands( ZONE* aZone, std::vector<int>& aIslands );
-    void FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLATED_ISLAND_LIST>& aZones,
-                                    bool aConnectivityAlreadyRebuilt = false );
+    void FillIsolatedIslandsMap( std::map<ZONE*, std::map<PCB_LAYER_ID, ISOLATED_ISLANDS>>& aMap,
+                                 bool aConnectivityAlreadyRebuilt = false );
 
     /**
      * Function RecalculateRatsnest()
