@@ -22,6 +22,7 @@
 #define _SETTINGS_MANAGER_H
 
 #include <algorithm>
+#include <mutex>
 #include <shared_mutex>
 #include <typeinfo>
 #include <core/wx_stl_compat.h> // for wxString hash
