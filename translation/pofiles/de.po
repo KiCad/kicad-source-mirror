@@ -19,15 +19,15 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:53-0800\n"
-"PO-Revision-Date: 2023-03-12 20:08+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"PO-Revision-Date: 2023-03-26 04:41+0000\n"
+"Last-Translator: Luc <some_physics@live.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v7/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16.2-dev\n"
+"X-Generator: Weblate 4.17-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -4421,7 +4421,7 @@ msgstr "Ziel"
 
 #: common/eda_item.cpp:351
 msgid "ItemList"
-msgstr "ItemList"
+msgstr "Elementliste"
 
 #: common/eda_item.cpp:352
 msgid "NetInfo"
@@ -4492,7 +4492,7 @@ msgstr "Schaltplanblatt"
 
 #: common/eda_item.cpp:379
 msgid "SCH Screen"
-msgstr "SCH Screen"
+msgstr "SCH Fenster"
 
 #: common/eda_item.cpp:386 eeschema/sch_field.cpp:742
 msgid "Symbol Field"
@@ -5537,7 +5537,6 @@ msgstr "Ausgewählte deaktivieren"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:201
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:212
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:223
-#, fuzzy
 msgid "Unit"
 msgstr "Komponente"
 
@@ -20881,9 +20880,8 @@ msgstr ""
 "%s"
 
 #: kicad/pcm/pcm.cpp:464
-#, fuzzy
 msgid "Failed to parse locally stored repository.json."
-msgstr "Kann Repository nicht parsen: %s"
+msgstr "Lokal gespeicherte repository.json konnte nicht geparst werden."
 
 #: kicad/pcm/pcm.cpp:492
 msgid ""
@@ -23709,7 +23707,7 @@ msgstr "Differenzielle Impedanz (Zd):"
 
 #: pcb_calculator/transline_ident.cpp:334
 msgid "Zeven"
-msgstr "Zeven"
+msgstr "Z_gerade"
 
 #: pcb_calculator/transline_ident.cpp:335
 msgid "Even mode impedance (lines driven by common voltages)"
@@ -23719,7 +23717,7 @@ msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:338
 msgid "Zodd"
-msgstr "Zodd"
+msgstr "Z_ungerade"
 
 #: pcb_calculator/transline_ident.cpp:339
 msgid "Odd mode impedance (lines driven by opposite (differential) voltages)"
@@ -33712,9 +33710,9 @@ msgid "Determining PCB data\n"
 msgstr "Bestimme Platinendaten\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Board Thickness from stackup: %.3f mm\n"
-msgstr "Platinendicke vom Lagenaufbau:"
+msgstr "Platinendicke vom Lagenaufbau: %.3f mm\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:344
 msgid "Build STEP data\n"
