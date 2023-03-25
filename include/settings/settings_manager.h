@@ -22,6 +22,7 @@
 #define _SETTINGS_MANAGER_H
 
 #include <algorithm>
+#include <shared_mutex>
 #include <typeinfo>
 #include <core/wx_stl_compat.h> // for wxString hash
 #include <settings/color_settings.h>
@@ -66,7 +67,11 @@ public:
     template<typename T>
     T* RegisterSettings( T* aSettings, bool aLoadNow = true )
     {
-        return static_cast<T*>( registerSettings( aSettings, aLoadNow ) );
+        // Throws a low chance of conflict with GetAppSettings in threads but let's lock anyway
+        std::unique_lock<std::shared_mutex> writeLock( m_settings_mutex );
+
+        return static_cast<T*>(
+                registerSettings( aSettings, aLoadNow ) );
     }
 
     void Load();
@@ -99,11 +104,26 @@ public:
         T*     ret      = nullptr;
         size_t typeHash = typeid( T ).hash_code();
 
+        std::shared_lock<std::shared_mutex> readLock( m_settings_mutex );
+
          if( m_app_settings_cache.count( typeHash ) )
             ret = dynamic_cast<T*>( m_app_settings_cache.at( typeHash ) );
 
         if( ret )
             return ret;
+
+        // cache lookup failed, now we shift to an exclusive lock to update the cache
+        readLock.unlock();
+        std::unique_lock<std::shared_mutex> writeLock( m_settings_mutex );
+
+        // In case multiple threads ended up waiting to unique lock to handle the same setting object
+        // This happens with library loading for example
+        if( m_app_settings_cache.count( typeHash ) )
+        {
+            T* recheck = dynamic_cast<T*>( m_app_settings_cache.at( typeHash ) );
+            if( recheck )
+                return recheck;
+        }
 
         auto it = std::find_if( m_settings.begin(), m_settings.end(),
                                 []( const std::unique_ptr<JSON_SETTINGS>& aSettings )
@@ -119,12 +139,11 @@ public:
         {
             try
             {
-                ret = static_cast<T*>( RegisterSettings( new T, aLoadNow ) );
+                ret = static_cast<T*>( registerSettings( new T, aLoadNow ) );
             }
             catch( ... )
             {
             }
-
         }
 
         m_app_settings_cache[typeHash] = ret;
@@ -353,8 +372,8 @@ public:
     static std::string GetSettingsVersion();
 
 private:
-
     JSON_SETTINGS* registerSettings( JSON_SETTINGS* aSettings, bool aLoadNow = true );
+
 
     /**
      * Determines the base path for user settings files.
@@ -454,6 +473,9 @@ private:
 
     /// Lock for loaded project (expand to multiple once we support MDI)
     std::unique_ptr<wxSingleInstanceChecker> m_project_lock;
+
+    /// Mutex to protect read/write access to m_settings and m_app_settings_cache
+    std::shared_mutex m_settings_mutex;
 
     static wxString backupDateTimeFormat;
 };
