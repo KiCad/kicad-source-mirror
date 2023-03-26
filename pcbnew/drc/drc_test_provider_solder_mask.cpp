@@ -307,12 +307,17 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testSilkToMaskClearance()
                                                                clearance, &actual, &pos ) )
                     {
                         auto drce = DRC_ITEM::Create( DRCE_SILK_CLEARANCE );
-                        wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
-                                                  constraint.GetName(),
-                                                  clearance,
-                                                  actual );
 
-                        drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
+                        if( clearance > 0 )
+                        {
+                            wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
+                                                      constraint.GetName(),
+                                                      clearance,
+                                                      actual );
+
+                            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
+                        }
+
                         drce->SetItems( item );
                         drce->SetViolatingRule( constraint.GetParentRule() );
 

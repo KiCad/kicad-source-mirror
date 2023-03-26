@@ -235,9 +235,9 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
                                                       actual );
 
                             drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
-                            drce->SetViolatingRule( constraint.GetParentRule() );
                         }
 
+                        drce->SetViolatingRule( constraint.GetParentRule() );
                         drce->SetItems( fpA, fpB );
                         reportViolation( drce, pos, F_CrtYd );
                     }
@@ -268,9 +268,9 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
                                                       actual );
 
                             drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
-                            drce->SetViolatingRule( constraint.GetParentRule() );
                         }
 
+                        drce->SetViolatingRule( constraint.GetParentRule() );
                         drce->SetItems( fpA, fpB );
                         reportViolation( drce, pos, B_CrtYd );
                     }
