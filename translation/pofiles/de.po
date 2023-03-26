@@ -19,8 +19,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:53-0800\n"
-"PO-Revision-Date: 2023-03-26 04:41+0000\n"
-"Last-Translator: Luc <some_physics@live.com>\n"
+"PO-Revision-Date: 2023-03-27 04:36+0000\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v7/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -20189,9 +20189,10 @@ msgstr ""
 "werden\n"
 
 #: kicad/cli/command_export_sch_pdf.cpp:38
-#, fuzzy
 msgid "Color theme to use (will default to schematic settings)"
-msgstr "Zu verwendendes Farbthema (Standard sind pcbnew-Einstellungen)"
+msgstr ""
+"Zu verwendendes Farbschema (standardmäßig werden die Schaltplaneinstellungen "
+"verwendet)"
 
 #: kicad/cli/command_export_sch_pdf.cpp:51
 #: kicad/cli/command_export_sch_svg.cpp:51
@@ -27904,7 +27905,7 @@ msgstr "Aufrecht halten"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:246
 msgid "Set to layer default values:"
-msgstr "Lagen-Standardwerte anwenden:"
+msgstr "Auf Standardwerte für Lage einstellen:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:229
 #: pcbnew/tools/board_inspection_tool.cpp:346
