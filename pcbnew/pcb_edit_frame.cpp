@@ -2173,6 +2173,7 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
                      resetTextLayers, resetTextEffects, aUpdated );
 
     // Copy fields in accordance with the reset* flags
+
     for( BOARD_ITEM* item : aExisting->GraphicalItems() )
     {
         FP_TEXT* srcItem = dyn_cast<FP_TEXT*>( item );
@@ -2193,12 +2194,33 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
         }
     }
 
-    if( !resetFabricationAttrs )
-        aNew->SetAttributes( aExisting->GetAttributes() );
+    if( resetFabricationAttrs )
+    {
+        // We've replaced the existing footprint with the library one, so the fabrication attrs
+        // are already reset.
+        //
+        // We only have to do anything if resetFabricationAttrs is *not* set....
+    }
+    else
+    {
+        // Careful; allow-soldermask-bridges is in the m_attributes field but is not presented
+        // as a fabrication attribute in the GUI....
+        int libraryFlagsToKeep = aNew->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES;
+        int existingFlagsToKeep = aExisting->GetAttributes() & ~FP_ALLOW_SOLDERMASK_BRIDGES;
+        aNew->SetAttributes( existingFlagsToKeep | libraryFlagsToKeep );
+    }
 
-    // Copy 3D model settings in accordance with the reset* flag
-    if( !reset3DModels )
+    if( reset3DModels )
+    {
+        // We've replaced the existing footprint with the library one, so the 3D models are
+        // already reset.
+        //
+        // We only have to do anything if reset3DModels is *not* set....
+    }
+    else
+    {
         aNew->Models() = aExisting->Models();  // Linked list of 3D models.
+    }
 
     // Updating other parameters
     const_cast<KIID&>( aNew->m_Uuid ) = aExisting->m_Uuid;
