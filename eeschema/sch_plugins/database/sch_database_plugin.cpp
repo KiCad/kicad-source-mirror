@@ -321,13 +321,13 @@ std::optional<bool> SCH_DATABASE_PLUGIN::boolFromAny( const std::any& aVal )
 
         strval.MakeLower();
 
-        for( const wxString& trueVal : { wxS( "true" ), wxS( "yes" ), wxS( "y" ), wxS( "1" ) } )
+        for( const auto& trueVal : { wxS( "true" ), wxS( "yes" ), wxS( "y" ), wxS( "1" ) } )
         {
             if( strval.Matches( trueVal ) )
                 return true;
         }
 
-        for( const wxString& falseVal : { wxS( "false" ), wxS( "no" ), wxS( "n" ), wxS( "0" ) } )
+        for( const auto& falseVal : { wxS( "false" ), wxS( "no" ), wxS( "n" ), wxS( "0" ) } )
         {
             if( strval.Matches( falseVal ) )
                 return false;
