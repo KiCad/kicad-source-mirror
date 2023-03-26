@@ -33,17 +33,24 @@
 SIM_PLOT_TYPE NGSPICE_CIRCUIT_MODEL::VectorToSignal( const std::string& aVector,
                                                      wxString& aSignal ) const
 {
-    using namespace std;
-
+    static wxString BRANCH( wxS( "#branch" ) );
     // See ngspice manual chapt. 31.1 "Accessing internal device parameters"
-    wxRegEx  internalDevParameter( "^@(\\w*[\\.\\w+]*)\\[(\\w*)\\]$", wxRE_ADVANCED );
+    static wxRegEx internalDevParameter( wxS( "^@(\\w*[\\.\\w+]*)\\[(\\w*)\\]$" ), wxRE_ADVANCED );
+
     wxString vector( aVector );
 
     if( !internalDevParameter.Matches( vector ) )
     {
-        // any text is a node name, which returns voltage
-        aSignal = wxT( "V(" ) + aVector + wxT( ")" );
-        return SPT_VOLTAGE;
+        if( vector.EndsWith( BRANCH ) )
+        {
+            aSignal = wxT( "I(" ) + vector.Left( vector.Length() - BRANCH.Length() ) + wxT( ")" );
+            return SPT_CURRENT;
+        }
+        else
+        {
+            aSignal = wxT( "V(" ) + vector + wxT( ")" );
+            return SPT_VOLTAGE;
+        }
     }
     else
     {
