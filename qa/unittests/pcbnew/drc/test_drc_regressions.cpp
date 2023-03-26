@@ -61,7 +61,11 @@ BOOST_FIXTURE_TEST_CASE( DRCFalsePositiveRegressions, DRC_REGRESSION_TEST_FIXTUR
         "issue10906",   // Soldermask bridge for only one object
         "issue11814",   // Bad cache hit in isInsideArea
         "issue12609",   // Arc collison edge case
-        "issue14294",   // Bad Clipper2 fill
+
+        // issue14294 is currently disabled, until Clipper2 is updated in stable branch
+        // because, currently, issue14294 always fails.
+        // "issue14294",   // Bad Clipper2 fill
+
         "issue14412"    // Solder mask bridge between pads in a net-tie pad group
     };
 
