@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:51-0800\n"
-"PO-Revision-Date: 2023-03-12 20:08+0000\n"
+"PO-Revision-Date: 2023-03-27 04:36+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.16.2-dev\n"
+"X-Generator: Weblate 4.17-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -25213,9 +25213,8 @@ msgid "Teardrop on Vias/Pads Properties"
 msgstr "Vlastnosti \"teardrop\" na prokovech/ploškách"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:213
-#, fuzzy
 msgid "Teardrop on Tracks Properties"
-msgstr "Nastavit spoje a prokovy Vlastnosti"
+msgstr "Teardrop na spojích Vlastnosti"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:217
 msgid "Teardrop Properties"
@@ -25232,9 +25231,8 @@ msgstr "Nastavení převodu"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:109
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:100
 #: pcbnew/tools/convert_tool.cpp:72
-#, fuzzy
 msgid "Use centerlines"
-msgstr "Použít metrické jednotky"
+msgstr "Použít středové čáry"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:230
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:113
@@ -25248,14 +25246,12 @@ msgstr "Vytvořit soubor loga"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:118
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:109
 #: pcbnew/tools/convert_tool.cpp:102
-#, fuzzy
 msgid "Delete source objects after conversion"
-msgstr "Smazat objekty s gumou"
+msgstr "Smazat zdrojové objekty po převodu"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:243
-#, fuzzy
 msgid "Convert to Copper Zone"
-msgstr "Připojení k zónám mědi"
+msgstr "Převést na zónu mědi"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:408
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:164
@@ -25344,9 +25340,8 @@ msgstr "Plně šrafované"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:140
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:65
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:126
-#, fuzzy
 msgid "Outline hatch pitch:"
-msgstr "Tloušťka obrysu:"
+msgstr "Žádné šrafované čáry:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:154
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:87
@@ -25514,13 +25509,12 @@ msgid "Export Settings to Other Similar Zones"
 msgstr "Exportovat nastavení do dalších podobných zón"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:396
-#, fuzzy
 msgid ""
 "Export this zone setup (excluding layer and net selection) to other similar "
 "copper zones (teardrops or usual copper zones)."
 msgstr ""
 "Exportovat nastavení zóny (s výjimkou vrstvy a vybraných sítí) do ostatních "
-"zón mědi."
+"podobných zón mědi (teardrop nebo obvyklých zón mědi)."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:141
 msgid "Copper Zone Properties"
@@ -25833,9 +25827,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:132
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:137
-#, fuzzy
 msgid "Text to print before the dimension value"
-msgstr "Tloušťka čar kót"
+msgstr "Text vytištěný před hodnotou rozměru"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:141
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:114
@@ -28080,9 +28073,8 @@ msgid "Deselect All"
 msgstr "Odznačit vše"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:51
-#, fuzzy
 msgid "Board layers and physical stackup"
-msgstr "Strana desky"
+msgstr "Vrstvy a fyzická struktura desky"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:54
 msgid "Solder mask/paste defaults"
@@ -30620,9 +30612,8 @@ msgid "Page origin"
 msgstr "Referenční bod stránky"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:25
-#, fuzzy
 msgid "Display Origin"
-msgstr "Počátek vrtání"
+msgstr "Zobrazit referenční bod"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:27
 msgid "Select which origin is used for X,Y coordinate display."
@@ -30688,9 +30679,8 @@ msgstr ""
 "nastavení."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:79
-#, fuzzy
 msgid "Minimum connection width:"
-msgstr "Minimální šířka prstence:"
+msgstr "Minimální šířka připojení:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:84
 msgid "The minimum copper width of connected copper items."
@@ -32123,9 +32113,8 @@ msgstr "Lokálně přepsat na %s; izolační mezera: %s."
 
 #: pcbnew/drc/drc_engine.cpp:778 pcbnew/drc/drc_engine.cpp:1361
 #: pcbnew/drc/drc_engine.cpp:1376
-#, fuzzy
 msgid "board minimum"
-msgstr "deska minimální šířka"
+msgstr "minimum desky"
 
 #: pcbnew/drc/drc_engine.cpp:781 pcbnew/drc/drc_engine.cpp:1355
 #: pcbnew/drc/drc_engine.cpp:1370
@@ -32134,14 +32123,13 @@ msgid "Board minimum clearance: %s."
 msgstr "Minimální izolační mezera desky: %s."
 
 #: pcbnew/drc/drc_engine.cpp:790
-#, fuzzy
 msgid "board minimum hole"
-msgstr "deska minimální šířka"
+msgstr "minimální díra desky"
 
 #: pcbnew/drc/drc_engine.cpp:793
-#, fuzzy, c-format
+#, c-format
 msgid "Board minimum hole clearance: %s."
-msgstr "Minimální izolační mezera desky: %s."
+msgstr "Minimální izolační mezera díry desky: %s."
 
 #: pcbnew/drc/drc_engine.cpp:812
 #, fuzzy, c-format
@@ -32159,14 +32147,14 @@ msgid "Local override on %s; thermal spoke width: %s."
 msgstr "Lokálně přepsat na %s; izolační mezera: %s."
 
 #: pcbnew/drc/drc_engine.cpp:855
-#, fuzzy, c-format
+#, c-format
 msgid "%s min thickness: %s."
-msgstr "Zóna %s min tloušťka: %s."
+msgstr "%s min tloušťka: %s."
 
 #: pcbnew/drc/drc_engine.cpp:869
-#, fuzzy, c-format
+#, c-format
 msgid "Checking assertion \"%s\"."
-msgstr "Kontrola pravidla podmínky \"%s\"."
+msgstr "Kontrola tvrzení \"%s\"."
 
 #: pcbnew/drc/drc_engine.cpp:875 pcbnew/drc/drc_engine.cpp:1480
 msgid "Assertion passed."
@@ -32207,9 +32195,9 @@ msgid "Checking %s min spoke count: %s."
 msgstr "Kontrola %s %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:936
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s zone connection: %s."
-msgstr "Kontrola připojení sítě..."
+msgstr "Kontrola %s z hlediska spojení se zónou: %s."
 
 #: pcbnew/drc/drc_engine.cpp:954 pcbnew/drc/drc_engine.cpp:955
 #: pcbnew/drc/drc_engine.cpp:956 pcbnew/tools/board_inspection_tool.cpp:214
@@ -32219,9 +32207,9 @@ msgid "undefined"
 msgstr "nedefinováno"
 
 #: pcbnew/drc/drc_engine.cpp:968
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s track width: opt %s."
-msgstr "Kontrola šířky spojů..."
+msgstr "Kontrola šířky spoje %s: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:974
 #, fuzzy, c-format
@@ -32229,14 +32217,14 @@ msgid "Checking %s track width: min %s."
 msgstr "Kontrola šířky spojů..."
 
 #: pcbnew/drc/drc_engine.cpp:982
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s annular width: min %s."
-msgstr "Kontrola průměru prstence prokovu..."
+msgstr "Kontrola šířky prstence %s: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:990
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s via diameter: opt %s."
-msgstr "Kontrola průměrů prokovu..."
+msgstr "Kontrola %s průměru prokovu: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:996
 #, fuzzy, c-format
@@ -32867,9 +32855,9 @@ msgid "(%s clearance %s; actual %s)"
 msgstr "(%s izolační mezera %s; aktuální %s)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:298
-#, fuzzy, c-format
+#, c-format
 msgid "(%s clearance %s; actual < 0)"
-msgstr "(%s izolační mezera %s; aktuální %s)"
+msgstr "(%s izolační mezera %s; aktuální < 0)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:635
 #, c-format
@@ -33366,9 +33354,9 @@ msgid "Determining PCB data\n"
 msgstr "Stanovení údajů o DPS\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:447
-#, c-format, fuzzy
+#, c-format
 msgid "Board Thickness from stackup: %.3f mm\n"
-msgstr "Tloušťka desky ze struktury vrstev:\n"
+msgstr "Tloušťka desky ze struktury vrstev: %.3f mm\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:452
 msgid "Build STEP data\n"
