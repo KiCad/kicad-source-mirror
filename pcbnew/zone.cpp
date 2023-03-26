@@ -1414,13 +1414,13 @@ static struct ZONE_DESC
                                              reinterpret_cast<int (ZONE::*)() const>( &ZONE::GetX ),
                                              PROPERTY_DISPLAY::PT_COORD,
                                              ORIGIN_TRANSFORMS::ABS_X_COORD );
-        posX->SetIsInternal( true );
+        posX->SetIsHiddenFromPropertiesManager();
 
         auto posY = new PROPERTY<ZONE, int>( _HKI( "Position Y" ), NO_SETTER( ZONE, int ),
                                              reinterpret_cast<int (ZONE::*)() const>( &ZONE::GetY ),
                                              PROPERTY_DISPLAY::PT_COORD,
                                              ORIGIN_TRANSFORMS::ABS_Y_COORD );
-        posY->SetIsInternal( true );
+        posY->SetIsHiddenFromPropertiesManager();
 
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Position X" ), posX );
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Position Y" ), posY );
@@ -1443,13 +1443,13 @@ static struct ZONE_DESC
                     return false;
                 };
 
-        // Layer property is internal because it only holds a single layer and zones actually use
+        // Layer property is hidden because it only holds a single layer and zones actually use
         // a layer set
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ),
                                  new PROPERTY_ENUM<ZONE, PCB_LAYER_ID>( _HKI( "Layer" ),
                                                                         &ZONE::SetLayer,
                                                                         &ZONE::GetLayer ) )
-                .SetIsInternal();
+                .SetIsHiddenFromPropertiesManager();
 
         propMgr.OverrideAvailability( TYPE_HASH( ZONE ), TYPE_HASH( BOARD_CONNECTED_ITEM ),
                                       _HKI( "Net" ), isCopperZone );

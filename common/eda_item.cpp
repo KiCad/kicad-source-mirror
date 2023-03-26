@@ -394,7 +394,7 @@ static struct EDA_ITEM_DESC
 
         propMgr.AddProperty( new PROPERTY_ENUM<EDA_ITEM, KICAD_T>( wxS( "Type" ),
                              NO_SETTER( EDA_ITEM, KICAD_T ), &EDA_ITEM::Type ) )
-                .SetIsInternal();
+                .SetIsHiddenFromPropertiesManager();
     }
 } _EDA_ITEM_DESC;
 

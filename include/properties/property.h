@@ -185,8 +185,8 @@ PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = PT_DEFAULT,
         m_name( aName ),
         m_display( aDisplay ),
         m_coordType( aCoordType ),
-        m_isInternal( false ),
-        m_isDeprecated( false ),
+        m_hideFromPropertiesManager( false ),
+        m_hideFromRulesEditor( false ),
         m_hideFromLibraryEditors( false ),
         m_availFunc( [](INSPECTABLE*)->bool { return true; } ),
         m_writeableFunc( [](INSPECTABLE*)->bool { return true; } ),
@@ -280,17 +280,17 @@ PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = PT_DEFAULT,
         return *this;
     }
 
-    bool IsInternal() const { return m_isInternal; }
-    PROPERTY_BASE& SetIsInternal( bool aIsInternal = true )
+    bool IsHiddenFromPropertiesManager() const { return m_hideFromPropertiesManager; }
+    PROPERTY_BASE& SetIsHiddenFromPropertiesManager( bool aHide = true )
     {
-        m_isInternal = aIsInternal;
+        m_hideFromPropertiesManager = aHide;
         return *this;
     }
 
-    bool IsDeprecated() const { return m_isDeprecated; }
-    PROPERTY_BASE& SetIsDeprecated( bool aIsDeprecated = true )
+    bool IsHiddenFromRulesEditor() const { return m_hideFromRulesEditor; }
+    PROPERTY_BASE& SetIsHiddenFromRulesEditor( bool aHide = true )
     {
-        m_isDeprecated = aIsDeprecated;
+        m_hideFromRulesEditor = aHide;
         return *this;
     }
 
@@ -377,11 +377,11 @@ private:
     /// The coordinate type controls how distances are mapped to the user coordinate system
     ORIGIN_TRANSFORMS::COORD_TYPES_T m_coordType;
 
-    /// Internal properties are hidden from the GUI but not from the rules editor autocomplete
-    bool m_isInternal;
+    /// Some properties should not be shown in the Properties Manager GUI
+    bool m_hideFromPropertiesManager;
 
-    /// Deprecated properties are hidden from the GUI and rules editor autocomplete
-    bool m_isDeprecated;
+    /// Some properties should not be shown in the Custom Rules editor autocomplete
+    bool m_hideFromRulesEditor;
 
     /// This property should only be shown in the design editor, not the library editor
     bool m_hideFromLibraryEditors;

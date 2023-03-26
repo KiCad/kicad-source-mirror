@@ -442,10 +442,10 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
 
                 for( PROPERTY_BASE* prop : props )
                 {
-                    // TODO: It would be nice to replace IsDeprecated with a property nickname
+                    // TODO: It would be nice to replace IsHiddenFromRulesEditor with a nickname
                     // system, so that two different properies don't need to be created.  This is
                     // a bigger change than I want to make right now, though.
-                    if( prop->IsDeprecated() )
+                    if( prop->IsHiddenFromRulesEditor() )
                         continue;
 
                     wxString ref( prop->Name() );

@@ -209,7 +209,7 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
     // Find a set of properties that is common to all selected items
     for( PROPERTY_BASE* property : commonProps )
     {
-        if( property->IsInternal() )
+        if( property->IsHiddenFromPropertiesManager() )
             continue;
 
         if( isFootprintEditor && property->IsHiddenFromLibraryEditors() )

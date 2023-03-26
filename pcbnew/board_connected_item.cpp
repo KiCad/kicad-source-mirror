@@ -173,28 +173,31 @@ static struct BOARD_CONNECTED_ITEM_DESC
         propMgr.AddProperty( new PROPERTY_ENUM<BOARD_CONNECTED_ITEM, int>( _HKI( "Net" ),
                              &BOARD_CONNECTED_ITEM::SetNetCode,
                              &BOARD_CONNECTED_ITEM::GetNetCode ) )
-                .SetIsDeprecated()
+                .SetIsHiddenFromRulesEditor()
                 .SetIsHiddenFromLibraryEditors();
 
-        // Not really deprecated, but hidden from rule editor suggestions
+        /**
+         * This property should just be an alias for the one below, it only exists so that we
+         * maintain compatibility with both `NetClass` and `Net_Class` in custom rules.
+         */
         propMgr.AddProperty( new PROPERTY<BOARD_CONNECTED_ITEM, wxString>( _HKI( "Net Class" ),
                              NO_SETTER( BOARD_CONNECTED_ITEM, wxString ),
                              &BOARD_CONNECTED_ITEM::GetNetClassName ) )
-                .SetIsDeprecated()
+                .SetIsHiddenFromRulesEditor()
                 .SetIsHiddenFromLibraryEditors();
 
         // Compatibility alias for DRC engine
         propMgr.AddProperty( new PROPERTY<BOARD_CONNECTED_ITEM, wxString>( _HKI( "NetClass" ),
                              NO_SETTER( BOARD_CONNECTED_ITEM, wxString ),
                              &BOARD_CONNECTED_ITEM::GetNetClassName ) )
-                .SetIsInternal()
+                .SetIsHiddenFromPropertiesManager()
                 .SetIsHiddenFromLibraryEditors();
 
         // Used only in DRC engine
         propMgr.AddProperty( new PROPERTY<BOARD_CONNECTED_ITEM, wxString>( _HKI( "NetName" ),
                              NO_SETTER( BOARD_CONNECTED_ITEM, wxString ),
                              &BOARD_CONNECTED_ITEM::GetNetname ) )
-                .SetIsInternal()
+                .SetIsHiddenFromPropertiesManager()
                 .SetIsHiddenFromLibraryEditors();
     }
 } _BOARD_CONNECTED_ITEM_DESC;
