@@ -290,6 +290,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testSilkToMaskClearance()
                     if( !item->IsOnLayer( layer ) )
                         continue;
 
+                    PCB_LAYER_ID   maskLayer = layer == F_SilkS ? F_Mask : B_Mask;
                     BOX2I          itemBBox = item->GetBoundingBox();
                     DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( SILK_CLEARANCE_CONSTRAINT,
                                                                         item, nullptr, layer );
@@ -302,7 +303,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testSilkToMaskClearance()
 
                     std::shared_ptr<SHAPE> itemShape = item->GetEffectiveShape( layer );
 
-                    if( m_fullSolderMaskRTree->QueryColliding( itemBBox, itemShape.get(), layer,
+                    if( m_fullSolderMaskRTree->QueryColliding( itemBBox, itemShape.get(), maskLayer,
                                                                clearance, &actual, &pos ) )
                     {
                         auto drce = DRC_ITEM::Create( DRCE_SILK_CLEARANCE );
