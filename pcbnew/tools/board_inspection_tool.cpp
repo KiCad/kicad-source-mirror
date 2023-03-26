@@ -766,7 +766,11 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         {
             // Different nets (or one or both unconnected)....
             constraint = drcEngine.EvalRules( CLEARANCE_CONSTRAINT, a, b, layer, r );
-            clearance = constraint.m_Value.Min();
+
+            if( constraint.IsNull() )
+                clearance = 0;
+            else
+                clearance = constraint.m_Value.Min();
 
             if( compileError )
                 reportCompileError( r );
