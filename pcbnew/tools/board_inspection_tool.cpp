@@ -782,7 +782,11 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
             r->Report( "" );
 
-            if( clearance < 0 )
+            if( constraint.IsNull() )
+            {
+                r->Report( _( "Clearance is 0." ) );
+            }
+            else if( clearance < 0 )
             {
                 r->Report( wxString::Format( _( "Resolved clearance: %s; clearance will not be "
                                                 "tested." ),

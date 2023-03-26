@@ -1080,8 +1080,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                 {
                     if( implicit && ( a_is_non_copper || b_is_non_copper ) )
                     {
-                        REPORT( _( "Board and netclass clearances apply only between copper "
-                                   "items." ) );
+                        REPORT( _( "Netclass clearances apply only between copper items." ) );
                         return;
                     }
                 }
@@ -1360,6 +1359,13 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
             constraint.SetParentRule( nullptr );
             constraint.SetName( _( "board minimum" ) );
             constraint.m_Value.SetMin( m_designSettings->m_MinClearance );
+        }
+
+        if( a_is_non_copper || b_is_non_copper )
+        {
+            REPORT( _( "Local and board clearances apply only between copper items." ) );
+            constraint.m_Type = NULL_CONSTRAINT;
+            constraint.m_DisallowFlags = 0;
         }
 
         return constraint;
