@@ -206,8 +206,8 @@ public:
 
     struct TERMATTR : PARSER
     {
-        TERMINAL_ID        TerminalID;
-        ATTRIBUTE_VALUE    Value;
+        TERMINAL_ID                  TerminalID;
+        std::vector<ATTRIBUTE_VALUE> Attributes;
 
         void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };

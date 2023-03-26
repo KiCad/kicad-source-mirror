@@ -559,14 +559,14 @@ void CADSTAR_SCH_ARCHIVE_PARSER::TERMATTR::Parse( XNODE* aNode, PARSER_CONTEXT* 
     TerminalID = GetXmlAttributeIDLong( aNode, 0 );
 
     XNODE* cNode = aNode->GetChildren();
-    bool   attrParsed = false;
 
     for( ; cNode; cNode = cNode->GetNext() )
     {
-        if( !attrParsed && cNode->GetName() == wxT( "ATTR" ) )
+        if( cNode->GetName() == wxT( "ATTR" ) )
         {
-            Value.Parse( cNode, aContext );
-            attrParsed = true;
+            ATTRIBUTE_VALUE val;
+            val.Parse( cNode, aContext );
+            Attributes.push_back( val );
         }
         else
         {
