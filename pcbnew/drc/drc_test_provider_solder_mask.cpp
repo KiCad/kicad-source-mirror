@@ -293,12 +293,12 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testSilkToMaskClearance()
                     PCB_LAYER_ID   maskLayer = layer == F_SilkS ? F_Mask : B_Mask;
                     BOX2I          itemBBox = item->GetBoundingBox();
                     DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( SILK_CLEARANCE_CONSTRAINT,
-                                                                        item, nullptr, layer );
+                                                                        item, nullptr, maskLayer );
                     int            clearance = constraint.GetValue().Min();
                     int            actual;
                     VECTOR2I       pos;
 
-                    if( constraint.GetSeverity() == RPT_SEVERITY_IGNORE || clearance <= 0 )
+                    if( constraint.GetSeverity() == RPT_SEVERITY_IGNORE || clearance < 0 )
                         return true;
 
                     std::shared_ptr<SHAPE> itemShape = item->GetEffectiveShape( layer );
