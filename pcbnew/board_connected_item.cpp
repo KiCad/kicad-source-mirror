@@ -174,10 +174,18 @@ static struct BOARD_CONNECTED_ITEM_DESC
         netCode->SetIsHiddenFromRulesEditor();
         propMgr.AddProperty( netCode );
 
+        /**
+         * This property should just be an alias for the one below, it only exists so that we
+         * maintain compatibility with both `NetClass` and `Net_Class` in custom rules.
+         * It has the name we would show in the GUI if we wanted to show this in the GUI, but we
+         * don't at the moment because there is no way to edit the netclass of a net from a selected
+         * connected item, and showing it makes users think they can change it.
+         */
         auto netClass = new PROPERTY<BOARD_CONNECTED_ITEM, wxString>( _HKI( "Net Class" ),
                 NO_SETTER( BOARD_CONNECTED_ITEM, wxString ),
                 &BOARD_CONNECTED_ITEM::GetNetClassName );
         netClass->SetIsHiddenFromRulesEditor();
+        netClass->SetIsHiddenFromPropertiesManager();
         propMgr.AddProperty( netClass );
 
         // Compatibility alias for DRC engine
