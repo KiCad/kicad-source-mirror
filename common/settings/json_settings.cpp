@@ -30,6 +30,7 @@
 #include <settings/json_settings_internals.h>
 #include <settings/nested_settings.h>
 #include <settings/parameters.h>
+#include <settings/bom_settings.h>
 #include <wx/config.h>
 #include <wx/debug.h>
 #include <wx/fileconf.h>
@@ -565,6 +566,9 @@ template std::optional<unsigned long long> JSON_SETTINGS::Get<unsigned long long
 template std::optional<std::string> JSON_SETTINGS::Get<std::string>( const std::string& aPath ) const;
 template std::optional<nlohmann::json> JSON_SETTINGS::Get<nlohmann::json>( const std::string& aPath ) const;
 template std::optional<KIGFX::COLOR4D> JSON_SETTINGS::Get<KIGFX::COLOR4D>( const std::string& aPath ) const;
+template std::optional<BOM_FIELD>  JSON_SETTINGS::Get<BOM_FIELD>( const std::string& aPath ) const;
+template std::optional<BOM_PRESET> JSON_SETTINGS::Get<BOM_PRESET>( const std::string& aPath ) const;
+template std::optional<BOM_FMT_PRESET> JSON_SETTINGS::Get<BOM_FMT_PRESET>( const std::string& aPath ) const;
 
 
 template<typename ValueType>
@@ -585,6 +589,9 @@ template void JSON_SETTINGS::Set<const char*>( const std::string& aPath, const c
 template void JSON_SETTINGS::Set<std::string>( const std::string& aPath, std::string aValue );
 template void JSON_SETTINGS::Set<nlohmann::json>( const std::string& aPath, nlohmann::json aValue );
 template void JSON_SETTINGS::Set<KIGFX::COLOR4D>( const std::string& aPath, KIGFX::COLOR4D aValue );
+template void JSON_SETTINGS::Set<BOM_FIELD>( const std::string& aPath, BOM_FIELD aValue );
+template void JSON_SETTINGS::Set<BOM_PRESET>( const std::string& aPath, BOM_PRESET aValue );
+template void JSON_SETTINGS::Set<BOM_FMT_PRESET>( const std::string& aPath, BOM_FMT_PRESET aValue );
 
 
 void JSON_SETTINGS::registerMigration( int aOldSchemaVersion, int aNewSchemaVersion,

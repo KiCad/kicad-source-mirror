@@ -78,14 +78,15 @@ int FIELDS_EDITOR_GRID_DATA_MODEL::GetFieldNameCol( wxString aFieldName )
 }
 
 
-const std::vector<wxString> FIELDS_EDITOR_GRID_DATA_MODEL::GetFieldsOrder()
+const std::vector<BOM_FIELD> FIELDS_EDITOR_GRID_DATA_MODEL::GetFieldsOrdered()
 {
-    std::vector<wxString> fields;
+    std::vector<BOM_FIELD> fields;
 
     for( auto col : m_cols )
-    {
-        fields.emplace_back( col.m_fieldName );
-    }
+        fields.emplace_back( ( struct BOM_FIELD ){ .name = col.m_fieldName,
+                                                   .label = col.m_label,
+                                                   .show = col.m_show,
+                                                   .groupBy = col.m_group } );
 
     return fields;
 }
@@ -597,40 +598,34 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyBomPreset( const BOM_PRESET& aPreset )
         SetGroupColumn( i, false );
     }
 
-    // Set columns that are present and shown
-    for( size_t i = 0; i < aPreset.fieldsOrdered.size(); i++ )
-    {
-        const wxString& fieldName = aPreset.fieldsOrdered[i];
-        const wxString& label =
-                i < aPreset.fieldsLabels.size() ? aPreset.fieldsLabels[i] : fieldName;
+    std::vector<wxString> order;
 
-        int col = GetFieldNameCol( fieldName );
+    // Set columns that are present and shown
+    for( BOM_FIELD field : aPreset.fieldsOrdered )
+    {
+        order.emplace_back( field.name );
+
+        int col = GetFieldNameCol( field.name );
 
         // Add any missing fields, if the user doesn't add any data
         // they won't be saved to the symbols anywa
         if( col == -1 )
-            AddColumn( fieldName, label, true );
+            AddColumn( field.name, field.label, true );
         else
-            SetColLabelValue( col, label );
+            SetColLabelValue( col, field.label );
 
-        SetShowColumn( col, true );
+        SetGroupColumn( col, field.groupBy );
+        SetShowColumn( col, field.show );
     }
 
     // Set grouping columns
     SetGroupingEnabled( aPreset.groupSymbols );
 
-    for( auto fieldName : aPreset.fieldsGroupBy )
-    {
-        int col = GetFieldNameCol( fieldName );
-
-        if( col != -1 )
-            SetGroupColumn( col, true );
-    }
-
-    SetFieldsOrder( aPreset.fieldsOrdered );
+    SetFieldsOrder( order );
 
     // Set our sorting
     int sortCol = GetFieldNameCol( aPreset.sortField );
+
     if( sortCol != -1 )
         SetSorting( sortCol, aPreset.sortAsc );
     else

@@ -24,74 +24,14 @@
 
 #include <default_values.h>
 #include <settings/nested_settings.h>
+#include <settings/parameters.h>
+#include <settings/bom_settings.h>
 #include <template_fieldnames.h>
+#include <nlohmann/json.hpp>
 
 #include <utility>
 
 class NGSPICE_SIMULATOR_SETTINGS;
-
-struct BOM_PRESET
-{
-    BOM_PRESET( const wxString& aName = wxEmptyString ) : name( aName ) {}
-
-    BOM_PRESET( const wxString& aName, const std::vector<wxString>& aFieldsOrdered,
-                const std::vector<wxString>& aFieldsLabels,
-                const std::vector<wxString>& aFieldsShow,
-                const std::vector<wxString>& aFieldsGroupBy, const wxString& aSortField,
-                bool aSortAscending, const wxString& aFilterString, bool aGroupSymbols ) :
-            name( aName ),
-            fieldsOrdered( aFieldsOrdered ), fieldsLabels( aFieldsLabels ),
-            fieldsShow( aFieldsShow ), fieldsGroupBy( aFieldsGroupBy ), sortField( aSortField ),
-            sortAsc( aSortAscending ), filterString( aFilterString ), groupSymbols( aGroupSymbols )
-    {
-    }
-
-    wxString                    name;
-    bool                        readOnly = false;
-    std::vector<wxString>       fieldsOrdered;
-    std::vector<wxString>       fieldsLabels;
-    std::vector<wxString>       fieldsShow;
-    std::vector<wxString>       fieldsGroupBy;
-    wxString                    sortField;
-    bool                        sortAsc = true;
-    wxString                    filterString;
-    bool                        groupSymbols = false;
-};
-
-
-struct BOM_FMT_PRESET
-{
-    BOM_FMT_PRESET( const wxString& aName = wxEmptyString ) :
-            name( aName ), readOnly( false ), fieldDelimiter( wxS( "\"" ) ),
-            stringDelimiter( wxS( "\"" ) ), refDelimiter( "," ), refRangeDelimiter( "" ),
-            keepTabs( true ), keepLineBreaks( true )
-    {
-    }
-
-    BOM_FMT_PRESET( const wxString& aName, const wxString& aFieldDelimiter,
-                    const wxString& aStringDelimiter, const wxString& aRefDelimiter,
-                    const wxString& aRefRangeDelimiter, bool removeTabs, bool removeLineBreaks ) :
-            name( aName ),
-            readOnly( false ),
-            fieldDelimiter( aFieldDelimiter ),
-            stringDelimiter( aStringDelimiter ),
-            refDelimiter( aRefDelimiter ),
-            refRangeDelimiter( aRefRangeDelimiter ),
-            keepTabs( removeTabs ),
-            keepLineBreaks( removeLineBreaks )
-    {
-    }
-
-    wxString name;
-    bool     readOnly;
-    wxString fieldDelimiter;
-    wxString stringDelimiter;
-    wxString refDelimiter;
-    wxString refRangeDelimiter;
-    bool     keepTabs;
-    bool     keepLineBreaks;
-};
-
 
 /**
  * These settings were stored in SCH_BASE_FRAME previously.
@@ -152,15 +92,10 @@ public:
     TEMPLATES m_TemplateFieldNames;
 
     /// List of stored BOM presets
-    static BOM_PRESET       bomPresetGroupedByValue;
-    static BOM_PRESET       bomPresetGroupedByValueFootprint;
     BOM_PRESET              m_BomSettings;
     std::vector<BOM_PRESET> m_BomPresets;
 
     /// List of stored BOM format presets
-    static BOM_FMT_PRESET       bomFmtPresetCSV;
-    static BOM_FMT_PRESET       bomFmtPresetSemicolons;
-    static BOM_FMT_PRESET       bomFmtPresetTSV;
     BOM_FMT_PRESET              m_BomFmtSettings;
     std::vector<BOM_FMT_PRESET> m_BomFmtPresets;
 

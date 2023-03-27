@@ -25,7 +25,7 @@
 #include <gal/color4d.h>
 #include <project/project_file.h>
 #include <settings/parameters.h>
-
+#include <settings/bom_settings.h>
 
 template <typename ValueType>
 void PARAM_LAMBDA<ValueType>::Load( JSON_SETTINGS* aSettings, bool aResetIfMissing ) const
@@ -136,6 +136,8 @@ template class PARAM_LIST<double>;
 template class PARAM_LIST<wxString>;
 template class PARAM_LIST<KIGFX::COLOR4D>;
 template class PARAM_LIST<FILE_INFO_PAIR>;
+template class PARAM_LIST<BOM_PRESET>;
+template class PARAM_LIST<BOM_FMT_PRESET>;
 
 
 template <typename ValueType>

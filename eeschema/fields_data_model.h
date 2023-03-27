@@ -10,6 +10,7 @@
 // The internal field name (untranslated)
 #define FIELD_NAME_COLUMN     4
 
+struct BOM_FIELD;
 struct BOM_PRESET;
 struct BOM_FMT_PRESET;
 
@@ -89,7 +90,7 @@ public:
 
     int      GetFieldNameCol( wxString aFieldName );
 
-    const std::vector<wxString> GetFieldsOrder();
+    const std::vector<BOM_FIELD> GetFieldsOrdered();
     void                        SetFieldsOrder( const std::vector<wxString>& aNewOrder );
 
     bool IsEmptyCell( int aRow, int aCol ) override

@@ -26,44 +26,17 @@
 #include <macros.h>
 #include <pgm_base.h>
 #include <schematic_settings.h>
+#include <settings/json_settings.h>
 #include <settings/json_settings_internals.h>
 #include <settings/parameters.h>
 #include <settings/settings_manager.h>
+#include <settings/bom_settings.h>
 #include <sim/spice_settings.h>
 #include <i18n_utility.h>
+#include <wx/string.h>
 
 
 const int schSettingsSchemaVersion = 1;
-
-
-BOM_PRESET SCHEMATIC_SETTINGS::bomPresetGroupedByValue(
-        _HKI( "Grouped By Value and Footprint" ),
-        std::vector<wxString>( { "Reference", "Value", "Datasheet", "Footprint", "Quantity" } ),
-        std::vector<wxString>( { "Reference", "Value", "Datasheet", "Footprint", "Qty" } ),
-        std::vector<wxString>( { "Reference", "Value", "Datasheet", "Footprint", "Quantity" } ),
-        std::vector<wxString>( { "Value" } ), _( "Reference" ), true, _HKI( "" ), true );
-
-
-BOM_PRESET SCHEMATIC_SETTINGS::bomPresetGroupedByValueFootprint(
-        _HKI( "Grouped By Value and Footprint" ),
-        std::vector<wxString>( { "Reference", "Value", "Datasheet", "Footprint", "Quantity" } ),
-        std::vector<wxString>( { "Reference", "Value", "Datasheet", "Footprint", "Qty" } ),
-        std::vector<wxString>( { "Reference", "Value", "Datasheet", "Footprint", "Quantity" } ),
-        std::vector<wxString>( { "Value", "Footprint" } ), _( "Reference" ), true, _HKI( "" ),
-        true );
-
-
-BOM_FMT_PRESET SCHEMATIC_SETTINGS::bomFmtPresetCSV( _HKI( "CSV" ), wxS( "," ), wxT( "\"" ),
-                                                    wxT( "," ), wxT( "" ), false, false );
-
-
-BOM_FMT_PRESET SCHEMATIC_SETTINGS::bomFmtPresetTSV( _HKI( "TSV" ), wxS( "\t" ), wxT( "" ),
-                                                    wxT( "," ), wxT( "" ), false, false );
-
-
-BOM_FMT_PRESET SCHEMATIC_SETTINGS::bomFmtPresetSemicolons( _HKI( "Semicolons" ), wxS( ";" ),
-                                                           wxT( "'" ), wxT( "," ), wxT( "" ), false,
-                                                           false );
 
 
 SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
@@ -217,6 +190,16 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
                 if( cfg && !cfg->m_Drawing.field_names.IsEmpty() )
                     m_TemplateFieldNames.AddTemplateFieldNames( cfg->m_Drawing.field_names );
             }, {} ) );
+
+    m_params.emplace_back(
+            new PARAM<BOM_PRESET>( "bom_settings", &m_BomSettings, BOM_PRESET::GroupedByValue() ) );
+    m_params.emplace_back(
+            new PARAM_LIST<BOM_PRESET>( "bom_presets", &m_BomPresets, {} ) );
+
+    m_params.emplace_back(
+            new PARAM<BOM_FMT_PRESET>( "bom_fmt_settings", &m_BomFmtSettings, BOM_FMT_PRESET::CSV() ) );
+    m_params.emplace_back(
+            new PARAM_LIST<BOM_FMT_PRESET>( "bom_fmt_settings", &m_BomFmtPresets, {} ) );
 
     m_params.emplace_back( new PARAM<wxString>( "page_layout_descr_file",
             &m_SchDrawingSheetFileName, "" ) );

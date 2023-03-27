@@ -308,10 +308,26 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
     }
 
     BOM_PRESET preset;
-    preset.fieldsOrdered = aBomJob->m_fieldsOrdered;
-    preset.fieldsLabels = aBomJob->m_fieldsLabels;
-    preset.fieldsShow = aBomJob->m_fieldsOrdered;
-    preset.fieldsGroupBy = aBomJob->m_fieldsGroupBy;
+
+    size_t i = 0;
+    for( wxString fieldName : aBomJob->m_fieldsOrdered )
+    {
+        struct BOM_FIELD field;
+
+        field.name = fieldName;
+        field.show = true;
+        field.groupBy = std::find( aBomJob->m_fieldsGroupBy.begin(), aBomJob->m_fieldsGroupBy.end(),
+                                   field.name )
+                        != aBomJob->m_fieldsGroupBy.end();
+        field.label =
+                ( ( aBomJob->m_fieldsLabels.size() < i ) && !aBomJob->m_fieldsLabels[i].IsEmpty() )
+                        ? aBomJob->m_fieldsLabels[i]
+                        : field.name;
+
+        preset.fieldsOrdered.emplace_back( field );
+        i++;
+    }
+
     preset.sortAsc = aBomJob->m_sortAsc;
     preset.sortField = aBomJob->m_sortField;
     preset.groupSymbols = aBomJob->m_groupSymbols;
