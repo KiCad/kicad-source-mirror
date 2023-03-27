@@ -20,8 +20,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:51-0800\n"
-"PO-Revision-Date: 2023-03-27 04:36+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"PO-Revision-Date: 2023-03-29 06:02+0000\n"
+"Last-Translator: Luc <some_physics@live.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -32909,9 +32909,8 @@ msgid "Hole"
 msgstr "Loch"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:153
-#, fuzzy
 msgid "Differential pairs:"
-msgstr "Differenzielle Paare"
+msgstr "Differenzielle Paare:"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:170
 msgid "Gap"
@@ -33823,18 +33822,18 @@ msgid "Footprint descriptions differ."
 msgstr "Footprint-Beschreibungen stimmen nicht überein."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:449
-#, fuzzy
 msgid "Footprint keywords differ."
-msgstr "Footprintreihenfolge"
+msgstr "Footprint-Schlüsselwörter weichen ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:454
 msgid "Footprint types differ."
 msgstr "Footprint-Typen stimmen nicht überein."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:456
-#, fuzzy
 msgid "Allow bridged solder mask apertures between pads settings differ."
-msgstr "Gebrückte Lötstoppöffnungen zwischen Pads erlauben"
+msgstr ""
+"Einstellungen zu \"Gebrückte Lötstoppöffnungen zwischen Pads erlauben\" "
+"weichen ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:458
 #, fuzzy
@@ -35902,9 +35901,8 @@ msgid "Crossbar Height"
 msgstr "Cursor rechts"
 
 #: pcbnew/pcb_dimension.cpp:1387
-#, fuzzy
 msgid "Extension Line Overshoot"
-msgstr "Verlängerungslinienversatz:"
+msgstr "Verlängerungslinienüberschreitung"
 
 #: pcbnew/pcb_dimension.cpp:1452
 msgid "Leader Length"
