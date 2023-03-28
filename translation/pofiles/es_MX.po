@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:51-0800\n"
-"PO-Revision-Date: 2023-03-19 09:38+0000\n"
+"PO-Revision-Date: 2023-03-29 06:03+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16.2-dev\n"
+"X-Generator: Weblate 4.17-dev\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -8760,20 +8760,18 @@ msgstr ""
 "elementos (.probe p(<elemento>))"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:313
-#, fuzzy
 msgid "Run external simulator command:"
-msgstr "Comando del simulador externo:"
+msgstr "Ejecute el comando del simulador externo:"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:315
-#, fuzzy
 msgid ""
 "Enter the command line to run SPICE\n"
 "Usually '<path to SPICE binary> \"%I\"'\n"
 "%I will be replaced by the netlist filepath"
 msgstr ""
-"Introduzca la línea de comandos para ejecutar spice\n"
-"Por lo general <ruta al binario de spice> %I\n"
-"%I será reemplazado por el nombre de la lista de redes de spice"
+"Introduzca la línea de comandos para ejecutar SPICE\n"
+"Normalmente '<ruta al binario SPICE> \"%I\"'\n"
+"%I se sustituirá por la ruta del archivo netlist"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:388
 msgid "Netlist command:"
@@ -8795,18 +8793,19 @@ msgstr ""
 "Para exportar la lista de redes se necesita un esquema anotado completamente."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:575
-#, fuzzy
 msgid "external simulator not found"
-msgstr "Comando del simulador externo:"
+msgstr "simulador externo no encontrado"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:576
 msgid ""
 "Note: command line is usually: <tt>&lt;path to SPICE binary&gt; \"%I\"</tt>"
 msgstr ""
+"Nota: la línea de comandos suele ser: <tt>&lt;ruta al binario SPICE&gt; \"%"
+"I\"</tt>"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:582
 msgid "external simulator has the wrong format or architecture"
-msgstr ""
+msgstr "el simulador externo tiene un formato o arquitectura incorrectos"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:587
 msgid "permission denied"
@@ -11355,9 +11354,8 @@ msgid "G"
 msgstr ""
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "T"
-msgstr "T:"
+msgstr "T"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 #, fuzzy
@@ -12503,9 +12501,8 @@ msgid "Significant digits (voltages):"
 msgstr ""
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:270
-#, fuzzy
 msgid "Range (voltages):"
-msgstr "Guardar todos los voltajes"
+msgstr "Rango (voltajes):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
 #, fuzzy
@@ -16247,9 +16244,9 @@ msgstr ""
 "descendentes"
 
 #: eeschema/sim/sim_lib_mgr.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "Simulation model library not found at '%s'"
-msgstr "Biblioteca de modelos de simulación no encontrada en '%s' o '%s'"
+msgstr "Biblioteca de modelos de simulación no encontrada en '%s'"
 
 #: eeschema/sim/sim_lib_mgr.cpp:84
 #, c-format
@@ -16300,9 +16297,9 @@ msgstr ""
 "'%s', pero es '%s'"
 
 #: eeschema/sim/sim_model.cpp:783
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown simulation model pin '%s'"
-msgstr "Nodo '%s' desconocido en '%s'"
+msgstr "Pin de modelo de simulación desconocido '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:81
 #, c-format
@@ -16386,9 +16383,9 @@ msgstr ""
 "para ver los resultados."
 
 #: eeschema/sim/sim_plot_panel.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "%d"
-msgstr "%"
+msgstr "%d"
 
 #: eeschema/sim/sim_plot_panel.cpp:508
 msgid "noise [(V or A)^2/Hz]"
@@ -16460,9 +16457,9 @@ msgid "Measure Integral"
 msgstr "Medir distancia"
 
 #: eeschema/sim/simulator_frame.cpp:313
-#, fuzzy, c-format
+#, c-format
 msgid "Format %s..."
-msgstr "Formato"
+msgstr "Formato %s..."
 
 #: eeschema/sim/simulator_frame.cpp:372
 #, fuzzy
@@ -19003,9 +19000,9 @@ msgstr ""
 "sufijo para garantizar que no hallan entradas de tabla duplicadas."
 
 #: eeschema/widgets/tuner_slider.cpp:57 eeschema/widgets/tuner_slider.cpp:113
-#, fuzzy, c-format
+#, c-format
 msgid "Tune %s"
-msgstr "Ajustar"
+msgstr "Ajustar %s"
 
 #: eeschema/widgets/tuner_slider.cpp:74
 #, fuzzy, c-format
@@ -32163,7 +32160,6 @@ msgid "Check rule syntax"
 msgstr "Verificar reglas de sintaxis"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -32550,8 +32546,8 @@ msgstr ""
 "### Elementos\n"
 "\n"
 " * `A` &nbsp;&nbsp; _el primer (o único) elemento bajo prueba_\n"
-" * `B` &nbsp;&nbsp; _el segundo elemento bajo prueba (para pruebas "
-"binarias)_\n"
+" * `B` &nbsp;&nbsp; _el segundo elemento bajo prueba (para pruebas binarias)"
+"_\n"
 " * `L` &nbsp;&nbsp; _la capa bajo prueba_\n"
 "\n"
 "<br>\n"
@@ -32628,8 +32624,8 @@ msgstr ""
 "\n"
 "Las reglas deberían ser ordenadas por especificidad.\n"
 "Las reglas posteriores tienen precedencia sobre las reglas anteriores;\n"
-"una vez que se encuentra una regla coincidente, no se comprobarán más "
-"reglas.\n"
+"una vez que se encuentra una regla coincidente, no se comprobarán más reglas."
+"\n"
 "\n"
 "Use Ctrl+/ para comentar o descomentar la(s) línea(s).\n"
 "<br><br><br>\n"
@@ -32662,8 +32658,8 @@ msgstr ""
 "    A.enclosedByArea('<zone_name>')\n"
 "Verdadero si todo `A` se encuentra dentro del contorno de la zona dada.\n"
 "\n"
-"Nota: esto es una llamada potencialmente más costosa que "
-"`intersectsArea()`.  Use `intersectsArea()` \n"
+"Nota: esto es una llamada potencialmente más costosa que `intersectsArea()`"
+".  Use `intersectsArea()` \n"
 "donde sea posible.\n"
 "<br><br>\n"
 " \n"
@@ -32672,8 +32668,8 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.inDiffPair('<net_name>')\n"
-"Verdadero si `A` tiene una red que es parte del par diferencial "
-"especificado.\n"
+"Verdadero si `A` tiene una red que es parte del par diferencial especificado."
+"\n"
 "`<net_name>` es el nombre base del par diferencial. Por ejemplo, "
 "`inDiffPair('CLK')`\n"
 "coincide con los elementos en las redes `CLK_P` y `CLK_N`.\n"
@@ -32824,7 +32820,12 @@ msgstr ""
 "    (rule high-current\n"
 "        (constraint track_width (min 1.0mm))\n"
 "        (constraint connection_width (min 0.8mm))\n"
-"        (condition \"A.NetClass == 'Power'\"))"
+"        (condition \"A.NetClass == 'Power'\"))\n"
+"\n"
+"### Documentación\n"
+"\n"
+"Para la documentación completa consulte [https://docs.kicad.org](https://docs"
+".kicad.org/GetMajorMinorVersion/pcbnew/#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:75
 msgid "Default properties for new dimension objects:"
@@ -33894,9 +33895,9 @@ msgid "%s differs."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:550
-#, fuzzy, c-format
+#, c-format
 msgid "%s has overrides."
-msgstr "Anulación local"
+msgstr "%s tiene anulaciones."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:592
 msgid "3D model count differs."
@@ -38740,9 +38741,9 @@ msgid "Overridden by larger physical hole clearance from %s;clearance: %s."
 msgstr "Anulado por una mayor holgura física del agujero de %s;holgura: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:779
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved clearance: %s; clearance will not be tested."
-msgstr "Margen local en %s; margen: %s."
+msgstr "Margen resuelto: %s; no se comprobará el margen."
 
 #: pcbnew/tools/board_inspection_tool.cpp:801
 msgid "Diff Pair"
@@ -38891,9 +38892,9 @@ msgid "The library is not enabled in the current configuration."
 msgstr "La biblioteca '%s' no está habilitada en la configuración actual."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1404
-#, fuzzy, c-format
+#, c-format
 msgid "The library no longer contains the item %s."
-msgstr "La selección contiene %d elementos bloqueados."
+msgstr "La biblioteca ya no contiene el elemento %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1409
 #, fuzzy
