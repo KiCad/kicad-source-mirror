@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:53-0800\n"
-"PO-Revision-Date: 2023-03-23 21:40+0000\n"
+"PO-Revision-Date: 2023-03-29 06:03+0000\n"
 "Last-Translator: Nguyễn Ngọc Khánh <ngockhanhnguyen985@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v7/vi/>"
 "\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.16.2-dev\n"
+"X-Generator: Weblate 4.17-dev\n"
 "X-Poedit-Basepath: E:/OPEN_SOURSE/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -26,9 +26,8 @@ msgid "All Files"
 msgstr "Tất cả Tập tin"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:312
-#, fuzzy
 msgid "Build board outline"
-msgstr "Xây dựng đường bao ngoài bo mạch"
+msgstr "Dựng đường bao bo mạch"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:520
 msgid "Create layers"
@@ -45,13 +44,14 @@ msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
-"Đường bao ngoài kích thước tổng của linh kiện bị mất hay lỗi. Mở công cụ "
-"kiểm tra linh kiện để tìm lỗi."
+"Đường bao footprint bị thiếu hoặc không đúng định dạng. Chạy Footprint "
+"Checker để phân tích đầy đủ."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:695
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
-"Đường bao kích thước bo mạch bị mất hay lỗi. Mở DRC để kiểm tra lỗi này."
+"Đường bao bo mạch bị thiếu hoặc không đúng định dạng. Chạy DRC để phân tích "
+"đầy đủ."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:226
 msgid "Create tracks and vias"
