@@ -1949,6 +1949,7 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
         m_gal->SetIsFill( true );
         m_gal->SetIsStroke( true );
         m_gal->SetFillColor( color );
+        m_gal->SetStrokeColor( color );
         m_gal->SetLineWidth( m_lockedShadowMargin );
 
         SHAPE_POLY_SET poly;
