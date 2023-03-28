@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:51-0800\n"
-"PO-Revision-Date: 2023-03-27 04:36+0000\n"
+"PO-Revision-Date: 2023-03-29 06:02+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -22551,7 +22551,7 @@ msgstr "Cín"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:58
 msgid "Lead"
-msgstr "Vedoucí"
+msgstr "Olovo"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:59
 msgid "Aluminium-Copper"
@@ -33354,9 +33354,9 @@ msgid "Determining PCB data\n"
 msgstr "Stanovení údajů o DPS\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:447
-#, c-format
+#, c-format, fuzzy
 msgid "Board Thickness from stackup: %.3f mm\n"
-msgstr "Tloušťka desky ze struktury vrstev: %.3f mm\n"
+msgstr "Tloušťka desky ze struktury vrstev:\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:452
 msgid "Build STEP data\n"
