@@ -1150,7 +1150,7 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
         break;
 
     case PAD_SHAPE_TYPE::ROUNDED_RECT:
-        pad->SetShape( PAD_SHAPE::RECT );
+        pad->SetShape( PAD_SHAPE::ROUNDRECT );
         pad->SetRoundRectCornerRadius( getKiCadLength( csPadcode.Shape.InternalFeature ) );
         pad->SetSize( { getKiCadLength( (long long) csPadcode.Shape.Size
                                         + (long long) csPadcode.Shape.LeftLength
