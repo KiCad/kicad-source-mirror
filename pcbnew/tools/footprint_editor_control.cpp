@@ -110,6 +110,13 @@ bool FOOTPRINT_EDITOR_CONTROL::Init()
                 return !sel.GetLibNickname().empty() && !sel.GetLibItemName().empty();
             };
 
+    auto fpExportCondition =
+            [ this ]( const SELECTION& aSel )
+            {
+                FOOTPRINT* fp = m_frame->GetBoard()->GetFirstFootprint();
+                return fp != nullptr;
+            };
+
     ctxMenu.AddItem( ACTIONS::pinLibrary,             unpinnedLibSelectedCondition );
     ctxMenu.AddItem( ACTIONS::unpinLibrary,           pinnedLibSelectedCondition );
 
@@ -132,7 +139,7 @@ bool FOOTPRINT_EDITOR_CONTROL::Init()
 
     ctxMenu.AddSeparator();
     ctxMenu.AddItem( PCB_ACTIONS::importFootprint,    libInferredCondition );
-    ctxMenu.AddItem( PCB_ACTIONS::exportFootprint,    fpSelectedCondition );
+    ctxMenu.AddItem( PCB_ACTIONS::exportFootprint,    fpExportCondition );
 
     // If we've got nothing else to show, at least show a hide tree option
     ctxMenu.AddItem( PCB_ACTIONS::hideFootprintTree,  !libInferredCondition );
@@ -526,14 +533,11 @@ int FOOTPRINT_EDITOR_CONTROL::ImportFootprint( const TOOL_EVENT& aEvent )
 int FOOTPRINT_EDITOR_CONTROL::ExportFootprint( const TOOL_EVENT& aEvent )
 {
     LIB_ID     fpID = m_frame->GetTreeFPID();
-    FOOTPRINT* fp;
+    FOOTPRINT* fp = m_frame->GetBoard()->GetFirstFootprint();
 
-    if( !fpID.IsValid() )
-        fp = m_frame->GetBoard()->GetFirstFootprint();
-    else
-        fp = m_frame->LoadFootprint( fpID );
+    if( fp )
+        m_frame->ExportFootprint( fp );
 
-    m_frame->ExportFootprint( fp );
     return 0;
 }
 
