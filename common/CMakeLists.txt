@@ -274,6 +274,7 @@ set( FONT_SRCS
 	font/outline_font.cpp
 	font/outline_decomposer.cpp
 	font/fontconfig.cpp
+    font/text_attributes.cpp
 	)
 
 set( COMMON_SRCS

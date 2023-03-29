@@ -23,6 +23,7 @@
  */
 
 #include <cmath>
+#include <wx/log.h>
 #include <trigo.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_grid_helper.h>

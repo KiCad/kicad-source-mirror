@@ -1,6 +1,6 @@
 # This program source code file is part of KiCad, a free EDA CAD application.
 #
-# Copyright (C) 2018 KiCad Developers, see CHANGELOG.TXT for contributors.
+# Copyright (C) 2018, 2023 KiCad Developers, see CHANGELOG.TXT for contributors.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -42,6 +42,7 @@ set( QA_COMMON_SRCS
     test_kiid.cpp
     test_property.cpp
     test_refdes_utils.cpp
+    test_text_attributes.cpp
     test_title_block.cpp
     test_types.cpp
     test_utf8.cpp
@@ -65,7 +66,8 @@ endif()
 
 if( WIN32 )
     # We want to declare a resource manifest on Windows to enable UTF8 mode
-    # Without UTF8 mode, some random IO tests may fail, we set the active code page on normal kicad to UTF8 as well
+    # Without UTF8 mode, some random IO tests may fail, we set the active code page on
+    # normal kicad to UTF8 as well
     if( MINGW )
         # QA_COMMON_RESOURCES variable is set by the macro.
         mingw_resource_compiler( qa_common )

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2018-2019, 2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -304,5 +304,45 @@ BOOST_AUTO_TEST_CASE( FromWx )
         BOOST_CHECK_PREDICATE( KI_TEST::IsColorNear, ( col )( c.c4d )( tol ) );
     }
 }
+
+
+/**
+ * Check the Compare method.
+ */
+BOOST_AUTO_TEST_CASE( Compare )
+{
+    COLOR4D a( 0.5, 0.5, 0.5, 0.5 );
+    COLOR4D b( 0.5, 0.5, 0.5, 0.5 );
+
+    BOOST_CHECK_EQUAL( a.Compare( b ), 0 );
+
+    b.r = 0.25;
+    BOOST_CHECK_GT( a.Compare( b ), 0 );
+
+    b.r = 0.75;
+    BOOST_CHECK_LT( a.Compare( b ), 0 );
+
+    b.r = 0.5;
+    b.g = 0.25;
+    BOOST_CHECK_GT( a.Compare( b ), 0 );
+
+    b.g = 0.75;
+    BOOST_CHECK_LT( a.Compare( b ), 0 );
+
+    b.g = 0.5;
+    b.b = 0.25;
+    BOOST_CHECK_GT( a.Compare( b ), 0 );
+
+    b.b = 0.75;
+    BOOST_CHECK_LT( a.Compare( b ), 0 );
+
+    b.b = 0.5;
+    b.a = 0.25;
+    BOOST_CHECK_GT( a.Compare( b ), 0 );
+
+    b.a = 0.75;
+    BOOST_CHECK_LT( a.Compare( b ), 0 );
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()

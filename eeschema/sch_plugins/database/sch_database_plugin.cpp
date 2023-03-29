@@ -20,6 +20,7 @@
 
 #include <iostream>
 #include <unordered_set>
+#include <wx/log.h>
 
 #include <boost/algorithm/string.hpp>
 

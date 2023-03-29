@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras@wanadoo.fr
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,6 +63,7 @@
 #include <cstring>
 #include <plugins/legacy/legacy_plugin.h>   // implement this here
 #include <wx/ffile.h>
+#include <wx/log.h>
 #include <wx/string.h>
 
 #include <string_utils.h>

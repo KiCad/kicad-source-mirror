@@ -47,6 +47,7 @@
 #include <fmt/core.h>
 #include <paths.h>
 #include <wx/dir.h>
+#include <wx/log.h>
 #include <locale_io.h>
 #include "markup_parser.h"
 

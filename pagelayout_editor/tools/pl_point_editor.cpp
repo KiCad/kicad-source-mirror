@@ -25,6 +25,7 @@
 #include <functional>
 using namespace std::placeholders;
 
+#include <wx/log.h>
 #include <fmt/format.h>
 
 #include <tool/tool_manager.h>

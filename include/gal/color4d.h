@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright (C) 2017-2020 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * Color class
  *
@@ -362,6 +362,8 @@ public:
      * Returns the distance (in RGB space) between two colors.
      */
     double Distance( const COLOR4D& other ) const;
+
+    int Compare( const COLOR4D& aRhs ) const;
 
     /**
      * Returns a legacy color ID that is closest to the given 8-bit RGB values.

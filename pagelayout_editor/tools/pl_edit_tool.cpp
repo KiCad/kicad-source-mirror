@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <wx/log.h>
 #include <fmt/format.h>
 
 #include <tool/tool_manager.h>

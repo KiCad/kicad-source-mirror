@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <wx/log.h>
 #include <sim/spice_model_parser.h>
 #include <sim/spice_grammar.h>
 #include <sim/sim_model_spice.h>

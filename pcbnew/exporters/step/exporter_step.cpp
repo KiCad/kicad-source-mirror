@@ -45,6 +45,7 @@
 #include <Standard_Version.hxx>
 
 #include <wx/crt.h>
+#include <wx/log.h>
 
 #define OCC_VERSION_MIN 0x070500
 

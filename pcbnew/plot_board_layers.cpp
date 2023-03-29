@@ -29,6 +29,7 @@
  */
 
 
+#include <wx/log.h>
 #include <eda_item.h>
 #include <layer_ids.h>
 #include <geometry/geometry_utils.h>

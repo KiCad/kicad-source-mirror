@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2021 Ola Rinta-Koski
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -21,14 +21,10 @@
 #ifndef TEXT_ATTRIBUTES_H
 #define TEXT_ATTRIBUTES_H
 
-#include <iostream>
-#include <wx/log.h>
-#include <cmath>
 #include <math/vector2d.h>
 #include <gal/color4d.h>
 #include "../../libs/kimath/include/geometry/eda_angle.h"
 
-class EDA_TEXT;
 
 namespace KIFONT
 {
@@ -63,26 +59,37 @@ enum GR_TEXT_V_ALIGN_T
 class TEXT_ATTRIBUTES
 {
 public:
-    KIFONT::FONT*     m_Font = nullptr;
-    GR_TEXT_H_ALIGN_T m_Halign = GR_TEXT_H_ALIGN_CENTER;
-    GR_TEXT_V_ALIGN_T m_Valign = GR_TEXT_V_ALIGN_CENTER;
-    EDA_ANGLE         m_Angle = ANGLE_0;
-    double            m_LineSpacing = 1.0;
-    int               m_StrokeWidth = 0;
-    bool              m_Italic = false;
-    bool              m_Bold = false;
-    bool              m_Underlined = false;
-    KIGFX::COLOR4D    m_Color = KIGFX::COLOR4D::UNSPECIFIED;
-    bool              m_Visible = true;
-    bool              m_Mirrored = false;
-    bool              m_Multiline = true;
+    TEXT_ATTRIBUTES( KIFONT::FONT* aFont = nullptr );
+
+    int Compare( const TEXT_ATTRIBUTES& aRhs ) const;
+
+    bool operator==( const TEXT_ATTRIBUTES& aRhs ) const { return Compare( aRhs ) == 0; }
+    bool operator>( const TEXT_ATTRIBUTES& aRhs ) const { return Compare( aRhs ) > 0; }
+    bool operator<( const TEXT_ATTRIBUTES& aRhs ) const { return Compare( aRhs ) < 0; }
+
+    KIFONT::FONT*     m_Font;
+    GR_TEXT_H_ALIGN_T m_Halign;
+    GR_TEXT_V_ALIGN_T m_Valign;
+    EDA_ANGLE         m_Angle;
+    double            m_LineSpacing;
+    int               m_StrokeWidth;
+    bool              m_Italic;
+    bool              m_Bold;
+    bool              m_Underlined;
+    KIGFX::COLOR4D    m_Color;
+    bool              m_Visible;
+    bool              m_Mirrored;
+    bool              m_Multiline;
     VECTOR2I          m_Size;
 
     /**
      * If true, keep rotation angle between -90...90 degrees for readability
      */
-    bool              m_KeepUpright = false;
+    bool              m_KeepUpright;
 };
+
+
+extern std::ostream& operator<<( std::ostream& aStream, const TEXT_ATTRIBUTES& aAttributes );
 
 
 #endif //TEXT_ATTRIBUTES_H

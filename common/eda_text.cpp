@@ -469,7 +469,8 @@ EDA_TEXT::GetRenderCache( const KIFONT::FONT* aFont, const wxString& forResolved
 
             attrs.m_Angle = resolvedAngle;
 
-            font->GetLinesAsGlyphs( &m_render_cache, GetShownText(), GetDrawPos() + aOffset, attrs );
+            font->GetLinesAsGlyphs( &m_render_cache, GetShownText(), GetDrawPos() + aOffset,
+                                    attrs );
             m_render_cache_angle = resolvedAngle;
             m_render_cache_text = forResolvedText;
             m_render_cache_offset = aOffset;
@@ -912,30 +913,20 @@ std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( bool aTriangula
 
 int EDA_TEXT::Compare( const EDA_TEXT* aOther ) const
 {
-#define EPSILON 2       // Should be enough for rounding errors on calculated items
+    wxCHECK( aOther, 1 );
 
-#define TEST( a, b ) { if( a != b ) return a - b; }
-#define TEST_E( a, b ) { if( abs( a - b ) > EPSILON ) return a - b; }
-#define TEST_PT( a, b ) { TEST_E( a.x, b.x ); TEST_E( a.y, b.y ); }
+    int val = m_attributes.Compare( aOther->m_attributes );
 
-    TEST_PT( m_pos, aOther->m_pos );
+    if( val != 0 )
+        return val;
 
-    TEST_PT( m_attributes.m_Size, aOther->m_attributes.m_Size );
-    TEST_E( m_attributes.m_StrokeWidth, aOther->m_attributes.m_StrokeWidth );
-    TEST( m_attributes.m_Angle.AsDegrees(), aOther->m_attributes.m_Angle.AsDegrees() );
-    TEST( m_attributes.m_LineSpacing, aOther->m_attributes.m_LineSpacing );
+    if( m_pos.x != aOther->m_pos.x )
+        return m_pos.x - aOther->m_pos.x;
 
-    TEST( m_attributes.m_Halign, aOther->m_attributes.m_Halign );
-    TEST( m_attributes.m_Valign, aOther->m_attributes.m_Valign );
-    TEST( m_attributes.m_Italic, aOther->m_attributes.m_Italic );
-    TEST( m_attributes.m_Bold, aOther->m_attributes.m_Bold );
-    TEST( m_attributes.m_Underlined, aOther->m_attributes.m_Underlined );
-    TEST( m_attributes.m_Visible, aOther->m_attributes.m_Visible );
-    TEST( m_attributes.m_Mirrored, aOther->m_attributes.m_Mirrored );
-    TEST( m_attributes.m_Multiline, aOther->m_attributes.m_Multiline );
-    TEST( m_attributes.m_KeepUpright, aOther->m_attributes.m_KeepUpright );
+    if( m_pos.y != aOther->m_pos.y )
+        return m_pos.y - aOther->m_pos.y;
 
-    int val = GetFontName().Cmp( aOther->GetFontName() );
+    val = GetFontName().Cmp( aOther->GetFontName() );
 
     if( val != 0 )
         return val;

@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright 2017-2021 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright 2017-2023 Kicad Developers, see AUTHORS.txt for contributors.
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -581,4 +581,22 @@ COLOR4D& COLOR4D::FromCSSRGBA( int aRed, int aGreen, int aBlue, double aAlpha )
     a = std::max( 0.0, std::min( 1.0, aAlpha ) );
 
     return *this;
+}
+
+
+int COLOR4D::Compare( const COLOR4D& aRhs ) const
+{
+    if( r != aRhs.r )
+        return ( r < aRhs.r ) ? -1 : 1;
+
+    if( g != aRhs.g )
+        return ( g < aRhs.g ) ? -1 : 1;
+
+    if( b != aRhs.b )
+        return ( b < aRhs.b ) ? -1 : 1;
+
+    if( a != aRhs.a )
+        return ( a < aRhs.a ) ? -1 : 1;
+
+    return 0;
 }
