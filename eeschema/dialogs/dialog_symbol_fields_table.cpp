@@ -442,18 +442,6 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataFromWindow()
     if( !wxDialog::TransferDataFromWindow() )
         return false;
 
-    // Save our BOM presets
-    std::vector<BOM_PRESET> presets;
-
-    for( const std::pair<const wxString, BOM_PRESET>& pair : m_bomPresets )
-    {
-        if( !pair.second.readOnly )
-            presets.emplace_back( pair.second );
-    }
-
-    m_schSettings.m_BomPresets = presets;
-
-
     SCH_SHEET_PATH currentSheet = m_parent->GetCurrentSheet();
 
     std::function<void( SCH_SYMBOL&, SCH_SHEET_PATH & aPath )> changeHandler =
@@ -1385,13 +1373,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged( wxCommandEvent& aEvent )
 
         if( !exists )
         {
-            m_bomPresets[name] =
-                    ( BOM_PRESET ){ .name = name,
-                                    .fieldsOrdered = m_schSettings.m_BomSettings.fieldsOrdered,
-                                    .sortField = m_schSettings.m_BomSettings.sortField,
-                                    .sortAsc = m_schSettings.m_BomSettings.sortAsc,
-                                    .filterString = m_schSettings.m_BomSettings.filterString,
-                                    .groupSymbols = m_schSettings.m_BomSettings.groupSymbols };
+            m_bomPresets[name] = m_schSettings.m_BomSettings;
+            m_bomPresets[name].readOnly = false;
+            m_bomPresets[name].name = name;
         }
 
         BOM_PRESET* preset = &m_bomPresets[name];
@@ -1403,11 +1387,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged( wxCommandEvent& aEvent )
         }
         else
         {
-            preset->fieldsOrdered = m_schSettings.m_BomSettings.fieldsOrdered;
-            preset->sortField = m_schSettings.m_BomSettings.sortField;
-            preset->sortAsc = m_schSettings.m_BomSettings.sortAsc;
-            preset->filterString = m_schSettings.m_BomSettings.filterString;
-            preset->groupSymbols = m_schSettings.m_BomSettings.groupSymbols;
+            *preset = m_schSettings.m_BomSettings;
+            preset->name = name;
 
             index = m_cbBomPresets->FindString( name );
             m_bomPresetMRU.Remove( name );
@@ -1416,6 +1397,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged( wxCommandEvent& aEvent )
         m_cbBomPresets->SetSelection( index );
         m_bomPresetMRU.Insert( name, 0 );
 
+        savePresetsToSchematic();
         return;
     }
     else if( index == count - 1 )
@@ -1456,6 +1438,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged( wxCommandEvent& aEvent )
         }
 
         resetSelection();
+        savePresetsToSchematic();
         return;
     }
 
@@ -1481,6 +1464,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged( wxCommandEvent& aEvent )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
 {
+    m_schSettings.m_BomSettings = aPreset;
+
     // Basically, we apply the BOM preset to the data model and then
     // update our UI to reflect resulting the data model state, not the preset.
     m_dataModel->ApplyBomPreset( aPreset );
@@ -1552,8 +1537,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
     // and labels are right, then we refresh the shown grid data to match
     m_dataModel->RebuildRows();
     m_grid->ForceRefresh();
-
-    m_schSettings.m_BomSettings = aPreset;
 }
 
 
@@ -1776,6 +1759,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomFmtPresetChanged( wxCommandEvent& aEvent )
         if( !exists )
         {
             m_bomFmtPresets[name] = m_schSettings.m_BomFmtSettings;
+            m_bomFmtPresets[name].readOnly = false;
+            m_bomFmtPresets[name].name = name;
         }
 
         BOM_FMT_PRESET* preset = &m_bomFmtPresets[name];
@@ -1797,6 +1782,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomFmtPresetChanged( wxCommandEvent& aEvent )
         m_cbBomFmtPresets->SetSelection( index );
         m_bomFmtPresetMRU.Insert( name, 0 );
 
+        savePresetsToSchematic();
         return;
     }
     else if( index == count - 1 )
@@ -1837,6 +1823,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomFmtPresetChanged( wxCommandEvent& aEvent )
         }
 
         resetSelection();
+        savePresetsToSchematic();
         return;
     }
 
@@ -1863,19 +1850,41 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomFmtPresetChanged( wxCommandEvent& aEvent )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomFmtPreset( const BOM_FMT_PRESET& aPreset )
 {
+    m_schSettings.m_BomFmtSettings = aPreset;
+
     m_textFieldDelimiter->ChangeValue( aPreset.fieldDelimiter );
     m_textStringDelimiter->ChangeValue( aPreset.stringDelimiter );
-    m_textRefDelimiter->SetValue( aPreset.refDelimiter );
-    m_textRefRangeDelimiter->SetValue( aPreset.refRangeDelimiter );
+    m_textRefDelimiter->ChangeValue( aPreset.refDelimiter );
+    m_textRefRangeDelimiter->ChangeValue( aPreset.refRangeDelimiter );
     m_checkKeepTabs->SetValue( aPreset.keepTabs );
     m_checkKeepLineBreaks->SetValue( aPreset.keepLineBreaks );
 
     PreviewRefresh();
+}
 
-    m_schSettings.m_BomFmtSettings.fieldDelimiter = aPreset.fieldDelimiter;
-    m_schSettings.m_BomFmtSettings.stringDelimiter = aPreset.stringDelimiter;
-    m_schSettings.m_BomFmtSettings.refDelimiter = aPreset.refDelimiter;
-    m_schSettings.m_BomFmtSettings.refRangeDelimiter = aPreset.refRangeDelimiter;
-    m_schSettings.m_BomFmtSettings.keepTabs = aPreset.keepTabs;
-    m_schSettings.m_BomFmtSettings.keepLineBreaks = aPreset.keepLineBreaks;
+
+void DIALOG_SYMBOL_FIELDS_TABLE::savePresetsToSchematic()
+{
+    // Save our BOM presets
+    std::vector<BOM_PRESET> presets;
+
+    for( const std::pair<const wxString, BOM_PRESET>& pair : m_bomPresets )
+    {
+        if( !pair.second.readOnly )
+            presets.emplace_back( pair.second );
+    }
+
+    m_schSettings.m_BomPresets = presets;
+
+    // Save our BOM Format presets
+    std::vector<BOM_FMT_PRESET> fmts;
+
+    for( const std::pair<const wxString, BOM_FMT_PRESET>& pair : m_bomFmtPresets )
+    {
+        if( !pair.second.readOnly )
+            fmts.emplace_back( pair.second );
+    }
+
+    m_schSettings.m_BomFmtPresets = fmts;
+    m_parent->OnModify();
 }

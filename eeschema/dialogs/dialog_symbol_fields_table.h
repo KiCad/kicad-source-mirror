@@ -121,6 +121,8 @@ private:
     BOM_FMT_PRESET*                    m_lastSelectedBomFmtPreset;
     wxArrayString                      m_bomFmtPresetMRU;
 
+    void savePresetsToSchematic();
+
     SCH_EDIT_FRAME*                m_parent;
     int                            m_fieldNameColWidth;
     int                            m_labelColWidth;

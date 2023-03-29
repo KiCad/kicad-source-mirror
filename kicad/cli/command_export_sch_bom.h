@@ -42,8 +42,8 @@ namespace CLI
 #define ARG_KEEP_TABS "--keep-tabs"
 #define ARG_KEEP_TABS_DESC "Keep tab characters from input fields. Stripped by default."
 
-#define ARG_KEEP_LINE_BREAKS "--keep-newlines"
-#define ARG_KEEP_LINE_BREAKS_DESC "Keep newline characters from input fields. Stripped by default."
+#define ARG_KEEP_LINE_BREAKS "--keep-line-breaks"
+#define ARG_KEEP_LINE_BREAKS_DESC "Keep line break characters from input fields. Stripped by default."
 
 //Options for controlling the fields and the grouping
 #define ARG_FIELDS "--fields"
