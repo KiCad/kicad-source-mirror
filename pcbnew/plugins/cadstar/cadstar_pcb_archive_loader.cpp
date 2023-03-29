@@ -1700,10 +1700,6 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponents()
                 PADEXCEPTION& padEx = padPair.second;
                 COMPONENT_PAD csPad = fpLibEntry.ComponentPads.at( padPair.first );
 
-                // Reset the pad to be around 0,0
-                csPad.Position -= fpLibEntry.Origin;
-                csPad.Position += m_designCenter;
-
                 if( !padEx.PadCode.IsEmpty() )
                     csPad.PadCodeID = padEx.PadCode;
 
