@@ -732,6 +732,9 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnLibList( wxCommandEvent& aEvent )
 
     setCurNickname( name );
 
+    // Ensure the displayed footprint is loade/reloaded from the new library
+    setCurFootprintName( wxEmptyString );
+
     ReCreateFootprintList();
     UpdateTitle();
 }

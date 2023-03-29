@@ -301,7 +301,7 @@ int TEARDROP_MANAGER::addTeardropsOnTracks( BOARD_COMMIT* aCommitter )
     TEARDROP_PARAMETERS* currParams = m_prmsList->GetParameters( TARGET_TRACK );
 
     // Explore groups (a group is a set of tracks on the same layer and the same net):
-    for( auto grp : trackLookupList.GetBuffer() )
+    for( auto& grp : trackLookupList.GetBuffer() )
     {
         int layer, netcode;
         TRACK_BUFFER::GetNetcodeAndLayerFromIndex( grp.first, &layer, &netcode );
