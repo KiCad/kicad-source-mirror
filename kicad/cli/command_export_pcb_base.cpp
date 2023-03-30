@@ -105,7 +105,7 @@ LSET CLI::EXPORT_PCB_BASE_COMMAND::convertLayerStringList( wxString& aLayerStrin
             // Search for a layer name in canonical layer name used in GUI (not translated):
             else if( m_layerGuiMasks.count( token ) )
             {
-                layerMask |= m_layerMasks.at(token);
+                layerMask |= m_layerGuiMasks.at(token);
                 aLayerArgSet = true;
             }
             else
