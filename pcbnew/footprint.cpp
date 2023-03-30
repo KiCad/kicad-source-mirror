@@ -1700,10 +1700,17 @@ void FOOTPRINT::SetPosition( const VECTOR2I& aPos )
         switch( item->Type() )
         {
         case PCB_FP_SHAPE_T:
-        case PCB_FP_TEXTBOX_T:
         {
             FP_SHAPE* shape = static_cast<FP_SHAPE*>( item );
             shape->SetDrawCoord();
+            break;
+        }
+
+        case PCB_FP_TEXTBOX_T:
+        {
+            FP_TEXTBOX* textb = static_cast<FP_TEXTBOX*>( item );
+            textb->SetDrawCoord();
+            textb->ClearRenderCache();
             break;
         }
 
