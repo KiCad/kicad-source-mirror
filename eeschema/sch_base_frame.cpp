@@ -45,6 +45,7 @@
 #include <tools/ee_actions.h>
 #include <tools/ee_selection_tool.h>
 #include <wx/choicdlg.h>
+#include <wx/log.h>
 
 #if defined( KICAD_USE_3DCONNEXION )
 #include <navlib/nl_schematic_plugin.h>
