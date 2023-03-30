@@ -184,7 +184,7 @@ void EDA_SHAPE::move( const VECTOR2I& aMoveVector )
         break;
 
     case SHAPE_T::POLY:
-        m_poly.Move( VECTOR2I( aMoveVector ) );
+        m_poly.Move( aMoveVector );
         break;
 
     case SHAPE_T::BEZIER:
@@ -712,14 +712,7 @@ const BOX2I EDA_SHAPE::getBoundingBox() const
             break;
 
         for( auto iter = m_poly.CIterate(); iter; iter++ )
-        {
-            VECTOR2I pt( iter->x, iter->y );
-
-            RotatePoint( pt, getParentOrientation() );
-            pt += getParentPosition();
-
-            bbox.Merge( pt );
-        }
+            bbox.Merge( *iter );
 
         break;
 
@@ -949,18 +942,10 @@ bool EDA_SHAPE::hitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
             // Account for the width of the line
             arect.Inflate( GetWidth() / 2 );
 
-            // Polygons in footprints use coordinates relative to the footprint.
-            // Therefore, instead of using m_poly, we make a copy which is translated
-            // to the actual location in the board.
-            VECTOR2I offset = getParentPosition();
-
             for( int ii = 0; ii < m_poly.OutlineCount(); ++ii )
             {
-                SHAPE_LINE_CHAIN poly = m_poly.Outline( ii );
-                poly.Rotate( getParentOrientation() );
-                poly.Move( offset );
-
-                int count = poly.GetPointCount();
+                const SHAPE_LINE_CHAIN& poly = m_poly.Outline( ii );
+                int                     count = poly.GetPointCount();
 
                 for( int jj = 0; jj < count; jj++ )
                 {
@@ -1038,31 +1023,10 @@ std::vector<VECTOR2I> EDA_SHAPE::GetRectCorners() const
     VECTOR2I              topLeft = GetStart();
     VECTOR2I              botRight = GetEnd();
 
-    // Un-rotate rect topLeft and botRight
-    if( !getParentOrientation().IsCardinal() )
-    {
-        topLeft -= getParentPosition();
-        RotatePoint( topLeft, -getParentOrientation() );
-
-        botRight -= getParentPosition();
-        RotatePoint( botRight, -getParentOrientation() );
-    }
-
-    // Set up the un-rotated 4 corners
     pts.emplace_back( topLeft );
     pts.emplace_back( botRight.x, topLeft.y );
     pts.emplace_back( botRight );
     pts.emplace_back( topLeft.x, botRight.y );
-
-    // Now re-rotate the 4 corners to get a diamond
-    if( !getParentOrientation().IsCardinal() )
-    {
-        for( VECTOR2I& pt : pts )
-        {
-            RotatePoint( pt, getParentOrientation() );
-            pt += getParentPosition();
-        }
-    }
 
     return pts;
 }
@@ -1197,9 +1161,6 @@ std::vector<SHAPE*> EDA_SHAPE::makeEffectiveShapes( bool aEdgeOnly, bool aLineCh
 
             if( aLineChainOnly )
                 l.SetClosed( false );
-
-            l.Rotate( getParentOrientation() );
-            l.Move( getParentPosition() );
 
             if( IsFilled() && !aEdgeOnly )
                 effectiveShapes.emplace_back( new SHAPE_SIMPLE( l ) );
@@ -1604,38 +1565,30 @@ void EDA_SHAPE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance
         if( !IsPolyShapeValid() )
             break;
 
-        // The polygon is expected to be a simple polygon; not self intersecting, no hole.
-        EDA_ANGLE orientation = getParentOrientation();
-        VECTOR2I  offset = getParentPosition();
-
-        // Build the polygon with the actual position and orientation:
-        std::vector<VECTOR2I> poly;
-        DupPolyPointsList( poly );
-
-        for( VECTOR2I& point : poly )
-        {
-            RotatePoint( point, orientation );
-            point += offset;
-        }
-
         if( IsFilled() )
         {
             aBuffer.NewOutline();
 
-            for( const VECTOR2I& point : poly )
-                aBuffer.Append( point.x, point.y );
+            for( int ii = 0; ii < m_poly.OutlineCount(); ++ii )
+            {
+                const SHAPE_LINE_CHAIN& poly = m_poly.Outline( ii );
+
+                for( int jj = 0; jj < (int) poly.GetPointCount(); ++jj )
+                    aBuffer.Append( poly.GetPoint( jj ) );
+            }
         }
 
         if( width > 0 || !IsFilled() )
         {
-            VECTOR2I pt1( poly[poly.size() - 1] );
-
-            for( const VECTOR2I& pt2 : poly )
+            for( int ii = 0; ii < m_poly.OutlineCount(); ++ii )
             {
-                if( pt2 != pt1 )
-                    TransformOvalToPolygon( aBuffer, pt1, pt2, width, aError, aErrorLoc );
+                const SHAPE_LINE_CHAIN& poly = m_poly.Outline( ii );
 
-                pt1 = pt2;
+                for( int jj = 0; jj < (int) poly.SegmentCount(); ++jj )
+                {
+                    const SEG& seg = poly.GetSegment( jj );
+                    TransformOvalToPolygon( aBuffer, seg.A, seg.B, width, aError, aErrorLoc );
+                }
             }
         }
 

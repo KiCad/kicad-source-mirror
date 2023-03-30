@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,56 +23,39 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <pcad/pcb_component.h>
+#ifndef PCAD_LINE_H
+#define PCAD_LINE_H
 
-#include <board.h>
-#include <common.h>
-#include <footprint.h>
+#include <pcad/pcad_pcb_component.h>
 
-#include <wx/string.h>
-
+class BOARD;
+class FOOTPRINT;
+class wxString;
+class XNODE;
 
 namespace PCAD2KICAD {
 
-PCB_COMPONENT::PCB_COMPONENT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
-        m_uuid(),
-        m_callbacks( aCallbacks ),
-        m_board( aBoard )
+// Line , routes and drawings
+class PCAD_LINE : public PCAD_PCB_COMPONENT
 {
-    m_tag             = 0;
-    m_objType         = wxT( '?' );
-    m_PCadLayer       = 0;
-    m_KiCadLayer      = F_Cu; // It *has* to be somewhere...
-    m_positionX       = 0;
-    m_positionY       = 0;
-    m_rotation        = ANGLE_0;
-    InitTTextValue( &m_name );
-    m_net             = wxEmptyString;
-    m_netCode         = 0;
-    m_compRef         = wxEmptyString;
-    m_patGraphRefName = wxEmptyString;
-}
+public:
+    PCAD_LINE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
+    ~PCAD_LINE();
 
+    virtual void Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
+                        const wxString& aActualConversion );
 
-PCB_COMPONENT::~PCB_COMPONENT()
-{
-}
+    virtual void SetPosOffset( int aX_offs, int aY_offs ) override;
 
+    virtual void Flip() override;
 
-void PCB_COMPONENT::AddToFootprint( FOOTPRINT* aFootprint )
-{
-}
+    void AddToBoard( FOOTPRINT* aFootprint = nullptr ) override;
 
-
-void PCB_COMPONENT::SetPosOffset( int aX_offs, int aY_offs )
-{
-    m_positionX += aX_offs;
-    m_positionY += aY_offs;
-}
-
-void PCB_COMPONENT::Flip()
-{
-    m_positionX = -m_positionX;
-}
+    int m_Width;
+    int m_ToX;
+    int m_ToY;
+};
 
 } // namespace PCAD2KICAD
+
+#endif    // PCAD_LINE_H

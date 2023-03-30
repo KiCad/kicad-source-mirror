@@ -34,7 +34,7 @@ namespace PCAD2KICAD {
 PCB_KEEPOUT::PCB_KEEPOUT( PCB_CALLBACKS*    aCallbacks,
                           BOARD*            aBoard,
                           int               aPCadLayer ) :
-    PCB_POLYGON( aCallbacks, aBoard, aPCadLayer )
+        PCAD_POLYGON( aCallbacks, aBoard, aPCadLayer )
 {
     m_objType   = wxT( 'K' );
 }

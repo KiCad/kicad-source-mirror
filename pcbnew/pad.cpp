@@ -164,7 +164,7 @@ bool PAD::IsLocked() const
 
 bool PAD::SharesNetTieGroup( const PAD* aOther ) const
 {
-    FOOTPRINT* parentFp = static_cast<FOOTPRINT*>( GetParentFootprint() );
+    FOOTPRINT* parentFp = GetParentFootprint();
 
     if( parentFp && parentFp->IsNetTie() && aOther->GetParentFootprint() == parentFp )
     {

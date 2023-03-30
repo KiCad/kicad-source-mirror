@@ -33,7 +33,6 @@
 #include <pcb_edit_frame.h>
 #include <board.h>
 #include <board_design_settings.h>
-#include <fp_shape.h>
 #include <macros.h>
 #include <pad.h>
 #include <pcb_marker.h>
@@ -41,6 +40,7 @@
 #include <pcb_track.h>
 #include <pcb_dimension.h>
 #include <pcb_bitmap.h>
+#include <pcb_textbox.h>
 #include <footprint.h>
 #include <zone.h>
 #include <view/view.h>
@@ -50,8 +50,8 @@
 #include <geometry/shape_simple.h>
 #include <convert_shape_list_to_polygon.h>
 #include <geometry/convex_hull.h>
-#include "fp_textbox.h"
 #include "convert_basic_shapes_to_polygon.h"
+
 
 FOOTPRINT::FOOTPRINT( BOARD* parent ) :
         BOARD_ITEM_CONTAINER((BOARD_ITEM*) parent, PCB_FOOTPRINT_T ),
@@ -77,8 +77,8 @@ FOOTPRINT::FOOTPRINT( BOARD* parent ) :
     m_fileFormatVersionAtLoad     = 0;
 
     // These are special and mandatory text fields
-    m_reference = new FP_TEXT( this, FP_TEXT::TEXT_is_REFERENCE );
-    m_value = new FP_TEXT( this, FP_TEXT::TEXT_is_VALUE );
+    m_reference = new PCB_TEXT( this, PCB_TEXT::TEXT_is_REFERENCE );
+    m_value = new PCB_TEXT( this, PCB_TEXT::TEXT_is_VALUE );
 
     m_3D_Drawings.clear();
 }
@@ -116,11 +116,11 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
     std::map<BOARD_ITEM*, BOARD_ITEM*> ptrMap;
 
     // Copy reference and value.
-    m_reference = new FP_TEXT( *aFootprint.m_reference );
+    m_reference = new PCB_TEXT( *aFootprint.m_reference );
     m_reference->SetParent( this );
     ptrMap[ aFootprint.m_reference ] = m_reference;
 
-    m_value = new FP_TEXT( *aFootprint.m_value );
+    m_value = new PCB_TEXT( *aFootprint.m_value );
     m_value->SetParent( this );
     ptrMap[ aFootprint.m_value ] = m_value;
 
@@ -133,9 +133,9 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
     }
 
     // Copy zones
-    for( FP_ZONE* zone : aFootprint.Zones() )
+    for( ZONE* zone : aFootprint.Zones() )
     {
-        FP_ZONE* newZone = static_cast<FP_ZONE*>( zone->Clone() );
+        ZONE* newZone = static_cast<ZONE*>( zone->Clone() );
         ptrMap[ zone ] = newZone;
         Add( newZone, ADD_MODE::APPEND ); // Append to ensure indexes are identical
 
@@ -200,7 +200,7 @@ FOOTPRINT::FOOTPRINT( FOOTPRINT&& aFootprint ) :
 FOOTPRINT::~FOOTPRINT()
 {
     // Untangle group parents before doing any deleting
-    for( PCB_GROUP* group : m_fp_groups )
+    for( PCB_GROUP* group : m_groups )
     {
         for( BOARD_ITEM* item : group->GetItems() )
             item->SetParentGroup( nullptr );
@@ -216,15 +216,15 @@ FOOTPRINT::~FOOTPRINT()
 
     m_pads.clear();
 
-    for( FP_ZONE* zone : m_fp_zones )
+    for( ZONE* zone : m_zones )
         delete zone;
 
-    m_fp_zones.clear();
+    m_zones.clear();
 
-    for( PCB_GROUP* group : m_fp_groups )
+    for( PCB_GROUP* group : m_groups )
         delete group;
 
-    m_fp_groups.clear();
+    m_groups.clear();
 
     for( BOARD_ITEM* d : m_drawings )
         delete d;
@@ -252,11 +252,11 @@ bool FOOTPRINT::FixUuids()
 
     // Note: one cannot fix null UUIDs inside the group, but it should not happen
     // because null uuids can be found in old footprints, therefore without group
-    for( PCB_GROUP* group : m_fp_groups )
+    for( PCB_GROUP* group : m_groups )
         item_list.push_back( group );
 
     // Probably notneeded, because old fp do not have zones. But just in case.
-    for( FP_ZONE* zone : m_fp_zones )
+    for( ZONE* zone : m_zones )
         item_list.push_back( zone );
 
     bool changed = false;
@@ -319,9 +319,9 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
     aOther.Pads().clear();
 
     // Move the zones
-    m_fp_zones.clear();
+    m_zones.clear();
 
-    for( FP_ZONE* item : aOther.Zones() )
+    for( ZONE* item : aOther.Zones() )
     {
         Add( item );
 
@@ -343,7 +343,7 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
     aOther.GraphicalItems().clear();
 
     // Move the groups
-    m_fp_groups.clear();
+    m_groups.clear();
 
     for( PCB_GROUP* group : aOther.Groups() )
         Add( group );
@@ -419,11 +419,11 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
     }
 
     // Copy zones
-    m_fp_zones.clear();
+    m_zones.clear();
 
-    for( FP_ZONE* zone : aOther.Zones() )
+    for( ZONE* zone : aOther.Zones() )
     {
-        FP_ZONE* newZone = static_cast<FP_ZONE*>( zone->Clone() );
+        ZONE* newZone = static_cast<ZONE*>( zone->Clone() );
         ptrMap[ zone ] = newZone;
         Add( newZone );
 
@@ -445,7 +445,7 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
     }
 
     // Copy groups
-    m_fp_groups.clear();
+    m_groups.clear();
 
     for( PCB_GROUP* group : aOther.Groups() )
     {
@@ -569,18 +569,18 @@ void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectiv
 {
     switch( aBoardItem->Type() )
     {
-    case PCB_FP_TEXT_T:
+    case PCB_TEXT_T:
         // Only user text can be added this way.
-        wxASSERT( static_cast<FP_TEXT*>( aBoardItem )->GetType() == FP_TEXT::TEXT_is_DIVERS );
+        wxASSERT( static_cast<PCB_TEXT*>( aBoardItem )->GetType() == PCB_TEXT::TEXT_is_DIVERS );
         KI_FALLTHROUGH;
 
-    case PCB_FP_DIM_ALIGNED_T:
-    case PCB_FP_DIM_LEADER_T:
-    case PCB_FP_DIM_CENTER_T:
-    case PCB_FP_DIM_RADIAL_T:
-    case PCB_FP_DIM_ORTHOGONAL_T:
-    case PCB_FP_SHAPE_T:
-    case PCB_FP_TEXTBOX_T:
+    case PCB_DIM_ALIGNED_T:
+    case PCB_DIM_LEADER_T:
+    case PCB_DIM_CENTER_T:
+    case PCB_DIM_RADIAL_T:
+    case PCB_DIM_ORTHOGONAL_T:
+    case PCB_SHAPE_T:
+    case PCB_TEXTBOX_T:
     case PCB_BITMAP_T:
         if( aMode == ADD_MODE::APPEND )
             m_drawings.push_back( aBoardItem );
@@ -595,18 +595,18 @@ void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectiv
             m_pads.push_front( static_cast<PAD*>( aBoardItem ) );
         break;
 
-    case PCB_FP_ZONE_T:
+    case PCB_ZONE_T:
         if( aMode == ADD_MODE::APPEND )
-            m_fp_zones.push_back( static_cast<FP_ZONE*>( aBoardItem ) );
+            m_zones.push_back( static_cast<ZONE*>( aBoardItem ) );
         else
-            m_fp_zones.insert( m_fp_zones.begin(), static_cast<FP_ZONE*>( aBoardItem ) );
+            m_zones.insert( m_zones.begin(), static_cast<ZONE*>( aBoardItem ) );
         break;
 
     case PCB_GROUP_T:
         if( aMode == ADD_MODE::APPEND )
-            m_fp_groups.push_back( static_cast<PCB_GROUP*>( aBoardItem ) );
+            m_groups.push_back( static_cast<PCB_GROUP*>( aBoardItem ) );
         else
-            m_fp_groups.insert( m_fp_groups.begin(), static_cast<PCB_GROUP*>( aBoardItem ) );
+            m_groups.insert( m_groups.begin(), static_cast<PCB_GROUP*>( aBoardItem ) );
         break;
 
     default:
@@ -629,19 +629,19 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
 {
     switch( aBoardItem->Type() )
     {
-    case PCB_FP_TEXT_T:
+    case PCB_TEXT_T:
         // Only user text can be removed this way.
-        wxCHECK_RET( static_cast<FP_TEXT*>( aBoardItem )->GetType() == FP_TEXT::TEXT_is_DIVERS,
+        wxCHECK_RET( static_cast<PCB_TEXT*>( aBoardItem )->GetType() == PCB_TEXT::TEXT_is_DIVERS,
                      wxT( "Please report this bug: Invalid remove operation on required text" ) );
         KI_FALLTHROUGH;
 
-    case PCB_FP_DIM_ALIGNED_T:
-    case PCB_FP_DIM_CENTER_T:
-    case PCB_FP_DIM_ORTHOGONAL_T:
-    case PCB_FP_DIM_RADIAL_T:
-    case PCB_FP_DIM_LEADER_T:
-    case PCB_FP_SHAPE_T:
-    case PCB_FP_TEXTBOX_T:
+    case PCB_DIM_ALIGNED_T:
+    case PCB_DIM_CENTER_T:
+    case PCB_DIM_ORTHOGONAL_T:
+    case PCB_DIM_RADIAL_T:
+    case PCB_DIM_LEADER_T:
+    case PCB_SHAPE_T:
+    case PCB_TEXTBOX_T:
     case PCB_BITMAP_T:
         for( auto it = m_drawings.begin(); it != m_drawings.end(); ++it )
         {
@@ -666,12 +666,12 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
 
         break;
 
-    case PCB_FP_ZONE_T:
-        for( auto it = m_fp_zones.begin(); it != m_fp_zones.end(); ++it )
+    case PCB_ZONE_T:
+        for( auto it = m_zones.begin(); it != m_zones.end(); ++it )
         {
-            if( *it == static_cast<FP_ZONE*>( aBoardItem ) )
+            if( *it == static_cast<ZONE*>( aBoardItem ) )
             {
-                m_fp_zones.erase( it );
+                m_zones.erase( it );
                 break;
             }
         }
@@ -679,11 +679,11 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
         break;
 
     case PCB_GROUP_T:
-        for( auto it = m_fp_groups.begin(); it != m_fp_groups.end(); ++it )
+        for( auto it = m_groups.begin(); it != m_groups.end(); ++it )
         {
             if( *it == static_cast<PCB_GROUP*>( aBoardItem ) )
             {
-                m_fp_groups.erase( it );
+                m_groups.erase( it );
                 break;
             }
         }
@@ -847,14 +847,11 @@ const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisible
             continue;
 
         // Handle text separately
-        if( item->Type() == PCB_FP_TEXT_T )
+        if( item->Type() == PCB_TEXT_T )
             continue;
 
         // Treat dimension objects as text
-        if( !aIncludeText
-            && ( item->Type() == PCB_FP_DIM_ALIGNED_T || item->Type() == PCB_FP_DIM_CENTER_T
-                 || item->Type() == PCB_FP_DIM_LEADER_T || item->Type() == PCB_FP_DIM_ORTHOGONAL_T
-                 || item->Type() == PCB_FP_DIM_RADIAL_T ) )
+        if( !aIncludeText && BaseType( item->Type() ) == PCB_DIMENSION_T )
             continue;
 
         bbox.Merge( item->GetBoundingBox() );
@@ -863,10 +860,10 @@ const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisible
     for( PAD* pad : m_pads )
         bbox.Merge( pad->GetBoundingBox() );
 
-    for( FP_ZONE* zone : m_fp_zones )
+    for( ZONE* zone : m_zones )
         bbox.Merge( zone->GetBoundingBox() );
 
-    bool noDrawItems = ( m_drawings.empty() && m_pads.empty() && m_fp_zones.empty() );
+    bool noDrawItems = ( m_drawings.empty() && m_pads.empty() && m_zones.empty() );
 
     // Groups do not contribute to the rect, only their members
     if( aIncludeText || noDrawItems )
@@ -876,9 +873,9 @@ const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisible
             if( !isFPEdit && m_privateLayers.test( item->GetLayer() ) )
                 continue;
 
-            // Only FP_TEXT items are independently selectable; FP_TEXTBOX items go in with
+            // Only PCB_TEXT items are independently selectable; PCB_TEXTBOX items go in with
             // other graphic items above.
-            if( item->Type() == PCB_FP_TEXT_T )
+            if( item->Type() == PCB_TEXT_T )
                 bbox.Merge( item->GetBoundingBox() );
         }
 
@@ -960,7 +957,7 @@ SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
         if( !isFPEdit && m_privateLayers.test( item->GetLayer() ) )
             continue;
 
-        if( item->Type() != PCB_FP_TEXT_T && item->Type() != PCB_BITMAP_T )
+        if( item->Type() != PCB_TEXT_T && item->Type() != PCB_BITMAP_T )
         {
             item->TransformShapeToPolygon( rawPolys, UNDEFINED_LAYER, 0, ARC_LOW_DEF,
                                            ERROR_OUTSIDE );
@@ -976,7 +973,7 @@ SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
         pad->TransformHoleToPolygon( rawPolys, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
     }
 
-    for( FP_ZONE* zone : m_fp_zones )
+    for( ZONE* zone : m_zones )
     {
         for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
         {
@@ -1104,7 +1101,7 @@ bool FOOTPRINT::IsOnLayer( PCB_LAYER_ID aLayer, bool aIncludeCourtyards ) const
         return m_layer == aLayer;
 
     // No pads?  Check if this entire footprint exists on the given layer
-    for( FP_ZONE* zone : m_fp_zones )
+    for( ZONE* zone : m_zones )
     {
         if( !zone->IsOnLayer( aLayer ) )
             return false;
@@ -1149,7 +1146,7 @@ bool FOOTPRINT::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
             return false;
 
         // The empty footprint dummy rectangle intersects the selection area.
-        if( m_pads.empty() && m_fp_zones.empty() && m_drawings.empty() )
+        if( m_pads.empty() && m_zones.empty() && m_drawings.empty() )
             return GetBoundingBox( true, false ).Intersects( arect );
 
         // Determine if any elements in the FOOTPRINT intersect the rect
@@ -1159,7 +1156,7 @@ bool FOOTPRINT::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
                 return true;
         }
 
-        for( FP_ZONE* zone : m_fp_zones )
+        for( ZONE* zone : m_zones )
         {
             if( zone->HitTest( arect, false, 0 ) )
                 return true;
@@ -1170,11 +1167,8 @@ bool FOOTPRINT::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
             // Text items are selectable on their own, and are therefore excluded from this
             // test.  TextBox items are NOT selectable on their own, and so MUST be included
             // here. Bitmaps aren't selectable since they aren't displayed.
-            if( item->Type() != PCB_FP_TEXT_T && item->Type() != PCB_FP_TEXT_T
-                && item->HitTest( arect, false, 0 ) )
-            {
+            if( item->Type() != PCB_TEXT_T && item->HitTest( arect, false, 0 ) )
                 return true;
-            }
         }
 
         // Groups are not hit-tested; only their members
@@ -1310,8 +1304,8 @@ INSPECT_RESULT FOOTPRINT::Visit( INSPECTOR inspector, void* testData,
 
             break;
 
-        case PCB_FP_ZONE_T:
-            if( IterateForward<FP_ZONE*>( m_fp_zones, inspector, testData, { scanType } )
+        case PCB_ZONE_T:
+            if( IterateForward<ZONE*>( m_zones, inspector, testData, { scanType } )
                     == INSPECT_RESULT::QUIT )
             {
                 return INSPECT_RESULT::QUIT;
@@ -1319,23 +1313,23 @@ INSPECT_RESULT FOOTPRINT::Visit( INSPECTOR inspector, void* testData,
 
             break;
 
-        case PCB_FP_TEXT_T:
+        case PCB_TEXT_T:
             if( inspector( m_reference, testData ) == INSPECT_RESULT::QUIT )
                 return INSPECT_RESULT::QUIT;
 
             if( inspector( m_value, testData ) == INSPECT_RESULT::QUIT )
                 return INSPECT_RESULT::QUIT;
 
-            // Intentionally fall through since m_Drawings can hold PCB_FP_TEXT_T also
+            // Intentionally fall through since m_Drawings can hold PCB_TEXT_T also
             KI_FALLTHROUGH;
 
-        case PCB_FP_DIM_ALIGNED_T:
-        case PCB_FP_DIM_LEADER_T:
-        case PCB_FP_DIM_CENTER_T:
-        case PCB_FP_DIM_RADIAL_T:
-        case PCB_FP_DIM_ORTHOGONAL_T:
-        case PCB_FP_SHAPE_T:
-        case PCB_FP_TEXTBOX_T:
+        case PCB_DIM_ALIGNED_T:
+        case PCB_DIM_LEADER_T:
+        case PCB_DIM_CENTER_T:
+        case PCB_DIM_RADIAL_T:
+        case PCB_DIM_ORTHOGONAL_T:
+        case PCB_SHAPE_T:
+        case PCB_TEXTBOX_T:
             if( !drawingsScanned )
             {
                 if( IterateForward<BOARD_ITEM*>( m_drawings, inspector, testData, aScanTypes )
@@ -1350,7 +1344,7 @@ INSPECT_RESULT FOOTPRINT::Visit( INSPECTOR inspector, void* testData,
             break;
 
         case PCB_GROUP_T:
-            if( IterateForward<PCB_GROUP*>( m_fp_groups, inspector, testData, { scanType } )
+            if( IterateForward<PCB_GROUP*>( m_groups, inspector, testData, { scanType } )
                     == INSPECT_RESULT::QUIT )
             {
                 return INSPECT_RESULT::QUIT;
@@ -1397,10 +1391,10 @@ void FOOTPRINT::RunOnChildren( const std::function<void ( BOARD_ITEM*)>& aFuncti
         for( PAD* pad : m_pads )
             aFunction( static_cast<BOARD_ITEM*>( pad ) );
 
-        for( FP_ZONE* zone : m_fp_zones )
-            aFunction( static_cast<FP_ZONE*>( zone ) );
+        for( ZONE* zone : m_zones )
+            aFunction( static_cast<ZONE*>( zone ) );
 
-        for( PCB_GROUP* group : m_fp_groups )
+        for( PCB_GROUP* group : m_groups )
             aFunction( static_cast<PCB_GROUP*>( group ) );
 
         for( BOARD_ITEM* drawing : m_drawings )
@@ -1573,8 +1567,8 @@ void FOOTPRINT::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 
     for( BOARD_ITEM* item : m_drawings )
     {
-        if( item->Type() == PCB_FP_TEXT_T )
-            static_cast<FP_TEXT*>( item )->KeepUpright( orientation, newOrientation  );
+        if( item->Type() == PCB_TEXT_T )
+            static_cast<PCB_TEXT*>( item )->KeepUpright( orientation, newOrientation );
     }
 
     m_boundingBoxCacheTimeStamp = 0;
@@ -1624,7 +1618,7 @@ void FOOTPRINT::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
         pad->Flip( m_pos, false );
 
     // Mirror zones to other side of board.
-    for( ZONE* zone : m_fp_zones )
+    for( ZONE* zone : m_zones )
         zone->Flip( m_pos, false );
 
     // Mirror reference and value.
@@ -1633,39 +1627,7 @@ void FOOTPRINT::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 
     // Reverse mirror footprint graphics and texts.
     for( BOARD_ITEM* item : m_drawings )
-    {
-        switch( item->Type() )
-        {
-        case PCB_FP_SHAPE_T:
-            static_cast<FP_SHAPE*>( item )->Flip( m_pos, false );
-            break;
-
-        case PCB_FP_TEXT_T:
-            static_cast<FP_TEXT*>( item )->Flip( m_pos, false );
-            break;
-
-        case PCB_FP_TEXTBOX_T:
-            static_cast<FP_TEXTBOX*>( item )->Flip( m_pos, false );
-            break;
-
-        case PCB_BITMAP_T:
-            static_cast<PCB_BITMAP*>( item )->Flip( m_pos, false );
-            break;
-
-        case PCB_FP_DIM_ALIGNED_T:
-        case PCB_FP_DIM_ORTHOGONAL_T:
-        case PCB_FP_DIM_RADIAL_T:
-        case PCB_FP_DIM_CENTER_T:
-        case PCB_FP_DIM_LEADER_T:
-            static_cast<PCB_DIMENSION_BASE*>( item )->Flip( m_pos, false );
-            break;
-
-        default:
-            wxMessageBox( wxString::Format( wxT( "FOOTPRINT::Flip() error: Unknown Draw Type %d" ),
-                          (int)item->Type() ) );
-            break;
-        }
-    }
+        item->Flip( m_pos, false );
 
     // Now rotate 180 deg if required
     if( aFlipLeftRight )
@@ -1694,49 +1656,11 @@ void FOOTPRINT::SetPosition( const VECTOR2I& aPos )
     for( PAD* pad : m_pads )
         pad->SetPosition( pad->GetPosition() + delta );
 
-    for( ZONE* zone : m_fp_zones )
+    for( ZONE* zone : m_zones )
         zone->Move( delta );
 
     for( BOARD_ITEM* item : m_drawings )
-    {
-        switch( item->Type() )
-        {
-        case PCB_FP_SHAPE_T:
-        {
-            FP_SHAPE* shape = static_cast<FP_SHAPE*>( item );
-            shape->SetDrawCoord();
-            break;
-        }
-
-        case PCB_FP_TEXTBOX_T:
-        {
-            FP_TEXTBOX* textb = static_cast<FP_TEXTBOX*>( item );
-            textb->SetDrawCoord();
-            textb->ClearRenderCache();
-            break;
-        }
-
-        case PCB_FP_TEXT_T:
-        {
-            FP_TEXT* text = static_cast<FP_TEXT*>( item );
-            text->EDA_TEXT::Offset( delta );
-            break;
-        }
-
-        case PCB_FP_DIM_ALIGNED_T:
-        case PCB_FP_DIM_CENTER_T:
-        case PCB_FP_DIM_ORTHOGONAL_T:
-        case PCB_FP_DIM_RADIAL_T:
-        case PCB_FP_DIM_LEADER_T:
-        case PCB_BITMAP_T:
-            item->Move( delta );
-            break;
-
-        default:
-            wxMessageBox( wxT( "Draw type undefined." ) );
-            break;
-        }
-    }
+        item->Move( delta );
 
     m_cachedBoundingBox.Move( delta );
     m_cachedVisibleBBox.Move( delta );
@@ -1763,10 +1687,8 @@ void FOOTPRINT::MoveAnchorPosition( const VECTOR2I& aMoveVector )
     RotatePoint( moveVector, -GetOrientation() );
 
     // Update of the reference and value.
-    m_reference->SetPos0( m_reference->GetPos0() + moveVector );
-    m_reference->SetDrawCoord();
-    m_value->SetPos0( m_value->GetPos0() + moveVector );
-    m_value->SetDrawCoord();
+    m_reference->Move( moveVector );
+    m_value->Move( moveVector );
 
     // Update the pad local coordinates.
     for( PAD* pad : m_pads )
@@ -1777,35 +1699,11 @@ void FOOTPRINT::MoveAnchorPosition( const VECTOR2I& aMoveVector )
 
     // Update the draw element coordinates.
     for( BOARD_ITEM* item : GraphicalItems() )
-    {
-        switch( item->Type() )
-        {
-        case PCB_FP_SHAPE_T:
-        case PCB_FP_TEXTBOX_T:
-        {
-            FP_SHAPE* shape = static_cast<FP_SHAPE*>( item );
-            shape->Move( moveVector );
-            break;
-        }
-
-        case PCB_FP_TEXT_T:
-        {
-            FP_TEXT* text = static_cast<FP_TEXT*>( item );
-            text->SetPos0( text->GetPos0() + moveVector );
-            text->SetDrawCoord();
-            break;
-        }
-
-        default:
-            break;
-        }
-    }
+        item->Move( moveVector );
 
     // Update the keepout zones
     for( ZONE* zone : Zones() )
-    {
         zone->Move( moveVector );
-    }
 
     // Update the 3D models
     for( FP_3DMODEL& model : Models() )
@@ -1834,37 +1732,15 @@ void FOOTPRINT::SetOrientation( const EDA_ANGLE& aNewAngle )
         pad->SetDrawCoord();
     }
 
-    for( ZONE* zone : m_fp_zones )
+    for( ZONE* zone : m_zones )
         zone->Rotate( GetPosition(), angleChange );
 
-    for( BOARD_ITEM* item : m_drawings )
-    {
-        if( PCB_DIMENSION_BASE* dimension = dynamic_cast<PCB_DIMENSION_BASE*>( item ) )
-            dimension->Rotate( GetPosition(), angleChange );
-    }
-
     // Update of the reference and value.
-    m_reference->SetDrawCoord();
-    m_value->SetDrawCoord();
+    m_reference->Rotate( GetPosition(), angleChange );
+    m_value->Rotate( GetPosition(), angleChange );
 
-    // Displace contours and text of the footprint.
     for( BOARD_ITEM* item : m_drawings )
-    {
-        switch( item->Type() )
-        {
-        case PCB_FP_SHAPE_T:
-        case PCB_FP_TEXTBOX_T:
-            static_cast<FP_SHAPE*>( item )->SetDrawCoord();
-            break;
-
-        case PCB_FP_TEXT_T:
-            static_cast<FP_TEXT*>( item )->SetDrawCoord();
-            break;
-
-        default:
-            break;
-        }
-    }
+        item->Rotate( GetPosition(), angleChange );
 
     m_boundingBoxCacheTimeStamp = 0;
     m_visibleBBoxCacheTimeStamp = 0;
@@ -1891,7 +1767,6 @@ BOARD_ITEM* FOOTPRINT::Duplicate() const
 BOARD_ITEM* FOOTPRINT::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToFootprint )
 {
     BOARD_ITEM* new_item = nullptr;
-    FP_ZONE* new_zone = nullptr;
 
     switch( aItem->Type() )
     {
@@ -1907,45 +1782,44 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToFootpr
         break;
     }
 
-    case PCB_FP_ZONE_T:
+    case PCB_ZONE_T:
     {
-        new_zone = new FP_ZONE( *static_cast<const FP_ZONE*>( aItem ) );
+        ZONE* new_zone = new ZONE( *static_cast<const ZONE*>( aItem ) );
         const_cast<KIID&>( new_zone->m_Uuid ) = KIID();
 
         if( aAddToFootprint )
-            m_fp_zones.push_back( new_zone );
+            m_zones.push_back( new_zone );
 
         new_item = new_zone;
         break;
     }
 
-    case PCB_FP_TEXT_T:
+    case PCB_TEXT_T:
     {
-        FP_TEXT* new_text = new FP_TEXT( *static_cast<const FP_TEXT*>( aItem ) );
+        PCB_TEXT* new_text = new PCB_TEXT( *static_cast<const PCB_TEXT*>( aItem ) );
         const_cast<KIID&>( new_text->m_Uuid ) = KIID();
 
-        if( new_text->GetType() == FP_TEXT::TEXT_is_REFERENCE )
+        if( new_text->GetType() == PCB_TEXT::TEXT_is_REFERENCE )
         {
             new_text->SetText( wxT( "${REFERENCE}" ) );
-            new_text->SetType( FP_TEXT::TEXT_is_DIVERS );
+            new_text->SetType( PCB_TEXT::TEXT_is_DIVERS );
         }
-        else if( new_text->GetType() == FP_TEXT::TEXT_is_VALUE )
+        else if( new_text->GetType() == PCB_TEXT::TEXT_is_VALUE )
         {
             new_text->SetText( wxT( "${VALUE}" ) );
-            new_text->SetType( FP_TEXT::TEXT_is_DIVERS );
+            new_text->SetType( PCB_TEXT::TEXT_is_DIVERS );
         }
 
         if( aAddToFootprint )
             Add( new_text );
 
         new_item = new_text;
-
         break;
     }
 
-    case PCB_FP_SHAPE_T:
+    case PCB_SHAPE_T:
     {
-        FP_SHAPE* new_shape = new FP_SHAPE( *static_cast<const FP_SHAPE*>( aItem ) );
+        PCB_SHAPE* new_shape = new PCB_SHAPE( *static_cast<const PCB_SHAPE*>( aItem ) );
         const_cast<KIID&>( new_shape->m_Uuid ) = KIID();
 
         if( aAddToFootprint )
@@ -1955,9 +1829,9 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToFootpr
         break;
     }
 
-    case PCB_FP_TEXTBOX_T:
+    case PCB_TEXTBOX_T:
     {
-        FP_TEXTBOX* new_textbox = new FP_TEXTBOX( *static_cast<const FP_TEXTBOX*>( aItem ) );
+        PCB_TEXTBOX* new_textbox = new PCB_TEXTBOX( *static_cast<const PCB_TEXTBOX*>( aItem ) );
         const_cast<KIID&>( new_textbox->m_Uuid ) = KIID();
 
         if( aAddToFootprint )
@@ -1967,11 +1841,11 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToFootpr
         break;
     }
 
-    case PCB_FP_DIM_ALIGNED_T:
-    case PCB_FP_DIM_LEADER_T:
-    case PCB_FP_DIM_CENTER_T:
-    case PCB_FP_DIM_RADIAL_T:
-    case PCB_FP_DIM_ORTHOGONAL_T:
+    case PCB_DIM_ALIGNED_T:
+    case PCB_DIM_LEADER_T:
+    case PCB_DIM_CENTER_T:
+    case PCB_DIM_RADIAL_T:
+    case PCB_DIM_ORTHOGONAL_T:
     {
         PCB_DIMENSION_BASE* dimension = static_cast<PCB_DIMENSION_BASE*>( aItem->Duplicate() );
 
@@ -2075,15 +1949,15 @@ double FOOTPRINT::GetCoverageArea( const BOARD_ITEM* aItem, const GENERAL_COLLEC
 
         poly = footprint->GetBoundingHull();
     }
-    else if( aItem->Type() == PCB_FP_TEXT_T )
+    else if( aItem->Type() == PCB_TEXT_T )
     {
-        const FP_TEXT* text = static_cast<const FP_TEXT*>( aItem );
+        const PCB_TEXT* text = static_cast<const PCB_TEXT*>( aItem );
 
         text->TransformTextToPolySet( poly, UNDEFINED_LAYER, textMargin, ARC_LOW_DEF, ERROR_OUTSIDE );
     }
-    else if( aItem->Type() == PCB_FP_TEXTBOX_T )
+    else if( aItem->Type() == PCB_TEXTBOX_T )
     {
-        const FP_TEXTBOX* tb = static_cast<const FP_TEXTBOX*>( aItem );
+        const PCB_TEXTBOX* tb = static_cast<const PCB_TEXTBOX*>( aItem );
 
         tb->TransformTextToPolySet( poly, UNDEFINED_LAYER, textMargin, ARC_LOW_DEF, ERROR_OUTSIDE );
     }
@@ -2151,24 +2025,17 @@ double FOOTPRINT::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
 
         switch( item->Type() )
         {
-        case PCB_FP_TEXT_T:
-        case PCB_FP_TEXTBOX_T:
-        case PCB_FP_SHAPE_T:
-            if( item->GetParent() != this )
-            {
-                item->TransformShapeToPolygon( coveredRegion, UNDEFINED_LAYER, 0, ARC_LOW_DEF,
-                                               ERROR_OUTSIDE );
-            }
-            break;
-
         case PCB_TEXT_T:
         case PCB_TEXTBOX_T:
         case PCB_SHAPE_T:
         case PCB_TRACE_T:
         case PCB_ARC_T:
         case PCB_VIA_T:
-            item->TransformShapeToPolygon( coveredRegion, UNDEFINED_LAYER, 0, ARC_LOW_DEF,
-                                           ERROR_OUTSIDE );
+            if( item->GetParent() != this )
+            {
+                item->TransformShapeToPolygon( coveredRegion, UNDEFINED_LAYER, 0, ARC_LOW_DEF,
+                                               ERROR_OUTSIDE );
+            }
             break;
 
         case PCB_FOOTPRINT_T:
@@ -2225,7 +2092,7 @@ std::shared_ptr<SHAPE> FOOTPRINT::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHI
 
         for( BOARD_ITEM* item : GraphicalItems() )
         {
-            if( item->Type() == PCB_FP_SHAPE_T )
+            if( item->Type() == PCB_SHAPE_T )
                 shape->AddShape( item->GetEffectiveShape( aLayer, aFlash )->Clone() );
         }
     }
@@ -2255,17 +2122,17 @@ void FOOTPRINT::BuildCourtyardCaches( OUTLINE_ERROR_HANDLER* aErrorHandler )
     m_courtyard_cache_timestamp = GetBoard()->GetTimeStamp();
 
     // Build the courtyard area from graphic items on the courtyard.
-    // Only PCB_FP_SHAPE_T have meaning, graphic texts are ignored.
+    // Only PCB_SHAPE_T have meaning, graphic texts are ignored.
     // Collect items:
     std::vector<PCB_SHAPE*> list_front;
     std::vector<PCB_SHAPE*> list_back;
 
     for( BOARD_ITEM* item : GraphicalItems() )
     {
-        if( item->GetLayer() == B_CrtYd && item->Type() == PCB_FP_SHAPE_T )
+        if( item->GetLayer() == B_CrtYd && item->Type() == PCB_SHAPE_T )
             list_back.push_back( static_cast<PCB_SHAPE*>( item ) );
 
-        if( item->GetLayer() == F_CrtYd && item->Type() == PCB_FP_SHAPE_T )
+        if( item->GetLayer() == F_CrtYd && item->Type() == PCB_SHAPE_T )
             list_front.push_back( static_cast<PCB_SHAPE*>( item ) );
     }
 
@@ -2550,7 +2417,7 @@ void FOOTPRINT::CheckNetTies( const std::function<void( const BOARD_ITEM* aItem,
             copperItems.push_back( item );
     }
 
-    for( ZONE* zone : m_fp_zones )
+    for( ZONE* zone : m_zones )
     {
         if( !zone->GetIsRuleArea() && zone->IsOnCopperLayer() )
             copperItems.push_back( zone );
@@ -2690,24 +2557,24 @@ bool FOOTPRINT::cmp_drawings::operator()( const BOARD_ITEM* itemA, const BOARD_I
     TEST( itemA->Type(), itemB->Type() );
     TEST( itemA->GetLayer(), itemB->GetLayer() );
 
-    if( itemA->Type() == PCB_FP_SHAPE_T )
+    if( itemA->Type() == PCB_SHAPE_T )
     {
-        const FP_SHAPE* dwgA = static_cast<const FP_SHAPE*>( itemA );
-        const FP_SHAPE* dwgB = static_cast<const FP_SHAPE*>( itemB );
+        const PCB_SHAPE* dwgA = static_cast<const PCB_SHAPE*>( itemA );
+        const PCB_SHAPE* dwgB = static_cast<const PCB_SHAPE*>( itemB );
 
         TEST( dwgA->GetShape(), dwgB->GetShape() );
 
-        TEST_PT( dwgA->GetStart0(), dwgB->GetStart0() );
-        TEST_PT( dwgA->GetEnd0(), dwgB->GetEnd0() );
+        TEST_PT( dwgA->GetStart(), dwgB->GetStart() );
+        TEST_PT( dwgA->GetEnd(), dwgB->GetEnd() );
 
         if( dwgA->GetShape() == SHAPE_T::ARC )
         {
-            TEST_PT( dwgA->GetCenter0(), dwgB->GetCenter0() );
+            TEST_PT( dwgA->GetCenter(), dwgB->GetCenter() );
         }
         else if( dwgA->GetShape() == SHAPE_T::BEZIER )
         {
-            TEST_PT( dwgA->GetBezierC1_0(), dwgB->GetBezierC1_0() );
-            TEST_PT( dwgA->GetBezierC2_0(), dwgB->GetBezierC2_0() );
+            TEST_PT( dwgA->GetBezierC1(), dwgB->GetBezierC1() );
+            TEST_PT( dwgA->GetBezierC2(), dwgB->GetBezierC2() );
         }
         else if( dwgA->GetShape() == SHAPE_T::POLY )
         {
@@ -2742,7 +2609,7 @@ bool FOOTPRINT::cmp_pads::operator()( const PAD* aFirst, const PAD* aSecond ) co
 }
 
 
-bool FOOTPRINT::cmp_zones::operator()( const FP_ZONE* aFirst, const FP_ZONE* aSecond ) const
+bool FOOTPRINT::cmp_zones::operator()( const ZONE* aFirst, const ZONE* aSecond ) const
 {
     TEST( aFirst->GetAssignedPriority(), aSecond->GetAssignedPriority() );
     TEST( aFirst->GetLayerSet().Seq(), aSecond->GetLayerSet().Seq() );
@@ -2839,32 +2706,32 @@ void FOOTPRINT::TransformFPShapesToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_I
                                             bool aIncludeText, bool aIncludeShapes,
                                             bool aIncludePrivateItems ) const
 {
-    std::vector<FP_TEXT*> texts;  // List of FP_TEXT to convert
+    std::vector<PCB_TEXT*> texts;  // List of PCB_TEXTs to convert
 
     for( BOARD_ITEM* item : GraphicalItems() )
     {
         if( GetPrivateLayers().test( item->GetLayer() ) && !aIncludePrivateItems )
             continue;
 
-        if( item->Type() == PCB_FP_TEXT_T && aIncludeText )
+        if( item->Type() == PCB_TEXT_T && aIncludeText )
         {
-            FP_TEXT* text = static_cast<FP_TEXT*>( item );
+            PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
 
             if( aLayer != UNDEFINED_LAYER && text->GetLayer() == aLayer && text->IsVisible() )
                 texts.push_back( text );
         }
 
-        if( item->Type() == PCB_FP_TEXTBOX_T && aIncludeText )
+        if( item->Type() == PCB_TEXTBOX_T && aIncludeText )
         {
-            FP_TEXTBOX* textbox = static_cast<FP_TEXTBOX*>( item );
+            PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( item );
 
             if( aLayer != UNDEFINED_LAYER && textbox->GetLayer() == aLayer && textbox->IsVisible() )
                 textbox->TransformShapeToPolygon( aBuffer, aLayer, 0, aError, aErrorLoc );
         }
 
-        if( item->Type() == PCB_FP_SHAPE_T && aIncludeShapes )
+        if( item->Type() == PCB_SHAPE_T && aIncludeShapes )
         {
-            const FP_SHAPE* outline = static_cast<FP_SHAPE*>( item );
+            const PCB_SHAPE* outline = static_cast<PCB_SHAPE*>( item );
 
             if( aLayer != UNDEFINED_LAYER && outline->GetLayer() == aLayer )
                 outline->TransformShapeToPolygon( aBuffer, aLayer, 0, aError, aErrorLoc );
@@ -2880,7 +2747,7 @@ void FOOTPRINT::TransformFPShapesToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_I
             texts.push_back( &Value() );
     }
 
-    for( const FP_TEXT* text : texts )
+    for( const PCB_TEXT* text : texts )
         text->TransformTextToPolySet( aBuffer, aLayer, aClearance, aError, aErrorLoc );
 }
 

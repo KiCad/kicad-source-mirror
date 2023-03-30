@@ -40,10 +40,35 @@
 
 
 PCB_TEXT::PCB_TEXT( BOARD_ITEM* parent, KICAD_T idtype ) :
-    BOARD_ITEM( parent, idtype ),
-    EDA_TEXT( pcbIUScale )
+        BOARD_ITEM( parent, idtype ),
+        EDA_TEXT( pcbIUScale ),
+        m_type( TEXT_is_DIVERS )
 {
     SetMultilineAllowed( true );
+}
+
+
+PCB_TEXT::PCB_TEXT( FOOTPRINT* aParent, TEXT_TYPE text_type ) :
+        BOARD_ITEM( aParent, PCB_TEXT_T ),
+        EDA_TEXT( pcbIUScale ),
+        m_type( text_type )
+{
+    SetKeepUpright( true );
+
+    // Set text thickness to a default value
+    SetTextThickness( pcbIUScale.mmToIU( DEFAULT_TEXT_WIDTH ) );
+    SetLayer( F_SilkS );
+
+    if( aParent )
+    {
+        SetTextPos( aParent->GetPosition() );
+
+        if( IsBackLayer( aParent->GetLayer() ) )
+        {
+            SetLayer( B_SilkS );
+            SetMirrored( true );
+        }
+    }
 }
 
 
@@ -54,11 +79,15 @@ PCB_TEXT::~PCB_TEXT()
 
 wxString PCB_TEXT::GetShownText( int aDepth, bool aAllowExtraText ) const
 {
-    BOARD* board = dynamic_cast<BOARD*>( GetParent() );
+    const FOOTPRINT* parentFootprint = GetParentFootprint();
+    const BOARD*     board = GetBoard();
 
-    std::function<bool( wxString* )> pcbTextResolver =
+    std::function<bool( wxString* )> resolver =
             [&]( wxString* token ) -> bool
             {
+                if( parentFootprint && parentFootprint->ResolveTextVar( token, aDepth + 1 ) )
+                    return true;
+
                 if( token->IsSameAs( wxT( "LAYER" ) ) )
                 {
                     *token = GetLayerName();
@@ -66,19 +95,65 @@ wxString PCB_TEXT::GetShownText( int aDepth, bool aAllowExtraText ) const
                 }
 
                 if( board->ResolveTextVar( token, aDepth + 1 ) )
-                {
                     return true;
-                }
 
                 return false;
             };
 
     wxString text = EDA_TEXT::GetShownText();
 
-    if( board && HasTextVars() && aDepth < 10 )
-        text = ExpandTextVars( text, &pcbTextResolver );
+    if( HasTextVars() )
+    {
+        if( aDepth < 10 )
+            text = ExpandTextVars( text, &resolver );
+    }
 
     return text;
+}
+
+
+EDA_ANGLE PCB_TEXT::GetDrawRotation() const
+{
+    EDA_ANGLE rotation = GetTextAngle();
+
+    if( GetParentFootprint() && IsKeepUpright() )
+    {
+        // Keep angle between ]-90..90] deg. Otherwise the text is not easy to read
+        while( rotation > ANGLE_90 )
+            rotation -= ANGLE_180;
+
+        while( rotation <= -ANGLE_90 )
+            rotation += ANGLE_180;
+    }
+    else
+    {
+        rotation.Normalize();
+    }
+
+    return rotation;
+}
+
+
+const BOX2I PCB_TEXT::ViewBBox() const
+{
+    EDA_ANGLE angle = GetDrawRotation();
+    BOX2I     text_area = GetTextBox();
+
+    if( !angle.IsZero() )
+        text_area = text_area.GetBoundingBoxRotated( GetTextPos(), angle );
+
+    return BOX2I( text_area.GetPosition(), text_area.GetSize() );
+}
+
+
+void PCB_TEXT::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    if( GetParentFootprint() == nullptr || IsVisible() )
+        aLayers[0] = GetLayer();
+    else
+        aLayers[0] = LAYER_MOD_TEXT_INVISIBLE;
+
+    aCount = 1;
 }
 
 
@@ -86,15 +161,19 @@ double PCB_TEXT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
     constexpr double HIDE = std::numeric_limits<double>::max();
 
+    if( !aView )
+        return 0.0;
+
     KIGFX::PCB_PAINTER*  painter = static_cast<KIGFX::PCB_PAINTER*>( aView->GetPainter() );
     KIGFX::PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();
 
+    // Hidden text gets put on the LAYER_MOD_TEXT_INVISIBLE for rendering, but
+    // should only render if its native layer is visible.
+    if( !aView->IsLayerVisible( GetLayer() ) )
+        return HIDE;
+
     if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
     {
-        // Hide shadow if the main layer is not shown
-        if( !aView->IsLayerVisible( m_layer ) )
-            return HIDE;
-
         // Hide shadow on dimmed tracks
         if( renderSettings->GetHighContrast() )
         {
@@ -103,17 +182,63 @@ double PCB_TEXT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         }
     }
 
+    if( FOOTPRINT* parentFP = GetParentFootprint() )
+    {
+        // Handle Render tab switches
+        if( m_type == TEXT_is_VALUE || GetText() == wxT( "${VALUE}" ) )
+        {
+            if( !aView->IsLayerVisible( LAYER_MOD_VALUES ) )
+                return HIDE;
+        }
+
+        if( m_type == TEXT_is_REFERENCE || GetText() == wxT( "${REFERENCE}" ) )
+        {
+            if( !aView->IsLayerVisible( LAYER_MOD_REFERENCES ) )
+                return HIDE;
+        }
+
+        if( parentFP->GetLayer() == F_Cu && !aView->IsLayerVisible( LAYER_MOD_FR ) )
+            return HIDE;
+
+        if( parentFP->GetLayer() == B_Cu && !aView->IsLayerVisible( LAYER_MOD_BK ) )
+            return HIDE;
+
+        if( !aView->IsLayerVisible( LAYER_MOD_TEXT ) )
+            return HIDE;
+    }
+
     return 0.0;
 }
 
 
 void PCB_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
+    FOOTPRINT* parentFP = GetParentFootprint();
+
+    if( parentFP && aFrame->GetName() == PCB_EDIT_FRAME_NAME )
+        aList.emplace_back( _( "Footprint" ), parentFP->GetReference() );
+
     // Don't use GetShownText() here; we want to show the user the variable references
-    aList.emplace_back( _( "PCB Text" ), KIUI::EllipsizeStatusText( aFrame, GetText() ) );
+    if( parentFP )
+        aList.emplace_back( _( "Text" ), KIUI::EllipsizeStatusText( aFrame, GetText() ) );
+    else
+        aList.emplace_back( _( "PCB Text" ), KIUI::EllipsizeStatusText( aFrame, GetText() ) );
+
+    if( parentFP )
+    {
+        switch( m_type )
+        {
+        case TEXT_is_REFERENCE: aList.emplace_back( _( "Type" ), _( "Reference" ) ); break;
+        case TEXT_is_VALUE:     aList.emplace_back( _( "Type" ), _( "Value" ) );     break;
+        case TEXT_is_DIVERS:    aList.emplace_back( _( "Type" ), _( "Text" ) );      break;
+        }
+    }
 
     if( aFrame->GetName() == PCB_EDIT_FRAME_NAME && IsLocked() )
         aList.emplace_back( _( "Status" ), _( "Locked" ) );
+
+    if( parentFP )
+        aList.emplace_back( _( "Display" ), IsVisible() ? _( "Yes" ) : _( "No" ) );
 
     aList.emplace_back( _( "Layer" ), GetLayerName() );
 
@@ -137,14 +262,33 @@ int PCB_TEXT::getKnockoutMargin() const
 }
 
 
+void PCB_TEXT::KeepUpright( const EDA_ANGLE& aOldOrientation, const EDA_ANGLE& aNewOrientation )
+{
+    if( !IsKeepUpright() )
+        return;
+
+    EDA_ANGLE newAngle = GetTextAngle() + aNewOrientation;
+    newAngle.Normalize();
+
+    bool needsFlipped = newAngle >= ANGLE_180;
+
+    if( needsFlipped )
+    {
+        SetHorizJustify( static_cast<GR_TEXT_H_ALIGN_T>( -GetHorizJustify() ) );
+        SetTextAngle( GetTextAngle() + ANGLE_180 );
+    }
+}
+
+
 const BOX2I PCB_TEXT::GetBoundingBox() const
 {
-    BOX2I rect = GetTextBox();
+    EDA_ANGLE angle = GetDrawRotation();
+    BOX2I     rect = GetTextBox();
 
     if( IsKnockout() )
         rect.Inflate( getKnockoutMargin() );
 
-    if( !GetTextAngle().IsZero() )
+    if( !angle.IsZero() )
         rect = rect.GetBoundingBoxRotated( GetTextPos(), GetTextAngle() );
 
     return rect;
@@ -236,9 +380,31 @@ void PCB_TEXT::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 
 wxString PCB_TEXT::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
-    return wxString::Format( _( "PCB Text '%s' on %s"),
-                             KIUI::EllipsizeMenuText( GetShownText() ),
-                             GetLayerName() );
+    if( FOOTPRINT* parentFP = GetParentFootprint() )
+    {
+        switch( m_type )
+        {
+        case TEXT_is_REFERENCE:
+            return wxString::Format( _( "Reference '%s'" ),
+                                     parentFP->GetReference() );
+
+        case TEXT_is_VALUE:
+            return wxString::Format( _( "Value '%s' of %s" ),
+                                     GetShownText(),
+                                     parentFP->GetReference() );
+
+        case TEXT_is_DIVERS:
+            return wxString::Format( _( "Footprint Text '%s' of %s" ),
+                                     KIUI::EllipsizeMenuText( GetShownText() ),
+                                     parentFP->GetReference() );
+        }
+    }
+    else
+    {
+        return wxString::Format( _( "PCB Text '%s' on %s"),
+                                 KIUI::EllipsizeMenuText( GetShownText() ),
+                                 GetLayerName() );
+    }
 }
 
 

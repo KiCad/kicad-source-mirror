@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,6 @@
 #include <footprint.h>
 #include <string_utils.h>
 #include <pcb_textbox.h>
-#include <fp_textbox.h>
 #include <pcbnew.h>
 #include <pcb_edit_frame.h>
 #include <pcb_layer_box_selector.h>
@@ -41,13 +40,10 @@
 #include "macros.h"
 
 DIALOG_TEXTBOX_PROPERTIES::DIALOG_TEXTBOX_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent,
-                                                      BOARD_ITEM* aItem ) :
+                                                      PCB_TEXTBOX* aTextBox ) :
         DIALOG_TEXTBOX_PROPERTIES_BASE( aParent ),
         m_frame( aParent ),
-        m_item( aItem ),
-        m_edaText( nullptr ),
-        m_fpTextBox( nullptr ),
-        m_pcbTextBox( nullptr ),
+        m_textBox( aTextBox ),
         m_textWidth( aParent, m_SizeXLabel, m_SizeXCtrl, m_SizeXUnits ),
         m_textHeight( aParent, m_SizeYLabel, m_SizeYCtrl, m_SizeYUnits ),
         m_thickness( aParent, m_ThicknessLabel, m_ThicknessCtrl, m_ThicknessUnits ),
@@ -67,22 +63,10 @@ DIALOG_TEXTBOX_PROPERTIES::DIALOG_TEXTBOX_PROPERTIES( PCB_BASE_EDIT_FRAME* aPare
     m_MultiLineText->SetScrollWidth( 1 );
     m_MultiLineText->SetScrollWidthTracking( true );
 
-    if( m_item->Type() == PCB_FP_TEXTBOX_T )
+    if( m_textBox->GetParentFootprint() )
     {
-        m_fpTextBox = static_cast<FP_TEXTBOX*>( m_item );
-        m_edaText = m_fpTextBox;
-
         // Do not allow locking items in the footprint editor
         m_cbLocked->Show( false );
-    }
-    else if( m_item->Type() == PCB_TEXTBOX_T )
-    {
-        m_pcbTextBox = static_cast<PCB_TEXTBOX*>( m_item );
-        m_edaText = m_pcbTextBox;
-    }
-    else
-    {
-        UNIMPLEMENTED_FOR( m_item->GetClass() );
     }
 
     SetInitialFocus( m_MultiLineText );
@@ -112,7 +96,7 @@ DIALOG_TEXTBOX_PROPERTIES::DIALOG_TEXTBOX_PROPERTIES( PCB_BASE_EDIT_FRAME* aPare
 
     // Configure the layers list selector.  Note that footprints are built outside the current
     // board and so we may need to show all layers if the text is on an unactivated layer.
-    if( !m_frame->GetBoard()->IsLayerEnabled( m_item->GetLayer() ) )
+    if( !m_frame->GetBoard()->IsLayerEnabled( m_textBox->GetLayer() ) )
         m_LayerSelectionCtrl->ShowNonActivatedLayers( true );
 
     m_LayerSelectionCtrl->SetLayersHotkeys( false );
@@ -154,9 +138,9 @@ DIALOG_TEXTBOX_PROPERTIES::~DIALOG_TEXTBOX_PROPERTIES()
 }
 
 
-int PCB_BASE_EDIT_FRAME::ShowTextBoxPropertiesDialog( BOARD_ITEM* aText )
+int PCB_BASE_EDIT_FRAME::ShowTextBoxPropertiesDialog( PCB_TEXTBOX* aTextBox )
 {
-    DIALOG_TEXTBOX_PROPERTIES dlg( this, aText );
+    DIALOG_TEXTBOX_PROPERTIES dlg( this, aTextBox );
     return dlg.ShowQuasiModal();
 }
 
@@ -165,44 +149,38 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataToWindow()
 {
     BOARD*   board = m_frame->GetBoard();
     wxString converted = board->ConvertKIIDsToCrossReferences(
-                                                        UnescapeString( m_edaText->GetText() ) );
+                                                        UnescapeString( m_textBox->GetText() ) );
 
     m_MultiLineText->SetValue( converted );
     m_MultiLineText->SetSelection( -1, -1 );
     m_MultiLineText->EmptyUndoBuffer();
 
-    m_cbLocked->SetValue( m_item->IsLocked() );
+    m_cbLocked->SetValue( m_textBox->IsLocked() );
 
-    m_LayerSelectionCtrl->SetLayerSelection( m_item->GetLayer() );
+    m_LayerSelectionCtrl->SetLayerSelection( m_textBox->GetLayer() );
 
-    m_fontCtrl->SetFontSelection( m_edaText->GetFont() );
+    m_fontCtrl->SetFontSelection( m_textBox->GetFont() );
 
-    m_textWidth.SetValue( m_edaText->GetTextSize().x );
-    m_textHeight.SetValue( m_edaText->GetTextSize().y );
-    m_thickness.SetValue( m_edaText->GetTextThickness() );
+    m_textWidth.SetValue( m_textBox->GetTextSize().x );
+    m_textHeight.SetValue( m_textBox->GetTextSize().y );
+    m_thickness.SetValue( m_textBox->GetTextThickness() );
 
-    m_bold->Check( m_edaText->IsBold() );
-    m_italic->Check( m_edaText->IsItalic() );
+    m_bold->Check( m_textBox->IsBold() );
+    m_italic->Check( m_textBox->IsItalic() );
 
-    switch ( m_edaText->GetHorizJustify() )
+    switch ( m_textBox->GetHorizJustify() )
     {
     case GR_TEXT_H_ALIGN_LEFT:   m_alignLeft->Check( true );   break;
     case GR_TEXT_H_ALIGN_CENTER: m_alignCenter->Check( true ); break;
     case GR_TEXT_H_ALIGN_RIGHT:  m_alignRight->Check( true );  break;
     }
 
-    m_mirrored->Check( m_edaText->IsMirrored() );
+    m_mirrored->Check( m_textBox->IsMirrored() );
 
-    EDA_ANGLE orientation = m_edaText->GetTextAngle();
+    EDA_ANGLE orientation = m_textBox->GetTextAngle();
     m_orientation.SetAngleValue( orientation.Normalize180() );
 
-    STROKE_PARAMS stroke;
-
-    if( m_fpTextBox )
-        stroke = m_fpTextBox->GetStroke();
-    else if( m_pcbTextBox )
-        stroke = m_pcbTextBox->GetStroke();
-
+    STROKE_PARAMS stroke = m_textBox->GetStroke();
     m_borderCheckbox->SetValue( stroke.GetWidth() >= 0 );
 
     if( stroke.GetWidth() >= 0 )
@@ -282,8 +260,8 @@ void DIALOG_TEXTBOX_PROPERTIES::onBorderChecked( wxCommandEvent& event )
 
     if( border && m_borderWidth.GetValue() <= 0 )
     {
-        BOARD_DESIGN_SETTINGS& bds = m_item->GetBoard()->GetDesignSettings();
-        m_borderWidth.SetValue( bds.GetLineThickness( m_item->GetLayer() ) );
+        BOARD_DESIGN_SETTINGS& bds = m_textBox->GetBoard()->GetDesignSettings();
+        m_borderWidth.SetValue( bds.GetLineThickness( m_textBox->GetLayer() ) );
     }
 
     m_borderWidth.Enable( border );
@@ -304,16 +282,16 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataFromWindow()
     }
 
     BOARD_COMMIT commit( m_frame );
-    commit.Modify( m_item );
+    commit.Modify( m_textBox );
 
     // If no other command in progress, prepare undo command
     // (for a command in progress, will be made later, at the completion of command)
-    bool pushCommit = ( m_item->GetEditFlags() == 0 );
+    bool pushCommit = ( m_textBox->GetEditFlags() == 0 );
 
     // Set IN_EDIT flag to force undo/redo/abort proper operation and avoid new calls to
     // SaveCopyInUndoList for the same text if is moved, and then rotated, edited, etc....
     if( !pushCommit )
-        m_item->SetFlags( IN_EDIT );
+        m_textBox->SetFlags( IN_EDIT );
 
     BOARD*   board = m_frame->GetBoard();
     wxString txt = board->ConvertCrossReferencesToKIIDs( m_MultiLineText->GetValue() );
@@ -328,54 +306,43 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataFromWindow()
     txt.Replace( "\r", "" );
 #endif
 
-    m_edaText->SetText( EscapeString( txt, CTX_QUOTED_STR ) );
-
-    m_item->SetLocked( m_cbLocked->GetValue() );
-
-    m_item->SetLayer( ToLAYER_ID( m_LayerSelectionCtrl->GetLayerSelection() ) );
+    m_textBox->SetText( EscapeString( txt, CTX_QUOTED_STR ) );
+    m_textBox->SetLocked( m_cbLocked->GetValue() );
+    m_textBox->SetLayer( ToLAYER_ID( m_LayerSelectionCtrl->GetLayerSelection() ) );
 
     if( m_fontCtrl->HaveFontSelection() )
     {
-        m_edaText->SetFont( m_fontCtrl->GetFontSelection( m_bold->IsChecked(),
+        m_textBox->SetFont( m_fontCtrl->GetFontSelection( m_bold->IsChecked(),
                                                           m_italic->IsChecked() ) );
     }
 
-    m_edaText->SetTextSize( VECTOR2I( m_textWidth.GetValue(), m_textHeight.GetValue() ) );
-    m_edaText->SetTextThickness( m_thickness.GetValue() );
-
-    if( m_fpTextBox )
-        m_fpTextBox->SetLocalCoord();
+    m_textBox->SetTextSize( VECTOR2I( m_textWidth.GetValue(), m_textHeight.GetValue() ) );
+    m_textBox->SetTextThickness( m_thickness.GetValue() );
 
     // Test for acceptable values for thickness and size and clamp if fails
-    int maxPenWidth = Clamp_Text_PenSize( m_edaText->GetTextThickness(), m_edaText->GetTextSize() );
+    int maxPenWidth = Clamp_Text_PenSize( m_textBox->GetTextThickness(), m_textBox->GetTextSize() );
 
-    if( m_edaText->GetTextThickness() > maxPenWidth )
+    if( m_textBox->GetTextThickness() > maxPenWidth )
     {
         DisplayError( this, _( "The text thickness is too large for the text size.\n"
                                "It will be clamped." ) );
-        m_edaText->SetTextThickness( maxPenWidth );
+        m_textBox->SetTextThickness( maxPenWidth );
     }
 
-    m_edaText->SetTextAngle( m_orientation.GetAngleValue().Normalize() );
-
-    m_edaText->SetBold( m_bold->IsChecked() );
-    m_edaText->SetItalic( m_italic->IsChecked() );
+    m_textBox->SetTextAngle( m_orientation.GetAngleValue().Normalize() );
+    m_textBox->SetBold( m_bold->IsChecked() );
+    m_textBox->SetItalic( m_italic->IsChecked() );
 
     if( m_alignLeft->IsChecked() )
-        m_edaText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        m_textBox->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
     else if( m_alignCenter->IsChecked() )
-        m_edaText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+        m_textBox->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
     else
-        m_edaText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+        m_textBox->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
 
-    m_edaText->SetMirrored( m_mirrored->IsChecked() );
+    m_textBox->SetMirrored( m_mirrored->IsChecked() );
 
-    STROKE_PARAMS stroke;
-
-    if( m_fpTextBox )
-        stroke = m_fpTextBox->GetStroke();
-    else if( m_pcbTextBox )
-        stroke = m_pcbTextBox->GetStroke();
+    STROKE_PARAMS stroke = m_textBox->GetStroke();
 
     if( m_borderCheckbox->GetValue() )
     {
@@ -395,13 +362,10 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataFromWindow()
     else
         stroke.SetPlotStyle( it->first );
 
-    if( m_fpTextBox )
-        m_fpTextBox->SetStroke( stroke );
-    else if( m_pcbTextBox )
-        m_pcbTextBox->SetStroke( stroke );
+    m_textBox->SetStroke( stroke );
 
-    m_edaText->ClearBoundingBoxCache();
-    m_edaText->ClearRenderCache();
+    m_textBox->ClearBoundingBoxCache();
+    m_textBox->ClearRenderCache();
 
     if( pushCommit )
         commit.Push( _( "Change text box properties" ) );

@@ -38,8 +38,6 @@ using namespace std::placeholders;
 #include <tools/pcb_grid_helper.h>
 #include <board_commit.h>
 #include <pcb_edit_frame.h>
-#include <fp_shape.h>
-#include <fp_textbox.h>
 #include <pcb_bitmap.h>
 #include <pcb_dimension.h>
 #include <pcb_textbox.h>
@@ -181,7 +179,7 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
     if( !aItem )
         return points;
 
-    if( aItem->Type() == PCB_TEXTBOX_T || aItem->Type() == PCB_FP_TEXTBOX_T )
+    if( aItem->Type() == PCB_TEXTBOX_T )
     {
         const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( aItem );
 
@@ -209,9 +207,7 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
     }
 
     case PCB_TEXTBOX_T:
-    case PCB_FP_TEXTBOX_T:
     case PCB_SHAPE_T:
-    case PCB_FP_SHAPE_T:
     {
         const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( aItem );
 
@@ -306,21 +302,19 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
         default:        // suppress warnings
             break;
         }
-    }
-        break;
 
-    case PCB_FP_ZONE_T:
+        break;
+    }
+
     case PCB_ZONE_T:
     {
         const ZONE* zone = static_cast<const ZONE*>( aItem );
         buildForPolyOutline( points, zone->Outline() );
-    }
         break;
+    }
 
     case PCB_DIM_ALIGNED_T:
     case PCB_DIM_ORTHOGONAL_T:
-    case PCB_FP_DIM_ALIGNED_T:
-    case PCB_FP_DIM_ORTHOGONAL_T:
     {
         const PCB_DIM_ALIGNED* dimension = static_cast<const PCB_DIM_ALIGNED*>( aItem );
 
@@ -348,7 +342,6 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
     }
 
     case PCB_DIM_CENTER_T:
-    case PCB_FP_DIM_CENTER_T:
     {
         const PCB_DIM_CENTER* dimension = static_cast<const PCB_DIM_CENTER*>( aItem );
 
@@ -365,7 +358,6 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
     }
 
     case PCB_DIM_RADIAL_T:
-    case PCB_FP_DIM_RADIAL_T:
     {
         const PCB_DIM_RADIAL* dimension = static_cast<const PCB_DIM_RADIAL*>( aItem );
 
@@ -389,7 +381,6 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
     }
 
     case PCB_DIM_LEADER_T:
-    case PCB_FP_DIM_LEADER_T:
     {
         const PCB_DIM_LEADER* dimension = static_cast<const PCB_DIM_LEADER*>( aItem );
 
@@ -1117,9 +1108,7 @@ void PCB_POINT_EDITOR::updateItem() const
     }
 
     case PCB_TEXTBOX_T:
-    case PCB_FP_TEXTBOX_T:
     case PCB_SHAPE_T:
-    case PCB_FP_SHAPE_T:
     {
         PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
 
@@ -1276,26 +1265,18 @@ void PCB_POINT_EDITOR::updateItem() const
             break;
         }
 
-        if( FP_SHAPE* fpShape = dynamic_cast<FP_SHAPE*>( item ) )
+        if( shape->IsAnnotationProxy() )
         {
-            // Update relative coordinates for footprint shapes
-            fpShape->SetLocalCoord();
-
-            if( fpShape->IsAnnotationProxy() )
+            for( PAD* pad : shape->GetParentFootprint()->Pads() )
             {
-                for( PAD* pad : fpShape->GetParentFootprint()->Pads() )
-                {
-                    if( pad->GetFlags() & ENTERED )
-                        view()->Update( pad );
-                }
+                if( pad->GetFlags() & ENTERED )
+                    view()->Update( pad );
             }
         }
 
         // Nuke outline font render caches
         if( PCB_TEXTBOX* textBox = dynamic_cast<PCB_TEXTBOX*>( item ) )
             textBox->ClearRenderCache();
-        else if( FP_TEXTBOX* fpTextBox = dynamic_cast<FP_TEXTBOX*>( item ) )
-            fpTextBox->ClearRenderCache();
 
         break;
     }
@@ -1406,7 +1387,6 @@ void PCB_POINT_EDITOR::updateItem() const
         break;
     }
 
-    case PCB_FP_ZONE_T:
     case PCB_ZONE_T:
     {
         ZONE* zone = static_cast<ZONE*>( item );
@@ -1435,7 +1415,6 @@ void PCB_POINT_EDITOR::updateItem() const
     }
 
     case PCB_DIM_ALIGNED_T:
-    case PCB_FP_DIM_ALIGNED_T:
     {
         PCB_DIM_ALIGNED* dimension = static_cast<PCB_DIM_ALIGNED*>( item );
 
@@ -1500,7 +1479,6 @@ void PCB_POINT_EDITOR::updateItem() const
     }
 
     case PCB_DIM_ORTHOGONAL_T:
-    case PCB_FP_DIM_ORTHOGONAL_T:
     {
         PCB_DIM_ORTHOGONAL* dimension = static_cast<PCB_DIM_ORTHOGONAL*>( item );
 
@@ -1566,7 +1544,6 @@ void PCB_POINT_EDITOR::updateItem() const
     }
 
     case PCB_DIM_CENTER_T:
-    case PCB_FP_DIM_CENTER_T:
     {
         PCB_DIM_CENTER* dimension = static_cast<PCB_DIM_CENTER*>( item );
 
@@ -1581,7 +1558,6 @@ void PCB_POINT_EDITOR::updateItem() const
     }
 
     case PCB_DIM_RADIAL_T:
-    case PCB_FP_DIM_RADIAL_T:
     {
         PCB_DIM_RADIAL* dimension = static_cast<PCB_DIM_RADIAL*>( item );
 
@@ -1630,7 +1606,6 @@ void PCB_POINT_EDITOR::updateItem() const
     }
 
     case PCB_DIM_LEADER_T:
-    case PCB_FP_DIM_LEADER_T:
     {
         PCB_DIM_LEADER* dimension = static_cast<PCB_DIM_LEADER*>( item );
 
@@ -1699,7 +1674,6 @@ void PCB_POINT_EDITOR::updatePoints()
     }
 
     case PCB_TEXTBOX_T:
-    case PCB_FP_TEXTBOX_T:
     {
         const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( item );
         int              target = shape->GetShape() == SHAPE_T::RECT ? 4 : 0;
@@ -1736,7 +1710,6 @@ void PCB_POINT_EDITOR::updatePoints()
     }
 
     case PCB_SHAPE_T:
-    case PCB_FP_SHAPE_T:
     {
         const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( item );
 
@@ -1881,7 +1854,6 @@ void PCB_POINT_EDITOR::updatePoints()
     }
         break;
 
-    case PCB_FP_ZONE_T:
     case PCB_ZONE_T:
     {
         ZONE*                 zone = static_cast<ZONE*>( item );
@@ -1908,8 +1880,6 @@ void PCB_POINT_EDITOR::updatePoints()
 
     case PCB_DIM_ALIGNED_T:
     case PCB_DIM_ORTHOGONAL_T:
-    case PCB_FP_DIM_ALIGNED_T:
-    case PCB_FP_DIM_ORTHOGONAL_T:
     {
         const PCB_DIM_ALIGNED* dimension = static_cast<const PCB_DIM_ALIGNED*>( item );
 
@@ -1922,7 +1892,6 @@ void PCB_POINT_EDITOR::updatePoints()
     }
 
     case PCB_DIM_CENTER_T:
-    case PCB_FP_DIM_CENTER_T:
     {
         const PCB_DIM_CENTER* dimension = static_cast<const PCB_DIM_CENTER*>( item );
 
@@ -1932,7 +1901,6 @@ void PCB_POINT_EDITOR::updatePoints()
     }
 
     case PCB_DIM_RADIAL_T:
-    case PCB_FP_DIM_RADIAL_T:
     {
         const PCB_DIM_RADIAL* dimension = static_cast<const PCB_DIM_RADIAL*>( item );
 
@@ -1944,7 +1912,6 @@ void PCB_POINT_EDITOR::updatePoints()
     }
 
     case PCB_DIM_LEADER_T:
-    case PCB_FP_DIM_LEADER_T:
     {
         const PCB_DIM_LEADER* dimension = static_cast<const PCB_DIM_LEADER*>( item );
 
@@ -1995,12 +1962,10 @@ void PCB_POINT_EDITOR::setAltConstraint( bool aEnabled )
         switch( parent->Type() )
         {
         case PCB_ZONE_T:
-        case PCB_FP_ZONE_T:
             isPoly = true;
             break;
 
         case PCB_SHAPE_T:
-        case PCB_FP_SHAPE_T:
             isPoly = static_cast<PCB_SHAPE*>( parent )->GetShape() == SHAPE_T::POLY;
             break;
 
@@ -2035,7 +2000,6 @@ EDIT_POINT PCB_POINT_EDITOR::get45DegConstrainer() const
     switch( item->Type() )
     {
     case PCB_SHAPE_T:
-    case PCB_FP_SHAPE_T:
         switch( static_cast<const PCB_SHAPE*>( item )->GetShape() )
         {
         case SHAPE_T::SEGMENT:
@@ -2052,7 +2016,6 @@ EDIT_POINT PCB_POINT_EDITOR::get45DegConstrainer() const
         break;
 
     case PCB_DIM_ALIGNED_T:
-    case PCB_FP_DIM_ALIGNED_T:
     {
         // Constraint for crossbar
         if( isModified( m_editPoints->Point( DIM_START ) ) )
@@ -2068,7 +2031,6 @@ EDIT_POINT PCB_POINT_EDITOR::get45DegConstrainer() const
     }
 
     case PCB_DIM_CENTER_T:
-    case PCB_FP_DIM_CENTER_T:
     {
         if( isModified( m_editPoints->Point( DIM_END ) ) )
             return m_editPoints->Point( DIM_START );
@@ -2077,7 +2039,6 @@ EDIT_POINT PCB_POINT_EDITOR::get45DegConstrainer() const
     }
 
     case PCB_DIM_RADIAL_T:
-    case PCB_FP_DIM_RADIAL_T:
     {
         if( isModified( m_editPoints->Point( DIM_TEXT ) ) )
             return m_editPoints->Point( DIM_KNEE );
@@ -2099,10 +2060,10 @@ bool PCB_POINT_EDITOR::canAddCorner( const EDA_ITEM& aItem )
     const auto type = aItem.Type();
 
     // Works only for zones and line segments
-    if( type == PCB_ZONE_T || type == PCB_FP_ZONE_T )
+    if( type == PCB_ZONE_T )
         return true;
 
-    if( type == PCB_SHAPE_T || type == PCB_FP_SHAPE_T )
+    if( type == PCB_SHAPE_T )
     {
         const PCB_SHAPE& shape = static_cast<const PCB_SHAPE&>( aItem );
         return shape.GetShape() == SHAPE_T::SEGMENT || shape.GetShape() == SHAPE_T::POLY;
@@ -2153,12 +2114,10 @@ bool PCB_POINT_EDITOR::removeCornerCondition( const SELECTION& )
     switch( item->Type() )
     {
     case PCB_ZONE_T:
-    case PCB_FP_ZONE_T:
         polyset = static_cast<ZONE*>( item )->Outline();
         break;
 
     case PCB_SHAPE_T:
-    case PCB_FP_SHAPE_T:
         if( static_cast<PCB_SHAPE*>( item )->GetShape() == SHAPE_T::POLY )
             polyset = &static_cast<PCB_SHAPE*>( item )->GetPolyShape();
         else
@@ -2211,8 +2170,7 @@ int PCB_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
     PCB_SHAPE* graphicItem = dynamic_cast<PCB_SHAPE*>( item );
     BOARD_COMMIT commit( frame );
 
-    if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T
-        || ( graphicItem && graphicItem->GetShape() == SHAPE_T::POLY ) )
+    if( item->Type() == PCB_ZONE_T || ( graphicItem && graphicItem->GetShape() == SHAPE_T::POLY ) )
     {
         unsigned int nearestIdx = 0;
         unsigned int nextNearestIdx = 0;
@@ -2220,7 +2178,7 @@ int PCB_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
         unsigned int firstPointInContour = 0;
         SHAPE_POLY_SET* zoneOutline;
 
-        if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
+        if( item->Type() == PCB_ZONE_T )
         {
             ZONE* zone = static_cast<ZONE*>( item );
             zoneOutline = zone->Outline();
@@ -2278,7 +2236,7 @@ int PCB_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
         zoneOutline->InsertVertex( nextNearestIdx, nearestPoint );
 
         // We re-hatch the filled zones but not polygons
-        if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
+        if( item->Type() == PCB_ZONE_T )
             static_cast<ZONE*>( item )->HatchBorder();
 
 
@@ -2294,29 +2252,12 @@ int PCB_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
         // Move the end of the line to the break point..
         graphicItem->SetEnd( VECTOR2I( nearestPoint.x, nearestPoint.y ) );
 
-        if( graphicItem->Type() == PCB_FP_SHAPE_T )
-            static_cast<FP_SHAPE*>( graphicItem )->SetLocalCoord();
-
         // and add another one starting from the break point
-        PCB_SHAPE* newSegment;
-
-        if( item->Type() == PCB_FP_SHAPE_T )
-        {
-            FP_SHAPE* edge = static_cast<FP_SHAPE*>( graphicItem );
-            assert( edge->GetParent()->Type() == PCB_FOOTPRINT_T );
-            newSegment = new FP_SHAPE( *edge );
-        }
-        else
-        {
-            newSegment = new PCB_SHAPE( *graphicItem );
-        }
+        PCB_SHAPE* newSegment = new PCB_SHAPE( *graphicItem );
 
         newSegment->ClearSelected();
         newSegment->SetStart( VECTOR2I( nearestPoint.x, nearestPoint.y ) );
         newSegment->SetEnd( VECTOR2I( seg.B.x, seg.B.y ) );
-
-        if( newSegment->Type() == PCB_FP_SHAPE_T )
-            static_cast<FP_SHAPE*>( newSegment )->SetLocalCoord();
 
         commit.Add( newSegment );
         commit.Push( _( "Split segment" ) );
@@ -2339,13 +2280,13 @@ int PCB_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
 
     SHAPE_POLY_SET* polygon = nullptr;
 
-    if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
+    if( item->Type() == PCB_ZONE_T )
     {
         ZONE* zone = static_cast<ZONE*>( item );
         polygon = zone->Outline();
         zone->SetNeedRefill( true );
     }
-    else if( item->Type() == PCB_FP_SHAPE_T || item->Type() == PCB_SHAPE_T )
+    else if( item->Type() == PCB_SHAPE_T )
     {
         PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
 
@@ -2393,7 +2334,7 @@ int PCB_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
         commit.Push( _( "Remove a zone/polygon corner" ) );
 
         // Refresh zone hatching
-        if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
+        if( item->Type() == PCB_ZONE_T )
             static_cast<ZONE*>( item )->HatchBorder();
 
         updatePoints();

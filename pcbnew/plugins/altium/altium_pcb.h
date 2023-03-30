@@ -234,8 +234,6 @@ private:
 
     FOOTPRINT* HelperGetFootprint( uint16_t aComponent ) const;
     PCB_SHAPE* HelperCreateAndAddShape( uint16_t aComponent );
-    void HelperShapeSetLocalCoord( PCB_SHAPE* aShape, uint16_t aComponent );
-    void       HelperShapeSetLocalCoord( FP_SHAPE* aShape );
 
     BOARD*                               m_board;
     std::vector<FOOTPRINT*>              m_components;

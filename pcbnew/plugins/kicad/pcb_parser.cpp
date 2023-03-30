@@ -36,8 +36,6 @@
 
 #include <board.h>
 #include <board_design_settings.h>
-#include <fp_shape.h>
-#include <fp_textbox.h>
 #include <pcb_dimension.h>
 #include <pcb_shape.h>
 #include <pcb_bitmap.h>
@@ -825,7 +823,7 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
         case T_gr_poly:
         case T_gr_circle:
         case T_gr_rect:
-            item = parsePCB_SHAPE();
+            item = parsePCB_SHAPE( m_board );
             m_board->Add( item, ADD_MODE::BULK_APPEND, true );
             bulkAddedItems.push_back( item );
             break;
@@ -837,19 +835,19 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
             break;
 
         case T_gr_text:
-            item = parsePCB_TEXT();
+            item = parsePCB_TEXT( m_board );
             m_board->Add( item, ADD_MODE::BULK_APPEND, true );
             bulkAddedItems.push_back( item );
             break;
 
         case T_gr_text_box:
-            item = parsePCB_TEXTBOX();
+            item = parsePCB_TEXTBOX( m_board );
             m_board->Add( item, ADD_MODE::BULK_APPEND, true );
             bulkAddedItems.push_back( item );
             break;
 
         case T_dimension:
-            item = parseDIMENSION( m_board, false );
+            item = parseDIMENSION( m_board );
             m_board->Add( item, ADD_MODE::BULK_APPEND, true );
             bulkAddedItems.push_back( item );
             break;
@@ -1056,47 +1054,30 @@ void PCB_PARSER::resolveGroups( BOARD_ITEM* aParent )
 
     wxString error;
 
-    for( size_t idx = 0; idx < m_groupInfos.size(); idx++ )
+    for( PCB_PARSER::GROUP_INFO& groupInfo : m_groupInfos )
     {
-        GROUP_INFO& aGrp  = m_groupInfos[idx];
-        BOARD_ITEM* bItem = getItem( aGrp.uuid );
-
-        if( bItem == nullptr || bItem->Type() != PCB_GROUP_T )
-            continue;
-
-        PCB_GROUP* group = static_cast<PCB_GROUP*>( bItem );
-
-        for( const KIID& aUuid : aGrp.memberUuids )
+        if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( getItem( groupInfo.uuid ) ) )
         {
-            BOARD_ITEM* item;
-
-            if( m_appendToExisting )
-                item = getItem( m_resetKIIDMap[ aUuid.AsString() ] );
-            else
-                item = getItem( aUuid );
-
-            if( item && item->Type() != NOT_USED )
+            for( const KIID& aUuid : groupInfo.memberUuids )
             {
-                switch( item->Type() )
+                BOARD_ITEM* item;
+
+                if( m_appendToExisting )
+                    item = getItem( m_resetKIIDMap[ aUuid.AsString() ] );
+                else
+                    item = getItem( aUuid );
+
+                if( item->Type() == NOT_USED )
                 {
-                // We used to allow fp items in non-footprint groups.  It was a mistake.
-                case PCB_FP_TEXT_T:
-                case PCB_FP_TEXTBOX_T:
-                case PCB_FP_SHAPE_T:
-                case PCB_FP_ZONE_T:
-                case PCB_PAD_T:
-                    if( item->GetParent() == group->GetParent() )
-                        group->AddItem( item );
-
-                    break;
-
-                // This is the deleted item singleton, which means we didn't find the uuid.
-                case NOT_USED:
-                    break;
-
-                default:
-                    group->AddItem( item );
+                    // This is the deleted item singleton, which means we didn't find the uuid.
+                    continue;
                 }
+
+                // We used to allow fp items in non-footprint groups.  It was a mistake.  Check
+                // to make sure they the item and group are owned by the same parent (will both
+                // be nullptr in the board case).
+                if( item->GetParentFootprint() == group->GetParentFootprint() )
+                    group->AddItem( item );
             }
         }
     }
@@ -2483,9 +2464,11 @@ void PCB_PARSER::parseNETCLASS()
 }
 
 
-PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
+PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
 {
-    wxCHECK_MSG( CurTok() == T_gr_arc || CurTok() == T_gr_circle || CurTok() == T_gr_curve ||
+    wxCHECK_MSG( CurTok() == T_fp_arc || CurTok() == T_fp_circle || CurTok() == T_fp_curve ||
+                 CurTok() == T_fp_rect || CurTok() == T_fp_line || CurTok() == T_fp_poly ||
+                 CurTok() == T_gr_arc || CurTok() == T_gr_circle || CurTok() == T_gr_curve ||
                  CurTok() == T_gr_rect || CurTok() == T_gr_bbox || CurTok() == T_gr_line ||
                  CurTok() == T_gr_poly, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PCB_SHAPE." ) );
@@ -2493,11 +2476,12 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
     T                          token;
     VECTOR2I                   pt;
     STROKE_PARAMS              stroke( 0, PLOT_DASH_TYPE::SOLID );
-    std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( nullptr );
+    std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( aParent );
 
     switch( CurTok() )
     {
     case T_gr_arc:
+    case T_fp_arc:
         shape->SetShape( SHAPE_T::ARC );
         token = NextTok();
 
@@ -2532,6 +2516,14 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
             pt.x = parseBoardUnits( "X coordinate" );
             pt.y = parseBoardUnits( "Y coordinate" );
             shape->SetStart( pt );
+            NeedRIGHT();
+            NeedLEFT();
+            token = NextTok();
+
+            if( token != T_angle )
+                Expecting( T_angle );
+
+            shape->SetArcAngleAndEnd( EDA_ANGLE( parseDouble( "arc angle" ), DEGREES_T ), true );
             NeedRIGHT();
         }
         else
@@ -2569,6 +2561,7 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
         break;
 
     case T_gr_circle:
+    case T_fp_circle:
         shape->SetShape( SHAPE_T::CIRCLE );
         token = NextTok();
 
@@ -2604,6 +2597,7 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
         break;
 
     case T_gr_curve:
+    case T_fp_curve:
         shape->SetShape( SHAPE_T::BEZIER );
         token = NextTok();
 
@@ -2630,6 +2624,7 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
 
     case T_gr_bbox:
     case T_gr_rect:
+    case T_fp_rect:
         shape->SetShape( SHAPE_T::RECT );
         token = NextTok();
 
@@ -2660,11 +2655,23 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
         pt.x = parseBoardUnits( "X coordinate" );
         pt.y = parseBoardUnits( "Y coordinate" );
         shape->SetEnd( pt );
-        shape->NormalizeRect();
+
+        if( aParent && aParent->Type() == PCB_FOOTPRINT_T )
+        {
+            // I'm not aware of any reason to skip normalization of footprint rects, except
+            // that that's what we've always done.  (And, FWIW, the Alitum test gold files
+            // currently depend on this behaviour.)
+        }
+        else
+        {
+            shape->NormalizeRect();
+        }
+
         NeedRIGHT();
         break;
 
     case T_gr_line:
+    case T_fp_line:
         // Default PCB_SHAPE type is S_SEGMENT.
         token = NextTok();
 
@@ -2699,6 +2706,7 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
         break;
 
     case T_gr_poly:
+    case T_fp_poly:
     {
         shape->SetShape( SHAPE_T::POLY );
         shape->SetPolyPoints( {} );
@@ -2722,9 +2730,7 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
             Expecting( T_pts );
 
         while( (token = NextTok() ) != T_RIGHT )
-        {
             parseOutlinePoints( outline );
-        }
 
         break;
     }
@@ -2744,21 +2750,9 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
 
         switch( token )
         {
-        case T_angle:
-            if( m_requiredVersion <= LEGACY_ARC_FORMATTING )
-            {
-                EDA_ANGLE angle( parseDouble( "arc angle" ), DEGREES_T );
-
-                if( shape->GetShape() == SHAPE_T::ARC )
-                    shape->SetArcAngleAndEnd( angle, true );
-
-                NeedRIGHT();
-            }
-            else
-            {
-                Unexpected( T_angle );
-            }
-
+        case T_angle:       // legacy token; ignore value
+            parseDouble( "arc angle" );
+            NeedRIGHT();
             break;
 
         case T_layer:
@@ -2857,6 +2851,12 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
 
     shape->SetStroke( stroke );
 
+    if( FOOTPRINT* parentFP = dynamic_cast<FOOTPRINT*>( aParent ) )
+    {
+        shape->Rotate( { 0, 0 }, parentFP->GetOrientation() );
+        shape->Move( parentFP->GetPosition() );
+    }
+
     return shape.release();
 }
 
@@ -2939,14 +2939,43 @@ PCB_BITMAP* PCB_PARSER::parsePCB_BITMAP( BOARD_ITEM* aParent )
 }
 
 
-PCB_TEXT* PCB_PARSER::parsePCB_TEXT()
+PCB_TEXT* PCB_PARSER::parsePCB_TEXT( BOARD_ITEM* aParent )
 {
-    wxCHECK_MSG( CurTok() == T_gr_text, nullptr,
+    wxCHECK_MSG( CurTok() == T_gr_text || CurTok() == T_fp_text, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PCB_TEXT." ) );
 
-    std::unique_ptr<PCB_TEXT> text = std::make_unique<PCB_TEXT>( m_board );
+    FOOTPRINT*                parentFP = dynamic_cast<FOOTPRINT*>( aParent );
+    std::unique_ptr<PCB_TEXT> text;
 
     T token = NextTok();
+
+    if( parentFP )
+    {
+        switch( token )
+        {
+        case T_reference:
+            text = std::make_unique<PCB_TEXT>( parentFP, PCB_TEXT::TEXT_is_REFERENCE );
+            break;
+
+        case T_value:
+            text = std::make_unique<PCB_TEXT>( parentFP, PCB_TEXT::TEXT_is_VALUE );
+            break;
+
+        case T_user:
+            text = std::make_unique<PCB_TEXT>( parentFP, PCB_TEXT::TEXT_is_DIVERS );
+            break;
+
+        default:
+            THROW_IO_ERROR( wxString::Format( _( "Cannot handle footprint text type %s" ),
+                                              FromUTF8() ) );
+        }
+
+        token = NextTok();
+    }
+    else
+    {
+        text = std::make_unique<PCB_TEXT>( aParent );
+    }
 
     if( token == T_locked )
     {
@@ -2957,7 +2986,10 @@ PCB_TEXT* PCB_PARSER::parsePCB_TEXT()
     if( !IsSymbol( token ) && (int) token != DSN_NUMBER )
         Expecting( "text value" );
 
-    text->SetText( FromUTF8() );
+    wxString value = FromUTF8();
+    value.Replace( wxT( "%V" ), wxT( "${VALUE}" ) );
+    value.Replace( wxT( "%R" ), wxT( "${REFERENCE}" ) );
+    text->SetText( value );
 
     NeedLEFT();
     token = NextTok();
@@ -2974,22 +3006,27 @@ PCB_TEXT* PCB_PARSER::parsePCB_TEXT()
     // If there is no orientation defined, then it is the default value of 0 degrees.
     token = NextTok();
 
-    if( token == T_NUMBER )
+    if( CurTok() == T_NUMBER )
     {
         text->SetTextAngle( EDA_ANGLE( parseDouble(), DEGREES_T ) );
-        NeedRIGHT();
+        NextTok();
     }
-    else if( token != T_RIGHT )
+
+    if( parentFP && CurTok() == T_unlocked )
+    {
+        text->SetKeepUpright( false );
+        NextTok();
+    }
+
+    if( CurTok() != T_RIGHT )
     {
         Unexpected( CurText() );
     }
 
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
-        if( token != T_LEFT )
-            Expecting( T_LEFT );
-
-        token = NextTok();
+        if( token == T_LEFT )
+            token = NextTok();
 
         switch( token )
         {
@@ -3015,6 +3052,14 @@ PCB_TEXT* PCB_PARSER::parsePCB_TEXT()
             NeedRIGHT();
             break;
 
+        case T_hide:
+            if( parentFP )
+                text->SetVisible( false );
+            else
+                Expecting( "layer, effects, locked, render_cache or tstamp" );
+
+            break;
+
         case T_effects:
             parseEDA_TEXT( static_cast<EDA_TEXT*>( text.get() ) );
             break;
@@ -3024,20 +3069,29 @@ PCB_TEXT* PCB_PARSER::parsePCB_TEXT()
             break;
 
         default:
-            Expecting( "layer, effects, locked, render_cache or tstamp" );
+            if( parentFP )
+                Expecting( "layer, hide, effects, locked, render_cache or tstamp" );
+            else
+                Expecting( "layer, effects, locked, render_cache or tstamp" );
         }
+    }
+
+    if( parentFP )
+    {
+        text->Rotate( { 0, 0 }, parentFP->GetOrientation() );
+        text->Move( parentFP->GetPosition() );
     }
 
     return text.release();
 }
 
 
-PCB_TEXTBOX* PCB_PARSER::parsePCB_TEXTBOX()
+PCB_TEXTBOX* PCB_PARSER::parsePCB_TEXTBOX( BOARD_ITEM* aParent )
 {
-    wxCHECK_MSG( CurTok() == T_gr_text_box, nullptr,
+    wxCHECK_MSG( CurTok() == T_gr_text_box || CurTok() == T_fp_text_box, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PCB_TEXTBOX." ) );
 
-    std::unique_ptr<PCB_TEXTBOX> textbox = std::make_unique<PCB_TEXTBOX>( m_board );
+    std::unique_ptr<PCB_TEXTBOX> textbox = std::make_unique<PCB_TEXTBOX>( aParent );
 
     STROKE_PARAMS stroke( -1, PLOT_DASH_TYPE::SOLID );
     T token = NextTok();
@@ -3138,11 +3192,17 @@ PCB_TEXTBOX* PCB_PARSER::parsePCB_TEXTBOX()
 
     textbox->SetStroke( stroke );
 
+    if( FOOTPRINT* parentFP = dynamic_cast<FOOTPRINT*>( aParent ) )
+    {
+        textbox->Rotate( { 0, 0 }, parentFP->GetOrientation() );
+        textbox->Move( parentFP->GetPosition() );
+    }
+
     return textbox.release();
 }
 
 
-PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP )
+PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent )
 {
     wxCHECK_MSG( CurTok() == T_dimension, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as DIMENSION." ) );
@@ -3171,9 +3231,8 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
     if( token == T_width )
     {
         isLegacyDimension = true;
-        dim = std::make_unique<PCB_DIM_ALIGNED>( aParent, aInFP ? PCB_FP_DIM_ALIGNED_T
-                                                                : PCB_DIM_ALIGNED_T );
-        dim->SetLineThickness( parseBoardUnits( "dim width value" ) );
+        dim = std::make_unique<PCB_DIM_ALIGNED>( aParent );
+        dim->SetLineThickness( parseBoardUnits( "dimension width value" ) );
         NeedRIGHT();
     }
     else
@@ -3183,29 +3242,13 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
 
         switch( NextTok() )
         {
-        case T_aligned:
-            dim = std::make_unique<PCB_DIM_ALIGNED>( aParent, aInFP ? PCB_FP_DIM_ALIGNED_T
-                                                                    : PCB_DIM_ALIGNED_T );
-            break;
-
-        case T_orthogonal:
-            dim = std::make_unique<PCB_DIM_ORTHOGONAL>( aParent, aInFP );
-            break;
-
-        case T_leader:
-            dim = std::make_unique<PCB_DIM_LEADER>( aParent, aInFP );
-            break;
-
-        case T_center:
-            dim = std::make_unique<PCB_DIM_CENTER>( aParent, aInFP );
-            break;
-
-        case T_radial:
-            dim = std::make_unique<PCB_DIM_RADIAL>( aParent, aInFP );
-            break;
-
-        default:
-            wxFAIL_MSG( wxT( "Cannot parse unknown dim type %s" ) + GetTokenString( CurTok() ) );
+        case T_aligned:    dim = std::make_unique<PCB_DIM_ALIGNED>( aParent );    break;
+        case T_orthogonal: dim = std::make_unique<PCB_DIM_ORTHOGONAL>( aParent ); break;
+        case T_leader:     dim = std::make_unique<PCB_DIM_LEADER>( aParent );     break;
+        case T_center:     dim = std::make_unique<PCB_DIM_CENTER>( aParent );     break;
+        case T_radial:     dim = std::make_unique<PCB_DIM_RADIAL>( aParent );     break;
+        default:           wxFAIL_MSG( wxT( "Cannot parse unknown dimension type " )
+                                       + GetTokenString( CurTok() ) );
         }
 
         NeedRIGHT();
@@ -3233,7 +3276,7 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
 
         case T_gr_text:
         {
-            PCB_TEXT* text = parsePCB_TEXT();
+            PCB_TEXT* text = parsePCB_TEXT( m_board );
 
             dim->EDA_TEXT::operator=( *text );
 
@@ -3270,11 +3313,10 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
 
         case T_height:
         {
-            int height = parseBoardUnits( "dim height value" );
+            int height = parseBoardUnits( "dimension height value" );
             NeedRIGHT();
 
-            if( dim->Type() == PCB_DIM_ORTHOGONAL_T || dim->Type() == PCB_FP_DIM_ORTHOGONAL_T
-                    || dim->Type() == PCB_DIM_ALIGNED_T || dim->Type() == PCB_FP_DIM_ALIGNED_T )
+            if( dim->Type() == PCB_DIM_ORTHOGONAL_T || dim->Type() == PCB_DIM_ALIGNED_T )
             {
                 PCB_DIM_ALIGNED* aligned = static_cast<PCB_DIM_ALIGNED*>( dim.get() );
                 aligned->SetHeight( height );
@@ -3285,10 +3327,10 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
 
         case T_leader_length:
         {
-            int length = parseBoardUnits( "dim leader length value" );
+            int length = parseBoardUnits( "leader length value" );
             NeedRIGHT();
 
-            if( dim->Type() == PCB_DIM_RADIAL_T || dim->Type() == PCB_FP_DIM_RADIAL_T )
+            if( dim->Type() == PCB_DIM_RADIAL_T )
             {
                 PCB_DIM_RADIAL* radial = static_cast<PCB_DIM_RADIAL*>( dim.get() );
                 radial->SetLeaderLength( length );
@@ -3299,10 +3341,10 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
 
         case T_orientation:
         {
-            int orientation = parseInt( "orthogonal dim orientation" );
+            int orientation = parseInt( "orthogonal dimension orientation" );
             NeedRIGHT();
 
-            if( dim->Type() == PCB_DIM_ORTHOGONAL_T || dim->Type() == PCB_FP_DIM_ORTHOGONAL_T )
+            if( dim->Type() == PCB_DIM_ORTHOGONAL_T )
             {
                 PCB_DIM_ORTHOGONAL* ortho = static_cast<PCB_DIM_ORTHOGONAL*>( dim.get() );
                 orientation = std::max( 0, std::min( 1, orientation ) );
@@ -3335,7 +3377,7 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
 
                 case T_units:
                 {
-                    int mode = parseInt( "dim units mode" );
+                    int mode = parseInt( "dimension units mode" );
                     mode = std::max( 0, std::min( 4, mode ) );
                     dim->SetUnitsMode( static_cast<DIM_UNITS_MODE>( mode ) );
                     NeedRIGHT();
@@ -3344,7 +3386,7 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
 
                 case T_units_format:
                 {
-                    int format = parseInt( "dim units format" );
+                    int format = parseInt( "dimension units format" );
                     format = std::max( 0, std::min( 3, format ) );
                     dim->SetUnitsFormat( static_cast<DIM_UNITS_FORMAT>( format ) );
                     NeedRIGHT();
@@ -3352,7 +3394,7 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
                 }
 
                 case T_precision:
-                    dim->SetPrecision( static_cast<DIM_PRECISION>( parseInt( "dim precision" ) ) );
+                    dim->SetPrecision( static_cast<DIM_PRECISION>( parseInt( "dimension precision" ) ) );
                     NeedRIGHT();
                     break;
 
@@ -3388,18 +3430,18 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
                     continue;
 
                 case T_thickness:
-                    dim->SetLineThickness( parseBoardUnits( "extension line thickness" ) );
+                    dim->SetLineThickness( parseBoardUnits( "extension line thickness value" ) );
                     NeedRIGHT();
                     break;
 
                 case T_arrow_length:
-                    dim->SetArrowLength( parseBoardUnits( "arrow length" ) );
+                    dim->SetArrowLength( parseBoardUnits( "arrow length value" ) );
                     NeedRIGHT();
                     break;
 
                 case T_text_position_mode:
                 {
-                    int mode = parseInt( "dim text position mode" );
+                    int mode = parseInt( "text position mode" );
                     mode = std::max( 0, std::min( 3, mode ) );
                     dim->SetTextPositionMode( static_cast<DIM_TEXT_POSITION>( mode ) );
                     NeedRIGHT();
@@ -3410,13 +3452,13 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
                 {
                     PCB_DIM_ALIGNED* aligned = dynamic_cast<PCB_DIM_ALIGNED*>( dim.get() );
                     wxCHECK_MSG( aligned, nullptr, wxT( "Invalid extension_height token" ) );
-                    aligned->SetExtensionHeight( parseBoardUnits( "extension height" ) );
+                    aligned->SetExtensionHeight( parseBoardUnits( "extension height value" ) );
                     NeedRIGHT();
                     break;
                 }
 
                 case T_extension_offset:
-                    dim->SetExtensionOffset( parseBoardUnits( "extension offset" ) );
+                    dim->SetExtensionOffset( parseBoardUnits( "extension offset value" ) );
                     NeedRIGHT();
                     break;
 
@@ -3426,13 +3468,12 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
 
                 case T_text_frame:
                 {
-                    KICAD_T expected_type = aInFP ? PCB_FP_DIM_LEADER_T : PCB_DIM_LEADER_T;
-                    wxCHECK_MSG( dim->Type() == expected_type, nullptr,
+                    wxCHECK_MSG( dim->Type() == PCB_DIM_LEADER_T, nullptr,
                                  wxT( "Invalid text_frame token" ) );
 
                     PCB_DIM_LEADER* leader = static_cast<PCB_DIM_LEADER*>( dim.get() );
 
-                    int textFrame = parseInt( "dim text frame mode" );
+                    int textFrame = parseInt( "text frame mode" );
                     textFrame = std::max( 0, std::min( 3, textFrame ) );
                     leader->SetTextBorder( static_cast<DIM_TEXT_BORDER>( textFrame ));
                     NeedRIGHT();
@@ -3844,22 +3885,18 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
 
         case T_fp_text:
         {
-            FP_TEXT* text = parseFP_TEXT();
-            text->SetParent( footprint.get() );
-            EDA_ANGLE orientation = text->GetTextAngle();
-            orientation -= footprint->GetOrientation();
-            text->SetTextAngle( orientation );
-            text->SetDrawCoord();
+            PCB_TEXT* text = parsePCB_TEXT( footprint.get() );
+            text->SetTextAngle( text->GetTextAngle() - footprint->GetOrientation());
 
             switch( text->GetType() )
             {
-            case FP_TEXT::TEXT_is_REFERENCE:
+            case PCB_TEXT::TEXT_is_REFERENCE:
                 footprint->Reference() = *text;
                 const_cast<KIID&>( footprint->Reference().m_Uuid ) = text->m_Uuid;
                 delete text;
                 break;
 
-            case FP_TEXT::TEXT_is_VALUE:
+            case PCB_TEXT::TEXT_is_VALUE:
                 footprint->Value() = *text;
                 const_cast<KIID&>( footprint->Value().m_Uuid ) = text->m_Uuid;
                 delete text;
@@ -3874,9 +3911,7 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
 
         case T_fp_text_box:
         {
-            FP_TEXTBOX* textbox = parseFP_TEXTBOX();
-            textbox->SetParent( footprint.get() );
-            textbox->SetDrawCoord();
+            PCB_TEXTBOX* textbox = parsePCB_TEXTBOX( footprint.get() );
             footprint->Add( textbox, ADD_MODE::APPEND, true );
             break;
         }
@@ -3888,9 +3923,7 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
         case T_fp_line:
         case T_fp_poly:
         {
-            FP_SHAPE* shape = parseFP_SHAPE();
-            shape->SetParent( footprint.get() );
-            shape->SetDrawCoord();
+            PCB_SHAPE* shape = parsePCB_SHAPE( footprint.get() );
             footprint->Add( shape, ADD_MODE::APPEND, true );
             break;
         }
@@ -3904,7 +3937,7 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
 
         case T_dimension:
         {
-            PCB_DIMENSION_BASE* dimension = parseDIMENSION( footprint.get(), true );
+            PCB_DIMENSION_BASE* dimension = parseDIMENSION( footprint.get() );
             footprint->Add( dimension, ADD_MODE::APPEND, true );
             break;
         }
@@ -3984,604 +4017,6 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
     footprint->SetProperties( properties );
 
     return footprint.release();
-}
-
-
-FP_TEXT* PCB_PARSER::parseFP_TEXT()
-{
-    wxCHECK_MSG( CurTok() == T_fp_text, nullptr,
-                 wxString::Format( wxT( "Cannot parse %s as FP_TEXT at line %d, offset %d." ),
-                                   GetTokenString( CurTok() ), CurLineNumber(), CurOffset() ) );
-
-    T token = NextTok();
-
-    std::unique_ptr<FP_TEXT> text = std::make_unique<FP_TEXT>( nullptr );
-
-    switch( token )
-    {
-    case T_reference:
-        text->SetType( FP_TEXT::TEXT_is_REFERENCE );
-        break;
-
-    case T_value:
-        text->SetType( FP_TEXT::TEXT_is_VALUE );
-        break;
-
-    case T_user:
-        break;          // Default type is user text.
-
-    default:
-        THROW_IO_ERROR( wxString::Format( _( "Cannot handle footprint text type %s" ),
-                                          FromUTF8() ) );
-    }
-
-    token = NextTok();
-
-    if( token == T_locked )
-    {
-        text->SetLocked( true );
-        token = NextTok();
-    }
-
-    if( !IsSymbol( token ) && (int) token != DSN_NUMBER )
-        Expecting( "text value" );
-
-    wxString value = FromUTF8();
-    value.Replace( wxT( "%V" ), wxT( "${VALUE}" ) );
-    value.Replace( wxT( "%R" ), wxT( "${REFERENCE}" ) );
-    text->SetText( value );
-    NeedLEFT();
-    token = NextTok();
-
-    if( token != T_at )
-        Expecting( T_at );
-
-    VECTOR2I pt;
-
-    pt.x = parseBoardUnits( "X coordinate" );
-    pt.y = parseBoardUnits( "Y coordinate" );
-    text->SetPos0( pt );
-
-    NextTok();
-
-    if( CurTok() == T_NUMBER )
-    {
-        text->SetTextAngle( EDA_ANGLE( parseDouble(), DEGREES_T ) );
-        NextTok();
-    }
-
-    if( CurTok() == T_unlocked )
-    {
-        text->SetKeepUpright( false );
-        NextTok();
-    }
-
-    if( CurTok() != T_RIGHT )
-    {
-        Unexpected( CurText() );
-    }
-
-    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
-    {
-        if( token == T_LEFT )
-            token = NextTok();
-
-        switch( token )
-        {
-        case T_layer:
-            text->SetLayer( parseBoardItemLayer() );
-
-            token = NextTok();
-
-            if( token == T_knockout )
-            {
-                text->SetIsKnockout( true );
-                token = NextTok();
-            }
-
-            if( (int) token != DSN_RIGHT )
-                Expecting( DSN_RIGHT );
-
-            break;
-
-        case T_hide:
-            text->SetVisible( false );
-            break;
-
-        case T_effects:
-            parseEDA_TEXT( static_cast<EDA_TEXT*>( text.get() ) );
-            break;
-
-        case T_render_cache:
-            parseRenderCache( static_cast<EDA_TEXT*>( text.get() ) );
-            break;
-
-        case T_tstamp:
-            NextTok();
-            const_cast<KIID&>( text->m_Uuid ) = CurStrToKIID();
-            NeedRIGHT();
-            break;
-
-        default:
-            Expecting( "layer, hide, effects, render_cache or tstamp" );
-        }
-    }
-
-    return text.release();
-}
-
-
-FP_TEXTBOX* PCB_PARSER::parseFP_TEXTBOX()
-{
-    wxCHECK_MSG( CurTok() == T_fp_text_box, nullptr,
-                 wxString::Format( wxT( "Cannot parse %s as FP_TEXTBOX at line %d, offset %d." ),
-                                   GetTokenString( CurTok() ), CurLineNumber(), CurOffset() ) );
-
-    std::unique_ptr<FP_TEXTBOX> textbox = std::make_unique<FP_TEXTBOX>( nullptr );
-
-    STROKE_PARAMS stroke( -1, PLOT_DASH_TYPE::SOLID );
-    T token = NextTok();
-
-    if( token == T_locked )
-    {
-        textbox->SetLocked( true );
-        token = NextTok();
-    }
-
-    if( !IsSymbol( token ) && (int) token != DSN_NUMBER )
-        Expecting( "text value" );
-
-    textbox->SetText( FromUTF8() );
-
-    NeedLEFT();
-    token = NextTok();
-
-    if( token == T_start )
-    {
-        int x = parseBoardUnits( "X coordinate" );
-        int y = parseBoardUnits( "Y coordinate" );
-        textbox->SetStart0( VECTOR2I( x, y ) );
-        NeedRIGHT();
-
-        NeedLEFT();
-        token = NextTok();
-
-        if( token != T_end )
-            Expecting( T_end );
-
-        x = parseBoardUnits( "X coordinate" );
-        y = parseBoardUnits( "Y coordinate" );
-        textbox->SetEnd0( VECTOR2I( x, y ) );
-        NeedRIGHT();
-    }
-    else if( token == T_pts )
-    {
-        textbox->SetShape( SHAPE_T::POLY );
-        textbox->GetPolyShape().RemoveAllContours();
-        textbox->GetPolyShape().NewOutline();
-
-        while( (token = NextTok() ) != T_RIGHT )
-            parseOutlinePoints( textbox->GetPolyShape().Outline( 0 ) );
-    }
-    else
-    {
-        Expecting( "start or pts" );
-    }
-
-    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
-    {
-        if( token == T_LEFT )
-            token = NextTok();
-
-        switch( token )
-        {
-        case T_angle:
-            textbox->SetTextAngle( EDA_ANGLE( parseDouble( "text box angle" ), DEGREES_T ) );
-            NeedRIGHT();
-            break;
-
-        case T_stroke:
-        {
-            STROKE_PARAMS_PARSER strokeParser( reader, pcbIUScale.IU_PER_MM );
-            strokeParser.SyncLineReaderWith( *this );
-
-            strokeParser.ParseStroke( stroke );
-            SyncLineReaderWith( strokeParser );
-            break;
-        }
-
-        case T_layer:
-            textbox->SetLayer( parseBoardItemLayer() );
-            NeedRIGHT();
-            break;
-
-        case T_effects:
-            parseEDA_TEXT( static_cast<EDA_TEXT*>( textbox.get() ) );
-            break;
-
-        case T_render_cache:
-            parseRenderCache( static_cast<EDA_TEXT*>( textbox.get() ) );
-            break;
-
-        case T_tstamp:
-            NextTok();
-            const_cast<KIID&>( textbox->m_Uuid ) = CurStrToKIID();
-            NeedRIGHT();
-            break;
-
-        default:
-            Expecting( "angle, width, layer, effects, render_cache or tstamp" );
-        }
-    }
-
-    textbox->SetStroke( stroke );
-
-    return textbox.release();
-}
-
-
-FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
-{
-    wxCHECK_MSG( CurTok() == T_fp_arc || CurTok() == T_fp_circle || CurTok() == T_fp_curve ||
-                 CurTok() == T_fp_rect || CurTok() == T_fp_line || CurTok() == T_fp_poly, nullptr,
-                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as FP_SHAPE." ) );
-
-    VECTOR2I pt;
-    STROKE_PARAMS stroke( 0, PLOT_DASH_TYPE::SOLID );
-    T token;
-
-    std::unique_ptr<FP_SHAPE> shape = std::make_unique<FP_SHAPE>( nullptr );
-
-    switch( CurTok() )
-    {
-    case T_fp_arc:
-        shape->SetShape( SHAPE_T::ARC );
-        token = NextTok();
-
-        if( token == T_locked )
-        {
-            shape->SetLocked( true );
-            token = NextTok();
-        }
-
-        if( token != T_LEFT )
-            Expecting( T_LEFT );
-
-        token = NextTok();
-
-        if( m_requiredVersion <= LEGACY_ARC_FORMATTING )
-        {
-            // In legacy files the start keyword actually gives the arc center...
-            if( token != T_start )
-                Expecting( T_start );
-
-            pt.x = parseBoardUnits( "X coordinate" );
-            pt.y = parseBoardUnits( "Y coordinate" );
-            shape->SetCenter0( pt );
-            NeedRIGHT();
-            NeedLEFT();
-            token = NextTok();
-
-            // ... and the end keyword gives the start point of the arc
-            if( token != T_end )
-                Expecting( T_end );
-
-            pt.x = parseBoardUnits( "X coordinate" );
-            pt.y = parseBoardUnits( "Y coordinate" );
-            shape->SetStart0( pt );
-            NeedRIGHT();
-            NeedLEFT();
-            token = NextTok();
-
-            if( token != T_angle )
-                Expecting( T_angle );
-
-            shape->SetArcAngleAndEnd0( EDA_ANGLE( parseDouble( "arc angle" ), DEGREES_T ), true );
-            NeedRIGHT();
-        }
-        else
-        {
-            VECTOR2I arc_start, arc_mid, arc_end;
-
-            if( token != T_start )
-                Expecting( T_start );
-
-            arc_start.x = parseBoardUnits( "X coordinate" );
-            arc_start.y = parseBoardUnits( "Y coordinate" );
-            NeedRIGHT();
-            NeedLEFT();
-            token = NextTok();
-
-            if( token != T_mid )
-                Expecting( T_mid );
-
-            arc_mid.x = parseBoardUnits( "X coordinate" );
-            arc_mid.y = parseBoardUnits( "Y coordinate" );
-            NeedRIGHT();
-            NeedLEFT();
-            token = NextTok();
-
-            if( token != T_end )
-                Expecting( T_end );
-
-            arc_end.x = parseBoardUnits( "X coordinate" );
-            arc_end.y = parseBoardUnits( "Y coordinate" );
-            NeedRIGHT();
-
-            shape->SetArcGeometry0( arc_start, arc_mid, arc_end );
-        }
-
-        break;
-
-    case T_fp_circle:
-        shape->SetShape( SHAPE_T::CIRCLE );
-        token = NextTok();
-
-        if( token == T_locked )
-        {
-            shape->SetLocked( true );
-            token = NextTok();
-        }
-
-        if( token != T_LEFT )
-            Expecting( T_LEFT );
-
-        token = NextTok();
-
-        if( token != T_center )
-            Expecting( T_center );
-
-        pt.x = parseBoardUnits( "X coordinate" );
-        pt.y = parseBoardUnits( "Y coordinate" );
-        shape->SetStart0( pt );
-        NeedRIGHT();
-        NeedLEFT();
-        token = NextTok();
-
-        if( token != T_end )
-            Expecting( T_end );
-
-        pt.x = parseBoardUnits( "X coordinate" );
-        pt.y = parseBoardUnits( "Y coordinate" );
-        shape->SetEnd0( pt );
-        NeedRIGHT();
-        break;
-
-    case T_fp_curve:
-        shape->SetShape( SHAPE_T::BEZIER );
-        token = NextTok();
-
-        if( token == T_locked )
-        {
-            shape->SetLocked( true );
-            token = NextTok();
-        }
-
-        if( token != T_LEFT )
-            Expecting( T_LEFT );
-
-        token = NextTok();
-
-        if( token != T_pts )
-            Expecting( T_pts );
-
-        shape->SetStart0( parseXY() );
-        shape->SetBezierC1_0( parseXY() );
-        shape->SetBezierC2_0( parseXY() );
-        shape->SetEnd0( parseXY() );
-        NeedRIGHT();
-        break;
-
-    case T_fp_rect:
-        shape->SetShape( SHAPE_T::RECT );
-        token = NextTok();
-
-        if( token == T_locked )
-        {
-            shape->SetLocked( true );
-            token = NextTok();
-        }
-
-        if( token != T_LEFT )
-            Expecting( T_LEFT );
-
-        token = NextTok();
-
-        if( token != T_start )
-            Expecting( T_start );
-
-        pt.x = parseBoardUnits( "X coordinate" );
-        pt.y = parseBoardUnits( "Y coordinate" );
-        shape->SetStart0( pt );
-
-        NeedRIGHT();
-        NeedLEFT();
-        token = NextTok();
-
-        if( token != T_end )
-            Expecting( T_end );
-
-        pt.x = parseBoardUnits( "X coordinate" );
-        pt.y = parseBoardUnits( "Y coordinate" );
-        shape->SetEnd0( pt );
-        NeedRIGHT();
-        break;
-
-    case T_fp_line:
-        // Default PCB_SHAPE type is S_SEGMENT.
-        token = NextTok();
-
-        if( token == T_locked )
-        {
-            shape->SetLocked( true );
-            token = NextTok();
-        }
-
-        if( token != T_LEFT )
-            Expecting( T_LEFT );
-
-        token = NextTok();
-
-        if( token != T_start )
-            Expecting( T_start );
-
-        pt.x = parseBoardUnits( "X coordinate" );
-        pt.y = parseBoardUnits( "Y coordinate" );
-        shape->SetStart0( pt );
-
-        NeedRIGHT();
-        NeedLEFT();
-        token = NextTok();
-
-        if( token != T_end )
-            Expecting( T_end );
-
-        pt.x = parseBoardUnits( "X coordinate" );
-        pt.y = parseBoardUnits( "Y coordinate" );
-        shape->SetEnd0( pt );
-        NeedRIGHT();
-        break;
-
-    case T_fp_poly:
-    {
-        shape->SetShape( SHAPE_T::POLY );
-        shape->SetPolyPoints( {} );
-        SHAPE_LINE_CHAIN& outline = shape->GetPolyShape().Outline( 0 );
-
-        token = NextTok();
-
-        if( token == T_locked )
-        {
-            shape->SetLocked( true );
-            token = NextTok();
-        }
-
-        if( token != T_LEFT )
-            Expecting( T_LEFT );
-
-        token = NextTok();
-
-        if( token != T_pts )
-            Expecting( T_pts );
-
-        while( (token = NextTok() ) != T_RIGHT )
-            parseOutlinePoints( outline );
-
-        break;
-    }
-
-    default:
-        Expecting( "fp_arc, fp_circle, fp_curve, fp_line, fp_poly, or fp_rect" );
-    }
-
-    bool foundFill = false;
-
-    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
-    {
-        if( token != T_LEFT )
-            Expecting( T_LEFT );
-
-        token = NextTok();
-
-        switch( token )
-        {
-        case T_layer:
-            shape->SetLayer( parseBoardItemLayer() );
-            NeedRIGHT();
-            break;
-
-        case T_width:       // legacy token
-            stroke.SetWidth( parseBoardUnits( T_width ) );
-            NeedRIGHT();
-            break;
-
-        case T_stroke:
-        {
-            STROKE_PARAMS_PARSER strokeParser( reader, pcbIUScale.IU_PER_MM );
-            strokeParser.SyncLineReaderWith( *this );
-
-            strokeParser.ParseStroke( stroke );
-            SyncLineReaderWith( strokeParser );
-            break;
-        }
-
-        case T_tstamp:
-            NextTok();
-            const_cast<KIID&>( shape->m_Uuid ) = CurStrToKIID();
-            NeedRIGHT();
-            break;
-
-        case T_fill:
-            foundFill = true;
-
-            for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
-            {
-                if( token == T_LEFT )
-                    token = NextTok();
-
-                switch( token )
-                {
-                // T_yes was used to indicate filling when first introduced,
-                // so treat it like a solid fill since that was the only fill available
-                case T_yes:
-                case T_solid:
-                    shape->SetFilled( true );
-                    break;
-
-                case T_none:
-                    shape->SetFilled( false );
-                    break;
-
-                default:
-                    Expecting( "yes, none, solid" );
-                }
-            }
-
-            break;
-
-        // We continue to parse the status field but it is no longer written
-        case T_status:
-            parseHex();
-            NeedRIGHT();
-            break;
-
-        // Continue to process "(locked)" format which was output during 5.99 development
-        case T_locked:
-            shape->SetLocked( true );
-            NeedRIGHT();
-            break;
-
-        default:
-            Expecting( "layer, width, fill, tstamp, locked, or status" );
-        }
-    }
-
-    if( !foundFill )
-    {
-        // Legacy versions didn't have a filled flag but allowed some shapes to indicate they
-        // should be filled by specifying a 0 stroke-width.
-        if( stroke.GetWidth() == 0
-            && ( shape->GetShape() == SHAPE_T::RECT || shape->GetShape() == SHAPE_T::CIRCLE ) )
-        {
-            shape->SetFilled( true );
-        }
-        // Polygons on non-Edge_Cuts layers were always filled
-        else if( shape->GetShape() == SHAPE_T::POLY && shape->GetLayer() != Edge_Cuts )
-        {
-            shape->SetFilled( true );
-        }
-    }
-
-    // Only filled shapes may have a zero line-width.  This is not permitted in KiCad but some
-    // external tools can generate invalid files.
-    if( stroke.GetWidth() <= 0 && !shape->IsFilled() )
-    {
-        stroke.SetWidth( pcbIUScale.mmToIU( DEFAULT_LINE_WIDTH ) );
-    }
-
-    shape->SetStroke( stroke );
-
-    return shape.release();
 }
 
 
@@ -4982,42 +4417,42 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
                 switch( token )
                 {
                 case T_gr_arc:
-                    dummyShape = parsePCB_SHAPE();
+                    dummyShape = parsePCB_SHAPE( nullptr );
                     pad->AddPrimitiveArc( dummyShape->GetCenter(), dummyShape->GetStart(),
                                           dummyShape->GetArcAngle(), dummyShape->GetWidth() );
                     break;
 
                 case T_gr_line:
-                    dummyShape = parsePCB_SHAPE();
+                    dummyShape = parsePCB_SHAPE( nullptr );
                     pad->AddPrimitiveSegment( dummyShape->GetStart(), dummyShape->GetEnd(),
                                               dummyShape->GetWidth() );
                     break;
 
                 case T_gr_circle:
-                    dummyShape = parsePCB_SHAPE();
+                    dummyShape = parsePCB_SHAPE( nullptr );
                     pad->AddPrimitiveCircle( dummyShape->GetCenter(), dummyShape->GetRadius(),
                                              dummyShape->GetWidth(), dummyShape->IsFilled() );
                     break;
 
                 case T_gr_rect:
-                    dummyShape = parsePCB_SHAPE();
+                    dummyShape = parsePCB_SHAPE( nullptr );
                     pad->AddPrimitiveRect( dummyShape->GetStart(), dummyShape->GetEnd(),
                                            dummyShape->GetWidth(), dummyShape->IsFilled() );
                     break;
 
                 case T_gr_bbox:
-                    dummyShape = parsePCB_SHAPE();
+                    dummyShape = parsePCB_SHAPE( nullptr );
                     pad->AddPrimitiveAnnotationBox( dummyShape->GetStart(), dummyShape->GetEnd() );
                     break;
 
                 case T_gr_poly:
-                    dummyShape = parsePCB_SHAPE();
+                    dummyShape = parsePCB_SHAPE( nullptr );
                     pad->AddPrimitivePoly( dummyShape->GetPolyShape(), dummyShape->GetWidth(),
                                            dummyShape->IsFilled() );
                     break;
 
                 case T_gr_curve:
-                    dummyShape = parsePCB_SHAPE();
+                    dummyShape = parsePCB_SHAPE( nullptr );
                     pad->AddPrimitiveCurve( dummyShape->GetStart(), dummyShape->GetEnd(),
                                             dummyShape->GetBezierC1(), dummyShape->GetBezierC2(),
                                             dummyShape->GetWidth() );
@@ -5537,20 +4972,11 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
 
     // bigger scope since each filled_polygon is concatenated in here
     std::map<PCB_LAYER_ID, SHAPE_POLY_SET> pts;
-    bool         inFootprint = false;
     PCB_LAYER_ID filledLayer;
     bool         addedFilledPolygons = false;
     bool         dropFilledPolygons = false;
 
-    if( dynamic_cast<FOOTPRINT*>( aParent ) )      // The zone belongs a footprint
-        inFootprint = true;
-
-    std::unique_ptr<ZONE> zone;
-
-    if( inFootprint )
-        zone = std::make_unique<FP_ZONE>( aParent );
-    else
-        zone = std::make_unique<ZONE>( aParent );
+    std::unique_ptr<ZONE> zone = std::make_unique<ZONE>( aParent );
 
     zone->SetAssignedPriority( 0 );
 

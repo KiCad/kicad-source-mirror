@@ -889,10 +889,10 @@ void PCB_EDIT_FRAME::setupUIConditions()
 
 
     SELECTION_CONDITION singleZoneCond = SELECTION_CONDITIONS::Count( 1 )
-                                    && SELECTION_CONDITIONS::OnlyTypes( { PCB_ZONE_T, PCB_FP_ZONE_T } );
+                                    && SELECTION_CONDITIONS::OnlyTypes( { PCB_ZONE_T } );
 
     SELECTION_CONDITION zoneMergeCond = SELECTION_CONDITIONS::MoreThan( 1 )
-                                    && SELECTION_CONDITIONS::OnlyTypes( { PCB_ZONE_T, PCB_FP_ZONE_T } );
+                                    && SELECTION_CONDITIONS::OnlyTypes( { PCB_ZONE_T } );
 
     mgr->SetConditions( PCB_ACTIONS::zoneDuplicate,   ENABLE( singleZoneCond ) );
     mgr->SetConditions( PCB_ACTIONS::drawZoneCutout,  ENABLE( singleZoneCond ) );
@@ -1699,10 +1699,6 @@ void PCB_EDIT_FRAME::ShowFindDialog()
             findString = static_cast<FOOTPRINT*>( front )->GetValue();
             break;
 
-        case PCB_FP_TEXT_T:
-            findString = static_cast<FP_TEXT*>( front )->GetShownText();
-            break;
-
         case PCB_TEXT_T:
             findString = static_cast<PCB_TEXT*>( front )->GetShownText();
 
@@ -2047,7 +2043,7 @@ int PCB_EDIT_FRAME::ShowExchangeFootprintsDialog( FOOTPRINT* aFootprint, bool aU
 namespace {
 
 
-void processTextItem( const FP_TEXT& aSrc, FP_TEXT& aDest,
+void processTextItem( const PCB_TEXT& aSrc, PCB_TEXT& aDest,
                       bool resetText, bool resetTextLayers, bool resetTextEffects,
                       bool* aUpdated )
 {
@@ -2074,7 +2070,7 @@ void processTextItem( const FP_TEXT& aSrc, FP_TEXT& aDest,
         *aUpdated |= aSrc.GetTextSize() != aDest.GetTextSize();
         *aUpdated |= aSrc.GetTextThickness() != aDest.GetTextThickness();
         *aUpdated |= aSrc.GetTextAngle() != aDest.GetTextAngle();
-        *aUpdated |= aSrc.GetPos0() != aDest.GetPos0();
+        *aUpdated |= aSrc.GetFPRelativePosition() != aDest.GetFPRelativePosition();
     }
     else
     {
@@ -2082,20 +2078,20 @@ void processTextItem( const FP_TEXT& aSrc, FP_TEXT& aDest,
         bool visible = aDest.IsVisible();
         aDest.SetAttributes( aSrc );
         aDest.SetVisible( visible );
-        aDest.SetPos0( aSrc.GetPos0() );
+        aDest.SetFPRelativePosition( aSrc.GetFPRelativePosition() );
     }
 
     aDest.SetLocked( aSrc.IsLocked() );
 }
 
 
-FP_TEXT* getMatchingTextItem( FP_TEXT* aRefItem, FOOTPRINT* aFootprint )
+PCB_TEXT* getMatchingTextItem( PCB_TEXT* aRefItem, FOOTPRINT* aFootprint )
 {
-    std::vector<FP_TEXT*> candidates;
+    std::vector<PCB_TEXT*> candidates;
 
     for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
     {
-        FP_TEXT* candidate = dyn_cast<FP_TEXT*>( item );
+        PCB_TEXT* candidate = dyn_cast<PCB_TEXT*>( item );
 
         if( candidate && candidate->GetText() == aRefItem->GetText() )
             candidates.push_back( candidate );
@@ -2108,9 +2104,9 @@ FP_TEXT* getMatchingTextItem( FP_TEXT* aRefItem, FOOTPRINT* aFootprint )
         return candidates[0];
 
     // Try refining the match by layer
-    std::vector<FP_TEXT*> candidatesOnSameLayer;
+    std::vector<PCB_TEXT*> candidatesOnSameLayer;
 
-    for( FP_TEXT* candidate : candidates )
+    for( PCB_TEXT* candidate : candidates )
     {
         if( candidate->GetLayer() == aRefItem->GetLayer() )
             candidatesOnSameLayer.push_back( candidate );
@@ -2120,11 +2116,11 @@ FP_TEXT* getMatchingTextItem( FP_TEXT* aRefItem, FOOTPRINT* aFootprint )
         return candidatesOnSameLayer[0];
 
     // Last ditch effort: refine by position
-    std::vector<FP_TEXT*> candidatesAtSamePos;
+    std::vector<PCB_TEXT*> candidatesAtSamePos;
 
-    for( FP_TEXT* candidate : candidatesOnSameLayer.size() ? candidatesOnSameLayer : candidates )
+    for( PCB_TEXT* candidate : candidatesOnSameLayer.size() ? candidatesOnSameLayer : candidates )
     {
-        if( candidate->GetPos0() == aRefItem->GetPos0() )
+        if( candidate->GetFPRelativePosition() == aRefItem->GetFPRelativePosition() )
             candidatesAtSamePos.push_back( candidate );
     }
 
@@ -2236,11 +2232,11 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
 
     for( BOARD_ITEM* item : aExisting->GraphicalItems() )
     {
-        FP_TEXT* srcItem = dyn_cast<FP_TEXT*>( item );
+        PCB_TEXT* srcItem = dyn_cast<PCB_TEXT*>( item );
 
         if( srcItem )
         {
-            FP_TEXT* destItem = getMatchingTextItem( srcItem, aNew );
+            PCB_TEXT* destItem = getMatchingTextItem( srcItem, aNew );
 
             if( destItem )
             {
@@ -2249,7 +2245,7 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
             }
             else if( !deleteExtraTexts )
             {
-                aNew->Add( new FP_TEXT( *srcItem ) );
+                aNew->Add( new PCB_TEXT( *srcItem ) );
             }
         }
     }

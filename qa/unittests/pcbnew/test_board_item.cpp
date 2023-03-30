@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,15 +35,11 @@
 #include <pcb_text.h>
 #include <pcb_textbox.h>
 #include <pcb_bitmap.h>
-#include <fp_text.h>
-#include <fp_textbox.h>
-#include <fp_shape.h>
 #include <zone.h>
 #include <pcb_track.h>
 #include <pcb_marker.h>
 #include <pcb_dimension.h>
 #include <pcb_target.h>
-#include <netinfo.h>
 #include <pcb_group.h>
 
 class TEST_BOARD_ITEM_FIXTURE
@@ -83,26 +79,6 @@ public:
         case PCB_TEXT_T:              return new PCB_TEXT( &m_board );
         case PCB_TEXTBOX_T:           return new PCB_TEXTBOX( &m_board );
         case PCB_BITMAP_T:            return new PCB_BITMAP( &m_board );
-        case PCB_FP_TEXT_T:           return new FP_TEXT( &m_footprint );
-        case PCB_FP_TEXTBOX_T:        return new FP_TEXTBOX( &m_footprint );
-        case PCB_FP_SHAPE_T:          return new FP_SHAPE( &m_footprint );
-        case PCB_FP_DIM_ALIGNED_T:    return new PCB_DIM_ALIGNED( &m_footprint, PCB_FP_DIM_ALIGNED_T );
-        case PCB_FP_DIM_LEADER_T:     return new PCB_DIM_LEADER( &m_footprint, true );
-        case PCB_FP_DIM_CENTER_T:     return new PCB_DIM_CENTER( &m_footprint, true );
-        case PCB_FP_DIM_RADIAL_T:     return new PCB_DIM_RADIAL( &m_footprint, true );
-        case PCB_FP_DIM_ORTHOGONAL_T: return new PCB_DIM_ORTHOGONAL( &m_footprint, true );
-        case PCB_FP_ZONE_T:
-        {
-            FP_ZONE* fpZone = new FP_ZONE( &m_footprint );
-
-            fpZone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( -100 ), pcbIUScale.mmToIU( -50 ) ), -1 );
-            fpZone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( -100 ), pcbIUScale.mmToIU( 50 ) ), -1 );
-            fpZone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 100 ), pcbIUScale.mmToIU( 50 ) ), -1 );
-            fpZone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 100 ), pcbIUScale.mmToIU( -50 ) ), -1 );
-
-            return fpZone;
-        }
-
         case PCB_TRACE_T:             return new PCB_TRACK( &m_board );
         case PCB_VIA_T:               return new PCB_VIA( &m_board );
         case PCB_ARC_T:               return new PCB_ARC( &m_board );
@@ -183,11 +159,6 @@ BOOST_AUTO_TEST_CASE( Move )
                     item.get(),
                     []( BOARD_ITEM* aOriginalItem, VECTOR2I aRef )
                     {
-                        FP_SHAPE* originalFpShape = dynamic_cast<FP_SHAPE*>( aOriginalItem );
-
-                        if( originalFpShape != nullptr )
-                            originalFpShape->SetDrawCoord();
-
                         // FIXME: Update() has to be called after SetPosition() to update dimension
                         // shapes.
                         PCB_DIMENSION_BASE* originalDimension =
@@ -203,19 +174,9 @@ BOOST_AUTO_TEST_CASE( Move )
                         // This has to be an identity transformation.
 
                         item->Move( aRef );
-
-                        FP_SHAPE* fpShape = dynamic_cast<FP_SHAPE*>( item.get() );
-
-                        if( fpShape != nullptr )
-                            fpShape->SetDrawCoord();
-
                         BOOST_CHECK_EQUAL( item->GetPosition(), originalPos + aRef );
 
                         item->Move( -aRef );
-
-                        if( fpShape != nullptr )
-                            fpShape->SetDrawCoord();
-
                         CompareItems( item.get(), aOriginalItem );
                     } );
         }
@@ -242,11 +203,6 @@ BOOST_AUTO_TEST_CASE( Rotate )
                     item.get(),
                     []( BOARD_ITEM* aOriginalItem, VECTOR2I aRef )
                     {
-                        FP_SHAPE* originalFpShape = dynamic_cast<FP_SHAPE*>( aOriginalItem );
-
-                        if( originalFpShape != nullptr )
-                            originalFpShape->SetDrawCoord();
-
                         // FIXME: Update() has to be called after SetPosition() to update dimension
                         // shapes.
                         PCB_DIMENSION_BASE* originalDimension =
@@ -263,11 +219,6 @@ BOOST_AUTO_TEST_CASE( Rotate )
                         item->Rotate( aRef, EDA_ANGLE( 90.0, DEGREES_T ) );
                         item->Rotate( aRef, EDA_ANGLE( 90.0, DEGREES_T ) );
                         item->Rotate( aRef, EDA_ANGLE( 90.0, DEGREES_T ) );
-
-                        FP_SHAPE* fpShape = dynamic_cast<FP_SHAPE*>( aOriginalItem );
-
-                        if( fpShape != nullptr )
-                            fpShape->SetDrawCoord();
 
                         CompareItems( item.get(), aOriginalItem );
                     } );
@@ -293,11 +244,6 @@ BOOST_AUTO_TEST_CASE( FlipLeftRight )
                     item.get(),
                     []( BOARD_ITEM* aOriginalItem, VECTOR2I aRef )
                     {
-                        FP_SHAPE* originalFpShape = dynamic_cast<FP_SHAPE*>( aOriginalItem );
-
-                        if( originalFpShape != nullptr )
-                            originalFpShape->SetDrawCoord();
-
                         // FIXME: Update() has to be called after SetPosition() to update dimension
                         // shapes.
                         PCB_DIMENSION_BASE* originalDimension =
@@ -312,11 +258,6 @@ BOOST_AUTO_TEST_CASE( FlipLeftRight )
 
                         item->Flip( aRef, true );
                         item->Flip( aRef, true );
-
-                        FP_SHAPE* fpShape = dynamic_cast<FP_SHAPE*>( aOriginalItem );
-
-                        if( fpShape != nullptr )
-                            fpShape->SetDrawCoord();
 
                         CompareItems( item.get(), aOriginalItem );
                     } );
@@ -342,11 +283,6 @@ BOOST_AUTO_TEST_CASE( FlipUpDown )
                     item.get(),
                     []( BOARD_ITEM* aOriginalItem, VECTOR2I aRef )
                     {
-                        FP_SHAPE* originalFpShape = dynamic_cast<FP_SHAPE*>( aOriginalItem );
-
-                        if( originalFpShape != nullptr )
-                            originalFpShape->SetDrawCoord();
-
                         // FIXME: Update() has to be called after SetPosition() to update dimension
                         // shapes.
                         PCB_DIMENSION_BASE* originalDimension =
@@ -361,11 +297,6 @@ BOOST_AUTO_TEST_CASE( FlipUpDown )
 
                         item->Flip( aRef, false );
                         item->Flip( aRef, false );
-
-                        FP_SHAPE* fpShape = dynamic_cast<FP_SHAPE*>( aOriginalItem );
-
-                        if( fpShape != nullptr )
-                            fpShape->SetDrawCoord();
 
                         CompareItems( item.get(), aOriginalItem );
                     } );

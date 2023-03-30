@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 BeagleBoard Foundation
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,6 @@
  */
 
 /**
- * @file pcad_plugin.cpp
  * @brief Pcbnew PLUGIN for FABMASTER ASCII *.txt / *.fab format.
  */
 

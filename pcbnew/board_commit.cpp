@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <macros.h>
 #include <board.h>
 #include <footprint.h>
 #include <pcb_group.h>
@@ -144,7 +145,7 @@ void BOARD_COMMIT::dirtyIntersectingZones( BOARD_ITEM* item, int aChangeType )
 
     ZONE_FILLER_TOOL* zoneFillerTool = m_toolMgr->GetTool<ZONE_FILLER_TOOL>();
 
-    if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
+    if( item->Type() == PCB_ZONE_T )
         zoneFillerTool->DirtyZone( static_cast<ZONE*>( item ) );
 
     if( item->Type() == PCB_FOOTPRINT_T )
@@ -318,21 +319,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 if( !( changeFlags & CHT_DONE ) )
                     board->Footprints().front()->Add( boardItem );
             }
-            else if( boardItem->Type() == PCB_PAD_T
-                   || boardItem->Type() == PCB_FP_TEXT_T
-                   || boardItem->Type() == PCB_FP_TEXTBOX_T
-                   || boardItem->Type() == PCB_FP_SHAPE_T
-                   || boardItem->Type() == PCB_FP_DIM_ALIGNED_T
-                   || boardItem->Type() == PCB_FP_DIM_LEADER_T
-                   || boardItem->Type() == PCB_FP_DIM_CENTER_T
-                   || boardItem->Type() == PCB_FP_DIM_RADIAL_T
-                   || boardItem->Type() == PCB_FP_DIM_ORTHOGONAL_T
-                   || boardItem->Type() == PCB_FP_ZONE_T )
-            {
-                wxASSERT( boardItem->GetParent() &&
-                          boardItem->GetParent()->Type() == PCB_FOOTPRINT_T );
-            }
-            else
+            else if( !boardItem->GetParentFootprint() )
             {
                 if( !( aCommitFlags & SKIP_UNDO ) )
                     undoList.PushItem( ITEM_PICKER( nullptr, boardItem, UNDO_REDO::NEWITEM ) );
@@ -355,6 +342,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
         case CHT_REMOVE:
         {
+            FOOTPRINT* parentFP = boardItem->GetParentFootprint();
             PCB_GROUP* parentGroup = boardItem->GetParentGroup();
 
             if( !m_isFootprintEditor && !( aCommitFlags & SKIP_UNDO ) )
@@ -376,47 +364,16 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
             switch( boardItem->Type() )
             {
-                // Footprint items
+            case PCB_TEXT_T:
+                // don't allow deletion of Reference or Value
+                if( static_cast<PCB_TEXT*>( boardItem )->GetType() != PCB_TEXT::TEXT_is_DIVERS )
+                    break;
+
+                KI_FALLTHROUGH;
+
             case PCB_PAD_T:
-            case PCB_FP_SHAPE_T:
-            case PCB_FP_TEXT_T:
-            case PCB_FP_TEXTBOX_T:
-            case PCB_FP_DIM_ALIGNED_T:
-            case PCB_FP_DIM_LEADER_T:
-            case PCB_FP_DIM_CENTER_T:
-            case PCB_FP_DIM_RADIAL_T:
-            case PCB_FP_DIM_ORTHOGONAL_T:
-            case PCB_FP_ZONE_T:
-                // This level can only handle footprint children in the footprint editor as
-                // only in that case has the entire footprint (and all its children) already
-                // been saved for undo.
-                wxASSERT( m_isFootprintEditor );
-
-                if( boardItem->Type() == PCB_FP_TEXT_T )
-                {
-                    FP_TEXT* text = static_cast<FP_TEXT*>( boardItem );
-
-                    // don't allow deletion of Reference or Value
-                    if( text->GetType() != FP_TEXT::TEXT_is_DIVERS )
-                        break;
-                }
-
-                if( view )
-                    view->Remove( boardItem );
-
-                if( !( changeFlags & CHT_DONE ) )
-                {
-                    FOOTPRINT* footprint = static_cast<FOOTPRINT*>( boardItem->GetParent() );
-                    wxASSERT( footprint && footprint->Type() == PCB_FOOTPRINT_T );
-                    footprint->Delete( boardItem );
-                }
-
-                break;
-
-            // Board items
             case PCB_SHAPE_T:            // a shape (normally not on copper layers)
             case PCB_BITMAP_T:           // a bitmap on a user layer
-            case PCB_TEXT_T:             // a text on a layer
             case PCB_TEXTBOX_T:          // a wrapped text on a layer
             case PCB_TRACE_T:            // a track segment (segment on a copper layer)
             case PCB_ARC_T:              // an arced track segment (segment on a copper layer)
@@ -434,8 +391,15 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
                 if( !( changeFlags & CHT_DONE ) )
                 {
-                    board->Remove( boardItem, REMOVE_MODE::BULK );
-                    bulkRemovedItems.push_back( boardItem );
+                    if( parentFP )
+                    {
+                        parentFP->Delete( boardItem );
+                    }
+                    else
+                    {
+                        board->Remove( boardItem, REMOVE_MODE::BULK );
+                        bulkRemovedItems.push_back( boardItem );
+                    }
                 }
 
                 break;
@@ -467,8 +431,10 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
                 if( !( changeFlags & CHT_DONE ) )
                 {
-                    if( m_isFootprintEditor )
-                        board->GetFirstFootprint()->Remove( boardItem );
+                    if( parentFP )
+                    {
+                        parentFP->Remove( boardItem );
+                    }
                     else
                     {
                         board->Remove( boardItem, REMOVE_MODE::BULK );
@@ -638,26 +604,10 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
 EDA_ITEM* BOARD_COMMIT::parentObject( EDA_ITEM* aItem ) const
 {
-    switch( aItem->Type() )
+    if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( aItem ) )
     {
-    case PCB_PAD_T:
-    case PCB_FP_SHAPE_T:
-    case PCB_FP_TEXT_T:
-    case PCB_FP_TEXTBOX_T:
-    case PCB_FP_DIM_ALIGNED_T:
-    case PCB_FP_DIM_LEADER_T:
-    case PCB_FP_DIM_CENTER_T:
-    case PCB_FP_DIM_RADIAL_T:
-    case PCB_FP_DIM_ORTHOGONAL_T:
-    case PCB_FP_ZONE_T:
-        return aItem->GetParent();
-
-    case PCB_ZONE_T:
-        wxASSERT( !dynamic_cast<FOOTPRINT*>( aItem->GetParent() ) );
-        return aItem;
-
-    default:
-        break;
+        if( FOOTPRINT* parentFP = boardItem->GetParentFootprint() )
+            return parentFP;
     }
 
     return aItem;

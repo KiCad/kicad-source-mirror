@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@
 #include <tools/pcb_tool_base.h>
 
 class ACTION_MENU;
-class FP_SHAPE;
+class PCB_SHAPE;
 
 /**
  * Tool relating to pads and pad settings.
@@ -70,9 +70,9 @@ public:
      * @param aPad the pad to run the recombination algorithm on
      * @param aIsDryRun if true the list will be generated but no changes will be made
      * @param aCommit the commit to add any changes to
-     * @return a list of FP_SHAPEs that will be combined
+     * @return a list of PCB_SHAPEs that will be combined
      */
-    std::vector<FP_SHAPE*> RecombinePad( PAD* aPad, bool aIsDryRun, BOARD_COMMIT& aCommit );
+    std::vector<PCB_SHAPE*> RecombinePad( PAD* aPad, bool aIsDryRun, BOARD_COMMIT& aCommit );
 
 private:
     ///< Bind handlers to corresponding TOOL_ACTIONs.

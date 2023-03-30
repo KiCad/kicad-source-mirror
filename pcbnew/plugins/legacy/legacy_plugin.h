@@ -5,7 +5,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,11 +42,10 @@
 class PCB_TARGET;
 class FOOTPRINT;
 class NETCLASS;
-class NETCLASSES;
 class ZONE;
 class PCB_DIMENSION_BASE;
 class NETINFO_ITEM;
-class FP_TEXT;
+class PCB_TEXT;
 class PAD;
 struct LP_CACHE;
 
@@ -152,7 +151,7 @@ protected:
 
     void load3D( FOOTPRINT* aFootprint );
     void loadPAD( FOOTPRINT* aFootprint );
-    void loadMODULE_TEXT( FP_TEXT* aText );
+    void loadMODULE_TEXT( PCB_TEXT* aText );
     void loadFP_SHAPE( FOOTPRINT* aFootprint );
 
     void loadPCB_LINE();

@@ -38,7 +38,7 @@
 #include <pad.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
-#include <fp_shape.h>
+#include <pcb_shape.h>
 #include <zone.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <trigo.h>

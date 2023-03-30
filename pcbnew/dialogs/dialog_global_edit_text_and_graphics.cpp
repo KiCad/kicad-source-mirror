@@ -33,7 +33,7 @@
 #include <footprint.h>
 #include <pcb_group.h>
 #include <pcb_dimension.h>
-#include <fp_shape.h>
+#include <pcb_shape.h>
 #include <pcb_text.h>
 #include <widgets/unit_binder.h>
 #include <widgets/font_choice.h>
@@ -41,7 +41,6 @@
 #include <tools/global_edit_tool.h>
 #include <tools/footprint_editor_control.h>
 #include <dialog_global_edit_text_and_graphics_base.h>
-#include "font/kicad_font_name.h"
 
 // Columns of layer classes grid
 enum
@@ -338,60 +337,58 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
 {
     aCommit.Modify( aItem );
 
-    EDA_TEXT*           edaText = dynamic_cast<EDA_TEXT*>( aItem );
-    FP_TEXT*            fpText = dynamic_cast<FP_TEXT*>( aItem );
+    PCB_TEXT*           text = dynamic_cast<PCB_TEXT*>( aItem );
     PCB_SHAPE*          shape = dynamic_cast<PCB_SHAPE*>( aItem );
     PCB_DIMENSION_BASE* dimension = dynamic_cast<PCB_DIMENSION_BASE*>( aItem );
+    FOOTPRINT*          parentFP = aItem->GetParentFootprint();
 
     if( m_setToSpecifiedValues->GetValue() )
     {
         if( m_LayerCtrl->GetLayerSelection() != UNDEFINED_LAYER )
             aItem->SetLayer( ToLAYER_ID( m_LayerCtrl->GetLayerSelection() ) );
 
-        if( edaText )
+        if( text )
         {
             if( !m_textWidth.IsIndeterminate() )
-                edaText->SetTextSize( VECTOR2I( m_textWidth.GetValue(), edaText->GetTextSize().y ) );
+                text->SetTextSize( VECTOR2I( m_textWidth.GetValue(), text->GetTextSize().y ) );
 
             if( !m_textHeight.IsIndeterminate() )
-                edaText->SetTextSize( VECTOR2I( edaText->GetTextSize().x, m_textHeight.GetValue() ) );
+                text->SetTextSize( VECTOR2I( text->GetTextSize().x, m_textHeight.GetValue() ) );
 
             if( !m_thickness.IsIndeterminate() )
-                edaText->SetTextThickness( m_thickness.GetValue() );
+                text->SetTextThickness( m_thickness.GetValue() );
 
             if( m_bold->Get3StateValue() != wxCHK_UNDETERMINED )
-                edaText->SetBold( m_bold->GetValue() );
+                text->SetBold( m_bold->GetValue() );
 
             if( m_italic->Get3StateValue() != wxCHK_UNDETERMINED )
-                edaText->SetItalic( m_italic->GetValue() );
+                text->SetItalic( m_italic->GetValue() );
 
             // Must come after setting bold & italic
             if( m_fontCtrl->GetStringSelection() != INDETERMINATE_ACTION )
             {
-                edaText->SetFont( m_fontCtrl->GetFontSelection( edaText->IsBold(),
-                                                                edaText->IsItalic() ) );
+                text->SetFont( m_fontCtrl->GetFontSelection( text->IsBold(), text->IsItalic() ) );
             }
             else if(( m_italic->Get3StateValue() != wxCHK_UNDETERMINED
                     || m_bold->Get3StateValue() != wxCHK_UNDETERMINED ) )
             {
-                wxString fontName = edaText->GetFontName();
+                wxString fontName = text->GetFontName();
 
-                if( !edaText->GetFontName().IsEmpty() )
+                if( !text->GetFontName().IsEmpty() )
                 {
-                    edaText->SetFont( KIFONT::FONT::GetFont( edaText->GetFontName(),
-                                                             edaText->IsBold(),
-                                                             edaText->IsItalic() ) );
+                    text->SetFont( KIFONT::FONT::GetFont( text->GetFontName(), text->IsBold(),
+                                                          text->IsItalic() ) );
                 }
             }
 
-            if( m_visible->Get3StateValue() != wxCHK_UNDETERMINED )
-                edaText->SetVisible( m_visible->GetValue() );
-        }
+            if( parentFP )
+            {
+                if( m_visible->Get3StateValue() != wxCHK_UNDETERMINED )
+                    text->SetVisible( m_visible->GetValue() );
 
-        if( fpText )
-        {
-            if( m_keepUpright->Get3StateValue() != wxCHK_UNDETERMINED )
-                fpText->SetKeepUpright( m_keepUpright->GetValue() );
+                if( m_keepUpright->Get3StateValue() != wxCHK_UNDETERMINED )
+                    text->SetKeepUpright( m_keepUpright->GetValue() );
+            }
         }
 
         if( !m_lineWidth.IsIndeterminate() )
@@ -411,15 +408,15 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
     {
         PCB_LAYER_ID layer = aItem->GetLayer();
 
-        if( edaText )
+        if( text )
         {
-            edaText->SetTextSize( m_brdSettings->GetTextSize( layer ) );
-            edaText->SetTextThickness( m_brdSettings->GetTextThickness( layer ) );
-            edaText->SetItalic( m_brdSettings->GetTextItalic( layer ) );
-        }
+            text->SetTextSize( m_brdSettings->GetTextSize( layer ) );
+            text->SetTextThickness( m_brdSettings->GetTextThickness( layer ) );
+            text->SetItalic( m_brdSettings->GetTextItalic( layer ) );
 
-        if( fpText )
-            fpText->SetKeepUpright( m_brdSettings->GetTextUpright( layer ) );
+            if( parentFP )
+                text->SetKeepUpright( m_brdSettings->GetTextUpright( layer ) );
+        }
 
         if( shape )
         {
@@ -477,9 +474,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( BOARD_COMMIT& aCommit, BOA
     {
         if( m_referenceFilterOpt->GetValue() && !m_referenceFilter->GetValue().IsEmpty() )
         {
-            FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aItem->GetParent() );
-
-            if( fp )
+            if( FOOTPRINT* fp = aItem->GetParentFootprint() )
             {
                 if( !WildCompareString( m_referenceFilter->GetValue(), fp->GetReference(), false ) )
                     return;
@@ -488,9 +483,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( BOARD_COMMIT& aCommit, BOA
 
         if( m_footprintFilterOpt->GetValue() && !m_footprintFilter->GetValue().IsEmpty() )
         {
-            FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aItem->GetParent() );
-
-            if( fp )
+            if( FOOTPRINT* fp = aItem->GetParentFootprint() )
             {
                 if( !WildCompareString( m_footprintFilter->GetValue(), fp->GetFPID().Format(), false ) )
                     return;
@@ -526,7 +519,7 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
         {
             KICAD_T itemType = boardItem->Type();
 
-            if( itemType == PCB_FP_TEXT_T || itemType == PCB_FP_TEXTBOX_T )
+            if( itemType == PCB_TEXT_T || itemType == PCB_TEXTBOX_T )
             {
                 if( m_otherFields->GetValue() )
                     visitItem( commit, boardItem );
@@ -536,7 +529,7 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
                 if( m_footprintDimensions->GetValue() )
                     visitItem( commit, boardItem );
             }
-            else if( itemType == PCB_FP_SHAPE_T )
+            else if( itemType == PCB_SHAPE_T )
             {
                 if( m_footprintGraphics->GetValue() )
                     visitItem( commit, boardItem );

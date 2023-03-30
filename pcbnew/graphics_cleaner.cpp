@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,6 @@
 #include <board_commit.h>
 #include <cleanup_item.h>
 #include <pcb_shape.h>
-#include <fp_shape.h>
 #include <pad.h>
 #include <footprint.h>
 #include <graphics_cleaner.h>
@@ -320,13 +319,7 @@ void GRAPHICS_CLEANER::mergeRects()
 
                 if( !m_dryRun )
                 {
-                    PCB_SHAPE* rect;
-                    FP_SHAPE* fp_rect = nullptr;
-
-                    if( m_parentFootprint )
-                        rect = fp_rect = new FP_SHAPE( m_parentFootprint );
-                    else
-                        rect = new PCB_SHAPE();
+                    PCB_SHAPE* rect = new PCB_SHAPE( m_parentFootprint );
 
                     rect->SetShape( SHAPE_T::RECT );
                     rect->SetFilled( false );
@@ -334,9 +327,6 @@ void GRAPHICS_CLEANER::mergeRects()
                     rect->SetEnd( bottom->end );
                     rect->SetLayer( top->shape->GetLayer() );
                     rect->SetStroke( top->shape->GetStroke() );
-
-                    if( fp_rect )
-                        fp_rect->SetLocalCoord();
 
                     m_commit.Add( rect );
                     m_commit.Remove( left->shape );
@@ -366,13 +356,13 @@ void GRAPHICS_CLEANER::mergePads()
         if( padToNetTieGroupMap[ pad->GetNumber() ] >= 0 )
             continue;
 
-        std::vector<FP_SHAPE*> shapes = padTool->RecombinePad( pad, m_dryRun, m_commit );
+        std::vector<PCB_SHAPE*> shapes = padTool->RecombinePad( pad, m_dryRun, m_commit );
 
         if( !shapes.empty() )
         {
             std::shared_ptr<CLEANUP_ITEM> item = std::make_shared<CLEANUP_ITEM>( CLEANUP_MERGE_PAD );
 
-            for( FP_SHAPE* shape : shapes )
+            for( PCB_SHAPE* shape : shapes )
                 item->AddItem( shape );
 
             item->AddItem( pad );

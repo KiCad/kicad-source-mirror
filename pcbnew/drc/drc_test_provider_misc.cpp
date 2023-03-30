@@ -178,7 +178,7 @@ void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
                     else if( disabledLayers.test( bottom ) )
                         badLayer = bottom;
                 }
-                else if( item->Type() == PCB_FP_ZONE_T )
+                else if( item->Type() == PCB_ZONE_T )
                 {
                     // Footprint zones just get a top/bottom/inner setting, so they're on
                     // whatever inner layers there are.
@@ -260,7 +260,8 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
     int       items = 0;
 
     static const std::vector<KICAD_T> itemTypes = {
-        PCB_TEXT_T, PCB_FP_TEXT_T, PCB_TEXTBOX_T, PCB_FP_TEXTBOX_T,
+        PCB_TEXT_T,
+        PCB_TEXTBOX_T,
         PCB_DIMENSION_T
     };
 

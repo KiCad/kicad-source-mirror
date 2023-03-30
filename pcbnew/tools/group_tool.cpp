@@ -240,19 +240,8 @@ int GROUP_TOOL::Group( const TOOL_EVENT& aEvent )
                     {
                         BOARD_ITEM* item = aCollector[ i ];
 
-                        switch( item->Type() )
-                        {
-                        case PCB_FP_TEXT_T:
-                        case PCB_FP_TEXTBOX_T:
-                        case PCB_FP_SHAPE_T:
-                        case PCB_FP_ZONE_T:
-                        case PCB_PAD_T:
+                        if( item->GetParentFootprint() )
                             aCollector.Remove( item );
-                            break;
-
-                        default:
-                            break;
-                        }
                     }
                 } );
     }

@@ -31,7 +31,6 @@
 #include <board_design_settings.h>
 #include <pcb_dimension.h>
 #include <pcb_shape.h>
-#include <fp_shape.h>
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_group.h>
@@ -2781,12 +2780,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarShape( const SHAPE& aCadstarShape,
             break;
         }
 
-        PCB_SHAPE* shape;
-
-        if( isFootprint( aContainer ) )
-            shape = new FP_SHAPE( (FOOTPRINT*) aContainer, SHAPE_T::POLY );
-        else
-            shape = new PCB_SHAPE( aContainer, SHAPE_T::POLY );
+        PCB_SHAPE* shape = new PCB_SHAPE( aContainer, SHAPE_T::POLY );
 
         shape->SetFilled( true );
 
@@ -2919,11 +2913,7 @@ PCB_SHAPE* CADSTAR_PCB_ARCHIVE_LOADER::getShapeFromVertex( const POINT& aCadstar
     {
 
     case VERTEX_TYPE::POINT:
-
-        if( isFootprint( aContainer ) )
-            shape = new FP_SHAPE( static_cast<FOOTPRINT*>( aContainer ), SHAPE_T::SEGMENT );
-        else
-            shape = new PCB_SHAPE( aContainer, SHAPE_T::SEGMENT );
+        shape = new PCB_SHAPE( aContainer, SHAPE_T::SEGMENT );
 
         shape->SetStart( startPoint );
         shape->SetEnd( endPoint );
@@ -2937,10 +2927,7 @@ PCB_SHAPE* CADSTAR_PCB_ARCHIVE_LOADER::getShapeFromVertex( const POINT& aCadstar
     case VERTEX_TYPE::ANTICLOCKWISE_SEMICIRCLE:
     case VERTEX_TYPE::ANTICLOCKWISE_ARC:
     {
-        if( isFootprint( aContainer ) )
-            shape = new FP_SHAPE((FOOTPRINT*) aContainer, SHAPE_T::ARC );
-        else
-            shape = new PCB_SHAPE( aContainer, SHAPE_T::ARC );
+        shape = new PCB_SHAPE( aContainer, SHAPE_T::ARC );
 
         shape->SetCenter( centerPoint );
         shape->SetStart( startPoint );
@@ -2977,9 +2964,6 @@ PCB_SHAPE* CADSTAR_PCB_ARCHIVE_LOADER::getShapeFromVertex( const POINT& aCadstar
     if( aMoveVector != VECTOR2I{ 0, 0 } )
         shape->Move( aMoveVector );
 
-    if( isFootprint( aContainer ) && shape != nullptr )
-        static_cast<FP_SHAPE*>( shape )->SetLocalCoord();
-
     if( !aCadstarGroupID.IsEmpty() )
         addToGroup( aCadstarGroupID, shape );
 
@@ -2991,7 +2975,7 @@ ZONE* CADSTAR_PCB_ARCHIVE_LOADER::getZoneFromCadstarShape( const SHAPE& aCadstar
                                                            const int& aLineThickness,
                                                            BOARD_ITEM_CONTAINER* aParentContainer )
 {
-    ZONE* zone = new ZONE( aParentContainer, isFootprint( aParentContainer ) );
+    ZONE* zone = new ZONE( aParentContainer );
 
     if( aCadstarShape.Type == SHAPE_TYPE::HATCHED )
     {
@@ -3084,39 +3068,18 @@ SHAPE_LINE_CHAIN CADSTAR_PCB_ARCHIVE_LOADER::getLineChainFromShapes( const std::
         {
         case SHAPE_T::ARC:
         {
-            if( shape->GetClass() == wxT( "MGRAPHIC" ) )
-            {
-                FP_SHAPE* fp_shape = (FP_SHAPE*) shape;
-                SHAPE_ARC arc( fp_shape->GetCenter0(), fp_shape->GetStart0(), fp_shape->GetArcAngle() );
+            SHAPE_ARC arc( shape->GetCenter(), shape->GetStart(), shape->GetArcAngle() );
 
-                if( shape->EndsSwapped() )
-                    arc.Reverse();
+            if( shape->EndsSwapped() )
+                arc.Reverse();
 
-                lineChain.Append( arc );
-            }
-            else
-            {
-                SHAPE_ARC arc( shape->GetCenter(), shape->GetStart(), shape->GetArcAngle() );
-
-                if( shape->EndsSwapped() )
-                    arc.Reverse();
-
-                lineChain.Append( arc );
-            }
+            lineChain.Append( arc );
+            break;
         }
-        break;
+
         case SHAPE_T::SEGMENT:
-            if( shape->GetClass() == wxT( "MGRAPHIC" ) )
-            {
-                FP_SHAPE* fp_shape = (FP_SHAPE*) shape;
-                lineChain.Append( fp_shape->GetStart0().x, fp_shape->GetStart0().y );
-                lineChain.Append( fp_shape->GetEnd0().x, fp_shape->GetEnd0().y );
-            }
-            else
-            {
-                lineChain.Append( shape->GetStartX(), shape->GetStartY() );
-                lineChain.Append( shape->GetEndX(), shape->GetEndY() );
-            }
+            lineChain.Append( shape->GetStartX(), shape->GetStartY() );
+            lineChain.Append( shape->GetEndX(), shape->GetEndY() );
             break;
 
         default:
@@ -3173,40 +3136,20 @@ std::vector<PCB_TRACK*> CADSTAR_PCB_ARCHIVE_LOADER::makeTracksFromShapes(
         switch( shape->GetShape() )
         {
         case SHAPE_T::ARC:
-            if( shape->GetClass() == wxT( "MGRAPHIC" ) )
-            {
-                FP_SHAPE* fp_shape = (FP_SHAPE*) shape;
-                SHAPE_ARC arc( fp_shape->GetStart0(), fp_shape->GetArcMid0(), fp_shape->GetEnd0(), 0 );
+        {
+            SHAPE_ARC arc( shape->GetStart(), shape->GetArcMid(), shape->GetEnd(), 0 );
 
-                if( fp_shape->EndsSwapped() )
-                    arc.Reverse();
+            if( shape->EndsSwapped() )
+                arc.Reverse();
 
-                track = new PCB_ARC( aParentContainer, &arc );
-            }
-            else
-            {
-                SHAPE_ARC arc( shape->GetStart(), shape->GetArcMid(), shape->GetEnd(), 0 );
-
-                if( shape->EndsSwapped() )
-                    arc.Reverse();
-
-                track = new PCB_ARC( aParentContainer, &arc );
-            }
+            track = new PCB_ARC( aParentContainer, &arc );
             break;
+        }
+
         case SHAPE_T::SEGMENT:
-            if( shape->GetClass() == wxT( "MGRAPHIC" ) )
-            {
-                FP_SHAPE* fp_shape = (FP_SHAPE*) shape;
-                track = new PCB_TRACK( aParentContainer );
-                track->SetStart( fp_shape->GetStart0() );
-                track->SetEnd( fp_shape->GetEnd0() );
-            }
-            else
-            {
-                track = new PCB_TRACK( aParentContainer );
-                track->SetStart( shape->GetStart() );
-                track->SetEnd( shape->GetEnd() );
-            }
+            track = new PCB_TRACK( aParentContainer );
+            track->SetStart( shape->GetStart() );
+            track->SetEnd( shape->GetEnd() );
             break;
 
         default:
@@ -3286,7 +3229,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::addAttribute( const ATTRIBUTE_LOCATION& aCadsta
                                                FOOTPRINT* aFootprint,
                                                const wxString& aAttributeValue )
 {
-    FP_TEXT* txt;
+    PCB_TEXT* txt;
 
     if( aCadstarAttributeID == COMPONENT_NAME_ATTRID )
     {
@@ -3302,7 +3245,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::addAttribute( const ATTRIBUTE_LOCATION& aCadsta
         }
         else
         {
-            txt = new FP_TEXT( aFootprint );
+            txt = new PCB_TEXT( aFootprint );
             aFootprint->Add( txt );
             txt->SetText( aAttributeValue );
         }
@@ -3323,21 +3266,17 @@ void CADSTAR_PCB_ARCHIVE_LOADER::addAttribute( const ATTRIBUTE_LOCATION& aCadsta
     }
     else
     {
-        txt = new FP_TEXT( aFootprint );
+        txt = new PCB_TEXT( aFootprint );
         aFootprint->Add( txt );
         txt->SetText( aAttributeValue );
         txt->SetVisible( false ); //make all user attributes invisible to avoid clutter.
         //TODO: Future improvement - allow user to decide what to do with attributes
     }
 
-    VECTOR2I rotatedTextPos = getKiCadPoint( aCadstarAttrLoc.Position ) - aFootprint->GetPosition();
-    RotatePoint( rotatedTextPos, -aFootprint->GetOrientation() );
-
-    txt->SetTextPos( getKiCadPoint( aCadstarAttrLoc.Position ) );
-    txt->SetPos0( rotatedTextPos );
+    txt->SetPosition( getKiCadPoint( aCadstarAttrLoc.Position ) );
     txt->SetLayer( getKiCadLayer( aCadstarAttrLoc.LayerID ) );
     txt->SetMirrored( aCadstarAttrLoc.Mirror );
-    txt->SetTextAngle( getAngle( aCadstarAttrLoc.OrientAngle ) - aFootprint->GetOrientation() );
+    txt->SetTextAngle( getAngle( aCadstarAttrLoc.OrientAngle ) );
 
     if( aCadstarAttrLoc.Mirror ) // If mirroring, invert angle to match CADSTAR
         txt->SetTextAngle( -txt->GetTextAngle() );

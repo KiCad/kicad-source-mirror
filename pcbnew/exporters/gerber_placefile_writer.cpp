@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean_Pierre Charras <jp.charras at wanadoo.fr>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -41,7 +41,6 @@
 #include <gbr_metadata.h>
 #include <footprint.h>
 #include <pad.h>
-#include <fp_shape.h>
 
 
 PLACEFILE_GERBER_WRITER::PLACEFILE_GERBER_WRITER( BOARD* aPcb )
@@ -304,8 +303,8 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
         {
             for( BOARD_ITEM* item : footprint->GraphicalItems() )
             {
-                if( item->Type() == PCB_FP_SHAPE_T && item->GetLayer() == Edge_Cuts )
-                    brd_plotter.PlotFootprintShape( static_cast<FP_SHAPE*>( item ) );
+                if( item->Type() == PCB_SHAPE_T && item->GetLayer() == Edge_Cuts )
+                    brd_plotter.PlotPcbShape( static_cast<PCB_SHAPE*>( item ) );
             }
         }
     }

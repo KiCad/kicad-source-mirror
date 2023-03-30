@@ -26,8 +26,7 @@
 #include <netlist_reader/pcb_netlist.h>
 #include <fp_lib_table.h>
 #include <board.h>
-#include <fp_shape.h>
-#include <fp_text.h>
+#include <pcb_shape.h>
 #include <zone.h>
 #include <footprint.h>
 #include <pad.h>
@@ -266,7 +265,7 @@ bool padHasOverrides( const PAD* a, const PAD* b )
 }
 
 
-bool shapeNeedsUpdate( const FP_SHAPE* a, const FP_SHAPE* b )
+bool shapeNeedsUpdate( const PCB_SHAPE* a, const PCB_SHAPE* b )
 {
     REPORTER* aReporter = nullptr;
     bool      diff = false;
@@ -278,26 +277,26 @@ bool shapeNeedsUpdate( const FP_SHAPE* a, const FP_SHAPE* b )
     case SHAPE_T::SEGMENT:
     case SHAPE_T::RECT:
     case SHAPE_T::CIRCLE:
-        TEST( a->GetStart0(), b->GetStart0(), "" );
-        TEST( a->GetEnd0(), b->GetEnd0(), "" );
+        TEST( a->GetStart(), b->GetStart(), "" );
+        TEST( a->GetEnd(), b->GetEnd(), "" );
         break;
 
     case SHAPE_T::ARC:
-        TEST( a->GetStart0(), b->GetStart0(), "" );
-        TEST( a->GetEnd0(), b->GetEnd0(), "" );
+        TEST( a->GetStart(), b->GetStart(), "" );
+        TEST( a->GetEnd(), b->GetEnd(), "" );
 
         // Arc center is calculated and so may have round-off errors when parents are
         // differentially rotated.
-        if( ( a->GetCenter0() - b->GetCenter0() ).EuclideanNorm() > pcbIUScale.mmToIU( 0.0001 ) )
+        if( ( a->GetCenter() - b->GetCenter() ).EuclideanNorm() > pcbIUScale.mmToIU( 0.0001 ) )
             return true;
 
         break;
 
     case SHAPE_T::BEZIER:
-        TEST( a->GetStart0(), b->GetStart0(), "" );
-        TEST( a->GetEnd0(), b->GetEnd0(), "" );
-        TEST( a->GetBezierC1_0(), b->GetBezierC1_0(), "" );
-        TEST( a->GetBezierC2_0(), b->GetBezierC2_0(), "" );
+        TEST( a->GetStart(), b->GetStart(), "" );
+        TEST( a->GetEnd(), b->GetEnd(), "" );
+        TEST( a->GetBezierC1(), b->GetBezierC1(), "" );
+        TEST( a->GetBezierC2(), b->GetBezierC2(), "" );
         break;
 
     case SHAPE_T::POLY:
@@ -321,7 +320,7 @@ bool shapeNeedsUpdate( const FP_SHAPE* a, const FP_SHAPE* b )
 }
 
 
-bool textNeedsUpdate( const FP_TEXT* a, const FP_TEXT* b )
+bool textNeedsUpdate( const PCB_TEXT* a, const PCB_TEXT* b )
 {
     REPORTER* aReporter = nullptr;
     bool      diff = false;
@@ -342,13 +341,13 @@ bool textNeedsUpdate( const FP_TEXT* a, const FP_TEXT* b )
     TEST( a->GetVertJustify(), b->GetVertJustify(), "" );
 
     TEST( a->GetTextSize(), b->GetTextSize(), "" );
-    TEST( a->GetPos0(), b->GetPos0(), "" );
+    TEST( a->GetFPRelativePosition(), b->GetFPRelativePosition(), "" );
 
     return diff;
 }
 
 
-bool zoneNeedsUpdate( const FP_ZONE* a, const FP_ZONE* b, REPORTER* aReporter )
+bool zoneNeedsUpdate( const ZONE* a, const ZONE* b, REPORTER* aReporter )
 {
     bool diff = false;
 
@@ -539,14 +538,14 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint, REPORTER* 
                   std::inserter( aShapes, aShapes.begin() ),
                   []( BOARD_ITEM* item )
                   {
-                      return item->Type() == PCB_FP_SHAPE_T;
+                      return item->Type() == PCB_SHAPE_T;
                   } );
     std::set<BOARD_ITEM*, FOOTPRINT::cmp_drawings> bShapes;
     std::copy_if( aLibFootprint->GraphicalItems().begin(), aLibFootprint->GraphicalItems().end(),
                   std::inserter( bShapes, bShapes.begin() ),
                   []( BOARD_ITEM* item )
                   {
-                      return item->Type() == PCB_FP_SHAPE_T;
+                      return item->Type() == PCB_SHAPE_T;
                   } );
 
     if( aShapes.size() != bShapes.size() )
@@ -558,9 +557,9 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint, REPORTER* 
     {
         for( auto aIt = aShapes.begin(), bIt = bShapes.begin(); aIt != aShapes.end(); aIt++, bIt++ )
         {
-            if( ( *aIt )->Type() == PCB_FP_SHAPE_T )
+            if( ( *aIt )->Type() == PCB_SHAPE_T )
             {
-                if( shapeNeedsUpdate( static_cast<FP_SHAPE*>( *aIt ), static_cast<FP_SHAPE*>( *bIt ) ) )
+                if( shapeNeedsUpdate( static_cast<PCB_SHAPE*>( *aIt ), static_cast<PCB_SHAPE*>( *bIt ) ) )
                 {
                     diff = true;
                     REPORT( wxString::Format( _( "%s differs." ), ITEM_DESC( *aIt ) ) );
@@ -617,8 +616,8 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint, REPORTER* 
     libCopy->SetOrientation( GetOrientation() );
     libCopy->Move( GetPosition() );
 
-    std::set<FP_ZONE*, FOOTPRINT::cmp_zones> aZones( Zones().begin(), Zones().end() );
-    std::set<FP_ZONE*, FOOTPRINT::cmp_zones> bZones( libCopy->Zones().begin(), libCopy->Zones().end() );
+    std::set<ZONE*, FOOTPRINT::cmp_zones> aZones( Zones().begin(), Zones().end() );
+    std::set<ZONE*, FOOTPRINT::cmp_zones> bZones( libCopy->Zones().begin(), libCopy->Zones().end() );
 
     if( aZones.size() != bZones.size() )
     {

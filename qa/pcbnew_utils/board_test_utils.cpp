@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,8 +29,8 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <footprint.h>
-#include <fp_shape.h>
-#include <fp_text.h>
+#include <pcb_shape.h>
+#include <zone.h>
 #include <pad.h>
 #include <settings/settings_manager.h>
 #include <pcbnew_utils/board_file_utils.h>
@@ -148,10 +148,10 @@ struct kitest_cmp_drawings
         if( itemA->GetLayerSet() != itemB->GetLayerSet() )
             return itemA->GetLayerSet().Seq() < itemB->GetLayerSet().Seq();
 
-        if( itemA->Type() == PCB_FP_TEXT_T )
+        if( itemA->Type() == PCB_TEXT_T )
         {
-            const FP_TEXT* textA = static_cast<const FP_TEXT*>( itemA );
-            const FP_TEXT* textB = static_cast<const FP_TEXT*>( itemB );
+            const PCB_TEXT* textA = static_cast<const PCB_TEXT*>( itemA );
+            const PCB_TEXT* textB = static_cast<const PCB_TEXT*>( itemB );
 
             TEST( textA->GetType(), textB->GetType() );
             TEST_PT( textA->GetPosition(), textB->GetPosition() );
@@ -190,51 +190,62 @@ void CheckFootprint( const FOOTPRINT* expected, const FOOTPRINT* fp )
     std::set<PAD*, FOOTPRINT::cmp_pads> expectedPads( expected->Pads().begin(),
                                                       expected->Pads().end() );
     std::set<PAD*, FOOTPRINT::cmp_pads> fpPads( fp->Pads().begin(), fp->Pads().end() );
+
     for( auto itExpected = expectedPads.begin(), itFp = fpPads.begin();
          itExpected != expectedPads.end() && itFp != fpPads.end(); itExpected++, itFp++ )
     {
         CheckFpPad( *itExpected, *itFp );
     }
 
-    std::set<BOARD_ITEM*, kitest_cmp_drawings> expectedGraphicalItems(
-            expected->GraphicalItems().begin(), expected->GraphicalItems().end() );
+    std::set<BOARD_ITEM*, kitest_cmp_drawings> expectedGraphicalItems( expected->GraphicalItems().begin(),
+                                                                       expected->GraphicalItems().end() );
     std::set<BOARD_ITEM*, kitest_cmp_drawings> fpGraphicalItems( fp->GraphicalItems().begin(),
                                                                  fp->GraphicalItems().end() );
+
     for( auto itExpected = expectedGraphicalItems.begin(), itFp = fpGraphicalItems.begin();
          itExpected != expectedGraphicalItems.end() && itFp != fpGraphicalItems.end();
          itExpected++, itFp++ )
     {
         BOOST_CHECK_EQUAL( ( *itExpected )->Type(), ( *itFp )->Type() );
+
         switch( ( *itExpected )->Type() )
         {
-        case PCB_FP_TEXT_T:
+        case PCB_TEXT_T:
         {
-            const FP_TEXT* expectedText = static_cast<const FP_TEXT*>( *itExpected );
-            const FP_TEXT* text = static_cast<const FP_TEXT*>( *itFp );
+            const PCB_TEXT* expectedText = static_cast<const PCB_TEXT*>( *itExpected );
+            const PCB_TEXT* text = static_cast<const PCB_TEXT*>( *itFp );
 
             CheckFpText( expectedText, text );
+            break;
         }
-        break;
-        case PCB_FP_SHAPE_T:
+
+        case PCB_SHAPE_T:
         {
-            const FP_SHAPE* expectedShape = static_cast<const FP_SHAPE*>( *itExpected );
-            const FP_SHAPE* shape = static_cast<const FP_SHAPE*>( *itFp );
+            const PCB_SHAPE* expectedShape = static_cast<const PCB_SHAPE*>( *itExpected );
+            const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( *itFp );
 
             CheckFpShape( expectedShape, shape );
+            break;
         }
-        break;
-        /*case PCB_FP_DIM_ALIGNED_T: break;
-            case PCB_FP_DIM_LEADER_T: break;
-            case PCB_FP_DIM_CENTER_T: break;
-            case PCB_FP_DIM_RADIAL_T: break;
-            case PCB_FP_DIM_ORTHOGONAL_T: break;*/
-        default: BOOST_ERROR( "KICAD_T not known" ); break;
+
+        case PCB_DIM_ALIGNED_T:
+        case PCB_DIM_LEADER_T:
+        case PCB_DIM_CENTER_T:
+        case PCB_DIM_RADIAL_T:
+        case PCB_DIM_ORTHOGONAL_T:
+            // TODO
+            break;
+
+        default:
+            BOOST_ERROR( "KICAD_T not known" );
+            break;
         }
     }
 
-    std::set<FP_ZONE*, FOOTPRINT::cmp_zones> expectedZones( expected->Zones().begin(),
-                                                            expected->Zones().end() );
-    std::set<FP_ZONE*, FOOTPRINT::cmp_zones> fpZones( fp->Zones().begin(), fp->Zones().end() );
+    std::set<ZONE*, FOOTPRINT::cmp_zones> expectedZones( expected->Zones().begin(),
+                                                         expected->Zones().end() );
+    std::set<ZONE*, FOOTPRINT::cmp_zones> fpZones( fp->Zones().begin(), fp->Zones().end() );
+
     for( auto itExpected = expectedZones.begin(), itFp = fpZones.begin();
          itExpected != expectedZones.end() && itFp != fpZones.end(); itExpected++, itFp++ )
     {
@@ -296,9 +307,9 @@ void CheckFpPad( const PAD* expected, const PAD* pad )
 }
 
 
-void CheckFpText( const FP_TEXT* expected, const FP_TEXT* text )
+void CheckFpText( const PCB_TEXT* expected, const PCB_TEXT* text )
 {
-    BOOST_TEST_CONTEXT( "Assert FP_TEXT with KIID=" << expected->m_Uuid.AsString() )
+    BOOST_TEST_CONTEXT( "Assert PCB_TEXT with KIID=" << expected->m_Uuid.AsString() )
     {
         CHECK_ENUM_CLASS_EQUAL( expected->Type(), text->Type() );
 
@@ -330,9 +341,9 @@ void CheckFpText( const FP_TEXT* expected, const FP_TEXT* text )
 }
 
 
-void CheckFpShape( const FP_SHAPE* expected, const FP_SHAPE* shape )
+void CheckFpShape( const PCB_SHAPE* expected, const PCB_SHAPE* shape )
 {
-    BOOST_TEST_CONTEXT( "Assert FP_SHAPE with KIID=" << expected->m_Uuid.AsString() )
+    BOOST_TEST_CONTEXT( "Assert PCB_SHAPE with KIID=" << expected->m_Uuid.AsString() )
     {
         CHECK_ENUM_CLASS_EQUAL( expected->Type(), shape->Type() );
 
@@ -342,6 +353,7 @@ void CheckFpShape( const FP_SHAPE* expected, const FP_SHAPE* shape )
 
         BOOST_CHECK_EQUAL( expected->GetStart(), shape->GetStart() );
         BOOST_CHECK_EQUAL( expected->GetEnd(), shape->GetEnd() );
+
         if( expected->GetShape() == SHAPE_T::ARC )
         {
             // center and position might differ as they are calculated from start/mid/end -> compare mid instead
@@ -352,6 +364,7 @@ void CheckFpShape( const FP_SHAPE* expected, const FP_SHAPE* shape )
             BOOST_CHECK_EQUAL( expected->GetCenter(), shape->GetCenter() );
             BOOST_CHECK_EQUAL( expected->GetPosition(), shape->GetPosition() );
         }
+
         BOOST_CHECK_EQUAL( expected->GetBezierC1(), shape->GetBezierC1() );
         BOOST_CHECK_EQUAL( expected->GetBezierC2(), shape->GetBezierC2() );
 
@@ -367,9 +380,9 @@ void CheckFpShape( const FP_SHAPE* expected, const FP_SHAPE* shape )
 }
 
 
-void CheckFpZone( const FP_ZONE* expected, const FP_ZONE* zone )
+void CheckFpZone( const ZONE* expected, const ZONE* zone )
 {
-    BOOST_TEST_CONTEXT( "Assert FP_ZONE with KIID=" << expected->m_Uuid.AsString() )
+    BOOST_TEST_CONTEXT( "Assert ZONE with KIID=" << expected->m_Uuid.AsString() )
     {
         CHECK_ENUM_CLASS_EQUAL( expected->Type(), zone->Type() );
 

@@ -55,18 +55,14 @@ class PCB_DIM_CENTER;
 class PCB_DIM_RADIAL;
 class FOOTPRINT;
 class PCB_GROUP;
-class FP_TEXT;
-class FP_TEXTBOX;
 class PCB_SHAPE;
 class MARKER_PCB;
 class BOARD;
-class FP_SHAPE;
 class PAD;
 class PCB_TRACK;
 class PCB_VIA;
 class PCB_ARC;
 class ZONE;
-class FP_ZONE;
 class PCB_TARGET;
 class PCB_BITMAP;
 
@@ -85,18 +81,14 @@ static PCB_DIM_CENTER*       Cast_to_PCB_DIM_CENTER( BOARD_ITEM* );
 static PCB_DIM_RADIAL*       Cast_to_PCB_DIM_RADIAL( BOARD_ITEM* );
 static FOOTPRINT*            Cast_to_FOOTPRINT( BOARD_ITEM* );
 static PCB_GROUP*            Cast_to_PCB_GROUP( BOARD_ITEM* );
-static FP_TEXT*              Cast_to_FP_TEXT( BOARD_ITEM* );
-static FP_TEXTBOX*           Cast_to_FP_TEXTBOX( BOARD_ITEM* );
 static PCB_SHAPE*            Cast_to_PCB_SHAPE( BOARD_ITEM* );
 static PCB_MARKER*           Cast_to_PCB_MARKER( BOARD_ITEM* );
 static BOARD*                Cast_to_BOARD( BOARD_ITEM* );
-static FP_SHAPE*             Cast_to_FP_SHAPE( BOARD_ITEM* );
 static PAD*                  Cast_to_PAD( BOARD_ITEM* );
 static PCB_TRACK*            Cast_to_PCB_TRACK( BOARD_ITEM* );
 static PCB_VIA*              Cast_to_PCB_VIA( BOARD_ITEM* );
 static PCB_ARC*              Cast_to_PCB_ARC( BOARD_ITEM* );
 static ZONE*                 Cast_to_ZONE( BOARD_ITEM* );
-static FP_ZONE*              Cast_to_FP_ZONE( BOARD_ITEM* );
 static PCB_TARGET*           Cast_to_PCB_TARGET( BOARD_ITEM* );
 static PCB_BITMAP*           Cast_to_PCB_BITMAP( BOARD_ITEM* );
 
@@ -115,18 +107,14 @@ static PCB_DIM_CENTER*       Cast_to_PCB_DIM_CENTER( BOARD_ITEM* );
 static PCB_DIM_RADIAL*       Cast_to_PCB_DIM_RADIAL( BOARD_ITEM* );
 static FOOTPRINT*            Cast_to_FOOTPRINT( BOARD_ITEM* );
 static PCB_GROUP*            Cast_to_PCB_GROUP( BOARD_ITEM* );
-static FP_TEXT*              Cast_to_FP_TEXT( BOARD_ITEM* );
-static FP_TEXTBOX*           Cast_to_FP_TEXTBOX( BOARD_ITEM* );
 static PCB_SHAPE*            Cast_to_PCB_SHAPE( BOARD_ITEM* );
 static PCB_MARKER*           Cast_to_PCB_MARKER( BOARD_ITEM* );
 static BOARD*                Cast_to_BOARD( BOARD_ITEM* );
-static FP_SHAPE*             Cast_to_FP_SHAPE( BOARD_ITEM* );
 static PAD*                  Cast_to_PAD( BOARD_ITEM* );
 static PCB_TRACK*            Cast_to_PCB_TRACK( BOARD_ITEM* );
 static PCB_VIA*              Cast_to_PCB_VIA( BOARD_ITEM* );
 static PCB_ARC*              Cast_to_PCB_ARC( BOARD_ITEM* );
 static ZONE*                 Cast_to_ZONE( BOARD_ITEM* );
-static FP_ZONE*              Cast_to_FP_ZONE( BOARD_ITEM* );
 static PCB_TARGET*           Cast_to_PCB_TARGET( BOARD_ITEM* );
 static PCB_BITMAP*           Cast_to_PCB_BITMAP( BOARD_ITEM* );
 
@@ -157,18 +145,12 @@ static PCB_BITMAP*           Cast_to_PCB_BITMAP( BOARD_ITEM* );
             return Cast_to_PCB_DIM_ORTHOGONAL(self)
         elif ct=="PCB_SHAPE":
             return Cast_to_PCB_SHAPE(self)
-        elif ct=="MGRAPHIC":
-            return Cast_to_FP_SHAPE(self)
         elif ct=="FOOTPRINT":
             return Cast_to_FOOTPRINT(self)
         elif ct=="PCB_GROUP":
             return Cast_to_PCB_GROUP(self)
         elif ct=="PAD":
             return Cast_to_PAD(self)
-        elif ct=="FP_TEXT":
-            return Cast_to_FP_TEXT(self)
-        elif ct=="FP_TEXTBOX":
-            return Cast_to_FP_TEXTBOX(self)
         elif ct=="PCB_VIA":
             return Cast_to_PCB_VIA(self)
         elif ct=="PCB_TRACK":
@@ -218,18 +200,14 @@ static PCB_DIM_CENTER*       Cast_to_PCB_DIM_CENTER( BOARD_ITEM* self )       { 
 static PCB_DIM_RADIAL*       Cast_to_PCB_DIM_RADIAL( BOARD_ITEM* self )       { return dynamic_cast<PCB_DIM_RADIAL *>(self);      }
 static FOOTPRINT*            Cast_to_FOOTPRINT( BOARD_ITEM* self )            { return dynamic_cast<FOOTPRINT*>(self);            }
 static PCB_GROUP*            Cast_to_PCB_GROUP( BOARD_ITEM* self )            { return dynamic_cast<PCB_GROUP*>(self);            }
-static FP_TEXT*              Cast_to_FP_TEXT( BOARD_ITEM* self )              { return dynamic_cast<FP_TEXT*>(self);              }
-static FP_TEXTBOX*           Cast_to_FP_TEXTBOX( BOARD_ITEM* self )           { return dynamic_cast<FP_TEXTBOX*>(self);           }
 static PCB_SHAPE*            Cast_to_PCB_SHAPE( BOARD_ITEM* self )            { return dynamic_cast<PCB_SHAPE*>(self);            }
 static PCB_MARKER*           Cast_to_PCB_MARKER( BOARD_ITEM* self )           { return dynamic_cast<PCB_MARKER*>(self);           }
 static BOARD*                Cast_to_BOARD( BOARD_ITEM* self )                { return dynamic_cast<BOARD*>(self);                }
-static FP_SHAPE*             Cast_to_FP_SHAPE( BOARD_ITEM* self )             { return dynamic_cast<FP_SHAPE*>(self);             }
 static PAD*                  Cast_to_PAD( BOARD_ITEM* self )                  { return dynamic_cast<PAD*>(self);                  }
 static PCB_TRACK*            Cast_to_PCB_TRACK( BOARD_ITEM* self )            { return dynamic_cast<PCB_TRACK *>(self);           }
 static PCB_VIA*              Cast_to_PCB_VIA( BOARD_ITEM* self )              { return dynamic_cast<PCB_VIA *>(self);             }
 static PCB_ARC*              Cast_to_PCB_ARC( BOARD_ITEM* self )              { return dynamic_cast<PCB_ARC *>(self);             }
 static ZONE*                 Cast_to_ZONE( BOARD_ITEM* self )                 { return dynamic_cast<ZONE*>(self);                 }
-static FP_ZONE*              Cast_to_FP_ZONE( BOARD_ITEM* self )              { return dynamic_cast<FP_ZONE*>(self);              }
 static PCB_TARGET*           Cast_to_PCB_TARGET( BOARD_ITEM* self )           { return dynamic_cast<PCB_TARGET*>(self);           }
 static PCB_BITMAP*           Cast_to_PCB_BITMAP( BOARD_ITEM* self )           { return dynamic_cast<PCB_BITMAP*>(self);           }
 %}

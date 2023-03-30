@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
- * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012-2020 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,10 +23,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PCB_TEXT_H_
-#define PCB_TEXT_H_
+#ifndef PCAD_POLYGON_H
+#define PCAD_POLYGON_H
 
-#include <pcad/pcb_component.h>
+#include <pcad/pcad_item_types.h>
+#include <pcad/pcad_pcb_component.h>
 
 class BOARD;
 class FOOTPRINT;
@@ -35,23 +36,39 @@ class XNODE;
 
 namespace PCAD2KICAD {
 
-// Name property of parent is used for text value
-class PCB_TEXT : public PCB_COMPONENT
+class PCAD_POLYGON : public PCAD_PCB_COMPONENT
 {
 public:
-    PCB_TEXT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
-    ~PCB_TEXT();
+    PCAD_POLYGON( PCB_CALLBACKS* aCallbacks, BOARD* aBoard, int aPCadLayer );
+    ~PCAD_POLYGON();
 
-    virtual void Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
+    virtual bool Parse( XNODE* aNode, const wxString& aDefaultUnits,
                         const wxString& aActualConversion );
 
-    void AddToFootprint( FOOTPRINT* aFootprint ) override;
+    virtual void SetPosOffset( int aX_offs, int aY_offs ) override;
 
-    void AddToBoard() override;
+    virtual void Flip() override;
 
-// virtual void    SetPosOffset( int aX_offs, int aY_offs );
+    void AddToBoard( FOOTPRINT* aFootprint = nullptr ) override;
+
+// protected:
+    void AssignNet( const wxString& aNetName );
+
+    void SetOutline( VERTICES_ARRAY* aOutline );
+
+    void FormPolygon( XNODE* aNode, VERTICES_ARRAY* aPolygon,
+                      const wxString& aDefaultUnits, const wxString& actualConversion );
+
+    int             m_width;
+    int             m_priority;
+    VERTICES_ARRAY  m_outline; // collection of boundary/outline lines - objects
+    ISLANDS_ARRAY   m_islands;
+    ISLANDS_ARRAY   m_cutouts;
+
+protected:
+    bool            m_filled;
 };
 
 } // namespace PCAD2KICAD
 
-#endif    // PCB_TEXT_H_
+#endif    // PCAD_POLYGON_H

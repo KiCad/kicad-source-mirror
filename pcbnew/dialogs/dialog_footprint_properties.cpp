@@ -4,7 +4,7 @@
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -250,9 +250,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
 
     for( BOARD_ITEM* item : m_footprint->GraphicalItems() )
     {
-        FP_TEXT* textItem = dyn_cast<FP_TEXT*>( item );
-
-        if( textItem )
+        if( PCB_TEXT* textItem = dynamic_cast<PCB_TEXT*>( item ) )
             m_texts->push_back( *textItem );
     }
 
@@ -349,7 +347,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::Validate()
     // Validate texts.
     for( size_t i = 0; i < m_texts->size(); ++i )
     {
-        FP_TEXT& text = m_texts->at( i );
+        PCB_TEXT& text = m_texts->at( i );
 
         if( i >= 2 )
         {
@@ -478,9 +476,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
 
     for( BOARD_ITEM* item : m_footprint->GraphicalItems() )
     {
-        FP_TEXT* textItem = dyn_cast<FP_TEXT*>( item );
-
-        if( textItem )
+        if( PCB_TEXT* textItem = dynamic_cast<PCB_TEXT*>( item ) )
         {
             // copy grid table entries till we run out, then delete any remaining texts
             if( i < m_texts->size() )
@@ -493,7 +489,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
     // if there are still grid table entries, create new texts for them
     while( i < m_texts->size() )
     {
-        auto newText = new FP_TEXT( m_texts->at( i++ ) );
+        PCB_TEXT* newText = new PCB_TEXT( m_texts->at( i++ ) );
         m_footprint->Add( newText, ADD_MODE::APPEND );
         view->Add( newText );
     }
@@ -583,7 +579,7 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnAddField( wxCommandEvent&  )
         return;
 
     const BOARD_DESIGN_SETTINGS& dsnSettings = m_frame->GetDesignSettings();
-    FP_TEXT textItem( m_footprint );
+    PCB_TEXT                     textItem( m_footprint, PCB_TEXT::TEXT_is_DIVERS );
 
     // Set active layer if legal; otherwise copy layer from previous text item
     if( LSET::AllTechMask().test( m_frame->GetActiveLayer() ) )

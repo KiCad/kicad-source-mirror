@@ -220,12 +220,8 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                 VECTOR2I pos;
 
                 // Graphics are often compound shapes so ignore collisions between shapes in a
-                // single footprint or on the board.
-                if( refItem->Type() == PCB_SHAPE_T && testItem->Type() == PCB_SHAPE_T )
-                {
-                    return true;
-                }
-                else if( refItem->Type() == PCB_FP_SHAPE_T && testItem->Type() == PCB_FP_SHAPE_T
+                // single footprint or on the board (both parent footprints will be nullptr).
+                if( refItem->Type() == PCB_SHAPE_T && testItem->Type() == PCB_SHAPE_T
                          && refItem->GetParentFootprint() == testItem->GetParentFootprint() )
                 {
                     return true;

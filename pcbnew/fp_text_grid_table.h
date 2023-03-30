@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,10 +26,9 @@
 
 #include <wx/grid.h>
 #include <grid_tricks.h>
-#include <fp_text.h>
+#include <pcb_text.h>
 
 
-class FOOTPRINT;
 class PCB_BASE_FRAME;
 
 enum FP_TEXT_COL_ORDER
@@ -50,7 +49,7 @@ enum FP_TEXT_COL_ORDER
 };
 
 
-class FP_TEXT_GRID_TABLE : public wxGridTableBase, public std::vector<FP_TEXT>
+class FP_TEXT_GRID_TABLE : public wxGridTableBase, public std::vector<PCB_TEXT>
 {
 public:
     FP_TEXT_GRID_TABLE( PCB_BASE_FRAME* aFrame );

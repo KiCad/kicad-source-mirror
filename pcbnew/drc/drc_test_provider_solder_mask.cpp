@@ -114,7 +114,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::addItemToRTrees( BOARD_ITEM* aItem )
 {
     ZONE* solderMask = m_board->m_SolderMask;
 
-    if( aItem->Type() == PCB_ZONE_T || aItem->Type() == PCB_FP_ZONE_T )
+    if( aItem->Type() == PCB_ZONE_T )
     {
         ZONE* zone = static_cast<ZONE*>( aItem );
 
@@ -166,21 +166,6 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::addItemToRTrees( BOARD_ITEM* aItem )
             if( aItem->IsOnLayer( layer ) )
             {
                 const PCB_TEXT* text = static_cast<const PCB_TEXT*>( aItem );
-
-                text->TransformTextToPolySet( *solderMask->GetFill( layer ), layer,
-                                              m_webWidth / 2, m_maxError, ERROR_OUTSIDE );
-
-                m_itemTree->Insert( aItem, layer, m_largestClearance );
-            }
-        }
-    }
-    else if( aItem->Type() == PCB_FP_TEXT_T )
-    {
-        for( PCB_LAYER_ID layer : { F_Mask, B_Mask } )
-        {
-            if( aItem->IsOnLayer( layer ) )
-            {
-                const FP_TEXT* text = static_cast<const FP_TEXT*>( aItem );
 
                 text->TransformTextToPolySet( *solderMask->GetFill( layer ), layer,
                                               m_webWidth / 2, m_maxError, ERROR_OUTSIDE );
@@ -379,7 +364,7 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::checkMaskAperture( BOARD_ITEM* aMaskItem, BO
     if( aTestLayer == B_Mask && !aTestItem->IsOnLayer( B_Cu ) )
         return false;
 
-    FOOTPRINT* fp = static_cast<FOOTPRINT*>( aMaskItem->GetParentFootprint() );
+    FOOTPRINT* fp = aMaskItem->GetParentFootprint();
 
     if( fp && ( fp->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES ) > 0 )
     {
@@ -421,7 +406,7 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::checkMaskAperture( BOARD_ITEM* aMaskItem, BO
 
 bool DRC_TEST_PROVIDER_SOLDER_MASK::checkItemMask( BOARD_ITEM* aMaskItem, int aTestNet )
 {
-    FOOTPRINT* fp = static_cast<FOOTPRINT*>( aMaskItem->GetParentFootprint() );
+    FOOTPRINT* fp = aMaskItem->GetParentFootprint();
 
     wxCHECK( fp, false );
 
@@ -463,7 +448,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
             // Filter:
             [&]( BOARD_ITEM* other ) -> bool
             {
-                FOOTPRINT* itemFP = static_cast<FOOTPRINT*>( aItem->GetParentFootprint() );
+                FOOTPRINT* itemFP = aItem->GetParentFootprint();
                 PAD*       otherPad = dynamic_cast<PAD*>( other );
                 int        otherNet = -1;
 

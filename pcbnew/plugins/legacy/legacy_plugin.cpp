@@ -83,7 +83,6 @@
 #include <pcb_dimension.h>
 #include <pcb_shape.h>
 #include <pcb_target.h>
-#include <fp_shape.h>
 #include <pcb_plot_params.h>
 #include <pcb_plot_params_parser.h>
 #include <trigo.h>
@@ -1149,21 +1148,21 @@ void LEGACY_PLUGIN::loadFOOTPRINT( FOOTPRINT* aFootprint )
             // e.g. "T1 6940 -16220 350 300 900 60 M I 20 N "CFCARD"\r\n"
             int tnum = intParse( line + SZ( "T" ) );
 
-            FP_TEXT* text = nullptr;
+            PCB_TEXT* text = nullptr;
 
             switch( tnum )
             {
-            case FP_TEXT::TEXT_is_REFERENCE:
+            case PCB_TEXT::TEXT_is_REFERENCE:
                 text = &aFootprint->Reference();
                 break;
 
-            case FP_TEXT::TEXT_is_VALUE:
+            case PCB_TEXT::TEXT_is_VALUE:
                 text = &aFootprint->Value();
                 break;
 
             // All other fields greater than 1.
             default:
-                text = new FP_TEXT( aFootprint );
+                text = new PCB_TEXT( aFootprint, PCB_TEXT::TEXT_is_DIVERS );
                 aFootprint->Add( text );
             }
 
@@ -1544,13 +1543,13 @@ void LEGACY_PLUGIN::loadFP_SHAPE( FOOTPRINT* aFootprint )
     case 'A': shape = SHAPE_T::ARC;     break;
     case 'P': shape = SHAPE_T::POLY;    break;
     default:
-        m_error.Printf( _( "Unknown FP_SHAPE type:'%c=0x%02x' on line %d of footprint '%s'." ),
+        m_error.Printf( _( "Unknown PCB_SHAPE type:'%c=0x%02x' on line %d of footprint '%s'." ),
                         (unsigned char) line[1], (unsigned char) line[1], m_reader->LineNumber(),
                         aFootprint->GetFPID().GetLibItemName().wx_str() );
         THROW_IO_ERROR( m_error );
     }
 
-    std::unique_ptr<FP_SHAPE> dwg = std::make_unique<FP_SHAPE>( aFootprint, shape );    // a drawing
+    std::unique_ptr<PCB_SHAPE> dwg = std::make_unique<PCB_SHAPE>( aFootprint, shape );    // a drawing
 
     const char* data;
 
@@ -1571,9 +1570,9 @@ void LEGACY_PLUGIN::loadFP_SHAPE( FOOTPRINT* aFootprint )
         width = biuParse( data, &data );
         layer = intParse( data );
 
-        dwg->SetCenter0( VECTOR2I( center0_x, center0_y ) );
-        dwg->SetStart0( VECTOR2I( start0_x, start0_y ) );
-        dwg->SetArcAngleAndEnd0( angle, true );
+        dwg->SetCenter( VECTOR2I( center0_x, center0_y ) );
+        dwg->SetStart( VECTOR2I( start0_x, start0_y ) );
+        dwg->SetArcAngleAndEnd( angle, true );
         break;
     }
 
@@ -1589,8 +1588,8 @@ void LEGACY_PLUGIN::loadFP_SHAPE( FOOTPRINT* aFootprint )
         width = biuParse( data, &data );
         layer = intParse( data );
 
-        dwg->SetStart0( VECTOR2I( start0_x, start0_y ) );
-        dwg->SetEnd0( VECTOR2I( end0_x, end0_y ) );
+        dwg->SetStart( VECTOR2I( start0_x, start0_y ) );
+        dwg->SetEnd( VECTOR2I( end0_x, end0_y ) );
         break;
     }
 
@@ -1606,8 +1605,8 @@ void LEGACY_PLUGIN::loadFP_SHAPE( FOOTPRINT* aFootprint )
         width = biuParse( data, &data );
         layer = intParse( data );
 
-        dwg->SetStart0( VECTOR2I( start0_x, start0_y ) );
-        dwg->SetEnd0( VECTOR2I( end0_x, end0_y ) );
+        dwg->SetStart( VECTOR2I( start0_x, start0_y ) );
+        dwg->SetEnd( VECTOR2I( end0_x, end0_y ) );
 
         std::vector<VECTOR2I> pts;
         pts.reserve( ptCount );
@@ -1650,17 +1649,13 @@ void LEGACY_PLUGIN::loadFP_SHAPE( FOOTPRINT* aFootprint )
     dwg->SetStroke( STROKE_PARAMS( width, PLOT_DASH_TYPE::SOLID ) );
     dwg->SetLayer( leg_layer2new( m_cu_count,  layer ) );
 
-    FP_SHAPE* fpShape = dwg.release();
-
-    aFootprint->Add( fpShape );
-
-    // this had been done at the FOOTPRINT level before, presumably because the FP_SHAPE needs
-    // to be already added to a footprint before this function will work.
-    fpShape->SetDrawCoord();
+    dwg->Rotate( { 0, 0 }, aFootprint->GetOrientation() );
+    dwg->Move( aFootprint->GetPosition() );
+    aFootprint->Add( dwg.release() );
 }
 
 
-void LEGACY_PLUGIN::loadMODULE_TEXT( FP_TEXT* aText )
+void LEGACY_PLUGIN::loadMODULE_TEXT( PCB_TEXT* aText )
 {
     const char* data;
     const char* txt_end;
@@ -1705,15 +1700,13 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( FP_TEXT* aText )
     char*   hjust   = strtok_r( (char*) txt_end, delims, (char**) &data );
     char*   vjust   = strtok_r( nullptr, delims, (char**) &data );
 
-    if( type != FP_TEXT::TEXT_is_REFERENCE && type != FP_TEXT::TEXT_is_VALUE )
-        type = FP_TEXT::TEXT_is_DIVERS;
+    if( type != PCB_TEXT::TEXT_is_REFERENCE && type != PCB_TEXT::TEXT_is_VALUE )
+        type = PCB_TEXT::TEXT_is_DIVERS;
 
-    aText->SetType( static_cast<FP_TEXT::TEXT_TYPE>( type ) );
+    aText->SetType( static_cast<PCB_TEXT::TEXT_TYPE>( type ) );
 
-    aText->SetPos0( VECTOR2I( pos0_x, pos0_y ) );
+    aText->SetFPRelativePosition( VECTOR2I( pos0_x, pos0_y ) );
     aText->SetTextSize( VECTOR2I( size0_x, size0_y ) );
-
-    orient -= ( static_cast<FOOTPRINT*>( aText->GetParentFootprint() ) )->GetOrientation();
 
     aText->SetTextAngle( orient );
 
@@ -1744,9 +1737,6 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( FP_TEXT* aText )
         layer_num = SILKSCREEN_N_FRONT;
 
     aText->SetLayer( leg_layer2new( m_cu_count, layer_num ) );
-
-    // Calculate the actual position.
-    aText->SetDrawCoord();
 }
 
 

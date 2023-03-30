@@ -482,7 +482,7 @@ bool collidesWithArea( BOARD_ITEM* aItem, PCB_EXPR_CONTEXT* aCtx, ZONE* aArea )
         return false;
     }
 
-    if( aItem->Type() == PCB_ZONE_T || aItem->Type() == PCB_FP_ZONE_T )
+    if( aItem->Type() == PCB_ZONE_T )
     {
         ZONE* zone = static_cast<ZONE*>( aItem );
 

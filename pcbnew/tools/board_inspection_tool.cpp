@@ -1246,9 +1246,7 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         r->Flush();
     }
 
-    if( item->Type() == PCB_TEXT_T
-            || item->Type() == PCB_TEXTBOX_T
-            || item->Type() == PCB_FP_TEXT_T )
+    if( item->Type() == PCB_TEXT_T || item->Type() == PCB_TEXTBOX_T )
     {
         r = dialog->AddHTMLPage( _( "Text Size" ) );
         reportHeader( _( "Text height resolution for:" ), item, r );
@@ -1547,7 +1545,7 @@ int BOARD_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
                            guide );
 
         if( collector.GetCount() == 0 )
-            collector.Collect( board, { PCB_ZONE_T, PCB_FP_ZONE_T }, aPosition, guide );
+            collector.Collect( board, { PCB_ZONE_T }, aPosition, guide );
 
         // Apply the active selection filter, except we want to allow picking locked items for
         // highlighting even if the user has disabled them for selection

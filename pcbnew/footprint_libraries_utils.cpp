@@ -36,8 +36,10 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/board_editor_control.h>
+#include <tools/pad_tool.h>
 #include <board.h>
 #include <footprint.h>
+#include <pcb_text.h>
 #include <board_commit.h>
 #include <footprint_edit_frame.h>
 #include <wildcards_and_files_ext.h>
@@ -49,7 +51,6 @@
 #include <project/project_file.h>
 #include <footprint_editor_settings.h>
 #include "footprint_viewer_frame.h"
-#include "tools/pad_tool.h"
 #include <wx/choicdlg.h>
 #include <wx/filedlg.h>
 
@@ -1312,7 +1313,7 @@ FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( const wxString& aFootprintName, b
 
     for( size_t i = 2; i < settings.m_DefaultFPTextItems.size(); ++i )
     {
-        FP_TEXT* textItem = new FP_TEXT( footprint );
+        PCB_TEXT* textItem = new PCB_TEXT( footprint, PCB_TEXT::TEXT_is_DIVERS );
         textItem->SetText( settings.m_DefaultFPTextItems[i].m_Text );
         textItem->SetVisible( settings.m_DefaultFPTextItems[i].m_Visible );
         txt_layer = (PCB_LAYER_ID) settings.m_DefaultFPTextItems[i].m_Layer;
@@ -1332,9 +1333,9 @@ FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( const wxString& aFootprintName, b
     footprint->RunOnChildren(
             [&] ( BOARD_ITEM* aChild )
             {
-                if( aChild->Type() == PCB_FP_TEXT_T )
+                if( aChild->Type() == PCB_TEXT_T )
                 {
-                    FP_TEXT*     textItem = static_cast<FP_TEXT*>( aChild );
+                    PCB_TEXT*    textItem = static_cast<PCB_TEXT*>( aChild );
                     PCB_LAYER_ID layer = textItem->GetLayer();
 
                     textItem->SetTextThickness( settings.GetTextThickness( layer ) );

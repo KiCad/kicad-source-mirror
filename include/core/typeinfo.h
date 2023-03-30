@@ -89,15 +89,6 @@ enum KICAD_T
     PCB_BITMAP_T,            ///< class PCB_BITMAP, bitmap on a layer
     PCB_TEXT_T,              ///< class PCB_TEXT, text on a layer
     PCB_TEXTBOX_T,           ///< class PCB_TEXTBOX, wrapped text on a layer
-    PCB_FP_TEXT_T,           ///< class FP_TEXT, text in a footprint
-    PCB_FP_TEXTBOX_T,        ///< class FP_TEXTBOX, wrapped text in a footprint
-    PCB_FP_SHAPE_T,          ///< class FP_SHAPE, a footprint edge
-    PCB_FP_DIM_ALIGNED_T,    ///< class PCB_DIM_ALIGNED, a linear dimension (graphic item)
-    PCB_FP_DIM_LEADER_T,     ///< class PCB_DIM_LEADER, a leader dimension (graphic item)
-    PCB_FP_DIM_CENTER_T,     ///< class PCB_DIM_CENTER, a center point marking (graphic item)
-    PCB_FP_DIM_RADIAL_T,     ///< class PCB_DIM_RADIAL, a radius or diameter dimension
-    PCB_FP_DIM_ORTHOGONAL_T, ///< class PCB_DIM_ORTHOGONAL, a linear dimension constrained to x/y
-    PCB_FP_ZONE_T,           ///< class ZONE, managed by a footprint
     PCB_TRACE_T,             ///< class PCB_TRACK, a track segment (segment on a copper layer)
     PCB_VIA_T,               ///< class PCB_VIA, a via (like a track segment on a copper layer)
     PCB_ARC_T,               ///< class PCB_ARC, an arc track segment on a copper layer
@@ -121,13 +112,12 @@ enum KICAD_T
     PCB_LOCATE_UVIA_T,
     PCB_LOCATE_BBVIA_T,
     PCB_LOCATE_TEXT_T,
-    PCB_LOCATE_GRAPHIC_T,
     PCB_LOCATE_HOLE_T,
     PCB_LOCATE_PTH_T,
     PCB_LOCATE_NPTH_T,
     PCB_LOCATE_BOARD_EDGE_T,
 
-    // Same for locating shapes types from PCB_SHAPE_T and PCB_FP_SHAPE_T items
+    // Same for locating shapes types from PCB_SHAPE_T items
     PCB_SHAPE_LOCATE_SEGMENT_T,
     PCB_SHAPE_LOCATE_RECT_T,
     PCB_SHAPE_LOCATE_CIRCLE_T,
@@ -291,11 +281,6 @@ constexpr KICAD_T BaseType( const KICAD_T aType )
     case PCB_DIM_RADIAL_T:
     case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
-    case PCB_FP_DIM_ALIGNED_T:
-    case PCB_FP_DIM_CENTER_T:
-    case PCB_FP_DIM_RADIAL_T:
-    case PCB_FP_DIM_ORTHOGONAL_T:
-    case PCB_FP_DIM_LEADER_T:
         return PCB_DIMENSION_T;
 
     default:
@@ -336,7 +321,6 @@ constexpr bool IsInstantiableType( const KICAD_T aType )
     case PCB_LOCATE_UVIA_T:
     case PCB_LOCATE_BBVIA_T:
     case PCB_LOCATE_TEXT_T:
-    case PCB_LOCATE_GRAPHIC_T:
     case PCB_LOCATE_HOLE_T:
     case PCB_LOCATE_PTH_T:
     case PCB_LOCATE_NPTH_T:
@@ -432,15 +416,6 @@ constexpr bool IsPcbnewType( const KICAD_T aType )
     case PCB_BITMAP_T:
     case PCB_TEXT_T:
     case PCB_TEXTBOX_T:
-    case PCB_FP_TEXT_T:
-    case PCB_FP_TEXTBOX_T:
-    case PCB_FP_SHAPE_T:
-    case PCB_FP_DIM_ALIGNED_T:
-    case PCB_FP_DIM_LEADER_T:
-    case PCB_FP_DIM_CENTER_T:
-    case PCB_FP_DIM_RADIAL_T:
-    case PCB_FP_DIM_ORTHOGONAL_T:
-    case PCB_FP_ZONE_T:
     case PCB_TRACE_T:
     case PCB_VIA_T:
     case PCB_ARC_T:
@@ -461,7 +436,6 @@ constexpr bool IsPcbnewType( const KICAD_T aType )
     case PCB_LOCATE_UVIA_T:
     case PCB_LOCATE_BBVIA_T:
     case PCB_LOCATE_TEXT_T:
-    case PCB_LOCATE_GRAPHIC_T:
     case PCB_LOCATE_HOLE_T:
     case PCB_LOCATE_PTH_T:
     case PCB_LOCATE_NPTH_T:

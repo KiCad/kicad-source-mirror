@@ -53,10 +53,7 @@
 #include <board_item.h>                       // for BOARD_ITEM, S_CIRCLE
 #include <pcb_dimension.h>
 #include <pcb_shape.h>
-#include <fp_shape.h>
 #include <footprint.h>
-#include <fp_text.h>
-#include <fp_textbox.h>
 #include <pcb_track.h>
 #include <pad.h>
 #include <pcb_target.h>
@@ -296,8 +293,8 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, const COLOR4D& aColor, OUTLINE_
 
 void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
 {
-    const FP_TEXT* textItem = &aFootprint->Reference();
-    int            textLayer = textItem->GetLayer();
+    const PCB_TEXT* textItem = &aFootprint->Reference();
+    int             textLayer = textItem->GetLayer();
 
     // Reference and value are specific items, not in graphic items list
     if( GetPlotReference() && m_layerMask[textLayer]
@@ -317,7 +314,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
 
     for( const BOARD_ITEM* item : aFootprint->GraphicalItems() )
     {
-        textItem = dyn_cast<const FP_TEXT*>( item );
+        textItem = dyn_cast<const PCB_TEXT*>( item );
 
         if( !textItem )
             continue;
@@ -392,7 +389,7 @@ void BRDITEMS_PLOTTER::PlotBoardGraphicItems()
 }
 
 
-void BRDITEMS_PLOTTER::PlotFootprintTextItem( const FP_TEXT* aText, const COLOR4D& aColor )
+void BRDITEMS_PLOTTER::PlotFootprintTextItem( const PCB_TEXT* aText, const COLOR4D& aColor )
 {
     COLOR4D color = aColor;
 
@@ -431,7 +428,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItem( const FP_TEXT* aText, const COLOR4
         gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_NONCONDUCTOR );
 
     gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_CMP );
-    const FOOTPRINT* parent = static_cast<const FOOTPRINT*> ( aText->GetParent() );
+    const FOOTPRINT* parent = aText->GetParentFootprint();
     gbr_metadata.SetCmpReference( parent->GetReference() );
 
     m_plotter->SetCurrentLineWidth( thickness );
@@ -586,34 +583,34 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint )
 
         switch( item->Type() )
         {
-        case PCB_FP_SHAPE_T:
+        case PCB_SHAPE_T:
         {
-            const FP_SHAPE* shape = static_cast<const FP_SHAPE*>( item );
+            const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( item );
 
             if( m_layerMask[ shape->GetLayer() ] )
-                PlotFootprintShape( shape );
+                PlotPcbShape( shape );
 
             break;
         }
 
-        case PCB_FP_TEXTBOX_T:
+        case PCB_TEXTBOX_T:
         {
-            const FP_TEXTBOX* textbox = static_cast<const FP_TEXTBOX*>( item );
+            const PCB_TEXTBOX* textbox = static_cast<const PCB_TEXTBOX*>( item );
 
             if( m_layerMask[ textbox->GetLayer() ] )
             {
                 PlotPcbText( textbox, textbox->GetLayer(), textbox->IsKnockout() );
-                PlotFootprintShape( textbox );
+                PlotPcbShape( textbox );
             }
 
             break;
         }
 
-        case PCB_FP_DIM_ALIGNED_T:
-        case PCB_FP_DIM_CENTER_T:
-        case PCB_FP_DIM_RADIAL_T:
-        case PCB_FP_DIM_ORTHOGONAL_T:
-        case PCB_FP_DIM_LEADER_T:
+        case PCB_DIM_ALIGNED_T:
+        case PCB_DIM_CENTER_T:
+        case PCB_DIM_RADIAL_T:
+        case PCB_DIM_ORTHOGONAL_T:
+        case PCB_DIM_LEADER_T:
         {
             const PCB_DIMENSION_BASE* dimension = static_cast<const PCB_DIMENSION_BASE*>( item );
 
@@ -623,202 +620,13 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint )
             break;
         }
 
-        case PCB_FP_TEXT_T:
+        case PCB_TEXT_T:
             // Plotted in PlotFootprintTextItem()
             break;
 
         default:
             UNIMPLEMENTED_FOR( item->GetClass() );
         }
-    }
-}
-
-
-void BRDITEMS_PLOTTER::PlotFootprintShape( const FP_SHAPE* aShape )
-{
-    m_plotter->SetColor( getColor( aShape->GetLayer() ) );
-
-    bool sketch = GetPlotMode() == SKETCH;
-    int  thickness = aShape->GetWidth();
-
-    GBR_METADATA gbr_metadata;
-    gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_CMP );
-    const FOOTPRINT* parent = static_cast<const FOOTPRINT*> ( aShape->GetParent() );
-    gbr_metadata.SetCmpReference( parent->GetReference() );
-
-    bool isOnCopperLayer = ( m_layerMask & LSET::AllCuMask() ).any();
-
-    if( aShape->GetLayer() == Edge_Cuts )   // happens also when plotting copper layers
-    {
-        gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_EDGECUT );
-    }
-    else if( isOnCopperLayer )  // only for items not on Edge_Cuts.
-    {
-        gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_ETCHEDCMP );
-        gbr_metadata.SetCopper( true );
-    }
-
-    int            radius;             // Circle/arc radius.
-    PLOT_DASH_TYPE lineStyle = aShape->GetStroke().GetPlotStyle();
-
-    if( lineStyle <= PLOT_DASH_TYPE::FIRST_TYPE )
-    {
-        switch( aShape->GetShape() )
-        {
-        case SHAPE_T::SEGMENT:
-            m_plotter->ThickSegment( aShape->GetStart(), aShape->GetEnd(), thickness, GetPlotMode(),
-                                     &gbr_metadata );
-            break;
-
-        case SHAPE_T::RECT:
-        {
-            std::vector<VECTOR2I> pts = aShape->GetRectCorners();
-
-            if( sketch || thickness > 0 )
-            {
-                m_plotter->ThickSegment( pts[0], pts[1], thickness, GetPlotMode(), &gbr_metadata );
-                m_plotter->ThickSegment( pts[1], pts[2], thickness, GetPlotMode(), &gbr_metadata );
-                m_plotter->ThickSegment( pts[2], pts[3], thickness, GetPlotMode(), &gbr_metadata );
-                m_plotter->ThickSegment( pts[3], pts[0], thickness, GetPlotMode(), &gbr_metadata );
-            }
-
-            if( !sketch && aShape->IsFilled() )
-            {
-                SHAPE_LINE_CHAIN poly;
-
-                for( const VECTOR2I& pt : pts )
-                    poly.Append( pt );
-
-                m_plotter->PlotPoly( poly, FILL_T::FILLED_SHAPE, -1, &gbr_metadata );
-            }
-        }
-            break;
-
-        case SHAPE_T::CIRCLE:
-            radius = KiROUND( GetLineLength( aShape->GetStart(), aShape->GetEnd() ) );
-
-            if( aShape->IsFilled() )
-            {
-                m_plotter->FilledCircle( aShape->GetStart(), radius * 2 + thickness, GetPlotMode(),
-                                         &gbr_metadata );
-            }
-            else
-            {
-                m_plotter->ThickCircle( aShape->GetStart(), radius * 2, thickness, GetPlotMode(),
-                                        &gbr_metadata );
-            }
-
-            break;
-
-        case SHAPE_T::ARC:
-        {
-            radius = KiROUND( GetLineLength( aShape->GetCenter(), aShape->GetStart() ) );
-
-            // when startAngle == endAngle ThickArc() doesn't know whether it's 0 deg and 360 deg
-            // but it is a circle
-            if( std::abs( aShape->GetArcAngle().AsDegrees() ) == 360.0 )
-            {
-                m_plotter->ThickCircle( aShape->GetCenter(), radius * 2, thickness, GetPlotMode(),
-                                        &gbr_metadata );
-            }
-            else
-            {
-                m_plotter->ThickArc( *aShape, GetPlotMode(), &gbr_metadata );
-            }
-        }
-            break;
-
-        case SHAPE_T::POLY:
-            if( aShape->IsPolyShapeValid() )
-            {
-                std::vector<VECTOR2I> cornerList;
-                aShape->DupPolyPointsList( cornerList );
-
-                // We must compute board coordinates from m_PolyList which are relative to the parent
-                // position at orientation 0
-                const FOOTPRINT *parentFootprint = aShape->GetParentFootprint();
-
-                if( parentFootprint )
-                {
-                    for( unsigned ii = 0; ii < cornerList.size(); ++ii )
-                    {
-                        RotatePoint( cornerList[ii], parentFootprint->GetOrientation() );
-                        cornerList[ii] += parentFootprint->GetPosition();
-                    }
-                }
-
-                if( sketch )
-                {
-                    for( size_t i = 1; i < cornerList.size(); i++ )
-                    {
-                        m_plotter->ThickSegment( cornerList[i - 1], cornerList[i], thickness,
-                                                 GetPlotMode(), &gbr_metadata );
-                    }
-
-                    m_plotter->ThickSegment( cornerList.back(), cornerList.front(), thickness,
-                                             GetPlotMode(), &gbr_metadata );
-
-                }
-                else
-                {
-                    // This must be simplified and fractured to prevent overlapping polygons
-                    // from generating invalid Gerber files
-
-                    SHAPE_LINE_CHAIN line( cornerList );
-                    SHAPE_POLY_SET tmpPoly;
-
-                    line.SetClosed( true );
-                    tmpPoly.AddOutline( line );
-                    tmpPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
-
-                    for( int jj = 0; jj < tmpPoly.OutlineCount(); ++jj )
-                    {
-                        SHAPE_LINE_CHAIN& poly = tmpPoly.Outline( jj );
-                        FILL_T fill_mode = aShape->IsFilled() ? FILL_T::FILLED_SHAPE
-                                                              : FILL_T::NO_FILL;
-                        // Plot the current filled area
-                        // (as region for Gerber plotter to manage attributes)
-                        if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
-                        {
-                            static_cast<GERBER_PLOTTER*>( m_plotter )->
-                                            PlotPolyAsRegion( poly, fill_mode,
-                                                              thickness, &gbr_metadata );
-                        }
-                        else
-                            m_plotter->PlotPoly( poly, fill_mode,
-                                                 thickness, &gbr_metadata );
-                    }
-                }
-            }
-
-            break;
-
-        case SHAPE_T::BEZIER:
-            m_plotter->BezierCurve( aShape->GetStart(), aShape->GetBezierC1(),
-                                    aShape->GetBezierC2(), aShape->GetEnd(), 0, thickness );
-            break;
-
-        default:
-            wxASSERT_MSG( false, wxT( "Unhandled FP_SHAPE shape" ) );
-            break;
-        }
-    }
-    else
-    {
-        std::vector<SHAPE*> shapes = aShape->MakeEffectiveShapes( true );
-
-        for( SHAPE* shape : shapes )
-        {
-            STROKE_PARAMS::Stroke( shape, lineStyle, thickness, m_plotter->RenderSettings(),
-                                   [&]( const VECTOR2I& a, const VECTOR2I& b )
-                                   {
-                                       m_plotter->ThickSegment( a, b, thickness, GetPlotMode(),
-                                                                &gbr_metadata );
-                                   } );
-        }
-
-        for( SHAPE* shape : shapes )
-            delete shape;
     }
 }
 
@@ -990,16 +798,31 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
 
     m_plotter->SetColor( getColor( aShape->GetLayer() ) );
 
-    GBR_METADATA gbr_metadata;
+    const FOOTPRINT* parentFP = aShape->GetParentFootprint();
+    GBR_METADATA     gbr_metadata;
+
+    if( parentFP )
+        gbr_metadata.SetCmpReference( parentFP->GetReference() );
 
     if( aShape->GetLayer() == Edge_Cuts )
+    {
         gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_EDGECUT );
-
-    if( IsCopperLayer( aShape->GetLayer() ) )
-        // Graphic items (PCB_SHAPE, TEXT) having no net have the NonConductor attribute
-        // Graphic items having a net have the Conductor attribute, but are not (yet?)
-        // supported in Pcbnew
-        gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_NONCONDUCTOR );
+    }
+    else if( IsCopperLayer( aShape->GetLayer() ) )
+    {
+        if( parentFP )
+        {
+            gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_ETCHEDCMP );
+            gbr_metadata.SetCopper( true );
+        }
+        else
+        {
+            // Graphic items (PCB_SHAPE, TEXT) having no net have the NonConductor attribute
+            // Graphic items having a net have the Conductor attribute, but are not (yet?)
+            // supported in Pcbnew
+            gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_NONCONDUCTOR );
+        }
+    }
 
     if( lineStyle <= PLOT_DASH_TYPE::FIRST_TYPE )
     {
@@ -1086,7 +909,9 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
                                         PlotPolyAsRegion( poly, fill, thickness, &gbr_metadata );
                         }
                         else
+                        {
                             m_plotter->PlotPoly( poly, fill, thickness, &gbr_metadata );
+                        }
                     }
                 }
             }
@@ -1104,7 +929,8 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
                 m_plotter->ThickSegment( pts[2], pts[3], thickness, GetPlotMode(), &gbr_metadata );
                 m_plotter->ThickSegment( pts[3], pts[0], thickness, GetPlotMode(), &gbr_metadata );
             }
-            else
+
+            if( !sketch )
             {
                 SHAPE_LINE_CHAIN poly;
 
@@ -1122,7 +948,9 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
                                 PlotPolyAsRegion( poly, fill_mode, thickness, &gbr_metadata );
                 }
                 else
+                {
                     m_plotter->PlotPoly( poly, fill_mode, thickness, &gbr_metadata );
+                }
             }
 
             break;

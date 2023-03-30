@@ -6,22 +6,22 @@
 set( PCAD2PCBNEW_SRCS
     pcad2kicad_common.cpp
     pcad_plugin.cpp
-    pcb.cpp
-    pcb_arc.cpp
-    pcb_component.cpp
+    pcad_pcb.cpp
+        pcad_arc.cpp
+    pcad_pcb_component.cpp
     pcb_copper_pour.cpp
     pcb_cutout.cpp
     pcb_keepout.cpp
-    pcb_line.cpp
-    pcb_footprint.cpp
+        pcad_line.cpp
+    pcad_footprint.cpp
     pcb_net.cpp
-    pcb_pad.cpp
-    pcb_pad_shape.cpp
+        pcad_pad.cpp
+        pcad_pad_shape.cpp
     pcb_plane.cpp
-    pcb_polygon.cpp
-    pcb_text.cpp
-    pcb_via.cpp
-    pcb_via_shape.cpp
+        pcad_polygon.cpp
+    pcad_text.cpp
+        pcad_via.cpp
+        pcad_via_shape.cpp
     s_expr_loader.cpp
     )
 

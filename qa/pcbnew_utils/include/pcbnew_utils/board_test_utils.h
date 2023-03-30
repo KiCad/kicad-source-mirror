@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,9 +35,9 @@
 class BOARD;
 class BOARD_ITEM;
 class FOOTPRINT;
-class FP_TEXT;
-class FP_SHAPE;
-class FP_ZONE;
+class PCB_TEXT;
+class PCB_SHAPE;
+class ZONE;
 class PAD;
 class SHAPE_POLY_SET;
 class SETTINGS_MANAGER;
@@ -171,11 +171,11 @@ void CheckFootprint( const FOOTPRINT* expected, const FOOTPRINT* fp );
 
 void CheckFpPad( const PAD* expected, const PAD* pad );
 
-void CheckFpText( const FP_TEXT* expected, const FP_TEXT* text );
+void CheckFpText( const PCB_TEXT* expected, const PCB_TEXT* text );
 
-void CheckFpShape( const FP_SHAPE* expected, const FP_SHAPE* shape );
+void CheckFpShape( const PCB_SHAPE* expected, const PCB_SHAPE* shape );
 
-void CheckFpZone( const FP_ZONE* expected, const FP_ZONE* zone );
+void CheckFpZone( const ZONE* expected, const ZONE* zone );
 
 void CheckShapePolySet( const SHAPE_POLY_SET* expected, const SHAPE_POLY_SET* polyset );
 

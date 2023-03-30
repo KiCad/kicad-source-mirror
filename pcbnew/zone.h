@@ -67,22 +67,11 @@ struct ISOLATED_ISLANDS
  *
  * A zone is described by a main polygon, a time stamp, a layer or a layer set, and a net name.
  * Other polygons inside the main polygon are holes in the zone.
- *
- * a item ZONE is living in a board
- * a variant FP_ZONE is living in a footprint
  */
 class ZONE : public BOARD_CONNECTED_ITEM
 {
 public:
-
-    /**
-     * The ctor to build ZONE, but compatible with FP_ZONE requirement.
-     * if aInFP is true, a FP_ZONE is actually built
-     * (same item, but with a specific type id:
-     * The type is PCB_ZONE_T for a ZONE
-     * The type is PCB_FP_ZONE_T for a FP_ZONE
-     */
-    ZONE( BOARD_ITEM_CONTAINER* parent, bool aInFP = false );
+    ZONE( BOARD_ITEM_CONTAINER* parent );
 
     ZONE( const ZONE& aZone );
     ZONE& operator=( const ZONE &aOther );
@@ -926,21 +915,6 @@ protected:
     std::mutex m_lock;
 };
 
-
-/**
- * A specialization of ZONE for use in footprints.
- */
-class FP_ZONE : public ZONE
-{
-public:
-    FP_ZONE( BOARD_ITEM_CONTAINER* aParent );
-    FP_ZONE( const FP_ZONE& aZone );
-    FP_ZONE& operator=( const FP_ZONE &aOther );
-
-    EDA_ITEM* Clone() const override;
-
-    double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
-};
 
 #ifndef SWIG
 DECLARE_ENUM_TO_WXANY( ZONE_CONNECTION )

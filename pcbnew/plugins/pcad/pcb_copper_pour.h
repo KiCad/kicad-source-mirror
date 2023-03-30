@@ -26,7 +26,7 @@
 #ifndef PCB_COPPER_POUR_H_
 #define PCB_COPPER_POUR_H_
 
-#include <pcad/pcb_polygon.h>
+#include <pcad/pcad_polygon.h>
 
 class BOARD;
 class wxString;
@@ -34,7 +34,7 @@ class XNODE;
 
 namespace PCAD2KICAD {
 
-class PCB_COPPER_POUR : public PCB_POLYGON
+class PCB_COPPER_POUR : public PCAD_POLYGON
 {
 public:
     PCB_COPPER_POUR( PCB_CALLBACKS* aCallbacks, BOARD* aBoard, int aPCadLayer );

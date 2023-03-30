@@ -35,8 +35,6 @@
 #include <pcb_track.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
-#include <fp_text.h>
-#include <fp_textbox.h>
 #include <connectivity/connectivity_data.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <board_commit.h>
@@ -819,11 +817,9 @@ void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap,
 
     switch( aItem->Type() )
     {
-    case PCB_TEXT_T:       text = static_cast<PCB_TEXT*>( aItem );    break;
-    case PCB_TEXTBOX_T:    text = static_cast<PCB_TEXTBOX*>( aItem ); break;
-    case PCB_FP_TEXT_T:    text = static_cast<FP_TEXT*>( aItem );     break;
-    case PCB_FP_TEXTBOX_T: text = static_cast<FP_TEXTBOX*>( aItem );  break;
-    default:                                                          break;
+    case PCB_TEXT_T:    text = static_cast<PCB_TEXT*>( aItem );    break;
+    case PCB_TEXTBOX_T: text = static_cast<PCB_TEXTBOX*>( aItem ); break;
+    default:                                                       break;
     }
 
     if( text )
@@ -834,15 +830,8 @@ void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap,
     case PCB_SHAPE_T:
     case PCB_TEXT_T:
     case PCB_TEXTBOX_T:
-    case PCB_FP_TEXTBOX_T:
-    case PCB_FP_SHAPE_T:
     case PCB_TARGET_T:
-        aItem->TransformShapeToPolygon( aHoles, aLayer, aGap, m_maxError, ERROR_OUTSIDE,
-                                        aIgnoreLineWidth );
-        break;
-
-    case PCB_FP_TEXT_T:
-        if( text->IsVisible() )
+        if( !text || text->IsVisible() )
         {
             aItem->TransformShapeToPolygon( aHoles, aLayer, aGap, m_maxError, ERROR_OUTSIDE,
                                             aIgnoreLineWidth );

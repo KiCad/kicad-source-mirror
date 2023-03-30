@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012-2020 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2012 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,47 +23,51 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PCB_PAD_H_
-#define PCB_PAD_H_
+#include <pcad/pcad_pcb_component.h>
 
-#include <pcad/pcb_component.h>
+#include <board.h>
+#include <common.h>
+#include <footprint.h>
 
-class BOARD;
-class FOOTPRINT;
-class wxString;
-class XNODE;
+#include <wx/string.h>
+
 
 namespace PCAD2KICAD {
 
-class PCB_PAD : public PCB_COMPONENT
+PCAD_PCB_COMPONENT::PCAD_PCB_COMPONENT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
+        m_uuid(),
+        m_callbacks( aCallbacks ),
+        m_board( aBoard )
 {
-public:
-    PCB_PAD( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
-    ~PCB_PAD();
+    m_tag             = 0;
+    m_objType         = wxT( '?' );
+    m_PCadLayer       = 0;
+    m_KiCadLayer      = F_Cu; // It *has* to be somewhere...
+    m_positionX       = 0;
+    m_positionY       = 0;
+    m_rotation        = ANGLE_0;
+    InitTTextValue( &m_name );
+    m_net             = wxEmptyString;
+    m_netCode         = 0;
+    m_compRef         = wxEmptyString;
+    m_patGraphRefName = wxEmptyString;
+}
 
-    virtual void Parse( XNODE* aNode, const wxString& aDefaultUnits,
-                        const wxString& aActualConversion );
 
-    virtual void Flip() override;
+PCAD_PCB_COMPONENT::~PCAD_PCB_COMPONENT()
+{
+}
 
-    void AddToFootprint( FOOTPRINT* aFootprint ) override
-    {
-        AddToFootprint( aFootprint, ANGLE_0, true );
-    }
 
-    void AddToFootprint( FOOTPRINT* aFootprint, const EDA_ANGLE& aRotation, bool aEncapsulatedPad );
+void PCAD_PCB_COMPONENT::SetPosOffset( int aX_offs, int aY_offs )
+{
+    m_positionX += aX_offs;
+    m_positionY += aY_offs;
+}
 
-    void AddToBoard() override;
-
-    int                  m_Number;
-    int                  m_Hole;
-    bool                 m_IsHolePlated;
-    PCB_PAD_SHAPES_ARRAY m_Shapes;
-
-private:
-    wxString m_defaultPinDes;
-};
+void PCAD_PCB_COMPONENT::Flip()
+{
+    m_positionX = -m_positionX;
+}
 
 } // namespace PCAD2KICAD
-
-#endif    // PCB_PAD_H_

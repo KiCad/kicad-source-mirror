@@ -32,6 +32,7 @@
 #include <board_design_settings.h>
 #include <pad.h>
 #include <zone.h>
+#include <footprint.h>
 #include <string_utils.h>
 #include <math_for_graphics.h>
 #include <properties/property_validators.h>
@@ -41,25 +42,27 @@
 #include <i18n_utility.h>
 
 
-ZONE::ZONE( BOARD_ITEM_CONTAINER* aParent, bool aInFP ) :
-        BOARD_CONNECTED_ITEM( aParent, aInFP ? PCB_FP_ZONE_T : PCB_ZONE_T ),
+ZONE::ZONE( BOARD_ITEM_CONTAINER* aParent ) :
+        BOARD_CONNECTED_ITEM( aParent, PCB_ZONE_T ),
+        m_Poly( nullptr ),
+        m_isFilled( false ),
+        m_CornerSelection( nullptr ),
         m_area( 0.0 ),
         m_outlinearea( 0.0 )
 {
     m_Poly = new SHAPE_POLY_SET();              // Outlines
     m_cornerSmoothingType = ZONE_SETTINGS::SMOOTHING_NONE;
     m_cornerRadius = 0;
-    m_zoneName = wxEmptyString;
-    m_CornerSelection = nullptr;                // no corner is selected
-    m_isFilled = false;                         // fill status : true when the zone is filled
     m_teardropType = TEARDROP_TYPE::TD_NONE;
     m_islandRemovalMode = ISLAND_REMOVAL_MODE::ALWAYS;
     m_borderStyle = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE;
     m_borderHatchPitch = GetDefaultHatchPitch();
     m_priority = 0;
-    SetIsRuleArea( aInFP );           // Zones living in footprints have the rule area option
     SetLocalFlags( 0 );               // flags temporary used in zone calculations
     m_fillVersion = 5;                // set the "old" way to build filled polygon areas (< 6.0.x)
+
+    if( GetParentFootprint() )
+        SetIsRuleArea( true );        // Zones living in footprints have the rule area option
 
     // Technically not necesssary to set this here, but just ensure a safe min value is set
     m_ZoneMinThickness = pcbIUScale.mmToIU( ZONE_CLEARANCE_MM );
@@ -316,7 +319,26 @@ double ZONE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
     constexpr double HIDE = std::numeric_limits<double>::max();
 
-    return aView->IsLayerVisible( LAYER_ZONES ) ? 0.0 : HIDE;
+    if( !aView )
+        return 0;
+
+    if( !aView->IsLayerVisible( LAYER_ZONES ) )
+        return HIDE;
+
+    if( FOOTPRINT* parentFP = GetParentFootprint() )
+    {
+        bool flipped = parentFP->GetLayer() == B_Cu;
+
+        // Handle Render tab switches
+        if( !flipped && !aView->IsLayerVisible( LAYER_MOD_FR ) )
+            return HIDE;
+
+        if( flipped && !aView->IsLayerVisible( LAYER_MOD_BK ) )
+            return HIDE;
+    }
+
+    // Other layers are shown without any conditions
+    return 0.0;
 }
 
 
@@ -1002,7 +1024,7 @@ BITMAPS ZONE::GetMenuImage() const
 
 void ZONE::swapData( BOARD_ITEM* aImage )
 {
-    assert( aImage->Type() == PCB_ZONE_T || aImage->Type() == PCB_FP_ZONE_T );
+    assert( aImage->Type() == PCB_ZONE_T );
 
     std::swap( *static_cast<ZONE*>( this ), *static_cast<ZONE*>( aImage) );
 }
@@ -1269,59 +1291,6 @@ void ZONE::TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aBuffer, int aClea
 
     polybuffer.Fracture( SHAPE_POLY_SET::PM_FAST );
     aBuffer.Append( polybuffer );
-}
-
-
-FP_ZONE::FP_ZONE( BOARD_ITEM_CONTAINER* aParent ) :
-        ZONE( aParent, true )
-{
-    // in a footprint, net classes are not managed.
-    // so set the net to NETINFO_LIST::ORPHANED_ITEM
-    SetNetCode( -1, true );
-}
-
-
-FP_ZONE::FP_ZONE( const FP_ZONE& aZone ) :
-        ZONE( aZone )
-{
-    InitDataFromSrcInCopyCtor( aZone );
-}
-
-
-FP_ZONE& FP_ZONE::operator=( const FP_ZONE& aOther )
-{
-    ZONE::operator=( aOther );
-    return *this;
-}
-
-
-EDA_ITEM* FP_ZONE::Clone() const
-{
-    return new FP_ZONE( *this );
-}
-
-
-double FP_ZONE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
-{
-    constexpr double HIDE = (double)std::numeric_limits<double>::max();
-
-    if( !aView )
-        return 0;
-
-    if( !aView->IsLayerVisible( LAYER_ZONES ) )
-        return HIDE;
-
-    bool flipped = GetParent() && GetParent()->GetLayer() == B_Cu;
-
-    // Handle Render tab switches
-    if( !flipped && !aView->IsLayerVisible( LAYER_MOD_FR ) )
-        return HIDE;
-
-    if( flipped && !aView->IsLayerVisible( LAYER_MOD_BK ) )
-        return HIDE;
-
-    // Other layers are shown without any conditions
-    return 0.0;
 }
 
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,16 +34,14 @@
 #include "../3d_rendering/raytracing/shapes2D/filled_circle_2d.h"
 #include "../3d_rendering/raytracing/shapes2D/round_segment_2d.h"
 #include "../3d_rendering/raytracing/shapes2D/triangle_2d.h"
-#include "fp_textbox.h"
 #include <board_adapter.h>
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_text.h>
-#include <fp_shape.h>
+#include <pcb_textbox.h>
 #include <board_design_settings.h>
 #include <pcb_painter.h>        // for PCB_RENDER_SETTINGS
 #include <zone.h>
-#include <fp_text.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <trigo.h>
 #include <geometry/shape_segment.h>
@@ -194,9 +192,9 @@ void BOARD_ADAPTER::addFootprintShapes( const FOOTPRINT* aFootprint, CONTAINER_2
     {
         switch( item->Type() )
         {
-        case PCB_FP_TEXT_T:
+        case PCB_TEXT_T:
         {
-            FP_TEXT* text = static_cast<FP_TEXT*>( item );
+            PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
 
             if( text->GetLayer() == aLayerId && text->IsVisible() )
                 addText( text, aContainer, text );
@@ -204,9 +202,9 @@ void BOARD_ADAPTER::addFootprintShapes( const FOOTPRINT* aFootprint, CONTAINER_2
             break;
         }
 
-        case PCB_FP_TEXTBOX_T:
+        case PCB_TEXTBOX_T:
         {
-            FP_TEXTBOX* textbox = static_cast<FP_TEXTBOX*>( item );
+            PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( item );
 
             if( textbox->GetLayer() == aLayerId )
             {
@@ -217,11 +215,11 @@ void BOARD_ADAPTER::addFootprintShapes( const FOOTPRINT* aFootprint, CONTAINER_2
             break;
         }
 
-        case PCB_FP_DIM_ALIGNED_T:
-        case PCB_FP_DIM_CENTER_T:
-        case PCB_FP_DIM_ORTHOGONAL_T:
-        case PCB_FP_DIM_RADIAL_T:
-        case PCB_FP_DIM_LEADER_T:
+        case PCB_DIM_ALIGNED_T:
+        case PCB_DIM_CENTER_T:
+        case PCB_DIM_ORTHOGONAL_T:
+        case PCB_DIM_RADIAL_T:
+        case PCB_DIM_LEADER_T:
         {
             PCB_DIMENSION_BASE* dimension = static_cast<PCB_DIMENSION_BASE*>( item );
 
@@ -231,9 +229,9 @@ void BOARD_ADAPTER::addFootprintShapes( const FOOTPRINT* aFootprint, CONTAINER_2
             break;
         }
 
-        case PCB_FP_SHAPE_T:
+        case PCB_SHAPE_T:
         {
-            FP_SHAPE* shape = static_cast<FP_SHAPE*>( item );
+            PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
 
             if( shape->GetLayer() == aLayerId )
                 addShape( shape, aContainer, aFootprint );

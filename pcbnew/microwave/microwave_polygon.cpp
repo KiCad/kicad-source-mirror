@@ -33,7 +33,7 @@
 #include <dialogs/dialog_text_entry.h>
 #include <board.h>
 #include <footprint.h>
-#include <fp_shape.h>
+#include <pcb_shape.h>
 #include <microwave/microwave_tool.h>
 #include <pad.h>
 #include <pcbnew.h>
@@ -289,7 +289,7 @@ FOOTPRINT* MICROWAVE_TOOL::createPolygonShape()
     FOOTPRINT* footprint;
     wxString   cmp_name;
     int        pad_count = 2;
-    FP_SHAPE*  shape;
+    PCB_SHAPE* shape;
 
     PCB_EDIT_FRAME& editFrame  = *getEditFrame<PCB_EDIT_FRAME>();
 
@@ -341,7 +341,7 @@ FOOTPRINT* MICROWAVE_TOOL::createPolygonShape()
     pad2->SetX( pad2->GetPos0().x );
 
     // Add a polygonal edge (corners will be added later) on copper layer
-    shape = new FP_SHAPE( footprint, SHAPE_T::POLY );
+    shape = new PCB_SHAPE( footprint, SHAPE_T::POLY );
     shape->SetFilled( true );
     shape->SetLayer( F_Cu );
 
@@ -386,6 +386,8 @@ FOOTPRINT* MICROWAVE_TOOL::createPolygonShape()
     }
 
     shape->SetPolyPoints( polyPoints );
+    shape->Rotate( { 0, 0 }, footprint->GetOrientation() );
+    shape->Move( footprint->GetPosition() );
 
     // Set the polygon outline thickness to 0, only the polygonal shape is filled
     // without extra thickness.

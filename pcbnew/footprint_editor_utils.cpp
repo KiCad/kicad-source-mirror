@@ -30,6 +30,8 @@
 #include <functional>
 #include <kiway_express.h>
 #include <pcb_marker.h>
+#include <pcb_textbox.h>
+#include <pcb_shape.h>
 #include <pad.h>
 #include <zone.h>
 #include <settings/color_settings.h>
@@ -70,19 +72,19 @@ void FOOTPRINT_EDIT_FRAME::LoadFootprintFromLibrary( LIB_ID aFPID )
 
     // if either m_Reference or m_Value are gone, reinstall them -
     // otherwise you cannot see what you are doing on board
-    FP_TEXT* ref = &footprint->Reference();
-    FP_TEXT* val = &footprint->Value();
+    PCB_TEXT* ref = &footprint->Reference();
+    PCB_TEXT* val = &footprint->Value();
 
     if( val && ref )
     {
-        ref->SetType( FP_TEXT::TEXT_is_REFERENCE );    // just in case ...
+        ref->SetType( PCB_TEXT::TEXT_is_REFERENCE );    // just in case ...
 
-        if( ref->GetLength() == 0 )
+        if( ref->GetText().IsEmpty() )
             ref->SetText( wxT( "Ref**" ) );
 
-        val->SetType( FP_TEXT::TEXT_is_VALUE );        // just in case ...
+        val->SetType( PCB_TEXT::TEXT_is_VALUE );        // just in case ...
 
-        if( val->GetLength() == 0 )
+        if( val->GetText().IsEmpty() )
             val->SetText( wxT( "Val**" ) );
     }
 
@@ -201,30 +203,30 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
         GetCanvas()->Refresh();
         break;
 
-    case PCB_FP_TEXT_T:
-        ShowTextPropertiesDialog( aItem );
+    case PCB_TEXT_T:
+        ShowTextPropertiesDialog( static_cast<PCB_TEXT*>( aItem ) );
         break;
 
-    case PCB_FP_TEXTBOX_T:
-        ShowTextBoxPropertiesDialog( aItem );
+    case PCB_TEXTBOX_T:
+        ShowTextBoxPropertiesDialog( static_cast<PCB_TEXTBOX*>( aItem ) );
         break;
 
-    case PCB_FP_SHAPE_T :
-        ShowGraphicItemPropertiesDialog( aItem );
+    case PCB_SHAPE_T :
+        ShowGraphicItemPropertiesDialog( static_cast<PCB_SHAPE*>( aItem ) );
         break;
 
-    case PCB_FP_DIM_ALIGNED_T:
-    case PCB_FP_DIM_CENTER_T:
-    case PCB_FP_DIM_RADIAL_T:
-    case PCB_FP_DIM_ORTHOGONAL_T:
-    case PCB_FP_DIM_LEADER_T:
+    case PCB_DIM_ALIGNED_T:
+    case PCB_DIM_CENTER_T:
+    case PCB_DIM_RADIAL_T:
+    case PCB_DIM_ORTHOGONAL_T:
+    case PCB_DIM_LEADER_T:
     {
         DIALOG_DIMENSION_PROPERTIES dlg( this, static_cast<PCB_DIMENSION_BASE*>( aItem ) );
         dlg.ShowQuasiModal();
         break;
     }
 
-    case PCB_FP_ZONE_T:
+    case PCB_ZONE_T:
     {
         ZONE*         zone = static_cast<ZONE*>( aItem );
         bool          success = false;

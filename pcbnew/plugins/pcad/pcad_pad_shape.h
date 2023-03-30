@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012-2020 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,10 +23,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PCB_VIA_SHAPE_H_
-#define PCB_VIA_SHAPE_H_
+#ifndef PCAD_PAD_SHAPE_H
+#define PCAD_PAD_SHAPE_H
 
-#include <pcad/pcb_pad_shape.h>
+#include <pcad/pcad_pcb_component.h>
 
 class BOARD;
 class wxString;
@@ -34,16 +34,22 @@ class XNODE;
 
 namespace PCAD2KICAD {
 
-class PCB_VIA_SHAPE : public PCB_PAD_SHAPE
+class PCAD_PAD_SHAPE : public PCAD_PCB_COMPONENT
 {
 public:
-    PCB_VIA_SHAPE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
-    ~PCB_VIA_SHAPE();
+    PCAD_PAD_SHAPE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
+    ~PCAD_PAD_SHAPE();
 
     virtual void Parse( XNODE* aNode, const wxString& aDefaultUnits,
-                        const wxString& aActualConversion ) override;
+                        const wxString& aActualConversion );
+
+    void AddToBoard( FOOTPRINT* aFootprint = nullptr ) override {}
+
+    wxString    m_Shape;
+    int         m_Width;
+    int         m_Height;
 };
 
 } // namespace PCAD2KICAD
 
-#endif    // PCB_VIA_SHAPE_H_
+#endif    // PCAD_PAD_SHAPE_H

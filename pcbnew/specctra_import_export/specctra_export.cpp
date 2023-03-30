@@ -44,7 +44,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <footprint.h>
-#include <fp_shape.h>
+#include <pcb_shape.h>
 #include <pcb_track.h>
 #include <pad.h>
 #include <zone.h>
@@ -194,6 +194,14 @@ static POINT mapPt( const VECTOR2I& pt )
     ret.y   = mapY( pt.y );
     ret.FixNegativeZero();
     return ret;
+}
+
+
+static POINT mapPt( const VECTOR2I& pt, FOOTPRINT* aFootprint )
+{
+    VECTOR2I fpRelative = pt - aFootprint->GetPosition();
+    RotatePoint( fpRelative, -aFootprint->GetOrientation() );
+    return mapPt( fpRelative );
 }
 
 
@@ -695,14 +703,14 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
         }
     }
 
-    // get all the FOOTPRINT's FP_SHAPEs and convert those to DSN outlines.
-    fpItems.Collect( aFootprint, { PCB_FP_SHAPE_T } );
+    // get all the FOOTPRINT's SHAPEs and convert those to DSN outlines.
+    fpItems.Collect( aFootprint, { PCB_SHAPE_T } );
 
     for( int i = 0; i < fpItems.GetCount(); ++i )
     {
-        FP_SHAPE* graphic = (FP_SHAPE*) fpItems[i];
-        SHAPE*    outline;
-        PATH*     path;
+        PCB_SHAPE* graphic = static_cast<PCB_SHAPE*>( fpItems[i] );
+        SHAPE*     outline;
+        PATH*      path;
 
         switch( graphic->GetShape() )
         {
@@ -715,8 +723,8 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
             outline->SetShape( path );
             path->SetAperture( scale( graphic->GetWidth() ) );
             path->SetLayerId( "signal" );
-            path->AppendPoint( mapPt( graphic->GetStart0() ) );
-            path->AppendPoint( mapPt( graphic->GetEnd0() ) );
+            path->AppendPoint( mapPt( graphic->GetStart(), aFootprint ) );
+            path->AppendPoint( mapPt( graphic->GetEnd(), aFootprint ) );
             break;
 
         case SHAPE_T::CIRCLE:
@@ -733,7 +741,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
             path->SetLayerId( "signal" );
 
             double radius = graphic->GetRadius();
-            VECTOR2I circle_centre = graphic->GetStart0();
+            VECTOR2I circle_centre = graphic->GetStart();
 
             SHAPE_LINE_CHAIN polyline;
             ConvertArcToPolyline( polyline, VECTOR2I( circle_centre ), radius, ANGLE_0, ANGLE_360,
@@ -742,7 +750,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
             for( int ii = 0; ii < polyline.PointCount(); ++ii )
             {
                 VECTOR2I corner( polyline.CPoint( ii ).x, polyline.CPoint( ii ).y );
-                path->AppendPoint( mapPt( corner ) );
+                path->AppendPoint( mapPt( corner, aFootprint ) );
             }
 
             break;
@@ -758,17 +766,17 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
             outline->SetShape( path );
             path->SetAperture( scale( graphic->GetWidth() ) );
             path->SetLayerId( "signal" );
-            VECTOR2I corner = graphic->GetStart0();
-            path->AppendPoint( mapPt( corner ) );
+            VECTOR2I corner = graphic->GetStart();
+            path->AppendPoint( mapPt( corner, aFootprint ) );
 
-            corner.x = graphic->GetEnd0().x;
-            path->AppendPoint( mapPt( corner ) );
+            corner.x = graphic->GetEnd().x;
+            path->AppendPoint( mapPt( corner, aFootprint ) );
 
-            corner.y = graphic->GetEnd0().y;
-            path->AppendPoint( mapPt( corner ) );
+            corner.y = graphic->GetEnd().y;
+            path->AppendPoint( mapPt( corner, aFootprint ) );
 
-            corner.x = graphic->GetStart0().x;
-            path->AppendPoint( mapPt( corner ) );
+            corner.x = graphic->GetStart().x;
+            path->AppendPoint( mapPt( corner, aFootprint ) );
             break;
         }
 
@@ -786,7 +794,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
             path->SetAperture( 0 );//scale( graphic->GetWidth() ) );
             path->SetLayerId( "signal" );
 
-            VECTOR2I  arc_centre = graphic->GetCenter0();
+            VECTOR2I  arc_centre = graphic->GetCenter();
             double    radius = graphic->GetRadius() + graphic->GetWidth()/2;
             EDA_ANGLE arcAngle = graphic->GetArcAngle();
 
@@ -844,7 +852,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
             for( int ii = 0; ii < poly.PointCount(); ++ii )
             {
                 VECTOR2I corner( poly.CPoint( ii ).x, poly.CPoint( ii ).y );
-                path->AppendPoint( mapPt( corner ) );
+                path->AppendPoint( mapPt( corner, aFootprint ) );
             }
 
             break;
@@ -855,7 +863,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
         }
     }
 
-    for( FP_ZONE* zone : aFootprint->Zones() )
+    for( ZONE* zone : aFootprint->Zones() )
     {
         if( !zone->GetIsRuleArea() )
             continue;

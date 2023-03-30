@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -33,6 +33,9 @@ class APPEARANCE_CONTROLS;
 class BOARD_ITEM_CONTAINER;
 class PANEL_SELECTION_FILTER;
 class PROPERTIES_PANEL;
+class PCB_TEXTBOX;
+class PCB_TEXT;
+class PCB_SHAPE;
 
 /**
  * Common, abstract interface for edit frames.
@@ -174,9 +177,9 @@ public:
     //void SetRotationAngle( EDA_ANGLE aRotationAngle );
 
     void ShowBitmapPropertiesDialog( BOARD_ITEM* aBitmap );
-    void ShowTextPropertiesDialog( BOARD_ITEM* aText );
-    int ShowTextBoxPropertiesDialog( BOARD_ITEM* aText );
-    void ShowGraphicItemPropertiesDialog( BOARD_ITEM* aItem );
+    void ShowTextPropertiesDialog( PCB_TEXT* aText );
+    int ShowTextBoxPropertiesDialog( PCB_TEXTBOX* aTextBox );
+    void ShowGraphicItemPropertiesDialog( PCB_SHAPE* aShape );
 
     ///< @copydoc EDA_DRAW_FRAME::UseGalCanvas()
     void ActivateGalCanvas() override;

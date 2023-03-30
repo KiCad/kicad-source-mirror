@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 CERN
- * Copyright (C) 2012-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,7 +52,6 @@ class PCB_SHAPE;
 class PCB_BITMAP;
 class EDA_TEXT;
 class FP_SHAPE;
-class FP_TEXT;
 class PCB_TEXT;
 class PCB_TRACK;
 class FOOTPRINT;
@@ -175,18 +174,15 @@ private:
     void parseNETINFO_ITEM();
     void parseNETCLASS();
 
-    PCB_SHAPE*          parsePCB_SHAPE();
-    PCB_TEXT*           parsePCB_TEXT();
+    PCB_SHAPE*          parsePCB_SHAPE( BOARD_ITEM* aParent );
+    PCB_TEXT*           parsePCB_TEXT( BOARD_ITEM* aParent );
     PCB_BITMAP*         parsePCB_BITMAP( BOARD_ITEM* aParent );
-    PCB_TEXTBOX*        parsePCB_TEXTBOX();
-    PCB_DIMENSION_BASE* parseDIMENSION( BOARD_ITEM* aParent, bool aInFP );
+    PCB_TEXTBOX*        parsePCB_TEXTBOX( BOARD_ITEM* aParent );
+    PCB_DIMENSION_BASE* parseDIMENSION( BOARD_ITEM* aParent );
 
     // Parse a footprint, but do not replace PARSE_ERROR with FUTURE_FORMAT_ERROR automatically.
     FOOTPRINT*          parseFOOTPRINT_unchecked( wxArrayString* aInitialComments = nullptr );
 
-    FP_TEXT*            parseFP_TEXT();
-    FP_TEXTBOX*         parseFP_TEXTBOX();
-    FP_SHAPE*           parseFP_SHAPE();
     PAD*                parsePAD( FOOTPRINT* aParent = nullptr );
 
     // Parse only the (option ...) inside a pad description

@@ -143,7 +143,7 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
 
     case PCB_PAD_T:
     {
-        if( FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aItem->GetParentFootprint() ) )
+        if( FOOTPRINT* fp = aItem->GetParentFootprint() )
         {
             if( fp->GetAttributes() & FP_JUST_ADDED )
                 return false;

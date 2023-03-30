@@ -57,8 +57,6 @@
 #include <board_design_settings.h>
 #include <confirm.h>
 #include <footprint.h>
-#include <fp_shape.h>
-#include <fp_textbox.h>
 #include <macros.h>
 #include <painter.h>
 #include <pcb_edit_frame.h>
@@ -70,7 +68,6 @@
 #include <pcbnew_id.h>
 #include <preview_items/arc_assistant.h>
 #include <scoped_set_reset.h>
-#include <status_popup.h>
 #include <string_utils.h>
 #include <zone.h>
 
@@ -294,7 +291,7 @@ void DRAWING_TOOL::UpdateStatusBar() const
         else
             constrained = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>()->m_Use45Limit;
 
-        m_frame->DisplayConstraintsMsg( constrained ? _( "Constrain to H, V, 45" ) : wxString( wxT( "" ) ) );
+        m_frame->DisplayConstraintsMsg( constrained ? _( "Constrain to H, V, 45" ) : wxString( "" ) );
     }
 }
 
@@ -309,11 +306,11 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
 
     REENTRANCY_GUARD guard( &m_inDrawingTool );
 
-    FOOTPRINT*       parentFootprint = dynamic_cast<FOOTPRINT*>( m_frame->GetModel() );
-    PCB_SHAPE*       line = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
-    BOARD_COMMIT     commit( m_frame );
-    SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::LINE );
-    std::optional<VECTOR2D>    startingPoint;
+    BOARD_ITEM*             parent = m_frame->GetModel();
+    PCB_SHAPE*              line = new PCB_SHAPE( parent );
+    BOARD_COMMIT            commit( m_frame );
+    SCOPED_DRAW_MODE        scopedDrawMode( m_mode, MODE::LINE );
+    std::optional<VECTOR2D> startingPoint;
 
     line->SetShape( SHAPE_T::SEGMENT );
     line->SetFlags( IS_NEW );
@@ -328,9 +325,6 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
     {
         if( line )
         {
-            if( m_isFootprintEditor )
-                static_cast<FP_SHAPE*>( line )->SetLocalCoord();
-
             commit.Add( line );
             commit.Push( _( "Draw a line segment" ) );
             startingPoint = VECTOR2D( line->GetEnd() );
@@ -340,7 +334,7 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
             startingPoint = std::nullopt;
         }
 
-        line = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
+        line = new PCB_SHAPE( parent );
         line->SetShape( SHAPE_T::SEGMENT );
         line->SetFlags( IS_NEW );
     }
@@ -359,34 +353,14 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
 
     REENTRANCY_GUARD guard( &m_inDrawingTool );
 
-    bool             isTextBox = aEvent.IsAction( &PCB_ACTIONS::drawTextBox );
-    PCB_SHAPE*       rect = nullptr;
-    BOARD_COMMIT     commit( m_frame );
-    SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::RECTANGLE );
-    std::optional<VECTOR2D>    startingPoint;
+    bool                    isTextBox = aEvent.IsAction( &PCB_ACTIONS::drawTextBox );
+    PCB_SHAPE*              rect = nullptr;
+    BOARD_COMMIT            commit( m_frame );
+    BOARD_ITEM*             parent = m_frame->GetModel();
+    SCOPED_DRAW_MODE        scopedDrawMode( m_mode, MODE::RECTANGLE );
+    std::optional<VECTOR2D> startingPoint;
 
-    auto makeNew =
-            [&]() -> PCB_SHAPE*
-            {
-                if( m_isFootprintEditor )
-                {
-                    FOOTPRINT* parentFootprint = dynamic_cast<FOOTPRINT*>( m_frame->GetModel() );
-
-                    if( isTextBox )
-                        return new FP_TEXTBOX( parentFootprint );
-                    else
-                        return new FP_SHAPE( parentFootprint );
-                }
-                else
-                {
-                    if( isTextBox )
-                        return new PCB_TEXTBOX( m_frame->GetModel() );
-                    else
-                        return new PCB_SHAPE();
-                }
-            };
-
-    rect = makeNew();
+    rect = isTextBox ? new PCB_TEXTBOX( parent ) : new PCB_SHAPE( parent );
     rect->SetShape( SHAPE_T::RECT );
     rect->SetFilled( false );
     rect->SetFlags( IS_NEW );
@@ -401,10 +375,12 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
     {
         if( rect )
         {
-            if( m_isFootprintEditor )
-                static_cast<FP_SHAPE*>( rect )->SetLocalCoord();
+            bool cancelled = false;
 
-            if( isTextBox && m_frame->ShowTextBoxPropertiesDialog( rect ) != wxID_OK )
+            if( PCB_TEXTBOX* textbox = dynamic_cast<PCB_TEXTBOX*>( rect ) )
+                cancelled = m_frame->ShowTextBoxPropertiesDialog( textbox ) != wxID_OK;
+
+            if( cancelled )
             {
                 delete rect;
                 rect = nullptr;
@@ -419,7 +395,7 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
             }
         }
 
-        rect = makeNew();
+        rect = isTextBox ? new PCB_TEXTBOX( parent ) : new PCB_SHAPE( parent );
         rect->SetShape( SHAPE_T::RECT );
         rect->SetFilled( false );
         rect->SetFlags( IS_NEW );
@@ -440,11 +416,11 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
 
     REENTRANCY_GUARD guard( &m_inDrawingTool );
 
-    FOOTPRINT*       parentFootprint = dynamic_cast<FOOTPRINT*>( m_frame->GetModel() );
-    PCB_SHAPE*       circle = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
-    BOARD_COMMIT     commit( m_frame );
-    SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::CIRCLE );
-    std::optional<VECTOR2D>    startingPoint;
+    BOARD_ITEM*             parent = m_frame->GetModel();
+    PCB_SHAPE*              circle = new PCB_SHAPE( parent );
+    BOARD_COMMIT            commit( m_frame );
+    SCOPED_DRAW_MODE        scopedDrawMode( m_mode, MODE::CIRCLE );
+    std::optional<VECTOR2D> startingPoint;
 
     circle->SetShape( SHAPE_T::CIRCLE );
     circle->SetFilled( false );
@@ -460,16 +436,13 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
     {
         if( circle )
         {
-            if( m_isFootprintEditor )
-                static_cast<FP_SHAPE*>( circle )->SetLocalCoord();
-
             commit.Add( circle );
             commit.Push( _( "Draw a circle" ) );
 
             m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, circle );
         }
 
-        circle = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
+        circle = new PCB_SHAPE( parent );
         circle->SetShape( SHAPE_T::CIRCLE );
         circle->SetFilled( false );
         circle->SetFlags( IS_NEW );
@@ -491,11 +464,11 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
 
     REENTRANCY_GUARD guard( &m_inDrawingTool );
 
-    FOOTPRINT*       parentFootprint = dynamic_cast<FOOTPRINT*>( m_frame->GetModel() );
-    PCB_SHAPE*       arc = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
-    BOARD_COMMIT     commit( m_frame );
-    SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ARC );
-    std::optional<VECTOR2D>    startingPoint;
+    BOARD_ITEM*             parent = m_frame->GetModel();
+    PCB_SHAPE*              arc = new PCB_SHAPE( parent );
+    BOARD_COMMIT            commit( m_frame );
+    SCOPED_DRAW_MODE        scopedDrawMode( m_mode, MODE::ARC );
+    std::optional<VECTOR2D> startingPoint;
 
     arc->SetShape( SHAPE_T::ARC );
     arc->SetFlags( IS_NEW );
@@ -510,16 +483,13 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
     {
         if( arc )
         {
-            if( m_isFootprintEditor )
-                static_cast<FP_SHAPE*>( arc )->SetLocalCoord();
-
             commit.Add( arc );
             commit.Push( _( "Draw an arc" ) );
 
             m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, arc );
         }
 
-        arc = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
+        arc = new PCB_SHAPE( parent );
         arc->SetShape( SHAPE_T::ARC );
         arc->SetFlags( IS_NEW );
 
@@ -782,7 +752,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
     REENTRANCY_GUARD guard( &m_inDrawingTool );
 
     COMMON_SETTINGS*             common_settings = Pgm().GetCommonSettings();
-    BOARD_ITEM*                  text = nullptr;
+    PCB_TEXT*                    text = nullptr;
     bool                         ignorePrimePosition = false;
     const BOARD_DESIGN_SETTINGS& bds = m_frame->GetDesignSettings();
     BOARD_COMMIT                 commit( m_frame );
@@ -901,52 +871,36 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                 // Init the new item attributes
                 if( m_isFootprintEditor )
                 {
-                    FP_TEXT* fpText = new FP_TEXT( (FOOTPRINT*) m_frame->GetModel() );
-
-                    fpText->SetLayer( layer );
-                    fpText->SetAttributes( textAttrs );
-                    fpText->SetTextPos( cursorPos );
-
-                    text = fpText;
-
-                    DIALOG_TEXT_PROPERTIES textDialog( m_frame, fpText );
-                    bool cancelled;
-
-                    RunMainStack( [&]()
-                                  {
-                                      cancelled = !textDialog.ShowModal();
-                                  } );
-
-                    if( cancelled || NoPrintableChars( fpText->GetText() ) )
-                    {
-                        delete text;
-                        text = nullptr;
-                    }
-                    else if( fpText->GetTextPos() != cursorPos )
-                    {
-                        // If the user modified the location then go ahead and place it there.
-                        // Otherwise we'll drag.
-                        placing = true;
-                    }
+                    text = new PCB_TEXT( static_cast<FOOTPRINT*>( m_frame->GetModel() ),
+                                         PCB_TEXT::TEXT_is_DIVERS );
                 }
                 else
                 {
-                    PCB_TEXT* pcbText = new PCB_TEXT( m_frame->GetModel() );
-                    pcbText->SetFlags( IS_NEW );
+                    text = new PCB_TEXT( m_frame->GetModel() );
+                }
 
-                    pcbText->SetLayer( layer );
-                    pcbText->SetAttributes( textAttrs );
-                    pcbText->SetTextPos( cursorPos );
+                text->SetLayer( layer );
+                text->SetAttributes( textAttrs );
+                text->SetTextPos( cursorPos );
 
-                    RunMainStack( [&]()
-                                  {
-                                      m_frame->ShowTextPropertiesDialog( pcbText );
-                                  } );
+                DIALOG_TEXT_PROPERTIES textDialog( m_frame, text );
+                bool cancelled;
 
-                    if( NoPrintableChars( pcbText->GetText() ) )
-                        delete pcbText;
-                    else
-                        text = pcbText;
+                RunMainStack( [&]()
+                              {
+                                  cancelled = !textDialog.ShowModal();
+                              } );
+
+                if( cancelled || NoPrintableChars( text->GetText() ) )
+                {
+                    delete text;
+                    text = nullptr;
+                }
+                else if( text->GetTextPos() != cursorPos )
+                {
+                    // If the user modified the location then go ahead and place it there.
+                    // Otherwise we'll drag.
+                    placing = true;
                 }
 
                 if( text )
@@ -1128,7 +1082,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
-        if( step == SET_HEIGHT && t != PCB_DIM_ORTHOGONAL_T && t != PCB_FP_DIM_ORTHOGONAL_T )
+        if( step == SET_HEIGHT && t != PCB_DIM_ORTHOGONAL_T )
         {
             if( dimension->GetStart().x != dimension->GetEnd().x
                     && dimension->GetStart().y != dimension->GetEnd().y )
@@ -1222,28 +1176,26 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
                 if( originalEvent.IsAction( &PCB_ACTIONS::drawAlignedDimension ) )
                 {
-                    dimension = new PCB_DIM_ALIGNED( m_frame->GetModel(),
-                                                     m_isFootprintEditor ? PCB_FP_DIM_ALIGNED_T
-                                                                         : PCB_DIM_ALIGNED_T );
+                    dimension = new PCB_DIM_ALIGNED( m_frame->GetModel() );
                     setMeasurementAttributes( dimension );
                 }
                 else if( originalEvent.IsAction( &PCB_ACTIONS::drawOrthogonalDimension ) )
                 {
-                    dimension = new PCB_DIM_ORTHOGONAL( m_frame->GetModel(), m_isFootprintEditor );
+                    dimension = new PCB_DIM_ORTHOGONAL( m_frame->GetModel() );
                     setMeasurementAttributes( dimension );
                 }
                 else if( originalEvent.IsAction( &PCB_ACTIONS::drawCenterDimension ) )
                 {
-                    dimension = new PCB_DIM_CENTER( m_frame->GetModel(), m_isFootprintEditor );
+                    dimension = new PCB_DIM_CENTER( m_frame->GetModel() );
                 }
                 else if( originalEvent.IsAction( &PCB_ACTIONS::drawRadialDimension ) )
                 {
-                    dimension = new PCB_DIM_RADIAL( m_frame->GetModel(), m_isFootprintEditor );
+                    dimension = new PCB_DIM_RADIAL( m_frame->GetModel() );
                     setMeasurementAttributes( dimension );
                 }
                 else if( originalEvent.IsAction( &PCB_ACTIONS::drawLeader ) )
                 {
-                    dimension = new PCB_DIM_LEADER( m_frame->GetModel(), m_isFootprintEditor );
+                    dimension = new PCB_DIM_LEADER( m_frame->GetModel() );
                     dimension->SetTextPos( cursorPos );
                 }
                 else
@@ -1286,8 +1238,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                     break;
                 }
 
-                if( t == PCB_DIM_CENTER_T    || t == PCB_DIM_RADIAL_T    || t == PCB_DIM_LEADER_T
-                 || t == PCB_FP_DIM_CENTER_T || t == PCB_FP_DIM_RADIAL_T || t == PCB_FP_DIM_LEADER_T )
+                if( t == PCB_DIM_CENTER_T || t == PCB_DIM_RADIAL_T || t == PCB_DIM_LEADER_T )
                 {
                     // No separate height step
                     ++step;
@@ -1307,7 +1258,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 commit.Add( dimension );
                 commit.Push( _( "Draw a dimension" ) );
 
-                if( t == PCB_DIM_LEADER_T || t == PCB_FP_DIM_LEADER_T )
+                if( t == PCB_DIM_LEADER_T )
                 {
                     // Run the edit immediately to set the leader text
                     m_toolMgr->RunAction( PCB_ACTIONS::properties, true, dimension );
@@ -1337,10 +1288,10 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             case SET_END:
                 dimension->SetEnd( cursorPos );
 
-                if( Is45Limited() || t == PCB_DIM_CENTER_T || t == PCB_FP_DIM_CENTER_T )
+                if( Is45Limited() || t == PCB_DIM_CENTER_T )
                     constrainDimension( dimension );
 
-                if( t == PCB_DIM_ORTHOGONAL_T || t == PCB_FP_DIM_ORTHOGONAL_T )
+                if( t == PCB_DIM_ORTHOGONAL_T )
                 {
                     PCB_DIM_ORTHOGONAL* ortho = static_cast<PCB_DIM_ORTHOGONAL*>( dimension );
 
@@ -1353,7 +1304,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                     ortho->SetOrientation( vert ? PCB_DIM_ORTHOGONAL::DIR::VERTICAL
                                                 : PCB_DIM_ORTHOGONAL::DIR::HORIZONTAL );
                 }
-                else if( t == PCB_DIM_RADIAL_T || t == PCB_FP_DIM_RADIAL_T )
+                else if( t == PCB_DIM_RADIAL_T )
                 {
                     PCB_DIM_RADIAL* radialDim = static_cast<PCB_DIM_RADIAL*>( dimension );
                     VECTOR2I        textOffset( radialDim->GetArrowLength() * 10, 0 );
@@ -1363,7 +1314,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
                     radialDim->SetTextPos( radialDim->GetKnee() + textOffset );
                 }
-                else if( t == PCB_DIM_LEADER_T || t == PCB_FP_DIM_LEADER_T )
+                else if( t == PCB_DIM_LEADER_T )
                 {
                     VECTOR2I textOffset( dimension->GetArrowLength() * 10, 0 );
 
@@ -1377,7 +1328,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 break;
 
             case SET_HEIGHT:
-                if( t == PCB_DIM_ALIGNED_T || t == PCB_FP_DIM_ALIGNED_T )
+                if( t == PCB_DIM_ALIGNED_T )
                 {
                     PCB_DIM_ALIGNED* aligned = static_cast<PCB_DIM_ALIGNED*>( dimension );
 
@@ -1389,7 +1340,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                     aligned->SetHeight( height );
                     aligned->Update();
                 }
-                else if( t == PCB_DIM_ORTHOGONAL_T || t == PCB_FP_DIM_ORTHOGONAL_T )
+                else if( t == PCB_DIM_ORTHOGONAL_T )
                 {
                     PCB_DIM_ORTHOGONAL* ortho = static_cast<PCB_DIM_ORTHOGONAL*>( dimension );
 
@@ -1545,11 +1496,6 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     for( std::unique_ptr<EDA_ITEM>& ptr : list )
     {
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( ptr.get() );
-
-        if( m_isFootprintEditor )
-            wxASSERT( item->Type() == PCB_FP_SHAPE_T || item->Type() == PCB_FP_TEXT_T );
-        else
-            wxASSERT( item->Type() == PCB_SHAPE_T || item->Type() == PCB_TEXT_T );
 
         newItems.push_back( item );
 
@@ -1952,9 +1898,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
                 graphic->SetLayer( m_layer );
                 graphic->SetStroke( m_stroke );
 
-                if( FP_TEXTBOX* fp_textbox = dynamic_cast<FP_TEXTBOX*>( graphic ) )
-                    fp_textbox->SetAttributes( m_textAttrs );
-                else if( PCB_TEXTBOX* pcb_textbox = dynamic_cast<PCB_TEXTBOX*>( graphic ) )
+                if( PCB_TEXTBOX* pcb_textbox = dynamic_cast<PCB_TEXTBOX*>( graphic ) )
                     pcb_textbox->SetAttributes( m_textAttrs );
 
                 m_view->Update( &preview );
@@ -1993,9 +1937,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
                     graphic->SetLayer( m_layer );
                 }
 
-                if( FP_TEXTBOX* fp_textbox = dynamic_cast<FP_TEXTBOX*>( graphic ) )
-                    fp_textbox->SetAttributes( m_textAttrs );
-                else if( PCB_TEXTBOX* pcb_textbox = dynamic_cast<PCB_TEXTBOX*>( graphic ) )
+                if( PCB_TEXTBOX* pcb_textbox = dynamic_cast<PCB_TEXTBOX*>( graphic ) )
                     pcb_textbox->SetAttributes( m_textAttrs );
 
                 grid.SetSkipPoint( cursorPos );
@@ -2905,8 +2847,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 if( !item )
                     continue;
 
-                if( ( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
-                        && !static_cast<ZONE*>( item )->GetIsRuleArea() )
+                if( item->Type() == PCB_ZONE_T && !static_cast<ZONE*>( item )->GetIsRuleArea() )
                 {
                     continue;       // stitching vias bind to zones, so ignore them
                 }
@@ -2914,8 +2855,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 {
                     continue;       // check against children, but not against footprint itself
                 }
-                else if( item->Type() == PCB_FP_TEXT_T
-                            && !static_cast<FP_TEXT*>( item )->IsVisible() )
+                else if( item->Type() == PCB_TEXT_T && !static_cast<PCB_TEXT*>( item )->IsVisible() )
                 {
                     continue;       // ignore hidden items
                 }

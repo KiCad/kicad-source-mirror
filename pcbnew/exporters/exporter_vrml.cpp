@@ -34,7 +34,6 @@
 #include "board.h"
 #include "board_design_settings.h"
 #include <fp_lib_table.h>
-#include "fp_shape.h"
 #include "footprint.h"
 #include "pad.h"
 #include "pcb_text.h"

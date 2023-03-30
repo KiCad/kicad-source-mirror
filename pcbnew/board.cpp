@@ -1002,12 +1002,7 @@ void BOARD::UpdateUserUnits( BOARD_ITEM* aItem, KIGFX::VIEW* aView )
                                         PCB_DIM_LEADER_T,
                                         PCB_DIM_ORTHOGONAL_T,
                                         PCB_DIM_CENTER_T,
-                                        PCB_DIM_RADIAL_T,
-                                        PCB_FP_DIM_ALIGNED_T,
-                                        PCB_FP_DIM_LEADER_T,
-                                        PCB_FP_DIM_ORTHOGONAL_T,
-                                        PCB_FP_DIM_CENTER_T,
-                                        PCB_FP_DIM_RADIAL_T } );
+                                        PCB_DIM_RADIAL_T } );
 }
 
 
@@ -1321,7 +1316,7 @@ BOX2I BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
         {
             for( const BOARD_ITEM* edge : footprint->GraphicalItems() )
             {
-                if( edge->GetLayer() == Edge_Cuts  && edge->Type() == PCB_FP_SHAPE_T )
+                if( edge->GetLayer() == Edge_Cuts && edge->Type() == PCB_SHAPE_T )
                     bbox.Merge( edge->GetBoundingBox() );
             }
         }
@@ -1419,15 +1414,16 @@ INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData,
 
         case PCB_FOOTPRINT_T:
         case PCB_PAD_T:
-        case PCB_FP_TEXT_T:
-        case PCB_FP_TEXTBOX_T:
-        case PCB_FP_SHAPE_T:
-        case PCB_FP_DIM_ALIGNED_T:
-        case PCB_FP_DIM_LEADER_T:
-        case PCB_FP_DIM_CENTER_T:
-        case PCB_FP_DIM_RADIAL_T:
-        case PCB_FP_DIM_ORTHOGONAL_T:
-        case PCB_FP_ZONE_T:
+        case PCB_SHAPE_T:
+        case PCB_BITMAP_T:
+        case PCB_TEXT_T:
+        case PCB_TEXTBOX_T:
+        case PCB_DIM_ALIGNED_T:
+        case PCB_DIM_CENTER_T:
+        case PCB_DIM_RADIAL_T:
+        case PCB_DIM_ORTHOGONAL_T:
+        case PCB_DIM_LEADER_T:
+        case PCB_TARGET_T:
             if( !footprintsScanned )
             {
                 if( IterateForward<FOOTPRINT*>( m_footprints, inspector, testData, scanTypes )
@@ -1439,18 +1435,6 @@ INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData,
                 footprintsScanned = true;
             }
 
-            break;
-
-        case PCB_SHAPE_T:
-        case PCB_BITMAP_T:
-        case PCB_TEXT_T:
-        case PCB_TEXTBOX_T:
-        case PCB_DIM_ALIGNED_T:
-        case PCB_DIM_CENTER_T:
-        case PCB_DIM_RADIAL_T:
-        case PCB_DIM_ORTHOGONAL_T:
-        case PCB_DIM_LEADER_T:
-        case PCB_TARGET_T:
             if( !drawingsScanned )
             {
                 if( IterateForward<BOARD_ITEM*>( m_drawings, inspector, testData, scanTypes )
@@ -1490,6 +1474,17 @@ INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData,
             break;
 
         case PCB_ZONE_T:
+            if( !footprintsScanned )
+            {
+                if( IterateForward<FOOTPRINT*>( m_footprints, inspector, testData, scanTypes )
+                        == INSPECT_RESULT::QUIT )
+                {
+                    return INSPECT_RESULT::QUIT;
+                }
+
+                footprintsScanned = true;
+            }
+
             for( ZONE* zone : m_zones)
             {
                 if( zone->Visit( inspector, testData, { scanType } ) == INSPECT_RESULT::QUIT )
@@ -1976,7 +1971,7 @@ std::list<ZONE*> BOARD::GetZoneList( bool aIncludeZonesInFootprints ) const
     {
         for( FOOTPRINT* footprint : m_footprints )
         {
-            for( FP_ZONE* zone : footprint->Zones() )
+            for( ZONE* zone : footprint->Zones() )
                 zones.push_back( zone );
         }
     }

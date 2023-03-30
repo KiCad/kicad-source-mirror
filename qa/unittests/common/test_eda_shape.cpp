@@ -29,10 +29,6 @@ class EDA_SHAPE_MOCK : public EDA_SHAPE
 {
 public:
     EDA_SHAPE_MOCK( SHAPE_T aShapeType ) : EDA_SHAPE( aShapeType, 0, FILL_T::NO_FILL ){};
-
-protected:
-    EDA_ANGLE getParentOrientation() const override { return ANGLE_0; }
-    VECTOR2I  getParentPosition() const override { return VECTOR2I(); }
 };
 
 

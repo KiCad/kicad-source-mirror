@@ -98,10 +98,7 @@ DRC_ENGINE::~DRC_ENGINE()
 
 static bool isKeepoutZone( const BOARD_ITEM* aItem, bool aCheckFlags )
 {
-    if( !aItem )
-        return false;
-
-    if( aItem->Type() != PCB_ZONE_T && aItem->Type() != PCB_FP_ZONE_T )
+    if( !aItem || aItem->Type() != PCB_ZONE_T )
         return false;
 
     const ZONE* zone = static_cast<const ZONE*>( aItem );
@@ -693,16 +690,16 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     {
         if( a && a->Type() == PCB_PAD_T )
             pad = static_cast<const PAD*>( a );
-        else if( a && ( a->Type() == PCB_ZONE_T || a->Type() == PCB_FP_ZONE_T ) )
+        else if( a && a->Type() == PCB_ZONE_T )
             zone = static_cast<const ZONE*>( a );
 
         if( b && b->Type() == PCB_PAD_T )
             pad = static_cast<const PAD*>( b );
-        else if( b && ( b->Type() == PCB_ZONE_T || b->Type() == PCB_FP_ZONE_T ) )
+        else if( b && b->Type() == PCB_ZONE_T )
             zone = static_cast<const ZONE*>( b );
 
         if( pad )
-            parentFootprint = static_cast<FOOTPRINT*>( pad->GetParentFootprint() );
+            parentFootprint = pad->GetParentFootprint();
     }
 
     DRC_CONSTRAINT constraint;
@@ -1112,24 +1109,17 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                         case PCB_PAD_T:          mask = DRC_DISALLOW_PADS;       break;
                         case PCB_FOOTPRINT_T:    mask = DRC_DISALLOW_FOOTPRINTS; break;
                         case PCB_SHAPE_T:        mask = DRC_DISALLOW_GRAPHICS;   break;
-                        case PCB_FP_SHAPE_T:     mask = DRC_DISALLOW_GRAPHICS;   break;
                         case PCB_TEXT_T:         mask = DRC_DISALLOW_TEXTS;      break;
                         case PCB_TEXTBOX_T:      mask = DRC_DISALLOW_TEXTS;      break;
-                        case PCB_FP_TEXT_T:      mask = DRC_DISALLOW_TEXTS;      break;
-                        case PCB_FP_TEXTBOX_T:   mask = DRC_DISALLOW_TEXTS;      break;
-                        case PCB_ZONE_T:
-                        case PCB_FP_ZONE_T:
-                        {
-                            const ZONE* test_zone = static_cast<const ZONE*>( a );
 
+                        case PCB_ZONE_T:
                             // Treat teardrop areas as tracks for DRC purposes
-                            if( test_zone->IsTeardropArea() )
+                            if( static_cast<const ZONE*>( a )->IsTeardropArea() )
                                 mask = DRC_DISALLOW_TRACKS;
                             else
                                 mask = DRC_DISALLOW_ZONES;
 
                             break;
-                        }
 
                         case PCB_LOCATE_HOLE_T:  mask = DRC_DISALLOW_HOLES;      break;
                         default:                 mask = 0;                       break;
@@ -1775,7 +1765,7 @@ bool DRC_ENGINE::IsNetADiffPair( BOARD* aBoard, NETINFO_ITEM* aNet, int& aNetP, 
 bool DRC_ENGINE::IsNetTieExclusion( int aTrackNetCode, PCB_LAYER_ID aTrackLayer,
                                     const VECTOR2I& aCollisionPos, BOARD_ITEM* aCollidingItem )
 {
-    FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( aCollidingItem->GetParentFootprint() );
+    FOOTPRINT* parentFootprint = aCollidingItem->GetParentFootprint();
 
     if( parentFootprint && parentFootprint->IsNetTie() )
     {

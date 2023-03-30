@@ -4,7 +4,7 @@
  * Copyright (C) 2016 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <convert_basic_shapes_to_polygon.h>
-#include <fp_shape.h>
+#include <pcb_shape.h>
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_track.h>
@@ -49,7 +49,6 @@
 #include <project/project_file.h> // LAST_PATH_TYPE
 
 #include <wx/app.h>
-#include <wx/filedlg.h>
 
 static bool CreateHeaderInfoData( FILE* aFile, PCB_EDIT_FRAME* frame );
 static void CreateArtworksSection( FILE* aFile );
@@ -891,24 +890,25 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
                  mirror, flip );
 
         // Text on silk layer: RefDes and value (are they actually useful?)
-        for( FP_TEXT* textItem : { &footprint->Reference(), &footprint->Value() } )
+        for( PCB_TEXT* textItem : { &footprint->Reference(), &footprint->Value() } )
         {
             std::string layer = GenCADLayerName( cu_count,
                                                  footprint->GetFlag() ? B_SilkS : F_SilkS );
 
             fprintf( aFile, "TEXT %g %g %g %g %s %s \"%s\"",
-                     textItem->GetPos0().x / SCALE_FACTOR,
-                    -textItem->GetPos0().y / SCALE_FACTOR,
+                     textItem->GetFPRelativePosition().x / SCALE_FACTOR,
+                    -textItem->GetFPRelativePosition().y / SCALE_FACTOR,
                      textItem->GetTextWidth() / SCALE_FACTOR,
                      textItem->GetTextAngle().AsDegrees(),
                      mirror,
                      layer.c_str(),
                      TO_UTF8( escapeString( textItem->GetText() ) ) );
 
-            // Please note, the width is approx
+            BOX2I textBox = textItem->GetTextBox();
+
             fprintf( aFile, " 0 0 %g %g\n",
-                     ( textItem->GetTextWidth() * textItem->GetLength() ) / SCALE_FACTOR,
-                     textItem->GetTextHeight() / SCALE_FACTOR );
+                     textBox.GetWidth() / SCALE_FACTOR,
+                     textBox.GetHeight() / SCALE_FACTOR );
         }
 
         // The SHEET is a 'generic description' for referencing the component
@@ -1197,8 +1197,6 @@ static void CreateTracksInfoData( FILE* aFile, BOARD* aPcb )
  */
 static void FootprintWriteShape( FILE* aFile, FOOTPRINT* aFootprint, const wxString& aShapeName )
 {
-    FP_SHAPE* shape;
-
     /* creates header: */
     fprintf( aFile, "\nSHAPE \"%s\"\n", TO_UTF8( escapeString( aShapeName ) ) );
 
@@ -1211,99 +1209,85 @@ static void FootprintWriteShape( FILE* aFile, FOOTPRINT* aFootprint, const wxStr
     // CAM350 read it right but only closed shapes
     // ProntoPlace double-flip it (at least the pads are correct)
     // GerberTool usually get it right...
-    for( BOARD_ITEM* PtStruct : aFootprint->GraphicalItems() )
+    for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
     {
-        switch( PtStruct->Type() )
+        if( item->Type() == PCB_SHAPE_T
+                    && ( item->GetLayer() == F_SilkS || item->GetLayer() == B_SilkS ) )
         {
-        case PCB_FP_TEXT_T:
-        case PCB_FP_TEXTBOX_T:
+            PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
+            VECTOR2I   start = shape->GetStart() - aFootprint->GetPosition();
+            VECTOR2I   end = shape->GetEnd() - aFootprint->GetPosition();
+            VECTOR2I   center = shape->GetCenter() - aFootprint->GetPosition();
 
-            // If we wanted to export text, this is not the correct section
-            break;
+            RotatePoint( start, -aFootprint->GetOrientation() );
+            RotatePoint( end, -aFootprint->GetOrientation() );
+            RotatePoint( center, -aFootprint->GetOrientation() );
 
-        case PCB_FP_SHAPE_T:
-            shape = (FP_SHAPE*) PtStruct;
-
-            if( shape->GetLayer() == F_SilkS || shape->GetLayer() == B_SilkS )
+            switch( shape->GetShape() )
             {
-                switch( shape->GetShape() )
-                {
-                case SHAPE_T::SEGMENT:
-                    fprintf( aFile, "LINE %g %g %g %g\n",
-                             shape->GetStart0().x / SCALE_FACTOR,
-                             -shape->GetStart0().y / SCALE_FACTOR,
-                             shape->GetEnd0().x / SCALE_FACTOR,
-                             -shape->GetEnd0().y / SCALE_FACTOR );
-                    break;
+            case SHAPE_T::SEGMENT:
+                fprintf( aFile, "LINE %g %g %g %g\n",
+                         start.x / SCALE_FACTOR,
+                         -start.y / SCALE_FACTOR,
+                         end.x / SCALE_FACTOR,
+                         -end.y / SCALE_FACTOR );
+                break;
 
-                case SHAPE_T::RECT:
-                {
-                    fprintf( aFile, "LINE %g %g %g %g\n",
-                             shape->GetStart0().x / SCALE_FACTOR,
-                             -shape->GetStart0().y / SCALE_FACTOR,
-                             shape->GetEnd0().x / SCALE_FACTOR,
-                             -shape->GetStart0().y / SCALE_FACTOR );
-                    fprintf( aFile, "LINE %g %g %g %g\n",
-                             shape->GetEnd0().x / SCALE_FACTOR,
-                             -shape->GetStart0().y / SCALE_FACTOR,
-                             shape->GetEnd0().x / SCALE_FACTOR,
-                             -shape->GetEnd0().y / SCALE_FACTOR );
-                    fprintf( aFile, "LINE %g %g %g %g\n",
-                             shape->GetEnd0().x / SCALE_FACTOR,
-                             -shape->GetEnd0().y / SCALE_FACTOR,
-                             shape->GetStart0().x / SCALE_FACTOR,
-                             -shape->GetEnd0().y / SCALE_FACTOR );
-                    fprintf( aFile, "LINE %g %g %g %g\n",
-                             shape->GetStart0().x / SCALE_FACTOR,
-                             -shape->GetEnd0().y / SCALE_FACTOR,
-                             shape->GetStart0().x / SCALE_FACTOR,
-                             -shape->GetStart0().y / SCALE_FACTOR );
-                }
-                    break;
+            case SHAPE_T::RECT:
+                fprintf( aFile, "LINE %g %g %g %g\n",
+                         start.x / SCALE_FACTOR,
+                         -start.y / SCALE_FACTOR,
+                         end.x / SCALE_FACTOR,
+                         -end.y / SCALE_FACTOR );
+                fprintf( aFile, "LINE %g %g %g %g\n",
+                         end.x / SCALE_FACTOR,
+                         -start.y / SCALE_FACTOR,
+                         end.x / SCALE_FACTOR,
+                         -end.y / SCALE_FACTOR );
+                fprintf( aFile, "LINE %g %g %g %g\n",
+                         end.x / SCALE_FACTOR,
+                         -end.y / SCALE_FACTOR,
+                         start.x / SCALE_FACTOR,
+                         -end.y / SCALE_FACTOR );
+                fprintf( aFile, "LINE %g %g %g %g\n",
+                         start.x / SCALE_FACTOR,
+                         -end.y / SCALE_FACTOR,
+                         start.x / SCALE_FACTOR,
+                         -start.y / SCALE_FACTOR );
+                break;
 
-                case SHAPE_T::CIRCLE:
-                {
-                    int radius = KiROUND( GetLineLength( shape->GetEnd0(), shape->GetStart0() ) );
+            case SHAPE_T::CIRCLE:
+            {
+                int radius = KiROUND( GetLineLength( end, start ) );
 
-                    fprintf( aFile, "CIRCLE %g %g %g\n",
-                             shape->GetStart0().x / SCALE_FACTOR,
-                             -shape->GetStart0().y / SCALE_FACTOR,
-                             radius / SCALE_FACTOR );
-                    break;
-                }
-
-                case SHAPE_T::ARC:
-                {
-                    VECTOR2I start = shape->GetStart0();
-                    VECTOR2I end = shape->GetEnd0();
-
-                    if( shape->GetArcAngle() > ANGLE_0 )
-                        std::swap( start, end );
-
-                    fprintf( aFile, "ARC %g %g %g %g %g %g\n",
-                             start.x / SCALE_FACTOR,
-                             -start.y / SCALE_FACTOR,
-                             end.x / SCALE_FACTOR,
-                             -end.y / SCALE_FACTOR,
-                             shape->GetCenter0().x / SCALE_FACTOR,
-                             -shape->GetCenter0().y / SCALE_FACTOR );
-                }
-                    break;
-
-                case SHAPE_T::POLY:
-                    // Not exported (TODO)
-                    break;
-
-                default:
-                    wxFAIL_MSG( wxString::Format( wxT( "Type Edge Module %d invalid." ),
-                                                  PtStruct->Type() ) );
-                    break;
-                }
+                fprintf( aFile, "CIRCLE %g %g %g\n",
+                         start.x / SCALE_FACTOR,
+                         -start.y / SCALE_FACTOR,
+                         radius / SCALE_FACTOR );
+                break;
             }
-            break;
 
-        default:
-            break;
+            case SHAPE_T::ARC:
+                if( shape->GetArcAngle() > ANGLE_0 )
+                    std::swap( start, end );
+
+                fprintf( aFile, "ARC %g %g %g %g %g %g\n",
+                         start.x / SCALE_FACTOR,
+                         -start.y / SCALE_FACTOR,
+                         end.x / SCALE_FACTOR,
+                         -end.y / SCALE_FACTOR,
+                         center.x / SCALE_FACTOR,
+                         -center.y / SCALE_FACTOR );
+                break;
+
+            case SHAPE_T::POLY:
+                // Not exported (TODO)
+                break;
+
+            default:
+                wxFAIL_MSG( wxString::Format( wxT( "Shape type %d invalid." ), item->Type() ) );
+                break;
+            }
         }
     }
 }

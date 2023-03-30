@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012-2020 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <pcad/pcb_via.h>
-#include <pcad/pcb_via_shape.h>
+#include <pcad/pcad_via.h>
+#include <pcad/pcad_via_shape.h>
 
 #include <xnode.h>
 
@@ -33,24 +33,23 @@
 
 namespace PCAD2KICAD {
 
-PCB_VIA::PCB_VIA( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
-    PCB_PAD( aCallbacks, aBoard )
+PCAD_VIA::PCAD_VIA( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) : PCAD_PAD( aCallbacks, aBoard )
 {
     m_objType = wxT( 'V' );
 }
 
 
-PCB_VIA::~PCB_VIA()
+PCAD_VIA::~PCAD_VIA()
 {
 }
 
 
-void PCB_VIA::Parse( XNODE* aNode, const wxString& aDefaultUnits,
+void PCAD_VIA::Parse( XNODE* aNode, const wxString& aDefaultUnits,
                      const wxString& aActualConversion )
 {
     XNODE*          lNode, * tNode;
     wxString        propValue;
-    PCB_VIA_SHAPE*  viaShape;
+    PCAD_VIA_SHAPE*  viaShape;
 
     m_rotation = ANGLE_0;
     lNode = FindNode( aNode, wxT( "viaStyleRef" ) );
@@ -125,7 +124,7 @@ void PCB_VIA::Parse( XNODE* aNode, const wxString& aDefaultUnits,
                 // we do not support vias on "Plane", "NonSignal" , "Signal" ... layerr
                 if( FindNode( lNode, wxT( "layerNumRef" ) ) )
                 {
-                    viaShape = new PCB_VIA_SHAPE( m_callbacks, m_board );
+                    viaShape = new PCAD_VIA_SHAPE( m_callbacks, m_board );
                     viaShape->Parse( lNode, aDefaultUnits, aActualConversion );
                     m_Shapes.Add( viaShape );
                 }

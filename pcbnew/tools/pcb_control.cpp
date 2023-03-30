@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2016 CERN
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -45,8 +45,6 @@
 #include <pcb_track.h>
 #include <wildcards_and_files_ext.h>
 #include <zone.h>
-#include <fp_shape.h>
-#include <fp_textbox.h>
 #include <confirm.h>
 #include <connectivity/connectivity_data.h>
 #include <core/kicad_algo.h>
@@ -678,38 +676,31 @@ static void pasteFootprintItemsToFootprintEditor( FOOTPRINT* aClipFootprint, BOA
     aClipFootprint->Pads().clear();
 
     // Not all graphic items can be added to the current footprint:
-    // Reference and value are already existing in the current footprint, and
-    // must be unique.
+    // Reference and value are already existing in the current footprint, and must be unique.
     // So they will be skipped
     for( BOARD_ITEM* item : aClipFootprint->GraphicalItems() )
     {
-        if( item->Type() == PCB_FP_SHAPE_T || item->Type() == PCB_FP_TEXTBOX_T )
+        if( item->Type() == PCB_TEXT_T )
         {
-            FP_SHAPE* shape = static_cast<FP_SHAPE*>( item );
+            PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
 
-            shape->SetParent( nullptr );
-            shape->SetLocalCoord();
-        }
-        else if( item->Type() == PCB_FP_TEXT_T )
-        {
-            FP_TEXT* text = static_cast<FP_TEXT*>( item );
-
-            if( text->GetType() != FP_TEXT::TEXT_is_DIVERS )
+            if( text->GetType() != PCB_TEXT::TEXT_is_DIVERS )
                 continue;
 
-            text->SetTextAngle( text->GetTextAngle() + aClipFootprint->GetOrientation() );
-
-            text->SetParent( nullptr );
-            text->SetLocalCoord();
+            text->SetTextAngle( text->GetTextAngle() - aClipFootprint->GetOrientation() );
+            text->SetTextAngle( text->GetTextAngle() + editorFootprint->GetOrientation() );
         }
 
+        VECTOR2I pos = item->GetFPRelativePosition();
         item->SetParent( editorFootprint );
+        item->SetFPRelativePosition( pos );
+
         aPastedItems.push_back( item );
     }
 
     aClipFootprint->GraphicalItems().clear();
 
-    for( FP_ZONE* zone : aClipFootprint->Zones() )
+    for( ZONE* zone : aClipFootprint->Zones() )
     {
         zone->SetParent( editorFootprint );
         aPastedItems.push_back( zone );
@@ -882,67 +873,29 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
                 for( BOARD_ITEM* clipDrawItem : clipBoard->Drawings() )
                 {
-                    if( clipDrawItem->Type() == PCB_SHAPE_T )
+                    switch( clipDrawItem->Type() )
                     {
-                        PCB_SHAPE* clipShape = static_cast<PCB_SHAPE*>( clipDrawItem );
-                        PCB_GROUP* parentGroup = clipDrawItem->GetParentGroup();
+                    case PCB_TEXT_T:
+                    case PCB_TEXTBOX_T:
+                    case PCB_SHAPE_T:
+                    case PCB_DIM_ALIGNED_T:
+                    case PCB_DIM_CENTER_T:
+                    case PCB_DIM_LEADER_T:
+                    case PCB_DIM_ORTHOGONAL_T:
+                    case PCB_DIM_RADIAL_T:
+                        clipDrawItem->SetParent( editorFootprint );
+                        pastedItems.push_back( clipDrawItem );
+                        break;
 
-                        if( parentGroup )
+                    default:
+                        if( PCB_GROUP* parentGroup = clipDrawItem->GetParentGroup() )
                             parentGroup->RemoveItem( clipDrawItem );
 
-                        // Convert to PCB_FP_SHAPE_T
-                        FP_SHAPE* pastedShape = new FP_SHAPE( editorFootprint );
-                        static_cast<PCB_SHAPE*>( pastedShape )->SwapItemData( clipShape );
-                        pastedShape->SetLocalCoord();
-
-                        if( parentGroup )
-                            parentGroup->AddItem( pastedShape );
-
-                        pastedItems.push_back( pastedShape );
-                    }
-                    else if( clipDrawItem->Type() == PCB_TEXT_T )
-                    {
-                        PCB_TEXT*  clipTextItem = static_cast<PCB_TEXT*>( clipDrawItem );
-                        PCB_GROUP* parentGroup = clipDrawItem->GetParentGroup();
-
-                        if( parentGroup )
-                            parentGroup->RemoveItem( clipDrawItem );
-
-                        // Convert to PCB_FP_TEXT_T
-                        FP_TEXT* pastedTextItem = new FP_TEXT( editorFootprint );
-                        static_cast<EDA_TEXT*>( pastedTextItem )->SwapText( *clipTextItem );
-                        static_cast<EDA_TEXT*>( pastedTextItem )->SwapAttributes( *clipTextItem );
-
-                        if( parentGroup )
-                            parentGroup->AddItem( pastedTextItem );
-
-                        pastedItems.push_back( pastedTextItem );
-                    }
-                    else if( clipDrawItem->Type() == PCB_TEXTBOX_T )
-                    {
-                        PCB_TEXTBOX* clipTextBox = static_cast<PCB_TEXTBOX*>( clipDrawItem );
-                        PCB_GROUP*   parentGroup = clipDrawItem->GetParentGroup();
-
-                        if( parentGroup )
-                            parentGroup->RemoveItem( clipDrawItem );
-
-                        // Convert to PCB_FP_TEXTBOX_T
-                        FP_TEXTBOX* pastedTextBox = new FP_TEXTBOX( editorFootprint );
-
-                        // Handle shape data
-                        static_cast<PCB_SHAPE*>( pastedTextBox )->SwapItemData( clipTextBox );
-                        pastedTextBox->SetLocalCoord();
-
-                        // Handle text data
-                        static_cast<EDA_TEXT*>( pastedTextBox )->SwapText( *clipTextBox );
-                        static_cast<EDA_TEXT*>( pastedTextBox )->SwapAttributes( *clipTextBox );
-
-                        if( parentGroup )
-                            parentGroup->AddItem( pastedTextBox );
-
-                        pastedItems.push_back( pastedTextBox );
+                        break;
                     }
                 }
+
+                clipBoard->Drawings().clear();
 
                 clipBoard->Visit(
                         [&]( EDA_ITEM* item, void* testData )

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,16 +42,15 @@ class wxRealPoint;
 namespace PCAD2KICAD {
 
 // basic parent class for PCB objects
-class PCB_COMPONENT : public wxObject
+class PCAD_PCB_COMPONENT : public wxObject
 {
 public:
-    PCB_COMPONENT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
-    ~PCB_COMPONENT();
+    PCAD_PCB_COMPONENT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
+    ~PCAD_PCB_COMPONENT();
 
     virtual void SetPosOffset( int aX_offs, int aY_offs );
     virtual void Flip();
-    virtual void AddToFootprint( FOOTPRINT* aFootprint );
-    virtual void AddToBoard() = 0;
+    virtual void AddToBoard( FOOTPRINT* aFootprint = nullptr ) = 0;
 
     PCB_LAYER_ID GetKiCadLayer() const { return m_callbacks->GetKiCadLayer( m_PCadLayer ); }
 

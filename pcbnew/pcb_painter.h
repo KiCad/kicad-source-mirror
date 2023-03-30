@@ -52,8 +52,6 @@ class ZONE;
 class PCB_BITMAP;
 class PCB_TEXT;
 class PCB_TEXTBOX;
-class FP_TEXT;
-class FP_TEXTBOX;
 class PCB_DIMENSION_BASE;
 class PCB_TARGET;
 class PCB_MARKER;
@@ -180,8 +178,6 @@ protected:
     void draw( const PCB_BITMAP* aBitmap, int aLayer );
     void draw( const PCB_TEXT* aText, int aLayer );
     void draw( const PCB_TEXTBOX* aText, int aLayer );
-    void draw( const FP_TEXT* aText, int aLayer );
-    void draw( const FP_TEXTBOX* aText, int aLayer );
     void draw( const FOOTPRINT* aFootprint, int aLayer );
     void draw( const PCB_GROUP* aGroup, int aLayer );
     void draw( const ZONE* aZone, int aLayer );

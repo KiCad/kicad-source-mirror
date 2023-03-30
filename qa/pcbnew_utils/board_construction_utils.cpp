@@ -23,7 +23,7 @@
 
 #include <pcbnew_utils/board_construction_utils.h>
 
-#include <fp_shape.h>
+#include <pcb_shape.h>
 #include <footprint.h>
 #include <geometry/seg.h>
 #include <math/vector2d.h>
@@ -34,13 +34,16 @@ namespace KI_TEST
 
 void DrawSegment( FOOTPRINT& aFootprint, const SEG& aSeg, int aWidth, PCB_LAYER_ID aLayer )
 {
-    std::unique_ptr<FP_SHAPE> seg = std::make_unique<FP_SHAPE>( &aFootprint, SHAPE_T::SEGMENT );
+    std::unique_ptr<PCB_SHAPE> seg = std::make_unique<PCB_SHAPE>( &aFootprint, SHAPE_T::SEGMENT );
 
-    seg->SetStart0( aSeg.A );
-    seg->SetEnd0( aSeg.B );
+    seg->SetStart( aSeg.A );
+    seg->SetEnd( aSeg.B );
 
     seg->SetStroke( STROKE_PARAMS( aWidth, PLOT_DASH_TYPE::SOLID ) );
     seg->SetLayer( aLayer );
+
+    seg->Rotate( { 0, 0 }, aFootprint.GetOrientation() );
+    seg->Move( aFootprint.GetPosition() );
 
     aFootprint.Add( seg.release() );
 }
@@ -59,14 +62,17 @@ void DrawPolyline( FOOTPRINT& aFootprint, const std::vector<VECTOR2I>& aPts, int
 void DrawArc( FOOTPRINT& aFootprint, const VECTOR2I& aCentre, const VECTOR2I& aStart,
               const EDA_ANGLE& aAngle, int aWidth, PCB_LAYER_ID aLayer )
 {
-    std::unique_ptr<FP_SHAPE>  arc = std::make_unique<FP_SHAPE>( &aFootprint, SHAPE_T::ARC );
+    std::unique_ptr<PCB_SHAPE>  arc = std::make_unique<PCB_SHAPE>( &aFootprint, SHAPE_T::ARC );
 
-    arc->SetCenter0( aCentre );
-    arc->SetStart0( aStart );
-    arc->SetArcAngleAndEnd0( aAngle );
+    arc->SetCenter( aCentre );
+    arc->SetStart( aStart );
+    arc->SetArcAngleAndEnd( aAngle );
 
     arc->SetStroke( STROKE_PARAMS( aWidth, PLOT_DASH_TYPE::SOLID ) );
     arc->SetLayer( aLayer );
+
+    arc->Rotate( { 0, 0 }, aFootprint.GetOrientation() );
+    arc->Move( aFootprint.GetPosition() );
 
     aFootprint.Add( arc.release() );
 }

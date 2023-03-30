@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@
 #include <zones.h>
 #include <convert_shape_list_to_polygon.h>
 #include <pcb_item_containers.h>
-#include <fp_text.h>
+#include <pcb_text.h>
 #include <functional>
 #include <math/vector3.h>
 
@@ -168,17 +168,17 @@ public:
     const BOX2I GetBoundingBox() const override;
     const BOX2I GetBoundingBox( bool aIncludeText, bool aIncludeInvisibleText ) const;
 
-    PADS& Pads()             { return m_pads; }
-    const PADS& Pads() const { return m_pads; }
+    PADS& Pads()                           { return m_pads; }
+    const PADS& Pads() const               { return m_pads; }
 
     DRAWINGS& GraphicalItems()             { return m_drawings; }
     const DRAWINGS& GraphicalItems() const { return m_drawings; }
 
-    FP_ZONES& Zones()             { return m_fp_zones; }
-    const FP_ZONES& Zones() const { return m_fp_zones; }
+    ZONES& Zones()                         { return m_zones; }
+    const ZONES& Zones() const             { return m_zones; }
 
-    FP_GROUPS& Groups()             { return m_fp_groups; }
-    const FP_GROUPS& Groups() const { return m_fp_groups; }
+    GROUPS& Groups()                       { return m_groups; }
+    const GROUPS& Groups() const           { return m_groups; }
 
     bool HasThroughHolePads() const;
 
@@ -565,12 +565,12 @@ public:
     }
 
     /// read/write accessors:
-    FP_TEXT& Value()           { return *m_value; }
-    FP_TEXT& Reference()       { return *m_reference; }
+    PCB_TEXT& Value()           { return *m_value; }
+    PCB_TEXT& Reference()       { return *m_reference; }
 
     /// The const versions to keep the compiler happy.
-    FP_TEXT& Value() const     { return *m_value; }
-    FP_TEXT& Reference() const { return *m_reference; }
+    PCB_TEXT& Value() const     { return *m_value; }
+    PCB_TEXT& Reference() const { return *m_reference; }
 
     const std::map<wxString, wxString>& GetProperties() const        { return m_properties; }
     void SetProperties( const std::map<wxString, wxString>& aProps ) { m_properties = aProps; }
@@ -819,7 +819,7 @@ public:
 
     struct cmp_zones
     {
-        bool operator()( const FP_ZONE* aFirst, const FP_ZONE* aSecond ) const;
+        bool operator()( const ZONE* aFirst, const ZONE* aSecond ) const;
     };
 
 protected:
@@ -828,13 +828,13 @@ protected:
 private:
     DRAWINGS        m_drawings;          // BOARD_ITEMs for drawings on the board, owned by pointer.
     PADS            m_pads;              // PAD items, owned by pointer
-    FP_ZONES        m_fp_zones;          // FP_ZONE items, owned by pointer
-    FP_GROUPS       m_fp_groups;         // PCB_GROUP items, owned by pointer
+    ZONES           m_zones;             // PCB_ZONE items, owned by pointer
+    GROUPS          m_groups;            // PCB_GROUP items, owned by pointer
 
     EDA_ANGLE       m_orient;            // Orientation
     VECTOR2I        m_pos;               // Position of footprint on the board in internal units.
-    FP_TEXT*        m_reference;         // Component reference designator value (U34, R18..)
-    FP_TEXT*        m_value;             // Component value (74LS00, 22K..)
+    PCB_TEXT*       m_reference;         // Component reference designator value (U34, R18..)
+    PCB_TEXT*       m_value;             // Component value (74LS00, 22K..)
     LIB_ID          m_fpid;              // The #LIB_ID of the FOOTPRINT.
     int             m_attributes;        // Flag bits (see FOOTPRINT_ATTR_T)
     int             m_fpStatus;          // For autoplace: flags (LOCKED, FIELDS_AUTOPLACED)

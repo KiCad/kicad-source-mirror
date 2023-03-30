@@ -37,7 +37,7 @@
 #include <wx/xml/xml.h>
 
 class PAD;
-class FP_TEXT;
+class PCB_TEXT;
 class ZONE;
 
 typedef std::map<wxString, FOOTPRINT*> FOOTPRINT_MAP;
@@ -278,7 +278,7 @@ private:
     void orientFootprintAndText( FOOTPRINT* aFootprint, const EELEMENT& e, const EATTR* aNameAttr,
                                  const EATTR* aValueAttr );
 
-    void orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, FP_TEXT* aFPText,
+    void orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, PCB_TEXT* aFPText,
                        const EATTR* aAttr );
 
 

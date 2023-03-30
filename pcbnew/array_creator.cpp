@@ -87,7 +87,7 @@ void ARRAY_CREATOR::Invoke()
             if( item->Type() == PCB_PAD_T && !m_isFootprintEditor )
             {
                 // If it is not the footprint editor, then duplicate the parent footprint instead
-                item = static_cast<FOOTPRINT*>( item )->GetParent();
+                item = item->GetParentFootprint();
             }
 
             BOARD_ITEM* this_item = nullptr;

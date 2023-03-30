@@ -41,7 +41,6 @@ using namespace std::placeholders;
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
-#include <fp_textbox.h>
 #include <pcb_marker.h>
 #include <zone.h>
 #include <collectors.h>
@@ -390,7 +389,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
                             for( EDA_ITEM* item : aCollector )
                             {
-                                if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
+                                if( item->Type() == PCB_ZONE_T )
                                 {
                                     ZONE* zone = static_cast<ZONE*>( item );
 
@@ -2087,7 +2086,6 @@ static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem, const BOARD& aBoard
     case PCB_VIA_T:
         return aFilterOptions.includeVias;
 
-    case PCB_FP_ZONE_T:
     case PCB_ZONE_T:
         return aFilterOptions.includeZones;
 
@@ -2098,18 +2096,11 @@ static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem, const BOARD& aBoard
     case PCB_DIM_RADIAL_T:
     case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
-    case PCB_FP_DIM_ALIGNED_T:
-    case PCB_FP_DIM_CENTER_T:
-    case PCB_FP_DIM_RADIAL_T:
-    case PCB_FP_DIM_ORTHOGONAL_T:
-    case PCB_FP_DIM_LEADER_T:
         if( aItem.GetLayer() == Edge_Cuts )
             return aFilterOptions.includeBoardOutlineLayer;
         else
             return aFilterOptions.includeItemsOnTechLayers;
 
-    case PCB_FP_TEXT_T:
-    case PCB_FP_TEXTBOX_T:
     case PCB_TEXT_T:
     case PCB_TEXTBOX_T:
         return aFilterOptions.includePcbTexts;
@@ -2219,7 +2210,6 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect 
 
         break;
 
-    case PCB_FP_ZONE_T:
     case PCB_ZONE_T:
     {
         ZONE* zone = static_cast<ZONE*>( aItem );
@@ -2233,7 +2223,6 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect 
         break;
     }
 
-    case PCB_FP_SHAPE_T:
     case PCB_SHAPE_T:
     case PCB_TARGET_T:
         if( !m_filter.graphics )
@@ -2242,21 +2231,15 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect 
         break;
 
     case PCB_BITMAP_T:
-        // a bitmap living in a footprint must not be selected inside the board editor
         if( !m_filter.graphics )
             return false;
 
-        if( !m_isFootprintEditor )
-        {
-            if( dynamic_cast<FOOTPRINT*>( aItem->GetParent() ) )
-                return false;
-        }
-
+        // a bitmap living in a footprint must not be selected inside the board editor
+        if( !m_isFootprintEditor && aItem->GetParentFootprint() )
+            return false;
 
         break;
 
-    case PCB_FP_TEXT_T:
-    case PCB_FP_TEXTBOX_T:
     case PCB_TEXT_T:
     case PCB_TEXTBOX_T:
         if( !m_filter.text )
@@ -2269,11 +2252,6 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect 
     case PCB_DIM_RADIAL_T:
     case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
-    case PCB_FP_DIM_ALIGNED_T:
-    case PCB_FP_DIM_CENTER_T:
-    case PCB_FP_DIM_RADIAL_T:
-    case PCB_FP_DIM_ORTHOGONAL_T:
-    case PCB_FP_DIM_LEADER_T:
         if( !m_filter.dimensions )
             return false;
 
@@ -2452,15 +2430,14 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
         return false;
     }
 
-    const ZONE*    zone = nullptr;
-    const PCB_VIA* via = nullptr;
-    const PAD*     pad = nullptr;
-    const FP_TEXT* text = nullptr;
+    const ZONE*     zone = nullptr;
+    const PCB_VIA*  via = nullptr;
+    const PAD*      pad = nullptr;
+    const PCB_TEXT* text = nullptr;
 
     switch( aItem->Type() )
     {
     case PCB_ZONE_T:
-    case PCB_FP_ZONE_T:
         if( !board()->IsElementVisible( LAYER_ZONES ) )
             return false;
 
@@ -2511,32 +2488,32 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
 
         break;
 
-    case PCB_FP_TEXT_T:
+    case PCB_TEXT_T:
+        text = static_cast<const PCB_TEXT*>( aItem );
+
         if( m_isFootprintEditor )
         {
-            text = static_cast<const FP_TEXT*>( aItem );
-
             if( !text->IsVisible() && !view()->IsLayerVisible( LAYER_MOD_TEXT_INVISIBLE ) )
                 return false;
 
-            if( !view()->IsLayerVisible( aItem->GetLayer() ) )
+            if( !view()->IsLayerVisible( text->GetLayer() ) )
                 return false;
         }
-        else
+        else if( aItem->GetParentFootprint() )
         {
-            if( !view()->IsVisible( aItem ) )
+            if( !view()->IsVisible( text ) )
                 return false;
 
-            if( !board()->IsLayerVisible( aItem->GetLayer() ) )
+            if( !board()->IsLayerVisible( text->GetLayer() ) )
                 return false;
 
             int controlLayer = UNDEFINED_LAYER;
 
-            switch( static_cast<const FP_TEXT*>( aItem )->GetType() )
+            switch( text->GetType() )
             {
-            case FP_TEXT::TEXT_is_REFERENCE: controlLayer = LAYER_MOD_REFERENCES; break;
-            case FP_TEXT::TEXT_is_VALUE:     controlLayer = LAYER_MOD_VALUES;     break;
-            case FP_TEXT::TEXT_is_DIVERS:    controlLayer = LAYER_MOD_TEXT;       break;
+            case PCB_TEXT::TEXT_is_REFERENCE: controlLayer = LAYER_MOD_REFERENCES; break;
+            case PCB_TEXT::TEXT_is_VALUE:     controlLayer = LAYER_MOD_VALUES;     break;
+            case PCB_TEXT::TEXT_is_DIVERS:    controlLayer = LAYER_MOD_TEXT;       break;
             }
 
             if( controlLayer == UNDEFINED_LAYER )
@@ -2548,14 +2525,14 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
 
         break;
 
-    case PCB_FP_SHAPE_T:
-    case PCB_FP_TEXTBOX_T:
+    case PCB_SHAPE_T:
+    case PCB_TEXTBOX_T:
         if( m_isFootprintEditor )
         {
             if( !view()->IsLayerVisible( aItem->GetLayer() ) )
                 return false;
         }
-        else
+        else if( aItem->GetParentFootprint() )
         {
             // Footprint shape selections are only allowed in footprint editor mode.
             if( !checkVisibilityOnly )
@@ -2795,20 +2772,6 @@ int PCB_SELECTION_TOOL::hitTestDistance( const VECTOR2I& aWhere, BOARD_ITEM* aIt
         break;
     }
 
-    case PCB_FP_TEXT_T:
-    {
-        FP_TEXT* text = static_cast<FP_TEXT*>( aItem );
-        text->GetEffectiveTextShape()->Collide( loc, aMaxDistance, &distance );
-        break;
-    }
-
-    case PCB_FP_TEXTBOX_T:
-    {
-        FP_TEXTBOX* textbox = static_cast<FP_TEXTBOX*>( aItem );
-        textbox->GetEffectiveTextShape()->Collide( loc, aMaxDistance, &distance );
-        break;
-    }
-
     case PCB_ZONE_T:
     {
         ZONE* zone = static_cast<ZONE*>( aItem );
@@ -2979,7 +2942,7 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
         BOARD_ITEM* item = aCollector[i];
         double      area = 0.0;
 
-        if( ( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
+        if( item->Type() == PCB_ZONE_T
                 && static_cast<ZONE*>( item )->HitTestForEdge( where, maxSlop / 2 ) )
         {
             // Zone borders are very specific, so make them "small"

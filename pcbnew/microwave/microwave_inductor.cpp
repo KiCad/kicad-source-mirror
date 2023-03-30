@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@
 #include <board_commit.h>
 #include <board_design_settings.h>
 #include <pad.h>
-#include <fp_shape.h>
+#include <pcb_shape.h>
 #include <footprint.h>
 #include <confirm.h>
 #include <dialogs/dialog_text_entry.h>
@@ -417,13 +417,11 @@ FOOTPRINT* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& 
     // Generate segments
     for( unsigned jj = 1; jj < buffer.size(); jj++ )
     {
-        FP_SHAPE* seg = new FP_SHAPE( footprint, SHAPE_T::SEGMENT );
+        PCB_SHAPE* seg = new PCB_SHAPE( footprint, SHAPE_T::SEGMENT );
         seg->SetStart( buffer[jj - 1] );
         seg->SetEnd( buffer[jj] );
         seg->SetStroke( STROKE_PARAMS( aInductorPattern.m_Width, PLOT_DASH_TYPE::SOLID ) );
         seg->SetLayer( footprint->GetLayer() );
-        seg->SetStart0( seg->GetStart() - footprint->GetPosition() );
-        seg->SetEnd0( seg->GetEnd() - footprint->GetPosition() );
         footprint->Add( seg );
     }
 

@@ -131,7 +131,7 @@ int PCB_VIEWER_TOOLS::GraphicOutlines( const TOOL_EVENT& aEvent )
         {
             KICAD_T t = item->Type();
 
-            if( t == PCB_FP_SHAPE_T || BaseType( t ) == PCB_DIMENSION_T )
+            if( t == PCB_SHAPE_T || BaseType( t ) == PCB_DIMENSION_T )
                 view()->Update( item, KIGFX::REPAINT );
         }
     }
@@ -162,7 +162,7 @@ int PCB_VIEWER_TOOLS::TextOutlines( const TOOL_EVENT& aEvent )
 
         for( BOARD_ITEM* item : fp->GraphicalItems() )
         {
-            if( item->Type() == PCB_FP_TEXT_T )
+            if( item->Type() == PCB_TEXT_T )
                 view()->Update( item, KIGFX::REPAINT );
         }
     }

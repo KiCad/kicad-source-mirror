@@ -35,9 +35,7 @@
 #include <tool/tool_manager.h>
 #include <tool/actions.h>
 #include <pcb_shape.h>
-#include <fp_shape.h>
 #include <macros.h>
-#include <confirm.h>
 #include <widgets/unit_binder.h>
 
 #include <dialog_graphic_item_properties_base.h>
@@ -47,7 +45,7 @@
 class DIALOG_GRAPHIC_ITEM_PROPERTIES : public DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE
 {
 public:
-    DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BOARD_ITEM* aItem );
+    DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PCB_SHAPE* aShape );
     ~DIALOG_GRAPHIC_ITEM_PROPERTIES() {};
 
 private:
@@ -70,7 +68,6 @@ private:
 private:
     PCB_BASE_EDIT_FRAME*  m_parent;
     PCB_SHAPE*            m_item;
-    FP_SHAPE*             m_fp_item;
 
     UNIT_BINDER           m_startX, m_startY;
     UNIT_BINDER           m_endX, m_endY;
@@ -83,8 +80,10 @@ private:
 };
 
 DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent,
-                                                                BOARD_ITEM* aItem ):
+                                                                PCB_SHAPE* aShape ):
     DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( aParent ),
+    m_parent( aParent ),
+    m_item( aShape ),
     m_startX( aParent, m_startXLabel, m_startXCtrl, m_startXUnits ),
     m_startY( aParent, m_startYLabel, m_startYCtrl, m_startYUnits ),
     m_endX( aParent, m_endXLabel, m_endXCtrl, m_endXUnits ),
@@ -97,10 +96,6 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
     m_bezierCtrl2Y( aParent, m_BezierPointC2YLabel, m_BezierC2Y_Ctrl, m_BezierPointC2YUnit ),
     m_flipStartEnd( false )
 {
-    m_parent = aParent;
-    m_item = dynamic_cast<PCB_SHAPE*>( aItem );
-    m_fp_item = dynamic_cast<FP_SHAPE*>( aItem );
-
     // Configure display origin transforms
     m_startX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
     m_startY.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
@@ -117,13 +112,13 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
     m_locked->Show( dynamic_cast<PCB_EDIT_FRAME*>( aParent ) != nullptr );
 
     // Configure the layers list selector
-    if( m_fp_item )
+    if( m_parent->GetFrameType() == FRAME_FOOTPRINT_EDITOR )
     {
         LSET forbiddenLayers = LSET::ForbiddenFootprintLayers();
 
         // If someone went to the trouble of setting the layer in a text editor, then there's
         // very little sense in nagging them about it.
-        forbiddenLayers.set( m_fp_item->GetLayer(), false );
+        forbiddenLayers.set( m_item->GetLayer(), false );
 
         m_LayerSelectionCtrl->SetNotAllowedLayerSet( forbiddenLayers );
     }
@@ -143,18 +138,18 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
 }
 
 
-void PCB_BASE_EDIT_FRAME::ShowGraphicItemPropertiesDialog( BOARD_ITEM* aItem )
+void PCB_BASE_EDIT_FRAME::ShowGraphicItemPropertiesDialog( PCB_SHAPE* aShape )
 {
-    wxCHECK_RET( aItem != NULL, wxT( "ShowGraphicItemPropertiesDialog() error: NULL item" ) );
+    wxCHECK_RET( aShape != NULL, wxT( "ShowGraphicItemPropertiesDialog() error: NULL item" ) );
 
-    DIALOG_GRAPHIC_ITEM_PROPERTIES dlg( this, aItem );
+    DIALOG_GRAPHIC_ITEM_PROPERTIES dlg( this, aShape );
 
     if( dlg.ShowQuasiModal() == wxID_OK )
     {
-        if( aItem->IsOnLayer( GetActiveLayer(), true ) )
+        if( aShape->IsOnLayer( GetActiveLayer(), true ) )
         {
             DRAWING_TOOL* drawingTool = m_toolManager->GetTool<DRAWING_TOOL>();
-            drawingTool->SetStroke( aItem->GetStroke(), GetActiveLayer() );
+            drawingTool->SetStroke( aShape->GetStroke(), GetActiveLayer() );
         }
     }
 }
@@ -361,22 +356,6 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
         VECTOR2D c = CalcArcCenter( m_item->GetStart(), m_item->GetEnd(), m_angle.GetAngleValue() );
 
         m_item->SetCenter( c );
-    }
-
-    if( m_fp_item )
-    {
-        // We are editing a footprint; init the item coordinates relative to the footprint anchor.
-        m_fp_item->SetStart0( m_fp_item->GetStart() );
-        m_fp_item->SetEnd0( m_fp_item->GetEnd() );
-
-        if( m_fp_item->GetShape() == SHAPE_T::ARC )
-            m_fp_item->SetCenter0( m_fp_item->GetCenter() );
-
-        if( m_fp_item->GetShape() == SHAPE_T::BEZIER )
-        {
-            m_fp_item->SetBezierC1_0( m_fp_item->GetBezierC1() );
-            m_fp_item->SetBezierC2_0( m_fp_item->GetBezierC2() );
-        }
     }
 
     bool wasLocked = m_item->IsLocked();

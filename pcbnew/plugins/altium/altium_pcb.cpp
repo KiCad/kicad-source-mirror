@@ -35,9 +35,6 @@
 #include <pcb_text.h>
 #include <pcb_track.h>
 #include <string_utils.h>
-
-#include <fp_shape.h>
-#include <fp_text.h>
 #include <zone.h>
 
 #include <board_stackup_manager/stackup_predefined_prms.h>
@@ -101,57 +98,10 @@ PCB_SHAPE* ALTIUM_PCB::HelperCreateAndAddShape( uint16_t aComponent )
         }
 
         FOOTPRINT* footprint = m_components.at( aComponent );
-        PCB_SHAPE* fpShape = new FP_SHAPE( footprint );
+        PCB_SHAPE* fpShape = new PCB_SHAPE( footprint );
 
         footprint->Add( fpShape, ADD_MODE::APPEND );
         return fpShape;
-    }
-}
-
-
-void ALTIUM_PCB::HelperShapeSetLocalCoord( PCB_SHAPE* aShape, uint16_t aComponent )
-{
-    if( aComponent != ALTIUM_COMPONENT_NONE )
-    {
-        FP_SHAPE* fpShape = dynamic_cast<FP_SHAPE*>( aShape );
-
-        if( fpShape )
-        {
-            fpShape->SetLocalCoord();
-
-            // TODO: SetLocalCoord() does not update the polygon shape!
-            // This workaround converts the poly shape into the local coordinates
-            SHAPE_POLY_SET& polyShape = fpShape->GetPolyShape();
-
-            if( !polyShape.IsEmpty() )
-            {
-                FOOTPRINT* fp = m_components.at( aComponent );
-
-                polyShape.Move( -fp->GetPosition() );
-                polyShape.Rotate( fp->GetOrientation() );
-            }
-        }
-    }
-}
-
-
-void ALTIUM_PCB::HelperShapeSetLocalCoord( FP_SHAPE* aShape )
-{
-    aShape->SetLocalCoord();
-
-    // TODO: SetLocalCoord() does not update the polygon shape!
-    // This workaround converts the poly shape into the local coordinates
-    SHAPE_POLY_SET& polyShape = aShape->GetPolyShape();
-
-    if( !polyShape.IsEmpty() )
-    {
-        FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aShape->GetParent() );
-
-        if( fp )
-        {
-            polyShape.Move( -fp->GetPosition() );
-            polyShape.Rotate( fp->GetOrientation() );
-        }
     }
 }
 
@@ -1982,7 +1932,7 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItem( FOOTPRINT*      aFoot
             return;
         }
 
-        FP_ZONE* zone = new FP_ZONE( aFootprint );
+        ZONE* zone = new ZONE( aFootprint );
         aFootprint->Add( zone, ADD_MODE::APPEND );
 
         zone->SetIsRuleArea( true );
@@ -2052,14 +2002,13 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItemOnLayer( FOOTPRINT*    
         return;
     }
 
-    FP_SHAPE* shape = new FP_SHAPE( aFootprint, SHAPE_T::POLY );
+    PCB_SHAPE* shape = new PCB_SHAPE( aFootprint, SHAPE_T::POLY );
 
     shape->SetPolyShape( linechain );
     shape->SetFilled( true );
     shape->SetLayer( aLayer );
     shape->SetStroke( STROKE_PARAMS( 0 ) );
 
-    HelperShapeSetLocalCoord( shape );
     aFootprint->Add( shape, ADD_MODE::APPEND );
 }
 
@@ -2283,13 +2232,12 @@ void ALTIUM_PCB::ConvertArcs6ToFootprintItem( FOOTPRINT* aFootprint, const AARC6
 
         if( width > 1 )
         {
-            FP_SHAPE* arc = new FP_SHAPE( aFootprint );
+            PCB_SHAPE* arc = new PCB_SHAPE( aFootprint );
 
             ConvertArcs6ToPcbShape( aElem, arc );
             arc->SetStroke( STROKE_PARAMS( width, PLOT_DASH_TYPE::SOLID ) );
             arc->SetLayer( layerExpansionMask.first );
 
-            arc->SetLocalCoord();
             aFootprint->Add( arc, ADD_MODE::APPEND );
         }
     }
@@ -2339,13 +2287,12 @@ void ALTIUM_PCB::ConvertArcs6ToBoardItemOnLayer( const AARC6& aElem, PCB_LAYER_I
 void ALTIUM_PCB::ConvertArcs6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, const AARC6& aElem,
                                                      PCB_LAYER_ID aLayer )
 {
-    FP_SHAPE* arc = new FP_SHAPE( aFootprint );
+    PCB_SHAPE* arc = new PCB_SHAPE( aFootprint );
 
     ConvertArcs6ToPcbShape( aElem, arc );
     arc->SetStroke( STROKE_PARAMS( aElem.width, PLOT_DASH_TYPE::SOLID ) );
     arc->SetLayer( aLayer );
 
-    arc->SetLocalCoord();
     aFootprint->Add( arc, ADD_MODE::APPEND );
 }
 
@@ -2638,11 +2585,10 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnNonCopper( FOOTPRINT* aFootprint, 
         klayer = Eco1_User;
     }
 
-    FP_SHAPE* pad = new FP_SHAPE( aFootprint );
+    PCB_SHAPE* pad = new PCB_SHAPE( aFootprint );
 
     HelperParsePad6NonCopper( aElem, klayer, pad );
 
-    HelperShapeSetLocalCoord( pad );
     aFootprint->Add( pad, ADD_MODE::APPEND );
 }
 
@@ -2984,14 +2930,13 @@ void ALTIUM_PCB::ConvertTracks6ToFootprintItem( FOOTPRINT* aFootprint, const ATR
         int width = aElem.width + ( layerExpansionMask.second * 2 );
         if( width > 1 )
         {
-            FP_SHAPE* seg = new FP_SHAPE( aFootprint, SHAPE_T::SEGMENT );
+            PCB_SHAPE* seg = new PCB_SHAPE( aFootprint, SHAPE_T::SEGMENT );
 
             seg->SetStart( aElem.start );
             seg->SetEnd( aElem.end );
             seg->SetStroke( STROKE_PARAMS( width, PLOT_DASH_TYPE::SOLID ) );
             seg->SetLayer( layerExpansionMask.first );
 
-            seg->SetLocalCoord();
             aFootprint->Add( seg, ADD_MODE::APPEND );
         }
     }
@@ -3029,14 +2974,13 @@ void ALTIUM_PCB::ConvertTracks6ToBoardItemOnLayer( const ATRACK6& aElem, PCB_LAY
 void ALTIUM_PCB::ConvertTracks6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, const ATRACK6& aElem,
                                                        PCB_LAYER_ID aLayer )
 {
-    FP_SHAPE* seg = new FP_SHAPE( aFootprint, SHAPE_T::SEGMENT );
+    PCB_SHAPE* seg = new PCB_SHAPE( aFootprint, SHAPE_T::SEGMENT );
 
     seg->SetStart( aElem.start );
     seg->SetEnd( aElem.end );
     seg->SetStroke( STROKE_PARAMS( aElem.width, PLOT_DASH_TYPE::SOLID ) );
     seg->SetLayer( aLayer );
 
-    seg->SetLocalCoord();
     aFootprint->Add( seg, ADD_MODE::APPEND );
 }
 
@@ -3136,7 +3080,8 @@ void ALTIUM_PCB::ConvertTexts6ToBoardItemOnLayer( const ATEXT6& aElem, PCB_LAYER
 void ALTIUM_PCB::ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, const ATEXT6& aElem,
                                                       PCB_LAYER_ID aLayer )
 {
-    FP_TEXT* fpText;
+    PCB_TEXT* fpText;
+
     if( aElem.isDesignator )
     {
         fpText = &aFootprint->Reference(); // TODO: handle multiple layers
@@ -3147,7 +3092,7 @@ void ALTIUM_PCB::ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
     }
     else
     {
-        fpText = new FP_TEXT( aFootprint );
+        fpText = new PCB_TEXT( aFootprint, PCB_TEXT::TEXT_is_DIVERS );
         aFootprint->Add( fpText, ADD_MODE::APPEND );
     }
 
@@ -3166,12 +3111,10 @@ void ALTIUM_PCB::ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
 
     fpText->SetKeepUpright( false );
     fpText->SetLayer( aLayer );
-    fpText->SetPosition( aElem.position );
-    fpText->SetTextAngle( EDA_ANGLE( aElem.rotation, DEGREES_T ) - aFootprint->GetOrientation() );
+    fpText->SetFPRelativePosition( aElem.position );
+    fpText->SetTextAngle( EDA_ANGLE( aElem.rotation, DEGREES_T ) );
 
     ConvertTexts6ToEdaTextSettings( aElem, fpText );
-
-    fpText->SetLocalCoord();
 }
 
 
@@ -3395,7 +3338,7 @@ void ALTIUM_PCB::ConvertFills6ToBoardItemOnLayer( const AFILL6& aElem, PCB_LAYER
 void ALTIUM_PCB::ConvertFills6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, const AFILL6& aElem,
                                                       PCB_LAYER_ID aLayer )
 {
-    FP_SHAPE* fill = new FP_SHAPE( aFootprint, SHAPE_T::RECT );
+    PCB_SHAPE* fill = new PCB_SHAPE( aFootprint, SHAPE_T::RECT );
 
     fill->SetFilled( true );
     fill->SetLayer( aLayer );
@@ -3411,7 +3354,6 @@ void ALTIUM_PCB::ConvertFills6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
         fill->Rotate( center, EDA_ANGLE( aElem.rotation, DEGREES_T ) );
     }
 
-    fill->SetLocalCoord();
     aFootprint->Add( fill, ADD_MODE::APPEND );
 }
 
@@ -3475,7 +3417,7 @@ void ALTIUM_PCB::HelperPcpShapeAsFootprintKeepoutRegion( FOOTPRINT*         aFoo
                                                          const ALTIUM_LAYER aAltiumLayer,
                                                          const uint8_t      aKeepoutRestrictions )
 {
-    FP_ZONE* zone = new FP_ZONE( aFootprint );
+    ZONE* zone = new ZONE( aFootprint );
 
     zone->SetIsRuleArea( true );
 

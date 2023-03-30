@@ -260,7 +260,6 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, 
                 break;
 
             case PCB_ZONE_T:
-            case PCB_FP_ZONE_T:
             {
                 ZONE* zone = static_cast<ZONE*>( parent );
 
@@ -277,14 +276,11 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, 
                 break;
 
             case PCB_TEXT_T:
-            case PCB_FP_TEXT_T:
             case PCB_TEXTBOX_T:
-            case PCB_FP_TEXTBOX_T:
                 failureReason = _( "Cannot start routing from a text item." );
                 break;
 
             case PCB_SHAPE_T:
-            case PCB_FP_SHAPE_T:
                 failureReason = _( "Cannot start routing from a graphic." );
 
             default:

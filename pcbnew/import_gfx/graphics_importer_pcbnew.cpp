@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
- * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,9 +26,9 @@
 #include "graphics_importer_pcbnew.h"
 
 #include <board.h>
-#include <fp_shape.h>
+#include <footprint.h>
+#include <pcb_shape.h>
 #include <pcb_text.h>
-#include <fp_text.h>
 #include <memory>
 #include <tuple>
 
@@ -71,10 +71,6 @@ void GRAPHICS_IMPORTER_PCBNEW::AddLine( const VECTOR2D& aOrigin, const VECTOR2D&
     if( line->GetStart() == line->GetEnd() )
         return;
 
-
-    if( line->Type() == PCB_FP_SHAPE_T )
-        static_cast<FP_SHAPE*>( line.get() )->SetLocalCoord();
-
     addItem( std::move( line ) );
 }
 
@@ -89,9 +85,6 @@ void GRAPHICS_IMPORTER_PCBNEW::AddCircle( const VECTOR2D& aCenter, double aRadiu
     circle->SetStroke( STROKE_PARAMS( MapLineWidth( aWidth ), PLOT_DASH_TYPE::SOLID ) );
     circle->SetStart( MapCoordinate( aCenter ));
     circle->SetEnd( MapCoordinate( VECTOR2D( aCenter.x + aRadius, aCenter.y ) ) );
-
-    if( circle->Type() == PCB_FP_SHAPE_T )
-        static_cast<FP_SHAPE*>( circle.get() )->SetLocalCoord();
 
     addItem( std::move( circle ) );
 }
@@ -118,14 +111,11 @@ void GRAPHICS_IMPORTER_PCBNEW::AddArc( const VECTOR2D& aCenter, const VECTOR2D& 
 
     arc->SetStroke( STROKE_PARAMS( MapLineWidth( aWidth ), PLOT_DASH_TYPE::SOLID ) );
 
-    if( arc->Type() == PCB_FP_SHAPE_T )
-        static_cast<FP_SHAPE*>( arc.get() )->SetLocalCoord();
-
     addItem( std::move( arc ) );
 }
 
 
-void GRAPHICS_IMPORTER_PCBNEW::AddPolygon( const std::vector< VECTOR2D >& aVertices, double aWidth )
+void GRAPHICS_IMPORTER_PCBNEW::AddPolygon( const std::vector<VECTOR2D>& aVertices, double aWidth )
 {
     std::vector<VECTOR2I> convertedPoints;
     convertedPoints.reserve( aVertices.size() );
@@ -139,8 +129,11 @@ void GRAPHICS_IMPORTER_PCBNEW::AddPolygon( const std::vector< VECTOR2D >& aVerti
     polygon->SetLayer( GetLayer() );
     polygon->SetPolyPoints( convertedPoints );
 
-    if( polygon->Type() == PCB_FP_SHAPE_T )
-        static_cast<FP_SHAPE*>( polygon.get() )->SetLocalCoord();
+    if( FOOTPRINT* parentFP = polygon->GetParentFootprint() )
+    {
+        polygon->Rotate( { 0, 0 }, parentFP->GetOrientation() );
+        polygon->Move( parentFP->GetPosition() );
+    }
 
     polygon->SetStroke( STROKE_PARAMS( MapLineWidth( aWidth ), PLOT_DASH_TYPE::SOLID ) );
     addItem( std::move( polygon ) );
@@ -152,23 +145,18 @@ void GRAPHICS_IMPORTER_PCBNEW::AddText( const VECTOR2D& aOrigin, const wxString&
                                         double aOrientation, GR_TEXT_H_ALIGN_T aHJustify,
                                         GR_TEXT_V_ALIGN_T aVJustify )
 {
-    std::unique_ptr<BOARD_ITEM> boardItem;
-    EDA_TEXT* textItem;
-    tie( boardItem, textItem ) = createText();
-    boardItem->SetLayer( GetLayer() );
+    std::unique_ptr<PCB_TEXT> textItem = createText();
+    textItem->SetLayer( GetLayer() );
     textItem->SetTextThickness( MapLineWidth( aThickness ) );
     textItem->SetTextPos( MapCoordinate( aOrigin ) );
-    textItem->SetTextAngle( EDA_ANGLE( aOrientation, DEGREES_T ) );      // Pcbnew uses the decidegree
+    textItem->SetTextAngle( EDA_ANGLE( aOrientation, DEGREES_T ) );
     textItem->SetTextWidth( aWidth * ImportScalingFactor() );
     textItem->SetTextHeight( aHeight * ImportScalingFactor() );
     textItem->SetVertJustify( aVJustify );
     textItem->SetHorizJustify( aHJustify );
     textItem->SetText( aText );
 
-    if( boardItem->Type() == PCB_FP_TEXT_T )
-        static_cast<FP_TEXT*>( boardItem.get() )->SetLocalCoord();
-
-    addItem( std::move( boardItem ) );
+    addItem( std::move( textItem ) );
 }
 
 
@@ -199,10 +187,6 @@ void GRAPHICS_IMPORTER_PCBNEW::AddSpline( const VECTOR2D& aStart, const VECTOR2D
             return;
     }
 
-
-    if( spline->Type() == PCB_FP_SHAPE_T )
-        static_cast<FP_SHAPE*>( spline.get() )->SetLocalCoord();
-
     addItem( std::move( spline ) );
 }
 
@@ -213,21 +197,19 @@ std::unique_ptr<PCB_SHAPE> GRAPHICS_IMPORTER_BOARD::createDrawing()
 }
 
 
-std::pair<std::unique_ptr<BOARD_ITEM>, EDA_TEXT*> GRAPHICS_IMPORTER_BOARD::createText()
+std::unique_ptr<PCB_TEXT> GRAPHICS_IMPORTER_BOARD::createText()
 {
-    PCB_TEXT* text = new PCB_TEXT( m_board );
-    return make_pair( std::unique_ptr<BOARD_ITEM>( text ), static_cast<EDA_TEXT*>( text ) );
+    return std::make_unique<PCB_TEXT>( m_board );
 }
 
 
 std::unique_ptr<PCB_SHAPE> GRAPHICS_IMPORTER_FOOTPRINT::createDrawing()
 {
-    return std::make_unique<FP_SHAPE>( m_footprint );
+    return std::make_unique<PCB_SHAPE>( m_footprint );
 }
 
 
-std::pair<std::unique_ptr<BOARD_ITEM>, EDA_TEXT*> GRAPHICS_IMPORTER_FOOTPRINT::createText()
+std::unique_ptr<PCB_TEXT> GRAPHICS_IMPORTER_FOOTPRINT::createText()
 {
-    FP_TEXT* text = new FP_TEXT( m_footprint );
-    return make_pair( std::unique_ptr<BOARD_ITEM>( text ), static_cast<EDA_TEXT*>( text ) );
+    return std::make_unique<PCB_TEXT>( m_footprint, PCB_TEXT::TEXT_is_DIVERS );
 }

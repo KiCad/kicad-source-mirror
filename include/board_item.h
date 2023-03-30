@@ -39,6 +39,7 @@ class SHAPE_SEGMENT;
 class PCB_BASE_FRAME;
 class SHAPE;
 class PCB_GROUP;
+class FOOTPRINT;
 
 
 /**
@@ -174,7 +175,10 @@ public:
 
     BOARD_ITEM_CONTAINER* GetParent() const { return (BOARD_ITEM_CONTAINER*) m_parent; }
 
-    BOARD_ITEM_CONTAINER* GetParentFootprint() const;
+    FOOTPRINT* GetParentFootprint() const;
+
+    VECTOR2I GetFPRelativePosition() const;
+    void SetFPRelativePosition( const VECTOR2I& aPos );
 
     /**
      * Check if this item has line stoke properties.

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012-2020 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@
 #include <pcad/pcad2kicad_common.h>
 #include <pcad/pcad_item_types.h>
 #include <pcad/pcb_callbacks.h>
-#include <pcad/pcb_footprint.h>
+#include <pcad/pcad_footprint.h>
 
 #include <map>
 #include <wx/arrstr.h>
@@ -43,11 +43,11 @@ class wxXmlDocument;
 
 namespace PCAD2KICAD {
 
-class PCB : public PCB_FOOTPRINT, public PCB_CALLBACKS
+class PCAD_PCB : public PCAD_FOOTPRINT, public PCB_CALLBACKS
 {
 public:
-    PCB( BOARD* aBoard );
-    ~PCB();
+    PCAD_PCB( BOARD* aBoard );
+    ~PCAD_PCB();
 
     PCB_LAYER_ID GetKiCadLayer( int aPCadLayer ) const override;
     LAYER_TYPE_T GetLayerType( int aPCadLayer ) const override;
@@ -57,7 +57,7 @@ public:
     void ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc,
                      const wxString& aActualConversion );
 
-    void AddToBoard() override;
+    void AddToBoard( FOOTPRINT* aFootprint = nullptr ) override;
 
     PCB_COMPONENTS_ARRAY    m_PcbComponents;    // PCB footprints,Lines,Routes,Texts, .... and so on
     PCB_NETS_ARRAY          m_PcbNetlist;       // net objects collection

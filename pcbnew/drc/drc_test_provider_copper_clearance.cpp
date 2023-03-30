@@ -551,7 +551,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
     // Disable some tests for net-tie objects in a footprint
     if( other->GetParent() == pad->GetParent() )
     {
-        FOOTPRINT*              fp = static_cast<FOOTPRINT*>( pad->GetParent() );
+        FOOTPRINT*              fp = pad->GetParentFootprint();
         std::map<wxString, int> padToNetTieGroupMap = fp->MapPadNumbersToNetTieGroups();
         int                     padGroupIdx = padToNetTieGroupMap[ pad->GetNumber() ];
 
@@ -566,7 +566,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
                 testHoles = false;
         }
 
-        if( other->Type() == PCB_FP_SHAPE_T && padGroupIdx >= 0 )
+        if( other->Type() == PCB_SHAPE_T && padGroupIdx >= 0 )
             testClearance = false;
     }
 

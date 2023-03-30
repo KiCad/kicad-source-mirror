@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +38,6 @@
 #include <macros.h>
 #include <pcb_text.h>
 #include <pcb_shape.h>
-#include <fp_shape.h>
 #include <plugins/geda/gpcb_plugin.h>
 #include <wx_filename.h>
 
@@ -413,8 +412,7 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
     textPos.x -= thsize / 10;
     textPos.y += thsize / 2;
 
-    footprint->Reference().SetTextPos( textPos );
-    footprint->Reference().SetPos0( textPos );
+    footprint->Reference().SetFPRelativePosition( textPos );
     footprint->Reference().SetTextSize( VECTOR2I( twsize, thsize ) );
     footprint->Reference().SetTextThickness( thickness );
 
@@ -425,8 +423,7 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
     footprint->Value().SetTextSize( footprint->Reference().GetTextSize() );
     footprint->Value().SetTextThickness( footprint->Reference().GetTextThickness() );
     textPos.y += thsize * 13 / 10;  // 130% line height
-    footprint->Value().SetTextPos( textPos );
-    footprint->Value().SetPos0( textPos );
+    footprint->Value().SetFPRelativePosition( textPos );
 
     while( aLineReader->ReadLine() )
     {
@@ -463,15 +460,18 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
                                    aLineReader->LineNumber(), 0 );
             }
 
-            FP_SHAPE* shape = new FP_SHAPE( footprint.get(), SHAPE_T::SEGMENT );
+            PCB_SHAPE* shape = new PCB_SHAPE( footprint.get(), SHAPE_T::SEGMENT );
             shape->SetLayer( F_SilkS );
-            shape->SetStart0( VECTOR2I( parseInt( parameters[2], conv_unit ),
-                                        parseInt( parameters[3], conv_unit ) ) );
-            shape->SetEnd0( VECTOR2I( parseInt( parameters[4], conv_unit ),
-                                      parseInt( parameters[5], conv_unit ) ) );
+            shape->SetStart( VECTOR2I( parseInt( parameters[2], conv_unit ),
+                                       parseInt( parameters[3], conv_unit ) ) );
+            shape->SetEnd( VECTOR2I( parseInt( parameters[4], conv_unit ),
+                                     parseInt( parameters[5], conv_unit ) ) );
             shape->SetStroke( STROKE_PARAMS( parseInt( parameters[6], conv_unit ),
                                              PLOT_DASH_TYPE::SOLID ) );
-            shape->SetDrawCoord();
+
+            shape->Rotate( { 0, 0 }, footprint->GetOrientation() );
+            shape->Move( footprint->GetPosition() );
+
             footprint->Add( shape );
             continue;
         }
@@ -487,18 +487,18 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
             }
 
             // Pcbnew does know ellipse so we must have Width = Height
-            FP_SHAPE* shape = new FP_SHAPE( footprint.get(), SHAPE_T::ARC );
+            PCB_SHAPE* shape = new PCB_SHAPE( footprint.get(), SHAPE_T::ARC );
             shape->SetLayer( F_SilkS );
             footprint->Add( shape );
 
             // for and arc: ibuf[3] = ibuf[4]. Pcbnew does not know ellipses
-            int     radius = ( parseInt( parameters[4], conv_unit ) +
-                               parseInt( parameters[5], conv_unit ) ) / 2;
+            int      radius = ( parseInt( parameters[4], conv_unit ) +
+                                parseInt( parameters[5], conv_unit ) ) / 2;
 
             VECTOR2I centre( parseInt( parameters[2], conv_unit ),
                              parseInt( parameters[3], conv_unit ) );
 
-            shape->SetCenter0( centre );
+            shape->SetCenter( centre );
 
             // Pcbnew start angles are inverted and 180 degrees from Geda PCB angles.
             EDA_ANGLE start_angle( (int) parseInt( parameters[6], -10.0 ), TENTHS_OF_A_DEGREE_T );
@@ -514,14 +514,16 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
             // Calculate start point coordinate of arc
             VECTOR2I arcStart( radius, 0 );
             RotatePoint( arcStart, -start_angle );
-            shape->SetStart0( arcStart + centre );
+            shape->SetStart( arcStart + centre );
 
             // Angle value is clockwise in gpcb and Pcbnew.
-            shape->SetArcAngleAndEnd0( sweep_angle );
+            shape->SetArcAngleAndEnd( sweep_angle );
 
             shape->SetStroke( STROKE_PARAMS( parseInt( parameters[8], conv_unit ),
                                              PLOT_DASH_TYPE::SOLID ) );
-            shape->SetDrawCoord();
+
+            shape->Rotate( { 0, 0 }, footprint->GetOrientation() );
+            shape->Move( footprint->GetPosition() );
             continue;
         }
 

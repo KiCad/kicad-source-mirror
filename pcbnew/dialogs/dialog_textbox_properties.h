@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,9 +31,6 @@
 
 
 class PCB_BASE_EDIT_FRAME;
-class BOARD_ITEM;
-class EDA_TEXT;
-class FP_TEXTBOX;
 class PCB_TEXTBOX;
 class SCINTILLA_TRICKS;
 
@@ -41,7 +38,7 @@ class SCINTILLA_TRICKS;
 class DIALOG_TEXTBOX_PROPERTIES : public DIALOG_TEXTBOX_PROPERTIES_BASE
 {
 public:
-    DIALOG_TEXTBOX_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BOARD_ITEM* aItem );
+    DIALOG_TEXTBOX_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PCB_TEXTBOX* aTextBox );
     ~DIALOG_TEXTBOX_PROPERTIES();
 
 private:
@@ -57,10 +54,7 @@ private:
 
 private:
     PCB_BASE_EDIT_FRAME* m_frame;
-    BOARD_ITEM*          m_item;           // FP_TEXTBOX or PCB_TEXTBOX
-    EDA_TEXT*            m_edaText;        // always non-null
-    FP_TEXTBOX*          m_fpTextBox;      // only non-null for FP_TEXTBOXes
-    PCB_TEXTBOX*         m_pcbTextBox;     // only non-null for PCB_TEXTBOXes
+    PCB_TEXTBOX*         m_textBox;
 
     UNIT_BINDER          m_textWidth;
     UNIT_BINDER          m_textHeight;

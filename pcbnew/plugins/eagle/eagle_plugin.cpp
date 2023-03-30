@@ -70,7 +70,7 @@ Load() TODO's
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_track.h>
-#include <fp_shape.h>
+#include <pcb_shape.h>
 #include <zone.h>
 #include <pad_shapes.h>
 #include <pcb_text.h>
@@ -1393,10 +1393,6 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
 
         orientFootprintAndText( footprint, e, nameAttr, valueAttr );
 
-        // Set the local coordinates for the footprint text items
-        footprint->Reference().SetLocalCoord();
-        footprint->Value().SetLocalCoord();
-
         // Get next element
         element = element->GetNext();
     }
@@ -1576,7 +1572,7 @@ void EAGLE_PLUGIN::orientFootprintAndText( FOOTPRINT* aFootprint, const EELEMENT
 }
 
 
-void EAGLE_PLUGIN::orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, FP_TEXT* aFPText,
+void EAGLE_PLUGIN::orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, PCB_TEXT* aFPText,
                                  const EATTR* aAttr )
 {
     // Smashed part ?
@@ -1624,7 +1620,6 @@ void EAGLE_PLUGIN::orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, FP_TE
         // package's text field.  If they did not want zero, they specify
         // what they want explicitly.
         double  degrees  = a.rot ? a.rot->degrees : 0.0;
-        double  orient;      // relative to parent
 
         int     sign = 1;
         bool    spin = false;
@@ -1638,25 +1633,21 @@ void EAGLE_PLUGIN::orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, FP_TE
 
         if( degrees == 90 || degrees == 0 || spin )
         {
-            orient = degrees - aFootprint->GetOrientation().AsDegrees();
-            aFPText->SetTextAngle( EDA_ANGLE( sign * orient, DEGREES_T ) );
+            aFPText->SetTextAngle( EDA_ANGLE( sign * degrees, DEGREES_T ) );
         }
         else if( degrees == 180 )
         {
-            orient = 0 - aFootprint->GetOrientation().AsDegrees();
-            aFPText->SetTextAngle( EDA_ANGLE( sign * orient, DEGREES_T ) );
+            aFPText->SetTextAngle( EDA_ANGLE( sign * 0, DEGREES_T ) );
             align = -align;
         }
         else if( degrees == 270 )
         {
-            orient = 90 - aFootprint->GetOrientation().AsDegrees();
             align = -align;
-            aFPText->SetTextAngle( EDA_ANGLE( sign * orient, DEGREES_T ) );
+            aFPText->SetTextAngle( EDA_ANGLE( sign * 90, DEGREES_T ) );
         }
         else
         {
-            orient = 90 - degrees - aFootprint->GetOrientation().AsDegrees();
-            aFPText->SetTextAngle( EDA_ANGLE( sign * orient, DEGREES_T ) );
+            aFPText->SetTextAngle( EDA_ANGLE( sign * 90 - degrees, DEGREES_T ) );
         }
 
         switch( align )
@@ -1820,28 +1811,29 @@ void EAGLE_PLUGIN::packageWire( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
     }
 
     // FIXME: the cap attribute is ignored because KiCad can't create lines with flat ends.
-    FP_SHAPE* dwg;
+    PCB_SHAPE* dwg;
 
     if( !w.curve )
     {
-        dwg = new FP_SHAPE( aFootprint, SHAPE_T::SEGMENT );
+        dwg = new PCB_SHAPE( aFootprint, SHAPE_T::SEGMENT );
 
-        dwg->SetStart0( start );
-        dwg->SetEnd0( end );
+        dwg->SetStart( start );
+        dwg->SetEnd( end );
     }
     else
     {
-        dwg = new FP_SHAPE( aFootprint, SHAPE_T::ARC );
+        dwg = new PCB_SHAPE( aFootprint, SHAPE_T::ARC );
         VECTOR2I center = ConvertArcCenter( start, end, *w.curve );
 
-        dwg->SetCenter0( center );
-        dwg->SetStart0( start );
-        dwg->SetArcAngleAndEnd0( -EDA_ANGLE( *w.curve, DEGREES_T ), true ); // KiCad rotates the other way
+        dwg->SetCenter( center );
+        dwg->SetStart( start );
+        dwg->SetArcAngleAndEnd( -EDA_ANGLE( *w.curve, DEGREES_T ), true ); // KiCad rotates the other way
     }
 
     dwg->SetLayer( layer );
     dwg->SetStroke( STROKE_PARAMS( width, PLOT_DASH_TYPE::SOLID ) );
-    dwg->SetDrawCoord();
+    dwg->Rotate( { 0, 0 }, aFootprint->GetOrientation() );
+    dwg->Move( aFootprint->GetPosition() );
 
     aFootprint->Add( dwg );
 }
@@ -1964,7 +1956,7 @@ void EAGLE_PLUGIN::packageText( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
         return;
     }
 
-    FP_TEXT* textItem;
+    PCB_TEXT* textItem;
 
     if( t.text.Upper() == wxT( ">NAME" ) && aFootprint->GetReference().IsEmpty() )
     {
@@ -1980,8 +1972,7 @@ void EAGLE_PLUGIN::packageText( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
     }
     else
     {
-        // FIXME: graphical text items are rotated for some reason.
-        textItem = new FP_TEXT( aFootprint );
+        textItem = new PCB_TEXT( aFootprint, PCB_TEXT::TEXT_is_DIVERS );
         aFootprint->Add( textItem );
 
         textItem->SetText( interpretText( t.text ) );
@@ -1989,9 +1980,7 @@ void EAGLE_PLUGIN::packageText( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
 
     VECTOR2I pos( kicad_x( t.x ), kicad_y( t.y ) );
 
-    textItem->SetTextPos( pos );
-    textItem->SetPos0( pos - aFootprint->GetPosition() );
-
+    textItem->SetPosition( pos );
     textItem->SetLayer( layer );
 
     double ratio = t.ratio ? *t.ratio : 8;  // DTD says 8 is default
@@ -2084,7 +2073,7 @@ void EAGLE_PLUGIN::packageRectangle( FOOTPRINT* aFootprint, wxXmlNode* aTree ) c
     if( r.layer == EAGLE_LAYER::TRESTRICT || r.layer == EAGLE_LAYER::BRESTRICT
             || r.layer == EAGLE_LAYER::VRESTRICT )
     {
-        FP_ZONE* zone = new FP_ZONE( aFootprint );
+        ZONE* zone = new ZONE( aFootprint );
         aFootprint->Add( zone, ADD_MODE::APPEND );
 
         setKeepoutSettingsToZone( zone, r.layer );
@@ -2117,7 +2106,7 @@ void EAGLE_PLUGIN::packageRectangle( FOOTPRINT* aFootprint, wxXmlNode* aTree ) c
             return;
         }
 
-        FP_SHAPE* dwg = new FP_SHAPE( aFootprint, SHAPE_T::POLY );
+        PCB_SHAPE* dwg = new PCB_SHAPE( aFootprint, SHAPE_T::POLY );
 
         aFootprint->Add( dwg );
 
@@ -2139,6 +2128,9 @@ void EAGLE_PLUGIN::packageRectangle( FOOTPRINT* aFootprint, wxXmlNode* aTree ) c
 
         if( r.rot )
             dwg->Rotate( dwg->GetCenter(), EDA_ANGLE( r.rot->degrees, DEGREES_T ) );
+
+        dwg->Rotate( { 0, 0 }, aFootprint->GetOrientation() );
+        dwg->Move( aFootprint->GetPosition() );
     }
 }
 
@@ -2209,7 +2201,7 @@ void EAGLE_PLUGIN::packagePolygon( FOOTPRINT* aFootprint, wxXmlNode* aTree ) con
         || p.layer == EAGLE_LAYER::BRESTRICT
         || p.layer == EAGLE_LAYER::VRESTRICT )
     {
-        FP_ZONE* zone = new FP_ZONE( aFootprint );
+        ZONE* zone = new ZONE( aFootprint );
         aFootprint->Add( zone, ADD_MODE::APPEND );
 
         setKeepoutSettingsToZone( zone, p.layer );
@@ -2231,7 +2223,7 @@ void EAGLE_PLUGIN::packagePolygon( FOOTPRINT* aFootprint, wxXmlNode* aTree ) con
             return;
         }
 
-        FP_SHAPE* dwg = new FP_SHAPE( aFootprint, SHAPE_T::POLY );
+        PCB_SHAPE* dwg = new PCB_SHAPE( aFootprint, SHAPE_T::POLY );
 
         aFootprint->Add( dwg );
 
@@ -2240,7 +2232,8 @@ void EAGLE_PLUGIN::packagePolygon( FOOTPRINT* aFootprint, wxXmlNode* aTree ) con
         dwg->SetLayer( layer );
 
         dwg->SetPolyPoints( pts );
-        dwg->SetDrawCoord();
+        dwg->Rotate( { 0, 0 }, aFootprint->GetOrientation() );
+        dwg->Move( aFootprint->GetPosition() );
         dwg->GetPolyShape().Inflate( p.width.ToPcbUnits() / 2, 32,
                                      SHAPE_POLY_SET::ALLOW_ACUTE_CORNERS );
     }
@@ -2258,7 +2251,7 @@ void EAGLE_PLUGIN::packageCircle( FOOTPRINT* aFootprint, wxXmlNode* aTree ) cons
      || e.layer == EAGLE_LAYER::BRESTRICT
      || e.layer == EAGLE_LAYER::VRESTRICT )
     {
-        FP_ZONE* zone = new FP_ZONE( aFootprint );
+        ZONE* zone = new ZONE( aFootprint );
         aFootprint->Add( zone, ADD_MODE::APPEND );
 
         setKeepoutSettingsToZone( zone, e.layer );
@@ -2306,7 +2299,7 @@ void EAGLE_PLUGIN::packageCircle( FOOTPRINT* aFootprint, wxXmlNode* aTree ) cons
             return;
         }
 
-        FP_SHAPE* gr = new FP_SHAPE( aFootprint, SHAPE_T::CIRCLE );
+        PCB_SHAPE* gr = new PCB_SHAPE( aFootprint, SHAPE_T::CIRCLE );
 
         // width == 0 means filled circle
         if( width <= 0 )
@@ -2329,9 +2322,10 @@ void EAGLE_PLUGIN::packageCircle( FOOTPRINT* aFootprint, wxXmlNode* aTree ) cons
         }
 
         gr->SetLayer( layer );
-        gr->SetStart0( VECTOR2I( kicad_x( e.x ), kicad_y( e.y ) ) );
-        gr->SetEnd0( VECTOR2I( kicad_x( e.x ) + radius, kicad_y( e.y ) ) );
-        gr->SetDrawCoord();
+        gr->SetStart( VECTOR2I( kicad_x( e.x ), kicad_y( e.y ) ) );
+        gr->SetEnd( VECTOR2I( kicad_x( e.x ) + radius, kicad_y( e.y ) ) );
+        gr->Rotate( { 0, 0 }, aFootprint->GetOrientation() );
+        gr->Move( aFootprint->GetPosition() );
     }
 }
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -29,7 +29,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <footprint.h>
-#include <fp_shape.h>
+#include <pcb_shape.h>
 #include <collectors.h>
 #include <pcb_edit_frame.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
@@ -363,7 +363,7 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommi
                 else if( item->Type() == PCB_PAD_T )
                 {
                     PAD*       pad = static_cast<PAD*>( item );
-                    FOOTPRINT* fp = static_cast<FOOTPRINT*>( pad->GetParentFootprint() );
+                    FOOTPRINT* fp = pad->GetParentFootprint();
                     msg = wxString::Format( _( "%s pad %s" ), fp->GetReference(), pad->GetNumber() );
                 }
                 else

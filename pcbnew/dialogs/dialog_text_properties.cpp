@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004-2018 Jean-Pierre Charras jp.charras at wanadoo.fr
- * Copyright (C) 2010-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2010-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,6 @@
 #include <footprint.h>
 #include <string_utils.h>
 #include <pcb_text.h>
-#include <fp_text.h>
 #include <pcbnew.h>
 #include <pcb_edit_frame.h>
 #include <pcb_layer_box_selector.h>
@@ -41,13 +40,10 @@
 #include <scintilla_tricks.h>
 
 
-DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BOARD_ITEM* aItem ) :
+DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PCB_TEXT* aText ) :
         DIALOG_TEXT_PROPERTIES_BASE( aParent ),
         m_frame( aParent ),
-        m_item( aItem ),
-        m_edaText( nullptr ),
-        m_fpText( nullptr ),
-        m_pcbText( nullptr ),
+        m_item( aText ),
         m_textWidth( aParent, m_SizeXLabel, m_SizeXCtrl, m_SizeXUnits ),
         m_textHeight( aParent, m_SizeYLabel, m_SizeYCtrl, m_SizeYUnits ),
         m_thickness( aParent, m_ThicknessLabel, m_ThicknessCtrl, m_ThicknessUnits ),
@@ -74,23 +70,20 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
     m_MultiLineText->SetScrollWidth( 1 );
     m_MultiLineText->SetScrollWidthTracking( true );
 
-    if( m_item->Type() == PCB_FP_TEXT_T )
+    if( m_item->GetParentFootprint() )
     {
-        m_fpText = (FP_TEXT*) m_item;
-        m_edaText = static_cast<EDA_TEXT*>( m_fpText );
-
-        switch( m_fpText->GetType() )
+        switch( m_item->GetType() )
         {
-        case FP_TEXT::TEXT_is_REFERENCE: title = _( "Footprint Reference Properties" ); break;
-        case FP_TEXT::TEXT_is_VALUE:     title = _( "Footprint Value Properties" );     break;
-        case FP_TEXT::TEXT_is_DIVERS:    title = _( "Footprint Text Properties" );      break;
+        case PCB_TEXT::TEXT_is_REFERENCE: title = _( "Footprint Reference Properties" ); break;
+        case PCB_TEXT::TEXT_is_VALUE:     title = _( "Footprint Value Properties" );     break;
+        case PCB_TEXT::TEXT_is_DIVERS:    title = _( "Footprint Text Properties" );      break;
         }
 
-        switch( m_fpText->GetType() )
+        switch( m_item->GetType() )
         {
-        case FP_TEXT::TEXT_is_REFERENCE: m_TextLabel->SetLabel( _( "Reference:" ) ); break;
-        case FP_TEXT::TEXT_is_VALUE:     m_TextLabel->SetLabel( _( "Value:" ) );     break;
-        case FP_TEXT::TEXT_is_DIVERS:    m_TextLabel->SetLabel( _( "Text:" ) );      break;
+        case PCB_TEXT::TEXT_is_REFERENCE: m_TextLabel->SetLabel( _( "Reference:" ) ); break;
+        case PCB_TEXT::TEXT_is_VALUE:     m_TextLabel->SetLabel( _( "Value:" ) );     break;
+        case PCB_TEXT::TEXT_is_DIVERS:    m_TextLabel->SetLabel( _( "Text:" ) );      break;
         }
 
         SetInitialFocus( m_SingleLineText );
@@ -102,9 +95,6 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
     else
     {
         title = _( "Text Properties" );
-
-        m_pcbText = (PCB_TEXT*) aItem;
-        m_edaText = static_cast<EDA_TEXT*>( m_pcbText );
 
         SetInitialFocus( m_MultiLineText );
         m_SingleLineSizer->Show( false );
@@ -190,7 +180,7 @@ DIALOG_TEXT_PROPERTIES::~DIALOG_TEXT_PROPERTIES()
 }
 
 
-void PCB_BASE_EDIT_FRAME::ShowTextPropertiesDialog( BOARD_ITEM* aText )
+void PCB_BASE_EDIT_FRAME::ShowTextPropertiesDialog( PCB_TEXT* aText )
 {
     DIALOG_TEXT_PROPERTIES dlg( this, aText );
     dlg.ShowQuasiModal();
@@ -206,11 +196,11 @@ void DIALOG_TEXT_PROPERTIES::OnSetFocusText( wxFocusEvent& event )
     // Note that we can't do this on OSX as it tends to provoke Apple's
     // "[NSAlert runModal] may not be invoked inside of transaction begin/commit pair"
     // bug.  See: https://bugs.launchpad.net/kicad/+bug/1837225
-    if( m_fpText->GetType() == FP_TEXT::TEXT_is_REFERENCE )
+    if( m_item->GetType() == PCB_TEXT::TEXT_is_REFERENCE )
         m_SingleLineText->Update();
 #endif
 
-    if( m_fpText->GetType() == FP_TEXT::TEXT_is_REFERENCE )
+    if( m_item->GetType() == PCB_TEXT::TEXT_is_REFERENCE )
         KIUI::SelectReferenceNumber( static_cast<wxTextEntry*>( m_SingleLineText ) );
     else
         m_SingleLineText->SetSelection( -1, -1 );
@@ -221,41 +211,35 @@ void DIALOG_TEXT_PROPERTIES::OnSetFocusText( wxFocusEvent& event )
 
 bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
 {
+    BOARD*     board = m_frame->GetBoard();
+    FOOTPRINT* parentFP = m_item->GetParentFootprint();
+
     if( m_SingleLineText->IsShown() )
     {
-        m_SingleLineText->SetValue( m_edaText->GetText() );
+        m_SingleLineText->SetValue( m_item->GetText() );
 
-        if( m_fpText && m_fpText->GetType() == FP_TEXT::TEXT_is_REFERENCE )
+        if( m_item->GetType() == PCB_TEXT::TEXT_is_REFERENCE )
             KIUI::SelectReferenceNumber( static_cast<wxTextEntry*>( m_SingleLineText ) );
         else
             m_SingleLineText->SetSelection( -1, -1 );
     }
     else if( m_MultiLineText->IsShown() )
     {
-        BOARD*   board = m_frame->GetBoard();
-        wxString converted = board->ConvertKIIDsToCrossReferences(
-                UnescapeString( m_edaText->GetText() ) );
+        wxString msg = board->ConvertKIIDsToCrossReferences( UnescapeString( m_item->GetText() ) );
 
-        m_MultiLineText->SetValue( converted );
+        m_MultiLineText->SetValue( msg );
         m_MultiLineText->SetSelection( -1, -1 );
         m_MultiLineText->EmptyUndoBuffer();
     }
 
-    if( m_item->Type() == PCB_FP_TEXT_T && m_fpText )
+    if( parentFP )
     {
-        FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( m_fpText->GetParent() );
-        wxString   msg;
-
-        if( footprint )
-        {
-            msg.Printf( _( "Footprint %s (%s), %s, rotated %.1f deg"),
-                        footprint->GetReference(),
-                        footprint->GetValue(),
-                        footprint->IsFlipped() ? _( "back side (mirrored)" ) : _( "front side" ),
-                        footprint->GetOrientation().AsDegrees() );
-        }
-
-        m_statusLine->SetLabel( msg );
+        m_statusLine->SetLabel( wxString::Format( _( "Footprint %s (%s), %s, rotated %.1f deg"),
+                                                  parentFP->GetReference(),
+                                                  parentFP->GetValue(),
+                                                  parentFP->IsFlipped() ? _( "back side (mirrored)" )
+                                                                        : _( "front side" ),
+                                                  parentFP->GetOrientation().AsDegrees() ) );
     }
     else
     {
@@ -267,39 +251,39 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
     m_LayerSelectionCtrl->SetLayerSelection( m_item->GetLayer() );
     m_cbKnockout->SetValue( m_item->IsKnockout() );
 
-    m_fontCtrl->SetFontSelection( m_edaText->GetFont() );
+    m_fontCtrl->SetFontSelection( m_item->GetFont() );
 
-    m_textWidth.SetValue( m_edaText->GetTextSize().x );
-    m_textHeight.SetValue( m_edaText->GetTextSize().y );
-    m_thickness.SetValue( m_edaText->GetTextThickness() );
-    m_posX.SetValue( m_edaText->GetTextPos().x );
-    m_posY.SetValue( m_edaText->GetTextPos().y );
+    m_textWidth.SetValue( m_item->GetTextSize().x );
+    m_textHeight.SetValue( m_item->GetTextSize().y );
+    m_thickness.SetValue( m_item->GetTextThickness() );
+    m_posX.SetValue( m_item->GetFPRelativePosition().x );
+    m_posY.SetValue( m_item->GetFPRelativePosition().y );
 
-    m_Visible->SetValue( m_edaText->IsVisible() );
+    m_Visible->SetValue( m_item->IsVisible() );
 
-    if( m_fpText )
-        m_KeepUpright->SetValue( m_fpText->IsKeepUpright() );
+    if( parentFP )
+        m_KeepUpright->SetValue( m_item->IsKeepUpright() );
 
-    m_bold->Check( m_edaText->IsBold() );
-    m_italic->Check( m_edaText->IsItalic() );
+    m_bold->Check( m_item->IsBold() );
+    m_italic->Check( m_item->IsItalic() );
 
-    switch ( m_edaText->GetHorizJustify() )
+    switch ( m_item->GetHorizJustify() )
     {
     case GR_TEXT_H_ALIGN_LEFT:   m_alignLeft->Check( true );   break;
     case GR_TEXT_H_ALIGN_CENTER: m_alignCenter->Check( true ); break;
     case GR_TEXT_H_ALIGN_RIGHT:  m_alignRight->Check( true );  break;
     }
 
-    switch ( m_edaText->GetVertJustify() )
+    switch ( m_item->GetVertJustify() )
     {
     case GR_TEXT_V_ALIGN_BOTTOM: m_valignBottom->Check( true ); break;
     case GR_TEXT_V_ALIGN_CENTER: m_valignCenter->Check( true ); break;
     case GR_TEXT_V_ALIGN_TOP:    m_valignTop->Check( true );    break;
     }
 
-    m_mirrored->Check( m_edaText->IsMirrored() );
+    m_mirrored->Check( m_item->IsMirrored() );
 
-    EDA_ANGLE orientation = m_edaText->GetTextAngle();
+    EDA_ANGLE orientation = m_item->GetTextAngle();
     m_orientation.SetAngleValue( orientation.Normalize180() );
 
     return DIALOG_TEXT_PROPERTIES_BASE::TransferDataToWindow();
@@ -395,7 +379,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     if( m_SingleLineText->IsShown() )
     {
         if( !m_SingleLineText->GetValue().IsEmpty() )
-            m_edaText->SetText( m_SingleLineText->GetValue() );
+            m_item->SetText( m_SingleLineText->GetValue() );
     }
     else if( m_MultiLineText->IsShown() )
     {
@@ -413,7 +397,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
             // drawing routines so strip the \r char.
             txt.Replace( wxT( "\r" ), wxT( "" ) );
 #endif
-            m_edaText->SetText( EscapeString( txt, CTX_QUOTED_STR ) );
+            m_item->SetText( EscapeString( txt, CTX_QUOTED_STR ) );
         }
     }
 
@@ -424,52 +408,49 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
 
     if( m_fontCtrl->HaveFontSelection() )
     {
-        m_edaText->SetFont( m_fontCtrl->GetFontSelection( m_bold->IsChecked(),
-                                                          m_italic->IsChecked() ) );
+        m_item->SetFont( m_fontCtrl->GetFontSelection( m_bold->IsChecked(),
+                                                       m_italic->IsChecked() ) );
     }
 
-    m_edaText->SetTextSize( VECTOR2I( m_textWidth.GetValue(), m_textHeight.GetValue() ) );
-    m_edaText->SetTextThickness( m_thickness.GetValue() );
-    m_edaText->SetTextPos( VECTOR2I( m_posX.GetValue(), m_posY.GetValue() ) );
-
-    if( m_fpText )
-        m_fpText->SetLocalCoord();
+    m_item->SetTextSize( VECTOR2I( m_textWidth.GetValue(), m_textHeight.GetValue() ) );
+    m_item->SetTextThickness( m_thickness.GetValue() );
+    m_item->SetFPRelativePosition( VECTOR2I( m_posX.GetValue(), m_posY.GetValue() ) );
 
     // Test for acceptable values for thickness and size and clamp if fails
-    int maxPenWidth = Clamp_Text_PenSize( m_edaText->GetTextThickness(), m_edaText->GetTextSize() );
+    int maxPenWidth = Clamp_Text_PenSize( m_item->GetTextThickness(), m_item->GetTextSize() );
 
-    if( m_edaText->GetTextThickness() > maxPenWidth )
+    if( m_item->GetTextThickness() > maxPenWidth )
     {
         DisplayError( this, _( "The text thickness is too large for the text size.\n"
                                "It will be clamped." ) );
-        m_edaText->SetTextThickness( maxPenWidth );
+        m_item->SetTextThickness( maxPenWidth );
     }
 
-    m_edaText->SetTextAngle( m_orientation.GetAngleValue().Normalize() );
+    m_item->SetTextAngle( m_orientation.GetAngleValue().Normalize() );
 
-    m_edaText->SetVisible( m_Visible->GetValue() );
+    m_item->SetVisible( m_Visible->GetValue() );
 
-    if( m_fpText )
-        m_fpText->SetKeepUpright( m_KeepUpright->GetValue() );
+    if( m_KeepUpright->IsShown() )
+        m_item->SetKeepUpright( m_KeepUpright->GetValue() );
 
-    m_edaText->SetBold( m_bold->IsChecked() );
-    m_edaText->SetItalic( m_italic->IsChecked() );
+    m_item->SetBold( m_bold->IsChecked() );
+    m_item->SetItalic( m_italic->IsChecked() );
 
     if( m_alignLeft->IsChecked() )
-        m_edaText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        m_item->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
     else if( m_alignCenter->IsChecked() )
-        m_edaText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+        m_item->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
     else
-        m_edaText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+        m_item->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
 
     if( m_valignBottom->IsChecked() )
-        m_edaText->SetVertJustify ( GR_TEXT_V_ALIGN_BOTTOM );
+        m_item->SetVertJustify ( GR_TEXT_V_ALIGN_BOTTOM );
     else if( m_valignCenter->IsChecked() )
-        m_edaText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+        m_item->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
     else
-        m_edaText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+        m_item->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
 
-    m_edaText->SetMirrored( m_mirrored->IsChecked() );
+    m_item->SetMirrored( m_mirrored->IsChecked() );
 
     if( pushCommit )
         commit.Push( _( "Change text properties" ) );

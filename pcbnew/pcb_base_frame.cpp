@@ -447,10 +447,6 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
             case PCB_SHAPE_T:
             case PCB_TEXT_T:
             case PCB_TEXTBOX_T:
-            case PCB_FP_TEXT_T:
-            case PCB_FP_TEXTBOX_T:
-            case PCB_FP_SHAPE_T:
-            case PCB_FP_ZONE_T:
             case PCB_TRACE_T:
             case PCB_ARC_T:
             case PCB_DIM_ALIGNED_T:
@@ -458,11 +454,6 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
             case PCB_DIM_CENTER_T:
             case PCB_DIM_RADIAL_T:
             case PCB_DIM_ORTHOGONAL_T:
-            case PCB_FP_DIM_ALIGNED_T:
-            case PCB_FP_DIM_LEADER_T:
-            case PCB_FP_DIM_CENTER_T:
-            case PCB_FP_DIM_RADIAL_T:
-            case PCB_FP_DIM_ORTHOGONAL_T:
                 item->TransformShapeToPolygon( itemPoly, aLayer, 0, pcbIUScale.mmToIU( 0.1 ),
                                                ERROR_INSIDE );
                 break;

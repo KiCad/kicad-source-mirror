@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <pcad/pcb_pad.h>
-#include <pcad/pcb_pad_shape.h>
+#include <pcad/pcad_pad.h>
+#include <pcad/pcad_pad_shape.h>
 
 #include <board.h>
 #include <footprint.h>
@@ -38,8 +38,8 @@
 namespace PCAD2KICAD {
 
 
-PCB_PAD::PCB_PAD( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
-        PCB_COMPONENT( aCallbacks, aBoard )
+PCAD_PAD::PCAD_PAD( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
+        PCAD_PCB_COMPONENT( aCallbacks, aBoard )
 {
     m_objType       = wxT( 'P' );
     m_Number        = 0;
@@ -49,7 +49,7 @@ PCB_PAD::PCB_PAD( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
 }
 
 
-PCB_PAD::~PCB_PAD()
+PCAD_PAD::~PCAD_PAD()
 {
     int i;
 
@@ -58,14 +58,14 @@ PCB_PAD::~PCB_PAD()
 }
 
 
-void PCB_PAD::Parse( XNODE* aNode, const wxString& aDefaultUnits,
+void PCAD_PAD::Parse( XNODE* aNode, const wxString& aDefaultUnits,
                      const wxString& aActualConversion )
 {
     XNODE*          lNode;
     XNODE*          cNode;
     long            num;
     wxString        propValue, str, emsg;
-    PCB_PAD_SHAPE*  padShape;
+    PCAD_PAD_SHAPE*  padShape;
 
     m_rotation = ANGLE_0;
     lNode = FindNode( aNode, wxT( "padNum" ) );
@@ -166,7 +166,7 @@ void PCB_PAD::Parse( XNODE* aNode, const wxString& aDefaultUnits,
             // we do not support pads on "Plane", "NonSignal" , "Signal" ... layerr
             if( FindNode( cNode, wxT( "layerNumRef" ) ) )
             {
-                padShape = new PCB_PAD_SHAPE( m_callbacks, m_board );
+                padShape = new PCAD_PAD_SHAPE( m_callbacks, m_board );
                 padShape->Parse( cNode, aDefaultUnits, aActualConversion );
                 m_Shapes.Add( padShape );
             }
@@ -177,11 +177,11 @@ void PCB_PAD::Parse( XNODE* aNode, const wxString& aDefaultUnits,
 }
 
 
-void PCB_PAD::Flip()
+void PCAD_PAD::Flip()
 {
     int i;
 
-    PCB_COMPONENT::Flip();
+    PCAD_PCB_COMPONENT::Flip();
 
     if( m_objType == wxT( 'P' ) )
         m_rotation = -m_rotation;
@@ -191,10 +191,10 @@ void PCB_PAD::Flip()
 }
 
 
-void PCB_PAD::AddToFootprint( FOOTPRINT* aFootprint, const EDA_ANGLE& aRotation,
+void PCAD_PAD::AddToFootprint( FOOTPRINT* aFootprint, const EDA_ANGLE& aRotation,
                               bool aEncapsulatedPad )
 {
-    PCB_PAD_SHAPE*  padShape;
+    PCAD_PAD_SHAPE*  padShape;
     wxString        padShapeName = wxT( "Ellipse" );
     PAD_ATTRIB      padType;
     int             i;
@@ -324,9 +324,9 @@ void PCB_PAD::AddToFootprint( FOOTPRINT* aFootprint, const EDA_ANGLE& aRotation,
 }
 
 
-void PCB_PAD::AddToBoard()
+void PCAD_PAD::AddToBoard( FOOTPRINT* aFootprint )
 {
-    PCB_PAD_SHAPE*  padShape;
+    PCAD_PAD_SHAPE*  padShape;
     int             i;
     int             width = 0;
     int             height = 0;
@@ -373,13 +373,16 @@ void PCB_PAD::AddToBoard()
     }
     else // pad
     {
-        FOOTPRINT* footprint = new FOOTPRINT( m_board );
-        m_board->Add( footprint, ADD_MODE::APPEND );
+        if( !aFootprint )
+        {
+            aFootprint = new FOOTPRINT( m_board );
+            m_board->Add( aFootprint, ADD_MODE::APPEND );
+            aFootprint->SetPosition( VECTOR2I( m_positionX, m_positionY ) );
+        }
 
         m_name.text = m_defaultPinDes;
 
-        footprint->SetPosition( VECTOR2I( m_positionX, m_positionY ) );
-        AddToFootprint( footprint, ANGLE_0, true );
+        AddToFootprint( aFootprint, ANGLE_0, true );
     }
 }
 

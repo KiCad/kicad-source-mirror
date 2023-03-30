@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +31,7 @@
 #include <board_design_settings.h>
 #include <board_item.h>
 #include <footprint.h>
-#include <fp_shape.h>
+#include <pcb_shape.h>
 #include <pad.h>
 #include <pcbnew_settings.h>
 #include <board_commit.h>
@@ -580,6 +580,8 @@ int PAD_TOOL::EditPad( const TOOL_EVENT& aEvent )
     if( !m_isFootprintEditor )
         return 0;
 
+    Activate();
+
     PCB_DISPLAY_OPTIONS  opts = frame()->GetDisplayOptions();
     PCB_RENDER_SETTINGS* settings = static_cast<PCB_RENDER_SETTINGS*>( view()->GetPainter()->GetSettings() );
     WX_INFOBAR*          infoBar = frame()->GetInfoBar();
@@ -681,7 +683,7 @@ PCB_LAYER_ID PAD_TOOL::explodePad( PAD* aPad )
 
         for( const std::shared_ptr<PCB_SHAPE>& primitive : aPad->GetPrimitives() )
         {
-            FP_SHAPE* shape = new FP_SHAPE( board()->GetFirstFootprint() );
+            PCB_SHAPE* shape = new PCB_SHAPE( board()->GetFirstFootprint() );
 
             shape->SetShape( primitive->GetShape() );
             shape->SetIsAnnotationProxy( primitive->IsAnnotationProxy());
@@ -718,7 +720,6 @@ PCB_LAYER_ID PAD_TOOL::explodePad( PAD* aPad )
                 UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
             }
 
-            shape->SetLocalCoord();
             shape->Move( aPad->GetPosition() );
             shape->Rotate( aPad->GetPosition(), aPad->GetOrientation() );
             shape->SetLayer( layer );
@@ -738,10 +739,10 @@ PCB_LAYER_ID PAD_TOOL::explodePad( PAD* aPad )
 }
 
 
-std::vector<FP_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun, BOARD_COMMIT& aCommit )
+std::vector<PCB_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun, BOARD_COMMIT& aCommit )
 {
     int        maxError = board()->GetDesignSettings().m_MaxError;
-    FOOTPRINT* footprint = static_cast<FOOTPRINT*>( aPad->GetParentFootprint() );
+    FOOTPRINT* footprint = aPad->GetParentFootprint();
 
     // Don't leave an object in the point editor that might no longer exist after
     // recombining the pad.
@@ -751,14 +752,14 @@ std::vector<FP_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun, BOARD_
         item->ClearFlags( SKIP_STRUCT );
 
     auto findNext =
-            [&]( PCB_LAYER_ID aLayer ) -> FP_SHAPE*
+            [&]( PCB_LAYER_ID aLayer ) -> PCB_SHAPE*
             {
                 SHAPE_POLY_SET padPoly;
                 aPad->TransformShapeToPolygon( padPoly, aLayer, 0, maxError, ERROR_INSIDE );
 
                 for( BOARD_ITEM* item : footprint->GraphicalItems() )
                 {
-                    FP_SHAPE* shape = dynamic_cast<FP_SHAPE*>( item );
+                    PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item );
 
                     if( !shape || ( shape->GetFlags() & SKIP_STRUCT ) )
                         continue;
@@ -767,27 +768,27 @@ std::vector<FP_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun, BOARD_
                         continue;
 
                     if( shape->IsAnnotationProxy() )    // Pad number (and net name) box
-                        return (FP_SHAPE*) item;
+                        return shape;
 
                     SHAPE_POLY_SET drawPoly;
                     shape->TransformShapeToPolygon( drawPoly, aLayer, 0, maxError, ERROR_INSIDE );
                     drawPoly.BooleanIntersection( padPoly, SHAPE_POLY_SET::PM_FAST );
 
                     if( !drawPoly.IsEmpty() )
-                        return (FP_SHAPE*) item;
+                        return shape;
                 }
 
                 return nullptr;
             };
 
     auto findMatching =
-            [&]( FP_SHAPE* aShape ) -> std::vector<FP_SHAPE*>
+            [&]( PCB_SHAPE* aShape ) -> std::vector<PCB_SHAPE*>
             {
-                std::vector<FP_SHAPE*> matching;
+                std::vector<PCB_SHAPE*> matching;
 
                 for( BOARD_ITEM* item : footprint->GraphicalItems() )
                 {
-                    FP_SHAPE* other = dynamic_cast<FP_SHAPE*>( item );
+                    PCB_SHAPE* other = dynamic_cast<PCB_SHAPE*>( item );
 
                     if( !other || ( other->GetFlags() & SKIP_STRUCT ) )
                         continue;
@@ -802,8 +803,8 @@ std::vector<FP_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun, BOARD_
                 return matching;
             };
 
-    PCB_LAYER_ID           layer;
-    std::vector<FP_SHAPE*> mergedShapes;
+    PCB_LAYER_ID            layer;
+    std::vector<PCB_SHAPE*> mergedShapes;
 
     if( aPad->IsOnLayer( F_Cu ) )
         layer = F_Cu;
@@ -812,7 +813,7 @@ std::vector<FP_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun, BOARD_
     else
         layer = *aPad->GetLayerSet().UIOrder();
 
-    while( FP_SHAPE* fpShape = findNext( layer ) )
+    while( PCB_SHAPE* fpShape = findNext( layer ) )
     {
         // We've found an intersecting item to combine.
         //
@@ -861,53 +862,52 @@ std::vector<FP_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun, BOARD_
 
         if( !aIsDryRun )
         {
-            PCB_SHAPE* pcbShape = new PCB_SHAPE;
+            PCB_SHAPE* primitive = new PCB_SHAPE;
 
-            pcbShape->SetShape( fpShape->GetShape() );
-            pcbShape->SetFilled( fpShape->IsFilled() );
-            pcbShape->SetStroke( fpShape->GetStroke() );
+            primitive->SetShape( fpShape->GetShape() );
+            primitive->SetFilled( fpShape->IsFilled() );
+            primitive->SetStroke( fpShape->GetStroke() );
 
-            switch( pcbShape->GetShape() )
+            switch( primitive->GetShape() )
             {
             case SHAPE_T::SEGMENT:
             case SHAPE_T::RECT:
             case SHAPE_T::CIRCLE:
-                pcbShape->SetStart( fpShape->GetStart() );
-                pcbShape->SetEnd( fpShape->GetEnd() );
+                primitive->SetStart( fpShape->GetStart() );
+                primitive->SetEnd( fpShape->GetEnd() );
                 break;
 
             case SHAPE_T::ARC:
-                pcbShape->SetStart( fpShape->GetStart() );
-                pcbShape->SetEnd( fpShape->GetEnd() );
-                pcbShape->SetCenter( fpShape->GetCenter() );
+                primitive->SetStart( fpShape->GetStart() );
+                primitive->SetEnd( fpShape->GetEnd() );
+                primitive->SetCenter( fpShape->GetCenter() );
                 break;
 
             case SHAPE_T::BEZIER:
-                pcbShape->SetStart( fpShape->GetStart() );
-                pcbShape->SetEnd( fpShape->GetEnd() );
-                pcbShape->SetBezierC1( fpShape->GetBezierC1() );
-                pcbShape->SetBezierC2( fpShape->GetBezierC2() );
+                primitive->SetStart( fpShape->GetStart() );
+                primitive->SetEnd( fpShape->GetEnd() );
+                primitive->SetBezierC1( fpShape->GetBezierC1() );
+                primitive->SetBezierC2( fpShape->GetBezierC2() );
                 break;
 
-            case SHAPE_T::POLY:
-                pcbShape->SetPolyShape( fpShape->GetPolyShape() );
+            case SHAPE_T::POLY: primitive->SetPolyShape( fpShape->GetPolyShape() );
                 break;
 
             default:
-                UNIMPLEMENTED_FOR( pcbShape->SHAPE_T_asString() );
+                UNIMPLEMENTED_FOR( primitive->SHAPE_T_asString() );
             }
 
-            pcbShape->Move( - aPad->GetPosition() );
-            pcbShape->Rotate( VECTOR2I( 0, 0 ), - aPad->GetOrientation() );
-            pcbShape->SetIsAnnotationProxy( fpShape->IsAnnotationProxy());
-            aPad->AddPrimitive( pcbShape );
+            primitive->Move( - aPad->GetPosition() );
+            primitive->Rotate( VECTOR2I( 0, 0 ), - aPad->GetOrientation() );
+            primitive->SetIsAnnotationProxy( fpShape->IsAnnotationProxy());
+            aPad->AddPrimitive( primitive );
 
             aCommit.Remove( fpShape );
         }
 
         // See if there are other shapes that match and mark them for delete.  (KiCad won't
         // produce these, but old footprints from other vendors have them.)
-        for( FP_SHAPE* other : findMatching( fpShape ) )
+        for( PCB_SHAPE* other : findMatching( fpShape ) )
         {
             other->SetFlags( SKIP_STRUCT );
             mergedShapes.push_back( other );

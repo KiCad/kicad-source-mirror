@@ -24,8 +24,6 @@
 #include <macros.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
-#include <fp_text.h>
-#include <fp_textbox.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
@@ -255,8 +253,7 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                 return true;
             };
 
-    static const std::vector<KICAD_T> itemTypes = { PCB_TEXT_T, PCB_FP_TEXT_T,
-                                                    PCB_TEXTBOX_T, PCB_FP_TEXTBOX_T };
+    static const std::vector<KICAD_T> itemTypes = { PCB_TEXT_T, PCB_TEXTBOX_T };
 
     forEachGeometryItem( itemTypes, LSET::AllLayersMask(),
             [&]( BOARD_ITEM* item ) -> bool
@@ -276,11 +273,9 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
 
                 switch( item->Type() )
                 {
-                case PCB_TEXT_T:       text = static_cast<PCB_TEXT*>( item );    break;
-                case PCB_TEXTBOX_T:    text = static_cast<PCB_TEXTBOX*>( item ); break;
-                case PCB_FP_TEXT_T:    text = static_cast<FP_TEXT*>( item );     break;
-                case PCB_FP_TEXTBOX_T: text = static_cast<FP_TEXTBOX*>( item );  break;
-                default:               UNIMPLEMENTED_FOR( item->GetClass() );    break;
+                case PCB_TEXT_T:    text = static_cast<PCB_TEXT*>( item );    break;
+                case PCB_TEXTBOX_T: text = static_cast<PCB_TEXTBOX*>( item ); break;
+                default:            UNIMPLEMENTED_FOR( item->GetClass() );    break;
                 }
 
                 if( !text || !text->IsVisible() )

@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -31,11 +31,10 @@
 
 #include <layer_ids.h>
 
-class BOARD_ITEM;
 class BOARD;
 class FOOTPRINT;
 class PCB_SHAPE;
-class EDA_TEXT;
+class PCB_TEXT;
 
 class GRAPHICS_IMPORTER_PCBNEW : public GRAPHICS_IMPORTER
 {
@@ -97,9 +96,8 @@ protected:
     ///< Create an object representing a graphical shape.
     virtual std::unique_ptr<PCB_SHAPE> createDrawing() = 0;
 
-    ///< Create an object representing a text. Both pointers point to different parts of the
-    ///< same object, the EDA_TEXT pointer is simply for convenience.
-    virtual std::pair<std::unique_ptr<BOARD_ITEM>, EDA_TEXT*> createText() = 0;
+    ///< Create an object representing a text.
+    virtual std::unique_ptr<PCB_TEXT> createText() = 0;
 
     ///< Target layer for the imported shapes.
     PCB_LAYER_ID m_layer;
@@ -116,7 +114,7 @@ public:
 
 protected:
     std::unique_ptr<PCB_SHAPE> createDrawing() override;
-    std::pair<std::unique_ptr<BOARD_ITEM>, EDA_TEXT*> createText() override;
+    std::unique_ptr<PCB_TEXT> createText() override;
 
     BOARD* m_board;
 };
@@ -132,7 +130,7 @@ public:
 
 protected:
     std::unique_ptr<PCB_SHAPE> createDrawing() override;
-    std::pair<std::unique_ptr<BOARD_ITEM>, EDA_TEXT*> createText() override;
+    std::unique_ptr<PCB_TEXT> createText() override;
 
     FOOTPRINT* m_footprint;
 };

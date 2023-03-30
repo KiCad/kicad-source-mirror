@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2008 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -230,7 +230,7 @@ public:
 
     /**
      * A scan list for all primary board items, omitting items which are subordinate to
-     * a FOOTPRINT, such as PAD and FP_TEXT.
+     * a FOOTPRINT, such as PAD and PCB_TEXT.
      */
     static const std::vector<KICAD_T> BoardLevelItems;
 

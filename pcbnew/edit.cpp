@@ -35,6 +35,8 @@
 #include <zone.h>
 #include <pcb_target.h>
 #include <pcb_dimension.h>
+#include <pcb_textbox.h>
+#include <pcb_shape.h>
 #include <dialog_drc.h>
 #include <connectivity/connectivity_data.h>
 #include <tool/tool_manager.h>
@@ -124,13 +126,11 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
         break;
 
     case PCB_TEXT_T:
-    case PCB_FP_TEXT_T:
-        ShowTextPropertiesDialog( aItem );
+        ShowTextPropertiesDialog( static_cast<PCB_TEXT*>( aItem ) );
         break;
 
     case PCB_TEXTBOX_T:
-    case PCB_FP_TEXTBOX_T:
-        ShowTextBoxPropertiesDialog( aItem );
+        ShowTextBoxPropertiesDialog( static_cast<PCB_TEXTBOX*>( aItem ) );
         break;
 
     case PCB_PAD_T:
@@ -157,7 +157,7 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
     }
 
     case PCB_SHAPE_T:
-        ShowGraphicItemPropertiesDialog( aItem );
+        ShowGraphicItemPropertiesDialog( static_cast<PCB_SHAPE*>( aItem ) );
         break;
 
     case PCB_ZONE_T:

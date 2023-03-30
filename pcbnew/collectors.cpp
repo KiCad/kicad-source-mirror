@@ -26,7 +26,6 @@
 #include <board_item.h>             // class BOARD_ITEM
 
 #include <footprint.h>
-#include <fp_shape.h>
 #include <pad.h>
 #include <pcb_track.h>
 #include <pcb_marker.h>
@@ -54,8 +53,6 @@ const std::vector<KICAD_T> GENERAL_COLLECTOR::AllBoardItems = {
     PCB_TRACE_T,            // in m_tracks
     PCB_ARC_T,              // in m_tracks
     PCB_PAD_T,              // in footprints
-    PCB_FP_TEXT_T,          // in footprints
-    PCB_FP_TEXTBOX_T,       // in footprints
     PCB_FOOTPRINT_T,        // in m_footprints
     PCB_GROUP_T,            // in m_groups
     PCB_ZONE_T              // in m_zones
@@ -98,16 +95,16 @@ const std::vector<KICAD_T> GENERAL_COLLECTOR::PadsOrTracks = {
 
 const std::vector<KICAD_T> GENERAL_COLLECTOR::FootprintItems = {
     PCB_MARKER_T,
-    PCB_FP_TEXT_T,
-    PCB_FP_TEXTBOX_T,
-    PCB_FP_SHAPE_T,
-    PCB_FP_DIM_ALIGNED_T,
-    PCB_FP_DIM_ORTHOGONAL_T,
-    PCB_FP_DIM_CENTER_T,
-    PCB_FP_DIM_RADIAL_T,
-    PCB_FP_DIM_LEADER_T,
+    PCB_TEXT_T,
+    PCB_TEXTBOX_T,
+    PCB_SHAPE_T,
+    PCB_DIM_ALIGNED_T,
+    PCB_DIM_ORTHOGONAL_T,
+    PCB_DIM_CENTER_T,
+    PCB_DIM_RADIAL_T,
+    PCB_DIM_LEADER_T,
     PCB_PAD_T,
-    PCB_FP_ZONE_T,
+    PCB_ZONE_T,
     PCB_GROUP_T,
     PCB_BITMAP_T
     };
@@ -129,23 +126,12 @@ const std::vector<KICAD_T> GENERAL_COLLECTOR::LockableItems = {
 };
 
 
-const std::vector<KICAD_T> GENERAL_COLLECTOR::Zones = {
-    PCB_ZONE_T,
-    PCB_FP_ZONE_T
-};
-
-
 const std::vector<KICAD_T> GENERAL_COLLECTOR::Dimensions = {
     PCB_DIM_ALIGNED_T,
     PCB_DIM_LEADER_T,
     PCB_DIM_ORTHOGONAL_T,
     PCB_DIM_CENTER_T,
-    PCB_DIM_RADIAL_T,
-    PCB_FP_DIM_ALIGNED_T,
-    PCB_FP_DIM_LEADER_T,
-    PCB_FP_DIM_ORTHOGONAL_T,
-    PCB_FP_DIM_CENTER_T,
-    PCB_FP_DIM_RADIAL_T
+    PCB_DIM_RADIAL_T
 };
 
 
@@ -159,8 +145,8 @@ const std::vector<KICAD_T> GENERAL_COLLECTOR::DraggableItems = {
 
 INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 {
-    BOARD_ITEM*         item        = (BOARD_ITEM*) testItem;
-    FOOTPRINT*          footprint   = nullptr;
+    BOARD_ITEM*         item        = static_cast<BOARD_ITEM*>( testItem );
+    FOOTPRINT*          footprint   = item->GetParentFootprint();
     PCB_GROUP*          group       = nullptr;
     PAD*                pad         = nullptr;
     bool                pad_through = false;
@@ -208,19 +194,6 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         breakhere++;
         break;
 
-    case PCB_FP_TEXT_T:
-        {
-            FP_TEXT* fpText = (FP_TEXT*) item;
-
-            if( fpText->GetText() == wxT( "10uH" ) )
-                breakhere++;
-        }
-        break;
-
-    case PCB_FP_TEXTBOX_T:
-        breakhere++;
-        break;
-
     case PCB_FOOTPRINT_T:
         {
             FOOTPRINT* footprint = (FOOTPRINT*) item;
@@ -259,10 +232,6 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
             // by leaving footprint==NULL, but having pad != null
             pad_through = true;
         }
-        else  // smd, so use pads test after footprint test
-        {
-            footprint = static_cast<FOOTPRINT*>( item->GetParent() );
-        }
 
         break;
 
@@ -277,30 +246,13 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 
         break;
 
-    case PCB_FP_ZONE_T:
-        footprint = static_cast<FOOTPRINT*>( item->GetParent() );
-
-        // Fallthrough to get the zone as well
-        KI_FALLTHROUGH;
-
     case PCB_ZONE_T:
         zone = static_cast<ZONE*>( item );
         break;
 
-    case PCB_TEXT_T:
     case PCB_TEXTBOX_T:
     case PCB_SHAPE_T:
         break;
-
-    case PCB_FP_DIM_ALIGNED_T:
-    case PCB_FP_DIM_CENTER_T:
-    case PCB_FP_DIM_RADIAL_T:
-    case PCB_FP_DIM_ORTHOGONAL_T:
-    case PCB_FP_DIM_LEADER_T:
-        footprint = static_cast<FOOTPRINT*>( item->GetParent() );
-
-        // Fallthrough to get the zone as well
-        KI_FALLTHROUGH;
 
     case PCB_DIM_ALIGNED_T:
     case PCB_DIM_CENTER_T:
@@ -313,63 +265,51 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
     case PCB_TARGET_T:
         break;
 
-    case PCB_FP_TEXT_T:
-    case PCB_FP_TEXTBOX_T:
-    {
-        PCB_LAYER_ID layer = item->GetLayer();
-
-        if( m_Guide->IgnoreHiddenFPText() && item->Type() == PCB_FP_TEXT_T )
+    case PCB_TEXT_T:
+        if( item->GetParentFootprint() )
         {
-            FP_TEXT *text = static_cast<FP_TEXT*>( item );
+            PCB_TEXT*    text = static_cast<PCB_TEXT*>( item );
+            PCB_LAYER_ID layer = item->GetLayer();
 
-            if( !text->IsVisible() )
+            if( m_Guide->IgnoreHiddenFPText() )
+            {
+                if( !text->IsVisible() )
+                    return INSPECT_RESULT::CONTINUE;
+            }
+
+            if( m_Guide->IgnoreFPTextOnBack() && IsBackLayer( layer ) )
                 return INSPECT_RESULT::CONTINUE;
+
+            if( m_Guide->IgnoreFPTextOnFront() && IsFrontLayer( layer ) )
+                return INSPECT_RESULT::CONTINUE;
+
+            /*
+             * The three text types have different criteria: reference and value have their own
+             * ignore flags; user text instead follows their layer visibility. Checking this here
+             * is simpler than later (when layer visibility is checked for other entities)
+             */
+            switch( text->GetType() )
+            {
+            case PCB_TEXT::TEXT_is_REFERENCE:
+                if( m_Guide->IgnoreFPReferences() )
+                    return INSPECT_RESULT::CONTINUE;
+
+                break;
+
+            case PCB_TEXT::TEXT_is_VALUE:
+                if( m_Guide->IgnoreFPValues() )
+                    return INSPECT_RESULT::CONTINUE;
+
+                break;
+
+            case PCB_TEXT::TEXT_is_DIVERS:
+                if( !m_Guide->IsLayerVisible( layer ) )
+                    return INSPECT_RESULT::CONTINUE;
+
+                break;
+            }
         }
 
-        if( m_Guide->IgnoreFPTextOnBack() && IsBackLayer( layer ) )
-            return INSPECT_RESULT::CONTINUE;
-
-        if( m_Guide->IgnoreFPTextOnFront() && IsFrontLayer( layer ) )
-            return INSPECT_RESULT::CONTINUE;
-
-        /*
-         * The three text types have different criteria: reference and value have their own
-         * ignore flags; user text instead follows their layer visibility. Checking this here
-         * is simpler than later (when layer visibility is checked for other entities)
-         */
-
-        FP_TEXT::TEXT_TYPE textType = FP_TEXT::TEXT_is_DIVERS;
-
-        if( item->Type() == PCB_FP_TEXT_T )
-            textType = static_cast<FP_TEXT*>( item )->GetType();
-
-        switch( textType )
-        {
-        case FP_TEXT::TEXT_is_REFERENCE:
-            if( m_Guide->IgnoreFPReferences() )
-                return INSPECT_RESULT::CONTINUE;
-
-            break;
-
-        case FP_TEXT::TEXT_is_VALUE:
-            if( m_Guide->IgnoreFPValues() )
-                return INSPECT_RESULT::CONTINUE;
-
-            break;
-
-        case FP_TEXT::TEXT_is_DIVERS:
-            if( !m_Guide->IsLayerVisible( layer ) )
-                return INSPECT_RESULT::CONTINUE;
-
-            break;
-        }
-
-        // Extract the footprint since it could be hidden
-        footprint = static_cast<FOOTPRINT*>( item->GetParent() );
-        break;
-    }
-
-    case PCB_FP_SHAPE_T:
         break;
 
     case PCB_FOOTPRINT_T:
@@ -390,7 +330,7 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 
     // common tests:
 
-    if( footprint )    // true from case PCB_PAD_T, PCB_FP_TEXT_T, or PCB_FOOTPRINT_T
+    if( footprint )
     {
         if( m_Guide->IgnoreFootprintsOnBack() && ( footprint->GetLayer() == B_Cu ) )
             return INSPECT_RESULT::CONTINUE;

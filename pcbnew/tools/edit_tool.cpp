@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -29,8 +29,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <footprint.h>
-#include <fp_shape.h>
-#include <fp_textbox.h>
+#include <pcb_shape.h>
 #include <pcb_group.h>
 #include <pcb_target.h>
 #include <pcb_text.h>
@@ -1114,12 +1113,7 @@ int EDIT_TOOL::FilletLines( const TOOL_EVENT& aEvent )
 
         for( size_t jj = 1; jj < pts.size(); ++jj )
         {
-            PCB_SHAPE *line;
-
-            if( m_isFootprintEditor )
-                line = new FP_SHAPE( static_cast<FOOTPRINT*>( frame()->GetModel() ), SHAPE_T::SEGMENT );
-            else
-                line = new PCB_SHAPE( frame()->GetModel(), SHAPE_T::SEGMENT );
+            PCB_SHAPE *line = new PCB_SHAPE( frame()->GetModel(), SHAPE_T::SEGMENT );
 
             line->SetStart( pts[jj - 1] );
             line->SetEnd( pts[jj] );
@@ -1130,12 +1124,7 @@ int EDIT_TOOL::FilletLines( const TOOL_EVENT& aEvent )
 
         if( pts.size() > 1 )
         {
-            PCB_SHAPE *line;
-
-            if( m_isFootprintEditor )
-                line = new FP_SHAPE( static_cast<FOOTPRINT*>( frame()->GetModel() ), SHAPE_T::SEGMENT );
-            else
-                line = new PCB_SHAPE( frame()->GetModel(), SHAPE_T::SEGMENT );
+            PCB_SHAPE *line = new PCB_SHAPE( frame()->GetModel(), SHAPE_T::SEGMENT );
 
             line->SetStart( pts.back() );
             line->SetEnd( pts.front() );
@@ -1251,12 +1240,7 @@ int EDIT_TOOL::FilletLines( const TOOL_EVENT& aEvent )
                 return;
             }
 
-            PCB_SHAPE* tArc;
-
-            if( m_isFootprintEditor )
-                tArc = new FP_SHAPE( static_cast<FOOTPRINT*>( frame()->GetModel() ), SHAPE_T::ARC );
-            else
-                tArc = new PCB_SHAPE( frame()->GetBoard(), SHAPE_T::ARC );
+            PCB_SHAPE* tArc = new PCB_SHAPE( frame()->GetBoard(), SHAPE_T::ARC );
 
             tArc->SetArcGeometry( sArc.GetP0(), sArc.GetArcMid(), sArc.GetP1() );
             tArc->SetWidth( line_a->GetWidth() );
@@ -1290,13 +1274,6 @@ int EDIT_TOOL::FilletLines( const TOOL_EVENT& aEvent )
             line_a->SetEnd( seg_a.B );
             line_b->SetStart( seg_b.A );
             line_b->SetEnd( seg_b.B );
-
-            if( m_isFootprintEditor )
-            {
-                static_cast<FP_SHAPE*>( line_a )->SetLocalCoord();
-                static_cast<FP_SHAPE*>( line_b )->SetLocalCoord();
-                static_cast<FP_SHAPE*>( tArc )->SetLocalCoord();
-            }
 
             operationPerformedOnAtLeastOne = true;
 
@@ -1600,13 +1577,9 @@ static void mirrorPadY( PAD& aPad, const VECTOR2I& aMirrorPoint )
 
 
 const std::vector<KICAD_T> EDIT_TOOL::MirrorableItems = {
-        PCB_FP_SHAPE_T,
         PCB_SHAPE_T,
-        PCB_FP_TEXT_T,
         PCB_TEXT_T,
-        PCB_FP_TEXTBOX_T,
         PCB_TEXTBOX_T,
-        PCB_FP_ZONE_T,
         PCB_ZONE_T,
         PCB_PAD_T,
         PCB_TRACE_T,
@@ -1664,26 +1637,16 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         // modify each object as necessary
         switch( item->Type() )
         {
-        case PCB_FP_SHAPE_T:
         case PCB_SHAPE_T:
             static_cast<PCB_SHAPE*>( item )->Mirror( mirrorPoint, mirrorAroundXaxis );
             break;
 
-        case PCB_FP_ZONE_T:
         case PCB_ZONE_T:
-            static_cast<FP_ZONE*>( item )->Mirror( mirrorPoint, mirrorLeftRight );
-            break;
-
-        case PCB_FP_TEXT_T:
-            static_cast<FP_TEXT*>( item )->Mirror( mirrorPoint, mirrorAroundXaxis );
+            static_cast<ZONE*>( item )->Mirror( mirrorPoint, mirrorLeftRight );
             break;
 
         case PCB_TEXT_T:
             static_cast<PCB_TEXT*>( item )->Mirror( mirrorPoint, mirrorAroundXaxis );
-            break;
-
-        case PCB_FP_TEXTBOX_T:
-            static_cast<FP_TEXTBOX*>( item )->Mirror( mirrorPoint, mirrorAroundXaxis );
             break;
 
         case PCB_TEXTBOX_T:
@@ -1818,33 +1781,31 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
 
     for( EDA_ITEM* item : aItems )
     {
-        PCB_GROUP* parentGroup = static_cast<BOARD_ITEM*>( item )->GetParentGroup();
+        BOARD_ITEM* board_item = static_cast<BOARD_ITEM*>( item );
+        FOOTPRINT*  parentFP = board_item->GetParentFootprint();
+        PCB_GROUP*  parentGroup = board_item->GetParentGroup();
 
         if( parentGroup )
         {
             m_commit->Modify( parentGroup );
-            parentGroup->RemoveItem( static_cast<BOARD_ITEM*>( item ) );
+            parentGroup->RemoveItem( board_item );
         }
 
         switch( item->Type() )
         {
-        case PCB_FP_TEXT_T:
-        {
-            FP_TEXT*   text = static_cast<FP_TEXT*>( item );
-            FOOTPRINT* parent = static_cast<FOOTPRINT*>( item->GetParent() );
-
-            switch( text->GetType() )
+        case PCB_TEXT_T:
+            switch( static_cast<PCB_TEXT*>( board_item )->GetType() )
             {
-            case FP_TEXT::TEXT_is_VALUE:
-            case FP_TEXT::TEXT_is_REFERENCE:
-                m_commit->Modify( parent );
-                text->SetVisible( false );
-                getView()->Update( text );
+            case PCB_TEXT::TEXT_is_VALUE:
+            case PCB_TEXT::TEXT_is_REFERENCE:
+                m_commit->Modify( parentFP );
+                static_cast<PCB_TEXT*>( board_item )->SetVisible( false );
+                getView()->Update( board_item );
                 break;
-            case FP_TEXT::TEXT_is_DIVERS:
-                m_commit->Modify( parent );
-                getView()->Remove( text );
-                parent->Remove( text );
+            case PCB_TEXT::TEXT_is_DIVERS:
+                m_commit->Modify( parentFP );
+                getView()->Remove( board_item );
+                parentFP->Remove( board_item );
                 break;
             default:
                 wxFAIL; // Shouldn't get here
@@ -1852,98 +1813,81 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
             }
 
             break;
-        }
 
-        case PCB_FP_TEXTBOX_T:
-        {
-            FP_TEXTBOX* textbox = static_cast<FP_TEXTBOX*>( item );
-            FOOTPRINT*  parent = static_cast<FOOTPRINT*>( item->GetParent() );
-
-            m_commit->Modify( parent );
-            getView()->Remove( textbox );
-            parent->Remove( textbox );
-            break;
-        }
-
+        case PCB_SHAPE_T:
+        case PCB_TEXTBOX_T:
         case PCB_BITMAP_T:
             if( IsFootprintEditor() )
             {
-                PCB_BITMAP* fp_bitmap = static_cast<PCB_BITMAP*>( item );
-                FOOTPRINT*  parent = static_cast<FOOTPRINT*>( item->GetParent() );
-
-                m_commit->Modify( parent );
-                getView()->Remove( fp_bitmap );
-                parent->Remove( fp_bitmap );
+                m_commit->Modify( parentFP );
+                getView()->Remove( board_item );
+                parentFP->Remove( board_item );
             }
             else
-                m_commit->Remove( item );
+            {
+                m_commit->Remove( board_item );
+            }
 
             break;
 
         case PCB_PAD_T:
             if( IsFootprintEditor() || frame()->GetPcbNewSettings()->m_AllowFreePads )
             {
-                PAD*       pad = static_cast<PAD*>( item );
-                FOOTPRINT* parent = static_cast<FOOTPRINT*>( item->GetParent() );
-
-                m_commit->Modify( parent );
-                getView()->Remove( pad );
-                parent->Remove( pad );
+                m_commit->Modify( parentFP );
+                getView()->Remove( board_item );
+                parentFP->Remove( board_item );
             }
 
             break;
-
-        case PCB_FP_ZONE_T:
-        {
-            FP_ZONE*   zone = static_cast<FP_ZONE*>( item );
-            FOOTPRINT* parent = static_cast<FOOTPRINT*>( item->GetParent() );
-
-            m_commit->Modify( parent );
-            getView()->Remove( zone );
-            parent->Remove( zone );
-            break;
-        }
 
         case PCB_ZONE_T:
-        // We process the zones special so that cutouts can be deleted when the delete tool
-        // is called from inside a cutout when the zone is selected.
-        {
-            // Only interact with cutouts when deleting and a single item is selected
-            if( !aIsCut && aItems.GetSize() == 1 )
+            if( IsFootprintEditor() )
             {
-                VECTOR2I curPos = getViewControls()->GetCursorPosition();
-                ZONE*    zone   = static_cast<ZONE*>( item );
-
-                int outlineIdx, holeIdx;
-
-                if( zone->HitTestCutout( curPos, &outlineIdx, &holeIdx ) )
+                m_commit->Modify( parentFP );
+                getView()->Remove( board_item );
+                parentFP->Remove( board_item );
+            }
+            else
+            {
+                // We process the zones special so that cutouts can be deleted when the delete
+                // tool is called from inside a cutout when the zone is selected.
+                // Only interact with cutouts when deleting and a single item is selected
+                if( !aIsCut && aItems.GetSize() == 1 )
                 {
-                    // Remove the cutout
-                    m_commit->Modify( zone );
-                    zone->RemoveCutout( outlineIdx, holeIdx );
-                    zone->UnFill();
+                    VECTOR2I curPos = getViewControls()->GetCursorPosition();
+                    ZONE*    zone   = static_cast<ZONE*>( board_item );
 
-                    // TODO Refill zone when KiCad supports auto re-fill
+                    int outlineIdx, holeIdx;
 
-                    // Update the display
-                    zone->HatchBorder();
-                    canvas()->Refresh();
+                    if( zone->HitTestCutout( curPos, &outlineIdx, &holeIdx ) )
+                    {
+                        // Remove the cutout
+                        m_commit->Modify( zone );
+                        zone->RemoveCutout( outlineIdx, holeIdx );
+                        zone->UnFill();
 
-                    // Restore the selection on the original zone
-                    m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, zone );
+                        // TODO Refill zone when KiCad supports auto re-fill
 
-                    break;
+                        // Update the display
+                        zone->HatchBorder();
+                        canvas()->Refresh();
+
+                        // Restore the selection on the original zone
+                        m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, zone );
+
+                        break;
+                    }
                 }
+
+                // Remove the entire zone otherwise
+                m_commit->Remove( board_item );
             }
 
-            // Remove the entire zone otherwise
-            m_commit->Remove( item );
             break;
-        }
 
         case PCB_GROUP_T:
         {
-            PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
+            PCB_GROUP* group = static_cast<PCB_GROUP*>( board_item );
 
             auto removeItem =
                     [&]( BOARD_ITEM* bItem )
@@ -1952,11 +1896,11 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
                         {
                             // Silently ignore delete of Reference or Value if they happen to be
                             // in group.
-                            if( bItem->Type() == PCB_FP_TEXT_T )
+                            if( bItem->Type() == PCB_TEXT_T )
                             {
-                                FP_TEXT* textItem = static_cast<FP_TEXT*>( bItem );
+                                PCB_TEXT* textItem = static_cast<PCB_TEXT*>( bItem );
 
-                                if( textItem->GetType() != FP_TEXT::TEXT_is_DIVERS )
+                                if( textItem->GetType() != PCB_TEXT::TEXT_is_DIVERS )
                                     return;
                             }
                             else if( bItem->Type() == PCB_PAD_T )
@@ -1988,7 +1932,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
         }
 
         default:
-            m_commit->Remove( item );
+            m_commit->Remove( board_item );
             break;
         }
     }
@@ -2239,10 +2183,8 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
                 static_cast<PAD*>( dupe_item )->SetNumber( padNumber );
             }
         }
-        else if( orig_item->GetParent() && orig_item->GetParent()->Type() == PCB_FOOTPRINT_T )
+        else if( FOOTPRINT* parentFootprint = orig_item->GetParentFootprint() )
         {
-            FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( orig_item->GetParent() );
-
             m_commit->Modify( parentFootprint );
             dupe_item = parentFootprint->DuplicateItem( orig_item, true /* add to parent */ );
         }
@@ -2515,7 +2457,7 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
 
                     // We can't copy both a footprint and its text in the same operation, so if
                     // both are selected, remove the text
-                    if( item->Type() == PCB_FP_TEXT_T && aCollector.HasItem( item->GetParent() ) )
+                    if( item->Type() == PCB_TEXT_T && aCollector.HasItem( item->GetParentFootprint() ) )
                         aCollector.Remove( item );
                 }
             },

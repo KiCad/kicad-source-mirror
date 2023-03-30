@@ -257,39 +257,38 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
 std::string FormatProbeItem( BOARD_ITEM* aItem )
 {
-    FOOTPRINT* footprint;
-
     if( !aItem )
         return "$CLEAR: \"HIGHLIGHTED\""; // message to clear highlight state
 
     switch( aItem->Type() )
     {
     case PCB_FOOTPRINT_T:
-        footprint = (FOOTPRINT*) aItem;
+    {
+        FOOTPRINT* footprint = static_cast<FOOTPRINT*>( aItem );
         return StrPrintf( "$PART: \"%s\"", TO_UTF8( footprint->GetReference() ) );
+    }
 
     case PCB_PAD_T:
     {
-        footprint = static_cast<FOOTPRINT*>( aItem->GetParent() );
-        wxString pad = static_cast<PAD*>( aItem )->GetNumber();
+        PAD*       pad = static_cast<PAD*>( aItem );
+        FOOTPRINT* footprint = pad->GetParentFootprint();
 
         return StrPrintf( "$PART: \"%s\" $PAD: \"%s\"",
                           TO_UTF8( footprint->GetReference() ),
-                          TO_UTF8( pad ) );
+                          TO_UTF8( pad->GetNumber() ) );
     }
 
-    case PCB_FP_TEXT_T:
+    case PCB_TEXT_T:
     {
-        footprint = static_cast<FOOTPRINT*>( aItem->GetParent() );
-
-        FP_TEXT*    text = static_cast<FP_TEXT*>( aItem );
+        PCB_TEXT*   text = static_cast<PCB_TEXT*>( aItem );
+        FOOTPRINT*  footprint = text->GetParentFootprint();
         const char* text_key;
 
         /* This can't be a switch since the break need to pull out
          * from the outer switch! */
-        if( text->GetType() == FP_TEXT::TEXT_is_REFERENCE )
+        if( text->GetType() == PCB_TEXT::TEXT_is_REFERENCE )
             text_key = "$REF:";
-        else if( text->GetType() == FP_TEXT::TEXT_is_VALUE )
+        else if( text->GetType() == PCB_TEXT::TEXT_is_VALUE )
             text_key = "$VAL:";
         else
             break;
@@ -335,9 +334,8 @@ void collectItemsForSyncParts( ItemContainer& aItems, std::set<wxString>& parts 
 
         case PCB_PAD_T:
         {
-            PAD*       pad = static_cast<PAD*>( item );
-            FOOTPRINT* footprint = static_cast<FOOTPRINT*>( pad->GetParentFootprint() );
-            wxString   ref = footprint->GetReference();
+            PAD*      pad = static_cast<PAD*>( item );
+            wxString  ref = pad->GetParentFootprint()->GetReference();
 
             parts.emplace( wxT( "P" ) + EscapeString( ref, CTX_IPC ) + wxT( "/" )
                            + EscapeString( pad->GetNumber(), CTX_IPC ) );

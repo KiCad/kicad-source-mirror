@@ -22,7 +22,6 @@
 #include <board.h>
 #include <board_connected_item.h>
 #include <board_design_settings.h>
-#include <fp_text.h>
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_track.h>
@@ -220,12 +219,8 @@ bool PNS_PCBNEW_RULE_RESOLVER::IsDiffPair( const PNS::ITEM* aA, const PNS::ITEM*
 bool PNS_PCBNEW_RULE_RESOLVER::IsInNetTie( const PNS::ITEM* aA )
 {
     BOARD_ITEM* item = aA->Parent();
-    BOARD_ITEM* parentFootprint = item ? item->GetParentFootprint() : nullptr;
 
-    if( parentFootprint )
-        return static_cast<FOOTPRINT*>( parentFootprint )->IsNetTie();
-
-    return false;
+    return item && item->GetParentFootprint() && item->GetParentFootprint()->IsNetTie();
 }
 
 
@@ -238,10 +233,8 @@ bool PNS_PCBNEW_RULE_RESOLVER::IsNetTieExclusion( const PNS::ITEM* aItem,
     std::shared_ptr<DRC_ENGINE> drcEngine = m_board->GetDesignSettings().m_DRCEngine;
     BOARD_ITEM*                 collidingItem = aCollidingItem->Parent();
 
-    FOOTPRINT* collidingFp = static_cast<FOOTPRINT*>( collidingItem->GetParentFootprint() );
-    FOOTPRINT* itemFp      = aItem->Parent()
-                                ? static_cast<FOOTPRINT*>( aItem->Parent()->GetParentFootprint() )
-                                : nullptr;
+    FOOTPRINT* collidingFp = collidingItem->GetParentFootprint();
+    FOOTPRINT* itemFp      = aItem->Parent() ? aItem->Parent()->GetParentFootprint() : nullptr;
 
     if( collidingFp && itemFp && ( collidingFp == itemFp ) && itemFp->IsNetTie() )
     {
@@ -1569,18 +1562,18 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
         syncTextItem( aWorld, &footprint->Reference(), footprint->Reference().GetLayer() );
         syncTextItem( aWorld, &footprint->Value(), footprint->Value().GetLayer() );
 
-        for( FP_ZONE* zone : footprint->Zones() )
+        for( ZONE* zone : footprint->Zones() )
             syncZone( aWorld, zone, boardOutline );
 
-        for( BOARD_ITEM* mgitem : footprint->GraphicalItems() )
+        for( BOARD_ITEM* item : footprint->GraphicalItems() )
         {
-            if( mgitem->Type() == PCB_FP_SHAPE_T || mgitem->Type() == PCB_FP_TEXTBOX_T )
+            if( item->Type() == PCB_SHAPE_T || item->Type() == PCB_TEXTBOX_T )
             {
-                syncGraphicalItem( aWorld, static_cast<PCB_SHAPE*>( mgitem ) );
+                syncGraphicalItem( aWorld, static_cast<PCB_SHAPE*>( item ) );
             }
-            else if( mgitem->Type() == PCB_FP_TEXT_T )
+            else if( item->Type() == PCB_TEXT_T )
             {
-                syncTextItem( aWorld, static_cast<FP_TEXT*>( mgitem ), mgitem->GetLayer() );
+                syncTextItem( aWorld, static_cast<PCB_TEXT*>( item ), item->GetLayer() );
             }
         }
     }
@@ -1591,17 +1584,17 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
 
         if( type == PCB_TRACE_T )
         {
-            if( auto segment = syncTrack( t ) )
+            if( std::unique_ptr<PNS::SEGMENT> segment = syncTrack( t ) )
                 aWorld->Add( std::move( segment ) );
         }
         else if( type == PCB_ARC_T )
         {
-            if( auto arc = syncArc( static_cast<PCB_ARC*>( t ) ) )
+            if( std::unique_ptr<PNS::ARC> arc = syncArc( static_cast<PCB_ARC*>( t ) ) )
                 aWorld->Add( std::move( arc ) );
         }
         else if( type == PCB_VIA_T )
         {
-            if( auto via = syncVia( static_cast<PCB_VIA*>( t ) ) )
+            if( std::unique_ptr<PNS::VIA> via = syncVia( static_cast<PCB_VIA*>( t ) ) )
                 aWorld->Add( std::move( via ) );
         }
     }

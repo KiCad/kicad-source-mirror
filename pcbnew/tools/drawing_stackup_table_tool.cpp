@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2017 CERN
- * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
   *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@
 #include <tools/zone_filler_tool.h>
 #include <board_design_settings.h>
 #include <footprint.h>
-#include <fp_shape.h>
+#include <pcb_shape.h>
 #include <pcb_group.h>
 #include <pcb_text.h>
 #include <string_utils.h>

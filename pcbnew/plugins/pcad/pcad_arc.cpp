@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012-2020 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,11 +23,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <pcad/pcb_arc.h>
+#include <pcad/pcad_arc.h>
 
 #include <board.h>
 #include <footprint.h>
-#include <fp_shape.h>
 #include <math/util.h>      // for KiROUND
 #include <pcb_shape.h>
 #include <trigo.h>
@@ -37,8 +36,8 @@
 
 namespace PCAD2KICAD {
 
-PCB_ARC::PCB_ARC( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
-    PCB_COMPONENT( aCallbacks, aBoard )
+PCAD_ARC::PCAD_ARC( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
+        PCAD_PCB_COMPONENT( aCallbacks, aBoard )
 {
     m_objType    = wxT( 'A' );
     m_StartX     = 0;
@@ -48,13 +47,13 @@ PCB_ARC::PCB_ARC( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
 }
 
 
-PCB_ARC::~PCB_ARC()
+PCAD_ARC::~PCAD_ARC()
 {
 }
 
 
-void PCB_ARC::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
-                     const wxString& aActualConversion )
+void PCAD_ARC::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
+                      const wxString& aActualConversion )
 {
     XNODE*      lNode;
     int         r = 0;
@@ -153,18 +152,18 @@ void PCB_ARC::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
 }
 
 
-void PCB_ARC::SetPosOffset( int aX_offs, int aY_offs )
+void PCAD_ARC::SetPosOffset( int aX_offs, int aY_offs )
 {
-    PCB_COMPONENT::SetPosOffset( aX_offs, aY_offs );
+    PCAD_PCB_COMPONENT::SetPosOffset( aX_offs, aY_offs );
 
     m_StartX    += aX_offs;
     m_StartY    += aY_offs;
 }
 
 
-void PCB_ARC::Flip()
+void PCAD_ARC::Flip()
 {
-    PCB_COMPONENT::Flip();
+    PCAD_PCB_COMPONENT::Flip();
 
     m_StartX = -m_StartX;
     m_Angle = -m_Angle;
@@ -173,41 +172,27 @@ void PCB_ARC::Flip()
 }
 
 
-void PCB_ARC::AddToFootprint( FOOTPRINT* aFootprint )
+void PCAD_ARC::AddToBoard( FOOTPRINT* aFootprint )
 {
-    if( IsNonCopperLayer( m_KiCadLayer ) )
+    PCB_SHAPE* arc = new PCB_SHAPE( aFootprint, IsCircle() ? SHAPE_T::CIRCLE : SHAPE_T::ARC );
+    aFootprint->Add( arc );
+
+    arc->SetCenter( VECTOR2I( m_positionX, m_positionY ) );
+    arc->SetStart( VECTOR2I( m_StartX, m_StartY ) );
+    arc->SetArcAngleAndEnd( -m_Angle, true );
+
+    arc->SetStroke( STROKE_PARAMS( m_Width, PLOT_DASH_TYPE::SOLID ) );
+    arc->SetLayer( m_KiCadLayer );
+
+    if( aFootprint )
     {
-        FP_SHAPE* arc = new FP_SHAPE( aFootprint, IsCircle() ? SHAPE_T::CIRCLE : SHAPE_T::ARC );
-        aFootprint->Add( arc );
-
-        arc->SetCenter0( VECTOR2I( m_positionX, m_positionY ) );
-        arc->SetStart0( VECTOR2I( m_StartX, m_StartY ) );
-        arc->SetArcAngleAndEnd0( -m_Angle, true );
-
-        arc->SetStroke( STROKE_PARAMS( m_Width, PLOT_DASH_TYPE::SOLID ) );
-        arc->SetLayer( m_KiCadLayer );
-
-        arc->SetDrawCoord();
+        arc->Rotate( { 0, 0 }, aFootprint->GetOrientation() );
+        arc->Move( aFootprint->GetPosition() );
     }
 }
 
 
-void PCB_ARC::AddToBoard()
-{
-    PCB_SHAPE* arc = new PCB_SHAPE( m_board, IsCircle() ? SHAPE_T::CIRCLE : SHAPE_T::ARC );
-
-    m_board->Add( arc, ADD_MODE::APPEND );
-
-    arc->SetFilled( false );
-    arc->SetLayer( m_KiCadLayer );
-    arc->SetCenter( VECTOR2I( m_positionX, m_positionY ) );
-    arc->SetStart( VECTOR2I( m_StartX, m_StartY ) );
-    arc->SetArcAngleAndEnd( -m_Angle, true );
-    arc->SetStroke( STROKE_PARAMS( m_Width, PLOT_DASH_TYPE::SOLID ) );
-}
-
-
-bool PCB_ARC::IsCircle()
+bool PCAD_ARC::IsCircle()
 {
     return ( m_Angle == ANGLE_360 );
 }

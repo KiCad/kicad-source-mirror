@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -33,7 +33,6 @@ using namespace std::placeholders;
 #include <board_design_settings.h>
 #include <board_item.h>
 #include <footprint.h>
-#include <fp_shape.h>
 #include <pad.h>
 #include <zone.h>
 #include <pcb_edit_frame.h>
@@ -2211,24 +2210,12 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
                 VECTOR2I offset = m_endSnapPoint - p;
                 BOARD_ITEM* previewItem;
 
-                VECTOR2I fp_offset( offset );
-                RotatePoint( fp_offset, -footprint->GetOrientation() );
-
                 view()->ClearPreview();
 
                 for( BOARD_ITEM* drawing : footprint->GraphicalItems() )
                 {
                     previewItem = static_cast<BOARD_ITEM*>( drawing->Clone() );
-
-                    if( drawing->Type() == PCB_FP_SHAPE_T )
-                    {
-                        FP_SHAPE* shape = static_cast<FP_SHAPE*>( previewItem );
-                        shape->FP_SHAPE::Move( fp_offset );
-                    }
-                    else
-                    {
-                        previewItem->Move( offset );
-                    }
+                    previewItem->Move( offset );
 
                     view()->AddToPreview( previewItem );
                     view()->Hide( drawing, true );

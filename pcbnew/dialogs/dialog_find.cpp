@@ -27,7 +27,6 @@
 #include <pcb_marker.h>
 #include <footprint.h>
 #include <pcb_text.h>
-#include <fp_text.h>
 #include <zone.h>
 #include <dialog_find.h>
 #include <string_utils.h>
@@ -267,12 +266,12 @@ void DIALOG_FIND::search( bool aDirection )
                 {
                     for( BOARD_ITEM* item : fp->GraphicalItems() )
                     {
-                        FP_TEXT* textItem = dynamic_cast<FP_TEXT*>( item );
-
-                        if( textItem && textItem->Matches( m_frame->GetFindReplaceData(),
-                                                           nullptr ) )
+                        if( item->Type() == PCB_TEXT_T )
                         {
-                            m_hitList.push_back( fp );
+                            PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
+
+                            if( text && text->Matches( m_frame->GetFindReplaceData(), nullptr ) )
+                                m_hitList.push_back( fp );
                         }
                     }
                 }
@@ -282,22 +281,21 @@ void DIALOG_FIND::search( bool aDirection )
             {
                 for( BOARD_ITEM* item : board->Drawings() )
                 {
-                    PCB_TEXT* textItem = dynamic_cast<PCB_TEXT*>( item );
-
-                    if( textItem && textItem->Matches( m_frame->GetFindReplaceData(), nullptr ) )
+                    if( item->Type() == PCB_TEXT_T )
                     {
-                        m_hitList.push_back( textItem );
+                        PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
+
+                        if( text && text->Matches( m_frame->GetFindReplaceData(), nullptr ) )
+                            m_hitList.push_back( text );
                     }
                 }
 
                 for( BOARD_ITEM* item : board->Zones() )
                 {
-                    ZONE* zoneItem = dynamic_cast<ZONE*>( item );
+                    ZONE* zone = static_cast<ZONE*>( item );
 
-                    if( zoneItem && zoneItem->Matches( m_frame->GetFindReplaceData(), nullptr ) )
-                    {
-                        m_hitList.push_back( zoneItem );
-                    }
+                    if( zone->Matches( m_frame->GetFindReplaceData(), nullptr ) )
+                        m_hitList.push_back( zone );
                 }
             }
         }
@@ -316,9 +314,7 @@ void DIALOG_FIND::search( bool aDirection )
             for( NETINFO_ITEM* net : board->GetNetInfo() )
             {
                 if( net && net->Matches( m_frame->GetFindReplaceData(), nullptr ) )
-                {
                     m_hitList.push_back( net );
-                }
             }
         }
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013  Cirilo Bernardo
- * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,9 +31,9 @@
 #include <board_design_settings.h>
 #include <footprint.h>
 #include <fp_lib_table.h>
-#include <fp_shape.h>
 #include <idf_parser.h>
 #include <pad.h>
+#include <pcb_shape.h>
 #include <build_version.h>
 #include <wx/msgdlg.h>
 #include "project.h"
@@ -59,12 +59,9 @@ static FILENAME_RESOLVER* resolver;
 static void idf_export_outline( BOARD* aPcb, IDF3_BOARD& aIDFBoard )
 {
     double scale = aIDFBoard.GetUserScale();
-
-    PCB_SHAPE* graphic;                 // KiCad graphical item
     IDF_POINT sp, ep;                   // start and end points from KiCad item
-
     std::list< IDF_SEGMENT* > lines;    // IDF intermediate form of KiCad graphical item
-    IDF_OUTLINE* outline = nullptr;        // graphical items forming an outline or cutout
+    IDF_OUTLINE* outline = nullptr;     // graphical items forming an outline or cutout
 
     // NOTE: IMPLEMENTATION
     // If/when component cutouts are allowed, we must implement them separately. Cutouts
@@ -80,7 +77,7 @@ static void idf_export_outline( BOARD* aPcb, IDF3_BOARD& aIDFBoard )
         if( item->Type() != PCB_SHAPE_T || item->GetLayer() != Edge_Cuts )
             continue;
 
-        graphic = (PCB_SHAPE*) item;
+        PCB_SHAPE* graphic = static_cast<PCB_SHAPE*>( item );
 
         switch( graphic->GetShape() )
         {
@@ -311,7 +308,7 @@ static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD
     // TODO: If footprint cutouts are supported we must add code here
     // for( EDA_ITEM* item = aFootprint->GraphicalItems();  item != NULL;  item = item->Next() )
     // {
-    //     if( item->Type() != PCB_FP_SHAPE_T || item->GetLayer() != Edge_Cuts )
+    //     if( item->Type() != PCB_SHAPE_T || item->GetLayer() != Edge_Cuts )
     //         continue;
     //     code to export cutouts
     // }

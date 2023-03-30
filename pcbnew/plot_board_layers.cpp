@@ -42,7 +42,6 @@
 #include <footprint.h>
 #include <pcb_track.h>
 #include <pcb_text.h>
-#include <fp_shape.h>
 #include <pad.h>
 #include <zone.h>
 #include <pcb_shape.h>
@@ -825,7 +824,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     SHAPE_POLY_SET initialPolys;
 
     auto plotFPTextItem =
-            [&]( const FP_TEXT& aText )
+            [&]( const PCB_TEXT& aText )
             {
                 if( !aText.IsVisible() && !itemplotter.GetPlotInvisibleText()  )
                     return;
@@ -865,9 +864,9 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             {
                 if( item->IsOnLayer( layer ) )
                 {
-                    if( item->Type() == PCB_FP_TEXT_T )
+                    if( item->Type() == PCB_TEXT_T )
                     {
-                        plotFPTextItem( static_cast<const FP_TEXT&>( *item ) );
+                        plotFPTextItem( static_cast<const PCB_TEXT&>( *item ) );
                     }
                     else
                     {
@@ -882,7 +881,8 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 }
                 else if( item->IsOnLayer( Edge_Cuts ) )
                 {
-                   itemplotter.PlotFootprintShape( static_cast<const FP_SHAPE*>( item ) );
+                    if( item->Type() == PCB_SHAPE_T )
+                        itemplotter.PlotPcbShape( static_cast<const PCB_SHAPE*>( item ) );
                 }
             }
         }

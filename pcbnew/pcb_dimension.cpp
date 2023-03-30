@@ -335,7 +335,7 @@ void PCB_DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
 
     ORIGIN_TRANSFORMS originTransforms = aFrame->GetOriginTransforms();
 
-    if( Type() == PCB_DIM_CENTER_T || Type() == PCB_FP_DIM_CENTER_T )
+    if( Type() == PCB_DIM_CENTER_T )
     {
         VECTOR2I startCoord = originTransforms.ToDisplayAbs( GetStart() );
         wxString start = wxString::Format( wxT( "@(%s, %s)" ),
@@ -735,8 +735,8 @@ void PCB_DIM_ALIGNED::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_P
 }
 
 
-PCB_DIM_ORTHOGONAL::PCB_DIM_ORTHOGONAL( BOARD_ITEM* aParent, bool aInFP ) :
-        PCB_DIM_ALIGNED( aParent, aInFP ? PCB_FP_DIM_ORTHOGONAL_T : PCB_DIM_ORTHOGONAL_T )
+PCB_DIM_ORTHOGONAL::PCB_DIM_ORTHOGONAL( BOARD_ITEM* aParent ) :
+        PCB_DIM_ALIGNED( aParent, PCB_DIM_ORTHOGONAL_T )
 {
     // To preserve look of old dimensions, initialize extension height based on default arrow length
     m_extensionHeight = static_cast<int>( m_arrowLength * s_arrowAngle.Sin() );
@@ -948,8 +948,8 @@ void PCB_DIM_ORTHOGONAL::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aA
 }
 
 
-PCB_DIM_LEADER::PCB_DIM_LEADER( BOARD_ITEM* aParent, bool aInFP ) :
-        PCB_DIMENSION_BASE( aParent, aInFP ? PCB_FP_DIM_LEADER_T : PCB_DIM_LEADER_T ),
+PCB_DIM_LEADER::PCB_DIM_LEADER( BOARD_ITEM* aParent ) :
+        PCB_DIMENSION_BASE( aParent, PCB_DIM_LEADER_T ),
         m_textBorder( DIM_TEXT_BORDER::NONE )
 {
     m_unitsFormat         = DIM_UNITS_FORMAT::NO_SUFFIX;
@@ -1097,8 +1097,8 @@ void PCB_DIM_LEADER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
 }
 
 
-PCB_DIM_RADIAL::PCB_DIM_RADIAL( BOARD_ITEM* aParent, bool aInFP ) :
-        PCB_DIMENSION_BASE( aParent, aInFP ? PCB_FP_DIM_RADIAL_T : PCB_DIM_RADIAL_T )
+PCB_DIM_RADIAL::PCB_DIM_RADIAL( BOARD_ITEM* aParent ) :
+        PCB_DIMENSION_BASE( aParent, PCB_DIM_RADIAL_T )
 {
     m_unitsFormat         = DIM_UNITS_FORMAT::NO_SUFFIX;
     m_overrideTextEnabled = false;
@@ -1228,8 +1228,8 @@ void PCB_DIM_RADIAL::updateGeometry()
 }
 
 
-PCB_DIM_CENTER::PCB_DIM_CENTER( BOARD_ITEM* aParent, bool aInFP ) :
-        PCB_DIMENSION_BASE( aParent, aInFP ? PCB_FP_DIM_CENTER_T : PCB_DIM_CENTER_T )
+PCB_DIM_CENTER::PCB_DIM_CENTER( BOARD_ITEM* aParent ) :
+        PCB_DIMENSION_BASE( aParent, PCB_DIM_CENTER_T )
 {
     m_unitsFormat         = DIM_UNITS_FORMAT::NO_SUFFIX;
     m_overrideTextEnabled = true;

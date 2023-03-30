@@ -112,8 +112,8 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
         PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T,
         PCB_FOOTPRINT_T,
         PCB_PAD_T,
-        PCB_SHAPE_T, PCB_FP_SHAPE_T,
-        PCB_TEXT_T, PCB_FP_TEXT_T, PCB_TEXTBOX_T, PCB_FP_TEXTBOX_T,
+        PCB_SHAPE_T,
+        PCB_TEXT_T, PCB_TEXTBOX_T,
         PCB_DIMENSION_T
     };
 
@@ -259,7 +259,7 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
     // Generate a count for progress reporting.
     //
 
-    forEachGeometryItem( { PCB_ZONE_T, PCB_FP_ZONE_T, PCB_SHAPE_T, PCB_FP_SHAPE_T },
+    forEachGeometryItem( { PCB_ZONE_T, PCB_SHAPE_T },
             LSET::AllCuMask(),
             [&]( BOARD_ITEM* item ) -> bool
             {
@@ -277,7 +277,7 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
     // Run clearance checks -within- polygonal items.
     //
 
-    forEachGeometryItem( { PCB_ZONE_T, PCB_FP_ZONE_T, PCB_SHAPE_T, PCB_FP_SHAPE_T },
+    forEachGeometryItem( { PCB_ZONE_T, PCB_SHAPE_T },
             LSET::AllCuMask(),
             [&]( BOARD_ITEM* item ) -> bool
             {
@@ -512,8 +512,11 @@ void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testShapeLineChain( const SHAPE_LINE_
         std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
         VECTOR2I pt = collision.first;
 
-        if( aParentItem->GetParentFootprint() )
-            pt += aParentItem->GetParentFootprint()->GetPosition();
+        if( FOOTPRINT* parentFP = aParentItem->GetParentFootprint() )
+        {
+            RotatePoint( pt, parentFP->GetOrientation() );
+            pt += parentFP->GetPosition();
+        }
 
         wxString msg = formatMsg( _( "Internal clearance violation (%s clearance %s; actual %s)" ),
                                   aConstraint.GetName(),
@@ -644,7 +647,6 @@ int DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* aItem
 
         if( aItem->Type() == PCB_VIA_T )
         {
-
             wxCHECK_MSG( aItem->GetLayerSet().Contains( aLayer ), violations,
                     wxT( "Bug!  Vias should only be checked for layers on which they exist" ) );
 

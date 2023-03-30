@@ -37,9 +37,7 @@ class PAD;
 class PCB_SHAPE;
 class PCB_DIMENSION_BASE;
 class FOOTPRINT;
-class FP_SHAPE;
 class PCB_TARGET;
-class FP_TEXT;
 class ZONE;
 class BOARD;
 class BOARD_ITEM;
@@ -80,8 +78,7 @@ public:
     // Basic functions to plot a board item
     void SetLayerSet( LSET aLayerMask ) { m_layerMask = aLayerMask; }
     void PlotFootprintGraphicItems( const FOOTPRINT* aFootprint );
-    void PlotFootprintShape( const FP_SHAPE* aShape );
-    void PlotFootprintTextItem( const FP_TEXT* aText, const COLOR4D& aColor );
+    void PlotFootprintTextItem( const PCB_TEXT* aText, const COLOR4D& aColor );
 
     /*
      * Reference, Value, and other fields are plotted only if the corresponding option is enabled.

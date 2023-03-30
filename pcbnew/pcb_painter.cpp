@@ -30,7 +30,6 @@
 #include <pcb_track.h>
 #include <pcb_group.h>
 #include <footprint.h>
-#include <fp_textbox.h>
 #include <pad.h>
 #include <pcb_shape.h>
 #include <string_utils.h>
@@ -223,7 +222,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
     }
 
     // Zones should pull from the copper layer
-    if( item && ( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T ) )
+    if( item && item->Type() == PCB_ZONE_T )
     {
         if( IsZoneFillLayer( aLayer ) )
             aLayer = aLayer - LAYER_ZONE_START;
@@ -429,7 +428,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
         color.a *= m_viaOpacity;
     else if( item->Type() == PCB_PAD_T )
         color.a *= m_padOpacity;
-    else if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
+    else if( item->Type() == PCB_ZONE_T )
         color.a *= m_zoneOpacity;
     else if( item->Type() == PCB_BITMAP_T )
         color.a *= m_imageOpacity;
@@ -505,11 +504,13 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 
         if( item->GetParentFootprint() && !board->IsFootprintHolder() )
         {
-            FOOTPRINT* parentFP = static_cast<FOOTPRINT*>( item->GetParentFootprint() );
+            FOOTPRINT* parentFP = item->GetParentFootprint();
 
             // Never draw footprint bitmaps on board
             if( item->Type() == PCB_BITMAP_T )
+            {
                 return false;
+            }
             else if( item->GetLayerSet().count() > 1 )
             {
                 // For multi-layer objects, exclude only those layers that are private
@@ -553,7 +554,6 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         break;
 
     case PCB_SHAPE_T:
-    case PCB_FP_SHAPE_T:
         draw( static_cast<const PCB_SHAPE*>( item ), aLayer );
         break;
 
@@ -569,14 +569,6 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         draw( static_cast<const PCB_TEXTBOX*>( item ), aLayer );
         break;
 
-    case PCB_FP_TEXT_T:
-        draw( static_cast<const FP_TEXT*>( item ), aLayer );
-        break;
-
-    case PCB_FP_TEXTBOX_T:
-        draw( static_cast<const FP_TEXTBOX*>( item ), aLayer );
-        break;
-
     case PCB_FOOTPRINT_T:
         draw( static_cast<const FOOTPRINT*>( item ), aLayer );
         break;
@@ -586,7 +578,6 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         break;
 
     case PCB_ZONE_T:
-    case PCB_FP_ZONE_T:
         draw( static_cast<const ZONE*>( item ), aLayer );
         break;
 
@@ -595,11 +586,6 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
     case PCB_DIM_RADIAL_T:
     case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
-    case PCB_FP_DIM_ALIGNED_T:
-    case PCB_FP_DIM_CENTER_T:
-    case PCB_FP_DIM_RADIAL_T:
-    case PCB_FP_DIM_ORTHOGONAL_T:
-    case PCB_FP_DIM_LEADER_T:
         draw( static_cast<const PCB_DIMENSION_BASE*>( item ), aLayer );
         break;
 
@@ -1116,14 +1102,14 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
         if( aPad->GetFlags() & ENTERED )
         {
-            FOOTPRINT* fp = static_cast<FOOTPRINT*>( aPad->GetParentFootprint() );
+            FOOTPRINT* fp = aPad->GetParentFootprint();
 
             // Find the number box
             for( const BOARD_ITEM* aItem : fp->GraphicalItems() )
             {
-                if( aItem->Type() == PCB_FP_SHAPE_T )
+                if( aItem->Type() == PCB_SHAPE_T )
                 {
-                    const FP_SHAPE* shape = static_cast<const FP_SHAPE*>( aItem );
+                    const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( aItem );
 
                     if( shape->IsAnnotationProxy() )
                     {
@@ -1768,17 +1754,9 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
         case SHAPE_T::POLY:
         {
             SHAPE_POLY_SET&  shape = const_cast<PCB_SHAPE*>( aShape )->GetPolyShape();
-            const FOOTPRINT* parentFootprint = aShape->GetParentFootprint();
 
             if( shape.OutlineCount() == 0 )
                 break;
-
-            if( parentFootprint )
-            {
-                m_gal->Save();
-                m_gal->Translate( parentFootprint->GetPosition() );
-                m_gal->Rotate( -parentFootprint->GetOrientation().AsRadians() );
-            }
 
             if( outline_mode )
             {
@@ -1808,9 +1786,6 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
                     m_gal->DrawPolygon( shape );
                 }
             }
-
-            if( parentFootprint )
-                m_gal->Restore();
 
             break;
         }
@@ -1976,6 +1951,7 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
 
     m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );
+    attrs.m_Angle = aText->GetDrawRotation();
 
     if( aText->IsKnockout() )
     {
@@ -2123,159 +2099,6 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
 
     if( font->IsOutline() )
         cache = aTextBox->GetRenderCache( font, resolvedText );
-
-    if( cache )
-        m_gal->DrawGlyphs( *cache );
-    else
-        strokeText( resolvedText, aTextBox->GetDrawPos(), attrs );
-}
-
-
-void PCB_PAINTER::draw( const FP_TEXT* aText, int aLayer )
-{
-    wxString resolvedText( aText->GetShownText() );
-
-    if( resolvedText.Length() == 0 )
-        return;
-
-    const COLOR4D&  color = m_pcbSettings.GetColor( aText, aLayer );
-    bool            outline_mode = !viewer_settings()->m_ViewersDisplay.m_DisplayTextFill;
-    TEXT_ATTRIBUTES attrs = aText->GetAttributes();
-
-    KIFONT::FONT* font = aText->GetFont();
-
-    if( !font )
-    {
-        font = KIFONT::FONT::GetFont( m_pcbSettings.GetDefaultFont(), aText->IsBold(),
-                                      aText->IsItalic() );
-    }
-
-    m_gal->SetStrokeColor( color );
-    m_gal->SetFillColor( color );
-    attrs.m_Angle = aText->GetDrawRotation();
-
-    if( aText->IsKnockout() )
-    {
-        KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
-        SHAPE_POLY_SET             knockouts;
-
-        CALLBACK_GAL callback_gal( empty_opts,
-                // Polygon callback
-                [&]( const SHAPE_LINE_CHAIN& aPoly )
-                {
-                    knockouts.AddOutline( aPoly );
-                } );
-
-        attrs.m_StrokeWidth = getLineThickness( aText->GetEffectiveTextPenWidth() );
-
-        callback_gal.SetIsFill( font->IsOutline() );
-        callback_gal.SetIsStroke( font->IsStroke() );
-        callback_gal.SetLineWidth( attrs.m_StrokeWidth );
-        font->Draw( &callback_gal, resolvedText, aText->GetDrawPos(), attrs );
-
-        SHAPE_POLY_SET finalPoly;
-        int            margin = attrs.m_StrokeWidth * 1.5
-                                    + GetKnockoutTextMargin( attrs.m_Size, attrs.m_StrokeWidth );
-
-        aText->TransformBoundingBoxToPolygon( &finalPoly, margin );
-        finalPoly.BooleanSubtract( knockouts, SHAPE_POLY_SET::PM_FAST );
-        finalPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
-
-        m_gal->SetIsStroke( false );
-        m_gal->SetIsFill( true );
-        m_gal->DrawPolygon( finalPoly );
-    }
-    else
-    {
-        if( outline_mode )
-            attrs.m_StrokeWidth = m_pcbSettings.m_outlineWidth;
-        else
-            attrs.m_StrokeWidth = getLineThickness( aText->GetEffectiveTextPenWidth() );
-
-        if( m_gal->IsFlippedX() && !( aText->GetLayerSet() & LSET::SideSpecificMask() ).any() )
-        {
-            attrs.m_Mirrored = !attrs.m_Mirrored;
-            attrs.m_Halign = static_cast<GR_TEXT_H_ALIGN_T>( -attrs.m_Halign );
-        }
-
-        std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
-
-        if( font->IsOutline() )
-            cache = aText->GetRenderCache( font, resolvedText );
-
-        if( cache )
-            m_gal->DrawGlyphs( *cache );
-        else
-            strokeText( resolvedText, aText->GetTextPos(), attrs );
-    }
-
-    // Draw the umbilical line
-    if( aText->IsSelected() )
-    {
-        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-        m_gal->SetStrokeColor( m_pcbSettings.GetColor( nullptr, LAYER_ANCHOR ) );
-        m_gal->DrawLine( aText->GetTextPos(), aText->GetParent()->GetPosition() );
-    }
-}
-
-
-void PCB_PAINTER::draw( const FP_TEXTBOX* aTextBox, int aLayer )
-{
-    const COLOR4D& color = m_pcbSettings.GetColor( aTextBox, aTextBox->GetLayer() );
-    int            thickness = getLineThickness( aTextBox->GetWidth() );
-    PLOT_DASH_TYPE lineStyle = aTextBox->GetStroke().GetPlotStyle();
-
-    m_gal->SetFillColor( color );
-    m_gal->SetStrokeColor( color );
-    m_gal->SetIsFill( true );
-    m_gal->SetIsStroke( false );
-
-    if( thickness > 0 )
-    {
-        if( lineStyle <= PLOT_DASH_TYPE::FIRST_TYPE )
-        {
-            std::vector<VECTOR2I> pts = aTextBox->GetCorners();
-
-            for( size_t ii = 0; ii < pts.size(); ++ii )
-                m_gal->DrawSegment( pts[ ii ], pts[ (ii + 1) % pts.size() ], thickness );
-        }
-        else
-        {
-            std::vector<SHAPE*> shapes = aTextBox->MakeEffectiveShapes( true );
-
-            for( SHAPE* shape : shapes )
-            {
-                STROKE_PARAMS::Stroke( shape, lineStyle, thickness, &m_pcbSettings,
-                                       [&]( const VECTOR2I& a, const VECTOR2I& b )
-                                       {
-                                           m_gal->DrawSegment( a, b, thickness );
-                                       } );
-            }
-
-            for( SHAPE* shape : shapes )
-                delete shape;
-        }
-    }
-
-    wxString resolvedText( aTextBox->GetShownText() );
-
-    if( resolvedText.Length() == 0 )
-        return;
-
-    TEXT_ATTRIBUTES attrs = aTextBox->GetAttributes();
-    attrs.m_Angle = aTextBox->GetDrawRotation();
-    attrs.m_StrokeWidth = getLineThickness( aTextBox->GetEffectiveTextPenWidth() );
-
-    if( m_gal->IsFlippedX() && !( aTextBox->GetLayerSet() & LSET::SideSpecificMask() ).any() )
-    {
-        attrs.m_Mirrored = !attrs.m_Mirrored;
-        attrs.m_Halign = static_cast<GR_TEXT_H_ALIGN_T>( -attrs.m_Halign );
-    }
-
-    std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
-
-    if( aTextBox->GetFont() && aTextBox->GetFont()->IsOutline() )
-        cache = aTextBox->GetRenderCache( aTextBox->GetFont(), resolvedText );
 
     if( cache )
         m_gal->DrawGlyphs( *cache );

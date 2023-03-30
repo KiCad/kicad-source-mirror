@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012-2020 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,10 +23,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PCB_VIA_H_
-#define PCB_VIA_H_
+#ifndef PCAD_VIA_H
+#define PCAD_VIA_H
 
-#include <pcad/pcb_pad.h>
+#include <pcad/pcad_pad.h>
 
 class BOARD;
 class wxString;
@@ -35,11 +35,11 @@ class XNODE;
 namespace PCAD2KICAD {
 
 // will be replaced by pad in next version ????
-class PCB_VIA : public PCB_PAD
+class PCAD_VIA : public PCAD_PAD
 {
 public:
-    PCB_VIA( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
-    ~PCB_VIA();
+    PCAD_VIA( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
+    ~PCAD_VIA();
 
     virtual void Parse( XNODE* aNode, const wxString& aDefaultUnits,
                         const wxString& aActualConversion ) override;
@@ -47,4 +47,4 @@ public:
 
 } // namespace PCAD2KICAD
 
-#endif    // PCB_VIA_H_
+#endif    // PCAD_VIA_H

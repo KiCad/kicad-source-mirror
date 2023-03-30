@@ -58,8 +58,6 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
 %include pcb_dimension.i
 %include pcb_marker.i
 %include pcb_target.i
-%include fp_shape.i
-%include fp_text.i
 %include netinfo.i
 %include netclass.i
 %include pcb_plot_params.i

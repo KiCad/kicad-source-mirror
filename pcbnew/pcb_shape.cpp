@@ -63,9 +63,7 @@ bool PCB_SHAPE::IsType( const std::vector<KICAD_T>& aScanTypes ) const
 
     for( KICAD_T scanType : aScanTypes )
     {
-        if( scanType == PCB_LOCATE_GRAPHIC_T )
-            return true;
-        else if( scanType == PCB_LOCATE_BOARD_EDGE_T )
+        if( scanType == PCB_LOCATE_BOARD_EDGE_T )
             sametype = m_layer == Edge_Cuts;
         else if( scanType == PCB_SHAPE_LOCATE_ARC_T )
             sametype = m_shape == SHAPE_T::ARC;
@@ -140,12 +138,10 @@ std::vector<VECTOR2I> PCB_SHAPE::GetCorners() const
     }
     else if( GetShape() == SHAPE_T::POLY )
     {
-        VECTOR2I offset = getParentPosition();
-
         for( int ii = 0; ii < GetPolyShape().OutlineCount(); ++ii )
         {
             for( const VECTOR2I& pt : GetPolyShape().Outline( ii ).CPoints() )
-                pts.emplace_back( pt + offset );
+                pts.emplace_back( pt );
         }
     }
     else
@@ -249,30 +245,6 @@ void PCB_SHAPE::Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis )
 }
 
 
-FOOTPRINT* PCB_SHAPE::GetParentFootprint() const
-{
-    return dynamic_cast<FOOTPRINT*>( BOARD_ITEM::GetParentFootprint() );
-}
-
-
-EDA_ANGLE PCB_SHAPE::getParentOrientation() const
-{
-    if( GetParentFootprint() )
-        return GetParentFootprint()->GetOrientation();
-    else
-        return ANGLE_0;
-}
-
-
-VECTOR2I PCB_SHAPE::getParentPosition() const
-{
-    if( GetParentFootprint() )
-        return GetParentFootprint()->GetPosition();
-    else
-        return VECTOR2I( 0, 0 );
-}
-
-
 double PCB_SHAPE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
     constexpr double HIDE = std::numeric_limits<double>::max();
@@ -295,12 +267,27 @@ double PCB_SHAPE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         }
     }
 
+    if( FOOTPRINT* parent = GetParentFootprint() )
+    {
+        if( parent->GetLayer() == F_Cu && !aView->IsLayerVisible( LAYER_MOD_FR ) )
+            return HIDE;
+
+        if( parent->GetLayer() == B_Cu && !aView->IsLayerVisible( LAYER_MOD_BK ) )
+            return HIDE;
+    }
+
     return SHOW;
 }
 
 
 void PCB_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
+    if( aFrame->GetName() == PCB_EDIT_FRAME_NAME )
+    {
+        if( FOOTPRINT* parent = GetParentFootprint() )
+            aList.emplace_back( _( "Footprint" ), parent->GetReference() );
+    }
+
     aList.emplace_back( _( "Type" ), _( "Drawing" ) );
 
     if( aFrame->GetName() == PCB_EDIT_FRAME_NAME && IsLocked() )
@@ -320,7 +307,10 @@ wxString PCB_SHAPE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 
 BITMAPS PCB_SHAPE::GetMenuImage() const
 {
-    return BITMAPS::add_dashed_line;
+    if( GetParentFootprint() )
+        return BITMAPS::show_mod_edge;
+    else
+        return BITMAPS::add_dashed_line;
 }
 
 

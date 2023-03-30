@@ -31,7 +31,7 @@
 #include "board_adapter.h"
 #include <board_design_settings.h>
 #include <convert_basic_shapes_to_polygon.h>
-#include <fp_shape.h>
+#include <pcb_shape.h>
 #include <footprint.h>
 
 
@@ -71,19 +71,10 @@ void BOARD_ADAPTER::transformFPShapesToPolySet( const FOOTPRINT* aFootprint, PCB
 
     for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
     {
-        if( item->Type() == PCB_FP_SHAPE_T )
+        if( item->Type() == PCB_SHAPE_T || BaseType( item->Type() ) == PCB_DIMENSION_T )
         {
-            FP_SHAPE* shape = static_cast<FP_SHAPE*>( item );
-
-            if( shape->GetLayer() == aLayer )
-                shape->TransformShapeToPolygon( aBuffer, aLayer, 0, maxError, ERROR_INSIDE );
-        }
-        else if( BaseType( item->Type() ) == PCB_DIMENSION_T )
-        {
-            PCB_DIMENSION_BASE* dimension = static_cast<PCB_DIMENSION_BASE*>( item );
-
-            if( dimension->GetLayer() == aLayer )
-                dimension->TransformShapeToPolygon( aBuffer, aLayer, 0, maxError, ERROR_INSIDE );
+            if( item->GetLayer() == aLayer )
+                item->TransformShapeToPolygon( aBuffer, aLayer, 0, maxError, ERROR_INSIDE );
         }
     }
 }

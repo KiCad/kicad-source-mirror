@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
- * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -26,9 +26,9 @@
 #include <hash_eda.h>
 #include <hash.h>
 #include <footprint.h>
-#include <fp_text.h>
-#include <fp_textbox.h>
-#include <fp_shape.h>
+#include <pcb_text.h>
+#include <pcb_textbox.h>
+#include <pcb_shape.h>
 #include <pad.h>
 
 #include <functional>
@@ -101,14 +101,14 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
     }
         break;
 
-    case PCB_FP_TEXT_T:
+    case PCB_TEXT_T:
     {
-        const FP_TEXT* text = static_cast<const FP_TEXT*>( aItem );
+        const PCB_TEXT* text = static_cast<const PCB_TEXT*>( aItem );
 
-        if( !( aFlags & HASH_REF ) && text->GetType() == FP_TEXT::TEXT_is_REFERENCE )
+        if( !( aFlags & HASH_REF ) && text->GetType() == PCB_TEXT::TEXT_is_REFERENCE )
             break;
 
-        if( !( aFlags & HASH_VALUE ) && text->GetType() == FP_TEXT::TEXT_is_VALUE )
+        if( !( aFlags & HASH_VALUE ) && text->GetType() == PCB_TEXT::TEXT_is_VALUE )
             break;
 
         ret = hash_board_item( text, aFlags );
@@ -123,10 +123,10 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
 
         if( aFlags & HASH_POS )
         {
-            if( aFlags & REL_COORD )
-                hash_combine( ret, text->GetPos0().x, text->GetPos0().y );
-            else
-                hash_combine( ret, text->GetPosition().x, text->GetPosition().y );
+            VECTOR2I pos = ( aFlags & REL_COORD ) ? text->GetFPRelativePosition()
+                                                  : text->GetPosition();
+
+            hash_combine( ret, pos.x, pos.y );
         }
 
         if( aFlags & HASH_ROT )
@@ -134,9 +134,9 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
     }
         break;
 
-    case PCB_FP_SHAPE_T:
+    case PCB_SHAPE_T:
     {
-        const FP_SHAPE* shape = static_cast<const FP_SHAPE*>( aItem );
+        const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( aItem );
         ret = hash_board_item( shape, aFlags );
         hash_combine( ret, shape->GetShape() );
         hash_combine( ret, shape->GetWidth() );
@@ -147,39 +147,40 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
 
         if( aFlags & HASH_POS )
         {
-            if( aFlags & REL_COORD )
-            {
-                hash_combine( ret, shape->GetStart0().x );
-                hash_combine( ret, shape->GetStart0().y );
-                hash_combine( ret, shape->GetEnd0().x );
-                hash_combine( ret, shape->GetEnd0().y );
+            VECTOR2I start = shape->GetStart();
+            VECTOR2I end = shape->GetEnd();
+            VECTOR2I center = shape->GetCenter();
 
-                if( shape->GetShape() == SHAPE_T::ARC )
-                {
-                    hash_combine( ret, shape->GetCenter0().x );
-                    hash_combine( ret, shape->GetCenter0().y );
-                }
+            FOOTPRINT* parentFP = shape->GetParentFootprint();
+
+            if( parentFP && ( aFlags & REL_COORD ) )
+            {
+                start -= parentFP->GetPosition();
+                end -= parentFP->GetPosition();
+                center -= parentFP->GetPosition();
+
+                RotatePoint( start, -parentFP->GetOrientation() );
+                RotatePoint( end, -parentFP->GetOrientation() );
+                RotatePoint( center, -parentFP->GetOrientation() );
             }
-            else
-            {
-                hash_combine( ret, shape->GetStart().x );
-                hash_combine( ret, shape->GetStart().y );
-                hash_combine( ret, shape->GetEnd().x );
-                hash_combine( ret, shape->GetEnd().y );
 
-                if( shape->GetShape() == SHAPE_T::ARC )
-                {
-                    hash_combine( ret, shape->GetCenter().x );
-                    hash_combine( ret, shape->GetCenter().y );
-                }
+            hash_combine( ret, start.x );
+            hash_combine( ret, start.y );
+            hash_combine( ret, end.x );
+            hash_combine( ret, end.y );
+
+            if( shape->GetShape() == SHAPE_T::ARC )
+            {
+                hash_combine( ret, center.x );
+                hash_combine( ret, center.y );
             }
         }
     }
         break;
 
-    case PCB_FP_TEXTBOX_T:
+    case PCB_TEXTBOX_T:
     {
-        const FP_TEXTBOX* textbox = static_cast<const FP_TEXTBOX*>( aItem );
+        const PCB_TEXTBOX* textbox = static_cast<const PCB_TEXTBOX*>( aItem );
 
         ret = hash_board_item( textbox, aFlags );
         hash_combine( ret, textbox->GetText().ToStdString() );
@@ -199,20 +200,24 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
 
         if( aFlags & HASH_POS )
         {
-            if( aFlags & REL_COORD )
+            VECTOR2I start = textbox->GetStart();
+            VECTOR2I end = textbox->GetEnd();
+
+            FOOTPRINT* parentFP = textbox->GetParentFootprint();
+
+            if( parentFP && ( aFlags & REL_COORD ) )
             {
-                hash_combine( ret, textbox->GetStart0().x );
-                hash_combine( ret, textbox->GetStart0().y );
-                hash_combine( ret, textbox->GetEnd0().x );
-                hash_combine( ret, textbox->GetEnd0().y );
+                start -= parentFP->GetPosition();
+                end -= parentFP->GetPosition();
+
+                RotatePoint( start, -parentFP->GetOrientation() );
+                RotatePoint( end, -parentFP->GetOrientation() );
             }
-            else
-            {
-                hash_combine( ret, textbox->GetStart().x );
-                hash_combine( ret, textbox->GetStart().y );
-                hash_combine( ret, textbox->GetEnd().x );
-                hash_combine( ret, textbox->GetEnd().y );
-            }
+
+            hash_combine( ret, start.x );
+            hash_combine( ret, start.y );
+            hash_combine( ret, end.x );
+            hash_combine( ret, end.y );
         }
     }
         break;

@@ -622,8 +622,8 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aE
 
     SHAPE_POLY_SET      fpHoles;
 
-    // Get all the PCB and FP shapes into 'items', then keep only those on layer == Edge_Cuts.
-    items.Collect( aBoard, { PCB_SHAPE_T, PCB_FP_SHAPE_T } );
+    // Get all the shapes into 'items', then keep only those on layer == Edge_Cuts.
+    items.Collect( aBoard, { PCB_SHAPE_T } );
 
     for( int ii = 0; ii < items.GetCount(); ++ii )
         items[ii]->ClearFlags( SKIP_STRUCT );
@@ -631,7 +631,7 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aE
     for( FOOTPRINT* fp : aBoard->Footprints() )
     {
         PCB_TYPE_COLLECTOR fpItems;
-        fpItems.Collect( fp, { PCB_SHAPE_T, PCB_FP_SHAPE_T } );
+        fpItems.Collect( fp, { PCB_SHAPE_T } );
 
         std::vector<PCB_SHAPE*> fpSegList;
 
@@ -881,7 +881,7 @@ bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, in
     bool                success = false;
 
     // Get all the SHAPEs into 'items', then keep only those on layer == Edge_Cuts.
-    items.Collect( aBoard, { PCB_SHAPE_T, PCB_FP_SHAPE_T } );
+    items.Collect( aBoard, { PCB_SHAPE_T } );
 
     // Make a working copy of aSegList, because the list is modified during calculations
     std::vector<PCB_SHAPE*> segList;

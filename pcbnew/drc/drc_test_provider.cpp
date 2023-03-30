@@ -60,7 +60,7 @@ void DRC_TEST_PROVIDER::Init()
             {
                 s_allBasicItems.push_back( (KICAD_T) i );
 
-                if( i != PCB_ZONE_T && i != PCB_FP_ZONE_T )
+                if( i != PCB_ZONE_T )
                     s_allBasicItemsButZones.push_back( (KICAD_T) i );
             }
         }
@@ -247,7 +247,7 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
 
     for( FOOTPRINT* footprint : brd->Footprints() )
     {
-        if( typeMask[ PCB_FP_TEXT_T ] )
+        if( typeMask[ PCB_TEXT_T ] )
         {
             if( ( footprint->Reference().GetLayerSet() & aLayers ).any() )
             {
@@ -292,21 +292,21 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
 
                     n++;
                 }
-                else if( typeMask[ PCB_FP_TEXT_T ] && dwg->Type() == PCB_FP_TEXT_T )
+                else if( typeMask[ PCB_TEXT_T ] && dwg->Type() == PCB_TEXT_T )
                 {
                     if( !aFunc( dwg ) )
                         return n;
 
                     n++;
                 }
-                else if( typeMask[ PCB_FP_TEXTBOX_T ] && dwg->Type() == PCB_FP_TEXTBOX_T )
+                else if( typeMask[ PCB_TEXTBOX_T ] && dwg->Type() == PCB_TEXTBOX_T )
                 {
                     if( !aFunc( dwg ) )
                         return n;
 
                     n++;
                 }
-                else if( typeMask[ PCB_FP_SHAPE_T ] && dwg->Type() == PCB_FP_SHAPE_T )
+                else if( typeMask[ PCB_SHAPE_T ] && dwg->Type() == PCB_SHAPE_T )
                 {
                     if( !aFunc( dwg ) )
                         return n;
@@ -316,7 +316,7 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
             }
         }
 
-        if( typeMask[ PCB_FP_ZONE_T ] )
+        if( typeMask[ PCB_ZONE_T ] )
         {
             for( ZONE* zone : footprint->Zones() )
             {
@@ -345,13 +345,6 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
 
 bool DRC_TEST_PROVIDER::isInvisibleText( const BOARD_ITEM* aItem ) const
 {
-
-    if( const FP_TEXT* text = dyn_cast<const FP_TEXT*>( aItem ) )
-    {
-        if( !text->IsVisible() )
-            return true;
-    }
-
     if( const PCB_TEXT* text = dyn_cast<const PCB_TEXT*>( aItem ) )
     {
         if( !text->IsVisible() )

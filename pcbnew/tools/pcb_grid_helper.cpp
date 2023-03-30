@@ -25,7 +25,7 @@
 
 #include <functional>
 #include <pcb_dimension.h>
-#include <fp_shape.h>
+#include <pcb_shape.h>
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_group.h>
@@ -679,7 +679,6 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
 
             break;
 
-        case PCB_FP_TEXTBOX_T:
         case PCB_TEXTBOX_T:
             if( aFrom )
             {
@@ -695,7 +694,6 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             handleShape( static_cast<PCB_SHAPE*>( aItem ) );
             break;
 
-        case PCB_FP_SHAPE_T:
         case PCB_SHAPE_T:
             if( aFrom )
             {
@@ -776,31 +774,8 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             break;
         }
 
-        case PCB_FP_ZONE_T:
-        {
-            if( aFrom && aSelectionFilter && !aSelectionFilter->zones )
-                break;
-
-            const SHAPE_POLY_SET* outline = static_cast<const FP_ZONE*>( aItem )->Outline();
-
-            SHAPE_LINE_CHAIN lc;
-            lc.SetClosed( true );
-
-            for( auto iter = outline->CIterateWithHoles(); iter; iter++ )
-            {
-                addAnchor( *iter, CORNER | SNAPPABLE, aItem );
-                lc.Append( *iter );
-            }
-
-            addAnchor( lc.NearestPoint( aRefPos ), OUTLINE, aItem );
-
-            break;
-        }
-
         case PCB_DIM_ALIGNED_T:
         case PCB_DIM_ORTHOGONAL_T:
-        case PCB_FP_DIM_ALIGNED_T:
-        case PCB_FP_DIM_ORTHOGONAL_T:
         {
             if( aFrom && aSelectionFilter && !aSelectionFilter->dimensions )
                 break;
@@ -814,7 +789,6 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
         }
 
         case PCB_DIM_CENTER_T:
-        case PCB_FP_DIM_CENTER_T:
         {
             if( aFrom && aSelectionFilter && !aSelectionFilter->dimensions )
                 break;
@@ -836,7 +810,6 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
         }
 
         case PCB_DIM_RADIAL_T:
-        case PCB_FP_DIM_RADIAL_T:
         {
             if( aFrom && aSelectionFilter && !aSelectionFilter->dimensions )
                 break;
@@ -850,7 +823,6 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
         }
 
         case PCB_DIM_LEADER_T:
-        case PCB_FP_DIM_LEADER_T:
         {
             if( aFrom && aSelectionFilter && !aSelectionFilter->dimensions )
                 break;
@@ -862,7 +834,6 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             break;
         }
 
-        case PCB_FP_TEXT_T:
         case PCB_TEXT_T:
             if( aFrom && aSelectionFilter && !aSelectionFilter->text )
                 break;

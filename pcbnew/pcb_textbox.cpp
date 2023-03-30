@@ -485,22 +485,43 @@ void PCB_TEXTBOX::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID
     // Don't use PCB_SHAPE::TransformShapeToPolygon.  We want to treat the textbox as filled even
     // if there's no background colour.
 
-    std::vector<VECTOR2I> pts = GetRectCorners();
-
-    aBuffer.NewOutline();
-
-    for( const VECTOR2I& pt : pts )
-        aBuffer.Append( pt );
-
     int width = GetWidth() + ( 2 * aClearance );
 
-    if( width > 0 )
+    if( GetShape() == SHAPE_T::RECT )
     {
-        // Add in segments
-        TransformOvalToPolygon( aBuffer, pts[0], pts[1], width, aError, aErrorLoc );
-        TransformOvalToPolygon( aBuffer, pts[1], pts[2], width, aError, aErrorLoc );
-        TransformOvalToPolygon( aBuffer, pts[2], pts[3], width, aError, aErrorLoc );
-        TransformOvalToPolygon( aBuffer, pts[3], pts[0], width, aError, aErrorLoc );
+        std::vector<VECTOR2I> pts = GetRectCorners();
+
+        aBuffer.NewOutline();
+
+        for( const VECTOR2I& pt : pts )
+            aBuffer.Append( pt );
+
+        if( width > 0 )
+        {
+            // Add in segments
+            TransformOvalToPolygon( aBuffer, pts[0], pts[1], width, aError, aErrorLoc );
+            TransformOvalToPolygon( aBuffer, pts[1], pts[2], width, aError, aErrorLoc );
+            TransformOvalToPolygon( aBuffer, pts[2], pts[3], width, aError, aErrorLoc );
+            TransformOvalToPolygon( aBuffer, pts[3], pts[0], width, aError, aErrorLoc );
+        }
+    }
+    else if( GetShape() == SHAPE_T::POLY )  // Non-cardinally-rotated rect
+    {
+        aBuffer.NewOutline();
+
+        const SHAPE_LINE_CHAIN& poly = m_poly.Outline( 0 );
+
+        for( int ii = 0; ii < poly.PointCount(); ++ii )
+            aBuffer.Append( poly.GetPoint( ii ) );
+
+        if( width > 0 )
+        {
+            for( int ii = 0; ii < poly.SegmentCount(); ++ii )
+            {
+                const SEG& seg = poly.GetSegment( ii );
+                TransformOvalToPolygon( aBuffer, seg.A, seg.B, width, aError, aErrorLoc );
+            }
+        }
     }
 }
 

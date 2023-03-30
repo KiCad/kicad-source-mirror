@@ -111,10 +111,11 @@ void FOOTPRINT_PREVIEW_PANEL::renderFootprint( std::shared_ptr<FOOTPRINT> aFootp
                 return INSPECT_RESULT::CONTINUE;
             };
 
-    aFootprint->Visit( inspector, nullptr, { PCB_FP_DIM_LEADER_T,
-                                             PCB_FP_DIM_ORTHOGONAL_T,
-                                             PCB_FP_DIM_CENTER_T,
-                                             PCB_FP_DIM_RADIAL_T } );
+    aFootprint->Visit( inspector, nullptr, { PCB_DIM_LEADER_T,
+                                             PCB_DIM_ALIGNED_T,
+                                             PCB_DIM_ORTHOGONAL_T,
+                                             PCB_DIM_CENTER_T,
+                                             PCB_DIM_RADIAL_T } );
 
     // Ensure we are not using the high contrast mode to display the selected footprint
     KIGFX::PAINTER* painter = GetView()->GetPainter();

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,11 +23,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <pcad/pcb_polygon.h>
+#include <pcad/pcad_polygon.h>
 
 #include <board.h>
 #include <footprint.h>
-#include <fp_shape.h>
+#include <pcb_shape.h>
 #include <math/util.h>      // for KiROUND
 #include <xnode.h>
 #include <zone.h>
@@ -36,8 +36,8 @@
 
 namespace PCAD2KICAD {
 
-PCB_POLYGON::PCB_POLYGON( PCB_CALLBACKS* aCallbacks, BOARD* aBoard, int aPCadLayer ) :
-    PCB_COMPONENT( aCallbacks, aBoard )
+PCAD_POLYGON::PCAD_POLYGON( PCB_CALLBACKS* aCallbacks, BOARD* aBoard, int aPCadLayer ) :
+        PCAD_PCB_COMPONENT( aCallbacks, aBoard )
 {
     m_width      = 0;
 
@@ -53,21 +53,17 @@ PCB_POLYGON::PCB_POLYGON( PCB_CALLBACKS* aCallbacks, BOARD* aBoard, int aPCadLay
 }
 
 
-PCB_POLYGON::~PCB_POLYGON()
+PCAD_POLYGON::~PCAD_POLYGON()
 {
     int i, island;
 
     for( i = 0; i < (int) m_outline.GetCount(); i++ )
-    {
         delete m_outline[i];
-    }
 
     for( island = 0; island < (int) m_cutouts.GetCount(); island++ )
     {
         for( i = 0; i < (int) m_cutouts[island]->GetCount(); i++ )
-        {
             delete (*m_cutouts[island])[i];
-        }
 
         delete m_cutouts[island];
     }
@@ -75,21 +71,19 @@ PCB_POLYGON::~PCB_POLYGON()
     for( island = 0; island < (int) m_islands.GetCount(); island++ )
     {
         for( i = 0; i < (int) m_islands[island]->GetCount(); i++ )
-        {
             delete (*m_islands[island])[i];
-        }
 
         delete m_islands[island];
     }
 }
 
-void PCB_POLYGON::AssignNet( const wxString& aNetName )
+void PCAD_POLYGON::AssignNet( const wxString& aNetName )
 {
     m_net = aNetName;
     m_netCode = GetNetCode( m_net );
 }
 
-void PCB_POLYGON::SetOutline( VERTICES_ARRAY* aOutline )
+void PCAD_POLYGON::SetOutline( VERTICES_ARRAY* aOutline )
 {
     int i;
 
@@ -105,8 +99,8 @@ void PCB_POLYGON::SetOutline( VERTICES_ARRAY* aOutline )
     }
 }
 
-void PCB_POLYGON::FormPolygon( XNODE* aNode, VERTICES_ARRAY* aPolygon,
-                               const wxString& aDefaultUnits, const wxString& aActualConversion )
+void PCAD_POLYGON::FormPolygon( XNODE* aNode, VERTICES_ARRAY* aPolygon,
+                                const wxString& aDefaultUnits, const wxString& aActualConversion )
 {
     XNODE*      lNode;
     double      x, y;
@@ -127,7 +121,7 @@ void PCB_POLYGON::FormPolygon( XNODE* aNode, VERTICES_ARRAY* aPolygon,
 }
 
 
-bool PCB_POLYGON::Parse( XNODE* aNode, const wxString& aDefaultUnits,
+bool PCAD_POLYGON::Parse( XNODE* aNode, const wxString& aDefaultUnits,
                          const wxString& aActualConversion )
 {
     XNODE*      lNode;
@@ -158,95 +152,93 @@ bool PCB_POLYGON::Parse( XNODE* aNode, const wxString& aDefaultUnits,
 }
 
 
-void PCB_POLYGON::AddToFootprint( FOOTPRINT* aFootprint )
+void PCAD_POLYGON::AddToBoard( FOOTPRINT* aFootprint )
 {
-    if( IsNonCopperLayer( m_KiCadLayer ) )
-    {
-        FP_SHAPE* dwg = new FP_SHAPE( aFootprint, SHAPE_T::POLY );
-        aFootprint->Add( dwg );
-
-        dwg->SetStroke( STROKE_PARAMS( 0 ) );
-        dwg->SetLayer( m_KiCadLayer );
-
-        auto outline = new std::vector<VECTOR2I>;
-        for( auto point : m_outline )
-            outline->push_back( VECTOR2I( point->x, point->y ) );
-
-        dwg->SetPolyPoints( *outline );
-        dwg->SetStart0( *outline->begin() );
-        dwg->SetEnd0( outline->back() );
-        dwg->SetDrawCoord();
-
-        delete( outline );
-    }
-}
-
-
-void PCB_POLYGON::AddToBoard()
-{
-    int i = 0;
-
     if( m_outline.GetCount() > 0 )
     {
-        ZONE* zone = new ZONE( m_board );
-        m_board->Add( zone, ADD_MODE::APPEND );
-
-        zone->SetLayer( m_KiCadLayer );
-        zone->SetNetCode( m_netCode );
-
-        // add outline
-        for( i = 0; i < (int) m_outline.GetCount(); i++ )
+        if( aFootprint )
         {
-            zone->AppendCorner( VECTOR2I( KiROUND( m_outline[i]->x ),
-                                          KiROUND( m_outline[i]->y ) ), -1 );
+            PCB_SHAPE* dwg = new PCB_SHAPE( aFootprint, SHAPE_T::POLY );
+            aFootprint->Add( dwg );
+
+            dwg->SetStroke( STROKE_PARAMS( 0 ) );
+            dwg->SetLayer( m_KiCadLayer );
+
+            auto outline = new std::vector<VECTOR2I>;
+
+            for( auto point : m_outline )
+                outline->push_back( VECTOR2I( point->x, point->y ) );
+
+            dwg->SetPolyPoints( *outline );
+            dwg->SetStart( *outline->begin() );
+            dwg->SetEnd( outline->back() );
+            dwg->Rotate( { 0, 0 }, aFootprint->GetOrientation() );
+            dwg->Move( aFootprint->GetPosition() );
+
+            delete( outline );
         }
-
-        zone->SetLocalClearance( m_width );
-
-        zone->SetAssignedPriority( m_priority );
-
-        zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
-                                     zone->GetDefaultHatchPitch(), true );
-
-        if ( m_objType == wxT( 'K' ) )
+        else
         {
-            zone->SetIsRuleArea( true );
-            zone->SetDoNotAllowTracks( true );
-            zone->SetDoNotAllowVias( true );
-            zone->SetDoNotAllowPads( true );
-            zone->SetDoNotAllowCopperPour( true );
-            zone->SetDoNotAllowFootprints( false );
-        }
-        else if( m_objType == wxT( 'C' ) )
-        {
-            // convert cutouts to keepouts because standalone cutouts are not supported in KiCad
-            zone->SetIsRuleArea( true );
-            zone->SetDoNotAllowCopperPour( true );
-            zone->SetDoNotAllowTracks( false );
-            zone->SetDoNotAllowVias( false );
-            zone->SetDoNotAllowPads( false );
-            zone->SetDoNotAllowFootprints( false );
-        }
+            ZONE* zone = new ZONE( m_board );
+            m_board->Add( zone, ADD_MODE::APPEND );
 
-        //if( m_filled )
-        //    zone->BuildFilledPolysListData( m_board );
+            zone->SetLayer( m_KiCadLayer );
+            zone->SetNetCode( m_netCode );
+
+            // add outline
+            for( int i = 0; i < (int) m_outline.GetCount(); i++ )
+            {
+                zone->AppendCorner( VECTOR2I( KiROUND( m_outline[i]->x ),
+                                              KiROUND( m_outline[i]->y ) ), -1 );
+            }
+
+            zone->SetLocalClearance( m_width );
+
+            zone->SetAssignedPriority( m_priority );
+
+            zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
+                                         zone->GetDefaultHatchPitch(), true );
+
+            if ( m_objType == wxT( 'K' ) )
+            {
+                zone->SetIsRuleArea( true );
+                zone->SetDoNotAllowTracks( true );
+                zone->SetDoNotAllowVias( true );
+                zone->SetDoNotAllowPads( true );
+                zone->SetDoNotAllowCopperPour( true );
+                zone->SetDoNotAllowFootprints( false );
+            }
+            else if( m_objType == wxT( 'C' ) )
+            {
+                // convert cutouts to keepouts because standalone cutouts are not supported in KiCad
+                zone->SetIsRuleArea( true );
+                zone->SetDoNotAllowCopperPour( true );
+                zone->SetDoNotAllowTracks( false );
+                zone->SetDoNotAllowVias( false );
+                zone->SetDoNotAllowPads( false );
+                zone->SetDoNotAllowFootprints( false );
+            }
+
+            //if( m_filled )
+            //    zone->BuildFilledPolysListData( m_board );
+        }
     }
 }
 
 
-void PCB_POLYGON::Flip()
+void PCAD_POLYGON::Flip()
 {
-    PCB_COMPONENT::Flip();
+    PCAD_PCB_COMPONENT::Flip();
 
     m_KiCadLayer = FlipLayer( m_KiCadLayer );
 }
 
 
-void PCB_POLYGON::SetPosOffset( int aX_offs, int aY_offs )
+void PCAD_POLYGON::SetPosOffset( int aX_offs, int aY_offs )
 {
     int i, island;
 
-    PCB_COMPONENT::SetPosOffset( aX_offs, aY_offs );
+    PCAD_PCB_COMPONENT::SetPosOffset( aX_offs, aY_offs );
 
     for( i = 0; i < (int) m_outline.GetCount(); i++ )
     {

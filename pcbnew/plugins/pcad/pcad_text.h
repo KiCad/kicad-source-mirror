@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
- * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,10 +23,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PCB_ARC_H_
-#define PCB_ARC_H_
+#ifndef PCAD_TEXT_H
+#define PCAD_TEXT_H
 
-#include <pcad/pcb_component.h>
+#include <pcad/pcad_pcb_component.h>
 
 class BOARD;
 class FOOTPRINT;
@@ -35,31 +35,21 @@ class XNODE;
 
 namespace PCAD2KICAD {
 
-class PCB_ARC : public PCB_COMPONENT
+// Name property of parent is used for text value
+class PCAD_TEXT : public PCAD_PCB_COMPONENT
 {
 public:
-    PCB_ARC( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
-    ~PCB_ARC();
+    PCAD_TEXT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
+    ~PCAD_TEXT();
 
     virtual void Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
                         const wxString& aActualConversion );
 
-    virtual void SetPosOffset( int aX_offs, int aY_offs ) override;
+    void AddToBoard( FOOTPRINT* aFootprint = nullptr ) override;
 
-    virtual void Flip() override;
-
-    void AddToFootprint( FOOTPRINT* aFootprint ) override;
-    void AddToBoard() override;
-
-    int       m_StartX;
-    int       m_StartY;
-    EDA_ANGLE m_Angle;
-    int       m_Width;
-
-private:
-    bool IsCircle();
+// virtual void    SetPosOffset( int aX_offs, int aY_offs );
 };
 
 } // namespace PCAD2KICAD
 
-#endif    // PCB_ARC_H_
+#endif    // PCAD_TEXT_H

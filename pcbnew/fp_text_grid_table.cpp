@@ -27,6 +27,7 @@
 #include <widgets/grid_combobox.h>
 #include <trigo.h>
 #include <pcb_base_frame.h>
+#include <footprint.h>
 #include "grid_layer_box_helpers.h"
 
 enum
@@ -193,8 +194,8 @@ wxGridCellAttr* FP_TEXT_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr:
 
 wxString FP_TEXT_GRID_TABLE::GetValue( int aRow, int aCol )
 {
-    wxGrid*        grid = GetView();
-    const FP_TEXT& text = this->at( (size_t) aRow );
+    wxGrid*         grid = GetView();
+    const PCB_TEXT& text = this->at( (size_t) aRow );
 
     if( grid->GetGridCursorRow() == aRow && grid->GetGridCursorCol() == aCol
             && grid->IsCellEditControlShown() )
@@ -223,13 +224,16 @@ wxString FP_TEXT_GRID_TABLE::GetValue( int aRow, int aCol )
         return text.GetLayerName();
 
     case FPT_ORIENTATION:
-        return m_frame->StringFromValue( text.GetTextAngle(), true );
+    {
+        EDA_ANGLE angle = text.GetTextAngle() - text.GetParentFootprint()->GetOrientation();
+        return m_frame->StringFromValue( angle, true );
+    }
 
     case FPT_XOFFSET:
-        return m_frame->StringFromValue( text.GetPos0().x, true );
+        return m_frame->StringFromValue( text.GetFPRelativePosition().x, true );
 
     case FPT_YOFFSET:
-        return m_frame->StringFromValue( text.GetPos0().y, true );
+        return m_frame->StringFromValue( text.GetFPRelativePosition().y, true );
 
     default:
         // we can't assert here because wxWidgets sometimes calls this without checking
@@ -241,7 +245,7 @@ wxString FP_TEXT_GRID_TABLE::GetValue( int aRow, int aCol )
 
 bool FP_TEXT_GRID_TABLE::GetValueAsBool( int aRow, int aCol )
 {
-    FP_TEXT& text = this->at( (size_t) aRow );
+    PCB_TEXT& text = this->at( (size_t) aRow );
 
     switch( aCol )
     {
@@ -258,7 +262,7 @@ bool FP_TEXT_GRID_TABLE::GetValueAsBool( int aRow, int aCol )
 
 long FP_TEXT_GRID_TABLE::GetValueAsLong( int aRow, int aCol )
 {
-    FP_TEXT& text = this->at( (size_t) aRow );
+    PCB_TEXT& text = this->at( (size_t) aRow );
 
     switch( aCol )
     {
@@ -273,9 +277,9 @@ long FP_TEXT_GRID_TABLE::GetValueAsLong( int aRow, int aCol )
 
 void FP_TEXT_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
 {
-    FP_TEXT& text = this->at( (size_t) aRow );
-    VECTOR2I pos;
-    wxString value = aValue;
+    PCB_TEXT& text = this->at( (size_t) aRow );
+    VECTOR2I  pos;
+    wxString  value = aValue;
 
     switch( aCol )
     {
@@ -317,21 +321,20 @@ void FP_TEXT_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
         break;
 
     case FPT_ORIENTATION:
-        text.SetTextAngle( m_frame->AngleValueFromString( value ) );
-        text.SetDrawCoord();
+        text.SetTextAngle( m_frame->AngleValueFromString( value )
+                            + text.GetParentFootprint()->GetOrientation() );
         break;
 
     case FPT_XOFFSET:
     case FPT_YOFFSET:
-        pos = text.GetPos0();
+        pos = text.GetFPRelativePosition();
 
         if( aCol == FPT_XOFFSET )
             pos.x = m_frame->ValueFromString( value );
         else
             pos.y = m_frame->ValueFromString( value );
 
-        text.SetPos0( pos );
-        text.SetDrawCoord();
+        text.SetFPRelativePosition( pos );
         break;
 
     default:
@@ -345,7 +348,7 @@ void FP_TEXT_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
 
 void FP_TEXT_GRID_TABLE::SetValueAsBool( int aRow, int aCol, bool aValue )
 {
-    FP_TEXT& text = this->at( (size_t) aRow );
+    PCB_TEXT& text = this->at( (size_t) aRow );
 
     switch( aCol )
     {
@@ -369,7 +372,7 @@ void FP_TEXT_GRID_TABLE::SetValueAsBool( int aRow, int aCol, bool aValue )
 
 void FP_TEXT_GRID_TABLE::SetValueAsLong( int aRow, int aCol, long aValue )
 {
-    FP_TEXT& text = this->at( (size_t) aRow );
+    PCB_TEXT& text = this->at( (size_t) aRow );
 
     switch( aCol )
     {

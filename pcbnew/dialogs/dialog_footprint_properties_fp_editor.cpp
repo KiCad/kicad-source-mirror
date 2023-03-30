@@ -274,9 +274,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
 
     for( BOARD_ITEM* item : m_footprint->GraphicalItems() )
     {
-        FP_TEXT* textItem = dyn_cast<FP_TEXT*>( item );
-
-        if( textItem )
+        if( PCB_TEXT* textItem = dynamic_cast<PCB_TEXT*>( item) )
             m_texts->push_back( *textItem );
     }
 
@@ -406,7 +404,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::Validate()
     // Check for empty texts.
     for( size_t i = 2; i < m_texts->size(); ++i )
     {
-        FP_TEXT& text = m_texts->at( i );
+        PCB_TEXT& text = m_texts->at( i );
 
         if( text.GetText().IsEmpty() )
         {
@@ -506,11 +504,11 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
     m_footprint->Value() = m_texts->at( 1 );
 
     size_t i = 2;
-    std::vector<FP_TEXT*> items_to_remove;
+    std::vector<PCB_TEXT*> items_to_remove;
 
     for( BOARD_ITEM* item : m_footprint->GraphicalItems() )
     {
-        FP_TEXT* textItem = dynamic_cast<FP_TEXT*>( item );
+        PCB_TEXT* textItem = dynamic_cast<PCB_TEXT*>( item );
 
         if( textItem )
         {
@@ -526,7 +524,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
     // Remove text items:
     PCB_SELECTION_TOOL* selTool = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
 
-    for( FP_TEXT* item: items_to_remove )
+    for( PCB_TEXT* item: items_to_remove )
     {
         selTool->RemoveItemFromSel( item );
         view->Remove( item );
@@ -536,7 +534,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
     // if there are still grid table entries, create new texts for them
     while( i < m_texts->size() )
     {
-        FP_TEXT* newText = new FP_TEXT( m_texts->at( i++ ) );
+        PCB_TEXT* newText = new PCB_TEXT( m_texts->at( i++ ) );
         m_footprint->Add( newText, ADD_MODE::APPEND );
         view->Add( newText );
     }
@@ -632,7 +630,7 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAddField( wxCommandEvent& event )
         return;
 
     const BOARD_DESIGN_SETTINGS& dsnSettings = m_frame->GetDesignSettings();
-    FP_TEXT textItem( m_footprint );
+    PCB_TEXT                     textItem( m_footprint );
 
     // Set active layer if legal; otherwise copy layer from previous text item
     if( LSET::AllTechMask().test( m_frame->GetActiveLayer() ) )

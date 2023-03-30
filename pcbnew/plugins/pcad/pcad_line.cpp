@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012-2020 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,12 +23,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <pcad/pcb_line.h>
+#include <pcad/pcad_line.h>
 
 #include <board.h>
 #include <common.h>
 #include <footprint.h>
-#include <fp_shape.h>
 #include <pcb_shape.h>
 #include <pcb_track.h>
 #include <xnode.h>
@@ -37,8 +36,8 @@
 
 namespace PCAD2KICAD {
 
-PCB_LINE::PCB_LINE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
-    PCB_COMPONENT( aCallbacks, aBoard )
+PCAD_LINE::PCAD_LINE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
+        PCAD_PCB_COMPONENT( aCallbacks, aBoard )
 {
     m_Width     = 0;
     m_ToX       = 0;
@@ -47,25 +46,25 @@ PCB_LINE::PCB_LINE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
 }
 
 
-PCB_LINE::~PCB_LINE()
+PCAD_LINE::~PCAD_LINE()
 {
 }
 
 
-void PCB_LINE::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
-                      const wxString& aActualConversion )
+void PCAD_LINE::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
+                       const wxString& aActualConversion )
 {
     XNODE*      lNode;
     wxString    propValue;
 
-    m_PCadLayer     = aLayer;
-    m_KiCadLayer    = GetKiCadLayer();
-    m_positionX     = 0;
-    m_positionY     = 0;
-    m_ToX   = 0;
-    m_ToY   = 0;
-    m_Width = 0;
-    lNode   = FindNode( aNode, wxT( "pt" ) );
+    m_PCadLayer  = aLayer;
+    m_KiCadLayer = GetKiCadLayer();
+    m_positionX  = 0;
+    m_positionY  = 0;
+    m_ToX        = 0;
+    m_ToY        = 0;
+    m_Width      = 0;
+    lNode        = FindNode( aNode, wxT( "pt" ) );
 
     if( lNode )
     {
@@ -97,45 +96,27 @@ void PCB_LINE::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
 }
 
 
-void PCB_LINE::SetPosOffset( int aX_offs, int aY_offs )
+void PCAD_LINE::SetPosOffset( int aX_offs, int aY_offs )
 {
-    PCB_COMPONENT::SetPosOffset( aX_offs, aY_offs );
+    PCAD_PCB_COMPONENT::SetPosOffset( aX_offs, aY_offs );
 
     m_ToX   += aX_offs;
     m_ToY   += aY_offs;
 }
 
 
-void PCB_LINE::Flip()
+void PCAD_LINE::Flip()
 {
-    PCB_COMPONENT::Flip();
+    PCAD_PCB_COMPONENT::Flip();
 
     m_ToX = -m_ToX;
     m_KiCadLayer = FlipLayer( m_KiCadLayer );
 }
 
 
-void PCB_LINE::AddToFootprint( FOOTPRINT* aFootprint )
+void PCAD_LINE::AddToBoard( FOOTPRINT* aFootprint )
 {
-    if( IsNonCopperLayer( m_KiCadLayer ) )
-    {
-        FP_SHAPE* segment = new FP_SHAPE( aFootprint, SHAPE_T::SEGMENT );
-        aFootprint->Add( segment );
-
-        segment->SetStart0( VECTOR2I( m_positionX, m_positionY ) );
-        segment->SetEnd0( VECTOR2I( m_ToX, m_ToY ) );
-
-        segment->SetStroke( STROKE_PARAMS( m_Width, PLOT_DASH_TYPE::SOLID ) );
-        segment->SetLayer( m_KiCadLayer );
-
-        segment->SetDrawCoord();
-    }
-}
-
-
-void PCB_LINE::AddToBoard()
-{
-    if( IsCopperLayer( m_KiCadLayer ) )
+    if( IsCopperLayer( m_KiCadLayer ) && !aFootprint )
     {
         PCB_TRACK* track = new PCB_TRACK( m_board );
         m_board->Add( track );
@@ -157,6 +138,12 @@ void PCB_LINE::AddToBoard()
         segment->SetStart( VECTOR2I( m_positionX, m_positionY ) );
         segment->SetEnd( VECTOR2I( m_ToX, m_ToY ) );
         segment->SetStroke( STROKE_PARAMS( m_Width, PLOT_DASH_TYPE::SOLID ) );
+
+        if( aFootprint )
+        {
+            segment->Rotate( { 0, 0 }, aFootprint->GetOrientation() );
+            segment->Move( aFootprint->GetPosition() );
+        }
     }
 }
 

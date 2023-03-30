@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 BeagleBoard Foundation
- * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Seth Hillbrand <hillbrand@kipro-pcb.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -42,7 +42,6 @@
 #include <board_design_settings.h>
 #include <board_item.h>
 #include <footprint.h>
-#include <fp_shape.h>
 #include <pad.h>
 #include <pad_shapes.h>
 #include <pcb_shape.h>
@@ -2022,7 +2021,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
 
                 if( lsrc->text == src->refdes )
                 {
-                    FP_TEXT* txt = nullptr;
+                    PCB_TEXT*    txt = nullptr;
                     PCB_LAYER_ID layer = getLayer( ref->layer );
 
                     if( !IsPcbLayer( layer ) )
@@ -2034,7 +2033,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                     if( layer == F_SilkS || layer == B_SilkS )
                         txt = &( fp->Reference() );
                     else
-                        txt = new FP_TEXT( fp );
+                        txt = new PCB_TEXT( fp, PCB_TEXT::TEXT_is_DIVERS );
 
                     if( src->mirror )
                     {
@@ -2053,7 +2052,6 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                     txt->SetTextHeight( lsrc->height );
                     txt->SetTextWidth( lsrc->width );
                     txt->SetHorizJustify( lsrc->orient );
-                    txt->SetLocalCoord();
 
                     if( txt != &fp->Reference() )
                         fp->Add( txt, ADD_MODE::APPEND );
@@ -2092,7 +2090,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                     {
                         const GRAPHIC_LINE* lsrc = static_cast<const GRAPHIC_LINE*>( seg.get() );
 
-                        FP_SHAPE* line = new FP_SHAPE( fp, SHAPE_T::SEGMENT );
+                        PCB_SHAPE* line = new PCB_SHAPE( fp, SHAPE_T::SEGMENT );
 
                         if( src->mirror )
                         {
@@ -2108,7 +2106,9 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         }
 
                         line->SetStroke( STROKE_PARAMS( lsrc->width, PLOT_DASH_TYPE::SOLID ) );
-                        line->SetLocalCoord();
+
+                        line->Rotate( { 0, 0 }, fp->GetOrientation() );
+                        line->Move( fp->GetPosition() );
 
                         if( lsrc->width == 0 )
                             line->SetStroke( defaultStroke );
@@ -2120,13 +2120,15 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                     {
                         const GRAPHIC_ARC* lsrc = static_cast<const GRAPHIC_ARC*>( seg.get() );
 
-                        FP_SHAPE* circle = new FP_SHAPE( fp, SHAPE_T::CIRCLE );
+                        PCB_SHAPE* circle = new PCB_SHAPE( fp, SHAPE_T::CIRCLE );
 
                         circle->SetLayer( layer );
                         circle->SetCenter( VECTOR2I( lsrc->center_x, lsrc->center_y ) );
                         circle->SetEnd( VECTOR2I( lsrc->end_x, lsrc->end_y ) );
                         circle->SetWidth( lsrc->width );
-                        circle->SetLocalCoord();
+
+                        circle->Rotate( { 0, 0 }, fp->GetOrientation() );
+                        circle->Move( fp->GetPosition() );
 
                         if( lsrc->width == 0 )
                             circle->SetWidth( ds.GetLineThickness( circle->GetLayer() ) );
@@ -2141,14 +2143,16 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                     {
                         const GRAPHIC_ARC* lsrc = static_cast<const GRAPHIC_ARC*>( seg.get() );
 
-                        FP_SHAPE* arc = new FP_SHAPE( fp, SHAPE_T::ARC );
+                        PCB_SHAPE* arc = new PCB_SHAPE( fp, SHAPE_T::ARC );
 
                         arc->SetLayer( layer );
                         arc->SetArcGeometry( lsrc->result.GetP0(),
                                              lsrc->result.GetArcMid(),
                                              lsrc->result.GetP1() );
                         arc->SetStroke( STROKE_PARAMS( lsrc->width, PLOT_DASH_TYPE::SOLID ) );
-                        arc->SetLocalCoord();
+
+                        arc->Rotate( { 0, 0 }, fp->GetOrientation() );
+                        arc->Move( fp->GetPosition() );
 
                         if( lsrc->width == 0 )
                             arc->SetStroke( defaultStroke );
@@ -2164,7 +2168,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         const GRAPHIC_RECTANGLE *lsrc =
                                 static_cast<const GRAPHIC_RECTANGLE*>( seg.get() );
 
-                        FP_SHAPE* rect = new FP_SHAPE( fp, SHAPE_T::RECT );
+                        PCB_SHAPE* rect = new PCB_SHAPE( fp, SHAPE_T::RECT );
 
                         if( src->mirror )
                         {
@@ -2180,7 +2184,9 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         }
 
                         rect->SetStroke( defaultStroke );
-                        rect->SetLocalCoord();
+
+                        rect->Rotate( { 0, 0 }, fp->GetOrientation() );
+                        rect->Move( fp->GetPosition() );
 
                         fp->Add( rect, ADD_MODE::APPEND );
                         break;
@@ -2190,7 +2196,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         const GRAPHIC_TEXT *lsrc =
                                 static_cast<const GRAPHIC_TEXT*>( seg.get() );
 
-                        FP_TEXT* txt = new FP_TEXT( fp );
+                        PCB_TEXT* txt = new PCB_TEXT( fp );
 
                         if( src->mirror )
                         {
@@ -2209,7 +2215,6 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         txt->SetTextHeight( lsrc->height );
                         txt->SetTextWidth( lsrc->width );
                         txt->SetHorizJustify( lsrc->orient );
-                        txt->SetLocalCoord();
 
                         // FABMASTER doesn't have visibility flags but layers that are not silk should be hidden
                         // by default to prevent clutter.

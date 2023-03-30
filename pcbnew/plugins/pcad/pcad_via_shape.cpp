@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012-2020 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <pcad/pcb_via_shape.h>
+#include <pcad/pcad_via_shape.h>
 
 #include <common.h>
 #include <xnode.h>
@@ -32,18 +32,18 @@
 
 namespace PCAD2KICAD {
 
-PCB_VIA_SHAPE::PCB_VIA_SHAPE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
-    PCB_PAD_SHAPE( aCallbacks, aBoard )
+PCAD_VIA_SHAPE::PCAD_VIA_SHAPE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
+        PCAD_PAD_SHAPE( aCallbacks, aBoard )
 {
 }
 
 
-PCB_VIA_SHAPE::~PCB_VIA_SHAPE()
+PCAD_VIA_SHAPE::~PCAD_VIA_SHAPE()
 {
 }
 
 
-void PCB_VIA_SHAPE::Parse( XNODE* aNode, const wxString& aDefaultUnits,
+void PCAD_VIA_SHAPE::Parse( XNODE* aNode, const wxString& aDefaultUnits,
                            const wxString& aActualConversion )
 {
     XNODE*      lNode;

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012-2020 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <pcad/pcb_text.h>
+#include <pcad/pcad_text.h>
 
 #include <common.h>
 #include <board.h>
@@ -34,19 +34,19 @@
 
 namespace PCAD2KICAD {
 
-PCB_TEXT::PCB_TEXT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
-        PCB_COMPONENT( aCallbacks, aBoard )
+PCAD_TEXT::PCAD_TEXT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
+        PCAD_PCB_COMPONENT( aCallbacks, aBoard )
 {
     m_objType = wxT( 'T' );
 }
 
 
-PCB_TEXT::~PCB_TEXT()
+PCAD_TEXT::~PCAD_TEXT()
 {
 }
 
 
-void PCB_TEXT::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
+void PCAD_TEXT::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
                       const wxString& aActualConversion )
 {
     XNODE*      lNode;
@@ -92,12 +92,7 @@ void PCB_TEXT::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
 }
 
 
-void PCB_TEXT::AddToFootprint( FOOTPRINT* aFootprint )
-{
-}
-
-
-void PCB_TEXT::AddToBoard()
+void PCAD_TEXT::AddToBoard( FOOTPRINT* aFootprint )
 {
     m_name.textPositionX = m_positionX;
     m_name.textPositionY = m_positionY;
@@ -130,9 +125,9 @@ void PCB_TEXT::AddToBoard()
 }
 
 
-// void PCB_TEXT::SetPosOffset( int aX_offs, int aY_offs )
+// void PCAD_TEXT::SetPosOffset( int aX_offs, int aY_offs )
 // {
-// PCB_COMPONENT::SetPosOffset( aX_offs, aY_offs );
+// PCAD_PCB_COMPONENT::SetPosOffset( aX_offs, aY_offs );
 
 // m_name.textPositionX    += aX_offs;
 // m_name.textPositionY    += aY_offs;

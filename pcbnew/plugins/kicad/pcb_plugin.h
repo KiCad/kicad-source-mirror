@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 CERN.
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,13 +39,10 @@ class PCB_PARSER;
 class NETINFO_MAPPING;
 class BOARD_DESIGN_SETTINGS;
 class PCB_DIMENSION_BASE;
-class FP_SHAPE;
 class PCB_SHAPE;
 class PCB_BITMAP;
 class PCB_TARGET;
 class PAD;
-class FP_TEXT;
-class FP_TEXTBOX;
 class PCB_GROUP;
 class PCB_TRACK;
 class ZONE;
@@ -378,8 +375,6 @@ private:
 
     void format( const PCB_DIMENSION_BASE* aDimension, int aNestLevel = 0 ) const;
 
-    void format( const FP_SHAPE* aFPShape, int aNestLevel = 0 ) const;
-
     void format( const PCB_BITMAP* aBitmap, int aNestLevel = 0 ) const;
 
     void format( const PCB_GROUP* aGroup, int aNestLevel = 0 ) const;
@@ -395,14 +390,12 @@ private:
     void format( const PCB_TEXT* aText, int aNestLevel = 0 ) const;
     void format( const PCB_TEXTBOX* aTextBox, int aNestLevel = 0 ) const;
 
-    void format( const FP_TEXT* aText, int aNestLevel = 0 ) const;
-    void format( const FP_TEXTBOX* aTextBox, int aNestLevel = 0 ) const;
-
     void format( const PCB_TRACK* aTrack, int aNestLevel = 0 ) const;
 
     void format( const ZONE* aZone, int aNestLevel = 0 ) const;
 
-    void formatPolyPts( const SHAPE_LINE_CHAIN& outline, int aNestLevel, bool aCompact ) const;
+    void formatPolyPts( const SHAPE_LINE_CHAIN& outline, int aNestLevel, bool aCompact,
+                        const FOOTPRINT* aParentFP = nullptr ) const;
 
     void formatRenderCache( const EDA_TEXT* aText, int aNestLevel ) const;
 
@@ -413,20 +406,20 @@ private:
     friend class FP_CACHE;
 
 protected:
-    wxString        m_error;        ///< for throwing exceptions
-    BOARD*          m_board;        ///< which BOARD, no ownership here
+    wxString               m_error;      ///< for throwing exceptions
+    BOARD*                 m_board;      ///< which BOARD, no ownership here
 
-    const STRING_UTF8_MAP*     m_props;        ///< passed via Save() or Load(), no ownership, may be NULL.
-    FP_CACHE*       m_cache;        ///< Footprint library cache.
+    const STRING_UTF8_MAP* m_props;      ///< passed via Save() or Load(), no ownership, may be NULL
+    FP_CACHE*              m_cache;      ///< Footprint library cache
 
-    LINE_READER*    m_reader;       ///< no ownership here.
-    wxString        m_filename;     ///< for saves only, name is in m_reader for loads
+    LINE_READER*           m_reader;     ///< no ownership
+    wxString               m_filename;   ///< for saves only, name is in m_reader for loads
 
-    STRING_FORMATTER    m_sf;
-    OUTPUTFORMATTER*    m_out;      ///< output any Format()s to this, no ownership
-    int                 m_ctl;
-    NETINFO_MAPPING*    m_mapping;  ///< mapping for net codes, so only not empty net codes
-                                    ///< are stored with consecutive integers as net codes
+    STRING_FORMATTER       m_sf;
+    OUTPUTFORMATTER*       m_out;        ///< output any Format()s to this, no ownership
+    int                    m_ctl;
+    NETINFO_MAPPING*       m_mapping;    ///< mapping for net codes, so only not empty net codes
+                                         ///< are stored with consecutive integers as net codes
 
     std::function<bool( wxString aTitle, int aIcon, wxString aMsg, wxString aAction )>* m_queryUserCallback;
 };

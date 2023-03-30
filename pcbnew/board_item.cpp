@@ -32,6 +32,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <pcb_group.h>
+#include <footprint.h>
 
 
 BOARD_ITEM::~BOARD_ITEM()
@@ -236,14 +237,45 @@ std::shared_ptr<SHAPE_SEGMENT> BOARD_ITEM::GetEffectiveHoleShape() const
 }
 
 
-BOARD_ITEM_CONTAINER* BOARD_ITEM::GetParentFootprint() const
+FOOTPRINT* BOARD_ITEM::GetParentFootprint() const
 {
     BOARD_ITEM_CONTAINER* ancestor = GetParent();
 
     while( ancestor && ancestor->Type() == PCB_GROUP_T )
         ancestor = ancestor->GetParent();
 
-    return ( ancestor && ancestor->Type() == PCB_FOOTPRINT_T ) ? ancestor : nullptr;
+    if( ancestor && ancestor->Type() == PCB_FOOTPRINT_T )
+        return static_cast<FOOTPRINT*>( ancestor );
+
+    return nullptr;
+}
+
+
+VECTOR2I BOARD_ITEM::GetFPRelativePosition() const
+{
+    VECTOR2I pos = GetPosition();
+
+    if( FOOTPRINT* parentFP = GetParentFootprint() )
+    {
+        pos -= parentFP->GetPosition();
+        RotatePoint( pos, -parentFP->GetOrientation() );
+    }
+
+    return pos;
+}
+
+
+void BOARD_ITEM::SetFPRelativePosition( const VECTOR2I& aPos )
+{
+    VECTOR2I pos( aPos );
+
+    if( FOOTPRINT* parentFP = GetParentFootprint() )
+    {
+        RotatePoint( pos, parentFP->GetOrientation() );
+        pos += parentFP->GetPosition();
+    }
+
+    SetPosition( pos );
 }
 
 

@@ -23,14 +23,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <pcad/pcb.h>
+#include <pcad/pcad_pcb.h>
 
 #include <pcad/pcb_keepout.h>
-#include <pcad/pcb_footprint.h>
+#include <pcad/pcad_footprint.h>
 #include <pcad/pcb_net.h>
-#include <pcad/pcb_pad.h>
-#include <pcad/pcb_text.h>
-#include <pcad/pcb_via.h>
+#include <pcad/pcad_pad.h>
+#include <pcad/pcad_text.h>
+#include <pcad/pcad_via.h>
 #include <pcad/s_expr_loader.h>
 
 #include <board.h>
@@ -42,7 +42,7 @@
 namespace PCAD2KICAD {
 
 
-PCB_LAYER_ID PCB::GetKiCadLayer( int aPCadLayer ) const
+PCB_LAYER_ID PCAD_PCB::GetKiCadLayer( int aPCadLayer ) const
 {
     auto it = m_LayersMap.find( aPCadLayer );
 
@@ -53,7 +53,7 @@ PCB_LAYER_ID PCB::GetKiCadLayer( int aPCadLayer ) const
 }
 
 
-LAYER_TYPE_T PCB::GetLayerType( int aPCadLayer ) const
+LAYER_TYPE_T PCAD_PCB::GetLayerType( int aPCadLayer ) const
 {
     auto it = m_LayersMap.find( aPCadLayer );
 
@@ -64,7 +64,7 @@ LAYER_TYPE_T PCB::GetLayerType( int aPCadLayer ) const
 }
 
 
-wxString PCB::GetLayerNetNameRef( int aPCadLayer ) const
+wxString PCAD_PCB::GetLayerNetNameRef( int aPCadLayer ) const
 {
     auto it = m_LayersMap.find( aPCadLayer );
 
@@ -75,8 +75,7 @@ wxString PCB::GetLayerNetNameRef( int aPCadLayer ) const
 }
 
 
-PCB::PCB( BOARD* aBoard ) :
-        PCB_FOOTPRINT( this, aBoard )
+PCAD_PCB::PCAD_PCB( BOARD* aBoard ) : PCAD_FOOTPRINT( this, aBoard )
 {
     m_DefaultMeasurementUnit = wxT( "mil" );
 
@@ -105,7 +104,7 @@ PCB::PCB( BOARD* aBoard ) :
 }
 
 
-PCB::~PCB()
+PCAD_PCB::~PCAD_PCB()
 {
     int i;
 
@@ -121,7 +120,7 @@ PCB::~PCB()
 }
 
 
-int PCB::GetNetCode( const wxString& aNetName ) const
+int PCAD_PCB::GetNetCode( const wxString& aNetName ) const
 {
     const PCB_NET* net;
 
@@ -138,7 +137,7 @@ int PCB::GetNetCode( const wxString& aNetName ) const
     return 0;
 }
 
-XNODE* PCB::FindCompDefName( XNODE* aNode, const wxString& aName ) const
+XNODE* PCAD_PCB::FindCompDefName( XNODE* aNode, const wxString& aName ) const
 {
     XNODE*      result = nullptr, * lNode;
     wxString    propValue;
@@ -166,7 +165,7 @@ XNODE* PCB::FindCompDefName( XNODE* aNode, const wxString& aName ) const
 }
 
 
-void PCB::SetTextProperty( XNODE* aNode, TTEXTVALUE* aTextValue, const wxString& aPatGraphRefName,
+void PCAD_PCB::SetTextProperty( XNODE* aNode, TTEXTVALUE* aTextValue, const wxString& aPatGraphRefName,
                            const wxString& aXmlName, const wxString& aActualConversion )
 {
     XNODE*      tNode, * t1Node;
@@ -235,13 +234,13 @@ void PCB::SetTextProperty( XNODE* aNode, TTEXTVALUE* aTextValue, const wxString&
 }
 
 
-void PCB::DoPCBComponents( XNODE* aNode, wxXmlDocument* aXmlDoc, const wxString& aActualConversion,
+void PCAD_PCB::DoPCBComponents( XNODE* aNode, wxXmlDocument* aXmlDoc, const wxString& aActualConversion,
                            wxStatusBar* aStatusBar )
 {
     XNODE*         lNode, * tNode, * mNode;
-    PCB_FOOTPRINT* fp;
-    PCB_PAD*       pad;
-    PCB_VIA*       via;
+    PCAD_FOOTPRINT* fp;
+    PCAD_PAD*       pad;
+    PCAD_VIA*       via;
     PCB_KEEPOUT*   keepOut;
     wxString       cn, str, propValue;
 
@@ -264,7 +263,7 @@ void PCB::DoPCBComponents( XNODE* aNode, wxXmlDocument* aXmlDoc, const wxString&
 
                 if( tNode )
                 {
-                    fp = new PCB_FOOTPRINT( this, m_board );
+                    fp = new PCAD_FOOTPRINT( this, m_board );
 
                     mNode = FindNode( lNode, wxT( "patternGraphicsNameRef" ) );
 
@@ -399,13 +398,13 @@ void PCB::DoPCBComponents( XNODE* aNode, wxXmlDocument* aXmlDoc, const wxString&
         }
         else if( lNode->GetName().IsSameAs( wxT( "pad" ), false ) )
         {
-            pad = new PCB_PAD( this, m_board );
+            pad = new PCAD_PAD( this, m_board );
             pad->Parse( lNode, m_DefaultMeasurementUnit, aActualConversion );
             m_PcbComponents.Add( pad );
         }
         else if( lNode->GetName().IsSameAs( wxT( "via" ), false ) )
         {
-            via = new PCB_VIA( this, m_board );
+            via = new PCAD_VIA( this, m_board );
             via->Parse( lNode, m_DefaultMeasurementUnit, aActualConversion );
             m_PcbComponents.Add( via );
         }
@@ -424,16 +423,16 @@ void PCB::DoPCBComponents( XNODE* aNode, wxXmlDocument* aXmlDoc, const wxString&
 }
 
 
-void PCB::ConnectPinToNet( const wxString& aCompRef, const wxString& aPinRef,
+void PCAD_PCB::ConnectPinToNet( const wxString& aCompRef, const wxString& aPinRef,
                            const wxString& aNetName )
 {
-    PCB_FOOTPRINT* footprint;
-    PCB_PAD*       cp;
+    PCAD_FOOTPRINT* footprint;
+    PCAD_PAD*       cp;
     int            i, j;
 
     for( i = 0; i < (int) m_PcbComponents.GetCount(); i++ )
     {
-        footprint = (PCB_FOOTPRINT*) m_PcbComponents[i];
+        footprint = (PCAD_FOOTPRINT*) m_PcbComponents[i];
 
         if( footprint->m_objType == wxT( 'M' ) && footprint->m_name.text == aCompRef )
         {
@@ -441,7 +440,7 @@ void PCB::ConnectPinToNet( const wxString& aCompRef, const wxString& aPinRef,
             {
                 if( footprint->m_FootprintItems[j]->m_objType == wxT( 'P' ) )
                 {
-                    cp = (PCB_PAD*) footprint->m_FootprintItems[j];
+                    cp = (PCAD_PAD*) footprint->m_FootprintItems[j];
 
                     if( cp->m_name.text == aPinRef )
                         cp->m_net = aNetName;
@@ -452,7 +451,7 @@ void PCB::ConnectPinToNet( const wxString& aCompRef, const wxString& aPinRef,
 }
 
 
-int PCB::FindLayer( const wxString& aLayerName ) const
+int PCAD_PCB::FindLayer( const wxString& aLayerName ) const
 {
     for( int i = 0; i < (int) m_layersStackup.size(); ++i )
     {
@@ -464,7 +463,7 @@ int PCB::FindLayer( const wxString& aLayerName ) const
 }
 
 
-void PCB::MapLayer( XNODE* aNode )
+void PCAD_PCB::MapLayer( XNODE* aNode )
 {
     wxString     lName, layerType;
     PCB_LAYER_ID KiCadLayer;
@@ -559,7 +558,7 @@ void PCB::MapLayer( XNODE* aNode )
     }
 }
 
-int PCB::FindOutlinePoint( const VERTICES_ARRAY* aOutline, wxRealPoint aPoint ) const
+int PCAD_PCB::FindOutlinePoint( const VERTICES_ARRAY* aOutline, wxRealPoint aPoint ) const
 {
     int i;
 
@@ -573,13 +572,13 @@ int PCB::FindOutlinePoint( const VERTICES_ARRAY* aOutline, wxRealPoint aPoint ) 
 }
 
 
-double PCB::GetDistance( const wxRealPoint* aPoint1, const wxRealPoint* aPoint2 ) const
+double PCAD_PCB::GetDistance( const wxRealPoint* aPoint1, const wxRealPoint* aPoint2 ) const
 {
     return sqrt(  ( aPoint1->x - aPoint2->x ) * ( aPoint1->x - aPoint2->x ) +
                   ( aPoint1->y - aPoint2->y ) * ( aPoint1->y - aPoint2->y ) );
 }
 
-void PCB::GetBoardOutline( wxXmlDocument* aXmlDoc, const wxString& aActualConversion )
+void PCAD_PCB::GetBoardOutline( wxXmlDocument* aXmlDoc, const wxString& aActualConversion )
 {
     XNODE*       iNode, *lNode, *pNode;
     long         PCadLayer = 0;
@@ -673,13 +672,13 @@ void PCB::GetBoardOutline( wxXmlDocument* aXmlDoc, const wxString& aActualConver
 }
 
 
-void PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc,
+void PCAD_PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc,
                       const wxString& aActualConversion )
 {
     XNODE*          aNode;//, *aaNode;
     PCB_NET*        net;
-    PCB_COMPONENT*  comp;
-    PCB_FOOTPRINT*  footprint;
+    PCAD_PCB_COMPONENT*  comp;
+    PCAD_FOOTPRINT*  footprint;
     wxString        compRef, pinRef, layerName, layerType;
     int             i, j, netCode;
 
@@ -858,7 +857,7 @@ void PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc,
         for( i = 0; i < (int) m_PcbComponents.GetCount(); i++ )
         {
             if( m_PcbComponents[i]->m_objType == wxT( 'M' ) )
-                ( (PCB_FOOTPRINT*) m_PcbComponents[i] )->Flip();
+                ( (PCAD_FOOTPRINT*) m_PcbComponents[i] )->Flip();
         }
 
         // POSTPROCESS -- SET/OPTIMIZE NEW PCB POSITION
@@ -928,7 +927,7 @@ void PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc,
 
                 if( aNode->GetName().IsSameAs( wxT( "compDef" ), false ) )
                 {
-                    footprint = new PCB_FOOTPRINT( this, m_board );
+                    footprint = new PCAD_FOOTPRINT( this, m_board );
                     footprint->Parse( aNode, aStatusBar, m_DefaultMeasurementUnit,
                                       aActualConversion );
                     m_PcbComponents.Add( footprint );
@@ -941,7 +940,7 @@ void PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc,
 }
 
 
-void PCB::AddToBoard()
+void PCAD_PCB::AddToBoard( FOOTPRINT* )
 {
     int i;
     PCB_NET* net;

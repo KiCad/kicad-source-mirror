@@ -26,7 +26,7 @@
 #ifndef PCB_CUTOUT_H_
 #define PCB_CUTOUT_H_
 
-#include <pcad/pcb_polygon.h>
+#include <pcad/pcad_polygon.h>
 
 class BOARD;
 class wxString;
@@ -34,7 +34,7 @@ class XNODE;
 
 namespace PCAD2KICAD {
 
-class PCB_CUTOUT : public PCB_POLYGON
+class PCB_CUTOUT : public PCAD_POLYGON
 {
 public:
     PCB_CUTOUT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard, int aPCadLayer );

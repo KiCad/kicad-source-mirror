@@ -324,10 +324,6 @@ protected:
     void flip( const VECTOR2I& aCentre, bool aFlipLeftRight );
     void scale( double aScale );
 
-    // To be implemented by concrete classes
-    virtual EDA_ANGLE getParentOrientation() const = 0;
-    virtual VECTOR2I getParentPosition() const = 0;
-
     const BOX2I getBoundingBox() const;
 
     void computeArcBBox( BOX2I& aBBox ) const;

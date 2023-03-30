@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,8 +34,6 @@
 #include <pcbnew/plugins/kicad/pcb_plugin.h>
 
 #include <footprint.h>
-#include <fp_shape.h>
-#include <fp_text.h>
 #include <pad.h>
 #include <zone.h>
 

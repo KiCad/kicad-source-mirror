@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 KiCad Developers, see AUTHORS.TXT for contributors.
- * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Kristoffer Ödmark
  *
  * This program is free software; you can redistribute it and/or
@@ -33,8 +33,6 @@
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
-#include <fp_text.h>
-#include <fp_textbox.h>
 #include <zone.h>
 #include <locale_io.h>
 #include <netinfo.h>
@@ -113,9 +111,9 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
             const PCB_GROUP* group = dynamic_cast<const PCB_GROUP*>( item );
             BOARD_ITEM*      clone;
 
-            if( const FP_TEXT* text = dyn_cast<const FP_TEXT*>( item ) )
+            if( const PCB_TEXT* text = dyn_cast<const PCB_TEXT*>( item ) )
             {
-                if( text->GetType() != FP_TEXT::TEXT_is_DIVERS )
+                if( text->GetType() != PCB_TEXT::TEXT_is_DIVERS )
                     continue;
             }
 
@@ -133,7 +131,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
             partialFootprint.Add( clone );
 
             // A list of not added items, when adding items to the footprint
-            // some FP_TEXT (reference and value) cannot be added to the footprint
+            // some PCB_TEXT (reference and value) cannot be added to the footprint
             std::vector<BOARD_ITEM*> skipped_items;
 
             if( group )
@@ -142,12 +140,12 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
                         [&]( BOARD_ITEM* descendant )
                         {
                             // One cannot add a text reference or value to a given footprint:
-                            // only one is allowed. So add only FP_TEXT::TEXT_is_DIVERS
+                            // only one is allowed. So add only PCB_TEXT::TEXT_is_DIVERS
                             bool can_add = true;
 
-                            if( const FP_TEXT* text = dyn_cast<const FP_TEXT*>( descendant ) )
+                            if( const PCB_TEXT* text = dyn_cast<const PCB_TEXT*>( descendant ) )
                             {
-                                if( text->GetType() != FP_TEXT::TEXT_is_DIVERS )
+                                if( text->GetType() != PCB_TEXT::TEXT_is_DIVERS )
                                     can_add = false;
                             }
 
@@ -197,41 +195,16 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
             BOARD_ITEM* item = static_cast<BOARD_ITEM*>( i );
             BOARD_ITEM* copy = nullptr;
 
-            if( item->Type() == PCB_FP_SHAPE_T )
+            if( item->Type() == PCB_TEXT_T )
             {
-                // Convert to PCB_SHAPE_T
-                copy = (BOARD_ITEM*) reinterpret_cast<PCB_SHAPE*>( item )->Clone();
-                copy->SetLayer( item->GetLayer() );
-            }
-            else if( item->Type() == PCB_FP_TEXT_T )
-            {
-                // Convert to PCB_TEXT_T
-                FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item->GetParent() );
-                FP_TEXT*   fp_text = static_cast<FP_TEXT*>( item );
-                PCB_TEXT*  pcb_text = new PCB_TEXT( m_board );
+                copy = static_cast<BOARD_ITEM*>( item->Clone() );
 
-                if( fp_text->GetText() == wxT( "${VALUE}" ) )
-                    pcb_text->SetText( footprint->GetValue() );
-                else if( fp_text->GetText() == wxT( "${REFERENCE}" ) )
-                    pcb_text->SetText( footprint->GetReference() );
-                else
-                    pcb_text->CopyText( *fp_text );
+                PCB_TEXT* textItem = static_cast<PCB_TEXT*>( copy );
 
-                pcb_text->SetAttributes( *fp_text );
-                pcb_text->SetLayer( fp_text->GetLayer() );
-                copy = pcb_text;
-            }
-            else if( item->Type() == PCB_FP_TEXTBOX_T )
-            {
-                // Convert to PCB_TEXTBOX_T
-                FP_TEXTBOX*  fp_textbox = static_cast<FP_TEXTBOX*>( item );
-                PCB_TEXTBOX* pcb_textbox = new PCB_TEXTBOX( m_board );
-
-                pcb_textbox->CopyText( *fp_textbox );
-
-                pcb_textbox->SetAttributes( *fp_textbox );
-                pcb_textbox->SetLayer( fp_textbox->GetLayer() );
-                copy = pcb_textbox;
+                if( textItem->GetText() == wxT( "${VALUE}" ) )
+                    textItem->SetText( item->GetParentFootprint()->GetValue() );
+                else if( textItem->GetText() == wxT( "${REFERENCE}" ) )
+                    textItem->SetText( item->GetParentFootprint()->GetReference() );
             }
             else if( item->Type() == PCB_PAD_T )
             {
@@ -243,13 +216,6 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
                 pad->SetPos0( VECTOR2I() );
                 footprint->Add( pad );
                 copy = footprint;
-            }
-            else if( item->Type() == PCB_FP_ZONE_T )
-            {
-                // Convert to PCB_ZONE_T
-                ZONE* zone = new ZONE( m_board );
-                zone->InitDataFromSrcInCopyCtor( *static_cast<ZONE*>( item ) );
-                copy = zone;
             }
             else if( item->Type() == PCB_GROUP_T )
             {

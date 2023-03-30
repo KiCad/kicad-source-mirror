@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012-2020 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <pcad/pcb_pad_shape.h>
+#include <pcad/pcad_pad_shape.h>
 
 #include <common.h>
 #include <xnode.h>
@@ -32,8 +32,8 @@
 
 namespace PCAD2KICAD {
 
-PCB_PAD_SHAPE::PCB_PAD_SHAPE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
-    PCB_COMPONENT( aCallbacks, aBoard )
+PCAD_PAD_SHAPE::PCAD_PAD_SHAPE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
+        PCAD_PCB_COMPONENT( aCallbacks, aBoard )
 {
     m_Shape     = wxEmptyString;
     m_Width     = 0;
@@ -41,12 +41,12 @@ PCB_PAD_SHAPE::PCB_PAD_SHAPE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
 }
 
 
-PCB_PAD_SHAPE::~PCB_PAD_SHAPE()
+PCAD_PAD_SHAPE::~PCAD_PAD_SHAPE()
 {
 }
 
 
-void PCB_PAD_SHAPE::Parse( XNODE* aNode, const wxString& aDefaultUnits,
+void PCAD_PAD_SHAPE::Parse( XNODE* aNode, const wxString& aDefaultUnits,
                            const wxString& aActualConversion )
 {
     wxString    str, s;
@@ -127,9 +127,5 @@ void PCB_PAD_SHAPE::Parse( XNODE* aNode, const wxString& aDefaultUnits,
     }
 }
 
-
-void PCB_PAD_SHAPE::AddToBoard()
-{
-}
 
 } // namespace PCAD2KICAD

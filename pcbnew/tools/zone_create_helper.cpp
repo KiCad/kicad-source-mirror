@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,14 +28,11 @@
 #include <zone.h>
 #include <pcb_shape.h>
 #include <footprint.h>
-#include <fp_shape.h>
 #include <board_commit.h>
 #include <board_design_settings.h>
 #include <pcb_painter.h>
-#include <pcbnew_settings.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
-#include <zone_filler.h>
 
 ZONE_CREATE_HELPER::ZONE_CREATE_HELPER( DRAWING_TOOL& aTool, PARAMS& aParams ):
         m_tool( aTool ),
@@ -142,13 +139,9 @@ std::unique_ptr<ZONE> ZONE_CREATE_HELPER::createNewZone( bool aKeepout )
         controls->WarpMouseCursor( controls->GetCursorPosition(), true );
     }
 
-    // The new zone is a ZONE if created in the board editor and a FP_ZONE if created in the
-    // footprint editor
     wxASSERT( !m_tool.m_isFootprintEditor || ( parent->Type() == PCB_FOOTPRINT_T ) );
 
-    std::unique_ptr<ZONE> newZone = m_tool.m_isFootprintEditor ?
-                                                std::make_unique<FP_ZONE>( parent ) :
-                                                std::make_unique<ZONE>( parent );
+    std::unique_ptr<ZONE> newZone = std::make_unique<ZONE>( parent );
 
     // Apply the selected settings
     zoneInfo.ExportSetting( *newZone );
@@ -254,12 +247,7 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE> aZone )
             BOARD_COMMIT          commit( &m_tool );
             BOARD*                board = m_tool.getModel<BOARD>();
             PCB_LAYER_ID          layer = m_params.m_layer;
-            PCB_SHAPE*            poly;
-
-            if( m_tool.m_isFootprintEditor )
-                poly = new FP_SHAPE( static_cast<FOOTPRINT*>( m_tool.m_frame->GetModel() ) );
-            else
-                poly = new PCB_SHAPE();
+            PCB_SHAPE*            poly = new PCB_SHAPE( m_tool.m_frame->GetModel() );
 
             poly->SetShape( SHAPE_T::POLY );
 

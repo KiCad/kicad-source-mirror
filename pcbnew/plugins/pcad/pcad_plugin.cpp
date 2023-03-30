@@ -28,7 +28,7 @@
  */
 
 #include <pcad/pcad_plugin.h>
-#include <pcad/pcb.h>
+#include <pcad/pcad_pcb.h>
 #include <pcad/s_expr_loader.h>
 
 #include <board.h>
@@ -80,7 +80,7 @@ BOARD* PCAD_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
     if( !aAppendToMe )
         m_board->SetFileName( aFileName );
 
-    PCB pcb( m_board );
+    PCAD_PCB pcb( m_board );
 
     LOCALE_IO toggle;    // toggles on, then off, the C locale.
 

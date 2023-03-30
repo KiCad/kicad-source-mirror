@@ -25,7 +25,7 @@
 #ifndef PCB_KEEPOUT_H_
 #define PCB_KEEPOUT_H_
 
-#include <pcad/pcb_polygon.h>
+#include <pcad/pcad_polygon.h>
 
 class BOARD;
 class wxString;
@@ -33,7 +33,7 @@ class XNODE;
 
 namespace PCAD2KICAD {
 
-class PCB_KEEPOUT : public PCB_POLYGON
+class PCB_KEEPOUT : public PCAD_POLYGON
 {
 public:
     PCB_KEEPOUT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard, int aPCadLayer );

@@ -84,13 +84,6 @@ public:
     const VECTOR2I GetFocusPosition() const override;
 
     /**
-     * Return the parent footprint or NULL if PCB_SHAPE does not belong to a footprint.
-     *
-     * @return the parent footprint or NULL.
-     */
-    FOOTPRINT* GetParentFootprint() const;
-
-    /**
      * Make a set of SHAPE objects representing the PCB_SHAPE.  Caller owns the objects.
      */
     std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
@@ -158,9 +151,6 @@ protected:
     {
         bool operator()( const BOARD_ITEM* aFirst, const BOARD_ITEM* aSecond ) const;
     };
-
-    EDA_ANGLE getParentOrientation() const override;
-    VECTOR2I getParentPosition() const override;
 };
 
 #endif  // PCB_SHAPE_H
