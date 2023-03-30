@@ -88,11 +88,14 @@ const bool operator<( const BOM_PRESET& lhs, const BOM_PRESET& rhs )
 
 void to_json( nlohmann::json& j, const BOM_PRESET& p )
 {
-    j = nlohmann::json{ { "name", p.name },
-                        { "sort_field", p.sortField },
-                        { "sort_asc", p.sortAsc },
-                        { "filter_string", p.filterString },
-                        { "group_symbols", p.groupSymbols } };
+    j = nlohmann::json{
+        { "name", p.name },
+        { "sort_field", p.sortField },
+        { "sort_asc", p.sortAsc },
+        { "filter_string", p.filterString },
+        { "group_symbols", p.groupSymbols },
+        { "exclude_dnp", p.excludeDNP },
+    };
 
     if( p.fieldsOrdered.size() > 0 )
         j["fields_ordered"] = p.fieldsOrdered;
@@ -107,15 +110,20 @@ void from_json( const nlohmann::json& j, BOM_PRESET& f )
     j.at( "sort_asc" ).get_to( f.sortAsc );
     j.at( "filter_string" ).get_to( f.filterString );
     j.at( "group_symbols" ).get_to( f.groupSymbols );
+    j.at( "exclude_dnp" ).get_to( f.excludeDNP );
 }
 
 
 // Implementations for BOM_PRESET
 bool BOM_PRESET::operator==( const BOM_PRESET& rhs ) const
 {
-    return this->name == rhs.name && this->readOnly == rhs.readOnly
-           && this->fieldsOrdered == rhs.fieldsOrdered && this->sortField == rhs.sortField
-           && this->sortAsc == rhs.sortAsc && this->groupSymbols == rhs.groupSymbols;
+    return this->name == rhs.name
+        && this->readOnly == rhs.readOnly
+        && this->fieldsOrdered == rhs.fieldsOrdered
+        && this->sortField == rhs.sortField
+        && this->sortAsc == rhs.sortAsc
+        && this->groupSymbols == rhs.groupSymbols
+        && this->excludeDNP == rhs.excludeDNP;
 }
 
 
@@ -125,7 +133,8 @@ BOM_PRESET BOM_PRESET::GroupedByValue()
                      .readOnly = true,
                      .sortField = _( "Reference" ),
                      .sortAsc = true,
-                     .groupSymbols = true };
+                     .groupSymbols = true,
+                     .excludeDNP = false };
 
     p.fieldsOrdered = std::vector<BOM_FIELD>( {
             ( BOM_FIELD ){
@@ -150,7 +159,8 @@ BOM_PRESET BOM_PRESET::GroupedByValueFootprint()
                      .readOnly = true,
                      .sortField = _( "Reference" ),
                      .sortAsc = true,
-                     .groupSymbols = true };
+                     .groupSymbols = true,
+                     .excludeDNP = false };
 
     p.fieldsOrdered = std::vector<BOM_FIELD>( {
             ( BOM_FIELD ){

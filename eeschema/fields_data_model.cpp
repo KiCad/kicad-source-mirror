@@ -133,7 +133,8 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( int aRow, int aCol )
 
 wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const DATA_MODEL_ROW& group, int aCol,
                                                   const wxString& refDelimiter,
-                                                  const wxString& refRangeDelimiter )
+                                                  const wxString& refRangeDelimiter,
+                                                  bool            resolveVars )
 {
     std::vector<SCH_REFERENCE> references;
     wxString                   fieldValue;
@@ -364,9 +365,13 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
         SCH_REFERENCE ref = m_symbolsList[i];
 
         if( !m_filter.IsEmpty() && !WildCompareString( m_filter, ref.GetFullRef(), false ) )
-        {
             continue;
-        }
+
+        if( m_excludeDNP && ref.GetSymbol()->GetDNP() )
+            continue;
+
+        if( !m_includeExcluded && !ref.GetSymbol()->GetIncludeInBom() )
+            continue;
 
         bool matchFound = false;
 
@@ -633,6 +638,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyBomPreset( const BOM_PRESET& aPreset )
                     aPreset.sortAsc );
 
     SetFilter( aPreset.filterString );
+    SetExcludeDNP( aPreset.excludeDNP );
 
     RebuildRows();
 }
@@ -699,8 +705,8 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::Export( const BOM_FMT_PRESET& settings )
                 continue;
 
             // Get the unanottated version of the field, e.g. no ">   " or "v   " by
-            out.Append( formatField( GetRawValue( (int) row, (int) col, settings.refDelimiter,
-                                                  settings.refRangeDelimiter ),
+            out.Append( formatField( GetExportValue( (int) row, (int) col, settings.refDelimiter,
+                                                     settings.refRangeDelimiter ),
                                      col == last_col ) );
         }
     }

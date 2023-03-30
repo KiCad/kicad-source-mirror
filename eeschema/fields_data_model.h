@@ -52,7 +52,8 @@ class FIELDS_EDITOR_GRID_DATA_MODEL : public wxGridTableBase
 public:
     FIELDS_EDITOR_GRID_DATA_MODEL( SCH_REFERENCE_LIST& aSymbolsList ) :
             m_symbolsList( aSymbolsList ), m_edited( false ), m_sortColumn( 0 ),
-            m_sortAscending( false ), m_groupingEnabled( false )
+            m_sortAscending( false ), m_groupingEnabled( false ), m_excludeDNP( false ),
+            m_includeExcluded( false )
     {
         m_symbolsList.SplitReferences();
     }
@@ -101,11 +102,12 @@ public:
     wxString GetValue( int aRow, int aCol ) override;
     wxString GetValue( const DATA_MODEL_ROW& group, int aCol,
                        const wxString& refDelimiter = wxT( ", " ),
-                       const wxString& refRangeDelimiter = wxT( "-" ) );
-    wxString GetRawValue( int aRow, int aCol, const wxString& refDelimiter,
-                          const wxString& refRangeDelimiter )
+                       const wxString& refRangDelimiter = wxT( "-" ),
+                       bool resolveVars = false );
+    wxString GetExportValue( int aRow, int aCol, const wxString& refDelimiter,
+                             const wxString& refRangeDelimiter )
     {
-        return GetValue( m_rows[aRow], aCol, refDelimiter, refRangeDelimiter );
+        return GetValue( m_rows[aRow], aCol, refDelimiter, refRangeDelimiter, true );
     }
     void     SetValue( int aRow, int aCol, const wxString& aValue ) override;
 
@@ -148,6 +150,16 @@ public:
     void SetGroupingEnabled( bool group ) { m_groupingEnabled = group; }
     bool GetGroupingEnabled() { return m_groupingEnabled; }
 
+    /* These contradictorily named functions force including symbols that
+     * have the Exclude from BOM check box ticked. This is needed so we can view
+     * these parts in the symbol fields table dialog, while also excluding from the
+     * BOM export */
+    void SetIncludeExcludedFromBOM( bool include ) { m_includeExcluded = include; }
+    bool GetIncludeExcludedFromBOM() { return m_includeExcluded; }
+
+    void SetExcludeDNP( bool exclude ) { m_excludeDNP = exclude; }
+    bool GetExcludeDNP() { return m_excludeDNP; }
+
     void SetGroupColumn( int aCol, bool group )
     {
         wxCHECK_RET( aCol >= 0 && aCol < (int) m_cols.size(), "Invalid Column Number" );
@@ -189,6 +201,8 @@ protected:
     bool               m_sortAscending;
     wxString           m_filter;
     bool               m_groupingEnabled;
+    bool               m_excludeDNP;
+    bool               m_includeExcluded;
 
     std::vector<DATA_MODEL_COL> m_cols;
     std::vector<DATA_MODEL_ROW> m_rows;

@@ -193,6 +193,10 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
     m_filter->SetDescriptiveText( _( "Filter" ) );
     m_dataModel = new FIELDS_EDITOR_GRID_DATA_MODEL( m_symbolsList );
 
+    // We want to show excluded symbols because the Edit page needs to show all symbols,
+    // they will still be excluded from the export.
+    m_dataModel->SetIncludeExcludedFromBOM( true );
+
     LoadFieldNames();   // loads rows into m_fieldsCtrl and columns into m_dataModel
 
     // Now that the fields are loaded we can set the initial location of the splitter
@@ -793,6 +797,17 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnGroupSymbolsToggled( wxCommandEvent& event )
 }
 
 
+void DIALOG_SYMBOL_FIELDS_TABLE::OnExcludeDNPToggled( wxCommandEvent& event )
+{
+    m_schSettings.m_BomSettings.excludeDNP = m_checkExludeDNP->GetValue();
+    m_dataModel->SetExcludeDNP( m_checkExludeDNP->GetValue() );
+    m_dataModel->RebuildRows();
+    m_grid->ForceRefresh();
+
+    syncBomPresetSelection();
+}
+
+
 void DIALOG_SYMBOL_FIELDS_TABLE::OnColSort( wxGridEvent& aEvent )
 {
     int         sortCol = aEvent.GetCol();
@@ -1006,7 +1021,13 @@ void DIALOG_SYMBOL_FIELDS_TABLE::PreviewRefresh()
     current.keepTabs = m_checkKeepTabs->GetValue();
     current.keepLineBreaks = m_checkKeepLineBreaks->GetValue();
 
+    m_dataModel->SetIncludeExcludedFromBOM( false );
+    m_dataModel->RebuildRows();
+
     m_textOutput->SetValue( m_dataModel->Export( current ) );
+
+    m_dataModel->SetIncludeExcludedFromBOM( true );
+    m_dataModel->RebuildRows();
 }
 
 
@@ -1530,6 +1551,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
     m_grid->SetSortingColumn( m_dataModel->GetSortCol(), m_dataModel->GetSortAsc() );
     m_groupSymbolsBox->SetValue( m_dataModel->GetGroupingEnabled() );
     m_filter->ChangeValue( m_dataModel->GetFilter() );
+    m_checkExludeDNP->SetValue( m_dataModel->GetExcludeDNP() );
 
     SetupColumnProperties();
 

@@ -55,6 +55,7 @@ struct BOM_PRESET
     bool                   sortAsc = true;
     wxString               filterString;
     bool                   groupSymbols = false;
+    bool                   excludeDNP = false;
 
     bool operator==( const BOM_PRESET& rhs ) const;
 

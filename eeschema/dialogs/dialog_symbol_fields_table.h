@@ -63,6 +63,7 @@ private:
 
     void OnColumnItemToggled( wxDataViewEvent& event ) override;
     void OnGroupSymbolsToggled( wxCommandEvent& event ) override;
+    void OnExcludeDNPToggled( wxCommandEvent& event ) override;
     void OnRegroupSymbols( wxCommandEvent& aEvent ) override;
     void OnTableValueChanged( wxGridEvent& event ) override;
     void OnTableCellClick( wxGridEvent& event ) override;

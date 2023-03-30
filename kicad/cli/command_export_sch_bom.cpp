@@ -62,6 +62,11 @@ CLI::EXPORT_SCH_BOM_COMMAND::EXPORT_SCH_BOM_COMMAND() : EXPORT_PCB_BASE_COMMAND(
             .implicit_value( true )
             .default_value( true );
 
+    m_argParser.add_argument( ARG_EXCLUDE_DNP )
+            .help( UTF8STDSTR( _( ARG_EXCLUDE_DNP_DESC ) ) )
+            .implicit_value( true )
+            .default_value( true );
+
     // Output formatting options
     m_argParser.add_argument( ARG_FIELD_DELIMITER )
             .help( UTF8STDSTR( _( ARG_FIELD_DELIMITER_DESC ) ) )
@@ -136,6 +141,7 @@ int CLI::EXPORT_SCH_BOM_COMMAND::doPerform( KIWAY& aKiway )
     bomJob->m_sortAsc = m_argParser.get<bool>( ARG_SORT_ASC );
     bomJob->m_filterString = FROM_UTF8( m_argParser.get<std::string>( ARG_FILTER ).c_str() );
     bomJob->m_groupSymbols = m_argParser.get<bool>( ARG_GROUP_SYMBOLS );
+    bomJob->m_groupSymbols = m_argParser.get<bool>( ARG_EXCLUDE_DNP );
 
     if( !wxFile::Exists( bomJob->m_filename ) )
     {
