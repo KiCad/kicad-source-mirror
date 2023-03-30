@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -34,11 +34,10 @@
 #define ARG_EXCELLON_SEPARATE_TH "--excellon-separate-th"
 #define ARG_EXCELLON_ZEROS_FORMAT "--excellon-zeros-format"
 #define ARG_GERBER_PRECISION "--gerber-precision"
-#define ARG_UNITS "--units"
+#define ARG_EXCELLON_UNITS "--excellon-units"
 #define ARG_GENERATE_MAP "--generate-map"
 #define ARG_MAP_FORMAT "--map-format"
 #define ARG_DRILL_ORIGIN "--drill-origin"
-#define ARG_SEPARATE_FILES "--separate-files"
 
 CLI::EXPORT_PCB_DRILL_COMMAND::EXPORT_PCB_DRILL_COMMAND() : EXPORT_PCB_BASE_COMMAND( "drill" )
 {
@@ -46,17 +45,17 @@ CLI::EXPORT_PCB_DRILL_COMMAND::EXPORT_PCB_DRILL_COMMAND() : EXPORT_PCB_BASE_COMM
             .default_value( std::string( "excellon" ) )
             .help( UTF8STDSTR( _( "Valid options excellon, gerber." ) ) );
 
+    m_argParser.add_argument( ARG_DRILL_ORIGIN )
+            .default_value( std::string( "absolute" ) )
+            .help( UTF8STDSTR( _( "Valid options are: absolute,plot" ) ) );
+
     m_argParser.add_argument( ARG_EXCELLON_ZEROS_FORMAT )
             .default_value( std::string( "decimal" ) )
             .help( UTF8STDSTR(
                     _( "Valid options are: decimal,suppressleading,suppresstrailing,keep." ) ) );
 
-    m_argParser.add_argument( ARG_DRILL_ORIGIN )
-            .default_value( std::string( "absolute" ) )
-            .help( UTF8STDSTR( _( "Valid options are: absolute,plot" ) ) );
-
-    m_argParser.add_argument( "-u", ARG_UNITS )
-            .default_value( std::string( "in" ) )
+    m_argParser.add_argument( ARG_EXCELLON_UNITS )
+            .default_value( std::string( "mm" ) )
             .help( UTF8STDSTR( _( "Output units, valid options:in,mm" ) ) );
 
     m_argParser.add_argument( ARG_EXCELLON_MIRRORY )
@@ -70,7 +69,7 @@ CLI::EXPORT_PCB_DRILL_COMMAND::EXPORT_PCB_DRILL_COMMAND() : EXPORT_PCB_BASE_COMM
             .default_value( false );
 
     m_argParser.add_argument( ARG_EXCELLON_SEPARATE_TH )
-            .help( UTF8STDSTR( _( "PTH and NPTH in separate files" ) ) )
+            .help( UTF8STDSTR( _( "Generate independent files for NPTH and PTH holes" ) ) )
             .implicit_value( true )
             .default_value( false );
 
@@ -83,14 +82,9 @@ CLI::EXPORT_PCB_DRILL_COMMAND::EXPORT_PCB_DRILL_COMMAND() : EXPORT_PCB_BASE_COMM
             .default_value( std::string( "pdf" ) )
             .help( UTF8STDSTR( _( "Valid options: pdf,gerberx2,ps,dxf,svg" ) ) );
 
-    m_argParser.add_argument( ARG_SEPARATE_FILES )
-            .help( UTF8STDSTR( _( "Generate independent files for NPTH and PTH holes" ) ) )
-            .implicit_value( true )
-            .default_value( false );
-
     m_argParser.add_argument( ARG_GERBER_PRECISION )
             .help( UTF8STDSTR( _( "Precision of gerber coordinates (5 or 6)" ) ) )
-            .default_value( 5 );
+            .default_value( 6 );
 }
 
 
@@ -126,7 +120,7 @@ int CLI::EXPORT_PCB_DRILL_COMMAND::doPerform( KIWAY& aKiway )
         return EXIT_CODES::ERR_ARGS;
     }
 
-    wxString units = FROM_UTF8( m_argParser.get<std::string>( ARG_UNITS ).c_str() );
+    wxString units = FROM_UTF8( m_argParser.get<std::string>( ARG_EXCELLON_UNITS ).c_str() );
 
     if( units == wxS( "mm" ) )
     {
