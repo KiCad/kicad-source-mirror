@@ -47,7 +47,12 @@ protected:
     LSET convertLayerStringList( wxString& aLayerString, bool& aLayerArgSet ) const;
     void addLayerArg( bool aRequire );
 
+    // The list of canonical layer names used in .kicad_pcb files:
     std::map<std::string, LSET> m_layerMasks;
+
+    // The list of canonical layer names used in GUI (not translated):
+    std::map<std::string, LSET> m_layerGuiMasks;
+
     LSET                        m_selectedLayers;
     bool                        m_selectedLayersSet;
 
