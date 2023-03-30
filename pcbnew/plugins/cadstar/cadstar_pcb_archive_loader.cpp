@@ -252,15 +252,15 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
 
     std::vector<LAYER_BLOCK> cadstarBoardStackup;
     LAYER_BLOCK              currentBlock;
+    bool                     first = true;
 
     // Find the electrical and construction (dielectric) layers in the stackup
     for( LAYER_ID cadstarLayerID : Assignments.Layerdefs.LayerStack )
     {
         LAYER cadstarLayer = Assignments.Layerdefs.Layers.at( cadstarLayerID );
 
-        if( cadstarLayer.Type == LAYER_TYPE::JUMPERLAYER ||
-            cadstarLayer.Type == LAYER_TYPE::POWER ||
-            cadstarLayer.Type == LAYER_TYPE::ELEC )
+        if( cadstarLayer.Type == LAYER_TYPE::JUMPERLAYER || cadstarLayer.Type == LAYER_TYPE::POWER
+            || cadstarLayer.Type == LAYER_TYPE::ELEC )
         {
             if( currentBlock.IsInitialised() )
             {
@@ -269,10 +269,22 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
             }
 
             currentBlock.ElecLayerID = cadstarLayerID;
+            first = false;
         }
         else if( cadstarLayer.Type == LAYER_TYPE::CONSTRUCTION )
         {
-            currentBlock.ConstructionLayers.push_back( cadstarLayerID );
+            if( first )
+            {
+                /* No new strings in stable branch
+                wxLogWarning( wxString::Format( _( "The CADSTAR construction layer '%s' is on "
+                                                   "the outer surface of the board. It has been "
+                                                   "ignored." ),
+                                                cadstarLayer.Name ) );*/
+            }
+            else
+            {
+                currentBlock.ConstructionLayers.push_back( cadstarLayerID );
+            }
         }
     }
 
@@ -281,12 +293,21 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
 
     m_numCopperLayers = cadstarBoardStackup.size();
 
-    // Special case: last layer in the stackup is a construction layer, we need to use B.Cu as a
-    // dummy layer
+    // Special case: last layer in the stackup is a construction layer, drop it
     if( cadstarBoardStackup.back().ConstructionLayers.size() > 0 )
     {
-        cadstarBoardStackup.push_back( LAYER_BLOCK() ); //Add dummy layer at the end
-        ++m_numCopperLayers;
+        for( const LAYER_ID& layerID : cadstarBoardStackup.back().ConstructionLayers )
+        {
+            LAYER cadstarLayer = Assignments.Layerdefs.Layers.at( layerID );
+
+            /* No new strings in stable branch
+            wxLogWarning( wxString::Format( _( "The CADSTAR construction layer '%s' is on "
+                                               "the outer surface of the board. It has been "
+                                               "ignored." ),
+                                            cadstarLayer.Name ) );*/
+        }
+
+        cadstarBoardStackup.back().ConstructionLayers.clear();
     }
 
     // Make sure it is an even number of layers (KiCad doesn't yet support unbalanced stack-ups)
@@ -299,21 +320,27 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
         cadstarBoardStackup.pop_back();
 
         LAYER_BLOCK dummyLayer;
-        LAYER_ID    lastConstruction = secondToLastLayer.ConstructionLayers.back();
 
-        if( secondToLastLayer.ConstructionLayers.size() > 1 )
+        if( secondToLastLayer.ConstructionLayers.size() > 0 )
         {
-            // At least two construction layers, lets remove it here and use it in the dummy layer
-            secondToLastLayer.ConstructionLayers.pop_back();
-        }
-        else
-        {
-            // There is only one construction layer, lets halve its thickness so it is split evenly
-            // between this layer and the dummy layer
-            Assignments.Layerdefs.Layers.at( lastConstruction ).Thickness /= 2;
+            LAYER_ID lastConstruction = secondToLastLayer.ConstructionLayers.back();
+
+            if( secondToLastLayer.ConstructionLayers.size() > 1 )
+            {
+                // At least two construction layers, lets remove one here and use the
+                // other in the dummy layer
+                secondToLastLayer.ConstructionLayers.pop_back();
+            }
+            else
+            {
+                // There is only one construction layer, lets halve its thickness so it is split
+                // evenly between this layer and the dummy layer
+                Assignments.Layerdefs.Layers.at( lastConstruction ).Thickness /= 2;
+            }
+
+            dummyLayer.ConstructionLayers.push_back( lastConstruction );
         }
 
-        dummyLayer.ConstructionLayers.push_back( lastConstruction );
         cadstarBoardStackup.push_back( secondToLastLayer );
         cadstarBoardStackup.push_back( dummyLayer );
         cadstarBoardStackup.push_back( bottomLayer );
