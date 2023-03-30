@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:53-0800\n"
-"PO-Revision-Date: 2023-03-26 04:41+0000\n"
+"PO-Revision-Date: 2023-03-30 23:16+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/kicad/v7/et/>\n"
 "Language: et\n"
@@ -46,45 +46,45 @@ msgstr ""
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:226
 msgid "Create tracks and vias"
-msgstr ""
+msgstr "Loo rajad ja läbiviigid"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:678
 msgid "Create zones"
-msgstr ""
+msgstr "Loo tsoonid"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:745
 msgid "Simplifying copper layers polygons"
-msgstr ""
+msgstr "Vaskkihi polügonide lihtsustamine"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:754
 msgid "Simplifying polygons on F_Cu"
-msgstr ""
+msgstr "F_Cu polügonide lihtsustamine"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:765
 msgid "Simplifying polygons on B_Cu"
-msgstr ""
+msgstr "B_Cu polügonide lihtsustamine"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:795
 #, c-format
 msgid "Simplifying %d copper layers"
-msgstr ""
+msgstr "Vaskkihi %d polügonide lihtsustamine"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:835
 msgid "Simplify holes contours"
-msgstr ""
+msgstr "Aukude kontuuride lihtsustamine"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:864
 msgid "Build Tech layers"
-msgstr ""
+msgstr "Tehniliste kihtide loomine"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:903
 #, c-format
 msgid "Build Tech layer %d"
-msgstr ""
+msgstr "Tehniliste kihtide loomine %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1063
 msgid "Build BVH for holes and vias"
-msgstr ""
+msgstr "Aukude ja läbiviikude BVH-kihi loomine"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:389
 msgid "OpenGL context creation error"
