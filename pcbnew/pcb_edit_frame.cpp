@@ -1192,6 +1192,12 @@ void PCB_EDIT_FRAME::ActivateGalCanvas()
 
 void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
 {
+    std::unique_lock<std::mutex> dialogLock( DIALOG_BOARD_SETUP::g_Mutex, std::try_to_lock );
+
+    // One DIALOG_BOARD_SETUP dialog at a time.
+    if( !dialogLock.owns_lock() )
+        return;
+
     // Make sure everything's up-to-date
     GetBoard()->BuildListOfNets();
 
