@@ -54,7 +54,7 @@ CLI::EXPORT_PCB_DRILL_COMMAND::EXPORT_PCB_DRILL_COMMAND() : EXPORT_PCB_BASE_COMM
             .help( UTF8STDSTR(
                     _( "Valid options are: decimal,suppressleading,suppresstrailing,keep." ) ) );
 
-    m_argParser.add_argument( ARG_EXCELLON_UNITS )
+    m_argParser.add_argument( "-u", ARG_EXCELLON_UNITS )
             .default_value( std::string( "mm" ) )
             .help( UTF8STDSTR( _( "Output units, valid options:in,mm" ) ) );
 
