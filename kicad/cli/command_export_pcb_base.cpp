@@ -51,14 +51,20 @@ CLI::EXPORT_PCB_BASE_COMMAND::EXPORT_PCB_BASE_COMMAND( const std::string& aName,
 
     m_argParser.add_argument( ARG_INPUT ).help( UTF8STDSTR( _( "Input file" ) ) );
 
+    // Build list of layer names and their layer mask:
     for( int layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
     {
         std::string untranslated = TO_UTF8( wxString( LSET::Name( PCB_LAYER_ID( layer ) ) ) );
 
         //m_layerIndices[untranslated] = PCB_LAYER_ID( layer );
+
+        // Add layer name used in pcb files
         m_layerMasks[untranslated] = LSET( PCB_LAYER_ID( layer ) );
+        // Add layer name using GUI canonical layer name
+        m_layerGuiMasks[ TO_UTF8(LayerName( layer ) ) ] = LSET( PCB_LAYER_ID( layer ) );
     }
 
+    // Add list of grouped layer names used in pcb files
     m_layerMasks["*"] = LSET::AllLayersMask();
     m_layerMasks["*.Cu"] = LSET::AllCuMask();
     m_layerMasks["*In.Cu"] = LSET::InternalCuMask();
@@ -69,6 +75,11 @@ CLI::EXPORT_PCB_BASE_COMMAND::EXPORT_PCB_BASE_COMMAND( const std::string& aName,
     m_layerMasks["*.SilkS"] = LSET( 2, B_SilkS, F_SilkS );
     m_layerMasks["*.Fab"] = LSET( 2, B_Fab, F_Fab );
     m_layerMasks["*.CrtYd"] = LSET( 2, B_CrtYd, F_CrtYd );
+
+    // Add list of grouped layer names using GUI canonical layer names
+    m_layerGuiMasks["*.Adhesive"] = LSET( 2, B_Adhes, F_Adhes );
+    m_layerGuiMasks["*.Silkscreen"] = LSET( 2, B_SilkS, F_SilkS );
+    m_layerGuiMasks["*.Courtyard"] = LSET( 2, B_CrtYd, F_CrtYd );
 }
 
 
@@ -80,12 +91,21 @@ LSET CLI::EXPORT_PCB_BASE_COMMAND::convertLayerStringList( wxString& aLayerStrin
     {
         layerMask.reset();
         wxStringTokenizer layerTokens( aLayerString, "," );
+
         while( layerTokens.HasMoreTokens() )
         {
             std::string token = TO_UTF8( layerTokens.GetNextToken() );
+
+            // Search for a layer name in canonical layer name used in .kicad_pcb files:
             if( m_layerMasks.count( token ) )
             {
                 layerMask |= m_layerMasks.at(token);
+                aLayerArgSet = true;
+            }
+            // Search for a layer name in canonical layer name used in GUI (not translated):
+            else if( m_layerGuiMasks.count( token ) )
+            {
+                layerMask |= m_layerGuiMasks.at(token);
                 aLayerArgSet = true;
             }
             else
