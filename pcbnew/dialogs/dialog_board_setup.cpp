@@ -45,6 +45,8 @@
 
 #include <wx/treebook.h>
 
+std::mutex DIALOG_BOARD_SETUP::g_Mutex;
+
 
 DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
         PAGED_DIALOG( aFrame, _( "Board Setup" ), false,

@@ -21,6 +21,7 @@
 #ifndef KICAD_DIALOG_BOARD_SETUP_H
 #define KICAD_DIALOG_BOARD_SETUP_H
 
+#include <mutex>
 #include <widgets/paged_dialog.h>
 #include "panel_setup_formatting.h"
 
@@ -63,6 +64,9 @@ protected:
     PANEL_SETUP_BOARD_FINISH*        m_boardFinish;
     PANEL_SETUP_SEVERITIES*          m_severities;
     PANEL_TEXT_VARIABLES*            m_textVars;
+
+public:
+    static std::mutex g_Mutex;      // Mutex to prevent multiple windows opening
 
 private:
     int m_currentPage;              // the current page index
