@@ -405,6 +405,9 @@ wxString PCB_TEXT::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
                                  KIUI::EllipsizeMenuText( GetShownText() ),
                                  GetLayerName() );
     }
+
+    // Can't get here, but gcc doesn't seem to know that....
+    return wxEmptyString;
 }
 
 
