@@ -20,8 +20,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:51-0800\n"
-"PO-Revision-Date: 2023-03-29 06:02+0000\n"
-"Last-Translator: Luc <some_physics@live.com>\n"
+"PO-Revision-Date: 2023-04-01 03:59+0000\n"
+"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -19006,8 +19006,8 @@ msgstr "%s abstimmen"
 #, c-format
 msgid "%s has simulation model of type '%s %s'; only RLC passives be tuned"
 msgstr ""
-"\"%s\" hat ein Simulationsmodell vom Typ \"%s %s\"; nur RLC-Werte können "
-"veràndert werden"
+"%s hat ein Simulationsmodell vom Typ \"%s %s\"; nur RLC-Werte können "
+"verändert werden"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -33104,7 +33104,7 @@ msgstr "Leiterbahnbreite %s wird geprüft: opt %s."
 #: pcbnew/drc/drc_engine.cpp:974
 #, c-format
 msgid "Checking %s track width: min %s."
-msgstr "Leiterbahnbreite %s wird geprüft: minimum %s."
+msgstr "Leiterbahnbreite %s wird geprüft: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:982
 #, c-format
@@ -33119,7 +33119,7 @@ msgstr "Via-Durchmesser %s wird geprüft: opt %s."
 #: pcbnew/drc/drc_engine.cpp:996
 #, c-format
 msgid "Checking %s via diameter: min %s."
-msgstr "Via-Durchmesser %s wird geprüft: minimum %s."
+msgstr "Via-Durchmesser %s wird geprüft: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1005
 #, c-format
@@ -33129,7 +33129,7 @@ msgstr "Lochgröße %s wird geprüft: opt %s."
 #: pcbnew/drc/drc_engine.cpp:1011
 #, c-format
 msgid "Checking %s hole size: min %s."
-msgstr "Lochgröße %s wird geprüft: minimum %s."
+msgstr "Lochgröße %s wird geprüft: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1021
 #, c-format
@@ -33144,12 +33144,12 @@ msgstr "Prüfe %s Differenzialpaar-Abstand: opt %s."
 #: pcbnew/drc/drc_engine.cpp:1035
 #, c-format
 msgid "Checking %s clearance: min %s."
-msgstr "Prüfe %s Freiraum: minimum %s."
+msgstr "Prüfe %s Freiraum: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1043
 #, c-format
 msgid "Checking %s hole to hole: min %s."
-msgstr "Lochabstand %s wird geprüft: minimum %s."
+msgstr "Lochabstand %s wird geprüft: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1049 pcbnew/drc/drc_engine.cpp:1075
 #: pcbnew/drc/drc_engine.cpp:1493
