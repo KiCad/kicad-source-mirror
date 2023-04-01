@@ -27,9 +27,7 @@
 #include <map>
 #include <type_traits>
 
-#ifndef __clang__
 #include <cstdint>
-#endif
 
 // User may redefine NANODBC_ASSERT macro in nanodbc/nanodbc.h
 #ifndef NANODBC_ASSERT
