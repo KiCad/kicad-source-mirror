@@ -1,8 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
+ * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,8 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PCB_KEEPOUT_H_
-#define PCB_KEEPOUT_H_
+#ifndef PCAD_COPPER_POUR_H
+#define PCAD_COPPER_POUR_H
 
 #include <pcad/pcad_polygon.h>
 
@@ -33,17 +34,17 @@ class XNODE;
 
 namespace PCAD2KICAD {
 
-class PCB_KEEPOUT : public PCAD_POLYGON
+class PCAD_COPPER_POUR : public PCAD_POLYGON
 {
 public:
-    PCB_KEEPOUT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard, int aPCadLayer );
-    ~PCB_KEEPOUT();
+    PCAD_COPPER_POUR( PCAD_CALLBACKS* aCallbacks, BOARD* aBoard, int aPCadLayer );
+    ~PCAD_COPPER_POUR();
 
     virtual bool Parse( XNODE*          aNode,
-                        const wxString& aDefaultMeasurementUnit,
+                        const wxString& aDefaultUnits,
                         const wxString& aActualConversion ) override;
 };
 
 } // namespace PCAD2KICAD
 
-#endif    // PCB_KEEPOUT_H_
+#endif    // PCAD_COPPER_POUR_H

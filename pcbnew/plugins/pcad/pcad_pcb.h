@@ -28,7 +28,7 @@
 
 #include <pcad/pcad2kicad_common.h>
 #include <pcad/pcad_item_types.h>
-#include <pcad/pcb_callbacks.h>
+#include <pcad/pcad_callbacks.h>
 #include <pcad/pcad_footprint.h>
 
 #include <map>
@@ -43,7 +43,7 @@ class wxXmlDocument;
 
 namespace PCAD2KICAD {
 
-class PCAD_PCB : public PCAD_FOOTPRINT, public PCB_CALLBACKS
+class PCAD_PCB : public PCAD_FOOTPRINT, public PCAD_CALLBACKS
 {
 public:
     PCAD_PCB( BOARD* aBoard );
@@ -58,13 +58,6 @@ public:
                      const wxString& aActualConversion );
 
     void AddToBoard( FOOTPRINT* aFootprint = nullptr ) override;
-
-    PCB_COMPONENTS_ARRAY    m_PcbComponents;    // PCB footprints,Lines,Routes,Texts, .... and so on
-    PCB_NETS_ARRAY          m_PcbNetlist;       // net objects collection
-    wxString                m_DefaultMeasurementUnit;
-    std::map<int, TLAYER>   m_LayersMap;        // flexible layers mapping
-    int                     m_SizeX;
-    int                     m_SizeY;
 
 private:
     XNODE* FindCompDefName( XNODE* aNode, const wxString& aName ) const;
@@ -83,6 +76,15 @@ private:
     double GetDistance( const wxRealPoint* aPoint1, const wxRealPoint* aPoint2 ) const;
     void GetBoardOutline( wxXmlDocument* aXmlDoc, const wxString& aActualConversion );
 
+public:
+    PCAD_COMPONENTS_ARRAY   m_PcbComponents;    // PCB footprints,Lines,Routes,Texts, .... and so on
+    PCAD_NETS_ARRAY         m_PcbNetlist;       // net objects collection
+    wxString                m_DefaultMeasurementUnit;
+    std::map<int, TLAYER>   m_LayersMap;        // flexible layers mapping
+    int                     m_SizeX;
+    int                     m_SizeY;
+
+private:
     std::vector<std::pair<wxString, long>>   m_layersStackup;
 };
 

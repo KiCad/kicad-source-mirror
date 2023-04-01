@@ -39,7 +39,7 @@ namespace PCAD2KICAD {
 class PCAD_LINE : public PCAD_PCB_COMPONENT
 {
 public:
-    PCAD_LINE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
+    PCAD_LINE( PCAD_CALLBACKS* aCallbacks, BOARD* aBoard );
     ~PCAD_LINE();
 
     virtual void Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
@@ -51,6 +51,7 @@ public:
 
     void AddToBoard( FOOTPRINT* aFootprint = nullptr ) override;
 
+public:
     int m_Width;
     int m_ToX;
     int m_ToY;

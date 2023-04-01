@@ -36,17 +36,17 @@
 
 namespace PCAD2KICAD {
 
-PCAD_POLYGON::PCAD_POLYGON( PCB_CALLBACKS* aCallbacks, BOARD* aBoard, int aPCadLayer ) :
+PCAD_POLYGON::PCAD_POLYGON( PCAD_CALLBACKS* aCallbacks, BOARD* aBoard, int aPCadLayer ) :
         PCAD_PCB_COMPONENT( aCallbacks, aBoard )
 {
-    m_width      = 0;
+    m_Width      = 0;
 
     // P-CAD polygons are similar to zones (and we're going to convert them as such), except
     // that they don't avoid other copper pours.  So effectively they're very-high-priority
     // zones.
-    m_priority   = 100000;
+    m_Priority   = 100000;
 
-    m_objType    = wxT( 'Z' );
+    m_ObjType = wxT( 'Z' );
     m_PCadLayer  = aPCadLayer;
     m_KiCadLayer = GetKiCadLayer();
     m_filled     = true;
@@ -57,45 +57,45 @@ PCAD_POLYGON::~PCAD_POLYGON()
 {
     int i, island;
 
-    for( i = 0; i < (int) m_outline.GetCount(); i++ )
-        delete m_outline[i];
+    for( i = 0; i < (int) m_Outline.GetCount(); i++ )
+        delete m_Outline[i];
 
-    for( island = 0; island < (int) m_cutouts.GetCount(); island++ )
+    for( island = 0; island < (int) m_Cutouts.GetCount(); island++ )
     {
-        for( i = 0; i < (int) m_cutouts[island]->GetCount(); i++ )
-            delete (*m_cutouts[island])[i];
+        for( i = 0; i < (int) m_Cutouts[island]->GetCount(); i++ )
+            delete (*m_Cutouts[island])[i];
 
-        delete m_cutouts[island];
+        delete m_Cutouts[island];
     }
 
-    for( island = 0; island < (int) m_islands.GetCount(); island++ )
+    for( island = 0; island < (int) m_Islands.GetCount(); island++ )
     {
-        for( i = 0; i < (int) m_islands[island]->GetCount(); i++ )
-            delete (*m_islands[island])[i];
+        for( i = 0; i < (int) m_Islands[island]->GetCount(); i++ )
+            delete (*m_Islands[island])[i];
 
-        delete m_islands[island];
+        delete m_Islands[island];
     }
 }
 
 void PCAD_POLYGON::AssignNet( const wxString& aNetName )
 {
-    m_net = aNetName;
-    m_netCode = GetNetCode( m_net );
+    m_Net = aNetName;
+    m_NetCode = GetNetCode( m_Net );
 }
 
 void PCAD_POLYGON::SetOutline( VERTICES_ARRAY* aOutline )
 {
     int i;
 
-    m_outline.Empty();
+    m_Outline.Empty();
 
     for( i = 0; i < (int) aOutline->GetCount(); i++ )
-        m_outline.Add( new wxRealPoint( (*aOutline)[i]->x, (*aOutline)[i]->y ) );
+        m_Outline.Add( new wxRealPoint( (*aOutline)[i]->x, (*aOutline)[i]->y ) );
 
-    if( m_outline.Count() > 0 )
+    if( m_Outline.Count() > 0 )
     {
-        m_positionX = m_outline[0]->x;
-        m_positionY = m_outline[0]->y;
+        m_PositionX = m_Outline[0]->x;
+        m_PositionY = m_Outline[0]->y;
     }
 }
 
@@ -122,7 +122,7 @@ void PCAD_POLYGON::FormPolygon( XNODE* aNode, VERTICES_ARRAY* aPolygon,
 
 
 bool PCAD_POLYGON::Parse( XNODE* aNode, const wxString& aDefaultUnits,
-                         const wxString& aActualConversion )
+                          const wxString& aActualConversion )
 {
     XNODE*      lNode;
     wxString    propValue;
@@ -134,19 +134,19 @@ bool PCAD_POLYGON::Parse( XNODE* aNode, const wxString& aDefaultUnits,
         lNode->GetAttribute( wxT( "Name" ), &propValue );
         propValue.Trim( false );
         propValue.Trim( true );
-        m_net = propValue;
-        m_netCode = GetNetCode( m_net );
+        m_Net = propValue;
+        m_NetCode = GetNetCode( m_Net );
     }
 
     // retrieve polygon outline
-    FormPolygon( aNode, &m_outline, aDefaultUnits, aActualConversion );
+    FormPolygon( aNode, &m_Outline, aDefaultUnits, aActualConversion );
 
-    m_positionX = m_outline[0]->x;
-    m_positionY = m_outline[0]->y;
+    m_PositionX = m_Outline[0]->x;
+    m_PositionY = m_Outline[0]->y;
 
     // fill the polygon with the same contour as its outline is
-    m_islands.Add( new VERTICES_ARRAY );
-    FormPolygon( aNode, m_islands[0], aDefaultUnits, aActualConversion );
+    m_Islands.Add( new VERTICES_ARRAY );
+    FormPolygon( aNode, m_Islands[0], aDefaultUnits, aActualConversion );
 
     return true;
 }
@@ -154,7 +154,7 @@ bool PCAD_POLYGON::Parse( XNODE* aNode, const wxString& aDefaultUnits,
 
 void PCAD_POLYGON::AddToBoard( FOOTPRINT* aFootprint )
 {
-    if( m_outline.GetCount() > 0 )
+    if( m_Outline.GetCount() > 0 )
     {
         if( aFootprint )
         {
@@ -166,7 +166,7 @@ void PCAD_POLYGON::AddToBoard( FOOTPRINT* aFootprint )
 
             auto outline = new std::vector<VECTOR2I>;
 
-            for( auto point : m_outline )
+            for( auto point : m_Outline )
                 outline->push_back( VECTOR2I( point->x, point->y ) );
 
             dwg->SetPolyPoints( *outline );
@@ -183,23 +183,23 @@ void PCAD_POLYGON::AddToBoard( FOOTPRINT* aFootprint )
             m_board->Add( zone, ADD_MODE::APPEND );
 
             zone->SetLayer( m_KiCadLayer );
-            zone->SetNetCode( m_netCode );
+            zone->SetNetCode( m_NetCode );
 
             // add outline
-            for( int i = 0; i < (int) m_outline.GetCount(); i++ )
+            for( int i = 0; i < (int) m_Outline.GetCount(); i++ )
             {
-                zone->AppendCorner( VECTOR2I( KiROUND( m_outline[i]->x ),
-                                              KiROUND( m_outline[i]->y ) ), -1 );
+                zone->AppendCorner( VECTOR2I( KiROUND( m_Outline[i]->x ),
+                                              KiROUND( m_Outline[i]->y ) ), -1 );
             }
 
-            zone->SetLocalClearance( m_width );
+            zone->SetLocalClearance( m_Width );
 
-            zone->SetAssignedPriority( m_priority );
+            zone->SetAssignedPriority( m_Priority );
 
             zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
                                          zone->GetDefaultHatchPitch(), true );
 
-            if ( m_objType == wxT( 'K' ) )
+            if ( m_ObjType == wxT( 'K' ) )
             {
                 zone->SetIsRuleArea( true );
                 zone->SetDoNotAllowTracks( true );
@@ -208,7 +208,7 @@ void PCAD_POLYGON::AddToBoard( FOOTPRINT* aFootprint )
                 zone->SetDoNotAllowCopperPour( true );
                 zone->SetDoNotAllowFootprints( false );
             }
-            else if( m_objType == wxT( 'C' ) )
+            else if( m_ObjType == wxT( 'C' ) )
             {
                 // convert cutouts to keepouts because standalone cutouts are not supported in KiCad
                 zone->SetIsRuleArea( true );
@@ -240,27 +240,27 @@ void PCAD_POLYGON::SetPosOffset( int aX_offs, int aY_offs )
 
     PCAD_PCB_COMPONENT::SetPosOffset( aX_offs, aY_offs );
 
-    for( i = 0; i < (int) m_outline.GetCount(); i++ )
+    for( i = 0; i < (int) m_Outline.GetCount(); i++ )
     {
-        m_outline[i]->x += aX_offs;
-        m_outline[i]->y += aY_offs;
+        m_Outline[i]->x += aX_offs;
+        m_Outline[i]->y += aY_offs;
     }
 
-    for( island = 0; island < (int) m_islands.GetCount(); island++ )
+    for( island = 0; island < (int) m_Islands.GetCount(); island++ )
     {
-        for( i = 0; i < (int) m_islands[island]->GetCount(); i++ )
+        for( i = 0; i < (int) m_Islands[island]->GetCount(); i++ )
         {
-            (*m_islands[island])[i]->x  += aX_offs;
-            (*m_islands[island])[i]->y  += aY_offs;
+            (*m_Islands[island])[i]->x  += aX_offs;
+            (*m_Islands[island])[i]->y  += aY_offs;
         }
     }
 
-    for( island = 0; island < (int) m_cutouts.GetCount(); island++ )
+    for( island = 0; island < (int) m_Cutouts.GetCount(); island++ )
     {
-        for( i = 0; i < (int) m_cutouts[island]->GetCount(); i++ )
+        for( i = 0; i < (int) m_Cutouts[island]->GetCount(); i++ )
         {
-            (*m_cutouts[island])[i]->x  += aX_offs;
-            (*m_cutouts[island])[i]->y  += aY_offs;
+            (*m_Cutouts[island])[i]->x  += aX_offs;
+            (*m_Cutouts[island])[i]->y  += aY_offs;
         }
     }
 }

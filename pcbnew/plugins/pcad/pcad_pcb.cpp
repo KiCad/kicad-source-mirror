@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,13 +25,11 @@
 
 #include <pcad/pcad_pcb.h>
 
-#include <pcad/pcb_keepout.h>
+#include <pcad/pcad_keepout.h>
 #include <pcad/pcad_footprint.h>
-#include <pcad/pcb_net.h>
+#include <pcad/pcad_nets.h>
 #include <pcad/pcad_pad.h>
-#include <pcad/pcad_text.h>
 #include <pcad/pcad_via.h>
-#include <pcad/s_expr_loader.h>
 
 #include <board.h>
 #include <common.h>
@@ -122,7 +120,7 @@ PCAD_PCB::~PCAD_PCB()
 
 int PCAD_PCB::GetNetCode( const wxString& aNetName ) const
 {
-    const PCB_NET* net;
+    const PCAD_NET* net;
 
     for( int i = 0; i < (int) m_PcbNetlist.GetCount(); i++ )
     {
@@ -241,7 +239,7 @@ void PCAD_PCB::DoPCBComponents( XNODE* aNode, wxXmlDocument* aXmlDoc, const wxSt
     PCAD_FOOTPRINT* fp;
     PCAD_PAD*       pad;
     PCAD_VIA*       via;
-    PCB_KEEPOUT*   keepOut;
+    PCAD_KEEPOUT*   keepOut;
     wxString       cn, str, propValue;
 
     lNode = aNode->GetChildren();
@@ -268,7 +266,7 @@ void PCAD_PCB::DoPCBComponents( XNODE* aNode, wxXmlDocument* aXmlDoc, const wxSt
                     mNode = FindNode( lNode, wxT( "patternGraphicsNameRef" ) );
 
                     if( mNode )
-                        mNode->GetAttribute( wxT( "Name" ), &fp->m_patGraphRefName );
+                        mNode->GetAttribute( wxT( "Name" ), &fp->m_PatGraphRefName );
 
                     fp->Parse( tNode, aStatusBar, m_DefaultMeasurementUnit, aActualConversion );
                 }
@@ -276,15 +274,15 @@ void PCAD_PCB::DoPCBComponents( XNODE* aNode, wxXmlDocument* aXmlDoc, const wxSt
 
             if( fp )
             {
-                fp->m_compRef = cn;    // default - in new version of file it is updated later....
+                fp->m_CompRef = cn;    // default - in new version of file it is updated later....
                 tNode = FindNode( lNode, wxT( "refDesRef" ) );
 
                 if( tNode )
                 {
-                    tNode->GetAttribute( wxT( "Name" ), &fp->m_name.text );
-                    SetTextProperty( lNode, &fp->m_name, fp->m_patGraphRefName, wxT( "RefDes" ),
+                    tNode->GetAttribute( wxT( "Name" ), &fp->m_Name.text );
+                    SetTextProperty( lNode, &fp->m_Name, fp->m_PatGraphRefName, wxT( "RefDes" ),
                                      aActualConversion );
-                    SetTextProperty( lNode, &fp->m_Value, fp->m_patGraphRefName, wxT( "Value" ),
+                    SetTextProperty( lNode, &fp->m_Value, fp->m_PatGraphRefName, wxT( "Value" ),
                                      aActualConversion );
                 }
 
@@ -293,7 +291,7 @@ void PCAD_PCB::DoPCBComponents( XNODE* aNode, wxXmlDocument* aXmlDoc, const wxSt
                 if( tNode )
                 {
                     SetPosition( tNode->GetNodeContent(), m_DefaultMeasurementUnit,
-                                 &fp->m_positionX, &fp->m_positionY, aActualConversion );
+                                 &fp->m_PositionX, &fp->m_PositionY, aActualConversion );
                 }
 
                 tNode = FindNode( lNode, wxT( "rotation" ) );
@@ -302,7 +300,7 @@ void PCAD_PCB::DoPCBComponents( XNODE* aNode, wxXmlDocument* aXmlDoc, const wxSt
                 {
                     str = tNode->GetNodeContent();
                     str.Trim( false );
-                    fp->m_rotation = EDA_ANGLE( StrToInt1Units( str ), TENTHS_OF_A_DEGREE_T );
+                    fp->m_Rotation = EDA_ANGLE( StrToInt1Units( str ), TENTHS_OF_A_DEGREE_T );
                 }
 
                 str = FindNodeGetContent( lNode, wxT( "isFlipped" ) );
@@ -325,7 +323,7 @@ void PCAD_PCB::DoPCBComponents( XNODE* aNode, wxXmlDocument* aXmlDoc, const wxSt
                     {
                         tNode->GetAttribute( wxT( "Name" ), &propValue );
 
-                        if( propValue == fp->m_name.text )
+                        if( propValue == fp->m_Name.text )
                         {
                             if( FindNode( tNode, wxT( "compValue" ) ) )
                             {
@@ -340,9 +338,9 @@ void PCAD_PCB::DoPCBComponents( XNODE* aNode, wxXmlDocument* aXmlDoc, const wxSt
                             {
                                 FindNode( tNode,
                                           wxT( "compRef" ) )->GetAttribute( wxT( "Name" ),
-                                                                            &fp->m_compRef );
-                                fp->m_compRef.Trim( false );
-                                fp->m_compRef.Trim( true );
+                                                                            &fp->m_CompRef );
+                                fp->m_CompRef.Trim( false );
+                                fp->m_CompRef.Trim( true );
                             }
 
                             tNode = nullptr;
@@ -356,7 +354,7 @@ void PCAD_PCB::DoPCBComponents( XNODE* aNode, wxXmlDocument* aXmlDoc, const wxSt
 
                 // map pins
                 tNode   = FindNode( (XNODE *)aXmlDoc->GetRoot(), wxT( "library" ) );
-                tNode   = FindCompDefName( tNode, fp->m_compRef );
+                tNode   = FindCompDefName( tNode, fp->m_CompRef );
 
                 if( tNode )
                 {
@@ -410,7 +408,7 @@ void PCAD_PCB::DoPCBComponents( XNODE* aNode, wxXmlDocument* aXmlDoc, const wxSt
         }
         else if( lNode->GetName().IsSameAs( wxT( "polyKeepOut" ), false ) )
         {
-            keepOut = new PCB_KEEPOUT( m_callbacks, m_board, 0 );
+            keepOut = new PCAD_KEEPOUT( m_callbacks, m_board, 0 );
 
             if( keepOut->Parse( lNode, m_DefaultMeasurementUnit, aActualConversion ) )
                 m_PcbComponents.Add( keepOut );
@@ -434,16 +432,16 @@ void PCAD_PCB::ConnectPinToNet( const wxString& aCompRef, const wxString& aPinRe
     {
         footprint = (PCAD_FOOTPRINT*) m_PcbComponents[i];
 
-        if( footprint->m_objType == wxT( 'M' ) && footprint->m_name.text == aCompRef )
+        if( footprint->m_ObjType == wxT( 'M' ) && footprint->m_Name.text == aCompRef )
         {
             for( j = 0; j < (int) footprint->m_FootprintItems.GetCount(); j++ )
             {
-                if( footprint->m_FootprintItems[j]->m_objType == wxT( 'P' ) )
+                if( footprint->m_FootprintItems[j]->m_ObjType == wxT( 'P' ) )
                 {
                     cp = (PCAD_PAD*) footprint->m_FootprintItems[j];
 
-                    if( cp->m_name.text == aPinRef )
-                        cp->m_net = aNetName;
+                    if( cp->m_Name.text == aPinRef )
+                        cp->m_Net = aNetName;
                 }
             }
         }
@@ -676,7 +674,7 @@ void PCAD_PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc,
                       const wxString& aActualConversion )
 {
     XNODE*          aNode;//, *aaNode;
-    PCB_NET*        net;
+    PCAD_NET*        net;
     PCAD_PCB_COMPONENT*  comp;
     PCAD_FOOTPRINT*  footprint;
     wxString        compRef, pinRef, layerName, layerType;
@@ -802,7 +800,7 @@ void PCAD_PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc,
 
         while( aNode )
         {
-            net = new PCB_NET( netCode++ );
+            net = new PCAD_NET( netCode++ );
             net->Parse( aNode );
             m_PcbNetlist.Add( net );
 
@@ -856,7 +854,7 @@ void PCAD_PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc,
         // POSTPROCESS -- FLIP COMPONENTS
         for( i = 0; i < (int) m_PcbComponents.GetCount(); i++ )
         {
-            if( m_PcbComponents[i]->m_objType == wxT( 'M' ) )
+            if( m_PcbComponents[i]->m_ObjType == wxT( 'M' ) )
                 ( (PCAD_FOOTPRINT*) m_PcbComponents[i] )->Flip();
         }
 
@@ -870,11 +868,11 @@ void PCAD_PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc,
         {
             comp = m_PcbComponents[i];
 
-            if( comp->m_positionY < m_SizeY )
-                m_SizeY = comp->m_positionY; // max Y
+            if( comp->m_PositionY < m_SizeY )
+                m_SizeY = comp->m_PositionY; // max Y
 
-            if( comp->m_positionX < m_SizeX && comp->m_positionX > 0 )
-                m_SizeX = comp->m_positionX; // Min X
+            if( comp->m_PositionX < m_SizeX && comp->m_PositionX > 0 )
+                m_SizeX = comp->m_PositionX; // Min X
         }
 
         m_SizeY -= 10000;
@@ -891,11 +889,11 @@ void PCAD_PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc,
         {
             comp = m_PcbComponents[i];
 
-            if( comp->m_positionY < m_SizeY )
-                m_SizeY = comp->m_positionY; // max Y
+            if( comp->m_PositionY < m_SizeY )
+                m_SizeY = comp->m_PositionY; // max Y
 
-            if( comp->m_positionX > m_SizeX )
-                m_SizeX = comp->m_positionX; // Min X
+            if( comp->m_PositionX > m_SizeX )
+                m_SizeX = comp->m_PositionX; // Min X
         }
 
         // SHEET SIZE CALCULATION
@@ -943,7 +941,7 @@ void PCAD_PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc,
 void PCAD_PCB::AddToBoard( FOOTPRINT* )
 {
     int i;
-    PCB_NET* net;
+    PCAD_NET* net;
 
     m_board->SetCopperLayerCount( m_layersStackup.size() );
 

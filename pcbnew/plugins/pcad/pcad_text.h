@@ -39,7 +39,7 @@ namespace PCAD2KICAD {
 class PCAD_TEXT : public PCAD_PCB_COMPONENT
 {
 public:
-    PCAD_TEXT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
+    PCAD_TEXT( PCAD_CALLBACKS* aCallbacks, BOARD* aBoard );
     ~PCAD_TEXT();
 
     virtual void Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,

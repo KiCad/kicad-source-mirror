@@ -1,9 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PCB_COPPER_POUR_H_
-#define PCB_COPPER_POUR_H_
+#ifndef PCAD_PLANE_H
+#define PCAD_PLANE_H
 
 #include <pcad/pcad_polygon.h>
 
@@ -34,17 +33,16 @@ class XNODE;
 
 namespace PCAD2KICAD {
 
-class PCB_COPPER_POUR : public PCAD_POLYGON
+class PCAD_PLANE : public PCAD_POLYGON
 {
 public:
-    PCB_COPPER_POUR( PCB_CALLBACKS* aCallbacks, BOARD* aBoard, int aPCadLayer );
-    ~PCB_COPPER_POUR();
+    PCAD_PLANE( PCAD_CALLBACKS* aCallbacks, BOARD* aBoard, int aPCadLayer );
+    ~PCAD_PLANE();
 
-    virtual bool Parse( XNODE*          aNode,
-                        const wxString& aDefaultUnits,
+    virtual bool Parse( XNODE* aNode, const wxString& aDefaultUnits,
                         const wxString& aActualConversion ) override;
 };
 
 } // namespace PCAD2KICAD
 
-#endif    // PCB_COPPER_POUR_H_
+#endif    // PCB_PLANE_H_

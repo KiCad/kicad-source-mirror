@@ -34,10 +34,10 @@
 
 namespace PCAD2KICAD {
 
-PCAD_TEXT::PCAD_TEXT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
+PCAD_TEXT::PCAD_TEXT( PCAD_CALLBACKS* aCallbacks, BOARD* aBoard ) :
         PCAD_PCB_COMPONENT( aCallbacks, aBoard )
 {
-    m_objType = wxT( 'T' );
+    m_ObjType = wxT( 'T' );
 }
 
 
@@ -54,14 +54,14 @@ void PCAD_TEXT::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
 
     m_PCadLayer     = aLayer;
     m_KiCadLayer    = GetKiCadLayer();
-    m_positionX     = 0;
-    m_positionY     = 0;
-    m_name.mirror   = 0;    // Normal, not mirrored
+    m_PositionX     = 0;
+    m_PositionY     = 0;
+    m_Name.mirror   = 0;    // Normal, not mirrored
     lNode = FindNode( aNode, wxT( "pt" ) );
 
     if( lNode )
     {
-        SetPosition( lNode->GetNodeContent(), aDefaultUnits, &m_positionX, &m_positionY,
+        SetPosition( lNode->GetNodeContent(), aDefaultUnits, &m_PositionX, &m_PositionY,
                      aActualConversion );
     }
 
@@ -71,55 +71,55 @@ void PCAD_TEXT::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
     {
         str = lNode->GetNodeContent();
         str.Trim( false );
-        m_rotation = EDA_ANGLE( StrToInt1Units( str ), TENTHS_OF_A_DEGREE_T );
+        m_Rotation = EDA_ANGLE( StrToInt1Units( str ), TENTHS_OF_A_DEGREE_T );
     }
 
-    aNode->GetAttribute( wxT( "Name" ), &m_name.text );
-    m_name.text.Replace( wxT( "\r" ), wxT( "" ) );
+    aNode->GetAttribute( wxT( "Name" ), &m_Name.text );
+    m_Name.text.Replace( wxT( "\r" ), wxT( "" ) );
 
     str = FindNodeGetContent( aNode, wxT( "justify" ) );
-    m_name.justify = GetJustifyIdentificator( str );
+    m_Name.justify = GetJustifyIdentificator( str );
 
     str = FindNodeGetContent( aNode, wxT( "isFlipped" ) );
 
     if( str.IsSameAs( wxT( "True" ), false ) )
-        m_name.mirror = 1;
+        m_Name.mirror = 1;
 
     lNode = FindNode( aNode, wxT( "textStyleRef" ) );
 
     if( lNode )
-        SetFontProperty( lNode, &m_name, aDefaultUnits, aActualConversion );
+        SetFontProperty( lNode, &m_Name, aDefaultUnits, aActualConversion );
 }
 
 
 void PCAD_TEXT::AddToBoard( FOOTPRINT* aFootprint )
 {
-    m_name.textPositionX = m_positionX;
-    m_name.textPositionY = m_positionY;
-    m_name.textRotation = m_rotation;
+    m_Name.textPositionX = m_PositionX;
+    m_Name.textPositionY = m_PositionY;
+    m_Name.textRotation = m_Rotation;
 
     ::PCB_TEXT* pcbtxt = new ::PCB_TEXT( m_board );
     m_board->Add( pcbtxt, ADD_MODE::APPEND );
 
-    pcbtxt->SetText( m_name.text );
+    pcbtxt->SetText( m_Name.text );
 
-    if( m_name.isTrueType )
-        SetTextSizeFromTrueTypeFontHeight( pcbtxt, m_name.textHeight );
+    if( m_Name.isTrueType )
+        SetTextSizeFromTrueTypeFontHeight( pcbtxt, m_Name.textHeight );
     else
-        SetTextSizeFromStrokeFontHeight( pcbtxt, m_name.textHeight );
+        SetTextSizeFromStrokeFontHeight( pcbtxt, m_Name.textHeight );
 
-    pcbtxt->SetItalic( m_name.isItalic );
-    pcbtxt->SetTextThickness( m_name.textstrokeWidth );
+    pcbtxt->SetItalic( m_Name.isItalic );
+    pcbtxt->SetTextThickness( m_Name.textstrokeWidth );
 
-    SetTextJustify( pcbtxt, m_name.justify );
-    pcbtxt->SetTextPos( VECTOR2I( m_name.textPositionX, m_name.textPositionY ) );
+    SetTextJustify( pcbtxt, m_Name.justify );
+    pcbtxt->SetTextPos( VECTOR2I( m_Name.textPositionX, m_Name.textPositionY ) );
 
-    pcbtxt->SetMirrored( m_name.mirror );
+    pcbtxt->SetMirrored( m_Name.mirror );
 
     if( pcbtxt->IsMirrored() )
-        pcbtxt->SetTextAngle( ANGLE_360 - m_name.textRotation );
+        pcbtxt->SetTextAngle( ANGLE_360 - m_Name.textRotation );
     else
-        pcbtxt->SetTextAngle( m_name.textRotation );
+        pcbtxt->SetTextAngle( m_Name.textRotation );
 
     pcbtxt->SetLayer( m_KiCadLayer );
 }
@@ -129,8 +129,8 @@ void PCAD_TEXT::AddToBoard( FOOTPRINT* aFootprint )
 // {
 // PCAD_PCB_COMPONENT::SetPosOffset( aX_offs, aY_offs );
 
-// m_name.textPositionX    += aX_offs;
-// m_name.textPositionY    += aY_offs;
+// m_Name.textPositionX    += aX_offs;
+// m_Name.textPositionY    += aY_offs;
 // }
 
 } // namespace PCAD2KICAD

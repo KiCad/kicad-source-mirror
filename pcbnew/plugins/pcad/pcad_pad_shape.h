@@ -37,7 +37,7 @@ namespace PCAD2KICAD {
 class PCAD_PAD_SHAPE : public PCAD_PCB_COMPONENT
 {
 public:
-    PCAD_PAD_SHAPE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
+    PCAD_PAD_SHAPE( PCAD_CALLBACKS* aCallbacks, BOARD* aBoard );
     ~PCAD_PAD_SHAPE();
 
     virtual void Parse( XNODE* aNode, const wxString& aDefaultUnits,
@@ -45,6 +45,7 @@ public:
 
     void AddToBoard( FOOTPRINT* aFootprint = nullptr ) override {}
 
+public:
     wxString    m_Shape;
     int         m_Width;
     int         m_Height;

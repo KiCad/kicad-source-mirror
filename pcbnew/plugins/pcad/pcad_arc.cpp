@@ -36,10 +36,10 @@
 
 namespace PCAD2KICAD {
 
-PCAD_ARC::PCAD_ARC( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
+PCAD_ARC::PCAD_ARC( PCAD_CALLBACKS* aCallbacks, BOARD* aBoard ) :
         PCAD_PCB_COMPONENT( aCallbacks, aBoard )
 {
-    m_objType    = wxT( 'A' );
+    m_ObjType = wxT( 'A' );
     m_StartX     = 0;
     m_StartY     = 0;
     m_Angle      = ANGLE_0;
@@ -75,7 +75,7 @@ void PCAD_ARC::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
 
         if( lNode )
         {
-            SetPosition( lNode->GetNodeContent(), aDefaultUnits, &m_positionX, &m_positionY,
+            SetPosition( lNode->GetNodeContent(), aDefaultUnits, &m_PositionX, &m_PositionY,
                          aActualConversion );
         }
 
@@ -99,7 +99,7 @@ void PCAD_ARC::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
                          aActualConversion );
         }
 
-        VECTOR2I position( m_positionX, m_positionY );
+        VECTOR2I position( m_PositionX, m_PositionY );
         VECTOR2I start( m_StartX, m_StartY );
 
         if( start == end )
@@ -121,7 +121,7 @@ void PCAD_ARC::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
 
         if( lNode )
         {
-            SetPosition( lNode->GetNodeContent(), aDefaultUnits, &m_positionX, &m_positionY,
+            SetPosition( lNode->GetNodeContent(), aDefaultUnits, &m_PositionX, &m_PositionY,
                          aActualConversion );
         }
 
@@ -146,8 +146,8 @@ void PCAD_ARC::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
         if( lNode )
             m_Angle = EDA_ANGLE( StrToInt1Units( lNode->GetNodeContent() ), TENTHS_OF_A_DEGREE_T );
 
-        m_StartX = m_positionX + KiROUND( r * a.Cos() );
-        m_StartY = m_positionY - KiROUND( r * a.Sin() );
+        m_StartX = m_PositionX + KiROUND( r * a.Cos() );
+        m_StartY = m_PositionY - KiROUND( r * a.Sin() );
     }
 }
 
@@ -177,7 +177,7 @@ void PCAD_ARC::AddToBoard( FOOTPRINT* aFootprint )
     PCB_SHAPE* arc = new PCB_SHAPE( aFootprint, IsCircle() ? SHAPE_T::CIRCLE : SHAPE_T::ARC );
     aFootprint->Add( arc );
 
-    arc->SetCenter( VECTOR2I( m_positionX, m_positionY ) );
+    arc->SetCenter( VECTOR2I( m_PositionX, m_PositionY ) );
     arc->SetStart( VECTOR2I( m_StartX, m_StartY ) );
     arc->SetArcAngleAndEnd( -m_Angle, true );
 

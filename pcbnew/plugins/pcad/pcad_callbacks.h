@@ -1,8 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
+ * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2012, 2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,51 +23,41 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <pcad/pcb_keepout.h>
+#ifndef PCAD_CALLBACKS_H
+#define PCAD_CALLBACKS_H
 
-#include <common.h>
-#include <xnode.h>
+#include <layer_ids.h>
 
-#include <wx/string.h>
+class wxString;
 
-namespace PCAD2KICAD {
-
-PCB_KEEPOUT::PCB_KEEPOUT( PCB_CALLBACKS*    aCallbacks,
-                          BOARD*            aBoard,
-                          int               aPCadLayer ) :
-        PCAD_POLYGON( aCallbacks, aBoard, aPCadLayer )
+enum LAYER_TYPE_T
 {
-    m_objType   = wxT( 'K' );
-}
+    LAYER_TYPE_SIGNAL,
+    LAYER_TYPE_NONSIGNAL,
+    LAYER_TYPE_PLANE
+};
 
-
-PCB_KEEPOUT::~PCB_KEEPOUT()
+struct TLAYER
 {
-}
+    PCB_LAYER_ID  KiCadLayer;
+    LAYER_TYPE_T  layerType = LAYER_TYPE_SIGNAL;
+    wxString      netNameRef;
+};
 
-
-bool PCB_KEEPOUT::Parse( XNODE*          aNode,
-                         const wxString& aDefaultMeasurementUnit,
-                         const wxString& aActualConversion )
+namespace PCAD2KICAD
 {
-    XNODE*          lNode;
-
-    lNode = FindNode( aNode, wxT( "pcbPoly" ) );
-
-    if( lNode )
+    class PCAD_CALLBACKS
     {
-        // retrieve keepOut outline
-        FormPolygon( lNode, &m_outline, aDefaultMeasurementUnit, aActualConversion );
+    public:
+        virtual ~PCAD_CALLBACKS()
+        {
+        }
 
-        m_positionX = m_outline[0]->x;
-        m_positionY = m_outline[0]->y;
-    }
-    else
-    {
-        return false;
-    }
-
-    return true;
+        virtual PCB_LAYER_ID  GetKiCadLayer( int aPCadLayer ) const = 0;
+        virtual LAYER_TYPE_T  GetLayerType( int aPCadLayer ) const = 0;
+        virtual wxString      GetLayerNetNameRef( int aPCadLayer ) const = 0;
+        virtual int           GetNetCode( const wxString& netName ) const = 0;
+    };
 }
 
-} // namespace PCAD2KICAD
+#endif    // PCAD_CALLBACKS_H

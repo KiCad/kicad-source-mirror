@@ -1,9 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012-2020 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2012 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,41 +22,49 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PCB_NET_H_
-#define PCB_NET_H_
+#include <pcad/pcad_keepout.h>
 
+#include <common.h>
+#include <xnode.h>
 
-#include <pcad/pcad2kicad_common.h>
-#include <pcad/pcad_item_types.h>
-
-class wxString;
-class XNODE;
+#include <wx/string.h>
 
 namespace PCAD2KICAD {
 
-class PCB_NET_NODE : public wxObject
+PCAD_KEEPOUT::PCAD_KEEPOUT( PCAD_CALLBACKS* aCallbacks, BOARD* aBoard, int aPCadLayer ) :
+        PCAD_POLYGON( aCallbacks, aBoard, aPCadLayer )
 {
-public:
-    PCB_NET_NODE();
-    ~PCB_NET_NODE();
+    m_ObjType = wxT( 'K' );
+}
 
-    wxString    m_CompRef;
-    wxString    m_PinRef;
-};
 
-class PCB_NET : public wxObject
+PCAD_KEEPOUT::~PCAD_KEEPOUT()
 {
-public:
-    PCB_NET( int aNetCode );
-    ~PCB_NET();
+}
 
-    void Parse( XNODE* aNode );
 
-    wxString            m_Name;
-    int                 m_NetCode;
-    PCB_NET_NODES_ARRAY m_NetNodes;
-};
+bool PCAD_KEEPOUT::Parse( XNODE*          aNode,
+                          const wxString& aDefaultMeasurementUnit,
+                          const wxString& aActualConversion )
+{
+    XNODE*          lNode;
+
+    lNode = FindNode( aNode, wxT( "pcbPoly" ) );
+
+    if( lNode )
+    {
+        // retrieve keepOut outline
+        FormPolygon( lNode, &m_Outline, aDefaultMeasurementUnit, aActualConversion );
+
+        m_PositionX = m_Outline[0]->x;
+        m_PositionY = m_Outline[0]->y;
+    }
+    else
+    {
+        return false;
+    }
+
+    return true;
+}
 
 } // namespace PCAD2KICAD
-
-#endif    // PCB_NET_H_

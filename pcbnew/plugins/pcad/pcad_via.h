@@ -38,7 +38,7 @@ namespace PCAD2KICAD {
 class PCAD_VIA : public PCAD_PAD
 {
 public:
-    PCAD_VIA( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
+    PCAD_VIA( PCAD_CALLBACKS* aCallbacks, BOARD* aBoard );
     ~PCAD_VIA();
 
     virtual void Parse( XNODE* aNode, const wxString& aDefaultUnits,

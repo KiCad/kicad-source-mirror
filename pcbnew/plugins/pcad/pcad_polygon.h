@@ -39,7 +39,7 @@ namespace PCAD2KICAD {
 class PCAD_POLYGON : public PCAD_PCB_COMPONENT
 {
 public:
-    PCAD_POLYGON( PCB_CALLBACKS* aCallbacks, BOARD* aBoard, int aPCadLayer );
+    PCAD_POLYGON( PCAD_CALLBACKS* aCallbacks, BOARD* aBoard, int aPCadLayer );
     ~PCAD_POLYGON();
 
     virtual bool Parse( XNODE* aNode, const wxString& aDefaultUnits,
@@ -59,11 +59,12 @@ public:
     void FormPolygon( XNODE* aNode, VERTICES_ARRAY* aPolygon,
                       const wxString& aDefaultUnits, const wxString& actualConversion );
 
-    int             m_width;
-    int             m_priority;
-    VERTICES_ARRAY  m_outline; // collection of boundary/outline lines - objects
-    ISLANDS_ARRAY   m_islands;
-    ISLANDS_ARRAY   m_cutouts;
+public:
+    int             m_Width;
+    int             m_Priority;
+    VERTICES_ARRAY  m_Outline; // collection of boundary/outline lines - objects
+    ISLANDS_ARRAY   m_Islands;
+    ISLANDS_ARRAY   m_Cutouts;
 
 protected:
     bool            m_filled;

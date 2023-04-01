@@ -32,7 +32,7 @@
 
 namespace PCAD2KICAD {
 
-PCAD_VIA_SHAPE::PCAD_VIA_SHAPE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
+PCAD_VIA_SHAPE::PCAD_VIA_SHAPE( PCAD_CALLBACKS* aCallbacks, BOARD* aBoard ) :
         PCAD_PAD_SHAPE( aCallbacks, aBoard )
 {
 }

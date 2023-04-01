@@ -38,7 +38,7 @@ namespace PCAD2KICAD {
 class PCAD_ARC : public PCAD_PCB_COMPONENT
 {
 public:
-    PCAD_ARC( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
+    PCAD_ARC( PCAD_CALLBACKS* aCallbacks, BOARD* aBoard );
     ~PCAD_ARC();
 
     virtual void Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
@@ -50,13 +50,14 @@ public:
 
     void AddToBoard( FOOTPRINT* aFootprint = nullptr ) override;
 
+private:
+    bool IsCircle();
+
+public:
     int       m_StartX;
     int       m_StartY;
     EDA_ANGLE m_Angle;
     int       m_Width;
-
-private:
-    bool IsCircle();
 };
 
 } // namespace PCAD2KICAD

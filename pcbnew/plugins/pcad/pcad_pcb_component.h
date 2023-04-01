@@ -28,7 +28,7 @@
 
 #include <pcad/pcad2kicad_common.h>
 #include <pcad/pcad_item_types.h>
-#include <pcad/pcb_callbacks.h>
+#include <pcad/pcad_callbacks.h>
 
 #include <kiid.h>
 #include <layer_ids.h>
@@ -45,7 +45,7 @@ namespace PCAD2KICAD {
 class PCAD_PCB_COMPONENT : public wxObject
 {
 public:
-    PCAD_PCB_COMPONENT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
+    PCAD_PCB_COMPONENT( PCAD_CALLBACKS* aCallbacks, BOARD* aBoard );
     ~PCAD_PCB_COMPONENT();
 
     virtual void SetPosOffset( int aX_offs, int aY_offs );
@@ -59,22 +59,22 @@ public:
         return m_callbacks->GetNetCode( aNetName );
     }
 
-    int          m_tag;
-    char         m_objType;
+public:
+    char         m_ObjType;
     int          m_PCadLayer;
     PCB_LAYER_ID m_KiCadLayer;
-    KIID         m_uuid;
-    int          m_positionX;
-    int          m_positionY;
-    EDA_ANGLE    m_rotation;
-    TTEXTVALUE   m_name;             // name has also private positions, rotations and so on....
-    wxString     m_net;
-    int          m_netCode;
-    wxString     m_compRef;          // internal usage for XL parsing
-    wxString     m_patGraphRefName;  // internal usage for XL parsing
+    KIID         m_Uuid;
+    int          m_PositionX;
+    int          m_PositionY;
+    EDA_ANGLE    m_Rotation;
+    TTEXTVALUE   m_Name;             // name has also private positions, rotations and so on....
+    wxString     m_Net;
+    int          m_NetCode;
+    wxString     m_CompRef;          // internal usage for XL parsing
+    wxString     m_PatGraphRefName;  // internal usage for XL parsing
 
 protected:
-    PCB_CALLBACKS*  m_callbacks;
+    PCAD_CALLBACKS* m_callbacks;
     BOARD*          m_board;
 };
 

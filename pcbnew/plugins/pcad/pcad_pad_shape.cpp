@@ -32,7 +32,7 @@
 
 namespace PCAD2KICAD {
 
-PCAD_PAD_SHAPE::PCAD_PAD_SHAPE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
+PCAD_PAD_SHAPE::PCAD_PAD_SHAPE( PCAD_CALLBACKS* aCallbacks, BOARD* aBoard ) :
         PCAD_PCB_COMPONENT( aCallbacks, aBoard )
 {
     m_Shape     = wxEmptyString;
@@ -47,7 +47,7 @@ PCAD_PAD_SHAPE::~PCAD_PAD_SHAPE()
 
 
 void PCAD_PAD_SHAPE::Parse( XNODE* aNode, const wxString& aDefaultUnits,
-                           const wxString& aActualConversion )
+                            const wxString& aActualConversion )
 {
     wxString    str, s;
     long        num;

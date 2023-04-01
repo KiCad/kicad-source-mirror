@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <pcad/pcb_plane.h>
+#include <pcad/pcad_plane.h>
 
 #include <common.h>
 #include <xnode.h>
@@ -31,22 +31,20 @@
 
 namespace PCAD2KICAD {
 
-PCB_PLANE::PCB_PLANE( PCB_CALLBACKS*    aCallbacks,
-                      BOARD*            aBoard,
-                      int               aPCadLayer ) :
+PCAD_PLANE::PCAD_PLANE( PCAD_CALLBACKS* aCallbacks, BOARD* aBoard, int aPCadLayer ) :
         PCAD_POLYGON( aCallbacks, aBoard, aPCadLayer )
 {
-    m_priority = 1;
+    m_Priority = 1;
 }
 
 
-PCB_PLANE::~PCB_PLANE()
+PCAD_PLANE::~PCAD_PLANE()
 {
 }
 
 
-bool PCB_PLANE::Parse( XNODE* aNode, const wxString& aDefaultUnits,
-                       const wxString& aActualConversion )
+bool PCAD_PLANE::Parse( XNODE* aNode, const wxString& aDefaultUnits,
+                        const wxString& aActualConversion )
 {
     XNODE*          lNode;
     wxString        pourType, str, propValue;
@@ -58,13 +56,13 @@ bool PCB_PLANE::Parse( XNODE* aNode, const wxString& aDefaultUnits,
         lNode->GetAttribute( wxT( "Name" ), &propValue );
         propValue.Trim( false );
         propValue.Trim( true );
-        m_net = propValue;
-        m_netCode = GetNetCode( m_net );
+        m_Net = propValue;
+        m_NetCode = GetNetCode( m_Net );
     }
 
     if( FindNode( aNode, wxT( "width" ) ) )
     {
-        SetWidth( FindNode( aNode, wxT( "width" ) )->GetNodeContent(), aDefaultUnits, &m_width,
+        SetWidth( FindNode( aNode, wxT( "width" ) )->GetNodeContent(), aDefaultUnits, &m_Width,
                   aActualConversion );
     }
 
@@ -76,10 +74,10 @@ bool PCB_PLANE::Parse( XNODE* aNode, const wxString& aDefaultUnits,
     if( lNode )
     {
         // retrieve plane outline
-        FormPolygon( lNode, &m_outline, aDefaultUnits, aActualConversion );
+        FormPolygon( lNode, &m_Outline, aDefaultUnits, aActualConversion );
 
-        m_positionX = m_outline[0]->x;
-        m_positionY = m_outline[0]->y;
+        m_PositionX = m_Outline[0]->x;
+        m_PositionY = m_Outline[0]->y;
     }
     else
     {

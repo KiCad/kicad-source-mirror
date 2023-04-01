@@ -38,7 +38,7 @@ namespace PCAD2KICAD {
 class PCAD_PAD : public PCAD_PCB_COMPONENT
 {
 public:
-    PCAD_PAD( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
+    PCAD_PAD( PCAD_CALLBACKS* aCallbacks, BOARD* aBoard );
     ~PCAD_PAD();
 
     virtual void Parse( XNODE* aNode, const wxString& aDefaultUnits,
@@ -50,10 +50,11 @@ public:
 
     void AddToBoard( FOOTPRINT* aFootprint = nullptr ) override;
 
-    int                  m_Number;
-    int                  m_Hole;
-    bool                 m_IsHolePlated;
-    PCB_PAD_SHAPES_ARRAY m_Shapes;
+public:
+    int                   m_Number;
+    int                   m_Hole;
+    bool                  m_IsHolePlated;
+    PCAD_PAD_SHAPES_ARRAY m_Shapes;
 
 private:
     wxString m_defaultPinDes;

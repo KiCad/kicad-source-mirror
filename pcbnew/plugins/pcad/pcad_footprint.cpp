@@ -24,9 +24,9 @@
  */
 
 #include <pcad/pcad_arc.h>
-#include <pcad/pcb_copper_pour.h>
-#include <pcad/pcb_cutout.h>
-#include <pcad/pcb_plane.h>
+#include <pcad/pcad_copper_pour.h>
+#include <pcad/pcad_cutout.h>
+#include <pcad/pcad_plane.h>
 #include <pcad/pcad_line.h>
 #include <pcad/pcad_footprint.h>
 #include <pcad/pcad_pad.h>
@@ -45,12 +45,12 @@
 namespace PCAD2KICAD {
 
 
-PCAD_FOOTPRINT::PCAD_FOOTPRINT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
+PCAD_FOOTPRINT::PCAD_FOOTPRINT( PCAD_CALLBACKS* aCallbacks, BOARD* aBoard ) :
         PCAD_PCB_COMPONENT( aCallbacks, aBoard )
 {
     InitTTextValue( &m_Value );
     m_Mirror = 0;
-    m_objType = wxT( 'M' );  // FOOTPRINT
+    m_ObjType = wxT( 'M' );  // FOOTPRINT
     m_KiCadLayer = F_SilkS;  // default
 }
 
@@ -216,24 +216,25 @@ XNODE* PCAD_FOOTPRINT::FindPatternMultilayerSection( XNODE* aNode, wxString* aPa
 
 
 void PCAD_FOOTPRINT::DoLayerContentsObjects( XNODE* aNode, PCAD_FOOTPRINT* aFootprint,
-                                            PCB_COMPONENTS_ARRAY* aList, wxStatusBar* aStatusBar,
-                                            const wxString& aDefaultMeasurementUnit,
-                                            const wxString& aActualConversion )
+                                             PCAD_COMPONENTS_ARRAY* aList, wxStatusBar* aStatusBar,
+                                             const wxString& aDefaultMeasurementUnit,
+                                             const wxString& aActualConversion )
 {
-    PCAD_ARC*            arc;
-    PCAD_POLYGON*        polygon;
-    PCAD_POLYGON*plane_layer = nullptr;
-    PCB_COPPER_POUR*    copperPour;
-    PCB_CUTOUT*         cutout;
-    PCB_PLANE*          plane;
-    VERTICES_ARRAY*     plane_layer_polygon;
-    PCAD_LINE*           line;
-    PCAD_TEXT*          text;
-    XNODE*              lNode, * tNode;
-    wxString            propValue;
-    long long           i;
-    int PCadLayer;
-    long                num = 0;
+    PCAD_ARC*         arc;
+    PCAD_POLYGON*     polygon;
+    PCAD_POLYGON*     plane_layer = nullptr;
+    PCAD_COPPER_POUR* copperPour;
+    PCAD_CUTOUT*      cutout;
+    PCAD_PLANE*       plane;
+    VERTICES_ARRAY*   plane_layer_polygon;
+    PCAD_LINE*        line;
+    PCAD_TEXT*        text;
+    XNODE*            lNode;
+    XNODE*            tNode;
+    wxString          propValue;
+    long long         i;
+    int               PCadLayer;
+    long              num = 0;
 
     i = 0;
 
@@ -292,12 +293,12 @@ void PCAD_FOOTPRINT::DoLayerContentsObjects( XNODE* aNode, PCAD_FOOTPRINT* aFoot
                 {
                     // TODO: to understand and may be repair
                     // Alexander Lunev: originally in Delphi version of the project there was
-                    // a strange access to pcbModule->m_name (it was global variable). This access
+                    // a strange access to pcbModule->m_Name (it was global variable). This access
                     // is necessary when the function DoLayerContentsObjects() is called from
                     // function CreatePCBModule(). However it is not clear whether the access is
                     // required when the function DoLayerContentsObjects() is called from
                     // function ProcessXMLtoPCBLib().
-                    SetFontProperty( tNode, &aFootprint->m_name, aDefaultMeasurementUnit,
+                    SetFontProperty( tNode, &aFootprint->m_Name, aDefaultMeasurementUnit,
                                      aActualConversion );
                 }
             }
@@ -318,7 +319,7 @@ void PCAD_FOOTPRINT::DoLayerContentsObjects( XNODE* aNode, PCAD_FOOTPRINT* aFoot
                 plane_layer_polygon = new VERTICES_ARRAY;
                 plane_layer->FormPolygon( lNode, plane_layer_polygon, aDefaultMeasurementUnit,
                                           aActualConversion );
-                plane_layer->m_cutouts.Add( plane_layer_polygon );
+                plane_layer->m_Cutouts.Add( plane_layer_polygon );
             }
             else
             {
@@ -333,7 +334,7 @@ void PCAD_FOOTPRINT::DoLayerContentsObjects( XNODE* aNode, PCAD_FOOTPRINT* aFoot
 
         if( lNode->GetName() == wxT( "copperPour95" ) )
         {
-            copperPour = new PCB_COPPER_POUR( m_callbacks, m_board, PCadLayer );
+            copperPour = new PCAD_COPPER_POUR( m_callbacks, m_board, PCadLayer );
 
             if( copperPour->Parse( lNode, aDefaultMeasurementUnit, aActualConversion ) )
                 aList->Add( copperPour );
@@ -343,7 +344,7 @@ void PCAD_FOOTPRINT::DoLayerContentsObjects( XNODE* aNode, PCAD_FOOTPRINT* aFoot
 
         if( lNode->GetName() == wxT( "polyCutOut" ) )
         {
-            cutout = new PCB_CUTOUT( m_callbacks, m_board, PCadLayer );
+            cutout = new PCAD_CUTOUT( m_callbacks, m_board, PCadLayer );
 
             if( cutout->Parse( lNode, aDefaultMeasurementUnit, aActualConversion ) )
                 aList->Add( cutout );
@@ -353,7 +354,7 @@ void PCAD_FOOTPRINT::DoLayerContentsObjects( XNODE* aNode, PCAD_FOOTPRINT* aFoot
 
         if( lNode->GetName() == wxT( "planeObj" ) )
         {
-            plane = new PCB_PLANE( m_callbacks, m_board, PCadLayer );
+            plane = new PCAD_PLANE( m_callbacks, m_board, PCadLayer );
 
             if( plane->Parse( lNode, aDefaultMeasurementUnit, aActualConversion ) )
                 aList->Add( plane );
@@ -375,10 +376,10 @@ void PCAD_FOOTPRINT::SetName( const wxString& aPin, const wxString& aName )
 
     for( i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
     {
-        if( m_FootprintItems[i]->m_objType == wxT( 'P' ) )
+        if( m_FootprintItems[i]->m_ObjType == wxT( 'P' ) )
         {
             if( ( (PCAD_PAD*) m_FootprintItems[i] )->m_Number == num )
-                ( (PCAD_PAD*) m_FootprintItems[i] )->m_name.text = aName;
+                ( (PCAD_PAD*) m_FootprintItems[i] )->m_Name.text = aName;
         }
     }
 }
@@ -395,11 +396,11 @@ void PCAD_FOOTPRINT::Parse( XNODE* aNode, wxStatusBar* aStatusBar,
 
     FindNode( aNode, wxT( "originalName" ) )->GetAttribute( wxT( "Name" ), &propValue );
     propValue.Trim( false );
-    m_name.text = propValue;
+    m_Name.text = propValue;
 
-    // aStatusBar->SetStatusText( wxT( "Creating Component : " ) + m_name.text );
+    // aStatusBar->SetStatusText( wxT( "Creating Component : " ) + m_Name.text );
     lNode   = aNode;
-    lNode   = FindPatternMultilayerSection( lNode, &m_patGraphRefName );
+    lNode   = FindPatternMultilayerSection( lNode, &m_PatGraphRefName );
 
     if( lNode )
     {
@@ -484,46 +485,46 @@ void PCAD_FOOTPRINT::AddToBoard( FOOTPRINT* aFootprint )
     EDA_ANGLE r;
 
     // transform text positions
-    CorrectTextPosition( &m_name );
-    RotatePoint( &m_name.correctedPositionX, &m_name.correctedPositionY, -m_rotation );
+    CorrectTextPosition( &m_Name );
+    RotatePoint( &m_Name.correctedPositionX, &m_Name.correctedPositionY, -m_Rotation );
 
     CorrectTextPosition( &m_Value );
-    RotatePoint( &m_Value.correctedPositionX, &m_Value.correctedPositionY, -m_rotation );
+    RotatePoint( &m_Value.correctedPositionX, &m_Value.correctedPositionY, -m_Rotation );
 
     FOOTPRINT* footprint = new FOOTPRINT( m_board );
     m_board->Add( footprint, ADD_MODE::APPEND );
 
-    footprint->SetPosition( VECTOR2I( m_positionX, m_positionY ) );
+    footprint->SetPosition( VECTOR2I( m_PositionX, m_PositionY ) );
     footprint->SetLayer( m_Mirror ? B_Cu : F_Cu );
-    footprint->SetOrientation( m_rotation );
+    footprint->SetOrientation( m_Rotation );
 
     LIB_ID fpID;
-    fpID.Parse( m_compRef, true );
+    fpID.Parse( m_CompRef, true );
     footprint->SetFPID( fpID );
 
     // reference text
     PCB_TEXT* ref_text = &footprint->Reference();
 
-    ref_text->SetText( ValidateReference( m_name.text ) );
+    ref_text->SetText( ValidateReference( m_Name.text ) );
     ref_text->SetType( PCB_TEXT::TEXT_is_REFERENCE );
 
-    ref_text->SetFPRelativePosition( VECTOR2I( m_name.correctedPositionX,
-                                               m_name.correctedPositionY ) );
+    ref_text->SetFPRelativePosition( VECTOR2I( m_Name.correctedPositionX,
+                                               m_Name.correctedPositionY ) );
 
-    if( m_name.isTrueType )
-        SetTextSizeFromTrueTypeFontHeight( ref_text, m_name.textHeight );
+    if( m_Name.isTrueType )
+        SetTextSizeFromTrueTypeFontHeight( ref_text, m_Name.textHeight );
     else
-        SetTextSizeFromStrokeFontHeight( ref_text, m_name.textHeight );
+        SetTextSizeFromStrokeFontHeight( ref_text, m_Name.textHeight );
 
-    r = m_name.textRotation - m_rotation;
+    r = m_Name.textRotation - m_Rotation;
     ref_text->SetTextAngle( r );
     ref_text->SetKeepUpright( false );
 
-    ref_text->SetItalic( m_name.isItalic );
-    ref_text->SetTextThickness( m_name.textstrokeWidth );
+    ref_text->SetItalic( m_Name.isItalic );
+    ref_text->SetTextThickness( m_Name.textstrokeWidth );
 
-    ref_text->SetMirrored( m_name.mirror );
-    ref_text->SetVisible( m_name.textIsVisible );
+    ref_text->SetMirrored( m_Name.mirror );
+    ref_text->SetVisible( m_Name.textIsVisible );
 
     ref_text->SetLayer( m_Mirror ? FlipLayer( m_KiCadLayer ) : m_KiCadLayer );
 
@@ -541,7 +542,7 @@ void PCAD_FOOTPRINT::AddToBoard( FOOTPRINT* aFootprint )
     else
         SetTextSizeFromStrokeFontHeight( val_text, m_Value.textHeight );
 
-    r = m_Value.textRotation - m_rotation;
+    r = m_Value.textRotation - m_Rotation;
     val_text->SetTextAngle( r );
     val_text->SetKeepUpright( false );
 
@@ -556,46 +557,43 @@ void PCAD_FOOTPRINT::AddToBoard( FOOTPRINT* aFootprint )
     // TEXTS
     for( i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
     {
-        if( m_FootprintItems[i]->m_objType == wxT( 'T' ) )
-        {
-            ( (PCAD_TEXT*) m_FootprintItems[i] )->m_tag = i + 2;
+        if( m_FootprintItems[i]->m_ObjType == wxT( 'T' ) )
             m_FootprintItems[ i ]->AddToBoard( footprint );
-        }
     }
 
     // FOOTPRINT LINES
     for( i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
     {
-        if( m_FootprintItems[i]->m_objType == wxT( 'L' ) )
+        if( m_FootprintItems[i]->m_ObjType == wxT( 'L' ) )
             m_FootprintItems[ i ]->AddToBoard( footprint );
     }
 
     // FOOTPRINT ARCS
     for( i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
     {
-        if( m_FootprintItems[i]->m_objType == wxT( 'A' ) )
+        if( m_FootprintItems[i]->m_ObjType == wxT( 'A' ) )
             m_FootprintItems[ i ]->AddToBoard( footprint );
     }
 
     // FOOTPRINT POLYGONS
     for( i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
     {
-        if( m_FootprintItems[i]->m_objType == wxT( 'Z' ) )
+        if( m_FootprintItems[i]->m_ObjType == wxT( 'Z' ) )
             m_FootprintItems[ i ]->AddToBoard( footprint );
     }
 
     // PADS
     for( i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
     {
-        if( m_FootprintItems[i]->m_objType == wxT( 'P' ) )
-            ((PCAD_PAD*) m_FootprintItems[ i ] )->AddToFootprint( footprint, m_rotation, false );
+        if( m_FootprintItems[i]->m_ObjType == wxT( 'P' ) )
+            ((PCAD_PAD*) m_FootprintItems[ i ] )->AddToFootprint( footprint, m_Rotation, false );
     }
 
     // VIAS
     for( i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
     {
-        if( m_FootprintItems[i]->m_objType == wxT( 'V' ) )
-            ((PCAD_VIA*) m_FootprintItems[ i ] )->AddToFootprint( footprint, m_rotation, false );
+        if( m_FootprintItems[i]->m_ObjType == wxT( 'V' ) )
+            ((PCAD_VIA*) m_FootprintItems[ i ] )->AddToFootprint( footprint, m_Rotation, false );
     }
 }
 
@@ -606,15 +604,15 @@ void PCAD_FOOTPRINT::Flip()
 
     if( m_Mirror == 1 )
     {
-        m_rotation = -m_rotation;
+        m_Rotation = -m_Rotation;
 
         for( i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
         {
-            if( m_FootprintItems[i]->m_objType == wxT( 'L' ) || // lines
-                m_FootprintItems[i]->m_objType == wxT( 'A' ) || // arcs
-                m_FootprintItems[i]->m_objType == wxT( 'Z' ) || // polygons
-                m_FootprintItems[i]->m_objType == wxT( 'P' ) || // pads
-                m_FootprintItems[i]->m_objType == wxT( 'V' ) )  // vias
+            if( m_FootprintItems[i]->m_ObjType == wxT( 'L' ) || // lines
+                m_FootprintItems[i]->m_ObjType == wxT( 'A' ) || // arcs
+                m_FootprintItems[i]->m_ObjType == wxT( 'Z' ) || // polygons
+                m_FootprintItems[i]->m_ObjType == wxT( 'P' ) || // pads
+                m_FootprintItems[i]->m_ObjType == wxT( 'V' ) )  // vias
             {
                 m_FootprintItems[i]->Flip();
             }

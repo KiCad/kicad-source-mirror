@@ -36,13 +36,13 @@
 
 namespace PCAD2KICAD {
 
-PCAD_LINE::PCAD_LINE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
+PCAD_LINE::PCAD_LINE( PCAD_CALLBACKS* aCallbacks, BOARD* aBoard ) :
         PCAD_PCB_COMPONENT( aCallbacks, aBoard )
 {
     m_Width     = 0;
     m_ToX       = 0;
     m_ToY       = 0;
-    m_objType   = wxT( 'L' );
+    m_ObjType = wxT( 'L' );
 }
 
 
@@ -59,8 +59,8 @@ void PCAD_LINE::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
 
     m_PCadLayer  = aLayer;
     m_KiCadLayer = GetKiCadLayer();
-    m_positionX  = 0;
-    m_positionY  = 0;
+    m_PositionX  = 0;
+    m_PositionY  = 0;
     m_ToX        = 0;
     m_ToY        = 0;
     m_Width      = 0;
@@ -68,7 +68,7 @@ void PCAD_LINE::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
 
     if( lNode )
     {
-        SetPosition( lNode->GetNodeContent(), aDefaultUnits, &m_positionX, &m_positionY,
+        SetPosition( lNode->GetNodeContent(), aDefaultUnits, &m_PositionX, &m_PositionY,
                      aActualConversion );
     }
 
@@ -90,8 +90,8 @@ void PCAD_LINE::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
         lNode->GetAttribute( wxT( "Name" ), &propValue );
         propValue.Trim( false );
         propValue.Trim( true );
-        m_net = propValue;
-        m_netCode = GetNetCode( m_net );
+        m_Net = propValue;
+        m_NetCode = GetNetCode( m_Net );
     }
 }
 
@@ -121,13 +121,13 @@ void PCAD_LINE::AddToBoard( FOOTPRINT* aFootprint )
         PCB_TRACK* track = new PCB_TRACK( m_board );
         m_board->Add( track );
 
-        track->SetPosition( VECTOR2I( m_positionX, m_positionY ) );
+        track->SetPosition( VECTOR2I( m_PositionX, m_PositionY ) );
         track->SetEnd( VECTOR2I( m_ToX, m_ToY ) );
 
         track->SetWidth( m_Width );
 
         track->SetLayer( m_KiCadLayer );
-        track->SetNetCode( m_netCode );
+        track->SetNetCode( m_NetCode );
     }
     else
     {
@@ -135,7 +135,7 @@ void PCAD_LINE::AddToBoard( FOOTPRINT* aFootprint )
         m_board->Add( segment, ADD_MODE::APPEND );
 
         segment->SetLayer( m_KiCadLayer );
-        segment->SetStart( VECTOR2I( m_positionX, m_positionY ) );
+        segment->SetStart( VECTOR2I( m_PositionX, m_PositionY ) );
         segment->SetEnd( VECTOR2I( m_ToX, m_ToY ) );
         segment->SetStroke( STROKE_PARAMS( m_Width, PLOT_DASH_TYPE::SOLID ) );
 

@@ -23,28 +23,50 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PCB_CUTOUT_H_
-#define PCB_CUTOUT_H_
+/**
+ * @file pcb_cutout.cpp
+ */
 
-#include <pcad/pcad_polygon.h>
+#include <pcad/pcad_cutout.h>
 
-class BOARD;
-class wxString;
-class XNODE;
+#include <xnode.h>
+
+#include <wx/gdicmn.h>
+#include <wx/string.h>
 
 namespace PCAD2KICAD {
 
-class PCB_CUTOUT : public PCAD_POLYGON
+PCAD_CUTOUT::PCAD_CUTOUT( PCAD_CALLBACKS* aCallbacks, BOARD* aBoard, int aPCadLayer ) :
+        PCAD_POLYGON( aCallbacks, aBoard, aPCadLayer )
 {
-public:
-    PCB_CUTOUT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard, int aPCadLayer );
-    ~PCB_CUTOUT();
+    m_ObjType = wxT( 'C' );
+}
 
-    virtual bool Parse( XNODE*          aNode,
-                        const wxString& aDefaultMeasurementUnit,
-                        const wxString& actualConversion ) override;
-};
+
+PCAD_CUTOUT::~PCAD_CUTOUT()
+{
+}
+
+
+bool PCAD_CUTOUT::Parse( XNODE*          aNode,
+                         const wxString& aDefaultMeasurementUnit,
+                         const wxString& aActualConversion )
+{
+    if( XNODE* lNode = FindNode( aNode, wxT( "pcbPoly" ) ) )
+    {
+        // retrieve cutout outline
+        FormPolygon( lNode, &m_Outline, aDefaultMeasurementUnit, aActualConversion );
+
+        m_PositionX = m_Outline[0]->x;
+        m_PositionY = m_Outline[0]->y;
+    }
+    else
+    {
+        return false;
+    }
+
+    return true;
+}
+
 
 } // namespace PCAD2KICAD
-
-#endif    // PCB_CUTOUT_H_

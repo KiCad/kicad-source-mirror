@@ -38,10 +38,10 @@
 namespace PCAD2KICAD {
 
 
-PCAD_PAD::PCAD_PAD( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
+PCAD_PAD::PCAD_PAD( PCAD_CALLBACKS* aCallbacks, BOARD* aBoard ) :
         PCAD_PCB_COMPONENT( aCallbacks, aBoard )
 {
-    m_objType       = wxT( 'P' );
+    m_ObjType = wxT( 'P' );
     m_Number        = 0;
     m_Hole          = 0;
     m_IsHolePlated  = true;
@@ -59,15 +59,15 @@ PCAD_PAD::~PCAD_PAD()
 
 
 void PCAD_PAD::Parse( XNODE* aNode, const wxString& aDefaultUnits,
-                     const wxString& aActualConversion )
+                      const wxString& aActualConversion )
 {
     XNODE*          lNode;
     XNODE*          cNode;
     long            num;
     wxString        propValue, str, emsg;
-    PCAD_PAD_SHAPE*  padShape;
+    PCAD_PAD_SHAPE* padShape;
 
-    m_rotation = ANGLE_0;
+    m_Rotation = ANGLE_0;
     lNode = FindNode( aNode, wxT( "padNum" ) );
 
     if( lNode )
@@ -82,14 +82,14 @@ void PCAD_PAD::Parse( XNODE* aNode, const wxString& aDefaultUnits,
     {
         lNode->GetAttribute( wxT( "Name" ), &propValue );
         propValue.Trim( false );
-        m_name.text = propValue;
+        m_Name.text = propValue;
     }
 
     lNode = FindNode( aNode, wxT( "pt" ) );
 
     if( lNode )
     {
-        SetPosition( lNode->GetNodeContent(), aDefaultUnits, &m_positionX, &m_positionY,
+        SetPosition( lNode->GetNodeContent(), aDefaultUnits, &m_PositionX, &m_PositionY,
                      aActualConversion );
     }
 
@@ -99,7 +99,7 @@ void PCAD_PAD::Parse( XNODE* aNode, const wxString& aDefaultUnits,
     {
         str = lNode->GetNodeContent();
         str.Trim( false );
-        m_rotation = EDA_ANGLE( StrToInt1Units( str ), TENTHS_OF_A_DEGREE_T );
+        m_Rotation = EDA_ANGLE( StrToInt1Units( str ), TENTHS_OF_A_DEGREE_T );
     }
 
     lNode = FindNode( aNode, wxT( "netNameRef" ) );
@@ -109,8 +109,8 @@ void PCAD_PAD::Parse( XNODE* aNode, const wxString& aDefaultUnits,
         lNode->GetAttribute( wxT( "Name" ), &propValue );
         propValue.Trim( false );
         propValue.Trim( true );
-        m_net = propValue;
-        m_netCode = GetNetCode( m_net );
+        m_Net = propValue;
+        m_NetCode = GetNetCode( m_Net );
     }
 
     lNode = FindNode( aNode, wxT( "defaultPinDes" ) );
@@ -139,14 +139,14 @@ void PCAD_PAD::Parse( XNODE* aNode, const wxString& aDefaultUnits,
     {
         lNode->GetAttribute( wxT( "Name" ), &propValue );
 
-        if( propValue.IsSameAs( m_name.text, false) )
+        if( propValue.IsSameAs( m_Name.text, false) )
             break;
 
         lNode = lNode->GetNext();
     }
 
     if ( !lNode )
-        THROW_IO_ERROR( wxString::Format( wxT( "Unable to find padStyleDef " ) + m_name.text ) );
+        THROW_IO_ERROR( wxString::Format( wxT( "Unable to find padStyleDef " ) + m_Name.text ) );
 
     cNode = FindNode( lNode, wxT( "holeDiam" ) );
 
@@ -183,8 +183,8 @@ void PCAD_PAD::Flip()
 
     PCAD_PCB_COMPONENT::Flip();
 
-    if( m_objType == wxT( 'P' ) )
-        m_rotation = -m_rotation;
+    if( m_ObjType == wxT( 'P' ) )
+        m_Rotation = -m_Rotation;
 
     for( i = 0; i < (int)m_Shapes.GetCount(); i++ )
         m_Shapes[i]->m_KiCadLayer = FlipLayer( m_Shapes[i]->m_KiCadLayer );
@@ -263,7 +263,7 @@ void PCAD_PAD::AddToFootprint( FOOTPRINT* aFootprint, const EDA_ANGLE& aRotation
             // actually this is a thru-hole pad
             pad->SetLayerSet( LSET::AllCuMask() | LSET( 2, B_Mask, F_Mask ) );
 
-        pad->SetNumber( m_name.text );
+        pad->SetNumber( m_Name.text );
 
         if( padShapeName.IsSameAs( wxT( "Oval" ), false )
             || padShapeName.IsSameAs( wxT( "Ellipse" ), false )
@@ -289,7 +289,7 @@ void PCAD_PAD::AddToFootprint( FOOTPRINT* aFootprint, const EDA_ANGLE& aRotation
 
         pad->SetSize( VECTOR2I( width, height ) );
         pad->SetDelta( VECTOR2I( 0, 0 ) );
-        pad->SetOrientation( m_rotation + aRotation );
+        pad->SetOrientation( m_Rotation + aRotation );
 
         pad->SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );
         pad->SetOffset( VECTOR2I( 0, 0 ) );
@@ -298,12 +298,12 @@ void PCAD_PAD::AddToFootprint( FOOTPRINT* aFootprint, const EDA_ANGLE& aRotation
         pad->SetAttribute( padType );
 
         // Set the proper net code
-        NETINFO_ITEM* netinfo = m_board->FindNet( m_net );
+        NETINFO_ITEM* netinfo = m_board->FindNet( m_Net );
 
         if( netinfo == nullptr )   // I believe this should not happen, but just in case
         {
             // It is a new net
-            netinfo = new NETINFO_ITEM( m_board, m_net );
+            netinfo = new NETINFO_ITEM( m_board, m_Net );
             m_board->Add( netinfo );
         }
 
@@ -314,7 +314,7 @@ void PCAD_PAD::AddToFootprint( FOOTPRINT* aFootprint, const EDA_ANGLE& aRotation
     {
         // pad's "Position" is not relative to the footprint's, whereas Pos0 is relative to
         // the footprint's but is the unrotated coordinate.
-        VECTOR2I padpos( m_positionX, m_positionY );
+        VECTOR2I padpos( m_PositionX, m_PositionY );
         pad->SetPos0( padpos );
         RotatePoint( padpos, aFootprint->GetOrientation() );
         pad->SetPosition( padpos + aFootprint->GetPosition() );
@@ -331,7 +331,7 @@ void PCAD_PAD::AddToBoard( FOOTPRINT* aFootprint )
     int             width = 0;
     int             height = 0;
 
-    if( m_objType == wxT( 'V' ) ) // via
+    if( m_ObjType == wxT( 'V' ) ) // via
     {
         // choose one of the shapes
         for( i = 0; i < (int) m_Shapes.GetCount(); i++ )
@@ -359,8 +359,8 @@ void PCAD_PAD::AddToBoard( FOOTPRINT* aFootprint )
             PCB_VIA* via = new PCB_VIA( m_board );
             m_board->Add( via );
 
-            via->SetPosition( VECTOR2I( m_positionX, m_positionY ) );
-            via->SetEnd( VECTOR2I( m_positionX, m_positionY ) );
+            via->SetPosition( VECTOR2I( m_PositionX, m_PositionY ) );
+            via->SetEnd( VECTOR2I( m_PositionX, m_PositionY ) );
 
             via->SetWidth( height );
             via->SetViaType( VIATYPE::THROUGH );
@@ -368,7 +368,7 @@ void PCAD_PAD::AddToBoard( FOOTPRINT* aFootprint )
             via->SetDrill( m_Hole );
 
             via->SetLayer( m_KiCadLayer );
-            via->SetNetCode( m_netCode );
+            via->SetNetCode( m_NetCode );
         }
     }
     else // pad
@@ -377,10 +377,10 @@ void PCAD_PAD::AddToBoard( FOOTPRINT* aFootprint )
         {
             aFootprint = new FOOTPRINT( m_board );
             m_board->Add( aFootprint, ADD_MODE::APPEND );
-            aFootprint->SetPosition( VECTOR2I( m_positionX, m_positionY ) );
+            aFootprint->SetPosition( VECTOR2I( m_PositionX, m_PositionY ) );
         }
 
-        m_name.text = m_defaultPinDes;
+        m_Name.text = m_defaultPinDes;
 
         AddToFootprint( aFootprint, ANGLE_0, true );
     }

@@ -41,13 +41,13 @@ namespace PCAD2KICAD {
 class PCAD_FOOTPRINT : public PCAD_PCB_COMPONENT
 {
 public:
-    PCAD_FOOTPRINT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
+    PCAD_FOOTPRINT( PCAD_CALLBACKS* aCallbacks, BOARD* aBoard );
     ~PCAD_FOOTPRINT();
 
     XNODE*  FindModulePatternDefName( XNODE* aNode, const wxString& aName );
 
     void DoLayerContentsObjects( XNODE* aNode, PCAD_FOOTPRINT* aFootprint,
-                                 PCB_COMPONENTS_ARRAY* aList, wxStatusBar* aStatusBar,
+                                 PCAD_COMPONENTS_ARRAY* aList, wxStatusBar* aStatusBar,
                                  const wxString&  aDefaultMeasurementUnit,
                                  const wxString& aActualConversion );
 
@@ -60,13 +60,14 @@ public:
     virtual void Flip() override;
     void AddToBoard( FOOTPRINT* aFootprint = nullptr ) override;
 
-    TTEXTVALUE            m_Value;           // has reference (Name from parent) and value
-    PCB_COMPONENTS_ARRAY  m_FootprintItems;  // set of objects like PCAD_LINE, PCAD_PAD, PCAD_VIA....
-    int                   m_Mirror;
-    VERTICES_ARRAY        m_BoardOutline;
-
 private:
     XNODE*   FindPatternMultilayerSection( XNODE* aNode, wxString* aPatGraphRefName );
+
+public:
+    TTEXTVALUE            m_Value;           // has reference (Name from parent) and value
+    PCAD_COMPONENTS_ARRAY m_FootprintItems;  // set of objects like PCAD_LINE, PCAD_PAD, PCAD_VIA....
+    int                   m_Mirror;
+    VERTICES_ARRAY        m_BoardOutline;
 };
 
 } // namespace PCAD2KICAD

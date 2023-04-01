@@ -33,9 +33,9 @@
 
 namespace PCAD2KICAD {
 
-PCAD_VIA::PCAD_VIA( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) : PCAD_PAD( aCallbacks, aBoard )
+PCAD_VIA::PCAD_VIA( PCAD_CALLBACKS* aCallbacks, BOARD* aBoard ) : PCAD_PAD( aCallbacks, aBoard )
 {
-    m_objType = wxT( 'V' );
+    m_ObjType = wxT( 'V' );
 }
 
 
@@ -51,7 +51,7 @@ void PCAD_VIA::Parse( XNODE* aNode, const wxString& aDefaultUnits,
     wxString        propValue;
     PCAD_VIA_SHAPE*  viaShape;
 
-    m_rotation = ANGLE_0;
+    m_Rotation = ANGLE_0;
     lNode = FindNode( aNode, wxT( "viaStyleRef" ) );
 
     if( lNode )
@@ -59,14 +59,14 @@ void PCAD_VIA::Parse( XNODE* aNode, const wxString& aDefaultUnits,
         lNode->GetAttribute( wxT( "Name" ), &propValue );
         propValue.Trim( false );
         propValue.Trim( true );
-        m_name.text = propValue;
+        m_Name.text = propValue;
     }
 
     lNode = FindNode( aNode, wxT( "pt" ) );
 
     if( lNode )
     {
-        SetPosition( lNode->GetNodeContent(), aDefaultUnits, &m_positionX, &m_positionY,
+        SetPosition( lNode->GetNodeContent(), aDefaultUnits, &m_PositionX, &m_PositionY,
                      aActualConversion );
     }
 
@@ -77,8 +77,8 @@ void PCAD_VIA::Parse( XNODE* aNode, const wxString& aDefaultUnits,
         lNode->GetAttribute( wxT( "Name" ), &propValue );
         propValue.Trim( false );
         propValue.Trim( true );
-        m_net = propValue;
-        m_netCode = GetNetCode( m_net );
+        m_Net = propValue;
+        m_NetCode = GetNetCode( m_Net );
     }
 
     lNode = aNode;
@@ -97,14 +97,14 @@ void PCAD_VIA::Parse( XNODE* aNode, const wxString& aDefaultUnits,
     {
         lNode->GetAttribute( wxT( "Name" ), &propValue );
 
-        if( propValue.IsSameAs( m_name.text, false ) )
+        if( propValue.IsSameAs( m_Name.text, false ) )
             break;
 
         lNode = lNode->GetNext();
     }
 
     if ( !lNode )
-        THROW_IO_ERROR( wxString::Format( _( "Unable to find viaStyleDef %s." ), m_name.text ) );
+        THROW_IO_ERROR( wxString::Format( _( "Unable to find viaStyleDef %s." ), m_Name.text ) );
 
     if( lNode )
     {

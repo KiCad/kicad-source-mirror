@@ -23,7 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <pcad/pcb_net.h>
+#include <pcad/pcad_nets.h>
 
 #include <xnode.h>
 
@@ -31,25 +31,25 @@
 
 namespace PCAD2KICAD {
 
-PCB_NET_NODE::PCB_NET_NODE()
+PCAD_NET_NODE::PCAD_NET_NODE()
 {
     m_CompRef   = wxEmptyString;
     m_PinRef    = wxEmptyString;
 }
 
 
-PCB_NET_NODE::~PCB_NET_NODE()
+PCAD_NET_NODE::~PCAD_NET_NODE()
 {
 }
 
 
-PCB_NET::PCB_NET( int aNetCode ) : m_NetCode( aNetCode )
+PCAD_NET::PCAD_NET( int aNetCode ) : m_NetCode( aNetCode )
 {
     m_Name = wxEmptyString;
 }
 
 
-PCB_NET::~PCB_NET()
+PCAD_NET::~PCAD_NET()
 {
     int i;
 
@@ -60,10 +60,10 @@ PCB_NET::~PCB_NET()
 }
 
 
-void PCB_NET::Parse( XNODE* aNode )
+void PCAD_NET::Parse( XNODE* aNode )
 {
     wxString        propValue, s1, s2;
-    PCB_NET_NODE*   netNode;
+    PCAD_NET_NODE*   netNode;
     XNODE*          lNode;
 
     aNode->GetAttribute( wxT( "Name" ), &propValue );
@@ -85,7 +85,7 @@ void PCB_NET::Parse( XNODE* aNode )
             s2  = s2.Mid( 1 );
         }
 
-        netNode = new PCB_NET_NODE;
+        netNode = new PCAD_NET_NODE;
         s1.Trim( false );
         s1.Trim( true );
         netNode->m_CompRef = s1;

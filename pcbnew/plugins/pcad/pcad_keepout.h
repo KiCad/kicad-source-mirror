@@ -1,9 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012, 2022 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,46 +22,28 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pcb_callbacks.h
- */
+#ifndef PCAD_KEEPOUT_H
+#define PCAD_KEEPOUT_H
 
-#ifndef PCB_CALLBACKS_H_
-#define PCB_CALLBACKS_H_
+#include <pcad/pcad_polygon.h>
 
-#include <layer_ids.h>
-
+class BOARD;
 class wxString;
+class XNODE;
 
-enum LAYER_TYPE_T
+namespace PCAD2KICAD {
+
+class PCAD_KEEPOUT : public PCAD_POLYGON
 {
-    LAYER_TYPE_SIGNAL,
-    LAYER_TYPE_NONSIGNAL,
-    LAYER_TYPE_PLANE
+public:
+    PCAD_KEEPOUT( PCAD_CALLBACKS* aCallbacks, BOARD* aBoard, int aPCadLayer );
+    ~PCAD_KEEPOUT();
+
+    virtual bool Parse( XNODE*          aNode,
+                        const wxString& aDefaultMeasurementUnit,
+                        const wxString& aActualConversion ) override;
 };
 
-struct TLAYER
-{
-    PCB_LAYER_ID  KiCadLayer;
-    LAYER_TYPE_T  layerType = LAYER_TYPE_SIGNAL;
-    wxString      netNameRef;
-};
+} // namespace PCAD2KICAD
 
-namespace PCAD2KICAD
-{
-
-    class PCB_CALLBACKS
-    {
-    public:
-        virtual ~PCB_CALLBACKS()
-        {
-        }
-
-        virtual PCB_LAYER_ID  GetKiCadLayer( int aPCadLayer ) const = 0;
-        virtual LAYER_TYPE_T  GetLayerType( int aPCadLayer ) const = 0;
-        virtual wxString      GetLayerNetNameRef( int aPCadLayer ) const = 0;
-        virtual int           GetNetCode( const wxString& netName ) const = 0;
-    };
-}
-
-#endif    // PCB_CALLBACKS_H_
+#endif    // PCAD_KEEPOUT_H

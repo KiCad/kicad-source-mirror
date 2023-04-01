@@ -9,15 +9,15 @@ set( PCAD2PCBNEW_SRCS
     pcad_pcb.cpp
         pcad_arc.cpp
     pcad_pcb_component.cpp
-    pcb_copper_pour.cpp
-    pcb_cutout.cpp
-    pcb_keepout.cpp
+        pcad_copper_pour.cpp
+        pcad_cutout.cpp
+        pcad_keepout.cpp
         pcad_line.cpp
     pcad_footprint.cpp
-    pcb_net.cpp
+        pcad_nets.cpp
         pcad_pad.cpp
         pcad_pad_shape.cpp
-    pcb_plane.cpp
+        pcad_plane.cpp
         pcad_polygon.cpp
     pcad_text.cpp
         pcad_via.cpp

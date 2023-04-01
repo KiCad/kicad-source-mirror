@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,54 +23,43 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pcb_cutout.cpp
- */
+#ifndef PCAD_NETS_H
+#define PCAD_NETS_H
 
-#include <pcad/pcb_cutout.h>
 
-#include <xnode.h>
+#include <pcad/pcad2kicad_common.h>
+#include <pcad/pcad_item_types.h>
 
-#include <wx/gdicmn.h>
-#include <wx/string.h>
+class wxString;
+class XNODE;
 
 namespace PCAD2KICAD {
 
-PCB_CUTOUT::PCB_CUTOUT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard, int aPCadLayer ) :
-        PCAD_POLYGON( aCallbacks, aBoard, aPCadLayer )
+class PCAD_NET_NODE : public wxObject
 {
-    m_objType = wxT( 'C' );
-}
+public:
+    PCAD_NET_NODE();
+    ~PCAD_NET_NODE();
 
+public:
+    wxString    m_CompRef;
+    wxString    m_PinRef;
+};
 
-PCB_CUTOUT::~PCB_CUTOUT()
+class PCAD_NET : public wxObject
 {
-}
+public:
+    PCAD_NET( int aNetCode );
+    ~PCAD_NET();
 
+    void Parse( XNODE* aNode );
 
-bool PCB_CUTOUT::Parse( XNODE*          aNode,
-                        const wxString& aDefaultMeasurementUnit,
-                        const wxString& aActualConversion )
-{
-    XNODE*          lNode;
-
-    lNode = FindNode( aNode, wxT( "pcbPoly" ) );
-
-    if( lNode )
-    {
-        // retrieve cutout outline
-        FormPolygon( lNode, &m_outline, aDefaultMeasurementUnit, aActualConversion );
-
-        m_positionX = m_outline[0]->x;
-        m_positionY = m_outline[0]->y;
-    }
-    else
-    {
-        return false;
-    }
-
-    return true;
-}
-
+public:
+    wxString             m_Name;
+    int                  m_NetCode;
+    PCAD_NET_NODES_ARRAY m_NetNodes;
+};
 
 } // namespace PCAD2KICAD
+
+#endif    // PCAD_NETS_H
