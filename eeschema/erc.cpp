@@ -1029,15 +1029,26 @@ int ERC_TESTER::TestSimModelIssues()
 
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+            // Power symbols are skipped: obviously they do not have a simulator model
+            const std::unique_ptr< LIB_SYMBOL >& libpart = symbol->GetLibSymbolRef();
+
+            if( libpart && libpart->IsPower() )
+                continue;
+
             // Reset for each symbol
             msg.Clear();
 
-            SCH_SYMBOL*        symbol = static_cast<SCH_SYMBOL*>( item );
             SIM_LIBRARY::MODEL model = libMgr.CreateModel( &sheet, *symbol );
 
             if( !msg.IsEmpty() )
             {
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_SIMULATION_MODEL );
+
+                //Remove \n and \r at e.o.l if any:
+                msg.Trim();
+
                 ercItem->SetErrorMessage( msg );
                 ercItem->SetItems( symbol );
 
