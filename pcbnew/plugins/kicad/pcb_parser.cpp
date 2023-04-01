@@ -907,40 +907,36 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
 
     if( m_undefinedLayers.size() > 0 )
     {
-        if( Pgm().IsGUI() )
+        PCB_LAYER_ID destLayer = Cmts_User;
+        wxString msg, undefinedLayerNames, destLayerName;
+
+        for( const wxString& layerName : m_undefinedLayers )
         {
-            bool                     deleteItems;
-            std::vector<BOARD_ITEM*> deleteList;
-            wxString msg = wxString::Format( _( "Items found on undefined layers.  Do you wish to\n"
-                                                "rescue them to the User.Comments layer?" ) );
-            wxString details = wxString::Format( _( "Undefined layers:" ) );
+            if( !undefinedLayerNames.IsEmpty() )
+                undefinedLayerNames += wxT( ", " );
 
-            for( const wxString& undefinedLayer : m_undefinedLayers )
-                details += wxT( "\n   " ) + undefinedLayer;
+            undefinedLayerNames += layerName;
+        }
 
-            wxRichMessageDialog dlg( nullptr, msg, _( "Warning" ),
-                                     wxYES_NO | wxCANCEL | wxCENTRE | wxICON_WARNING
-                                             | wxSTAY_ON_TOP );
-            dlg.ShowDetailedText( details );
-            dlg.SetYesNoCancelLabels( _( "Rescue" ), _( "Delete" ), _( "Cancel" ) );
+        destLayerName = m_board->GetLayerName( destLayer );
 
-            switch( dlg.ShowModal() )
+        if( Pgm().IsGUI() && m_queryUserCallback )
+        {
+            msg.Printf( _( "Items found on undefined layers (%s).\n"
+                           "Do you wish to rescue them to the %s layer?" ),
+                        undefinedLayerNames,
+                        destLayerName );
+
+            if( !(*m_queryUserCallback)( _( "Undefined Layers Warning" ), wxICON_WARNING, msg,
+                                         _( "Rescue" ) ) )
             {
-            case wxID_YES: deleteItems = false; break;
-            case wxID_NO: deleteItems = true; break;
-            case wxID_CANCEL:
-            default: THROW_IO_ERROR( wxT( "CANCEL" ) );
+                THROW_IO_ERROR( wxT( "CANCEL" ) );
             }
 
             auto visitItem = [&]( BOARD_ITEM* curr_item )
             {
                 if( curr_item->GetLayer() == Rescue )
-                {
-                    if( deleteItems )
-                        deleteList.push_back( curr_item );
-                    else
-                        curr_item->SetLayer( Cmts_User );
-                }
+                    curr_item->SetLayer( destLayer );
             };
 
             for( PCB_TRACK* track : m_board->Tracks() )
@@ -957,18 +953,13 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
 
                     if( top_layer == Rescue || bottom_layer == Rescue )
                     {
-                        if( deleteItems )
-                            deleteList.push_back( via );
-                        else
-                        {
-                            if( top_layer == Rescue )
-                                top_layer = F_Cu;
+                        if( top_layer == Rescue )
+                            top_layer = F_Cu;
 
-                            if( bottom_layer == Rescue )
-                                bottom_layer = B_Cu;
+                        if( bottom_layer == Rescue )
+                            bottom_layer = B_Cu;
 
-                            via->SetLayerPair( top_layer, bottom_layer );
-                        }
+                        via->SetLayerPair( top_layer, bottom_layer );
                     }
                 }
                 else
@@ -992,14 +983,12 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
                     visitItem( zone );
             }
 
-            for( BOARD_ITEM* curr_item : deleteList )
-                m_board->Delete( curr_item );
-
             m_undefinedLayers.clear();
         }
         else
         {
-            THROW_IO_ERROR( wxT( "One or more undefined layers was found, open the project in the PCB Editor to resolve" ) );
+            THROW_IO_ERROR( wxT( "One or more undefined undefinedLayerNames was found; "
+                                 "open the board in the PCB Editor to resolve." ) );
         }
     }
 
@@ -1035,26 +1024,25 @@ void PCB_PARSER::resolveGroups( BOARD_ITEM* aParent )
     //
     // First add all group objects so subsequent GetItem() calls for nested groups work.
 
-    for( size_t idx = 0; idx < m_groupInfos.size(); idx++ )
+    for( const GROUP_INFO& groupInfo : m_groupInfos )
     {
-        GROUP_INFO& aGrp  = m_groupInfos[idx];
-        PCB_GROUP*  group = new PCB_GROUP( aGrp.parent );
+        PCB_GROUP* group = new PCB_GROUP( groupInfo.parent );
 
-        group->SetName( aGrp.name );
-        const_cast<KIID&>( group->m_Uuid ) = aGrp.uuid;
+        group->SetName( groupInfo.name );
+        const_cast<KIID&>( group->m_Uuid ) = groupInfo.uuid;
 
-        if( aGrp.locked )
+        if( groupInfo.locked )
             group->SetLocked( true );
 
-        if( aGrp.parent->Type() == PCB_FOOTPRINT_T )
-            static_cast<FOOTPRINT*>( aGrp.parent )->Add( group, ADD_MODE::INSERT, true );
+        if( groupInfo.parent->Type() == PCB_FOOTPRINT_T )
+            static_cast<FOOTPRINT*>( groupInfo.parent )->Add( group, ADD_MODE::INSERT, true );
         else
-            static_cast<BOARD*>( aGrp.parent )->Add( group, ADD_MODE::INSERT, true );
+            static_cast<BOARD*>( groupInfo.parent )->Add( group, ADD_MODE::INSERT, true );
     }
 
     wxString error;
 
-    for( PCB_PARSER::GROUP_INFO& groupInfo : m_groupInfos )
+    for( const GROUP_INFO& groupInfo : m_groupInfos )
     {
         if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( getItem( groupInfo.uuid ) ) )
         {
@@ -2156,27 +2144,26 @@ void PCB_PARSER::parseSetup()
             {
                 if( m_showLegacy5ZoneWarning )
                 {
-                    if( Pgm().IsGUI() )
+                    if( Pgm().IsGUI() && m_queryUserCallback )
                     {
                         // Thick outline fill mode no longer supported.  Make sure user is OK with
                         // converting fills.
-                        KIDIALOG dlg( nullptr,
-                                      _( "The legacy zone fill strategy is no longer "
-                                         "supported.\nConvert zones to smoothed polygon "
-                                         "fills?" ),
-                                      _( "Legacy Zone Warning" ), wxYES_NO | wxICON_WARNING );
-
-                        dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
-
-                        if( dlg.ShowModal() == wxID_NO )
+                        if( !(*m_queryUserCallback)(
+                                    _( "Legacy Zone Warning" ), wxICON_WARNING,
+                                    _( "The legacy zone fill strategy is no longer supported.\n"
+                                       "Convert zones to smoothed polygon fills?" ),
+                                    _( "Convert" ) ) )
+                        {
                             THROW_IO_ERROR( wxT( "CANCEL" ) );
-
-                        m_showLegacy5ZoneWarning = false;
+                        }
                     }
                     else
                     {
-                        THROW_IO_ERROR( wxT( "Legacy zone fill strategy was found, open the project in the PCB Editor to resolve" ) );
+                        THROW_IO_ERROR( wxT( "Legacy zone fill strategy was found; "
+                                             "open the board in the PCB Editor to resolve." ) );
                     }
+
+                    m_showLegacy5ZoneWarning = false;
                 }
             }
 
@@ -5098,19 +5085,28 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
         case T_filled_areas_thickness:
             if( parseBool() )
             {
-                if( m_showLegacy5ZoneWarning && m_queryUserCallback )
+                if( m_showLegacy5ZoneWarning )
                 {
-                    if( !(*m_queryUserCallback)(
-                                _( "Legacy Zone Warning" ), wxICON_WARNING,
-                                _( "The legacy zone fill strategy is no longer supported.\n"
-                                   "Convert zones to smoothed polygon fills?" ),
-                                _( "Convert" ) ) )
+                    if( Pgm().IsGUI() && m_queryUserCallback )
                     {
-                        THROW_IO_ERROR( wxT( "CANCEL" ) );
+                        if( !(*m_queryUserCallback)(
+                                    _( "Legacy Zone Warning" ), wxICON_WARNING,
+                                    _( "The legacy zone fill strategy is no longer supported.\n"
+                                       "Convert zones to smoothed polygon fills?" ),
+                                    _( "Convert" ) ) )
+                        {
+                            THROW_IO_ERROR( wxT( "CANCEL" ) );
+                        }
                     }
+                    else
+                    {
+                        THROW_IO_ERROR( wxT( "Legacy zone fill strategy was found; "
+                                             "open the board in the PCB Editor to resolve." ) );
+                    }
+
+                    m_showLegacy5ZoneWarning = false;
                 }
 
-                m_showLegacy5ZoneWarning = false;
                 zone->SetFlags( CANDIDATE );
                 dropFilledPolygons = true;
             }
@@ -5138,19 +5134,28 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
 
                     if( token == T_segment )    // deprecated
                     {
-                        if( m_showLegacySegmentZoneWarning && m_queryUserCallback )
+                        if( m_showLegacySegmentZoneWarning )
                         {
-                            if( !(*m_queryUserCallback)(
-                                        _( "Legacy Zone Warning" ), wxICON_WARNING,
-                                        _( "The segment zone fill mode is no longer supported.\n"
-                                           "Convert zones to smoothed polygon fills?" ),
-                                        _( "Convert" ) ) )
+                            if( Pgm().IsGUI() && m_queryUserCallback )
                             {
-                                THROW_IO_ERROR( wxT( "CANCEL" ) );
+                                if( !(*m_queryUserCallback)(
+                                            _( "Legacy Zone Warning" ), wxICON_WARNING,
+                                            _( "The segment zone fill mode is no longer supported.\n"
+                                               "Convert zones to smoothed polygon fills?" ),
+                                            _( "Convert" ) ) )
+                                {
+                                    THROW_IO_ERROR( wxT( "CANCEL" ) );
+                                }
                             }
+                            else
+                            {
+                                THROW_IO_ERROR( wxT( "Legacy segment zone fill strategy was found; "
+                                                     "open the board in the PCB Editor to resolve." ) );
+                            }
+
+                            m_showLegacySegmentZoneWarning = false;
                         }
 
-                        m_showLegacySegmentZoneWarning = false;
                         zone->SetFlags( CANDIDATE );
                         zone->SetFillMode( ZONE_FILL_MODE::POLYGONS );
                         m_board->SetModified();
