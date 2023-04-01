@@ -192,16 +192,16 @@ PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA*aVia, PADSTACK* aPadstack, const POINT& 
 
     // The drill diameter is encoded in the padstack name if Pcbnew did the DSN export.
     // It is after the colon and before the last '_'
-    int     drillStartNdx = aPadstack->padstack_id.find( ':' );
+    int     drillStartNdx = aPadstack->m_padstack_id.find( ':' );
 
     if( drillStartNdx != -1 )
     {
         ++drillStartNdx;    // skip over the ':'
 
-        int drillEndNdx = aPadstack->padstack_id.rfind( '_' );
+        int drillEndNdx = aPadstack->m_padstack_id.rfind( '_' );
         if( drillEndNdx != -1 )
         {
-            std::string diam_txt( aPadstack->padstack_id,
+            std::string diam_txt( aPadstack->m_padstack_id,
                             drillStartNdx, drillEndNdx-drillStartNdx );
 
             double drill_um = strtod( diam_txt.c_str(), 0 );

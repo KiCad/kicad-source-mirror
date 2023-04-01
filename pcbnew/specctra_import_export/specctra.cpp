@@ -3,7 +3,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2011 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2007-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2007-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2120,7 +2120,7 @@ void SPECCTRA_DB::doPADSTACK( PADSTACK* growth )
     if( !IsSymbol( tok ) && tok != T_NUMBER )
         Expecting( "padstack_id" );
 
-    growth->padstack_id = CurText();
+    growth->m_padstack_id = CurText();
 
     while( ( tok = NextTok() ) != T_RIGHT )
     {
@@ -2132,11 +2132,11 @@ void SPECCTRA_DB::doPADSTACK( PADSTACK* growth )
         switch( tok )
         {
         case T_unit:
-            if( growth->unit )
+            if( growth->m_unit )
                 Unexpected( tok );
 
-            growth->unit = new UNIT_RES( growth, tok );
-            doUNIT( growth->unit );
+            growth->m_unit = new UNIT_RES( growth, tok );
+            doUNIT( growth->m_unit );
             break;
 
         case T_rotate:
@@ -2145,7 +2145,7 @@ void SPECCTRA_DB::doPADSTACK( PADSTACK* growth )
             if( tok != T_on && tok != T_off )
                 Expecting( "on|off" );
 
-            growth->rotate = tok;
+            growth->m_rotate = tok;
             NeedRIGHT();
             break;
 
@@ -2155,7 +2155,7 @@ void SPECCTRA_DB::doPADSTACK( PADSTACK* growth )
             if( tok != T_on && tok != T_off )
                 Expecting( "on|off" );
 
-            growth->absolute = tok;
+            growth->m_absolute = tok;
             NeedRIGHT();
             break;
 
@@ -2172,7 +2172,7 @@ void SPECCTRA_DB::doPADSTACK( PADSTACK* growth )
             if( tok != T_off && tok != T_on )
                 Expecting( "off|on" );
 
-            growth->attach = tok;
+            growth->m_attach = tok;
             tok = NextTok();
 
             if( tok == T_LEFT )
@@ -2181,7 +2181,7 @@ void SPECCTRA_DB::doPADSTACK( PADSTACK* growth )
                     Expecting( T_use_via );
 
                 NeedSYMBOL();
-                growth->via_id = CurText();
+                growth->m_via_id = CurText();
 
                 NeedRIGHT();
                 NeedRIGHT();
@@ -2196,11 +2196,11 @@ void SPECCTRA_DB::doPADSTACK( PADSTACK* growth )
 
         case T_rule:
 
-            if( growth->rules )
+            if( growth->m_rules )
                 Unexpected( tok );
 
-            growth->rules = new RULE( growth, T_rule );
-            doRULE( growth->rules );
+            growth->m_rules = new RULE( growth, T_rule );
+            doRULE( growth->m_rules );
             break;
 
         default:
@@ -3816,20 +3816,20 @@ UNIT_RES UNIT_RES::Default( nullptr, T_resolution );
 
 int PADSTACK::Compare( PADSTACK* lhs, PADSTACK* rhs )
 {
-    if( !lhs->hash.size() )
-        lhs->hash = lhs->makeHash();
+    if( !lhs->m_hash.size() )
+        lhs->m_hash = lhs->makeHash();
 
-    if( !rhs->hash.size() )
-        rhs->hash = rhs->makeHash();
+    if( !rhs->m_hash.size() )
+        rhs->m_hash = rhs->makeHash();
 
-    int result = lhs->hash.compare( rhs->hash );
+    int result = lhs->m_hash.compare( rhs->m_hash );
 
     if( result )
         return result;
 
     // Via names hold the drill diameters, so we have to include those to discern
     // between two vias with same copper size but with different drill sizes.
-    result = lhs->padstack_id.compare( rhs->padstack_id );
+    result = lhs->m_padstack_id.compare( rhs->m_padstack_id );
 
     return result;
 }
