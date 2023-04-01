@@ -177,12 +177,20 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
 
     aMsg << eol;
 
-    aMsg << "Platform: "
+    wxString osDescription;
+
 #if __LINUX__
-         << wxGetLinuxDistributionInfo().Description << ", "
-#else
-         << wxGetOsDescription() << ", "
+    osDescription = wxGetLinuxDistributionInfo().Description;
 #endif
+
+    // Linux uses the lsb-release program to get the description of the OS, if lsb-release
+    // isn't installed, then the string will be empty and we fallback to the method used on
+    // the other platforms (to at least get the kernel/uname info).
+     if( osDescription.empty() )
+         osDescription = wxGetOsDescription();
+
+    aMsg << "Platform: "
+         << osDescription << ", "
          << GetPlatformGetBitnessName() << ", "
          << platform.GetEndiannessName() << ", "
          << platform.GetPortIdName();
