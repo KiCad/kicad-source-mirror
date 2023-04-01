@@ -629,6 +629,8 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
             double  diameter = scale( pad->GetDrillSize().x );
             POINT   vertex   = mapPt( pad->GetPos0() );
 
+            diameter += aBoard->GetDesignSettings().m_HoleClearance * 2;
+
             int layerCount = aBoard->GetCopperLayerCount();
 
             for( int layer=0;  layer<layerCount;  ++layer )
