@@ -323,7 +323,7 @@ void SPECCTRA_DB::doPCB( PCB* growth )
     */
 
     NeedSYMBOL();
-    growth->pcbname = CurText();
+    growth->m_pcbname = CurText();
 
     while( (tok = NextTok()) != T_RIGHT )
     {
@@ -335,67 +335,67 @@ void SPECCTRA_DB::doPCB( PCB* growth )
         switch( tok )
         {
         case T_parser:
-            if( growth->parser )
+            if( growth->m_parser )
                 Unexpected( tok );
 
-            growth->parser = new PARSER( growth );
-            doPARSER( growth->parser );
+            growth->m_parser = new PARSER( growth );
+            doPARSER( growth->m_parser );
             break;
 
         case T_unit:
-            if( growth->unit )
+            if( growth->m_unit )
                 Unexpected( tok );
 
-            growth->unit = new UNIT_RES( growth, tok );
-            doUNIT( growth->unit );
+            growth->m_unit = new UNIT_RES( growth, tok );
+            doUNIT( growth->m_unit );
             break;
 
         case T_resolution:
-            if( growth->resolution )
+            if( growth->m_resolution )
                 Unexpected( tok );
 
-            growth->resolution = new UNIT_RES( growth, tok );
-            doRESOLUTION( growth->resolution );
+            growth->m_resolution = new UNIT_RES( growth, tok );
+            doRESOLUTION( growth->m_resolution );
             break;
 
         case T_structure:
-            if( growth->structure )
+            if( growth->m_structure )
                 Unexpected( tok );
 
-            growth->structure = new STRUCTURE( growth );
-            doSTRUCTURE( growth->structure );
+            growth->m_structure = new STRUCTURE( growth );
+            doSTRUCTURE( growth->m_structure );
             break;
 
         case T_placement:
-            if( growth->placement )
+            if( growth->m_placement )
                 Unexpected( tok );
 
-            growth->placement = new PLACEMENT( growth );
-            doPLACEMENT( growth->placement );
+            growth->m_placement = new PLACEMENT( growth );
+            doPLACEMENT( growth->m_placement );
             break;
 
         case T_library:
-            if( growth->library )
+            if( growth->m_library )
                 Unexpected( tok );
 
-            growth->library = new LIBRARY( growth );
-            doLIBRARY( growth->library );
+            growth->m_library = new LIBRARY( growth );
+            doLIBRARY( growth->m_library );
             break;
 
         case T_network:
-            if( growth->network )
+            if( growth->m_network )
                 Unexpected( tok );
 
-            growth->network = new NETWORK( growth );
-            doNETWORK( growth->network );
+            growth->m_network = new NETWORK( growth );
+            doNETWORK( growth->m_network );
             break;
 
         case T_wiring:
-            if( growth->wiring )
+            if( growth->m_wiring )
                 Unexpected( tok );
 
-            growth->wiring = new WIRING( growth );
-            doWIRING( growth->wiring );
+            growth->m_wiring = new WIRING( growth );
+            doWIRING( growth->m_wiring );
             break;
 
         default:
@@ -665,62 +665,62 @@ void SPECCTRA_DB::doSTRUCTURE( STRUCTURE* growth )
         switch( tok )
         {
         case T_unit:
-            if( growth->unit )
+            if( growth->m_unit )
                 Unexpected( tok );
 
-            growth->unit = new UNIT_RES( growth, tok );
-            doUNIT( growth->unit );
+            growth->m_unit = new UNIT_RES( growth, tok );
+            doUNIT( growth->m_unit );
             break;
 
         case T_resolution:
-            if( growth->unit )
+            if( growth->m_unit )
                 Unexpected( tok );
 
-            growth->unit = new UNIT_RES( growth, tok );
-            doRESOLUTION( growth->unit );
+            growth->m_unit = new UNIT_RES( growth, tok );
+            doRESOLUTION( growth->m_unit );
             break;
 
         case T_layer_noise_weight:
-            if( growth->layer_noise_weight )
+            if( growth->m_layer_noise_weight )
                 Unexpected( tok );
 
-            growth->layer_noise_weight = new LAYER_NOISE_WEIGHT( growth );
-            doLAYER_NOISE_WEIGHT( growth->layer_noise_weight );
+            growth->m_layer_noise_weight = new LAYER_NOISE_WEIGHT( growth );
+            doLAYER_NOISE_WEIGHT( growth->m_layer_noise_weight );
             break;
 
         case T_place_boundary:
 L_place:
-            if( growth->place_boundary )
+            if( growth->m_place_boundary )
                 Unexpected( tok );
 
-            growth->place_boundary = new BOUNDARY( growth, T_place_boundary );
-            doBOUNDARY( growth->place_boundary );
+            growth->m_place_boundary = new BOUNDARY( growth, T_place_boundary );
+            doBOUNDARY( growth->m_place_boundary );
             break;
 
         case T_boundary:
-            if( growth->boundary )
+            if( growth->m_boundary )
             {
-                if( growth->place_boundary )
+                if( growth->m_place_boundary )
                     Unexpected( tok );
 
                 goto L_place;
             }
 
-            growth->boundary = new BOUNDARY( growth );
-            doBOUNDARY( growth->boundary );
+            growth->m_boundary = new BOUNDARY( growth );
+            doBOUNDARY( growth->m_boundary );
             break;
 
         case T_plane:
             COPPER_PLANE* plane;
             plane = new COPPER_PLANE( growth );
-            growth->planes.push_back( plane );
+            growth->m_planes.push_back( plane );
             doKEEPOUT( plane );
             break;
 
         case T_region:
             REGION* region;
             region = new REGION( growth );
-            growth->regions.push_back( region );
+            growth->m_regions.push_back( region );
             doREGION( region );
             break;
 
@@ -732,42 +732,42 @@ L_place:
             break;
 
         case T_via:
-            if( growth->via )
+            if( growth->m_via )
                 Unexpected( tok );
 
-            growth->via = new VIA( growth );
-            doVIA( growth->via );
+            growth->m_via = new VIA( growth );
+            doVIA( growth->m_via );
             break;
 
         case T_control:
-            if( growth->control )
+            if( growth->m_control )
                 Unexpected( tok );
 
-            growth->control = new CONTROL( growth );
-            doCONTROL( growth->control );
+            growth->m_control = new CONTROL( growth );
+            doCONTROL( growth->m_control );
             break;
 
         case T_layer:
             LAYER* layer;
             layer = new LAYER( growth );
-            growth->layers.push_back( layer );
+            growth->m_layers.push_back( layer );
             doLAYER( layer );
             break;
 
         case T_rule:
-            if( growth->rules )
+            if( growth->m_rules )
                 Unexpected( tok );
 
-            growth->rules = new RULE( growth, T_rule );
-            doRULE( growth->rules );
+            growth->m_rules = new RULE( growth, T_rule );
+            doRULE( growth->m_rules );
             break;
 
         case T_place_rule:
-            if( growth->place_rules )
+            if( growth->m_place_rules )
                 Unexpected( tok );
 
-            growth->place_rules = new RULE( growth, T_place_rule );
-            doRULE( growth->place_rules );
+            growth->m_place_rules = new RULE( growth, T_place_rule );
+            doRULE( growth->m_place_rules );
             break;
 
         case T_keepout:
@@ -778,14 +778,14 @@ L_place:
         case T_elongate_keepout:
             KEEPOUT* keepout;
             keepout = new KEEPOUT( growth, tok );
-            growth->keepouts.push_back( keepout );
+            growth->m_keepouts.push_back( keepout );
             doKEEPOUT( keepout );
             break;
 
         case T_grid:
             GRID* grid;
             grid = new GRID( growth );
-            growth->grids.push_back( grid );
+            growth->m_grids.push_back( grid );
             doGRID( grid );
             break;
 
@@ -820,16 +820,16 @@ void SPECCTRA_DB::doSTRUCTURE_OUT( STRUCTURE_OUT* growth )
         case T_layer:
             LAYER* layer;
             layer = new LAYER( growth );
-            growth->layers.push_back( layer );
+            growth->m_layers.push_back( layer );
             doLAYER( layer );
             break;
 
         case T_rule:
-            if( growth->rules )
+            if( growth->m_rules )
                 Unexpected( tok );
 
-            growth->rules = new RULE( growth, T_rule );
-            doRULE( growth->rules );
+            growth->m_rules = new RULE( growth, T_rule );
+            doRULE( growth->m_rules );
             break;
 
         default:
@@ -847,7 +847,7 @@ void SPECCTRA_DB::doKEEPOUT( KEEPOUT* growth )
 
     if( IsSymbol(tok) )
     {
-        growth->name = CurText();
+        growth->m_name = CurText();
         tok = NextTok();
     }
 
@@ -867,40 +867,40 @@ void SPECCTRA_DB::doKEEPOUT( KEEPOUT* growth )
             if( NextTok() != T_NUMBER )
                 Expecting( T_NUMBER );
 
-            growth->sequence_number = atoi( CurText() );
+            growth->m_sequence_number = atoi( CurText() );
             NeedRIGHT();
             break;
 
         case T_rule:
-            if( growth->rules )
+            if( growth->m_rules )
                 Unexpected( tok );
 
-            growth->rules = new RULE( growth, T_rule );
-            doRULE( growth->rules );
+            growth->m_rules = new RULE( growth, T_rule );
+            doRULE( growth->m_rules );
             break;
 
         case T_place_rule:
-            if( growth->place_rules )
+            if( growth->m_place_rules )
                 Unexpected( tok );
 
-            growth->place_rules = new RULE( growth, T_place_rule );
-            doRULE( growth->place_rules );
+            growth->m_place_rules = new RULE( growth, T_place_rule );
+            doRULE( growth->m_place_rules );
             break;
 
         case T_rect:
-            if( growth->shape )
+            if( growth->m_shape )
                 Unexpected( tok );
 
-            growth->shape = new RECTANGLE( growth );
-            doRECTANGLE( (RECTANGLE*) growth->shape );
+            growth->m_shape = new RECTANGLE( growth );
+            doRECTANGLE( (RECTANGLE*) growth->m_shape );
             break;
 
         case T_circle:
-            if( growth->shape )
+            if( growth->m_shape )
                 Unexpected( tok );
 
-            growth->shape = new CIRCLE( growth );
-            doCIRCLE( (CIRCLE*) growth->shape );
+            growth->m_shape = new CIRCLE( growth );
+            doCIRCLE( (CIRCLE*) growth->m_shape );
             break;
 
         case T_polyline_path:
@@ -909,25 +909,25 @@ void SPECCTRA_DB::doKEEPOUT( KEEPOUT* growth )
 
         case T_path:
         case T_polygon:
-            if( growth->shape )
+            if( growth->m_shape )
                 Unexpected( tok );
 
-            growth->shape = new PATH( growth, tok );
-            doPATH( (PATH*) growth->shape );
+            growth->m_shape = new PATH( growth, tok );
+            doPATH( (PATH*) growth->m_shape );
             break;
 
         case T_qarc:
-            if( growth->shape )
+            if( growth->m_shape )
                 Unexpected( tok );
 
-            growth->shape = new QARC( growth );
-            doQARC( (QARC*) growth->shape );
+            growth->m_shape = new QARC( growth );
+            doQARC( (QARC*) growth->m_shape );
             break;
 
         case T_window:
             WINDOW* window;
             window = new WINDOW( growth );
-            growth->windows.push_back( window );
+            growth->m_windows.push_back( window );
             doWINDOW( window );
             break;
 
@@ -1259,12 +1259,12 @@ void SPECCTRA_DB::doVIA( VIA* growth )
                 if( !IsSymbol( tok ) )
                     Expecting( T_SYMBOL );
 
-                growth->spares.push_back( CurText() );
+                growth->m_spares.push_back( CurText() );
             }
         }
         else if( IsSymbol( tok ) )
         {
-            growth->padstacks.push_back( CurText() );
+            growth->m_padstacks.push_back( CurText() );
         }
         else
         {
@@ -1521,7 +1521,7 @@ void SPECCTRA_DB::doRULE( RULE* growth )
         // the last rule).  Then save the last rule and clear the string builder.
         if( bracketNesting == 1 )
         {
-           growth->rules.push_back( builder );
+           growth->m_rules.push_back( builder );
            builder.clear();
         }
     }
@@ -1631,7 +1631,7 @@ void SPECCTRA_DB::doREGION( REGION* growth )
 
     if( IsSymbol( tok ) )
     {
-        growth->region_id = CurText();
+        growth->m_region_id = CurText();
         tok = NextTok();
     }
 
@@ -1645,19 +1645,19 @@ void SPECCTRA_DB::doREGION( REGION* growth )
         switch( tok )
         {
         case T_rect:
-            if( growth->rectangle )
+            if( growth->m_rectangle )
                 Unexpected( tok );
 
-            growth->rectangle = new RECTANGLE( growth );
-            doRECTANGLE( growth->rectangle );
+            growth->m_rectangle = new RECTANGLE( growth );
+            doRECTANGLE( growth->m_rectangle );
             break;
 
         case T_polygon:
-            if( growth->polygon )
+            if( growth->m_polygon )
                 Unexpected( tok );
 
-            growth->polygon = new PATH( growth, T_polygon );
-            doPATH( growth->polygon );
+            growth->m_polygon = new PATH( growth, T_polygon );
+            doPATH( growth->m_polygon );
             break;
 
         case T_region_net:
@@ -1676,11 +1676,11 @@ void SPECCTRA_DB::doREGION( REGION* growth )
             break;
 
         case T_rule:
-            if( growth->rules )
+            if( growth->m_rules )
                 Unexpected( tok );
 
-            growth->rules = new RULE( growth, T_rule );
-            doRULE( growth->rules );
+            growth->m_rules = new RULE( growth, T_rule );
+            doRULE( growth->m_rules );
             break;
 
         default:
@@ -1691,7 +1691,7 @@ void SPECCTRA_DB::doREGION( REGION* growth )
 
         if( tok == T_RIGHT )
         {
-            if( !growth->rules )
+            if( !growth->m_rules )
                 Expecting( T_rule );
 
             break;
@@ -1783,12 +1783,12 @@ void SPECCTRA_DB::doGRID( GRID* growth )
     case T_via_keepout:
     case T_snap:
     case T_place:
-        growth->grid_type = tok;
+        growth->m_grid_type = tok;
 
         if( NextTok() != T_NUMBER )
             Expecting( T_NUMBER );
 
-        growth->dimension = strtod( CurText(), 0 );
+        growth->m_dimension = strtod( CurText(), 0 );
         tok = NextTok();
 
         if( tok == T_LEFT )
@@ -1797,7 +1797,7 @@ void SPECCTRA_DB::doGRID( GRID* growth )
             {
                 if( tok == T_direction )
                 {
-                    if( growth->grid_type == T_place )
+                    if( growth->m_grid_type == T_place )
                         Unexpected( tok );
 
                     tok = NextTok();
@@ -1805,27 +1805,27 @@ void SPECCTRA_DB::doGRID( GRID* growth )
                     if( tok != T_x && tok != T_y )
                         Unexpected( CurText() );
 
-                    growth->direction = tok;
+                    growth->m_direction = tok;
 
                     if( NextTok() != T_RIGHT )
                         Expecting(T_RIGHT);
                 }
                 else if( tok == T_offset )
                 {
-                    if( growth->grid_type == T_place )
+                    if( growth->m_grid_type == T_place )
                         Unexpected( tok );
 
                     if( NextTok() != T_NUMBER )
                         Expecting( T_NUMBER );
 
-                    growth->offset = strtod( CurText(), 0 );
+                    growth->m_offset = strtod( CurText(), 0 );
 
                     if( NextTok() != T_RIGHT )
                         Expecting( T_RIGHT );
                 }
                 else if( tok == T_image_type )
                 {
-                    if( growth->grid_type != T_place )
+                    if( growth->m_grid_type != T_place )
                         Unexpected( tok );
 
                     tok = NextTok();
@@ -1833,7 +1833,7 @@ void SPECCTRA_DB::doGRID( GRID* growth )
                     if( tok != T_smd && tok != T_pin )
                         Unexpected( CurText() );
 
-                    growth->image_type = tok;
+                    growth->m_image_type = tok;
 
                     if( NextTok() != T_RIGHT )
                         Expecting( T_RIGHT );
@@ -1857,7 +1857,7 @@ void SPECCTRA_DB::doLAYER_RULE( LAYER_RULE* growth )
 
     do
     {
-        growth->layer_ids.push_back( CurText() );
+        growth->m_layer_ids.push_back( CurText() );
 
     } while( IsSymbol( tok = NextTok() ) );
 
@@ -1867,8 +1867,8 @@ void SPECCTRA_DB::doLAYER_RULE( LAYER_RULE* growth )
     if( NextTok() != T_rule )
         Expecting( T_rule );
 
-    growth->rule = new RULE( growth, T_rule );
-    doRULE( growth->rule );
+    growth->m_rule = new RULE( growth, T_rule );
+    doRULE( growth->m_rule );
 
     NeedRIGHT();
 }
@@ -1881,7 +1881,7 @@ void SPECCTRA_DB::doPLACE( PLACE* growth )
     if( !IsSymbol( tok ) )
         Expecting( "component_id" );
 
-    growth->component_id = CurText();
+    growth->m_component_id = CurText();
 
     tok = NextTok();
 
@@ -1903,7 +1903,7 @@ void SPECCTRA_DB::doPLACE( PLACE* growth )
         if( tok != T_front && tok != T_back )
             Expecting( "front|back" );
 
-        growth->side = tok;
+        growth->m_side = tok;
 
         if( NextTok() != T_NUMBER )
             Expecting( "rotation" );
@@ -1924,7 +1924,7 @@ void SPECCTRA_DB::doPLACE( PLACE* growth )
             tok = NextTok();
 
             if( tok == T_x || tok == T_y || tok == T_xy || tok == T_off )
-                growth->mirror = tok;
+                growth->m_mirror = tok;
             else
                 Expecting( "x|y|xy|off" );
 
@@ -1934,14 +1934,14 @@ void SPECCTRA_DB::doPLACE( PLACE* growth )
             tok = NextTok();
 
             if( tok==T_added || tok==T_deleted || tok==T_substituted )
-                growth->status = tok;
+                growth->m_status = tok;
             else
                 Expecting("added|deleted|substituted");
 
             break;
 
         case T_logical_part:
-            if( growth->logical_part.size() )
+            if( growth->m_logical_part.size() )
                 Unexpected( tok );
 
             tok = NextTok();
@@ -1949,56 +1949,56 @@ void SPECCTRA_DB::doPLACE( PLACE* growth )
             if( !IsSymbol( tok ) )
                 Expecting( "logical_part_id");
 
-            growth->logical_part = CurText();
+            growth->m_logical_part = CurText();
             break;
 
         case T_place_rule:
-            if( growth->place_rules )
+            if( growth->m_place_rules )
                 Unexpected( tok );
 
-            growth->place_rules = new RULE( growth, T_place_rule );
-            doRULE( growth->place_rules );
+            growth->m_place_rules = new RULE( growth, T_place_rule );
+            doRULE( growth->m_place_rules );
             break;
 
         case T_property:
-            if( growth->properties.size() )
+            if( growth->m_properties.size() )
                 Unexpected( tok );
 
-            doPROPERTIES( &growth->properties );
+            doPROPERTIES( &growth->m_properties );
             break;
 
         case T_lock_type:
             tok = NextTok();
 
             if( tok == T_position || tok == T_gate || tok == T_subgate || tok == T_pin )
-                growth->lock_type = tok;
+                growth->m_lock_type = tok;
             else
                 Expecting( "position|gate|subgate|pin" );
 
             break;
 
         case T_rule:
-            if( growth->rules || growth->region )
+            if( growth->m_rules || growth->m_region )
                 Unexpected( tok );
 
-            growth->rules = new RULE( growth, T_rule );
-            doRULE( growth->rules );
+            growth->m_rules = new RULE( growth, T_rule );
+            doRULE( growth->m_rules );
             break;
 
         case T_region:
-            if( growth->rules || growth->region )
+            if( growth->m_rules || growth->m_region )
                 Unexpected( tok );
 
-            growth->region = new REGION( growth );
-            doREGION( growth->region );
+            growth->m_region = new REGION( growth );
+            doREGION( growth->m_region );
             break;
 
         case T_pn:
-            if( growth->part_number.size() )
+            if( growth->m_part_number.size() )
                 Unexpected( tok );
 
             NeedSYMBOLorNUMBER();
-            growth->part_number = CurText();
+            growth->m_part_number = CurText();
             NeedRIGHT();
             break;
 
@@ -2016,7 +2016,7 @@ void SPECCTRA_DB::doCOMPONENT( COMPONENT* growth )
     if( !IsSymbol( tok ) && tok != T_NUMBER )
         Expecting( "image_id" );
 
-    growth->image_id = CurText();
+    growth->m_image_id = CurText();
 
     while( ( tok = NextTok() ) != T_RIGHT )
     {
@@ -2030,7 +2030,7 @@ void SPECCTRA_DB::doCOMPONENT( COMPONENT* growth )
         case T_place:
             PLACE* place;
             place = new PLACE( growth );
-            growth->places.push_back( place );
+            growth->m_places.push_back( place );
             doPLACE( place );
             break;
 
@@ -2059,12 +2059,12 @@ void SPECCTRA_DB::doPLACEMENT( PLACEMENT* growth )
         {
         case T_unit:
         case T_resolution:
-            growth->unit = new UNIT_RES( growth, tok );
+            growth->m_unit = new UNIT_RES( growth, tok );
 
             if( tok == T_resolution )
-                doRESOLUTION( growth->unit );
+                doRESOLUTION( growth->m_unit );
             else
-                doUNIT( growth->unit );
+                doUNIT( growth->m_unit );
             break;
 
         case T_place_control:
@@ -2077,7 +2077,7 @@ void SPECCTRA_DB::doPLACEMENT( PLACEMENT* growth )
             tok = NextTok();
 
             if( tok == T_mirror_first || tok == T_rotate_first )
-                growth->flip_style = tok;
+                growth->m_flip_style = tok;
             else
                 Expecting( "mirror_first|rotate_first" );
 
@@ -2088,7 +2088,7 @@ void SPECCTRA_DB::doPLACEMENT( PLACEMENT* growth )
         case T_component:
             COMPONENT* component;
             component = new COMPONENT( growth );
-            growth->components.push_back( component );
+            growth->m_components.push_back( component );
             doCOMPONENT( component );
             break;
 
@@ -2103,7 +2103,7 @@ void SPECCTRA_DB::doPADSTACK( PADSTACK* growth )
 {
     T       tok = NextTok();
 
-    /*  (padstack <padstack_id >
+    /*  (padstack <m_padstack_id >
         [<unit_descriptor> ]
         {(shape <shape_descriptor>
             [<reduced_shape_descriptor> ]
@@ -2117,9 +2117,9 @@ void SPECCTRA_DB::doPADSTACK( PADSTACK* growth )
         [(rule <clearance_descriptor> )])
     */
 
-    // padstack_id may be a number
+    // m_padstack_id may be a number
     if( !IsSymbol( tok ) && tok != T_NUMBER )
-        Expecting( "padstack_id" );
+        Expecting( "m_padstack_id" );
 
     growth->m_padstack_id = CurText();
 
@@ -2281,14 +2281,14 @@ L_done_that:
             tok = NextTok();
             if( tok!=T_on && tok!=T_off )
                 Expecting( "on|off" );
-            growth->connect = tok;
+            growth->m_connect = tok;
             NeedRIGHT();
             break;
 
         case T_window:
             WINDOW* window;
             window = new WINDOW( growth );
-            growth->windows.push_back( window );
+            growth->m_windows.push_back( window );
             doWINDOW( window );
             break;
 
@@ -2308,7 +2308,7 @@ void SPECCTRA_DB::doIMAGE( IMAGE* growth )
            [(side [front | back | both])]
            [<unit_descriptor> ]
            [<outline_descriptor> ]
-           {(pin <padstack_id > [(rotate <rotation> )]
+           {(pin <m_padstack_id > [(rotate <rotation> )]
               [<reference_descriptor> | <pin_array_descriptor> ]
               [<user_property_descriptor> ])}
            [{<conductor_shape_descriptor> }]
@@ -2323,7 +2323,7 @@ void SPECCTRA_DB::doIMAGE( IMAGE* growth )
     if( !IsSymbol( tok ) && tok != T_NUMBER  )
         Expecting( "image_id" );
 
-    growth->image_id = CurText();
+    growth->m_image_id = CurText();
 
     while( ( tok = NextTok() ) != T_RIGHT )
     {
@@ -2335,11 +2335,11 @@ void SPECCTRA_DB::doIMAGE( IMAGE* growth )
         switch( tok )
         {
         case T_unit:
-            if( growth->unit )
+            if( growth->m_unit )
                 Unexpected( tok );
 
-            growth->unit = new UNIT_RES( growth, tok );
-            doUNIT( growth->unit );
+            growth->m_unit = new UNIT_RES( growth, tok );
+            doUNIT( growth->m_unit );
             break;
 
         case T_side:
@@ -2348,7 +2348,7 @@ void SPECCTRA_DB::doIMAGE( IMAGE* growth )
             if( tok != T_front && tok != T_back && tok != T_both )
                 Expecting( "front|back|both" );
 
-            growth->side = tok;
+            growth->m_side = tok;
             NeedRIGHT();
             break;
 
@@ -2362,24 +2362,24 @@ void SPECCTRA_DB::doIMAGE( IMAGE* growth )
         case T_pin:
             PIN* pin;
             pin = new PIN( growth );
-            growth->pins.push_back( pin );
+            growth->m_pins.push_back( pin );
             doPIN( pin );
             break;
 
         case T_rule:
-            if( growth->rules )
+            if( growth->m_rules )
                 Unexpected( tok );
 
-            growth->rules = new RULE( growth, tok );
-            doRULE( growth->rules );
+            growth->m_rules = new RULE( growth, tok );
+            doRULE( growth->m_rules );
             break;
 
         case T_place_rule:
-            if( growth->place_rules )
+            if( growth->m_place_rules )
                 Unexpected( tok );
 
-            growth->place_rules = new RULE( growth, tok );
-            doRULE( growth->place_rules );
+            growth->m_place_rules = new RULE( growth, tok );
+            doRULE( growth->m_place_rules );
             break;
 
         case T_keepout:
@@ -2390,7 +2390,7 @@ void SPECCTRA_DB::doIMAGE( IMAGE* growth )
         case T_elongate_keepout:
             KEEPOUT* keepout;
             keepout = new KEEPOUT( growth, tok );
-            growth->keepouts.push_back( keepout );
+            growth->m_keepouts.push_back( keepout );
             doKEEPOUT( keepout );
             break;
 
@@ -2405,16 +2405,16 @@ void SPECCTRA_DB::doPIN( PIN* growth )
 {
     T       tok = NextTok();
 
-    /*  (pin <padstack_id > [(rotate <rotation> )]
+    /*  (pin <m_padstack_id > [(rotate <rotation> )]
           [<reference_descriptor> | <pin_array_descriptor> ]
           [<user_property_descriptor> ])
     */
 
-    // a padstack_id may be a number
+    // a m_padstack_id may be a number
     if( !IsSymbol( tok ) && tok!=T_NUMBER )
-        Expecting( "padstack_id" );
+        Expecting( "m_padstack_id" );
 
-    growth->padstack_id = CurText();
+    growth->m_padstack_id = CurText();
 
     while( ( tok = NextTok() ) != T_RIGHT )
     {
@@ -2436,17 +2436,17 @@ void SPECCTRA_DB::doPIN( PIN* growth )
             if( !IsSymbol( tok ) && tok != T_NUMBER )
                 Expecting( "pin_id" );
 
-            growth->pin_id = CurText();
+            growth->m_pin_id = CurText();
 
             if( NextTok() != T_NUMBER )
                 Expecting( T_NUMBER );
 
-            growth->vertex.x = strtod( CurText(), 0 );
+            growth->m_vertex.x = strtod( CurText(), 0 );
 
             if( NextTok() != T_NUMBER )
                 Expecting( T_NUMBER );
 
-            growth->vertex.y = strtod( CurText(), 0 );
+            growth->m_vertex.y = strtod( CurText(), 0 );
         }
     }
 }
@@ -2480,11 +2480,11 @@ void SPECCTRA_DB::doLIBRARY( LIBRARY* growth )
         switch( tok )
         {
         case T_unit:
-            if( growth->unit )
+            if( growth->m_unit )
                 Unexpected( tok );
 
-            growth->unit = new UNIT_RES( growth, tok );
-            doUNIT( growth->unit );
+            growth->m_unit = new UNIT_RES( growth, tok );
+            doUNIT( growth->m_unit );
             break;
 
         case T_padstack:
@@ -2497,7 +2497,7 @@ void SPECCTRA_DB::doLIBRARY( LIBRARY* growth )
         case T_image:
             IMAGE*  image;
             image = new IMAGE( growth );
-            growth->images.push_back( image );
+            growth->m_images.push_back( image );
             doIMAGE( image );
             break;
 
@@ -2537,7 +2537,7 @@ void SPECCTRA_DB::doNET( NET* growth )
     if( !IsSymbol( tok ) )
         Expecting( "net_id" );
 
-    growth->net_id = CurText();
+    growth->m_net_id = CurText();
 
     while( ( tok = NextTok() ) != T_RIGHT )
     {
@@ -2549,7 +2549,7 @@ void SPECCTRA_DB::doNET( NET* growth )
         switch( tok )
         {
         case T_unassigned:
-            growth->unassigned = true;
+            growth->m_unassigned = true;
             NeedRIGHT();
             break;
 
@@ -2557,34 +2557,34 @@ void SPECCTRA_DB::doNET( NET* growth )
             if( NextTok() != T_NUMBER )
                 Expecting( T_NUMBER );
 
-            growth->net_number = atoi( CurText() );
+            growth->m_net_number = atoi( CurText() );
             NeedRIGHT();
             break;
 
         case T_pins:
         case T_order:
-            growth->pins_type = tok;
-            pin_refs = &growth->pins;
+            growth->m_pins_type = tok;
+            pin_refs = &growth->m_pins;
             goto L_pins;
 
         case T_expose:
-            pin_refs = &growth->expose;
+            pin_refs = &growth->m_expose;
             goto L_pins;
 
         case T_noexpose:
-            pin_refs = &growth->noexpose;
+            pin_refs = &growth->m_noexpose;
             goto L_pins;
 
         case T_source:
-            pin_refs = &growth->source;
+            pin_refs = &growth->m_source;
             goto L_pins;
 
         case T_load:
-            pin_refs = &growth->load;
+            pin_refs = &growth->m_load;
             goto L_pins;
 
         case T_terminator:
-            pin_refs = &growth->terminator;
+            pin_refs = &growth->m_terminator;
             //goto L_pins;
 
 L_pins:
@@ -2605,11 +2605,11 @@ L_pins:
             break;
 
         case T_comp_order:
-            if( growth->comp_order )
+            if( growth->m_comp_order )
                 Unexpected( tok );
 
-            growth->comp_order = new COMP_ORDER( growth );
-            doCOMP_ORDER( growth->comp_order );
+            growth->m_comp_order = new COMP_ORDER( growth );
+            doCOMP_ORDER( growth->m_comp_order );
             break;
 
         case T_type:
@@ -2628,24 +2628,24 @@ L_pins:
 */
 
         case T_rule:
-            if( growth->rules )
+            if( growth->m_rules )
                 Unexpected( tok );
 
-            growth->rules = new RULE( growth, T_rule );
-            doRULE( growth->rules );
+            growth->m_rules = new RULE( growth, T_rule );
+            doRULE( growth->m_rules );
             break;
 
         case T_layer_rule:
             LAYER_RULE* layer_rule;
             layer_rule = new LAYER_RULE( growth );
-            growth->layer_rules.push_back( layer_rule );
+            growth->m_layer_rules.push_back( layer_rule );
             doLAYER_RULE( layer_rule );
             break;
 
         case T_fromto:
             FROMTO* fromto;
             fromto = new FROMTO( growth );
-            growth->fromtos.push_back( fromto );
+            growth->m_fromtos.push_back( fromto );
             doFROMTO( fromto );
             break;
 
@@ -2677,14 +2677,14 @@ void SPECCTRA_DB::doTOPOLOGY( TOPOLOGY* growth )
         case T_fromto:
             FROMTO* fromto;
             fromto = new FROMTO( growth );
-            growth->fromtos.push_back( fromto );
+            growth->m_fromtos.push_back( fromto );
             doFROMTO( fromto );
             break;
 
         case T_comp_order:
             COMP_ORDER*  comp_order;
             comp_order = new COMP_ORDER( growth );
-            growth->comp_orders.push_back( comp_order );
+            growth->m_comp_orders.push_back( comp_order );
             doCOMP_ORDER( comp_order );
             break;
 
@@ -2711,12 +2711,12 @@ void SPECCTRA_DB::doCLASS( CLASS* growth )
 
     NeedSYMBOL();
 
-    growth->class_id = CurText();
+    growth->m_class_id = CurText();
 
     // do net_ids, do not support <composite_name_list>s at this time
     while( IsSymbol( tok = NextTok() ) )
     {
-        growth->net_ids.push_back( CurText() );
+        growth->m_net_ids.push_back( CurText() );
     }
 
 
@@ -2730,26 +2730,26 @@ void SPECCTRA_DB::doCLASS( CLASS* growth )
         switch( tok )
         {
         case T_rule:
-            if( growth->rules )
+            if( growth->m_rules )
                 Unexpected( tok );
 
-            growth->rules = new RULE( growth, T_rule );
-            doRULE( growth->rules );
+            growth->m_rules = new RULE( growth, T_rule );
+            doRULE( growth->m_rules );
             break;
 
         case T_layer_rule:
             LAYER_RULE* layer_rule;
             layer_rule = new LAYER_RULE( growth );
-            growth->layer_rules.push_back( layer_rule );
+            growth->m_layer_rules.push_back( layer_rule );
             doLAYER_RULE( layer_rule );
             break;
 
         case T_topology:
-            if( growth->topology )
+            if( growth->m_topology )
                 Unexpected( tok );
 
-            growth->topology = new TOPOLOGY( growth );
-            doTOPOLOGY( growth->topology );
+            growth->m_topology = new TOPOLOGY( growth );
+            doTOPOLOGY( growth->m_topology );
             break;
 
         case T_circuit:  // handle all the circuit_descriptor here as strings
@@ -2787,7 +2787,7 @@ void SPECCTRA_DB::doCLASS( CLASS* growth )
                 // to bracketNesting == 0, then save the builder and break;
                 if( bracketNesting == 0 )
                 {
-                    growth->circuit.push_back( builder );
+                    growth->m_circuit.push_back( builder );
                     break;
                 }
             }
@@ -2836,14 +2836,14 @@ void SPECCTRA_DB::doNETWORK( NETWORK* growth )
         case T_net:
             NET* net;
             net = new NET( growth );
-            growth->nets.push_back( net );
+            growth->m_nets.push_back( net );
             doNET( net );
             break;
 
         case T_class:
             CLASS*  myclass;
             myclass = new CLASS( growth );
-            growth->classes.push_back( myclass );
+            growth->m_classes.push_back( myclass );
             doCLASS( myclass );
             break;
 
@@ -2863,9 +2863,7 @@ void SPECCTRA_DB::doCOMP_ORDER( COMP_ORDER* growth )
     */
 
     while( IsSymbol( tok = NextTok() ) )
-    {
-        growth->placement_ids.push_back( CurText() );
-    }
+        growth->m_placement_ids.push_back( CurText() );
 
     if( tok != T_RIGHT )
         Expecting( T_RIGHT );
@@ -2901,7 +2899,7 @@ void SPECCTRA_DB::doFROMTO( FROMTO* growth )
         Expecting( T_SYMBOL );
     }
 
-    growth->fromText = CurText();
+    growth->m_fromText = CurText();
 
     if( !IsSymbol(NextTok() ) )
     {
@@ -2909,7 +2907,7 @@ void SPECCTRA_DB::doFROMTO( FROMTO* growth )
         Expecting( T_SYMBOL );
     }
 
-    growth->toText = CurText();
+    growth->m_toText = CurText();
 
     SetStringDelimiter( old );
 
@@ -2928,31 +2926,31 @@ void SPECCTRA_DB::doFROMTO( FROMTO* growth )
             if( tok != T_fix && tok != T_normal && tok != T_soft )
                 Expecting( "fix|normal|soft" );
 
-            growth->fromto_type = tok;
+            growth->m_fromto_type = tok;
             NeedRIGHT();
             break;
 
         case T_rule:
-            if( growth->rules )
+            if( growth->m_rules )
                 Unexpected( tok );
 
-            growth->rules = new RULE( growth, T_rule );
-            doRULE( growth->rules );
+            growth->m_rules = new RULE( growth, T_rule );
+            doRULE( growth->m_rules );
             break;
 
         case T_layer_rule:
             LAYER_RULE* layer_rule;
             layer_rule = new LAYER_RULE( growth );
-            growth->layer_rules.push_back( layer_rule );
+            growth->m_layer_rules.push_back( layer_rule );
             doLAYER_RULE( layer_rule );
             break;
 
         case T_net:
-            if( growth->net_id.size() )
+            if( growth->m_net_id.size() )
                 Unexpected( tok );
 
             NeedSYMBOL();
-            growth->net_id = CurText();
+            growth->m_net_id = CurText();
             NeedRIGHT();
             break;
 
@@ -2996,19 +2994,19 @@ void SPECCTRA_DB::doWIRE( WIRE* growth )
         switch( tok )
         {
         case T_rect:
-            if( growth->shape )
+            if( growth->m_shape )
                 Unexpected( tok );
 
-            growth->shape = new RECTANGLE( growth );
-            doRECTANGLE( (RECTANGLE*) growth->shape );
+            growth->m_shape = new RECTANGLE( growth );
+            doRECTANGLE( (RECTANGLE*) growth->m_shape );
             break;
 
         case T_circle:
-            if( growth->shape )
+            if( growth->m_shape )
                 Unexpected( tok );
 
-            growth->shape = new CIRCLE( growth );
-            doCIRCLE( (CIRCLE*) growth->shape );
+            growth->m_shape = new CIRCLE( growth );
+            doCIRCLE( (CIRCLE*) growth->m_shape );
             break;
 
         case T_polyline_path:
@@ -3017,24 +3015,24 @@ void SPECCTRA_DB::doWIRE( WIRE* growth )
 
         case T_path:
         case T_polygon:
-            if( growth->shape )
+            if( growth->m_shape )
                 Unexpected( tok );
 
-            growth->shape = new PATH( growth, tok );
-            doPATH( (PATH*) growth->shape );
+            growth->m_shape = new PATH( growth, tok );
+            doPATH( (PATH*) growth->m_shape );
             break;
 
         case T_qarc:
-            if( growth->shape )
+            if( growth->m_shape )
                 Unexpected( tok );
 
-            growth->shape = new QARC( growth );
-            doQARC( (QARC*) growth->shape );
+            growth->m_shape = new QARC( growth );
+            doQARC( (QARC*) growth->m_shape );
             break;
 
         case T_net:
             NeedSYMBOLorNUMBER();
-            growth->net_id = CurText();
+            growth->m_net_id = CurText();
             NeedRIGHT();
             break;
 
@@ -3042,7 +3040,7 @@ void SPECCTRA_DB::doWIRE( WIRE* growth )
             if( NextTok() != T_NUMBER )
                 Expecting( T_NUMBER );
 
-            growth->turret = atoi( CurText() );
+            growth->m_turret = atoi( CurText() );
             NeedRIGHT();
             break;
 
@@ -3052,7 +3050,7 @@ void SPECCTRA_DB::doWIRE( WIRE* growth )
             if( tok != T_fix && tok != T_route && tok != T_normal && tok != T_protect )
                 Expecting( "fix|route|normal|protect" );
 
-            growth->wire_type = tok;
+            growth->m_wire_type = tok;
             NeedRIGHT();
             break;
 
@@ -3062,33 +3060,33 @@ void SPECCTRA_DB::doWIRE( WIRE* growth )
             if( tok != T_test && tok != T_fanout && tok != T_bus && tok != T_jumper )
                 Expecting( "test|fanout|bus|jumper" );
 
-            growth->attr = tok;
+            growth->m_attr = tok;
             NeedRIGHT();
             break;
 
         case T_shield:
             NeedSYMBOL();
-            growth->shield = CurText();
+            growth->m_shield = CurText();
             NeedRIGHT();
             break;
 
         case T_window:
             WINDOW* window;
             window = new WINDOW( growth );
-            growth->windows.push_back( window );
+            growth->m_windows.push_back( window );
             doWINDOW( window );
             break;
 
         case T_connect:
-            if( growth->connect )
+            if( growth->m_connect )
                 Unexpected( tok );
 
-            growth->connect = new CONNECT( growth );
-            doCONNECT( growth->connect );
+            growth->m_connect = new CONNECT( growth );
+            doCONNECT( growth->m_connect );
             break;
 
         case T_supply:
-            growth->supply = true;
+            growth->m_supply = true;
             NeedRIGHT();
             break;
 
@@ -3106,22 +3104,22 @@ void SPECCTRA_DB::doWIRE_VIA( WIRE_VIA* growth )
 
     /*  <wire_via_descriptor >::=
         (via
-           <padstack_id > {<vertex> }
+           <m_padstack_id > {<vertex> }
            [(net <net_id >)]
            [(via_number <via#> )]
            [(type [fix | route | normal | protect])]
            [(attr [test | fanout | jumper |
-              virtual_pin <virtual_pin_name> ])]
+              virtual_pin <m_virtual_pin_name> ])]
            [(contact {<layer_id >})]
            [(supply)]
         )
         (virtual_pin
-           <virtual_pin_name> <vertex> (net <net_id >)
+           <m_virtual_pin_name> <vertex> (net <net_id >)
         )
     */
 
     NeedSYMBOL();
-    growth->padstack_id = CurText();
+    growth->m_padstack_id = CurText();
 
     while( ( tok = NextTok() ) == T_NUMBER )
     {
@@ -3132,7 +3130,7 @@ void SPECCTRA_DB::doWIRE_VIA( WIRE_VIA* growth )
 
         point.y = strtod( CurText(), 0 );
 
-        growth->vertexes.push_back( point );
+        growth->m_vertexes.push_back( point );
     }
 
     while( tok != T_RIGHT )
@@ -3146,7 +3144,7 @@ void SPECCTRA_DB::doWIRE_VIA( WIRE_VIA* growth )
         {
         case T_net:
             NeedSYMBOL();
-            growth->net_id = CurText();
+            growth->m_net_id = CurText();
             NeedRIGHT();
             break;
 
@@ -3154,7 +3152,7 @@ void SPECCTRA_DB::doWIRE_VIA( WIRE_VIA* growth )
             if( NextTok() != T_NUMBER )
                 Expecting( "<via#>" );
 
-            growth->via_number = atoi( CurText() );
+            growth->m_via_number = atoi( CurText() );
             NeedRIGHT();
             break;
 
@@ -3164,7 +3162,7 @@ void SPECCTRA_DB::doWIRE_VIA( WIRE_VIA* growth )
             if( tok != T_fix && tok != T_route && tok != T_normal && tok != T_protect )
                 Expecting( "fix|route|normal|protect" );
 
-            growth->via_type = tok;
+            growth->m_via_type = tok;
             NeedRIGHT();
             break;
 
@@ -3174,12 +3172,12 @@ void SPECCTRA_DB::doWIRE_VIA( WIRE_VIA* growth )
             if( tok != T_test && tok != T_fanout && tok != T_jumper && tok != T_virtual_pin )
                 Expecting( "test|fanout|jumper|virtual_pin" );
 
-            growth->attr = tok;
+            growth->m_attr = tok;
 
             if( tok == T_virtual_pin )
             {
                 NeedSYMBOL();
-                growth->virtual_pin_name = CurText();
+                growth->m_virtual_pin_name = CurText();
             }
 
             NeedRIGHT();
@@ -3191,7 +3189,7 @@ void SPECCTRA_DB::doWIRE_VIA( WIRE_VIA* growth )
 
             while( IsSymbol( tok ) )
             {
-                growth->contact_layers.push_back( CurText() );
+                growth->m_contact_layers.push_back( CurText() );
                 tok = NextTok();
             }
 
@@ -3201,7 +3199,7 @@ void SPECCTRA_DB::doWIRE_VIA( WIRE_VIA* growth )
             break;
 
         case T_supply:
-            growth->supply = true;
+            growth->m_supply = true;
             NeedRIGHT();
             break;
 
@@ -3702,7 +3700,7 @@ void SPECCTRA_DB::ExportPCB( const wxString& aFilename, bool aNameChange )
         FILE_OUTPUTFORMATTER    formatter( aFilename, wxT( "wt" ), m_quote_char[0] );
 
         if( aNameChange )
-            m_pcb->pcbname = TO_UTF8( aFilename );
+            m_pcb->m_pcbname = TO_UTF8( aFilename );
 
         m_pcb->Format( &formatter, 0 );
     }
@@ -3724,22 +3722,22 @@ PCB* SPECCTRA_DB::MakePCB()
 {
     PCB*    pcb = new PCB();
 
-    pcb->parser = new PARSER( pcb );
-    pcb->resolution = new UNIT_RES( pcb, T_resolution );
-    pcb->unit = new UNIT_RES( pcb, T_unit );
+    pcb->m_parser = new PARSER( pcb );
+    pcb->m_resolution = new UNIT_RES( pcb, T_resolution );
+    pcb->m_unit = new UNIT_RES( pcb, T_unit );
 
-    pcb->structure = new STRUCTURE( pcb );
-    pcb->structure->boundary = new BOUNDARY( pcb->structure );
-    pcb->structure->via = new VIA( pcb->structure );
-    pcb->structure->rules = new RULE( pcb->structure, T_rule );
+    pcb->m_structure = new STRUCTURE( pcb );
+    pcb->m_structure->m_boundary = new BOUNDARY( pcb->m_structure );
+    pcb->m_structure->m_via = new VIA( pcb->m_structure );
+    pcb->m_structure->m_rules = new RULE( pcb->m_structure, T_rule );
 
-    pcb->placement = new PLACEMENT( pcb );
+    pcb->m_placement = new PLACEMENT( pcb );
 
-    pcb->library = new LIBRARY( pcb );
+    pcb->m_library = new LIBRARY( pcb );
 
-    pcb->network = new NETWORK( pcb );
+    pcb->m_network = new NETWORK( pcb );
 
-    pcb->wiring = new WIRING( pcb );
+    pcb->m_wiring = new WIRING( pcb );
 
     return pcb;
 }
@@ -3838,13 +3836,13 @@ int PADSTACK::Compare( PADSTACK* lhs, PADSTACK* rhs )
 
 int IMAGE::Compare( IMAGE* lhs, IMAGE* rhs )
 {
-    if( !lhs->hash.size() )
-        lhs->hash = lhs->makeHash();
+    if( !lhs->m_hash.size() )
+        lhs->m_hash = lhs->makeHash();
 
-    if( !rhs->hash.size() )
-        rhs->hash = rhs->makeHash();
+    if( !rhs->m_hash.size() )
+        rhs->m_hash = rhs->makeHash();
 
-    int result = lhs->hash.compare( rhs->hash );
+    int result = lhs->m_hash.compare( rhs->m_hash );
 
     return result;
 }
@@ -3925,47 +3923,47 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel )
 {
     bool        useMultiLine;
 
-    const char* quote = out->GetQuoteChar( component_id.c_str() );
+    const char* quote = out->GetQuoteChar( m_component_id.c_str() );
 
-    if( place_rules || properties.size() || rules || region )
+    if( m_place_rules || m_properties.size() || m_rules || m_region )
     {
         useMultiLine = true;
 
-        out->Print( nestLevel, "(%s %s%s%s\n", Name(), quote, component_id.c_str(), quote );
+        out->Print( nestLevel, "(%s %s%s%s\n", Name(), quote, m_component_id.c_str(), quote );
         out->Print( nestLevel+1, "%s", "" );
     }
     else
     {
         useMultiLine = false;
 
-        out->Print( nestLevel, "(%s %s%s%s", Name(), quote, component_id.c_str(), quote );
+        out->Print( nestLevel, "(%s %s%s%s", Name(), quote, m_component_id.c_str(), quote );
     }
 
-    if( hasVertex )
+    if( m_hasVertex )
     {
-        out->Print( 0, " %.6f %.6f", vertex.x, vertex.y );
-        out->Print( 0, " %s", GetTokenText( side ) );
-        out->Print( 0, " %.6f", rotation );
+        out->Print( 0, " %.6f %.6f", m_vertex.x, m_vertex.y );
+        out->Print( 0, " %s", GetTokenText( m_side ) );
+        out->Print( 0, " %.6f", m_rotation );
     }
 
     const char* space = " ";    // one space, as c string.
 
-    if( mirror != T_NONE )
+    if( m_mirror != T_NONE )
     {
-        out->Print( 0, "%s(mirror %s)", space, GetTokenText( mirror ) );
+        out->Print( 0, "%s(mirror %s)", space, GetTokenText( m_mirror ) );
         space = "";
     }
 
-    if( status != T_NONE )
+    if( m_status != T_NONE )
     {
-        out->Print( 0, "%s(status %s)", space, GetTokenText( status ) );
+        out->Print( 0, "%s(status %s)", space, GetTokenText( m_status ) );
         space = "";
     }
 
-    if( logical_part.size() )
+    if( m_logical_part.size() )
     {
-        quote = out->GetQuoteChar( logical_part.c_str() );
-        out->Print( 0, "%s(logical_part %s%s%s)", space, quote, logical_part.c_str(), quote );
+        quote = out->GetQuoteChar( m_logical_part.c_str() );
+        out->Print( 0, "%s(logical_part %s%s%s)", space, quote, m_logical_part.c_str(), quote );
         space = "";
     }
 
@@ -3973,48 +3971,46 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel )
     {
         out->Print( 0, "\n" );
 
-        if( place_rules )
-        {
-            place_rules->Format( out, nestLevel+1 );
-        }
+        if( m_place_rules )
+            m_place_rules->Format( out, nestLevel+1 );
 
-        if( properties.size() )
+        if( m_properties.size() )
         {
             out->Print( nestLevel + 1, "(property \n" );
 
-            for( PROPERTIES::const_iterator i = properties.begin(); i != properties.end(); ++i )
+            for( PROPERTIES::const_iterator i = m_properties.begin(); i != m_properties.end(); ++i )
                 i->Format( out, nestLevel + 2 );
 
             out->Print( nestLevel + 1, ")\n" );
         }
 
-        if( lock_type != T_NONE )
-            out->Print( nestLevel + 1, "(lock_type %s)\n", GetTokenText( lock_type ) );
+        if( m_lock_type != T_NONE )
+            out->Print( nestLevel + 1, "(lock_type %s)\n", GetTokenText( m_lock_type ) );
 
-        if( rules )
-            rules->Format( out, nestLevel+1 );
+        if( m_rules )
+            m_rules->Format( out, nestLevel+1 );
 
-        if( region )
-            region->Format( out, nestLevel+1 );
+        if( m_region )
+            m_region->Format( out, nestLevel+1 );
 
-        if( part_number.size() )
+        if( m_part_number.size() )
         {
-            quote = out->GetQuoteChar( part_number.c_str() );
-            out->Print( nestLevel + 1, "(PN %s%s%s)\n", quote, part_number.c_str(), quote );
+            quote = out->GetQuoteChar( m_part_number.c_str() );
+            out->Print( nestLevel + 1, "(PN %s%s%s)\n", quote, m_part_number.c_str(), quote );
         }
     }
     else
     {
-        if( lock_type != T_NONE )
+        if( m_lock_type != T_NONE )
         {
-            out->Print( 0, "%s(lock_type %s)", space, GetTokenText( lock_type ) );
+            out->Print( 0, "%s(lock_type %s)", space, GetTokenText( m_lock_type ) );
             space = "";
         }
 
-        if( part_number.size() )
+        if( m_part_number.size() )
         {
-            quote = out->GetQuoteChar( part_number.c_str() );
-            out->Print( 0, "%s(PN %s%s%s)", space, quote, part_number.c_str(), quote );
+            quote = out->GetQuoteChar( m_part_number.c_str() );
+            out->Print( 0, "%s(PN %s%s%s)", space, quote, m_part_number.c_str(), quote );
         }
     }
 
