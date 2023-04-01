@@ -173,7 +173,7 @@ PCB_TRACK* SPECCTRA_DB::makeTRACK( WIRE* wire, PATH* aPath, int aPointIndex, int
     // wire->wire_type = T_fix, T_route, T_normal or T_protect
     // fix and protect could be used as lock option
     // but protect is returned for all tracks having initially the route or protect property
-    if( wire->wire_type == T_fix )
+    if( wire->m_wire_type == T_fix )
         track->SetLocked( true );
 
     return track;
@@ -183,7 +183,7 @@ PCB_TRACK* SPECCTRA_DB::makeTRACK( WIRE* wire, PATH* aPath, int aPointIndex, int
 PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA*aVia, PADSTACK* aPadstack, const POINT& aPoint, int aNetCode,
                                int aViaDrillDefault )
 {
-    PCB_VIA* via = 0;
+    PCB_VIA* via = nullptr;
     SHAPE*   shape;
     int      shapeCount = aPadstack->Length();
     int      drill_diam_iu = -1;
@@ -324,7 +324,7 @@ PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA*aVia, PADSTACK* aPadstack, const POINT& 
     // aVia->via_type = T_fix, T_route, T_normal or T_protect
     // fix and protect could be used as lock option
     // but protect is returned for all tracks having initially the route or protect property
-    if( aVia->via_type == T_fix )
+    if( aVia->m_via_type == T_fix )
         via->SetLocked( true );
 
     return via;
@@ -375,16 +375,16 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
         // Walk the PLACEMENT object's COMPONENTs list, and for each PLACE within
         // each COMPONENT, reposition and re-orient each component and put on
         // correct side of the board.
-        COMPONENTS& components = m_session->placement->components;
+        COMPONENTS& components = m_session->placement->m_components;
 
         for( COMPONENTS::iterator comp=components.begin();  comp!=components.end();  ++comp )
         {
-            PLACES& places = comp->places;
+            PLACES& places = comp->m_places;
             for( unsigned i=0; i<places.size();  ++i )
             {
                 PLACE* place = &places[i];  // '&' even though places[] holds a pointer!
 
-                wxString   reference = FROM_UTF8( place->component_id.c_str() );
+                wxString   reference = FROM_UTF8( place->m_component_id.c_str() );
                 FOOTPRINT* footprint = aBoard->FindFootprintByReference( reference );
 
                 if( !footprint )
@@ -393,19 +393,19 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
                                                       reference ) );
                 }
 
-                if( !place->hasVertex )
+                if( !place->m_hasVertex )
                     continue;
 
                 UNIT_RES* resolution = place->GetUnits();
                 wxASSERT( resolution );
 
-                wxPoint newPos = mapPt( place->vertex, resolution );
+                wxPoint newPos = mapPt( place->m_vertex, resolution );
                 footprint->SetPosition( newPos );
 
-                if( place->side == T_front )
+                if( place->m_side == T_front )
                 {
                     // convert from degrees to tenths of degrees used in KiCad.
-                    EDA_ANGLE orientation( place->rotation, DEGREES_T );
+                    EDA_ANGLE orientation( place->m_rotation, DEGREES_T );
 
                     if( footprint->GetLayer() != F_Cu )
                     {
@@ -415,9 +415,9 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
 
                     footprint->SetOrientation( orientation );
                 }
-                else if( place->side == T_back )
+                else if( place->m_side == T_back )
                 {
-                    EDA_ANGLE orientation( place->rotation + 180.0, DEGREES_T );
+                    EDA_ANGLE orientation( place->m_rotation + 180.0, DEGREES_T );
 
                     if( footprint->GetLayer() != B_Cu )
                     {
@@ -458,7 +458,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
         for( unsigned i = 0; i<wires.size(); ++i )
         {
             WIRE*   wire  = &wires[i];
-            DSN_T   shape = wire->shape->Type();
+            DSN_T   shape = wire->m_shape->Type();
 
             if( shape != T_path )
             {
@@ -476,7 +476,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
             }
             else
             {
-                PATH*   path = (PATH*) wire->shape;
+                PATH*   path = (PATH*) wire->m_shape;
 
                 for( unsigned pt=0; pt < path->points.size()-1; ++pt )
                 {
@@ -526,9 +526,9 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
 
             int via_drill_default = netSettings->m_DefaultNetClass->GetViaDrill();
 
-            for( unsigned v = 0; v < wire_via->vertexes.size(); ++v )
+            for( unsigned v = 0; v < wire_via->m_vertexes.size(); ++v )
             {
-                PCB_VIA* via = makeVIA( wire_via, padstack, wire_via->vertexes[v], netCode,
+                PCB_VIA* via = makeVIA( wire_via, padstack, wire_via->m_vertexes[v], netCode,
                                         via_drill_default );
                 aBoard->Add( via );
             }

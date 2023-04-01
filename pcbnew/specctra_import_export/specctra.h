@@ -203,7 +203,7 @@ class ELEM
 {
 public:
 
-    ELEM( DSN_T aType, ELEM* aParent = 0 );
+    ELEM( DSN_T aType, ELEM* aParent = nullptr );
 
     virtual ~ELEM();
 
@@ -289,7 +289,7 @@ class ELEM_HOLDER : public ELEM
 {
 public:
 
-    ELEM_HOLDER( DSN_T aType, ELEM* aParent = 0 ) :
+    ELEM_HOLDER( DSN_T aType, ELEM* aParent = nullptr ) :
         ELEM( aType, aParent )
     {
     }
@@ -503,10 +503,10 @@ public:
 
         bool singleLine;
 
-        if( rules.size() == 1 )
+        if( m_rules.size() == 1 )
         {
             singleLine = true;
-            out->Print( 0, " %s)", rules.begin()->c_str() );
+            out->Print( 0, " %s)", m_rules.begin()->c_str() );
         }
 
         else
@@ -514,7 +514,7 @@ public:
             out->Print( 0, "\n" );
             singleLine = false;
 
-            for( STRINGS::const_iterator i = rules.begin();  i != rules.end(); ++i )
+            for( STRINGS::const_iterator i = m_rules.begin();  i != m_rules.end(); ++i )
                 out->Print( nestLevel+1, "%s\n", i->c_str() );
 
             out->Print( nestLevel, ")" );
@@ -527,7 +527,7 @@ public:
 private:
     friend class SPECCTRA_DB;
 
-    STRINGS     rules;      ///< rules are saved in std::string form.
+    STRINGS      m_rules;      ///< rules are saved in std::string form.
 };
 
 
@@ -538,19 +538,19 @@ public:
     LAYER_RULE( ELEM* aParent ) :
         ELEM( T_layer_rule, aParent )
     {
-        rule = 0;
+        m_rule = nullptr;
     }
 
     ~LAYER_RULE()
     {
-        delete rule;
+        delete m_rule;
     }
 
     void Format( OUTPUTFORMATTER* out, int nestLevel ) override
     {
         out->Print( nestLevel, "(%s", Name() );
 
-        for( STRINGS::const_iterator i=layer_ids.begin(); i != layer_ids.end(); ++i )
+        for( STRINGS::const_iterator i = m_layer_ids.begin(); i != m_layer_ids.end(); ++i )
         {
             const char* quote = out->GetQuoteChar( i->c_str() );
             out->Print( 0, " %s%s%s", quote, i->c_str(), quote );
@@ -558,8 +558,8 @@ public:
 
         out->Print( 0 , "\n" );
 
-        if( rule )
-            rule->Format( out, nestLevel+1 );
+        if( m_rule )
+            m_rule->Format( out, nestLevel+1 );
 
         out->Print( nestLevel, ")\n" );
     }
@@ -567,8 +567,8 @@ public:
 private:
     friend class SPECCTRA_DB;
 
-    STRINGS layer_ids;
-    RULE*   rule;
+    STRINGS m_layer_ids;
+    RULE*   m_rule;
 };
 
 
@@ -664,7 +664,7 @@ public:
     BOUNDARY( ELEM* aParent, DSN_T aType = T_boundary ) :
         ELEM( aType, aParent )
     {
-        rectangle = 0;
+        rectangle = nullptr;
     }
 
     ~BOUNDARY()
@@ -847,7 +847,7 @@ public:
     WINDOW( ELEM* aParent, DSN_T aType = T_window ) :
         ELEM( aType, aParent )
     {
-        shape = 0;
+        shape = nullptr;
     }
 
     ~WINDOW()
@@ -913,24 +913,24 @@ public:
     KEEPOUT( ELEM* aParent, DSN_T aType ) :
         ELEM( aType, aParent )
     {
-        rules = 0;
-        place_rules = 0;
-        shape = 0;
+        m_rules = nullptr;
+        m_place_rules = nullptr;
+        m_shape = nullptr;
 
-        sequence_number = -1;
+        m_sequence_number = -1;
     }
 
     ~KEEPOUT()
     {
-        delete rules;
-        delete place_rules;
-        delete shape;
+        delete m_rules;
+        delete m_place_rules;
+        delete m_shape;
     }
 
     void SetShape( ELEM* aShape )
     {
-        delete shape;
-        shape = aShape;
+        delete m_shape;
+        m_shape = aShape;
 
         if( aShape )
         {
@@ -947,7 +947,7 @@ public:
     void AddWindow( WINDOW* aWindow )
     {
         aWindow->SetParent( this );
-        windows.push_back( aWindow );
+        m_windows.push_back( aWindow );
     }
 
     void Format( OUTPUTFORMATTER* out, int nestLevel ) override
@@ -956,10 +956,10 @@ public:
 
         out->Print( nestLevel, "(%s", Name() );
 
-        if( name.size() )
+        if( m_name.size() )
         {
-            const char* quote = out->GetQuoteChar( name.c_str() );
-            out->Print( 0, " %s%s%s", quote, name.c_str(), quote );
+            const char* quote = out->GetQuoteChar( m_name.c_str() );
+            out->Print( 0, " %s%s%s", quote, m_name.c_str(), quote );
         }
         // Could be not needed:
 #if 1
@@ -969,35 +969,35 @@ public:
         }
 #endif
 
-        if( sequence_number != -1 )
-            out->Print( 0, " (sequence_number %d)", sequence_number );
+        if( m_sequence_number != -1 )
+            out->Print( 0, " (sequence_number %d)", m_sequence_number );
 
-        if( shape )
+        if( m_shape )
         {
             out->Print( 0, " " );
-            shape->Format( out, 0 );
+            m_shape->Format( out, 0 );
         }
 
-        if( rules )
+        if( m_rules )
         {
             out->Print( 0, "%s", newline );
             newline = "";
-            rules->Format( out, nestLevel+1 );
+            m_rules->Format( out, nestLevel+1 );
         }
 
-        if( place_rules )
+        if( m_place_rules )
         {
             out->Print( 0, "%s", newline );
             newline = "";
-            place_rules->Format( out, nestLevel+1 );
+            m_place_rules->Format( out, nestLevel+1 );
         }
 
-        if( windows.size() )
+        if( m_windows.size() )
         {
             out->Print( 0, "%s", newline );
             newline = "";
 
-            for( WINDOWS::iterator i = windows.begin(); i != windows.end(); ++i )
+            for( WINDOWS::iterator i = m_windows.begin(); i != m_windows.end(); ++i )
                 i->Format( out, nestLevel+1 );
 
             out->Print( nestLevel, ")\n" );
@@ -1009,12 +1009,12 @@ public:
     }
 
 protected:
-    std::string     name;
-    int             sequence_number;
-    RULE*           rules;
-    RULE*           place_rules;
+    std::string     m_name;
+    int             m_sequence_number;
+    RULE*           m_rules;
+    RULE*           m_place_rules;
 
-    WINDOWS         windows;
+    WINDOWS         m_windows;
 
     /*  <shape_descriptor >::=
         [<rectangle_descriptor> |
@@ -1023,7 +1023,7 @@ protected:
         <path_descriptor> |
         <qarc_descriptor> ]
     */
-    ELEM*           shape;
+    ELEM*           m_shape;
 
 private:
     friend class SPECCTRA_DB;
@@ -1046,7 +1046,7 @@ public:
 
     void AppendVia( const char* aViaName )
     {
-        padstacks.push_back( aViaName );
+        m_padstacks.push_back( aViaName );
     }
 
     void Format( OUTPUTFORMATTER* out, int nestLevel ) override
@@ -1054,7 +1054,7 @@ public:
         const int RIGHTMARGIN = 80;
         int perLine = out->Print( nestLevel, "(%s", Name() );
 
-        for( STRINGS::iterator i = padstacks.begin(); i != padstacks.end(); ++i )
+        for( STRINGS::iterator i = m_padstacks.begin(); i != m_padstacks.end(); ++i )
         {
             if( perLine > RIGHTMARGIN )
             {
@@ -1066,13 +1066,13 @@ public:
             perLine += out->Print( 0, " %s%s%s", quote, i->c_str(), quote );
         }
 
-        if( spares.size() )
+        if( m_spares.size() )
         {
             out->Print( 0, "\n" );
 
             perLine = out->Print( nestLevel+1, "(spare" );
 
-            for( STRINGS::iterator i = spares.begin(); i != spares.end(); ++i )
+            for( STRINGS::iterator i = m_spares.begin(); i != m_spares.end(); ++i )
             {
                 if( perLine > RIGHTMARGIN )
                 {
@@ -1093,8 +1093,8 @@ public:
 private:
     friend class SPECCTRA_DB;
 
-    STRINGS     padstacks;
-    STRINGS     spares;
+    STRINGS     m_padstacks;
+    STRINGS     m_spares;
 };
 
 
@@ -1133,7 +1133,7 @@ public:
     CLASS_CLASS( ELEM* aParent, DSN_T aType ) :
         ELEM_HOLDER( aType, aParent )
     {
-        classes = 0;
+        classes = nullptr;
     }
 
     ~CLASS_CLASS()
@@ -1209,7 +1209,7 @@ public:
         cost       = -1;
         cost_type  = -1;
 
-        rules = 0;
+        rules = nullptr;
     }
 
     ~LAYER()
@@ -1425,53 +1425,53 @@ public:
     REGION( ELEM* aParent ) :
         ELEM_HOLDER( T_region, aParent )
     {
-        rectangle = 0;
-        polygon = 0;
-        rules = 0;
+        m_rectangle = nullptr;
+        m_polygon = nullptr;
+        m_rules = nullptr;
     }
 
     ~REGION()
     {
-        delete rectangle;
-        delete polygon;
-        delete rules;
+        delete m_rectangle;
+        delete m_polygon;
+        delete m_rules;
     }
 
     void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) override
     {
-        if( region_id.size() )
+        if( m_region_id.size() )
         {
-            const char* quote = out->GetQuoteChar( region_id.c_str() );
-            out->Print( nestLevel, "%s%s%s\n", quote, region_id.c_str(), quote );
+            const char* quote = out->GetQuoteChar( m_region_id.c_str() );
+            out->Print( nestLevel, "%s%s%s\n", quote, m_region_id.c_str(), quote );
         }
 
-        if( rectangle )
-            rectangle->Format( out, nestLevel );
+        if( m_rectangle )
+            m_rectangle->Format( out, nestLevel );
 
-        if( polygon )
-            polygon->Format( out, nestLevel );
+        if( m_polygon )
+            m_polygon->Format( out, nestLevel );
 
         ELEM_HOLDER::FormatContents( out, nestLevel );
 
-        if( rules )
-            rules->Format( out, nestLevel );
+        if( m_rules )
+            m_rules->Format( out, nestLevel );
     }
 
 private:
     friend class SPECCTRA_DB;
 
-    std::string     region_id;
+    std::string     m_region_id;
 
     //-----<mutually exclusive>--------------------------------------
-    RECTANGLE*      rectangle;
-    PATH*           polygon;
+    RECTANGLE*      m_rectangle;
+    PATH*           m_polygon;
     //-----</mutually exclusive>-------------------------------------
 
     /* region_net | region_class | region_class_class are all mutually
        exclusive and are put into the kids container.
     */
 
-    RULE*           rules;
+    RULE*           m_rules;
 };
 
 
@@ -1481,30 +1481,30 @@ public:
     GRID( ELEM* aParent ) :
         ELEM( T_grid, aParent )
     {
-        grid_type  = T_via;
-        direction  = T_NONE;
-        dimension  = 0.0;
-        offset     = 0.0;
-        image_type = T_NONE;
+        m_grid_type  = T_via;
+        m_direction  = T_NONE;
+        m_dimension  = 0.0;
+        m_offset     = 0.0;
+        m_image_type = T_NONE;
     }
 
     void Format( OUTPUTFORMATTER* out, int nestLevel ) override
     {
-        out->Print( nestLevel, "(%s %s %.6g", Name(), GetTokenText( grid_type ), dimension );
+        out->Print( nestLevel, "(%s %s %.6g", Name(), GetTokenText( m_grid_type ), m_dimension );
 
-        if( grid_type == T_place )
+        if( m_grid_type == T_place )
         {
-            if( image_type==T_smd || image_type==T_pin )
-                out->Print( 0, " (image_type %s)", GetTokenText( image_type ) );
+            if( m_image_type == T_smd || m_image_type == T_pin )
+                out->Print( 0, " (image_type %s)", GetTokenText( m_image_type ) );
         }
         else
         {
-            if( direction==T_x || direction==T_y )
-                out->Print( 0, " (direction %s)", GetTokenText( direction ) );
+            if( m_direction == T_x || m_direction == T_y )
+                out->Print( 0, " (direction %s)", GetTokenText( m_direction ) );
         }
 
-        if( offset != 0.0 )
-            out->Print( 0, " (offset %.6g)", offset );
+        if( m_offset != 0.0 )
+            out->Print( 0, " (offset %.6g)", m_offset );
 
         out->Print( 0, ")\n");
     }
@@ -1512,11 +1512,11 @@ public:
 private:
     friend class SPECCTRA_DB;
 
-    DSN_T       grid_type;      ///< T_via | T_wire | T_via_keepout | T_place | T_snap
-    double      dimension;
-    DSN_T       direction;      ///< T_x | T_y | -1 for both
-    double      offset;
-    DSN_T       image_type;
+    DSN_T       m_grid_type;      ///< T_via | T_wire | T_via_keepout | T_place | T_snap
+    double      m_dimension;
+    DSN_T       m_direction;      ///< T_x | T_y | -1 for both
+    double      m_offset;
+    DSN_T       m_image_type;
 };
 
 
@@ -1526,28 +1526,28 @@ public:
     STRUCTURE_OUT( ELEM* aParent ) :
         ELEM( T_structure_out, aParent )
     {
-        rules = 0;
+        m_rules = nullptr;
     }
 
     ~STRUCTURE_OUT()
     {
-        delete rules;
+        delete m_rules;
     }
 
     void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) override
     {
-        for( LAYERS::iterator i = layers.begin(); i != layers.end(); ++i )
+        for( LAYERS::iterator i = m_layers.begin(); i != m_layers.end(); ++i )
             i->Format( out, nestLevel );
 
-        if( rules )
-            rules->Format( out, nestLevel );
+        if( m_rules )
+            m_rules->Format( out, nestLevel );
     }
 
 private:
     friend class SPECCTRA_DB;
 
-    LAYERS      layers;
-    RULE*       rules;
+    LAYERS      m_layers;
+    RULE*       m_rules;
 };
 
 
@@ -1557,97 +1557,97 @@ public:
     STRUCTURE( ELEM* aParent ) :
         ELEM_HOLDER( T_structure, aParent )
     {
-        unit = 0;
-        layer_noise_weight = 0;
-        boundary = 0;
-        place_boundary = 0;
-        via = 0;
-        control = 0;
-        rules = 0;
-        place_rules = 0;
+        m_unit = nullptr;
+        m_layer_noise_weight = nullptr;
+        m_boundary = nullptr;
+        m_place_boundary = nullptr;
+        m_via = nullptr;
+        m_control = nullptr;
+        m_rules = nullptr;
+        m_place_rules = nullptr;
     }
 
     ~STRUCTURE()
     {
-        delete unit;
-        delete layer_noise_weight;
-        delete boundary;
-        delete place_boundary;
-        delete via;
-        delete control;
-        delete rules;
-        delete place_rules;
+        delete m_unit;
+        delete m_layer_noise_weight;
+        delete m_boundary;
+        delete m_place_boundary;
+        delete m_via;
+        delete m_control;
+        delete m_rules;
+        delete m_place_rules;
     }
 
     void SetBOUNDARY( BOUNDARY *aBoundary )
     {
-        delete boundary;
-        boundary = aBoundary;
-        if( boundary )
-        {
-            boundary->SetParent( this );
-        }
+        delete m_boundary;
+        m_boundary = aBoundary;
+
+        if( m_boundary )
+            m_boundary->SetParent( this );
     }
 
     void SetPlaceBOUNDARY( BOUNDARY *aBoundary )
     {
-        delete place_boundary;
-        place_boundary = aBoundary;
-        if( place_boundary )
-            place_boundary->SetParent( this );
+        delete m_place_boundary;
+        m_place_boundary = aBoundary;
+
+        if( m_place_boundary )
+            m_place_boundary->SetParent( this );
     }
 
     void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) override
     {
-        if( unit )
-            unit->Format( out, nestLevel );
+        if( m_unit )
+            m_unit->Format( out, nestLevel );
 
-        for( LAYERS::iterator i=layers.begin();  i!=layers.end();  ++i )
+        for( LAYERS::iterator i=m_layers.begin();  i!=m_layers.end();  ++i )
             i->Format( out, nestLevel );
 
-        if( layer_noise_weight )
-            layer_noise_weight->Format( out, nestLevel );
+        if( m_layer_noise_weight )
+            m_layer_noise_weight->Format( out, nestLevel );
 
-        if( boundary )
-            boundary->Format( out, nestLevel );
+        if( m_boundary )
+            m_boundary->Format( out, nestLevel );
 
-        if( place_boundary )
-            place_boundary->Format( out, nestLevel );
+        if( m_place_boundary )
+            m_place_boundary->Format( out, nestLevel );
 
-        for( COPPER_PLANES::iterator i=planes.begin();  i!=planes.end();  ++i )
+        for( COPPER_PLANES::iterator i=m_planes.begin();  i!=m_planes.end();  ++i )
             i->Format( out, nestLevel );
 
-        for( REGIONS::iterator i=regions.begin();  i!=regions.end();  ++i )
+        for( REGIONS::iterator i=m_regions.begin();  i!=m_regions.end();  ++i )
             i->Format( out, nestLevel );
 
-        for( KEEPOUTS::iterator i=keepouts.begin();  i!=keepouts.end();  ++i )
+        for( KEEPOUTS::iterator i=m_keepouts.begin();  i!=m_keepouts.end();  ++i )
             i->Format( out, nestLevel );
 
-        if( via )
-            via->Format( out, nestLevel );
+        if( m_via )
+            m_via->Format( out, nestLevel );
 
-        if( control )
-            control->Format( out, nestLevel );
+        if( m_control )
+            m_control->Format( out, nestLevel );
 
         for( int i=0; i<Length();  ++i )
         {
             At(i)->Format( out, nestLevel );
         }
 
-        if( rules )
-            rules->Format( out, nestLevel );
+        if( m_rules )
+            m_rules->Format( out, nestLevel );
 
-        if( place_rules )
-            place_rules->Format( out, nestLevel );
+        if( m_place_rules )
+            m_place_rules->Format( out, nestLevel );
 
-        for( GRIDS::iterator i=grids.begin();  i!=grids.end();  ++i )
+        for( GRIDS::iterator i=m_grids.begin();  i!=m_grids.end();  ++i )
             i->Format( out, nestLevel );
     }
 
     UNIT_RES* GetUnits() const override
     {
-        if( unit )
-            return unit;
+        if( m_unit )
+            return m_unit;
 
         return ELEM::GetUnits();
     }
@@ -1655,29 +1655,29 @@ public:
 private:
     friend class SPECCTRA_DB;
 
-    UNIT_RES*   unit;
+    UNIT_RES*           m_unit;
 
-    LAYERS      layers;
+    LAYERS              m_layers;
 
-    LAYER_NOISE_WEIGHT*  layer_noise_weight;
+    LAYER_NOISE_WEIGHT* m_layer_noise_weight;
 
-    BOUNDARY*   boundary;
-    BOUNDARY*   place_boundary;
-    VIA*        via;
-    CONTROL*    control;
-    RULE*       rules;
+    BOUNDARY*           m_boundary;
+    BOUNDARY*           m_place_boundary;
+    VIA*                m_via;
+    CONTROL*            m_control;
+    RULE*               m_rules;
 
-    KEEPOUTS    keepouts;
+    KEEPOUTS            m_keepouts;
 
-    COPPER_PLANES      planes;
+    COPPER_PLANES       m_planes;
 
     typedef boost::ptr_vector<REGION>   REGIONS;
-    REGIONS     regions;
+    REGIONS             m_regions;
 
-    RULE*       place_rules;
+    RULE*                m_place_rules;
 
     typedef boost::ptr_vector<GRID>     GRIDS;
-    GRIDS       grids;
+    GRIDS                m_grids;
 };
 
 
@@ -1690,39 +1690,39 @@ public:
     PLACE( ELEM* aParent ) :
         ELEM( T_place, aParent )
     {
-        side = T_front;
+        m_side = T_front;
 
-        rotation = 0.0;
+        m_rotation = 0.0;
 
-        hasVertex = false;
+        m_hasVertex = false;
 
-        mirror = T_NONE;
-        status = T_NONE;
+        m_mirror = T_NONE;
+        m_status = T_NONE;
 
-        place_rules = 0;
+        m_place_rules = nullptr;
 
-        lock_type = T_NONE;
-        rules = 0;
-        region = 0;
+        m_lock_type = T_NONE;
+        m_rules = nullptr;
+        m_region = nullptr;
     }
 
     ~PLACE()
     {
-        delete place_rules;
-        delete rules;
-        delete region;
+        delete m_place_rules;
+        delete m_rules;
+        delete m_region;
     }
 
     void SetVertex( const POINT& aVertex )
     {
-        vertex = aVertex;
-        vertex.FixNegativeZero();
-        hasVertex = true;
+        m_vertex = aVertex;
+        m_vertex.FixNegativeZero();
+        m_hasVertex = true;
     }
 
     void SetRotation( double aRotation )
     {
-        rotation = aRotation;
+        m_rotation = aRotation;
     }
 
     void Format( OUTPUTFORMATTER* out, int nestLevel ) override;
@@ -1730,32 +1730,32 @@ public:
 private:
     friend class SPECCTRA_DB;
 
-    std::string     component_id;       ///< reference designator
+    std::string     m_component_id;       ///< reference designator
 
-    DSN_T           side;
+    DSN_T           m_side;
 
-    double          rotation;
+    double          m_rotation;
 
-    bool            hasVertex;
-    POINT           vertex;
+    bool            m_hasVertex;
+    POINT           m_vertex;
 
-    DSN_T           mirror;
-    DSN_T           status;
+    DSN_T           m_mirror;
+    DSN_T           m_status;
 
-    std::string     logical_part;
+    std::string     m_logical_part;
 
-    RULE*           place_rules;
+    RULE*           m_place_rules;
 
-    PROPERTIES      properties;
+    PROPERTIES      m_properties;
 
-    DSN_T           lock_type;
+    DSN_T           m_lock_type;
 
     //-----<mutually exclusive>--------------
-    RULE*           rules;
-    REGION*         region;
+    RULE*           m_rules;
+    REGION*         m_region;
     //-----</mutually exclusive>-------------
 
-    std::string     part_number;
+    std::string     m_part_number;
 };
 
 typedef boost::ptr_vector<PLACE>    PLACES;
@@ -1772,10 +1772,10 @@ public:
     {
     }
 
-    const std::string& GetImageId() const  { return image_id; }
+    const std::string& GetImageId() const  { return m_image_id; }
     void SetImageId( const std::string& aImageId )
     {
-        image_id = aImageId;
+        m_image_id = aImageId;
     }
 
 
@@ -1786,8 +1786,8 @@ public:
 
     void Format( OUTPUTFORMATTER* out, int nestLevel ) override
     {
-        const char* quote = out->GetQuoteChar( image_id.c_str() );
-        out->Print( nestLevel, "(%s %s%s%s\n", Name(), quote, image_id.c_str(), quote );
+        const char* quote = out->GetQuoteChar( m_image_id.c_str() );
+        out->Print( nestLevel, "(%s %s%s%s\n", Name(), quote, m_image_id.c_str(), quote );
 
         FormatContents( out, nestLevel+1 );
 
@@ -1796,17 +1796,17 @@ public:
 
     void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) override
     {
-        for( PLACES::iterator i=places.begin();  i!=places.end();  ++i )
+        for( PLACES::iterator i=m_places.begin();  i!=m_places.end();  ++i )
             i->Format( out, nestLevel );
     }
 
 private:
     friend class SPECCTRA_DB;
 
-//    std::string     hash;       ///< a hash string used by Compare(), not Format()ed/exported.
+//    std::string     m_hash;       ///< a hash string used by Compare(), not Format()ed/exported.
 
-    std::string     image_id;
-    PLACES          places;
+    std::string     m_image_id;
+    PLACES          m_places;
 };
 
 typedef boost::ptr_vector<COMPONENT> COMPONENTS;
@@ -1818,13 +1818,13 @@ public:
     PLACEMENT( ELEM* aParent ) :
         ELEM( T_placement, aParent )
     {
-        unit = 0;
-        flip_style = DSN_T( T_NONE );
+        m_unit = nullptr;
+        m_flip_style = DSN_T( T_NONE );
     }
 
     ~PLACEMENT()
     {
-        delete unit;
+        delete m_unit;
     }
 
     /**
@@ -1837,37 +1837,37 @@ public:
      */
     COMPONENT* LookupCOMPONENT( const std::string& imageName )
     {
-        for( unsigned i = 0; i < components.size(); ++i )
+        for( unsigned i = 0; i < m_components.size(); ++i )
         {
-            if( 0 == components[i].GetImageId().compare( imageName ) )
-                return &components[i];
+            if( 0 == m_components[i].GetImageId().compare( imageName ) )
+                return &m_components[i];
         }
 
         COMPONENT* added = new COMPONENT(this);
-        components.push_back( added );
+        m_components.push_back( added );
         added->SetImageId( imageName );
         return added;
     }
 
     void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) override
     {
-        if( unit )
-            unit->Format( out, nestLevel );
+        if( m_unit )
+            m_unit->Format( out, nestLevel );
 
-        if( flip_style != DSN_T( T_NONE ) )
+        if( m_flip_style != DSN_T( T_NONE ) )
         {
             out->Print( nestLevel, "(place_control (flip_style %s))\n",
-                        GetTokenText( flip_style ) );
+                        GetTokenText( m_flip_style ) );
         }
 
-        for( COMPONENTS::iterator i = components.begin(); i != components.end(); ++i )
+        for( COMPONENTS::iterator i = m_components.begin(); i != m_components.end(); ++i )
             i->Format( out, nestLevel );
     }
 
     UNIT_RES* GetUnits() const override
     {
-        if( unit )
-            return unit;
+        if( m_unit )
+            return m_unit;
 
         return ELEM::GetUnits();
     }
@@ -1875,11 +1875,11 @@ public:
 private:
     friend class SPECCTRA_DB;
 
-    UNIT_RES*   unit;
+    UNIT_RES*   m_unit;
 
-    DSN_T       flip_style;
+    DSN_T       m_flip_style;
 
-    COMPONENTS  components;
+    COMPONENTS  m_components;
 };
 
 
@@ -1899,12 +1899,12 @@ public:
     SHAPE( ELEM* aParent, DSN_T aType = T_shape ) :
         WINDOW( aParent, aType )
     {
-        connect = T_on;
+        m_connect = T_on;
     }
 
     void SetConnect( DSN_T aConnect )
     {
-        connect = aConnect;
+        m_connect = aConnect;
     }
 
     void Format( OUTPUTFORMATTER* out, int nestLevel ) override
@@ -1914,14 +1914,14 @@ public:
         if( shape )
             shape->Format( out, 0 );
 
-        if( connect == T_off )
-            out->Print( 0, "(connect %s)", GetTokenText( connect ) );
+        if( m_connect == T_off )
+            out->Print( 0, "(connect %s)", GetTokenText( m_connect ) );
 
-        if( windows.size() )
+        if( m_windows.size() )
         {
             out->Print( 0, "\n" );
 
-            for( WINDOWS::iterator i=windows.begin();  i!=windows.end();  ++i )
+            for( WINDOWS::iterator i=m_windows.begin();  i!=m_windows.end();  ++i )
                 i->Format( out, nestLevel+1 );
 
             out->Print( nestLevel, ")\n" );
@@ -1935,7 +1935,7 @@ public:
 private:
     friend class SPECCTRA_DB;
 
-    DSN_T           connect;
+    DSN_T           m_connect;
 
     /*  <shape_descriptor >::=
         [<rectangle_descriptor> |
@@ -1946,7 +1946,7 @@ private:
     ELEM*           shape;      // inherited from WINDOW
     */
 
-    WINDOWS         windows;
+    WINDOWS         m_windows;
 };
 
 
@@ -1956,46 +1956,46 @@ public:
     PIN( ELEM* aParent ) :
         ELEM( T_pin, aParent )
     {
-        rotation = 0.0;
-        isRotated = false;
-        kiNetCode = 0;
+        m_rotation = 0.0;
+        m_isRotated = false;
+        m_kiNetCode = 0;
     }
 
     void SetRotation( double aRotation )
     {
-        rotation = aRotation;
-        isRotated = (aRotation != 0.0);
+        m_rotation = aRotation;
+        m_isRotated = (aRotation != 0.0);
     }
 
     void SetVertex( const POINT& aPoint )
     {
-        vertex = aPoint;
-        vertex.FixNegativeZero();
+        m_vertex = aPoint;
+        m_vertex.FixNegativeZero();
     }
 
     void Format( OUTPUTFORMATTER* out, int nestLevel ) override
     {
-        const char* quote = out->GetQuoteChar( padstack_id.c_str() );
-        if( isRotated )
-            out->Print( nestLevel, "(pin %s%s%s (rotate %.6g)", quote, padstack_id.c_str(), quote,
-                        rotation );
+        const char* quote = out->GetQuoteChar( m_padstack_id.c_str() );
+        if( m_isRotated )
+            out->Print( nestLevel, "(pin %s%s%s (rotate %.6g)", quote, m_padstack_id.c_str(), quote,
+                        m_rotation );
         else
-            out->Print( nestLevel, "(pin %s%s%s", quote, padstack_id.c_str(), quote );
+            out->Print( nestLevel, "(pin %s%s%s", quote, m_padstack_id.c_str(), quote );
 
-        quote = out->GetQuoteChar( pin_id.c_str() );
-        out->Print( 0, " %s%s%s %.6g %.6g)\n", quote, pin_id.c_str(), quote, vertex.x, vertex.y );
+        quote = out->GetQuoteChar( m_pin_id.c_str() );
+        out->Print( 0, " %s%s%s %.6g %.6g)\n", quote, m_pin_id.c_str(), quote, m_vertex.x, m_vertex.y );
     }
 
 private:
     friend class SPECCTRA_DB;
 
-    std::string     padstack_id;
-    double          rotation;
-    bool            isRotated;
-    std::string     pin_id;
-    POINT           vertex;
+    std::string     m_padstack_id;
+    double          m_rotation;
+    bool            m_isRotated;
+    std::string     m_pin_id;
+    POINT           m_vertex;
 
-    int             kiNetCode;      ///< KiCad netcode
+    int             m_kiNetCode;      ///< KiCad netcode
 };
 
 typedef boost::ptr_vector<PIN>  PINS;
@@ -2009,18 +2009,18 @@ public:
     IMAGE( ELEM* aParent ) :
         ELEM_HOLDER( T_image, aParent )
     {
-        side = T_both;
-        unit = 0;
-        rules = 0;
-        place_rules = 0;
-        duplicated = 0;
+        m_side = T_both;
+        m_unit = nullptr;
+        m_rules = nullptr;
+        m_place_rules = nullptr;
+        m_duplicated = 0;
     }
 
     ~IMAGE()
     {
-        delete unit;
-        delete rules;
-        delete place_rules;
+        delete m_unit;
+        delete m_rules;
+        delete m_place_rules;
     }
 
     /**
@@ -2030,18 +2030,18 @@ public:
 
     std::string GetImageId()
     {
-        if( duplicated )
+        if( m_duplicated )
         {
             char    buf[32];
 
-            std::string ret = image_id;
+            std::string ret = m_image_id;
             ret += "::";
-            sprintf( buf, "%d", duplicated );
+            sprintf( buf, "%d", m_duplicated );
             ret += buf;
             return ret;
         }
 
-        return image_id;
+        return m_image_id;
     }
 
     void Format( OUTPUTFORMATTER* out, int nestLevel ) override
@@ -2060,34 +2060,34 @@ public:
     // this is here for makeHash()
     void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) override
     {
-        if( side != T_both )
-            out->Print( 0, " (side %s)", GetTokenText( side ) );
+        if( m_side != T_both )
+            out->Print( 0, " (side %s)", GetTokenText( m_side ) );
 
         out->Print( 0, "\n");
 
-        if( unit )
-            unit->Format( out, nestLevel );
+        if( m_unit )
+            m_unit->Format( out, nestLevel );
 
         // format the kids, which in this class are the shapes
         ELEM_HOLDER::FormatContents( out, nestLevel );
 
-        for( PINS::iterator i=pins.begin();  i!=pins.end();  ++i )
+        for( PINS::iterator i=m_pins.begin();  i!=m_pins.end();  ++i )
             i->Format( out, nestLevel );
 
-        if( rules )
-            rules->Format( out, nestLevel );
+        if( m_rules )
+            m_rules->Format( out, nestLevel );
 
-        if( place_rules )
-            place_rules->Format( out, nestLevel );
+        if( m_place_rules )
+            m_place_rules->Format( out, nestLevel );
 
-        for( KEEPOUTS::iterator i=keepouts.begin();  i!=keepouts.end();  ++i )
+        for( KEEPOUTS::iterator i=m_keepouts.begin();  i!=m_keepouts.end();  ++i )
             i->Format( out, nestLevel );
     }
 
     UNIT_RES* GetUnits() const override
     {
-        if( unit )
-            return unit;
+        if( m_unit )
+            return m_unit;
 
         return ELEM::GetUnits();
     }
@@ -2096,25 +2096,25 @@ private:
     friend class SPECCTRA_DB;
     friend class LIBRARY;
 
-    std::string     hash;       ///< a hash string used by Compare(), not Format()ed/exported.
+    std::string     m_hash;       ///< a hash string used by Compare(), not Format()ed/exported.
 
-    std::string     image_id;
-    DSN_T           side;
-    UNIT_RES*       unit;
+    std::string     m_image_id;
+    DSN_T           m_side;
+    UNIT_RES*       m_unit;
 
     /*  The grammar spec says only one outline is supported, but I am seeing
         *.dsn examples with multiple outlines.  So the outlines will go into
         the kids list.
     */
 
-    PINS            pins;
+    PINS            m_pins;
 
-    RULE*           rules;
-    RULE*           place_rules;
+    RULE*           m_rules;
+    RULE*           m_place_rules;
 
-    KEEPOUTS        keepouts;
+    KEEPOUTS        m_keepouts;
 
-    int             duplicated;     ///< no. times this image_id is duplicated
+    int             m_duplicated;     ///< no. times this image_id is duplicated
 };
 
 typedef boost::ptr_vector<IMAGE>    IMAGES;
@@ -2134,10 +2134,10 @@ public:
     PADSTACK() :
         ELEM_HOLDER( T_padstack, nullptr )
     {
-        m_unit = 0;
+        m_unit = nullptr;
         m_rotate = T_on;
         m_absolute = T_off;
-        m_rules = 0;
+        m_rules = nullptr;
         m_attach = T_off;
     }
 
@@ -2260,19 +2260,19 @@ public:
     LIBRARY( ELEM* aParent, DSN_T aType = T_library ) :
         ELEM( aType, aParent )
     {
-        unit = 0;
+        m_unit = nullptr;
 //        via_start_index = -1;       // 0 or greater means there is at least one via
     }
 
     ~LIBRARY()
     {
-        delete unit;
+        delete m_unit;
     }
 
     void AddPadstack( PADSTACK* aPadstack )
     {
         aPadstack->SetParent( this );
-        padstacks.push_back( aPadstack );
+        m_padstacks.push_back( aPadstack );
     }
 
 /*
@@ -2295,9 +2295,9 @@ public:
     {
         unsigned i;
 
-        for( i=0;  i<images.size();  ++i )
+        for( i=0;  i<m_images.size();  ++i )
         {
-            if( 0 == IMAGE::Compare( aImage, &images[i] ) )
+            if( 0 == IMAGE::Compare( aImage, &m_images[i] ) )
                 return (int) i;
         }
 
@@ -2305,10 +2305,10 @@ public:
         // name for it.
         int dups = 1;
 
-        for( i=0;  i<images.size();  ++i )
+        for( i=0;  i<m_images.size();  ++i )
         {
-            if( 0 == aImage->image_id.compare( images[i].image_id ) )
-                aImage->duplicated = dups++;
+            if( 0 == aImage->m_image_id.compare( m_images[i].m_image_id ) )
+                aImage->m_duplicated = dups++;
         }
 
         return -1;
@@ -2321,7 +2321,7 @@ public:
     void AppendIMAGE( IMAGE* aImage )
     {
         aImage->SetParent( this );
-        images.push_back( aImage );
+        m_images.push_back( aImage );
     }
 
     /**
@@ -2340,7 +2340,7 @@ public:
             return aImage;
         }
 
-        return &images[ndx];
+        return &m_images[ndx];
     }
 
     /**
@@ -2350,9 +2350,9 @@ public:
      */
     int FindVia( PADSTACK* aVia )
     {
-        for( unsigned i = 0; i < vias.size(); ++i )
+        for( unsigned i = 0; i < m_vias.size(); ++i )
         {
-            if( 0 == PADSTACK::Compare( aVia, &vias[i] ) )
+            if( 0 == PADSTACK::Compare( aVia, &m_vias[i] ) )
                 return int( i );
         }
 
@@ -2365,7 +2365,7 @@ public:
     void AppendVia( PADSTACK* aVia )
     {
         aVia->SetParent( this );
-        vias.push_back( aVia );
+        m_vias.push_back( aVia );
     }
 
 
@@ -2375,7 +2375,7 @@ public:
     void AppendPADSTACK( PADSTACK* aPadstack )
     {
         aPadstack->SetParent( this );
-        padstacks.push_back( aPadstack );
+        m_padstacks.push_back( aPadstack );
     }
 
     /**
@@ -2394,7 +2394,7 @@ public:
             return aVia;
         }
 
-        return &vias[ndx];
+        return &m_vias[ndx];
     }
 
     /**
@@ -2404,9 +2404,9 @@ public:
      */
     PADSTACK* FindPADSTACK( const std::string& aPadstackId )
     {
-        for( unsigned i = 0; i < padstacks.size(); ++i )
+        for( unsigned i = 0; i < m_padstacks.size(); ++i )
         {
-            PADSTACK* ps = &padstacks[i];
+            PADSTACK* ps = &m_padstacks[i];
 
             if( ps->GetPadstackId().compare( aPadstackId ) == 0 )
                 return ps;
@@ -2417,23 +2417,23 @@ public:
 
     void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) override
     {
-        if( unit )
-            unit->Format( out, nestLevel );
+        if( m_unit )
+            m_unit->Format( out, nestLevel );
 
-        for( IMAGES::iterator i = images.begin(); i != images.end(); ++i )
+        for( IMAGES::iterator i = m_images.begin(); i != m_images.end(); ++i )
             i->Format( out, nestLevel );
 
-        for( PADSTACKS::iterator i = padstacks.begin(); i != padstacks.end(); ++i )
+        for( PADSTACKS::iterator i = m_padstacks.begin(); i != m_padstacks.end(); ++i )
             i->Format( out, nestLevel );
 
-        for( PADSTACKS::iterator i = vias.begin(); i != vias.end(); ++i )
+        for( PADSTACKS::iterator i = m_vias.begin(); i != m_vias.end(); ++i )
             i->Format( out, nestLevel );
     }
 
     UNIT_RES* GetUnits() const override
     {
-        if( unit )
-            return unit;
+        if( m_unit )
+            return m_unit;
 
         return ELEM::GetUnits();
     }
@@ -2441,11 +2441,11 @@ public:
 private:
     friend class SPECCTRA_DB;
 
-    UNIT_RES*       unit;
-    IMAGES          images;
+    UNIT_RES*       m_unit;
+    IMAGES          m_images;
 
-    PADSTACKS       padstacks;      ///< all except vias, which are in 'vias'
-    PADSTACKS       vias;
+    PADSTACKS       m_padstacks;      ///< all except vias, which are in 'vias'
+    PADSTACKS       m_vias;
 };
 
 
@@ -2491,46 +2491,46 @@ public:
     FROMTO( ELEM* aParent ) :
         ELEM( T_fromto, aParent )
     {
-        rules = 0;
-        fromto_type  = DSN_T( T_NONE );
+        m_rules = nullptr;
+        m_fromto_type  = DSN_T( T_NONE );
     }
     ~FROMTO()
     {
-        delete rules;
+        delete m_rules;
     }
 
     void Format( OUTPUTFORMATTER* out, int nestLevel ) override
     {
         // no quoting on these two, the lexer preserved the quotes on input
         out->Print( nestLevel, "(%s %s %s ",
-                 Name(), fromText.c_str(), toText.c_str() );
+                 Name(), m_fromText.c_str(), m_toText.c_str() );
 
-        if( fromto_type != DSN_T( T_NONE ) )
-            out->Print( 0, "(type %s)", GetTokenText( fromto_type ) );
+        if( m_fromto_type != DSN_T( T_NONE ) )
+            out->Print( 0, "(type %s)", GetTokenText( m_fromto_type ) );
 
-        if( net_id.size() )
+        if( m_net_id.size() )
         {
-            const char* quote = out->GetQuoteChar( net_id.c_str() );
-            out->Print( 0, "(net %s%s%s)",  quote, net_id.c_str(), quote );
+            const char* quote = out->GetQuoteChar( m_net_id.c_str() );
+            out->Print( 0, "(net %s%s%s)",  quote, m_net_id.c_str(), quote );
         }
 
         bool singleLine = true;
 
-        if( rules || layer_rules.size() )
+        if( m_rules || m_layer_rules.size() )
         {
             out->Print( 0, "\n" );
             singleLine = false;
         }
 
-        if( rules )
-            rules->Format( out, nestLevel+1 );
+        if( m_rules )
+            m_rules->Format( out, nestLevel+1 );
 
         /*
         if( circuit.size() )
             out->Print( nestLevel, "%s\n", circuit.c_str() );
         */
 
-        for( LAYER_RULES::iterator i = layer_rules.begin(); i != layer_rules.end(); ++i )
+        for( LAYER_RULES::iterator i = m_layer_rules.begin(); i != m_layer_rules.end(); ++i )
             i->Format( out, nestLevel+1 );
 
         out->Print( singleLine ? 0 : nestLevel, ")" );
@@ -2542,14 +2542,14 @@ public:
 private:
     friend class SPECCTRA_DB;
 
-    std::string     fromText;
-    std::string     toText;
+    std::string     m_fromText;
+    std::string     m_toText;
 
-    DSN_T           fromto_type;
-    std::string     net_id;
-    RULE*           rules;
-//    std::string     circuit;
-    LAYER_RULES     layer_rules;
+    DSN_T           m_fromto_type;
+    std::string     m_net_id;
+    RULE*           m_rules;
+//    std::string     m_circuit;
+    LAYER_RULES     m_layer_rules;
 };
 
 typedef boost::ptr_vector<FROMTO>       FROMTOS;
@@ -2570,7 +2570,7 @@ public:
     {
         out->Print( nestLevel, "(%s", Name() );
 
-        for( STRINGS::iterator i = placement_ids.begin(); i != placement_ids.end(); ++i )
+        for( STRINGS::iterator i = m_placement_ids.begin(); i != m_placement_ids.end(); ++i )
         {
             const char* quote = out->GetQuoteChar( i->c_str() );
             out->Print( 0, " %s%s%s", quote, i->c_str(), quote );
@@ -2585,7 +2585,7 @@ public:
 private:
     friend class SPECCTRA_DB;
 
-    STRINGS         placement_ids;
+    STRINGS         m_placement_ids;
 };
 
 typedef boost::ptr_vector<COMP_ORDER>   COMP_ORDERS;
@@ -2599,28 +2599,28 @@ public:
     NET( ELEM* aParent ) :
         ELEM( T_net, aParent )
     {
-        unassigned = false;
-        net_number = T_NONE;
-        pins_type = T_pins;
+        m_unassigned = false;
+        m_net_number = T_NONE;
+        m_pins_type = T_pins;
 
-        type = T_NONE;
-        supply = T_NONE;
+        m_type = T_NONE;
+        m_supply = T_NONE;
 
-        rules = 0;
-        comp_order = 0;
+        m_rules = nullptr;
+        m_comp_order = nullptr;
     }
 
     ~NET()
     {
-        delete rules;
-        delete comp_order;
+        delete m_rules;
+        delete m_comp_order;
     }
 
     int FindPIN_REF( const std::string& aComponent )
     {
-        for( unsigned i = 0; i < pins.size(); ++i )
+        for( unsigned i = 0; i < m_pins.size(); ++i )
         {
-            if( aComponent.compare( pins[i].component_id ) == 0 )
+            if( aComponent.compare( m_pins[i].component_id ) == 0 )
                 return int(i);
         }
 
@@ -2629,31 +2629,31 @@ public:
 
     void Format( OUTPUTFORMATTER* out, int nestLevel ) override
     {
-        const char* quote = out->GetQuoteChar( net_id.c_str() );
+        const char* quote = out->GetQuoteChar( m_net_id.c_str() );
         const char* space = " ";
 
-        out->Print( nestLevel, "(%s %s%s%s", Name(), quote, net_id.c_str(), quote );
+        out->Print( nestLevel, "(%s %s%s%s", Name(), quote, m_net_id.c_str(), quote );
 
-        if( unassigned )
+        if( m_unassigned )
         {
             out->Print( 0, "%s(unassigned)", space );
             space = "";         // only needed one space
         }
 
-        if( net_number != T_NONE )
+        if( m_net_number != T_NONE )
         {
-            out->Print( 0, "%s(net_number %d)", space, net_number );
+            out->Print( 0, "%s(net_number %d)", space, m_net_number );
             // space = "";
         }
 
         out->Print( 0, "\n" );
 
-        if( pins.size() )
+        if( m_pins.size() )
         {
             const int RIGHTMARGIN = 80;
-            int perLine = out->Print( nestLevel+1, "(%s", GetTokenText( pins_type ) );
+            int perLine = out->Print( nestLevel+1, "(%s", GetTokenText( m_pins_type ) );
 
-            for( PIN_REFS::iterator i = pins.begin(); i != pins.end(); ++i )
+            for( PIN_REFS::iterator i = m_pins.begin(); i != m_pins.end(); ++i )
             {
                 if( perLine > RIGHTMARGIN )
                 {
@@ -2671,19 +2671,19 @@ public:
             out->Print( 0, ")\n" );
         }
 
-        if( comp_order )
-            comp_order->Format( out, nestLevel+1 );
+        if( m_comp_order )
+            m_comp_order->Format( out, nestLevel+1 );
 
-        if( type != T_NONE )
-            out->Print( nestLevel+1, "(type %s)\n", GetTokenText( type ) );
+        if( m_type != T_NONE )
+            out->Print( nestLevel+1, "(type %s)\n", GetTokenText( m_type ) );
 
-        if( rules )
-            rules->Format( out, nestLevel+1 );
+        if( m_rules )
+            m_rules->Format( out, nestLevel+1 );
 
-        for( LAYER_RULES::iterator i = layer_rules.begin(); i != layer_rules.end(); ++i )
+        for( LAYER_RULES::iterator i = m_layer_rules.begin(); i != m_layer_rules.end(); ++i )
             i->Format( out, nestLevel+1 );
 
-        for( FROMTOS::iterator i = fromtos.begin(); i != fromtos.end(); ++i )
+        for( FROMTOS::iterator i = m_fromtos.begin(); i != m_fromtos.end(); ++i )
             i->Format( out, nestLevel+1 );
 
         out->Print( nestLevel, ")\n" );
@@ -2692,30 +2692,30 @@ public:
 private:
     friend class SPECCTRA_DB;
 
-    std::string     net_id;
-    bool            unassigned;
-    int             net_number;
+    std::string     m_net_id;
+    bool            m_unassigned;
+    int             m_net_number;
 
-    DSN_T           pins_type;      ///< T_pins | T_order, type of field 'pins' below
-    PIN_REFS        pins;
+    DSN_T           m_pins_type;      ///< T_pins | T_order, type of field 'pins' below
+    PIN_REFS        m_pins;
 
-    PIN_REFS        expose;
-    PIN_REFS        noexpose;
-    PIN_REFS        source;
-    PIN_REFS        load;
-    PIN_REFS        terminator;
+    PIN_REFS        m_expose;
+    PIN_REFS        m_noexpose;
+    PIN_REFS        m_source;
+    PIN_REFS        m_load;
+    PIN_REFS        m_terminator;
 
-    DSN_T           type;           ///< T_fix | T_normal
+    DSN_T           m_type;           ///< T_fix | T_normal
 
-    DSN_T           supply;         ///< T_power | T_ground
+    DSN_T           m_supply;         ///< T_power | T_ground
 
-    RULE*           rules;
+    RULE*           m_rules;
 
-    LAYER_RULES     layer_rules;
+    LAYER_RULES     m_layer_rules;
 
-    FROMTOS         fromtos;
+    FROMTOS         m_fromtos;
 
-    COMP_ORDER*     comp_order;
+    COMP_ORDER*     m_comp_order;
 };
 
 typedef boost::ptr_vector<NET>  NETS;
@@ -2731,19 +2731,19 @@ public:
 
     void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) override
     {
-        for( FROMTOS::iterator i = fromtos.begin(); i != fromtos.end(); ++i )
+        for( FROMTOS::iterator i = m_fromtos.begin(); i != m_fromtos.end(); ++i )
             i->Format( out, nestLevel );
 
-        for( COMP_ORDERS::iterator i = comp_orders.begin(); i != comp_orders.end(); ++i )
+        for( COMP_ORDERS::iterator i = m_comp_orders.begin(); i != m_comp_orders.end(); ++i )
             i->Format( out, nestLevel );
     }
 
 private:
     friend class SPECCTRA_DB;
 
-    FROMTOS         fromtos;
+    FROMTOS         m_fromtos;
 
-    COMP_ORDERS     comp_orders;
+    COMP_ORDERS     m_comp_orders;
 };
 
 
@@ -2756,25 +2756,25 @@ public:
     CLASS( ELEM* aParent ) :
         ELEM( T_class, aParent )
     {
-        rules = 0;
-        topology = 0;
+        m_rules = nullptr;
+        m_topology = nullptr;
     }
 
     ~CLASS()
     {
-        delete rules;
-        delete topology;
+        delete m_rules;
+        delete m_topology;
     }
 
     void Format( OUTPUTFORMATTER* out, int nestLevel ) override
     {
-        const char* quote = out->GetQuoteChar( class_id.c_str() );
+        const char* quote = out->GetQuoteChar( m_class_id.c_str() );
 
-        int perLine = out->Print( nestLevel, "(%s %s%s%s", Name(), quote, class_id.c_str(), quote );
+        int perLine = out->Print( nestLevel, "(%s %s%s%s", Name(), quote, m_class_id.c_str(), quote );
 
         const int RIGHTMARGIN = 72;
 
-        for( STRINGS::iterator i=net_ids.begin();  i!=net_ids.end();  ++i )
+        for( STRINGS::iterator i=m_net_ids.begin();  i!=m_net_ids.end();  ++i )
         {
             const char* space = " ";
 
@@ -2791,30 +2791,30 @@ public:
 
         bool newLine = false;
 
-        if( circuit.size() || rules || layer_rules.size() || topology )
+        if( m_circuit.size() || m_rules || m_layer_rules.size() || m_topology )
         {
             out->Print( 0, "\n" );
             newLine = true;
         }
 
-        if( circuit.size() )
+        if( m_circuit.size() )
         {
             out->Print( nestLevel+1, "(circuit\n" );
 
-            for( STRINGS::iterator i = circuit.begin(); i != circuit.end(); ++i )
+            for( STRINGS::iterator i = m_circuit.begin(); i != m_circuit.end(); ++i )
                 out->Print( nestLevel + 2, "%s\n", i->c_str() );
 
             out->Print( nestLevel+1, ")\n" );
         }
 
-        if( rules )
-            rules->Format( out, nestLevel+1 );
+        if( m_rules )
+            m_rules->Format( out, nestLevel+1 );
 
-        for( LAYER_RULES::iterator i = layer_rules.begin(); i != layer_rules.end(); ++i )
+        for( LAYER_RULES::iterator i = m_layer_rules.begin(); i != m_layer_rules.end(); ++i )
             i->Format( out, nestLevel + 1 );
 
-        if( topology )
-            topology->Format( out, nestLevel+1 );
+        if( m_topology )
+            m_topology->Format( out, nestLevel+1 );
 
         out->Print( newLine ? nestLevel : 0, ")\n" );
     }
@@ -2822,18 +2822,18 @@ public:
 private:
     friend class SPECCTRA_DB;
 
-    std::string     class_id;
+    std::string     m_class_id;
 
-    STRINGS         net_ids;
+    STRINGS         m_net_ids;
 
     /// circuit descriptor list
-    STRINGS         circuit;
+    STRINGS         m_circuit;
 
-    RULE*           rules;
+    RULE*           m_rules;
 
-    LAYER_RULES     layer_rules;
+    LAYER_RULES     m_layer_rules;
 
-    TOPOLOGY*       topology;
+    TOPOLOGY*       m_topology;
 };
 
 typedef boost::ptr_vector<CLASS> CLASSLIST;
@@ -2849,18 +2849,18 @@ public:
 
     void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) override
     {
-        for( NETS::iterator i = nets.begin(); i != nets.end(); ++i )
+        for( NETS::iterator i = m_nets.begin(); i != m_nets.end(); ++i )
             i->Format( out, nestLevel );
 
-        for( CLASSLIST::iterator i = classes.begin(); i != classes.end(); ++i )
+        for( CLASSLIST::iterator i = m_classes.begin(); i != m_classes.end(); ++i )
             i->Format( out, nestLevel );
     }
 
 private:
     friend class SPECCTRA_DB;
 
-    NETS        nets;
-    CLASSLIST   classes;
+    NETS        m_nets;
+    CLASSLIST   m_classes;
 };
 
 
@@ -2883,25 +2883,25 @@ public:
     WIRE( ELEM* aParent ) :
         ELEM( T_wire, aParent )
     {
-        shape = 0;
-        connect = 0;
+        m_shape = nullptr;
+        m_connect = nullptr;
 
-        turret = -1;
-        wire_type = T_NONE;
-        attr = T_NONE;
-        supply = false;
+        m_turret = -1;
+        m_wire_type = T_NONE;
+        m_attr = T_NONE;
+        m_supply = false;
     }
 
     ~WIRE()
     {
-        delete shape;
-        delete connect;
+        delete m_shape;
+        delete m_connect;
     }
 
     void SetShape( ELEM* aShape )
     {
-        delete shape;
-        shape = aShape;
+        delete m_shape;
+        m_shape = aShape;
 
         if( aShape )
         {
@@ -2917,42 +2917,42 @@ public:
     {
         out->Print( nestLevel, "(%s ", Name() );
 
-        if( shape )
-            shape->Format( out, 0 );
+        if( m_shape )
+            m_shape->Format( out, 0 );
 
-        if( net_id.size() )
+        if( m_net_id.size() )
         {
-            const char* quote = out->GetQuoteChar( net_id.c_str() );
-            out->Print( 0, "(net %s%s%s)", quote, net_id.c_str(), quote );
+            const char* quote = out->GetQuoteChar( m_net_id.c_str() );
+            out->Print( 0, "(net %s%s%s)", quote, m_net_id.c_str(), quote );
         }
 
-        if( turret >= 0 )
-            out->Print( 0, "(turrent %d)", turret );
+        if( m_turret >= 0 )
+            out->Print( 0, "(turrent %d)", m_turret );
 
-        if( wire_type != T_NONE )
-            out->Print( 0, "(type %s)", GetTokenText( wire_type ) );
+        if( m_wire_type != T_NONE )
+            out->Print( 0, "(type %s)", GetTokenText( m_wire_type ) );
 
-        if( attr != T_NONE )
-            out->Print( 0, "(attr %s)", GetTokenText( attr ) );
+        if( m_attr != T_NONE )
+            out->Print( 0, "(attr %s)", GetTokenText( m_attr ) );
 
-        if( shield.size() )
+        if( m_shield.size() )
         {
-            const char* quote = out->GetQuoteChar( shield.c_str() );
-            out->Print( 0, "(shield %s%s%s)", quote, shield.c_str(), quote );
+            const char* quote = out->GetQuoteChar( m_shield.c_str() );
+            out->Print( 0, "(shield %s%s%s)", quote, m_shield.c_str(), quote );
         }
 
-        if( windows.size() )
+        if( m_windows.size() )
         {
             out->Print( 0, "\n" );
 
-            for( WINDOWS::iterator i = windows.begin(); i != windows.end(); ++i )
+            for( WINDOWS::iterator i = m_windows.begin(); i != m_windows.end(); ++i )
                 i->Format( out, nestLevel + 1 );
         }
 
-        if( connect )
-            connect->Format( out, 0 );
+        if( m_connect )
+            m_connect->Format( out, 0 );
 
-        if( supply )
+        if( m_supply )
             out->Print( 0, "(supply)" );
 
         out->Print( 0, ")\n" );
@@ -2968,16 +2968,16 @@ private:
         <path_descriptor> |
         <qarc_descriptor> ]
     */
-    ELEM*           shape;
+    ELEM*           m_shape;
 
-    std::string     net_id;
-    int             turret;
-    DSN_T           wire_type;
-    DSN_T           attr;
-    std::string     shield;
-    WINDOWS         windows;
-    CONNECT*        connect;
-    bool            supply;
+    std::string     m_net_id;
+    int             m_turret;
+    DSN_T           m_wire_type;
+    DSN_T           m_attr;
+    std::string     m_shield;
+    WINDOWS         m_windows;
+    CONNECT*        m_connect;
+    bool            m_supply;
 };
 
 typedef boost::ptr_vector<WIRE>     WIRES;
@@ -2992,26 +2992,26 @@ public:
     WIRE_VIA( ELEM* aParent ) :
         ELEM( T_via, aParent )
     {
-        via_number = -1;
-        via_type = T_NONE;
-        attr = T_NONE;
-        supply = false;
+        m_via_number = -1;
+        m_via_type = T_NONE;
+        m_attr = T_NONE;
+        m_supply = false;
     }
 
     const std::string& GetPadstackId()
     {
-        return padstack_id;
+        return m_padstack_id;
     }
 
     void Format( OUTPUTFORMATTER* out, int nestLevel ) override
     {
-        const char* quote = out->GetQuoteChar( padstack_id.c_str() );
+        const char* quote = out->GetQuoteChar( m_padstack_id.c_str() );
 
         const int RIGHTMARGIN = 80;
-        int perLine = out->Print( nestLevel, "(%s %s%s%s", Name(), quote, padstack_id.c_str(),
+        int perLine = out->Print( nestLevel, "(%s %s%s%s", Name(), quote, m_padstack_id.c_str(),
                                   quote );
 
-        for( POINTS::iterator i = vertexes.begin(); i != vertexes.end(); ++i )
+        for( POINTS::iterator i = m_vertexes.begin(); i != m_vertexes.end(); ++i )
         {
             if( perLine > RIGHTMARGIN )
             {
@@ -3026,10 +3026,10 @@ public:
             perLine += out->Print( 0, "%.6g %.6g", i->x, i->y );
         }
 
-        if( net_id.size() || via_number!=-1 || via_type!=T_NONE || attr!=T_NONE || supply)
+        if( m_net_id.size() || m_via_number!=-1 || m_via_type!=T_NONE || m_attr!=T_NONE || m_supply)
             out->Print( 0, " " );
 
-        if( net_id.size() )
+        if( m_net_id.size() )
         {
             if( perLine > RIGHTMARGIN )
             {
@@ -3037,11 +3037,11 @@ public:
                 perLine = out->Print( nestLevel+1, "%s", "" );
             }
 
-            quote = out->GetQuoteChar( net_id.c_str() );
-            perLine += out->Print( 0, "(net %s%s%s)", quote, net_id.c_str(), quote );
+            quote = out->GetQuoteChar( m_net_id.c_str() );
+            perLine += out->Print( 0, "(net %s%s%s)", quote, m_net_id.c_str(), quote );
         }
 
-        if( via_number != -1 )
+        if( m_via_number != -1 )
         {
             if( perLine > RIGHTMARGIN )
             {
@@ -3049,10 +3049,10 @@ public:
                 perLine = out->Print( nestLevel+1, "%s", "" );
             }
 
-            perLine += out->Print( 0, "(via_number %d)", via_number );
+            perLine += out->Print( 0, "(via_number %d)", m_via_number );
         }
 
-        if( via_type != T_NONE )
+        if( m_via_type != T_NONE )
         {
             if( perLine > RIGHTMARGIN )
             {
@@ -3060,10 +3060,10 @@ public:
                 perLine = out->Print( nestLevel+1, "%s", "" );
             }
 
-            perLine += out->Print( 0, "(type %s)", GetTokenText( via_type ) );
+            perLine += out->Print( 0, "(type %s)", GetTokenText( m_via_type ) );
         }
 
-        if( attr != T_NONE )
+        if( m_attr != T_NONE )
         {
             if( perLine > RIGHTMARGIN )
             {
@@ -3071,19 +3071,19 @@ public:
                 perLine = out->Print( nestLevel+1, "%s", "" );
             }
 
-            if( attr == T_virtual_pin )
+            if( m_attr == T_virtual_pin )
             {
-                quote = out->GetQuoteChar( virtual_pin_name.c_str() );
+                quote = out->GetQuoteChar( m_virtual_pin_name.c_str() );
                 perLine += out->Print( 0, "(attr virtual_pin %s%s%s)", quote,
-                                       virtual_pin_name.c_str(), quote );
+                                       m_virtual_pin_name.c_str(), quote );
             }
             else
             {
-                perLine += out->Print( 0, "(attr %s)", GetTokenText( attr ) );
+                perLine += out->Print( 0, "(attr %s)", GetTokenText( m_attr ) );
             }
         }
 
-        if( supply )
+        if( m_supply )
         {
             if( perLine > RIGHTMARGIN )
             {
@@ -3094,12 +3094,12 @@ public:
             perLine += out->Print( 0, "(supply)" );
         }
 
-        if( contact_layers.size() )
+        if( m_contact_layers.size() )
         {
             out->Print( 0, "\n" );
             out->Print( nestLevel+1, "(contact\n" );
 
-            for( STRINGS::iterator i = contact_layers.begin(); i != contact_layers.end(); ++i )
+            for( STRINGS::iterator i = m_contact_layers.begin(); i != m_contact_layers.end(); ++i )
             {
                 quote = out->GetQuoteChar( i->c_str() );
                 out->Print( nestLevel+2, "%s%s%s\n", quote, i->c_str(), quote );
@@ -3116,15 +3116,15 @@ public:
 private:
     friend class SPECCTRA_DB;
 
-    std::string     padstack_id;
-    POINTS          vertexes;
-    std::string     net_id;
-    int             via_number;
-    DSN_T           via_type;
-    DSN_T           attr;
-    std::string     virtual_pin_name;
-    STRINGS         contact_layers;
-    bool            supply;
+    std::string     m_padstack_id;
+    POINTS          m_vertexes;
+    std::string     m_net_id;
+    int             m_via_number;
+    DSN_T           m_via_type;
+    DSN_T           m_attr;
+    std::string     m_virtual_pin_name;
+    STRINGS         m_contact_layers;
+    bool            m_supply;
 };
 
 typedef boost::ptr_vector<WIRE_VIA>      WIRE_VIAS;
@@ -3139,7 +3139,7 @@ public:
     WIRING( ELEM* aParent ) :
         ELEM( T_wiring, aParent )
     {
-        unit = 0;
+        unit = nullptr;
     }
 
     ~WIRING()
@@ -3179,71 +3179,71 @@ private:
 class PCB : public ELEM
 {
 public:
-    PCB( ELEM* aParent = 0 ) :
+    PCB( ELEM* aParent = nullptr ) :
         ELEM( T_pcb, aParent )
     {
-        parser = 0;
-        resolution = 0;
-        unit = 0;
-        structure = 0;
-        placement = 0;
-        library = 0;
-        network = 0;
-        wiring = 0;
+        m_parser = nullptr;
+        m_resolution = nullptr;
+        m_unit = nullptr;
+        m_structure = nullptr;
+        m_placement = nullptr;
+        m_library = nullptr;
+        m_network = nullptr;
+        m_wiring = nullptr;
     }
 
     ~PCB()
     {
-        delete parser;
-        delete resolution;
-        delete unit;
-        delete structure;
-        delete placement;
-        delete library;
-        delete network;
-        delete wiring;
+        delete m_parser;
+        delete m_resolution;
+        delete m_unit;
+        delete m_structure;
+        delete m_placement;
+        delete m_library;
+        delete m_network;
+        delete m_wiring;
     }
 
     void Format( OUTPUTFORMATTER* out, int nestLevel ) override
     {
-        const char* quote = out->GetQuoteChar( pcbname.c_str() );
+        const char* quote = out->GetQuoteChar( m_pcbname.c_str() );
 
-        out->Print( nestLevel, "(%s %s%s%s\n", Name(), quote, pcbname.c_str(), quote );
+        out->Print( nestLevel, "(%s %s%s%s\n", Name(), quote, m_pcbname.c_str(), quote );
 
-        if( parser )
-            parser->Format( out, nestLevel+1 );
+        if( m_parser )
+            m_parser->Format( out, nestLevel+1 );
 
-        if( resolution )
-            resolution->Format( out, nestLevel+1 );
+        if( m_resolution )
+            m_resolution->Format( out, nestLevel+1 );
 
-        if( unit )
-            unit->Format( out, nestLevel+1 );
+        if( m_unit )
+            m_unit->Format( out, nestLevel+1 );
 
-        if( structure )
-            structure->Format( out, nestLevel+1 );
+        if( m_structure )
+            m_structure->Format( out, nestLevel+1 );
 
-        if( placement )
-            placement->Format( out, nestLevel+1 );
+        if( m_placement )
+            m_placement->Format( out, nestLevel+1 );
 
-        if( library )
-            library->Format( out, nestLevel+1 );
+        if( m_library )
+            m_library->Format( out, nestLevel+1 );
 
-        if( network )
-            network->Format( out, nestLevel+1 );
+        if( m_network )
+            m_network->Format( out, nestLevel+1 );
 
-        if( wiring )
-            wiring->Format( out, nestLevel+1 );
+        if( m_wiring )
+            m_wiring->Format( out, nestLevel+1 );
 
         out->Print( nestLevel, ")\n" );
     }
 
     UNIT_RES*  GetUnits() const override
     {
-        if( unit )
-            return unit;
+        if( m_unit )
+            return m_unit;
 
-        if( resolution )
-            return resolution->GetUnits();
+        if( m_resolution )
+            return m_resolution->GetUnits();
 
         return ELEM::GetUnits();
     }
@@ -3251,15 +3251,15 @@ public:
 private:
     friend class SPECCTRA_DB;
 
-    std::string     pcbname;
-    PARSER*         parser;
-    UNIT_RES*       resolution;
-    UNIT_RES*       unit;
-    STRUCTURE*      structure;
-    PLACEMENT*      placement;
-    LIBRARY*        library;
-    NETWORK*        network;
-    WIRING*         wiring;
+    std::string     m_pcbname;
+    PARSER*         m_parser;
+    UNIT_RES*       m_resolution;
+    UNIT_RES*       m_unit;
+    STRUCTURE*      m_structure;
+    PLACEMENT*      m_placement;
+    LIBRARY*        m_library;
+    NETWORK*        m_network;
+    WIRING*         m_wiring;
 };
 
 
@@ -3403,7 +3403,7 @@ public:
     NET_OUT( ELEM* aParent ) :
         ELEM( T_net_out, aParent )
     {
-        rules = 0;
+        rules = nullptr;
         net_number = -1;
     }
 
@@ -3457,10 +3457,10 @@ public:
     ROUTE( ELEM* aParent ) :
         ELEM( T_route, aParent )
     {
-        resolution = 0;
-        parser = 0;
-        structure_out = 0;
-        library = 0;
+        resolution = nullptr;
+        parser = nullptr;
+        structure_out = nullptr;
+        library = nullptr;
     }
 
     ~ROUTE()
@@ -3526,7 +3526,7 @@ private:
  */
 struct PIN_PAIR
 {
-    PIN_PAIR( ELEM* aParent = 0 ) :
+    PIN_PAIR( ELEM* aParent = nullptr ) :
         was( aParent ),
         is( aParent )
     {
@@ -3575,14 +3575,14 @@ private:
 class SESSION : public ELEM
 {
 public:
-    SESSION( ELEM* aParent = 0 ) :
+    SESSION( ELEM* aParent = nullptr ) :
         ELEM( T_session, aParent )
     {
-        history = 0;
-        structure = 0;
-        placement = 0;
-        was_is = 0;
-        route = 0;
+        history = nullptr;
+        structure = nullptr;
+        placement = nullptr;
+        was_is = nullptr;
+        route = nullptr;
     }
 
     ~SESSION()
@@ -3655,8 +3655,8 @@ public:
         // we don't own it:
         wxASSERT( !iOwnReaders );
 
-        m_pcb   = 0;
-        m_session = 0;
+        m_pcb   = nullptr;
+        m_session = nullptr;
         m_quote_char += '"';
         m_footprintsAreFlipped = false;
 
@@ -3915,7 +3915,7 @@ private:
      *
      * @param aBoard The owner of the PAD's footprint.
      * @param aPad The PAD which needs to be made into a PADSTACK.
-     * @return The created padstack, including its padstack_id.
+     * @return The created padstack, including its m_padstack_id.
      */
     PADSTACK* makePADSTACK( BOARD* aBoard, PAD* aPad );
 
