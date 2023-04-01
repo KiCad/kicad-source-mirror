@@ -146,7 +146,6 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
         m_lastSelectedBomPreset( nullptr ), m_parent( parent ),
         m_schSettings( parent->Schematic().Settings() )
 {
-    wxSize defaultDlgSize = ConvertDialogToPixels( wxSize( 600, 300 ) );
     int    nameColWidthMargin = 44;
 
     // Get all symbols from the list of schematic sheets
@@ -257,7 +256,18 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
     SetupStandardButtons();
 
     finishDialogSettings();
-    SetSize( defaultDlgSize );
+
+    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
+    {
+        EESCHEMA_SETTINGS::PANEL_FIELD_EDITOR& panelCfg = cfg->m_FieldEditorPanel;
+
+        wxSize dlgSize( panelCfg.width > 0 ? panelCfg.width : horizPixelsFromDU( 600 ),
+                        panelCfg.height > 0 ? panelCfg.height : vertPixelsFromDU( 300 ) );
+        SetSize( dlgSize );
+
+        m_nbPages->SetSelection( cfg->m_FieldEditorPanel.page );
+    }
+
     Center();
 
     // Connect Events
@@ -274,6 +284,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::SetupColumnProperties()
 {
+    EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     wxSize defaultDlgSize = ConvertDialogToPixels( wxSize( 600, 300 ) );
 
     // Restore column sorting order and widths
@@ -320,34 +331,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupColumnProperties()
             m_grid->SetColFormatCustom( col, wxGRID_VALUE_STRING );
         }
 
-        // Columns are hidden by setting their width to 0 so if we resize them they will
-        // become unhidden.
-        if( m_grid->IsColShown( col ) )
-        {
-            EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-            std::string key( m_dataModel->GetColFieldName( col ).ToUTF8() );
-
-            if( cfg->m_FieldEditorPanel.field_widths.count( key ) )
-            {
-                int width = cfg->m_FieldEditorPanel.field_widths.at( key );
-                m_grid->SetColSize( col, width );
-            }
-            else
-            {
-                int textWidth = m_dataModel->GetDataWidth( col ) + COLUMN_MARGIN;
-                int maxWidth = defaultDlgSize.x / 3;
-
-                if( col == m_grid->GetNumberCols() - 1 )
-                    m_grid->SetColSize( col, Clamp( 50, textWidth, maxWidth ) );
-                else
-                    m_grid->SetColSize( col, Clamp( 100, textWidth, maxWidth ) );
-            }
-        }
-
-        if( m_schSettings.m_BomSettings.sortField == m_dataModel->GetColFieldName( col ) )
+        if( col == m_dataModel->GetSortCol() )
         {
             sortCol = col;
-            sortAscending = m_schSettings.m_BomSettings.sortAsc;
+            sortAscending = m_dataModel->GetSortAsc();
         }
     }
 
@@ -363,9 +350,31 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupColumnProperties()
         m_dataModel->SetShowColumn( col, show );
 
         if( show )
+        {
             m_grid->ShowCol( col );
+
+            std::string key( m_dataModel->GetColFieldName( col ).ToUTF8() );
+
+            if( cfg && cfg->m_FieldEditorPanel.field_widths.count( key )
+                && ( cfg->m_FieldEditorPanel.field_widths.at( key ) > 0 ) )
+            {
+                m_grid->SetColSize( col, cfg->m_FieldEditorPanel.field_widths.at( key ) );
+            }
+            else
+            {
+                int textWidth = m_dataModel->GetDataWidth( col ) + COLUMN_MARGIN;
+                int maxWidth = defaultDlgSize.x / 3;
+
+                if( col == m_grid->GetNumberCols() - 1 )
+                    m_grid->SetColSize( col, Clamp( 50, textWidth, maxWidth ) );
+                else
+                    m_grid->SetColSize( col, Clamp( 100, textWidth, maxWidth ) );
+            }
+        }
         else
+        {
             m_grid->HideCol( col );
+        }
     }
 
     m_dataModel->SetSorting( sortCol, sortAscending );
@@ -375,6 +384,24 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupColumnProperties()
 
 DIALOG_SYMBOL_FIELDS_TABLE::~DIALOG_SYMBOL_FIELDS_TABLE()
 {
+    savePresetsToSchematic();
+
+    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
+    {
+        cfg->m_FieldEditorPanel.width = GetSize().x;
+        cfg->m_FieldEditorPanel.height = GetSize().y;
+        cfg->m_FieldEditorPanel.page = m_nbPages->GetSelection();
+
+        for( int i = 0; i < m_grid->GetNumberCols(); i++ )
+        {
+            if( m_grid->IsColShown( i ) )
+            {
+                std::string fieldName( m_dataModel->GetColFieldName( i ).ToUTF8() );
+                cfg->m_FieldEditorPanel.field_widths[fieldName] = m_grid->GetColSize( i );
+            }
+        }
+    }
+
     // Disconnect Events
     m_grid->Disconnect( wxEVT_GRID_COL_SORT,
                         wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnColSort ), nullptr,
@@ -565,10 +592,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnAddField( wxCommandEvent& event )
         }
     }
 
-    std::string key( fieldName.ToUTF8() );
-
-    m_parent->Schematic().Settings().m_BomSettings.fieldsOrdered.emplace_back(
-            ( BOM_FIELD ){ .name = key, .label = key, .show = true, .groupBy = false } );
     AddField( fieldName, fieldName, true, false, true );
 
     wxGridTableMessage msg( m_dataModel, wxGRIDTABLE_NOTIFY_COLS_APPENDED, 1 );
@@ -692,7 +715,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRenameField( wxCommandEvent& event )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnFilterText( wxCommandEvent& aEvent )
 {
-    m_schSettings.m_BomSettings.filterString = m_filter->GetValue();
     m_dataModel->SetFilter( m_filter->GetValue() );
     m_dataModel->RebuildRows();
     m_grid->ForceRefresh();
@@ -788,7 +810,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnColumnItemToggled( wxDataViewEvent& event )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnGroupSymbolsToggled( wxCommandEvent& event )
 {
-    m_schSettings.m_BomSettings.groupSymbols = m_groupSymbolsBox->GetValue();
     m_dataModel->SetGroupingEnabled( m_groupSymbolsBox->GetValue() );
     m_dataModel->RebuildRows();
     m_grid->ForceRefresh();
@@ -799,8 +820,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnGroupSymbolsToggled( wxCommandEvent& event )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnExcludeDNPToggled( wxCommandEvent& event )
 {
-    m_schSettings.m_BomSettings.excludeDNP = m_checkExludeDNP->GetValue();
-    m_dataModel->SetExcludeDNP( m_checkExludeDNP->GetValue() );
+    m_dataModel->SetExcludeDNP( m_checkExcludeDNP->GetValue() );
     m_dataModel->RebuildRows();
     m_grid->ForceRefresh();
 
@@ -827,10 +847,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnColSort( wxGridEvent& aEvent )
         ascending = true;
     }
 
-    // We only support sorting on one column at this time
-    m_schSettings.m_BomSettings.sortField = m_dataModel->GetColFieldName( sortCol );
-    m_schSettings.m_BomSettings.sortAsc = ascending;
-
     m_dataModel->SetSorting( sortCol, ascending );
     m_dataModel->RebuildRows();
     m_grid->ForceRefresh();
@@ -849,8 +865,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnColMove( wxGridEvent& aEvent )
                 int newPos = m_grid->GetColPos( origPos );
 
                 m_dataModel->MoveColumn( origPos, newPos );
-
-                m_schSettings.m_BomSettings.fieldsOrdered = m_dataModel->GetFieldsOrdered();
 
                 // "Unmove" the column since we've moved the column internally
                 m_grid->ResetColPos();
@@ -1012,8 +1026,21 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnPreviewRefresh( wxCommandEvent& event )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::PreviewRefresh()
 {
-    BOM_FMT_PRESET& current = m_parent->Schematic().Settings().m_BomFmtSettings;
+    m_dataModel->SetIncludeExcludedFromBOM( false );
+    m_dataModel->RebuildRows();
 
+    m_textOutput->SetValue( m_dataModel->Export( GetCurrentBomFmtSettings() ) );
+
+    m_dataModel->SetIncludeExcludedFromBOM( true );
+    m_dataModel->RebuildRows();
+}
+
+
+BOM_FMT_PRESET DIALOG_SYMBOL_FIELDS_TABLE::GetCurrentBomFmtSettings()
+{
+    BOM_FMT_PRESET current;
+
+    current.name = m_cbBomFmtPresets->GetStringSelection();
     current.fieldDelimiter = m_textFieldDelimiter->GetValue();
     current.stringDelimiter = m_textStringDelimiter->GetValue();
     current.refDelimiter = m_textRefDelimiter->GetValue();
@@ -1021,13 +1048,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::PreviewRefresh()
     current.keepTabs = m_checkKeepTabs->GetValue();
     current.keepLineBreaks = m_checkKeepLineBreaks->GetValue();
 
-    m_dataModel->SetIncludeExcludedFromBOM( false );
-    m_dataModel->RebuildRows();
-
-    m_textOutput->SetValue( m_dataModel->Export( current ) );
-
-    m_dataModel->SetIncludeExcludedFromBOM( true );
-    m_dataModel->RebuildRows();
+    return current;
 }
 
 
@@ -1269,11 +1290,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::rebuildBomPresetsWidget()
 
 void DIALOG_SYMBOL_FIELDS_TABLE::syncBomPresetSelection()
 {
-    // We need to check for matching an existing preset all the places we also
-    // need to update the settings, so do it here.
-    m_schSettings.m_BomSettings.fieldsOrdered = m_dataModel->GetFieldsOrdered();
-
-    BOM_PRESET& current = m_parent->Schematic().Settings().m_BomSettings;
+    BOM_PRESET current = m_dataModel->GetBomSettings();
 
     auto it = std::find_if( m_bomPresets.begin(), m_bomPresets.end(),
                             [&]( const std::pair<const wxString, BOM_PRESET>& aPair )
@@ -1284,7 +1301,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::syncBomPresetSelection()
                                 if( !( preset.sortField == current.sortField
                                        && preset.sortAsc == current.sortAsc
                                        && preset.filterString == current.filterString
-                                       && preset.groupSymbols == current.groupSymbols ) )
+                                       && preset.groupSymbols == current.groupSymbols
+                                       && preset.excludeDNP == current.excludeDNP ) )
                                     return false;
 
                                 // Only compare shown or grouped fields
@@ -1394,7 +1412,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged( wxCommandEvent& aEvent )
 
         if( !exists )
         {
-            m_bomPresets[name] = m_schSettings.m_BomSettings;
+            m_bomPresets[name] = m_dataModel->GetBomSettings();
             m_bomPresets[name].readOnly = false;
             m_bomPresets[name].name = name;
         }
@@ -1408,7 +1426,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged( wxCommandEvent& aEvent )
         }
         else
         {
-            *preset = m_schSettings.m_BomSettings;
+            *preset = m_dataModel->GetBomSettings();
             preset->name = name;
 
             index = m_cbBomPresets->FindString( name );
@@ -1418,7 +1436,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged( wxCommandEvent& aEvent )
         m_cbBomPresets->SetSelection( index );
         m_bomPresetMRU.Insert( name, 0 );
 
-        savePresetsToSchematic();
         return;
     }
     else if( index == count - 1 )
@@ -1459,7 +1476,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged( wxCommandEvent& aEvent )
         }
 
         resetSelection();
-        savePresetsToSchematic();
         return;
     }
 
@@ -1485,8 +1501,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged( wxCommandEvent& aEvent )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
 {
-    m_schSettings.m_BomSettings = aPreset;
-
     // Basically, we apply the BOM preset to the data model and then
     // update our UI to reflect resulting the data model state, not the preset.
     m_dataModel->ApplyBomPreset( aPreset );
@@ -1527,7 +1541,12 @@ void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
         EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
         std::string        fieldNameStr( fieldName.ToUTF8() );
 
-        if( cfg->m_FieldEditorPanel.field_widths.count( fieldNameStr ) )
+        // Set column labels
+        const wxString& label = m_dataModel->GetColLabelValue( col );
+        m_fieldsCtrl->SetTextValue( label, i, LABEL_COLUMN );
+        m_grid->SetColLabelValue( col, label );
+
+        if( cfg && cfg->m_FieldEditorPanel.field_widths.count( fieldNameStr ) )
             m_grid->SetColMinimalWidth( col,
                                         cfg->m_FieldEditorPanel.field_widths.at( fieldNameStr ) );
 
@@ -1551,7 +1570,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
     m_grid->SetSortingColumn( m_dataModel->GetSortCol(), m_dataModel->GetSortAsc() );
     m_groupSymbolsBox->SetValue( m_dataModel->GetGroupingEnabled() );
     m_filter->ChangeValue( m_dataModel->GetFilter() );
-    m_checkExludeDNP->SetValue( m_dataModel->GetExcludeDNP() );
+    m_checkExcludeDNP->SetValue( m_dataModel->GetExcludeDNP() );
 
     SetupColumnProperties();
 
@@ -1673,7 +1692,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::rebuildBomFmtPresetsWidget()
 
 void DIALOG_SYMBOL_FIELDS_TABLE::syncBomFmtPresetSelection()
 {
-    BOM_FMT_PRESET& current = m_parent->Schematic().Settings().m_BomFmtSettings;
+    BOM_FMT_PRESET current = GetCurrentBomFmtSettings();
 
     auto it = std::find_if( m_bomFmtPresets.begin(), m_bomFmtPresets.end(),
                             [&]( const std::pair<const wxString, BOM_FMT_PRESET>& aPair )
@@ -1780,7 +1799,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomFmtPresetChanged( wxCommandEvent& aEvent )
 
         if( !exists )
         {
-            m_bomFmtPresets[name] = m_schSettings.m_BomFmtSettings;
+            m_bomFmtPresets[name] = GetCurrentBomFmtSettings();
             m_bomFmtPresets[name].readOnly = false;
             m_bomFmtPresets[name].name = name;
         }
@@ -1794,7 +1813,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomFmtPresetChanged( wxCommandEvent& aEvent )
         }
         else
         {
-            *preset = m_schSettings.m_BomFmtSettings;
+            *preset = GetCurrentBomFmtSettings();
             preset->name = name;
 
             index = m_cbBomFmtPresets->FindString( name );
@@ -1804,7 +1823,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomFmtPresetChanged( wxCommandEvent& aEvent )
         m_cbBomFmtPresets->SetSelection( index );
         m_bomFmtPresetMRU.Insert( name, 0 );
 
-        savePresetsToSchematic();
         return;
     }
     else if( index == count - 1 )
@@ -1845,7 +1863,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomFmtPresetChanged( wxCommandEvent& aEvent )
         }
 
         resetSelection();
-        savePresetsToSchematic();
         return;
     }
 
@@ -1872,8 +1889,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomFmtPresetChanged( wxCommandEvent& aEvent )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomFmtPreset( const BOM_FMT_PRESET& aPreset )
 {
-    m_schSettings.m_BomFmtSettings = aPreset;
-
     m_textFieldDelimiter->ChangeValue( aPreset.fieldDelimiter );
     m_textStringDelimiter->ChangeValue( aPreset.stringDelimiter );
     m_textRefDelimiter->ChangeValue( aPreset.refDelimiter );
@@ -1897,6 +1912,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::savePresetsToSchematic()
     }
 
     m_schSettings.m_BomPresets = presets;
+    m_schSettings.m_BomSettings = m_dataModel->GetBomSettings();
 
     // Save our BOM Format presets
     std::vector<BOM_FMT_PRESET> fmts;
@@ -1908,5 +1924,5 @@ void DIALOG_SYMBOL_FIELDS_TABLE::savePresetsToSchematic()
     }
 
     m_schSettings.m_BomFmtPresets = fmts;
-    m_parent->OnModify();
+    m_schSettings.m_BomFmtSettings = GetCurrentBomFmtSettings();
 }

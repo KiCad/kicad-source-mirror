@@ -183,6 +183,7 @@ public:
     }
 
     void     ApplyBomPreset( const BOM_PRESET& preset );
+    BOM_PRESET GetBomSettings();
     wxString Export( const BOM_FMT_PRESET& settings );
 
 private:

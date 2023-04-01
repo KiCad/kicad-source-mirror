@@ -92,6 +92,9 @@ private:
     void                    ApplyBomPreset( const wxString& aPresetName );
     void                    ApplyBomPreset( const BOM_PRESET& aPreset );
 
+    /// Returns a formatting configuration corresponding to the values in the UI controls
+    /// of the dialog.
+    BOM_FMT_PRESET              GetCurrentBomFmtSettings();
     std::vector<BOM_FMT_PRESET> GetUserBomFmtPresets() const;
     void                        SetUserBomFmtPresets( std::vector<BOM_FMT_PRESET>& aPresetList );
     void                        ApplyBomFmtPreset( const wxString& aPresetName );

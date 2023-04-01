@@ -50,7 +50,7 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		wxNotebook* m_notebook1;
+		wxNotebook* m_nbPages;
 		wxPanel* m_panelEdit;
 		wxSplitterWindow* m_splitterMainWindow;
 		wxPanel* m_leftPanel;
@@ -63,7 +63,7 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		wxPanel* m_rightPanel;
 		wxSearchCtrl* m_filter;
 		BITMAP_BUTTON* m_separator1;
-		wxCheckBox* m_checkExludeDNP;
+		wxCheckBox* m_checkExcludeDNP;
 		BITMAP_BUTTON* m_separator2;
 		wxCheckBox* m_groupSymbolsBox;
 		BITMAP_BUTTON* m_separator3;

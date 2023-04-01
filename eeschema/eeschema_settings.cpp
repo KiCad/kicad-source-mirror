@@ -356,6 +356,15 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "page_settings.export_comment9",
             &m_PageSettings.export_comment9, false ) );
 
+    m_params.emplace_back( new PARAM_MAP<int>( "field_editor.field_widths",
+                                               &m_FieldEditorPanel.field_widths, {} ) );
+
+    m_params.emplace_back( new PARAM<int>( "field_editor.width", &m_FieldEditorPanel.width, 0 ) );
+
+    m_params.emplace_back( new PARAM<int>( "field_editor.height", &m_FieldEditorPanel.height, 0 ) );
+
+    m_params.emplace_back( new PARAM<int>( "field_editor.page", &m_FieldEditorPanel.page, 0 ) );
+
     m_params.emplace_back( new PARAM<bool>( "plot.background_color",
             &m_PlotPanel.background_color, false ) );
 

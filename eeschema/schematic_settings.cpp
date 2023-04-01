@@ -26,14 +26,11 @@
 #include <macros.h>
 #include <pgm_base.h>
 #include <schematic_settings.h>
-#include <settings/json_settings.h>
 #include <settings/json_settings_internals.h>
 #include <settings/parameters.h>
 #include <settings/settings_manager.h>
 #include <settings/bom_settings.h>
 #include <sim/spice_settings.h>
-#include <i18n_utility.h>
-#include <wx/string.h>
 
 
 const int schSettingsSchemaVersion = 1;
@@ -199,7 +196,7 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
     m_params.emplace_back(
             new PARAM<BOM_FMT_PRESET>( "bom_fmt_settings", &m_BomFmtSettings, BOM_FMT_PRESET::CSV() ) );
     m_params.emplace_back(
-            new PARAM_LIST<BOM_FMT_PRESET>( "bom_fmt_settings", &m_BomFmtPresets, {} ) );
+            new PARAM_LIST<BOM_FMT_PRESET>( "bom_fmt_presets", &m_BomFmtPresets, {} ) );
 
     m_params.emplace_back( new PARAM<wxString>( "page_layout_descr_file",
             &m_SchDrawingSheetFileName, "" ) );

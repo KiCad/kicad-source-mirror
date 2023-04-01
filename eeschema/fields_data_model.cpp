@@ -643,6 +643,22 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyBomPreset( const BOM_PRESET& aPreset )
     RebuildRows();
 }
 
+
+BOM_PRESET FIELDS_EDITOR_GRID_DATA_MODEL::GetBomSettings()
+{
+    BOM_PRESET current;
+    current.readOnly = false;
+    current.fieldsOrdered = GetFieldsOrdered();
+    current.sortField = GetColFieldName( GetSortCol() );
+    current.sortAsc = GetSortAsc();
+    current.filterString = GetFilter();
+    current.groupSymbols = GetGroupingEnabled();
+    current.excludeDNP = GetExcludeDNP();
+
+    return current;
+}
+
+
 wxString FIELDS_EDITOR_GRID_DATA_MODEL::Export( const BOM_FMT_PRESET& settings )
 {
     wxString out;

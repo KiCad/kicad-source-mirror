@@ -20,16 +20,10 @@
 #ifndef KICAD_SCHEMATIC_SETTINGS_H
 #define KICAD_SCHEMATIC_SETTINGS_H
 
-#include <set>
-
 #include <default_values.h>
 #include <settings/nested_settings.h>
-#include <settings/parameters.h>
 #include <settings/bom_settings.h>
 #include <template_fieldnames.h>
-#include <nlohmann/json.hpp>
-
-#include <utility>
 
 class NGSPICE_SIMULATOR_SETTINGS;
 
