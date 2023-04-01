@@ -694,7 +694,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
 
             image->pins.push_back( pin );
 
-            pin->padstack_id = padstack->padstack_id;
+            pin->padstack_id = padstack->m_padstack_id;
 
             EDA_ANGLE angle = pad->GetOrientation() - aFootprint->GetOrientation();
             pin->SetRotation( angle.Normalize().AsDegrees() );
@@ -1697,7 +1697,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
             m_pcb->wiring->wire_vias.push_back( dsnVia );
 
-            dsnVia->padstack_id = registered->padstack_id;
+            dsnVia->padstack_id = registered->m_padstack_id;
             dsnVia->vertexes.push_back( mapPt( via->GetPosition() ) );
 
             NETINFO_ITEM* net = aBoard->FindNet( netcode );
@@ -1723,7 +1723,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         VIA* vias = m_pcb->structure->via;
 
         for( unsigned viaNdx = 0; viaNdx < m_pcb->library->vias.size(); ++viaNdx )
-            vias->AppendVia( m_pcb->library->vias[viaNdx].padstack_id.c_str() );
+            vias->AppendVia( m_pcb->library->vias[viaNdx].m_padstack_id.c_str() );
     }
 
     //-----<output NETCLASSs>----------------------------------------------------

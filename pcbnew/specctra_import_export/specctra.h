@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2007-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2007-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2134,22 +2134,22 @@ public:
     PADSTACK() :
         ELEM_HOLDER( T_padstack, nullptr )
     {
-        unit = 0;
-        rotate = T_on;
-        absolute = T_off;
-        rules = 0;
-        attach = T_off;
+        m_unit = 0;
+        m_rotate = T_on;
+        m_absolute = T_off;
+        m_rules = 0;
+        m_attach = T_off;
     }
 
     ~PADSTACK()
     {
-        delete unit;
-        delete rules;
+        delete m_unit;
+        delete m_rules;
     }
 
     const std::string& GetPadstackId()
     {
-        return padstack_id;
+        return m_padstack_id;
     }
 
     /**
@@ -2159,14 +2159,14 @@ public:
 
     void SetPadstackId( const char* aPadstackId )
     {
-        padstack_id = aPadstackId;
+        m_padstack_id = aPadstackId;
     }
 
     void Format( OUTPUTFORMATTER* out, int nestLevel ) override
     {
-        const char* quote = out->GetQuoteChar( padstack_id.c_str() );
+        const char* quote = out->GetQuoteChar( m_padstack_id.c_str() );
 
-        out->Print( nestLevel, "(%s %s%s%s\n", Name(), quote, padstack_id.c_str(), quote );
+        out->Print( nestLevel, "(%s %s%s%s\n", Name(), quote, m_padstack_id.c_str(), quote );
 
         FormatContents( out, nestLevel+1 );
 
@@ -2176,8 +2176,8 @@ public:
     // this factored out for use by Compare()
     void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) override
     {
-        if( unit )
-            unit->Format( out, nestLevel );
+        if( m_unit )
+            m_unit->Format( out, nestLevel );
 
         // format the kids, which in this class are the shapes
         ELEM_HOLDER::FormatContents( out, nestLevel );
@@ -2186,34 +2186,34 @@ public:
 
         // spec for <attach_descriptor> says default is on, so
         // print the off condition to override this.
-        if( attach == T_off )
+        if( m_attach == T_off )
         {
             out->Print( 0, "(attach off)" );
         }
-        else if( attach == T_on )
+        else if( m_attach == T_on )
         {
-            const char* quote = out->GetQuoteChar( via_id.c_str() );
+            const char* quote = out->GetQuoteChar( m_via_id.c_str() );
 
-            out->Print( 0, "(attach on (use_via %s%s%s))", quote, via_id.c_str(), quote );
+            out->Print( 0, "(attach on (use_via %s%s%s))", quote, m_via_id.c_str(), quote );
         }
 
-        if( rotate == T_off )   // print the non-default
-            out->Print( 0, "(rotate %s)", GetTokenText( rotate ) );
+        if( m_rotate == T_off )   // print the non-default
+            out->Print( 0, "(rotate %s)", GetTokenText( m_rotate ) );
 
-        if( absolute == T_on )  // print the non-default
-            out->Print( 0, "(absolute %s)", GetTokenText( absolute ) );
+        if( m_absolute == T_on )  // print the non-default
+            out->Print( 0, "(absolute %s)", GetTokenText( m_absolute ) );
 
         out->Print( 0, "\n" );
 
-        if( rules )
-            rules->Format( out, nestLevel );
+        if( m_rules )
+            m_rules->Format( out, nestLevel );
     }
 
 
     UNIT_RES* GetUnits() const override
     {
-        if( unit )
-            return unit;
+        if( m_unit )
+            return m_unit;
 
         return ELEM::GetUnits();
     }
@@ -2221,19 +2221,19 @@ public:
 private:
     friend class SPECCTRA_DB;
 
-    std::string     hash;       ///< a hash string used by Compare(), not Format()ed/exported.
+    std::string  m_hash;       ///< a hash string used by Compare(), not Format()ed/exported.
 
-    std::string     padstack_id;
-    UNIT_RES*       unit;
+    std::string  m_padstack_id;
+    UNIT_RES*    m_unit;
 
     /* The shapes are stored in the kids list */
 
-    DSN_T           rotate;
-    DSN_T           absolute;
-    DSN_T           attach;
-    std::string     via_id;
+    DSN_T        m_rotate;
+    DSN_T        m_absolute;
+    DSN_T        m_attach;
+    std::string  m_via_id;
 
-    RULE*           rules;
+    RULE*        m_rules;
 };
 
 typedef boost::ptr_vector<PADSTACK> PADSTACKS;
