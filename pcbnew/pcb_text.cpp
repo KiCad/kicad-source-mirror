@@ -462,6 +462,9 @@ void PCB_TEXT::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLa
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
     KIFONT::FONT*              font = getDrawFont();
     int                        penWidth = GetEffectiveTextPenWidth();
+    TEXT_ATTRIBUTES            attrs = GetAttributes();
+
+    attrs.m_Angle = GetDrawRotation();
 
     // The polygonal shape of a text can have many basic shapes, so combining these shapes can
     // be very useful to create a final shape with a lot less vertices to speedup calculations.
@@ -472,7 +475,7 @@ void PCB_TEXT::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLa
             // Stroke callback
             [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
             {
-                TransformOvalToPolygon( aBuffer, aPt1, aPt2, penWidth + ( 2 * aClearance ),
+                TransformOvalToPolygon( buffer, aPt1, aPt2, penWidth + ( 2 * aClearance ),
                                         aError, ERROR_INSIDE );
             },
             // Triangulation callback
@@ -484,10 +487,24 @@ void PCB_TEXT::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLa
                     buffer.Append( point.x, point.y );
             } );
 
-    font->Draw( &callback_gal, GetShownText(), GetTextPos(), GetAttributes() );
-
+    font->Draw( &callback_gal, GetShownText(), GetTextPos(), attrs );
     buffer.Simplify( SHAPE_POLY_SET::PM_FAST );
-    aBuffer.Append( buffer );
+
+    if( IsKnockout() )
+    {
+        SHAPE_POLY_SET finalPoly;
+        int            margin = attrs.m_StrokeWidth * 1.5
+                                    + GetKnockoutTextMargin( attrs.m_Size, attrs.m_StrokeWidth );
+
+        TransformBoundingBoxToPolygon( &finalPoly, margin );
+        finalPoly.BooleanSubtract( buffer, SHAPE_POLY_SET::PM_FAST );
+
+        aBuffer.Append( finalPoly );
+    }
+    else
+    {
+        aBuffer.Append( buffer );
+    }
 }
 
 
