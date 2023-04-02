@@ -186,12 +186,17 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( PCB_TRACK* track,
                                                                BOARD_ITEM* other )
 {
     bool           testClearance = !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE );
+    bool           testShorting = !m_drcEngine->IsErrorLimitExceeded( DRCE_SHORTING_ITEMS );
     bool           testHoles = !m_drcEngine->IsErrorLimitExceeded( DRCE_HOLE_CLEARANCE );
     DRC_CONSTRAINT constraint;
     int            clearance = -1;
     int            actual;
     VECTOR2I       pos;
     bool           has_error = false;
+    int            otherNet = 0;
+
+    if( BOARD_CONNECTED_ITEM* connectedItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( other ) )
+        otherNet = connectedItem->GetNetCode();
 
     std::shared_ptr<SHAPE> otherShape = other->GetEffectiveShape( layer );
 
@@ -200,10 +205,10 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( PCB_TRACK* track,
         PAD* pad = static_cast<PAD*>( other );
 
         if( pad->GetAttribute() == PAD_ATTRIB::NPTH && !pad->FlashLayer( layer ) )
-            testClearance = false;
+            testClearance = testShorting = false;
     }
 
-    if( testClearance )
+    if( testClearance || testShorting )
     {
         constraint = m_drcEngine->EvalRules( CLEARANCE_CONSTRAINT, track, other, layer );
         clearance = constraint.GetValue().Min();
@@ -236,7 +241,25 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( PCB_TRACK* track,
                 // Collision occurred as track was entering a pad marked as a net-tie.  We
                 // allow these.
             }
-            else
+            else if( actual == 0 && otherNet && testShorting )
+            {
+                std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
+                wxString msg;
+
+                msg.Printf( _( "(nets %s and %s)" ),
+                            track->GetNetname(),
+                            static_cast<BOARD_CONNECTED_ITEM*>( other )->GetNetname() );
+
+                drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
+                drce->SetItems( track, other );
+
+                reportViolation( drce, pos, layer );
+                has_error = true;
+
+                if( !m_drcEngine->GetReportAllTrackErrors() )
+                    return false;
+            }
+            else if( testClearance )
             {
                 std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
                 wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
@@ -560,14 +583,14 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
             PAD* otherPad = static_cast<PAD*>( other );
 
             if( padGroupIdx >= 0 && padGroupIdx == padToNetTieGroupMap[ otherPad->GetNumber() ] )
-                testClearance = false;
+                testClearance = testShorting = false;
 
             if( pad->SameLogicalPadAs( otherPad ) )
                 testHoles = false;
         }
 
         if( other->Type() == PCB_SHAPE_T && padGroupIdx >= 0 )
-            testClearance = false;
+            testClearance = testShorting = false;
     }
 
     PAD*     otherPad = nullptr;
@@ -580,27 +603,29 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
         otherVia = static_cast<PCB_VIA*>( other );
 
     if( !IsCopperLayer( aLayer ) )
-        testClearance = false;
+        testClearance = testShorting = false;
 
     // A NPTH has no cylinder, but it may still have pads on some layers
     if( pad->GetAttribute() == PAD_ATTRIB::NPTH && !pad->FlashLayer( aLayer ) )
-        testClearance = false;
+        testClearance = testShorting = false;
 
     if( otherPad && otherPad->GetAttribute() == PAD_ATTRIB::NPTH && !otherPad->FlashLayer( aLayer ) )
-        testClearance = false;
+        testClearance = testShorting = false;
 
     // Track clearances are tested in testTrackClearances()
     if( dynamic_cast<PCB_TRACK*>( other) )
-        testClearance = false;
+        testClearance = testShorting = false;
 
     int padNet = pad->GetNetCode();
-    int otherPadNet = otherPad ? otherPad->GetNetCode() : 0;
-    int otherViaNet = otherVia ? otherVia->GetNetCode() : 0;
+    int otherNet = 0;
+
+    if( BOARD_CONNECTED_ITEM* connectedItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( other ) )
+        otherNet = connectedItem->GetNetCode();
 
     // Pads and vias of the same (defined) net get a waiver on clearance and hole tests
-    if( ( otherPadNet && otherPadNet == padNet ) || ( otherViaNet && otherViaNet == padNet ) )
+    if( ( otherPad || otherVia ) && otherNet && otherNet == padNet )
     {
-        testClearance = false;
+        testClearance = testShorting = false;
         testHoles = false;
     }
 
@@ -633,8 +658,8 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
             wxString msg;
 
             msg.Printf( _( "(nets %s and %s)" ),
-                          pad->GetNetname(),
-                          otherPad->GetNetname() );
+                        pad->GetNetname(),
+                        otherPad->GetNetname() );
 
             drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
             drce->SetItems( pad, otherPad );
@@ -645,7 +670,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
         return !m_drcEngine->IsCancelled();
     }
 
-    if( testClearance )
+    if( testClearance || testShorting )
     {
         constraint = m_drcEngine->EvalRules( CLEARANCE_CONSTRAINT, pad, other, aLayer );
         clearance = constraint.GetValue().Min();
@@ -660,7 +685,22 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
                     // Pads connected to pads of a net-tie footprint are allowed to collide
                     // with the net-tie footprint's graphics.
                 }
-                else
+                else if( actual == 0 && otherNet && testShorting )
+                {
+                    std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
+                    wxString msg;
+
+                    msg.Printf( _( "(nets %s and %s)" ),
+                                pad->GetNetname(),
+                                static_cast<BOARD_CONNECTED_ITEM*>( other )->GetNetname() );
+
+                    drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
+                    drce->SetItems( pad, other );
+
+                    reportViolation( drce, pos, aLayer );
+                    testHoles = false;  // No need for multiple violations
+                }
+                else if( testClearance )
                 {
                     std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
                     wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
