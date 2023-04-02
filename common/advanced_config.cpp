@@ -291,7 +291,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_DRCEpsilon                = 0.0005;   // 0.5um is small enough not to materially violate
                                             // any constraints.
     m_SliverWidthTolerance      = 0.08;
-    m_SliverMinimumLength       = 0.0005;
+    m_SliverMinimumLength       = 0.0008;
     m_SliverAngleTolerance      = 20.0;
 
     m_HoleWallThickness         = 0.020;    // IPC-6012 says 15-18um; Cadence says at least
