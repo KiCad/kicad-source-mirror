@@ -17,15 +17,15 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:53-0800\n"
-"PO-Revision-Date: 2023-03-23 21:40+0000\n"
-"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
+"PO-Revision-Date: 2023-04-03 04:35+0000\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v7/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16.2-dev\n"
+"X-Generator: Weblate 4.17-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -4348,7 +4348,7 @@ msgstr "Bittikartta"
 #: eeschema/sch_textbox.cpp:430 pcbnew/fp_textbox.cpp:327
 #: pcbnew/pcb_textbox.cpp:282
 msgid "Text Box"
-msgstr "Tekstilaatikko"
+msgstr "Tekstiruutu"
 
 #: common/eda_item.cpp:334 common/eda_item.cpp:335 common/eda_item.cpp:336
 #: common/eda_item.cpp:337 common/eda_item.cpp:344 common/eda_item.cpp:345
@@ -4704,7 +4704,7 @@ msgstr "Vasen"
 #: eeschema/sch_field.cpp:758 eeschema/sch_field.cpp:767
 #: gerbview/gerber_file_image.cpp:342 gerbview/gerber_file_image.cpp:345
 msgid "Center"
-msgstr "Keskusta"
+msgstr "Keskitetty"
 
 #: common/eda_text.cpp:1017
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:224
@@ -8853,7 +8853,7 @@ msgstr "Tasaa vasemmalle"
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:104
 #: eeschema/dialogs/dialog_text_properties_base.cpp:125
 msgid "Align horizontal center"
-msgstr "Tasaa vaakasuoraan keskelle"
+msgstr "Keskitä vaakasuoraan"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:162
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:127
@@ -8878,7 +8878,7 @@ msgstr "Tasaa ylös"
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:144
 #: eeschema/dialogs/dialog_text_properties_base.cpp:145
 msgid "Align vertical center"
-msgstr "Tasaa pystysuoraan keskelle"
+msgstr "Keskitä pystysuoraan"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:182
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:147
@@ -9609,17 +9609,17 @@ msgstr "Luo symboli tehosymboliksi"
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:82
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:284
 msgid "Exclude from schematic bill of materials"
-msgstr "Jätä kaavamaisesta materiaaliluettelosta"
+msgstr "Jätä pois kytkentäkaavion materiaaliluettelosta"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:85
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:287
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:213
 msgid "Exclude from board"
-msgstr "Sulje pois aluksella"
+msgstr "Jätä pois piirilevyltä"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:103
 msgid "Pin name position offset:"
-msgstr "Nimen nimen siirtymä:"
+msgstr "Nastan nimen siirtymä:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:120
 msgid "Show pin number text"
@@ -9667,7 +9667,7 @@ msgstr "Täytä tyyli"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:110
 msgid "Do not fill"
-msgstr "Älä täytä"
+msgstr "Ei täytetä"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:113
 msgid "Fill with body outline color"
@@ -9947,7 +9947,7 @@ msgstr "Yksityinen Symbolieditorille"
 #: eeschema/dialogs/dialog_text_properties.cpp:60
 #: pcbnew/dialogs/dialog_textbox_properties_base.h:101
 msgid "Text Box Properties"
-msgstr "Tekstilaatikon Ominaisuudet"
+msgstr "Tekstiruudun ominaisuudet"
 
 #: eeschema/dialogs/dialog_line_properties_base.cpp:79
 msgid "Set width to 0 to use schematic's default line width."
@@ -11478,9 +11478,9 @@ msgid ""
 "This is useful for adding symbols for board footprints such as fiducials\n"
 "and logos that you do not want to appear in the bill of materials export"
 msgstr ""
-"Tästä on hyötyä, kun lisätään symboleita levyn jalanjälkiin, kuten "
-"viitekuvia\n"
-"ja logot, joita et halua esiintyä materiaalien vientiluettelossa"
+"Tästä on hyötyä lisätessäsi symboleja jotka kuuluvat piirilevyn jalanjälkiin "
+"kuten viitekuvat\n"
+"ja logot, joiden et halua esiintyvän materiaaliluettelossa"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:214
 msgid ""
@@ -11488,13 +11488,14 @@ msgid ""
 "materials but\n"
 "not required to layout the board such as mechanical fasteners and enclosures"
 msgstr ""
-"Tästä on hyötyä lisättäessä symboleja, jotka viedään vain materiaalilaskuun, "
-"mutta\n"
-"ei vaadita levyn, kuten mekaanisten kiinnikkeiden ja koteloiden, asettamista"
+"Tästä on hyötyä lisättäessä symboleja, jotka viedään vain "
+"materiaaliluetteloon, mutta\n"
+"joita ei tarvita piirilevyn suunnittelussa, kuten mekaaniset kiinnikkeet ja "
+"kotelot"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:218
 msgid "Do not populate"
-msgstr "Älä täytä"
+msgstr "Ei asenneta"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:230
 msgid "Update Symbol from Library..."
@@ -13372,7 +13373,7 @@ msgstr "Graafinen teksti '%s'"
 
 #: eeschema/lib_textbox.cpp:375 eeschema/sch_textbox.cpp:353
 msgid "Graphic Text Box"
-msgstr "Graafinen tekstilaatikko"
+msgstr "Graafinen tekstiruutu"
 
 #: eeschema/lib_textbox.cpp:486 eeschema/sch_label.cpp:872
 #: eeschema/sch_text.cpp:490 eeschema/sch_textbox.cpp:434
@@ -14160,8 +14161,8 @@ msgid ""
 "Altium's harness port (%s) was imported as a text box. Please review the "
 "imported schematic."
 msgstr ""
-"Altiumin johtosarjaportti (%s) tuotiin tekstilaatikkona. Ole hyvä ja "
-"esikatsele tuotu kytkentäkaavio."
+"Altiumin johtosarjaportti (%s) tuotiin tekstiruutuna. Ole hyvä ja esikatsele "
+"tuotu kytkentäkaavio."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2525
 #, c-format
@@ -17226,11 +17227,11 @@ msgstr "Lisää tekstikohde"
 #: eeschema/tools/ee_actions.cpp:248 eeschema/tools/ee_actions.cpp:358
 #: pcbnew/tools/pcb_actions.cpp:133
 msgid "Add Text Box"
-msgstr "Lisää Tekstilaatikko"
+msgstr "Lisää tekstiruutu"
 
 #: eeschema/tools/ee_actions.cpp:248
 msgid "Add a text box item"
-msgstr "Lisää tekstilaatikkokohde"
+msgstr "Lisää tekstiruutukohde"
 
 #: eeschema/tools/ee_actions.cpp:253 eeschema/tools/ee_actions.cpp:834
 msgid "Add Lines"
@@ -17370,7 +17371,7 @@ msgstr "Lisää tekstiä"
 
 #: eeschema/tools/ee_actions.cpp:358
 msgid "Add a text box"
-msgstr "Lisää tekstilaatikko"
+msgstr "Lisää tekstiruutu"
 
 #: eeschema/tools/ee_actions.cpp:363 pagelayout_editor/tools/pl_actions.cpp:49
 msgid "Add Rectangle"
@@ -17605,11 +17606,11 @@ msgstr "Vaihda nykyinen kohde tekstikommentiksi"
 
 #: eeschema/tools/ee_actions.cpp:528
 msgid "Change to Text Box"
-msgstr "Vaihda Tekstilaatikkoon"
+msgstr "Vaihda tekstiruutuun"
 
 #: eeschema/tools/ee_actions.cpp:528
 msgid "Change existing item to a text box"
-msgstr "Muuta olemassa oleva kohde tekstilaatikkoon"
+msgstr "Muuta olemassa oleva kohde tekstiruutuun"
 
 #: eeschema/tools/ee_actions.cpp:533
 msgid "Cleanup Sheet Pins"
@@ -29896,7 +29897,7 @@ msgstr "Vanhemman jalanjäljen kuvaus"
 
 #: pcbnew/dialogs/dialog_textbox_properties.cpp:414
 msgid "Change text box properties"
-msgstr "Muuta tekstilaatikon ominaisuuksia"
+msgstr "Muuta tekstiruudun ominaisuuksia"
 
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:204
 msgid "Border style:"
@@ -34042,7 +34043,7 @@ msgstr "Jalanjälkiteksti '%s' / %s"
 #: pcbnew/fp_textbox.cpp:353
 #, c-format
 msgid "Footprint Text Box of %s"
-msgstr "Jalanjäljen %s Tekstilaatikko"
+msgstr "Jalanjäljen %s tekstiruutu"
 
 #: pcbnew/generate_footprint_info.cpp:43
 msgid "Documentation"
@@ -35183,7 +35184,7 @@ msgstr "PCB Teksti '%s' > %s"
 #: pcbnew/pcb_textbox.cpp:400
 #, c-format
 msgid "PCB Text Box on %s"
-msgstr "PCB Tekstilaatikko '%s'"
+msgstr "Piirilevyn tekstiruutu kerroksella '%s'"
 
 #: pcbnew/pcb_track.cpp:140
 #, c-format
@@ -37998,7 +37999,7 @@ msgstr "Piirrä viivasegmentti"
 
 #: pcbnew/tools/drawing_tool.cpp:416
 msgid "Draw a text box"
-msgstr "Piirrä tekstilaatikko"
+msgstr "Piirrä tekstiruutu"
 
 #: pcbnew/tools/drawing_tool.cpp:416 pcbnew/tools/pcb_actions.cpp:93
 msgid "Draw a rectangle"
@@ -40828,7 +40829,7 @@ msgstr "Muuta ominaisuutta"
 
 #: pcbnew/widgets/search_handlers.cpp:239
 msgid "Textbox"
-msgstr "Tekstilaatikko"
+msgstr "Tekstiruutu"
 
 #: pcbnew/widgets/search_handlers.cpp:317
 msgid "No Net"
