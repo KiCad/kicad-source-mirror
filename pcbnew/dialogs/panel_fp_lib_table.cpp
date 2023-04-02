@@ -655,8 +655,8 @@ void PANEL_FP_LIB_TABLE::appendRowHandler( wxCommandEvent& event )
         int last_row = m_cur_grid->GetNumberRows() - 1;
 
         // wx documentation is wrong, SetGridCursor does not make visible.
-        m_cur_grid->MakeCellVisible( last_row, 0 );
-        m_cur_grid->SetGridCursor( last_row, 1 );
+        m_cur_grid->MakeCellVisible( last_row, COL_ENABLED );
+        m_cur_grid->SetGridCursor( last_row, COL_NICKNAME );
         m_cur_grid->EnableCellEditControl( true );
         m_cur_grid->ShowCellEditControl();
     }

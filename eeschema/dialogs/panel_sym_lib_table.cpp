@@ -559,8 +559,8 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
     if( !filePathsList.IsEmpty() )
     {
-        m_cur_grid->MakeCellVisible( m_cur_grid->GetNumberRows() - 1, 0 );
-        m_cur_grid->SetGridCursor( m_cur_grid->GetNumberRows() - 1, 1 );
+        m_cur_grid->MakeCellVisible( m_cur_grid->GetNumberRows() - 1, COL_ENABLED );
+        m_cur_grid->SetGridCursor( m_cur_grid->GetNumberRows() - 1, COL_NICKNAME );
     }
 }
 
@@ -575,8 +575,8 @@ void PANEL_SYM_LIB_TABLE::appendRowHandler( wxCommandEvent& event )
         int row = m_cur_grid->GetNumberRows() - 1;
 
         // wx documentation is wrong, SetGridCursor does not make visible.
-        m_cur_grid->MakeCellVisible( row, 0 );
-        m_cur_grid->SetGridCursor( row, 1 );
+        m_cur_grid->MakeCellVisible( row, COL_ENABLED );
+        m_cur_grid->SetGridCursor( row, COL_NICKNAME );
         m_cur_grid->EnableCellEditControl( true );
         m_cur_grid->ShowCellEditControl();
     }
