@@ -303,7 +303,7 @@ void PCB_TEXT::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLa
             // Stroke callback
             [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
             {
-                TransformOvalToPolygon( aBuffer, aPt1, aPt2, penWidth + ( 2 * aClearance ),
+                TransformOvalToPolygon( buffer, aPt1, aPt2, penWidth + ( 2 * aClearance ),
                                         aError, ERROR_INSIDE );
             },
             // Triangulation callback
@@ -318,7 +318,23 @@ void PCB_TEXT::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLa
     font->Draw( &callback_gal, GetShownText(), GetTextPos(), GetAttributes() );
 
     buffer.Simplify( SHAPE_POLY_SET::PM_FAST );
-    aBuffer.Append( buffer );
+
+    if( IsKnockout() )
+    {
+        TEXT_ATTRIBUTES attrs = GetAttributes();
+        SHAPE_POLY_SET finalPoly;
+        int            margin = attrs.m_StrokeWidth * 1.5
+                                    + GetKnockoutTextMargin( attrs.m_Size, attrs.m_StrokeWidth );
+
+        TransformBoundingBoxToPolygon( &finalPoly, margin );
+        finalPoly.BooleanSubtract( buffer, SHAPE_POLY_SET::PM_FAST );
+
+        aBuffer.Append( finalPoly );
+    }
+    else
+    {
+        aBuffer.Append( buffer );
+    }
 }
 
 

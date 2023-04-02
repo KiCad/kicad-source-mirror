@@ -493,7 +493,22 @@ void FP_TEXT::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLay
     font->Draw( &callback_gal, GetShownText(), GetTextPos(), attrs );
 
     buffer.Simplify( SHAPE_POLY_SET::PM_FAST );
-    aBuffer.Append( buffer );
+
+    if( IsKnockout() )
+    {
+        SHAPE_POLY_SET finalPoly;
+        int            margin = attrs.m_StrokeWidth * 1.5
+                                    + GetKnockoutTextMargin( attrs.m_Size, attrs.m_StrokeWidth );
+
+        TransformBoundingBoxToPolygon( &finalPoly, margin );
+        finalPoly.BooleanSubtract( buffer, SHAPE_POLY_SET::PM_FAST );
+
+        aBuffer.Append( finalPoly );
+    }
+    else
+    {
+        aBuffer.Append( buffer );
+    }
 }
 
 
