@@ -1692,10 +1692,7 @@ void FOOTPRINT::MoveAnchorPosition( const VECTOR2I& aMoveVector )
 
     // Update the pad local coordinates.
     for( PAD* pad : m_pads )
-    {
-        pad->SetPos0( pad->GetPos0() + moveVector );
-        pad->SetDrawCoord();
-    }
+        pad->Move( moveVector );
 
     // Update the draw element coordinates.
     for( BOARD_ITEM* item : GraphicalItems() )
@@ -1727,10 +1724,7 @@ void FOOTPRINT::SetOrientation( const EDA_ANGLE& aNewAngle )
     m_orient.Normalize180();
 
     for( PAD* pad : m_pads )
-    {
-        pad->SetOrientation( pad->GetOrientation() + angleChange );
-        pad->SetDrawCoord();
-    }
+        pad->Rotate( GetPosition(), angleChange );
 
     for( ZONE* zone : m_zones )
         zone->Rotate( GetPosition(), angleChange );
@@ -2598,7 +2592,7 @@ bool FOOTPRINT::cmp_pads::operator()( const PAD* aFirst, const PAD* aSecond ) co
     if( aFirst->GetNumber() != aSecond->GetNumber() )
         return StrNumCmp( aFirst->GetNumber(), aSecond->GetNumber() ) < 0;
 
-    TEST_PT( aFirst->GetPos0(), aSecond->GetPos0() );
+    TEST_PT( aFirst->GetFPRelativePosition(), aSecond->GetFPRelativePosition() );
     TEST_PT( aFirst->GetSize(), aSecond->GetSize() );
     TEST( aFirst->GetShape(), aSecond->GetShape() );
     TEST( aFirst->GetLayerSet().Seq(), aSecond->GetLayerSet().Seq() );

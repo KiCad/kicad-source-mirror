@@ -1459,8 +1459,7 @@ void LEGACY_PLUGIN::loadPAD( FOOTPRINT* aFootprint )
             pos.x = biuParse( line + SZ( "Po" ), &data );
             pos.y = biuParse( data );
 
-            pad->SetPos0( pos );
-            // pad->SetPosition( pos ); set at function return
+            pad->SetFPRelativePosition( pos );
         }
         else if( TESTLINE( "Le" ) )
         {
@@ -1504,15 +1503,6 @@ void LEGACY_PLUGIN::loadPAD( FOOTPRINT* aFootprint )
         }
         else if( TESTLINE( "$EndPAD" ) )
         {
-            // pad's "Position" is not relative to the footprint's, whereas Pos0 is relative
-            // to the footprint's but is the unrotated coordinate.
-
-            VECTOR2I padpos = pad->GetPos0();
-
-            RotatePoint( padpos, aFootprint->GetOrientation() );
-
-            pad->SetPosition( padpos + aFootprint->GetPosition() );
-
             if( pad->GetSizeX() > 0 && pad->GetSizeY() > 0 )
             {
                 aFootprint->Add( pad.release() );

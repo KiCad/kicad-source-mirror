@@ -2373,8 +2373,6 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
 
     pad->SetPosition( aElem.position );
     pad->SetOrientationDegrees( aElem.direction );
-    pad->SetLocalCoord();
-
     pad->SetSize( aElem.topsize );
 
     if( aElem.holesize == 0 )

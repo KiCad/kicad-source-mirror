@@ -1396,7 +1396,7 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
     if( aPad->IsLocked() )
         m_out->Print( 0, " locked" );
 
-    m_out->Print( 0, " (at %s", formatInternalUnits( aPad->GetPos0() ).c_str() );
+    m_out->Print( 0, " (at %s", formatInternalUnits( aPad->GetFPRelativePosition() ).c_str() );
 
     if( !aPad->GetOrientation().IsZero() )
         m_out->Print( 0, " %s", EDA_UNIT_UTILS::FormatAngle( aPad->GetOrientation() ).c_str() );

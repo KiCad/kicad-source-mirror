@@ -140,13 +140,6 @@ int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
         a->SetPosition( aPos );
         b->SetPosition( bPos );
 
-        // Pads need special handling to keep their offset from their parent
-        if( a->Type() == PCB_PAD_T )
-            static_cast<PAD*>( a )->SetLocalCoord();
-
-        if( b->Type() == PCB_PAD_T )
-            static_cast<PAD*>( b )->SetLocalCoord();
-
         // Handle footprints specially. They can be flipped to the back of the board which
         // requires a special transformation.
         if( a->Type() == PCB_FOOTPRINT_T && b->Type() == PCB_FOOTPRINT_T )

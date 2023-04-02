@@ -126,7 +126,6 @@ PAD& PAD::operator=( const PAD &aOther )
     ImportSettingsFrom( aOther );
     SetPadToDieLength( aOther.GetPadToDieLength() );
     SetPosition( aOther.GetPosition() );
-    SetPos0( aOther.GetPos0() );
     SetNumber( aOther.GetNumber() );
     SetPinType( aOther.GetPinType() );
     SetPinFunction( aOther.GetPinFunction() );
@@ -641,37 +640,6 @@ const BOX2I PAD::GetBoundingBox() const
 }
 
 
-void PAD::SetDrawCoord()
-{
-    FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( m_parent );
-
-    m_pos = m_pos0;
-
-    if( parentFootprint == nullptr )
-        return;
-
-    RotatePoint( &m_pos.x, &m_pos.y, parentFootprint->GetOrientation() );
-    m_pos += parentFootprint->GetPosition();
-
-    SetDirty();
-}
-
-
-void PAD::SetLocalCoord()
-{
-    FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( m_parent );
-
-    if( parentFootprint == nullptr )
-    {
-        m_pos0 = m_pos;
-        return;
-    }
-
-    m_pos0 = m_pos - parentFootprint->GetPosition();
-    RotatePoint( &m_pos0.x, &m_pos0.y, -parentFootprint->GetOrientation() );
-}
-
-
 void PAD::SetAttribute( PAD_ATTRIB aAttribute )
 {
     m_attribute = aAttribute;
@@ -705,14 +673,12 @@ void PAD::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
     if( aFlipLeftRight )
     {
         MIRROR( m_pos.x, aCentre.x );
-        MIRROR( m_pos0.x, 0 );
         MIRROR( m_offset.x, 0 );
         MIRROR( m_deltaSize.x, 0 );
     }
     else
     {
         MIRROR( m_pos.y, aCentre.y );
-        MIRROR( m_pos0.y, 0 );
         MIRROR( m_offset.y, 0 );
         MIRROR( m_deltaSize.y, 0 );
     }
@@ -1203,8 +1169,6 @@ void PAD::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 
     m_orient += aAngle;
     m_orient.Normalize();
-
-    SetLocalCoord();
 
     SetDirty();
 }

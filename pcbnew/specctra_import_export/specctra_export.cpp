@@ -627,7 +627,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
         if( isRoundKeepout( pad ) )
         {
             double  diameter = scale( pad->GetDrillSize().x );
-            POINT   vertex   = mapPt( pad->GetPos0() );
+            POINT   vertex   = mapPt( pad->GetFPRelativePosition() );
 
             diameter += scale( aBoard->GetDesignSettings().m_HoleClearance * 2 );
 
@@ -699,7 +699,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
             EDA_ANGLE angle = pad->GetOrientation() - aFootprint->GetOrientation();
             pin->SetRotation( angle.Normalize().AsDegrees() );
 
-            VECTOR2I pos( pad->GetPos0() );
+            VECTOR2I pos( pad->GetFPRelativePosition() );
 
             pin->SetVertex( mapPt( pos ) );
         }

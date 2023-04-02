@@ -192,15 +192,6 @@ void PCB_PROPERTIES_PANEL::valueChanging( wxPropertyGridEvent& aEvent )
 }
 
 
-void setLocalCoord( BOARD_ITEM* aItem )
-{
-    // TODO: we really need to get rid of this local/draw coords stuff, but for now, it is what it is.
-
-    if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
-        pad->SetLocalCoord();
-}
-
-
 void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
 {
     PCB_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
@@ -217,7 +208,6 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( edaItem );
         changes.Modify( item );
         item->Set( property, newValue );
-        setLocalCoord( item );
     }
 
     changes.Push( _( "Change property" ) );

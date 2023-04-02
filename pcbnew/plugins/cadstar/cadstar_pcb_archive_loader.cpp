@@ -898,7 +898,6 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryCoppers( const SYMDEF_PCB& aComponen
             pad->SetAnchorPadShape( PAD_SHAPE::CIRCLE );
             pad->SetSize( { anchorSize, anchorSize } );
             pad->SetPosition( anchorPos );
-            pad->SetLocalCoord();
 
             SHAPE_POLY_SET shapePolys = getPolySetFromCadstarShape( compCopper.Shape,
                                                                     lineThickness,
@@ -1243,7 +1242,6 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
             int            maxError = m_board->GetDesignSettings().m_MaxError;
 
             pad->SetPosition( { 0, 0 } );
-            pad->SetPos0( { 0, 0 } );
             pad->TransformShapeToPolygon( padOutline, layer, 0, maxError, ERROR_INSIDE );
 
             PCB_SHAPE* padShape = new PCB_SHAPE;
@@ -1296,8 +1294,6 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
 
     RotatePoint( padOffset, padOrientation );
     RotatePoint( drillOffset, padOrientation );
-    pad->SetPos0( getKiCadPoint( aCadstarPad.Position ) - aParent->GetPosition() - padOffset
-                  - drillOffset );
     pad->SetPosition( getKiCadPoint( aCadstarPad.Position ) - padOffset - drillOffset );
     pad->SetOrientation( padOrientation + getAngle( csPadcode.SlotOrientation ) );
 

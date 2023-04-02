@@ -2355,13 +2355,11 @@ void EAGLE_PLUGIN::packageHole( FOOTPRINT* aFootprint, wxXmlNode* aTree, bool aC
 
     if( aCenter )
     {
-        pad->SetPos0( VECTOR2I( 0, 0 ) );
         aFootprint->SetPosition( padpos );
         pad->SetPosition( padpos );
     }
     else
     {
-        pad->SetPos0( padpos );
         pad->SetPosition( padpos + aFootprint->GetPosition() );
     }
 
@@ -2453,10 +2451,7 @@ void EAGLE_PLUGIN::transferPad( const EPAD_COMMON& aEaglePad, PAD* aPad ) const
 {
     aPad->SetNumber( aEaglePad.name );
 
-    // pad's "Position" is not relative to the footprint's,
-    // whereas Pos0 is relative to the footprint's but is the unrotated coordinate.
     VECTOR2I padPos( kicad_x( aEaglePad.x ), kicad_y( aEaglePad.y ) );
-    aPad->SetPos0( padPos );
 
     // Solder mask
     const VECTOR2I& padSize( aPad->GetSize() );

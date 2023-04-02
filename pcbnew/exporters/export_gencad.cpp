@@ -830,13 +830,15 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
             EDA_ANGLE orient = pad->GetOrientation() - footprint->GetOrientation();
             orient.Normalize();
 
+            VECTOR2I padPos = pad->GetFPRelativePosition();
+
             // Bottom side footprints use the flipped padstack
             fprintf( aFile, ( flipBottomPads && footprint->GetFlag() ) ?
                      "PIN \"%s\" PAD%dF %g %g %s %g %s\n" :
                      "PIN \"%s\" PAD%d %g %g %s %g %s\n",
                      TO_UTF8( escapeString( pinname ) ), pad->GetSubRatsnest(),
-                     pad->GetPos0().x / SCALE_FACTOR,
-                     -pad->GetPos0().y / SCALE_FACTOR,
+                     padPos.x / SCALE_FACTOR,
+                     -padPos.y / SCALE_FACTOR,
                      layer, orient.AsDegrees(), mirror );
         }
     }

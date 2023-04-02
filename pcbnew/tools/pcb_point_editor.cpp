@@ -1375,7 +1375,6 @@ void PCB_POINT_EDITOR::updateItem() const
 
                 pad->SetSize( padSize );
                 pad->SetPosition( VECTOR2I( ( left + right ) / 2, ( top + bottom ) / 2 ) );
-                pad->SetLocalCoord();
             }
             break;
         }

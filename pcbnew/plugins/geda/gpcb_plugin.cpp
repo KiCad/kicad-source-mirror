@@ -596,8 +596,6 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
 
             pad->SetSize( VECTOR2I( KiROUND( EuclideanNorm( delta ) ) + width, width ) );
 
-            // Set the relative position before adjusting the absolute position
-            pad->SetPos0( padPos );
             padPos += footprint->GetPosition();
             pad->SetPosition( padPos );
 
@@ -688,8 +686,6 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
 
             pad->SetDrillSize( VECTOR2I( drillSize, drillSize ) );
 
-            // Set the relative position before adjusting the absolute position
-            pad->SetPos0( padPos );
             padPos += footprint->GetPosition();
             pad->SetPosition( padPos );
 

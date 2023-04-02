@@ -2409,8 +2409,6 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         }
                     }
 
-                    newpad->SetLocalCoord();
-
                     if( src->mirror )
                         newpad->SetOrientation( EDA_ANGLE( -src->rotate + pin->rotation, DEGREES_T ) );
                     else

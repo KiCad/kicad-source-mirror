@@ -312,10 +312,7 @@ void PCAD_PAD::AddToFootprint( FOOTPRINT* aFootprint, const EDA_ANGLE& aRotation
 
     if( !aEncapsulatedPad )
     {
-        // pad's "Position" is not relative to the footprint's, whereas Pos0 is relative to
-        // the footprint's but is the unrotated coordinate.
         VECTOR2I padpos( m_PositionX, m_PositionY );
-        pad->SetPos0( padpos );
         RotatePoint( padpos, aFootprint->GetOrientation() );
         pad->SetPosition( padpos + aFootprint->GetPosition() );
     }

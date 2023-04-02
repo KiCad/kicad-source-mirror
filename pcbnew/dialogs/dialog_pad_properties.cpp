@@ -1653,11 +1653,7 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
 
     if( footprint )
     {
-        // compute the pos 0 value, i.e. pad position for footprint with orientation = 0
-        // i.e. relative to footprint origin (footprint position)
-        VECTOR2I pt = m_currentPad->GetPosition() - footprint->GetPosition();
-        RotatePoint( pt, -footprint->GetOrientation() );
-        m_currentPad->SetPos0( pt );
+        m_currentPad->SetFPRelativePosition( m_currentPad->GetPosition() );
         m_currentPad->SetOrientation( m_currentPad->GetOrientation() + footprint->GetOrientation() );
     }
 

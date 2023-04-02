@@ -247,12 +247,6 @@ public:
     void SetY( int y )                          { m_pos.y = y; SetDirty(); }
     void SetX( int x )                          { m_pos.x = x; SetDirty(); }
 
-    void SetPos0( const VECTOR2I& aPos )        { m_pos0 = aPos; }
-    const VECTOR2I& GetPos0() const             { return m_pos0; }
-
-    void SetY0( int y )                         { m_pos0.y = y; }
-    void SetX0( int x )                         { m_pos0.x = x; }
-
     void SetSize( const VECTOR2I& aSize )       { m_size = aSize; SetDirty(); }
     const VECTOR2I& GetSize() const             { return m_size; }
     void SetSizeX( const int aX )               { m_size.x = aX; SetDirty(); }
@@ -676,13 +670,6 @@ public:
      */
     const BOX2I GetBoundingBox() const override;
 
-    /// Set absolute coordinates.
-    void SetDrawCoord();
-
-    //todo: Remove SetLocalCoord along with m_pos
-    /// Set relative coordinates.
-    void SetLocalCoord();
-
     /**
      * Compare two pads and return 0 if they are equal.
      *
@@ -694,7 +681,6 @@ public:
     void Move( const VECTOR2I& aMoveVector ) override
     {
         m_pos += aMoveVector;
-        SetLocalCoord();
         SetDirty();
     }
 
@@ -833,9 +819,6 @@ private:
     VECTOR2I    m_deltaSize;        // Delta for PAD_SHAPE::TRAPEZOID; half the delta squeezes
                                     //   one end and half expands the other.  It is only valid
                                     //   to have a single axis be non-0.
-
-    VECTOR2I    m_pos0;             // Initial Pad position (i.e. pad position relative to the
-                                    //   footprint anchor, orientation 0)
 
     PAD_ATTRIB  m_attribute;        // PAD_ATTRIB_NORMAL, PAD_ATTRIB::SMD, PAD_ATTRIB::CONN,
                                     //   PAD_ATTRIB::NPTH

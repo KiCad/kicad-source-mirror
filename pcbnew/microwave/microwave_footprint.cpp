@@ -33,7 +33,8 @@
 
 FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprintShape )
 {
-    int        oX;
+    int        offsetX;
+    int        offsetY;
     PAD*       pad;
     FOOTPRINT* footprint;
     wxString   msg;
@@ -125,23 +126,22 @@ FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprint
     switch( aFootprintShape )
     {
     case MICROWAVE_FOOTPRINT_SHAPE::GAP:     //Gap :
-        oX = -( gap_size + pad->GetSize().x ) / 2;
-        pad->SetX0( oX );
+        offsetX = -( gap_size + pad->GetSize().x ) / 2;
 
-        pad->SetX( pad->GetPos0().x + pad->GetPosition().x );
+        pad->SetX( pad->GetPosition().x + offsetX );
 
         pad = *( it + 1 );
 
-        pad->SetX0( oX + gap_size + pad->GetSize().x );
-        pad->SetX( pad->GetPos0().x + pad->GetPosition().x );
+        pad->SetX( pad->GetPosition().x + offsetX + gap_size + pad->GetSize().x );
         break;
 
     case MICROWAVE_FOOTPRINT_SHAPE::STUB:     //Stub :
         pad->SetNumber( wxT( "1" ) );
+        offsetY = -( gap_size + pad->GetSize().y ) / 2;
+
         pad = *( it + 1 );
-        pad->SetY0( -( gap_size + pad->GetSize().y ) / 2 );
         pad->SetSize( VECTOR2I( pad->GetSize().x, gap_size ) );
-        pad->SetY( pad->GetPos0().y + pad->GetPosition().y );
+        pad->SetY( pad->GetPosition().y + offsetY );
         break;
 
     case MICROWAVE_FOOTPRINT_SHAPE::STUB_ARC:     // Arc Stub created by a polygonal approach:

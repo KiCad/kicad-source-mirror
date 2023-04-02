@@ -213,7 +213,6 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
                 PAD*       pad = (PAD*) item->Clone();
 
                 footprint->SetPosition( pad->GetPosition() );
-                pad->SetPos0( VECTOR2I() );
                 footprint->Add( pad );
                 copy = footprint;
             }

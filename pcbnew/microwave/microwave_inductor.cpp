@@ -432,7 +432,6 @@ FOOTPRINT* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& 
 
     pad->SetNumber( wxT( "1" ) );
     pad->SetPosition( aInductorPattern.m_End );
-    pad->SetPos0( pad->GetPosition() - footprint->GetPosition() );
 
     pad->SetSize( VECTOR2I( aInductorPattern.m_Width, aInductorPattern.m_Width ) );
 
@@ -448,7 +447,6 @@ FOOTPRINT* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& 
     pad = newpad;
     pad->SetNumber( wxT( "2" ) );
     pad->SetPosition( aInductorPattern.m_Start );
-    pad->SetPos0( pad->GetPosition() - footprint->GetPosition() );
 
     // Modify text positions.
     VECTOR2I refPos( ( aInductorPattern.m_Start.x + aInductorPattern.m_End.x ) / 2,

@@ -1537,8 +1537,6 @@ static void mirrorPadX( PAD& aPad, const VECTOR2I& aMirrorPoint )
     VECTOR2I tmpPt = mirrorPointX( aPad.GetPosition(), aMirrorPoint );
     aPad.SetPosition( tmpPt );
 
-    aPad.SetX0( aPad.GetPosition().x );
-
     tmpPt = aPad.GetOffset();
     tmpPt.x = -tmpPt.x;
     aPad.SetOffset( tmpPt );
@@ -1561,8 +1559,6 @@ static void mirrorPadY( PAD& aPad, const VECTOR2I& aMirrorPoint )
 
     VECTOR2I tmpPt = mirrorPointY( aPad.GetPosition(), aMirrorPoint );
     aPad.SetPosition( tmpPt );
-
-    aPad.SetY0( aPad.GetPosition().y );
 
     tmpPt = aPad.GetOffset();
     tmpPt.y = -tmpPt.y;

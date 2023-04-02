@@ -179,7 +179,7 @@ bool padNeedsUpdate( const PAD* a, const PAD* b )
     bool      diff = false;
 
     TEST( a->GetPadToDieLength(), b->GetPadToDieLength(), "" );
-    TEST( a->GetPos0(), b->GetPos0(), "" );
+    TEST( a->GetFPRelativePosition(), b->GetFPRelativePosition(), "" );
 
     TEST( a->GetNumber(), b->GetNumber(), "" );
 

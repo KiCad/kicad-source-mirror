@@ -3931,14 +3931,8 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
 
         case T_pad:
         {
-            if( PAD* pad = parsePAD( footprint.get() ) )
-            {
-                pt       = pad->GetPos0();
-                RotatePoint( pt, footprint->GetOrientation() );
-                pad->SetPosition( pt + footprint->GetPosition() );
-                footprint->Add( pad, ADD_MODE::APPEND, true );
-            }
-
+            PAD* pad = parsePAD( footprint.get() );
+            footprint->Add( pad, ADD_MODE::APPEND, true );
             break;
         }
 
@@ -4121,7 +4115,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
         case T_at:
             pt.x = parseBoardUnits( "X coordinate" );
             pt.y = parseBoardUnits( "Y coordinate" );
-            pad->SetPos0( pt );
+            pad->SetFPRelativePosition( pt );
             token = NextTok();
 
             if( token == T_NUMBER )

@@ -88,7 +88,7 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
         if( aFlags & HASH_POS )
         {
             if( aFlags & REL_COORD )
-                hash_combine( ret, pad->GetPos0().x, pad->GetPos0().y );
+                hash_combine( ret, pad->GetFPRelativePosition().x, pad->GetFPRelativePosition().y );
             else
                 hash_combine( ret, pad->GetPosition().x, pad->GetPosition().y );
         }

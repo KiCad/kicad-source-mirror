@@ -555,7 +555,6 @@ int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
             if( pad )
             {
                 m_frame->GetDesignSettings().m_Pad_Master->ImportSettingsFrom( *pad );
-                pad->SetLocalCoord();
                 aCommit.Add( aItem );
                 return true;
             }

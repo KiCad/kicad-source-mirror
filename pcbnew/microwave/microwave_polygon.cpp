@@ -333,12 +333,10 @@ FOOTPRINT* MICROWAVE_TOOL::createPolygonShape()
     auto it = footprint->Pads().begin();
 
     pad1 = *it;
-    pad1->SetX0( offset.x );
-    pad1->SetX( pad1->GetPos0().x );
+    pad1->SetX( offset.x );
 
     pad2 = *( ++it );
-    pad2->SetX0( offset.x + g_ShapeSize.x );
-    pad2->SetX( pad2->GetPos0().x );
+    pad2->SetX( offset.x + g_ShapeSize.x );
 
     // Add a polygonal edge (corners will be added later) on copper layer
     shape = new PCB_SHAPE( footprint, SHAPE_T::POLY );
@@ -386,8 +384,6 @@ FOOTPRINT* MICROWAVE_TOOL::createPolygonShape()
     }
 
     shape->SetPolyPoints( polyPoints );
-    shape->Rotate( { 0, 0 }, footprint->GetOrientation() );
-    shape->Move( footprint->GetPosition() );
 
     // Set the polygon outline thickness to 0, only the polygonal shape is filled
     // without extra thickness.

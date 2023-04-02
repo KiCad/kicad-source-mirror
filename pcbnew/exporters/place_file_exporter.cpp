@@ -233,11 +233,11 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
 
         buffer += "\n";
 
-        snprintf(line, sizeof(line), "%-*s  %-*s  %-*s  %9.9s  %9.9s  %8.8s  %s\n",
-                int(lenRefText), "# Ref",
-                int(lenValText), "Val",
-                int(lenPkgText), "Package",
-                "PosX", "PosY", "Rot", "Side" );
+        snprintf( line, sizeof(line), "%-*s  %-*s  %-*s  %9.9s  %9.9s  %8.8s  %s\n",
+                  int(lenRefText), "# Ref",
+                  int(lenValText), "Val",
+                  int(lenPkgText), "Package",
+                  "PosX", "PosY", "Rot", "Side" );
         buffer += line;
 
         for( int ii = 0; ii < m_fpCount; ii++ )
@@ -258,16 +258,16 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
             ref.Replace( wxT( " " ), wxT( "_" ) );
             val.Replace( wxT( " " ), wxT( "_" ) );
             pkg.Replace( wxT( " " ), wxT( "_" ) );
-            snprintf(line, sizeof(line), "%-*s  %-*s  %-*s  %9.4f  %9.4f  %8.4f  %s\n",
-                    lenRefText, TO_UTF8( ref ),
-                    lenValText, TO_UTF8( val ),
-                    lenPkgText, TO_UTF8( pkg ),
-                    footprint_pos.x * conv_unit,
-                    // Keep the coordinates in the first quadrant,
-                    // (i.e. change y sign
-                    -footprint_pos.y * conv_unit,
-                    list[ii].m_Footprint->GetOrientation().AsDegrees(),
-                    (layer == F_Cu ) ? GetFrontSideName().c_str() : GetBackSideName().c_str() );
+            snprintf( line, sizeof(line), "%-*s  %-*s  %-*s  %9.4f  %9.4f  %8.4f  %s\n",
+                      lenRefText, TO_UTF8( ref ),
+                      lenValText, TO_UTF8( val ),
+                      lenPkgText, TO_UTF8( pkg ),
+                      footprint_pos.x * conv_unit,
+                      // Keep the coordinates in the first quadrant,
+                      // (i.e. change y sign
+                      -footprint_pos.y * conv_unit,
+                      list[ii].m_Footprint->GetOrientation().AsDegrees(),
+                      (layer == F_Cu ) ? GetFrontSideName().c_str() : GetBackSideName().c_str() );
             buffer += line;
         }
 
@@ -309,11 +309,11 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
     buffer += "\n$BOARD\n";
 
     snprintf( line, sizeof(line), "upper_left_corner %9.6f %9.6f\n",
-             bbbox.GetX() * conv_unit, bbbox.GetY() * conv_unit );
+              bbbox.GetX() * conv_unit, bbbox.GetY() * conv_unit );
     buffer += line;
 
     snprintf( line, sizeof(line), "lower_right_corner %9.6f %9.6f\n",
-             bbbox.GetRight()  * conv_unit, bbbox.GetBottom() * conv_unit );
+              bbbox.GetRight()  * conv_unit, bbbox.GetBottom() * conv_unit );
     buffer += line;
 
     buffer += "$EndBOARD\n\n";
@@ -358,9 +358,9 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
         footprint_pos -= m_place_Offset;
 
         snprintf( line, sizeof(line), "position %9.6f %9.6f  orientation %.2f\n",
-                 footprint_pos.x * conv_unit,
-                 footprint_pos.y * conv_unit,
-                 footprint->GetOrientation().AsDegrees() );
+                  footprint_pos.x * conv_unit,
+                  footprint_pos.y * conv_unit,
+                  footprint->GetOrientation().AsDegrees() );
         buffer += line;
 
         if( footprint->GetLayer() == F_Cu )
@@ -396,24 +396,26 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
 
             static const char* layer_name[4] = { "nocopper", "back", "front", "both" };
             snprintf( line, sizeof(line), "Shape %s Layer %s\n",
-                     TO_UTF8( pad->ShowPadShape() ),
-                     layer_name[layer] );
+                      TO_UTF8( pad->ShowPadShape() ),
+                      layer_name[layer] );
             buffer += line;
 
+            VECTOR2I padPos = pad->GetFPRelativePosition();
+
             snprintf( line, sizeof(line), "position %9.6f %9.6f  size %9.6f %9.6f  orientation %.2f\n",
-                     pad->GetPos0().x * conv_unit,
-                     pad->GetPos0().y * conv_unit,
-                     pad->GetSize().x * conv_unit,
-                     pad->GetSize().y * conv_unit,
-                     ( pad->GetOrientation() - footprint->GetOrientation() ).AsDegrees() );
+                      padPos.x * conv_unit,
+                      padPos.y * conv_unit,
+                      pad->GetSize().x * conv_unit,
+                      pad->GetSize().y * conv_unit,
+                      ( pad->GetOrientation() - footprint->GetOrientation() ).AsDegrees() );
             buffer += line;
 
             snprintf( line, sizeof(line), "drill %9.6f\n", pad->GetDrillSize().x * conv_unit );
             buffer += line;
 
             snprintf( line, sizeof(line), "shape_offset %9.6f %9.6f\n",
-                     pad->GetOffset().x * conv_unit,
-                     pad->GetOffset().y * conv_unit );
+                      pad->GetOffset().x * conv_unit,
+                      pad->GetOffset().y * conv_unit );
             buffer += line;
 
             buffer += "$EndPAD\n";
