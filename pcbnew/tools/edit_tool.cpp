@@ -1798,15 +1798,25 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
             {
             case PCB_TEXT::TEXT_is_VALUE:
             case PCB_TEXT::TEXT_is_REFERENCE:
+                wxASSERT( parentFP );
                 m_commit->Modify( parentFP );
                 static_cast<PCB_TEXT*>( board_item )->SetVisible( false );
                 getView()->Update( board_item );
                 break;
+
             case PCB_TEXT::TEXT_is_DIVERS:
-                m_commit->Modify( parentFP );
-                getView()->Remove( board_item );
-                parentFP->Remove( board_item );
+                if( IsFootprintEditor() )
+                {
+                    m_commit->Modify( parentFP );
+                    getView()->Remove( board_item );
+                    parentFP->Remove( board_item );
+                }
+                else
+                {
+                    m_commit->Remove( board_item );
+                }
                 break;
+
             default:
                 wxFAIL; // Shouldn't get here
                 break;
