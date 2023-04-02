@@ -601,7 +601,45 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         b = *bg->GetItems().begin();
     }
 
-    // a and b could be null after group tests above.
+    // a or b could be null after group tests above.
+    wxCHECK( a && b, 0 );
+
+    auto checkFootprint =
+            [&]( FOOTPRINT* footprint ) -> BOARD_ITEM*
+            {
+                if( footprint->Pads().empty() )
+                {
+                    m_frame->ShowInfoBarError( _( "Cannot generate clearance report on footprint "
+                                                  "with no pads." ) );
+                    return nullptr;
+                }
+
+                PAD* foundPad = nullptr;
+
+                for( PAD* pad : footprint->Pads() )
+                {
+                    if( !foundPad || pad->SameLogicalPadAs( foundPad ) )
+                    {
+                        foundPad = pad;
+                    }
+                    else
+                    {
+                        m_frame->ShowInfoBarError( _( "Cannot generate clearance report on footprint "
+                                                      "with multiple pads.  Select a single pad." ) );
+                        return nullptr;
+                    }
+                }
+
+                return foundPad;
+            };
+
+    if( a->Type() == PCB_FOOTPRINT_T )
+        a = checkFootprint( static_cast<FOOTPRINT*>( a ) );
+
+    if( b->Type() == PCB_FOOTPRINT_T )
+        b = checkFootprint( static_cast<FOOTPRINT*>( b ) );
+
+    // a or b could be null after footprint tests above.
     wxCHECK( a && b, 0 );
 
     DIALOG_BOOK_REPORTER* dialog = m_frame->GetInspectClearanceDialog();
