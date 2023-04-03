@@ -184,6 +184,8 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
         m_padNetSelector->Show( false );
     }
 
+    m_FlippedWarningSizer->Show( false );
+
     // Pad needs to have a parent for painting; use the parent board for its design settings
     if( !m_dummyPad->GetParent() )
         m_dummyPad->SetParent( m_board );
@@ -479,23 +481,21 @@ void DIALOG_PAD_PROPERTIES::initValues()
     m_PadLayerECO2->SetLabel( m_board->GetLayerName( Eco2_User ) );
     m_PadLayerDraft->SetLabel( m_board->GetLayerName( Dwgs_User ) );
 
-    m_isFlipped = false;
-
     if( m_currentPad )
     {
-        m_dummyPad->SetOrientation( m_currentPad->GetFPRelativeOrientation() );
-        m_dummyPad->SetPosition( m_currentPad->GetFPRelativePosition() );
-
         if( FOOTPRINT* footprint = m_currentPad->GetParent() )
         {
-            m_isFlipped = footprint->IsFlipped();
+            VECTOR2I relPos = m_currentPad->GetFPRelativePosition();
 
-            if( m_isFlipped )
+            if( footprint->IsFlipped() )
             {
                 // flip pad (up/down) around its position
                 m_dummyPad->Flip( m_dummyPad->GetPosition(), false );
-                m_dummyPad->SetY( -m_dummyPad->GetY() );
+                relPos.y = - relPos.y;
             }
+
+            m_dummyPad->SetPosition( relPos );
+            m_dummyPad->SetOrientation( m_currentPad->GetFPRelativeOrientation() );
 
             // Display parent footprint info
             msg.Printf( _("Footprint %s (%s), %s, rotated %g deg"),
@@ -503,14 +503,13 @@ void DIALOG_PAD_PROPERTIES::initValues()
                          footprint->Value().GetShownText(),
                          footprint->IsFlipped() ? _( "back side (mirrored)" ) : _( "front side" ),
                          footprint->GetOrientation().AsDegrees() );
-        }
 
-        m_parentInfo->SetLabel( msg );
+            m_FlippedWarningSizer->Show( footprint->IsFlipped() );
+            m_parentInfo->SetLabel( msg );
+        }
     }
 
     m_primitives = m_dummyPad->GetPrimitives();
-
-    m_FlippedWarningSizer->Show( m_isFlipped );
 
     if( m_currentPad )
     {
@@ -1578,6 +1577,7 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     // Update values
     m_currentPad->SetShape( m_padMaster->GetShape() );
     m_currentPad->SetAttribute( m_padMaster->GetAttribute() );
+    m_currentPad->SetFPRelativeOrientation( m_padMaster->GetOrientation() );
 
     m_currentPad->SetSize( m_padMaster->GetSize() );
 
@@ -1639,7 +1639,7 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
 
     VECTOR2I relPos = m_padMaster->GetPosition();
 
-    if( m_isFlipped )
+    if( m_currentPad->GetParentFootprint() && m_currentPad->GetParentFootprint()->IsFlipped() )
     {
         // flip pad (up/down) around its position
          m_currentPad->Flip( m_currentPad->GetPosition(), false );
@@ -1647,7 +1647,6 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     }
 
     // Must be done after flipping
-    m_currentPad->SetFPRelativeOrientation( m_padMaster->GetOrientation() );
     m_currentPad->SetFPRelativePosition( relPos );
 
     m_parent->SetMsgPanel( m_currentPad );

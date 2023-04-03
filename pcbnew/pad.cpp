@@ -701,7 +701,7 @@ void PAD::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
         MIRROR( m_deltaSize.y, 0 );
     }
 
-    SetOrientation( -GetOrientation() );
+    SetFPRelativeOrientation( -GetFPRelativeOrientation() );
 
     auto mirrorBitFlags = []( int& aBitfield, int a, int b )
                           {

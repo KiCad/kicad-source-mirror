@@ -130,8 +130,6 @@ private:
     PAD*    m_padMaster;            // pad used to create new pads in board or footprint editor
     BOARD*  m_board;                // the main board: this is the board handled by the PCB
                                     //    editor or the dummy board used by the footprint editor
-    bool    m_isFlipped;            // indicates the parent footprint is flipped (mirrored) in
-                                    //    which case some Y coordinates values must be negated
     bool    m_canUpdate;
     bool    m_canEditNetName;       // true only if the caller is the board editor
     bool    m_isFpEditor;           // true if the caller is the footprint editor
