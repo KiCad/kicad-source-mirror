@@ -86,7 +86,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
     void OnKifaceEnd() override;
 
     wxWindow* CreateKiWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway,
-                            int aCtlBits = 0 ) override
+                              int aCtlBits = 0 ) override
     {
         switch( aClassId )
         {
@@ -160,9 +160,9 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
                 frame = aKiway->Player( FRAME_PCB_EDITOR, false );
 
             if( frame )
-                return new PANEL_EDIT_OPTIONS( aParent, frame, frame, true );
-            else
-                return new PANEL_EDIT_OPTIONS( aParent, this, nullptr, true );
+                SetUserUnits( frame->GetUserUnits() );
+
+            return new PANEL_EDIT_OPTIONS( aParent, this, frame, true );
         }
 
         case PANEL_FP_DEFAULT_VALUES:
@@ -176,9 +176,9 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
                 frame = aKiway->Player( FRAME_PCB_EDITOR, false );
 
             if( frame )
-                return new PANEL_FP_EDITOR_DEFAULTS( aParent, frame );
-            else
-                return new PANEL_FP_EDITOR_DEFAULTS( aParent, this );
+                SetUserUnits( frame->GetUserUnits() );
+
+            return new PANEL_FP_EDITOR_DEFAULTS( aParent, this );
         }
 
         case PANEL_FP_COLORS:
@@ -203,9 +203,9 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
                 frame = aKiway->Player( FRAME_FOOTPRINT_VIEWER, false );
 
             if( frame )
-                return new PANEL_EDIT_OPTIONS( aParent, frame, frame, false );
-            else
-                return new PANEL_EDIT_OPTIONS( aParent, this, nullptr, false );
+                SetUserUnits( frame->GetUserUnits() );
+
+            return new PANEL_EDIT_OPTIONS( aParent, this, frame, false );
         }
 
         case PANEL_PCB_COLORS:
