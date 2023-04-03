@@ -4,7 +4,7 @@
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Dick Hollenbeck, dick@softplc.com
  * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -123,27 +123,35 @@ private:
     /// Return the pad property currently selected
     PAD_PROP getSelectedProperty();
 
+    // Show/hide the hole size Y widgets
+    // Setting the X/Diameter label according to the selected hole type
+    void updateHoleControls();
+
+    // Show/hide the pad size Y widgets
+    // Setting the X/Diameter label according to the selected hole type
+    void updatePadSizeControls();
+
 private:
     PCB_BASE_FRAME* m_parent;
-    PAD*    m_currentPad;           // pad currently being edited
-    PAD*    m_dummyPad;             // a working copy used to show changes
-    PAD*    m_padMaster;            // pad used to create new pads in board or footprint editor
-    BOARD*  m_board;                // the main board: this is the board handled by the PCB
-                                    //    editor or the dummy board used by the footprint editor
-    bool    m_canUpdate;
-    bool    m_canEditNetName;       // true only if the caller is the board editor
-    bool    m_isFpEditor;           // true if the caller is the footprint editor
+    PAD*            m_currentPad;       // pad currently being edited
+    PAD*            m_previewPad;       // a working copy used to show changes
+    PAD*            m_masterPad;        // pad used to create new pads in board or FP editor
+    BOARD*          m_board;            // the main board: this is the board handled by the PCB
+                                        //    editor or the dummy board used by the FP editor
+    bool            m_canUpdate;
+    bool            m_canEditNetName;   // true only if the caller is the board editor
+    bool            m_isFpEditor;       // true if the caller is the footprint editor
 
     std::vector<std::shared_ptr<PCB_SHAPE>> m_primitives;     // the custom shape primitives in
                                                               // local coords, orient 0
                                                               // must define a single copper area
-    COLOR4D                       m_selectedColor; // color used to draw selected primitives when
-                                                   //     editing a custom pad shape
+    COLOR4D                  m_selectedColor; // color used to draw selected primitives when
+                                              //     editing a custom pad shape
 
-    std::vector<PCB_SHAPE*>       m_highlight;     // shapes highlighted in GAL mode
-    PCB_DRAW_PANEL_GAL*           m_padPreviewGAL;
-    KIGFX::ORIGIN_VIEWITEM*       m_axisOrigin;    // origin of the preview canvas
-    static bool                   m_sketchPreview; // session storage
+    std::vector<PCB_SHAPE*>  m_highlight;     // shapes highlighted in GAL mode
+    PCB_DRAW_PANEL_GAL*      m_padPreviewGAL;
+    KIGFX::ORIGIN_VIEWITEM*  m_axisOrigin;    // origin of the preview canvas
+    static bool              m_sketchPreview; // session storage
 
     UNIT_BINDER m_posX, m_posY;
     UNIT_BINDER m_sizeX, m_sizeY;
@@ -164,14 +172,6 @@ private:
     UNIT_BINDER m_spokeWidth;
     UNIT_BINDER m_spokeAngle;
     UNIT_BINDER m_pad_orientation;
-
-    // Show/hide the hole size Y widgets
-    // Setting the X/Diameter label according to the selected hole type
-    void updateHoleControls();
-
-    // Show/hide the pad size Y widgets
-    // Setting the X/Diameter label according to the selected hole type
-    void updatePadSizeControls();
 };
 
 
