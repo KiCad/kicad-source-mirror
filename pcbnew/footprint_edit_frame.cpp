@@ -494,6 +494,10 @@ void FOOTPRINT_EDIT_FRAME::ClearModify()
 
 bool FOOTPRINT_EDIT_FRAME::IsCurrentFPFromBoard() const
 {
+    // If we've already vetted closing this window, then we have no FP anymore
+    if( m_isClosing )
+        return false;
+
     FOOTPRINT* footprint = GetBoard()->GetFirstFootprint();
 
     return ( footprint && footprint->GetLink() != niluuid );

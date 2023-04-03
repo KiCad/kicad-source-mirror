@@ -247,7 +247,14 @@ public:
         UpdateSymbolMsgPanelInfo();
     }
 
-    bool IsSymbolFromSchematic() const { return m_isSymbolFromSchematic; }
+    bool IsSymbolFromSchematic() const
+    {
+        // If we've already vetted closing this window, then we have no symbol anymore
+        if( m_isClosing )
+            return false;
+
+        return m_isSymbolFromSchematic;
+    }
 
     bool IsSymbolFromLegacyLibrary() const;
 
