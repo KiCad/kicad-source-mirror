@@ -63,7 +63,7 @@ WX_INFOBAR::WX_INFOBAR( wxWindow* aParent, wxAuiManager* aMgr, wxWindowID aWinid
 
     // Infobar is broken on Mac without the effects
     SetShowHideEffects( wxSHOW_EFFECT_ROLL_TO_BOTTOM, wxSHOW_EFFECT_ROLL_TO_TOP );
-    SetEffectDuration( 300 );
+    SetEffectDuration( 200 );
 #else
     // Infobar freezes canvas on Windows with the effect, and GTK looks bad with it
     SetShowHideEffects( wxSHOW_EFFECT_NONE, wxSHOW_EFFECT_NONE );
