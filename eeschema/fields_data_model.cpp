@@ -16,7 +16,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::AddColumn( const wxString& aFieldName, const
     if( GetFieldNameCol( aFieldName ) != -1 )
         return;
 
-    m_cols.push_back( ( struct DATA_MODEL_COL ){ aFieldName, aLabel, aAddedByUser, false, false } );
+    m_cols.push_back( { aFieldName, aLabel, aAddedByUser, false, false } );
 
     for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
     {
@@ -80,8 +80,7 @@ const std::vector<BOM_FIELD> FIELDS_EDITOR_GRID_DATA_MODEL::GetFieldsOrdered()
     std::vector<BOM_FIELD> fields;
 
     for( auto col : m_cols )
-        fields.emplace_back(
-                ( struct BOM_FIELD ){ col.m_fieldName, col.m_label, col.m_show, col.m_group } );
+        fields.push_back( { col.m_fieldName, col.m_label, col.m_show, col.m_group } );
 
     return fields;
 }
@@ -691,7 +690,7 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::Export( const BOM_FMT_PRESET& settings )
                                settings.stringDelimiter + settings.stringDelimiter );
 
             return settings.stringDelimiter + field + settings.stringDelimiter
-                   + wxString( last ? wxS( "\r\n" ) : settings.fieldDelimiter );
+                   + ( last ? wxString( wxS( "\r\n" ) ) : settings.fieldDelimiter );
         };
 
     // Column names
