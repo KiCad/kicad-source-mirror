@@ -1,0 +1,7 @@
+icon_qa_spice ICON "../../resources/bitmaps_png/icons/icon_eeschema.ico"
+
+#define RC_VER_FILE_DESCRIPTION "KiCad QA Spice " KICAD_WIN32_RC_PRODVER_STR
+#define RC_VER_INTERNALNAME "qa_spice"
+#define RC_VER_ORIGINALFILENAME "qa_spice.exe"
+
+#include "kiwin32.rc"

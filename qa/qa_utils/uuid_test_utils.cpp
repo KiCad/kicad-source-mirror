@@ -21,8 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "uuid_test_utils.h"
-
+#include <qa_utils/uuid_test_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 namespace KI_TEST

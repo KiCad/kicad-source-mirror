@@ -115,4 +115,4 @@
   parallel:
     matrix:
       # The name of the test without the qa_ prefix
-      - TEST: [python, common, gerbview, pcbnew, eeschema, kimath, sexpr, kicad2step]
+      - TEST: [python, common, gerbview, pcbnew, eeschema, kimath, sexpr, kicad2step, spice]

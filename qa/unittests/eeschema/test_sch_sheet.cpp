@@ -33,8 +33,7 @@
 #include <sch_sheet_pin.h>
 #include <schematic.h>
 
-#include "uuid_test_utils.h"
-
+#include <qa_utils/uuid_test_utils.h>
 #include <qa_utils/wx_utils/wx_assert.h>
 
 class TEST_SCH_SHEET_FIXTURE

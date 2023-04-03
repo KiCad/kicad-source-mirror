@@ -26,12 +26,11 @@
  * Test suite for #SCH_SHEET_PATH and #SCH_SHEET_LIST
  */
 
+#include <qa_utils/uuid_test_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 // Code under test
 #include <sch_sheet_path.h>
-
-#include "uuid_test_utils.h"
 
 #include <sch_sheet.h>
 

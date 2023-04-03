@@ -1,9 +1,7 @@
 #
 # This program source code file is part of KiCad, a free EDA CAD application.
 #
-# Copyright (C) 2017 CERN
-# @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
-# Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+# Copyright (C) 2023 Ian McInerney
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -25,6 +23,17 @@
 
 include_directories( BEFORE ${INC_BEFORE} )
 
+set( INC_AFTER ${INC_AFTER} ${NGSPICE_INCLUDE_DIR} )
+
+# Find out the exact libngspice file name
+get_filename_component( NGSPICE_DLL_ABSPATH "${NGSPICE_DLL}" ABSOLUTE )
+get_filename_component( NGSPICE_DLL_FILE "${NGSPICE_DLL_ABSPATH}" NAME )
+
+set_property( SOURCE sim/ngspice.cpp
+    APPEND PROPERTY COMPILE_DEFINITIONS
+    NGSPICE_DLL_FILE="${NGSPICE_DLL_FILE}"
+    )
+
 include_directories(
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/include
@@ -35,60 +44,42 @@ include_directories(
     ${INC_AFTER}
     )
 
-set( QA_EESCHEMA_SRCS
+set( QA_SPICE_SRCS
     # need the mock Pgm for many functions
     ${CMAKE_SOURCE_DIR}/qa/mocks/kicad/common_mocks.cpp
 
     # The main test entry points
     test_module.cpp
 
-    # Base internal units (1=100nm) testing.
-    test_sch_biu.cpp
+    # Test exporting the netlist
+    test_netlist_exporter_spice.cpp
 
-    # Shared between programs, but dependent on the BIU
-    ${CMAKE_SOURCE_DIR}/qa/unittests/common/test_format_units.cpp
-    ${CMAKE_SOURCE_DIR}/qa/unittests/common/test_array_options.cpp
+    # Test SPICE library and models
+    test_library_spice.cpp
+    test_sim_model_inference.cpp
+    test_sim_model_ngspice.cpp
+    test_sim_regressions.cpp
 
-    sch_plugins/altium/test_altium_parser_sch.cpp
-
-	erc/test_erc_label_not_connected.cpp
-	erc/test_erc_stacking_pins.cpp
-	erc/test_erc_global_labels.cpp
-	erc/test_erc_no_connect.cpp
-    erc/test_erc_hierarchical_schematics.cpp
-
-    test_eagle_plugin.cpp
-    test_lib_part.cpp
-    test_netlist_exporter_kicad.cpp
-    test_ee_item.cpp
-    test_legacy_power_symbols.cpp
-    test_pin_numbers.cpp
-    test_sch_pin.cpp
-    test_sch_rtree.cpp
-    test_sch_reference_list.cpp
-    test_sch_sheet.cpp
-    test_sch_sheet_path.cpp
-    test_sch_sheet_list.cpp
-    test_sch_symbol.cpp
+    test_ngspice_helpers.cpp
 )
 
 if( WIN32 )
     # We want to declare a resource manifest on Windows to enable UTF8 mode
     # Without UTF8 mode, some random IO tests may fail, we set the active code page on normal kicad to UTF8 as well
     if( MINGW )
-        # QA_EESCHEMA_RESOURCES variable is set by the macro.
-        mingw_resource_compiler( qa_eeschema )
+        # QA_SPICE_RESOURCES variable is set by the macro.
+        mingw_resource_compiler( qa_spice )
     else()
-        set( QA_EESCHEMA_RESOURCES ${CMAKE_SOURCE_DIR}/resources/msw/qa_eeschema.rc )
+        set( QA_SPICE_RESOURCES ${CMAKE_SOURCE_DIR}/resources/msw/qa_spice.rc )
     endif()
 endif()
 
-add_executable( qa_eeschema
-    ${QA_EESCHEMA_SRCS}
-    ${QA_EESCHEMA_RESOURCES}
+add_executable( qa_spice
+    ${QA_SPICE_SRCS}
+    ${QA_SPICE_RESOURCES}
 )
 
-target_link_libraries( qa_eeschema
+target_link_libraries( qa_spice
 PRIVATE
     eeschema_kiface_objects
     common
@@ -98,15 +89,28 @@ PRIVATE
     qa_utils
     qa_schematic_utils
     markdown_lib
+    ${NGSPICE_LIBRARY}
     ${GDI_PLUS_LIBRARIES}
     Boost::headers
     Boost::unit_test_framework
 )
 
+if( KICAD_SPICE_QA AND MSVC )
+    # Allow for MSVC to run from the build directory
+    add_custom_command( TARGET qa_spice POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${NGSPICE_DLL}" "$<TARGET_FILE_DIR:qa_spice>"
+        )
+
+    add_custom_command( TARGET qa_spice POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory "${NGSPICE_CM_DIR}" "$<TARGET_FILE_DIR:qa_spice>/ngspice"
+        )
+endif()
+
+
 # Eeschema tests, so pretend to be eeschema (for units, etc)
-target_compile_definitions( qa_eeschema
+target_compile_definitions( qa_spice
     PUBLIC EESCHEMA
 )
 
-kicad_add_boost_test( qa_eeschema qa_eeschema )
+kicad_add_boost_test( qa_spice qa_spice )
 

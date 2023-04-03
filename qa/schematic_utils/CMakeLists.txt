@@ -19,7 +19,7 @@
 # Eeschema-related auxiliary functions that are useful for QA purposes
 
 set( QA_SCHEMATIC_UTILS_SRCS
-
+    ${CMAKE_CURRENT_SOURCE_DIR}/eeschema_test_utils.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/schematic_file_util.cpp
 )
 
@@ -35,12 +35,14 @@ target_include_directories( qa_schematic_utils PUBLIC
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/eeschema
+    ${CMAKE_SOURCE_DIR}/pcbnew
     ${CMAKE_SOURCE_DIR}/common
     ${INC_AFTER}
 )
 
 target_link_libraries( qa_schematic_utils PUBLIC
     qa_utils
+    pcbcommon
 )
 
 # # we need to pretend to be something to appease the units code

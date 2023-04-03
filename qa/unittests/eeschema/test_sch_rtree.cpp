@@ -30,12 +30,11 @@
 #include <ignore.h>
 #include <sch_junction.h>
 #include <sch_no_connect.h>
+#include <qa_utils/uuid_test_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 // Code under test
 #include <sch_rtree.h>
-
-#include "uuid_test_utils.h"
 
 #include <qa_utils/wx_utils/wx_assert.h>
 
