@@ -479,16 +479,23 @@ void DIALOG_PAD_PROPERTIES::initValues()
     m_PadLayerECO2->SetLabel( m_board->GetLayerName( Eco2_User ) );
     m_PadLayerDraft->SetLabel( m_board->GetLayerName( Dwgs_User ) );
 
+    m_isFlipped = false;
+
     if( m_currentPad )
     {
-        m_isFlipped = m_currentPad->IsFlipped();
+        m_dummyPad->SetOrientation( m_currentPad->GetFPRelativeOrientation() );
+        m_dummyPad->SetPosition( m_currentPad->GetFPRelativePosition() );
 
-        FOOTPRINT* footprint = m_currentPad->GetParent();
-
-        if( footprint )
+        if( FOOTPRINT* footprint = m_currentPad->GetParent() )
         {
-            EDA_ANGLE angle = m_dummyPad->GetOrientation() - footprint->GetOrientation();
-            m_dummyPad->SetOrientation( angle );
+            m_isFlipped = footprint->IsFlipped();
+
+            if( m_isFlipped )
+            {
+                // flip pad (up/down) around its position
+                m_dummyPad->Flip( m_dummyPad->GetPosition(), false );
+                m_dummyPad->SetY( -m_dummyPad->GetY() );
+            }
 
             // Display parent footprint info
             msg.Printf( _("Footprint %s (%s), %s, rotated %g deg"),
@@ -499,16 +506,6 @@ void DIALOG_PAD_PROPERTIES::initValues()
         }
 
         m_parentInfo->SetLabel( msg );
-    }
-    else
-    {
-        m_isFlipped = false;
-    }
-
-    if( m_isFlipped )
-    {
-        // flip pad (up/down) around its position
-        m_dummyPad->Flip( m_dummyPad->GetPosition(), false );
     }
 
     m_primitives = m_dummyPad->GetPrimitives();
@@ -1581,15 +1578,10 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     // Update values
     m_currentPad->SetShape( m_padMaster->GetShape() );
     m_currentPad->SetAttribute( m_padMaster->GetAttribute() );
-    m_currentPad->SetOrientation( m_padMaster->GetOrientation() );
-    m_currentPad->SetPosition( m_padMaster->GetPosition() );
-
-    VECTOR2I   size;
-    FOOTPRINT* footprint = m_currentPad->GetParent();
 
     m_currentPad->SetSize( m_padMaster->GetSize() );
 
-    size = m_padMaster->GetDelta();
+    VECTOR2I size = m_padMaster->GetDelta();
     m_currentPad->SetDelta( size );
 
     m_currentPad->SetDrillSize( m_padMaster->GetDrillSize() );
@@ -1645,17 +1637,18 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     // define the way the clearance area is defined in zones
     m_currentPad->SetCustomShapeInZoneOpt( m_padMaster->GetCustomShapeInZoneOpt() );
 
+    VECTOR2I relPos = m_padMaster->GetPosition();
+
     if( m_isFlipped )
     {
         // flip pad (up/down) around its position
          m_currentPad->Flip( m_currentPad->GetPosition(), false );
+         relPos.y = -relPos.y;
     }
 
-    if( footprint )
-    {
-        m_currentPad->SetFPRelativePosition( m_currentPad->GetPosition() );
-        m_currentPad->SetOrientation( m_currentPad->GetOrientation() + footprint->GetOrientation() );
-    }
+    // Must be done after flipping
+    m_currentPad->SetFPRelativeOrientation( m_padMaster->GetOrientation() );
+    m_currentPad->SetFPRelativePosition( relPos );
 
     m_parent->SetMsgPanel( m_currentPad );
 

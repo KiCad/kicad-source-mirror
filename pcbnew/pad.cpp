@@ -668,6 +668,24 @@ void PAD::SetOrientation( const EDA_ANGLE& aAngle )
 }
 
 
+void PAD::SetFPRelativeOrientation( const EDA_ANGLE& aAngle )
+{
+    if( FOOTPRINT* parentFP = GetParentFootprint() )
+        SetOrientation( aAngle + parentFP->GetOrientation() );
+    else
+        SetOrientation( aAngle );
+}
+
+
+EDA_ANGLE PAD::GetFPRelativeOrientation()
+{
+    if( FOOTPRINT* parentFP = GetParentFootprint() )
+        return GetOrientation() - parentFP->GetOrientation();
+    else
+        return GetOrientation();
+}
+
+
 void PAD::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 {
     if( aFlipLeftRight )

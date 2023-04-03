@@ -357,11 +357,13 @@ public:
      * If \a aAngle is outside of 0 - 360, then it will be normalized.
      */
     void SetOrientation( const EDA_ANGLE& aAngle );
+    void SetFPRelativeOrientation( const EDA_ANGLE& aAngle );
 
     /**
      * Return the rotation angle of the pad.
      */
     EDA_ANGLE GetOrientation() const { return m_orient; }
+    EDA_ANGLE GetFPRelativeOrientation();
 
     // For property system
     void SetOrientationDegrees( double aOrientation )
