@@ -596,18 +596,22 @@ APP_SETTINGS_BASE* FOOTPRINT_EDIT_FRAME::config() const
 
 void FOOTPRINT_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
-    // aCfg will be the PCBNEW_SETTINGS
+    // Get our own settings; aCfg will be the PCBNEW_SETTINGS because we're part of the pcbnew
+    // compile unit
     FOOTPRINT_EDITOR_SETTINGS* cfg = GetSettings();
 
-    PCB_BASE_FRAME::LoadSettings( cfg );
+    if( cfg )
+    {
+        PCB_BASE_FRAME::LoadSettings( cfg );
 
-    GetDesignSettings() = cfg->m_DesignSettings;
+        GetDesignSettings() = cfg->m_DesignSettings;
 
-    m_displayOptions = cfg->m_Display;
-    m_show_layer_manager_tools = cfg->m_AuiPanels.show_layer_manager;
+        m_displayOptions = cfg->m_Display;
+        m_show_layer_manager_tools = cfg->m_AuiPanels.show_layer_manager;
 
-    GetToolManager()->GetTool<PCB_SELECTION_TOOL>()->GetFilter() = cfg->m_SelectionFilter;
-    m_selectionFilterPanel->SetCheckboxesFromFilter( cfg->m_SelectionFilter );
+        GetToolManager()->GetTool<PCB_SELECTION_TOOL>()->GetFilter() = cfg->m_SelectionFilter;
+        m_selectionFilterPanel->SetCheckboxesFromFilter( cfg->m_SelectionFilter );
+    }
 }
 
 
@@ -615,21 +619,25 @@ void FOOTPRINT_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
     GetGalDisplayOptions().m_axesEnabled = true;
 
-    // aCfg will be the PCBNEW_SETTINGS
+    // Get our own settings; aCfg will be the PCBNEW_SETTINGS because we're part of the pcbnew
+    // compile unit
     FOOTPRINT_EDITOR_SETTINGS* cfg = GetSettings();
 
-    PCB_BASE_FRAME::SaveSettings( cfg );
+    if( cfg )
+    {
+        PCB_BASE_FRAME::SaveSettings( cfg );
 
-    cfg->m_DesignSettings    = GetDesignSettings();
-    cfg->m_Display           = m_displayOptions;
-    cfg->m_LibWidth          = m_treePane->GetSize().x;
-    cfg->m_SelectionFilter   = GetToolManager()->GetTool<PCB_SELECTION_TOOL>()->GetFilter();
-    cfg->m_LayerPresets      = m_appearancePanel->GetUserLayerPresets();
-    cfg->m_ActiveLayerPreset = m_appearancePanel->GetActiveLayerPreset();
+        cfg->m_DesignSettings    = GetDesignSettings();
+        cfg->m_Display           = m_displayOptions;
+        cfg->m_LibWidth          = m_treePane->GetSize().x;
+        cfg->m_SelectionFilter   = GetToolManager()->GetTool<PCB_SELECTION_TOOL>()->GetFilter();
+        cfg->m_LayerPresets      = m_appearancePanel->GetUserLayerPresets();
+        cfg->m_ActiveLayerPreset = m_appearancePanel->GetActiveLayerPreset();
 
-    cfg->m_AuiPanels.show_layer_manager   = m_show_layer_manager_tools;
-    cfg->m_AuiPanels.right_panel_width    = m_appearancePanel->GetSize().x;
-    cfg->m_AuiPanels.appearance_panel_tab = m_appearancePanel->GetTabIndex();
+        cfg->m_AuiPanels.show_layer_manager   = m_show_layer_manager_tools;
+        cfg->m_AuiPanels.right_panel_width    = m_appearancePanel->GetSize().x;
+        cfg->m_AuiPanels.appearance_panel_tab = m_appearancePanel->GetTabIndex();
+    }
 }
 
 
