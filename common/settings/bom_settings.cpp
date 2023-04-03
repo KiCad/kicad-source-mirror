@@ -129,25 +129,15 @@ bool BOM_PRESET::operator==( const BOM_PRESET& rhs ) const
 
 BOM_PRESET BOM_PRESET::GroupedByValue()
 {
-    BOM_PRESET p = { .name = _HKI( "Grouped By Value" ),
-                     .readOnly = true,
-                     .sortField = _( "Reference" ),
-                     .sortAsc = true,
-                     .groupSymbols = true,
-                     .excludeDNP = false };
+    BOM_PRESET p{ _HKI( "Grouped By Value" ), true, {}, _( "Reference" ), true, "", true, false };
 
-    p.fieldsOrdered = std::vector<BOM_FIELD>( {
-            ( BOM_FIELD ){
-                    .name = "Reference", .label = "Reference", .show = true, .groupBy = false },
-            ( BOM_FIELD ){
-                    .name = "Value",     .label = "Value",     .show = true, .groupBy = true  },
-            ( BOM_FIELD ){
-                    .name = "Datasheet", .label = "Datasheet", .show = true, .groupBy = false },
-            ( BOM_FIELD ){
-                    .name = "Footprint", .label = "Footprint", .show = true, .groupBy = false },
-            ( BOM_FIELD ){
-                    .name = "Quantity",  .label = "Qty",       .show = true, .groupBy = false },
-    } );
+    p.fieldsOrdered = std::vector<BOM_FIELD>{
+        { "Reference", "Reference", true, false },
+        { "Value", "Value", true, true },
+        { "Datasheet", "Datasheet", true, false },
+        { "Footprint", "Footprint", true, false },
+        { "Quantity", "Qty", true, false },
+    };
 
     return p;
 }
@@ -155,25 +145,17 @@ BOM_PRESET BOM_PRESET::GroupedByValue()
 
 BOM_PRESET BOM_PRESET::GroupedByValueFootprint()
 {
-    BOM_PRESET p = { .name = _HKI( "Grouped By Value and Footprint" ),
-                     .readOnly = true,
-                     .sortField = _( "Reference" ),
-                     .sortAsc = true,
-                     .groupSymbols = true,
-                     .excludeDNP = false };
+    BOM_PRESET p{
+        _HKI( "Grouped By Value and Footprint" ), true, {}, _( "Reference" ), true, "", true, false
+    };
 
-    p.fieldsOrdered = std::vector<BOM_FIELD>( {
-            ( BOM_FIELD ){
-                    .name = "Reference", .label = "Reference", .show = true, .groupBy = false },
-            ( BOM_FIELD ){
-                    .name = "Value",     .label = "Value",     .show = true, .groupBy = true  },
-            ( BOM_FIELD ){
-                    .name = "Datasheet", .label = "Datasheet", .show = true, .groupBy = false },
-            ( BOM_FIELD ){
-                    .name = "Footprint", .label = "Footprint", .show = true, .groupBy = true  },
-            ( BOM_FIELD ){
-                    .name = "Quantity",  .label = "Qty",       .show = true, .groupBy = false },
-    } );
+    p.fieldsOrdered = std::vector<BOM_FIELD>{
+        { "Reference", "Reference", true, false },
+        { "Value", "Value", true, true },
+        { "Datasheet", "Datasheet", true, false },
+        { "Footprint", "Footprint", true, true },
+        { "Quantity", "Qty", true, false },
+    };
 
     return p;
 }
@@ -228,36 +210,17 @@ void from_json( const nlohmann::json& j, BOM_FMT_PRESET& f )
 
 BOM_FMT_PRESET BOM_FMT_PRESET::CSV()
 {
-    return ( BOM_FMT_PRESET ){ .name = _HKI( "CSV" ),
-                               .readOnly = true,
-                               .fieldDelimiter = wxS( "," ),
-                               .stringDelimiter = wxT( "\"" ),
-                               .refDelimiter = wxT( "," ),
-                               .refRangeDelimiter = wxT( "" ),
-                               .keepTabs = false,
-                               .keepLineBreaks = false };
+    return { _HKI( "CSV" ), true, wxS( "," ), wxT( "\"" ), wxT( "," ), wxT( "" ), false, false };
 }
 
 BOM_FMT_PRESET BOM_FMT_PRESET::TSV()
 {
-    return ( BOM_FMT_PRESET ){ .name = _HKI( "TSV" ),
-                               .readOnly = true,
-                               .fieldDelimiter = wxS( "\t" ),
-                               .stringDelimiter = wxT( "" ),
-                               .refDelimiter = wxT( "," ),
-                               .refRangeDelimiter = wxT( "" ),
-                               .keepTabs = false,
-                               .keepLineBreaks = false };
+    return { _HKI( "TSV" ), true, wxS( "\t" ), wxT( "" ), wxT( "," ), wxT( "" ), false, false };
 }
 
 BOM_FMT_PRESET BOM_FMT_PRESET::Semicolons()
 {
-    return ( BOM_FMT_PRESET ){ .name = _HKI( "Semicolons" ),
-                               .readOnly = true,
-                               .fieldDelimiter = wxS( ";" ),
-                               .stringDelimiter = wxT( "'" ),
-                               .refDelimiter = wxT( "," ),
-                               .refRangeDelimiter = wxT( "" ),
-                               .keepTabs = false,
-                               .keepLineBreaks = false };
+    return {
+        _HKI( "Semicolons" ), true, wxS( ";" ), wxT( "'" ), wxT( "," ), wxT( "" ), false, false
+    };
 }
