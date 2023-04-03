@@ -144,7 +144,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
     void OnKifaceEnd() override;
 
     wxWindow* CreateKiWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway,
-                            int aCtlBits = 0 ) override
+                              int aCtlBits = 0 ) override
     {
         switch( aClassId )
         {
@@ -207,9 +207,9 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
                 frame = aKiway->Player( FRAME_SCH, false );
 
             if( frame )
-                return new PANEL_SYM_EDITING_OPTIONS( aParent, frame, frame );
-            else
-                return new PANEL_SYM_EDITING_OPTIONS( aParent, this, nullptr );
+                SetUserUnits( frame->GetUserUnits() );
+
+            return new PANEL_SYM_EDITING_OPTIONS( aParent, this, frame );
         }
 
         case PANEL_SYM_COLORS:
@@ -234,9 +234,9 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
                 frame = aKiway->Player( FRAME_SCH_VIEWER, false );
 
             if( frame )
-                return new PANEL_EESCHEMA_EDITING_OPTIONS( aParent, frame, frame );
-            else
-                return new PANEL_EESCHEMA_EDITING_OPTIONS( aParent, this, nullptr );
+                SetUserUnits( frame->GetUserUnits() );
+
+            return new PANEL_EESCHEMA_EDITING_OPTIONS( aParent, this, frame );
         }
 
         case PANEL_SCH_ANNO_OPTIONS:

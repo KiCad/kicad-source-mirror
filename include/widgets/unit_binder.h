@@ -221,7 +221,6 @@ protected:
     double setPrecision( double aValue, bool aValueUsesUserUnits );
 
 protected:
-    wxWindow*           m_eventSource;
     bool                m_bindFocusEvent;
 
     ///< The bound widgets
