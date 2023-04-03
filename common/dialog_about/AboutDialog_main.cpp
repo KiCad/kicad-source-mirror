@@ -659,6 +659,10 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                           wxEmptyString,
                                           wxEmptyString,
                                           wxS( "Greek (el_GR)" ) ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxS( "aris-kimi" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          wxS( "Greek (el_GR)" ) ) );
 
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Adolfo Jayme Barrientos" ),
                                           wxEmptyString,
@@ -688,6 +692,10 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                           wxEmptyString,
                                           wxEmptyString,
                                           wxS( "Spanish (ES)" ) ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "VicSanRoPe" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          wxS( "Spanish - Latin American (ES)" ) ) );
 
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Ulices Avila Hernandez" ),
                                           wxEmptyString,
@@ -822,11 +830,43 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                           wxEmptyString,
                                           wxEmptyString,
                                           wxS( "Korean (KO)" ) ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "김낙환" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          wxS( "Korean (KO)" ) ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "이기형" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          wxS( "Korean (KO)" ) ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "남우근" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          wxS( "Korean (KO)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "강명구" ),
                                           wxEmptyString,
                                           wxEmptyString,
                                           wxS( "Korean (KO)" ) ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "김용재" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          wxS( "Korean (KO)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "서범기" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          wxS( "Korean (KO)" ) ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "김세영" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          wxS( "Korean (KO)" ) ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "이윤성" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          wxS( "Korean (KO)" ) ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "KwonHyeokbeom" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          wxS( "Korean (KO)" ) ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Minsu Kim (0xGabriel)" ),
                                           wxEmptyString,
                                           wxEmptyString,
                                           wxS( "Korean (KO)" ) ) );
@@ -857,6 +897,14 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                           wxEmptyString,
                                           wxS( "Dutch (NL)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Bas Wijnen" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          wxS( "Dutch (NL)" ) ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Tom Niesse" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          wxS( "Dutch (NL)" ) ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Christiaan Nieuwlaat" ),
                                           wxEmptyString,
                                           wxEmptyString,
                                           wxS( "Dutch (NL)" ) ) );
@@ -929,6 +977,10 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                           wxEmptyString,
                                           wxS( "Portuguese (PT)" ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Rafael Silva" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          wxS( "Portuguese (PT)" ) ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "ssantos" ),
                                           wxEmptyString,
                                           wxEmptyString,
                                           wxS( "Portuguese (PT)" ) ) );
