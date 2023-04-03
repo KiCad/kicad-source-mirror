@@ -219,6 +219,10 @@ void EDA_BASE_FRAME::windowClosing( wxCloseEvent& event )
     if( canCloseWindow( event ) )
     {
         m_isClosing = true;
+
+        if( m_infoBar )
+            m_infoBar->Dismiss();
+
         APP_SETTINGS_BASE* cfg = config();
 
         if( cfg )
