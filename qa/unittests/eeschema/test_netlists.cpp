@@ -20,8 +20,7 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include "eeschema_test_utils.h"
 
-
-class TEST_NETLIST_EXPORTER_KICAD_FIXTURE : publc TEST_NETLIST_EXPORTER_FIXTURE<NETLIST_EXPORTER_KICAD>
+class TEST_NETLIST_EXPORTER_KICAD_FIXTURE : public TEST_NETLIST_EXPORTER_FIXTURE<NETLIST_EXPORTER_KICAD>
 {
 public:
     void CompareNetlists() override
@@ -179,6 +178,11 @@ BOOST_AUTO_TEST_CASE( LegacyPower )
 BOOST_AUTO_TEST_CASE( LegacyPower4 )
 {
     doNetlistTest( "legacy_power4" );
+}
+
+BOOST_AUTO_TEST_CASE( BusConnections )
+{
+    doNetlistTest( "bus_connection" );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -76,6 +76,7 @@ public:
               m_graph( aGraph ),
               m_dirty( false ),
               m_absorbed( false ),
+              m_is_bus_member( false ),
               m_absorbed_by( nullptr ),
               m_code( -1 ),
               m_multiple_drivers( false ),
@@ -110,8 +111,11 @@ public:
      */
     wxString GetNetName() const;
 
-    /// Returns all the bus labels attached to this subgraph (if any)
-    std::vector<SCH_ITEM*> GetBusLabels() const;
+    /// Returns all the vector-based bus labels attached to this subgraph (if any)
+    std::vector<SCH_ITEM*> GetVectorBusLabels() const;
+
+    /// Returns all the all bus labels attached to this subgraph (if any)
+    std::vector<SCH_ITEM*> GetAllBusLabels() const;
 
     /// Returns the candidate net name for a driver
     const wxString& GetNameForDriver( SCH_ITEM* aItem ) const;
@@ -196,6 +200,12 @@ private:
 
     /// True if this subgraph has been absorbed into another.  No pointers here are safe if so!
     bool m_absorbed;
+
+    /**
+     *  True if the subgraph is not actually part of a net.  These are created for bus members
+     *  to ensure that bus-to-bus connection happens but they don't have any valid data
+     */
+    bool m_is_bus_member;
 
     /// If this subgraph is absorbed, points to the absorbing (and valid) subgraph
     CONNECTION_SUBGRAPH* m_absorbed_by;
@@ -462,6 +472,11 @@ private:
     void generateGlobalPowerPinSubGraphs();
 
     /**
+     * Iterate through labels to create placeholders for bus elements
+     */
+    void generateBusAliasMembers();
+
+    /**
      * Process all subgraphs to assign netcodes and merge subgraphs based on labels
      */
     void processSubGraphs();
@@ -472,6 +487,13 @@ private:
      * @return the assigned code
      */
     int assignNewNetCode( SCH_CONNECTION& aConnection );
+
+    /**
+     *
+     * @param aNetName string with the netname for coding
+     * @return existing netcode (if it exists) or newly created one
+     */
+    int getOrCreateNetCode( const wxString& aNetName );
 
     /**
      * Ensures all members of the bus connection have a valid net code assigned

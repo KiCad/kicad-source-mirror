@@ -195,7 +195,7 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCheckMultipleDrivers )
         m_driver_connection->SetDriver( m_driver );
         m_driver_connection->ClearDirty();
     }
-    else
+    else if( !m_is_bus_member )
     {
         m_driver_connection = nullptr;
     }
@@ -246,7 +246,36 @@ wxString CONNECTION_SUBGRAPH::GetNetName() const
 }
 
 
-std::vector<SCH_ITEM*> CONNECTION_SUBGRAPH::GetBusLabels() const
+std::vector<SCH_ITEM*> CONNECTION_SUBGRAPH::GetAllBusLabels() const
+{
+    std::vector<SCH_ITEM*> labels;
+
+    for( SCH_ITEM* item : m_drivers )
+    {
+        switch( item->Type() )
+        {
+        case SCH_LABEL_T:
+        case SCH_GLOBAL_LABEL_T:
+        {
+            CONNECTION_TYPE type = item->Connection( &m_sheet )->Type();
+
+            // Only consider bus vectors
+            if( type == CONNECTION_TYPE::BUS || type == CONNECTION_TYPE::BUS_GROUP )
+                labels.push_back( item );
+
+            break;
+        }
+
+        default:
+            break;
+        }
+    }
+
+    return labels;
+}
+
+
+std::vector<SCH_ITEM*> CONNECTION_SUBGRAPH::GetVectorBusLabels() const
 {
     std::vector<SCH_ITEM*> labels;
 
@@ -973,6 +1002,57 @@ void CONNECTION_GRAPH::collectAllDriverValues()
 }
 
 
+void CONNECTION_GRAPH::generateBusAliasMembers()
+{
+    std::vector<CONNECTION_SUBGRAPH*> new_subgraphs;
+
+    SCH_CONNECTION dummy( this );
+
+    for( auto&& subgraph : m_driver_subgraphs )
+    {
+        auto vec = subgraph->GetAllBusLabels();
+
+        for( auto& item : vec )
+        {
+            SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( item );
+
+            dummy.ConfigureFromLabel( label->GetText() );
+
+            wxLogTrace( ConnTrace, wxS( "new bus label (%s)" ), label->GetText() );
+
+            for( auto& conn : dummy.Members() )
+            {
+                wxString name = conn->FullLocalName();
+
+                CONNECTION_SUBGRAPH* new_sg = new CONNECTION_SUBGRAPH( this );
+                SCH_CONNECTION* new_conn = new SCH_CONNECTION( this );
+
+                new_conn->SetName( name );
+                new_conn->SetType( CONNECTION_TYPE::NET );
+                int code = assignNewNetCode( *new_conn );
+
+                wxLogTrace( ConnTrace, wxS( "SG(%ld), Adding full local name (%s) with sg (%d)" ), subgraph->m_code,
+                            name, code );
+
+                new_sg->m_driver_connection = new_conn;
+                new_sg->m_code = m_last_subgraph_code++;
+                new_sg->m_sheet = subgraph->GetSheet();
+                new_sg->m_is_bus_member = true;
+                new_sg->m_strong_driver = true;
+                /// Need to figure out why these sgs are not getting connected to their bus parents
+
+                NET_NAME_CODE_CACHE_KEY key = { new_sg->GetNetName(), code };
+                m_net_code_to_subgraphs_map[ key ].push_back( new_sg );
+                m_net_name_to_subgraphs_map[ name ].push_back( new_sg );
+                m_subgraphs.push_back( new_sg );
+                new_subgraphs.push_back( new_sg );
+            }
+        }
+    }
+
+    std::copy( new_subgraphs.begin(), new_subgraphs.end(), std::back_inserter( m_driver_subgraphs ) );
+}
+
 void CONNECTION_GRAPH::generateGlobalPowerPinSubGraphs()
 {
     // Generate subgraphs for global power pins.  These will be merged with other subgraphs
@@ -1125,7 +1205,7 @@ void CONNECTION_GRAPH::processSubGraphs()
 
                 name = new_name;
             }
-            else
+            else if( subgraph->m_driver )
             {
                 // If there is no conflict, promote sheet pins to be strong drivers so that they
                 // will be considered below for propagation/merging.
@@ -1366,7 +1446,8 @@ void CONNECTION_GRAPH::processSubGraphs()
         if( subgraph->m_absorbed )
             continue;
 
-        subgraph->ResolveDrivers();
+        if( !subgraph->ResolveDrivers() )
+            continue;
 
         if( subgraph->m_driver_connection->IsBus() )
             assignNetCodesToBus( subgraph->m_driver_connection );
@@ -1422,6 +1503,8 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
     collectAllDriverValues();
 
     generateGlobalPowerPinSubGraphs();
+
+    generateBusAliasMembers();
 
     PROF_TIMER proc_sub_graph( "ProcessSubGraphs" );
     processSubGraphs();
@@ -1621,7 +1704,7 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
                 // As a visual aid, we can check sheet pins that are driven by themselves to see
                 // if they should be promoted to buses
 
-                if( subgraph->m_driver->Type() == SCH_SHEET_PIN_T )
+                if( subgraph->m_driver && subgraph->m_driver->Type() == SCH_SHEET_PIN_T )
                 {
                     SCH_SHEET_PIN* pin = static_cast<SCH_SHEET_PIN*>( subgraph->m_driver );
 
@@ -1746,21 +1829,29 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
 }
 
 
-int CONNECTION_GRAPH::assignNewNetCode( SCH_CONNECTION& aConnection )
+int CONNECTION_GRAPH::getOrCreateNetCode( const wxString& aNetName )
 {
     int code;
 
-    auto it = m_net_name_to_code_map.find( aConnection.Name() );
+    auto it = m_net_name_to_code_map.find( aNetName );
 
     if( it == m_net_name_to_code_map.end() )
     {
         code = m_last_net_code++;
-        m_net_name_to_code_map[ aConnection.Name() ] = code;
+        m_net_name_to_code_map[ aNetName ] = code;
     }
     else
     {
         code = it->second;
     }
+
+    return code;
+}
+
+
+int CONNECTION_GRAPH::assignNewNetCode( SCH_CONNECTION& aConnection )
+{
+    int code = getOrCreateNetCode( aConnection.Name() );
 
     aConnection.SetNetCode( code );
 
@@ -2241,7 +2332,7 @@ std::vector<const CONNECTION_SUBGRAPH*> CONNECTION_GRAPH::GetBusesNeedingMigrati
         if( !connection->IsBus() )
             continue;
 
-        auto labels = subgraph->GetBusLabels();
+        auto labels = subgraph->GetVectorBusLabels();
 
         if( labels.size() > 1 )
         {
