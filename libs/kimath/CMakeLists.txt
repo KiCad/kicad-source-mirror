@@ -58,5 +58,5 @@ target_include_directories( kimath PUBLIC
 target_include_directories( kimath PRIVATE
     # This include REALLY shouldn't be here, but shape_arc grew a dependency on the units somehow
     ${CMAKE_SOURCE_DIR}/include
-    ${wxWidgets_LIBRARIES}
+    ${wxWidgets_INCLUDE_DIRS}
 )
