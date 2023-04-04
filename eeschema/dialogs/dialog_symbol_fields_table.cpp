@@ -662,16 +662,17 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRemoveField( wxCommandEvent& event )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnRenameField( wxCommandEvent& event )
 {
-    int col = -1;
     int row = m_fieldsCtrl->GetSelectedRow();
+    wxString fieldName = m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN );
 
     // Should never occur: "Rename Field..." button should be disabled if invalid selection
     // via OnFieldsCtrlSelectionChanged()
     wxCHECK_RET( row != -1, wxS( "Some user defined field must be selected first" ) );
     wxCHECK_RET( row >= MANDATORY_FIELDS, wxS( "Mandatory fields cannot be renamed" ) );
+    wxCHECK_RET( !fieldName.IsEmpty(), wxS( "Field must have a name" ) );
 
-    wxString fieldName = m_fieldsCtrl->GetTextValue( row, 0 );
-
+    int col = m_dataModel->GetFieldNameCol( fieldName );
+    wxCHECK_RET( col != -1, wxS( "Existing field name missing from data model" ) );
 
     wxTextEntryDialog dlg( this, _( "New field name:" ), _( "Rename Field" ) );
 
@@ -680,34 +681,23 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRenameField( wxCommandEvent& event )
 
     wxString newFieldName = dlg.GetValue();
 
-    if( fieldName.IsEmpty() )
+    // No change, no-op
+    if( newFieldName == fieldName )
+         return;
+
+    // New field name already exists
+    if( m_dataModel->GetFieldNameCol( newFieldName ) != -1 )
     {
-         DisplayError( this, _( "Field must have a name." ) );
+         wxString confirm_msg = wxString::Format(
+                 _( "Field name %s already exists. Cannot rename over existing field." ),
+                 newFieldName );
+         DisplayError( this, confirm_msg );
          return;
     }
 
-    for( int i = 0; i < m_dataModel->GetNumberCols(); ++i )
-    {
-         if( fieldName == m_dataModel->GetColFieldName( i ) )
-         {
-            if( col == -1 )
-            {
-                col = i;
-            }
-            else
-            {
-                wxString confirm_msg = wxString::Format(
-                        _( "Field name %s already exists. Cannot rename over existing field." ),
-                        fieldName );
-                DisplayError( this, confirm_msg );
-                return;
-            }
-         }
-    }
-
-
     m_dataModel->RenameColumn( col, newFieldName );
-    m_fieldsCtrl->SetTextValue( newFieldName, col, 0 );
+    m_fieldsCtrl->SetTextValue( newFieldName, col, DISPLAY_NAME_COLUMN );
+    m_fieldsCtrl->SetTextValue( newFieldName, col, FIELD_NAME_COLUMN );
 
     syncBomPresetSelection();
 }
