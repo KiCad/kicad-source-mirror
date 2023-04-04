@@ -410,8 +410,8 @@ std::vector<FOOTPRINT*> EAGLE_PLUGIN::GetImportedCachedLibraryFootprints()
 {
     std::vector<FOOTPRINT*> retval;
 
-    for( std::pair<wxString, FOOTPRINT*> fp : m_templates )
-        retval.push_back( static_cast<FOOTPRINT*>( fp.second->Clone() ) );
+    for( const auto& [ name, footprint ] : m_templates )
+        retval.push_back( static_cast<FOOTPRINT*>( footprint->Clone() ) );
 
     return retval;
 }
@@ -1093,7 +1093,7 @@ void EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLib, const wxString* aLibName )
         FOOTPRINT* footprint = makeFootprint( package, pack_ref );
 
         // add the templating FOOTPRINT to the FOOTPRINT template factory "m_templates"
-        std::pair<FOOTPRINT_MAP::iterator, bool> r = m_templates.insert( { key, footprint} );
+        auto r = m_templates.insert( { key, footprint } );
 
         if( !r.second /* && !( m_props && m_props->Value( "ignore_duplicates" ) ) */ )
         {
@@ -1173,8 +1173,7 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
         m_xpath->Value( e.name.c_str() );
 
         wxString pkg_key = makeKey( e.library, e.package );
-
-        FOOTPRINT_MAP::const_iterator it = m_templates.find( pkg_key );
+        auto     it = m_templates.find( pkg_key );
 
         if( it == m_templates.end() )
         {
@@ -2474,8 +2473,11 @@ void EAGLE_PLUGIN::transferPad( const EPAD_COMMON& aEaglePad, PAD* aPad ) const
 
 void EAGLE_PLUGIN::deleteTemplates()
 {
-    for( auto& t : m_templates )
-        delete t.second;
+    for( const auto& [ name, footprint ] : m_templates )
+    {
+        footprint->SetParent( nullptr );
+        delete footprint;
+    }
 
     m_templates.clear();
 }
@@ -3162,8 +3164,8 @@ void EAGLE_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wxS
     // Some of the files may have been parsed correctly so we want to add the valid files to
     // the library.
 
-    for( FOOTPRINT_MAP::const_iterator it = m_templates.begin(); it != m_templates.end(); ++it )
-        aFootprintNames.Add( it->first );
+    for( const auto& [ name, footprint ] : m_templates )
+        aFootprintNames.Add( name );
 
     if( !errorMsg.IsEmpty() && !aBestEfforts )
         THROW_IO_ERROR( errorMsg );
@@ -3176,7 +3178,7 @@ FOOTPRINT* EAGLE_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
 {
     init( aProperties );
     cacheLib( aLibraryPath );
-    FOOTPRINT_MAP::const_iterator it = m_templates.find( aFootprintName );
+    auto it = m_templates.find( aFootprintName );
 
     if( it == m_templates.end() )
         return nullptr;
