@@ -127,7 +127,7 @@ bool DIALOG_GRID_SETTINGS::TransferDataFromWindow()
 
     // Notify TOOLS
     TOOL_MANAGER* mgr = m_parent->GetToolManager();
-    mgr->ResetTools( TOOL_BASE::MODEL_RELOAD );
+    mgr->ResetTools( TOOL_BASE::REDRAW );
 
     // Notify GAL
     mgr->RunAction( ACTIONS::gridPreset, true, static_cast<intptr_t>( gridCfg.last_size_idx ) );

@@ -298,11 +298,15 @@ void EE_SELECTION_TOOL::Reset( RESET_REASON aReason )
 {
     m_frame = getEditFrame<SCH_BASE_FRAME>();
 
-    if( aReason == TOOL_BASE::MODEL_RELOAD )
+    if( aReason != TOOL_BASE::REDRAW )
     {
         // Remove pointers to the selected items from containers without changing their
         // properties (as they are already deleted while a new sheet is loaded)
         m_selection.Clear();
+    }
+
+    if( aReason == TOOL_BASE::MODEL_RELOAD )
+    {
         getView()->GetPainter()->GetSettings()->SetHighlight( false );
 
         SYMBOL_EDIT_FRAME*   symbolEditFrame = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame );
@@ -318,11 +322,6 @@ void EE_SELECTION_TOOL::Reset( RESET_REASON aReason )
         {
             m_isSymbolViewer = symbolViewerFrame != nullptr;
         }
-    }
-    else
-    {
-        // Restore previous properties of selected items and remove them from containers
-        ClearSelection();
     }
 
     // Reinsert the VIEW_GROUP, in case it was removed from the VIEW

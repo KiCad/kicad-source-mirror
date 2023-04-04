@@ -211,24 +211,18 @@ void PCB_SELECTION_TOOL::Reset( RESET_REASON aReason )
     m_frame = getEditFrame<PCB_BASE_FRAME>();
     m_isFootprintEditor = m_frame->IsType( FRAME_FOOTPRINT_EDITOR );
 
-    if( m_enteredGroup )
-        ExitGroup();
+    if( aReason != TOOL_BASE::REDRAW )
+    {
+        if( m_enteredGroup )
+            ExitGroup();
+
+        // Deselect any item being currently in edit, to avoid unexpected behavior and remove
+        // pointers to the selected items from containers.
+        ClearSelection( true );
+    }
 
     if( aReason == TOOL_BASE::MODEL_RELOAD )
-    {
-        // Deselect any item being currently in edit, to avoid unexpected behavior
-        // and remove pointers to the selected items from containers
-        // without changing their properties (as they are already deleted
-        // while a new board is loaded)
-        ClearSelection( true );
-
         getView()->GetPainter()->GetSettings()->SetHighlight( false );
-    }
-    else if ( aReason != TOOL_BASE::REDRAW )
-    {
-        // Restore previous properties of selected items and remove them from containers
-        ClearSelection( true );
-    }
 
     // Reinsert the VIEW_GROUP, in case it was removed from the VIEW
     view()->Remove( &m_selection );
