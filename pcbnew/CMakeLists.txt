@@ -595,6 +595,7 @@ target_link_libraries( pcbnew
     common
     gal
     scripting
+    core
     nlohmann_json
     rectpack2d
     argparse::argparse
@@ -625,6 +626,7 @@ make_lexer(
 target_link_libraries( pcbnew_kiface_objects
     PRIVATE
         common
+        core
         dxflib_qcad
         nanosvg
         tinyspline_lib
@@ -672,6 +674,7 @@ set( PCBNEW_KIFACE_LIBRARIES
     common
     gal
     scripting
+    core
     dxflib_qcad
     tinyspline_lib
     idf3

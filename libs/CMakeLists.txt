@@ -22,6 +22,7 @@
 #
 
 # Build file for generic re-useable libraries
+add_subdirectory( core )
 add_subdirectory( kimath )
 add_subdirectory( kiplatform )
 add_subdirectory( sexpr )

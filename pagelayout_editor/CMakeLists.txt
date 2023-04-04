@@ -85,6 +85,7 @@ target_link_libraries( pl_editor
     # There's way too much crap coming in from common yet.
     gal
     common
+    core
     ${wxWidgets_LIBRARIES}
     )
 
@@ -102,6 +103,7 @@ add_library( pl_editor_kiface MODULE
 target_link_libraries( pl_editor_kiface
     gal
     common
+    core
     ${wxWidgets_LIBRARIES}
     )
 set_target_properties( pl_editor_kiface PROPERTIES

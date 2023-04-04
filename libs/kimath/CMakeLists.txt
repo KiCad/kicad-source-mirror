@@ -38,6 +38,7 @@ add_library( kimath STATIC
 )
 
 target_link_libraries( kimath
+    core
     clipper
     clipper2
     othermath
@@ -49,9 +50,13 @@ target_link_libraries( kimath
 target_include_directories( kimath PUBLIC
     ${PROJECT_BINARY_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/include
+
+    # This include REALLY shouldn't be here, but shape_arc.h grew a dependency on the units somehow
+    ${CMAKE_SOURCE_DIR}/include
 )
 
 target_include_directories( kimath PRIVATE
-    ${PROJECT_SOURCE_DIR}/include    # core/kicad_algo.h is needed for shape_arc
+    # This include REALLY shouldn't be here, but shape_arc grew a dependency on the units somehow
+    ${CMAKE_SOURCE_DIR}/include
     ${wxWidgets_LIBRARIES}
 )

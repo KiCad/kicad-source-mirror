@@ -112,6 +112,7 @@ target_link_libraries( gerbview
     # There's way too much crap coming in from common yet.
     gal
     common
+    core
     nlohmann_json
     ${wxWidgets_LIBRARIES}
     )
@@ -137,6 +138,7 @@ target_link_libraries( gerbview_kiface_objects
     PUBLIC
         common
         gal
+        core
     )
 
 # the main gerbview program, in DSO form.
@@ -153,6 +155,7 @@ target_link_libraries( gerbview_kiface
         nlohmann_json
         gal
         common
+        core
         gerbview_kiface_objects
         ${wxWidgets_LIBRARIES}
     )

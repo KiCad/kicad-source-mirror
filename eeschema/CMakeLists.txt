@@ -483,6 +483,7 @@ target_link_libraries( eeschema_kiface
         markdown_lib
         scripting
         sexpr
+        core
         Boost::headers
         ${wxWidgets_LIBRARIES}
         ${NGSPICE_LIBRARY}

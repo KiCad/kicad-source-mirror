@@ -76,7 +76,6 @@ target_link_libraries( qa_kimath
 )
 
 target_include_directories( qa_kimath PRIVATE
-    ${CMAKE_SOURCE_DIR}/include         # Needed for core/optional.h
     ${CMAKE_SOURCE_DIR}/qa/mocks/include
     ${CMAKE_CURRENT_SOURCE_DIR}
 )

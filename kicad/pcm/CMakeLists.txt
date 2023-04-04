@@ -55,7 +55,10 @@ add_library( pcm_settings STATIC
 # This is a circular dependency but it's not a problem for static libs.
 # Refactoring this would need separating kicad_settings, settings manager
 # and pgm_base out of common.
-target_link_libraries( pcm_settings common )
+target_link_libraries( pcm_settings
+    common
+    core
+)
 
 target_include_directories(
     pcm_settings

@@ -483,6 +483,7 @@ target_link_libraries( common
     libcontext
     kimath
     kiplatform
+    core
     fmt::fmt
     gal
     scripting
@@ -618,6 +619,7 @@ target_link_libraries( pcbcommon PUBLIC
     delaunator
     kimath
     kiplatform
+    core
     threadpool
 )
 

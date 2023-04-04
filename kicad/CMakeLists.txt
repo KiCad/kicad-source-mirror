@@ -118,6 +118,7 @@ if( APPLE )
     target_link_libraries( kicad
         nlohmann_json
         common
+        core
         ${wxWidgets_LIBRARIES}
         )
 
@@ -129,6 +130,7 @@ if( APPLE )
         nlohmann_json
         common
         ${wxWidgets_LIBRARIES}
+        core
         )
 else()
     target_link_libraries( kicad
@@ -136,6 +138,7 @@ else()
         common
         gal
         common      #repeated due to a circular dependency between gal and common
+        core
         ${wxWidgets_LIBRARIES}
         )
 
@@ -144,6 +147,7 @@ else()
         common
         gal
         common      #repeated due to a circular dependency between gal and common
+        core
         ${wxWidgets_LIBRARIES}
         )
 endif()
