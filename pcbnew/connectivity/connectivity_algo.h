@@ -42,7 +42,6 @@
 #include <functional>
 #include <vector>
 #include <deque>
-#include <intrusive_list.h>
 
 #include <connectivity/connectivity_rtree.h>
 #include <connectivity/connectivity_data.h>
