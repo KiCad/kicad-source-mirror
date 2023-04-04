@@ -84,7 +84,7 @@ void DIALOG_MIGRATE_BUSES::loadGraphData()
         status.subgraph = subgraph;
         status.approved = false;
 
-        std::vector<SCH_ITEM*> labels = subgraph->GetBusLabels();
+        std::vector<SCH_ITEM*> labels = subgraph->GetVectorBusLabels();
         wxASSERT( labels.size() > 1 );
 
         for( SCH_ITEM* label : labels )
@@ -205,7 +205,7 @@ void DIALOG_MIGRATE_BUSES::onAcceptClicked( wxCommandEvent& aEvent )
     m_items[sel].approved_label = m_cb_new_name->GetStringSelection();
     m_items[sel].approved = true;
 
-    std::vector<SCH_ITEM*> labels =  m_items[sel].subgraph->GetBusLabels();
+    std::vector<SCH_ITEM*> labels =  m_items[sel].subgraph->GetVectorBusLabels();
 
     for( SCH_ITEM* label : labels )
         static_cast<SCH_LABEL_BASE*>( label )->SetText( m_items[sel].approved_label );

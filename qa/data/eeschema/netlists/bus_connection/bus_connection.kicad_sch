@@ -1,0 +1,69 @@
+(kicad_sch (version 20230221) (generator eeschema)
+
+  (uuid 3082b26f-b83d-4458-bb0e-9c16987db84d)
+
+  (paper "A5")
+
+  (lib_symbols
+  )
+
+  (bus_alias "b_x" (members "x"))
+  (bus_alias "a_xyz" (members "x" "y" "z"))
+  (bus_alias "b_yz" (members "y" "z"))
+
+  (bus (pts (xy 85.725 48.26) (xy 113.665 48.26))
+    (stroke (width 0) (type default))
+    (uuid 6a3f32a3-fa94-40d4-b2c7-ea69521bd6e2)
+  )
+
+  (label "top{a_xyz}" (at 95.25 48.26 0) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid ea738e62-37a3-40e2-9e94-fa1e0c67ca38)
+  )
+
+  (sheet (at 69.85 41.275) (size 15.875 13.97) (fields_autoplaced)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0000))
+    (uuid 409e30f5-e026-4121-aa4f-ead0fa3cc75d)
+    (property "Sheetname" "a" (at 69.85 40.5634 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "a.kicad_sch" (at 69.85 55.8296 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (pin "{a_xyz}" bidirectional (at 85.725 48.26 0)
+      (effects (font (size 1.27 1.27)) (justify right))
+      (uuid 1560bde8-b48c-4bba-bc9a-d0b992953eb8)
+    )
+    (instances
+      (project "bus_connection"
+        (path "/3082b26f-b83d-4458-bb0e-9c16987db84d" (page "2"))
+      )
+    )
+  )
+
+  (sheet (at 113.665 43.18) (size 16.51 13.335) (fields_autoplaced)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0000))
+    (uuid 8e047953-57e8-499d-89c7-aaeb7ad61c51)
+    (property "Sheetname" "a2" (at 113.665 42.4684 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "a2.kicad_sch" (at 113.665 57.0996 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (pin "test{a_xyz}" bidirectional (at 113.665 48.26 180)
+      (effects (font (size 1.27 1.27)) (justify left))
+      (uuid 62edb4b4-8dde-4234-a79c-0f056d5d0643)
+    )
+    (instances
+      (project "bus_connection"
+        (path "/3082b26f-b83d-4458-bb0e-9c16987db84d" (page "3"))
+      )
+    )
+  )
+
+  (sheet_instances
+    (path "/" (page "1"))
+  )
+)

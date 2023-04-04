@@ -179,4 +179,10 @@ BOOST_AUTO_TEST_CASE( HierNoConnect )
 }
 
 
+BOOST_AUTO_TEST_CASE( BusConnection )
+{
+    TestNetlist( "bus_connection" );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
