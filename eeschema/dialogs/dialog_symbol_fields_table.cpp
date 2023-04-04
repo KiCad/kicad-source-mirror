@@ -511,6 +511,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::AddField( const wxString& aFieldName, const wxS
     fieldsCtrlRow.push_back( wxVariant( aFieldName ) );
 
     m_fieldsCtrl->AppendItem( fieldsCtrlRow );
+
+    wxGridTableMessage msg( m_dataModel, wxGRIDTABLE_NOTIFY_COLS_APPENDED, 1 );
+    m_grid->ProcessTableMessage( msg );
 }
 
 
@@ -593,9 +596,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnAddField( wxCommandEvent& event )
     }
 
     AddField( fieldName, fieldName, true, false, true );
-
-    wxGridTableMessage msg( m_dataModel, wxGRIDTABLE_NOTIFY_COLS_APPENDED, 1 );
-    m_grid->ProcessTableMessage( msg );
 
     wxGridCellAttr* attr = new wxGridCellAttr;
     m_grid->SetColAttr( m_dataModel->GetColsCount() - 1, attr );
@@ -1298,11 +1298,11 @@ void DIALOG_SYMBOL_FIELDS_TABLE::syncBomPresetSelection()
                                 // Only compare shown or grouped fields
                                 std::vector<BOM_FIELD> A, B;
 
-                                for( auto field : preset.fieldsOrdered )
+                                for( const BOM_FIELD& field : preset.fieldsOrdered )
                                     if( field.show || field.groupBy )
                                         A.emplace_back( field );
 
-                                for( auto field : current.fieldsOrdered )
+                                for( const BOM_FIELD& field : current.fieldsOrdered )
                                     if( field.show || field.groupBy )
                                         B.emplace_back( field );
 

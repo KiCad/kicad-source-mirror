@@ -79,7 +79,7 @@ const std::vector<BOM_FIELD> FIELDS_EDITOR_GRID_DATA_MODEL::GetFieldsOrdered()
 {
     std::vector<BOM_FIELD> fields;
 
-    for( auto col : m_cols )
+    for( const DATA_MODEL_COL& col : m_cols )
         fields.push_back( { col.m_fieldName, col.m_label, col.m_show, col.m_group } );
 
     return fields;
@@ -302,6 +302,9 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRef,
 {
     int  refCol = GetFieldNameCol( TEMPLATE_FIELDNAME::GetDefaultFieldName( REFERENCE_FIELD ) );
     bool matchFound = false;
+
+    if( refCol == -1 )
+        return false;
 
     // First check the reference column.  This can be done directly out of the
     // SCH_REFERENCEs as the references can't be edited in the grid.
@@ -609,7 +612,10 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyBomPreset( const BOM_PRESET& aPreset )
         // Add any missing fields, if the user doesn't add any data
         // they won't be saved to the symbols anywa
         if( col == -1 )
+        {
             AddColumn( field.name, field.label, true );
+            col = GetFieldNameCol( field.name );
+        }
         else
             SetColLabelValue( col, field.label );
 
@@ -660,17 +666,18 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::Export( const BOM_FMT_PRESET& settings )
     if( m_cols.empty() )
         return out;
 
-    size_t last_col = m_cols.size() - 1;
+    int last_col = -1;
 
     // Find the location for the line terminator
-    for( size_t col = m_cols.size() - 1; col >= 0; --col )
+    for( size_t col = 0; col < m_cols.size(); col++ )
     {
         if( m_cols[col].m_show )
-        {
-            last_col = col;
-            break;
-        }
+            last_col = (int) col;
     }
+
+    // No shown columns
+    if( last_col == -1 )
+        return out;
 
     auto formatField = [&]( wxString field, bool last ) -> wxString
         {
@@ -699,7 +706,7 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::Export( const BOM_FMT_PRESET& settings )
         if( !m_cols[col].m_show )
             continue;
 
-        out.Append( formatField( m_cols[col].m_label, col == last_col ) );
+        out.Append( formatField( m_cols[col].m_label, col == (size_t) last_col ) );
     }
 
     // Data rows
@@ -717,7 +724,7 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::Export( const BOM_FMT_PRESET& settings )
             // Get the unanottated version of the field, e.g. no ">   " or "v   " by
             out.Append( formatField( GetExportValue( (int) row, (int) col, settings.refDelimiter,
                                                      settings.refRangeDelimiter ),
-                                     col == last_col ) );
+                                     col == (size_t) last_col ) );
         }
     }
 
