@@ -896,6 +896,7 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
     LSEQ         layers       = LSET( board()->GetEnabledLayers() & LSET::AllCuMask() ).Seq();
     PCB_LAYER_ID currentLayer = (PCB_LAYER_ID) m_router->GetCurrentLayer();
     PCB_LAYER_ID targetLayer  = UNDEFINED_LAYER;
+    BOARD*       brd          = board();
 
     if( aEvent.IsAction( &PCB_ACTIONS::layerNext ) )
     {
@@ -903,6 +904,7 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
             m_lastTargetLayer = currentLayer;
 
         size_t idx = 0;
+        size_t target_idx = 0;
 
         for( size_t i = 0; i < layers.size(); i++ )
         {
@@ -913,8 +915,29 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
             }
         }
 
-        idx         = ( idx + 1 ) % layers.size();
-        targetLayer = layers[idx];
+        target_idx = ( idx + 1 ) % layers.size();
+        // issue: #14480
+        // idx + 1 layer may be invisible, switches to next visible layer
+        for( size_t i = 0; i < layers.size() - 1; i++ )
+        {
+            if( brd->IsLayerVisible( static_cast<PCB_LAYER_ID>( layers[target_idx] ) ) )
+            {
+                targetLayer = layers[target_idx];
+                break;
+            }
+            target_idx += 1;
+
+            if( target_idx >= layers.size() )
+            {
+                target_idx = 0;
+            }
+        }
+
+        if( targetLayer == UNDEFINED_LAYER )
+        {
+            // if there is no visible layers
+            return 0;
+        }
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::layerPrev ) )
     {
@@ -922,6 +945,7 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
             m_lastTargetLayer = currentLayer;
 
         size_t idx = 0;
+        size_t target_idx = 0;
 
         for( size_t i = 0; i < layers.size(); i++ )
         {
@@ -932,8 +956,27 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
             }
         }
 
-        idx         = ( idx > 0 ) ? ( idx - 1 ) : ( layers.size() - 1 );
-        targetLayer = layers[idx];
+        target_idx = ( idx > 0 ) ? ( idx - 1 ) : ( layers.size() - 1 );
+
+        for( size_t i = 0; i < layers.size() - 1; i++ )
+        {
+            if( brd->IsLayerVisible( static_cast<PCB_LAYER_ID>( layers[target_idx] ) ) )
+            {
+                targetLayer = layers[target_idx];
+                break;
+            }
+
+            if( target_idx > 0 )
+                target_idx -= 1;
+            else
+                target_idx = layers.size() - 1;
+        }
+
+        if( targetLayer == UNDEFINED_LAYER )
+        {
+            // if there is no visible layers
+            return 0;
+        }
     }
     else
     {
