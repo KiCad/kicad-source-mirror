@@ -29,13 +29,16 @@ BOOST_AUTO_TEST_SUITE( TextAttributes )
 
 BOOST_AUTO_TEST_CASE( Compare )
 {
+    std::hash<TEXT_ATTRIBUTES> hasher;
     TEXT_ATTRIBUTES a;
     TEXT_ATTRIBUTES b;
 
     BOOST_CHECK_EQUAL( a, b );
+    BOOST_CHECK_EQUAL( hasher( a ), hasher( b ) );
 
     a.m_Font = KIFONT::FONT::GetFont();
     BOOST_CHECK_GT( a, b );
+    BOOST_CHECK_NE( hasher( a ), hasher( b ) );
 
     a.m_Font = nullptr;
     b.m_Font = KIFONT::FONT::GetFont();

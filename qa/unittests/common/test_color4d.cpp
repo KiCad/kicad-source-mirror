@@ -307,17 +307,21 @@ BOOST_AUTO_TEST_CASE( FromWx )
 
 
 /**
- * Check the Compare method.
+ * Check the Compare method and hashing.
  */
 BOOST_AUTO_TEST_CASE( Compare )
 {
+    std::hash<COLOR4D> colorHasher;
+
     COLOR4D a( 0.5, 0.5, 0.5, 0.5 );
     COLOR4D b( 0.5, 0.5, 0.5, 0.5 );
 
     BOOST_CHECK_EQUAL( a.Compare( b ), 0 );
+    BOOST_CHECK_EQUAL( colorHasher( a ), colorHasher( b ) );
 
     b.r = 0.25;
     BOOST_CHECK_GT( a.Compare( b ), 0 );
+    BOOST_CHECK_NE( colorHasher( a ), colorHasher( b ) );
 
     b.r = 0.75;
     BOOST_CHECK_LT( a.Compare( b ), 0 );

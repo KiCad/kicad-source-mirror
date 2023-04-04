@@ -30,6 +30,7 @@
 #include <wx/debug.h>
 #include <wx/colour.h>
 #include <wx/string.h>
+#include <hash.h>
 #include <nlohmann/json_fwd.hpp>
 
 
@@ -403,5 +404,18 @@ void to_json( nlohmann::json& aJson, const COLOR4D& aColor );
 void from_json( const nlohmann::json& aJson, COLOR4D& aColor );
 
 } // namespace KIGFX
+
+template<>
+struct std::hash<KIGFX::COLOR4D>
+{
+    std::size_t operator()( const KIGFX::COLOR4D& aColor ) const
+    {
+        std::size_t seed;
+
+        hash_combine( seed, aColor.r, aColor.b, aColor.g, aColor.a );
+
+        return seed;
+    }
+};
 
 #endif /* COLOR4D_H_ */

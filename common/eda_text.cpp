@@ -1000,6 +1000,14 @@ wxString EDA_TEXT::GotoPageHref( const wxString& aDestination )
 }
 
 
+std::ostream& operator<<( std::ostream& aStream, const EDA_TEXT& aText )
+{
+    aStream << aText.GetText();
+
+    return aStream;
+}
+
+
 static struct EDA_TEXT_DESC
 {
     EDA_TEXT_DESC()

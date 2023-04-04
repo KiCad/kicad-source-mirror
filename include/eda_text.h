@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -95,7 +95,10 @@ public:
      * for intance a title, a prefix for texts in display functions.
      * False to disable any added text (for instance when writing the shown text in netlists).
      */
-    virtual wxString GetShownText( int aDepth = 0, bool aAllowExtraText = true ) const { return m_shown_text; }
+    virtual wxString GetShownText( int aDepth = 0, bool aAllowExtraText = true ) const
+    {
+        return m_shown_text;
+    }
 
     /**
      * Indicates the ShownText has text var references which need to be processed.
@@ -330,6 +333,10 @@ public:
 
     int Compare( const EDA_TEXT* aOther ) const;
 
+    bool operator==( const EDA_TEXT& aRhs ) const { return Compare( &aRhs ) == 0; }
+    bool operator<( const EDA_TEXT& aRhs ) const { return Compare( &aRhs ) < 0; }
+    bool operator>( const EDA_TEXT& aRhs ) const { return Compare( &aRhs ) > 0; }
+
     virtual bool HasHyperlink() const           { return !m_hyperlink.IsEmpty(); }
     wxString     GetHyperlink() const           { return m_hyperlink; }
     void         SetHyperlink( wxString aLink ) { m_hyperlink = aLink; }
@@ -407,5 +414,22 @@ private:
     VECTOR2I         m_pos;
 };
 
+
+extern std::ostream& operator<<( std::ostream& aStream, const EDA_TEXT& aAttributes );
+
+
+template<>
+struct std::hash<EDA_TEXT>
+{
+    std::size_t operator()( const EDA_TEXT& aText ) const
+    {
+        std::size_t seed;
+
+        hash_combine( seed, aText.GetText(), aText.GetAttributes(), aText.GetTextPos().x,
+                      aText.GetTextPos().y );
+
+        return seed;
+    }
+};
 
 #endif   //  EDA_TEXT_H_
