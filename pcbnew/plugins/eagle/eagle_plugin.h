@@ -332,10 +332,11 @@ private:
 
     NET_MAP       m_pads_to_nets;   ///< net list
 
-    FOOTPRINT_MAP m_templates;      ///< is part of a FOOTPRINT factory that operates using copy
-                                    ///< construction.
-                                    ///< lookup key is either libname.packagename or simply
-                                    ///< packagename if FootprintLoad() or FootprintEnumberate()
+    std::map<wxString, FOOTPRINT*> m_templates;  ///< is part of a FOOTPRINT factory that operates
+                                                 ///< using copy construction.
+                                                 ///< lookup key is either libname.packagename or
+                                                 ///< simply packagename if FootprintLoad() or
+                                                 ///< FootprintEnumberate()
 
     const STRING_UTF8_MAP*   m_props;    ///< passed via Save() or Load(), no ownership, may be NULL.
     BOARD*              m_board;    ///< which BOARD is being worked on, no ownership here
