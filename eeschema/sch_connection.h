@@ -185,11 +185,6 @@ public:
 
     wxString VectorPrefix() const { return m_vector_prefix; }
 
-    std::vector< std::shared_ptr< SCH_CONNECTION > >& Members()
-    {
-        return m_members;
-    }
-
     const std::vector< std::shared_ptr< SCH_CONNECTION > >& Members() const
     {
         return m_members;
