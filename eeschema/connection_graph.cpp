@@ -1770,7 +1770,7 @@ int CONNECTION_GRAPH::assignNewNetCode( SCH_CONNECTION& aConnection )
 
 void CONNECTION_GRAPH::assignNetCodesToBus( SCH_CONNECTION* aConnection )
 {
-    std::vector< std::shared_ptr<SCH_CONNECTION>>& connections_to_check( aConnection->Members() );
+    std::vector<std::shared_ptr<SCH_CONNECTION>> connections_to_check( aConnection->Members() );
 
     for( unsigned i = 0; i < connections_to_check.size(); i++ )
     {

@@ -903,7 +903,7 @@ void SCH_LINE::Plot( PLOTTER* aPlotter, bool aBackground ) const
     {
         if( SCH_CONNECTION* connection = Connection() )
         {
-            for( std::shared_ptr<SCH_CONNECTION>& member : connection->Members() )
+            for( const std::shared_ptr<SCH_CONNECTION>& member : connection->Members() )
                 properties.emplace_back( wxT( "!" ) + member->Name() );
         }
 
