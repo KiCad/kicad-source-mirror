@@ -434,12 +434,13 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
     wxXmlDocument xmlDocument;
     wxFFileInputStream stream( m_filename.GetFullPath() );
 
-    // read first line to check for legacy kicad sch file
+    // read first line to check for Eagle XML format file
     wxTextInputStream text( stream );
     wxString line = text.ReadLine();
-    if( line.StartsWith( wxT( "EESchema" ) ) )
+    if( !line.StartsWith( wxT( "<?xml" ) ) )
     {
-        THROW_IO_ERROR( wxString::Format( _( "'%s' is an legacy Kicad schematic format file.  Try to open this file instead of importing it." ),
+        THROW_IO_ERROR( wxString::Format( _( "'%s' is an Eagle binary-format schematic file; "
+                                             "only Eagle XML-format schematics can be imported." ),
                                           m_filename.GetFullPath() ) );
     }
 
