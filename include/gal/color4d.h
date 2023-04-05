@@ -130,6 +130,37 @@ public:
     }
 
     /**
+     * A COLOR4D constructor that is constexpr-capable.
+     *
+     * This constructor simply adds a 5th unused argument to differentiate it from
+     * the normal 4-argument constructor, so any COLOR4D instances that should be compile-time
+     * created should call this 5-argument version, while everyother instance should use the
+     * 4-argument version.
+     *
+     * @param aRed     is the red component   [0.0 .. 1.0].
+     * @param aGreen   is the green component [0.0 .. 1.0].
+     * @param aBlue    is the blue component  [0.0 .. 1.0].
+     * @param aAlpha   is the alpha value     [0.0 .. 1.0].
+     * @param aIsConst is just an argument to differentiate this constructor from the 4-argument one,
+     *                 actual value doesn't matter.
+     */
+    constexpr COLOR4D( double aRed, double aGreen, double aBlue, double aAlpha, bool aIsConst ) :
+        r( aRed ),
+        g( aGreen ),
+        b( aBlue ),
+        a( aAlpha )
+    {
+        /*!!!!!!!!!!!!!!!!!!!!!!
+         * DO NOT change these to wxASSERT or collapse this into the other constructor,
+         * it must remain separate to ensure COLOR4D objects can be compile-time constructed
+         */
+        assert( r >= 0.0 && r <= 1.0 );
+        assert( g >= 0.0 && g <= 1.0 );
+        assert( b >= 0.0 && b <= 1.0 );
+        assert( a >= 0.0 && a <= 1.0 );
+    }
+
+    /**
      * @param aColor is one of KiCad's palette colors.
      * @see EDA_COLOR_T
      */
