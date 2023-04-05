@@ -455,13 +455,24 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint, REPORTER* 
     wxASSERT( aLibFootprint );
     bool diff = false;
 
-    if( IsFlipped() )
+    // To avoid issues when comparing the footprint on board and the footprint in library
+    // use a footprint not flipped, not rotated and at position 0,0.
+    // Otherwise one can see differences when comparing coordinates of some items
+    if( IsFlipped() || GetPosition() != VECTOR2I( 0, 0 )  || GetOrientation() != ANGLE_0 )
     {
         std::unique_ptr<FOOTPRINT> temp( static_cast<FOOTPRINT*>( Clone() ) );
-        temp->Flip( {0,0}, false );
         temp->SetParentGroup( nullptr );
 
-        diff = temp->FootprintNeedsUpdate( aLibFootprint );
+        if( IsFlipped() )
+            temp->Flip( {0,0}, false );
+
+        if( GetPosition() != VECTOR2I( 0, 0 ) )
+            temp->SetPosition( { 0, 0 } );
+
+        if( GetOrientation() != ANGLE_0 )
+            temp->SetOrientation( ANGLE_0 );
+
+        diff = temp->FootprintNeedsUpdate( aLibFootprint, aReporter );
 
         // This temporary footprint must not have a parent when it goes out of scope because it must
         // not trigger the IncrementTimestamp call in ~FOOTPRINT.
