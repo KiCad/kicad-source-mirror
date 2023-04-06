@@ -103,20 +103,6 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
     if( aHead->m_kind == LINE_T )
         lineWidthH = static_cast<const LINE*>( aHead )->Width() / 2;
 
-    // same nets? no collision!
-    if( aCtx && aCtx->options.m_differentNetsOnly
-            && m_net == aHead->m_net && m_net >= 0 && aHead->m_net >= 0 )
-    {
-        return false;
-    }
-
-    // a pad associated with a "free" pin (NIC) doesn't have a net until it has been used
-    if( aCtx && aCtx->options.m_differentNetsOnly
-            && ( IsFreePad() || aHead->IsFreePad() ) )
-    {
-        return false;
-    }
-
     // check if we are not on completely different layers first
     if( !m_layers.Overlaps( aHead->m_layers ) )
         return false;
@@ -128,34 +114,56 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
         collisionsFound |= holeI->collideSimple( aHead, aNode, aCtx );
 
     if( holeH && holeI )
-        collisionsFound |= holeI->collideSimple( holeH, aNode, aCtx );
-
-    int clearance;
-
-    if( aCtx && aCtx->options.m_overrideClearance >= 0 )
     {
-        clearance = aCtx->options.m_overrideClearance;
-    }
-    else if( aNode->GetRuleResolver()->IsKeepout( this, aHead ) )
-    {
-        clearance = 0;    // keepouts are exact boundary; no clearance
-    }
-    else
-    {
-        clearance = aNode->GetClearance( this, aHead );
+        if( aCtx )
+        {
+            // Hole to hole collsions are never net-specific
+            COLLISION_SEARCH_OPTIONS holeToHoleOptions( aCtx->options );
+            holeToHoleOptions.m_differentNetsOnly = false;
+            COLLISION_SEARCH_CONTEXT holeToHoleCtx( aCtx->obstacles, holeToHoleOptions );
+            collisionsFound |= holeI->collideSimple( holeH, aNode, &holeToHoleCtx );
+        }
+        else
+        {
+            collisionsFound |= holeI->collideSimple( holeH, aNode, nullptr );
+        }
     }
 
     // fixme: this f***ing singleton must go...
     ROUTER*       router = ROUTER::GetInstance();
     ROUTER_IFACE* iface = router ? router->GetInterface() : nullptr;
+    bool          differentNetsOnly = aCtx && aCtx->options.m_differentNetsOnly;
+    int           clearance;
 
-    if( iface )
+    if( differentNetsOnly && m_net == aHead->m_net && m_net >= 0 && aHead->m_net >= 0 )
     {
-        if( !iface->IsFlashedOnLayer( this, aHead->Layer() ) )
-            return collisionsFound;
-
-        if( !iface->IsFlashedOnLayer( aHead, Layer() ) )
-            return collisionsFound;
+        // same nets? no clearance!
+        clearance = -1;
+    }
+    else if( differentNetsOnly && ( IsFreePad() || aHead->IsFreePad() ) )
+    {
+        // a pad associated with a "free" pin (NIC) doesn't have a net until it has been used
+        clearance = -1;
+    }
+    else if( aNode->GetRuleResolver()->IsKeepout( this, aHead ) )
+    {
+        clearance = 0;    // keepouts are exact boundary; no clearance
+    }
+    else if( iface && !iface->IsFlashedOnLayer( this, aHead->Layer() ) )
+    {
+        clearance = -1;
+    }
+    else if( iface && !iface->IsFlashedOnLayer( aHead, Layer() ) )
+    {
+        clearance = -1;
+    }
+    else if( aCtx && aCtx->options.m_overrideClearance >= 0 )
+    {
+        clearance = aCtx->options.m_overrideClearance;
+    }
+    else
+    {
+        clearance = aNode->GetClearance( this, aHead );
     }
 
     if( clearance >= 0 )
