@@ -337,18 +337,8 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine,
         if( aLine->EndsWithVia() )
         {
             const VIA& via = aLine->Via();
-            // JEY TODO: clean up (or re-enable) all this commented-out stuff....
-            //const HOLE* viaHole = via.Hole();
-
-            //int viaHoleRadius = static_cast<const SHAPE_CIRCLE*>( via.Hole() )->GetRadius();
-
             int viaClearance = GetClearance( obstacle.m_item, &via, aOpts.m_useClearanceEpsilon )
                                + via.Diameter() / 2;
-            //int holeClearance = GetClearance( obstacle.m_item, viaHole, aOpts.m_useClearanceEpsilon )
-            //                   + viaHoleRadius;
-
-            //if( holeClearance > viaClearance )
-            //    viaClearance = holeClearance;
 
             obstacleHull = obstacle.m_item->Hull( viaClearance, 0, layer );
             //debugDecorator->AddLine( obstacleHull, 3 );
@@ -356,61 +346,9 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine,
             intersectingPts.clear();
             HullIntersection( obstacleHull, aLine->CLine(), intersectingPts );
 
-            // obstacleHull.Intersect( aLine->CLine(), intersectingPts, true );
-
             for( const SHAPE_LINE_CHAIN::INTERSECTION& ip : intersectingPts )
                 updateNearest( ip, obstacle );
         }
-#if 0
-        if( ( m_collisionQueryScope == CQS_ALL_RULES
-              || !ROUTER::GetInstance()->GetInterface()->IsFlashedOnLayer( obstacle.m_item,
-                                                                           layer ) )
-            && obstacle.m_item->Hole() )
-        {
-            clearance = GetHoleClearance( obstacle.m_item, aLine, aOpts.m_useClearanceEpsilon );
-            int copperClearance = GetClearance( obstacle.m_item, aLine, aOpts.m_useClearanceEpsilon );
-
-            clearance = std::max( clearance, copperClearance );
-
-            obstacleHull = obstacle.m_item->HoleHull( clearance, aLine->Width(), layer );
-
-            intersectingPts.clear();
-            HullIntersection( obstacleHull, aLine->CLine(), intersectingPts );
-
-            for( const SHAPE_LINE_CHAIN::INTERSECTION& ip : intersectingPts )
-                updateNearest( ip, obstacle.m_item, obstacleHull, true );
-
-            if( aLine->EndsWithVia() )
-            {
-                const VIA& via = aLine->Via();
-                // Don't use via.Drill(); it doesn't include the plating thickness
-                int viaHoleRadius = static_cast<const SHAPE_CIRCLE*>( via.Hole() )->GetRadius();
-
-                int viaClearance = GetClearance( obstacle.m_item, &via, aOpts.m_useClearanceEpsilon )
-                                   + via.Diameter() / 2;
-                int holeClearance = GetHoleClearance( obstacle.m_item, &via, aOpts.m_useClearanceEpsilon )
-                                    + viaHoleRadius;
-                int holeToHole =
-                        GetHoleToHoleClearance( obstacle.m_item, &via, aOpts.m_useClearanceEpsilon )
-                        + viaHoleRadius;
-
-                if( holeClearance > viaClearance )
-                    viaClearance = holeClearance;
-
-                if( holeToHole > viaClearance )
-                    viaClearance = holeToHole;
-
-                obstacleHull = obstacle.m_item->Hull( viaClearance, 0, layer );
-                //debugDecorator->AddLine( obstacleHull, 5 );
-
-                intersectingPts.clear();
-                HullIntersection( obstacleHull, aLine->CLine(), intersectingPts );
-
-                for( const SHAPE_LINE_CHAIN::INTERSECTION& ip : intersectingPts )
-                    updateNearest( ip, obstacle.m_item, obstacleHull, true );
-            }
-        }
-#endif
     }
 
     if( nearest.m_distFirst == INT_MAX )
@@ -712,29 +650,6 @@ bool NODE::Add( std::unique_ptr< ARC >&& aArc, bool aAllowRedundant )
     return true;
 }
 
-
-#if 0   // JEY TODO: clean up
-void NODE::Add( std::unique_ptr< ITEM > aItem, bool aAllowRedundant )
-{
-    switch( aItem->Kind() )
-    {
-    case ITEM::SOLID_T:   Add( ItemCast<SOLID>( std::move( aItem ) ) );                    break;
-    case ITEM::SEGMENT_T: Add( ItemCast<SEGMENT>( std::move( aItem ) ), aAllowRedundant ); break;
-    case ITEM::VIA_T:     Add( ItemCast<VIA>( std::move( aItem ) ) );                      break;
-    case ITEM::HOLE_T:
-        break; // ignore holes, they don't exist as independent objects
-
-    case ITEM::ARC_T:
-        //todo(snh): Add redundant search
-        Add( ItemCast<ARC>( std::move( aItem ) ) );
-        break;
-
-    case ITEM::LINE_T:
-    default:
-        assert( false );
-    }
-}
-#endif
 
 void NODE::AddEdgeExclusion( std::unique_ptr<SHAPE> aShape )
 {
