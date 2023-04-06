@@ -129,8 +129,6 @@ public:
     void ClearCaches() override;
 
 private:
-    int holeRadius( const PNS::ITEM* aItem ) const;
-
     /**
      * Checks for netnamed differential pairs.
      * This accepts nets named suffixed by 'P', 'N', '+', '-', as well as additional
@@ -171,27 +169,6 @@ PNS_PCBNEW_RULE_RESOLVER::PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard,
 
 PNS_PCBNEW_RULE_RESOLVER::~PNS_PCBNEW_RULE_RESOLVER()
 {
-}
-
-
-int PNS_PCBNEW_RULE_RESOLVER::holeRadius( const PNS::ITEM* aItem ) const
-{
-    if( aItem->Kind() == PNS::ITEM::SOLID_T )
-    {
-        const PAD* pad = dynamic_cast<const PAD*>( aItem->Parent() );
-
-        if( pad && pad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
-            return pad->GetDrillSize().x / 2;
-    }
-    else if( aItem->Kind() == PNS::ITEM::VIA_T )
-    {
-        const PCB_VIA* via = dynamic_cast<const PCB_VIA*>( aItem->Parent() );
-
-        if( via )
-            return via->GetDrillValue() / 2;
-    }
-
-    return 0;
 }
 
 

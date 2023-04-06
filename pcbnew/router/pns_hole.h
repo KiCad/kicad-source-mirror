@@ -63,7 +63,13 @@ public:
 
     BOARD_ITEM* Parent() const override
     {
-        return m_parentPadVia ? m_parentPadVia->Parent() : nullptr;
+        if( m_parent )
+            return m_parent;
+
+        if( m_parentPadVia )
+            return m_parentPadVia->Parent();
+
+        return nullptr;
     }
 
     void SetCenter( const VECTOR2I& aCenter );

@@ -1573,13 +1573,15 @@ ITEM *NODE::FindItemByParent( const BOARD_ITEM* aParent )
     if( aParent->IsConnected() )
     {
         const BOARD_CONNECTED_ITEM* cItem = static_cast<const BOARD_CONNECTED_ITEM*>( aParent );
-
-        INDEX::NET_ITEMS_LIST* l_cur = m_index->GetItemsForNet( cItem->GetNetCode() );
+        INDEX::NET_ITEMS_LIST*      l_cur = m_index->GetItemsForNet( cItem->GetNetCode() );
 
         if( l_cur )
         {
             for( ITEM* item : *l_cur )
             {
+                if( item->OfKind( PNS::ITEM::HOLE_T ) && static_cast<HOLE*>( item )->ParentPadVia() )
+                    continue;
+
                 if( item->Parent() == aParent )
                     return item;
             }
