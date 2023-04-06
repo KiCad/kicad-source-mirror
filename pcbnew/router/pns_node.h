@@ -142,8 +142,6 @@ public:
     virtual int DpNetPolarity( int aNet ) = 0;
     virtual bool DpNetPair( const ITEM* aItem, int& aNetP, int& aNetN ) = 0;
 
-    virtual bool IsDiffPair( const ITEM* aA, const ITEM* aB ) = 0;
-
     virtual bool IsInNetTie( const ITEM* aA ) = 0;
     virtual bool IsNetTieExclusion( const PNS::ITEM* aItem, const VECTOR2I& aCollisionPos,
                                     const PNS::ITEM* aCollidingItem )= 0;

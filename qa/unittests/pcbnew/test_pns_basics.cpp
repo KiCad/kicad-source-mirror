@@ -138,8 +138,6 @@ public:
     {
         return false;
     }
-    virtual bool IsDiffPair( const PNS::ITEM* aA, const PNS::ITEM* aB ) override { return false; }
-
     virtual bool QueryConstraint( PNS::CONSTRAINT_TYPE aType, const PNS::ITEM* aItemA,
                                   const PNS::ITEM* aItemB, int aLayer,
                                   PNS::CONSTRAINT* aConstraint ) override

@@ -165,7 +165,7 @@ public:
     }
 
     /**
-     * Return true if the item's type matches the mask \a aKindMask.
+     * @return true if the item's type matches the mask \a aKindMask.
      */
     bool OfKind( int aKindMask ) const
     {
@@ -173,12 +173,17 @@ public:
     }
 
     /**
-     * Returns the kind of the item, as string
+     * @return the kind of the item, as string
      */
     std::string KindStr() const;
 
     void SetParent( BOARD_ITEM* aParent ) { m_parent = aParent; }
-    virtual BOARD_ITEM* Parent() const { return m_parent; }
+    BOARD_ITEM* Parent() const { return m_parent; }
+
+    /**
+     * @return the BOARD_ITEM, even if it's not the direct parent.
+     */
+    virtual BOARD_ITEM* BoardItem() const { return m_parent; }
 
     void SetNet( int aNet ) { m_net = aNet; }
     int Net() const { return m_net;  }

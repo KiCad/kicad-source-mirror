@@ -61,7 +61,7 @@ public:
 
     ITEM* ParentPadVia() const { return m_parentPadVia; }
 
-    BOARD_ITEM* Parent() const override
+    BOARD_ITEM* BoardItem() const override
     {
         if( m_parent )
             return m_parent;
