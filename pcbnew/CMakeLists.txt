@@ -626,6 +626,7 @@ make_lexer(
 target_link_libraries( pcbnew_kiface_objects
     PRIVATE
         common
+        gal       # Circular dependency between gal and common now
         core
         dxflib_qcad
         nanosvg

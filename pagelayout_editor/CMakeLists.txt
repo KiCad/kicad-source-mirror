@@ -85,6 +85,7 @@ target_link_libraries( pl_editor
     # There's way too much crap coming in from common yet.
     gal
     common
+    gal       # Circular dependency between gal and common now
     core
     ${wxWidgets_LIBRARIES}
     )
@@ -103,6 +104,7 @@ add_library( pl_editor_kiface MODULE
 target_link_libraries( pl_editor_kiface
     gal
     common
+    gal       # Circular dependency between gal and common now
     core
     ${wxWidgets_LIBRARIES}
     )
