@@ -36,22 +36,6 @@ bool VIA::PushoutForce( NODE* aNode, const ITEM* aOther, VECTOR2I& aForce )
     VECTOR2I elementForces[4], force;
     size_t   nf = 0;
 
-    #if 0   // JEY TODO: why is this commented out?  Needs replacing, or deleting?
-    if( aNode->GetCollisionQueryScope() == NODE::CQS_ALL_RULES )
-    {
-        int holeClearance = aNode->GetHoleClearance( this, aOther );
-        int hole2holeClearance = aNode->GetHoleToHoleClearance( this, aOther );
-
-        if( aOther->Hole() )
-        {
-            aOther->Hole()->Collide( Shape(), holeClearance, &elementForces[nf++] );
-            aOther->Hole()->Collide( Hole(), hole2holeClearance, &elementForces[nf++] );
-        }
-
-        aOther->Shape()->Collide( Hole(), holeClearance, &elementForces[nf++] );
-    }
-    #endif
-
     aOther->Shape()->Collide( Shape(), clearance, &elementForces[nf++] );
 
     for( size_t i = 0; i < nf; i++ )
@@ -165,18 +149,6 @@ const SHAPE_LINE_CHAIN VIA::Hull( int aClearance, int aWalkaroundThickness, int 
                           cl, ( 2 * cl + width ) * ( 1.0 - M_SQRT1_2 ) );
 }
 
-
-#if 0   // JEY TODO: is this no longer needed?
-const SHAPE_LINE_CHAIN VIA::HoleHull( int aClearance, int aWalkaroundThickness, int aLayer ) const
-{
-    int cl = ( aClearance + aWalkaroundThickness / 2 );
-    int width = m_hole->GetRadius() * 2;
-
-    // Chamfer = width * ( 1 - sqrt(2)/2 ) for equilateral octagon
-    return OctagonalHull( m_pos - VECTOR2I( width / 2, width / 2 ), VECTOR2I( width, width ), cl,
-                          ( 2 * cl + width ) * ( 1.0 - M_SQRT1_2 ) );
-}
-#endif
 
 VIA* VIA::Clone() const
 {
