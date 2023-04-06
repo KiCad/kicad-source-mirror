@@ -1183,6 +1183,10 @@ void LIB_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 
     aList.emplace_back( _( "Pos X" ), aFrame->MessageTextFromValue( pinpos.x, true ) );
     aList.emplace_back( _( "Pos Y" ), aFrame->MessageTextFromValue( pinpos.y, true ) );
+
+    #if 0   // For debug purpose only
+    aList.emplace_back( _( "Flags" ), wxString::Format( "%8.8X", (long)GetFlags() ) );
+    #endif
 }
 
 

@@ -317,8 +317,13 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
                 try
                 {
-                    if( !pinTool->PlacePin( (LIB_PIN*) selection.Front() ) )
+                    LIB_PIN* curr_pin = (LIB_PIN*) selection.Front();
+                    // PlacePin() will clear the current selection, so we need to reset
+                    // flags of the selected pin here:
+                    if( !pinTool->PlacePin( curr_pin ) )
                         restore_state = true;
+                    else
+                        curr_pin->ClearEditFlags();
                 }
                 catch( const boost::bad_pointer& e )
                 {
