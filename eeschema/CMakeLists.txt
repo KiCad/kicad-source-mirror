@@ -437,7 +437,6 @@ target_link_libraries( eeschema
     # There's way too much crap coming in from common yet.
     gal
     common
-    gal       # Circular dependency between gal and common now
     argparse::argparse
     ${wxWidgets_LIBRARIES}
     )
@@ -481,7 +480,6 @@ target_link_libraries( eeschema_kiface
     PRIVATE
         common
         eeschema_kiface_objects
-        gal       # Circular dependency between gal and common now
         markdown_lib
         scripting
         sexpr

@@ -72,7 +72,6 @@ target_link_libraries( cvpcb_kiface
     3d-viewer
     gal
     common
-    gal       # Circular dependency between gal and common now
     kimath
     ${PCBNEW_IO_LIBRARIES}
     Boost::headers

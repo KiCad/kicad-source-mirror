@@ -521,12 +521,11 @@ COLOR4D& COLOR4D::Desaturate()
     return *this;
 }
 
-// These call the 5-argument constructor to get a constexpr COLOR4D object.
-// The 5th argument isn't actually used at all, so its bool value doesn't matter.
-constexpr COLOR4D COLOR4D::UNSPECIFIED( 0, 0, 0, 0, true );
-constexpr COLOR4D COLOR4D::WHITE( 1, 1, 1, 1, true );
-constexpr COLOR4D COLOR4D::BLACK( 0, 0, 0, 1, true );
-constexpr COLOR4D COLOR4D::CLEAR( 1, 0, 1, 0, true );
+
+const COLOR4D COLOR4D::UNSPECIFIED( 0, 0, 0, 0 );
+const COLOR4D COLOR4D::WHITE( 1, 1, 1, 1 );
+const COLOR4D COLOR4D::BLACK( 0, 0, 0, 1 );
+const COLOR4D COLOR4D::CLEAR( 1, 0, 1, 0 );
 
 
 double COLOR4D::Distance( const COLOR4D& other ) const

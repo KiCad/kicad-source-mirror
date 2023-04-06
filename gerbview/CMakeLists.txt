@@ -112,7 +112,6 @@ target_link_libraries( gerbview
     # There's way too much crap coming in from common yet.
     gal
     common
-    gal       # Circular dependency between gal and common now
     core
     nlohmann_json
     ${wxWidgets_LIBRARIES}
@@ -156,7 +155,6 @@ target_link_libraries( gerbview_kiface
         nlohmann_json
         gal
         common
-        gal       # Circular dependency between gal and common now
         core
         gerbview_kiface_objects
         ${wxWidgets_LIBRARIES}
