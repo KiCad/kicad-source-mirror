@@ -85,6 +85,7 @@ DIALOG_SIM_COMMAND::DIALOG_SIM_COMMAND( wxWindow* aParent,
     m_transStep->SetValidator( m_spiceValidator );
     m_transFinal->SetValidator( m_spiceValidator );
     m_transInitial->SetValidator( m_spiceEmptyValidator );
+    m_transMaxStep->SetValidator( m_spiceEmptyValidator );
 
     refreshUIControls();
 
@@ -261,15 +262,38 @@ bool DIALOG_SIM_COMMAND::TransferDataFromWindow()
         if( !m_pgTransient->Validate() )
             return false;
 
-        wxString initial;
+        const SPICE_VALUE timeStep( m_transStep->GetValue() );
+        const SPICE_VALUE finalTime( m_transFinal->GetValue() );
+
+        SPICE_VALUE startTime;
 
         if( !empty( m_transInitial ) )
-            initial = SPICE_VALUE( m_transInitial->GetValue() ).ToSpiceString();
+            startTime = SPICE_VALUE( m_transInitial->GetValue() );
 
-        m_simCommand.Printf( ".tran %s %s %s",
-                             SPICE_VALUE( m_transStep->GetValue() ).ToSpiceString(),
-                             SPICE_VALUE( m_transFinal->GetValue() ).ToSpiceString(),
-                             initial );
+        wxString optionals;
+
+        if( m_useInitialConditions->GetValue() )
+            optionals = "uic";
+
+        if( !empty( m_transMaxStep ) )
+            optionals = SPICE_VALUE( m_transMaxStep->GetValue() ).ToSpiceString() + " " + optionals;
+        else if( !optionals.IsEmpty() )
+        {
+            SPICE_VALUE maxStep = ( finalTime - startTime ) / 50.0;
+
+            if( maxStep > timeStep )
+                maxStep = timeStep;
+
+            optionals = maxStep.ToSpiceString() + " " + optionals;
+        }
+
+        if( !empty( m_transInitial ) )
+            optionals = startTime.ToSpiceString() + " " + optionals;
+        else if( !optionals.IsEmpty() )
+            optionals = "0 " + optionals;
+
+        m_simCommand.Printf( ".tran %s %s %s", timeStep.ToSpiceString(), finalTime.ToSpiceString(),
+                             optionals );
     }
     else if( page == m_pgCustom )       // Custom directives
     {
@@ -510,6 +534,18 @@ bool DIALOG_SIM_COMMAND::parseCommand( const wxString& aCommand )
 
             if( !tkn.IsEmpty() )
                 m_transInitial->SetValue( SPICE_VALUE( tkn ).ToSpiceString() );
+
+            // Max step is an optional field
+            tkn = tokenizer.GetNextToken();
+
+            if( !tkn.IsEmpty() )
+                m_transMaxStep->SetValue( SPICE_VALUE( tkn ).ToSpiceString() );
+
+            // uic is an optional field
+            tkn = tokenizer.GetNextToken();
+
+            if( tkn == "uic" )
+                m_useInitialConditions->SetValue( true );
         }
         else if( tkn == ".op" )
         {

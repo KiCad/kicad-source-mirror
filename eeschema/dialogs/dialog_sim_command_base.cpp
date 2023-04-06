@@ -394,6 +394,36 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	fgSizer6->Add( m_staticText24, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
+	m_maxTimeLabel = new wxStaticText( m_pgTransient, wxID_ANY, _("Max. time step:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_maxTimeLabel->Wrap( -1 );
+	fgSizer6->Add( m_maxTimeLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_transMaxStep = new wxTextCtrl( m_pgTransient, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer6->Add( m_transMaxStep, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+
+	m_transMaxStepUnits = new wxStaticText( m_pgTransient, wxID_ANY, _("seconds"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_transMaxStepUnits->Wrap( -1 );
+	fgSizer6->Add( m_transMaxStepUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxRIGHT, 5 );
+
+	m_staticText25 = new wxStaticText( m_pgTransient, wxID_ANY, _("(optional; default min{tstep, (tstop-tstart)/50})"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText25->Wrap( -1 );
+	fgSizer6->Add( m_staticText25, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+
+	m_useInitialConditionsLabel = new wxStaticText( m_pgTransient, wxID_ANY, _("Use initial conditions:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_useInitialConditionsLabel->Wrap( -1 );
+	fgSizer6->Add( m_useInitialConditionsLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_useInitialConditions = new wxCheckBox( m_pgTransient, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer6->Add( m_useInitialConditions, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+
+	fgSizer6->Add( 0, 0, 0, wxEXPAND, 5 );
+
+	m_staticText26 = new wxStaticText( m_pgTransient, wxID_ANY, _("(optional; default off)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText26->Wrap( -1 );
+	fgSizer6->Add( m_staticText26, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+
 	bSizer81->Add( fgSizer6, 0, wxALL|wxEXPAND, 5 );
 
 

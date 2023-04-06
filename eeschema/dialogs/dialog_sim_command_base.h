@@ -112,6 +112,13 @@ class DIALOG_SIM_COMMAND_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_transInitial;
 		wxStaticText* m_transInitialUnits;
 		wxStaticText* m_staticText24;
+		wxStaticText* m_maxTimeLabel;
+		wxTextCtrl* m_transMaxStep;
+		wxStaticText* m_transMaxStepUnits;
+		wxStaticText* m_staticText25;
+		wxStaticText* m_useInitialConditionsLabel;
+		wxCheckBox* m_useInitialConditions;
+		wxStaticText* m_staticText26;
 		wxPanel* m_pgCustom;
 		wxStaticText* m_staticText18;
 		wxTextCtrl* m_customTxt;
