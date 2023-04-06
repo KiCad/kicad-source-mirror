@@ -441,11 +441,7 @@ struct std::hash<KIGFX::COLOR4D>
 {
     std::size_t operator()( const KIGFX::COLOR4D& aColor ) const
     {
-        std::size_t seed;
-
-        hash_combine( seed, aColor.r, aColor.b, aColor.g, aColor.a );
-
-        return seed;
+        return hash_val( aColor.r, aColor.b, aColor.g, aColor.a );
     }
 };
 

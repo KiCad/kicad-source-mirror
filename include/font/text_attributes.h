@@ -97,16 +97,12 @@ struct std::hash<TEXT_ATTRIBUTES>
 {
     std::size_t operator()( const TEXT_ATTRIBUTES& aAttributes ) const
     {
-        std::size_t seed;
-
-        hash_combine( seed, aAttributes.m_Font, aAttributes.m_Halign, aAttributes.m_Valign,
-                      aAttributes.m_Angle.AsDegrees(), aAttributes.m_LineSpacing,
-                      aAttributes.m_StrokeWidth, aAttributes.m_Italic, aAttributes.m_Bold,
-                      aAttributes.m_Underlined, aAttributes.m_Color, aAttributes.m_Visible,
-                      aAttributes.m_Mirrored, aAttributes.m_Multiline, aAttributes.m_Size.x,
-                      aAttributes.m_Size.y );
-
-        return seed;
+        return hash_val( aAttributes.m_Font, aAttributes.m_Halign, aAttributes.m_Valign,
+                         aAttributes.m_Angle.AsDegrees(), aAttributes.m_LineSpacing,
+                         aAttributes.m_StrokeWidth, aAttributes.m_Italic, aAttributes.m_Bold,
+                         aAttributes.m_Underlined, aAttributes.m_Color, aAttributes.m_Visible,
+                         aAttributes.m_Mirrored, aAttributes.m_Multiline, aAttributes.m_Size.x,
+                         aAttributes.m_Size.y );
     }
 };
 

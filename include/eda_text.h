@@ -423,12 +423,8 @@ struct std::hash<EDA_TEXT>
 {
     std::size_t operator()( const EDA_TEXT& aText ) const
     {
-        std::size_t seed;
-
-        hash_combine( seed, aText.GetText(), aText.GetAttributes(), aText.GetTextPos().x,
-                      aText.GetTextPos().y );
-
-        return seed;
+        return hash_val( aText.GetText(), aText.GetAttributes(), aText.GetTextPos().x,
+                         aText.GetTextPos().y );
     }
 };
 
