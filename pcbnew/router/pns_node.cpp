@@ -1579,9 +1579,6 @@ ITEM *NODE::FindItemByParent( const BOARD_ITEM* aParent )
         {
             for( ITEM* item : *l_cur )
             {
-                if( item->OfKind( PNS::ITEM::HOLE_T ) && static_cast<HOLE*>( item )->ParentPadVia() )
-                    continue;
-
                 if( item->Parent() == aParent )
                     return item;
             }

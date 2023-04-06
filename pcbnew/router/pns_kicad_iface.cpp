@@ -110,7 +110,6 @@ public:
     virtual int DpCoupledNet( int aNet ) override;
     virtual int DpNetPolarity( int aNet ) override;
     virtual bool DpNetPair( const PNS::ITEM* aItem, int& aNetP, int& aNetN ) override;
-    virtual bool IsDiffPair( const PNS::ITEM* aA, const PNS::ITEM* aB ) override;
 
     virtual bool IsInNetTie( const PNS::ITEM* aA ) override;
     virtual bool IsNetTieExclusion( const PNS::ITEM* aItem, const VECTOR2I& aCollisionPos,
@@ -172,26 +171,10 @@ PNS_PCBNEW_RULE_RESOLVER::~PNS_PCBNEW_RULE_RESOLVER()
 }
 
 
-bool PNS_PCBNEW_RULE_RESOLVER::IsDiffPair( const PNS::ITEM* aA, const PNS::ITEM* aB )
-{
-    int net_p, net_n;
-
-    if( !DpNetPair( aA, net_p, net_n ) )
-        return false;
-
-    if( aA->Net() == net_p && aB->Net() == net_n )
-        return true;
-
-    if( aB->Net() == net_p && aA->Net() == net_n )
-        return true;
-
-    return false;
-}
-
-
 bool PNS_PCBNEW_RULE_RESOLVER::IsInNetTie( const PNS::ITEM* aA )
 {
-    BOARD_ITEM* item = aA->Parent();
+    BOARD_ITEM* item = aA->BoardItem();
+
     BOARD_ITEM* parentFootprint = item ? item->GetParentFootprint() : nullptr;
 
     if( parentFootprint )
@@ -208,7 +191,8 @@ bool PNS_PCBNEW_RULE_RESOLVER::IsNetTieExclusion( const PNS::ITEM* aItem,
     wxCHECK( aItem && aCollidingItem, false );
 
     std::shared_ptr<DRC_ENGINE> drcEngine = m_board->GetDesignSettings().m_DRCEngine;
-    BOARD_ITEM*                 collidingItem = aCollidingItem->Parent();
+    BOARD_ITEM*                 item = aItem->BoardItem();
+    BOARD_ITEM*                 collidingItem = aCollidingItem->BoardItem();
 
     FOOTPRINT* collidingFp = static_cast<FOOTPRINT*>( collidingItem->GetParentFootprint() );
     FOOTPRINT* itemFp      = aItem->Parent()
@@ -296,7 +280,7 @@ static bool isEdge( const PNS::ITEM* aItem )
     if ( !aItem )
         return false;
 
-    const BOARD_ITEM *parent = aItem->Parent();
+    const BOARD_ITEM *parent = aItem->BoardItem();
 
     return parent && ( parent->IsOnLayer( Edge_Cuts ) || parent->IsOnLayer( Margin ) );
 }
@@ -327,8 +311,8 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
     default:                                      return false; // should not happen
     }
 
-    BOARD_ITEM*    parentA = aItemA ? aItemA->Parent() : nullptr;
-    BOARD_ITEM*    parentB = aItemB ? aItemB->Parent() : nullptr;
+    BOARD_ITEM*    parentA = aItemA ? aItemA->BoardItem() : nullptr;
+    BOARD_ITEM*    parentB = aItemB ? aItemB->BoardItem() : nullptr;
     DRC_CONSTRAINT hostConstraint;
 
     // A track being routed may not have a BOARD_ITEM associated yet.
@@ -1408,7 +1392,7 @@ bool PNS_KICAD_IFACE_BASE::IsFlashedOnLayer( const PNS::ITEM* aItem, int aLayer 
     if( aLayer < 0 )
         return true;
 
-    if( !aItem->OfKind( PNS::ITEM::HOLE_T ) && aItem->Parent() )
+    if( aItem->Parent() )
     {
         switch( aItem->Parent()->Type() )
         {

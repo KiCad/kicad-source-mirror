@@ -43,7 +43,7 @@ ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem, KIGFX::VIEW* a
     m_shape( nullptr ),
     m_hole( nullptr )
 {
-    BOARD_ITEM* boardItem = aItem ? aItem->Parent() : nullptr;
+    BOARD_ITEM* boardItem = aItem ? aItem->BoardItem() : nullptr;
 
     // A PNS::SOLID for an edge-cut item must have 0 width for collision calculations, but when
     // highlighting an edge we want to show it with its parent PCB_SHAPE's shape.
