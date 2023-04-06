@@ -6,7 +6,7 @@
 # ZbeeGin <zbeegin@op.pl>, 2020, 2021.
 # Дмитрий Дёмин <dmitrodem@gmail.com>, 2021.
 # dsa-t <dudesuchamazing@gmail.com>, 2022, 2023.
-# Andrey Fedorushkov <andrf@mail.ru>, 2022.
+# Andrey Fedorushkov <andrf@mail.ru>, 2022, 2023.
 # Ivan Chuba <xtrvweb@gmail.com>, 2022, 2023.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2023.
 msgid ""
@@ -14,17 +14,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:51-0800\n"
-"PO-Revision-Date: 2023-02-13 00:59+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"PO-Revision-Date: 2023-04-07 08:41+0000\n"
+"Last-Translator: Andrey Fedorushkov <andrf@mail.ru>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 4.17-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -117,9 +117,8 @@ msgid "Build BVH for holes and vias"
 msgstr "Построение глухих/внутр. перех.отв."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:389
-#, fuzzy
 msgid "OpenGL context creation error"
-msgstr "Разрешение кол-ва мостиков терморазгрузки для:"
+msgstr "Ошибка создания контекста OpenGL"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:420
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
@@ -537,9 +536,8 @@ msgid "Render Solid Colors"
 msgstr "Отображать полные цвета"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:195
-#, fuzzy
 msgid "Use only the diffuse color property from 3D model file"
-msgstr "Использовать только значение цвет из файла 3D-модели"
+msgstr "Использовать только значение диффузии цвета из файла 3D-модели"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:201
 msgid "Render CAD Colors"
@@ -5079,9 +5077,8 @@ msgid "Delete"
 msgstr "Удалить"
 
 #: common/grid_tricks.cpp:353
-#, fuzzy
 msgid "Clear contents of selected cells"
-msgstr "Удалить выбранные ячейки"
+msgstr "Удалить содержимое выбранных ячеек"
 
 #: common/grid_tricks.cpp:354 common/tool/actions.cpp:171
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:105
@@ -5384,12 +5381,11 @@ msgstr "Границы страниц"
 #: common/layer_id.cpp:150
 #, fuzzy
 msgid "Operating point voltages"
-msgstr "Рабочая точка"
+msgstr "Напряжения рабочих точек"
 
 #: common/layer_id.cpp:151
-#, fuzzy
 msgid "Operating point currents"
-msgstr "Рабочая точка"
+msgstr "Токи рабочих точек"
 
 #: common/layer_id.cpp:155
 msgid "Footprints front"
@@ -6088,7 +6084,7 @@ msgstr "Найти обратно"
 #: common/tool/actions.cpp:234
 #, fuzzy
 msgid "Find previous match"
-msgstr "Найти обратно"
+msgstr "Найти предыдущее совпадение"
 
 #: common/tool/actions.cpp:240
 msgid "Find Next Marker"
@@ -8729,29 +8725,28 @@ msgstr "Записать директиву для сохранения всех
 #: eeschema/dialogs/dialog_sim_command_base.cpp:441
 #, fuzzy
 msgid "Save all power dissipations"
-msgstr "Макс. допустимое отклонение:"
+msgstr "Сохранение всех рассеиваемых мощностей"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:307
-#, fuzzy
 msgid ""
 "Write directives to save power dissipation of all items (.probe p(<item>))"
-msgstr "Записать директиву для сохранения всех напряжений (.probe alli)"
+msgstr ""
+"Запись директив для сохранения рассеиваемой мощности всех элементов (.probe "
+"p(<item>))"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:313
-#, fuzzy
 msgid "Run external simulator command:"
-msgstr "Команда внешнего симулятора:"
+msgstr "Выполнение команды внешнего симулятора:"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:315
-#, fuzzy
 msgid ""
 "Enter the command line to run SPICE\n"
 "Usually '<path to SPICE binary> \"%I\"'\n"
 "%I will be replaced by the netlist filepath"
 msgstr ""
-"Введите команду для запуска spice-симулятора\n"
-"Обычно это <путь к исполняемуоу файлу> %I\n"
-"%I заменяется именем текущего списка цепей spice"
+"Введите команду для запуска SPICE-симулятора\n"
+"Обычно это '<путь к исполняемому файлу SPICE> \"%I\"'\n"
+"%I будет заменен на путь к файлу списка цепей spice"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:388
 msgid "Netlist command:"
@@ -8774,21 +8769,24 @@ msgstr "Для формирования списка цепей требуетс
 #: eeschema/dialogs/dialog_export_netlist.cpp:575
 #, fuzzy
 msgid "external simulator not found"
-msgstr "Команда внешнего симулятора:"
+msgstr "внешний симулятор не найден"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:576
 msgid ""
 "Note: command line is usually: <tt>&lt;path to SPICE binary&gt; \"%I\"</tt>"
 msgstr ""
+"Примечание: командная строка обычно выглядит так: <tt>&lt;путь к "
+"исполняемому файлу SPICE&gt; \"%I\"</tt>"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:582
+#, fuzzy
 msgid "external simulator has the wrong format or architecture"
-msgstr ""
+msgstr "внешний симулятор имеет неправильный формат или архитектуру"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:587
 #, fuzzy
 msgid "permission denied"
-msgstr "Ошибка доступа?"
+msgstr "доступ запрещен"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:723
 msgid "This plugin already exists."
@@ -10687,7 +10685,7 @@ msgstr "Искать только на текущем листе"
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:101
 #, fuzzy
 msgid "Search the current selection &only"
-msgstr "Искать только на текущем листе"
+msgstr "Поиск только по текущему выбору"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:104
 msgid "Replace matches in reference designators"
@@ -11269,7 +11267,7 @@ msgstr "Фаза"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:25
 msgid "Significant digits:"
-msgstr ""
+msgstr "Значащие цифры:"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:32
 msgid "Range:"
@@ -11302,31 +11300,32 @@ msgstr "m"
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 #, fuzzy
 msgid "K"
-msgstr "OK"
+msgstr "K"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 #, fuzzy
 msgid "M"
-msgstr "Мбайт"
+msgstr "M"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
+#, fuzzy
 msgid "G"
-msgstr ""
+msgstr "Г"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 #, fuzzy
 msgid "T"
-msgstr "T:"
+msgstr "T"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 #, fuzzy
 msgid "P"
-msgstr "П-образный"
+msgstr "п"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.h:47
 #, fuzzy, c-format
 msgid "Format %s"
-msgstr "Формат"
+msgstr "Формат %s"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:186
 msgid "<unknown>"
@@ -11925,7 +11924,7 @@ msgstr "Обновление полей символов"
 #: eeschema/tools/ee_actions.cpp:999
 #, fuzzy
 msgid "User-defined Signals"
-msgstr "Начало координат пользователя"
+msgstr "Сигналы, заданные пользователем"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:30
 msgid "Wire/bus width:"
@@ -16125,9 +16124,9 @@ msgstr ""
 "Битрейт может быть слишком высоким для нарастающего / спадающего фронтов"
 
 #: eeschema/sim/sim_lib_mgr.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "Simulation model library not found at '%s'"
-msgstr "Библиотека моделей симуляции не найдена в '%s' или '%s'"
+msgstr "Библиотека моделей симуляции не найдена в '%s'"
 
 #: eeschema/sim/sim_lib_mgr.cpp:84
 #, c-format
@@ -16178,9 +16177,9 @@ msgstr ""
 "но является '%s'"
 
 #: eeschema/sim/sim_model.cpp:783
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown simulation model pin '%s'"
-msgstr "Неизвестный узел '%s' в '%s'"
+msgstr "Неизвестная модель симуляции вывода '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:81
 #, c-format
@@ -16266,7 +16265,7 @@ msgstr ""
 #: eeschema/sim/sim_plot_panel.cpp:269
 #, fuzzy, c-format
 msgid "%d"
-msgstr "%"
+msgstr "%d"
 
 #: eeschema/sim/sim_plot_panel.cpp:508
 msgid "noise [(V or A)^2/Hz]"
@@ -16340,7 +16339,7 @@ msgstr "Измеряемый узел"
 #: eeschema/sim/simulator_frame.cpp:313
 #, fuzzy, c-format
 msgid "Format %s..."
-msgstr "Формат"
+msgstr "Формат %s..."
 
 #: eeschema/sim/simulator_frame.cpp:372
 #, fuzzy
@@ -16431,7 +16430,7 @@ msgstr "%s не настраивается"
 #: eeschema/sim/simulator_frame.cpp:1599
 #, fuzzy
 msgid "Error: no current simulation.\n"
-msgstr "Мощность, ток и изоляция"
+msgstr "Ошибка: нет текущей симуляции.\n"
 
 #: eeschema/sim/simulator_frame.cpp:1608
 #, fuzzy
@@ -18862,7 +18861,7 @@ msgstr ""
 #: eeschema/widgets/tuner_slider.cpp:57 eeschema/widgets/tuner_slider.cpp:113
 #, fuzzy, c-format
 msgid "Tune %s"
-msgstr "Подстройка"
+msgstr "Настроить %s"
 
 #: eeschema/widgets/tuner_slider.cpp:74
 #, fuzzy, c-format
@@ -23463,18 +23462,18 @@ msgid ""
 "refill.\n"
 msgstr ""
 "В этой таблице показана разница в электрохимическом потенциале между "
-"различными металлами и сплавами. Положительное число указывает на то, что "
-"ряд является анодным, а столбец — катодным.\n"
-"Гальваническая коррозия поражает разные металлы при контакте и при "
-"определенных условиях.\n"
-"Анод электрохимической пары окисляется и разъедается, а на катод наносятся "
-"растворенные металлы, но он остается защищенным.\n"
-"EN 50310 предлагает разность напряжений ниже 300 мВ. В известных практиках "
-"используется третий интерфейсный металл между основной парой (т. е. отделка "
-"поверхности ENIG).\n"
-"Стандарт EN 50310 предполагает разность напряжений менее 300 мВ. В известных "
-"практиках используется третий интерфейсный металл между основной парой "
-"(например, поверхностное покрытие ENIG)."
+"различными металлами и сплавами. Гальваническая коррозия поражает различные "
+"металлы при контакте и при определенных условиях.<br>\n"
+"Анод электрохимической пары окисляется и разъедается, а катод покрывается "
+"растворенными металлами, но остается защищенным.<br>\n"
+"Положительное число означает, что строка является анодной (-), а столбец - "
+"катодной (+), холодные и теплые оттенки окраски также указывают на потенциал "
+"строк.<br>\n"
+"Стандарт EN 50310 предполагает разность напряжений менее 300 мВ. Известные "
+"практики используют слой другого металла  между основной парой (т.е. "
+"покрытие поверхности ENIG).<br>\n"
+"Выделенные ячейки показаны с выбором цвета по умолчанию после заполнения "
+"таблицы.\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:72
 msgid "General system design"
@@ -33667,7 +33666,7 @@ msgstr ""
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:550
 #, fuzzy, c-format
 msgid "%s has overrides."
-msgstr "Переопределено локально"
+msgstr "%s имеет переопределения."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:592
 msgid "3D model count differs."
@@ -33969,9 +33968,9 @@ msgid "Determining PCB data\n"
 msgstr "Определение данных платы\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:447
-#, fuzzy, c-format
+#, c-format
 msgid "Board Thickness from stackup: %.3f mm\n"
-msgstr "Толщина платы:"
+msgstr "Толщина платы из стека: %.3f мм\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:452
 msgid "Build STEP data\n"
@@ -38452,9 +38451,9 @@ msgstr ""
 "Переопределено на больший физический зазор между отверстиями в %s; зазор: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:779
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved clearance: %s; clearance will not be tested."
-msgstr "Локальные зазор на %s; зазор: %s."
+msgstr "Разрешенный зазор: %s; зазор не будет проверяться."
 
 #: pcbnew/tools/board_inspection_tool.cpp:801
 msgid "Diff Pair"
@@ -38608,7 +38607,7 @@ msgstr "Библиотека '%s' не задействована в текущ�
 #: pcbnew/tools/board_inspection_tool.cpp:1404
 #, fuzzy, c-format
 msgid "The library no longer contains the item %s."
-msgstr "Выделение содержит %d заблокированных элементов."
+msgstr "Библиотека больше не содержит элемент %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1409
 #, fuzzy
