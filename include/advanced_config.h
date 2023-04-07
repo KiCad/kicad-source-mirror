@@ -247,6 +247,11 @@ public:
      */
     bool m_UseClipper2;
 
+    /**
+     * Use the 3DConnexion Driver
+     */
+    bool m_Use3DConnexionDriver;
+
 ///@}
 
 

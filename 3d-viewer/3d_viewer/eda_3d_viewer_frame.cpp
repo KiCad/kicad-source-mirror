@@ -39,6 +39,7 @@
 #include <3d_viewer/tools/eda_3d_actions.h>
 #include <3d_viewer/tools/eda_3d_controller.h>
 #include <3d_viewer/tools/eda_3d_conditions.h>
+#include <advanced_config.h>
 #include <bitmaps.h>
 #include <board_design_settings.h>
 #include <core/arraydim.h>
@@ -56,9 +57,7 @@
 #include <widgets/wx_infobar.h>
 #include <wildcards_and_files_ext.h>
 
-#if defined( KICAD_USE_3DCONNEXION )
 #include <3d_navlib/nl_3d_viewer_plugin.h>
-#endif
 
 /**
  * Flag to enable 3D viewer main frame window debug tracing.
@@ -166,16 +165,18 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
     m_canvas->SetInfoBar( m_infoBar );
     m_canvas->SetStatusBar( status_bar );
 
-#if defined( KICAD_USE_3DCONNEXION )
-    try
+
+    if( ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
     {
-        m_spaceMouse = new NL_3D_VIEWER_PLUGIN( m_canvas );
+        try
+        {
+            m_spaceMouse = new NL_3D_VIEWER_PLUGIN( m_canvas );
+        }
+        catch( const std::system_error& e )
+        {
+            wxLogTrace( wxT( "KI_TRACE_NAVLIB" ), e.what() );
+        }
     }
-    catch( const std::system_error& e )
-    {
-        wxLogTrace( wxT( "KI_TRACE_NAVLIB" ), e.what() );
-    }
-#endif
 
     // Fixes bug in Windows (XP and possibly others) where the canvas requires the focus
     // in order to receive mouse events.  Otherwise, the user has to click somewhere on
@@ -193,12 +194,7 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
 
 EDA_3D_VIEWER_FRAME::~EDA_3D_VIEWER_FRAME()
 {
-#if defined( KICAD_USE_3DCONNEXION )
-    if( m_spaceMouse != nullptr )
-    {
-        delete m_spaceMouse;
-    }
-#endif
+    delete m_spaceMouse;
 
     Prj().GetProjectFile().m_Viewports3D = GetUserViewports();
 
@@ -334,12 +330,11 @@ void EDA_3D_VIEWER_FRAME::handleIconizeEvent( wxIconizeEvent& aEvent )
 {
     KIWAY_PLAYER::handleIconizeEvent( aEvent );
 
-#if defined( KICAD_USE_3DCONNEXION )
-    if( m_spaceMouse != nullptr && aEvent.IsIconized() )
+    if( m_spaceMouse != nullptr && aEvent.IsIconized()
+            && ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
     {
         m_spaceMouse->SetFocus( false );
     }
-#endif
 }
 
 
@@ -655,12 +650,8 @@ void EDA_3D_VIEWER_FRAME::OnActivate( wxActivateEvent &aEvent )
         m_canvas->SetFocus();
     }
 
-#if defined( KICAD_USE_3DCONNEXION )
-    if( m_spaceMouse != nullptr )
-    {
+    if( m_spaceMouse != nullptr && ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
         m_spaceMouse->SetFocus( aEvent.GetActive() );
-    }
-#endif
 
     aEvent.Skip(); // required under wxMAC
 }

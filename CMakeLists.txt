@@ -83,10 +83,6 @@ option( KICAD_USE_SENTRY
     "Build KiCad with support for sentry app metrics"
     OFF )
 
-option( KICAD_USE_3DCONNEXION
-    "Build KiCad with support for 3Dconnexion devices (Currently only for Mac/MSW)"
-    OFF )
-
 option( KICAD_SIGNAL_INTEGRITY
     "Build tools for signal integrity analysis ( default ON )"
     ON )
@@ -240,11 +236,6 @@ add_compile_definitions( $<$<BOOL:${KICAD_SIGNAL_INTEGRITY}>:KICAD_SIGNAL_INTEGR
 add_compile_definitions( $<$<BOOL:${KICAD_USE_VALGRIND}>:KICAD_USE_VALGRIND> )
 add_compile_definitions( $<$<BOOL:${KICAD_GAL_PROFILE}>:KICAD_GAL_PROFILE> )
 add_compile_definitions( $<$<BOOL:${KICAD_WIN32_VERIFY_CODESIGN}>:KICAD_WIN32_VERIFY_CODESIGN> )
-
-# 3D mouse is only available on Windows and macOS
-if( WIN32 OR APPLE )
-    add_compile_definitions( $<$<BOOL:${KICAD_USE_3DCONNEXION}>:KICAD_USE_3DCONNEXION> )
-endif()
 
 if( KICAD_USE_EGL )
     message( STATUS "Configuring KiCad for the wxGLCanvas EGL backend" )

@@ -623,12 +623,9 @@ target_link_libraries( pcbcommon PUBLIC
     threadpool
 )
 
-if( KICAD_USE_3DCONNEXION )
-    message( STATUS "Including 3Dconnexion SpaceMouse navigation support in pcbcommon" )
-    add_subdirectory( ../pcbnew/navlib ./navlib)
-    target_link_libraries( pcbcommon PUBLIC pcbnew_navlib)
-endif()
-
+message( STATUS "Including 3Dconnexion SpaceMouse navigation support in pcbcommon" )
+add_subdirectory( ../pcbnew/navlib ./navlib)
+target_link_libraries( pcbcommon PUBLIC pcbnew_navlib)
 
 add_dependencies( pcbcommon delaunator )
 

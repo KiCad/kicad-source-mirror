@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <advanced_config.h>
 #include <base_units.h>
 #include <kiway.h>
 #include <lib_tree_model_adapter.h>
@@ -47,9 +48,7 @@
 #include <wx/choicdlg.h>
 #include <wx/log.h>
 
-#if defined( KICAD_USE_3DCONNEXION )
 #include <navlib/nl_schematic_plugin.h>
-#endif
 
 LIB_SYMBOL* SchGetLibSymbol( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable,
                              SYMBOL_LIB* aCacheLib, wxWindow* aParent, bool aShowErrorMsg )
@@ -91,10 +90,7 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindo
                                 const wxSize& aSize, long aStyle, const wxString& aFrameName ) :
         EDA_DRAW_FRAME( aKiway, aParent, aWindowType, aTitle, aPosition, aSize, aStyle,
                         aFrameName, schIUScale ),
-        m_base_frame_defaults( nullptr, "base_Frame_defaults" )
-#if defined( KICAD_USE_3DCONNEXION )
-        ,m_spaceMouse( nullptr )
-#endif
+        m_base_frame_defaults( nullptr, "base_Frame_defaults" ), m_spaceMouse( nullptr )
 {
     createCanvas();
 
@@ -116,10 +112,7 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindo
 
 SCH_BASE_FRAME::~SCH_BASE_FRAME()
 {
-#if defined( KICAD_USE_3DCONNEXION )
-    if( m_spaceMouse != nullptr )
-        delete m_spaceMouse;
-#endif
+    delete m_spaceMouse;
 }
 
 
@@ -350,21 +343,20 @@ void SCH_BASE_FRAME::ActivateGalCanvas()
 {
     EDA_DRAW_FRAME::ActivateGalCanvas();
 
-#if defined( KICAD_USE_3DCONNEXION )
-    try
+    if( ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
     {
-        if( !m_spaceMouse )
+        try
         {
-            m_spaceMouse = new NL_SCHEMATIC_PLUGIN();
-        }
+            if( !m_spaceMouse )
+                m_spaceMouse = new NL_SCHEMATIC_PLUGIN();
 
-        m_spaceMouse->SetCanvas( GetCanvas() );
+            m_spaceMouse->SetCanvas( GetCanvas() );
+        }
+        catch( const std::system_error& e )
+        {
+            wxLogTrace( wxT( "KI_TRACE_NAVLIB" ), e.what() );
+        }
     }
-    catch( const std::system_error& e )
-    {
-        wxLogTrace( wxT( "KI_TRACE_NAVLIB" ), e.what() );
-    }
-#endif
 }
 
 
@@ -543,12 +535,8 @@ void SCH_BASE_FRAME::handleActivateEvent( wxActivateEvent& aEvent )
 {
     EDA_DRAW_FRAME::handleActivateEvent( aEvent );
 
-#if defined( KICAD_USE_3DCONNEXION )
-    if( m_spaceMouse )
-    {
+    if( m_spaceMouse && ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
         m_spaceMouse->SetFocus( aEvent.GetActive() );
-    }
-#endif
 }
 
 
@@ -556,12 +544,8 @@ void SCH_BASE_FRAME::handleIconizeEvent( wxIconizeEvent& aEvent )
 {
     EDA_DRAW_FRAME::handleIconizeEvent( aEvent );
 
-#if defined( KICAD_USE_3DCONNEXION )
-    if( m_spaceMouse && aEvent.IsIconized() )
-    {
+    if( m_spaceMouse && aEvent.IsIconized() && ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
         m_spaceMouse->SetFocus( false );
-    }
-#endif
 }
 
 

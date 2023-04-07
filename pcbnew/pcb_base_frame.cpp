@@ -33,39 +33,39 @@
 #include <boost/uuid/entropy_error.hpp>
 #endif
 
-#include <kiface_base.h>
-#include <confirm.h>
-#include <pcb_base_frame.h>
-#include <base_units.h>
-#include <widgets/msgpanel.h>
-#include <pgm_base.h>
 #include <3d_viewer/eda_3d_viewer_frame.h>          // To include VIEWER3D_FRAMENAME
-#include <footprint_editor_settings.h>
-#include <pcbnew_settings.h>
-#include <fp_lib_table.h>
-#include <pcbnew_id.h>
+#include <advanced_config.h>
+#include <base_units.h>
 #include <board.h>
-#include <footprint.h>
+#include <cleanup_item.h>
 #include <collectors.h>
+#include <confirm.h>
+#include <footprint.h>
+#include <footprint_editor_settings.h>
+#include <fp_lib_table.h>
+#include <kiface_base.h>
+#include <pcb_group.h>
+#include <pcb_painter.h>
+#include <pcbnew_id.h>
+#include <pcbnew_settings.h>
+#include <pcb_base_frame.h>
 #include <pcb_draw_panel_gal.h>
+#include <pgm_base.h>
+#include <zoom_defines.h>
+
 #include <math/vector2d.h>
 #include <math/vector2wx.h>
-#include <pcb_group.h>
+#include <widgets/msgpanel.h>
 
-#include <pcb_painter.h>
 #include <settings/settings_manager.h>
 #include <settings/cvpcb_settings.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tools/pcb_actions.h>
 #include <tool/grid_menu.h>
-#include "cleanup_item.h"
-#include <zoom_defines.h>
 #include <ratsnest/ratsnest_view_item.h>
 
-#if defined( KICAD_USE_3DCONNEXION )
 #include <navlib/nl_pcbnew_plugin.h>
-#endif
 
 using KIGFX::RENDER_SETTINGS;
 using KIGFX::PCB_RENDER_SETTINGS;
@@ -86,9 +86,8 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 
 PCB_BASE_FRAME::~PCB_BASE_FRAME()
 {
-#if defined( KICAD_USE_3DCONNEXION )
     delete m_spaceMouse;
-#endif
+    m_spaceMouse = nullptr;
 
     // Ensure m_canvasType is up to date, to save it in config
     m_canvasType = GetCanvas()->GetBackend();
@@ -119,12 +118,8 @@ void PCB_BASE_FRAME::handleActivateEvent( wxActivateEvent& aEvent )
 {
     EDA_DRAW_FRAME::handleActivateEvent( aEvent );
 
-#if defined( KICAD_USE_3DCONNEXION )
-    if( m_spaceMouse != nullptr )
-    {
+    if( m_spaceMouse != nullptr && ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
         m_spaceMouse->SetFocus( aEvent.GetActive() );
-    }
-#endif
 }
 
 
@@ -132,12 +127,9 @@ void PCB_BASE_FRAME::handleIconizeEvent( wxIconizeEvent& aEvent )
 {
     EDA_DRAW_FRAME::handleIconizeEvent( aEvent );
 
-#if defined( KICAD_USE_3DCONNEXION )
-    if( m_spaceMouse != nullptr && aEvent.IsIconized() )
-    {
+    if( m_spaceMouse != nullptr && aEvent.IsIconized()
+            && ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
         m_spaceMouse->SetFocus( false );
-    }
-#endif
 }
 
 
@@ -1084,19 +1076,21 @@ void PCB_BASE_FRAME::ActivateGalCanvas()
     canvas->SetEventDispatcher( m_toolDispatcher );
     canvas->StartDrawing();
 
-#if defined( KICAD_USE_3DCONNEXION )
-    try
+    if( ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
     {
-        if( m_spaceMouse == nullptr )
+        try
+
         {
-            m_spaceMouse = new NL_PCBNEW_PLUGIN( GetCanvas() );
+            if( m_spaceMouse == nullptr )
+            {
+                m_spaceMouse = new NL_PCBNEW_PLUGIN( GetCanvas() );
+            }
+        }
+        catch( const std::system_error& e )
+        {
+            wxLogTrace( wxT( "KI_TRACE_NAVLIB" ), e.what() );
         }
     }
-    catch( const std::system_error& e )
-    {
-        wxLogTrace( wxT( "KI_TRACE_NAVLIB" ), e.what() );
-    }
-#endif
 }
 
 
