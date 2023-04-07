@@ -7,18 +7,13 @@
     BSD-style license that can be found in the LICENSE file.
 */
 
-#include <pybind11/eigen.h>
+#include <pybind11/eigen/matrix.h>
 #include <pybind11/stl.h>
 
 #include "constructor_stats.h"
 #include "pybind11_tests.h"
 
-#if defined(_MSC_VER)
-#    if _MSC_VER < 1910                 // VS 2015's MSVC
-#        pragma warning(disable : 4127) // C4127: conditional expression is constant
-#    endif
-#    pragma warning(disable : 4996) // C4996: std::unary_negation is deprecated
-#endif
+PYBIND11_WARNING_DISABLE_MSVC(4996)
 
 #include <Eigen/Cholesky>
 
@@ -84,7 +79,7 @@ struct CustomOperatorNew {
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
 };
 
-TEST_SUBMODULE(eigen, m) {
+TEST_SUBMODULE(eigen_matrix, m) {
     using FixedMatrixR = Eigen::Matrix<float, 5, 6, Eigen::RowMajor>;
     using FixedMatrixC = Eigen::Matrix<float, 5, 6>;
     using DenseMatrixR = Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
@@ -200,11 +195,40 @@ TEST_SUBMODULE(eigen, m) {
 
     // Return a block of a matrix (gives non-standard strides)
     m.def("block",
-          [](const Eigen::Ref<const Eigen::MatrixXd> &x,
-             int start_row,
-             int start_col,
-             int block_rows,
-             int block_cols) { return x.block(start_row, start_col, block_rows, block_cols); });
+          [m](const py::object &x_obj,
+              int start_row,
+              int start_col,
+              int block_rows,
+              int block_cols) {
+              return m.attr("_block")(x_obj, x_obj, start_row, start_col, block_rows, block_cols);
+          });
+
+    m.def(
+        "_block",
+        [](const py::object &x_obj,
+           const Eigen::Ref<const Eigen::MatrixXd> &x,
+           int start_row,
+           int start_col,
+           int block_rows,
+           int block_cols) {
+            // See PR #4217 for background. This test is a bit over the top, but might be useful
+            // as a concrete example to point to when explaining the dangling reference trap.
+            auto i0 = py::make_tuple(0, 0);
+            auto x0_orig = x_obj[*i0].cast<double>();
+            if (x(0, 0) != x0_orig) {
+                throw std::runtime_error(
+                    "Something in the type_caster for Eigen::Ref is terribly wrong.");
+            }
+            double x0_mod = x0_orig + 1;
+            x_obj[*i0] = x0_mod;
+            auto copy_detected = (x(0, 0) != x0_mod);
+            x_obj[*i0] = x0_orig;
+            if (copy_detected) {
+                throw std::runtime_error("type_caster for Eigen::Ref made a copy.");
+            }
+            return x.block(start_row, start_col, block_rows, block_cols);
+        },
+        py::keep_alive<0, 1>());
 
     // test_eigen_return_references, test_eigen_keepalive
     // return value referencing/copying tests:
@@ -348,10 +372,13 @@ TEST_SUBMODULE(eigen, m) {
         },
         py::arg{}.noconvert());
 
-    // test_issue738
-    // Issue #738: 1xN or Nx1 2D matrices were neither accepted nor properly copied with an
+    // test_issue738, test_zero_length
+    // Issue #738: 1×N or N×1 2D matrices were neither accepted nor properly copied with an
     // incompatible stride value on the length-1 dimension--but that should be allowed (without
     // requiring a copy!) because the stride value can be safely ignored on a size-1 dimension.
+    // Similarly, 0×N or N×0 matrices were not accepted--again, these should be allowed since
+    // they contain no data. This particularly affects numpy ≥ 1.23, which sets the strides to
+    // 0 if any dimension size is 0.
     m.def("iss738_f1",
           &adjust_matrix<const Eigen::Ref<const Eigen::MatrixXd> &>,
           py::arg{}.noconvert());

@@ -92,7 +92,7 @@ endif()
 
 # Use the Python interpreter to find the libs.
 if(NOT PythonLibsNew_FIND_VERSION)
-  set(PythonLibsNew_FIND_VERSION "")
+  set(PythonLibsNew_FIND_VERSION "3.6")
 endif()
 
 find_package(PythonInterp ${PythonLibsNew_FIND_VERSION} ${_pythonlibs_required}
@@ -127,10 +127,11 @@ if USE_SYSCONFIG:
         scheme = 'posix_prefix'
     print(s.get_path('platinclude', scheme))
     print(s.get_path('platlib'))
+    print(s.get_config_var('EXT_SUFFIX') or s.get_config_var('SO'))
 else:
     print(ds.get_python_inc(plat_specific=True));
     print(ds.get_python_lib(plat_specific=True));
-print(s.get_config_var('EXT_SUFFIX') or s.get_config_var('SO'));
+    print(ds.get_config_var('EXT_SUFFIX') or ds.get_config_var('SO'));
 print(hasattr(sys, 'gettotalrefcount')+0);
 print(struct.calcsize('@P'));
 print(s.get_config_var('LDVERSION') or s.get_config_var('VERSION'));
@@ -150,26 +151,40 @@ if(NOT _PYTHON_SUCCESS MATCHES 0)
   return()
 endif()
 
+option(
+  PYBIND11_PYTHONLIBS_OVERWRITE
+  "Overwrite cached values read from Python library (classic search). Turn off if cross-compiling and manually setting these values."
+  ON)
+# Can manually set values when cross-compiling
+macro(_PYBIND11_GET_IF_UNDEF lst index name)
+  if(PYBIND11_PYTHONLIBS_OVERWRITE OR NOT DEFINED "${name}")
+    list(GET "${lst}" "${index}" "${name}")
+  endif()
+endmacro()
+
 # Convert the process output into a list
 if(WIN32)
   string(REGEX REPLACE "\\\\" "/" _PYTHON_VALUES ${_PYTHON_VALUES})
 endif()
 string(REGEX REPLACE ";" "\\\\;" _PYTHON_VALUES ${_PYTHON_VALUES})
 string(REGEX REPLACE "\n" ";" _PYTHON_VALUES ${_PYTHON_VALUES})
-list(GET _PYTHON_VALUES 0 _PYTHON_VERSION_LIST)
-list(GET _PYTHON_VALUES 1 PYTHON_PREFIX)
-list(GET _PYTHON_VALUES 2 PYTHON_INCLUDE_DIR)
-list(GET _PYTHON_VALUES 3 PYTHON_SITE_PACKAGES)
-list(GET _PYTHON_VALUES 4 PYTHON_MODULE_EXTENSION)
-list(GET _PYTHON_VALUES 5 PYTHON_IS_DEBUG)
-list(GET _PYTHON_VALUES 6 PYTHON_SIZEOF_VOID_P)
-list(GET _PYTHON_VALUES 7 PYTHON_LIBRARY_SUFFIX)
-list(GET _PYTHON_VALUES 8 PYTHON_LIBDIR)
-list(GET _PYTHON_VALUES 9 PYTHON_MULTIARCH)
+_pybind11_get_if_undef(_PYTHON_VALUES 0 _PYTHON_VERSION_LIST)
+_pybind11_get_if_undef(_PYTHON_VALUES 1 PYTHON_PREFIX)
+_pybind11_get_if_undef(_PYTHON_VALUES 2 PYTHON_INCLUDE_DIR)
+_pybind11_get_if_undef(_PYTHON_VALUES 3 PYTHON_SITE_PACKAGES)
+_pybind11_get_if_undef(_PYTHON_VALUES 4 PYTHON_MODULE_EXTENSION)
+_pybind11_get_if_undef(_PYTHON_VALUES 5 PYTHON_IS_DEBUG)
+_pybind11_get_if_undef(_PYTHON_VALUES 6 PYTHON_SIZEOF_VOID_P)
+_pybind11_get_if_undef(_PYTHON_VALUES 7 PYTHON_LIBRARY_SUFFIX)
+_pybind11_get_if_undef(_PYTHON_VALUES 8 PYTHON_LIBDIR)
+_pybind11_get_if_undef(_PYTHON_VALUES 9 PYTHON_MULTIARCH)
 
 # Make sure the Python has the same pointer-size as the chosen compiler
 # Skip if CMAKE_SIZEOF_VOID_P is not defined
-if(CMAKE_SIZEOF_VOID_P AND (NOT "${PYTHON_SIZEOF_VOID_P}" STREQUAL "${CMAKE_SIZEOF_VOID_P}"))
+# This should be skipped for (non-Apple) cross-compiles (like EMSCRIPTEN)
+if(NOT CMAKE_CROSSCOMPILING
+   AND CMAKE_SIZEOF_VOID_P
+   AND (NOT "${PYTHON_SIZEOF_VOID_P}" STREQUAL "${CMAKE_SIZEOF_VOID_P}"))
   if(PythonLibsNew_FIND_REQUIRED)
     math(EXPR _PYTHON_BITS "${PYTHON_SIZEOF_VOID_P} * 8")
     math(EXPR _CMAKE_BITS "${CMAKE_SIZEOF_VOID_P} * 8")
@@ -193,7 +208,9 @@ string(REGEX REPLACE "\\\\" "/" PYTHON_PREFIX "${PYTHON_PREFIX}")
 string(REGEX REPLACE "\\\\" "/" PYTHON_INCLUDE_DIR "${PYTHON_INCLUDE_DIR}")
 string(REGEX REPLACE "\\\\" "/" PYTHON_SITE_PACKAGES "${PYTHON_SITE_PACKAGES}")
 
-if(CMAKE_HOST_WIN32)
+if(DEFINED PYTHON_LIBRARY)
+  # Don't write to PYTHON_LIBRARY if it's already set
+elseif(CMAKE_HOST_WIN32)
   set(PYTHON_LIBRARY "${PYTHON_PREFIX}/libs/python${PYTHON_LIBRARY_SUFFIX}.lib")
 
   # when run in a venv, PYTHON_PREFIX points to it. But the libraries remain in the
@@ -201,21 +218,6 @@ if(CMAKE_HOST_WIN32)
   if(NOT EXISTS "${PYTHON_LIBRARY}")
     get_filename_component(_PYTHON_ROOT ${PYTHON_INCLUDE_DIR} DIRECTORY)
     set(PYTHON_LIBRARY "${_PYTHON_ROOT}/libs/python${PYTHON_LIBRARY_SUFFIX}.lib")
-  elseif(DEFINED VCPKG_TOOLCHAIN AND NOT EXISTS "${PYTHON_LIBRARY}")
-    set(PYTHON_LIBRARY "${PYTHON_PREFIX}/../../lib/python${PYTHON_LIBRARY_SUFFIX}.lib")
-  endif()
-
-  if(DEFINED VCPKG_TOOLCHAIN)
-    unset(PYTHON_LIBRARY)
-    find_library(
-      PYTHON_LIBRARY
-      NAMES "python${PYTHON_LIBRARY_SUFFIX}"
-      NO_SYSTEM_ENVIRONMENT_PATH)
-
-    find_library(PYTHON_DEBUG_LIBRARY
-      NAMES python${PYTHON_LIBRARY_SUFFIX}_d
-      NO_SYSTEM_ENVIRONMENT_PATH
-    )
   endif()
 
   # if we are in MSYS & MINGW, and we didn't find windows python lib, look for system python lib
@@ -261,7 +263,7 @@ else()
   endif()
 endif()
 
-mark_as_advanced(PYTHON_DEBUG_LIBRARY PYTHON_LIBRARY PYTHON_INCLUDE_DIR)
+mark_as_advanced(PYTHON_LIBRARY PYTHON_INCLUDE_DIR)
 
 # We use PYTHON_INCLUDE_DIR, PYTHON_LIBRARY and PYTHON_DEBUG_LIBRARY for the
 # cache entries because they are meant to specify the location of a single
@@ -274,11 +276,7 @@ if(NOT PYTHON_DEBUG_LIBRARY)
 endif()
 set(PYTHON_DEBUG_LIBRARIES "${PYTHON_DEBUG_LIBRARY}")
 
-set(PYTHON_LIBRARY_DEBUG "${PYTHON_DEBUG_LIBRARY}")
-set(PYTHON_LIBRARY_RELEASE, "${PYTHON_LIBRARY}")
-select_library_configurations(PYTHON)
-
-find_package_message(PYTHON "Found PythonLibs: ${PYTHON_LIBRARY}"
+find_package_message(PYTHON "Found PythonLibs: ${PYTHON_LIBRARIES}"
                      "${PYTHON_EXECUTABLE}${PYTHON_VERSION_STRING}")
 
 set(PYTHONLIBS_FOUND TRUE)

@@ -228,7 +228,10 @@ TEST_SUBMODULE(exceptions, m) {
             throw py::error_already_set();
         } catch (const std::runtime_error &e) {
             if ((err && e.what() != std::string("ValueError: foo"))
-                || (!err && e.what() != std::string("Unknown internal error occurred"))) {
+                || (!err
+                    && e.what()
+                           != std::string("Internal error: pybind11::error_already_set called "
+                                          "while Python error indicator not set."))) {
                 PyErr_Clear();
                 throw std::runtime_error("error message mismatch");
             }
@@ -266,7 +269,9 @@ TEST_SUBMODULE(exceptions, m) {
                   if (ex.matches(exc_type)) {
                       py::print(ex.what());
                   } else {
-                      throw;
+                      // Simply `throw;` also works and is better, but using `throw ex;`
+                      // here to cover that situation (as observed in the wild).
+                      throw ex; // Invokes the copy ctor.
                   }
               }
           });
@@ -275,8 +280,6 @@ TEST_SUBMODULE(exceptions, m) {
     m.def("simple_bool_passthrough", [](bool x) { return x; });
 
     m.def("throw_should_be_translated_to_key_error", []() { throw shared_exception(); });
-
-#if PY_VERSION_HEX >= 0x03030000
 
     m.def("raise_from", []() {
         PyErr_SetString(PyExc_ValueError, "inner");
@@ -301,5 +304,39 @@ TEST_SUBMODULE(exceptions, m) {
             std::throw_with_nested(std::runtime_error("Outer Exception"));
         }
     });
-#endif
+
+    m.def("error_already_set_what", [](const py::object &exc_type, const py::object &exc_value) {
+        PyErr_SetObject(exc_type.ptr(), exc_value.ptr());
+        std::string what = py::error_already_set().what();
+        bool py_err_set_after_what = (PyErr_Occurred() != nullptr);
+        PyErr_Clear();
+        return py::make_tuple(std::move(what), py_err_set_after_what);
+    });
+
+    m.def("test_cross_module_interleaved_error_already_set", []() {
+        auto cm = py::module_::import("cross_module_interleaved_error_already_set");
+        auto interleaved_error_already_set
+            = reinterpret_cast<void (*)()>(PyLong_AsVoidPtr(cm.attr("funcaddr").ptr()));
+        interleaved_error_already_set();
+    });
+
+    m.def("test_error_already_set_double_restore", [](bool dry_run) {
+        PyErr_SetString(PyExc_ValueError, "Random error.");
+        py::error_already_set e;
+        e.restore();
+        PyErr_Clear();
+        if (!dry_run) {
+            e.restore();
+        }
+    });
+
+    // https://github.com/pybind/pybind11/issues/4075
+    m.def("test_pypy_oserror_normalization", []() {
+        try {
+            py::module_::import("io").attr("open")("this_filename_must_not_exist", "r");
+        } catch (const py::error_already_set &e) {
+            return py::str(e.what()); // str must be built before e goes out of scope.
+        }
+        return py::str("UNEXPECTED");
+    });
 }

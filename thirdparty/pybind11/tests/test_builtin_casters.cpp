@@ -73,6 +73,9 @@ PYBIND11_NAMESPACE_END(detail)
 PYBIND11_NAMESPACE_END(pybind11)
 
 TEST_SUBMODULE(builtin_casters, m) {
+    PYBIND11_WARNING_PUSH
+    PYBIND11_WARNING_DISABLE_MSVC(4127)
+
     // test_simple_string
     m.def("string_roundtrip", [](const char *s) { return s; });
 
@@ -86,7 +89,7 @@ TEST_SUBMODULE(builtin_casters, m) {
     std::wstring wstr;
     wstr.push_back(0x61);   // a
     wstr.push_back(0x2e18); // ⸘
-    if (PYBIND11_SILENCE_MSVC_C4127(sizeof(wchar_t) == 2)) {
+    if (sizeof(wchar_t) == 2) {
         wstr.push_back(mathbfA16_1);
         wstr.push_back(mathbfA16_2);
     } // 𝐀, utf16
@@ -110,16 +113,14 @@ TEST_SUBMODULE(builtin_casters, m) {
                            "def");
     });
     m.def("bad_utf16_string", [=]() { return std::u16string({b16, char16_t(0xd800), z16}); });
-#if PY_MAJOR_VERSION >= 3
-    // Under Python 2.7, invalid unicode UTF-32 characters don't appear to trigger
+    // Under Python 2.7, invalid unicode UTF-32 characters didn't appear to trigger
     // UnicodeDecodeError
     m.def("bad_utf32_string", [=]() { return std::u32string({a32, char32_t(0xd800), z32}); });
-    if (PYBIND11_SILENCE_MSVC_C4127(sizeof(wchar_t) == 2)) {
+    if (sizeof(wchar_t) == 2) {
         m.def("bad_wchar_string", [=]() {
             return std::wstring({wchar_t(0x61), wchar_t(0xd800)});
         });
     }
-#endif
     m.def("u8_Z", []() -> char { return 'Z'; });
     m.def("u8_eacute", []() -> char { return '\xe9'; });
     m.def("u16_ibang", [=]() -> char16_t { return ib16; });
@@ -198,12 +199,10 @@ TEST_SUBMODULE(builtin_casters, m) {
           []() { return [](py::str s) { return s; }("abc \342\200\275 def"sv); });
     m.def("string_view_from_bytes",
           [](const py::bytes &b) { return [](std::string_view s) { return s; }(b); });
-#    if PY_MAJOR_VERSION >= 3
     m.def("string_view_memoryview", []() {
         static constexpr auto val = "Have some \360\237\216\202"sv;
         return py::memoryview::from_memory(val);
     });
-#    endif
 
 #    ifdef PYBIND11_HAS_U8STRING
     m.def("string_view8_print", [](std::u8string_view s) { py::print(s, s.size()); });
@@ -270,8 +269,14 @@ TEST_SUBMODULE(builtin_casters, m) {
     });
     m.def("lvalue_nested", []() -> const decltype(lvnested) & { return lvnested; });
 
-    static std::pair<int, std::string> int_string_pair{2, "items"};
-    m.def("int_string_pair", []() { return &int_string_pair; });
+    m.def(
+        "int_string_pair",
+        []() {
+            // Using no-destructor idiom to side-step warnings from overzealous compilers.
+            static auto *int_string_pair = new std::pair<int, std::string>{2, "items"};
+            return int_string_pair;
+        },
+        py::return_value_policy::reference);
 
     // test_builtins_cast_return_none
     m.def("return_none_string", []() -> std::string * { return nullptr; });
@@ -382,4 +387,6 @@ TEST_SUBMODULE(builtin_casters, m) {
     m.def("takes_const_ref", [](const ConstRefCasted &x) { return x.tag; });
     m.def("takes_const_ref_wrap",
           [](std::reference_wrapper<const ConstRefCasted> x) { return x.get().tag; });
+
+    PYBIND11_WARNING_POP
 }

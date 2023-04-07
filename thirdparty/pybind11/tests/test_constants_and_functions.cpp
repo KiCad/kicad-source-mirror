@@ -31,8 +31,8 @@ py::bytes return_bytes() {
 std::string print_bytes(const py::bytes &bytes) {
     std::string ret = "bytes[";
     const auto value = static_cast<std::string>(bytes);
-    for (size_t i = 0; i < value.length(); ++i) {
-        ret += std::to_string(static_cast<int>(value[i])) + " ";
+    for (char c : value) {
+        ret += std::to_string(static_cast<int>(c)) + ' ';
     }
     ret.back() = ']';
     return ret;
@@ -52,15 +52,12 @@ int f1(int x) noexcept { return x + 1; }
 #endif
 int f2(int x) noexcept(true) { return x + 2; }
 int f3(int x) noexcept(false) { return x + 3; }
-#if defined(__GNUG__) && !defined(__INTEL_COMPILER)
-#    pragma GCC diagnostic push
-#    pragma GCC diagnostic ignored "-Wdeprecated"
-#endif
+PYBIND11_WARNING_PUSH
+PYBIND11_WARNING_DISABLE_GCC("-Wdeprecated")
+PYBIND11_WARNING_DISABLE_CLANG("-Wdeprecated")
 // NOLINTNEXTLINE(modernize-use-noexcept)
 int f4(int x) throw() { return x + 4; } // Deprecated equivalent to noexcept(true)
-#if defined(__GNUG__) && !defined(__INTEL_COMPILER)
-#    pragma GCC diagnostic pop
-#endif
+PYBIND11_WARNING_POP
 struct C {
     int m1(int x) noexcept { return x - 1; }
     int m2(int x) const noexcept { return x - 2; }
@@ -68,17 +65,14 @@ struct C {
     int m4(int x) const noexcept(true) { return x - 4; }
     int m5(int x) noexcept(false) { return x - 5; }
     int m6(int x) const noexcept(false) { return x - 6; }
-#if defined(__GNUG__) && !defined(__INTEL_COMPILER)
-#    pragma GCC diagnostic push
-#    pragma GCC diagnostic ignored "-Wdeprecated"
-#endif
+    PYBIND11_WARNING_PUSH
+    PYBIND11_WARNING_DISABLE_GCC("-Wdeprecated")
+    PYBIND11_WARNING_DISABLE_CLANG("-Wdeprecated")
     // NOLINTNEXTLINE(modernize-use-noexcept)
     int m7(int x) throw() { return x - 7; }
     // NOLINTNEXTLINE(modernize-use-noexcept)
     int m8(int x) const throw() { return x - 8; }
-#if defined(__GNUG__) && !defined(__INTEL_COMPILER)
-#    pragma GCC diagnostic pop
-#endif
+    PYBIND11_WARNING_POP
 };
 } // namespace test_exc_sp
 
@@ -126,29 +120,24 @@ TEST_SUBMODULE(constants_and_functions, m) {
         .def("m8", &C::m8);
     m.def("f1", f1);
     m.def("f2", f2);
-#if defined(__INTEL_COMPILER)
-#    pragma warning push
-#    pragma warning disable 878 // incompatible exception specifications
-#endif
+
+    PYBIND11_WARNING_PUSH
+    PYBIND11_WARNING_DISABLE_INTEL(878) // incompatible exception specifications
     m.def("f3", f3);
-#if defined(__INTEL_COMPILER)
-#    pragma warning pop
-#endif
+    PYBIND11_WARNING_POP
+
     m.def("f4", f4);
 
     // test_function_record_leaks
-    struct LargeCapture {
+    m.def("register_large_capture_with_invalid_arguments", [](py::module_ m) {
         // This should always be enough to trigger the alternative branch
         // where `sizeof(capture) > sizeof(rec->data)`
-        uint64_t zeros[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-    };
-    m.def("register_large_capture_with_invalid_arguments", [](py::module_ m) {
-        LargeCapture capture; // VS 2015's MSVC is acting up if we create the array here
+        uint64_t capture[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+#if defined(__GNUC__) && __GNUC__ == 4 // CentOS7
+        py::detail::silence_unused_warnings(capture);
+#endif
         m.def(
-            "should_raise",
-            [capture](int) { return capture.zeros[9] + 33; },
-            py::kw_only(),
-            py::arg());
+            "should_raise", [capture](int) { return capture[9] + 33; }, py::kw_only(), py::arg());
     });
     m.def("register_with_raising_repr", [](py::module_ m, const py::object &default_value) {
         m.def(

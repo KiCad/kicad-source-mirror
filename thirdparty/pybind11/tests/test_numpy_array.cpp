@@ -162,7 +162,7 @@ static int data_i = 42;
 TEST_SUBMODULE(numpy_array, sm) {
     try {
         py::module_::import("numpy");
-    } catch (...) {
+    } catch (const py::error_already_set &) {
         return;
     }
 
@@ -521,4 +521,6 @@ TEST_SUBMODULE(numpy_array, sm) {
     sm.def("test_fmt_desc_double", [](const py::array_t<double> &) {});
     sm.def("test_fmt_desc_const_float", [](const py::array_t<const float> &) {});
     sm.def("test_fmt_desc_const_double", [](const py::array_t<const double> &) {});
+
+    sm.def("round_trip_float", [](double d) { return d; });
 }
