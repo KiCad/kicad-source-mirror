@@ -1689,6 +1689,8 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
                 const CONNECTION_SUBGRAPH* driverSubgraph = nullptr;
                 wxString                   netclass;
 
+                wxCHECK_RET( !subgraphs.empty(), wxT("Invalid empty subgraph" ) );
+
                 for( const CONNECTION_SUBGRAPH* subgraph : subgraphs )
                 {
                     for( SCH_ITEM* item : subgraph->m_items )
@@ -1699,7 +1701,7 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
                             break;
                     }
 
-                    if( !netclass.IsEmpty() || !driverSubgraph )
+                    if( !netclass.IsEmpty() )
                     {
                         driverSubgraph = subgraph;
                         break;
@@ -1708,6 +1710,9 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
 
                 if( netclass.IsEmpty() )
                     return;
+
+                if( !driverSubgraph )
+                    driverSubgraph = subgraphs.front();
 
                 const wxString netname = driverSubgraph->GetNetName();
 
