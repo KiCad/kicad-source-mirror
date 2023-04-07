@@ -40,15 +40,26 @@ static bool isCopper( const PNS::ITEM* aItem )
 
     BOARD_ITEM* parent = aItem->Parent();
 
-    if ( !parent )
-    {
-        return LSET::AllCuMask().Contains( (PCB_LAYER_ID) aItem->Layer() );
-    }
-
     if( parent && parent->Type() == PCB_PAD_T )
     {
         PAD* pad = static_cast<PAD*>( parent );
-        return pad->IsOnCopperLayer() && pad->GetAttribute() != PAD_ATTRIB::NPTH;
+
+        if( !pad->IsOnCopperLayer() )
+            return false;
+
+        if( pad->GetAttribute() != PAD_ATTRIB::NPTH )
+            return true;
+
+        // round NPTH with a hole size >= pad size are not on a copper layer
+        // All other NPTH are seen on copper layers
+        // This is a basic criteria, but probably enough for a NPTH
+        if( pad->GetShape() == PAD_SHAPE::CIRCLE )
+        {
+            if( pad->GetSize().x <= pad->GetDrillSize().x )
+                return false;
+        }
+
+        return true;
     }
 
     return true;
@@ -69,12 +80,7 @@ static bool isEdge( const PNS::ITEM* aItem )
     if( !aItem )
         return false;
 
-    const BOARD_ITEM* parent = aItem->Parent();
-
-    if ( !parent )
-    {
-        return aItem->Layer() == Edge_Cuts;
-    }
+    const BOARD_ITEM *parent = aItem->BoardItem();
 
     return parent && ( parent->IsOnLayer( Edge_Cuts ) || parent->IsOnLayer( Margin ) );
 }
@@ -93,51 +99,68 @@ public:
                            bool aUseClearanceEpsilon = true ) override
     {
         PNS::CONSTRAINT constraint;
-        int             rv = -1;
-        int             layer;
+        int             rv = 0;
+        LAYER_RANGE     layers;
 
-        if( !aA->Layers().IsMultilayer() || !aB || aB->Layers().IsMultilayer() )
-            layer = aA->Layer();
+        if( !aB )
+            layers = aA->Layers();
+        else if( isEdge( aA ) )
+            layers = aB->Layers();
+        else if( isEdge( aB ) )
+            layers = aA->Layers();
         else
-            layer = aB->Layer();
+            layers = aA->Layers().Intersection( aB->Layers() );
 
-        if( isHole( aA ) && isHole( aB ) )
+        // Normalize layer range (no -1 magic numbers)
+        layers = layers.Intersection( LAYER_RANGE( PCBNEW_LAYER_ID_START, PCB_LAYER_ID_COUNT - 1 ) );
+
+        for( int layer = layers.Start(); layer <= layers.End(); ++layer )
         {
-            if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE, aA, aB, layer,
-                                 &constraint ) )
-                rv = constraint.m_Value.Min();
-        }
-        else if( isHole( aA ) || isHole( aB ) )
-        {
-            if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_CLEARANCE, aA, aB, layer,
-                                 &constraint ) )
-                rv = constraint.m_Value.Min();
-        }
-        else if( isCopper( aA ) && ( !aB || isCopper( aB ) ) )
-        {
-            if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, aA, aB, layer, &constraint ) )
-                rv = constraint.m_Value.Min();
-        }
-        else if( isEdge( aA ) || ( aB && isEdge( aB ) ) )
-        {
-            if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_EDGE_CLEARANCE, aA, aB, layer,
-                                 &constraint ) )
+            if( isHole( aA ) && isHole( aB) )
             {
-                if( constraint.m_Value.Min() > rv )
-                    rv = constraint.m_Value.Min();
+                if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE, aA, aB, layer, &constraint ) )
+                {
+                    if( constraint.m_Value.Min() > rv )
+                        rv = constraint.m_Value.Min();
+                }
+            }
+            else if( isHole( aA ) || isHole( aB ) )
+            {
+                if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_CLEARANCE, aA, aB, layer, &constraint ) )
+                {
+                    if( constraint.m_Value.Min() > rv )
+                        rv = constraint.m_Value.Min();
+                }
+            }
+            else if( isCopper( aA ) && ( !aB || isCopper( aB ) ) )
+            {
+                if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, aA, aB, layer, &constraint ) )
+                {
+                    if( constraint.m_Value.Min() > rv )
+                        rv = constraint.m_Value.Min();
+                }
+            }
+            else if( isEdge( aA ) || ( aB && isEdge( aB ) ) )
+            {
+                if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_EDGE_CLEARANCE, aA, aB, layer, &constraint ) )
+                {
+                    if( constraint.m_Value.Min() > rv )
+                        rv = constraint.m_Value.Min();
+                }
             }
         }
 
         return rv;
     }
 
+    virtual int DpCoupledNet( int aNet ) override { return -1; }
+    virtual int DpNetPolarity( int aNet ) override { return -1; }
 
-    virtual int  DpCoupledNet( int aNet ) override { return -1; }
-    virtual int  DpNetPolarity( int aNet ) override { return -1; }
     virtual bool DpNetPair( const PNS::ITEM* aItem, int& aNetP, int& aNetN ) override
     {
         return false;
     }
+
     virtual bool QueryConstraint( PNS::CONSTRAINT_TYPE aType, const PNS::ITEM* aItemA,
                                   const PNS::ITEM* aItemB, int aLayer,
                                   PNS::CONSTRAINT* aConstraint ) override
@@ -149,13 +172,14 @@ public:
         key.type = aType;
 
         auto it = m_ruleMap.find( key );
+
         if( it == m_ruleMap.end() )
         {
             int cl;
             switch( aType )
             {
-            case PNS::CONSTRAINT_TYPE::CT_CLEARANCE: cl = m_defaultClearance; break;
-            case PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE: cl = m_defaultHole2Hole; break;
+            case PNS::CONSTRAINT_TYPE::CT_CLEARANCE:      cl = m_defaultClearance;   break;
+            case PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE:   cl = m_defaultHole2Hole;   break;
             case PNS::CONSTRAINT_TYPE::CT_HOLE_CLEARANCE: cl = m_defaultHole2Copper; break;
             default: return false;
             }
@@ -166,7 +190,9 @@ public:
             aConstraint->m_Value.SetMin( cl );
 
             return true;
-        } else {
+        }
+        else
+        {
             *aConstraint = it->second;
         }
 
@@ -294,8 +320,8 @@ static void dumpObstacles( const PNS::NODE::OBSTACLES &obstacles )
 
 BOOST_FIXTURE_TEST_CASE( PNSHoleCollisions, PNS_TEST_FIXTURE )
 {
-    PNS::VIA* v1 = new PNS::VIA( VECTOR2I( 0, 1000000 ), LAYER_RANGE( F_Cu, B_Cu ), 500000, 100000 );
-    PNS::VIA* v2 = new PNS::VIA( VECTOR2I( 0, 2000000 ), LAYER_RANGE( F_Cu, B_Cu ), 500000, 100000 );
+    PNS::VIA* v1 = new PNS::VIA( VECTOR2I( 0, 1000000 ), LAYER_RANGE( F_Cu, B_Cu ), 50000, 10000 );
+    PNS::VIA* v2 = new PNS::VIA( VECTOR2I( 0, 2000000 ), LAYER_RANGE( F_Cu, B_Cu ), 50000, 10000 );
 
     std::unique_ptr<PNS::NODE> world ( new PNS::NODE );
 
@@ -328,10 +354,28 @@ BOOST_FIXTURE_TEST_CASE( PNSHoleCollisions, PNS_TEST_FIXTURE )
         BOOST_CHECK_EQUAL( first.m_clearance, m_ruleResolver.m_defaultClearance );
     }
 
-    BOOST_TEST_MESSAGE( "via to via, forced copper to hole violation" );
+    BOOST_TEST_MESSAGE( "via to via, forced hole to hole violation" );
     {
         PNS::NODE::OBSTACLES obstacles;
         m_ruleResolver.m_defaultClearance = 200000;
+        m_ruleResolver.m_defaultHole2Hole = 1000000;
+
+        world->QueryColliding( v1, obstacles );
+        dumpObstacles( obstacles );
+
+        BOOST_CHECK_EQUAL( obstacles.size(), 1 );
+        auto iter = obstacles.begin();
+        const auto first = *iter++;
+
+        BOOST_CHECK_EQUAL( first.m_head, v1->Hole() );
+        BOOST_CHECK_EQUAL( first.m_item, v2->Hole() );
+        BOOST_CHECK_EQUAL( first.m_clearance, m_ruleResolver.m_defaultHole2Hole );
+    }
+
+    BOOST_TEST_MESSAGE( "via to via, forced copper to hole violation" );
+    {
+        PNS::NODE::OBSTACLES obstacles;
+        m_ruleResolver.m_defaultHole2Hole = 220000;
         m_ruleResolver.m_defaultHole2Copper = 1000000;
 
         world->QueryColliding( v1, obstacles );
@@ -340,13 +384,12 @@ BOOST_FIXTURE_TEST_CASE( PNSHoleCollisions, PNS_TEST_FIXTURE )
         BOOST_CHECK_EQUAL( obstacles.size(), 2 );
         auto iter = obstacles.begin();
         const auto first = *iter++;
-        const auto second = *iter;
 
-        BOOST_CHECK_EQUAL( first.m_head, v1 );
-        BOOST_CHECK_EQUAL( first.m_item, v2 );
+        // There is no guarantee on what order the two collisions will be in...
+        BOOST_CHECK( ( first.m_head == v1 && first.m_item == v2->Hole() )
+                  || ( first.m_head == v1->Hole() && first.m_item == v2 ) );
+
         BOOST_CHECK_EQUAL( first.m_clearance, m_ruleResolver.m_defaultHole2Copper );
     }
-
-
 }
 

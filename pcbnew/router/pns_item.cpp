@@ -48,8 +48,11 @@ static void dumpObstacles( const PNS::NODE::OBSTACLES &obstacles )
 bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
                           COLLISION_SEARCH_CONTEXT* aCtx ) const
 {
+    // Note: if 'this' is a pad or a via then its hole is a separate PNS::ITEM in the node's
+    // index and we don't need to deal with holeI here.  The same is *not* true of the routing
+    // "head", so we do need to handle holeH.
+
     const SHAPE* shapeI = Shape();
-    const HOLE*  holeI = Hole();
     int          lineWidthI = 0;
 
     const SHAPE* shapeH = aHead->Shape();
@@ -62,21 +65,7 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
 
     //printf( "h %p n %p t %p ctx %p\n", aHead, aNode, this, aCtx );
 
-    if( aHead == this )  // we cannot be self-colliding
-        return false;
-
-    // prevent bogus collisions between the item and its own hole.
-    // FIXME: figure out a cleaner way of doing that
-    if( holeI && aHead == holeI->ParentPadVia() )
-        return false;
-
-    if( holeH && this == holeH->ParentPadVia() )
-        return false;
-
-    if( holeH && this == holeH )
-        return false;
-
-    if( holeI && aHead == holeI )
+    if( this == aHead || this == holeH )  // we cannot be self-colliding
         return false;
 
     // Special cases for "head" lines with vias attached at the end.  Note that this does not
@@ -95,6 +84,11 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
             collisionsFound |= line->Via().collideSimple( this, aNode, aCtx );
     }
 
+    // And a special case for the "head" via's hole.
+
+    if( holeH )
+        collisionsFound |= collideSimple( holeH, aNode, aCtx );
+
     // Sadly collision routines ignore SHAPE_POLY_LINE widths so we have to pass them in as part
     // of the clearance value.
     if( m_kind == LINE_T )
@@ -107,33 +101,15 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
     if( !m_layers.Overlaps( aHead->m_layers ) )
         return false;
 
-    if( holeH )
-        collisionsFound |= collideSimple( holeH, aNode, aCtx );
-
-    if( holeI )
-        collisionsFound |= holeI->collideSimple( aHead, aNode, aCtx );
-
-    if( holeH && holeI )
-    {
-        if( aCtx )
-        {
-            // Hole to hole collsions are never net-specific
-            COLLISION_SEARCH_OPTIONS holeToHoleOptions( aCtx->options );
-            holeToHoleOptions.m_differentNetsOnly = false;
-            COLLISION_SEARCH_CONTEXT holeToHoleCtx( aCtx->obstacles, holeToHoleOptions );
-            collisionsFound |= holeI->collideSimple( holeH, aNode, &holeToHoleCtx );
-        }
-        else
-        {
-            collisionsFound |= holeI->collideSimple( holeH, aNode, nullptr );
-        }
-    }
-
     // fixme: this f***ing singleton must go...
     ROUTER*       router = ROUTER::GetInstance();
     ROUTER_IFACE* iface = router ? router->GetInterface() : nullptr;
     bool          differentNetsOnly = aCtx && aCtx->options.m_differentNetsOnly;
     int           clearance;
+
+    // Hole-to-hole collisions don't have anything to do with nets
+    if( Kind() == HOLE_T && aHead->Kind() == HOLE_T )
+        differentNetsOnly = false;
 
     if( differentNetsOnly && m_net == aHead->m_net && m_net >= 0 && aHead->m_net >= 0 )
     {

@@ -433,8 +433,7 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
                     rv = constraint.m_Value.Min();
             }
         }
-
-        if( isHole( aA ) || isHole( aB ) )
+        else if( isHole( aA ) || isHole( aB ) )
         {
             if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_CLEARANCE, aA, aB, layer, &constraint ) )
             {
