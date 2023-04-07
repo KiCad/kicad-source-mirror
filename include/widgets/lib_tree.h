@@ -28,8 +28,8 @@
 #include <wx/panel.h>
 #include <lib_tree_model_adapter.h>
 #include <html_window.h>
+#include <widgets/wx_dataviewctrl.h>
 
-class wxDataViewCtrl;
 class wxTextCtrl;
 class wxHtmlLinkEvent;
 class wxSearchCtrl;
@@ -216,16 +216,16 @@ protected:
 
     wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> m_adapter;
 
-    wxSearchCtrl*    m_query_ctrl;
-    wxDataViewCtrl*  m_tree_ctrl;
-    HTML_WINDOW*     m_details_ctrl;
-    wxTimer*         m_debounceTimer;
-    bool             m_inTimerEvent;
+    wxSearchCtrl*     m_query_ctrl;
+    WX_DATAVIEWCTRL*  m_tree_ctrl;
+    HTML_WINDOW*      m_details_ctrl;
+    wxTimer*          m_debounceTimer;
+    bool              m_inTimerEvent;
 
-    LIB_ID           m_last_libid;
-    wxString         m_recentSearchesKey;
+    LIB_ID            m_last_libid;
+    wxString          m_recentSearchesKey;
 
-    bool             m_skipNextRightClick;
+    bool              m_skipNextRightClick;
 };
 
 ///< Custom event sent when a new symbol is preselected

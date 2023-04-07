@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,21 +17,21 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <widgets/wx_dataviewctrl.h>
 #include <wx/dataview.h>
-#include <wxdataviewctrl_helpers.h>
 
-wxDataViewItem GetPrevItem( wxDataViewCtrl const& aView, wxDataViewItem const& aItem )
+wxDataViewItem WX_DATAVIEWCTRL::GetPrevItem( wxDataViewItem const& aItem )
 {
-    wxDataViewItem prevItem = GetPrevSibling( aView, aItem );
+    wxDataViewItem prevItem = GetPrevSibling( aItem );
 
     if( !prevItem.IsOk() )
     {
-        prevItem = aView.GetModel()->GetParent( aItem );
+        prevItem = GetModel()->GetParent( aItem );
     }
-    else if( aView.IsExpanded( prevItem ) )
+    else if( IsExpanded( prevItem ) )
     {
         wxDataViewItemArray children;
-        aView.GetModel()->GetChildren( prevItem, children );
+        GetModel()->GetChildren( prevItem, children );
         prevItem = children[children.size() - 1];
     }
 
@@ -39,7 +39,7 @@ wxDataViewItem GetPrevItem( wxDataViewCtrl const& aView, wxDataViewItem const& a
 }
 
 
-wxDataViewItem GetNextItem( wxDataViewCtrl const& aView, wxDataViewItem const& aItem )
+wxDataViewItem WX_DATAVIEWCTRL::GetNextItem( wxDataViewItem const& aItem )
 {
     wxDataViewItem nextItem;
     wxDataViewItem invalid;
@@ -48,7 +48,7 @@ wxDataViewItem GetNextItem( wxDataViewCtrl const& aView, wxDataViewItem const& a
     {
         // No selection. Select the first.
         wxDataViewItemArray children;
-        aView.GetModel()->GetChildren( aItem, children );
+        GetModel()->GetChildren( aItem, children );
 
         if( children.size() )
             return children[0];
@@ -56,10 +56,10 @@ wxDataViewItem GetNextItem( wxDataViewCtrl const& aView, wxDataViewItem const& a
         return invalid;
     }
 
-    if( aView.IsExpanded( aItem ) )
+    if( IsExpanded( aItem ) )
     {
         wxDataViewItemArray children;
-        aView.GetModel()->GetChildren( aItem, children );
+        GetModel()->GetChildren( aItem, children );
 
         if( children.size() )
             return children[0];
@@ -69,9 +69,9 @@ wxDataViewItem GetNextItem( wxDataViewCtrl const& aView, wxDataViewItem const& a
     else
     {
         // Walk up levels until we find one that has a next sibling.
-        for( wxDataViewItem walk = aItem; walk.IsOk(); walk = aView.GetModel()->GetParent( walk ) )
+        for( wxDataViewItem walk = aItem; walk.IsOk(); walk = GetModel()->GetParent( walk ) )
         {
-            nextItem = GetNextSibling( aView, walk );
+            nextItem = GetNextSibling( walk );
 
             if( nextItem.IsOk() )
                 break;
@@ -82,13 +82,13 @@ wxDataViewItem GetNextItem( wxDataViewCtrl const& aView, wxDataViewItem const& a
 }
 
 
-wxDataViewItem GetPrevSibling( wxDataViewCtrl const& aView, wxDataViewItem const& aItem )
+wxDataViewItem WX_DATAVIEWCTRL::GetPrevSibling( wxDataViewItem const& aItem )
 {
     wxDataViewItemArray siblings;
     wxDataViewItem      invalid;
-    wxDataViewItem      parent = aView.GetModel()->GetParent( aItem );
+    wxDataViewItem      parent = GetModel()->GetParent( aItem );
 
-    aView.GetModel()->GetChildren( parent, siblings );
+    GetModel()->GetChildren( parent, siblings );
 
     for( size_t i = 0; i < siblings.size(); ++i )
     {
@@ -105,13 +105,13 @@ wxDataViewItem GetPrevSibling( wxDataViewCtrl const& aView, wxDataViewItem const
 }
 
 
-wxDataViewItem GetNextSibling( wxDataViewCtrl const& aView, wxDataViewItem const& aItem )
+wxDataViewItem WX_DATAVIEWCTRL::GetNextSibling( wxDataViewItem const& aItem )
 {
     wxDataViewItemArray siblings;
     wxDataViewItem      invalid;
-    wxDataViewItem      parent = aView.GetModel()->GetParent( aItem );
+    wxDataViewItem      parent = GetModel()->GetParent( aItem );
 
-    aView.GetModel()->GetChildren( parent, siblings );
+    GetModel()->GetChildren( parent, siblings );
 
     for( size_t i = 0; i < siblings.size(); ++i )
     {

@@ -206,6 +206,7 @@ set( COMMON_WIDGET_SRCS
     widgets/wx_busy_indicator.cpp
     widgets/wx_collapsible_pane.cpp
     widgets/wx_combobox.cpp
+    widgets/wx_dataviewctrl.cpp
     widgets/wx_ellipsized_static_text.cpp
     widgets/wx_grid.cpp
     widgets/wx_html_report_box.cpp
@@ -387,7 +388,6 @@ set( COMMON_SRCS
     validators.cpp
     wildcards_and_files_ext.cpp
     drawing_sheet/ds_painter.cpp
-    wxdataviewctrl_helpers.cpp
     wx_stl_compat.cpp
     wx_filename.cpp
     xnode.cpp

@@ -25,15 +25,15 @@
 #include <widgets/lib_tree.h>
 #include <core/kicad_algo.h>
 #include <macros.h>
-#include <wxdataviewctrl_helpers.h>
-#include <wx/sizer.h>
 #include <dialogs/eda_reorderable_list_dialog.h>
 #include <tool/tool_interactive.h>
 #include <tool/tool_manager.h>
 #include <tool/action_manager.h>
 #include <tool/actions.h>
-#include <wx/srchctrl.h>
+#include <widgets/wx_dataviewctrl.h>
 #include <wx/settings.h>
+#include <wx/sizer.h>
+#include <wx/srchctrl.h>
 #include <wx/timer.h>
 
 constexpr int RECENT_SEARCHES_MAX = 10;
@@ -106,7 +106,7 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
 
     // Tree control
     int dvFlags = ( aFlags & MULTISELECT ) ? wxDV_MULTIPLE : wxDV_SINGLE;
-    m_tree_ctrl = new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, dvFlags );
+    m_tree_ctrl = new WX_DATAVIEWCTRL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, dvFlags );
     m_adapter->AttachTo( m_tree_ctrl );
 
     if( aFlags & DETAILS )
@@ -488,12 +488,12 @@ void LIB_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
     {
     case WXK_UP:
         updateRecentSearchMenu();
-        selectIfValid( GetPrevItem( *m_tree_ctrl, sel ) );
+        selectIfValid( m_tree_ctrl->GetPrevItem( sel ) );
         break;
 
     case WXK_DOWN:
         updateRecentSearchMenu();
-        selectIfValid( GetNextItem( *m_tree_ctrl, sel ) );
+        selectIfValid( m_tree_ctrl->GetNextItem( sel ) );
         break;
 
     case WXK_ADD:
