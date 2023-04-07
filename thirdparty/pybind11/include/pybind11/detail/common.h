@@ -210,23 +210,10 @@
 #    define HAVE_SNPRINTF 1
 #endif
 
-/// Include Python header, disable linking to pythonX_d.lib on Windows in debug mode
 #if defined(_MSC_VER)
 PYBIND11_WARNING_PUSH
 PYBIND11_WARNING_DISABLE_MSVC(4505)
-// C4505: 'PySlice_GetIndicesEx': unreferenced local function has been removed (PyPy only)
-#    if defined(_DEBUG) && !defined(Py_DEBUG)
-// Workaround for a VS 2022 issue.
-// NOTE: This workaround knowingly violates the Python.h include order requirement:
-// https://docs.python.org/3/c-api/intro.html#include-files
-// See https://github.com/pybind/pybind11/pull/3497 for full context.
-#        include <yvals.h>
-#        if _MSVC_STL_VERSION >= 143
-#            include <crtdefs.h>
-#        endif
-#        define PYBIND11_DEBUG_MARKER
-#        undef _DEBUG
-#    endif
+PYBIND11_WARNING_DISABLE_MSVC(4510 4610 4512 4005)
 #endif
 
 // https://en.cppreference.com/w/c/chrono/localtime
