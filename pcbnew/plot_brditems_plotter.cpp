@@ -660,16 +660,12 @@ void BRDITEMS_PLOTTER::PlotPcbText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, 
     COLOR4D color = getColor( aLayer );
     m_plotter->SetColor( color );
 
-    //VECTOR2I size = aText->GetTextSize();
     VECTOR2I pos = aText->GetTextPos();
 
     TEXT_ATTRIBUTES attrs = aText->GetAttributes();
     attrs.m_StrokeWidth = aText->GetEffectiveTextPenWidth();
     attrs.m_Angle = aText->GetDrawRotation();
     attrs.m_Multiline = false;
-
-    //if( aText->IsMirrored() )
-    //    size.x = -size.x;
 
     m_plotter->SetCurrentLineWidth( attrs.m_StrokeWidth );
 
@@ -802,7 +798,10 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
     GBR_METADATA     gbr_metadata;
 
     if( parentFP )
+    {
         gbr_metadata.SetCmpReference( parentFP->GetReference() );
+        gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_CMP );
+    }
 
     if( aShape->GetLayer() == Edge_Cuts )
     {

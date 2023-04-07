@@ -207,6 +207,9 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
 
                 // Plot the mask
                 PlotStandardLayer( aBoard, aPlotter, layer_mask, plotOpt );
+
+                // Disable the negative polarity
+                aPlotter->SetLayerPolarity( true );
             }
 
             break;
