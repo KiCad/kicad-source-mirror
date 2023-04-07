@@ -1,20 +1,20 @@
-# Arnau Llovet Vidal <arnaullv@gmail.com>, 2021, 2022.
+# Arnau Llovet Vidal <arnaullv@gmail.com>, 2021, 2022, 2023.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:51-0800\n"
-"PO-Revision-Date: 2023-01-20 06:51+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
-"source/ca/>\n"
+"PO-Revision-Date: 2023-04-07 16:20+0000\n"
+"Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
+"master-source/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.1\n"
+"X-Generator: Weblate 4.17-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: f:/kicad-svn/kicad\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -21913,9 +21913,8 @@ msgid "Insufficient permissions to write to folder '%s'."
 msgstr "No es pot escriure a la carpeta «%s»."
 
 #: kicad/tools/kicad_manager_control.cpp:259
-#, fuzzy
 msgid "Overwriting files:"
-msgstr "Sobreescriu fitxers"
+msgstr "S'estan sobreescrivint fitxers:"
 
 #: kicad/tools/kicad_manager_control.cpp:265
 msgid "Similar files already exist in the destination folder."
@@ -23573,9 +23572,8 @@ msgid "Coupled Microstrip Line"
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:23
-#, fuzzy
 msgid "Stripline"
-msgstr "Esbós"
+msgstr "Línia Stripline"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:23
 msgid "Twisted Pair"
@@ -25479,9 +25477,8 @@ msgid "1"
 msgstr "1"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:218
-#, fuzzy
 msgid "Default is 1"
-msgstr "Predeterminats"
+msgstr "Per defecte és 1"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:223
 msgid "Back reference start:"
@@ -25522,9 +25519,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:245
-#, fuzzy
 msgid "Front prefix:"
-msgstr "Prefix del nom del pad:"
+msgstr "Prefix frontal:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:247
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:252
@@ -25533,9 +25529,8 @@ msgid "Optional prefix for component side reference designations (e.g. F_)"
 msgstr "Substitueix els designadors de les referències dels componen&ts"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:256
-#, fuzzy
 msgid "Back prefix:"
-msgstr "Prefix del nom del pad:"
+msgstr "Prefix posterior:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:258
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:263
@@ -25549,11 +25544,8 @@ msgid "Exclude locked footprints"
 msgstr "Inclou les pistes b&loquejades"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:268
-#, fuzzy
 msgid "Locked footprints will not be reannotated"
-msgstr ""
-"\n"
-"Les empremtes bloquejades no seran reanotades"
+msgstr "Les empremtes bloquejades no seran re-anotades"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:272
 msgid "Exclude references:"
@@ -25575,18 +25567,16 @@ msgid "Geographical Reannotation"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:50
-#, fuzzy
 msgid "Board Setup"
-msgstr "Cara de la placa"
+msgstr "Configuració de la placa"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:51
 msgid "Import Settings from Another Board..."
 msgstr "Importa la configuració d'una altra placa..."
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:81
-#, fuzzy
 msgid "Board Stackup"
-msgstr "Cara de la placa"
+msgstr "Apilat de la placa"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:91
 #, fuzzy
@@ -25599,9 +25589,8 @@ msgid "Physical Stackup"
 msgstr "Paràmetres físics"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:99
-#, fuzzy
 msgid "Board Finish"
-msgstr "Delimitacions de la placa"
+msgstr "Acabat de la placa"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:100
 #: pcbnew/dialogs/dialog_plot.cpp:1168
@@ -25627,9 +25616,8 @@ msgstr "Restriccions"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:109 pcbnew/edit_track_width.cpp:190
 #: pcbnew/edit_track_width.cpp:214
-#, fuzzy
 msgid "Pre-defined Sizes"
-msgstr "Mida del traç"
+msgstr "Mides predefinides"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:111
 #: pcbnew/dialogs/dialog_constraints_reporter.cpp:54
@@ -25668,15 +25656,13 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:96
 #: pcbnew/dialogs/dialog_board_statistics.cpp:701
-#, fuzzy
 msgid "Front Side"
-msgstr "Vista frontal"
+msgstr "Costat frontal"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:98
 #: pcbnew/dialogs/dialog_board_statistics.cpp:701
-#, fuzzy
 msgid "Back Side"
-msgstr "Vista posterior"
+msgstr "Costat posterior"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:100
 #: pcbnew/dialogs/dialog_board_statistics.cpp:701
@@ -25693,9 +25679,8 @@ msgid "SMD:"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:147
-#, fuzzy
 msgid "Unspecified:"
-msgstr "No especificat"
+msgstr "No especificat:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:150
 msgid "Through hole:"
@@ -25721,9 +25706,8 @@ msgstr "Cega/enterrada:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:158
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:175
-#, fuzzy
 msgid "Micro vias:"
-msgstr "Microvies:"
+msgstr "Micro vies:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:396
 #: pcbnew/dialogs/dialog_board_statistics.cpp:410
@@ -25732,13 +25716,12 @@ msgid "Total:"
 msgstr "Total:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:477
-#, fuzzy
 msgid "Round"
-msgstr "%s trobat"
+msgstr "Rodó"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:478
 msgid "Slot"
-msgstr ""
+msgstr "Ranura"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:479
 msgid "???"
@@ -25769,7 +25752,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:662
 msgid "Date"
-msgstr ""
+msgstr "Data"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:664
 #, fuzzy
@@ -25777,14 +25760,13 @@ msgid "Board name"
 msgstr "Classes de plaques"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:667
-#, fuzzy
 msgid "Board"
-msgstr "En la placa"
+msgstr "Placa"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:675
 #: pcbnew/dialogs/dialog_board_statistics.cpp:683
 msgid "Area"
-msgstr ""
+msgstr "Àrea"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:730
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:39
@@ -25802,9 +25784,8 @@ msgid "Error writing file '%s'."
 msgstr "Error en escriure al fitxer '%s'."
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:117
-#, fuzzy
 msgid "Board Size"
-msgstr "Cara de la placa"
+msgstr "Mida de la placa"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:196
 #, fuzzy
@@ -25817,14 +25798,12 @@ msgid "Exclude footprints with no pads"
 msgstr "Excloure totes les empremtes amb pads amb forats passants"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:229
-#, fuzzy
 msgid "X Size"
-msgstr "Mida"
+msgstr "Mida X"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:230
-#, fuzzy
 msgid "Y Size"
-msgstr "Mida"
+msgstr "Mida Y"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:231
 #, fuzzy
@@ -25864,16 +25843,15 @@ msgid "No footprint selected"
 msgstr "No s'ha especificat cap empremta"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:45
-#, fuzzy
 msgid "Update Footprint"
-msgstr "Desa l'empremta"
+msgstr "Actualitza empremta"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:50
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:80
 #: pcbnew/dialogs/dialog_import_netlist.cpp:83
 #: pcbnew/dialogs/dialog_update_pcb.cpp:59
 msgid "Update PCB"
-msgstr "Actualitza el PCB"
+msgstr "Actualitza PCB"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:124
 msgid "Graphics cleanup"
