@@ -5,14 +5,14 @@ if( COMPILER_SUPPORTS_WARNINGS )
 endif()
 
 
-add_library( core INTERFACE
-    # Just a header library right now
+add_library( core STATIC
+    wx_stl_compat.cpp
 )
 
-target_link_libraries( core INTERFACE
+target_link_libraries( core PUBLIC
     ${wxWidgets_LIBRARIES}
 )
 
-target_include_directories( core INTERFACE
+target_include_directories( core PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )

@@ -388,7 +388,6 @@ set( COMMON_SRCS
     validators.cpp
     wildcards_and_files_ext.cpp
     drawing_sheet/ds_painter.cpp
-    wx_stl_compat.cpp
     wx_filename.cpp
     xnode.cpp
     )
