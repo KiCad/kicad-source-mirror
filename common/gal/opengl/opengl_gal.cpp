@@ -169,14 +169,6 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
     bmp.w = imgData.GetSize().x;
     bmp.h = imgData.GetSize().y;
 
-    // The bitmap size needs to be a multiple of 4.
-    // This is easiest to achieve by ensuring that each row
-    // has a multiple of 4 pixels
-    int extra_w = bmp.w % 4;
-
-    if( extra_w )
-        extra_w = 4 - extra_w;
-
     GLuint textureID;
 
     if( m_freedTextureIds.empty() )
@@ -189,15 +181,14 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
         m_freedTextureIds.pop_front();
     }
 
-    // make_unique initializes this to 0, so extra pixels are transparent
-    bmp.size = ( bmp.w + extra_w ) * bmp.h * 4;
+    bmp.size = bmp.w * bmp.h * 4;
     auto buf = std::make_unique<uint8_t[]>( bmp.size );
 
     for( int y = 0; y < bmp.h; y++ )
     {
         for( int x = 0; x < bmp.w; x++ )
         {
-            uint8_t* p = buf.get() + ( ( bmp.w + extra_w ) * y + x ) * 4;
+            uint8_t* p = buf.get() + ( bmp.w * y + x ) * 4;
 
             p[0] = imgData.GetRed( x, y );
             p[1] = imgData.GetGreen( x, y );
@@ -214,7 +205,7 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
     }
 
     glBindTexture( GL_TEXTURE_2D, textureID );
-    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, bmp.w + extra_w, bmp.h, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, bmp.w, bmp.h, 0, GL_RGBA, GL_UNSIGNED_BYTE,
                   buf.get() );
 
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
