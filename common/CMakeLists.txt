@@ -499,9 +499,9 @@ target_link_libraries( common
     ${wxWidgets_LIBRARIES}
     ${EXTRA_LIBS}
     # outline font support
-    Freetype::Freetype
-    HarfBuzz::HarfBuzz
-    Fontconfig::Fontconfig
+   	${FREETYPE_LIBRARIES}
+   	${HarfBuzz_LIBRARIES}
+	${Fontconfig_LIBRARIES}
     )
 
 if( KICAD_USE_SENTRY )

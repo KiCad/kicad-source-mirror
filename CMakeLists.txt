@@ -751,8 +751,10 @@ find_package( CURL REQUIRED )
 # Find Cairo library, required
 #
 find_package( Cairo 1.12 REQUIRED )
+include_directories( SYSTEM ${CAIRO_INCLUDE_DIR} )
 
 find_package( Pixman 0.30 REQUIRED )
+include_directories( SYSTEM ${PIXMAN_INCLUDE_DIR} )
 
 #
 # Find Boost headers and libraries, required.
@@ -773,8 +775,10 @@ set( FREETYPE_MIN_VERSION 2.11.1 )
 endif()
 
 find_package( Freetype ${FREETYPE_MIN_VERSION} REQUIRED )
+include_directories( SYSTEM ${FREETYPE_INCLUDE_DIRS} )
 
 find_package( HarfBuzz REQUIRED )
+include_directories( SYSTEM ${HarfBuzz_INCLUDE_DIRS} )
 
 find_package( Fontconfig REQUIRED )
 
