@@ -44,24 +44,20 @@ set( GAL_SRCS
 
 add_library( gal STATIC ${GAL_SRCS} )
 
-if( WIN32 )
-    # we need the gdiplus library for cairo printing on windows
-    set( GDI_PLUS_LIBRARIES gdiplus )
-endif()
 
 target_link_libraries( gal
     common          # This is needed until the circular dependency is removed
     kimath
     nlohmann_json
     ${GLEW_LIBRARIES}
-    ${CAIRO_LIBRARIES}
-    ${PIXMAN_LIBRARIES}
+    Cairo::Cairo
+    Pixman::Pixman
     ${OPENGL_LIBRARIES}
-    ${GDI_PLUS_LIBRARIES}
+    "$<$<PLATFORM_ID:Windows>:gdiplus>" # required for Cairo printing
     # outline font support
-    ${FREETYPE_LIBRARIES}
-    ${HarfBuzz_LIBRARIES}
-    ${Fontconfig_LIBRARIES}
+    Freetype::Freetype
+    HarfBuzz::HarfBuzz
+    Fontconfig::Fontconfig
 )
 function( add_shader outTarget inFile shaderName )
     set(outCppName "${shaderName}.cpp")
