@@ -178,8 +178,6 @@ public:
      */
     void SetRenderPivot( bool aValue ) { m_render_pivot = aValue; }
 
-
-#if defined( KICAD_USE_3DCONNEXION )
     /**
      * Get a value indicating whether to render the 3dmouse pivot.
      */
@@ -209,7 +207,6 @@ public:
     {
         m_3dmousePivotPos = aPos;
     }
-#endif
 
 private:
     /**
@@ -278,14 +275,12 @@ private:
      */
     void render_pivot( float t, float aScale );
 
-#if defined( KICAD_USE_3DCONNEXION )
     /**
      * Render the 3dmouse pivot cursor.
      *
      * @param aScale scale to apply on the cursor.
      */
     void render3dmousePivot( float aScale );
-#endif
 
     /**
      * @return true if OpenGL initialization succeeded.
@@ -331,10 +326,8 @@ private:
 
     BOARD_ITEM*            m_currentRollOverItem;
 
-#if defined( KICAD_USE_3DCONNEXION )
     bool    m_render3dmousePivot = false; // Render the 3dmouse pivot
     SFVEC3F m_3dmousePivotPos;            // The position of the 3dmouse pivot
-#endif
 
     /**
      *  Trace mask used to enable or disable the trace output of this class.

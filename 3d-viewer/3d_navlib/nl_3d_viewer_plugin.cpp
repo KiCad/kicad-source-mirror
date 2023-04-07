@@ -19,14 +19,14 @@
  */
 
 #include "nl_3d_viewer_plugin.h"
-
-#if defined( KICAD_USE_3DCONNEXION )
 #include "nl_3d_viewer_plugin_impl.h"
+#include <advanced_config.h>
 
 
-NL_3D_VIEWER_PLUGIN::NL_3D_VIEWER_PLUGIN( EDA_3D_CANVAS* aViewport ) :
-        m_impl( new NL_3D_VIEWER_PLUGIN_IMPL( aViewport ) )
+NL_3D_VIEWER_PLUGIN::NL_3D_VIEWER_PLUGIN( EDA_3D_CANVAS* aViewport )
 {
+    if( ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
+        m_impl = new NL_3D_VIEWER_PLUGIN_IMPL( aViewport );
 }
 
 
@@ -38,22 +38,6 @@ NL_3D_VIEWER_PLUGIN::~NL_3D_VIEWER_PLUGIN()
 
 void NL_3D_VIEWER_PLUGIN::SetFocus( bool focus )
 {
-    m_impl->SetFocus( focus );
+    if( ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
+        m_impl->SetFocus( focus );
 }
-#else
-
-
-NL_3D_VIEWER_PLUGIN::NL_3D_VIEWER_PLUGIN( EDA_3D_CANVAS* aViewport ) : m_impl( nullptr )
-{
-}
-
-
-void NL_3D_VIEWER_PLUGIN::SetFocus( bool focus )
-{
-}
-
-
-NL_3D_VIEWER_PLUGIN::~NL_3D_VIEWER_PLUGIN()
-{
-}
-#endif

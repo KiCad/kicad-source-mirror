@@ -32,6 +32,7 @@
 #include <3d_rendering/raytracing/render_3d_raytrace.h>
 #include <3d_rendering/opengl/render_3d_opengl.h>
 #include <3d_viewer_id.h>
+#include <advanced_config.h>
 #include <board.h>
 #include <reporter.h>
 #include <gl_context_mgr.h>
@@ -531,13 +532,11 @@ void EDA_3D_CANVAS::DoRePaint()
         render_pivot( curtime_delta_s, scale );
     }
 
-#if defined( KICAD_USE_3DCONNEXION )
-    if( m_render3dmousePivot )
+    if( m_render3dmousePivot && ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
     {
         const float scale = glm::min( m_camera.GetZoom(), 1.0f );
         render3dmousePivot( scale );
     }
-#endif
 
     // "Swaps the double-buffer of this window, making the back-buffer the
     //  front-buffer and vice versa, so that the output of the previous OpenGL

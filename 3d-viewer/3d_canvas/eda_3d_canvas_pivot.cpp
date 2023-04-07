@@ -120,7 +120,6 @@ void EDA_3D_CANVAS::render_pivot( float t, float aScale )
 }
 
 
-#if defined( KICAD_USE_3DCONNEXION )
 void EDA_3D_CANVAS::render3dmousePivot( float aScale )
 {
     wxASSERT( aScale >= 0.0f );
@@ -160,4 +159,3 @@ void EDA_3D_CANVAS::render3dmousePivot( float aScale )
     glDisable( GL_BLEND );
     glDisable( GL_POINT_SMOOTH );
 }
-#endif

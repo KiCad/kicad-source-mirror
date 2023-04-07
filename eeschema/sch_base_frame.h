@@ -270,9 +270,7 @@ protected:
     SCHEMATIC_SETTINGS  m_base_frame_defaults;
 
 private:
-#if defined( KICAD_USE_3DCONNEXION )
     NL_SCHEMATIC_PLUGIN* m_spaceMouse;
-#endif
 };
 
 #endif // SCH_BASE_FRAME_H_

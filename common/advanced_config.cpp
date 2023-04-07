@@ -63,6 +63,11 @@ namespace AC_KEYS
 {
 
 /**
+ * Decide whether to attempt usage of the 3DConnexion mouse
+ */
+static const wxChar Use3DConnexionDriver[] = wxT( "3DConnexionDriver" );
+
+/**
  * When filling zones, we add an extra amount of clearance to each zone to ensure that rounding
  * errors do not overrun minimum clearance distances.  This is the extra in mm.
  */
@@ -320,6 +325,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_3DRT_BevelExtentFactor    = 1.0 / 16.0;
 
     m_UseClipper2               = true;
+    m_Use3DConnexionDriver      = false;
 
     loadFromConfigFile();
 }
@@ -462,6 +468,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::UseClipper2,
                                                 &m_UseClipper2, m_UseClipper2 ) );
+
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::Use3DConnexionDriver,
+                                                &m_Use3DConnexionDriver, m_Use3DConnexionDriver ) );
 
 
 

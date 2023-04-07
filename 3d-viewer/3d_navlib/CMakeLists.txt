@@ -1,4 +1,3 @@
-if( KICAD_USE_3DCONNEXION )
     add_library(3d-viewer_navlib STATIC
 	    "nl_3d_viewer_plugin.cpp"
 	    "nl_3d_viewer_plugin_impl.cpp"
@@ -23,9 +22,4 @@ if( KICAD_USE_3DCONNEXION )
         $<TARGET_PROPERTY:3DxWare::Navlib,INTERFACE_LINK_LIBRARIES>
         3DxWare::Navlib
     )
-else()
-    add_library(3d-viewer_navlib STATIC
-	    "nl_3d_viewer_plugin.cpp"
-    )
-endif(KICAD_USE_3DCONNEXION)
 

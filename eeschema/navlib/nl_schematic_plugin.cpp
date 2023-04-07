@@ -19,13 +19,15 @@
  */
 
 #include "nl_schematic_plugin.h"
-#if defined( KICAD_USE_3DCONNEXION )
+#include <advanced_config.h>
 
 #include "nl_schematic_plugin_impl.h"
 
 
-NL_SCHEMATIC_PLUGIN::NL_SCHEMATIC_PLUGIN() : m_impl( new NL_SCHEMATIC_PLUGIN_IMPL() )
+NL_SCHEMATIC_PLUGIN::NL_SCHEMATIC_PLUGIN()
 {
+    if( ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
+        m_impl = new NL_SCHEMATIC_PLUGIN_IMPL();
 }
 
 
@@ -37,33 +39,13 @@ NL_SCHEMATIC_PLUGIN::~NL_SCHEMATIC_PLUGIN()
 
 void NL_SCHEMATIC_PLUGIN::SetFocus( bool focus )
 {
-    m_impl->SetFocus( focus );
+    if( ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
+        m_impl->SetFocus( focus );
 }
 
 
 void NL_SCHEMATIC_PLUGIN::SetCanvas( EDA_DRAW_PANEL_GAL* aViewport )
 {
-    m_impl->SetCanvas( aViewport );
+    if( ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
+        m_impl->SetCanvas( aViewport );
 }
-#else
-
-
-NL_SCHEMATIC_PLUGIN::NL_SCHEMATIC_PLUGIN()
-{
-}
-
-
-void NL_SCHEMATIC_PLUGIN::SetFocus( bool focus )
-{
-}
-
-
-void NL_SCHEMATIC_PLUGIN::SetCanvas( EDA_DRAW_PANEL_GAL* aViewport )
-{
-}
-
-
-NL_SCHEMATIC_PLUGIN::~NL_SCHEMATIC_PLUGIN()
-{
-}
-#endif

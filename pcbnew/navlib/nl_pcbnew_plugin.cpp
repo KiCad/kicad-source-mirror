@@ -19,14 +19,14 @@
  */
 
 #include "nl_pcbnew_plugin.h"
-#if defined( KICAD_USE_3DCONNEXION )
-
 #include "nl_pcbnew_plugin_impl.h"
+#include <advanced_config.h>
 
 
-NL_PCBNEW_PLUGIN::NL_PCBNEW_PLUGIN( PCB_DRAW_PANEL_GAL* aViewport ) :
-        m_impl( new NL_PCBNEW_PLUGIN_IMPL( aViewport ) )
+NL_PCBNEW_PLUGIN::NL_PCBNEW_PLUGIN( PCB_DRAW_PANEL_GAL* aViewport )
 {
+    if( ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
+        m_impl = new NL_PCBNEW_PLUGIN_IMPL( aViewport );
 }
 
 
@@ -38,22 +38,6 @@ NL_PCBNEW_PLUGIN::~NL_PCBNEW_PLUGIN()
 
 void NL_PCBNEW_PLUGIN::SetFocus( bool focus )
 {
-    m_impl->SetFocus( focus );
+    if( ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
+        m_impl->SetFocus( focus );
 }
-#else
-
-
-NL_PCBNEW_PLUGIN::NL_PCBNEW_PLUGIN( PCB_DRAW_PANEL_GAL* aViewport )
-{
-}
-
-
-void NL_PCBNEW_PLUGIN::SetFocus( bool focus )
-{
-}
-
-
-NL_PCBNEW_PLUGIN::~NL_PCBNEW_PLUGIN()
-{
-}
-#endif
