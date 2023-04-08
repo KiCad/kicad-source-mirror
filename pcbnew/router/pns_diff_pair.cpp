@@ -460,6 +460,10 @@ void DP_GATEWAYS::BuildFromPrimitivePair( const DP_PRIMITIVE_PAIR& aPair, bool a
 
     switch( shP->Type() )
     {
+    case SH_CIRCLE:
+        BuildGeneric ( p0_p, p0_n, true );
+        return;
+
     case SH_RECT:
     {
         int w = static_cast<const SHAPE_RECT*>( shP )->GetWidth();
@@ -483,9 +487,26 @@ void DP_GATEWAYS::BuildFromPrimitivePair( const DP_PRIMITIVE_PAIR& aPair, bool a
         break;
     }
 
+    case SH_SIMPLE:
+    case SH_COMPOUND:
+    {
+        BOX2I bbox = shP->BBox();
+        int   w = bbox.GetWidth();
+        int   h = bbox.GetHeight();
+
+        if( w < h )
+            std::swap( w, h );
+
+        orthoFanDistance = ( w + 1 )* 3 / 2;
+        diagFanDistance = ( w - h );
+        break;
+    }
+
     default:
-        BuildGeneric ( p0_p, p0_n, true );
-        return;
+        wxFAIL_MSG( wxString::Format( wxT( "Unsupported starting primitive: %d (%s)." ),
+                                      shP->Type(),
+                                      SHAPE_TYPE_asString( shP->Type() ) ) );
+        break;
     }
 
     if( checkDiagonalAlignment( p0_p, p0_n ) )
