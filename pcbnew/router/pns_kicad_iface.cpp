@@ -260,31 +260,9 @@ bool PNS_PCBNEW_RULE_RESOLVER::IsNetTieExclusion( const PNS::ITEM* aItem,
 
 bool isCopper( const PNS::ITEM* aItem )
 {
-    BOARD_ITEM* parent = aItem->Parent();
+    const BOARD_ITEM *parent = aItem->Parent();
 
-    if( parent && parent->Type() == PCB_PAD_T )
-    {
-        PAD* pad = static_cast<PAD*>( parent );
-
-        if( !pad->IsOnCopperLayer() )
-            return false;
-
-        if( pad->GetAttribute() != PAD_ATTRIB::NPTH )
-            return true;
-
-        // round NPTH with a hole size >= pad size are not on a copper layer
-        // All other NPTH are seen on copper layers
-        // This is a basic criteria, but probably enough for a NPTH
-        if( pad->GetShape() == PAD_SHAPE::CIRCLE )
-        {
-            if( pad->GetSize().x <= pad->GetDrillSize().x )
-                return false;
-        }
-
-        return true;
-    }
-
-    return true;
+    return !parent || parent->IsOnCopperLayer();
 }
 
 

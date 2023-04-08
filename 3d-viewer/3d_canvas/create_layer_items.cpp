@@ -525,9 +525,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         // ADD PADS
         for( FOOTPRINT* footprint : m_board->Footprints() )
         {
-            // Note: NPTH pads are not drawn on copper layers when the pad has the same shape
-            // as its hole
-            addPads( footprint, layerContainer, layer, true, renderPlatedPadsAsPlated, false );
+            addPads( footprint, layerContainer, layer, renderPlatedPadsAsPlated, false );
 
             // Micro-wave footprints may have items on copper layers
             addFootprintShapes( footprint, layerContainer, layer );
@@ -539,8 +537,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         // ADD PLATED PADS
         for( FOOTPRINT* footprint : m_board->Footprints() )
         {
-            addPads( footprint, m_platedPadsFront, F_Cu, true, false, true );
-            addPads( footprint, m_platedPadsBack, B_Cu, true, false, true );
+            addPads( footprint, m_platedPadsFront, F_Cu, false, true );
+            addPads( footprint, m_platedPadsBack, B_Cu, false, true );
         }
 
         m_platedPadsFront->BuildBVH();
@@ -995,7 +993,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             }
             else
             {
-                addPads( footprint, layerContainer, layer, false, false, false );
+                addPads( footprint, layerContainer, layer, false, false );
             }
 
             addFootprintShapes( footprint, layerContainer, layer );
