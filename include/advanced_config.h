@@ -244,6 +244,11 @@ public:
      */
     bool m_Use3DConnexionDriver;
 
+    /**
+     * Use the new incremental netlister for realtime jobs
+     */
+    bool m_IncrementalConnectivity;
+
 ///@}
 
 

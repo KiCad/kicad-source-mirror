@@ -228,6 +228,24 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCheckMultipleDrivers )
 }
 
 
+void CONNECTION_SUBGRAPH::getAllConnectedItems( std::set<std::pair<SCH_SHEET_PATH, SCH_ITEM*>>& aItems, std::set<CONNECTION_SUBGRAPH*>& aSubgraphs )
+{
+    CONNECTION_SUBGRAPH* sg = this;
+
+    while( sg->m_absorbed_by )
+        sg = sg->m_absorbed_by;
+
+    aSubgraphs.insert( sg );
+    aSubgraphs.insert( sg->m_absorbed_subgraphs.begin(), sg->m_absorbed_subgraphs.end() );
+
+    for( SCH_ITEM* item : sg->m_items )
+        aItems.emplace( m_sheet, item );
+
+    for( CONNECTION_SUBGRAPH* child_sg : sg->m_hier_children )
+        child_sg->getAllConnectedItems( aItems, aSubgraphs );
+}
+
+
 wxString CONNECTION_SUBGRAPH::GetNetName() const
 {
     if( !m_driver || m_dirty )
@@ -377,6 +395,10 @@ void CONNECTION_SUBGRAPH::Absorb( CONNECTION_SUBGRAPH* aOther )
         AddItem( item );
     }
 
+    m_absorbed_subgraphs.insert( aOther );
+    m_absorbed_subgraphs.insert( aOther->m_absorbed_subgraphs.begin(),
+            aOther->m_absorbed_subgraphs.end() );
+
     m_bus_neighbors.insert( aOther->m_bus_neighbors.begin(), aOther->m_bus_neighbors.end() );
     m_bus_parents.insert( aOther->m_bus_parents.begin(), aOther->m_bus_parents.end() );
 
@@ -457,10 +479,80 @@ CONNECTION_SUBGRAPH::PRIORITY CONNECTION_SUBGRAPH::GetDriverPriority( SCH_ITEM* 
 }
 
 
+void CONNECTION_GRAPH::Merge( CONNECTION_GRAPH& aGraph )
+{
+    std::copy( aGraph.m_items.begin(), aGraph.m_items.end(),
+            std::back_inserter( m_items ) );
+
+    for( SCH_ITEM* item : aGraph.m_items )
+        item->SetConnectionGraph( this );
+
+    std::copy( aGraph.m_subgraphs.begin(), aGraph.m_subgraphs.end(),
+            std::back_inserter( m_subgraphs ) );
+
+    for( CONNECTION_SUBGRAPH* sg : aGraph.m_subgraphs )
+        sg->m_graph = this;
+
+    std::copy( aGraph.m_driver_subgraphs.begin(),
+            aGraph.m_driver_subgraphs.end(),
+            std::back_inserter( m_driver_subgraphs ) );
+
+    std::copy( aGraph.m_sheet_to_subgraphs_map.begin(),
+            aGraph.m_sheet_to_subgraphs_map.end(),
+            std::inserter( m_sheet_to_subgraphs_map,
+                    m_sheet_to_subgraphs_map.begin() ) );
+
+    std::copy( aGraph.m_invisible_power_pins.begin(),
+            aGraph.m_invisible_power_pins.end(),
+            std::back_inserter( m_invisible_power_pins ) );
+
+    std::copy( aGraph.m_net_name_to_code_map.begin(),
+            aGraph.m_net_name_to_code_map.end(),
+            std::inserter( m_net_name_to_code_map,
+                    m_net_name_to_code_map.begin() ) );
+
+    std::copy( aGraph.m_bus_name_to_code_map.begin(),
+            aGraph.m_bus_name_to_code_map.end(),
+            std::inserter( m_bus_name_to_code_map,
+                    m_net_name_to_code_map.begin() ) );
+
+    std::copy( aGraph.m_net_code_to_subgraphs_map.begin(),
+            aGraph.m_net_code_to_subgraphs_map.end(),
+            std::inserter( m_net_code_to_subgraphs_map,
+                    m_net_code_to_subgraphs_map.begin() ) );
+
+    std::copy( aGraph.m_net_name_to_subgraphs_map.begin(),
+            aGraph.m_net_name_to_subgraphs_map.end(),
+            std::inserter( m_net_name_to_subgraphs_map,
+                    m_net_name_to_subgraphs_map.begin() ) );
+
+    std::copy( aGraph.m_item_to_subgraph_map.begin(),
+            aGraph.m_item_to_subgraph_map.end(),
+            std::inserter( m_item_to_subgraph_map,
+                    m_item_to_subgraph_map.begin() ) );
+
+    std::copy( aGraph.m_local_label_cache.begin(),
+            aGraph.m_local_label_cache.end(),
+            std::inserter( m_local_label_cache, m_local_label_cache.begin() ) );
+
+    std::copy( aGraph.m_global_label_cache.begin(),
+            aGraph.m_global_label_cache.end(),
+            std::inserter( m_global_label_cache, m_global_label_cache.begin() ) );
+
+    m_last_bus_code = std::max( m_last_bus_code, aGraph.m_last_bus_code );
+    m_last_net_code = std::max( m_last_net_code, aGraph.m_last_net_code );
+    m_last_subgraph_code = std::max( m_last_subgraph_code, aGraph.m_last_subgraph_code );
+}
+
+
 void CONNECTION_GRAPH::Reset()
 {
     for( auto& subgraph : m_subgraphs )
-        delete subgraph;
+    {
+        /// Only delete subgraphs of which we are the owner
+        if( subgraph->m_graph == this )
+            delete subgraph;
+    }
 
     m_items.clear();
     m_subgraphs.clear();
@@ -550,6 +642,169 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
 
     if( wxLog::IsAllowedTraceMask( ConnProfileMask ) )
         recalc_time.Show();
+}
+
+std::set<std::pair<SCH_SHEET_PATH, SCH_ITEM*>> CONNECTION_GRAPH::ExtractAffectedItems(
+        const std::set<SCH_ITEM*> &aItems )
+{
+    std::set<std::pair<SCH_SHEET_PATH, SCH_ITEM*>> retvals;
+    std::set<CONNECTION_SUBGRAPH*> subgraphs;
+
+    auto traverse_subgraph = [&retvals, &subgraphs]( CONNECTION_SUBGRAPH* aSubgraph )
+    {
+        // Find the primary subgraph on this sheet
+        while( aSubgraph->m_absorbed_by )
+            aSubgraph = aSubgraph->m_absorbed_by;
+
+        // Find the top most connected subgraph on all sheets
+        while( aSubgraph->m_hier_parent )
+            aSubgraph = aSubgraph->m_hier_parent;
+
+        // Recurse through all subsheets to collect connected items
+        aSubgraph->getAllConnectedItems( retvals, subgraphs );
+    };
+
+    for( SCH_ITEM* item : aItems )
+    {
+        auto it = m_item_to_subgraph_map.find( item );
+
+        if( it == m_item_to_subgraph_map.end() )
+            continue;
+
+        CONNECTION_SUBGRAPH* sg = it->second;
+
+        traverse_subgraph( sg );
+
+        for( auto& bus_it : sg->m_bus_neighbors )
+        {
+            for( CONNECTION_SUBGRAPH* bus_sg : bus_it.second )
+                traverse_subgraph( bus_sg );
+        }
+
+        for( auto& bus_it : sg->m_bus_parents )
+        {
+            for( CONNECTION_SUBGRAPH* bus_sg : bus_it.second )
+                traverse_subgraph( bus_sg );
+        }
+    }
+
+    removeSubgraphs( subgraphs );
+
+    return retvals;
+}
+
+
+void CONNECTION_GRAPH::removeSubgraphs( std::set<CONNECTION_SUBGRAPH*>& aSubgraphs )
+{
+    std::sort( m_driver_subgraphs.begin(), m_driver_subgraphs.end() );
+    std::sort( m_subgraphs.begin(), m_subgraphs.end() );
+    std::set<int> codes_to_remove;
+
+    for( auto el : m_sheet_to_subgraphs_map )
+    {
+        std::sort( el.second.begin(), el.second.end() );
+    }
+
+    for( CONNECTION_SUBGRAPH* sg : aSubgraphs )
+    {
+        {
+            auto it = std::lower_bound( m_driver_subgraphs.begin(), m_driver_subgraphs.end(), sg );
+
+            if( it != m_driver_subgraphs.end() )
+                m_driver_subgraphs.erase( it );
+        }
+
+        {
+            auto it = std::lower_bound( m_subgraphs.begin(), m_subgraphs.end(), sg );
+
+            if( it != m_subgraphs.end() )
+                m_subgraphs.erase( it );
+        }
+
+        for( auto el : m_sheet_to_subgraphs_map )
+        {
+            auto it = std::lower_bound( el.second.begin(), el.second.end(), sg );
+
+            if( it != el.second.end() )
+                el.second.erase( it );
+        }
+
+        auto remove_sg = [sg]( auto it ) -> bool
+                        {
+                            for( const CONNECTION_SUBGRAPH* test_sg : it->second )
+                            {
+                                if( sg == test_sg )
+                                    return true;
+                            }
+
+                            return false;
+                        };
+
+        for( auto it = m_global_label_cache.begin(); it != m_global_label_cache.end(); )
+        {
+            if( remove_sg( it ) )
+                it = m_global_label_cache.erase( it );
+            else
+                ++it;
+        }
+
+        for( auto it = m_local_label_cache.begin(); it != m_local_label_cache.end(); )
+        {
+            if( remove_sg( it ) )
+                it = m_local_label_cache.erase( it );
+            else
+                ++it;
+        }
+
+        for( auto it = m_net_code_to_subgraphs_map.begin(); it != m_net_code_to_subgraphs_map.end(); )
+        {
+            if( remove_sg( it ) )
+            {
+                codes_to_remove.insert( it->first.Netcode );
+                it = m_net_code_to_subgraphs_map.erase( it );
+            }
+            else
+                ++it;
+        }
+
+        for( auto it = m_net_name_to_subgraphs_map.begin(); it != m_net_name_to_subgraphs_map.end(); )
+        {
+            if( remove_sg( it ) )
+                it = m_net_name_to_subgraphs_map.erase( it );
+            else
+                ++it;
+        }
+
+        for( auto it = m_item_to_subgraph_map.begin(); it != m_item_to_subgraph_map.end(); )
+        {
+            if( it->second == sg )
+                it = m_item_to_subgraph_map.erase( it );
+            else
+                ++it;
+        }
+    }
+
+    for( auto it = m_net_name_to_code_map.begin(); it != m_net_name_to_code_map.end(); )
+    {
+        if( codes_to_remove.find( it->second ) != codes_to_remove.end() )
+            it = m_net_name_to_code_map.erase( it );
+        else
+            ++it;
+    }
+
+    for( auto it = m_bus_name_to_code_map.begin(); it != m_bus_name_to_code_map.end(); )
+    {
+        if( codes_to_remove.find( it->second ) != codes_to_remove.end() )
+            it = m_bus_name_to_code_map.erase( it );
+        else
+            ++it;
+    }
+
+    for( CONNECTION_SUBGRAPH* sg : aSubgraphs )
+    {
+        sg->m_code = -1;
+        delete sg;
+    }
 }
 
 
@@ -1355,7 +1610,7 @@ void CONNECTION_GRAPH::processSubGraphs()
 
             for( CONNECTION_SUBGRAPH* candidate : candidate_subgraphs )
             {
-                if( candidate->m_absorbed )
+                if( candidate->m_absorbed || candidate == subgraph )
                     continue;
 
                 bool match = false;
@@ -1912,7 +2167,6 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, boo
                                             candidate->m_code, candidate->m_driver_connection->Name() );
 
                                 candidate->m_hier_parent = aParent;
-
                                 search_list.push_back( candidate );
                                 break;
                             }
@@ -1959,6 +2213,7 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, boo
                                     aParent->m_code, candidate->m_code,
                                     candidate->m_driver_connection->Name() );
 
+                        aParent->m_hier_children.insert( candidate );
                         search_list.push_back( candidate );
                         break;
                     }
