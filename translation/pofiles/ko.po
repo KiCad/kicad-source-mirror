@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:53-0800\n"
-"PO-Revision-Date: 2023-03-21 04:37+0000\n"
+"PO-Revision-Date: 2023-04-08 21:59+0000\n"
 "Last-Translator: \"minsu kim (0xGabriel)\" <rlaalstn9601@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v7/ko/>\n"
 "Language: ko\n"
@@ -36,7 +36,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.16.2-dev\n"
+"X-Generator: Weblate 4.17-dev\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -11078,7 +11078,6 @@ msgid "Simulation Command"
 msgstr "시뮬레이션 명령"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:186
-#, fuzzy
 msgid "<unknown>"
 msgstr "<알 수 없음>"
 
@@ -21792,7 +21791,7 @@ msgstr "선형 저항:"
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:126
 #, c-format
 msgid "Frequency for 100% skin depth:"
-msgstr "침투깊이 100%를 위한 주파수:"
+msgstr "skin depth 100%를 위한 주파수:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:138
 msgid "Ampacity:"
@@ -33066,9 +33065,9 @@ msgid "Determining PCB data\n"
 msgstr "PCB 데이터 결정\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Board Thickness from stackup: %.3f mm\n"
-msgstr "스택업에서 기판 두께:\n"
+msgstr "스택업에서 기판 두께: %.3f mm\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:344
 msgid "Build STEP data\n"
