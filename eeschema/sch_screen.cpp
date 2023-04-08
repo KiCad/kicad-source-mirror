@@ -192,12 +192,20 @@ void SCH_SCREEN::Append( SCH_ITEM* aItem, bool aUpdateLibSymbol )
 
                             wxCHECK2( foundSymbol, continue );
 
+                            wxString tmp = symbol->GetLibSymbolRef()->GetName();
+
+                            // Temporarily update the new symbol library symbol name so it
+                            // doesn't fail on the name comparison below.
+                            symbol->GetLibSymbolRef()->SetName( foundSymbol->GetName() );
+
                             if( *foundSymbol == *symbol->GetLibSymbolRef() )
                             {
                                 newName = libSymbolName;
+                                symbol->GetLibSymbolRef()->SetName( tmp );
                                 break;
                             }
 
+                            symbol->GetLibSymbolRef()->SetName( tmp );
                             foundSymbol = nullptr;
                         }
 

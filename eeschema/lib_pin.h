@@ -27,6 +27,7 @@
 #ifndef CLASS_PIN_H
 #define CLASS_PIN_H
 
+#include <iostream>
 #include <pin_type.h>
 #include <lib_symbol.h>
 
@@ -278,6 +279,11 @@ protected:
      */
     void printPinElectricalTypeName( const RENDER_SETTINGS* aSettings, VECTOR2I& aPosition,
                                      int aOrientation, bool aDimmed );
+
+    bool operator==( const LIB_PIN& aRhs ) const { return compare( aRhs, EQUALITY ) == 0; }
+    bool operator<( const LIB_PIN& aRhs ) const { return compare( aRhs, EQUALITY ) < 0; }
+    bool operator>( const LIB_PIN& aRhs ) const { return compare( aRhs, EQUALITY ) > 0; }
+    std::ostream& operator<<( std::ostream& aStream );
 
 private:
     /**

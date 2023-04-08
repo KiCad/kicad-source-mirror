@@ -564,6 +564,8 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
         if( aStartAtCurrent && ref_unit.m_numRef > 0 )
             minRefId = ref_unit.m_numRef;
 
+        wxCHECK( ref_unit.GetLibPart(), /* void */ );
+
         // Annotation of one part per package symbols (trivial case).
         if( ref_unit.GetLibPart()->GetUnitCount() <= 1 )
         {

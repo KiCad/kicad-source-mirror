@@ -1416,6 +1416,23 @@ wxString LIB_PIN::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 }
 
 
+std::ostream& LIB_PIN::operator<<( std::ostream& aStream )
+{
+    aStream << "LIB_PIN:" << std::endl
+            << "  Name: \"" << m_name << "\"" << std::endl
+            << "  Number: \"" << m_number << "\"" << std::endl
+            << "  Position: " << m_position << std::endl
+            << "  Length: " << m_length << std::endl
+            << "  Orientation: " << PinOrientationName( m_orientation ) << std::endl
+            << "  Shape: " << PinShapeGetText( m_shape ) << std::endl
+            << "  Type: " << ElectricalPinTypeGetText( m_type ) << std::endl
+            << "  Name Text Size: " << m_nameTextSize << std::endl
+            << "  Number Text Size: " << m_numTextSize << std::endl;
+
+    return aStream;
+}
+
+
 #if defined(DEBUG)
 
 void LIB_PIN::Show( int nestLevel, std::ostream& os ) const
