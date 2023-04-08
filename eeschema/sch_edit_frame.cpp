@@ -1671,7 +1671,73 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
                 GetCanvas()->GetView()->Update( aChangedItem, KIGFX::REPAINT );
             };
 
-    Schematic().ConnectionGraph()->Recalculate( list, true, &changeHandler );
+    if( !ADVANCED_CFG::GetCfg().m_IncrementalConnectivity || aCleanupFlags == GLOBAL_CLEANUP
+            || m_undoList.m_CommandsList.empty() )
+    {
+        Schematic().ConnectionGraph()->Recalculate( list, true, &changeHandler );
+    }
+    else
+    {
+        auto& changed_list = m_undoList.m_CommandsList.back();
+        std::set<SCH_ITEM*> changed_items;
+        std::vector<VECTOR2I> pts;
+
+        for( unsigned ii = 0; ii < changed_list->GetCount(); ++ii )
+        {
+            SCH_ITEM* item = static_cast<SCH_ITEM*>( changed_list->GetPickedItem( ii ) );
+
+            std::vector<VECTOR2I> tmp_pts = item->GetConnectionPoints();
+            pts.insert( pts.end(), tmp_pts.begin(), tmp_pts.end() );
+            changed_items.insert( item );
+        }
+
+        for( VECTOR2I& pt: pts )
+        {
+            for( SCH_ITEM* item : GetScreen()->Items().Overlapping(pt ) )
+            {
+                if( !item->IsConnectable() )
+                    continue;
+
+                if( SCH_LINE* line = dyn_cast<SCH_LINE*>( item ) )
+                {
+                    if( line->HitTest( pt ) )
+                    {
+                        changed_items.insert( item );
+                        continue;
+                    }
+                }
+
+                if( item->IsConnected( pt ) )
+                    changed_items.insert( item );
+            }
+        }
+
+        std::set<std::pair<SCH_SHEET_PATH, SCH_ITEM*>> all_items =
+                Schematic().ConnectionGraph()->ExtractAffectedItems(
+                        changed_items );
+
+        CONNECTION_GRAPH new_graph( &Schematic() );
+
+        new_graph.SetLastCodes( Schematic().ConnectionGraph() );
+
+        for( auto&[ path, item ] : all_items )
+        {
+            switch( item->Type() )
+            {
+            case SCH_FIELD_T:
+            case SCH_PIN_T:
+            case SCH_SHEET_PIN_T:
+                static_cast<SCH_ITEM*>( item->GetParent() )->SetConnectivityDirty();
+                break;
+
+            default:
+                item->SetConnectivityDirty();
+            }
+        }
+
+        new_graph.Recalculate( list, false, &changeHandler );
+        Schematic().ConnectionGraph()->Merge( new_graph );
+    }
 
     GetCanvas()->GetView()->UpdateAllItemsConditionally(
             [&]( KIGFX::VIEW_ITEM* aItem ) -> int

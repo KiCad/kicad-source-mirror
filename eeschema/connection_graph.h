@@ -137,6 +137,9 @@ public:
         return m_items;
     }
 
+    /// Finds all items in the subgraph as well as child subgraphs recursively
+    void getAllConnectedItems( std::set<std::pair<SCH_SHEET_PATH, SCH_ITEM*>>& aItems, std::set<CONNECTION_SUBGRAPH*>& aSubgraphs );
+
     /**
      * Return the priority (higher is more important) of a candidate driver
      *
@@ -210,6 +213,9 @@ private:
     /// If this subgraph is absorbed, points to the absorbing (and valid) subgraph
     CONNECTION_SUBGRAPH* m_absorbed_by;
 
+    /// Set of subgraphs that have been absorbed by this subgraph
+    std::set<CONNECTION_SUBGRAPH*> m_absorbed_subgraphs;
+
     long m_code;
 
     /**
@@ -236,7 +242,7 @@ private:
      *
      * For example, if this subgraph is a bus D[7..0], and on the same sheet there is
      * a net with label D7, this map will contain an entry for the D7 bus member, and
-     * the vector will contain a pointer to the D7 net subgraph.
+     * the set will contain a pointer to the D7 net subgraph.
      */
     std::unordered_map< std::shared_ptr<SCH_CONNECTION>,
                         std::unordered_set<CONNECTION_SUBGRAPH*> > m_bus_neighbors;
@@ -257,6 +263,9 @@ private:
 
     // If not null, this indicates the subgraph on a higher level sheet that is linked to this one
     CONNECTION_SUBGRAPH* m_hier_parent;
+
+    // If not null, this indicates the subgraph(s) on a lower level sheet that are linked to this one
+    std::unordered_set<CONNECTION_SUBGRAPH*> m_hier_children;
 
     /// A cache of escaped netnames from schematic items
     mutable std::unordered_map<SCH_ITEM*, wxString> m_driver_name_cache;
@@ -339,6 +348,13 @@ public:
         m_schematic = aSchematic;
     }
 
+    void SetLastCodes( const CONNECTION_GRAPH* aOther )
+    {
+        m_last_net_code = aOther->m_last_net_code;
+        m_last_bus_code = aOther->m_last_bus_code;
+        m_last_subgraph_code = aOther->m_last_subgraph_code;
+    }
+
     /**
      * Updates the connection graph for the given list of sheets.
      *
@@ -402,6 +418,24 @@ public:
      * @return Netname string usable with m_net_name_to_subgraphs_map
      */
     wxString GetResolvedSubgraphName( const CONNECTION_SUBGRAPH* aSubGraph ) const;
+
+    /**
+     * For a set of items, this will remove the connected items and their
+     * associated data including subgraphs and generated codes from the connection graph.
+     *
+     * @param aItems A vector of items whose presence should be removed from the graph
+     * @return The full set of all items associated with the input items that were removed
+     */
+    std::set<std::pair<SCH_SHEET_PATH, SCH_ITEM*>> ExtractAffectedItems(
+            const std::set<SCH_ITEM*> &aItems );
+
+    /**
+     * Combines the input graph contents into the current graph.  After merging, the
+     * original graph is invalid.
+     *
+     * @param aGraph Input graph reference to add to the current graph
+     */
+    void Merge( CONNECTION_GRAPH& aGraph );
 
 private:
     /**
@@ -511,6 +545,14 @@ private:
      * @param aForce prevents this routine from skipping subgraphs
      */
     void propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, bool aForce );
+
+    /**
+     * Removes references to the given subgraphs from all structures in the
+     * connection graph.
+     *
+     * @param aSubgraphs set of unique subgraphs to find/remove
+     */
+    void removeSubgraphs( std::set<CONNECTION_SUBGRAPH*>& aSubgraphs );
 
     /**
      * Search for a matching bus member inside a bus connection

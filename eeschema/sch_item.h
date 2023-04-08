@@ -417,6 +417,9 @@ public:
 
     void SetConnectivityDirty( bool aDirty = true ) { m_connectivity_dirty = aDirty; }
 
+    /// Updates the connection graph for all connections in this item
+    void SetConnectionGraph( CONNECTION_GRAPH* aGraph );
+
     virtual void SetLastResolvedState( const SCH_ITEM* aItem ) { }
 
     std::shared_ptr<NETCLASS> GetEffectiveNetClass( const SCH_SHEET_PATH* aSheet = nullptr ) const;

@@ -63,6 +63,11 @@ namespace AC_KEYS
 {
 
 /**
+ * Should the schematic use the new incremental connectivity algorithm
+ */
+static const wxChar IncrementalConnectivity[] = wxT( "IncrementalConnectivity" );
+
+/**
  * Decide whether to attempt usage of the 3DConnexion mouse
  */
 static const wxChar Use3DConnexionDriver[] = wxT( "3DConnexionDriver" );
@@ -326,6 +331,7 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     m_UseClipper2               = true;
     m_Use3DConnexionDriver      = false;
+    m_IncrementalConnectivity   = false;
 
     loadFromConfigFile();
 }
@@ -471,6 +477,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::Use3DConnexionDriver,
                                                 &m_Use3DConnexionDriver, m_Use3DConnexionDriver ) );
+
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::IncrementalConnectivity,
+                                                &m_IncrementalConnectivity, m_IncrementalConnectivity ) );
 
 
 

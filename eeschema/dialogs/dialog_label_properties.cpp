@@ -595,7 +595,6 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
 
     m_Parent->UpdateItem( m_currentLabel );
     m_Parent->GetCanvas()->Refresh();
-    m_Parent->OnModify();
 
     return true;
 }

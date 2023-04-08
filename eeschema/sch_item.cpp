@@ -26,13 +26,14 @@
 #include <settings/settings_manager.h>
 #include <eeschema_settings.h>
 #include <eda_item.h>
-#include <trace_helpers.h>
+#include <sch_connection.h>
 #include <sch_item.h>
 #include <sch_screen.h>
 #include <sch_sheet_path.h>
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
 #include <schematic.h>
+#include <trace_helpers.h>
 #include <general.h>
 #include <netclass.h>
 #include <project/project_file.h>
@@ -160,6 +161,13 @@ SCH_CONNECTION* SCH_ITEM::Connection( const SCH_SHEET_PATH* aSheet ) const
         return nullptr;
     else
         return it->second;
+}
+
+
+void SCH_ITEM::SetConnectionGraph( CONNECTION_GRAPH* aGraph )
+{
+    for( auto& [path, conn] : m_connection_map )
+        conn->SetGraph( aGraph );
 }
 
 
