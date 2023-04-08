@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2018 jean-pierre.charras
- * Copyright (C) 2011-2020 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011-2023 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -110,12 +110,19 @@ bool PANEL_IMAGE_EDITOR::TransferDataFromWindow()
 void PANEL_IMAGE_EDITOR::OnRedrawPanel( wxPaintEvent& event )
 {
     wxPaintDC dc( m_panelDraw );
-    wxSize    size = m_panelDraw->GetClientSize();
-    dc.SetDeviceOrigin( size.x / 2, size.y / 2 );
+    wxSize    display_size = m_panelDraw->GetClientSize();
 
-    double scale = 1.0 / m_workingImage->GetScalingFactor();
-    dc.SetUserScale( scale, scale );
-    m_workingImage->DrawBitmap( &dc, VECTOR2I( 0, 0 ) );
+    double img_scale = 1.0 / m_workingImage->GetScalingFactor();
+    VECTOR2I img_size_pixels = m_workingImage->GetSizePixels();
+
+    // Adjust the display scale to use the full available display area
+    double scale_X = (double)display_size.x/img_size_pixels.x;
+    double scale_Y = (double)display_size.y/img_size_pixels.y;
+
+    double display_scale = img_scale * std::min( scale_X, scale_Y );
+
+    dc.SetUserScale( display_scale, display_scale );
+    m_workingImage->DrawBitmap( &dc, VECTOR2I( m_workingImage->GetSize()/2 ) );
 }
 
 

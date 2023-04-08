@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -79,7 +79,6 @@ DIALOG_IMAGE_PROPERTIES_BASE::DIALOG_IMAGE_PROPERTIES_BASE( wxWindow* parent, wx
 
 	this->SetSizer( m_GeneralBoxSizer );
 	this->Layout();
-	m_GeneralBoxSizer->Fit( this );
 
 	this->Centre( wxBOTH );
 }
