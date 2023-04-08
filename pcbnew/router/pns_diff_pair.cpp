@@ -532,13 +532,13 @@ void DP_GATEWAYS::BuildForCursor( const VECTOR2I& aCursorPos )
 {
     int gap = m_fitVias ? m_viaGap + m_viaDiameter : m_gap;
 
-    for( int attempt = 0; attempt < 2; attempt++ )
+    for( bool diagonal : { false, true } )
     {
         for( int i = 0; i < 4; i++ )
         {
             VECTOR2I dir;
 
-            if( !attempt )
+            if( !diagonal )
             {
                 dir = makeGapVector( VECTOR2I( gap, gap ), gap );
 
@@ -553,15 +553,13 @@ void DP_GATEWAYS::BuildForCursor( const VECTOR2I& aCursorPos )
                 if( i /2 == 0 )
                     dir = VECTOR2I( (gap + 1) / 2 * ( ( i % 2 ) ? -1 : 1 ), 0 );
                 else
-                    dir = VECTOR2I( 0, (gap + 1) / 2 * ( ( i % 2 ) ? -1 : 1) );
+                    dir = VECTOR2I( 0, (gap + 1) / 2 * ( ( i % 2 ) ? -1 : 1 ) );
             }
 
             if( m_fitVias )
                 BuildGeneric( aCursorPos + dir, aCursorPos - dir, true, true );
             else
-                m_gateways.emplace_back( aCursorPos + dir, aCursorPos - dir,
-                                         attempt ? true : false );
-
+                m_gateways.emplace_back( aCursorPos + dir, aCursorPos - dir, diagonal );
         }
     }
 }
