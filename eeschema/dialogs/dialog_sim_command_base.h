@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -112,13 +112,14 @@ class DIALOG_SIM_COMMAND_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_transInitial;
 		wxStaticText* m_transInitialUnits;
 		wxStaticText* m_staticText24;
-		wxStaticText* m_maxTimeLabel;
+		wxStaticText* m_maxStepLabel;
 		wxTextCtrl* m_transMaxStep;
-		wxStaticText* m_transMaxStepUnits;
-		wxStaticText* m_staticText25;
+		wxStaticText* m_transMaxStepUnit;
+		wxStaticText* m_staticText37;
 		wxStaticText* m_useInitialConditionsLabel;
 		wxCheckBox* m_useInitialConditions;
-		wxStaticText* m_staticText26;
+		wxStaticText* m_staticText39;
+		wxStaticText* m_staticText40;
 		wxPanel* m_pgCustom;
 		wxStaticText* m_staticText18;
 		wxTextCtrl* m_customTxt;

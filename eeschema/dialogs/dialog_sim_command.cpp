@@ -262,10 +262,11 @@ bool DIALOG_SIM_COMMAND::TransferDataFromWindow()
         if( !m_pgTransient->Validate() )
             return false;
 
+        const wxString    spc = wxS( " " );
         const SPICE_VALUE timeStep( m_transStep->GetValue() );
         const SPICE_VALUE finalTime( m_transFinal->GetValue() );
 
-        SPICE_VALUE startTime;
+        SPICE_VALUE startTime( 0 );
 
         if( !empty( m_transInitial ) )
             startTime = SPICE_VALUE( m_transInitial->GetValue() );
@@ -273,10 +274,10 @@ bool DIALOG_SIM_COMMAND::TransferDataFromWindow()
         wxString optionals;
 
         if( m_useInitialConditions->GetValue() )
-            optionals = "uic";
+            optionals = wxS( "uic" );
 
         if( !empty( m_transMaxStep ) )
-            optionals = SPICE_VALUE( m_transMaxStep->GetValue() ).ToSpiceString() + " " + optionals;
+            optionals = SPICE_VALUE( m_transMaxStep->GetValue() ).ToSpiceString() + spc + optionals;
         else if( !optionals.IsEmpty() )
         {
             SPICE_VALUE maxStep = ( finalTime - startTime ) / 50.0;
@@ -284,16 +285,16 @@ bool DIALOG_SIM_COMMAND::TransferDataFromWindow()
             if( maxStep > timeStep )
                 maxStep = timeStep;
 
-            optionals = maxStep.ToSpiceString() + " " + optionals;
+            optionals = maxStep.ToSpiceString() + spc + optionals;
         }
 
         if( !empty( m_transInitial ) )
-            optionals = startTime.ToSpiceString() + " " + optionals;
+            optionals = startTime.ToSpiceString() + spc + optionals;
         else if( !optionals.IsEmpty() )
-            optionals = "0 " + optionals;
+            optionals = wxS( "0 " ) + optionals;
 
-        m_simCommand.Printf( ".tran %s %s %s", timeStep.ToSpiceString(), finalTime.ToSpiceString(),
-                             optionals );
+        m_simCommand.Printf( wxS( ".tran %s %s %s" ), timeStep.ToSpiceString(),
+                             finalTime.ToSpiceString(), optionals );
     }
     else if( page == m_pgCustom )       // Custom directives
     {
@@ -544,7 +545,7 @@ bool DIALOG_SIM_COMMAND::parseCommand( const wxString& aCommand )
             // uic is an optional field
             tkn = tokenizer.GetNextToken();
 
-            if( tkn == "uic" )
+            if( tkn.IsSameAs( wxS( "uic" ) ) )
                 m_useInitialConditions->SetValue( true );
         }
         else if( tkn == ".op" )
