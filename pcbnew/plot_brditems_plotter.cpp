@@ -726,9 +726,7 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( const ZONE* aZone, PCB_LAYER_ID aLayer,
 
     GBR_METADATA gbr_metadata;
 
-    bool isOnCopperLayer = aZone->IsOnCopperLayer();
-
-    if( isOnCopperLayer )
+    if( aZone->IsOnCopperLayer() )
     {
         gbr_metadata.SetNetName( aZone->GetNetname() );
         gbr_metadata.SetCopper( true );

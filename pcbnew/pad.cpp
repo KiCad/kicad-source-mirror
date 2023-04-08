@@ -766,6 +766,38 @@ VECTOR2I PAD::ShapePos() const
 }
 
 
+bool PAD::IsOnCopperLayer() const
+{
+    if( GetAttribute() == PAD_ATTRIB::NPTH )
+    {
+        // NPTH pads have no plated hole cylinder.  If their annular ring size is 0 or
+        // negative, then they have no annular ring either.
+
+        switch( GetShape() )
+        {
+        case PAD_SHAPE::CIRCLE:
+            if( m_offset == VECTOR2I( 0, 0 ) && m_size.x <= m_drill.x )
+                return false;
+
+            break;
+
+        case PAD_SHAPE::OVAL:
+            if( m_offset == VECTOR2I( 0, 0 ) && m_size.x <= m_drill.x && m_size.y <= m_drill.y )
+                return false;
+
+            break;
+
+        default:
+            // We could subtract the hole polygon from the shape polygon for these, but it
+            // would be expensive and we're probably well out of the common use cases....
+            break;
+        }
+    }
+
+    return ( GetLayerSet() & LSET::AllCuMask() ).any();
+}
+
+
 int PAD::GetLocalClearanceOverrides( wxString* aSource ) const
 {
     // A pad can have specific clearance that overrides its NETCLASS clearance value
@@ -817,13 +849,9 @@ int PAD::GetOwnClearance( PCB_LAYER_ID aLayer, wxString* aSource ) const
 
 int PAD::GetSolderMaskExpansion() const
 {
-    // The pad inherits the margin only to calculate a default shape,
-    // therefore only if it is also a copper layer
     // Pads defined only on mask layers (and perhaps on other tech layers) use the shape
     // defined by the pad settings only
-    bool isOnCopperLayer = ( m_layerMask & LSET::AllCuMask() ).any();
-
-    if( !isOnCopperLayer )
+    if( !IsOnCopperLayer() )
         return 0;
 
     int margin = m_localSolderMaskMargin;
@@ -862,13 +890,9 @@ int PAD::GetSolderMaskExpansion() const
 
 VECTOR2I PAD::GetSolderPasteMargin() const
 {
-    // The pad inherits the margin only to calculate a default shape,
-    // therefore only if it is also a copper layer.
     // Pads defined only on mask layers (and perhaps on other tech layers) use the shape
     // defined by the pad settings only
-    bool isOnCopperLayer = ( m_layerMask & LSET::AllCuMask() ).any();
-
-    if( !isOnCopperLayer )
+    if( !IsOnCopperLayer() )
         return VECTOR2I( 0, 0 );
 
     int     margin = m_localSolderPasteMargin;

@@ -342,8 +342,7 @@ private:
     OBJECT_2D* createPadWithDrill( const PAD* aPad, int aInflateValue );
 
     void addPads( const FOOTPRINT* aFootprint, CONTAINER_2D_BASE* aDstContainer,
-                  PCB_LAYER_ID aLayerId, bool aSkipNPTHPadsWihNoCopper, bool aSkipPlatedPads,
-                  bool aSkipNonPlatedPads );
+                  PCB_LAYER_ID aLayerId, bool aSkipPlatedPads, bool aSkipNonPlatedPads );
 
     void addFootprintShapes( const FOOTPRINT* aFootprint, CONTAINER_2D_BASE* aDstContainer,
                              PCB_LAYER_ID aLayerId );

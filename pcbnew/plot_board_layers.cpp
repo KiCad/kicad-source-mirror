@@ -310,6 +310,9 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 }
             }
 
+            if( onCopperLayer && !pad->IsOnCopperLayer() )
+                continue;
+
             /// pads not connected to copper are optionally not drawn
             if( onCopperLayer && !pad->FlashLayer( aLayerMask ) )
                 continue;

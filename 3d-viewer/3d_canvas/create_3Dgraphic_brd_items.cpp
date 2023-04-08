@@ -490,41 +490,24 @@ OBJECT_2D* BOARD_ADAPTER::createPadWithDrill( const PAD* aPad, int aInflateValue
 
 
 void BOARD_ADAPTER::addPads( const FOOTPRINT* aFootprint, CONTAINER_2D_BASE* aContainer,
-                             PCB_LAYER_ID aLayerId, bool aSkipNPTHPadsWihNoCopper,
-                             bool aSkipPlatedPads, bool aSkipNonPlatedPads )
+                             PCB_LAYER_ID aLayerId, bool aSkipPlatedPads, bool aSkipNonPlatedPads )
 {
     for( PAD* pad : aFootprint->Pads() )
     {
         if( !pad->IsOnLayer( aLayerId ) )
             continue;
 
-        // Skip pad annulus when not connected on this layer (if removing is enabled)
-        if( !pad->FlashLayer( aLayerId ) && IsCopperLayer( aLayerId ) )
-            continue;
-
-        // NPTH pads are not drawn on layers if the shape size and pos is the same as their hole:
-        if( aSkipNPTHPadsWihNoCopper && ( pad->GetAttribute() == PAD_ATTRIB::NPTH ) )
+        if( IsCopperLayer( aLayerId ) )
         {
-            if( pad->GetDrillSize() == pad->GetSize() && pad->GetOffset() == VECTOR2I( 0, 0 ) )
-            {
-                switch( pad->GetShape() )
-                {
-                case PAD_SHAPE::CIRCLE:
-                    if( pad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
-                        continue;
+            // Skip pad annulus when there isn't one (note: this is more discerning than
+            // pad->IsOnLayer(), which doesn't check for NPTH pads with holes that consume
+            // the entire pad).
+            if( !pad->IsOnCopperLayer() )
+                continue;
 
-                    break;
-
-                case PAD_SHAPE::OVAL:
-                    if( pad->GetDrillShape() != PAD_DRILL_SHAPE_CIRCLE )
-                        continue;
-
-                    break;
-
-                default:
-                    break;
-                }
-            }
+            // Skip pad annulus when not connected on this layer (if removing is enabled)
+            if( !pad->FlashLayer( aLayerId ) )
+                continue;
         }
 
         VECTOR2I margin( 0, 0 );

@@ -239,10 +239,7 @@ public:
     /**
      * @return true if the pad is on any copper layer, false otherwise.
      */
-    bool IsOnCopperLayer() const override
-    {
-        return ( GetLayerSet() & LSET::AllCuMask() ) != 0;
-    }
+    bool IsOnCopperLayer() const override;
 
     void SetY( int y )                          { m_pos.y = y; SetDirty(); }
     void SetX( int x )                          { m_pos.x = x; SetDirty(); }
