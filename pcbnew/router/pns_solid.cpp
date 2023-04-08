@@ -78,16 +78,14 @@ static const SHAPE_LINE_CHAIN buildHullForPrimitiveShape( const SHAPE* aShape, i
     case SH_SIMPLE:
     {
         const SHAPE_SIMPLE* convex = static_cast<const SHAPE_SIMPLE*>( aShape );
-
         return ConvexHull( *convex, cl );
     }
+
     default:
-    {
         wxFAIL_MSG( wxString::Format( wxT( "Unsupported hull shape: %d (%s)." ),
                                       aShape->Type(),
                                       SHAPE_TYPE_asString( aShape->Type() ) ) );
         break;
-    }
     }
 
     return SHAPE_LINE_CHAIN();
