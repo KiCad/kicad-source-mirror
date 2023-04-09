@@ -119,31 +119,43 @@ bool ROUTER::RoutingInProgress() const
 
 const ITEM_SET ROUTER::QueryHoverItems( const VECTOR2I& aP, bool aUseClearance )
 {
+    NODE* node;
+    int   clearance;
+
     if( m_state == IDLE || m_placer == nullptr )
     {
-        if( aUseClearance )
-        {
-            SEGMENT test( SEG( aP, aP ), -1 );
-            test.SetWidth( 1 );
-            test.SetLayers( LAYER_RANGE::All() );
-            NODE::OBSTACLES obs;
-            m_world->QueryColliding( &test, obs, ITEM::ANY_T, -1, false );
+        node = m_world.get();
+        clearance = 0;
+    }
+    else if( m_mode == PNS_MODE_ROUTE_SINGLE )
+    {
+        node = m_placer->CurrentNode();
+        clearance = m_sizes.Clearance() + m_sizes.TrackWidth() / 2;
+    }
+    else if( m_mode == PNS_MODE_ROUTE_DIFF_PAIR )
+    {
+        node = m_placer->CurrentNode();
+        clearance = m_sizes.Clearance() + m_sizes.DiffPairWidth() / 2;
+    }
 
-            PNS::ITEM_SET ret;
+    if( aUseClearance )
+    {
+        SEGMENT test( SEG( aP, aP ), -1 );
+        test.SetWidth( 1 );
+        test.SetLayers( LAYER_RANGE::All() );
+        NODE::OBSTACLES obs;
+        node->QueryColliding( &test, obs, ITEM::ANY_T, -1, false, clearance );
 
-            for( OBSTACLE& obstacle : obs )
-                ret.Add( obstacle.m_item, false );
+        PNS::ITEM_SET ret;
 
-            return ret;
-        }
-        else
-        {
-            return m_world->HitTest( aP );
-        }
+        for( OBSTACLE& obstacle : obs )
+            ret.Add( obstacle.m_item, false );
+
+        return ret;
     }
     else
     {
-        return m_placer->CurrentNode()->HitTest( aP );
+        return node->HitTest( aP );
     }
 }
 
