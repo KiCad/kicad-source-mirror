@@ -868,6 +868,8 @@ void SCH_EDIT_FRAME::doCloseWindow()
     if( m_toolManager )
     {
         m_toolManager->ShutdownAllTools();
+        // prevent the canvas from trying to dispatch events during close
+        GetCanvas()->SetEventDispatcher( nullptr );
         delete m_toolManager;
         m_toolManager = nullptr;
     }
