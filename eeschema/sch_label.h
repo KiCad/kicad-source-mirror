@@ -100,6 +100,11 @@ public:
         m_fields = aFields;     // vector copying, length is changed possibly
     }
 
+    void AddFields( const std::vector<SCH_FIELD>& aFields )
+    {
+        m_fields.insert( m_fields.end(), aFields.begin(), aFields.end() );
+    }
+
     /**
      * Increment the label text, if it ends with a number.
      *

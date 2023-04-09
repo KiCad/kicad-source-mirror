@@ -2165,7 +2165,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             SCH_LABEL_BASE* new_label = dynamic_cast<SCH_LABEL_BASE*>( newtext );
 
             if( label && new_label )
-                new_label->SetFields( label->GetFields() );
+                new_label->AddFields( label->GetFields() );
 
             if( selected )
                 m_toolMgr->RunAction( EE_ACTIONS::removeItemFromSel, true, item );
