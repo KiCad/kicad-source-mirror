@@ -110,95 +110,108 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer, b
         dist[i] = VECTOR2I::ECOORD_MAX;
     }
 
-    ITEM_SET candidates = m_router->QueryHoverItems( aWhere );
-
-    if( candidates.Empty() )
-        candidates = m_router->QueryHoverItems( aWhere, true );
-
-    for( ITEM* item : candidates.Items() )
-    {
-        if( !item->IsRoutable() )
-            continue;
-
-        if( !IsCopperLayer( item->Layers().Start() ) )
-            continue;
-
-        if( !m_iface->IsAnyLayerVisible( item->Layers() ) )
-            continue;
-
-        if( alg::contains( aAvoidItems, item ) )
-            continue;
-
-        // fixme: this causes flicker with live loop removal...
-        //if( item->Parent() && !item->Parent()->ViewIsVisible() )
-        //    continue;
-
-        if( item->OfKind( ITEM::SOLID_T ) && aIgnorePads )
-        {
-            continue;
-        }
-        else if( aNet <= 0 || item->Net() == aNet )
-        {
-            if( item->OfKind( ITEM::VIA_T | ITEM::SOLID_T ) )
+    auto haveCandidates =
+            [&]()
             {
-                SEG::ecoord d = ( item->Shape()->Centre() - aWhere ).SquaredEuclideanNorm();
-
-                if( d < dist[2] )
+                for( ITEM* item : prioritized )
                 {
-                    prioritized[2] = item;
-                    dist[2] = d;
+                    if( item )
+                        return true;
                 }
 
-                if( item->Layers().Overlaps( tl ) && d < dist[0] )
+                return false;
+            };
+
+    for( bool useClearance : { false, true } )
+    {
+        ITEM_SET candidates = m_router->QueryHoverItems( aWhere, useClearance );
+
+        for( ITEM* item : candidates.Items() )
+        {
+            if( !item->IsRoutable() )
+                continue;
+
+            if( !IsCopperLayer( item->Layers().Start() ) )
+                continue;
+
+            if( !m_iface->IsAnyLayerVisible( item->Layers() ) )
+                continue;
+
+            if( alg::contains( aAvoidItems, item ) )
+                continue;
+
+            // fixme: this causes flicker with live loop removal...
+            //if( item->Parent() && !item->Parent()->ViewIsVisible() )
+            //    continue;
+
+            if( item->OfKind( ITEM::SOLID_T ) && aIgnorePads )
+            {
+                continue;
+            }
+            else if( aNet <= 0 || item->Net() == aNet )
+            {
+                if( item->OfKind( ITEM::VIA_T | ITEM::SOLID_T ) )
+                {
+                    SEG::ecoord d = ( item->Shape()->Centre() - aWhere ).SquaredEuclideanNorm();
+
+                    if( d < dist[2] )
+                    {
+                        prioritized[2] = item;
+                        dist[2] = d;
+                    }
+
+                    if( item->Layers().Overlaps( tl ) && d < dist[0] )
+                    {
+                        prioritized[0] = item;
+                        dist[0] = d;
+                    }
+                }
+                else    // ITEM::SEGMENT_T | ITEM::ARC_T
+                {
+                    LINKED_ITEM* li = static_cast<LINKED_ITEM*>( item );
+                    SEG::ecoord  d = std::min( ( li->Anchor( 0 ) - aWhere ).SquaredEuclideanNorm(),
+                                               ( li->Anchor( 1 ) - aWhere ).SquaredEuclideanNorm() );
+
+                    if( d < dist[3] )
+                    {
+                        prioritized[3] = item;
+                        dist[3] = d;
+                    }
+
+                    if( item->Layers().Overlaps( tl ) && d < dist[1] )
+                    {
+                        prioritized[1] = item;
+                        dist[1] = d;
+                    }
+                }
+            }
+            else if( item->OfKind( ITEM::SOLID_T ) && item->IsFreePad() )
+            {
+                // Allow free pads only when already inside pad
+                if( item->Shape()->Collide( aWhere ) )
                 {
                     prioritized[0] = item;
-                    dist[0] = d;
+                    dist[0] = 0;
                 }
             }
-            else    // ITEM::SEGMENT_T | ITEM::ARC_T
+            else if ( item->Net() == 0 && m_router->Settings().Mode() == RM_MarkObstacles )
             {
-                LINKED_ITEM* li = static_cast<LINKED_ITEM*>( item );
-                SEG::ecoord  d = std::min( ( li->Anchor( 0 ) - aWhere ).SquaredEuclideanNorm(),
-                                           ( li->Anchor( 1 ) - aWhere ).SquaredEuclideanNorm() );
-
-                if( d < dist[3] )
-                {
-                    prioritized[3] = item;
-                    dist[3] = d;
-                }
-
-                if( item->Layers().Overlaps( tl ) && d < dist[1] )
-                {
-                    prioritized[1] = item;
-                    dist[1] = d;
-                }
+                // Allow unconnected items as last resort in RM_MarkObstacles mode
+                if( item->Layers().Overlaps( tl ) )
+                    prioritized[4] = item;
             }
         }
-        else if( item->OfKind( ITEM::SOLID_T ) && item->IsFreePad() )
-        {
-            // Allow free pads only when already inside pad
-            if( item->Shape()->Collide( aWhere ) )
-            {
-                prioritized[0] = item;
-                dist[0] = 0;
-            }
-        }
-        else if ( item->Net() == 0 && m_router->Settings().Mode() == RM_MarkObstacles )
-        {
-            // Allow unconnected items as last resort in RM_MarkObstacles mode
-            if( item->Layers().Overlaps( tl ) )
-                prioritized[4] = item;
-        }
+
+        if( haveCandidates() )
+            break;
     }
 
     ITEM* rv = nullptr;
 
     bool highContrast = ( frame()->GetDisplayOptions().m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL );
 
-    for( int i = 0; i < candidateCount; i++ )
+    for( ITEM* item : prioritized )
     {
-        ITEM* item = prioritized[i];
-
         if( highContrast && item && !item->Layers().Overlaps( tl ) )
             item = nullptr;
 
