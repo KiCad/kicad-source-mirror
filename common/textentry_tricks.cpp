@@ -41,6 +41,10 @@ void TEXTENTRY_TRICKS::OnCharHook( wxTextEntry* aTextEntry, wxKeyEvent& aEvent )
     {
         aTextEntry->Paste();
     }
+    else if( aEvent.GetModifiers() == wxMOD_CONTROL && aEvent.GetKeyCode() == 'A' )
+    {
+        aTextEntry->SelectAll();
+    }
     else if( aEvent.GetKeyCode() == WXK_BACK )
     {
         long start, end;
