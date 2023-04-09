@@ -59,7 +59,6 @@ NODE::NODE()
     m_maxClearance = 800000;    // fixme: depends on how thick traces are.
     m_ruleResolver = nullptr;
     m_index = new INDEX;
-    m_collisionQueryScope = CQS_ALL_RULES;
 
 #ifdef DEBUG
     allocNodes.insert( this );
@@ -115,7 +114,6 @@ int NODE::GetClearance( const ITEM* aA, const ITEM* aB, bool aUseClearanceEpsilo
    if( !m_ruleResolver )
         return 100000;
 
-
    if( aA->IsVirtual() || aB->IsVirtual() )
        return 0;
 
@@ -136,7 +134,6 @@ NODE* NODE::Branch()
     child->m_ruleResolver = m_ruleResolver;
     child->m_root = isRoot() ? this : m_root;
     child->m_maxClearance = m_maxClearance;
-    child->m_collisionQueryScope = m_collisionQueryScope;
 
     // Immediate offspring of the root branch needs not copy anything. For the rest, deep-copy
     // joints, overridden item maps and pointers to stored items.
@@ -365,7 +362,7 @@ NODE::OPT_OBSTACLE NODE::CheckColliding( const ITEM_SET& aSet, int aKindMask )
         OPT_OBSTACLE obs = CheckColliding( item, aKindMask );
 
         if( obs )
-            return  obs;
+            return obs;
     }
 
     return OPT_OBSTACLE();
@@ -521,6 +518,7 @@ void NODE::Add( std::unique_ptr< VIA >&& aVia )
 {
     addVia( aVia.release() );
 }
+
 
 void NODE::add( ITEM* aItem, bool aAllowRedundant )
 {
@@ -1347,8 +1345,8 @@ void NODE::GetUpdatedItems( ITEM_VECTOR& aRemoved, ITEM_VECTOR& aAdded )
     for( ITEM* item : m_override )
         aRemoved.push_back( item );
 
-    for( INDEX::ITEM_SET::iterator i = m_index->begin(); i != m_index->end(); ++i )
-        aAdded.push_back( *i );
+    for( ITEM* item : *m_index )
+        aAdded.push_back( item );
 }
 
 

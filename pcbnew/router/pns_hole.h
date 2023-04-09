@@ -52,10 +52,7 @@ public:
     virtual const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0,
                                          int aLayer = -1 ) const override;
 
-    bool IsCircular() const;
-
-    const VECTOR2I Pos() const;
-    int            Radius() const;
+    int Radius() const;
 
     const SHAPE* Shape() const override { return m_holeShape; }
 

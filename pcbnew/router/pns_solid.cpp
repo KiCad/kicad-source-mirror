@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -23,9 +23,7 @@
 
 #include <geometry/shape.h>
 #include <geometry/shape_line_chain.h>
-#include <geometry/shape_rect.h>
 #include <geometry/shape_circle.h>
-#include <geometry/shape_simple.h>
 #include <geometry/shape_compound.h>
 #include <geometry/shape_poly_set.h>
 
@@ -40,11 +38,6 @@ namespace PNS {
 
 const SHAPE_LINE_CHAIN SOLID::Hull( int aClearance, int aWalkaroundThickness, int aLayer ) const
 {
-    //if( !ROUTER::GetInstance()->GetInterface()->IsFlashedOnLayer( this, aLayer ) )
-      //  return HoleHull( aClearance, aWalkaroundThickness, aLayer );
-
-    // fixme holes
-
     if( !m_shape )
         return SHAPE_LINE_CHAIN();
 

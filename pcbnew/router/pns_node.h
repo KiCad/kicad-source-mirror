@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -448,16 +448,6 @@ public:
 
     void FixupVirtualVias();
 
-    void SetCollisionQueryScope( COLLISION_QUERY_SCOPE aScope )
-    {
-        m_collisionQueryScope = aScope;
-    }
-
-    COLLISION_QUERY_SCOPE GetCollisionQueryScope() const
-    {
-        return m_collisionQueryScope;
-    }
-
     void AddRaw( ITEM* aItem, bool aAllowRedundant = false )
     {
         add( aItem, aAllowRedundant );
@@ -538,8 +528,6 @@ private:
     std::vector< std::unique_ptr<SHAPE> > m_edgeExclusions;
 
     std::unordered_set<ITEM*> m_garbageItems;
-
-    COLLISION_QUERY_SCOPE m_collisionQueryScope;
 };
 
 }

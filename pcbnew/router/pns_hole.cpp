@@ -37,6 +37,7 @@ HOLE::~HOLE()
     delete m_holeShape;
 }
 
+
 HOLE* HOLE::Clone() const
 {
     HOLE* h = new HOLE( nullptr, m_holeShape->Clone() );
@@ -52,6 +53,7 @@ HOLE* HOLE::Clone() const
 
     return h;
 }
+
 
 const SHAPE_LINE_CHAIN HOLE::Hull( int aClearance, int aWalkaroundThickness, int aLayer ) const
 {
@@ -98,10 +100,6 @@ const SHAPE_LINE_CHAIN HOLE::Hull( int aClearance, int aWalkaroundThickness, int
     }
 }
 
-bool HOLE::IsCircular() const
-{
-    return m_holeShape->Type() == SH_CIRCLE;
-}
 
 int HOLE::Radius() const
 {
@@ -110,10 +108,6 @@ int HOLE::Radius() const
     return static_cast<const SHAPE_CIRCLE*>( m_holeShape )->GetRadius();
 }
 
-const VECTOR2I HOLE::Pos() const
-{
-    return VECTOR2I( 0, 0 ); // fixme holes
-}
 
 void HOLE::SetCenter( const VECTOR2I& aCenter )
 {
@@ -121,28 +115,27 @@ void HOLE::SetCenter( const VECTOR2I& aCenter )
     static_cast<SHAPE_CIRCLE*>( m_holeShape )->SetCenter( aCenter );
 }
 
+
 void HOLE::SetRadius( int aRadius )
 {
     assert( m_holeShape->Type() == SH_CIRCLE );
     static_cast<SHAPE_CIRCLE*>( m_holeShape )->SetRadius( aRadius );
 }
 
+
 void HOLE::Move( const VECTOR2I& delta )
 {
     m_holeShape->Move( delta );
 }
 
+
 HOLE* HOLE::MakeCircularHole( const VECTOR2I& pos, int radius )
 {
-    auto circle = new SHAPE_CIRCLE( pos, radius );
-    auto hole = new HOLE( nullptr, circle );
+    SHAPE_CIRCLE* circle = new SHAPE_CIRCLE( pos, radius );
+    HOLE*         hole = new HOLE( nullptr, circle );
+
     hole->SetLayers( LAYER_RANGE( F_Cu, B_Cu ) );
     return hole;
 }
-
-/*bool HOLE::collideSimple( const ITEM* aHead, const NODE* aNode,
-                          COLLISION_SEARCH_CONTEXT* aCtx ) const
-{
-}*/
 
 }; // namespace PNS

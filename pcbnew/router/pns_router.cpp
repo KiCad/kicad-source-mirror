@@ -176,15 +176,6 @@ bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM_SET aStartItems, int aDragM
     if( aStartItems.Empty() )
         return false;
 
-    if( Settings().Mode() == RM_MarkObstacles )
-    {
-        m_world->SetCollisionQueryScope( NODE::CQS_ALL_RULES );
-    }
-    else
-    {
-        m_world->SetCollisionQueryScope( NODE::CQS_IGNORE_HOLE_CLEARANCE );
-    }
-
     GetRuleResolver()->ClearCaches();
 
     if( aStartItems.Count( ITEM::SOLID_T ) == aStartItems.Size() )
@@ -213,9 +204,7 @@ bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM_SET aStartItems, int aDragM
         m_logger->Clear();
 
     if( m_logger && aStartItems.Size() )
-    {
         m_logger->Log( LOGGER::EVT_START_DRAG, aP, aStartItems[0] );
-    }
 
     if( m_dragger->Start( aP, aStartItems ) )
     {
@@ -404,15 +393,6 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, 
 
 bool ROUTER::StartRouting( const VECTOR2I& aP, ITEM* aStartItem, int aLayer )
 {
-    if( Settings().Mode() == RM_MarkObstacles )
-    {
-        m_world->SetCollisionQueryScope( NODE::CQS_ALL_RULES );
-    }
-    else
-    {
-        m_world->SetCollisionQueryScope( NODE::CQS_IGNORE_HOLE_CLEARANCE );
-    }
-
     GetRuleResolver()->ClearCaches();
 
     if( !isStartingPointRoutable( aP, aStartItem, aLayer ) )
@@ -515,8 +495,10 @@ bool ROUTER::getNearestRatnestAnchor( VECTOR2I& aOtherEnd, LAYER_RANGE& aOtherEn
 
     // If the user has drawn a line, get the anchor nearest to the line end
     if( trace->SegmentCount() > 0 )
+    {
         return topo.NearestUnconnectedAnchorPoint( trace, aOtherEnd, aOtherEndLayers,
                                                    aOtherEndItem );
+    }
 
     // Otherwise, find the closest anchor to our start point
 
@@ -558,7 +540,6 @@ bool ROUTER::Finish()
         return false;
 
     // Get our current line and position and nearest ratsnest to them if it exists
-    VECTOR2I    currentEnd = placer->CurrentEnd();
     VECTOR2I    otherEnd;
     LAYER_RANGE otherEndLayers;
     ITEM*       otherEndItem = nullptr;
@@ -573,16 +554,14 @@ bool ROUTER::Finish()
 
     do
     {
-        moveResultPoint = Placer()->CurrentEnd();
+        moveResultPoint = placer->CurrentEnd();
         Move( otherEnd, otherEndItem );
         triesLeft--;
-    } while( Placer()->CurrentEnd() != moveResultPoint && triesLeft );
+    } while( placer->CurrentEnd() != moveResultPoint && triesLeft );
 
     // If we've made it, fix the route and we're done
     if( moveResultPoint == otherEnd && otherEndLayers.Overlaps( GetCurrentLayer() ) )
-    {
         return FixRoute( otherEnd, otherEndItem, false );
-    }
 
     return false;
 }
@@ -652,29 +631,11 @@ void ROUTER::markViolations( NODE* aNode, ITEM_SET& aCurrent, NODE::ITEM_VECTOR&
                 if( itemToMark->Layers().IsMultilayer() && !currentItem->Layers().IsMultilayer() )
                     tmp->SetLayer( currentItem->Layer() );
 
-                if( itemToMark->Kind() == ITEM::SOLID_T )
+                if( itemToMark->IsCompoundShapePrimitive() )
                 {
-                    #if 0 // fixme holes
-                    if( holeOnly || !m_iface->IsFlashedOnLayer( itemToMark, currentItem->Layer() ) )
-                    {
-                        SOLID* solid = static_cast<SOLID*>( tmp.get() );
-
-                        if( solid->Hole() )
-                        {
-                            solid->SetShape( solid->Hole()->Clone() );
-
-                            // Leave the pad flashing around the highlighted hole
-                            removeOriginal = false;
-                        }
-                    }
-                    #endif
-
-                    if( itemToMark->IsCompoundShapePrimitive() )
-                    {
-                        // We're only highlighting one (or more) of several primitives so we
-                        // don't want all the other parts of the object to disappear
-                        removeOriginal = false;
-                    }
+                    // We're only highlighting one (or more) of several primitives so we don't
+                    // want all the other parts of the object to disappear
+                    removeOriginal = false;
                 }
 
                 m_iface->DisplayItem( tmp.get(), clearance );
@@ -758,9 +719,7 @@ void ROUTER::UpdateSizes( const SIZES_SETTINGS& aSizes )
 
     // Change track/via size settings
     if( m_state == ROUTE_TRACK )
-    {
         m_placer->UpdateSizes( m_sizes );
-    }
 }
 
 
@@ -784,13 +743,19 @@ bool ROUTER::movePlacing( const VECTOR2I& aP, ITEM* aEndItem )
         if( l->EndsWithVia() )
         {
             const VIA& via = l->Via();
-            int viaClearance = GetRuleResolver()->Clearance( &via, nullptr );
-            int holeClearance = 0; // GetRuleResolver()->HoleClearance( &via, nullptr ); // fixme holes
+            clearance = GetRuleResolver()->Clearance( &via, nullptr );
 
-            if( holeClearance + via.Drill() / 2 > viaClearance + via.Diameter() / 2 )
-                viaClearance = holeClearance + via.Drill() / 2 - via.Diameter() / 2;
+            if( via.HasHole() )
+            {
+                int holeClearance = GetRuleResolver()->Clearance( via.Hole(), nullptr );
+                int annularWidth = std::max( 0, via.Diameter() - via.Drill() ) / 2;
+                int excessHoleClearance = holeClearance - annularWidth;
 
-            m_iface->DisplayItem( &l->Via(), viaClearance, false, true );
+                if( excessHoleClearance > clearance )
+                    clearance = excessHoleClearance;
+            }
+
+            m_iface->DisplayItem( &l->Via(), clearance, false, true );
         }
     }
 
@@ -870,17 +835,13 @@ void ROUTER::CommitRouting( NODE* aNode )
     for( ITEM* item : added )
     {
         if( !item->IsVirtual() )
-        {
             m_iface->AddItem( item );
-        }
     }
 
     for( ITEM* item : changed )
     {
         if( !item->IsVirtual() )
-        {
             m_iface->UpdateItem( item );
-        }
     }
 
     m_iface->Commit();
@@ -993,9 +954,7 @@ void ROUTER::ToggleViaPlacement()
         m_placer->ToggleVia( toggle );
 
         if( m_logger )
-        {
             m_logger->Log( LOGGER::EVT_TOGGLE_VIA, VECTOR2I(), nullptr, &m_sizes );
-        }
     }
 }
 
@@ -1072,6 +1031,7 @@ void ROUTER::SetInterface( ROUTER_IFACE *aIface )
 {
     m_iface = aIface;
 }
+
 
 void ROUTER::BreakSegment( ITEM *aItem, const VECTOR2I& aP )
 {
