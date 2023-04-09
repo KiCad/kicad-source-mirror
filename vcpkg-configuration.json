@@ -9,7 +9,7 @@
     {
       "kind": "git",
       "repository": "https://gitlab.com/kicad/packaging/kicad-vcpkg-registry.git",
-      "baseline": "fae9169558d2373a9d6e95e85bb82108ab663244",
+      "baseline": "3bc244ccb3a4641941aa5e91cc7ec7e2caa2c658",
       "packages": [
         "glew",
         "python3",
