@@ -3732,6 +3732,11 @@ SCH_TEXT* SCH_SEXPR_PARSER::parseSchText()
 
         switch( token )
         {
+        case T_exclude_from_sim:
+            text->SetExcludeFromSim( parseBool() );
+            NeedRIGHT();
+            break;
+
         case T_at:
             text->SetPosition( parseXY() );
 
@@ -3906,6 +3911,11 @@ SCH_TEXTBOX* SCH_SEXPR_PARSER::parseSchTextBox()
 
         switch( token )
         {
+        case T_exclude_from_sim:
+            textBox->SetExcludeFromSim( parseBool() );
+            NeedRIGHT();
+            break;
+
         case T_start:       // Legacy token during 6.99 development; fails to handle angle
             pos = parseXY();
             NeedRIGHT();

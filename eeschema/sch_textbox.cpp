@@ -52,13 +52,17 @@ SCH_TEXTBOX::SCH_TEXTBOX( int aLineWidth, FILL_T aFillType, const wxString& text
     SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
     SetVertJustify( GR_TEXT_V_ALIGN_TOP );
     SetMultilineAllowed( true );
+
+    m_excludeFromSim = false;
 }
 
 
 SCH_TEXTBOX::SCH_TEXTBOX( const SCH_TEXTBOX& aText ) :
         SCH_SHAPE( aText ),
         EDA_TEXT( aText )
-{ }
+{
+    m_excludeFromSim = aText.m_excludeFromSim;
+}
 
 
 int SCH_TEXTBOX::GetTextMargin() const
@@ -208,6 +212,9 @@ bool SCH_TEXTBOX::operator<( const SCH_ITEM& aItem ) const
 
     if( GetPosition().y != other->GetPosition().y )
         return GetPosition().y < other->GetPosition().y;
+
+    if( GetExcludeFromSim() != other->GetExcludeFromSim() )
+        return GetExcludeFromSim() - other->GetExcludeFromSim();
 
     return GetText() < other->GetText();
 }
@@ -428,6 +435,9 @@ void SCH_TEXTBOX::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL
 {
     // Don't use GetShownText() here; we want to show the user the variable references
     aList.emplace_back( _( "Text Box" ), KIUI::EllipsizeStatusText( aFrame, GetText() ) );
+
+    if( m_excludeFromSim )
+        aList.emplace_back( _( "Exclude from" ), _( "Simulation" ) );
 
     aList.emplace_back( _( "Font" ), GetFont() ? GetFont()->GetName() : _( "Default" ) );
 

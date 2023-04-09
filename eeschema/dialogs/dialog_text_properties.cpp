@@ -209,6 +209,8 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
     m_textCtrl->SetValue( schematic.ConvertKIIDsToRefs( m_currentText->GetText() ) );
     m_textCtrl->EmptyUndoBuffer();
 
+    m_excludeFromSim->SetValue( m_currentItem->GetExcludeFromSim() );
+
     m_fontCtrl->SetFontSelection( m_currentText->GetFont() );
     m_textSize.SetValue( m_currentText->GetTextWidth() );
     m_textColorSwatch->SetSwatchColor( m_currentText->GetTextColor(), false );
@@ -489,6 +491,8 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
         DisplayError( this, _( "Text can not be empty." ) );
         return false;
     }
+
+    m_currentItem->SetExcludeFromSim( m_excludeFromSim->GetValue() );
 
     if( !m_currentText->ValidateHyperlink( m_hyperlinkCombo->GetValue() ) )
     {

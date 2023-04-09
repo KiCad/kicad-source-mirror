@@ -42,6 +42,7 @@
 
 #include <utility>
 #include "plotters/plotter.h"
+#include "sim/sim_model.h"
 
 
 std::unordered_map<TRANSFORM, int> SCH_SYMBOL::s_transformToOrientationCache;
@@ -513,6 +514,30 @@ void SCH_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffse
                              3.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ),
                              dnp_color );
     }
+}
+
+
+void SCH_SYMBOL::SetExcludeFromSim( bool aExclude )
+{
+    SCH_FIELD* enable = FindField( SIM_ENABLE_FIELD );
+
+    if( aExclude )
+    {
+        if( !enable )
+            enable = AddField( SCH_FIELD( VECTOR2I( 0, 0 ), -1, this, SIM_ENABLE_FIELD ) );
+
+        enable->SetText( wxS( "0" ) );
+    }
+    else
+    {
+        RemoveField( SIM_ENABLE_FIELD );
+    }
+}
+
+
+bool SCH_SYMBOL::GetExcludeFromSim() const
+{
+    return GetFieldText( SIM_ENABLE_FIELD ) == wxS( "0" );
 }
 
 
@@ -1695,6 +1720,30 @@ void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
     SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( aFrame );
     SCH_SHEET_PATH* currentSheet = schframe ? &schframe->GetCurrentSheet() : nullptr;
 
+    auto addExcludes =
+            [&]()
+    {
+        wxArrayString msgs;
+
+        if( GetExcludeFromSim() )
+            msgs.Add( _( "Simulation" ) );
+
+        if( !GetIncludeInBom() )
+            msgs.Add( _( "BOM" ) );
+
+        if( !GetIncludeOnBoard() )
+            msgs.Add( _( "Board" ) );
+
+        if( GetDNP() )
+            msgs.Add( _( "DNP" ) );
+
+        msg = wxJoin( msgs, '|' );
+        msg.Replace( '|', wxS( ", " ) );
+
+        if( !msg.empty() )
+            aList.emplace_back( _( "Exclude from" ), msg );
+    };
+
     // part and alias can differ if alias is not the root
     if( m_part )
     {
@@ -1708,6 +1757,7 @@ void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
             {
                 aList.emplace_back( _( "Reference" ), GetRef( currentSheet ) );
                 aList.emplace_back( _( "Value" ), GetValueFieldText( true ) );
+                addExcludes();
                 aList.emplace_back( _( "Name" ), UnescapeString( GetLibId().GetLibItemName() ) );
             }
 
@@ -1751,9 +1801,9 @@ void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
     else
     {
         aList.emplace_back( _( "Reference" ), GetRef( currentSheet ) );
-
         aList.emplace_back( _( "Value" ), GetValueFieldText( true ) );
-        aList.emplace_back( _( "Name" ), GetLibId().GetLibItemName() );
+        addExcludes();
+        aList.emplace_back( _( "Name" ), UnescapeString( GetLibId().GetLibItemName() ) );
 
         wxString libNickname = GetLibId().GetLibNickname();
 

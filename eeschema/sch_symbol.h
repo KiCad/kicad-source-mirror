@@ -152,6 +152,9 @@ public:
     void SortInstances( bool ( *aSortFunction )( const SCH_SYMBOL_INSTANCE& aLhs,
                                                  const SCH_SYMBOL_INSTANCE& aRhs ) );
 
+    void SetExcludeFromSim( bool aExclude ) override;
+    bool GetExcludeFromSim() const override;
+
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
     /**

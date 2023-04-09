@@ -121,6 +121,8 @@ SCH_TEXT::SCH_TEXT( const VECTOR2I& pos, const wxString& text, KICAD_T aType ) :
     SetTextPos( pos );
     SetTextSpinStyle( TEXT_SPIN_STYLE::LEFT );
     SetMultilineAllowed( true );
+
+    m_excludeFromSim = false;
 }
 
 
@@ -128,7 +130,9 @@ SCH_TEXT::SCH_TEXT( const SCH_TEXT& aText ) :
         SCH_ITEM( aText ),
         EDA_TEXT( aText ),
         m_spin_style( aText.m_spin_style )
-{ }
+{
+    m_excludeFromSim = aText.m_excludeFromSim;
+}
 
 
 VECTOR2I SCH_TEXT::GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) const
@@ -243,13 +247,16 @@ bool SCH_TEXT::operator<( const SCH_ITEM& aItem ) const
     auto other = static_cast<const SCH_TEXT*>( &aItem );
 
     if( GetLayer() != other->GetLayer() )
-            return GetLayer() < other->GetLayer();
+        return GetLayer() < other->GetLayer();
 
     if( GetPosition().x != other->GetPosition().x )
         return GetPosition().x < other->GetPosition().x;
 
     if( GetPosition().y != other->GetPosition().y )
         return GetPosition().y < other->GetPosition().y;
+
+    if( GetExcludeFromSim() != other->GetExcludeFromSim() )
+        return GetExcludeFromSim() - other->GetExcludeFromSim();
 
     return GetText() < other->GetText();
 }
@@ -491,6 +498,9 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 
     // Don't use GetShownText() here; we want to show the user the variable references
     aList.emplace_back( _( "Graphic Text" ), KIUI::EllipsizeStatusText( aFrame, GetText() ) );
+
+    if( m_excludeFromSim )
+        aList.emplace_back( _( "Exclude from" ), _( "Simulation" ) );
 
     aList.emplace_back( _( "Font" ), GetFont() ? GetFont()->GetName() : _( "Default" ) );
 

@@ -35,6 +35,7 @@ edge_clock_high
 effects
 end
 extends
+exclude_from_sim
 face
 fields_autoplaced
 fill

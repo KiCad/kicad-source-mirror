@@ -27,6 +27,7 @@ class WX_INFOBAR;
 #include <wx/stc/stc.h>
 #include <wx/hyperlink.h>
 #include <wx/sizer.h>
+#include <wx/checkbox.h>
 #include <wx/choice.h>
 #include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
@@ -35,7 +36,6 @@ class WX_INFOBAR;
 #include <wx/button.h>
 #include <wx/textctrl.h>
 #include <wx/panel.h>
-#include <wx/checkbox.h>
 #include <wx/bmpcbox.h>
 #include <wx/gbsizer.h>
 #include <wx/dialog.h>
@@ -55,6 +55,7 @@ class DIALOG_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_textLabel;
 		wxStyledTextCtrl* m_textCtrl;
 		wxHyperlinkCtrl* m_syntaxHelp;
+		wxCheckBox* m_excludeFromSim;
 		wxStaticText* m_fontLabel;
 		FONT_CHOICE* m_fontCtrl;
 		BITMAP_BUTTON* m_separator1;

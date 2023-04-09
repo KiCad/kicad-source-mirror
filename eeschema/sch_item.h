@@ -198,6 +198,9 @@ public:
      */
     SCH_ITEM* Duplicate( bool doClone = false ) const;
 
+    virtual void SetExcludeFromSim( bool aExclude ) { }
+    virtual bool GetExcludeFromSim() const { return false; }
+
     /**
      * @return true for items which are moved with the anchor point at mouse cursor
      *  and false for items moved with no reference to anchor

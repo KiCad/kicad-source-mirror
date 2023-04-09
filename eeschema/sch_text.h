@@ -142,6 +142,9 @@ public:
 
     void DoHypertextAction( EDA_DRAW_FRAME* aFrame ) const override;
 
+    void SetExcludeFromSim( bool aExclude ) override { m_excludeFromSim = aExclude; }
+    bool GetExcludeFromSim() const override { return m_excludeFromSim; }
+
     /**
      * Set a spin or rotation angle, along with specific horizontal and vertical justification
      * styles with each angle.
@@ -241,6 +244,8 @@ protected:
      * easier to handle than 3 parameters when editing and reading and saving files.
      */
     TEXT_SPIN_STYLE m_spin_style;
+
+    bool            m_excludeFromSim;
 };
 
 

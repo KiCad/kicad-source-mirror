@@ -1259,7 +1259,12 @@ void SCH_SEXPR_PLUGIN::saveText( SCH_TEXT* aText, int aNestLevel )
                   getTextTypeToken( aText->Type() ),
                   m_out->Quotew( aText->GetText() ).c_str() );
 
-    if( aText->Type() == SCH_DIRECTIVE_LABEL_T )
+    if( aText->Type() == SCH_TEXT_T )
+    {
+        m_out->Print( 0, " (exclude_from_sim %s)\n",
+                      aText->GetExcludeFromSim() ? "yes" : "no" );
+    }
+    else if( aText->Type() == SCH_DIRECTIVE_LABEL_T )
     {
         SCH_DIRECTIVE_LABEL* flag = static_cast<SCH_DIRECTIVE_LABEL*>( aText );
 
@@ -1339,7 +1344,8 @@ void SCH_SEXPR_PLUGIN::saveTextBox( SCH_TEXTBOX* aTextBox, int aNestLevel )
     VECTOR2I pos = aTextBox->GetStart();
     VECTOR2I size = aTextBox->GetEnd() - pos;
 
-    m_out->Print( aNestLevel + 1, "(at %s %s %s) (size %s %s)\n",
+    m_out->Print( aNestLevel + 1, "(exclude_from_sim %s) (at %s %s %s) (size %s %s)\n",
+                  aTextBox->GetExcludeFromSim() ? "yes" : "no",
                   EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pos.x ).c_str(),
                   EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pos.y ).c_str(),
                   EDA_UNIT_UTILS::FormatAngle( aTextBox->GetTextAngle() ).c_str(),

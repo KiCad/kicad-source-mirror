@@ -29,7 +29,6 @@
 #include <sim/sim_library_spice.h>
 #include <sim/sim_model_raw_spice.h>
 #include <sim/sim_model_ideal.h>
-#include <sim/spice_grammar.h>
 #include <common.h>
 #include <confirm.h>
 #include <pgm_base.h>
@@ -37,7 +36,6 @@
 #include <sim/sim_library.h>
 #include <sim/sim_library_kibis.h>
 #include <sim/sim_model_kibis.h>
-#include <sim/sim_model.h>
 #include <sch_screen.h>
 #include <sch_text.h>
 #include <sch_textbox.h>
@@ -212,7 +210,7 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
         {
             SCH_SYMBOL* symbol = findNextSymbol( item, &sheet );
 
-            if( !symbol || symbol->GetFieldText( SIM_ENABLE_FIELD ) == wxT( "0" ) )
+            if( !symbol || symbol->GetExcludeFromSim() )
                 continue;
 
             std::vector<PIN_INFO> pins = CreatePinList( symbol, &sheet, true );
@@ -340,6 +338,9 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
     {
         for( SCH_ITEM* item : sheet.LastScreen()->Items() )
         {
+            if( item->GetExcludeFromSim() )
+                continue;
+
             if( item->Type() == SCH_TEXT_T )
                 text = static_cast<SCH_TEXT*>( item )->GetShownText();
             else if( item->Type() == SCH_TEXTBOX_T )
