@@ -21,7 +21,6 @@
 
 #include <wx/wupdlock.h>
 #include <wx/stattext.h>
-#include <wx/combobox.h>
 
 #include <gerbview.h>
 #include <gerbview_frame.h>
@@ -180,8 +179,8 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
 
     if( !m_gridSelectBox )
     {
-        m_gridSelectBox = new wxComboBox( m_auxiliaryToolBar, ID_ON_GRID_SELECT, wxEmptyString, wxDefaultPosition,
-                                        wxDefaultSize, 0, nullptr, wxCB_READONLY );
+        m_gridSelectBox = new wxChoice( m_auxiliaryToolBar, ID_ON_GRID_SELECT, wxDefaultPosition,
+                                        wxDefaultSize, 0, nullptr );
     }
 
     m_auxiliaryToolBar->AddScaledSeparator( this );
@@ -189,8 +188,8 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
 
     if( !m_zoomSelectBox )
     {
-        m_zoomSelectBox = new wxComboBox( m_auxiliaryToolBar, ID_ON_ZOOM_SELECT, wxEmptyString, wxDefaultPosition,
-                wxDefaultSize, 0, nullptr, wxCB_READONLY );
+        m_zoomSelectBox = new wxChoice( m_auxiliaryToolBar, ID_ON_ZOOM_SELECT, wxDefaultPosition,
+                                        wxDefaultSize, 0, nullptr );
     }
 
     m_auxiliaryToolBar->AddScaledSeparator( this );

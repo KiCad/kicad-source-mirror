@@ -549,8 +549,8 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
 
     // Creates box to display and choose tracks widths:
     if( m_SelTrackWidthBox == nullptr )
-        m_SelTrackWidthBox = new wxComboBox( m_auxiliaryToolBar, ID_AUX_TOOLBAR_PCB_TRACK_WIDTH, wxEmptyString,
-                                           wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY );
+        m_SelTrackWidthBox = new wxChoice( m_auxiliaryToolBar, ID_AUX_TOOLBAR_PCB_TRACK_WIDTH,
+                                           wxDefaultPosition, wxDefaultSize, 0, nullptr );
 
     UpdateTrackWidthSelectBox( m_SelTrackWidthBox );
     m_auxiliaryToolBar->AddControl( m_SelTrackWidthBox );
@@ -570,8 +570,8 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
     // Creates box to display and choose vias diameters:
 
     if( m_SelViaSizeBox == nullptr )
-        m_SelViaSizeBox = new wxComboBox( m_auxiliaryToolBar, ID_AUX_TOOLBAR_PCB_VIA_SIZE, wxEmptyString,
-                                        wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY );
+        m_SelViaSizeBox = new wxChoice( m_auxiliaryToolBar, ID_AUX_TOOLBAR_PCB_VIA_SIZE,
+                                        wxDefaultPosition, wxDefaultSize, 0, nullptr );
 
     UpdateViaSizeSelectBox( m_SelViaSizeBox );
     m_auxiliaryToolBar->AddControl( m_SelViaSizeBox );
@@ -580,8 +580,8 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
     m_auxiliaryToolBar->AddScaledSeparator( this );
 
     if( m_gridSelectBox == nullptr )
-        m_gridSelectBox = new wxComboBox( m_auxiliaryToolBar, ID_ON_GRID_SELECT, wxEmptyString,
-                                        wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY );
+        m_gridSelectBox = new wxChoice( m_auxiliaryToolBar, ID_ON_GRID_SELECT,
+                                        wxDefaultPosition, wxDefaultSize, 0, nullptr );
 
     UpdateGridSelectBox();
 
@@ -591,8 +591,8 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
     m_auxiliaryToolBar->AddScaledSeparator( this );
 
     if( m_zoomSelectBox == nullptr )
-        m_zoomSelectBox = new wxComboBox( m_auxiliaryToolBar, ID_ON_ZOOM_SELECT, wxEmptyString,
-                                        wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY );
+        m_zoomSelectBox = new wxChoice( m_auxiliaryToolBar, ID_ON_ZOOM_SELECT,
+                                        wxDefaultPosition, wxDefaultSize, 0, nullptr );
 
     UpdateZoomSelectBox();
     m_auxiliaryToolBar->AddControl( m_zoomSelectBox );
@@ -653,7 +653,7 @@ static wxString ComboBoxUnits( EDA_UNITS aUnits, double aValue, bool aIncludeLab
 }
 
 
-void PCB_EDIT_FRAME::UpdateTrackWidthSelectBox( wxComboBox* aTrackWidthSelectBox, bool aEdit )
+void PCB_EDIT_FRAME::UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox, bool aEdit )
 {
     if( aTrackWidthSelectBox == nullptr )
         return;
@@ -692,7 +692,7 @@ void PCB_EDIT_FRAME::UpdateTrackWidthSelectBox( wxComboBox* aTrackWidthSelectBox
 }
 
 
-void PCB_EDIT_FRAME::UpdateViaSizeSelectBox( wxComboBox* aViaSizeSelectBox, bool aEdit )
+void PCB_EDIT_FRAME::UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, bool aEdit )
 {
     if( aViaSizeSelectBox == nullptr )
         return;

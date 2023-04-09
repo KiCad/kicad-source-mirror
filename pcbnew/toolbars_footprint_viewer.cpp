@@ -20,7 +20,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <wx/combobox.h>
 
 #include <advanced_config.h>
 #include <macros.h>
@@ -33,6 +32,7 @@
 #include "footprint_viewer_frame.h"
 #include "pcbnew_id.h"
 #include <widgets/wx_menubar.h>
+#include <wx/choice.h>
 
 
 void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
@@ -82,8 +82,8 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
     // Grid selection choice box.
     if( m_gridSelectBox == nullptr )
     {
-        m_gridSelectBox = new wxComboBox( m_mainToolBar, ID_ON_GRID_SELECT, wxEmptyString, wxDefaultPosition,
-                wxDefaultSize, 0, nullptr, wxCB_READONLY );
+        m_gridSelectBox = new wxChoice( m_mainToolBar, ID_ON_GRID_SELECT, wxDefaultPosition,
+                                        wxDefaultSize, 0, nullptr );
     }
 
     UpdateGridSelectBox();
@@ -94,8 +94,8 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
     // Zoom selection choice box.
     if( m_zoomSelectBox == nullptr )
     {
-        m_zoomSelectBox = new wxComboBox( m_mainToolBar, ID_ON_ZOOM_SELECT, wxEmptyString, wxDefaultPosition,
-                wxDefaultSize, 0, nullptr, wxCB_READONLY );
+        m_zoomSelectBox = new wxChoice( m_mainToolBar, ID_ON_ZOOM_SELECT, wxDefaultPosition,
+                                        wxDefaultSize, 0, nullptr );
     }
 
     UpdateZoomSelectBox();

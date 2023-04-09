@@ -500,8 +500,8 @@ protected:
 
     bool               m_showBorderAndTitleBlock;  // Show the drawing sheet (border & title block).
 
-    wxComboBox*        m_gridSelectBox;
-    wxComboBox*        m_zoomSelectBox;
+    wxChoice*          m_gridSelectBox;
+    wxChoice*          m_zoomSelectBox;
 
     ACTION_TOOLBAR*    m_mainToolBar;
     ACTION_TOOLBAR*    m_auxiliaryToolBar;  // Additional tools under main toolbar
