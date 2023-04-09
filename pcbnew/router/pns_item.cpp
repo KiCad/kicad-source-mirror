@@ -125,11 +125,11 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
     {
         clearance = 0;    // keepouts are exact boundary; no clearance
     }
-    else if( iface && !iface->IsFlashedOnLayer( this, aHead->Layer() ) )
+    else if( iface && !iface->IsFlashedOnLayer( this, aHead->Layers() ) )
     {
         clearance = -1;
     }
-    else if( iface && !iface->IsFlashedOnLayer( aHead, Layer() ) )
+    else if( iface && !iface->IsFlashedOnLayer( aHead, Layers() ) )
     {
         clearance = -1;
     }

@@ -58,6 +58,7 @@ public:
     void SyncWorld( PNS::NODE* aWorld ) override;
     bool IsAnyLayerVisible( const LAYER_RANGE& aLayer ) const override { return true; };
     bool IsFlashedOnLayer( const PNS::ITEM* aItem, int aLayer ) const override;
+    bool IsFlashedOnLayer( const PNS::ITEM* aItem, const LAYER_RANGE& aLayer ) const override;
     bool IsItemVisible( const PNS::ITEM* aItem ) const override { return true; };
     void HideItem( PNS::ITEM* aItem ) override {}
     void DisplayItem( const PNS::ITEM* aItem, int aClearance, bool aEdit = false,

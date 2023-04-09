@@ -1418,6 +1418,50 @@ bool PNS_KICAD_IFACE_BASE::IsFlashedOnLayer( const PNS::ITEM* aItem, int aLayer 
 }
 
 
+bool PNS_KICAD_IFACE_BASE::IsFlashedOnLayer( const PNS::ITEM* aItem,
+                                             const LAYER_RANGE& aLayer ) const
+{
+    LAYER_RANGE test = aItem->Layers().Intersection( aLayer );
+
+    if( aItem->Parent() )
+    {
+        switch( aItem->Parent()->Type() )
+        {
+        case PCB_VIA_T:
+        {
+            const PCB_VIA* via = static_cast<const PCB_VIA*>( aItem->Parent() );
+
+            for( int layer = test.Start(); layer <= test.End(); ++layer )
+            {
+                if( via->FlashLayer( ToLAYER_ID( layer ) ) )
+                    return true;
+            }
+
+            return false;
+        }
+
+        case PCB_PAD_T:
+        {
+            const PAD* pad = static_cast<const PAD*>( aItem->Parent() );
+
+            for( int layer = test.Start(); layer <= test.End(); ++layer )
+            {
+                if( pad->FlashLayer( ToLAYER_ID( layer ) ) )
+                    return true;
+            }
+
+            return false;
+        }
+
+        default:
+            break;
+        }
+    }
+
+    return test.Start() <= test.End();
+}
+
+
 bool PNS_KICAD_IFACE::IsItemVisible( const PNS::ITEM* aItem ) const
 {
     // by default, all items are visible (new ones created by the router have parent == NULL
