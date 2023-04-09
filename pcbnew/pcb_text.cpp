@@ -531,6 +531,10 @@ static struct PCB_TEXT_DESC
                 &BOARD_ITEM::SetIsKnockout, &BOARD_ITEM::IsKnockout ),
                 _HKI( "Text Properties" ) );
 
+        propMgr.AddProperty( new PROPERTY<PCB_TEXT, bool, EDA_TEXT>( _HKI( "Keep Upright" ),
+                &PCB_TEXT::SetKeepUpright, &PCB_TEXT::IsKeepUpright ),
+                _HKI( "Text Properties" ) );
+
         auto isFootprintText =
                 []( INSPECTABLE* aItem ) -> bool
                 {
@@ -542,6 +546,9 @@ static struct PCB_TEXT_DESC
 
         propMgr.OverrideAvailability( TYPE_HASH( PCB_TEXT ), TYPE_HASH( EDA_TEXT ),
                                       _HKI( "Visible" ), isFootprintText );
+
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_TEXT ), TYPE_HASH( EDA_TEXT ),
+                                      _HKI( "Keep Upright" ), isFootprintText );
 
         propMgr.OverrideAvailability( TYPE_HASH( PCB_TEXT ), TYPE_HASH( EDA_TEXT ),
                                       _HKI( "Hyperlink" ),
