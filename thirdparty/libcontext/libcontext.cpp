@@ -1552,83 +1552,8 @@ __asm (
 );
 #endif
 
-#if defined(LIBCONTEXT_USE_WINFIBER) && (defined(LIBCONTEXT_PLATFORM_msvc_x86_64) || defined(LIBCONTEXT_PLATFORM_msvc_i386))
-
-#include <map>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#include <windows.h>
-
-namespace libcontext
-{
-
-static int threadHasFibers = 0;
-
-struct FiberData
-{
-	intptr_t inValue;
-	intptr_t outValue;
-	void(*entry)(intptr_t);
-};
-
-static std::map<fcontext_t, FiberData> fiberParams;
-
-static void fiberEntry(LPVOID params)
-{
-	auto ctx = (fcontext_t) GetCurrentFiber();
-	auto& d = fiberParams[ctx];
-	d.entry(d.inValue);
-}
-
-fcontext_t LIBCONTEXT_CALL_CONVENTION make_fcontext(void* sp, size_t size, void(*fn)(intptr_t))
-{
-	if (!threadHasFibers)
-	{
-		ConvertThreadToFiberEx( nullptr, FIBER_FLAG_FLOAT_SWITCH );
-		threadHasFibers = 1;
-	}
-
-	fcontext_t ctx = CreateFiberEx( size - 1, size, FIBER_FLAG_FLOAT_SWITCH, (LPFIBER_START_ROUTINE) fiberEntry, nullptr );
-	fiberParams[ctx].entry = fn;
-
-	return ctx;
-}
-
-intptr_t LIBCONTEXT_CALL_CONVENTION jump_fcontext( fcontext_t* ofc, fcontext_t nfc,
-	intptr_t vp, bool preserve_fpu )
-{
-	*ofc = GetCurrentFiber();
-	fiberParams[nfc].inValue = vp;
-	fiberParams[nfc].outValue = vp;
-	SwitchToFiber(nfc);
-	return fiberParams[*ofc].outValue;
-}
-
-
-void LIBCONTEXT_CALL_CONVENTION release_fcontext( fcontext_t ctx )
-{
-    if( ctx == nullptr )
-		return;
-
-	if( fiberParams.find( ctx ) != fiberParams.end() )
-	{
-		fiberParams.erase( ctx );
-	}
-
-	DeleteFiber( ctx );
-}
-
-
-}; // namespace libcontext
-
-#ifdef __cplusplus
-};
-#endif
-
-#else // defined(LIBCONTEXT_USE_WINFIBER) && (defined(LIBCONTEXT_PLATFORM_msvc_x86_64) || defined(LIBCONTEXT_PLATFORM_msvc_i386))
+#if( defined( LIBCONTEXT_PLATFORM_msvc_x86_64 ) || defined( LIBCONTEXT_PLATFORM_msvc_i386 )        \
+     || defined( LIBCONTEXT_PLATFORM_msvc_arm64 ) )
 
 #ifdef __cplusplus
 extern "C" {

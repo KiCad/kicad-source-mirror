@@ -116,11 +116,6 @@ cmake_dependent_option( KICAD_WIN32_DPI_AWARE
     OFF "WIN32"
     OFF )
 
-cmake_dependent_option( KICAD_WIN32_CONTEXT_WINFIBER
-    "Use win32 fibers for libcontext"
-    OFF "WIN32"
-    OFF )
-
 cmake_dependent_option( KICAD_WIN32_VERIFY_CODESIGN
     "When enabled, verifies the code signing signature of certain DLLs loaded during runtime."
     OFF "WIN32"
@@ -269,17 +264,8 @@ message( STATUS "KiCad install dir: <${DEFAULT_INSTALL_PATH}>" )
 include( PerformFeatureChecks )
 perform_feature_checks()
 
-
 # Setup the compiler warnings
 include( ${KICAD_CMAKE_MODULE_PATH}/Warnings.cmake )
-
-add_compile_definitions( $<$<BOOL:${KICAD_WIN32_CONTEXT_WINFIBER}>:LIBCONTEXT_USE_WINFIBER> )
-
-if( KICAD_WIN32_CONTEXT_WINFIBER )
-    set(LIBCONTEXT_USE_WINFIBER true)
-else()
-    set(LIBCONTEXT_USE_WINFIBER false)
-endif()
 
 if( WIN32 )
     # define UNICODE and_UNICODE definition on Windows. KiCad uses unicode.

@@ -88,25 +88,19 @@
     #endif
 #elif defined (_MSC_VER )
 
-#if defined( LIBCONTEXT_USE_WINFIBER )
-#define LIBCONTEXT_HAS_OWN_STACK
-#endif
-
 #define LIBCONTEXT_CALL_CONVENTION __cdecl
 
 #if defined(_WIN64)
 	#define LIBCONTEXT_PLATFORM_msvc_x86_64
 #elif defined(_WIN32)
 	#define LIBCONTEXT_PLATFORM_msvc_i386
+#elif defined( _M_ARM64 )
+    #define LIBCONTEXT_PLATFORM_msvc_arm64
 #endif
 #endif
 
 #ifdef __cplusplus
 namespace libcontext {
-#endif
-
-#if defined(_WIN32_WCE)
-typedef int intptr_t;
 #endif
 
 typedef void* fcontext_t;
