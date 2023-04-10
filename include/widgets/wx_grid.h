@@ -93,6 +93,7 @@ public:
      * @return false if validation failed
      */
     bool CommitPendingChanges( bool aQuietMode = false );
+    bool CancelPendingChanges();
 
     /**
      * Set a UNITS_PROVIDER to enable use of unit- and eval-based Getters.

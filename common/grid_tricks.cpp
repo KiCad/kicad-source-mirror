@@ -456,6 +456,14 @@ void GRID_TRICKS::onCharHook( wxKeyEvent& ev )
             m_grid->ForceRefresh();
         }
     }
+    else if( ev.GetKeyCode() == WXK_ESCAPE )
+    {
+        if( m_grid->IsCellEditControlShown() )
+        {
+            m_grid->CancelPendingChanges();
+            handled = true;
+        }
+    }
 
     if( !handled )
         ev.Skip( true );
