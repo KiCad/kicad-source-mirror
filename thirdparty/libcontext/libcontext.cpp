@@ -1552,8 +1552,6 @@ __asm (
 );
 #endif
 
-#if( defined( LIBCONTEXT_PLATFORM_msvc_x86_64 ) || defined( LIBCONTEXT_PLATFORM_msvc_i386 )        \
-     || defined( LIBCONTEXT_PLATFORM_msvc_arm64 ) )
 
 #ifdef __cplusplus
 extern "C" {
@@ -1571,7 +1569,4 @@ void LIBCONTEXT_CALL_CONVENTION release_fcontext( fcontext_t ctx )
 
 #ifdef __cplusplus
 };
-#endif // defined(LIBCONTEXT_PLATFORM_msvc_x86_64) || defined(LIBCONTEXT_PLATFORM_msvc_i386)
-
 #endif
-
