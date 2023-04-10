@@ -420,6 +420,34 @@ void WX_GRID::DrawRowLabel( wxDC& dc, int row )
 }
 
 
+bool WX_GRID::CancelPendingChanges()
+{
+    if( !IsCellEditControlEnabled() )
+        return true;
+
+    HideCellEditControl();
+
+    // do it after HideCellEditControl()
+    m_cellEditCtrlEnabled = false;
+
+    int row = m_currentCellCoords.GetRow();
+    int col = m_currentCellCoords.GetCol();
+
+    wxString oldval = GetCellValue( row, col );
+    wxString newval;
+
+    wxGridCellAttr* attr = GetCellAttr( row, col );
+    wxGridCellEditor* editor = attr->GetEditor( this, row, col );
+
+    bool changed = editor->EndEdit( row, col, this, oldval, &newval );
+
+    editor->DecRef();
+    attr->DecRef();
+
+    return true;
+}
+
+
 bool WX_GRID::CommitPendingChanges( bool aQuietMode )
 {
     if( !IsCellEditControlEnabled() )

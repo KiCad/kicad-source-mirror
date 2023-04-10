@@ -181,6 +181,8 @@ protected:
     virtual void OnCharHook( wxKeyEvent& aEvt );
 
 private:
+    void selectAllInTextCtrls( wxWindowList& children );
+
     /**
      * Properly handle the wxCloseEvent when in the quasimodal mode when not calling
      * EndQuasiModal which is possible with any dialog derived from #DIALOG_SHIM.
@@ -193,8 +195,7 @@ private:
      */
     void OnButton( wxCommandEvent& aEvent );
 
-    void OnGridEditorShown( wxGridEvent& event );
-    void OnGridEditorHidden( wxGridEvent& event );
+    void onChildSetFocus( wxFocusEvent& aEvent );
 
     DECLARE_EVENT_TABLE();
 
@@ -223,6 +224,9 @@ protected:
 
     // The size asked by the caller, used the first time the dialog is created
     wxSize                 m_initialSize;
+
+    // Used to support first-esc-cancels-edit logic
+    std::map<wxWindow*, wxString> m_beforeEditValues;
 };
 
 #endif  // DIALOG_SHIM_

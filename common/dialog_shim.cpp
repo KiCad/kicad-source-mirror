@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,10 +67,6 @@ public:
 
 
 BEGIN_EVENT_TABLE( DIALOG_SHIM, wxDialog )
-    // If dialog has a grid and the grid has an active cell editor
-    // Esc key closes cell editor, otherwise Esc key closes the dialog.
-    EVT_GRID_EDITOR_SHOWN( DIALOG_SHIM::OnGridEditorShown )
-    EVT_GRID_EDITOR_HIDDEN( DIALOG_SHIM::OnGridEditorHidden )
     EVT_CHAR_HOOK( DIALOG_SHIM::OnCharHook )
 END_EVENT_TABLE()
 
@@ -325,30 +321,38 @@ bool DIALOG_SHIM::Enable( bool enable )
 // Recursive descent doing a SelectAll() in wxTextCtrls.
 // MacOS User Interface Guidelines state that when tabbing to a text control all its
 // text should be selected.  Since wxWidgets fails to implement this, we do it here.
-static void selectAllInTextCtrls( wxWindowList& children )
+void DIALOG_SHIM::selectAllInTextCtrls( wxWindowList& children )
 {
     for( wxWindow* child : children )
     {
-        if( wxTextCtrl* childTextCtrl = dynamic_cast<wxTextCtrl*>( child ) )
+        if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( child ) )
         {
+            m_beforeEditValues[ textCtrl ] = textCtrl->GetValue();
+            textCtrl->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( DIALOG_SHIM::onChildSetFocus ),
+                               nullptr, this );
+
             // We don't currently run this on GTK because some window managers don't hide the
             // selection in non-active controls, and other window managers do the selection
             // automatically anyway.
 #if defined( __WXMAC__ ) || defined( __WXMSW__ )
-            if( !childTextCtrl->GetStringSelection().IsEmpty() )
+            if( !textCtrl->GetStringSelection().IsEmpty() )
             {
                 // Respect an existing selection
             }
-            else if( childTextCtrl->IsEditable() )
+            else if( textCtrl->IsEditable() )
             {
-                childTextCtrl->SelectAll();
+                textCtrl->SelectAll();
             }
 #else
-            ignore_unused( childTextCtrl );
+            ignore_unused( textCtrl );
 #endif
         }
         else if( wxStyledTextCtrl* scintilla = dynamic_cast<wxStyledTextCtrl*>( child ) )
         {
+            m_beforeEditValues[ scintilla ] = scintilla->GetText();
+            scintilla->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( DIALOG_SHIM::onChildSetFocus ),
+                                nullptr, this );
+
             if( !scintilla->GetSelectedText().IsEmpty() )
             {
                 // Respect an existing selection
@@ -533,11 +537,6 @@ void DIALOG_SHIM::OnButton( wxCommandEvent& aEvent )
 {
     const int id = aEvent.GetId();
 
-    // If we are pressing a button to exit, we need to enable the escapeID
-    // otherwise the dialog does not process cancel
-    if( id == wxID_CANCEL )
-        SetEscapeId( wxID_ANY );
-
     if( IsQuasiModal() )
     {
         if( id == GetAffirmativeId() )
@@ -555,7 +554,7 @@ void DIALOG_SHIM::OnButton( wxCommandEvent& aEvent )
                 ignore_unused( TransferDataFromWindow() );
             }
         }
-        else if( id == GetEscapeId() || (id == wxID_CANCEL && GetEscapeId() == wxID_ANY) )
+        else if( id == wxID_CANCEL )
         {
             EndQuasiModal( wxID_CANCEL );
         }
@@ -569,6 +568,17 @@ void DIALOG_SHIM::OnButton( wxCommandEvent& aEvent )
 
     // This is mandatory to allow wxDialogBase::OnButton() to be called.
     aEvent.Skip();
+}
+
+
+void DIALOG_SHIM::onChildSetFocus( wxFocusEvent& aEvent )
+{
+    // When setting focus to a text control reset the before-edit value.
+
+    if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( aEvent.GetEventObject() ) )
+        m_beforeEditValues[ textCtrl ] = textCtrl->GetValue();
+    else if( wxStyledTextCtrl* scintilla = dynamic_cast<wxStyledTextCtrl*>( aEvent.GetEventObject() ) )
+        m_beforeEditValues[ scintilla ] = scintilla->GetText();
 }
 
 
@@ -627,22 +637,33 @@ void DIALOG_SHIM::OnCharHook( wxKeyEvent& aEvt )
             return;
         }
     }
+    else if( aEvt.GetKeyCode() == WXK_ESCAPE )
+    {
+        wxObject* eventSource = aEvt.GetEventObject();
+
+        if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( eventSource ) )
+        {
+            // First escape after an edit cancels edit
+            if( textCtrl->GetValue() != m_beforeEditValues[ textCtrl ] )
+            {
+                textCtrl->SetValue( m_beforeEditValues[ textCtrl ] );
+                textCtrl->SelectAll();
+                return;
+            }
+        }
+        else if( wxStyledTextCtrl* scintilla = dynamic_cast<wxStyledTextCtrl*>( eventSource ) )
+        {
+            // First escape after an edit cancels edit
+            if( scintilla->GetText() != m_beforeEditValues[ scintilla ] )
+            {
+                scintilla->SetText( m_beforeEditValues[ scintilla ] );
+                scintilla->SelectAll();
+                return;
+            }
+        }
+    }
 
     aEvt.Skip();
-}
-
-
-void DIALOG_SHIM::OnGridEditorShown( wxGridEvent& event )
-{
-    SetEscapeId( wxID_NONE );
-    event.Skip();
-}
-
-
-void DIALOG_SHIM::OnGridEditorHidden( wxGridEvent& event )
-{
-    SetEscapeId( wxID_ANY );
-    event.Skip();
 }
 
 
