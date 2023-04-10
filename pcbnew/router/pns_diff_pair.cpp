@@ -78,6 +78,7 @@ DP_PRIMITIVE_PAIR& DP_PRIMITIVE_PAIR::operator=( const DP_PRIMITIVE_PAIR& aOther
 {
     if( aOther.m_primP )
         m_primP = aOther.m_primP->Clone();
+
     if( aOther.m_primN )
         m_primN = aOther.m_primN->Clone();
 
@@ -178,11 +179,9 @@ static DIRECTION_45::AngleType angle( const VECTOR2I &a, const VECTOR2I &b )
 
 static bool checkGap( const SHAPE_LINE_CHAIN &p, const SHAPE_LINE_CHAIN &n, int gap )
 {
-    int i, j;
-
-    for( i = 0; i < p.SegmentCount(); i++ )
+    for( int i = 0; i < p.SegmentCount(); i++ )
     {
-        for( j = 0; j < n.SegmentCount() ; j++ )
+        for( int j = 0; j < n.SegmentCount() ; j++ )
         {
             int dist = p.CSegment( i ).Distance( n.CSegment( j ) );
 
@@ -205,10 +204,10 @@ void DP_GATEWAY::Reverse()
 bool DIFF_PAIR::BuildInitial( const DP_GATEWAY& aEntry, const DP_GATEWAY &aTarget,
                               bool aPrefDiagonal )
 {
-    SHAPE_LINE_CHAIN p = DIRECTION_45().BuildInitialTrace ( aEntry.AnchorP(), aTarget.AnchorP(),
-                                                            aPrefDiagonal );
-    SHAPE_LINE_CHAIN n = DIRECTION_45().BuildInitialTrace ( aEntry.AnchorN(), aTarget.AnchorN(),
-                                                            aPrefDiagonal );
+    SHAPE_LINE_CHAIN p = DIRECTION_45().BuildInitialTrace( aEntry.AnchorP(), aTarget.AnchorP(),
+                                                           aPrefDiagonal );
+    SHAPE_LINE_CHAIN n = DIRECTION_45().BuildInitialTrace( aEntry.AnchorN(), aTarget.AnchorN(),
+                                                           aPrefDiagonal );
 
     int mask = aEntry.AllowedAngles() | DIRECTION_45::ANG_STRAIGHT | DIRECTION_45::ANG_OBTUSE;
 
@@ -239,7 +238,7 @@ bool DIFF_PAIR::BuildInitial( const DP_GATEWAY& aEntry, const DP_GATEWAY &aTarge
 
     if( aTarget.HasEntryLines() )
     {
-        DP_GATEWAY t(aTarget) ;
+        DP_GATEWAY t( aTarget );
         t.Reverse();
 
         if( !CheckConnectionAngle( t.Entry(), mask ) )
@@ -252,7 +251,7 @@ bool DIFF_PAIR::BuildInitial( const DP_GATEWAY& aEntry, const DP_GATEWAY &aTarge
     m_p = sum_p;
     m_n = sum_n;
 
-    if( !checkGap ( p, n, m_gapConstraint ) )
+    if( !checkGap( p, n, m_gapConstraint ) )
         return false;
 
     if( p.SelfIntersecting() || n.SelfIntersecting() )
@@ -270,7 +269,9 @@ bool DIFF_PAIR::CheckConnectionAngle( const DIFF_PAIR& aOther, int aAllowedAngle
     bool checkP, checkN;
 
     if( m_p.SegmentCount() == 0 || aOther.m_p.SegmentCount() == 0 )
+    {
         checkP = true;
+    }
     else
     {
         DIRECTION_45 p0( m_p.CSegment( -1 ) );
@@ -340,7 +341,6 @@ bool DP_GATEWAYS::FitGateways( DP_GATEWAYS& aEntry, DP_GATEWAYS& aTarget, bool a
 {
     DP_CANDIDATE best;
 
-    int n = 0;
     int bestScore = -1000;
     bool found = false;
 
@@ -348,26 +348,24 @@ bool DP_GATEWAYS::FitGateways( DP_GATEWAYS& aEntry, DP_GATEWAYS& aTarget, bool a
     {
         for( const DP_GATEWAY& g_target : aTarget.Gateways() )
         {
-            n++;
-
-            for( int attempt = 0; attempt < 2; attempt++ )
+            for( bool preferred : { false, true } )
             {
-                int score = ( attempt == 1 ? -3 : 0 );
+                int score = preferred ? 0 : -3;
                 score += g_entry.Priority();
                 score += g_target.Priority();
 
-                if( score < bestScore )
-                    continue;
-
-                DIFF_PAIR l( m_gap );
-
-                if( l.BuildInitial( g_entry, g_target,
-                                    aPrefDiagonal ^ ( attempt ? true : false ) ) )
+                if( score >= bestScore )
                 {
-                    best.p = l.CP();
-                    best.n = l.CN();
-                    bestScore = score;
-                    found = true;
+                    DIFF_PAIR l( m_gap );
+
+                    if( l.BuildInitial( g_entry, g_target, preferred ? aPrefDiagonal
+                                                                     : !aPrefDiagonal ) )
+                    {
+                        best.p = l.CP();
+                        best.n = l.CN();
+                        bestScore = score;
+                        found = true;
+                    }
                 }
             }
         }
@@ -393,16 +391,14 @@ bool DP_GATEWAYS::checkDiagonalAlignment( const VECTOR2I& a, const VECTOR2I& b )
 }
 
 
-void DP_GATEWAYS::FilterByOrientation ( int aAngleMask, DIRECTION_45 aRefOrientation )
+void DP_GATEWAYS::FilterByOrientation( int aAngleMask, DIRECTION_45 aRefOrientation )
 {
-    m_gateways.erase(
-        std::remove_if( m_gateways.begin(), m_gateways.end(),
-                        [aAngleMask, aRefOrientation]( const DP_GATEWAY& dp)
-                        {
-                            DIRECTION_45 orient( dp.AnchorP() - dp.AnchorN() );
-                            return ( orient.Angle( aRefOrientation ) & aAngleMask );
-                        } ), m_gateways.end()
-        );
+    alg::delete_if( m_gateways,
+                    [aAngleMask, aRefOrientation]( const DP_GATEWAY& dp )
+                    {
+                        DIRECTION_45 orient( dp.AnchorP() - dp.AnchorN() );
+                        return ( orient.Angle( aRefOrientation ) & aAngleMask );
+                    } );
 }
 
 static VECTOR2I makeGapVector( VECTOR2I dir, int length )
@@ -681,7 +677,7 @@ void DP_GATEWAYS::BuildGeneric( const VECTOR2I& p0_p, const VECTOR2I& p0_n, bool
         {
             VECTOR2I dir = makeGapVector( p0_n - p0_p, m_gap / 2 );
             VECTOR2I m = ( p0_p + p0_n ) / 2;
-            int prio = ( padDist > padToGapThreshold * m_gap ? 2 : 1);
+            int prio = ( padDist > padToGapThreshold * m_gap ) ? 2 : 1;
 
             if( !aViaMode )
             {
@@ -735,7 +731,7 @@ void DP_GATEWAYS::BuildGeneric( const VECTOR2I& p0_p, const VECTOR2I& p0_n, bool
             ips[0] = st_n[i].IntersectLines( d_p[j] );
             ips[1] = st_p[i].IntersectLines( d_n[j] );
 
-//          diagonal-straight cases: 8 possibilities of "weirder" exists
+            // diagonal-straight cases: 8 possibilities of "weirder" exists
             for( int k = 0; k < 2; k++ )
             {
                 if( ips[k] )
@@ -901,8 +897,8 @@ double DIFF_PAIR::CoupledLength() const
 
     double l = 0.0;
 
-    for( unsigned int i = 0; i < pairs.size(); i++ )
-        l += pairs[i].coupledP.Length();
+    for( const COUPLED_SEGMENTS& pair : pairs )
+        l += pair.coupledP.Length();
 
     return l;
 }
@@ -933,9 +929,11 @@ int DIFF_PAIR::CoupledLength ( const SEG& aP, const SEG& aN ) const
     SEG p_clip, n_clip;
     int64_t dist = std::abs( aP.Distance( aN ) - m_width );
 
-    if( aP.ApproxParallel( aN ) && m_gapConstraint.Matches( dist ) &&
-        commonParallelProjection ( aP, aN, p_clip, n_clip ) )
+    if( aP.ApproxParallel( aN ) && m_gapConstraint.Matches( dist )
+            && commonParallelProjection ( aP, aN, p_clip, n_clip ) )
+    {
         return p_clip.Length();
+    }
 
     return 0;
 }
