@@ -2165,7 +2165,22 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             SCH_LABEL_BASE* new_label = dynamic_cast<SCH_LABEL_BASE*>( newtext );
 
             if( label && new_label )
+            {
                 new_label->AddFields( label->GetFields() );
+
+                // A SCH_GLOBALLABEL has a specific field, that has no meaning for
+                // other labels, and expected to be the first field in list.
+                // It is the first field in list for this kind of label
+                // So remove field named "Intersheetrefs" if exists for other labels
+                int min_idx = new_label->Type() == SCH_GLOBAL_LABEL_T ? 1 : 0;
+                std::vector<SCH_FIELD>& fields = new_label->GetFields();
+
+                for( int ii = fields.size()-1; ii >= min_idx; ii-- )
+                {
+                    if( fields[ii].GetCanonicalName() == wxT( "Intersheetrefs" ) )
+                        fields.erase( fields.begin() + ii );
+                }
+            }
 
             if( selected )
                 m_toolMgr->RunAction( EE_ACTIONS::removeItemFromSel, true, item );

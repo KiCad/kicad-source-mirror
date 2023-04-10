@@ -61,6 +61,7 @@
 #include <progress_reporter.h>
 #include <sch_shape.h>
 
+
 using namespace TSCHEMATIC_T;
 
 
@@ -1948,7 +1949,6 @@ SCH_FIELD* SCH_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
 
     std::unique_ptr<SCH_FIELD> field = std::make_unique<SCH_FIELD>( wxDefaultPosition, -1,
                                                                     aParent, name );
-
     field->SetText( value );
     field->SetVisible( true );
 
@@ -3853,6 +3853,10 @@ SCH_TEXT* SCH_SEXPR_PARSER::parseSchText()
                      || field->GetInternalName() == wxT( "Intersheetrefs" ) ) ) // Current name
             {
                 SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( text.get() );
+                // Ensure the Id of this special and first field is 0, needed by
+                // SCH_FIELD::IsHypertext() test
+                field->SetId( 0 );
+
                 label->GetFields()[0] = *field;
             }
             else
