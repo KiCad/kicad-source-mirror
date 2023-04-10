@@ -179,13 +179,15 @@ static DIRECTION_45::AngleType angle( const VECTOR2I &a, const VECTOR2I &b )
 
 static bool checkGap( const SHAPE_LINE_CHAIN &p, const SHAPE_LINE_CHAIN &n, int gap )
 {
+    SEG::ecoord gap_sq = SEG::Square( gap - 100 );
+
     for( int i = 0; i < p.SegmentCount(); i++ )
     {
         for( int j = 0; j < n.SegmentCount() ; j++ )
         {
-            int dist = p.CSegment( i ).Distance( n.CSegment( j ) );
+            SEG::ecoord dist_sq = p.CSegment( i ).SquaredDistance( n.CSegment( j ) );
 
-            if( dist < gap - 100 )
+            if( dist_sq < gap_sq )
                 return false;
         }
     }
@@ -607,45 +609,34 @@ void DP_GATEWAYS::buildDpContinuation( const DP_PRIMITIVE_PAIR& aPair, bool aIsD
     if( !aPair.Directional() )
         return;
 
-    DIRECTION_45 dP = aPair.DirP();
-    DIRECTION_45 dN = aPair.DirN();
+    // Add gateways that angle the anchor points by 22.5 degrees for connection to tracks which
+    // are at +/- 45 degrees from the existing direction.
 
-    int gap = ( aPair.AnchorP() - aPair.AnchorN() ).EuclideanNorm();
+    auto addAngledGateways =
+            [&]( int length, int priority )
+            {
+                SHAPE_LINE_CHAIN entryLineP;
+                entryLineP.Append( aPair.AnchorP() );
+                entryLineP.Append( aPair.AnchorP() + aPair.DirP().ToVector().Resize( length ) );
+                DP_GATEWAY gwExtendP( entryLineP.CLastPoint(), aPair.AnchorN(), aIsDiagonal );
+                gwExtendP.SetPriority( priority );
+                gwExtendP.SetEntryLines( entryLineP, SHAPE_LINE_CHAIN() );
+                m_gateways.push_back( gwExtendP );
 
-    VECTOR2I vdP = aPair.AnchorP() + dP.Left().ToVector();
-    VECTOR2I vdN = aPair.AnchorN() + dN.Left().ToVector();
+                SHAPE_LINE_CHAIN entryLineN;
+                entryLineN.Append( aPair.AnchorN() );
+                entryLineN.Append( aPair.AnchorN() + aPair.DirN().ToVector().Resize( length ) );
+                DP_GATEWAY gwExtendN( aPair.AnchorP(), entryLineN.CLastPoint(), aIsDiagonal );
+                gwExtendN.SetPriority( priority );
+                gwExtendN.SetEntryLines( SHAPE_LINE_CHAIN(), entryLineN );
+                m_gateways.push_back( gwExtendN );
+            };
 
-    SEGMENT* sP = static_cast<SEGMENT*>( aPair.PrimP() );
+    addAngledGateways( KiROUND( (double) m_gap * 0.38268 ), 20 );
 
-    VECTOR2I t1, t2;
-
-    auto vL = makeGapVector( dP.Left().ToVector(), ( gap + 1 ) / 2 );
-    auto vR = makeGapVector( dP.Right().ToVector(), ( gap + 1 ) / 2 );
-
-    if( sP->Seg().Side( vdP ) == sP->Seg().Side( vdN ) )
-    {
-        t1 = aPair.AnchorP() + vL;
-        t2 = aPair.AnchorN() + vR;
-    }
-    else
-    {
-        t1 = aPair.AnchorP() + vR;
-        t2 = aPair.AnchorN() + vL;
-    }
-
-    DP_GATEWAY gwL( t2, aPair.AnchorN(), !aIsDiagonal );
-    SHAPE_LINE_CHAIN ep = dP.BuildInitialTrace( aPair.AnchorP(), t2, !aIsDiagonal );
-    gwL.SetPriority( 10 );
-    gwL.SetEntryLines( ep , SHAPE_LINE_CHAIN() );
-
-    m_gateways.push_back( gwL );
-
-    DP_GATEWAY gwR( aPair.AnchorP(), t1, !aIsDiagonal );
-    SHAPE_LINE_CHAIN en = dP.BuildInitialTrace( aPair.AnchorN(), t1, !aIsDiagonal );
-    gwR.SetPriority( 10) ;
-    gwR.SetEntryLines( SHAPE_LINE_CHAIN(), en );
-
-    m_gateways.push_back( gwR );
+    // fixme; sin(22.5) doesn't always work, so we also add some lower priority ones with a bit
+    // of wiggle room.  See https://gitlab.com/kicad/code/kicad/-/issues/12459.
+    addAngledGateways( KiROUND( (double) m_gap * 0.4 ), 5 );
 }
 
 
