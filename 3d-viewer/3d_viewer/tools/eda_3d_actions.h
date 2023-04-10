@@ -79,6 +79,7 @@ public:
     static TOOL_ACTION showSMD;
     static TOOL_ACTION showVirtual;
     static TOOL_ACTION showNotInPosFile;
+    static TOOL_ACTION showDNP;
     static TOOL_ACTION showBBoxes;
     static TOOL_ACTION toggleRealisticMode;
     static TOOL_ACTION toggleBoardBody;

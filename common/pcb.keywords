@@ -86,6 +86,7 @@ diff_pair_width
 diff_pair_gap
 dimension_precision
 dimension_units
+dnp
 drawings
 drill
 edge

@@ -127,6 +127,7 @@ void EDA_3D_VIEWER_FRAME::ReCreateMainToolbar()
     m_mainToolBar->Add( EDA_3D_ACTIONS::showSMD, ACTION_TOOLBAR::TOGGLE );
     m_mainToolBar->Add( EDA_3D_ACTIONS::showVirtual, ACTION_TOOLBAR::TOGGLE );
     m_mainToolBar->Add( EDA_3D_ACTIONS::showNotInPosFile, ACTION_TOOLBAR::TOGGLE );
+    m_mainToolBar->Add( EDA_3D_ACTIONS::showDNP, ACTION_TOOLBAR::TOGGLE );
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->AddControl( m_viewportsLabel );

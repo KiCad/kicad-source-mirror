@@ -228,6 +228,12 @@ TOOL_ACTION EDA_3D_ACTIONS::showNotInPosFile( "3DViewer.Control.attribute_not_in
         _( "Toggle 3D models not in pos file" ), _( "Toggle 3D models not in pos file" ),
         BITMAPS::show_not_in_posfile, AF_NONE );
 
+TOOL_ACTION EDA_3D_ACTIONS::showDNP( "3DViewer.Control.attribute_dnp",
+        AS_ACTIVE,
+        'D', "",
+        _( "Toggle 3D models marked DNP" ), _( "Toggle 3D models for components marked 'Do Not Place'" ),
+        BITMAPS::show_dnp, AF_NONE );
+
 TOOL_ACTION EDA_3D_ACTIONS::showBBoxes( "3DViewer.Control.showBoundingBoxes",
          AS_GLOBAL, 0, "",
          _( "Show Model Bounding Boxes" ), _( "Show Model Bounding Boxes" ),

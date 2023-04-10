@@ -1073,6 +1073,9 @@ void FOOTPRINT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
     if( m_attributes & FP_EXCLUDE_FROM_BOM )
         addToken( &attrs, _( "exclude from BOM" ) );
 
+    if( m_attributes & FP_DNP )
+        addToken( &attrs, _( "DNP" ) );
+
     aList.emplace_back( _( "Status: " ) + status, _( "Attributes:" ) + wxS( " " ) + attrs );
 
     aList.emplace_back( _( "Rotation" ), wxString::Format( wxT( "%.4g" ),
@@ -2820,6 +2823,9 @@ static struct FOOTPRINT_DESC
                     groupAttributes );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, bool>( _HKI( "Exclude from bill of materials" ),
                     &FOOTPRINT::SetExcludedFromBOM, &FOOTPRINT::IsExcludedFromBOM ),
+                    groupAttributes );
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, bool>( _HKI( "Do not populate" ),
+                    &FOOTPRINT::SetDNP, &FOOTPRINT::IsDNP ),
                     groupAttributes );
 
         const wxString groupOverrides = _HKI( "Overrides" );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -208,6 +208,9 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::DIALOG_FOOTPRINT_PROPERTIES_BASE( wxWindow* pa
 	m_noCourtyards->SetToolTip( _("Will not generate \"missing courtyard\" DRC violations") );
 
 	sbFabSizer->Add( m_noCourtyards, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_cbDNP = new wxCheckBox( sbFabSizer->GetStaticBox(), wxID_ANY, _("Do not populate"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbFabSizer->Add( m_cbDNP, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
 	bSizerMiddle->Add( sbFabSizer, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );

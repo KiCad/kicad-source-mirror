@@ -507,6 +507,7 @@ enum class BITMAPS : unsigned int
     show_all_layers,
     show_back_assembly_layers,
     show_dcodenumber,
+    show_dnp,
     show_footprint,
     show_front_assembly_layers,
     show_graphics_mode,

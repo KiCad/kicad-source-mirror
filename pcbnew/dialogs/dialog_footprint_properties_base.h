@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -74,6 +74,7 @@ class DIALOG_FOOTPRINT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxCheckBox* m_excludeFromPosFiles;
 		wxCheckBox* m_excludeFromBOM;
 		wxCheckBox* m_noCourtyards;
+		wxCheckBox* m_cbDNP;
 		wxButton* m_buttonUpdate;
 		wxButton* m_buttonExchange;
 		wxButton* m_buttonModuleEditor;

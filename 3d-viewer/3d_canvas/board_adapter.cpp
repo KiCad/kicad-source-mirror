@@ -272,6 +272,12 @@ bool BOARD_ADAPTER::IsFootprintShown( FOOTPRINT_ATTR_T aFPAttributes ) const
             return false;
     }
 
+    if( aFPAttributes & FP_DNP )
+    {
+        if( !m_Cfg->m_Render.show_footprints_dnp )
+            return false;
+    }
+
     if( aFPAttributes & FP_SMD )
         return m_Cfg->m_Render.show_footprints_insert;
 

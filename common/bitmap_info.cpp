@@ -491,6 +491,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::search_tree].emplace_back( BITMAPS::search_tree, wxT( "search_tree_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::set_origin].emplace_back( BITMAPS::set_origin, wxT( "set_origin_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::show_dcodenumber].emplace_back( BITMAPS::show_dcodenumber, wxT( "show_dcodenumber_24.png" ), 24, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::show_dnp].emplace_back( BITMAPS::show_dnp, wxT( "show_dnp_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::show_footprint].emplace_back( BITMAPS::show_footprint, wxT( "show_footprint_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::show_mod_edge].emplace_back( BITMAPS::show_mod_edge, wxT( "show_mod_edge_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::show_ratsnest].emplace_back( BITMAPS::show_ratsnest, wxT( "show_ratsnest_24.png" ), 24, wxT( "light" ) );
@@ -874,6 +875,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::search_tree].emplace_back( BITMAPS::search_tree, wxT( "search_tree_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::set_origin].emplace_back( BITMAPS::set_origin, wxT( "set_origin_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::show_dcodenumber].emplace_back( BITMAPS::show_dcodenumber, wxT( "show_dcodenumber_dark_24.png" ), 24, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::show_dnp].emplace_back( BITMAPS::show_dnp, wxT( "show_dnp_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::show_footprint].emplace_back( BITMAPS::show_footprint, wxT( "show_footprint_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::show_mod_edge].emplace_back( BITMAPS::show_mod_edge, wxT( "show_mod_edge_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::show_ratsnest].emplace_back( BITMAPS::show_ratsnest, wxT( "show_ratsnest_dark_24.png" ), 24, wxT( "dark" ) );

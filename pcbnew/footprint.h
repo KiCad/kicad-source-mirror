@@ -73,7 +73,8 @@ enum FOOTPRINT_ATTR_T
     FP_BOARD_ONLY               = 0x0010,   // Footprint has no corresponding symbol
     FP_JUST_ADDED               = 0x0020,   // Footprint just added by netlist update
     FP_ALLOW_SOLDERMASK_BRIDGES = 0x0040,
-    FP_ALLOW_MISSING_COURTYARD  = 0x0080
+    FP_ALLOW_MISSING_COURTYARD  = 0x0080,
+    FP_DNP                      = 0x0100
 };
 
 class FP_3DMODEL
@@ -615,6 +616,15 @@ public:
             m_attributes |= FP_ALLOW_MISSING_COURTYARD;
         else
             m_attributes &= ~FP_ALLOW_MISSING_COURTYARD;
+    }
+
+    bool IsDNP() const { return m_attributes & FP_DNP; }
+    void SetDNP( bool aDNP = true )
+    {
+        if( aDNP )
+            m_attributes |= FP_DNP;
+        else
+            m_attributes &= ~FP_DNP;
     }
 
     void SetFileFormatVersionAtLoad( int aVersion ) { m_fileFormatVersionAtLoad = aVersion; }

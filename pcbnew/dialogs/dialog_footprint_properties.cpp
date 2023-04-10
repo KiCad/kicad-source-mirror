@@ -157,6 +157,7 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
         m_excludeFromPosFiles,
         m_excludeFromBOM,
         m_noCourtyards,
+        m_cbDNP,
       	m_NetClearanceCtrl,
         m_SolderMaskMarginCtrl,
       	m_allowSolderMaskBridges,
@@ -284,6 +285,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
     m_excludeFromPosFiles->SetValue( m_footprint->GetAttributes() & FP_EXCLUDE_FROM_POS_FILES );
     m_excludeFromBOM->SetValue( m_footprint->GetAttributes() & FP_EXCLUDE_FROM_BOM );
     m_noCourtyards->SetValue( m_footprint->GetAttributes() & FP_ALLOW_MISSING_COURTYARD );
+    m_cbDNP->SetValue( m_footprint->GetAttributes() & FP_DNP );
 
     // Local Clearances
 
@@ -531,6 +533,9 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
 
     if( m_excludeFromBOM->GetValue() )
         attributes |= FP_EXCLUDE_FROM_BOM;
+
+    if( m_cbDNP->GetValue() )
+        attributes |= FP_DNP;
 
     if( m_noCourtyards->GetValue() )
         attributes |= FP_ALLOW_MISSING_COURTYARD;

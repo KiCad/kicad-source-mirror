@@ -468,6 +468,7 @@ set( BMAPS_MID
     search_tree
     set_origin
     show_dcodenumber
+    show_dnp
     show_footprint
     show_mod_edge
     show_ratsnest
