@@ -61,10 +61,13 @@ void LIB_TABLE_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
     {
         LIB_TABLE_GRID* tbl = (LIB_TABLE_GRID*) m_grid->GetTable();
 
+        bool selected_state = menu_id == LIB_TABLE_GRID_TRICKS_ACTIVATE_SELECTED;
+
         for( int row = m_sel_row_start; row < m_sel_row_start + m_sel_row_count; ++row )
-        {
-            tbl->SetValueAsBool( row, 0, menu_id == LIB_TABLE_GRID_TRICKS_ACTIVATE_SELECTED );
-        }
+            tbl->SetValueAsBool( row, 0, selected_state );
+
+        // Ensure the new state (on/off) of the widgets is immediately shown:
+        m_grid->Refresh();
     }
     else
     {
