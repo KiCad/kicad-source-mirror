@@ -394,7 +394,9 @@ public:
     {
         m_hasVias = true;
         m_via_p = aViaP;
+        m_via_p.SetHole( aViaP.Hole()->Clone() );
         m_via_n = aViaN;
+        m_via_n.SetHole( aViaN.Hole()->Clone() );
     }
 
     void RemoveVias()
