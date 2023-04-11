@@ -74,10 +74,10 @@ LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent,
         m_widget( nullptr )
 {
     // Default column widths.  Do not translate these names.
-    m_colWidths[ wxT( "Item" ) ] = 300;
-    m_colWidths[ wxT( "Description" ) ] = 600;
+    m_colWidths[ _HKI( "Item" ) ] = 300;
+    m_colWidths[ _HKI( "Description" ) ] = 600;
 
-    m_availableColumns = { wxT( "Item" ), wxT( "Description" ) };
+    m_availableColumns = { _HKI( "Item" ), _HKI( "Description" ) };
 
     APP_SETTINGS_BASE* cfg = Kiface().KifaceSettings();
 
@@ -87,10 +87,10 @@ LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent,
     m_shownColumns = cfg->m_LibTree.columns;
 
     if( m_shownColumns.empty() )
-        m_shownColumns = {  wxT( "Item" ), wxT( "Description" ) };
+        m_shownColumns = {  _HKI( "Item" ), _HKI( "Description" ) };
 
-    if( m_shownColumns[0] != wxT( "Item" ) )
-        m_shownColumns.insert( m_shownColumns.begin(), wxT( "Item" ) );
+    if( m_shownColumns[0] != _HKI( "Item" ) )
+        m_shownColumns.insert( m_shownColumns.begin(), _HKI( "Item" ) );
 }
 
 
