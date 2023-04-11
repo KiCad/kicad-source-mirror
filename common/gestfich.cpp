@@ -75,7 +75,7 @@ wxString FindKicadFile( const wxString& shortname )
     // kicad can be installed highly portably on Windows, anywhere and concurrently
     // either the "kicad file" is immediately adjacent to the exe or it's not a valid install
     return shortname;
-#endif
+#else
 
     // Path list for KiCad binary files
     const static wxChar* possibilities[] = {
@@ -109,6 +109,8 @@ wxString FindKicadFile( const wxString& shortname )
     }
 
     return shortname;
+
+#endif
 }
 
 

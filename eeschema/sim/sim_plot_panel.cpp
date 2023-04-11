@@ -557,7 +557,7 @@ void SIM_PLOT_PANEL::prepareDCAxes( int aNewTraceType )
 
     if( sim_cmd.StartsWith( ".dc", &rem ) )
     {
-        wxChar ch;
+        wxChar ch = 0;
 
         rem.Trim( false );
 

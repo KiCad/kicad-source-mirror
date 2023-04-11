@@ -447,7 +447,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType, const std::vector<LIB_
         // Passing nullptr to ReadDataFields will make it act as if all fields were empty.
         model->ReadDataFields( static_cast<const std::vector<SCH_FIELD>*>( nullptr ), aPins );
     }
-    catch( IO_ERROR& err )
+    catch( IO_ERROR& )
     {
         wxFAIL_MSG( "Shouldn't throw reading empty fields!" );
     }
@@ -484,7 +484,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
     {
         model->ReadDataFields( static_cast<const std::vector<SCH_FIELD>*>( nullptr ), aPins );
     }
-    catch( IO_ERROR& err )
+    catch( IO_ERROR& )
     {
         wxFAIL_MSG( "Shouldn't throw reading empty fields!" );
     }

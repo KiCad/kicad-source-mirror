@@ -195,7 +195,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
          char*    line;
          wxString data;
 
-         while( ( line = jobfileReader.ReadLine() ) )
+         while( ( line = jobfileReader.ReadLine() ) != nullptr )
             data << line << '\n';
 
         // detect the file format: old (deprecated) gerber format or official JSON format

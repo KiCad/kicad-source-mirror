@@ -104,7 +104,7 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
                                                           item->GetLayer() );
                 bool fail_min = false;
                 bool fail_max = false;
-                int  constraintWidth;
+                int  constraintWidth = 0;
 
                 if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE )
                 {

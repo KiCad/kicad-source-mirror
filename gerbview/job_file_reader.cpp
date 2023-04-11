@@ -132,7 +132,7 @@ bool GERBER_JOBFILE_READER::ReadGerberJobFile()
 
     if( json_format )
     {
-        while( ( line = jobfileReader.ReadLine() ) )
+        while( ( line = jobfileReader.ReadLine() ) != nullptr )
             data << '\n' << line;
 
         try

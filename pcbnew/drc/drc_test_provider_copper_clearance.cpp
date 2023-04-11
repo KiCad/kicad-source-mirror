@@ -641,8 +641,8 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
 
     std::shared_ptr<SHAPE> otherShape = other->GetEffectiveShape( aLayer );
     DRC_CONSTRAINT         constraint;
-    int                    clearance;
-    int                    actual;
+    int                    clearance = 0;
+    int                    actual = 0;
     VECTOR2I               pos;
 
     if( otherPad && pad->SameLogicalPadAs( otherPad ) )

@@ -112,7 +112,7 @@ void DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR::OnItemClicked( wxMouseEvent& event 
     long idx = m_listFp->HitTest( pos, flgs );
 
     // Try to find the column clicked (must be COL_SELCMP or COL_SELSCH)
-    int colclr = -1, colset;
+    int colclr = -1, colset = -1;
     int minpx = m_listFp->GetColumnWidth( 0 ) + m_listFp->GetColumnWidth( 1 );
     int maxpx = minpx + m_listFp->GetColumnWidth( 2 );
 

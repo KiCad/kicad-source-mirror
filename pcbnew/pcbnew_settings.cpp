@@ -889,7 +889,7 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 
     Set( "appearance.color_theme", cs->GetFilename() );
 
-    double x, y;
+    double x = 0, y = 0;
 
     if( aCfg->Read( f + "PcbUserGrid_X", &x ) && aCfg->Read( f + "PcbUserGrid_Y", &y ) )
     {

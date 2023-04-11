@@ -137,7 +137,7 @@ public:
             Vertex* match = nullptr;
 
             // Only run the expensive search if we don't already have a match for the point
-            if( ( all_hits.empty() || all_hits.count( p ) == 0 ) && ( match = getKink( p ) ) )
+            if( ( all_hits.empty() || all_hits.count( p ) == 0 ) && ( match = getKink( p ) ) != nullptr )
             {
                 if( !all_hits.count( match ) && m_hits.emplace( p->i, match->i ).second )
                 {

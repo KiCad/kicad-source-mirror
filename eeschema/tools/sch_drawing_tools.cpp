@@ -1364,7 +1364,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 }
                 else if( isSheetPin )
                 {
-                    EDA_ITEM* i;
+                    EDA_ITEM* i = nullptr;
 
                     // If we didn't have a sheet selected, try to find one under the cursor
                     if( !sheet && m_selectionTool->SelectPoint( cursorPos, { SCH_SHEET_T }, &i ) )

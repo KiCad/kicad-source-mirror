@@ -131,7 +131,7 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkPadHole( PAD* aPad )
                                               UNDEFINED_LAYER /* holes are not layer-specific */ );
     bool fail_min = false;
     bool fail_max = false;
-    int  constraintValue;
+    int  constraintValue = 0;
 
     if( constraint.GetSeverity() == RPT_SEVERITY_IGNORE )
         return;
@@ -200,7 +200,7 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkViaHole( PCB_VIA* via, bool aExceedMicro,
                                               UNDEFINED_LAYER /* holes are not layer-specific */ );
     bool fail_min = false;
     bool fail_max = false;
-    int  constraintValue;
+    int  constraintValue = 0;
 
     if( constraint.GetSeverity() == RPT_SEVERITY_IGNORE )
         return;

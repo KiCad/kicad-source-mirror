@@ -40,7 +40,7 @@ int main( int argc, char **argv )
     string dname;           // DXF filename
     string gname;           // Geometry Name
     string pname;           // Part Name
-    double height;          // extrusion height
+    double height = 0;      // extrusion height
     bool   inch = false;    // true = inches, false = mm
     bool   ok;
 

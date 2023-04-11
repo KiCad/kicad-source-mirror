@@ -1478,8 +1478,6 @@ static inline void addIntersection( SHAPE_LINE_CHAIN::INTERSECTIONS& aIps, int a
         return;
     }
 
-    const auto& last = aIps.back();
-
     aIps.push_back( aP );
 }
 

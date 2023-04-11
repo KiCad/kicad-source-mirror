@@ -2696,19 +2696,16 @@ bool mpWindow::SaveScreenshot( const wxString& filename, wxBitmapType type, wxSi
                                bool fit )
 {
     int sizeX, sizeY;
-    int bk_scrX, bk_scrY;
 
     if( imageSize == wxDefaultSize )
     {
-        sizeX   = m_scrX;
-        sizeY   = m_scrY;
+        sizeX = m_scrX;
+        sizeY = m_scrY;
     }
     else
     {
-        sizeX   = imageSize.x;
-        sizeY   = imageSize.y;
-        bk_scrX = m_scrX;
-        bk_scrY = m_scrY;
+        sizeX = imageSize.x;
+        sizeY = imageSize.y;
         SetScr( sizeX, sizeY );
     }
 
@@ -2733,6 +2730,8 @@ bool mpWindow::SaveScreenshot( const wxString& filename, wxBitmapType type, wxSi
     if( imageSize != wxDefaultSize )
     {
         // Restore dimensions
+        int bk_scrX = m_scrX;
+        int bk_scrY = m_scrY;
         SetScr( bk_scrX, bk_scrY );
         Fit( m_desiredXmin, m_desiredXmax, m_desiredYmin, m_desiredYmax, &bk_scrX, &bk_scrY );
         UpdateAll();

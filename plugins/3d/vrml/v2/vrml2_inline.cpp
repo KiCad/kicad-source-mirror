@@ -93,7 +93,7 @@ bool WRL2INLINE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     proc.Pop();
 
-    while( ( tok = proc.Peek() ) )
+    while( ( tok = proc.Peek() ) != 0 )
     {
         std::string glob;
 

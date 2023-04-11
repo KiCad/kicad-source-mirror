@@ -128,8 +128,8 @@ void TransformEllipseToBeziers( const ELLIPSE<T>& aEllipse, std::vector<BEZIER<T
     const int minBeziersPerCircle = 4;
 
     /// The number of Beziers needed for the given arc
-    const int numBeziers = std::ceil( std::abs( arcAngle.AsRadians() /
-                                                ( 2 * M_PI / minBeziersPerCircle ) ) );
+    const int numBeziers = static_cast<int>(
+            std::ceil( std::abs( arcAngle.AsRadians() / ( 2 * M_PI / minBeziersPerCircle ) ) ) );
 
     /// Angle occupied by each Bezier
     const double angleIncrement = arcAngle.AsRadians() / numBeziers;

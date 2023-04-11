@@ -461,7 +461,7 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
     bool             reported_no_more_layer = false;
     KIGFX::VIEW*     view = GetCanvas()->GetView();
 
-    while( ( entry = zipArchive.GetNextEntry() ) )
+    while( ( entry = zipArchive.GetNextEntry() ) != nullptr )
     {
         if( entry->IsDir() )
             continue;

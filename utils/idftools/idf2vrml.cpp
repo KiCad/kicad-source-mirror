@@ -759,7 +759,7 @@ bool MakeComponents( IDF3_BOARD& board, std::ostream& file, bool compact )
             tY += vY;
             tA += vA;
 
-            if( ( pout = (IDF3_COMP_OUTLINE*)((*so)->GetOutline()) ) )
+            if( ( pout = (IDF3_COMP_OUTLINE*)((*so)->GetOutline()) ) != nullptr )
             {
                 vcp = GetColor( cmap, cidx, pout->GetUID() );
             }

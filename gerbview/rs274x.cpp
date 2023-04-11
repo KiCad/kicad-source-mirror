@@ -967,7 +967,6 @@ char* GERBER_FILE_IMAGE::GetNextLine( char *aBuff, unsigned int aBuffSize, char*
                 return aText;
         }
     }
-    return aText;
 }
 
 

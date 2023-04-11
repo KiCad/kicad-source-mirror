@@ -34,8 +34,8 @@ EDA_ANGLE EDA_ANGLE::KeepUpright() const
     EDA_ANGLE inAngle( *this );
     inAngle.Normalize();
 
-    int inDegrees = inAngle.AsDegrees();
-    int outDegrees;
+    double inDegrees = inAngle.AsDegrees();
+    double outDegrees;
 
     if( inDegrees <= 45 || inDegrees >= 315 || ( inDegrees > 135 && inDegrees <= 225 ) )
         outDegrees = 0;

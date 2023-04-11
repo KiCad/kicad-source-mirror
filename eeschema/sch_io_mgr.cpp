@@ -209,6 +209,3 @@ SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::GuessPluginTypeFromSchPath( const wxString& a
 
     return ret;
 }
-
-
-DECLARE_ENUM_VECTOR( SCH_IO_MGR, SCH_FILE_T )

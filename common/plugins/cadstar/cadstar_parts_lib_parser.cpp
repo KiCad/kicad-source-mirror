@@ -526,7 +526,7 @@ bool checkHeaderHelper( INPUT_TYPE& aInput )
         if( !parse<VALID_HEADER>( aInput ) )
             return false;
     }
-    catch( const parse_error& e )
+    catch( const parse_error& )
     {
         return false;
     }

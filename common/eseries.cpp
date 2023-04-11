@@ -53,7 +53,7 @@ static std::string strValue( double aValue )
     else
     {
         double div = 1e3;
-        int unit = 'K';
+        char unit = 'K';
 
         if( aValue >= 1e6 )
         {

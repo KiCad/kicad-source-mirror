@@ -27,40 +27,30 @@
 #include <wx/translation.h>
 
 
-#define FMT_UNIMPLEMENTED   wxT( "Plugin \"%s\" does not implement the \"%s\" function." )
-
-/**
- * Throw an #IO_ERROR and complains of an API function not being implemented.
- *
- * @param aPlugin is a #PLUGIN instance.
- * @param aCaller is the name of the unimplemented API function.
- */
-static void not_implemented( PLUGIN* aPlugin, const char* aCaller )
-{
-    THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED,
-                                      aPlugin->PluginName(),
+#define FMT_UNIMPLEMENTED wxT( "Plugin \"%s\" does not implement the \"%s\" function." )
+#define NOT_IMPLEMENTED( aCaller )                                          \
+    THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED,                    \
+                                      PluginName(),                         \
                                       wxString::FromUTF8( aCaller ) ) );
-}
+
 
 
 BOARD* PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, const STRING_UTF8_MAP* aProperties,
                      PROJECT* aProject, PROGRESS_REPORTER* aProgressReporter )
 {
-    not_implemented( this, __FUNCTION__ );
-    return nullptr;
+    NOT_IMPLEMENTED( __FUNCTION__ );
 }
 
 
 std::vector<FOOTPRINT*> PLUGIN::GetImportedCachedLibraryFootprints()
 {
-    not_implemented( this, __FUNCTION__ );
-    return std::vector<FOOTPRINT*>();
+    NOT_IMPLEMENTED( __FUNCTION__ );
 }
 
 void PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, const STRING_UTF8_MAP* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
-    not_implemented( this, __FUNCTION__ );
+    NOT_IMPLEMENTED( __FUNCTION__ );
 }
 
 
@@ -68,7 +58,7 @@ void PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString&
                                  bool aBestEfforts, const STRING_UTF8_MAP* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
-    not_implemented( this, __FUNCTION__ );
+    NOT_IMPLEMENTED( __FUNCTION__ );
 }
 
 
@@ -98,8 +88,7 @@ FOOTPRINT* PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxString& 
                                   bool  aKeepUUID, const STRING_UTF8_MAP* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
-    not_implemented( this, __FUNCTION__ );
-    return nullptr;
+    NOT_IMPLEMENTED( __FUNCTION__ );
 }
 
 
@@ -107,7 +96,7 @@ void PLUGIN::FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFoot
                             const STRING_UTF8_MAP* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
-    not_implemented( this, __FUNCTION__ );
+    NOT_IMPLEMENTED( __FUNCTION__ );
 }
 
 
@@ -115,30 +104,28 @@ void PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxString& aFoo
                               const STRING_UTF8_MAP* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
-    not_implemented( this, __FUNCTION__ );
+    NOT_IMPLEMENTED( __FUNCTION__ );
 }
 
 
 void PLUGIN::FootprintLibCreate( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
-    not_implemented( this, __FUNCTION__ );
+    NOT_IMPLEMENTED( __FUNCTION__ );
 }
 
 
 bool PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
-    not_implemented( this, __FUNCTION__ );
-    return false;
+    NOT_IMPLEMENTED( __FUNCTION__ );
 }
 
 
 bool PLUGIN::IsFootprintLibWritable( const wxString& aLibraryPath )
 {
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
-    not_implemented( this, __FUNCTION__ );
-    return false;
+    NOT_IMPLEMENTED( __FUNCTION__ );
 }
 
 

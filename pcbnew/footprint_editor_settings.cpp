@@ -407,7 +407,7 @@ bool FOOTPRINT_EDITOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 
     ( *m_internals )[m_internals->PointerFromString( "appearance.color_theme" )] = "user_footprints";
 
-    double x, y;
+    double x = 0, y = 0;
     f = "ModEditFrame";
 
     if( aCfg->Read( f + "PcbUserGrid_X", &x ) && aCfg->Read( f + "PcbUserGrid_Y", &y ) )

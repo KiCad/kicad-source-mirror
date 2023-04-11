@@ -2658,7 +2658,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadItemOntoKiCadSheet( LAYER_ID aCadstarSheetI
 
     if( aCadstarSheetID == "ALL_SHEETS" )
     {
-        SCH_ITEM* duplicateItem;
+        SCH_ITEM* duplicateItem = nullptr;
 
         for( std::pair<LAYER_ID, SHEET_NAME> sheetPair : Sheets.SheetNames )
         {

@@ -1498,7 +1498,7 @@ std::vector<std::pair<int, double>> KIBIS_WAVEFORM_PRBS::GenerateBitSequence()
     do
     {
         uint8_t lsb = lfsr & 0x01;
-        bitSequence.emplace_back( ( inverted ^ lsb ? 1 : 0 ), t );
+        bitSequence.emplace_back( ( static_cast<uint8_t>( inverted ) ^ lsb ? 1 : 0 ), t );
         lfsr = lfsr >> 1;
 
         if ( lsb )

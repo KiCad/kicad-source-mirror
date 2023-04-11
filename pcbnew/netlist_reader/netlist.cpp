@@ -175,7 +175,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
                 KIID_PATH path = component->GetPath();
                 path.push_back( uuid );
 
-                if( ( fpOnBoard = m_pcb->FindFootprintByPath( path ) ) )
+                if( ( fpOnBoard = m_pcb->FindFootprintByPath( path ) ) != nullptr )
                     break;
             }
         }

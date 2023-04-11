@@ -136,7 +136,7 @@ int SHADER::AddParameter( const std::string& aParameterName )
     else
         throw std::runtime_error( "Could not find shader uniform: " + aParameterName );
 
-    return parameterLocation.size() - 1;
+    return static_cast<int>( parameterLocation.size() ) - 1;
 }
 
 
@@ -254,7 +254,7 @@ bool SHADER::loadShaderFromStringArray( SHADER_TYPE aShaderType, const char** aA
     programInfo( programNumber );
 
     // Attach the sources
-    glShaderSource( shaderNumber, aSize, (const GLchar**) aArray, nullptr );
+    glShaderSource( shaderNumber, static_cast<GLsizei>( aSize ), (const GLchar**) aArray, nullptr );
     programInfo( programNumber );
 
     // Compile and attach shader to the program

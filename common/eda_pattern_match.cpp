@@ -321,7 +321,7 @@ int EDA_PATTERN_MATCH_RELATIONAL::FindOne( const wxString& aCandidate ) const
     wxString val = m_regex_description.GetMatch( aCandidate, 2 );
     wxString unit = m_regex_description.GetMatch( aCandidate, 3 );
 
-    int istart = ( start > std::numeric_limits<int>::max() ) ? std::numeric_limits<int>::max() : start;
+    int istart = static_cast<int>( CLAMPED_VAL_INT_MAX( start ) );
 
     if( key.Lower() != m_key )
         return EDA_PATTERN_NOT_FOUND;

@@ -75,7 +75,7 @@ VECTOR2I ARC_GEOM_MANAGER::GetOrigin() const
 
 VECTOR2I ARC_GEOM_MANAGER::GetStartRadiusEnd() const
 {
-    VECTOR2I vec( m_radius, 0 );
+    VECTOR2I vec( static_cast<int>( m_radius ), 0 );
     RotatePoint( vec, -m_startAngle );
     return m_origin +vec;
 }
@@ -83,7 +83,7 @@ VECTOR2I ARC_GEOM_MANAGER::GetStartRadiusEnd() const
 
 VECTOR2I ARC_GEOM_MANAGER::GetEndRadiusEnd() const
 {
-    VECTOR2I vec( m_radius, 0 );
+    VECTOR2I vec( static_cast<int>( m_radius ), 0 );
     RotatePoint( vec, -m_endAngle );
     return m_origin + vec;
 }

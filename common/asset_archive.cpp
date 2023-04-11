@@ -52,7 +52,7 @@ bool ASSET_ARCHIVE::Load()
 
     size_t offset = 0;
 
-    while( ( entry = tarStream.GetNextEntry() ) )
+    while( ( entry = tarStream.GetNextEntry() ) != nullptr )
     {
         if( entry->IsDir() )
         {
