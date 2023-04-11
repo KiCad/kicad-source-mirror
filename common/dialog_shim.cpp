@@ -579,6 +579,8 @@ void DIALOG_SHIM::onChildSetFocus( wxFocusEvent& aEvent )
         m_beforeEditValues[ textCtrl ] = textCtrl->GetValue();
     else if( wxStyledTextCtrl* scintilla = dynamic_cast<wxStyledTextCtrl*>( aEvent.GetEventObject() ) )
         m_beforeEditValues[ scintilla ] = scintilla->GetText();
+
+    aEvent.Skip();
 }
 
 
