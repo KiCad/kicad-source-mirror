@@ -181,11 +181,6 @@ public:
                        const std::vector<LIB_TREE_ITEM*>& aItemList,
                        bool pinned, bool presorted );
 
-    void AddColumn( const wxString& aHeader )
-    {
-        doAddColumn( aHeader, false );
-    }
-
     std::vector<wxString> GetAvailableColumns() const { return m_availableColumns; }
 
     std::vector<wxString> GetShownColumns() const { return m_shownColumns; }
@@ -302,6 +297,11 @@ public:
 
     void PinLibrary( LIB_TREE_NODE* aTreeNode );
     void UnpinLibrary( LIB_TREE_NODE* aTreeNode );
+
+    void ShowChangedLanguage()
+    {
+        recreateColumns();
+    }
 
 protected:
     /**

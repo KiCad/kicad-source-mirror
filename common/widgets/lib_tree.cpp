@@ -185,6 +185,16 @@ LIB_TREE::~LIB_TREE()
 }
 
 
+void LIB_TREE::ShowChangedLanguage()
+{
+    if( m_query_ctrl )
+        m_query_ctrl->SetDescriptiveText( _( "Filter" ) );
+
+    if( m_adapter )
+        m_adapter->ShowChangedLanguage();
+}
+
+
 LIB_ID LIB_TREE::GetSelectedLibId( int* aUnit ) const
 {
     wxDataViewItem sel = m_tree_ctrl->GetSelection();

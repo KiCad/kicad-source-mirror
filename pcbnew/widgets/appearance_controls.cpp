@@ -1005,7 +1005,9 @@ void APPEARANCE_CONTROLS::OnLanguageChanged()
 {
     m_notebook->SetPageText( 0, _( "Layers" ) );
     m_notebook->SetPageText( 1, _( "Objects" ) );
-    m_notebook->SetPageText( 2, _( "Nets" ) );
+
+    if( m_notebook->GetPageCount() >= 3 )
+        m_notebook->SetPageText( 2, _( "Nets" ) );
 
     Freeze();
     rebuildLayers();

@@ -1197,6 +1197,16 @@ void SYMBOL_EDIT_FRAME::ShowChangedLanguage()
     // tooltips in toolbars
     RecreateToolbars();
 
+    // For some obscure reason, the AUI manager hides the first modified pane.
+    // So force show panes
+    wxAuiPaneInfo& tree_pane_info = m_auimgr.GetPane( m_treePane );
+    bool tree_shown = tree_pane_info.IsShown();
+    tree_pane_info.Caption( _( "Libraries" ) );
+    tree_pane_info.Show( tree_shown );
+    m_auimgr.Update();
+
+    m_treePane->GetLibTree()->ShowChangedLanguage();
+
     // status bar
     UpdateMsgPanel();
 

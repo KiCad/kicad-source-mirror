@@ -605,8 +605,8 @@ void EDA_DRAW_FRAME::DisplayGridMsg()
 {
     wxString msg;
 
-    msg.Printf( wxS( "grid %s" ), MessageTextFromValue( GetCanvas()->GetGAL()->GetGridSize().x,
-                                                        false ) );
+    msg.Printf( _( "grid %s" ), MessageTextFromValue( GetCanvas()->GetGAL()->GetGridSize().x,
+                                                      false ) );
 
     SetStatusText( msg, 4 );
 }
