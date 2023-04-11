@@ -44,7 +44,7 @@ if( MSVC )
     endif()
 endif()
 
-add_library( libcontext OBJECT
+add_library( libcontext STATIC
     ${LIBCONTEXT_SOURCES}
     )
 
