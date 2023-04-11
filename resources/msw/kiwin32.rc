@@ -12,9 +12,9 @@
 #endif
 
 #if !defined( KICAD_WIN32_DPI_AWARE ) || KICAD_WIN32_DPI_AWARE == 0
-#define MANIFEST_SUFFIX .manifest
+#define MANIFEST_NAME basic.manifest
 #else
-#define MANIFEST_SUFFIX _dpi_aware_pmv2.manifest
+#define MANIFEST_NAME dpi_aware_pmv2.manifest
 #endif
 
 //MSYS2
@@ -25,10 +25,10 @@
 #define RC_CONCAT2( a, b, c ) a##b##c
 
 #ifdef __GNUC__
-#define MANIFEST_FILE "manifests/" RC_STR( KICAD_BUILD_ARCH ) RC_STR( MANIFEST_SUFFIX )
+#define MANIFEST_FILE "manifests/" RC_STR( MANIFEST_NAME )
 #else
 //Do not try and quote the first part, it won't work, also make sure the IDE doesn't reformat it with spaces between slashes
-#define MANIFEST_FILE RC_CONCAT( manifests/, KICAD_BUILD_ARCH, MANIFEST_SUFFIX )
+#define MANIFEST_FILE RC_CONCAT( manifests/, MANIFEST_NAME )
 #endif
 
 MANIFEST_ID RT_MANIFEST MANIFEST_FILE
