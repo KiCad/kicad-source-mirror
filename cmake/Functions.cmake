@@ -69,7 +69,7 @@ function( generate_lemon_grammar TGT GRAMMAR_DIR CONSUMING_FILE GRAMMAR_FILE )
 
     file( MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${GRAMMAR_DIR} )
 
-    set( LEMON_EXE $<TARGET_FILE:lemon>)
+    set( LEMON_EXE $<TARGET_FILE:lemon> CACHE FILEPATH "Path to Lemon Executable" )
 
     get_property( LEMON_TEMPLATE
         TARGET lemon
