@@ -269,7 +269,7 @@ void LIB_TREE_MODEL_ADAPTER::recreateColumns()
     for( const wxString& colName : m_shownColumns )
     {
         if( !m_colNameMap.count( colName ) )
-            doAddColumn( colName, false );
+            doAddColumn( colName, colName == wxT( "Description" ) );
     }
 }
 
