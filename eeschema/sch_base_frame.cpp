@@ -384,7 +384,7 @@ void SCH_BASE_FRAME::UpdateItem( EDA_ITEM* aItem, bool isAddOrDelete, bool aUpda
      * Be careful when calling this.  Update will invalidate RTree iterators, so you cannot call this
      * while doing things like `for( SCH_ITEM* item : screen->Items() )`
      */
-    if( aUpdateRtree)
+    if( aUpdateRtree && dynamic_cast<SCH_ITEM*>( aItem ) )
         GetScreen()->Update( static_cast<SCH_ITEM*>( aItem ) );
 
     // Calling Refresh() here introduces a bi-stable state: when doing operations on a
