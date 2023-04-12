@@ -286,7 +286,7 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags ) const
 
             if( lhsField->GetId() == VALUE_FIELD )
             {
-                if( ( aCompareFlags & LIB_ITEM::COMPARE_FLAGS::ERC ) == 0 || IsPower() )
+                if( ( aCompareFlags & LIB_ITEM::COMPARE_FLAGS::ERC ) == 0 )
                     retv = lhsItem->compare( *rhsItem, aCompareFlags );
             }
             else if( lhsField->IsMandatory() )
