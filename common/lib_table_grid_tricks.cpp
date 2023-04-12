@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -24,11 +24,15 @@ LIB_TABLE_GRID_TRICKS::LIB_TABLE_GRID_TRICKS( WX_GRID* aGrid ) : GRID_TRICKS( aG
 {
 }
 
+
 void LIB_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 {
     bool            showActivate = false;
     bool            showDeactivate = false;
     LIB_TABLE_GRID* tbl = static_cast<LIB_TABLE_GRID*>( m_grid->GetTable() );
+
+    // Ensure selection parameters are up to date
+    getSelectedArea();
 
     for( int row = m_sel_row_start; row < m_sel_row_start + m_sel_row_count; ++row )
     {
@@ -47,9 +51,12 @@ void LIB_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
     if( showDeactivate )
         menu.Append( LIB_TABLE_GRID_TRICKS_DEACTIVATE_SELECTED, _( "Deactivate selected" ) );
 
-    menu.AppendSeparator();
+    if( showActivate || showDeactivate )
+        menu.AppendSeparator();
+
     GRID_TRICKS::showPopupMenu( menu, aEvent );
 }
+
 
 void LIB_TABLE_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
 {
