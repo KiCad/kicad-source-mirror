@@ -1635,7 +1635,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
             }
             else
             {
-                for( unsigned ii = 0; ii < pinIndexes.size(); ++ii )
+                for( unsigned ii = 0; ii < pinIndexes.size() && ii < sourcePins.size(); ++ii )
                 {
                     if( ii > 0 )
                         pinMap.Append( wxS( " " ) );
