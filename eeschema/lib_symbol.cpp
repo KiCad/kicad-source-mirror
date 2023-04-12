@@ -386,7 +386,7 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
         }
         else if( aField->GetId() == VALUE_FIELD )
         {
-            if( ( aCompareFlags & LIB_ITEM::COMPARE_FLAGS::ERC ) == 0 || IsPower() )
+            if( ( aCompareFlags & LIB_ITEM::COMPARE_FLAGS::ERC ) == 0 )
                 tmp = aFieldItem->compare( *bField, aCompareFlags );
         }
         else
