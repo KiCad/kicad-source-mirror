@@ -94,6 +94,12 @@ bool PCAD_COPPER_POUR::Parse( XNODE* aNode, const wxString& aDefaultUnits,
         // retrieve copper pour outline
         FormPolygon( lNode, &m_Outline, aDefaultUnits, aActualConversion );
 
+        if( m_Outline.GetCount() <= 0 )
+        {
+            // empty polygon may have been in the file
+            return false;
+        }
+
         m_PositionX = m_Outline[0]->x;
         m_PositionY = m_Outline[0]->y;
     }
