@@ -755,7 +755,7 @@ static void enclosedByAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 #define MISSING_GROUP_ARG( f ) \
     wxString::Format( _( "Missing group name argument to %s." ), f )
 
-static void memberOfFunc( LIBEVAL::CONTEXT* aCtx, void* self )
+static void memberOfGroupFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 {
     LIBEVAL::VALUE* arg = aCtx->Pop();
     LIBEVAL::VALUE* result = aCtx->AllocValue();
@@ -766,7 +766,7 @@ static void memberOfFunc( LIBEVAL::CONTEXT* aCtx, void* self )
     if( !arg )
     {
         if( aCtx->HasErrorCallback() )
-            aCtx->ReportError( MISSING_GROUP_ARG( wxT( "memberOf()" ) ) );
+            aCtx->ReportError( MISSING_GROUP_ARG( wxT( "memberOfGroup()" ) ) );
 
         return;
     }
@@ -791,6 +791,47 @@ static void memberOfFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                         return 1.0;
 
                     group = group->GetParentGroup();
+                }
+
+                return 0.0;
+            } );
+}
+
+
+#define MISSING_REF_ARG( f ) \
+    wxString::Format( _( "Missing footprint argument (reference designator) to %s." ), f )
+
+static void memberOfFootprintFunc( LIBEVAL::CONTEXT* aCtx, void* self )
+{
+    LIBEVAL::VALUE* arg = aCtx->Pop();
+    LIBEVAL::VALUE* result = aCtx->AllocValue();
+
+    result->Set( 0.0 );
+    aCtx->Push( result );
+
+    if( !arg )
+    {
+        if( aCtx->HasErrorCallback() )
+            aCtx->ReportError( MISSING_REF_ARG( wxT( "memberOfFootprint()" ) ) );
+
+        return;
+    }
+
+    PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
+    BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
+
+    if( !item )
+        return;
+
+    result->SetDeferredEval(
+            [item, arg]() -> double
+            {
+                ;
+
+                if( FOOTPRINT* parentFP = item->GetParentFootprint() )
+                {
+                    if( parentFP->GetReference().Matches( arg->AsString() ) )
+                        return 1.0;
                 }
 
                 return 0.0;
@@ -988,7 +1029,9 @@ void PCB_EXPR_BUILTIN_FUNCTIONS::RegisterAllFunctions()
     RegisterFunc( wxT( "isMicroVia()" ), isMicroVia );
     RegisterFunc( wxT( "isBlindBuriedVia()" ), isBlindBuriedViaFunc );
 
-    RegisterFunc( wxT( "memberOf('x')" ), memberOfFunc );
+    RegisterFunc( wxT( "memberOf('x') DEPRECATED" ), memberOfGroupFunc );
+    RegisterFunc( wxT( "memberOfGroup('x')" ), memberOfGroupFunc );
+    RegisterFunc( wxT( "memberOfFootprint('x')" ), memberOfFootprintFunc );
 
     RegisterFunc( wxT( "fromTo('x','y')" ), fromToFunc );
     RegisterFunc( wxT( "isCoupledDiffPair()" ), isCoupledDiffPairFunc );

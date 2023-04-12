@@ -176,8 +176,14 @@ matches items in the `/CLK_P` and `/CLK_N` nets.
 True if `A` and `B` are members of the same diff pair.
 <br><br>
 
-    A.memberOf('<group_name>')
-True if `A` is a member of the given group. Includes nested membership.
+    A.memberOfGroup('<group_name>')
+True if `A` is a member of the given group. The name can contain wildcards.
+Includes nested membership.
+<br><br>
+
+    A.memberOfFootprint('<footprint_reference>')
+True if `A` is a member of a footprint matching the given reference designator.  The
+reference can contain wildcards.
 <br><br>
 
     A.existsOnLayer('<layer_name>')
@@ -188,6 +194,10 @@ the canonical name (ie: `F.Cu`).
 NB: this returns true if `A` is on the given layer, independently
 of whether or not the rule is being evaluated for that layer.
 For the latter use a `(layer "layer_name")` clause in the rule.
+<br><br>
+
+    !!! A.memberOf('<group_name>') !!!
+Deprecated; use `memberOfGroup()` instead.
 <br><br>
 
     !!! A.insideCourtyard('<footprint_refdes>') !!!

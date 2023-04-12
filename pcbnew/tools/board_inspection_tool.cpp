@@ -543,6 +543,16 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
 
         break;
 
+    case DRCE_ASSERTION_FAILURE:
+        r = dialog->AddHTMLPage( _( "Assertions" ) );
+        reportHeader( _( "Assertions for:" ), a, r );
+
+        if( compileError )
+            reportCompileError( r );
+
+        drcEngine.ProcessAssertions( a, []( const DRC_CONSTRAINT* c ){}, r );
+        break;
+
     default:
         return;
     }
