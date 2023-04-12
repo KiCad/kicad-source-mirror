@@ -132,7 +132,7 @@ protected:
 class PGPROPERTY_COLORENUM : public wxEnumProperty
 {
 public:
-    PGPROPERTY_COLORENUM( const wxString& aLabel, wxString& aName, wxPGChoices* aChoices,
+    PGPROPERTY_COLORENUM( const wxString& aLabel, const wxString& aName, wxPGChoices* aChoices,
                           int aValue = 0 ) :
             wxEnumProperty( aLabel, aName, *aChoices, aValue ),
             m_colorFunc( []( int aDummy ) { return wxNullColour; } )
