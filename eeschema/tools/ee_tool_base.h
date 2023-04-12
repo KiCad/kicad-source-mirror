@@ -124,7 +124,7 @@ protected:
         default:
             getView()->Update( aItem );
 
-            if( aUpdateRTree )
+            if( aUpdateRTree && dynamic_cast<SCH_ITEM*>( aItem ) )
                 m_frame->GetScreen()->Update( static_cast<SCH_ITEM*>( aItem ) );
         }
     }
