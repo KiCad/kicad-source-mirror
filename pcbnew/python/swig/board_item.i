@@ -166,13 +166,6 @@ static PCB_BITMAP*           Cast_to_PCB_BITMAP( BOARD_ITEM* );
         else:
             raise TypeError("Unsupported drawing class: %s" % ct)
 
-    def Duplicate(self):
-        ct = self.GetClass()
-        if ct=="BOARD":
-            return None
-        else:
-            return Cast_to_BOARD_ITEM(self.Clone()).Cast()
-
     def SetPos(self,p):
         self.SetPosition(p)
         self.SetPos0(p)

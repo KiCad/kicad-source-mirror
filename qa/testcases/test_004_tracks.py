@@ -15,6 +15,10 @@ class TestTracks(unittest.TestCase):
         self.assertEqual(250000, track.GetWidth())
         self.assertEqual('McNetty', track.GetNetname())
 
+        dup_track = track.Duplicate()
+        self.assertTrue( dup_track.m_Uuid != track.m_Uuid )
+
+
     def test_arcs(self):
         arcs = [t.Cast() for t in self.pcb.Tracks() if t.GetClass() == 'PCB_ARC']
         self.assertEqual(13, len(arcs))
@@ -24,9 +28,15 @@ class TestTracks(unittest.TestCase):
                                         round(arc.GetArcAngleEnd().AsTenthsOfADegree())])
         self.assertEqual(2414200, round(arc.GetRadius()))
 
+        dup_arc = arc.Duplicate()
+        self.assertTrue( dup_arc.m_Uuid != arc.m_Uuid )
+
     def test_vias(self):
         vias = [t.Cast() for t in self.pcb.Tracks() if t.GetClass() == 'PCB_VIA']
         self.assertEqual(2, len(vias))
         via = sorted(vias, key=lambda t: [t.GetStart()[0], t.GetStart()[1]])[0]
         self.assertEqual([29000000, 41000000], [via.GetStart()[0], via.GetStart()[1]])
         self.assertEqual(400000, via.GetDrillValue())
+
+        dup_via = via.Duplicate()
+        self.assertTrue( dup_via.m_Uuid != via.m_Uuid )
