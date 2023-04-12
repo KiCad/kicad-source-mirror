@@ -77,7 +77,8 @@ public:
     enum RESET_REASON
     {
         RUN,                ///< Tool is invoked after being inactive
-        MODEL_RELOAD,       ///< Model changes (required full reload)
+        MODEL_RELOAD,       ///< Model changes (the sheet for a schematic)
+        SUPERMODEL_RELOAD,  ///< For schematics, the entire schematic changed, not just the sheet
         GAL_SWITCH,         ///< Rendering engine changes
         REDRAW              ///< Full drawing refresh
     };

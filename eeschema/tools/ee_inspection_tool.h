@@ -45,6 +45,8 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
 
+    void Reset( RESET_REASON aReason ) override;
+
     int RunERC( const TOOL_EVENT& aEvent );
     void ShowERCDialog();
 

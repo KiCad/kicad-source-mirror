@@ -132,7 +132,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     {
         ClearUndoRedoList();
         SetScreen( nullptr );
-        m_toolManager->GetTool<EE_INSPECTION_TOOL>()->Reset( TOOL_BASE::MODEL_RELOAD );
+        m_toolManager->GetTool<EE_INSPECTION_TOOL>()->Reset( TOOL_BASE::SUPERMODEL_RELOAD );
         CreateScreens();
     }
 

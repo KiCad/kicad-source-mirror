@@ -71,6 +71,19 @@ bool EE_INSPECTION_TOOL::Init()
 }
 
 
+void EE_INSPECTION_TOOL::Reset( RESET_REASON aReason )
+{
+    EE_TOOL_BASE::Reset( aReason );
+
+    if( aReason == SUPERMODEL_RELOAD )
+    {
+        wxCommandEvent* evt = new wxCommandEvent( EDA_EVT_CLOSE_ERC_DIALOG, wxID_ANY );
+
+        wxQueueEvent( m_frame, evt );
+    }
+}
+
+
 int EE_INSPECTION_TOOL::RunERC( const TOOL_EVENT& aEvent )
 {
     ShowERCDialog();

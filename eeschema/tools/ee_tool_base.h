@@ -85,7 +85,7 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override
     {
-        if( aReason == MODEL_RELOAD )
+        if( aReason == MODEL_RELOAD || aReason == SUPERMODEL_RELOAD )
         {
             // Init variables used by every drawing tool
             m_frame = getEditFrame<T>();

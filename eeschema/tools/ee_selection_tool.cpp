@@ -305,7 +305,7 @@ void EE_SELECTION_TOOL::Reset( RESET_REASON aReason )
         m_selection.Clear();
     }
 
-    if( aReason == TOOL_BASE::MODEL_RELOAD )
+    if( aReason == TOOL_BASE::MODEL_RELOAD || aReason == TOOL_BASE::SUPERMODEL_RELOAD )
     {
         getView()->GetPainter()->GetSettings()->SetHighlight( false );
 
