@@ -189,12 +189,6 @@ void NET_GRID_TABLE::SetValueAsCustom( int aRow, int aCol, const wxString& aType
 
     m_nets[aRow].color = VoidToColor( aValue );
     updateNetColor( m_nets[aRow] );
-
-    if( GetView() )
-    {
-        wxGridTableMessage msg( this, wxGRIDTABLE_REQUEST_VIEW_GET_VALUES );
-        GetView()->ProcessTableMessage( msg );
-    }
 }
 
 
