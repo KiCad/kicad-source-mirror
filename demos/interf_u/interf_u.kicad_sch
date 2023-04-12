@@ -1,4 +1,4 @@
-(kicad_sch (version 20230121) (generator eeschema)
+(kicad_sch (version 20230409) (generator eeschema)
 
   (uuid 092cfb52-b6f1-4355-8e6c-0f835c9fcaf7)
 
@@ -4987,7 +4987,8 @@
     )
   )
 
-  (text "Selection" (at 33.02 168.91 0)
+  (text "Selection" (exclude_from_sim no)
+ (at 33.02 168.91 0)
     (effects (font (size 2.032 2.032) (thickness 0.4064) bold italic) (justify left bottom))
     (uuid 9b579b23-c567-4c2c-933c-bd5ff67aee70)
   )

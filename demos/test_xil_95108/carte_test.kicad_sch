@@ -1,4 +1,4 @@
-(kicad_sch (version 20230121) (generator eeschema)
+(kicad_sch (version 20230409) (generator eeschema)
 
   (uuid 15a5bbab-5625-4b9a-aabf-f67f0843b1a5)
 
@@ -3361,7 +3361,8 @@
     (uuid ff3d06e1-4a4f-44ac-9cdf-3975231a5b14)
   )
 
-  (text "Unused" (at 67.31 279.4 0)
+  (text "Unused" (exclude_from_sim no)
+ (at 67.31 279.4 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 415dc144-e907-44ab-9c1f-50bd876b6aba)
   )

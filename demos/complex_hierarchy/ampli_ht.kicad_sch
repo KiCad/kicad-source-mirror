@@ -1,4 +1,4 @@
-(kicad_sch (version 20230121) (generator eeschema)
+(kicad_sch (version 20230409) (generator eeschema)
 
   (uuid 994297ef-4ddc-40ea-b4d6-64ee58be7864)
 
@@ -971,7 +971,8 @@
     (uuid fe597290-c281-45fd-998f-2c25c487bba9)
   )
 
-  (text "Filter:\nFc =1000Hz" (at 66.04 74.93 0)
+  (text "Filter:\nFc =1000Hz" (exclude_from_sim no)
+ (at 66.04 74.93 0)
     (effects (font (size 2.032 2.032) (thickness 0.4064) bold italic) (justify left bottom))
     (uuid 4fee597b-5b3d-4d5f-9246-cb5aaa802827)
   )
