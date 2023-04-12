@@ -29,6 +29,7 @@
 #include <profile.h>
 
 #include <wx/cmdline.h>
+#include <wx/msgout.h>
 
 #include <board_item.h>
 #include <plugins/kicad/pcb_plugin.h>
