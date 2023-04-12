@@ -290,6 +290,21 @@ VECTOR2I SCH_LABEL_BASE::GetSchematicTextOffset( const RENDER_SETTINGS* aSetting
     return text_offset;
 }
 
+void SCH_LABEL_BASE::SetPosition( const VECTOR2I& aPosition )
+{
+    VECTOR2I offset = aPosition - GetTextPos();
+    Move( offset );
+}
+
+
+void SCH_LABEL_BASE::Move( const VECTOR2I& aMoveVector )
+{
+    SCH_TEXT::Move( aMoveVector );
+
+    for( SCH_FIELD& field : m_fields )
+        field.Offset( aMoveVector );
+}
+
 
 void SCH_LABEL_BASE::Rotate( const VECTOR2I& aCenter )
 {
