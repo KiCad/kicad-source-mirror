@@ -94,6 +94,12 @@ bool PCB_COPPER_POUR::Parse( XNODE* aNode, const wxString& aDefaultUnits,
         // retrieve copper pour outline
         FormPolygon( lNode, &m_outline, aDefaultUnits, aActualConversion );
 
+        if( m_outline.GetCount() == 0 )
+        {
+            // empty polygon may have been in the file
+            return false;
+        }
+
         m_positionX = m_outline[0]->x;
         m_positionY = m_outline[0]->y;
     }
