@@ -103,7 +103,7 @@ void GRID_CELL_COMBOBOX::BeginEdit( int aRow, int aCol, wxGrid* aGrid )
 
     // When dropping down the menu, a kill focus event
     // happens after this point, so we can't reset the flag yet.
-#if !defined(__WXGTK20__)
+#if !defined(__WXGTK__)
     evtHandler->SetInSetFocus( false );
 #endif
 }

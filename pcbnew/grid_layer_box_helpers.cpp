@@ -148,7 +148,7 @@ void GRID_CELL_LAYER_SELECTOR::SetSize( const wxRect& aRect )
     wxRect rect( aRect );
     rect.Inflate( -1 );
 
-#if !defined( __WXMSW__ ) && !defined( __WXGTK20__ )
+#if !defined( __WXMSW__ ) && !defined( __WXGTK__ )
     // Only implemented in generic wxBitmapComboBox; MSW and GTK use native controls
     LayerBox()->SetButtonPosition( 0, 0, wxRIGHT, 0 );
 #endif
@@ -194,7 +194,7 @@ void GRID_CELL_LAYER_SELECTOR::BeginEdit( int aRow, int aCol, wxGrid* aGrid )
 
     // When dropping down the menu, a kill focus event
     // happens after this point, so we can't reset the flag yet.
-#if !defined(__WXGTK20__)
+#if !defined(__WXGTK__)
     evtHandler->SetInSetFocus( false );
 #endif
 }
@@ -232,7 +232,7 @@ void GRID_CELL_LAYER_SELECTOR::Reset()
 void GRID_CELL_LAYER_SELECTOR::onComboDropDown( wxCommandEvent& aEvent )
 {
     // On other platforms this is done in BeginEdit()
-#if defined(__WXGTK20__)
+#if defined(__WXGTK__)
     auto evtHandler = static_cast<wxGridCellEditorEvtHandler*>( m_control->GetEventHandler() );
 
     // Once the combobox is dropped, reset the flag to allow the focus-loss handler
