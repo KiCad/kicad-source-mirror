@@ -142,8 +142,7 @@ SCH_ITEM* SCH_FIND_REPLACE_TOOL::nextMatch( SCH_SCREEN* aScreen, SCH_SHEET_PATH*
                     for( SCH_PIN* pin : cmp->GetPins() )
                         sorted_items.push_back( pin );
                 }
-
-                if( item->Type() == SCH_SHEET_T )
+                else if( item->Type() == SCH_SHEET_T )
                 {
                     SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
 
@@ -152,6 +151,13 @@ SCH_ITEM* SCH_FIND_REPLACE_TOOL::nextMatch( SCH_SCREEN* aScreen, SCH_SHEET_PATH*
 
                     for( SCH_SHEET_PIN* pin : sheet->GetPins() )
                         sorted_items.push_back( pin );
+                }
+                else if( item->IsType( { SCH_LABEL_LOCATE_ANY_T } ) )
+                {
+                    SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( item );
+
+                    for( SCH_FIELD& field : label->GetFields() )
+                        sorted_items.push_back( &field );
                 }
             };
 
