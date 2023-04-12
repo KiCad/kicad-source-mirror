@@ -18,6 +18,7 @@
  */
 
 #include <widgets/font_choice.h>
+#include <kiplatform/ui.h>
 #include <wx/fontenum.h>
 #include <font/fontconfig.h>
 #include <pgm_base.h>
@@ -54,7 +55,11 @@ FONT_CHOICE::FONT_CHOICE( wxWindow* aParent, int aId, wxPoint aPosition, wxSize 
         menuList.Add( wxString( name ) );
 
     menuList.Sort();
+
+    Freeze();
     Append( menuList );
+    KIPLATFORM::UI::LargeChoiceBoxHack( this );
+    Thaw();
 
     m_notFound = wxS( " " ) + _( "<not found>" );
 }
