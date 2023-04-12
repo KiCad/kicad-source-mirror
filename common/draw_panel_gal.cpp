@@ -626,7 +626,7 @@ void EDA_DRAW_PANEL_GAL::onRefreshTimer( wxTimerEvent& aEvent )
 
 void EDA_DRAW_PANEL_GAL::onShowTimer( wxTimerEvent& aEvent )
 {
-    if( m_gal && m_gal->IsVisible() )
+    if( m_gal && m_gal->IsInitialized() && m_gal->IsVisible() )
     {
         m_onShowTimer.Stop();
         OnShow();
