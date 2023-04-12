@@ -1420,7 +1420,7 @@ void VIEW::RecacheAllItems()
 
 void VIEW::UpdateItems()
 {
-    if( !m_gal->IsVisible() )
+    if( !m_gal->IsVisible() || !m_gal->IsInitialized() )
         return;
 
     unsigned int cntGeomUpdate = 0;
