@@ -260,14 +260,18 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
     {
         retv = ( m_options == ENTRY_NORMAL ) ? -1 : 1;
         REPORT( _( "Power flag differs." ) );
-        return retv;
+
+        if( !aReporter )
+            return retv;
     }
 
     if( int tmp = m_unitCount - aRhs.m_unitCount )
     {
         retv = tmp;
         REPORT( _( "Unit count differs." ) );
-        return retv;
+
+        if( !aReporter )
+            return retv;
     }
 
     // Make sure shapes and pins are sorted. No need with fields as those are
@@ -305,7 +309,9 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
     {
         retv = tmp;
         REPORT( _( "Graphic item count differs." ) );
-        return retv;
+
+        if( !aReporter )
+            return retv;
     }
     else
     {
@@ -315,7 +321,9 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
             {
                 retv = tmp2;
                 REPORT( wxString::Format( _( "%s differs." ), ITEM_DESC( *aIt ) ) );
-                return retv;
+
+                if( !aReporter )
+                    return retv;
             }
         }
     }
@@ -324,25 +332,35 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
     {
         retv = tmp;
         REPORT( _( "Pin count differs." ) );
-        return retv;
-    }
 
-    for( const LIB_ITEM* aPinItem : aPins )
-    {
-        const LIB_PIN* aPin = static_cast<const LIB_PIN*>( aPinItem );
-        const LIB_PIN* bPin = aRhs.GetPin( aPin->GetNumber(), aPin->GetUnit(), aPin->GetConvert() );
-        int            tmp = 0;
-
-        if( !bPin )
-            tmp = 1;
-        else
-            tmp = aPinItem->compare( *bPin, aCompareFlags );
-
-        if( tmp )
-        {
-            retv = tmp;
-            REPORT( wxString::Format( _( "Pin %s differs." ), aPin->GetNumber() ) );
+        if( !aReporter )
             return retv;
+    }
+    else
+    {
+        for( const LIB_ITEM* aPinItem : aPins )
+        {
+            const LIB_PIN* aPin = static_cast<const LIB_PIN*>( aPinItem );
+            const LIB_PIN* bPin = aRhs.GetPin( aPin->GetNumber(), aPin->GetUnit(),
+                                               aPin->GetConvert() );
+
+            if( !bPin )
+            {
+                retv = 1;
+                REPORT( wxString::Format( _( "Pin %s not found." ), aPin->GetNumber() ) );
+
+                if( !aReporter )
+                    return retv;
+            }
+
+            if( int tmp2 = aPinItem->compare( *bPin, aCompareFlags ) )
+            {
+                retv = tmp2;
+                REPORT( wxString::Format( _( "Pin %s differs." ), aPin->GetNumber() ) );
+
+                if( !aReporter )
+                    return retv;
+            }
         }
     }
 
@@ -380,7 +398,9 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
         {
             retv = tmp;
             REPORT( wxString::Format( _( "%s field differs." ), aField->GetName( false ) ) );
-            return retv;
+
+            if( !aReporter )
+                return retv;
         }
     }
 
@@ -388,14 +408,18 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
     {
         retv = tmp;
         REPORT( _( "Field count differs." ) );
-        return retv;
+
+        if( !aReporter )
+            return retv;
     }
 
     if( int tmp = static_cast<int>( m_fpFilters.GetCount() - aRhs.m_fpFilters.GetCount() ) )
     {
         retv = tmp;
         REPORT( _( "Footprint filters differs." ) );
-        return retv;
+
+        if( !aReporter )
+            return retv;
     }
     else
     {
@@ -405,7 +429,9 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
             {
                 retv = tmp2;
                 REPORT( _( "Footprint filters differ." ) );
-                return retv;
+
+                if( !aReporter )
+                    return retv;
             }
         }
     }
@@ -414,21 +440,27 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
     {
         retv = tmp;
         REPORT( _( "Symbol descriptions differ." ) );
-        return retv;
+
+        if( !aReporter )
+            return retv;
     }
 
     if( int tmp = m_keyWords.Cmp( aRhs.m_keyWords ) )
     {
         retv = tmp;
         REPORT( _( "Symbol keywords differ." ) );
-        return retv;
+
+        if( !aReporter )
+            return retv;
     }
 
     if( int tmp = m_pinNameOffset - aRhs.m_pinNameOffset )
     {
         retv = tmp;
         REPORT( _( "Symbol pin name offsets differ." ) );
-        return retv;
+
+        if( !aReporter )
+            return retv;
     }
 
     if( ( aCompareFlags & LIB_ITEM::COMPARE_FLAGS::ERC ) == 0 )
@@ -437,28 +469,36 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
         {
             retv = ( m_showPinNames ) ? 1 : -1;
             REPORT( _( "Show pin names settings differ." ) );
-            return retv;
+
+            if( !aReporter )
+                return retv;
         }
 
         if( m_showPinNumbers != aRhs.m_showPinNumbers )
         {
             retv = ( m_showPinNumbers ) ? 1 : -1;
             REPORT( _( "Show pin numbers settings differ." ) );
-            return retv;
+
+            if( !aReporter )
+                return retv;
         }
 
         if( m_includeInBom != aRhs.m_includeInBom )
         {
             retv = ( m_includeInBom ) ? 1 : -1;
             REPORT( _( "Exclude from bill of materials settings differ." ) );
-            return retv;
+
+            if( !aReporter )
+                return retv;
         }
 
         if( m_includeOnBoard != aRhs.m_includeOnBoard )
         {
             retv = ( m_includeOnBoard ) ? 1 : -1;
             REPORT( _( "Exclude from board settings differ." ) );
-            return retv;
+
+            if( !aReporter )
+                return retv;
         }
     }
 
