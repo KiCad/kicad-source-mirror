@@ -207,7 +207,14 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
     }
 
     aMsg << indent4 << "wxWidgets: " << wxVERSION_NUM_DOT_STRING << " (";
-    aMsg << __WX_BO_UNICODE __WX_BO_STL __WX_BO_WXWIN_COMPAT_2_8 ")";
+    aMsg << __WX_BO_UNICODE __WX_BO_STL;
+
+// wx changed compatibility macros in 3.3, adding the 3.0 macro and removing the 2.8 macro
+#if wxCHECK_VERSION( 3, 3, 0 )
+    aMsg << __WX_BO_WXWIN_COMPAT_3_0 ")";
+#else
+    aMsg << __WX_BO_WXWIN_COMPAT_2_8 ")";
+#endif
 
     // Get the GTK+ version where possible.
 #ifdef __WXGTK__
