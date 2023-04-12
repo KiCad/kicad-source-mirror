@@ -27,7 +27,6 @@
 #include <wx/debug.h>
 #include <wx/gdicmn.h>
 #include <wx/string.h>
-#include <wx/stringimpl.h>
 #include <wx/translation.h>
 #include <algorithm>
 #include <cstdlib>
