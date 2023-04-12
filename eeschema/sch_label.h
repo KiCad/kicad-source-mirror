@@ -112,16 +112,11 @@ public:
      */
     bool IncrementLabel( int aIncrement );
 
-    void Move( const VECTOR2I& aMoveVector ) override
-    {
-        SCH_TEXT::Move( aMoveVector );
-
-        for( SCH_FIELD& field : m_fields )
-            field.Offset( aMoveVector );
-    }
-
+    void Move( const VECTOR2I& aMoveVector ) override;
     void Rotate( const VECTOR2I& aCenter ) override;
     void Rotate90( bool aClockwise ) override;
+
+    void SetPosition( const VECTOR2I& aPosition ) override;
 
     void AutoplaceFields( SCH_SCREEN* aScreen, bool aManual ) override;
 
