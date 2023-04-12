@@ -64,8 +64,8 @@ bool COMPONENT_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
                 seenItems.insert( aItem );
 
                 // Segments that go directly between two linked pads are special-cased
-                VECTOR2I otherEnd = ( aJoint->Pos() == aItem->Anchor( 0 ) ) ?
-                                    aItem->Anchor( 1 ) : aItem->Anchor( 0 );
+                VECTOR2I otherEnd = ( aJoint->Pos() == aItem->Anchor( 0 ) ) ? aItem->Anchor( 1 )
+                                                                            : aItem->Anchor( 0 );
                 const JOINT* otherJoint = m_world->FindJoint( otherEnd, aItem->Layer(), aItem->Net() );
 
                 if( otherJoint && otherJoint->LinkCount( ITEM::SOLID_T ) )
@@ -112,7 +112,7 @@ bool COMPONENT_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
                 m_conns.push_back( cn );
             };
 
-    for( auto item : aPrimitives.Items() )
+    for( ITEM* item : aPrimitives.Items() )
     {
         if( item->Kind() != ITEM::SOLID_T )
             continue;
@@ -126,10 +126,10 @@ bool COMPONENT_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
 
         const JOINT* jt = m_world->FindJoint( solid->Pos(), solid );
 
-        for( auto link : jt->LinkList() )
+        for( ITEM* link : jt->LinkList() )
         {
-            if( item->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) )
-                addLinked( solid, jt, static_cast<LINKED_ITEM*>( item ) );
+            if( link->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) )
+                addLinked( solid, jt, static_cast<LINKED_ITEM*>( link ) );
         }
 
         std::vector<JOINT*> extraJoints;
