@@ -87,6 +87,14 @@ namespace KIPLATFORM
         bool IsStockCursorOk( wxStockCursor aCursor );
 
         /**
+         * Configure a wxChoice control to support a lot of entries by disabling functionality that makes
+         * adding new items become very expensive.
+         *
+         * @param aChoice is the choice box to modify
+         */
+        void LargeChoiceBoxHack( wxChoice* aChoice );
+
+        /**
          * Configure a wxChoice control to ellipsize the shown text in the button with the ellipses
          * placed at the end of the string.
          *

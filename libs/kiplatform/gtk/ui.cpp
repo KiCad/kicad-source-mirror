@@ -89,6 +89,45 @@ bool KIPLATFORM::UI::IsStockCursorOk( wxStockCursor aCursor )
 }
 
 
+/**
+ * The following two functions are based on the "hack" contained in the attached patch at
+ * https://gitlab.gnome.org/GNOME/gtk/-/issues/1910 which is supposed to speed up creation of
+ * GTK choice boxes.
+ *
+ * The basic idea is to disable some of the event handlers on the menus for the choice box to
+ * prevent them from running, which will speed up the creation of the choice box and its popup menu.
+ */
+static void disable_area_apply_attributes_cb( GtkWidget* pItem, gpointer userdata )
+{
+    // GTK needs this enormous chain to get the actual type of item that we want
+    GtkMenuItem*   pMenuItem   = GTK_MENU_ITEM( pItem );
+    GtkWidget*     child       = gtk_bin_get_child( GTK_BIN( pMenuItem ) );
+    GtkCellView*   pCellView   = GTK_CELL_VIEW( child );
+    GtkCellLayout* pCellLayout = GTK_CELL_LAYOUT( pCellView );
+    GtkCellArea*   pCellArea   = gtk_cell_layout_get_area( pCellLayout );
+
+    g_signal_handlers_block_matched( pCellArea, G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, userdata );
+}
+
+
+void KIPLATFORM::UI::LargeChoiceBoxHack( wxChoice* aChoice )
+{
+    AtkObject* atkObj = gtk_combo_box_get_popup_accessible( GTK_COMBO_BOX( aChoice->m_widget ) );
+
+    if( !atkObj || !GTK_IS_ACCESSIBLE( atkObj ) )
+        return;
+
+    GtkWidget* widget = gtk_accessible_get_widget( GTK_ACCESSIBLE( atkObj ) );
+
+    if( !widget || !GTK_IS_MENU( widget ) )
+        return;
+
+    GtkMenu* menu = GTK_MENU( widget );
+
+    gtk_container_foreach( GTK_CONTAINER( menu ), disable_area_apply_attributes_cb, menu );
+}
+
+
 void KIPLATFORM::UI::EllipsizeChoiceBox( wxChoice* aChoice )
 {
     // This function is based on the code inside the function post_process_ui in

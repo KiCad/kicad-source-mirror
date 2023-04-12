@@ -110,6 +110,12 @@ bool KIPLATFORM::UI::IsStockCursorOk( wxStockCursor aCursor )
 }
 
 
+void KIPLATFORM::UI::LargeChoiceBoxHack( wxChoice* aChoice )
+{
+    // Not implemented
+}
+
+
 void KIPLATFORM::UI::EllipsizeChoiceBox( wxChoice* aChoice )
 {
     // Not implemented
