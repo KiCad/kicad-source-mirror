@@ -34,7 +34,10 @@
 #include <wx/propgrid/advprops.h>
 
 
+// This is provided by wx >3.3.0
+#if !wxCHECK_VERSION( 3, 3, 0 )
 extern APIIMPORT wxPGGlobalVarsClass* wxPGGlobalVars;
+#endif
 
 PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
         wxPanel( aParent ),
@@ -75,7 +78,13 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
                                  wxPG_DEFAULT_STYLE );
     m_grid->SetUnspecifiedValueAppearance( wxPGCell( wxT( "<...>" ) ) );
     m_grid->SetExtraStyle( wxPG_EX_HELP_AS_TOOLTIPS );
+
+#if wxCHECK_VERSION( 3, 3, 0 )
+    m_grid->SetValidationFailureBehavior( wxPGVFBFlags::MarkCell );
+#else
     m_grid->SetValidationFailureBehavior( wxPG_VFB_MARK_CELL );
+#endif
+
     m_grid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_RETURN );
     m_grid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_NUMPAD_ENTER );
     m_grid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_DOWN );

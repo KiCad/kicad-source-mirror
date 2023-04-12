@@ -1312,8 +1312,13 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::onParamGridSetFocus( wxFocusEvent& aEv
     if( !selected )
         selected = grid->wxPropertyGridInterface::GetFirst();
 
+#if wxCHECK_VERSION( 3, 3, 0 )
+    if( selected )
+        grid->DoSelectProperty( selected, wxPGSelectPropertyFlags::Focus );
+#else
     if( selected )
         grid->DoSelectProperty( selected, wxPG_SEL_FOCUS );
+#endif
 
     aEvent.Skip();
 }
