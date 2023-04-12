@@ -25,6 +25,8 @@
 #ifndef GRID_TEXT_BUTTON_HELPERS_H
 #define GRID_TEXT_BUTTON_HELPERS_H
 
+#include <memory>
+
 #include <wx/combo.h>
 #include <wx/generic/gridctrl.h>
 #include <wx/generic/grideditors.h>
@@ -58,7 +60,7 @@ protected:
     wxComboCtrl* Combo() const { return static_cast<wxComboCtrl*>( m_control ); }
 
 #if wxUSE_VALIDATORS
-    wxScopedPtr< wxValidator > m_validator;
+    std::unique_ptr< wxValidator > m_validator;
 #endif
 
     wxString     m_value;

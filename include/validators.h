@@ -31,6 +31,8 @@
 #ifndef VALIDATORS_H
 #define VALIDATORS_H
 
+#include <memory>
+
 #include <wx/valtext.h>
 #include <wx/grid.h>
 #include <wx/regex.h>
@@ -50,7 +52,7 @@ public:
     virtual void StartingKey( wxKeyEvent& event ) override;
 
 protected:
-    wxScopedPtr<wxValidator> m_validator;
+    std::unique_ptr<wxValidator> m_validator;
 };
 
 

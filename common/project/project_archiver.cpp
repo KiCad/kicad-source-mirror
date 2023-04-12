@@ -17,6 +17,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <memory>
 #include <wx/dir.h>
 #include <wx/filedlg.h>
 #include <wx/fs_zip.h>
@@ -62,7 +63,7 @@ bool PROJECT_ARCHIVER::Unarchive( const wxString& aSrcFile, const wxString& aDes
         return false;
     }
 
-    wxScopedPtr<wxArchiveInputStream> archiveStream( archiveClassFactory->NewStream( stream ) );
+    std::unique_ptr<wxArchiveInputStream> archiveStream( archiveClassFactory->NewStream( stream ) );
 
     wxString fileStatus;
 
