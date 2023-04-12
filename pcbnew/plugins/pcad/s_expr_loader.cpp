@@ -70,6 +70,10 @@ static const char ACCEL_ASCII_KEYWORD[] = "ACCEL_ASCII";
         if( tok == DSN_RIGHT )
         {
             iNode = iNode->GetParent();
+
+            // this will happen if there are more right parens than left
+            if( !iNode )
+                THROW_IO_ERROR( wxT( "Unexpected right paren" ) );
         }
         else if( tok == DSN_LEFT )
         {
