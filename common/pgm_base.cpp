@@ -43,6 +43,7 @@
 #include <wx/tooltip.h>
 
 #include <advanced_config.h>
+#include <cli/cli_names.h> // Needed for the pre wx 3.2 cli workaround
 #include <common.h>
 #include <config_params.h>
 #include <confirm.h>
