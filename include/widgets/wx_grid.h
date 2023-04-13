@@ -27,6 +27,7 @@
 #include <memory>
 #include <vector>
 #include <memory>
+#include <bitset>
 #include <wx/event.h>
 #include <wx/grid.h>
 #include <wx/version.h>
