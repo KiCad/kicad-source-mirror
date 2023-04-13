@@ -113,7 +113,9 @@ int COMMON_CONTROL::ShowLibraryTable( const TOOL_EVENT& aEvent )
         try     // Sch frame was not available, try to start it
         {
             KIFACE* kiface = m_frame->Kiway().KiFACE( KIWAY::FACE_SCH );
-            kiface->CreateKiWindow( m_frame, DIALOG_SCH_LIBRARY_TABLE, &m_frame->Kiway() );
+
+            if( kiface )
+                kiface->CreateKiWindow( m_frame, DIALOG_SCH_LIBRARY_TABLE, &m_frame->Kiway() );
         }
         catch( ... )
         {
