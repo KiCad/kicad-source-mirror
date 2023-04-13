@@ -61,12 +61,18 @@ public:
      * Get a tokenized string containing the shown column indexes.
      * Tokens are separated by spaces.
      */
-    wxString GetShownColumns();
+    wxString GetShownColumnsAsString();
+    std::bitset<64> GetShownColumns();
 
     /**
      * Show/hide the grid columns based on a tokenized string of shown column indexes.
      */
     void ShowHideColumns( const wxString& shownColumns );
+
+    /**
+     * A more performant version of ShowHideColumns (primarily for OnUpdateUI handlers).
+     */
+    void ShowHideColumns( const std::bitset<64>& aShownColumns );
 
     /**
      * Hide wxGrid's SetTable() method with one which doesn't mess up the grid column

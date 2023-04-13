@@ -71,7 +71,7 @@ private:
     SCH_NETNAME_VALIDATOR         m_netNameValidator;
 
     FIELDS_GRID_TABLE<SCH_FIELD>* m_fields;
-    wxString                      m_shownColumns;
+    std::bitset<64>               m_shownColumns;
 
     UNIT_BINDER                   m_textSize;
 

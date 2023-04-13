@@ -127,8 +127,8 @@ DIALOG_LIB_SYMBOL_PROPERTIES::~DIALOG_LIB_SYMBOL_PROPERTIES()
 {
     m_lastOpenedPage = m_NoteBook->GetSelection( );
 
-    SYMBOL_EDITOR_SETTINGS* cfg = m_Parent->GetSettings();
-    cfg->m_EditSymbolVisibleColumns = m_grid->GetShownColumns();
+    if( SYMBOL_EDITOR_SETTINGS* cfg = m_Parent->GetSettings() )
+        cfg->m_EditSymbolVisibleColumns = m_grid->GetShownColumnsAsString();
 
     // Prevents crash bug in wxGrid's d'tor
     m_grid->DestroyTable( m_fields );
@@ -839,7 +839,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
     }
 
     // Handle shown columns changes
-    wxString shownColumns = m_grid->GetShownColumns();
+    std::bitset<64> shownColumns = m_grid->GetShownColumns();
 
     if( shownColumns != m_shownColumns )
     {

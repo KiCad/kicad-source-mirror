@@ -90,7 +90,7 @@ public:
     int                m_delayedFocusPage;
     wxString           m_delayedErrorMessage;
 
-    wxString           m_shownColumns;
+    std::bitset<64>    m_shownColumns;
     wxSize             m_size;
 
 private:

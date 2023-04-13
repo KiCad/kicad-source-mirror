@@ -118,13 +118,10 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_L
     m_grid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
     // Show/hide columns according to user's preference
-    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-    wxASSERT( cfg );
-
-    if( cfg )
+    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
     {
-        m_shownColumns = cfg->m_Appearance.edit_label_visible_columns;
-        m_grid->ShowHideColumns( m_shownColumns );
+        m_grid->ShowHideColumns( cfg->m_Appearance.edit_label_visible_columns );
+        m_shownColumns = m_grid->GetShownColumns();
     }
 
     // Configure button logos
@@ -221,19 +218,19 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_L
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
 
-    if( cfg && cfg->m_Appearance.edit_label_width > 0 && cfg->m_Appearance.edit_label_height > 0 )
-        SetSize( cfg->m_Appearance.edit_label_width, cfg->m_Appearance.edit_label_height );
+    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
+    {
+        if( cfg->m_Appearance.edit_label_width > 0 && cfg->m_Appearance.edit_label_height > 0 )
+            SetSize( cfg->m_Appearance.edit_label_width, cfg->m_Appearance.edit_label_height );
+    }
 }
 
 
 DIALOG_LABEL_PROPERTIES::~DIALOG_LABEL_PROPERTIES()
 {
-    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-    wxASSERT( cfg );
-
-    if( cfg )
+    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
     {
-        cfg->m_Appearance.edit_label_visible_columns = m_grid->GetShownColumns();
+        cfg->m_Appearance.edit_label_visible_columns = m_grid->GetShownColumnsAsString();
         cfg->m_Appearance.edit_label_width = GetSize().x;
         cfg->m_Appearance.edit_label_height = GetSize().y;
     }
@@ -776,7 +773,7 @@ void DIALOG_LABEL_PROPERTIES::AdjustGridColumns( int aWidth )
 
 void DIALOG_LABEL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 {
-    wxString shownColumns = m_grid->GetShownColumns();
+    std::bitset<64> shownColumns = m_grid->GetShownColumns();
 
     if( shownColumns != m_shownColumns )
     {

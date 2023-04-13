@@ -70,13 +70,10 @@ DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
     m_grid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
     // Show/hide columns according to user's preference
-    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-    wxASSERT( cfg );
-
-    if( cfg )
+    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
     {
-        m_shownColumns = cfg->m_Appearance.edit_sheet_visible_columns;
-        m_grid->ShowHideColumns( m_shownColumns );
+        m_grid->ShowHideColumns( cfg->m_Appearance.edit_sheet_visible_columns );
+        m_shownColumns = m_grid->GetShownColumns();
     }
 
     if( m_frame->GetColorSettings()->GetOverrideSchItemColors() )
@@ -109,12 +106,9 @@ DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
 
 DIALOG_SHEET_PROPERTIES::~DIALOG_SHEET_PROPERTIES()
 {
-    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-    wxASSERT( cfg );
-
-    if( cfg )
+    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
     {
-        cfg->m_Appearance.edit_sheet_visible_columns = m_grid->GetShownColumns();
+        cfg->m_Appearance.edit_sheet_visible_columns = m_grid->GetShownColumnsAsString();
         cfg->m_Appearance.edit_sheet_width = GetSize().x;
         cfg->m_Appearance.edit_sheet_height = GetSize().y;
     }
@@ -833,7 +827,7 @@ void DIALOG_SHEET_PROPERTIES::AdjustGridColumns()
 
 void DIALOG_SHEET_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 {
-    wxString shownColumns = m_grid->GetShownColumns();
+    std::bitset<64> shownColumns = m_grid->GetShownColumns();
 
     if( shownColumns != m_shownColumns )
     {

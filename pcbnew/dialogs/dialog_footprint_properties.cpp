@@ -97,10 +97,9 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
     m_itemsGrid->SetTable( m_texts );
     m_itemsGrid->PushEventHandler( new GRID_TRICKS( m_itemsGrid ) );
 
-    PCBNEW_SETTINGS* cfg = m_frame->GetPcbNewSettings();
-
     // Show/hide text item columns according to the user's preference
-    m_itemsGrid->ShowHideColumns( cfg->m_FootprintTextShownColumns );
+    if( PCBNEW_SETTINGS* cfg = m_frame->GetPcbNewSettings() )
+        m_itemsGrid->ShowHideColumns( cfg->m_FootprintTextShownColumns );
 
     m_orientation.SetUnits( EDA_UNITS::DEGREES );
     m_orientation.SetPrecision( 3 );
@@ -175,7 +174,8 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
 
 DIALOG_FOOTPRINT_PROPERTIES::~DIALOG_FOOTPRINT_PROPERTIES()
 {
-    m_frame->GetPcbNewSettings()->m_FootprintTextShownColumns = m_itemsGrid->GetShownColumns().ToStdString();
+    if( PCBNEW_SETTINGS* cfg = m_frame->GetPcbNewSettings() )
+        cfg->m_FootprintTextShownColumns = m_itemsGrid->GetShownColumnsAsString();
 
     // Prevents crash bug in wxGrid's d'tor
     m_itemsGrid->DestroyTable( m_texts );
