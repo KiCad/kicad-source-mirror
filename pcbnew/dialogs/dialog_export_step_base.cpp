@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -107,10 +107,15 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	wxStaticBoxSizer* sbOtherOptions;
 	sbOtherOptions = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Other Options") ), wxVERTICAL );
 
-	m_cbRemoveVirtual = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Ignore not mounted components"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbRemoveVirtual->SetToolTip( _("Do not show components not in BOM and not in place file") );
+	m_cbRemoveDNP = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Ignore 'Do not populate' components"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbRemoveDNP->SetToolTip( _("Do not show components marked 'Do not populate'") );
 
-	sbOtherOptions->Add( m_cbRemoveVirtual, 0, wxBOTTOM|wxRIGHT, 5 );
+	sbOtherOptions->Add( m_cbRemoveDNP, 0, wxBOTTOM|wxRIGHT, 5 );
+
+	m_cbRemoveUnspecified = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Ignore 'Unspecified' components"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbRemoveUnspecified->SetToolTip( _("Do not show components with Footprint Type 'Unspecified'") );
+
+	sbOtherOptions->Add( m_cbRemoveUnspecified, 0, wxBOTTOM|wxRIGHT, 5 );
 
 	m_cbSubstModels = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Substitute similarly named models"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbSubstModels->SetToolTip( _("Replace VRML models with STEP models of the same name") );

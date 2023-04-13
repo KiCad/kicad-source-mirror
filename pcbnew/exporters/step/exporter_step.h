@@ -49,7 +49,8 @@ public:
             m_overwrite( false ),
             m_useGridOrigin( false ),
             m_useDrillOrigin( false ),
-            m_includeExcludedBom( true ),
+            m_includeUnspecified( true ),
+            m_includeDNP( true ),
             m_substModels( true ),
             m_BoardOutlinesChainingEpsilon( BOARD_DEFAULT_CHAINING_EPSILON ),
             m_boardOnly( false ),
@@ -63,7 +64,8 @@ public:
     bool     m_overwrite;
     bool     m_useGridOrigin;
     bool     m_useDrillOrigin;
-    bool     m_includeExcludedBom;
+    bool     m_includeUnspecified;
+    bool     m_includeDNP;
     bool     m_substModels;
     double   m_BoardOutlinesChainingEpsilon;
     bool     m_boardOnly;

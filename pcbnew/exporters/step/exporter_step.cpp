@@ -173,7 +173,12 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
                                                false /* include private items */ );
     }
 
-    if( ( aFootprint->GetAttributes() & FP_EXCLUDE_FROM_BOM ) && !m_params.m_includeExcludedBom )
+    if( ( !(aFootprint->GetAttributes() & (FP_THROUGH_HOLE|FP_SMD)) ) && !m_params.m_includeUnspecified )
+    {
+        return hasdata;
+    }
+
+    if( ( aFootprint->GetAttributes() & FP_DNP ) && !m_params.m_includeDNP )
     {
         return hasdata;
     }

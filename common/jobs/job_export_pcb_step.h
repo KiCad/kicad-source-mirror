@@ -33,7 +33,8 @@ public:
             m_useGridOrigin( false ),
             m_useDrillOrigin( false ),
             m_boardOnly( false ),
-            m_includeExcludedBom( false ),
+            m_includeUnspecified( false ),
+            m_includeDNP( false ),
             m_substModels( false ),
             m_filename(),
             m_outputFile(),
@@ -49,7 +50,8 @@ public:
     bool     m_useGridOrigin;
     bool     m_useDrillOrigin;
     bool     m_boardOnly;
-    bool     m_includeExcludedBom;
+    bool     m_includeUnspecified;
+    bool     m_includeDNP;
     bool     m_substModels;
     wxString m_filename;
     wxString m_outputFile;

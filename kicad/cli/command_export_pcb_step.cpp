@@ -29,7 +29,8 @@
 
 #define ARG_DRILL_ORIGIN "--drill-origin"
 #define ARG_GRID_ORIGIN "--grid-origin"
-#define ARG_NO_VIRTUAL "--no-virtual"
+#define ARG_NO_UNSPECIFIED "--no-unspecified"
+#define ARG_NO_DNP "--no-dnp"
 #define ARG_SUBST_MODELS "--subst-models"
 #define ARG_FORCE "--force"
 #define ARG_OUTPUT "--output"
@@ -55,8 +56,13 @@ CLI::EXPORT_PCB_STEP_COMMAND::EXPORT_PCB_STEP_COMMAND() : COMMAND( "step" )
             .implicit_value( true )
             .default_value( false );
 
-    m_argParser.add_argument( ARG_NO_VIRTUAL )
-            .help( UTF8STDSTR( _( "Exclude 3D models for components with 'virtual' attribute" ) ) )
+    m_argParser.add_argument( ARG_NO_UNSPECIFIED )
+            .help( UTF8STDSTR( _( "Exclude 3D models for components with 'Unspecified' footprint type" ) ) )
+            .implicit_value( true )
+            .default_value( false );
+
+    m_argParser.add_argument( ARG_NO_DNP )
+            .help( UTF8STDSTR( _( "Exclude 3D models for components with 'Do not populate' attribute" ) ) )
             .implicit_value( true )
             .default_value( false );
 
@@ -101,7 +107,8 @@ int CLI::EXPORT_PCB_STEP_COMMAND::doPerform( KIWAY& aKiway )
 
     step->m_useDrillOrigin = m_argParser.get<bool>( ARG_DRILL_ORIGIN );
     step->m_useGridOrigin = m_argParser.get<bool>( ARG_GRID_ORIGIN );
-    step->m_includeExcludedBom = !m_argParser.get<bool>( ARG_NO_VIRTUAL );
+    step->m_includeUnspecified = !m_argParser.get<bool>( ARG_NO_UNSPECIFIED );
+    step->m_includeDNP = !m_argParser.get<bool>( ARG_NO_DNP );
     step->m_substModels = m_argParser.get<bool>( ARG_SUBST_MODELS );
     step->m_overwrite = m_argParser.get<bool>( ARG_FORCE );
     step->m_filename = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );

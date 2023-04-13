@@ -334,8 +334,11 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<double>( "export_step.origin_y",
             &m_ExportStep.origin_y, 0 ) );
 
-    m_params.emplace_back( new PARAM<bool>( "export_step.no_virtual",
-            &m_ExportStep.no_virtual, false ) );
+    m_params.emplace_back( new PARAM<bool>( "export_step.no_unspecified",
+            &m_ExportStep.no_unspecified, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "export_step.no_dnp",
+            &m_ExportStep.no_dnp, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "export_step.replace_models",
             &m_ExportStep.replace_models, true ) );

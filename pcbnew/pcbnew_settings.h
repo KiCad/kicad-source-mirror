@@ -178,7 +178,8 @@ public:
         int    origin_units;
         double origin_x;
         double origin_y;
-        bool   no_virtual;
+        bool   no_unspecified;
+        bool   no_dnp;
         bool   replace_models;
         bool   overwrite_file;
     };

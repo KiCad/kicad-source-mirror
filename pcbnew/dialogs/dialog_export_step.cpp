@@ -85,9 +85,14 @@ protected:
 
     STEP_ORIGIN_OPTION GetOriginOption();
 
-    bool GetNoVirtOption()
+    bool GetNoUnspecifiedOption()
     {
-        return m_cbRemoveVirtual->GetValue();
+        return m_cbRemoveUnspecified->GetValue();
+    }
+
+    bool GetNoDNPOption()
+    {
+        return m_cbRemoveDNP->GetValue();
     }
 
     bool GetSubstOption()
@@ -106,7 +111,8 @@ private:
     double             m_userOriginX;    // remember last User Origin X value
     double             m_userOriginY;    // remember last User Origin Y value
     int                m_originUnits;    // remember last units for User Origin
-    bool               m_noVirtual;      // remember last preference for No Virtual Component
+    bool               m_noUnspecified;  // remember last preference for No Unspecified Component
+    bool               m_noDNP;          // remember last preference for No DNP Component
     static bool        m_exportTracks;   // remember last preference to export tracks
                                          // (stored only for the session)
     wxString           m_boardPath;      // path to the exported board file
@@ -172,10 +178,12 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
     m_originUnits = cfg->m_ExportStep.origin_units;
     m_userOriginX = cfg->m_ExportStep.origin_x;
     m_userOriginY = cfg->m_ExportStep.origin_y;
-    m_noVirtual = cfg->m_ExportStep.no_virtual;
+    m_noUnspecified = cfg->m_ExportStep.no_unspecified;
+    m_noDNP       = cfg->m_ExportStep.no_dnp;
 
     m_cbExportTracks->SetValue( m_exportTracks );
-    m_cbRemoveVirtual->SetValue( m_noVirtual );
+    m_cbRemoveUnspecified->SetValue( m_noUnspecified );
+    m_cbRemoveDNP->SetValue( m_noDNP );
     m_cbSubstModels->SetValue( cfg->m_ExportStep.replace_models );
     m_cbOverwriteFile->SetValue( cfg->m_ExportStep.overwrite_file );
 
@@ -253,7 +261,8 @@ DIALOG_EXPORT_STEP::~DIALOG_EXPORT_STEP()
     m_STEP_Yorg->GetValue().ToDouble( &val );
     cfg->m_ExportStep.origin_y = val;
 
-    cfg->m_ExportStep.no_virtual = m_cbRemoveVirtual->GetValue();
+    cfg->m_ExportStep.no_unspecified = m_cbRemoveUnspecified->GetValue();
+    cfg->m_ExportStep.no_dnp = m_cbRemoveDNP->GetValue();
 
     m_toleranceLastChoice = m_choiceTolerance->GetSelection();
     m_exportTracks = m_cbExportTracks->GetValue();
@@ -393,8 +402,11 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     cmdK2S.Append( wxT( " export" ) );
     cmdK2S.Append( wxT( " step" ) );
 
-    if( GetNoVirtOption() )
-        cmdK2S.Append( wxT( " --no-virtual" ) );
+    if( GetNoUnspecifiedOption() )
+        cmdK2S.Append( wxT( " --no-unspecified" ) );
+
+    if( GetNoDNPOption() )
+        cmdK2S.Append( wxT( " --no-dnp" ) );
 
     if( GetSubstOption() )
         cmdK2S.Append( wxT( " --subst-models" ) );

@@ -97,7 +97,8 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
 
     EXPORTER_STEP_PARAMS params;
     params.m_exportTracks = aStepJob->m_exportTracks;
-    params.m_includeExcludedBom = aStepJob->m_includeExcludedBom;
+    params.m_includeUnspecified = aStepJob->m_includeUnspecified;
+    params.m_includeDNP = aStepJob->m_includeDNP;
     params.m_BoardOutlinesChainingEpsilon = aStepJob->m_BoardOutlinesChainingEpsilon;
     params.m_overwrite = aStepJob->m_overwrite;
     params.m_substModels = aStepJob->m_substModels;

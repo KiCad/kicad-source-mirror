@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -54,7 +54,8 @@ class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 		TEXT_CTRL_EVAL* m_STEP_Xorg;
 		wxStaticText* m_staticTextYpos;
 		TEXT_CTRL_EVAL* m_STEP_Yorg;
-		wxCheckBox* m_cbRemoveVirtual;
+		wxCheckBox* m_cbRemoveDNP;
+		wxCheckBox* m_cbRemoveUnspecified;
 		wxCheckBox* m_cbSubstModels;
 		wxCheckBox* m_cbOverwriteFile;
 		wxCheckBox* m_cbExportTracks;
