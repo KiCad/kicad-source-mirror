@@ -1,4 +1,4 @@
-(kicad_sch (version 20230221) (generator eeschema)
+(kicad_sch (version 20230121) (generator eeschema)
 
   (uuid 3082b26f-b83d-4458-bb0e-9c16987db84d)
 
@@ -7,9 +7,9 @@
   (lib_symbols
   )
 
+  (bus_alias "b_yz" (members "y" "z"))
   (bus_alias "b_x" (members "x"))
   (bus_alias "a_xyz" (members "x" "y" "z"))
-  (bus_alias "b_yz" (members "y" "z"))
 
   (bus (pts (xy 85.725 48.26) (xy 113.665 48.26))
     (stroke (width 0) (type default))
