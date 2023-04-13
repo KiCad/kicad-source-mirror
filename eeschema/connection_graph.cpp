@@ -1034,7 +1034,7 @@ void CONNECTION_GRAPH::generateBusAliasMembers()
 
                 new_sg->m_driver_connection = new_conn;
                 new_sg->m_code = m_last_subgraph_code++;
-                new_sg->m_sheet = subgraph->GetSheet();
+                new_sg->m_sheet = subgraph->m_sheet;
                 new_sg->m_is_bus_member = true;
                 new_sg->m_strong_driver = true;
                 /// Need to figure out why these sgs are not getting connected to their bus parents
@@ -1051,56 +1051,6 @@ void CONNECTION_GRAPH::generateBusAliasMembers()
     std::copy( new_subgraphs.begin(), new_subgraphs.end(), std::back_inserter( m_driver_subgraphs ) );
 }
 
-void CONNECTION_GRAPH::generateBusAliasMembers()
-{
-    std::vector<CONNECTION_SUBGRAPH*> new_subgraphs;
-
-    SCH_CONNECTION dummy( this );
-
-    for( auto&& subgraph : m_driver_subgraphs )
-    {
-        auto vec = subgraph->GetAllBusLabels();
-
-        for( auto& item : vec )
-        {
-            SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( item );
-
-            dummy.ConfigureFromLabel( label->GetText() );
-
-            wxLogTrace( ConnTrace, wxS( "new bus label (%s)" ), label->GetText() );
-
-            for( auto& conn : dummy.Members() )
-            {
-                wxString name = conn->FullLocalName();
-
-                CONNECTION_SUBGRAPH* new_sg = new CONNECTION_SUBGRAPH( this );
-                SCH_CONNECTION* new_conn = new SCH_CONNECTION( this );
-
-                new_conn->SetName( name );
-                new_conn->SetType( CONNECTION_TYPE::NET );
-                int code = assignNewNetCode( *new_conn );
-
-                wxLogTrace( ConnTrace, wxS( "SG(%ld), Adding full local name (%s) with sg (%d)" ), subgraph->m_code,
-                            name, code );
-
-                new_sg->m_driver_connection = new_conn;
-                new_sg->m_code = m_last_subgraph_code++;
-                new_sg->m_sheet = subgraph->GetSheet();
-                new_sg->m_is_bus_member = true;
-                new_sg->m_strong_driver = true;
-                /// Need to figure out why these sgs are not getting connected to their bus parents
-
-                NET_NAME_CODE_CACHE_KEY key = { new_sg->GetNetName(), code };
-                m_net_code_to_subgraphs_map[ key ].push_back( new_sg );
-                m_net_name_to_subgraphs_map[ name ].push_back( new_sg );
-                m_subgraphs.push_back( new_sg );
-                new_subgraphs.push_back( new_sg );
-            }
-        }
-    }
-
-    std::copy( new_subgraphs.begin(), new_subgraphs.end(), std::back_inserter( m_driver_subgraphs ) );
-}
 
 void CONNECTION_GRAPH::generateInvisiblePinSubGraphs()
 {
