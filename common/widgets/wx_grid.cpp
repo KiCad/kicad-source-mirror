@@ -273,7 +273,7 @@ void WX_GRID::DestroyTable( wxGridTableBase* aTable )
 }
 
 
-wxString WX_GRID::GetShownColumns()
+wxString WX_GRID::GetShownColumnsAsString()
 {
     wxString shownColumns;
 
@@ -287,6 +287,17 @@ wxString WX_GRID::GetShownColumns()
             shownColumns << i;
         }
     }
+
+    return shownColumns;
+}
+
+
+std::bitset<64> WX_GRID::GetShownColumns()
+{
+    std::bitset<64> shownColumns;
+
+    for( int ii = 0; ii < GetNumberCols(); ++ii )
+        shownColumns[ii] = IsColShown( ii );
 
     return shownColumns;
 }
@@ -306,6 +317,18 @@ void WX_GRID::ShowHideColumns( const wxString& shownColumns )
 
         if( colNumber >= 0 && colNumber < GetNumberCols() )
             ShowCol( (int) colNumber );
+    }
+}
+
+
+void WX_GRID::ShowHideColumns( const std::bitset<64>& aShownColumns )
+{
+    for( int ii = 0; ii < GetNumberCols(); ++ ii )
+    {
+        if( aShownColumns[ii] )
+            ShowCol( ii );
+        else
+            HideCol( ii );
     }
 }
 

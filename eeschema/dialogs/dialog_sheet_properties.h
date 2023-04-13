@@ -70,7 +70,7 @@ private:
     wxSize                        m_size;
     int                           m_delayedFocusRow;
     int                           m_delayedFocusColumn;
-    wxString                      m_shownColumns;
+    std::bitset<64>               m_shownColumns;
 
     FIELDS_GRID_TABLE<SCH_FIELD>* m_fields;
     UNIT_BINDER                   m_borderWidth;

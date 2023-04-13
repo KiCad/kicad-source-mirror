@@ -723,10 +723,11 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
                                                        } ) );
 
     // Show/hide columns according to the user's preference
-    SYMBOL_EDITOR_SETTINGS* cfg = parent->GetSettings();
-    m_columnsShown = cfg->m_PinTableVisibleColumns;
-
-    m_grid->ShowHideColumns( m_columnsShown );
+    if( SYMBOL_EDITOR_SETTINGS* cfg = parent->GetSettings() )
+    {
+        m_grid->ShowHideColumns( cfg->m_PinTableVisibleColumns );
+        m_columnsShown = m_grid->GetShownColumns();
+    }
 
     // Set special attributes
     wxGridCellAttr* attr;
@@ -838,8 +839,8 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
 
 DIALOG_LIB_EDIT_PIN_TABLE::~DIALOG_LIB_EDIT_PIN_TABLE()
 {
-    SYMBOL_EDITOR_SETTINGS* cfg = m_editFrame->GetSettings();
-    cfg->m_PinTableVisibleColumns = m_grid->GetShownColumns().ToStdString();
+    if( SYMBOL_EDITOR_SETTINGS* cfg = m_editFrame->GetSettings() )
+        cfg->m_PinTableVisibleColumns = m_grid->GetShownColumnsAsString();
 
     // Disconnect Events
     m_grid->Disconnect( wxEVT_GRID_COL_SORT,
@@ -1130,7 +1131,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnSize( wxSizeEvent& event )
 
 void DIALOG_LIB_EDIT_PIN_TABLE::OnUpdateUI( wxUpdateUIEvent& event )
 {
-    wxString columnsShown = m_grid->GetShownColumns();
+    std::bitset<64> columnsShown = m_grid->GetShownColumns();
 
     if( columnsShown != m_columnsShown )
     {

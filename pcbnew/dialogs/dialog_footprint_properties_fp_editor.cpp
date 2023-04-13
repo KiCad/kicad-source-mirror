@@ -229,8 +229,8 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
 
 DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::~DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR()
 {
-    m_frame->GetSettings()->m_FootprintTextShownColumns =
-            m_itemsGrid->GetShownColumns().ToStdString();
+    if( FOOTPRINT_EDITOR_SETTINGS* cfg = m_frame->GetSettings() )
+        cfg->m_FootprintTextShownColumns = m_itemsGrid->GetShownColumnsAsString();
 
     // Prevents crash bug in wxGrid's d'tor
     m_itemsGrid->DestroyTable( m_texts );

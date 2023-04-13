@@ -333,12 +333,10 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
     m_fieldsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
     // Show/hide columns according to user's preference
-    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-
-    if( cfg )
+    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
     {
-        m_shownColumns = cfg->m_Appearance.edit_symbol_visible_columns;
-        m_fieldsGrid->ShowHideColumns( m_shownColumns );
+        m_fieldsGrid->ShowHideColumns( cfg->m_Appearance.edit_symbol_visible_columns );
+        m_shownColumns = m_fieldsGrid->GetShownColumns();
     }
 
     if( m_part && m_part->HasConversion() )
@@ -394,11 +392,9 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
 
 DIALOG_SYMBOL_PROPERTIES::~DIALOG_SYMBOL_PROPERTIES()
 {
-    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-
-    if( cfg )
+    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
     {
-        cfg->m_Appearance.edit_symbol_visible_columns = m_fieldsGrid->GetShownColumns();
+        cfg->m_Appearance.edit_symbol_visible_columns = m_fieldsGrid->GetShownColumnsAsString();
         cfg->m_Appearance.edit_symbol_width = GetSize().x;
         cfg->m_Appearance.edit_symbol_height = GetSize().y;
     }
@@ -1178,7 +1174,7 @@ void DIALOG_SYMBOL_PROPERTIES::AdjustPinsGridColumns()
 
 void DIALOG_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 {
-    wxString shownColumns = m_fieldsGrid->GetShownColumns();
+    std::bitset<64> shownColumns = m_fieldsGrid->GetShownColumns();
 
     if( shownColumns != m_shownColumns )
     {
