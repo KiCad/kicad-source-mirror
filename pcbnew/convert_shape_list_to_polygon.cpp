@@ -220,20 +220,9 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
         // with other shapes), so process them separately.
         if( graphic->GetShape() == SHAPE_T::POLY )
         {
-            EDA_ANGLE orientation = ANGLE_0;
-            VECTOR2I  offset = VECTOR2I( 0, 0 );
-
-            if( graphic->GetParentFootprint() )
-            {
-                orientation = graphic->GetParentFootprint()->GetOrientation();
-                offset = graphic->GetParentFootprint()->GetPosition();
-            }
-
             for( auto it = graphic->GetPolyShape().CIterate(); it; it++ )
             {
                 VECTOR2I pt = *it;
-                RotatePoint( pt, orientation );
-                pt += offset;
 
                 currContour.Append( pt );
 
