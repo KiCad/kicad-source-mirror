@@ -621,10 +621,10 @@ void DIALOG_SIM_COMMAND::updateDCUnits( wxChar aType, wxChoice* aSource,
 
     switch( aType )
     {
-    case 'V': unit = _( "Volts" );     break;
-    case 'I': unit = _( "Amperes" );   break;
-    case 'R': unit = _( "Ohms" );      break;
-    case 'T': unit = wxT( "\u00B0C" ); break;
+    case 'V': unit = wxS( "V" );  break;
+    case 'I': unit = wxS( "A" );  break;
+    case 'R': unit = wxS( "Ω" );  break;
+    case 'T': unit = wxS( "°C" ); break;
     }
 
     aStartValUnit->SetLabel( unit );

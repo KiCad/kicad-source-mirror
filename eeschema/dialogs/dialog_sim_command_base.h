@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -94,8 +94,10 @@ class DIALOG_SIM_COMMAND_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_noisePointsNumber;
 		wxStaticText* m_staticText21;
 		wxTextCtrl* m_noiseFreqStart;
+		wxStaticText* m_noiseFreqStartUnits;
 		wxStaticText* m_staticText31;
 		wxTextCtrl* m_noiseFreqStop;
+		wxStaticText* m_noiseFreqStopUnits;
 		wxPanel* m_pgOP;
 		wxStaticText* m_staticText13;
 		wxPanel* m_pgPoleZero;
@@ -111,15 +113,13 @@ class DIALOG_SIM_COMMAND_BASE : public DIALOG_SHIM
 		wxStaticText* m_transInitialLabel;
 		wxTextCtrl* m_transInitial;
 		wxStaticText* m_transInitialUnits;
-		wxStaticText* m_staticText24;
+		wxStaticText* m_transInitialHelp;
 		wxStaticText* m_maxStepLabel;
 		wxTextCtrl* m_transMaxStep;
 		wxStaticText* m_transMaxStepUnit;
-		wxStaticText* m_staticText37;
-		wxStaticText* m_useInitialConditionsLabel;
+		wxStaticText* m_transMaxHelp;
 		wxCheckBox* m_useInitialConditions;
-		wxStaticText* m_staticText39;
-		wxStaticText* m_staticText40;
+		wxStaticText* m_useInitialConditionsHelp;
 		wxPanel* m_pgCustom;
 		wxStaticText* m_staticText18;
 		wxTextCtrl* m_customTxt;
