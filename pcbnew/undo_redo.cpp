@@ -375,6 +375,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
     bool not_found = false;
     bool reBuild_ratsnest = false;
     bool deep_reBuild_ratsnest = false;  // true later if pointers must be rebuilt
+    bool solder_mask_dirty = false;
 
     auto view = GetCanvas()->GetView();
     auto connectivity = GetBoard()->GetConnectivity();
@@ -440,6 +441,34 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             reBuild_ratsnest = true;
             deep_reBuild_ratsnest = true;
             break;
+
+        default:
+            break;
+        }
+
+        switch( eda_item->Type() )
+        {
+        case PCB_FOOTPRINT_T:
+            solder_mask_dirty = true;
+            break;
+
+        case PCB_VIA_T:
+            solder_mask_dirty = true;
+            break;
+
+        case PCB_ZONE_T:
+        case PCB_TRACE_T:
+        case PCB_ARC_T:
+        case PCB_PAD_T:
+        case PCB_SHAPE_T:
+        {
+            LSET layers = static_cast<BOARD_ITEM*>( eda_item )->GetLayerSet();
+
+            if( layers.test( F_Mask ) || layers.test( B_Mask ) )
+                solder_mask_dirty = true;
+
+            break;
+        }
 
         default:
             break;
@@ -546,11 +575,13 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
     if( not_found )
         wxMessageBox( _( "Incomplete undo/redo operation: some items not found" ) );
 
-    // Rebuild pointers and connectivity that can be changed.
-    // connectivity can be rebuilt only in the board editor frame
-    if( IsType( FRAME_PCB_EDITOR ) && ( reBuild_ratsnest || deep_reBuild_ratsnest ) )
+    if( IsType( FRAME_PCB_EDITOR ) )
     {
-        Compile_Ratsnest( false );
+        if( reBuild_ratsnest || deep_reBuild_ratsnest )
+            Compile_Ratsnest( false );
+
+        if( solder_mask_dirty )
+            HideSolderMask();
     }
 
     PCB_SELECTION_TOOL* selTool = m_toolManager->GetTool<PCB_SELECTION_TOOL>();
