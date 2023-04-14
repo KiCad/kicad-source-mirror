@@ -86,12 +86,11 @@ void FOOTPRINT_FILTER_IT::increment()
                                                    candidate.GetLibNickname(),
                                                    candidate.GetFootprintName(),
                                                    candidate.GetSearchText() );
-            int      matches, position;
-            bool     exclude = false;
+            bool exclude = false;
 
             for( std::unique_ptr<EDA_COMBINED_MATCHER>& matcher : m_filter->m_pattern_filters )
             {
-                if( !matcher->Find( searchStr.Lower(), matches, position ) )
+                if( !matcher->Find( searchStr.Lower() ) )
                 {
                     exclude = true;
                     break;

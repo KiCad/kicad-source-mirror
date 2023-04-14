@@ -719,11 +719,10 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
         {
             const wxString       term = tokenizer.GetNextToken().Lower();
             EDA_COMBINED_MATCHER matcher( term, CTX_LIBITEM );
-            int                  matches, position;
 
             for( const wxString& lib : libs )
             {
-                if( matcher.Find( lib.Lower(), matches, position ) )
+                if( matcher.Find( lib.Lower() ) )
                     process( lib );
             }
         }
@@ -796,12 +795,11 @@ bool SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
         {
             const wxString       term = tokenizer.GetNextToken().Lower();
             EDA_COMBINED_MATCHER matcher( term, CTX_LIBITEM );
-            int                  matches, position;
 
             for( LIB_SYMBOL* symbol : symbols )
             {
                 wxString search = symbol->GetName() + wxS( " " ) + symbol->GetSearchText();
-                bool     matched = matcher.Find( search.Lower(), matches, position );
+                bool     matched = matcher.Find( search.Lower() );
 
                 if( !matched && term.IsNumber() )
                     matched = ( wxAtoi( term ) == (int)symbol->GetPinCount() );
