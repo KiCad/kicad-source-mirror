@@ -707,10 +707,7 @@ void PANEL_SETUP_NETCLASSES::OnUpdateUI( wxUpdateUIEvent& event )
 
             for( const wxString& net : m_netNames )
             {
-                int matches;
-                int offset;
-
-                if( matcher.Find( net, matches, offset ) && offset == 0 )
+                if( matcher.StartsWith( net ) )
                     m_matchingNets->Report( net );
             }
         }

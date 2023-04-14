@@ -197,7 +197,9 @@ public:
      *
      * @return true if any matchers found the term
      */
-    bool Find( const wxString& aTerm, int& aMatchersTriggered, int& aPosition );
+    bool Find( const wxString& aTerm );
+
+    bool StartsWith( const wxString& aTerm );
 
     const wxString& GetPattern() const;
 

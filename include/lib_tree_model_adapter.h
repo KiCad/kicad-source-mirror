@@ -391,26 +391,14 @@ protected:
 
 private:
     /**
-     * Find any results worth highlighting and expand them, according to given criteria
-     * The highest-scoring node is written to aHighScore
+     * Find any results worth highlighting and expand them.
      */
-    void Find( LIB_TREE_NODE& aNode, std::function<bool( const LIB_TREE_NODE* )> aFunc,
-               LIB_TREE_NODE** aHighScore );
+    void Find( LIB_TREE_NODE& aNode, std::function<bool( const LIB_TREE_NODE* )> aFunc );
 
     /**
      * Find and expand successful search results.  Return the best match (if any).
      */
-    LIB_TREE_NODE* ShowResults();
-
-    /**
-     * Find and expand preselected node.  Return the best match (if any).
-     */
-    LIB_TREE_NODE* ShowPreselect();
-
-    /**
-     * Find and expand a library if there is only one.  Return the best match (if any).
-     */
-    LIB_TREE_NODE* ShowSingleLibrary();
+    const LIB_TREE_NODE* ShowResults();
 
     wxDataViewColumn* doAddColumn( const wxString& aHeader, bool aTranslate = true );
 

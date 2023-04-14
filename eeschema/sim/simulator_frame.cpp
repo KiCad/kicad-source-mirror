@@ -796,10 +796,7 @@ void SIMULATOR_FRAME::rebuildSignalsGrid( wxString aFilter )
 
     for( const wxString& signal : m_signals )
     {
-        int matches;
-        int offset;
-
-        if( matcher.Find( signal, matches, offset ) && offset == 0 )
+        if( matcher.StartsWith( signal ) )
         {
             int      traceType = SPT_UNKNOWN;
             wxString vectorName = vectorNameFromSignalName( signal, &traceType );

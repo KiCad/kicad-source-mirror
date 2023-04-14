@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2014-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -213,17 +213,11 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( const wxString& aSearch, bool a
         Thaw();
     }
 
-    LIB_TREE_NODE* bestMatch = ShowResults();
+    const LIB_TREE_NODE* firstMatch = ShowResults();
 
-    if( !bestMatch )
-        bestMatch = ShowPreselect();
-
-    if( !bestMatch )
-        bestMatch = ShowSingleLibrary();
-
-    if( bestMatch )
+    if( firstMatch )
     {
-        wxDataViewItem item = wxDataViewItem( bestMatch );
+        wxDataViewItem item = ToItem( firstMatch );
         m_widget->Select( item );
 
         // Make sure the *parent* item is visible. The selected item is the
@@ -619,93 +613,83 @@ bool LIB_TREE_MODEL_ADAPTER::GetAttr( const wxDataViewItem&   aItem,
 }
 
 
-void LIB_TREE_MODEL_ADAPTER::Find( LIB_TREE_NODE& aNode,
-                                            std::function<bool( const LIB_TREE_NODE* )> aFunc,
-                                            LIB_TREE_NODE** aHighScore )
+void recursiveDescent( LIB_TREE_NODE& aNode, const std::function<bool( const LIB_TREE_NODE* )>& f )
 {
     for( std::unique_ptr<LIB_TREE_NODE>& node: aNode.m_Children )
     {
-        if( aFunc( &*node ) )
-        {
-            if( !(*aHighScore) || node->m_Score > (*aHighScore)->m_Score )
-                (*aHighScore) = &*node;
-        }
+        if( !f( node.get() ) )
+            break;
 
-        Find( *node, aFunc, aHighScore );
+        recursiveDescent( *node, f );
     }
 }
 
 
-LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ShowResults()
+const LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ShowResults()
 {
-    LIB_TREE_NODE* highScore = nullptr;
+    const LIB_TREE_NODE* firstMatch = nullptr;
 
-    Find( m_tree,
-                   []( LIB_TREE_NODE const* n )
-                   {
-                       // return leaf nodes with some level of matching
-                       return n->m_Type == LIB_TREE_NODE::TYPE::LIBID && n->m_Score > 1;
-                   },
-                   &highScore );
-
-    if( highScore)
-    {
-        wxDataViewItem item = wxDataViewItem( highScore );
-        m_widget->ExpandAncestors( item );
-    }
-
-    return highScore;
-}
-
-
-LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ShowPreselect()
-{
-    LIB_TREE_NODE* highScore = nullptr;
-
-    if( !m_preselect_lib_id.IsValid() )
-        return highScore;
-
-    Find( m_tree,
-            [&]( LIB_TREE_NODE const* n )
+    // Expand parents of leaf nodes with some level of matching
+    recursiveDescent( m_tree,
+            [&]( const LIB_TREE_NODE* n )
             {
-                if( n->m_Type == LIB_TREE_NODE::LIBID && ( n->m_Children.empty() ||
-                                                           !m_preselect_unit ) )
-                    return m_preselect_lib_id == n->m_LibId;
-                else if( n->m_Type == LIB_TREE_NODE::UNIT && m_preselect_unit )
-                    return m_preselect_lib_id == n->m_Parent->m_LibId &&
-                            m_preselect_unit == n->m_Unit;
-                else
-                    return false;
-            },
-            &highScore );
+                if( n->m_Type == LIB_TREE_NODE::TYPE::LIBID && n->m_Score > 1 )
+                {
+                    if( !firstMatch )
+                        firstMatch = n;
 
-    if( highScore)
+                    m_widget->ExpandAncestors( ToItem( n ) );
+                }
+
+                return true;    // keep going to expand ancestors of all found items
+            } );
+
+    // If no matches, find and show the preselect node
+    if( !firstMatch && m_preselect_lib_id.IsValid() )
     {
-        wxDataViewItem item = wxDataViewItem( highScore );
-        m_widget->ExpandAncestors( item );
+        recursiveDescent( m_tree,
+                [&]( const LIB_TREE_NODE* n )
+                {
+                    if( n->m_Type == LIB_TREE_NODE::LIBID
+                              && ( n->m_Children.empty() || !m_preselect_unit )
+                              && m_preselect_lib_id == n->m_LibId )
+                    {
+                        firstMatch = n;
+                        m_widget->ExpandAncestors( ToItem( n ) );
+                        return false;
+                    }
+                    else if( n->m_Type == LIB_TREE_NODE::UNIT
+                              && ( m_preselect_unit && m_preselect_unit == n->m_Unit )
+                              && m_preselect_lib_id == n->m_Parent->m_LibId )
+                    {
+                        firstMatch = n;
+                        m_widget->ExpandAncestors( ToItem( n ) );
+                        return false;
+                    }
+
+                    return true;
+                } );
     }
 
-    return highScore;
+    // If still no matches expand a single library if there is only one
+    if( !firstMatch )
+    {
+        recursiveDescent( m_tree,
+                [&]( const LIB_TREE_NODE* n )
+                {
+                    if( n->m_Type == LIB_TREE_NODE::TYPE::LIBID
+                            && n->m_Parent->m_Parent->m_Children.size() == 1 )
+                    {
+                        firstMatch = n;
+                        m_widget->ExpandAncestors( ToItem( n ) );
+                        return false;
+                    }
+
+                    return true;
+                } );
+    }
+
+    return firstMatch;
 }
 
 
-LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ShowSingleLibrary()
-{
-    LIB_TREE_NODE* highScore = nullptr;
-
-    Find( m_tree,
-                   []( LIB_TREE_NODE const* n )
-                   {
-                       return n->m_Type == LIB_TREE_NODE::TYPE::LIBID &&
-                              n->m_Parent->m_Parent->m_Children.size() == 1;
-                   },
-                   &highScore );
-
-    if( highScore)
-    {
-        wxDataViewItem item = wxDataViewItem( highScore );
-        m_widget->ExpandAncestors( item );
-    }
-
-    return highScore;
-}

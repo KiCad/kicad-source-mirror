@@ -493,11 +493,10 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateLibraryList()
         {
             const wxString       term = tokenizer.GetNextToken().Lower();
             EDA_COMBINED_MATCHER matcher( term, CTX_LIBITEM );
-            int                  matches, position;
 
             for( const wxString& nickname : nicknames )
             {
-                if( matcher.Find( nickname.Lower(), matches, position ) )
+                if( matcher.Find( nickname.Lower() ) )
                     process( nickname );
             }
         }
@@ -570,12 +569,11 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
         {
             const wxString       term = tokenizer.GetNextToken().Lower();
             EDA_COMBINED_MATCHER matcher( term, CTX_LIBITEM );
-            int                  matches, position;
 
             for( const std::unique_ptr<FOOTPRINT_INFO>& footprint : fp_info_list->GetList() )
             {
                 wxString search = footprint->GetFootprintName() + wxS( " " ) + footprint->GetSearchText();
-                bool     matched = matcher.Find( search.Lower(), matches, position );
+                bool     matched = matcher.Find( search.Lower() );
 
                 if( !matched && term.IsNumber() )
                     matched = ( wxAtoi( term ) == (int)footprint->GetPadCount() );
