@@ -68,9 +68,8 @@ DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const
     m_note->SetFont( KIUI::GetInfoFont( this ).Italic() );
     m_note->Show( false );
 
-    // The field ID and power status are Initialized in the derived object's ctor.
+    // The field ID is initialized in the derived object's ctor.
     m_fieldId = VALUE_FIELD;
-    m_isPower = false;
 
     m_scintillaTricks = new SCINTILLA_TRICKS( m_StyledTextCtrl, wxT( "{}" ), true,
             [this]()
@@ -422,8 +421,6 @@ DIALOG_LIB_FIELD_PROPERTIES::DIALOG_LIB_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
     m_nameVisible->Show();
     m_cbAllowAutoPlace->Show();
 
-    // When in the library editor, power symbols can be renamed.
-    m_isPower = false;
     init();
 }
 
@@ -486,8 +483,6 @@ DIALOG_SCH_FIELD_PROPERTIES::DIALOG_SCH_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
 
     m_font = m_field->GetFont();
 
-    m_isPower = false;
-
     m_textLabel->SetLabel( aField->GetName() + wxS( ":" ) );
 
     m_position = m_field->GetPosition();
@@ -497,19 +492,6 @@ DIALOG_SCH_FIELD_PROPERTIES::DIALOG_SCH_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
 
     m_horizontalJustification = m_field->GetEffectiveHorizJustify();
     m_verticalJustification = m_field->GetEffectiveVertJustify();
-
-    // The library symbol may have been removed so using SCH_SYMBOL::GetLibSymbolRef() here
-    // could result in a segfault.  If the library symbol is no longer available, the
-    // schematic fields can still edit so set the power symbol flag to false.  This may not
-    // be entirely accurate if the power library is missing but it's better then a segfault.
-    if( aField->GetParent() && aField->GetParent()->Type() == SCH_SYMBOL_T )
-    {
-        const SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( aField->GetParent() );
-        const LIB_SYMBOL* libSymbol = GetParent()->GetLibSymbol( symbol->GetLibId(), true );
-
-        if( libSymbol && libSymbol->IsPower() )
-            m_isPower = true;
-    }
 
     m_StyledTextCtrl->Bind( wxEVT_STC_CHARADDED, &DIALOG_SCH_FIELD_PROPERTIES::onScintillaCharAdded,
                             this );

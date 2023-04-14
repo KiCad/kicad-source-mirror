@@ -89,7 +89,6 @@ protected:
     UNIT_BINDER       m_textSize;
 
     int               m_fieldId;
-    bool              m_isPower;
     wxString          m_text;
     KIFONT::FONT*     m_font;
     bool              m_isItalic;
