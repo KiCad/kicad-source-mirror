@@ -492,48 +492,32 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol( const wxString& inheritFromSymbolName )
 
 void SYMBOL_EDIT_FRAME::Save()
 {
-    if( getTargetSymbol() == m_symbol )
-    {
-        if( IsSymbolFromSchematic() )
-        {
-            SCH_EDIT_FRAME* schframe = (SCH_EDIT_FRAME*) Kiway().Player( FRAME_SCH, false );
+    wxString libName;
 
-            if( !schframe )      // happens when the schematic editor is not active (or closed)
-            {
-                DisplayErrorMessage( this, _( "No schematic currently open." ) );
-            }
-            else
-            {
-                schframe->SaveSymbolToSchematic( *m_symbol, m_schematicSymbolUUID );
-                GetScreen()->SetContentModified( false );
-            }
-        }
-        else
-        {
-            saveCurrentSymbol();
-        }
+    if( IsSymbolTreeShown() )
+        libName = GetTreeLIBID().GetLibNickname();
+
+    if( libName.empty() )
+    {
+        saveCurrentSymbol();
     }
-    else if( !GetTargetLibId().GetLibNickname().empty() )
+    else if( m_libMgr->IsLibraryReadOnly( libName ) )
     {
-        LIB_ID          libId   = GetTargetLibId();
-        const wxString& libName = libId.GetLibNickname();
+        wxString msg = wxString::Format( _( "Symbol library '%s' is not writable." ),
+                                         libName );
+        wxString msg2 = _( "You must save to a different location." );
 
-        if( m_libMgr->IsLibraryReadOnly( libName ) )
-        {
-            wxString msg = wxString::Format( _( "Symbol library '%s' is not writable." ),
-                                             libName );
-            wxString msg2 = _( "You must save to a different location." );
-
-            if( OKOrCancelDialog( this, _( "Warning" ), msg, msg2 ) == wxID_OK )
-                saveLibrary( libName, true );
-        }
-        else
-        {
-            saveLibrary( libName, false );
-        }
+        if( OKOrCancelDialog( this, _( "Warning" ), msg, msg2 ) == wxID_OK )
+            saveLibrary( libName, true );
+    }
+    else
+    {
+        saveLibrary( libName, false );
     }
 
-    m_treePane->GetLibTree()->RefreshLibTree();
+    if( IsSymbolTreeShown() )
+        m_treePane->GetLibTree()->RefreshLibTree();
+
     updateTitle();
 }
 
