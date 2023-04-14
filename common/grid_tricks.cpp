@@ -462,7 +462,12 @@ void GRID_TRICKS::onCharHook( wxKeyEvent& ev )
     if( ( ev.GetKeyCode() == WXK_RETURN || ev.GetKeyCode() == WXK_NUMPAD_ENTER )
         && m_grid->GetGridCursorRow() == m_grid->GetNumberRows() - 1 )
     {
-        if( m_grid->CommitPendingChanges() )
+        if( m_grid->IsCellEditControlShown() )
+        {
+            if( m_grid->CommitPendingChanges() )
+                handled = true;
+        }
+        else
         {
             wxCommandEvent dummy;
             m_addHandler( dummy );
