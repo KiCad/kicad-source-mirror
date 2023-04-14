@@ -1366,6 +1366,11 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
             wxString              ref = symbol->GetRef( &GetCurrentSheet() );
             std::vector<SCH_PIN*> pins = symbol->GetPins( &GetCurrentSheet() );
 
+            // Power symbols and other symbols which have the reference starting with "#" are
+            // not included in simulation
+            if( ref.StartsWith( '#' ) || symbol->GetExcludeFromSim() )
+                continue;
+
             for( SCH_PIN* pin : pins )
             {
                 if( !pin->GetOperatingPoint().IsEmpty() )

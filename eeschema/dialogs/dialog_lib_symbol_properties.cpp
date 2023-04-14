@@ -180,6 +180,9 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
 
     m_OptionPower->SetValue( m_libEntry->IsPower() );
 
+    if( m_libEntry->IsPower() )
+        m_spiceFieldsButton->Hide();
+
     LIB_FIELD* simEnableField = m_libEntry->FindField( SIM_ENABLE_FIELD );
     m_excludeFromSim->SetValue( simEnableField && simEnableField->GetText() == wxT( "0" ) );
 
@@ -942,11 +945,13 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::onPowerCheckBox( wxCommandEvent& aEvent )
         m_excludeFromBoardCheckBox->SetValue( true );
         m_excludeFromBomCheckBox->Enable( false );
         m_excludeFromBoardCheckBox->Enable( false );
+        m_spiceFieldsButton->Show( false );
     }
     else
     {
         m_excludeFromBomCheckBox->Enable( true );
         m_excludeFromBoardCheckBox->Enable( true );
+        m_spiceFieldsButton->Show( true );
     }
 
     OnModify();

@@ -355,6 +355,9 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
         m_pinGrid->SetTable( m_dataModel );
     }
 
+    if( m_part && m_part->IsPower() )
+        m_spiceFieldsButton->Hide();
+
     m_pinGrid->PushEventHandler( new GRID_TRICKS( m_pinGrid ) );
     m_pinGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 

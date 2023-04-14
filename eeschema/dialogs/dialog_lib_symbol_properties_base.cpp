@@ -353,7 +353,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	bUpperSizer->Add( m_NoteBook, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
 
-	bMainSizer->Add( bUpperSizer, 1, wxEXPAND, 5 );
+	bMainSizer->Add( bUpperSizer, 1, wxEXPAND|wxBOTTOM, 5 );
 
 	wxBoxSizer* bSizer101;
 	bSizer101 = new wxBoxSizer( wxHORIZONTAL );

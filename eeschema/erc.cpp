@@ -1031,10 +1031,9 @@ int ERC_TESTER::TestSimModelIssues()
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
-            // Power symbols are skipped: obviously they do not have a simulator model
-            const std::unique_ptr< LIB_SYMBOL >& libpart = symbol->GetLibSymbolRef();
-
-            if( libpart && libpart->IsPower() )
+            // Power symbols and other symbols which have the reference starting with "#" are
+            // not included in simulation
+            if( symbol->GetRef( &sheet ).StartsWith( '#' ) || symbol->GetExcludeFromSim() )
                 continue;
 
             // Reset for each symbol
