@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:51-0800\n"
-"PO-Revision-Date: 2023-04-03 04:36+0000\n"
+"PO-Revision-Date: 2023-04-15 16:48+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -12315,7 +12315,7 @@ msgid ""
 "Percentage of the text size to offset labels above (or below) a wire, bus, "
 "or pin"
 msgstr ""
-"Textens marginal över (eller under) tråd, buss eller stift, i procent av "
+"Textens marginal över (eller under) ledning, buss eller stift, i procent av "
 "textstorleken"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
@@ -12588,12 +12588,12 @@ msgstr "Smeknamns- och sökvägsceller är tomma i en bibliotekstabellsrad."
 #: eeschema/dialogs/panel_sym_lib_table.cpp:358
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:542
 msgid "A library table row nickname cell is empty."
-msgstr "Smeknamnscellen är tom i en bibliotekstabellsrad."
+msgstr "Smeknamnscellen i en bibliotekstabellsrad är tom."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:360
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:544
 msgid "A library table row path cell is empty."
-msgstr "Sökvägscellen är tom i en bibliotekstabellsrad."
+msgstr "Sökvägscellen i en bibliotekstabellsrad är tom."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:362
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:546
@@ -13261,7 +13261,7 @@ msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheets."
 msgstr ""
-"Hela kretsschemat kunde inte laddas. Fel uppstod vid inläsning av "
+"Kunde inte läsa in hela kretsschemat. Fel uppstod vid inläsning av "
 "hierarkiska ark."
 
 #: eeschema/files-io.cpp:249 eeschema/files-io.cpp:257
