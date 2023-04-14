@@ -3107,9 +3107,9 @@ void ALTIUM_PCB::ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
     else
         fpText->SetText( aElem.text );
 
-    fpText->SetKeepUpright( false );
+    fpText->SetKeepUpright( true );
     fpText->SetLayer( aLayer );
-    fpText->SetFPRelativePosition( aElem.position );
+    fpText->SetPosition( aElem.position );
     fpText->SetTextAngle( EDA_ANGLE( aElem.rotation, DEGREES_T ) );
 
     ConvertTexts6ToEdaTextSettings( aElem, fpText );

@@ -412,7 +412,8 @@ void BOARD::Move( const VECTOR2I& aMoveVector ) // overload
 
                 // aMoveVector was snapshotted, don't need "data".
                 // Only move the top level group
-                if( brdItem->GetParentGroup() == nullptr )
+                if( brdItem->GetParentGroup() == nullptr
+                        && brdItem->GetParentFootprint() == nullptr )
                     brdItem->Move( aMoveVector );
 
                 return INSPECT_RESULT::CONTINUE;
