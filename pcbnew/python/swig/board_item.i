@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Miguel Angel Ajo <miguelangel@nbee.es>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -183,6 +183,16 @@ static PCB_BITMAP*           Cast_to_PCB_BITMAP( BOARD_ITEM* );
             return Cast_to_ZONE(self)
         else:
             raise TypeError("Unsupported drawing class: %s" % ct)
+
+    """
+    Needed to cast BOARD_ITEM::Duplicate() to the suitable type
+    """
+    def Duplicate(self):
+        ct = self.GetClass()
+        if ct=="BOARD":
+            return None
+        else:
+            return Cast_to_BOARD_ITEM( _pcbnew.BOARD_ITEM_Duplicate(self) ).Cast()
 
     def SetPos(self,p):
         self.SetPosition(p)
