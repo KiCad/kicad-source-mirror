@@ -156,7 +156,7 @@ class PadArray(object):
 
     def AddPad(self, pad):
         """!
-        Add a pad to the array, under the same moodule as the main
+        Add a pad to the array, under the same footprint as the main
         prototype pad
         @param pad: pad to add
         """
@@ -175,7 +175,6 @@ class PadArray(object):
 
         # create a new pad with same characteristics
         pad = pad.Duplicate()
-        pad.SetPos0(pos)
         pad.SetPosition(pos)
 
         return pad

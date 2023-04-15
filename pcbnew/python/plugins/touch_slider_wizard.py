@@ -66,7 +66,6 @@ class TouchSliderWizard(FootprintWizardBase.FootprintWizard):
         pad.SetShape(PAD_SHAPE_RECT)
         pad.SetAttribute(PAD_ATTRIB_SMD)
         pad.SetLayerSet(pad.ConnSMDMask())
-        pad.SetPos0(pos)
         pad.SetPosition(pos)
         pad.SetName(name)
         return pad
@@ -78,7 +77,6 @@ class TouchSliderWizard(FootprintWizardBase.FootprintWizard):
         pad.SetShape(PAD_SHAPE_TRAPEZOID)
         pad.SetAttribute(PAD_ATTRIB_SMD)
         pad.SetLayerSet(pad.ConnSMDMask())
-        pad.SetPos0(pos)
         pad.SetPosition(pos)
         pad.SetName(name)
         pad.SetDelta(VECTOR2I(left_right*size[1],up_down*size[0]))

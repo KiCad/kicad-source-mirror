@@ -49,7 +49,6 @@ class FPC_FootprintWizard(FootprintWizardBase.FootprintWizard):
         pad.SetShape(pcbnew.PAD_SHAPE_RECT)
         pad.SetAttribute(pcbnew.PAD_ATTRIB_SMD)
         pad.SetLayerSet( pad.SMDMask() )
-        pad.SetPos0(pos)
         pad.SetPosition(pos)
         pad.SetName(name)
         return pad

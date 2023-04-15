@@ -486,7 +486,7 @@ class FootprintWizardDrawingAids:
         """!
         Draw a line from (x1, y1) to (x2, y2)
         """
-        outline = pcbnew.FP_SHAPE(self.module)
+        outline = pcbnew.PCB_SHAPE(self.module)
         outline.SetWidth(self.GetLineThickness())
         outline.SetLayer(self.GetLayer())
         outline.SetShape(pcbnew.S_SEGMENT)
@@ -508,7 +508,7 @@ class FootprintWizardDrawingAids:
                        DC line thickness
         """
 
-        circle = pcbnew.FP_SHAPE(self.module)
+        circle = pcbnew.PCB_SHAPE(self.module)
         start = self.TransformPoint(x, y)
 
         if filled:
@@ -548,7 +548,7 @@ class FootprintWizardDrawingAids:
         @param sy: the y coordinate of the arc start point
         @param angle: the arc's central angle (in deci-degrees)
         """
-        arc = pcbnew.FP_SHAPE(self.module)
+        arc = pcbnew.PCB_SHAPE(self.module)
         arc.SetShape(pcbnew.SHAPE_T_ARC)
         arc.SetWidth(self.dc['lineThickness'])
 
@@ -564,7 +564,7 @@ class FootprintWizardDrawingAids:
         arc.SetCenter(center)
         arc.SetStart(start)
         arc.SetArcAngleAndEnd(angle, True)
-        arc.SetLocalCoord()
+        #arc.SetLocalCoord()
         self.module.Add(arc)
 
     def HLine(self, x, y, l):
@@ -635,9 +635,7 @@ class FootprintWizardDrawingAids:
 
         text_size = pcbnew.VECTOR2I(size, size)
 
-        self.module.Reference().SetPos0(self.TransformPoint(x, y))
-        self.module.Reference().SetPosition(
-            self.module.Reference().GetPos0())
+        self.module.Reference().SetPosition( self.TransformPoint(x, y) )
         self.module.Reference().SetTextSize(text_size)
         self.module.Reference().SetTextAngle( pcbnew.EDA_ANGLE( orientation_degree, pcbnew.DEGREES_T ) )
 
@@ -652,8 +650,7 @@ class FootprintWizardDrawingAids:
         """
         text_size = pcbnew.VECTOR2I(size, size)
 
-        self.module.Value().SetPos0(self.TransformPoint(x, y))
-        self.module.Value().SetPosition(self.module.Value().GetPos0())
+        self.module.Value().SetPosition(self.TransformPoint(x, y))
         self.module.Value().SetTextSize(text_size)
         self.module.Value().SetLayer(self.DefaultTextValueLayer())
         self.module.Value().SetTextAngle( pcbnew.EDA_ANGLE( orientation_degree, pcbnew.DEGREES_T ) )

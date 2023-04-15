@@ -64,7 +64,6 @@ class MutualcapButtonWizard(FootprintWizardBase.FootprintWizard):
         layerset.AddLayer(pcbnew.F_Cu)
         pad.SetLayerSet(layerset)
 
-        pad.SetPos0(pos)
         pad.SetPosition(pos)
         pad.SetName(name)
         return pad

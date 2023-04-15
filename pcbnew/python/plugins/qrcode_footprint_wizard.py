@@ -66,8 +66,8 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
         self.qr.make()
 
     def drawPixelSquareArea( self, layer, size, xposition, yposition):
-        # creates a FP_SHAPE of rectangle type. The rectangle is square
-        rectangle = pcbnew.FP_SHAPE(self.module)
+        # creates a PCB_SHAPE of rectangle type. The rectangle is square
+        rectangle = pcbnew.PCB_SHAPE(self.module)
         rectangle.SetShape(pcbnew.S_RECT)
         rectangle.SetWidth( 0 )
         rectangle.SetFilled( True )
@@ -77,8 +77,6 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
         rectangle.SetStartY( -halfsize+yposition )
         rectangle.SetEndX( halfsize+xposition )
         rectangle.SetEndY( halfsize+yposition )
-        rectangle.SetStart0( rectangle.GetStart() )
-        rectangle.SetEnd0( rectangle.GetEnd() )
         return rectangle
 
 
@@ -90,7 +88,6 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
             pad.SetSize(pcbnew.VECTOR2I(self.X, self.X))
             pad_pos = pcbnew.VECTOR2I(xposition,yposition)
             pad.SetPosition(pad_pos)
-            pad.SetPos0(pad_pos)
             pad.SetShape(pcbnew.PAD_SHAPE_RECT)
             pad.SetAttribute(pcbnew.PAD_ATTRIB_SMD)
             pad.SetName("")
@@ -149,7 +146,6 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
         textPosition = int((self.textHeight) + ((1 + half_number_of_elements) * self.X))
         pos = pcbnew.VECTOR2I(0, - textPosition)
         self.module.Value().SetPosition(pos)
-        self.module.Value().SetPos0(pos)
         self.module.Value().SetTextHeight(self.textHeight)
         self.module.Value().SetTextWidth(self.textWidth)
         self.module.Value().SetTextThickness(self.textThickness)
@@ -157,7 +153,6 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
         # Add Reference field
         pos = pcbnew.VECTOR2I(0, textPosition)
         self.module.Reference().SetPosition(pos)
-        self.module.Reference().SetPos0(pos)
         self.module.Reference().SetTextHeight(self.textHeight)
         self.module.Reference().SetTextWidth(self.textWidth)
         self.module.Reference().SetTextThickness(self.textThickness)
