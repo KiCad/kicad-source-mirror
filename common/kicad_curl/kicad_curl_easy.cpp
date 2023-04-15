@@ -112,12 +112,6 @@ static int progressinfo( void* aProgress, double aDLtotal, double aDLnow, double
 KICAD_CURL_EASY::KICAD_CURL_EASY() :
         m_headers( nullptr )
 {
-    // Call KICAD_CURL::Init() from in here every time, but only the first time
-    // will incur any overhead.  This strategy ensures that libcurl is never loaded
-    // unless it is needed.
-
-    KICAD_CURL::Init();
-
     m_CURL = curl_easy_init();
 
     if( !m_CURL )

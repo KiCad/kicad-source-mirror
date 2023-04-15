@@ -52,6 +52,7 @@
 #include <eda_draw_frame.h>
 #include <gestfich.h>
 #include <id.h>
+#include <kicad_curl/kicad_curl.h>
 #include <kiplatform/policy.h>
 #include <lockfile.h>
 #include <menus_helpers.h>
@@ -151,6 +152,8 @@ PGM_BASE::~PGM_BASE()
 
 void PGM_BASE::Destroy()
 {
+    KICAD_CURL::Cleanup();
+
 #ifdef KICAD_USE_SENTRY
     sentry_close();
 #endif
@@ -408,6 +411,8 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
     // Just make sure we init precreate any folders early for later code
     // In particular, the user cache path is the most likely to be hit by startup code
     PATHS::EnsureUserPathsExist();
+
+    KICAD_CURL::Init();
 
 #ifdef KICAD_USE_SENTRY
     sentryInit();
