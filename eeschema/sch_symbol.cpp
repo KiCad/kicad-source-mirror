@@ -137,13 +137,12 @@ SCH_SYMBOL::SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const LIB_ID& aLibId,
     m_prefix = UTIL::GetRefDesPrefix( m_part->GetReferenceField().GetText() );
 
     if( aSheet )
-    {
         SetRef( aSheet, UTIL::GetRefDesUnannotated( m_prefix ) );
-    }
 
-    // Inherit the include in bill of materials and board netlist settings from library symbol.
-    m_inBom = aSymbol.GetIncludeInBom();
-    m_onBoard = aSymbol.GetIncludeOnBoard();
+    // Inherit the include in bill of materials and board netlist settings from flattened
+    // library symbol.
+    m_inBom = m_part->GetIncludeInBom();
+    m_onBoard = m_part->GetIncludeOnBoard();
     m_DNP = false;
 
 }
