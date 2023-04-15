@@ -226,7 +226,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
 
     m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_clearance",
             &m_MinClearance, pcbIUScale.mmToIU( DEFAULT_MINCLEARANCE ),
-            pcbIUScale.mmToIU( 0.01 ), pcbIUScale.mmToIU( 25.0 ), pcbIUScale.MM_PER_IU ) );
+            pcbIUScale.mmToIU( 0.00 ), pcbIUScale.mmToIU( 25.0 ), pcbIUScale.MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_connection",
             &m_MinConn, pcbIUScale.mmToIU( DEFAULT_MINCONNECTION ),
@@ -234,27 +234,27 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
 
     m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_track_width",
             &m_TrackMinWidth, pcbIUScale.mmToIU( DEFAULT_TRACKMINWIDTH ),
-            pcbIUScale.mmToIU( 0.01 ), pcbIUScale.mmToIU( 25.0 ), pcbIUScale.MM_PER_IU ) );
+            pcbIUScale.mmToIU( 0.00 ), pcbIUScale.mmToIU( 25.0 ), pcbIUScale.MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_via_annular_width",
-            &m_ViasMinAnnularWidth, pcbIUScale.mmToIU( DEFAULT_VIASMINSIZE ), pcbIUScale.mmToIU( 0.01 ),
-            pcbIUScale.mmToIU( 25.0 ), pcbIUScale.MM_PER_IU ) );
+            &m_ViasMinAnnularWidth, pcbIUScale.mmToIU( DEFAULT_VIASMINSIZE ),
+            pcbIUScale.mmToIU( 0.00 ), pcbIUScale.mmToIU( 25.0 ), pcbIUScale.MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_via_diameter",
             &m_ViasMinSize, pcbIUScale.mmToIU( DEFAULT_VIASMINSIZE ),
-            pcbIUScale.mmToIU( 0.01 ), pcbIUScale.mmToIU( 25.0 ), pcbIUScale.MM_PER_IU ) );
+            pcbIUScale.mmToIU( 0.00 ), pcbIUScale.mmToIU( 25.0 ), pcbIUScale.MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_through_hole_diameter",
             &m_MinThroughDrill, pcbIUScale.mmToIU( DEFAULT_MINTHROUGHDRILL ),
-            pcbIUScale.mmToIU( 0.01 ), pcbIUScale.mmToIU( 25.0 ), pcbIUScale.MM_PER_IU ) );
+            pcbIUScale.mmToIU( 0.00 ), pcbIUScale.mmToIU( 25.0 ), pcbIUScale.MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_microvia_diameter",
             &m_MicroViasMinSize, pcbIUScale.mmToIU( DEFAULT_MICROVIASMINSIZE ),
-            pcbIUScale.mmToIU( 0.01 ), pcbIUScale.mmToIU( 10.0 ), pcbIUScale.MM_PER_IU ) );
+            pcbIUScale.mmToIU( 0.00 ), pcbIUScale.mmToIU( 10.0 ), pcbIUScale.MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_microvia_drill",
             &m_MicroViasMinDrill, pcbIUScale.mmToIU( DEFAULT_MICROVIASMINDRILL ),
-            pcbIUScale.mmToIU( 0.01 ), pcbIUScale.mmToIU( 10.0 ), pcbIUScale.MM_PER_IU ) );
+            pcbIUScale.mmToIU( 0.00 ), pcbIUScale.mmToIU( 10.0 ), pcbIUScale.MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_hole_to_hole",
             &m_HoleToHoleMin, pcbIUScale.mmToIU( DEFAULT_HOLETOHOLEMIN ),
