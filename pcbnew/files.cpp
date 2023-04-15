@@ -826,7 +826,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         // we should not ask PLUGINs to do these items:
         loadedBoard->BuildListOfNets();
-        ResolveDRCExclusions();
+        ResolveDRCExclusions( true );
         m_toolManager->RunAction( PCB_ACTIONS::repairBoard, true, true);
 
         if( loadedBoard->IsModified() )

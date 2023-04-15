@@ -206,7 +206,7 @@ void DRC_TOOL::updatePointers()
     // update my pointers, m_editFrame is the only unchangeable one
     m_pcb = m_editFrame->GetBoard();
 
-    m_editFrame->ResolveDRCExclusions();
+    m_editFrame->ResolveDRCExclusions( false );
 
     if( m_drcDialog )
         m_drcDialog->UpdateData();

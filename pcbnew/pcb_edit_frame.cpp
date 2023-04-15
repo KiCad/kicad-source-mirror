@@ -984,11 +984,11 @@ void PCB_EDIT_FRAME::RecordDRCExclusions()
 }
 
 
-void PCB_EDIT_FRAME::ResolveDRCExclusions()
+void PCB_EDIT_FRAME::ResolveDRCExclusions( bool aCreateMarkers )
 {
     BOARD_COMMIT commit( this );
 
-    for( PCB_MARKER* marker : GetBoard()->ResolveDRCExclusions() )
+    for( PCB_MARKER* marker : GetBoard()->ResolveDRCExclusions( aCreateMarkers ) )
     {
         if( marker->GetMarkerType() == MARKER_BASE::MARKER_DRAWING_SHEET )
             marker->GetRCItem()->SetItems( GetCanvas()->GetDrawingSheet() );

@@ -460,8 +460,12 @@ public:
 
     /**
      * Rebuild DRC markers from the serialized data in BOARD_DESIGN_SETTINGS.
+     *
+     * @param aCreateMarkers if true, create markers from serialized data; if false only
+     *                       use serialized data to set existing markers to excluded.
+     *                       The former is used on board load; the later after a DRC.
      */
-    std::vector<PCB_MARKER*> ResolveDRCExclusions();
+    std::vector<PCB_MARKER*> ResolveDRCExclusions( bool aCreateMarkers );
 
     /**
      * Update the visibility flags on the current unconnected ratsnest lines.
