@@ -50,6 +50,7 @@ class DIALOG_DRC_BASE : public DIALOG_SHIM
 
 	protected:
 		wxCheckBox* m_cbRefillZones;
+		wxCheckBox* m_cbUpdateTeardrops;
 		wxCheckBox* m_cbReportAllTrackErrors;
 		wxCheckBox* m_cbTestFootprints;
 		wxSimplebook* m_runningResultsBook;

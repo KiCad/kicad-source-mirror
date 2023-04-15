@@ -274,6 +274,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "drc_dialog.refill_zones",
             &m_DrcDialog.refill_zones, true ) );
 
+    m_params.emplace_back( new PARAM<bool>( "drc_dialog.update_teardrops",
+            &m_DrcDialog.update_teardrops, true ) );
+
     m_params.emplace_back( new PARAM<bool>( "drc_dialog.test_all_track_errors",
             &m_DrcDialog.test_all_track_errors, false ) );
 

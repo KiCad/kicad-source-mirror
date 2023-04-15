@@ -36,6 +36,7 @@
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <netlist_reader/pcb_netlist.h>
+#include <teardrop/teardrop.h>
 
 DRC_TOOL::DRC_TOOL() :
         PCB_TOOL_BASE( "pcbnew.DRCTool" ),
@@ -129,7 +130,7 @@ void DRC_TOOL::DestroyDRCDialog()
 
 
 void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aRefillZones,
-                         bool aReportAllTrackErrors, bool aTestFootprints )
+                         bool aUpdateTeardrops, bool aReportAllTrackErrors, bool aTestFootprints )
 {
     // One at a time, please.
     // Note that the main GUI entry points to get here are blocked, so this is really an
@@ -150,6 +151,17 @@ void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aRefillZones
         aProgressReporter->AdvancePhase( _( "Refilling all zones..." ) );
 
         zoneFiller->FillAllZones( m_drcDialog, aProgressReporter );
+    }
+
+    if( aUpdateTeardrops )
+    {
+        aProgressReporter->AdvancePhase( _( "Updating teardrops..." ) );
+
+        BOARD*                 board( m_editFrame->GetBoard() );
+        BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
+        TEARDROP_MANAGER       teardropManager( board, m_editFrame );
+
+        teardropManager.SetTeardrops( &commit, bds.GetTeardropParamsList()->m_AllowUseTwoTracks );
     }
 
     m_drcEngine->SetDrawingSheet( m_editFrame->GetCanvas()->GetDrawingSheet() );
