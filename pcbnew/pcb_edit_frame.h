@@ -236,9 +236,10 @@ public:
     void RecordDRCExclusions();
 
     /**
-     * Update markers to match recorded exclusions.
+     * If aCreateMarkers then create DRC exclusion markers from the serialized data.  If false,
+     * then use the serialized data to set exclusion flags on existing markers.
      */
-    void ResolveDRCExclusions();
+    void ResolveDRCExclusions( bool aCreateMarkers );
 
     void Process_Special_Functions( wxCommandEvent& event );
     void Tracks_and_Vias_Size_Event( wxCommandEvent& event );

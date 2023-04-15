@@ -305,7 +305,7 @@ void BOARD::UpdateRatsnestExclusions()
 }
 
 
-std::vector<PCB_MARKER*> BOARD::ResolveDRCExclusions()
+std::vector<PCB_MARKER*> BOARD::ResolveDRCExclusions( bool aCreateMarkers )
 {
     for( PCB_MARKER* marker : GetBoard()->Markers() )
     {
@@ -320,28 +320,31 @@ std::vector<PCB_MARKER*> BOARD::ResolveDRCExclusions()
 
     std::vector<PCB_MARKER*> newMarkers;
 
-    for( const wxString& exclusionData : m_designSettings->m_DrcExclusions )
+    if( aCreateMarkers )
     {
-        PCB_MARKER* marker = PCB_MARKER::Deserialize( exclusionData );
-
-        if( !marker )
-            continue;
-
-        // Check to see if items still exist
-        for( const KIID& guid : marker->GetRCItem()->GetIDs() )
+        for( const wxString& exclusionData : m_designSettings->m_DrcExclusions )
         {
-            if( GetItem( guid ) == DELETED_BOARD_ITEM::GetInstance() )
+            PCB_MARKER* marker = PCB_MARKER::Deserialize( exclusionData );
+
+            if( !marker )
+                continue;
+
+            // Check to see if items still exist
+            for( const KIID& guid : marker->GetRCItem()->GetIDs() )
             {
-                delete marker;
-                marker = nullptr;
-                break;
+                if( GetItem( guid ) == DELETED_BOARD_ITEM::GetInstance() )
+                {
+                    delete marker;
+                    marker = nullptr;
+                    break;
+                }
             }
-        }
 
-        if( marker )
-        {
-            marker->SetExcluded( true );
-            newMarkers.push_back( marker );
+            if( marker )
+            {
+                marker->SetExcluded( true );
+                newMarkers.push_back( marker );
+            }
         }
     }
 

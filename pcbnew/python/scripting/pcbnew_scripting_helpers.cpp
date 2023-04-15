@@ -183,7 +183,7 @@ BOARD* LoadBoard( wxString& aFileName, IO_MGR::PCB_FILE_T aFormat )
             // Best efforts...
         }
 
-        for( PCB_MARKER* marker : brd->ResolveDRCExclusions() )
+        for( PCB_MARKER* marker : brd->ResolveDRCExclusions( true ) )
             brd->Add( marker );
 
         brd->BuildConnectivity();
