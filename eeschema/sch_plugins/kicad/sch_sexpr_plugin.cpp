@@ -1493,6 +1493,10 @@ LIB_SYMBOL* SCH_SEXPR_PLUGIN::LoadSymbol( const wxString& aLibraryPath, const wx
 
     LIB_SYMBOL_MAP::const_iterator it = m_cache->m_symbols.find( aSymbolName );
 
+    // We no longer escape '/' in symbol names, but we used to.
+    if( it == m_cache->m_symbols.end() && aSymbolName.Contains( '/' ) )
+        it = m_cache->m_symbols.find( EscapeString( aSymbolName, CTX_LEGACY_LIBID ) );
+
     if( it == m_cache->m_symbols.end() )
         return nullptr;
 

@@ -159,9 +159,12 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
             else
                 converted += c;
         }
-        else if( aContext == CTX_LIBID )
+        else if( aContext == CTX_LIBID || aContext == CTX_LEGACY_LIBID )
         {
-            if( c == '\\' )
+            // We no longer escape '/' in LIB_IDs, but we used to
+            if( c == '/' && aContext == CTX_LEGACY_LIBID )
+                converted += wxT( "{slash}" );
+            else if( c == '\\' )
                 converted += wxT( "{backslash}" );
             else if( c == '<' )
                 converted += wxT( "{lt}" );
