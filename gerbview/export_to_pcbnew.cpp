@@ -297,6 +297,7 @@ void GBR_TO_PCB_EXPORTER::export_copper_item( const GERBER_DRAW_ITEM* aGbrItem, 
         export_flashed_copper_item( aGbrItem, aLayer );
         break;
 
+    case GBR_CIRCLE:
     case GBR_ARC:
         export_segarc_copper_item( aGbrItem, aLayer );
         break;
@@ -314,8 +315,26 @@ void GBR_TO_PCB_EXPORTER::export_copper_item( const GERBER_DRAW_ITEM* aGbrItem, 
 #endif
         break;
 
+    case GBR_SEGMENT:
+    {
+        D_CODE* code = aGbrItem->GetDcodeDescr();
+
+        if( code && code->m_ApertType == APT_RECT )
+        {
+            if( aGbrItem->m_ShapeAsPolygon.OutlineCount() == 0 )
+                const_cast<GERBER_DRAW_ITEM*>( aGbrItem )->ConvertSegmentToPolygon();
+
+            writePcbPolygon( aGbrItem->m_ShapeAsPolygon, aLayer );
+        }
+        else
+        {
+            export_segline_copper_item( aGbrItem, aLayer );
+        }
+
+        break;
+    }
+
     default:
-        export_segline_copper_item( aGbrItem, aLayer );
         break;
     }
 }
