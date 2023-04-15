@@ -589,8 +589,10 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( const std::map<SCH_SYMBOL*,
 
         if( m_resetAttributes->GetValue() )
         {
-            symbol->SetIncludeInBom( libSymbol->GetIncludeInBom() );
-            symbol->SetIncludeOnBoard( libSymbol->GetIncludeOnBoard() );
+            // Fetch the attributes from the *flattened* library symbol.  They are not supported
+            // in derived symbols.
+            symbol->SetIncludeInBom( symbol->GetLibSymbolRef()->GetIncludeInBom() );
+            symbol->SetIncludeOnBoard( symbol->GetLibSymbolRef()->GetIncludeOnBoard() );
         }
 
         bool removeExtras = m_removeExtraBox->GetValue();

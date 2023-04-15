@@ -647,6 +647,10 @@ std::unique_ptr< LIB_SYMBOL > LIB_SYMBOL::Flatten() const
         retv->SetKeyWords( m_keyWords.IsEmpty() ? parent->GetKeyWords() : m_keyWords );
         retv->SetDescription( m_description.IsEmpty() ? parent->GetDescription() : m_description );
         retv->SetFPFilters( m_fpFilters.IsEmpty() ? parent->GetFPFilters() : m_fpFilters );
+
+        retv->SetIncludeInBom( parent->GetIncludeInBom() );
+        retv->SetIncludeOnBoard( parent->GetIncludeOnBoard() );
+
         retv->UpdateFieldOrdinals();
     }
     else
