@@ -27,109 +27,21 @@
 // conflicts for some defines, at least on Windows
 #include <kicad_curl/kicad_curl.h>
 
-#include <mutex>
 #include <ki_exception.h>   // THROW_IO_ERROR
-
-
-
-// These are even more private than class members, and since there is only
-// one instance of KICAD_CURL ever, these statics are hidden here to simplify the
-// client (API) header file.
-static volatile bool s_initialized;
-
-static std::mutex s_lock;        // for s_initialized
-
-/// At process termination, using atexit() keeps the CURL stuff out of the
-/// singletops and PGM_BASE.
-static void at_terminate()
-{
-    KICAD_CURL::Cleanup();
-}
 
 
 void KICAD_CURL::Init()
 {
-    // We test s_initialized twice in an effort to avoid
-    // unnecessarily locking s_lock.  This understands that the common case
-    // will not need to lock.
-    if( !s_initialized )
+    if( curl_global_init( CURL_GLOBAL_ALL ) != CURLE_OK )
     {
-        std::lock_guard<std::mutex> lock( s_lock );
-
-        if( !s_initialized )
-        {
-            if( curl_global_init( CURL_GLOBAL_ALL ) != CURLE_OK )
-            {
-                THROW_IO_ERROR( "curl_global_init() failed." );
-            }
-
-            s_initialized = true;
-        }
+        THROW_IO_ERROR( "curl_global_init() failed." );
     }
 }
 
 
 void KICAD_CURL::Cleanup()
 {
-    /*
-
-    Calling lock_guard() from a static destructor will typically be bad, since the
-    s_lock may already have been statically destroyed itself leading to a boost
-    exception. (Remember C++ does not provide certain sequencing of static
-    destructor invocation.)
-
-    To prevent this we test s_initialized twice, which ensures that the lock_guard
-    is only instantiated on the first call, which should be from
-    PGM_BASE::destroy() which is first called earlier than static destruction.
-    Then when called again from the actual PGM_BASE::~PGM_BASE() function,
-    lock_guard will not be instantiated because s_initialized will be false.
-
-    */
-
-    if( s_initialized )
-    {
-        std::lock_guard<std::mutex> lock( s_lock );
-
-        if( s_initialized )
-        {
-            curl_global_cleanup();
-
-            atexit( &at_terminate );
-
-            s_initialized = false;
-        }
-    }
-}
-
-
-std::string KICAD_CURL::GetSimpleVersion()
-{
-    if( !s_initialized )
-        Init();
-
-    curl_version_info_data* info = curl_version_info( CURLVERSION_NOW );
-
-    std::string res;
-
-    if( info->version )
-    {
-        res += "libcurl version: " + std::string( info->version );
-    }
-
-    res += " (";
-
-    if( info->features & CURL_VERSION_SSL )
-    {
-        res += "with SSL - ";
-        res += std::string( info->ssl_version );
-    }
-    else
-    {
-        res += "without SSL";
-    }
-    res += ")";
-
-    return res;
+    curl_global_cleanup();
 }
 
 

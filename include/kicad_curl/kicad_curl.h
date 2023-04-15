@@ -53,10 +53,6 @@
 #  endif
 #endif
 
-
-struct DYN_LOOKUP;
-
-
 /**
  * Simple wrapper class to call curl_global_init and curl_global_cleanup for KiCad.
  */
@@ -88,17 +84,6 @@ public:
     {
         return curl_version();
     }
-
-
-    /**
-     * Report back curl version only and SSL library support.
-     *
-     * @return  Generated version string.
-     */
-    static std::string GetSimpleVersion();
-
-private:
-    friend class KICAD_CURL_EASY;
 };
 
 #endif // KICAD_CURL_H_
