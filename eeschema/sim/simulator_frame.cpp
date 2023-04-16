@@ -457,6 +457,12 @@ private:
 };
 
 
+BEGIN_EVENT_TABLE( SIMULATOR_FRAME, SIMULATOR_FRAME_BASE )
+    EVT_MENU( wxID_EXIT, SIMULATOR_FRAME::onExit )
+    EVT_MENU( wxID_CLOSE, SIMULATOR_FRAME::onExit )
+END_EVENT_TABLE()
+
+
 SIMULATOR_FRAME::SIMULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         SIMULATOR_FRAME_BASE( aParent ),
         m_SuppressGridEvents( 0 ),

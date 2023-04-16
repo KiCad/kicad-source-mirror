@@ -245,6 +245,8 @@ public:
 
     void OnModify() override;
 
+    DECLARE_EVENT_TABLE()
+
 private:
     void setupTools();
     void doReCreateMenuBar() override;
