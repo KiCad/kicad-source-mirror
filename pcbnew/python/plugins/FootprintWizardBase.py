@@ -603,9 +603,10 @@ class FootprintWizardDrawingAids:
             for i in range(0, len(pts) - 1):
                 self.Line(pts[i][0], pts[i][1], pts[i+1][0], pts[i+1][1])
 
-        _PolyLineInternal(pts)  # original
+        if mirrorX is None and mirrorY is None:
+            _PolyLineInternal(pts)  # original
 
-        if mirrorX is not None and mirrorY is not None:
+        elif mirrorX is not None and mirrorY is not None:
             self.TransformFlip(mirrorX, mirrorY, self.flipBoth)  # both
             _PolyLineInternal(pts)
             self.PopTransform()

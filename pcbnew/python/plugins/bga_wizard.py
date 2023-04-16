@@ -163,7 +163,15 @@ class BGAWizard(FootprintWizardBase.FootprintWizard):
         self.draw.Value(0, ypos, text_size)
         self.draw.Reference(0, -ypos, text_size)
 
+        # Add a extra text (${REFERENCE}) on the F_Fab layer
+        extra_text = pcbnew.PCB_TEXT( self.module, pcbnew.PCB_TEXT.TEXT_is_DIVERS )
+        extra_text.SetLayer( pcbnew.F_Fab )
+        extra_text.SetPosition( pcbnew.VECTOR2I( 0, 0) )
+        extra_text.SetTextSize( pcbnew.VECTOR2I( text_size, text_size ) )
+        extra_text.SetText( "${REFERENCE}" )
+        self.module.Add( extra_text )
+
         # set SMD attribute
-        self.module.SetAttributes(pcbnew.PAD_ATTRIB_SMD)
+        self.module.SetAttributes(pcbnew.FP_SMD)
 
 BGAWizard().register()
