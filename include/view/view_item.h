@@ -142,11 +142,6 @@ public:
         return m_viewPrivData;
     }
 
-    void ClearViewPrivData()
-    {
-        m_viewPrivData = nullptr;
-    }
-
     void SetForcedTransparency( double aForcedTransparency )
     {
         m_forcedTransparency = aForcedTransparency;

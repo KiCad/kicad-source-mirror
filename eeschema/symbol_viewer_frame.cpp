@@ -114,8 +114,7 @@ SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAM
                     aFrameType == FRAME_SCH_VIEWER_MODAL ? LIB_VIEW_NAME_MODAL : LIB_VIEW_NAME ),
         m_unitChoice( nullptr ),
         m_libList( nullptr ),
-        m_symbolList( nullptr ),
-        m_previewItem( nullptr )
+        m_symbolList( nullptr )
 {
     wxASSERT( aFrameType == FRAME_SCH_VIEWER || aFrameType == FRAME_SCH_VIEWER_MODAL );
 
@@ -318,7 +317,10 @@ SYMBOL_VIEWER_FRAME::~SYMBOL_VIEWER_FRAME()
         m_toolManager->ShutdownAllTools();
 
     if( m_previewItem )
-        GetCanvas()->GetView()->Remove( m_previewItem );
+    {
+        GetCanvas()->GetView()->Remove( m_previewItem.get() );
+        m_previewItem = nullptr;
+    }
 }
 
 
@@ -497,7 +499,7 @@ void SYMBOL_VIEWER_FRAME::updatePreviewSymbol()
 
     if( m_previewItem )
     {
-        view->Remove( m_previewItem );
+        view->Remove( m_previewItem.get() );
         m_previewItem = nullptr;
     }
 
@@ -508,11 +510,11 @@ void SYMBOL_VIEWER_FRAME::updatePreviewSymbol()
         GetRenderSettings()->m_ShowUnit = m_unit;
         GetRenderSettings()->m_ShowConvert = m_convert;
 
-        m_previewItem = symbol;
-        view->Add( m_previewItem );
+        m_previewItem = symbol->Flatten();
+        view->Add( m_previewItem.get() );
 
         wxString parentName;
-        std::shared_ptr<LIB_SYMBOL> parent  = m_previewItem->GetParent().lock();
+        std::shared_ptr<LIB_SYMBOL> parent  = symbol->GetParent().lock();
 
         if( parent )
             parentName = parent->GetName();

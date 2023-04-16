@@ -200,9 +200,9 @@ private:
      * Updated to `true` if a list rewrite on GUI activation resulted in the symbol
      * selection changing, or if the user has changed the selection manually.
      */
-    bool m_selection_changed;
+    bool                m_selection_changed;
 
-    LIB_SYMBOL* m_previewItem;
+    std::unique_ptr<LIB_SYMBOL> m_previewItem;
 
     DECLARE_EVENT_TABLE()
 };
