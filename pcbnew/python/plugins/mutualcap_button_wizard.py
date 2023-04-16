@@ -1,4 +1,5 @@
 #  Copyright 2019-2020 Julian Fellinger
+#  Copyright (C) 2023 KiCad Developers.
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -17,7 +18,6 @@
 
 import FootprintWizardBase
 import pcbnew
-from pcbnew import *
 
 class MutualcapButtonWizard(FootprintWizardBase.FootprintWizard):
 
@@ -55,10 +55,10 @@ class MutualcapButtonWizard(FootprintWizardBase.FootprintWizard):
 
     # build a rectangular pad
     def smdRectPad(self,module,size,pos,name):
-        pad = PAD(module)
+        pad = pcbnew.PAD(module)
         pad.SetSize(size)
-        pad.SetShape(PAD_SHAPE_RECT)
-        pad.SetAttribute(PAD_ATTRIB_SMD)
+        pad.SetShape(pcbnew.PAD_SHAPE_RECT)
+        pad.SetAttribute(pcbnew.PAD_ATTRIB_SMD)
 
         layerset = pcbnew.LSET()
         layerset.AddLayer(pcbnew.F_Cu)
@@ -87,7 +87,7 @@ class MutualcapButtonWizard(FootprintWizardBase.FootprintWizard):
         clearance    = oew/2
 
         ###border h
-        self.module.SetLayer(F_Cu)
+        self.module.SetLayer(pcbnew.F_Cu)
         size_pad = pcbnew.VECTOR2I( w, oew )
         self.module.Add(self.smdRectPad(self.module,size_pad,
                                         pcbnew.VECTOR2I(0, (int)((-h/2)+oew/2) ),
@@ -130,8 +130,24 @@ class MutualcapButtonWizard(FootprintWizardBase.FootprintWizard):
         self.draw.Value(0, h/2+textSize, textSize)
         self.draw.Reference(0, -h/2-textSize, textSize)
 
+        # Add a extra text (${REFERENCE}) on the F_Fab layer
+        extra_text = pcbnew.FP_TEXT( self.module, pcbnew.FP_TEXT.TEXT_is_DIVERS )
+        extra_text.SetLayer( pcbnew.F_Fab )
+        extra_text.SetPosition( pcbnew.VECTOR2I( 0, 0) )
+        extra_text.SetTextSize( pcbnew.VECTOR2I( textSize, textSize ) )
+        extra_text.SetText( "${REFERENCE}" )
+        self.module.Add( extra_text )
+
         #optionally draw silkscreen line around button
         if(drawBox):
-            self.draw.Box(0,0,w,h)
+            self.draw.SetLayer( pcbnew.F_SilkS )
+            self.draw.SetLineThickness( pcbnew.FromMM( 0.12 ) )     #Default per KLC F5.3
+            self.draw.Box( 0, 0, w, h )
+
+        # draw coutyard  around button
+        self.draw.SetLayer( pcbnew.F_CrtYd )
+        self.draw.SetLineThickness( pcbnew.FromMM( 0.05 ) )     #Default per KLC F5.3
+        margin = pcbnew.FromMM( 0.25 )  #Default per KLC F5.3
+        self.draw.Box( 0, 0, w + margin*2 , h + margin*2 )
 
 MutualcapButtonWizard().register()
