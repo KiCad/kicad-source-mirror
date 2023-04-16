@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -55,7 +55,7 @@ public:
      * Sets (or updates) drawing-sheet used by the draw panel.
      *
      * @param aDrawingSheet is the drawing-sheet to be used.  The object is then owned by
-     *                   #PCB_DRAW_PANEL_GAL.
+     *                      #PCB_DRAW_PANEL_GAL.
      */
     void SetDrawingSheet( DS_PROXY_VIEW_ITEM* aDrawingSheet );
 
@@ -115,11 +115,9 @@ protected:
     ///< Set rendering targets & dependencies for layers.
     void setDefaultLayerDeps();
 
-    ///< Currently used drawing-sheet.
-    std::unique_ptr<DS_PROXY_VIEW_ITEM> m_drawingSheet;
-
-    ///< Ratsnest view item
-    std::unique_ptr<RATSNEST_VIEW_ITEM> m_ratsnest;
+protected:
+    std::unique_ptr<DS_PROXY_VIEW_ITEM> m_drawingSheet;  ///< Currently used drawing-sheet.
+    std::unique_ptr<RATSNEST_VIEW_ITEM> m_ratsnest;      ///< Ratsnest view item
 };
 
 #endif /* PCB_DRAW_PANEL_GAL_H_ */

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2017 CERN
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -352,7 +352,7 @@ void PCB_DRAW_PANEL_GAL::SetHighContrastLayer( PCB_LAYER_ID aLayer )
                 LAYER_RATSNEST, LAYER_CURSOR, LAYER_ANCHOR, LAYER_LOCKED_ITEM_SHADOW
         };
 
-        for( unsigned int i : layers )
+        for( int i : layers )
             rSettings->SetLayerIsHighContrast( i );
 
         // Pads should be shown too
@@ -500,7 +500,7 @@ void PCB_DRAW_PANEL_GAL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
     int           viaCount = 0;
     int           trackSegmentCount = 0;
     std::set<int> netCodes;
-    int           unconnected = board->GetConnectivity()->GetUnconnectedCount( true );
+    int           unconnected = (int) board->GetConnectivity()->GetUnconnectedCount( true );
 
     for( PCB_TRACK* item : board->Tracks() )
     {
