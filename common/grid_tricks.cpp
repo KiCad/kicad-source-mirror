@@ -351,22 +351,16 @@ void GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
                  _( "Copy selected cells to clipboard" ) );
     menu.Append( GRIDTRICKS_ID_PASTE, _( "Paste" ) + "\tCtrl+V",
                  _( "Paste clipboard cells to matrix at current cell" ) );
-    menu.Append( GRIDTRICKS_ID_DELETE, _( "Delete" ) + "\tDel", _( "Clear contents of selected cells" ) );
-    menu.Append( GRIDTRICKS_ID_SELECT, _( "Select All" ) + "\tCtrl+A",  _( "Select all cells" ) );
-
-    getSelectedArea();
-
-    // if nothing is selected, disable cut, copy and delete.
-    if( !m_sel_row_count && !m_sel_col_count )
-    {
-        menu.Enable( GRIDTRICKS_ID_CUT,  false );
-        menu.Enable( GRIDTRICKS_ID_COPY, false );
-        menu.Enable( GRIDTRICKS_ID_DELETE, false );
-    }
+    menu.Append( GRIDTRICKS_ID_DELETE, _( "Delete" ) + "\tDel",
+                 _( "Clear contents of selected cells" ) );
+    menu.Append( GRIDTRICKS_ID_SELECT, _( "Select All" ) + "\tCtrl+A",
+                 _( "Select all cells" ) );
 
     menu.Enable( GRIDTRICKS_ID_CUT,  false );
     menu.Enable( GRIDTRICKS_ID_DELETE, false );
     menu.Enable( GRIDTRICKS_ID_PASTE, false );
+
+    getSelectedArea();
 
     auto anyCellsWritable =
             [&]()
@@ -387,19 +381,21 @@ void GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
     {
         menu.Enable( GRIDTRICKS_ID_CUT,  true );
         menu.Enable( GRIDTRICKS_ID_DELETE, true );
+    }
 
-        wxLogNull doNotLog; // disable logging of failed clipboard actions
+    // Paste can overflow the selection, so don't depend on the particular cell being writeable.
 
-        if( wxTheClipboard->Open() )
+    wxLogNull doNotLog; // disable logging of failed clipboard actions
+
+    if( wxTheClipboard->Open() )
+    {
+        if( wxTheClipboard->IsSupported( wxDF_TEXT )
+            || wxTheClipboard->IsSupported( wxDF_UNICODETEXT ) )
         {
-            if( wxTheClipboard->IsSupported( wxDF_TEXT )
-                || wxTheClipboard->IsSupported( wxDF_UNICODETEXT ) )
-            {
-                menu.Enable( GRIDTRICKS_ID_PASTE, true );
-            }
-
-            wxTheClipboard->Close();
+            menu.Enable( GRIDTRICKS_ID_PASTE, true );
         }
+
+        wxTheClipboard->Close();
     }
 
     m_grid->PopupMenu( &menu );
@@ -556,9 +552,7 @@ void GRID_TRICKS::onKeyDown( wxKeyEvent& ev )
             wxArrayInt rowSel = m_grid->GetSelectedRows();
 
             for( unsigned int rowInd = 0; rowInd < rowSel.GetCount(); rowInd++ )
-            {
                 retVal |= toggleCell( rowSel[rowInd], 0, true );
-            }
         }
 
         // If only columns can be selected, only toggle the first cell in a column
@@ -567,9 +561,7 @@ void GRID_TRICKS::onKeyDown( wxKeyEvent& ev )
             wxArrayInt colSel = m_grid->GetSelectedCols();
 
             for( unsigned int colInd = 0; colInd < colSel.GetCount(); colInd++ )
-            {
                 retVal |= toggleCell( 0, colSel[colInd], true );
-            }
         }
 
         // If the user can select the individual cells, toggle each cell selected
@@ -591,18 +583,14 @@ void GRID_TRICKS::onKeyDown( wxKeyEvent& ev )
             for( unsigned int colInd = 0; colInd < colSel.GetCount(); colInd++ )
             {
                 for( int row = 0; row < m_grid->GetNumberRows(); row++ )
-                {
                     retVal |= toggleCell( row, colSel[colInd], true );
-                }
             }
 
             // Iterate over every row and try to toggle each cell in it
             for( unsigned int rowInd = 0; rowInd < rowSel.GetCount(); rowInd++ )
             {
                 for( int col = 0; col < m_grid->GetNumberCols(); col++ )
-                {
                     retVal |= toggleCell( rowSel[rowInd], col, true );
-                }
             }
 
             // Iterate over the selection blocks
@@ -614,9 +602,7 @@ void GRID_TRICKS::onKeyDown( wxKeyEvent& ev )
                 for( int row = start.GetRow(); row <= end.GetRow(); row++ )
                 {
                     for( int col = start.GetCol(); col <= end.GetCol(); col++ )
-                    {
                         retVal |= toggleCell( row, col, true );
-                    }
                 }
             }
         }
@@ -750,7 +736,18 @@ void GRID_TRICKS::paste_text( const wxString& cb_text )
         end_row = cur_row + rows.CountTokens();
 
         if( end_row > tbl->GetNumberRows() )
+        {
+            if( m_addHandler )
+            {
+                for( int ii = end_row - tbl->GetNumberRows(); ii > 0; --ii )
+                {
+                    wxCommandEvent dummy;
+                    m_addHandler( dummy );
+                }
+            }
+
             end_row = tbl->GetNumberRows();
+        }
 
         start_col = cur_col;
         end_col = start_col; // end_col actual value calculates later

@@ -55,6 +55,7 @@
 #include <widgets/paged_dialog.h>
 #include <widgets/wx_infobar.h>
 #include <widgets/wx_aui_art_providers.h>
+#include <widgets/wx_grid.h>
 #include <wx/app.h>
 #include <wx/config.h>
 #include <wx/display.h>
@@ -403,6 +404,8 @@ void EDA_BASE_FRAME::HandleUpdateUIEvent( wxUpdateUIEvent& aEvent, EDA_BASE_FRAM
             enableRes = true;
         else if( textEntry && isPaste && textEntry->CanPaste() )
             enableRes = true;
+        else if( dynamic_cast<WX_GRID*>( focus ) )
+            enableRes = false;  // Must disable menu in order to get command as CharHook event
     }
 
     aEvent.Enable( enableRes );
