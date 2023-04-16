@@ -240,16 +240,14 @@ private:
 
 void VIEW::OnDestroy( VIEW_ITEM* aItem )
 {
-    VIEW_ITEM_DATA* data = aItem->viewPrivData();
+    if( aItem->m_viewPrivData )
+    {
+        if( aItem->m_viewPrivData->m_view )
+            aItem->m_viewPrivData->m_view->VIEW::Remove( aItem );
 
-    if( !data )
-        return;
-
-    if( data->m_view )
-        data->m_view->VIEW::Remove( aItem );
-
-    delete data;
-    aItem->ClearViewPrivData();
+        delete aItem->m_viewPrivData;
+        aItem->m_viewPrivData = nullptr;
+    }
 }
 
 
@@ -323,6 +321,8 @@ void VIEW::Add( VIEW_ITEM* aItem, int aDrawPriority )
     if( !aItem->m_viewPrivData )
         aItem->m_viewPrivData = new VIEW_ITEM_DATA;
 
+    wxASSERT_MSG( aItem->m_viewPrivData->m_view == nullptr, wxS( "Already in a different view!" ) );
+
     aItem->m_viewPrivData->m_view = this;
     aItem->m_viewPrivData->m_drawPriority = aDrawPriority;
 
@@ -334,7 +334,7 @@ void VIEW::Add( VIEW_ITEM* aItem, int aDrawPriority )
     for( int i = 0; i < layers_count; ++i )
     {
         wxCHECK2_MSG( layers[i] >= 0 && static_cast<unsigned>( layers[i] ) < m_layers.size(),
-                continue, wxS( "Invalid layer" ) );
+                      continue, wxS( "Invalid layer" ) );
 
         VIEW_LAYER& l = m_layers[layers[i]];
         l.items->Insert( aItem );
@@ -348,41 +348,36 @@ void VIEW::Add( VIEW_ITEM* aItem, int aDrawPriority )
 
 void VIEW::Remove( VIEW_ITEM* aItem )
 {
-    if( !aItem )
-        return;
-
-    auto viewData = aItem->viewPrivData();
-
-    if( !viewData )
-        return;
-
-    wxCHECK( viewData->m_view == this, /*void*/ );
-    auto item = std::find( m_allItems->begin(), m_allItems->end(), aItem );
-
-    if( item != m_allItems->end() )
+    if( aItem && aItem->m_viewPrivData )
     {
-        m_allItems->erase( item );
-        viewData->clearUpdateFlags();
+        wxCHECK( aItem->m_viewPrivData->m_view == this, /*void*/ );
+        auto item = std::find( m_allItems->begin(), m_allItems->end(), aItem );
+
+        if( item != m_allItems->end() )
+        {
+            m_allItems->erase( item );
+            aItem->m_viewPrivData->clearUpdateFlags();
+        }
+
+        int layers[VIEW::VIEW_MAX_LAYERS], layers_count;
+        aItem->m_viewPrivData->getLayers( layers, layers_count );
+
+        for( int i = 0; i < layers_count; ++i )
+        {
+            VIEW_LAYER& l = m_layers[layers[i]];
+            l.items->Remove( aItem );
+            MarkTargetDirty( l.target );
+
+            // Clear the GAL cache
+            int prevGroup = aItem->m_viewPrivData->getGroup( layers[i] );
+
+            if( prevGroup >= 0 )
+                m_gal->DeleteGroup( prevGroup );
+        }
+
+        aItem->m_viewPrivData->deleteGroups();
+        aItem->m_viewPrivData->m_view = nullptr;
     }
-
-    int layers[VIEW::VIEW_MAX_LAYERS], layers_count;
-    viewData->getLayers( layers, layers_count );
-
-    for( int i = 0; i < layers_count; ++i )
-    {
-        VIEW_LAYER& l = m_layers[layers[i]];
-        l.items->Remove( aItem );
-        MarkTargetDirty( l.target );
-
-        // Clear the GAL cache
-        int prevGroup = viewData->getGroup( layers[i] );
-
-        if( prevGroup >= 0 )
-            m_gal->DeleteGroup( prevGroup );
-    }
-
-    viewData->deleteGroups();
-    viewData->m_view = nullptr;
 }
 
 

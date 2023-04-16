@@ -76,7 +76,8 @@ enum VIEW_VISIBILITY_FLAGS {
 class VIEW_ITEM : public INSPECTABLE
 {
 public:
-    VIEW_ITEM() : m_viewPrivData( nullptr )
+    VIEW_ITEM() :
+            m_viewPrivData( nullptr )
     {
     }
 
@@ -138,11 +139,6 @@ public:
     VIEW_ITEM_DATA* viewPrivData() const
     {
         return m_viewPrivData;
-    }
-
-    void ClearViewPrivData()
-    {
-        m_viewPrivData = nullptr;
     }
 
 private:
