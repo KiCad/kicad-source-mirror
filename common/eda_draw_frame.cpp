@@ -27,6 +27,7 @@
 #include <bitmaps.h>
 #include <confirm.h>
 #include <core/arraydim.h>
+#include <core/kicad_algo.h>
 #include <dialog_shim.h>
 #include <eda_draw_frame.h>
 #include <file_history.h>
@@ -741,21 +742,21 @@ void EDA_DRAW_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 void EDA_DRAW_FRAME::AppendMsgPanel( const wxString& aTextUpper, const wxString& aTextLower,
                                      int aPadding )
 {
-    if( m_messagePanel )
+    if( m_messagePanel && !m_isClosing )
         m_messagePanel->AppendMessage( aTextUpper, aTextLower, aPadding );
 }
 
 
 void EDA_DRAW_FRAME::ClearMsgPanel()
 {
-    if( m_messagePanel )
+    if( m_messagePanel && !m_isClosing )
         m_messagePanel->EraseMsgBox();
 }
 
 
 void EDA_DRAW_FRAME::SetMsgPanel( const std::vector<MSG_PANEL_ITEM>& aList )
 {
-    if( m_messagePanel )
+    if( m_messagePanel && !m_isClosing )
     {
         m_messagePanel->EraseMsgBox();
 
@@ -768,10 +769,9 @@ void EDA_DRAW_FRAME::SetMsgPanel( const std::vector<MSG_PANEL_ITEM>& aList )
 void EDA_DRAW_FRAME::SetMsgPanel( const wxString& aTextUpper, const wxString& aTextLower,
                                   int aPadding )
 {
-    if( m_messagePanel )
+    if( m_messagePanel && !m_isClosing )
     {
         m_messagePanel->EraseMsgBox();
-
         m_messagePanel->AppendMessage( aTextUpper, aTextLower, aPadding );
     }
 }
@@ -842,26 +842,15 @@ bool EDA_DRAW_FRAME::saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvas
     // Not all classes derived from EDA_DRAW_FRAME can save the canvas type, because some
     // have a fixed type, or do not have a option to set the canvas type (they inherit from
     // a parent frame)
-    FRAME_T allowed_frames[] =
-    {
-        FRAME_SCH, FRAME_SCH_SYMBOL_EDITOR,
-        FRAME_PCB_EDITOR, FRAME_FOOTPRINT_EDITOR,
-        FRAME_GERBER,
-        FRAME_PL_EDITOR
-    };
+    static std::vector<FRAME_T> s_allowedFrames =
+            {
+                FRAME_SCH, FRAME_SCH_SYMBOL_EDITOR,
+                FRAME_PCB_EDITOR, FRAME_FOOTPRINT_EDITOR,
+                FRAME_GERBER,
+                FRAME_PL_EDITOR
+            };
 
-    bool allow_save = false;
-
-    for( unsigned ii = 0; ii < arrayDim( allowed_frames ); ii++ )
-    {
-        if( m_ident == allowed_frames[ii] )
-        {
-            allow_save = true;
-            break;
-        }
-    }
-
-    if( !allow_save )
+    if( !alg::contains( s_allowedFrames, m_ident ) )
         return false;
 
     if( aCanvasType < EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE
@@ -871,9 +860,7 @@ bool EDA_DRAW_FRAME::saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvas
         return false;
     }
 
-    APP_SETTINGS_BASE* cfg = Kiface().KifaceSettings();
-
-    if( cfg )
+    if( APP_SETTINGS_BASE* cfg = Kiface().KifaceSettings() )
         cfg->m_Graphics.canvas_type = static_cast<int>( aCanvasType );
 
     return false;
@@ -883,7 +870,7 @@ bool EDA_DRAW_FRAME::saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvas
 VECTOR2I EDA_DRAW_FRAME::GetNearestGridPosition( const VECTOR2I& aPosition ) const
 {
     const VECTOR2I& gridOrigin = GetGridOrigin();
-    VECTOR2D       gridSize = GetCanvas()->GetGAL()->GetGridSize();
+    VECTOR2D        gridSize = GetCanvas()->GetGAL()->GetGridSize();
 
     double xOffset = fmod( gridOrigin.x, gridSize.x );
     int    x = KiROUND( (aPosition.x - xOffset) / gridSize.x );
@@ -897,7 +884,7 @@ VECTOR2I EDA_DRAW_FRAME::GetNearestGridPosition( const VECTOR2I& aPosition ) con
 VECTOR2I EDA_DRAW_FRAME::GetNearestHalfGridPosition( const VECTOR2I& aPosition ) const
 {
     const VECTOR2I& gridOrigin = GetGridOrigin();
-    VECTOR2D       gridSize = GetCanvas()->GetGAL()->GetGridSize() / 2.0;
+    VECTOR2D        gridSize = GetCanvas()->GetGAL()->GetGridSize() / 2.0;
 
     double xOffset = fmod( gridOrigin.x, gridSize.x );
     int    x = KiROUND( (aPosition.x - xOffset) / gridSize.x );
