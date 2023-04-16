@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:53-0800\n"
-"PO-Revision-Date: 2023-04-16 06:36+0000\n"
+"PO-Revision-Date: 2023-04-17 22:52+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v7/cs/>\n"
 "Language: cs\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.17-dev\n"
+"X-Generator: Weblate 4.17\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -26069,12 +26069,11 @@ msgid "Loose (0.1 mm)"
 msgstr "Volné (0,1 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:131
-#, fuzzy
 msgid ""
 "Tolerance sets the distance between two points that are considered joined."
 msgstr ""
 "Tolerance nastavuje vzdálenost mezi dvěma body, které jsou považovány za "
-"spojené. Standard je 0,001 mm."
+"spojené."
 
 #: pcbnew/dialogs/dialog_export_step_base.h:75
 msgid "Export STEP"
@@ -26526,15 +26525,14 @@ msgid "Pad clearance:"
 msgstr "Izolační mezera plošky:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:275
-#, fuzzy
 msgid ""
 "This is the local net clearance for all pad of this footprint\n"
 "If 0, the Netclass values are used\n"
 "This value can be superseded by a pad local value."
 msgstr ""
-"Toto je místní oddělovací mezera sítě pro všechny plošky tohoto pouzdra\n"
+"Toto je místní izolační mezera sítě pro všechny plošky tohoto pouzdra\n"
 "Je-li 0, budou použity hodnoty třídy sítě\n"
-"Tato hodnota může být nahrazena místní hodnotou, platnou pro plošku."
+"Tato hodnota může být nahrazena místní hodnotou plošky."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:286
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:257
@@ -26567,7 +26565,6 @@ msgid "Solder paste absolute clearance:"
 msgstr "Absolutní izolační mezera pájecí pasty:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:304
-#, fuzzy
 msgid ""
 "This is the local clearance between pads and the solder paste for this "
 "footprint.\n"
@@ -26576,9 +26573,9 @@ msgid ""
 "ratio.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"To je místní izolační mezera mezi ploškami a pájecí pastou pro toto "
-"pouzdro.\n"
-"Tato hodnota může být nahrazena místní hodnotou plošky.\n"
+"To je místní izolační mezera mezi ploškami a pájecí pastou pro toto pouzdro."
+"\n"
+"Tuto hodnotu lze nahradit místními hodnotami plošek.\n"
 "Konečná hodnota mezery je součtem této hodnoty a poměru hodnoty mezery.\n"
 "Záporná hodnota znamená menší velikost masky než velikost plošky."
 
@@ -26742,7 +26739,6 @@ msgstr ""
 "v záložce Místní izolační mezery a nastavení ve Vlastnostech plošky."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:275
-#, fuzzy
 msgid ""
 "This is the local clearance between pads and the solder paste for\n"
 "this footprint.\n"
@@ -26752,8 +26748,8 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"To je místní izolační mezera mezi ploškami a maskou\n"
-"pro toto pouzdro.\n"
+"To je místní izolační mezera mezi ploškami a maskou pro\n"
+"toto pouzdro.\n"
 "Konečná hodnota izolační mezery je součtem této hodnoty a poměru hodnoty "
 "mezery.\n"
 "Záporná hodnota znamená menší velikost masky než velikost plošky.\n"
@@ -27098,11 +27094,12 @@ msgid "Drill Origin"
 msgstr "Počátek vrtání"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:102
-#, fuzzy
 msgid ""
 "Choose the coordinate origin: absolute or relative to the drill/place file "
 "origin"
-msgstr "Zvolit počátek souřadnic: absolutní nebo relativní k pomocné ose"
+msgstr ""
+"Zvolte nulový bod souřadnic: Absolutní nebo relativní k základnímu bodu "
+"souboru vrtání/umístění"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:108
 msgid "Drill Units"
@@ -27561,9 +27558,8 @@ msgid "Group name:"
 msgstr "Název skupiny:"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:41
-#, fuzzy
 msgid "Prevents group from being moved on canvas"
-msgstr "Zabránit Cvpcb ukončení po uložení netlistu"
+msgstr "Zabraňuje přesunu skupiny na kreslicí ploše"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:45
 msgid "Group members:"
@@ -27605,27 +27601,25 @@ msgid "Using reference designators to match symbols and footprints.\n"
 msgstr "Použití referencí při porovnávání symbolů a pouzder.\n"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:231
-#, fuzzy
 msgid "Using tstamps (unique IDs) to match symbols and footprints.\n"
-msgstr "Použití referencí aby odpovídali součástky a pouzdra.\n"
+msgstr ""
+"Použití časových podpisů (jedinečných ID) k přidružení komponent a otisků.\n"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:26
 msgid "Netlist file:"
 msgstr "Soubor netlistu:"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:42
-#, fuzzy
 msgid "Link footprints using component tstamps (unique ids)"
-msgstr "Znova přiřadit pouzdra podle reference"
+msgstr "Připojte pouzdra pomocí časových podpisů komponent (unikátní ID)"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:42
 msgid "Link footprints using reference designators"
 msgstr "Přiřadit pouzdra podle s použitím reference schématu"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:44
-#, fuzzy
 msgid "Link Method"
-msgstr "Neznámá metoda"
+msgstr "Metoda propojení"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:46
 msgid ""
@@ -27667,23 +27661,20 @@ msgid "Solder mask/paste defaults"
 msgstr "Výchozí nastavení pájecí masky/pasty"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:57
-#, fuzzy
 msgid "Text && graphics default properties"
-msgstr "Vlastnosti grafické položky"
+msgstr "Výchozí vlastnosti textů && grafiky"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:60
-#, fuzzy
 msgid "Text && graphics formatting"
-msgstr "Text & grafika"
+msgstr "Formátování textu && grafiky"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:63
 msgid "Design rule constraints"
 msgstr "Omezení návrhových pravidel"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:66
-#, fuzzy
 msgid "Predefined track && via dimensions"
-msgstr "Předdefinované rozměry spojů a prokovů"
+msgstr "Předdefinované rozměry spojů && prokovů"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:243
 #: pcbnew/dialogs/dialog_imported_layers.cpp:251
@@ -27976,9 +27967,8 @@ msgid "Polygon must have at least 3 corners after simplification"
 msgstr "Polygon musí mít po zjednodušení alespoň 3 rohy"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:380
-#, fuzzy
 msgid "Polygon can not be self-intersecting"
-msgstr "Polygon nesmí být sám se protínající"
+msgstr "Polygon nesmí být samoprotínající se"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:398
 msgid "Note: redundant corners removed"
@@ -28153,12 +28143,12 @@ msgstr ""
 "Výsledek může být překvapující."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1314
-#, fuzzy
 msgid ""
 "Warning: Negative solder mask clearance larger than pad. No solder mask will "
 "be generated."
 msgstr ""
-"Záporná mezera znamená oblast menší, než ploška (obvykle pro pájecí pastu)."
+"Varování: Negativní mezera pájecí masky je větší než ploška. Pájecí maska "
+"nebude generována."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1333
 #, fuzzy
@@ -28189,12 +28179,11 @@ msgid "Error: Through hole pad has no hole."
 msgstr "Chyba: Ploška s průchozí dírou nemá žádný otvor."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1368
-#, fuzzy
 msgid ""
 "Warning: Connector pads normally have no solder paste. Use a SMD pad instead."
 msgstr ""
-"Varování: Plošky konektoru obvykle neobsahují žádnou pájecí pastu. Použijte "
-"místo nich SMD plošky."
+"Varování: Plošky konektoru obvykle nemají pájecí pastu. Použijte místo nich "
+"SMD plošky."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1377
 msgid "Error: SMD pad has a hole."
@@ -28529,9 +28518,8 @@ msgid "Castellated pad (through hole only)"
 msgstr "Půldírové plošky (pouze průchozí díra)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:580
-#, fuzzy
 msgid "Clearance Overrides"
-msgstr "Izolační mezera přepsání"
+msgstr "Izolační mezera Přepsání"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:583
 msgid "Set values to 0 to use parent footprint or netclass values."
@@ -29876,23 +29864,20 @@ msgid "Show pad clearance"
 msgstr "Zobrazit izolační mezeru plošky"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:102
-#, fuzzy
 msgid "Highlight footprints when symbols selected"
-msgstr "Smazat pouzdra bez symbolů"
+msgstr "Zvýraznit pouzdra při výběru symbolů"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:104
-#, fuzzy
 msgid "Highlight footprints corresponding to selected symbols"
-msgstr "Přiřadí pouzdro k vybraným symbolům"
+msgstr "Zvýraznit pouzdra odpovídající vybraným symbolům"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:110
 msgid "Ensures that cross-probed footprints are visible in the current view"
 msgstr ""
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:120
-#, fuzzy
 msgid "Highlight nets when they are highlighted in the schematic editor"
-msgstr "Zvýrazněte sítě, když jsou zvýrazněny v editoru PCB"
+msgstr "Zvýraznit sítě, když jsou zvýrazněny v editoru schémat"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:124
 msgid "Refresh 3D view automatically"
@@ -29918,9 +29903,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:45
-#, fuzzy
 msgid "Constrain actions to H, V, 45 degrees"
-msgstr "Omezit na H, V a 45 stupňů"
+msgstr "Omezení akcí na H, V, 45 stupňů"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:51
 msgid "Step for &rotate commands:"
@@ -30128,9 +30112,8 @@ msgid "The following directories could not be opened: \n"
 msgstr "Nelze otevřít následující adresáře: \n"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:875
-#, fuzzy
 msgid "Failed to open directories to look for libraries"
-msgstr "Selhalo uložení změn do souboru knihovny symbolů \"%s\""
+msgstr "Chyby při otevírání adresářů kde jsou vyhledávány knihovny"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:903
 #, fuzzy
@@ -30138,7 +30121,6 @@ msgid "Warning: Duplicate Nicknames"
 msgstr "Varování: Zdvojené jméno"
 
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:97
-#, fuzzy
 msgid "LIbrary Format"
 msgstr "Formát knihovny"
 
@@ -31119,9 +31101,8 @@ msgid "Allow bridged solder mask apertures between pads within footprints"
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:98
-#, fuzzy
 msgid "Tent vias"
-msgstr "Nezakrývat prokovy"
+msgstr "Zakrýt prokovy"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:103
 msgid ""
