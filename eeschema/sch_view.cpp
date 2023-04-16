@@ -137,29 +137,25 @@ void SCH_VIEW::DisplaySymbol( LIB_SYMBOL* aSymbol )
     if( !aSymbol )
         return;
 
-    std::shared_ptr< LIB_SYMBOL > parent;
-    LIB_SYMBOL* drawnSymbol = aSymbol;
-
-    // Draw the mandatory fields for aliases and parent symbols.
+    // Draw the fields.
     for( LIB_ITEM& item : aSymbol->GetDrawItems() )
     {
-        if( item.Type() != LIB_FIELD_T )
-            continue;
+        if( item.Type() == LIB_FIELD_T )
+        {
+            LIB_FIELD* field = static_cast< LIB_FIELD* >( &item );
 
-        LIB_FIELD* field = static_cast< LIB_FIELD* >( &item );
+            wxCHECK2( field, continue );
 
-        wxCHECK2( field, continue );
-
-        if( field->GetText().IsEmpty() )
-            continue;
-
-        Add( &item );
+            Add( &item );
+        }
     }
+
+    LIB_SYMBOL* drawnSymbol = aSymbol;
 
     // Draw the parent items if the symbol is inherited from another symbol.
     if( aSymbol->IsAlias() )
     {
-        parent = aSymbol->GetParent().lock();
+        std::shared_ptr< LIB_SYMBOL > parent = aSymbol->GetParent().lock();
 
         wxCHECK( parent, /* void */ );
 
@@ -168,9 +164,9 @@ void SCH_VIEW::DisplaySymbol( LIB_SYMBOL* aSymbol )
 
     for( LIB_ITEM& item : drawnSymbol->GetDrawItems() )
     {
-        // Don't show parent symbol fields.  Users may be confused by shown fields that can not
-        // be edited.
-        if( aSymbol->IsAlias() && item.Type() == LIB_FIELD_T )
+        // Fields already drawn above.  (Besides, we don't want to show parent symbol fields as
+        // users may be confused by shown fields that can not be edited.)
+        if( item.Type() == LIB_FIELD_T )
             continue;
 
         Add( &item );
