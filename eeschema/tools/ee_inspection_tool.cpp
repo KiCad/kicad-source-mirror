@@ -313,26 +313,33 @@ int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
 
 int EE_INSPECTION_TOOL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 {
+    SYMBOL_EDIT_FRAME* symbolEditFrame = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame );
+    SCH_EDIT_FRAME*    schEditFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
     EE_SELECTION&      selection = selTool->GetSelection();
 
-    if( selection.GetSize() == 1 )
-    {
-        EDA_ITEM* item = (EDA_ITEM*) selection.Front();
+    // Note: the symbol viewer manages its own message panel
 
-        std::vector<MSG_PANEL_ITEM> msgItems;
-        item->GetMsgPanelInfo( m_frame, msgItems );
-        m_frame->SetMsgPanel( msgItems );
-    }
-    else
+    if( symbolEditFrame || schEditFrame )
     {
-        m_frame->ClearMsgPanel();
+        if( selection.GetSize() == 1 )
+        {
+            EDA_ITEM* item = (EDA_ITEM*) selection.Front();
+
+            std::vector<MSG_PANEL_ITEM> msgItems;
+            item->GetMsgPanelInfo( m_frame, msgItems );
+            m_frame->SetMsgPanel( msgItems );
+        }
+        else
+        {
+            m_frame->ClearMsgPanel();
+        }
     }
 
-    if( SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
+    if( schEditFrame )
     {
-        editFrame->UpdateNetHighlightStatus();
-        editFrame->UpdateHierarchySelection();
+        schEditFrame->UpdateNetHighlightStatus();
+        schEditFrame->UpdateHierarchySelection();
     }
 
     return 0;
