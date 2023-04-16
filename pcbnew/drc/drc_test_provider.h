@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -103,7 +103,11 @@ protected:
     int forEachGeometryItem( const std::vector<KICAD_T>& aTypes, LSET aLayers,
                              const std::function<bool(BOARD_ITEM*)>& aFunc );
 
+    // Do not use a wxString with a vararg list: it is a complex thing and can create issues.
+    // So prefer using a wxChar* item in this case:
+    void reportAux( const wxString& aMsg ) { reportAux( (const wxChar*) aMsg.wchar_str() ); }
     virtual void reportAux( const wxChar* fmt, ... );
+
     virtual void reportViolation( std::shared_ptr<DRC_ITEM>& item, const VECTOR2I& aMarkerPos,
                                   int aMarkerLayer );
     virtual bool reportProgress( int aCount, int aSize, int aDelta );
