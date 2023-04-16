@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
@@ -166,7 +166,7 @@ public:
         m_allNodes.clear();
     }
 
-    void AddNode( std::shared_ptr<CN_ANCHOR> aNode )
+    void AddNode( const std::shared_ptr<CN_ANCHOR>& aNode )
     {
         m_allNodes.insert( aNode );
     }
@@ -333,7 +333,7 @@ void RN_NET::OptimizeRNEdges()
     auto optimizeZoneAnchor =
             [&]( const VECTOR2I& aPos, const LSET& aLayerSet,
                  const std::shared_ptr<const CN_ANCHOR>& aAnchor,
-                 std::function<void( std::shared_ptr<const CN_ANCHOR> )> setOptimizedTo )
+                 const std::function<void( std::shared_ptr<const CN_ANCHOR> )>& setOptimizedTo )
             {
                 SEG::ecoord closest_dist_sq = ( aAnchor->Pos() - aPos ).SquaredEuclideanNorm();
                 VECTOR2I    closest_pt;
@@ -347,7 +347,7 @@ void RN_NET::OptimizeRNEdges()
                     {
                         const std::vector<VECTOR2I>& pts = zoneLayer->GetOutline().CPoints();
 
-                        for( VECTOR2I pt : pts )
+                        for( const VECTOR2I& pt : pts )
                         {
                             SEG::ecoord dist_sq = ( pt - aPos ).SquaredEuclideanNorm();
 
@@ -368,8 +368,8 @@ void RN_NET::OptimizeRNEdges()
     auto optimizeZoneToZoneAnchors =
             [&]( const std::shared_ptr<const CN_ANCHOR>& a,
                  const std::shared_ptr<const CN_ANCHOR>& b,
-                 std::function<void(const std::shared_ptr<const CN_ANCHOR>&)> setOptimizedATo,
-                 std::function<void(const std::shared_ptr<const CN_ANCHOR>&)> setOptimizedBTo )
+                 const std::function<void(const std::shared_ptr<const CN_ANCHOR>&)>& setOptimizedATo,
+                 const std::function<void(const std::shared_ptr<const CN_ANCHOR>&)>& setOptimizedBTo )
             {
                 for( CN_ITEM* itemA : a->Item()->ConnectedItems() )
                 {
@@ -415,7 +415,7 @@ void RN_NET::OptimizeRNEdges()
         if( source->ConnectedItemsCount() == 0 )
         {
             optimizeZoneAnchor( source->Pos(), source->Parent()->GetLayerSet(), target,
-                                [&]( std::shared_ptr<const CN_ANCHOR> optimized )
+                                [&]( const std::shared_ptr<const CN_ANCHOR>& optimized )
                                 {
                                     edge.SetTargetNode( optimized );
                                 } );
@@ -423,7 +423,7 @@ void RN_NET::OptimizeRNEdges()
         else if( target->ConnectedItemsCount() == 0 )
         {
             optimizeZoneAnchor( target->Pos(), target->Parent()->GetLayerSet(), source,
-                                [&]( std::shared_ptr<const CN_ANCHOR> optimized )
+                                [&]( const std::shared_ptr<const CN_ANCHOR>& optimized )
                                 {
                                     edge.SetSourceNode( optimized );
                                 } );
@@ -431,11 +431,11 @@ void RN_NET::OptimizeRNEdges()
         else
         {
             optimizeZoneToZoneAnchors( source, target,
-                                       [&]( std::shared_ptr<const CN_ANCHOR> optimized )
+                                       [&]( const std::shared_ptr<const CN_ANCHOR>& optimized )
                                        {
                                            edge.SetSourceNode( optimized );
                                        },
-                                       [&]( std::shared_ptr<const CN_ANCHOR> optimized )
+                                       [&]( const std::shared_ptr<const CN_ANCHOR>& optimized )
                                        {
                                            edge.SetTargetNode( optimized );
                                        } );
