@@ -113,7 +113,7 @@ class RowedFootprint(FootprintWizardBase.FootprintWizard):
 
         # set SMD attribute
         if self.GetName() == "ZIP":
-            self.module.SetAttributes(pcbnew.FP_PTH)
+            self.module.SetAttributes(pcbnew.FP_THROUGH_HOLE)
         elif self.GetName() == "ZOIC":
             self.module.SetAttributes(pcbnew.FP_SMD)
 
