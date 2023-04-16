@@ -76,6 +76,15 @@ public:
      * Recompute ratsnest for a net.
      */
     void UpdateNet();
+
+    /**
+     * Find optimal ends of RNEdges.  The MST will have found the closest anchors, but when
+     * zones are involved we might have points closer than the anchors.
+     *
+     * Normally called after UpdateNet(), but from a separate multi-threaded loop for safety.
+     */
+    void OptimizeRNEdges();
+
     void Clear();
 
     void AddCluster( std::shared_ptr<CN_CLUSTER> aCluster );
@@ -93,10 +102,6 @@ protected:
 
     ///< Compute the minimum spanning tree using Kruskal's algorithm
     void kruskalMST( const std::vector<CN_EDGE> &aEdges );
-
-    ///< Find optimal ends of RNEdges.  The MST will have found the closest anchors, but when
-    ///< zones are involved we might have points closer than the anchors.
-    void optimizeRNEdges();
 
 protected:
     ///< Vector of nodes

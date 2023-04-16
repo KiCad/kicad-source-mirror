@@ -328,7 +328,7 @@ void RN_NET::compute()
 }
 
 
-void RN_NET::optimizeRNEdges()
+void RN_NET::OptimizeRNEdges()
 {
     auto optimizeZoneAnchor =
             [&]( const VECTOR2I& aPos, const LSET& aLayerSet,
@@ -447,14 +447,6 @@ void RN_NET::optimizeRNEdges()
 void RN_NET::UpdateNet()
 {
     compute();
-
-#ifdef PROFILE
-    PROF_TIMER cnt( "optimize" );
-#endif
-    optimizeRNEdges();
-#ifdef PROFILE
-    cnt.Show();
-#endif
 
     m_dirty = false;
 }

@@ -182,10 +182,18 @@ void CONNECTIVITY_DATA::updateRatsnest()
     thread_pool& tp = GetKiCadThreadPool();
 
     tp.push_loop( dirty_nets.size(),
-            [&]( const int a, const int b)
+            [&]( const int a, const int b )
             {
                 for( int ii = a; ii < b; ++ii )
                     dirty_nets[ii]->UpdateNet();
+            } );
+    tp.wait_for_tasks();
+
+    tp.push_loop( dirty_nets.size(),
+            [&]( const int a, const int b )
+            {
+                for( int ii = a; ii < b; ++ii )
+                    dirty_nets[ii]->OptimizeRNEdges();
             } );
     tp.wait_for_tasks();
 
