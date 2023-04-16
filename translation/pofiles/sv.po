@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:51-0800\n"
-"PO-Revision-Date: 2023-04-15 16:48+0000\n"
+"PO-Revision-Date: 2023-04-17 22:52+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.17-dev\n"
+"X-Generator: Weblate 4.17\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -16774,7 +16774,7 @@ msgstr "[Skrivskyddat bibliotek]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:83
 msgid "[no symbol loaded]"
-msgstr "[ingen symbol laddad]"
+msgstr "[ingen symbol inläst]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:115
 #: eeschema/symbol_editor/symbol_editor.cpp:502
