@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -347,9 +347,9 @@ void WIDGET_HOTKEY_LIST::editItem( wxTreeListItem aItem )
 
         if( it != m_reservedHotkeys.end() )
         {
-            wxString msg = wxString::Format(
-                    _( "'%s' is a reserved hotkey in KiCad and cannot be assigned." ),
-                    it->second );
+            wxString msg = wxString::Format( _( "'%s' is a reserved hotkey in KiCad and cannot "
+                                                "be assigned." ),
+                                             it->second );
 
             DisplayErrorMessage( this, msg );
             return;
@@ -414,12 +414,14 @@ void WIDGET_HOTKEY_LIST::onMenu( wxCommandEvent& aEvent )
 {
     switch( aEvent.GetId() )
     {
-    case ID_EDIT_HOTKEY:editItem( m_context_menu_item );
+    case ID_EDIT_HOTKEY:
+        editItem( m_context_menu_item );
         break;
 
     case ID_RESET:
     case ID_CLEAR:
-    case ID_DEFAULT:resetItem( m_context_menu_item, aEvent.GetId());
+    case ID_DEFAULT:
+        resetItem( m_context_menu_item, aEvent.GetId());
         break;
 
     default:
@@ -494,10 +496,10 @@ WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkey
 #endif
 
     std::vector<wxString> reserved_keys =
-    {
-            wxS( "Ctrl+Tab" ),
-            wxS( "Ctrl+Shift+Tab" )
-    };
+            {
+                wxS( "Ctrl+Tab" ),
+                wxS( "Ctrl+Shift+Tab" )
+            };
 
     for( const wxString& key : reserved_keys )
     {
