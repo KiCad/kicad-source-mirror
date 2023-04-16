@@ -390,6 +390,14 @@ sentry__crashpad_backend_startup(
         crashpad_info->set_system_crash_reporter_forwarding(
             crashpad::TriState::kDisabled);
     }
+
+    {
+        // KICAD Hack to try and capture some extra variable data
+        crashpad::CrashpadInfo* crashpad_info = crashpad::CrashpadInfo::GetCrashpadInfo();
+        crashpad_info->set_gather_indirectly_referenced_memory( crashpad::TriState::kEnabled,
+                                                                1024 * 1024 * 5 );
+    }
+
     return 0;
 }
 
