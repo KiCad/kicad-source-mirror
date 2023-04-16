@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:53-0800\n"
-"PO-Revision-Date: 2023-03-29 06:03+0000\n"
+"PO-Revision-Date: 2023-04-16 06:36+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v7/cs/>\n"
 "Language: cs\n"
@@ -15748,6 +15748,8 @@ msgid ""
 "Simulation model type must be the same as of its base class: '%s', but is "
 "'%s'"
 msgstr ""
+"Typ simulačního modelu musí být stejný jako jeho základní třída: '%s', ale "
+"je '%s'"
 
 #: eeschema/sim/sim_model.cpp:784
 #, c-format
@@ -15891,6 +15893,8 @@ msgid ""
 "Schematic sheet simulation command directive has changed.  Do you wish to "
 "update the Simulation Command?"
 msgstr ""
+"Směrnice příkazu simulace listu schématu se změnila.  Chcete simulační "
+"příkaz aktualizovat?"
 
 #: eeschema/sim/sim_plot_frame.cpp:506 eeschema/sim/sim_plot_frame.cpp:1992
 msgid "Another simulation is already running."
@@ -24862,7 +24866,7 @@ msgstr "Použít středové čáry"
 #: pcbnew/tools/convert_tool.cpp:75
 #, fuzzy
 msgid "Create bounding hull"
-msgstr "Vytvořit soubor loga"
+msgstr "Vytvořit konvexní obálku"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:234
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:118
@@ -26412,9 +26416,8 @@ msgstr "Textové položky"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:61
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:51
 #: pcbnew/fp_text_grid_table.cpp:108
-#, fuzzy
 msgid "Keep Upright"
-msgstr "Přesunout vpravo"
+msgstr "Držet svisle"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:62
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:62
