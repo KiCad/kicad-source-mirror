@@ -103,7 +103,7 @@ protected:
     int forEachGeometryItem( const std::vector<KICAD_T>& aTypes, LSET aLayers,
                              const std::function<bool(BOARD_ITEM*)>& aFunc );
 
-    virtual void reportAux( wxString fmt, ... );
+    virtual void reportAux( const wxChar* fmt, ... );
     virtual void reportViolation( std::shared_ptr<DRC_ITEM>& item, const VECTOR2I& aMarkerPos,
                                   int aMarkerLayer );
     virtual bool reportProgress( int aCount, int aSize, int aDelta );

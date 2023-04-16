@@ -102,7 +102,7 @@ bool DRC_TEST_PROVIDER::reportPhase( const wxString& aMessage )
 }
 
 
-void DRC_TEST_PROVIDER::reportAux( wxString fmt, ... )
+void DRC_TEST_PROVIDER::reportAux( const wxChar* fmt, ... )
 {
     va_list vargs;
     va_start( vargs, fmt );
