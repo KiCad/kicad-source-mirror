@@ -321,7 +321,9 @@ void VIEW::Add( VIEW_ITEM* aItem, int aDrawPriority )
     if( !aItem->m_viewPrivData )
         aItem->m_viewPrivData = new VIEW_ITEM_DATA;
 
-    wxASSERT_MSG( aItem->m_viewPrivData->m_view == nullptr, wxS( "Already in a different view!" ) );
+    wxASSERT_MSG( aItem->m_viewPrivData->m_view == nullptr
+                    || aItem->m_viewPrivData->m_view == this,
+                  wxS( "Already in a different view!" ) );
 
     aItem->m_viewPrivData->m_view = this;
     aItem->m_viewPrivData->m_drawPriority = aDrawPriority;
