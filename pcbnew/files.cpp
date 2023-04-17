@@ -57,6 +57,7 @@
 #include <plugins/cadstar/cadstar_pcb_archive_plugin.h>
 #include <plugins/kicad/pcb_plugin.h>
 #include <dialogs/dialog_imported_layers.h>
+#include <string>
 #include <tools/pcb_actions.h>
 #include "footprint_info_impl.h"
 #include "board_commit.h"
@@ -712,15 +713,10 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         try
         {
             STRING_UTF8_MAP props;
-            char        xbuf[30];
-            char        ybuf[30];
 
             // EAGLE_PLUGIN can use this info to center the BOARD, but it does not yet.
-            snprintf( xbuf, sizeof(xbuf), "%d", GetPageSizeIU().x );
-            snprintf( ybuf, sizeof(ybuf), "%d", GetPageSizeIU().y );
-
-            props["page_width"]  = xbuf;
-            props["page_height"] = ybuf;
+            props["page_width"] = std::to_string( GetPageSizeIU().x );
+            props["page_height"] = std::to_string( GetPageSizeIU().y );
 
             pi->SetQueryUserCallback(
                     [&]( wxString aTitle, int aIcon, wxString aMessage, wxString aAction ) -> bool

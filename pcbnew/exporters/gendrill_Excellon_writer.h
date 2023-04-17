@@ -143,7 +143,7 @@ private:
     /**
      * Create a line like according to the selected format.
      */
-    void writeCoordinates( char* aLine, double aCoordX, double aCoordY );
+    void writeCoordinates( char* aLine, size_t aLineSize, double aCoordX, double aCoordY );
 
     /**
      * Write a comment string giving the hole attribute.

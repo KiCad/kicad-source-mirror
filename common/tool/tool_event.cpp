@@ -155,9 +155,7 @@ const std::string TOOL_EVENT::Format() const
 
     if( m_actions & TA_KEYBOARD )
     {
-        char tmp[128];
-        sprintf( tmp, "key: %d", m_keyCode );
-        ev += tmp;
+        ev += "key: " + std::to_string( m_keyCode );
     }
 
     if( m_actions & ( TA_MOUSE | TA_KEYBOARD ) )
@@ -168,9 +166,7 @@ const std::string TOOL_EVENT::Format() const
 
     if( m_commandId )
     {
-        char tmp[128];
-        sprintf( tmp, "cmd-id: %d", *m_commandId );
-        ev += tmp;
+        ev += "cmd-id: " + std::to_string( *m_commandId );
     }
 
     ev += "cmd-str: " + m_commandStr;

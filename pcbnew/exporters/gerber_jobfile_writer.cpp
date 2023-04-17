@@ -69,7 +69,7 @@ std::string GERBER_JOBFILE_WRITER::formatStringFromUTF32( const wxString& aText 
         else
         {
             char buff[16];
-            sprintf( buff, "\\u%4.4lX", letter );
+            std::snprintf( buff, sizeof( buff ), "\\u%4.4lX", letter );
             fmt_text += buff;
         }
     }
@@ -221,7 +221,7 @@ double GERBER_JOBFILE_WRITER::mapValue( double aUiValue )
     // i.e. displays values truncated in 0.1 microns.
     // This is enough for a Json file
     char buffer[128];
-    sprintf( buffer, "%.4f", aUiValue * m_conversionUnits );
+    std::snprintf( buffer, sizeof( buffer ), "%.4f", aUiValue * m_conversionUnits );
 
     long double output;
     sscanf( buffer, "%Lg", &output );

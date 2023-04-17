@@ -249,7 +249,7 @@ int EXCELLON_WRITER::createDrillFile( FILE* aFile, DRILL_LAYER_PAIR aLayerPair,
 
         xt = x0 * m_conversionUnits;
         yt = y0 * m_conversionUnits;
-        writeCoordinates( line, xt, yt );
+        writeCoordinates( line, sizeof( line ), xt, yt );
 
         fputs( line, m_file );
         holes_count++;
@@ -311,7 +311,7 @@ int EXCELLON_WRITER::createDrillFile( FILE* aFile, DRILL_LAYER_PAIR aLayerPair,
         if( m_useRouteModeForOval )
             fputs( "G00", m_file );    // Select the routing mode
 
-        writeCoordinates( line, xt, yt );
+        writeCoordinates( line, sizeof( line ), xt, yt );
 
         if( !m_useRouteModeForOval )
         {
@@ -334,7 +334,7 @@ int EXCELLON_WRITER::createDrillFile( FILE* aFile, DRILL_LAYER_PAIR aLayerPair,
 
         xt = xf * m_conversionUnits;
         yt = yf * m_conversionUnits;
-        writeCoordinates( line, xt, yt );
+        writeCoordinates( line, sizeof( line ), xt, yt );
 
         fputs( line, m_file );
 
@@ -376,7 +376,8 @@ void EXCELLON_WRITER::SetFormat( bool aMetric, ZEROS_FMT aZerosFmt, int aLeftDig
 }
 
 
-void EXCELLON_WRITER::writeCoordinates( char* aLine, double aCoordX, double aCoordY )
+void EXCELLON_WRITER::writeCoordinates( char* aLine, size_t aLineSize, double aCoordX,
+                                        double aCoordY )
 {
     wxString xs, ys;
     int      xpad = m_precision.m_Lhs + m_precision.m_Rhs;
@@ -419,7 +420,7 @@ void EXCELLON_WRITER::writeCoordinates( char* aLine, double aCoordX, double aCoo
         if( ys.Last() == '.' )
             ys << '0';
 
-        sprintf( aLine, "X%sY%s\n", TO_UTF8( xs ), TO_UTF8( ys ) );
+        std::snprintf( aLine, aLineSize, "X%sY%s\n", TO_UTF8( xs ), TO_UTF8( ys ) );
         break;
 
     case SUPPRESS_LEADING:
@@ -428,7 +429,7 @@ void EXCELLON_WRITER::writeCoordinates( char* aLine, double aCoordX, double aCoo
             aCoordX *= 10; aCoordY *= 10;
         }
 
-        sprintf( aLine, "X%dY%d\n", KiROUND( aCoordX ), KiROUND( aCoordY ) );
+        std::snprintf( aLine, aLineSize, "X%dY%d\n", KiROUND( aCoordX ), KiROUND( aCoordY ) );
         break;
 
     case SUPPRESS_TRAILING:
@@ -458,7 +459,7 @@ void EXCELLON_WRITER::writeCoordinates( char* aLine, double aCoordX, double aCoo
         while( ys[j] == '0' && j )
             ys.Truncate( j-- );
 
-        sprintf( aLine, "X%sY%s\n", TO_UTF8( xs ), TO_UTF8( ys ) );
+        std::snprintf( aLine, aLineSize, "X%sY%s\n", TO_UTF8( xs ), TO_UTF8( ys ) );
         break;
     }
 
@@ -476,7 +477,7 @@ void EXCELLON_WRITER::writeCoordinates( char* aLine, double aCoordX, double aCoo
 
         xs.Printf( wxT( "%0*d" ), xpad, KiROUND( aCoordX ) );
         ys.Printf( wxT( "%0*d" ), ypad, KiROUND( aCoordY ) );
-        sprintf( aLine, "X%sY%s\n", TO_UTF8( xs ), TO_UTF8( ys ) );
+        std::snprintf( aLine, aLineSize, "X%sY%s\n", TO_UTF8( xs ), TO_UTF8( ys ) );
         break;
     }
 }

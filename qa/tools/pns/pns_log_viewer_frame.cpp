@@ -24,6 +24,7 @@
 
 // WARNING - this Tom's crappy PNS hack tool code. Please don't complain about its quality
 // (unless you want to improve it).
+#include <string>
 
 #include <wx/clipbrd.h>
 #include <pgm_base.h>
@@ -403,9 +404,7 @@ void PNS_LOG_VIEWER_FRAME::onRewindScroll( wxScrollEvent& event )
     drawLoggedItems( m_rewindIter );
     updateDumpPanel( m_rewindIter );
     updatePnsPreviewItems( m_rewindIter );
-    char str[128];
-    sprintf( str, "%d", m_rewindIter );
-    m_rewindPos->SetValue( str );
+    m_rewindPos->SetValue( std::to_string( m_rewindIter ) );
     event.Skip();
 }
 
@@ -418,9 +417,7 @@ void PNS_LOG_VIEWER_FRAME::onBtnRewindLeft( wxCommandEvent& event )
         drawLoggedItems( m_rewindIter );
         updateDumpPanel( m_rewindIter );
         updatePnsPreviewItems( m_rewindIter );
-        char str[128];
-        sprintf( str, "%d", m_rewindIter );
-        m_rewindPos->SetValue( str );
+        m_rewindPos->SetValue( std::to_string( m_rewindIter ) );
     }
 }
 
@@ -436,9 +433,7 @@ void PNS_LOG_VIEWER_FRAME::onBtnRewindRight( wxCommandEvent& event )
         drawLoggedItems( m_rewindIter );
         updateDumpPanel( m_rewindIter );
         updatePnsPreviewItems( m_rewindIter );
-        char str[128];
-        sprintf( str, "%d", m_rewindIter );
-        m_rewindPos->SetValue( str );
+        m_rewindPos->SetValue( std::to_string( m_rewindIter ) );
     }
 }
 

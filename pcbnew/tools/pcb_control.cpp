@@ -54,6 +54,7 @@
 #include <pcb_painter.h>
 #include <string_utf8_map.h>
 #include <settings/color_settings.h>
+#include <string>
 #include <tool/tool_manager.h>
 #include <footprint_edit_frame.h>
 #include <widgets/wx_progress_reporters.h>
@@ -1208,15 +1209,11 @@ int PCB_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
     try
     {
         STRING_UTF8_MAP props;
-        char        xbuf[30];
-        char        ybuf[30];
 
         // EAGLE_PLUGIN can use this info to center the BOARD, but it does not yet.
-        snprintf( xbuf, sizeof(xbuf), "%d", editFrame->GetPageSizeIU().x );
-        snprintf( ybuf, sizeof(ybuf), "%d", editFrame->GetPageSizeIU().y );
 
-        props["page_width"]  = xbuf;
-        props["page_height"] = ybuf;
+        props["page_width"] = std::to_string( editFrame->GetPageSizeIU().x );
+        props["page_height"] = std::to_string( editFrame->GetPageSizeIU().y );
 
         pi.SetQueryUserCallback(
                 [&]( wxString aTitle, int aIcon, wxString aMessage, wxString aAction ) -> bool

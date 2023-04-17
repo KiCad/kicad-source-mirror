@@ -2032,13 +2032,7 @@ public:
     {
         if( m_duplicated )
         {
-            char    buf[32];
-
-            std::string ret = m_image_id;
-            ret += "::";
-            sprintf( buf, "%d", m_duplicated );
-            ret += buf;
-            return ret;
+            return m_image_id + "::" + std::to_string( m_duplicated );
         }
 
         return m_image_id;

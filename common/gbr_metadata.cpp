@@ -478,7 +478,7 @@ wxString ConvertNotAllowedCharsInGerber( const wxString& aString, bool aAllowUtf
             // (Gerber allows only 4 hexadecimal digit) in escape seq:
             // "\uXXXX", XXXX is the Unicode 16 bits hexa value
             char hexa[32];
-            sprintf( hexa,"\\u%4.4X", code & 0xFFFF);
+            std::snprintf( hexa, sizeof( hexa ), "\\u%4.4X", code & 0xFFFF );
             txt += hexa;
         }
         else

@@ -29,6 +29,7 @@
 #include <math/util.h>      // for KiROUND
 #include <trigo.h>
 #include <wx/log.h>
+#include <cstdio>
 
 #include <build_version.h>
 
@@ -571,8 +572,6 @@ void GERBER_PLOTTER::selectAperture( int aDiameter, const EDA_ANGLE& aPolygonRot
 void GERBER_PLOTTER::writeApertureList()
 {
     wxASSERT( m_outputFile );
-    char cbuf[1024];
-    std::string buffer;
 
     bool useX1StructuredComment = false;
 
@@ -598,8 +597,7 @@ void GERBER_PLOTTER::writeApertureList()
                             useX1StructuredComment ).c_str(), m_outputFile );
         }
 
-        sprintf( cbuf, "%%ADD%d", tool.m_DCode );
-        buffer = cbuf;
+        fprintf( m_outputFile, "%%ADD%d", tool.m_DCode );
 
         /* Please note: the Gerber specs for mass parameters say that
            exponential syntax is *not* allowed and the decimal point should
@@ -611,21 +609,21 @@ void GERBER_PLOTTER::writeApertureList()
         switch( tool.m_Type )
         {
         case APERTURE::AT_CIRCLE:
-            sprintf( cbuf, "C,%#f*%%\n", tool.GetDiameter() * fscale );
+            fprintf( m_outputFile, "C,%#f*%%\n", tool.GetDiameter() * fscale );
             break;
 
         case APERTURE::AT_RECT:
-            sprintf( cbuf, "R,%#fX%#f*%%\n", tool.m_Size.x * fscale,
-                                             tool.m_Size.y * fscale );
+            fprintf( m_outputFile, "R,%#fX%#f*%%\n", tool.m_Size.x * fscale,
+                     tool.m_Size.y * fscale );
             break;
 
         case APERTURE::AT_PLOTTING:
-            sprintf( cbuf, "C,%#f*%%\n", tool.m_Size.x * fscale );
+            fprintf( m_outputFile, "C,%#f*%%\n", tool.m_Size.x * fscale );
             break;
 
         case APERTURE::AT_OVAL:
-            sprintf( cbuf, "O,%#fX%#f*%%\n", tool.m_Size.x * fscale,
-                                             tool.m_Size.y * fscale );
+            fprintf( m_outputFile, "O,%#fX%#f*%%\n", tool.m_Size.x * fscale,
+                     tool.m_Size.y * fscale );
             break;
 
         case APERTURE::AT_REGULAR_POLY:
@@ -639,7 +637,7 @@ void GERBER_PLOTTER::writeApertureList()
         case APERTURE::AT_REGULAR_POLY10:
         case APERTURE::AT_REGULAR_POLY11:
         case APERTURE::AT_REGULAR_POLY12:
-            sprintf( cbuf, "P,%#fX%dX%#f*%%\n", tool.GetDiameter() * fscale,
+            fprintf( m_outputFile, "P,%#fX%dX%#f*%%\n", tool.GetDiameter() * fscale,
                      tool.GetRegPolyVerticeCount(), tool.GetRotation().AsDegrees() );
             break;
 
@@ -658,26 +656,21 @@ void GERBER_PLOTTER::writeApertureList()
             for( int ii = 0; ii < 4; ii++ )
                 RotatePoint( corners[ii], -tool.m_Rotation );
 
-            sprintf( cbuf, "%s,%#fX", APER_MACRO_ROUNDRECT_NAME,
-                     tool.m_Radius * fscale );
-            buffer += cbuf;
+            fprintf( m_outputFile, "%s,%#fX", APER_MACRO_ROUNDRECT_NAME, tool.m_Radius * fscale );
 
             // Add each corner
             for( int ii = 0; ii < 4; ii++ )
             {
-                sprintf( cbuf, "%#fX%#fX",
-                         corners[ii].x * fscale, corners[ii].y * fscale );
-                buffer += cbuf;
+                fprintf( m_outputFile, "%#fX%#fX", corners[ii].x * fscale, corners[ii].y * fscale );
             }
 
-            sprintf( cbuf, "0*%%\n" );
+            fprintf( m_outputFile, "0*%%\n" );
         }
             break;
 
         case APERTURE::AM_ROT_RECT:         // Aperture macro for rotated rect pads
-            sprintf( cbuf, "%s,%#fX%#fX%#f*%%\n", APER_MACRO_ROT_RECT_NAME,
-                     tool.m_Size.x * fscale, tool.m_Size.y * fscale,
-                     tool.m_Rotation.AsDegrees() );
+            fprintf( m_outputFile, "%s,%#fX%#fX%#f*%%\n", APER_MACRO_ROT_RECT_NAME,
+                     tool.m_Size.x * fscale, tool.m_Size.y * fscale, tool.m_Rotation.AsDegrees() );
             break;
 
         case APERTURE::APER_MACRO_OUTLINE4P:    // Aperture macro for trapezoid pads
@@ -688,33 +681,36 @@ void GERBER_PLOTTER::writeApertureList()
             switch( tool.m_Type )
             {
             case APERTURE::APER_MACRO_OUTLINE4P:
-                sprintf( cbuf, "%s,", APER_MACRO_OUTLINE4P_NAME ); break;
+                fprintf( m_outputFile, "%s,", APER_MACRO_OUTLINE4P_NAME );
+                break;
             case APERTURE::APER_MACRO_OUTLINE5P:
-                sprintf( cbuf, "%s,", APER_MACRO_OUTLINE5P_NAME ); break;
+                fprintf( m_outputFile, "%s,", APER_MACRO_OUTLINE5P_NAME );
+                break;
             case APERTURE::APER_MACRO_OUTLINE6P:
-                sprintf( cbuf, "%s,", APER_MACRO_OUTLINE6P_NAME ); break;
+                fprintf( m_outputFile, "%s,", APER_MACRO_OUTLINE6P_NAME );
+                break;
             case APERTURE::APER_MACRO_OUTLINE7P:
-                sprintf( cbuf, "%s,", APER_MACRO_OUTLINE7P_NAME ); break;
+                fprintf( m_outputFile, "%s,", APER_MACRO_OUTLINE7P_NAME );
+                break;
             case APERTURE::APER_MACRO_OUTLINE8P:
-                sprintf( cbuf, "%s,", APER_MACRO_OUTLINE8P_NAME ); break;
+                fprintf( m_outputFile, "%s,", APER_MACRO_OUTLINE8P_NAME );
+                break;
             default:
                 break;
             }
 
-            buffer += cbuf;
 
             // Output all corners (should be 4 to 8 corners)
             // Remember: the Y coordinate must be negated, due to the fact in Pcbnew
             // the Y axis is from top to bottom
             for( size_t ii = 0; ii < tool.m_Corners.size(); ii++ )
             {
-                sprintf( cbuf, "%#fX%#fX",
-                         tool.m_Corners[ii].x * fscale, -tool.m_Corners[ii].y * fscale );
-                buffer += cbuf;
+                fprintf( m_outputFile, "%#fX%#fX", tool.m_Corners[ii].x * fscale,
+                         -tool.m_Corners[ii].y * fscale );
             }
 
             // close outline and output rotation
-            sprintf( cbuf, "%#f*%%\n", tool.m_Rotation.AsDegrees() );
+            fprintf( m_outputFile, "%#f*%%\n", tool.m_Rotation.AsDegrees() );
             break;
 
         case APERTURE::AM_ROTATED_OVAL:         // Aperture macro for rotated oval pads
@@ -732,10 +728,10 @@ void GERBER_PLOTTER::writeApertureList()
                 RotatePoint( start, tool.m_Rotation );
                 RotatePoint( end, tool.m_Rotation );
 
-                sprintf( cbuf, "%s,%#fX%#fX%#fX%#fX%#fX0*%%\n", APER_MACRO_SHAPE_OVAL_NAME,
-                         tool.m_Size.y * fscale,                // width
-                         start.x * fscale, -start.y * fscale,   // X,Y corner start pos
-                         end.x * fscale, -end.y * fscale );     // X,Y cornerend  pos
+                fprintf( m_outputFile, "%s,%#fX%#fX%#fX%#fX%#fX0*%%\n", APER_MACRO_SHAPE_OVAL_NAME,
+                         tool.m_Size.y * fscale,              // width
+                         start.x * fscale, -start.y * fscale, // X,Y corner start pos
+                         end.x * fscale, -end.y * fscale );   // X,Y cornerend  pos
         }
             break;
 
@@ -747,16 +743,11 @@ void GERBER_PLOTTER::writeApertureList()
 
             // Write DCODE id ( "%ADDxx" is already in buffer) and rotation
             // the full line is something like :%ADD12FreePoly1,45.000000*%
-            sprintf( cbuf, "%s%d,%#f*%%\n",
-                     AM_FREEPOLY_BASENAME,
-                     idx,
+            fprintf( m_outputFile, "%s%d,%#f*%%\n", AM_FREEPOLY_BASENAME, idx,
                      tool.m_Rotation.AsDegrees() );
             break;
         }
         }
-
-        buffer += cbuf;
-        fputs( buffer.c_str(), m_outputFile );
 
         m_apertureAttribute = attribute;
 

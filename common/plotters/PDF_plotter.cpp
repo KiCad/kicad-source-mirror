@@ -28,6 +28,7 @@
  */
 
 #include <algorithm>
+#include <cstdio> // snprintf
 
 #include <wx/filename.h>
 #include <wx/mstream.h>
@@ -93,11 +94,12 @@ std::string PDF_PLOTTER::encodeStringForPlotter( const wxString& aText )
     {
         result = "<FEFF";
 
+
         for( size_t ii = 0; ii < aText.Len(); ii++ )
         {
             unsigned int code = aText[ii];
             char buffer[16];
-            sprintf( buffer, "%4.4X", code );
+            std::snprintf( buffer, sizeof( buffer ), "%4.4X", code );
             result += buffer;
 
         }

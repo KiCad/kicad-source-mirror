@@ -300,7 +300,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
         dsnOffset = mapPt( offset );
 
         // using () would cause padstack name to be quoted, and {} locks freerouter, so use [].
-        sprintf( offsetTxt, "[%.6g,%.6g]", dsnOffset.x, dsnOffset.y );
+        std::snprintf( offsetTxt, sizeof( offsetTxt ), "[%.6g,%.6g]", dsnOffset.x, dsnOffset.y );
 
         uniqifier += offsetTxt;
     }
@@ -682,12 +682,10 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
             }
             else    // pad name is a duplicate within this footprint
             {
-                char    buf[32];
                 int     duplicates = ++pinmap[ padNumber ];
 
-                sprintf( buf, "@%d", duplicates );
-
-                pin->m_pin_id += buf;      // append "@1" or "@2", etc. to pin name
+                pin->m_pin_id +=
+                        "@" + std::to_string( duplicates ); // append "@1" or "@2", etc. to pin name
             }
 
             pin->m_kiNetCode = pad->GetNetCode();
@@ -1157,9 +1155,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             layer->properties.push_back( PROPERTY() );
             PROPERTY*   property = &layer->properties.back();
             property->name = "index";
-            char        temp[32];
-            sprintf( temp, "%d", pcbNdx );
-            property->value = temp;
+            property->value = std::to_string( pcbNdx );
         }
     }
 
@@ -1195,10 +1191,10 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
         STRINGS&  rules = m_pcb->m_structure->m_rules->m_rules;
 
-        sprintf( rule, "(width %.6g)", scale( defaultTrackWidth ) );
+        std::snprintf( rule, sizeof( rule ), "(width %.6g)", scale( defaultTrackWidth ) );
         rules.push_back( rule );
 
-        sprintf( rule, "(clearance %.6g)", clearance + safetyMargin );
+        std::snprintf( rule, sizeof( rule ), "(clearance %.6g)", clearance + safetyMargin );
         rules.push_back( rule );
 
         // On a high density board (4 mil tracks, 4 mil spacing) a typical solder mask clearance
@@ -1212,7 +1208,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         if( default_smd <= 6.0 )
             default_smd = 6.0;
 
-        sprintf( rule, "(clearance %.6g (type default_smd))", default_smd );
+        std::snprintf( rule, sizeof( rule ), "(clearance %.6g (type default_smd))", default_smd );
 
         rules.push_back( rule );
 
@@ -1221,7 +1217,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         // clearance to freerouter.
         clearance = scale( defaultClearance ) / 4;
 
-        sprintf( rule, "(clearance %.6g (type smd_smd))", clearance );
+        std::snprintf( rule, sizeof( rule ), "(clearance %.6g (type smd_smd))", clearance );
         rules.push_back( rule );
     }
 
@@ -1262,14 +1258,12 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
                 if( plane->m_name.size() == 0 )
                 {
-                    char name[32];
-
                     // This is one of those no connection zones, netcode=0, and it has no name.
                     // Create a unique, bogus netname.
                     NET* no_net = new NET( m_pcb->m_network );
 
-                    sprintf( name, "@:no_net_%d", netlessZones++ );
-                    no_net->m_net_id = name;
+
+                    no_net->m_net_id = "@:no_net_" + std::to_string( netlessZones++ );
 
                     // add the bogus net name to network->nets.
                     m_pcb->m_network->m_nets.push_back( no_net );
@@ -1785,12 +1779,12 @@ void SPECCTRA_DB::exportNETCLASS( const std::shared_ptr<NETCLASS>& aNetClass, BO
 
     // output the track width.
     int trackWidth = aNetClass->GetTrackWidth();
-    sprintf( text, "(width %.6g)", scale( trackWidth ) );
+    std::snprintf( text, sizeof( text ), "(width %.6g)", scale( trackWidth ) );
     clazz->m_rules->m_rules.push_back( text );
 
     // output the clearance.
     int clearance = aNetClass->GetClearance();
-    sprintf( text, "(clearance %.6g)", scale( clearance ) + safetyMargin );
+    std::snprintf( text, sizeof( text ), "(clearance %.6g)", scale( clearance ) + safetyMargin );
     clazz->m_rules->m_rules.push_back( text );
 
     if( aNetClass->GetName() == NETCLASS::Default )

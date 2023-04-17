@@ -24,6 +24,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <gal/color4d.h>
 #include <view/view_overlay.h>
+#include <string>
 
 #include "label_manager.h"
 
@@ -65,9 +66,7 @@ void LABEL_MANAGER::Add( const SHAPE_LINE_CHAIN& aL, COLOR4D color )
 {
     for( int i = 0; i < aL.PointCount(); i++ )
     {
-        char msg[1024];
-        snprintf( msg, sizeof( msg ), "%d", i );
-        Add( aL.CPoint( i ), msg, color );
+        Add( aL.CPoint( i ), std::to_string( i ), color );
     }
 }
 

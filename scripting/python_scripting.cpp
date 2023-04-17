@@ -32,7 +32,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <Python.h>
-#include <sstream>
+#include <string>
 
 #include <eda_base_frame.h>
 #include <gal/color4d.h>
@@ -347,12 +347,11 @@ static void RunPythonMethodWithReturnedString( const char* aMethodName, wxString
     Py_DECREF( builtins );
 
     // Build the python code
-    char cmd[1024];
-    snprintf( cmd, sizeof(cmd), "result = %s()", aMethodName );
+    std::string cmd = "result = " + std::string( aMethodName ) + "()";
 
     // Execute the python code and get the returned data
     PyObject* localDict = PyDict_New();
-    PyObject* pobj = PyRun_String( cmd,  Py_file_input, globals, localDict);
+    PyObject* pobj = PyRun_String( cmd.c_str(), Py_file_input, globals, localDict );
     Py_DECREF( globals );
 
     if( pobj )
