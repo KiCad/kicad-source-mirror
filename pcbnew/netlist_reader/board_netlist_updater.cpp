@@ -523,7 +523,8 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint
             else if( pad->IsOnCopperLayer() && !pad->GetNumber().IsEmpty() )
             {
                 // pad is connectable but has no net found in netlist
-                msg.Printf( _( "No net found for symbol %s pin %s." ),
+                msg.Printf( _( "No net found for component %s pad %s (no pin %s in symbol)." ),
+                            pad->GetNumber(),
                             aFootprint->GetReference(),
                             pad->GetNumber() );
                 m_reporter->Report( msg, RPT_SEVERITY_WARNING);
