@@ -225,7 +225,7 @@ int EDIT_TOOL::PackAndMoveFootprints( const TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
 {
-    if( isRouterActive() )
+    if( isRouterActive() || m_dragging )
     {
         wxBell();
         return 0;
