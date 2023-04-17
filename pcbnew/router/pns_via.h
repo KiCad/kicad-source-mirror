@@ -53,12 +53,12 @@ public:
     VIA() :
         LINKED_ITEM( VIA_T )
     {
-        m_diameter = 2; // Dummy value
-        m_drill    = 0;
-        m_viaType  = VIATYPE::THROUGH;
-        m_isFree   = false;
+        m_diameter  = 2; // Dummy value
+        m_drill     = 0;
+        m_viaType   = VIATYPE::THROUGH;
+        m_isFree    = false;
         m_isVirtual = false;
-        m_hole = nullptr;
+        m_hole      = HOLE::MakeCircularHole( m_pos, m_diameter / 2 );
     }
 
     VIA( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, int aDiameter, int aDrill,

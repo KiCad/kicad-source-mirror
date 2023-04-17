@@ -140,7 +140,7 @@ const SHAPE_LINE_CHAIN VIA::Hull( int aClearance, int aWalkaroundThickness, int 
     int cl = ( aClearance + aWalkaroundThickness / 2 );
     int width = m_diameter;
 
-    if( !ROUTER::GetInstance()->GetInterface()->IsFlashedOnLayer( this, aLayer ) )
+    if( m_hole && !ROUTER::GetInstance()->GetInterface()->IsFlashedOnLayer( this, aLayer ) )
         width = m_hole->Radius() * 2;
 
     // Chamfer = width * ( 1 - sqrt(2)/2 ) for equilateral octagon
@@ -160,6 +160,7 @@ VIA* VIA::Clone() const
     v->m_diameter = m_diameter;
     v->m_drill = m_drill;
     v->m_shape = SHAPE_CIRCLE( m_pos, m_diameter / 2 );
+    delete v->m_hole;
     v->m_hole = m_hole->Clone();
     v->m_rank = m_rank;
     v->m_marker = m_marker;
