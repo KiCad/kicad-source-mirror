@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -280,42 +280,49 @@ wxString UnescapeString( const wxString& aSource )
     wxString newbuf;
     newbuf.reserve( sourceLen );
 
+    wxUniChar prev = 0;
+    wxUniChar ch = 0;
+
     for( size_t i = 0; i < sourceLen; ++i )
     {
-        wxUniChar ch = aSource[i];
+        prev = ch;
+        ch = aSource[i];
 
-        if( ( ch == '$' || ch == '~' || ch == '^' || ch == '_' )
-                && i + 1 < sourceLen && aSource[i+1] == '{' )
-        {
-            for( ; i < sourceLen; ++i )
-            {
-                ch = aSource[i];
-                newbuf += ch;
-
-                if( ch == '}' )
-                    break;
-            }
-        }
-        else if( ch == '{' )
+        if( ch == '{' )
         {
             wxString token;
             int      depth = 1;
+            bool     terminated = false;
 
             for( i = i + 1; i < sourceLen; ++i )
             {
                 ch = aSource[i];
+
                 if( ch == '{' )
                     depth++;
                 else if( ch == '}' )
                     depth--;
 
                 if( depth <= 0 )
+                {
+                    terminated = true;
                     break;
+                }
                 else
+                {
                     token.append( ch );
+                }
             }
 
-            if(      token == wxT( "dblquote" ) )  newbuf.append( wxT( "\"" ) );
+            if( !terminated )
+            {
+                newbuf.append( wxT( "{" ) + UnescapeString( token ) );
+            }
+            else if( prev == '$' || prev == '~' || prev == '^' || prev == '_' )
+            {
+                newbuf.append( wxT( "{" ) + UnescapeString( token ) + wxT( "}" ) );
+            }
+            else if( token == wxT( "dblquote" ) )  newbuf.append( wxT( "\"" ) );
             else if( token == wxT( "quote" ) )     newbuf.append( wxT( "'" ) );
             else if( token == wxT( "lt" ) )        newbuf.append( wxT( "<" ) );
             else if( token == wxT( "gt" ) )        newbuf.append( wxT( ">" ) );
@@ -329,7 +336,6 @@ wxString UnescapeString( const wxString& aSource )
             else if( token == wxT( "tab" ) )       newbuf.append( wxT( "\t" ) );
             else if( token == wxT( "return" ) )    newbuf.append( wxT( "\n" ) );
             else if( token == wxT( "brace" ) )     newbuf.append( wxT( "{" ) );
-            else if( token.IsEmpty() )             newbuf.append( wxT( "{" ) );
             else
             {
                 newbuf.append( wxT( "{" ) + UnescapeString( token ) + wxT( "}" ) );

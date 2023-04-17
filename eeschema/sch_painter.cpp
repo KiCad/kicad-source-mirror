@@ -2027,8 +2027,8 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
 
             if( cache )
             {
-                for( const std::unique_ptr<KIFONT::GLYPH>& glyph : *cache )
-                    m_gal->DrawGlyph( *glyph );
+                m_gal->SetLineWidth( attrs.m_StrokeWidth );
+                m_gal->DrawGlyphs( *cache );
             }
             else
             {
@@ -2078,8 +2078,8 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
 
                 if( cache )
                 {
-                    for( const std::unique_ptr<KIFONT::GLYPH>& glyph : *cache )
-                        m_gal->DrawGlyph( *glyph );
+                    m_gal->SetLineWidth( attrs.m_StrokeWidth );
+                    m_gal->DrawGlyphs( *cache );
                 }
                 else
                 {
@@ -2451,8 +2451,8 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
 
             if( cache )
             {
-                for( const std::unique_ptr<KIFONT::GLYPH>& glyph : *cache )
-                    m_gal->DrawGlyph( *glyph );
+                m_gal->SetLineWidth( attributes.m_StrokeWidth );
+                m_gal->DrawGlyphs( *cache );
             }
             else
             {

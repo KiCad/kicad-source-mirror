@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2021 Ola Rinta-Koski <gitlab@rinta-koski.net>
- * Copyright (C) 2021-2022 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * Outline font class
  *
@@ -313,22 +313,6 @@ VECTOR2I OUTLINE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
 }
 
 
-double OUTLINE_FONT::getOverbarOffset( int ascender, int height, int thickness ) const
-{
-    double thicknessRatio = abs( (double) thickness ) / (double) height;
-    double ascenderRatio = (double) ascender / (double) height;
-
-    if( thicknessRatio < 0.05 )
-        return 0.04;
-    else if( ascenderRatio < 0.78 )
-        return 0.00;
-    else if( ascenderRatio < 0.80 )
-        return -0.03;
-    else
-        return -0.06;
-}
-
-
 VECTOR2I OUTLINE_FONT::getTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
                                         const wxString& aText, const VECTOR2I& aSize,
                                         const VECTOR2I& aPosition, const EDA_ANGLE& aAngle,
@@ -338,14 +322,15 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
     std::lock_guard<std::mutex> guard( m_freeTypeMutex );
 
     return getTextAsGlyphsUnlocked( aBBox, aGlyphs, aText, aSize, aPosition, aAngle, aMirror,
-            aOrigin, aTextStyle );
+                                    aOrigin, aTextStyle );
 }
 
-VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
-        const wxString& aText, const VECTOR2I& aSize,
-        const VECTOR2I& aPosition, const EDA_ANGLE& aAngle,
-        bool aMirror, const VECTOR2I& aOrigin,
-        TEXT_STYLE_FLAGS aTextStyle ) const
+VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox,
+                                                std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
+                                                const wxString& aText, const VECTOR2I& aSize,
+                                                const VECTOR2I& aPosition, const EDA_ANGLE& aAngle,
+                                                bool aMirror, const VECTOR2I& aOrigin,
+                                                TEXT_STYLE_FLAGS aTextStyle ) const
 {
     VECTOR2D glyphSize = aSize;
     FT_Face  face = m_face;
@@ -478,74 +463,8 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox, std::vector<std::u
     }
 
     int      ascender = abs( face->size->metrics.ascender * GLYPH_SIZE_SCALER );
-    int      height = abs( face->size->metrics.height * GLYPH_SIZE_SCALER );
     int      descender = abs( face->size->metrics.descender * GLYPH_SIZE_SCALER );
     VECTOR2I extents( cursor.x * scaleFactor.x, ( ascender + descender ) * abs( scaleFactor.y ) );
-
-    // Font metrics don't include all descenders and diacriticals, so beef them up just a little.
-    extents.y *= 1.05;
-
-    if( IsOverbar( aTextStyle ) )
-    {
-        std::vector<std::unique_ptr<GLYPH>> underscoreGlyphs;
-
-        getTextAsGlyphsUnlocked( nullptr, &underscoreGlyphs, wxT( "_" ), aSize, { 0, 0 }, ANGLE_0, false,
-                         { 0, 0 }, aTextStyle & ~TEXT_STYLE::OVERBAR );
-
-        OUTLINE_GLYPH* underscoreGlyph = static_cast<OUTLINE_GLYPH*>( underscoreGlyphs[0].get() );
-        BOX2I          underscoreBBox;
-
-        for( const VECTOR2I& pt : underscoreGlyph->Outline( 0 ).CPoints() )
-            underscoreBBox.Merge( pt );
-
-        int barThickness = underscoreBBox.GetHeight();
-
-        // Shorten the bar a little so its rounded ends don't make it over-long
-        double barTrim = barThickness / 2.0;
-        double barOffset = getOverbarOffset( ascender, height, barThickness / scaleFactor.y );
-
-        VECTOR2I topLeft( aPosition );
-        VECTOR2I topRight( aPosition );
-
-        topLeft.y += ascender * scaleFactor.y * ( 1.0 + barOffset );
-        topRight.y = topLeft.y;
-
-        topLeft.x += barTrim;
-        topRight.x += extents.x - barTrim;
-
-        extents.y *= ( 1.0 + barOffset + barOffset );
-        extents.x += barTrim;
-
-        if( IsItalic() )
-        {
-            topLeft.x += aSize.y * ITALIC_TILT;
-            topRight.x += aSize.y * ITALIC_TILT;
-            extents.x += aSize.y * ITALIC_TILT;
-        }
-
-        if( aMirror )
-        {
-            topLeft.x = aOrigin.x - ( topLeft.x - aOrigin.x );
-            topRight.x = aOrigin.x - ( topRight.x - aOrigin.x );
-        }
-
-        if( !aAngle.IsZero() )
-        {
-            RotatePoint( topLeft, aOrigin, aAngle );
-            RotatePoint( topRight, aOrigin, aAngle );
-        }
-
-        if( aGlyphs )
-        {
-            int            maxError = KiROUND( barThickness / 48 );
-            SHAPE_POLY_SET poly;
-
-            TransformOvalToPolygon( poly, topLeft, topRight, barThickness, maxError, ERROR_INSIDE );
-
-            std::unique_ptr<OUTLINE_GLYPH> overbarGlyph = std::make_unique<OUTLINE_GLYPH>( poly );
-            aGlyphs->push_back( std::move( overbarGlyph ) );
-        }
-    }
 
     hb_buffer_destroy( buf );
     hb_font_destroy( referencedFont );
@@ -575,7 +494,7 @@ void OUTLINE_FONT::RenderToOpenGLCanvas( KIGFX::OPENGL_GAL& aGal, const wxString
     unsigned int         glyphCount;
     hb_glyph_info_t*     glyphInfo = hb_buffer_get_glyph_infos( buf, &glyphCount );
     hb_glyph_position_t* glyphPos = hb_buffer_get_glyph_positions( buf, &glyphCount );
-    
+
     std::lock_guard<std::mutex> guard( m_freeTypeMutex );
 
     hb_font_t*           referencedFont = hb_ft_font_create_referenced( m_face );

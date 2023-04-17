@@ -4,7 +4,7 @@
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
  * Copyright (C) 2013 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
- * Copyright (C) 2016-2022 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * Stroke font class
  *
@@ -128,7 +128,6 @@ void STROKE_FONT::loadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
 
             while( aNewStrokeFont[j][i] )
             {
-
                 if( aNewStrokeFont[j][i] == ' ' && aNewStrokeFont[j][i+1] == 'R' )
                     strokes++;
 
@@ -304,62 +303,10 @@ VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr
         ++char_count;
     }
 
-    VECTOR2D barOffset( 0.0, 0.0 );
-
-    // Shorten the bar a little so its rounded ends don't make it over-long
-    double   barTrim = glyphSize.x * 0.1;
-
-    if( aTextStyle & TEXT_STYLE::OVERBAR )
-    {
-        barOffset.y = ComputeOverbarVerticalPosition( glyphSize.y );
-
-        if( aTextStyle & TEXT_STYLE::ITALIC )
-            barOffset.x = barOffset.y * ITALIC_TILT;
-
-        VECTOR2D barStart( aPosition.x + barOffset.x + barTrim, cursor.y - barOffset.y );
-        VECTOR2D barEnd( cursor.x + barOffset.x - barTrim, cursor.y - barOffset.y );
-
-        if( aGlyphs )
-        {
-            STROKE_GLYPH overbarGlyph;
-
-            overbarGlyph.AddPoint( barStart );
-            overbarGlyph.AddPoint( barEnd );
-            overbarGlyph.Finalize();
-
-            aGlyphs->push_back( overbarGlyph.Transform( { 1.0, 1.0 }, { 0, 0 }, false,
-                                                         aAngle, aMirror, aOrigin ) );
-        }
-    }
-
-    if( aTextStyle & TEXT_STYLE::UNDERLINE )
-    {
-        barOffset.y = ComputeUnderlineVerticalPosition( glyphSize.y );
-
-        if( aTextStyle & TEXT_STYLE::ITALIC )
-            barOffset.x = barOffset.y * ITALIC_TILT;
-
-        VECTOR2D barStart( aPosition.x + barOffset.x + barTrim, cursor.y - barOffset.y );
-        VECTOR2D barEnd( cursor.x + barOffset.x - barTrim, cursor.y - barOffset.y );
-
-        if( aGlyphs )
-        {
-            STROKE_GLYPH underlineGlyph;
-
-            underlineGlyph.AddPoint( barStart );
-            underlineGlyph.AddPoint( barEnd );
-            underlineGlyph.Finalize();
-
-            aGlyphs->push_back( underlineGlyph.Transform( { 1.0, 1.0 }, { 0, 0 }, false,
-                                                          aAngle, aMirror, aOrigin ) );
-        }
-    }
-
     if( aBBox )
     {
         aBBox->SetOrigin( aPosition );
-        aBBox->SetEnd( cursor.x + barOffset.x - KiROUND( glyphSize.x * INTER_CHAR ),
-                       cursor.y + std::max( glyphSize.y, barOffset.y * OVERBAR_POSITION_FACTOR ) );
+        aBBox->SetEnd( cursor.x - KiROUND( glyphSize.x * INTER_CHAR ), cursor.y + glyphSize.y );
         aBBox->Normalize();
     }
 

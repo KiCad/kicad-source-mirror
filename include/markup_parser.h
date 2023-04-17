@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2021 Ola Rinta-Koski
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -61,19 +61,25 @@ struct markup : sor< subscript,
 struct anyString : plus< seq< not_at< markup >,
                               utf8::any > > {};
 
-struct anyStringWithinBraces : plus< seq< not_at< markup >,
-                                          utf8::not_one< '}' > > > {};
+struct escapeSequence : seq< string<'{'>, identifier, string<'}'> > {};
+
+struct anyStringWithinBraces : plus< sor< seq< not_at< markup >,
+                                               escapeSequence >,
+                                          seq< not_at< markup >,
+                                               utf8::not_one<'}'> > > > {};
 
 template< typename ControlChar >
-struct braces : seq< seq< ControlChar, string< '{' > >,
-                     until< string< '}' >, sor< anyStringWithinBraces,
-                                                subscript,
-                                                superscript,
-                                                overbar > > > {};
+struct braces : seq< seq< ControlChar,
+                          string<'{'> >,
+                     until< string<'}'>,
+                            sor< anyStringWithinBraces,
+                                 subscript,
+                                 superscript,
+                                 overbar > > > {};
 
-struct superscript : braces< string< '^' > > {};
-struct subscript   : braces< string< '_' > > {};
-struct overbar     : braces< string< '~' > > {};
+struct superscript : braces< string<'^'> > {};
+struct subscript   : braces< string<'_'> > {};
+struct overbar     : braces< string<'~'> > {};
 
 /**
  * Finally, the full grammar
