@@ -56,7 +56,7 @@ Coverity:
   script:
     - *coverity_cache_prep
     - cmake
-      -DCMAKE_BUILD_TYPE=Debug
+      -DCMAKE_BUILD_TYPE=RelWithDebInfo
       -DKICAD_STDLIB_LIGHT_DEBUG=ON
       -DKICAD_SCRIPTING_WXPYTHON=ON
     - coverity/bin/cov-build --dir cov-int make -j8
