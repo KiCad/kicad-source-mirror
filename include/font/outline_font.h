@@ -126,8 +126,6 @@ public:
 protected:
     FT_Error loadFace( const wxString& aFontFileName, int aFaceIndex );
 
-    double getOverbarOffset( int ascender, int height, int thickness ) const;
-
     BOX2I getBoundingBox( const std::vector<std::unique_ptr<GLYPH>>& aGlyphs ) const;
 
     VECTOR2I getTextAsGlyphs( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
@@ -136,10 +134,12 @@ protected:
                               const VECTOR2I& aOrigin, TEXT_STYLE_FLAGS aTextStyle ) const;
 
 private:
-    VECTOR2I getTextAsGlyphsUnlocked( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
-                              const wxString& aText, const VECTOR2I& aSize,
-                              const VECTOR2I& aPosition, const EDA_ANGLE& aAngle, bool aMirror,
-                              const VECTOR2I& aOrigin, TEXT_STYLE_FLAGS aTextStyle ) const;
+    VECTOR2I getTextAsGlyphsUnlocked( BOX2I* aBoundingBox,
+                                      std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
+                                      const wxString& aText, const VECTOR2I& aSize,
+                                      const VECTOR2I& aPosition, const EDA_ANGLE& aAngle,
+                                      bool aMirror, const VECTOR2I& aOrigin,
+                                      TEXT_STYLE_FLAGS aTextStyle ) const;
 
 private:
     // FreeType variables

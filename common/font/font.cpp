@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2021 Ola Rinta-Koski
- * Copyright (C) 2021-2022 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * Font abstract base class
  *
@@ -264,6 +264,8 @@ VECTOR2I drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* a
                      bool aMirror, const VECTOR2I& aOrigin, TEXT_STYLE_FLAGS aTextStyle )
 {
     VECTOR2I nextPosition = aPosition;
+    bool     drawUnderline = false;
+    bool     drawOverbar = false;
 
     if( aNode )
     {
@@ -272,12 +274,12 @@ VECTOR2I drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* a
         if( !aNode->is_root() )
         {
             if( aNode->isSubscript() )
-                textStyle = TEXT_STYLE::SUBSCRIPT;
+                textStyle |= TEXT_STYLE::SUBSCRIPT;
             else if( aNode->isSuperscript() )
-                textStyle = TEXT_STYLE::SUPERSCRIPT;
+                textStyle |= TEXT_STYLE::SUPERSCRIPT;
 
             if( aNode->isOverbar() )
-                textStyle |= TEXT_STYLE::OVERBAR;
+                drawOverbar = true;
 
             if( aNode->has_content() )
             {
@@ -291,11 +293,59 @@ VECTOR2I drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* a
                     aBoundingBox->Merge( bbox );
             }
         }
+        else if( aTextStyle & TEXT_STYLE::UNDERLINE )
+        {
+            drawUnderline = true;
+        }
 
         for( const std::unique_ptr<MARKUP::NODE>& child : aNode->children )
         {
             nextPosition = drawMarkup( aBoundingBox, aGlyphs, child.get(), nextPosition, aFont,
                                        aSize, aAngle, aMirror, aOrigin, textStyle );
+        }
+    }
+
+    if( drawUnderline )
+    {
+        // Shorten the bar a little so its rounded ends don't make it over-long
+        double barTrim = aSize.x * 0.1;
+        double barOffset = aFont->ComputeUnderlineVerticalPosition( aSize.y );
+
+        VECTOR2D barStart( aPosition.x + barTrim, aPosition.y - barOffset );
+        VECTOR2D barEnd( nextPosition.x - barTrim, nextPosition.y - barOffset );
+
+        if( aGlyphs )
+        {
+            STROKE_GLYPH barGlyph;
+
+            barGlyph.AddPoint( barStart );
+            barGlyph.AddPoint( barEnd );
+            barGlyph.Finalize();
+
+            aGlyphs->push_back( barGlyph.Transform( { 1.0, 1.0 }, { 0, 0 }, false, aAngle, aMirror,
+                                                    aOrigin ) );
+        }
+    }
+
+    if( drawOverbar )
+    {
+        // Shorten the bar a little so its rounded ends don't make it over-long
+        double barTrim = aSize.x * 0.1;
+        double barOffset = aFont->ComputeOverbarVerticalPosition( aSize.y );
+
+        VECTOR2D barStart( aPosition.x + barTrim, aPosition.y - barOffset );
+        VECTOR2D barEnd( nextPosition.x - barTrim, nextPosition.y - barOffset );
+
+        if( aGlyphs )
+        {
+            STROKE_GLYPH barGlyph;
+
+            barGlyph.AddPoint( barStart );
+            barGlyph.AddPoint( barEnd );
+            barGlyph.Finalize();
+
+            aGlyphs->push_back( barGlyph.Transform( { 1.0, 1.0 }, { 0, 0 }, false, aAngle, aMirror,
+                                                    aOrigin ) );
         }
     }
 

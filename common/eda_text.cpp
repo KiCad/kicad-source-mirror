@@ -37,6 +37,7 @@
 #include <callback_gal.h>
 #include <eda_text.h>         // for EDA_TEXT, TEXT_EFFECTS, GR_TEXT_VJUSTIF...
 #include <gal/color4d.h>      // for COLOR4D, COLOR4D::BLACK
+#include <font/glyph.h>
 #include <gr_text.h>
 #include <string_utils.h>     // for UnescapeString
 #include <math/util.h>        // for KiROUND
@@ -119,8 +120,10 @@ EDA_TEXT::EDA_TEXT( const EDA_TEXT& aText ) :
 
     for( const std::unique_ptr<KIFONT::GLYPH>& glyph : aText.m_render_cache )
     {
-        KIFONT::OUTLINE_GLYPH* outline_glyph = static_cast<KIFONT::OUTLINE_GLYPH*>( glyph.get() );
-        m_render_cache.emplace_back( std::make_unique<KIFONT::OUTLINE_GLYPH>( *outline_glyph ) );
+        if( KIFONT::OUTLINE_GLYPH* outline = dynamic_cast<KIFONT::OUTLINE_GLYPH*>( glyph.get() ) )
+            m_render_cache.emplace_back( std::make_unique<KIFONT::OUTLINE_GLYPH>( *outline ) );
+        else if( KIFONT::STROKE_GLYPH* stroke = dynamic_cast<KIFONT::STROKE_GLYPH*>( glyph.get() ) )
+            m_render_cache.emplace_back( std::make_unique<KIFONT::STROKE_GLYPH>( *stroke ) );
     }
 
     m_bounding_box_cache_valid = aText.m_bounding_box_cache_valid;
@@ -151,8 +154,10 @@ EDA_TEXT& EDA_TEXT::operator=( const EDA_TEXT& aText )
 
     for( const std::unique_ptr<KIFONT::GLYPH>& glyph : aText.m_render_cache )
     {
-        KIFONT::OUTLINE_GLYPH* outline_glyph = static_cast<KIFONT::OUTLINE_GLYPH*>( glyph.get() );
-        m_render_cache.emplace_back( std::make_unique<KIFONT::OUTLINE_GLYPH>( *outline_glyph ) );
+        if( KIFONT::OUTLINE_GLYPH* outline = dynamic_cast<KIFONT::OUTLINE_GLYPH*>( glyph.get() ) )
+            m_render_cache.emplace_back( std::make_unique<KIFONT::OUTLINE_GLYPH>( *outline ) );
+        else if( KIFONT::STROKE_GLYPH* stroke = dynamic_cast<KIFONT::STROKE_GLYPH*>( glyph.get() ) )
+            m_render_cache.emplace_back( std::make_unique<KIFONT::STROKE_GLYPH>( *stroke ) );
     }
 
     m_bounding_box_cache_valid = aText.m_bounding_box_cache_valid;
@@ -393,7 +398,12 @@ void EDA_TEXT::Offset( const VECTOR2I& aOffset )
     m_pos += aOffset;
 
     for( std::unique_ptr<KIFONT::GLYPH>& glyph : m_render_cache )
-        static_cast<KIFONT::OUTLINE_GLYPH*>( glyph.get() )->Move( aOffset );
+    {
+        if( KIFONT::OUTLINE_GLYPH* outline = dynamic_cast<KIFONT::OUTLINE_GLYPH*>( glyph.get() ) )
+            outline->Move( aOffset );
+        else if( KIFONT::STROKE_GLYPH* stroke = dynamic_cast<KIFONT::STROKE_GLYPH*>( glyph.get() ) )
+            glyph = stroke->Transform( { 1.0, 1.0 }, aOffset, 0, ANGLE_0, false, { 0, 0 } );
+    }
 
     m_bounding_box_cache_valid = false;
 }

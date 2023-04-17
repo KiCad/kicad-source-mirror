@@ -2003,9 +2003,14 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
             cache = aText->GetRenderCache( font, resolvedText );
 
         if( cache )
+        {
+            m_gal->SetLineWidth( attrs.m_StrokeWidth );
             m_gal->DrawGlyphs( *cache );
+        }
         else
+        {
             strokeText( resolvedText, aText->GetTextPos(), attrs );
+        }
     }
 }
 
@@ -2101,9 +2106,14 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
         cache = aTextBox->GetRenderCache( font, resolvedText );
 
     if( cache )
+    {
+        m_gal->SetLineWidth( attrs.m_StrokeWidth );
         m_gal->DrawGlyphs( *cache );
+    }
     else
+    {
         strokeText( resolvedText, aTextBox->GetDrawPos(), attrs );
+    }
 }
 
 
