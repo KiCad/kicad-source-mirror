@@ -32,6 +32,12 @@
 #include <wx/print.h>
 #include <wx/printdlg.h>
 #include "dialog_print.h"
+
+
+#include <dialogs/panel_printer_list.h>
+
+#include <advanced_config.h>
+
 #include "sch_printout.h"
 
 
@@ -91,13 +97,16 @@ DIALOG_PRINT::DIALOG_PRINT( SCH_EDIT_FRAME* aParent ) :
     wxASSERT( aParent );
     m_useCairo = ADVANCED_CFG::GetCfg().m_EnableEeschemaPrintCairo;
 
+    // Show m_panelPrinters only if there are printers to list:
+    m_panelPrinters->Show( m_panelPrinters->AsPrintersAvailable() );
+
     SetupStandardButtons( { { wxID_OK,     _( "Print" )         },
                             { wxID_APPLY,  _( "Print Preview" ) },
                             { wxID_CANCEL, _( "Close" )         } } );
 
 #ifdef __WXMAC__
     // Problems with modal on wx-2.9 - Anyway preview is standard for OSX
-    m_sdbSizer1Apply->Hide();
+    m_sdbSizerApply->Hide();
 #endif
 #if defined(__WXGTK__)
     // Preview using Cairo does not work on GTK,
@@ -106,7 +115,9 @@ DIALOG_PRINT::DIALOG_PRINT( SCH_EDIT_FRAME* aParent ) :
         m_sdbSizer1Apply->Hide();
 #endif
 
-    m_sdbSizer1OK->SetFocus();
+    m_sdbSizerOK->SetFocus();
+
+    Layout();
 
     finishDialogSettings();
 }
@@ -236,12 +247,20 @@ void DIALOG_PRINT::OnPageSetup( wxCommandEvent& event )
 void DIALOG_PRINT::OnPrintPreview( wxCommandEvent& event )
 {
     SavePrintOptions();
+    wxPrintData& prn_data = m_parent->GetPageSetupData().GetPrintData();
+
+    wxString selectedPrinterName;
+
+    if( m_panelPrinters )
+        selectedPrinterName = m_panelPrinters->GetSelectedPrinterName();
+
+    prn_data.SetPrinterName( selectedPrinterName );
 
     // Pass two printout objects: for preview, and possible printing.
     wxString        title   = _( "Preview" );
     wxPrintPreview* preview = new wxPrintPreview( new SCH_PRINTOUT( m_parent, title, m_useCairo ),
                                                   new SCH_PRINTOUT( m_parent, title, m_useCairo ),
-                                                  &m_parent->GetPageSetupData().GetPrintData() );
+                                                  &prn_data );
 
     preview->SetZoom( 100 );
 
@@ -284,7 +303,7 @@ bool DIALOG_PRINT::TransferDataFromWindow()
 
     int sheet_count = m_parent->Schematic().Root().CountSheets();
 
-    wxPrintData data = m_parent->GetPageSetupData().GetPrintData();
+    wxPrintData& data = m_parent->GetPageSetupData().GetPrintData();
 
 #if defined( __WXGTK__ ) && !wxCHECK_VERSION( 3, 2, 3 )
     // In GTK, the default bottom margin is bigger by 0.31 inches for
@@ -345,6 +364,12 @@ bool DIALOG_PRINT::TransferDataFromWindow()
         data.SetPaperId( wxPAPER_NONE );
     }
 #endif
+
+    wxString selectedPrinterName;
+
+    if( m_panelPrinters )
+        selectedPrinterName = m_panelPrinters->GetSelectedPrinterName();
+    data.SetPrinterName( selectedPrinterName );
 
     wxPrintDialogData printDialogData( data );
     printDialogData.SetMaxPage( sheet_count );
