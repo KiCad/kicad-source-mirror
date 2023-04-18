@@ -10,7 +10,6 @@
 
 #pragma once
 
-#include "detail/common.h"
 #include "cast.h"
 
 #include <functional>
@@ -62,7 +61,7 @@ struct base {
 
     PYBIND11_DEPRECATED(
         "base<T>() was deprecated in favor of specifying 'T' as a template argument to class_")
-    base() = default;
+    base() {} // NOLINT(modernize-use-equals-default): breaks MSVC 2015 when adding an attribute
 };
 
 /// Keep patient alive while nurse lives
@@ -83,7 +82,8 @@ struct metaclass {
     handle value;
 
     PYBIND11_DEPRECATED("py::metaclass() is no longer required. It's turned on by default now.")
-    metaclass() = default;
+    // NOLINTNEXTLINE(modernize-use-equals-default): breaks MSVC 2015 when adding an attribute
+    metaclass() {}
 
     /// Override pybind11's default metaclass
     explicit metaclass(handle value) : value(value) {}
@@ -345,11 +345,9 @@ struct type_record {
 
         bases.append((PyObject *) base_info->type);
 
-#if PY_VERSION_HEX < 0x030B0000
-        dynamic_attr |= base_info->type->tp_dictoffset != 0;
-#else
-        dynamic_attr |= (base_info->type->tp_flags & Py_TPFLAGS_MANAGED_DICT) != 0;
-#endif
+        if (base_info->type->tp_dictoffset != 0) {
+            dynamic_attr = true;
+        }
 
         if (caster) {
             base_info->implicit_casts.emplace_back(type, caster);
@@ -399,7 +397,7 @@ struct process_attribute<doc> : process_attribute_default<doc> {
 template <>
 struct process_attribute<const char *> : process_attribute_default<const char *> {
     static void init(const char *d, function_record *r) { r->doc = const_cast<char *>(d); }
-    static void init(const char *d, type_record *r) { r->doc = d; }
+    static void init(const char *d, type_record *r) { r->doc = const_cast<char *>(d); }
 };
 template <>
 struct process_attribute<char *> : process_attribute<const char *> {};
@@ -480,7 +478,7 @@ struct process_attribute<arg_v> : process_attribute_default<arg_v> {
         }
 
         if (!a.value) {
-#if defined(PYBIND11_DETAILED_ERROR_MESSAGES)
+#if !defined(NDEBUG)
             std::string descr("'");
             if (a.name) {
                 descr += std::string(a.name) + ": ";
@@ -501,8 +499,7 @@ struct process_attribute<arg_v> : process_attribute_default<arg_v> {
 #else
             pybind11_fail("arg(): could not convert default argument "
                           "into a Python object (type not registered yet?). "
-                          "#define PYBIND11_DETAILED_ERROR_MESSAGES or compile in debug mode for "
-                          "more information.");
+                          "Compile in debug mode for more information.");
 #endif
         }
         r->args.emplace_back(a.name, a.descr, a.value.inc_ref(), !a.flag_noconvert, a.flag_none);

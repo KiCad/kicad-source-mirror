@@ -23,7 +23,7 @@
 #if defined(PYBIND11_TEST_BOOST)
 #    include <boost/optional.hpp>
 
-namespace PYBIND11_NAMESPACE {
+namespace pybind11 {
 namespace detail {
 template <typename T>
 struct type_caster<boost::optional<T>> : optional_caster<boost::optional<T>> {};
@@ -31,19 +31,18 @@ struct type_caster<boost::optional<T>> : optional_caster<boost::optional<T>> {};
 template <>
 struct type_caster<boost::none_t> : void_caster<boost::none_t> {};
 } // namespace detail
-} // namespace PYBIND11_NAMESPACE
+} // namespace pybind11
 #endif
 
 // Test with `std::variant` in C++17 mode, or with `boost::variant` in C++11/14
 #if defined(PYBIND11_HAS_VARIANT)
 using std::variant;
-#    define PYBIND11_TEST_VARIANT 1
-#elif defined(PYBIND11_TEST_BOOST)
+#elif defined(PYBIND11_TEST_BOOST) && (!defined(_MSC_VER) || _MSC_VER >= 1910)
 #    include <boost/variant.hpp>
-#    define PYBIND11_TEST_VARIANT 1
+#    define PYBIND11_HAS_VARIANT 1
 using boost::variant;
 
-namespace PYBIND11_NAMESPACE {
+namespace pybind11 {
 namespace detail {
 template <typename... Ts>
 struct type_caster<boost::variant<Ts...>> : variant_caster<boost::variant<Ts...>> {};
@@ -56,7 +55,7 @@ struct visit_helper<boost::variant> {
     }
 };
 } // namespace detail
-} // namespace PYBIND11_NAMESPACE
+} // namespace pybind11
 #endif
 
 PYBIND11_MAKE_OPAQUE(std::vector<std::string, std::allocator<std::string>>);
@@ -159,13 +158,13 @@ private:
     std::vector<T> storage;
 };
 
-namespace PYBIND11_NAMESPACE {
+namespace pybind11 {
 namespace detail {
 template <typename T>
 struct type_caster<ReferenceSensitiveOptional<T>>
     : optional_caster<ReferenceSensitiveOptional<T>> {};
 } // namespace detail
-} // namespace PYBIND11_NAMESPACE
+} // namespace pybind11
 
 TEST_SUBMODULE(stl, m) {
     // test_vector
@@ -176,14 +175,8 @@ TEST_SUBMODULE(stl, m) {
     m.def("load_bool_vector",
           [](const std::vector<bool> &v) { return v.at(0) == true && v.at(1) == false; });
     // Unnumbered regression (caused by #936): pointers to stl containers aren't castable
-    m.def(
-        "cast_ptr_vector",
-        []() {
-            // Using no-destructor idiom to side-step warnings from overzealous compilers.
-            static auto *v = new std::vector<RValueCaster>{2};
-            return v;
-        },
-        py::return_value_policy::reference);
+    static std::vector<RValueCaster> lvv{2};
+    m.def("cast_ptr_vector", []() { return &lvv; });
 
     // test_deque
     m.def("cast_deque", []() { return std::deque<int>{1}; });
@@ -242,7 +235,6 @@ TEST_SUBMODULE(stl, m) {
     lvn["b"].emplace_back();        // add a list
     lvn["b"].back().emplace_back(); // add an array
     lvn["b"].back().emplace_back(); // add another array
-    static std::vector<RValueCaster> lvv{2};
     m.def("cast_lv_vector", []() -> const decltype(lvv) & { return lvv; });
     m.def("cast_lv_array", []() -> const decltype(lva) & { return lva; });
     m.def("cast_lv_map", []() -> const decltype(lvm) & { return lvm; });
@@ -432,7 +424,7 @@ TEST_SUBMODULE(stl, m) {
     m.def("parent_path", [](const std::filesystem::path &p) { return p.parent_path(); });
 #endif
 
-#ifdef PYBIND11_TEST_VARIANT
+#ifdef PYBIND11_HAS_VARIANT
     static_assert(std::is_same<py::detail::variant_caster_visitor::result_type, py::handle>::value,
                   "visitor::result_type is required by boost::variant in C++11 mode");
 
@@ -443,9 +435,6 @@ TEST_SUBMODULE(stl, m) {
         result_type operator()(const std::string &) { return "std::string"; }
         result_type operator()(double) { return "double"; }
         result_type operator()(std::nullptr_t) { return "std::nullptr_t"; }
-#    if defined(PYBIND11_HAS_VARIANT)
-        result_type operator()(std::monostate) { return "std::monostate"; }
-#    endif
     };
 
     // test_variant
@@ -459,18 +448,6 @@ TEST_SUBMODULE(stl, m) {
         using V = variant<int, std::string>;
         return py::make_tuple(V(5), V("Hello"));
     });
-
-#    if defined(PYBIND11_HAS_VARIANT)
-    // std::monostate tests.
-    m.def("load_monostate_variant",
-          [](const variant<std::monostate, int, std::string> &v) -> const char * {
-              return py::detail::visit_helper<variant>::call(visitor(), v);
-          });
-    m.def("cast_monostate_variant", []() {
-        using V = variant<std::monostate, int, std::string>;
-        return py::make_tuple(V{}, V(5), V("Hello"));
-    });
-#    endif
 #endif
 
     // #528: templated constructor

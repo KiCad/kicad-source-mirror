@@ -8,6 +8,10 @@
     BSD-style license that can be found in the LICENSE file.
 */
 
+#if defined(_MSC_VER) && _MSC_VER < 1910 // VS 2015's MSVC
+#    pragma warning(disable : 4702)      // unreachable code in system header (xatomic.h(382))
+#endif
+
 #include "object.h"
 #include "pybind11_tests.h"
 
@@ -266,14 +270,14 @@ struct ElementList {
 // It is always possible to construct a ref<T> from an Object* pointer without
 // possible inconsistencies, hence the 'true' argument at the end.
 // Make pybind11 aware of the non-standard getter member function
-namespace PYBIND11_NAMESPACE {
+namespace pybind11 {
 namespace detail {
 template <typename T>
 struct holder_helper<ref<T>> {
     static const T *get(const ref<T> &p) { return p.get_ptr(); }
 };
 } // namespace detail
-} // namespace PYBIND11_NAMESPACE
+} // namespace pybind11
 
 // Make pybind aware of the ref-counted wrapper type (s):
 PYBIND11_DECLARE_HOLDER_TYPE(T, ref<T>, true);

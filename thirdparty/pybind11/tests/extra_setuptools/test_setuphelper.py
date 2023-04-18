@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 import subprocess
 import sys
@@ -18,7 +19,7 @@ def test_simple_setup_py(monkeypatch, tmpdir, parallel, std):
 
     (tmpdir / "setup.py").write_text(
         dedent(
-            f"""\
+            u"""\
             import sys
             sys.path.append({MAIN_DIR!r})
 
@@ -51,13 +52,13 @@ def test_simple_setup_py(monkeypatch, tmpdir, parallel, std):
                 ext_modules=ext_modules,
             )
             """
-        ),
+        ).format(MAIN_DIR=MAIN_DIR, std=std, parallel=parallel),
         encoding="ascii",
     )
 
     (tmpdir / "main.cpp").write_text(
         dedent(
-            """\
+            u"""\
             #include <pybind11/pybind11.h>
 
             int f(int x) {
@@ -95,7 +96,7 @@ def test_simple_setup_py(monkeypatch, tmpdir, parallel, std):
 
     (tmpdir / "test.py").write_text(
         dedent(
-            """\
+            u"""\
             import simple_setup
             assert simple_setup.f(3) == 9
             """
@@ -120,11 +121,10 @@ def test_intree_extensions(monkeypatch, tmpdir):
     subdir.ensure_dir()
     src = subdir / "ext.cpp"
     src.ensure()
-    relpath = src.relto(tmpdir)
-    (ext,) = intree_extensions([relpath])
+    (ext,) = intree_extensions([src.relto(tmpdir)])
     assert ext.name == "ext"
     subdir.ensure("__init__.py")
-    (ext,) = intree_extensions([relpath])
+    (ext,) = intree_extensions([src.relto(tmpdir)])
     assert ext.name == "dir.ext"
 
 

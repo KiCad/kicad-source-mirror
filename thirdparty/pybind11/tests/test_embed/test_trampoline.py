@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import trampoline_module
 
 

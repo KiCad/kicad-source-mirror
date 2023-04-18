@@ -21,7 +21,7 @@ public:
 };
 class ArgAlwaysConverts {};
 
-namespace PYBIND11_NAMESPACE {
+namespace pybind11 {
 namespace detail {
 template <>
 struct type_caster<ArgInspector1> {
@@ -74,7 +74,7 @@ public:
     }
 };
 } // namespace detail
-} // namespace PYBIND11_NAMESPACE
+} // namespace pybind11
 
 // test_custom_caster_destruction
 class DestructionTester {
@@ -92,7 +92,7 @@ public:
         return *this;
     }
 };
-namespace PYBIND11_NAMESPACE {
+namespace pybind11 {
 namespace detail {
 template <>
 struct type_caster<DestructionTester> {
@@ -104,7 +104,7 @@ struct type_caster<DestructionTester> {
     }
 };
 } // namespace detail
-} // namespace PYBIND11_NAMESPACE
+} // namespace pybind11
 
 // Define type caster outside of `pybind11::detail` and then alias it.
 namespace other_lib {
@@ -112,7 +112,7 @@ struct MyType {};
 // Corrupt `py` shorthand alias for surrounding context.
 namespace py {}
 // Corrupt unqualified relative `pybind11` namespace.
-namespace PYBIND11_NAMESPACE {}
+namespace pybind11 {}
 // Correct alias.
 namespace py_ = ::pybind11;
 // Define caster. This is effectively no-op, we only ensure it compiles and we
@@ -127,12 +127,12 @@ struct my_caster {
 };
 } // namespace other_lib
 // Effectively "alias" it into correct namespace (via inheritance).
-namespace PYBIND11_NAMESPACE {
+namespace pybind11 {
 namespace detail {
 template <>
 struct type_caster<other_lib::MyType> : public other_lib::my_caster {};
 } // namespace detail
-} // namespace PYBIND11_NAMESPACE
+} // namespace pybind11
 
 TEST_SUBMODULE(custom_type_casters, m) {
     // test_custom_type_casters

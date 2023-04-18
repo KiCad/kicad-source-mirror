@@ -167,4 +167,5 @@ as arguments and return values, refer to the section on binding :ref:`classes`.
 +------------------------------------+---------------------------+-----------------------------------+
 
 .. [#] ``std::filesystem::path`` is converted to ``pathlib.Path`` and
-   ``os.PathLike`` is converted to ``std::filesystem::path``.
+   ``os.PathLike`` is converted to ``std::filesystem::path``, but this requires
+   Python 3.6 (for ``__fspath__`` support).

@@ -100,7 +100,7 @@ private:
 
             if (size > remainder) {
                 str line(pbase(), size - remainder);
-                pywrite(std::move(line));
+                pywrite(line);
                 pyflush();
             }
 

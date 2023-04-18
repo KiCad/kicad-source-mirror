@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import pytest
 
 import env  # noqa: F401
@@ -12,7 +13,8 @@ def test_multiple_inheritance_cpp():
     assert mt.bar() == 4
 
 
-@pytest.mark.xfail("env.PYPY")
+@pytest.mark.skipif("env.PYPY and env.PY2")
+@pytest.mark.xfail("env.PYPY and not env.PY2")
 def test_multiple_inheritance_mix1():
     class Base1:
         def __init__(self, i):
@@ -51,14 +53,15 @@ def test_multiple_inheritance_mix2():
     assert mt.bar() == 4
 
 
-@pytest.mark.xfail("env.PYPY")
+@pytest.mark.skipif("env.PYPY and env.PY2")
+@pytest.mark.xfail("env.PYPY and not env.PY2")
 def test_multiple_inheritance_python():
     class MI1(m.Base1, m.Base2):
         def __init__(self, i, j):
             m.Base1.__init__(self, i)
             m.Base2.__init__(self, j)
 
-    class B1:
+    class B1(object):
         def v(self):
             return 1
 
@@ -93,7 +96,7 @@ def test_multiple_inheritance_python():
         def v(self):
             return 2
 
-    class B3:
+    class B3(object):
         def v(self):
             return 3
 

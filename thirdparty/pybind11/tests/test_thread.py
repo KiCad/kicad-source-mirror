@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import threading
 
 from pybind11_tests import thread as m
@@ -5,7 +7,7 @@ from pybind11_tests import thread as m
 
 class Thread(threading.Thread):
     def __init__(self, fn):
-        super().__init__()
+        super(Thread, self).__init__()
         self.fn = fn
         self.e = None
 
@@ -17,7 +19,7 @@ class Thread(threading.Thread):
             self.e = e
 
     def join(self):
-        super().join()
+        super(Thread, self).join()
         if self.e:
             raise self.e
 

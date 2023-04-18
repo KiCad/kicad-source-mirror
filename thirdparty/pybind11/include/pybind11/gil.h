@@ -10,10 +10,7 @@
 #pragma once
 
 #include "detail/common.h"
-
-#if defined(WITH_THREAD) && !defined(PYBIND11_SIMPLE_GIL_MANAGEMENT)
-#    include "detail/internals.h"
-#endif
+#include "detail/internals.h"
 
 PYBIND11_NAMESPACE_BEGIN(PYBIND11_NAMESPACE)
 
@@ -24,9 +21,7 @@ PyThreadState *get_thread_state_unchecked();
 
 PYBIND11_NAMESPACE_END(detail)
 
-#if defined(WITH_THREAD)
-
-#    if !defined(PYBIND11_SIMPLE_GIL_MANAGEMENT)
+#if defined(WITH_THREAD) && !defined(PYPY_VERSION)
 
 /* The functions below essentially reproduce the PyGILState_* API using a RAII
  * pattern, but there are a few important differences:
@@ -67,11 +62,11 @@ public:
 
         if (!tstate) {
             tstate = PyThreadState_New(internals.istate);
-#        if defined(PYBIND11_DETAILED_ERROR_MESSAGES)
+#    if !defined(NDEBUG)
             if (!tstate) {
                 pybind11_fail("scoped_acquire: could not create thread state!");
             }
-#        endif
+#    endif
             tstate->gilstate_counter = 0;
             PYBIND11_TLS_REPLACE_VALUE(internals.tstate, tstate);
         } else {
@@ -85,27 +80,24 @@ public:
         inc_ref();
     }
 
-    gil_scoped_acquire(const gil_scoped_acquire &) = delete;
-    gil_scoped_acquire &operator=(const gil_scoped_acquire &) = delete;
-
     void inc_ref() { ++tstate->gilstate_counter; }
 
     PYBIND11_NOINLINE void dec_ref() {
         --tstate->gilstate_counter;
-#        if defined(PYBIND11_DETAILED_ERROR_MESSAGES)
+#    if !defined(NDEBUG)
         if (detail::get_thread_state_unchecked() != tstate) {
             pybind11_fail("scoped_acquire::dec_ref(): thread state must be current!");
         }
         if (tstate->gilstate_counter < 0) {
             pybind11_fail("scoped_acquire::dec_ref(): reference count underflow!");
         }
-#        endif
+#    endif
         if (tstate->gilstate_counter == 0) {
-#        if defined(PYBIND11_DETAILED_ERROR_MESSAGES)
+#    if !defined(NDEBUG)
             if (!release) {
                 pybind11_fail("scoped_acquire::dec_ref(): internal error!");
             }
-#        endif
+#    endif
             PyThreadState_Clear(tstate);
             if (active) {
                 PyThreadState_DeleteCurrent();
@@ -152,9 +144,6 @@ public:
         }
     }
 
-    gil_scoped_release(const gil_scoped_release &) = delete;
-    gil_scoped_release &operator=(const gil_scoped_release &) = delete;
-
     /// This method will disable the PyThreadState_DeleteCurrent call and the
     /// GIL won't be acquired. This method should be used if the interpreter
     /// could be shutting down when this is called, as thread deletion is not
@@ -183,16 +172,12 @@ private:
     bool disassoc;
     bool active = true;
 };
-
-#    else // PYBIND11_SIMPLE_GIL_MANAGEMENT
-
+#elif defined(PYPY_VERSION)
 class gil_scoped_acquire {
     PyGILState_STATE state;
 
 public:
-    gil_scoped_acquire() : state{PyGILState_Ensure()} {}
-    gil_scoped_acquire(const gil_scoped_acquire &) = delete;
-    gil_scoped_acquire &operator=(const gil_scoped_acquire &) = delete;
+    gil_scoped_acquire() { state = PyGILState_Ensure(); }
     ~gil_scoped_acquire() { PyGILState_Release(state); }
     void disarm() {}
 };
@@ -201,39 +186,17 @@ class gil_scoped_release {
     PyThreadState *state;
 
 public:
-    gil_scoped_release() : state{PyEval_SaveThread()} {}
-    gil_scoped_release(const gil_scoped_release &) = delete;
-    gil_scoped_release &operator=(const gil_scoped_release &) = delete;
+    gil_scoped_release() { state = PyEval_SaveThread(); }
     ~gil_scoped_release() { PyEval_RestoreThread(state); }
     void disarm() {}
 };
-
-#    endif // PYBIND11_SIMPLE_GIL_MANAGEMENT
-
-#else // WITH_THREAD
-
+#else
 class gil_scoped_acquire {
-public:
-    gil_scoped_acquire() {
-        // Trick to suppress `unused variable` error messages (at call sites).
-        (void) (this != (this + 1));
-    }
-    gil_scoped_acquire(const gil_scoped_acquire &) = delete;
-    gil_scoped_acquire &operator=(const gil_scoped_acquire &) = delete;
     void disarm() {}
 };
-
 class gil_scoped_release {
-public:
-    gil_scoped_release() {
-        // Trick to suppress `unused variable` error messages (at call sites).
-        (void) (this != (this + 1));
-    }
-    gil_scoped_release(const gil_scoped_release &) = delete;
-    gil_scoped_release &operator=(const gil_scoped_release &) = delete;
     void disarm() {}
 };
-
-#endif // WITH_THREAD
+#endif
 
 PYBIND11_NAMESPACE_END(PYBIND11_NAMESPACE)

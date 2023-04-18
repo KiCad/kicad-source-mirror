@@ -9,7 +9,7 @@ if(CMAKE_VERSION VERSION_LESS 3.12)
   message(FATAL_ERROR "You cannot use the new FindPython module with CMake < 3.12")
 endif()
 
-include_guard(DIRECTORY)
+include_guard(GLOBAL)
 
 get_property(
   is_config
@@ -22,7 +22,9 @@ else()
   set(_pybind11_quiet "")
 endif()
 
-if(NOT Python_FOUND AND NOT Python3_FOUND)
+if(NOT Python_FOUND
+   AND NOT Python3_FOUND
+   AND NOT Python2_FOUND)
   if(NOT DEFINED Python_FIND_IMPLEMENTATIONS)
     set(Python_FIND_IMPLEMENTATIONS CPython PyPy)
   endif()
@@ -32,7 +34,7 @@ if(NOT Python_FOUND AND NOT Python3_FOUND)
     set(Python_ROOT_DIR "$ENV{pythonLocation}")
   endif()
 
-  find_package(Python 3.6 REQUIRED COMPONENTS Interpreter Development ${_pybind11_quiet})
+  find_package(Python REQUIRED COMPONENTS Interpreter Development ${_pybind11_quiet})
 
   # If we are in submodule mode, export the Python targets to global targets.
   # If this behavior is not desired, FindPython _before_ pybind11.
@@ -49,10 +51,19 @@ if(Python_FOUND)
   set(_Python
       Python
       CACHE INTERNAL "" FORCE)
-elseif(Python3_FOUND)
+elseif(Python3_FOUND AND NOT Python2_FOUND)
   set(_Python
       Python3
       CACHE INTERNAL "" FORCE)
+elseif(Python2_FOUND AND NOT Python3_FOUND)
+  set(_Python
+      Python2
+      CACHE INTERNAL "" FORCE)
+else()
+  message(AUTHOR_WARNING "Python2 and Python3 both present, pybind11 in "
+                         "PYBIND11_NOPYTHON mode (manually activate to silence warning)")
+  set(_pybind11_nopython ON)
+  return()
 endif()
 
 if(PYBIND11_MASTER_PROJECT)
@@ -126,7 +137,7 @@ if(PYTHON_IS_DEBUG)
     PROPERTY INTERFACE_COMPILE_DEFINITIONS Py_DEBUG)
 endif()
 
-# Check on every access - since Python can change - do nothing in that case.
+# Check on every access - since Python2 and Python3 could have been used - do nothing in that case.
 
 if(DEFINED ${_Python}_INCLUDE_DIRS)
   # Only add Python for build - must be added during the import for config
@@ -146,6 +157,13 @@ if(DEFINED ${_Python}_INCLUDE_DIRS)
   set(pybind11_INCLUDE_DIRS
       "${pybind11_INCLUDE_DIR}" "${${_Python}_INCLUDE_DIRS}"
       CACHE INTERNAL "Directories where pybind11 and possibly Python headers are located")
+endif()
+
+if(DEFINED ${_Python}_VERSION AND ${_Python}_VERSION VERSION_LESS 3)
+  set_property(
+    TARGET pybind11::pybind11
+    APPEND
+    PROPERTY INTERFACE_LINK_LIBRARIES pybind11::python2_no_register)
 endif()
 
 # In CMake 3.18+, you can find these separately, so include an if
@@ -187,6 +205,8 @@ function(pybind11_add_module target_name)
     python_add_library(${target_name} ${lib_type} ${ARG_UNPARSED_ARGUMENTS})
   elseif("${_Python}" STREQUAL "Python3")
     python3_add_library(${target_name} ${lib_type} ${ARG_UNPARSED_ARGUMENTS})
+  elseif("${_Python}" STREQUAL "Python2")
+    python2_add_library(${target_name} ${lib_type} ${ARG_UNPARSED_ARGUMENTS})
   else()
     message(FATAL_ERROR "Cannot detect FindPython version: ${_Python}")
   endif()
@@ -201,6 +221,10 @@ function(pybind11_add_module target_name)
 
   if(MSVC)
     target_link_libraries(${target_name} PRIVATE pybind11::windows_extras)
+  endif()
+
+  if(DEFINED ${_Python}_VERSION AND ${_Python}_VERSION VERSION_LESS 3)
+    target_link_libraries(${target_name} PRIVATE pybind11::python2_no_register)
   endif()
 
   # -fvisibility=hidden is required to allow multiple modules compiled against
@@ -233,9 +257,7 @@ function(pybind11_add_module target_name)
     endif()
   endif()
 
-  # Use case-insensitive comparison to match the result of $<CONFIG:cfgs>
-  string(TOUPPER "${CMAKE_BUILD_TYPE}" uppercase_CMAKE_BUILD_TYPE)
-  if(NOT MSVC AND NOT "${uppercase_CMAKE_BUILD_TYPE}" MATCHES DEBUG|RELWITHDEBINFO)
+  if(NOT MSVC AND NOT ${CMAKE_BUILD_TYPE} MATCHES Debug|RelWithDebInfo)
     # Strip unnecessary sections of the binary on Linux/macOS
     pybind11_strip(${target_name})
   endif()

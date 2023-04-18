@@ -117,7 +117,7 @@ std::string Animal::name_of_kind(Kind kind) {
     return raw_name;
 }
 
-namespace PYBIND11_NAMESPACE {
+namespace pybind11 {
 template <typename itype>
 struct polymorphic_type_hook<itype, detail::enable_if_t<std::is_base_of<Animal, itype>::value>> {
     static const void *get(const itype *src, const std::type_info *&type) {
@@ -125,7 +125,7 @@ struct polymorphic_type_hook<itype, detail::enable_if_t<std::is_base_of<Animal, 
         return src;
     }
 };
-} // namespace PYBIND11_NAMESPACE
+} // namespace pybind11
 
 TEST_SUBMODULE(tagbased_polymorphic, m) {
     py::class_<Animal>(m, "Animal").def_readonly("name", &Animal::name);

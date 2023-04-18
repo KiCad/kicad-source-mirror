@@ -120,6 +120,4 @@ TEST_SUBMODULE(modules, m) {
 
         return failures;
     });
-
-    m.def("def_submodule", [](py::module_ m, const char *name) { return m.def_submodule(name); });
 }

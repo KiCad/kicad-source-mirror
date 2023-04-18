@@ -154,7 +154,8 @@ class NCVirtTrampoline : public NCVirt {
 };
 
 struct Base {
-    virtual std::string dispatch() const = 0;
+    /* for some reason MSVC2015 can't compile this if the function is pure virtual */
+    virtual std::string dispatch() const { return {}; };
     virtual ~Base() = default;
     Base() = default;
     Base(const Base &) = delete;
@@ -173,8 +174,7 @@ struct AdderBase {
     using DataVisitor = std::function<void(const Data &)>;
 
     virtual void
-    operator()(const Data &first, const Data &second, const DataVisitor &visitor) const
-        = 0;
+    operator()(const Data &first, const Data &second, const DataVisitor &visitor) const = 0;
     virtual ~AdderBase() = default;
     AdderBase() = default;
     AdderBase(const AdderBase &) = delete;
@@ -343,8 +343,9 @@ TEST_SUBMODULE(virtual_functions, m) {
              const AdderBase &adder,
              const AdderBase::DataVisitor &visitor) {
               adder(first, second, [&](const AdderBase::Data &first_plus_second) {
-                  // NOLINTNEXTLINE(readability-suspicious-call-argument)
-                  adder(first_plus_second, third, visitor);
+                  adder(first_plus_second,
+                        third,
+                        visitor); // NOLINT(readability-suspicious-call-argument)
               });
           });
 

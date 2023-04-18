@@ -115,7 +115,7 @@ public:
 #if defined(PYPY_VERSION)
         PyObject *globals = PyEval_GetGlobals();
         PyObject *result = PyRun_String("import gc\n"
-                                        "for i in range(2):\n"
+                                        "for i in range(2):"
                                         "    gc.collect()\n",
                                         Py_file_input,
                                         globals,

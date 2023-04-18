@@ -289,9 +289,8 @@ py::list test_dtype_ctors() {
     dict["itemsize"] = py::int_(20);
     list.append(py::dtype::from_args(dict));
     list.append(py::dtype(names, formats, offsets, 20));
-    list.append(py::dtype(py::buffer_info((void *) nullptr, sizeof(unsigned int), "I", 1)));
-    list.append(py::dtype(py::buffer_info((void *) nullptr, 0, "T{i:a:f:b:}", 1)));
-    list.append(py::dtype(py::detail::npy_api::NPY_DOUBLE_));
+    list.append(py::dtype(py::buffer_info((void *) 0, sizeof(unsigned int), "I", 1)));
+    list.append(py::dtype(py::buffer_info((void *) 0, 0, "T{i:a:f:b:}", 1)));
     return list;
 }
 
@@ -301,7 +300,7 @@ struct B {};
 TEST_SUBMODULE(numpy_dtypes, m) {
     try {
         py::module_::import("numpy");
-    } catch (const py::error_already_set &) {
+    } catch (...) {
         return;
     }
 
@@ -438,34 +437,6 @@ TEST_SUBMODULE(numpy_dtypes, m) {
         py::list list;
         for (const auto &dt_name : dtype_names) {
             list.append(py::dtype(dt_name).char_());
-        }
-        return list;
-    });
-    m.def("test_dtype_num", [dtype_names]() {
-        py::list list;
-        for (const auto &dt_name : dtype_names) {
-            list.append(py::dtype(dt_name).num());
-        }
-        return list;
-    });
-    m.def("test_dtype_byteorder", [dtype_names]() {
-        py::list list;
-        for (const auto &dt_name : dtype_names) {
-            list.append(py::dtype(dt_name).byteorder());
-        }
-        return list;
-    });
-    m.def("test_dtype_alignment", [dtype_names]() {
-        py::list list;
-        for (const auto &dt_name : dtype_names) {
-            list.append(py::dtype(dt_name).alignment());
-        }
-        return list;
-    });
-    m.def("test_dtype_flags", [dtype_names]() {
-        py::list list;
-        for (const auto &dt_name : dtype_names) {
-            list.append(py::dtype(dt_name).flags());
         }
         return list;
     });
@@ -610,5 +581,5 @@ TEST_SUBMODULE(numpy_dtypes, m) {
           []() { PYBIND11_NUMPY_DTYPE(SimpleStruct, bool_, uint_, float_, ldbl_); });
 
     // test_str_leak
-    m.def("dtype_wrapper", [](const py::object &d) { return py::dtype::from_args(d); });
+    m.def("dtype_wrapper", [](py::object d) { return py::dtype::from_args(std::move(d)); });
 }

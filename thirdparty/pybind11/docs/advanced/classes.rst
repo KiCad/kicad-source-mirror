@@ -133,14 +133,14 @@ a virtual method call.
     >>> from example import *
     >>> d = Dog()
     >>> call_go(d)
-    'woof! woof! woof! '
+    u'woof! woof! woof! '
     >>> class Cat(Animal):
     ...     def go(self, n_times):
     ...         return "meow! " * n_times
     ...
     >>> c = Cat()
     >>> call_go(c)
-    'meow! meow! meow! '
+    u'meow! meow! meow! '
 
 If you are defining a custom constructor in a derived Python class, you *must*
 ensure that you explicitly call the bound C++ constructor using ``__init__``,
@@ -813,21 +813,26 @@ An instance can now be pickled as follows:
 
 .. code-block:: python
 
-    import pickle
+    try:
+        import cPickle as pickle  # Use cPickle on Python 2.7
+    except ImportError:
+        import pickle
 
     p = Pickleable("test_value")
     p.setExtra(15)
-    data = pickle.dumps(p)
+    data = pickle.dumps(p, 2)
 
 
 .. note::
-    If given, the second argument to ``dumps`` must be 2 or larger - 0 and 1 are
-    not supported. Newer versions are also fine; for instance, specify ``-1`` to
-    always use the latest available version. Beware: failure to follow these
-    instructions will cause important pybind11 memory allocation routines to be
-    skipped during unpickling, which will likely lead to memory corruption
-    and/or segmentation faults. Python defaults to version 3 (Python 3-3.7) and
-    version 4 for Python 3.8+.
+    Note that only the cPickle module is supported on Python 2.7.
+
+    The second argument to ``dumps`` is also crucial: it selects the pickle
+    protocol version 2, since the older version 1 is not supported. Newer
+    versions are also fine—for instance, specify ``-1`` to always use the
+    latest available version. Beware: failure to follow these instructions
+    will cause important pybind11 memory allocation routines to be skipped
+    during unpickling, which will likely lead to memory corruption and/or
+    segmentation faults.
 
 .. seealso::
 
@@ -844,9 +849,11 @@ Python normally uses references in assignments. Sometimes a real copy is needed
 to prevent changing all copies. The ``copy`` module [#f5]_ provides these
 capabilities.
 
-A class with pickle support is automatically also (deep)copy
+On Python 3, a class with pickle support is automatically also (deep)copy
 compatible. However, performance can be improved by adding custom
-``__copy__`` and ``__deepcopy__`` methods.
+``__copy__`` and ``__deepcopy__`` methods. With Python 2.7, these custom methods
+are mandatory for (deep)copy compatibility, because pybind11 only supports
+cPickle.
 
 For simple classes (deep)copy can be enabled by using the copy constructor,
 which should look as follows:
@@ -1118,6 +1125,13 @@ described trampoline:
     py::class_<A, Trampoline>(m, "A") // <-- `Trampoline` here
         .def("foo", &Publicist::foo); // <-- `Publicist` here, not `Trampoline`!
 
+.. note::
+
+    MSVC 2015 has a compiler bug (fixed in version 2017) which
+    requires a more explicit function binding in the form of
+    ``.def("foo", static_cast<int (A::*)() const>(&Publicist::foo));``
+    where ``int (A::*)() const`` is the type of ``A::foo``.
+
 Binding final classes
 =====================
 
@@ -1228,7 +1242,7 @@ whether a downcast is safe, you can proceed by specializing the
         std::string bark() const { return sound; }
     };
 
-    namespace PYBIND11_NAMESPACE {
+    namespace pybind11 {
         template<> struct polymorphic_type_hook<Pet> {
             static const void *get(const Pet *src, const std::type_info*& type) {
                 // note that src may be nullptr
@@ -1239,7 +1253,7 @@ whether a downcast is safe, you can proceed by specializing the
                 return src;
             }
         };
-    } // namespace PYBIND11_NAMESPACE
+    } // namespace pybind11
 
 When pybind11 wants to convert a C++ pointer of type ``Base*`` to a
 Python object, it calls ``polymorphic_type_hook<Base>::get()`` to

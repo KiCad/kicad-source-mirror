@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import pytest
 
 from pybind11_tests import custom_type_casters as m
@@ -18,7 +19,7 @@ def test_noconvert_args(msg):
         loading ArgInspector1 argument WITH conversion allowed.  Argument value = this is b
         13
         loading ArgInspector2 argument WITH conversion allowed.  Argument value = (default arg inspector 2)
-    """
+    """  # noqa: E501 line too long
     )
     assert (
         msg(a.g("this is a", "this is b", 42))
@@ -27,7 +28,7 @@ def test_noconvert_args(msg):
         loading ArgInspector1 argument WITH conversion allowed.  Argument value = this is b
         42
         loading ArgInspector2 argument WITH conversion allowed.  Argument value = (default arg inspector 2)
-    """
+    """  # noqa: E501 line too long
     )
     assert (
         msg(a.g("this is a", "this is b", 42, "this is d"))
@@ -75,7 +76,7 @@ def test_noconvert_args(msg):
             1. (i: int) -> int
 
         Invoked with: 4.0
-    """
+    """  # noqa: E501 line too long
     )
 
     assert m.ints_only(4) == 2
@@ -94,8 +95,7 @@ def test_noconvert_args(msg):
 
 def test_custom_caster_destruction():
     """Tests that returning a pointer to a type that gets converted with a custom type caster gets
-    destroyed when the function has py::return_value_policy::take_ownership policy applied.
-    """
+    destroyed when the function has py::return_value_policy::take_ownership policy applied."""
 
     cstats = m.destruction_tester_cstats()
     # This one *doesn't* have take_ownership: the pointer should be used but not destroyed:
