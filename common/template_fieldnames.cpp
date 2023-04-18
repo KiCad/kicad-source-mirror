@@ -129,7 +129,10 @@ void TEMPLATES::Format( OUTPUTFORMATTER* out, int nestLevel, bool aGlobal ) cons
     const TEMPLATE_FIELDNAMES& source = aGlobal ? m_globals : m_project;
 
     for( const TEMPLATE_FIELDNAME& temp : source )
-        temp.Format( out, nestLevel+1 );
+    {
+        if( !temp.m_Name.IsEmpty() )
+            temp.Format( out, nestLevel+1 );
+    }
 
     out->Print( 0, ")\n" );
 }
@@ -162,7 +165,8 @@ void TEMPLATES::parse( TEMPLATE_FIELDNAMES_LEXER* in, bool aGlobal )
                 field.Parse( in );
 
                 // add the field
-                AddTemplateFieldName( field, aGlobal );
+                if( !field.m_Name.IsEmpty() )
+                    AddTemplateFieldName( field, aGlobal );
             }
             break;
 

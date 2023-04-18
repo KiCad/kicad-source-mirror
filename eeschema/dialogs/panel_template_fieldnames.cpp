@@ -185,7 +185,10 @@ bool PANEL_TEMPLATE_FIELDNAMES::TransferDataFromWindow()
     m_templateMgr->DeleteAllFieldNameTemplates( m_global );
 
     for( const TEMPLATE_FIELDNAME& field : m_fields )
-        m_templateMgr->AddTemplateFieldName( field, m_global );
+    {
+        if( !field.m_Name.IsEmpty() )
+            m_templateMgr->AddTemplateFieldName( field, m_global );
+    }
 
     if( m_global )
     {
