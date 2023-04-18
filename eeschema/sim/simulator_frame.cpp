@@ -3029,9 +3029,13 @@ void SIMULATOR_FRAME::onSimReport( wxCommandEvent& aEvent )
 }
 
 
-void SIMULATOR_FRAME::onExit( wxCommandEvent& event )
+void SIMULATOR_FRAME::onExit( wxCommandEvent& aEvent )
 {
-    Kiway().OnKiCadExit();
+    if( aEvent.GetId() == wxID_EXIT )
+        Kiway().OnKiCadExit();
+
+    if( aEvent.GetId() == wxID_CLOSE )
+        Close( false );
 }
 
 
