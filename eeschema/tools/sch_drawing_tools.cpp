@@ -1402,6 +1402,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 {
                     getViewControls()->PinCursorInsideNonAutoscrollArea( true );
                     cursorPos = getViewControls()->GetMousePosition();
+                    cursorPos = grid.BestSnapAnchor( cursorPos, snapLayer, item );
                 }
 
                 if( item )
