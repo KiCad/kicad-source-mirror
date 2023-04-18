@@ -61,6 +61,9 @@
 #include <panel_sym_display_options.h>
 #include <sim/sim_plot_frame.h>
 
+#include "../3d-viewer/3d_viewer/eda_3d_viewer_settings.h"
+#include "../pcbnew/pcbnew_settings.h"
+
 #include <wx/crt.h>
 
 // The main sheet of the project
@@ -333,6 +336,11 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
     // Do nothing in here pertinent to a project!
     InitSettings( new EESCHEMA_SETTINGS );
     aProgram->GetSettingsManager().RegisterSettings( KifaceSettings() );
+
+    // Register the symbol editor settings as well because they share a KiFACE and need to be
+    // loaded prior to use to avoid threading deadlocks
+    aProgram->GetSettingsManager().RegisterSettings( new SYMBOL_EDITOR_SETTINGS, false );
+    aProgram->GetSettingsManager().RegisterSettings( new SYMBOL_EDITOR_SETTINGS, false );
 
     start_common( aCtlBits );
 
