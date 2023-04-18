@@ -426,6 +426,7 @@ void EXPORTER_PCB_VRML::ExportStandardLayers()
 
         outlines.RemoveAllContours();
         m_board->ConvertBrdLayerToPolygonalContours( pcb_layer[lcnt], outlines );
+        outlines.BooleanIntersection( m_pcbOutlines, SHAPE_POLY_SET::PM_FAST );
         outlines.Fracture( SHAPE_POLY_SET::PM_FAST );
 
         ExportVrmlPolygonSet( vrmllayer[lcnt], outlines );
