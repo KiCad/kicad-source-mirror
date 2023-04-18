@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:51-0800\n"
-"PO-Revision-Date: 2023-04-03 04:35+0000\n"
+"PO-Revision-Date: 2023-04-21 07:52+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.17-dev\n"
+"X-Generator: Weblate 4.18-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -8699,9 +8699,8 @@ msgid ""
 msgstr "すべての電流を保存する指示を書く (.probe alli)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:313
-#, fuzzy
 msgid "Run external simulator command:"
-msgstr "外部のシミュレーターのコマンド:"
+msgstr "外部のシミュレーターのコマンドを実行:"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:315
 #, fuzzy
@@ -8733,9 +8732,8 @@ msgid "Exporting netlist requires a fully annotated schematic."
 msgstr "ネットリストのエクスポートには回路図の完全なアノテーションが必要です。"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:575
-#, fuzzy
 msgid "external simulator not found"
-msgstr "外部のシミュレーターのコマンド:"
+msgstr "外部のシミュレーターのコマンドが見つかりません"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:576
 msgid ""
@@ -8744,7 +8742,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:582
 msgid "external simulator has the wrong format or architecture"
-msgstr ""
+msgstr "外部のシミュレーターのファイル形式か対応アーキテクチャが異なります"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:587
 #, fuzzy
@@ -11264,7 +11262,7 @@ msgstr "M"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 msgid "G"
-msgstr ""
+msgstr "G"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 msgid "T"
@@ -15624,14 +15622,12 @@ msgid "Invalid R_load."
 msgstr "不正な R_load."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:450
-#, fuzzy
 msgid "Invalid falling dV/dt."
-msgstr "不正な下降 dv/dt."
+msgstr "不正な下降 dV/dt."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:455
-#, fuzzy
 msgid "Invalid rising dV/dt."
-msgstr "不正な上昇 dv/dt."
+msgstr "不正な上昇 dV/dt."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:470
 msgid "Model name cannot be empty"
@@ -15662,9 +15658,8 @@ msgid "Invalid C_ref value."
 msgstr "不正な C_ref 値。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:523
-#, fuzzy
 msgid "Invalid V_ref value."
-msgstr "不正な V_ref 値。"
+msgstr "不正な V_ref 値."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:531
 msgid "Invalid V_meas value."
@@ -32733,9 +32728,9 @@ msgid "Checking %s hole size: opt %s."
 msgstr "%s のホールサイズをチェックしています:選択肢: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1011
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s hole size: min %s."
-msgstr "%s のホールサイズをチェックしています:選択肢: %s."
+msgstr "%s の穴サイズをチェックしています:選択肢: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1021
 #, c-format
@@ -32748,9 +32743,9 @@ msgid "Checking %s diff pair gap: opt %s."
 msgstr "%s の差動ペアのギャップをチェックしています: 最適は %s."
 
 #: pcbnew/drc/drc_engine.cpp:1035
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s clearance: min %s."
-msgstr "%s のクリアランスをチェックしています: %s."
+msgstr "%s のクリアランスをチェックしています: 最小 %s."
 
 #: pcbnew/drc/drc_engine.cpp:1043
 #, fuzzy, c-format
@@ -32796,9 +32791,8 @@ msgid "Rule layer not matched; rule ignored."
 msgstr "ルールレイヤーが一致しません。ルールは無視されます。"
 
 #: pcbnew/drc/drc_engine.cpp:1188
-#, fuzzy
 msgid "Constraint layer not matched."
-msgstr "キープアウト レイヤーが一致しません。"
+msgstr "制約レイヤーが一致しません。"
 
 #: pcbnew/drc/drc_engine.cpp:1208
 #, c-format
