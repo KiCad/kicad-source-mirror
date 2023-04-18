@@ -2012,6 +2012,16 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
             strokeText( resolvedText, aText->GetTextPos(), attrs );
         }
     }
+
+    // Draw the umbilical line for texts in footprints
+    FOOTPRINT* fp_parent = aText->GetParentFootprint();
+
+    if( fp_parent && aText->IsSelected() )
+    {
+        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+        m_gal->SetStrokeColor( m_pcbSettings.GetColor( nullptr, LAYER_ANCHOR ) );
+        m_gal->DrawLine( aText->GetTextPos(), fp_parent->GetPosition() );
+    }
 }
 
 
