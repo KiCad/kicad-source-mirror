@@ -37,6 +37,7 @@
 #include <pcbnew_settings.h>
 #include <footprint_editor_settings.h>
 #include <settings/settings_manager.h>
+#include <settings/cvpcb_settings.h>
 #include <fp_lib_table.h>
 #include <footprint_edit_frame.h>
 #include <footprint_viewer_frame.h>
@@ -348,6 +349,12 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
     // Do nothing in here pertinent to a project!
     InitSettings( new PCBNEW_SETTINGS );
     aProgram->GetSettingsManager().RegisterSettings( KifaceSettings() );
+
+    // Register the footprint editor settings as well because they share a KiFACE and need to be
+    // loaded prior to use to avoid threading deadlocks
+    aProgram->GetSettingsManager().RegisterSettings( new FOOTPRINT_EDITOR_SETTINGS );
+    aProgram->GetSettingsManager().RegisterSettings( new CVPCB_SETTINGS );
+    aProgram->GetSettingsManager().RegisterSettings( new EDA_3D_VIEWER_SETTINGS );
 
     start_common( aCtlBits );
 
