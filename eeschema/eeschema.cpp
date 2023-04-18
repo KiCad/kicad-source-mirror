@@ -337,7 +337,6 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
     // Register the symbol editor settings as well because they share a KiFACE and need to be
     // loaded prior to use to avoid threading deadlocks
     aProgram->GetSettingsManager().RegisterSettings( new SYMBOL_EDITOR_SETTINGS, false );
-    aProgram->GetSettingsManager().RegisterSettings( new SYMBOL_EDITOR_SETTINGS, false );
 
     start_common( aCtlBits );
 
