@@ -33,7 +33,6 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/common
     ${CMAKE_SOURCE_DIR}/common/dialogs
     ${CMAKE_SOURCE_DIR}/libs/sexpr/include
-    ${CMAKE_SOURCE_DIR}/3d-viewer
     ${INC_AFTER}
     ./dialogs
     ./libview
