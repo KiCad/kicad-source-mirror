@@ -61,9 +61,6 @@
 #include <panel_sym_display_options.h>
 #include <sim/simulator_frame.h>
 
-#include "../3d-viewer/3d_viewer/eda_3d_viewer_settings.h"
-#include "../pcbnew/pcbnew_settings.h"
-
 #include <wx/crt.h>
 
 // The main sheet of the project
