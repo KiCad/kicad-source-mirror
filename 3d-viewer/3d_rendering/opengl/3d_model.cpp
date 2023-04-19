@@ -24,8 +24,7 @@
  */
 
 /**
- * @file  c_ogl_3dmodel.cpp
- * @brief
+ * @file  3d_model.cpp
  */
 #include <algorithm>
 #include <stdexcept>
@@ -448,7 +447,7 @@ void MODEL_3D::Draw( bool aTransparent, float aOpacity, bool aUseSelectedMateria
     glTexEnvfv( GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, (const float*)&param.x );
 
     std::vector<const MODEL_3D::MATERIAL *> materialsToRender;
-    
+
     materialsToRender.reserve( m_materials.size() );
 
     if( aModelWorldMatrix && aCameraWorldPos )
@@ -524,10 +523,10 @@ void MODEL_3D::Draw( bool aTransparent, float aOpacity, bool aUseSelectedMateria
             {
                 continue;
             }
-            
+
             materialsToRender.push_back( &mat );
         }
-    }   
+    }
 
     for( const MODEL_3D::MATERIAL* mat : materialsToRender )
     {
@@ -606,7 +605,7 @@ void MODEL_3D::DrawBboxes() const
                                                                           : sizeof( GLuint );
 
     glDrawElements( GL_LINES, bbox_idx_count * m_meshes_bbox.size(), m_bbox_index_buffer_type,
-                    reinterpret_cast<const void*>( 
+                    reinterpret_cast<const void*>(
                         static_cast<uintptr_t>( bbox_idx_count * idx_size ) ) );
 }
 

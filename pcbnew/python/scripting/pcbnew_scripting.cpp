@@ -23,7 +23,7 @@
  */
 
 /**
- * @file python_scripting.cpp
+ * @file pcbnew_scripting.cpp
  * @brief methods to add scripting capabilities inside pcbnew
  */
 

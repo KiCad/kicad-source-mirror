@@ -75,7 +75,7 @@ public:
      * a KIWAY_HOLDER mix-in.
      *
      * @param aDest is the recipient of \a aKiway pointer.
-     * @param aKiway is often from a parent window or from #KIFACE::CreateWindow().
+     * @param aKiway is often from a parent window or from #KIFACE::CreateKiWindow().
      */
     void SetKiway( wxWindow* aDest, KIWAY* aKiway );
 

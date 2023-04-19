@@ -23,8 +23,7 @@
  */
 
 /**
- * @file  ccylinder.cpp
- * @brief
+ * @file  cylinder_3d.cpp
  */
 
 #include "3d_fastmath.h"

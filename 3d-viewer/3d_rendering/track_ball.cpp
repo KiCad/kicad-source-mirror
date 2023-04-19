@@ -23,7 +23,7 @@
  */
 
 /**
- * @file  ctrack_ball.cpp
+ * @file  track_ball.cpp
  * @brief Implementation of a track ball camera. A track ball is placed in the
  * center of the screen and rotates the camera.
  */

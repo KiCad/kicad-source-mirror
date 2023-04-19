@@ -23,7 +23,7 @@
  */
 
 /**
- * @file  c3d_model_viewer.h
+ * @file  eda_3d_model_viewer.h
  * @brief Implements a model viewer canvas.
  *
  * The purpose of model viewer is to render 3d models that come in the original data from

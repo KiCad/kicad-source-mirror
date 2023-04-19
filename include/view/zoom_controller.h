@@ -23,7 +23,7 @@
  */
 
 /**
- * @file zoom_control.h
+ * @file zoom_controller.h
  * @brief ZOOM_CONTROLLER class definition.
  */
 
@@ -135,7 +135,7 @@ private:
 
 
 /**
- * A #ZOOM_CONTROLLER that zooms by a fixed factor based only on the magnitude of the scroll
+ * A CONSTANT_ZOOM_CONTROLLER that zooms by a fixed factor based only on the magnitude of the scroll
  * wheel rotation.
  */
 class CONSTANT_ZOOM_CONTROLLER : public ZOOM_CONTROLLER

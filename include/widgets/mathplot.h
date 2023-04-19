@@ -13,7 +13,6 @@
 #ifndef _MP_MATHPLOT_H_
 #define _MP_MATHPLOT_H_
 
-/** @file mathplot.h */
 /**
  *  wxMathPlot is a framework for mathematical graph plotting in wxWindows.
  *
@@ -50,6 +49,11 @@
  *  Contributors:<br>
  *  Jose Luis Blanco, Val Greene.<br>
  */
+
+ /**
+  * @file mathplot.h
+  */
+
 
 // this definition uses windows dll to export function.
 // WXDLLIMPEXP_MATHPLOT definition definition changed to WXDLLIMPEXP_MATHPLOT
@@ -2031,7 +2035,5 @@ protected:
      */
     double m_min_x, m_max_x, m_min_y, m_max_y;
 };
-
-/*@}*/
 
 #endif    // _MP_MATHPLOT_H_

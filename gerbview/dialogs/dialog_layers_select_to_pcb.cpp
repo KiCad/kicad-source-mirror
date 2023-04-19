@@ -1,8 +1,3 @@
-/**
- * @file select_layers_to_pcb.cpp
- * @brief Dialog to choose equivalence between gerber layers and pcb layers
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *

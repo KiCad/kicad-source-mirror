@@ -25,7 +25,7 @@
  */
 
 /**
- * @file  eda_3d_viewer.h
+ * @file  eda_3d_viewer_frame.h
  * @brief Declaration of the eda_3d_viewer class
  */
 

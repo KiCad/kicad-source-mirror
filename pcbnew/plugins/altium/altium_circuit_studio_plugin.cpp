@@ -23,7 +23,7 @@
  */
 
 /**
- * @file altium_plugin.cpp
+ * @file altium_circuit_studio_plugin.cpp
  * @brief Pcbnew PLUGIN for Altium *.PcbDoc format.
  */
 

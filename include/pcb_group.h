@@ -23,7 +23,7 @@
  */
 
 /**
- * @file class_pcb_group.h
+ * @file pcb_group.h
  * @brief Class to handle a set of BOARD_ITEMs.
  */
 

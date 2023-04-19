@@ -23,8 +23,7 @@
  */
 
 /**
- * @file  cobject.cpp
- * @brief
+ * @file  object_3d.cpp
  */
 
 #include "object_3d.h"

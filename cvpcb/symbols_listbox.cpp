@@ -22,7 +22,7 @@
  */
 
 /**
- * @file class_components_listbox.cpp
+ * @file symbols_listbox.cpp
  */
 
 #include <trace_helpers.h>

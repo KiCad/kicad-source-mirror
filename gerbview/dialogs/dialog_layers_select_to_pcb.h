@@ -23,7 +23,7 @@
  */
 
 /**
- * @file select_layers_to_pcb.h
+ * @file dialog_layers_select_to_pcb.h
  */
 
 #ifndef DIALOG_LAYERS_SELECT_TO_PCB_H_

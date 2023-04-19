@@ -23,7 +23,7 @@
  */
 
 /**
- * @file  cbvh_pbrt.cpp
+ * @file  bvh_pbrt.cpp
  * @brief This BVH implementation is based on the source code implementation
  * from the book "Physically Based Rendering" (v2 and v3)
  *

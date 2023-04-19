@@ -23,7 +23,7 @@
  */
 
 /**
- * @file  create_graphic_brd_items.cpp
+ * @file  create_3Dgraphic_brd_items.cpp
  * @brief This file implements the creation of 2D graphic primitives of pcb items:
  *  pads, tracks, drawsegments, texts....
  * It is based on the function found in the files:

@@ -24,7 +24,7 @@
  */
 
 /**
- * @file component_references_lister.cpp
+ * @file sch_reference_list.cpp
  * @brief functions to create a symbol flat list and to annotate schematic.
  */
 

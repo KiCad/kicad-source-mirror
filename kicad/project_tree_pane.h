@@ -23,7 +23,7 @@
  */
 
 /**
- * @file PROJECT_TREE_PANE.h
+ * @file project_tree_pane.h
  */
 
 

@@ -23,7 +23,7 @@
  */
 
 /**
- * @file class_zone_settings.h
+ * @file zone_settings.h
  * @brief Class ZONE_SETTINGS used to handle zones parameters in dialogs.
  */
 

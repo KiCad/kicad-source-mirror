@@ -22,7 +22,7 @@
  */
 
 /**
- * @file string.cpp
+ * @file string_utils.cpp
  * @brief Some useful functions to handle strings.
  */
 

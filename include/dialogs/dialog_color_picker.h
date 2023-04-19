@@ -1,7 +1,3 @@
-/**
- * @file color4Dpickerdlg.h
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *

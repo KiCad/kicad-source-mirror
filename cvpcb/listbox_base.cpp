@@ -22,7 +22,7 @@
  */
 
 /**
- * @file listboxes.cpp
+ * @file listbox_base.cpp
  * @brief Implementation of class for displaying footprint and symbol lists.
  */
 

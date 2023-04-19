@@ -851,7 +851,7 @@ int PAD::GetSolderMaskExpansion() const
 {
     // Pads defined only on mask layers (and perhaps on other tech layers) use the shape
     // defined by the pad settings only
-    if( !IsOnCopperLayer() )
+    if( !IsOnCopperLayer() && !HasHole() )
         return 0;
 
     int margin = m_localSolderMaskMargin;

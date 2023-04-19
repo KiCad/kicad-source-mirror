@@ -19,7 +19,7 @@
  */
 
 /**
- * @file dialog_dielectric_manager.h
+ * @file dialog_dielectric_list_manager.h
  */
 
 #ifndef DIALOG_DIELECTRIC_MANAGER_H

@@ -24,7 +24,7 @@
  */
 
 /**
- * @file pcb_cutout.cpp
+ * @file pcad_cutout.cpp
  */
 
 #include <pcad/pcad_cutout.h>
