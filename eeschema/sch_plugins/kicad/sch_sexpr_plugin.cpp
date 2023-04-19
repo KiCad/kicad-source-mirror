@@ -397,7 +397,11 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
     std::multiset<SCH_ITEM*, decltype( cmp )> save_map( cmp );
 
     for( SCH_ITEM* item : screen->Items() )
-        save_map.insert( item );
+    {
+        // Markers are not saved, so keep them from being considered below
+        if( item->Type() != SCH_MARKER_T )
+            save_map.insert( item );
+    }
 
     KICAD_T itemType = TYPE_NOT_INIT;
     SCH_LAYER_ID layer = SCH_LAYER_ID_START;
