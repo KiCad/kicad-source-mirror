@@ -257,16 +257,14 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
 
     finishDialogSettings();
 
-    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
-    {
-        EESCHEMA_SETTINGS::PANEL_FIELD_EDITOR& panelCfg = cfg->m_FieldEditorPanel;
+    EESCHEMA_SETTINGS* cfg = m_parent->eeconfig();
+    EESCHEMA_SETTINGS::PANEL_FIELD_EDITOR& panelCfg = cfg->m_FieldEditorPanel;
 
-        wxSize dlgSize( panelCfg.width > 0 ? panelCfg.width : horizPixelsFromDU( 600 ),
-                        panelCfg.height > 0 ? panelCfg.height : vertPixelsFromDU( 300 ) );
-        SetSize( dlgSize );
+    wxSize dlgSize( panelCfg.width > 0 ? panelCfg.width : horizPixelsFromDU( 600 ),
+                    panelCfg.height > 0 ? panelCfg.height : vertPixelsFromDU( 300 ) );
+    SetSize( dlgSize );
 
-        m_nbPages->SetSelection( cfg->m_FieldEditorPanel.page );
-    }
+    m_nbPages->SetSelection( cfg->m_FieldEditorPanel.page );
 
     Center();
 
@@ -284,7 +282,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::SetupColumnProperties()
 {
-    EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    EESCHEMA_SETTINGS* cfg = m_parent->eeconfig();
     wxSize defaultDlgSize = ConvertDialogToPixels( wxSize( 600, 300 ) );
 
     // Restore column sorting order and widths
@@ -355,7 +353,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupColumnProperties()
 
             std::string key( m_dataModel->GetColFieldName( col ).ToUTF8() );
 
-            if( cfg && cfg->m_FieldEditorPanel.field_widths.count( key )
+            if( cfg->m_FieldEditorPanel.field_widths.count( key )
                 && ( cfg->m_FieldEditorPanel.field_widths.at( key ) > 0 ) )
             {
                 m_grid->SetColSize( col, cfg->m_FieldEditorPanel.field_widths.at( key ) );
@@ -385,20 +383,18 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupColumnProperties()
 DIALOG_SYMBOL_FIELDS_TABLE::~DIALOG_SYMBOL_FIELDS_TABLE()
 {
     savePresetsToSchematic();
+    EESCHEMA_SETTINGS* cfg = m_parent->eeconfig();
 
-    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
+    cfg->m_FieldEditorPanel.width = GetSize().x;
+    cfg->m_FieldEditorPanel.height = GetSize().y;
+    cfg->m_FieldEditorPanel.page = m_nbPages->GetSelection();
+
+    for( int i = 0; i < m_grid->GetNumberCols(); i++ )
     {
-        cfg->m_FieldEditorPanel.width = GetSize().x;
-        cfg->m_FieldEditorPanel.height = GetSize().y;
-        cfg->m_FieldEditorPanel.page = m_nbPages->GetSelection();
-
-        for( int i = 0; i < m_grid->GetNumberCols(); i++ )
+        if( m_grid->IsColShown( i ) )
         {
-            if( m_grid->IsColShown( i ) )
-            {
-                std::string fieldName( m_dataModel->GetColFieldName( i ).ToUTF8() );
-                cfg->m_FieldEditorPanel.field_widths[fieldName] = m_grid->GetColSize( i );
-            }
+            std::string fieldName( m_dataModel->GetColFieldName( i ).ToUTF8() );
+            cfg->m_FieldEditorPanel.field_widths[fieldName] = m_grid->GetColSize( i );
         }
     }
 
@@ -1528,7 +1524,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
             continue;
         }
 
-        EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+        EESCHEMA_SETTINGS* cfg = m_parent->eeconfig();
         std::string        fieldNameStr( fieldName.ToUTF8() );
 
         // Set column labels
@@ -1536,7 +1532,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
         m_fieldsCtrl->SetTextValue( label, i, LABEL_COLUMN );
         m_grid->SetColLabelValue( col, label );
 
-        if( cfg && cfg->m_FieldEditorPanel.field_widths.count( fieldNameStr ) )
+        if( cfg->m_FieldEditorPanel.field_widths.count( fieldNameStr ) )
             m_grid->SetColMinimalWidth( col,
                                         cfg->m_FieldEditorPanel.field_widths.at( fieldNameStr ) );
 
