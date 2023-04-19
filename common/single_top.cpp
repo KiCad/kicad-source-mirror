@@ -46,6 +46,7 @@
 #include <kiway_player.h>
 #include <macros.h>
 #include <confirm.h>
+#include <settings/kicad_settings.h>
 #include <settings/settings_manager.h>
 
 #include <kiplatform/app.h>
@@ -339,6 +340,8 @@ bool PGM_SINGLE_TOP::OnPgmInit()
 
     // Tell the settings manager about the current Kiway
     GetSettingsManager().SetKiway( &Kiway );
+
+    GetSettingsManager().RegisterSettings( new KICAD_SETTINGS );
 
     // Use KIWAY to create a top window, which registers its existence also.
     // "TOP_FRAME" is a macro that is passed on compiler command line from CMake,
