@@ -333,73 +333,63 @@ void RC_TREE_MODEL::GetValue( wxVariant&              aVariant,
 {
     const RC_TREE_NODE*            node = ToNode( aItem );
     const std::shared_ptr<RC_ITEM> rcItem = node->m_RcItem;
+    MARKER_BASE*                   marker = rcItem->GetParent();
+    EDA_ITEM*                      item = nullptr;
+    wxString                       msg;
 
     switch( node->m_Type )
     {
     case RC_TREE_NODE::MARKER:
-    {
-        wxString prefix;
-
-        if( rcItem->GetParent() )
+        if( marker )
         {
-            SEVERITY severity = rcItem->GetParent()->GetSeverity();
+            SEVERITY severity = marker->GetSeverity();
 
             if( severity == RPT_SEVERITY_EXCLUSION )
             {
                 if( m_editFrame->GetSeverity( rcItem->GetErrorCode() ) == RPT_SEVERITY_WARNING )
-                    prefix = _( "Excluded warning: " );
+                    msg = _( "Excluded warning: " );
                 else
-                    prefix = _( "Excluded error: " );
+                    msg = _( "Excluded error: " );
             }
             else if( severity == RPT_SEVERITY_WARNING )
             {
-                prefix = _( "Warning: " );
+                msg = _( "Warning: " );
             }
             else
             {
-                prefix = _( "Error: " );
+                msg = _( "Error: " );
             }
         }
 
-        aVariant = prefix + rcItem->GetErrorMessage();
-    }
+        msg += rcItem->GetErrorMessage();
         break;
 
     case RC_TREE_NODE::MAIN_ITEM:
-        if( rcItem->GetParent() && rcItem->GetParent()->GetMarkerType() == MARKER_BASE::MARKER_DRAWING_SHEET )
-        {
-            aVariant = _( "Drawing Sheet" );
-            break;
-        }
+        if( marker && marker->GetMarkerType() == MARKER_BASE::MARKER_DRAWING_SHEET )
+            msg = _( "Drawing Sheet" );
         else
-        {
-            EDA_ITEM* item = m_editFrame->GetItem( rcItem->GetMainItemID() );
-            aVariant = item->GetItemDescription( m_editFrame );
-        }
+            item = m_editFrame->GetItem( rcItem->GetMainItemID() );
 
         break;
 
     case RC_TREE_NODE::AUX_ITEM:
-    {
-        EDA_ITEM* item = m_editFrame->GetItem( rcItem->GetAuxItemID() );
-        aVariant = item->GetItemDescription( m_editFrame );
-    }
+        item = m_editFrame->GetItem( rcItem->GetAuxItemID() );
         break;
 
     case RC_TREE_NODE::AUX_ITEM2:
-    {
-        EDA_ITEM* item = m_editFrame->GetItem( rcItem->GetAuxItem2ID() );
-        aVariant = item->GetItemDescription( m_editFrame );
-    }
+        item = m_editFrame->GetItem( rcItem->GetAuxItem2ID() );
         break;
 
     case RC_TREE_NODE::AUX_ITEM3:
-    {
-        EDA_ITEM* item = m_editFrame->GetItem( rcItem->GetAuxItem3ID() );
-        aVariant = item->GetItemDescription( m_editFrame );
-    }
+        item = m_editFrame->GetItem( rcItem->GetAuxItem3ID() );
         break;
     }
+
+    if( item )
+        msg += item->GetItemDescription( m_editFrame );
+
+    msg.Replace( wxS( "\n" ), wxS( " " ) );
+    aVariant = msg;
 }
 
 
