@@ -287,44 +287,41 @@ void ERC_TREE_MODEL::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
 {
     const RC_TREE_NODE*            node = ToNode( aItem );
     const std::shared_ptr<RC_ITEM> rcItem = node->m_RcItem;
+    MARKER_BASE*                   marker = rcItem->GetParent();
+    EDA_ITEM*                      item = nullptr;
+    wxString                       msg;
 
     switch( node->m_Type )
     {
     case RC_TREE_NODE::MARKER:
-    {
-        wxString prefix;
-
-        if( rcItem->GetParent() )
+        if( marker )
         {
             SEVERITY severity = rcItem->GetParent()->GetSeverity();
 
             if( severity == RPT_SEVERITY_EXCLUSION )
             {
                 if( m_editFrame->GetSeverity( rcItem->GetErrorCode() ) == RPT_SEVERITY_WARNING )
-                    prefix = _( "Excluded warning: " );
+                    msg = _( "Excluded warning: " );
                 else
-                    prefix = _( "Excluded error: " );
+                    msg = _( "Excluded error: " );
             }
             else if( severity == RPT_SEVERITY_WARNING )
             {
-                prefix = _( "Warning: " );
+                msg = _( "Warning: " );
             }
             else
             {
-                prefix = _( "Error: " );
+                msg = _( "Error: " );
             }
         }
 
-        aVariant = prefix + rcItem->GetErrorMessage();
-    }
-    break;
+        msg += rcItem->GetErrorMessage();
+        break;
 
     case RC_TREE_NODE::MAIN_ITEM:
-        if( rcItem->GetParent()
-            && rcItem->GetParent()->GetMarkerType() == MARKER_BASE::MARKER_DRAWING_SHEET )
+        if( marker && marker->GetMarkerType() == MARKER_BASE::MARKER_DRAWING_SHEET )
         {
-            aVariant = _( "Drawing Sheet" );
-            break;
+            msg = _( "Drawing Sheet" );
         }
         else
         {
@@ -338,8 +335,8 @@ void ERC_TREE_MODEL::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
             if( ercItem->MainItemHasSheetPath() )
                 ercItem->GetMainItemSheetPath().UpdateAllScreenReferences();
 
-            EDA_ITEM* item = m_editFrame->GetItem( rcItem->GetMainItemID() );
-            aVariant = item->GetItemDescription( m_editFrame );
+            item = m_editFrame->GetItem( rcItem->GetMainItemID() );
+            msg = item->GetItemDescription( m_editFrame );
 
             // Reset reference fields to current visible sheet
             if( ercItem->MainItemHasSheetPath() )
@@ -360,8 +357,8 @@ void ERC_TREE_MODEL::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
         if( ercItem->AuxItemHasSheetPath() )
             ercItem->GetAuxItemSheetPath().UpdateAllScreenReferences();
 
-        EDA_ITEM* item = m_editFrame->GetItem( rcItem->GetAuxItemID() );
-        aVariant = item->GetItemDescription( m_editFrame );
+        item = m_editFrame->GetItem( rcItem->GetAuxItemID() );
+        msg = item->GetItemDescription( m_editFrame );
 
         // Reset reference fields to current visible sheet
         if( ercItem->AuxItemHasSheetPath() )
@@ -370,17 +367,11 @@ void ERC_TREE_MODEL::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
     break;
 
     case RC_TREE_NODE::AUX_ITEM2:
-    {
-        EDA_ITEM* item = m_editFrame->GetItem( rcItem->GetAuxItem2ID() );
-        aVariant = item->GetItemDescription( m_editFrame );
-    }
-    break;
-
     case RC_TREE_NODE::AUX_ITEM3:
-    {
-        EDA_ITEM* item = m_editFrame->GetItem( rcItem->GetAuxItem3ID() );
-        aVariant = item->GetItemDescription( m_editFrame );
+        UNIMPLEMENTED_FOR( wxS( "AUX_ITEM2 or AUX_ITEM3" ) );
+        break;
     }
-    break;
-    }
+
+    msg.Replace( wxS( "\n" ), wxS( " " ) );
+    aVariant = msg;
 }
