@@ -445,8 +445,7 @@ KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate, wxTopLevelWindow
         }
         catch( const std::exception& e )
         {
-            const char* ptr = e.what();
-            wxLogError( ptr );
+            wxLogError( e.what() );
             wxLogError( _( "Error loading editor." ) );
         }
         catch( ... )
