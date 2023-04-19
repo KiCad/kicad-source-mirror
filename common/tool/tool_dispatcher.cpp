@@ -23,7 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <ignore.h>
+#include <core/ignore.h>
 #include <macros.h>
 #include <trace_helpers.h>
 #include <tool/tool_manager.h>

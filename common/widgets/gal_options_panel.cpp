@@ -31,7 +31,7 @@
 #include <wx/statbox.h>
 #include <wx/statline.h>
 
-#include <ignore.h>
+#include <core/ignore.h>
 #include <widgets/gal_options_panel.h>
 #include <settings/app_settings.h>
 #include <eda_draw_frame.h>

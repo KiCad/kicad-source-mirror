@@ -37,7 +37,7 @@
 #include <advanced_config.h>
 #include <eda_text.h> // for IsGotoPageHref
 #include <font/font.h>
-#include <ignore.h>
+#include <core/ignore.h>
 #include <macros.h>
 #include <trigo.h>
 #include <string_utils.h>

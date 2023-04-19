@@ -40,7 +40,7 @@
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <fp_lib_table.h>
-#include <ignore.h>
+#include <core/ignore.h>
 #include <io_mgr.h>
 #include <string_utils.h>
 #include <macros.h>

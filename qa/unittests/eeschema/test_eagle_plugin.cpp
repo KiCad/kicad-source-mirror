@@ -24,7 +24,7 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
-#include <ignore.h>
+#include <core/ignore.h>
 #include <kiway.h>
 #include <sch_io_mgr.h>
 

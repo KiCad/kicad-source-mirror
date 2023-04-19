@@ -75,7 +75,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <footprint.h>
-#include <ignore.h>
+#include <core/ignore.h>
 #include <pad.h>
 #include <pcb_track.h>
 #include <pcb_text.h>

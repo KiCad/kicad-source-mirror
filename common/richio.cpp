@@ -26,7 +26,7 @@
 #include <cstdarg>
 #include <config.h> // HAVE_FGETC_NOLOCK
 
-#include <ignore.h>
+#include <core/ignore.h>
 #include <richio.h>
 #include <errno.h>
 

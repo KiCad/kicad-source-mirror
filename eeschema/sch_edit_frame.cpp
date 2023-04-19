@@ -34,7 +34,7 @@
 #include <executable_names.h>
 #include <gestfich.h>
 #include <dialogs/html_message_box.h>
-#include <ignore.h>
+#include <core/ignore.h>
 #include <invoke_sch_dialog.h>
 #include <string_utils.h>
 #include <kiface_base.h>

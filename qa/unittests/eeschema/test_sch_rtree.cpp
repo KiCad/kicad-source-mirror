@@ -27,7 +27,7 @@
  */
 
 #include <base_units.h>
-#include <ignore.h>
+#include <core/ignore.h>
 #include <sch_junction.h>
 #include <sch_no_connect.h>
 #include <qa_utils/uuid_test_utils.h>

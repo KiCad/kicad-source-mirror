@@ -48,7 +48,7 @@
 #include <footprint.h>
 #include <geometry/shape_line_chain.h>
 #include <font/font.h>
-#include <ignore.h>
+#include <core/ignore.h>
 #include <netclass.h>
 #include <plugins/kicad/pcb_plugin.h>
 #include <pcb_plot_params_parser.h>

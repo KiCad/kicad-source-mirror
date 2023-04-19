@@ -38,7 +38,7 @@ using namespace std::placeholders;
 #include <footprint_tree_pane.h>
 #include <footprint_viewer_frame.h>
 #include <fp_lib_table.h>
-#include <ignore.h>
+#include <core/ignore.h>
 #include <io_mgr.h>
 #include <string_utils.h>
 #include <kiway.h>

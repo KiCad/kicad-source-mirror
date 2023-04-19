@@ -23,7 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <ignore.h>
+#include <core/ignore.h>
 #include <kiway.h>
 #include <kiway_holder.h>
 #include <project.h>

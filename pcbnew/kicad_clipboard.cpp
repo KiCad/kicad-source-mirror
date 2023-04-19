@@ -27,7 +27,7 @@
 #include <wx/log.h>
 
 #include <board.h>
-#include <ignore.h>
+#include <core/ignore.h>
 #include <pad.h>
 #include <pcb_group.h>
 #include <pcb_shape.h>

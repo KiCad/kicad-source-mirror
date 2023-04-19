@@ -32,7 +32,7 @@
 #include <qa_utils/utility_registry.h>
 
 #include <board.h>
-#include <ignore.h>
+#include <core/ignore.h>
 #include <zone.h>
 #include <profile.h>
 

@@ -23,7 +23,7 @@
  */
 
 #include <dialog_shim.h>
-#include <ignore.h>
+#include <core/ignore.h>
 #include <kiway_player.h>
 #include <kiway.h>
 #include <pgm_base.h>

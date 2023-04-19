@@ -24,7 +24,7 @@
 
 #include <cstring>
 
-#include <ignore.h>
+#include <core/ignore.h>
 #include <macros.h>
 #include <kiway.h>
 #include <kiway_player.h>
@@ -445,7 +445,8 @@ KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate, wxTopLevelWindow
         }
         catch( const std::exception& e )
         {
-            wxLogError( e.what() );
+            const char* ptr = e.what();
+            wxLogError( ptr );
             wxLogError( _( "Error loading editor." ) );
         }
         catch( ... )

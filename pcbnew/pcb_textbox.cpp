@@ -35,7 +35,7 @@
 #include <callback_gal.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <macros.h>
-#include <ignore.h>
+#include <core/ignore.h>
 
 
 PCB_TEXTBOX::PCB_TEXTBOX( BOARD_ITEM* parent ) :
