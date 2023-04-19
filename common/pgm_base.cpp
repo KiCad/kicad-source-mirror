@@ -55,6 +55,7 @@
 #include <kicad_curl/kicad_curl.h>
 #include <kiplatform/policy.h>
 #include <lockfile.h>
+#include <macros.h>
 #include <menus_helpers.h>
 #include <paths.h>
 #include <pgm_base.h>
@@ -880,4 +881,36 @@ bool PGM_BASE::IsGUI()
     bool run_gui = wxTheApp->GetClassName() != KICAD_CLI_APP_NAME;
     return run_gui;
 #endif
+}
+
+
+void PGM_BASE::HandleException( std::exception_ptr aPtr )
+{
+    try
+    {
+        if( aPtr )
+            std::rethrow_exception( aPtr );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        wxLogError( ioe.What() );
+    }
+    catch( const std::exception& e )
+    {
+#ifdef KICAD_USE_SENTRY
+        sentry_value_t exc = sentry_value_new_exception( "exception", e.what() );
+        sentry_value_set_stacktrace( exc, NULL, 0 );
+
+        sentry_value_t sentryEvent = sentry_value_new_event();
+        sentry_event_add_exception( sentryEvent, exc );
+        sentry_capture_event( sentryEvent );
+#endif
+
+        wxLogError( wxT( "Unhandled exception class: %s  what: %s" ),
+                    FROM_UTF8( typeid( e ).name() ), FROM_UTF8( e.what() ) );
+    }
+    catch( ... )
+    {
+        wxLogError( wxT( "Unhandled exception of unknown type" ) );
+    }
 }
