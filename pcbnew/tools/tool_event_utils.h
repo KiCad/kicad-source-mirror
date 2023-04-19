@@ -55,7 +55,7 @@ namespace TOOL_EVT_UTILS
      * direction indicated by a rotation action event
      *
      * @param aFrame the PCB edit frame to use to get the base rotation step value from
-     * @param aEvt the tool event - should be a rotation action event and should have a rotation
+     * @param aEvent the tool event - should be a rotation action event and should have a rotation
      *                              multiplier parameter
      *
      * @return the clockwise rotation angle

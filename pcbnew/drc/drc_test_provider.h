@@ -69,7 +69,7 @@ public:
 
 /**
  * Represent a DRC "provider" which runs some DRC functions over a #BOARD and spits out
- * #DRC_ITEMs and positions as needed.
+ * #DRC_ITEM and positions as needed.
  */
 class DRC_TEST_PROVIDER : public UNITS_PROVIDER
 {

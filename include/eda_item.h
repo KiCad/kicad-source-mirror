@@ -186,7 +186,7 @@ public:
     /**
      * Populate \a aList of #MSG_PANEL_ITEM objects with it's internal state for display
      * purposes.
-     *
+     * @param aFrame is the EDA_DRAW_FRAME that displays the message panel
      * @param aList is the list to populate.
      */
     virtual void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )

@@ -62,6 +62,8 @@ public:
      *
      * @param aValue = value in internal units
      * @param aAddUnitLabel = true to add symbol unit to the string value
+     * @param aType is the type of this value, and controls the way the value is converted
+     * to a string, and the suitable unit
      * @return A wxString object containing value and optionally the symbol unit (like 2.000 mm)
      */
     wxString StringFromValue( double aValue, bool aAddUnitLabel = false,
@@ -101,6 +103,8 @@ public:
     /**
      * Converts \a aTextValue in \a aUnits to internal units used by the frame.
      * @warning This utilizes the current locale and will break if decimal formats differ
+     * @param aType is the type of this value, and controls the way the string is converted
+     * to a value
      *
      * @param aTextValue A reference to a wxString object containing the string to convert.
      * @return internal units value
