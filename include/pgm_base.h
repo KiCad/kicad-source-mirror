@@ -31,6 +31,7 @@
 #ifndef  PGM_BASE_H_
 #define  PGM_BASE_H_
 
+#include <exception>
 #include <map>
 #include <vector>
 #include <memory>
@@ -302,6 +303,8 @@ public:
     void ResetSentryId();
     const wxString& GetSentryId();
 #endif
+
+    void HandleException( std::exception_ptr ptr );
 
     /**
      * Determine if the application is running with a GUI

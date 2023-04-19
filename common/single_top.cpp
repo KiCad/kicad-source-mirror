@@ -52,6 +52,9 @@
 #include <kiplatform/app.h>
 #include <kiplatform/environment.h>
 
+#ifdef KICAD_USE_SENTRY
+#include <sentry.h>
+#endif
 
 // Only a single KIWAY is supported in this single_top top level component,
 // which is dedicated to loading only a single DSO.
@@ -159,18 +162,9 @@ struct APP_SINGLE_TOP : public wxApp
         {
             return program.OnPgmInit();
         }
-        catch( const std::exception& e )
+        catch( ... )
         {
-            wxLogError( wxT( "Unhandled exception class: %s  what: %s" ),
-                    FROM_UTF8( typeid( e ).name() ), FROM_UTF8( e.what() ) );
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            wxLogError( ioe.What() );
-        }
-        catch(...)
-        {
-            wxLogError( wxT( "Unhandled exception of unknown type" ) );
+            Pgm().HandleException( std::current_exception() );
         }
 
         program.OnPgmExit();
@@ -192,18 +186,9 @@ struct APP_SINGLE_TOP : public wxApp
         {
             ret = wxApp::OnRun();
         }
-        catch( const std::exception& e )
-        {
-            wxLogError( wxT( "Unhandled exception class: %s  what: %s" ),
-                    FROM_UTF8( typeid( e ).name() ), FROM_UTF8( e.what() ) );
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            wxLogError( ioe.What() );
-        }
         catch(...)
         {
-            wxLogError( wxT( "Unhandled exception of unknown type" ) );
+            Pgm().HandleException( std::current_exception() );
         }
 
         return ret;
@@ -254,19 +239,9 @@ struct APP_SINGLE_TOP : public wxApp
         {
             throw;
         }
-        catch( const std::exception& e )
+        catch( ... )
         {
-            wxLogError( "Unhandled exception class: %s  what: %s",
-                        FROM_UTF8( typeid(e).name() ),
-                        FROM_UTF8( e.what() ) );
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            wxLogError( ioe.What() );
-        }
-        catch(...)
-        {
-            wxLogError( "Unhandled exception of unknown type" );
+            Pgm().HandleException( std::current_exception() );
         }
 
         return false;   // continue on. Return false to abort program
