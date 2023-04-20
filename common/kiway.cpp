@@ -287,14 +287,37 @@ KIFACE* KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
             wxASSERT_MSG( kiface,
                           wxT( "attempted DSO has a bug, failed to return a KIFACE*" ) );
 
+            wxDllType dsoHandle = dso.Detach();
+
+            bool startSuccess = false;
+
             // Give the DSO a single chance to do its "process level" initialization.
             // "Process level" specifically means stay away from any projects in there.
-            if( kiface->OnKifaceStart( m_program, m_ctl ) )
-            {
-                // Tell dso's wxDynamicLibrary destructor not to Unload() the program image.
-                ignore_unused( dso.Detach() );
 
+            try
+            {
+                startSuccess = kiface->OnKifaceStart( m_program, m_ctl );
+            }
+            catch (...)
+            {
+                // OnKiFaceStart may generate an exception
+                // Before we continue and ultimately unload our module to retry we need
+                // to process the exception before we delete the free the memory space the exception resides in
+                Pgm().HandleException( std::current_exception() );
+            }
+
+            if( startSuccess )
+            {
                 return m_kiface[aFaceId] = kiface;
+            }
+            else
+            {
+                // Usually means cancelled initial global library setup
+                // But it could have been an exception/failure
+                // Let the module go out of scope to unload
+                dso.Attach( dsoHandle );
+
+                return nullptr;
             }
         }
 
