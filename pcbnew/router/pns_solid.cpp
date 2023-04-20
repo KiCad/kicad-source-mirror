@@ -92,8 +92,6 @@ void SOLID::SetPos( const VECTOR2I& aCenter )
     if( m_shape )
         m_shape->Move( delta );
 
-    //printf("Hole@%p\n", m_hole);
-
     if( m_hole )
         m_hole->Move( delta );
 

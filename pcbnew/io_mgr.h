@@ -551,9 +551,7 @@ public:
     virtual void FootprintLibOptions( STRING_UTF8_MAP* aListToAppendTo ) const;
 
     virtual ~PLUGIN()
-    {
-        //printf( "~%s", __func__ );
-    };
+    {};
 
 
 #ifndef SWIG

@@ -99,7 +99,7 @@ NODE::~NODE()
 
     for( ITEM* item : toDelete )
     {
-        printf("del item %p type %s\n", item, item->KindStr().c_str() );
+        wxLogTrace( wxT( "PNS" ), wxT( "del item %p type %s" ), item, item->KindStr().c_str() );
         delete item;
     }
 
