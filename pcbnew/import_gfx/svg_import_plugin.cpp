@@ -97,7 +97,7 @@ bool SVG_IMPORT_PLUGIN::Import()
 
         for( NSVGpath* path = shape->paths; path != nullptr; path = path->next )
         {
-            bool closed = path->closed || rule == GRAPHICS_IMPORTER::PF_EVEN_ODD;
+            bool closed = path->closed || filled || rule == GRAPHICS_IMPORTER::PF_EVEN_ODD;
 
             DrawPath( path->pts, path->npts, closed, filled, lineWidth );
         }
