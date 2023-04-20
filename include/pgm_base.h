@@ -298,13 +298,38 @@ public:
     void SaveCommonSettings();
 
 #ifdef KICAD_USE_SENTRY
+    /**
+     * @return True if the user agreed to sentry data collection
+     */
     bool IsSentryOptedIn();
+
+    /**
+     * Sets the Sentry opt in state, this will also terminate sentry
+     * immediately if needed, however it will not init sentry if opted in
+     *
+     * @param aOptIn True/false to agreeing to the use of sentry
+     */
     void SetSentryOptIn( bool aOptIn );
+
+    /**
+     * Generates and stores a new sentry id at random using the boost uuid generator
+     */
     void ResetSentryId();
+
+    /**
+     * Gets the current id string being used as "user id" in sentry reports
+     */
     const wxString& GetSentryId();
 #endif
 
-    void HandleException( std::exception_ptr ptr );
+    /**
+     * A excepion handler to be used at the top level if exceptions bubble up that for
+     *
+     * The purpose is to have a central place to log a wxWidgets error message and/or sentry report
+     *
+     * @param aPtr Pass the std::current_exception() from within the catch block
+     */
+    void HandleException( std::exception_ptr aPtr );
 
     /**
      * Determine if the application is running with a GUI
