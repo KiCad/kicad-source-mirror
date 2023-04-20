@@ -652,7 +652,11 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aE
                                                // gets an opportunity to use these segments
                                                nullptr );
 
-            if( success && isCopperOutside( fp, fpOutlines ) )
+            // Here, we test to see if we should make holes or outlines.  Holes are made if the footprint
+            // has copper outside of a single, closed outline.  If there are multiple outlines, we assume
+            // that the footprint edges represent holes as we do not support multiple boards.  Similarly, if
+            // any of the footprint pads are located outside of the edges, then the edges are holes
+            if( success && ( isCopperOutside( fp, fpOutlines ) || fpOutlines.OutlineCount() > 1 ) )
             {
                 fpHoles.Append( fpOutlines );
             }
@@ -904,7 +908,8 @@ bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, in
         wxLogTrace( traceBoardOutline, wxT( "Closed outline found" ) );
 
         // If copper is outside a closed polygon, treat it as a hole
-        if( isCopperOutside( footprint, outlines ) )
+        // If there are multiple outlines in the footprint, they are also holes
+        if( isCopperOutside( footprint, outlines ) || outlines.OutlineCount() > 1 )
         {
             wxLogTrace( traceBoardOutline, wxT( "Treating outline as a hole" ) );
 
