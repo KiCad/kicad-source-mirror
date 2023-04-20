@@ -179,7 +179,6 @@ int FROM_TO_CACHE::cacheFromToPaths( const wxString& aFrom, const wxString& aTo 
                         if( count >= 2 )
                         {
                             // fixme: report this somewhere?
-                            //printf("Multiple targets found, aborting...\n");
                             path.to = nullptr;
                         }
                     }
@@ -206,9 +205,6 @@ int FROM_TO_CACHE::cacheFromToPaths( const wxString& aFrom, const wxString& aTo 
         else
             path.isUnique = false;
 
-
-        //printf( "%s\n", (const char *) wxString::Format( _("Check path: %s -> %s (net %s)"), path.fromName, path.toName, cnFrom->Parent()->GetNetname() ) );
-
         if( result == PS_NO_PATH )
             continue;
 
@@ -233,7 +229,6 @@ bool  FROM_TO_CACHE::IsOnFromToPath( BOARD_CONNECTED_ITEM* aItem, const wxString
     if( !m_board )
         return false;
 
-    //printf("Check %d cached paths [%p]\n", m_ftPaths.size(), aItem );
     for( int attempt = 0; attempt < 2; attempt++ )
     {
         // item already belongs to path
@@ -244,10 +239,7 @@ bool  FROM_TO_CACHE::IsOnFromToPath( BOARD_CONNECTED_ITEM* aItem, const wxString
                 nFromTosFound++;
 
                 if( ftPath.pathItems.count( aItem ) )
-                {
-        //            printf("Found cached path for %p [%s->%s]\n", aItem, (const char *)ftPath.fromName, (const char *) ftPath.toName );
                     return true;
-                }
             }
         }
 

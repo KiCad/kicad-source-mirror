@@ -86,9 +86,7 @@ public:
         m_itemIndex( aItemIndex ),
         m_type( LIBEVAL::VT_UNDEFINED ),
         m_isEnum( false )
-    {
-        //printf("*** CreateVarRef %p %d\n", this, aItemIndex );
-    }
+    {}
 
     ~PCB_EXPR_VAR_REF() {};
 
@@ -123,7 +121,6 @@ public:
         PCB_EXPR_VAR_REF( aItemIndex )
     {
         SetType( LIBEVAL::VT_STRING );
-        //printf("*** CreateVarRef %p %d\n", this, aItemIndex );
     }
 
     LIBEVAL::VALUE* GetValue( LIBEVAL::CONTEXT* aCtx ) override;
@@ -138,7 +135,6 @@ public:
         PCB_EXPR_VAR_REF( aItemIndex )
     {
         SetType( LIBEVAL::VT_STRING );
-        //printf("*** CreateVarRef %p %d\n", this, aItemIndex );
     }
 
     LIBEVAL::VALUE* GetValue( LIBEVAL::CONTEXT* aCtx ) override;
@@ -152,7 +148,6 @@ public:
         PCB_EXPR_VAR_REF( aItemIndex )
     {
         SetType( LIBEVAL::VT_STRING );
-        //printf("*** CreateVarRef %p %d\n", this, aItemIndex );
     }
 
     LIBEVAL::VALUE* GetValue( LIBEVAL::CONTEXT* aCtx ) override;

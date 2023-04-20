@@ -724,7 +724,6 @@ bool OPTIMIZER::mergeStep( LINE* aLine, SHAPE_LINE_CHAIN& aCurrentPath, int step
 
             if( !checkColliding( aLine, bypass ) )
             {
-                //printf("Chk-constraints: %d %d\n", n, n+step+1 );
                 ok = checkConstraints ( n, n + step + 1, aLine, aCurrentPath, bypass );
             }
 
