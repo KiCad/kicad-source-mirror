@@ -479,18 +479,9 @@ struct APP_KICAD_CLI : public wxAppConsole
         {
             return program.OnPgmRun();
         }
-        catch( const std::exception& e )
-        {
-            wxLogError( wxT( "Unhandled exception class: %s  what: %s" ),
-                        FROM_UTF8( typeid( e ).name() ), FROM_UTF8( e.what() ) );
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            wxFprintf( stderr, ioe.What() );
-        }
         catch( ... )
         {
-            wxLogError( wxT( "Unhandled exception of unknown type" ) );
+            Pgm().HandleException( std::current_exception() );
         }
 
         return -1;
@@ -560,18 +551,9 @@ struct APP_KICAD_CLI : public wxAppConsole
         {
             throw;
         }
-        catch( const std::exception& e )
-        {
-            wxLogError( "Unhandled exception class: %s  what: %s", FROM_UTF8( typeid( e ).name() ),
-                        FROM_UTF8( e.what() ) );
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            wxLogError( ioe.What() );
-        }
         catch( ... )
         {
-            wxLogError( "Unhandled exception of unknown type" );
+            Pgm().HandleException( std::current_exception() );
         }
 
         return false; // continue on. Return false to abort program

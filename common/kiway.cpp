@@ -452,18 +452,9 @@ KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate, wxTopLevelWindow
             m_playerFrameId[aFrameType].store( frame->GetId() );
             return frame;
         }
-        catch( const IO_ERROR& ioe )
-        {
-            wxLogError( ioe.What() );
-            wxLogError( _( "Error loading editor." ) );
-        }
-        catch( const std::exception& e )
-        {
-            wxLogError( e.what() );
-            wxLogError( _( "Error loading editor." ) );
-        }
         catch( ... )
         {
+            Pgm().HandleException( std::current_exception() );
             wxLogError( _( "Error loading editor." ) );
         }
     }
