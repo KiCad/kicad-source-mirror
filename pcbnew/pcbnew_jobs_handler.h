@@ -23,12 +23,13 @@
 
 #include <jobs/job_dispatcher.h>
 #include <pcb_plot_params.h>
+#include <reporter.h>
 
 class JOB_EXPORT_PCB_GERBER;
 class JOB_FP_EXPORT_SVG;
 class FOOTPRINT;
 
-class PCBNEW_JOBS_HANDLER : public JOB_DISPATCHER
+class PCBNEW_JOBS_HANDLER : public JOB_DISPATCHER, REPORTER
 {
 public:
     PCBNEW_JOBS_HANDLER();
@@ -42,6 +43,13 @@ public:
     int JobExportPos( JOB* aJob );
     int JobExportFpUpgrade( JOB* aJob );
     int JobExportFpSvg( JOB* aJob );
+
+    /*
+     * REPORTER INTERFACE
+     */
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
+
+    bool HasMessage() const override { return false; }
 
 private:
     void populateGerberPlotOptionsFromJob( PCB_PLOT_PARAMS&       aPlotOpts,

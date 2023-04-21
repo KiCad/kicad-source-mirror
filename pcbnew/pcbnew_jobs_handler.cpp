@@ -259,6 +259,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
 
 int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
 {
+    int                     exitCode = CLI::EXIT_CODES::OK;
     JOB_EXPORT_PCB_GERBERS* aGerberJob = dynamic_cast<JOB_EXPORT_PCB_GERBERS*>( aJob );
 
     if( aGerberJob == nullptr )
@@ -333,6 +334,11 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
             PlotBoardLayers( brd, plotter, plotSequence, plotOpts );
             plotter->EndPlot();
         }
+        else
+        {
+            wxFprintf( stderr, _( "Failed to plot to '%s'.\n" ), fn.GetFullPath() );
+            exitCode = CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+        }
 
         delete plotter;
     }
@@ -342,7 +348,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
     BuildPlotFileName( &fn, aGerberJob->m_outputFile, wxT( "job" ), GerberJobFileExtension );
     jobfile_writer.CreateJobFile( fn.GetFullPath() );
 
-    return CLI::EXIT_CODES::OK;
+    return exitCode;
 }
 
 
@@ -371,6 +377,7 @@ void PCBNEW_JOBS_HANDLER::populateGerberPlotOptionsFromJob( PCB_PLOT_PARAMS&    
 
 int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
 {
+    int                    exitCode = CLI::EXIT_CODES::OK;
     JOB_EXPORT_PCB_GERBER* aGerberJob = dynamic_cast<JOB_EXPORT_PCB_GERBER*>( aJob );
 
     if( aGerberJob == nullptr )
@@ -405,10 +412,15 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
                          plotOpts );
         plotter->EndPlot();
     }
+    else
+    {
+        wxFprintf( stderr, _( "Failed to plot to '%s'.\n" ), aGerberJob->m_outputFile );
+        exitCode = CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
 
     delete plotter;
 
-    return CLI::EXIT_CODES::OK;
+    return exitCode;
 }
 
 static DRILL_PRECISION precisionListForInches( 2, 4 );
@@ -498,8 +510,11 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
         excellonWriter->SetRouteModeForOvalHoles( aDrillJob->m_excellonOvalDrillRoute );
         excellonWriter->SetMapFileFormat( mapFormat );
 
-        excellonWriter->CreateDrillandMapFilesSet( aDrillJob->m_outputDir, true,
-                                                   aDrillJob->m_generateMap, nullptr );
+        if( !excellonWriter->CreateDrillandMapFilesSet( aDrillJob->m_outputDir, true,
+                                                        aDrillJob->m_generateMap, this ) )
+        {
+            return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+        }
     }
     else if( aDrillJob->m_format == JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::GERBER )
     {
@@ -515,8 +530,11 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
         gerberWriter->SetOptions( offset );
         gerberWriter->SetMapFileFormat( mapFormat );
 
-        gerberWriter->CreateDrillandMapFilesSet( aDrillJob->m_outputDir, true,
-                                                 aDrillJob->m_generateMap, nullptr );
+        if( !gerberWriter->CreateDrillandMapFilesSet( aDrillJob->m_outputDir, true,
+                                                      aDrillJob->m_generateMap, this ) )
+        {
+            return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+        }
     }
 
     return CLI::EXIT_CODES::OK;
@@ -782,4 +800,15 @@ int PCBNEW_JOBS_HANDLER::doFpExportSvg( JOB_FP_EXPORT_SVG* aSvgJob, const FOOTPR
 
 
     return CLI::EXIT_CODES::OK;
+}
+
+
+REPORTER& PCBNEW_JOBS_HANDLER::Report( const wxString& aText, SEVERITY aSeverity )
+{
+    if( aSeverity == RPT_SEVERITY_ERROR )
+        wxFprintf( stderr, wxS( "%s\n" ), aText );
+    else
+        wxPrintf( wxS( "%s\n" ), aText );
+
+    return *this;
 }

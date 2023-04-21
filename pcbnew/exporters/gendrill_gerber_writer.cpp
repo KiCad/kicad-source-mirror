@@ -54,9 +54,10 @@ GERBER_WRITER::GERBER_WRITER( BOARD* aPcb )
 }
 
 
-void GERBER_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory, bool aGenDrill,
+bool GERBER_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory, bool aGenDrill,
                                                bool aGenMap, REPORTER* aReporter )
 {
+    bool success = true;
     // Note: In Gerber drill files, NPTH and PTH are always separate files
     m_merge_PTH_NPTH = false;
 
@@ -100,6 +101,7 @@ void GERBER_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory, b
                     {
                         msg.Printf( _( "Failed to create file '%s'." ), fullFilename );
                         aReporter->Report( msg, RPT_SEVERITY_ERROR );
+                        success = false;
                     }
 
                     break;
@@ -118,10 +120,12 @@ void GERBER_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory, b
     }
 
     if( aGenMap )
-        CreateMapFilesSet( aPlotDirectory, aReporter );
+        success &= CreateMapFilesSet( aPlotDirectory, aReporter );
 
     if( aReporter )
         aReporter->ReportTail( _( "Done." ), RPT_SEVERITY_INFO );
+
+    return success;
 }
 
 

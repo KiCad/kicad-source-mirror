@@ -297,7 +297,7 @@ const wxString GENDRILL_WRITER_BASE::getDrillFileName( DRILL_LAYER_PAIR aPair, b
     return ret;
 }
 
-void GENDRILL_WRITER_BASE::CreateMapFilesSet( const wxString& aPlotDirectory,
+bool GENDRILL_WRITER_BASE::CreateMapFilesSet( const wxString& aPlotDirectory,
                                               REPORTER * aReporter )
 {
     wxFileName  fn;
@@ -341,7 +341,7 @@ void GENDRILL_WRITER_BASE::CreateMapFilesSet( const wxString& aPlotDirectory,
                     aReporter->Report( msg, RPT_SEVERITY_ERROR );
                 }
 
-                return;
+                return false;
             }
             else
             {
@@ -353,6 +353,8 @@ void GENDRILL_WRITER_BASE::CreateMapFilesSet( const wxString& aPlotDirectory,
             }
         }
     }
+
+    return true;
 }
 
 

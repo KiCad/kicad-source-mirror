@@ -212,7 +212,7 @@ public:
      * @param aPlotDirectory is the output folder.
      * @param aReporter is a REPORTER to return activity or any message (can be NULL)
      */
-    void CreateMapFilesSet( const wxString& aPlotDirectory, REPORTER* aReporter = nullptr );
+    bool CreateMapFilesSet( const wxString& aPlotDirectory, REPORTER* aReporter = nullptr );
 
     /**
      * Create a plain text report file giving a list of drill values and drill count for through
