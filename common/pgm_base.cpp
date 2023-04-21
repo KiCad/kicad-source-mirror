@@ -898,12 +898,15 @@ void PGM_BASE::HandleException( std::exception_ptr aPtr )
     catch( const std::exception& e )
     {
 #ifdef KICAD_USE_SENTRY
-        sentry_value_t exc = sentry_value_new_exception( "exception", e.what() );
-        sentry_value_set_stacktrace( exc, NULL, 0 );
+        if( Pgm().IsSentryOptedIn() )
+        {
+            sentry_value_t exc = sentry_value_new_exception( "exception", e.what() );
+            sentry_value_set_stacktrace( exc, NULL, 0 );
 
-        sentry_value_t sentryEvent = sentry_value_new_event();
-        sentry_event_add_exception( sentryEvent, exc );
-        sentry_capture_event( sentryEvent );
+            sentry_value_t sentryEvent = sentry_value_new_event();
+            sentry_event_add_exception( sentryEvent, exc );
+            sentry_capture_event( sentryEvent );
+        }
 #endif
 
         wxLogError( wxT( "Unhandled exception class: %s  what: %s" ),

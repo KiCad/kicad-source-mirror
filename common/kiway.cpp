@@ -234,11 +234,12 @@ KIFACE* KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
             }
         }
 
+        wxString msg;
+
 #ifdef KICAD_WIN32_VERIFY_CODESIGN
         bool codeSignOk = KIPLATFORM::ENV::VerifyFileSignature( dname );
         if( !codeSignOk )
         {
-            wxString msg;
             msg.Printf( _( "Failed to verify kiface library '%s' signature." ), dname );
             THROW_IO_ERROR( msg );
         }
@@ -261,11 +262,14 @@ KIFACE* KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
         setlocale( lc_new_type, user_locale.c_str() );
 
 #ifdef KICAD_USE_SENTRY
-        wxString       msg = wxString::Format( "Loading kiface %d", aFaceId );
-        sentry_value_t crumb = sentry_value_new_breadcrumb( "navigation", msg.utf8_str() );
-        sentry_value_set_by_key( crumb, "category", sentry_value_new_string( "kiway.kiface" ) );
-        sentry_value_set_by_key( crumb, "level", sentry_value_new_string( "info" ) );
-        sentry_add_breadcrumb( crumb );
+        if( Pgm().IsSentryOptedIn() )
+        {
+            msg = wxString::Format( "Loading kiface %d", aFaceId );
+            sentry_value_t crumb = sentry_value_new_breadcrumb( "navigation", msg.utf8_str() );
+            sentry_value_set_by_key( crumb, "category", sentry_value_new_string( "kiway.kiface" ) );
+            sentry_value_set_by_key( crumb, "level", sentry_value_new_string( "info" ) );
+            sentry_add_breadcrumb( crumb );
+        }
 #endif
 
         if( !success )
@@ -449,11 +453,15 @@ KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate, wxTopLevelWindow
         try
         {
 #ifdef KICAD_USE_SENTRY
-            wxString       msg = wxString::Format( "Creating window type %d", aFrameType );
-            sentry_value_t crumb = sentry_value_new_breadcrumb( "navigation", msg.utf8_str() );
-            sentry_value_set_by_key( crumb, "category", sentry_value_new_string( "kiway.player" ) );
-            sentry_value_set_by_key( crumb, "level", sentry_value_new_string( "info" ) );
-            sentry_add_breadcrumb( crumb );
+            if( Pgm().IsSentryOptedIn() )
+            {
+                wxString       msg = wxString::Format( "Creating window type %d", aFrameType );
+                sentry_value_t crumb = sentry_value_new_breadcrumb( "navigation", msg.utf8_str() );
+                sentry_value_set_by_key( crumb, "category",
+                                         sentry_value_new_string( "kiway.player" ) );
+                sentry_value_set_by_key( crumb, "level", sentry_value_new_string( "info" ) );
+                sentry_add_breadcrumb( crumb );
+            }
 #endif
 
             FACE_T  face_type = KifaceType( aFrameType );
@@ -504,11 +512,15 @@ bool KIWAY::PlayerClose( FRAME_T aFrameType, bool doForce )
         return true;
 
 #ifdef KICAD_USE_SENTRY
-    wxString       msg = wxString::Format( "Closing window type %d", aFrameType );
-    sentry_value_t crumb = sentry_value_new_breadcrumb( "navigation", msg.utf8_str() );
-    sentry_value_set_by_key( crumb, "category", sentry_value_new_string( "kiway.playerclose" ) );
-    sentry_value_set_by_key( crumb, "level", sentry_value_new_string( "info" ) );
-    sentry_add_breadcrumb( crumb );
+    if( Pgm().IsSentryOptedIn() )
+    {
+        wxString       msg = wxString::Format( "Closing window type %d", aFrameType );
+        sentry_value_t crumb = sentry_value_new_breadcrumb( "navigation", msg.utf8_str() );
+        sentry_value_set_by_key( crumb, "category",
+                                 sentry_value_new_string( "kiway.playerclose" ) );
+        sentry_value_set_by_key( crumb, "level", sentry_value_new_string( "info" ) );
+        sentry_add_breadcrumb( crumb );
+    }
 #endif
 
     if( frame->NonUserClose( doForce ) )
