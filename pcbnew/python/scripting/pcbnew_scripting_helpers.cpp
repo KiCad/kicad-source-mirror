@@ -37,6 +37,7 @@
 #include <board_design_settings.h>
 #include <pcb_marker.h>
 #include <cstdlib>
+#include <drawing_sheet/ds_data_model.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <fp_lib_table.h>
@@ -54,6 +55,7 @@
 #include <wildcards_and_files_ext.h>
 #include <locale_io.h>
 #include <wx/app.h>
+#include <wx/crt.h>
 
 
 static PCB_EDIT_FRAME* s_PcbEditFrame = nullptr;
@@ -155,6 +157,16 @@ BOARD* LoadBoard( wxString& aFileName, IO_MGR::PCB_FILE_T aFormat )
     // Board cannot be loaded without a project, so create the default project
     if( !project )
         project = GetDefaultProject();
+
+    BASE_SCREEN::m_DrawingSheetFileName = project->GetProjectFile().m_BoardDrawingSheetFile;
+
+    // Load the drawing sheet from the filename stored in BASE_SCREEN::m_DrawingSheetFileName.
+    // If empty, or not existing, the default drawing sheet is loaded.
+    wxString filename = DS_DATA_MODEL::ResolvePath( BASE_SCREEN::m_DrawingSheetFileName,
+                                                    project->GetProjectPath() );
+
+    if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename ) )
+        wxFprintf( stderr, _( "Error loading drawing sheet." ) );
 
     BOARD* brd = IO_MGR::Load( aFormat, aFileName );
 
