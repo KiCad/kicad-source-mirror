@@ -1707,6 +1707,13 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
                     }
                 }
 
+                if( SCH_SYMBOL* sym = dyn_cast<SCH_SYMBOL*>( item ) )
+                {
+                    std::vector<SCH_PIN*> pins = sym->GetPins();
+                    changed_items.insert( pins.begin(), pins.end() );
+                    continue;
+                }
+
                 if( item->IsConnected( pt ) )
                     changed_items.insert( item );
             }

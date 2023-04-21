@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <advanced_config.h>
 #include <gestfich.h>
 #include <sch_screen.h>
 #include <sch_edit_frame.h>
@@ -471,9 +472,6 @@ void DIALOG_ERC::testErc()
 
     SCHEMATIC* sch = &m_parent->Schematic();
 
-    // Build the whole sheet list in hierarchy (sheet, not screen)
-    sch->GetSheets().AnnotatePowerSymbols();
-
     SCH_SCREENS screens( sch->Root() );
     ERC_SETTINGS& settings = sch->ErcSettings();
     ERC_TESTER tester( sch );
@@ -494,7 +492,13 @@ void DIALOG_ERC::testErc()
 
     // The connection graph has a whole set of ERC checks it can run
     AdvancePhase( _( "Checking conflicts..." ) );
-    m_parent->RecalculateConnections( NO_CLEANUP );
+
+    // If we are using the new connectivity, make sure that we do a full-rebuild
+    if( ADVANCED_CFG::GetCfg().m_IncrementalConnectivity )
+        m_parent->RecalculateConnections( GLOBAL_CLEANUP );
+    else
+        m_parent->RecalculateConnections( NO_CLEANUP );
+
     sch->ConnectionGraph()->RunERC();
 
     AdvancePhase( _( "Checking units..." ) );
