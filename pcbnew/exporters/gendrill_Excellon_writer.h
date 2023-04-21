@@ -105,7 +105,7 @@ public:
      * @param aGenMap set to true to generate a drill map file.
      * @param aReporter is a #REPORTER to return activity or any message (can be NULL)
      */
-    void CreateDrillandMapFilesSet( const wxString& aPlotDirectory, bool aGenDrill, bool aGenMap,
+    bool CreateDrillandMapFilesSet( const wxString& aPlotDirectory, bool aGenDrill, bool aGenMap,
                                     REPORTER* aReporter = nullptr );
 
 private:
