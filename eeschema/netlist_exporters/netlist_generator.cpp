@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <advanced_config.h>
 #include <common.h>     // for ProcessExecute
 #include <string_utils.h>
 #include <gestfich.h>
@@ -51,6 +52,10 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
 
     if( !ReadyToNetlist( _( "Exporting netlist requires a fully annotated schematic." ) ) )
         return false;
+
+    // If we are using the new connectivity, make sure that we do a full-rebuild
+    if( ADVANCED_CFG::GetCfg().m_IncrementalConnectivity )
+        RecalculateConnections( GLOBAL_CLEANUP );
 
     bool res = true;
     bool executeCommandLine = false;

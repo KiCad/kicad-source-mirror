@@ -883,6 +883,9 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
                 return;
         }
 
+        if( ADVANCED_CFG::GetCfg().m_IncrementalConnectivity )
+            RecalculateConnections( GLOBAL_CLEANUP );
+
         NETLIST_EXPORTER_KICAD exporter( &Schematic() );
         STRING_FORMATTER formatter;
 

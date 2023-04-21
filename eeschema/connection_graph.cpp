@@ -404,11 +404,21 @@ void CONNECTION_SUBGRAPH::Absorb( CONNECTION_SUBGRAPH* aOther )
 
     m_multiple_drivers |= aOther->m_multiple_drivers;
 
+    std::function<void( CONNECTION_SUBGRAPH* )> set_absorbed_by =
+            [ & ]( CONNECTION_SUBGRAPH *child )
+    {
+        child->m_absorbed_by = this;
+
+        for( CONNECTION_SUBGRAPH* subchild : child->m_absorbed_subgraphs )
+            set_absorbed_by( subchild );
+    };
+
     aOther->m_absorbed = true;
     aOther->m_dirty = false;
     aOther->m_driver = nullptr;
     aOther->m_driver_connection = nullptr;
-    aOther->m_absorbed_by = this;
+
+    set_absorbed_by( aOther );
 }
 
 
@@ -497,47 +507,33 @@ void CONNECTION_GRAPH::Merge( CONNECTION_GRAPH& aGraph )
             aGraph.m_driver_subgraphs.end(),
             std::back_inserter( m_driver_subgraphs ) );
 
-    std::copy( aGraph.m_sheet_to_subgraphs_map.begin(),
-            aGraph.m_sheet_to_subgraphs_map.end(),
-            std::inserter( m_sheet_to_subgraphs_map,
-                    m_sheet_to_subgraphs_map.begin() ) );
-
     std::copy( aGraph.m_invisible_power_pins.begin(),
             aGraph.m_invisible_power_pins.end(),
             std::back_inserter( m_invisible_power_pins ) );
 
-    std::copy( aGraph.m_net_name_to_code_map.begin(),
-            aGraph.m_net_name_to_code_map.end(),
-            std::inserter( m_net_name_to_code_map,
-                    m_net_name_to_code_map.begin() ) );
+    for( auto& [key, value] : aGraph.m_net_name_to_subgraphs_map )
+        m_net_name_to_subgraphs_map.insert_or_assign( key, value );
 
-    std::copy( aGraph.m_bus_name_to_code_map.begin(),
-            aGraph.m_bus_name_to_code_map.end(),
-            std::inserter( m_bus_name_to_code_map,
-                    m_net_name_to_code_map.begin() ) );
+    for( auto& [key, value] : aGraph.m_sheet_to_subgraphs_map )
+        m_sheet_to_subgraphs_map.insert_or_assign( key, value );
 
-    std::copy( aGraph.m_net_code_to_subgraphs_map.begin(),
-            aGraph.m_net_code_to_subgraphs_map.end(),
-            std::inserter( m_net_code_to_subgraphs_map,
-                    m_net_code_to_subgraphs_map.begin() ) );
+    for( auto& [key, value] : aGraph.m_net_name_to_code_map )
+        m_net_name_to_code_map.insert_or_assign( key, value );
 
-    std::copy( aGraph.m_net_name_to_subgraphs_map.begin(),
-            aGraph.m_net_name_to_subgraphs_map.end(),
-            std::inserter( m_net_name_to_subgraphs_map,
-                    m_net_name_to_subgraphs_map.begin() ) );
+    for( auto& [key, value] : aGraph.m_bus_name_to_code_map )
+        m_bus_name_to_code_map.insert_or_assign( key, value );
 
-    std::copy( aGraph.m_item_to_subgraph_map.begin(),
-            aGraph.m_item_to_subgraph_map.end(),
-            std::inserter( m_item_to_subgraph_map,
-                    m_item_to_subgraph_map.begin() ) );
+    for( auto& [key, value] : aGraph.m_net_code_to_subgraphs_map )
+        m_net_code_to_subgraphs_map.insert_or_assign( key, value );
 
-    std::copy( aGraph.m_local_label_cache.begin(),
-            aGraph.m_local_label_cache.end(),
-            std::inserter( m_local_label_cache, m_local_label_cache.begin() ) );
+    for( auto& [key, value] : aGraph.m_item_to_subgraph_map )
+        m_item_to_subgraph_map.insert_or_assign( key, value );
 
-    std::copy( aGraph.m_global_label_cache.begin(),
-            aGraph.m_global_label_cache.end(),
-            std::inserter( m_global_label_cache, m_global_label_cache.begin() ) );
+    for( auto& [key, value] : aGraph.m_local_label_cache )
+        m_local_label_cache.insert_or_assign( key, value );
+
+    for( auto& [key, value] : aGraph.m_global_label_cache )
+        m_global_label_cache.insert_or_assign( key, value );
 
     m_last_bus_code = std::max( m_last_bus_code, aGraph.m_last_bus_code );
     m_last_net_code = std::max( m_last_net_code, aGraph.m_last_net_code );
@@ -686,6 +682,8 @@ std::set<std::pair<SCH_SHEET_PATH, SCH_ITEM*>> CONNECTION_GRAPH::ExtractAffected
             for( CONNECTION_SUBGRAPH* bus_sg : bus_it.second )
                 traverse_subgraph( bus_sg );
         }
+
+        alg::delete_matching( m_items, item );
     }
 
     removeSubgraphs( subgraphs );
@@ -2167,60 +2165,15 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, boo
                                             candidate->m_code, candidate->m_driver_connection->Name() );
 
                                 candidate->m_hier_parent = aParent;
+                                aParent->m_hier_children.insert( candidate );
+
                                 search_list.push_back( candidate );
                                 break;
                             }
                         }
                     }
                 }
-
-        for( SCH_HIERLABEL* label : aParent->m_hier_ports )
-        {
-            SCH_SHEET_PATH path = aParent->m_sheet;
-            path.pop_back();
-
-            auto it = m_sheet_to_subgraphs_map.find( path );
-
-            if( it == m_sheet_to_subgraphs_map.end() )
-                continue;
-
-            for( CONNECTION_SUBGRAPH* candidate : it->second )
-            {
-                if( candidate->m_hier_pins.empty()
-                    || visited.count( candidate )
-                    || candidate->m_driver_connection->Type() != aParent->m_driver_connection->Type() )
-                {
-                    continue;
-                }
-
-                const KIID& last_parent_uuid = aParent->m_sheet.Last()->m_Uuid;
-
-                for( SCH_SHEET_PIN* pin : candidate->m_hier_pins )
-                {
-                    // If the last sheet UUIDs won't match, no need to check the full path
-                    if( pin->GetParent()->m_Uuid != last_parent_uuid )
-                        continue;
-
-                    SCH_SHEET_PATH pin_path = path;
-                    pin_path.push_back( pin->GetParent() );
-
-                    if( pin_path != aParent->m_sheet )
-                        continue;
-
-                    if( aParent->GetNameForDriver( label ) == candidate->GetNameForDriver( pin ) )
-                    {
-                        wxLogTrace( ConnTrace, wxS( "%lu: found additional parent %lu (%s)" ),
-                                    aParent->m_code, candidate->m_code,
-                                    candidate->m_driver_connection->Name() );
-
-                        aParent->m_hier_children.insert( candidate );
-                        search_list.push_back( candidate );
-                        break;
-                    }
-                }
-            }
-      }
-    };
+            };
 
     auto propagate_bus_neighbors = [&]( CONNECTION_SUBGRAPH* aParentGraph ) {
         for( const auto& kv : aParentGraph->m_bus_neighbors )
