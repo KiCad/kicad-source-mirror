@@ -481,10 +481,9 @@ void NETLIST_EXPORTER_SPICE::readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSym
 
         if( !cacheFile.IsOpened() )
         {
-            DisplayErrorMessage( m_dialogParent,
-                                 wxString::Format( _( "Could not open file '%s' to write "
-                                                      "IBIS model" ),
-                                                   cacheFn.GetFullPath() ) );
+            DisplayErrorMessage( m_dialogParent, wxString::Format( _( "Could not open file '%s' "
+                                                                      "to write IBIS model" ),
+                                                                   cacheFn.GetFullPath() ) );
         }
 
         auto spiceGenerator = static_cast<const SPICE_GENERATOR_KIBIS&>( kibisModel->SpiceGenerator() );
@@ -536,9 +535,9 @@ void NETLIST_EXPORTER_SPICE::writeInclude( OUTPUTFORMATTER& aFormatter, unsigned
 
         if( fullPath.IsEmpty() )
         {
-            DisplayErrorMessage( m_dialogParent,
-                                 wxString::Format( _( "Could not find library file '%s'" ),
-                                                   expandedPath ) );
+            DisplayErrorMessage( m_dialogParent, wxString::Format( _( "Could not find library file "
+                                                                      "'%s'" ),
+                                                                   expandedPath ) );
             fullPath = expandedPath;
         }
         else if( wxFileName::GetPathSeparator() == '\\' )
