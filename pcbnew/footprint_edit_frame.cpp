@@ -809,8 +809,6 @@ void FOOTPRINT_EDIT_FRAME::doCloseWindow()
     {
         GFootprintList.WriteCacheToFile( Prj().GetProjectPath() + wxT( "fp-info-cache" ) );
     }
-
-    mgr->FlushAndRelease( GetSettings() );
 }
 
 
