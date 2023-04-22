@@ -379,7 +379,6 @@ NODE::OPT_OBSTACLE NODE::CheckColliding( const ITEM* aItemA, int aKindMask )
 
     opts.m_kindMask = aKindMask;
     opts.m_limitCount = 1;
-    opts.m_overrideClearance = 1;
 
     if( aItemA->Kind() == ITEM::LINE_T )
     {
