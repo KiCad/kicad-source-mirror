@@ -46,15 +46,16 @@ public:
 
     ~SCH_BITMAP()
     {
-        delete m_image;
+        delete m_bitmapBase;
     }
 
     SCH_BITMAP& operator=( const SCH_ITEM& aItem );
 
     BITMAP_BASE* GetImage() const
     {
-        wxCHECK_MSG( m_image != nullptr, nullptr, "Invalid SCH_BITMAP init, m_image is NULL." );
-        return m_image;
+        wxCHECK_MSG( m_bitmapBase != nullptr, nullptr,
+                     "Invalid SCH_BITMAP init, m_bitmapBase is NULL." );
+        return m_bitmapBase;
     }
 
     void SetImage( wxImage* aImage );
@@ -67,12 +68,12 @@ public:
      */
     double GetImageScale() const
     {
-        return m_image->GetScale();
+        return m_bitmapBase->GetScale();
     }
 
     void SetImageScale( double aScale )
     {
-        m_image->SetScale( aScale );
+        m_bitmapBase->SetScale( aScale );
     }
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
@@ -151,7 +152,7 @@ public:
 
 private:
     VECTOR2I     m_pos;                 // XY coordinates of center of the bitmap
-    BITMAP_BASE* m_image;               // the BITMAP_BASE item
+    BITMAP_BASE* m_bitmapBase;          // the BITMAP_BASE item
 };
 
 

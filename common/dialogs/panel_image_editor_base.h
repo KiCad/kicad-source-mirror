@@ -39,6 +39,8 @@ class PANEL_IMAGE_EDITOR_BASE : public wxPanel
 		wxButton* m_buttonGrey;
 		wxStaticText* m_staticTextScale;
 		wxTextCtrl* m_textCtrlScale;
+		wxStaticText* m_staticTextPPI;
+		wxStaticText* m_stPPI_Value;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnRedrawPanel( wxPaintEvent& event ) { event.Skip(); }

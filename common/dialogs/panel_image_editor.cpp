@@ -39,9 +39,13 @@ PANEL_IMAGE_EDITOR::PANEL_IMAGE_EDITOR( wxWindow* aParent, BITMAP_BASE* aItem ) 
         PANEL_IMAGE_EDITOR_BASE( aParent )
 {
     m_workingImage = new BITMAP_BASE( *aItem );
+
     wxString msg;
     msg.Printf( wxT( "%f" ), m_workingImage->GetScale() );
     m_textCtrlScale->SetValue( msg );
+
+    msg.Printf( wxT( "%d" ), m_workingImage->GetPPI() );
+    m_stPPI_Value->SetLabel( msg );
 }
 
 

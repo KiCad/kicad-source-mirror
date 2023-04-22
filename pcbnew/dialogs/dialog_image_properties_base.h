@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -59,7 +59,7 @@ class DIALOG_IMAGE_PROPERTIES_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_IMAGE_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
+		DIALOG_IMAGE_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Image Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 353,260 ), long style = wxDEFAULT_DIALOG_STYLE );
 
 		~DIALOG_IMAGE_PROPERTIES_BASE();
 

@@ -46,7 +46,7 @@ SCH_BITMAP::SCH_BITMAP( const VECTOR2I& pos ) :
     m_pos   = pos;
     m_layer = LAYER_NOTES;              // used only to draw/plot a rectangle,
                                         // when a bitmap cannot be drawn or plotted
-    m_image = new BITMAP_BASE();
+    m_bitmapBase = new BITMAP_BASE();
 }
 
 
@@ -55,7 +55,7 @@ SCH_BITMAP::SCH_BITMAP( const SCH_BITMAP& aSchBitmap ) :
 {
     m_pos   = aSchBitmap.m_pos;
     m_layer = aSchBitmap.m_layer;
-    m_image = new BITMAP_BASE( *aSchBitmap.m_image );
+    m_bitmapBase = new BITMAP_BASE( *aSchBitmap.m_bitmapBase );
 }
 
 
@@ -71,8 +71,8 @@ SCH_BITMAP& SCH_BITMAP::operator=( const SCH_ITEM& aItem )
 
         SCH_BITMAP* bitmap = (SCH_BITMAP*) &aItem;
 
-        delete m_image;
-        m_image = new BITMAP_BASE( *bitmap->m_image );
+        delete m_bitmapBase;
+        m_bitmapBase = new BITMAP_BASE( *bitmap->m_bitmapBase );
         m_pos = bitmap->m_pos;
     }
 
@@ -82,9 +82,9 @@ SCH_BITMAP& SCH_BITMAP::operator=( const SCH_ITEM& aItem )
 
 bool SCH_BITMAP::ReadImageFile( const wxString& aFullFilename )
 {
-    if( m_image->ReadImageFile( aFullFilename ) )
+    if( m_bitmapBase->ReadImageFile( aFullFilename ) )
     {
-        m_image->SetPixelSizeIu( 254000.0 / m_image->GetPPI() );
+        m_bitmapBase->SetPixelSizeIu( 254000.0 / m_bitmapBase->GetPPI() );
         return true;
     }
 
@@ -94,8 +94,8 @@ bool SCH_BITMAP::ReadImageFile( const wxString& aFullFilename )
 
 void SCH_BITMAP::SetImage( wxImage* aImage )
 {
-    m_image->SetImage( aImage );
-    m_image->SetPixelSizeIu( 254000.0 / m_image->GetPPI() );
+    m_bitmapBase->SetImage( aImage );
+    m_bitmapBase->SetPixelSizeIu( 254000.0 / m_bitmapBase->GetPPI() );
 }
 
 
@@ -113,13 +113,13 @@ void SCH_BITMAP::SwapData( SCH_ITEM* aItem )
 
     SCH_BITMAP* item = (SCH_BITMAP*) aItem;
     std::swap( m_pos, item->m_pos );
-    std::swap( m_image, item->m_image );
+    std::swap( m_bitmapBase, item->m_bitmapBase );
 }
 
 
 const BOX2I SCH_BITMAP::GetBoundingBox() const
 {
-    BOX2I bbox = m_image->GetBoundingBox();
+    BOX2I bbox = m_bitmapBase->GetBoundingBox();
 
     bbox.Move( m_pos );
 
@@ -131,34 +131,34 @@ void SCH_BITMAP::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffse
 {
     VECTOR2I pos = m_pos + aOffset;
 
-    m_image->DrawBitmap( aSettings->GetPrintDC(), pos );
+    m_bitmapBase->DrawBitmap( aSettings->GetPrintDC(), pos );
 }
 
 
 VECTOR2I SCH_BITMAP::GetSize() const
 {
-    return m_image->GetSize();
+    return m_bitmapBase->GetSize();
 }
 
 
 void SCH_BITMAP::MirrorVertically( int aCenter )
 {
     MIRROR( m_pos.y, aCenter );
-    m_image->Mirror( true );
+    m_bitmapBase->Mirror( true );
 }
 
 
 void SCH_BITMAP::MirrorHorizontally( int aCenter )
 {
     MIRROR( m_pos.x, aCenter );
-    m_image->Mirror( false );
+    m_bitmapBase->Mirror( false );
 }
 
 
 void SCH_BITMAP::Rotate( const VECTOR2I& aCenter )
 {
     RotatePoint( m_pos, aCenter, ANGLE_90 );
-    m_image->Rotate( false );
+    m_bitmapBase->Rotate( false );
 }
 
 
@@ -200,7 +200,7 @@ void SCH_BITMAP::Plot( PLOTTER* aPlotter, bool aBackground ) const
 {
     if( aBackground )
     {
-        m_image->PlotImage( aPlotter, m_pos,
+        m_bitmapBase->PlotImage( aPlotter, m_pos,
                             aPlotter->RenderSettings()->GetLayerColor( GetLayer() ),
                             aPlotter->RenderSettings()->GetDefaultPenWidth() );
     }
@@ -216,6 +216,9 @@ BITMAPS SCH_BITMAP::GetMenuImage() const
 void SCH_BITMAP::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     aList.emplace_back( _( "Bitmap" ), wxEmptyString );
+
+    aList.emplace_back( _( "PPI" ), wxString::Format( wxT( "%d "), GetImage()->GetPPI() ) );
+    aList.emplace_back( _( "Scale" ), wxString::Format( wxT( "%f "), GetImageScale() ) );
 
     aList.emplace_back( _( "Width" ), aFrame->MessageTextFromValue( GetSize().x ) );
     aList.emplace_back( _( "Height" ), aFrame->MessageTextFromValue( GetSize().y ) );

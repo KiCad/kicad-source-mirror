@@ -47,16 +47,16 @@ PCB_BITMAP::PCB_BITMAP( BOARD_ITEM* aParent, const VECTOR2I& pos, PCB_LAYER_ID a
         BOARD_ITEM( aParent, PCB_BITMAP_T, aLayer )
 {
     m_pos = pos;
-    m_image = new BITMAP_BASE();
-    m_image->SetPixelSizeIu( (float) pcbIUScale.MilsToIU( 1000 ) / m_image->GetPPI() );
+    m_bitmapBase = new BITMAP_BASE();
+    m_bitmapBase->SetPixelSizeIu( (float) pcbIUScale.MilsToIU( 1000 ) / m_bitmapBase->GetPPI() );
 }
 
 
 PCB_BITMAP::PCB_BITMAP( const PCB_BITMAP& aPCBBitmap ) : BOARD_ITEM( aPCBBitmap )
 {
     m_pos = aPCBBitmap.m_pos;
-    m_image = new BITMAP_BASE( *aPCBBitmap.m_image );
-    m_image->SetPixelSizeIu( (float) pcbIUScale.MilsToIU( 1000 ) / m_image->GetPPI() );
+    m_bitmapBase = new BITMAP_BASE( *aPCBBitmap.m_bitmapBase );
+    m_bitmapBase->SetPixelSizeIu( (float) pcbIUScale.MilsToIU( 1000 ) / m_bitmapBase->GetPPI() );
 }
 
 
@@ -72,10 +72,10 @@ PCB_BITMAP& PCB_BITMAP::operator=( const BOARD_ITEM& aItem )
 
         PCB_BITMAP* bitmap = (PCB_BITMAP*) &aItem;
 
-        delete m_image;
-        m_image = new BITMAP_BASE( *bitmap->m_image );
+        delete m_bitmapBase;
+        m_bitmapBase = new BITMAP_BASE( *bitmap->m_bitmapBase );
         m_pos = bitmap->m_pos;
-        m_image->SetPixelSizeIu( (float) pcbIUScale.MilsToIU( 1000 ) / m_image->GetPPI() );
+        m_bitmapBase->SetPixelSizeIu( (float) pcbIUScale.MilsToIU( 1000 ) / m_bitmapBase->GetPPI() );
     }
 
     return *this;
@@ -84,16 +84,16 @@ PCB_BITMAP& PCB_BITMAP::operator=( const BOARD_ITEM& aItem )
 
 void PCB_BITMAP::SetImage( wxImage* aImage )
 {
-    m_image->SetImage( aImage );
-    m_image->SetPixelSizeIu( (float) pcbIUScale.MilsToIU( 1000 ) / m_image->GetPPI() );
+    m_bitmapBase->SetImage( aImage );
+    m_bitmapBase->SetPixelSizeIu( (float) pcbIUScale.MilsToIU( 1000 ) / m_bitmapBase->GetPPI() );
 }
 
 
 bool PCB_BITMAP::ReadImageFile( const wxString& aFullFilename )
 {
-    if( m_image->ReadImageFile( aFullFilename ) )
+    if( m_bitmapBase->ReadImageFile( aFullFilename ) )
     {
-        m_image->SetPixelSizeIu( (float) pcbIUScale.MilsToIU( 1000 ) / m_image->GetPPI() );
+        m_bitmapBase->SetPixelSizeIu( (float) pcbIUScale.MilsToIU( 1000 ) / m_bitmapBase->GetPPI() );
         return true;
     }
 
@@ -121,7 +121,7 @@ void PCB_BITMAP::swapData( BOARD_ITEM* aItem )
     std::swap( m_parent, item->m_parent );
     std::swap( m_forceVisible, item->m_forceVisible );
     std::swap( m_pos, item->m_pos );
-    std::swap( m_image, item->m_image );
+    std::swap( m_bitmapBase, item->m_bitmapBase );
 }
 
 
@@ -141,7 +141,7 @@ double PCB_BITMAP::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 const BOX2I PCB_BITMAP::GetBoundingBox() const
 {
     // Bitmaps are center origin, BOX2Is need top-left origin
-    VECTOR2I size = m_image->GetSize();
+    VECTOR2I size = m_bitmapBase->GetSize();
     VECTOR2I topLeft = { m_pos.x - size.x / 2, m_pos.y - size.y / 2 };
 
     return BOX2I( topLeft, size );
@@ -158,7 +158,7 @@ std::shared_ptr<SHAPE> PCB_BITMAP::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASH
 
 const VECTOR2I PCB_BITMAP::GetSize() const
 {
-    return m_image->GetSize();
+    return m_bitmapBase->GetSize();
 }
 
 
@@ -167,12 +167,12 @@ void PCB_BITMAP::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
     if( aFlipLeftRight )
     {
         MIRROR( m_pos.x, aCentre.x );
-        m_image->Mirror( false );
+        m_bitmapBase->Mirror( false );
     }
     else
     {
         MIRROR( m_pos.y, aCentre.y );
-        m_image->Mirror( true );
+        m_bitmapBase->Mirror( true );
     }
 }
 
@@ -184,9 +184,9 @@ void PCB_BITMAP::Rotate( const VECTOR2I& aCenter, const EDA_ANGLE& aAngle )
 
     norm.Normalize();
 
-    // each call to m_image->Rotate() rotates 90 degrees CCW
+    // each call to m_bitmapBase->Rotate() rotates 90 degrees CCW
     for( double ang = 45.0; ang < norm.AsDegrees(); ang += 90.0 )
-        m_image->Rotate( false );
+        m_bitmapBase->Rotate( false );
 }
 
 
@@ -233,6 +233,9 @@ BITMAPS PCB_BITMAP::GetMenuImage() const
 void PCB_BITMAP::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     aList.emplace_back( _( "Bitmap" ), wxEmptyString );
+
+    aList.emplace_back( _( "PPI" ), wxString::Format( wxT( "%d "), GetImage()->GetPPI() ) );
+    aList.emplace_back( _( "Scale" ), wxString::Format( wxT( "%f "), GetImageScale() ) );
 
     aList.emplace_back( _( "Width" ), aFrame->MessageTextFromValue( GetSize().x ) );
     aList.emplace_back( _( "Height" ), aFrame->MessageTextFromValue( GetSize().y ) );

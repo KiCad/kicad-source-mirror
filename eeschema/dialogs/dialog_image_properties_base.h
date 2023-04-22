@@ -52,7 +52,7 @@ class DIALOG_IMAGE_PROPERTIES_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_IMAGE_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 363,281 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_IMAGE_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Image Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 363,281 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_IMAGE_PROPERTIES_BASE();
 

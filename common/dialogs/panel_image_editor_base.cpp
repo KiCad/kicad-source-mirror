@@ -41,6 +41,20 @@ PANEL_IMAGE_EDITOR_BASE::PANEL_IMAGE_EDITOR_BASE( wxWindow* parent, wxWindowID i
 	m_textCtrlScale = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerRight->Add( m_textCtrlScale, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
+	wxBoxSizer* bSizerPPI;
+	bSizerPPI = new wxBoxSizer( wxHORIZONTAL );
+
+	m_staticTextPPI = new wxStaticText( this, wxID_ANY, _("PPI:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextPPI->Wrap( -1 );
+	bSizerPPI->Add( m_staticTextPPI, 0, wxALL, 5 );
+
+	m_stPPI_Value = new wxStaticText( this, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stPPI_Value->Wrap( -1 );
+	bSizerPPI->Add( m_stPPI_Value, 1, wxALL|wxEXPAND, 5 );
+
+
+	bSizerRight->Add( bSizerPPI, 0, wxEXPAND, 5 );
+
 
 	bSizerLeft->Add( bSizerRight, 0, wxEXPAND|wxALL, 5 );
 

@@ -46,14 +46,15 @@ public:
 
     PCB_BITMAP( const PCB_BITMAP& aPcbBitmap );
 
-    ~PCB_BITMAP() { delete m_image; }
+    ~PCB_BITMAP() { delete m_bitmapBase; }
 
     PCB_BITMAP& operator=( const BOARD_ITEM& aItem );
 
     const BITMAP_BASE* GetImage() const
     {
-        wxCHECK_MSG( m_image != nullptr, nullptr, "Invalid PCB_BITMAP init, m_image is NULL." );
-        return m_image;
+        wxCHECK_MSG( m_bitmapBase != nullptr, nullptr,
+                     "Invalid PCB_BITMAP init, m_bitmapBase is NULL." );
+        return m_bitmapBase;
     }
 
     /**
@@ -61,7 +62,7 @@ public:
      */
     BITMAP_BASE* MutableImage() const
     {
-        return m_image;
+        return m_bitmapBase;
     }
 
     void SetImage( wxImage* aImage );
@@ -72,9 +73,9 @@ public:
      *  scale < 1.0 = the bitmap is drawn smaller than its original size.
      *  scale > 1.0 = the bitmap is drawn bigger than its original size.
      */
-    double GetImageScale() const { return m_image->GetScale(); }
+    double GetImageScale() const { return m_bitmapBase->GetScale(); }
 
-    void SetImageScale( double aScale ) { m_image->SetScale( aScale ); }
+    void SetImageScale( double aScale ) { m_bitmapBase->SetScale( aScale ); }
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
@@ -141,7 +142,7 @@ protected:
 
 private:
     VECTOR2I     m_pos;   // XY coordinates of center of the bitmap
-    BITMAP_BASE* m_image; // the BITMAP_BASE item
+    BITMAP_BASE* m_bitmapBase; // the BITMAP_BASE item
 };
 
 #endif // _PCB_BITMAP_H_
