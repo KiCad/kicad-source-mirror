@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2021 CERN
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -47,10 +48,10 @@ bool SPICE_SIMULATOR_SETTINGS::operator==( const SPICE_SIMULATOR_SETTINGS &aRhs 
 }
 
 
-NGSPICE_SIMULATOR_SETTINGS::NGSPICE_SIMULATOR_SETTINGS(
-        JSON_SETTINGS* aParent, const std::string& aPath ) :
-    SPICE_SIMULATOR_SETTINGS( aParent, aPath ),
-    m_modelMode( NGSPICE_MODEL_MODE::LT_PSPICE )
+NGSPICE_SIMULATOR_SETTINGS::NGSPICE_SIMULATOR_SETTINGS( JSON_SETTINGS* aParent,
+                                                        const std::string& aPath ) :
+        SPICE_SIMULATOR_SETTINGS( aParent, aPath ),
+        m_modelMode( NGSPICE_MODEL_MODE::LT_PSPICE )
 {
     m_params.emplace_back( new PARAM_ENUM<NGSPICE_MODEL_MODE>( "model_mode", &m_modelMode,
                                                                NGSPICE_MODEL_MODE::LT_PSPICE,
