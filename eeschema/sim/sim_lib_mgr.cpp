@@ -279,10 +279,16 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const wxString& aLibraryPath,
     {
         path = ResolveLibraryPath( aLibraryPath, m_project );
 
-        std::function<wxString( const wxString&, const wxString& )> f2 =
-                std::bind( &SIM_LIB_MGR::ResolveEmbeddedLibraryPath, this, _1, _2 );
+        auto it = m_libraries.find( path );
 
-        auto it = m_libraries.try_emplace( path, SIM_LIBRARY::Create( path, m_reporter, &f2 ) ).first;
+        if( it == m_libraries.end() )
+        {
+            std::function<wxString( const wxString&, const wxString& )> f2 =
+                    std::bind( &SIM_LIB_MGR::ResolveEmbeddedLibraryPath, this, _1, _2 );
+
+            it = m_libraries.emplace( path, SIM_LIBRARY::Create( path, m_reporter, &f2 ) ).first;
+        }
+
         library = &*it->second;
     }
     catch( const IO_ERROR& e )

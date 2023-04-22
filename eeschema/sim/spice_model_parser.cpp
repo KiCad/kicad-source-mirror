@@ -265,44 +265,49 @@ SIM_MODEL::TYPE SPICE_MODEL_PARSER::ReadTypeFromSpiceStrings( const std::string&
                                                               const std::string& aVersion,
                                                               bool aSkipDefaultLevel )
 {
-    std::string readLevel = wxString( aLevel ).BeforeFirst( '.' ).ToStdString();
+    wxString input_level = wxString( aLevel ).BeforeFirst( '.' );
+    wxString input_type( aTypeString );
+    bool     vdmos = false;
+    bool     pchan = false;
 
-    for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
+    input_type.UpperCase();
+
+    if( input_type.StartsWith( wxS( "VDMOS" ) ) )
     {
-        std::string typePrefix = SIM_MODEL::SpiceInfo( type ).modelType;
-        std::string level = SIM_MODEL::SpiceInfo( type ).level;
-        std::string version = SIM_MODEL::SpiceInfo( type ).version;
-        bool isDefaultLevel = SIM_MODEL::SpiceInfo( type ).isDefaultLevel;
+        vdmos = true;
+        pchan = input_type.Contains( wxS( "PCHAN" ) );
+    }
 
-        if( typePrefix == "" )
+    for( SIM_MODEL::TYPE candidate : SIM_MODEL::TYPE_ITERATOR() )
+    {
+        wxString candidate_type = SIM_MODEL::SpiceInfo( candidate ).modelType;
+        wxString candidate_level = SIM_MODEL::SpiceInfo( candidate ).level;
+        wxString candidate_version = SIM_MODEL::SpiceInfo( candidate ).version;
+        bool     candidate_isDefaultLevel = SIM_MODEL::SpiceInfo( candidate ).isDefaultLevel;
+
+        if( candidate_type.IsEmpty() )
             continue;
 
-        if( boost::starts_with( typePrefix, "VDMOS" ) )
+        if( candidate_type.StartsWith( wxS( "VDMOS" ) ) && vdmos )
         {
-            wxString deviceType = wxString( typePrefix ).BeforeFirst( ' ' );   // VDMOS
-            wxString channelType = wxString( typePrefix ).AfterFirst( ' ' );   // NCHAN or PCHAN
-
-            wxStringTokenizer tokenizer( aTypeString, wxT( " \t\n\r+(" ), wxTOKEN_STRTOK );
-
-            if( tokenizer.HasMoreTokens() && tokenizer.GetNextToken().Upper() == deviceType
-                && tokenizer.HasMoreTokens() && tokenizer.GetNextToken().Upper() == channelType )
-            {
-                return type;
-            }
+            if( vdmos && pchan && candidate_type.EndsWith( wxS( "PCHAN" ) ) )
+                return candidate;
+            else if( vdmos && !pchan && candidate_type.EndsWith( wxS( "NCHAN" ) ) )
+                return candidate;
         }
-        else if( boost::starts_with( boost::to_upper_copy( aTypeString ), typePrefix ) )
+        else if( input_type.StartsWith( candidate_type ) )
         {
-            if( version != aVersion )
+            if( candidate_version != aVersion )
                 continue;
 
-            if( level == readLevel )
-                return type;
+            if( candidate_level == input_level )
+                return candidate;
 
             if( aSkipDefaultLevel )
                 continue;
 
-            if( isDefaultLevel && aLevel == "" )
-                return type;
+            if( candidate_isDefaultLevel && aLevel == "" )
+                return candidate;
         }
     }
 

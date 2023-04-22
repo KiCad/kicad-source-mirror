@@ -1076,6 +1076,10 @@ void SIM_MODEL::doWriteFields( std::vector<T>& aFields ) const
 
 bool SIM_MODEL::requiresSpiceModelLine( const SPICE_ITEM& aItem ) const
 {
+    // SUBCKTs are a single level; there's never a baseModel.
+    if( m_type == TYPE::SUBCKT )
+        return false;
+
     // Model must be written if there's no base model or the base model is an internal model
     if( !m_baseModel || aItem.baseModelName == "" )
         return true;
