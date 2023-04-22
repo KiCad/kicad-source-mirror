@@ -34,7 +34,7 @@ class SIM_LIBRARY_SPICE : public SIM_LIBRARY
 public:
     friend class SPICE_LIBRARY_PARSER;
 
-    SIM_LIBRARY_SPICE();
+    SIM_LIBRARY_SPICE( bool aForceFullParse );
 
     // @copydoc SIM_LIBRARY::ReadFile()
     void ReadFile( const wxString& aFilePath, REPORTER* aReporter ) override;

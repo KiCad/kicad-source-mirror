@@ -44,6 +44,7 @@ public:
     virtual ~SIM_LIB_MGR() = default;
 
     void SetReporter( REPORTER* aReporter ) { m_reporter = aReporter; }
+    void SetForceFullParse() { m_forceFullParse = true; }
 
     void Clear();
 
@@ -81,6 +82,7 @@ public:
 private:
     const PROJECT*                                   m_project;
     REPORTER*                                        m_reporter;
+    bool                                             m_forceFullParse;
     std::map<wxString, std::unique_ptr<SIM_LIBRARY>> m_libraries;
     std::vector<std::unique_ptr<SIM_MODEL>>          m_models;
 };

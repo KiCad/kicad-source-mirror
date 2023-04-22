@@ -608,6 +608,9 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
     // Import Eagle schematic files.
     loaders.emplace_back( EagleSchematicFileWildcard(),  SCH_IO_MGR::SCH_EAGLE );
 
+    // Import LTspice schematic files.
+    loaders.emplace_back( LtspiceSchematicFileWildcard(), SCH_IO_MGR::SCH_LTSPICE );
+
     wxString fileFilters;
     wxString allWildcards;
 
@@ -1210,6 +1213,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
     case SCH_IO_MGR::SCH_ALTIUM:
     case SCH_IO_MGR::SCH_CADSTAR_ARCHIVE:
     case SCH_IO_MGR::SCH_EAGLE:
+    case SCH_IO_MGR::SCH_LTSPICE:
         // We insist on caller sending us an absolute path, if it does not, we say it's a bug.
         wxCHECK_MSG( filename.IsAbsolute(), false,
                      wxT( "Import schematic: path is not absolute!" ) );

@@ -28,6 +28,7 @@
 #include <sim/sim_library_spice.h>
 #include <sim/spice_grammar.h>
 #include <sim/sim_model_spice.h>
+#include <sim/sim_model_spice_fallback.h>
 #include <ki_exception.h>
 
 #include <pegtl.hpp>
@@ -55,6 +56,82 @@ namespace SIM_LIBRARY_SPICE_PARSER
     // For debugging.
     template <> struct librarySelector<unknownLine> : std::true_type {};
 };
+
+
+static SIM_MODEL::TYPE getFallbackType( const wxString& aToken, const wxString& aLine )
+{
+    for( SIM_MODEL::TYPE candidate : SIM_MODEL::TYPE_ITERATOR() )
+    {
+        wxString candidate_type = SIM_MODEL::SpiceInfo( candidate ).modelType;
+
+        if( candidate_type.IsEmpty() )
+            continue;
+
+        if( SIM_MODEL::SpiceInfo( candidate ).level != ""
+                && !SIM_MODEL::SpiceInfo( candidate ).isDefaultLevel )
+        {
+            continue;
+        }
+
+        if( candidate_type.StartsWith( wxS( "VDMOS" ) ) && aToken == wxS( "VDMOS" ) )
+        {
+            if( candidate_type.EndsWith( wxS( "PCHAN" ) ) )
+            {
+                if( aLine.Upper().Contains( wxS( "PCHAN" ) ) )
+                    return candidate;
+            }
+            else
+            {
+                if( !aLine.Upper().Contains( wxS( "PCHAN" ) ) )
+                    return candidate;
+            }
+        }
+        else if( aToken.StartsWith( candidate_type ) )
+        {
+            return candidate;
+        }
+    }
+
+    return SIM_MODEL::TYPE::NONE;
+}
+
+
+void SPICE_LIBRARY_PARSER::readFallbacks( const wxString& aFilePath, REPORTER& aReporter )
+{
+    try
+    {
+        wxArrayString lines = wxSplit( SafeReadFile( aFilePath, wxS( "r" ) ), '\n' );
+
+        for( const wxString& line : lines )
+        {
+            wxStringTokenizer tokenizer( line, wxS( " ()\t\r\n" ), wxTOKEN_STRTOK );
+            wxString          token = tokenizer.GetNextToken().Lower();
+
+            if( token == wxS( ".model" ) )
+            {
+                wxString        name = tokenizer.GetNextToken();
+                wxString        typeToken = tokenizer.GetNextToken().Upper();
+                SIM_MODEL::TYPE type = getFallbackType( typeToken, line );
+
+                m_library.m_models.push_back( std::make_unique<SIM_MODEL_SPICE_FALLBACK>( type ) );
+                m_library.m_modelNames.emplace_back( name );
+            }
+            else if( token == wxS( ".inc" ) )
+            {
+                wxString lib = tokenizer.GetNextToken();
+
+                if( m_library.m_pathResolver )
+                    lib = ( *m_library.m_pathResolver )( lib, aFilePath );
+
+                parseFile( lib, aReporter );
+            }
+        }
+    }
+    catch( IO_ERROR& e )
+    {
+        aReporter.Report( e.What(), RPT_SEVERITY_ERROR );
+    }
+}
 
 
 void SPICE_LIBRARY_PARSER::parseFile( const wxString &aFilePath, REPORTER& aReporter )
@@ -127,18 +204,12 @@ void SPICE_LIBRARY_PARSER::ReadFile( const wxString& aFilePath, REPORTER* aRepor
     m_library.m_models.clear();
     m_library.m_modelNames.clear();
 
-    if( aReporter )
-    {
-        parseFile( aFilePath, *aReporter );
-    }
+    // Aside from the simulation model editor dialog, about the only data we use from the
+    // complete models are the pin definitions for SUBCKTs.  The standard LTSpice "cmp" libraries
+    // (cmp/standard.bjt, cmp/standard.mos, etc.) have copious error which trip up our parser,
+    // and our parser is *really* slow on such large files (nearly 5 seconds on my dev machine).
+    if( !m_forceFullParse && aFilePath.Contains( wxS( "/LTspiceXVII/lib/cmp/standard" ) ) )
+        readFallbacks( aFilePath, *aReporter );
     else
-    {
-        wxString           msg;
-        WX_STRING_REPORTER reporter( &msg );
-
-        parseFile( aFilePath, reporter );
-
-        if( reporter.HasMessage() )
-            THROW_IO_ERROR( msg );
-    }
+        parseFile( aFilePath, *aReporter );
 }

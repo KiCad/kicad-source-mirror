@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see change_log.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -31,6 +31,7 @@
 #include <sch_plugins/altium/sch_altium_plugin.h>
 #include <sch_plugins/cadstar/cadstar_sch_archive_plugin.h>
 #include <sch_plugins/database/sch_database_plugin.h>
+#include <sch_plugins/ltSpice/ltspice_sch_plugin.h>
 #include <wildcards_and_files_ext.h>
 
 #define FMT_UNIMPLEMENTED   _( "Plugin \"%s\" does not implement the \"%s\" function." )
@@ -63,6 +64,7 @@ SCH_PLUGIN* SCH_IO_MGR::FindPlugin( SCH_FILE_T aFileType )
     case SCH_CADSTAR_ARCHIVE: return new CADSTAR_SCH_ARCHIVE_PLUGIN();
     case SCH_EAGLE:           return new SCH_EAGLE_PLUGIN();
     case SCH_DATABASE:        return new SCH_DATABASE_PLUGIN();
+    case SCH_LTSPICE:         return new SCH_LTSPICE_PLUGIN();
     default:                  return nullptr;
     }
 }
@@ -92,6 +94,7 @@ const wxString SCH_IO_MGR::ShowType( SCH_FILE_T aType )
     case SCH_CADSTAR_ARCHIVE: return wxString( wxT( "CADSTAR Schematic Archive" ) );
     case SCH_EAGLE:           return wxString( wxT( "EAGLE" ) );
     case SCH_DATABASE:        return wxString( wxT( "Database" ) );
+    case SCH_LTSPICE:         return wxString( wxT( "LTSpice Schematic" ) );
     default:                  return wxString::Format( _( "Unknown SCH_FILE_T value: %d" ),
                                                        aType );
     }

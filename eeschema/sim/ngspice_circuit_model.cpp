@@ -127,9 +127,8 @@ bool NGSPICE_CIRCUIT_MODEL::ParseDCCommand( const wxString& aCmd, SPICE_DC_PARAM
     if( !aCmd.Lower().StartsWith( ".dc" ) )
         return false;
 
-    wxString cmd = aCmd.Mid( 3 ).Trim().Trim( false );
-
-    wxStringTokenizer tokens( cmd );
+    wxString          cmd = aCmd.Mid( 3 );
+    wxStringTokenizer tokens( cmd, wxS( " \t" ), wxTOKEN_STRTOK );
 
     size_t num = tokens.CountTokens();
 

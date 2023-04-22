@@ -53,6 +53,13 @@ set( EESCHEMA_SCH_PLUGINS_CADSTAR
     sch_plugins/cadstar/cadstar_sch_archive_plugin.cpp
     )
 
+
+set( EESCHEMA_SCH_PLUGINS_LTSPICE
+        sch_plugins/ltSpice/ltspice_schematic.cpp
+    sch_plugins/ltSpice/ltspice_sch_parser.cpp
+    sch_plugins/ltSpice/ltspice_sch_plugin.cpp
+    )
+
 set( EESCHEMA_DLGS
     dialogs/dialog_annotate.cpp
     dialogs/dialog_annotate_base.cpp
@@ -243,6 +250,7 @@ set( EESCHEMA_SRCS
     ${EESCHEMA_LIBEDIT_SRCS}
     ${EESCHEMA_SCH_PLUGINS_ALTIUM}
     ${EESCHEMA_SCH_PLUGINS_CADSTAR}
+    ${EESCHEMA_SCH_PLUGINS_LTSPICE}
     ${EESCHEMA_SIM_SRCS}
     ${EESCHEMA_WIDGETS}
     annotate.cpp

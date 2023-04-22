@@ -204,7 +204,7 @@ BOOST_AUTO_TEST_CASE( EndconnectionPoints )
     // make sure the pins made it in
     BOOST_CHECK_EQUAL( pins.size(), pin_defs.size() );
 
-    // Check that the EndPoint getter gets the right things
+    // Check that the End getter gets the right things
     {
         std::vector<DANGLING_END_ITEM> expectedDangling;
 

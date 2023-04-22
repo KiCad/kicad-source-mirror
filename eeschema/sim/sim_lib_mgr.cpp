@@ -41,7 +41,8 @@ using namespace std::placeholders;
 
 SIM_LIB_MGR::SIM_LIB_MGR( const PROJECT* aPrj, REPORTER* aReporter ) :
         m_project( aPrj ),
-        m_reporter( aReporter )
+        m_reporter( aReporter ),
+        m_forceFullParse( false )
 {
 }
 
@@ -136,7 +137,8 @@ void SIM_LIB_MGR::SetLibrary( const wxString& aLibraryPath )
         std::function<wxString(const wxString&, const wxString&)> f2 =
                 std::bind( &SIM_LIB_MGR::ResolveEmbeddedLibraryPath, this, _1, _2 );
 
-        std::unique_ptr<SIM_LIBRARY> library = SIM_LIBRARY::Create( path, m_reporter, &f2 );
+        std::unique_ptr<SIM_LIBRARY> library = SIM_LIBRARY::Create( path, m_forceFullParse,
+                                                                    m_reporter, &f2 );
 
         Clear();
         m_libraries[path] = std::move( library );
@@ -294,7 +296,8 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const wxString& aLibraryPath,
             std::function<wxString( const wxString&, const wxString& )> f2 =
                     std::bind( &SIM_LIB_MGR::ResolveEmbeddedLibraryPath, this, _1, _2 );
 
-            it = m_libraries.emplace( path, SIM_LIBRARY::Create( path, m_reporter, &f2 ) ).first;
+            it = m_libraries.emplace( path, SIM_LIBRARY::Create( path, m_forceFullParse,
+                                                                 m_reporter, &f2 ) ).first;
         }
 
         library = &*it->second;

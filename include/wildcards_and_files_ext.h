@@ -4,7 +4,7 @@
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2007-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -157,6 +157,8 @@ extern const std::string FootprintPlaceFileExtension;
 extern const std::string KiCadFootprintFileExtension;
 extern const std::string KiCadFootprintLibPathExtension;
 extern const std::string AltiumFootprintLibPathExtension;
+extern const std::string LtspiceSchematicExtension;
+extern const std::string LtspiceSymbolExtension;
 extern const std::string GedaPcbFootprintLibFileExtension;
 extern const std::string EagleFootprintLibPathExtension;
 extern const std::string DrawingSheetFileExtension;
@@ -218,6 +220,7 @@ extern wxString AltiumSchematicFileWildcard();
 extern wxString CadstarSchematicArchiveFileWildcard();
 extern wxString CadstarArchiveFilesWildcard();
 extern wxString EagleSchematicFileWildcard();
+extern wxString LtspiceSchematicFileWildcard();
 extern wxString EagleFilesWildcard();
 extern wxString PCadPcbFileWildcard();
 extern wxString CadstarPcbArchiveFileWildcard();

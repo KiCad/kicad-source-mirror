@@ -26,9 +26,9 @@
 #include <sim/sim_model_spice.h>
 
 
-SIM_LIBRARY_SPICE::SIM_LIBRARY_SPICE() :
-    SIM_LIBRARY(),
-    m_spiceLibraryParser( std::make_unique<SPICE_LIBRARY_PARSER>( *this ) )
+SIM_LIBRARY_SPICE::SIM_LIBRARY_SPICE( bool aForceFullParse ) :
+        SIM_LIBRARY(),
+        m_spiceLibraryParser( std::make_unique<SPICE_LIBRARY_PARSER>( *this, aForceFullParse ) )
 {
 }
 

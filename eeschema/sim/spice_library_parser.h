@@ -33,7 +33,8 @@ class REPORTER;
 class SPICE_LIBRARY_PARSER
 {
 public:
-    SPICE_LIBRARY_PARSER( SIM_LIBRARY_SPICE &aLibrary ) :
+    SPICE_LIBRARY_PARSER( SIM_LIBRARY_SPICE &aLibrary, bool aForceFullParse ) :
+            m_forceFullParse( aForceFullParse ),
             m_library( aLibrary )
     {};
 
@@ -43,9 +44,11 @@ public:
     virtual void ReadFile( const wxString& aFilePath, REPORTER* aReporter );
 
 protected:
+    void readFallbacks( const wxString& aFilePath, REPORTER& aReporter );
     void parseFile( const wxString& aFilePath, REPORTER& aReporter );
 
 private:
+    bool               m_forceFullParse;
     SIM_LIBRARY_SPICE& m_library;
 };
 

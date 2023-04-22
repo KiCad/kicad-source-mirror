@@ -698,6 +698,7 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::loadLibrary( const wxString& aLibraryP
     WX_STRING_REPORTER reporter( &msg );
 
     m_libraryModelsMgr.SetReporter( &reporter );
+    m_libraryModelsMgr.SetForceFullParse();
     m_libraryModelsMgr.SetLibrary( aLibraryPath );
 
     if( reporter.HasMessage() )

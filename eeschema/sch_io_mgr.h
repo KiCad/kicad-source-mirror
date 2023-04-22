@@ -5,7 +5,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -55,12 +55,13 @@ public:
      */
     DEFINE_ENUM_VECTOR( SCH_FILE_T,
             {
-                    SCH_LEGACY, ///< Legacy Eeschema file formats prior to s-expression.
-                    SCH_KICAD,  ///< The s-expression version of the schematic file formats.
-                    SCH_ALTIUM,  ///< Altium file format
-                    SCH_CADSTAR_ARCHIVE, ///< CADSTAR Schematic Archive
-                    SCH_EAGLE,  ///< Autodesk Eagle file format
-                    SCH_DATABASE, ///< KiCad database library
+                    SCH_LEGACY,           ///< Legacy Eeschema file formats prior to s-expression.
+                    SCH_KICAD,            ///< The s-expression version of the schematic.
+                    SCH_ALTIUM,           ///< Altium file format
+                    SCH_CADSTAR_ARCHIVE,  ///< CADSTAR Schematic Archive
+                    SCH_EAGLE,            ///< Autodesk Eagle file format
+                    SCH_DATABASE,         ///< KiCad database library
+                    SCH_LTSPICE,          /// LtSpice Schematic format
 
                     // Add your schematic type here.
                     SCH_FILE_UNKNOWN

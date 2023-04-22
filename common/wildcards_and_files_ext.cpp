@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -128,6 +128,7 @@ const std::string KiCadSymbolLibFileExtension( "kicad_sym" );
 const std::string SchematicSymbolFileExtension( "sym" );
 const std::string LegacySymbolLibFileExtension( "lib" );
 const std::string LegacySymbolDocumentFileExtension( "dcm" );
+const std::string LtspiceSymbolExtension( "asy" );
 
 const std::string VrmlFileExtension( "wrl" );
 
@@ -140,6 +141,7 @@ const std::string CadstarSchematicFileExtension( "csa" );
 const std::string CadstarPartsLibraryFileExtension( "lib" );
 const std::string KiCadSchematicFileExtension( "kicad_sch" );
 const std::string SpiceFileExtension( "cir" );
+const std::string LtspiceSchematicExtension( "asc" );
 const std::string CadstarNetlistFileExtension( "frp" );
 const std::string OrCadPcb2NetlistFileExtension( "net" );
 const std::string NetlistFileExtension( "net" );
@@ -300,6 +302,12 @@ wxString CadstarArchiveFilesWildcard()
 wxString EagleSchematicFileWildcard()
 {
     return _( "Eagle XML schematic files" ) + AddFileExtListToFilter( { "sch" } );
+}
+
+
+wxString LtspiceSchematicFileWildcard()
+{
+    return _( "Ltspice schematic files" ) + AddFileExtListToFilter( { "asc" } );
 }
 
 
