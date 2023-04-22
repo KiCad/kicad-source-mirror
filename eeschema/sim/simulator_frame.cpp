@@ -527,6 +527,12 @@ SIMULATOR_FRAME::SIMULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // Prepare the color list to plot traces
     SIM_PLOT_COLORS::FillDefaultColorList( m_darkMode );
 
+    NGSPICE_SIMULATOR_SETTINGS* settings =
+            dynamic_cast<NGSPICE_SIMULATOR_SETTINGS*>( m_simulator->Settings().get() );
+
+    if( settings->GetWorkbookFilename().IsEmpty() )
+        settings->SetModelMode( NGSPICE_MODEL_MODE::LT_PSPICE );
+
     m_simulator->Init();
 
     m_reporter = new SIM_THREAD_REPORTER( this );
