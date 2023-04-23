@@ -41,7 +41,8 @@ BITMAP_BASE::BITMAP_BASE( const VECTOR2I& pos )
     m_ppi    = 300;                     // the bitmap definition. the default is 300PPI
     m_pixelSizeIu = 254000.0 / m_ppi;   // a pixel size value OK for bitmaps using 300 PPI
                                         // for Eeschema which uses currently 254000PPI
-    m_isMirrored = false;
+    m_isMirroredX = false;
+    m_isMirroredY = false;
     m_rotation   = ANGLE_0;
 }
 
@@ -51,7 +52,8 @@ BITMAP_BASE::BITMAP_BASE( const BITMAP_BASE& aSchBitmap )
     m_scale = aSchBitmap.m_scale;
     m_ppi   = aSchBitmap.m_ppi;
     m_pixelSizeIu = aSchBitmap.m_pixelSizeIu;
-    m_isMirrored = aSchBitmap.m_isMirrored;
+    m_isMirroredX = aSchBitmap.m_isMirroredX;
+    m_isMirroredY = aSchBitmap.m_isMirroredY;
     m_rotation = aSchBitmap.m_rotation;
 
     m_image = nullptr;
@@ -115,7 +117,8 @@ void BITMAP_BASE::ImportData( BITMAP_BASE* aItem )
     m_scale   = aItem->m_scale;
     m_ppi     = aItem->m_ppi;
     m_pixelSizeIu = aItem->m_pixelSizeIu;
-    m_isMirrored = aItem->m_isMirrored;
+    m_isMirroredX = aItem->m_isMirroredX;
+    m_isMirroredY = aItem->m_isMirroredY;
     m_rotation = aItem->m_rotation;
 }
 
@@ -414,7 +417,11 @@ void BITMAP_BASE::Mirror( bool aVertically )
         m_image->SetOption( wxIMAGE_OPTION_RESOLUTIONX, resX);
         m_image->SetOption( wxIMAGE_OPTION_RESOLUTIONY, resY);
 
-        m_isMirrored = !m_isMirrored;
+        if( aVertically )
+            m_isMirroredY = !m_isMirroredY;
+        else
+            m_isMirroredX = !m_isMirroredX;
+
         rebuildBitmap( false );
     }
 }

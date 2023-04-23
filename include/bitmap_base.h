@@ -210,7 +210,8 @@ public:
 
     void ConvertToGreyscale();
 
-    bool IsMirrored() const { return m_isMirrored; }
+    bool IsMirroredX() const { return m_isMirroredX; }
+    bool IsMirroredY() const { return m_isMirroredY; }
     EDA_ANGLE Rotation() const { return m_rotation; }
 
     /**
@@ -249,7 +250,8 @@ private:
                                     // Usually does not change
     int       m_ppi;                // the bitmap definition. the default is 300PPI
     KIID      m_imageId;
-    bool      m_isMirrored;         // Used for OpenGL rendering only
+    bool      m_isMirroredX;        // Used for OpenGL rendering only
+    bool      m_isMirroredY;        // Used for OpenGL rendering only
     EDA_ANGLE m_rotation;           // Used for OpenGL rendering only
 };
 

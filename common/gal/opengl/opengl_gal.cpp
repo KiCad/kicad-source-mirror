@@ -1418,21 +1418,23 @@ void OPENGL_GAL::DrawBitmap( const BITMAP_BASE& aBitmap, double alphaBlend )
     glActiveTexture( GL_TEXTURE0 );
     glBindTexture( GL_TEXTURE_2D, texture_id );
 
-    float texStartX = aBitmap.IsMirrored() ? 1.0 : 0.0;
-    float texEndX   = aBitmap.IsMirrored() ? 0.0 : 1.0;
+    float texStartX = aBitmap.IsMirroredX() ? 1.0 : 0.0;
+    float texEndX   = aBitmap.IsMirroredX() ? 0.0 : 1.0;
+    float texStartY = aBitmap.IsMirroredY() ? 1.0 : 0.0;
+    float texEndY   = aBitmap.IsMirroredY() ? 0.0 : 1.0;
 
     glBegin( GL_QUADS );
     glColor4f( 1.0, 1.0, 1.0, alpha );
-    glTexCoord2f( texStartX, 0.0 );
+    glTexCoord2f( texStartX, texStartY );
     glVertex3f( v0.x, v0.y, m_layerDepth );
     glColor4f( 1.0, 1.0, 1.0, alpha );
-    glTexCoord2f( texEndX, 0.0 );
+    glTexCoord2f( texEndX,  texStartY);
     glVertex3f( v1.x, v0.y, m_layerDepth );
     glColor4f( 1.0, 1.0, 1.0, alpha );
-    glTexCoord2f( texEndX, 1.0 );
+    glTexCoord2f( texEndX, texEndY);
     glVertex3f( v1.x, v1.y, m_layerDepth );
     glColor4f( 1.0, 1.0, 1.0, alpha );
-    glTexCoord2f( texStartX, 1.0 );
+    glTexCoord2f( texStartX, texEndY);
     glVertex3f( v0.x, v1.y, m_layerDepth );
     glEnd();
 
