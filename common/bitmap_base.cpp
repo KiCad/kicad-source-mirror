@@ -400,7 +400,20 @@ void BITMAP_BASE::Mirror( bool aVertically )
 {
     if( m_image )
     {
+        // wxImage::Mirror() clear some parameters of the original image.
+        // We need to restore them, especially resolution and unit, to be
+        // sure image parameters saved in file are the right parameters, not
+        // the defualt values
+        int resX = m_image->GetOptionInt( wxIMAGE_OPTION_RESOLUTIONX );
+        int resY = m_image->GetOptionInt( wxIMAGE_OPTION_RESOLUTIONY );
+        int unit = m_image->GetOptionInt( wxIMAGE_OPTION_RESOLUTIONUNIT );
+
         *m_image = m_image->Mirror( not aVertically );
+
+        m_image->SetOption( wxIMAGE_OPTION_RESOLUTIONUNIT , unit);
+        m_image->SetOption( wxIMAGE_OPTION_RESOLUTIONX, resX);
+        m_image->SetOption( wxIMAGE_OPTION_RESOLUTIONY, resY);
+
         m_isMirrored = !m_isMirrored;
         rebuildBitmap( false );
     }
@@ -411,7 +424,20 @@ void BITMAP_BASE::Rotate( bool aRotateCCW )
 {
     if( m_image )
     {
+        // wxImage::Rotate90() clear some parameters of the original image.
+        // We need to restore them, especially resolution and unit, to be
+        // sure image parameters saved in file are the right parameters, not
+        // the defualt values
+        int resX = m_image->GetOptionInt( wxIMAGE_OPTION_RESOLUTIONX );
+        int resY = m_image->GetOptionInt( wxIMAGE_OPTION_RESOLUTIONY );
+        int unit = m_image->GetOptionInt( wxIMAGE_OPTION_RESOLUTIONUNIT );
+
         *m_image = m_image->Rotate90( aRotateCCW );
+
+        m_image->SetOption( wxIMAGE_OPTION_RESOLUTIONUNIT , unit);
+        m_image->SetOption( wxIMAGE_OPTION_RESOLUTIONX, resX);
+        m_image->SetOption( wxIMAGE_OPTION_RESOLUTIONY, resY);
+
         m_rotation += ( aRotateCCW ? -ANGLE_90 : ANGLE_90 );
         rebuildBitmap( false );
     }
