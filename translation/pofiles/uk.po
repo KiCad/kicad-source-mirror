@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:53-0800\n"
-"PO-Revision-Date: 2023-03-26 04:41+0000\n"
+"PO-Revision-Date: 2023-04-24 09:25+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/v7/uk/>\n"
 "Language: uk\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.17-dev\n"
+"X-Generator: Weblate 4.18-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -92,9 +92,8 @@ msgid "Build BVH for holes and vias"
 msgstr "Побудова глухих/внутрішніх перехідних отворів"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:389
-#, fuzzy
 msgid "OpenGL context creation error"
-msgstr "Кількість термічних переходів для:"
+msgstr "Помилка створення контексту OpenGL"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:420
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
@@ -21927,7 +21926,7 @@ msgid "Linear resistance:"
 msgstr "Лінійний опір:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:126
-#, c-format
+#, c-format, fuzzy
 msgid "Frequency for 100% skin depth:"
 msgstr "Частота для 100% ефективної проникності:"
 
@@ -26783,7 +26782,7 @@ msgid "Solder paste relative clearance:"
 msgstr "Відносний зазор паяльної пасти:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:317
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -26796,9 +26795,9 @@ msgid ""
 msgstr ""
 "Це коефіцієнт місцевого зазору, застосований у відсотках від ширини та "
 "висоти контактної площадки для посадкового місця.\n"
-"Значення 10 означає, що значення горизонтального зазору становить 10 "
-"відсотків від ширини контактної площадки, а значення вертикального зазору "
-"становить 10 відсотків від висоти контактної площадки.\n"
+"Значення 10 означає, що значення горизонтального зазору становить 10% від "
+"ширини контактної площадки, а значення вертикального зазору становить 10% "
+"від висоти контактної площадки.\n"
 "Це значення може бути замінене локальним значенням контактної площадки.\n"
 "Остаточне значення зазору є сумою цього значення та абсолютного значення "
 "зазору.\n"
@@ -26964,7 +26963,7 @@ msgstr ""
 "Вкладка зазори і налаштування в властивості контактної площадки."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:288
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
