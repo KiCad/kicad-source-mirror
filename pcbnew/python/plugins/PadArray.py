@@ -84,7 +84,6 @@ class PadMaker(object):
         Create a surface-mount pad of the given size and shape
         @param Vsize: the vertical size of the pad
         @param Hsize: the horizontal size of the pad
-        @param drill: the drill diameter
         @param shape: the shape of the pad
         @param rot_degree: the pad rotation, in degrees
         """
@@ -93,6 +92,25 @@ class PadMaker(object):
         pad.SetShape(shape)
         pad.SetAttribute(pcbnew.PAD_ATTRIB_SMD)
         pad.SetLayerSet(pad.SMDMask())
+        pad.SetOrientation( pcbnew.EDA_ANGLE( rot_degree, pcbnew.DEGREES_T ) )
+
+        return pad
+
+    def AperturePad(self, Vsize, Hsize, shape=pcbnew.PAD_SHAPE_RECT, rot_degree=0):
+        """
+        Create a aperture pad of the given size and shape, i.e. a smd pad shape
+        on the solder paste and not on a copper
+        layer
+        @param Vsize: the vertical size of the aperture
+        @param Hsize: the horizontal size of the aperture
+        @param shape: the shape of the pad
+        @param rot_degree: the pad rotation, in degrees
+        """
+        pad = pcbnew.PAD(self.module)
+        pad.SetSize(pcbnew.VECTOR2I( int(Hsize), int(Vsize) ) )
+        pad.SetShape(shape)
+        pad.SetAttribute(pcbnew.PAD_ATTRIB_SMD)
+        pad.SetLayerSet(pad.ApertureMask())
         pad.SetOrientation( pcbnew.EDA_ANGLE( rot_degree, pcbnew.DEGREES_T ) )
 
         return pad

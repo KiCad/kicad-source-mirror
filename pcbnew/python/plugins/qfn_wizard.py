@@ -44,7 +44,7 @@ class QFNWizard(FootprintWizardBase.FootprintWizard):
         self.AddParam("EPad", "width", self.uMM, 10, designator="E2")
         self.AddParam("EPad", "length", self.uMM, 10, designator="D2")
         self.AddParam("EPad", "thermal vias", self.uBool, False)
-        self.AddParam("EPad", "thermal vias drill", self.uMM, 1, min_value=0.1)
+        self.AddParam("EPad", "thermal vias drill", self.uMM, 0.6, min_value=0.1)
         self.AddParam("EPad", "x divisions", self.uInteger, 4, min_value=1)
         self.AddParam("EPad", "y divisions", self.uInteger, 4, min_value=1)
         self.AddParam("EPad", "paste margin", self.uMM, 0.75)
@@ -136,8 +136,8 @@ class QFNWizard(FootprintWizardBase.FootprintWizard):
         epad_width   = self.epad["width"]
         epad_length  = self.epad["length"]
 
-        epad_ny = self.epad["x divisions"]
-        epad_nx = self.epad["y divisions"]
+        aper_pad_ny = self.epad["x divisions"]
+        aper_pad_nx = self.epad["y divisions"]
 
         epad_via_drill = self.epad["thermal vias drill"]
 
@@ -146,34 +146,47 @@ class QFNWizard(FootprintWizardBase.FootprintWizard):
 
             epad_num = self.pads['n'] + 1
 
-            epad_w = epad_length / epad_nx
-            epad_l = epad_width / epad_ny
+            aper_pad_w = epad_length / aper_pad_nx
+            aper_pad_l = epad_width / aper_pad_ny
+            paste_margin = self.epad['paste margin']
+
+            if paste_margin >= aper_pad_w:
+                paste_margin = aper_pad_w -1
+
+            if paste_margin >= aper_pad_l:
+                paste_margin = aper_pad_l -1
 
             # Create the epad
-            epad = PA.PadMaker(self.module).SMDPad( epad_w, epad_l, shape=pcbnew.PAD_SHAPE_RECT )
-            epad.SetLocalSolderPasteMargin( -1 * self.epad['paste margin'] )
+            aperture_pad = PA.PadMaker(self.module).AperturePad( aper_pad_w-paste_margin, aper_pad_l-paste_margin,
+                shape=pcbnew.PAD_SHAPE_RECT )
+            epad = PA.PadMaker(self.module).SMDPad( epad_length, epad_width,
+                    shape=pcbnew.PAD_SHAPE_RECT )
             # set pad layers
             layers = pcbnew.LSET(pcbnew.F_Mask)
-            layers.AddLayer(pcbnew.F_Cu)
-            layers.AddLayer(pcbnew.F_Paste)
-            epad.SetName(epad_num)
+            layers.AddLayer( pcbnew.F_Cu )
+            epad.SetLayerSet( layers )
+            epad.SetPosition( pcbnew.VECTOR2I(0,0) )
+            epad.SetName( epad_num )
+            self.module.Add( epad )
 
-            array = PA.EPADGridArray( epad, epad_ny, epad_nx, epad_l, epad_w, pcbnew.VECTOR2I(0,0) )
-            array.SetFirstPadInArray(epad_num)
+            array = PA.EPADGridArray( aperture_pad, aper_pad_ny, aper_pad_nx, aper_pad_l, aper_pad_w, pcbnew.VECTOR2I(0,0) )
             array.AddPadsToModule(self.draw)
 
             if self.epad['thermal vias']:
 
                 # create the thermal via
-                via_diam = min(epad_w, epad_l) / 2
+                via_diam = min(aper_pad_w, aper_pad_l) / 2
                 via_drill = min(via_diam / 2, epad_via_drill)
                 via = PA.PadMaker(self.module).THRoundPad(via_diam, via_drill)
                 layers = pcbnew.LSET.AllCuMask()
                 layers.AddLayer(pcbnew.B_Mask)
                 layers.AddLayer(pcbnew.F_Mask)
                 via.SetLayerSet(layers)
-
-                via_array = PA.EPADGridArray(via, epad_ny, epad_nx, epad_l, epad_w, pcbnew.VECTOR2I(0,0) )
+                # thermal pads are placed between aperture pads.
+                # so the number of thermal pads is aper_pad_ny-1 and aper_pad_nx-1 because
+                #there are aper_pad_nx and aper_pad_nx apertures
+                via_array = PA.EPADGridArray( via, aper_pad_ny-1, aper_pad_nx-1, aper_pad_l, aper_pad_w,
+                    pcbnew.VECTOR2I( 0, 0 ) )
                 via_array.SetFirstPadInArray(epad_num)
                 via_array.AddPadsToModule(self.draw)
 
