@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:51-0800\n"
-"PO-Revision-Date: 2023-04-21 07:52+0000\n"
+"PO-Revision-Date: 2023-04-24 09:25+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -5335,14 +5335,12 @@ msgid "Page limits"
 msgstr "ページ数制限"
 
 #: common/layer_id.cpp:150
-#, fuzzy
 msgid "Operating point voltages"
-msgstr "動作点"
+msgstr "動作点電圧"
 
 #: common/layer_id.cpp:151
-#, fuzzy
 msgid "Operating point currents"
-msgstr "動作点"
+msgstr "動作点電流"
 
 #: common/layer_id.cpp:155
 msgid "Footprints front"
@@ -8693,25 +8691,23 @@ msgid "Save all power dissipations"
 msgstr "最大許容偏差:"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:307
-#, fuzzy
 msgid ""
 "Write directives to save power dissipation of all items (.probe p(<item>))"
-msgstr "すべての電流を保存する指示を書く (.probe alli)"
+msgstr "すべての電流を保存する指示を書く (.probe p(<item>))"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:313
 msgid "Run external simulator command:"
 msgstr "外部のシミュレーターのコマンドを実行:"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:315
-#, fuzzy
 msgid ""
 "Enter the command line to run SPICE\n"
 "Usually '<path to SPICE binary> \"%I\"'\n"
 "%I will be replaced by the netlist filepath"
 msgstr ""
-"spice を実行するコマンドラインを入力します。\n"
-"通常 <spiceのバイナリへのパス> %I\n"
-"%l は実際のspiceネットリスト名に置き換えられます"
+"SPICE を実行するコマンドラインを入力します。\n"
+"通常 '<SPICEのバイナリへのパス> \"%I\"' で、\n"
+"%l は実際のSPICEネットリストのファイルパスに置き換えられます"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:388
 msgid "Netlist command:"
@@ -8745,9 +8741,8 @@ msgid "external simulator has the wrong format or architecture"
 msgstr "外部のシミュレーターのファイル形式か対応アーキテクチャが異なります"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:587
-#, fuzzy
 msgid "permission denied"
-msgstr "パーミッション エラー?"
+msgstr "権限がありません"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:723
 msgid "This plugin already exists."
@@ -11222,7 +11217,7 @@ msgstr "位相"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:25
 msgid "Significant digits:"
-msgstr ""
+msgstr "有効数字:"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:32
 msgid "Range:"
@@ -11947,14 +11942,12 @@ msgid "Show ERC exclusions"
 msgstr "ERC 除外の表示"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:68
-#, fuzzy
 msgid "Show OP voltages"
-msgstr "%s ページを表示"
+msgstr "動作点の電圧を表示"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:71
-#, fuzzy
 msgid "Show OP currents"
-msgstr "すべての電流を保存"
+msgstr "動作点の電流を表示"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:74
 msgid "Show page limi&ts"
@@ -12388,12 +12381,11 @@ msgstr "動作点"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:262
 msgid "Significant digits (voltages):"
-msgstr ""
+msgstr "有効数字 (電圧):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:270
-#, fuzzy
 msgid "Range (voltages):"
-msgstr "すべての電圧を保存"
+msgstr "範囲 (電圧):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:274
 msgid "fV"
@@ -12439,12 +12431,11 @@ msgstr "PV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:281
 msgid "Significant digits (currents):"
-msgstr ""
+msgstr "有効数字 (電流):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:289
-#, fuzzy
 msgid "Range (currents):"
-msgstr "すべての電流を保存"
+msgstr "範囲 (電流):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:293
 msgid "fA"
@@ -12794,9 +12785,8 @@ msgstr "ライブラリを移行"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:169
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:157
-#, fuzzy
 msgid "Available path substitutions:"
-msgstr "有効なパス:"
+msgstr "パスの置換:"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:203
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:191
@@ -14302,9 +14292,8 @@ msgstr ""
 "ストレージのファイルは完全に読み込まれていません(%d バイト残っています)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:500
-#, fuzzy
 msgid "Blanket not currently supported."
-msgstr "コンパイル マスクは現在サポートされていません。"
+msgstr "ブランケットは現在サポートされていません。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:504
 #, c-format
@@ -14322,9 +14311,8 @@ msgid "Record 'PIECHART' not handled."
 msgstr "'PIECHART'のレコードは処理されません。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:697
-#, fuzzy
 msgid "Parameter Set not currently supported."
-msgstr "コンパイル マスクは現在サポートされていません。"
+msgstr "パラメータセットは現在サポートされていません。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:722
 msgid "Compile mask not currently supported."
@@ -15587,16 +15575,14 @@ msgid "Checking component "
 msgstr "コンポーネントをチェック中 "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:254
-#, fuzzy
 msgid "Component: name cannot be empty."
-msgstr "コンポーネント名は空欄にできません。"
+msgstr "コンポーネント: 名前は空欄にできません。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:263
 msgid "Component: manufacturer cannot be empty."
 msgstr "コンポーネント:製造者の欄は空にできません。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:272
-#, fuzzy
 msgid "Component: invalid package."
 msgstr "コンポーネント:不正なパッケージ。"
 
@@ -15609,9 +15595,8 @@ msgid "Cannot interpolate the current based on this IV table."
 msgstr "このIVテーブルに基づいて電流を補間することはできません。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:396
-#, fuzzy
 msgid "There is an invalid voltage in an IV table"
-msgstr "IVテーブルに Nan 電圧があります"
+msgstr "IVテーブルに 不正な電圧があります"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:403
 msgid "There is an invalid current in an IV table"
@@ -16115,9 +16100,9 @@ msgstr ""
 "すが、'%s' です"
 
 #: eeschema/sim/sim_model.cpp:783
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown simulation model pin '%s'"
-msgstr "未知のノード '%s' ( '%s' 中)"
+msgstr "未知のシミュレーション モデルのピン '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:81
 #, c-format
@@ -16302,15 +16287,13 @@ msgstr "信号"
 
 #: eeschema/sim/simulator_frame.cpp:631
 #: eeschema/sim/simulator_frame_base.cpp:121
-#, fuzzy
 msgid "Cursor 1"
-msgstr "カーソル"
+msgstr "カーソル 1"
 
 #: eeschema/sim/simulator_frame.cpp:632
 #: eeschema/sim/simulator_frame_base.cpp:122
-#, fuzzy
 msgid "Cursor 2"
-msgstr "カーソル"
+msgstr "カーソル 2"
 
 #: eeschema/sim/simulator_frame.cpp:759 eeschema/sim/simulator_frame_base.h:88
 msgid "Spice Simulator"
@@ -16318,7 +16301,7 @@ msgstr "Spice シミュレーター"
 
 #: eeschema/sim/simulator_frame.cpp:892 eeschema/sim/simulator_frame.cpp:1119
 msgid " (gain)"
-msgstr ""
+msgstr " (利得)"
 
 #: eeschema/sim/simulator_frame.cpp:893 eeschema/sim/simulator_frame.cpp:1120
 msgid " (phase)"
@@ -16329,12 +16312,11 @@ msgid "Simulator requires a fully annotated schematic."
 msgstr "シミュレーターには回路図の完全なアノテーションが必要です。"
 
 #: eeschema/sim/simulator_frame.cpp:985
-#, fuzzy
 msgid ""
 "Errors during netlist generation.\n"
 "\n"
 msgstr ""
-"ネットリストの生成中にエラーが発生しました。シミュレーションを中止します。\n"
+"ネットリストの生成中にエラーが発生しました。\n"
 "\n"
 
 #: eeschema/sim/simulator_frame.cpp:1020
@@ -16366,19 +16348,16 @@ msgid "%s is not tunable"
 msgstr "%s の調整はできません"
 
 #: eeschema/sim/simulator_frame.cpp:1599
-#, fuzzy
 msgid "Error: no current simulation.\n"
-msgstr "電源、電流と絶縁"
+msgstr "エラー: 電流のシミュレーションがありません。\n"
 
 #: eeschema/sim/simulator_frame.cpp:1608
-#, fuzzy
 msgid "Error: simulation type not defined.\n"
-msgstr "エラー: シミュレーション タイプが定義されていません!\n"
+msgstr "エラー: シミュレーション タイプが定義されていません。\n"
 
 #: eeschema/sim/simulator_frame.cpp:1614
-#, fuzzy
 msgid "Error: simulation type doesn't support plotting.\n"
-msgstr "エラー: シミュレーション タイプはプロットをサポートしていません!\n"
+msgstr "エラー: シミュレーション タイプはプロットをサポートしていません。\n"
 
 #: eeschema/sim/simulator_frame.cpp:2447
 msgid ""
@@ -16460,14 +16439,12 @@ msgid "'%s' is not a valid Spice value."
 msgstr "'%s' は有効な Spice の値ではありません。"
 
 #: eeschema/sim/toolbars_simulator_frame.cpp:107
-#, fuzzy
 msgid "Simulator"
-msgstr "シミュレーター (&t)"
+msgstr "シミュレーター"
 
 #: eeschema/sim/toolbars_simulator_frame.cpp:162
-#, fuzzy
 msgid "&Simulation"
-msgstr "シミュレーション"
+msgstr "シミュレーション (&S)"
 
 #: eeschema/symbol_async_loader.cpp:108
 #, c-format
@@ -17118,16 +17095,14 @@ msgid "Select at least one property to back annotate."
 msgstr "バックアノテートするには少なくとも一つのプロパティを選択します。"
 
 #: eeschema/tools/backannotate.cpp:97
-#, fuzzy
 msgid ""
 "Cannot fetch PCB netlist because Schematic Editor is opened in stand-alone "
 "mode.\n"
 "You must launch the KiCad project manager and create a project."
 msgstr ""
-"Eeschema がスタンドアローン モードで開かれているため、PCB ネットリストを"
-"フェッチできません。\n"
-"KiCad プロジェクト マネージャーを起動して、プロジェクトを作成しなければなりま"
-"せん。"
+"回路図エディター がスタンドアローン "
+"モードで開かれているため、ネットリストを取り込めません。\n"
+"プロジェクト マネージャーを起動して、プロジェクトを作成してください。"
 
 #: eeschema/tools/backannotate.cpp:164
 #, c-format
@@ -17270,14 +17245,12 @@ msgid "Create a new symbol"
 msgstr "新しいシンボルを作成"
 
 #: eeschema/tools/ee_actions.cpp:132
-#, fuzzy
 msgid "Derive from existing symbol"
-msgstr "既存シンボルから派生:"
+msgstr "既存のシンボルから派生"
 
 #: eeschema/tools/ee_actions.cpp:132
-#, fuzzy
 msgid "Create a new symbol, derived from an existing symbol"
-msgstr "既存シンボルから派生:"
+msgstr "既存のシンボルから派生して新しいシンボルを作成"
 
 #: eeschema/tools/ee_actions.cpp:137
 msgid "Edit Symbol"
@@ -18080,22 +18053,20 @@ msgid "Show markers for excluded electrical rules checker violations"
 msgstr "除外したエレクトリカル ルール チェッカーの違反マーカーを表示"
 
 #: eeschema/tools/ee_actions.cpp:714
-#, fuzzy
 msgid "Show OP Voltages"
-msgstr "%s ページを表示"
+msgstr "動作点の電圧を表示"
 
 #: eeschema/tools/ee_actions.cpp:715
 msgid "Show operating point voltage data from simulation"
-msgstr ""
+msgstr "シミュレーションで得られた動作点の電圧を表示"
 
 #: eeschema/tools/ee_actions.cpp:719
-#, fuzzy
 msgid "Show OP Currents"
-msgstr "カーソルを表示"
+msgstr "動作点の電流を表示"
 
 #: eeschema/tools/ee_actions.cpp:720
 msgid "Show operating point current data from simulation"
-msgstr ""
+msgstr "シミュレーションで得られた動作点の電流を表示"
 
 #: eeschema/tools/ee_actions.cpp:724 eeschema/tools/ee_actions.cpp:729
 #: eeschema/tools/ee_actions.cpp:735 eeschema/tools/ee_actions.cpp:741
@@ -18125,9 +18096,8 @@ msgid "Annotate Automatically"
 msgstr "自動的にアノテーション"
 
 #: eeschema/tools/ee_actions.cpp:746
-#, fuzzy
 msgid "Toggle automatic annotation of new symbols"
-msgstr "新しいシンボルのアノテーション自動化オン・オフを切り替える"
+msgstr "新しいシンボルの自動アノテーションを切り替える"
 
 #: eeschema/tools/ee_actions.cpp:751
 msgid "Repair Schematic"
@@ -18355,9 +18325,8 @@ msgid "Export Current Plot as CSV..."
 msgstr "現在のプロットをCSVしてエクスポート..."
 
 #: eeschema/tools/ee_actions.cpp:950
-#, fuzzy
 msgid "Show Legend"
-msgstr "凡例を表示 (&L)"
+msgstr "凡例を表示"
 
 #: eeschema/tools/ee_actions.cpp:955
 msgid "Dotted Current/Phase"
@@ -18368,46 +18337,40 @@ msgid "Draw secondary signal trace (current or phase) with a dotted line"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:960
-#, fuzzy
 msgid "Dark Mode Plots"
-msgstr "3D モデル"
+msgstr "ダークモードでプロット"
 
 #: eeschema/tools/ee_actions.cpp:961
-#, fuzzy
 msgid "Draw plots with a black background"
-msgstr "背景色を白または黒に切り替え"
+msgstr "背景色を黒にして描画"
 
 #: eeschema/tools/ee_actions.cpp:965
 msgid "Simulation Command..."
 msgstr "シミュレーションコマンド..."
 
 #: eeschema/tools/ee_actions.cpp:966
-#, fuzzy
 msgid "Edit the simulation command for the current plot tab"
-msgstr "現在のアイテムに追加した最後の点を削除"
+msgstr "現在のプロットのシミュレーション コマンドを編集"
 
 #: eeschema/tools/ee_actions.cpp:972
 msgid "Run Simulation"
 msgstr "シミュレーションを実行"
 
 #: eeschema/tools/ee_actions.cpp:977
-#, fuzzy
 msgid "Stop Simulation"
-msgstr "実行/停止"
+msgstr "シミュレーションを停止"
 
 #: eeschema/tools/ee_actions.cpp:983
-#, fuzzy
 msgid "Probe Schematic..."
-msgstr "回路図をアノテーション..."
+msgstr "回路図からプローブ..."
 
 #: eeschema/tools/ee_actions.cpp:983
 msgid "Add a simulator probe"
 msgstr "シミュレーターのプローブを追加"
 
 #: eeschema/tools/ee_actions.cpp:989
-#, fuzzy
 msgid "Add Tuned Value..."
-msgstr "フィールド値を更新..."
+msgstr "値の調整を追加..."
 
 #: eeschema/tools/ee_actions.cpp:989
 msgid "Select a value to be tuned"
@@ -18419,7 +18382,7 @@ msgstr "SPICE ネットリストを表示"
 
 #: eeschema/tools/ee_actions.cpp:1000
 msgid "Add, edit or delete user-defined simulation signals"
-msgstr ""
+msgstr "ユーザー定義の信号の編集、追加、削除"
 
 #: eeschema/tools/ee_inspection_tool.cpp:222
 msgid "No symbol issues found."
@@ -20149,9 +20112,8 @@ msgid "Subtract soldermask from silkscreen"
 msgstr "ハンダマスクがない部分のシルク印刷を除去する"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:70
-#, fuzzy
 msgid "Disable aperture macros"
-msgstr "アパーチャ マクロを無効化"
+msgstr "アパーチャ マクロを無効にする"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:75
 msgid "Precision of gerber coordinates, valid options: 5 or 6"
@@ -20255,7 +20217,7 @@ msgstr "部品なしのボードのみを生成する"
 
 #: kicad/cli/command_export_pcb_step.cpp:79
 msgid "Export tracks (extremely time consuming)"
-msgstr ""
+msgstr "配線をエクスポート (とても時間がかかる)"
 
 #: kicad/cli/command_export_pcb_step.cpp:85
 msgid "Minimum distance between points to treat them as separate ones"
@@ -22716,7 +22678,6 @@ msgid "Threshold voltage:"
 msgstr "電圧の閾値:"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:91
-#, fuzzy
 msgid "Names"
 msgstr "名前"
 
@@ -23374,7 +23335,6 @@ msgstr ""
 "また、このエネルギーは配線の抵抗によって消費されるエネルギーと比較されます。"
 
 #: pcb_calculator/galvanic_corrosion_help.h:2
-#, fuzzy
 msgid ""
 "This table shows the difference in electrochemical potential between various "
 "metals and alloys. Galvanic corrosion affects different metals in contact "
@@ -23390,14 +23350,17 @@ msgid ""
 "Selected cells shown with the default system's coloring choice after a table "
 "refill.\n"
 msgstr ""
-"この表は、さまざまな金属や合金の電気化学的なポテンシャルの違いを示していま"
-"す。正の数値の場合、行が陽極、列が陰極となります。\n"
-"ガルバニック腐食は、接触中および特定の条件下でさまざまな金属に影響を与えま"
-"す。\n"
-"陽極は酸化されて侵食されますが、陰極は溶解した金属でメッキされ保護されま"
-"す。\n"
+"この表は、さまざまな金属や合金の電気化学的なポテンシャルの違いを示しています"
+"。正の数値の場合、行が陽極、列が陰極となります。ガルバニック腐食は、接触中お"
+"よび特定の条件下でさまざまな金属に影響を与えます。<br>\n"
+"陽極は酸化されて侵食されますが、陰極は溶解した金属でメッキされ保護されます。<"
+"br>\n"
+"正の値は、行が陽極（-）、列が陰極（＋）であることを示し、寒色と暖色の色相は、"
+"行の電位をも示しています。<br>\n"
 "EN 50310は、300mV未満の電圧差を推奨しています。既知の慣行では、メインペアの間"
-"に第3の界面金属(すなわちENIG表面仕上げ)を使用します。"
+"に第3の界面金属(すなわちENIG表面仕上げ)を使用します。<br>\n"
+"選択されたセルは、テーブルの再入力後にデフォルトのシステムの色の選択で表示さ"
+"れます。\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:72
 msgid "General system design"
@@ -26591,7 +26554,7 @@ msgstr "古いファイルを上書き"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:123
 msgid "Export tracks (time consuming)"
-msgstr ""
+msgstr "配線をエクスポート (時間がかかる)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:124
 msgid ""
@@ -31781,7 +31744,6 @@ msgid "Check rule syntax"
 msgstr "ルールの文法をチェック"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -32160,9 +32122,10 @@ msgstr ""
 " * via\\_diameter\n"
 " * zone\\_connection\n"
 "\n"
-"注: `clearance` と `hole_clearance`のルールは同一ネットにあるアイテムで動作し"
-"ません; `physical_clearance` と `physical_hole_clearance` のルールについても"
-"同様です。\n"
+"注: `clearance` と "
+"`hole_clearance`のルールは同一ネットにあるアイテムで動作しません; "
+"`physical_clearance` と `physical_hole_clearance` "
+"のルールについても同様です。\n"
 "<br><br>\n"
 "\n"
 "### アイテム\n"
@@ -32237,8 +32200,8 @@ msgstr ""
 "\n"
 "### 注\n"
 "\n"
-"Version句は最初の句でなければなりません。  これはファイルの文法のバージョンを"
-"示し、\n"
+"Version句は最初の句でなければなりません。  "
+"これはファイルの文法のバージョンを示し、\n"
 "将来のルールパーサーが自動的にアップデート可能にするためです。\n"
 "\"1\"を設定しなければなりません。\n"
 "\n"
@@ -32251,8 +32214,8 @@ msgstr ""
 "\n"
 "### 式関数\n"
 "\n"
-"全ての関数のパラメーターは単純なワイルドカードをサポートします。 (`*` and `?"
-"`).\n"
+"全ての関数のパラメーターは単純なワイルドカードをサポートします。 (`*` and "
+"`?`).\n"
 "<br><br>\n"
 "\n"
 "    A.intersectsCourtyard('<footprint_refdes>')\n"
@@ -32277,8 +32240,8 @@ msgstr ""
 "    A.enclosedByArea('<zone_name>')\n"
 "`A` のすべてが指定されたゾーンのアウトライン内にある場合に真になります。\n"
 "\n"
-"注意: これは、`intersectsArea()`よりも高コストな呼び出しになる可能性がありま"
-"す。\n"
+"注意: "
+"これは、`intersectsArea()`よりも高コストな呼び出しになる可能性があります。\n"
 "可能であれば`intersectsArea()`を使用してください。\n"
 "<br><br>\n"
 "\n"
@@ -32306,8 +32269,8 @@ msgstr ""
 "レイヤー名は 基板の設定 > 基板編集レイヤー で指定された名前か、\n"
 "正規化名(例: `F.Cu`)が使えます。\n"
 "\n"
-"注意: これは、ルールがそのレイヤーに対して評価されているかいないかにかかわら"
-"ず\n"
+"注意: これは、"
+"ルールがそのレイヤーに対して評価されているかいないかにかかわらず\n"
 "`A`がレイヤーにある場合に真を返します。\n"
 "後者の場合、`(layer \"layer_name\")`の句をルールの中で使います。\n"
 "<br><br>\n"
@@ -32349,13 +32312,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -32436,7 +32399,13 @@ msgstr ""
 "    (rule high-current\n"
 "        (constraint track_width (min 1.0mm))\n"
 "        (constraint connection_width (min 0.8mm))\n"
-"        (condition \"A.NetClass == 'Power'\"))"
+"        (condition \"A.NetClass == 'Power'\"))\n"
+"\n"
+"### ドキュメント\n"
+"\n"
+"完全なドキュメントは以下を参照してください。[https://docs.kicad."
+"org](https://docs.kicad.org/GetMajorMinorVersion/pcbnew/"
+"#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:75
 msgid "Default properties for new dimension objects:"
@@ -33393,82 +33362,68 @@ msgid "(%s min %s; actual %s)"
 msgstr "(%s 最小 %s; 現状 %s)"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:414
-#, fuzzy
 msgid "3D model scale doesn't match: "
-msgstr "3D モデルの検索パス"
+msgstr "3D モデルのスケールが一致しません: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:415
 msgid "3D model rotation doesn't match: "
-msgstr ""
+msgstr "3Dモデルの回転が一致しません: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:416
-#, fuzzy
 msgid "3D model offset doesn't match: "
-msgstr "パッドのネットが回路図と不一致"
+msgstr "3D モデルのオフセットが一致しません: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:417
 msgid "3D model opacity doesn't match: "
-msgstr ""
+msgstr "3Dモデルの透過度が一致しません: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:418
-#, fuzzy
 msgid "3D model doesn't match: "
-msgstr "3D モデルの検索パス"
+msgstr "3D モデルが一致しません: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:419
-#, fuzzy
 msgid "3D model visibility doesn't match: "
-msgstr "3D モデルの可視性:"
+msgstr "3D モデルの可視性が一致しません: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:447
-#, fuzzy
 msgid "Footprint descriptions differ."
-msgstr "フットプリント関連付けファイル"
+msgstr "フットプリントの説明が異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:449
-#, fuzzy
 msgid "Footprint keywords differ."
-msgstr "フットプリントの順序"
+msgstr "フットプリントのキーワードが異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:454
-#, fuzzy
 msgid "Footprint types differ."
-msgstr "フットプリント タイプ:"
+msgstr "フットプリントの部品のタイプが異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:456
-#, fuzzy
 msgid "Allow bridged solder mask apertures between pads settings differ."
-msgstr "パッド間を接続するハンダマスク アパーチャを許容する"
+msgstr "「パッド間を接続するハンダマスク アパーチャを許容する」設定が異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:458
-#, fuzzy
 msgid "Exempt from courtyard requirement settings differ."
-msgstr "コートヤード要件から除外"
+msgstr "「コートヤード要件から除外」の設定が異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:471
-#, fuzzy
 msgid "Pad clearance overridden."
-msgstr "クリアランスのオーバーライド"
+msgstr "パッドのクリアランスをオーバーライドしています。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:473
-#, fuzzy
 msgid "Solder mask expansion overridden."
-msgstr "ハンダマスクの拡張:"
+msgstr "ハンダマスクの拡張をオーバーライドしています。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:475
-#, fuzzy
 msgid "Solder paste absolute clearance overridden."
-msgstr "ハンダペーストの絶対クリアランス:"
+msgstr "ハンダペーストの絶対クリアランスをオーバーライドしています。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:477
-#, fuzzy
 msgid "Solder paste relative clearance overridden."
-msgstr "ハンダペーストの相対クリアランス:"
+msgstr "ハンダペーストの相対クリアランスをオーバーライドしています。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:480
-#, fuzzy
 msgid "Zone connection overridden."
-msgstr "ゾーンの接続スタイル"
+msgstr "導体ゾーンへの接続をオーバーライドしています。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:484
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:489
@@ -33476,35 +33431,32 @@ msgid "Net tie pad groups differ."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:528
-#, fuzzy
 msgid "Pad count differs."
-msgstr "パッド カウント"
+msgstr "パッドの数が異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:529
-#, fuzzy
 msgid "Rule area count differs."
-msgstr "ルールエリア ( %s 上)"
+msgstr "ルールエリアの数が異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:530
-#, fuzzy
 msgid "Graphic item count differs."
-msgstr "グラフィック アイテムがファイルに見つかりません。"
+msgstr "図形の数が異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:539
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:564
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:582
 #, c-format
 msgid "%s differs."
-msgstr ""
+msgstr "%s は異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:550
-#, fuzzy, c-format
+#, c-format
 msgid "%s has overrides."
-msgstr "ローカル オーバーライド"
+msgstr "%s はオーバーライドされました。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:592
 msgid "3D model count differs."
-msgstr ""
+msgstr "3Dモデルの数が異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:616
 msgid "No project loaded, skipping library parity tests."
@@ -38272,9 +38224,9 @@ msgstr ""
 "より大きな物理的な穴のクリアランス %s で上書きされます; クリアランス: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:779
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved clearance: %s; clearance will not be tested."
-msgstr "%sのローカルクリアランス; クリアランス: %s."
+msgstr "クリアランスの解決: %s; クリアランスはテストされません。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:801
 msgid "Diff Pair"
@@ -38394,9 +38346,8 @@ msgid "Select a footprint to check against its library equivalent."
 msgstr "ライブラリに対するフットプリントをチェックしています..."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1346
-#, fuzzy
 msgid "Check Footprint against Library"
-msgstr "ライブラリに対するフットプリントをチェックしています..."
+msgstr "フットプリントをライブラリと比較してチェックします"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1363
 #, fuzzy
@@ -38404,14 +38355,12 @@ msgid "Board/library check for:"
 msgstr "ローカル ライブラリー フォルダー:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1365
-#, fuzzy
 msgid "Library: "
-msgstr "ライブラリー:"
+msgstr "ライブラリ: "
 
 #: pcbnew/tools/board_inspection_tool.cpp:1366
-#, fuzzy
 msgid "Library item: "
-msgstr "ライブラリー フィルター:"
+msgstr "ライブラリー アイテム: "
 
 #: pcbnew/tools/board_inspection_tool.cpp:1384
 #, fuzzy
@@ -38424,14 +38373,13 @@ msgid "The library is not enabled in the current configuration."
 msgstr "ライブラリ '%s' は現在の設定では有効化されていません。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1404
-#, fuzzy, c-format
+#, c-format
 msgid "The library no longer contains the item %s."
-msgstr "選択対象に%d個のロックしたアイテムが含まれています。"
+msgstr "このライブラリには %s は含まれていません。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1409
-#, fuzzy
 msgid "Footprint matches library equivalent."
-msgstr "フットプリント ライブラリー エディター"
+msgstr "フットプリントはライブラリのものと等しいです。"
 
 #: pcbnew/tools/convert_tool.cpp:68
 msgid "Copy line width of first object"
@@ -40027,10 +39975,9 @@ msgid "Check Footprint against Library..."
 msgstr "ライブラリに対するフットプリントをチェックしています..."
 
 #: pcbnew/tools/pcb_actions.cpp:1179
-#, fuzzy
 msgid ""
 "Check for differences between board footprint and its library equivalent"
-msgstr "ライブラリに対するフットプリントをチェックしています..."
+msgstr "フットプリントがライブラリのものと等しいかをチェック"
 
 #: pcbnew/tools/pcb_actions.cpp:1185
 msgid "Geographical Reannotate..."
