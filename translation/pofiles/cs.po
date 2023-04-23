@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:51-0800\n"
-"PO-Revision-Date: 2023-04-17 22:52+0000\n"
+"PO-Revision-Date: 2023-04-24 09:25+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.17\n"
+"X-Generator: Weblate 4.18-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -30472,9 +30472,8 @@ msgid "Show courtyard collisions when moving/dragging"
 msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:400
-#, fuzzy
 msgid "Auto-refill zones"
-msgstr "Přidat vyplněné oblasti"
+msgstr "Automatické vyplnění zón"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:402
 #, fuzzy
@@ -32278,9 +32277,9 @@ msgstr "Omezení díry: min. %s."
 
 #: pcbnew/drc/drc_engine.cpp:1171 pcbnew/drc/drc_engine.cpp:1192
 #: pcbnew/drc/drc_engine.cpp:1497
-#, fuzzy, c-format
+#, c-format
 msgid "Rule layer '%s' not matched; rule ignored."
-msgstr "Pravidlo vrstvy \"%s\" neodpovídá."
+msgstr "Pravidlo vrstvy '%s' neodpovídá; pravidlo ignorováno."
 
 #: pcbnew/drc/drc_engine.cpp:1176 pcbnew/drc/drc_engine.cpp:1197
 msgid "Rule layer not matched; rule ignored."
@@ -32292,9 +32291,9 @@ msgid "Constraint layer not matched."
 msgstr "Omezení díry: min. %s."
 
 #: pcbnew/drc/drc_engine.cpp:1208
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not a drilled hole; rule ignored."
-msgstr "Pravidlo vrstva neodpovídá; pravidlo ignorováno."
+msgstr "%s není vyvrtaný otvor; pravidlo ignorováno."
 
 #: pcbnew/drc/drc_engine.cpp:1218
 msgid "Unconditional constraint applied."
@@ -32310,9 +32309,9 @@ msgid "Unconditional rule applied; overrides previous constraints."
 msgstr "Použito bezpodmínečné pravidlo."
 
 #: pcbnew/drc/drc_engine.cpp:1241 pcbnew/drc/drc_engine.cpp:1508
-#, fuzzy, c-format
+#, c-format
 msgid "Checking rule condition \"%s\"."
-msgstr "Kontrola pravidla podmínky \"%s\"."
+msgstr "Kontrola podmínky pravidla \"%s\"."
 
 #: pcbnew/drc/drc_engine.cpp:1251
 #, fuzzy
@@ -32334,9 +32333,8 @@ msgid "Membership not satisfied; constraint ignored."
 msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:1269 pcbnew/drc/drc_engine.cpp:1519
-#, fuzzy
 msgid "Condition not satisfied; rule ignored."
-msgstr "Pravidlo vrstva neodpovídá; pravidlo ignorováno."
+msgstr "Podmínka není splněna; pravidlo ignorováno."
 
 #: pcbnew/drc/drc_engine.cpp:1323 pcbnew/drc/drc_engine.cpp:1340
 #, c-format
@@ -32344,14 +32342,14 @@ msgid "Local clearance on %s; clearance: %s."
 msgstr "Místní izolační mezera na %s; izolační mezera: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1391
-#, fuzzy, c-format
+#, c-format
 msgid "%s zone connection: %s."
-msgstr "Kontrola připojení sítě..."
+msgstr "Připojení zóny %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1407
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad connection: %s."
-msgstr "Typ připojení zóny: %s."
+msgstr "Připojení plošky %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1412 pcbnew/drc/drc_engine.cpp:1429
 #: pcbnew/drc/drc_engine.cpp:1446 pcbnew/zone.cpp:371 pcbnew/zone.cpp:482
@@ -32359,9 +32357,9 @@ msgid "zone"
 msgstr "zóna"
 
 #: pcbnew/drc/drc_engine.cpp:1424
-#, fuzzy, c-format
+#, c-format
 msgid "%s thermal relief gap: %s."
-msgstr "Tepelný reliéf zóny: %s."
+msgstr "%s mezera tepelného reliéfu: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1441
 #, c-format
@@ -32369,16 +32367,15 @@ msgid "%s thermal spoke width: %s."
 msgstr "%s teplotní profil šířka: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1474
-#, fuzzy, c-format
+#, c-format
 msgid "Checking rule assertion \"%s\"."
-msgstr "Kontrola pravidla podmínky \"%s\"."
+msgstr "Kontroluji tvrzení pravidla \"%s\"."
 
 #: pcbnew/drc/drc_item.cpp:45
 msgid "Electrical"
 msgstr "Elektrický"
 
 #: pcbnew/drc/drc_item.cpp:46
-#, fuzzy
 msgid "Design for Manufacturing"
 msgstr "Design pro výrobu"
 
@@ -32392,9 +32389,8 @@ msgid "Signal Integrity"
 msgstr "Integrita signálu"
 
 #: pcbnew/drc/drc_item.cpp:49
-#, fuzzy
 msgid "Readability"
-msgstr "Načíst netlist"
+msgstr "Čitelnost"
 
 #: pcbnew/drc/drc_item.cpp:53
 #, fuzzy
@@ -32402,9 +32398,8 @@ msgid "Missing connection between items"
 msgstr "Neplatné spojení mezi sběrnicí a položkami sítě"
 
 #: pcbnew/drc/drc_item.cpp:57
-#, fuzzy
 msgid "Items shorting two nets"
-msgstr "Smazat spoje zkratující dvě sítě"
+msgstr "Položky zkratující dvě sítě"
 
 #: pcbnew/drc/drc_item.cpp:61
 msgid "Items not allowed"
@@ -32516,9 +32511,8 @@ msgid "NPTH inside courtyard"
 msgstr "Ploška uvnitř zakázané oblasti"
 
 #: pcbnew/drc/drc_item.cpp:161
-#, fuzzy
 msgid "Item on a disabled copper layer"
-msgstr "Položka na zakázané vrstvě"
+msgstr "Položka na neaktivní vrstvě mědi"
 
 #: pcbnew/drc/drc_item.cpp:165
 msgid "Board has malformed outline"
@@ -32537,9 +32531,8 @@ msgid "Extra footprint"
 msgstr "Přebytečná pouzdra"
 
 #: pcbnew/drc/drc_item.cpp:181
-#, fuzzy
 msgid "Pad net doesn't match schematic"
-msgstr "Načíst směrnice ze schématu"
+msgstr "Síť plošky neodpovídá schématu"
 
 #: pcbnew/drc/drc_item.cpp:185
 msgid "Footprint not found in libraries"
@@ -32562,34 +32555,28 @@ msgid "Solder mask aperture bridges items with different nets"
 msgstr ""
 
 #: pcbnew/drc/drc_item.cpp:209
-#, fuzzy
 msgid "Silkscreen clipped by solder mask"
-msgstr "Potisk na dolní straně desky"
+msgstr "Potisk oříznutý pájecí maskou"
 
 #: pcbnew/drc/drc_item.cpp:213
-#, fuzzy
 msgid "Silkscreen clipped by board edge"
-msgstr "Potisk na dolní straně desky"
+msgstr "Potisk oříznutý hranou desky"
 
 #: pcbnew/drc/drc_item.cpp:217
-#, fuzzy
 msgid "Silkscreen overlap"
-msgstr "Min. izolační mezera"
+msgstr "Přesah potisku"
 
 #: pcbnew/drc/drc_item.cpp:221
-#, fuzzy
 msgid "Text height out of range"
-msgstr "Ladění délky spoje"
+msgstr "Výška textu mimo rozsah"
 
 #: pcbnew/drc/drc_item.cpp:225
-#, fuzzy
 msgid "Text thickness out of range"
-msgstr "Ladění délky spoje"
+msgstr "Tloušťka textu mimo rozsah"
 
 #: pcbnew/drc/drc_item.cpp:229
-#, fuzzy
 msgid "Trace length out of range"
-msgstr "Ladění délky spoje"
+msgstr "Délka cesty mimo rozsah"
 
 #: pcbnew/drc/drc_item.cpp:233
 #, fuzzy
@@ -32597,28 +32584,24 @@ msgid "Skew between traces out of range"
 msgstr "Ladění délky spoje"
 
 #: pcbnew/drc/drc_item.cpp:237
-#, fuzzy
 msgid "Too many vias on a connection"
-msgstr "Port %s nemá žádné připojení."
+msgstr "Příliš mnoho prokovů na spojení"
 
 #: pcbnew/drc/drc_item.cpp:241
 msgid "Differential pair gap out of range"
 msgstr "Mezera diferenciálního páru je mimo rozsah"
 
 #: pcbnew/drc/drc_item.cpp:245
-#, fuzzy
 msgid "Differential uncoupled length too long"
-msgstr "Doladění délky diferenciálního páru"
+msgstr "Příliš dlouhý diferenciální pár"
 
 #: pcbnew/drc/drc_item.cpp:249
-#, fuzzy
 msgid "Footprint is not valid"
-msgstr "Pouzdro ID '%s' není platné."
+msgstr "Pouzdro není platné"
 
 #: pcbnew/drc/drc_item.cpp:253
-#, fuzzy
 msgid "Footprint component type doesn't match footprint pads"
-msgstr "Editor pouzder - Vytvoření/úprava pouzder"
+msgstr "Typ pouzdra se neshoduje s typem plošek pouzdra"
 
 #: pcbnew/drc/drc_item.cpp:257
 msgid "Through hole pad has no hole"
@@ -32732,9 +32715,8 @@ msgid "Expecting number."
 msgstr "Očekává se číslo."
 
 #: pcbnew/drc/drc_rule_parser.cpp:451
-#, fuzzy
 msgid "Missing assertion expression."
-msgstr "Chybějící výraz podmínky."
+msgstr "Chybí výraz tvrzení."
 
 #: pcbnew/drc/drc_rule_parser.cpp:488
 msgid "Missing min value."
@@ -32758,14 +32740,12 @@ msgid "Unrecognized layer '%s'."
 msgstr "Nerozpoznaná vrstva '%s'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:653
-#, fuzzy
 msgid "Missing severity name."
-msgstr "Chybí číslo verze."
+msgstr "Chybí název závažnosti."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:88
-#, fuzzy
 msgid "Checking pad & via annular rings..."
-msgstr "Kontrola průměru prstence prokovu..."
+msgstr "Kontrola plošek & prstence prokovu..."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:248
 #, c-format
@@ -32778,9 +32758,8 @@ msgid "(%s max annular width %s; actual %s)"
 msgstr "(%s maximální šířka prstence %s; aktuální %s)"
 
 #: pcbnew/drc/drc_test_provider_connection_width.cpp:643
-#, fuzzy
 msgid "Checking nets for minimum connection width..."
-msgstr "Kontrola připojení sítě..."
+msgstr "Kontrola minimální šířky připojení sítí..."
 
 #: pcbnew/drc/drc_test_provider_connection_width.cpp:782
 #, fuzzy, c-format
