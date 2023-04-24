@@ -27,8 +27,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:51-0800\n"
-"PO-Revision-Date: 2023-03-20 10:00+0000\n"
-"Last-Translator: Hubert Hu <qinghan.hu@gmail.com>\n"
+"PO-Revision-Date: 2023-04-24 19:52+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -36,7 +36,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.16.2-dev\n"
+"X-Generator: Weblate 4.18-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -76,7 +76,7 @@ msgstr "创建导线和过孔"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:678
 msgid "Create zones"
-msgstr "创建敷铜"
+msgstr "创建区域"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:745
 msgid "Simplifying copper layers polygons"
@@ -590,7 +590,7 @@ msgstr "显示 3D 轴线"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:251
 msgid "Toggle zone display"
-msgstr "切换敷铜显示"
+msgstr "切换区域显示"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:255
 msgid "Toggle adhesive display"
@@ -764,7 +764,7 @@ msgstr "真实渲染模式"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:99
 msgid "Show filled areas in zones"
-msgstr "显示敷铜中的填充敷铜"
+msgstr "显示区域内的填充区域"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:102
 msgid "Use bare copper color for unplated copper"
@@ -1086,7 +1086,7 @@ msgstr "不透明度"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:165
 msgid "Board Thickness"
-msgstr "电路板厚度"
+msgstr "板厚"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:170
 #: bitmap2component/bitmap2cmp_gui.cpp:152
@@ -1224,7 +1224,7 @@ msgstr "重新加载电路板和 3D 模型"
 #: bitmap2component/bitmap2cmp_gui.cpp:152
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
 msgid "Inch"
-msgstr "英寸"
+msgstr "inch"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:152
 msgid "DPI"
@@ -3657,11 +3657,11 @@ msgstr "差分对间隙"
 
 #: common/dialogs/panel_setup_netclasses.cpp:510
 msgid "Schematic wire thickness"
-msgstr "原理图线粗细"
+msgstr "原理图线宽"
 
 #: common/dialogs/panel_setup_netclasses.cpp:511
 msgid "Bus wire thickness"
-msgstr "总线线粗细"
+msgstr "总线线宽"
 
 #: common/dialogs/panel_setup_netclasses.cpp:512
 msgid "Schematic wire color"
@@ -3729,11 +3729,11 @@ msgstr "差分对间距"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
 msgid "Wire Thickness"
-msgstr "线粗细"
+msgstr "线宽"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "Bus Thickness"
-msgstr "总线粗细"
+msgstr "总线线宽"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:63
 #: common/stroke_params.cpp:210 eeschema/sch_line.cpp:940
@@ -4195,7 +4195,7 @@ msgstr "文档文件 \"%s\" 的 MIME 类型未知"
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:91
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:49 pcbnew/pcb_dimension.cpp:1320
 msgid "Inches"
-msgstr "英寸"
+msgstr "inches"
 
 #: common/eda_draw_frame.cpp:154 pagelayout_editor/pl_editor_frame.cpp:164
 #: pcbnew/tools/drawing_tool.cpp:297 pcbnew/tools/edit_tool_move_fct.cpp:347
@@ -4218,7 +4218,7 @@ msgstr "缩放 %.2f"
 
 #: common/eda_draw_frame.cpp:621 pagelayout_editor/pl_editor_frame.cpp:750
 msgid "inches"
-msgstr "英寸"
+msgstr "Inches"
 
 #: common/eda_draw_frame.cpp:622
 #: eeschema/dialogs/dialog_junction_props_base.cpp:34
@@ -4709,7 +4709,7 @@ msgstr "超链接"
 #: pcbnew/fp_text.cpp:310 pcbnew/fp_text_grid_table.cpp:104
 #: pcbnew/fp_textbox.cpp:347 pcbnew/pcb_text.cpp:125
 msgid "Thickness"
-msgstr "厚度"
+msgstr "线宽"
 
 #: common/eda_text.cpp:1054 pcbnew/microwave/microwave_polygon.cpp:128
 msgid "Mirrored"
@@ -6554,7 +6554,7 @@ msgstr "网格样式"
 
 #: common/widgets/gal_options_panel.cpp:132
 msgid "Grid thickness:"
-msgstr "网格粗细："
+msgstr "网格线宽："
 
 #: common/widgets/gal_options_panel.cpp:142
 #: common/widgets/gal_options_panel.cpp:156
@@ -8813,7 +8813,7 @@ msgstr "垂直文本"
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:117
 #: eeschema/dialogs/dialog_text_properties_base.cpp:177
 msgid "Text size:"
-msgstr "文本尺寸："
+msgstr "文字大小："
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:223
 #: eeschema/dialogs/dialog_junction_props_base.cpp:38
@@ -9360,7 +9360,7 @@ msgstr "编号文本高度"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:126
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:94
 msgid "Name Text Size"
-msgstr "名称文本尺寸"
+msgstr "名称文字大小"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:132
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:100
@@ -10228,7 +10228,7 @@ msgstr "默认线宽："
 msgid ""
 "Selection of the default pen thickness used to draw items, when their "
 "thickness is set to 0."
-msgstr "当线粗细设置为 0 时,将选择默认的画笔粗细用来绘制项。"
+msgstr "当线宽设置为 0 时,将选择默认的画笔线宽用来绘制项。"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:123
 #: pcbnew/dialogs/dialog_plot_base.cpp:246
@@ -11816,7 +11816,7 @@ msgstr "填充所选形状"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:106
 msgid "Selection thickness:"
-msgstr "选区厚度："
+msgstr "选区高亮宽度："
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:114
 msgid "(selection color can be edited in the \"Colors\" page)"
@@ -11824,7 +11824,7 @@ msgstr "（可以在“颜色”页面编辑选区颜色）"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:118
 msgid "Highlight thickness:"
-msgstr "高亮粗细："
+msgstr "高亮线宽："
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:135
 #: pcbnew/dialogs/panel_display_options_base.cpp:92
@@ -18808,11 +18808,11 @@ msgstr "："
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:100
 msgid "Format for inches"
-msgstr "英寸格式"
+msgstr "英寸单位格式"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:129
 msgid "Usually: 3:3 in mm and 2:4 in inches"
-msgstr "通常情况：3:3 毫米和2:4 英寸"
+msgstr "通常：3:3 mm 和 2:4 inches"
 
 #: gerbview/events_called_functions.cpp:182 gerbview/gerbview_frame.cpp:156
 msgid "Layers Manager"
@@ -21291,12 +21291,12 @@ msgstr "项目属性"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:385
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:144
 msgid "Line thickness:"
-msgstr "线粗细："
+msgstr "线宽："
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:516
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:232
 msgid "Text thickness:"
-msgstr "文本线粗细："
+msgstr "文本线宽："
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:536
 msgid "Set to Default"
@@ -22182,7 +22182,7 @@ msgstr "布线宽度："
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:77
 msgid "Track thickness:"
-msgstr "导线厚度："
+msgstr "铜层厚度："
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:106
 msgid "Time to fuse:"
@@ -22516,7 +22516,7 @@ msgstr "布线宽度 (W)："
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:115
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:213
 msgid "Trace thickness (H):"
-msgstr "线路厚度 (H)："
+msgstr "铜层厚度 (H)："
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:136
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:234
@@ -22686,7 +22686,7 @@ msgstr "过孔长度："
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:59
 msgid "Via length is the board thickness for through hole vias"
-msgstr "通孔长度是通过的电路板厚度"
+msgstr "通孔长度是指通孔所通过的电路板的厚度"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:71
 msgid "Via pad diameter:"
@@ -23182,7 +23182,7 @@ msgstr "框顶高度"
 #: pcb_calculator/transline_ident.cpp:316
 #: pcb_calculator/transline_ident.cpp:361
 msgid "Strip thickness"
-msgstr "带状线厚度"
+msgstr "铜层厚度"
 
 #: pcb_calculator/transline_ident.cpp:131
 #: pcb_calculator/transline_ident.cpp:318
@@ -23413,7 +23413,7 @@ msgstr "mil"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:65
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:67
 msgid "inch"
-msgstr "英寸"
+msgstr "inch"
 
 #: pcb_calculator/widgets/unit_selector.cpp:100
 msgid "GHz"
@@ -23433,7 +23433,7 @@ msgstr "Hz"
 
 #: pcb_calculator/widgets/unit_selector.cpp:129
 msgid "rad"
-msgstr "rad (拉德)"
+msgstr "rad"
 
 #: pcb_calculator/widgets/unit_selector.cpp:212
 msgid "km"
@@ -23688,12 +23688,12 @@ msgstr "预浸料"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:180
 #, c-format
 msgid "Enter board thickness in %s:"
-msgstr "以 %s 为单位输入板厚度："
+msgstr "输入板厚，单位为 %s:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:185
 #, c-format
 msgid "Enter expected board thickness (min value %s):"
-msgstr "输入预期的板厚度 (最小值 %s)："
+msgstr "输入预期板厚 (最小值 %s)："
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:189
 msgid "Adjust Unlocked Dielectric Layers"
@@ -23750,7 +23750,7 @@ msgstr "损耗角正切的值不正确（如果不使用，则该值必须为正
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1203
 msgid "A layer thickness is < 0. Fix it"
-msgstr "层厚度为 < 0。修复它"
+msgstr "有一个层的厚度小于0，需要修复"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1653
 msgid "Custom..."
@@ -25077,7 +25077,7 @@ msgstr "最小宽度："
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:212
 msgid "Minimum thickness of filled areas."
-msgstr "填充敷铜最小厚度。"
+msgstr "填充区域最小厚度。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:226
 msgid "Pad connections:"
@@ -25112,7 +25112,7 @@ msgstr "敷铜的填充区和由散热式镂空辐条连接的焊盘间保持清
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:245
 msgid "Clearance between pads in the same net and filled areas."
-msgstr "在同一网中的焊盘和填充敷铜之间进行间隙处理。"
+msgstr "同一网络中焊盘与填充区域之间的间隙。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:253
 msgid "Thermal spoke width:"
@@ -25607,7 +25607,7 @@ msgstr "0.00000"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/pcb_dimension.cpp:1309
 msgid "0.00 in / 0 mils / 0.0 mm"
-msgstr "0.00 英寸/ 0 mils / 0.0 毫米"
+msgstr "0.00 in/ 0 mils / 0.0 mm"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/pcb_dimension.cpp:1310
@@ -25666,13 +25666,13 @@ msgstr "文本位置 Y"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:196
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:167
 msgid "Thickness:"
-msgstr "粗细："
+msgstr "线宽："
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:327
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:198
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:169
 msgid "Text thickness"
-msgstr "文本粗细"
+msgstr "文本线宽"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:340
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:237
@@ -25735,7 +25735,7 @@ msgstr "标注线"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:387
 msgid "Thickness of the dimension lines"
-msgstr "标注线的粗细"
+msgstr "标注线的宽度"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:401
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:141
@@ -25902,7 +25902,7 @@ msgstr "更新文本层和可见性"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:80
 msgid "Update text sizes, styles and positions"
-msgstr "更新文本尺寸，样式和位置"
+msgstr "更新文本大小，样式和位置"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:81
 msgid "Update fabrication attributes"
@@ -25978,7 +25978,7 @@ msgstr "更新/重置文本层和可见性"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:104
 msgid "Update/reset text sizes, styles and positions"
-msgstr "更新/重置文本尺寸，样式和位置"
+msgstr "更新/重置文本大小，样式和位置"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:107
 msgid "Update/reset fabrication attributes"
@@ -26287,7 +26287,7 @@ msgstr "米"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
 msgid "0.1 Inch"
-msgstr "0.1 英寸"
+msgstr "0.1 inch"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:111
 msgid "VRML Units for Output Files"
@@ -26477,8 +26477,8 @@ msgid ""
 "Text thickness is too large for the text size.\n"
 "It will be clamped at %s."
 msgstr ""
-"文本粗细对于文本大小来说太大。\n"
-"它将被限制在 %s。"
+"文本线宽与高度比例不对。\n"
+"线宽已被限制为 %s。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:573
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:608
@@ -26772,8 +26772,8 @@ msgid ""
 "The text thickness is too large for the text size.\n"
 "It will be clamped."
 msgstr ""
-"文本粗细与高度比例不对。\n"
-"它将会变形，被挤在一起。"
+"文本线宽与高度比例不对。\n"
+"文字将会被挤压变形。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:61
 msgid "Unconstrained"
@@ -27393,7 +27393,7 @@ msgstr "其他层"
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:129
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:46
 msgid "Line Thickness"
-msgstr "线粗细"
+msgstr "线宽"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:272
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:130
@@ -27417,7 +27417,7 @@ msgstr "文本高度"
 #: pcbnew/pcb_dimension.cpp:332 pcbnew/pcb_textbox.cpp:301
 #: pcbnew/tools/board_inspection_tool.cpp:303
 msgid "Text Thickness"
-msgstr "文本粗细"
+msgstr "文本线宽"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:296
 msgid "Upright"
@@ -29645,7 +29645,7 @@ msgstr "输入要放在所选层上的文字。"
 #: pcbnew/pcb_dimension.cpp:1461 pcbnew/pcb_dimension.cpp:1500
 #: pcbnew/pcb_dimension.cpp:1531 pcbnew/pcb_text.cpp:344
 msgid "Knockout"
-msgstr "阴文 (反相)"
+msgstr "反显"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:105
 msgid "Keep text upright"
@@ -30116,8 +30116,8 @@ msgid ""
 "Text will not be readable with a thickness greater than\n"
 "1/4 its width or height."
 msgstr ""
-"文本读取困难，其粗细大于\n"
-"1/4 的宽度或高度。"
+"文本线宽超过 1/4 文字高度或宽度的文本\n"
+"将变得难以阅读。"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:23
 msgid "Default text items for new footprints:"
@@ -30424,7 +30424,7 @@ msgstr "最低文本高度："
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:329
 msgid "Minimum text thickness:"
-msgstr "最小文本厚度："
+msgstr "最小文本线宽："
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:355
 msgid "Arc/circle approximated by segments"
@@ -32044,7 +32044,7 @@ msgstr "电路板设置约束丝印文本高度"
 
 #: pcbnew/drc/drc_engine.cpp:192
 msgid "board setup constraints silk text thickness"
-msgstr "电路板设置约束丝印文本粗细"
+msgstr "电路板设置约束丝印文本线宽"
 
 #: pcbnew/drc/drc_engine.cpp:198
 msgid "board setup constraints hole"
@@ -33167,7 +33167,7 @@ msgstr "(%s 最大高度 %s；实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:211
 msgid "(TrueType font characters with insufficient stroke weight)"
-msgstr "(笔画粗细不足的 TrueType 字体字符)"
+msgstr "(TrueType 字体字符的笔画线宽不足)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:227
 #, c-format
@@ -33383,10 +33383,10 @@ msgid ""
 "This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"如果重新填充此电路板上的敷铜，则将应用铜边缘间隙设置 （参见电路板配置 > 设计"
-"规则 > 限制）。\n"
-"老版本的 KiCad 会将电路板边缘 (Edge Cuts 层) 的线粗细作为铜间距，因此新的填充"
-"结果可能与老版本的填充结果不同。"
+"如果重新填充此电路板上的敷铜，则将应用铜边缘间隙设置 （参见电路板配置 > "
+"设计规则 > 限制）。\n"
+"老版本的 KiCad 会将电路板边缘 (Edge Cuts 层) "
+"的线宽作为铜间距，因此新的填充结果可能与老版本的填充结果不同。"
 
 #: pcbnew/files.cpp:612
 #, c-format
@@ -35776,9 +35776,9 @@ msgid ""
 "Therefore the minimum thickness has been applied as the new spoke width and "
 "will be applied next time the zones are filled."
 msgstr ""
-"CADSTAR 模板“%s”在原始设计中具有散热片，但辐条宽度 (%.2f mm) 比敷铜的最小厚"
-"度 (%.2f mm) 更薄。KiCad 要求保留敷铜的最小厚度。因此，已将最小厚度用作新的辐"
-"条宽度，并将在下次填充敷铜时应用。"
+"CADSTAR 模板“%s”在原始设计中具有散热片，但辐条宽度 (%.2f mm) "
+"比敷铜的最小厚度 (%.2f mm) 更薄。KiCad 要求保留敷铜的最小厚度。因此，已将最小"
+"厚度用作新的辐条宽度，并将在下次填充区域时应用。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1992
 #, c-format
@@ -37407,12 +37407,12 @@ msgstr "已解决的高度约束：最小 %s；最大 %s。"
 #: pcbnew/tools/board_inspection_tool.cpp:304
 #: pcbnew/tools/board_inspection_tool.cpp:1257
 msgid "Text thickness resolution for:"
-msgstr "下列项的文字粗细分辨率："
+msgstr "下列项的文字线宽分辨率："
 
 #: pcbnew/tools/board_inspection_tool.cpp:312
 #, c-format
 msgid "Resolved thickness constraints: min %s; max %s."
-msgstr "已解决的粗细约束：最小 %s；最大 %s。"
+msgstr "已解决的线宽约束：最小 %s；最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:319
 #: pcbnew/tools/board_inspection_tool.cpp:1162
@@ -37693,7 +37693,7 @@ msgstr "文本高度约束：最小 %s；最优 %s；最大 %s。"
 #: pcbnew/tools/board_inspection_tool.cpp:1265
 #, c-format
 msgid "Text thickness constraints: min %s; opt %s; max %s."
-msgstr "文本粗细约束：最小 %s；最优 %s；最大 %s。"
+msgstr "文本线宽约束：最小 %s；最优 %s；最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1273
 msgid "Keepouts"
@@ -37800,15 +37800,15 @@ msgstr "层名称"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:260
 msgid "Thickness (mm)"
-msgstr "粗细 (mm)"
+msgstr "线宽 (mm)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:261
 msgid "Thickness (inches)"
-msgstr "厚度（英寸）"
+msgstr "厚度（inches）"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:262
 msgid "Thickness (mils)"
-msgstr "粗细 (mils)"
+msgstr "线宽 (mils)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:277
 msgid "Loss Tangent"
@@ -37848,7 +37848,7 @@ msgstr "邮票孔： "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:460
 msgid "Board Thickness: "
-msgstr "电路板厚度： "
+msgstr "板厚： "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:474
 msgid "Min hole diameter: "
@@ -38266,11 +38266,11 @@ msgstr "添加引线标注"
 
 #: pcbnew/tools/pcb_actions.cpp:170
 msgid "Add Filled Zone"
-msgstr "添加填充敷铜"
+msgstr "添加填充区域"
 
 #: pcbnew/tools/pcb_actions.cpp:170
 msgid "Add a filled zone"
-msgstr "添加填充敷铜"
+msgstr "添加填充区域"
 
 #: pcbnew/tools/pcb_actions.cpp:176
 msgid "Add Vias"
@@ -39142,7 +39142,7 @@ msgstr "绘制敷铜填充"
 
 #: pcbnew/tools/pcb_actions.cpp:927
 msgid "Show filled areas of zones"
-msgstr "显示敷铜的填充敷铜"
+msgstr "显示区域内的填充区域"
 
 #: pcbnew/tools/pcb_actions.cpp:932
 msgid "Draw Zone Outlines"
@@ -39902,7 +39902,7 @@ msgstr "检查敷铜"
 #: pcbnew/tools/zone_filler_tool.cpp:93 pcbnew/tools/zone_filler_tool.cpp:170
 #: pcbnew/tools/zone_filler_tool.cpp:337
 msgid "Fill Zone(s)"
-msgstr "填充敷铜"
+msgstr "填充区域(s)"
 
 #: pcbnew/tools/zone_filler_tool.cpp:139 pcbnew/tools/zone_filler_tool.cpp:226
 msgid "Show DRC rules"
@@ -39938,11 +39938,11 @@ msgstr "自动补充区域可以在首选项中关闭，如果它变得太慢。
 
 #: pcbnew/tools/zone_filler_tool.cpp:331
 msgid "Fill Zone"
-msgstr "填充敷铜"
+msgstr "填充区域"
 
 #: pcbnew/tools/zone_filler_tool.cpp:375
 msgid "Unfill Zone"
-msgstr "取消填充敷铜"
+msgstr "取消填充区域"
 
 #: pcbnew/tracks_cleaner.cpp:68
 msgid "Checking null tracks and vias..."
@@ -40709,7 +40709,7 @@ msgstr "填充模式"
 
 #: pcbnew/zone.cpp:609
 msgid "Filled Area"
-msgstr "填充敷铜"
+msgstr "填充区域"
 
 #: pcbnew/zone.cpp:630
 msgid "Corner Count"
