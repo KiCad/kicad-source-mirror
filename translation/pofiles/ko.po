@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:53-0800\n"
-"PO-Revision-Date: 2023-04-24 09:24+0000\n"
+"PO-Revision-Date: 2023-04-25 20:50+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v7/ko/>\n"
 "Language: ko\n"
@@ -16035,7 +16035,7 @@ msgstr "점선 전류/위상"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:115
 msgid "White Background"
-msgstr "흰 바탕"
+msgstr "흰색 배경"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:118
 msgid "View"
@@ -24345,7 +24345,7 @@ msgstr "전면"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:155
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:569
 msgid "Back"
-msgstr "뒤로 가기"
+msgstr "후면"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:208
 msgid "Front reference start:"
