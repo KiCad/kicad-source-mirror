@@ -37,10 +37,7 @@ public:
     SIM_LIBRARY_SPICE();
 
     // @copydoc SIM_LIBRARY::ReadFile()
-    void ReadFile( const std::string& aFilePath, REPORTER* aReporter ) override;
-
-    // @copydoc SIM_LIBRARY::WriteFile()
-    void WriteFile( const std::string& aFilePath ) override;
+    void ReadFile( const wxString& aFilePath, REPORTER* aReporter ) override;
 
 private:
     std::unique_ptr<SPICE_LIBRARY_PARSER> m_spiceLibraryParser;

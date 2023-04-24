@@ -40,10 +40,10 @@ public:
     virtual ~SPICE_LIBRARY_PARSER()
     {};
 
-    virtual void ReadFile( const std::string& aFilePath, REPORTER* aReporter );
+    virtual void ReadFile( const wxString& aFilePath, REPORTER* aReporter );
 
 protected:
-    void readElement( const std::string& aFilePath, REPORTER& aReporter );
+    void parseFile( const wxString& aFilePath, REPORTER& aReporter );
 
 private:
     SIM_LIBRARY_SPICE& m_library;

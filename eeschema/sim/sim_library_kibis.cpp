@@ -29,10 +29,10 @@
 #include <lib_pin.h>
 
 
-void SIM_LIBRARY_KIBIS::ReadFile( const std::string& aFilePath, REPORTER* aReporter )
+void SIM_LIBRARY_KIBIS::ReadFile( const wxString& aFilePath, REPORTER* aReporter )
 {
     SIM_LIBRARY::ReadFile( aFilePath, aReporter );
-    m_kibis = KIBIS( aFilePath, m_reporter );
+    m_kibis = KIBIS( aFilePath.ToStdString(), m_reporter );
 
     if( !m_kibis.m_valid )
     {

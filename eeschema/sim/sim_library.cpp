@@ -29,8 +29,9 @@
 #include <macros.h>
 
 
-std::unique_ptr<SIM_LIBRARY> SIM_LIBRARY::Create( const wxString& aFilePath, REPORTER* aReporter,
-            std::function<std::string( const std::string&, const std::string& )> *aResolver )
+std::unique_ptr<SIM_LIBRARY>
+SIM_LIBRARY::Create( const wxString& aFilePath, REPORTER* aReporter,
+                     std::function<wxString( const wxString&, const wxString& )>* aResolver )
 {
     std::unique_ptr<SIM_LIBRARY> library;
 
@@ -41,13 +42,13 @@ std::unique_ptr<SIM_LIBRARY> SIM_LIBRARY::Create( const wxString& aFilePath, REP
 
     library->m_reporter = aReporter;
     library->m_pathResolver = aResolver;
-    library->ReadFile( std::string( TO_UTF8( aFilePath ) ), aReporter );
+    library->ReadFile( aFilePath, aReporter );
 
     return library;
 }
 
 
-void SIM_LIBRARY::ReadFile( const std::string& aFilePath, REPORTER* aReporter )
+void SIM_LIBRARY::ReadFile( const wxString& aFilePath, REPORTER* aReporter )
 {
     m_filePath = aFilePath;
 }

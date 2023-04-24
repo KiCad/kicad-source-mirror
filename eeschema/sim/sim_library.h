@@ -52,9 +52,9 @@ public:
      * @param aReporter The reporter the library reports to
      * @return The library loaded in a newly constructed object.
      */
-    static std::unique_ptr<SIM_LIBRARY> Create( const wxString& aFilePath,
-                                                REPORTER* aReporter = nullptr,
-                                                std::function<std::string( const std::string&, const std::string& )>* aResolver = nullptr);
+    static std::unique_ptr<SIM_LIBRARY>
+    Create( const wxString& aFilePath, REPORTER* aReporter,
+            std::function<wxString( const wxString&, const wxString& )>* aResolver );
 
     /**
      * Read library from a source file. Must be in the format appropriate to the subclass, e.g.
@@ -63,15 +63,7 @@ public:
      * @param aFilePath Path to the file.
      * @throw IO_ERROR on read or parsing error.
      */
-    virtual void ReadFile( const std::string& aFilePath, REPORTER* aReporter ) = 0;
-
-    /**
-     * Write library to a source file (e.g. in Spice format).
-     *
-     * @param aFilePath Path to the file.
-     * @throw IO_ERROR on write error.
-     */
-    virtual void WriteFile( const std::string& aFilePath ) = 0;
+    virtual void ReadFile( const wxString& aFilePath, REPORTER* aReporter ) = 0;
 
     SIM_MODEL* FindModel( const std::string& aModelName ) const;
 
@@ -83,7 +75,7 @@ protected:
     std::vector<std::string>                m_modelNames;
     std::vector<std::unique_ptr<SIM_MODEL>> m_models;
 
-    std::function<std::string( const std::string&, const std::string& )>* m_pathResolver;
+    std::function<wxString( const wxString&, const wxString& )>* m_pathResolver;
 
     std::string m_filePath;
 
