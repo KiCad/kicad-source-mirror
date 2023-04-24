@@ -38,10 +38,7 @@ public:
     static constexpr auto DIFF_FIELD = "Sim.Ibis.Diff";
 
     // @copydoc SIM_LIBRARY::ReadFile()
-    void ReadFile( const std::string& aFilePath, REPORTER* aReporter ) override;
-
-    // @copydoc SIM_LIBRARY::WriteFile()
-    void WriteFile( const std::string& aFilePath ) override{};
+    void ReadFile( const wxString& aFilePath, REPORTER* aReporter ) override;
 
     bool InitModel( SIM_MODEL_KIBIS& aModel, wxString aCompName );
     bool isPinDiff( const std::string& aComp, const std::string& aPinNumber ) const;

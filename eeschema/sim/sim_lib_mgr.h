@@ -76,9 +76,7 @@ public:
     std::vector<std::reference_wrapper<SIM_MODEL>> GetModels() const;
 
     static wxString ResolveLibraryPath( const wxString& aLibraryPath, const PROJECT* aProject );
-
-    std::string ResolveEmbeddedLibraryPath( const std::string& aLibPath,
-                                            const std::string& aRelativeLib );
+    wxString ResolveEmbeddedLibraryPath( const wxString& aLibPath, const wxString& aRelativeLib );
 
 private:
     const PROJECT*                                   m_project;

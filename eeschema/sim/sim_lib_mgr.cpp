@@ -80,8 +80,8 @@ wxString SIM_LIB_MGR::ResolveLibraryPath( const wxString& aLibraryPath, const PR
 }
 
 
-std::string SIM_LIB_MGR::ResolveEmbeddedLibraryPath( const std::string& aLibPath,
-                                                     const std::string& aRelativeLib )
+wxString SIM_LIB_MGR::ResolveEmbeddedLibraryPath( const wxString& aLibPath,
+                                                  const wxString& aRelativeLib )
 {
     wxFileName testPath( aLibPath );
     wxString fullPath( aLibPath );
@@ -115,7 +115,7 @@ std::string SIM_LIB_MGR::ResolveEmbeddedLibraryPath( const std::string& aLibPath
     catch( ... )
     {}
 
-    return fullPath.ToStdString();
+    return fullPath;
 }
 
 
@@ -125,7 +125,7 @@ void SIM_LIB_MGR::SetLibrary( const wxString& aLibraryPath )
     {
         wxString path = ResolveLibraryPath( aLibraryPath, m_project );
 
-        std::function<std::string(const std::string&, const std::string&)> f2 =
+        std::function<wxString(const wxString&, const wxString&)> f2 =
                 std::bind( &SIM_LIB_MGR::ResolveEmbeddedLibraryPath, this, _1, _2 );
 
         std::unique_ptr<SIM_LIBRARY> library = SIM_LIBRARY::Create( path, m_reporter, &f2 );
@@ -279,7 +279,7 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const wxString& aLibraryPath,
     {
         path = ResolveLibraryPath( aLibraryPath, m_project );
 
-        std::function<std::string( const std::string&, const std::string& )> f2 =
+        std::function<wxString( const wxString&, const wxString& )> f2 =
                 std::bind( &SIM_LIB_MGR::ResolveEmbeddedLibraryPath, this, _1, _2 );
 
         auto it = m_libraries.try_emplace( path, SIM_LIBRARY::Create( path, m_reporter, &f2 ) ).first;

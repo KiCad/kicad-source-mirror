@@ -106,6 +106,47 @@ std::string StrPrintf( const char* format, ... )
 }
 
 
+wxString SafeReadFile( const wxString& aFilePath, const wxString& aReadType )
+{
+    auto FROM_UTF8_WINE =
+            []( const char* cstring )
+            {
+                wxString line = wxString::FromUTF8( cstring );
+
+                if( line.IsEmpty() )  // happens when cstring is not a valid UTF8 sequence
+                    line = wxConvCurrent->cMB2WC( cstring );    // try to use locale conversion
+
+                // We have trouble here *probably* because Wine-hosted LTSpice writes out MSW
+                // encoded text on a macOS, where it isn't expected.  In any case, wxWidgets'
+                // wxSafeConvert() appears to get around it.
+
+                if( line.IsEmpty() )
+                    line = wxSafeConvertMB2WX( cstring );
+
+                // I'm not sure what the source of this style of line-endings is, but it can be
+                // found in some Fairchild Semiconductor SPICE files.
+                line.Replace( wxS( "\r\r\n" ), wxS( "\n" ) );
+
+                return line;
+            };
+
+    // Open file
+    FILE* fp = wxFopen( aFilePath, aReadType );
+
+    if( !fp )
+        THROW_IO_ERROR( wxString::Format( _( "Cannot open file '%s'." ), aFilePath ) );
+
+    FILE_LINE_READER fileReader( fp, aFilePath );
+
+    wxString contents;
+
+    while( fileReader.ReadLine() )
+        contents += FROM_UTF8_WINE( fileReader.Line() );
+
+    return contents;
+}
+
+
 //-----<LINE_READER>------------------------------------------------------
 
 LINE_READER::LINE_READER( unsigned aMaxLineLength ) :

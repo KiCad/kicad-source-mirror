@@ -57,17 +57,16 @@ namespace SIM_LIBRARY_SPICE_PARSER
 };
 
 
-void SPICE_LIBRARY_PARSER::readElement( const std::string &aFilePath, REPORTER& aReporter )
+void SPICE_LIBRARY_PARSER::parseFile( const wxString &aFilePath, REPORTER& aReporter )
 {
     try
     {
-        tao::pegtl::file_input in( aFilePath );
-        std::unique_ptr<tao::pegtl::parse_tree::node> root =
-                    tao::pegtl::parse_tree::parse<SIM_LIBRARY_SPICE_PARSER::libraryGrammar,
+        tao::pegtl::string_input<> in( SafeReadFile( aFilePath, wxS( "r" ) ).ToStdString(),
+                                       aFilePath.ToStdString() );
+        auto root = tao::pegtl::parse_tree::parse<SIM_LIBRARY_SPICE_PARSER::libraryGrammar,
                                                   SIM_LIBRARY_SPICE_PARSER::librarySelector,
                                                   tao::pegtl::nothing,
-                                                  SIM_LIBRARY_SPICE_PARSER::control>
-                ( in );
+                                                  SIM_LIBRARY_SPICE_PARSER::control> ( in );
 
         for( const auto& node : root->children )
         {
@@ -88,14 +87,14 @@ void SPICE_LIBRARY_PARSER::readElement( const std::string &aFilePath, REPORTER& 
             }
             else if( node->is_type<SIM_LIBRARY_SPICE_PARSER::dotInclude>() )
             {
-                std::string lib = node->children.at( 0 )->string();
+                wxString lib = node->children.at( 0 )->string();
 
                 try
                 {
                     if( m_library.m_pathResolver )
                         lib = ( *m_library.m_pathResolver )( lib, aFilePath );
 
-                    readElement( lib, aReporter );
+                    parseFile( lib, aReporter );
                 }
                 catch( const IO_ERROR& e )
                 {
@@ -112,9 +111,9 @@ void SPICE_LIBRARY_PARSER::readElement( const std::string &aFilePath, REPORTER& 
             }
         }
     }
-    catch( const std::filesystem::filesystem_error& e )
+    catch( const IO_ERROR& e )
     {
-        aReporter.Report( e.what(), RPT_SEVERITY_ERROR );
+        aReporter.Report( e.What(), RPT_SEVERITY_ERROR );
     }
     catch( const tao::pegtl::parse_error& e )
     {
@@ -123,21 +122,21 @@ void SPICE_LIBRARY_PARSER::readElement( const std::string &aFilePath, REPORTER& 
 }
 
 
-void SPICE_LIBRARY_PARSER::ReadFile( const std::string& aFilePath, REPORTER* aReporter )
+void SPICE_LIBRARY_PARSER::ReadFile( const wxString& aFilePath, REPORTER* aReporter )
 {
     m_library.m_models.clear();
     m_library.m_modelNames.clear();
 
     if( aReporter )
     {
-        readElement( aFilePath, *aReporter );
+        parseFile( aFilePath, *aReporter );
     }
     else
     {
         wxString           msg;
         WX_STRING_REPORTER reporter( &msg );
 
-        readElement( aFilePath, reporter );
+        parseFile( aFilePath, reporter );
 
         if( reporter.HasMessage() )
             THROW_IO_ERROR( msg );

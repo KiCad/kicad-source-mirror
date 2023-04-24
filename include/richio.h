@@ -70,6 +70,18 @@ std::string
     StrPrintf( const char* format, ... );
 
 
+/**
+ * Nominally opens a file and reads it into a string.  But unlike other facilities, this handles
+ * mis-encded Wine-written files on macOS.
+ *
+ * @param aFilePath
+ * @param aReadType
+ * @throw IO_ERROR if the file can't be opened
+ * @return the file contents
+ */
+wxString SafeReadFile( const wxString& aFilePath, const wxString& aReadType );
+
+
 #define LINE_READER_LINE_DEFAULT_MAX        1000000
 #define LINE_READER_LINE_INITIAL_SIZE       5000
 
