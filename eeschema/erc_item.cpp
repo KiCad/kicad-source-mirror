@@ -285,22 +285,42 @@ std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
 void ERC_TREE_MODEL::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
                                unsigned int aCol ) const
 {
-    const RC_TREE_NODE*            node = ToNode( aItem );
-    const std::shared_ptr<RC_ITEM> rcItem = node->m_RcItem;
-    MARKER_BASE*                   marker = rcItem->GetParent();
-    EDA_ITEM*                      item = nullptr;
-    wxString                       msg;
+    SCH_EDIT_FRAME*           schEditFrame = static_cast<SCH_EDIT_FRAME*>( m_editFrame );
+    const RC_TREE_NODE*       node = ToNode( aItem );
+    std::shared_ptr<ERC_ITEM> ercItem = std::static_pointer_cast<ERC_ITEM>( node->m_RcItem );
+    MARKER_BASE*              marker = ercItem->GetParent();
+    wxString                  msg;
+
+    auto getItemDesc =
+            [&]( EDA_ITEM* aItem, SCH_SHEET_PATH& aSheet )
+            {
+                SCH_SHEET_PATH curSheet = schEditFrame->GetCurrentSheet();
+                wxString       desc;
+
+                if( aSheet != curSheet )
+                {
+                    aSheet.UpdateAllScreenReferences();
+                    desc = aItem->GetItemDescription( m_editFrame );
+                    curSheet.UpdateAllScreenReferences();
+                }
+                else
+                {
+                    desc = aItem->GetItemDescription( m_editFrame );
+                }
+
+                return desc;
+            };
 
     switch( node->m_Type )
     {
     case RC_TREE_NODE::MARKER:
         if( marker )
         {
-            SEVERITY severity = rcItem->GetParent()->GetSeverity();
+            SEVERITY severity = ercItem->GetParent()->GetSeverity();
 
             if( severity == RPT_SEVERITY_EXCLUSION )
             {
-                if( m_editFrame->GetSeverity( rcItem->GetErrorCode() ) == RPT_SEVERITY_WARNING )
+                if( schEditFrame->GetSeverity( ercItem->GetErrorCode() ) == RPT_SEVERITY_WARNING )
                     msg = _( "Excluded warning: " );
                 else
                     msg = _( "Excluded error: " );
@@ -315,7 +335,7 @@ void ERC_TREE_MODEL::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
             }
         }
 
-        msg += rcItem->GetErrorMessage();
+        msg += ercItem->GetErrorMessage();
         break;
 
     case RC_TREE_NODE::MAIN_ITEM:
@@ -325,50 +345,27 @@ void ERC_TREE_MODEL::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
         }
         else
         {
-            std::shared_ptr<ERC_ITEM> ercItem = std::static_pointer_cast<ERC_ITEM>( rcItem );
-            SCH_EDIT_FRAME*           schEditFrame = static_cast<SCH_EDIT_FRAME*>( m_editFrame );
-            SCH_SHEET_PATH            curPath;
-
-            // Update the target ERC item reference field to a specific sheet context if present
-            curPath = schEditFrame->GetCurrentSheet();
-
-            if( ercItem->MainItemHasSheetPath() )
-                ercItem->GetMainItemSheetPath().UpdateAllScreenReferences();
-
-            item = m_editFrame->GetItem( rcItem->GetMainItemID() );
-            msg = item->GetItemDescription( m_editFrame );
-
-            // Reset reference fields to current visible sheet
-            if( ercItem->MainItemHasSheetPath() )
-                curPath.UpdateAllScreenReferences();
+            msg = getItemDesc( schEditFrame->GetItem( ercItem->GetMainItemID() ),
+                               ercItem->MainItemHasSheetPath() ? ercItem->GetMainItemSheetPath()
+                                                               : schEditFrame->GetCurrentSheet() );
         }
 
         break;
 
     case RC_TREE_NODE::AUX_ITEM:
-    {
-        std::shared_ptr<ERC_ITEM> ercItem = std::static_pointer_cast<ERC_ITEM>( rcItem );
-        SCH_EDIT_FRAME*           schEditFrame = static_cast<SCH_EDIT_FRAME*>( m_editFrame );
-        SCH_SHEET_PATH            curPath;
-
-        // Update the target ERC item reference field to a specific sheet context if present
-        curPath = schEditFrame->GetCurrentSheet();
-
-        if( ercItem->AuxItemHasSheetPath() )
-            ercItem->GetAuxItemSheetPath().UpdateAllScreenReferences();
-
-        item = m_editFrame->GetItem( rcItem->GetAuxItemID() );
-        msg = item->GetItemDescription( m_editFrame );
-
-        // Reset reference fields to current visible sheet
-        if( ercItem->AuxItemHasSheetPath() )
-            curPath.UpdateAllScreenReferences();
-    }
-    break;
+        msg = getItemDesc( schEditFrame->GetItem( ercItem->GetAuxItemID() ),
+                           ercItem->AuxItemHasSheetPath() ? ercItem->GetAuxItemSheetPath()
+                                                          : schEditFrame->GetCurrentSheet() );
+        break;
 
     case RC_TREE_NODE::AUX_ITEM2:
+        msg = getItemDesc( schEditFrame->GetItem( ercItem->GetAuxItem2ID() ),
+                           schEditFrame->GetCurrentSheet() );
+        break;
+
     case RC_TREE_NODE::AUX_ITEM3:
-        UNIMPLEMENTED_FOR( wxS( "AUX_ITEM2 or AUX_ITEM3" ) );
+        msg = getItemDesc( schEditFrame->GetItem( ercItem->GetAuxItem3ID() ),
+                           schEditFrame->GetCurrentSheet() );
         break;
     }
 
