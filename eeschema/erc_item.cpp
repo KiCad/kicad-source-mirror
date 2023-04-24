@@ -292,7 +292,7 @@ void ERC_TREE_MODEL::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
     wxString                  msg;
 
     auto getItemDesc =
-            [&]( EDA_ITEM* aItem, SCH_SHEET_PATH& aSheet )
+            [&]( EDA_ITEM* aCurrItem, SCH_SHEET_PATH& aSheet )
             {
                 SCH_SHEET_PATH curSheet = schEditFrame->GetCurrentSheet();
                 wxString       desc;
@@ -300,12 +300,12 @@ void ERC_TREE_MODEL::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
                 if( aSheet != curSheet )
                 {
                     aSheet.UpdateAllScreenReferences();
-                    desc = aItem->GetItemDescription( m_editFrame );
+                    desc = aCurrItem->GetItemDescription( m_editFrame );
                     curSheet.UpdateAllScreenReferences();
                 }
                 else
                 {
-                    desc = aItem->GetItemDescription( m_editFrame );
+                    desc = aCurrItem->GetItemDescription( m_editFrame );
                 }
 
                 return desc;
