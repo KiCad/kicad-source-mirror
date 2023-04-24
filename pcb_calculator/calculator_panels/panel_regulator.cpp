@@ -437,13 +437,31 @@ void PANEL_REGULATOR::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 
     for( int ii = 0; ii < 3; ii++ )
         regprms[ii]->SetValue( aCfg->m_Regulators.last_param == ii );
-
 }
 
 
 void PANEL_REGULATOR::SaveSettings( PCB_CALCULATOR_SETTINGS *aCfg )
 {
-    // TODO: This was empty for some reason, should we actually save settings here?
+    aCfg->m_Regulators.r1 = m_RegulR1Value->GetValue();
+    aCfg->m_Regulators.r2 = m_RegulR2Value->GetValue();
+    aCfg->m_Regulators.vref = m_RegulVrefValue->GetValue();
+    m_RegulVoutValue->SetValue( aCfg->m_Regulators.vout );
+    aCfg->m_Regulators.data_file = GetDataFilename();
+    aCfg->m_Regulators.selected_regulator = m_lastSelectedRegulatorName;
+    aCfg->m_Regulators.type = m_choiceRegType->GetSelection();
+
+    wxRadioButton* regprms[3] = { m_rbRegulR1, m_rbRegulR2, m_rbRegulVout };
+
+    aCfg->m_Regulators.last_param = 0;
+
+    for( int ii = 0; ii < 3; ii++ )
+    {
+        if( regprms[ii]->GetValue() )
+        {
+            aCfg->m_Regulators.last_param = ii;
+            break;
+        }
+    }
 }
 
 
