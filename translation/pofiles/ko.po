@@ -29,7 +29,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:51-0800\n"
-"PO-Revision-Date: 2023-04-24 09:25+0000\n"
+"PO-Revision-Date: 2023-04-24 19:52+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -5022,9 +5022,8 @@ msgid "Delete"
 msgstr "삭제"
 
 #: common/grid_tricks.cpp:353
-#, fuzzy
 msgid "Clear contents of selected cells"
-msgstr "선택한 셀 삭제"
+msgstr "선택한 셀의 내용 지우기"
 
 #: common/grid_tricks.cpp:354 common/tool/actions.cpp:171
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:105
@@ -5324,14 +5323,12 @@ msgid "Page limits"
 msgstr "페이지 제한"
 
 #: common/layer_id.cpp:150
-#, fuzzy
 msgid "Operating point voltages"
-msgstr "동작점"
+msgstr "동작점 전압"
 
 #: common/layer_id.cpp:151
-#, fuzzy
 msgid "Operating point currents"
-msgstr "동작점"
+msgstr "동작점 전류"
 
 #: common/layer_id.cpp:155
 msgid "Footprints front"
@@ -6029,9 +6026,8 @@ msgid "Find Previous"
 msgstr "이전 찾기"
 
 #: common/tool/actions.cpp:234
-#, fuzzy
 msgid "Find previous match"
-msgstr "이전 찾기"
+msgstr "이전 일치 항목 찾기"
 
 #: common/tool/actions.cpp:240
 msgid "Find Next Marker"
@@ -8658,15 +8654,13 @@ msgid "Save all power dissipations"
 msgstr "모든 전원 분산 저장"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:307
-#, fuzzy
 msgid ""
 "Write directives to save power dissipation of all items (.probe p(<item>))"
-msgstr "모든 전류를 저장하는 지시문 작성(.probe alli)"
+msgstr "모든 항목의 전력 소모를 줄이기 위한 지시문 작성(.probe p(<item>))"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:313
-#, fuzzy
 msgid "Run external simulator command:"
-msgstr "외부 시뮬레이터 명령:"
+msgstr "외부 시뮬레이터 명령 실행:"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:315
 #, fuzzy
@@ -24745,7 +24739,7 @@ msgstr "전면"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:155
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:569
 msgid "Back"
-msgstr "뒤로 가기"
+msgstr "후면"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:211
 msgid "Front reference start:"
