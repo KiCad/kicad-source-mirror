@@ -324,7 +324,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
         case PNS::ITEM::VIA_T:     parentA = &m_dummyVias[0];   break;
         case PNS::ITEM::SEGMENT_T: parentA = &m_dummyTracks[0]; break;
         case PNS::ITEM::LINE_T:    parentA = &m_dummyTracks[0]; break;
-        case PNS::ITEM::HOLE_T:    parentB = &m_dummyVias[0];   break;
+        case PNS::ITEM::HOLE_T:    parentA = &m_dummyVias[0];   break;
         default: break;
         }
 
