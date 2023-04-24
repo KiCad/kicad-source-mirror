@@ -34,7 +34,7 @@ if __name__ == '__main__':
     # wxWidgets alerts when running the test code
     locale.setlocale(locale.LC_ALL, 'C')
 
-    testsuite = unittest.TestLoader().discover('testcases', pattern="*.py")
+    testsuite = unittest.TestLoader().discover('tests/pcbnewswig', pattern="*.py")
 
     if args.xml:
         # Dump XML results to the right directory

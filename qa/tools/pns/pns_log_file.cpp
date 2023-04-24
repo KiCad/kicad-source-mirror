@@ -34,7 +34,7 @@
 #include <pcbnew/plugins/kicad/pcb_plugin.h>
 #include <pcbnew/drc/drc_engine.h>
 
-#include <../../unittests/common/console_log.h>
+#include <../../tests/common/console_log.h>
 
 BOARD_CONNECTED_ITEM* PNS_LOG_FILE::ItemById( const PNS_LOG_FILE::EVENT_ENTRY& evt )
 {
@@ -60,7 +60,7 @@ static const wxString readLine( FILE* f )
 }
 
 
-PNS_LOG_FILE::PNS_LOG_FILE() : 
+PNS_LOG_FILE::PNS_LOG_FILE() :
     m_mode( PNS::ROUTER_MODE::PNS_MODE_ROUTE_SINGLE )
 {
     m_routerSettings.reset( new PNS::ROUTING_SETTINGS( nullptr, "" ) );
@@ -85,7 +85,7 @@ static std::shared_ptr<SHAPE> parseShape( SHAPE_TYPE expectedType, wxStringToken
     }
     else if ( type == SHAPE_TYPE::SH_CIRCLE )
     {
-        
+
             std::shared_ptr<SHAPE_CIRCLE> sh(  new SHAPE_CIRCLE );
         VECTOR2I a;
         a.x = wxAtoi( aTokens.GetNextToken() );
@@ -128,12 +128,12 @@ static PNS::SEGMENT* parsePnsSegmentFromString( PNS::SEGMENT* aSeg, wxStringToke
                 if ( cmd == "shape" )
                 {
                     auto sh = parseShape( SH_SEGMENT, aTokens );
-                    
+
                     if(!sh)
                         return nullptr;
-        
+
                     seg->SetShape( *static_cast<SHAPE_SEGMENT*>(sh.get()) );
-                    
+
                 }
             }
     }
@@ -153,10 +153,10 @@ static PNS::VIA* parsePnsViaFromString( PNS::VIA* aSeg, wxStringTokenizer& aToke
                 if ( cmd == "shape" )
                 {
                     auto sh = parseShape( SH_CIRCLE, aTokens );
-                    
+
                     if(!sh)
                         return nullptr;
-        
+
                     auto *sc = static_cast<SHAPE_CIRCLE*>( sh.get() );
 
                     via->SetPos( sc->GetCenter() );
@@ -195,7 +195,7 @@ bool comparePnsItems( const PNS::ITEM*a , const PNS::ITEM* b )
 {
     if( a->Kind() != b->Kind() )
         return false;
-    
+
     if( a->Net() != b->Net() )
         return false;
 
@@ -228,7 +228,7 @@ bool comparePnsItems( const PNS::ITEM*a , const PNS::ITEM* b )
         if( sa->Width() != sb->Width() )
             return false;
     }
-    
+
     return true;
 }
 
@@ -329,7 +329,7 @@ bool PNS_LOG_FILE::Load( const wxFileName& logFileName, REPORTER* aRpt )
     fclose( f );
 
     aRpt->Report( wxString::Format( wxT("Loading router settings from '%s'"), fname_settings.GetFullPath() ) );
-    
+
     bool ok = m_routerSettings->LoadFromRawFile( fname_settings.GetFullPath() );
 
     if( !ok )
@@ -338,7 +338,7 @@ bool PNS_LOG_FILE::Load( const wxFileName& logFileName, REPORTER* aRpt )
     }
 
     aRpt->Report( wxString::Format( wxT("Loading project settings from '%s'"), fname_settings.GetFullPath() ) );
-    
+
     m_settingsMgr.reset( new SETTINGS_MANAGER ( true ) );
     m_settingsMgr->LoadProject( fname_project.GetFullPath() );
 
