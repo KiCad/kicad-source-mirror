@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:51-0800\n"
-"PO-Revision-Date: 2023-04-24 19:52+0000\n"
+"PO-Revision-Date: 2023-04-24 20:33+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -302,17 +302,17 @@ msgstr "设置 (&P)"
 #: pcbnew/widgets/appearance_controls.cpp:2744
 #, c-format
 msgid "Viewports (%s+Tab):"
-msgstr "视口 (%s+Tab)："
+msgstr "视角 (%s+Tab)："
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:68
 #: pcbnew/widgets/appearance_controls.cpp:2753
 msgid "Save viewport..."
-msgstr "保存视口…"
+msgstr "保存视角…"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:69
 #: pcbnew/widgets/appearance_controls.cpp:2754
 msgid "Delete viewport..."
-msgstr "删除视口…"
+msgstr "删除视角…"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:71
 #, c-format
@@ -324,7 +324,7 @@ msgid ""
 msgstr ""
 "保存并恢复视图方向和缩放。\n"
 "使用 %s+Tab 激活选择器。\n"
-"按下 %s 时，连续的选项卡将在弹出窗口的视口中循环。"
+"按下 %s 时，连续的选项卡将在弹出窗口的视角中循环。"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:83
 msgid "Reload board"
@@ -346,27 +346,27 @@ msgstr "KiCad 3D 查看器"
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:522
 #: pcbnew/widgets/appearance_controls.cpp:2802
 msgid "Viewport name:"
-msgstr "视口名称："
+msgstr "视角名称："
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:522
 #: pcbnew/widgets/appearance_controls.cpp:2802
 msgid "Save Viewport"
-msgstr "保存视口"
+msgstr "保存视角"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:561
 #: pcbnew/widgets/appearance_controls.cpp:2841
 msgid "Viewports"
-msgstr "视口"
+msgstr "视角"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:570
 #: pcbnew/widgets/appearance_controls.cpp:2850
 msgid "Delete Viewport"
-msgstr "删除视口"
+msgstr "删除视角"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:571
 #: pcbnew/widgets/appearance_controls.cpp:2851
 msgid "Select viewport:"
-msgstr "选择视口："
+msgstr "选择视角："
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:773
 msgid "3D Image File Name"
@@ -40175,7 +40175,7 @@ msgid ""
 msgstr ""
 "保存并恢复视图位置和缩放。\n"
 "使用 %s+Tab 激活选择器。\n"
-"按下 %s 时，连续的选项卡将在弹出窗口的视口中循环。"
+"按下 %s 时，连续的选项卡将在弹出窗口的视角中循环。"
 
 #: pcbnew/widgets/appearance_controls.cpp:460
 msgid "Filter nets"
@@ -40599,7 +40599,7 @@ msgstr "(未保存)"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:180
 msgid "Viewports (Alt+Tab):"
-msgstr "视口 (Alt+Tab)："
+msgstr "视角 (Alt+Tab)："
 
 #: pcbnew/widgets/filedlg_hook_save_project.h:32
 #: pcbnew/widgets/legacyfiledlg_save_project.h:34
