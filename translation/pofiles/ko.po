@@ -28,15 +28,15 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:53-0800\n"
-"PO-Revision-Date: 2023-04-08 21:59+0000\n"
-"Last-Translator: \"minsu kim (0xGabriel)\" <rlaalstn9601@gmail.com>\n"
+"PO-Revision-Date: 2023-04-24 09:24+0000\n"
+"Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v7/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.17-dev\n"
+"X-Generator: Weblate 4.18-dev\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -19566,7 +19566,7 @@ msgstr "최소 헤더"
 
 #: kicad/cli/command_export_pcb_drill.cpp:73
 msgid "PTH and NPTH in separate files file"
-msgstr "PTH & NPTH를 별도의 파일로"
+msgstr "PTH & NPTH을 별도 파일로"
 
 #: kicad/cli/command_export_pcb_drill.cpp:78
 msgid "Generate map / summary of drill hits"
@@ -20481,7 +20481,7 @@ msgstr ""
 
 #: kicad/pcm/pcm.cpp:464
 msgid "Failed to parse locally stored repository.json."
-msgstr "로컬에 저장된 레파지토리.json 파일을 불러오는데 실패했습니다 : %s"
+msgstr "로컬에 저장된 repository.json을 구문 분석하지 못함."
 
 #: kicad/pcm/pcm.cpp:492
 msgid ""
@@ -21789,9 +21789,9 @@ msgid "Linear resistance:"
 msgstr "선형 저항:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:126
-#, c-format
+#, c-format, fuzzy
 msgid "Frequency for 100% skin depth:"
-msgstr "skin depth 100%를 위한 주파수:"
+msgstr "침투깊이 100%를 위한 주파수:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:138
 msgid "Ampacity:"
