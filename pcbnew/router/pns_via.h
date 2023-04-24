@@ -51,19 +51,21 @@ class VIA : public LINKED_ITEM
 {
 public:
     VIA() :
-        LINKED_ITEM( VIA_T )
+        LINKED_ITEM( VIA_T ),
+        m_hole( nullptr )
     {
-        m_diameter  = 2; // Dummy value
-        m_drill     = 0;
-        m_viaType   = VIATYPE::THROUGH;
-        m_isFree    = false;
+        m_diameter = 2; // Dummy value
+        m_drill = 0;
+        m_viaType = VIATYPE::THROUGH;
+        m_isFree = false;
         m_isVirtual = false;
-        m_hole      = HOLE::MakeCircularHole( m_pos, m_diameter / 2 );
+        SetHole( HOLE::MakeCircularHole( m_pos, m_diameter / 2 ) );
     }
 
     VIA( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, int aDiameter, int aDrill,
          int aNet = -1, VIATYPE aViaType = VIATYPE::THROUGH ) :
-        LINKED_ITEM( VIA_T )
+        LINKED_ITEM( VIA_T ),
+        m_hole( nullptr )
     {
         SetNet( aNet );
         SetLayers( aLayers );
@@ -71,24 +73,22 @@ public:
         m_diameter = aDiameter;
         m_drill = aDrill;
         m_shape = SHAPE_CIRCLE( aPos, aDiameter / 2 );
-        m_hole = HOLE::MakeCircularHole( m_pos, aDrill / 2 );
-        m_hole->SetNet( aNet );
-        m_hole->SetOwner( this );
+        SetHole( HOLE::MakeCircularHole( m_pos, aDrill / 2 ) );
         m_viaType = aViaType;
         m_isFree = false;
         m_isVirtual = false;
     }
 
     VIA( const VIA& aB ) :
-        LINKED_ITEM( aB )
+        LINKED_ITEM( aB ),
+        m_hole( nullptr )
     {
         SetNet( aB.Net() );
         SetLayers( aB.Layers() );
         m_pos = aB.m_pos;
         m_diameter = aB.m_diameter;
         m_shape = SHAPE_CIRCLE( m_pos, m_diameter / 2 );
-        m_hole = aB.m_hole->Clone();
-        m_hole->SetOwner( this );
+        SetHole( aB.m_hole->Clone() );
         m_marker = aB.m_marker;
         m_rank = aB.m_rank;
         m_drill = aB.m_drill;
@@ -175,7 +175,7 @@ public:
             delete m_hole;
 
         m_hole = aHole;
-        m_hole->SetNet( Net() );
+        m_hole->SetParentPadVia( this );
         m_hole->SetOwner( this );
 
         if( m_hole )
