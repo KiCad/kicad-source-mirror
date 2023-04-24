@@ -31,10 +31,12 @@
 #include <geometry/shape_rect.h>
 #include <sch_painter.h>
 #include <sch_junction.h>
+#include <sch_edit_frame.h>
 #include <sch_connection.h>
 #include <schematic.h>
 #include <settings/color_settings.h>
 #include <connection_graph.h>
+#include <string_utils.h>
 
 
 SCH_JUNCTION::SCH_JUNCTION( const VECTOR2I& aPosition, int aDiameter, SCH_LAYER_ID aLayer ) :
@@ -276,5 +278,29 @@ bool SCH_JUNCTION::operator <( const SCH_ITEM& aItem ) const
         return GetDiameter() < junction->GetDiameter();
 
     return GetColor() < junction->GetColor();
+}
+
+
+void SCH_JUNCTION::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
+{
+    aList.emplace_back( _( "Junction" ), wxEmptyString );
+
+    aList.emplace_back( _( "Size" ), aFrame->MessageTextFromValue( GetEffectiveDiameter() ) );
+
+    SCH_CONNECTION* conn = nullptr;
+
+    if( !IsConnectivityDirty() && dynamic_cast<SCH_EDIT_FRAME*>( aFrame ) )
+        conn = Connection();
+
+    if( conn )
+    {
+        conn->AppendInfoToMsgPanel( aList );
+
+        if( !conn->IsBus() )
+        {
+            aList.emplace_back( _( "Resolved Netclass" ),
+                                UnescapeString( GetEffectiveNetClass()->GetName() ) );
+        }
+    }
 }
 
