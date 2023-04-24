@@ -29,8 +29,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:51-0800\n"
-"PO-Revision-Date: 2023-04-08 21:59+0000\n"
-"Last-Translator: \"minsu kim (0xGabriel)\" <rlaalstn9601@gmail.com>\n"
+"PO-Revision-Date: 2023-04-24 09:25+0000\n"
+"Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -38,7 +38,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.17-dev\n"
+"X-Generator: Weblate 4.18-dev\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -544,7 +544,6 @@ msgid "Render Solid Colors"
 msgstr "단색 렌더링"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:195
-#, fuzzy
 msgid "Use only the diffuse color property from 3D model file"
 msgstr "모델 3D 모델 파일의 확산 색상 속성만 사용"
 
@@ -20891,7 +20890,7 @@ msgstr ""
 
 #: kicad/pcm/pcm.cpp:464
 msgid "Failed to parse locally stored repository.json."
-msgstr "로컬에 저장된 레파지토리.json 파일을 불러오는데 실패했습니다 : %s"
+msgstr "로컬에 저장된 repository.json을 구문 분석하지 못함."
 
 #: kicad/pcm/pcm.cpp:492
 msgid ""
@@ -22202,7 +22201,7 @@ msgstr "선형 저항:"
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:126
 #, c-format
 msgid "Frequency for 100% skin depth:"
-msgstr "skin depth 100%를 위한 주파수:"
+msgstr "침투깊이 100%를 위한 주파수:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:138
 msgid "Ampacity:"
