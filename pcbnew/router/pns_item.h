@@ -186,7 +186,7 @@ public:
     virtual BOARD_ITEM* BoardItem() const { return m_parent; }
 
     void SetNet( int aNet ) { m_net = aNet; }
-    int Net() const { return m_net;  }
+    virtual int Net() const { return m_net;  }
 
     const LAYER_RANGE& Layers() const { return m_layers; }
     void SetLayers( const LAYER_RANGE& aLayers ) { m_layers = aLayers; }

@@ -49,6 +49,14 @@ public:
      */
     virtual HOLE* Clone() const override;
 
+    virtual int Net() const override
+    {
+        if( m_parentPadVia )
+            return m_parentPadVia->Net();
+
+        return m_net;
+    }
+
     virtual const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0,
                                          int aLayer = -1 ) const override;
 
@@ -59,6 +67,7 @@ public:
 
     const SHAPE* Shape() const override { return m_holeShape; }
 
+    void SetParentPadVia( ITEM* aParent ) { m_parentPadVia = aParent; }
     ITEM* ParentPadVia() const { return m_parentPadVia; }
 
     BOARD_ITEM* BoardItem() const override
