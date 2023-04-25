@@ -19,9 +19,9 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <sch_plugins/lt_spice/ltspice_schematic.h>
-#include <sch_plugins/lt_spice/ltspice_sch_plugin.h>
-#include <sch_plugins/lt_spice/ltspice_sch_parser.h>
+#include <sch_plugins/ltspice/ltspice_schematic.h>
+#include <sch_plugins/ltspice/ltspice_sch_plugin.h>
+#include <sch_plugins/ltspice/ltspice_sch_parser.h>
 
 #include <schematic.h>
 #include <sch_sheet.h>

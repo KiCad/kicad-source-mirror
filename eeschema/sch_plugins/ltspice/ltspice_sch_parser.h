@@ -32,7 +32,7 @@
 #include <layer_ids.h>
 #include <wx/filename.h>
 #include <plotters/plotter.h>
-#include <sch_plugins/lt_spice/ltspice_schematic.h>
+#include <sch_plugins/ltspice/ltspice_schematic.h>
 
 
 class LIB_SHAPE;

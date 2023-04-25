@@ -24,8 +24,8 @@
  * schematic file.
  */
 
-#include <sch_plugins/lt_spice/ltspice_sch_parser.h>
-#include <sch_plugins/lt_spice/ltspice_schematic.h>
+#include <sch_plugins/ltspice/ltspice_sch_parser.h>
+#include <sch_plugins/ltspice/ltspice_schematic.h>
 #include <sch_io_mgr.h>
 #include <base_units.h>
 #include <core/kicad_algo.h>

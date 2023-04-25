@@ -23,8 +23,8 @@
  * @brief Loads the asc file and asy files.
  */
 
-#include <sch_plugins/lt_spice/ltspice_schematic.h>
-#include <sch_plugins/lt_spice/ltspice_sch_parser.h>
+#include <sch_plugins/ltspice/ltspice_schematic.h>
+#include <sch_plugins/ltspice/ltspice_sch_parser.h>
 #include <sch_io_mgr.h>
 #include <sch_screen.h>
 #include <wx/log.h>

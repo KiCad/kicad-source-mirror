@@ -31,7 +31,7 @@
 #include <sch_plugins/altium/sch_altium_plugin.h>
 #include <sch_plugins/cadstar/cadstar_sch_archive_plugin.h>
 #include <sch_plugins/database/sch_database_plugin.h>
-#include "sch_plugins/lt_spice/ltspice_sch_plugin.h"
+#include <sch_plugins/ltspice/ltspice_sch_plugin.h>
 #include <wildcards_and_files_ext.h>
 
 #define FMT_UNIMPLEMENTED   _( "Plugin \"%s\" does not implement the \"%s\" function." )
