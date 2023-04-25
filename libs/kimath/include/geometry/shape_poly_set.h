@@ -1009,7 +1009,7 @@ public:
      *                        #ROUND_ALL_CORNERS to round regardless of angles
      */
     void Inflate( int aAmount, int aCircleSegCount,
-                  CORNER_STRATEGY aCornerStrategy = ROUND_ALL_CORNERS );
+                  CORNER_STRATEGY aCornerStrategy = ROUND_ALL_CORNERS, bool aSimplify = false );
 
     void Deflate( int aAmount, int aCircleSegmentsCount,
                   CORNER_STRATEGY aCornerStrategy = CHAMFER_ALL_CORNERS )
@@ -1402,7 +1402,7 @@ private:
                      const std::vector<SHAPE_ARC>&                       aArcBuffer );
 
     void inflate1( int aAmount, int aCircleSegCount, CORNER_STRATEGY aCornerStrategy );
-    void inflate2( int aAmount, int aCircleSegCount, CORNER_STRATEGY aCornerStrategy );
+    void inflate2( int aAmount, int aCircleSegCount, CORNER_STRATEGY aCornerStrategy, bool aSimplify = false );
 
     /**
      * This is the engine to execute all polygon boolean transforms (AND, OR, ... and polygon

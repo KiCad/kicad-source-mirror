@@ -1,6 +1,6 @@
 /*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Date      :  22 March 2023                                                   *
+* Date      :  23 March 2023                                                   *
 * Website   :  http://www.angusj.com                                           *
 * Copyright :  Angus Johnson 2010-2023                                         *
 * Purpose   :  This module exports the Clipper2 Library (ie DLL/so)            *
@@ -157,14 +157,14 @@ EXTERN_DLL_EXPORT CPathsD InflatePathsD(const CPathsD paths,
   int precision = 2, double miter_limit = 2.0,
   double arc_tolerance = 0.0, bool reverse_solution = false);
 
-// RectClip & RectClipLines:
-EXTERN_DLL_EXPORT CPaths64 RectClip64(const CRect64& rect,
+// ExecuteRectClip & ExecuteRectClipLines:
+EXTERN_DLL_EXPORT CPaths64 ExecuteRectClip64(const CRect64& rect,
   const CPaths64 paths, bool convex_only = false);
-EXTERN_DLL_EXPORT CPathsD RectClipD(const CRectD& rect,
+EXTERN_DLL_EXPORT CPathsD ExecuteRectClipD(const CRectD& rect,
   const CPathsD paths, int precision = 2, bool convex_only = false);
-EXTERN_DLL_EXPORT CPaths64 RectClipLines64(const CRect64& rect,
+EXTERN_DLL_EXPORT CPaths64 ExecuteRectClipLines64(const CRect64& rect,
   const CPaths64 paths);
-EXTERN_DLL_EXPORT CPathsD RectClipLinesD(const CRectD& rect,
+EXTERN_DLL_EXPORT CPathsD ExecuteRectClipLinesD(const CRectD& rect,
   const CPathsD paths, int precision = 2);
 
 //////////////////////////////////////////////////////
@@ -381,7 +381,7 @@ EXTERN_DLL_EXPORT CPathsD InflatePathsD(const CPathsD paths,
   return CreateCPathsD(result, 1/scale);
 }
 
-EXTERN_DLL_EXPORT CPaths64 RectClip64(const CRect64& rect,
+EXTERN_DLL_EXPORT CPaths64 ExecuteRectClip64(const CRect64& rect,
   const CPaths64 paths, bool convex_only)
 {
   if (CRectIsEmpty(rect) || !paths) return nullptr;
@@ -392,7 +392,7 @@ EXTERN_DLL_EXPORT CPaths64 RectClip64(const CRect64& rect,
   return CreateCPaths64(result);
 }
 
-EXTERN_DLL_EXPORT CPathsD RectClipD(const CRectD& rect,
+EXTERN_DLL_EXPORT CPathsD ExecuteRectClipD(const CRectD& rect,
   const CPathsD paths, int precision, bool convex_only)
 {
   if (CRectIsEmpty(rect) || !paths) return nullptr;
@@ -407,7 +407,7 @@ EXTERN_DLL_EXPORT CPathsD RectClipD(const CRectD& rect,
   return CreateCPathsD(result, 1/scale);
 }
 
-EXTERN_DLL_EXPORT CPaths64 RectClipLines64(const CRect64& rect, 
+EXTERN_DLL_EXPORT CPaths64 ExecuteRectClipLines64(const CRect64& rect,
   const CPaths64 paths)
 {
   if (CRectIsEmpty(rect) || !paths) return nullptr;
@@ -418,7 +418,7 @@ EXTERN_DLL_EXPORT CPaths64 RectClipLines64(const CRect64& rect,
   return CreateCPaths64(result);
 }
 
-EXTERN_DLL_EXPORT CPathsD RectClipLinesD(const CRectD& rect, 
+EXTERN_DLL_EXPORT CPathsD ExecuteRectClipLinesD(const CRectD& rect,
   const CPathsD paths, int precision)
 {
   if (CRectIsEmpty(rect) || !paths) return nullptr;

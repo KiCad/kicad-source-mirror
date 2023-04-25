@@ -1,6 +1,6 @@
 /*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Date      :  2 March 2023                                                    *
+* Date      :  22 April 2023                                                   *
 * Website   :  http://www.angusj.com                                           *
 * Copyright :  Angus Johnson 2010-2023                                         *
 * Purpose   :  This is the main polygon clipping module                        *
@@ -10,7 +10,7 @@
 #ifndef CLIPPER_ENGINE_H
 #define CLIPPER_ENGINE_H
 
-constexpr auto CLIPPER2_VERSION = "1.2.1";
+constexpr auto CLIPPER2_VERSION = "1.2.2";
 
 #include <cstdlib>
 #include <iostream>
@@ -260,8 +260,8 @@ namespace Clipper2Lib {
 		bool ExecuteInternal(ClipType ct, FillRule ft, bool use_polytrees);
 		void CleanCollinear(OutRec* outrec);
 		bool CheckBounds(OutRec* outrec);
+		bool CheckSplitOwner(OutRec* outrec);
 		void RecursiveCheckOwners(OutRec* outrec, PolyPath* polypath);
-		void DeepCheckOwners(OutRec* outrec, PolyPath* polypath);
 #ifdef USINGZ
 		ZCallback64 zCallback_ = nullptr;
 		void SetZ(const Active& e1, const Active& e2, Point64& pt);

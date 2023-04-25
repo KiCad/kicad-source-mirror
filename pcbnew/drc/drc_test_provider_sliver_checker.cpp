@@ -84,9 +84,11 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
     if( !reportPhase( _( "Running sliver detection on copper layers..." ) ) )
         return false;   // DRC cancelled
 
-    int    widthTolerance = pcbIUScale.mmToIU( ADVANCED_CFG::GetCfg().m_SliverWidthTolerance );
+    int64_t widthTolerance = pcbIUScale.mmToIU( ADVANCED_CFG::GetCfg().m_SliverWidthTolerance );
+    int64_t squared_width = widthTolerance * widthTolerance;
+
     double angleTolerance = ADVANCED_CFG::GetCfg().m_SliverAngleTolerance;
-    int    testLength = widthTolerance / ( 2 * sin( DEG2RAD( angleTolerance / 2 ) ) );
+    double cosangleTol = 2.0 * cos( DEG2RAD( angleTolerance ) );
     LSET   copperLayerSet = m_drcEngine->GetBoard()->GetEnabledLayers() & LSET::AllCuMask();
     LSEQ   copperLayers = copperLayerSet.Seq();
     int    layerCount = copperLayers.size();
@@ -130,7 +132,6 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
                                 if( !zone->GetIsRuleArea() )
                                 {
                                     fill = zone->GetFill( layer )->CloneDropTriangulation();
-                                    fill.Unfracture( SHAPE_POLY_SET::PM_FAST );
                                     poly.Append( fill );
 
                                     // Report progress on board zones only.  Everything else is
@@ -141,7 +142,7 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
                             else
                             {
                                 item->TransformShapeToPolygon( poly, layer, 0, ARC_LOW_DEF,
-                                                               ERROR_OUTSIDE );
+                                                               ERROR_INSIDE );
                             }
 
                             if( m_drcEngine->IsCancelled() )
@@ -154,11 +155,7 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
                 if( m_drcEngine->IsCancelled() )
                     return 0;
 
-                poly.Simplify( SHAPE_POLY_SET::PM_FAST );
-
-                // Sharpen corners
-                poly.Deflate( widthTolerance / 2, ARC_LOW_DEF,
-                              SHAPE_POLY_SET::ALLOW_ACUTE_CORNERS );
+                poly.Simplify( SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
 
                 return 1;
             };
@@ -183,7 +180,6 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
         }
     }
 
-
     for( int ii = 0; ii < layerCount; ++ii )
     {
         PCB_LAYER_ID    layer = copperLayers[ii];
@@ -203,31 +199,78 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
         {
             const std::vector<VECTOR2I>& pts = poly.Outline( jj ).CPoints();
             int                          ptCount = pts.size();
+            int                          offset = 0;
 
-            for( int kk = 0; kk < ptCount; ++kk )
-            {
-                VECTOR2I pt = pts[ kk ];
-                VECTOR2I ptPrior = pts[ ( ptCount + kk - 1 ) % ptCount ];
-                VECTOR2I vPrior = ( ptPrior - pt );
-
-                if( std::abs( vPrior.x ) < min_len && std::abs( vPrior.y ) < min_len && ptCount > 5)
+            auto area = [&]( const VECTOR2I& p, const VECTOR2I& q, const VECTOR2I& r ) -> VECTOR2I::extended_type
                 {
-                    ptPrior = pts[ ( ptCount + kk - 2 ) % ptCount ];
+                    return static_cast<VECTOR2I::extended_type>( q.y - p.y ) * ( r.x - q.x ) -
+                           static_cast<VECTOR2I::extended_type>( q.x - p.x ) * ( r.y - q.y );
+                };
+
+            auto isLocallyInside = [&]( int aA, int aB ) -> bool
+                {
+                    int prev = ( ptCount + aA - 1 ) % ptCount;
+                    int next = ( aA + 1 ) % ptCount;
+
+                    if( area( pts[prev], pts[aA], pts[next] ) < 0 )
+                        return area( pts[aA], pts[aB], pts[next] ) >= 0 && area( pts[aA], pts[prev], pts[aB] ) >= 0;
+                    else
+                        return area( pts[aA], pts[aB], pts[prev] ) < 0 || area( pts[aA], pts[next], pts[aB] ) < 0;
+                };
+
+            if( ptCount <= 5 )
+                continue;
+
+            for( int kk = 0; kk < ptCount; kk += offset )
+            {
+                int      prior_index = ( ptCount + kk - 1 ) % ptCount;
+                int      next_index  = ( kk + 1 ) % ptCount;
+                VECTOR2I pt = pts[ kk ];
+                VECTOR2I ptPrior = pts[ prior_index ];
+                VECTOR2I vPrior = ( ptPrior - pt );
+                int forward_offset = 1;
+
+                offset = 1;
+
+                while( std::abs( vPrior.x ) < min_len && std::abs( vPrior.y ) < min_len
+                        && offset < ptCount )
+                {
+                    pt = pts[ ( kk + offset++ ) % ptCount ];
                     vPrior = ( ptPrior - pt );
                 }
 
-                VECTOR2I ptAfter  = pts[ ( kk + 1 ) % ptCount ];
+                if( offset >= ptCount )
+                    break;
+
+                VECTOR2I ptAfter  = pts[ next_index ];
                 VECTOR2I vAfter = ( ptAfter - pt );
 
-                if( std::abs( vAfter.x ) < min_len && std::abs( vAfter.y ) < min_len && ptCount > 5 )
+                while( std::abs( vAfter.x ) < min_len && std::abs( vAfter.y ) < min_len
+                        && forward_offset < ptCount )
                 {
-                    ptAfter  = pts[ ( kk + 2 ) % ptCount ];
+                    next_index = ( kk + forward_offset++ ) % ptCount;
+                    ptAfter  = pts[ next_index ];
                     vAfter = ( ptAfter - pt );
                 }
 
-                VECTOR2I vIncluded = vPrior.Resize( testLength ) - vAfter.Resize( testLength );
+                if( offset >= ptCount )
+                    break;
 
-                if( vIncluded.SquaredEuclideanNorm() < SEG::Square( widthTolerance ) )
+                // Negative dot product means that the angle is > 90°
+                if( vPrior.Dot( vAfter ) <= 0 )
+                    continue;
+
+                if( !isLocallyInside( prior_index, next_index ) )
+                    continue;
+
+                VECTOR2I vIncluded = ptAfter - ptPrior;
+                double arm1 = vPrior.SquaredEuclideanNorm();
+                double arm2 = vAfter.SquaredEuclideanNorm();
+                double opp  = vIncluded.SquaredEuclideanNorm();
+
+                double cos_ang = std::abs( ( opp - arm1 - arm2 ) / ( std::sqrt( arm1 ) * std::sqrt( arm2 ) ) );
+
+                if( cos_ang > cosangleTol && 2.0 - cos_ang > std::numeric_limits<float>::epsilon() && opp > squared_width )
                 {
                     std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_COPPER_SLIVER );
                     drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + layerDesc( layer ) );
