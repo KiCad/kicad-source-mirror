@@ -105,6 +105,11 @@ public:
         m_fields.insert( m_fields.end(), aFields.begin(), aFields.end() );
     }
 
+    void AddField( const SCH_FIELD& aField )
+    {
+        m_fields.push_back( aField );
+    }
+
     /**
      * Increment the label text, if it ends with a number.
      *

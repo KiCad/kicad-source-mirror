@@ -32,12 +32,15 @@
 #include <layer_ids.h>
 #include <wx/filename.h>
 #include <plotters/plotter.h>
-#include <sch_symbol.h>
-#include <sch_text.h>
-#include <sch_shape.h>
-#include <lib_shape.h>
-#include "ltspice_schematic.h"
+#include <sch_plugins/lt_spice/ltspice_schematic.h>
 
+
+class LIB_SHAPE;
+class LIB_PIN;
+class SCH_LABEL_BASE;
+class SCH_SYMBOL;
+class SCH_TEXT;
+class SCH_SHAPE;
 
 /**
  * The class is been used for loading the asc and asy files in intermediate data structure.
@@ -67,7 +70,8 @@ public:
     const int SMALL_LABEL_SIZE = KiROUND( (double) SCH_IU_PER_MM * 0.4 );
 
     explicit LTSPICE_SCH_PARSER( const wxString& aFilename,  LTSPICE_SCHEMATIC* aLTSchematic ) :
-            m_lt_schematic( aLTSchematic )
+            m_lt_schematic( aLTSchematic ),
+            m_powerSymbolIndex( 0 )
     { }
 
     ~LTSPICE_SCH_PARSER() {}
@@ -174,14 +178,6 @@ public:
     void CreatePin( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex, SCH_SHEET_PATH* aSheet );
 
     /**
-     * Method to get Label Shape in kicad
-     *
-     * @param aAscfile object representing asc file.
-     * @param aIndex index.
-     */
-    LABEL_FLAG_SHAPE GetLabelShape( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex );
-
-    /**
      * Method for plotting Line from Asc files
      *
      * @param aAscfile object representing asc file.
@@ -220,7 +216,8 @@ public:
     /**
      * Create schematic text.
      */
-    void CreateText( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex, SCH_SHEET_PATH* aSheet );
+    SCH_TEXT* CreateSCH_TEXT( VECTOR2I aOffset, const wxString& aText, int aFontSize,
+                          LTSPICE_SCHEMATIC::JUSTIFICATION aJustification );
 
     /**
      * Create a schematic wire.
@@ -229,18 +226,22 @@ public:
                      SCH_LAYER_ID aLayer );
 
     /**
-     * Create a power symbol from an LTspice flag
+     * Create a power symbol.
+     * @param aWires Schematic wires.  (Allows us to correctly orient the power symbol.)
      */
-    void CreatePowerSymbol( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex,
-                            SCH_SHEET_PATH* aSheet );
+    SCH_SYMBOL* CreatePowerSymbol( const VECTOR2I& aOffset, const wxString& aValue, int aFontSize,
+                                   SCH_SHEET_PATH* aSheet,
+                                   std::vector<LTSPICE_SCHEMATIC::WIRE>& aWires );
+
+    /**
+     * Create a label.
+     * @param aType Currently supported types: SCH_LABEL_T, SCH_DIRECTIVE_LABEL_T
+     */
+    SCH_LABEL_BASE* CreateSCH_LABEL( KICAD_T aType, const VECTOR2I& aOffset, const wxString& aValue,
+                                     int aFontSize );
 
     void CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, SCH_SYMBOL* aSymbol,
                        SCH_SHEET_PATH* aSheet );
-
-    /**
-     * Method for plotting Window(i.e flags which are shown on screen ) from Asy files
-     */
-    void CreateText( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex, SCH_SHEET_PATH* aSheet );
 
     /**
      * Create a symbol rect.
@@ -302,5 +303,6 @@ private:
     wxFileName                   m_libraryFileName;
     VECTOR2I                     m_originOffset;
     std::map<wxString, wxString> m_includes;
+    int                          m_powerSymbolIndex;
 };
 #endif // LTSPICE_SCH_PARSER_H

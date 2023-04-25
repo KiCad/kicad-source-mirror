@@ -24,8 +24,8 @@
  * schematic file.
  */
 
-#include <sch_plugins/ltSpice/ltspice_sch_parser.h>
-#include <sch_plugins/ltSpice/ltspice_schematic.h>
+#include <sch_plugins/lt_spice/ltspice_sch_parser.h>
+#include <sch_plugins/lt_spice/ltspice_schematic.h>
 #include <sch_io_mgr.h>
 #include <base_units.h>
 #include <core/kicad_algo.h>
@@ -38,7 +38,7 @@
 #include <sch_edit_frame.h>
 #include <sch_shape.h>
 #include <sch_bus_entry.h>
-#include "kiplatform/environment.h"
+#include <kiplatform/environment.h>
 
 
 void LTSPICE_SCH_PARSER::Parse( SCH_SHEET_PATH* aSheet,
@@ -194,9 +194,6 @@ void LTSPICE_SCH_PARSER::CreateKicadSYMBOLs( SCH_SHEET_PATH* aSheet,
 
                 for( int j = 0; j < (int) lt_symbol.Rectangles.size(); j++ )
                     CreateRect( lt_symbol, j, aSheet );
-
-                for( int j = 0; j < (int) lt_symbol.Windows.size(); j++ )
-                    CreateText( lt_symbol, j, aSheet );
 
                 // Calculating bounding box
                 BOX2I bbox;
@@ -478,8 +475,10 @@ void LTSPICE_SCH_PARSER::CreateWires( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, i
 
 
 void LTSPICE_SCH_PARSER::CreateKicadSCH_ITEMs( SCH_SHEET_PATH* aSheet,
-                                             std::vector<LTSPICE_SCHEMATIC::LT_ASC>& outLT_ASCs )
+                                               std::vector<LTSPICE_SCHEMATIC::LT_ASC>& outLT_ASCs )
 {
+    SCH_SCREEN* screen = aSheet->LastScreen();
+
     for( LTSPICE_SCHEMATIC::LT_ASC& lt_asc : outLT_ASCs )
     {
         for( int j = 0; j < (int) lt_asc.Lines.size(); j++ )
@@ -522,11 +521,31 @@ void LTSPICE_SCH_PARSER::CreateKicadSCH_ITEMs( SCH_SHEET_PATH* aSheet,
         for( int j = 0; j < (int) lt_asc.Iopins.size(); j++ )
             CreatePin( lt_asc, j, aSheet );
 
-        for( int j = 0; j < (int) lt_asc.Flags.size(); j++ )
-            CreatePowerSymbol( lt_asc, j, aSheet );
+        for( const LTSPICE_SCHEMATIC::FLAG& lt_flag : lt_asc.Flags )
+        {
+            if( lt_flag.Value == wxS( "0" ) )
+            {
+                screen->Append( CreatePowerSymbol( lt_flag.Offset, lt_flag.Value, lt_flag.FontSize,
+                                                   aSheet, lt_asc.Wires ) );
+            }
+            else
+            {
+                screen->Append( CreateSCH_LABEL( SCH_LABEL_T, lt_flag.Offset, lt_flag.Value,
+                                                 lt_flag.FontSize ) );
+            }
+        }
 
-        for( int j = 0; j < (int) lt_asc.Texts.size(); j++ )
-            CreateText( lt_asc, j, aSheet );
+        for( const LTSPICE_SCHEMATIC::TEXT& lt_text : lt_asc.Texts )
+        {
+            screen->Append( CreateSCH_TEXT( lt_text.Offset, lt_text.Value, lt_text.FontSize,
+                                            lt_text.Justification ) );
+        }
+
+        for( const LTSPICE_SCHEMATIC::DATAFLAG& lt_flag : lt_asc.DataFlags )
+        {
+            screen->Append( CreateSCH_LABEL( SCH_DIRECTIVE_LABEL_T, lt_flag.Offset,
+                                             lt_flag.Expression, lt_flag.FontSize ) );
+        }
     }
 }
 
@@ -555,6 +574,17 @@ void LTSPICE_SCH_PARSER::CreateBusEntry( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, in
 }
 
 
+LABEL_FLAG_SHAPE getLabelShape( LTSPICE_SCHEMATIC::POLARITY aPolarity )
+{
+    if( aPolarity == LTSPICE_SCHEMATIC::POLARITY::INPUT )
+        return LABEL_FLAG_SHAPE::L_INPUT;
+    else if( aPolarity == LTSPICE_SCHEMATIC::POLARITY::OUTPUT )
+        return LABEL_FLAG_SHAPE::L_OUTPUT;
+    else
+        return LABEL_FLAG_SHAPE::L_BIDI;
+}
+
+
 void LTSPICE_SCH_PARSER::CreatePin( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex,
                                     SCH_SHEET_PATH* aSheet )
 {
@@ -574,20 +604,8 @@ void LTSPICE_SCH_PARSER::CreatePin( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIn
     SCH_HIERLABEL* sheetPin = new SCH_HIERLABEL( ToKicadCoords( iopin.Location ) + m_originOffset,
                                                  ioPinName, SCH_HIER_LABEL_T );
 
-    sheetPin->SetShape( GetLabelShape( aAscfile, aIndex ) );
+    sheetPin->SetShape( getLabelShape( iopin.Polarity ) );
     aSheet->LastScreen()->Append( sheetPin );
-}
-
-
-LABEL_FLAG_SHAPE LTSPICE_SCH_PARSER::GetLabelShape( LTSPICE_SCHEMATIC::LT_ASC& aAscfile,
-                                                    int aIndex )
-{
-    if( aAscfile.Iopins[aIndex].Polarity == LTSPICE_SCHEMATIC::POLARITY::INPUT )
-        return LABEL_FLAG_SHAPE::L_INPUT;
-    else if( aAscfile.Iopins[aIndex].Polarity == LTSPICE_SCHEMATIC::POLARITY::OUTPUT )
-        return LABEL_FLAG_SHAPE::L_OUTPUT;
-    else
-        return LABEL_FLAG_SHAPE::L_BIDI;
 }
 
 
@@ -683,18 +701,18 @@ STROKE_PARAMS LTSPICE_SCH_PARSER::getStroke( const LTSPICE_SCHEMATIC::LINEWIDTH&
 }
 
 
-void LTSPICE_SCH_PARSER::CreateText( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex,
-                                     SCH_SHEET_PATH* aSheet )
+SCH_TEXT* LTSPICE_SCH_PARSER::CreateSCH_TEXT( VECTOR2I aOffset, const wxString& aText,
+                                              int aFontSize,
+                                              LTSPICE_SCHEMATIC::JUSTIFICATION aJustification )
 {
-    LTSPICE_SCHEMATIC::TEXT& lt_text = aAscfile.Texts[aIndex];
-    VECTOR2I                 pos = ToKicadCoords( lt_text.Offset ) + m_originOffset;
-    SCH_TEXT*                textItem = new SCH_TEXT( pos, lt_text.Value, SCH_TEXT_T );
+    VECTOR2I  pos = ToKicadCoords( aOffset ) + m_originOffset;
+    SCH_TEXT* textItem = new SCH_TEXT( pos, aText, SCH_TEXT_T );
 
-    textItem->SetTextSize( ToKicadFontSize( lt_text.FontSize ) );
+    textItem->SetTextSize( ToKicadFontSize( aFontSize ) );
     textItem->SetVisible( true );
     textItem->SetMultilineAllowed( true );
 
-    switch( lt_text.Justification )
+    switch( aJustification )
     {
     case LTSPICE_SCHEMATIC::JUSTIFICATION::VLEFT:
         textItem->SetTextSpinStyle( TEXT_SPIN_STYLE::UP );
@@ -740,7 +758,7 @@ void LTSPICE_SCH_PARSER::CreateText( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aI
         break;
     }
 
-    aSheet->LastScreen()->Append( textItem );
+    return textItem;
 }
 
 
@@ -760,100 +778,125 @@ void LTSPICE_SCH_PARSER::CreateWire( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aI
 }
 
 
-void LTSPICE_SCH_PARSER::CreatePowerSymbol( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex,
-                                            SCH_SHEET_PATH* aSheet )
+SCH_SYMBOL* LTSPICE_SCH_PARSER::CreatePowerSymbol( const VECTOR2I& aOffset, const wxString& aValue,
+                                                   int aFontSize, SCH_SHEET_PATH* aSheet,
+                                                   std::vector<LTSPICE_SCHEMATIC::WIRE>& aWires )
 {
-    LTSPICE_SCHEMATIC::FLAG& flag = aAscfile.Flags[aIndex];
+    LIB_SYMBOL* lib_symbol = new LIB_SYMBOL( wxS( "GND" ) );
+    LIB_SHAPE*  shape = new LIB_SHAPE( lib_symbol, SHAPE_T::POLY );
 
-    if( flag.Value == wxS( "0" ) )
+    shape->AddPoint( ToInvertedKicadCoords( { 16, 0 } ) );
+    shape->AddPoint( ToInvertedKicadCoords( { -16, 0 } ) );
+    shape->AddPoint( ToInvertedKicadCoords( { 0, 15 } ) );
+    shape->AddPoint( ToInvertedKicadCoords( { 16, 0 } ) );
+    shape->AddPoint( ToInvertedKicadCoords( { -16, 0 } ) );
+    shape->AddPoint( ToInvertedKicadCoords( { 0, 15 } ) );
+
+    shape->SetStroke( STROKE_PARAMS( getLineWidth( LTSPICE_SCHEMATIC::LINEWIDTH::Normal ),
+                                     PLOT_DASH_TYPE::SOLID ) );
+
+    lib_symbol->AddDrawItem( shape );
+    lib_symbol->SetPower();
+
+    LIB_PIN* pin = new LIB_PIN( lib_symbol );
+
+    pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
+    pin->SetPosition( ToInvertedKicadCoords( { 0, 0 } ) );
+    pin->SetLength( 5 );
+    pin->SetShape( GRAPHIC_PINSHAPE::LINE );
+    lib_symbol->AddDrawItem( pin );
+
+    LIB_ID libId( wxS( "ltspice" ), wxS( "GND" ) );
+    SCH_SYMBOL* sch_symbol = new SCH_SYMBOL( *lib_symbol, libId, aSheet, 1 );
+
+    sch_symbol->SetRef( aSheet, wxString::Format( wxS( "#GND%03d" ), m_powerSymbolIndex++ ) );
+    sch_symbol->GetField( REFERENCE_FIELD )->SetVisible( false );
+    sch_symbol->SetValueFieldText( wxS( "0" ) );
+    sch_symbol->GetField( VALUE_FIELD )->SetTextSize( ToKicadFontSize( aFontSize ) );
+    sch_symbol->GetField( VALUE_FIELD )->SetVisible( false );
+
+    sch_symbol->Move( ToKicadCoords( aOffset ) + m_originOffset );
+
+    for( LTSPICE_SCHEMATIC::WIRE& wire : aWires )
     {
-        LIB_SYMBOL* lib_symbol = new LIB_SYMBOL( wxS( "GND" ) );
-        LIB_SHAPE*  shape = new LIB_SHAPE( lib_symbol, SHAPE_T::POLY );
-
-        shape->AddPoint( ToInvertedKicadCoords( { 16, 0 } ) );
-        shape->AddPoint( ToInvertedKicadCoords( { -16, 0 } ) );
-        shape->AddPoint( ToInvertedKicadCoords( { 0, 15 } ) );
-        shape->AddPoint( ToInvertedKicadCoords( { 16, 0 } ) );
-        shape->AddPoint( ToInvertedKicadCoords( { -16, 0 } ) );
-        shape->AddPoint( ToInvertedKicadCoords( { 0, 15 } ) );
-
-        shape->SetStroke( STROKE_PARAMS( getLineWidth( LTSPICE_SCHEMATIC::LINEWIDTH::Normal ),
-                                         PLOT_DASH_TYPE::SOLID ) );
-
-        lib_symbol->AddDrawItem( shape );
-        lib_symbol->SetPower();
-
-        LIB_PIN* pin = new LIB_PIN( lib_symbol );
-
-        pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
-        pin->SetPosition( ToInvertedKicadCoords( { 0, 0 } ) );
-        pin->SetLength( 5 );
-        pin->SetShape( GRAPHIC_PINSHAPE::LINE );
-        lib_symbol->AddDrawItem( pin );
-
-        LIB_ID libId( wxS( "ltspice" ), wxS( "GND" ) );
-        SCH_SYMBOL* sch_symbol = new SCH_SYMBOL( *lib_symbol, libId, aSheet, 1 );
-
-        sch_symbol->SetRef( aSheet, wxString::Format( wxS( "#GND%03d" ), aIndex ) );
-        sch_symbol->GetField( REFERENCE_FIELD )->SetVisible( false );
-        sch_symbol->SetValueFieldText( wxS( "0" ) );
-        sch_symbol->GetField( VALUE_FIELD )->SetVisible( false );
-
-        sch_symbol->Move( ToKicadCoords( aAscfile.Flags[aIndex].Offset ) + m_originOffset );
-
-        for( LTSPICE_SCHEMATIC::WIRE& wire : aAscfile.Wires )
+        if( aOffset == wire.Start )
         {
-            if( flag.Offset == wire.Start )
+            if( wire.Start.x == wire.End.x )
             {
-                if( wire.Start.x == wire.End.x )
+                if( wire.Start.y < wire.End.y )
                 {
-                    if( wire.Start.y < wire.End.y )
-                    {
-                        sch_symbol->SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
-                        sch_symbol->SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
-                    }
-                }
-                else
-                {
-                    if( wire.Start.x < wire.End.x )
-                        sch_symbol->SetOrientation( SYM_ROTATE_CLOCKWISE );
-                    else if( wire.Start.x > wire.End.x )
-                        sch_symbol->SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
+                    sch_symbol->SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
+                    sch_symbol->SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
                 }
             }
-            else if( flag.Offset == wire.End )
+            else
             {
-                if( wire.Start.x == wire.End.x )
-                {
-                    if( wire.Start.y > wire.End.y )
-                    {
-                        sch_symbol->SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
-                        sch_symbol->SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
-                    }
-                }
-                else
-                {
-                    if( wire.Start.x < wire.End.x )
-                        sch_symbol->SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
-                    else if( wire.Start.x > wire.End.x )
-                        sch_symbol->SetOrientation( SYM_ROTATE_CLOCKWISE );
-                }
+                if( wire.Start.x < wire.End.x )
+                    sch_symbol->SetOrientation( SYM_ROTATE_CLOCKWISE );
+                else if( wire.Start.x > wire.End.x )
+                    sch_symbol->SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
             }
         }
+        else if( aOffset == wire.End )
+        {
+            if( wire.Start.x == wire.End.x )
+            {
+                if( wire.Start.y > wire.End.y )
+                {
+                    sch_symbol->SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
+                    sch_symbol->SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
+                }
+            }
+            else
+            {
+                if( wire.Start.x < wire.End.x )
+                    sch_symbol->SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
+                else if( wire.Start.x > wire.End.x )
+                    sch_symbol->SetOrientation( SYM_ROTATE_CLOCKWISE );
+            }
+        }
+    }
 
-        aSheet->LastScreen()->Append( sch_symbol );
+    return sch_symbol;
+}
+
+
+SCH_LABEL_BASE* LTSPICE_SCH_PARSER::CreateSCH_LABEL( KICAD_T aType, const VECTOR2I& aOffset,
+                                                     const wxString& aValue, int aFontSize )
+{
+    SCH_LABEL_BASE* label = nullptr;
+
+    if( aType == SCH_LABEL_T )
+    {
+        label = new SCH_LABEL();
+
+        label->SetText( aValue );
+        label->SetTextSize( ToKicadFontSize( aFontSize ) );
+        label->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );
+    }
+    else if( aType == SCH_DIRECTIVE_LABEL_T )
+    {
+        label = new SCH_DIRECTIVE_LABEL();
+
+        label->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );
+
+        SCH_FIELD field( { 0, 0 }, -1, label, wxS( "DATAFLAG" ) );
+        field.SetText( aValue );
+        field.SetTextSize( ToKicadFontSize( aFontSize ) );
+        field.SetVisible( true );
+
+        label->AddField( field );
+        label->AutoplaceFields( nullptr, false );
     }
     else
     {
-        SCH_LABEL* label = new SCH_LABEL();
-
-        label->SetText( flag.Value );
-        label->SetTextSize( ToKicadFontSize( flag.FontSize ) );
-        label->SetPosition( ToKicadCoords( flag.Offset ) + m_originOffset );
-        label->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );
-        label->SetVisible( true );
-        aSheet->LastScreen()->Append( label );
+        UNIMPLEMENTED_FOR( aType );
     }
+
+    label->SetPosition( ToKicadCoords( aOffset ) + m_originOffset );
+    label->SetVisible( true );
+
+    return label;
 }
 
 
@@ -962,11 +1005,119 @@ void LTSPICE_SCH_PARSER::CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol,
 
         switch( lt_window.WindowNumber )
         {
-        case 0:  field = aSymbol->GetField( REFERENCE_FIELD );       break;
-        case 3:  field = aSymbol->GetField( VALUE_FIELD );           break;
-        case 38: field = aSymbol->FindField( wxS( "Sim.Name" ) );    break;
-        case 39: field = aSymbol->FindField( wxS( "Sim.Params" ) );  break;
-        default:                                                     break;
+        case -1: /* PartNum    */                                                     break;
+        case 0:  /* InstName   */ field = aSymbol->GetField( REFERENCE_FIELD );       break;
+        case 1:  /* Type       */                                                     break;
+        case 2:  /* RefName    */                                                     break;
+        case 3:  /* Value      */ field = aSymbol->GetField( VALUE_FIELD );           break;
+
+        case 5:  /* QArea      */                                                     break;
+
+        case 8:  /* Width      */                                                     break;
+        case 9:  /* Length     */                                                     break;
+        case 10: /* Multi      */                                                     break;
+
+        case 16: /* Nec        */                                                     break;
+
+        case 38: /* SpiceModel */ field = aSymbol->FindField( wxS( "Sim.Name" ) );    break;
+        case 39: /* SpiceLine  */ field = aSymbol->FindField( wxS( "Sim.Params" ) );  break;
+        case 40: /* SpiceLine2 */                                                     break;
+
+        /*
+           47   Def_Sub
+
+           50   Digital_Timing_Model
+           51   Digital_Extracts
+           52   Digital_IO_Model
+           53   Digital_Line
+           54   Digital_Primitive
+           55   Digital_MNTYMXDLY
+           56   Digital_IO_LEVEL
+           57   Digital_StdCell
+           58   Digital_File
+
+          105   Cell
+          106   W/L
+          107   PSIZE
+          108   NSIZE
+          109   sheets
+          110   sh#
+          111   Em_Scale
+          112   Epi
+          113   Sinker
+          114   Multi5
+
+          118   AQ
+          119   AQSUB
+          120   ZSIZE
+          121   ESR
+          123   Value2
+          124   COUPLE
+          125   Voltage
+          126   Area1
+          127   Area2
+          128   Area3
+          129   Area4
+          130   Multi1
+          131   Multi2
+          132   Multi3
+          133   Multi4
+          134   DArea
+          135   DPerim
+          136   CArea
+          137   CPerim
+          138   Shrink
+          139   Gate_Resize
+
+          142   BP
+          143   BN
+          144   Sim_Level
+
+          146   G_Voltage
+
+          150   SpiceLine3
+
+          153   D_VOLTAGES
+
+          156   Version
+          157   Comment
+          158   XDef_Sub
+          159   LVS_Area
+
+          162   User1
+          163   User2
+          164   User3
+          165   User4
+          166   User5
+          167   Root
+          168   Class
+          169   Geometry
+          170   WL_Delimiter
+
+          175   T1
+          176   T2
+
+          184   DsgnName
+          185   Designer
+
+          190   RTN
+          191   PWR
+          192   BW
+
+          201   CAPROWS
+          202   CAPCOLS
+          203   NF
+          204   SLICES
+          205   CUR
+          206   TEMPRISE
+          207   STRIPS
+          208   WEM
+          209   LEM
+          210   BASES
+          211   COLS
+          212   XDef_Tub
+          */
+        default: break;
         }
 
         if( field )
@@ -1023,136 +1174,6 @@ void LTSPICE_SCH_PARSER::CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol,
             }
         }
     }
-}
-
-
-void LTSPICE_SCH_PARSER::CreateText( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex,
-                                     SCH_SHEET_PATH* aSheet )
-{
-    /*
-     * TODO
-     *
-       -1   PartNum
-        0   InstName
-        1   Type
-        2   RefName
-        3   Value
-
-        5   QArea
-
-        8   Width
-        9   Length
-       10   Multi
-
-       16   Nec
-
-       38   SpiceModel
-       39   SpiceLine
-       40   SpiceLine2
-
-       47   Def_Sub
-
-       50   Digital_Timing_Model
-       51   Digital_Extracts
-       52   Digital_IO_Model
-       53   Digital_Line
-       54   Digital_Primitive
-       55   Digital_MNTYMXDLY
-       56   Digital_IO_LEVEL
-       57   Digital_StdCell
-       58   Digital_File
-
-      105   Cell
-      106   W/L
-      107   PSIZE
-      108   NSIZE
-      109   sheets
-      110   sh#
-      111   Em_Scale
-      112   Epi
-      113   Sinker
-      114   Multi5
-
-      118   AQ
-      119   AQSUB
-      120   ZSIZE
-      121   ESR
-      123   Value2
-      124   COUPLE
-      125   Voltage
-      126   Area1
-      127   Area2
-      128   Area3
-      129   Area4
-      130   Multi1
-      131   Multi2
-      132   Multi3
-      133   Multi4
-      134   DArea
-      135   DPerim
-      136   CArea
-      137   CPerim
-      138   Shrink
-      139   Gate_Resize
-
-      142   BP
-      143   BN
-      144   Sim_Level
-
-      146   G_Voltage
-
-      150   SpiceLine3
-
-      153   D_VOLTAGES
-
-      156   Version
-      157   Comment
-      158   XDef_Sub
-      159   LVS_Area
-
-      162   User1
-      163   User2
-      164   User3
-      165   User4
-      166   User5
-      167   Root
-      168   Class
-      169   Geometry
-      170   WL_Delimiter
-
-      175   T1
-      176   T2
-
-      184   DsgnName
-      185   Designer
-
-      190   RTN
-      191   PWR
-      192   BW
-
-      201   CAPROWS
-      202   CAPCOLS
-      203   NF
-      204   SLICES
-      205   CUR
-      206   TEMPRISE
-      207   STRIPS
-      208   WEM
-      209   LEM
-      210   BASES
-      211   COLS
-      212   XDef_Tub
-
-    LTSPICE_SCHEMATIC::LT_WINDOW& lt_window = aLTSymbol.Windows[aIndex];
-
-    SCH_TEXT* textItem = new SCH_TEXT( { 0, 0 }, ??? );
-
-    textItem->SetPosition( ToKicadCoords( lt_window.Position ) + m_originOffset );
-    textItem->SetTextSize( ToKicadFontSize( lt_window.FontSize ) );
-    textItem->SetVisible( true );
-
-    aSheet->LastScreen()->Append( textItem );
-*/
 }
 
 

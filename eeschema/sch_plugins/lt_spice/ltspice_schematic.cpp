@@ -23,16 +23,16 @@
  * @brief Loads the asc file and asy files.
  */
 
-#include <sch_plugins/ltSpice/ltspice_schematic.h>
-#include <sch_plugins/ltSpice/ltspice_sch_parser.h>
+#include <sch_plugins/lt_spice/ltspice_schematic.h>
+#include <sch_plugins/lt_spice/ltspice_sch_parser.h>
 #include <sch_io_mgr.h>
 #include <sch_screen.h>
 #include <wx/log.h>
+#include <wx/dir.h>
 #include <kiplatform/environment.h>
 #include <wildcards_and_files_ext.h>
 #include <sch_sheet.h>
 #include <schematic.h>
-#include "wx/dir.h"
 
 
 void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
@@ -677,27 +677,13 @@ LTSPICE_SCHEMATIC::LT_SYMBOL LTSPICE_SCHEMATIC::SymbolBuilder( const wxString& a
 
             lt_symbol.Pins.back().PinAttribute.insert( { name, Value } );
         }
-        else if( element == "SymbolType" )
+        else if( element == "SYMBOLTYPE" )
         {
             tokensSizeRangeCheck( tokens.size(), 2, 2, lineNumber, aAscFileName );
 
             wxString symbolType = tokens[1];
 
             lt_symbol.SymbolType = getSymbolType( symbolType );
-        }
-        else if( element == "FLAG" )
-        {
-            tokensSizeRangeCheck( tokens.size(), 4, 4, lineNumber, aAscFileName );
-
-            wxString locationPointX = tokens[1];
-            wxString locationPointY = tokens[2];
-            wxString name = tokens[3];
-
-            FLAG flag;
-            flag.Offset = pointCheck( locationPointX, locationPointY, lineNumber, aAscFileName );
-            flag.Value = name;
-
-            aAscFile.Flags.push_back( flag );
         }
 
         lineNumber++;
@@ -794,6 +780,22 @@ std::vector<LTSPICE_SCHEMATIC::LT_ASC> LTSPICE_SCHEMATIC::StructureBuilder()
                 flag.FontSize = 2;
 
                 ascFile.Flags.push_back( flag );
+                ascFile.BoundingBox.Merge( flag.Offset );
+            }
+            else if( element == "DATAFLAG" )
+            {
+                tokensSizeRangeCheck( tokens.size(), 4, 4, lineNumber, fileName );
+
+                wxString posX = tokens[1];
+                wxString posY = tokens[2];
+                wxString expression = tokens[3];
+
+                DATAFLAG flag;
+                flag.Offset = pointCheck( posX, posY, lineNumber, fileName );
+                flag.Expression = expression;
+                flag.FontSize = 2;
+
+                ascFile.DataFlags.push_back( flag );
                 ascFile.BoundingBox.Merge( flag.Offset );
             }
             else if( element == "WINDOW" )

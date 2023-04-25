@@ -55,9 +55,9 @@ set( EESCHEMA_SCH_PLUGINS_CADSTAR
 
 
 set( EESCHEMA_SCH_PLUGINS_LTSPICE
-        sch_plugins/ltSpice/ltspice_schematic.cpp
-    sch_plugins/ltSpice/ltspice_sch_parser.cpp
-    sch_plugins/ltSpice/ltspice_sch_plugin.cpp
+    sch_plugins/lt_spice/ltspice_schematic.cpp
+    sch_plugins/lt_spice/ltspice_sch_parser.cpp
+    sch_plugins/lt_spice/ltspice_sch_plugin.cpp
     )
 
 set( EESCHEMA_DLGS

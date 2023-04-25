@@ -193,14 +193,18 @@ public:
         VECTOR2I End;
     };
 
-    /**
-     * A marker. used to specify certain position.
-     */
     struct FLAG
     {
         VECTOR2I Offset;
         int      FontSize;
         wxString Value;
+    };
+
+    struct DATAFLAG
+    {
+        VECTOR2I Offset;
+        int      FontSize;
+        wxString Expression;
     };
 
     struct TEXT
@@ -261,6 +265,7 @@ public:
         std::vector<RECTANGLE> Rectangles;
         std::vector<WIRE>      Wires;
         std::vector<FLAG>      Flags;
+        std::vector<DATAFLAG>  DataFlags;
         std::vector<IOPIN>     Iopins;
         std::vector<BUSTAP>    Bustap;
         std::vector<TEXT>      Texts;
