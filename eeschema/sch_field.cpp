@@ -195,7 +195,7 @@ wxString SCH_FIELD::GetShownText( int aDepth, bool aAllowExtraText ) const
 
     wxString text = EDA_TEXT::GetShownText();
 
-    if( IsNameShown() )
+    if( IsNameShown() && aAllowExtraText )
         text = GetName() << wxS( ": " ) << text;
 
     if( text == wxS( "~" ) ) // Legacy placeholder for empty string
