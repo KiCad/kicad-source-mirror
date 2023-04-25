@@ -1551,7 +1551,7 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
      */
 
     if( half_min_width - epsilon > epsilon )
-        aFillPolys.Inflate( half_min_width - epsilon, numSegs, cornerStrategy );
+        aFillPolys.Inflate( half_min_width - epsilon, numSegs, cornerStrategy, true );
 
     DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In15_Cu, wxT( "after-reinflating" ) );
 

@@ -1,6 +1,6 @@
 /*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Date      :  19 March 2023                                                   *
+* Date      :  23 April 2023                                                   *
 * Website   :  http://www.angusj.com                                           *
 * Copyright :  Angus Johnson 2010-2023                                         *
 * Purpose   :  This is the main polygon clipping module                        *
@@ -593,6 +593,9 @@ namespace Clipper2Lib {
     {
       //for each path create a circular double linked list of vertices
       Vertex* v0 = v, * curr_v = v, * prev_v = nullptr;
+
+      if (path.empty())
+        continue;
 
       v->prev = nullptr;
       int cnt = 0;
@@ -1533,7 +1536,7 @@ namespace Clipper2Lib {
     InsertScanline(e->top.y);
 
     CheckJoinLeft(*e, e->bot);
-    CheckJoinRight(*e, e->bot);
+    CheckJoinRight(*e, e->bot, true); // (#500)
   }
 
   Active* FindEdgeWithMatchingLocMin(Active* e)
@@ -2124,7 +2127,11 @@ namespace Clipper2Lib {
           else if (Path1InsidePath2(or1->pts, or2->pts))
             SetOwner(or1, or2);
           else
+          {
+            if (!or1->splits) or1->splits = new OutRecList(); 
+            or1->splits->push_back(or2); //(#498)
             or2->owner = or1;
+          }
         }
         else
           or2->owner = or1;
@@ -2635,10 +2642,10 @@ namespace Clipper2Lib {
     const Point64& pt, bool check_curr_x)
   {
     Active* prev = e.prev_in_ael;
-    if (IsOpen(e) || !IsHotEdge(e) || !prev || 
-      IsOpen(*prev) || !IsHotEdge(*prev) ||
-      pt.y < e.top.y + 2 || pt.y < prev->top.y + 2) // avoid trivial joins
-        return;
+    if (IsOpen(e) || !IsHotEdge(e) || !prev ||
+      IsOpen(*prev) || !IsHotEdge(*prev)) return;
+    if ((pt.y < e.top.y + 2 || pt.y < prev->top.y + 2) &&
+      ((e.bot.y > pt.y) || (prev->bot.y > pt.y))) return; // avoid trivial joins              
 
     if (check_curr_x)
     {
@@ -2661,10 +2668,10 @@ namespace Clipper2Lib {
     const Point64& pt, bool check_curr_x)
   {
     Active* next = e.next_in_ael;
-    if (IsOpen(e) || !IsHotEdge(e) || 
-      !next || IsOpen(*next) || !IsHotEdge(*next) ||
-      pt.y < e.top.y +2 || pt.y < next->top.y +2) // avoids trivial joins
-        return;      
+    if (IsOpen(e) || !IsHotEdge(e) ||
+      !next || IsOpen(*next) || !IsHotEdge(*next)) return;
+    if ((pt.y < e.top.y +2 || pt.y < next->top.y +2) &&
+      ((e.bot.y > pt.y) || (next->bot.y > pt.y))) return; // avoid trivial joins              
 
     if (check_curr_x)
     {
@@ -2679,6 +2686,7 @@ namespace Clipper2Lib {
       JoinOutrecPaths(e, *next);
     else
       JoinOutrecPaths(*next, e);
+
     e.join_with = JoinWith::Right;
     next->join_with = JoinWith::Left;
   }
@@ -2755,6 +2763,23 @@ namespace Clipper2Lib {
     return true;
   }
 
+  bool ClipperBase::CheckSplitOwner(OutRec* outrec)
+  {
+    for (auto s : *outrec->owner->splits)
+    {
+      OutRec* split = GetRealOutRec(s);
+      if (split && split != outrec &&
+        split != outrec->owner && CheckBounds(split) &&
+        split->bounds.Contains(outrec->bounds) &&
+        Path1InsidePath2(outrec->pts, split->pts))
+      {
+        outrec->owner = split; //found in split
+        return true;
+      }
+    }
+    return false;
+  }
+
   void ClipperBase::RecursiveCheckOwners(OutRec* outrec, PolyPath* polypath)
   {
     // pre-condition: outrec will have valid bounds
@@ -2762,50 +2787,23 @@ namespace Clipper2Lib {
 
     if (outrec->polypath || outrec->bounds.IsEmpty()) return;
 
-    while (outrec->owner &&
-      (!outrec->owner->pts || !CheckBounds(outrec->owner)))
-        outrec->owner = outrec->owner->owner;
-
-    if (outrec->owner && !outrec->owner->polypath) 
-      RecursiveCheckOwners(outrec->owner, polypath);
-
     while (outrec->owner)
-      if (outrec->owner->bounds.Contains(outrec->bounds) &&
-        Path1InsidePath2(outrec->pts, outrec->owner->pts))
-        break; // found - owner contain outrec!
-      else
-        outrec->owner = outrec->owner->owner;
+    {
+      if (outrec->owner->splits && CheckSplitOwner(outrec)) break;
+      if (outrec->owner->pts && CheckBounds(outrec->owner) &&
+        outrec->owner->bounds.Contains(outrec->bounds) &&
+        Path1InsidePath2(outrec->pts, outrec->owner->pts)) break;
+      outrec->owner = outrec->owner->owner;
+    }
 
     if (outrec->owner)
+    {
+      if (!outrec->owner->polypath) 
+        RecursiveCheckOwners(outrec->owner, polypath);
       outrec->polypath = outrec->owner->polypath->AddChild(outrec->path);
+    }
     else
       outrec->polypath = polypath->AddChild(outrec->path);
-  }
-
-  void ClipperBase::DeepCheckOwners(OutRec* outrec, PolyPath* polypath)
-  {
-    RecursiveCheckOwners(outrec, polypath);
-
-    while (outrec->owner && outrec->owner->splits)
-    {
-      OutRec* split = nullptr;
-      for (auto s : *outrec->owner->splits)
-      {
-        split = GetRealOutRec(s);
-        if (split && split != outrec &&
-          split != outrec->owner && CheckBounds(split) &&
-          split->bounds.Contains(outrec->bounds) &&
-            Path1InsidePath2(outrec->pts, split->pts)) 
-        {
-          RecursiveCheckOwners(split, polypath);
-          outrec->owner = split; //found in split
-          break; // inner 'for' loop
-        }
-        else
-          split = nullptr;
-      }
-      if (!split) break;
-    }
   }
 
   void Clipper64::BuildPaths64(Paths64& solutionClosed, Paths64* solutionOpen)
@@ -2866,7 +2864,7 @@ namespace Clipper2Lib {
       }
 
       if (CheckBounds(outrec))
-        DeepCheckOwners(outrec, &polytree);
+        RecursiveCheckOwners(outrec, &polytree);
     }
   }
 
@@ -2969,7 +2967,7 @@ namespace Clipper2Lib {
       }
 
       if (CheckBounds(outrec))
-        DeepCheckOwners(outrec, &polytree);
+        RecursiveCheckOwners(outrec, &polytree);
     }
   }
 

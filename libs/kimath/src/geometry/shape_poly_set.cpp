@@ -992,7 +992,8 @@ void SHAPE_POLY_SET::inflate1( int aAmount, int aCircleSegCount, CORNER_STRATEGY
 }
 
 
-void SHAPE_POLY_SET::inflate2( int aAmount, int aCircleSegCount, CORNER_STRATEGY aCornerStrategy )
+void SHAPE_POLY_SET::inflate2( int aAmount, int aCircleSegCount, CORNER_STRATEGY aCornerStrategy,
+        bool aSimplify )
 {
     using namespace Clipper2Lib;
     // A static table to avoid repetitive calculations of the coefficient
@@ -1071,17 +1072,35 @@ void SHAPE_POLY_SET::inflate2( int aAmount, int aCircleSegCount, CORNER_STRATEGY
     c.MiterLimit( miterLimit );
 
     PolyTree64 tree;
-    c.Execute( aAmount, tree );
+
+    if( aSimplify )
+    {
+        Paths64 paths;
+        c.Execute( aAmount, paths );
+
+        Clipper2Lib::SimplifyPaths( paths, std::abs( aAmount ) * coeff, false );
+
+        Clipper64 c2;
+        c2.PreserveCollinear = false;
+        c2.ReverseSolution = false;
+        c2.AddSubject( paths );
+        c2.Execute(ClipType::Union, FillRule::Positive, tree);
+    }
+    else
+    {
+        c.Execute( aAmount, tree );
+    }
 
     importTree( tree, zValues, arcBuffer );
     tree.Clear();
 }
 
 
-void SHAPE_POLY_SET::Inflate( int aAmount, int aCircleSegCount, CORNER_STRATEGY aCornerStrategy )
+void SHAPE_POLY_SET::Inflate( int aAmount, int aCircleSegCount, CORNER_STRATEGY aCornerStrategy,
+        bool aSimplify )
 {
     if( ADVANCED_CFG::GetCfg().m_UseClipper2 )
-        inflate2( aAmount, aCircleSegCount, aCornerStrategy );
+        inflate2( aAmount, aCircleSegCount, aCornerStrategy, aSimplify );
     else
         inflate1( aAmount, aCircleSegCount, aCornerStrategy );
 }

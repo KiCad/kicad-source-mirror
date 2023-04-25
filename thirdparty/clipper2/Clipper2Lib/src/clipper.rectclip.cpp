@@ -1,6 +1,6 @@
 /*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Date      :  14 February 2023                                                *
+* Date      :  22 April 2023                                                   *
 * Website   :  http://www.angusj.com                                           *
 * Copyright :  Angus Johnson 2010-2023                                         *
 * Purpose   :  FAST rectangular clipping                                       *
@@ -619,7 +619,7 @@ namespace Clipper2Lib {
       p1 = cw[i];
       if (!p1 || p1->next == p1->prev)
       {
-        cw[i++]->edge = nullptr;
+        cw[i++] = nullptr;
         j = 0;
         continue;
       }
@@ -819,8 +819,8 @@ namespace Clipper2Lib {
     Paths64 result;
     if (rect_.IsEmpty()) return result;
 
-    for (const auto& path : paths)
-    {
+    for (const Path64& path : paths)
+    {      
       if (path.size() < 3) continue;
       path_bounds_ = GetBounds(path);
       if (!rect_.Intersects(path_bounds_))
@@ -867,9 +867,7 @@ namespace Clipper2Lib {
 
     for (const auto& path : paths)
     {
-      if (path.size() < 2) continue;
       Rect64 pathrec = GetBounds(path);
-
       if (!rect_.Intersects(pathrec)) continue;
 
       ExecuteInternal(path);
