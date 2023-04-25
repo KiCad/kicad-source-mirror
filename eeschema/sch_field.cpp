@@ -196,7 +196,7 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, int aDepth,
 
     wxString text = EDA_TEXT::GetShownText();
 
-    if( IsNameShown() )
+    if( IsNameShown() && aAllowExtraText )
         text = GetName() << wxS( ": " ) << text;
 
     if( text == wxS( "~" ) ) // Legacy placeholder for empty string

@@ -137,8 +137,9 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
                 if( !candidate.IsEmpty() && ( unit < minUnit || footprint.IsEmpty() ) )
                     footprint = candidate;
 
-                candidate = m_resolveTextVars ? symbol2->GetField( DATASHEET_FIELD )->GetShownText()
-                                              : symbol2->GetField( DATASHEET_FIELD )->GetText();
+                candidate = m_resolveTextVars
+                                ? symbol2->GetField( DATASHEET_FIELD )->GetShownText( 0, false )
+                                : symbol2->GetField( DATASHEET_FIELD )->GetText();
 
                 if( !candidate.IsEmpty() && ( unit < minUnit || datasheet.IsEmpty() ) )
                     datasheet = candidate;
@@ -151,7 +152,7 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
                         && ( unit < minUnit || userFields.count( f.GetName() ) == 0 ) )
                     {
                         if( m_resolveTextVars )
-                            userFields[ f.GetName() ] = f.GetShownText();
+                            userFields[ f.GetName() ] = f.GetShownText( 0, false );
                         else
                             userFields[ f.GetName() ] = f.GetText();
                     }
@@ -167,7 +168,7 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
         footprint = aSymbol->GetFootprintFieldText( m_resolveTextVars );
 
         if( m_resolveTextVars )
-            datasheet = aSymbol->GetField( DATASHEET_FIELD )->GetShownText();
+            datasheet = aSymbol->GetField( DATASHEET_FIELD )->GetShownText( 0, false );
         else
             datasheet = aSymbol->GetField( DATASHEET_FIELD )->GetText();
 
@@ -178,7 +179,7 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
             if( f.GetText().size() )
             {
                 if( m_resolveTextVars )
-                    userFields[ f.GetName() ] = f.GetShownText();
+                    userFields[ f.GetName() ] = f.GetShownText( 0, false );
                 else
                     userFields[ f.GetName() ] = f.GetText();
             }
@@ -315,7 +316,7 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
                 xproperty->AddAttribute( wxT( "name" ), fields[jj].GetCanonicalName() );
 
                 if( m_resolveTextVars )
-                    xproperty->AddAttribute( wxT( "value" ), fields[jj].GetShownText() );
+                    xproperty->AddAttribute( wxT( "value" ), fields[jj].GetShownText( 0, false ) );
                 else
                     xproperty->AddAttribute( wxT( "value" ), fields[jj].GetText() );
             }
