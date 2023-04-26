@@ -165,11 +165,8 @@ void LTSPICE_SCH_PARSER::CreateKicadSYMBOLs( SCH_SHEET_PATH* aSheet,
                     lib_symbol = existingSymbol[lt_symbol.Name];
                 }
 
-                LIB_ID libId( wxS( "ltspice" ), lt_symbol.Name );
-
-                SCH_SHEET_PATH sheetpath;
-
-                SCH_SYMBOL* sch_symbol = new SCH_SYMBOL( *lib_symbol, libId, &sheetpath, 1 );
+                LIB_ID      libId( wxS( "ltspice" ), lt_symbol.Name );
+                SCH_SYMBOL* sch_symbol = new SCH_SYMBOL( *lib_symbol, libId, aSheet, 1 );
 
                 CreateFields( lt_symbol, sch_symbol, aSheet );
 
