@@ -611,9 +611,9 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( const std::map<SCH_SYMBOL*,
                 continue;
 
             if( i < MANDATORY_FIELDS )
-                libField = libSymbol->GetFieldById( (int) i );
+                libField = symbol->GetLibSymbolRef()->GetFieldById( (int) i );
             else
-                libField = libSymbol->FindField( field.GetName() );
+                libField = symbol->GetLibSymbolRef()->FindField( field.GetName() );
 
             if( libField )
             {
@@ -672,7 +672,7 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( const std::map<SCH_SYMBOL*,
         }
 
         std::vector<LIB_FIELD*> libFields;
-        libSymbol->GetFields( libFields );
+        symbol->GetLibSymbolRef()->GetFields( libFields );
 
         for( unsigned i = MANDATORY_FIELDS; i < libFields.size(); ++i )
         {
