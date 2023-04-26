@@ -1,0 +1,40 @@
+.HEA
+.TIM 5/2/2023 8:59:04 PM
+.APP "Eeschema 7.99.0-893-g4a5939297b-dirty"
+.TYP FULL
+
+.ADD_COM     R1     "10k"     "Resistor_SMD:R_1206_3216Metric"
+.ADD_COM     C1     "10u"     "Capacitor_SMD:C_1206_3216Metric"
+.ADD_COM     R2     "10k"     "Resistor_SMD:R_1206_3216Metric"
+.ADD_COM     J3     "Conn_01x01_Pin"     "TestPoint:TestPoint_Pad_3.0x3.0mm"
+.ADD_COM     J2     "Conn_01x01_Pin"     "TestPoint:TestPoint_Pad_3.0x3.0mm"
+.ADD_COM     J1     "Conn_01x01_Pin"     "TestPoint:TestPoint_Pad_3.0x3.0mm"
+.ADD_COM     J4     "Conn_01x01_Pin"     "TestPoint:TestPoint_Pad_3.0x3.0mm"
+.ADD_COM     R3     "10k"     "Resistor_SMD:R_1206_3216Metric"
+.ADD_COM     U1     "TLV2371DBV"     "Package_TO_SOT_SMD:SOT-23-5"
+
+
+.ADD_TER   J3   1     "/OUT"
+.TER       R2   2
+            U1   1
+
+.ADD_TER   J1   1     "/VCC"
+.TER       U1   5
+
+.ADD_TER   C1   1     "Net-(U1-+)"
+.TER       R3   2
+            U1   3
+
+.ADD_TER   R1   2     "Net-(U1--)"
+.TER       R2   1
+            U1   4
+
+.ADD_TER   C1   2     "GND"
+.TER       J4   1
+            R1   1
+            U1   2
+
+.ADD_TER   J2   1     "/IN"
+.TER       R3   1
+
+.END

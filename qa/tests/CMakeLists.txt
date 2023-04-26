@@ -32,15 +32,42 @@ endif()
 
 if( KICAD_TEST_XML_OUTPUT )
     # To do this, you will need xmlrunner
-    set( PY_TEST_ARGS --xml=${CMAKE_CURRENT_BINARY_DIR}/python.xunit-results )
+    set( PYTEST_ARGS_QAPYTHON --xml=${CMAKE_CURRENT_BINARY_DIR}/qapython.xunit-results )
+    set( PYTEST_ARGS_QACLI --junitxml=${CMAKE_CURRENT_BINARY_DIR}/qacli.junit-results )
 endif()
 
+
+if( MSVC )
+# avoid formatting this otherwise you will introduce whitespace into the PATH string
+    set( QA_PATH_REPLACEMENT
+"PATH=${CMAKE_BINARY_DIR}/kicad/;\
+${CMAKE_BINARY_DIR}/pcbnew/;\
+${CMAKE_BINARY_DIR}/eeschema/;\
+$ENV{PATH};" )
+endif()
+
+
+if( NOT (MSVC AND CMAKE_BUILD_TYPE STREQUAL "Debug") )
+# qa_python will never work under MSVC + Debug because we only have the Release mode python.exe
+# but the kicad binaries are linked to the debug mode python
 # Test that runs the QA tests through scripting
 add_test( NAME qa_python
-    COMMAND ${PYTHON_EXECUTABLE} test-pcbnewswig.py ${PY_TEST_ARGS}
+    COMMAND ${PYTHON_EXECUTABLE} test-pcbnewswig.py ${PYTEST_ARGS_QAPYTHON}
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-set_property( TEST qa_python
-    PROPERTY ENVIRONMENT "PYTHONPATH=${CMAKE_BINARY_DIR}/pcbnew${PYTHON_QA_PATH}"
+set_tests_properties( qa_python
+    PROPERTIES
+        ENVIRONMENT "${QA_PATH_REPLACEMENT}PYTHONPATH=${CMAKE_BINARY_DIR}/pcbnew;${PYTHON_QA_PATH}"
+)
+endif()
+
+add_test(NAME qa_cli
+    COMMAND ${PYTHON_EXECUTABLE} -m pytest ${CMAKE_CURRENT_SOURCE_DIR}/cli ${PYTEST_ARGS_QACLI}
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+set_tests_properties( qa_cli
+    PROPERTIES
+        ENVIRONMENT "${QA_PATH_REPLACEMENT};KICAD_RUN_FROM_BUILD_DIR=1;PYTHONPATH=${CMAKE_BINARY_DIR}/pcbnew;${PYTHON_QA_PATH}"
 )

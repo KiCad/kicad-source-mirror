@@ -1,0 +1,38 @@
+( { EESchema Netlist Version 1.1 created  5/2/2023 8:59:05 PM }
+ ( /eaf8668d-aec7-4209-a3f9-fc7bfb5b931b Resistor_SMD:R_1206_3216Metric  R1 10k
+  (    1 GND )
+  (    2 Net-(U1--) )
+ )
+ ( /8a4f4d93-4e0c-474b-8535-68c4fef6e828 Capacitor_SMD:C_1206_3216Metric  C1 10u
+  (    1 Net-(U1-+) )
+  (    2 GND )
+ )
+ ( /8b2eeae5-e1ad-4999-aeb9-01fe06aff8b1 Resistor_SMD:R_1206_3216Metric  R2 10k
+  (    1 Net-(U1--) )
+  (    2 /OUT )
+ )
+ ( /9efa520e-00e1-47a2-b8dc-bf8e2121d065 TestPoint:TestPoint_Pad_3.0x3.0mm  J3 Conn_01x01_Pin
+  (    1 /OUT )
+ )
+ ( /2a9f5f63-d864-4898-ae3e-539c635e8f2c TestPoint:TestPoint_Pad_3.0x3.0mm  J2 Conn_01x01_Pin
+  (    1 /IN )
+ )
+ ( /203ec3c1-122c-4087-8f6d-2a0dd0b941e6 TestPoint:TestPoint_Pad_3.0x3.0mm  J1 Conn_01x01_Pin
+  (    1 /VCC )
+ )
+ ( /789295bb-2cfb-4a2b-977f-b3831d5aa975 TestPoint:TestPoint_Pad_3.0x3.0mm  J4 Conn_01x01_Pin
+  (    1 GND )
+ )
+ ( /985a669c-9a7f-4b74-bb4f-9487b164d3aa Resistor_SMD:R_1206_3216Metric  R3 10k
+  (    1 /IN )
+  (    2 Net-(U1-+) )
+ )
+ ( /b8a40376-5e4f-459f-9886-5e9ee83698cf Package_TO_SOT_SMD:SOT-23-5  U1 TLV2371DBV
+  (    1 /OUT )
+  (    2 GND )
+  (    3 Net-(U1-+) )
+  (    4 Net-(U1--) )
+  (    5 /VCC )
+ )
+)
+*
