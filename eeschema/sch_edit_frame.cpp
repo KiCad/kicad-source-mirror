@@ -1911,7 +1911,7 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
 
     SCH_BASE_FRAME::SetScreen( screen );
 
-    m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+    m_toolManager->ResetTools( TOOL_BASE::REDRAW );
 
     // update the References
     GetCurrentSheet().UpdateAllScreenReferences();
