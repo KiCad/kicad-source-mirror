@@ -33,6 +33,7 @@
 #include <sch_plugins/database/sch_database_plugin.h>
 #include <sch_plugins/ltspice/ltspice_sch_plugin.h>
 #include <wildcards_and_files_ext.h>
+#include <common.h>     // for ExpandEnvVarSubstitutions
 
 #define FMT_UNIMPLEMENTED   _( "Plugin \"%s\" does not implement the \"%s\" function." )
 #define FMT_NOTFOUND        _( "Plugin type \"%s\" is not found." )
@@ -165,13 +166,15 @@ SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::GuessPluginTypeFromLibPath( const wxString& a
     // .lib is shared between CADSTAR and Legacy KiCad file formats. Let's read the header
     if( ext == LegacySymbolLibFileExtension )
     {
+        wxString fullName = ExpandEnvVarSubstitutions( aLibPath, nullptr );
+
         for( SCH_FILE_T pluginType : { SCH_LEGACY, SCH_CADSTAR_ARCHIVE } )
         {
             SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( pluginType ) );
 
             if( pi )
             {
-                if( pi->CheckHeader( aLibPath ) )
+                if( pi->CheckHeader( fullName ) )
                     return pluginType;
             }
         }
