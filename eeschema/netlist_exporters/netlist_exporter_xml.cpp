@@ -222,6 +222,7 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
     m_libParts.clear();
 
     SCH_SHEET_LIST sheetList = m_schematic->GetSheets();
+    SCH_SHEET_PATH currentSheet = m_schematic->CurrentSheet();
 
     // Output is xml, so there is no reason to remove spaces from the field values.
     // And XML element names need not be translated to various languages.
@@ -229,6 +230,10 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
     for( unsigned ii = 0; ii < sheetList.size(); ii++ )
     {
         SCH_SHEET_PATH sheet = sheetList[ii];
+
+        // Change schematic CurrentSheet in each iteration to allow hierarchical
+        // resolution of text variables in sheet fields.
+        m_schematic->SetCurrentSheet( sheet );
 
         auto cmp = [sheet]( SCH_SYMBOL* a, SCH_SYMBOL* b )
                    {
@@ -399,6 +404,8 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
             xunits->AddChild( new XNODE( wxXML_TEXT_NODE, wxEmptyString, uuid ) );
         }
     }
+
+    m_schematic->SetCurrentSheet( currentSheet );
 
     return xcomps;
 }
