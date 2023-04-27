@@ -190,7 +190,7 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, int aDepth,
     std::function<bool( wxString* )> labelResolver =
             [&]( wxString* token ) -> bool
             {
-                return static_cast<SCH_LABEL_BASE*>( m_parent )->ResolveTextVar( token,
+                return static_cast<SCH_LABEL_BASE*>( m_parent )->ResolveTextVar( aPath, token,
                                                                                  aDepth + 1 );
             };
 

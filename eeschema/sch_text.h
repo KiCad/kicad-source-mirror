@@ -128,8 +128,9 @@ public:
         return wxT( "SCH_TEXT" );
     }
 
-    wxString GetShownText( const SCH_SHEET_PATH* aPath, int aDepth = 0,
-                           bool aAllowExtraText = true ) const;
+    virtual wxString GetShownText( const SCH_SHEET_PATH* aPath, int aDepth = 0,
+                                   bool aAllowExtraText = true ) const;
+
     wxString GetShownText( int aDepth = 0, bool aAllowExtraText = true ) const override
     {
         return GetShownText( nullptr, aDepth, aAllowExtraText );

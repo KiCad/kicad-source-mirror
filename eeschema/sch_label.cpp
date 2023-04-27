@@ -507,7 +507,8 @@ void SCH_LABEL_BASE::GetContextualTextVars( wxArrayString* aVars ) const
 }
 
 
-bool SCH_LABEL_BASE::ResolveTextVar( wxString* token, int aDepth ) const
+bool SCH_LABEL_BASE::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
+                                     int aDepth ) const
 {
     static wxRegEx operatingPoint( wxT( "^"
                                         "OP"
@@ -600,9 +601,14 @@ bool SCH_LABEL_BASE::ResolveTextVar( wxString* token, int aDepth ) const
         if( sheet->ResolveTextVar( token, aDepth + 1 ) )
             return true;
     }
+    else if( aPath && aPath->Last() )
+    {
+        if( aPath->Last()->ResolveTextVar( aPath, token, aDepth + 1 ) )
+            return true;
+    }
     else if( SCH_SHEET* sheet = Schematic()->CurrentSheet().Last() )
     {
-        if( sheet->ResolveTextVar( token, aDepth + 1 ) )
+        if( sheet->ResolveTextVar( aPath, token, aDepth + 1 ) )
             return true;
     }
 
@@ -610,12 +616,12 @@ bool SCH_LABEL_BASE::ResolveTextVar( wxString* token, int aDepth ) const
 }
 
 
-wxString SCH_LABEL_BASE::GetShownText( int aDepth, bool aAllowExtraText ) const
+wxString SCH_LABEL_BASE::GetShownText( const SCH_SHEET_PATH* aPath, int aDepth, bool aAllowExtraText ) const
 {
     std::function<bool( wxString* )> textResolver =
             [&]( wxString* token ) -> bool
             {
-                return ResolveTextVar( token, aDepth );
+                return ResolveTextVar( aPath, token, aDepth );
             };
 
     wxString text = EDA_TEXT::GetShownText();
@@ -1425,7 +1431,8 @@ void SCH_GLOBALLABEL::MirrorVertically( int aCenter )
 }
 
 
-bool SCH_GLOBALLABEL::ResolveTextVar( wxString* token, int aDepth ) const
+bool SCH_GLOBALLABEL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
+                                      int aDepth ) const
 {
     if( token->IsSameAs( wxT( "INTERSHEET_REFS" ) ) && Schematic() )
     {
@@ -1472,7 +1479,7 @@ bool SCH_GLOBALLABEL::ResolveTextVar( wxString* token, int aDepth ) const
         return true;
     }
 
-    return SCH_LABEL_BASE::ResolveTextVar( token, aDepth );
+    return SCH_LABEL_BASE::ResolveTextVar( aPath, token, aDepth );
 }
 
 
