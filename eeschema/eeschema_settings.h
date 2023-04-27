@@ -60,6 +60,7 @@ public:
         wxString default_font;
         bool show_hidden_pins;
         bool show_hidden_fields;
+        bool show_directive_labels;
         bool show_erc_warnings;
         bool show_erc_errors;
         bool show_erc_exclusions;

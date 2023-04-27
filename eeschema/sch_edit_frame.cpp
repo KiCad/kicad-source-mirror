@@ -479,6 +479,13 @@ void SCH_EDIT_FRAME::setupUIConditions()
                 return cfg && cfg->m_Appearance.show_hidden_fields;
             };
 
+    auto showDirectiveLabelsCond =
+            [this]( const SELECTION& )
+            {
+                EESCHEMA_SETTINGS* cfg = eeconfig();
+                return cfg && cfg->m_Appearance.show_directive_labels;
+            };
+
     auto showERCErrorsCond =
             [this]( const SELECTION& )
             {
@@ -560,22 +567,23 @@ void SCH_EDIT_FRAME::setupUIConditions()
                 return m_toolManager->GetTool<SCH_NAVIGATE_TOOL>()->CanGoNext();
             };
 
-    mgr->SetConditions( EE_ACTIONS::leaveSheet,          ENABLE( belowRootSheetCondition ) );
-    mgr->SetConditions( EE_ACTIONS::navigateUp,          ENABLE( belowRootSheetCondition ) );
-    mgr->SetConditions( EE_ACTIONS::navigateForward,     ENABLE( navHistoryHasForward ) );
-    mgr->SetConditions( EE_ACTIONS::navigateBack,        ENABLE( navHistoryHasBackward ) );
-    mgr->SetConditions( EE_ACTIONS::navigatePrevious,    ENABLE( navSchematicHasPreviousSheet ) );
-    mgr->SetConditions( EE_ACTIONS::navigateNext,        ENABLE( navSchematicHasNextSheet ) );
-    mgr->SetConditions( EE_ACTIONS::remapSymbols,        ENABLE( remapSymbolsCondition ) );
-    mgr->SetConditions( EE_ACTIONS::toggleHiddenPins,    CHECK( showHiddenPinsCond ) );
-    mgr->SetConditions( EE_ACTIONS::toggleHiddenFields,  CHECK( showHiddenFieldsCond ) );
-    mgr->SetConditions( EE_ACTIONS::toggleERCErrors,     CHECK( showERCErrorsCond ) );
-    mgr->SetConditions( EE_ACTIONS::toggleERCWarnings,   CHECK( showERCWarningsCond ) );
-    mgr->SetConditions( EE_ACTIONS::toggleERCExclusions, CHECK( showERCExclusionsCond ) );
-    mgr->SetConditions( EE_ACTIONS::toggleOPVoltages,    CHECK( showOPVoltagesCond ) );
-    mgr->SetConditions( EE_ACTIONS::toggleOPCurrents,    CHECK( showOPCurrentsCond ) );
-    mgr->SetConditions( EE_ACTIONS::toggleAnnotateAuto,  CHECK( showAnnotateAutomaticallyCond ) );
-    mgr->SetConditions( ACTIONS::toggleBoundingBoxes,    CHECK( cond.BoundingBoxes() ) );
+    mgr->SetConditions( EE_ACTIONS::leaveSheet,            ENABLE( belowRootSheetCondition ) );
+    mgr->SetConditions( EE_ACTIONS::navigateUp,            ENABLE( belowRootSheetCondition ) );
+    mgr->SetConditions( EE_ACTIONS::navigateForward,       ENABLE( navHistoryHasForward ) );
+    mgr->SetConditions( EE_ACTIONS::navigateBack,          ENABLE( navHistoryHasBackward ) );
+    mgr->SetConditions( EE_ACTIONS::navigatePrevious,      ENABLE( navSchematicHasPreviousSheet ) );
+    mgr->SetConditions( EE_ACTIONS::navigateNext,          ENABLE( navSchematicHasNextSheet ) );
+    mgr->SetConditions( EE_ACTIONS::remapSymbols,          ENABLE( remapSymbolsCondition ) );
+    mgr->SetConditions( EE_ACTIONS::toggleHiddenPins,      CHECK( showHiddenPinsCond ) );
+    mgr->SetConditions( EE_ACTIONS::toggleHiddenFields,    CHECK( showHiddenFieldsCond ) );
+    mgr->SetConditions( EE_ACTIONS::toggleDirectiveLabels, CHECK( showDirectiveLabelsCond ) );
+    mgr->SetConditions( EE_ACTIONS::toggleERCErrors,       CHECK( showERCErrorsCond ) );
+    mgr->SetConditions( EE_ACTIONS::toggleERCWarnings,     CHECK( showERCWarningsCond ) );
+    mgr->SetConditions( EE_ACTIONS::toggleERCExclusions,   CHECK( showERCExclusionsCond ) );
+    mgr->SetConditions( EE_ACTIONS::toggleOPVoltages,      CHECK( showOPVoltagesCond ) );
+    mgr->SetConditions( EE_ACTIONS::toggleOPCurrents,      CHECK( showOPCurrentsCond ) );
+    mgr->SetConditions( EE_ACTIONS::toggleAnnotateAuto,    CHECK( showAnnotateAutomaticallyCond ) );
+    mgr->SetConditions( ACTIONS::toggleBoundingBoxes,      CHECK( cond.BoundingBoxes() ) );
 
 
 #define CURRENT_TOOL( action ) mgr->SetConditions( action, CHECK( cond.CurrentTool( action ) ) )

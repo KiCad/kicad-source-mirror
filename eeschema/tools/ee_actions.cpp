@@ -702,6 +702,10 @@ TOOL_ACTION EE_ACTIONS::toggleHiddenFields( "eeschema.EditorControl.showHiddenFi
         AS_GLOBAL, 0, "",
         _( "Show Hidden Fields" ), _( "Toggle display of hidden text fields" ) );
 
+TOOL_ACTION EE_ACTIONS::toggleDirectiveLabels( "eeschema.EditorControl.showDirectiveLabels",
+        AS_GLOBAL, 0, "",
+        _( "Show Directive Labels" ), _( "Toggle display of directive labels" ) );
+
 TOOL_ACTION EE_ACTIONS::toggleERCWarnings( "eeschema.EditorControl.showERCWarnings",
         AS_GLOBAL, 0, "",
         _( "Show ERC Warnings" ), _( "Show markers for electrical rules checker warnings" ) );

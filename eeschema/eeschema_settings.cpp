@@ -124,6 +124,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "appearance.show_hidden_fields",
             &m_Appearance.show_hidden_fields, false ) );
 
+    m_params.emplace_back( new PARAM<bool>( "appearance.show_directive_labels",
+            &m_Appearance.show_directive_labels, true ) );
+
     m_params.emplace_back( new PARAM<bool>( "appearance.show_erc_warnings",
             &m_Appearance.show_erc_warnings, true ) );
 

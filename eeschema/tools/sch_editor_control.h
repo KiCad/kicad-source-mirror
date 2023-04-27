@@ -127,6 +127,7 @@ public:
 
     int ToggleHiddenPins( const TOOL_EVENT& aEvent );
     int ToggleHiddenFields( const TOOL_EVENT& aEvent );
+    int ToggleDirectiveLabels( const TOOL_EVENT& aEvent );
     int ToggleERCWarnings( const TOOL_EVENT& aEvent );
     int ToggleERCErrors( const TOOL_EVENT& aEvent );
     int ToggleERCExclusions( const TOOL_EVENT& aEvent );

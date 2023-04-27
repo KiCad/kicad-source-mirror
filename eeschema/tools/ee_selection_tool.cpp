@@ -1815,6 +1815,12 @@ bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, const VECTOR2I* aPos,
         break;
     }
 
+    case SCH_DIRECTIVE_LABEL_T:
+        if( !m_frame->eeconfig()->m_Appearance.show_directive_labels )
+            return false;
+
+        break;
+
     case LIB_SYMBOL_T:    // In symbol_editor we do not want to select the symbol itself.
         return false;
 

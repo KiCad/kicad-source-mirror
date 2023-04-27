@@ -2720,6 +2720,9 @@ void SCH_PAINTER::draw( const SCH_HIERLABEL *aLabel, int aLayer )
 
 void SCH_PAINTER::draw( const SCH_DIRECTIVE_LABEL *aLabel, int aLayer )
 {
+    if( !eeconfig()->m_Appearance.show_directive_labels && !aLabel->IsSelected() )
+        return;
+
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
     if( !drawingShadows || eeconfig()->m_Selection.draw_selected_children )
