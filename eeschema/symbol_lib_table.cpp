@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2022 CERN
- * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -677,6 +677,26 @@ bool SYMBOL_LIB_TABLE::LoadGlobalTable( SYMBOL_LIB_TABLE& aTable )
     }
 
     return tableExists;
+}
+
+
+bool SYMBOL_LIB_TABLE::operator==( const SYMBOL_LIB_TABLE& aOther ) const
+{
+    if( m_rows.size() != aOther.m_rows.size() )
+        return false;
+
+    unsigned i;
+
+    for( i = 0; i < m_rows.size(); ++i )
+    {
+        const SYMBOL_LIB_TABLE_ROW& curr = static_cast<const SYMBOL_LIB_TABLE_ROW&>( m_rows[i] );
+        const SYMBOL_LIB_TABLE_ROW& curr_other = static_cast<const SYMBOL_LIB_TABLE_ROW&>( aOther.m_rows[i] );
+
+        if( curr != curr_other )
+            return false;
+    }
+
+    return true;
 }
 
 

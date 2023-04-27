@@ -74,6 +74,14 @@ private:
 
     SYMBOL_LIB_TABLE_GRID* cur_model() const;
 
+    /**
+     * @return true if the plugin type can be selected from the library path only
+     * (i.e. only from its extension)
+     * if the type needs an access to the file itself, return false because
+     * the file can be not (at least temporary) available
+     */
+    bool allowAutomaticPluginTypeSelection( wxString& aLibraryPath );
+
 private:
     // Caller's tables are modified only on OK button and successful verification.
     SYMBOL_LIB_TABLE*           m_globalTable;

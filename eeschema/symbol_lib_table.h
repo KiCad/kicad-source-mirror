@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2016-2021 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -307,6 +307,15 @@ public:
     static SYMBOL_LIB_TABLE& GetGlobalLibTable();
 
     static const wxString& GetSymbolLibTableFileName();
+
+   /**
+     * Compares this table against another.
+     * This compares the row *contents* against each other.
+     */
+    bool operator==( const SYMBOL_LIB_TABLE& aOther ) const;
+
+    bool operator!=( const SYMBOL_LIB_TABLE& aOther ) const { return !( *this == aOther ); }
+
 
 private:
     friend class SYMBOL_LIB_TABLE_GRID;

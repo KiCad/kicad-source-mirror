@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2021 CERN
- * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -328,6 +328,23 @@ PANEL_SYM_LIB_TABLE::~PANEL_SYM_LIB_TABLE()
 }
 
 
+bool PANEL_SYM_LIB_TABLE::allowAutomaticPluginTypeSelection( wxString& aLibraryPath )
+{
+    // When the plugin type depends only of the file extension, return true.
+    // if it needs to read the actual file (taht can be not available), return false
+
+    wxFileName fn( aLibraryPath );
+    wxString   ext = fn.GetExt().Lower();
+
+    // Currently, only the extension .lib is common to legacy libraries and Cadstar libraries
+    // so return false in this case
+    if( ext == LegacySymbolLibFileExtension )
+        return false;
+
+    return true;
+}
+
+
 bool PANEL_SYM_LIB_TABLE::verifyTables()
 {
     wxString msg;
@@ -389,7 +406,16 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
             {
                 // set the trimmed values back into the table so they get saved to disk.
                 model->SetValue( r, COL_NICKNAME, nick );
-                model->SetValue( r, COL_URI, uri );
+
+                if( allowAutomaticPluginTypeSelection( uri ) )
+                    model->SetValue( r, COL_URI, uri );
+                else
+                {
+                    wxString ltype  = model->GetValue( r, COL_TYPE );
+                    model->LIB_TABLE_GRID::SetValue( r, COL_URI, uri );
+                    model->SetValue( r, COL_TYPE, ltype );
+                }
+
                 ++r;        // this row was OK.
             }
         }

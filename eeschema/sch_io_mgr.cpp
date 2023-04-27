@@ -168,6 +168,11 @@ SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::GuessPluginTypeFromLibPath( const wxString& a
     {
         wxString fullName = ExpandEnvVarSubstitutions( aLibPath, nullptr );
 
+        // Of course the file should exist to be read. If not, use the SCH_LEGACY
+        // format: it is more usual than SCH_CADSTAR_ARCHIVE
+        if( !wxFileExists( fullName ) )
+            return SCH_LEGACY;
+
         for( SCH_FILE_T pluginType : { SCH_LEGACY, SCH_CADSTAR_ARCHIVE } )
         {
             SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( pluginType ) );
@@ -179,16 +184,13 @@ SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::GuessPluginTypeFromLibPath( const wxString& a
             }
         }
 
+        // If not found, use the SCH_LEGACY.
+        return SCH_LEGACY;
     }
 
     for( SCH_IO_MGR::SCH_FILE_T piType : SCH_IO_MGR::SCH_FILE_T_vector )
     {
-
-        if( ext == LegacySymbolLibFileExtension )
-        {
-            break;
-        }
-        else if( SCH_IO_MGR::GetLibraryFileExtension( piType ).Lower() == fn.GetExt().Lower() )
+        if( SCH_IO_MGR::GetLibraryFileExtension( piType ).Lower() == ext )
         {
             ret = piType;
             break;
