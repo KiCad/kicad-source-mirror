@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 CERN
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Jon Evans <jon@craftyjon.com>
  *
@@ -62,7 +62,7 @@
  *
  */
 
-SCH_CONNECTION::SCH_CONNECTION( SCH_ITEM* aParent, SCH_SHEET_PATH aPath ) :
+SCH_CONNECTION::SCH_CONNECTION( SCH_ITEM* aParent, const SCH_SHEET_PATH& aPath ) :
         m_sheet( aPath ),
         m_local_sheet( aPath ),
         m_parent( aParent ),

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -60,7 +60,7 @@ enum class CONNECTION_TYPE
 class SCH_CONNECTION
 {
 public:
-    SCH_CONNECTION( SCH_ITEM* aParent = nullptr, SCH_SHEET_PATH aPath = SCH_SHEET_PATH() );
+    SCH_CONNECTION( SCH_ITEM* aParent = nullptr, const SCH_SHEET_PATH& aPath = SCH_SHEET_PATH() );
 
     SCH_CONNECTION( CONNECTION_GRAPH* aGraph );
 
