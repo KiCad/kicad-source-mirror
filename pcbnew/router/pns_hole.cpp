@@ -42,7 +42,6 @@ HOLE* HOLE::Clone() const
 {
     HOLE* h = new HOLE( nullptr, m_holeShape->Clone() );
 
-    h->SetNet( Net() );
     h->SetLayers( Layers() );
     h->SetOwner( nullptr );
 
