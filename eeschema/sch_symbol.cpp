@@ -827,10 +827,10 @@ void SCH_SYMBOL::SetUnitSelection( int aUnitSelection )
 }
 
 
-const wxString SCH_SYMBOL::GetValueFieldText( bool aResolve ) const
+const wxString SCH_SYMBOL::GetValueFieldText( bool aResolve, const SCH_SHEET_PATH* aPath ) const
 {
     if( aResolve )
-        return GetField( VALUE_FIELD )->GetShownText();
+        return GetField( VALUE_FIELD )->GetShownText( aPath );
 
     return GetField( VALUE_FIELD )->GetText();
 }
@@ -1155,13 +1155,15 @@ void SCH_SYMBOL::GetContextualTextVars( wxArrayString* aVars ) const
 }
 
 
-bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
+bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth, const SCH_SHEET_PATH* aPath ) const
 {
     SCHEMATIC* schematic = Schematic();
 
     // SCH_SYMOL object has no context outside a schematic.
     if( !schematic )
         return false;
+
+    SCH_SHEET* sheet = aPath ? aPath->Last() : schematic->CurrentSheet().Last();
 
     if( token->Contains( ':' ) )
     {
@@ -1278,9 +1280,9 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
 
     // See if parent can resolve it (this will recurse to ancestors)
 
-    if( SCH_SHEET* sheet = schematic->CurrentSheet().Last() )
+    if( sheet )
     {
-        if( sheet->ResolveTextVar( token, aDepth + 1 ) )
+        if( sheet->ResolveTextVar( aPath, token, aDepth + 1 ) )
             return true;
     }
 

@@ -234,7 +234,7 @@ void SCH_SHEET::GetContextualTextVars( wxArrayString* aVars ) const
 }
 
 
-bool SCH_SHEET::ResolveTextVar( wxString* token, int aDepth ) const
+bool SCH_SHEET::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, int aDepth ) const
 {
     if( !Schematic() )
         return false;
@@ -291,13 +291,13 @@ bool SCH_SHEET::ResolveTextVar( wxString* token, int aDepth ) const
 
     // See if parent can resolve it (these will recurse to ancestors)
 
-    SCH_SHEET_PATH sheetPath = findSelf();
+    SCH_SHEET_PATH sheetPath = aPath ? *aPath : findSelf();
 
     if( sheetPath.size() >= 2 )
     {
         sheetPath.pop_back();
 
-        if( sheetPath.Last()->ResolveTextVar( token, aDepth + 1 ) )
+        if( sheetPath.Last()->ResolveTextVar( aPath, token, aDepth + 1 ) )
             return true;
     }
     else

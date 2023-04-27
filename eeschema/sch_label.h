@@ -126,9 +126,20 @@ public:
      */
     void GetIntersheetRefs( std::vector<std::pair<wxString, wxString>>* pages );
 
-    virtual bool ResolveTextVar( wxString* token, int aDepth ) const;
+    /**
+     * Resolve any references to system tokens supported by the label.
+     *
+     * @param aDepth a counter to limit recursion and circular references.
+     */
+    virtual bool ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, int aDepth ) const;
 
-    wxString GetShownText( int aDepth = 0, bool aAllowExtraText = true ) const override;
+    wxString GetShownText( const SCH_SHEET_PATH* aPath, int aDepth = 0,
+                           bool aAllowExtraText = true ) const override;
+
+    wxString GetShownText( int aDepth = 0, bool aAllowExtraText = true ) const override
+    {
+        return GetShownText( nullptr, aDepth, aAllowExtraText );
+    }
 
     void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction ) override;
 
@@ -353,7 +364,7 @@ public:
     void CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings, std::vector<VECTOR2I>& aPoints,
                              const VECTOR2I& aPos ) const override;
 
-    bool ResolveTextVar( wxString* token, int aDepth ) const override;
+    bool ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, int aDepth ) const override;
 
     bool IsConnectable() const override { return true; }
 

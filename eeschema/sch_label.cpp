@@ -494,7 +494,8 @@ void SCH_LABEL_BASE::GetIntersheetRefs( std::vector<std::pair<wxString, wxString
 }
 
 
-bool SCH_LABEL_BASE::ResolveTextVar( wxString* token, int aDepth ) const
+bool SCH_LABEL_BASE::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
+                                     int aDepth ) const
 {
     if( !Schematic() )
         return false;
@@ -543,11 +544,11 @@ bool SCH_LABEL_BASE::ResolveTextVar( wxString* token, int aDepth ) const
         return true;
     }
 
-    for( size_t i = 0; i < m_fields.size(); ++i )
+    for( const SCH_FIELD& field : m_fields)
     {
-        if( token->IsSameAs( m_fields[i].GetName() ) )
+        if( token->IsSameAs( field.GetName() ) )
         {
-            *token = m_fields[i].GetShownText( aDepth + 1 );
+            *token = field.GetShownText( aDepth + 1 );
             return true;
         }
     }
@@ -561,9 +562,14 @@ bool SCH_LABEL_BASE::ResolveTextVar( wxString* token, int aDepth ) const
         if( sheet->ResolveTextVar( token, aDepth + 1 ) )
             return true;
     }
+    else if( aPath && aPath->Last() )
+    {
+        if( aPath->Last()->ResolveTextVar( aPath, token, aDepth + 1 ) )
+            return true;
+    }
     else if( SCH_SHEET* sheet = Schematic()->CurrentSheet().Last() )
     {
-        if( sheet->ResolveTextVar( token, aDepth + 1 ) )
+        if( sheet->ResolveTextVar( aPath, token, aDepth + 1 ) )
             return true;
     }
 
@@ -571,12 +577,12 @@ bool SCH_LABEL_BASE::ResolveTextVar( wxString* token, int aDepth ) const
 }
 
 
-wxString SCH_LABEL_BASE::GetShownText( int aDepth, bool aAllowExtraText ) const
+wxString SCH_LABEL_BASE::GetShownText( const SCH_SHEET_PATH* aPath, int aDepth, bool aAllowExtraText ) const
 {
     std::function<bool( wxString* )> textResolver =
             [&]( wxString* token ) -> bool
             {
-                return ResolveTextVar( token, aDepth );
+                return ResolveTextVar( aPath, token, aDepth );
             };
 
     wxString text = EDA_TEXT::GetShownText();
@@ -1386,7 +1392,8 @@ void SCH_GLOBALLABEL::MirrorVertically( int aCenter )
 }
 
 
-bool SCH_GLOBALLABEL::ResolveTextVar( wxString* token, int aDepth ) const
+bool SCH_GLOBALLABEL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
+                                      int aDepth ) const
 {
     if( token->IsSameAs( wxT( "INTERSHEET_REFS" ) ) && Schematic() )
     {
@@ -1433,7 +1440,7 @@ bool SCH_GLOBALLABEL::ResolveTextVar( wxString* token, int aDepth ) const
         return true;
     }
 
-    return SCH_LABEL_BASE::ResolveTextVar( token, aDepth );
+    return SCH_LABEL_BASE::ResolveTextVar( aPath, token, aDepth );
 }
 
 
