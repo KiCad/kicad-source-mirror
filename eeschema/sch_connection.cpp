@@ -281,16 +281,16 @@ void SCH_CONNECTION::Clone( const SCH_CONNECTION& aOther )
         else
         {
             // TODO: refactor this once we support deep nesting
-            for( size_t i = 0; i < m_members.size(); ++i )
+            for( std::shared_ptr<SCH_CONNECTION>& member : m_members )
             {
                 auto it = std::find_if( otherMembers.begin(), otherMembers.end(),
                                         [&]( const std::shared_ptr<SCH_CONNECTION>& aTest )
                                         {
-                                            return aTest->LocalName() == m_members[i]->LocalName();
+                                            return aTest->LocalName() == member->LocalName();
                                         } );
 
                 if( it != otherMembers.end() )
-                    m_members[i]->Clone( **it );
+                    member->Clone( **it );
             }
         }
     }
@@ -317,7 +317,7 @@ bool SCH_CONNECTION::IsDriver() const
 
     case SCH_PIN_T:
     {
-        auto pin = static_cast<SCH_PIN*>( Parent() );
+        SCH_PIN* pin = static_cast<SCH_PIN*>( Parent() );
 
         // Only annotated symbols should drive nets.
         return pin->IsGlobalPower() || pin->GetParentSymbol()->IsAnnotated( &m_sheet );
@@ -351,8 +351,8 @@ wxString SCH_CONNECTION::Name( bool aIgnoreSheet ) const
 
 void SCH_CONNECTION::recacheName()
 {
-    m_cached_name =
-            m_name.IsEmpty() ? wxString( wxT( "<NO NET>" ) ) : wxString( m_prefix ) << m_name << m_suffix;
+    m_cached_name = m_name.IsEmpty() ? wxString( wxT( "<NO NET>" ) )
+                                     : wxString( m_prefix ) << m_name << m_suffix;
 
     bool prepend_path = true;
 
@@ -375,8 +375,8 @@ void SCH_CONNECTION::recacheName()
         }
     }
 
-    m_cached_name_with_path =
-            prepend_path ? m_sheet.PathHumanReadable() << m_cached_name : m_cached_name;
+    m_cached_name_with_path = prepend_path ? m_sheet.PathHumanReadable() << m_cached_name
+                                           : m_cached_name;
 }
 
 
@@ -386,7 +386,7 @@ void SCH_CONNECTION::SetPrefix( const wxString& aPrefix )
 
     recacheName();
 
-    for( const auto& m : Members() )
+    for( const std::shared_ptr<SCH_CONNECTION>& m : Members() )
         m->SetPrefix( aPrefix );
 }
 
@@ -397,7 +397,7 @@ void SCH_CONNECTION::SetSuffix( const wxString& aSuffix )
 
     recacheName();
 
-    for( const auto& m : Members() )
+    for( const std::shared_ptr<SCH_CONNECTION>& m : Members() )
         m->SetSuffix( aSuffix );
 }
 
@@ -467,9 +467,11 @@ const std::vector< std::shared_ptr< SCH_CONNECTION > > SCH_CONNECTION::AllMember
 {
     std::vector< std::shared_ptr< SCH_CONNECTION > > ret( m_members );
 
-    for( const auto& member : m_members )
+    for( const std::shared_ptr<SCH_CONNECTION>& member : m_members )
+    {
         if( member->IsBus() )
             ret.insert( ret.end(), member->Members().begin(), member->Members().end() );
+    }
 
     return ret;
 }
@@ -543,7 +545,7 @@ bool SCH_CONNECTION::IsSubsetOf( SCH_CONNECTION* aOther ) const
     if( !aOther->IsBus() )
         return false;
 
-    for( const auto& member : aOther->Members() )
+    for( const std::shared_ptr<SCH_CONNECTION>& member : aOther->Members() )
     {
         if( member->FullLocalName() == FullLocalName() )
             return true;
@@ -558,11 +560,13 @@ bool SCH_CONNECTION::IsMemberOfBus( SCH_CONNECTION* aOther ) const
     if( !aOther->IsBus() )
         return false;
 
-    auto me = Name( true );
+    wxString me = Name( true );
 
-    for( const auto& m : aOther->Members() )
+    for( const std::shared_ptr<SCH_CONNECTION>& m : aOther->Members() )
+    {
         if( m->Name( true ) == me )
             return true;
+    }
 
     return false;
 }
