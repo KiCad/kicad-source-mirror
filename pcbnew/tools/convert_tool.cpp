@@ -233,9 +233,10 @@ bool CONVERT_TOOL::Init()
     m_menu->SetIcon( BITMAPS::convert );
     m_menu->SetTitle( _( "Create from Selection" ) );
 
-    auto graphicLines = S_C::OnlyTypes( { PCB_SHAPE_LOCATE_SEGMENT_T, PCB_SHAPE_LOCATE_RECT_T,
-                                          PCB_SHAPE_LOCATE_CIRCLE_T, PCB_SHAPE_LOCATE_ARC_T,
-                                          PCB_SHAPE_LOCATE_BEZIER_T } )
+    auto shapes = S_C::OnlyTypes( { PCB_SHAPE_LOCATE_SEGMENT_T, PCB_SHAPE_LOCATE_RECT_T,
+                                    PCB_SHAPE_LOCATE_CIRCLE_T, PCB_SHAPE_LOCATE_ARC_T,
+                                    PCB_SHAPE_LOCATE_BEZIER_T,
+                                    PCB_TEXT_T } )
                                 && P_S_C::SameLayer();
 
     auto graphicToTrack = S_C::OnlyTypes( { PCB_SHAPE_LOCATE_SEGMENT_T, PCB_SHAPE_LOCATE_ARC_T } );
@@ -248,7 +249,7 @@ bool CONVERT_TOOL::Init()
     auto canCreateArcs     = S_C::Count( 1 )
                                 && S_C::OnlyTypes( { PCB_TRACE_T, PCB_SHAPE_LOCATE_SEGMENT_T } );
     auto canCreateArray    = S_C::MoreThan( 0 );
-    auto canCreatePolyType = graphicLines || anyPolys || anyTracks;
+    auto canCreatePolyType = shapes || anyPolys || anyTracks;
     auto canCreateLines    = anyPolys;
     auto canCreateTracks   = anyPolys || graphicToTrack;
     auto canCreate         = canCreatePolyType
@@ -781,6 +782,14 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromClosedGraphics( const std::deque<EDA_I
             poly.Append( *static_cast<ZONE*>( item )->Outline() );
             item->SetFlags( SKIP_STRUCT );
             break;
+
+        case PCB_TEXT_T:
+        {
+            PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
+            text->TransformTextToPolySet( poly, UNDEFINED_LAYER, 0, bds.m_MaxError, ERROR_INSIDE );
+            text->SetFlags( SKIP_STRUCT );
+            break;
+        }
 
         default:
             continue;

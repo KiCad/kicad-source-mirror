@@ -85,7 +85,7 @@ DIALOG_RULE_AREA_PROPERTIES_BASE::DIALOG_RULE_AREA_PROPERTIES_BASE( wxWindow* pa
 
 	fgSizer2->Add( m_cbPadsCtrl, 0, wxRIGHT|wxLEFT, 5 );
 
-	m_cbCopperPourCtrl = new wxCheckBox( this, wxID_ANY, _("Keep out copper fill"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbCopperPourCtrl = new wxCheckBox( this, wxID_ANY, _("Keep out zone fills"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbCopperPourCtrl->SetToolTip( _("Zones will not fill copper into this area") );
 
 	fgSizer2->Add( m_cbCopperPourCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );

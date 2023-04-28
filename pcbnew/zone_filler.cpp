@@ -1632,6 +1632,18 @@ bool ZONE_FILLER::fillNonCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
     aFillPolys = aSmoothedOutline;
     aFillPolys.BooleanSubtract( clearanceHoles, SHAPE_POLY_SET::PM_FAST );
 
+    for( ZONE* keepout : m_board->Zones() )
+    {
+        if( !keepout->GetIsRuleArea() )
+            continue;
+
+        if( keepout->GetDoNotAllowCopperPour() && keepout->IsOnLayer( aLayer ) )
+        {
+            if( keepout->GetBoundingBox().Intersects( zone_boundingbox ) )
+                aFillPolys.BooleanSubtract( *keepout->Outline(), SHAPE_POLY_SET::PM_FAST );
+        }
+    }
+
     // Features which are min_width should survive pruning; features that are *less* than
     // min_width should not.  Therefore we subtract epsilon from the min_width when
     // deflating/inflating.
