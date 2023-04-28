@@ -111,7 +111,7 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
     if( Kind() == HOLE_T && aHead->Kind() == HOLE_T )
         differentNetsOnly = false;
 
-    if( differentNetsOnly && Net() == aHead->m_net && aHead->m_net >= 0 )
+    if( differentNetsOnly && Net() == aHead->Net() && aHead->Net() >= 0 )
     {
         // same nets? no clearance!
         clearance = -1;
@@ -242,7 +242,7 @@ const std::string ITEM::Format() const
 {
     std::stringstream ss;
     ss << KindStr() << " ";
-    ss << "net " << m_net << " ";
+    ss << "net " << Net() << " ";
     ss << "layers " << m_layers.Start() << " " << m_layers.End();
     return ss.str();
 }
