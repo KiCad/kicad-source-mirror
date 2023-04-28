@@ -132,7 +132,7 @@ public:
                              std::vector<LTSPICE_SCHEMATIC::LT_ASC>& outLT_ASCs,
                              const std::vector<wxString>& aAsyFiles );
 
-    void CreateSymbol( LTSPICE_SCHEMATIC::LT_SYMBOL& schematicSymbol, LIB_SYMBOL* symbol );
+    void CreateSymbol( LTSPICE_SCHEMATIC::LT_SYMBOL& aLtSymbol, LIB_SYMBOL* aLibSymbol );
 
     /**
      * Methods for rotating and mirroring objects

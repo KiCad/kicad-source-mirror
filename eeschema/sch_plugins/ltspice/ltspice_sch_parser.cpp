@@ -278,47 +278,47 @@ void LTSPICE_SCH_PARSER::CreateKicadSYMBOLs( SCH_SHEET_PATH* aSheet,
 }
 
 
-void LTSPICE_SCH_PARSER::CreateSymbol( LTSPICE_SCHEMATIC::LT_SYMBOL& schematicSymbol,
-                                       LIB_SYMBOL* symbol )
+void LTSPICE_SCH_PARSER::CreateSymbol( LTSPICE_SCHEMATIC::LT_SYMBOL& aLtSymbol,
+                                       LIB_SYMBOL*                   aLibSymbol )
 {
-    for( int j = 0; j < (int) schematicSymbol.Lines.size(); j++ )
+    for( int j = 0; j < (int) aLtSymbol.Lines.size(); j++ )
     {
-        LIB_SHAPE* line = new LIB_SHAPE( symbol, SHAPE_T::POLY );
+        LIB_SHAPE* line = new LIB_SHAPE( aLibSymbol, SHAPE_T::POLY );
 
-        CreateLines( symbol, schematicSymbol, j, line );
-        symbol->AddDrawItem( line );
+        CreateLines( aLibSymbol, aLtSymbol, j, line );
+        aLibSymbol->AddDrawItem( line );
     }
 
-    for( int j = 0; j < (int) schematicSymbol.Circles.size(); j++ )
+    for( int j = 0; j < (int) aLtSymbol.Circles.size(); j++ )
     {
-        LIB_SHAPE* circle = new LIB_SHAPE( symbol, SHAPE_T::CIRCLE );
+        LIB_SHAPE* circle = new LIB_SHAPE( aLibSymbol, SHAPE_T::CIRCLE );
 
-        CreateCircle( schematicSymbol, j, circle );
-        symbol->AddDrawItem( circle );
+        CreateCircle( aLtSymbol, j, circle );
+        aLibSymbol->AddDrawItem( circle );
     }
 
-    for( int j = 0; j < (int) schematicSymbol.Arcs.size(); j++ )
+    for( int j = 0; j < (int) aLtSymbol.Arcs.size(); j++ )
     {
-        LIB_SHAPE* arc = new LIB_SHAPE( symbol, SHAPE_T::ARC );
+        LIB_SHAPE* arc = new LIB_SHAPE( aLibSymbol, SHAPE_T::ARC );
 
-        CreateArc( schematicSymbol, j, arc );
-        symbol->AddDrawItem( arc );
+        CreateArc( aLtSymbol, j, arc );
+        aLibSymbol->AddDrawItem( arc );
     }
 
-    for( int j = 0; j < (int) schematicSymbol.Rectangles.size(); j++ )
+    for( int j = 0; j < (int) aLtSymbol.Rectangles.size(); j++ )
     {
-        LIB_SHAPE* rectangle = new LIB_SHAPE( symbol, SHAPE_T::RECT );
+        LIB_SHAPE* rectangle = new LIB_SHAPE( aLibSymbol, SHAPE_T::RECT );
 
-        CreateRect( schematicSymbol, j, rectangle );
-        symbol->AddDrawItem( rectangle );
+        CreateRect( aLtSymbol, j, rectangle );
+        aLibSymbol->AddDrawItem( rectangle );
     }
 
-    for( int j = 0; j < (int) schematicSymbol.Pins.size(); j++ )
+    for( int j = 0; j < (int) aLtSymbol.Pins.size(); j++ )
     {
-        LIB_PIN* aPin = new LIB_PIN( symbol );
+        LIB_PIN* pin = new LIB_PIN( aLibSymbol );
 
-        CreatePin( schematicSymbol, j, aPin );
-        symbol->AddDrawItem( aPin );
+        CreatePin( aLtSymbol, j, pin );
+        aLibSymbol->AddDrawItem( pin );
     }
 }
 
@@ -1205,9 +1205,24 @@ void LTSPICE_SCH_PARSER::CreateRect( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, in
 void LTSPICE_SCH_PARSER::CreatePin( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex,
                                     LIB_PIN* aPin )
 {
+    LTSPICE_SCHEMATIC::LT_PIN& lt_pin = aLTSymbol.Pins[aIndex];
+    wxString                   device = aLTSymbol.Name.Lower();
+
+    if( aLTSymbol.Pins.size() == 2 && ( device == wxS( "res" )
+                                     || device == wxS( "cap" )
+                                     || device == wxS( "ind" ) ) )
+    {
+        // drop A/B pin names from simple LRCs as they're not terribly useful (and prevent
+        // other pin names on the net from driving the net name).
+    }
+    else
+    {
+        aPin->SetName( lt_pin.PinAttribute[ wxS( "PinName" ) ] );
+    }
+
     aPin->SetNumber( wxString::Format( wxS( "%d" ), aIndex + 1 ) );
     aPin->SetType( ELECTRICAL_PINTYPE::PT_PASSIVE );
-    aPin->SetPosition( ToInvertedKicadCoords( aLTSymbol.Pins[aIndex].PinLocation ) );
+    aPin->SetPosition( ToInvertedKicadCoords( lt_pin.PinLocation ) );
     aPin->SetLength( 5 );
     aPin->SetShape( GRAPHIC_PINSHAPE::LINE );
 }
