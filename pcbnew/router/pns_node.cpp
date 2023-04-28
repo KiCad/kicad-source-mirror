@@ -535,6 +535,9 @@ void NODE::add( ITEM* aItem, bool aAllowRedundant )
     case ITEM::SOLID_T:
         addSolid( static_cast<SOLID*>( aItem ) );
         break;
+    case ITEM::HOLE_T:
+        // added by parent VIA_T or SOLID_T (pad)
+        break;
     default:
         assert( false );
     }
