@@ -113,19 +113,14 @@ public:
 
     virtual void SetHole( HOLE* aHole ) override
     {
-        if( m_hole )
-        {
-            assert( m_hole->Owner() == nullptr );
-        }
+        if( m_hole && m_hole->BelongsTo( this ) )
+            delete m_hole;
 
         m_hole = aHole;
-        m_hole->SetNet( Net() );
+        m_hole->SetParentPadVia( this );
         m_hole->SetOwner( this );
-
-        if( m_hole )
-        {
-            m_hole->SetLayers( m_layers ); // fixme: backdrill vias can have hole layer set different than copper layer set
-        }
+        m_hole->SetLayers( m_layers ); // fixme: backdrill vias can have hole layer set different
+                                       // than copper layer set
     }
 
     virtual bool HasHole() const override { return m_hole != nullptr; }

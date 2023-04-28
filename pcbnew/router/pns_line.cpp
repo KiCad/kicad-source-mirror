@@ -51,6 +51,7 @@ LINE::LINE( const LINE& aOther )
     {
         m_via = aOther.m_via->Clone();
         m_via->SetOwner( this );
+        m_via->SetNet( m_net );
     }
 
     m_marker = aOther.m_marker;
@@ -82,6 +83,7 @@ LINE& LINE::operator=( const LINE& aOther )
     {
         m_via = aOther.m_via->Clone();
         m_via->SetOwner( this );
+        m_via->SetNet( m_net );
     }
 
     m_marker = aOther.m_marker;
@@ -1267,11 +1269,7 @@ bool LINE::HasLockedSegments() const
 
 void LINE::Clear()
 {
-    if( m_via && m_via->BelongsTo( this ) )
-    {
-        delete m_via;
-        m_via = nullptr;
-    }
+    RemoveVia();
     m_line.Clear();
 }
 
