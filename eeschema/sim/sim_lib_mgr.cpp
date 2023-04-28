@@ -183,14 +183,14 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, S
 
     std::vector<SCH_FIELD> fields;
 
-    for( int i = 0; i < aSymbol.GetFieldCount(); ++i )
+    for( const SCH_FIELD& field : aSymbol.GetFields() )
     {
-        fields.emplace_back( VECTOR2I(), i, &aSymbol, aSymbol.GetFields()[ i ].GetName() );
+        fields.emplace_back( VECTOR2I(), -1, &aSymbol, field.GetName() );
 
-        if( i == REFERENCE_FIELD )
+        if( field.GetId() == REFERENCE_FIELD )
             fields.back().SetText( aSymbol.GetRef( aSheetPath ) );
         else
-            fields.back().SetText( aSymbol.GetFields()[ i ].GetShownText( 0, false ) );
+            fields.back().SetText( field.GetShownText( aSheetPath, 0, false ) );
     }
 
     wxString deviceType;
