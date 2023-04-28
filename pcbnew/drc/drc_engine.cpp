@@ -1075,9 +1075,23 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
                 if( c->constraint.m_Type == CLEARANCE_CONSTRAINT )
                 {
-                    if( implicit && ( a_is_non_copper || b_is_non_copper ) )
+                    if( a_is_non_copper || b_is_non_copper )
                     {
-                        REPORT( _( "Netclass clearances apply only between copper items." ) );
+                        if( implicit )
+                        {
+                            REPORT( _( "Netclass clearances apply only between copper items." ) )
+                        }
+                        else if( a_is_non_copper )
+                        {
+                            REPORT( wxString::Format( _( "%s contains no copper.  Rule ignored." ),
+                                                      EscapeHTML( a->GetItemDescription( this ) ) ) )
+                        }
+                        else if( b_is_non_copper )
+                        {
+                            REPORT( wxString::Format( _( "%s contains no copper.  Rule ignored." ),
+                                                      EscapeHTML( b->GetItemDescription( this ) ) ) )
+                        }
+
                         return;
                     }
                 }
@@ -1301,15 +1315,21 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     // rule selection paradigm is "winner takes all".
     if( aConstraintType == CLEARANCE_CONSTRAINT )
     {
-        int global = constraint.m_Value.Min();
-        int localA = ac ? ac->GetLocalClearance( nullptr ) : 0;
-        int localB = bc ? bc->GetLocalClearance( nullptr ) : 0;
-        int clearance = global;
+        int  global = constraint.m_Value.Min();
+        int  localA = ac ? ac->GetLocalClearance( nullptr ) : 0;
+        int  localB = bc ? bc->GetLocalClearance( nullptr ) : 0;
+        int  clearance = global;
+        bool needBlankLine = true;
 
         if( localA > 0 )
         {
-            REPORT( "" )
-            REPORT( wxString::Format( _( "Local clearance on %s; clearance: %s." ),
+            if( needBlankLine )
+            {
+                REPORT( "" )
+                needBlankLine = false;
+            }
+
+            REPORT( wxString::Format( _( "Local clearance on %s: %s." ),
                                       EscapeHTML( a->GetItemDescription( this ) ),
                                       MessageTextFromValue( localA ) ) )
 
@@ -1325,8 +1345,13 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
         if( localB > 0 )
         {
-            REPORT( "" )
-            REPORT( wxString::Format( _( "Local clearance on %s; clearance: %s." ),
+            if( needBlankLine )
+            {
+                REPORT( "" )
+                needBlankLine = false;
+            }
+
+            REPORT( wxString::Format( _( "Local clearance on %s: %s." ),
                                       EscapeHTML( b->GetItemDescription( this ) ),
                                       MessageTextFromValue( localB ) ) )
 
@@ -1340,22 +1365,23 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
             }
         }
 
-        REPORT( "" )
-        REPORT( wxString::Format( _( "Board minimum clearance: %s." ),
-                                  MessageTextFromValue( m_designSettings->m_MinClearance ) ) )
-
-        if( clearance < m_designSettings->m_MinClearance )
+        if( !a_is_non_copper && !b_is_non_copper )
         {
-            constraint.SetParentRule( nullptr );
-            constraint.SetName( _( "board minimum" ) );
-            constraint.m_Value.SetMin( m_designSettings->m_MinClearance );
-        }
+            if( needBlankLine )
+            {
+                REPORT( "" )
+                needBlankLine = false;
+            }
 
-        if( a_is_non_copper || b_is_non_copper )
-        {
-            REPORT( _( "Local and board clearances apply only between copper items." ) );
-            constraint.m_Type = NULL_CONSTRAINT;
-            constraint.m_DisallowFlags = 0;
+            REPORT( wxString::Format( _( "Board minimum clearance: %s." ),
+                                      MessageTextFromValue( m_designSettings->m_MinClearance ) ) )
+
+            if( clearance < m_designSettings->m_MinClearance )
+            {
+                constraint.SetParentRule( nullptr );
+                constraint.SetName( _( "board minimum" ) );
+                constraint.m_Value.SetMin( m_designSettings->m_MinClearance );
+            }
         }
 
         return constraint;
