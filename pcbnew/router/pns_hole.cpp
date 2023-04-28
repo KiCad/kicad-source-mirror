@@ -39,7 +39,7 @@ HOLE::~HOLE()
 
 HOLE* HOLE::Clone() const
 {
-    HOLE* h = new HOLE( nullptr, m_holeShape->Clone() );
+    HOLE* h = new HOLE( m_holeShape->Clone() );
 
     h->SetLayers( Layers() );
     h->SetOwner( nullptr );
@@ -134,7 +134,7 @@ void HOLE::Move( const VECTOR2I& delta )
 HOLE* HOLE::MakeCircularHole( const VECTOR2I& pos, int radius )
 {
     auto circle = new SHAPE_CIRCLE( pos, radius );
-    auto hole = new HOLE( nullptr, circle );
+    auto hole = new HOLE( circle );
     hole->SetLayers( LAYER_RANGE( F_Cu, B_Cu ) );
     return hole;
 }

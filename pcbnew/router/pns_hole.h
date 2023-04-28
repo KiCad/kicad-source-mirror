@@ -33,14 +33,18 @@ namespace PNS
 class HOLE : public ITEM
 {
 public:
-    HOLE( ITEM* aParentPadVia, SHAPE* aShape ) :
+    HOLE( SHAPE* aShape ) :
             ITEM( ITEM::HOLE_T ),
             m_holeShape( aShape ), 
-            m_parentPadVia( aParentPadVia )
+            m_parentPadVia( nullptr )
     {
     }
 
-    HOLE( const ITEM& aOther ) : ITEM( aOther ) {}
+    HOLE( const ITEM& aOther ) :
+            ITEM( aOther ),
+            m_parentPadVia( nullptr )
+    {
+    }
 
     virtual ~HOLE();
 

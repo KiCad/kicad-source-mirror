@@ -231,7 +231,7 @@ public:
         return m_tag.pos;
     }
 
-    int Net() const
+    int Net() const override
     {
         return m_tag.net;
     }

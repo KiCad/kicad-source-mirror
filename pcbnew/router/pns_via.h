@@ -54,12 +54,12 @@ public:
         LINKED_ITEM( VIA_T ),
         m_hole( nullptr )
     {
-        m_diameter = 2; // Dummy value
-        m_drill = 0;
+        m_diameter = 2;     // Dummy value
+        m_drill = 1;        // Dummy value
         m_viaType = VIATYPE::THROUGH;
         m_isFree = false;
         m_isVirtual = false;
-        SetHole( HOLE::MakeCircularHole( m_pos, m_diameter / 2 ) );
+        SetHole( HOLE::MakeCircularHole( m_pos, m_drill / 2 ) );
     }
 
     VIA( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, int aDiameter, int aDrill,
@@ -100,9 +100,7 @@ public:
     virtual ~VIA()
     {
         if ( m_hole && m_hole->BelongsTo( this ) )
-	{
             delete m_hole;
-	}
     }
 
     static inline bool ClassOf( const ITEM* aItem )
@@ -116,6 +114,7 @@ public:
     {
         m_pos = aPos;
         m_shape.SetCenter( aPos );
+
         if( m_hole )
             m_hole->SetCenter( aPos );
     }
@@ -136,6 +135,7 @@ public:
     void SetDrill( int aDrill )
     {
         m_drill = aDrill;
+
         if( m_hole )
             m_hole->SetRadius( m_drill / 2 );
     }
@@ -171,19 +171,14 @@ public:
 
     virtual void SetHole( HOLE* aHole ) override
     {
-        if( m_hole && m_hole->Owner() == this )
-        {
+        if( m_hole && m_hole->BelongsTo( this ) )
             delete m_hole;
-        }
 
         m_hole = aHole;
         m_hole->SetParentPadVia( this );
         m_hole->SetOwner( this );
-
-        if( m_hole )
-        {
-            m_hole->SetLayers( m_layers ); // fixme: backdrill vias can have hole layer set different than copper layer set
-        }
+        m_hole->SetLayers( m_layers ); // fixme: backdrill vias can have hole layer set different
+                                       // than copper layer set
     }
 
     virtual bool HasHole() const override { return true; }

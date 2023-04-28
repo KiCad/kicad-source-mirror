@@ -1098,12 +1098,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
     solid->SetOffset( VECTOR2I( offset.x, offset.y ) );
 
     if( aPad->GetDrillSize().x > 0 )
-    {
-        SHAPE_SEGMENT* slot = (SHAPE_SEGMENT*) aPad->GetEffectiveHoleShape()->Clone();
-        PNS::HOLE*     hole = new PNS::HOLE( solid.get(), slot );
-
-        solid->SetHole( hole );
-    }
+        solid->SetHole( new PNS::HOLE( aPad->GetEffectiveHoleShape()->Clone() ) );
 
     // We generate a single SOLID for a pad, so we have to treat it as ALWAYS_FLASHED and then
     // perform layer-specific flashing tests internally.
@@ -1176,11 +1171,7 @@ std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE_BASE::syncVia( PCB_VIA* aVia )
         via->Mark( PNS::MK_LOCKED );
 
     via->SetIsFree( aVia->GetIsFree() );
-
-    SHAPE*     holeShape = new SHAPE_CIRCLE( aVia->GetPosition(), aVia->GetDrillValue() / 2 );
-    PNS::HOLE* viaHole = new PNS::HOLE( via.get(), holeShape );
-
-    via->SetHole( viaHole );
+    via->SetHole( PNS::HOLE::MakeCircularHole( aVia->GetPosition(), aVia->GetDrillValue() / 2 ) );
 
     return via;
 }
