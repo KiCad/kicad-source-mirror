@@ -213,25 +213,18 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
             if( !symbol || symbol->GetExcludeFromSim() )
                 continue;
 
+            SPICE_ITEM            spiceItem;
             std::vector<PIN_INFO> pins = CreatePinList( symbol, &sheet, true );
 
-            SPICE_ITEM spiceItem;
-
-            for( int i = 0; i < symbol->GetFieldCount(); ++i )
+            for( const SCH_FIELD& field : symbol->GetFields() )
             {
-                spiceItem.fields.emplace_back( VECTOR2I(), i, symbol,
-                                               symbol->GetFields()[ i ].GetName() );
+                spiceItem.fields.emplace_back( VECTOR2I(), -1, symbol, field.GetName() );
 
-                if( i == REFERENCE_FIELD )
+                if( field.GetId() == REFERENCE_FIELD )
                     spiceItem.fields.back().SetText( symbol->GetRef( &sheet ) );
                 else
-                    spiceItem.fields.back().SetText( symbol->GetFields()[i].GetShownText( 0, false ) );
+                    spiceItem.fields.back().SetText( field.GetShownText( &sheet, 0, false ) );
             }
-
-            wxString deviceType;
-            wxString modelType;
-            wxString modelParams;
-            wxString pinMap;
 
             readRefName( sheet, *symbol, spiceItem, refNames );
             readModel( sheet, *symbol, spiceItem );
