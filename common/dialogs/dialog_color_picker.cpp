@@ -396,12 +396,12 @@ void DIALOG_COLOR_PICKER::drawRGBPalette()
 
     // Use Y axis from bottom to top and origin to center
     bitmapDC.SetAxisOrientation( true, true );
-    #if wxCHECK_VERSION( 3, 1, 7 )
+#if wxCHECK_VERSION( 3, 1, 7 ) && !defined( __WXMAC__)
     // For some reason, SetDeviceOrigin has changed in wxWidgets 3.1.6 or 3.1.7
     bitmapDC.SetDeviceOrigin( half_size, -half_size );
-    #else
+#else
     bitmapDC.SetDeviceOrigin( half_size, half_size );
-    #endif
+#endif
 
     // Reserve room to draw cursors inside the bitmap
     half_size -= m_cursorsSize/2;
@@ -466,12 +466,12 @@ void DIALOG_COLOR_PICKER::drawHSVPalette()
 
     // Use Y axis from bottom to top and origin to center
     bitmapDC.SetAxisOrientation( true, true );
-    #if wxCHECK_VERSION( 3, 1, 7 )
+#if wxCHECK_VERSION( 3, 1, 7 ) && !defined( __WXMAC__)
     // For some reason, SetDeviceOrigin has changed in wxWidgets 3.1.6 or 3.1.7
     bitmapDC.SetDeviceOrigin( half_size, -half_size );
-    #else
+#else
     bitmapDC.SetDeviceOrigin( half_size, half_size );
-    #endif
+#endif
 
     // Reserve room to draw cursors inside the bitmap
     half_size -= m_cursorsSize / 2;
@@ -701,11 +701,13 @@ void DIALOG_COLOR_PICKER::onHSVMouseDrag( wxMouseEvent& event )
 
 void DIALOG_COLOR_PICKER::OnColorValueText( wxCommandEvent& event )
 {
-    m_newColor4D.SetFromHexString( m_colorValue->GetValue() );
-    m_newColor4D.ToHSV( m_hue, m_sat, m_val, true );
+    if( m_newColor4D.SetFromHexString( m_colorValue->GetValue() ) )
+    {
+        m_newColor4D.ToHSV( m_hue, m_sat, m_val, true );
 
-    SetEditVals( HEX_CHANGED, true );
-    drawAll();
+        SetEditVals( HEX_CHANGED, false );
+        drawAll();
+    }
 }
 
 

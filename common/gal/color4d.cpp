@@ -179,7 +179,7 @@ bool COLOR4D::SetFromHexString( const wxString& aColorString )
     str.Trim( true );
     str.Trim( false );
 
-    if( str.length() < 7 || str.GetChar( 0 ) != '#' )
+    if( str.length() < 7 || !str.StartsWith( '#' ) )
         return false;
 
     unsigned long tmp;
