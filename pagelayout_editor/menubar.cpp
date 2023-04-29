@@ -113,6 +113,7 @@ void PL_EDITOR_FRAME::doReCreateMenuBar()
 
     viewMenu->AppendSeparator();
     viewMenu->Add( ACTIONS::toggleGrid,          ACTION_MENU::CHECK );
+    viewMenu->Add( ACTIONS::gridProperties );
 
     // Units submenu
     ACTION_MENU* unitsSubMenu = new ACTION_MENU( false, selTool );

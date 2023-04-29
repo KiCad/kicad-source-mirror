@@ -21,11 +21,13 @@
 
 #include <bitmaps.h>
 #include <tool/action_toolbar.h>
+#include <tool/tool_manager.h>
+#include <tools/pl_actions.h>
+#include <tools/pl_selection_tool.h>
 #include <wx/choice.h>
 
 #include "pl_editor_id.h"
 #include "pl_editor_frame.h"
-#include "tools/pl_actions.h"
 
 void PL_EDITOR_FRAME::ReCreateHToolbar()
 {
@@ -168,6 +170,11 @@ void PL_EDITOR_FRAME::ReCreateOptToolbar()
                                                KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
         m_optionsToolBar->SetAuiManager( &m_auimgr );
     }
+
+    PL_SELECTION_TOOL*           selTool = m_toolManager->GetTool<PL_SELECTION_TOOL>();
+    std::unique_ptr<ACTION_MENU> gridMenu = std::make_unique<ACTION_MENU>( false, selTool );
+    gridMenu->Add( ACTIONS::gridProperties );
+    m_optionsToolBar->AddToolContextMenu( ACTIONS::toggleGrid, std::move( gridMenu ) );
 
     m_optionsToolBar->Add( ACTIONS::toggleGrid, ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::inchesUnits, ACTION_TOOLBAR::TOGGLE );
