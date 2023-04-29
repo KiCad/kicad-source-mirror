@@ -127,13 +127,18 @@ LIBEVAL::VALUE* PCB_EXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
             else
             {
                 const wxAny& any = item->Get( it->second );
-                bool valid = any.GetAs<wxString>( &str );
+                PCB_LAYER_ID layer;
 
-                if( valid )
+                if( it->second->Name() == wxT( "Layer" ) )
                 {
-                    if( it->second->Name() == wxT( "Layer" ) )
+                    if( any.GetAs<PCB_LAYER_ID>( &layer ) )
+                        return new PCB_LAYER_VALUE( layer );
+                    else if( any.GetAs<wxString>( &str ) )
                         return new PCB_LAYER_VALUE( context->GetBoard()->GetLayerID( str ) );
-                    else
+                }
+                else
+                {
+                    if( any.GetAs<wxString>( &str ) )
                         return new LIBEVAL::VALUE( str );
                 }
             }
