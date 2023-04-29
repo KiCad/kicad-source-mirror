@@ -108,7 +108,7 @@ public:
     SELECTION& GetCurrentSelection() override;
 
     const VECTOR2I& GetGridOrigin() const override { return m_grid_origin; }
-    void            SetGridOrigin( const VECTOR2I& aPoint ) override { m_grid_origin = aPoint; }
+    void SetGridOrigin( const VECTOR2I& aPoint ) override { m_grid_origin = aPoint; }
 
     /**
      * Calculate the position (in page, in iu) of the corner used as coordinate origin
@@ -133,14 +133,14 @@ public:
     /**
      * Create or update the right vertical toolbar.
      */
-    void    ReCreateVToolbar() override;
+    void ReCreateVToolbar() override;
 
     /**
      * Create or update the left vertical toolbar.
      *
      * @note This is currently not used.
      */
-    void    ReCreateOptToolbar() override;
+    void ReCreateOptToolbar() override;
 
     const PL_EDITOR_LAYOUT& GetPageLayout() const { return m_pageLayout; }
     PL_EDITOR_LAYOUT& GetPageLayout() { return m_pageLayout; }
@@ -178,15 +178,6 @@ public:
      * left top paper corner).
      */
     void OnSelectCoordOriginCorner( wxCommandEvent& event );
-
-    /**
-     * Toggle the display mode between the normal mode and the editor mode:
-     * In normal mode, title block texts are shown like they will be shown in other kicad
-     * applications: the format symbols in texts are replaced by the actual text.
-     * In editor mode, the format symbols in texts are not replaced by the actual text,
-     * and therefore format symbols are displayed.
-     */
-    void OnSelectTitleBlockDisplayMode( wxCommandEvent& event );
 
     /**
      * Open a dialog frame to print layers.
@@ -271,25 +262,26 @@ protected:
 
     void doReCreateMenuBar() override;
 
+    void DoWithAcceptedFiles() override;
+
     DECLARE_EVENT_TABLE();
 
+protected:
     /// The last filename chosen to be proposed to the user
-    PROPERTIES_FRAME*       m_propertiesPagelayout;
+    PROPERTIES_FRAME* m_propertiesPagelayout;
 
 private:
-    PL_EDITOR_LAYOUT m_pageLayout;
+    PL_EDITOR_LAYOUT  m_pageLayout;
 
-    int         m_propertiesFrameWidth; // the last width (in pixels) of m_propertiesPagelayout
+    int               m_propertiesFrameWidth; // last width (in pixels) of m_propertiesPagelayout
 
-    wxChoice*   m_originSelectBox;      // Corner origin choice for coordinates
-    int         m_originSelectChoice;   // the last choice for m_originSelectBox
-    wxChoice*   m_pageSelectBox;        // The page number sel'ector (page 1 or other pages
-                                        // useful when there are some items which are
-    wxString    m_mruImagePath;         // Most recently used path for placing a new image
-                                        // only on page 1, not on page 1
-    VECTOR2I m_grid_origin;
-
-    void DoWithAcceptedFiles() override;
+    wxChoice*         m_originSelectBox;      // Corner origin choice for coordinates
+    int               m_originSelectChoice;   // the last choice for m_originSelectBox
+    wxChoice*         m_pageSelectBox;        // The page number sel'ector (page 1 or other pages
+                                              // useful when there are some items which are
+    wxString          m_mruImagePath;         // Most recently used path for placing a new image
+                                              // only on page 1, not on page 1
+    VECTOR2I          m_grid_origin;
 };
 
 #endif /* _PL_EDITOR_FRAME_H */
