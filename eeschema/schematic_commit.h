@@ -23,59 +23,58 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef BOARD_COMMIT_H
-#define BOARD_COMMIT_H
+#ifndef SCHEMATIC_COMMIT_H
+#define SCHEMATIC_COMMIT_H
 
 #include <commit.h>
 
-class BOARD_ITEM;
-class BOARD;
 class PICKED_ITEMS_LIST;
-class PCB_TOOL_BASE;
 class TOOL_MANAGER;
+class SCH_EDIT_FRAME;
 class EDA_DRAW_FRAME;
 class TOOL_BASE;
+
+template<class T>
+class EE_TOOL_BASE;
 
 #define SKIP_UNDO          0x0001
 #define APPEND_UNDO        0x0002
 #define SKIP_SET_DIRTY     0x0004
 #define SKIP_CONNECTIVITY  0x0008
-#define ZONE_FILL_OP       0x0010
 
-class BOARD_COMMIT : public COMMIT
+class SCHEMATIC_COMMIT : public COMMIT
 {
 public:
-    BOARD_COMMIT( TOOL_MANAGER* aToolMgr );
-    BOARD_COMMIT( EDA_DRAW_FRAME* aFrame );
-    BOARD_COMMIT( PCB_TOOL_BASE *aTool );
+    SCHEMATIC_COMMIT( TOOL_MANAGER* aToolMgr );
+    SCHEMATIC_COMMIT( EDA_DRAW_FRAME* aFrame );
+    SCHEMATIC_COMMIT( EE_TOOL_BASE<SCH_BASE_FRAME>* aFrame );
 
-    virtual ~BOARD_COMMIT();
-
-    BOARD* GetBoard() const;
+    virtual ~SCHEMATIC_COMMIT();
 
     virtual void Push( const wxString& aMessage = wxT( "A commit" ),
                        int aCommitFlags = 0 ) override;
 
     virtual void Revert() override;
-    COMMIT&      Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType,
-                        BASE_SCREEN* aScreen = nullptr ) override;
-    COMMIT&      Stage( std::vector<EDA_ITEM*>& container, CHANGE_TYPE aChangeType,
-                        BASE_SCREEN* aScreen = nullptr ) override;
-    COMMIT&      Stage( const PICKED_ITEMS_LIST& aItems,
-                        UNDO_REDO aModFlag = UNDO_REDO::UNSPECIFIED,
-                        BASE_SCREEN* aScreen = nullptr ) override;
+    COMMIT&      Stage( EDA_ITEM *aItem, CHANGE_TYPE aChangeType, BASE_SCREEN *aScreen = nullptr )
+                     override;
+    COMMIT&      Stage( std::vector<EDA_ITEM*> &container, CHANGE_TYPE aChangeType,
+                    BASE_SCREEN *aScreen = nullptr ) override;
+    COMMIT&      Stage( const PICKED_ITEMS_LIST &aItems, UNDO_REDO aModFlag = UNDO_REDO::UNSPECIFIED,
+                    BASE_SCREEN *aScreen = nullptr ) override;
 
 private:
     EDA_ITEM* parentObject( EDA_ITEM* aItem ) const override;
 
     EDA_ITEM* makeImage( EDA_ITEM* aItem ) const override;
 
-    void dirtyIntersectingZones( BOARD_ITEM* item, int aChangeType );
+    void pushLibEdit(  const wxString& aMessage, int aCommitFlags );
+    void pushSchEdit(  const wxString& aMessage, int aCommitFlags );
+
+    void revertLibEdit();
 
 private:
     TOOL_MANAGER*  m_toolMgr;
-    bool           m_isFootprintEditor;
-    bool           m_isBoardEditor;
+    bool           m_isLibEditor;
 };
 
 #endif

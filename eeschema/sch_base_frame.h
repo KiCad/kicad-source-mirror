@@ -216,7 +216,7 @@ public:
      * Add an item to the screen (and view)
      * aScreen is the screen the item is located on, if not the current screen
      */
-    void AddToScreen( EDA_ITEM* aItem, SCH_SCREEN* aScreen );
+    void AddToScreen( EDA_ITEM* aItem, SCH_SCREEN* aScreen = nullptr );
 
     /**
      * Remove an item from the screen (and view)

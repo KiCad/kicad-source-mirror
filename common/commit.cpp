@@ -45,7 +45,7 @@ COMMIT::~COMMIT()
 }
 
 
-COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType )
+COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType, BASE_SCREEN* aScreen )
 {
     // CHT_MODIFY and CHT_DONE are not compatible
     wxASSERT( ( aChangeType & ( CHT_MODIFY | CHT_DONE ) ) != ( CHT_MODIFY | CHT_DONE ) );
@@ -56,11 +56,11 @@ COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType )
     {
     case CHT_ADD:
         wxASSERT( m_changedItems.find( aItem ) == m_changedItems.end() );
-        makeEntry( aItem, CHT_ADD | flag );
+        makeEntry( aItem, CHT_ADD | flag, nullptr, aScreen );
         return *this;
 
     case CHT_REMOVE:
-        makeEntry( aItem, CHT_REMOVE | flag );
+        makeEntry( aItem, CHT_REMOVE | flag, nullptr, aScreen );
         return *this;
 
     case CHT_MODIFY:
@@ -71,7 +71,7 @@ COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType )
         wxASSERT( clone );
 
         if( clone )
-            return createModified( parent, clone, flag );
+            return createModified( parent, clone, flag, aScreen );
 
         break;
     }
@@ -84,16 +84,17 @@ COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType )
 }
 
 
-COMMIT& COMMIT::Stage( std::vector<EDA_ITEM*>& container, CHANGE_TYPE aChangeType )
+COMMIT& COMMIT::Stage( std::vector<EDA_ITEM*> &container, CHANGE_TYPE aChangeType,
+        BASE_SCREEN *aScreen )
 {
     for( EDA_ITEM* item : container )
-        Stage( item, aChangeType );
+        Stage( item, aChangeType, aScreen);
 
     return *this;
 }
 
 
-COMMIT& COMMIT::Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO aModFlag )
+COMMIT& COMMIT::Stage( const PICKED_ITEMS_LIST &aItems, UNDO_REDO aModFlag, BASE_SCREEN *aScreen )
 {
     for( unsigned int i = 0; i < aItems.GetCount(); i++ )
     {
@@ -108,11 +109,11 @@ COMMIT& COMMIT::Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO aModFlag )
             assert( change_type == UNDO_REDO::CHANGED );
 
             // There was already a copy created, so use it
-            Modified( item, copy );
+            Modified( item, copy, aScreen );
         }
         else
         {
-            Stage( item, convert( change_type ) );
+            Stage( item, convert( change_type ), aScreen );
         }
     }
 
@@ -120,15 +121,15 @@ COMMIT& COMMIT::Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO aModFlag )
 }
 
 
-int COMMIT::GetStatus( EDA_ITEM* aItem )
+int COMMIT::GetStatus( EDA_ITEM* aItem, BASE_SCREEN *aScreen )
 {
-    COMMIT_LINE* entry = findEntry( parentObject( aItem ) );
+    COMMIT_LINE* entry = findEntry( parentObject( aItem ), aScreen );
 
     return entry ? entry->m_type : 0;
 }
 
 
-COMMIT& COMMIT::createModified( EDA_ITEM* aItem, EDA_ITEM* aCopy, int aExtraFlags )
+COMMIT& COMMIT::createModified( EDA_ITEM* aItem, EDA_ITEM* aCopy, int aExtraFlags, BASE_SCREEN* aScreen )
 {
     EDA_ITEM* parent = parentObject( aItem );
     auto entryIt = m_changedItems.find( parent );
@@ -139,22 +140,22 @@ COMMIT& COMMIT::createModified( EDA_ITEM* aItem, EDA_ITEM* aCopy, int aExtraFlag
         return *this; // item has been already modified once
     }
 
-    makeEntry( parent, CHT_MODIFY | aExtraFlags, aCopy );
+    makeEntry( parent, CHT_MODIFY | aExtraFlags, aCopy, aScreen );
 
     return *this;
 }
 
 
-void COMMIT::makeEntry( EDA_ITEM* aItem, CHANGE_TYPE aType, EDA_ITEM* aCopy )
+void COMMIT::makeEntry( EDA_ITEM* aItem, CHANGE_TYPE aType, EDA_ITEM* aCopy, BASE_SCREEN *aScreen )
 {
     // Expect an item copy if it is going to be modified
     wxASSERT( !!aCopy == ( ( aType & CHT_TYPE ) == CHT_MODIFY ) );
 
     if( m_changedItems.find( aItem ) != m_changedItems.end() )
     {
-        alg::delete_if( m_changes, [aItem]( const COMMIT_LINE& aEnt )
+        alg::delete_if( m_changes, [aItem, aScreen]( const COMMIT_LINE& aEnt )
                                    {
-                                       return aEnt.m_item == aItem;
+                                       return aEnt.m_item == aItem && aEnt.m_screen == aScreen;
                                    } );
     }
 
@@ -163,17 +164,18 @@ void COMMIT::makeEntry( EDA_ITEM* aItem, CHANGE_TYPE aType, EDA_ITEM* aCopy )
     ent.m_item = aItem;
     ent.m_type = aType;
     ent.m_copy = aCopy;
+    ent.m_screen = aScreen;
 
     m_changedItems.insert( aItem );
     m_changes.push_back( ent );
 }
 
 
-COMMIT::COMMIT_LINE* COMMIT::findEntry( EDA_ITEM* aItem )
+COMMIT::COMMIT_LINE* COMMIT::findEntry( EDA_ITEM* aItem, BASE_SCREEN *aScreen )
 {
     for( COMMIT_LINE& change : m_changes )
     {
-        if( change.m_item == aItem )
+        if( change.m_item == aItem && change.m_screen == aScreen )
             return &change;
     }
 

@@ -44,6 +44,11 @@ public:
         return wxT( "LIB_SHAPE" );
     }
 
+    static inline bool ClassOf( const EDA_ITEM* aItem )
+    {
+        return aItem && aItem->Type() == LIB_SHAPE_T;
+    }
+
     wxString GetTypeName() const override
     {
         return ShowShape();

@@ -50,6 +50,11 @@ public:
         return wxT( "LIB_TEXT" );
     }
 
+    static inline bool ClassOf( const EDA_ITEM* aItem )
+    {
+        return aItem && aItem->Type() == LIB_TEXT_T;
+    }
+
     wxString GetTypeName() const override
     {
         return _( "Text" );

@@ -27,6 +27,7 @@
 #include <reporter.h>
 #include <sch_edit_frame.h>
 #include <schematic.h>
+#include <schematic_commit.h>
 #include <erc_settings.h>
 #include <sch_reference_list.h>
 #include <symbol_library.h>
@@ -57,16 +58,20 @@ void SCH_EDIT_FRAME::mapExistingAnnotation( std::map<wxString, wxString>& aMap )
 }
 
 
-void SCH_EDIT_FRAME::DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool aRecursive,
-                                       bool* aAppendUndo )
+void SCH_EDIT_FRAME::DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool aRecursive )
 {
+
+    SCH_SHEET_LIST sheets = Schematic().GetSheets();
+    SCH_SCREEN*    screen = GetScreen();
+    SCH_SHEET_PATH currentSheet = GetCurrentSheet();
+    SCHEMATIC_COMMIT commit( this );
+
     auto clearSymbolAnnotation =
         [&]( EDA_ITEM* aItem, SCH_SCREEN* aScreen, SCH_SHEET_PATH* aSheet, bool aResetPrefixes )
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( aItem );
+            commit.Modify( aItem, aScreen );
 
-            SaveCopyInUndoList( aScreen, symbol, UNDO_REDO::CHANGED, *aAppendUndo );
-            *aAppendUndo = true;
             symbol->ClearAnnotation( aSheet, aResetPrefixes );
         };
 
@@ -76,10 +81,6 @@ void SCH_EDIT_FRAME::DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool aRe
                 for( SCH_ITEM* item : aScreen->Items().OfType( SCH_SYMBOL_T ) )
                     clearSymbolAnnotation( item, aScreen, aSheet, aResetPrefixes );
             };
-
-    SCH_SHEET_LIST sheets = Schematic().GetSheets();
-    SCH_SCREEN*    screen = GetScreen();
-    SCH_SHEET_PATH currentSheet = GetCurrentSheet();
 
     switch( aAnnotateScope )
     {
@@ -151,9 +152,9 @@ void SCH_EDIT_FRAME::DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool aRe
     if( erc_dlg )
         static_cast<DIALOG_ERC*>( erc_dlg )->UpdateAnnotationWarning();
 
-    SyncView();
+    commit.Push( _( "Delete Annotation" ) );
+
     GetCanvas()->Refresh();
-    OnModify();
 
     // Must go after OnModify() so the connectivity graph has been updated
     UpdateNetHighlightStatus();

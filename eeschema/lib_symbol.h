@@ -134,6 +134,11 @@ public:
         return wxT( "LIB_SYMBOL" );
     }
 
+    static inline bool ClassOf( const EDA_ITEM* aItem )
+    {
+        return aItem && aItem->Type() == LIB_SYMBOL_T;
+    }
+
     virtual void SetName( const wxString& aName );
     wxString GetName() const override { return m_name; }
 
@@ -308,6 +313,8 @@ public:
     LIB_FIELD& GetDatasheetField();
 
     wxString GetPrefix();
+
+    void RunOnChildren( const std::function<void( LIB_ITEM* )>& aFunction );
 
     /**
      * Order optional field indices.

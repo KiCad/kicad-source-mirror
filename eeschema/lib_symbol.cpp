@@ -1336,6 +1336,13 @@ wxString LIB_SYMBOL::GetPrefix()
 }
 
 
+void LIB_SYMBOL::RunOnChildren( const std::function<void( LIB_ITEM* )>& aFunction )
+{
+    for( LIB_ITEM& item : m_drawings )
+        aFunction( &item );
+}
+
+
 int LIB_SYMBOL::UpdateFieldOrdinals()
 {
     int retv = 0;

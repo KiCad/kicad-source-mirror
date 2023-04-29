@@ -344,9 +344,8 @@ public:
      * Clear the current symbol annotation.
      *
      * @param aCurrentSheetOnly Where to clear the annotation. See #ANNOTATE_SCOPE_T
-     * @param appendUndo true to add the action to the previous undo list
      */
-    void DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool aRecursive, bool* appendUndo );
+    void DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool aRecursive );
 
     /**
      * Annotate the symbols in the schematic that are not currently annotated. Multi-unit symbols

@@ -245,9 +245,7 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
 
 void DIALOG_ANNOTATE::OnClearAnnotationClick( wxCommandEvent& event )
 {
-    bool appendUndo = false;
-
-    m_Parent->DeleteAnnotation( GetScope(), GetRecursive(), &appendUndo );
+    m_Parent->DeleteAnnotation( GetScope(), GetRecursive() );
     m_btnClear->Enable( false );
 }
 

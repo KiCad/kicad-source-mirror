@@ -73,6 +73,11 @@ public:
         return wxT( "LIB_FIELD" );
     }
 
+    static inline bool ClassOf( const EDA_ITEM* aItem )
+    {
+        return aItem && aItem->Type() == LIB_FIELD_T;
+    }
+
     wxString GetTypeName() const override
     {
         return _( "Field" );

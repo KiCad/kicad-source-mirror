@@ -30,6 +30,7 @@
 #include <tools/ee_actions.h>
 #include <tools/ee_selection_tool.h>
 
+
 void SYMBOL_EDIT_FRAME::SaveCopyInUndoList( EDA_ITEM* aItem, UNDO_REDO aUndoType, bool aAppend )
 {
     wxASSERT_MSG( !aAppend, "Append not needed/supported for symbol editor" );

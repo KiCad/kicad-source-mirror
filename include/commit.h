@@ -34,6 +34,7 @@
 #include <undo_redo_container.h>
 
 class EDA_ITEM;
+class BASE_SCREEN;
 
 ///< Types of changes
 enum CHANGE_TYPE {
@@ -75,39 +76,39 @@ public:
     virtual ~COMMIT();
 
     ///< Add a new item to the model
-    COMMIT& Add( EDA_ITEM* aItem )
+    COMMIT& Add( EDA_ITEM* aItem, BASE_SCREEN *aScreen = nullptr )
     {
-        return Stage( aItem, CHT_ADD );
+        return Stage( aItem, CHT_ADD, aScreen );
     }
 
     ///< Notify observers that aItem has been added
-    COMMIT& Added( EDA_ITEM* aItem )
+    COMMIT& Added( EDA_ITEM* aItem, BASE_SCREEN *aScreen = nullptr )
     {
-        return Stage( aItem, CHT_ADD | CHT_DONE );
+        return Stage( aItem, CHT_ADD | CHT_DONE, aScreen );
     }
 
     ///< Remove a new item from the model
-    COMMIT& Remove( EDA_ITEM* aItem )
+    COMMIT& Remove( EDA_ITEM* aItem, BASE_SCREEN *aScreen = nullptr )
     {
-        return Stage( aItem, CHT_REMOVE );
+        return Stage( aItem, CHT_REMOVE, aScreen );
     }
 
     ///< Notify observers that aItem has been removed
-    COMMIT& Removed( EDA_ITEM* aItem )
+    COMMIT& Removed( EDA_ITEM* aItem, BASE_SCREEN *aScreen = nullptr )
     {
-        return Stage( aItem, CHT_REMOVE | CHT_DONE );
+        return Stage( aItem, CHT_REMOVE | CHT_DONE, aScreen );
     }
 
     ///< Modify a given item in the model.
     ///< Must be called before modification is performed.
-    COMMIT& Modify( EDA_ITEM* aItem )
+    COMMIT& Modify( EDA_ITEM* aItem, BASE_SCREEN *aScreen = nullptr )
     {
-        return Stage( aItem, CHT_MODIFY );
+        return Stage( aItem, CHT_MODIFY, aScreen );
     }
 
     ///< Create an undo entry for an item that has been already modified. Requires a copy done
     ///< before the modification.
-    COMMIT& Modified( EDA_ITEM* aItem, EDA_ITEM* aCopy )
+    COMMIT& Modified( EDA_ITEM* aItem, EDA_ITEM* aCopy, BASE_SCREEN *aScreen = nullptr )
     {
         return createModified( aItem, aCopy );
     }
@@ -123,12 +124,15 @@ public:
     }
 
     ///< Add a change of the item aItem of type aChangeType to the change list.
-    virtual COMMIT& Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType );
+    virtual COMMIT& Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType,
+                           BASE_SCREEN *aScreen = nullptr );
 
-    virtual COMMIT& Stage( std::vector<EDA_ITEM*>& container, CHANGE_TYPE aChangeType );
+    virtual COMMIT& Stage( std::vector<EDA_ITEM*>& container, CHANGE_TYPE aChangeType,
+                           BASE_SCREEN *aScreen = nullptr );
 
     virtual COMMIT& Stage( const PICKED_ITEMS_LIST& aItems,
-                           UNDO_REDO aModFlag = UNDO_REDO::UNSPECIFIED );
+                           UNDO_REDO aModFlag = UNDO_REDO::UNSPECIFIED,
+                           BASE_SCREEN *aScreen = nullptr );
 
     ///< Execute the changes.
     virtual void Push( const wxString& aMessage = wxT( "A commit" ), int aFlags = 0 ) = 0;
@@ -142,7 +146,7 @@ public:
     }
 
     ///< Returns status of an item.
-    int GetStatus( EDA_ITEM* aItem );
+    int GetStatus( EDA_ITEM* aItem, BASE_SCREEN *aScreen = nullptr );
 
 protected:
     struct COMMIT_LINE
@@ -150,6 +154,7 @@ protected:
         EDA_ITEM*   m_item;       ///< Main item that is added/deleted/modified
         EDA_ITEM*   m_copy;       ///< Optional copy of the item
         CHANGE_TYPE m_type;       ///< Modification type
+        BASE_SCREEN* m_screen;
     };
 
     // Should be called in Push() & Revert() methods
@@ -159,16 +164,18 @@ protected:
         m_changes.clear();
     }
 
-    COMMIT& createModified( EDA_ITEM* aItem, EDA_ITEM* aCopy, int aExtraFlags = 0 );
+    COMMIT& createModified( EDA_ITEM* aItem, EDA_ITEM* aCopy, int aExtraFlags = 0,
+                            BASE_SCREEN *aScreen = nullptr );
 
-    virtual void makeEntry( EDA_ITEM* aItem, CHANGE_TYPE aType, EDA_ITEM* aCopy = nullptr );
+    virtual void makeEntry( EDA_ITEM* aItem, CHANGE_TYPE aType, EDA_ITEM* aCopy = nullptr,
+                            BASE_SCREEN *aScreen = nullptr );
 
     /**
      * Search for an entry describing change for a particular item.
      *
      * @return null if there is no related entry.
      */
-    COMMIT_LINE* findEntry( EDA_ITEM* aItem );
+    COMMIT_LINE* findEntry( EDA_ITEM* aItem, BASE_SCREEN *aScreen = nullptr );
 
     virtual EDA_ITEM* parentObject( EDA_ITEM* aItem ) const = 0;
 

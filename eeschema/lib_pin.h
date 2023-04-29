@@ -66,6 +66,11 @@ public:
         return wxT( "LIB_PIN" );
     }
 
+    static inline bool ClassOf( const EDA_ITEM* aItem )
+    {
+        return aItem && aItem->Type() == LIB_PIN_T;
+    }
+
     wxString GetTypeName() const override
     {
         return _( "Pin" );

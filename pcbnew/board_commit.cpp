@@ -75,7 +75,7 @@ BOARD* BOARD_COMMIT::GetBoard() const
 }
 
 
-COMMIT& BOARD_COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType )
+COMMIT& BOARD_COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType, BASE_SCREEN* aScreen )
 {
     wxCHECK( aItem, *this );
 
@@ -127,15 +127,15 @@ COMMIT& BOARD_COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType )
 }
 
 
-COMMIT& BOARD_COMMIT::Stage( std::vector<EDA_ITEM*>& container, CHANGE_TYPE aChangeType )
+COMMIT& BOARD_COMMIT::Stage( std::vector<EDA_ITEM*>& container, CHANGE_TYPE aChangeType, BASE_SCREEN* aScreen )
 {
-    return COMMIT::Stage( container, aChangeType );
+    return COMMIT::Stage( container, aChangeType, aScreen );
 }
 
 
-COMMIT& BOARD_COMMIT::Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO aModFlag )
+COMMIT& BOARD_COMMIT::Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO aModFlag, BASE_SCREEN* aScreen )
 {
-    return COMMIT::Stage( aItems, aModFlag );
+    return COMMIT::Stage( aItems, aModFlag, aScreen );
 }
 
 

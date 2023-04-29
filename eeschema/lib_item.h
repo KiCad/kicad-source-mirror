@@ -92,6 +92,26 @@ public:
      */
     virtual wxString GetTypeName() const = 0;
 
+    static inline bool ClassOf( const EDA_ITEM* aItem )
+    {
+        if( !aItem )
+            return false;
+
+        switch ( aItem->Type() )
+        {
+        case LIB_SHAPE_T:
+        case LIB_TEXT_T:
+        case LIB_TEXTBOX_T:
+        case LIB_PIN_T:
+        case LIB_FIELD_T:
+            return true;
+        default:
+            break;
+        }
+
+        return false;
+    }
+
     /**
      * Begin drawing a symbol library draw item at \a aPosition.
      *
