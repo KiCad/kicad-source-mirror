@@ -241,6 +241,7 @@ void DRC_TEST_PROVIDER_MISC::testAssertions()
                             drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " (" )
                                                         + c->GetName() + wxS( ")" ) );
                             drcItem->SetItems( item );
+                            drcItem->SetViolatingRule( c->GetParentRule() );
 
                             reportViolation( drcItem, item->GetPosition(), item->GetLayer() );
                         } );
