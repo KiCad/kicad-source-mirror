@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-254-gc2ef7767)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -119,6 +119,9 @@ class DIALOG_DIMENSION_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_lblExtensionOffset;
 		wxTextCtrl* m_txtExtensionOffset;
 		wxStaticText* m_lblExtensionOffsetUnits;
+		wxStaticText* m_lblExtensionOvershoot;
+		wxTextCtrl* m_txtExtensionOvershoot;
+		wxStaticText* m_lblExtensionOvershootUnits;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;

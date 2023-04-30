@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-254-gc2ef7767)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -400,29 +400,40 @@ DIALOG_DIMENSION_PROPERTIES_BASE::DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* pa
 
 	m_lblArrowLength = new wxStaticText( sbSizerLine->GetStaticBox(), wxID_ANY, _("Arrow length:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblArrowLength->Wrap( -1 );
-	gbSizerLine->Add( m_lblArrowLength, wxGBPosition( 0, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	gbSizerLine->Add( m_lblArrowLength, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_txtArrowLength = new wxTextCtrl( sbSizerLine->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-	gbSizerLine->Add( m_txtArrowLength, wxGBPosition( 0, 5 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizerLine->Add( m_txtArrowLength, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_lblArrowLengthUnits = new wxStaticText( sbSizerLine->GetStaticBox(), wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblArrowLengthUnits->Wrap( -1 );
-	gbSizerLine->Add( m_lblArrowLengthUnits, wxGBPosition( 0, 6 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	gbSizerLine->Add( m_lblArrowLengthUnits, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_lblExtensionOffset = new wxStaticText( sbSizerLine->GetStaticBox(), wxID_ANY, _("Extension line offset:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblExtensionOffset->Wrap( -1 );
 	m_lblExtensionOffset->SetToolTip( _("Gap between the measured points and the start of the extension lines") );
 
-	gbSizerLine->Add( m_lblExtensionOffset, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	gbSizerLine->Add( m_lblExtensionOffset, wxGBPosition( 0, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_txtExtensionOffset = new wxTextCtrl( sbSizerLine->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_txtExtensionOffset->SetToolTip( _("Gap between the measured points and the start of the extension lines") );
 
-	gbSizerLine->Add( m_txtExtensionOffset, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	gbSizerLine->Add( m_txtExtensionOffset, wxGBPosition( 0, 5 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_lblExtensionOffsetUnits = new wxStaticText( sbSizerLine->GetStaticBox(), wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblExtensionOffsetUnits->Wrap( -1 );
-	gbSizerLine->Add( m_lblExtensionOffsetUnits, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	gbSizerLine->Add( m_lblExtensionOffsetUnits, wxGBPosition( 0, 6 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_lblExtensionOvershoot = new wxStaticText( sbSizerLine->GetStaticBox(), wxID_ANY, _("Extension line overshoot:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lblExtensionOvershoot->Wrap( -1 );
+	gbSizerLine->Add( m_lblExtensionOvershoot, wxGBPosition( 1, 4 ), wxGBSpan( 1, 1 ), wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_txtExtensionOvershoot = new wxTextCtrl( sbSizerLine->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizerLine->Add( m_txtExtensionOvershoot, wxGBPosition( 1, 5 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	m_lblExtensionOvershootUnits = new wxStaticText( sbSizerLine->GetStaticBox(), wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lblExtensionOvershootUnits->Wrap( -1 );
+	gbSizerLine->Add( m_lblExtensionOvershootUnits, wxGBPosition( 1, 6 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 
 	gbSizerLine->AddGrowableCol( 1 );

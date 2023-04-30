@@ -1705,6 +1705,7 @@ void PCB_PLUGIN::format( const PCB_TEXT* aText, int aNestLevel ) const
     FOOTPRINT*  parentFP = aText->GetParentFootprint();
     std::string prefix;
     std::string type;
+    VECTOR2I    pos = aText->GetTextPos();
 
     // Always format dimension text as gr_text
     if( dynamic_cast<const PCB_DIMENSION_BASE*>( aText ) )
@@ -1720,6 +1721,9 @@ void PCB_PLUGIN::format( const PCB_TEXT* aText, int aNestLevel ) const
         case PCB_TEXT::TEXT_is_VALUE:     type = " value";     break;
         case PCB_TEXT::TEXT_is_DIVERS:    type = " user";      break;
         }
+
+        pos -= parentFP->GetPosition();
+        RotatePoint( pos, -parentFP->GetOrientation() );
     }
     else
     {
@@ -1731,7 +1735,7 @@ void PCB_PLUGIN::format( const PCB_TEXT* aText, int aNestLevel ) const
                   type.c_str(),
                   aText->IsLocked() ? " locked" : "",
                   m_out->Quotew( aText->GetText() ).c_str(),
-                  formatInternalUnits( aText->GetFPRelativePosition() ).c_str() );
+                  formatInternalUnits( pos ).c_str() );
 
     // Due to Pcbnew history, fp_text angle is saved as an absolute on screen angle.
     if( !aText->GetTextAngle().IsZero() )

@@ -46,7 +46,8 @@ DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* a
         m_orientation( aParent, m_lblTextOrientation, m_cbTextOrientation, nullptr ),
         m_lineThickness( aParent, m_lblLineThickness, m_txtLineThickness, m_lblLineThicknessUnits ),
         m_arrowLength( aParent, m_lblArrowLength, m_txtArrowLength, m_lblArrowLengthUnits ),
-        m_extensionOffset( aParent, m_lblExtensionOffset, m_txtExtensionOffset, m_lblExtensionOffsetUnits )
+        m_extensionOffset( aParent, m_lblExtensionOffset, m_txtExtensionOffset, m_lblExtensionOffsetUnits ),
+        m_extensionOvershoot( aParent, m_lblExtensionOvershoot, m_txtExtensionOvershoot, m_lblExtensionOvershootUnits )
 {
     wxASSERT( BaseType( aItem->Type() ) == PCB_DIMENSION_T );
     m_dimension = static_cast<PCB_DIMENSION_BASE*>( aItem );
@@ -262,6 +263,11 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
     m_arrowLength.SetValue( m_dimension->GetArrowLength() );
     m_extensionOffset.SetValue( m_dimension->GetExtensionOffset() );
 
+    if( PCB_DIM_ALIGNED* aligned = dynamic_cast<PCB_DIM_ALIGNED*>( m_dimension ) )
+        m_extensionOvershoot.SetValue( aligned->GetExtensionHeight() );
+    else
+        m_extensionOvershoot.Show( false );
+
     // Do this last; it depends on the other settings
     if( m_dimension->GetOverrideTextEnabled() )
     {
@@ -273,11 +279,8 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
         m_txtValueActual->SetValue( m_dimension->GetValueText() );
     }
 
-    if( m_dimension->Type() == PCB_DIM_LEADER_T )
-    {
-        PCB_DIM_LEADER* leader = static_cast<PCB_DIM_LEADER*>( m_dimension );
+    if( PCB_DIM_LEADER* leader = static_cast<PCB_DIM_LEADER*>( m_dimension ) )
         m_cbTextFrame->SetSelection( static_cast<int>( leader->GetTextBorder() ) );
-    }
 
     return DIALOG_DIMENSION_PROPERTIES_BASE::TransferDataToWindow();
 }
@@ -426,11 +429,11 @@ void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( PCB_DIMENSION_BASE*
     aTarget->SetArrowLength( m_arrowLength.GetValue() );
     aTarget->SetExtensionOffset( m_extensionOffset.GetValue() );
 
-    if( aTarget->Type() == PCB_DIM_LEADER_T )
-    {
-        PCB_DIM_LEADER* leader = static_cast<PCB_DIM_LEADER*>( aTarget );
+    if( PCB_DIM_ALIGNED* aligned = dynamic_cast<PCB_DIM_ALIGNED*>( aTarget ) )
+        aligned->SetExtensionHeight( m_extensionOvershoot.GetValue() );
+
+    if( PCB_DIM_LEADER* leader = dynamic_cast<PCB_DIM_LEADER*>( aTarget ) )
         leader->SetTextBorder( static_cast<DIM_TEXT_BORDER>( m_cbTextFrame->GetSelection()));
-    }
 
     aTarget->Update();
 }
