@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:51-0800\n"
-"PO-Revision-Date: 2023-04-07 08:41+0000\n"
+"PO-Revision-Date: 2023-05-03 08:53+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.17-dev\n"
+"X-Generator: Weblate 4.18-dev\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -12042,12 +12042,10 @@ msgid "Show ERC exclusions"
 msgstr "Mostrar exclusiones de ERC"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:68
-#, fuzzy
 msgid "Show OP voltages"
 msgstr "Mostrar tensiones OP"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:71
-#, fuzzy
 msgid "Show OP currents"
 msgstr "Mostrar corrientes OP"
 
@@ -12487,7 +12485,6 @@ msgstr ""
 "Las longitudes de guiones y puntos son proporciones del ancho de la línea."
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:253
-#, fuzzy
 msgid "Operating-point Overlay"
 msgstr "Superposición de puntos operativos"
 
@@ -12616,13 +12613,13 @@ msgid "&Default line width:"
 msgstr "Ancho de línea por &defecto:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:47
-#, fuzzy
 msgid ""
 "Set to 0 to allow symbols to inherit line width properties\n"
 "from Schematic"
 msgstr ""
-"Establecer a 0 para permitir que los símbolos hereden su ancho de línea de\n"
-"su esquema primario"
+"Establecer a 0 para permitir que los símbolos hereden las propiedades de "
+"ancho de línea\n"
+"del Esquema"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:62
 msgid "D&efault pin length:"
@@ -12898,9 +12895,8 @@ msgstr "Migrar librerías"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:169
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:157
-#, fuzzy
 msgid "Available path substitutions:"
-msgstr "Rutas disponibles:"
+msgstr "Sustituciones de ruta disponibles:"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:203
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:191
@@ -14437,7 +14433,7 @@ msgstr ""
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:500
 #, fuzzy
 msgid "Blanket not currently supported."
-msgstr "Actualmente no se soporta la máscara de compilación."
+msgstr "Actualmente no se admite la manta."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:504
 #, c-format
@@ -14455,9 +14451,8 @@ msgid "Record 'PIECHART' not handled."
 msgstr "Grabar 'PIECHART' no manejado."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:697
-#, fuzzy
 msgid "Parameter Set not currently supported."
-msgstr "Actualmente no se soporta la máscara de compilación."
+msgstr "El conjunto de parámetros no se admite actualmente."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:722
 msgid "Compile mask not currently supported."
@@ -15730,18 +15725,16 @@ msgid "Checking component "
 msgstr "Comprobando componente "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:254
-#, fuzzy
 msgid "Component: name cannot be empty."
-msgstr "El nombre de componente no puede estar vacío."
+msgstr "Componente: el nombre no puede estar vacío."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:263
 msgid "Component: manufacturer cannot be empty."
 msgstr "Componente: el fabricante no puede estar vacío."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:272
-#, fuzzy
 msgid "Component: invalid package."
-msgstr "Componente: Paquete inválido."
+msgstr "Componente: paquete inválido."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:281
 msgid "Component: no pin"
@@ -15752,9 +15745,8 @@ msgid "Cannot interpolate the current based on this IV table."
 msgstr "No se puede interpolar la corriente en base a esta tabla IV."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:396
-#, fuzzy
 msgid "There is an invalid voltage in an IV table"
-msgstr "Hay un voltaje Nan en una tabla IV"
+msgstr "Hay una tensión inválida en una tabla IV"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:403
 msgid "There is an invalid current in an IV table"
@@ -15765,14 +15757,12 @@ msgid "Invalid R_load."
 msgstr "R_load inválido."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:450
-#, fuzzy
 msgid "Invalid falling dV/dt."
-msgstr "dv/dt descendente inválido."
+msgstr "dV/dt descendente inválido."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:455
-#, fuzzy
 msgid "Invalid rising dV/dt."
-msgstr "dv/dt ascendente inválido."
+msgstr "dV/dt ascendente inválido."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:470
 msgid "Model name cannot be empty"
@@ -15803,9 +15793,8 @@ msgid "Invalid C_ref value."
 msgstr "Valor C_ref inválido."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:523
-#, fuzzy
 msgid "Invalid V_ref value."
-msgstr "valor V_ref inválido."
+msgstr "Valor V_ref inválido."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:531
 msgid "Invalid V_meas value."
@@ -16361,7 +16350,7 @@ msgstr "ruido [(V o A)^2/Hz]"
 #: eeschema/sim/sim_plot_panel.cpp:543 eeschema/sim/sim_plot_panel.cpp:650
 #, fuzzy
 msgid "Power"
-msgstr "alimentación"
+msgstr "Alimentación"
 
 #: eeschema/sim/sim_plot_panel.cpp:585
 msgid "Voltage (swept)"
@@ -16384,44 +16373,36 @@ msgid "Voltage (measured)"
 msgstr "Voltaje (medido)"
 
 #: eeschema/sim/simulator_frame.cpp:193
-#, fuzzy
 msgid "Measure Min"
-msgstr "Nodo de medida"
+msgstr "Medida mín"
 
 #: eeschema/sim/simulator_frame.cpp:194
-#, fuzzy
 msgid "Measure Max"
-msgstr "&Medir"
+msgstr "Medida máx"
 
 #: eeschema/sim/simulator_frame.cpp:195
-#, fuzzy
 msgid "Measure Average"
-msgstr "Medir distancia"
+msgstr "Medida promedio"
 
 #: eeschema/sim/simulator_frame.cpp:196
-#, fuzzy
 msgid "Measure RMS"
-msgstr "&Medir"
+msgstr "Medida RMS"
 
 #: eeschema/sim/simulator_frame.cpp:197
-#, fuzzy
 msgid "Measure Peak-to-peak"
-msgstr "Nodo de medida"
+msgstr "Medida pico a pico"
 
 #: eeschema/sim/simulator_frame.cpp:198
-#, fuzzy
 msgid "Measure Time of Min"
-msgstr "Herramienta de medida"
+msgstr "Tiempo de medida de mín"
 
 #: eeschema/sim/simulator_frame.cpp:199
-#, fuzzy
 msgid "Measure Time of Max"
-msgstr "Herramienta de medida"
+msgstr "Tiempo de medida de máx"
 
 #: eeschema/sim/simulator_frame.cpp:200
-#, fuzzy
 msgid "Measure Integral"
-msgstr "Medir distancia"
+msgstr "Medida integral"
 
 #: eeschema/sim/simulator_frame.cpp:313
 #, c-format
@@ -16431,12 +16412,11 @@ msgstr "Formato %s..."
 #: eeschema/sim/simulator_frame.cpp:372
 #, fuzzy
 msgid "Format Value..."
-msgstr "Editar valor..."
+msgstr "Valor de formato..."
 
 #: eeschema/sim/simulator_frame.cpp:375
-#, fuzzy
 msgid "Delete Measurement"
-msgstr "Eliminar segmento"
+msgstr "Eliminar medición"
 
 #: eeschema/sim/simulator_frame.cpp:621 eeschema/sim/simulator_frame.cpp:1076
 #, c-format
@@ -16451,15 +16431,13 @@ msgstr "Señal"
 
 #: eeschema/sim/simulator_frame.cpp:631
 #: eeschema/sim/simulator_frame_base.cpp:121
-#, fuzzy
 msgid "Cursor 1"
-msgstr "Cursor"
+msgstr "Cursor 1"
 
 #: eeschema/sim/simulator_frame.cpp:632
 #: eeschema/sim/simulator_frame_base.cpp:122
-#, fuzzy
 msgid "Cursor 2"
-msgstr "Cursor"
+msgstr "Cursor 2"
 
 #: eeschema/sim/simulator_frame.cpp:759 eeschema/sim/simulator_frame_base.h:88
 msgid "Spice Simulator"
@@ -16467,7 +16445,7 @@ msgstr "Simulador Spice"
 
 #: eeschema/sim/simulator_frame.cpp:892 eeschema/sim/simulator_frame.cpp:1119
 msgid " (gain)"
-msgstr ""
+msgstr " (ganancia)"
 
 #: eeschema/sim/simulator_frame.cpp:893 eeschema/sim/simulator_frame.cpp:1120
 msgid " (phase)"
@@ -16478,12 +16456,11 @@ msgid "Simulator requires a fully annotated schematic."
 msgstr "El simulador requiere un esquema completamente anotado."
 
 #: eeschema/sim/simulator_frame.cpp:985
-#, fuzzy
 msgid ""
 "Errors during netlist generation.\n"
 "\n"
 msgstr ""
-"Errores durante la generación de netlist; simulación abortada.\n"
+"Errores durante la generación de netlist\n"
 "\n"
 
 #: eeschema/sim/simulator_frame.cpp:1020
@@ -16519,14 +16496,12 @@ msgid "Error: no current simulation.\n"
 msgstr "Error: ninguna simulación actual.\n"
 
 #: eeschema/sim/simulator_frame.cpp:1608
-#, fuzzy
 msgid "Error: simulation type not defined.\n"
-msgstr "Error: ¡tipo de simulación no definido!\n"
+msgstr "Error: tipo de simulación no definido\n"
 
 #: eeschema/sim/simulator_frame.cpp:1614
-#, fuzzy
 msgid "Error: simulation type doesn't support plotting.\n"
-msgstr "Error: ¡el tipo de simulación no admite el trazado!\n"
+msgstr "Error: el tipo de simulación no admite el trazado\n"
 
 #: eeschema/sim/simulator_frame.cpp:2447
 msgid ""
@@ -16553,9 +16528,8 @@ msgstr ""
 "\n"
 
 #: eeschema/sim/simulator_frame_base.cpp:228
-#, fuzzy
 msgid "Measurement"
-msgstr "&Medir"
+msgstr "Medición"
 
 #: eeschema/sim/simulator_frame_base.cpp:230 gerbview/gerber_file_image.cpp:321
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:51
@@ -16612,9 +16586,8 @@ msgid "Simulator"
 msgstr "Simulador"
 
 #: eeschema/sim/toolbars_simulator_frame.cpp:162
-#, fuzzy
 msgid "&Simulation"
-msgstr "Simulación"
+msgstr "&Simulación"
 
 #: eeschema/symbol_async_loader.cpp:108
 #, c-format
@@ -16693,7 +16666,6 @@ msgid "<b>A Power Symbol should have only one pin</b><br><br>"
 msgstr "<b>Un símbolo de potencia debe tener solo un pin</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:208
-#, fuzzy
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Only an input or output power pin has "
 "meaning<br><br>"
@@ -16702,13 +16674,12 @@ msgstr ""
 "entrada o salida tiene significado<br><br>"
 
 #: eeschema/symbol_checker.cpp:215
-#, fuzzy
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Invisible input power pins are no longer "
 "required<br><br>"
 msgstr ""
-"<b>Símbolo de alimentación sospechoso</b><br>Solo los pines de alimentación "
-"de entrada invisibles se conectan automáticamente<br><br>"
+"<b>Símbolo de alimentación sospechoso</b><br>Ya no son necesarios los pines "
+"de alimentación de entrada invisibles<br><br>"
 
 #: eeschema/symbol_checker.cpp:240
 #, c-format
@@ -16949,7 +16920,7 @@ msgstr "Se ha modificado el símbolo. ¿Desea guardar los cambios?"
 #: eeschema/symbol_editor/symbol_editor.cpp:360
 #, c-format
 msgid "Deriving from '%s', the root symbol of '%s'."
-msgstr ""
+msgstr "Derivado de '%s', el símbolo raíz de '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:378
 msgid "This new symbol has no name and cannot be created."
@@ -17274,14 +17245,13 @@ msgid "Select at least one property to back annotate."
 msgstr "Seleccione al menos una propiedad para volver a anotar."
 
 #: eeschema/tools/backannotate.cpp:97
-#, fuzzy
 msgid ""
 "Cannot fetch PCB netlist because Schematic Editor is opened in stand-alone "
 "mode.\n"
 "You must launch the KiCad project manager and create a project."
 msgstr ""
-"No se puede obtener la lista de redes de la PCB porque Eeschema está abierto "
-"en modo independiente.\n"
+"No se puede obtener la lista de redes de la PCB porque el editor de esquemas "
+"está abierto en modo independiente.\n"
 "Debe iniciar el gestor de proyectos de KiCad y crear un proyecto."
 
 #: eeschema/tools/backannotate.cpp:164
@@ -18241,22 +18211,20 @@ msgstr ""
 "excluidas"
 
 #: eeschema/tools/ee_actions.cpp:714
-#, fuzzy
 msgid "Show OP Voltages"
-msgstr "Mostrar página %s"
+msgstr "Mostrar tensiones OP"
 
 #: eeschema/tools/ee_actions.cpp:715
 msgid "Show operating point voltage data from simulation"
-msgstr ""
+msgstr "Mostrar los datos de tensión del punto de operación de la simulación"
 
 #: eeschema/tools/ee_actions.cpp:719
-#, fuzzy
 msgid "Show OP Currents"
-msgstr "Mostrar cursor"
+msgstr "Mostrar corrientes OP"
 
 #: eeschema/tools/ee_actions.cpp:720
 msgid "Show operating point current data from simulation"
-msgstr ""
+msgstr "Mostrar los datos de corriente del punto de operación de la simulación"
 
 #: eeschema/tools/ee_actions.cpp:724 eeschema/tools/ee_actions.cpp:729
 #: eeschema/tools/ee_actions.cpp:735 eeschema/tools/ee_actions.cpp:741
@@ -18289,9 +18257,8 @@ msgid "Annotate Automatically"
 msgstr "Anotar automáticamente"
 
 #: eeschema/tools/ee_actions.cpp:746
-#, fuzzy
 msgid "Toggle automatic annotation of new symbols"
-msgstr "Alternar la anotación automática de símbolos de piezas nuevas"
+msgstr "Alternar la anotación automática de nuevos símbolos"
 
 #: eeschema/tools/ee_actions.cpp:751
 msgid "Repair Schematic"
@@ -18520,9 +18487,8 @@ msgid "Export Current Plot as CSV..."
 msgstr "Exportar la gráfica actual como CSV..."
 
 #: eeschema/tools/ee_actions.cpp:950
-#, fuzzy
 msgid "Show Legend"
-msgstr "Mostrar &leyenda"
+msgstr "Mostrar leyenda"
 
 #: eeschema/tools/ee_actions.cpp:955
 msgid "Dotted Current/Phase"
@@ -18531,33 +18497,31 @@ msgstr "Corriente/Fase de puntos"
 #: eeschema/tools/ee_actions.cpp:956
 msgid "Draw secondary signal trace (current or phase) with a dotted line"
 msgstr ""
+"Dibujar traza de señal secundaria (corriente o fase) con una línea punteada"
 
 #: eeschema/tools/ee_actions.cpp:960
-#, fuzzy
 msgid "Dark Mode Plots"
-msgstr "Modelos 3D"
+msgstr "Gráficos de modo oscuro"
 
 #: eeschema/tools/ee_actions.cpp:961
 msgid "Draw plots with a black background"
-msgstr ""
+msgstr "Dibujar gráficos con fondo negro"
 
 #: eeschema/tools/ee_actions.cpp:965
 msgid "Simulation Command..."
 msgstr "Comando de simulación..."
 
 #: eeschema/tools/ee_actions.cpp:966
-#, fuzzy
 msgid "Edit the simulation command for the current plot tab"
-msgstr "Eliminar el último punto añadido al elemento activo"
+msgstr "Editar el comando de simulación para la pestaña de gráfica actual"
 
 #: eeschema/tools/ee_actions.cpp:972
 msgid "Run Simulation"
 msgstr "Ejecutar simulación"
 
 #: eeschema/tools/ee_actions.cpp:977
-#, fuzzy
 msgid "Stop Simulation"
-msgstr "Ejecutar/Parar simulación"
+msgstr "Detener simulación"
 
 #: eeschema/tools/ee_actions.cpp:983
 #, fuzzy
@@ -18569,9 +18533,8 @@ msgid "Add a simulator probe"
 msgstr "Añadir sonda de simulación"
 
 #: eeschema/tools/ee_actions.cpp:989
-#, fuzzy
 msgid "Add Tuned Value..."
-msgstr "Actualizar valores de los campos..."
+msgstr "Agregar valor ajustado..."
 
 #: eeschema/tools/ee_actions.cpp:989
 msgid "Select a value to be tuned"
@@ -18584,6 +18547,7 @@ msgstr "Mostrar listado de redes SPICE"
 #: eeschema/tools/ee_actions.cpp:1000
 msgid "Add, edit or delete user-defined simulation signals"
 msgstr ""
+"Agregar, editar o eliminar señales de simulación definidas por el usuario"
 
 #: eeschema/tools/ee_inspection_tool.cpp:222
 msgid "No symbol issues found."
@@ -18967,11 +18931,11 @@ msgid "Tune %s"
 msgstr "Ajustar %s"
 
 #: eeschema/widgets/tuner_slider.cpp:74
-#, fuzzy, c-format
+#, c-format
 msgid "%s has simulation model of type '%s %s'; only RLC passives be tuned"
 msgstr ""
-"El símbolo '%s' tiene un modelo de simulación de tipo '%s %s', que no se "
-"puede ajustar"
+"%s tiene modelo de simulación de tipo '%s %s'; sólo pasivos RLC serán "
+"ajustados"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -20235,7 +20199,6 @@ msgid "Minimal header"
 msgstr "Encabezamiento mínimo"
 
 #: kicad/cli/command_export_pcb_drill.cpp:73
-#, fuzzy
 msgid "PTH and NPTH in separate files"
 msgstr "PTH y NPTH en archivos separados"
 
@@ -20334,7 +20297,6 @@ msgid "Subtract soldermask from silkscreen"
 msgstr "Restar la máscara de soldadura de la serigrafía"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:70
-#, fuzzy
 msgid "Disable aperture macros"
 msgstr "Deshabilitar macros de apertura"
 
@@ -20447,7 +20409,7 @@ msgstr "Solo generar una placa sin componentes"
 
 #: kicad/cli/command_export_pcb_step.cpp:79
 msgid "Export tracks (extremely time consuming)"
-msgstr ""
+msgstr "Exportar pistas (consume demasiado tiempo)"
 
 #: kicad/cli/command_export_pcb_step.cpp:85
 msgid "Minimum distance between points to treat them as separate ones"
@@ -26856,13 +26818,15 @@ msgstr "Sobrescribir archivo antiguo"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:123
 msgid "Export tracks (time consuming)"
-msgstr ""
+msgstr "Exportar pistas (lleva mucho tiempo)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:124
 msgid ""
 "Export tracks and vias on external copper layers.\n"
 "Warning: this is *extremely* time consuming."
 msgstr ""
+"Exportar pistas y vías en capas externas de cobre.\n"
+"Advertencia: esto consume *demasiado* tiempo."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:128
 msgid "Board outline chaining tolerance:"
@@ -33760,7 +33724,7 @@ msgstr "La escala del modelo 3D no coincide: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:415
 msgid "3D model rotation doesn't match: "
-msgstr ""
+msgstr "La rotación del modelo 3D no coincide: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:416
 msgid "3D model offset doesn't match: "
@@ -33768,7 +33732,7 @@ msgstr "El desplazamiento del modelo 3D no coincide: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:417
 msgid "3D model opacity doesn't match: "
-msgstr ""
+msgstr "La opacidad del modelo 3D no coincide: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:418
 msgid "3D model doesn't match: "
@@ -33797,14 +33761,12 @@ msgstr ""
 "puente difieren."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:458
-#, fuzzy
 msgid "Exempt from courtyard requirement settings differ."
-msgstr "Exento del requisito del patio"
+msgstr "La configuración de exentar los requerimientos de patio es diferente."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:471
-#, fuzzy
 msgid "Pad clearance overridden."
-msgstr "Remplazo de margen"
+msgstr "Margen de pad anulado."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:473
 msgid "Solder mask expansion overridden."
@@ -33819,9 +33781,8 @@ msgid "Solder paste relative clearance overridden."
 msgstr "Margen relativo de la pasta de soldadura sobreescrito."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:480
-#, fuzzy
 msgid "Zone connection overridden."
-msgstr "Estilo de conexión de zona"
+msgstr "Conexión de zona anulada."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:484
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:489
@@ -33829,14 +33790,12 @@ msgid "Net tie pad groups differ."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:528
-#, fuzzy
 msgid "Pad count differs."
-msgstr "Isleta Cu"
+msgstr "El recuento de pads difiere."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:529
-#, fuzzy
 msgid "Rule area count differs."
-msgstr "Área de reglas en %s"
+msgstr "El recuento de áreas de regla difiere."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:530
 #, fuzzy
@@ -33848,7 +33807,7 @@ msgstr "No se han encontrado elementos gráficos en el archivo."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:582
 #, c-format
 msgid "%s differs."
-msgstr ""
+msgstr "%s difiere."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:550
 #, c-format
@@ -33857,7 +33816,7 @@ msgstr "%s tiene anulaciones."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:592
 msgid "3D model count differs."
-msgstr ""
+msgstr "El recuento de modelos 3D difiere."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:616
 msgid "No project loaded, skipping library parity tests."
@@ -38817,9 +38776,8 @@ msgid "Select a footprint to check against its library equivalent."
 msgstr "Comprobando las huellas de la placa con la biblioteca..."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1346
-#, fuzzy
 msgid "Check Footprint against Library"
-msgstr "Comprobando las huellas de la placa con la biblioteca..."
+msgstr "Comprobar la huella contra la biblioteca"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1363
 #, fuzzy
@@ -38850,9 +38808,8 @@ msgid "The library no longer contains the item %s."
 msgstr "La biblioteca ya no contiene el elemento %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1409
-#, fuzzy
 msgid "Footprint matches library equivalent."
-msgstr "Editor de librerías de huellas"
+msgstr "La huella coincide con el equivalente de la biblioteca."
 
 #: pcbnew/tools/convert_tool.cpp:68
 msgid "Copy line width of first object"
@@ -40484,10 +40441,11 @@ msgid "Check Footprint against Library..."
 msgstr "Comprobando las huellas de la placa con la biblioteca..."
 
 #: pcbnew/tools/pcb_actions.cpp:1179
-#, fuzzy
 msgid ""
 "Check for differences between board footprint and its library equivalent"
-msgstr "Comprobando las huellas de la placa con la biblioteca..."
+msgstr ""
+"Comprobar si hay diferencias entre la huella de la placa y su equivalente en "
+"la biblioteca"
 
 #: pcbnew/tools/pcb_actions.cpp:1185
 msgid "Geographical Reannotate..."
