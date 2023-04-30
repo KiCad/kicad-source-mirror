@@ -326,4 +326,4 @@ _HKI( "### Top-level Clauses\n"
 "\n"
 "### Documentation\n"
 "\n"
-"For the full documentation see [https://docs.kicad.org](https://docs.kicad.org/GetMajorMinorVersion/pcbnew/#custom_design_rules)." );
+"For the full documentation see [https://docs.kicad.org](https://docs.kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)." );
