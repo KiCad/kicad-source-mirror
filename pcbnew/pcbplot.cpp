@@ -489,7 +489,7 @@ bool PLOT_CONTROLLER::PlotLayer()
 
     // Fully delegated to the parent
     PlotOneBoardLayer( m_board, m_plotter, ToLAYER_ID( GetLayer() ), GetPlotOptions() );
-    PlotInteractiveLayer( m_board, m_plotter );
+    PlotInteractiveLayer( m_board, m_plotter, GetPlotOptions() );
     return true;
 }
 
@@ -504,7 +504,7 @@ bool PLOT_CONTROLLER::PlotLayers( const LSEQ& aLayerSequence )
 
     // Fully delegated to the parent
     PlotBoardLayers( m_board, m_plotter, aLayerSequence, GetPlotOptions() );
-    PlotInteractiveLayer( m_board, m_plotter );
+    PlotInteractiveLayer( m_board, m_plotter, GetPlotOptions() );
     return true;
 }
 

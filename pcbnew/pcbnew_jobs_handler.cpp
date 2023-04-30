@@ -247,7 +247,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
     if( plotter )
     {
         PlotBoardLayers( brd, plotter, aPdfJob->m_printMaskLayer.SeqStackupBottom2Top(), plotOpts );
-        PlotInteractiveLayer( brd, plotter );
+        PlotInteractiveLayer( brd, plotter, plotOpts );
         plotter->EndPlot();
     }
 

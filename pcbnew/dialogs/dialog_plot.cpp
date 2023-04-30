@@ -336,6 +336,8 @@ void DIALOG_PLOT::init_Dialog()
     // Black and white plotting
     m_SVGColorChoice->SetSelection( m_plotOpts.GetBlackAndWhite() ? 1 : 0 );
     m_PDFColorChoice->SetSelection( m_plotOpts.GetBlackAndWhite() ? 1 : 0 );
+    m_frontFPPropertyPopups->SetValue( m_plotOpts.m_PDFFrontFPPropertyPopups );
+    m_backFPPropertyPopups->SetValue( m_plotOpts.m_PDFBackFPPropertyPopups );
 
     // Initialize a few other parameters, which can also be modified
     // from the drill dialog
@@ -798,11 +800,19 @@ void DIALOG_PLOT::applyPlotSettings()
                                                                            PLOT_TEXT_MODE::NATIVE );
 
     if( getPlotFormat() == PLOT_FORMAT::SVG )
+    {
         tempOptions.SetBlackAndWhite( !!m_SVGColorChoice->GetSelection() );
+    }
     else if( getPlotFormat() == PLOT_FORMAT::PDF )
+    {
         tempOptions.SetBlackAndWhite( !!m_PDFColorChoice->GetSelection() );
+        tempOptions.m_PDFFrontFPPropertyPopups = m_frontFPPropertyPopups->GetValue();
+        tempOptions.m_PDFBackFPPropertyPopups = m_backFPPropertyPopups->GetValue();
+    }
     else
+    {
         tempOptions.SetBlackAndWhite( true );
+    }
 
     // Update settings from text fields. Rewrite values back to the fields,
     // since the values may have been constrained by the setters.
@@ -1107,7 +1117,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         if( plotter )
         {
             PlotBoardLayers( board, plotter, plotSequence, m_plotOpts );
-            PlotInteractiveLayer( board, plotter );
+            PlotInteractiveLayer( board, plotter, m_plotOpts );
             plotter->EndPlot();
             delete plotter->RenderSettings();
             delete plotter;

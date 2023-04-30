@@ -187,6 +187,10 @@ public:
     void        SetDashedLineGapRatio( double aVal ) { m_dashedLineGapRatio = aVal; }
     double      GetDashedLineGapRatio() const { return m_dashedLineGapRatio; }
 
+public:
+    bool        m_PDFFrontFPPropertyPopups;   ///< Generate PDF property popup menus for footprints
+    bool        m_PDFBackFPPropertyPopups;    ///<   on front and/or back of board
+
 private:
     friend class PCB_PLOT_PARAMS_PARSER;
 

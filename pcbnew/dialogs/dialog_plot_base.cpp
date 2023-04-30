@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-254-gc2ef7767)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -265,7 +265,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_PSOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Postscript Options") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer2;
-	fgSizer2 = new wxFlexGridSizer( 0, 6, 3, 0 );
+	fgSizer2 = new wxFlexGridSizer( 0, 6, 5, 0 );
 	fgSizer2->AddGrowableCol( 1 );
 	fgSizer2->AddGrowableCol( 4 );
 	fgSizer2->SetFlexibleDirection( wxBOTH );
@@ -279,7 +279,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_fineAdjustXCtrl = new wxTextCtrl( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_fineAdjustXCtrl->SetToolTip( _("Set global X scale adjust for exact scale PostScript output.") );
 
-	fgSizer2->Add( m_fineAdjustXCtrl, 0, wxEXPAND|wxRIGHT, 5 );
+	fgSizer2->Add( m_fineAdjustXCtrl, 0, wxEXPAND|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	fgSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -303,14 +303,14 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_widthAdjustCtrl = new wxTextCtrl( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_widthAdjustCtrl->SetToolTip( _("Set global width correction for exact width PostScript output.\nThese width correction is intended to compensate tracks width and also pads and vias size errors.\nThe reasonable width correction value must be in a range of [-(MinTrackWidth-1), +(MinClearanceValue-1)].") );
 
-	fgSizer2->Add( m_widthAdjustCtrl, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	fgSizer2->Add( m_widthAdjustCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_widthAdjustUnits = new wxStaticText( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_widthAdjustUnits->Wrap( -1 );
 	fgSizer2->Add( m_widthAdjustUnits, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
 
 
-	m_PSOptionsSizer->Add( fgSizer2, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_PSOptionsSizer->Add( fgSizer2, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_forcePSA4OutputOpt = new wxCheckBox( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, _("Force A4 output"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PSOptionsSizer->Add( m_forcePSA4OutputOpt, 0, wxBOTTOM|wxRIGHT, 5 );
@@ -320,32 +320,20 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	m_SizerDXF_options = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("DXF Options") ), wxHORIZONTAL );
 
-	wxBoxSizer* bSizerdxfLeft;
-	bSizerdxfLeft = new wxBoxSizer( wxVERTICAL );
+	wxGridBagSizer* gbSizer5;
+	gbSizer5 = new wxGridBagSizer( 5, 5 );
+	gbSizer5->SetFlexibleDirection( wxBOTH );
+	gbSizer5->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_DXF_plotModeOpt = new wxCheckBox( m_SizerDXF_options->GetStaticBox(), wxID_ANY, _("Plot graphic items using their contours"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DXF_plotModeOpt->SetValue(true);
 	m_DXF_plotModeOpt->SetToolTip( _("Uncheck to plot graphic items using their center lines") );
 
-	bSizerdxfLeft->Add( m_DXF_plotModeOpt, 0, wxALL, 5 );
-
-	m_DXF_plotTextStrokeFontOpt = new wxCheckBox( m_SizerDXF_options->GetStaticBox(), wxID_ANY, _("Use KiCad font to plot text"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_DXF_plotTextStrokeFontOpt->SetToolTip( _("Check to use KiCad stroke font\nUncheck to plot single-line ASCII texts as editable text (using DXF font)") );
-
-	bSizerdxfLeft->Add( m_DXF_plotTextStrokeFontOpt, 0, wxALL, 5 );
-
-
-	m_SizerDXF_options->Add( bSizerdxfLeft, 1, wxEXPAND, 5 );
-
-
-	m_SizerDXF_options->Add( 20, 0, 0, 0, 5 );
-
-	wxBoxSizer* dxfSizerRight;
-	dxfSizerRight = new wxBoxSizer( wxHORIZONTAL );
+	gbSizer5->Add( m_DXF_plotModeOpt, wxGBPosition( 0, 0 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	DXF_exportUnitsLabel = new wxStaticText( m_SizerDXF_options->GetStaticBox(), wxID_ANY, _("Export units:"), wxDefaultPosition, wxDefaultSize, 0 );
 	DXF_exportUnitsLabel->Wrap( -1 );
-	dxfSizerRight->Add( DXF_exportUnitsLabel, 0, wxALIGN_CENTER|wxALIGN_LEFT|wxALL, 5 );
+	gbSizer5->Add( DXF_exportUnitsLabel, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 40 );
 
 	wxString m_DXF_plotUnitsChoices[] = { _("Inches"), _("Millimeters") };
 	int m_DXF_plotUnitsNChoices = sizeof( m_DXF_plotUnitsChoices ) / sizeof( wxString );
@@ -353,10 +341,15 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_DXF_plotUnits->SetSelection( 0 );
 	m_DXF_plotUnits->SetToolTip( _("The units to use for the exported DXF file") );
 
-	dxfSizerRight->Add( m_DXF_plotUnits, 0, wxALIGN_CENTER|wxALL, 5 );
+	gbSizer5->Add( m_DXF_plotUnits, wxGBPosition( 0, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_DXF_plotTextStrokeFontOpt = new wxCheckBox( m_SizerDXF_options->GetStaticBox(), wxID_ANY, _("Use KiCad font to plot text"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DXF_plotTextStrokeFontOpt->SetToolTip( _("Check to use KiCad stroke font\nUncheck to plot single-line ASCII texts as editable text (using DXF font)") );
+
+	gbSizer5->Add( m_DXF_plotTextStrokeFontOpt, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
-	m_SizerDXF_options->Add( dxfSizerRight, 1, wxEXPAND, 5 );
+	m_SizerDXF_options->Add( gbSizer5, 1, wxEXPAND|wxBOTTOM, 5 );
 
 
 	m_PlotOptionsSizer->Add( m_SizerDXF_options, 0, wxEXPAND|wxALL, 5 );
@@ -364,31 +357,31 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_svgOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("SVG Options") ), wxHORIZONTAL );
 
 	wxGridBagSizer* gbSizer3;
-	gbSizer3 = new wxGridBagSizer( 3, 0 );
+	gbSizer3 = new wxGridBagSizer( 5, 0 );
 	gbSizer3->SetFlexibleDirection( wxBOTH );
 	gbSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	svgPrecisionLabel = new wxStaticText( m_svgOptionsSizer->GetStaticBox(), wxID_ANY, _("Precision:"), wxDefaultPosition, wxDefaultSize, 0 );
 	svgPrecisionLabel->Wrap( -1 );
-	gbSizer3->Add( svgPrecisionLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	gbSizer3->Add( svgPrecisionLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_svgPrecsision = new wxSpinCtrl( m_svgOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 3, 6, 4 );
 	m_svgPrecsision->SetToolTip( _("This number defines how many digits are exported that are below 1 mm.\nUser unit is 10^-<N> mm\nChoose 4 if you are not sure.") );
 
-	gbSizer3->Add( m_svgPrecsision, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	gbSizer3->Add( m_svgPrecsision, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_staticText18 = new wxStaticText( m_svgOptionsSizer->GetStaticBox(), wxID_ANY, _("Output mode:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText18->Wrap( -1 );
+	gbSizer3->Add( m_staticText18, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	wxString m_SVGColorChoiceChoices[] = { _("Color"), _("Black and white") };
 	int m_SVGColorChoiceNChoices = sizeof( m_SVGColorChoiceChoices ) / sizeof( wxString );
 	m_SVGColorChoice = new wxChoice( m_svgOptionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_SVGColorChoiceNChoices, m_SVGColorChoiceChoices, 0 );
 	m_SVGColorChoice->SetSelection( 0 );
-	gbSizer3->Add( m_SVGColorChoice, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
-
-	m_staticText18 = new wxStaticText( m_svgOptionsSizer->GetStaticBox(), wxID_ANY, _("Output mode:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText18->Wrap( -1 );
-	gbSizer3->Add( m_staticText18, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	gbSizer3->Add( m_SVGColorChoice, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
-	m_svgOptionsSizer->Add( gbSizer3, 1, wxEXPAND, 5 );
+	m_svgOptionsSizer->Add( gbSizer3, 1, wxEXPAND|wxBOTTOM, 5 );
 
 
 	m_PlotOptionsSizer->Add( m_svgOptionsSizer, 1, wxEXPAND|wxALL, 5 );
@@ -396,22 +389,28 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_PDFOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("PDF Options") ), wxHORIZONTAL );
 
 	wxGridBagSizer* gbSizer4;
-	gbSizer4 = new wxGridBagSizer( 0, 0 );
+	gbSizer4 = new wxGridBagSizer( 5, 0 );
 	gbSizer4->SetFlexibleDirection( wxBOTH );
 	gbSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_staticText19 = new wxStaticText( m_PDFOptionsSizer->GetStaticBox(), wxID_ANY, _("Output mode:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText19->Wrap( -1 );
+	gbSizer4->Add( m_staticText19, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	wxString m_PDFColorChoiceChoices[] = { _("Color"), _("Black and white") };
 	int m_PDFColorChoiceNChoices = sizeof( m_PDFColorChoiceChoices ) / sizeof( wxString );
 	m_PDFColorChoice = new wxChoice( m_PDFOptionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_PDFColorChoiceNChoices, m_PDFColorChoiceChoices, 0 );
 	m_PDFColorChoice->SetSelection( 0 );
-	gbSizer4->Add( m_PDFColorChoice, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	gbSizer4->Add( m_PDFColorChoice, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_staticText19 = new wxStaticText( m_PDFOptionsSizer->GetStaticBox(), wxID_ANY, _("Output mode:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText19->Wrap( -1 );
-	gbSizer4->Add( m_staticText19, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_frontFPPropertyPopups = new wxCheckBox( m_PDFOptionsSizer->GetStaticBox(), wxID_ANY, _("Generate property popups for front footprints"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer4->Add( m_frontFPPropertyPopups, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxRIGHT|wxLEFT, 5 );
+
+	m_backFPPropertyPopups = new wxCheckBox( m_PDFOptionsSizer->GetStaticBox(), wxID_ANY, _("Generate property popups for back footprints"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer4->Add( m_backFPPropertyPopups, wxGBPosition( 2, 0 ), wxGBSpan( 1, 2 ), wxRIGHT|wxLEFT, 5 );
 
 
-	m_PDFOptionsSizer->Add( gbSizer4, 1, wxEXPAND, 5 );
+	m_PDFOptionsSizer->Add( gbSizer4, 1, wxEXPAND|wxBOTTOM, 5 );
 
 
 	m_PlotOptionsSizer->Add( m_PDFOptionsSizer, 1, wxALL|wxEXPAND, 5 );

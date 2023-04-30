@@ -75,10 +75,16 @@ void PlotBoardLayers( BOARD* aBoard, PLOTTER* aPlotter, const LSEQ& aLayers,
 }
 
 
-void PlotInteractiveLayer( BOARD* aBoard, PLOTTER* aPlotter )
+void PlotInteractiveLayer( BOARD* aBoard, PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpt )
 {
     for( const FOOTPRINT* fp : aBoard->Footprints() )
     {
+        if( fp->GetLayer() == F_Cu && !aPlotOpt.m_PDFFrontFPPropertyPopups )
+            continue;
+
+        if( fp->GetLayer() == B_Cu && !aPlotOpt.m_PDFBackFPPropertyPopups )
+            continue;
+
         std::vector<wxString> properties;
 
         properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),

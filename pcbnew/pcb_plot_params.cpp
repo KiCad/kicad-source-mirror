@@ -132,6 +132,9 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
                                          F_Paste, B_Paste, Edge_Cuts )
                                          | LSET::AllCuMask();
 
+    m_PDFFrontFPPropertyPopups   = true;
+    m_PDFBackFPPropertyPopups    = true;
+
     // This parameter controls if the NPTH pads will be plotted or not
     // it is a "local" parameter
     m_skipNPTH_Pads              = false;
@@ -216,6 +219,12 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
     aFormatter->Print( aNestLevel+1, "(hpglpennumber %d)\n", m_HPGLPenNum );
     aFormatter->Print( aNestLevel+1, "(hpglpenspeed %d)\n", m_HPGLPenSpeed );
     aFormatter->Print( aNestLevel+1, "(hpglpendiameter %f)\n", m_HPGLPenDiam );
+
+    // PDF options
+    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_pdf_front_fp_property_popups ),
+                       printBool( m_PDFFrontFPPropertyPopups ) );
+    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_pdf_back_fp_property_popups ),
+                       printBool( m_PDFBackFPPropertyPopups ) );
 
     // DXF options
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_dxfpolygonmode ),
@@ -316,6 +325,12 @@ bool PCB_PLOT_PARAMS::IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
         return false;
 
     if( m_negative != aPcbPlotParams.m_negative )
+        return false;
+
+    if( m_PDFFrontFPPropertyPopups != aPcbPlotParams.m_PDFFrontFPPropertyPopups )
+        return false;
+
+    if( m_PDFBackFPPropertyPopups != aPcbPlotParams.m_PDFBackFPPropertyPopups )
         return false;
 
     if( m_A4Output != aPcbPlotParams.m_A4Output )
@@ -548,6 +563,14 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
         case T_hpglpenoverlay:
             // No more used. just here for compatibility with old versions
             parseInt( 0, HPGL_PEN_DIAMETER_MAX );
+            break;
+
+        case T_pdf_front_fp_property_popups:
+            aPcbPlotParams->m_PDFFrontFPPropertyPopups = parseBool();
+            break;
+
+        case T_pdf_back_fp_property_popups:
+            aPcbPlotParams->m_PDFFrontFPPropertyPopups = parseBool();
             break;
 
         case T_dxfpolygonmode:
