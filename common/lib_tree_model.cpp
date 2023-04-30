@@ -34,6 +34,20 @@
 static const unsigned kLowestDefaultScore = 1;
 
 
+// Creates a score depending on the position of a string match. If the position
+// is 0 (= prefix match), this returns the maximum score. This degrades until
+// pos == max, which returns a score of 0; Evertyhing else beyond that is just
+// 0. Only values >= 0 allowed for position and max.
+//
+// @param aPosition is the position a string has been found in a substring.
+// @param aMaximum is the maximum score this function returns.
+// @return position dependent score.
+static int matchPosScore(int aPosition, int aMaximum)
+{
+    return ( aPosition < aMaximum ) ? aMaximum - aPosition : 0;
+}
+
+
 void LIB_TREE_NODE::ResetScore()
 {
     for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
@@ -243,14 +257,46 @@ void LIB_TREE_NODE_LIB_ID::UpdateScore( EDA_COMBINED_MATCHER& aMatcher, const wx
         return;
     }
 
-    // Keyword and description matches only count if they're at least two chars long.  This
-    // avoids spurious, low quality matches.  (Most abbreviations are at least 3 chars.)
-    if( aMatcher.Find( m_MatchName ) )
-        m_Score++;
-    else if( aMatcher.GetPattern().length() >= 2 && aMatcher.Find( m_SearchText ) )
-        m_Score++;
+    // Keywords and description we only count if the match string is at
+    // least two characters long. That avoids spurious, low quality
+    // matches. Most abbreviations are at three characters long.
+    int found_pos = EDA_PATTERN_NOT_FOUND;
+    int matchers_fired = 0;
+
+    if( aMatcher.GetPattern() == m_MatchName )
+    {
+        m_Score += 1000;  // exact match. High score :)
+    }
+    else if( aMatcher.Find( m_MatchName, matchers_fired, found_pos ) )
+    {
+        // Substring match. The earlier in the string the better.
+        m_Score += matchPosScore( found_pos, 20 ) + 20;
+    }
+    else if( aMatcher.Find( m_Parent->m_MatchName, matchers_fired, found_pos ) )
+    {
+        m_Score += 19;   // parent name matches.         score += 19
+    }
+    else if( aMatcher.Find( m_SearchText, matchers_fired, found_pos ) )
+    {
+        // If we have a very short search term (like one or two letters),
+        // we don't want to accumulate scores if they just happen to be in
+        // keywords or description as almost any one or two-letter
+        // combination shows up in there.
+        if( aMatcher.GetPattern().length() >= 2 )
+        {
+            // For longer terms, we add scores 1..18 for positional match
+            // (higher in the front, where the keywords are).
+            m_Score += matchPosScore( found_pos, 17 ) + 1;
+        }
+    }
     else
+    {
+        // No match. That's it for this item.
         m_Score = 0;
+    }
+
+    // More matchers = better match
+    m_Score += 2 * matchers_fired;
 }
 
 
@@ -292,10 +338,27 @@ void LIB_TREE_NODE_LIB::UpdateScore( EDA_COMBINED_MATCHER& aMatcher, const wxStr
     {
         // No children; we are a leaf.
 
-        if( !aLib.IsEmpty() && m_MatchName == aLib )
-            m_Score++;
-        else if( aMatcher.Find( m_MatchName ) )
-            m_Score++;
+        if( !aLib.IsEmpty() )
+        {
+            m_Score = m_MatchName == aLib ? 1000 : 0;
+            return;
+        }
+
+        int found_pos = EDA_PATTERN_NOT_FOUND;
+        int matchers_fired = 0;
+
+        if( aMatcher.GetPattern() == m_MatchName )
+        {
+            m_Score += 1000;  // exact match. High score :)
+        }
+        else if( aMatcher.Find( m_MatchName, matchers_fired, found_pos ) )
+        {
+            // Substring match. The earlier in the string the better.
+            m_Score += matchPosScore( found_pos, 20 ) + 20;
+        }
+
+        // More matchers = better match
+        m_Score += 2 * matchers_fired;
     }
 }
 

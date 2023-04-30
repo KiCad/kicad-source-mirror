@@ -637,6 +637,8 @@ const LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ShowResults()
                 {
                     if( !firstMatch )
                         firstMatch = n;
+                    else if( n->m_Score > firstMatch->m_Score )
+                        firstMatch = n;
 
                     m_widget->ExpandAncestors( ToItem( n ) );
                 }

@@ -399,6 +399,28 @@ EDA_COMBINED_MATCHER::EDA_COMBINED_MATCHER( const wxString& aPattern,
 }
 
 
+bool EDA_COMBINED_MATCHER::Find( const wxString& aTerm, int& aMatchersTriggered, int& aPosition )
+{
+    aPosition = EDA_PATTERN_NOT_FOUND;
+    aMatchersTriggered = 0;
+
+    for( const std::unique_ptr<EDA_PATTERN_MATCH>& matcher : m_matchers )
+    {
+        EDA_PATTERN_MATCH::FIND_RESULT local_find = matcher->Find( aTerm );
+
+        if( local_find )
+        {
+            aMatchersTriggered += 1;
+
+            if( local_find.start < aPosition || aPosition == EDA_PATTERN_NOT_FOUND )
+                aPosition = local_find.start;
+        }
+    }
+
+    return aPosition != EDA_PATTERN_NOT_FOUND;
+}
+
+
 bool EDA_COMBINED_MATCHER::Find( const wxString& aTerm )
 {
     for( const std::unique_ptr<EDA_PATTERN_MATCH>& matcher : m_matchers )
