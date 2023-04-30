@@ -1498,7 +1498,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
         const wxString& fieldName( m_dataModel->GetColFieldName( i ) );
         bool            found = false;
 
-        for( int j = 0; i < m_fieldsCtrl->GetItemCount(); j++ )
+        for( int j = 0; j < m_fieldsCtrl->GetItemCount(); j++ )
         {
             if( m_fieldsCtrl->GetTextValue( j, FIELD_NAME_COLUMN ) == fieldName )
             {
