@@ -28,6 +28,7 @@
 
 #include <geometry/seg.h>
 #include <geometry/shape_line_chain.h>
+#include <zone.h>
 
 #include <wx/log.h>
 
@@ -676,7 +677,7 @@ void NODE::doRemove( ITEM* aItem )
     if( aItem->BelongsTo( m_root ) && !isRoot() )
     {
         m_override.insert( aItem );
-    
+
         if( aItem->HasHole() )
             m_override.insert( aItem->Hole() );
     }
@@ -1588,4 +1589,16 @@ ITEM *NODE::FindItemByParent( const BOARD_ITEM* aParent )
     return nullptr;
 }
 
+std::vector<ITEM*> NODE::FindItemsByZone( const ZONE* aParent )
+{
+    std::vector<ITEM*> ret;
+
+    for( ITEM* item : *m_index )
+    {
+        if( item->Parent() == aParent )
+            ret.push_back( item );
+    }
+
+    return ret;
+}
 }

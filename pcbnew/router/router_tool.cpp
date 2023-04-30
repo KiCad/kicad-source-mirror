@@ -2095,6 +2095,14 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
             }
         }
 
+        for( ZONE* zone : footprint->Zones() )
+        {
+            std::vector<PNS::ITEM*> solids = m_router->GetWorld()->FindItemsByZone( zone );
+
+            for( PNS::ITEM* solid : solids )
+                itemsToDrag.Add( solid );
+        }
+
         if( showCourtyardConflicts )
         {
             courtyardClearanceDRC.Init( board() );
@@ -2249,14 +2257,6 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
                 view()->AddToPreview( previewItem );
                 view()->Hide( &footprint->Value() );
 
-                for( ZONE* zone : footprint->Zones() )
-                {
-                    previewItem = static_cast<BOARD_ITEM*>( zone->Clone() );
-                    previewItem->Move( offset );
-                    view()->AddToPreview( previewItem );
-                    view()->Hide( zone, true );
-                }
-
                 if( showCourtyardConflicts )
                 {
                     footprint->Move( offset );
@@ -2323,9 +2323,6 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
         view()->Hide( &footprint->Reference(), false );
         view()->Hide( &footprint->Value(), false );
-
-        for( ZONE* zone : footprint->Zones() )
-            view()->Hide( zone, false );
 
         for( PAD* pad : footprint->Pads() )
             view()->Hide( pad, false );

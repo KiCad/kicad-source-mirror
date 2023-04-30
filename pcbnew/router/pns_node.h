@@ -35,6 +35,7 @@
 #include "pns_joint.h"
 #include "pns_itemset.h"
 
+class ZONE;
 namespace PNS {
 
 class ARC;
@@ -429,6 +430,8 @@ public:
     void RemoveByMarker( int aMarker );
 
     ITEM* FindItemByParent( const BOARD_ITEM* aParent );
+
+    std::vector<ITEM*> FindItemsByZone( const ZONE* aParent );
 
     bool HasChildren() const
     {
