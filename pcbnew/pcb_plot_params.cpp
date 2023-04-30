@@ -101,11 +101,11 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
 
     // we used 0.1mils for SVG step before, but nm precision is more accurate, so we use nm
     m_svgPrecision               = SVG_PRECISION_DEFAULT;
-    m_plotFrameRef               = false;
+    m_plotDrawingSheet = false;
     m_plotViaOnMaskLayer         = false;
     m_plotMode                   = FILLED;
-    m_DXFplotPolygonMode         = true;
-    m_DXFplotUnits               = DXF_UNITS::INCHES;
+    m_DXFPolygonMode = true;
+    m_DXFUnits = DXF_UNITS::INCHES;
     m_useAuxOrigin               = false;
     m_HPGLPenNum                 = 1;
     m_HPGLPenSpeed               = 20;        // this param is always in cm/s
@@ -207,7 +207,7 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
     // SVG options
     aFormatter->Print( aNestLevel+1, "(svgprecision %d)\n", m_svgPrecision );
 
-    aFormatter->Print( aNestLevel+1, "(plotframeref %s)\n", printBool( m_plotFrameRef ) );
+    aFormatter->Print( aNestLevel+1, "(plotframeref %s)\n", printBool( m_plotDrawingSheet ) );
     aFormatter->Print( aNestLevel+1, "(viasonmask %s)\n", printBool( m_plotViaOnMaskLayer ) );
     aFormatter->Print( aNestLevel+1, "(mode %d)\n", GetPlotMode() == SKETCH ? 2 : 1 );
     aFormatter->Print( aNestLevel+1, "(useauxorigin %s)\n", printBool( m_useAuxOrigin ) );
@@ -219,9 +219,9 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
 
     // DXF options
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_dxfpolygonmode ),
-                       printBool( m_DXFplotPolygonMode ) );
+                       printBool( m_DXFPolygonMode ) );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_dxfimperialunits ),
-                       printBool( m_DXFplotUnits == DXF_UNITS::INCHES ) );
+                       printBool( m_DXFUnits == DXF_UNITS::INCHES ) );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_dxfusepcbnewfont ),
                        printBool( m_textMode != PLOT_TEXT_MODE::NATIVE ) );
 
@@ -285,7 +285,7 @@ bool PCB_PLOT_PARAMS::IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
     if( m_dashedLineGapRatio != aPcbPlotParams.m_dashedLineGapRatio )
         return false;
 
-    if( m_plotFrameRef != aPcbPlotParams.m_plotFrameRef )
+    if( m_plotDrawingSheet != aPcbPlotParams.m_plotDrawingSheet )
         return false;
 
     if( m_plotViaOnMaskLayer != aPcbPlotParams.m_plotViaOnMaskLayer )
@@ -294,10 +294,10 @@ bool PCB_PLOT_PARAMS::IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
     if( m_plotMode != aPcbPlotParams.m_plotMode )
         return false;
 
-    if( m_DXFplotPolygonMode != aPcbPlotParams.m_DXFplotPolygonMode )
+    if( m_DXFPolygonMode != aPcbPlotParams.m_DXFPolygonMode )
         return false;
 
-    if( m_DXFplotUnits != aPcbPlotParams.m_DXFplotUnits )
+    if( m_DXFUnits != aPcbPlotParams.m_DXFUnits )
         return false;
 
     if( m_svgPrecision != aPcbPlotParams.m_svgPrecision )
@@ -518,7 +518,7 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
             break;
 
         case T_plotframeref:
-            aPcbPlotParams->m_plotFrameRef = parseBool();
+            aPcbPlotParams->m_plotDrawingSheet = parseBool();
             break;
 
         case T_viasonmask:
@@ -551,11 +551,11 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
             break;
 
         case T_dxfpolygonmode:
-            aPcbPlotParams->m_DXFplotPolygonMode = parseBool();
+            aPcbPlotParams->m_DXFPolygonMode = parseBool();
             break;
 
         case T_dxfimperialunits:
-            aPcbPlotParams->m_DXFplotUnits = parseBool() ? DXF_UNITS::INCHES
+            aPcbPlotParams->m_DXFUnits = parseBool() ? DXF_UNITS::INCHES
                                                          : DXF_UNITS::MILLIMETERS;
             break;
 
