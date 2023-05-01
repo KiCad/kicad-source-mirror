@@ -795,16 +795,16 @@ bool SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
 
         while( tokenizer.HasMoreTokens() )
         {
-            const wxString       term = tokenizer.GetNextToken().Lower();
-            EDA_COMBINED_MATCHER matcher( term, CTX_LIBITEM );
+            const wxString       filterTerm = tokenizer.GetNextToken().Lower();
+            EDA_COMBINED_MATCHER matcher( filterTerm, CTX_LIBITEM );
 
             for( LIB_SYMBOL* symbol : symbols )
             {
-                wxString search = symbol->GetName() + wxS( " " ) + symbol->GetSearchText();
-                bool     matched = matcher.Find( search.Lower() );
+                std::vector<SEARCH_TERM> searchTerms = symbol->GetSearchTerms();
+                int                      matched = matcher.ScoreTerms( searchTerms );
 
-                if( !matched && term.IsNumber() )
-                    matched = ( wxAtoi( term ) == (int)symbol->GetPinCount() );
+                if( filterTerm.IsNumber() && wxAtoi( filterTerm ) == (int)symbol->GetPinCount() )
+                    matched++;
 
                 if( !matched )
                     excludes.insert( symbol->GetName() );

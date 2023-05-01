@@ -68,6 +68,7 @@ LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent,
                                                 const wxString& aPinnedKey ) :
         m_parent( aParent ),
         m_filter( SYM_FILTER_NONE ),
+        m_sort_mode( BEST_MATCH ),
         m_show_units( true ),
         m_preselect_unit( 0 ),
         m_freeze( 0 ),
@@ -208,7 +209,7 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( const wxString& aSearch, bool a
             m_tree.UpdateScore( matcher, lib );
         }
 
-        m_tree.SortNodes();
+        m_tree.SortNodes( m_sort_mode == BEST_MATCH );
         AfterReset();
         Thaw();
     }
@@ -273,7 +274,7 @@ void LIB_TREE_MODEL_ADAPTER::resortTree()
     Freeze();
     BeforeReset();
 
-    m_tree.SortNodes();
+    m_tree.SortNodes( m_sort_mode == BEST_MATCH );
 
     AfterReset();
     Thaw();

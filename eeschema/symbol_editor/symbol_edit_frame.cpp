@@ -142,6 +142,7 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     SyncLibraries( false, loadingCancelled );
     m_treePane = new SYMBOL_TREE_PANE( this, m_libMgr );
+    m_treePane->GetLibTree()->SetSortMode( (LIB_TREE_MODEL_ADAPTER::SORT_MODE) m_settings->m_LibrarySortMode );
 
     resolveCanvasType();
     SwitchCanvas( m_canvasType );
@@ -304,6 +305,8 @@ void SYMBOL_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
     m_settings->m_ShowPinElectricalType  = GetRenderSettings()->m_ShowPinsElectricalType;
     m_settings->m_LibWidth               = m_treePane->GetSize().x;
+
+    m_settings->m_LibrarySortMode = m_treePane->GetLibTree()->GetSortMode();
 }
 
 

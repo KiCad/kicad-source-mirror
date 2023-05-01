@@ -446,6 +446,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "symbol_chooser.height",
             &m_SymChooserPanel.height, -1 ) );
 
+    m_params.emplace_back( new PARAM<int>( "symbol_chooser.sort_mode",
+            &m_SymChooserPanel.sort_mode, 0 ) );
+
     m_params.emplace_back( new PARAM<bool>( "symbol_chooser.keep_symbol",
             &m_SymChooserPanel.keep_symbol, false ) );
 

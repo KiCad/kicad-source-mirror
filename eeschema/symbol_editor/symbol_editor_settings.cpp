@@ -1,7 +1,7 @@
 /*
 * This program source code file is part of KiCad, a free EDA CAD application.
 *
-* Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+* Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -72,6 +72,9 @@ SYMBOL_EDITOR_SETTINGS::SYMBOL_EDITOR_SETTINGS() :
 
     m_params.emplace_back( new PARAM<int>( "lib_table_width",
                                            &m_LibWidth, 250 ) );
+
+    m_params.emplace_back( new PARAM<int>( "library.sort_mode",
+                                           &m_LibrarySortMode, 0 ) );
 
     m_params.emplace_back( new PARAM<wxString>( "edit_symbol_visible_columns",
                                                 &m_EditSymbolVisibleColumns, "0 1 2 3 4 5 6 7" ) );

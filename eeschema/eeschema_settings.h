@@ -234,6 +234,7 @@ public:
         int  sash_pos_v;
         int  width;
         int  height;
+        int  sort_mode;
         bool keep_symbol;
         bool place_all_units;
     };

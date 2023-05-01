@@ -82,15 +82,13 @@ void FOOTPRINT_FILTER_IT::increment()
 
         if( ( filter_type & FOOTPRINT_FILTER::FILTERING_BY_TEXT_PATTERN ) )
         {
-            wxString searchStr = wxString::Format( wxT( "%s:%s %s" ),
-                                                   candidate.GetLibNickname(),
-                                                   candidate.GetFootprintName(),
-                                                   candidate.GetSearchText() );
             bool exclude = false;
 
             for( std::unique_ptr<EDA_COMBINED_MATCHER>& matcher : m_filter->m_pattern_filters )
             {
-                if( !matcher->Find( searchStr.Lower() ) )
+                std::vector<SEARCH_TERM> searchTerms = candidate.GetSearchTerms();
+
+                if( !matcher->ScoreTerms( searchTerms ) )
                 {
                     exclude = true;
                     break;

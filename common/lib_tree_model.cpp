@@ -34,20 +34,6 @@
 static const unsigned kLowestDefaultScore = 1;
 
 
-// Creates a score depending on the position of a string match. If the position
-// is 0 (= prefix match), this returns the maximum score. This degrades until
-// pos == max, which returns a score of 0; Evertyhing else beyond that is just
-// 0. Only values >= 0 allowed for position and max.
-//
-// @param aPosition is the position a string has been found in a substring.
-// @param aMaximum is the maximum score this function returns.
-// @return position dependent score.
-static int matchPosScore(int aPosition, int aMaximum)
-{
-    return ( aPosition < aMaximum ) ? aMaximum - aPosition : 0;
-}
-
-
 void LIB_TREE_NODE::ResetScore()
 {
     for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
@@ -85,20 +71,21 @@ void LIB_TREE_NODE::AssignIntrinsicRanks( bool presorted )
 }
 
 
-void LIB_TREE_NODE::SortNodes()
+void LIB_TREE_NODE::SortNodes( bool aUseScores )
 {
     std::sort( m_Children.begin(), m_Children.end(),
-               []( std::unique_ptr<LIB_TREE_NODE>& a, std::unique_ptr<LIB_TREE_NODE>& b )
-               {
-                   return Compare( *a, *b );
-               } );
+            [&]( std::unique_ptr<LIB_TREE_NODE>& a, std::unique_ptr<LIB_TREE_NODE>& b )
+            {
+                return Compare( *a, *b, aUseScores );
+            } );
 
     for( std::unique_ptr<LIB_TREE_NODE>& node: m_Children )
-        node->SortNodes();
+        node->SortNodes( aUseScores );
 }
 
 
-bool LIB_TREE_NODE::Compare( LIB_TREE_NODE const& aNode1, LIB_TREE_NODE const& aNode2 )
+bool LIB_TREE_NODE::Compare( LIB_TREE_NODE const& aNode1, LIB_TREE_NODE const& aNode2,
+                             bool aUseScores )
 {
     if( aNode1.m_Type != aNode2.m_Type )
         return aNode1.m_Type < aNode2.m_Type;
@@ -126,6 +113,9 @@ bool LIB_TREE_NODE::Compare( LIB_TREE_NODE const& aNode1, LIB_TREE_NODE const& a
     else if( aNode2.m_Pinned && !aNode1.m_Pinned )
         return false;
 
+    if( aUseScores && aNode1.m_Score != aNode2.m_Score )
+        return aNode1.m_Score > aNode2.m_Score;
+
     if( aNode1.m_IntrinsicRank != aNode2.m_IntrinsicRank )
         return aNode1.m_IntrinsicRank > aNode2.m_IntrinsicRank;
 
@@ -139,7 +129,6 @@ LIB_TREE_NODE::LIB_TREE_NODE()
       m_IntrinsicRank( 0 ),
       m_Score( kLowestDefaultScore ),
       m_Pinned( false ),
-      m_Normalized( false ),
       m_Unit( 0 ),
       m_IsRoot( false )
 {}
@@ -167,15 +156,9 @@ LIB_TREE_NODE_UNIT::LIB_TREE_NODE_UNIT( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* a
     m_Name = namePrefix + " " + aItem->GetUnitReference( aUnit );
 
     if( aItem->HasUnitDisplayName( aUnit ) )
-    {
         m_Desc = aItem->GetUnitDisplayName( aUnit );
-    }
     else
-    {
         m_Desc = wxEmptyString;
-    }
-
-    m_MatchName = wxEmptyString;
 
     m_IntrinsicRank = -aUnit;
 }
@@ -195,9 +178,7 @@ LIB_TREE_NODE_LIB_ID::LIB_TREE_NODE_LIB_ID( LIB_TREE_NODE* aParent, LIB_TREE_ITE
 
     aItem->GetChooserFields( m_Fields );
 
-    m_MatchName = aItem->GetName();
-    m_SearchText = aItem->GetSearchText();
-    m_Normalized = false;
+    m_SearchTerms = aItem->GetSearchTerms();
 
     m_IsRoot = aItem->IsRoot();
 
@@ -224,12 +205,10 @@ void LIB_TREE_NODE_LIB_ID::Update( LIB_TREE_ITEM* aItem )
 
     m_Name = aItem->GetName();
     m_Desc = aItem->GetDescription();
-    m_MatchName = aItem->GetName();
 
     aItem->GetChooserFields( m_Fields );
 
-    m_SearchText = aItem->GetSearchText();
-    m_Normalized = false;
+    m_SearchTerms = aItem->GetSearchTerms();
 
     m_IsRoot = aItem->IsRoot();
     m_Children.clear();
@@ -244,59 +223,13 @@ void LIB_TREE_NODE_LIB_ID::UpdateScore( EDA_COMBINED_MATCHER& aMatcher, const wx
     if( m_Score <= 0 )
         return; // Leaf nodes without scores are out of the game.
 
-    if( !m_Normalized )
-    {
-        m_MatchName = UnescapeString( m_MatchName ).Lower();
-        m_SearchText = m_SearchText.Lower();
-        m_Normalized = true;
-    }
-
-    if( !aLib.IsEmpty() && m_Parent->m_MatchName != aLib )
+    if( !aLib.IsEmpty() && m_Parent->m_Name.Lower() != aLib )
     {
         m_Score = 0;
         return;
     }
 
-    // Keywords and description we only count if the match string is at
-    // least two characters long. That avoids spurious, low quality
-    // matches. Most abbreviations are at three characters long.
-    int found_pos = EDA_PATTERN_NOT_FOUND;
-    int matchers_fired = 0;
-
-    if( aMatcher.GetPattern() == m_MatchName )
-    {
-        m_Score += 1000;  // exact match. High score :)
-    }
-    else if( aMatcher.Find( m_MatchName, matchers_fired, found_pos ) )
-    {
-        // Substring match. The earlier in the string the better.
-        m_Score += matchPosScore( found_pos, 20 ) + 20;
-    }
-    else if( aMatcher.Find( m_Parent->m_MatchName, matchers_fired, found_pos ) )
-    {
-        m_Score += 19;   // parent name matches.         score += 19
-    }
-    else if( aMatcher.Find( m_SearchText, matchers_fired, found_pos ) )
-    {
-        // If we have a very short search term (like one or two letters),
-        // we don't want to accumulate scores if they just happen to be in
-        // keywords or description as almost any one or two-letter
-        // combination shows up in there.
-        if( aMatcher.GetPattern().length() >= 2 )
-        {
-            // For longer terms, we add scores 1..18 for positional match
-            // (higher in the front, where the keywords are).
-            m_Score += matchPosScore( found_pos, 17 ) + 1;
-        }
-    }
-    else
-    {
-        // No match. That's it for this item.
-        m_Score = 0;
-    }
-
-    // More matchers = better match
-    m_Score += 2 * matchers_fired;
+    m_Score = aMatcher.ScoreTerms( m_SearchTerms );
 }
 
 
@@ -305,7 +238,6 @@ LIB_TREE_NODE_LIB::LIB_TREE_NODE_LIB( LIB_TREE_NODE* aParent, wxString const& aN
 {
     m_Type = LIB;
     m_Name = aName;
-    m_MatchName = aName.Lower();
     m_Desc = aDesc;
     m_Parent = aParent;
     m_LibId.SetLibNickname( aName );
@@ -338,27 +270,7 @@ void LIB_TREE_NODE_LIB::UpdateScore( EDA_COMBINED_MATCHER& aMatcher, const wxStr
     {
         // No children; we are a leaf.
 
-        if( !aLib.IsEmpty() )
-        {
-            m_Score = m_MatchName == aLib ? 1000 : 0;
-            return;
-        }
-
-        int found_pos = EDA_PATTERN_NOT_FOUND;
-        int matchers_fired = 0;
-
-        if( aMatcher.GetPattern() == m_MatchName )
-        {
-            m_Score += 1000;  // exact match. High score :)
-        }
-        else if( aMatcher.Find( m_MatchName, matchers_fired, found_pos ) )
-        {
-            // Substring match. The earlier in the string the better.
-            m_Score += matchPosScore( found_pos, 20 ) + 20;
-        }
-
-        // More matchers = better match
-        m_Score += 2 * matchers_fired;
+        m_Score = aMatcher.ScoreTerms( m_SearchTerms );
     }
 }
 

@@ -626,6 +626,8 @@ void FOOTPRINT_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
         GetToolManager()->GetTool<PCB_SELECTION_TOOL>()->GetFilter() = cfg->m_SelectionFilter;
         m_selectionFilterPanel->SetCheckboxesFromFilter( cfg->m_SelectionFilter );
+
+        m_treePane->GetLibTree()->SetSortMode( (LIB_TREE_MODEL_ADAPTER::SORT_MODE) cfg->m_LibrarySortMode );
     }
 }
 
@@ -658,6 +660,8 @@ void FOOTPRINT_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
         cfg->m_AuiPanels.properties_splitter_proportion =
                 m_propertiesPanel->SplitterProportion();
+
+        cfg->m_LibrarySortMode = m_treePane->GetLibTree()->GetSortMode();
     }
 }
 

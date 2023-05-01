@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -203,6 +203,8 @@ DIALOG_CHOOSE_SYMBOL::DIALOG_CHOOSE_SYMBOL( SCH_BASE_FRAME* aParent, const wxStr
         wxSize dlgSize( panelCfg.width > 0 ? panelCfg.width : horizPixelsFromDU( 390 ),
                         panelCfg.height > 0 ? panelCfg.height : vertPixelsFromDU( 300 ) );
         SetSize( dlgSize );
+
+        aAdapter->SetSortMode( (LIB_TREE_MODEL_ADAPTER::SORT_MODE) cfg->m_SymChooserPanel.sort_mode );
     }
 
     SetInitialFocus( m_tree->GetFocusTarget() );
@@ -280,6 +282,8 @@ DIALOG_CHOOSE_SYMBOL::~DIALOG_CHOOSE_SYMBOL()
 
         if( m_vsplitter )
             cfg->m_SymChooserPanel.sash_pos_v = m_vsplitter->GetSashPosition();
+
+        cfg->m_SymChooserPanel.sort_mode = m_tree->GetSortMode();
     }
 }
 

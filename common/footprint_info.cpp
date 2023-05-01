@@ -37,6 +37,7 @@
 #include <lib_id.h>
 #include <thread>
 #include <utility>
+#include <wx/tokenzr.h>
 #include <kiface_base.h>
 
 FOOTPRINT_INFO* FOOTPRINT_LIST::GetFootprintInfo( const wxString& aLibNickname,
@@ -66,6 +67,25 @@ FOOTPRINT_INFO* FOOTPRINT_LIST::GetFootprintInfo( const wxString& aFootprintName
                  wxString::Format( wxT( "'%s' is not a valid LIB_ID." ), aFootprintName ) );
 
     return GetFootprintInfo( fpid.GetLibNickname(), fpid.GetLibItemName() );
+}
+
+
+std::vector<SEARCH_TERM> FOOTPRINT_INFO::GetSearchTerms()
+{
+    std::vector<SEARCH_TERM> terms;
+
+    terms.emplace_back( SEARCH_TERM( GetName(), 8 ) );
+
+    wxStringTokenizer keywordTokenizer( GetKeywords(), wxS( " " ), wxTOKEN_STRTOK );
+
+    while( keywordTokenizer.HasMoreTokens() )
+        terms.emplace_back( SEARCH_TERM( keywordTokenizer.GetNextToken(), 4 ) );
+
+    // Also include keywords as one long string, just in case
+    terms.emplace_back( SEARCH_TERM( GetKeywords(), 1 ) );
+    terms.emplace_back( SEARCH_TERM( GetDescription(), 1 ) );
+
+    return terms;
 }
 
 

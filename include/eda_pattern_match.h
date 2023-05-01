@@ -38,6 +38,26 @@
 static const int EDA_PATTERN_NOT_FOUND = wxNOT_FOUND;
 
 /*
+ * A structure for storing weighted search terms.
+ *
+ * NOTE: an exact match is scored at 8 * Score while a match at the start of the text is scored
+ * at 2 * Score.
+ */
+struct SEARCH_TERM
+{
+    SEARCH_TERM( const wxString& aText, int aScore ) :
+            Text( aText ),
+            Score( aScore ),
+            Normalized( false )
+    {}
+
+    wxString Text;
+    int      Score;
+    bool     Normalized;
+};
+
+
+/*
  * Interface for a pattern matcher, for which there are several implementations
  */
 class EDA_PATTERN_MATCH
@@ -204,6 +224,8 @@ public:
     bool StartsWith( const wxString& aTerm );
 
     const wxString& GetPattern() const;
+
+    int ScoreTerms( std::vector<SEARCH_TERM>& aWeightedTerms );
 
 private:
     // Add matcher if it can compile the pattern.

@@ -45,28 +45,34 @@ int LIB_SYMBOL::m_subpartIdSeparator = 0;
 int LIB_SYMBOL::m_subpartFirstId = 'A';
 
 
-wxString LIB_SYMBOL::GetSearchText()
+std::vector<SEARCH_TERM> LIB_SYMBOL::GetSearchTerms()
 {
-    // Matches are scored by offset from front of string, so inclusion of this spacer
-    // discounts matches found after it.
-    static const wxString discount( wxT( "        " ) );
+    std::vector<SEARCH_TERM> terms;
 
-    wxString  text = GetKeyWords() + discount + GetDescription();
-    wxString  footprint = GetFootprintField().GetText();
+    terms.emplace_back( SEARCH_TERM( GetName(), 8 ) );
 
-    if( !footprint.IsEmpty() )
-    {
-        text += discount + footprint;
-    }
+    wxStringTokenizer keywordTokenizer( GetKeyWords(), wxS( " " ), wxTOKEN_STRTOK );
+
+    while( keywordTokenizer.HasMoreTokens() )
+        terms.emplace_back( SEARCH_TERM( keywordTokenizer.GetNextToken(), 4 ) );
 
     // TODO(JE) rework this later so we can highlight matches in their column
     std::map<wxString, wxString> fields;
     GetChooserFields( fields );
 
-    for( const auto& it : fields )
-        text += discount + it.second;
+    for( const auto& [ name, text ] : fields )
+        terms.emplace_back( SEARCH_TERM( text, 4 ) );
 
-    return text;
+    // Also include keywords as one long string, just in case
+    terms.emplace_back( SEARCH_TERM( GetKeyWords(), 1 ) );
+    terms.emplace_back( SEARCH_TERM( GetDescription(), 1 ) );
+
+    wxString  footprint = GetFootprintField().GetText();
+
+    if( !footprint.IsEmpty() )
+        terms.emplace_back( SEARCH_TERM( GetFootprintField().GetText(), 1 ) );
+
+    return terms;
 }
 
 
@@ -77,7 +83,7 @@ void LIB_SYMBOL::GetChooserFields( std::map<wxString , wxString>& aColumnMap )
         LIB_FIELD* field = static_cast<LIB_FIELD*>( &item );
 
         if( field->ShowInChooser() )
-            aColumnMap[field->GetName()] = field->EDA_TEXT::GetShownText();
+            aColumnMap[field->GetName()] = field->EDA_TEXT::GetShownText( false );
     }
 }
 

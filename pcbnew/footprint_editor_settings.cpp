@@ -80,6 +80,9 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "aui.show_properties",
             &m_AuiPanels.show_properties, false ) );
 
+    m_params.emplace_back( new PARAM<int>( "library.sort_mode",
+            &m_LibrarySortMode, 0 ) );
+
     m_params.emplace_back( new PARAM<wxString>( "system.last_import_export_path",
             &m_LastImportExportPath, "" ) );
 

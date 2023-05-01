@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -26,10 +26,8 @@
 #include <map>
 #include <memory>
 #include <wx/string.h>
+#include <eda_pattern_match.h>
 #include <lib_tree_item.h>
-
-
-class EDA_COMBINED_MATCHER;
 
 
 /**
@@ -98,18 +96,24 @@ public:
     /**
      * Sort child nodes quickly and recursively (IntrinsicRanks must have been set).
      */
-    void SortNodes();
+    void SortNodes( bool aUseScores );
 
     /**
      * Compare two nodes. Returns true if aNode1 < aNode2.
      */
-    static bool Compare( LIB_TREE_NODE const& aNode1, LIB_TREE_NODE const& aNode2 );
+    static bool Compare( LIB_TREE_NODE const& aNode1, LIB_TREE_NODE const& aNode2,
+                         bool aUseScores );
 
     LIB_TREE_NODE();
     virtual ~LIB_TREE_NODE() {}
 
-    enum TYPE {
-        ROOT, LIB, LIBID, UNIT, INVALID
+    enum TYPE
+    {
+        ROOT,
+        LIB,
+        LIBID,
+        UNIT,
+        INVALID
     };
 
     typedef std::vector<std::unique_ptr<LIB_TREE_NODE>> PTR_VECTOR;
@@ -131,12 +135,9 @@ public:
     wxString    m_Name;        // Actual name of the part
     wxString    m_Desc;        // Description to be displayed
     wxString    m_Footprint;   // Footprint ID as a string (ie: the footprint field text)
-    wxString    m_MatchName;   // Normalized name for matching
-    wxString    m_SearchText;  // Descriptive text to search
-    bool        m_Normalized;  // Support for lazy normalization.
 
-    /// @see LIB_TREE_ITEMS::GetChooserFields
-    std::map<wxString, wxString> m_Fields;
+    std::vector<SEARCH_TERM>     m_SearchTerms;    /// List of weighted search terms
+    std::map<wxString, wxString> m_Fields;         /// @see LIB_TREE_ITEMS::GetChooserFields
 
     LIB_ID      m_LibId;       // LIB_ID determined by the parent library nickname and alias name.
     int         m_Unit;        // Actual unit, or zero

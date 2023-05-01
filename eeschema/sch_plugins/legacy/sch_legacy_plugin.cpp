@@ -152,7 +152,7 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchem
         if( m_path.IsEmpty() )
             m_path = aSchematic->Prj().GetProjectPath();
 
-        wxLogTrace( traceSchLegacyPlugin, "m_Normalized append path \"%s\".", m_path );
+        wxLogTrace( traceSchLegacyPlugin, "Normalized append path \"%s\".", m_path );
     }
     else
     {

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2014-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,6 +35,7 @@ class wxHtmlLinkEvent;
 class wxSearchCtrl;
 class wxTimer;
 class wxTimerEvent;
+class STD_BITMAP_BUTTON;
 class ACTION_MENU;
 class LIB_ID;
 class LIB_TABLE;
@@ -128,6 +129,12 @@ public:
     wxString GetSearchString() const;
 
     /**
+     * Save/restore the sorting mode.
+     */
+    void SetSortMode( LIB_TREE_MODEL_ADAPTER::SORT_MODE aMode ) { m_adapter->SetSortMode( aMode ); }
+    LIB_TREE_MODEL_ADAPTER::SORT_MODE GetSortMode() const { return m_adapter->GetSortMode(); }
+
+    /**
      * Regenerate the tree.
      */
     void Regenerate( bool aKeepState );
@@ -214,20 +221,19 @@ protected:
     void onDebounceTimer( wxTimerEvent& aEvent );
 
 protected:
-    LIB_TABLE*       m_lib_table;
-
     wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> m_adapter;
 
-    wxSearchCtrl*     m_query_ctrl;
-    WX_DATAVIEWCTRL*  m_tree_ctrl;
-    HTML_WINDOW*      m_details_ctrl;
-    wxTimer*          m_debounceTimer;
-    bool              m_inTimerEvent;
+    wxSearchCtrl*      m_query_ctrl;
+    STD_BITMAP_BUTTON* m_sort_ctrl;
+    WX_DATAVIEWCTRL*   m_tree_ctrl;
+    HTML_WINDOW*       m_details_ctrl;
+    wxTimer*           m_debounceTimer;
+    bool               m_inTimerEvent;
 
-    LIB_ID            m_last_libid;
-    wxString          m_recentSearchesKey;
+    LIB_ID             m_last_libid;
+    wxString           m_recentSearchesKey;
 
-    bool              m_skipNextRightClick;
+    bool               m_skipNextRightClick;
 };
 
 ///< Custom event sent when a new symbol is preselected

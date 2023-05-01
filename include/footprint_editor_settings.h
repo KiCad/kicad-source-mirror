@@ -64,6 +64,8 @@ public:
 
     AUI_PANELS m_AuiPanels;
 
+    int m_LibrarySortMode;
+
     USER_GRID m_UserGrid;
 
     bool m_PolarCoords;

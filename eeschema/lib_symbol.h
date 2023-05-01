@@ -177,7 +177,7 @@ public:
         return m_keyWords;
     }
 
-    wxString GetSearchText() override;
+    std::vector<SEARCH_TERM> GetSearchTerms() override;
 
     wxString GetFootprint() override
     {

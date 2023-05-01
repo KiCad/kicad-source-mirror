@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011 Jean-Pierre Charras, <jp.charras@wanadoo.fr>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,14 +89,7 @@ public:
         return m_keywords;
     }
 
-    wxString GetSearchText() override
-    {
-        // Matches are scored by offset from front of string, so inclusion of this spacer
-        // discounts matches found after it.
-        static const wxString discount( wxT( "        " ) );
-
-        return GetKeywords() + discount + GetDescription();
-    }
+    std::vector<SEARCH_TERM> GetSearchTerms() override;
 
     unsigned GetPadCount()
     {

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,6 +28,7 @@
 #include <map>
 #include <lib_id.h>
 #include <import_export.h>
+#include <eda_pattern_match.h>
 
 /**
  * A mix-in to provide polymorphism between items stored in libraries (symbols, aliases
@@ -55,7 +56,7 @@ public:
      */
     virtual void GetChooserFields( std::map<wxString , wxString>& aColumnMap ) {}
 
-    virtual wxString GetSearchText() { return wxEmptyString; }
+    virtual std::vector<SEARCH_TERM> GetSearchTerms() { return std::vector<SEARCH_TERM>(); }
 
     /**
      * For items having aliases, IsRoot() indicates the principal item.

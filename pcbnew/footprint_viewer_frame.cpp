@@ -567,16 +567,16 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
 
         while( tokenizer.HasMoreTokens() )
         {
-            const wxString       term = tokenizer.GetNextToken().Lower();
-            EDA_COMBINED_MATCHER matcher( term, CTX_LIBITEM );
+            const wxString       filterTerm = tokenizer.GetNextToken().Lower();
+            EDA_COMBINED_MATCHER matcher( filterTerm, CTX_LIBITEM );
 
             for( const std::unique_ptr<FOOTPRINT_INFO>& footprint : fp_info_list->GetList() )
             {
-                wxString search = footprint->GetFootprintName() + wxS( " " ) + footprint->GetSearchText();
-                bool     matched = matcher.Find( search.Lower() );
+                std::vector<SEARCH_TERM> searchTerms = footprint->GetSearchTerms();
+                int                      matched = matcher.ScoreTerms( searchTerms );
 
-                if( !matched && term.IsNumber() )
-                    matched = ( wxAtoi( term ) == (int)footprint->GetPadCount() );
+                if( filterTerm.IsNumber() && wxAtoi( filterTerm ) == (int)footprint->GetPadCount() )
+                    matched++;
 
                 if( !matched )
                     excludes.insert( footprint->GetFootprintName() );

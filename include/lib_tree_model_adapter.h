@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -133,6 +133,11 @@ public:
         NUM_COLS        ///< The number of default tree columns
     };
 
+    enum SORT_MODE
+    {
+        BEST_MATCH = 0,
+        ALPHABETIC
+    };
 
     /**
      * Save the column widths to the config file. This requires the tree view to still be
@@ -151,6 +156,9 @@ public:
      * Return the active filter.
      */
     SYM_FILTER_TYPE GetFilter() const { return m_filter; }
+
+    void SetSortMode( SORT_MODE aMode ) { m_sort_mode = aMode; }
+    SORT_MODE GetSortMode() const { return m_sort_mode; }
 
     /**
      * Whether or not to show units. May be set at any time; updates at the next
@@ -415,6 +423,7 @@ private:
     EDA_BASE_FRAME*         m_parent;
 
     SYM_FILTER_TYPE         m_filter;
+    SORT_MODE               m_sort_mode;
     bool                    m_show_units;
     LIB_ID                  m_preselect_lib_id;
     int                     m_preselect_unit;

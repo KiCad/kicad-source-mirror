@@ -445,6 +445,38 @@ bool EDA_COMBINED_MATCHER::StartsWith( const wxString& aTerm )
 }
 
 
+int EDA_COMBINED_MATCHER::ScoreTerms( std::vector<SEARCH_TERM>& aWeightedTerms )
+{
+    int score = 0;
+
+    for( SEARCH_TERM& term : aWeightedTerms )
+    {
+        if( !term.Normalized )
+        {
+            term.Text = term.Text.MakeLower().Trim( false ).Trim( true );
+            term.Normalized = true;
+        }
+
+        int found_pos = EDA_PATTERN_NOT_FOUND;
+        int matchers_fired = 0;
+
+        if( GetPattern() == term.Text )
+        {
+            score += 8 * term.Score;
+        }
+        else if( Find( term.Text, matchers_fired, found_pos ) )
+        {
+            if( found_pos == 0 )
+                score += 2 * term.Score;
+            else
+                score += term.Score;
+        }
+    }
+
+    return score;
+}
+
+
 wxString const& EDA_COMBINED_MATCHER::GetPattern() const
 {
     return m_pattern;

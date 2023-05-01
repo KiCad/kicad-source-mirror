@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2014-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +23,10 @@
  */
 
 #include <widgets/lib_tree.h>
+#include <widgets/std_bitmap_button.h>
 #include <core/kicad_algo.h>
 #include <macros.h>
+#include <bitmaps.h>
 #include <dialogs/eda_reorderable_list_dialog.h>
 #include <tool/tool_interactive.h>
 #include <tool/tool_manager.h>
@@ -46,7 +48,9 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
                     HTML_WINDOW* aDetails ) :
         wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                  wxWANTS_CHARS | wxTAB_TRAVERSAL | wxNO_BORDER ),
-        m_lib_table( aLibTable ), m_adapter( aAdapter ), m_query_ctrl( nullptr ),
+        m_adapter( aAdapter ),
+        m_query_ctrl( nullptr ),
+        m_sort_ctrl( nullptr ),
         m_details_ctrl( nullptr ),
         m_inTimerEvent( false ),
         m_recentSearchesKey( aRecentSearchesKey ),
@@ -72,6 +76,36 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
         m_debounceTimer = new wxTimer( this );
 
         search_sizer->Add( m_query_ctrl, 1, wxEXPAND, 5 );
+
+        m_sort_ctrl = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition,
+                                             wxDefaultSize, wxBU_AUTODRAW|0 );
+        m_sort_ctrl->SetBitmap( KiBitmap( BITMAPS::small_sort_desc ) );
+        m_sort_ctrl->Bind( wxEVT_LEFT_DOWN,
+                [&]( wxMouseEvent& aEvent )
+                {
+                    wxMenu menu;
+
+                    menu.Append( 4201, _( "Sort by Best Match" ), wxEmptyString, wxITEM_CHECK );
+                    menu.Append( 4202, _( "Sort Alphabetically" ), wxEmptyString, wxITEM_CHECK );
+
+                    if( m_adapter->GetSortMode() == LIB_TREE_MODEL_ADAPTER::BEST_MATCH )
+                        menu.Check( 4201, true );
+                    else
+                        menu.Check( 4202, true );
+
+                    if( m_sort_ctrl->GetPopupMenuSelectionFromUser( menu ) == 0 )
+                    {
+                        m_adapter->SetSortMode( LIB_TREE_MODEL_ADAPTER::BEST_MATCH );
+                        Regenerate( true );
+                    }
+                    else
+                    {
+                        m_adapter->SetSortMode( LIB_TREE_MODEL_ADAPTER::ALPHABETIC );
+                        Regenerate( true );
+                    }
+                } );
+
+        search_sizer->Add( m_sort_ctrl, 0, wxEXPAND|wxALL, 1 );
 
         sizer->Add( search_sizer, 0, wxEXPAND, 5 );
 
