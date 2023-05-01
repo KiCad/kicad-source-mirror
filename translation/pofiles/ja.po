@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:53-0800\n"
-"PO-Revision-Date: 2023-04-24 09:24+0000\n"
+"PO-Revision-Date: 2023-05-02 03:53+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v7/ja/>\n"
 "Language: ja\n"
@@ -9640,7 +9640,7 @@ msgstr "ボディ背景色で塗りつぶし"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:119
 msgid "Fill with:"
-msgstr "塗りつぶしタイプ:"
+msgstr "塗りつぶし色:"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:140
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:196
