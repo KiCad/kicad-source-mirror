@@ -100,7 +100,7 @@ public:
     void SetBoard( BOARD* aBoard ) noexcept { m_board = aBoard; }
     const BOARD* GetBoard() const noexcept { return m_board; }
 
-    void SetColorSettings( COLOR_SETTINGS* aSettings ) noexcept { m_colors = aSettings; }
+    void ReloadColorSettings() noexcept;
 
     /**
      * Function to be called by the render when it need to reload the settings for the board.
