@@ -141,7 +141,7 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow* aParent, const int* aAttribList,
     // long calculation time)
     m_3d_render = m_3d_render_opengl;
 
-    m_boardAdapter.SetColorSettings( Pgm().GetSettingsManager().GetColorSettings() );
+    m_boardAdapter.ReloadColorSettings();
 
     wxASSERT( a3DCachePointer != nullptr );
     m_boardAdapter.Set3dCacheManager( a3DCachePointer );
@@ -304,7 +304,7 @@ void EDA_3D_CANVAS::ReloadRequest( BOARD* aBoard , S3D_CACHE* aCachePointer )
     if( aBoard != nullptr )
         m_boardAdapter.SetBoard( aBoard );
 
-    m_boardAdapter.SetColorSettings( Pgm().GetSettingsManager().GetColorSettings() );
+    m_boardAdapter.ReloadColorSettings();
 
     if( m_3d_render )
         m_3d_render->ReloadRequest();

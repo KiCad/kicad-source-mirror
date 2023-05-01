@@ -36,6 +36,7 @@
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <wx/log.h>
+#include <pcbnew_settings.h>
 #include <advanced_config.h>
 
 
@@ -92,8 +93,7 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
 {
     wxLogTrace( m_logTrace, wxT( "BOARD_ADAPTER::BOARD_ADAPTER" ) );
 
-    if( PgmOrNull() )
-        m_colors = Pgm().GetSettingsManager().GetColorSettings();
+    ReloadColorSettings();
 
     m_boardPos = VECTOR2I();
     m_boardSize = VECTOR2I();
@@ -205,6 +205,15 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
 BOARD_ADAPTER::~BOARD_ADAPTER()
 {
     destroyLayers();
+}
+
+
+void BOARD_ADAPTER::ReloadColorSettings() noexcept
+{
+    wxASSERT( PgmOrNull() );
+
+    PCBNEW_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+    m_colors = Pgm().GetSettingsManager().GetColorSettings( settings->m_ColorTheme );
 }
 
 
