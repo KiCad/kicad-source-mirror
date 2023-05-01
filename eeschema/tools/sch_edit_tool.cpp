@@ -1353,7 +1353,7 @@ int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
                 m_toolMgr->RunAction( EE_ACTIONS::selectionActivate, false );
             } );
 
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true );
+    m_toolMgr->RunAction( ACTIONS::pickerTool, true, (void*) &aEvent );
 
     return 0;
 }

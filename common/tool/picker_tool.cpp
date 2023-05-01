@@ -26,6 +26,7 @@
 #include <tool/picker_tool.h>
 #include <view/view_controls.h>
 #include <eda_draw_frame.h>
+#include <wx/debug.h>
 
 
 void PICKER_TOOL_BASE::reset()
@@ -77,7 +78,12 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     int finalize_state = WAIT_CANCEL;
 
-    m_frame->PushTool( aEvent );
+    wxCHECK_MSG( aEvent.Parameter<const TOOL_EVENT*>(), -1,
+                 wxT( "PICKER_TOOL::Main() called without a source event" ) );
+
+    const TOOL_EVENT sourceEvent = *aEvent.Parameter<const TOOL_EVENT*>();
+
+    m_frame->PushTool( sourceEvent );
     Activate();
 
     setControls();
@@ -193,7 +199,7 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 
     reset();
     controls->ForceCursorPosition( false );
-    m_frame->PopTool( aEvent );
+    m_frame->PopTool( sourceEvent );
     return 0;
 }
 

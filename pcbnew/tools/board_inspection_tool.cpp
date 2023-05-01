@@ -1815,7 +1815,7 @@ int BOARD_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
                 }
             } );
 
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true );
+    m_toolMgr->RunAction( ACTIONS::pickerTool, true, (void*) &aEvent );
 
     return 0;
 }

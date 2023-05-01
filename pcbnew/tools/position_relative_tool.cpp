@@ -164,7 +164,6 @@ int POSITION_RELATIVE_TOOL::RelativeItemSelectionMove( const VECTOR2I& aPosAncho
 
 int POSITION_RELATIVE_TOOL::SelectPositionRelativeItem( const TOOL_EVENT& aEvent  )
 {
-    std::string       tool = "pcbnew.PositionRelative.selectReferenceItem";
     PCB_PICKER_TOOL*  picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
     STATUS_TEXT_POPUP statusPopup( frame() );
     bool              done = false;
@@ -220,7 +219,7 @@ int POSITION_RELATIVE_TOOL::SelectPositionRelativeItem( const TOOL_EVENT& aEvent
     statusPopup.Popup();
     canvas()->SetStatusPopup( statusPopup.GetPanel() );
 
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
+    m_toolMgr->RunAction( ACTIONS::pickerTool, true, (void*) &aEvent );
 
     while( !done )
     {

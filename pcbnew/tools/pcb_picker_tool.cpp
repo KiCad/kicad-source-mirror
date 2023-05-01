@@ -44,8 +44,16 @@ int PCB_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
     PCB_GRID_HELPER       grid( m_toolMgr, frame->GetMagneticItemsSettings() );
     int                   finalize_state = WAIT_CANCEL;
 
+    TOOL_EVENT sourceEvent;
+
     if( aEvent.IsAction( &ACTIONS::pickerTool ) )
-        frame->PushTool( aEvent );
+    {
+        wxCHECK_MSG( aEvent.Parameter<const TOOL_EVENT*>(), -1,
+                     wxT( "PCB_PICKER_TOOL::Main() called without a source event" ) );
+
+        sourceEvent = *aEvent.Parameter<const TOOL_EVENT*>();
+        frame->PushTool( sourceEvent );
+    }
 
     Activate();
     setControls();
@@ -174,7 +182,7 @@ int PCB_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
     controls->ShowCursor( false );
 
     if( aEvent.IsAction( &ACTIONS::pickerTool ) )
-        frame->PopTool( aEvent );
+        frame->PopTool( sourceEvent );
 
     return 0;
 }

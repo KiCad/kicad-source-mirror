@@ -649,7 +649,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                 m_toolMgr->RunAction( EE_ACTIONS::selectionActivate, false );
             } );
 
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true );
+    m_toolMgr->RunAction( ACTIONS::pickerTool, true, (void*) &aEvent );
 
     return 0;
 }
@@ -739,7 +739,7 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
                 m_toolMgr->RunAction( EE_ACTIONS::selectionActivate, false );
             } );
 
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true );
+    m_toolMgr->RunAction( ACTIONS::pickerTool, true, (void*) &aEvent );
 
     return 0;
 }
@@ -1167,7 +1167,7 @@ int SCH_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
             return highlightNet( m_toolMgr, aPos );
         } );
 
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true );
+    m_toolMgr->RunAction( ACTIONS::pickerTool, true, (void*) &aEvent );
 
     return 0;
 }

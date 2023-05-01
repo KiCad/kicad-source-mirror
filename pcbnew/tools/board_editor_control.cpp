@@ -1589,7 +1589,7 @@ int BOARD_EDITOR_CONTROL::DrillOrigin( const TOOL_EVENT& aEvent )
             return false;   // drill origin is a one-shot; don't continue with tool
         } );
 
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true );
+    m_toolMgr->RunAction( ACTIONS::pickerTool, true, (void*) &aEvent );
 
     return 0;
 }
