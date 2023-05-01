@@ -42,13 +42,15 @@
 
 BACK_ANNOTATE::BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, REPORTER& aReporter, bool aRelinkFootprints,
                               bool aProcessFootprints, bool aProcessValues,
-                              bool aProcessReferences, bool aProcessNetNames, bool aDryRun ) :
+                              bool aProcessReferences, bool aProcessNetNames,
+                              bool aProcessAttributes, bool aDryRun ) :
         m_reporter( aReporter ),
         m_matchByReference( aRelinkFootprints ),
         m_processFootprints( aProcessFootprints ),
         m_processValues( aProcessValues ),
         m_processReferences( aProcessReferences ),
         m_processNetNames( aProcessNetNames ),
+        m_processAttributes( aProcessAttributes ),
         m_dryRun( aDryRun ),
         m_frame( aFrame ),
         m_changesCount( 0 ),
@@ -68,7 +70,7 @@ bool BACK_ANNOTATE::BackAnnotateSymbols( const std::string& aNetlist )
     m_appendUndo = false;
 
     if( !m_matchByReference && !m_processValues && !m_processFootprints && !m_processReferences
-        && !m_processNetNames )
+        && !m_processNetNames && !m_processAttributes )
     {
         m_reporter.ReportTail( _( "Select at least one property to back annotate." ),
                                RPT_SEVERITY_ERROR );
@@ -148,6 +150,7 @@ void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
     for( const std::pair<const std::string, PTREE>& item : tree )
     {
         wxString path, value, footprint;
+        bool     dnp = false, exBOM = false;
         std::map<wxString, wxString> pinNetMap;
         wxASSERT( item.first == "ref" );
         wxString ref = getStr( item.second );
@@ -168,6 +171,28 @@ void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
 
             footprint = getStr( item.second.get_child( "fpid" ) );
             value     = getStr( item.second.get_child( "value" ) );
+
+            // Get DNP and Exclude from BOM out of the properties if they exist
+            for( const auto& child : item.second )
+            {
+                if( child.first != "property" )
+                    continue;
+
+                auto property = child.second;
+                auto name = property.get_child_optional( "name" );
+
+                if( !name )
+                    continue;
+
+                if( name.get().front().first == "dnp" )
+                {
+                    dnp = true;
+                }
+                else if( name.get().front().first == "exclude_from_bom" )
+                {
+                    exBOM = true;
+                }
+            }
 
             boost::optional<const PTREE&> nets = item.second.get_child_optional( "nets" );
 
@@ -201,7 +226,8 @@ void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
         else
         {
             // Add footprint to the map
-            auto data = std::make_shared<PCB_FP_DATA>( ref, footprint, value, pinNetMap );
+            auto data =
+                    std::make_shared<PCB_FP_DATA>( ref, footprint, value, dnp, exBOM, pinNetMap );
             m_pcbFootprints.insert( nearestItem, std::make_pair( path, data ) );
         }
     }
@@ -321,7 +347,14 @@ void BACK_ANNOTATE::applyChangelist()
         SCH_SCREEN*    screen = ref.GetSheetPath().LastScreen();
         wxString       oldFootprint = ref.GetFootprint();
         wxString       oldValue = ref.GetValue();
+        bool           oldDNP = ref.GetSymbol()->GetDNP();
+        bool           oldExBOM = !ref.GetSymbol()->GetIncludeInBom();
         bool           skip = ( ref.GetSymbol()->GetFlags() & SKIP_STRUCT ) > 0;
+
+        auto boolString = []( bool b ) -> wxString
+        {
+            return b ? _( "true" ) : _( "false" );
+        };
 
         if( m_processReferences && ref.GetRef() != fpData.m_ref && !skip )
         {
@@ -371,6 +404,39 @@ void BACK_ANNOTATE::applyChangelist()
                 m_frame->SaveCopyInUndoList( screen, symbol, UNDO_REDO::CHANGED, m_appendUndo );
                 m_appendUndo = true;
                 symbol->SetValueFieldText( fpData.m_value );
+            }
+
+            m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
+        }
+
+        if( m_processAttributes && oldDNP != fpData.m_DNP && !skip )
+        {
+            ++m_changesCount;
+            msg.Printf( _( "Change %s 'Do not populate' from '%s' to '%s'." ), ref.GetRef(),
+                        boolString( oldDNP ), boolString( fpData.m_DNP ) );
+
+            if( !m_dryRun )
+            {
+                m_frame->SaveCopyInUndoList( screen, symbol, UNDO_REDO::CHANGED, m_appendUndo );
+                m_appendUndo = true;
+                symbol->SetDNP( fpData.m_DNP );
+            }
+
+            m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
+        }
+
+        if( m_processAttributes && oldExBOM != fpData.m_excludeFromBOM && !skip )
+        {
+            ++m_changesCount;
+            msg.Printf( _( "Change %s 'Exclude from bill of materials' from '%s' to '%s'." ),
+                        ref.GetRef(), boolString( oldExBOM ),
+                        boolString( fpData.m_excludeFromBOM ) );
+
+            if( !m_dryRun )
+            {
+                m_frame->SaveCopyInUndoList( screen, symbol, UNDO_REDO::CHANGED, m_appendUndo );
+                m_appendUndo = true;
+                symbol->SetIncludeInBom( !fpData.m_excludeFromBOM );
             }
 
             m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );

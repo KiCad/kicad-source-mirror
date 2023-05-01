@@ -61,16 +61,21 @@ public:
     struct PCB_FP_DATA
     {
         PCB_FP_DATA( const wxString& aRef, const wxString& aFootprint, const wxString& aValue,
+                     bool aDNP, bool aExcludeFromBOM,
                      const std::map<wxString, wxString> aPinMap ) :
                 m_ref( aRef ),
                 m_footprint( aFootprint ),
                 m_value( aValue ),
+                m_DNP( aDNP ),
+                m_excludeFromBOM( aExcludeFromBOM ),
                 m_pinMap( aPinMap )
-        {};
+        {}
 
         wxString m_ref;
         wxString m_footprint;
         wxString m_value;
+        bool     m_DNP;
+        bool     m_excludeFromBOM;
         std::map<wxString, wxString> m_pinMap;
     };
 
@@ -81,7 +86,7 @@ public:
 
     BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, REPORTER& aReporter, bool aRelinkFootprints,
                    bool aProcessFootprints, bool aProcessValues, bool aProcessReferences,
-                   bool aProcessNetNames, bool aDryRun );
+                   bool aProcessNetNames, bool aProcessAttributes, bool aDryRun );
     ~BACK_ANNOTATE();
 
     /**
@@ -137,6 +142,7 @@ private:
     bool                         m_processValues;
     bool                         m_processReferences;
     bool                         m_processNetNames;
+    bool                         m_processAttributes;
     bool                         m_dryRun;
 
     PCB_FOOTPRINTS_MAP           m_pcbFootprints;

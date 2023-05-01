@@ -31,7 +31,7 @@
 
 // Saved dialog settings
 DIALOG_UPDATE_FROM_PCB::DIALOG_UPDATE_FROM_PCB_SAVED_STATE
-        DIALOG_UPDATE_FROM_PCB::s_savedDialogState{ false, true, true, true, false };
+        DIALOG_UPDATE_FROM_PCB::s_savedDialogState{ false, true, true, true, false, true };
 
 
 DIALOG_UPDATE_FROM_PCB::DIALOG_UPDATE_FROM_PCB( SCH_EDIT_FRAME* aParent )
@@ -61,6 +61,7 @@ DIALOG_UPDATE_FROM_PCB::DIALOG_UPDATE_FROM_PCB( SCH_EDIT_FRAME* aParent )
     m_cbUpdateFootprints->SetValue( s_savedDialogState.UpdateFootprints );
     m_cbUpdateValues->SetValue( s_savedDialogState.UpdateValues );
     m_cbUpdateNetNames->SetValue( s_savedDialogState.UpdateNetNames );
+    m_cbUpdateAttributes->SetValue( s_savedDialogState.UpdateAttributes );
 
     SetupStandardButtons( { { wxID_OK,     _( "Update Schematic" ) },
                             { wxID_CANCEL, _( "Close" )            } } );
@@ -80,6 +81,7 @@ void DIALOG_UPDATE_FROM_PCB::updateData()
                             m_cbUpdateValues->GetValue(),
                             m_cbUpdateReferences->GetValue(),
                             m_cbUpdateNetNames->GetValue(),
+                            m_cbUpdateAttributes->GetValue(),
                             true );
     std::string   netlist;
 
@@ -131,6 +133,8 @@ void DIALOG_UPDATE_FROM_PCB::OnOptionChanged( wxCommandEvent& event )
         s_savedDialogState.UpdateValues = m_cbUpdateValues->GetValue();
     else if( event.GetEventObject() == m_cbUpdateNetNames )
         s_savedDialogState.UpdateNetNames = m_cbUpdateNetNames->GetValue();
+    else if( event.GetEventObject() == m_cbUpdateAttributes )
+        s_savedDialogState.UpdateAttributes = m_cbUpdateAttributes->GetValue();
 }
 
 
@@ -145,6 +149,7 @@ void DIALOG_UPDATE_FROM_PCB::OnUpdateClick( wxCommandEvent& event )
                             m_cbUpdateValues->GetValue(),
                             m_cbUpdateReferences->GetValue(),
                             m_cbUpdateNetNames->GetValue(),
+                            m_cbUpdateAttributes->GetValue(),
                             false );
 
     if( backAnno.FetchNetlistFromPCB( netlist ) && backAnno.BackAnnotateSymbols( netlist ) )

@@ -55,6 +55,7 @@ private:
         bool UpdateFootprints;
         bool UpdateValues;
         bool UpdateNetNames;
+        bool UpdateAttributes;
     };
 
     static DIALOG_UPDATE_FROM_PCB_SAVED_STATE s_savedDialogState;

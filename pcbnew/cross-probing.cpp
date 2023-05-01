@@ -563,6 +563,17 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
                 }
             }
 
+            // Add DNP and Exclude from BOM properties
+            std::map<wxString, wxString> properties;
+
+            if( footprint->GetAttributes() & FP_DNP )
+                properties.emplace( "dnp", "" );
+
+            if( footprint->GetAttributes() & FP_EXCLUDE_FROM_BOM )
+                properties.emplace( "exclude_from_bom", "" );
+
+            component->SetProperties( properties );
+
             netlist.AddComponent( component );
         }
 

@@ -93,6 +93,13 @@ void COMPONENT::Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl )
             path += '/' + m_kiids.front().AsString();
 
         aOut->Print( nl+1, "(timestamp %s)\n", aOut->Quotew( path ).c_str() );
+
+        // Add DNP and Exclude from BOM properties if we have them
+        if( m_properties.count( "dnp" ) )
+            aOut->Print( nl + 1, "(property (name \"dnp\"))\n" );
+
+        if( m_properties.count( "exclude_from_bom" ) )
+            aOut->Print( nl + 1, "(property (name \"exclude_from_bom\"))\n" );
     }
 
     if( !( aCtl & CTL_OMIT_FILTERS ) && m_footprintFilters.GetCount() )
