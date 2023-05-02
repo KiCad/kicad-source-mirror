@@ -1275,10 +1275,12 @@ bool PNS_KICAD_IFACE_BASE::syncTextItem( PNS::NODE* aWorld, EDA_TEXT* aText, PCB
             rectShape->Append( point );
         }
 
-        solid->SetShape( rectShape );
+        solid->SetShape( rectShape );   // takes ownership
     }
     else
-    solid->SetShape( aText->GetEffectiveTextShape()->Clone() );
+    {
+        solid->SetShape( aText->GetEffectiveTextShape()->Clone() );
+    }
 
     solid->SetRoutable( false );
 
