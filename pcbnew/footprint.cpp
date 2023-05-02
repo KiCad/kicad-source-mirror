@@ -2830,7 +2830,7 @@ static struct FOOTPRINT_DESC
                     NO_SETTER( FOOTPRINT, wxString ), &FOOTPRINT::GetKeywords ),
                     groupFootprint );
 
-        const wxString groupAttributes = _HKI( "Fabrication Attributes" );
+        const wxString groupAttributes = _HKI( "Attributes" );
 
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, bool>( _HKI( "Not in schematic" ),
                     &FOOTPRINT::SetBoardOnly, &FOOTPRINT::IsBoardOnly ), groupAttributes );
