@@ -83,6 +83,7 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
         m_sort_ctrl->Bind( wxEVT_LEFT_DOWN,
                 [&]( wxMouseEvent& aEvent )
                 {
+                    // Build a pop menu:
                     wxMenu menu;
 
                     menu.Append( 4201, _( "Sort by Best Match" ), wxEmptyString, wxITEM_CHECK );
@@ -93,12 +94,15 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
                     else
                         menu.Check( 4202, true );
 
-                    if( m_sort_ctrl->GetPopupMenuSelectionFromUser( menu ) == 0 )
+                    // menu_id is the selected submenu id from the popup menu or wxID_NONE
+                    int menu_id = m_sort_ctrl->GetPopupMenuSelectionFromUser( menu );
+
+                    if( menu_id == 0 || menu_id == 4201 )
                     {
                         m_adapter->SetSortMode( LIB_TREE_MODEL_ADAPTER::BEST_MATCH );
                         Regenerate( true );
                     }
-                    else
+                    else if( menu_id == 1 || menu_id == 4202 )
                     {
                         m_adapter->SetSortMode( LIB_TREE_MODEL_ADAPTER::ALPHABETIC );
                         Regenerate( true );
