@@ -37,7 +37,7 @@ BITMAP_BUTTON::BITMAP_BUTTON( wxWindow* aParent, wxWindowID aId, const wxPoint& 
         wxPanel( aParent, aId, aPos, aSize, aStyles ),
         m_isRadioButton( false ),
         m_showBadge( false ),
-        m_badgeColor( wxColor( 210, 0, 0, 0 ) ), // dark red
+        m_badgeColor( wxColor( 210, 0, 0 ) ), // dark red
         m_badgeTextColor( wxColor( wxT( "white" ) ) ),
         m_buttonState( 0 ),
         m_padding( 0 ),
