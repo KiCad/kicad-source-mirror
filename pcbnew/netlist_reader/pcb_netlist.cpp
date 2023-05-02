@@ -52,7 +52,7 @@ void COMPONENT::SetFootprint( FOOTPRINT* aFootprint )
     aFootprint->SetValue( m_value );
     aFootprint->SetFPID( m_fpid );
     aFootprint->SetPath( path );
-    aFootprint->SetProperties( m_properties );
+    aFootprint->SetFields( m_properties );
 }
 
 

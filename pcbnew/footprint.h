@@ -573,14 +573,14 @@ public:
     PCB_TEXT& Value() const     { return *m_value; }
     PCB_TEXT& Reference() const { return *m_reference; }
 
-    const std::map<wxString, wxString>& GetProperties() const        { return m_properties; }
-    void SetProperties( const std::map<wxString, wxString>& aProps ) { m_properties = aProps; }
-    const wxString& GetProperty( const wxString& aKey)               { return m_properties[ aKey ]; }
-    bool HasProperty( const wxString& aKey)
+    const std::map<wxString, wxString>& GetFields() const        { return m_fields; }
+    void SetFields( const std::map<wxString, wxString>& aFields ) { m_fields = aFields; }
+    const wxString& GetField( const wxString& aKey)               { return m_fields[ aKey ]; }
+    bool HasField( const wxString& aKey)
     {
-        return m_properties.find( aKey ) != m_properties.end();
+        return m_fields.find( aKey ) != m_fields.end();
     }
-    void SetProperty( const wxString& aKey, const wxString& aVal )   { m_properties[ aKey ] = aVal; }
+    void SetField( const wxString& aKey, const wxString& aVal )   { m_fields[ aKey ] = aVal; }
 
     bool IsBoardOnly() const { return m_attributes & FP_BOARD_ONLY; }
     void SetBoardOnly( bool aIsBoardOnly = true )
@@ -888,7 +888,7 @@ private:
     LSET            m_privateLayers;     // Layers visible only in the footprint editor
 
     std::vector<FP_3DMODEL>       m_3D_Drawings;       // 3D models.
-    std::map<wxString, wxString>  m_properties;
+    std::map<wxString, wxString>  m_fields;
     wxArrayString*                m_initial_comments;  // s-expression comments in the footprint,
                                                        // lazily allocated only if needed for speed
 

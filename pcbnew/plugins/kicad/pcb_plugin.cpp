@@ -1118,7 +1118,7 @@ void PCB_PLUGIN::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
                       m_out->Quotew( aFootprint->GetKeywords() ).c_str() );
     }
 
-    const std::map<wxString, wxString>& props = aFootprint->GetProperties();
+    const std::map<wxString, wxString>& props = aFootprint->GetFields();
 
     for( const std::pair<const wxString, wxString>& prop : props )
     {

@@ -180,7 +180,7 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
     m_3D_Drawings   = aFootprint.m_3D_Drawings;
     m_doc           = aFootprint.m_doc;
     m_keywords      = aFootprint.m_keywords;
-    m_properties    = aFootprint.m_properties;
+    m_fields        = aFootprint.m_fields;
     m_privateLayers = aFootprint.m_privateLayers;
 
     m_arflag        = 0;
@@ -354,7 +354,7 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
     m_3D_Drawings      = aOther.m_3D_Drawings;
     m_doc              = aOther.m_doc;
     m_keywords         = aOther.m_keywords;
-    m_properties       = aOther.m_properties;
+    m_fields           = aOther.m_fields;
     m_privateLayers    = aOther.m_privateLayers;
 
     m_initial_comments = aOther.m_initial_comments;
@@ -462,7 +462,7 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
     m_3D_Drawings   = aOther.m_3D_Drawings;
     m_doc           = aOther.m_doc;
     m_keywords      = aOther.m_keywords;
-    m_properties    = aOther.m_properties;
+    m_fields        = aOther.m_fields;
     m_privateLayers = aOther.m_privateLayers;
 
     m_initial_comments = aOther.m_initial_comments ?
@@ -543,9 +543,9 @@ bool FOOTPRINT::ResolveTextVar( wxString* token, int aDepth ) const
             }
         }
     }
-    else if( m_properties.count( *token ) )
+    else if( m_fields.count( *token ) )
     {
-        *token = m_properties.at( *token );
+        *token = m_fields.at( *token );
         return true;
     }
 
@@ -2811,7 +2811,7 @@ static struct FOOTPRINT_DESC
                     &FOOTPRINT::SetOrientationDegrees, &FOOTPRINT::GetOrientationDegrees,
                     PROPERTY_DISPLAY::PT_DEGREE ) );
 
-        const wxString groupFootprint = _HKI( "Footprint Properties" );
+        const wxString groupFootprint = _HKI( "Fields" );
 
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Reference" ),
                     &FOOTPRINT::SetReference, &FOOTPRINT::GetReferenceAsString ),

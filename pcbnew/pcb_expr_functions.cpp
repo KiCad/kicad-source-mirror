@@ -993,8 +993,8 @@ static void getFieldFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                 {
                     FOOTPRINT* fp = static_cast<FOOTPRINT*>( item );
 
-                    if( fp->HasProperty( arg->AsString() ) )
-                        return fp->GetProperty( arg->AsString() );
+                    if( fp->HasField( arg->AsString() ) )
+                        return fp->GetField( arg->AsString() );
                 }
 
                 return "";

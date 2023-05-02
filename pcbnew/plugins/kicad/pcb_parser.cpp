@@ -4067,7 +4067,7 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
     footprint->SetAttributes( attributes );
 
     footprint->SetFPID( fpid );
-    footprint->SetProperties( properties );
+    footprint->SetFields( properties );
 
     return footprint.release();
 }

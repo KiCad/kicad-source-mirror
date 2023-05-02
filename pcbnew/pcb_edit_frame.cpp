@@ -2309,7 +2309,7 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
 
     // Updating other parameters
     const_cast<KIID&>( aNew->m_Uuid ) = aExisting->m_Uuid;
-    aNew->SetProperties( aExisting->GetProperties() );
+    aNew->SetFields( aExisting->GetFields() );
     aNew->SetPath( aExisting->GetPath() );
 
     aCommit.Remove( aExisting );

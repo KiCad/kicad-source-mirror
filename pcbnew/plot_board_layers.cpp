@@ -95,7 +95,7 @@ void PlotInteractiveLayer( BOARD* aBoard, PLOTTER* aPlotter, const PCB_PLOT_PARA
                                                    _( "Value" ),
                                                    fp->Value().GetShownText( false ) ) );
 
-        for( const auto& [ name, value ] : fp->GetProperties() )
+        for( const auto& [name, value] : fp->GetFields() )
             properties.emplace_back( wxString::Format( wxT( "!%s = %s" ), name, value ) );
 
         properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
