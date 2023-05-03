@@ -213,18 +213,8 @@ public:
 
         for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
         {
-            SCH_SYMBOL* symbol = m_symbolsList[ i ].GetSymbol();
-
-            wxCHECK( symbol && ( symbol->GetInstanceReferences().size() != 0 ), /* void */ );
-
-            wxString val = symbol->GetFieldText( aFieldName );
-
-            if( aFieldName == wxT( "Value" ) )
-                val = symbol->GetValueFieldText( true );
-            else if( aFieldName == wxT( "Footprint" ) )
-                val = symbol->GetFootprintFieldText( true );
-
-            m_dataStore[ symbol->m_Uuid ][ aFieldName ] = val;
+            if( SCH_SYMBOL* symbol = m_symbolsList[ i ].GetSymbol() )
+                m_dataStore[ symbol->m_Uuid ][ aFieldName ] = symbol->GetFieldText( aFieldName );
         }
     }
 
