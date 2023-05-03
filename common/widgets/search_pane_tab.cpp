@@ -70,7 +70,7 @@ void SEARCH_PANE_LISTVIEW::GetSelectRowsList( std::vector<long>& aSelectedList )
 void SEARCH_PANE_LISTVIEW::OnItemActivated( wxListEvent& aEvent )
 {
     CallAfter(
-            [&]()
+            [=]()
             {
                 m_handler->ActivateItem( aEvent.GetIndex() );
 
@@ -87,7 +87,7 @@ void SEARCH_PANE_LISTVIEW::OnItemActivated( wxListEvent& aEvent )
 void SEARCH_PANE_LISTVIEW::OnItemSelected( wxListEvent& aEvent )
 {
     CallAfter(
-            [&]()
+            [=]()
             {
                 std::vector<long> list;
                 GetSelectRowsList( list );
@@ -101,7 +101,7 @@ void SEARCH_PANE_LISTVIEW::OnItemSelected( wxListEvent& aEvent )
 void SEARCH_PANE_LISTVIEW::OnItemDeselected( wxListEvent& aEvent )
 {
     CallAfter(
-            [&]()
+            [=]()
             {
                 std::vector<long> list;
                 GetSelectRowsList( list );
