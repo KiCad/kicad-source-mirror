@@ -44,6 +44,7 @@ enum FP_TEXT_COL_ORDER
     FPT_UPRIGHT,       // keep text upright when viewed from bottom or right of board
     FPT_XOFFSET,
     FPT_YOFFSET,
+    FPT_KNOCKOUT,
 
     FPT_COUNT          // keep as last
 };
