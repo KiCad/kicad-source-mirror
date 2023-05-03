@@ -2491,6 +2491,13 @@ SHAPE_POLY_SET::POLYGON SHAPE_POLY_SET::chamferFilletPolygon( CORNER_MODE aMode,
             double xb = currContour.CPoint( nextVertex ).x - x1;
             double yb = currContour.CPoint( nextVertex ).y - y1;
 
+            // Avoid segments that will generate nans below
+            if( std::abs( xa + xb ) < std::numeric_limits<double>::epsilon()
+                    && std::abs( ya + yb ) < std::numeric_limits<double>::epsilon() )
+            {
+                continue;
+            }
+
             // Compute the new distances
             double  lena    = hypot( xa, ya );
             double  lenb    = hypot( xb, yb );
@@ -2573,6 +2580,9 @@ SHAPE_POLY_SET::POLYGON SHAPE_POLY_SET::chamferFilletPolygon( CORNER_MODE aMode,
                 double  nx  = xc + xs;
                 double  ny  = yc + ys;
 
+                if( std::isnan( nx ) || std::isnan( ny ) )
+                    continue;
+
                 newContour.Append( KiROUND( nx ), KiROUND( ny ) );
 
                 // Store the previous added corner to make a sanity check
@@ -2583,6 +2593,9 @@ SHAPE_POLY_SET::POLYGON SHAPE_POLY_SET::chamferFilletPolygon( CORNER_MODE aMode,
                 {
                     nx = xc + cos( startAngle + ( j + 1 ) * deltaAngle ) * radius;
                     ny = yc - sin( startAngle + ( j + 1 ) * deltaAngle ) * radius;
+
+                    if( std::isnan( nx ) || std::isnan( ny ) )
+                        continue;
 
                     // Sanity check: the rounding can produce repeated corners; do not add them.
                     if( KiROUND( nx ) != prevX || KiROUND( ny ) != prevY )
