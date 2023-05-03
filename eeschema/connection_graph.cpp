@@ -331,16 +331,22 @@ wxString CONNECTION_SUBGRAPH::driverName( SCH_ITEM* aItem ) const
         bool forceNoConnect = m_no_connect != nullptr;
         SCH_PIN* pin = static_cast<SCH_PIN*>( aItem );
         return pin->GetDefaultNetName( m_sheet, forceNoConnect );
-        break;
     }
 
     case SCH_LABEL_T:
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIER_LABEL_T:
+    {
+        SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( aItem );
+        return EscapeString( label->GetShownText( &m_sheet ), CTX_NETNAME );
+    }
+
     case SCH_SHEET_PIN_T:
     {
-        return EscapeString( static_cast<SCH_TEXT*>( aItem )->GetShownText(), CTX_NETNAME );
-        break;
+        // Sheet pins need to use their parent sheet as their starting sheet or they will
+        // resolve variables on the current sheet first
+        SCH_SHEET_PIN* sheetPin = static_cast<SCH_SHEET_PIN*>( aItem );
+        return EscapeString( sheetPin->GetShownText(), CTX_NETNAME );
     }
 
     default:
