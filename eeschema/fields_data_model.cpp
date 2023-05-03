@@ -20,18 +20,8 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::AddColumn( const wxString& aFieldName, const
 
     for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
     {
-        SCH_SYMBOL* symbol = m_symbolsList[i].GetSymbol();
-
-        wxCHECK( symbol && ( symbol->GetInstanceReferences().size() != 0 ), /* void */ );
-
-        wxString val = symbol->GetFieldText( aFieldName );
-
-        if( aFieldName == wxT( "Value" ) )
-            val = symbol->GetValueFieldText( true );
-        else if( aFieldName == wxT( "Footprint" ) )
-            val = symbol->GetFootprintFieldText( true );
-
-        m_dataStore[symbol->m_Uuid][aFieldName] = val;
+        if( SCH_SYMBOL* symbol = m_symbolsList[i].GetSymbol() )
+            m_dataStore[symbol->m_Uuid][aFieldName] = symbol->GetFieldText( aFieldName );
     }
 }
 
@@ -40,8 +30,8 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RemoveColumn( int aCol )
 {
     for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
     {
-        SCH_SYMBOL* symbol = m_symbolsList[i].GetSymbol();
-        m_dataStore[symbol->m_Uuid].erase( m_cols[aCol].m_fieldName );
+        if( SCH_SYMBOL* symbol = m_symbolsList[i].GetSymbol() )
+            m_dataStore[symbol->m_Uuid].erase( m_cols[aCol].m_fieldName );
     }
 
     m_cols.erase( m_cols.begin() + aCol );
