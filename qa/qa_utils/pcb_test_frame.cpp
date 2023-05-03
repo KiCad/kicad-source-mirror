@@ -83,6 +83,9 @@ void PCB_TEST_FRAME_BASE::SetBoard( std::shared_ptr<BOARD> b )
 
 #ifdef USE_TOOL_MANAGER
     SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
+
+    mgr.RegisterSettings( new PCBNEW_SETTINGS, false );
+
     PCBNEW_SETTINGS* cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>();
 
     m_toolManager->SetEnvironment( m_board.get(), m_galPanel->GetView(),
