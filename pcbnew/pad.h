@@ -731,13 +731,13 @@ public:
 
     const ZONE_LAYER_OVERRIDE& GetZoneLayerOverride( PCB_LAYER_ID aLayer ) const
     {
-        return m_zoneLayerOverrides[ aLayer ];
+        return m_zoneLayerOverrides.at( aLayer );
     }
 
     void SetZoneLayerOverride( PCB_LAYER_ID aLayer, ZONE_LAYER_OVERRIDE aOverride )
     {
         std::unique_lock<std::mutex> cacheLock( m_zoneLayerOverridesMutex );
-        m_zoneLayerOverrides[ aLayer ] = aOverride;
+        m_zoneLayerOverrides.at( aLayer ) = aOverride;
     }
 
 #if defined(DEBUG)
