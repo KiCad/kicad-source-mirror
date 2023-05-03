@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:53-0800\n"
-"PO-Revision-Date: 2023-05-02 03:53+0000\n"
+"PO-Revision-Date: 2023-05-06 17:51+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v7/ja/>\n"
 "Language: ja\n"
@@ -9489,7 +9489,7 @@ msgstr "選択したグループ"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:151
 msgid "Filter by unit:"
-msgstr "単位でフィルター:"
+msgstr "ユニットでフィルター:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:82
 msgid "Pin Table"
@@ -11354,7 +11354,7 @@ msgstr "代替割り当て"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:133
 msgid "Unit:"
-msgstr "単位:"
+msgstr "ユニット:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:144
 msgid "Alternate symbol (De Morgan)"
@@ -16848,11 +16848,11 @@ msgstr "シンボル フットプリント リンク ファイルをロード"
 
 #: eeschema/tools/assign_footprints.cpp:223
 msgid "Keep existing footprint field visibility"
-msgstr "既存フットプリント フィールドの表示設定を変更しない"
+msgstr "フットプリント フィールドの表示設定を変更しない"
 
 #: eeschema/tools/assign_footprints.cpp:224
 msgid "Show all footprint fields"
-msgstr "すべてのフットプリント フィールドを表示"
+msgstr "すべてのフットプリント フィールドを表示する"
 
 #: eeschema/tools/assign_footprints.cpp:225
 msgid "Hide all footprint fields"
@@ -16860,7 +16860,7 @@ msgstr "すべてのフットプリント フィールドを非表示にする"
 
 #: eeschema/tools/assign_footprints.cpp:227
 msgid "Select the footprint field visibility setting."
-msgstr "フットプリント フィールドの表示設定を選択する。"
+msgstr "フットプリント フィールドの表示設定を選択."
 
 #: eeschema/tools/assign_footprints.cpp:228
 msgid "Change Visibility"
@@ -28762,7 +28762,7 @@ msgstr "親のフットプリントから"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:722
 msgid "Zone knockout:"
-msgstr "ゾーンを無くす:"
+msgstr "ゾーンの切り抜き:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:726
 msgid "Pad shape"
