@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -99,7 +99,7 @@ PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bSizer8;
 	bSizer8 = new wxBoxSizer( wxVERTICAL );
 
-	m_checkCrossProbeOnSelection = new wxCheckBox( pcbPage, wxID_ANY, _("Highlight footprints when symbols selected"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkCrossProbeOnSelection = new wxCheckBox( pcbPage, wxID_ANY, _("Select/highlight objects corresponding to schematic selection"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkCrossProbeOnSelection->SetValue(true);
 	m_checkCrossProbeOnSelection->SetToolTip( _("Highlight footprints corresponding to selected symbols") );
 

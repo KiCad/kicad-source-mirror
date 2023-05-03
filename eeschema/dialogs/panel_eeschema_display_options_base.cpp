@@ -142,7 +142,7 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 	wxBoxSizer* bCrossProbingSizer;
 	bCrossProbingSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_checkCrossProbeOnSelection = new wxCheckBox( this, wxID_ANY, _("Highlight symbols when footprints selected"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkCrossProbeOnSelection = new wxCheckBox( this, wxID_ANY, _("Select/highlight objects corresponding to PCB selection"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkCrossProbeOnSelection->SetValue(true);
 	m_checkCrossProbeOnSelection->SetToolTip( _("Highlight symbols corresponding to selected footprints") );
 
