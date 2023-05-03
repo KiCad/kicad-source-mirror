@@ -60,6 +60,7 @@
 #include "fmt/format.h"
 #include <dialog_sim_format_value.h>
 #include <eeschema_settings.h>
+#include <advanced_config.h>
 
 #include <memory>
 
@@ -988,6 +989,10 @@ bool SIMULATOR_FRAME::LoadSimulator()
 
     if( !m_schematicFrame->ReadyToNetlist( _( "Simulator requires a fully annotated schematic." ) ) )
         return false;
+
+    // If we are using the new connectivity, make sure that we do a full-rebuild
+    if( ADVANCED_CFG::GetCfg().m_IncrementalConnectivity )
+        m_schematicFrame->RecalculateConnections( GLOBAL_CLEANUP );
 
     if( !m_simulator->Attach( m_circuitModel, reporter ) )
     {
