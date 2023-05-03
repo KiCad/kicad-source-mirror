@@ -705,6 +705,44 @@ void CONNECTION_GRAPH::removeSubgraphs( std::set<CONNECTION_SUBGRAPH*>& aSubgrap
 
     for( CONNECTION_SUBGRAPH* sg : aSubgraphs )
     {
+        for( auto it : sg->m_bus_neighbors )
+        {
+            for( CONNECTION_SUBGRAPH* neighbor : it.second )
+            {
+                auto& parents = neighbor->m_bus_parents[it.first];
+
+                for( auto test = parents.begin(); test != parents.end(); )
+                {
+                    if( *test == sg )
+                        test = parents.erase( test );
+                    else
+                        ++test;
+                }
+
+                if( parents.empty() )
+                    neighbor->m_bus_parents.erase( it.first );
+            }
+        }
+
+        for( auto it : sg->m_bus_parents )
+        {
+            for( CONNECTION_SUBGRAPH* parent : it.second )
+            {
+                auto& neighbors = parent->m_bus_neighbors[it.first];
+
+                for( auto test = neighbors.begin(); test != neighbors.end(); )
+                {
+                    if( *test == sg )
+                        test = neighbors.erase( test );
+                    else
+                        ++test;
+                }
+
+                if( neighbors.empty() )
+                    parent->m_bus_neighbors.erase( it.first );
+            }
+        }
+
         {
             auto it = std::lower_bound( m_driver_subgraphs.begin(), m_driver_subgraphs.end(), sg );
 
@@ -780,6 +818,8 @@ void CONNECTION_GRAPH::removeSubgraphs( std::set<CONNECTION_SUBGRAPH*>& aSubgrap
             else
                 ++it;
         }
+
+
     }
 
     for( auto it = m_net_name_to_code_map.begin(); it != m_net_name_to_code_map.end(); )
