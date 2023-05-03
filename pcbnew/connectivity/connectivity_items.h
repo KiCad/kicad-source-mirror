@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
@@ -58,33 +58,23 @@ class CN_CLUSTER;
 class CN_ANCHOR
 {
 public:
-    CN_ANCHOR()
-    {
-        m_item = nullptr;
-    }
-
-    CN_ANCHOR( const VECTOR2I& aPos, CN_ITEM* aItem )
-    {
-        m_pos   = aPos;
-        m_item  = aItem;
-        assert( m_item );
-    }
+    CN_ANCHOR( const VECTOR2I& aPos, CN_ITEM* aItem ) :
+            m_pos( aPos ),
+            m_item( aItem ),
+            m_tag( -1 ),
+            m_noline( false )
+    { }
 
     bool Valid() const;
 
     bool Dirty() const;
 
-    CN_ITEM* Item() const
-    {
-        return m_item;
-    }
+    CN_ITEM* Item() const { return m_item; }
+    void SetItem( CN_ITEM* aItem ) { m_item = aItem; }
 
     BOARD_CONNECTED_ITEM* Parent() const;
 
-    const VECTOR2I& Pos() const
-    {
-        return m_pos;
-    }
+    const VECTOR2I& Pos() const { return m_pos; }
 
     void Move( const VECTOR2I& aPos )
     {
@@ -96,39 +86,16 @@ public:
         return ( m_pos - aSecond.Pos() ).EuclideanNorm();
     }
 
-    ///< Return tag, common identifier for connected nodes.
-    inline int GetTag() const
-    {
-        return m_tag;
-    }
+    ///< @return tag, a common identifier for connected nodes.
+    int GetTag() const { return m_tag; }
+    void SetTag( int aTag ) { m_tag = aTag; }
 
-    ///< Set tag, common identifier for connected nodes.
-    inline void SetTag( int aTag )
-    {
-        m_tag = aTag;
-    }
+    ///< @return true if this node can be a target for ratsnest lines.
+    const bool& GetNoLine() const { return m_noline; }
+    void SetNoLine( bool aEnable ) { m_noline = aEnable; }
 
-    ///< Decide whether this node can be a ratsnest line target.
-    inline void SetNoLine( bool aEnable )
-    {
-        m_noline = aEnable;
-    }
-
-    ///< Return true if this node can be a target for ratsnest lines.
-    inline const bool& GetNoLine() const
-    {
-        return m_noline;
-    }
-
-    inline void SetCluster( std::shared_ptr<CN_CLUSTER>& aCluster )
-    {
-        m_cluster = aCluster;
-    }
-
-    inline const std::shared_ptr<CN_CLUSTER>& GetCluster() const
-    {
-        return m_cluster;
-    }
+    const std::shared_ptr<CN_CLUSTER>& GetCluster() const { return m_cluster; }
+    void SetCluster( std::shared_ptr<CN_CLUSTER>& aCluster ) { m_cluster = aCluster; }
 
     /**
      * The anchor point is dangling if the parent is a track and this anchor point is not
@@ -148,10 +115,10 @@ public:
     static const int TAG_UNCONNECTED = -1;
 
 private:
-    VECTOR2I m_pos;              ///< Position of the anchor.
-    CN_ITEM* m_item = nullptr;   ///< Pad or track/arc/via owning the anchor.
-    int      m_tag = -1;         ///< Tag for quick connection resolution.
-    bool     m_noline = false;   ///< Whether it the node can be a target for ratsnest lines.
+    VECTOR2I    m_pos;             ///< Position of the anchor.
+    CN_ITEM*    m_item;            ///< Pad or track/arc/via owning the anchor.
+    int         m_tag;             ///< Tag for quick connection resolution.
+    bool        m_noline;          ///< Whether it the node can be a target for ratsnest lines.
 
     std::shared_ptr<CN_CLUSTER> m_cluster;     ///< Cluster to which the anchor belongs.
 };
@@ -179,7 +146,11 @@ public:
         m_connected.reserve( 8 );
     }
 
-    virtual ~CN_ITEM() {};
+    virtual ~CN_ITEM()
+    {
+        for( const std::shared_ptr<CN_ANCHOR>& anchor : m_anchors )
+            anchor->SetItem( nullptr );
+    };
 
     std::shared_ptr<CN_ANCHOR> AddAnchor( const VECTOR2I& aPos )
     {
@@ -253,14 +224,11 @@ public:
     virtual int AnchorCount() const;
     virtual const VECTOR2I GetAnchor( int n ) const;
 
-    int GetAnchorItemCount() const { return m_anchors.size(); }
-    std::shared_ptr<CN_ANCHOR> GetAnchorItem( int n ) const { return m_anchors[n]; }
-
     int Net() const
     {
         return ( !m_parent || !m_valid ) ? -1 : m_parent->GetNetCode();
     }
-                                     ///< allow parallel connection threads
+
 protected:
     bool            m_dirty;         ///< used to identify recently added item not yet
                                      ///< scanned into the connectivity search
@@ -282,9 +250,10 @@ private:
 };
 
 
-typedef std::shared_ptr<CN_ITEM> CN_ITEM_PTR;
-
-
+/*
+ * Represents a single outline of a zone fill on a particular layer.  \a aSubpolyIndex indicates
+ * which outline in the fill's SHAPE_POLY_SET.
+ */
 class CN_ZONE_LAYER : public CN_ITEM
 {
 public:
@@ -354,15 +323,6 @@ public:
         return m_triangulatedPoly->Outline( m_subpolyIndex );
     }
 
-    VECTOR2I ClosestPoint( const VECTOR2I aPt )
-    {
-        VECTOR2I closest;
-
-        m_triangulatedPoly->SquaredDistanceToPolygon( aPt, m_subpolyIndex, &closest );
-
-        return closest;
-    }
-
     bool Collide( SHAPE* aRefShape ) const
     {
         BOX2I bbox = aRefShape->BBox();
@@ -401,14 +361,6 @@ private:
 
 class CN_LIST
 {
-protected:
-    std::vector<CN_ITEM*> m_items;
-
-    void addItemtoTree( CN_ITEM* item )
-    {
-        m_index.Insert( item );
-    }
-
 public:
     CN_LIST()
     {
@@ -425,14 +377,11 @@ public:
         m_index.RemoveAll();
     }
 
-    using ITER       = decltype( m_items )::iterator;
-    using CONST_ITER = decltype( m_items )::const_iterator;
+    std::vector<CN_ITEM*>::iterator begin() { return m_items.begin(); };
+    std::vector<CN_ITEM*>::iterator end() { return m_items.end(); };
 
-    ITER begin() { return m_items.begin(); };
-    ITER end() { return m_items.end(); };
-
-    CONST_ITER begin() const { return m_items.begin(); }
-    CONST_ITER end() const { return m_items.end(); }
+    std::vector<CN_ITEM*>::const_iterator begin() const { return m_items.begin(); }
+    std::vector<CN_ITEM*>::const_iterator end() const { return m_items.end(); }
 
     CN_ITEM* operator[] ( int aIndex ) { return m_items[aIndex]; }
 
@@ -457,39 +406,34 @@ public:
         SetDirty( false );
     }
 
-    int Size() const
-    {
-        return m_items.size();
-    }
+    int Size() const { return m_items.size(); }
 
     CN_ITEM* Add( PAD* pad );
-
     CN_ITEM* Add( PCB_TRACK* track );
-
     CN_ITEM* Add( PCB_ARC* track );
-
     CN_ITEM* Add( PCB_VIA* via );
-
     CN_ITEM* Add( CN_ZONE_LAYER* zitem );
 
     const std::vector<CN_ITEM*> Add( ZONE* zone, PCB_LAYER_ID aLayer );
 
+protected:
+    void addItemtoTree( CN_ITEM* item )
+    {
+        m_index.Insert( item );
+    }
+
+protected:
+    std::vector<CN_ITEM*> m_items;
+
 private:
-    bool               m_dirty;
-    bool               m_hasInvalid;
-    CN_RTREE<CN_ITEM*> m_index;
+    bool                  m_dirty;
+    bool                  m_hasInvalid;
+    CN_RTREE<CN_ITEM*>    m_index;
 };
 
 
 class CN_CLUSTER
 {
-private:
-    bool                         m_conflicting;
-    int                          m_originNet;
-    CN_ITEM*                     m_originPad;
-    std::vector<CN_ITEM*>        m_items;
-    std::unordered_map<int, int> m_netRanks;
-
 public:
     CN_CLUSTER();
     ~CN_CLUSTER();
@@ -505,16 +449,24 @@ public:
 
     int Size() const { return m_items.size(); }
 
-    bool IsOrphaned() const { return m_originPad == nullptr; }
+    bool IsOrphaned() const
+    {
+        return m_originPad == nullptr;
+    }
 
     bool IsConflicting() const { return m_conflicting; }
 
     void Add( CN_ITEM* item );
 
-    using ITER = decltype(m_items)::iterator;
+    std::vector<CN_ITEM*>::iterator begin() { return m_items.begin(); };
+    std::vector<CN_ITEM*>::iterator end() { return m_items.end(); };
 
-    ITER begin() { return m_items.begin(); };
-    ITER end() { return m_items.end(); };
+private:
+    bool                         m_conflicting;
+    int                          m_originNet;
+    CN_ITEM*                     m_originPad;
+    std::vector<CN_ITEM*>        m_items;
+    std::unordered_map<int, int> m_netRanks;
 };
 
 
