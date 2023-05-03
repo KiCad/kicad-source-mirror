@@ -108,6 +108,7 @@ wxString FP_TEXT_GRID_TABLE::GetColLabelValue( int aCol )
     case FPT_UPRIGHT:     return _( "Keep Upright" );
     case FPT_XOFFSET:     return _( "X Offset" );
     case FPT_YOFFSET:     return _( "Y Offset" );
+    case FPT_KNOCKOUT:    return _( "Knockout" );
     default:              wxFAIL; return wxEmptyString;
     }
 }
@@ -140,6 +141,7 @@ bool FP_TEXT_GRID_TABLE::CanGetValueAs( int aRow, int aCol, const wxString& aTyp
     case FPT_SHOWN:
     case FPT_ITALIC:
     case FPT_UPRIGHT:
+    case FPT_KNOCKOUT:
         return aTypeName == wxGRID_VALUE_BOOL;
 
     case FPT_LAYER:
@@ -173,6 +175,7 @@ wxGridCellAttr* FP_TEXT_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr:
     case FPT_SHOWN:
     case FPT_ITALIC:
     case FPT_UPRIGHT:
+    case FPT_KNOCKOUT:
         m_boolColAttr->IncRef();
         return m_boolColAttr;
 
@@ -248,6 +251,7 @@ bool FP_TEXT_GRID_TABLE::GetValueAsBool( int aRow, int aCol )
     case FPT_SHOWN:    return text.IsVisible();
     case FPT_ITALIC:   return text.IsItalic();
     case FPT_UPRIGHT:  return text.IsKeepUpright();
+    case FPT_KNOCKOUT: return text.IsKnockout();
 
     default:
         wxFAIL_MSG( wxString::Format( wxT( "column %d doesn't hold a bool value" ), aCol ) );
@@ -357,7 +361,12 @@ void FP_TEXT_GRID_TABLE::SetValueAsBool( int aRow, int aCol, bool aValue )
         text.SetItalic( aValue );
         break;
 
-    case FPT_UPRIGHT:text.SetKeepUpright( aValue );
+    case FPT_UPRIGHT:
+        text.SetKeepUpright( aValue );
+        break;
+
+    case FPT_KNOCKOUT:
+        text.SetIsKnockout( aValue );
         break;
 
     default:
