@@ -4895,8 +4895,14 @@ PCB_VIA* PCB_PARSER::parsePCB_VIA()
             break;
 
         case T_zone_layer_connections:
-            for( PCB_LAYER_ID layer : via->GetLayerSet().Seq() )
+        {
+            // Ensure only copper layers are stored int ZoneLayerOverride array
+            LSET cuLayers = via->GetLayerSet() & LSET::AllCuMask();
+
+            for( PCB_LAYER_ID layer : cuLayers.Seq() )
+            {
                 via->SetZoneLayerOverride( layer, ZLO_FORCE_NO_ZONE_CONNECTION );
+            }
 
             for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
             {
@@ -4907,7 +4913,7 @@ PCB_VIA* PCB_PARSER::parsePCB_VIA()
 
                 via->SetZoneLayerOverride( layer, ZLO_FORCE_FLASHED );
             }
-
+        }
             break;
 
         case T_tstamp:
