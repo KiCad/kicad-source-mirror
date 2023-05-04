@@ -310,6 +310,7 @@ void KICAD_NETLIST_PARSER::parseComponent()
 
     std::vector<KIID>            uuids;
     std::map<wxString, wxString> properties;
+    std::map<wxString, wxString> fields;
 
     // The token comp was read, so the next data is (ref P1)
     while( (token = NextTok() ) != T_RIGHT )
@@ -401,6 +402,46 @@ void KICAD_NETLIST_PARSER::parseComponent()
         }
             break;
 
+        case T_fields:
+
+            // Read fields
+            while( ( token = NextTok() ) != T_RIGHT )
+            {
+                if( token == T_LEFT )
+                    token = NextTok();
+
+                if( token == T_field )
+                {
+                    wxString fieldName;
+                    wxString fieldValue;
+
+                    while( ( token = NextTok() ) != T_RIGHT )
+                    {
+                        if( token == T_LEFT )
+                            token = NextTok();
+
+                        if( token == T_name )
+                        {
+                            NeedSYMBOLorNUMBER();
+                            fieldName = FROM_UTF8( CurText() );
+                            NeedRIGHT();
+                        }
+                        else if( token == T_STRING )
+                        {
+                            fieldValue = CurText();
+                        }
+                    }
+
+                    if( !fieldName.IsEmpty() )
+                        fields[fieldName] = fieldValue;
+                }
+                else
+                {
+                    Expecting( "field" );
+                }
+            }
+            break;
+
         case T_sheetpath:
             while( ( token = NextTok() ) != T_EOF )
             {
@@ -445,6 +486,7 @@ void KICAD_NETLIST_PARSER::parseComponent()
     component->SetName( name );
     component->SetLibrary( library );
     component->SetProperties( properties );
+    component->SetFields( fields );
     m_netlist->AddComponent( component );
 }
 

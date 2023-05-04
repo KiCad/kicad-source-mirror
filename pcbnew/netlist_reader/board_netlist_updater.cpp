@@ -343,20 +343,18 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
     }
 
-    if( aPcbFootprint->GetFields() != aNetlistComponent->GetProperties() )
+    if( aPcbFootprint->GetFields() != aNetlistComponent->GetFields() )
     {
         if( m_isDryRun )
         {
-            msg.Printf( _( "Update %s properties." ),
-                        aPcbFootprint->GetReference() );
+            msg.Printf( _( "Update %s fields." ), aPcbFootprint->GetReference() );
         }
         else
         {
-            msg.Printf( _( "Updated %s properties." ),
-                        aPcbFootprint->GetReference() );
+            msg.Printf( _( "Updated %s fields." ), aPcbFootprint->GetReference() );
 
             changed = true;
-            aPcbFootprint->SetFields( aNetlistComponent->GetProperties() );
+            aPcbFootprint->SetFields( aNetlistComponent->GetFields() );
         }
 
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );

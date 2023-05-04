@@ -128,6 +128,9 @@ public:
     void SetValue( const wxString& aValue ) { m_value = aValue; }
     const wxString& GetValue() const { return m_value; }
 
+    void SetFields( std::map<wxString, wxString>& aFields ) { m_fields = std::move( aFields ); }
+    const std::map<wxString, wxString>& GetFields() const { return m_fields; }
+
     void SetProperties( std::map<wxString, wxString>& aProps )
     {
         m_properties = std::move( aProps );
@@ -197,6 +200,9 @@ private:
 
     /// Component-specific properties found in the netlist.
     std::map<wxString, wxString> m_properties;
+
+    /// Component-specific user fields found in the netlist.
+    std::map<wxString, wxString> m_fields;
 
     static COMPONENT_NET         m_emptyNet;
 };
