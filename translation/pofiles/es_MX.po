@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:51-0800\n"
-"PO-Revision-Date: 2023-05-03 08:53+0000\n"
+"PO-Revision-Date: 2023-05-04 22:43+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -20319,9 +20319,10 @@ msgstr ""
 "placa"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:60
-#, fuzzy
 msgid "Color theme to use (will default to PCB Editor settings)"
-msgstr "Tema de color a utilizar (por defecto será la configuración de pcbnew)"
+msgstr ""
+"Tema de color a utilizar (por defecto será la configuración del editor de "
+"PCB)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:44
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:64
@@ -22887,9 +22888,8 @@ msgid "Threshold voltage:"
 msgstr "Tensión umbral:"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:91
-#, fuzzy
 msgid "Names"
-msgstr "Nombre"
+msgstr "Nombres"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:154
 msgid "PCB Calculator data file"
@@ -26845,13 +26845,12 @@ msgid "Loose (0.1 mm)"
 msgstr "Suelta (0,1 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:136
-#, fuzzy
 msgid ""
 "Tolerance sets the distance between two points that are considered joined "
 "when building the board outlines."
 msgstr ""
-"La tolerancia fija la distancia entre dos puntos para que se consideren "
-"unidos."
+"La tolerancia establece la distancia entre dos puntos que se consideran "
+"unidos al construir los contornos de la placa."
 
 #: pcbnew/dialogs/dialog_export_step_base.h:76
 msgid "Export STEP"
@@ -28077,9 +28076,8 @@ msgid "Graphic items"
 msgstr "Elementos gráficos"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:142
-#, fuzzy
 msgid "Dimension items"
-msgstr "Línea de dimensión"
+msgstr "Elementos de dimensión"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:257
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:139
@@ -28152,9 +28150,8 @@ msgid "Upright"
 msgstr "Hacia arriba"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:331
-#, fuzzy
 msgid "Set to layer and dimension default values:"
-msgstr "Aplicar valores por defecto de capa:"
+msgstr "Establecer los valores por defecto de capa y dimensión:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:333
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:252
@@ -28170,9 +28167,8 @@ msgid "Footprint graphic items"
 msgstr "Elementos gráficos de la huella"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:40
-#, fuzzy
 msgid "Footprint dimension items"
-msgstr "Elementos gráficos de la huella"
+msgstr "Elementos de dimensión de huella"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
 msgid "PCB graphic items"
@@ -28183,9 +28179,8 @@ msgid "PCB text items"
 msgstr "Elementos de texto de la placa"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:52
-#, fuzzy
 msgid "PCB dimension items"
-msgstr "Línea de dimensión"
+msgstr "Elementos de dimensión de PCB"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:67
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:71
@@ -30621,32 +30616,28 @@ msgid "Track and Via Dimensions"
 msgstr "Dimensiones de pistas y vías"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:51
-#, fuzzy
 msgid "Remove Unused Layers"
-msgstr "Elimina&r capas sin usar"
+msgstr "Eliminar capas sin usar"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:52
-#, fuzzy
 msgid "Restore All Layers"
-msgstr "Recargar todas las capas"
+msgstr "Restaurar todas las capas"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:157
 msgid "Set Unused Pad Properties"
 msgstr "Fijar propiedades de pads sin usar"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:33
-#, fuzzy
 msgid "&Selected only"
-msgstr "&Solo selección"
+msgstr "&Sólo seleccionados"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:36
 msgid "Keep &outside layers"
 msgstr "Mantener capas de z&onas no permitidas"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.h:58
-#, fuzzy
 msgid "Unused Pads"
-msgstr "Capas incluidas"
+msgstr "Pads sin usar"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:32
 msgid "Delete footprints with no symbols"
@@ -32899,9 +32890,9 @@ msgid "netclass '%s' (diff pair)"
 msgstr "clase de red '%s' (par diferencial)"
 
 #: pcbnew/drc/drc_engine.cpp:348
-#, fuzzy, c-format
+#, c-format
 msgid "netclass '%s' (uvia)"
-msgstr "clase de red '%s' (par diferencial)"
+msgstr "clase de red '%s' (uvia)"
 
 #: pcbnew/drc/drc_engine.cpp:422
 msgid "keepout area"
@@ -33028,9 +33019,9 @@ msgid "Checking %s track width: opt %s."
 msgstr "Comprobando el ancho de pista %s: optar por %s."
 
 #: pcbnew/drc/drc_engine.cpp:974
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s track width: min %s."
-msgstr "Comprobando el ancho de pista %s: optar por %s."
+msgstr "Comprobando el ancho de pista %s: mín %s."
 
 #: pcbnew/drc/drc_engine.cpp:982
 #, c-format
@@ -33043,9 +33034,9 @@ msgid "Checking %s via diameter: opt %s."
 msgstr "Comprobando diámetro de vía de %s: optar por %s."
 
 #: pcbnew/drc/drc_engine.cpp:996
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s via diameter: min %s."
-msgstr "Comprobando diámetro de vía de %s: optar por %s."
+msgstr "Comprobando diámetro de vía de %s: mín %s."
 
 #: pcbnew/drc/drc_engine.cpp:1005
 #, c-format
@@ -33053,9 +33044,9 @@ msgid "Checking %s hole size: opt %s."
 msgstr "Comprobando tamaño del agujero %s: optar por %s."
 
 #: pcbnew/drc/drc_engine.cpp:1011
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s hole size: min %s."
-msgstr "Comprobando tamaño del agujero %s: optar por %s."
+msgstr "Comprobando tamaño del agujero %s: mín %s."
 
 #: pcbnew/drc/drc_engine.cpp:1021
 #, c-format
@@ -33068,14 +33059,14 @@ msgid "Checking %s diff pair gap: opt %s."
 msgstr "Comprobando el espacio del par diferencial %s: optar por %s."
 
 #: pcbnew/drc/drc_engine.cpp:1035
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s clearance: min %s."
-msgstr "Comprobando %s margen: %s."
+msgstr "Comprobando margen %s: mín %s."
 
 #: pcbnew/drc/drc_engine.cpp:1043
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s hole to hole: min %s."
-msgstr "Comprobando tamaño del agujero %s: optar por %s."
+msgstr "Comprobando agujero %s a agujero: mín %s."
 
 #: pcbnew/drc/drc_engine.cpp:1049 pcbnew/drc/drc_engine.cpp:1075
 #: pcbnew/drc/drc_engine.cpp:1493
@@ -33116,9 +33107,8 @@ msgid "Rule layer not matched; rule ignored."
 msgstr "Capa de reglas no coincide; regla ignorada."
 
 #: pcbnew/drc/drc_engine.cpp:1188
-#, fuzzy
 msgid "Constraint layer not matched."
-msgstr "La(s) capa(s) restrigida(s) no coincide(n)."
+msgstr "La capa de restricción no coincide."
 
 #: pcbnew/drc/drc_engine.cpp:1208
 #, c-format
@@ -33786,8 +33776,9 @@ msgstr "Conexión de zona anulada."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:484
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:489
+#, fuzzy
 msgid "Net tie pad groups differ."
-msgstr ""
+msgstr "Los grupos de pads de unión difieren."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:528
 msgid "Pad count differs."
@@ -33798,9 +33789,8 @@ msgid "Rule area count differs."
 msgstr "El recuento de áreas de regla difiere."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:530
-#, fuzzy
 msgid "Graphic item count differs."
-msgstr "No se han encontrado elementos gráficos en el archivo."
+msgstr "El recuento de elementos gráficos difiere."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:539
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:564
@@ -35797,42 +35787,36 @@ msgid "Dimension '%s' on %s"
 msgstr "Dimensión '%s' en %s"
 
 #: pcbnew/pcb_dimension.cpp:1315
-#, fuzzy
 msgid "1234.0"
-msgstr "1234"
+msgstr "1234.0"
 
 #: pcbnew/pcb_dimension.cpp:1316
-#, fuzzy
 msgid "1234.0 mm"
-msgstr "1234 mm"
+msgstr "1234.0 mm"
 
 #: pcbnew/pcb_dimension.cpp:1317
-#, fuzzy
 msgid "1234.0 (mm)"
-msgstr "1234 (mm)"
+msgstr "1234.0 (mm)"
 
 #: pcbnew/pcb_dimension.cpp:1349
 msgid "Units Format"
 msgstr "Formato de unidades"
 
 #: pcbnew/pcb_dimension.cpp:1355
-#, fuzzy
 msgid "Suppress Trailing Zeroes"
 msgstr "Eliminar ceros a la derecha"
 
 #: pcbnew/pcb_dimension.cpp:1383
-#, fuzzy
 msgid "Crossbar Height"
-msgstr "Cursor derecha"
+msgstr "Altura de barra transversal"
 
 #: pcbnew/pcb_dimension.cpp:1387
 msgid "Extension Line Overshoot"
 msgstr "Exceso de la línea de extensión"
 
 #: pcbnew/pcb_dimension.cpp:1452
-#, fuzzy
 msgid "Leader Length"
-msgstr "Longitud de vía"
+msgstr "Longitud del líder"
 
 #: pcbnew/pcb_dimension.cpp:1492
 msgid "Text Frame"
@@ -38771,18 +38755,17 @@ msgid "Assertions for:"
 msgstr "Afirmaciones para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1339
-#, fuzzy
 msgid "Select a footprint to check against its library equivalent."
-msgstr "Comprobando las huellas de la placa con la biblioteca..."
+msgstr ""
+"Seleccione una huella para cotejarla con su equivalente en la biblioteca."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1346
 msgid "Check Footprint against Library"
 msgstr "Comprobar la huella contra la biblioteca"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1363
-#, fuzzy
 msgid "Board/library check for:"
-msgstr "Carpeta local de librerías:"
+msgstr "Verificación de placa/biblioteca para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1365
 msgid "Library: "
@@ -38793,14 +38776,12 @@ msgid "Library item: "
 msgstr "Artículo de biblioteca: "
 
 #: pcbnew/tools/board_inspection_tool.cpp:1384
-#, fuzzy
 msgid "The current configuration does not include the library."
-msgstr "La configuración actual no incluye la librería '%s'."
+msgstr "La configuración actual no incluye la biblioteca."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1388
-#, fuzzy
 msgid "The library is not enabled in the current configuration."
-msgstr "La biblioteca '%s' no está habilitada en la configuración actual."
+msgstr "La biblioteca no está habilitada en la configuración actual."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1404
 #, c-format
@@ -40436,9 +40417,8 @@ msgid "Show constraints resolution for the selected object"
 msgstr "Mostrar la resolución de restricciones para el objeto seleccionado"
 
 #: pcbnew/tools/pcb_actions.cpp:1178
-#, fuzzy
 msgid "Check Footprint against Library..."
-msgstr "Comprobando las huellas de la placa con la biblioteca..."
+msgstr "Comprobar la huella contra la biblioteca..."
 
 #: pcbnew/tools/pcb_actions.cpp:1179
 msgid ""
