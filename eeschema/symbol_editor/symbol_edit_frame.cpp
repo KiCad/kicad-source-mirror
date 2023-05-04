@@ -781,7 +781,7 @@ void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
                                                        wxEmptyString );
 
         button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
-                [&]( wxHyperlinkEvent& aEvent )
+                [=]( wxHyperlinkEvent& aEvent )
                 {
                     InvokeSchEditSymbolLibTable( &Kiway(), this );
                 } ) );
@@ -795,6 +795,8 @@ void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
     else if( IsSymbolAlias() )
     {
         wxString parentSymbolName = m_symbol->GetParent().lock()->GetName();
+        int      unit = GetUnit();
+        int      convert = GetConvert();
         wxString msg;
         wxString link;
 
@@ -806,10 +808,9 @@ void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
 
         wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, link, wxEmptyString );
         button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
-                [&]( wxHyperlinkEvent& aEvent )
+                [=]( wxHyperlinkEvent& aEvent )
                 {
-                    LoadSymbolFromCurrentLib( m_symbol->GetParent().lock()->GetName(),
-                                              GetUnit(), GetConvert() );
+                    LoadSymbolFromCurrentLib( parentSymbolName, unit, convert );
                 } ) );
 
         infobar->RemoveAllButtons();
