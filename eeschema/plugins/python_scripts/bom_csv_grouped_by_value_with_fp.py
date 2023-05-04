@@ -62,11 +62,10 @@ for group in grouped:
     # Add the reference of every component in the group and keep a reference
     # to the component so that the other data can be filled in once per group
     for component in group:
-        refs += fromNetlistText( component.getRef() ) + ", "
+        if refs != "":
+            refs += ", "
+        refs += fromNetlistText( component.getRef() )
         c = component
-
-    # remove last, not needed trailing comma and whitespace
-    refs = refs.removesuffix(', ')
 
     # Fill in the component groups common data
     out.writerow([refs, len(group),
