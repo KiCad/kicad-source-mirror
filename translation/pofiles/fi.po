@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:51-0800\n"
-"PO-Revision-Date: 2023-04-03 04:35+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"PO-Revision-Date: 2023-05-04 22:43+0000\n"
+"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
 "Language: fi\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.17-dev\n"
+"X-Generator: Weblate 4.18-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -5921,7 +5921,7 @@ msgstr "Tallenna kaikki muutokset"
 
 #: common/tool/actions.cpp:91
 msgid "Throw away changes"
-msgstr "Heitä muutokset pois"
+msgstr "Poista muutokset"
 
 #: common/tool/actions.cpp:96
 msgid "Page Settings..."
@@ -6121,7 +6121,7 @@ msgstr "Päivitä"
 
 #: common/tool/actions.cpp:298
 msgid "Zoom to Fit"
-msgstr "Zoomaa sopivaksi"
+msgstr "Zoomaa Sopivaksi"
 
 #: common/tool/actions.cpp:303
 msgid "Zoom to Objects"
@@ -10803,7 +10803,7 @@ msgid ""
 "portability across systems and platforms.  Using absolute paths can result "
 "in portability issues."
 msgstr ""
-"Suhteellisten tiedostopolkujen käyttö hierarkkisille arkeille parantaa "
+"Suhteellisten tiedostopolkujen käyttö hierarkkisille sivuille parantaa "
 "siirrettävyyttä järjestelmien ja alustojen välillä. Absoluuttisten polkujen "
 "käyttö voi aiheuttaa siirrettävyysongelmia."
 
@@ -14151,7 +14151,7 @@ msgstr "Nimiö"
 
 #: eeschema/sch_label.cpp:898
 msgid "Hierarchical Sheet Pin"
-msgstr "Hierarkkisen lehden nasta"
+msgstr "Hierarkkisen Lehden Nasta"
 
 #: eeschema/sch_label.cpp:926 eeschema/sch_text.cpp:505
 msgid "Justification"
@@ -17551,7 +17551,7 @@ msgstr "Lisää hierarkkinen nimeke"
 
 #: eeschema/tools/ee_actions.cpp:341
 msgid "Add Sheet"
-msgstr "Lisää Arkki"
+msgstr "Lisää Lehti"
 
 #: eeschema/tools/ee_actions.cpp:341
 msgid "Add a hierarchical sheet"
