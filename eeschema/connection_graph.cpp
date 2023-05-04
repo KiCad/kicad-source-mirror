@@ -481,7 +481,7 @@ CONNECTION_SUBGRAPH::PRIORITY CONNECTION_SUBGRAPH::GetDriverPriority( SCH_ITEM* 
 
         if( sch_pin->IsGlobalPower() )
             return PRIORITY::POWER_PIN;
-        else if( !sym || !sym->GetIncludeOnBoard() || sym->GetRef( &m_sheet ).StartsWith( '#' ) )
+        else if( !sym || !sym->GetIncludeOnBoard() || sym->GetLibSymbolRef()->GetReferenceField().GetText().StartsWith( '#' ) )
             return PRIORITY::NONE;
         else
             return PRIORITY::PIN;
