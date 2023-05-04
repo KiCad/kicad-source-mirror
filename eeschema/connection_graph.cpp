@@ -483,9 +483,12 @@ CONNECTION_SUBGRAPH::PRIORITY CONNECTION_SUBGRAPH::GetDriverPriority( SCH_ITEM* 
     case SCH_PIN_T:
     {
         SCH_PIN* sch_pin = static_cast<SCH_PIN*>( aDriver );
+        SCH_SYMBOL* sym = sch_pin->GetParentSymbol();
 
         if( sch_pin->IsPowerConnection() )
             return PRIORITY::POWER_PIN;
+        else if( !sym || !sym->GetIncludeOnBoard() || sym->GetRef( &m_sheet ).StartsWith( '#' ) )
+            return PRIORITY::NONE;
         else
             return PRIORITY::PIN;
     }
