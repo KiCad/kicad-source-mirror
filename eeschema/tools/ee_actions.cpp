@@ -598,6 +598,66 @@ TOOL_ACTION EE_ACTIONS::editWithLibEdit( "eeschema.EditorControl.editWithSymbolE
         _( "Edit with Symbol Editor" ), _( "Open the selected symbol in the Symbol Editor" ),
         BITMAPS::libedit );
 
+TOOL_ACTION EE_ACTIONS::setExcludeFromBOM( "eeschema.EditorControl.setExcludeFromBOM",
+        AS_GLOBAL,
+        0, "",
+        _( "Exclude from bill of materials" ), _( "Set the exclude from bill of materials attribute" ) );
+
+TOOL_ACTION EE_ACTIONS::unsetExcludeFromBOM( "eeschema.EditorControl.unsetExcludeFromBOM",
+        AS_GLOBAL,
+        0, "",
+        _( "Include in bill of materials" ), _( "Clear the exclude from bill of materials attribute" ) );
+
+TOOL_ACTION EE_ACTIONS::toggleExcludeFromBOM( "eeschema.EditorControl.toggleExcludeFromBOM",
+        AS_GLOBAL,
+        0, "",
+        _( "Toggle Exclude from BOM" ), _( "Toggle the exclude from bill of materials attribute" ) );
+
+TOOL_ACTION EE_ACTIONS::setExcludeFromSimulation( "eeschema.EditorControl.setExcludeFromSimulation",
+        AS_GLOBAL,
+        0, "",
+        _( "Exclude from simulation" ), _( "Set the exclude from simulation attribute" ) );
+
+TOOL_ACTION EE_ACTIONS::unsetExcludeFromSimulation( "eeschema.EditorControl.unsetExcludeFromSimulation",
+        AS_GLOBAL,
+        0, "",
+        _( "Include in simulation" ), _( "Clear the exclude from simulation attribute" ) );
+
+TOOL_ACTION EE_ACTIONS::toggleExcludeFromSimulation( "eeschema.EditorControl.toggleExcludeFromSimulation",
+        AS_GLOBAL,
+        0, "",
+        _( "Toggle Exclude from simulation" ), _( "Toggle the exclude from simulation attribute" ) );
+
+TOOL_ACTION EE_ACTIONS::setExcludeFromBoard( "eeschema.EditorControl.setExcludeFromBoard",
+        AS_GLOBAL,
+        0, "",
+        _( "Exclude from board" ), _( "Set the exclude from board attribute" ) );
+
+TOOL_ACTION EE_ACTIONS::unsetExcludeFromBoard( "eeschema.EditorControl.unsetExcludeFromBoard",
+        AS_GLOBAL,
+        0, "",
+        _( "Include on board" ), _( "Clear the exclude from board attribute" ) );
+
+TOOL_ACTION EE_ACTIONS::toggleExcludeFromBoard( "eeschema.EditorControl.toggleExcludeFromBoard",
+        AS_GLOBAL,
+        0, "",
+        _( "Toggle Exclude from board" ), _( "Toggle the exclude from board attribute" ) );
+
+TOOL_ACTION EE_ACTIONS::setDNP( "eeschema.EditorControl.setDNP",
+        AS_GLOBAL,
+        0, "",
+        _( "Set do not populate" ), _( "Set the do not populate attribute" ) );
+
+TOOL_ACTION EE_ACTIONS::unsetDNP( "eeschema.EditorControl.unsetDNP",
+        AS_GLOBAL,
+        0, "",
+        _( "Unset do not populate" ), _( "Clear the do not populate attribute" ) );
+
+TOOL_ACTION EE_ACTIONS::toggleDNP( "eeschema.EditorControl.toggleDNP",
+        AS_GLOBAL,
+        0, "",
+        _( "Toggle do not populate" ), _( "Toggle the do not populate attribute" ) );
+
 TOOL_ACTION EE_ACTIONS::editLibSymbolWithLibEdit( "eeschema.EditorControl.editLibSymbolWithSymbolEditor",
         AS_GLOBAL,
         MD_CTRL + MD_SHIFT + 'E', "",

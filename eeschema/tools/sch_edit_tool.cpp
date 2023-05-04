@@ -48,6 +48,7 @@
 #include <sch_junction.h>
 #include <sch_edit_frame.h>
 #include <schematic.h>
+#include <schematic_commit.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <eeschema_id.h>
 #include <dialogs/dialog_change_symbols.h>
@@ -357,10 +358,63 @@ bool SCH_EDIT_TOOL::Init()
         CONDITIONAL_MENU& moveMenu = moveTool->GetToolMenu().GetMenu();
 
         moveMenu.AddSeparator();
-        moveMenu.AddItem( EE_ACTIONS::rotateCCW,       orientCondition );
-        moveMenu.AddItem( EE_ACTIONS::rotateCW,        orientCondition );
-        moveMenu.AddItem( EE_ACTIONS::mirrorV,         orientCondition );
-        moveMenu.AddItem( EE_ACTIONS::mirrorH,         orientCondition );
+
+        CONDITIONAL_MENU* transformMoveSubMenu = new CONDITIONAL_MENU( moveTool );
+        transformMoveSubMenu->SetTitle( _( "Transform Selection" ) );
+        moveMenu.AddMenu( transformMoveSubMenu, orientCondition, 200 );
+
+        transformMoveSubMenu->AddItem( EE_ACTIONS::rotateCCW,        orientCondition, 200 );
+        transformMoveSubMenu->AddItem( EE_ACTIONS::rotateCW,         orientCondition, 200 );
+        transformMoveSubMenu->AddItem( EE_ACTIONS::mirrorV,          orientCondition, 200 );
+        transformMoveSubMenu->AddItem( EE_ACTIONS::mirrorH,          orientCondition, 200 );
+
+        {
+            CONDITIONAL_MENU *attribMoveSubMenu = new CONDITIONAL_MENU( moveTool );
+            attribMoveSubMenu->SetTitle( _( "Attributes" ) );
+            moveMenu.AddMenu( attribMoveSubMenu, E_C::HasType( SCH_SYMBOL_T ), 200 );
+
+            {
+                CONDITIONAL_MENU *attribSimMoveSubMenu = new CONDITIONAL_MENU( moveTool );
+                attribSimMoveSubMenu->SetTitle( _( "Simulation" ) );
+                attribMoveSubMenu->AddMenu( attribSimMoveSubMenu, E_C::HasType( SCH_SYMBOL_T ) );
+                attribSimMoveSubMenu->AddItem( EE_ACTIONS::setExcludeFromSimulation,
+                        E_C::ShowAlways );
+                attribSimMoveSubMenu->AddItem( EE_ACTIONS::unsetExcludeFromSimulation,
+                        E_C::ShowAlways );
+                attribSimMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromSimulation,
+                        E_C::ShowAlways );
+            }
+
+            {
+                CONDITIONAL_MENU *attribBOMMoveSubMenu = new CONDITIONAL_MENU( moveTool );
+                attribBOMMoveSubMenu->SetTitle( _( "Bill of Materials" ) );
+                attribMoveSubMenu->AddMenu( attribBOMMoveSubMenu, E_C::HasType( SCH_SYMBOL_T ) );
+                attribBOMMoveSubMenu->AddItem( EE_ACTIONS::setExcludeFromBOM, E_C::ShowAlways );
+                attribBOMMoveSubMenu->AddItem( EE_ACTIONS::unsetExcludeFromBOM, E_C::ShowAlways );
+                attribBOMMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromBOM, E_C::ShowAlways );
+            }
+
+            {
+                CONDITIONAL_MENU *attribBoardMoveSubMenu = new CONDITIONAL_MENU( moveTool );
+                attribBoardMoveSubMenu->SetTitle( _( "Exclude from board" ) );
+                attribMoveSubMenu->AddMenu( attribBoardMoveSubMenu, E_C::HasType( SCH_SYMBOL_T ) );
+                attribBoardMoveSubMenu->AddItem( EE_ACTIONS::setExcludeFromBoard,
+                        E_C::ShowAlways );
+                attribBoardMoveSubMenu->AddItem( EE_ACTIONS::unsetExcludeFromBoard,
+                        E_C::ShowAlways );
+                attribBoardMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromBoard,
+                        E_C::ShowAlways );
+            }
+
+            {
+                CONDITIONAL_MENU *attribDNPMoveSubMenu = new CONDITIONAL_MENU( moveTool );
+                attribDNPMoveSubMenu->SetTitle( _( "Do not populate" ) );
+                attribMoveSubMenu->AddMenu( attribDNPMoveSubMenu, E_C::HasType( SCH_SYMBOL_T ) );
+                attribDNPMoveSubMenu->AddItem( EE_ACTIONS::setDNP, E_C::ShowAlways );
+                attribDNPMoveSubMenu->AddItem( EE_ACTIONS::unsetDNP, E_C::ShowAlways );
+                attribDNPMoveSubMenu->AddItem( EE_ACTIONS::toggleDNP, E_C::ShowAlways );
+            }
+        }
         moveMenu.AddItem( EE_ACTIONS::swap,            SELECTION_CONDITIONS::MoreThan( 1 ) );
 
         moveMenu.AddItem( EE_ACTIONS::properties,      propertiesCondition );
@@ -373,8 +427,6 @@ bool SCH_EDIT_TOOL::Init()
         editMoveItemSubMenu->AddItem( EE_ACTIONS::editReference,   E_C::SingleSymbol );
         editMoveItemSubMenu->AddItem( EE_ACTIONS::editValue,       E_C::SingleSymbol );
         editMoveItemSubMenu->AddItem( EE_ACTIONS::editFootprint,   E_C::SingleSymbol );
-
-        moveMenu.AddItem( EE_ACTIONS::toggleDeMorgan,  E_C::SingleDeMorganSymbol );
 
         std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu = std::make_shared<SYMBOL_UNIT_MENU>();
         symUnitMenu->SetTool( this );
@@ -399,10 +451,58 @@ bool SCH_EDIT_TOOL::Init()
     drawMenu.AddItem( EE_ACTIONS::enterSheet,       sheetSelection && EE_CONDITIONS::Idle, 1 );
     drawMenu.AddSeparator(                          sheetSelection && EE_CONDITIONS::Idle, 1 );
 
-    drawMenu.AddItem( EE_ACTIONS::rotateCCW,        orientCondition, 200 );
-    drawMenu.AddItem( EE_ACTIONS::rotateCW,         orientCondition, 200 );
-    drawMenu.AddItem( EE_ACTIONS::mirrorV,          orientCondition, 200 );
-    drawMenu.AddItem( EE_ACTIONS::mirrorH,          orientCondition, 200 );
+    CONDITIONAL_MENU* transformDrawSubMenu = new CONDITIONAL_MENU( drawingTools );
+    transformDrawSubMenu->SetTitle( _( "Transform Selection" ) );
+    drawMenu.AddMenu( transformDrawSubMenu, orientCondition, 200 );
+
+    transformDrawSubMenu->AddItem( EE_ACTIONS::rotateCCW,        orientCondition, 200 );
+    transformDrawSubMenu->AddItem( EE_ACTIONS::rotateCW,         orientCondition, 200 );
+    transformDrawSubMenu->AddItem( EE_ACTIONS::mirrorV,          orientCondition, 200 );
+    transformDrawSubMenu->AddItem( EE_ACTIONS::mirrorH,          orientCondition, 200 );
+
+    {
+        CONDITIONAL_MENU *attribMoveSubMenu = new CONDITIONAL_MENU( moveTool );
+        attribMoveSubMenu->SetTitle( _( "Attributes" ) );
+        drawMenu.AddMenu( attribMoveSubMenu, E_C::HasType( SCH_SYMBOL_T ), 200 );
+
+        {
+            CONDITIONAL_MENU *attribSimMoveSubMenu = new CONDITIONAL_MENU( moveTool );
+            attribSimMoveSubMenu->SetTitle( _( "Simulation" ) );
+            attribMoveSubMenu->AddMenu( attribSimMoveSubMenu, E_C::HasType( SCH_SYMBOL_T ) );
+            attribSimMoveSubMenu->AddItem( EE_ACTIONS::setExcludeFromSimulation, E_C::ShowAlways );
+            attribSimMoveSubMenu->AddItem( EE_ACTIONS::unsetExcludeFromSimulation,
+                    E_C::ShowAlways );
+            attribSimMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromSimulation,
+                    E_C::ShowAlways );
+        }
+
+        {
+            CONDITIONAL_MENU *attribBOMMoveSubMenu = new CONDITIONAL_MENU( moveTool );
+            attribBOMMoveSubMenu->SetTitle( _( "Bill of Materials" ) );
+            attribMoveSubMenu->AddMenu( attribBOMMoveSubMenu, E_C::HasType( SCH_SYMBOL_T ) );
+            attribBOMMoveSubMenu->AddItem( EE_ACTIONS::setExcludeFromBOM, E_C::ShowAlways );
+            attribBOMMoveSubMenu->AddItem( EE_ACTIONS::unsetExcludeFromBOM, E_C::ShowAlways );
+            attribBOMMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromBOM, E_C::ShowAlways );
+        }
+
+        {
+            CONDITIONAL_MENU *attribBoardMoveSubMenu = new CONDITIONAL_MENU( moveTool );
+            attribBoardMoveSubMenu->SetTitle( _( "Exclude from board" ) );
+            attribMoveSubMenu->AddMenu( attribBoardMoveSubMenu, E_C::HasType( SCH_SYMBOL_T ) );
+            attribBoardMoveSubMenu->AddItem( EE_ACTIONS::setExcludeFromBoard, E_C::ShowAlways );
+            attribBoardMoveSubMenu->AddItem( EE_ACTIONS::unsetExcludeFromBoard, E_C::ShowAlways );
+            attribBoardMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromBoard, E_C::ShowAlways );
+        }
+
+        {
+            CONDITIONAL_MENU *attribDNPMoveSubMenu = new CONDITIONAL_MENU( moveTool );
+            attribDNPMoveSubMenu->SetTitle( _( "Do not populate" ) );
+            attribMoveSubMenu->AddMenu( attribDNPMoveSubMenu, E_C::HasType( SCH_SYMBOL_T ) );
+            attribDNPMoveSubMenu->AddItem( EE_ACTIONS::setDNP, E_C::ShowAlways );
+            attribDNPMoveSubMenu->AddItem( EE_ACTIONS::unsetDNP, E_C::ShowAlways );
+            attribDNPMoveSubMenu->AddItem( EE_ACTIONS::toggleDNP, E_C::ShowAlways );
+        }
+    }
 
     drawMenu.AddItem( EE_ACTIONS::properties,       propertiesCondition, 200 );
 
@@ -415,7 +515,6 @@ bool SCH_EDIT_TOOL::Init()
     editDrawItemSubMenu->AddItem( EE_ACTIONS::editValue,        E_C::SingleSymbol, 200 );
     editDrawItemSubMenu->AddItem( EE_ACTIONS::editFootprint,    E_C::SingleSymbol, 200 );
 
-    drawMenu.AddItem( EE_ACTIONS::toggleDeMorgan,               E_C::SingleDeMorganSymbol, 200 );
 
     drawMenu.AddItem( EE_ACTIONS::autoplaceFields,              autoplaceCondition, 200 );
 
@@ -437,15 +536,63 @@ bool SCH_EDIT_TOOL::Init()
     //
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
-    selToolMenu.AddItem( EE_ACTIONS::rotateCCW,        orientCondition, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::rotateCW,         orientCondition, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::mirrorV,          orientCondition, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::mirrorH,          orientCondition, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::swap,             SELECTION_CONDITIONS::MoreThan( 1 ) );
+    CONDITIONAL_MENU* transformSelSubMenu = new CONDITIONAL_MENU( m_selectionTool );
+    transformSelSubMenu->SetTitle( _( "Transform Selection" ) );
+    selToolMenu.AddMenu( transformSelSubMenu, orientCondition, 200 );
 
+    transformSelSubMenu->AddItem( EE_ACTIONS::rotateCCW,        orientCondition, 200 );
+    transformSelSubMenu->AddItem( EE_ACTIONS::rotateCW,         orientCondition, 200 );
+    transformSelSubMenu->AddItem( EE_ACTIONS::mirrorV,          orientCondition, 200 );
+    transformSelSubMenu->AddItem( EE_ACTIONS::mirrorH,          orientCondition, 200 );
+
+    {
+        CONDITIONAL_MENU *attribMoveSubMenu = new CONDITIONAL_MENU( moveTool );
+        attribMoveSubMenu->SetTitle( _( "Attributes" ) );
+        selToolMenu.AddMenu( attribMoveSubMenu, E_C::HasType( SCH_SYMBOL_T ), 200 );
+
+        {
+            CONDITIONAL_MENU *attribSimMoveSubMenu = new CONDITIONAL_MENU( moveTool );
+            attribSimMoveSubMenu->SetTitle( _( "Simulation" ) );
+            attribMoveSubMenu->AddMenu( attribSimMoveSubMenu, E_C::HasType( SCH_SYMBOL_T ) );
+            attribSimMoveSubMenu->AddItem( EE_ACTIONS::setExcludeFromSimulation, E_C::ShowAlways );
+            attribSimMoveSubMenu->AddItem( EE_ACTIONS::unsetExcludeFromSimulation,
+                    E_C::ShowAlways );
+            attribSimMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromSimulation,
+                    E_C::ShowAlways );
+        }
+
+        {
+            CONDITIONAL_MENU *attribBOMMoveSubMenu = new CONDITIONAL_MENU( moveTool );
+            attribBOMMoveSubMenu->SetTitle( _( "Bill of Materials" ) );
+            attribMoveSubMenu->AddMenu( attribBOMMoveSubMenu, E_C::HasType( SCH_SYMBOL_T ) );
+            attribBOMMoveSubMenu->AddItem( EE_ACTIONS::setExcludeFromBOM, E_C::ShowAlways );
+            attribBOMMoveSubMenu->AddItem( EE_ACTIONS::unsetExcludeFromBOM, E_C::ShowAlways );
+            attribBOMMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromBOM, E_C::ShowAlways );
+        }
+
+        {
+            CONDITIONAL_MENU *attribBoardMoveSubMenu = new CONDITIONAL_MENU( moveTool );
+            attribBoardMoveSubMenu->SetTitle( _( "Exclude from board" ) );
+            attribMoveSubMenu->AddMenu( attribBoardMoveSubMenu, E_C::HasType( SCH_SYMBOL_T ) );
+            attribBoardMoveSubMenu->AddItem( EE_ACTIONS::setExcludeFromBoard, E_C::ShowAlways );
+            attribBoardMoveSubMenu->AddItem( EE_ACTIONS::unsetExcludeFromBoard, E_C::ShowAlways );
+            attribBoardMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromBoard, E_C::ShowAlways );
+        }
+
+        {
+            CONDITIONAL_MENU *attribDNPMoveSubMenu = new CONDITIONAL_MENU( moveTool );
+            attribDNPMoveSubMenu->SetTitle( _( "Do not populate" ) );
+            attribMoveSubMenu->AddMenu( attribDNPMoveSubMenu, E_C::HasType( SCH_SYMBOL_T ) );
+            attribDNPMoveSubMenu->AddItem( EE_ACTIONS::setDNP, E_C::ShowAlways );
+            attribDNPMoveSubMenu->AddItem( EE_ACTIONS::unsetDNP, E_C::ShowAlways );
+            attribDNPMoveSubMenu->AddItem( EE_ACTIONS::toggleDNP, E_C::ShowAlways );
+        }
+    }
+
+    selToolMenu.AddItem( EE_ACTIONS::swap,             SELECTION_CONDITIONS::MoreThan( 1 ) );
     selToolMenu.AddItem( EE_ACTIONS::properties,       propertiesCondition, 200 );
 
-    CONDITIONAL_MENU* editSelItemSubMenu = new CONDITIONAL_MENU( moveTool );
+    CONDITIONAL_MENU* editSelItemSubMenu = new CONDITIONAL_MENU( m_selectionTool );
     editSelItemSubMenu->SetTitle( _( "Edit Main Fields" ) );
     editSelItemSubMenu->SetIcon( BITMAPS::right );
     selToolMenu.AddMenu( editSelItemSubMenu, E_C::SingleSymbol, 200 );
@@ -455,7 +602,6 @@ bool SCH_EDIT_TOOL::Init()
     editSelItemSubMenu->AddItem( EE_ACTIONS::editFootprint,    E_C::SingleSymbol, 200 );
 
     selToolMenu.AddItem( EE_ACTIONS::autoplaceFields,          autoplaceCondition, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::toggleDeMorgan,           E_C::SingleSymbol, 200 );
 
     std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu3 = std::make_shared<SYMBOL_UNIT_MENU>();
     symUnitMenu3->SetTool( m_selectionTool );
@@ -2385,6 +2531,106 @@ int SCH_EDIT_TOOL::DdAppendFile( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDIT_TOOL::SetAttribute( const TOOL_EVENT& aEvent )
+{
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
+    SCHEMATIC_COMMIT commit( m_toolMgr );
+
+    if( selection.Empty() )
+        return 0;
+
+    for( EDA_ITEM* item : selection )
+    {
+        if( SCH_SYMBOL* sym = dyn_cast<SCH_SYMBOL*>( item ) )
+        {
+            commit.Modify( sym, m_frame->GetScreen() );
+
+            if( aEvent.IsAction( &EE_ACTIONS::setDNP ) )
+                sym->SetDNP( true );
+
+            if( aEvent.IsAction( &EE_ACTIONS::setExcludeFromSimulation ) )
+                sym->SetExcludeFromSim( true );
+
+            if( aEvent.IsAction( &EE_ACTIONS::setExcludeFromBOM ) )
+                sym->SetIncludeInBom( false );
+
+            if( aEvent.IsAction( &EE_ACTIONS::setExcludeFromBoard ) )
+                sym->SetIncludeOnBoard( false );
+        }
+    }
+
+    commit.Push( _( "Set Attribute" ) );
+    return 0;
+}
+
+
+int SCH_EDIT_TOOL::UnsetAttribute( const TOOL_EVENT& aEvent )
+{
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
+    SCHEMATIC_COMMIT commit( m_toolMgr );
+
+    if( selection.Empty() )
+        return 0;
+
+    for( EDA_ITEM* item : selection )
+    {
+        if( SCH_SYMBOL* sym = dyn_cast<SCH_SYMBOL*>( item ) )
+        {
+            commit.Modify( sym, m_frame->GetScreen() );
+
+            if( aEvent.IsAction( &EE_ACTIONS::unsetDNP ) )
+                sym->SetDNP( false );
+
+            if( aEvent.IsAction( &EE_ACTIONS::unsetExcludeFromSimulation ) )
+                sym->SetExcludeFromSim( false );
+
+            if( aEvent.IsAction( &EE_ACTIONS::unsetExcludeFromBOM ) )
+                sym->SetIncludeInBom( true );
+
+            if( aEvent.IsAction( &EE_ACTIONS::unsetExcludeFromBoard ) )
+                sym->SetIncludeOnBoard( true );
+        }
+    }
+
+    commit.Push( _( "Clear Attribute" ) );
+    return 0;
+}
+
+
+int SCH_EDIT_TOOL::ToggleAttribute( const TOOL_EVENT& aEvent )
+{
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
+    SCHEMATIC_COMMIT commit( m_toolMgr );
+
+    if( selection.Empty() )
+        return 0;
+
+    for( EDA_ITEM* item : selection )
+    {
+        if( SCH_SYMBOL* sym = dyn_cast<SCH_SYMBOL*>( item ) )
+        {
+            commit.Modify( sym, m_frame->GetScreen() );
+
+            if( aEvent.IsAction( &EE_ACTIONS::toggleDNP ) )
+                sym->SetDNP( !sym->GetDNP() );
+
+            if( aEvent.IsAction( &EE_ACTIONS::toggleExcludeFromSimulation ) )
+                sym->SetExcludeFromSim( !sym->GetExcludeFromSim() );
+
+            if( aEvent.IsAction( &EE_ACTIONS::toggleExcludeFromBOM ) )
+                sym->SetIncludeInBom( !sym->GetIncludeInBom() );
+
+            if( aEvent.IsAction( &EE_ACTIONS::toggleExcludeFromBoard ) )
+                sym->SetIncludeOnBoard( !sym->GetIncludeOnBoard() );
+        }
+    }
+
+    commit.Push( _( "Toggle Attribute" ) );
+    return 0;
+
+}
+
+
 void SCH_EDIT_TOOL::setTransitions()
 {
     Go( &SCH_EDIT_TOOL::RepeatDrawItem,     EE_ACTIONS::repeatDrawItem.MakeEvent() );
@@ -2417,6 +2663,19 @@ void SCH_EDIT_TOOL::setTransitions()
 
     Go( &SCH_EDIT_TOOL::BreakWire,          EE_ACTIONS::breakWire.MakeEvent() );
     Go( &SCH_EDIT_TOOL::BreakWire,          EE_ACTIONS::slice.MakeEvent() );
+
+    Go( &SCH_EDIT_TOOL::SetAttribute,       EE_ACTIONS::setDNP.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::SetAttribute,       EE_ACTIONS::setExcludeFromBOM.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::SetAttribute,       EE_ACTIONS::setExcludeFromBoard.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::SetAttribute,       EE_ACTIONS::setExcludeFromSimulation.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::UnsetAttribute,     EE_ACTIONS::unsetDNP.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::UnsetAttribute,     EE_ACTIONS::unsetExcludeFromBOM.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::UnsetAttribute,     EE_ACTIONS::unsetExcludeFromBoard.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::UnsetAttribute,     EE_ACTIONS::unsetExcludeFromSimulation.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ToggleAttribute,    EE_ACTIONS::toggleDNP.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ToggleAttribute,    EE_ACTIONS::toggleExcludeFromBOM.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ToggleAttribute,    EE_ACTIONS::toggleExcludeFromBoard.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ToggleAttribute,    EE_ACTIONS::toggleExcludeFromSimulation.MakeEvent() );
 
     Go( &SCH_EDIT_TOOL::CleanupSheetPins,   EE_ACTIONS::cleanupSheetPins.MakeEvent() );
     Go( &SCH_EDIT_TOOL::GlobalEdit,         EE_ACTIONS::editTextAndGraphics.MakeEvent() );
