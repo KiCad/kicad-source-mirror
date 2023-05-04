@@ -31,7 +31,9 @@
   # are processed in the junit report (https://gitlab.com/gitlab-org/gitlab/issues/23835)
   # so we can't use a glob and have to list out each hierarchy separately.
   artifacts:
+    when: always
+    paths:
+      - build/linux/qa/**/*.log
     reports:
       junit:
-        - build/linux/qa/*/*.xml
-        - build/linux/qa/*/*/*.xml
+        - build/linux/qa/**/*.xml

@@ -28,8 +28,8 @@ from pathlib import Path
 import pytest
 
 @pytest.mark.parametrize("test_file,output_dir,compare_fn,cli_args", 
-                            [("cli\\basic_test\\basic_test.kicad_sch", "basic_test", "cli\\basic_test\\basic_test.png", []), 
-                             ("cli\\basic_test\\basic_test.kicad_sch", "basic_test_nobg_bnw_nods", "cli\\basic_test\\basic_test_nobg_bnw_nods.png", ["--no-background-color", "--exclude-drawing-sheet", "--black-and-white"])
+                            [("cli/basic_test/basic_test.kicad_sch", "basic_test", "cli/basic_test/basic_test.png", []), 
+                             ("cli/basic_test/basic_test.kicad_sch", "basic_test_nobg_bnw_nods", "cli/basic_test/basic_test_nobg_bnw_nods.png", ["--no-background-color", "--exclude-drawing-sheet", "--black-and-white"])
                              ])
 def test_sch_export_svg( kitest,
                          image_diff, 
@@ -39,7 +39,7 @@ def test_sch_export_svg( kitest,
                          cli_args: list):
     input_file = kitest.get_data_file_path( test_file )
     
-    output_path =  kitest.get_output_path( "cli\\{}\\".format( output_dir ) )
+    output_path =  kitest.get_output_path( "cli/{}/".format( output_dir ) )
 
     command = ["kicad-cli", "sch", "export", "svg"]
     command.extend( cli_args )
@@ -51,6 +51,7 @@ def test_sch_export_svg( kitest,
     
     assert exitcode == 0
     assert stderr == ''
+    assert stdout is not None
     
     stdout_regex = re.match("^Plotted to '(.+)'", stdout)
     assert stdout_regex
@@ -70,22 +71,23 @@ def test_sch_export_svg( kitest,
     assert image_diff( png_converted_from_svg_path, compare_file_path, throw_exception=False )
 
 
-@pytest.mark.parametrize("test_file,output_fn,line_skip_count,cli_args", 
-                            [("cli\\basic_test\\basic_test.kicad_sch", "basic_test.netlist.kicadsexpr", 5, []), 
-                             ("cli\\basic_test\\basic_test.kicad_sch", "basic_test.netlist.kicadsexpr", 5, ["--format=kicadsexpr"]),
-                             ("cli\\basic_test\\basic_test.kicad_sch", "basic_test.netlist.kicadxml", 6, ["--format=kicadxml"]),
-                             ("cli\\basic_test\\basic_test.kicad_sch", "basic_test.netlist.cadstar", 3, ["--format=cadstar"]),
-                             ("cli\\basic_test\\basic_test.kicad_sch", "basic_test.netlist.orcadpcb2", 1, ["--format=orcadpcb2"])
+@pytest.mark.parametrize("test_file,output_fn,line_skip_count,skip_compare,cli_args", 
+                            [("cli/basic_test/basic_test.kicad_sch", "basic_test.netlist.kicadsexpr", 5, True, []), 
+                             ("cli/basic_test/basic_test.kicad_sch", "basic_test.netlist.kicadsexpr", 5, True,["--format=kicadsexpr"]),
+                             ("cli/basic_test/basic_test.kicad_sch", "basic_test.netlist.kicadxml", 6, True,["--format=kicadxml"]),
+                             ("cli/basic_test/basic_test.kicad_sch", "basic_test.netlist.cadstar", 3, False, ["--format=cadstar"]),
+                             ("cli/basic_test/basic_test.kicad_sch", "basic_test.netlist.orcadpcb2", 1, False, ["--format=orcadpcb2"])
                              ])
 def test_sch_export_netlist( kitest,
                              test_file: str,
                              output_fn: str, 
                              line_skip_count: int,
+                             skip_compare: bool,
                              cli_args: list):
     input_file = kitest.get_data_file_path( test_file )
-    compare_filepath = kitest.get_data_file_path( "cli\\basic_test\\{}".format( output_fn ) )
+    compare_filepath = kitest.get_data_file_path( "cli/basic_test/{}".format( output_fn ) )
     
-    output_filepath =  kitest.get_output_path( "cli\\" ).joinpath( output_fn )
+    output_filepath =  kitest.get_output_path( "cli/" ).joinpath( output_fn )
 
     command = ["kicad-cli", "sch", "export", "netlist"]
     command.extend( cli_args )
@@ -98,15 +100,17 @@ def test_sch_export_netlist( kitest,
     assert exitcode == 0
     assert stderr == ''
 
-    assert utils.textdiff_files( compare_filepath, str( output_filepath ), line_skip_count )
+    # some of our netlist formats are not cross platform so skip for now
+    if not skip_compare:
+        assert utils.textdiff_files( compare_filepath, str( output_filepath ), line_skip_count )
     
     kitest.add_attachment( str( output_filepath ) )
 
 
 @pytest.mark.parametrize("test_file,output_fn,cli_args", 
-                            [("cli\\basic_test\\basic_test.kicad_sch", "basic_test.pdf", []), 
-                             ("cli\\basic_test\\basic_test.kicad_sch", "basic_test.bnw.nods.nobg.pdf", ["--black-and-white","--exclude-drawing-sheet","--no-background-color"]),
-                             ("cli\\basic_test\\basic_test.kicad_sch", "basic_test.pone.pdf", ["--plot-one"])
+                            [("cli/basic_test/basic_test.kicad_sch", "basic_test.pdf", []), 
+                             ("cli/basic_test/basic_test.kicad_sch", "basic_test.bnw.nods.nobg.pdf", ["--black-and-white","--exclude-drawing-sheet","--no-background-color"]),
+                             ("cli/basic_test/basic_test.kicad_sch", "basic_test.pone.pdf", ["--plot-one"])
                              ])
 def test_sch_export_pdf( kitest,
                          test_file: str,
@@ -114,7 +118,7 @@ def test_sch_export_pdf( kitest,
                          cli_args: list):
     input_file = kitest.get_data_file_path( test_file )
     
-    output_filepath =  kitest.get_output_path( "cli\\" ).joinpath( output_fn )
+    output_filepath =  kitest.get_output_path( "cli/" ).joinpath( output_fn )
 
     command = ["kicad-cli", "sch", "export", "pdf"]
     command.extend( cli_args )
@@ -131,7 +135,7 @@ def test_sch_export_pdf( kitest,
 
 
 @pytest.mark.parametrize("test_file,output_fn,line_skip_count,cli_args", 
-                            [("cli\\basic_test\\basic_test.kicad_sch", "basic_test.pythonbom", 6, [])
+                            [("cli/basic_test/basic_test.kicad_sch", "basic_test.pythonbom", 6, [])
                              ])
 def test_sch_export_pythonbom( kitest,
                          test_file: str,
@@ -139,9 +143,9 @@ def test_sch_export_pythonbom( kitest,
                          line_skip_count: int,
                          cli_args: list):
     input_file = kitest.get_data_file_path( test_file )
-    compare_filepath = kitest.get_data_file_path( "cli\\basic_test\\{}".format( output_fn ) )
+    compare_filepath = kitest.get_data_file_path( "cli/basic_test/{}".format( output_fn ) )
     
-    output_filepath =  kitest.get_output_path( "cli\\" ).joinpath( output_fn )
+    output_filepath =  kitest.get_output_path( "cli/" ).joinpath( output_fn )
 
     command = ["kicad-cli", "sch", "export", "python-bom"]
     command.extend( cli_args )
@@ -154,6 +158,6 @@ def test_sch_export_pythonbom( kitest,
     assert exitcode == 0
     assert stderr == ''
 
-    assert utils.textdiff_files( compare_filepath, str( output_filepath ), line_skip_count )
+    # pythonbom is not currently crossplatform (platform specific paths) to enable diffs
 
     kitest.add_attachment( str( output_filepath ) )

@@ -32,20 +32,20 @@ endif()
 
 if( KICAD_TEST_XML_OUTPUT )
     # To do this, you will need xmlrunner
-    set( PYTEST_ARGS_QAPYTHON --xml=${CMAKE_CURRENT_BINARY_DIR}/qapython.xunit-results )
-    set( PYTEST_ARGS_QACLI --junitxml=${CMAKE_CURRENT_BINARY_DIR}/qacli.junit-results )
+    set( PYTEST_ARGS_QAPYTHON --xml=${CMAKE_CURRENT_BINARY_DIR}/qapython.xunit-results.xml )
+    set( PYTEST_ARGS_QACLI --junitxml=${CMAKE_CURRENT_BINARY_DIR}/qacli.junit-results.xml )
 endif()
 
-
-if( MSVC )
 # avoid formatting this otherwise you will introduce whitespace into the PATH string
     set( QA_PATH_REPLACEMENT
 "PATH=${CMAKE_BINARY_DIR}/kicad/;\
 ${CMAKE_BINARY_DIR}/pcbnew/;\
 ${CMAKE_BINARY_DIR}/eeschema/;\
 $ENV{PATH};" )
-endif()
 
+if (UNIX)
+  string(REPLACE ";" ":" QA_PATH_REPLACEMENT "${QA_PATH_REPLACEMENT}")
+endif()
 
 if( NOT (MSVC AND CMAKE_BUILD_TYPE STREQUAL "Debug") )
 # qa_python will never work under MSVC + Debug because we only have the Release mode python.exe
@@ -58,7 +58,7 @@ add_test( NAME qa_python
 
 set_tests_properties( qa_python
     PROPERTIES
-        ENVIRONMENT "${QA_PATH_REPLACEMENT}PYTHONPATH=${CMAKE_BINARY_DIR}/pcbnew;${PYTHON_QA_PATH}"
+        ENVIRONMENT "${QA_PATH_REPLACEMENT};PYTHONPATH=${CMAKE_BINARY_DIR}/pcbnew;${PYTHON_QA_PATH}"
 )
 endif()
 
