@@ -321,15 +321,15 @@ void LIB_TEXTBOX::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
     text.SetStart( VECTOR2I( pt1.x, -pt1.y ) );
     text.SetEnd( VECTOR2I( pt2.x, -pt2.y ) );
 
-    GRPrintText( DC, text.GetDrawPos(), color, text.GetShownText(), text.GetTextAngle(),
+    GRPrintText( DC, text.GetDrawPos(), color, text.GetShownText( true ), text.GetTextAngle(),
                  text.GetTextSize(), text.GetHorizJustify(), text.GetVertJustify(), penWidth,
                  text.IsItalic(), text.IsBold(), font );
 }
 
 
-wxString LIB_TEXTBOX::GetShownText( int aDepth, bool aAllowExtraText ) const
+wxString LIB_TEXTBOX::GetShownText( bool aAllowExtraText, int aDepth ) const
 {
-    wxString text = EDA_TEXT::GetShownText();
+    wxString text = EDA_TEXT::GetShownText( aAllowExtraText, aDepth );
 
     KIFONT::FONT* font = GetFont();
     VECTOR2D      size = GetEnd() - GetStart();
@@ -461,7 +461,7 @@ void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOf
 
     std::vector<VECTOR2I> positions;
     wxArrayString strings_list;
-    wxStringSplit( GetShownText(), strings_list, '\n' );
+    wxStringSplit( GetShownText( true ), strings_list, '\n' );
     positions.reserve( strings_list.Count() );
 
     text.GetLinePositions( positions, (int) strings_list.Count() );

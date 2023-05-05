@@ -587,7 +587,7 @@ bool SCH_LABEL_BASE::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* toke
     {
         if( token->IsSameAs( field.GetName() ) )
         {
-            *token = field.GetShownText( aDepth + 1 );
+            *token = field.GetShownText( false, aDepth + 1 );
             return true;
         }
     }
@@ -616,7 +616,8 @@ bool SCH_LABEL_BASE::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* toke
 }
 
 
-wxString SCH_LABEL_BASE::GetShownText( const SCH_SHEET_PATH* aPath, int aDepth, bool aAllowExtraText ) const
+wxString SCH_LABEL_BASE::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText,
+                                       int aDepth ) const
 {
     std::function<bool( wxString* )> textResolver =
             [&]( wxString* token ) -> bool
@@ -624,7 +625,7 @@ wxString SCH_LABEL_BASE::GetShownText( const SCH_SHEET_PATH* aPath, int aDepth, 
                 return ResolveTextVar( aPath, token, aDepth );
             };
 
-    wxString text = EDA_TEXT::GetShownText();
+    wxString text = EDA_TEXT::GetShownText( aAllowExtraText, aDepth );
 
     if( text == wxS( "~" ) ) // Legacy placeholder for empty string
     {
@@ -998,7 +999,7 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground ) const
     }
     else
     {
-        aPlotter->PlotText( textpos, color, GetShownText(), attrs, font );
+        aPlotter->PlotText( textpos, color, GetShownText( true ), attrs, font );
 
         if( s_poly.size() )
             aPlotter->PlotPoly( s_poly, FILL_T::NO_FILL, penWidth );
@@ -1008,8 +1009,8 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground ) const
 
         if( connection )
         {
-            properties.emplace_back(
-                    wxString::Format( wxT( "!%s = %s" ), _( "Net" ), connection->Name() ) );
+            properties.emplace_back( wxString::Format( wxT( "!%s = %s" ), _( "Net" ),
+                                                       connection->Name() ) );
 
             properties.emplace_back( wxString::Format( wxT( "!%s = %s" ), _( "Resolved netclass" ),
                                                        GetEffectiveNetClass()->GetName() ) );
@@ -1017,8 +1018,8 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground ) const
 
         for( const SCH_FIELD& field : GetFields() )
         {
-            properties.emplace_back(
-                    wxString::Format( wxT( "!%s = %s" ), field.GetName(), field.GetShownText() ) );
+            properties.emplace_back( wxString::Format( wxT( "!%s = %s" ), field.GetName(),
+                                                       field.GetShownText( false ) ) );
         }
 
         if( !properties.empty() )
@@ -1026,7 +1027,8 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground ) const
 
         if( Type() == SCH_HIER_LABEL_T )
         {
-            aPlotter->Bookmark( GetBodyBoundingBox(), GetShownText(), _( "Hierarchical Labels" ) );
+            aPlotter->Bookmark( GetBodyBoundingBox(), GetShownText( false ),
+                                _( "Hierarchical Labels" ) );
         }
     }
 
@@ -1111,7 +1113,7 @@ const BOX2I SCH_LABEL::GetBodyBoundingBox() const
 
 wxString SCH_LABEL::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
-    return wxString::Format( _( "Label '%s'" ), KIUI::EllipsizeMenuText( GetShownText() ) );
+    return wxString::Format( _( "Label '%s'" ), KIUI::EllipsizeMenuText( GetText() ) );
 }
 
 
@@ -1289,8 +1291,8 @@ wxString SCH_DIRECTIVE_LABEL::GetItemDescription( UNITS_PROVIDER* aUnitsProvider
     else
     {
         return wxString::Format( _( "Directive Label [%s %s]" ),
-                                 m_fields[0].GetName(),
-                                 m_fields[0].GetShownText() );
+                                 UnescapeString( m_fields[0].GetName() ),
+                                 KIUI::EllipsizeMenuText( m_fields[0].GetText() ) );
     }
 }
 
@@ -1565,7 +1567,7 @@ void SCH_GLOBALLABEL::CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings
 
 wxString SCH_GLOBALLABEL::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
-    return wxString::Format( _( "Global Label '%s'" ), KIUI::EllipsizeMenuText( GetShownText() ) );
+    return wxString::Format( _( "Global Label '%s'" ), KIUI::EllipsizeMenuText( GetText() ) );
 }
 
 
@@ -1699,7 +1701,7 @@ VECTOR2I SCH_HIERLABEL::GetSchematicTextOffset( const RENDER_SETTINGS* aSettings
 wxString SCH_HIERLABEL::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( _( "Hierarchical Label '%s'" ),
-                             KIUI::EllipsizeMenuText( GetShownText() ) );
+                             KIUI::EllipsizeMenuText( GetText() ) );
 }
 
 

@@ -295,7 +295,8 @@ void PCB_DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
 
     wxCHECK_RET( m_parent != nullptr, wxT( "PCB_TEXT::GetMsgPanelInfo() m_Parent is NULL." ) );
 
-    aList.emplace_back( _( "Dimension" ), GetShownText() );
+    // Don't use GetShownText(); we want to see the variable references here
+    aList.emplace_back( _( "Dimension" ), KIUI::EllipsizeStatusText( aFrame, GetText() ) );
 
     aList.emplace_back( _( "Prefix" ), GetPrefix() );
 
@@ -449,7 +450,9 @@ const BOX2I PCB_DIMENSION_BASE::GetBoundingBox() const
 
 wxString PCB_DIMENSION_BASE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
-    return wxString::Format( _( "Dimension '%s' on %s" ), GetText(), GetLayerName() );
+    return wxString::Format( _( "Dimension '%s' on %s" ),
+                             KIUI::EllipsizeMenuText( GetText() ),
+                             GetLayerName() );
 }
 
 
@@ -1082,7 +1085,8 @@ void PCB_DIM_LEADER::updateGeometry()
 
 void PCB_DIM_LEADER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    aList.emplace_back( _( "Leader" ), GetShownText() );
+    // Don't use GetShownText(); we want to see the variable references here
+    aList.emplace_back( _( "Leader" ), KIUI::EllipsizeStatusText( aFrame, GetText() ) );
 
     ORIGIN_TRANSFORMS originTransforms = aFrame->GetOriginTransforms();
 

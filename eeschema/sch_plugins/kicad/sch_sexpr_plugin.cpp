@@ -752,11 +752,11 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSchema
             }
             else if( id == VALUE_FIELD )
             {
-                field.SetText( aSymbol->GetValueFieldText( false ) );
+                field.SetText( aSymbol->GetField( VALUE_FIELD )->GetText() );
             }
             else if( id == FOOTPRINT_FIELD )
             {
-                field.SetText( aSymbol->GetFootprintFieldText( false ) );
+                field.SetText( aSymbol->GetField( FOOTPRINT_FIELD )->GetText() );
             }
         }
 

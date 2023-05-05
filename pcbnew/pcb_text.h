@@ -83,15 +83,12 @@ public:
      */
     void KeepUpright( const EDA_ANGLE& aOldOrientation, const EDA_ANGLE& aNewOrientation );
 
-    wxString GetShownText( int aDepth = 0, bool aAllowExtraText = true ) const override;
+    wxString GetShownText( bool aAllowExtraText, int aDepth = 0 ) const override;
 
     void SetType( TEXT_TYPE aType ) { m_type = aType; }
     TEXT_TYPE GetType() const       { return m_type; }
 
-    bool Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const override
-    {
-        return BOARD_ITEM::Matches( GetShownText(), aSearchData );
-    }
+    bool Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const override;
 
     virtual VECTOR2I GetPosition() const override
     {

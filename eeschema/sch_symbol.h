@@ -465,10 +465,12 @@ public:
         m_fields = aFields;     // vector copying, length is changed possibly
     }
 
-    const wxString GetValueFieldText( bool aResolve, const SCH_SHEET_PATH* aPath = nullptr ) const;
+    const wxString GetValueFieldText( bool aResolve, const SCH_SHEET_PATH* aPath,
+                                      bool aAllowExtraText ) const;
     void SetValueFieldText( const wxString& aValue );
 
-    const wxString GetFootprintFieldText( bool aResolve ) const;
+    const wxString GetFootprintFieldText( bool aResolve, const SCH_SHEET_PATH* aPath,
+                                          bool aAllowExtraText ) const;
     void SetFootprintFieldText( const wxString& aFootprint );
 
     /**

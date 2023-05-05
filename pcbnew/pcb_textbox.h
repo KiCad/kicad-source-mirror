@@ -76,16 +76,13 @@ public:
 
     void SetTextAngle( const EDA_ANGLE& aAngle ) override;
 
-    wxString GetShownText( int aDepth = 0, bool aAllowExtraText = true ) const override;
+    wxString GetShownText( bool aAllowExtraText, int aDepth = 0 ) const override;
 
     /// PCB_TEXTBOXes are always visible:
     void SetVisible( bool aVisible ) override { /* do nothing */}
     bool IsVisible() const override { return true; }
 
-    bool Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const override
-    {
-        return BOARD_ITEM::Matches( GetShownText(), aSearchData );
-    }
+    bool Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const override;
 
     std::vector<VECTOR2I> GetAnchorAndOppositeCorner() const;
 

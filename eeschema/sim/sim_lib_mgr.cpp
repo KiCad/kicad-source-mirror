@@ -200,7 +200,7 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, S
         if( field.GetId() == REFERENCE_FIELD )
             fields.back().SetText( aSymbol.GetRef( aSheetPath ) );
         else
-            fields.back().SetText( field.GetShownText( aSheetPath, 0, false ) );
+            fields.back().SetText( field.GetShownText( aSheetPath, false ) );
     }
 
     wxString deviceType;

@@ -55,7 +55,7 @@ public:
 
     VECTOR2I GetDrawPos() const override;
 
-    wxString GetShownText( int aDepth = 0, bool aAllowExtraText = true ) const override;
+    wxString GetShownText( bool aAllowExtraText, int aDepth = 0 ) const override;
 
     void MirrorHorizontally( const VECTOR2I& center );
     void MirrorVertically( const VECTOR2I& center );

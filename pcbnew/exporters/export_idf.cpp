@@ -271,7 +271,7 @@ UseBoundingBox:
 static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD& aIDFBoard )
 {
     // Reference Designator
-    std::string crefdes = TO_UTF8( aFootprint->Reference().GetShownText() );
+    std::string crefdes = TO_UTF8( aFootprint->Reference().GetShownText( false ) );
 
     wxString libraryName = aFootprint->GetFPID().GetLibNickname();
     wxString footprintBasePath = wxEmptyString;
@@ -295,7 +295,7 @@ static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD
 
     if( crefdes.empty() || !crefdes.compare( "~" ) )
     {
-        std::string cvalue = TO_UTF8( aFootprint->Value().GetShownText() );
+        std::string cvalue = TO_UTF8( aFootprint->Value().GetShownText( false ) );
 
         // if both the RefDes and Value are empty or set to '~' the board owns the part,
         // otherwise associated parts of the footprint must be marked NOREFDES.
@@ -440,7 +440,7 @@ static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD
 
         if( refdes.empty() )
         {
-            refdes = TO_UTF8( aFootprint->Reference().GetShownText() );
+            refdes = TO_UTF8( aFootprint->Reference().GetShownText( false ) );
 
             // NOREFDES cannot be used or else the software gets confused
             // when writing out the placement data due to conflicting

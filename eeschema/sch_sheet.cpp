@@ -248,7 +248,7 @@ bool SCH_SHEET::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, in
     {
         if( token->IsSameAs( m_fields[i].GetCanonicalName().Upper() ) )
         {
-            *token = m_fields[i].GetShownText( aDepth + 1 );
+            *token = m_fields[i].GetShownText( nullptr, false, aDepth + 1 );
             return true;
         }
     }
@@ -257,7 +257,7 @@ bool SCH_SHEET::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, in
     {
         if( token->IsSameAs( m_fields[i].GetName() ) )
         {
-            *token = m_fields[i].GetShownText( aDepth + 1 );
+            *token = m_fields[i].GetShownText( nullptr, false, aDepth + 1 );
             return true;
         }
     }
@@ -795,7 +795,9 @@ int SCH_SHEET::CountSheets() const
 
 void SCH_SHEET::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    aList.emplace_back( _( "Sheet Name" ), m_fields[ SHEETNAME ].GetText() );
+    // Don't use GetShownText(); we want to see the variable references here
+    aList.emplace_back( _( "Sheet Name" ),
+                        KIUI::EllipsizeStatusText( aFrame, m_fields[ SHEETNAME ].GetText() ) );
 
     if( SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( aFrame ) )
     {
@@ -805,7 +807,9 @@ void SCH_SHEET::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
         aList.emplace_back( _( "Hierarchical Path" ), path.PathHumanReadable( false, true ) );
     }
 
-    aList.emplace_back( _( "File Name" ), m_fields[ SHEETFILENAME ].GetText() );
+    // Don't use GetShownText(); we want to see the variable references here
+    aList.emplace_back( _( "File Name" ),
+                        KIUI::EllipsizeStatusText( aFrame, m_fields[ SHEETFILENAME ].GetText() ) );
 }
 
 
@@ -1052,7 +1056,7 @@ void SCH_SHEET::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction
 wxString SCH_SHEET::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( _( "Hierarchical Sheet %s" ),
-                             m_fields[ SHEETNAME ].GetText() );
+                             KIUI::EllipsizeMenuText( m_fields[ SHEETNAME ].GetText() ) );
 }
 
 
@@ -1123,7 +1127,7 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter, bool aBackground ) const
     {
         properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
                                                    field.GetName(),
-                                                   field.GetShownText() ) );
+                                                   field.GetShownText( false ) ) );
     }
 
     aPlotter->HyperlinkMenu( GetBoundingBox(), properties );

@@ -75,7 +75,7 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_SYMBO
 
         m_newId->ChangeValue( UnescapeString( m_symbol->GetLibId().Format() ) );
         m_specifiedReference->ChangeValue( m_symbol->GetRef( currentSheet ) );
-        m_specifiedValue->ChangeValue( m_symbol->GetValueFieldText( false ) );
+        m_specifiedValue->ChangeValue( UnescapeString( m_symbol->GetField( VALUE_FIELD )->GetText() ) );
         m_specifiedId->ChangeValue( UnescapeString( m_symbol->GetLibId().Format() ) );
     }
     else
@@ -426,12 +426,14 @@ bool DIALOG_CHANGE_SYMBOLS::isMatch( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aInsta
     else if( m_matchByReference->GetValue() )
     {
         return WildCompareString( m_specifiedReference->GetValue(),
-                                  aSymbol->GetRef( aInstance, false ), false );
+                                  UnescapeString( aSymbol->GetRef( aInstance, false ) ),
+                                  false );
     }
     else if( m_matchByValue->GetValue() )
     {
         return WildCompareString( m_specifiedValue->GetValue(),
-                                  aSymbol->GetValueFieldText( false ), false );
+                                  UnescapeString( aSymbol->GetField( VALUE_FIELD )->GetText() ),
+                                  false );
     }
     else if( m_matchById )
     {

@@ -143,12 +143,12 @@ public:
      */
     virtual bool ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, int aDepth ) const;
 
-    wxString GetShownText( const SCH_SHEET_PATH* aPath, int aDepth = 0,
-                           bool aAllowExtraText = true ) const override;
+    wxString GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText,
+                           int aDepth = 0 ) const override;
 
-    wxString GetShownText( int aDepth = 0, bool aAllowExtraText = true ) const override
+    wxString GetShownText( bool aAllowExtraText, int aDepth = 0 ) const override
     {
-        return GetShownText( nullptr, aDepth, aAllowExtraText );
+        return GetShownText( nullptr, aAllowExtraText, aDepth );
     }
 
     void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction ) override;

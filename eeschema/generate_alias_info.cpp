@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -166,7 +166,7 @@ protected:
         switch( aField.GetId() )
         {
         case DATASHEET_FIELD:
-            text = m_symbol->GetDatasheetField().GetShownText( 0, false );
+            text = m_symbol->GetDatasheetField().GetShownText( false );
 
             if( text.IsEmpty() || text == wxT( "~" ) )
             {
@@ -197,7 +197,7 @@ protected:
             break;
 
         default:
-            text = aField.GetShownText( 0, false );
+            text = aField.GetShownText( false );
             fieldhtml.Replace( wxS( "__VALUE__" ), EscapeHTML( text ) );
         }
 

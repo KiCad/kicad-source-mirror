@@ -498,12 +498,12 @@ bool FOOTPRINT::ResolveTextVar( wxString* token, int aDepth ) const
 
     if( token->IsSameAs( wxT( "REFERENCE" ) ) )
     {
-        *token = m_reference->GetShownText( aDepth + 1 );
+        *token = m_reference->GetShownText( false, aDepth + 1 );
         return true;
     }
     else if( token->IsSameAs( wxT( "VALUE" ) ) )
     {
-        *token = m_value->GetShownText( aDepth + 1 );
+        *token = m_value->GetShownText( false, aDepth + 1 );
         return true;
     }
     else if( token->IsSameAs( wxT( "LAYER" ) ) )
@@ -1024,7 +1024,9 @@ void FOOTPRINT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 {
     wxString msg, msg2;
 
-    aList.emplace_back( m_reference->GetShownText(), m_value->GetShownText() );
+    // Don't use GetShownText(); we want to see the variable references here
+    aList.emplace_back( UnescapeString( m_reference->GetText() ),
+                        UnescapeString( m_value->GetText() ) );
 
     if( aFrame->IsType( FRAME_FOOTPRINT_VIEWER )
         || aFrame->IsType( FRAME_FOOTPRINT_VIEWER_MODAL )
@@ -1039,7 +1041,7 @@ void FOOTPRINT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
         aList.emplace_back( _( "Pads" ), wxString::Format( wxT( "%zu" ), padCount ) );
 
         aList.emplace_back( wxString::Format( _( "Doc: %s" ), GetDescription() ),
-                               wxString::Format( _( "Keywords: %s" ), GetKeywords() ) );
+                            wxString::Format( _( "Keywords: %s" ), GetKeywords() ) );
 
         return;
     }

@@ -822,7 +822,7 @@ SCH_REFERENCE::SCH_REFERENCE( SCH_SYMBOL* aSymbol, LIB_SYMBOL* aLibSymbol,
     m_libPart    = aLibSymbol;     // Warning: can be nullptr for orphan symbols
                                    // (i.e. with a symbol library not found)
     m_unit       = aSymbol->GetUnitSelection( &aSheetPath );
-    m_footprint  = aSymbol->GetFootprintFieldText( true );
+    m_footprint  = aSymbol->GetFootprintFieldText( true, &aSheetPath, false );
     m_sheetPath  = aSheetPath;
     m_isNew      = false;
     m_flag       = 0;
@@ -838,10 +838,10 @@ SCH_REFERENCE::SCH_REFERENCE( SCH_SYMBOL* aSymbol, LIB_SYMBOL* aLibSymbol,
 
     m_numRef = -1;
 
-    if( aSymbol->GetValueFieldText( false ).IsEmpty() )
+    if( aSymbol->GetValueFieldText( false, &aSheetPath, false ).IsEmpty() )
         aSymbol->SetValueFieldText( wxT( "~" ) );
 
-    m_value = aSymbol->GetValueFieldText( false );
+    m_value = aSymbol->GetValueFieldText( false, &aSheetPath, false );
 }
 
 

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -377,7 +377,7 @@ void SCH_EDIT_FRAME::AnnotateSymbols( ANNOTATE_SCOPE_T  aAnnotateScope,
             if( symbol->GetUnitCount() > 1 )
             {
                 msg.Printf( _( "Updated %s (unit %s) from %s to %s." ),
-                            symbol->GetValueFieldText( true ),
+                            symbol->GetValueFieldText( true, sheet, false ),
                             LIB_SYMBOL::SubReference( symbol->GetUnit(), false ),
                             prevRef,
                             newRef );
@@ -385,7 +385,7 @@ void SCH_EDIT_FRAME::AnnotateSymbols( ANNOTATE_SCOPE_T  aAnnotateScope,
             else
             {
                 msg.Printf( _( "Updated %s from %s to %s." ),
-                            symbol->GetValueFieldText( true ),
+                            symbol->GetValueFieldText( true, sheet, false ),
                             prevRef,
                             newRef );
             }
@@ -395,14 +395,14 @@ void SCH_EDIT_FRAME::AnnotateSymbols( ANNOTATE_SCOPE_T  aAnnotateScope,
             if( symbol->GetUnitCount() > 1 )
             {
                 msg.Printf( _( "Annotated %s (unit %s) as %s." ),
-                            symbol->GetValueFieldText( true ),
+                            symbol->GetValueFieldText( true, sheet, false ),
                             LIB_SYMBOL::SubReference( symbol->GetUnit(), false ),
                             newRef );
             }
             else
             {
                 msg.Printf( _( "Annotated %s as %s." ),
-                            symbol->GetValueFieldText( true ),
+                            symbol->GetValueFieldText( true, sheet, false ),
                             newRef );
             }
         }

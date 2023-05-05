@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009-2014 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -133,7 +133,7 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
                     && curEntry->m_FPID == footprint->GetFPID() )
             {
                 curEntry->m_Ref.Append( wxT( ", " ), 1 );
-                curEntry->m_Ref.Append( footprint->Reference().GetShownText() );
+                curEntry->m_Ref.Append( footprint->Reference().GetShownText( false ) );
                 curEntry->m_Count++;
 
                 valExist = true;
@@ -146,8 +146,8 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
         {
             BOM_ENTRY* newEntry = new BOM_ENTRY();
             newEntry->m_Id  = i++;
-            newEntry->m_Val = footprint->Value().GetShownText();
-            newEntry->m_Ref = footprint->Reference().GetShownText();
+            newEntry->m_Val = footprint->Value().GetShownText( false );
+            newEntry->m_Ref = footprint->Reference().GetShownText( false );
             newEntry->m_FPID = footprint->GetFPID();
             newEntry->m_Count = 1;
             list.Append( newEntry );

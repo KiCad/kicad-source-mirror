@@ -223,7 +223,7 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
                 if( field.GetId() == REFERENCE_FIELD )
                     spiceItem.fields.back().SetText( symbol->GetRef( &sheet ) );
                 else
-                    spiceItem.fields.back().SetText( field.GetShownText( &sheet, 0, false ) );
+                    spiceItem.fields.back().SetText( field.GetShownText( &sheet, false ) );
             }
 
             readRefName( sheet, *symbol, spiceItem, refNames );
@@ -335,9 +335,9 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
                 continue;
 
             if( item->Type() == SCH_TEXT_T )
-                text = static_cast<SCH_TEXT*>( item )->GetShownText();
+                text = static_cast<SCH_TEXT*>( item )->GetShownText( &sheet, false );
             else if( item->Type() == SCH_TEXTBOX_T )
-                text = static_cast<SCH_TEXTBOX*>( item )->GetShownText();
+                text = static_cast<SCH_TEXTBOX*>( item )->GetShownText( &sheet, false );
             else
                 continue;
 

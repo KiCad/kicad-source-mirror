@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2013 jp.charras at wanadoo.fr
  * Copyright (C) 2013-2017 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -127,18 +127,18 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
                 int unit = symbol2->GetUnitSelection( aSheet );
 
                 // The lowest unit number wins.  User should only set fields in any one unit.
-                candidate = symbol2->GetValueFieldText(  m_resolveTextVars );
+                candidate = symbol2->GetValueFieldText( m_resolveTextVars, &sheetList[i], false );
 
                 if( !candidate.IsEmpty() && ( unit < minUnit || value.IsEmpty() ) )
                     value = candidate;
 
-                candidate = symbol2->GetFootprintFieldText( m_resolveTextVars );
+                candidate = symbol2->GetFootprintFieldText( m_resolveTextVars, &sheetList[i], false );
 
                 if( !candidate.IsEmpty() && ( unit < minUnit || footprint.IsEmpty() ) )
                     footprint = candidate;
 
                 candidate = m_resolveTextVars
-                                ? symbol2->GetField( DATASHEET_FIELD )->GetShownText( aSheet, 0, false )
+                                ? symbol2->GetField( DATASHEET_FIELD )->GetShownText( &sheetList[i], false )
                                 : symbol2->GetField( DATASHEET_FIELD )->GetText();
 
                 if( !candidate.IsEmpty() && ( unit < minUnit || datasheet.IsEmpty() ) )
@@ -152,7 +152,7 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
                         && ( unit < minUnit || userFields.count( f.GetName() ) == 0 ) )
                     {
                         if( m_resolveTextVars )
-                            userFields[ f.GetName() ] = f.GetShownText( aSheet, 0, false );
+                            userFields[ f.GetName() ] = f.GetShownText( aSheet, false );
                         else
                             userFields[ f.GetName() ] = f.GetText();
                     }
@@ -164,11 +164,11 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
     }
     else
     {
-        value = aSymbol->GetValueFieldText( m_resolveTextVars );
-        footprint = aSymbol->GetFootprintFieldText( m_resolveTextVars );
+        value = aSymbol->GetValueFieldText( m_resolveTextVars, aSheet, false );
+        footprint = aSymbol->GetFootprintFieldText( m_resolveTextVars, aSheet, false );
 
         if( m_resolveTextVars )
-            datasheet = aSymbol->GetField( DATASHEET_FIELD )->GetShownText( aSheet, 0, false );
+            datasheet = aSymbol->GetField( DATASHEET_FIELD )->GetShownText( aSheet, false );
         else
             datasheet = aSymbol->GetField( DATASHEET_FIELD )->GetText();
 
@@ -179,7 +179,7 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
             if( f.GetText().size() )
             {
                 if( m_resolveTextVars )
-                    userFields[ f.GetName() ] = f.GetShownText( aSheet, 0, false );
+                    userFields[ f.GetName() ] = f.GetShownText( aSheet, false );
                 else
                     userFields[ f.GetName() ] = f.GetText();
             }
@@ -321,7 +321,7 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
                 xproperty->AddAttribute( wxT( "name" ), fields[jj].GetCanonicalName() );
 
                 if( m_resolveTextVars )
-                    xproperty->AddAttribute( wxT( "value" ), fields[jj].GetShownText( &sheet, 0, false ) );
+                    xproperty->AddAttribute( wxT( "value" ), fields[jj].GetShownText( &sheet, false ) );
                 else
                     xproperty->AddAttribute( wxT( "value" ), fields[jj].GetText() );
             }
@@ -334,7 +334,7 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
                 if( m_resolveTextVars )
                     // do not allow GetShownText() to add any prefix useful only when displaying
                     // the field on screen
-                    xproperty->AddAttribute( wxT( "value" ), sheetField.GetShownText( &sheet, 0, false ) );
+                    xproperty->AddAttribute( wxT( "value" ), sheetField.GetShownText( &sheet, false ) );
                 else
                     xproperty->AddAttribute( wxT( "value" ), sheetField.GetText() );
             }

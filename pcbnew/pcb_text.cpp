@@ -77,7 +77,7 @@ PCB_TEXT::~PCB_TEXT()
 }
 
 
-wxString PCB_TEXT::GetShownText( int aDepth, bool aAllowExtraText ) const
+wxString PCB_TEXT::GetShownText( bool aAllowExtraText, int aDepth ) const
 {
     const FOOTPRINT* parentFootprint = GetParentFootprint();
     const BOARD*     board = GetBoard();
@@ -100,7 +100,7 @@ wxString PCB_TEXT::GetShownText( int aDepth, bool aAllowExtraText ) const
                 return false;
             };
 
-    wxString text = EDA_TEXT::GetShownText();
+    wxString text = EDA_TEXT::GetShownText( aAllowExtraText, aDepth );
 
     if( HasTextVars() )
     {
@@ -109,6 +109,12 @@ wxString PCB_TEXT::GetShownText( int aDepth, bool aAllowExtraText ) const
     }
 
     return text;
+}
+
+
+bool PCB_TEXT::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const
+{
+    return BOARD_ITEM::Matches( UnescapeString( GetText() ), aSearchData );
 }
 
 
@@ -390,19 +396,19 @@ wxString PCB_TEXT::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 
         case TEXT_is_VALUE:
             return wxString::Format( _( "Value '%s' of %s" ),
-                                     GetShownText(),
+                                     KIUI::EllipsizeMenuText( GetText() ),
                                      parentFP->GetReference() );
 
         case TEXT_is_DIVERS:
             return wxString::Format( _( "Footprint Text '%s' of %s" ),
-                                     KIUI::EllipsizeMenuText( GetShownText() ),
+                                     KIUI::EllipsizeMenuText( GetText() ),
                                      parentFP->GetReference() );
         }
     }
     else
     {
         return wxString::Format( _( "PCB Text '%s' on %s"),
-                                 KIUI::EllipsizeMenuText( GetShownText() ),
+                                 KIUI::EllipsizeMenuText( GetText() ),
                                  GetLayerName() );
     }
 
@@ -487,7 +493,7 @@ void PCB_TEXT::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLa
                     buffer.Append( point.x, point.y );
             } );
 
-    font->Draw( &callback_gal, GetShownText(), GetTextPos(), attrs );
+    font->Draw( &callback_gal, GetShownText( true ), GetTextPos(), attrs );
     buffer.Simplify( SHAPE_POLY_SET::PM_FAST );
 
     if( IsKnockout() )

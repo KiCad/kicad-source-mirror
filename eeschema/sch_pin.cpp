@@ -195,7 +195,7 @@ SCH_SYMBOL* SCH_PIN::GetParentSymbol() const
 wxString SCH_PIN::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( "Symbol %s %s",
-                             GetParentSymbol()->GetField( REFERENCE_FIELD )->GetShownText(),
+                             UnescapeString( GetParentSymbol()->GetField( REFERENCE_FIELD )->GetText() ),
                              m_libPin->GetItemDescription( aUnitsProvider ) );
 }
 
@@ -231,7 +231,9 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
     SCH_SHEET_PATH* currentSheet = schframe ? &schframe->GetCurrentSheet() : nullptr;
     SCH_SYMBOL*     symbol = GetParentSymbol();
 
-    aList.emplace_back( symbol->GetRef( currentSheet ), symbol->GetValueFieldText( true ) );
+    // Don't use GetShownText(); we want to see the variable references here
+    aList.emplace_back( symbol->GetRef( currentSheet ),
+                        UnescapeString( symbol->GetField( VALUE_FIELD )->GetText() ) );
 
 #if defined(DEBUG)
     if( !IsConnectivityDirty() && dynamic_cast<SCH_EDIT_FRAME*>( aFrame ) )
@@ -274,10 +276,14 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
     if( IsGlobalPower() )
     {
         if( GetLibPin()->GetParent()->IsPower() )
-            return EscapeString( GetParentSymbol()->GetValueFieldText( true, &aPath ),
+        {
+            return EscapeString( GetParentSymbol()->GetValueFieldText( true, &aPath, false ),
                                  CTX_NETNAME );
+        }
         else
+        {
             return EscapeString( m_libPin->GetName(), CTX_NETNAME );
+        }
     }
 
     std::lock_guard<std::recursive_mutex> lock( m_netmap_mutex );

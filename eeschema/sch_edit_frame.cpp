@@ -1066,22 +1066,25 @@ void SCH_EDIT_FRAME::ShowFindReplaceDialog( bool aReplace )
         switch( front->Type() )
         {
         case SCH_SYMBOL_T:
-            findString = static_cast<SCH_SYMBOL*>( front )->GetValueFieldText( true );
+        {
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( front );
+            findString = UnescapeString( symbol->GetField( VALUE_FIELD )->GetText() );
             break;
+        }
 
         case SCH_FIELD_T:
-            findString = static_cast<SCH_FIELD*>( front )->GetShownText();
+            findString = UnescapeString( static_cast<SCH_FIELD*>( front )->GetText() );
             break;
 
         case SCH_LABEL_T:
         case SCH_GLOBAL_LABEL_T:
         case SCH_HIER_LABEL_T:
         case SCH_SHEET_PIN_T:
-            findString = static_cast<SCH_LABEL_BASE*>( front )->GetShownText();
+            findString = UnescapeString( static_cast<SCH_LABEL_BASE*>( front )->GetText() );
             break;
 
         case SCH_TEXT_T:
-            findString = static_cast<SCH_TEXT*>( front )->GetShownText();
+            findString = UnescapeString( static_cast<SCH_TEXT*>( front )->GetText() );
 
             if( findString.Contains( wxT( "\n" ) ) )
                 findString = findString.Before( '\n' );
@@ -1096,9 +1099,10 @@ void SCH_EDIT_FRAME::ShowFindReplaceDialog( bool aReplace )
     if( m_findReplaceDialog )
         m_findReplaceDialog->Destroy();
 
-    m_findReplaceDialog = new DIALOG_SCH_FIND(
-            this, static_cast<SCH_SEARCH_DATA*>( m_findReplaceData.get() ), wxDefaultPosition,
-            wxDefaultSize, aReplace ? wxFR_REPLACEDIALOG : 0 );
+    m_findReplaceDialog = new DIALOG_SCH_FIND( this,
+                                               static_cast<SCH_SEARCH_DATA*>( m_findReplaceData.get() ),
+                                               wxDefaultPosition, wxDefaultSize,
+                                               aReplace ? wxFR_REPLACEDIALOG : 0 );
 
     m_findReplaceDialog->SetFindEntries( m_findStringHistoryList, findString );
     m_findReplaceDialog->SetReplaceEntries( m_replaceStringHistoryList );

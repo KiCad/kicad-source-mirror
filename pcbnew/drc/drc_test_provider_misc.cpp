@@ -287,7 +287,7 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
 
                 wxCHECK( boardItem, false );
 
-                if( text && text->GetShownText().Matches( wxT( "*${*}*" ) ) )
+                if( text && text->GetShownText( true ).Matches( wxT( "*${*}*" ) ) )
                 {
                     std::shared_ptr<DRC_ITEM>drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
                     drcItem->SetItems( item );
@@ -323,7 +323,7 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
 
         DS_DRAW_ITEM_TEXT* text = dynamic_cast<DS_DRAW_ITEM_TEXT*>( item );
 
-        if( text && text->GetShownText().Matches( wxT( "*${*}*" ) ) )
+        if( text && text->GetShownText( true ).Matches( wxT( "*${*}*" ) ) )
         {
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
             drcItem->SetItems( drawingSheet );
