@@ -795,7 +795,12 @@ void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
     }
     else if( IsSymbolAlias() )
     {
-        wxString parentSymbolName = m_symbol->GetParent().lock()->GetName();
+        std::shared_ptr<LIB_SYMBOL> parent = m_symbol->GetParent().lock();
+
+        // Don't assume the parent symbol shared pointer is still valid.
+        wxCHECK( parent, /* void */ );
+
+        wxString parentSymbolName = parent->GetName();
         int      unit = GetUnit();
         int      convert = GetConvert();
         wxString msg;
