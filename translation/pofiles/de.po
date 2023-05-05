@@ -15,13 +15,14 @@
 # Ivan Chuba <xtrvweb@gmail.com>, 2022.
 # magical-obama <maschwaerzler@a1.net>, 2022.
 # Luc <some_physics@live.com>, 2023.
+# Ken Ovo <Elektroniker@aon.at>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:51-0800\n"
-"PO-Revision-Date: 2023-04-01 03:59+0000\n"
-"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
+"PO-Revision-Date: 2023-05-06 17:52+0000\n"
+"Last-Translator: Ken Ovo <Elektroniker@aon.at>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -29,7 +30,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.17-dev\n"
+"X-Generator: Weblate 4.18-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -53,8 +54,9 @@ msgid "All Files"
 msgstr "Alle Dateien"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:312
+#, fuzzy
 msgid "Build board outline"
-msgstr "Platinenumriss erstellen"
+msgstr "Erstelle den Platinenumriss"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:520
 msgid "Create layers"
@@ -66,22 +68,25 @@ msgid "No footprint loaded."
 msgstr "Kein Footprint geladen."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:686
+#, fuzzy
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
-"Footprintumriss fehlt oder ist fehlerhaft. Footprint-Checker für eine "
+"Footprintumriss fehlt oder ist fehlerhaft. Den Footprint-Checker für eine "
 "vollständige Analyse ausführen."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:695
+#, fuzzy
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
-"Platinenumriss fehlt oder ist fehlerhaft. DRC für eine vollständige Analyse "
-"ausführen."
+"Platinenumriss fehlt oder ist fehlerhaft. Den Footprint-Checker (DRC) für "
+"eine vollständige Analyse ausführen."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:226
+#, fuzzy
 msgid "Create tracks and vias"
-msgstr "Leiterbahnen und Vias erstellen"
+msgstr "Leiterbahnen und Durchkontaktierungen erstellen"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:678
 msgid "Create zones"
@@ -109,26 +114,29 @@ msgid "Simplify holes contours"
 msgstr "Lochkonturen vereinfachen"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:864
+#, fuzzy
 msgid "Build Tech layers"
-msgstr "Erstelle technische Lagen"
+msgstr "Technische Lagen erstellen"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:903
-#, c-format
+#, c-format, fuzzy
 msgid "Build Tech layer %d"
-msgstr "Erstelle technische Lage %d"
+msgstr "Erstelle Technische Lage %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1063
+#, fuzzy
 msgid "Build BVH for holes and vias"
-msgstr "Erstelle BVH für Löcher und Vias"
+msgstr "Erstelle BVH für Bohrungen und Durchkontaktierungen"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:389
 msgid "OpenGL context creation error"
 msgstr "OpenGL-Kontext-Erstellungsfehler"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:420
+#, fuzzy
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
 msgstr ""
-"Ihre OpenGL-Version wird nicht unterstützt. Es ist mindestens 1.5 "
+"Ihre OpenGL-Version wird nicht unterstützt. Es ist mindestens Version 1.5 "
 "erforderlich."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:556
@@ -144,7 +152,7 @@ msgstr "Netz %s\tNetzklasse %s"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:687
 #, c-format
 msgid "Pad %s\t"
-msgstr "Pad %s\t"
+msgstr "Anschluß %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:718
 #, c-format
@@ -2679,7 +2687,7 @@ msgstr "<<<"
 
 #: common/dialogs/dialog_page_settings_base.cpp:228
 msgid "Revision:"
-msgstr "Revision:"
+msgstr "Überarbeitung:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:240
 #: eeschema/dialogs/dialog_export_netlist.cpp:378
@@ -3162,7 +3170,7 @@ msgid ""
 "window, that window is raised."
 msgstr ""
 "Wenn der Mauszeiger über die Arbeitsfläche eines Schaltplan- oder "
-"Leiterplatteneditor-Fensters bewegt wird, wird jenes Fenster angehoben."
+"Leiterplatteneditor-Fensters bewegt wird, wird jenes Fenster geöffnet."
 
 #: common/dialogs/panel_common_settings_base.cpp:163
 msgid "Icon theme:"
@@ -4176,8 +4184,9 @@ msgid "Schematic Editor"
 msgstr "Schaltplaneditor"
 
 #: common/eda_base_frame.cpp:1047
+#, fuzzy
 msgid "Annotation Options"
-msgstr "Annotierungsoptionen"
+msgstr "Anmerkungsoptionen"
 
 #: common/eda_base_frame.cpp:1050
 #: eeschema/dialogs/dialog_schematic_setup.cpp:77
@@ -4422,7 +4431,7 @@ msgstr "Leiterbahn"
 #: common/eda_item.cpp:342 pcbnew/dialogs/dialog_board_statistics.cpp:501
 #: pcbnew/pcb_track.cpp:849 pcbnew/pcb_track.cpp:932
 msgid "Via"
-msgstr "Via"
+msgstr "Durchkontaktierung"
 
 #: common/eda_item.cpp:343 common/eda_item.cpp:355 pcbnew/pcb_marker.cpp:193
 msgid "Marker"
@@ -4438,7 +4447,7 @@ msgstr "Elementliste"
 
 #: common/eda_item.cpp:352
 msgid "NetInfo"
-msgstr "NetInfo"
+msgstr "Netzinformation"
 
 #: common/eda_item.cpp:353 pcbnew/pcb_group.cpp:399
 #: pcbnew/tools/pcb_actions.cpp:758
@@ -4569,7 +4578,7 @@ msgstr "Pad-Nummernfeld"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:704
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2162
 msgid "Segment"
-msgstr "Segment"
+msgstr "Abschnitt"
 
 #: common/eda_shape.cpp:621
 msgid "Unrecognized"
@@ -7507,8 +7516,9 @@ msgid "Path Type"
 msgstr "Pfadangabe"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:37
+#, fuzzy
 msgid "Ref"
-msgstr "Ref"
+msgstr "Revision"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:38
 msgid "Schematic assignment"
@@ -8034,6 +8044,7 @@ msgid "Bill of Materials"
 msgstr "Bauteilliste (BoM)"
 
 #: eeschema/dialogs/dialog_bom_help_md.h:2
+#, fuzzy
 msgid ""
 "# 1. Summary\n"
 "\n"
@@ -8120,23 +8131,23 @@ msgstr ""
 "Das Bauteillisten-Werkzeug erstellt eine Liste von Bauteilen (engl. BoM, "
 "Bill of Materials), welche im Schaltplan-Design enthalten sind.\n"
 "\n"
-"Das Werkzeug verwendet ein externes Skript, um eine BoM im gewünschten "
-"Ausgabeformat zu erstellen. Die Auswahl eines anderen Skripts verändert die "
-"Formatierung der BoM.\n"
+"Das Werkzeug verwendet ein externes Skript, um eine Liste von Bauteilen (BoM)"
+" im gewünschten Ausgabeformat zu erstellen. Die Auswahl eines anderen "
+"Skripts verändert die Formatierung der Liste von Bauteilen (BoM).\n"
 "\n"
-"Die Erzeugung einer BoM wird eingehender im Handbuch zum Schaltplaneditor "
-"beschrieben.\n"
+"Die Erzeugung einer Liste von Bauteilen (BoM) wird eingehender im Handbuch "
+"zum Schaltplan Editor beschrieben.\n"
 "\n"
 "# 2. Verwendung\n"
 "\n"
-"Wählen Sie ein Generatorskript aus der Liste der **BoM-Generatorskripte**. "
+"Wählen Sie ein Generator Skript aus der Liste der **BoM-Generator Skripte**. "
 "Einzelheiten zum ausgewählten Generator werden auf der rechten Seite des "
 "Dialogfensters angezeigt.\n"
 "\n"
 "Klicken Sie auf **Erstellen**, um die BoM-Datei mit dem ausgewählten "
 "Generator zu erstellen.\n"
 "\n"
-"Die Grundeinstellungen bieten mehrere Generatorskript-Optionen. Außerdem "
+"Die Grundeinstellungen bieten mehrere Generator Skript-Optionen. Außerdem "
 "werden bei der KiCad-Installation zusätzliche Skripte abgelegt, welche der "
 "Liste mit der Schaltfläche **+** hinzugefügt werden können.\n"
 "\n"
@@ -8159,13 +8170,13 @@ msgstr ""
 "Formatierungsparameter wird ersetzt durch einen projektspezifischen Pfad- "
 "oder Dateinamen. Die unterstützten Formatierungsparameter lauten:\n"
 "\n"
-" * `%I`: absoluter Pfad und Dateiname der Zwischen-Netzlistendatei, welche "
-"als Eingabe an das BoM-Generatorskript fungiert\n"
+"* `%I`: absoluter Pfad und Dateiname der Zwischen-Netzlistendatei, welche "
+"als Eingabe an das BoM-Generator Skript fungiert\n"
 "(die Zwischennetzlistendatei).\n"
-" * `%O`: absoluter Pfad und Dateiname für die BoM-Ausgabedatei (ohne "
+"* `%O`: absoluter Pfad und Dateiname für die BoM-Ausgabedatei (ohne "
 "Dateinamenserweiterung)\n"
-" * `%B`: Basisdateiname der BoM-Ausgabedatei (ohne Dateinamenserweiterung)\n"
-" * `%P`: absoluter Pfad des Projektverzeichnisses, ohne nachfolgendes '/'-"
+"* `%B`: Basisdateiname der BoM-Ausgabedatei (ohne Dateinamenserweiterung)\n"
+"* `%P`: absoluter Pfad des Projektverzeichnisses, ohne nachfolgendes '/'-"
 "Zeichen\n"
 "\n"
 "**Hinweis:** Der Ausgabedatei-Parameter `%O` enthält keine "
@@ -8173,7 +8184,7 @@ msgstr ""
 "passende Erweiterung hinzuzufügen, es kann jedoch nötig sein, eine "
 "Erweiterung von Hand hinzuzufügen.\n"
 "\n"
-"Es wird empfohlen, Python für BoM-Generatorskripte zu verwenden. Es ist "
+"Es wird empfohlen, Python für BoM-Generator Skripte zu verwenden. Es ist "
 "jedoch auch möglich, andere Werkzeuge einzusetzen.\n"
 "\n"
 "## Beispiel-Kommandozeilen für Python-Skripte\n"
@@ -8184,8 +8195,8 @@ msgstr ""
 "python <skriptdateiname> <eingabedateiname> <ausgabedateiname>\n"
 "```\n"
 "\n"
-"Unter Windows, mit dem gewünschten Generatorskript für eine CSV-BoM unter `C:"
-"\\Users\\benutzername\\kicad\\mein_python_skript.py`, würde die "
+"Unter Windows, mit dem gewünschten Generator Skript für eine CSV-BoM unter "
+"`C:\\Users\\benutzername\\kicad\\mein_python_skript.py`, würde die "
 "Kommandozeile lauten:\n"
 "\n"
 "```\n"
@@ -8193,7 +8204,7 @@ msgstr ""
 "csv\"\n"
 "```\n"
 "\n"
-"Unter Linux, mit dem gewünschten Generatorskript für eine CSV-BoM unter `/"
+"Unter Linux, mit dem gewünschten Generator Skript für eine CSV-BoM unter `/"
 "home/benutzername/kicad/mein_python_skript.py`, würde die Kommandozeile "
 "lauten:\n"
 "\n"
@@ -8799,7 +8810,7 @@ msgstr "Schreibt eine Anweisung, alle Stromstärken zu speichern (.probe alli)"
 #: eeschema/dialogs/dialog_export_netlist.cpp:306
 #: eeschema/dialogs/dialog_sim_command_base.cpp:441
 msgid "Save all power dissipations"
-msgstr ""
+msgstr "Alle Verlustleistungen speichern"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:307
 #, fuzzy
@@ -11019,8 +11030,9 @@ msgid "Background fill:"
 msgstr "Hintergrundfüllung:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:178
+#, fuzzy
 msgid "Page number:"
-msgstr "Seitenzahl:"
+msgstr "Seite:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:193
 msgid "Hierarchical path:"
@@ -12537,7 +12549,7 @@ msgstr "Strich- und Punktlängen sind Vielfache der Linienbreite."
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:253
 msgid "Operating-point Overlay"
-msgstr ""
+msgstr "Arbeitspunktüberlagerung"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:262
 msgid "Significant digits (voltages):"
@@ -16983,7 +16995,7 @@ msgstr "Das aktuelle Symbol wurde geändert.  Änderungen speichern?"
 #: eeschema/symbol_editor/symbol_editor.cpp:360
 #, c-format
 msgid "Deriving from '%s', the root symbol of '%s'."
-msgstr ""
+msgstr "Abgeleitet aus '%s', dem Root Symbol von '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:378
 msgid "This new symbol has no name and cannot be created."
@@ -18603,7 +18615,7 @@ msgstr "Simulator-Tastkopf hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:989
 msgid "Add Tuned Value..."
-msgstr ""
+msgstr "Abgestimmten Wert hinzufügen..."
 
 #: eeschema/tools/ee_actions.cpp:989
 msgid "Select a value to be tuned"
@@ -20620,8 +20632,9 @@ msgstr ""
 "bearbeiten"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:146
+#, fuzzy
 msgid "Preview Gerber files"
-msgstr "Gerber-Dateien betrachten und prüfen"
+msgstr "Gerber Dateien betrachten und prüfen"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:150
 msgid "Convert bitmap images to schematic symbols or PCB footprints"
@@ -20630,7 +20643,7 @@ msgstr "Bilder in Schaltzeichen oder Bauteil-Footprints umwandeln"
 #: kicad/dialogs/panel_kicad_launcher.cpp:154
 msgid "Show tools for calculating resistance, current capacity, etc."
 msgstr ""
-"Werkzeuge zur Berechnung von Widerständen, zulässiger Stromstärke usw. "
+"Werkzeuge zur Berechnung von Widerständen, zulässiger Stromstärken usw. "
 "anzeigen"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:158
@@ -20642,9 +20655,11 @@ msgstr ""
 "Leiterplattenentwürfen bearbeiten"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:164
+#, fuzzy
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
 msgstr ""
-"Herunterladbare Pakete aus KiCad- und Drittanbieter-Repositorys verwalten"
+"Herunterladbare Pakete aus KiCad- und Drittanbieter Zusammenstellungen "
+"verwalten"
 
 #: kicad/files-io.cpp:46
 msgid "KiCad project file"
@@ -21052,8 +21067,9 @@ msgid "Author"
 msgstr "Autor"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:277
+#, fuzzy
 msgid "Maintainer"
-msgstr "Maintainer"
+msgstr "Betreuer"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:281
 msgid "Resources"
@@ -21583,8 +21599,9 @@ msgid "Calculator Tools"
 msgstr "Berechnungswerkzeuge"
 
 #: kicad/tools/kicad_manager_actions.cpp:115
+#, fuzzy
 msgid "Run component calculations, track width calculations, etc."
-msgstr "Bauteile, Leiterbahnbreiten und vieles mehr berechnen"
+msgstr "Berechnen von Bauteilen, Leiterbahnbreiten und vieles mehr"
 
 #: kicad/tools/kicad_manager_actions.cpp:121
 msgid "Edit drawing sheet borders and title block"
@@ -24213,8 +24230,9 @@ msgstr "Pads"
 #: pcbnew/widgets/appearance_controls.cpp:333
 #: pcbnew/widgets/panel_selection_filter.cpp:189
 #: pcbnew/widgets/panel_selection_filter_base.cpp:41
+#, fuzzy
 msgid "Vias"
-msgstr "Vias"
+msgstr "Durchkontaktierung"
 
 #: pcbnew/board.cpp:1347 pcbnew/pcb_draw_panel_gal.cpp:529
 msgid "Track Segments"
@@ -25493,8 +25511,9 @@ msgid "Stop Layer"
 msgstr "Endlage"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:253
+#, fuzzy
 msgid "Drill Holes"
-msgstr "Bohrlöcher"
+msgstr "Bohrungen"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:260
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:216
@@ -33838,7 +33857,7 @@ msgstr ""
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:458
 #, fuzzy
 msgid "Exempt from courtyard requirement settings differ."
-msgstr "Keine Abstandsfläche erforderlich"
+msgstr "Von den Abstandsflächen abweichende Einstellungen."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:471
 msgid "Pad clearance overridden."
@@ -33863,7 +33882,7 @@ msgstr "Zonenverbindung überschrieben."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:484
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:489
 msgid "Net tie pad groups differ."
-msgstr ""
+msgstr "Die Netzknotengruppen unterscheiden sich."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:528
 msgid "Pad count differs."
@@ -33872,7 +33891,7 @@ msgstr "Padanzahl weicht ab."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:529
 #, fuzzy
 msgid "Rule area count differs."
-msgstr "Regelbereich auf %s"
+msgstr "Die Anzahl der Regelbereiche ist unterschiedlich."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:530
 msgid "Graphic item count differs."
@@ -33888,7 +33907,7 @@ msgstr "%s weicht ab."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:550
 #, fuzzy, c-format
 msgid "%s has overrides."
-msgstr "Lokale Überschreibung"
+msgstr "%s hat Überschreibungen."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:592
 msgid "3D model count differs."
