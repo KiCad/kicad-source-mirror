@@ -763,6 +763,8 @@ public:
      */
     bool IsSymbolLikePowerGlobalLabel() const;
 
+    bool IsPower() const;
+
 private:
     BOX2I doGetBoundingBox( bool aIncludePins, bool aIncludeFields ) const;
 
