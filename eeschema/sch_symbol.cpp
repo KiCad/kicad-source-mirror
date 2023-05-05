@@ -2397,3 +2397,10 @@ bool SCH_SYMBOL::IsSymbolLikePowerGlobalLabel() const
     return pin_list[0]->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN;
 }
 
+
+bool SCH_SYMBOL::IsPower() const
+{
+    wxCHECK( m_part, false );
+
+    return m_part->IsPower();
+}

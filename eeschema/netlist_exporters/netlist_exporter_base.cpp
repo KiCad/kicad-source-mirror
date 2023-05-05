@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2017 jp.charras at wanadoo.fr
  * Copyright (C) 2013-2017 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -117,13 +117,15 @@ std::vector<PIN_INFO> NETLIST_EXPORTER_BASE::CreatePinList( SCH_SYMBOL* aSymbol,
                                                             SCH_SHEET_PATH* aSheetPath,
                                                             bool aKeepUnconnectedPins )
 {
-    wxString              ref( aSymbol->GetRef( aSheetPath ) );
     std::vector<PIN_INFO> pins;
+
+    wxCHECK( aSymbol, pins );
+
+    wxString              ref( aSymbol->GetRef( aSheetPath ) );
 
     // Power symbols and other symbols which have the reference starting with "#" are not
     // included in netlist (pseudo or virtual symbols)
-
-    if( ref[0] == wxChar( '#' ) )
+    if( ( ref[0] == wxChar( '#' ) ) || aSymbol->IsPower() )
         return pins;
 
     // if( aSymbol->m_FlagControlMulti == 1 )
