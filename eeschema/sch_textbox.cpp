@@ -278,12 +278,20 @@ void SCH_TEXTBOX::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
 }
 
 
-wxString SCH_TEXTBOX::GetShownText( int aDepth, bool aAllowExtraText ) const
+wxString SCH_TEXTBOX::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText,
+                                    int aDepth ) const
 {
+    SCH_SHEET* sheet = nullptr;
+
+    if( aPath )
+        sheet = aPath->Last();
+    else if( Schematic() )
+        sheet = Schematic()->CurrentSheet().Last();
+
     std::function<bool( wxString* )> textResolver =
             [&]( wxString* token ) -> bool
             {
-                if( SCH_SHEET* sheet = Schematic()->CurrentSheet().Last() )
+                if( sheet )
                 {
                     if( sheet->ResolveTextVar( token, aDepth + 1 ) )
                         return true;
@@ -292,7 +300,7 @@ wxString SCH_TEXTBOX::GetShownText( int aDepth, bool aAllowExtraText ) const
                 return false;
             };
 
-    wxString text = EDA_TEXT::GetShownText();
+    wxString text = EDA_TEXT::GetShownText( aAllowExtraText, aDepth );
 
     if( HasTextVars() )
     {
@@ -405,7 +413,7 @@ void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground ) const
 
     std::vector<VECTOR2I> positions;
     wxArrayString strings_list;
-    wxStringSplit( GetShownText(), strings_list, '\n' );
+    wxStringSplit( GetShownText( true ), strings_list, '\n' );
     positions.reserve( strings_list.Count() );
 
     GetLinePositions( positions, (int) strings_list.Count() );

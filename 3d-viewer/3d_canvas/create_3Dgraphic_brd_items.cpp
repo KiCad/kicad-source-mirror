@@ -91,7 +91,7 @@ void BOARD_ADAPTER::addText( const EDA_TEXT* aText, CONTAINER_2D_BASE* aContaine
         callback_gal.SetIsFill( font->IsOutline() );
         callback_gal.SetIsStroke( font->IsStroke() );
         callback_gal.SetLineWidth( attrs.m_StrokeWidth );
-        font->Draw( &callback_gal, aText->GetShownText(), aText->GetDrawPos(), attrs );
+        font->Draw( &callback_gal, aText->GetShownText( true ), aText->GetDrawPos(), attrs );
 
         SHAPE_POLY_SET finalPoly;
         int            margin = attrs.m_StrokeWidth * 1.5 +
@@ -137,7 +137,7 @@ void BOARD_ADAPTER::addText( const EDA_TEXT* aText, CONTAINER_2D_BASE* aContaine
 
         attrs.m_Angle = aText->GetDrawRotation();
 
-        font->Draw( &callback_gal, aText->GetShownText(), aText->GetDrawPos(), attrs );
+        font->Draw( &callback_gal, aText->GetShownText( true ), aText->GetDrawPos(), attrs );
     }
 }
 

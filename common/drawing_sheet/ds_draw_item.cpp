@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2013 Jean-Pierre Charras <jp.charras at wanadoo.fr>.
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -118,8 +118,12 @@ void DS_DRAW_ITEM_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
         break;
 
     case DS_DATA_ITEM::DS_TEXT:
-        aList.emplace_back( _( "Text" ), static_cast<DS_DRAW_ITEM_TEXT*>( this )->GetShownText() );
+    {
+        DS_DRAW_ITEM_TEXT* textItem = static_cast<DS_DRAW_ITEM_TEXT*>( this );
+        // Don't use GetShownText(); we want to see the variable references here
+        aList.emplace_back( _( "Text" ), KIUI::EllipsizeStatusText( aFrame, textItem->GetText() ) );
         break;
+    }
 
     case DS_DATA_ITEM::DS_POLYPOLYGON:
         aList.emplace_back( _( "Imported Shape" ), wxEmptyString );
@@ -190,7 +194,7 @@ bool DS_DRAW_ITEM_TEXT::HitTest( const BOX2I& aRect, bool aContains, int aAccura
 
 wxString DS_DRAW_ITEM_TEXT::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
-    return wxString::Format( _( "Text '%s'" ), GetShownText() );
+    return wxString::Format( _( "Text '%s'" ), KIUI::EllipsizeMenuText( GetText() ) );
 }
 
 

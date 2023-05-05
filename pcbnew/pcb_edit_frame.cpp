@@ -1642,15 +1642,15 @@ void PCB_EDIT_FRAME::ShowFindDialog()
         switch( front->Type() )
         {
         case PCB_FOOTPRINT_T:
-            findString = static_cast<FOOTPRINT*>( front )->GetValue();
+            findString = UnescapeString( static_cast<FOOTPRINT*>( front )->GetValue() );
             break;
 
         case PCB_FP_TEXT_T:
-            findString = static_cast<FP_TEXT*>( front )->GetShownText();
+            findString = UnescapeString( static_cast<FP_TEXT*>( front )->GetText() );
             break;
 
         case PCB_TEXT_T:
-            findString = static_cast<PCB_TEXT*>( front )->GetShownText();
+            findString = UnescapeString( static_cast<PCB_TEXT*>( front )->GetText() );
 
             if( findString.Contains( wxT( "\n" ) ) )
                 findString = findString.Before( '\n' );

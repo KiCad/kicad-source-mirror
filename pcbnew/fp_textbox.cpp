@@ -411,17 +411,17 @@ double FP_TEXTBOX::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 }
 
 
-wxString FP_TEXTBOX::GetShownText( int aDepth, bool aAllowExtraText ) const
+wxString FP_TEXTBOX::GetShownText( bool aAllowExtraText, int aDepth ) const
 {
     const FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( GetParent() );
 
     std::function<bool( wxString* )> footprintResolver =
             [&]( wxString* token ) -> bool
             {
-                return parentFootprint && parentFootprint->ResolveTextVar( token, aDepth );
+                return parentFootprint && parentFootprint->ResolveTextVar( token, aDepth + 1 );
             };
 
-    wxString text = EDA_TEXT::GetShownText();
+    wxString text = EDA_TEXT::GetShownText( aAllowExtraText, aDepth );
 
     if( HasTextVars() )
     {
@@ -484,7 +484,7 @@ void FP_TEXTBOX::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID a
     TEXT_ATTRIBUTES attrs = GetAttributes();
     attrs.m_Angle = GetDrawRotation();
 
-    font->Draw( &callback_gal, GetShownText(), GetDrawPos(), attrs );
+    font->Draw( &callback_gal, GetShownText( true ), GetDrawPos(), attrs );
 
     buffer.Simplify( SHAPE_POLY_SET::PM_FAST );
     aBuffer.Append( buffer );

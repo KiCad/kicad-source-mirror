@@ -990,7 +990,7 @@ void SCH_PAINTER::draw( const LIB_FIELD *aField, int aLayer, bool aDimmed )
         if( drawingShadows )
             attrs.m_StrokeWidth += getShadowWidth( !aField->IsSelected() );
 
-        strokeText( UnescapeString( aField->GetShownText() ), textpos, attrs );
+        strokeText( UnescapeString( aField->GetShownText( true ) ), textpos, attrs );
     }
 
     // Draw the umbilical line when in the schematic editor
@@ -1041,7 +1041,7 @@ void SCH_PAINTER::draw( const LIB_TEXT* aText, int aLayer, bool aDimmed )
     }
     else
     {
-        wxString        shownText( aText->GetShownText() );
+        wxString        shownText( aText->GetShownText( true ) );
         VECTOR2D        pos = bBox.Centre();
         TEXT_ATTRIBUTES attrs = aText->GetAttributes();
 
@@ -1098,7 +1098,7 @@ void SCH_PAINTER::draw( const LIB_TEXTBOX* aTextBox, int aLayer, bool aDimmed )
     auto drawText =
             [&]()
             {
-                wxString        shownText = aTextBox->GetShownText();
+                wxString        shownText = aTextBox->GetShownText( true );
                 TEXT_ATTRIBUTES attrs = aTextBox->GetAttributes();
 
                 attrs.m_Angle = aTextBox->GetDrawRotation();
@@ -1962,7 +1962,7 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
     m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );
 
-    wxString        shownText( aText->GetShownText() );
+    wxString        shownText( aText->GetShownText( true ) );
     VECTOR2I        text_offset = aText->GetSchematicTextOffset( &m_schSettings );
     TEXT_ATTRIBUTES attrs = aText->GetAttributes();
     KIFONT::FONT*   font = getFont( aText );
@@ -2058,7 +2058,7 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
     auto drawText =
             [&]()
             {
-                wxString        shownText = aTextBox->GetShownText();
+                wxString        shownText = aTextBox->GetShownText( true );
                 TEXT_ATTRIBUTES attrs = aTextBox->GetAttributes();
 
                 attrs.m_Angle = aTextBox->GetDrawRotation();
@@ -2356,7 +2356,7 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
             return;
     }
 
-    wxString shownText = aField->GetShownText();
+    wxString shownText = aField->GetShownText( true );
 
     if( shownText.IsEmpty() )
         return;

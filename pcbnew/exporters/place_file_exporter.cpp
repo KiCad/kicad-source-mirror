@@ -145,9 +145,9 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
         m_fpCount++;
 
         LIST_MOD item;
-        item.m_Footprint    = footprint;
-        item.m_Reference = footprint->Reference().GetShownText();
-        item.m_Value     = footprint->Value().GetShownText();
+        item.m_Footprint = footprint;
+        item.m_Reference = footprint->Reference().GetShownText( false );
+        item.m_Value     = footprint->Value().GetShownText( false );
         item.m_Layer     = footprint->GetLayer();
         list.push_back( item );
 
@@ -331,13 +331,14 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
 
     for( FOOTPRINT* footprint : sortedFootprints )
     {
-        wxString ref = footprint->Reference().GetShownText();
+        wxString ref = footprint->Reference().GetShownText( false );
+        wxString value = footprint->Value().GetShownText( false );
 
         snprintf( line, sizeof(line), "$MODULE %s\n", TO_UTF8( ref ) );
         buffer += line;
 
         snprintf( line, sizeof(line), "reference %s\n", TO_UTF8( ref ) );
-        snprintf( line, sizeof(line), "value %s\n", EscapedUTF8( footprint->Value().GetShownText() ).c_str() );
+        snprintf( line, sizeof(line), "value %s\n",  TO_UTF8( value ) );
         snprintf( line, sizeof(line), "footprint %s\n", footprint->GetFPID().Format().c_str() );
         buffer += line;
 

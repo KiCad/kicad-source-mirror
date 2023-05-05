@@ -406,8 +406,9 @@ void LIB_TEXT::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
     // Calculate pos according to mirror/rotation.
     txtpos = aTransform.TransformCoordinate( txtpos ) + aOffset;
 
-    GRPrintText( DC, txtpos, color, GetShownText(), orient, GetTextSize(), GR_TEXT_H_ALIGN_CENTER,
-                 GR_TEXT_V_ALIGN_CENTER, penWidth, IsItalic(), IsBold(), font );
+    GRPrintText( DC, txtpos, color, GetShownText( true ), orient, GetTextSize(),
+                 GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_CENTER, penWidth, IsItalic(), IsBold(),
+                 font );
 }
 
 
@@ -418,7 +419,7 @@ void LIB_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
     LIB_ITEM::GetMsgPanelInfo( aFrame, aList );
 
     // Don't use GetShownText() here; we want to show the user the variable references
-    aList.emplace_back( _( "Text" ), UnescapeString( GetText() ) );
+    aList.emplace_back( _( "Text" ), KIUI::EllipsizeStatusText( aFrame, GetText() ) );
 
     aList.emplace_back( _( "Font" ), GetFont() ? GetFont()->GetName() : _( "Default" ) );
 
@@ -473,7 +474,7 @@ const BOX2I LIB_TEXT::GetBoundingBox() const
 
 wxString LIB_TEXT::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
-    return wxString::Format( _( "Graphic Text '%s'" ), KIUI::EllipsizeMenuText( GetShownText() ) );
+    return wxString::Format( _( "Graphic Text '%s'" ), KIUI::EllipsizeMenuText( GetText() ) );
 }
 
 

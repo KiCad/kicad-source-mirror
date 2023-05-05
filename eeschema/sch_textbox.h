@@ -55,7 +55,13 @@ public:
 
     VECTOR2I GetDrawPos() const override;
 
-    wxString GetShownText( int aDepth = 0, bool aAllowExtraText = true ) const override;
+    virtual wxString GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText,
+                                   int aDepth = 0 ) const;
+
+    wxString GetShownText( bool aAllowExtraText, int aDepth = 0 ) const override
+    {
+        return GetShownText( nullptr, aAllowExtraText, aDepth );
+    }
 
     bool IsHypertext() const override
     {

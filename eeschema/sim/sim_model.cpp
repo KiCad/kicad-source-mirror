@@ -648,7 +648,7 @@ std::string SIM_MODEL::GetFieldValue( const std::vector<T>* aFields, const wxStr
     {
         if( field.GetName() == aFieldName )
         {
-            return aResolve ? field.GetShownText( 0, false ).ToStdString()
+            return aResolve ? field.GetShownText( false ).ToStdString()
                             : field.GetText().ToStdString();
         }
     }
@@ -1449,7 +1449,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
         // SPICE.  Here we remap them to 'r0' and 'r1'.
         if( T_field* deviceType = aSymbol.FindField( SIM_TYPE_FIELD ) )
         {
-            if( deviceType->GetShownText( 0, false ).Lower() == wxS( "pot" ) )
+            if( deviceType->GetShownText( false ).Lower() == wxS( "pot" ) )
             {
                 if( T_field* pins = aSymbol.FindField( SIM_PINS_FIELD ) )
                 {

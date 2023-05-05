@@ -311,7 +311,7 @@ wxString SCH_SHEET_PATH::PathHumanReadable( bool aUseShortRootName,
 
     // Start at 1 since we've already processed the root sheet.
     for( unsigned i = 1; i < size(); i++ )
-        s << at( i )->GetFields()[SHEETNAME].GetShownText() << wxS( "/" );
+        s << at( i )->GetFields()[SHEETNAME].GetShownText( false ) << wxS( "/" );
 
     if( aStripTrailingSeparator && s.EndsWith( "/" ) )
         s = s.Left( s.length() - 1 );

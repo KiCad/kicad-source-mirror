@@ -390,7 +390,7 @@ void LIB_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
     attrs.m_Angle = orient;
     attrs.m_Multiline = false;
 
-    aPlotter->PlotText( textpos, color, GetShownText(), attrs, font );
+    aPlotter->PlotText( textpos, color, GetShownText( true ), attrs, font );
 }
 
 
@@ -411,9 +411,9 @@ wxString LIB_FIELD::GetFullText( int unit ) const
 }
 
 
-wxString LIB_FIELD::GetShownText( int aDepth, bool aAllowExtraText ) const
+wxString LIB_FIELD::GetShownText( bool aAllowExtraText, int aDepth ) const
 {
-    wxString text = EDA_TEXT::GetShownText( aDepth );
+    wxString text = EDA_TEXT::GetShownText( aAllowExtraText, aDepth );
 
     if( IsNameShown() )
         text = GetName() << wxT( ": " ) << text;
@@ -516,7 +516,9 @@ void LIB_FIELD::SetName( const wxString& aName )
 
 wxString LIB_FIELD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
-    return wxString::Format( "%s '%s'", GetName(), KIUI::EllipsizeMenuText( GetShownText() ) );
+    return wxString::Format( "%s '%s'",
+                             UnescapeString( GetName() ),
+                             KIUI::EllipsizeMenuText( GetText() ) );
 }
 
 
@@ -538,10 +540,11 @@ void LIB_FIELD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
     LIB_ITEM::GetMsgPanelInfo( aFrame, aList );
 
-    aList.emplace_back( _( "Field" ), GetName() );
+    // Don't use GetShownText(); we want to see the variable references here
+    aList.emplace_back( _( "Field" ), UnescapeString( GetName() ) );
 
     // Don't use GetShownText() here; we want to show the user the variable references
-    aList.emplace_back( _( "Text" ), UnescapeString( GetText() ) );
+    aList.emplace_back( _( "Text" ), KIUI::EllipsizeStatusText( aFrame, GetText() ) );
 
     aList.emplace_back( _( "Visible" ), IsVisible() ? _( "Yes" ) : _( "No" ) );
 

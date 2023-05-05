@@ -194,7 +194,7 @@ void SCH_PLOTTER::createPDFFile( const SCH_PLOT_SETTINGS& aPlotSettings,
             plotter->ClosePage();
             setupPlotPagePDF( plotter, screen, aPlotSettings );
             plotter->StartPage( sheetList[i].GetPageNumber(),
-                                sheetList[i].Last()->GetFields()[SHEETNAME].GetShownText() );
+                                sheetList[i].Last()->GetFields()[SHEETNAME].GetShownText( false ) );
         }
 
         plotOneSheetPDF( plotter, screen, aPlotSettings );

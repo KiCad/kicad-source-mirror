@@ -147,7 +147,7 @@ public:
      */
     wxString GetFullText( int unit = 1 ) const;
 
-    wxString GetShownText( int aDepth = 0, bool aAllowExtraText = true ) const override;
+    wxString GetShownText( bool aAllowExtraText, int aDepth = 0 ) const override;
 
     SCH_LAYER_ID GetDefaultLayer() const;
 

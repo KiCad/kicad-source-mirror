@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2018 jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -88,7 +88,7 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
                                                   sheet ) );
             }
 
-            footprint = symbol->GetFootprintFieldText( true );
+            footprint = symbol->GetFootprintFieldText( true, &sheet, false );
             footprint.Replace( wxT( " " ), wxT( "_" ) );
 
             if( footprint.IsEmpty() )
@@ -102,7 +102,7 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
 
             ret |= fprintf( f, "  %s", TO_UTF8( field ) );
 
-            field = symbol->GetValueFieldText( true );
+            field = symbol->GetValueFieldText( true, &sheet, false );
             field.Replace( wxT( " " ), wxT( "_" ) );
 
             ret |= fprintf( f, " %s", TO_UTF8( field ) );

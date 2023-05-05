@@ -450,7 +450,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItem( const FP_TEXT* aText, const COLOR4
 
         callback_gal.SetIsFill( font->IsOutline() );
         callback_gal.SetIsStroke( font->IsStroke() );
-        font->Draw( &callback_gal, aText->GetShownText(), aText->GetDrawPos(), attrs );
+        font->Draw( &callback_gal, aText->GetShownText( true ), aText->GetDrawPos(), attrs );
 
         SHAPE_POLY_SET finalPoly;
         int            margin = attrs.m_StrokeWidth * 1.5
@@ -464,7 +464,9 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItem( const FP_TEXT* aText, const COLOR4
             m_plotter->PlotPoly( finalPoly.Outline( ii ), FILL_T::FILLED_SHAPE, 0, &gbr_metadata );
     }
     else
-        m_plotter->PlotText( pos, aColor, aText->GetShownText(), attrs, font, &gbr_metadata );
+    {
+        m_plotter->PlotText( pos, aColor, aText->GetShownText( true ), attrs, font, &gbr_metadata );
+    }
 }
 
 
@@ -836,7 +838,7 @@ void BRDITEMS_PLOTTER::PlotPcbText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, 
                                       aText->IsBold(), aText->IsItalic() );
     }
 
-    wxString        shownText( aText->GetShownText() );
+    wxString shownText( aText->GetShownText( true ) );
 
     if( shownText.IsEmpty() )
         return;

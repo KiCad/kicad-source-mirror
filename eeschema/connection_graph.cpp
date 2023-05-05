@@ -336,18 +336,14 @@ wxString CONNECTION_SUBGRAPH::driverName( SCH_ITEM* aItem ) const
     case SCH_LABEL_T:
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIER_LABEL_T:
-    {
-        SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( aItem );
-        return EscapeString( label->GetShownText( &m_sheet ), CTX_NETNAME );
-    }
+        return EscapeString( static_cast<SCH_TEXT*>( aItem )->GetShownText( &m_sheet, false ),
+                             CTX_NETNAME );
 
     case SCH_SHEET_PIN_T:
-    {
         // Sheet pins need to use their parent sheet as their starting sheet or they will
         // resolve variables on the current sheet first
-        SCH_SHEET_PIN* sheetPin = static_cast<SCH_SHEET_PIN*>( aItem );
-        return EscapeString( sheetPin->GetShownText(), CTX_NETNAME );
-    }
+        return EscapeString( static_cast<SCH_TEXT*>( aItem )->GetShownText( nullptr, false ),
+                             CTX_NETNAME );
 
     default:
         wxFAIL_MSG( wxS( "Unhandled item type in GetNameForDriver" ) );
@@ -2587,11 +2583,11 @@ std::vector<const CONNECTION_SUBGRAPH*> CONNECTION_GRAPH::GetBusesNeedingMigrati
         if( labels.size() > 1 )
         {
             bool different = false;
-            wxString first = static_cast<SCH_TEXT*>( labels.at( 0 ) )->GetShownText();
+            wxString first = static_cast<SCH_TEXT*>( labels.at( 0 ) )->GetShownText( false );
 
             for( unsigned i = 1; i < labels.size(); ++i )
             {
-                if( static_cast<SCH_TEXT*>( labels.at( i ) )->GetShownText() != first )
+                if( static_cast<SCH_TEXT*>( labels.at( i ) )->GetShownText( false ) != first )
                 {
                     different = true;
                     break;
@@ -2931,7 +2927,7 @@ bool CONNECTION_GRAPH::ercCheckBusToNetConflicts( const CONNECTION_SUBGRAPH* aSu
         case SCH_HIER_LABEL_T:
         {
             SCH_TEXT* text = static_cast<SCH_TEXT*>( item );
-            conn.ConfigureFromLabel( EscapeString( text->GetShownText(), CTX_NETNAME ) );
+            conn.ConfigureFromLabel( EscapeString( text->GetShownText( false ), CTX_NETNAME ) );
 
             if( conn.IsBus() )
                 bus_item = ( !bus_item ) ? item : bus_item;

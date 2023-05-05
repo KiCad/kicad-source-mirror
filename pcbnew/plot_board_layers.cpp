@@ -83,11 +83,11 @@ void PlotInteractiveLayer( BOARD* aBoard, PLOTTER* aPlotter )
 
         properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
                                                    _( "Reference designator" ),
-                                                   fp->Reference().GetShownText() ) );
+                                                   fp->Reference().GetShownText( false ) ) );
 
         properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
                                                    _( "Value" ),
-                                                   fp->Value().GetShownText() ) );
+                                                   fp->Value().GetShownText( false ) ) );
 
         for( const auto& [ name, value ] : fp->GetProperties() )
             properties.emplace_back( wxString::Format( wxT( "!%s = %s" ), name, value ) );

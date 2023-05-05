@@ -1937,7 +1937,7 @@ void PCB_PAINTER::draw( const PCB_BITMAP* aBitmap, int aLayer )
 
 void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
 {
-    wxString resolvedText( aText->GetShownText() );
+    wxString resolvedText( aText->GetShownText( true ) );
 
     if( resolvedText.Length() == 0 )
         return;
@@ -2041,7 +2041,7 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
     const COLOR4D& color = m_pcbSettings.GetColor( aTextBox, aLayer );
     int            thickness = getLineThickness( aTextBox->GetWidth() );
     PLOT_DASH_TYPE lineStyle = aTextBox->GetStroke().GetPlotStyle();
-    wxString       resolvedText( aTextBox->GetShownText() );
+    wxString       resolvedText( aTextBox->GetShownText( true ) );
 
     KIFONT::FONT* font = aTextBox->GetFont();
 
@@ -2140,7 +2140,7 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
 
 void PCB_PAINTER::draw( const FP_TEXT* aText, int aLayer )
 {
-    wxString resolvedText( aText->GetShownText() );
+    wxString resolvedText( aText->GetShownText( true ) );
 
     if( resolvedText.Length() == 0 )
         return;
@@ -2269,7 +2269,7 @@ void PCB_PAINTER::draw( const FP_TEXTBOX* aTextBox, int aLayer )
         }
     }
 
-    wxString resolvedText( aTextBox->GetShownText() );
+    wxString resolvedText( aTextBox->GetShownText( true ) );
 
     if( resolvedText.Length() == 0 )
         return;
@@ -2581,7 +2581,7 @@ void PCB_PAINTER::draw( const PCB_DIMENSION_BASE* aDimension, int aLayer )
     }
 
     // Draw text
-    wxString        resolvedText = aDimension->GetShownText();
+    wxString        resolvedText = aDimension->GetShownText( true );
     TEXT_ATTRIBUTES attrs = aDimension->GetAttributes();
 
     if( m_gal->IsFlippedX() && !( aDimension->GetLayerSet() & LSET::SideSpecificMask() ).any() )

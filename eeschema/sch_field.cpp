@@ -172,13 +172,14 @@ void SCH_FIELD::SetId( int aId )
 }
 
 
-wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, int aDepth,
-                                  bool aAllowExtraText ) const
+wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText,
+                                  int aDepth ) const
 {
     std::function<bool( wxString* )> symbolResolver =
             [&]( wxString* token ) -> bool
             {
-                return static_cast<SCH_SYMBOL*>( m_parent )->ResolveTextVar( token, aDepth + 1, aPath );
+                return static_cast<SCH_SYMBOL*>( m_parent )->ResolveTextVar( token, aDepth + 1,
+                                                                             aPath );
             };
 
     std::function<bool( wxString* )> sheetResolver =
@@ -194,7 +195,7 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, int aDepth,
                                                                                  aDepth + 1 );
             };
 
-    wxString text = EDA_TEXT::GetShownText();
+    wxString text = EDA_TEXT::GetShownText( aAllowExtraText, aDepth );
 
     if( IsNameShown() && aAllowExtraText )
         text = GetName() << wxS( ": " ) << text;
@@ -322,7 +323,7 @@ void SCH_FIELD::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
     VECTOR2I textpos;
     int      penWidth = GetEffectiveTextPenWidth( aSettings->GetDefaultPenWidth() );
 
-    if( ( !IsVisible() && !IsForceVisible() ) || GetShownText().IsEmpty() )
+    if( ( !IsVisible() && !IsForceVisible() ) || GetShownText( true ).IsEmpty() )
         return;
 
     COLOR4D bg = aSettings->GetBackgroundColor();
@@ -375,8 +376,9 @@ void SCH_FIELD::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
      */
     textpos = GetBoundingBox().Centre() + aOffset;
 
-    GRPrintText( DC, textpos, color, GetShownText(), orient, GetTextSize(), GR_TEXT_H_ALIGN_CENTER,
-                 GR_TEXT_V_ALIGN_CENTER, penWidth, IsItalic(), IsBold(), font );
+    GRPrintText( DC, textpos, color, GetShownText( true ), orient, GetTextSize(),
+                 GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_CENTER, penWidth, IsItalic(), IsBold(),
+                 font );
 }
 
 
@@ -580,7 +582,7 @@ bool SCH_FIELD::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) co
     {
     }
 
-    wxString text = GetShownText();
+    wxString text = UnescapeString( GetText() );
 
     if( !IsVisible() && !searchHiddenFields )
         return false;
@@ -597,7 +599,7 @@ bool SCH_FIELD::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) co
         // symbols with multiple parts.
         if( aAuxData )
         {
-            text = parentSymbol->GetRef((SCH_SHEET_PATH*) aAuxData );
+            text = parentSymbol->GetRef( (SCH_SHEET_PATH*) aAuxData );
 
             if( SCH_ITEM::Matches( text, aSearchData ) )
                 return true;
@@ -653,7 +655,6 @@ bool SCH_FIELD::Replace( const EDA_SEARCH_DATA& aSearchData, void* aAuxData )
     }
 
     wxString text;
-    bool     resolve = false;    // Replace in source text, not shown text
     bool     isReplaced = false;
 
     if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
@@ -679,7 +680,7 @@ bool SCH_FIELD::Replace( const EDA_SEARCH_DATA& aSearchData, void* aAuxData )
         case VALUE_FIELD:
             wxCHECK_MSG( aAuxData, false, wxT( "Need sheetpath to replace in value field." ) );
 
-            text = parentSymbol->GetValueFieldText( resolve );
+            text = parentSymbol->GetField( VALUE_FIELD )->GetText();
             isReplaced = EDA_ITEM::Replace( aSearchData, text );
 
             if( isReplaced )
@@ -690,7 +691,7 @@ bool SCH_FIELD::Replace( const EDA_SEARCH_DATA& aSearchData, void* aAuxData )
         case FOOTPRINT_FIELD:
             wxCHECK_MSG( aAuxData, false, wxT( "Need sheetpath to replace in footprint field." ) );
 
-            text = parentSymbol->GetFootprintFieldText( resolve );
+            text = parentSymbol->GetField( FOOTPRINT_FIELD )->GetText();
             isReplaced = EDA_ITEM::Replace( aSearchData, text );
 
             if( isReplaced )
@@ -732,7 +733,7 @@ void SCH_FIELD::Rotate( const VECTOR2I& aCenter )
 
 wxString SCH_FIELD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
-    return wxString::Format( "%s '%s'", GetName(), KIUI::EllipsizeMenuText( GetShownText() ) );
+    return wxString::Format( "%s '%s'", GetName(), KIUI::EllipsizeMenuText( GetText() ) );
 }
 
 
@@ -740,10 +741,10 @@ void SCH_FIELD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 {
     wxString msg;
 
-    aList.emplace_back( _( "Symbol Field" ), GetName() );
+    aList.emplace_back( _( "Symbol Field" ), UnescapeString( GetName() ) );
 
     // Don't use GetShownText() here; we want to show the user the variable references
-    aList.emplace_back( _( "Text" ), UnescapeString( GetText() ) );
+    aList.emplace_back( _( "Text" ), KIUI::EllipsizeStatusText( aFrame, GetText() ) );
 
     aList.emplace_back( _( "Visible" ), IsVisible() ? _( "Yes" ) : _( "No" ) );
 
@@ -911,7 +912,7 @@ BITMAPS SCH_FIELD::GetMenuImage() const
 bool SCH_FIELD::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     // Do not hit test hidden or empty fields.
-    if( !IsVisible() || GetShownText().IsEmpty() )
+    if( !IsVisible() || GetShownText( true ).IsEmpty() )
         return false;
 
     BOX2I rect = GetBoundingBox();
@@ -931,7 +932,7 @@ bool SCH_FIELD::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 bool SCH_FIELD::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
     // Do not hit test hidden fields.
-    if( !IsVisible() || GetShownText().IsEmpty() )
+    if( !IsVisible() || GetShownText( true ).IsEmpty() )
         return false;
 
     BOX2I rect = aRect;
@@ -953,7 +954,7 @@ bool SCH_FIELD::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
 
 void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground ) const
 {
-    if( GetShownText().IsEmpty() || aBackground )
+    if( GetShownText( true ).IsEmpty() || aBackground )
         return;
 
     RENDER_SETTINGS* settings = aPlotter->RenderSettings();
@@ -1033,7 +1034,7 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground ) const
     attrs.m_Angle = orient;
     attrs.m_Multiline = false;
 
-    aPlotter->PlotText( textpos, color, GetShownText(), attrs, font );
+    aPlotter->PlotText( textpos, color, GetShownText( true ), attrs, font );
 
     if( IsHypertext() )
     {

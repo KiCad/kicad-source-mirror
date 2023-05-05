@@ -339,7 +339,8 @@ const BOX2I SCH_TEXT::GetBoundingBox() const
 }
 
 
-wxString SCH_TEXT::GetShownText( const SCH_SHEET_PATH* aPath, int aDepth, bool aAllowExtraText ) const
+wxString SCH_TEXT::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText,
+                                 int aDepth ) const
 {
     SCH_SHEET* sheet = nullptr;
 
@@ -360,7 +361,7 @@ wxString SCH_TEXT::GetShownText( const SCH_SHEET_PATH* aPath, int aDepth, bool a
                 return false;
             };
 
-    wxString text = EDA_TEXT::GetShownText();
+    wxString text = EDA_TEXT::GetShownText( aAllowExtraText, aDepth );
 
     if( text == wxS( "~" ) ) // Legacy placeholder for empty string
     {
@@ -388,7 +389,7 @@ void SCH_TEXT::DoHypertextAction( EDA_DRAW_FRAME* aFrame ) const
 
 wxString SCH_TEXT::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
-    return wxString::Format( _( "Graphic Text '%s'" ), KIUI::EllipsizeMenuText( GetShownText() ) );
+    return wxString::Format( _( "Graphic Text '%s'" ), KIUI::EllipsizeMenuText( GetText() ) );
 }
 
 
@@ -464,7 +465,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter, bool aBackground ) const
 
     std::vector<VECTOR2I> positions;
     wxArrayString strings_list;
-    wxStringSplit( GetShownText(), strings_list, '\n' );
+    wxStringSplit( GetShownText( true ), strings_list, '\n' );
     positions.reserve( strings_list.Count() );
 
     GetLinePositions( positions, (int) strings_list.Count() );

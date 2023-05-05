@@ -441,5 +441,5 @@ void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( PCB_DIMENSION_BASE*
 void DIALOG_DIMENSION_PROPERTIES::updatePreviewText()
 {
     updateDimensionFromDialog( m_previewDimension );
-    m_staticTextPreview->SetLabel( m_previewDimension->GetShownText() );
+    m_staticTextPreview->SetLabel( m_previewDimension->GetShownText( true ) );
 }

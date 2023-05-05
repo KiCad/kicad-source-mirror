@@ -139,10 +139,10 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
 
             int penWidth = std::max( text->GetEffectiveTextPenWidth(), defaultPenWidth );
 
-            plotter->Text( text->GetTextPos(), color, text->GetShownText(), text->GetTextAngle(),
-                           text->GetTextSize(), text->GetHorizJustify(), text->GetVertJustify(),
-                           penWidth, text->IsItalic(), text->IsBold(), text->IsMultilineAllowed(),
-                           font );
+            plotter->Text( text->GetTextPos(), color, text->GetShownText( true ),
+                           text->GetTextAngle(), text->GetTextSize(), text->GetHorizJustify(),
+                           text->GetVertJustify(), penWidth, text->IsItalic(), text->IsBold(),
+                           text->IsMultilineAllowed(), font );
         }
             break;
 

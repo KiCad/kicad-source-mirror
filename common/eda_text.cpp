@@ -477,7 +477,8 @@ EDA_TEXT::GetRenderCache( const KIFONT::FONT* aFont, const wxString& forResolved
 
             attrs.m_Angle = resolvedAngle;
 
-            font->GetLinesAsGlyphs( &m_render_cache, GetShownText(), GetDrawPos() + aOffset, attrs );
+            font->GetLinesAsGlyphs( &m_render_cache, forResolvedText, GetDrawPos() + aOffset,
+                                    attrs );
             m_render_cache_angle = resolvedAngle;
             m_render_cache_text = forResolvedText;
             m_render_cache_offset = aOffset;
@@ -524,7 +525,7 @@ BOX2I EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
 
     BOX2I          bbox;
     wxArrayString  strings;
-    wxString       text = GetShownText();
+    wxString       text = GetShownText( true );
     int            thickness = GetEffectiveTextPenWidth();
 
     if( IsMultilineAllowed() )
@@ -662,7 +663,7 @@ void EDA_TEXT::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
     {
         std::vector<VECTOR2I> positions;
         wxArrayString  strings;
-        wxStringSplit( GetShownText(), strings, '\n' );
+        wxStringSplit( GetShownText( true ), strings, '\n' );
 
         positions.reserve( strings.Count() );
 
@@ -673,7 +674,8 @@ void EDA_TEXT::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
     }
     else
     {
-        printOneLineOfText( aSettings, aOffset, aColor, aFillMode, GetShownText(), GetDrawPos() );
+        printOneLineOfText( aSettings, aOffset, aColor, aFillMode, GetShownText( true ),
+                            GetDrawPos() );
     }
 }
 
@@ -894,7 +896,7 @@ std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( bool aTriangula
                     shape->AddShape( triShape );
                 } );
 
-        font->Draw( &callback_gal, GetShownText(), GetDrawPos(), attrs );
+        font->Draw( &callback_gal, GetShownText( true ), GetDrawPos(), attrs );
     }
     else
     {
@@ -911,7 +913,7 @@ std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( bool aTriangula
                     shape->AddShape( aPoly.Clone() );
                 } );
 
-        font->Draw( &callback_gal, GetShownText(), GetDrawPos(), attrs );
+        font->Draw( &callback_gal, GetShownText( true ), GetDrawPos(), attrs );
     }
 
     return shape;

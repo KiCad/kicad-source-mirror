@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -287,7 +287,7 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataToWindow()
                     // Ensure the symbol has the Power (i.e. equivalent to a global label
                     // before adding its value in list
                     if( power->IsSymbolLikePowerGlobalLabel() )
-                        existingLabels.insert( UnescapeString( power->GetValueFieldText( false ) ) );
+                        existingLabels.insert( UnescapeString( power->GetField( VALUE_FIELD )->GetText() ) );
                 }
             }
 

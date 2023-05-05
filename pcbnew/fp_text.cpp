@@ -323,12 +323,12 @@ wxString FP_TEXT::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 
     case TEXT_is_VALUE:
         return wxString::Format( _( "Value '%s' of %s" ),
-                                 GetShownText(),
+                                 GetShownText( false ),
                                  static_cast<FOOTPRINT*>( GetParent() )->GetReference() );
 
     default:
         return wxString::Format( _( "Footprint Text '%s' of %s" ),
-                                 KIUI::EllipsizeMenuText( GetShownText() ),
+                                 KIUI::EllipsizeMenuText( GetShownText( false ) ),
                                  static_cast<FOOTPRINT*>( GetParent() )->GetReference() );
     }
 }
@@ -412,17 +412,17 @@ double FP_TEXT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 }
 
 
-wxString FP_TEXT::GetShownText( int aDepth, bool aAllowExtraText ) const
+wxString FP_TEXT::GetShownText( bool aAllowExtraText, int aDepth ) const
 {
     const FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( GetParent() );
 
     std::function<bool( wxString* )> footprintResolver =
             [&]( wxString* token ) -> bool
             {
-                return parentFootprint && parentFootprint->ResolveTextVar( token, aDepth );
+                return parentFootprint && parentFootprint->ResolveTextVar( token, aDepth + 1 );
             };
 
-    wxString text = EDA_TEXT::GetShownText();
+    wxString text = EDA_TEXT::GetShownText( aAllowExtraText, aDepth );
 
     if( HasTextVars() )
     {
@@ -490,7 +490,7 @@ void FP_TEXT::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLay
     TEXT_ATTRIBUTES attrs = GetAttributes();
     attrs.m_Angle = GetDrawRotation();
 
-    font->Draw( &callback_gal, GetShownText(), GetTextPos(), attrs );
+    font->Draw( &callback_gal, GetShownText( true ), GetTextPos(), attrs );
 
     buffer.Simplify( SHAPE_POLY_SET::PM_FAST );
 

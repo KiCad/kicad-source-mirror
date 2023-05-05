@@ -255,7 +255,7 @@ wxString TEXT_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
         if( PCB_TEXT::ClassOf( text ) )
             return UnescapeString( static_cast<PCB_TEXT*>( text )->GetText() );
         else if( PCB_TEXTBOX::ClassOf( text ) )
-            return UnescapeString( static_cast<PCB_TEXTBOX*>( text )->GetShownText() );
+            return UnescapeString( static_cast<PCB_TEXTBOX*>( text )->GetText() );
     }
     if( aCol == 2 )
         return text->GetLayerName();

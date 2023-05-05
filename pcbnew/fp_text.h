@@ -81,7 +81,7 @@ public:
 
     bool Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const override
     {
-        return BOARD_ITEM::Matches( GetShownText(), aSearchData );
+        return BOARD_ITEM::Matches( GetShownText( false ), aSearchData );
     }
 
     virtual VECTOR2I GetPosition() const override
@@ -177,7 +177,7 @@ public:
 
     EDA_ITEM* Clone() const override;
 
-    virtual wxString GetShownText( int aDepth = 0, bool aAllowExtraText = true ) const override;
+    virtual wxString GetShownText( bool aAllowExtraText, int aDepth = 0 ) const override;
 
     virtual const BOX2I ViewBBox() const override;
 

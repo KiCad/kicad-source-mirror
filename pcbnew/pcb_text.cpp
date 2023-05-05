@@ -52,7 +52,7 @@ PCB_TEXT::~PCB_TEXT()
 }
 
 
-wxString PCB_TEXT::GetShownText( int aDepth, bool aAllowExtraText ) const
+wxString PCB_TEXT::GetShownText( bool aAllowExtraText, int aDepth ) const
 {
     BOARD* board = dynamic_cast<BOARD*>( GetParent() );
 
@@ -73,12 +73,18 @@ wxString PCB_TEXT::GetShownText( int aDepth, bool aAllowExtraText ) const
                 return false;
             };
 
-    wxString text = EDA_TEXT::GetShownText();
+    wxString text = EDA_TEXT::GetShownText( aAllowExtraText, aDepth );
 
     if( board && HasTextVars() && aDepth < 10 )
         text = ExpandTextVars( text, &pcbTextResolver );
 
     return text;
+}
+
+
+bool PCB_TEXT::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const
+{
+    return BOARD_ITEM::Matches( UnescapeString( GetText() ), aSearchData );
 }
 
 
@@ -237,7 +243,7 @@ void PCB_TEXT::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 wxString PCB_TEXT::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( _( "PCB Text '%s' on %s"),
-                             KIUI::EllipsizeMenuText( GetShownText() ),
+                             KIUI::EllipsizeMenuText( GetShownText( false ) ),
                              GetLayerName() );
 }
 
@@ -315,7 +321,7 @@ void PCB_TEXT::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLa
                     buffer.Append( point.x, point.y );
             } );
 
-    font->Draw( &callback_gal, GetShownText(), GetTextPos(), GetAttributes() );
+    font->Draw( &callback_gal, GetShownText( true ), GetTextPos(), GetAttributes() );
 
     buffer.Simplify( SHAPE_POLY_SET::PM_FAST );
 

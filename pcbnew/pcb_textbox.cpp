@@ -239,7 +239,7 @@ double PCB_TEXTBOX::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 }
 
 
-wxString PCB_TEXTBOX::GetShownText( int aDepth, bool aAllowExtraText ) const
+wxString PCB_TEXTBOX::GetShownText( bool aAllowExtraText, int aDepth ) const
 {
     BOARD* board = dynamic_cast<BOARD*>( GetParent() );
 
@@ -260,7 +260,7 @@ wxString PCB_TEXTBOX::GetShownText( int aDepth, bool aAllowExtraText ) const
                 return false;
             };
 
-    wxString text = EDA_TEXT::GetShownText();
+    wxString text = EDA_TEXT::GetShownText( aAllowExtraText, aDepth );
 
     if( board && HasTextVars() && aDepth < 10 )
         text = ExpandTextVars( text, &pcbTextResolver );
@@ -273,6 +273,12 @@ wxString PCB_TEXTBOX::GetShownText( int aDepth, bool aAllowExtraText ) const
     font->LinebreakText( text, colWidth, GetTextSize(), GetTextThickness(), IsBold(), IsItalic() );
 
     return text;
+}
+
+
+bool PCB_TEXTBOX::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const
+{
+    return BOARD_ITEM::Matches( UnescapeString( GetText() ), aSearchData );
 }
 
 
@@ -397,7 +403,7 @@ bool PCB_TEXTBOX::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) 
 
 wxString PCB_TEXTBOX::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
-    return wxString::Format( _( "PCB Text Box on %s"), GetLayerName() );
+    return wxString::Format( _( "PCB Text Box on %s" ), GetLayerName() );
 }
 
 
@@ -462,7 +468,7 @@ void PCB_TEXTBOX::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID 
                     buffer.Append( point.x, point.y );
             } );
 
-    font->Draw( &callback_gal, GetShownText(), GetDrawPos(), GetAttributes() );
+    font->Draw( &callback_gal, GetShownText( true ), GetDrawPos(), GetAttributes() );
 
     buffer.Simplify( SHAPE_POLY_SET::PM_FAST );
     aBuffer.Append( buffer );

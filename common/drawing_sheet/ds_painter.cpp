@@ -270,7 +270,7 @@ void KIGFX::DS_PAINTER::draw( const DS_DRAW_ITEM_TEXT* aItem, int aLayer ) const
     attrs.m_StrokeWidth = std::max( aItem->GetEffectiveTextPenWidth(),
                                     m_renderSettings.GetDefaultPenWidth() );
 
-    font->Draw( m_gal, aItem->GetShownText(), aItem->GetTextPos(), attrs );
+    font->Draw( m_gal, aItem->GetShownText( true ), aItem->GetTextPos(), attrs );
 }
 
 

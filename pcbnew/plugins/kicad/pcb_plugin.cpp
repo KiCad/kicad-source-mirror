@@ -476,7 +476,7 @@ void PCB_PLUGIN::formatPolyPts( const SHAPE_LINE_CHAIN& outline, int aNestLevel,
 
 void PCB_PLUGIN::formatRenderCache( const EDA_TEXT* aText, int aNestLevel ) const
 {
-    const wxString& shownText = aText->GetShownText();
+    const wxString& shownText = aText->GetShownText( true );
     std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = aText->GetRenderCache( aText->GetFont(),
                                                                                 shownText );
 

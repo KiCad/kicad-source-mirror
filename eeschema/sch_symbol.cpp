@@ -827,10 +827,11 @@ void SCH_SYMBOL::SetUnitSelection( int aUnitSelection )
 }
 
 
-const wxString SCH_SYMBOL::GetValueFieldText( bool aResolve, const SCH_SHEET_PATH* aPath ) const
+const wxString SCH_SYMBOL::GetValueFieldText( bool aResolve, const SCH_SHEET_PATH* aPath,
+                                              bool aAllowExtraText ) const
 {
     if( aResolve )
-        return GetField( VALUE_FIELD )->GetShownText( aPath );
+        return GetField( VALUE_FIELD )->GetShownText( aPath, aAllowExtraText );
 
     return GetField( VALUE_FIELD )->GetText();
 }
@@ -842,10 +843,11 @@ void SCH_SYMBOL::SetValueFieldText( const wxString& aValue )
 }
 
 
-const wxString SCH_SYMBOL::GetFootprintFieldText(  bool aResolve ) const
+const wxString SCH_SYMBOL::GetFootprintFieldText( bool aResolve, const SCH_SHEET_PATH* aPath,
+                                                  bool aAllowExtraText ) const
 {
     if( aResolve )
-        return GetField( FOOTPRINT_FIELD )->GetShownText();
+        return GetField( FOOTPRINT_FIELD )->GetShownText( aPath, aAllowExtraText );
 
     return GetField( FOOTPRINT_FIELD )->GetText();
 }
@@ -899,7 +901,7 @@ void SCH_SYMBOL::GetFields( std::vector<SCH_FIELD*>& aVector, bool aVisibleOnly 
     {
         if( aVisibleOnly )
         {
-            if( !field.IsVisible() || field.GetShownText().IsEmpty() )
+            if( !field.IsVisible() || field.GetShownText( nullptr, true ).IsEmpty() )
                 continue;
         }
 
@@ -1178,11 +1180,11 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth, const SCH_SHEET_PA
             if( i == REFERENCE_FIELD )
                 *token = GetRef( &schematic->CurrentSheet(), true );
             else if( i == VALUE_FIELD )
-                *token = GetValueFieldText( true );
+                *token = GetValueFieldText( true, aPath, false );
             else if( i == FOOTPRINT_FIELD )
-                *token = GetFootprintFieldText( true );
+                *token = GetFootprintFieldText( true, aPath, false );
             else
-                *token = m_fields[ i ].GetShownText( aDepth + 1 );
+                *token = m_fields[ i ].GetShownText( aPath, false, aDepth + 1 );
 
             return true;
         }
@@ -1193,7 +1195,7 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth, const SCH_SHEET_PA
         if( token->IsSameAs( m_fields[ i ].GetName() )
             || token->IsSameAs( m_fields[ i ].GetName().Upper() ) )
         {
-            *token = m_fields[ i ].GetShownText( aDepth + 1 );
+            *token = m_fields[ i ].GetShownText( aPath, false, aDepth + 1 );
             return true;
         }
     }
@@ -1215,7 +1217,7 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth, const SCH_SHEET_PA
     {
         wxString footprint;
 
-        footprint = GetFootprintFieldText( true );
+        footprint = GetFootprintFieldText( true, aPath, false );
 
         wxArrayString parts = wxSplit( footprint, ':' );
 
@@ -1226,7 +1228,7 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth, const SCH_SHEET_PA
     {
         wxString footprint;
 
-        footprint = GetFootprintFieldText( true );
+        footprint = GetFootprintFieldText( true, aPath, false );
 
         wxArrayString parts = wxSplit( footprint, ':' );
 
@@ -1653,13 +1655,20 @@ void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
         {
             if( m_part->IsPower() )
             {
-                aList.emplace_back( _( "Power symbol" ), GetValueFieldText( true ) );
+                // Don't use GetShownText(); we want to see the variable references here
+                aList.emplace_back( _( "Power symbol" ),
+                                    KIUI::EllipsizeStatusText( aFrame, GetField( VALUE_FIELD )->GetText() ) );
             }
             else
             {
-                aList.emplace_back( _( "Reference" ), GetRef( currentSheet ) );
-                aList.emplace_back( _( "Value" ), GetValueFieldText( true ) );
-                aList.emplace_back( _( "Name" ), UnescapeString( GetLibId().GetLibItemName() ) );
+                aList.emplace_back( _( "Reference" ),
+                                    UnescapeString( GetRef( currentSheet ) ) );
+
+                // Don't use GetShownText(); we want to see the variable references here
+                aList.emplace_back( _( "Value" ),
+                                    KIUI::EllipsizeStatusText( aFrame, GetField( VALUE_FIELD )->GetText() ) );
+                aList.emplace_back( _( "Name" ),
+                                    KIUI::EllipsizeStatusText( aFrame, GetLibId().GetLibItemName() ) );
             }
 
 #if 0       // Display symbol flags, for debug only
@@ -1687,7 +1696,8 @@ void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
             }
 
             // Display the current associated footprint, if exists.
-            msg = GetFootprintFieldText( true );
+            // Don't use GetShownText(); we want to see the variable references here
+            msg = KIUI::EllipsizeStatusText( aFrame, GetField( FOOTPRINT_FIELD )->GetText() );
 
             if( msg.IsEmpty() )
                 msg = _( "<Unknown>" );
@@ -1702,9 +1712,11 @@ void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
     else
     {
         aList.emplace_back( _( "Reference" ), GetRef( currentSheet ) );
-
-        aList.emplace_back( _( "Value" ), GetValueFieldText( true ) );
-        aList.emplace_back( _( "Name" ), GetLibId().GetLibItemName() );
+        // Don't use GetShownText(); we want to see the variable references here
+        aList.emplace_back( _( "Value" ),
+                            KIUI::EllipsizeStatusText( aFrame, GetField( VALUE_FIELD )->GetText() ) );
+        aList.emplace_back( _( "Name" ),
+                            KIUI::EllipsizeStatusText( aFrame, GetLibId().GetLibItemName() ) );
 
         wxString libNickname = GetLibId().GetLibNickname();
 
@@ -1901,8 +1913,8 @@ LIB_ITEM* SCH_SYMBOL::GetDrawItem( const VECTOR2I& aPosition, KICAD_T aType )
 wxString SCH_SYMBOL::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( _( "Symbol %s [%s]" ),
-                             GetField( REFERENCE_FIELD )->GetShownText(),
-                             UnescapeString( GetLibId().GetLibItemName() ) );
+                             KIUI::EllipsizeMenuText( GetField( REFERENCE_FIELD )->GetText() ),
+                             KIUI::EllipsizeMenuText( GetLibId().GetLibItemName() ) );
 }
 
 
@@ -2166,12 +2178,13 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground ) const
 
         // Plot attributes to a hypertext menu
         std::vector<wxString> properties;
+        SCH_SHEET_PATH*       sheet = &Schematic()->CurrentSheet();
 
         for( const SCH_FIELD& field : GetFields() )
         {
             properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
                                                        field.GetName(),
-                                                       field.GetShownText() ) );
+                                                       field.GetShownText( sheet, false) ) );
         }
 
         properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
@@ -2189,7 +2202,7 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground ) const
         aPlotter->EndBlock( nullptr );
 
         if( !m_part->IsPower() )
-            aPlotter->Bookmark( GetBoundingBox(), GetField( REFERENCE_FIELD )->GetShownText(), _("Symbols") );
+            aPlotter->Bookmark( GetBoundingBox(), GetRef( sheet ), _( "Symbols" ) );
     }
 }
 

@@ -147,7 +147,7 @@ int ERC_TESTER::TestDuplicateSheetNames( bool aCreateMarker )
                 // We have found a second sheet: compare names
                 // we are using case insensitive comparison to avoid mistakes between
                 // similar names like Mysheet and mysheet
-                if( sheet->GetName().CmpNoCase( test_item->GetName() ) == 0 )
+                if( sheet->GetShownName( false ).CmpNoCase( test_item->GetShownName( false ) ) == 0 )
                 {
                     if( aCreateMarker )
                     {
@@ -206,7 +206,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
 
                 for( SCH_FIELD& field : symbol->GetFields() )
                 {
-                    if( unresolved( field.GetShownText() ) )
+                    if( unresolved( field.GetShownText( true ) ) )
                     {
                         VECTOR2I pos = field.GetPosition() - symbol->GetPosition();
                         pos = symbol->GetTransform().TransformCoordinate( pos );
@@ -227,7 +227,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
 
                 for( SCH_FIELD& field : subSheet->GetFields() )
                 {
-                    if( unresolved( field.GetShownText() ) )
+                    if( unresolved( field.GetShownText( true ) ) )
                     {
                         std::shared_ptr<ERC_ITEM> ercItem =
                                 ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
@@ -240,7 +240,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
 
                 for( SCH_SHEET_PIN* pin : static_cast<SCH_SHEET*>( item )->GetPins() )
                 {
-                    if( pin->GetShownText().Matches( wxT( "*${*}*" ) ) )
+                    if( pin->GetShownText( true ).Matches( wxT( "*${*}*" ) ) )
                     {
                         std::shared_ptr<ERC_ITEM> ercItem =
                                 ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
@@ -253,7 +253,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
             }
             else if( SCH_TEXT* text = dynamic_cast<SCH_TEXT*>( item ) )
             {
-                if( text->GetShownText().Matches( wxT( "*${*}*" ) ) )
+                if( text->GetShownText( true ).Matches( wxT( "*${*}*" ) ) )
                 {
                     std::shared_ptr<ERC_ITEM> ercItem =
                             ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
@@ -265,7 +265,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
             }
             else if( SCH_TEXTBOX* textBox = dynamic_cast<SCH_TEXTBOX*>( item ) )
             {
-                if( textBox->GetShownText().Matches( wxT( "*${*}*" ) ) )
+                if( textBox->GetShownText( true ).Matches( wxT( "*${*}*" ) ) )
                 {
                     std::shared_ptr<ERC_ITEM> ercItem =
                             ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
@@ -281,7 +281,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
         {
             if( DS_DRAW_ITEM_TEXT* text = dynamic_cast<DS_DRAW_ITEM_TEXT*>( item ) )
             {
-                if( text->GetShownText().Matches( wxT( "*${*}*" ) ) )
+                if( text->GetShownText( true ).Matches( wxT( "*${*}*" ) ) )
                 {
                     std::shared_ptr<ERC_ITEM> erc = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                     erc->SetErrorMessage( _( "Unresolved text variable in drawing sheet" ) );
@@ -824,13 +824,14 @@ int ERC_TESTER::TestSimilarLabels()
                 {
                     SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( item );
 
-                    wxString normalized = label->GetShownText().Lower();
+                    wxString normalized = label->GetShownText( false ).Lower();
 
                     if( !labelMap.count( normalized ) )
                     {
                         labelMap[normalized] = label;
                     }
-                    else if( labelMap.at( normalized )->GetShownText() != label->GetShownText() )
+                    else if( labelMap.at( normalized )->GetShownText( false )
+                                    != label->GetShownText( false) )
                     {
                         std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_SIMILAR_LABELS );
                         ercItem->SetItems( label, labelMap.at( normalized ) );

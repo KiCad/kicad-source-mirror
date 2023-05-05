@@ -78,7 +78,7 @@ void LIB_SYMBOL::GetChooserFields( std::map<wxString , wxString>& aColumnMap )
         LIB_FIELD* field = static_cast<LIB_FIELD*>( &item );
 
         if( field->ShowInChooser() )
-            aColumnMap[field->GetName()] = field->EDA_TEXT::GetShownText();
+            aColumnMap[field->GetName()] = field->EDA_TEXT::GetShownText( false );
     }
 }
 
@@ -784,7 +784,7 @@ void LIB_SYMBOL::PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert, bool
 
         // The reference is a special case: we should change the basic text
         // to add '?' and the part id
-        wxString tmp = field.GetShownText();
+        wxString tmp = field.GetShownText( true );
 
         if( field.GetId() == REFERENCE_FIELD )
         {

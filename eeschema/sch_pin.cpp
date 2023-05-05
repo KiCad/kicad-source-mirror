@@ -194,7 +194,7 @@ SCH_SYMBOL* SCH_PIN::GetParentSymbol() const
 wxString SCH_PIN::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( "Symbol %s %s",
-                             GetParentSymbol()->GetField( REFERENCE_FIELD )->GetShownText(),
+                             UnescapeString( GetParentSymbol()->GetField( REFERENCE_FIELD )->GetText() ),
                              m_libPin->GetItemDescription( aUnitsProvider ) );
 }
 
@@ -230,7 +230,9 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
     SCH_SHEET_PATH* currentSheet = schframe ? &schframe->GetCurrentSheet() : nullptr;
     SCH_SYMBOL*     symbol = GetParentSymbol();
 
-    aList.emplace_back( symbol->GetRef( currentSheet ), symbol->GetValueFieldText( true ) );
+    // Don't use GetShownText(); we want to see the variable references here
+    aList.emplace_back( symbol->GetRef( currentSheet ),
+                        UnescapeString( symbol->GetField( VALUE_FIELD )->GetText() ) );
 
 #if defined(DEBUG)
     if( !IsConnectivityDirty() && dynamic_cast<SCH_EDIT_FRAME*>( aFrame ) )

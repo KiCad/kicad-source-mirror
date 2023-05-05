@@ -75,7 +75,7 @@ public:
 
     bool Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const override
     {
-        return BOARD_ITEM::Matches( GetShownText(), aSearchData );
+        return BOARD_ITEM::Matches( GetShownText( false ), aSearchData );
     }
 
     int GetTextMargin() const;
@@ -125,7 +125,7 @@ public:
 
     EDA_ITEM* Clone() const override;
 
-    virtual wxString GetShownText( int aDepth = 0, bool aAllowExtraText = true ) const override;
+    virtual wxString GetShownText( bool aAllowExtraText, int aDepth = 0 ) const override;
 
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
