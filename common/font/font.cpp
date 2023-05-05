@@ -39,6 +39,7 @@
 // The "official" name of the building Kicad stroke font (always existing)
 #include <font/kicad_font_name.h>
 #include "macros.h"
+#include "wx/tokenzr.h"
 
 
 // markup_parser.h includes pegtl.hpp which includes windows.h... which leaks #define DrawText
@@ -512,20 +513,22 @@ void wordbreakMarkup( std::vector<std::pair<wxString, int>>* aWords,
         }
         else
         {
-            wxString      textRun = aNode->asWxString();
-            wxArrayString words;
+            wxString              textRun = aNode->asWxString();
+            wxStringTokenizer     tokenizer( textRun, " ", wxTOKEN_RET_DELIMS );
+            std::vector<wxString> words;
 
-            wxStringSplit( textRun, words, ' ' );
+            while( tokenizer.HasMoreTokens() )
+                words.emplace_back( tokenizer.GetNextToken() );
 
-            if( textRun.EndsWith( wxS( " " ) ) )
-                words.Add( wxS( " " ) );
-
-            for( size_t ii = 0; ii < words.size(); ++ii )
+            for( const wxString& word : words )
             {
-                int w = aFont->GetTextAsGlyphs( nullptr, nullptr, words[ii], aSize, { 0, 0 },
+                wxString chars = word;
+                chars.Trim();
+
+                int w = aFont->GetTextAsGlyphs( nullptr, nullptr, chars, aSize, { 0, 0 },
                                                 ANGLE_0, false, { 0, 0 }, textStyle ).x;
 
-                aWords->emplace_back( std::make_pair( words[ii], w ) );
+                aWords->emplace_back( std::make_pair( word, w ) );
             }
         }
     }
@@ -577,35 +580,70 @@ void FONT::LinebreakText( wxString& aText, int aColumnWidth, const VECTOR2I& aSi
 
     for( size_t ii = 0; ii < textLines.Count(); ++ii )
     {
-        bool virginLine = true;
-        int  lineWidth = 0;
+        std::vector<std::pair<wxString, int>> markup;
         std::vector<std::pair<wxString, int>> words;
 
-        wordbreakMarkup( &words, textLines[ii], aSize, textStyle );
+        wordbreakMarkup( &markup, textLines[ii], aSize, textStyle );
 
-        for( size_t jj = 0; jj < words.size(); /* advance in loop */ )
+        for( const auto& [ run, runWidth ] : markup )
         {
-            if( virginLine )
+            if( !words.empty() && !words.back().first.EndsWith( ' ' ) )
             {
-                // First word is always placed, even when wider than columnWidth.
-                aText += words[jj].first;
-                lineWidth += words[jj].second;
-                jj++;
-
-                virginLine = false;
-            }
-            else if( lineWidth + spaceWidth + words[jj].second < aColumnWidth - aThickness )
-            {
-                aText += " " + words[jj].first;
-                lineWidth += spaceWidth + words[jj].second;
-                jj++;
+                words.back().first += run;
+                words.back().second += runWidth;
             }
             else
             {
-                aText += '\n';
+                words.emplace_back( std::make_pair( run, runWidth ) );
+            }
+        }
 
+        bool     buryMode = false;
+        int      lineWidth = 0;
+        wxString pendingSpaces;
+
+        for( const auto& [ word, wordWidth ] : words )
+        {
+            int  pendingSpaceWidth = (int) pendingSpaces.Length() * spaceWidth;
+            bool overflow = lineWidth + pendingSpaceWidth + wordWidth > aColumnWidth - aThickness;
+
+            if( overflow && pendingSpaces.Length() > 0 )
+            {
+                aText += '\n';
                 lineWidth = 0;
-                virginLine = true;
+                pendingSpaces = wxEmptyString;
+                pendingSpaceWidth = 0;
+                buryMode = true;
+            }
+
+            if( word == wxS( " " ) )
+            {
+                pendingSpaces += word;
+            }
+            else
+            {
+                if( buryMode )
+                {
+                    buryMode = false;
+                }
+                else
+                {
+                    aText += pendingSpaces;
+                    lineWidth += pendingSpaceWidth;
+                }
+
+                if( word.EndsWith( ' ' ) )
+                {
+                    aText += word.Left( word.Length() - 1 );
+                    pendingSpaces = wxS( " " );
+                }
+                else
+                {
+                    aText += word;
+                    pendingSpaces = wxEmptyString;
+                }
+
+                lineWidth += wordWidth;
             }
         }
 
