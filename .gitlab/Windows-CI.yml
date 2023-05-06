@@ -5,7 +5,6 @@ win64_build:
   stage: build
   tags:
     - kicad-windows-1809
-  extends: .only_code
   interruptible: false
   image: registry.gitlab.com/kicad/kicad-ci/windows-build-image/win1809-msvc:latest
   variables:
@@ -15,9 +14,10 @@ win64_build:
     paths:
       - build\windows\vcpkg_installed
       - .vcpkgCache
-  only:
-    - branches@kicad/code/kicad
-    - tags@kicad/code/kicad
+  rules:
+    - if: $CI_PROJECT_ROOT_NAMESPACE == "kicad" && $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
   script:
     - C:\builder\build.ps1 -Env -Arch x64
     - $vcpkgCache=Join-Path -Path (Get-Location) -ChildPath ".vcpkgCache";$env:VCPKG_DEFAULT_BINARY_CACHE=$vcpkgCache;New-Item -ItemType Directory -Force -Path $vcpkgCache
