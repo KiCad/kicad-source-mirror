@@ -23,6 +23,7 @@
  */
 
 #include <pcb_edit_frame.h>
+#include <widgets/unit_binder.h>
 #include <board.h>
 #include <board_design_settings.h>
 #include <pcb_track.h>
@@ -58,18 +59,15 @@ static bool         g_filterByNet;
 static wxString     g_netFilter;
 static bool         g_filterByLayer;
 static int          g_layerFilter;
+static bool         g_filterByTrackWidth = false;
+static int          g_trackWidthFilter = 0;
+static bool         g_filterByViaSize = false;
+static int          g_viaSizeFilter = 0;
 static bool         g_filterSelected = false;
 
 
 class DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS : public DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 {
-private:
-    PCB_EDIT_FRAME* m_parent;
-    BOARD*          m_brd;
-    int*            m_originalColWidths;
-    PCB_SELECTION   m_selection;
-    std::vector<BOARD_ITEM*>  m_items_changed;        // a list of modified items
-
 public:
     DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT_FRAME* aParent );
     ~DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS() override;
@@ -85,6 +83,14 @@ protected:
     void OnLayerFilterSelect( wxCommandEvent& event ) override
     {
         m_layerFilterOpt->SetValue( true );
+    }
+    void OnTrackWidthText( wxCommandEvent& aEvent ) override
+    {
+        m_filterByTrackWidth->SetValue( true );
+    }
+    void OnViaSizeText( wxCommandEvent& aEvent ) override
+    {
+        m_filterByViaSize->SetValue( true );
     }
 
     void onUnitsChanged( wxCommandEvent& aEvent );
@@ -105,11 +111,24 @@ private:
 
     void buildNetclassesGrid();
     void buildFilterLists();
+
+private:
+    PCB_EDIT_FRAME* m_parent;
+    BOARD*          m_brd;
+    int*            m_originalColWidths;
+    PCB_SELECTION   m_selection;
+
+    UNIT_BINDER     m_trackWidthFilter;
+    UNIT_BINDER     m_viaSizeFilter;
+
+    std::vector<BOARD_ITEM*>  m_items_changed;        // a list of modified items
 };
 
 
 DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT_FRAME* aParent ) :
-    DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE( aParent )
+        DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE( aParent ),
+        m_trackWidthFilter( aParent, nullptr, m_trackWidthFilterCtrl, m_trackWidthFilterUnits ),
+        m_viaSizeFilter( aParent, nullptr, m_viaSizeFilterCtrl, m_viaSizeFilterUnits )
 {
     m_parent = aParent;
     m_brd = m_parent->GetBoard();
@@ -160,6 +179,10 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::~DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS()
     g_netFilter = m_netFilter->GetSelectedNetname();
     g_filterByLayer = m_layerFilterOpt->GetValue();
     g_layerFilter = m_layerFilter->GetLayerSelection();
+    g_filterByTrackWidth = m_filterByTrackWidth->GetValue();
+    g_trackWidthFilter = m_trackWidthFilter.GetValue();
+    g_filterByViaSize = m_filterByViaSize->GetValue();
+    g_viaSizeFilter = m_viaSizeFilter.GetValue();
     g_filterSelected = m_selectedItemsFilter->GetValue();
 
     m_netFilter->Disconnect( NET_SELECTED,
@@ -299,6 +322,18 @@ bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataToWindow()
             m_layerFilter->SetLayerSelection( item->GetLayer() );
     }
 
+    if( g_filterByTrackWidth )
+    {
+        m_filterByTrackWidth->SetValue( true );
+        m_trackWidthFilter.SetValue( g_trackWidthFilter );
+    }
+
+    if( g_filterByViaSize )
+    {
+        m_filterByViaSize->SetValue( true );
+        m_viaSizeFilter.SetValue( g_viaSizeFilter );
+    }
+
     m_trackWidthSelectBox->SetSelection( (int) m_trackWidthSelectBox->GetCount() - 1 );
     m_viaSizesSelectBox->SetSelection( (int) m_viaSizesSelectBox->GetCount() - 1 );
     m_layerBox->SetStringSelection( INDETERMINATE_ACTION );
@@ -408,6 +443,17 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::visitItem( PICKED_ITEMS_LIST* aUndoList
             return;
     }
 
+    if( aItem->Type() == PCB_VIA_T )
+    {
+        if( m_filterByViaSize->GetValue() && aItem->GetWidth() != m_viaSizeFilter.GetValue() )
+            return;
+    }
+    else
+    {
+        if( m_filterByTrackWidth->GetValue() && aItem->GetWidth() != m_trackWidthFilter.GetValue() )
+            return;
+    }
+
     processItem( aUndoList, aItem );
 }
 
@@ -435,6 +481,8 @@ bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataFromWindow()
         for( PCB_TRACK* track : m_brd->Tracks() )
             m_parent->GetCanvas()->GetView()->Update( track );
     }
+
+    m_parent->GetCanvas()->ForceRefresh();
 
     if( m_items_changed.size() )
     {
