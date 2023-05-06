@@ -49,7 +49,7 @@ wxString escapeName( const wxString& aNetName )
 
 wxString interpretText( const wxString& aText )
 {
-    wxString token = aText.Upper();
+    wxString token = aText;
 
     if( substituteVariable( &token ) )
         return token;
@@ -118,22 +118,24 @@ bool substituteVariable( wxString* aText )
 {
     if( aText->StartsWith( '>' ) && aText->AfterFirst( ' ' ).IsEmpty() )
     {
-        if     ( *aText == wxT( ">NAME" ) )             *aText = wxT( "${REFERENCE}" );
-        else if( *aText == wxT( ">VALUE" ) )            *aText = wxT( "${VALUE}" );
-        else if( *aText == wxT( ">PART" ) )             *aText = wxT( "${REFERENCE}" );
-        else if( *aText == wxT( ">GATE" ) )             *aText = wxT( "${UNIT}" );
-        else if( *aText == wxT( ">MODULE" ) )           *aText = wxT( "${FOOTPRINT_NAME}" );
-        else if( *aText == wxT( ">SHEETNR" ) )          *aText = wxT( "${#}" );
-        else if( *aText == wxT( ">SHEETS" ) )           *aText = wxT( "${##}" );
-        else if( *aText == wxT( ">SHEET" ) )            *aText = wxT( "${#}/${##}" );
-        else if( *aText == wxT( ">SHEETNR_TOTAL" ) )    *aText = wxT( "${#}" );
-        else if( *aText == wxT( ">SHEETS_TOTAL" ) )     *aText = wxT( "${##}" );
-        else if( *aText == wxT( ">SHEET_TOTAL" ) )      *aText = wxT( "${#}/${##}" );
-        else if( *aText == wxT( ">SHEET_HEADLINE" ) )   *aText = wxT( "${SHEETNAME}" );
-        else if( *aText == wxT( ">ASSEMBLY_VARIANT" ) ) *aText = wxT( "${ASSEMBLY_VARIANT}" );
-        else if( *aText == wxT( ">DRAWING_NAME" ) )     *aText = wxT( "${PROJECTNAME}" );
-        else if( *aText == wxT( ">LAST_DATE_TIME" ) )   *aText = wxT( "${CURRENT_DATE}" );
-        else if( *aText == wxT( ">PLOT_DATE_TIME" ) )   *aText = wxT( "${CURRENT_DATE}" );
+        wxString token = aText->Upper();
+
+        if     ( token == wxT( ">NAME" ) )             *aText = wxT( "${REFERENCE}" );
+        else if( token == wxT( ">VALUE" ) )            *aText = wxT( "${VALUE}" );
+        else if( token == wxT( ">PART" ) )             *aText = wxT( "${REFERENCE}" );
+        else if( token == wxT( ">GATE" ) )             *aText = wxT( "${UNIT}" );
+        else if( token == wxT( ">MODULE" ) )           *aText = wxT( "${FOOTPRINT_NAME}" );
+        else if( token == wxT( ">SHEETNR" ) )          *aText = wxT( "${#}" );
+        else if( token == wxT( ">SHEETS" ) )           *aText = wxT( "${##}" );
+        else if( token == wxT( ">SHEET" ) )            *aText = wxT( "${#}/${##}" );
+        else if( token == wxT( ">SHEETNR_TOTAL" ) )    *aText = wxT( "${#}" );
+        else if( token == wxT( ">SHEETS_TOTAL" ) )     *aText = wxT( "${##}" );
+        else if( token == wxT( ">SHEET_TOTAL" ) )      *aText = wxT( "${#}/${##}" );
+        else if( token == wxT( ">SHEET_HEADLINE" ) )   *aText = wxT( "${SHEETNAME}" );
+        else if( token == wxT( ">ASSEMBLY_VARIANT" ) ) *aText = wxT( "${ASSEMBLY_VARIANT}" );
+        else if( token == wxT( ">DRAWING_NAME" ) )     *aText = wxT( "${PROJECTNAME}" );
+        else if( token == wxT( ">LAST_DATE_TIME" ) )   *aText = wxT( "${CURRENT_DATE}" );
+        else if( token == wxT( ">PLOT_DATE_TIME" ) )   *aText = wxT( "${CURRENT_DATE}" );
         else *aText = wxString::Format( wxS( "${%s}" ), aText->Mid( 1 ).Trim() );
 
         return true;
