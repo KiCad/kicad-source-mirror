@@ -354,10 +354,21 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
         if( evt->IsMouseDown( BUT_LEFT ) )
         {
-            // Avoid triggering when running under other tools
-            // Distinguish point editor from selection modification by checking modifiers
-            if( m_frame->ToolStackIsEmpty() && m_toolMgr->GetTool<EE_POINT_EDITOR>()
-                && ( !m_toolMgr->GetTool<EE_POINT_EDITOR>()->HasPoint() || hasModifier() ) )
+            if( !m_frame->ToolStackIsEmpty() )
+            {
+                // Avoid triggering when running under other tools
+            }
+            else if( m_toolMgr->GetTool<EE_POINT_EDITOR>()
+                        && m_toolMgr->GetTool<EE_POINT_EDITOR>()->HasPoint() )
+            {
+                // Distinguish point editor from selection modification by checking modifiers
+                if( hasModifier() )
+                {
+                    m_originalCursor = m_toolMgr->GetMousePosition();
+                    m_disambiguateTimer.StartOnce( 500 );
+                }
+            }
+            else
             {
                 m_originalCursor = m_toolMgr->GetMousePosition();
                 m_disambiguateTimer.StartOnce( 500 );
@@ -570,6 +581,11 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         else if( evt->IsCancelInteractive() )
         {
             m_disambiguateTimer.Stop();
+
+            // We didn't set these, but we have reports that they leak out of some other tools,
+            // so we clear them here.
+            getViewControls()->SetAutoPan( false );
+            getViewControls()->CaptureCursor( false );
 
             if( SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
                 schframe->FocusOnItem( nullptr );
