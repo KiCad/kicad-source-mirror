@@ -17,11 +17,9 @@
 .unit_test:
   stage: test
   when: on_success
-  # We define this using a before script because GitLab cannot merge variable
-  # definitions across inheritance (so the variables block from this would disappear)
-  before_script:
-    - export BOOST_TEST_LOGGER='JUNIT,all,test_results.${TEST}.xml:HRF,warning'
-    - export CTEST_OUTPUT_ON_FAILURE=1
+  variables:
+    BOOST_TEST_LOGGER: 'JUNIT,all,test_results.${TEST}.xml:HRF,warning'
+    CTEST_OUTPUT_ON_FAILURE: 1
   script:
     - cd build/linux/qa
     - ctest -R qa_${TEST}
