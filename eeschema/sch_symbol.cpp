@@ -1187,7 +1187,7 @@ void SCH_SYMBOL::GetContextualTextVars( wxArrayString* aVars ) const
 }
 
 
-bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth, const SCH_SHEET_PATH* aPath ) const
+bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, int aDepth ) const
 {
     static wxRegEx operatingPoint( wxT( "^"
                                         "OP"
@@ -1197,11 +1197,9 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth, const SCH_SHEET_PA
 
     SCHEMATIC* schematic = Schematic();
 
-    // SCH_SYMOL object has no context outside a schematic.
-    if( !schematic )
+    // SCH_SYMBOL object has no context outside a schematic and the instance on a path.
+    if( !schematic || !aPath )
         return false;
-
-    SCH_SHEET* sheet = aPath ? aPath->Last() : schematic->CurrentSheet().Last();
 
     if( operatingPoint.Matches( *token ) )
     {
@@ -1209,7 +1207,7 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth, const SCH_SHEET_PA
         wxString precisionStr( operatingPoint.GetMatch( *token, 3 ) );
         wxString range( operatingPoint.GetMatch( *token, 4 ) );
 
-        wxString signal = GetRef( &schematic->CurrentSheet() ) + port;
+        wxString signal = GetRef( aPath ) + port;
         int      precision = 3;
 
         if( !precisionStr.IsEmpty() )
@@ -1223,7 +1221,7 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth, const SCH_SHEET_PA
                 range = wxS( "~A" );
         }
 
-        *token = Schematic()->GetOperatingPoint( signal.Lower(), precision, range );
+        *token = schematic->GetOperatingPoint( signal.Lower(), precision, range );
 
         return true;
     }
@@ -1239,7 +1237,7 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth, const SCH_SHEET_PA
         if( token->IsSameAs( m_fields[ i ].GetCanonicalName().Upper() ) )
         {
             if( i == REFERENCE_FIELD )
-                *token = GetRef( &schematic->CurrentSheet(), true );
+                *token = GetRef( aPath, true );
             else if( i == VALUE_FIELD )
                 *token = GetValueFieldText( true, aPath, false );
             else if( i == FOOTPRINT_FIELD )
@@ -1276,9 +1274,7 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth, const SCH_SHEET_PA
 
     if( token->IsSameAs( wxT( "FOOTPRINT_LIBRARY" ) ) )
     {
-        wxString footprint;
-
-        footprint = GetFootprintFieldText( true, aPath, false );
+        wxString footprint = GetFootprintFieldText( true, aPath, false );
 
         wxArrayString parts = wxSplit( footprint, ':' );
 
@@ -1287,9 +1283,7 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth, const SCH_SHEET_PA
     }
     else if( token->IsSameAs( wxT( "FOOTPRINT_NAME" ) ) )
     {
-        wxString footprint;
-
-        footprint = GetFootprintFieldText( true, aPath, false );
+        wxString footprint = GetFootprintFieldText( true, aPath, false );
 
         wxArrayString parts = wxSplit( footprint, ':' );
 
@@ -1298,9 +1292,7 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth, const SCH_SHEET_PA
     }
     else if( token->IsSameAs( wxT( "UNIT" ) ) )
     {
-        int unit;
-
-        unit = GetUnitSelection( &schematic->CurrentSheet() );
+        int unit = GetUnitSelection( aPath );
 
         *token = LIB_SYMBOL::SubReference( unit );
         return true;
@@ -1344,12 +1336,8 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth, const SCH_SHEET_PA
     }
 
     // See if parent can resolve it (this will recurse to ancestors)
-
-    if( sheet )
-    {
-        if( sheet->ResolveTextVar( aPath, token, aDepth + 1 ) )
-            return true;
-    }
+    if( aPath->Last()->ResolveTextVar( aPath, token, aDepth + 1 ) )
+        return true;
 
     return false;
 }

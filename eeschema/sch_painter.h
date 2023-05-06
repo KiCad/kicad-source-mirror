@@ -203,6 +203,8 @@ private:
     void boxText( const wxString& aText, const VECTOR2D& aPosition,
                   const TEXT_ATTRIBUTES& aAttrs );
 
+    wxString expandLibItemTextVars( const wxString& aSourceText, const SCH_SYMBOL* aSymbolContext );
+
 public:
     static std::vector<KICAD_T> g_ScaledSelectionTypes;
 

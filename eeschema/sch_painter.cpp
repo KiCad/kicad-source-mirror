@@ -2339,12 +2339,12 @@ static void orientSymbol( LIB_SYMBOL* symbol, int orientation )
 }
 
 
-wxString expandLibItemTextVars( const wxString& aSourceText, const SCH_SYMBOL* aSymbolContext )
+wxString SCH_PAINTER::expandLibItemTextVars( const wxString& aSourceText, const SCH_SYMBOL* aSymbolContext )
 {
     std::function<bool( wxString* )> symbolResolver =
             [&]( wxString* token ) -> bool
             {
-                return aSymbolContext->ResolveTextVar( token, 0 );
+                return aSymbolContext->ResolveTextVar( &m_schematic->CurrentSheet(), token );
             };
 
     return ExpandTextVars( aSourceText, &symbolResolver );

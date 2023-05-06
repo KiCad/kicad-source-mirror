@@ -334,7 +334,7 @@ bool SCHEMATIC::ResolveCrossReference( wxString* token, int aDepth ) const
     {
         SCH_SYMBOL* refSymbol = static_cast<SCH_SYMBOL*>( refItem );
 
-        if( refSymbol->ResolveTextVar( &remainder, aDepth + 1 ) )
+        if( refSymbol->ResolveTextVar( &sheetPath, &remainder, aDepth + 1 ) )
             *token = remainder;
         else
             *token = refSymbol->GetRef( &sheetPath, true ) + wxS( ":" ) + remainder;

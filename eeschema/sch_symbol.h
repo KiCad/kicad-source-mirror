@@ -330,8 +330,7 @@ public:
      *
      * @param aDepth a counter to limit recursion and circular references.
      */
-    bool ResolveTextVar( wxString* token, int aDepth = 0,
-                         const SCH_SHEET_PATH* aPath = nullptr ) const;
+    bool ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, int aDepth = 0 ) const;
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 

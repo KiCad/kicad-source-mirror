@@ -178,8 +178,7 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
     std::function<bool( wxString* )> symbolResolver =
             [&]( wxString* token ) -> bool
             {
-                return static_cast<SCH_SYMBOL*>( m_parent )->ResolveTextVar( token, aDepth + 1,
-                                                                             aPath );
+                return static_cast<SCH_SYMBOL*>( m_parent )->ResolveTextVar( aPath, token, aDepth + 1 );
             };
 
     std::function<bool( wxString* )> sheetResolver =
