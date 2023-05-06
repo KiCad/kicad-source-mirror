@@ -866,8 +866,9 @@ int PAD::GetOwnClearance( PCB_LAYER_ID aLayer, wxString* aSource ) const
 int PAD::GetSolderMaskExpansion() const
 {
     // Pads defined only on mask layers (and perhaps on other tech layers) use the shape
-    // defined by the pad settings only
-    if( !IsOnCopperLayer() )
+    // defined by the pad settings only.  ALL other pads, even those that don't actually have
+    // any copper (such as NPTH pads with holes the same size as the pad) get mask expansion.
+    if( ( m_layerMask & LSET::AllCuMask() ).none() )
         return 0;
 
     int margin = m_localSolderMaskMargin;
@@ -907,8 +908,9 @@ int PAD::GetSolderMaskExpansion() const
 VECTOR2I PAD::GetSolderPasteMargin() const
 {
     // Pads defined only on mask layers (and perhaps on other tech layers) use the shape
-    // defined by the pad settings only
-    if( !IsOnCopperLayer() )
+    // defined by the pad settings only.  ALL other pads, even those that don't actually have
+    // any copper (such as NPTH pads with holes the same size as the pad) get paste expansion.
+    if( ( m_layerMask & LSET::AllCuMask() ).none() )
         return VECTOR2I( 0, 0 );
 
     int     margin = m_localSolderPasteMargin;
