@@ -1715,9 +1715,9 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
             valueField->SetVisible( false );
     }
 
-    for( const auto& a : epart->attribute )
+    for( const auto& [ attrName, attrValue ] : epart->attribute )
     {
-        VECTOR2I newFieldPosition( 0, 0 );
+        VECTOR2I   newFieldPosition( 0, 0 );
         SCH_FIELD* lastField = symbol->GetFieldById( symbol->GetFieldCount() - 1 );
 
         if( lastField )
@@ -1725,8 +1725,8 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
         SCH_FIELD newField( newFieldPosition, symbol->GetFieldCount(), symbol.get() );
 
-        newField.SetName( a.first );
-        newField.SetText( a.second );
+        newField.SetName( attrName );
+        newField.SetText( attrValue );
         newField.SetVisible( false );
 
         symbol->AddField( newField );
