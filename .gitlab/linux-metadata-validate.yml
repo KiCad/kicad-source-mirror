@@ -10,19 +10,14 @@ validate_linux_metadata:
   # Due to bug https://github.com/hughsie/appstream-glib/issues/381, this doesn't think our description tag
   # is localized even though it actually is.
   allow_failure: true
-  only:
-    refs:
-      - master
-      - branches
-      - merge_requests
-      - pushes
-    changes:
-      # Only run if the resources, its tests, or the translations are updated
-      - resources/linux/**/*
-      - qa/resources/linux/**/*
-      - translation/**/*
-  except:
-    - schedules
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - resources/linux/**/*
+        - qa/resources/linux/**/*
+        - translation/**/*
   # Only build the metadata files in this CI job
   script:
     - mkdir -p build/linux

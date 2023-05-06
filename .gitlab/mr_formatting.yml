@@ -7,8 +7,8 @@
 test_formatting:
   stage: test
   needs: []
-  only:
-    - merge_requests
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
   allow_failure: true
   before_script:
     # We must manually add the KiCad remote to ensure it is named sensibly

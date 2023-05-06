@@ -3,6 +3,8 @@ build_doxygen_docker:
   services:
     - docker:dind
   stage: build
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $SCHEDULED_JOB_NAME == "doxygen"
   tags:
     - docker
   before_script:
@@ -11,8 +13,3 @@ build_doxygen_docker:
   script:
     - docker build -t "${CI_REGISTRY_IMAGE}/doxygen:$CI_COMMIT_BRANCH" -f ./doxygen/doxygen.Dockerfile .
     - docker push "${CI_REGISTRY_IMAGE}/doxygen:$CI_COMMIT_BRANCH"
-  only:
-    refs:
-      - schedules
-    variables:
-      - $SCHEDULED_JOB_NAME == "doxygen"
