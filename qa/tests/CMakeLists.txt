@@ -32,7 +32,7 @@ endif()
 
 if( KICAD_TEST_XML_OUTPUT )
     # To do this, you will need xmlrunner
-    set( PYTEST_ARGS_QAPYTHON --xml=${CMAKE_CURRENT_BINARY_DIR}/qapython.xunit-results.xml )
+    set( PYTEST_ARGS_QAPYTHON --junitxml=${CMAKE_CURRENT_BINARY_DIR}/qapython.junit-results.xml )
     set( PYTEST_ARGS_QACLI --junitxml=${CMAKE_CURRENT_BINARY_DIR}/qacli.junit-results.xml )
 endif()
 
@@ -51,8 +51,8 @@ if( NOT (MSVC AND CMAKE_BUILD_TYPE STREQUAL "Debug") )
 # qa_python will never work under MSVC + Debug because we only have the Release mode python.exe
 # but the kicad binaries are linked to the debug mode python
 # Test that runs the QA tests through scripting
-add_test( NAME qa_python
-    COMMAND ${PYTHON_EXECUTABLE} test-pcbnewswig.py ${PYTEST_ARGS_QAPYTHON}
+add_test(NAME qa_python
+    COMMAND ${PYTHON_EXECUTABLE} -m pytest ${CMAKE_CURRENT_SOURCE_DIR}/pcbnewswig ${PYTEST_ARGS_QACLI}
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
 

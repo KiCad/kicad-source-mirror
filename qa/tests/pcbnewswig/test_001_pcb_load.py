@@ -1,23 +1,23 @@
-import code
-import unittest
 import pcbnew
-import pdb
+import pytest
 
-class TestPCBLoad(unittest.TestCase):
 
-    def setUp(self):
+class TestPCBLoad:
+    pcb : pcbnew.BOARD = None
+
+    def setup_method(self):
         self.pcb = pcbnew.LoadBoard("../data/pcbnew/complex_hierarchy.kicad_pcb")
 
     def test_pcb_load(self):
-        self.assertNotEqual(self.pcb,None)
+        assert self.pcb is not None
 
     def test_pcb_track_count(self):
         tracks = list(self.pcb.GetTracks())
-        self.assertEqual(len(tracks),361)
+        assert len(tracks) == 361
 
     def test_pcb_modules(self):
         modules = list(self.pcb.GetFootprints())
-        self.assertEqual(len(modules), 72)
+        assert len(modules) == 72
 
     def test_pcb_module_references(self):
         board_refs = list(module.GetReference() for
@@ -35,10 +35,10 @@ class TestPCBLoad(unittest.TestCase):
                       u'R26', u'R27', u'R28']
 
         for ref in known_refs:
-            self.assertTrue(ref in board_refs)
+            assert ref in board_refs
 
     def test_pcb_netcount(self):
-        self.assertEqual(self.pcb.GetNetCount(),51)
+        assert self.pcb.GetNetCount() == 51
 
     def test_pcb_shapes(self):
         drawings = list(self.pcb.GetDrawings())
@@ -50,7 +50,7 @@ class TestPCBLoad(unittest.TestCase):
             [[188595000, 51816000], [188595000, 131826000]],
             [[188595000, 131826000], [88265000, 131826000]]
         ]
-        self.assertEqual(sorted(coordinates), sorted(expected_coordinates))
+        assert sorted(coordinates) == sorted(expected_coordinates)
 
     def test_pcb_text(self):
         drawings = list(self.pcb.GetDrawings())
@@ -61,12 +61,6 @@ class TestPCBLoad(unittest.TestCase):
                          u'Actionneur\nPiezo New Amp\nV02')
 
     def verify_text(self, text, x, y, layer, s):
-        self.assertEquals(list(text.GetPosition()), [x, y])
-        self.assertEquals(text.GetLayer(), layer)
-        self.assertEquals(text.GetText(), s)
-
-    #def test_interactive(self):
-    #    code.interact(local=locals())
-
-if __name__ == '__main__':
-    unittest.main()
+        assert list(text.GetPosition()) == [x, y]
+        assert text.GetLayer() == layer
+        assert text.GetText() == s

@@ -1,9 +1,10 @@
-import unittest
+import pytest
 import pcbnew
 
-class TestPads(unittest.TestCase):
+class TestPads:
+    pcb : pcbnew.BOARD = None
 
-    def setUp(self):
+    def setup_method(self):
         self.pcb = pcbnew.LoadBoard("../data/pcbnew/custom_pads.kicad_pcb")
 
     def test_custom_pads_outline(self):
@@ -17,10 +18,11 @@ class TestPads(unittest.TestCase):
         ]]
         # test accessor without layer
         polygon_set = custom_pad1.GetCustomShapeAsPolygon()
-        self.assertEqual(expected_polygons, self.parse_polygon_set(polygon_set))
+        assert expected_polygons == self.parse_polygon_set(polygon_set)
+
         # test accessor with layer
         polygon_set = custom_pad1.GetCustomShapeAsPolygon(pcbnew.F_Cu)
-        self.assertEqual(expected_polygons, self.parse_polygon_set(polygon_set))
+        assert expected_polygons == self.parse_polygon_set(polygon_set)
 
     def parse_polygon_set(self, polygon_set):
         result = []

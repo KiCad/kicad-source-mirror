@@ -1,8 +1,6 @@
-import code
-import unittest
+import pytest
 import os
 import pcbnew
-import pdb
 import tempfile
 
 
@@ -14,9 +12,10 @@ B_CU = 'B.Cu'
 NEW_NAME = 'My_Fancy_Layer_Name'
 
 
-class TestBoardClass(unittest.TestCase):
+class TestBoardClass:
+    pcb : pcbnew.BOARD = None
 
-    def setUp(self):
+    def setup_method(self):
         self.pcb = LoadBoard("../data/pcbnew/complex_hierarchy.kicad_pcb")
         self.TITLE="Test Board"
         self.COMMENT1="For load/save test"
@@ -24,20 +23,20 @@ class TestBoardClass(unittest.TestCase):
 
     def test_pcb_find_module(self):
         module = self.pcb.FindFootprintByReference('P1')
-        self.assertEqual(module.GetReference(),'P1')
+        assert module.GetReference() =='P1'
 
     def test_pcb_get_track_count(self):
         pcb = BOARD()
 
-        self.assertEqual(pcb.Tracks().size(),0)
+        assert pcb.Tracks().size() == 0
 
         track0 = PCB_TRACK(pcb)
         pcb.Add(track0)
-        self.assertEqual(pcb.Tracks().size(),1)
+        assert pcb.Tracks().size() == 1
 
         track1 = PCB_TRACK(pcb)
         pcb.Add(track1)
-        self.assertEqual(pcb.Tracks().size(),2)
+        assert pcb.Tracks().size() == 2
 
     def test_pcb_bounding_box(self):
         pcb = BOARD()
@@ -55,8 +54,8 @@ class TestBoardClass(unittest.TestCase):
         height, width = ToMM(bounding_box.GetSize())
 
         margin = 0 # margin around bounding boxes (currently 0)
-        self.assertAlmostEqual(width, (30-10) + 0.5 + margin, 2)
-        self.assertAlmostEqual(height,  (20-10) + 0.5 + margin, 2)
+        assert width == pytest.approx((30-10) + 0.5 + margin, 2)
+        assert height == pytest.approx((20-10) + 0.5 + margin, 2)
 
     def test_pcb_get_pad(self):
         pcb = BOARD()
@@ -80,35 +79,35 @@ class TestBoardClass(unittest.TestCase):
 
         # TODO: get pad == p1 evaluated as true instead
         #       of relying in the internal C++ object pointer
-        self.assertEqual(pad.this, p1.this)
-        self.assertEqual(pad.this, p2.this)
-        self.assertEqual(pad.this, p3.this)
+        assert pad.this == p1.this
+        assert pad.this == p2.this
+        assert pad.this == p3.this
 
     def test_pcb_save_and_load(self):
         pcb = BOARD()
         pcb.GetTitleBlock().SetTitle(self.TITLE)
         pcb.GetTitleBlock().SetComment(0,self.COMMENT1)
         result = SaveBoard(self.FILENAME,pcb)
-        self.assertTrue(result)
+        assert result
 
         pcb2 = LoadBoard(self.FILENAME)
-        self.assertNotEqual(pcb2,None)
+        assert pcb2 is not None
 
         tb = pcb2.GetTitleBlock()
-        self.assertEqual(tb.GetTitle(),self.TITLE)
-        self.assertEqual(tb.GetComment(0),self.COMMENT1)
+        assert tb.GetTitle() == self.TITLE
+        assert tb.GetComment(0) == self.COMMENT1
 
         os.remove(self.FILENAME)
 
     def test_pcb_layer_name_set_get(self):
         pcb = BOARD()
         pcb.SetLayerName(31, BACK_COPPER)
-        self.assertEqual(pcb.GetLayerName(31), BACK_COPPER)
+        assert pcb.GetLayerName(31) == BACK_COPPER
 
     def test_pcb_layer_name_set_get(self):
         pcb = BOARD()
         pcb.SetLayerName(31, BACK_COPPER)
-        self.assertEqual(pcb.GetLayerName(31), BACK_COPPER)
+        assert pcb.GetLayerName(31) == BACK_COPPER
 
     def test_pcb_layer_id_get(self):
         pcb = BOARD()
@@ -116,10 +115,10 @@ class TestBoardClass(unittest.TestCase):
         pcb.SetLayerName(b_cu_id, NEW_NAME)
 
         # ensure we can get the ID for the new name
-        self.assertEqual(pcb.GetLayerID(NEW_NAME), b_cu_id)
+        assert pcb.GetLayerID(NEW_NAME) == b_cu_id
 
         # ensure we can get to the ID via the STD name too
-        self.assertEqual(pcb.GetLayerID(B_CU), b_cu_id)
+        assert pcb.GetLayerID(B_CU) == b_cu_id
 
     def test_footprint_properties(self):
         pcb = LoadBoard("../data/pcbnew/custom_fields.kicad_pcb")
@@ -129,17 +128,10 @@ class TestBoardClass(unittest.TestCase):
             'Sheet name': '',
             'myfield': 'myvalue'
         }
-        self.assertEquals(footprint.GetProperties(), expected_properties)
-        self.assertEquals(footprint.GetProperty('myfield'), 'myvalue')
-        self.assertEquals(footprint.HasProperty('myfield'), True)
-        self.assertEquals(footprint.HasProperty('abcd'), False)
+        assert footprint.GetProperties() == expected_properties
+        assert footprint.GetProperty('myfield') == 'myvalue'
+        assert footprint.HasProperty('myfield') == True
+        assert footprint.HasProperty('abcd') == False
         footprint.SetProperty('abcd', 'efgh')
-        self.assertEquals(footprint.HasProperty('abcd'), True)
-        self.assertEquals(footprint.GetProperty('abcd'), 'efgh')
-
-    #def test_interactive(self):
-    # 	code.interact(local=locals())
-
-if __name__ == '__main__':
-    unittest.main()
-
+        assert footprint.HasProperty('abcd') == True
+        assert footprint.GetProperty('abcd') == 'efgh'
