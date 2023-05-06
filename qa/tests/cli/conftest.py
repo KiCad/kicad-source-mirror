@@ -25,14 +25,25 @@ import os
 from pathlib import Path
 
 class KiTestFixture:
+    junit: bool = False
+    _output_path: Path = None
+    _junit_folder: Path = None
+    _ci_project_dir: Path = None
+
     def __init__( self, config ) -> None:
         self._junit = False
+
+        env_project_dir = os.getenv( 'CI_PROJECT_DIR' )
+        if env_project_dir is not None:
+            self._ci_project_dir = Path( env_project_dir )
+
         junitxml = config.getoption("xmlpath")
         
         if junitxml is not None:
             p = Path( junitxml )
             p = Path( p.parent ) # get the directory as junitxml points to a file
             p = p.resolve() # get absolute path
+            self._junit_folder = p
             self._junit = True
         else:
             p = Path.cwd()
@@ -59,8 +70,19 @@ class KiTestFixture:
     def add_attachment( self, path: str ) -> None:
         """Prints the attachment message line for junit reports"""
 
-        if self._junit:
-            print( "[[ATTACHMENT|{}]]".format( path ) )
+        if not self._junit:
+            return
+        
+        # Make the attachment path relative, gitlab in particular wants it
+        # relative tot he CI_PROJECT_DIR variable
+        attach_src_path = Path( path )
+        attach_path: Path = None
+        if self._ci_project_dir is not None:
+            attach_path = attach_src_path.relative_to( self._ci_project_dir )
+        else:
+            attach_path = attach_src_path.relative_to( self._junit_folder )
+        
+        print( "[[ATTACHMENT|{}]]".format( str( attach_path ) ) )
     
     
 @pytest.fixture
