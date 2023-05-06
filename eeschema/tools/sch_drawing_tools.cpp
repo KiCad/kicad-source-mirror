@@ -195,11 +195,10 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 
                     if( cfg->m_AnnotatePanel.automatic || newReference.AlwaysAnnotate() )
                     {
-                        refs.ReannotateByOptions(
-                                (ANNOTATE_ORDER_T) cfg->m_AnnotatePanel.sort_order,
-                                (ANNOTATE_ALGO_T) cfg->m_AnnotatePanel.method,
-                                m_frame->Schematic().Settings().m_AnnotateStartNum, existingRefs,
-                                false, &hierarchy );
+                        refs.ReannotateByOptions( (ANNOTATE_ORDER_T) cfg->m_AnnotatePanel.sort_order,
+                                                  (ANNOTATE_ALGO_T) cfg->m_AnnotatePanel.method,
+                                                  m_frame->Schematic().Settings().m_AnnotateStartNum,
+                                                  existingRefs, false, &hierarchy );
 
                         refs.UpdateAnnotation();
 
@@ -1643,6 +1642,9 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 {
                     SCH_TEXTBOX*           textbox = static_cast<SCH_TEXTBOX*>( item );
                     DIALOG_TEXT_PROPERTIES dlg( m_frame, textbox );
+
+                    getViewControls()->SetAutoPan( false );
+                    getViewControls()->CaptureCursor( false );
 
                     // This is modal not quasi to protect against place symbol calls starting
                     // TwoClickPlace wait routines in the middle
