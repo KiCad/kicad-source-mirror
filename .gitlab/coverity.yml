@@ -25,13 +25,13 @@
   export COV_INT_FILENAME=cov-int-$(date +"%Y%m%d%H%M").tar.gz
   tar cfz $COV_INT_FILENAME cov-int
   echo "Submitting scan results"
-  s5cmd/s5cmd cp $COV_INT_FILENAME s3://$KICAD_CI_R2_BUCKET/coverity
-  export FILE_URL=$KICAD_CI_R2_PUBLIC_BASE/coverity/$COV_INT_FILENAME
+  s5cmd/s5cmd put  $COV_INT_FILENAME s3://$KICAD_CI_R2_BUCKET/coverity
+  export FILE_URL="$KICAD_CI_R2_PUBLIC_BASE/coverity/$COV_INT_FILENAME"
   export KICAD_VERSION=$(sed 's/[()]//g' kicad_build_version.txt)
   curl https://scan.coverity.com/builds?project=$COVERITY_SCAN_PROJECT_NAME \
        --form token=$COVERITY_SCAN_TOKEN \
        --form email=$GITLAB_USER_EMAIL \
-       --form url=$FILE_URL \
+       --form url="$FILE_URL" \
        --form version="$KICAD_VERSION" \
        --form description="$KICAD_VERSION / $CI_COMMIT_TITLE" 2>&1 \
         | tee curl-response.txt
@@ -65,7 +65,7 @@ Coverity:
       -DCMAKE_BUILD_TYPE=RelWithDebInfo
       -DKICAD_STDLIB_LIGHT_DEBUG=ON
       -DKICAD_SCRIPTING_WXPYTHON=ON
-    - coverity/bin/cov-build --dir cov-int make -j8
+    - coverity/bin/cov-build --dir cov-int make -j10
     - *coverity_submit
   artifacts:
     expire_in: 1 year
