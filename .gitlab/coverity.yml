@@ -22,13 +22,20 @@
 # These results will be saved for 1 day if the build fails.
 .coverity_submit: &coverity_submit |
   echo "Creating tar file of scan results"
-  tar cfz cov-int.tar.gz cov-int
+  export COV_INT_FILENAME=cov-int-$(date +"%Y%m%d%H%M").tar.gz
+  tar cfz $COV_INT_FILENAME cov-int
   echo "Submitting scan results"
+
+  s5cmd/s5cmd cp $COV_INT_FILENAME s3://$KICAD_CI_R2_BUCKET/coverity
+
+  export FILE_URL=$KICAD_CI_R2_PUBLIC_BASE/coverity/$COV_INT_FILENAME
+
   export KICAD_VERSION=$(sed 's/[()]//g' kicad_build_version.txt)
+
   curl https://scan.coverity.com/builds?project=$COVERITY_SCAN_PROJECT_NAME \
        --form token=$COVERITY_SCAN_TOKEN \
        --form email=$GITLAB_USER_EMAIL \
-       --form file=@cov-int.tar.gz \
+       --form url=$FILE_URL \
        --form version="$KICAD_VERSION" \
        --form description="$KICAD_VERSION / $CI_COMMIT_TITLE" 2>&1 \
         | tee curl-response.txt
@@ -50,6 +57,12 @@ Coverity:
     - export COVERITY_SCAN_PROJECT_NAME="kicad"
     - test "$(git rev-parse --is-shallow-repository)" = "false" || (git fetch --unshallow)
     - git fetch origin
+    - curl -LO https://github.com/peak/s5cmd/releases/download/v2.0.0/s5cmd_2.0.0_Linux-64bit.tar.gz
+    - mkdir s5cmd
+    - tar -xvf ./s5cmd_2.0.0_Linux-64bit.tar.gz -C s5cmd
+    - export AWS_ACCESS_KEY_ID=$KICAD_CI_R2_KEY_ID
+    - export AWS_SECRET_ACCESS_KEY=$KICAD_CI_R2_ACCESS_KEY
+    - export S3_ENDPOINT_URL=$KICAD_CI_R2_ENDPOINT
   script:
     - *coverity_cache_prep
     - cmake
