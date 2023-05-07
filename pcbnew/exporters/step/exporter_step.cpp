@@ -326,7 +326,8 @@ void EXPORTER_STEP::determinePcbThickness()
             }
         }
 
-        m_boardThickness = pcbIUScale.IUTomm( thickness );
+        if( thickness > 0 )
+            m_boardThickness = pcbIUScale.IUTomm( thickness );
     }
 }
 
