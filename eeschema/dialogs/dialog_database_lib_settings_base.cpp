@@ -85,7 +85,7 @@ DIALOG_DATABASE_LIB_SETTINGS_BASE::DIALOG_DATABASE_LIB_SETTINGS_BASE( wxWindow* 
 	m_btnTest = new wxButton( sbSizer4->GetStaticBox(), wxID_ANY, _("Test"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer5->Add( m_btnTest, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_stConnectionTestStatus = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_stConnectionTestStatus = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxST_ELLIPSIZE_MIDDLE );
 	m_stConnectionTestStatus->Wrap( -1 );
 	bSizer5->Add( m_stConnectionTestStatus, 1, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 

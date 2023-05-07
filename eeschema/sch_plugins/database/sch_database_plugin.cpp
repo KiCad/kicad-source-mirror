@@ -66,6 +66,9 @@ void SCH_DATABASE_PLUGIN::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolL
     ensureSettings( aLibraryPath );
     ensureConnection();
 
+    if( !m_conn )
+        THROW_IO_ERROR( m_lastError );
+
     bool powerSymbolsOnly = ( aProperties &&
                               aProperties->find( SYMBOL_LIB_TABLE::PropPowerSymsOnly ) !=
                               aProperties->end() );
@@ -111,6 +114,9 @@ LIB_SYMBOL* SCH_DATABASE_PLUGIN::LoadSymbol( const wxString&   aLibraryPath,
     wxCHECK( m_libTable, nullptr );
     ensureSettings( aLibraryPath );
     ensureConnection();
+
+    if( !m_conn )
+        THROW_IO_ERROR( m_lastError );
 
     /*
      * Table names are tricky, in order to allow maximum flexibility to the user.
@@ -215,8 +221,8 @@ bool SCH_DATABASE_PLUGIN::TestConnection( wxString* aErrorMsg )
 
     connect();
 
-    if( aErrorMsg && m_conn && !m_conn->IsConnected() )
-        *aErrorMsg = m_conn->GetLastError();
+    if( aErrorMsg && ( !m_conn || !m_conn->IsConnected() ) )
+        *aErrorMsg = m_lastError;
 
     return m_conn && m_conn->IsConnected();
 }
@@ -272,8 +278,7 @@ void SCH_DATABASE_PLUGIN::ensureConnection()
     {
         wxString msg = wxString::Format(
                     _( "Could not load database library: could not connect to database %s (%s)" ),
-                    m_settings->m_Source.dsn,
-                    m_conn->GetLastError() );
+                    m_settings->m_Source.dsn, m_lastError );
 
         THROW_IO_ERROR( msg );
     }
@@ -302,7 +307,7 @@ void SCH_DATABASE_PLUGIN::connect()
             std::string basePath( wxFileName( m_settings->GetFilename() ).GetPath().ToUTF8() );
 
             // Database drivers that use files operate on absolute paths, so provide a mechanism
-            // for specifing on-disk databases that live next to the kicad_dbl file
+            // for specifying on-disk databases that live next to the kicad_dbl file
             boost::replace_all( cs, "${CWD}", basePath );
 
             m_conn = std::make_unique<DATABASE_CONNECTION>( cs, m_settings->m_Source.timeout );
@@ -310,6 +315,7 @@ void SCH_DATABASE_PLUGIN::connect()
 
         if( !m_conn->IsConnected() )
         {
+            m_lastError = m_conn->GetLastError();
             m_conn.reset();
             return;
         }

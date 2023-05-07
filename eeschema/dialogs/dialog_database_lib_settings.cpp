@@ -96,6 +96,7 @@ void DIALOG_DATABASE_LIB_SETTINGS::OnBtnTest( wxCommandEvent& aEvent )
     if( m_plugin->TestConnection( &errorMsg ) )
     {
         m_stConnectionTestStatus->SetLabel( _( "Connected to database successfully" ) );
+        m_stConnectionTestStatus->SetToolTip( wxEmptyString );
 
         wxCommandEvent dummy;
         OnBtnReloadConfig( dummy );
@@ -104,6 +105,7 @@ void DIALOG_DATABASE_LIB_SETTINGS::OnBtnTest( wxCommandEvent& aEvent )
     {
         m_stConnectionTestStatus->SetLabel( wxString::Format( _( "Database connection failed: %s" ),
                                                               errorMsg ) );
+        m_stConnectionTestStatus->SetToolTip( errorMsg );
     }
 }
 

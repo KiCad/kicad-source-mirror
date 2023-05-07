@@ -115,12 +115,14 @@ private:
 
     std::unique_ptr<DATABASE_LIB_SETTINGS> m_settings;
 
+    /// Generally will be null if no valid connection is established
     std::unique_ptr<DATABASE_CONNECTION> m_conn;
 
     std::set<wxString> m_customFields;
 
     std::set<wxString> m_defaultShownFields;
 
+    wxString m_lastError;
 };
 
 #endif //KICAD_SCH_DATABASE_PLUGIN_H
