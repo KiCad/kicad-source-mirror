@@ -6,13 +6,14 @@
 # Tokita, Hiroshi <tokita.hiroshi@fujitsu.com>, 2023.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2023.
 # "Tokita, Hiroshi" <tokita.hiroshi@fujitsu.com>, 2023.
+# 2tama3 <2tama3@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-06 16:51-0800\n"
-"PO-Revision-Date: 2023-05-04 22:43+0000\n"
-"Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
+"PO-Revision-Date: 2023-05-08 04:53+0000\n"
+"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -6040,9 +6041,8 @@ msgid "Find Previous"
 msgstr "前を検索"
 
 #: common/tool/actions.cpp:234
-#, fuzzy
 msgid "Find previous match"
-msgstr "前を検索"
+msgstr "前に一致するものを検索"
 
 #: common/tool/actions.cpp:240
 msgid "Find Next Marker"
