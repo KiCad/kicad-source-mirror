@@ -109,8 +109,17 @@ void SETTINGS_MANAGER::Load()
     // TODO(JE) We should check for dirty settings here and write them if so, because
     // Load() could be called late in the application lifecycle
 
-    for( auto&& settings : m_settings )
-        settings->LoadFromFile( GetPathForSettingsFile( settings.get() ) );
+    std::vector<JSON_SETTINGS*> toLoad;
+
+    // Cache a copy of raw pointers; m_settings may be modified during the load loop
+    std::transform( m_settings.begin(), m_settings.end(), std::back_inserter( toLoad ),
+                    []( std::unique_ptr<JSON_SETTINGS>& aSettings )
+                    {
+                        return aSettings.get();
+                    } );
+
+    for( JSON_SETTINGS* settings : toLoad )
+        settings->LoadFromFile( GetPathForSettingsFile( settings ) );
 }
 
 
