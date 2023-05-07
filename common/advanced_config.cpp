@@ -330,7 +330,14 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_3DRT_BevelExtentFactor    = 1.0 / 16.0;
 
     m_UseClipper2               = true;
-    m_Use3DConnexionDriver      = false;
+
+#ifdef _WIN32
+    // spacemouse is largely stable on Windows
+    m_Use3DConnexionDriver = true;
+#else
+    m_Use3DConnexionDriver = false;
+#endif
+
     m_IncrementalConnectivity   = false;
 
     loadFromConfigFile();
