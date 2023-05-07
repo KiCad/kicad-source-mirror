@@ -65,10 +65,10 @@
 #include <eeschema_settings.h>
 #include <core/arraydim.h>
 
-#define FIELD_PADDING schIUScale.MilsToIU( 10 )            // arbitrarily chosen for aesthetics
+#define FIELD_PADDING schIUScale.MilsToIU( 15 )       // arbitrarily chosen for aesthetics
 #define WIRE_V_SPACING schIUScale.MilsToIU( 100 )
-#define HPADDING schIUScale.MilsToIU( 25 )
-#define VPADDING schIUScale.MilsToIU( 25 )
+#define HPADDING schIUScale.MilsToIU( 25 )            // arbitrarily chosen for aesthetics
+#define VPADDING schIUScale.MilsToIU( 15 )            // arbitrarily chosen for aesthetics
 
 /**
  * Round up/down to the nearest multiple of n
@@ -218,10 +218,6 @@ protected:
             int   field_height = bbox.GetHeight();
 
             max_field_width = std::max( max_field_width, field_width );
-
-            // Remove interline spacing from field_height for last line.
-            if( field == visibleFields.back() )
-                field_height *= 0.62;
 
             if( !aDynamic )
                 total_height += WIRE_V_SPACING;
