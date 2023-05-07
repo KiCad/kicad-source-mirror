@@ -140,7 +140,7 @@ public:
      *
      * This is used to end or abort an edit action in progress initiated by BeginEdit().
      */
-    virtual void EndEdit() {}
+    virtual void EndEdit( bool aClosed = false ) {}
 
     /**
      * Calculate the attributes of an item at \a aPosition when it is being edited.

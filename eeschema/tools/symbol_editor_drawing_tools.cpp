@@ -329,7 +329,8 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 {
     SETTINGS_MANAGER&       settingsMgr = Pgm().GetSettingsManager();
     SYMBOL_EDITOR_SETTINGS* settings = settingsMgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
-    SHAPE_T                 type = aEvent.Parameter<SHAPE_T>();
+    SHAPE_T                 toolType = aEvent.Parameter<SHAPE_T>();
+    SHAPE_T                 shapeType = toolType == SHAPE_T::SEGMENT ? SHAPE_T::POLY : toolType;
     LIB_SYMBOL*             symbol = m_frame->GetCurSymbol();
     LIB_SHAPE*              item = nullptr;
     bool                    isTextBox = aEvent.IsAction( &EE_ACTIONS::drawSymbolTextBox );
@@ -441,7 +442,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             }
             else
             {
-                item = new LIB_SHAPE( symbol, type, lineWidth, m_lastFillStyle );
+                item = new LIB_SHAPE( symbol, shapeType, lineWidth, m_lastFillStyle );
             }
 
             item->SetStroke( m_lastStroke );
@@ -472,7 +473,16 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             if( evt->IsDblClick( BUT_LEFT ) || evt->IsAction( &EE_ACTIONS::finishDrawing )
                     || !item->ContinueEdit( VECTOR2I( cursorPos.x, -cursorPos.y ) ) )
             {
-                item->EndEdit();
+                if( toolType == SHAPE_T::POLY )
+                {
+                    item->CalcEdit( item->GetPosition() );  // Close shape
+                    item->EndEdit( true );
+                }
+                else
+                {
+                    item->EndEdit();
+                }
+
                 item->ClearEditFlags();
 
                 if( isTextBox )
@@ -652,6 +662,7 @@ void SYMBOL_EDITOR_DRAWING_TOOLS::setTransitions()
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,      EE_ACTIONS::drawCircle.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,      EE_ACTIONS::drawArc.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,      EE_ACTIONS::drawSymbolLines.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,      EE_ACTIONS::drawSymbolPolygon.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,      EE_ACTIONS::drawSymbolTextBox.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::PlaceAnchor,    EE_ACTIONS::placeSymbolAnchor.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::RepeatDrawItem, EE_ACTIONS::repeatDrawItem.MakeEvent() );

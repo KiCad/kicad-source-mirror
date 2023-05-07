@@ -110,6 +110,7 @@ public:
     static TOOL_ACTION placeSymbolText;
     static TOOL_ACTION drawSymbolTextBox;
     static TOOL_ACTION drawSymbolLines;
+    static TOOL_ACTION drawSymbolPolygon;
     static TOOL_ACTION placeSymbolAnchor;
     static TOOL_ACTION finishDrawing;
 

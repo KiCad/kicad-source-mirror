@@ -78,7 +78,7 @@ public:
     bool ContinueEdit( const VECTOR2I& aPosition ) override { return continueEdit( aPosition ); }
     void CalcEdit( const VECTOR2I& aPosition ) override     { calcEdit( aPosition ); }
 
-    void EndEdit() override                                 { endEdit( false ); }
+    void EndEdit( bool aClosed = false ) override           { endEdit( aClosed ); }
     void SetEditState( int aState )                         { setEditState( aState ); }
 
     void AddPoint( const VECTOR2I& aPosition );

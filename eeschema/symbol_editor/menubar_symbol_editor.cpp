@@ -145,6 +145,7 @@ void SYMBOL_EDIT_FRAME::doReCreateMenuBar()
     placeMenu->Add( EE_ACTIONS::drawCircle );
     placeMenu->Add( EE_ACTIONS::drawArc );
     placeMenu->Add( EE_ACTIONS::drawSymbolLines );
+    placeMenu->Add( EE_ACTIONS::drawSymbolPolygon );
 
 
     //-- Inspect menu -----------------------------------------------

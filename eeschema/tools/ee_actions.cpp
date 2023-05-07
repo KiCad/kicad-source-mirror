@@ -246,23 +246,28 @@ TOOL_ACTION EE_ACTIONS::toggleSyncedPinsMode( "eeschema.SymbolLibraryControl.tog
 TOOL_ACTION EE_ACTIONS::placeSymbolPin( "eeschema.SymbolDrawing.placeSymbolPin",
         AS_GLOBAL,
         'P', LEGACY_HK_NAME( "Create Pin" ),
-        _( "Add Pin" ), _( "Add a pin" ),
+        _( "Add Pin" ), _( "Draw pins" ),
         BITMAPS::pin, AF_ACTIVATE, (void*) LIB_PIN_T );
 
 TOOL_ACTION EE_ACTIONS::placeSymbolText( "eeschema.SymbolDrawing.placeSymbolText",
         AS_GLOBAL, 0, "",
-        _( "Add Text" ), _( "Add a text item" ),
+        _( "Add Text" ), _( "Draw text items" ),
         BITMAPS::text, AF_ACTIVATE, (void*) LIB_TEXT_T );
 
 TOOL_ACTION EE_ACTIONS::drawSymbolTextBox( "eeschema.SymbolDrawing.drawSymbolTextBox",
         AS_GLOBAL, 0, "",
-        _( "Add Text Box" ), _( "Add a text box item" ),
+        _( "Add Text Box" ), _( "Draw text box items" ),
         BITMAPS::add_textbox, AF_ACTIVATE, (void*) LIB_TEXTBOX_T );
 
 TOOL_ACTION EE_ACTIONS::drawSymbolLines( "eeschema.SymbolDrawing.drawSymbolLines",
         AS_GLOBAL, 0, "",
-        _( "Add Lines" ), _( "Add connected graphic lines" ),
-        BITMAPS::add_graphical_segments, AF_ACTIVATE, (void*) SHAPE_T::POLY );
+        _( "Add Lines" ), _( "Draw lines" ),
+        BITMAPS::add_graphical_segments, AF_ACTIVATE, (void*) SHAPE_T::SEGMENT );
+
+TOOL_ACTION EE_ACTIONS::drawSymbolPolygon( "eeschema.SymbolDrawing.drawSymbolPolygon",
+        AS_GLOBAL, 0, "",
+        _( "Add Polygon" ), _( "Draw polygons" ),
+        BITMAPS::add_graphical_polygon, AF_ACTIVATE, (void*) SHAPE_T::POLY );
 
 TOOL_ACTION EE_ACTIONS::placeSymbolAnchor( "eeschema.SymbolDrawing.placeSymbolAnchor",
         AS_GLOBAL, 0, "",
@@ -297,25 +302,25 @@ TOOL_ACTION EE_ACTIONS::pushPinNumSize( "eeschema.PinEditing.pushPinNumSize",
 TOOL_ACTION EE_ACTIONS::placeSymbol( "eeschema.InteractiveDrawing.placeSymbol",
         AS_GLOBAL,
         'A', LEGACY_HK_NAME( "Add Symbol" ),
-        _( "Add Symbol" ), _( "Add a symbol" ),
+        _( "Add Symbol" ), _( "Add symbols" ),
         BITMAPS::add_component, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::placePower( "eeschema.InteractiveDrawing.placePowerSymbol",
         AS_GLOBAL,
         'P', LEGACY_HK_NAME( "Add Power" ),
-        _( "Add Power" ), _( "Add a power symbol" ),
+        _( "Add Power" ), _( "Add power symbols" ),
         BITMAPS::add_power, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::placeNoConnect( "eeschema.InteractiveDrawing.placeNoConnect",
         AS_GLOBAL,
         'Q', LEGACY_HK_NAME( "Add No Connect Flag" ),
-        _( "Add No Connect Flag" ), _( "Add a no-connection flag" ),
+        _( "Add No Connect Flag" ), _( "Draw no-connection flags" ),
         BITMAPS::noconn, AF_ACTIVATE, (void*) SCH_NO_CONNECT_T );
 
 TOOL_ACTION EE_ACTIONS::placeJunction( "eeschema.InteractiveDrawing.placeJunction",
         AS_GLOBAL,
         'J', LEGACY_HK_NAME( "Add Junction" ),
-        _( "Add Junction" ), _( "Add a junction" ),
+        _( "Add Junction" ), _( "Draw junctions" ),
         BITMAPS::add_junction, AF_ACTIVATE, (void*) SCH_JUNCTION_T );
 
 TOOL_ACTION EE_ACTIONS::placeBusWireEntry( "eeschema.InteractiveDrawing.placeBusWireEntry",
@@ -327,66 +332,66 @@ TOOL_ACTION EE_ACTIONS::placeBusWireEntry( "eeschema.InteractiveDrawing.placeBus
 TOOL_ACTION EE_ACTIONS::placeLabel( "eeschema.InteractiveDrawing.placeLabel",
         AS_GLOBAL,
         'L', LEGACY_HK_NAME( "Add Label" ),
-        _( "Add Label" ), _( "Add a net label" ),
+        _( "Add Label" ), _( "Draw net labels" ),
         BITMAPS::add_label, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::placeClassLabel( "eeschema.InteractiveDrawing.placeClassLabel",
         AS_GLOBAL, 0, "",
-        _( "Add Net Class Directive" ), _( "Add a net class directive label" ),
+        _( "Add Net Class Directive" ), _( "Add net class directive labels" ),
         BITMAPS::add_class_flag, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::placeHierLabel( "eeschema.InteractiveDrawing.placeHierarchicalLabel",
         AS_GLOBAL,
         'H', LEGACY_HK_NAME( "Add Hierarchical Label" ),
-        _( "Add Hierarchical Label" ), _( "Add a hierarchical label" ),
+        _( "Add Hierarchical Label" ), _( "Add hierarchical labels" ),
         BITMAPS::add_hierarchical_label, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::drawSheet( "eeschema.InteractiveDrawing.drawSheet",
         AS_GLOBAL,
         'S', LEGACY_HK_NAME( "Add Sheet" ),
-        _( "Add Sheet" ), _( "Add a hierarchical sheet" ),
+        _( "Add Sheet" ), _( "Draw hierarchical sheets" ),
         BITMAPS::add_hierarchical_subsheet, AF_ACTIVATE, (void*) SCH_SHEET_T );
 
 TOOL_ACTION EE_ACTIONS::importSheetPin( "eeschema.InteractiveDrawing.importSheetPin",
         AS_GLOBAL, 0, "",
-        _( "Import Sheet Pin" ), _( "Import a hierarchical sheet pin" ),
+        _( "Import Sheet Pin" ), _( "Import hierarchical sheet pins" ),
         BITMAPS::import_hierarchical_label, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::placeGlobalLabel( "eeschema.InteractiveDrawing.placeGlobalLabel",
         AS_GLOBAL,
         MD_CTRL + 'L', LEGACY_HK_NAME( "Add Global Label" ),
-        _( "Add Global Label" ), _( "Add a global label" ),
+        _( "Add Global Label" ), _( "Add global labels" ),
         BITMAPS::add_glabel, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::placeSchematicText( "eeschema.InteractiveDrawing.placeSchematicText",
         AS_GLOBAL,
         'T', LEGACY_HK_NAME( "Add Graphic Text" ),
-        _( "Add Text" ), _( "Add text" ),
+        _( "Add Text" ), _( "Draw text items" ),
         BITMAPS::text, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::drawTextBox( "eeschema.InteractiveDrawing.drawTextBox",
         AS_GLOBAL, 0, "",
-        _( "Add Text Box" ), _( "Add a text box" ),
+        _( "Add Text Box" ), _( "Draw text box items" ),
         BITMAPS::add_textbox, AF_ACTIVATE, (void*) SHAPE_T::RECT );
 
 TOOL_ACTION EE_ACTIONS::drawRectangle( "eeschema.InteractiveDrawing.drawRectangle",
         AS_GLOBAL, 0, "",
-        _( "Add Rectangle" ), _( "Add a rectangle" ),
+        _( "Add Rectangle" ), _( "Draw rectangles" ),
         BITMAPS::add_rectangle, AF_ACTIVATE, (void*) SHAPE_T::RECT );
 
 TOOL_ACTION EE_ACTIONS::drawCircle( "eeschema.InteractiveDrawing.drawCircle",
         AS_GLOBAL, 0, "",
-        _( "Add Circle" ), _( "Add a circle" ),
+        _( "Add Circle" ), _( "Draw circles" ),
         BITMAPS::add_circle, AF_ACTIVATE, (void*) SHAPE_T::CIRCLE );
 
 TOOL_ACTION EE_ACTIONS::drawArc( "eeschema.InteractiveDrawing.drawArc",
         AS_GLOBAL, 0, "",
-        _( "Add Arc" ), _( "Add an arc" ),
+        _( "Add Arc" ), _( "Draw arcs" ),
         BITMAPS::add_arc, AF_ACTIVATE, (void*) SHAPE_T::ARC );
 
 TOOL_ACTION EE_ACTIONS::placeImage( "eeschema.InteractiveDrawing.placeImage",
         AS_GLOBAL, 0, "",
-        _( "Add Image" ), _( "Add bitmap image" ),
+        _( "Add Image" ), _( "Add bitmap images" ),
         BITMAPS::image, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::finishSheet( "eeschema.InteractiveDrawing.finishSheet",
@@ -908,8 +913,8 @@ const DRAW_SEGMENT_EVENT_PARAMS drawLinesActionParam = { LAYER_NOTES, false, nul
 TOOL_ACTION EE_ACTIONS::drawLines( "eeschema.InteractiveDrawingLineWireBus.drawLines",
         AS_GLOBAL,
         'I', LEGACY_HK_NAME( "Add Graphic PolyLine" ),
-        _( "Add Lines" ), _( "Add connected graphic lines" ),
-        BITMAPS::add_dashed_line, AF_ACTIVATE, (void*) &drawLinesActionParam );
+        _( "Add Lines" ), _( "Draw graphic lines" ),
+        BITMAPS::add_graphical_segments, AF_ACTIVATE, (void*) &drawLinesActionParam );
 
 TOOL_ACTION EE_ACTIONS::undoLastSegment( "eeschema.InteractiveDrawingLineWireBus.undoLastSegment",
         AS_GLOBAL,
