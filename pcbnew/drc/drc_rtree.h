@@ -56,15 +56,15 @@ public:
             parent( aParent ),
             shape( aShape ),
             shapeStorage( nullptr ),
-            parentShape( aParentShape )
+            parentShape( std::move( aParentShape ) )
         {};
 
-        ITEM_WITH_SHAPE( BOARD_ITEM *aParent, std::shared_ptr<SHAPE> aShape,
+        ITEM_WITH_SHAPE( BOARD_ITEM *aParent, const std::shared_ptr<SHAPE>& aShape,
                          std::shared_ptr<SHAPE> aParentShape = nullptr ) :
             parent( aParent ),
             shape( aShape.get() ),
             shapeStorage( aShape ),
-            parentShape( aParentShape )
+            parentShape( std::move( aParentShape ) )
         {};
 
         BOARD_ITEM*            parent;
