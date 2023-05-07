@@ -23,6 +23,7 @@
 #include <project.h>
 #include <widgets/footprint_choice.h>
 #include <widgets/footprint_select_widget.h>
+#include <widgets/wx_progress_reporters.h>
 #include <progress_reporter.h>
 #include <footprint_info_impl.h>
 #include <wx/wupdlock.h>
@@ -38,7 +39,8 @@ FOOTPRINT_SELECT_WIDGET::FOOTPRINT_SELECT_WIDGET( EDA_DRAW_FRAME* aFrame, wxWind
           wxPanel( aParent ),
           m_update( aUpdate ),
           m_max_items( aMaxItems ),
-          m_fp_list( aFpList )
+          m_fp_list( aFpList ),
+          m_frame( aFrame )
 {
     m_zero_filter = true;
     m_sizer = new wxBoxSizer( wxVERTICAL );
@@ -63,8 +65,13 @@ void FOOTPRINT_SELECT_WIDGET::Load( KIWAY& aKiway, PROJECT& aProject )
         {
             // If the fp-info-cache is empty (or, more likely, hasn't been created in a new
             // project yet), load footprints the hard way.
-            FP_LIB_TABLE* fpTable = aProject.PcbFootprintLibs( aKiway );
-            static_cast<FOOTPRINT_LIST_IMPL*>( m_fp_list )->ReadFootprintFiles( fpTable );
+            FP_LIB_TABLE*         fpTable = aProject.PcbFootprintLibs( aKiway );
+            WX_PROGRESS_REPORTER* progressReporter =
+                    new WX_PROGRESS_REPORTER( m_frame, _( "Loading Footprint Libraries" ), 3 );
+            static_cast<FOOTPRINT_LIST_IMPL*>( m_fp_list )
+                    ->ReadFootprintFiles( fpTable, nullptr, progressReporter );
+
+            delete progressReporter;
         }
 
         m_fp_filter.SetList( *m_fp_list );
