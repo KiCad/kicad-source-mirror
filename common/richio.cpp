@@ -38,7 +38,7 @@
 #if !defined( HAVE_FGETC_NOLOCK )
 #ifdef _MSC_VER
 //getc is not a macro on windows and adds a tiny overhead for the indirection to eventually calling fgetc
-#define getc_unlocked fgetc
+#define getc_unlocked _fgetc_nolock
 #else
 #define getc_unlocked getc
 #endif
