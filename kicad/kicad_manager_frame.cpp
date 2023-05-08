@@ -864,15 +864,19 @@ void KICAD_MANAGER_FRAME::OnIdle( wxIdleEvent& aEvent )
             APP_PROGRESS_DIALOG progressReporter( _( "Restoring session" ), wxEmptyString,
                                                   previousOpenCount, this );
 
+            // We don't currently support opening more than one view per file
+            std::set<wxString> openedFiles;
+
             int i = 0;
 
             for( const PROJECT_FILE_STATE& file : Prj().GetLocalSettings().m_files )
             {
-                if( file.open )
+                if( file.open && !openedFiles.count( file.fileName ) )
                 {
                     progressReporter.Update( i++,
                             wxString::Format( _( "Restoring '%s'" ), file.fileName ) );
 
+                    openedFiles.insert( file.fileName );
                     wxFileName fn( file.fileName );
 
                     if( fn.GetExt() == LegacySchematicFileExtension

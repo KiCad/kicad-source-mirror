@@ -210,6 +210,8 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                     return;
                 }
 
+                m_files.clear();
+
                 for( const nlohmann::json& file : aVal )
                 {
                     PROJECT_FILE_STATE fileState;
