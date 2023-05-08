@@ -215,6 +215,10 @@ struct NODE::DEFAULT_OBSTACLE_VISITOR : public OBSTACLE_VISITOR
         if( !aCandidate->OfKind( m_ctx->options.m_kindMask ) )
             return true;
 
+        // Collisions with self aren't a thing; don't spend time on them.
+        if( m_item == aCandidate )
+            return true;
+
         if( visit( aCandidate ) )
             return true;
 
