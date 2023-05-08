@@ -73,7 +73,7 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 	bSizerLower = new wxBoxSizer( wxVERTICAL );
 
 	m_onlySMD = new wxCheckBox( this, wxID_ANY, _("Include only SMD footprints"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerLower->Add( m_onlySMD, 0, wxALL, 5 );
+	bSizerLower->Add( m_onlySMD, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_excludeTH = new wxCheckBox( this, wxID_ANY, _("Exclude all footprints with through hole pads"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerLower->Add( m_excludeTH, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -90,10 +90,10 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 	m_messagesPanel = new WX_HTML_REPORT_PANEL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_messagesPanel->SetMinSize( wxSize( 350,300 ) );
 
-	bSizerLower->Add( m_messagesPanel, 1, wxEXPAND | wxALL, 5 );
+	bSizerLower->Add( m_messagesPanel, 1, wxEXPAND|wxTOP, 10 );
 
 
-	m_MainSizer->Add( bSizerLower, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_MainSizer->Add( bSizerLower, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
