@@ -406,6 +406,15 @@ public:
     SCH_FIELD* GetFieldById( int aFieldId );
 
     /**
+     * Return a field in this symbol.
+     *
+     * @param aFieldName is the name of the field
+     *
+     * @return is the field with \a aFieldName or NULL if the field does not exist.
+     */
+    SCH_FIELD* GetFieldByName( const wxString& aFieldName );
+
+    /**
      * Search for a field named \a aFieldName and returns text associated with this field.
      *
      * @param aFieldName is the name of the field

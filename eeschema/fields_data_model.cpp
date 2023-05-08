@@ -139,9 +139,21 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const DATA_MODEL_ROW& group, i
                 return INDETERMINATE_STATE;
             }
 
+            wxString refFieldValue;
+
+            if( resolveVars )
+            {
+                SCH_FIELD* field = ref.GetSymbol()->GetFieldByName( m_cols[aCol].m_fieldName );
+
+                if( field != nullptr )
+                    refFieldValue = field->GetShownText( &ref.GetSheetPath(), false );
+            }
+            else
+                refFieldValue = m_dataStore[symbolID][m_cols[aCol].m_fieldName];
+
             if( &ref == &group.m_Refs.front() )
-                fieldValue = m_dataStore[symbolID][m_cols[aCol].m_fieldName];
-            else if( fieldValue != m_dataStore[symbolID][m_cols[aCol].m_fieldName] )
+                fieldValue = refFieldValue;
+            else if( fieldValue != refFieldValue )
                 return INDETERMINATE_STATE;
         }
     }
@@ -307,9 +319,6 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRef,
         matchFound = true;
     }
 
-    const KIID& lhRefID = lhRef.GetSymbol()->m_Uuid;
-    const KIID& rhRefID = rhRef.GetSymbol()->m_Uuid;
-
     // Now check all the other columns.  This must be done out of the dataStore
     // for the refresh button to work after editing.
     for( size_t i = 0; i < m_cols.size(); ++i )
@@ -322,9 +331,17 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRef,
             continue;
 
         wxString fieldName = m_cols[i].m_fieldName;
+        SCH_FIELD* lhField = lhRef.GetSymbol()->GetFieldByName( m_cols[i].m_fieldName );
+        SCH_FIELD* rhField = rhRef.GetSymbol()->GetFieldByName( m_cols[i].m_fieldName );
 
-        if( m_dataStore[lhRefID][fieldName] != m_dataStore[rhRefID][fieldName] )
+        if( lhField == nullptr || rhField == nullptr )
             return false;
+
+        if( lhField->GetShownText( &lhRef.GetSheetPath(), false )
+            != rhField->GetShownText( &rhRef.GetSheetPath(), false ) )
+        {
+            return false;
+        }
 
         matchFound = true;
     }
