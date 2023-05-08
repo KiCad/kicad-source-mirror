@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013  CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -36,9 +36,9 @@ class SOLID : public ITEM
 {
 public:
     SOLID() :
-        ITEM( SOLID_T ),
-        m_shape( nullptr ),
-        m_hole( nullptr )
+            ITEM( SOLID_T ),
+            m_shape( nullptr ),
+            m_hole( nullptr )
     {
         m_movable = false;
         m_padToDie = 0;
@@ -46,24 +46,20 @@ public:
 
     ~SOLID()
     {
-        if ( m_hole )
-            delete m_hole;
-
+        delete m_hole;
         delete m_shape;
     }
 
     SOLID( const SOLID& aSolid ) :
-        ITEM( aSolid )
+            ITEM( aSolid ),
+            m_shape( nullptr ),
+            m_hole( nullptr )
     {
         if( aSolid.m_shape )
-            m_shape = aSolid.m_shape->Clone();
-        else
-            m_shape = nullptr;
+            SetShape( aSolid.m_shape->Clone() );
 
         if( aSolid.m_hole )
-            m_hole = aSolid.m_hole->Clone();
-        else
-            m_hole = nullptr;
+            SetHole( aSolid.m_hole->Clone() );
 
         m_pos = aSolid.m_pos;
         m_padToDie = aSolid.m_padToDie;
