@@ -841,8 +841,15 @@ void NODE::Remove( ITEM* aItem )
         break;
 
     case ITEM::SOLID_T:
+    {
+        SOLID* solid = static_cast<SOLID*>( aItem );
+
+        if( solid->HasHole() )
+            Remove( solid->Hole() );
+
         Remove( static_cast<SOLID*>( aItem ) );
         break;
+    }
 
     case ITEM::SEGMENT_T:
         Remove( static_cast<SEGMENT*>( aItem ) );
@@ -859,8 +866,15 @@ void NODE::Remove( ITEM* aItem )
     }
 
     case ITEM::VIA_T:
+    {
+        VIA* via = static_cast<VIA*>( aItem );
+
+        if( via->HasHole() )
+            Remove( via->Hole() );
+
         Remove( static_cast<VIA*>( aItem ) );
         break;
+    }
 
     default:
         break;
