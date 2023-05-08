@@ -242,6 +242,13 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
     }
     else if( aEvent.GetKeyCode() == WXK_BACK )
     {
+        if( aEvent.GetModifiers() == wxMOD_CONTROL )
+#ifdef __WXMAC__
+            m_te->HomeExtend();
+        else if( aEvent.GetModifiers() == wxMOD_ALT )
+#endif
+            m_te->WordLeftExtend();
+
         m_te->DeleteBack();
     }
     else if( aEvent.GetKeyCode() == WXK_DELETE )
