@@ -1878,6 +1878,7 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
                         conn->Clone( *subgraph->m_driver_connection );
 
                         candidate->m_dirty = false;
+                        propagateToNeighbors( candidate, false );
                     }
                 }
             }

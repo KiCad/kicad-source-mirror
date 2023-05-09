@@ -184,5 +184,10 @@ BOOST_AUTO_TEST_CASE( BusConnection )
     TestNetlist( "bus_connection" );
 }
 
+BOOST_AUTO_TEST_CASE( Issue14657 )
+{
+    TestNetlist( "issue14657" );
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()

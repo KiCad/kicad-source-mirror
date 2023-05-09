@@ -175,4 +175,9 @@ BOOST_AUTO_TEST_CASE( BusConnections )
     doNetlistTest( "bus_connection" );
 }
 
+BOOST_AUTO_TEST_CASE( Issue14657 )
+{
+    doNetlistTest( "issue14657" );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
