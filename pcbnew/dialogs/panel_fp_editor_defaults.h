@@ -43,13 +43,10 @@ private:
 
     bool Show( bool aShow ) override;
 
-    bool validateData();
-
     void loadFPSettings( FOOTPRINT_EDITOR_SETTINGS* aCfg );
 
 private:
-    PAGED_DIALOG* m_parent;
-    bool          m_firstShow = true;
+    bool m_firstShow = true;
 };
 
 
