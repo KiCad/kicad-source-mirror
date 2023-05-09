@@ -36,6 +36,8 @@
 #include <settings/color_settings.h>
 #include <lib_shape.h>
 
+#include <memory>
+
 // the separator char between the subpart id and the reference
 // 0 (no separator) or '.' or some other character
 int LIB_SYMBOL::m_subpartIdSeparator = 0;
@@ -465,7 +467,7 @@ std::unique_ptr< LIB_SYMBOL > LIB_SYMBOL::Flatten() const
                      wxString::Format( "Parent of derived symbol '%s' undefined", m_name ) );
 
         // Copy the parent.
-        retv.reset( new LIB_SYMBOL( *parent.get() ) );
+        retv = std::make_unique<LIB_SYMBOL>( *parent.get() );
 
         retv->m_name = m_name;
         retv->SetLibId( m_libId );
@@ -520,7 +522,7 @@ std::unique_ptr< LIB_SYMBOL > LIB_SYMBOL::Flatten() const
     }
     else
     {
-        retv.reset( new LIB_SYMBOL( *this ) );
+        retv = std::make_unique<LIB_SYMBOL>( *this );
     }
 
     return retv;
@@ -722,6 +724,7 @@ void LIB_SYMBOL::Plot( PLOTTER *aPlotter, int aUnit, int aConvert, bool aBackgro
         color.Desaturate( );
         color = color.Mix( bg, 0.5f );
     }
+
     aPlotter->SetColor( color );
 
     for( const LIB_ITEM& item : m_drawings )

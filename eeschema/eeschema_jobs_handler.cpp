@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -199,9 +199,15 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
     // Annotation warning check
     SCH_REFERENCE_LIST referenceList;
     sch->GetSheets().GetSymbols( referenceList );
+
     if( referenceList.GetCount() > 0 )
     {
-        if( referenceList.CheckAnnotation( []( ERCE_T, const wxString&, SCH_REFERENCE*, SCH_REFERENCE* ) {} ) > 0 )
+        if( referenceList.CheckAnnotation(
+                    []( ERCE_T, const wxString&, SCH_REFERENCE*, SCH_REFERENCE* )
+                    {
+                        // We're only interested in the end result -- either errors or not
+                    } )
+            > 0 )
         {
             wxPrintf( _( "Warning: schematic has annotation errors, please use the schematic editor to fix them\n" ) );
         }
@@ -294,11 +300,13 @@ int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
     // Annotation warning check
     SCH_REFERENCE_LIST referenceList;
     sch->GetSheets().GetSymbols( referenceList );
+
     if( referenceList.GetCount() > 0 )
     {
         if( referenceList.CheckAnnotation(
                     []( ERCE_T, const wxString&, SCH_REFERENCE*, SCH_REFERENCE* )
                     {
+                        // We're only interested in the end result -- either errors or not
                     } )
             > 0 )
         {
@@ -311,9 +319,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
     ERC_TESTER erc( sch );
 
     if( erc.TestDuplicateSheetNames( false ) > 0 )
-    {
         wxPrintf( _( "Warning: duplicate sheet names.\n" ) );
-    }
 
     std::unique_ptr<NETLIST_EXPORTER_XML> xmlNetlist =
             std::make_unique<NETLIST_EXPORTER_XML>( sch );
@@ -330,17 +336,15 @@ int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
     bool res = xmlNetlist->WriteNetlist( aNetJob->m_outputFile, GNL_OPT_BOM, *this );
 
     if( !res )
-    {
         return CLI::EXIT_CODES::ERR_UNKNOWN;
-    }
 
     return CLI::EXIT_CODES::OK;
 }
 
 
 int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
-                                        KIGFX::SCH_RENDER_SETTINGS* aRenderSettings,
-                                        LIB_SYMBOL*                 symbol )
+                                           KIGFX::SCH_RENDER_SETTINGS* aRenderSettings,
+                                           LIB_SYMBOL*                 symbol )
 {
     wxASSERT( symbol != nullptr );
 
@@ -432,10 +436,12 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
 
         // note, we want to use the fields from the original symbol pointer (in case of non-alias)
         symbolToPlot->Plot( plotter, unit, convert, background, plotPos, temp, false );
-        symbol->PlotLibFields( plotter, unit, convert, background, plotPos, temp, false, aSvgJob->m_includeHiddenFields );
+        symbol->PlotLibFields( plotter, unit, convert, background, plotPos, temp, false,
+                               aSvgJob->m_includeHiddenFields );
 
         symbolToPlot->Plot( plotter, unit, convert, !background, plotPos, temp, false );
-        symbol->PlotLibFields( plotter, unit, convert, !background, plotPos, temp, false, aSvgJob->m_includeHiddenFields );
+        symbol->PlotLibFields( plotter, unit, convert, !background, plotPos, temp, false,
+                               aSvgJob->m_includeHiddenFields );
 
         plotter->EndPlot();
         delete plotter;
@@ -465,10 +471,12 @@ int EESCHEMA_JOBS_HANDLER::JobSymExportSvg( JOB* aJob )
     }
 
     LIB_SYMBOL* symbol = nullptr;
+
     if( !svgJob->m_symbol.IsEmpty() )
     {
         // See if the selected symbol exists
         symbol = schLibrary.GetSymbol( svgJob->m_symbol );
+
         if( !symbol )
         {
             wxFprintf( stderr, _( "There is no symbol selected to save." ) );
@@ -487,6 +495,7 @@ int EESCHEMA_JOBS_HANDLER::JobSymExportSvg( JOB* aJob )
     renderSettings.SetDefaultPenWidth( DEFAULT_LINE_WIDTH_MILS * schIUScale.IU_PER_MILS );
 
     int exitCode = CLI::EXIT_CODES::OK;
+
     if( symbol )
     {
         exitCode = doSymExportSvg( svgJob, &renderSettings, symbol );
@@ -499,6 +508,7 @@ int EESCHEMA_JOBS_HANDLER::JobSymExportSvg( JOB* aJob )
         for( const std::pair<const wxString, LIB_SYMBOL*>& entry : libSymMap )
         {
             exitCode = doSymExportSvg( svgJob, &renderSettings, entry.second );
+
             if( exitCode != CLI::EXIT_CODES::OK )
                 break;
         }
