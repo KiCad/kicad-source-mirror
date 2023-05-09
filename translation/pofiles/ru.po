@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-09 09:51-0700\n"
-"PO-Revision-Date: 2023-04-18 19:52+0000\n"
+"PO-Revision-Date: 2023-05-10 06:34+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -36661,9 +36661,8 @@ msgid "Leader Length"
 msgstr "Длина перех.отв."
 
 #: pcbnew/pcb_dimension.cpp:1496
-#, fuzzy
 msgid "Text Frame"
-msgstr "Рамка текста:"
+msgstr "Рамка текста"
 
 #: pcbnew/pcb_edit_frame.cpp:216
 msgid "KiCad PCB Editor"
@@ -37011,9 +37010,9 @@ msgid "Error creating svg file"
 msgstr "Ошибка создания файла svg"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:339 pcbnew/pcbnew_jobs_handler.cpp:417
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to plot to '%s'.\n"
-msgstr "Не удалось загрузить '%s'."
+msgstr "Не удалось начертить в '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:627 pcbnew/pcbnew_jobs_handler.cpp:698
 msgid "Loading footprint library\n"
@@ -40459,14 +40458,12 @@ msgid "Import footprint from file"
 msgstr "Импорт посад.места из файла"
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export Current Footprint..."
-msgstr "Экспорт посад.места..."
+msgstr "Экспорт текущего посад.места..."
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export edited footprint to file"
-msgstr "Экспорт посад.места в файл"
+msgstr "Экспорт текущего посад.места в файл"
 
 #: pcbnew/tools/pcb_actions.cpp:453
 msgid "Footprint Properties..."
