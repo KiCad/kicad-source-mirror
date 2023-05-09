@@ -21,8 +21,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 4.18-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
@@ -3831,7 +3831,7 @@ msgstr "Стиль линии"
 #: eeschema/sch_textbox.cpp:440 include/stroke_params.h:80
 #: pcbnew/fp_text.cpp:309 pcbnew/fp_textbox.cpp:336
 #: pcbnew/pcb_dimension.cpp:332 pcbnew/pcb_text.cpp:130
-#: pcbnew/pcb_textbox.cpp:297
+#: pcbnew/pcb_textbox.cpp:297 eeschema/dialogs/dialog_sim_model.cpp:490
 msgid "Default"
 msgstr "По умолчанию"
 
@@ -4298,9 +4298,9 @@ msgid "Zoom %.2f"
 msgstr "Масштаб %.2f"
 
 #: common/eda_draw_frame.cpp:617
-#, fuzzy, c-format
+#, c-format
 msgid "grid %s"
-msgstr "Поле %s"
+msgstr "сетка %s"
 
 #: common/eda_draw_frame.cpp:630 pagelayout_editor/pl_editor_frame.cpp:752
 msgid "inches"
@@ -5518,6 +5518,7 @@ msgstr "Отключить выбранное"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:201
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:212
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:223
+#: eeschema/dialogs/dialog_sim_model.cpp:489
 msgid "Unit"
 msgstr "Часть"
 
@@ -8010,12 +8011,12 @@ msgid ""
 "python <script file name> <input filename> <output filename>\n"
 "```\n"
 "\n"
-"On Windows, if the desired generator script for a CSV BOM is `C:"
-"\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
+"On Windows, if the desired generator script for a CSV BOM is `C:\\Users"
+"\\username\\kicad\\my_python_script.py`, the command line would be:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O.csv"
+"\"\n"
 "```\n"
 "\n"
 "On Linux, if the desired generator script for a CSV BOM is `/home/username/"
@@ -8090,13 +8091,12 @@ msgstr ""
 "python <имя файла скрипта> <имя входного файла> <имя выходного файла>\n"
 "```\n"
 "\n"
-"В Windows, если желаемый скрипт генератора для CSV BOM - `C:"
-"\\Users\\username\\kicad\\my_python_script.py`, командная строка будет "
-"такой:\n"
+"В Windows, если желаемый скрипт генератора для CSV BOM - `C:\\Users\\username"
+"\\kicad\\my_python_script.py`, командная строка будет такой:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O.csv"
+"\"\n"
 "```\n"
 "\n"
 "В Linux, если желаемый скрипт генератора для CSV BOM - `/home/username/kicad/"
@@ -10635,7 +10635,6 @@ msgid "Replace matches in reference designators"
 msgstr "Заменять совпадения в обозначениях"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:120
-#, fuzzy
 msgid "Replace"
 msgstr "Заменить"
 
@@ -11182,39 +11181,47 @@ msgid "Simulation Command"
 msgstr "Управление симуляцией"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:186
+#: eeschema/dialogs/dialog_sim_model.cpp:189
 msgid "<unknown>"
 msgstr "<неизвестно>"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:196
+#: eeschema/dialogs/dialog_sim_model.cpp:199
 #, c-format
 msgid "No model named '%s' in library."
 msgstr "Нет модели с именем '%s' в библиотеке."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:278 eeschema/sim/sim_model.cpp:403
+#: eeschema/dialogs/dialog_sim_model.cpp:281
 msgid "Failed to read simulation model from fields."
 msgstr "Не удалось считать модель симуляции из полей."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:404
+#: eeschema/dialogs/dialog_sim_model.cpp:407
 msgid "Component:"
 msgstr "Компонент:"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:404
 #: eeschema/dialogs/dialog_sim_model_base.cpp:54
 #: eeschema/dialogs/dialog_sim_model_base.cpp:82
+#: eeschema/dialogs/dialog_sim_model.cpp:407
 msgid "Model:"
 msgstr "Модель:"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:460
+#: eeschema/dialogs/dialog_sim_model.cpp:463
 #, c-format
 msgid "Save parameter '%s (%s)' in Value field"
 msgstr "Хранить параметр '%s (%s)' в поле 'Значение'"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:468
+#: eeschema/dialogs/dialog_sim_model.cpp:471
 msgid "Save primary parameter in Value field"
 msgstr "Хранить основной параметр в поле 'Значение'"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:485
 #: pcbnew/footprint_wizard_frame.cpp:325
+#: eeschema/dialogs/dialog_sim_model.cpp:488
 msgid "Parameter"
 msgstr "Параметр"
 
@@ -11229,15 +11236,19 @@ msgstr "Параметр"
 #: pcbnew/fp_text.cpp:294 pcbnew/pcb_marker.cpp:193 pcbnew/pcb_shape.cpp:304
 #: pcbnew/pcb_track.cpp:861 pcbnew/pcb_track.cpp:935
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:249 pcbnew/zone.cpp:536
+#: eeschema/dialogs/dialog_sim_model.cpp:491
 msgid "Type"
 msgstr "Тип"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:601
 #: eeschema/dialogs/dialog_sim_model.cpp:644
+#: eeschema/dialogs/dialog_sim_model.cpp:604
+#: eeschema/dialogs/dialog_sim_model.cpp:647
 msgid "Not Connected"
 msgstr "Не подключено"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:1061
+#: eeschema/dialogs/dialog_sim_model.cpp:1072
 msgid "Browse Models"
 msgstr "Выбор моделей"
 
@@ -11577,9 +11588,9 @@ msgstr ""
 "библиотек. KiCad попытается переназначить существующим символам библиотеки "
 "из новой таблицы библиотек. Внесённые изменения коснуться файлов проекта и "
 "схема станет не совместимой с предыдущими версиями KiCad. Для всех файлов, "
-"подлежащих изменению, будут созданы резервные копии в каталоге "
-"\"remap_backup\", что позволит отменить внесённые изменения. Если пропустить "
-"этот шаг, придётся переопределять символы вручную."
+"подлежащих изменению, будут созданы резервные копии в каталоге \"remap_backup"
+"\", что позволит отменить внесённые изменения. Если пропустить этот шаг, "
+"придётся переопределять символы вручную."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:208
 #, c-format
@@ -12668,34 +12679,41 @@ msgid "Plotting symbol '%s' to '%s'\n"
 msgstr "Черчение символа '%s' в '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:430
+#: eeschema/eeschema_jobs_handler.cpp:431
 #, c-format
 msgid "Unable to open destination '%s'"
 msgstr "Невозможно открыть путь назначения '%s'"
 
 #: eeschema/eeschema_jobs_handler.cpp:480
 #: eeschema/eeschema_jobs_handler.cpp:547 pcbnew/pcbnew_jobs_handler.cpp:645
-#: pcbnew/pcbnew_jobs_handler.cpp:706
+#: pcbnew/pcbnew_jobs_handler.cpp:706 eeschema/eeschema_jobs_handler.cpp:481
+#: eeschema/eeschema_jobs_handler.cpp:548
 msgid "Unable to load library\n"
 msgstr "Не удалось загрузить библиотеку\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:493
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:123
+#: eeschema/eeschema_jobs_handler.cpp:494
 msgid "There is no symbol selected to save."
 msgstr "Не выбраны символы для сохранения."
 
 #: eeschema/eeschema_jobs_handler.cpp:555 pcbnew/pcbnew_jobs_handler.cpp:631
+#: eeschema/eeschema_jobs_handler.cpp:556
 msgid "Output path must not conflict with existing path\n"
 msgstr "Выходной путь не должен конфликтовать с существующим\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:565
+#: eeschema/eeschema_jobs_handler.cpp:566
 msgid "Saving symbol library in updated format\n"
 msgstr "Сохранение библиотеки символов в обновленном формате\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:579 pcbnew/pcbnew_jobs_handler.cpp:674
+#: eeschema/eeschema_jobs_handler.cpp:580
 msgid "Unable to save library\n"
 msgstr "Не удалось сохранить библиотеку\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:585
+#: eeschema/eeschema_jobs_handler.cpp:586
 msgid "Symbol library was not updated\n"
 msgstr "Библиотека символов не была обновлена\n"
 
@@ -16307,8 +16325,8 @@ msgstr ""
 #: eeschema/symbol_checker.cpp:146
 #, c-format
 msgid ""
-"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
-"%s%s at location <b>(%s, %s)</b>."
+"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
+"%s at location <b>(%s, %s)</b>."
 msgstr ""
 "<b>Вывод-дубликат %s</b> %s с координатами <b>(%s, %s)</b>, конфликтует с "
 "выводом %s%s, координаты <b>(%s, %s)</b>."
@@ -16316,8 +16334,8 @@ msgstr ""
 #: eeschema/symbol_checker.cpp:159
 #, c-format
 msgid ""
-"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
-"%s%s at location <b>(%s, %s)</b> in units %s and %s."
+"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
+"%s at location <b>(%s, %s)</b> in units %s and %s."
 msgstr ""
 "<b>Вывод-дубликат %s</b> %s с координатами <b>(%s, %s)</b>, конфликтует с "
 "выводом %s%s, координаты <b>(%s, %s)</b> в частях %s и %s."
@@ -19823,8 +19841,8 @@ msgstr "Сформировать файл позиций"
 #: kicad/cli/command_export_pcb_pos.cpp:49
 msgid "Valid options: front,back,both. Gerber format only supports \"both\"."
 msgstr ""
-"Возможные варианты: front,back,both. Формат Gerber поддерживает только "
-"\"both\"."
+"Возможные варианты: front,back,both. Формат Gerber поддерживает только \"both"
+"\"."
 
 #: kicad/cli/command_export_pcb_pos.cpp:53
 msgid "Valid options: ascii,csv,gerber"
@@ -31709,13 +31727,13 @@ msgid ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net"
+"\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net"
+"\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -32037,13 +32055,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net"
+"\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net"
+"\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -32080,8 +32098,8 @@ msgstr ""
 "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
 "\n"
 "\n"
-"    # Исключить терморазгрузку на конт.пл. с параметром \"для отвода "
-"тепла\"\n"
+"    # Исключить терморазгрузку на конт.пл. с параметром \"для отвода тепла"
+"\"\n"
 "    (rule heat_sink_pad\n"
 "        (constraint zone_connection solid)\n"
 "        (condition \"A.Fabrication_Property == 'Heatsink pad'\"))\n"
@@ -33466,8 +33484,8 @@ msgid ""
 "This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"Если перезалить зоны меди, то будет использован параметр \"Зазор у края "
-"платы\" (см. Параметры платы > Правила проектирования > Ограничения).\n"
+"Если перезалить зоны меди, то будет использован параметр \"Зазор у края платы"
+"\" (см. Параметры платы > Правила проектирования > Ограничения).\n"
 "При этом новая форма зоны может отличаться от той, что была сделана в "
 "предыдущих версиях KiCad, где в качестве зазора использовалась толщина "
 "контура платы."
@@ -35013,49 +35031,40 @@ msgid "Dimension '%s' on %s"
 msgstr "Размер '%s' на %s"
 
 #: pcbnew/pcb_dimension.cpp:1319
-#, fuzzy
 msgid "1234.0"
-msgstr "1234"
+msgstr "1234,0"
 
 #: pcbnew/pcb_dimension.cpp:1320
-#, fuzzy
 msgid "1234.0 mm"
-msgstr "1234 мм"
+msgstr "1234,0 mm"
 
 #: pcbnew/pcb_dimension.cpp:1321
-#, fuzzy
 msgid "1234.0 (mm)"
-msgstr "1234 (мм)"
+msgstr "1234,0 (мм)"
 
 #: pcbnew/pcb_dimension.cpp:1353
-#, fuzzy
 msgid "Units Format"
-msgstr "Формат ед.изм.:"
+msgstr "Формат ед.изм."
 
 #: pcbnew/pcb_dimension.cpp:1359
-#, fuzzy
 msgid "Suppress Trailing Zeroes"
-msgstr "Подавлять завершающие нули"
+msgstr "Подавлять заверш. нули"
 
 #: pcbnew/pcb_dimension.cpp:1387
-#, fuzzy
 msgid "Crossbar Height"
-msgstr "Курсор правее"
+msgstr "Высота линии"
 
 #: pcbnew/pcb_dimension.cpp:1391
-#, fuzzy
 msgid "Extension Line Overshoot"
-msgstr "Отступ от точки измерения:"
+msgstr "Удлинение выносной линии"
 
 #: pcbnew/pcb_dimension.cpp:1456
-#, fuzzy
 msgid "Leader Length"
-msgstr "Длина перех.отв."
+msgstr "Длина линии выноски"
 
 #: pcbnew/pcb_dimension.cpp:1496
-#, fuzzy
 msgid "Text Frame"
-msgstr "Рамка текста:"
+msgstr "Рамка текста"
 
 #: pcbnew/pcb_edit_frame.cpp:203
 msgid "KiCad PCB Editor"
@@ -35356,9 +35365,9 @@ msgid "Error creating svg file"
 msgstr "Ошибка создания файла svg"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:337 pcbnew/pcbnew_jobs_handler.cpp:414
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to plot to '%s'.\n"
-msgstr "Не удалось загрузить '%s'."
+msgstr "Не удалось начертить в '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:624 pcbnew/pcbnew_jobs_handler.cpp:695
 msgid "Loading footprint library\n"
@@ -38754,14 +38763,12 @@ msgid "Import footprint from file"
 msgstr "Импорт посад.места из файла"
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export Current Footprint..."
-msgstr "Экспорт посад.места..."
+msgstr "Экспорт текущего посад.места..."
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export edited footprint to file"
-msgstr "Экспорт посад.места в файл"
+msgstr "Экспорт текущего посад.места в файл"
 
 #: pcbnew/tools/pcb_actions.cpp:453
 msgid "Footprint Properties..."
@@ -41188,9 +41195,21 @@ msgstr "Схема KiCad"
 msgid "KiCad Printed Circuit Board"
 msgstr "Печатная плата KiCad"
 
+#: eeschema/eeschema_jobs_handler.cpp:396
+#: eeschema/eeschema_jobs_handler.cpp:406
 #, fuzzy
-#~ msgid "(De Morgan) "
-#~ msgstr "Начертание по Д.Моргану"
+msgid "(De Morgan) "
+msgstr "Начертание по Д.Моргану"
+
+#: eeschema/eeschema_jobs_handler.cpp:393
+#, fuzzy, c-format
+msgid "Plotting symbol '%s' unit %d %sto '%s'\n"
+msgstr "Черчение символа '%s' части %d в '%s'\n"
+
+#: eeschema/eeschema_jobs_handler.cpp:404
+#, fuzzy, c-format
+msgid "Plotting symbol '%s' %sto '%s'\n"
+msgstr "Черчение символа '%s' в '%s'\n"
 
 #~ msgid "&Find"
 #~ msgstr "Найти"
@@ -41625,8 +41644,8 @@ msgstr "Печатная плата KiCad"
 #~ "\n"
 #~ "On Linux:\n"
 #~ "```\n"
-#~ "python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py "
-#~ "\"%I\" \"%O.csv\"\n"
+#~ "python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I"
+#~ "\" \"%O.csv\"\n"
 #~ "```\n"
 #~ msgstr ""
 #~ "# 1 - Полное руководство\n"
@@ -41814,8 +41833,8 @@ msgstr "Печатная плата KiCad"
 #~ "\n"
 #~ "Для Linux:\n"
 #~ "```\n"
-#~ "python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py "
-#~ "\"%I\" \"%O.csv\"\n"
+#~ "python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I"
+#~ "\" \"%O.csv\"\n"
 #~ "```\n"
 
 #, c-format
@@ -47625,8 +47644,8 @@ msgstr "Печатная плата KiCad"
 #~ msgstr "Использовать сенсорную панель для панорамирования"
 
 #~ msgid ""
-#~ "Enable touchpad-friendly controls (pan with scroll action, zoom with "
-#~ "Ctrl+scroll)."
+#~ "Enable touchpad-friendly controls (pan with scroll action, zoom with Ctrl"
+#~ "+scroll)."
 #~ msgstr ""
 #~ "Сделать управление с помощью сенсорной панели более удобным "
 #~ "(панорамирование прокруткой, масштабирование Ctrl+прокрутка)."
