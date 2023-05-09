@@ -134,7 +134,7 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::DIODE].modelParams.emplace_back( "af",  117, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::NOISE, "1", "", "flicker noise exponent" );
         modelInfos[MODEL_TYPE::DIODE].modelParams.emplace_back( "fc",  110, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::DC, "0.5", "", "Forward bias junction fit parameter" );
         modelInfos[MODEL_TYPE::DIODE].modelParams.emplace_back( "fcs",  124, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::DC, "0.5", "", "Forward bias sidewall junction fit parameter" );
-        modelInfos[MODEL_TYPE::DIODE].modelParams.emplace_back( "bv",  111, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "V", SIM_MODEL::PARAM::CATEGORY::DC, "0", "", "Reverse breakdown voltage" );
+        modelInfos[MODEL_TYPE::DIODE].modelParams.emplace_back( "bv",  111, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "V", SIM_MODEL::PARAM::CATEGORY::DC, "1e+99", "", "Reverse breakdown voltage" );
         modelInfos[MODEL_TYPE::DIODE].modelParams.emplace_back( "ibv",  112, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "A", SIM_MODEL::PARAM::CATEGORY::DC, "0.001", "", "Current at reverse breakdown voltage" );
         modelInfos[MODEL_TYPE::DIODE].modelParams.emplace_back( "ib",  112, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "0.001", "", "n.a." );
         modelInfos[MODEL_TYPE::DIODE].modelParams.emplace_back( "tcv",  137, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "V", SIM_MODEL::PARAM::CATEGORY::TEMPERATURE, "0", "", "Reverse breakdown voltage temperature coefficient" );
