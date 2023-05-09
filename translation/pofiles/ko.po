@@ -23,13 +23,11 @@
 # 남우근 <rolru7686@gmail.com>, 2022.
 # 이윤성 <yunslee@student.42seoul.kr>, 2022.
 # KwonHyeokbeom <gurqja3810@naver.com>, 2022.
-#: eeschema/eeschema_jobs_handler.cpp:396
-#: eeschema/eeschema_jobs_handler.cpp:406
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-09 10:04-0700\n"
+"POT-Creation-Date: 2023-05-09 10:37-0700\n"
 "PO-Revision-Date: 2023-04-25 20:50+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v7/ko/>\n"
@@ -3778,7 +3776,7 @@ msgstr "선 스타일"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:70
 #: eeschema/dialogs/dialog_junction_props.cpp:46
 #: eeschema/dialogs/dialog_line_properties.cpp:56
-#: eeschema/dialogs/dialog_sim_model.cpp:490
+#: eeschema/dialogs/dialog_sim_model.cpp:487
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:59
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:149
 #: eeschema/lib_field.cpp:551 eeschema/lib_text.cpp:424
@@ -5450,7 +5448,7 @@ msgstr "선택대상 비활성화"
 #: common/lib_tree_model.cpp:146
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
-#: eeschema/dialogs/dialog_sim_model.cpp:489 eeschema/lib_item.cpp:58
+#: eeschema/dialogs/dialog_sim_model.cpp:486 eeschema/lib_item.cpp:58
 #: eeschema/symbol_editor/symbol_editor.cpp:1243
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:67
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:78
@@ -11098,44 +11096,44 @@ msgstr "HSpice"
 msgid "Simulation Command"
 msgstr "시뮬레이션 명령"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:189
+#: eeschema/dialogs/dialog_sim_model.cpp:186
 msgid "<unknown>"
 msgstr "<알 수 없음>"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:199
+#: eeschema/dialogs/dialog_sim_model.cpp:196
 #, c-format
 msgid "No model named '%s' in library."
 msgstr "라이브러리에 '%s' 모델이 없습니다."
 
-#: eeschema/dialogs/dialog_sim_model.cpp:281 eeschema/sim/sim_model.cpp:403
+#: eeschema/dialogs/dialog_sim_model.cpp:278 eeschema/sim/sim_model.cpp:403
 msgid "Failed to read simulation model from fields."
 msgstr "필드에서 시뮬레이션 모델을 읽기 실패."
 
-#: eeschema/dialogs/dialog_sim_model.cpp:407
+#: eeschema/dialogs/dialog_sim_model.cpp:404
 msgid "Component:"
 msgstr "부품:"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:407
+#: eeschema/dialogs/dialog_sim_model.cpp:404
 #: eeschema/dialogs/dialog_sim_model_base.cpp:54
 #: eeschema/dialogs/dialog_sim_model_base.cpp:82
 msgid "Model:"
 msgstr "모델:"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:463
+#: eeschema/dialogs/dialog_sim_model.cpp:460
 #, c-format
 msgid "Save parameter '%s (%s)' in Value field"
 msgstr "값 필드에 '%s (%s)' 매개 변수 저장"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:471
+#: eeschema/dialogs/dialog_sim_model.cpp:468
 msgid "Save primary parameter in Value field"
 msgstr "값 필드에 기본 매개 변수 저장"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:488
+#: eeschema/dialogs/dialog_sim_model.cpp:485
 #: pcbnew/footprint_wizard_frame.cpp:325
 msgid "Parameter"
 msgstr "매개변수"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:491 eeschema/lib_item.cpp:51
+#: eeschema/dialogs/dialog_sim_model.cpp:488 eeschema/lib_item.cpp:51
 #: eeschema/lib_pin.cpp:1170 eeschema/sch_label.cpp:890
 #: eeschema/sch_pin.cpp:206 eeschema/sch_pin.cpp:219
 #: eeschema/symbol_editor/symbol_editor.cpp:1257
@@ -11149,12 +11147,12 @@ msgstr "매개변수"
 msgid "Type"
 msgstr "형식"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:604
-#: eeschema/dialogs/dialog_sim_model.cpp:647
+#: eeschema/dialogs/dialog_sim_model.cpp:601
+#: eeschema/dialogs/dialog_sim_model.cpp:644
 msgid "Not Connected"
 msgstr "연결되지 않음"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:1072
+#: eeschema/dialogs/dialog_sim_model.cpp:1061
 msgid "Browse Models"
 msgstr "모델 찾아보기"
 
@@ -12559,51 +12557,45 @@ msgstr "경고: 시트 이름이 중복되었습니다.\n"
 msgid "Unknown netlist format.\n"
 msgstr "알 수 없는 네트리스트 형식.\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:393
+#: eeschema/eeschema_jobs_handler.cpp:396
 #, fuzzy, c-format
-msgid "Plotting symbol '%s' unit %d %sto '%s'\n"
+msgid "Plotting symbol '%s' unit %d to '%s'\n"
 msgstr "플로팅 심볼 '%s' 단위 %d ~ '%s'\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:396
 #: eeschema/eeschema_jobs_handler.cpp:406
-#, fuzzy
-msgid "(De Morgan) "
-msgstr "드모르간"
-
-#: eeschema/eeschema_jobs_handler.cpp:404
 #, fuzzy, c-format
-msgid "Plotting symbol '%s' %sto '%s'\n"
+msgid "Plotting symbol '%s' to '%s'\n"
 msgstr "'%s'에서 '%s'로 심볼 플로팅\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:431
+#: eeschema/eeschema_jobs_handler.cpp:430
 #, c-format
 msgid "Unable to open destination '%s'"
 msgstr "대상 '%s'을(를) 열 수 없음"
 
-#: eeschema/eeschema_jobs_handler.cpp:481
-#: eeschema/eeschema_jobs_handler.cpp:548 pcbnew/pcbnew_jobs_handler.cpp:645
+#: eeschema/eeschema_jobs_handler.cpp:480
+#: eeschema/eeschema_jobs_handler.cpp:547 pcbnew/pcbnew_jobs_handler.cpp:645
 #: pcbnew/pcbnew_jobs_handler.cpp:706
 msgid "Unable to load library\n"
 msgstr "라이브러리를 로드할 수 없습니다.\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:494
+#: eeschema/eeschema_jobs_handler.cpp:493
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:123
 msgid "There is no symbol selected to save."
 msgstr "저장하기 위해 선택한 심볼이 없습니다."
 
-#: eeschema/eeschema_jobs_handler.cpp:556 pcbnew/pcbnew_jobs_handler.cpp:631
+#: eeschema/eeschema_jobs_handler.cpp:555 pcbnew/pcbnew_jobs_handler.cpp:631
 msgid "Output path must not conflict with existing path\n"
 msgstr "출력 경로는 기존 경로와 충돌하지 않아야 합니다\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:566
+#: eeschema/eeschema_jobs_handler.cpp:565
 msgid "Saving symbol library in updated format\n"
 msgstr "심볼 라이브러리를 업데이트된 형식으로 저장\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:580 pcbnew/pcbnew_jobs_handler.cpp:674
+#: eeschema/eeschema_jobs_handler.cpp:579 pcbnew/pcbnew_jobs_handler.cpp:674
 msgid "Unable to save library\n"
 msgstr "라이브러리를 저장할 수 없음\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:586
+#: eeschema/eeschema_jobs_handler.cpp:585
 msgid "Symbol library was not updated\n"
 msgstr "심볼 라이브러리가 업데이트되지 않음\n"
 
@@ -40814,6 +40806,10 @@ msgstr "KiCad 회로도"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad 인쇄 회로 기판"
+
+#, fuzzy
+#~ msgid "(De Morgan) "
+#~ msgstr "드모르간"
 
 #~ msgid "&Find"
 #~ msgstr "찾기 (&F)"

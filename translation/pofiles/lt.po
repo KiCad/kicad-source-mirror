@@ -3,13 +3,11 @@
 # WhiteChairFromIkea <dainius.mazuika@gmail.com>, 2020, 2021.
 # ZbeeGin <zbeegin@op.pl>, 2020, 2021.
 # Henrik Kauhanen <henrik@kauhanen.se>, 2023.
-#: eeschema/eeschema_jobs_handler.cpp:396
-#: eeschema/eeschema_jobs_handler.cpp:406
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-09 10:04-0700\n"
+"POT-Creation-Date: 2023-05-09 10:37-0700\n"
 "PO-Revision-Date: 2023-01-20 06:51+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/master-"
@@ -3916,7 +3914,7 @@ msgstr "Linijos stilius"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:70
 #: eeschema/dialogs/dialog_junction_props.cpp:46
 #: eeschema/dialogs/dialog_line_properties.cpp:56
-#: eeschema/dialogs/dialog_sim_model.cpp:490
+#: eeschema/dialogs/dialog_sim_model.cpp:487
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:59
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:149
 #: eeschema/lib_field.cpp:551 eeschema/lib_text.cpp:424
@@ -5659,7 +5657,7 @@ msgstr "Удалить выбранную строку"
 #: common/lib_tree_model.cpp:146
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
-#: eeschema/dialogs/dialog_sim_model.cpp:489 eeschema/lib_item.cpp:58
+#: eeschema/dialogs/dialog_sim_model.cpp:486 eeschema/lib_item.cpp:58
 #: eeschema/symbol_editor/symbol_editor.cpp:1243
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:67
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:78
@@ -11389,46 +11387,46 @@ msgstr ""
 msgid "Simulation Command"
 msgstr "Modeliavimas"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:189
+#: eeschema/dialogs/dialog_sim_model.cpp:186
 msgid "<unknown>"
 msgstr "<nežinoma>"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:199
+#: eeschema/dialogs/dialog_sim_model.cpp:196
 #, fuzzy, c-format
 msgid "No model named '%s' in library."
 msgstr "Не удалось найти элемент '%s' в библиотеке"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:281 eeschema/sim/sim_model.cpp:403
+#: eeschema/dialogs/dialog_sim_model.cpp:278 eeschema/sim/sim_model.cpp:403
 #, fuzzy
 msgid "Failed to read simulation model from fields."
 msgstr "Nepavyko sukurti simbolių bibliotekos failo „%s“"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:407
+#: eeschema/dialogs/dialog_sim_model.cpp:404
 #, fuzzy
 msgid "Component:"
 msgstr "Komponentas"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:407
+#: eeschema/dialogs/dialog_sim_model.cpp:404
 #: eeschema/dialogs/dialog_sim_model_base.cpp:54
 #: eeschema/dialogs/dialog_sim_model_base.cpp:82
 msgid "Model:"
 msgstr "Modelis:"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:463
+#: eeschema/dialogs/dialog_sim_model.cpp:460
 #, c-format
 msgid "Save parameter '%s (%s)' in Value field"
 msgstr ""
 
-#: eeschema/dialogs/dialog_sim_model.cpp:471
+#: eeschema/dialogs/dialog_sim_model.cpp:468
 msgid "Save primary parameter in Value field"
 msgstr ""
 
-#: eeschema/dialogs/dialog_sim_model.cpp:488
+#: eeschema/dialogs/dialog_sim_model.cpp:485
 #: pcbnew/footprint_wizard_frame.cpp:325
 msgid "Parameter"
 msgstr "Parametras"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:491 eeschema/lib_item.cpp:51
+#: eeschema/dialogs/dialog_sim_model.cpp:488 eeschema/lib_item.cpp:51
 #: eeschema/lib_pin.cpp:1170 eeschema/sch_label.cpp:890
 #: eeschema/sch_pin.cpp:206 eeschema/sch_pin.cpp:219
 #: eeschema/symbol_editor/symbol_editor.cpp:1257
@@ -11442,13 +11440,13 @@ msgstr "Parametras"
 msgid "Type"
 msgstr "Tipas"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:604
-#: eeschema/dialogs/dialog_sim_model.cpp:647
+#: eeschema/dialogs/dialog_sim_model.cpp:601
+#: eeschema/dialogs/dialog_sim_model.cpp:644
 #, fuzzy
 msgid "Not Connected"
 msgstr "Neprijungta"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:1072
+#: eeschema/dialogs/dialog_sim_model.cpp:1061
 #, fuzzy
 msgid "Browse Models"
 msgstr "Peržiūrėti failus"
@@ -12937,54 +12935,48 @@ msgstr "Įspėjimas: Pasikartokite slapyvardžius"
 msgid "Unknown netlist format.\n"
 msgstr "nežinoma per tipą %d"
 
-#: eeschema/eeschema_jobs_handler.cpp:393
-#, fuzzy, c-format
-msgid "Plotting symbol '%s' unit %d %sto '%s'\n"
-msgstr "Keisti simbolį %s iš „%s“ į „%s“"
-
 #: eeschema/eeschema_jobs_handler.cpp:396
-#: eeschema/eeschema_jobs_handler.cpp:406
-#, fuzzy
-msgid "(De Morgan) "
-msgstr "„DeMorgan Standard“"
-
-#: eeschema/eeschema_jobs_handler.cpp:404
 #, fuzzy, c-format
-msgid "Plotting symbol '%s' %sto '%s'\n"
+msgid "Plotting symbol '%s' unit %d to '%s'\n"
 msgstr "Keisti simbolį %s iš „%s“ į „%s“"
 
-#: eeschema/eeschema_jobs_handler.cpp:431
+#: eeschema/eeschema_jobs_handler.cpp:406
+#, fuzzy, c-format
+msgid "Plotting symbol '%s' to '%s'\n"
+msgstr "Keisti simbolį %s iš „%s“ į „%s“"
+
+#: eeschema/eeschema_jobs_handler.cpp:430
 #, fuzzy, c-format
 msgid "Unable to open destination '%s'"
 msgstr "Nepavyko išanalizuoti „%s“ „%s“"
 
-#: eeschema/eeschema_jobs_handler.cpp:481
-#: eeschema/eeschema_jobs_handler.cpp:548 pcbnew/pcbnew_jobs_handler.cpp:645
+#: eeschema/eeschema_jobs_handler.cpp:480
+#: eeschema/eeschema_jobs_handler.cpp:547 pcbnew/pcbnew_jobs_handler.cpp:645
 #: pcbnew/pcbnew_jobs_handler.cpp:706
 #, fuzzy
 msgid "Unable to load library\n"
 msgstr "Negaliu užkrauti %s failo"
 
-#: eeschema/eeschema_jobs_handler.cpp:494
+#: eeschema/eeschema_jobs_handler.cpp:493
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:123
 msgid "There is no symbol selected to save."
 msgstr "Nėra pasirinkto simbolio išsaugoti."
 
-#: eeschema/eeschema_jobs_handler.cpp:556 pcbnew/pcbnew_jobs_handler.cpp:631
+#: eeschema/eeschema_jobs_handler.cpp:555 pcbnew/pcbnew_jobs_handler.cpp:631
 msgid "Output path must not conflict with existing path\n"
 msgstr ""
 
-#: eeschema/eeschema_jobs_handler.cpp:566
+#: eeschema/eeschema_jobs_handler.cpp:565
 #, fuzzy
 msgid "Saving symbol library in updated format\n"
 msgstr "Neteisingas simbolių bibliotekos identifikatorius"
 
-#: eeschema/eeschema_jobs_handler.cpp:580 pcbnew/pcbnew_jobs_handler.cpp:674
+#: eeschema/eeschema_jobs_handler.cpp:579 pcbnew/pcbnew_jobs_handler.cpp:674
 #, fuzzy
 msgid "Unable to save library\n"
 msgstr "nėra aktyvios bibliotekos"
 
-#: eeschema/eeschema_jobs_handler.cpp:586
+#: eeschema/eeschema_jobs_handler.cpp:585
 #, fuzzy
 msgid "Symbol library was not updated\n"
 msgstr "Simbolių biblioteka neįgalinta."
@@ -42222,6 +42214,10 @@ msgstr "Redaguoti schemą"
 #, fuzzy
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad spausdintinių plokščių failai"
+
+#, fuzzy
+#~ msgid "(De Morgan) "
+#~ msgstr "„DeMorgan Standard“"
 
 #~ msgid "&Find"
 #~ msgstr "Ieškoti"

@@ -6,13 +6,11 @@
 # Grzegorz Szymaszek <gszymaszek@short.pl>, 2022.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2023.
 # Henrik Kauhanen <henrik@kauhanen.se>, 2023.
-#: eeschema/eeschema_jobs_handler.cpp:396
-#: eeschema/eeschema_jobs_handler.cpp:406
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-09 10:04-0700\n"
+"POT-Creation-Date: 2023-05-09 10:37-0700\n"
 "PO-Revision-Date: 2023-03-12 20:08+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v7/pl/>\n"
@@ -3807,7 +3805,7 @@ msgstr "Styl linii"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:70
 #: eeschema/dialogs/dialog_junction_props.cpp:46
 #: eeschema/dialogs/dialog_line_properties.cpp:56
-#: eeschema/dialogs/dialog_sim_model.cpp:490
+#: eeschema/dialogs/dialog_sim_model.cpp:487
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:59
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:149
 #: eeschema/lib_field.cpp:551 eeschema/lib_text.cpp:424
@@ -5490,7 +5488,7 @@ msgstr "Dezaktywuj zaznaczone"
 #: common/lib_tree_model.cpp:146
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
-#: eeschema/dialogs/dialog_sim_model.cpp:489 eeschema/lib_item.cpp:58
+#: eeschema/dialogs/dialog_sim_model.cpp:486 eeschema/lib_item.cpp:58
 #: eeschema/symbol_editor/symbol_editor.cpp:1243
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:67
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:78
@@ -11210,44 +11208,44 @@ msgstr "HSpice"
 msgid "Simulation Command"
 msgstr "Polecenie symulacji"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:189
+#: eeschema/dialogs/dialog_sim_model.cpp:186
 msgid "<unknown>"
 msgstr "<nieznany>"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:199
+#: eeschema/dialogs/dialog_sim_model.cpp:196
 #, c-format
 msgid "No model named '%s' in library."
 msgstr "Nie ma modelu o nazwie '%s' w bibliotece."
 
-#: eeschema/dialogs/dialog_sim_model.cpp:281 eeschema/sim/sim_model.cpp:403
+#: eeschema/dialogs/dialog_sim_model.cpp:278 eeschema/sim/sim_model.cpp:403
 msgid "Failed to read simulation model from fields."
 msgstr "Nie można odczytać modelu symulacji z odpowiednich pól."
 
-#: eeschema/dialogs/dialog_sim_model.cpp:407
+#: eeschema/dialogs/dialog_sim_model.cpp:404
 msgid "Component:"
 msgstr "Komponent:"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:407
+#: eeschema/dialogs/dialog_sim_model.cpp:404
 #: eeschema/dialogs/dialog_sim_model_base.cpp:54
 #: eeschema/dialogs/dialog_sim_model_base.cpp:82
 msgid "Model:"
 msgstr "Model:"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:463
+#: eeschema/dialogs/dialog_sim_model.cpp:460
 #, c-format
 msgid "Save parameter '%s (%s)' in Value field"
 msgstr "Zapisz parametr '%s (%s)' w polu Wartość"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:471
+#: eeschema/dialogs/dialog_sim_model.cpp:468
 msgid "Save primary parameter in Value field"
 msgstr "Zapisz pierwotny parametr w polu Wartość"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:488
+#: eeschema/dialogs/dialog_sim_model.cpp:485
 #: pcbnew/footprint_wizard_frame.cpp:325
 msgid "Parameter"
 msgstr "Parametr"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:491 eeschema/lib_item.cpp:51
+#: eeschema/dialogs/dialog_sim_model.cpp:488 eeschema/lib_item.cpp:51
 #: eeschema/lib_pin.cpp:1170 eeschema/sch_label.cpp:890
 #: eeschema/sch_pin.cpp:206 eeschema/sch_pin.cpp:219
 #: eeschema/symbol_editor/symbol_editor.cpp:1257
@@ -11261,12 +11259,12 @@ msgstr "Parametr"
 msgid "Type"
 msgstr "Typ"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:604
-#: eeschema/dialogs/dialog_sim_model.cpp:647
+#: eeschema/dialogs/dialog_sim_model.cpp:601
+#: eeschema/dialogs/dialog_sim_model.cpp:644
 msgid "Not Connected"
 msgstr "Niepołączone"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:1072
+#: eeschema/dialogs/dialog_sim_model.cpp:1061
 msgid "Browse Models"
 msgstr "Przeglądaj modele"
 
@@ -12700,51 +12698,45 @@ msgstr "Ostrzeżenie: Zduplikowane nazwy arkuszy.\n"
 msgid "Unknown netlist format.\n"
 msgstr "Nieprawidłowy format listy sieci.\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:393
+#: eeschema/eeschema_jobs_handler.cpp:396
 #, fuzzy, c-format
-msgid "Plotting symbol '%s' unit %d %sto '%s'\n"
+msgid "Plotting symbol '%s' unit %d to '%s'\n"
 msgstr "Rysuję symbol '%s' element %d na '%s'\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:396
 #: eeschema/eeschema_jobs_handler.cpp:406
-#, fuzzy
-msgid "(De Morgan) "
-msgstr "De Morgan"
-
-#: eeschema/eeschema_jobs_handler.cpp:404
 #, fuzzy, c-format
-msgid "Plotting symbol '%s' %sto '%s'\n"
+msgid "Plotting symbol '%s' to '%s'\n"
 msgstr "Rysuję symbol '%s' na '%s'\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:431
+#: eeschema/eeschema_jobs_handler.cpp:430
 #, c-format
 msgid "Unable to open destination '%s'"
 msgstr "Nie można otworzyć docelowego '%s'"
 
-#: eeschema/eeschema_jobs_handler.cpp:481
-#: eeschema/eeschema_jobs_handler.cpp:548 pcbnew/pcbnew_jobs_handler.cpp:645
+#: eeschema/eeschema_jobs_handler.cpp:480
+#: eeschema/eeschema_jobs_handler.cpp:547 pcbnew/pcbnew_jobs_handler.cpp:645
 #: pcbnew/pcbnew_jobs_handler.cpp:706
 msgid "Unable to load library\n"
 msgstr "Nie można załadować biblioteki\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:494
+#: eeschema/eeschema_jobs_handler.cpp:493
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:123
 msgid "There is no symbol selected to save."
 msgstr "Nie ma zaznaczonych symboli do zapisu."
 
-#: eeschema/eeschema_jobs_handler.cpp:556 pcbnew/pcbnew_jobs_handler.cpp:631
+#: eeschema/eeschema_jobs_handler.cpp:555 pcbnew/pcbnew_jobs_handler.cpp:631
 msgid "Output path must not conflict with existing path\n"
 msgstr "Ścieżka wyjściowa nie może kolidować z istniejącą\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:566
+#: eeschema/eeschema_jobs_handler.cpp:565
 msgid "Saving symbol library in updated format\n"
 msgstr "Zapisywanie biblioteki w uaktualnionym formacie\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:580 pcbnew/pcbnew_jobs_handler.cpp:674
+#: eeschema/eeschema_jobs_handler.cpp:579 pcbnew/pcbnew_jobs_handler.cpp:674
 msgid "Unable to save library\n"
 msgstr "Nie można zapisać biblioteki\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:586
+#: eeschema/eeschema_jobs_handler.cpp:585
 msgid "Symbol library was not updated\n"
 msgstr "Biblioteka symboli nie została zaktualizowana\n"
 
@@ -41386,6 +41378,10 @@ msgstr "Schemat KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "Obwód drukowany KiCad"
+
+#, fuzzy
+#~ msgid "(De Morgan) "
+#~ msgstr "De Morgan"
 
 #~ msgid "&Find"
 #~ msgstr "Znajdź"

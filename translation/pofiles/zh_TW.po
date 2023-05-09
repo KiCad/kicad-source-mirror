@@ -5,13 +5,11 @@
 # pondahai <dahai.pon@gmail.com>, 2022.
 # willliam <traderwilliam@gmail.com>, 2022.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2023.
-#: eeschema/eeschema_jobs_handler.cpp:396
-#: eeschema/eeschema_jobs_handler.cpp:406
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-09 10:04-0700\n"
+"POT-Creation-Date: 2023-05-09 10:37-0700\n"
 "PO-Revision-Date: 2023-02-06 07:25+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
@@ -3724,7 +3722,7 @@ msgstr "線型"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:70
 #: eeschema/dialogs/dialog_junction_props.cpp:46
 #: eeschema/dialogs/dialog_line_properties.cpp:56
-#: eeschema/dialogs/dialog_sim_model.cpp:490
+#: eeschema/dialogs/dialog_sim_model.cpp:487
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:59
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:149
 #: eeschema/lib_field.cpp:551 eeschema/lib_text.cpp:424
@@ -5389,7 +5387,7 @@ msgstr "停用所選"
 #: common/lib_tree_model.cpp:146
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
-#: eeschema/dialogs/dialog_sim_model.cpp:489 eeschema/lib_item.cpp:58
+#: eeschema/dialogs/dialog_sim_model.cpp:486 eeschema/lib_item.cpp:58
 #: eeschema/symbol_editor/symbol_editor.cpp:1243
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:67
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:78
@@ -10989,44 +10987,44 @@ msgstr "HSpice"
 msgid "Simulation Command"
 msgstr "模擬命令"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:189
+#: eeschema/dialogs/dialog_sim_model.cpp:186
 msgid "<unknown>"
 msgstr "<未知>"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:199
+#: eeschema/dialogs/dialog_sim_model.cpp:196
 #, c-format
 msgid "No model named '%s' in library."
 msgstr "庫中沒有名為 '%s' 的模型。"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:281 eeschema/sim/sim_model.cpp:403
+#: eeschema/dialogs/dialog_sim_model.cpp:278 eeschema/sim/sim_model.cpp:403
 msgid "Failed to read simulation model from fields."
 msgstr "從欄位讀取模擬模型失敗。"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:407
+#: eeschema/dialogs/dialog_sim_model.cpp:404
 msgid "Component:"
 msgstr "元件："
 
-#: eeschema/dialogs/dialog_sim_model.cpp:407
+#: eeschema/dialogs/dialog_sim_model.cpp:404
 #: eeschema/dialogs/dialog_sim_model_base.cpp:54
 #: eeschema/dialogs/dialog_sim_model_base.cpp:82
 msgid "Model:"
 msgstr "模型："
 
-#: eeschema/dialogs/dialog_sim_model.cpp:463
+#: eeschema/dialogs/dialog_sim_model.cpp:460
 #, c-format
 msgid "Save parameter '%s (%s)' in Value field"
 msgstr "在值欄位中儲存引數 '%s (%s)'"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:471
+#: eeschema/dialogs/dialog_sim_model.cpp:468
 msgid "Save primary parameter in Value field"
 msgstr "在值欄位中儲存主引數"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:488
+#: eeschema/dialogs/dialog_sim_model.cpp:485
 #: pcbnew/footprint_wizard_frame.cpp:325
 msgid "Parameter"
 msgstr "引數"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:491 eeschema/lib_item.cpp:51
+#: eeschema/dialogs/dialog_sim_model.cpp:488 eeschema/lib_item.cpp:51
 #: eeschema/lib_pin.cpp:1170 eeschema/sch_label.cpp:890
 #: eeschema/sch_pin.cpp:206 eeschema/sch_pin.cpp:219
 #: eeschema/symbol_editor/symbol_editor.cpp:1257
@@ -11040,12 +11038,12 @@ msgstr "引數"
 msgid "Type"
 msgstr "型別"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:604
-#: eeschema/dialogs/dialog_sim_model.cpp:647
+#: eeschema/dialogs/dialog_sim_model.cpp:601
+#: eeschema/dialogs/dialog_sim_model.cpp:644
 msgid "Not Connected"
 msgstr "沒有連線"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:1072
+#: eeschema/dialogs/dialog_sim_model.cpp:1061
 msgid "Browse Models"
 msgstr "瀏覽模型"
 
@@ -12433,51 +12431,45 @@ msgstr "警告：重複的表單名稱。\n"
 msgid "Unknown netlist format.\n"
 msgstr "未知的網表格式。\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:393
+#: eeschema/eeschema_jobs_handler.cpp:396
 #, fuzzy, c-format
-msgid "Plotting symbol '%s' unit %d %sto '%s'\n"
+msgid "Plotting symbol '%s' unit %d to '%s'\n"
 msgstr "將符號 '%s' 單元 %d 繪製到 '%s'\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:396
 #: eeschema/eeschema_jobs_handler.cpp:406
-#, fuzzy
-msgid "(De Morgan) "
-msgstr "德摩根標準"
-
-#: eeschema/eeschema_jobs_handler.cpp:404
 #, fuzzy, c-format
-msgid "Plotting symbol '%s' %sto '%s'\n"
+msgid "Plotting symbol '%s' to '%s'\n"
 msgstr "將符號 '%s' 繪製到 '%s'\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:431
+#: eeschema/eeschema_jobs_handler.cpp:430
 #, c-format
 msgid "Unable to open destination '%s'"
 msgstr "打不開目標 '%s'"
 
-#: eeschema/eeschema_jobs_handler.cpp:481
-#: eeschema/eeschema_jobs_handler.cpp:548 pcbnew/pcbnew_jobs_handler.cpp:645
+#: eeschema/eeschema_jobs_handler.cpp:480
+#: eeschema/eeschema_jobs_handler.cpp:547 pcbnew/pcbnew_jobs_handler.cpp:645
 #: pcbnew/pcbnew_jobs_handler.cpp:706
 msgid "Unable to load library\n"
 msgstr "無法載入庫\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:494
+#: eeschema/eeschema_jobs_handler.cpp:493
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:123
 msgid "There is no symbol selected to save."
 msgstr "沒有選擇元件儲存。"
 
-#: eeschema/eeschema_jobs_handler.cpp:556 pcbnew/pcbnew_jobs_handler.cpp:631
+#: eeschema/eeschema_jobs_handler.cpp:555 pcbnew/pcbnew_jobs_handler.cpp:631
 msgid "Output path must not conflict with existing path\n"
 msgstr "輸出路徑不得與現有路徑衝突\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:566
+#: eeschema/eeschema_jobs_handler.cpp:565
 msgid "Saving symbol library in updated format\n"
 msgstr "用更新的格式儲存符號庫\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:580 pcbnew/pcbnew_jobs_handler.cpp:674
+#: eeschema/eeschema_jobs_handler.cpp:579 pcbnew/pcbnew_jobs_handler.cpp:674
 msgid "Unable to save library\n"
 msgstr "無法儲存庫\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:586
+#: eeschema/eeschema_jobs_handler.cpp:585
 msgid "Symbol library was not updated\n"
 msgstr "符號庫未更新\n"
 
@@ -40413,6 +40405,10 @@ msgstr "KiCad 原理圖"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad 印刷電路板"
+
+#, fuzzy
+#~ msgid "(De Morgan) "
+#~ msgstr "德摩根標準"
 
 #~ msgid "&Find"
 #~ msgstr "查詢 (&F)"

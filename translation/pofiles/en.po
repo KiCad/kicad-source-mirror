@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-09 10:04-0700\n"
+"POT-Creation-Date: 2023-05-09 10:37-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -8228,15 +8228,12 @@ msgid "Unknown netlist format.\n"
 msgstr "Unknown netlist format.\n"
 
 #, c-format
-msgid "Plotting symbol '%s' unit %d %sto '%s'\n"
-msgstr "Plotting symbol '%s' unit %d %sto '%s'\n"
-
-msgid "(De Morgan) "
-msgstr "(De Morgan) "
+msgid "Plotting symbol '%s' unit %d to '%s'\n"
+msgstr "Plotting symbol '%s' unit %d to '%s'\n"
 
 #, c-format
-msgid "Plotting symbol '%s' %sto '%s'\n"
-msgstr "Plotting symbol '%s' %sto '%s'\n"
+msgid "Plotting symbol '%s' to '%s'\n"
+msgstr "Plotting symbol '%s' to '%s'\n"
 
 #, c-format
 msgid "Unable to open destination '%s'"
@@ -29419,6 +29416,17 @@ msgstr "KiCad Schematic"
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
 
+#, c-format
+#~ msgid "Plotting symbol '%s' unit %d %sto '%s'\n"
+#~ msgstr "Plotting symbol '%s' unit %d %sto '%s'\n"
+
+#~ msgid "(De Morgan) "
+#~ msgstr "(De Morgan) "
+
+#, c-format
+#~ msgid "Plotting symbol '%s' %sto '%s'\n"
+#~ msgstr "Plotting symbol '%s' %sto '%s'\n"
+
 #~ msgid "&Find"
 #~ msgstr "&Find"
 
@@ -29427,14 +29435,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "Replace &All"
 #~ msgstr "Replace &All"
-
-#, c-format
-#~ msgid "Plotting symbol '%s' unit %d to '%s'\n"
-#~ msgstr "Plotting symbol '%s' unit %d to '%s'\n"
-
-#, c-format
-#~ msgid "Plotting symbol '%s' to '%s'\n"
-#~ msgstr "Plotting symbol '%s' to '%s'\n"
 
 #, c-format
 #~ msgid "Failed to generate a name for '%s': exceeded UINT64_MAX"

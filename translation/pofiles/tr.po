@@ -9,13 +9,11 @@
 # Gökhan Koçmarlı <gokhankocmarli@gmail.com>, 2022.
 # prometheus <181903185@ogrenci.ibu.edu.tr>, 2022.
 # Mustafa Selçuk ÇAVDAR <mselcuk@gmail.com>, 2022, 2023.
-#: eeschema/eeschema_jobs_handler.cpp:396
-#: eeschema/eeschema_jobs_handler.cpp:406
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-09 10:04-0700\n"
+"POT-Creation-Date: 2023-05-09 10:37-0700\n"
 "PO-Revision-Date: 2023-03-19 08:40+0000\n"
 "Last-Translator: turkce <turkceceviri@protonmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v7/tr/>\n"
@@ -3786,7 +3784,7 @@ msgstr "Çizgi Stili"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:70
 #: eeschema/dialogs/dialog_junction_props.cpp:46
 #: eeschema/dialogs/dialog_line_properties.cpp:56
-#: eeschema/dialogs/dialog_sim_model.cpp:490
+#: eeschema/dialogs/dialog_sim_model.cpp:487
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:59
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:149
 #: eeschema/lib_field.cpp:551 eeschema/lib_text.cpp:424
@@ -5476,7 +5474,7 @@ msgstr "Seçili hücreleri sil"
 #: common/lib_tree_model.cpp:146
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
-#: eeschema/dialogs/dialog_sim_model.cpp:489 eeschema/lib_item.cpp:58
+#: eeschema/dialogs/dialog_sim_model.cpp:486 eeschema/lib_item.cpp:58
 #: eeschema/symbol_editor/symbol_editor.cpp:1243
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:67
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:78
@@ -11256,47 +11254,47 @@ msgstr "HSpice"
 msgid "Simulation Command"
 msgstr "Simülasyon"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:189
+#: eeschema/dialogs/dialog_sim_model.cpp:186
 #, fuzzy
 msgid "<unknown>"
 msgstr "<Bilinmiyor>"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:199
+#: eeschema/dialogs/dialog_sim_model.cpp:196
 #, fuzzy, c-format
 msgid "No model named '%s' in library."
 msgstr "%s sembolü '%s' kitaplığında bulunamadı."
 
-#: eeschema/dialogs/dialog_sim_model.cpp:281 eeschema/sim/sim_model.cpp:403
+#: eeschema/dialogs/dialog_sim_model.cpp:278 eeschema/sim/sim_model.cpp:403
 #, fuzzy
 msgid "Failed to read simulation model from fields."
 msgstr "'%s' sembol kitaplığı dosyası oluşturulamadı."
 
-#: eeschema/dialogs/dialog_sim_model.cpp:407
+#: eeschema/dialogs/dialog_sim_model.cpp:404
 #, fuzzy
 msgid "Component:"
 msgstr "Elemanlar"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:407
+#: eeschema/dialogs/dialog_sim_model.cpp:404
 #: eeschema/dialogs/dialog_sim_model_base.cpp:54
 #: eeschema/dialogs/dialog_sim_model_base.cpp:82
 msgid "Model:"
 msgstr "Model:"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:463
+#: eeschema/dialogs/dialog_sim_model.cpp:460
 #, c-format
 msgid "Save parameter '%s (%s)' in Value field"
 msgstr "Parametreyi kaydet '%s (%s)' in Değer alanı"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:471
+#: eeschema/dialogs/dialog_sim_model.cpp:468
 msgid "Save primary parameter in Value field"
 msgstr "Birincil parametreyi Değer alanına kaydet"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:488
+#: eeschema/dialogs/dialog_sim_model.cpp:485
 #: pcbnew/footprint_wizard_frame.cpp:325
 msgid "Parameter"
 msgstr "Parametre"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:491 eeschema/lib_item.cpp:51
+#: eeschema/dialogs/dialog_sim_model.cpp:488 eeschema/lib_item.cpp:51
 #: eeschema/lib_pin.cpp:1170 eeschema/sch_label.cpp:890
 #: eeschema/sch_pin.cpp:206 eeschema/sch_pin.cpp:219
 #: eeschema/symbol_editor/symbol_editor.cpp:1257
@@ -11310,13 +11308,13 @@ msgstr "Parametre"
 msgid "Type"
 msgstr "Tür"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:604
-#: eeschema/dialogs/dialog_sim_model.cpp:647
+#: eeschema/dialogs/dialog_sim_model.cpp:601
+#: eeschema/dialogs/dialog_sim_model.cpp:644
 #, fuzzy
 msgid "Not Connected"
 msgstr "Bağlantı yok"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:1072
+#: eeschema/dialogs/dialog_sim_model.cpp:1061
 #, fuzzy
 msgid "Browse Models"
 msgstr "Kod Modeli"
@@ -12838,55 +12836,49 @@ msgstr "Uyarı: yinelenen sayfa adları.\n"
 msgid "Unknown netlist format.\n"
 msgstr "Özelliğin bilinmeyen üst öğesi"
 
-#: eeschema/eeschema_jobs_handler.cpp:393
-#, fuzzy, c-format
-msgid "Plotting symbol '%s' unit %d %sto '%s'\n"
-msgstr "%s sembolünü '%s' yerine '%s' olarak değiştirin"
-
 #: eeschema/eeschema_jobs_handler.cpp:396
-#: eeschema/eeschema_jobs_handler.cpp:406
-#, fuzzy
-msgid "(De Morgan) "
-msgstr "De Morgan"
-
-#: eeschema/eeschema_jobs_handler.cpp:404
 #, fuzzy, c-format
-msgid "Plotting symbol '%s' %sto '%s'\n"
+msgid "Plotting symbol '%s' unit %d to '%s'\n"
 msgstr "%s sembolünü '%s' yerine '%s' olarak değiştirin"
 
-#: eeschema/eeschema_jobs_handler.cpp:431
+#: eeschema/eeschema_jobs_handler.cpp:406
+#, fuzzy, c-format
+msgid "Plotting symbol '%s' to '%s'\n"
+msgstr "%s sembolünü '%s' yerine '%s' olarak değiştirin"
+
+#: eeschema/eeschema_jobs_handler.cpp:430
 #, fuzzy, c-format
 msgid "Unable to open destination '%s'"
 msgstr "'%s' içinde '%s' ayrıştırılamıyor"
 
-#: eeschema/eeschema_jobs_handler.cpp:481
-#: eeschema/eeschema_jobs_handler.cpp:548 pcbnew/pcbnew_jobs_handler.cpp:645
+#: eeschema/eeschema_jobs_handler.cpp:480
+#: eeschema/eeschema_jobs_handler.cpp:547 pcbnew/pcbnew_jobs_handler.cpp:645
 #: pcbnew/pcbnew_jobs_handler.cpp:706
 #, fuzzy
 msgid "Unable to load library\n"
 msgstr "Kitaplık bölümü bulunamıyor."
 
-#: eeschema/eeschema_jobs_handler.cpp:494
+#: eeschema/eeschema_jobs_handler.cpp:493
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:123
 #, fuzzy
 msgid "There is no symbol selected to save."
 msgstr "Sembol seçilmedi"
 
-#: eeschema/eeschema_jobs_handler.cpp:556 pcbnew/pcbnew_jobs_handler.cpp:631
+#: eeschema/eeschema_jobs_handler.cpp:555 pcbnew/pcbnew_jobs_handler.cpp:631
 msgid "Output path must not conflict with existing path\n"
 msgstr "Çıktı yolu mevcut yolla çakışmamalıdır\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:566
+#: eeschema/eeschema_jobs_handler.cpp:565
 #, fuzzy
 msgid "Saving symbol library in updated format\n"
 msgstr "geçersiz sembol kütüphane tanımlayıcı"
 
-#: eeschema/eeschema_jobs_handler.cpp:580 pcbnew/pcbnew_jobs_handler.cpp:674
+#: eeschema/eeschema_jobs_handler.cpp:579 pcbnew/pcbnew_jobs_handler.cpp:674
 #, fuzzy
 msgid "Unable to save library\n"
 msgstr "Kitaplık bölümü bulunamıyor."
 
-#: eeschema/eeschema_jobs_handler.cpp:586
+#: eeschema/eeschema_jobs_handler.cpp:585
 #, fuzzy
 msgid "Symbol library was not updated\n"
 msgstr "'%s' sembol kütüphanesi silinemiyor."
@@ -42699,6 +42691,10 @@ msgstr "KiCad Şeması"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Baskılı Devre Kartı"
+
+#, fuzzy
+#~ msgid "(De Morgan) "
+#~ msgstr "De Morgan"
 
 #~ msgid "&Find"
 #~ msgstr "&Bul"
