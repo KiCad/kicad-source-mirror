@@ -1,0 +1,30 @@
+(kicad_sch (version 20230121) (generator eeschema)
+
+  (uuid 2186fe71-84c5-450d-a77b-2883d8c95cb3)
+
+  (paper "A3")
+
+  (lib_symbols
+  )
+
+
+  (wire (pts (xy 95.25 229.87) (xy 101.6 229.87))
+    (stroke (width 0) (type default))
+    (uuid 7e736d0c-601c-4f96-b4d2-138dfebf5932)
+  )
+
+  (global_label "REG_ENABLE" (shape output) (at 101.6 229.87 0)
+    (effects (font (size 1.524 1.524)) (justify left))
+    (uuid 24390c04-0f13-48b6-ae5a-ba48240c3289)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 101.6 229.87 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+  (global_label "GPIO1_14__46" (shape bidirectional) (at 95.25 229.87 180)
+    (effects (font (size 1.524 1.524)) (justify right))
+    (uuid ab3b04ea-7320-437f-91d8-0dbd1001f3f9)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 95.25 229.87 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+)
