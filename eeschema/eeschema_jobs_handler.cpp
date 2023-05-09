@@ -492,7 +492,7 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
                 wxPrintf( _( "Plotting symbol '%s' unit %d %sto '%s'\n" ),
                           symbol->GetName(),
                           unit,
-                          convert == 2 ? _( "(De Morgan) " ) : wxS( "" ),
+                          convert == 2 ? _( "(De Morgan) " ) : wxString( "" ),
                           fn.GetFullPath() );
             }
             else
@@ -502,7 +502,7 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
                                               convert == 2 ? wxS( "_demorgan" ) : wxS( "" ) ) );
                 wxPrintf( _( "Plotting symbol '%s' %sto '%s'\n" ),
                           symbol->GetName(),
-                          convert == 2 ? _( "(De Morgan) " ) : wxS( "" ),
+                          convert == 2 ? _( "(De Morgan) " ) : wxString( "" ),
                           fn.GetFullPath() );
             }
 
