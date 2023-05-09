@@ -65,7 +65,12 @@ DIALOG_SIM_MODEL<T_symbol, T_field>::DIALOG_SIM_MODEL( wxWindow* aParent, T_symb
 {
     m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
 
-    m_sortedPartPins = m_symbol.GetAllLibPins();
+    for( LIB_PIN* pin : aSymbol.GetAllLibPins() )
+    {
+        // De Morgan conversions are equivalences, not additional items to simulate
+        if( !pin->GetParent()->HasConversion() || pin->GetConvert() < 2 )
+            m_sortedPartPins.push_back( pin );
+    }
 
     std::sort( m_sortedPartPins.begin(), m_sortedPartPins.end(),
                []( const LIB_PIN* lhs, const LIB_PIN* rhs )
@@ -169,14 +174,6 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
         m_fields[ VALUE_FIELD ].SetText( wxT( "${SIM.PARAMS}" ) );
     }
 
-    std::vector<LIB_PIN*> sourcePins = m_symbol.GetAllLibPins();
-
-    std::sort( sourcePins.begin(), sourcePins.end(),
-               []( const LIB_PIN* lhs, const LIB_PIN* rhs )
-               {
-                   return StrNumCmp( lhs->GetNumber(), rhs->GetNumber(), true ) < 0;
-               } );
-
     std::string libraryFilename = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::LIBRARY_FIELD );
 
     if( libraryFilename != "" )
@@ -188,7 +185,7 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
         {
             m_libraryPathText->ChangeValue( libraryFilename );
             m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields, &reporter );
-            m_libraryModelsMgr.CreateModel( nullptr, sourcePins, m_fields );
+            m_libraryModelsMgr.CreateModel( nullptr, m_sortedPartPins, m_fields );
 
             m_modelNameChoice->Append( _( "<unknown>" ) );
             m_modelNameChoice->SetSelection( 0 );
@@ -217,7 +214,7 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
         if( isIbisLoaded() && ( m_modelNameChoice->GetSelection() >= 0 ) )
         {
             int  idx = m_modelNameChoice->GetSelection();
-            auto kibismodel = dynamic_cast<SIM_MODEL_KIBIS*>( &m_libraryModelsMgr.GetModels().at( idx ).get() );
+            auto kibismodel = dynamic_cast<SIM_MODEL_KIBIS*>( &m_libraryModelsMgr.GetModels()[idx].get() );
 
             if( kibismodel )
             {
@@ -279,7 +276,7 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
         if( m_useInstanceModelRadioButton->GetValue() && type == m_curModelType )
         {
             msg.clear();
-            m_builtinModelsMgr.CreateModel( m_fields, sourcePins, false );
+            m_builtinModelsMgr.CreateModel( m_fields, m_sortedPartPins, false );
 
             if( reporter.HasMessage() )
             {
@@ -289,7 +286,7 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
         }
         else
         {
-            m_builtinModelsMgr.CreateModel( type, sourcePins );
+            m_builtinModelsMgr.CreateModel( type, m_sortedPartPins );
         }
 
         SIM_MODEL::DEVICE_T deviceTypeT = SIM_MODEL::TypeInfo( type ).deviceType;
@@ -707,22 +704,14 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::loadLibrary( const wxString& aLibraryP
         return false;
     }
 
-    std::vector<LIB_PIN*> sourcePins = m_symbol.GetAllLibPins();
-
-    std::sort( sourcePins.begin(), sourcePins.end(),
-               []( const LIB_PIN* lhs, const LIB_PIN* rhs )
-               {
-                   return StrNumCmp( lhs->GetNumber(), rhs->GetNumber(), true ) < 0;
-               } );
-
     std::string modelName = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD );
 
     for( const auto& [baseModelName, baseModel] : library()->GetModels() )
     {
         if( baseModelName == modelName )
-            m_libraryModelsMgr.CreateModel( &baseModel, sourcePins, m_fields );
+            m_libraryModelsMgr.CreateModel( &baseModel, m_sortedPartPins, m_fields );
         else
-            m_libraryModelsMgr.CreateModel( &baseModel, sourcePins );
+            m_libraryModelsMgr.CreateModel( &baseModel, m_sortedPartPins );
     }
 
     if( reporter.HasMessage() )
@@ -1211,13 +1200,6 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::onTypeChoice( wxCommandEvent& aEvent )
 {
     SIM_MODEL::DEVICE_T   deviceType = curModel().GetDeviceType();
     wxString              typeDescription = m_typeChoice->GetString( m_typeChoice->GetSelection() );
-    std::vector<LIB_PIN*> sourcePins = m_symbol.GetAllLibPins();
-
-    std::sort( sourcePins.begin(), sourcePins.end(),
-               []( const LIB_PIN* lhs, const LIB_PIN* rhs )
-               {
-                   return StrNumCmp( lhs->GetNumber(), rhs->GetNumber(), true ) < 0;
-               } );
 
     for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
     {
@@ -1232,13 +1214,14 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::onTypeChoice( wxCommandEvent& aEvent )
             {
                 int idx = m_modelNameChoice->GetSelection();
 
-                auto& baseModel = static_cast<SIM_MODEL_KIBIS&>( m_libraryModelsMgr.GetModels().at( idx ).get() );
+                auto& baseModel = static_cast<SIM_MODEL_KIBIS&>( m_libraryModelsMgr.GetModels()[idx].get() );
 
                 m_libraryModelsMgr.SetModel( idx, std::make_unique<SIM_MODEL_KIBIS>( type, baseModel ) );
 
                 try
                 {
-                    m_libraryModelsMgr.GetModels().at( idx ).get().ReadDataFields( &m_fields, sourcePins );
+                    m_libraryModelsMgr.GetModels()[idx].get().ReadDataFields( &m_fields,
+                                                                              m_sortedPartPins );
                 }
                 catch( IO_ERROR& err )
                 {
