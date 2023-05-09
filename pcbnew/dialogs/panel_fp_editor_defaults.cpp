@@ -174,9 +174,6 @@ PANEL_FP_EDITOR_DEFAULTS::PANEL_FP_EDITOR_DEFAULTS( wxWindow* aParent,
                                                     UNITS_PROVIDER* aUnitsProvider ) :
         PANEL_FP_EDITOR_DEFAULTS_BASE( aParent )
 {
-    m_parent = dynamic_cast<PAGED_DIALOG*>( aParent->GetParent()->GetParent() );
-    wxASSERT_MSG( m_parent, wxS( "Incorrect parent window passed" ) );
-
     m_textItemsGrid->SetDefaultRowSize( m_textItemsGrid->GetDefaultRowSize() + 4 );
 
     m_textItemsGrid->SetTable( new TEXT_ITEMS_GRID_TABLE(), true );
@@ -321,35 +318,9 @@ bool PANEL_FP_EDITOR_DEFAULTS::Show( bool aShow )
 }
 
 
-bool PANEL_FP_EDITOR_DEFAULTS::validateData()
-{
-    if( !m_textItemsGrid->CommitPendingChanges() || !m_graphicsGrid->CommitPendingChanges() )
-        return false;
-
-    // Test text parameters.
-    for( int row : { ROW_SILK, ROW_COPPER, ROW_FAB, ROW_OTHERS } )
-    {
-        int textSize = std::min( m_graphicsGrid->GetUnitValue( row, COL_TEXT_WIDTH ),
-                                 m_graphicsGrid->GetUnitValue( row, COL_TEXT_HEIGHT ) );
-
-        int thickness = m_graphicsGrid->GetUnitValue( row, COL_TEXT_THICKNESS );
-
-        if( thickness > textSize / 4 )
-        {
-            wxString msg = _( "Text will not be readable with a thickness greater than\n"
-                              "1/4 its width or height." );
-            m_parent->SetError( msg, this, m_graphicsGrid, row, COL_TEXT_THICKNESS );
-            return false;
-        }
-    }
-
-    return true;
-}
-
-
 bool PANEL_FP_EDITOR_DEFAULTS::TransferDataFromWindow()
 {
-    if( !validateData() )
+    if( !m_textItemsGrid->CommitPendingChanges() || !m_graphicsGrid->CommitPendingChanges() )
         return false;
 
     SETTINGS_MANAGER&      mgr = Pgm().GetSettingsManager();
