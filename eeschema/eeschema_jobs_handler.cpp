@@ -376,75 +376,87 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
     // iterate from unit 1, unit 0 would be "all units" which we don't want
     for( int unit = 1; unit < symbol->GetUnitCount() + 1; unit++ )
     {
-        int convert = 0;
-
-        wxFileName fn;
-
-        fn.SetPath( aSvgJob->m_outputDirectory );
-        fn.SetExt( SVGFileExtension );
-
-        //simplify the name if its single unit
-        if( symbol->IsMulti() )
+        for( int convert = 1; convert < ( symbol->HasConversion() ? 2 : 1 ) + 1; ++convert )
         {
-            fn.SetName( wxString::Format( "%s_%d", symbol->GetName().Lower(), unit ) );
-            wxPrintf( _( "Plotting symbol '%s' unit %d to '%s'\n" ), symbol->GetName(), unit,
-                      fn.GetFullPath() );
-        }
-        else
-        {
-            fn.SetName( symbol->GetName().Lower() );
-            wxPrintf( _( "Plotting symbol '%s' to '%s'\n" ), symbol->GetName(), fn.GetFullPath() );
-        }
+            wxFileName fn;
 
-        // Get the symbol bounding box to fit the plot page to it
-        BOX2I     symbolBB = symbol->Flatten()->GetUnitBoundingBox( unit, convert, false );
-        PAGE_INFO pageInfo( PAGE_INFO::Custom );
-        pageInfo.SetHeightMils( schIUScale.IUToMils( symbolBB.GetHeight() * 1.2 ) );
-        pageInfo.SetWidthMils( schIUScale.IUToMils( symbolBB.GetWidth() * 1.2 ) );
+            fn.SetPath( aSvgJob->m_outputDirectory );
+            fn.SetExt( SVGFileExtension );
 
-        SVG_PLOTTER* plotter = new SVG_PLOTTER();
-        plotter->SetRenderSettings( aRenderSettings );
-        plotter->SetPageSettings( pageInfo );
-        plotter->SetColorMode( !aSvgJob->m_blackAndWhite );
+            //simplify the name if its single unit
+            if( symbol->IsMulti() )
+            {
+                fn.SetName( wxString::Format( wxS( "%s_%d%s" ),
+                                              symbol->GetName().Lower(),
+                                              unit,
+                                              convert == 2 ? wxS( "_demorgan" ) : wxS( "" ) ) );
+                wxPrintf( _( "Plotting symbol '%s' unit %d %sto '%s'\n" ),
+                          symbol->GetName(),
+                          unit,
+                          convert == 2 ? _( "(De Morgan) " ) : _( "" ),
+                          fn.GetFullPath() );
+            }
+            else
+            {
+                fn.SetName( wxString::Format( wxS( "%s%s" ),
+                                              symbol->GetName().Lower(),
+                                              convert == 2 ? wxS( "_demorgan" ) : wxS( "" ) ) );
+                wxPrintf( _( "Plotting symbol '%s' %sto '%s'\n" ),
+                          symbol->GetName(),
+                          convert == 2 ? _( "(De Morgan) " ) : _( "" ),
+                          fn.GetFullPath() );
+            }
+
+            // Get the symbol bounding box to fit the plot page to it
+            BOX2I     symbolBB = symbol->Flatten()->GetUnitBoundingBox( unit, convert, false );
+            PAGE_INFO pageInfo( PAGE_INFO::Custom );
+            pageInfo.SetHeightMils( schIUScale.IUToMils( symbolBB.GetHeight() * 1.2 ) );
+            pageInfo.SetWidthMils( schIUScale.IUToMils( symbolBB.GetWidth() * 1.2 ) );
+
+            SVG_PLOTTER* plotter = new SVG_PLOTTER();
+            plotter->SetRenderSettings( aRenderSettings );
+            plotter->SetPageSettings( pageInfo );
+            plotter->SetColorMode( !aSvgJob->m_blackAndWhite );
 
         wxPoint      plot_offset;
         const double scale = 1.0;
 
-        // Currently, plot units are in decimil
-        plotter->SetViewport( plot_offset, schIUScale.IU_PER_MILS / 10, scale, false );
+            // Currently, plot units are in decimil
+            plotter->SetViewport( plot_offset, schIUScale.IU_PER_MILS / 10, scale, false );
 
-        plotter->SetCreator( wxT( "Eeschema-SVG" ) );
+            plotter->SetCreator( wxT( "Eeschema-SVG" ) );
 
-        if( !plotter->OpenFile( fn.GetFullPath() ) )
-        {
-            wxFprintf( stderr, _( "Unable to open destination '%s'" ), fn.GetFullPath() );
+            if( !plotter->OpenFile( fn.GetFullPath() ) )
+            {
+                wxFprintf( stderr, _( "Unable to open destination '%s'" ), fn.GetFullPath() );
 
+                delete plotter;
+                return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+            }
+
+            LOCALE_IO toggle;
+
+            plotter->StartPlot( wxT( "1" ) );
+
+            bool      background = true;
+            TRANSFORM temp; // Uses default transform
+            VECTOR2I  plotPos;
+
+            plotPos.x = pageInfo.GetWidthIU( schIUScale.IU_PER_MILS ) / 2;
+            plotPos.y = pageInfo.GetHeightIU( schIUScale.IU_PER_MILS ) / 2;
+
+            // note, we want the fields from the original symbol pointer (in case of non-alias)
+            symbolToPlot->Plot( plotter, unit, convert, background, plotPos, temp, false );
+            symbol->PlotLibFields( plotter, unit, convert, background, plotPos, temp, false,
+                                   aSvgJob->m_includeHiddenFields );
+
+            symbolToPlot->Plot( plotter, unit, convert, !background, plotPos, temp, false );
+            symbol->PlotLibFields( plotter, unit, convert, !background, plotPos, temp, false,
+                                   aSvgJob->m_includeHiddenFields );
+
+            plotter->EndPlot();
             delete plotter;
-            return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
         }
-
-        LOCALE_IO toggle;
-
-        plotter->StartPlot( wxT( "1" ) );
-
-        bool      background = true;
-        TRANSFORM temp; // Uses default transform
-        VECTOR2I  plotPos;
-
-        plotPos.x = pageInfo.GetWidthIU( schIUScale.IU_PER_MILS ) / 2;
-        plotPos.y = pageInfo.GetHeightIU( schIUScale.IU_PER_MILS ) / 2;
-
-        // note, we want to use the fields from the original symbol pointer (in case of non-alias)
-        symbolToPlot->Plot( plotter, unit, convert, background, plotPos, temp, false );
-        symbol->PlotLibFields( plotter, unit, convert, background, plotPos, temp, false,
-                               aSvgJob->m_includeHiddenFields );
-
-        symbolToPlot->Plot( plotter, unit, convert, !background, plotPos, temp, false );
-        symbol->PlotLibFields( plotter, unit, convert, !background, plotPos, temp, false,
-                               aSvgJob->m_includeHiddenFields );
-
-        plotter->EndPlot();
-        delete plotter;
     }
 
     return CLI::EXIT_CODES::OK;
