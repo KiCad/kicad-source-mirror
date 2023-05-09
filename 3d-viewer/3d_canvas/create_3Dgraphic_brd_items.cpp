@@ -97,8 +97,9 @@ void BOARD_ADAPTER::addText( const EDA_TEXT* aText, CONTAINER_2D_BASE* aContaine
 
         aText->TransformBoundingBoxToPolygon( &finalPoly, margin );
         finalPoly.BooleanSubtract( knockouts, SHAPE_POLY_SET::PM_FAST );
-        finalPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
 
+        // Do not call finalPoly.Fracture() here: ConvertPolygonToTriangles() call it
+        // if needed, and Fracture() called twice can create bad results and is useless
         ConvertPolygonToTriangles( finalPoly, *aContainer, m_biuTo3Dunits, *aOwner );
     }
     else
