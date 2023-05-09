@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-09 09:51-0700\n"
-"PO-Revision-Date: 2023-05-06 17:52+0000\n"
+"PO-Revision-Date: 2023-05-10 06:34+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -4317,9 +4317,9 @@ msgid "Zoom %.2f"
 msgstr "Zoom %.2f"
 
 #: common/eda_draw_frame.cpp:609
-#, fuzzy, c-format
+#, c-format
 msgid "grid %s"
-msgstr "campo %s"
+msgstr "cuadrícula %s"
 
 #: common/eda_draw_frame.cpp:622 pagelayout_editor/pl_editor_frame.cpp:752
 msgid "inches"
@@ -4518,7 +4518,7 @@ msgstr "Cuadro numérico"
 
 #: common/eda_shape.cpp:65 pcbnew/pad.cpp:1227
 msgid "Rect"
-msgstr "Rect"
+msgstr "Rectángulo"
 
 #: common/eda_shape.cpp:66 common/eda_shape.cpp:616 common/eda_shape.cpp:1629
 #: gerbview/gerber_draw_item.cpp:213
@@ -7039,7 +7039,7 @@ msgstr "Acciones"
 
 #: common/widgets/wx_html_report_panel_base.cpp:65
 msgid "Infos"
-msgstr "Infos"
+msgstr "Información"
 
 #: common/widgets/wx_html_report_panel_base.cpp:71
 #: eeschema/dialogs/dialog_erc_base.cpp:148
@@ -10927,9 +10927,8 @@ msgid "Replace matches in reference designators"
 msgstr "Reemplazar coincidencias en indicadores de referencia"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:123
-#, fuzzy
 msgid "Replace"
-msgstr "&Reemplazar"
+msgstr "Reemplazar"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:41
 msgid "Schematic Setup"
@@ -37178,9 +37177,9 @@ msgid "Error creating svg file"
 msgstr "Error al crear el archivo svg"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:339 pcbnew/pcbnew_jobs_handler.cpp:417
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to plot to '%s'.\n"
-msgstr "Fallo al cargar '%s'."
+msgstr "Error al trazar a '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:627 pcbnew/pcbnew_jobs_handler.cpp:698
 msgid "Loading footprint library\n"
@@ -40658,14 +40657,12 @@ msgid "Import footprint from file"
 msgstr "Importar huellas desde un archivo"
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export Current Footprint..."
-msgstr "Exportar huella..."
+msgstr "Exportar huella actual..."
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export edited footprint to file"
-msgstr "Exportar huella al un archivo"
+msgstr "Exportar la huella editada a un archivo"
 
 #: pcbnew/tools/pcb_actions.cpp:453
 msgid "Footprint Properties..."
@@ -40948,7 +40945,8 @@ msgstr "Posicionamiento de componentes (.pos)..."
 
 #: pcbnew/tools/pcb_actions.cpp:661
 msgid "Generate component placement file(s) for pick and place"
-msgstr "Generar archivo(s) de posicionamiento de componentes para Pick & Place"
+msgstr ""
+"Generar archivo(s) de posicionamiento de componentes para pick and place"
 
 #: pcbnew/tools/pcb_actions.cpp:666
 msgid "Footprint Report (.rpt)..."
