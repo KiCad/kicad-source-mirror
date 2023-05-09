@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-09 10:37-0700\n"
-"PO-Revision-Date: 2023-05-06 17:51+0000\n"
+"PO-Revision-Date: 2023-05-10 06:34+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "v7/es_MX/>\n"
@@ -4289,9 +4289,9 @@ msgid "Zoom %.2f"
 msgstr "Zoom %.2f"
 
 #: common/eda_draw_frame.cpp:617
-#, fuzzy, c-format
+#, c-format
 msgid "grid %s"
-msgstr "campo %s"
+msgstr "cuadrícula %s"
 
 #: common/eda_draw_frame.cpp:630 pagelayout_editor/pl_editor_frame.cpp:752
 msgid "inches"
@@ -4491,7 +4491,7 @@ msgstr "Cuadro numérico"
 
 #: common/eda_shape.cpp:65 pcbnew/pad.cpp:1245
 msgid "Rect"
-msgstr "Rect"
+msgstr "Rectángulo"
 
 #: common/eda_shape.cpp:66 common/eda_shape.cpp:616 common/eda_shape.cpp:1676
 #: gerbview/gerber_draw_item.cpp:213
@@ -6928,7 +6928,7 @@ msgstr "Acciones"
 
 #: common/widgets/wx_html_report_panel_base.cpp:65
 msgid "Infos"
-msgstr "Infos"
+msgstr "Información"
 
 #: common/widgets/wx_html_report_panel_base.cpp:71
 #: eeschema/dialogs/dialog_erc_base.cpp:148
@@ -10682,9 +10682,8 @@ msgid "Replace matches in reference designators"
 msgstr "Reemplazar coincidencias en indicadores de referencia"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:120
-#, fuzzy
 msgid "Replace"
-msgstr "&Reemplazar"
+msgstr "Reemplazar"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:41
 msgid "Schematic Setup"
@@ -12733,12 +12732,12 @@ msgid "Unknown netlist format.\n"
 msgstr "Formato de netlist desconocido.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:396
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
 msgstr "Trazando el símbolo '%s' unidad %d a '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' to '%s'\n"
 msgstr "Trazando el símbolo '%s' a '%s'\n"
 
@@ -35311,49 +35310,40 @@ msgid "Dimension '%s' on %s"
 msgstr "Dimensión '%s' en %s"
 
 #: pcbnew/pcb_dimension.cpp:1319
-#, fuzzy
 msgid "1234.0"
-msgstr "1234"
+msgstr "1234.0"
 
 #: pcbnew/pcb_dimension.cpp:1320
-#, fuzzy
 msgid "1234.0 mm"
-msgstr "1234 mm"
+msgstr "1234.0 mm"
 
 #: pcbnew/pcb_dimension.cpp:1321
-#, fuzzy
 msgid "1234.0 (mm)"
-msgstr "1234 (mm)"
+msgstr "1234.0 (mm)"
 
 #: pcbnew/pcb_dimension.cpp:1353
-#, fuzzy
 msgid "Units Format"
-msgstr "Formato de unidades:"
+msgstr "Formato de unidades"
 
 #: pcbnew/pcb_dimension.cpp:1359
-#, fuzzy
 msgid "Suppress Trailing Zeroes"
 msgstr "Eliminar ceros a la derecha"
 
 #: pcbnew/pcb_dimension.cpp:1387
-#, fuzzy
 msgid "Crossbar Height"
-msgstr "Cursor derecha"
+msgstr "Altura de barra transversal"
 
 #: pcbnew/pcb_dimension.cpp:1391
-#, fuzzy
 msgid "Extension Line Overshoot"
-msgstr "Desfase de línea de extensión:"
+msgstr "Exceso de la línea de extensión"
 
 #: pcbnew/pcb_dimension.cpp:1456
-#, fuzzy
 msgid "Leader Length"
-msgstr "Longitud de vía"
+msgstr "Longitud del líder"
 
 #: pcbnew/pcb_dimension.cpp:1496
-#, fuzzy
 msgid "Text Frame"
-msgstr "Marco de texto:"
+msgstr "Marco de texto"
 
 #: pcbnew/pcb_edit_frame.cpp:203
 msgid "KiCad PCB Editor"
@@ -35655,9 +35645,9 @@ msgid "Error creating svg file"
 msgstr "Error al crear el archivo svg"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:337 pcbnew/pcbnew_jobs_handler.cpp:414
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to plot to '%s'.\n"
-msgstr "Fallo al cargar '%s'."
+msgstr "Error al trazar a '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:624 pcbnew/pcbnew_jobs_handler.cpp:695
 msgid "Loading footprint library\n"
@@ -39084,14 +39074,12 @@ msgid "Import footprint from file"
 msgstr "Importar huellas desde un archivo"
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export Current Footprint..."
-msgstr "Exportar huella..."
+msgstr "Exportar huella actual..."
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export edited footprint to file"
-msgstr "Exportar huella al un archivo"
+msgstr "Exportar la huella editada a un archivo"
 
 #: pcbnew/tools/pcb_actions.cpp:453
 msgid "Footprint Properties..."
@@ -39374,7 +39362,8 @@ msgstr "Posicionamiento de componentes (.pos)..."
 
 #: pcbnew/tools/pcb_actions.cpp:661
 msgid "Generate component placement file(s) for pick and place"
-msgstr "Generar archivo(s) de posicionamiento de componentes para Pick & Place"
+msgstr ""
+"Generar archivo(s) de posicionamiento de componentes para pick and place"
 
 #: pcbnew/tools/pcb_actions.cpp:666
 msgid "Footprint Report (.rpt)..."
