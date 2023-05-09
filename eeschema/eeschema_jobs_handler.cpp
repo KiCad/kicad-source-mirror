@@ -378,6 +378,7 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
     {
         for( int convert = 1; convert < ( symbol->HasConversion() ? 2 : 1 ) + 1; ++convert )
         {
+            wxString   filename;
             wxFileName fn;
 
             fn.SetPath( aSvgJob->m_outputDirectory );
@@ -386,25 +387,23 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
             //simplify the name if its single unit
             if( symbol->IsMulti() )
             {
-                fn.SetName( wxString::Format( wxS( "%s_%d%s" ),
-                                              symbol->GetName().Lower(),
-                                              unit,
-                                              convert == 2 ? wxS( "_demorgan" ) : wxS( "" ) ) );
-                wxPrintf( _( "Plotting symbol '%s' unit %d %sto '%s'\n" ),
-                          symbol->GetName(),
-                          unit,
-                          convert == 2 ? _( "(De Morgan) " ) : _( "" ),
+                filename = wxString::Format( "%s_%d", symbol->GetName().Lower(), unit );
+
+                if( convert == 2 )
+                    filename += wxS( "_demorgan" );
+
+                fn.SetName( filename );
+                wxPrintf( _( "Plotting symbol '%s' unit %d to '%s'\n" ), symbol->GetName(), unit,
                           fn.GetFullPath() );
             }
             else
             {
-                fn.SetName( wxString::Format( wxS( "%s%s" ),
-                                              symbol->GetName().Lower(),
-                                              convert == 2 ? wxS( "_demorgan" ) : wxS( "" ) ) );
-                wxPrintf( _( "Plotting symbol '%s' %sto '%s'\n" ),
-                          symbol->GetName(),
-                          convert == 2 ? _( "(De Morgan) " ) : _( "" ),
-                          fn.GetFullPath() );
+                filename = symbol->GetName().Lower();
+
+                if( convert == 2 )
+                    filename += wxS( "_demorgan" );
+
+                wxPrintf( _( "Plotting symbol '%s' to '%s'\n" ), symbol->GetName(), fn.GetFullPath() );
             }
 
             // Get the symbol bounding box to fit the plot page to it
