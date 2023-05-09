@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-06 16:53-0800\n"
+"POT-Creation-Date: 2023-05-09 10:04-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -1739,9 +1739,6 @@ msgstr "Theme already exists!"
 msgid "New Theme..."
 msgstr "New Theme..."
 
-msgid "(read-only)"
-msgstr "(read-only)"
-
 msgid "Copy color"
 msgstr "Copy color"
 
@@ -1750,6 +1747,9 @@ msgstr "Paste color"
 
 msgid "Revert to saved color"
 msgstr "Revert to saved color"
+
+msgid "(read-only)"
+msgstr "(read-only)"
 
 msgid "Theme:"
 msgstr "Theme:"
@@ -2610,6 +2610,10 @@ msgstr "Zoom Auto"
 #, c-format
 msgid "Zoom %.2f"
 msgstr "Zoom %.2f"
+
+#, c-format
+msgid "grid %s"
+msgstr "grid %s"
 
 msgid "inches"
 msgstr "inches"
@@ -4105,6 +4109,9 @@ msgstr "<not found>"
 msgid "Footprint not found."
 msgstr "Footprint not found."
 
+msgid "Loading Footprint Libraries"
+msgstr "Loading Footprint Libraries"
+
 msgid "No default footprint"
 msgstr "No default footprint"
 
@@ -4628,9 +4635,6 @@ msgstr ""
 
 msgid "Configuration Error"
 msgstr "Configuration Error"
-
-msgid "Loading Footprint Libraries"
-msgstr "Loading Footprint Libraries"
 
 #, c-format
 msgid ""
@@ -5961,6 +5965,9 @@ msgstr "Hierarchical Sheet Pin Properties"
 msgid "Label can not be empty."
 msgstr "Label can not be empty."
 
+msgid "untitled"
+msgstr "untitled"
+
 msgid "The first field is mandatory."
 msgstr "The first field is mandatory."
 
@@ -6829,14 +6836,8 @@ msgstr "Search the current &sheet only"
 msgid "Replace matches in reference designators"
 msgstr "Replace matches in reference designators"
 
-msgid "&Find"
-msgstr "&Find"
-
-msgid "&Replace"
-msgstr "&Replace"
-
-msgid "Replace &All"
-msgstr "Replace &All"
+msgid "Replace"
+msgstr "Replace"
 
 msgid "Schematic Setup"
 msgstr "Schematic Setup"
@@ -8227,12 +8228,15 @@ msgid "Unknown netlist format.\n"
 msgstr "Unknown netlist format.\n"
 
 #, c-format
-msgid "Plotting symbol '%s' unit %d to '%s'\n"
-msgstr "Plotting symbol '%s' unit %d to '%s'\n"
+msgid "Plotting symbol '%s' unit %d %sto '%s'\n"
+msgstr "Plotting symbol '%s' unit %d %sto '%s'\n"
+
+msgid "(De Morgan) "
+msgstr "(De Morgan) "
 
 #, c-format
-msgid "Plotting symbol '%s' to '%s'\n"
-msgstr "Plotting symbol '%s' to '%s'\n"
+msgid "Plotting symbol '%s' %sto '%s'\n"
+msgstr "Plotting symbol '%s' %sto '%s'\n"
 
 #, c-format
 msgid "Unable to open destination '%s'"
@@ -8860,18 +8864,6 @@ msgstr "&Tools"
 
 msgid "P&references"
 msgstr "P&references"
-
-#, c-format
-msgid "Failed to generate a name for '%s': exceeded UINT64_MAX"
-msgstr "Failed to generate a name for '%s': exceeded UINT64_MAX"
-
-#, c-format
-msgid ""
-"Error reading simulation model from symbol '%s':\n"
-"%s"
-msgstr ""
-"Error reading simulation model from symbol '%s':\n"
-"%s"
 
 #, c-format
 msgid "Could not open file '%s' to write IBIS model"
@@ -10098,6 +10090,27 @@ msgstr ""
 "<i>Note that markup has precedence over bus definitions.</i>\n"
 "\n"
 
+msgid "The value of the field cannot be empty."
+msgstr "The value of the field cannot be empty."
+
+msgid "carriage return"
+msgstr "carriage return"
+
+msgid "line feed"
+msgstr "line feed"
+
+msgid "tab"
+msgstr "tab"
+
+msgid "space"
+msgstr "space"
+
+msgid " or "
+msgstr " or "
+
+msgid ", or "
+msgstr ", or "
+
 #, c-format
 msgid "The reference designator cannot contain %s character(s)."
 msgstr "The reference designator cannot contain %s character(s)."
@@ -10125,30 +10138,6 @@ msgstr "The sheet filename cannot contain %s character(s)."
 #, c-format
 msgid "The field cannot contain %s character(s)."
 msgstr "The field cannot contain %s character(s)."
-
-msgid "The name of the field cannot be empty."
-msgstr "The name of the field cannot be empty."
-
-msgid "The value of the field cannot be empty."
-msgstr "The value of the field cannot be empty."
-
-msgid "carriage return"
-msgstr "carriage return"
-
-msgid "line feed"
-msgstr "line feed"
-
-msgid "tab"
-msgstr "tab"
-
-msgid "space"
-msgstr "space"
-
-msgid " or "
-msgstr " or "
-
-msgid ", or "
-msgstr ", or "
 
 msgid "The reference designator cannot contain text variable references"
 msgstr "The reference designator cannot contain text variable references"
@@ -10720,11 +10709,11 @@ msgstr "Invalid IBIS file '%s'"
 
 #, c-format
 msgid ""
-"Simulation model type must be the same as of its base class: '%s', but is "
-"'%s'"
+"Error reading simulation model from symbol '%s':\n"
+"%s"
 msgstr ""
-"Simulation model type must be the same as of its base class: '%s', but is "
-"'%s'"
+"Error reading simulation model from symbol '%s':\n"
+"%s"
 
 #, c-format
 msgid "Could not find a pin named '%s' in simulation model of type '%s'"
@@ -13475,9 +13464,6 @@ msgstr "Malformed expression"
 msgid "Reset all hotkeys to the built-in KiCad defaults"
 msgstr "Reset all hotkeys to the built-in KiCad defaults"
 
-msgid "untitled"
-msgstr "untitled"
-
 msgid "Leave unchanged"
 msgstr "Leave unchanged"
 
@@ -13517,11 +13503,11 @@ msgstr "At least one or more layers must be specified\n"
 msgid "Valid options excellon, gerber."
 msgstr "Valid options excellon, gerber."
 
-msgid "Valid options are: decimal,suppressleading,suppresstrailing,keep."
-msgstr "Valid options are: decimal,suppressleading,suppresstrailing,keep."
-
 msgid "Valid options are: absolute,plot"
 msgstr "Valid options are: absolute,plot"
+
+msgid "Valid options are: decimal,suppressleading,suppresstrailing,keep."
+msgstr "Valid options are: decimal,suppressleading,suppresstrailing,keep."
 
 msgid "Output units, valid options:in,mm"
 msgstr "Output units, valid options:in,mm"
@@ -13532,17 +13518,14 @@ msgstr "Mirror Y axis"
 msgid "Minimal header"
 msgstr "Minimal header"
 
-msgid "PTH and NPTH in separate files file"
-msgstr "PTH and NPTH in separate files file"
+msgid "Generate independent files for NPTH and PTH holes"
+msgstr "Generate independent files for NPTH and PTH holes"
 
 msgid "Generate map / summary of drill hits"
 msgstr "Generate map / summary of drill hits"
 
 msgid "Valid options: pdf,gerberx2,ps,dxf,svg"
 msgstr "Valid options: pdf,gerberx2,ps,dxf,svg"
-
-msgid "Generate independent files for NPTH and PTH holes"
-msgstr "Generate independent files for NPTH and PTH holes"
 
 msgid "Precision of gerber coordinates (5 or 6)"
 msgstr "Precision of gerber coordinates (5 or 6)"
@@ -14583,9 +14566,6 @@ msgstr "Create (or open) a project to edit a pcb."
 
 msgid "Application failed to load:\n"
 msgstr "Application failed to load:\n"
-
-msgid "KiCad Error"
-msgstr "KiCad Error"
 
 msgid "Application failed to load."
 msgstr "Application failed to load."
@@ -21246,13 +21226,6 @@ msgstr "If checked, zones will be re-filled after each edit operation"
 msgid "Internal Layers"
 msgstr "Internal Layers"
 
-msgid ""
-"Text will not be readable with a thickness greater than\n"
-"1/4 its width or height."
-msgstr ""
-"Text will not be readable with a thickness greater than\n"
-"¼ its width or height."
-
 msgid "Default text items for new footprints:"
 msgstr "Default text items for new footprints:"
 
@@ -24802,6 +24775,33 @@ msgstr "Suffix"
 msgid "Dimension '%s' on %s"
 msgstr "Dimension '%s' on %s"
 
+msgid "1234.0"
+msgstr "1234.0"
+
+msgid "1234.0 mm"
+msgstr "1234.0 mm"
+
+msgid "1234.0 (mm)"
+msgstr "1234.0 (mm)"
+
+msgid "Units Format"
+msgstr "Units Format"
+
+msgid "Suppress Trailing Zeroes"
+msgstr "Suppress Trailing Zeroes"
+
+msgid "Crossbar Height"
+msgstr "Crossbar Height"
+
+msgid "Extension Line Overshoot"
+msgstr "Extension Line Overshoot"
+
+msgid "Leader Length"
+msgstr "Leader Length"
+
+msgid "Text Frame"
+msgstr "Text Frame"
+
 msgid "KiCad PCB Editor"
 msgstr "KiCad PCB Editor"
 
@@ -25028,6 +25028,10 @@ msgstr "Successfully created svg file"
 
 msgid "Error creating svg file"
 msgstr "Error creating svg file"
+
+#, c-format
+msgid "Failed to plot to '%s'.\n"
+msgstr "Failed to plot to '%s'.\n"
 
 msgid "Loading footprint library\n"
 msgstr "Loading footprint library\n"
@@ -27608,11 +27612,11 @@ msgstr "Import Footprint..."
 msgid "Import footprint from file"
 msgstr "Import footprint from file"
 
-msgid "Export Footprint..."
-msgstr "Export Footprint..."
+msgid "Export Current Footprint..."
+msgstr "Export Current Footprint..."
 
-msgid "Export footprint to file"
-msgstr "Export footprint to file"
+msgid "Export edited footprint to file"
+msgstr "Export edited footprint to file"
 
 msgid "Footprint Properties..."
 msgstr "Footprint Properties..."
@@ -29414,6 +29418,57 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "&Find"
+#~ msgstr "&Find"
+
+#~ msgid "&Replace"
+#~ msgstr "&Replace"
+
+#~ msgid "Replace &All"
+#~ msgstr "Replace &All"
+
+#, c-format
+#~ msgid "Plotting symbol '%s' unit %d to '%s'\n"
+#~ msgstr "Plotting symbol '%s' unit %d to '%s'\n"
+
+#, c-format
+#~ msgid "Plotting symbol '%s' to '%s'\n"
+#~ msgstr "Plotting symbol '%s' to '%s'\n"
+
+#, c-format
+#~ msgid "Failed to generate a name for '%s': exceeded UINT64_MAX"
+#~ msgstr "Failed to generate a name for '%s': exceeded UINT64_MAX"
+
+#~ msgid "The name of the field cannot be empty."
+#~ msgstr "The name of the field cannot be empty."
+
+#, c-format
+#~ msgid ""
+#~ "Simulation model type must be the same as of its base class: '%s', but is "
+#~ "'%s'"
+#~ msgstr ""
+#~ "Simulation model type must be the same as of its base class: '%s', but is "
+#~ "'%s'"
+
+#~ msgid "PTH and NPTH in separate files file"
+#~ msgstr "PTH and NPTH in separate files file"
+
+#~ msgid "KiCad Error"
+#~ msgstr "KiCad Error"
+
+#~ msgid ""
+#~ "Text will not be readable with a thickness greater than\n"
+#~ "1/4 its width or height."
+#~ msgstr ""
+#~ "Text will not be readable with a thickness greater than\n"
+#~ "¼ its width or height."
+
+#~ msgid "Export Footprint..."
+#~ msgstr "Export Footprint..."
+
+#~ msgid "Export footprint to file"
+#~ msgstr "Export footprint to file"
 
 #~ msgid "Unknown SIM_VALUE type"
 #~ msgstr "Unknown SIM_VALUE type"
