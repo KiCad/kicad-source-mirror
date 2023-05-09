@@ -10,16 +10,16 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-09 09:51-0700\n"
-"PO-Revision-Date: 2023-04-17 22:52+0000\n"
+"PO-Revision-Date: 2023-05-10 06:34+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.17\n"
+"X-Generator: Weblate 4.18-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -6798,7 +6798,7 @@ msgstr "Välj sökväg"
 
 #: common/widgets/lib_tree.cpp:89
 msgid "Sort by Best Match"
-msgstr ""
+msgstr "Sortera efter bästa matchning"
 
 #: common/widgets/lib_tree.cpp:90
 #, fuzzy
@@ -8442,7 +8442,7 @@ msgstr "Ingen symbol vald"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:98
 msgid "Connected to database successfully"
-msgstr ""
+msgstr "Anslutning till databasen lyckades"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:106
 #, fuzzy, c-format
@@ -8475,7 +8475,7 @@ msgstr "Nytt namn:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
 msgid "Password:"
-msgstr ""
+msgstr "Lösenord:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:71
 #, fuzzy
@@ -8527,7 +8527,7 @@ msgstr "Cachelagrad symbol:"
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:140
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:145
 msgid "Time in seconds that database queries will be cached for"
-msgstr ""
+msgstr "Tid i sekunder för hur länge databasförfrågningar skall cachelagras"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.h:79
 #, fuzzy
@@ -14917,6 +14917,8 @@ msgid ""
 "Inconsitent pin numbers in symbol %s compared to the one defined in part %s. "
 "The part was not loaded."
 msgstr ""
+"Inkonsekvent numrering av stift i symbol %s jämfört med den som definieras i "
+"komponent %s. Komponenten lästes inte in."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:365
 #, c-format
@@ -14985,6 +14987,8 @@ msgid ""
 "The selected file is a CADSTAR symbol library. It does not contain a "
 "schematic design so cannot be imported/opened in this way."
 msgstr ""
+"Den valda filen är ett CADSTAR symbolbibliotek. Det innehåller inte ett "
+"kretsschema och kan därför inte importeras/öppnas på detta sätt."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:585
 msgid "The CADSTAR schematic might be corrupt: there is no root sheet."
@@ -15145,6 +15149,8 @@ msgid ""
 "'%s' is an Eagle binary-format schematic file; only Eagle XML-format "
 "schematics can be imported."
 msgstr ""
+"'%s' är ett kretsschema i Eagle binärformat; endast kretsscheman i Eagel XML-"
+"format kan importeras."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:449
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:3099
@@ -15372,47 +15378,49 @@ msgstr "förväntad ociterad sträng"
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:294
 #, c-format
 msgid "Expecting integer at line %d in file %s"
-msgstr ""
+msgstr "Förväntar sig heltal (integer) på rad %d i filen %s"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:317
 #, c-format
 msgid "Expected data missing on line %d in file %s"
-msgstr ""
+msgstr "Förväntat data saknas på rad %d i filen %s"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:323
 #, c-format
 msgid "Extra data found on line %d in file %s"
-msgstr ""
+msgstr "Extra data hittades på rad %d i filen %s"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:351
 msgid "Expecting 0, 1, 2 or 3"
-msgstr ""
+msgstr "Förväntar 0, 1, 2 eller 3"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:365
 msgid "Expecting NORMAL or WIDE"
-msgstr ""
+msgstr "Förväntar NORMAL eller WIDE"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:381
 msgid "Expecting I, O, B or OUT"
-msgstr ""
+msgstr "Förväntar I, O, B eller OUT"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:402
 msgid "Expecting R0, R90, R18, R270, M0, M90, M180 or M270"
-msgstr ""
+msgstr "Förväntar R0, R90, R18, R270, M0, M90, M180 eller M270"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:423
 msgid ""
 "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VTOP or VBOTTOM"
 msgstr ""
+"Förväntar LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VTOP eller VBOTTOM"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:444
 msgid ""
 "Expecting NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VLEFT or VRIGHT"
 msgstr ""
+"Förväntar NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VLEFT eller VRIGHT"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:458
 msgid "Expecting CELL or BLOCK"
-msgstr ""
+msgstr "Förväntar CELL eller BLOCK"
 
 #: eeschema/sch_reference_list.cpp:692
 #, c-format
@@ -17720,11 +17728,11 @@ msgstr "Återlänkning av fotavtryck avbröts av användaren."
 
 #: eeschema/tools/backannotate.cpp:356
 msgid "true"
-msgstr ""
+msgstr "sant"
 
 #: eeschema/tools/backannotate.cpp:356
 msgid "false"
-msgstr ""
+msgstr "falskt"
 
 #: eeschema/tools/backannotate.cpp:362
 #, c-format
@@ -17794,7 +17802,7 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:61
 msgid "Show simulation window for running SPICE or IBIS simulations."
-msgstr ""
+msgstr "Visa simulationsfönster för SPICE eller IBIS-simulationer som körs."
 
 #: eeschema/tools/ee_actions.cpp:67
 msgid "Opens the datasheet in a browser"
@@ -18573,7 +18581,7 @@ msgstr "Monteras ej"
 
 #: eeschema/tools/ee_actions.cpp:654
 msgid "Set the do not populate attribute"
-msgstr ""
+msgstr "Sätt egenskap monteras ej"
 
 #: eeschema/tools/ee_actions.cpp:659
 #, fuzzy
@@ -18582,7 +18590,7 @@ msgstr "Monteras ej"
 
 #: eeschema/tools/ee_actions.cpp:659
 msgid "Clear the do not populate attribute"
-msgstr ""
+msgstr "Rensa attribut monteras ej"
 
 #: eeschema/tools/ee_actions.cpp:664
 #, fuzzy
@@ -19158,7 +19166,7 @@ msgstr "Symboler"
 #: eeschema/tools/ee_inspection_tool.cpp:275
 #: pcbnew/tools/board_inspection_tool.cpp:1426
 msgid "Summary"
-msgstr ""
+msgstr "Sammanfattning"
 
 #: eeschema/tools/ee_inspection_tool.cpp:277
 #, fuzzy
@@ -21131,7 +21139,7 @@ msgstr "Undvik att ställa in en bakgrundsfärg (oavsett tema)"
 
 #: kicad/cli/command_export_sch_plot.cpp:69
 msgid "Plot only the first page (no sub-sheets)"
-msgstr ""
+msgstr "Plotta bara första arket (inga underark)"
 
 #: kicad/cli/command_export_sch_plot.cpp:76
 #, fuzzy
@@ -21141,10 +21149,11 @@ msgstr "Sidstorlek:"
 #: kicad/cli/command_export_sch_plot.cpp:81
 msgid "Origin and scale: 0 bottom left, 1 centered, 2 page fit, 3 content fit"
 msgstr ""
+"Origo och skala: 0 vänster nere, 1 centrerad, 2 passa sida, 3 passa innehåll"
 
 #: kicad/cli/command_export_sch_plot.cpp:121
 msgid "HPGL origin option must be 0, 1, 2 or 3\n"
-msgstr ""
+msgstr "HPGL-origots alternativ måste vara 0, 1, 2 eller 3\n"
 
 #: kicad/cli/command_fp_export_svg.cpp:44
 #: kicad/cli/command_sym_export_svg.cpp:44
@@ -34336,12 +34345,12 @@ msgstr "(%s min %s; faktisk %s)"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:355
 #, c-format
 msgid "%s corner smoothing setting differs."
-msgstr ""
+msgstr "%s hörnavrundningsinställning skiljer sig."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:357
 #, c-format
 msgid "%s corner smoothing radius differs."
-msgstr ""
+msgstr "%s hörnavrundningsradie skiljer sig."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:359
 #, fuzzy, c-format
@@ -34356,7 +34365,7 @@ msgstr "%s är olika."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:364
 #, c-format
 msgid "%s keep-out property differs."
-msgstr ""
+msgstr "%s spärr-egenskap skiljer sig."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:366
 #, fuzzy, c-format
@@ -34371,7 +34380,7 @@ msgstr "Inställning för att undanta från krav på gårdsplan är olika."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:370
 #, c-format
 msgid "%s keep out pads setting differs."
-msgstr ""
+msgstr "%s inställning för spärr mot lödytor skiljer sig."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:372
 #, fuzzy, c-format
@@ -34381,7 +34390,7 @@ msgstr "Ta &bort ledare som ansluter olika nät"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:374
 #, c-format
 msgid "%s keep out vias setting differs."
-msgstr ""
+msgstr "%s inställning för spärr mot vior skiljer sig."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:377
 #, fuzzy, c-format
@@ -34416,7 +34425,7 @@ msgstr "%s minimibredd: %s."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:392
 #, c-format
 msgid "%s remove islands setting differs."
-msgstr ""
+msgstr "%s inställning för ta bort öar skiljer sig."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:394
 #, fuzzy, c-format
@@ -34446,17 +34455,17 @@ msgstr "Antal regelområden är olika."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:405
 #, c-format
 msgid "%s hatch smoothing level differs."
-msgstr ""
+msgstr "%s nivå för avrundning av rutmönster skiljer sig."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:407
 #, c-format
 msgid "%s hatch smoothing amount differs."
-msgstr ""
+msgstr "%s nivå för avrundning av rutmönster skiljer sig."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:409
 #, c-format
 msgid "%s minimum hatch hole setting differs."
-msgstr ""
+msgstr "%s inställning för minsta rutmönsteröppning skiljer sig."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:415
 #, fuzzy, c-format
