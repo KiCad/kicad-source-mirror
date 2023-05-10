@@ -41,7 +41,11 @@ struct LTSPICE_FILE
 
     LTSPICE_FILE( const wxFileName& aFilename, const VECTOR2I& aOffset ) :
             Name( aFilename ),
-            Offset( aOffset )
+            Offset( aOffset ),
+            ParentIndex( 0 ),
+            Sheet( nullptr ),
+            Screen( nullptr )
+
     { }
 
     bool operator<( const LTSPICE_FILE& t ) const

@@ -27,6 +27,8 @@ NL_PCBNEW_PLUGIN::NL_PCBNEW_PLUGIN( PCB_DRAW_PANEL_GAL* aViewport )
 {
     if( ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
         m_impl = new NL_PCBNEW_PLUGIN_IMPL( aViewport );
+    else
+        m_impl = nullptr;
 }
 
 
