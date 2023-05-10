@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-09 10:37-0700\n"
-"PO-Revision-Date: 2023-04-17 22:52+0000\n"
+"PO-Revision-Date: 2023-05-11 15:51+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v7/sv/>\n"
 "Language: sv\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.17\n"
+"X-Generator: Weblate 4.18-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -4273,9 +4273,9 @@ msgid "Zoom %.2f"
 msgstr "Zooma %.2f"
 
 #: common/eda_draw_frame.cpp:617
-#, fuzzy, c-format
+#, c-format
 msgid "grid %s"
-msgstr "Fält "
+msgstr "rutnät %s"
 
 #: common/eda_draw_frame.cpp:630 pagelayout_editor/pl_editor_frame.cpp:752
 msgid "inches"
@@ -10624,9 +10624,8 @@ msgid "Replace matches in reference designators"
 msgstr "Ersätt matchningar i referensbeteckningar"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:120
-#, fuzzy
 msgid "Replace"
-msgstr "&Ersätt"
+msgstr "Ersätt"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:41
 msgid "Schematic Setup"
@@ -35359,9 +35358,9 @@ msgid "Error creating svg file"
 msgstr "Fel vid försök att skapa svg-fil"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:337 pcbnew/pcbnew_jobs_handler.cpp:414
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to plot to '%s'.\n"
-msgstr "Det gick inte att läsa in '%s'."
+msgstr "Det gick inte att plotta till '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:624 pcbnew/pcbnew_jobs_handler.cpp:695
 msgid "Loading footprint library\n"
@@ -38737,14 +38736,12 @@ msgid "Import footprint from file"
 msgstr "Importera fotavtryck från fil"
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export Current Footprint..."
-msgstr "Exportera fotavtryck ..."
+msgstr "Exportera aktuellt fotavtryck..."
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export edited footprint to file"
-msgstr "Exportera fotavtryck till fil"
+msgstr "Exportera redigerat fotavtryck till fil"
 
 #: pcbnew/tools/pcb_actions.cpp:453
 msgid "Footprint Properties..."
