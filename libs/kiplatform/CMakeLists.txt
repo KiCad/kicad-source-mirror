@@ -33,6 +33,7 @@ elseif( WIN32 )
         "Shlwapi"
         "winhttp"
         "wintrust"
+        "Imm32"
         )
 elseif( UNIX )
     set( PLATFORM_SRCS

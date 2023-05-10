@@ -156,3 +156,24 @@ void KIPLATFORM::UI::WarpPointer( wxWindow* aWindow, int aX, int aY )
 {
     aWindow->WarpPointer( aX, aY );
 }
+
+
+void KIPLATFORM::UI::ImmControl( wxWindow* aWindow, bool aEnable )
+{
+    static HIMC origHIMC = (HIMC) 0;
+
+    if ( !aEnable )
+    {
+        if( origHIMC == (HIMC) 0 )
+        {
+            origHIMC = ImmGetContext( aWindow->GetHWND() );
+            if( origHIMC )
+                ImmAssociateContext( aWindow->GetHWND(), NULL );
+        }
+    }
+    else if( origHIMC != (HIMC) 0 )
+    {
+        ImmAssociateContext( aWindow->GetHWND(), origHIMC );
+        origHIMC = (HIMC) 0;
+    }
+}

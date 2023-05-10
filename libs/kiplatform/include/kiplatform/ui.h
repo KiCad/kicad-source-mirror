@@ -118,7 +118,7 @@ namespace KIPLATFORM
         double GetContentScaleFactor( const wxWindow* aWindow );
 
         /**
-         * Tries to determine the size of the viewport of a scrollable widget (wxDataViewCtrl, wxGrid) 
+         * Tries to determine the size of the viewport of a scrollable widget (wxDataViewCtrl, wxGrid)
          * that won't be obscured by scrollbars.
          * @param aWindow pointer to the scrollable widget to check
          * @return Viewport size that won't be obscured by scrollbars
@@ -143,6 +143,11 @@ namespace KIPLATFORM
          * @param aY destination y position
          */
         void WarpPointer( wxWindow* aWindow, int aX, int aY );
+
+        /**
+         * Configures the IME mode of a given control handle
+         */
+        void ImmControl( wxWindow* aWindow, bool aEnable );
     }
 }
 
