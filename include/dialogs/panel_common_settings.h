@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@ class STEPPED_SLIDER;
 class PANEL_COMMON_SETTINGS : public PANEL_COMMON_SETTINGS_BASE
 {
 public:
-    PANEL_COMMON_SETTINGS( DIALOG_SHIM* aDialog, wxWindow* aParent );
+    PANEL_COMMON_SETTINGS( wxWindow* aParent );
     ~PANEL_COMMON_SETTINGS() override;
 
     void ResetPanel() override;
@@ -66,8 +66,6 @@ private:
     void setPdfViewerPathState();
 
 protected:
-    DIALOG_SHIM*    m_dialog;
-
     wxStaticText*   m_iconScaleLabel;
     STEPPED_SLIDER* m_iconScaleSlider;
     wxCheckBox*     m_iconScaleAuto;

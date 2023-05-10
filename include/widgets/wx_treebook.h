@@ -1,11 +1,11 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -21,31 +21,26 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PANEL_DATA_COLLECTION_H
-#define PANEL_DATA_COLLECTION_H
+#ifndef WX_TREEBOOK_H
+#define WX_TREEBOOK_H
 
-#include "panel_data_collection_base.h"
+#include <wx/treebook.h>
 
-
-class COMMON_SETTINGS;
-class PAGED_DIALOG;
-
-
-class PANEL_DATA_COLLECTION : public PANEL_DATA_COLLECTION_BASE
+class WX_TREEBOOK : public wxTreebook
 {
 public:
-    PANEL_DATA_COLLECTION( wxWindow* aParent );
+    WX_TREEBOOK( wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize, long style = wxBK_DEFAULT,
+                 const wxString& name = wxEmptyString );
 
-    void ResetPanel() override;
+    bool AddLazyPage( std::function<wxWindow*( wxWindow* aParent )> aLazyCtor,
+                      const wxString& text, bool bSelect = false, int imageId = NO_IMAGE );
 
-protected:
-    bool TransferDataFromWindow() override;
-    bool TransferDataToWindow() override;
+    bool AddLazySubPage( std::function<wxWindow*( wxWindow* aParent )> aLazyCtor,
+                         const wxString& text, bool bSelect = false, int imageId = NO_IMAGE );
 
-    virtual void OnResetIdClick( wxCommandEvent& aEvent ) override;
-
-private:
-    void applySettingsToPanel();
+    wxWindow* ResolvePage( int aPage );
 };
 
-#endif //PANEL_DATA_COLLECTION_H
+
+#endif // WX_TREEBOOK_H

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,12 +50,11 @@ private:
 public:
     /**
      * Creates the severities setup panel
-     * @param aParent is the dialog parent
      * @param aItems is a list of error types that can have a severity.  Must have one or more!
      * @param aSeverities is a map of error code to severity
      * @param aPinMapSpecialCase is used to special-case the ERCE_PIN_TO_PIN_WARNING
      */
-    PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent,
+    PANEL_SETUP_SEVERITIES( wxWindow* aParentWindow,
                             std::vector<std::reference_wrapper<RC_ITEM>> aItems,
                             std::map<int, SEVERITY>& aSeverities,
                             RC_ITEM* aPinMapSpecialCase = nullptr );

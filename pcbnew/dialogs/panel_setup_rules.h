@@ -38,7 +38,7 @@ class HTML_MESSAGE_BOX;
 class PANEL_SETUP_RULES : public PANEL_SETUP_RULES_BASE
 {
 public:
-    PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame );
+    PANEL_SETUP_RULES( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame );
     ~PANEL_SETUP_RULES( ) override;
 
 private:
@@ -53,7 +53,6 @@ private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    PAGED_DIALOG*     m_Parent;
     PCB_EDIT_FRAME*   m_frame;
     SCINTILLA_TRICKS* m_scintillaTricks;
     wxString          m_originalText;

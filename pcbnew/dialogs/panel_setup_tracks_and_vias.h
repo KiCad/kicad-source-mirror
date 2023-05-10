@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,7 +39,7 @@ class BOARD_DESIGN_SETTINGS;
 class PANEL_SETUP_TRACKS_AND_VIAS : public PANEL_SETUP_TRACKS_AND_VIAS_BASE
 {
 public:
-    PANEL_SETUP_TRACKS_AND_VIAS( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame );
+    PANEL_SETUP_TRACKS_AND_VIAS( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame );
     ~PANEL_SETUP_TRACKS_AND_VIAS() override;
 
     bool TransferDataToWindow() override;
@@ -67,7 +67,6 @@ protected:
     void AppendDiffPairs( int aWidth, int aGap, int aViaGap );
 
 private:
-    PAGED_DIALOG*            m_Parent;
     PCB_EDIT_FRAME*          m_Frame;
     BOARD*                   m_Pcb;
     BOARD_DESIGN_SETTINGS*   m_BrdSettings;

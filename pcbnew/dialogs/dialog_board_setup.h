@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -52,26 +52,25 @@ protected:
 
     PCB_EDIT_FRAME*                  m_frame;
 
-    PANEL_SETUP_CONSTRAINTS*         m_constraints;
     PANEL_SETUP_LAYERS*              m_layers;
-    PANEL_SETUP_TEXT_AND_GRAPHICS*   m_textAndGraphics;
-    PANEL_SETUP_FORMATTING*          m_formatting;
-    PANEL_SETUP_NETCLASSES*          m_netclasses;
-    PANEL_SETUP_RULES*               m_rules;
-    PANEL_SETUP_TRACKS_AND_VIAS*     m_tracksAndVias;
-    PANEL_SETUP_MASK_AND_PASTE*      m_maskAndPaste;
     PANEL_SETUP_BOARD_STACKUP*       m_physicalStackup;
     PANEL_SETUP_BOARD_FINISH*        m_boardFinish;
-    PANEL_SETUP_SEVERITIES*          m_severities;
-    PANEL_TEXT_VARIABLES*            m_textVars;
 
 public:
     static std::mutex g_Mutex;      // Mutex to prevent multiple windows opening
 
 private:
     int m_currentPage;              // the current page index
-    int m_physicalStackupPage;      // the page index of the PANEL_SETUP_BOARD_STACKUP page
-    int m_layerSetupPage;           // the page index of the PANEL_SETUP_LAYERS page
+    int m_textAndGraphicsPage;
+    int m_constraintsPage;
+    int m_formattingPage;
+    int m_physicalStackupPage;
+    int m_tracksAndViasPage;
+    int m_netclassesPage;
+    int m_maskAndPagePage;
+    int m_rulesPage;
+    int m_severitiesPage;
+    int m_textVarsPage;
 };
 
 
