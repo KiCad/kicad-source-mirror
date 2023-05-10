@@ -21,10 +21,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-09 09:51-0700\n"
-"PO-Revision-Date: 2023-05-06 17:52+0000\n"
-"Last-Translator: Ken Ovo <Elektroniker@aon.at>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2023-05-11 09:52+0000\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -56,7 +56,7 @@ msgstr "Alle Dateien"
 #: 3d-viewer/3d_canvas/board_adapter.cpp:328
 #, fuzzy
 msgid "Build board outline"
-msgstr "Erstelle den Platinenumriss"
+msgstr "Platinenumriss erstellen"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:536
 msgid "Create layers"
@@ -121,23 +121,22 @@ msgstr "Technische Lagen erstellen"
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:901
 #, fuzzy, c-format
 msgid "Build Tech layer %d"
-msgstr "Erstelle Technische Lage %d"
+msgstr "Technische Lage %d erstellen"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1061
 #, fuzzy
 msgid "Build BVH for holes and vias"
-msgstr "Erstelle BVH für Bohrungen und Durchkontaktierungen"
+msgstr "BVH für Bohrungen und Durchkontaktierungen erstellen"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:390
 msgid "OpenGL context creation error"
 msgstr "OpenGL-Kontext-Erstellungsfehler"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:421
-#, fuzzy
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
 msgstr ""
-"Ihre OpenGL-Version wird nicht unterstützt. Es ist mindestens Version 1.5 "
-"erforderlich."
+"Ihre OpenGL-Version wird nicht unterstützt. Das erforderliche Minimum ist 1."
+"5."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:555
 #, c-format
