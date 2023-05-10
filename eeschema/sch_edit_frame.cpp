@@ -1496,11 +1496,16 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
 
         for( unsigned ii = 0; ii < changed_list->GetCount(); ++ii )
         {
-            SCH_ITEM* item = static_cast<SCH_ITEM*>( changed_list->GetPickedItem( ii ) );
+            EDA_ITEM* item = changed_list->GetPickedItem( ii );
 
-            std::vector<VECTOR2I> tmp_pts = item->GetConnectionPoints();
+            if( !item || !IsEeschemaType( item->Type() ) )
+                continue;
+
+            SCH_ITEM* sch_item = static_cast<SCH_ITEM*>( item );
+
+            std::vector<VECTOR2I> tmp_pts = sch_item->GetConnectionPoints();
             pts.insert( pts.end(), tmp_pts.begin(), tmp_pts.end() );
-            changed_items.insert( item );
+            changed_items.insert( sch_item );
         }
 
         for( VECTOR2I& pt: pts )
