@@ -38,7 +38,7 @@ class BOARD_DESIGN_SETTINGS;
 class PANEL_SETUP_TEXT_AND_GRAPHICS : public PANEL_SETUP_TEXT_AND_GRAPHICS_BASE
 {
 public:
-    PANEL_SETUP_TEXT_AND_GRAPHICS( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame );
+    PANEL_SETUP_TEXT_AND_GRAPHICS( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame );
     ~PANEL_SETUP_TEXT_AND_GRAPHICS( ) override;
 
     bool TransferDataToWindow() override;

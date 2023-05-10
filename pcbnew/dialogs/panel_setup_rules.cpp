@@ -33,16 +33,14 @@
 #include <tool/tool_manager.h>
 #include <panel_setup_rules.h>
 #include <widgets/wx_html_report_box.h>
-#include <wx/treebook.h>
 #include <dialogs/html_message_box.h>
 #include <scintilla_tricks.h>
 #include <drc/drc_rule_parser.h>
 #include <tools/drc_tool.h>
 #include <pgm_base.h>
 
-PANEL_SETUP_RULES::PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame ) :
-        PANEL_SETUP_RULES_BASE( aParent->GetTreebook() ),
-        m_Parent( aParent ),
+PANEL_SETUP_RULES::PANEL_SETUP_RULES( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame ) :
+        PANEL_SETUP_RULES_BASE( aParentWindow ),
         m_frame( aFrame ),
         m_scintillaTricks( nullptr ),
         m_helpWindow( nullptr )
@@ -50,7 +48,8 @@ PANEL_SETUP_RULES::PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFr
     m_scintillaTricks = new SCINTILLA_TRICKS( m_textEditor, wxT( "()" ), false,
             [this]()
             {
-                wxPostEvent( m_Parent, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
+                wxPostEvent( PAGED_DIALOG::GetDialog( this ),
+                             wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
             } );
 
     m_textEditor->AutoCompSetSeparator( '|' );
@@ -170,7 +169,7 @@ void PANEL_SETUP_RULES::OnContextMenu(wxMouseEvent &event)
 
 void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
 {
-    m_Parent->SetModified();
+    PAGED_DIALOG::GetDialog( this )->SetModified();
     m_textEditor->SearchAnchor();
 
     wxString rules = m_textEditor->GetText();

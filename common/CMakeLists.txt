@@ -216,6 +216,7 @@ set( COMMON_WIDGET_SRCS
     widgets/wx_panel.cpp
     widgets/wx_progress_reporters.cpp
     widgets/wx_splitter_window.cpp
+    widgets/wx_treebook.cpp
     )
 
 set( COMMON_DRAWING_SHEET_SRCS

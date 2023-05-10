@@ -39,7 +39,7 @@ struct SCROLL_MOD_SET
 class PANEL_MOUSE_SETTINGS : public PANEL_MOUSE_SETTINGS_BASE
 {
 public:
-    PANEL_MOUSE_SETTINGS( PAGED_DIALOG* aDialog, wxWindow* aParent );
+    PANEL_MOUSE_SETTINGS( wxWindow* aParent );
 
     ~PANEL_MOUSE_SETTINGS();
 
@@ -62,9 +62,6 @@ private:
     void updateScrollModButtons();
 
     bool isScrollModSetValid( const SCROLL_MOD_SET& aSet );
-
-protected:
-    PAGED_DIALOG*  m_dialog;
 
 private:
     SCROLL_MOD_SET m_currentScrollMod;

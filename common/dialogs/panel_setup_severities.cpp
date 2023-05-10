@@ -28,14 +28,13 @@
 #include <wx/radiobut.h>
 #include <wx/scrolwin.h>
 #include <wx/stattext.h>
-#include <wx/treebook.h>
 
 
-PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent,
+PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( wxWindow* aParentWindow,
                                                 std::vector<std::reference_wrapper<RC_ITEM>> aItems,
                                                 std::map<int, SEVERITY>& aSeverities,
                                                 RC_ITEM* aPinMapSpecialCase ) :
-        wxPanel( aParent->GetTreebook() ),
+        wxPanel( aParentWindow ),
         m_severities( aSeverities ),
         m_items( aItems ),
         m_pinMapSpecialCase( aPinMapSpecialCase )

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@ class NET_SETTINGS;
 class PANEL_SETUP_NETCLASSES : public PANEL_SETUP_NETCLASSES_BASE
 {
 public:
-    PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, EDA_DRAW_FRAME* aFrame,
+    PANEL_SETUP_NETCLASSES( wxWindow* aParentWindow, EDA_DRAW_FRAME* aFrame,
                             std::shared_ptr<NET_SETTINGS> aSettings,
                             const std::set<wxString>& aNetNames, bool isEEschema );
     ~PANEL_SETUP_NETCLASSES( ) override;
@@ -69,7 +69,6 @@ private:
 
 private:
     EDA_DRAW_FRAME*                 m_frame;
-    PAGED_DIALOG*                   m_parent;
     bool                            m_isEEschema;
     std::shared_ptr<NET_SETTINGS>   m_netSettings;
     std::set<wxString>              m_netNames;

@@ -37,8 +37,8 @@
 #include <settings/settings_manager.h>
 
 
-PANEL_DATA_COLLECTION::PANEL_DATA_COLLECTION( PAGED_DIALOG* aDialog, wxWindow* aParent ) :
-        PANEL_DATA_COLLECTION_BASE( aParent ), m_dialog( aDialog )
+PANEL_DATA_COLLECTION::PANEL_DATA_COLLECTION( wxWindow* aParent ) :
+        PANEL_DATA_COLLECTION_BASE( aParent )
 {
 }
 

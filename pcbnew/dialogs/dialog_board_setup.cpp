@@ -38,12 +38,12 @@
 #include <settings/settings_manager.h>
 #include <widgets/resettable_panel.h>
 #include <widgets/wx_progress_reporters.h>
+#include <widgets/wx_treebook.h>
 #include <wildcards_and_files_ext.h>
 
 #include "dialog_board_setup.h"
 #include "panel_setup_rules.h"
 
-#include <wx/treebook.h>
 
 std::mutex DIALOG_BOARD_SETUP::g_Mutex;
 
@@ -54,35 +54,18 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
         m_frame( aFrame )
 {
     SetEvtHandlerEnabled( false );
-    PROJECT_FILE&          project = aFrame->Prj().GetProjectFile();
-    BOARD*                 board = aFrame->GetBoard();
-    BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
 
-    m_layers = new PANEL_SETUP_LAYERS( this, aFrame );
-    m_textAndGraphics = new PANEL_SETUP_TEXT_AND_GRAPHICS( this, aFrame );
-    m_formatting = new PANEL_SETUP_FORMATTING( this, aFrame );
-    m_constraints = new PANEL_SETUP_CONSTRAINTS( this, aFrame );
-    m_rules = new PANEL_SETUP_RULES( this, aFrame );
-    m_tracksAndVias = new PANEL_SETUP_TRACKS_AND_VIAS( this, aFrame );
-    m_maskAndPaste = new PANEL_SETUP_MASK_AND_PASTE( this, aFrame );
-    m_physicalStackup = new PANEL_SETUP_BOARD_STACKUP( this, aFrame, m_layers );
-    m_boardFinish = new PANEL_SETUP_BOARD_FINISH( this, aFrame );
+    m_layers = new PANEL_SETUP_LAYERS( this, m_frame );
+    m_physicalStackup = new PANEL_SETUP_BOARD_STACKUP( this, m_frame, m_layers );
+    m_boardFinish = new PANEL_SETUP_BOARD_FINISH( this, m_frame );
 
-    m_severities = new PANEL_SETUP_SEVERITIES( this, DRC_ITEM::GetItemsWithSeverities(),
-                                               bds.m_DRCSeverities );
-
-    m_netclasses = new PANEL_SETUP_NETCLASSES( this, aFrame, project.NetSettings(),
-                                               board->GetNetClassAssignmentCandidates(), false );
-
-    m_textVars = new PANEL_TEXT_VARIABLES( m_treebook, &Prj() );
+    m_currentPage = -1;
 
     /*
      * WARNING: If you change page names you MUST update calls to ShowBoardSetupDialog().
      */
 
     m_treebook->AddPage( new wxPanel( GetTreebook() ), _( "Board Stackup" ) );
-
-    m_currentPage = -1;
 
     /*
      * WARNING: Code currently relies on the layers setup coming before the physical stackup panel,
@@ -91,27 +74,81 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
      * that the order of these pages should be changed.
      */
     m_treebook->AddSubPage( m_layers,  _( "Board Editor Layers" ) );
-    m_layerSetupPage = 1;
 
+    m_physicalStackupPage = m_treebook->GetPageCount();
     m_treebook->AddSubPage( m_physicalStackup,  _( "Physical Stackup" ) );
-
-    // Change this value if m_physicalStackup is not the page 2 of m_treebook
-    m_physicalStackupPage = 2;  // The page number (from 0) to select the m_physicalStackup panel
-
     m_treebook->AddSubPage( m_boardFinish, _( "Board Finish" ) );
-    m_treebook->AddSubPage( m_maskAndPaste,  _( "Solder Mask/Paste" ) );
+
+    m_maskAndPagePage = m_treebook->GetPageCount();
+    m_treebook->AddLazySubPage(
+            [this]( wxWindow* aParent ) -> wxWindow*
+            {
+                return new PANEL_SETUP_MASK_AND_PASTE( aParent, m_frame );
+            }, _( "Solder Mask/Paste" ) );
 
     m_treebook->AddPage( new wxPanel( GetTreebook() ), _( "Text & Graphics" ) );
-    m_treebook->AddSubPage( m_textAndGraphics,  _( "Defaults" ) );
-    m_treebook->AddSubPage( m_formatting, _( "Formatting" ) );
-    m_treebook->AddSubPage( m_textVars, _( "Text Variables" ) );
+
+    m_textAndGraphicsPage = m_treebook->GetPageCount();
+    m_treebook->AddLazySubPage(
+            [this]( wxWindow* aParent ) -> wxWindow*
+            {
+                return new PANEL_SETUP_TEXT_AND_GRAPHICS( aParent, m_frame );
+            }, _( "Defaults" ) );
+
+    m_formattingPage = m_treebook->GetPageCount();
+    m_treebook->AddLazySubPage(
+            [this]( wxWindow* aParent ) -> wxWindow*
+            {
+                return new PANEL_SETUP_FORMATTING( aParent, m_frame );
+            }, _( "Formatting" ) );
+
+    m_textVarsPage = m_treebook->GetPageCount();
+    m_treebook->AddLazySubPage(
+            [this]( wxWindow* aParent ) -> wxWindow*
+            {
+                return new PANEL_TEXT_VARIABLES( aParent, &Prj() );
+            }, _( "Text Variables" ) );
 
     m_treebook->AddPage( new wxPanel( GetTreebook() ), _( "Design Rules" ) );
-    m_treebook->AddSubPage( m_constraints,  _( "Constraints" ) );
-    m_treebook->AddSubPage( m_tracksAndVias, _( "Pre-defined Sizes" ) );
-    m_treebook->AddSubPage( m_netclasses,  _( "Net Classes" ) );
-    m_treebook->AddSubPage( m_rules, _( "Custom Rules" ) );
-    m_treebook->AddSubPage( m_severities, _( "Violation Severity" ) );
+
+    m_constraintsPage = m_treebook->GetPageCount();
+    m_treebook->AddLazySubPage(
+            [this]( wxWindow* aParent ) -> wxWindow*
+            {
+                return new PANEL_SETUP_CONSTRAINTS( aParent, m_frame );
+            }, _( "Constraints" ) );
+
+    m_tracksAndViasPage = m_treebook->GetPageCount();
+    m_treebook->AddLazySubPage(
+            [this]( wxWindow* aParent ) -> wxWindow*
+            {
+                return new PANEL_SETUP_TRACKS_AND_VIAS( aParent, m_frame );
+            },  _( "Pre-defined Sizes" ) );
+
+    m_netclassesPage = m_treebook->GetPageCount();
+    m_treebook->AddLazySubPage(
+            [this]( wxWindow* aParent ) -> wxWindow*
+            {
+                return new PANEL_SETUP_NETCLASSES( aParent, m_frame,
+                                                   m_frame->Prj().GetProjectFile().NetSettings(),
+                                                   m_frame->GetBoard()->GetNetClassAssignmentCandidates(),
+                                                   false );
+            }, _( "Net Classes" ) );
+
+    m_rulesPage = m_treebook->GetPageCount();
+    m_treebook->AddLazySubPage(
+            [this]( wxWindow* aParent ) -> wxWindow*
+            {
+                return new PANEL_SETUP_RULES( aParent, m_frame );
+            }, _( "Custom Rules" ) );
+
+    m_severitiesPage = m_treebook->GetPageCount();
+    m_treebook->AddLazySubPage(
+            [this]( wxWindow* aParent ) -> wxWindow*
+            {
+                return new PANEL_SETUP_SEVERITIES( aParent, DRC_ITEM::GetItemsWithSeverities(),
+                                                   m_frame->GetBoard()->GetDesignSettings().m_DRCSeverities );
+            }, _( "Violation Severity" ) );
 
     for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
         m_treebook->ExpandNode( i );
@@ -245,25 +282,46 @@ void DIALOG_BOARD_SETUP::onAuxiliaryAction( wxCommandEvent& aEvent )
         }
 
         if( importDlg.m_TextAndGraphicsOpt->GetValue() )
-            m_textAndGraphics->ImportSettingsFrom( otherBoard );
+        {
+            static_cast<PANEL_SETUP_TEXT_AND_GRAPHICS*>( m_treebook->ResolvePage( m_textAndGraphicsPage ) )
+                    ->ImportSettingsFrom( otherBoard );
+        }
 
         if( importDlg.m_FormattingOpt->GetValue() )
-            m_formatting->ImportSettingsFrom( otherBoard );
+        {
+            static_cast<PANEL_SETUP_FORMATTING*>( m_treebook->ResolvePage( m_formattingPage ) )
+                    ->ImportSettingsFrom( otherBoard );
+        }
 
         if( importDlg.m_ConstraintsOpt->GetValue() )
-            m_constraints->ImportSettingsFrom( otherBoard );
+        {
+            static_cast<PANEL_SETUP_CONSTRAINTS*>( m_treebook->ResolvePage( m_constraintsPage ) )
+                    ->ImportSettingsFrom( otherBoard );
+        }
 
         if( importDlg.m_NetclassesOpt->GetValue() )
-            m_netclasses->ImportSettingsFrom( otherPrj->GetProjectFile().m_NetSettings );
+        {
+            static_cast<PANEL_SETUP_NETCLASSES*>( m_treebook->ResolvePage( m_netclassesPage ) )
+                    ->ImportSettingsFrom( otherPrj->GetProjectFile().m_NetSettings );
+        }
 
         if( importDlg.m_TracksAndViasOpt->GetValue() )
-            m_tracksAndVias->ImportSettingsFrom( otherBoard );
+        {
+            static_cast<PANEL_SETUP_TRACKS_AND_VIAS*>( m_treebook->ResolvePage( m_tracksAndViasPage ) )
+                    ->ImportSettingsFrom( otherBoard );
+        }
 
         if( importDlg.m_MaskAndPasteOpt->GetValue() )
-            m_maskAndPaste->ImportSettingsFrom( otherBoard );
+        {
+            static_cast<PANEL_SETUP_MASK_AND_PASTE*>( m_treebook->ResolvePage( m_maskAndPagePage ) )
+                    ->ImportSettingsFrom( otherBoard );
+        }
 
         if( importDlg.m_SeveritiesOpt->GetValue() )
-            m_severities->ImportSettingsFrom( otherBoard->GetDesignSettings().m_DRCSeverities );
+        {
+            static_cast<PANEL_SETUP_SEVERITIES*>( m_treebook->ResolvePage( m_severitiesPage ) )
+                    ->ImportSettingsFrom( otherBoard->GetDesignSettings().m_DRCSeverities );
+        }
 
         if( otherPrj != &m_frame->Prj() )
             otherBoard->ClearProject();
