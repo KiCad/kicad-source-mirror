@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -31,7 +31,7 @@ class PAGED_DIALOG;
 class PANEL_SETUP_FORMATTING : public PANEL_SETUP_FORMATTING_BASE
 {
 public:
-    PANEL_SETUP_FORMATTING( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame );
+    PANEL_SETUP_FORMATTING( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame );
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,12 +26,11 @@
 #include <board_design_settings.h>
 #include <dialogs/dialog_text_entry.h>
 #include <panel_setup_mask_and_paste.h>
-#include <wx/treebook.h>
 
 
-PANEL_SETUP_MASK_AND_PASTE::PANEL_SETUP_MASK_AND_PASTE( PAGED_DIALOG* aParent,
+PANEL_SETUP_MASK_AND_PASTE::PANEL_SETUP_MASK_AND_PASTE( wxWindow* aParentWindow,
                                                         PCB_EDIT_FRAME* aFrame ) :
-        PANEL_SETUP_MASK_AND_PASTE_BASE( aParent->GetTreebook() ),
+        PANEL_SETUP_MASK_AND_PASTE_BASE( aParentWindow ),
         m_maskExpansion( aFrame, m_maskMarginLabel, m_maskMarginCtrl, m_maskMarginUnits ),
         m_maskMinWidth( aFrame, m_maskMinWidthLabel, m_maskMinWidthCtrl, m_maskMinWidthUnits ),
         m_maskToCopperClearance( aFrame, m_maskToCopperClearanceLabel, m_maskToCopperClearanceCtrl,

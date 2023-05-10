@@ -56,12 +56,12 @@
 #include <widgets/wx_infobar.h>
 #include <widgets/wx_aui_art_providers.h>
 #include <widgets/wx_grid.h>
+#include <widgets/wx_treebook.h>
 #include <wx/app.h>
 #include <wx/config.h>
 #include <wx/display.h>
 #include <wx/stdpaths.h>
 #include <wx/string.h>
-#include <wx/treebook.h>
 #include <kiplatform/app.h>
 #include <kiplatform/ui.h>
 
@@ -1011,23 +1011,42 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
     PAGED_DIALOG dlg( this, _( "Preferences" ), true );
 
     dlg.SetEvtHandlerEnabled( false );
-    wxTreebook*  book = dlg.GetTreebook();
 
+    WX_TREEBOOK*            book = dlg.GetTreebook();
     PANEL_HOTKEYS_EDITOR*   hotkeysPanel = new PANEL_HOTKEYS_EDITOR( this, book, false );
     KIFACE*                 kiface = nullptr;
     std::vector<int>        expand;
 
     Kiway().GetActions( hotkeysPanel->ActionsList() );
 
-    book->AddPage( new PANEL_COMMON_SETTINGS( &dlg, book ), _( "Common" ) );
-    book->AddPage( new PANEL_MOUSE_SETTINGS( &dlg, book ), _( "Mouse and Touchpad" ) );
+    book->AddLazyPage(
+            []( wxWindow* aParent ) -> wxWindow*
+            {
+                return new PANEL_COMMON_SETTINGS( aParent );
+            },
+            _( "Common" ) );
+
+    book->AddLazyPage(
+            []( wxWindow* aParent ) -> wxWindow*
+            {
+                return new PANEL_MOUSE_SETTINGS( aParent );
+            }, _( "Mouse and Touchpad" ) );
+
     book->AddPage( hotkeysPanel, _( "Hotkeys" ) );
 
 #ifdef KICAD_USE_SENTRY
-    book->AddPage( new PANEL_DATA_COLLECTION( &dlg, book ), _( "Data Collection" ) );
+    book->AddLazyPage(
+            []( wxWindow* aParent ) -> wxWindow*
+            {
+                return new PANEL_DATA_COLLECTION( aParent );
+            }, _( "Data Collection" ) );
 #endif
 
-#define CREATE_PANEL( key ) kiface->CreateKiWindow( book, key, &Kiway() )
+#define LAZY_CTOR( key )                                                \
+        [=]( wxWindow* aParent )                                        \
+        {                                                               \
+            return kiface->CreateKiWindow( aParent, key, &Kiway() );    \
+        }
 
     // If a dll is not loaded, the loader will show an error message.
 
@@ -1041,20 +1060,19 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
             expand.push_back( book->GetPageCount() );
 
         book->AddPage( new wxPanel( book ), _( "Symbol Editor" ) );
-        book->AddSubPage( CREATE_PANEL( PANEL_SYM_DISP_OPTIONS ), _( "Display Options" ) );
-        book->AddSubPage( CREATE_PANEL( PANEL_SYM_EDIT_OPTIONS ), _( "Editing Options" ) );
-        book->AddSubPage( CREATE_PANEL( PANEL_SYM_COLORS ), _( "Colors" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_DISP_OPTIONS ), _( "Display Options" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_EDIT_OPTIONS ), _( "Editing Options" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_COLORS ), _( "Colors" ) );
 
         if( GetFrameType() == FRAME_SCH )
             expand.push_back( book->GetPageCount() );
 
         book->AddPage( new wxPanel( book ), _( "Schematic Editor" ) );
-        book->AddSubPage( CREATE_PANEL( PANEL_SCH_DISP_OPTIONS ), _( "Display Options" ) );
-        book->AddSubPage( CREATE_PANEL( PANEL_SCH_EDIT_OPTIONS ), _( "Editing Options" ) );
-        book->AddSubPage( CREATE_PANEL( PANEL_SCH_ANNO_OPTIONS ), _( "Annotation Options" ) );
-        book->AddSubPage( CREATE_PANEL( PANEL_SCH_COLORS ), _( "Colors" ) );
-        book->AddSubPage( CREATE_PANEL( PANEL_SCH_FIELD_NAME_TEMPLATES ),
-                          _( "Field Name Templates" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_DISP_OPTIONS ), _( "Display Options" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_EDIT_OPTIONS ), _( "Editing Options" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_ANNO_OPTIONS ), _( "Annotation Options" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_COLORS ), _( "Colors" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_FIELD_NAME_TEMPLATES ), _( "Field Name Templates" ) );
     }
     catch( ... )
     {
@@ -1070,29 +1088,29 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
             expand.push_back( book->GetPageCount() );
 
         book->AddPage( new wxPanel( book ), _( "Footprint Editor" ) );
-        book->AddSubPage( CREATE_PANEL( PANEL_FP_DISPLAY_OPTIONS ), _( "Display Options" ) );
-        book->AddSubPage( CREATE_PANEL( PANEL_FP_EDIT_OPTIONS ), _( "Editing Options" ) );
-        book->AddSubPage( CREATE_PANEL( PANEL_FP_COLORS ), _( "Colors" ) );
-        book->AddSubPage( CREATE_PANEL( PANEL_FP_DEFAULT_VALUES ), _( "Default Values" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_FP_DISPLAY_OPTIONS ), _( "Display Options" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_FP_EDIT_OPTIONS ), _( "Editing Options" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_FP_COLORS ), _( "Colors" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_FP_DEFAULT_VALUES ), _( "Default Values" ) );
 
         if( GetFrameType() ==  FRAME_PCB_EDITOR )
             expand.push_back( book->GetPageCount() );
 
         book->AddPage( new wxPanel( book ), _( "PCB Editor" ) );
-        book->AddSubPage( CREATE_PANEL( PANEL_PCB_DISPLAY_OPTIONS ), _( "Display Options" ) );
-        book->AddSubPage( CREATE_PANEL( PANEL_PCB_EDIT_OPTIONS ), _( "Editing Options" ) );
-        book->AddSubPage( CREATE_PANEL( PANEL_PCB_COLORS ), _( "Colors" ) );
-        book->AddSubPage( CREATE_PANEL( PANEL_PCB_ACTION_PLUGINS ), _( "Action Plugins" ) );
-        book->AddSubPage( CREATE_PANEL( PANEL_PCB_ORIGINS_AXES ), _( "Origins & Axes" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_DISPLAY_OPTIONS ), _( "Display Options" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_EDIT_OPTIONS ), _( "Editing Options" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_COLORS ), _( "Colors" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_ACTION_PLUGINS ), _( "Action Plugins" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_ORIGINS_AXES ), _( "Origins & Axes" ) );
 
         if( GetFrameType() == FRAME_PCB_DISPLAY3D )
             expand.push_back( book->GetPageCount() );
 
         book->AddPage( new wxPanel( book ), _( "3D Viewer" ) );
-        book->AddSubPage( CREATE_PANEL( PANEL_3DV_DISPLAY_OPTIONS ), _( "General" ) );
-        book->AddSubPage( CREATE_PANEL( PANEL_3DV_OPENGL ), _( "Realtime Renderer" ) );
-        book->AddSubPage( CREATE_PANEL( PANEL_3DV_RAYTRACING ), _( "Raytracing Renderer" ) );
-        book->AddSubPage( CREATE_PANEL( PANEL_3DV_COLORS ), _( "Colors" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_3DV_DISPLAY_OPTIONS ), _( "General" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_3DV_OPENGL ), _( "Realtime Renderer" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_3DV_RAYTRACING ), _( "Raytracing Renderer" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_3DV_COLORS ), _( "Colors" ) );
     }
     catch( ... )
     {
@@ -1108,9 +1126,9 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
             expand.push_back( book->GetPageCount() );
 
         book->AddPage( new wxPanel( book ), _( "Gerber Viewer" ) );
-        book->AddSubPage( CREATE_PANEL( PANEL_GBR_DISPLAY_OPTIONS ), _( "Display Options" ) );
-        book->AddSubPage( CREATE_PANEL( PANEL_GBR_COLORS ), _( "Colors" ) );
-        book->AddSubPage( CREATE_PANEL( PANEL_GBR_EXCELLON_OPTIONS ), _( "Excellon Options" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_DISPLAY_OPTIONS ), _( "Display Options" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_COLORS ), _( "Colors" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_EXCELLON_OPTIONS ), _( "Excellon Options" ) );
     }
     catch( ... )
     {
@@ -1125,10 +1143,14 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
             expand.push_back( book->GetPageCount() );
 
         book->AddPage( new wxPanel( book ), _( "Drawing Sheet Editor" ) );
-        book->AddSubPage( CREATE_PANEL( PANEL_DS_DISPLAY_OPTIONS ), _( "Display Options" ) );
-        book->AddSubPage( CREATE_PANEL( PANEL_DS_COLORS ), _( "Colors" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_DS_DISPLAY_OPTIONS ), _( "Display Options" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_DS_COLORS ), _( "Colors" ) );
 
-        book->AddPage( new PANEL_PCM_SETTINGS( book ), _( "Plugin and Content Manager" ) );
+        book->AddLazyPage(
+                []( wxWindow* aParent ) -> wxWindow*
+                {
+                    return new PANEL_PCM_SETTINGS( aParent );
+                }, _( "Plugin and Content Manager" ) );
     }
     catch( ... )
     {
@@ -1156,7 +1178,7 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
         dlg.Kiway().CommonSettingsChanged( false, false );
     }
 
-#undef CREATE_PANEL
+#undef LAZY_CTOR
 }
 
 

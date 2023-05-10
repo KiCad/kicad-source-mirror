@@ -30,8 +30,8 @@
 #include <wx/treebook.h>
 
 
-PANEL_SETUP_FORMATTING::PANEL_SETUP_FORMATTING( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame ) :
-        PANEL_SETUP_FORMATTING_BASE( aParent->GetTreebook() ),
+PANEL_SETUP_FORMATTING::PANEL_SETUP_FORMATTING( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame ) :
+        PANEL_SETUP_FORMATTING_BASE( aParentWindow ),
         m_frame( aFrame )
 {
     wxSize minSize = m_dashLengthCtrl->GetMinSize();

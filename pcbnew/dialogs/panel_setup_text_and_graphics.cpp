@@ -54,9 +54,9 @@ enum
 };
 
 
-PANEL_SETUP_TEXT_AND_GRAPHICS::PANEL_SETUP_TEXT_AND_GRAPHICS( PAGED_DIALOG* aParent,
+PANEL_SETUP_TEXT_AND_GRAPHICS::PANEL_SETUP_TEXT_AND_GRAPHICS( wxWindow* aParentWindow,
                                                               PCB_EDIT_FRAME* aFrame ) :
-        PANEL_SETUP_TEXT_AND_GRAPHICS_BASE( aParent->GetTreebook() ),
+        PANEL_SETUP_TEXT_AND_GRAPHICS_BASE( aParentWindow ),
         m_arrowLength( aFrame, m_lblArrowLength, m_dimensionArrowLength, m_arrowLengthUnits ),
         m_extensionOffset( aFrame, m_lblExtensionOffset, m_dimensionExtensionOffset,
                            m_dimensionExtensionOffsetUnits )

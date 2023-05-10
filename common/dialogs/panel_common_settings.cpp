@@ -44,9 +44,8 @@
  * Ugly as it all is, it does improve our usability on various platforms.
  */
 
-PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( DIALOG_SHIM* aDialog, wxWindow* aParent )
+PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( wxWindow* aParent )
         : PANEL_COMMON_SETTINGS_BASE( aParent ),
-          m_dialog( aDialog ),
           m_iconScaleLabel( nullptr ),
           m_iconScaleSlider( nullptr ),
           m_iconScaleAuto( nullptr ),
