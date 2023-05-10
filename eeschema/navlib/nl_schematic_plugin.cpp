@@ -28,6 +28,8 @@ NL_SCHEMATIC_PLUGIN::NL_SCHEMATIC_PLUGIN()
 {
     if( ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
         m_impl = new NL_SCHEMATIC_PLUGIN_IMPL();
+    else
+        m_impl = nullptr;
 }
 
 
