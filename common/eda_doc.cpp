@@ -145,7 +145,8 @@ bool GetAssociatedDocument( wxWindow* aParent, const wxString& aDocName, PROJECT
     wxFileName currentFileName( fullfilename );
 
     // Use wxWidgets to resolve any "." and ".." in the path
-    fullfilename = currentFileName.GetAbsolutePath();
+    currentFileName.MakeAbsolute();
+    fullfilename = currentFileName.GetFullPath();
 
     wxString file_ext = currentFileName.GetExt();
 
