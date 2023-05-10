@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-09 09:51-0700\n"
-"PO-Revision-Date: 2023-05-04 22:43+0000\n"
+"PO-Revision-Date: 2023-05-11 09:52+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5529,9 +5529,9 @@ msgid "Deactivate selected"
 msgstr "Poista valinta"
 
 #: common/lib_table_grid_tricks.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid "Library settings for %s..."
-msgstr "Muokkaa uusien anturoiden asetuksia"
+msgstr "Kirjastoasetukset kohteelle %s..."
 
 #: common/lib_tree_model.cpp:146
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
@@ -8455,19 +8455,18 @@ msgid "Connected to database successfully"
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Database connection failed: %s"
-msgstr "%s vyöhykeliitäntä: %s."
+msgstr "Tietokantayhteys epäonnistui: %s"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:117
-#, fuzzy
 msgid "No connection to database"
-msgstr "Anturan liittäminen vyöhykkeisiin:"
+msgstr "Ei yhteyttä tietokantaan"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "Loaded %zu libraries"
-msgstr "Ladataan symbolikirjastoja"
+msgstr "Ladattu %zu kirjastoa"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:32
 #, fuzzy
@@ -8493,9 +8492,8 @@ msgid "Connection String:"
 msgstr "Liitin:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:85
-#, fuzzy
 msgid "Test"
-msgstr "Tee &ERC"
+msgstr "Testaa"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:99
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:190
@@ -8517,7 +8515,7 @@ msgstr "Lataa pikanäppäinasettelun asetustiedosto"
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:120
 #, fuzzy
 msgid "Caching"
-msgstr "Etsitään..."
+msgstr "Luetaan välimuistiin"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:127
 #, fuzzy
@@ -10887,9 +10885,8 @@ msgid "Replace matches in reference designators"
 msgstr "Korvaa osumat viitenimikkeissä"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:123
-#, fuzzy
 msgid "Replace"
-msgstr "&Korvaa"
+msgstr "Korvaa"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:41
 msgid "Schematic Setup"
@@ -11267,23 +11264,20 @@ msgid "Distortion"
 msgstr "Vääristymä"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:228
-#, fuzzy
 msgid "Measured node:"
-msgstr "Mitattu solmu"
+msgstr "Mitattu solmu:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:238
-#, fuzzy
 msgid "Reference node:"
-msgstr "Viitesolmu"
+msgstr "Viitesolmu:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:245
 msgid "(optional; default GND)"
 msgstr "(valinnainen; oletus GND)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:249
-#, fuzzy
 msgid "Noise source:"
-msgstr "Melulähde"
+msgstr "Kohinalähde:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:282
 msgid "Number of points:"
@@ -11696,9 +11690,11 @@ msgid "Rename Field"
 msgstr "Nimeä tiedosto uudelleen"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:688
-#, fuzzy, c-format
+#, c-format
 msgid "Field name %s already exists. Cannot rename over existing field."
-msgstr "Tiedosto %s on jo olemassa. Haluatko korvata tämän tiedoston?"
+msgstr ""
+"Kentän nimi %s on jo olemassa. Ei voi nimetä uudelleen olemassa olevan "
+"kentän päälle."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:775
 #, fuzzy
@@ -11739,9 +11735,9 @@ msgid "Could not write BOM output to '%s'."
 msgstr "Ei voitu kirjoittaa plot-tiedostoja kansioon '%s'."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1137
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote BOM output to '%s'"
-msgstr "Kohdehakemistoa '%s'. ei voi luoda."
+msgstr "Kirjoitti BOM-tulosteen '%s'"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1265
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1666
@@ -11811,19 +11807,16 @@ msgid "Group symbols together based on common properties"
 msgstr "Ryhmittele symbolit yhteen yhteisten ominaisuuksien perusteella"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:161
-#, fuzzy
 msgid "Edit"
-msgstr "&Muokkaa"
+msgstr "Muokkaa"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:173
-#, fuzzy
 msgid "Format Preset:"
-msgstr "Muoto %s"
+msgstr "Muodon Esiasetukset:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:183
-#, fuzzy
 msgid "Field Delimeter:"
-msgstr "Millimetrit"
+msgstr "Kentän Erotin:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:187
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:201
@@ -11840,14 +11833,12 @@ msgid "\""
 msgstr "\""
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:197
-#, fuzzy
 msgid "Reference Delimiter:"
-msgstr "Viitenumero"
+msgstr "Viiteerotin:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:204
-#, fuzzy
 msgid "Range Delimiter:"
-msgstr "Sivurajoitukset"
+msgstr "Alueen erotin:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:208
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:35
@@ -11859,14 +11850,12 @@ msgid "Leave blank to disable ranges."
 msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:213
-#, fuzzy
 msgid "Keep Tabs:"
-msgstr "Pidä läpiviennit poissa"
+msgstr "Pidä Välilehdet:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:220
-#, fuzzy
 msgid "Keep Line Breaks:"
-msgstr "Pidä johtimet poissa"
+msgstr "Pidä Rivinvaihdot:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:233
 #, fuzzy
@@ -13279,20 +13268,19 @@ msgid "Unable to open destination '%s'"
 msgstr "Kohdetta %s ei voi avata"
 
 #: eeschema/eeschema_jobs_handler.cpp:492
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' unit %d %sto '%s'\n"
-msgstr "Piirrä symboli '%s' yksikkö %d '%s'\n"
+msgstr "Piirretään symbolia '%s' yksikkö %d %sto '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:495
 #: eeschema/eeschema_jobs_handler.cpp:505
-#, fuzzy
 msgid "(De Morgan) "
-msgstr "De Morgan (logiikka)"
+msgstr "(De Morgan logiikka) "
 
 #: eeschema/eeschema_jobs_handler.cpp:503
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' %sto '%s'\n"
-msgstr "Piirrä symboli '%s' kohteeseen '%s'\n"
+msgstr "Piirtää symbolia '%s' %sto '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:583
 #: eeschema/eeschema_jobs_handler.cpp:653 pcbnew/pcbnew_jobs_handler.cpp:648
@@ -14035,9 +14023,9 @@ msgid "Pin count differs."
 msgstr "Anturamäärä eroaa."
 
 #: eeschema/lib_symbol.cpp:358
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s not found."
-msgstr "%s ei löytynyt"
+msgstr "Nastaa %s ei löytynyt."
 
 #: eeschema/lib_symbol.cpp:367
 #, fuzzy, c-format
@@ -14079,19 +14067,16 @@ msgid "Symbol pin name offsets differ."
 msgstr ""
 
 #: eeschema/lib_symbol.cpp:479
-#, fuzzy
 msgid "Show pin names settings differ."
-msgstr "Näytä pin-nimen teksti"
+msgstr "Näytä nastojen eroavat nimiasetukset."
 
 #: eeschema/lib_symbol.cpp:488
-#, fuzzy
 msgid "Show pin numbers settings differ."
-msgstr "Näytä pin-numeroteksti"
+msgstr "Näytä nastan eroavat numeroasetukset."
 
 #: eeschema/lib_symbol.cpp:497
-#, fuzzy
 msgid "Exclude from bill of materials settings differ."
-msgstr "Jätä pois materiaaliluettelosta"
+msgstr "Poissulkeminen materiaaliluetteloasetuksista eroaa."
 
 #: eeschema/lib_symbol.cpp:506
 #, fuzzy
@@ -14564,9 +14549,8 @@ msgid "Highlighted net: %s"
 msgstr "Korostettu verkko: %s"
 
 #: eeschema/sch_edit_frame.cpp:2200 eeschema/tools/ee_actions.cpp:55
-#, fuzzy
 msgid "Diff Symbol with Library"
-msgstr "Symbolit kirjastoon..."
+msgstr "Diff Symboli Kirjastolla"
 
 #: eeschema/sch_field.cpp:781
 #, c-format
@@ -14923,9 +14907,8 @@ msgid "File not found %s."
 msgstr "Tiedostoa %s ei löydy."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:72
-#, fuzzy
 msgid "The selected file does not appear to be a CADSTAR parts Library file"
-msgstr "Kytkentäkaaviotiedosto '%s' Ei näytä olevan kelvollinen."
+msgstr "Valittu tiedosto ei näytä olevan CADSTAR-osien kirjastotiedosto"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:117
 #, c-format
@@ -16707,14 +16690,13 @@ msgid "Invalid IBIS file '%s'"
 msgstr "Virheellinen IBIS-tiedosto '%s'"
 
 #: eeschema/sim/sim_model.cpp:394
-#, fuzzy, c-format
+#, c-format
 msgid "No simulation model definition found for symbol '%s'."
-msgstr "Simulaatiomallikirjastoa ei löydy kohteesta '%s' tai '%s'"
+msgstr "Symbolille '%s' ei löytynyt simulaatiomallin määritelmää."
 
 #: eeschema/sim/sim_model.cpp:401
-#, fuzzy
 msgid "No simulation model definition found."
-msgstr "Simulaatiomallieditori"
+msgstr "Simulaatiomallin määritelmää ei löytynyt."
 
 #: eeschema/sim/sim_model.cpp:535 eeschema/sim/sim_model.cpp:597
 #, c-format
@@ -18529,9 +18511,8 @@ msgid "Toggle the exclude from bill of materials attribute"
 msgstr "Jätä pois materiaaliluettelosta"
 
 #: eeschema/tools/ee_actions.cpp:624
-#, fuzzy
 msgid "Set the exclude from simulation attribute"
-msgstr "Lisättiin %s:lle valmistusasetus 'sulje pois materiaaliluettelosta'."
+msgstr "Aseta poissulkeminen simulaatiosta -määrite"
 
 #: eeschema/tools/ee_actions.cpp:629
 #, fuzzy
@@ -18539,9 +18520,8 @@ msgid "Include in simulation"
 msgstr "Spice-arvo simulaatiossa"
 
 #: eeschema/tools/ee_actions.cpp:629
-#, fuzzy
 msgid "Clear the exclude from simulation attribute"
-msgstr "Lisättiin %s:lle valmistusasetus 'sulje pois materiaaliluettelosta'."
+msgstr "Poista simulaatiosta poissulkeminen -määrite"
 
 #: eeschema/tools/ee_actions.cpp:634
 #, fuzzy
@@ -18549,14 +18529,12 @@ msgid "Toggle Exclude from simulation"
 msgstr "Sulje pois simulaatiosta"
 
 #: eeschema/tools/ee_actions.cpp:634
-#, fuzzy
 msgid "Toggle the exclude from simulation attribute"
-msgstr "Poista %s:ltä valmistusasetus 'sulje pois materiaaliluettelosta'."
+msgstr "Ota pois simulaatiosta -määrite (päälle/pois)"
 
 #: eeschema/tools/ee_actions.cpp:639
-#, fuzzy
 msgid "Set the exclude from board attribute"
-msgstr "Lisättiin %s:lle valmistusasetus 'sulje pois materiaaliluettelosta'."
+msgstr "Aseta poissulkeminen piirilevyltä -määrite"
 
 #: eeschema/tools/ee_actions.cpp:644
 #, fuzzy
@@ -18564,9 +18542,8 @@ msgid "Include on board"
 msgstr "Jätä pois piirilevyltä"
 
 #: eeschema/tools/ee_actions.cpp:644
-#, fuzzy
 msgid "Clear the exclude from board attribute"
-msgstr "Lisättiin %s:lle valmistusasetus 'sulje pois materiaaliluettelosta'."
+msgstr "Tyhjennä poissulkeminen piirilevyltä -määrite"
 
 #: eeschema/tools/ee_actions.cpp:649
 #, fuzzy
@@ -18574,9 +18551,8 @@ msgid "Toggle Exclude from board"
 msgstr "Jätä pois piirilevyltä"
 
 #: eeschema/tools/ee_actions.cpp:649
-#, fuzzy
 msgid "Toggle the exclude from board attribute"
-msgstr "Poista %s:ltä valmistusasetus 'sulje pois materiaaliluettelosta'."
+msgstr "Kytke pois piirilevyltä -attribuutti (päälle/pois)"
 
 #: eeschema/tools/ee_actions.cpp:654
 #, fuzzy
@@ -18774,9 +18750,8 @@ msgid "Toggle display of hidden text fields"
 msgstr "Näytä/piilota piilotetut tekstikentät"
 
 #: eeschema/tools/ee_actions.cpp:772
-#, fuzzy
 msgid "Show Directive Labels"
-msgstr "Asetusnimike"
+msgstr "Näytä Asetusnimikkeet"
 
 #: eeschema/tools/ee_actions.cpp:772
 #, fuzzy
@@ -18972,9 +18947,8 @@ msgid "Break a wire out of a bus"
 msgstr "Katkaise johto väylästä"
 
 #: eeschema/tools/ee_actions.cpp:916
-#, fuzzy
 msgid "Draw graphic lines"
-msgstr "Lisää grafiikkaviiva"
+msgstr "Piirrä graafisia viivoja"
 
 #: eeschema/tools/ee_actions.cpp:922 pcbnew/tools/pcb_actions.cpp:1508
 msgid "Undo Last Segment"
@@ -19161,9 +19135,9 @@ msgid "Select a symbol to diff against its library equivalent."
 msgstr "Valitse jalanjälki tarkistettavaksi kirjaston vastaavasta."
 
 #: eeschema/tools/ee_inspection_tool.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s"
-msgstr "Symbolit"
+msgstr "Symboli %s"
 
 #: eeschema/tools/ee_inspection_tool.cpp:275
 #: pcbnew/tools/board_inspection_tool.cpp:1426
@@ -27053,9 +27027,8 @@ msgid "Gap between the measured points and the start of the extension lines"
 msgstr "Väli mitattujen pisteiden ja jatkojohtojen alun välillä"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:427
-#, fuzzy
 msgid "Extension line overshoot:"
-msgstr "Laajennusviivan ylitys"
+msgstr "Laajennusviivan ylitys:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.h:141
 #: pcbnew/pcb_dimension.cpp:1338 pcbnew/pcb_dimension.cpp:1385
@@ -27068,11 +27041,9 @@ msgid "Run DRC"
 msgstr "Suorita suunnittelusääntöjen tarkistus (DRC)"
 
 #: pcbnew/dialogs/dialog_drc.cpp:266
-#, fuzzy
 msgid "DRC incomplete: could not compile custom design rules."
 msgstr ""
-"Suunnittelusääntöjen tarkistus keskeneräinen: ei voitu koota mukautettuja "
-"suunnitelusääntöjä.  "
+"DRC tarkistus keskeneräinen: ei voitu koota mukautettuja suunnitelusääntöjä."
 
 #: pcbnew/dialogs/dialog_drc.cpp:268 pcbnew/tools/board_inspection_tool.cpp:180
 msgid "Show design rules."
@@ -34369,9 +34340,9 @@ msgid "%s keep out pads setting differs."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:372
-#, fuzzy, c-format
+#, c-format
 msgid "%s keep out tracks setting differs."
-msgstr "Poista &johtimet yhdistää eri verkkoja"
+msgstr "%s pidä poissa johtimet asetukset eroavat."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:374
 #, c-format
@@ -39104,9 +39075,8 @@ msgid "[netclass %s]"
 msgstr "[verkkoluokka %s]"
 
 #: pcbnew/tools/board_inspection_tool.cpp:178
-#, fuzzy
 msgid "Report incomplete: could not compile custom design rules."
-msgstr "Raportti on epätäydellinen: suunnittelusääntöjä ei voitu koota.  "
+msgstr "Raportti on epätäydellinen: suunnittelusääntöjä ei voitu koota."
 
 #: pcbnew/tools/board_inspection_tool.cpp:280
 msgid "Uncoupled Length"
