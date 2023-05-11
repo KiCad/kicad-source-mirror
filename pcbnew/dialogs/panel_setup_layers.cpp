@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2009 Isaac Marino Bavaresco, isaacbavaresco@yahoo.com.br
  * Copyright (C) 2009 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2009-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2009-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +38,6 @@
 #include <board_stackup_manager/panel_board_stackup.h>
 
 #include <wx/choicdlg.h>
-#include <wx/treebook.h>
 #include <eda_list_dialog.h>
 
 
@@ -124,9 +123,8 @@ static LSEQ dlg_layers()
 }
 
 
-PANEL_SETUP_LAYERS::PANEL_SETUP_LAYERS( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame ) :
-        PANEL_SETUP_LAYERS_BASE( aParent->GetTreebook() ),
-        m_parentDialog( aParent ),
+PANEL_SETUP_LAYERS::PANEL_SETUP_LAYERS( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame ) :
+        PANEL_SETUP_LAYERS_BASE( aParentWindow ),
         m_frame( aFrame ),
         m_physicalStackup( nullptr ),
         m_initialized( false )
@@ -447,10 +445,9 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
     if( !testLayerNames() )
         return false;
 
-    wxASSERT( m_physicalStackup );
-
     // Make sure we have the latest copper layer count
-    SyncCopperLayers( m_physicalStackup->GetCopperLayerCount() );
+    if( m_physicalStackup )
+        SyncCopperLayers( m_physicalStackup->GetCopperLayerCount() );
 
     wxString msg;
     bool     modified = false;
@@ -671,20 +668,21 @@ bool PANEL_SETUP_LAYERS::testLayerNames()
 
         if( !name )
         {
-            m_parentDialog->SetError( _( "Layer must have a name." ), this, ctl );
+            PAGED_DIALOG::GetDialog( this )->SetError( _( "Layer must have a name." ), this, ctl );
             return false;
         }
 
         if( hasOneOf( name, badchars ) )
         {
             wxString msg = wxString::Format(_( "%s are forbidden in layer names." ), badchars );
-            m_parentDialog->SetError( msg, this, ctl );
+            PAGED_DIALOG::GetDialog( this )->SetError( msg, this, ctl );
             return false;
         }
 
         if( name == wxT( "signal" ) )
         {
-            m_parentDialog->SetError( _( "Layer name \"signal\" is reserved." ), this, ctl );
+            PAGED_DIALOG::GetDialog( this )->SetError( _( "Layer name \"signal\" is reserved." ),
+                                                       this, ctl );
             return false;
         }
 
@@ -693,7 +691,7 @@ bool PANEL_SETUP_LAYERS::testLayerNames()
             if( name == existingName )
             {
                 wxString msg = wxString::Format(_( "Layer name '%s' already in use." ), name );
-                m_parentDialog->SetError( msg, this, ctl );
+                PAGED_DIALOG::GetDialog( this )->SetError( msg, this, ctl );
                 return false;
             }
         }
@@ -833,12 +831,13 @@ void PANEL_SETUP_LAYERS::addUserDefinedLayer( wxCommandEvent& aEvent )
 
     if( list.empty() )
     {
-        DisplayErrorMessage( m_parentDialog,
+        DisplayErrorMessage( PAGED_DIALOG::GetDialog( this ),
                              _( "All user-defined layers have already been added." ) );
         return;
     }
 
-    EDA_LIST_DIALOG dlg( m_parentDialog, _( "Add User-defined Layer" ), headers, list );
+    EDA_LIST_DIALOG dlg( PAGED_DIALOG::GetDialog( this ), _( "Add User-defined Layer" ),
+                         headers, list );
     dlg.SetListLabel( _( "Select layer to add:" ) );
     dlg.HideFilter();
 
