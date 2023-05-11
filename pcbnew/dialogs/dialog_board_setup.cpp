@@ -38,7 +38,6 @@
 #include <settings/settings_manager.h>
 #include <widgets/resettable_panel.h>
 #include <widgets/wx_progress_reporters.h>
-#include <widgets/wx_treebook.h>
 #include <wildcards_and_files_ext.h>
 
 #include "dialog_board_setup.h"
@@ -102,7 +101,6 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
                 return new PANEL_SETUP_FORMATTING( aParent, m_frame );
             }, _( "Formatting" ) );
 
-    m_textVarsPage = m_treebook->GetPageCount();
     m_treebook->AddLazySubPage(
             [this]( wxWindow* aParent ) -> wxWindow*
             {
@@ -129,13 +127,13 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
     m_treebook->AddLazySubPage(
             [this]( wxWindow* aParent ) -> wxWindow*
             {
+                BOARD* board = m_frame->GetBoard();
                 return new PANEL_SETUP_NETCLASSES( aParent, m_frame,
                                                    m_frame->Prj().GetProjectFile().NetSettings(),
-                                                   m_frame->GetBoard()->GetNetClassAssignmentCandidates(),
+                                                   board->GetNetClassAssignmentCandidates(),
                                                    false );
             }, _( "Net Classes" ) );
 
-    m_rulesPage = m_treebook->GetPageCount();
     m_treebook->AddLazySubPage(
             [this]( wxWindow* aParent ) -> wxWindow*
             {
@@ -146,15 +144,18 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
     m_treebook->AddLazySubPage(
             [this]( wxWindow* aParent ) -> wxWindow*
             {
+                BOARD* board = m_frame->GetBoard();
                 return new PANEL_SETUP_SEVERITIES( aParent, DRC_ITEM::GetItemsWithSeverities(),
-                                                   m_frame->GetBoard()->GetDesignSettings().m_DRCSeverities );
+                                                   board->GetDesignSettings().m_DRCSeverities );
             }, _( "Violation Severity" ) );
 
     for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
         m_treebook->ExpandNode( i );
 
-    m_treebook->SetMinSize( wxSize( -1, 580 ) );
-    m_treebook->SetInitialSize( wxSize( -1, 700 ) );
+    // This is unfortunate, but it's the cost of lazy-loading the panels
+    m_treebook->SetMinSize( wxSize( 980, 600 ) );
+    m_treebook->SetInitialSize( wxSize( 980, 600 ) );
+
     SetEvtHandlerEnabled( true );
 
     finishDialogSettings();
@@ -180,7 +181,7 @@ void DIALOG_BOARD_SETUP::onPageChanged( wxBookCtrlEvent& aEvent )
 {
     PAGED_DIALOG::onPageChanged( aEvent );
 
-    int page = aEvent.GetSelection();
+    size_t page = aEvent.GetSelection();
 
     // Ensure layer page always gets updated even if we aren't moving towards it
     if( m_currentPage == m_physicalStackupPage )

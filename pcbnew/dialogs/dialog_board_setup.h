@@ -60,17 +60,15 @@ public:
     static std::mutex g_Mutex;      // Mutex to prevent multiple windows opening
 
 private:
-    int m_currentPage;              // the current page index
-    int m_textAndGraphicsPage;
-    int m_constraintsPage;
-    int m_formattingPage;
-    int m_physicalStackupPage;
-    int m_tracksAndViasPage;
-    int m_netclassesPage;
-    int m_maskAndPagePage;
-    int m_rulesPage;
-    int m_severitiesPage;
-    int m_textVarsPage;
+    size_t m_currentPage;              // the current page index
+    size_t m_textAndGraphicsPage;
+    size_t m_constraintsPage;
+    size_t m_formattingPage;
+    size_t m_physicalStackupPage;
+    size_t m_tracksAndViasPage;
+    size_t m_netclassesPage;
+    size_t m_maskAndPagePage;
+    size_t m_severitiesPage;
 };
 
 

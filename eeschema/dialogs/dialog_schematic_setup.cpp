@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -34,59 +34,87 @@
 #include <settings/settings_manager.h>
 #include "dialog_schematic_setup.h"
 #include "panel_template_fieldnames.h"
-#include <wx/treebook.h>
 
 
 DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
         PAGED_DIALOG( aFrame, _( "Schematic Setup" ), true,
                       _( "Import Settings from Another Project..." ) ),
-        m_frame( aFrame ),
-        m_severities( nullptr )
+        m_frame( aFrame )
 {
-    PROJECT_FILE&       project = aFrame->Prj().GetProjectFile();
-    SCHEMATIC&          schematic = aFrame->Schematic();
-    SCHEMATIC_SETTINGS& settings = schematic.Settings();
-
     SetEvtHandlerEnabled( false );
 
-    m_formatting = new PANEL_SETUP_FORMATTING( m_treebook, aFrame );
-
-    m_fieldNameTemplates = new PANEL_TEMPLATE_FIELDNAMES( m_treebook,
-                                                          &settings.m_TemplateFieldNames );
-
-    m_pinMap = new PANEL_SETUP_PINMAP( m_treebook, aFrame );
-
     m_pinToPinError = ERC_ITEM::Create( ERCE_PIN_TO_PIN_WARNING );
-    m_severities = new PANEL_SETUP_SEVERITIES( this, ERC_ITEM::GetItemsWithSeverities(),
-                                               schematic.ErcSettings().m_ERCSeverities,
-                                               m_pinToPinError.get() );
-
-    m_textVars = new PANEL_TEXT_VARIABLES( m_treebook, &Prj() );
-
-    m_netclasses = new PANEL_SETUP_NETCLASSES( this, aFrame, project.NetSettings(),
-                                               schematic.GetNetClassAssignmentCandidates(), true );
-
-    m_buses = new PANEL_SETUP_BUSES( m_treebook, aFrame );
 
     /*
      * WARNING: If you change page names you MUST update calls to ShowSchematicSetupDialog().
      */
 
     m_treebook->AddPage( new wxPanel( GetTreebook() ), _( "General" ) );
-    m_treebook->AddSubPage( m_formatting, _( "Formatting" ) );
-    m_treebook->AddSubPage( m_fieldNameTemplates, _( "Field Name Templates" ) );
+
+    m_formattingPage = m_treebook->GetPageCount();
+    m_treebook->AddLazySubPage(
+            [this]( wxWindow* aParent ) -> wxWindow*
+            {
+                return new PANEL_SETUP_FORMATTING( aParent, m_frame );
+            }, _( "Formatting" ) );
+
+    m_fieldNameTemplatesPage = m_treebook->GetPageCount();
+    m_treebook->AddLazySubPage(
+            [this]( wxWindow* aParent ) -> wxWindow*
+            {
+                SCHEMATIC_SETTINGS& settings = m_frame->Schematic().Settings();
+                return new PANEL_TEMPLATE_FIELDNAMES( aParent, &settings.m_TemplateFieldNames );
+            }, _( "Field Name Templates" ) );
 
     m_treebook->AddPage( new wxPanel( GetTreebook() ), _( "Electrical Rules" ) );
-    m_treebook->AddSubPage( m_severities, _( "Violation Severity" ) );
-    m_treebook->AddSubPage( m_pinMap, _( "Pin Conflicts Map" ) );
+    m_treebook->AddLazySubPage(
+            [this]( wxWindow* aParent ) -> wxWindow*
+            {
+                ERC_SETTINGS& ercSettings = m_frame->Schematic().ErcSettings();
+                return new PANEL_SETUP_SEVERITIES( aParent, ERC_ITEM::GetItemsWithSeverities(),
+                                                   ercSettings.m_ERCSeverities,
+                                                   m_pinToPinError.get() );
+            }, _( "Violation Severity" ) );
+
+    m_pinMapPage = m_treebook->GetPageCount();
+    m_treebook->AddLazySubPage(
+            [this]( wxWindow* aParent ) -> wxWindow*
+            {
+                return new PANEL_SETUP_PINMAP( aParent, m_frame );
+            }, _( "Pin Conflicts Map" ) );
 
     m_treebook->AddPage( new wxPanel( GetTreebook() ), _( "Project" ) );
-    m_treebook->AddSubPage( m_netclasses, _( "Net Classes" ) );
-    m_treebook->AddSubPage( m_buses, _( "Bus Alias Definitions" ) );
-    m_treebook->AddSubPage( m_textVars, _( "Text Variables" ) );
+
+    m_netclassesPage = m_treebook->GetPageCount();
+    m_treebook->AddLazySubPage(
+            [this]( wxWindow* aParent ) -> wxWindow*
+            {
+                SCHEMATIC& schematic = m_frame->Schematic();
+                return new PANEL_SETUP_NETCLASSES( aParent, m_frame,
+                                                   m_frame->Prj().GetProjectFile().NetSettings(),
+                                                   schematic.GetNetClassAssignmentCandidates(),
+                                                   true );
+            }, _( "Net Classes" ) );
+
+    m_busesPage = m_treebook->GetPageCount();
+    m_treebook->AddLazySubPage(
+            [this]( wxWindow* aParent ) -> wxWindow*
+            {
+                return new PANEL_SETUP_BUSES( aParent, m_frame );
+            }, _( "Bus Alias Definitions" ) );
+
+    m_treebook->AddLazySubPage(
+            [this]( wxWindow* aParent ) -> wxWindow*
+            {
+                return new PANEL_TEXT_VARIABLES( aParent, &Prj() );
+            }, _( "Text Variables" ) );
 
     for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
         m_treebook->ExpandNode( i );
+
+    // This is unfortunate, but it's the cost of lazy-loading the panels
+    m_treebook->SetMinSize( wxSize( 920, 460 ) );
+    m_treebook->SetInitialSize( wxSize( 920, 460 ) );
 
     SetEvtHandlerEnabled( true );
 
@@ -148,19 +176,34 @@ void DIALOG_SCHEMATIC_SETUP::onAuxiliaryAction( wxCommandEvent& event )
     file.m_SchematicSettings->LoadFromFile();
 
     if( importDlg.m_FormattingOpt->GetValue() )
-        m_formatting->ImportSettingsFrom( *file.m_SchematicSettings );
+    {
+        static_cast<PANEL_SETUP_FORMATTING*>( m_treebook->ResolvePage( m_formattingPage ) )
+                ->ImportSettingsFrom( *file.m_SchematicSettings );
+    }
 
     if( importDlg.m_FieldNameTemplatesOpt->GetValue() )
-        m_fieldNameTemplates->ImportSettingsFrom( &otherSch.Settings().m_TemplateFieldNames );
+    {
+        static_cast<PANEL_TEMPLATE_FIELDNAMES*>( m_treebook->ResolvePage( m_fieldNameTemplatesPage ) )
+                ->ImportSettingsFrom( &otherSch.Settings().m_TemplateFieldNames );
+    }
 
     if( importDlg.m_PinMapOpt->GetValue() )
-        m_pinMap->ImportSettingsFrom( file.m_ErcSettings->m_PinMap );
+    {
+        static_cast<PANEL_SETUP_PINMAP*>( m_treebook->ResolvePage( m_pinMapPage ) )
+                ->ImportSettingsFrom( file.m_ErcSettings->m_PinMap );
+    }
 
     if( importDlg.m_SeveritiesOpt->GetValue() )
-        m_severities->ImportSettingsFrom( file.m_ErcSettings->m_ERCSeverities );
+    {
+        static_cast<PANEL_SETUP_SEVERITIES*>( m_treebook->ResolvePage( m_severitiesPage ) )
+                ->ImportSettingsFrom( file.m_ErcSettings->m_ERCSeverities );
+    }
 
     if( importDlg.m_NetClassesOpt->GetValue() )
-        m_netclasses->ImportSettingsFrom( file.m_NetSettings );
+    {
+        static_cast<PANEL_SETUP_NETCLASSES*>( m_treebook->ResolvePage( m_netclassesPage ) )
+                ->ImportSettingsFrom( file.m_NetSettings );
+    }
 
     m_frame->GetSettingsManager()->UnloadProject( otherPrj, false );
 }
