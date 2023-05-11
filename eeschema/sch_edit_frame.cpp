@@ -309,6 +309,9 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
 
     SetScreen( nullptr );
 
+    if( m_schematic )
+        m_schematic->RemoveAllListeners();
+
     delete m_schematic;
     m_schematic = nullptr;
 

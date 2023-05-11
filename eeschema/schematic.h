@@ -50,6 +50,17 @@ public:
     virtual PROJECT& Prj() const = 0;
 };
 
+class SCHEMATIC;
+
+class SCHEMATIC_LISTENER
+{
+public:
+    virtual ~SCHEMATIC_LISTENER() {}
+    virtual void OnSchItemsAdded( SCHEMATIC& aSch, std::vector<SCH_ITEM*>& aSchItem ) {}
+    virtual void OnSchItemsRemoved( SCHEMATIC& aSch, std::vector<SCH_ITEM*>& aSchItem ) {}
+    virtual void OnSchItemsChanged( SCHEMATIC& aSch, std::vector<SCH_ITEM*>& aSchItem ) {}
+};
+
 /**
  * Holds all the data relating to one schematic.
  *
@@ -228,12 +239,58 @@ public:
      */
     void FixupJunctions();
 
+    /**
+     * Must be used if Add() is used using a BULK_x ADD_MODE to generate a change event for
+     * listeners.
+     */
+    void OnItemsAdded( std::vector<SCH_ITEM*>& aNewItems );
+
+    /**
+     * Must be used if Remove() is used using a BULK_x REMOVE_MODE to generate a change event
+     * for listeners.
+     */
+    void OnItemsRemoved( std::vector<SCH_ITEM*>& aRemovedItems );
+
+    /**
+     * Add a listener to the schematic to receive calls whenever something on the
+     * schematic has been modified.  The schematic does not take ownership of the
+     * listener object.  Make sure to call RemoveListener before deleting the
+     * listener object.  The order of listener invocations is not guaranteed.
+     * If the specified listener object has been added before, it will not be
+     * added again.
+     */
+    void AddListener( SCHEMATIC_LISTENER* aListener );
+
+    /**
+     * Remove the specified listener.  If it has not been added before, it
+     * will do nothing.
+     */
+    void RemoveListener( SCHEMATIC_LISTENER* aListener );
+
+    /**
+     * Remove all listeners
+     */
+    void RemoveAllListeners();
+
+    /**
+      * Notify the schematic and its listeners that an item on the schematic has
+      * been modified in some way.
+      */
+    void OnItemsChanged( std::vector<SCH_ITEM*>& aItems );
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override {}
 #endif
 
 private:
     friend class SCH_EDIT_FRAME;
+
+    template <typename Func, typename... Args>
+    void InvokeListeners( Func&& aFunc, Args&&... args )
+    {
+        for( auto&& l : m_listeners )
+            ( l->*aFunc )( std::forward<Args>( args )... );
+    }
 
     PROJECT* m_project;
 
@@ -266,6 +323,11 @@ private:
      * Simulation operating points for text variable substitution.
      */
     std::map<wxString, double>        m_operatingPoints;
+
+    /**
+     * Currently installed listeners
+     */
+    std::vector<SCHEMATIC_LISTENER*> m_listeners;
 };
 
 #endif

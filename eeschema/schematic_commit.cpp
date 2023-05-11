@@ -249,6 +249,11 @@ void SCHEMATIC_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
     if( Empty() )
         return;
 
+    SCHEMATIC& schematic = static_cast<SCH_EDIT_FRAME*>( m_toolMgr->GetToolHolder() )->Schematic();
+    std::vector<SCH_ITEM*>   bulkAddedItems;
+    std::vector<SCH_ITEM*>   bulkRemovedItems;
+    std::vector<SCH_ITEM*>   itemsChanged;
+
     for( COMMIT_LINE& ent : m_changes )
     {
         int changeType = ent.m_type & CHT_TYPE;
@@ -277,6 +282,8 @@ void SCHEMATIC_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
             if( view )
                 view->Add( schItem );
 
+            bulkAddedItems.push_back( schItem );
+
             break;
         }
 
@@ -302,6 +309,8 @@ void SCHEMATIC_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
             if( view )
                 view->Remove( schItem );
 
+            bulkRemovedItems.push_back( schItem );
+
             if( !( changeFlags & CHT_DONE ) )
                 frame->GetScreen()->Remove( schItem );
 
@@ -321,6 +330,8 @@ void SCHEMATIC_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
             if( view )
                 view->Update( schItem );
 
+            itemsChanged.push_back( schItem );
+
             // if no undo entry is needed, the copy would create a memory leak
             if( aCommitFlags & SKIP_UNDO )
                 delete ent.m_copy;
@@ -333,6 +344,15 @@ void SCHEMATIC_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
             break;
         }
     }
+
+    if( bulkAddedItems.size() > 0 )
+        schematic.OnItemsAdded( bulkAddedItems );
+
+    if( bulkRemovedItems.size() > 0 )
+        schematic.OnItemsRemoved( bulkRemovedItems );
+
+    if( itemsChanged.size() > 0 )
+        schematic.OnItemsChanged( itemsChanged );
 
     if( !( aCommitFlags & SKIP_UNDO ) && frame )
         frame->SaveCopyInUndoList(undoList, UNDO_REDO::UNSPECIFIED, aCommitFlags & APPEND_UNDO );
@@ -418,6 +438,10 @@ void SCHEMATIC_COMMIT::Revert()
 
     SCHEMATIC& schematic = static_cast<SCH_EDIT_FRAME*>( m_toolMgr->GetToolHolder() )->Schematic();
 
+    std::vector<SCH_ITEM*> bulkAddedItems;
+    std::vector<SCH_ITEM*>   bulkRemovedItems;
+    std::vector<SCH_ITEM*> itemsChanged;
+
     for( auto it = m_changes.rbegin(); it != m_changes.rend(); ++it )
     {
         COMMIT_LINE& ent = *it;
@@ -435,6 +459,7 @@ void SCHEMATIC_COMMIT::Revert()
 
             view->Remove( item );
             screen->Remove( item );
+            bulkRemovedItems.push_back( item );
             break;
 
         case CHT_REMOVE:
@@ -443,6 +468,7 @@ void SCHEMATIC_COMMIT::Revert()
 
             view->Add( item );
             screen->Append( item );
+            bulkAddedItems.push_back( item );
             break;
 
         case CHT_MODIFY:
@@ -475,6 +501,15 @@ void SCHEMATIC_COMMIT::Revert()
             break;
         }
     }
+
+    if( bulkAddedItems.size() > 0 )
+        schematic.OnItemsAdded( bulkAddedItems );
+
+    if( bulkRemovedItems.size() > 0 )
+        schematic.OnItemsRemoved( bulkRemovedItems );
+
+    if( itemsChanged.size() > 0 )
+        schematic.OnItemsChanged( itemsChanged );
 
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
     selTool->RebuildSelection();

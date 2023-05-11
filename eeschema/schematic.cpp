@@ -673,3 +673,46 @@ void SCHEMATIC::FixupJunctions()
         }
     }
 }
+
+
+void SCHEMATIC::OnItemsAdded( std::vector<SCH_ITEM*>& aNewItems )
+{
+    InvokeListeners( &SCHEMATIC_LISTENER::OnSchItemsAdded, *this, aNewItems );
+}
+
+
+void SCHEMATIC::OnItemsRemoved( std::vector<SCH_ITEM*>& aRemovedItems )
+{
+    InvokeListeners( &SCHEMATIC_LISTENER::OnSchItemsRemoved, *this, aRemovedItems );
+}
+
+
+void SCHEMATIC::AddListener( SCHEMATIC_LISTENER* aListener )
+{
+    if( !alg::contains( m_listeners, aListener ) )
+        m_listeners.push_back( aListener );
+}
+
+
+void SCHEMATIC::RemoveListener( SCHEMATIC_LISTENER* aListener )
+{
+    auto i = std::find( m_listeners.begin(), m_listeners.end(), aListener );
+
+    if( i != m_listeners.end() )
+    {
+        std::iter_swap( i, m_listeners.end() - 1 );
+        m_listeners.pop_back();
+    }
+}
+
+
+void SCHEMATIC::RemoveAllListeners()
+{
+    m_listeners.clear();
+}
+
+
+void SCHEMATIC::OnItemsChanged( std::vector<SCH_ITEM*>& aItems )
+{
+    InvokeListeners( &SCHEMATIC_LISTENER::OnSchItemsChanged, *this, aItems );
+}
