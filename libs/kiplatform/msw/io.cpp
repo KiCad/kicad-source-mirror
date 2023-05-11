@@ -14,19 +14,22 @@
 * General Public License for more details.
 *
 * You should have received a copy of the GNU General Public License along
-* with this program.  If not, see <http://www.gnu.org/licenses/>.
+* with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include <kiplatform/io.h>
 
 #include <wx/string.h>
+#include <wx/wxcrt.h>
 
 #include <windows.h>
 
+// Define USE_MSYS2_FALlBACK if the code for _MSC_VER does not compile on msys2
+//#define  USE_MSYS2_FALLBACK
 
-FILE* KIPLATFORM::IO::SeqFOpen( const wxString& aPath, const wxString& mode )
+FILE* KIPLATFORM::IO::SeqFOpen( const wxString& aPath, const wxString& aMode )
 {
-#ifdef _MSC_VER
+#if defined( _MSC_VER ) || !defined( USE_MSYS2_FALLBACK )
     // We need to use the win32 api to setup a file handle with sequential scan flagged
     // and pass it up the chain to create a normal FILE stream
     HANDLE hFile = INVALID_HANDLE_VALUE;
@@ -52,7 +55,7 @@ FILE* KIPLATFORM::IO::SeqFOpen( const wxString& aPath, const wxString& mode )
         return NULL;
     }
 
-    FILE* fp = _fdopen( fd, mode.c_str() );
+    FILE* fp = _fdopen( fd, aMode.c_str() );
 
     if( !fp )
     {
