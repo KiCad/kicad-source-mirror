@@ -48,6 +48,7 @@ TEARDROP_MANAGER::TEARDROP_MANAGER( BOARD* aBoard, PCB_EDIT_FRAME* aFrame )
     m_board = aBoard;
     m_prmsList = m_board->GetDesignSettings().GetTeadropParamsList();
     m_tolerance = 0;
+    m_toolManager = aFrame->GetToolManager();
 }
 
 
@@ -55,7 +56,7 @@ TEARDROP_MANAGER::TEARDROP_MANAGER( BOARD* aBoard, PCB_EDIT_FRAME* aFrame )
 static ZONE_SETTINGS s_default_settings;      // Use zone default settings for teardrop
 
 ZONE* TEARDROP_MANAGER::createTeardrop( TEARDROP_VARIANT aTeardropVariant,
-                                        std::vector<VECTOR2I>& aPoints, PCB_TRACK* aTrack) const
+                                        std::vector<VECTOR2I>& aPoints, PCB_TRACK* aTrack ) const
 {
     ZONE* teardrop = new ZONE( m_board );
 
@@ -90,7 +91,7 @@ ZONE* TEARDROP_MANAGER::createTeardrop( TEARDROP_VARIANT aTeardropVariant,
 }
 
 
-int TEARDROP_MANAGER::SetTeardrops( BOARD_COMMIT* aCommitter, bool aFollowTracks )
+int TEARDROP_MANAGER::SetTeardrops( BOARD_COMMIT* aCommitter, bool aFollowTracks, bool aFillAfter )
 {
     // Init parameters:
     m_tolerance = pcbIUScale.mmToIU( 0.01 );
@@ -162,7 +163,9 @@ int TEARDROP_MANAGER::SetTeardrops( BOARD_COMMIT* aCommitter, bool aFollowTracks
             // The track width must be < teardrop height
             if( track->GetWidth() >= currParams->m_TdMaxHeight
                 || track->GetWidth() >= viapad.m_Width * currParams->m_HeightRatio )
+            {
                 continue;
+            }
 
             // Ensure also it is not filtered by a too high track->GetWidth()/viapad.m_Width ratio
             if( track->GetWidth() >= viapad.m_Width * currParams->m_WidthtoSizeFilterRatio )
@@ -199,29 +202,6 @@ int TEARDROP_MANAGER::SetTeardrops( BOARD_COMMIT* aCommitter, bool aFollowTracks
     // Now set priority of teardrops now all teardrops are added
     setTeardropPriorities();
 
-    // Fill teardrop shapes. This is a rough calculation, just to show a filled
-    // shape on screen, but most of time this is a good shape.
-    // Exact shapes can be calculated only on a full zone refill, **much more** time consuming
-    if( m_createdTdList.size() )
-    {
-        int epsilon = pcbIUScale.mmToIU( 0.001 );
-
-        for( ZONE* zone: m_createdTdList )
-        {
-            int half_min_width = zone->GetMinThickness() / 2;
-            int numSegs = GetArcToSegmentCount( half_min_width, pcbIUScale.mmToIU( 0.005 ), FULL_CIRCLE );
-            SHAPE_POLY_SET filledPolys = *zone->Outline();
-
-            filledPolys.Deflate( half_min_width - epsilon, numSegs );
-
-            // Re-inflate after pruning of areas that don't meet minimum-width criteria
-            if( half_min_width - epsilon > epsilon )
-                filledPolys.Inflate( half_min_width - epsilon, numSegs );
-
-            zone->SetFilledPolysList( zone->GetFirstLayer(), filledPolys );
-        }
-    }
-
     if( count || removed_cnt || track2trackCount )
     {
         if( aCommitter )
@@ -230,6 +210,37 @@ int TEARDROP_MANAGER::SetTeardrops( BOARD_COMMIT* aCommitter, bool aFollowTracks
         // Note:
         // Refill zones can be made only with clean data, especially connectivity data,
         // therefore only after changes are pushed to avoid crashes in some cases
+
+        if( aFillAfter )
+        {
+            ZONE_FILLER filler( m_board, aCommitter );
+            filler.Fill( m_board->Zones() );
+
+            if( aCommitter )
+                aCommitter->Push( _( "Refill zones" ) );
+        }
+        else
+        {
+            // Fill raw teardrop shapes. This is a rough calculation, just to show a filled
+            // shape on screen without the (potentially large) performance hit of a zone refill
+            int epsilon = pcbIUScale.mmToIU( 0.001 );
+            int allowed_error = pcbIUScale.mmToIU( 0.005 );
+
+            for( ZONE* zone: m_createdTdList )
+            {
+                int half_min_width = zone->GetMinThickness() / 2;
+                int numSegs = GetArcToSegmentCount( half_min_width, allowed_error, FULL_CIRCLE );
+                SHAPE_POLY_SET filledPolys = *zone->Outline();
+
+                filledPolys.Deflate( half_min_width - epsilon, numSegs );
+
+                // Re-inflate after pruning of areas that don't meet minimum-width criteria
+                if( half_min_width - epsilon > epsilon )
+                    filledPolys.Inflate( half_min_width - epsilon, numSegs );
+
+                zone->SetFilledPolysList( zone->GetFirstLayer(), filledPolys );
+            }
+        }
     }
 
     return count + track2trackCount;

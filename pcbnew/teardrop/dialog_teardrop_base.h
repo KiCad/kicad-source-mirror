@@ -112,6 +112,8 @@ class TEARDROP_DIALOG_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbPadsInZones;
 		wxStaticText* m_stPointCount;
 		wxSpinCtrl* m_spPointCount;
+		wxCheckBox* m_generateRawTeardrops;
+		wxStaticText* m_rawTeardropsHint;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;

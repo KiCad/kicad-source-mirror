@@ -95,10 +95,9 @@ public:
      * @param aCommitter is a BOARD_COMMIT reference (can be null)
      * @param aFollowTracks = true to use a track connected to the initial track connected
      * to a pad / via if this initial track is too short to build the teardrop
+     * @param aFillAfter = true to performa zone fill at end
      */
-    int SetTeardrops( BOARD_COMMIT* aCommitter,
-                      bool aFollowTracks = true );
-
+    int SetTeardrops( BOARD_COMMIT* aCommitter, bool aFollowTracks, bool aFillAfter );
 
     /**
      * Remove all teardrops
@@ -108,7 +107,7 @@ public:
      * false if some other changes must be made and the actual commit postponed
      * Can be nullptr
      */
-    int  RemoveTeardrops( BOARD_COMMIT* aCommitter, bool aCommitAfterRemove );
+    int RemoveTeardrops( BOARD_COMMIT* aCommitter, bool aCommitAfterRemove );
 
 
 private:
@@ -244,11 +243,12 @@ private:
                                   bool aFollowTracks, TRACK_BUFFER& aTrackLookupList ) const;
 
 private:
-    int     m_tolerance;                // max distance between a track end point and a pad/via center to
-                                        // see them connected to ut a teardrop
-    BOARD*  m_board;
-    TEARDROP_PARAMETERS_LIST* m_prmsList; // the teardrop parameters list, from the board design settings
-    std::vector<ZONE*> m_createdTdList; // list of new created teardrops
+    int                       m_tolerance;      // max dist between track end point and pad/via
+                                                //   center to see them connected to ut a teardrop
+    BOARD*                    m_board;
+    TOOL_MANAGER*             m_toolManager;
+    TEARDROP_PARAMETERS_LIST* m_prmsList;       // the teardrop parameters list, from the board design settings
+    std::vector<ZONE*>        m_createdTdList;  // list of new created teardrops
 };
 
 

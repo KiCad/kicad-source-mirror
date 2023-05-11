@@ -39,6 +39,8 @@
 #define CURVED_OPTION_RECT  2       /* Curved teardrop shape for rect pad shapes */
 #define CURVED_OPTION_TRACK 4       /* Curved teardrop shape for track to track shapes */
 
+bool g_rawTeardrops = false;
+
 class TEARDROP_DIALOG: public TEARDROP_DIALOG_BASE
 {
 public:
@@ -57,6 +59,8 @@ public:
         m_bitmapTdCircularInfo->SetBitmap( KiBitmap( BITMAPS::teardrop_sizes ) );
         m_bitmapTdRectangularInfo->SetBitmap( KiBitmap( BITMAPS::teardrop_rect_sizes ) );
         m_bitmapTdTrackInfo->SetBitmap( KiBitmap( BITMAPS::teardrop_track_sizes ) );
+
+        m_rawTeardropsHint->SetFont( KIUI::GetInfoFont( this ) );
 
         m_brdSettings = &m_frame->GetBoard()->GetBoard()->GetDesignSettings();
         TEARDROP_PARAMETERS_LIST* prmsList = m_brdSettings->GetTeadropParamsList();
@@ -94,12 +98,16 @@ public:
         m_rbShapeTrack->SetSelection( prms->IsCurved() );
         m_spTeardropHDPercentTrack->SetValue( prms->m_WidthtoSizeFilterRatio*100 );
 
+        m_generateRawTeardrops->SetValue( g_rawTeardrops );
+
         // recalculate sizers, now the bitmap is initialized
         finishDialogSettings();
     }
 
     ~TEARDROP_DIALOG()
     {
+        g_rawTeardrops = m_generateRawTeardrops->GetValue();
+
         TransferToParamList();
     }
 
@@ -189,6 +197,8 @@ public:
 
     bool TeardropOnTracks() { return m_cbTrack2Track->GetValue(); }
 
+    bool GenerateRawTeardrops() { return m_generateRawTeardrops->GetValue(); }
+
 private:
     BOARD_DESIGN_SETTINGS* m_brdSettings;
     PCB_EDIT_FRAME* m_frame;
@@ -215,7 +225,8 @@ void PCB_EDIT_FRAME::OnRunTeardropTool( wxCommandEvent& event )
     dlg.TransferToParamList();
     TEARDROP_MANAGER trdm( GetBoard(), this );
 
-    int added_count = trdm.SetTeardrops( &committer, dlg.CanUseTwoTracks() );
+    int added_count = trdm.SetTeardrops( &committer, dlg.CanUseTwoTracks(),
+                                         !dlg.GenerateRawTeardrops() );
 
     GetToolManager()->PostEvent( EVENTS::ConnectivityChangedEvent );
 

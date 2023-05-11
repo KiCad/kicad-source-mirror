@@ -402,7 +402,22 @@ TEARDROP_DIALOG_BASE::TEARDROP_DIALOG_BASE( wxWindow* parent, wxWindowID id, con
 	bSizer6->Add( m_spPointCount, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	sbSizerOptions->Add( bSizer6, 1, wxEXPAND, 5 );
+	sbSizerOptions->Add( bSizer6, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+
+	m_generateRawTeardrops = new wxCheckBox( sbSizerOptions->GetStaticBox(), wxID_ANY, _("Generate raw teardrops"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizerOptions->Add( m_generateRawTeardrops, 0, wxRIGHT|wxLEFT, 5 );
+
+
+	sbSizerOptions->Add( 0, 2, 0, 0, 5 );
+
+	m_rawTeardropsHint = new wxStaticText( sbSizerOptions->GetStaticBox(), wxID_ANY, _("(Shapes will be adjusted for clearances on next zone fill.)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rawTeardropsHint->Wrap( -1 );
+	m_rawTeardropsHint->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+
+	sbSizerOptions->Add( m_rawTeardropsHint, 0, wxLEFT, 27 );
+
+
+	sbSizerOptions->Add( 0, 2, 0, 0, 5 );
 
 
 	bSizerShape->Add( sbSizerOptions, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
