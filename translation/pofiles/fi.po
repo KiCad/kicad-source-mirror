@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-09 09:51-0700\n"
-"PO-Revision-Date: 2023-05-11 09:52+0000\n"
-"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
+"PO-Revision-Date: 2023-05-12 13:56+0000\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
 "Language: fi\n"
@@ -14068,11 +14068,11 @@ msgstr ""
 
 #: eeschema/lib_symbol.cpp:479
 msgid "Show pin names settings differ."
-msgstr "Näytä nastojen eroavat nimiasetukset."
+msgstr "Asetus näytä nastojen nimet eriävät."
 
 #: eeschema/lib_symbol.cpp:488
 msgid "Show pin numbers settings differ."
-msgstr "Näytä nastan eroavat numeroasetukset."
+msgstr "Asetus näytä nastojen numerot eriävät."
 
 #: eeschema/lib_symbol.cpp:497
 msgid "Exclude from bill of materials settings differ."
