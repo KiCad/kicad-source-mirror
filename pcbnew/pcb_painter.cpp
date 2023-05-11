@@ -428,6 +428,8 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
         color.a *= m_viaOpacity;
     else if( item->Type() == PCB_PAD_T )
         color.a *= m_padOpacity;
+    else if( item->Type() == PCB_ZONE_T && static_cast<const ZONE*>( item )->IsTeardropArea() )
+        color.a *= m_trackOpacity;
     else if( item->Type() == PCB_ZONE_T )
         color.a *= m_zoneOpacity;
     else if( item->Type() == PCB_BITMAP_T )
