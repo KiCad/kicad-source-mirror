@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-09 10:37-0700\n"
-"PO-Revision-Date: 2023-04-24 09:24+0000\n"
+"PO-Revision-Date: 2023-05-12 13:56+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v7/cs/>\n"
 "Language: cs\n"
@@ -10570,9 +10570,8 @@ msgid "Replace matches in reference designators"
 msgstr "Nahradit shody v referencích schématu"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:120
-#, fuzzy
 msgid "Replace"
-msgstr "&Nahradit"
+msgstr "Nahradit"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:41
 msgid "Schematic Setup"
@@ -32760,9 +32759,9 @@ msgid "Determining PCB data\n"
 msgstr "Stanovení údajů o DPS\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:344
-#, fuzzy, c-format
+#, c-format
 msgid "Board Thickness from stackup: %.3f mm\n"
-msgstr "Tloušťka desky ze struktury vrstev:\n"
+msgstr "Tloušťka desky ze struktury vrstev: %.3f mm\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:349
 msgid "Build STEP data\n"
@@ -34424,9 +34423,8 @@ msgid "1234.0 (mm)"
 msgstr "1234 (mm)"
 
 #: pcbnew/pcb_dimension.cpp:1353
-#, fuzzy
 msgid "Units Format"
-msgstr "Formát jednotek:"
+msgstr "Formát jednotek"
 
 #: pcbnew/pcb_dimension.cpp:1359
 #, fuzzy
