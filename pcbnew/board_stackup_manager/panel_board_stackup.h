@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2009-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2009-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -87,7 +87,7 @@ struct BOARD_STACKUP_ROW_UI_ITEM
 class PANEL_SETUP_BOARD_STACKUP : public PANEL_SETUP_BOARD_STACKUP_BASE
 {
 public:
-    PANEL_SETUP_BOARD_STACKUP( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame,
+    PANEL_SETUP_BOARD_STACKUP( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame,
                                PANEL_SETUP_LAYERS* aPanelLayers );
     ~PANEL_SETUP_BOARD_STACKUP();
 
@@ -111,8 +111,6 @@ public:
 
     /// Return the color currently selected for the row aRow
     wxColor GetSelectedColor( int aRow ) const;
-
-    BOARD_STACKUP&  GetStackup() { return m_stackup; }
 
     // Called by wxWidgets: transfer current settings stored in m_stackup to the board
     bool TransferDataFromWindow() override;
@@ -230,42 +228,38 @@ private:
     wxBitmapComboBox* createColorBox( BOARD_STACKUP_ITEM* aStackupItem, int aRow );
 
     /**
-     * disconnect event handlers connected to wxControl items
-     * found in list m_controlItemsList
+     * disconnect event handlers connected to wxControl items found in list m_controlItemsList
      */
     void disconnectEvents();
 
 private:
     BOARD_STACKUP       m_stackup;
-    PANEL_SETUP_LAYERS* m_panelLayers;      // The associated PANEL_SETUP_LAYERS, to know
-                                            // enabled layers and copper layer names
-    LSET                m_enabledLayers;    // the current enabled layers in this panel
-                                            // restricted to allowed layers in stackup.
-                                            // when do not match the enabled layers
-                                            // in PANEL_SETUP_LAYERS the stackup is not up to date
-    // a list of currently available dielectric materials
-    DIELECTRIC_SUBSTRATE_LIST m_delectricMatList;
-    // a list of currently available solder mask materials
-    DIELECTRIC_SUBSTRATE_LIST m_solderMaskMatList;
-    // a list of currently available solder mask materials
-    DIELECTRIC_SUBSTRATE_LIST m_silkscreenMatList;
-    // List of items in m_fgGridSizer
-    std::vector<BOARD_STACKUP_ROW_UI_ITEM> m_rowUiItemsList;
+    PANEL_SETUP_LAYERS* m_panelLayers;      // The associated PANEL_SETUP_LAYERS, to know enabled
+                                            //   layers and copper layer names
+    LSET                m_enabledLayers;    // The current enabled layers in this panel restricted
+                                            //   to allowed layers in stackup.  (When this doesn't
+                                            //   match the enabled layers in PANEL_SETUP_LAYERS the
+                                            //   stackup is not up to date.)
 
-    PAGED_DIALOG*   m_parentDialog;
-    BOARD*          m_board;
+    DIELECTRIC_SUBSTRATE_LIST              m_delectricMatList;    // List of currently available
+                                                                  //   dielectric materials
+    DIELECTRIC_SUBSTRATE_LIST              m_solderMaskMatList;   // List of currently available
+                                                                  //   solder mask materials
+    DIELECTRIC_SUBSTRATE_LIST              m_silkscreenMatList;   // List of currently available
+                                                                  //   solder mask materials
+    std::vector<BOARD_STACKUP_ROW_UI_ITEM> m_rowUiItemsList;      // List of items in m_fgGridSizer
+
+    BOARD*                  m_board;
     BOARD_DESIGN_SETTINGS*  m_brdSettings;
-    PCB_EDIT_FRAME* m_frame;
-    wxSize          m_numericTextCtrlSize;  // Best size to enter values with units in wxTextCtrl
-    wxSize          m_numericFieldsSize;    // Best size to enter double values in wxTextCtrl
-    wxArrayString   m_core_prepreg_choice;  // Used to display the option list in dialog
-    wxSize          m_colorSwatchesSize;    // the size of color swatches in the wxBitmapComboBox.
-    wxSize          m_colorIconsSize;       // the size of color swatches in grid, left column.
+    PCB_EDIT_FRAME*         m_frame;
+    wxSize                  m_numericTextCtrlSize;  // Best size for wxTextCtrls with units
+    wxSize                  m_numericFieldsSize;    // Best size for wxTextCtrls without units
+    wxArrayString           m_core_prepreg_choice;  // Used to display the option list in dialog
+    wxSize                  m_colorSwatchesSize;    // Size of swatches in the wxBitmapComboBox.
+    wxSize                  m_colorIconsSize;       // Size of swatches in the grid (left column)
 
-    // The list of controls (wxChoice, wxBitmapComboBox, wxTextCtrl) added to the panel
-    // when building the BOARD_STACKUP_ITEM list editor and connected to command events
-    // Used to disconnect event handlers
-    std::vector<wxControl*> m_controlItemsList;
+    std::vector<wxControl*> m_controlItemsList;     // List of ctrls (wxChoice, wxTextCtrl, etc.)
+                                                    //   with added event handlers
 };
 
 #endif      // #ifndef PANEL_SETUP_BOARD_STACKUP_H

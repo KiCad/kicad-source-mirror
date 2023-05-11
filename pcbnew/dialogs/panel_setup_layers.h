@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2021 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,7 +56,7 @@ struct PANEL_SETUP_LAYERS_CTLs
 class PANEL_SETUP_LAYERS : public PANEL_SETUP_LAYERS_BASE
 {
 public:
-    PANEL_SETUP_LAYERS( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame );
+    PANEL_SETUP_LAYERS( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame );
 
     void ImportSettingsFrom( BOARD* aBoard );
 
@@ -94,7 +94,6 @@ public:
     bool IsInitialized() const { return m_initialized; }
 
 private:
-
     void setLayerCheckBox( int layer, bool isChecked );
     void setCopperLayerCheckBoxes( int copperCount );
     void setMandatoryLayerCheckBoxes();
@@ -129,7 +128,7 @@ private:
     wxCheckBox* getCheckBox( int aLayer );
     wxChoice* getChoice( int aLayer );
 
-    PAGED_DIALOG*              m_parentDialog;
+private:
     PCB_EDIT_FRAME*            m_frame;
     PANEL_SETUP_BOARD_STACKUP* m_physicalStackup;
     BOARD*                     m_pcb;

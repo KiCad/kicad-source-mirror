@@ -50,24 +50,24 @@ protected:
     void onPageChanged( wxBookCtrlEvent& aEvent ) override;
     void onAuxiliaryAction( wxCommandEvent& aEvent ) override;
 
-    PCB_EDIT_FRAME*                  m_frame;
-
-    PANEL_SETUP_LAYERS*              m_layers;
-    PANEL_SETUP_BOARD_STACKUP*       m_physicalStackup;
-    PANEL_SETUP_BOARD_FINISH*        m_boardFinish;
+    PCB_EDIT_FRAME*            m_frame;
+    PANEL_SETUP_LAYERS*        m_layers;
+    PANEL_SETUP_BOARD_STACKUP* m_physicalStackup;
 
 public:
     static std::mutex g_Mutex;      // Mutex to prevent multiple windows opening
 
 private:
     size_t m_currentPage;              // the current page index
-    size_t m_textAndGraphicsPage;
-    size_t m_constraintsPage;
-    size_t m_formattingPage;
+    size_t m_layersPage;
     size_t m_physicalStackupPage;
+    size_t m_boardFinishPage;
+    size_t m_textAndGraphicsPage;
+    size_t m_formattingPage;
+    size_t m_maskAndPagePage;
+    size_t m_constraintsPage;
     size_t m_tracksAndViasPage;
     size_t m_netclassesPage;
-    size_t m_maskAndPagePage;
     size_t m_severitiesPage;
 };
 

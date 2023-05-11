@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2009-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2009-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +36,7 @@ class PCB_EDIT_FRAME;
 class PANEL_SETUP_BOARD_FINISH : public PANEL_SETUP_BOARD_FINISH_BASE
 {
 public:
-    PANEL_SETUP_BOARD_FINISH( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame );
+    PANEL_SETUP_BOARD_FINISH( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame );
     ~PANEL_SETUP_BOARD_FINISH();
 
     void ImportSettingsFrom( BOARD* aBoard );
@@ -48,7 +48,6 @@ private:
     void synchronizeWithBoard();
 
 private:
-    PAGED_DIALOG*           m_parentDialog;
     PCB_EDIT_FRAME*         m_frame;
     BOARD*                  m_board;
     BOARD_DESIGN_SETTINGS*  m_brdSettings;
