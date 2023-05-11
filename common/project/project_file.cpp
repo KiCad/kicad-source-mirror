@@ -569,8 +569,25 @@ bool PROJECT_FILE::SaveToFile( const wxString& aDirectory, bool aForce )
 
 bool PROJECT_FILE::SaveAs( const wxString& aDirectory, const wxString& aFile )
 {
+    wxFileName oldFilename( GetFilename() );
+    wxString   oldProjectName = oldFilename.GetName();
+
     Set( "meta.filename", aFile + "." + ProjectFileExtension );
     SetFilename( aFile );
+
+    auto updatePath =
+            [&]( wxString& aPath )
+            {
+                if( aPath.StartsWith( oldProjectName + wxS( "." ) ) )
+                    aPath.Replace( oldProjectName, aFile, false );
+            };
+
+    updatePath( m_PcbLastPath[ LAST_PATH_NETLIST ] );
+    updatePath( m_PcbLastPath[ LAST_PATH_STEP ] );
+    updatePath( m_PcbLastPath[ LAST_PATH_IDF ] );
+    updatePath( m_PcbLastPath[ LAST_PATH_VRML ] );
+    updatePath( m_PcbLastPath[ LAST_PATH_SPECCTRADSN ] );
+    updatePath( m_PcbLastPath[ LAST_PATH_GENCAD ] );
 
     // While performing Save As, we have already checked that we can write to the directory
     // so don't carry the previous flag
