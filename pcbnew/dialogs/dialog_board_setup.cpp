@@ -47,17 +47,16 @@
 std::mutex DIALOG_BOARD_SETUP::g_Mutex;
 
 
+#define RESOLVE_PAGE( T, pageIndex ) static_cast<T*>( m_treebook->ResolvePage( pageIndex ) )
+
 DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
         PAGED_DIALOG( aFrame, _( "Board Setup" ), false,
                       _( "Import Settings from Another Board..." ) ),
-        m_frame( aFrame )
+        m_frame( aFrame ),
+        m_layers( nullptr ),
+        m_physicalStackup( nullptr )
 {
     SetEvtHandlerEnabled( false );
-
-    m_layers = new PANEL_SETUP_LAYERS( this, m_frame );
-    m_physicalStackup = new PANEL_SETUP_BOARD_STACKUP( this, m_frame, m_layers );
-    m_boardFinish = new PANEL_SETUP_BOARD_FINISH( this, m_frame );
-
     m_currentPage = -1;
 
     /*
@@ -72,11 +71,27 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
      * PANEL_SETUP_BOARD_STACKUP::TransferDataFromWindow and rework this logic if it is determined
      * that the order of these pages should be changed.
      */
-    m_treebook->AddSubPage( m_layers,  _( "Board Editor Layers" ) );
+    m_layersPage = m_treebook->GetPageCount();
+    m_treebook->AddLazySubPage(
+            [this]( wxWindow* aParent ) -> wxWindow*
+            {
+                return new PANEL_SETUP_LAYERS( aParent, m_frame );
+            },  _( "Board Editor Layers" ) );
 
     m_physicalStackupPage = m_treebook->GetPageCount();
-    m_treebook->AddSubPage( m_physicalStackup,  _( "Physical Stackup" ) );
-    m_treebook->AddSubPage( m_boardFinish, _( "Board Finish" ) );
+    m_treebook->AddLazySubPage(
+            [this]( wxWindow* aParent ) -> wxWindow*
+            {
+                m_layers = RESOLVE_PAGE( PANEL_SETUP_LAYERS, m_layersPage );
+                return new PANEL_SETUP_BOARD_STACKUP( aParent, m_frame, m_layers );
+            },  _( "Physical Stackup" ) );
+
+    m_boardFinishPage = m_treebook->GetPageCount();
+    m_treebook->AddLazySubPage(
+            [this]( wxWindow* aParent ) -> wxWindow*
+            {
+                return new PANEL_SETUP_BOARD_FINISH( aParent, m_frame );
+            }, _( "Board Finish" ) );
 
     m_maskAndPagePage = m_treebook->GetPageCount();
     m_treebook->AddLazySubPage(
@@ -183,6 +198,12 @@ void DIALOG_BOARD_SETUP::onPageChanged( wxBookCtrlEvent& aEvent )
 
     size_t page = aEvent.GetSelection();
 
+    if( m_currentPage == m_physicalStackupPage || page == m_physicalStackupPage )
+    {
+        m_layers = RESOLVE_PAGE( PANEL_SETUP_LAYERS, m_layersPage );
+        m_physicalStackup = RESOLVE_PAGE( PANEL_SETUP_BOARD_STACKUP, m_physicalStackupPage );
+    }
+
     // Ensure layer page always gets updated even if we aren't moving towards it
     if( m_currentPage == m_physicalStackupPage )
         m_layers->SyncCopperLayers( m_physicalStackup->GetCopperLayerCount() );
@@ -218,6 +239,9 @@ void DIALOG_BOARD_SETUP::onAuxiliaryAction( wxCommandEvent& aEvent )
         return;
     }
 
+    m_layers = RESOLVE_PAGE( PANEL_SETUP_LAYERS, m_layersPage );
+    m_physicalStackup = RESOLVE_PAGE( PANEL_SETUP_BOARD_STACKUP, m_physicalStackupPage );
+
     // Flag so user can stop work if it will result in deleted inner copper layers
     // and still clean up this function properly.
     bool okToProceed = true;
@@ -225,8 +249,7 @@ void DIALOG_BOARD_SETUP::onAuxiliaryAction( wxCommandEvent& aEvent )
     PROJECT* otherPrj = m_frame->GetSettingsManager()->GetProject( projectFn.GetFullPath() );
 
     PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::KICAD_SEXP ) );
-
-    BOARD* otherBoard = nullptr;
+    BOARD*           otherBoard = nullptr;
 
     try
     {
@@ -279,49 +302,55 @@ void DIALOG_BOARD_SETUP::onAuxiliaryAction( wxCommandEvent& aEvent )
         {
             m_physicalStackup->ImportSettingsFrom( otherBoard );
             m_layers->ImportSettingsFrom( otherBoard );
-            m_boardFinish->ImportSettingsFrom( otherBoard );
+
+            RESOLVE_PAGE( PANEL_SETUP_BOARD_FINISH,
+                          m_boardFinishPage )->ImportSettingsFrom( otherBoard );
         }
 
         if( importDlg.m_TextAndGraphicsOpt->GetValue() )
         {
-            static_cast<PANEL_SETUP_TEXT_AND_GRAPHICS*>( m_treebook->ResolvePage( m_textAndGraphicsPage ) )
-                    ->ImportSettingsFrom( otherBoard );
+            RESOLVE_PAGE( PANEL_SETUP_TEXT_AND_GRAPHICS,
+                          m_textAndGraphicsPage )->ImportSettingsFrom( otherBoard );
         }
 
         if( importDlg.m_FormattingOpt->GetValue() )
         {
-            static_cast<PANEL_SETUP_FORMATTING*>( m_treebook->ResolvePage( m_formattingPage ) )
-                    ->ImportSettingsFrom( otherBoard );
+            RESOLVE_PAGE( PANEL_SETUP_FORMATTING,
+                          m_formattingPage )->ImportSettingsFrom( otherBoard );
         }
 
         if( importDlg.m_ConstraintsOpt->GetValue() )
         {
-            static_cast<PANEL_SETUP_CONSTRAINTS*>( m_treebook->ResolvePage( m_constraintsPage ) )
-                    ->ImportSettingsFrom( otherBoard );
+            RESOLVE_PAGE( PANEL_SETUP_CONSTRAINTS,
+                          m_constraintsPage )->ImportSettingsFrom( otherBoard );
         }
 
         if( importDlg.m_NetclassesOpt->GetValue() )
         {
-            static_cast<PANEL_SETUP_NETCLASSES*>( m_treebook->ResolvePage( m_netclassesPage ) )
-                    ->ImportSettingsFrom( otherPrj->GetProjectFile().m_NetSettings );
+            PROJECT_FILE& otherProjectFile = otherPrj->GetProjectFile();
+
+            RESOLVE_PAGE( PANEL_SETUP_NETCLASSES,
+                          m_netclassesPage )->ImportSettingsFrom( otherProjectFile.m_NetSettings );
         }
 
         if( importDlg.m_TracksAndViasOpt->GetValue() )
         {
-            static_cast<PANEL_SETUP_TRACKS_AND_VIAS*>( m_treebook->ResolvePage( m_tracksAndViasPage ) )
-                    ->ImportSettingsFrom( otherBoard );
+            RESOLVE_PAGE( PANEL_SETUP_TRACKS_AND_VIAS,
+                          m_tracksAndViasPage )->ImportSettingsFrom( otherBoard );
         }
 
         if( importDlg.m_MaskAndPasteOpt->GetValue() )
         {
-            static_cast<PANEL_SETUP_MASK_AND_PASTE*>( m_treebook->ResolvePage( m_maskAndPagePage ) )
-                    ->ImportSettingsFrom( otherBoard );
+            RESOLVE_PAGE( PANEL_SETUP_MASK_AND_PASTE,
+                          m_maskAndPagePage )->ImportSettingsFrom( otherBoard );
         }
 
         if( importDlg.m_SeveritiesOpt->GetValue() )
         {
-            static_cast<PANEL_SETUP_SEVERITIES*>( m_treebook->ResolvePage( m_severitiesPage ) )
-                    ->ImportSettingsFrom( otherBoard->GetDesignSettings().m_DRCSeverities );
+            BOARD_DESIGN_SETTINGS& otherSettings = otherBoard->GetDesignSettings();
+
+            RESOLVE_PAGE( PANEL_SETUP_SEVERITIES,
+                          m_severitiesPage )->ImportSettingsFrom( otherSettings.m_DRCSeverities );
         }
 
         if( otherPrj != &m_frame->Prj() )

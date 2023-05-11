@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,19 +22,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <widgets/paged_dialog.h>
 #include <pcb_edit_frame.h>
 #include <board_design_settings.h>
 #include <board_stackup_manager/stackup_predefined_prms.h>
 #include "panel_board_finish.h"
 
-#include <wx/treebook.h>
 
-
-PANEL_SETUP_BOARD_FINISH::PANEL_SETUP_BOARD_FINISH( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame ) :
-        PANEL_SETUP_BOARD_FINISH_BASE( aParent->GetTreebook() )
+PANEL_SETUP_BOARD_FINISH::PANEL_SETUP_BOARD_FINISH( wxWindow* aParentWindow,
+                                                    PCB_EDIT_FRAME* aFrame ) :
+        PANEL_SETUP_BOARD_FINISH_BASE( aParentWindow )
 {
-    m_parentDialog = aParent;
     m_frame = aFrame;
     m_board = m_frame->GetBoard();
     m_brdSettings = &m_board->GetDesignSettings();
