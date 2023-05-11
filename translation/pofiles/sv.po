@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-09 09:51-0700\n"
-"PO-Revision-Date: 2023-05-11 09:52+0000\n"
+"PO-Revision-Date: 2023-05-12 13:56+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -14012,19 +14012,16 @@ msgid "Show pin names settings differ."
 msgstr "Inställning för visa stiftnamn är olika."
 
 #: eeschema/lib_symbol.cpp:488
-#, fuzzy
 msgid "Show pin numbers settings differ."
-msgstr "Visa text för stiftnummer"
+msgstr "Inställning visa stiftnummer är olika."
 
 #: eeschema/lib_symbol.cpp:497
-#, fuzzy
 msgid "Exclude from bill of materials settings differ."
-msgstr "Uteslut från komponentlistan"
+msgstr "Inställning uteslut från komponentlistan är olika."
 
 #: eeschema/lib_symbol.cpp:506
-#, fuzzy
 msgid "Exclude from board settings differ."
-msgstr "Inställning för att undanta från krav på gårdsplan är olika."
+msgstr "Inställning undanta från mönsterkortsinställningar är olika."
 
 #: eeschema/lib_symbol.cpp:553 eeschema/sch_symbol.cpp:438
 #: eeschema/tools/sch_edit_tool.cpp:116
@@ -14493,9 +14490,8 @@ msgid "Highlighted net: %s"
 msgstr "Markerat nät: %s"
 
 #: eeschema/sch_edit_frame.cpp:2200 eeschema/tools/ee_actions.cpp:55
-#, fuzzy
 msgid "Diff Symbol with Library"
-msgstr "Symboler till bibliotek..."
+msgstr "Jämför symbol med bibliotek"
 
 #: eeschema/sch_field.cpp:781
 #, c-format
@@ -14846,15 +14842,16 @@ msgid "File not found %s."
 msgstr "Fil %s hittades inte."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:72
-#, fuzzy
 msgid "The selected file does not appear to be a CADSTAR parts Library file"
-msgstr "Filen '%s' verkar inte vara en giltig kretsschemafil."
+msgstr "Den valda filen verkar inte vara en CADSTAR komponentbiblioteksfil"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:117
 #, c-format
 msgid ""
 "Unable to find symbol %s, referenced by part %s. The part was not loaded."
 msgstr ""
+"Kunde inte hitta symbol %s som komponent %s hänvisar till. Komponenten "
+"lästes inte in."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:132
 #, c-format
@@ -15501,15 +15498,13 @@ msgid "Simulation"
 msgstr "Simulering"
 
 #: eeschema/sch_symbol.cpp:1733
-#, fuzzy
 msgid "BOM"
-msgstr "Komponentlista..."
+msgstr "Komponentlista"
 
 #: eeschema/sch_symbol.cpp:1745 eeschema/sch_text.cpp:504
 #: eeschema/sch_textbox.cpp:448
-#, fuzzy
 msgid "Exclude from"
-msgstr "Uteslut från komponentlistan"
+msgstr "Uteslut från"
 
 #: eeschema/sch_symbol.cpp:1756
 msgid "Power symbol"
@@ -16638,14 +16633,13 @@ msgid "Invalid IBIS file '%s'"
 msgstr "Ogiltig IBIS-fil '%s'"
 
 #: eeschema/sim/sim_model.cpp:394
-#, fuzzy, c-format
+#, c-format
 msgid "No simulation model definition found for symbol '%s'."
-msgstr "Simulationsmodellbibliotek hittades inte på '%s' eller '%s'"
+msgstr "Ingen definition av simulationsmodell hittades för symbol '%s'."
 
 #: eeschema/sim/sim_model.cpp:401
-#, fuzzy
 msgid "No simulation model definition found."
-msgstr "Simualtionsmodellredigerare"
+msgstr "Ingen definition av simulationsmodell hittades."
 
 #: eeschema/sim/sim_model.cpp:535 eeschema/sim/sim_model.cpp:597
 #, c-format
@@ -17695,14 +17689,14 @@ msgid "Change %s value from '%s' to '%s'."
 msgstr "Ändra %s -värdet från '%s' till '%s'."
 
 #: eeschema/tools/backannotate.cpp:415
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s 'Do not populate' from '%s' to '%s'."
-msgstr "Ändra fotavtryck %s från '%s' till '%s'."
+msgstr "Ändra 'montera ej' %s från '%s' till '%s'."
 
 #: eeschema/tools/backannotate.cpp:431
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s 'Exclude from bill of materials' from '%s' to '%s'."
-msgstr "Ändra fotavtryck %s från '%s' till '%s'."
+msgstr "Ändra 'utelämna %s från komponentlistan' från '%s' till '%s'."
 
 #: eeschema/tools/backannotate.cpp:455
 #, c-format
@@ -17739,11 +17733,10 @@ msgid "Show the symbol checker window"
 msgstr "Visa symbolkontrollfönstret"
 
 #: eeschema/tools/ee_actions.cpp:56
-#, fuzzy
 msgid "Show differences between schematic symbol and its library equivalent"
 msgstr ""
-"Kontrollera om skillnader föreligger mellan fotavtryck på mönsterkortet och "
-"dess ekvivalent i bibliotek"
+"Kontrollera om skillnader föreligger mellan symbol på kretsschemat och dess "
+"ekvivalent i biblioteket"
 
 #: eeschema/tools/ee_actions.cpp:61
 msgid "Show simulation window for running SPICE or IBIS simulations."
@@ -17944,9 +17937,8 @@ msgid "Add Pin"
 msgstr "Lägg till pinne"
 
 #: eeschema/tools/ee_actions.cpp:249
-#, fuzzy
 msgid "Draw pins"
-msgstr "Ritningar"
+msgstr "Rita stift"
 
 #: eeschema/tools/ee_actions.cpp:254 eeschema/tools/ee_actions.cpp:369
 #: pagelayout_editor/tools/pl_actions.cpp:54 pcbnew/tools/pcb_actions.cpp:128
@@ -17954,9 +17946,8 @@ msgid "Add Text"
 msgstr "Lägg till text"
 
 #: eeschema/tools/ee_actions.cpp:254 eeschema/tools/ee_actions.cpp:369
-#, fuzzy
 msgid "Draw text items"
-msgstr "Andra textelement"
+msgstr "Rita textelement"
 
 #: eeschema/tools/ee_actions.cpp:259 eeschema/tools/ee_actions.cpp:374
 #: pcbnew/tools/pcb_actions.cpp:133
@@ -17964,28 +17955,24 @@ msgid "Add Text Box"
 msgstr "Lägg till textruta"
 
 #: eeschema/tools/ee_actions.cpp:259 eeschema/tools/ee_actions.cpp:374
-#, fuzzy
 msgid "Draw text box items"
-msgstr "Lägg till ett textruteobjekt"
+msgstr "Rita textruteobjekt"
 
 #: eeschema/tools/ee_actions.cpp:264 eeschema/tools/ee_actions.cpp:916
 msgid "Add Lines"
 msgstr "Lägg till linjer"
 
 #: eeschema/tools/ee_actions.cpp:264
-#, fuzzy
 msgid "Draw lines"
-msgstr "Rita en linje"
+msgstr "Rita linjer"
 
 #: eeschema/tools/ee_actions.cpp:269
-#, fuzzy
 msgid "Add Polygon"
-msgstr "Polygon"
+msgstr "Lägg till polygon"
 
 #: eeschema/tools/ee_actions.cpp:269
-#, fuzzy
 msgid "Draw polygons"
-msgstr "Rita grafisk polygon"
+msgstr "Rita polygoner"
 
 #: eeschema/tools/ee_actions.cpp:274
 msgid "Move Symbol Anchor"
@@ -18028,36 +18015,32 @@ msgid "Add Symbol"
 msgstr "Lägg till symbol"
 
 #: eeschema/tools/ee_actions.cpp:305
-#, fuzzy
 msgid "Add symbols"
-msgstr "Lägg till en symbol"
+msgstr "Lägg till symboler"
 
 #: eeschema/tools/ee_actions.cpp:311
 msgid "Add Power"
 msgstr "Lägg till strömkälla"
 
 #: eeschema/tools/ee_actions.cpp:311
-#, fuzzy
 msgid "Add power symbols"
-msgstr "Lägg till en strömförsörjningssymbol"
+msgstr "Lägg till strömförsörjningssymboler"
 
 #: eeschema/tools/ee_actions.cpp:317
 msgid "Add No Connect Flag"
 msgstr "Lägg till Ingen anslutningsflagga"
 
 #: eeschema/tools/ee_actions.cpp:317
-#, fuzzy
 msgid "Draw no-connection flags"
-msgstr "Lägg till en flagga utan anslutning"
+msgstr "Lägg till 'ingen anslutning'-flaggor"
 
 #: eeschema/tools/ee_actions.cpp:323
 msgid "Add Junction"
 msgstr "Lägg till korsning"
 
 #: eeschema/tools/ee_actions.cpp:323
-#, fuzzy
 msgid "Draw junctions"
-msgstr "Bussknutpunkter"
+msgstr "Rita knutpunkter"
 
 #: eeschema/tools/ee_actions.cpp:329
 msgid "Add Wire to Bus Entry"
@@ -18072,9 +18055,8 @@ msgid "Add Label"
 msgstr "Lägg till etikett"
 
 #: eeschema/tools/ee_actions.cpp:335
-#, fuzzy
 msgid "Draw net labels"
-msgstr "Lägg till en nätetikett"
+msgstr "Rita nätetiketter"
 
 #: eeschema/tools/ee_actions.cpp:340
 msgid "Add Net Class Directive"
@@ -21042,9 +21024,8 @@ msgid "Plot only the first page (no sub-sheets)"
 msgstr "Plotta bara första arket (inga underark)"
 
 #: kicad/cli/command_export_sch_plot.cpp:76
-#, fuzzy
 msgid "Pen size [mm]"
-msgstr "Pennstorlek [mm]:"
+msgstr "Pennstorlek [mm]"
 
 #: kicad/cli/command_export_sch_plot.cpp:81
 msgid "Origin and scale: 0 bottom left, 1 centered, 2 page fit, 3 content fit"
