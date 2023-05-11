@@ -80,7 +80,7 @@ public:
     /**
      * Run the DRC tests.
      */
-    void RunTests( PROGRESS_REPORTER* aProgressReporter, bool aRefillZones, bool aUpdateTeardrops,
+    void RunTests( PROGRESS_REPORTER* aProgressReporter, bool aRefillZones,
                    bool aReportAllTrackErrors, bool aTestFootprints );
 
     int PrevMarker( const TOOL_EVENT& aEvent );

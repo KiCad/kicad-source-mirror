@@ -467,13 +467,13 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                 nlohmann::json js = nlohmann::json::array();
                 nlohmann::json entry = {};
 
-                entry["td_onviapad"]             = m_TeardropParamsList.m_TargetViasPads;
-                entry["td_onpadsmd"]             = m_TeardropParamsList.m_TargetPadsWithNoHole;
-                entry["td_ontrackend"]           = m_TeardropParamsList.m_TargetTrack2Track;
-                entry["td_onroundshapesonly"]    = m_TeardropParamsList.m_UseRoundShapesOnly;
+                entry["td_onviapad"]  = m_TeardropParamsList.m_TargetViasPads;
+                entry["td_onpadsmd"]  = m_TeardropParamsList.m_TargetPadsWithNoHole;
+                entry["td_ontrackend"]  = m_TeardropParamsList.m_TargetTrack2Track;
+                entry["td_onroundshapesonly"]  = m_TeardropParamsList.m_UseRoundShapesOnly;
                 entry["td_allow_use_two_tracks"] = m_TeardropParamsList.m_AllowUseTwoTracks;
-                entry["td_curve_segcount"]       = m_TeardropParamsList.m_CurveSegCount;
-                entry["td_on_pad_in_zone"]       = m_TeardropParamsList.m_TdOnPadsInZones;
+                entry["td_curve_segcount"]  = m_TeardropParamsList.m_CurveSegCount;
+                entry["td_on_pad_in_zone"]  = m_TeardropParamsList.m_TdOnPadsInZones;
 
                 js.push_back( entry );
 

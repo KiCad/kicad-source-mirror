@@ -27,19 +27,16 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_cbRefillZones = new wxCheckBox( this, wxID_ANY, _("Refill all zones before performing DRC"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer12->Add( m_cbRefillZones, 0, wxALL, 5 );
 
-	m_cbUpdateTeardrops = new wxCheckBox( this, wxID_ANY, _("Update teardrops before performing DRC"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer12->Add( m_cbUpdateTeardrops, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_cbReportAllTrackErrors = new wxCheckBox( this, wxID_ANY, _("Report all errors for each track"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbReportAllTrackErrors->SetToolTip( _("If selected, all DRC violations for tracks will be reported.  This can be slow for complicated designs.\n\nIf unselected, only the first DRC violation will be reported for each track connection.") );
+
+	bSizer12->Add( m_cbReportAllTrackErrors, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizerOptions->Add( bSizer12, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bSizerOptSettings;
 	bSizerOptSettings = new wxBoxSizer( wxVERTICAL );
-
-	m_cbReportAllTrackErrors = new wxCheckBox( this, wxID_ANY, _("Report all errors for each track"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbReportAllTrackErrors->SetToolTip( _("If selected, all DRC violations for tracks will be reported.  This can be slow for complicated designs.\n\nIf unselected, only the first DRC violation will be reported for each track connection.") );
-
-	bSizerOptSettings->Add( m_cbReportAllTrackErrors, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_cbTestFootprints = new wxCheckBox( this, wxID_ANY, _("Test for parity between PCB and schematic"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerOptSettings->Add( m_cbTestFootprints, 0, wxALL, 5 );
@@ -48,7 +45,7 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bSizerOptions->Add( bSizerOptSettings, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	m_MainSizer->Add( bSizerOptions, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	m_MainSizer->Add( bSizerOptions, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 3 );
 
 	m_runningResultsBook = new wxSimplebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	running = new wxPanel( m_runningResultsBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -151,7 +148,7 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bSizer15->Fit( m_panelIgnored );
 	m_Notebook->AddPage( m_panelIgnored, _("Ignored Tests (%s)"), false );
 
-	bSizer13->Add( m_Notebook, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizer13->Add( m_Notebook, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
 
 	results->SetSizer( bSizer13 );
@@ -202,7 +199,7 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bSeveritySizer->Add( m_saveReport, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizer9->Add( bSeveritySizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizer9->Add( bSeveritySizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	m_MainSizer->Add( bSizer9, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );

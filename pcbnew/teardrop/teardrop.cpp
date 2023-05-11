@@ -46,7 +46,7 @@
 TEARDROP_MANAGER::TEARDROP_MANAGER( BOARD* aBoard, PCB_EDIT_FRAME* aFrame )
 {
     m_board = aBoard;
-    m_prmsList = m_board->GetDesignSettings().GetTeardropParamsList();
+    m_prmsList = m_board->GetDesignSettings().GetTeadropParamsList();
     m_tolerance = 0;
 }
 

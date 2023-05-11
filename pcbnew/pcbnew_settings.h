@@ -158,7 +158,6 @@ public:
     struct DIALOG_DRC
     {
         bool refill_zones;
-        bool update_teardrops;
         bool test_all_track_errors;
         bool test_footprints;
         int  severities;

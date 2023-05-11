@@ -59,7 +59,7 @@ public:
         m_bitmapTdTrackInfo->SetBitmap( KiBitmap( BITMAPS::teardrop_track_sizes ) );
 
         m_brdSettings = &m_frame->GetBoard()->GetBoard()->GetDesignSettings();
-        TEARDROP_PARAMETERS_LIST* prmsList = m_brdSettings->GetTeardropParamsList();
+        TEARDROP_PARAMETERS_LIST* prmsList = m_brdSettings->GetTeadropParamsList();
 
         m_cbPadVia->SetValue( prmsList->m_TargetViasPads );
         m_cbSmdSimilarPads->SetValue( prmsList->m_TargetPadsWithNoHole );
@@ -109,7 +109,7 @@ public:
     void TransferToParamList()
     {
         int shape_seg_count = GetCurvePointCount();
-        TEARDROP_PARAMETERS_LIST* prmsList = m_brdSettings->GetTeardropParamsList();
+        TEARDROP_PARAMETERS_LIST* prmsList = m_brdSettings->GetTeadropParamsList();
 
         prmsList->m_TargetViasPads = m_cbPadVia->GetValue();
         prmsList->m_TargetPadsWithNoHole = m_cbSmdSimilarPads->GetValue();

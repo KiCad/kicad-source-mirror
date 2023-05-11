@@ -235,7 +235,7 @@ public:
     BOARD_STACKUP& GetStackupDescriptor() { return m_stackup; }
     const BOARD_STACKUP& GetStackupDescriptor() const { return m_stackup; }
 
-    TEARDROP_PARAMETERS_LIST* GetTeardropParamsList()
+    TEARDROP_PARAMETERS_LIST* GetTeadropParamsList()
     {
         return &m_TeardropParamsList;
     }

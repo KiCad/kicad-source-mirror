@@ -131,7 +131,6 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
     m_ignoredTitleTemplate     = m_Notebook->GetPageText( 3 );
 
     m_cbRefillZones->SetValue( cfg->m_DrcDialog.refill_zones );
-    m_cbUpdateTeardrops->SetValue( cfg->m_DrcDialog.update_teardrops );
     m_cbReportAllTrackErrors->SetValue( cfg->m_DrcDialog.test_all_track_errors );
 
     if( !Kiface().IsSingle() )
@@ -162,7 +161,6 @@ DIALOG_DRC::~DIALOG_DRC()
 
     PCBNEW_SETTINGS* settings = m_frame->GetPcbNewSettings();
     settings->m_DrcDialog.refill_zones          = m_cbRefillZones->GetValue();
-    settings->m_DrcDialog.update_teardrops      = m_cbUpdateTeardrops->GetValue();
     settings->m_DrcDialog.test_all_track_errors = m_cbReportAllTrackErrors->GetValue();
 
     if( !Kiface().IsSingle() )
@@ -239,7 +237,6 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
     DRC_TOOL*         drcTool              = toolMgr->GetTool<DRC_TOOL>();
     ZONE_FILLER_TOOL* zoneFillerTool       = toolMgr->GetTool<ZONE_FILLER_TOOL>();
     bool              refillZones          = m_cbRefillZones->GetValue();
-    bool              updateTeardrops      = m_cbUpdateTeardrops->GetValue();
     bool              reportAllTrackErrors = m_cbReportAllTrackErrors->GetValue();
     bool              testFootprints       = m_cbTestFootprints->GetValue();
 
@@ -305,7 +302,7 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
 
     {
     wxBusyCursor dummy;
-    drcTool->RunTests( this, refillZones, updateTeardrops, reportAllTrackErrors, testFootprints );
+    drcTool->RunTests( this, refillZones, reportAllTrackErrors, testFootprints );
     }
 
     if( m_cancelled )
