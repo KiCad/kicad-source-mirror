@@ -39,7 +39,7 @@ public:
     bool AddLazySubPage( std::function<wxWindow*( wxWindow* aParent )> aLazyCtor,
                          const wxString& text, bool bSelect = false, int imageId = NO_IMAGE );
 
-    wxWindow* ResolvePage( int aPage );
+    wxWindow* ResolvePage( size_t aPage );
 };
 
 

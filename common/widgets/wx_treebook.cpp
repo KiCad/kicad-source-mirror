@@ -90,7 +90,7 @@ bool WX_TREEBOOK::AddLazySubPage( std::function<wxWindow*( wxWindow* aParent )> 
 }
 
 
-wxWindow* WX_TREEBOOK::ResolvePage( int aPage )
+wxWindow* WX_TREEBOOK::ResolvePage( size_t aPage )
 {
     wxWindow* page = GetPage( aPage );
 

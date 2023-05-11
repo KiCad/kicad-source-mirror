@@ -129,7 +129,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	m_assignmentGrid->SetMargins( 0, 0 );
 
 	// Columns
-	m_assignmentGrid->SetColSize( 0, 400 );
+	m_assignmentGrid->SetColSize( 0, 360 );
 	m_assignmentGrid->SetColSize( 1, 160 );
 	m_assignmentGrid->EnableDragColMove( false );
 	m_assignmentGrid->EnableDragColSize( true );
