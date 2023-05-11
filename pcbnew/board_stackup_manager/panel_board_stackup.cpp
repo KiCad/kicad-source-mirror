@@ -717,20 +717,26 @@ void PANEL_SETUP_BOARD_STACKUP::showOnlyActiveLayers()
 
         ui_row_item.m_isEnabled = show_item;
 
-        // Show or not items of this row:
-        ui_row_item.m_Icon->Show( show_item );
-        ui_row_item.m_LayerName->Show( show_item );
-        ui_row_item.m_LayerTypeCtrl->Show( show_item );
-        ui_row_item.m_MaterialCtrl->Show( show_item );
+        if( show_item && !ui_row_item.m_Icon )
+            lazyBuildRowUI( ui_row_item );
 
-        if( ui_row_item.m_MaterialButt )
-            ui_row_item.m_MaterialButt->Show( show_item );
+        if( ui_row_item.m_Icon )
+        {
+            // Show or not items of this row:
+            ui_row_item.m_Icon->Show( show_item );
+            ui_row_item.m_LayerName->Show( show_item );
+            ui_row_item.m_LayerTypeCtrl->Show( show_item );
+            ui_row_item.m_MaterialCtrl->Show( show_item );
 
-        ui_row_item.m_ThicknessCtrl->Show( show_item );
-        ui_row_item.m_ThicknessLockCtrl->Show( show_item );
-        ui_row_item.m_ColorCtrl->Show( show_item );
-        ui_row_item.m_EpsilonCtrl->Show( show_item );
-        ui_row_item.m_LossTgCtrl->Show( show_item );
+            if( ui_row_item.m_MaterialButt )
+                ui_row_item.m_MaterialButt->Show( show_item );
+
+            ui_row_item.m_ThicknessCtrl->Show( show_item );
+            ui_row_item.m_ThicknessLockCtrl->Show( show_item );
+            ui_row_item.m_ColorCtrl->Show( show_item );
+            ui_row_item.m_EpsilonCtrl->Show( show_item );
+            ui_row_item.m_LossTgCtrl->Show( show_item );
+        }
     }
 }
 
@@ -775,16 +781,11 @@ wxControl* PANEL_SETUP_BOARD_STACKUP::addSpacer()
 }
 
 
-BOARD_STACKUP_ROW_UI_ITEM PANEL_SETUP_BOARD_STACKUP::createRowData( int aRow,
-                                                                    BOARD_STACKUP_ITEM* aStackupItem,
-                                                                    int aSublayerIdx )
+void PANEL_SETUP_BOARD_STACKUP::lazyBuildRowUI( BOARD_STACKUP_ROW_UI_ITEM& ui_row_item )
 {
-    wxASSERT( aStackupItem );
-    wxASSERT( aSublayerIdx >= 0 && aSublayerIdx < aStackupItem->GetSublayersCount() );
-
-    BOARD_STACKUP_ROW_UI_ITEM ui_row_item( aStackupItem, aSublayerIdx );
-    BOARD_STACKUP_ITEM* item = aStackupItem;
-    int row = aRow;
+    BOARD_STACKUP_ITEM* item = ui_row_item.m_Item;
+    int                 sublayerIdx = ui_row_item.m_SubItem;
+    int                 row = ui_row_item.m_Row;
 
     // Add color swatch icon. The color will be updated later,
     // when all widgets are initialized
@@ -792,15 +793,13 @@ BOARD_STACKUP_ROW_UI_ITEM PANEL_SETUP_BOARD_STACKUP::createRowData( int aRow,
     m_fgGridSizer->Add( bitmap, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 4 );
     ui_row_item.m_Icon = bitmap;
 
-    ui_row_item.m_isEnabled = true;
-
     if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
     {
         wxString lname = item->FormatDielectricLayerName();
 
         if( item->GetSublayersCount() > 1 )
         {
-            lname <<  wxT( "  (" ) << aSublayerIdx+1 << wxT( "/" )
+            lname <<  wxT( "  (" ) << sublayerIdx +1 << wxT( "/" )
                                    << item->GetSublayersCount() << wxT( ")" );
         }
 
@@ -809,8 +808,8 @@ BOARD_STACKUP_ROW_UI_ITEM PANEL_SETUP_BOARD_STACKUP::createRowData( int aRow,
         ui_row_item.m_LayerName = st_text;
 
         // For a dielectric layer, the layer type choice is not for each sublayer,
-        // only for the first (aSublayerIdx = 0), and is common to all sublayers
-        if( aSublayerIdx == 0 )
+        // only for the first (sublayerIdx = 0), and is common to all sublayers
+        if( sublayerIdx == 0 )
         {
             wxChoice* choice = new wxChoice( m_scGridWin, wxID_ANY, wxDefaultPosition,
                                              wxDefaultSize, m_core_prepreg_choice );
@@ -846,7 +845,7 @@ BOARD_STACKUP_ROW_UI_ITEM PANEL_SETUP_BOARD_STACKUP::createRowData( int aRow,
 
     if( item->IsMaterialEditable() )
     {
-        wxString matName = item->GetMaterial( aSublayerIdx );
+        wxString matName = item->GetMaterial( sublayerIdx );
         addMaterialChooser( ID_ITEM_MATERIAL+row, &matName, ui_row_item );
     }
     else
@@ -858,7 +857,7 @@ BOARD_STACKUP_ROW_UI_ITEM PANEL_SETUP_BOARD_STACKUP::createRowData( int aRow,
     {
         wxTextCtrl* textCtrl = new wxTextCtrl( m_scGridWin, ID_ITEM_THICKNESS+row );
         textCtrl->SetMinSize( m_numericTextCtrlSize );
-        textCtrl->ChangeValue( m_frame->StringFromValue( item->GetThickness( aSublayerIdx ), true ) );
+        textCtrl->ChangeValue( m_frame->StringFromValue( item->GetThickness( sublayerIdx ), true ) );
         m_fgGridSizer->Add( textCtrl, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 2 );
         m_controlItemsList.push_back( textCtrl );
         textCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED,
@@ -870,7 +869,7 @@ BOARD_STACKUP_ROW_UI_ITEM PANEL_SETUP_BOARD_STACKUP::createRowData( int aRow,
         {
             wxCheckBox* cb_box = new wxCheckBox( m_scGridWin, ID_ITEM_THICKNESS_LOCKED+row,
                                                  wxEmptyString );
-            cb_box->SetValue( item->IsThicknessLocked( aSublayerIdx ) );
+            cb_box->SetValue( item->IsThicknessLocked( sublayerIdx ) );
             m_fgGridSizer->Add( cb_box, 0, wxALIGN_CENTER_VERTICAL, 2 );
             ui_row_item.m_ThicknessLockCtrl = cb_box;
         }
@@ -887,9 +886,9 @@ BOARD_STACKUP_ROW_UI_ITEM PANEL_SETUP_BOARD_STACKUP::createRowData( int aRow,
 
     if( item->IsColorEditable() )
     {
-        if( item->GetColor( aSublayerIdx ).StartsWith( wxT( "#" ) ) )  // User defined color
+        if( item->GetColor( sublayerIdx ).StartsWith( wxT( "#" ) ) )  // User defined color
         {
-            ui_row_item.m_UserColor = COLOR4D( item->GetColor( aSublayerIdx ) ).ToColour();
+            ui_row_item.m_UserColor = COLOR4D( item->GetColor( sublayerIdx ) ).ToColour();
         }
         else
             ui_row_item.m_UserColor = GetDefaultUserColor( item->GetType() );
@@ -899,17 +898,17 @@ BOARD_STACKUP_ROW_UI_ITEM PANEL_SETUP_BOARD_STACKUP::createRowData( int aRow,
 
         m_fgGridSizer->Add( bm_combo, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 2 );
 
-        if( item->GetColor( aSublayerIdx ).StartsWith( wxT( "#" ) ) )
+        if( item->GetColor( sublayerIdx ).StartsWith( wxT( "#" ) ) )
         {
             selected = GetColorUserDefinedListIdx( item->GetType() );
-            bm_combo->SetString( selected, item->GetColor( aSublayerIdx ) );
+            bm_combo->SetString( selected, item->GetColor( sublayerIdx ) );
         }
         else
         {
             // Note: don't use bm_combo->FindString() because the combo strings are translated.
             for( size_t ii = 0; ii < GetStandardColors( item->GetType() ).size(); ii++ )
             {
-                if( GetStandardColorName( item->GetType(), ii ) == item->GetColor( aSublayerIdx ) )
+                if( GetStandardColorName( item->GetType(), ii ) == item->GetColor( sublayerIdx ) )
                 {
                     selected = ii;
                     break;
@@ -927,7 +926,7 @@ BOARD_STACKUP_ROW_UI_ITEM PANEL_SETUP_BOARD_STACKUP::createRowData( int aRow,
 
     if( item->HasEpsilonRValue() )
     {
-        wxString txt = UIDouble2Str( item->GetEpsilonR( aSublayerIdx ) );
+        wxString txt = UIDouble2Str( item->GetEpsilonR( sublayerIdx ) );
         wxTextCtrl* textCtrl = new wxTextCtrl( m_scGridWin, wxID_ANY, wxEmptyString,
                                                wxDefaultPosition, m_numericFieldsSize );
         textCtrl->ChangeValue( txt );
@@ -941,7 +940,7 @@ BOARD_STACKUP_ROW_UI_ITEM PANEL_SETUP_BOARD_STACKUP::createRowData( int aRow,
 
     if( item->HasLossTangentValue() )
     {
-        wxString txt = UIDouble2Str( item->GetLossTangent( aSublayerIdx ) );;
+        wxString txt = UIDouble2Str( item->GetLossTangent( sublayerIdx ) );;
         wxTextCtrl* textCtrl = new wxTextCtrl( m_scGridWin, wxID_ANY, wxEmptyString,
                                                wxDefaultPosition, m_numericFieldsSize );
         textCtrl->ChangeValue( txt );
@@ -952,8 +951,6 @@ BOARD_STACKUP_ROW_UI_ITEM PANEL_SETUP_BOARD_STACKUP::createRowData( int aRow,
     {
         ui_row_item.m_LossTgCtrl = addSpacer();
     }
-
-    return ui_row_item;
 }
 
 
@@ -973,7 +970,8 @@ void PANEL_SETUP_BOARD_STACKUP::rebuildLayerStackPanel( bool aRelinkItems )
     for( BOARD_STACKUP_ROW_UI_ITEM& ui_item: m_rowUiItemsList )
     {
         // This remove and delete the current ui_item.m_MaterialCtrl sizer
-        ui_item.m_MaterialCtrl->SetSizer( nullptr );
+        if( ui_item.m_MaterialCtrl )
+            ui_item.m_MaterialCtrl->SetSizer( nullptr );
 
         // Delete other widgets
         delete ui_item.m_Icon;             // Color icon in first column (column 1)
@@ -1019,6 +1017,8 @@ void PANEL_SETUP_BOARD_STACKUP::rebuildLayerStackPanel( bool aRelinkItems )
 
     // Now enable/disable stackup items, according to the m_enabledLayers config
     showOnlyActiveLayers();
+
+    updateIconColor();
 
     m_scGridWin->Layout();
     m_scGridWin->Show();
@@ -1079,14 +1079,10 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel( bool aCreateInitialStackup
     {
         for( int sub_idx = 0; sub_idx < item->GetSublayersCount(); sub_idx++ )
         {
-            BOARD_STACKUP_ROW_UI_ITEM ui_row_item = createRowData( row, item, sub_idx );
-            m_rowUiItemsList.emplace_back( ui_row_item );
-
+            m_rowUiItemsList.emplace_back( item, sub_idx, row );
             row++;
         }
     }
-
-    updateIconColor();
 }
 
 
@@ -1578,9 +1574,12 @@ void PANEL_SETUP_BOARD_STACKUP::updateIconColor( int aRow )
 
     for( unsigned row = 0; row < m_rowUiItemsList.size(); row++ )
     {
-        wxBitmap bmp( m_colorIconsSize.x, m_colorIconsSize.y / 2, bitmap_depth );
-        drawBitmap( bmp, getColorIconItem( row ) );
-        m_rowUiItemsList[row].m_Icon->SetBitmap( bmp );
+        if( m_rowUiItemsList[row].m_Icon )
+        {
+            wxBitmap bmp( m_colorIconsSize.x, m_colorIconsSize.y / 2, bitmap_depth );
+            drawBitmap( bmp, getColorIconItem( row ) );
+            m_rowUiItemsList[row].m_Icon->SetBitmap( bmp );
+        }
     }
 }
 

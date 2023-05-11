@@ -51,6 +51,7 @@ struct BOARD_STACKUP_ROW_UI_ITEM
     int             m_SubItem;          // For multilayer dielectric, the index in sublayer list.
                                         // Must be >= 0 and < m_Item sublayer count. Used only for dielectic
                                         // 0 is the base list of parameters (always existing)
+    int             m_Row;              // The row number in the parent grid
     bool            m_isEnabled;        // True if the row is in board
                                         // false if not (this row is not shown on the panel)
     wxStaticBitmap* m_Icon;             // Color icon in first column (column 1)
@@ -66,10 +67,11 @@ struct BOARD_STACKUP_ROW_UI_ITEM
 
     COLOR4D         m_UserColor;        // User-specified color (if any)
 
-    BOARD_STACKUP_ROW_UI_ITEM( BOARD_STACKUP_ITEM* aItem, int aSubItem = 1 ) :
+    BOARD_STACKUP_ROW_UI_ITEM( BOARD_STACKUP_ITEM* aItem, int aSubItem, int aRow ) :
         m_Item( aItem ),
         m_SubItem( aSubItem ),
-        m_isEnabled( true ),
+        m_Row( aRow ),
+        m_isEnabled( false ),
         m_Icon( nullptr ),
         m_LayerName( nullptr ),
         m_LayerTypeCtrl( nullptr ),
@@ -116,7 +118,7 @@ public:
     bool TransferDataFromWindow() override;
 
 private:
-    /** Creates a BOARD_STACKUP_ROW_UI_ITEM relative to the aStackupItem.
+    /** Creates the controls in a BOARD_STACKUP_ROW_UI_ITEM relative to the aStackupItem.
      * @return a BOARD_STACKUP_ROW_UI_ITEM filled with corresponding widgets
      * @param aRow is the row index in the row list
      * @param aStackupItem is the stackup item controlled by the created
@@ -125,8 +127,7 @@ private:
      * this is the index of the sublayer to used inside aStackupItem
      * (from 0 to sub layer count - 1)
      */
-    BOARD_STACKUP_ROW_UI_ITEM createRowData( int aRow, BOARD_STACKUP_ITEM* aStackupItem,
-                                             int aSublayerIdx );
+    void lazyBuildRowUI( BOARD_STACKUP_ROW_UI_ITEM& ui_row_item );
 
     /** add a Spacer in m_fgGridSizer when a empty cell is needed
      */
