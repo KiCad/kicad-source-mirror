@@ -1247,6 +1247,16 @@ const ITEM_SET LINE_PLACER::Traces()
 
 void LINE_PLACER::FlipPosture()
 {
+    // In order to fix issue 12369 get the current line placer first direction
+    // and copy it to the mouse trail tracer, as the current placer may have
+    // changed the route.
+    if( m_mouseTrailTracer.IsManuallyForced() == false && m_currentTrace.SegmentCount() > 0 )
+    {
+        DIRECTION_45 firstDirection( m_currentTrace.CSegment( 0 ) );
+
+        m_mouseTrailTracer.SetDefaultDirections( firstDirection, DIRECTION_45::UNDEFINED );
+    }
+
     m_mouseTrailTracer.FlipPosture();
 }
 
