@@ -54,10 +54,21 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
                       _( "Import Settings from Another Board..." ) ),
         m_frame( aFrame ),
         m_layers( nullptr ),
-        m_physicalStackup( nullptr )
+        m_physicalStackup( nullptr ),
+        m_currentPage( 0 ),
+        m_layersPage( 0 ),
+        m_physicalStackupPage( 0 ),
+        m_boardFinishPage( 0 ),
+        m_textAndGraphicsPage( 0 ),
+        m_formattingPage( 0 ),
+        m_maskAndPagePage( 0 ),
+        m_constraintsPage( 0 ),
+        m_tracksAndViasPage( 0 ),
+        m_netclassesPage( 0 ),
+        m_severitiesPage( 0 )
+
 {
     SetEvtHandlerEnabled( false );
-    m_currentPage = -1;
 
     /*
      * WARNING: If you change page names you MUST update calls to ShowBoardSetupDialog().
@@ -198,20 +209,23 @@ void DIALOG_BOARD_SETUP::onPageChanged( wxBookCtrlEvent& aEvent )
 
     size_t page = aEvent.GetSelection();
 
-    if( m_currentPage == m_physicalStackupPage || page == m_physicalStackupPage )
+    if( m_physicalStackupPage > 0 )     // Don't run this during initialization
     {
-        m_layers = RESOLVE_PAGE( PANEL_SETUP_LAYERS, m_layersPage );
-        m_physicalStackup = RESOLVE_PAGE( PANEL_SETUP_BOARD_STACKUP, m_physicalStackupPage );
+        if( m_currentPage == m_physicalStackupPage || page == m_physicalStackupPage )
+        {
+            m_layers = RESOLVE_PAGE( PANEL_SETUP_LAYERS, m_layersPage );
+            m_physicalStackup = RESOLVE_PAGE( PANEL_SETUP_BOARD_STACKUP, m_physicalStackupPage );
+        }
+
+        // Ensure layer page always gets updated even if we aren't moving towards it
+        if( m_currentPage == m_physicalStackupPage )
+            m_layers->SyncCopperLayers( m_physicalStackup->GetCopperLayerCount() );
+
+        if( page == m_physicalStackupPage )
+            m_physicalStackup->OnLayersOptionsChanged( m_layers->GetUILayerMask() );
+        else if( Prj().IsReadOnly() )
+            KIUI::Disable( m_treebook->GetPage( page ) );
     }
-
-    // Ensure layer page always gets updated even if we aren't moving towards it
-    if( m_currentPage == m_physicalStackupPage )
-        m_layers->SyncCopperLayers( m_physicalStackup->GetCopperLayerCount() );
-
-    if( page == m_physicalStackupPage )
-        m_physicalStackup->OnLayersOptionsChanged( m_layers->GetUILayerMask() );
-    else if( Prj().IsReadOnly() )
-        KIUI::Disable( m_treebook->GetPage( page ) );
 
     m_currentPage = page;
 }
