@@ -297,7 +297,7 @@ bool SCH_SHEET::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, in
     {
         sheetPath.pop_back();
 
-        if( sheetPath.Last()->ResolveTextVar( aPath, token, aDepth + 1 ) )
+        if( sheetPath.Last()->ResolveTextVar( &sheetPath, token, aDepth + 1 ) )
             return true;
     }
     else
