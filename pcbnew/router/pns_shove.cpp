@@ -134,7 +134,7 @@ int SHOVE::getClearance( const ITEM* aA, const ITEM* aB ) const
     if( m_forceClearance >= 0 )
         return m_forceClearance;
 
-    return m_currentNode->GetClearance( aA, aB );
+    return m_currentNode->GetClearance( aA, aB, false );
 }
 
 
@@ -440,7 +440,7 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveObstacleLine( const LINE& aCurLine, const LINE& 
         // hull it will be at the appropriate clearance.
 
         int      obstacleLineWidth = aObstacleLine.Width();
-        int      clearance = getClearance( &aCurLine, &aObstacleLine ) + 1;
+        int      clearance = getClearance( &aCurLine, &aObstacleLine );
         int      currentLineSegmentCount = aCurLine.SegmentCount();
         HULL_SET hulls;
 
