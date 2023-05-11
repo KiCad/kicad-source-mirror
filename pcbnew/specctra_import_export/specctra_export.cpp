@@ -69,14 +69,6 @@ using namespace DSN;
 // I am guessing non convex polygons with holes linked could create issues with any Router.
 #define EXPORT_CUSTOM_PADS_CONVEX_HULL
 
-// Add .1 mil to the requested clearances as a safety margin.  There has been disagreement about
-// interpretation of clearance in the past between KiCad and Freerouter, so keep this safetyMargin
-// until the disagreement is resolved and stable.  Freerouter seems to be moving (protected)
-// traces upon loading the DSN file, and even though it seems to sometimes add its own 0.1 to the
-// clearances, I believe this is happening after the load process (and moving traces) so I am of
-// the opinion this is still needed.
-static const double safetyMargin = 0.1;
-
 
 bool PCB_EDIT_FRAME::ExportSpecctraFile( const wxString& aFullFilename )
 {
@@ -1194,7 +1186,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         std::snprintf( rule, sizeof( rule ), "(width %.6g)", scale( defaultTrackWidth ) );
         rules.push_back( rule );
 
-        std::snprintf( rule, sizeof( rule ), "(clearance %.6g)", clearance + safetyMargin );
+        std::snprintf( rule, sizeof( rule ), "(clearance %.6g)", clearance );
         rules.push_back( rule );
 
         // On a high density board (4 mil tracks, 4 mil spacing) a typical solder mask clearance
@@ -1203,7 +1195,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         // any trace within "clearance" of the pad.  So we need at least 2 mils *extra* clearance
         // for traces which would come near a pad on a different net.  So if the baseline trace to
         // trace clearance was 4 mils, then the SMD to trace clearance should be at least 6 mils.
-        double default_smd = clearance + safetyMargin;
+        double default_smd = clearance;
 
         if( default_smd <= 6.0 )
             default_smd = 6.0;
@@ -1784,7 +1776,7 @@ void SPECCTRA_DB::exportNETCLASS( const std::shared_ptr<NETCLASS>& aNetClass, BO
 
     // output the clearance.
     int clearance = aNetClass->GetClearance();
-    std::snprintf( text, sizeof( text ), "(clearance %.6g)", scale( clearance ) + safetyMargin );
+    std::snprintf( text, sizeof( text ), "(clearance %.6g)", scale( clearance ) );
     clazz->m_rules->m_rules.push_back( text );
 
     if( aNetClass->GetName() == NETCLASS::Default )
