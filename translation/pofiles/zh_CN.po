@@ -25642,7 +25642,7 @@ msgstr "（不会考虑合并出现在 Net Tie 焊盘组中的焊盘。）"
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:48
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:72
 msgid "Changes To Be Applied:"
-msgstr "将要应用的变更"
+msgstr "将要应用的变更："
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.h:55
 msgid "Cleanup Graphics"
