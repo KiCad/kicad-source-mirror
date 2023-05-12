@@ -30928,7 +30928,7 @@ msgstr "拖动(自由角度)"
 #: pcbnew/tools/pcb_actions.cpp:1560
 msgid ""
 "Drags the nearest joint in the track without restricting the track angle."
-msgstr "拖拽布线中最近的连接点，而不限制相连导线的角度"
+msgstr "拖拽布线中最近的连接点，而不限制相连导线的角度。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:392
 msgid "Draw an outline to show the sheet size."
@@ -35877,11 +35877,11 @@ msgstr "抑制尾随零"
 
 #: pcbnew/pcb_dimension.cpp:1387
 msgid "Crossbar Height"
-msgstr "横杆高度"
+msgstr "横杠高度"
 
 #: pcbnew/pcb_dimension.cpp:1391
 msgid "Extension Line Overshoot"
-msgstr "延长线过冲"
+msgstr "引线超出"
 
 #: pcbnew/pcb_dimension.cpp:1456
 msgid "Leader Length"
@@ -36231,9 +36231,9 @@ msgid "Error creating svg file"
 msgstr "创建 svg 文件出错"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:339 pcbnew/pcbnew_jobs_handler.cpp:417
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to plot to '%s'.\n"
-msgstr "未能加载 '%s'."
+msgstr "绘制到 '%s' 时失败。\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:627 pcbnew/pcbnew_jobs_handler.cpp:698
 msgid "Loading footprint library\n"
