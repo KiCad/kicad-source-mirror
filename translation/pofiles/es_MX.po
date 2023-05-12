@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-09 09:51-0700\n"
-"PO-Revision-Date: 2023-05-10 06:34+0000\n"
+"PO-Revision-Date: 2023-05-12 19:54+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -1355,7 +1355,7 @@ msgstr "PPP de la imagen:"
 #: bitmap2component/bitmap2cmp_gui_base.cpp:75 eeschema/sch_bitmap.cpp:220
 #: pcbnew/pcb_bitmap.cpp:237
 msgid "PPI"
-msgstr "PPI"
+msgstr "PPP"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:79
 msgid "BPP:"
@@ -3476,7 +3476,7 @@ msgstr "Escala de imagen:"
 
 #: common/dialogs/panel_image_editor_base.cpp:47
 msgid "PPI:"
-msgstr ""
+msgstr "PPP:"
 
 #: common/dialogs/panel_mouse_settings.cpp:47
 #: pcbnew/dialogs/panel_edit_options_base.cpp:224
@@ -6823,7 +6823,7 @@ msgstr "Seleccionar ruta"
 
 #: common/widgets/lib_tree.cpp:89
 msgid "Sort by Best Match"
-msgstr ""
+msgstr "Ordenar por mejor coincidencia"
 
 #: common/widgets/lib_tree.cpp:90
 #, fuzzy
@@ -8516,7 +8516,7 @@ msgstr "Nuevo nombre:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
 msgid "Password:"
-msgstr ""
+msgstr "Contraseña:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:71
 #, fuzzy
@@ -8569,6 +8569,8 @@ msgstr "Símbolo en caché:"
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:145
 msgid "Time in seconds that database queries will be cached for"
 msgstr ""
+"Tiempo en segundos por el cuál se almacenarán en caché las consultas a la "
+"base de datos"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.h:79
 #, fuzzy
@@ -11899,7 +11901,7 @@ msgstr "-"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:209
 msgid "Leave blank to disable ranges."
-msgstr ""
+msgstr "Deje en blanco para deshabilitar los rangos."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:213
 #, fuzzy
