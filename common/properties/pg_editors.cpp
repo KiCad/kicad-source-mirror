@@ -73,9 +73,14 @@ wxPGWindowList PG_UNIT_EDITOR::CreateControls( wxPropertyGrid* aPropGrid, wxPGPr
     m_unitBinder->SetUnits( m_frame->GetUserUnits() );
 
     if( PGPROPERTY_DISTANCE* prop = dynamic_cast<PGPROPERTY_DISTANCE*>( aProperty ) )
+    {
         m_unitBinder->SetCoordType( prop->CoordType() );
+    }
     else if( dynamic_cast<PGPROPERTY_ANGLE*>( aProperty ) != nullptr )
+    {
+        m_unitBinder->SetCoordType( ORIGIN_TRANSFORMS::NOT_A_COORD );
         m_unitBinder->SetUnits( EDA_UNITS::DEGREES );
+    }
 
     UpdateControl( aProperty, win );
 
