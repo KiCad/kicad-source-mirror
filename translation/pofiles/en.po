@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-09 09:51-0700\n"
+"POT-Creation-Date: 2023-05-12 12:58-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -8581,15 +8581,12 @@ msgid "Unable to open destination '%s'"
 msgstr "Unable to open destination '%s'"
 
 #, c-format
-msgid "Plotting symbol '%s' unit %d %sto '%s'\n"
-msgstr "Plotting symbol '%s' unit %d %sto '%s'\n"
-
-msgid "(De Morgan) "
-msgstr "(De Morgan) "
+msgid "Plotting symbol '%s' unit %d to '%s'\n"
+msgstr "Plotting symbol '%s' unit %d to '%s'\n"
 
 #, c-format
-msgid "Plotting symbol '%s' %sto '%s'\n"
-msgstr "Plotting symbol '%s' %sto '%s'\n"
+msgid "Plotting symbol '%s' to '%s'\n"
+msgstr "Plotting symbol '%s' to '%s'\n"
 
 msgid "Unable to load library\n"
 msgstr "Unable to load library\n"
@@ -18731,9 +18728,6 @@ msgstr "not run"
 msgid "Refill all zones before performing DRC"
 msgstr "Refill all zones before performing DRC"
 
-msgid "Update teardrops before performing DRC"
-msgstr "Update teardrops before performing DRC"
-
 msgid "Report all errors for each track"
 msgstr "Report all errors for each track"
 
@@ -27549,6 +27543,9 @@ msgstr "Reference '%s' not found."
 msgid "A wire_via refers to missing padstack '%s'."
 msgstr "A wire_via refers to missing padstack '%s'."
 
+msgid "Filling Zones"
+msgstr "Filling Zones"
+
 #, c-format
 msgid "%d teardrops created"
 msgstr "%d teardrops created"
@@ -27635,11 +27632,20 @@ msgstr "Curve points:"
 msgid "Number of segments to build a teardrop with curved shape"
 msgstr "Number of segments to build a teardrop with curved shape"
 
+msgid "Generate raw teardrops"
+msgstr "Generate raw teardrops"
+
+msgid "(Shapes will be adjusted for clearances on next zone fill.)"
+msgstr "(Shapes will be adjusted for clearances on next zone fill.)"
+
 msgid "Add Teardrops"
 msgstr "Add Teardrops"
 
 msgid "Add teardrops"
 msgstr "Add teardrops"
+
+msgid "Add teardrops and refill zones"
+msgstr "Add teardrops and refill zones"
 
 msgid "Remove teardrops"
 msgstr "Remove teardrops"
@@ -28155,9 +28161,6 @@ msgstr "Place via"
 
 msgid "Refilling all zones..."
 msgstr "Refilling all zones..."
-
-msgid "Updating teardrops..."
-msgstr "Updating teardrops..."
 
 msgid "Schematic parity tests require a fully annotated schematic."
 msgstr "Schematic parity tests require a fully annotated schematic."
@@ -30429,6 +30432,23 @@ msgstr "KiCad Schematic"
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
 
+#, c-format
+#~ msgid "Plotting symbol '%s' unit %d %sto '%s'\n"
+#~ msgstr "Plotting symbol '%s' unit %d %sto '%s'\n"
+
+#~ msgid "(De Morgan) "
+#~ msgstr "(De Morgan) "
+
+#, c-format
+#~ msgid "Plotting symbol '%s' %sto '%s'\n"
+#~ msgstr "Plotting symbol '%s' %sto '%s'\n"
+
+#~ msgid "Update teardrops before performing DRC"
+#~ msgstr "Update teardrops before performing DRC"
+
+#~ msgid "Updating teardrops..."
+#~ msgstr "Updating teardrops..."
+
 #~ msgid "&Find"
 #~ msgstr "&Find"
 
@@ -30489,14 +30509,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "Highlight symbols when footprints selected"
 #~ msgstr "Highlight symbols when footprints selected"
-
-#, c-format
-#~ msgid "Plotting symbol '%s' unit %d to '%s'\n"
-#~ msgstr "Plotting symbol '%s' unit %d to '%s'\n"
-
-#, c-format
-#~ msgid "Plotting symbol '%s' to '%s'\n"
-#~ msgstr "Plotting symbol '%s' to '%s'\n"
 
 #, c-format
 #~ msgid "Failed to generate a name for '%s': exceeded UINT64_MAX"
