@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-09 09:51-0700\n"
-"PO-Revision-Date: 2023-05-12 13:56+0000\n"
+"PO-Revision-Date: 2023-05-12 19:54+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -896,7 +896,7 @@ msgstr "禁用孔"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:27
 msgid "Procedural textures (slow)"
-msgstr "程序性纹理（慢）。"
+msgstr "程序性纹理（慢）"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:31
 msgid "Add floor (slow)"
@@ -909,7 +909,7 @@ msgstr "抗锯齿 (慢)"
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:39
 msgid ""
 "Screen space ambient occlusions and global illumination reflections (slow)"
-msgstr "屏幕空间的环境遮挡和全局照明反射（慢）。"
+msgstr "屏幕空间的环境遮挡和全局照明反射（慢）"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:54
 msgid "Number of Samples"
@@ -3301,7 +3301,6 @@ msgid ""
 "Number of minutes since the last backup before another will be created the "
 "next time you save (set to 0 for no minimum)"
 msgstr "自上一次备份后，在下次保存时将创建另一个备份的分钟数（设置为0表示没有最小值）"
-"。"
 
 #: common/dialogs/panel_common_settings_base.cpp:391
 msgid "Maximum total backup size:"
@@ -38162,7 +38161,7 @@ msgstr "仅圆焊盘"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:356
 msgid "Add teardrops to round shapes only "
-msgstr "仅为原型形状添加泪滴 "
+msgstr "仅为圆型形状添加泪滴 "
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:360
 msgid "SMD pads"
@@ -39563,14 +39562,12 @@ msgid "Import footprint from file"
 msgstr "从文件导入封装"
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export Current Footprint..."
-msgstr "导出封装..."
+msgstr "导出当前的封装..."
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export edited footprint to file"
-msgstr "导出封装到文件"
+msgstr "将编辑好的封装导出到文件"
 
 #: pcbnew/tools/pcb_actions.cpp:453
 msgid "Footprint Properties..."
