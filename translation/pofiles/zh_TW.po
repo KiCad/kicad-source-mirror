@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-09 09:51-0700\n"
-"PO-Revision-Date: 2023-02-06 07:25+0000\n"
+"PO-Revision-Date: 2023-05-12 19:54+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 4.18-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../../../../Downloads/kicad-master\n"
@@ -100,9 +100,8 @@ msgid "Build BVH for holes and vias"
 msgstr "為通孔和過孔構造 BVH (盲埋孔)"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:390
-#, fuzzy
 msgid "OpenGL context creation error"
-msgstr "下列專案的輻條計數解析度："
+msgstr "OpenGL 上下文建立錯誤"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:421
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
@@ -3182,8 +3181,7 @@ msgstr "首次按下快捷鍵僅選擇對應工具"
 msgid ""
 "If not checked, hotkeys will immediately perform an action even if the "
 "relevant tool was not previously selected."
-msgstr ""
-"如果未選中，即使未選擇快捷鍵對應的工具，按下快捷鍵也將立即執行對應的操作。"
+msgstr "如果未選中，即使未選擇快捷鍵對應的工具，按下快捷鍵也將立即執行對應的操作。"
 
 #: common/dialogs/panel_common_settings_base.cpp:265
 msgid "Session"
@@ -3285,8 +3283,7 @@ msgstr "備份之間的最短時間："
 msgid ""
 "Number of minutes since the last backup before another will be created the "
 "next time you save (set to 0 for no minimum)"
-msgstr ""
-"自上次備份後的分鐘數，下次儲存時將建立另一個備份(設定為 0 表示無最小值)"
+msgstr "自上次備份後的分鐘數，下次儲存時將建立另一個備份(設定為 0 表示無最小值)"
 
 #: common/dialogs/panel_common_settings_base.cpp:391
 msgid "Maximum total backup size:"
@@ -3318,15 +3315,15 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are not shared in this process."
 msgstr ""
-"KiCad 可以匿名地向開發人員報告崩潰和特殊事件資料，以幫助更有效地識別整個使用"
-"者群中的關鍵 bug，並幫助繪製功能畫像來指導改進。\n"
+"KiCad 可以匿名地向開發人員報告崩潰和特殊事件資料，"
+"以幫助更有效地識別整個使用者群中的關鍵 bug，並幫助繪製功能畫像來指導改進。\n"
 "\n"
 "要連結來自相同 KiCad 安裝的自動報告，將生成一個完全隨機的唯一識別符號，它僅用"
 "於崩潰報告的目的。沒有個人身份資訊(PII)，包括IP地址被儲存或連線到該識別符號。"
 "您可以在任何時候透過提供的按鈕重置此 id。\n"
 "\n"
-"如果您選擇自願參與，那麼發生崩潰或事件時，KiCad 將自動處理傳送上述報告。您的"
-"設計檔案，如原理圖或 PCB 在此過程中不會被共享。"
+"如果您選擇自願參與，那麼發生崩潰或事件時，KiCad "
+"將自動處理傳送上述報告。您的設計檔案，如原理圖或 PCB 在此過程中不會被共享。"
 
 #: common/dialogs/panel_data_collection_base.cpp:24
 msgid "I agree to provide anonymous reports"
@@ -4222,9 +4219,9 @@ msgid "Zoom %.2f"
 msgstr "縮放 %.2f"
 
 #: common/eda_draw_frame.cpp:609
-#, fuzzy, c-format
+#, c-format
 msgid "grid %s"
-msgstr "欄位 %s"
+msgstr "網格 %s"
 
 #: common/eda_draw_frame.cpp:622 pagelayout_editor/pl_editor_frame.cpp:752
 msgid "inches"
@@ -10699,9 +10696,8 @@ msgid "Replace matches in reference designators"
 msgstr "替換位號中的匹配項"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:123
-#, fuzzy
 msgid "Replace"
-msgstr "替換 (&R)"
+msgstr "替換"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:41
 msgid "Schematic Setup"
@@ -10825,9 +10821,7 @@ msgstr "注意：專案配色在當前配色主題中被覆蓋。"
 msgid ""
 "To see individual item colors uncheck '%s'\n"
 "in Preferences > Schematic Editor > Colors."
-msgstr ""
-"要檢視單個專案的顏色，\n"
-"請在偏好設定 > 原理圖編輯器 > 顏色中取消選擇 \"%s\"。"
+msgstr "要檢視單個專案的顏色，請在偏好設定 > 原理圖編輯器 > 顏色中取消選擇 \"%s\"。"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:439
 #, c-format
@@ -12012,9 +12006,8 @@ msgid ""
 "Normally footprints are linked to their symbols via their Unique IDs.  "
 "Select this option only if you want to reset the footprint linkages based on "
 "their reference designators."
-msgstr ""
-"通常，封裝透過其唯一 ID 連結到其符號。 僅當您要根據位號封裝連結時，才選擇此選"
-"項。"
+msgstr "通常，封裝透過其唯一 ID 連結到其符號。 "
+"僅當您要根據位號封裝連結時，才選擇此選項。"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:55
 msgid "Update references of symbols that have been changed in the PCB editor."
@@ -12240,8 +12233,7 @@ msgstr "在未連線的引腳上自動開始導線"
 msgid ""
 "When enabled, you can start wiring by clicking on unconnected pins even when "
 "the wire tool is not active"
-msgstr ""
-"啟用後，即使導線工具未處於活動狀態，也可以透過單擊未連線的接點來開始佈線"
+msgstr "啟用後，即使導線工具未處於活動狀態，也可以透過單擊未連線的接點來開始佈線"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:56
 #: pcbnew/dialogs/panel_edit_options_base.cpp:386
@@ -15287,7 +15279,6 @@ msgstr "DNP"
 #: eeschema/sch_symbol.cpp:1730 eeschema/sch_text.cpp:504
 #: eeschema/sch_textbox.cpp:448 eeschema/tools/sch_edit_tool.cpp:378
 #: eeschema/tools/sch_edit_tool.cpp:470 eeschema/tools/sch_edit_tool.cpp:555
-#, fuzzy
 msgid "Simulation"
 msgstr "模擬"
 
@@ -20809,9 +20800,8 @@ msgstr ""
 "spicemodel"
 
 #: kicad/cli/command_export_sch_plot.cpp:51
-#, fuzzy
 msgid "Color theme to use (will default to schematic settings)"
-msgstr "要使用的顏色主題（預設使用 pcbnew 設定）"
+msgstr "使用的顏色主題（預設為原理圖設定）"
 
 #: kicad/cli/command_export_sch_plot.cpp:64
 msgid "Avoid setting a background color (regardless of theme)"
@@ -21482,9 +21472,8 @@ msgstr ""
 "%s"
 
 #: kicad/pcm/pcm.cpp:464
-#, fuzzy
 msgid "Failed to parse locally stored repository.json."
-msgstr "無法解析倉庫：%s"
+msgstr "無法解析本地儲存的倉庫.json."
 
 #: kicad/pcm/pcm.cpp:492
 msgid ""
@@ -23854,11 +23843,11 @@ msgid ""
 "<br>\n"
 "This energy is then compared to the one dissipated by the wire resistance."
 msgstr ""
-"你可以使用這個計算器來檢查一個小導線是否能在短時間內處理大電流。\n"
-"這個工具允許你設計一個導線保險絲，但僅應用作估算值。\n"
+"你可以使用這個計算器來檢查一個小導線是否能在短時間內處理大電流。這個工具允許"
+"你設計一個導線保險絲，但僅應用作估算值。\n"
 "\n"
-"該計算器估計了將導線加熱到熔點所需的能量以及相位變化所需的能量。\n"
-"然後將這些能量與導線電阻所耗散的能量進行比較。"
+"該計算器估計了將導線加熱到熔點所需的能量以及相位變化所需的能量。然後將這些能"
+"量與導線電阻所耗散的能量進行比較。"
 
 #: pcb_calculator/galvanic_corrosion_help.h:2
 #, fuzzy
@@ -26114,8 +26103,7 @@ msgstr "將設定匯出到其他類似敷銅"
 msgid ""
 "Export this zone setup (excluding layer and net selection) to other similar "
 "copper zones (teardrops or usual copper zones)."
-msgstr ""
-"將該敷銅設定 (不包括層和網路選擇) 輸出到其他類似的銅區 (淚滴或普通銅區)。"
+msgstr "將該敷銅設定 (不包括層和網路選擇) 輸出到其他類似的銅區 (淚滴或普通銅區)。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:141
 msgid "Copper Zone Properties"
@@ -26747,8 +26735,8 @@ msgid ""
 "If unselected, only the first DRC violation will be reported for each track "
 "connection."
 msgstr ""
-"如果選中，則會報告所有針對佈線的 DRC 違規。 對於複雜的設計來說這可能會很"
-"慢。\n"
+"如果選中，則會報告所有針對佈線的 DRC 違規。 對於複雜的設計來說這可能會很慢。"
+"\n"
 "\n"
 "如果未選中，則只會為每個佈線連線報告第一個 DRC 違規。"
 
@@ -28644,8 +28632,7 @@ msgid ""
 "Select whether to update footprint references to match their currently-"
 "assigned symbols, or to re-assign footprints to symbols which match their "
 "current references."
-msgstr ""
-"選擇是否更新封裝參考以匹配其當前關聯的符號，或者重新關聯封裝到符號以匹配它們"
+msgstr "選擇是否更新封裝參考以匹配其當前關聯的符號，或者重新關聯封裝到符號以匹配它們"
 "當前參考。"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:53
@@ -30205,8 +30192,7 @@ msgstr "繞過障礙物"
 msgid ""
 "When enabled, the router tries to move colliding traces behind solid "
 "obstacles (e.g. pads) instead of \"reflecting\" back the collision"
-msgstr ""
-"啟用後，佈線器會嘗試移動後面障礙物衝突的走線（例如焊盤），而不是“反映”衝突"
+msgstr "啟用後，佈線器會嘗試移動後面障礙物衝突的走線（例如焊盤），而不是“反映”衝突"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:41
 msgid "Remove redundant tracks"
@@ -30219,8 +30205,8 @@ msgid ""
 "Loop removal works locally (only between the start and end of the currently "
 "routed trace)."
 msgstr ""
-"在佈線過程中刪除迴圈 (例如, 如果新佈線確保與現有佈線相同的連線, 則舊佈線將被"
-"刪除)。\n"
+"在佈線過程中刪除迴圈 (例如, 如果新佈線確保與現有佈線相同的連線, "
+"則舊佈線將被刪除)。\n"
 "迴圈刪除在本地工作 (僅在當前佈線跟蹤的開始和結束之間)。"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:46
@@ -30266,8 +30252,7 @@ msgid ""
 "When enabled, the entire portion of the track that is visible on the screen "
 "will be optimized and re-routed when a segment is dragged.  When disabled, "
 "only the area near the segment being dragged will be optimized."
-msgstr ""
-"啟用後，當一段線路被拖動時，螢幕上可見的整個導線部分將被最佳化和重排路徑。禁"
+msgstr "啟用後，當一段線路被拖動時，螢幕上可見的整個導線部分將被最佳化和重排路徑。禁"
 "用後，將只最佳化被拖動部分附近的敷銅。"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:71
@@ -30289,8 +30274,7 @@ msgid ""
 "When enabled, all track segments will be fixed in place up to the cursor "
 "location.  When disabled, the last segment (closest to the cursor) will "
 "remain free and follow the cursor."
-msgstr ""
-"啟用時，所有的佈線線段將被固定在游標上方的位置。禁用時，最後一個線段（離游標"
+msgstr "啟用時，所有的佈線線段將被固定在游標上方的位置。禁用時，最後一個線段（離游標"
 "最近的）將不受約束並跟隨游標。"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.h:61
@@ -30785,8 +30769,7 @@ msgid ""
 "Normally footprints on the board should be changed to match footprint "
 "assignment changes made in the schematic. Uncheck this only if you don't "
 "want to change existing footprints on the board."
-msgstr ""
-"通常應替換 PCB 上的封裝，以匹配原理圖中所做的封裝關聯變更。僅當您不想替換線路"
+msgstr "通常應替換 PCB 上的封裝，以匹配原理圖中所做的封裝關聯變更。僅當您不想替換線路"
 "板上的現有封裝時，才取消選中此選項。"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.h:53
@@ -30851,8 +30834,7 @@ msgstr "線路&過孔間隙"
 msgid ""
 "Show clearance outlines around tracks, and optionally the via clearance "
 "around the end of the track while routing."
-msgstr ""
-"顯示導線周圍的間隙輪廓，以及在切外形時顯示導線末端周圍的過孔間隙（可選）。"
+msgstr "顯示導線周圍的間隙輪廓，以及在切外形時顯示導線末端周圍的過孔間隙（可選）。"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:83
 msgid "Show pad clearance"
@@ -31207,8 +31189,7 @@ msgid ""
 "The minimum clearance between copper items which do not belong to the same "
 "net.  If set, this is an absolute minimum which cannot be reduced by "
 "netclasses, custom rules, or other settings."
-msgstr ""
-"不屬於同一網路的銅件之間的最小間隙。一旦設定，這是一個絕對的最小值，不能透過"
+msgstr "不屬於同一網路的銅件之間的最小間隙。一旦設定，這是一個絕對的最小值，不能透過"
 "網路類、自定義規則或其他設定減少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:62
@@ -31219,8 +31200,7 @@ msgstr "最小布線寬度："
 msgid ""
 "The minimum track width.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
-msgstr ""
-"最小線路寬度。一旦設定，這是一個絕對的最小值，不能透過網路類、自定義規則或其"
+msgstr "最小線路寬度。一旦設定，這是一個絕對的最小值，不能透過網路類、自定義規則或其"
 "他設定減少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:79
@@ -31239,8 +31219,7 @@ msgstr "最小環形寬度："
 msgid ""
 "The minimum annular ring width.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
-msgstr ""
-"最小環圈寬度。一旦設定，這是一個絕對的最小值，不能透過網路類、自定義規則或其"
+msgstr "最小環圈寬度。一旦設定，這是一個絕對的最小值，不能透過網路類、自定義規則或其"
 "他設定減少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:112
@@ -31264,8 +31243,7 @@ msgid ""
 "The minimum clearance between a hole and an unassociated copper item.  If "
 "set, this is an absolute minimum and cannot be reduced by custom rules or "
 "other settings."
-msgstr ""
-"孔與不相關銅件之間的最小間隙。一旦設定，這是一個絕對的最小值，不能透過自定義"
+msgstr "孔與不相關銅件之間的最小間隙。一旦設定，這是一個絕對的最小值，不能透過自定義"
 "規則或其他設定減少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:144
@@ -31277,8 +31255,7 @@ msgid ""
 "The minimum clearance between the board edge and any copper item.  If set, "
 "this is an absolute minimum and cannot be reduced by custom rules or other "
 "settings."
-msgstr ""
-"板邊與任意銅件之間的最小間隙。一旦設定，這是一個絕對的最小值，不能透過自定義"
+msgstr "板邊與任意銅件之間的最小間隙。一旦設定，這是一個絕對的最小值，不能透過自定義"
 "規則或其他設定減少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:169
@@ -31322,8 +31299,7 @@ msgstr "最小微孔外徑："
 msgid ""
 "The minimum diameter for micro-vias.  If set, this is an absolute minimum "
 "and cannot be reduced by netclasses, custom rules, or other settings."
-msgstr ""
-"微過孔的最小直徑。一旦設定，這是一個絕對的最小值，不能透過網路類、自定義規則"
+msgstr "微過孔的最小直徑。一旦設定，這是一個絕對的最小值，不能透過網路類、自定義規則"
 "或其他設定減少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:258
@@ -31334,8 +31310,7 @@ msgstr "最小 U 形導通孔："
 msgid ""
 "The minimum micro-via hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
-msgstr ""
-"最下微過孔尺寸。一旦設定，這是一個絕對的最小值，不能透過網路類、自定義規則或"
+msgstr "最下微過孔尺寸。一旦設定，這是一個絕對的最小值，不能透過網路類、自定義規則或"
 "其他設定減少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:283
@@ -31351,8 +31326,7 @@ msgid ""
 "Minimum clearance between two items on the same silkscreen layer.  If set "
 "this can improve legibility.  (Note: does not apply to multiple shapes "
 "within a single footprint.)"
-msgstr ""
-"同一絲印層上兩個專案間的最小間隙。設定此值可提高辯認度。(注：不適用於單個封裝"
+msgstr "同一絲印層上兩個專案間的最小間隙。設定此值可提高辯認度。(注：不適用於單個封裝"
 "中的多個形狀。)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:315
@@ -31385,8 +31359,7 @@ msgid ""
 "The maximum allowed deviation between a true arc or circle and segments used "
 "to approximate it.  Smaller values produce smoother graphics at the expense "
 "of performance."
-msgstr ""
-"真圓弧或圓與用來近似它的段之間的最大允許偏差。較小的值會以犧牲效能為代價產生"
+msgstr "真圓弧或圓與用來近似它的段之間的最大允許偏差。較小的值會以犧牲效能為代價產生"
 "更平滑的圖形。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:386
@@ -31419,8 +31392,7 @@ msgid ""
 "When enabled, the distance between copper layers will be included in track "
 "length calculations for tracks with vias.  When disabled, via stackup height "
 "is ignored."
-msgstr ""
-"啟用後，計算帶過孔的線路的長度時將包括銅層之間的距離。禁用時，過孔堆疊高度將"
+msgstr "啟用後，計算帶過孔的線路的長度時將包括銅層之間的距離。禁用時，過孔堆疊高度將"
 "被忽略。"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:435
@@ -34380,9 +34352,9 @@ msgid "Determining PCB data\n"
 msgstr "確定 PCB 資料\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:458
-#, fuzzy, c-format
+#, c-format
 msgid "Board Thickness from stackup: %.3f mm\n"
-msgstr "電路板壓層厚度:"
+msgstr "電路板壓層厚度: %.3f mm\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:463
 msgid "Build STEP data\n"
@@ -34484,10 +34456,10 @@ msgid ""
 "This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"如果重新填充此電路板上的敷銅，則將應用銅邊緣間隙設定 （參見電路板配置 > 設計"
-"規則 > 限制）。\n"
-"老版本的 KiCad 會將電路板邊緣 (Edge Cuts 層) 的線粗細作為銅間距，因此新的填充"
-"結果可能與老版本的填充結果不同。"
+"如果重新填充此電路板上的敷銅，則將應用銅邊緣間隙設定 （參見電路板配置 > "
+"設計規則 > 限制）。\n"
+"老版本的 KiCad 會將電路板邊緣 (Edge Cuts 層) "
+"的線粗細作為銅間距，因此新的填充結果可能與老版本的填充結果不同。"
 
 #: pcbnew/files.cpp:609
 #, c-format
@@ -35987,39 +35959,32 @@ msgid "Dimension '%s' on %s"
 msgstr "標註 '%s' 在 %s"
 
 #: pcbnew/pcb_dimension.cpp:1319
-#, fuzzy
 msgid "1234.0"
-msgstr "1234"
+msgstr "1234.0"
 
 #: pcbnew/pcb_dimension.cpp:1320
-#, fuzzy
 msgid "1234.0 mm"
-msgstr "1234 mm"
+msgstr "1234.0 mm"
 
 #: pcbnew/pcb_dimension.cpp:1321
-#, fuzzy
 msgid "1234.0 (mm)"
-msgstr "1234 (mm)"
+msgstr "1234.0 (mm)"
 
 #: pcbnew/pcb_dimension.cpp:1353
-#, fuzzy
 msgid "Units Format"
-msgstr "單位格式："
+msgstr "單位格式"
 
 #: pcbnew/pcb_dimension.cpp:1359
-#, fuzzy
 msgid "Suppress Trailing Zeroes"
-msgstr "隱藏尾隨零"
+msgstr "抑制尾隨零"
 
 #: pcbnew/pcb_dimension.cpp:1387
-#, fuzzy
 msgid "Crossbar Height"
-msgstr "向右游標"
+msgstr "橫槓高度"
 
 #: pcbnew/pcb_dimension.cpp:1391
-#, fuzzy
 msgid "Extension Line Overshoot"
-msgstr "尺寸界線偏移："
+msgstr "引線超出"
 
 #: pcbnew/pcb_dimension.cpp:1456
 #, fuzzy
@@ -36027,9 +35992,8 @@ msgid "Leader Length"
 msgstr "過孔長度"
 
 #: pcbnew/pcb_dimension.cpp:1496
-#, fuzzy
 msgid "Text Frame"
-msgstr "文字框架："
+msgstr "文字框"
 
 #: pcbnew/pcb_edit_frame.cpp:216
 msgid "KiCad PCB Editor"
@@ -36371,9 +36335,9 @@ msgid "Error creating svg file"
 msgstr "建立 svg 檔案出錯"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:339 pcbnew/pcbnew_jobs_handler.cpp:417
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to plot to '%s'.\n"
-msgstr "未能載入 '%s'."
+msgstr "繪製到 '%s' 時失敗。\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:627 pcbnew/pcbnew_jobs_handler.cpp:698
 msgid "Loading footprint library\n"
@@ -36724,8 +36688,7 @@ msgstr ""
 msgid ""
 "The CADSTAR layer '%s' has been assumed to be a technical layer. All "
 "elements on this layer have been mapped to KiCad layer '%s'."
-msgstr ""
-"CADSTAR 圖層 '%s' 被假定為技術層。此圖層上的所有元素都對映到 KiCad 圖層 "
+msgstr "CADSTAR 圖層 '%s' 被假定為技術層。此圖層上的所有元素都對映到 KiCad 圖層 "
 "'%s'。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:325
@@ -36918,9 +36881,8 @@ msgid ""
 "The CADSTAR template '%s' has different settings for thermal relief in pads "
 "and vias. KiCad only supports one single setting for both. The setting for "
 "pads has been applied."
-msgstr ""
-"CADSTAR 模板 '%s' 在焊盤和過孔中具有不同的防散熱設定。KiCad 僅支援這兩種設定"
-"的單一設定。已應用焊盤的設定。"
+msgstr "CADSTAR 模板 '%s' 在焊盤和過孔中具有不同的防散熱設定。KiCad "
+"僅支援這兩種設定的單一設定。已應用焊盤的設定。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2016
 #, c-format
@@ -36931,9 +36893,9 @@ msgid ""
 "Therefore the minimum thickness has been applied as the new spoke width and "
 "will be applied next time the zones are filled."
 msgstr ""
-"CADSTAR 模板“%s”在原始設計中具有散熱片，但輻條寬度 (%.2f mm) 比敷銅的最小厚"
-"度 (%.2f mm) 更薄。KiCad 要求保留敷銅的最小厚度。因此，已將最小厚度用作新的輻"
-"條寬度，並將在下次填充敷銅時應用。"
+"CADSTAR 模板“%s”在原始設計中具有散熱片，但輻條寬度 (%.2f mm) "
+"比敷銅的最小厚度 (%.2f mm) 更薄。KiCad 要求保留敷銅的最小厚度。因此，已將最小"
+"厚度用作新的輻條寬度，並將在下次填充敷銅時應用。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2063
 #, c-format
@@ -39702,14 +39664,12 @@ msgid "Import footprint from file"
 msgstr "從檔案匯入封裝"
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export Current Footprint..."
-msgstr "匯出封裝..."
+msgstr "匯出當前的封裝..."
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export edited footprint to file"
-msgstr "匯出封裝到檔案"
+msgstr "將編輯好的封裝匯出到檔案"
 
 #: pcbnew/tools/pcb_actions.cpp:453
 msgid "Footprint Properties..."
