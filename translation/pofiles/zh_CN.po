@@ -2841,7 +2841,7 @@ msgstr "打印图框"
 
 #: common/dialogs/dialog_print_generic_base.cpp:43
 msgid "Print Frame references."
-msgstr "打印图框"
+msgstr "打印图框。"
 
 #: common/dialogs/dialog_print_generic_base.cpp:58
 #: pcbnew/dialogs/dialog_plot_base.cpp:122
@@ -4237,9 +4237,9 @@ msgid "Zoom %.2f"
 msgstr "缩放 %.2f"
 
 #: common/eda_draw_frame.cpp:609
-#, fuzzy, c-format
+#, c-format
 msgid "grid %s"
-msgstr "字段 %s"
+msgstr "网格 %s"
 
 #: common/eda_draw_frame.cpp:622 pagelayout_editor/pl_editor_frame.cpp:752
 msgid "inches"
@@ -10705,9 +10705,8 @@ msgid "Replace matches in reference designators"
 msgstr "替换位号中的匹配项"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:123
-#, fuzzy
 msgid "Replace"
-msgstr "替换 (&R)"
+msgstr "替换"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:41
 msgid "Schematic Setup"
@@ -15259,7 +15258,6 @@ msgstr "DNP"
 #: eeschema/sch_symbol.cpp:1730 eeschema/sch_text.cpp:504
 #: eeschema/sch_textbox.cpp:448 eeschema/tools/sch_edit_tool.cpp:378
 #: eeschema/tools/sch_edit_tool.cpp:470 eeschema/tools/sch_edit_tool.cpp:555
-#, fuzzy
 msgid "Simulation"
 msgstr "仿真"
 
@@ -17995,7 +17993,7 @@ msgstr "关联网络类..."
 
 #: eeschema/tools/ee_actions.cpp:499 pcbnew/tools/pcb_actions.cpp:709
 msgid "Assign a netclass to nets matching a pattern"
-msgstr "为匹配模式的网络分配一个网络类"
+msgstr "将网络类分配给匹配模式的网络"
 
 #: eeschema/tools/ee_actions.cpp:504
 msgid "De Morgan Conversion"
