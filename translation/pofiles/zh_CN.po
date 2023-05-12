@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-09 10:37-0700\n"
-"PO-Revision-Date: 2023-05-12 13:57+0000\n"
+"PO-Revision-Date: 2023-05-12 19:54+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v7/zh_Hans/>\n"
@@ -879,7 +879,7 @@ msgstr "禁用孔"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:27
 msgid "Procedural textures (slow)"
-msgstr "程序性纹理（慢）。"
+msgstr "程序性纹理（慢）"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:31
 msgid "Add floor (slow)"
@@ -892,7 +892,7 @@ msgstr "抗锯齿 (慢)"
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:39
 msgid ""
 "Screen space ambient occlusions and global illumination reflections (slow)"
-msgstr "屏幕空间的环境遮挡和全局照明反射（慢）。"
+msgstr "屏幕空间的环境遮挡和全局照明反射（慢）"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:54
 msgid "Number of Samples"
@@ -3274,7 +3274,6 @@ msgid ""
 "Number of minutes since the last backup before another will be created the "
 "next time you save (set to 0 for no minimum)"
 msgstr "自上一次备份后，在下次保存时将创建另一个备份的分钟数（设置为0表示没有最小值）"
-"。"
 
 #: common/dialogs/panel_common_settings_base.cpp:391
 msgid "Maximum total backup size:"
@@ -12442,12 +12441,12 @@ msgid "Unknown netlist format.\n"
 msgstr "未知的网表格式。\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:396
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
 msgstr "将符号 '%s' 单元 %d 绘制到 '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' to '%s'\n"
 msgstr "将符号 '%s' 绘制到 '%s'\n"
 
@@ -34387,24 +34386,20 @@ msgid "Dimension '%s' on %s"
 msgstr "标注 '%s' 在 %s"
 
 #: pcbnew/pcb_dimension.cpp:1319
-#, fuzzy
 msgid "1234.0"
-msgstr "1234"
+msgstr "1234.0"
 
 #: pcbnew/pcb_dimension.cpp:1320
-#, fuzzy
 msgid "1234.0 mm"
-msgstr "1234 mm"
+msgstr "1234.0 mm"
 
 #: pcbnew/pcb_dimension.cpp:1321
-#, fuzzy
 msgid "1234.0 (mm)"
-msgstr "1234 (mm)"
+msgstr "1234.0 (mm)"
 
 #: pcbnew/pcb_dimension.cpp:1353
-#, fuzzy
 msgid "Units Format"
-msgstr "单位格式："
+msgstr "单位格式"
 
 #: pcbnew/pcb_dimension.cpp:1359
 msgid "Suppress Trailing Zeroes"
@@ -34419,14 +34414,12 @@ msgid "Extension Line Overshoot"
 msgstr "引线超出"
 
 #: pcbnew/pcb_dimension.cpp:1456
-#, fuzzy
 msgid "Leader Length"
-msgstr "过孔长度"
+msgstr "引线长度"
 
 #: pcbnew/pcb_dimension.cpp:1496
-#, fuzzy
 msgid "Text Frame"
-msgstr "文本框架："
+msgstr "文本框"
 
 #: pcbnew/pcb_edit_frame.cpp:203
 msgid "KiCad PCB Editor"
