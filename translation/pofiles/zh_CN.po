@@ -30917,7 +30917,7 @@ msgstr "拖动 (45 度模式)"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:368
 #: pcbnew/tools/pcb_actions.cpp:1553
 msgid "Drags the track segment while keeping connected tracks at 45 degrees."
-msgstr "拖动布线段时以 45 度角的方式保持相连的导线"
+msgstr "拖动布线段时以 45 度角的方式保持相连的导线。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:372
 #: pcbnew/tools/pcb_actions.cpp:1559
