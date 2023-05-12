@@ -120,9 +120,9 @@ UNIT_BINDER::~UNIT_BINDER()
         m_valueCtrl->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( UNIT_BINDER::onSetFocus ),
                               nullptr, this );
         m_valueCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( UNIT_BINDER::onKillFocus ),
-                                 nullptr, this );
+                              nullptr, this );
         m_valueCtrl->Disconnect( wxEVT_LEFT_UP, wxMouseEventHandler( UNIT_BINDER::onClick ),
-                                 nullptr, this );
+                              nullptr, this );
     }
 }
 
@@ -364,7 +364,7 @@ void UNIT_BINDER::SetDoubleValue( double aValue )
                                                               setPrecision( displayValue, false ),
                                                               false, m_dataType );
 
-    if( displayValue == 0 && m_negativeZero )
+    if( displayValue == 0 && !std::signbit( displayValue ) && m_negativeZero )
         SetValue( wxT( "-" ) + textValue );
     else
         SetValue( textValue );
@@ -427,7 +427,7 @@ void UNIT_BINDER::ChangeDoubleValue( double aValue )
                                                               setPrecision( displayValue, false ),
                                                               false, m_dataType );
 
-    if( displayValue == 0 && m_negativeZero )
+    if( displayValue == 0 && !std::signbit( displayValue ) && m_negativeZero )
         ChangeValue( wxT( "-" ) + textValue );
     else
         ChangeValue( textValue );
