@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-09 10:37-0700\n"
-"PO-Revision-Date: 2023-05-11 15:51+0000\n"
+"PO-Revision-Date: 2023-05-12 19:54+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v7/fi/>\n"
 "Language: fi\n"
@@ -4284,9 +4284,9 @@ msgid "Zoom %.2f"
 msgstr "Zoomaa %.2f"
 
 #: common/eda_draw_frame.cpp:617
-#, fuzzy, c-format
+#, c-format
 msgid "grid %s"
-msgstr "Kenttä %s"
+msgstr "ristikko %s"
 
 #: common/eda_draw_frame.cpp:630 pagelayout_editor/pl_editor_frame.cpp:752
 msgid "inches"
@@ -35343,9 +35343,9 @@ msgid "Error creating svg file"
 msgstr "Virhe luotaessa svg-tiedostoa"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:337 pcbnew/pcbnew_jobs_handler.cpp:414
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to plot to '%s'.\n"
-msgstr "'%s' lataaminen epäonnistui."
+msgstr "Piirtäminen kohteeseen %s epäonnistui.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:624 pcbnew/pcbnew_jobs_handler.cpp:695
 msgid "Loading footprint library\n"
@@ -38724,14 +38724,12 @@ msgid "Import footprint from file"
 msgstr "Tuo jalanjälki tiedostosta"
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export Current Footprint..."
-msgstr "Vie jalanjälki ..."
+msgstr "Vie Nykyinen Jalanjälki ..."
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export edited footprint to file"
-msgstr "Vie jalanjälki tiedostoon"
+msgstr "Vie muokattu jalanjälki tiedostoon"
 
 #: pcbnew/tools/pcb_actions.cpp:453
 msgid "Footprint Properties..."
