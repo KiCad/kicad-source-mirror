@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-09 10:37-0700\n"
+"POT-Creation-Date: 2023-05-12 12:57-0700\n"
 "PO-Revision-Date: 2023-05-08 16:50+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/v7/uk/>\n"
@@ -23,20 +23,20 @@ msgstr ""
 msgid "All Files"
 msgstr "Всі Файли"
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:321
+#: 3d-viewer/3d_canvas/board_adapter.cpp:322
 msgid "Build board outline"
 msgstr "Створити контур плати"
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:529
+#: 3d-viewer/3d_canvas/board_adapter.cpp:530
 msgid "Create layers"
 msgstr "Створити шари"
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:678
+#: 3d-viewer/3d_canvas/board_adapter.cpp:679
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:116
 msgid "No footprint loaded."
 msgstr "Не завантажено жодного посадкового місця."
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:695
+#: 3d-viewer/3d_canvas/board_adapter.cpp:696
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
@@ -44,7 +44,7 @@ msgstr ""
 "Контур посадкового місця відсутній або спотворений. Запустіть перевірку "
 "посадкових місць для повного аналізу."
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:704
+#: 3d-viewer/3d_canvas/board_adapter.cpp:705
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
 "Контур плати відсутній або спотворений. Запустіть DRC для повного аналізу."
@@ -997,7 +997,7 @@ msgid "Light 8:"
 msgstr "Освітлювач 8:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:21
-#: common/dialogs/dialog_print_generic_base.cpp:56 pcbnew/pcb_bitmap.cpp:254
+#: common/dialogs/dialog_print_generic_base.cpp:56 pcbnew/pcb_bitmap.cpp:261
 msgid "Scale"
 msgstr "Масштаб"
 
@@ -4224,7 +4224,7 @@ msgstr "Файл документації"
 msgid "Documentation file '%s' not found."
 msgstr "Файл документації '%s' не знайдено."
 
-#: common/eda_doc.cpp:186
+#: common/eda_doc.cpp:187
 #, c-format
 msgid "Unknown MIME type for documentation file '%s'"
 msgstr "Невідомий MIME тип файлу з документацією '%s'"
@@ -4325,7 +4325,7 @@ msgid "Graphic"
 msgstr "Графіка"
 
 #: common/eda_item.cpp:328 common/eda_item.cpp:361 eeschema/sch_bitmap.cpp:218
-#: pcbnew/pcb_bitmap.cpp:229
+#: pcbnew/pcb_bitmap.cpp:236
 msgid "Bitmap"
 msgstr "Зображення"
 
@@ -4555,7 +4555,7 @@ msgstr "Точки"
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:39
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:166
 #: pcbnew/fp_text.cpp:311 pcbnew/fp_text_grid_table.cpp:102 pcbnew/pad.cpp:1041
-#: pcbnew/pcb_bitmap.cpp:231 pcbnew/pcb_target.cpp:156
+#: pcbnew/pcb_bitmap.cpp:238 pcbnew/pcb_target.cpp:156
 #: pcbnew/pcb_target.cpp:201 pcbnew/pcb_text.cpp:132 pcbnew/pcb_track.cpp:867
 #: pcbnew/pcb_track.cpp:1277 pcbnew/pcb_track.cpp:1307
 msgid "Width"
@@ -4567,7 +4567,7 @@ msgstr "Ширина"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:56
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:56
 #: pcbnew/fp_text.cpp:312 pcbnew/fp_text_grid_table.cpp:103 pcbnew/pad.cpp:1042
-#: pcbnew/pcb_bitmap.cpp:232 pcbnew/pcb_dimension.cpp:737
+#: pcbnew/pcb_bitmap.cpp:239 pcbnew/pcb_dimension.cpp:737
 #: pcbnew/pcb_text.cpp:133
 msgid "Height"
 msgstr "Висота"
@@ -5580,22 +5580,22 @@ msgstr "Ця мова не підтримується операційною с�
 msgid "The KiCad language file for this language is not installed."
 msgstr "Файл перекладу KiCad для цієї мови не встановлений."
 
-#: common/plotters/PDF_plotter.cpp:826
+#: common/plotters/PDF_plotter.cpp:827
 #, c-format
 msgid "Page %s"
 msgstr "Сторінка %s"
 
-#: common/plotters/PDF_plotter.cpp:830
+#: common/plotters/PDF_plotter.cpp:831
 #, c-format
 msgid "%s (Page %s)"
 msgstr "%s (Сторінка %s)"
 
-#: common/plotters/PDF_plotter.cpp:1196
+#: common/plotters/PDF_plotter.cpp:1197
 #, c-format
 msgid "Show Page %s"
 msgstr "Показати сторінку %s"
 
-#: common/plotters/PDF_plotter.cpp:1207
+#: common/plotters/PDF_plotter.cpp:1208
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:812
 #: eeschema/tools/sch_navigate_tool.cpp:86
 #, c-format
@@ -7674,7 +7674,7 @@ msgstr ""
 "%s\n"
 "не знайдено. Скрипт не доступний."
 
-#: eeschema/connection_graph.cpp:2810 eeschema/connection_graph.cpp:2843
+#: eeschema/connection_graph.cpp:2811 eeschema/connection_graph.cpp:2844
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
@@ -7682,18 +7682,18 @@ msgstr ""
 "Обидва %s та %s прикріплені до тих самих елементів; %s буде "
 "використовуватися в списку зв'язків"
 
-#: eeschema/connection_graph.cpp:3112
+#: eeschema/connection_graph.cpp:3113
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr "Зв'язок %s графічно підключена до шини %s , але не є членом цієї шини"
 
-#: eeschema/connection_graph.cpp:3594
+#: eeschema/connection_graph.cpp:3595
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "Виводу листа %s не має відповідної ієрархічної мітки всередині листа"
 
-#: eeschema/connection_graph.cpp:3612
+#: eeschema/connection_graph.cpp:3613
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "Ієрархічна мітка %s не має відповідного виводу листа"
@@ -13727,7 +13727,7 @@ msgstr "Псевдонім шини %s учасники"
 msgid "KiCad Schematic Editor"
 msgstr "KiCad редактор схеми"
 
-#: eeschema/sch_edit_frame.cpp:180 eeschema/sch_edit_frame.cpp:1689
+#: eeschema/sch_edit_frame.cpp:180 eeschema/sch_edit_frame.cpp:1694
 msgid "Schematic Hierarchy"
 msgstr "Ієрархія схеми"
 
@@ -13797,7 +13797,7 @@ msgstr "[Не збережено]"
 msgid "[no schematic loaded]"
 msgstr "[схема не завантажена]"
 
-#: eeschema/sch_edit_frame.cpp:1712
+#: eeschema/sch_edit_frame.cpp:1717
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Підсвічений звʼязок: %s"
@@ -14512,13 +14512,13 @@ msgstr ""
 "Не вдалося завантажити аркуш '%s', оскільки він уже є прямим предком в "
 "ієрархії схеми."
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1534
+#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1538
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2175
 #, c-format
 msgid "Symbol library '%s' already exists."
 msgstr "Бібліотека символів '%s' вже існує."
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1560
+#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1564
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2201
 #, c-format
 msgid "Symbol library '%s' cannot be deleted."
@@ -18610,7 +18610,7 @@ msgstr "Вибрати шар: %s"
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:50
 #: pcbnew/footprint.cpp:2925 pcbnew/footprint.cpp:2928 pcbnew/fp_text.cpp:302
 #: pcbnew/fp_text_grid_table.cpp:106 pcbnew/fp_textbox.cpp:332
-#: pcbnew/pad.cpp:1013 pcbnew/pad.cpp:1768 pcbnew/pcb_bitmap.cpp:233
+#: pcbnew/pad.cpp:1013 pcbnew/pad.cpp:1768 pcbnew/pcb_bitmap.cpp:240
 #: pcbnew/pcb_dimension.cpp:365 pcbnew/pcb_dimension.cpp:1100
 #: pcbnew/pcb_marker.cpp:360 pcbnew/pcb_shape.cpp:311 pcbnew/pcb_shape.cpp:410
 #: pcbnew/pcb_shape.cpp:412 pcbnew/pcb_target.cpp:153 pcbnew/pcb_text.cpp:124
@@ -20153,18 +20153,18 @@ msgstr "Проект: %s"
 msgid "Restoring session"
 msgstr "Відновлення сесії"
 
-#: kicad/kicad_manager_frame.cpp:874
+#: kicad/kicad_manager_frame.cpp:877
 #, c-format
 msgid "Restoring '%s'"
 msgstr "Відновлення '%s'"
 
-#: kicad/kicad_manager_frame.cpp:902
+#: kicad/kicad_manager_frame.cpp:906
 msgid "Would you like to automatically check for plugin updates on startup?"
 msgstr ""
 "Чи бажаєте ви автоматично перевіряти наявність оновлень плагіна під час "
 "запуску?"
 
-#: kicad/kicad_manager_frame.cpp:903
+#: kicad/kicad_manager_frame.cpp:907
 msgid "Check for updates"
 msgstr "Перевірка оновлень"
 
@@ -23554,7 +23554,7 @@ msgstr "Теселяція мідних зон..."
 msgid "PCB"
 msgstr "PCB"
 
-#: pcbnew/board.cpp:1382 pcbnew/dialogs/dialog_board_statistics.cpp:687
+#: pcbnew/board.cpp:1387 pcbnew/dialogs/dialog_board_statistics.cpp:687
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:78
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:32
 #: pcbnew/footprint.cpp:1044 pcbnew/netinfo_item.cpp:107
@@ -23564,7 +23564,7 @@ msgstr "PCB"
 msgid "Pads"
 msgstr "Контактні площадки"
 
-#: pcbnew/board.cpp:1383 pcbnew/dialogs/dialog_board_statistics.cpp:693
+#: pcbnew/board.cpp:1388 pcbnew/dialogs/dialog_board_statistics.cpp:693
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:155
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:77
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:31
@@ -23578,11 +23578,11 @@ msgstr "Контактні площадки"
 msgid "Vias"
 msgstr "Перехідні отвори"
 
-#: pcbnew/board.cpp:1384 pcbnew/pcb_draw_panel_gal.cpp:529
+#: pcbnew/board.cpp:1389 pcbnew/pcb_draw_panel_gal.cpp:529
 msgid "Track Segments"
 msgstr "Сегменти доріжки"
 
-#: pcbnew/board.cpp:1385 pcbnew/pcb_draw_panel_gal.cpp:530
+#: pcbnew/board.cpp:1390 pcbnew/pcb_draw_panel_gal.cpp:530
 #: pcbnew/widgets/appearance_controls.cpp:1010
 #: pcbnew/widgets/appearance_controls.cpp:2336
 #: pcbnew/widgets/appearance_controls_base.cpp:61
@@ -23590,7 +23590,7 @@ msgstr "Сегменти доріжки"
 msgid "Nets"
 msgstr "Звʼязки"
 
-#: pcbnew/board.cpp:1386 pcbnew/pcb_draw_panel_gal.cpp:531
+#: pcbnew/board.cpp:1391 pcbnew/pcb_draw_panel_gal.cpp:531
 msgid "Unrouted"
 msgstr "Немаршрутизований"
 
@@ -29918,11 +29918,11 @@ msgstr "Розмір свердла повинен бути меншим за д
 msgid "Via start layer and end layer cannot be the same"
 msgstr "Початковий і кінцевий шари не повинні співпадати"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:670
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:679
 msgid "Edit track/via properties"
 msgstr "Редагувати властивості доріжки/отвору"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:735
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:744
 msgid "Updating nets"
 msgstr "Оновлення звʼязків"
 
@@ -34991,11 +34991,11 @@ msgstr "Зазор для термічного мостику"
 msgid "Error loading project footprint libraries."
 msgstr "Помилка завантаження бібліотеки посадкових місць проекта."
 
-#: pcbnew/pcb_bitmap.cpp:252
+#: pcbnew/pcb_bitmap.cpp:259
 msgid "Bitmap Properties"
 msgstr "Властивості растрового зображення"
 
-#: pcbnew/pcb_bitmap.cpp:259
+#: pcbnew/pcb_bitmap.cpp:266
 msgid "Greyscale"
 msgstr "Шкала сірого"
 
@@ -38760,12 +38760,12 @@ msgstr "Імпортувати посадкове місце з файлу"
 
 #: pcbnew/tools/pcb_actions.cpp:448
 #, fuzzy
-msgid "Export Current Footprint..."
-msgstr "Експортувати посадкове місце..."
+msgid "Export Footprint..."
+msgstr "Експорт посадкового місця"
 
 #: pcbnew/tools/pcb_actions.cpp:448
 #, fuzzy
-msgid "Export edited footprint to file"
+msgid "Export footprint to file"
 msgstr "Експортувати посадкове місце в файл"
 
 #: pcbnew/tools/pcb_actions.cpp:453
@@ -41209,6 +41209,10 @@ msgstr "KiCad схема"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "Друкована плата KiCad"
+
+#, fuzzy
+#~ msgid "Export Current Footprint..."
+#~ msgstr "Експортувати посадкове місце..."
 
 #, fuzzy
 #~ msgid "(De Morgan) "

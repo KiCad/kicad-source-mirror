@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-09 10:37-0700\n"
+"POT-Creation-Date: 2023-05-12 12:57-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -27609,11 +27609,11 @@ msgstr "Import Footprint..."
 msgid "Import footprint from file"
 msgstr "Import footprint from file"
 
-msgid "Export Current Footprint..."
-msgstr "Export Current Footprint..."
+msgid "Export Footprint..."
+msgstr "Export Footprint..."
 
-msgid "Export edited footprint to file"
-msgstr "Export edited footprint to file"
+msgid "Export footprint to file"
+msgstr "Export footprint to file"
 
 msgid "Footprint Properties..."
 msgstr "Footprint Properties..."
@@ -29416,6 +29416,12 @@ msgstr "KiCad Schematic"
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
 
+#~ msgid "Export Current Footprint..."
+#~ msgstr "Export Current Footprint..."
+
+#~ msgid "Export edited footprint to file"
+#~ msgstr "Export edited footprint to file"
+
 #, c-format
 #~ msgid "Plotting symbol '%s' unit %d %sto '%s'\n"
 #~ msgstr "Plotting symbol '%s' unit %d %sto '%s'\n"
@@ -29463,12 +29469,6 @@ msgstr "KiCad Printed Circuit Board"
 #~ msgstr ""
 #~ "Text will not be readable with a thickness greater than\n"
 #~ "¼ its width or height."
-
-#~ msgid "Export Footprint..."
-#~ msgstr "Export Footprint..."
-
-#~ msgid "Export footprint to file"
-#~ msgstr "Export footprint to file"
 
 #~ msgid "Unknown SIM_VALUE type"
 #~ msgstr "Unknown SIM_VALUE type"
