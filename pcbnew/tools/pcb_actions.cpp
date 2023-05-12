@@ -445,7 +445,7 @@ TOOL_ACTION PCB_ACTIONS::importFootprint( "pcbnew.ModuleEditor.importFootprint",
 
 TOOL_ACTION PCB_ACTIONS::exportFootprint( "pcbnew.ModuleEditor.exportFootprint",
         AS_GLOBAL, 0, "",
-        _( "Export Current Footprint..." ), _( "Export edited footprint to file" ),
+        _( "Export Footprint..." ), _( "Export footprint to file" ),
         BITMAPS::export_module );
 
 TOOL_ACTION PCB_ACTIONS::footprintProperties( "pcbnew.ModuleEditor.footprintProperties",
