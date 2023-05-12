@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-09 10:37-0700\n"
-"PO-Revision-Date: 2023-05-10 06:34+0000\n"
+"PO-Revision-Date: 2023-05-12 19:54+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "v7/es_MX/>\n"
@@ -1336,7 +1336,7 @@ msgstr "PPP de la imagen:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:75
 msgid "PPI"
-msgstr "PPI"
+msgstr "PPP"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:79
 msgid "BPP:"
