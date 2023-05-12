@@ -25,8 +25,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-09 10:37-0700\n"
-"PO-Revision-Date: 2023-05-12 13:56+0000\n"
-"Last-Translator: Hubert Hu <qinghan.hu@gmail.com>\n"
+"PO-Revision-Date: 2023-05-12 13:57+0000\n"
+"Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v7/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -914,7 +914,7 @@ msgstr "阴影："
 msgid ""
 "Number of rays that will be cast, into light direction, to evaluate a shadow "
 "point"
-msgstr "为了评估一个影子点，将向光照方向投射的射线数量。"
+msgstr "为了评估一个影子点，将向光照方向投射的射线数量"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:81
 msgid "Reflections:"
@@ -2815,7 +2815,7 @@ msgstr "打印图框"
 
 #: common/dialogs/dialog_print_generic_base.cpp:43
 msgid "Print Frame references."
-msgstr "打印图框"
+msgstr "打印图框。"
 
 #: common/dialogs/dialog_print_generic_base.cpp:58
 #: pcbnew/dialogs/dialog_plot_base.cpp:122
@@ -4206,9 +4206,9 @@ msgid "Zoom %.2f"
 msgstr "缩放 %.2f"
 
 #: common/eda_draw_frame.cpp:617
-#, fuzzy, c-format
+#, c-format
 msgid "grid %s"
-msgstr "字段 %s"
+msgstr "网格 %s"
 
 #: common/eda_draw_frame.cpp:630 pagelayout_editor/pl_editor_frame.cpp:752
 msgid "inches"
@@ -10457,9 +10457,8 @@ msgid "Replace matches in reference designators"
 msgstr "替换位号中的匹配项"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:120
-#, fuzzy
 msgid "Replace"
-msgstr "替换 (&R)"
+msgstr "替换"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:41
 msgid "Schematic Setup"
@@ -24487,9 +24486,8 @@ msgstr "（不会考虑合并出现在 Net Tie 焊盘组中的焊盘。）"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:48
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:72
-#, fuzzy
 msgid "Changes To Be Applied:"
-msgstr "将要应用的变更"
+msgstr "将要应用的变更："
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.h:55
 msgid "Cleanup Graphics"
@@ -29704,7 +29702,7 @@ msgstr "拖动 (45 度模式)"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:368
 #: pcbnew/tools/pcb_actions.cpp:1547
 msgid "Drags the track segment while keeping connected tracks at 45 degrees."
-msgstr "拖动布线段时以 45 度角的方式保持相连的导线"
+msgstr "拖动布线段时以 45 度角的方式保持相连的导线。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:372
 #: pcbnew/tools/pcb_actions.cpp:1553
@@ -29715,7 +29713,7 @@ msgstr "拖动(自由角度)"
 #: pcbnew/tools/pcb_actions.cpp:1554
 msgid ""
 "Drags the nearest joint in the track without restricting the track angle."
-msgstr "拖拽布线中最近的连接点，而不限制相连导线的角度"
+msgstr "拖拽布线中最近的连接点，而不限制相连导线的角度。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:392
 msgid "Draw an outline to show the sheet size."
@@ -34413,14 +34411,12 @@ msgid "Suppress Trailing Zeroes"
 msgstr "抑制尾随零"
 
 #: pcbnew/pcb_dimension.cpp:1387
-#, fuzzy
 msgid "Crossbar Height"
-msgstr "向右光标"
+msgstr "横杠高度"
 
 #: pcbnew/pcb_dimension.cpp:1391
-#, fuzzy
 msgid "Extension Line Overshoot"
-msgstr "尺寸界线偏移："
+msgstr "引线超出"
 
 #: pcbnew/pcb_dimension.cpp:1456
 #, fuzzy
@@ -34726,9 +34722,9 @@ msgid "Error creating svg file"
 msgstr "创建 svg 文件出错"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:337 pcbnew/pcbnew_jobs_handler.cpp:414
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to plot to '%s'.\n"
-msgstr "未能加载 '%s'."
+msgstr "绘制到 '%s' 时失败。\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:624 pcbnew/pcbnew_jobs_handler.cpp:695
 msgid "Loading footprint library\n"
@@ -36650,7 +36646,7 @@ msgstr "仅圆焊盘"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:356
 msgid "Add teardrops to round shapes only "
-msgstr "仅为原型形状添加泪滴 "
+msgstr "仅为圆型形状添加泪滴 "
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:360
 msgid "SMD pads"
@@ -38010,14 +38006,12 @@ msgid "Import footprint from file"
 msgstr "从文件导入封装"
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export Current Footprint..."
-msgstr "导出封装..."
+msgstr "导出当前的封装..."
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export edited footprint to file"
-msgstr "导出封装到文件"
+msgstr "将编辑好的封装导出到文件"
 
 #: pcbnew/tools/pcb_actions.cpp:453
 msgid "Footprint Properties..."
