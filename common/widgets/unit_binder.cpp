@@ -361,7 +361,7 @@ void UNIT_BINDER::SetDoubleValue( double aValue )
                                                               setPrecision( displayValue, false ),
                                                               false, m_dataType );
 
-    if( displayValue == 0 && m_negativeZero )
+    if( displayValue == 0 && !std::signbit( displayValue ) && m_negativeZero )
         SetValue( wxT( "-" ) + textValue );
     else
         SetValue( textValue );
@@ -424,7 +424,7 @@ void UNIT_BINDER::ChangeDoubleValue( double aValue )
                                                               setPrecision( displayValue, false ),
                                                               false, m_dataType );
 
-    if( displayValue == 0 && m_negativeZero )
+    if( displayValue == 0 && !std::signbit( displayValue ) && m_negativeZero )
         ChangeValue( wxT( "-" ) + textValue );
     else
         ChangeValue( textValue );
