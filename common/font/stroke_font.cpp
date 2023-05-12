@@ -44,7 +44,7 @@ using namespace KIFONT;
 
 
 ///< Factor that determines relative vertical position of the overbar.
-static constexpr double OVERBAR_POSITION_FACTOR = 1.40;
+static constexpr double OVERBAR_POSITION_FACTOR = 1.23;
 
 ///< Factor that determines relative vertical position of the underline.
 static constexpr double UNDERLINE_POSITION_FACTOR = -0.16;
@@ -227,9 +227,9 @@ VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr
 {
     constexpr int    TAB_WIDTH = 4;
     constexpr double INTER_CHAR = 0.2;
-    constexpr double SUPER_SUB_SIZE_MULTIPLIER = 0.7;
-    constexpr double SUPER_HEIGHT_OFFSET = 0.5;
-    constexpr double SUB_HEIGHT_OFFSET = 0.3;
+    constexpr double SUPER_SUB_SIZE_MULTIPLIER = 0.8;
+    constexpr double SUPER_HEIGHT_OFFSET = 0.35;
+    constexpr double SUB_HEIGHT_OFFSET = 0.15;
 
     VECTOR2I cursor( aPosition );
     VECTOR2D glyphSize( aSize );
@@ -293,9 +293,6 @@ VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr
             VECTOR2D glyphExtents = source->BoundingBox().GetEnd();
 
             glyphExtents *= glyphSize;
-
-            if( tilt > 0.0 )
-                glyphExtents.x -= glyphExtents.y * tilt;
 
             cursor.x += KiROUND( glyphExtents.x );
         }
