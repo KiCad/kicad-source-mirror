@@ -763,7 +763,7 @@ void CONNECTION_GRAPH::removeSubgraphs( std::set<CONNECTION_SUBGRAPH*>& aSubgrap
                 m_subgraphs.erase( it );
         }
 
-        for( auto el : m_sheet_to_subgraphs_map )
+        for( auto& el : m_sheet_to_subgraphs_map )
         {
             auto it = std::lower_bound( el.second.begin(), el.second.end(), sg );
 

@@ -27,6 +27,8 @@ NL_3D_VIEWER_PLUGIN::NL_3D_VIEWER_PLUGIN( EDA_3D_CANVAS* aViewport )
 {
     if( ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
         m_impl = new NL_3D_VIEWER_PLUGIN_IMPL( aViewport );
+    else
+        m_impl = nullptr;
 }
 
 

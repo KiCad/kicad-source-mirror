@@ -73,7 +73,10 @@ bool equals( glm::mat<L, C, T, Q> const& aFirst, glm::mat<L, C, T, Q> const& aSe
 
 
 NL_3D_VIEWER_PLUGIN_IMPL::NL_3D_VIEWER_PLUGIN_IMPL( EDA_3D_CANVAS* aCanvas ) :
-        NAV_3D( false, false ), m_canvas( aCanvas ), m_capIsMoving( false )
+        NAV_3D( false, false ),
+        m_canvas( aCanvas ),
+        m_capIsMoving( false ),
+        m_newWidth( 0.0 )
 {
     m_camera = dynamic_cast<TRACK_BALL*>( m_canvas->GetCamera() );
 
