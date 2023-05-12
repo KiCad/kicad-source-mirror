@@ -137,7 +137,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 
 	fgSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_selectedFilterOpt = new wxCheckBox( sbFilters->GetStaticBox(), wxID_ANY, _("Only include selected items"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_selectedFilterOpt = new wxCheckBox( sbFilters->GetStaticBox(), wxID_ANY, _("Selected items only"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer2->Add( m_selectedFilterOpt, 0, wxRIGHT|wxLEFT, 5 );
 
 

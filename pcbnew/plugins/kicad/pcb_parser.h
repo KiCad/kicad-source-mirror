@@ -63,6 +63,7 @@ class FP_3DMODEL;
 class SHAPE_LINE_CHAIN;
 struct LAYER;
 class PROGRESS_REPORTER;
+class TEARDROP_PARAMETERS;
 
 
 /**
@@ -173,6 +174,8 @@ private:
     void parseDefaultTextDims( BOARD_DESIGN_SETTINGS& aSettings, int aLayer );
     void parseNETINFO_ITEM();
     void parseNETCLASS();
+
+    void parseTEARDROP_PARAMETERS( TEARDROP_PARAMETERS* tdParams );
 
     PCB_SHAPE*          parsePCB_SHAPE( BOARD_ITEM* aParent );
     PCB_TEXT*           parsePCB_TEXT( BOARD_ITEM* aParent );

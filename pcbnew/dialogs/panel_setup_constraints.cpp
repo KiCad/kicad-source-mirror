@@ -53,6 +53,20 @@ PANEL_SETUP_CONSTRAINTS::PANEL_SETUP_CONSTRAINTS( wxWindow* aParentWindow, PCB_E
     m_Frame = aFrame;
     m_BrdSettings = &m_Frame->GetBoard()->GetDesignSettings();
 
+    m_filletBitmap->SetBitmap( KiBitmap( BITMAPS::zone_fillet ) );
+    m_spokeBitmap->SetBitmap( KiBitmap( BITMAPS::thermal_spokes ) );
+    m_bitmapClearance->SetBitmap( KiBitmap( BITMAPS::ps_diff_pair_gap ) );
+    m_bitmapMinTrackWidth->SetBitmap( KiBitmap( BITMAPS::width_track ) );
+    m_bitmapMinConn->SetBitmap( KiBitmap( BITMAPS::width_conn ) );
+    m_bitmapMinViaAnnulus->SetBitmap( KiBitmap( BITMAPS::via_annulus ) );
+    m_bitmapMinViaDiameter->SetBitmap( KiBitmap( BITMAPS::via_diameter ) );
+    m_bitmapMinViaDrill->SetBitmap( KiBitmap( BITMAPS::via_hole_diameter ) );
+    m_bitmapMinuViaDiameter->SetBitmap( KiBitmap( BITMAPS::via_diameter ) );
+    m_bitmapMinuViaDrill->SetBitmap( KiBitmap( BITMAPS::via_hole_diameter ) );
+    m_bitmapHoleClearance->SetBitmap( KiBitmap( BITMAPS::hole_to_copper_clearance ) );
+    m_bitmapMinHoleClearance->SetBitmap( KiBitmap( BITMAPS::hole_to_hole_clearance ) );
+    m_bitmapEdgeClearance->SetBitmap( KiBitmap( BITMAPS::edge_to_copper_clearance ) );
+
     m_stCircleToPolyWarning->SetFont( KIUI::GetInfoFont( this ) );
 
     wxSize ctrlSize = m_minResolvedSpokeCountCtrl->GetSize();
@@ -155,36 +169,6 @@ bool PANEL_SETUP_CONSTRAINTS::TransferDataFromWindow()
     m_BrdSettings->m_MinSilkTextThickness = m_minTextThickness.GetValue();
 
     return true;
-}
-
-
-bool PANEL_SETUP_CONSTRAINTS::Show( bool aShow )
-{
-    bool retVal = wxPanel::Show( aShow );
-
-    if( aShow )
-    {
-        // These *should* work in the constructor, and indeed they do if this panel is the
-        // first displayed.  However, on OSX 3.0.5 (at least), if another panel is displayed
-        // first then the icons will be blank unless they're set here.
-        m_filletBitmap->SetBitmap( KiBitmap( BITMAPS::zone_fillet ) );
-        m_spokeBitmap->SetBitmap( KiBitmap( BITMAPS::thermal_spokes ) );
-        m_bitmapClearance->SetBitmap( KiBitmap( BITMAPS::ps_diff_pair_gap ) );
-        m_bitmapMinTrackWidth->SetBitmap( KiBitmap( BITMAPS::width_track ) );
-        m_bitmapMinConn->SetBitmap( KiBitmap( BITMAPS::width_conn ) );
-        m_bitmapMinViaAnnulus->SetBitmap( KiBitmap( BITMAPS::via_annulus ) );
-        m_bitmapMinViaDiameter->SetBitmap( KiBitmap( BITMAPS::via_diameter ) );
-        m_bitmapMinViaDrill->SetBitmap( KiBitmap( BITMAPS::via_hole_diameter ) );
-        m_bitmapMinuViaDiameter->SetBitmap( KiBitmap( BITMAPS::via_diameter ) );
-        m_bitmapMinuViaDrill->SetBitmap( KiBitmap( BITMAPS::via_hole_diameter ) );
-        m_bitmapHoleClearance->SetBitmap( KiBitmap( BITMAPS::hole_to_copper_clearance ) );
-        m_bitmapMinHoleClearance->SetBitmap( KiBitmap( BITMAPS::hole_to_hole_clearance ) );
-        m_bitmapEdgeClearance->SetBitmap( KiBitmap( BITMAPS::edge_to_copper_clearance ) );
-
-        Layout();
-    }
-
-    return retVal;
 }
 
 

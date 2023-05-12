@@ -51,6 +51,7 @@ class ZONE;
 class RN_DATA;
 class RN_NET;
 class PCB_TRACK;
+class PCB_VIA;
 class PAD;
 class FOOTPRINT;
 class PROGRESS_REPORTER;
@@ -192,6 +193,9 @@ public:
     const std::vector<PAD*> GetConnectedPads( const BOARD_CONNECTED_ITEM* aItem ) const;
 
     void GetConnectedPads( const BOARD_CONNECTED_ITEM* aItem, std::set<PAD*>* pads ) const;
+
+    void GetConnectedPadsAndVias( const BOARD_CONNECTED_ITEM* aItem, std::vector<PAD*>* pads,
+                                  std::vector<PCB_VIA*>* vias );
 
     /**
      * Function GetConnectedItemsAtAnchor()

@@ -180,9 +180,9 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::~DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS()
     g_filterByLayer = m_layerFilterOpt->GetValue();
     g_layerFilter = m_layerFilter->GetLayerSelection();
     g_filterByTrackWidth = m_filterByTrackWidth->GetValue();
-    g_trackWidthFilter = m_trackWidthFilter.GetValue();
+    g_trackWidthFilter = m_trackWidthFilter.GetIntValue();
     g_filterByViaSize = m_filterByViaSize->GetValue();
-    g_viaSizeFilter = m_viaSizeFilter.GetValue();
+    g_viaSizeFilter = m_viaSizeFilter.GetIntValue();
     g_filterSelected = m_selectedItemsFilter->GetValue();
 
     m_netFilter->Disconnect( NET_SELECTED,

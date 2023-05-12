@@ -505,6 +505,12 @@ TOOL_ACTION PCB_ACTIONS::editTextAndGraphics( "pcbnew.GlobalEdit.editTextAndGrap
         _( "Edit Text and graphics properties globally across board" ),
         BITMAPS::text );
 
+TOOL_ACTION PCB_ACTIONS::editTeardrops( "pcbnew.GlobalEdit.editTeardrops",
+        AS_GLOBAL, 0, "",
+        _( "Edit Teardrops..." ),
+        _( "Add, remove or edit teardrops globally across board" ),
+        BITMAPS::via );
+
 TOOL_ACTION PCB_ACTIONS::globalDeletions( "pcbnew.GlobalEdit.globalDeletions",
         AS_GLOBAL, 0, "",
         _( "Global Deletions..." ),

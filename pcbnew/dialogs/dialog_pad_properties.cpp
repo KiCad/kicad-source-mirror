@@ -139,7 +139,9 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
         m_thermalGap( aParent, m_thermalGapLabel, m_thermalGapCtrl, m_thermalGapUnits ),
         m_spokeWidth( aParent, m_spokeWidthLabel, m_spokeWidthCtrl, m_spokeWidthUnits ),
         m_spokeAngle( aParent, m_spokeAngleLabel, m_spokeAngleCtrl, m_spokeAngleUnits ),
-        m_pad_orientation( aParent, m_PadOrientText, m_cb_padrotation, m_orientationUnits )
+        m_pad_orientation( aParent, m_PadOrientText, m_cb_padrotation, m_orientationUnits ),
+        m_teardropMaxLenSetting( aParent, m_stMaxLen, m_tcTdMaxLen, m_stMaxLenUnits ),
+        m_teardropMaxHeightSetting( aParent, m_stTdMaxSize, m_tcMaxHeight, m_stMaxHeightUnits )
 {
     SetName( PAD_PROPERTIES_DLG_NAME );
     m_isFpEditor = dynamic_cast<FOOTPRINT_EDIT_FRAME*>( aParent ) != nullptr;
@@ -160,6 +162,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
 
     m_FlippedWarningIcon->SetBitmap( KiBitmap( BITMAPS::dialog_warning ) );
     m_nonCopperWarningIcon->SetBitmap( KiBitmap( BITMAPS::dialog_warning ) );
+    m_legacyTeardropsIcon->SetBitmap( KiBitmap( BITMAPS::dialog_warning ) );
 
     m_masterPad = m_parent->GetDesignSettings().m_Pad_Master.get();
     m_previewPad = new PAD( (FOOTPRINT*) nullptr );
@@ -169,6 +172,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
         SetTitle( _( "Pad Properties" ) );
 
         *m_previewPad = *aPad;
+        m_previewPad->GetTeardropParams() = aPad->GetTeardropParams();
         m_previewPad->ClearFlags( SELECTED|BRIGHTENED );
     }
     else
@@ -176,6 +180,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
         SetTitle( _( "Default Pad Properties for Add Pad Tool" ) );
 
         *m_previewPad = *m_masterPad;
+        m_previewPad->GetTeardropParams() = m_masterPad->GetTeardropParams();
     }
 
     if( m_isFpEditor )
@@ -211,11 +216,13 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
     m_copperLayersLabel->SetFont( infoFont );
     m_techLayersLabel->SetFont( infoFont );
     m_parentInfo->SetFont( infoFont );
+    m_teardropShapeLabel->SetFont( infoFont );
 
     infoFont.SetStyle( wxFONTSTYLE_ITALIC );
     m_nonCopperNote->SetFont( infoFont );
     m_staticTextInfoPaste->SetFont( infoFont );
     m_staticTextPrimitiveListWarning->SetFont( infoFont );
+    m_minTrackWidthHint->SetFont( infoFont );
 
     updateHoleControls();
     updatePadSizeControls();
@@ -560,6 +567,26 @@ void DIALOG_PAD_PROPERTIES::initValues()
     m_pasteMarginRatio.ChangeDoubleValue( m_previewPad->GetLocalSolderPasteMarginRatio() * 100.0 );
     m_pad_orientation.ChangeAngleValue( m_previewPad->GetOrientation() );
 
+    m_cbTeardrops->SetValue( m_previewPad->GetTeardropParams().m_Enabled );
+    m_cbTeardropsUseNextTrack->SetValue( m_previewPad->GetTeardropParams().m_AllowUseTwoTracks );
+    m_cbPreferZoneConnection->SetValue( !m_previewPad->GetTeardropParams().m_TdOnPadsInZones );
+    m_teardropMaxLenSetting.SetValue( m_previewPad->GetTeardropParams().m_TdMaxLen );
+    m_teardropMaxHeightSetting.SetValue( m_previewPad->GetTeardropParams().m_TdMaxWidth );
+    m_spTeardropLenPercent->SetValue( m_previewPad->GetTeardropParams().m_BestLengthRatio *100 );
+    m_spTeardropSizePercent->SetValue( m_previewPad->GetTeardropParams().m_BestWidthRatio *100 );
+    m_spTeardropHDPercent->SetValue( m_previewPad->GetTeardropParams().m_WidthtoSizeFilterRatio*100 );
+
+    if( m_previewPad->GetTeardropParams().IsCurved() )
+    {
+        m_rbCurved->SetValue( true );
+        m_curvePointsCtrl->SetValue( m_previewPad->GetTeardropParams().m_CurveSegCount );
+    }
+    else
+    {
+        m_rbStraightLines->SetValue( true );
+        m_curvePointsCtrl->SetValue( 5 );
+    }
+
     switch( m_previewPad->GetZoneConnection() )
     {
     default:
@@ -598,14 +625,14 @@ void DIALOG_PAD_PROPERTIES::initValues()
         break;
     }
 
-    m_cbTopLeft->SetValue( ( m_previewPad->GetChamferPositions() & RECT_CHAMFER_TOP_LEFT) );
-    m_cbTopLeft1->SetValue( ( m_previewPad->GetChamferPositions() & RECT_CHAMFER_TOP_LEFT) );
-    m_cbTopRight->SetValue( ( m_previewPad->GetChamferPositions() & RECT_CHAMFER_TOP_RIGHT) );
-    m_cbTopRight1->SetValue( ( m_previewPad->GetChamferPositions() & RECT_CHAMFER_TOP_RIGHT) );
-    m_cbBottomLeft->SetValue( ( m_previewPad->GetChamferPositions() & RECT_CHAMFER_BOTTOM_LEFT) );
-    m_cbBottomLeft1->SetValue( ( m_previewPad->GetChamferPositions() & RECT_CHAMFER_BOTTOM_LEFT) );
-    m_cbBottomRight->SetValue( ( m_previewPad->GetChamferPositions() & RECT_CHAMFER_BOTTOM_RIGHT) );
-    m_cbBottomRight1->SetValue( ( m_previewPad->GetChamferPositions() & RECT_CHAMFER_BOTTOM_RIGHT) );
+    m_cbTopLeft->SetValue( m_previewPad->GetChamferPositions() & RECT_CHAMFER_TOP_LEFT );
+    m_cbTopLeft1->SetValue( m_previewPad->GetChamferPositions() & RECT_CHAMFER_TOP_LEFT );
+    m_cbTopRight->SetValue( m_previewPad->GetChamferPositions() & RECT_CHAMFER_TOP_RIGHT );
+    m_cbTopRight1->SetValue( m_previewPad->GetChamferPositions() & RECT_CHAMFER_TOP_RIGHT );
+    m_cbBottomLeft->SetValue( m_previewPad->GetChamferPositions() & RECT_CHAMFER_BOTTOM_LEFT );
+    m_cbBottomLeft1->SetValue( m_previewPad->GetChamferPositions() & RECT_CHAMFER_BOTTOM_LEFT );
+    m_cbBottomRight->SetValue( m_previewPad->GetChamferPositions() & RECT_CHAMFER_BOTTOM_RIGHT );
+    m_cbBottomRight1->SetValue( m_previewPad->GetChamferPositions() & RECT_CHAMFER_BOTTOM_RIGHT );
 
     updateRoundRectCornerValues();
 
@@ -665,13 +692,15 @@ void DIALOG_PAD_PROPERTIES::initValues()
     displayPrimitivesList();
 }
 
+
 // A small helper function, to display coordinates:
-static wxString formatCoord( EDA_UNITS aUnits, VECTOR2I aCoord )
+static wxString formatCoord( EDA_UNITS aUnits, const VECTOR2I& aCoord )
 {
     return wxString::Format( wxT( "(X:%s Y:%s)" ),
                              EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aUnits, aCoord.x ),
                              EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aUnits, aCoord.y ) );
 }
+
 
 void DIALOG_PAD_PROPERTIES::displayPrimitivesList()
 {
@@ -1096,6 +1125,20 @@ void DIALOG_PAD_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
         m_stackupImagesBook->ChangeSelection( 3 );
         break;
     }
+
+    m_legacyTeardropsWarning->Show( m_board->LegacyTeardrops() );
+}
+
+
+void DIALOG_PAD_PROPERTIES::onTeardropsUpdateUi( wxUpdateUIEvent& event )
+{
+    event.Enable( !m_board->LegacyTeardrops() );
+}
+
+
+void DIALOG_PAD_PROPERTIES::onTeardropCurvePointsUpdateUi( wxUpdateUIEvent& event )
+{
+    event.Enable( !m_board->LegacyTeardrops() && m_rbCurved->GetValue() );
 }
 
 
@@ -1624,6 +1667,8 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     m_currentPad->SetChamferPositions( m_masterPad->GetChamferPositions() );
     m_currentPad->SetZoneConnection( m_masterPad->GetZoneConnection() );
 
+    m_currentPad->GetTeardropParams() = m_masterPad->GetTeardropParams();
+
     // rounded rect pads with radius ratio = 0 are in fact rect pads.
     // So set the right shape (and perhaps issues with a radius = 0)
     if( m_currentPad->GetShape() == PAD_SHAPE::ROUNDRECT &&
@@ -1681,22 +1726,36 @@ PAD_PROP DIALOG_PAD_PROPERTIES::getSelectedProperty()
 
 void DIALOG_PAD_PROPERTIES::updateHoleControls()
 {
-    m_holeXLabel->SetLabel( ( m_holeShapeCtrl->GetSelection() == CHOICE_SHAPE_CIRCLE )
-                                    ? _( "Diameter:" )
-                                    : _( "Hole size X:" ) );
-    m_holeY.Show( m_holeShapeCtrl->GetSelection() != CHOICE_SHAPE_CIRCLE
-                  && m_holeShapeCtrl->GetSelection() != CHOICE_SHAPE_CUSTOM_CIRC_ANCHOR );
+    if( m_holeShapeCtrl->GetSelection() == CHOICE_SHAPE_CIRCLE )
+    {
+        m_holeXLabel->SetLabel( _( "Diameter:" ) );
+        m_holeY.Show( false );
+    }
+    else
+    {
+        m_holeXLabel->SetLabel( _( "Hole size X:" ) );
+        m_holeY.Show( true );
+    }
+
     m_holeXLabel->GetParent()->Layout();
 }
 
 void DIALOG_PAD_PROPERTIES::updatePadSizeControls()
 {
-    m_sizeXLabel->SetLabel( ( m_PadShapeSelector->GetSelection() == CHOICE_SHAPE_CIRCLE
-                                || m_PadShapeSelector->GetSelection() == CHOICE_SHAPE_CUSTOM_CIRC_ANCHOR )
-                                    ? _( "Diameter:" )
-                                    : _( "Pad size X:" ) );
-    m_sizeY.Show( m_PadShapeSelector->GetSelection() != CHOICE_SHAPE_CIRCLE
-                  && m_PadShapeSelector->GetSelection() != CHOICE_SHAPE_CUSTOM_CIRC_ANCHOR );
+    if( m_PadShapeSelector->GetSelection() == CHOICE_SHAPE_CIRCLE
+            || m_PadShapeSelector->GetSelection() == CHOICE_SHAPE_CUSTOM_CIRC_ANCHOR )
+    {
+        m_sizeXLabel->SetLabel( _( "Diameter:" ) );
+        m_sizeY.Show( false );
+        m_bitmapTeardrop->SetBitmap( KiBitmap( BITMAPS::teardrop_sizes ) );
+    }
+    else
+    {
+        m_sizeXLabel->SetLabel( _( "Pad size X:" ) );
+        m_sizeY.Show( true );
+        m_bitmapTeardrop->SetBitmap( KiBitmap( BITMAPS::teardrop_rect_sizes ) );
+    }
+
     m_sizeXLabel->GetParent()->Layout();
 }
 
@@ -1726,14 +1785,29 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     if( aPad->GetShape() == PAD_SHAPE::CUSTOM )
         aPad->ReplacePrimitives( m_primitives );
 
+    aPad->GetTeardropParams().m_Enabled = m_cbTeardrops->GetValue();
+    aPad->GetTeardropParams().m_AllowUseTwoTracks = m_cbTeardropsUseNextTrack->GetValue();
+    aPad->GetTeardropParams().m_TdOnPadsInZones = !m_cbPreferZoneConnection->GetValue();
+    aPad->GetTeardropParams().m_TdMaxLen = m_teardropMaxLenSetting.GetIntValue();
+    aPad->GetTeardropParams().m_TdMaxWidth = m_teardropMaxHeightSetting.GetIntValue();
+    aPad->GetTeardropParams().m_BestLengthRatio = m_spTeardropLenPercent->GetValue() / 100;
+    aPad->GetTeardropParams().m_BestWidthRatio = m_spTeardropSizePercent->GetValue() / 100;
+
+    if( m_rbStraightLines->GetValue() )
+        aPad->GetTeardropParams().m_CurveSegCount = 0;
+    else
+        aPad->GetTeardropParams().m_CurveSegCount = m_curvePointsCtrl->GetValue();
+
+    aPad->GetTeardropParams().m_WidthtoSizeFilterRatio = m_spTeardropHDPercent->GetValue() / 100;
+
     // Read pad clearances values:
-    aPad->SetLocalClearance( m_clearance.GetValue() );
-    aPad->SetLocalSolderMaskMargin( m_maskMargin.GetValue() );
-    aPad->SetLocalSolderPasteMargin( m_pasteMargin.GetValue() );
+    aPad->SetLocalClearance( m_clearance.GetIntValue() );
+    aPad->SetLocalSolderMaskMargin( m_maskMargin.GetIntValue() );
+    aPad->SetLocalSolderPasteMargin( m_pasteMargin.GetIntValue() );
     aPad->SetLocalSolderPasteMarginRatio( m_pasteMarginRatio.GetDoubleValue() / 100.0 );
-    aPad->SetThermalSpokeWidth( m_spokeWidth.GetValue() );
+    aPad->SetThermalSpokeWidth( m_spokeWidth.GetIntValue() );
     aPad->SetThermalSpokeAngle( m_spokeAngle.GetAngleValue() );
-    aPad->SetThermalGap( m_thermalGap.GetValue() );
+    aPad->SetThermalGap( m_thermalGap.GetIntValue() );
 
     // And rotation
     aPad->SetOrientation( m_pad_orientation.GetAngleValue() );
@@ -1747,23 +1821,23 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     case 3: aPad->SetZoneConnection( ZONE_CONNECTION::NONE );      break;
     }
 
-    aPad->SetPosition( VECTOR2I( m_posX.GetValue(), m_posY.GetValue() ) );
+    aPad->SetPosition( VECTOR2I( m_posX.GetIntValue(), m_posY.GetIntValue() ) );
 
     if( m_holeShapeCtrl->GetSelection() == CHOICE_SHAPE_CIRCLE )
     {
         aPad->SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );
-        aPad->SetDrillSize( VECTOR2I( m_holeX.GetValue(), m_holeX.GetValue() ) );
+        aPad->SetDrillSize( VECTOR2I( m_holeX.GetIntValue(), m_holeX.GetIntValue() ) );
     }
     else
     {
         aPad->SetDrillShape( PAD_DRILL_SHAPE_OBLONG );
-        aPad->SetDrillSize( VECTOR2I( m_holeX.GetValue(), m_holeY.GetValue() ) );
+        aPad->SetDrillSize( VECTOR2I( m_holeX.GetIntValue(), m_holeY.GetIntValue() ) );
     }
 
     if( aPad->GetShape() == PAD_SHAPE::CIRCLE )
-        aPad->SetSize( VECTOR2I( m_sizeX.GetValue(), m_sizeX.GetValue() ) );
+        aPad->SetSize( VECTOR2I( m_sizeX.GetIntValue(), m_sizeX.GetIntValue() ) );
     else
-        aPad->SetSize( VECTOR2I( m_sizeX.GetValue(), m_sizeY.GetValue() ) );
+        aPad->SetSize( VECTOR2I( m_sizeX.GetIntValue(), m_sizeY.GetIntValue() ) );
 
     // For a trapezoid, test delta value (be sure delta is not too large for pad size)
     // remember DeltaSize.x is the Y size variation
@@ -1774,9 +1848,9 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     {
         // For a trapezoid, only one of delta.x or delta.y is not 0, depending on axis.
         if( m_trapAxisCtrl->GetSelection() == 0 )
-            delta.x = m_trapDelta.GetValue();
+            delta.x = m_trapDelta.GetIntValue();
         else
-            delta.y = m_trapDelta.GetValue();
+            delta.y = m_trapDelta.GetIntValue();
 
         if( delta.x < 0 && delta.x < -aPad->GetSize().y )
         {
@@ -1806,13 +1880,13 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     aPad->SetDelta( delta );
 
     if( m_offsetShapeOpt->GetValue() )
-        aPad->SetOffset( VECTOR2I( m_offsetX.GetValue(), m_offsetY.GetValue() ) );
+        aPad->SetOffset( VECTOR2I( m_offsetX.GetIntValue(), m_offsetY.GetIntValue() ) );
     else
         aPad->SetOffset( VECTOR2I() );
 
     // Read pad length die
     if( m_padToDieOpt->GetValue() )
-        aPad->SetPadToDieLength( m_padToDie.GetValue() );
+        aPad->SetPadToDieLength( m_padToDie.GetIntValue() );
     else
         aPad->SetPadToDieLength( 0 );
 
@@ -1858,7 +1932,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
         // diameter is acceptable, and is used in Gerber files as flashed area
         // reference
         if( aPad->GetAnchorPadShape() == PAD_SHAPE::CIRCLE )
-            aPad->SetSize( VECTOR2I( m_sizeX.GetValue(), m_sizeX.GetValue() ) );
+            aPad->SetSize( VECTOR2I( m_sizeX.GetIntValue(), m_sizeX.GetIntValue() ) );
     }
 
     // Define the way the clearance area is defined in zones.  Since all non-custom pad

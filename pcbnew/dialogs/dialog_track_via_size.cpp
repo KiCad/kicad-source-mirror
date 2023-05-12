@@ -62,9 +62,9 @@ bool DIALOG_TRACK_VIA_SIZE::TransferDataFromWindow()
     }
 
     // Store dialog values to the router settings
-    m_settings.SetCustomTrackWidth( m_trackWidth.GetValue() );
-    m_settings.SetCustomViaSize( m_viaDiameter.GetValue() );
-    m_settings.SetCustomViaDrill( m_viaDrill.GetValue() );
+    m_settings.SetCustomTrackWidth( m_trackWidth.GetIntValue() );
+    m_settings.SetCustomViaSize( m_viaDiameter.GetIntValue() );
+    m_settings.SetCustomViaDrill( m_viaDrill.GetIntValue() );
 
     return true;
 }

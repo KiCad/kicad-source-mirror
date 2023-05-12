@@ -2437,6 +2437,11 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
 
         zone = static_cast<const ZONE*>( aItem );
 
+        // A teardrop is modelled as a property of a via, pad or the board (for track-to-track
+        // teardrops).  The underlying zone is only an implementation detail.
+        if( zone->IsTeardropArea() && !board()->LegacyTeardrops() )
+            return false;
+
         // A footprint zone is only selectable within the footprint editor
         if( zone->GetParent()
                 && zone->GetParent()->Type() == PCB_FOOTPRINT_T

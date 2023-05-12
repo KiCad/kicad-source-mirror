@@ -358,6 +358,7 @@ public:
     static TOOL_ACTION boardSetup;
     static TOOL_ACTION editTracksAndVias;
     static TOOL_ACTION editTextAndGraphics;
+    static TOOL_ACTION editTeardrops;
     static TOOL_ACTION globalDeletions;
     static TOOL_ACTION cleanupTracksAndVias;
     static TOOL_ACTION cleanupGraphics;

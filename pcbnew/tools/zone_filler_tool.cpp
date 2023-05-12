@@ -42,6 +42,7 @@
 #include "pcb_actions.h"
 #include "zone_filler_tool.h"
 #include "zone_filler.h"
+#include "teardrop/teardrop.h"
 #include <profile.h>
 
 ZONE_FILLER_TOOL::ZONE_FILLER_TOOL() :
@@ -115,21 +116,23 @@ void ZONE_FILLER_TOOL::singleShotRefocus( wxIdleEvent& )
 
 void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aReporter )
 {
-    PCB_EDIT_FRAME*    frame = getEditFrame<PCB_EDIT_FRAME>();
-    std::vector<ZONE*> toFill;
-
     if( m_fillInProgress )
         return;
 
     m_fillInProgress = true;
 
-    for( ZONE* zone : board()->Zones() )
-        toFill.push_back( zone );
+    PCB_EDIT_FRAME*                       frame = getEditFrame<PCB_EDIT_FRAME>();
+    BOARD_COMMIT                          commit( this );
+    std::unique_ptr<WX_PROGRESS_REPORTER> reporter;
+    TEARDROP_MANAGER                      teardropMgr( board(), m_toolMgr );
+    std::vector<ZONE*>                    toFill;
+
+    teardropMgr.UpdateTeardrops( commit, nullptr, nullptr, true /* forceFullUpdate */ );
 
     board()->IncrementTimeStamp();    // Clear caches
 
-    BOARD_COMMIT                          commit( this );
-    std::unique_ptr<WX_PROGRESS_REPORTER> reporter;
+    for( ZONE* zone : board()->Zones() )
+        toFill.push_back( zone );
 
     m_filler = std::make_unique<ZONE_FILLER>( board(), &commit );
 

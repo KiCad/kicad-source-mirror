@@ -380,6 +380,69 @@ std::pair<wxString, wxString> PCB_PARSER::parseProperty()
 }
 
 
+void PCB_PARSER::parseTEARDROP_PARAMETERS( TEARDROP_PARAMETERS* tdParams )
+{
+    tdParams->m_Enabled = false;
+    tdParams->m_AllowUseTwoTracks = false;
+    tdParams->m_TdOnPadsInZones = true;
+
+    for( T token = NextTok();  token != T_RIGHT;  token = NextTok() )
+    {
+        if( token == T_LEFT )
+            token = NextTok();
+
+        switch( token )
+        {
+        case T_enabled:
+            tdParams->m_Enabled = true;
+            break;
+
+        case T_allow_two_segments:
+            tdParams->m_AllowUseTwoTracks = true;
+            break;
+
+        case T_prefer_zone_connections:
+            tdParams->m_TdOnPadsInZones = false;
+            break;
+
+        case T_best_length_ratio:
+            tdParams->m_BestLengthRatio = parseDouble( "teardrop best length ratio" );
+            NeedRIGHT();
+            break;
+
+        case T_max_length:
+            tdParams->m_TdMaxLen = parseBoardUnits( "teardrop max length" );
+            NeedRIGHT();
+            break;
+
+        case T_best_width_ratio:
+            tdParams->m_BestWidthRatio = parseDouble( "teardrop best width ratio" );
+            NeedRIGHT();
+            break;
+
+        case T_max_width:
+            tdParams->m_TdMaxWidth = parseBoardUnits( "teardrop max width" );
+            NeedRIGHT();
+            break;
+
+        case T_curve_points:
+            tdParams->m_CurveSegCount = parseInt( "teardrop curve points count" );
+            NeedRIGHT();
+            break;
+
+        case T_filter_ratio:
+            tdParams->m_WidthtoSizeFilterRatio = parseDouble( "teardrop filter ratio" );
+            NeedRIGHT();
+            break;
+
+        default:
+            Expecting( "enabled, allow_two_segments, prefer_zone_connections, best_length_ratio, "
+                       "max_length, best_width_ratio, max_width, curve_points or filter_ratio" );
+        }
+    }
+}
+
+
 void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
 {
     wxCHECK_RET( CurTok() == T_effects,
@@ -1124,7 +1187,12 @@ void PCB_PARSER::parseGeneralSection()
             NeedRIGHT();
             break;
 
-        default:              // Skip everything but the board thickness.
+        case T_legacy_teardrops:
+            m_board->SetLegacyTeardrops( true );
+            NeedRIGHT();
+            break;
+
+        default:              // Skip everything else.
             while( ( token = NextTok() ) != T_RIGHT )
             {
                 if( !IsSymbol( token ) && token != T_NUMBER )
@@ -4276,6 +4344,10 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
             NeedRIGHT();
             break;
 
+        case T_teardrops:
+            parseTEARDROP_PARAMETERS( &pad->GetTeardropParams() );
+            break;
+
         case T_zone_connect:
             pad->SetZoneConnection( (ZONE_CONNECTION) parseInt( "zone connection value" ) );
             NeedRIGHT();
@@ -4499,7 +4571,8 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
             Expecting( "at, locked, drill, layers, net, die_length, roundrect_rratio, "
                        "solder_mask_margin, solder_paste_margin, solder_paste_margin_ratio, "
                        "clearance, tstamp, primitives, remove_unused_layers, keep_end_layers, "
-                       "pinfunction, pintype, zone_connect, thermal_width, or thermal_gap" );
+                       "pinfunction, pintype, zone_connect, thermal_width, thermal_gap or "
+                       "teardrops" );
         }
     }
 
@@ -4916,6 +4989,10 @@ PCB_VIA* PCB_PARSER::parsePCB_VIA()
         }
             break;
 
+        case T_teardrops:
+            parseTEARDROP_PARAMETERS( &via->GetTeardropParams() );
+            break;
+
         case T_tstamp:
             NextTok();
             const_cast<KIID&>( via->m_Uuid ) = CurStrToKIID();
@@ -4940,7 +5017,8 @@ PCB_VIA* PCB_PARSER::parsePCB_VIA()
             break;
 
         default:
-            Expecting( "blind, micro, at, size, drill, layers, net, free, tstamp, or status" );
+            Expecting( "blind, micro, at, size, drill, layers, net, free, tstamp, status or "
+                       "teardrops" );
         }
     }
 
@@ -5478,14 +5556,6 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
         case T_name:
             NextTok();
             zone->SetZoneName( FromUTF8() );
-
-            // TODO: remove this hack in next future, now keywords are added for teadrop attribute
-            // If a zone name starts by "$teardrop_", set its teardrop property flag
-            if( zone->GetZoneName().StartsWith( "$teardrop_p" ) )
-                zone->SetTeardropAreaType( TEARDROP_TYPE::TD_VIAPAD );
-            else if( zone->GetZoneName().StartsWith( "$teardrop_t" ) )
-                zone->SetTeardropAreaType( TEARDROP_TYPE::TD_TRACKEND );
-
             NeedRIGHT();
             break;
 
@@ -5498,37 +5568,30 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                 switch( token )
                 {
                 case T_teardrop:
-                    token = NextTok();
-
-                    // Expected teardrop data (type padvia) or (type track_end)
-                    if( token == T_LEFT )
+                    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
                     {
-                        token = NextTok();
+                        if( token == T_LEFT )
+                            token = NextTok();
 
-                        if( token == T_type )
+                        switch( token )
                         {
+                        case T_type:
                             token = NextTok();
 
                             if( token == T_padvia )
-                            {
                                 zone->SetTeardropAreaType( TEARDROP_TYPE::TD_VIAPAD );
-                                NeedRIGHT();
-                            }
                             else if( token == T_track_end )
-                            {
                                 zone->SetTeardropAreaType( TEARDROP_TYPE::TD_TRACKEND );
-                                NeedRIGHT();
-                            }
                             else
                                 Expecting( "padvia or track_end" );
 
                             NeedRIGHT();
-                        }
-                        else
+                            break;
+
+                        default:
                             Expecting( "type" );
+                        }
                     }
-                    else
-                        Expecting( "(" );
 
                     break;
 
@@ -5597,6 +5660,9 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
             zone->SetNetCode( net->GetNetCode() );
         }
     }
+
+    if( zone->IsTeardropArea() && m_requiredVersion < 20230517 )
+        m_board->SetLegacyTeardrops( true );
 
     // Clear flags used in zone edition:
     zone->SetNeedRefill( false );

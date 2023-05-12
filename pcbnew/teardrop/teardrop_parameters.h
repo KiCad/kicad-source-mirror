@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2021 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,14 +47,15 @@ enum TARGET_TD
 class TEARDROP_PARAMETERS
 {
 public:
-    TEARDROP_PARAMETERS( TARGET_TD aTdType ):
-        m_TdType( aTdType ),
-        m_TdMaxLen( pcbIUScale.mmToIU( 1.0 ) ),
-        m_TdMaxHeight( pcbIUScale.mmToIU( 2.0 ) ),
-        m_LengthRatio( 0.5),
-        m_HeightRatio( 1.0 ),
-        m_CurveSegCount( 0 ),
-        m_WidthtoSizeFilterRatio( 0.9 )
+    TEARDROP_PARAMETERS():
+            m_Enabled( false ),
+            m_AllowUseTwoTracks( true ),
+            m_TdMaxLen( pcbIUScale.mmToIU( 1.0 ) ),
+            m_TdMaxWidth( pcbIUScale.mmToIU( 2.0 ) ),
+            m_BestLengthRatio( 0.5),
+            m_BestWidthRatio( 1.0 ),
+            m_CurveSegCount( 0 ),
+            m_WidthtoSizeFilterRatio( 0.9 )
     {
     }
 
@@ -65,7 +66,7 @@ public:
     void SetTeardropMaxSize( int aMaxLen, int aMaxHeight )
     {
         m_TdMaxLen = aMaxLen;
-        m_TdMaxHeight = aMaxHeight;
+        m_TdMaxWidth = aMaxHeight;
     }
 
     /**
@@ -75,8 +76,8 @@ public:
      */
     void SetTeardropSizeRatio( double aLenghtRatio = 0.5, double aHeightRatio = 1.0 )
     {
-        m_LengthRatio = aLenghtRatio;
-        m_HeightRatio = aHeightRatio;
+        m_BestLengthRatio = aLenghtRatio;
+        m_BestWidthRatio = aHeightRatio;
     }
 
     /**
@@ -91,21 +92,25 @@ public:
     bool IsCurved() const { return m_CurveSegCount > 2; }
 
 public:
-    TARGET_TD m_TdType;     /// the type of target for these parameters
+    bool    m_Enabled;
+    /// True to create teardrops using 2 track segments if the first in too small
+    bool    m_AllowUseTwoTracks;
     /// max allowed length for teardrops in IU. <= 0 to disable
     int     m_TdMaxLen;
     /// max allowed height for teardrops in IU. <= 0 to disable
-    int     m_TdMaxHeight;
+    int     m_TdMaxWidth;
     /// The length of a teardrop as ratio between length and size of pad/via
-    double  m_LengthRatio;
+    double  m_BestLengthRatio;
     /// The height of a teardrop as ratio between height and size of pad/via
-    double  m_HeightRatio;
+    double  m_BestWidthRatio;
     /// number of segments to build the curved sides of a teardrop area
     /// must be > 2. for values <= 2 a straight line is used
     int     m_CurveSegCount;
     /// The ratio (H/D) between the via/pad size and the track width max value to create a teardrop
     /// 1.0 (100 %) always creates a teardrop, 0.0 (0%) never create a teardrop
     double  m_WidthtoSizeFilterRatio;
+    /// A filter to exclude pads inside zone fills
+    bool    m_TdOnPadsInZones;
 };
 
 
@@ -128,28 +133,17 @@ public:
     bool     m_TargetTrack2Track;
     /// True to create teardrops for round shapes only
     bool     m_UseRoundShapesOnly;
-    /// True to create teardrops using 2 track segments if the first in too small
-    bool     m_AllowUseTwoTracks;
-    /// the number of segments to apprximate a curve (Bezier curve) in a teardrop
-    /// Must be > 2, otherwise a line is used
-    int      m_CurveSegCount;
-    /// Pads inside a zone of the same net do not have teardrop added.
-    /// if this option is true, these pads will have teardrop added.
-    bool    m_TdOnPadsInZones;
 
 public:
     TEARDROP_PARAMETERS_LIST() :
             m_TargetViasPads( true ),
             m_TargetPadsWithNoHole( true ),
             m_TargetTrack2Track( false ),
-            m_UseRoundShapesOnly( false ),
-            m_AllowUseTwoTracks( true ),
-            m_CurveSegCount( 5 ),
-            m_TdOnPadsInZones( false )
+            m_UseRoundShapesOnly( false )
     {
-        m_params_list.emplace_back( TARGET_ROUND );     // parameters for TARGET_ROUND
-        m_params_list.emplace_back( TARGET_RECT );      // parameters for TARGET_RECT
-        m_params_list.emplace_back( TARGET_TRACK );     // parameters for TARGET_TRACK
+        m_params_list.emplace_back();     // parameters for TARGET_ROUND
+        m_params_list.emplace_back();     // parameters for TARGET_RECT
+        m_params_list.emplace_back();     // parameters for TARGET_TRACK
     }
 
     /**

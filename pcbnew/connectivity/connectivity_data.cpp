@@ -637,6 +637,28 @@ const
 }
 
 
+void CONNECTIVITY_DATA::GetConnectedPadsAndVias( const BOARD_CONNECTED_ITEM* aItem,
+                                                 std::vector<PAD*>* pads,
+                                                 std::vector<PCB_VIA*>* vias )
+{
+    for( CN_ITEM* citem : m_connAlgo->ItemEntry( aItem ).GetItems() )
+    {
+        for( CN_ITEM* connected : citem->ConnectedItems() )
+        {
+            if( connected->Valid() )
+            {
+                BOARD_CONNECTED_ITEM* parent = connected->Parent();
+
+                if( parent->Type() == PCB_PAD_T )
+                    pads->push_back( static_cast<PAD*>( parent ) );
+                else if( parent->Type() == PCB_VIA_T )
+                    vias->push_back( static_cast<PCB_VIA*>( parent ) );
+            }
+        }
+    }
+}
+
+
 unsigned int CONNECTIVITY_DATA::GetNodeCount( int aNet ) const
 {
     int sum = 0;

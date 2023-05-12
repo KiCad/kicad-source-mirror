@@ -2,7 +2,7 @@
 # This program source code file is part of KiCad, a free EDA CAD application.
 #
 # Copyright (C) 2012 CERN.
-# Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+# Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -31,6 +31,7 @@ allowed
 allow_missing_courtyard
 allow_soldermask_bridges
 allow_soldermask_bridges_in_footprints
+allow_two_segments
 anchor
 angle
 arc
@@ -46,6 +47,8 @@ attr
 autoplace_cost90
 autoplace_cost180
 aux_axis_origin
+best_length_ratio
+best_width_ratio
 bevelled
 blind
 blind_buried_vias_allowed
@@ -69,6 +72,7 @@ connect_pads
 copperpour
 copper_finish
 crossbar
+curve_points
 custom
 outline
 convexhull
@@ -96,6 +100,7 @@ edge_connector
 edge_plating
 edge_width
 effects
+enabled
 end
 epsilon_r
 exclude_from_pos_files
@@ -112,6 +117,7 @@ fill_segments
 filled_polygon
 filled_areas_thickness
 fillet
+filter_ratio
 font
 format
 footprint
@@ -171,12 +177,15 @@ layers
 leader
 leader_length
 left
+legacy_teardrops
 linear
 line_spacing
 links
 locked
 loss_tangent
 max_error
+max_length
+max_width
 material
 members
 micro
@@ -223,6 +232,7 @@ pad_prop_castellated
 pad_prop_testpoint
 pad_prop_heatsink
 padvia
+prefer_zone_connections
 private_layers
 property
 page
@@ -281,6 +291,7 @@ target
 title
 title_block
 teardrop
+teardrops
 tedit
 text_frame
 text_position_mode

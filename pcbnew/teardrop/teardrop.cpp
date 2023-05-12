@@ -31,13 +31,13 @@
 #include <zone_filler.h>
 #include <board_commit.h>
 
-#include "teardrop.h"
-#include <geometry/convex_hull.h>
+#include <connectivity/connectivity_data.h>
+#include <teardrop/teardrop.h>
+#include <drc/drc_rtree.h>
 #include <geometry/shape_line_chain.h>
+#include <geometry/rtree.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <bezier_curves.h>
-
-#include <progress_reporter.h>
 
 #include <wx/log.h>
 
@@ -45,14 +45,12 @@
 #define MAGIC_TEARDROP_ZONE_ID 30000
 
 
-TEARDROP_MANAGER::TEARDROP_MANAGER( BOARD* aBoard, PCB_EDIT_FRAME* aFrame, PROGRESS_REPORTER* aReporter )
+TEARDROP_MANAGER::TEARDROP_MANAGER( BOARD* aBoard, TOOL_MANAGER* aToolManager ) :
+        m_board( aBoard ),
+        m_toolManager( aToolManager )
 {
-    m_frame = aFrame;
-    m_reporter = aReporter;
-    m_board = aBoard;
     m_prmsList = m_board->GetDesignSettings().GetTeadropParamsList();
     m_tolerance = 0;
-    m_toolManager = m_frame->GetToolManager();
 }
 
 
@@ -69,24 +67,30 @@ ZONE* TEARDROP_MANAGER::createTeardrop( TEARDROP_VARIANT aTeardropVariant,
     s_default_settings.ExportSetting( *teardrop, false );
 
     // Add zone properties (priority will be fixed later)
-    teardrop->SetTeardropAreaType( aTeardropVariant == TD_TYPE_PADVIA ?
-                                    TEARDROP_TYPE::TD_VIAPAD :
-                                    TEARDROP_TYPE::TD_TRACKEND );
+    teardrop->SetTeardropAreaType( aTeardropVariant == TD_TYPE_PADVIA ? TEARDROP_TYPE::TD_VIAPAD
+                                                                      : TEARDROP_TYPE::TD_TRACKEND );
     teardrop->SetLayer( aTrack->GetLayer() );
     teardrop->SetNetCode( aTrack->GetNetCode() );
     teardrop->SetLocalClearance( 0 );
     teardrop->SetMinThickness( pcbIUScale.mmToIU( 0.0254 ) );  // The minimum zone thickness
     teardrop->SetPadConnection( ZONE_CONNECTION::FULL );
     teardrop->SetIsFilled( false );
-    teardrop->SetZoneName( aTeardropVariant == TD_TYPE_PADVIA ?
-                                MAGIC_TEARDROP_PADVIA_NAME :
-                                MAGIC_TEARDROP_TRACK_NAME );
+    teardrop->SetZoneName( aTeardropVariant == TD_TYPE_PADVIA ? MAGIC_TEARDROP_PADVIA_NAME
+                                                              : MAGIC_TEARDROP_TRACK_NAME );
     teardrop->SetIslandRemovalMode( ISLAND_REMOVAL_MODE::NEVER );
+    teardrop->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL,
+                                     pcbIUScale.mmToIU( 0.1 ), true );
+
     SHAPE_POLY_SET* outline = teardrop->Outline();
     outline->NewOutline();
 
-    for( VECTOR2I pt: aPoints )
-        outline->Append(pt.x, pt.y);
+    for( const VECTOR2I& pt: aPoints )
+        outline->Append( pt.x, pt.y );
+
+    // Until we know better (ie: pay for a potentially very expensive zone refill), the teardrop
+    // fill is the same as its outline.
+    teardrop->SetFilledPolysList( aTrack->GetLayer(), *teardrop->Outline() );
+    teardrop->SetIsFilled( true );
 
     // Used in priority calculations:
     teardrop->CalculateFilledArea();
@@ -95,163 +99,175 @@ ZONE* TEARDROP_MANAGER::createTeardrop( TEARDROP_VARIANT aTeardropVariant,
 }
 
 
-int TEARDROP_MANAGER::SetTeardrops( BOARD_COMMIT* aCommitter, bool aFollowTracks, bool aFillAfter )
+void TEARDROP_MANAGER::UpdateTeardrops( BOARD_COMMIT& aCommit,
+                                        const std::vector<BOARD_ITEM*>* dirtyPadsAndVias,
+                                        const std::set<PCB_TRACK*>* dirtyTracks,
+                                        bool aForceFullUpdate )
 {
+    if( m_board->LegacyTeardrops() )
+        return;
+
     // Init parameters:
     m_tolerance = pcbIUScale.mmToIU( 0.01 );
 
-    int count = 0;      // Number of created teardrop
+    buildTrackCaches();
+
+    std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_board->GetConnectivity();
 
     // Old teardrops must be removed, to ensure a clean teardrop rebuild
-    int removed_cnt = RemoveTeardrops( aCommitter, false );
+    std::vector<ZONE*> stale_teardrops;
 
-    // get vias, PAD_ATTRIB_PTH and others if aIncludeNotDrilled == true
-    // (custom pads are not collected)
-    std::vector< VIAPAD > viapad_list;
-
-    if( m_prmsList->m_TargetViasPads )
-        collectVias( viapad_list );
-
-    collectPadsCandidate( viapad_list, m_prmsList->m_TargetViasPads,
-                          m_prmsList->m_UseRoundShapesOnly, m_prmsList->m_TargetPadsWithNoHole );
-
-    TRACK_BUFFER trackLookupList;
-
-    if( aFollowTracks )
+    for( ZONE* zone : m_board->Zones() )
     {
-        // Build the track list (only straight lines)
-        for( PCB_TRACK* track: m_board->Tracks() )
+        if( zone->IsTeardropArea() )
         {
-            if( track->Type() == PCB_TRACE_T || track->Type() == PCB_ARC_T)
+            bool stale = aForceFullUpdate;
+
+            if( !stale )
             {
-                int netcode = track->GetNetCode();
-                int layer = track->GetLayer();
-                trackLookupList.AddTrack( track, layer, netcode );
+                std::vector<PAD*>     connectedPads;
+                std::vector<PCB_VIA*> connectedVias;
+
+                connectivity->GetConnectedPadsAndVias( zone, &connectedPads, &connectedVias );
+
+                for( PAD* pad : connectedPads )
+                    stale = stale || alg::contains( *dirtyPadsAndVias, pad );
+
+                for( PCB_VIA* via : connectedVias )
+                    stale = stale || alg::contains( *dirtyPadsAndVias, via );
             }
+
+            if( stale )
+                stale_teardrops.push_back( zone );
         }
     }
 
-
-    std::vector< ZONE*> teardrops;
-    collectTeardrops( teardrops );
+    for( ZONE* td : stale_teardrops )
+    {
+        m_board->Remove( td, REMOVE_MODE::BULK );
+        aCommit.Removed( td );
+    }
 
     for( PCB_TRACK* track : m_board->Tracks() )
     {
-        if( ! (track->Type() == PCB_TRACE_T || track->Type() == PCB_ARC_T ) )
+        if( ! ( track->Type() == PCB_TRACE_T || track->Type() == PCB_ARC_T ) )
             continue;
 
-        // Search for a padvia connected to track, with one end inside and one end outside
-        // if both track ends are inside or outside, one cannot build a teadrop
-        for( VIAPAD& viapad: viapad_list )
+        std::vector<PAD*>     connectedPads;
+        std::vector<PCB_VIA*> connectedVias;
+
+        connectivity->GetConnectedPadsAndVias( track, &connectedPads, &connectedVias );
+
+        bool forceUpdate = aForceFullUpdate || alg::contains( *dirtyTracks, track );
+
+        for( PAD* pad : connectedPads )
         {
-            // Pad and track must be on the same layer
-            if( !viapad.IsOnLayer( track->GetLayer() ) )
+            if( !forceUpdate && !alg::contains( *dirtyPadsAndVias, pad ) )
                 continue;
 
-            bool start_in_pad = viapad.m_Parent->HitTest( track->GetStart() );
-            bool end_in_pad = viapad.m_Parent->HitTest( track->GetEnd() );
-
-            if( end_in_pad == start_in_pad )
-                // the track is inside or outside the via pad. Cannot create a teardrop
+            if( pad->GetShape() == PAD_SHAPE::CUSTOM )
+                // A teardrop shape cannot be built
                 continue;
 
-            // A pointer to one of available m_Parameters items
-            TEARDROP_PARAMETERS* currParams;
+            TEARDROP_PARAMETERS& tdParams = pad->GetTeardropParams();
+            int                  annularWidth = std::min( pad->GetSize().x, pad->GetSize().y );
 
-            if( viapad.m_IsRound )
-                currParams = m_prmsList->GetParameters( TARGET_ROUND );
-            else
-                currParams = m_prmsList->GetParameters( TARGET_RECT );
+            if( !tdParams.m_Enabled )
+                continue;
 
-            // Ensure a teardrop shape can be built:
-            // The track width must be < teardrop height
-            if( track->GetWidth() >= currParams->m_TdMaxHeight
-                || track->GetWidth() >= viapad.m_Width * currParams->m_HeightRatio )
+            // Ensure a teardrop shape can be built: track width must be < teardrop width and
+            // filter width
+            if( track->GetWidth() >= tdParams.m_TdMaxWidth
+                || track->GetWidth() >= annularWidth * tdParams.m_BestWidthRatio
+                || track->GetWidth() >= annularWidth * tdParams.m_WidthtoSizeFilterRatio )
             {
                 continue;
             }
 
-            // Ensure also it is not filtered by a too high track->GetWidth()/viapad.m_Width ratio
-            if( track->GetWidth() >= viapad.m_Width * currParams->m_WidthtoSizeFilterRatio )
+            if( pad->HitTest( track->GetStart() ) && pad->HitTest( track->GetEnd() ) )
+                // The track is entirely inside the pad; cannot create a teardrop
                 continue;
 
-            // Skip case where pad/via and the track is within a copper zone with the same net
-            // (and the pad can be connected by the zone thermal relief )
-            if( !m_prmsList->m_TdOnPadsInZones && isViaAndTrackInSameZone( viapad, track ) )
+            // Skip case where pad and the track are within a copper zone with the same net
+            // (and the pad can be connected to the zone)
+            if( !tdParams.m_TdOnPadsInZones && areItemsInSameZone( pad, track ) )
                 continue;
 
             std::vector<VECTOR2I> points;
-            bool success = computeTeardropPolygonPoints( currParams, points, track, viapad,
-                                                         aFollowTracks, trackLookupList );
 
-            if( success )
+            if( computeTeardropPolygon( tdParams, points, track, pad, pad->GetPosition() ) )
             {
                 ZONE* new_teardrop = createTeardrop( TD_TYPE_PADVIA, points, track );
                 m_board->Add( new_teardrop, ADD_MODE::BULK_INSERT );
                 m_createdTdList.push_back( new_teardrop );
 
-                if( aCommitter )
-                    aCommitter->Added( new_teardrop );
+                aCommit.Added( new_teardrop );
+            }
+        }
 
-                count += 1;
+        for( PCB_VIA* via : connectedVias )
+        {
+            if( !forceUpdate && !alg::contains( *dirtyPadsAndVias, via ) )
+                continue;
+
+            TEARDROP_PARAMETERS tdParams = via->GetTeardropParams();
+            int                 annularWidth = via->GetWidth();
+
+            if( !tdParams.m_Enabled )
+                continue;
+
+            // Ensure a teardrop shape can be built: track width must be < teardrop width and
+            // filter width
+            if( track->GetWidth() >= tdParams.m_TdMaxWidth
+                || track->GetWidth() >= annularWidth * tdParams.m_BestWidthRatio
+                || track->GetWidth() >= annularWidth * tdParams.m_WidthtoSizeFilterRatio )
+            {
+                continue;
+            }
+
+            if( via->HitTest( track->GetStart() ) && via->HitTest( track->GetEnd() ) )
+                // The track is entirely inside the via; cannot create a teardrop
+                continue;
+
+            std::vector<VECTOR2I> points;
+
+            if( computeTeardropPolygon( tdParams, points, track, via, via->GetPosition() ) )
+            {
+                ZONE* new_teardrop = createTeardrop( TD_TYPE_PADVIA, points, track );
+                m_board->Add( new_teardrop, ADD_MODE::BULK_INSERT );
+                m_createdTdList.push_back( new_teardrop );
+
+                aCommit.Added( new_teardrop );
             }
         }
     }
 
-    int track2trackCount = 0;
-
-    if( m_prmsList->m_TargetTrack2Track )
-        track2trackCount = addTeardropsOnTracks( aCommitter );
+    if( ( aForceFullUpdate || !dirtyTracks->empty() )
+        && m_prmsList->GetParameters( TARGET_TRACK )->m_Enabled )
+    {
+        AddTeardropsOnTracks( aCommit, dirtyTracks, aForceFullUpdate );
+    }
 
     // Now set priority of teardrops now all teardrops are added
     setTeardropPriorities();
+}
 
-    if( count || removed_cnt || track2trackCount )
+
+void TEARDROP_MANAGER::DeleteTrackToTrackTeardrops( BOARD_COMMIT& aCommit )
+{
+    std::vector<ZONE*> stale_teardrops;
+
+    for( ZONE* zone : m_board->Zones() )
     {
-        // Note:
-        // Refill zones can be made only with clean data, especially connectivity data,
-        // therefore only after changes are pushed to avoid crashes in some cases
-        //
-        // Fill raw teardrop shapes, even if aFillAfter is true: it ensure teardrops
-        // will be filled even when undoing refilling zones.
-        // This is a rough calculation, just to show a filled
-        // shape on screen without the (potentially large) performance hit of a zone refill
-        int epsilon = pcbIUScale.mmToIU( 0.001 );
-        int allowed_error = pcbIUScale.mmToIU( 0.005 );
-
-        for( ZONE* zone: m_createdTdList )
-        {
-            int half_min_width = zone->GetMinThickness() / 2;
-            int numSegs = GetArcToSegmentCount( half_min_width, allowed_error, FULL_CIRCLE );
-            SHAPE_POLY_SET filledPolys = *zone->Outline();
-
-            filledPolys.Deflate( half_min_width - epsilon, numSegs );
-
-            // Re-inflate after pruning of areas that don't meet minimum-width criteria
-            if( half_min_width - epsilon > epsilon )
-                filledPolys.Inflate( half_min_width - epsilon, numSegs );
-
-            zone->SetFilledPolysList( zone->GetFirstLayer(), filledPolys );
-        }
-
-        if( aCommitter )
-            aCommitter->Push( _( "Add teardrops" ) );
-
-        if( aFillAfter )
-        {
-            ZONE_FILLER filler( m_board, aCommitter );
-
-            if( m_reporter )
-                filler.SetProgressReporter( m_reporter );
-
-            filler.Fill( m_board->Zones() );
-
-            if( aCommitter )
-                aCommitter->Push( _( "Add teardrops and refill zones" ) );
-        }
+        if( zone->IsTeardropArea() && zone->GetTeardropAreaType() == TEARDROP_TYPE::TD_TRACKEND )
+            stale_teardrops.push_back( zone );
     }
 
-    return count + track2trackCount;
+    for( ZONE* td : stale_teardrops )
+    {
+        m_board->Remove( td, REMOVE_MODE::BULK );
+        aCommit.Removed( td );
+    }
 }
 
 
@@ -295,32 +311,15 @@ void TEARDROP_MANAGER::setTeardropPriorities()
 }
 
 
-int TEARDROP_MANAGER::addTeardropsOnTracks( BOARD_COMMIT* aCommitter )
+void TEARDROP_MANAGER::AddTeardropsOnTracks( BOARD_COMMIT& aCommit,
+                                             const std::set<PCB_TRACK*>* aTracks,
+                                             bool aForceFullUpdate )
 {
-    TRACK_BUFFER trackLookupList;
-    int count = 0;
-
-    // Build the track list (only straight lines)
-    for( PCB_TRACK* track: m_board->Tracks() )
-    {
-        if( track->Type() == PCB_TRACE_T || track->Type() == PCB_ARC_T )
-        {
-            int netcode = track->GetNetCode();
-            int layer = track->GetLayer();
-            trackLookupList.AddTrack( track, layer, netcode );
-        }
-    }
-
-    // get vias and pads (custom pads are not collected). We do not create a track to track
-    // teardrop inside a pad or via area
-    std::vector< VIAPAD > viapad_list;
-    collectVias( viapad_list );
-    collectPadsCandidate( viapad_list, true, true, true );
-
-    TEARDROP_PARAMETERS* currParams = m_prmsList->GetParameters( TARGET_TRACK );
+    std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_board->GetConnectivity();
+    TEARDROP_PARAMETERS                params = *m_prmsList->GetParameters( TARGET_TRACK );
 
     // Explore groups (a group is a set of tracks on the same layer and the same net):
-    for( auto& grp : trackLookupList.GetBuffer() )
+    for( auto& grp : m_trackLookupList.GetBuffer() )
     {
         int layer, netcode;
         TRACK_BUFFER::GetNetcodeAndLayerFromIndex( grp.first, &layer, &netcode );
@@ -348,15 +347,14 @@ int TEARDROP_MANAGER::addTeardropsOnTracks( BOARD_COMMIT* aCommitter )
         for( unsigned ii = 0; ii < sublist->size()-1; ii++ )
         {
             PCB_TRACK* track = (*sublist)[ii];
-            int track_len = track->GetLength();
+            int        track_len = (int) track->GetLength();
+            bool       track_needs_update = aForceFullUpdate || alg::contains( *aTracks, track );
             min_width = track->GetWidth();
 
-            // to avoid creating a teardrop between 2 tracks having similar widths
-            // give a threshold
-            const double th = currParams->m_WidthtoSizeFilterRatio > 0.1 ?
-                                    1.0 / currParams->m_WidthtoSizeFilterRatio
-                                    : 10.0;
-            min_width = min_width * th;
+            // to avoid creating a teardrop between 2 tracks having similar widths give a threshold
+            params.m_WidthtoSizeFilterRatio = std::max( params.m_WidthtoSizeFilterRatio, 0.1 );
+            const double th = 1.0 / params.m_WidthtoSizeFilterRatio;
+            min_width = KiROUND( min_width * th );
 
             for( unsigned jj = ii+1; jj < sublist->size(); jj++ )
             {
@@ -375,82 +373,56 @@ int TEARDROP_MANAGER::addTeardropsOnTracks( BOARD_COMMIT* aCommitter )
                 EDA_ITEM_FLAGS match_points;    // to return the end point EDA_ITEM_FLAGS:
                                                 // 0, STARTPOINT, ENDPOINT
 
-                VECTOR2I roundshape_pos = candidate->GetStart();
-                ENDPOINT_T endPointCandidate = ENDPOINT_START;
-                match_points = track->IsPointOnEnds( roundshape_pos, m_tolerance );
+                VECTOR2I pos = candidate->GetStart();
+                match_points = track->IsPointOnEnds( pos, m_tolerance );
 
                 if( !match_points )
                 {
-                    roundshape_pos = candidate->GetEnd();
-                    match_points = track->IsPointOnEnds( roundshape_pos, m_tolerance );
-                    endPointCandidate = ENDPOINT_END;
+                    pos = candidate->GetEnd();
+                    match_points = track->IsPointOnEnds( pos, m_tolerance );
                 }
 
-                // Ensure a pad or via is not on test_pos point before creating a teardrop
-                // at this location
-                for( VIAPAD& viapad : viapad_list )
+                if( !match_points )
+                    continue;
+
+                if( !track_needs_update && alg::contains( *aTracks, candidate ) )
+                    continue;
+
+                // Pads/vias have priority for teardrops; ensure there isn't one at our position
+                bool                  existingPadOrVia = false;
+                std::vector<PAD*>     connectedPads;
+                std::vector<PCB_VIA*> connectedVias;
+
+                connectivity->GetConnectedPadsAndVias( track, &connectedPads, &connectedVias );
+
+                for( PAD* pad : connectedPads )
                 {
-                    if( viapad.IsOnLayer( track->GetLayer() )
-                        && viapad.m_Parent->HitTest( roundshape_pos, 0 ) )
-                    {
-                        match_points = 0;
-                        break;
-                    }
+                    if( pad->HitTest( pos ) )
+                        existingPadOrVia = true;
                 }
 
-                if( match_points )
+                for( PCB_VIA* via : connectedVias )
                 {
-                    VIAPAD viatrack( candidate, endPointCandidate );
-                    std::vector<VECTOR2I> points;
-                    bool success = computeTeardropPolygonPoints( currParams,
-                                                                 points, track, viatrack,
-                                                                 false, trackLookupList );
+                    if( via->HitTest( pos ) )
+                        existingPadOrVia = true;
+                }
 
-                    if( success )
-                    {
-                        ZONE* new_teardrop = createTeardrop( TD_TYPE_TRACKEND, points, track );
-                        m_board->Add( new_teardrop, ADD_MODE::BULK_INSERT );
-                        m_createdTdList.push_back( new_teardrop );
+                if( existingPadOrVia )
+                    continue;
 
-                        if( aCommitter )
-                            aCommitter->Added( new_teardrop );
+                std::vector<VECTOR2I> points;
 
-                        count += 1;
-                    }
+                if( computeTeardropPolygon( params, points, track, candidate, pos ) )
+                {
+                    ZONE* new_teardrop = createTeardrop( TD_TYPE_TRACKEND, points, track );
+                    m_board->Add( new_teardrop, ADD_MODE::BULK_INSERT );
+                    m_createdTdList.push_back( new_teardrop );
+
+                    aCommit.Added( new_teardrop );
                 }
             }
         }
     }
-
-    return count;
 }
 
-
-int TEARDROP_MANAGER::RemoveTeardrops( BOARD_COMMIT* aCommitter, bool aCommitAfterRemove )
-{
-    int count = 0;
-    std::vector< ZONE*> teardrops;
-
-    collectTeardrops( teardrops );
-
-    for( ZONE* teardrop : teardrops )
-    {
-        m_board->Remove( teardrop, REMOVE_MODE::BULK );
-
-        if( aCommitter )
-            aCommitter->Removed( teardrop );
-
-        count += 1;
-    }
-
-    if( count )
-    {
-        if( aCommitter && aCommitAfterRemove )
-            aCommitter->Push( _( "Remove teardrops" ), SKIP_CONNECTIVITY );
-
-        m_board->BuildConnectivity();
-    }
-
-    return count;
-}
 

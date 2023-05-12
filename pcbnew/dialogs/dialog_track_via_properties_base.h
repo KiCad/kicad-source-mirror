@@ -20,13 +20,18 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <widgets/net_selector.h>
-#include <wx/checkbox.h>
 #include <wx/sizer.h>
+#include <wx/checkbox.h>
 #include <wx/statline.h>
 #include <wx/statbox.h>
 #include <wx/textctrl.h>
 #include <wx/choice.h>
 #include <wx/bmpcbox.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/statbmp.h>
+#include <wx/radiobut.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -51,13 +56,11 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticBoxSizer* m_sbTrackSizer;
 		wxStaticText* m_TrackStartXLabel;
 		wxTextCtrl* m_TrackStartXCtrl;
-		wxStaticText* m_TrackStartXUnit;
 		wxStaticText* m_TrackStartYLabel;
 		wxTextCtrl* m_TrackStartYCtrl;
 		wxStaticText* m_TrackStartYUnit;
 		wxStaticText* m_TrackEndXLabel;
 		wxTextCtrl* m_TrackEndXCtrl;
-		wxStaticText* m_TrackEndXUnit;
 		wxStaticText* m_TrackEndYLabel;
 		wxTextCtrl* m_TrackEndYCtrl;
 		wxStaticText* m_TrackEndYUnit;
@@ -73,7 +76,6 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticBoxSizer* m_sbViaSizer;
 		wxStaticText* m_ViaXLabel;
 		wxTextCtrl* m_ViaXCtrl;
-		wxStaticText* m_ViaXUnit;
 		wxStaticText* m_ViaYLabel;
 		wxTextCtrl* m_ViaYCtrl;
 		wxStaticText* m_ViaYUnit;
@@ -95,6 +97,35 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		PCB_LAYER_BOX_SELECTOR* m_ViaEndLayer;
 		wxStaticText* m_annularRingsLabel;
 		wxChoice* m_annularRingsCtrl;
+		wxStaticLine* m_staticline2;
+		wxBoxSizer* m_legacyTeardropsWarning;
+		wxStaticBitmap* m_legacyTeardropsIcon;
+		wxStaticText* m_staticText85;
+		wxStaticText* m_staticText851;
+		wxCheckBox* m_cbTeardrops;
+		wxCheckBox* m_cbTeardropsUseNextTrack;
+		wxStaticText* m_stHDRatio;
+		wxTextCtrl* m_tcHDRatio;
+		wxStaticText* m_stHDRatioUnits;
+		wxStaticText* m_minTrackWidthHint;
+		wxStaticBitmap* m_bitmapTeardrop;
+		wxStaticText* m_staticText15;
+		wxRadioButton* m_rbStraightLines;
+		wxRadioButton* m_rbCurved;
+		wxStaticText* m_stLenPercentLabel;
+		wxTextCtrl* m_tcLenPercent;
+		wxStaticText* m_stLenPercentUnits;
+		wxStaticText* m_stMaxLen;
+		wxTextCtrl* m_tcTdMaxLen;
+		wxStaticText* m_stMaxLenUnits;
+		wxStaticText* m_stHeightPercentLabel;
+		wxTextCtrl* m_tcHeightPercent;
+		wxStaticText* m_stHeightPercentUnits;
+		wxStaticText* m_stMaxHeight;
+		wxTextCtrl* m_tcMaxHeight;
+		wxStaticText* m_stMaxHeightUnits;
+		wxStaticText* m_curvePointsLabel;
+		wxTextCtrl* m_curvePointsCtrl;
 		wxStdDialogButtonSizer* m_StdButtons;
 		wxButton* m_StdButtonsOK;
 		wxButton* m_StdButtonsCancel;
@@ -107,6 +138,10 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void onViaSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onViaEdit( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onViaNetclassCheck( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onTeardropsUpdateUi( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void onStraightLines( wxMouseEvent& event ) { event.Skip(); }
+		virtual void onCurvedLines( wxMouseEvent& event ) { event.Skip(); }
+		virtual void onCurvedEdgesUpdateUi( wxUpdateUIEvent& event ) { event.Skip(); }
 
 
 	public:

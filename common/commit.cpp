@@ -194,14 +194,31 @@ CHANGE_TYPE COMMIT::convert( UNDO_REDO aType ) const
         return CHT_REMOVE;
 
     default:
-        assert( false );
-        // Can't fall through if the assert fires, so quiet our warning
-#ifdef NDEBUG
+        wxASSERT( false );
         KI_FALLTHROUGH;
-#endif
 
     case UNDO_REDO::CHANGED:
         return CHT_MODIFY;
+    }
+}
+
+
+UNDO_REDO COMMIT::convert( CHANGE_TYPE aType ) const
+{
+    switch( aType )
+    {
+    case CHT_ADD:
+        return UNDO_REDO::NEWITEM;
+
+    case CHT_REMOVE:
+        return UNDO_REDO::DELETED;
+
+    default:
+        wxASSERT( false );
+        KI_FALLTHROUGH;
+
+    case CHT_MODIFY:
+        return UNDO_REDO::CHANGED;
     }
 }
 

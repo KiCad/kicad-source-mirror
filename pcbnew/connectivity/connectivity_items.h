@@ -258,18 +258,22 @@ class CN_ZONE_LAYER : public CN_ITEM
 public:
     CN_ZONE_LAYER( ZONE* aParent, PCB_LAYER_ID aLayer, int aSubpolyIndex ) :
             CN_ITEM( aParent, false ),
+            m_zone( aParent ),
             m_subpolyIndex( aSubpolyIndex ),
             m_layer( aLayer )
     {
-        m_triangulatedPoly = aParent->GetFilledPolysList( aLayer );
+        m_fillPoly = aParent->GetFilledPolysList( aLayer );
         SetLayers( aLayer );
     }
 
     void BuildRTree()
     {
-        for( unsigned int ii = 0; ii < m_triangulatedPoly->TriangulatedPolyCount(); ++ii )
+        if( m_zone->IsTeardropArea() )
+            return;
+
+        for( unsigned int ii = 0; ii < m_fillPoly->TriangulatedPolyCount(); ++ii )
         {
-            const auto* triangleSet = m_triangulatedPoly->TriangulatedPolygon( ii );
+            const auto* triangleSet = m_fillPoly->TriangulatedPolygon( ii );
 
             if( triangleSet->GetSourceOutlineIndex() != m_subpolyIndex )
                 continue;
@@ -291,6 +295,9 @@ public:
 
     bool ContainsPoint( const VECTOR2I& p ) const
     {
+        if( m_zone->IsTeardropArea() )
+            return m_fillPoly->Outline( m_subpolyIndex ).Collide( p ) ;
+
         int  min[2] = { p.x, p.y };
         int  max[2] = { p.x, p.y };
         bool collision = false;
@@ -319,11 +326,14 @@ public:
 
     const SHAPE_LINE_CHAIN& GetOutline() const
     {
-        return m_triangulatedPoly->Outline( m_subpolyIndex );
+        return m_fillPoly->Outline( m_subpolyIndex );
     }
 
     bool Collide( SHAPE* aRefShape ) const
     {
+        if( m_zone->IsTeardropArea() )
+            return m_fillPoly->Collide( aRefShape );
+
         BOX2I bbox = aRefShape->BBox();
         int  min[2] = { bbox.GetX(), bbox.GetY() };
         int  max[2] = { bbox.GetRight(), bbox.GetBottom() };
@@ -349,9 +359,10 @@ public:
     bool HasSingleConnection();
 
 private:
+    ZONE*                               m_zone;
     int                                 m_subpolyIndex;
     PCB_LAYER_ID                        m_layer;
-    std::shared_ptr<SHAPE_POLY_SET>     m_triangulatedPoly;
+    std::shared_ptr<SHAPE_POLY_SET>     m_fillPoly;
     RTree<const SHAPE*, int, 2, double> m_rTree;
 };
 

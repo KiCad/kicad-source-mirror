@@ -22,235 +22,270 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	wxBoxSizer* bSizerNetWidgets;
 	bSizerNetWidgets = new wxBoxSizer( wxHORIZONTAL );
 
+	wxBoxSizer* bNetWidgetsLeftCol;
+	bNetWidgetsLeftCol = new wxBoxSizer( wxHORIZONTAL );
+
 	m_netSelectorLabel = new wxStaticText( m_sbCommonSizer->GetStaticBox(), wxID_ANY, _("Net:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_netSelectorLabel->Wrap( -1 );
-	bSizerNetWidgets->Add( m_netSelectorLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bNetWidgetsLeftCol->Add( m_netSelectorLabel, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_netSelector = new NET_SELECTOR( m_sbCommonSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerNetWidgets->Add( m_netSelector, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
+	bNetWidgetsLeftCol->Add( m_netSelector, 1, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bSizerNetWidgets->Add( 20, 0, 0, wxEXPAND, 5 );
+	bSizerNetWidgets->Add( bNetWidgetsLeftCol, 1, wxRIGHT|wxALIGN_CENTER_VERTICAL, 10 );
+
+	wxBoxSizer* bNetWidgetsRightCol;
+	bNetWidgetsRightCol = new wxBoxSizer( wxHORIZONTAL );
 
 	m_viaNotFree = new wxCheckBox( m_sbCommonSizer->GetStaticBox(), wxID_ANY, _("Automatically update via nets"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
 	m_viaNotFree->SetToolTip( _("Automatically change the net of this via when the pads or zones it touches are changed") );
 
-	bSizerNetWidgets->Add( m_viaNotFree, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	bNetWidgetsRightCol->Add( m_viaNotFree, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 10 );
 
 
-	m_sbCommonSizer->Add( bSizerNetWidgets, 5, wxEXPAND|wxRIGHT, 10 );
+	bSizerNetWidgets->Add( bNetWidgetsRightCol, 1, wxLEFT|wxALIGN_CENTER_VERTICAL, 10 );
+
+
+	m_sbCommonSizer->Add( bSizerNetWidgets, 5, wxEXPAND, 10 );
 
 	m_staticline1 = new wxStaticLine( m_sbCommonSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_sbCommonSizer->Add( m_staticline1, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	m_sbCommonSizer->Add( m_staticline1, 0, wxEXPAND|wxBOTTOM, 10 );
 
 	m_lockedCbox = new wxCheckBox( m_sbCommonSizer->GetStaticBox(), wxID_ANY, _("Locked"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
-	m_sbCommonSizer->Add( m_lockedCbox, 0, wxALL, 5 );
+	m_sbCommonSizer->Add( m_lockedCbox, 0, wxBOTTOM, 2 );
 
 
 	m_MainSizer->Add( m_sbCommonSizer, 0, wxEXPAND|wxALL, 10 );
 
 	m_sbTrackSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Tracks") ), wxHORIZONTAL );
 
-	wxFlexGridSizer* fgTrackLeftGridSizer;
-	fgTrackLeftGridSizer = new wxFlexGridSizer( 7, 3, 3, 5 );
-	fgTrackLeftGridSizer->AddGrowableCol( 1 );
-	fgTrackLeftGridSizer->SetFlexibleDirection( wxBOTH );
-	fgTrackLeftGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxBoxSizer* bSizerTracksLeftCol;
+	bSizerTracksLeftCol = new wxBoxSizer( wxVERTICAL );
 
-	m_TrackStartXLabel = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("Start point X:"), wxDefaultPosition, wxDefaultSize, 0 );
+	wxFlexGridSizer* fgTrackEnds;
+	fgTrackEnds = new wxFlexGridSizer( 7, 5, 3, 2 );
+	fgTrackEnds->AddGrowableCol( 1 );
+	fgTrackEnds->AddGrowableCol( 3 );
+	fgTrackEnds->SetFlexibleDirection( wxBOTH );
+	fgTrackEnds->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_TrackStartXLabel = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("Start X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TrackStartXLabel->Wrap( -1 );
-	fgTrackLeftGridSizer->Add( m_TrackStartXLabel, 0, wxALIGN_CENTER_VERTICAL, 3 );
+	fgTrackEnds->Add( m_TrackStartXLabel, 0, wxALIGN_CENTER_VERTICAL, 3 );
 
 	m_TrackStartXCtrl = new wxTextCtrl( m_sbTrackSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgTrackLeftGridSizer->Add( m_TrackStartXCtrl, 0, wxEXPAND, 3 );
+	fgTrackEnds->Add( m_TrackStartXCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 3 );
 
-	m_TrackStartXUnit = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_TrackStartXUnit->Wrap( -1 );
-	fgTrackLeftGridSizer->Add( m_TrackStartXUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 3 );
-
-	m_TrackStartYLabel = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("Start point Y:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TrackStartYLabel = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TrackStartYLabel->Wrap( -1 );
-	fgTrackLeftGridSizer->Add( m_TrackStartYLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
+	fgTrackEnds->Add( m_TrackStartYLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 8 );
 
 	m_TrackStartYCtrl = new wxTextCtrl( m_sbTrackSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgTrackLeftGridSizer->Add( m_TrackStartYCtrl, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND, 5 );
+	fgTrackEnds->Add( m_TrackStartYCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 3 );
 
-	m_TrackStartYUnit = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TrackStartYUnit = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TrackStartYUnit->Wrap( -1 );
-	fgTrackLeftGridSizer->Add( m_TrackStartYUnit, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	fgTrackEnds->Add( m_TrackStartYUnit, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_TrackEndXLabel = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("End point X:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TrackEndXLabel = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("End X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TrackEndXLabel->Wrap( -1 );
-	fgTrackLeftGridSizer->Add( m_TrackEndXLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgTrackEnds->Add( m_TrackEndXLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_TrackEndXCtrl = new wxTextCtrl( m_sbTrackSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgTrackLeftGridSizer->Add( m_TrackEndXCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgTrackEnds->Add( m_TrackEndXCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 3 );
 
-	m_TrackEndXUnit = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_TrackEndXUnit->Wrap( -1 );
-	fgTrackLeftGridSizer->Add( m_TrackEndXUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
-
-	m_TrackEndYLabel = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("End point Y:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TrackEndYLabel = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TrackEndYLabel->Wrap( -1 );
-	fgTrackLeftGridSizer->Add( m_TrackEndYLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 8 );
+	fgTrackEnds->Add( m_TrackEndYLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 8 );
 
 	m_TrackEndYCtrl = new wxTextCtrl( m_sbTrackSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgTrackLeftGridSizer->Add( m_TrackEndYCtrl, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND, 8 );
+	fgTrackEnds->Add( m_TrackEndYCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 3 );
 
-	m_TrackEndYUnit = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TrackEndYUnit = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TrackEndYUnit->Wrap( -1 );
-	fgTrackLeftGridSizer->Add( m_TrackEndYUnit, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 8 );
+	fgTrackEnds->Add( m_TrackEndYUnit, 0, wxALIGN_CENTER_VERTICAL, 8 );
 
-	m_DesignRuleWidths = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("Pre-defined widths:"), wxDefaultPosition, wxDefaultSize, 0 );
+
+	bSizerTracksLeftCol->Add( fgTrackEnds, 0, wxEXPAND|wxBOTTOM, 8 );
+
+	wxFlexGridSizer* fgTrackSizes;
+	fgTrackSizes = new wxFlexGridSizer( 7, 3, 3, 3 );
+	fgTrackSizes->AddGrowableCol( 1 );
+	fgTrackSizes->SetFlexibleDirection( wxBOTH );
+	fgTrackSizes->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_DesignRuleWidths = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("Pre-defined sizes:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DesignRuleWidths->Wrap( -1 );
-	fgTrackLeftGridSizer->Add( m_DesignRuleWidths, 0, wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
+	fgTrackSizes->Add( m_DesignRuleWidths, 0, wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
 
 	wxArrayString m_DesignRuleWidthsCtrlChoices;
 	m_DesignRuleWidthsCtrl = new wxChoice( m_sbTrackSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_DesignRuleWidthsCtrlChoices, 0 );
 	m_DesignRuleWidthsCtrl->SetSelection( 0 );
-	fgTrackLeftGridSizer->Add( m_DesignRuleWidthsCtrl, 0, wxEXPAND|wxTOP|wxALIGN_CENTER_VERTICAL, 5 );
+	fgTrackSizes->Add( m_DesignRuleWidthsCtrl, 0, wxEXPAND|wxTOP|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_DesignRuleWidthsUnits = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DesignRuleWidthsUnits = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DesignRuleWidthsUnits->Wrap( -1 );
-	fgTrackLeftGridSizer->Add( m_DesignRuleWidthsUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
+	fgTrackSizes->Add( m_DesignRuleWidthsUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
 
 	m_TrackWidthLabel = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("Track width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TrackWidthLabel->Wrap( -1 );
-	fgTrackLeftGridSizer->Add( m_TrackWidthLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgTrackSizes->Add( m_TrackWidthLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_TrackWidthCtrl = new wxTextCtrl( m_sbTrackSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgTrackLeftGridSizer->Add( m_TrackWidthCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgTrackSizes->Add( m_TrackWidthCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
-	m_TrackWidthUnit = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TrackWidthUnit = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TrackWidthUnit->Wrap( -1 );
-	fgTrackLeftGridSizer->Add( m_TrackWidthUnit, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
+	fgTrackSizes->Add( m_TrackWidthUnit, 0, wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
 
 
-	fgTrackLeftGridSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	fgTrackSizes->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_trackNetclass = new wxCheckBox( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("Use net class widths"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgTrackLeftGridSizer->Add( m_trackNetclass, 0, wxTOP|wxBOTTOM, 5 );
+	fgTrackSizes->Add( m_trackNetclass, 0, wxBOTTOM, 3 );
 
 
-	fgTrackLeftGridSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	fgTrackSizes->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
-	m_sbTrackSizer->Add( fgTrackLeftGridSizer, 5, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizerTracksLeftCol->Add( fgTrackSizes, 1, wxEXPAND, 5 );
+
+
+	m_sbTrackSizer->Add( bSizerTracksLeftCol, 1, wxEXPAND, 5 );
 
 
 	m_sbTrackSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 15 );
 
 	wxFlexGridSizer* fgTrackRightSizer;
 	fgTrackRightSizer = new wxFlexGridSizer( 1, 3, 3, 5 );
-	fgTrackRightSizer->AddGrowableCol( 1 );
+	fgTrackRightSizer->AddGrowableCol( 2 );
 	fgTrackRightSizer->SetFlexibleDirection( wxBOTH );
 	fgTrackRightSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_TrackLayerLabel = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TrackLayerLabel->Wrap( -1 );
-	fgTrackRightSizer->Add( m_TrackLayerLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 25 );
+	fgTrackRightSizer->Add( m_TrackLayerLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+
+	fgTrackRightSizer->Add( 25, 0, 0, wxEXPAND, 5 );
 
 	m_TrackLayerCtrl = new PCB_LAYER_BOX_SELECTOR( m_sbTrackSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
 	fgTrackRightSizer->Add( m_TrackLayerCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 
-	m_sbTrackSizer->Add( fgTrackRightSizer, 4, wxEXPAND|wxRIGHT, 10 );
+	m_sbTrackSizer->Add( fgTrackRightSizer, 1, wxEXPAND|wxRIGHT, 3 );
 
 
 	m_MainSizer->Add( m_sbTrackSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 
-	m_sbViaSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Vias") ), wxHORIZONTAL );
+	m_sbViaSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Vias") ), wxVERTICAL );
 
-	wxFlexGridSizer* viaLeftColumn;
-	viaLeftColumn = new wxFlexGridSizer( 6, 3, 4, 5 );
-	viaLeftColumn->AddGrowableCol( 1 );
-	viaLeftColumn->SetFlexibleDirection( wxBOTH );
-	viaLeftColumn->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxBoxSizer* bSizerViaCols;
+	bSizerViaCols = new wxBoxSizer( wxHORIZONTAL );
 
-	m_ViaXLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Position X:"), wxDefaultPosition, wxDefaultSize, 0 );
+	wxBoxSizer* bSizerViasLeftCol;
+	bSizerViasLeftCol = new wxBoxSizer( wxVERTICAL );
+
+	wxFlexGridSizer* fgViaPos;
+	fgViaPos = new wxFlexGridSizer( 6, 5, 4, 2 );
+	fgViaPos->AddGrowableCol( 1 );
+	fgViaPos->AddGrowableCol( 3 );
+	fgViaPos->SetFlexibleDirection( wxBOTH );
+	fgViaPos->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_ViaXLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Pos X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaXLabel->Wrap( -1 );
-	viaLeftColumn->Add( m_ViaXLabel, 0, wxALIGN_CENTER_VERTICAL, 3 );
+	fgViaPos->Add( m_ViaXLabel, 0, wxALIGN_CENTER_VERTICAL, 3 );
 
 	m_ViaXCtrl = new wxTextCtrl( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	viaLeftColumn->Add( m_ViaXCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 3 );
+	fgViaPos->Add( m_ViaXCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 3 );
 
-	m_ViaXUnit = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_ViaXUnit->Wrap( -1 );
-	viaLeftColumn->Add( m_ViaXUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 3 );
-
-	m_ViaYLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Position Y:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ViaYLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaYLabel->Wrap( -1 );
-	viaLeftColumn->Add( m_ViaYLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
+	fgViaPos->Add( m_ViaYLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 8 );
 
 	m_ViaYCtrl = new wxTextCtrl( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	viaLeftColumn->Add( m_ViaYCtrl, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND, 5 );
+	fgViaPos->Add( m_ViaYCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 3 );
 
-	m_ViaYUnit = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ViaYUnit = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaYUnit->Wrap( -1 );
-	viaLeftColumn->Add( m_ViaYUnit, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	fgViaPos->Add( m_ViaYUnit, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	bSizerViasLeftCol->Add( fgViaPos, 0, wxEXPAND|wxBOTTOM, 8 );
+
+	wxFlexGridSizer* fgViaSizes;
+	fgViaSizes = new wxFlexGridSizer( 6, 3, 3, 3 );
+	fgViaSizes->AddGrowableCol( 1 );
+	fgViaSizes->SetFlexibleDirection( wxBOTH );
+	fgViaSizes->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_DesignRuleVias = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Pre-defined sizes:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DesignRuleVias->Wrap( -1 );
-	viaLeftColumn->Add( m_DesignRuleVias, 0, wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
+	fgViaSizes->Add( m_DesignRuleVias, 0, wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
 
 	wxArrayString m_DesignRuleViasCtrlChoices;
 	m_DesignRuleViasCtrl = new wxChoice( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_DesignRuleViasCtrlChoices, 0 );
 	m_DesignRuleViasCtrl->SetSelection( 0 );
-	viaLeftColumn->Add( m_DesignRuleViasCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP, 5 );
+	fgViaSizes->Add( m_DesignRuleViasCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP, 5 );
 
-	m_DesignRuleViasUnit = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DesignRuleViasUnit = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DesignRuleViasUnit->Wrap( -1 );
-	viaLeftColumn->Add( m_DesignRuleViasUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP, 5 );
+	fgViaSizes->Add( m_DesignRuleViasUnit, 0, wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
 
 	m_ViaDiameterLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Via diameter:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaDiameterLabel->Wrap( -1 );
-	viaLeftColumn->Add( m_ViaDiameterLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgViaSizes->Add( m_ViaDiameterLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_ViaDiameterCtrl = new wxTextCtrl( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	viaLeftColumn->Add( m_ViaDiameterCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgViaSizes->Add( m_ViaDiameterCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
-	m_ViaDiameterUnit = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ViaDiameterUnit = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaDiameterUnit->Wrap( -1 );
-	viaLeftColumn->Add( m_ViaDiameterUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgViaSizes->Add( m_ViaDiameterUnit, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_ViaDrillLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Via hole:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaDrillLabel->Wrap( -1 );
-	viaLeftColumn->Add( m_ViaDrillLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgViaSizes->Add( m_ViaDrillLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_ViaDrillCtrl = new wxTextCtrl( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	viaLeftColumn->Add( m_ViaDrillCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgViaSizes->Add( m_ViaDrillCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
-	m_ViaDrillUnit = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ViaDrillUnit = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaDrillUnit->Wrap( -1 );
-	viaLeftColumn->Add( m_ViaDrillUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgViaSizes->Add( m_ViaDrillUnit, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	viaLeftColumn->Add( 0, 0, 1, wxEXPAND, 5 );
+	fgViaSizes->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_viaNetclass = new wxCheckBox( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Use net class sizes"), wxDefaultPosition, wxDefaultSize, 0 );
-	viaLeftColumn->Add( m_viaNetclass, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
+	fgViaSizes->Add( m_viaNetclass, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 3 );
 
 
-	viaLeftColumn->Add( 0, 0, 1, wxEXPAND, 5 );
+	fgViaSizes->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
-	m_sbViaSizer->Add( viaLeftColumn, 5, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizerViasLeftCol->Add( fgViaSizes, 1, wxEXPAND, 5 );
 
 
-	m_sbViaSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 15 );
+	bSizerViaCols->Add( bSizerViasLeftCol, 1, wxEXPAND, 5 );
+
+
+	bSizerViaCols->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 15 );
 
 	wxBoxSizer* viaRightColumn;
 	viaRightColumn = new wxBoxSizer( wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer4;
-	fgSizer4 = new wxFlexGridSizer( 0, 2, 5, 0 );
+	fgSizer4 = new wxFlexGridSizer( 0, 2, 0, 5 );
 	fgSizer4->AddGrowableCol( 1 );
 	fgSizer4->SetFlexibleDirection( wxBOTH );
 	fgSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_ViaTypeLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Via type:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaTypeLabel->Wrap( -1 );
-	fgSizer4->Add( m_ViaTypeLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer4->Add( m_ViaTypeLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	wxString m_ViaTypeChoiceChoices[] = { _("Through"), _("Micro"), _("Blind/buried") };
 	int m_ViaTypeChoiceNChoices = sizeof( m_ViaTypeChoiceChoices ) / sizeof( wxString );
@@ -260,35 +295,256 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 
 	fgSizer4->Add( m_ViaTypeChoice, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
+
+	fgSizer4->Add( 0, 3, 1, wxEXPAND, 5 );
+
+
+	fgSizer4->Add( 0, 0, 1, wxEXPAND, 5 );
+
 	m_ViaStartLayerLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Start layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaStartLayerLabel->Wrap( -1 );
-	fgSizer4->Add( m_ViaStartLayerLabel, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer4->Add( m_ViaStartLayerLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_ViaStartLayer = new PCB_LAYER_BOX_SELECTOR( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
 	fgSizer4->Add( m_ViaStartLayer, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_ViaEndLayerLabel1 = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("End layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaEndLayerLabel1->Wrap( -1 );
-	fgSizer4->Add( m_ViaEndLayerLabel1, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer4->Add( m_ViaEndLayerLabel1, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_ViaEndLayer = new PCB_LAYER_BOX_SELECTOR( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
 	fgSizer4->Add( m_ViaEndLayer, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 
-	viaRightColumn->Add( fgSizer4, 0, wxBOTTOM|wxEXPAND|wxRIGHT, 5 );
+	fgSizer4->Add( 0, 15, 1, wxEXPAND, 5 );
+
+
+	fgSizer4->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_annularRingsLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Annular rings:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_annularRingsLabel->Wrap( -1 );
-	viaRightColumn->Add( m_annularRingsLabel, 0, wxTOP, 10 );
+	fgSizer4->Add( m_annularRingsLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	wxString m_annularRingsCtrlChoices[] = { _("All copper layers"), _("Start, end, and connected layers"), _("Connected layers only") };
 	int m_annularRingsCtrlNChoices = sizeof( m_annularRingsCtrlChoices ) / sizeof( wxString );
 	m_annularRingsCtrl = new wxChoice( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_annularRingsCtrlNChoices, m_annularRingsCtrlChoices, 0 );
 	m_annularRingsCtrl->SetSelection( 0 );
-	viaRightColumn->Add( m_annularRingsCtrl, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	fgSizer4->Add( m_annularRingsCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 
-	m_sbViaSizer->Add( viaRightColumn, 4, wxEXPAND|wxRIGHT, 5 );
+	viaRightColumn->Add( fgSizer4, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 3 );
+
+
+	bSizerViaCols->Add( viaRightColumn, 1, wxEXPAND, 5 );
+
+
+	m_sbViaSizer->Add( bSizerViaCols, 0, wxEXPAND, 5 );
+
+	m_staticline2 = new wxStaticLine( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	m_sbViaSizer->Add( m_staticline2, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+
+	m_legacyTeardropsWarning = new wxBoxSizer( wxHORIZONTAL );
+
+	m_legacyTeardropsIcon = new wxStaticBitmap( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_legacyTeardropsWarning->Add( m_legacyTeardropsIcon, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	wxBoxSizer* bSizer42;
+	bSizer42 = new wxBoxSizer( wxVERTICAL );
+
+	m_staticText85 = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Board contains legacy teardrops. "), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText85->Wrap( -1 );
+	bSizer42->Add( m_staticText85, 0, wxRIGHT|wxLEFT, 5 );
+
+	m_staticText851 = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Use Edit > Edit Teardrops to apply automatic teardrops."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText851->Wrap( -1 );
+	bSizer42->Add( m_staticText851, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	m_legacyTeardropsWarning->Add( bSizer42, 1, wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	m_sbViaSizer->Add( m_legacyTeardropsWarning, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+
+	wxBoxSizer* bSizerTeardrops;
+	bSizerTeardrops = new wxBoxSizer( wxVERTICAL );
+
+	wxBoxSizer* bSizerCols11;
+	bSizerCols11 = new wxBoxSizer( wxHORIZONTAL );
+
+	wxBoxSizer* bSizerLeftCol11;
+	bSizerLeftCol11 = new wxBoxSizer( wxVERTICAL );
+
+	m_cbTeardrops = new wxCheckBox( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Add teardrops on via's track connections"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
+	bSizerLeftCol11->Add( m_cbTeardrops, 0, wxBOTTOM|wxRIGHT, 5 );
+
+	m_cbTeardropsUseNextTrack = new wxCheckBox( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Allow teardrops to span 2 track segments"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
+	m_cbTeardropsUseNextTrack->SetToolTip( _("Allows a teardrop to spread over 2 tracks if the first track segment is too short") );
+
+	bSizerLeftCol11->Add( m_cbTeardropsUseNextTrack, 0, wxBOTTOM|wxRIGHT, 5 );
+
+
+	bSizerCols11->Add( bSizerLeftCol11, 1, wxEXPAND|wxTOP, 3 );
+
+
+	bSizerCols11->Add( 20, 0, 0, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizerRightCol11;
+	bSizerRightCol11 = new wxBoxSizer( wxVERTICAL );
+
+	wxBoxSizer* bSizer39;
+	bSizer39 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_stHDRatio = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Maximum track width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stHDRatio->Wrap( -1 );
+	m_stHDRatio->SetToolTip( _("Max pad/via size to track width ratio to create a teardrop.\n100 always creates a teardrop.") );
+
+	bSizer39->Add( m_stHDRatio, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_tcHDRatio = new wxTextCtrl( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), 0 );
+	m_tcHDRatio->SetToolTip( _("Tracks which are similar in size to the via do not need teardrops.") );
+
+	bSizer39->Add( m_tcHDRatio, 0, wxRIGHT|wxLEFT, 5 );
+
+	m_stHDRatioUnits = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stHDRatioUnits->Wrap( -1 );
+	bSizer39->Add( m_stHDRatioUnits, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	bSizerRightCol11->Add( bSizer39, 0, wxEXPAND, 3 );
+
+	wxBoxSizer* bSizer17;
+	bSizer17 = new wxBoxSizer( wxVERTICAL );
+
+	m_minTrackWidthHint = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("(as a percentage of pad/via/track size)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_minTrackWidthHint->Wrap( -1 );
+	bSizer17->Add( m_minTrackWidthHint, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
+
+
+	bSizerRightCol11->Add( bSizer17, 0, wxEXPAND|wxLEFT, 5 );
+
+
+	bSizerCols11->Add( bSizerRightCol11, 1, wxEXPAND|wxLEFT, 10 );
+
+
+	bSizerTeardrops->Add( bSizerCols11, 0, wxEXPAND|wxTOP, 3 );
+
+
+	bSizerTeardrops->Add( 0, 5, 0, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizerShapeColumns;
+	bSizerShapeColumns = new wxBoxSizer( wxHORIZONTAL );
+
+	wxBoxSizer* bSizerLeftCol;
+	bSizerLeftCol = new wxBoxSizer( wxVERTICAL );
+
+	m_bitmapTeardrop = new wxStaticBitmap( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerLeftCol->Add( m_bitmapTeardrop, 1, wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT, 5 );
+
+	wxBoxSizer* bSizer41;
+	bSizer41 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_staticText15 = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Edges:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText15->Wrap( -1 );
+	bSizer41->Add( m_staticText15, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
+
+	m_rbStraightLines = new wxRadioButton( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Straight lines"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	bSizer41->Add( m_rbStraightLines, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
+
+	m_rbCurved = new wxRadioButton( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Curved"), wxDefaultPosition, wxDefaultSize, wxRB_SINGLE );
+	bSizer41->Add( m_rbCurved, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
+
+
+	bSizerLeftCol->Add( bSizer41, 0, wxEXPAND|wxBOTTOM, 4 );
+
+
+	bSizerShapeColumns->Add( bSizerLeftCol, 1, wxEXPAND|wxRIGHT, 10 );
+
+
+	bSizerShapeColumns->Add( 20, 0, 0, wxEXPAND, 5 );
+
+	wxFlexGridSizer* fgSizerRightCol;
+	fgSizerRightCol = new wxFlexGridSizer( 0, 3, 2, 5 );
+	fgSizerRightCol->AddGrowableCol( 1 );
+	fgSizerRightCol->SetFlexibleDirection( wxBOTH );
+	fgSizerRightCol->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_stLenPercentLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Best length:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stLenPercentLabel->Wrap( -1 );
+	fgSizerRightCol->Add( m_stLenPercentLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_tcLenPercent = new wxTextCtrl( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerRightCol->Add( m_tcLenPercent, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_stLenPercentUnits = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stLenPercentUnits->Wrap( -1 );
+	fgSizerRightCol->Add( m_stLenPercentUnits, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_stMaxLen = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Max length:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stMaxLen->Wrap( -1 );
+	fgSizerRightCol->Add( m_stMaxLen, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_tcTdMaxLen = new wxTextCtrl( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerRightCol->Add( m_tcTdMaxLen, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_stMaxLenUnits = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stMaxLenUnits->Wrap( -1 );
+	fgSizerRightCol->Add( m_stMaxLenUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 3 );
+
+
+	fgSizerRightCol->Add( 0, 3, 1, wxEXPAND, 5 );
+
+
+	fgSizerRightCol->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	fgSizerRightCol->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_stHeightPercentLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Best height:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stHeightPercentLabel->Wrap( -1 );
+	fgSizerRightCol->Add( m_stHeightPercentLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_tcHeightPercent = new wxTextCtrl( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerRightCol->Add( m_tcHeightPercent, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_stHeightPercentUnits = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stHeightPercentUnits->Wrap( -1 );
+	fgSizerRightCol->Add( m_stHeightPercentUnits, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_stMaxHeight = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Max height:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stMaxHeight->Wrap( -1 );
+	fgSizerRightCol->Add( m_stMaxHeight, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_tcMaxHeight = new wxTextCtrl( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerRightCol->Add( m_tcMaxHeight, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_stMaxHeightUnits = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stMaxHeightUnits->Wrap( -1 );
+	fgSizerRightCol->Add( m_stMaxHeightUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 3 );
+
+
+	fgSizerRightCol->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	fgSizerRightCol->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	fgSizerRightCol->Add( 0, 3, 1, wxEXPAND, 5 );
+
+	m_curvePointsLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Curve points:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_curvePointsLabel->Wrap( -1 );
+	fgSizerRightCol->Add( m_curvePointsLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 3 );
+
+	m_curvePointsCtrl = new wxTextCtrl( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), 0 );
+	fgSizerRightCol->Add( m_curvePointsCtrl, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 3 );
+
+
+	bSizerShapeColumns->Add( fgSizerRightCol, 1, wxEXPAND|wxTOP|wxLEFT, 5 );
+
+
+	bSizerTeardrops->Add( bSizerShapeColumns, 1, wxEXPAND|wxBOTTOM, 3 );
+
+
+	m_sbViaSizer->Add( bSizerTeardrops, 1, wxEXPAND, 5 );
 
 
 	m_MainSizer->Add( m_sbViaSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
@@ -321,6 +577,32 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	m_ViaTypeChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
 	m_ViaStartLayer->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
 	m_ViaEndLayer->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
+	m_cbTeardrops->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_cbTeardropsUseNextTrack->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stHDRatio->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_tcHDRatio->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stHDRatioUnits->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_minTrackWidthHint->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_bitmapTeardrop->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_staticText15->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_rbStraightLines->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onStraightLines ), NULL, this );
+	m_rbStraightLines->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_rbCurved->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onCurvedLines ), NULL, this );
+	m_rbCurved->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stLenPercentLabel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_tcLenPercent->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stLenPercentUnits->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stMaxLen->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_tcTdMaxLen->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stMaxLenUnits->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stHeightPercentLabel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_tcHeightPercent->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stHeightPercentUnits->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stMaxHeight->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_tcMaxHeight->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stMaxHeightUnits->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_curvePointsLabel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onCurvedEdgesUpdateUi ), NULL, this );
+	m_curvePointsCtrl->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onCurvedEdgesUpdateUi ), NULL, this );
 }
 
 DIALOG_TRACK_VIA_PROPERTIES_BASE::~DIALOG_TRACK_VIA_PROPERTIES_BASE()
@@ -337,5 +619,31 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::~DIALOG_TRACK_VIA_PROPERTIES_BASE()
 	m_ViaTypeChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
 	m_ViaStartLayer->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
 	m_ViaEndLayer->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
+	m_cbTeardrops->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_cbTeardropsUseNextTrack->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stHDRatio->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_tcHDRatio->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stHDRatioUnits->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_minTrackWidthHint->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_bitmapTeardrop->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_staticText15->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_rbStraightLines->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onStraightLines ), NULL, this );
+	m_rbStraightLines->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_rbCurved->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onCurvedLines ), NULL, this );
+	m_rbCurved->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stLenPercentLabel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_tcLenPercent->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stLenPercentUnits->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stMaxLen->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_tcTdMaxLen->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stMaxLenUnits->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stHeightPercentLabel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_tcHeightPercent->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stHeightPercentUnits->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stMaxHeight->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_tcMaxHeight->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stMaxHeightUnits->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_curvePointsLabel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onCurvedEdgesUpdateUi ), NULL, this );
+	m_curvePointsCtrl->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onCurvedEdgesUpdateUi ), NULL, this );
 
 }

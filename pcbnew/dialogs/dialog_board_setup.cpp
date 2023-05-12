@@ -42,6 +42,7 @@
 
 #include "dialog_board_setup.h"
 #include "panel_setup_rules.h"
+#include "panel_setup_teardrops.h"
 
 
 std::mutex DIALOG_BOARD_SETUP::g_Mutex;
@@ -64,6 +65,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
         m_maskAndPagePage( 0 ),
         m_constraintsPage( 0 ),
         m_tracksAndViasPage( 0 ),
+        m_teardropsPage( 0 ),
         m_netclassesPage( 0 ),
         m_severitiesPage( 0 )
 
@@ -148,6 +150,13 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
             {
                 return new PANEL_SETUP_TRACKS_AND_VIAS( aParent, m_frame );
             },  _( "Pre-defined Sizes" ) );
+
+    m_teardropsPage = m_treebook->GetPageCount();
+    m_treebook->AddLazySubPage(
+            [this]( wxWindow* aParent ) -> wxWindow*
+            {
+                return new PANEL_SETUP_TEARDROPS( aParent, m_frame );
+            }, _( "Teardrops" ) );
 
     m_netclassesPage = m_treebook->GetPageCount();
     m_treebook->AddLazySubPage(
@@ -351,6 +360,12 @@ void DIALOG_BOARD_SETUP::onAuxiliaryAction( wxCommandEvent& aEvent )
         {
             RESOLVE_PAGE( PANEL_SETUP_TRACKS_AND_VIAS,
                           m_tracksAndViasPage )->ImportSettingsFrom( otherBoard );
+        }
+
+        if( importDlg.m_TeardropsOpt->GetValue() )
+        {
+            RESOLVE_PAGE( PANEL_SETUP_TEARDROPS,
+                          m_teardropsPage )->ImportSettingsFrom( otherBoard );
         }
 
         if( importDlg.m_MaskAndPasteOpt->GetValue() )

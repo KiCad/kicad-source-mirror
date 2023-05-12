@@ -228,7 +228,7 @@ const std::vector<CN_ITEM*> CN_LIST::Add( ZONE* zone, PCB_LAYER_ID aLayer )
 
         zitem->BuildRTree();
 
-        for( VECTOR2I pt : zone->GetFilledPolysList( aLayer )->COutline( j ).CPoints() )
+        for( const VECTOR2I& pt : zone->GetFilledPolysList( aLayer )->COutline( j ).CPoints() )
             zitem->AddAnchor( pt );
 
         rv.push_back( Add( zitem ) );

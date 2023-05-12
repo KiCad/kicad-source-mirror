@@ -30,8 +30,6 @@ include_directories(
     )
 
 set( PCBNEW_DIALOGS
-    teardrop/dialog_teardrop_base.cpp
-    teardrop/dialog_teardrop.cpp
     dialogs/dialog_filter_selection.cpp
     dialogs/dialog_filter_selection_base.cpp
     dialogs/dialog_board_setup.cpp
@@ -88,6 +86,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_global_deletion_base.cpp
     dialogs/dialog_global_edit_tracks_and_vias.cpp
     dialogs/dialog_global_edit_tracks_and_vias_base.cpp
+    dialogs/dialog_global_edit_teardrops.cpp
+    dialogs/dialog_global_edit_teardrops_base.cpp
     dialogs/dialog_global_edit_text_and_graphics.cpp
     dialogs/dialog_global_edit_text_and_graphics_base.cpp
     dialogs/dialog_global_fp_lib_table_config.cpp
@@ -171,6 +171,8 @@ set( PCBNEW_DIALOGS
     dialogs/panel_setup_layers_base.cpp
     dialogs/panel_setup_rules.cpp
     dialogs/panel_setup_rules_base.cpp
+    dialogs/panel_setup_teardrops.cpp
+    dialogs/panel_setup_teardrops_base.cpp
     dialogs/panel_setup_text_and_graphics.cpp
     dialogs/panel_setup_text_and_graphics_base.cpp
     dialogs/panel_setup_tracks_and_vias.cpp
@@ -354,6 +356,7 @@ set( PCBNEW_CLASS_SRCS
     tools/zone_create_helper.cpp
     tools/zone_filler_tool.cpp
     teardrop/teardrop.cpp
+    teardrop/teardrop_parameters.cpp
     teardrop/teardrop_utils.cpp
 
     footprint_preview_panel.cpp

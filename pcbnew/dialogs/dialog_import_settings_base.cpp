@@ -66,6 +66,9 @@ DIALOG_IMPORT_SETTINGS_BASE::DIALOG_IMPORT_SETTINGS_BASE( wxWindow* parent, wxWi
 	m_TracksAndViasOpt = new wxCheckBox( this, wxID_ANY, _("Predefined track && via dimensions"), wxDefaultPosition, wxDefaultSize, 0 );
 	bLeftCol->Add( m_TracksAndViasOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
+	m_TeardropsOpt = new wxCheckBox( this, wxID_ANY, _("Teardrop defaults"), wxDefaultPosition, wxDefaultSize, 0 );
+	bLeftCol->Add( m_TeardropsOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
 	m_NetclassesOpt = new wxCheckBox( this, wxID_ANY, _("Net classes"), wxDefaultPosition, wxDefaultSize, 0 );
 	bLeftCol->Add( m_NetclassesOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 

@@ -27,6 +27,7 @@
 #define BOARD_CONNECTED_ITEM_H
 
 #include <board_item.h>
+#include <teardrop/teardrop_parameters.h>
 
 class NETCLASS;
 class NETINFO_ITEM;
@@ -168,22 +169,50 @@ public:
      */
     wxString GetNetClassName() const;
 
-    void SetLocalRatsnestVisible( bool aVisible )
-    {
-        m_localRatsnestVisible = aVisible;
-    }
+    void SetLocalRatsnestVisible( bool aVisible ) { m_localRatsnestVisible = aVisible; }
+    bool GetLocalRatsnestVisible() const { return m_localRatsnestVisible; }
 
-    bool GetLocalRatsnestVisible() const
-    {
-        return m_localRatsnestVisible;
-    }
+    TEARDROP_PARAMETERS& GetTeardropParams() { return m_teardropParams; }
+    const TEARDROP_PARAMETERS& GetTeardropParams() const { return m_teardropParams; }
+
+    void SetTeardropsEnabled( bool aEnable ) { m_teardropParams.m_Enabled = aEnable; }
+    bool GetTeardropsEnabled() const { return m_teardropParams.m_Enabled; }
+
+    void SetTeardropBestLengthRatio( double aRatio ) { m_teardropParams.m_BestLengthRatio = aRatio; }
+    double GetTeardropBestLengthRatio() const { return m_teardropParams.m_BestLengthRatio; }
+
+    void SetTeardropMaxLength( int aMaxLength ) { m_teardropParams.m_TdMaxLen = aMaxLength; }
+    int GetTeardropMaxLength() const { return m_teardropParams.m_TdMaxLen; }
+
+    void SetTeardropBestWidthRatio( double aRatio ) { m_teardropParams.m_BestWidthRatio = aRatio; }
+    double GetTeardropBestWidthRatio() const { return m_teardropParams.m_BestWidthRatio; }
+
+    void SetTeardropMaxWidth( int aMaxWidth ) { m_teardropParams.m_TdMaxWidth = aMaxWidth; }
+    int GetTeardropMaxWidth() const { return m_teardropParams.m_TdMaxWidth; }
+
+    void SetTeardropCurvePts( int aPointCount ) { m_teardropParams.m_CurveSegCount = aPointCount; }
+    int GetTeardropCurvePts() const { return m_teardropParams.m_CurveSegCount; }
+
+    void SetTeardropPreferZoneConnections( bool aPrefer ) { m_teardropParams.m_TdOnPadsInZones = !aPrefer; }
+    bool GetTeardropPreferZoneConnections() const { return !m_teardropParams.m_TdOnPadsInZones; }
+
+    void SetTeardropAllowSpanTwoTracks( bool aAllow ) { m_teardropParams.m_AllowUseTwoTracks = aAllow; }
+    bool GetTeardropAllowSpanTwoTracks() const { return m_teardropParams.m_AllowUseTwoTracks; }
+
+    void SetTeardropMaxTrackWidth( double aRatio ) { m_teardropParams.m_WidthtoSizeFilterRatio = aRatio; }
+    double GetTeardropMaxTrackWidth() const { return m_teardropParams.m_WidthtoSizeFilterRatio; }
 
 protected:
     /// Store all information about the net that item belongs to.
     NETINFO_ITEM* m_netinfo;
 
+    /// Not all BOARD_CONNECTED_ITEMs support teardrops, but we want those that do to share a
+    /// single section in the property inspector.
+    TEARDROP_PARAMETERS m_teardropParams;
+
 private:
     bool m_localRatsnestVisible;
+
 };
 
 #endif  // BOARD_CONNECTED_ITEM_H

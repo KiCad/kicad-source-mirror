@@ -171,7 +171,7 @@ void UNIT_BINDER::onUnitsChanged( wxCommandEvent& aEvent )
             && m_units != EDA_UNITS::DEGREES
             && m_units != EDA_UNITS::PERCENT )
     {
-        int temp = (int) GetValue();
+        int temp = GetIntValue();
 
         SetUnits( provider->GetUserUnits() );
         m_iuScale = &provider->GetIuScale();

@@ -67,6 +67,7 @@ private:
     size_t m_maskAndPagePage;
     size_t m_constraintsPage;
     size_t m_tracksAndViasPage;
+    size_t m_teardropsPage;
     size_t m_netclassesPage;
     size_t m_severitiesPage;
 };

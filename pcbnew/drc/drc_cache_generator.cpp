@@ -142,7 +142,15 @@ bool DRC_CACHE_GENERATOR::Run()
     };
 
     forEachGeometryItem( itemTypes, LSET::AllCuMask(), countItems );
-    forEachGeometryItem( itemTypes, LSET::AllCuMask(), addToCopperTree );
+
+    {
+        std::unique_lock<std::mutex> cacheLock( m_board->m_CachesMutex );
+
+        if( !m_board->m_CopperItemRTreeCache )
+            m_board->m_CopperItemRTreeCache = std::make_shared<DRC_RTREE>();
+
+        forEachGeometryItem( itemTypes, LSET::AllCuMask(), addToCopperTree );
+    }
 
     if( !reportPhase( _( "Tessellating copper zones..." ) ) )
         return false;   // DRC cancelled
@@ -205,7 +213,7 @@ bool DRC_CACHE_GENERATOR::Run()
 
     for( ZONE* zone : m_board->Zones() )
     {
-        if( !zone->GetIsRuleArea() )
+        if( !zone->GetIsRuleArea() && !zone->IsTeardropArea() )
         {
             for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
                 m_board->m_ZoneIsolatedIslandsMap[ zone ][ layer ] = ISOLATED_ISLANDS();

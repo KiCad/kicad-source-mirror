@@ -1181,9 +1181,6 @@ bool PNS_KICAD_IFACE_BASE::syncZone( PNS::NODE* aWorld, ZONE* aZone, SHAPE_POLY_
 {
     SHAPE_POLY_SET* poly;
 
-    if( !aZone->GetIsRuleArea() && aZone->GetZoneName().IsEmpty() )
-        return false;
-
     // TODO handle aZone->GetDoNotAllowVias()
     // TODO handle rules which disallow tracks & vias
     if( !aZone->GetIsRuleArea() || !aZone->GetDoNotAllowTracks() )
@@ -1562,7 +1559,7 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
 
 void PNS_KICAD_IFACE::EraseView()
 {
-    for( auto item : m_hiddenItems )
+    for( BOARD_ITEM* item : m_hiddenItems )
         m_view->SetVisible( item, true );
 
     m_hiddenItems.clear();
@@ -1696,6 +1693,17 @@ void PNS_KICAD_IFACE::HideItem( PNS::ITEM* aItem )
 
         m_view->SetVisible( parent, false );
         m_view->Update( parent, KIGFX::APPEARANCE );
+
+        for( ZONE* td : m_board->Zones() )
+        {
+            if( td->IsTeardropArea()
+                && td->GetBoundingBox().Intersects( aItem->Parent()->GetBoundingBox() )
+                && td->Outline()->Collide( aItem->Shape() ) )
+            {
+                m_view->SetVisible( td, false );
+                m_view->Update( td, KIGFX::APPEARANCE );
+            }
+        }
     }
 }
 
@@ -1875,10 +1883,10 @@ void PNS_KICAD_IFACE::Commit()
 
     EraseView();
 
-    for( const std::pair<const PAD*, OFFSET>& fpOffset : m_fpOffsets )
+    for( const auto& [ pad, fpOffset ] : m_fpOffsets )
     {
-        VECTOR2I   offset = fpOffset.second.p_new - fpOffset.second.p_old;
-        FOOTPRINT* footprint = fpOffset.first->GetParent();
+        VECTOR2I   offset = fpOffset.p_new - fpOffset.p_old;
+        FOOTPRINT* footprint = pad->GetParent();
         VECTOR2I   p_orig = footprint->GetPosition();
         VECTOR2I   p_new = p_orig + offset;
 

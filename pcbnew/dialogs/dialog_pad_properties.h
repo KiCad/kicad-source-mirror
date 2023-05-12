@@ -78,6 +78,8 @@ private:
     void OnResize( wxSizeEvent& event );
 	void OnCancel( wxCommandEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
+    void onTeardropsUpdateUi( wxUpdateUIEvent& event ) override;
+    void onTeardropCurvePointsUpdateUi( wxUpdateUIEvent& event ) override;
 
     void OnUpdateUINonCopperWarning( wxUpdateUIEvent& event ) override;
 
@@ -172,6 +174,8 @@ private:
     UNIT_BINDER m_spokeWidth;
     UNIT_BINDER m_spokeAngle;
     UNIT_BINDER m_pad_orientation;
+    UNIT_BINDER m_teardropMaxLenSetting;
+    UNIT_BINDER m_teardropMaxHeightSetting;
 };
 
 

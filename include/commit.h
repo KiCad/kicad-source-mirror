@@ -182,8 +182,10 @@ protected:
     virtual EDA_ITEM* makeImage( EDA_ITEM* aItem ) const = 0;
 
     CHANGE_TYPE convert( UNDO_REDO aType ) const;
+    UNDO_REDO convert( CHANGE_TYPE aType ) const;
 
-    std::set<EDA_ITEM*> m_changedItems;
+protected:
+    std::set<EDA_ITEM*>      m_changedItems;
     std::vector<COMMIT_LINE> m_changes;
 };
 

@@ -1811,12 +1811,15 @@ static struct PAD_DESC
                     &PAD::SetSizeY, &PAD::GetSizeY,
                     PROPERTY_DISPLAY::PT_SIZE ), groupPad );
 
-        auto roundRadiusRatio = new PROPERTY<PAD, double>( _HKI( "Round Radius Ratio" ),
+        auto roundRadiusRatio = new PROPERTY<PAD, double>( _HKI( "Corner Radius Ratio" ),
                     &PAD::SetRoundRectRadiusRatio, &PAD::GetRoundRectRadiusRatio );
         roundRadiusRatio->SetAvailableFunc(
                     [=]( INSPECTABLE* aItem ) -> bool
                     {
-                        return aItem->Get( shape ) == static_cast<int>( PAD_SHAPE::ROUNDRECT );
+                        if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
+                            return pad->GetShape() == PAD_SHAPE::ROUNDRECT;
+
+                        return false;
                     } );
         propMgr.AddProperty( roundRadiusRatio, groupPad );
 

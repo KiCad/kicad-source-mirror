@@ -244,7 +244,8 @@ void BOARD::IncrementTimeStamp()
         || !m_IntersectsFCourtyardCache.empty()
         || !m_IntersectsBCourtyardCache.empty()
         || !m_LayerExpressionCache.empty()
-        || !m_ZoneBBoxCache.empty() )
+        || !m_ZoneBBoxCache.empty()
+        || m_CopperItemRTreeCache )
     {
         std::unique_lock<std::mutex> cacheLock( m_CachesMutex );
 
@@ -257,6 +258,8 @@ void BOARD::IncrementTimeStamp()
 
         m_ZoneBBoxCache.clear();
 
+        m_CopperItemRTreeCache = nullptr;
+
         // These are always regenerated before use, but still probably safer to clear them
         // while we're here.
         m_DRCMaxClearance = 0;
@@ -265,12 +268,6 @@ void BOARD::IncrementTimeStamp()
         m_DRCCopperZones.clear();
         m_ZoneIsolatedIslandsMap.clear();
         m_CopperZoneRTreeCache.clear();
-        m_CopperItemRTreeCache = std::make_unique<DRC_RTREE>();
-    }
-    else if( !m_CopperItemRTreeCache )
-    {
-        std::unique_lock<std::mutex> cacheLock( m_CachesMutex );
-        m_CopperItemRTreeCache = std::make_unique<DRC_RTREE>();
     }
 }
 

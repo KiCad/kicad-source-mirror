@@ -569,6 +569,321 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_panelGeneral->Layout();
 	bGeneralSizer->Fit( m_panelGeneral );
 	m_notebook->AddPage( m_panelGeneral, _("General"), true );
+	m_connectionsPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizerPanelConnections;
+	bSizerPanelConnections = new wxBoxSizer( wxVERTICAL );
+
+	wxBoxSizer* bSizerConnectionsMargins;
+	bSizerConnectionsMargins = new wxBoxSizer( wxVERTICAL );
+
+	wxStaticBoxSizer* bSizerTeardrops;
+	bSizerTeardrops = new wxStaticBoxSizer( new wxStaticBox( m_connectionsPanel, wxID_ANY, _("Teardrops") ), wxVERTICAL );
+
+	m_legacyTeardropsWarning = new wxBoxSizer( wxHORIZONTAL );
+
+	m_legacyTeardropsIcon = new wxStaticBitmap( bSizerTeardrops->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_legacyTeardropsWarning->Add( m_legacyTeardropsIcon, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	wxBoxSizer* bSizer42;
+	bSizer42 = new wxBoxSizer( wxVERTICAL );
+
+	m_staticText85 = new wxStaticText( bSizerTeardrops->GetStaticBox(), wxID_ANY, _("Board contains legacy teardrops. "), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText85->Wrap( -1 );
+	bSizer42->Add( m_staticText85, 0, wxRIGHT|wxLEFT, 5 );
+
+	m_staticText851 = new wxStaticText( bSizerTeardrops->GetStaticBox(), wxID_ANY, _("Use Edit > Edit Teardrops to apply automatic teardrops."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText851->Wrap( -1 );
+	bSizer42->Add( m_staticText851, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	m_legacyTeardropsWarning->Add( bSizer42, 1, wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	bSizerTeardrops->Add( m_legacyTeardropsWarning, 0, wxEXPAND|wxBOTTOM, 5 );
+
+	wxBoxSizer* bSizerCols11;
+	bSizerCols11 = new wxBoxSizer( wxHORIZONTAL );
+
+	wxBoxSizer* bSizerLeftCol11;
+	bSizerLeftCol11 = new wxBoxSizer( wxVERTICAL );
+
+	m_cbTeardrops = new wxCheckBox( bSizerTeardrops->GetStaticBox(), wxID_ANY, _("Add teardrops on pad's track connections"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerLeftCol11->Add( m_cbTeardrops, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_cbPreferZoneConnection = new wxCheckBox( bSizerTeardrops->GetStaticBox(), wxID_ANY, _("Prefer zone connection"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbPreferZoneConnection->SetValue(true);
+	bSizerLeftCol11->Add( m_cbPreferZoneConnection, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_cbTeardropsUseNextTrack = new wxCheckBox( bSizerTeardrops->GetStaticBox(), wxID_ANY, _("Allow teardrops to span 2 track segments"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbTeardropsUseNextTrack->SetValue(true);
+	m_cbTeardropsUseNextTrack->SetToolTip( _("Allows a teardrop to spread over 2 tracks if the first track segment is too short") );
+
+	bSizerLeftCol11->Add( m_cbTeardropsUseNextTrack, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	bSizerCols11->Add( bSizerLeftCol11, 1, wxEXPAND|wxTOP, 3 );
+
+
+	bSizerCols11->Add( 15, 0, 0, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizerRightCol11;
+	bSizerRightCol11 = new wxBoxSizer( wxVERTICAL );
+
+	wxBoxSizer* bSizer39;
+	bSizer39 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_stHDRatio = new wxStaticText( bSizerTeardrops->GetStaticBox(), wxID_ANY, _("Maximum track width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stHDRatio->Wrap( -1 );
+	m_stHDRatio->SetToolTip( _("Max pad/via size to track width ratio to create a teardrop.\n100 always creates a teardrop.") );
+
+	bSizer39->Add( m_stHDRatio, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_spTeardropHDPercent = new wxSpinCtrlDouble( bSizerTeardrops->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 100, 90, 10 );
+	m_spTeardropHDPercent->SetDigits( 0 );
+	m_spTeardropHDPercent->SetToolTip( _("Tracks which are similar in size to the pad do not need teardrops.") );
+
+	bSizer39->Add( m_spTeardropHDPercent, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+	m_minTrackWidthUnits = new wxStaticText( bSizerTeardrops->GetStaticBox(), wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_minTrackWidthUnits->Wrap( -1 );
+	bSizer39->Add( m_minTrackWidthUnits, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	bSizerRightCol11->Add( bSizer39, 0, wxEXPAND, 3 );
+
+	m_minTrackWidthHint = new wxStaticText( bSizerTeardrops->GetStaticBox(), wxID_ANY, _("(as a percentage of pad size)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_minTrackWidthHint->Wrap( -1 );
+	bSizerRightCol11->Add( m_minTrackWidthHint, 0, wxTOP|wxBOTTOM, 3 );
+
+
+	bSizerCols11->Add( bSizerRightCol11, 1, wxEXPAND|wxLEFT, 10 );
+
+
+	bSizerTeardrops->Add( bSizerCols11, 0, wxEXPAND, 5 );
+
+
+	bSizerTeardrops->Add( 0, 5, 0, wxEXPAND, 5 );
+
+	m_teardropShapeLabel = new wxStaticText( bSizerTeardrops->GetStaticBox(), wxID_ANY, _("Teardrop Shape"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_teardropShapeLabel->Wrap( -1 );
+	bSizerTeardrops->Add( m_teardropShapeLabel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+	m_staticline51 = new wxStaticLine( bSizerTeardrops->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizerTeardrops->Add( m_staticline51, 0, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizerShapeColumns;
+	bSizerShapeColumns = new wxBoxSizer( wxHORIZONTAL );
+
+	wxBoxSizer* bSizerLeftCol;
+	bSizerLeftCol = new wxBoxSizer( wxVERTICAL );
+
+	m_bitmapTeardrop = new wxStaticBitmap( bSizerTeardrops->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerLeftCol->Add( m_bitmapTeardrop, 1, wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT, 5 );
+
+	wxBoxSizer* bSizer41;
+	bSizer41 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_edgesLabel = new wxStaticText( bSizerTeardrops->GetStaticBox(), wxID_ANY, _("Edges:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_edgesLabel->Wrap( -1 );
+	bSizer41->Add( m_edgesLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_rbStraightLines = new wxRadioButton( bSizerTeardrops->GetStaticBox(), wxID_ANY, _("Straight lines"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	bSizer41->Add( m_rbStraightLines, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_rbCurved = new wxRadioButton( bSizerTeardrops->GetStaticBox(), wxID_ANY, _("Curved"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer41->Add( m_rbCurved, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	bSizerLeftCol->Add( bSizer41, 0, wxEXPAND, 5 );
+
+
+	bSizerShapeColumns->Add( bSizerLeftCol, 1, wxEXPAND|wxRIGHT, 10 );
+
+
+	bSizerShapeColumns->Add( 10, 0, 0, wxEXPAND, 5 );
+
+	wxFlexGridSizer* fgSizerRightCol;
+	fgSizerRightCol = new wxFlexGridSizer( 0, 3, 2, 0 );
+	fgSizerRightCol->AddGrowableCol( 1 );
+	fgSizerRightCol->SetFlexibleDirection( wxBOTH );
+	fgSizerRightCol->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_stHsetting = new wxStaticText( bSizerTeardrops->GetStaticBox(), wxID_ANY, _("Best length:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stHsetting->Wrap( -1 );
+	fgSizerRightCol->Add( m_stHsetting, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_spTeardropLenPercent = new wxSpinCtrlDouble( bSizerTeardrops->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 20, 100, 40.000000, 10 );
+	m_spTeardropLenPercent->SetDigits( 0 );
+	fgSizerRightCol->Add( m_spTeardropLenPercent, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_stTeardropLenUnits = new wxStaticText( bSizerTeardrops->GetStaticBox(), wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stTeardropLenUnits->Wrap( -1 );
+	fgSizerRightCol->Add( m_stTeardropLenUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	m_stMaxLen = new wxStaticText( bSizerTeardrops->GetStaticBox(), wxID_ANY, _("Max length:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stMaxLen->Wrap( -1 );
+	fgSizerRightCol->Add( m_stMaxLen, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_tcTdMaxLen = new wxTextCtrl( bSizerTeardrops->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerRightCol->Add( m_tcTdMaxLen, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_stMaxLenUnits = new wxStaticText( bSizerTeardrops->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stMaxLenUnits->Wrap( -1 );
+	fgSizerRightCol->Add( m_stMaxLenUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+
+	fgSizerRightCol->Add( 0, 5, 1, wxEXPAND, 5 );
+
+
+	fgSizerRightCol->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	fgSizerRightCol->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_stVsetting = new wxStaticText( bSizerTeardrops->GetStaticBox(), wxID_ANY, _("Best height:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stVsetting->Wrap( -1 );
+	fgSizerRightCol->Add( m_stVsetting, 0, wxALIGN_CENTER_VERTICAL, 10 );
+
+	m_spTeardropSizePercent = new wxSpinCtrlDouble( bSizerTeardrops->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 60, 100, 100.000000, 10 );
+	m_spTeardropSizePercent->SetDigits( 0 );
+	fgSizerRightCol->Add( m_spTeardropSizePercent, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_stLenPercent = new wxStaticText( bSizerTeardrops->GetStaticBox(), wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stLenPercent->Wrap( -1 );
+	fgSizerRightCol->Add( m_stLenPercent, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	m_stTdMaxSize = new wxStaticText( bSizerTeardrops->GetStaticBox(), wxID_ANY, _("Max height:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stTdMaxSize->Wrap( -1 );
+	fgSizerRightCol->Add( m_stTdMaxSize, 0, wxALIGN_CENTER_VERTICAL, 10 );
+
+	m_tcMaxHeight = new wxTextCtrl( bSizerTeardrops->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerRightCol->Add( m_tcMaxHeight, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_stMaxHeightUnits = new wxStaticText( bSizerTeardrops->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stMaxHeightUnits->Wrap( -1 );
+	fgSizerRightCol->Add( m_stMaxHeightUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+
+	fgSizerRightCol->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	fgSizerRightCol->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	fgSizerRightCol->Add( 0, 5, 1, wxEXPAND, 5 );
+
+	m_curvePointsLabel = new wxStaticText( bSizerTeardrops->GetStaticBox(), wxID_ANY, _("Curve points:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_curvePointsLabel->Wrap( -1 );
+	fgSizerRightCol->Add( m_curvePointsLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
+
+	m_curvePointsCtrl = new wxSpinCtrl( bSizerTeardrops->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 3, 10, 5 );
+	fgSizerRightCol->Add( m_curvePointsCtrl, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+
+	bSizerShapeColumns->Add( fgSizerRightCol, 1, wxEXPAND|wxTOP|wxLEFT, 10 );
+
+
+	bSizerTeardrops->Add( bSizerShapeColumns, 1, wxEXPAND|wxBOTTOM, 5 );
+
+
+	bSizerConnectionsMargins->Add( bSizerTeardrops, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	wxBoxSizer* bSizerConnectionsLower;
+	bSizerConnectionsLower = new wxBoxSizer( wxHORIZONTAL );
+
+	m_sbSizerZonesSettings = new wxStaticBoxSizer( new wxStaticBox( m_connectionsPanel, wxID_ANY, _("Connection to Copper Zones") ), wxVERTICAL );
+
+	wxFlexGridSizer* fgSizerCopperZonesOpts;
+	fgSizerCopperZonesOpts = new wxFlexGridSizer( 0, 2, 5, 0 );
+	fgSizerCopperZonesOpts->AddGrowableCol( 1 );
+	fgSizerCopperZonesOpts->SetFlexibleDirection( wxBOTH );
+	fgSizerCopperZonesOpts->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_padConnectionLabel = new wxStaticText( m_sbSizerZonesSettings->GetStaticBox(), wxID_ANY, _("Pad connection:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_padConnectionLabel->Wrap( -1 );
+	fgSizerCopperZonesOpts->Add( m_padConnectionLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	wxString m_ZoneConnectionChoiceChoices[] = { _("From parent footprint"), _("Solid"), _("Thermal relief"), _("None") };
+	int m_ZoneConnectionChoiceNChoices = sizeof( m_ZoneConnectionChoiceChoices ) / sizeof( wxString );
+	m_ZoneConnectionChoice = new wxChoice( m_sbSizerZonesSettings->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_ZoneConnectionChoiceNChoices, m_ZoneConnectionChoiceChoices, 0 );
+	m_ZoneConnectionChoice->SetSelection( 0 );
+	fgSizerCopperZonesOpts->Add( m_ZoneConnectionChoice, 1, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_zoneKnockoutLabel = new wxStaticText( m_sbSizerZonesSettings->GetStaticBox(), wxID_ANY, _("Zone knockout:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_zoneKnockoutLabel->Wrap( -1 );
+	fgSizerCopperZonesOpts->Add( m_zoneKnockoutLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	wxString m_ZoneCustomPadShapeChoices[] = { _("Pad shape"), _("Pad convex hull") };
+	int m_ZoneCustomPadShapeNChoices = sizeof( m_ZoneCustomPadShapeChoices ) / sizeof( wxString );
+	m_ZoneCustomPadShape = new wxChoice( m_sbSizerZonesSettings->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_ZoneCustomPadShapeNChoices, m_ZoneCustomPadShapeChoices, 0 );
+	m_ZoneCustomPadShape->SetSelection( 0 );
+	fgSizerCopperZonesOpts->Add( m_ZoneCustomPadShape, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT, 5 );
+
+
+	m_sbSizerZonesSettings->Add( fgSizerCopperZonesOpts, 0, 0, 5 );
+
+
+	bSizerConnectionsLower->Add( m_sbSizerZonesSettings, 1, wxALL|wxEXPAND, 5 );
+
+	wxStaticBoxSizer* sbSizerThermalReliefs;
+	sbSizerThermalReliefs = new wxStaticBoxSizer( new wxStaticBox( m_connectionsPanel, wxID_ANY, _("Thermal Relief Overrides") ), wxVERTICAL );
+
+	wxFlexGridSizer* fgSizerThermalReliefs;
+	fgSizerThermalReliefs = new wxFlexGridSizer( 0, 3, 3, 0 );
+	fgSizerThermalReliefs->AddGrowableCol( 1 );
+	fgSizerThermalReliefs->SetFlexibleDirection( wxBOTH );
+	fgSizerThermalReliefs->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_thermalGapLabel = new wxStaticText( sbSizerThermalReliefs->GetStaticBox(), wxID_ANY, _("Relief gap:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_thermalGapLabel->Wrap( -1 );
+	fgSizerThermalReliefs->Add( m_thermalGapLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_thermalGapCtrl = new wxTextCtrl( sbSizerThermalReliefs->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerThermalReliefs->Add( m_thermalGapCtrl, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxEXPAND, 5 );
+
+	m_thermalGapUnits = new wxStaticText( sbSizerThermalReliefs->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_thermalGapUnits->Wrap( -1 );
+	fgSizerThermalReliefs->Add( m_thermalGapUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_spokeWidthLabel = new wxStaticText( sbSizerThermalReliefs->GetStaticBox(), wxID_ANY, _("Spoke width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_spokeWidthLabel->Wrap( -1 );
+	fgSizerThermalReliefs->Add( m_spokeWidthLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_spokeWidthCtrl = new wxTextCtrl( sbSizerThermalReliefs->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerThermalReliefs->Add( m_spokeWidthCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_spokeWidthUnits = new wxStaticText( sbSizerThermalReliefs->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_spokeWidthUnits->Wrap( -1 );
+	fgSizerThermalReliefs->Add( m_spokeWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_spokeAngleLabel = new wxStaticText( sbSizerThermalReliefs->GetStaticBox(), wxID_ANY, _("Spoke angle:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_spokeAngleLabel->Wrap( -1 );
+	fgSizerThermalReliefs->Add( m_spokeAngleLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_spokeAngleCtrl = new wxTextCtrl( sbSizerThermalReliefs->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerThermalReliefs->Add( m_spokeAngleCtrl, 0, wxEXPAND|wxLEFT, 5 );
+
+	m_spokeAngleUnits = new wxStaticText( sbSizerThermalReliefs->GetStaticBox(), wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_spokeAngleUnits->Wrap( -1 );
+	fgSizerThermalReliefs->Add( m_spokeAngleUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+
+	sbSizerThermalReliefs->Add( fgSizerThermalReliefs, 1, wxEXPAND, 5 );
+
+
+	bSizerConnectionsLower->Add( sbSizerThermalReliefs, 1, wxEXPAND|wxALL, 5 );
+
+
+	bSizerConnectionsMargins->Add( bSizerConnectionsLower, 0, wxEXPAND|wxTOP, 10 );
+
+
+	bSizerPanelConnections->Add( bSizerConnectionsMargins, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	m_connectionsPanel->SetSizer( bSizerPanelConnections );
+	m_connectionsPanel->Layout();
+	bSizerPanelConnections->Fit( m_connectionsPanel );
+	m_notebook->AddPage( m_connectionsPanel, _("Connections"), false );
 	m_localSettingsPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerPanelClearance;
 	bSizerPanelClearance = new wxBoxSizer( wxVERTICAL );
@@ -698,94 +1013,6 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	bSizerClearance->Add( sbClearancesSizer, 0, wxALL|wxEXPAND, 5 );
 
-	wxBoxSizer* bSizerLower;
-	bSizerLower = new wxBoxSizer( wxHORIZONTAL );
-
-	m_sbSizerZonesSettings = new wxStaticBoxSizer( new wxStaticBox( m_localSettingsPanel, wxID_ANY, _("Connection to Copper Zones") ), wxVERTICAL );
-
-	wxFlexGridSizer* fgSizerCopperZonesOpts;
-	fgSizerCopperZonesOpts = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizerCopperZonesOpts->AddGrowableCol( 1 );
-	fgSizerCopperZonesOpts->SetFlexibleDirection( wxBOTH );
-	fgSizerCopperZonesOpts->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	m_staticText40 = new wxStaticText( m_sbSizerZonesSettings->GetStaticBox(), wxID_ANY, _("Pad connection:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText40->Wrap( -1 );
-	fgSizerCopperZonesOpts->Add( m_staticText40, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
-
-	wxString m_ZoneConnectionChoiceChoices[] = { _("From parent footprint"), _("Solid"), _("Thermal relief"), _("None") };
-	int m_ZoneConnectionChoiceNChoices = sizeof( m_ZoneConnectionChoiceChoices ) / sizeof( wxString );
-	m_ZoneConnectionChoice = new wxChoice( m_sbSizerZonesSettings->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_ZoneConnectionChoiceNChoices, m_ZoneConnectionChoiceChoices, 0 );
-	m_ZoneConnectionChoice->SetSelection( 0 );
-	fgSizerCopperZonesOpts->Add( m_ZoneConnectionChoice, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
-
-	m_staticTextcps = new wxStaticText( m_sbSizerZonesSettings->GetStaticBox(), wxID_ANY, _("Zone knockout:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextcps->Wrap( -1 );
-	fgSizerCopperZonesOpts->Add( m_staticTextcps, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP, 5 );
-
-	wxString m_ZoneCustomPadShapeChoices[] = { _("Pad shape"), _("Pad convex hull") };
-	int m_ZoneCustomPadShapeNChoices = sizeof( m_ZoneCustomPadShapeChoices ) / sizeof( wxString );
-	m_ZoneCustomPadShape = new wxChoice( m_sbSizerZonesSettings->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_ZoneCustomPadShapeNChoices, m_ZoneCustomPadShapeChoices, 0 );
-	m_ZoneCustomPadShape->SetSelection( 0 );
-	fgSizerCopperZonesOpts->Add( m_ZoneCustomPadShape, 1, wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
-
-
-	m_sbSizerZonesSettings->Add( fgSizerCopperZonesOpts, 0, 0, 5 );
-
-
-	bSizerLower->Add( m_sbSizerZonesSettings, 1, wxALL|wxEXPAND, 5 );
-
-	wxStaticBoxSizer* sbSizerThermalReliefs;
-	sbSizerThermalReliefs = new wxStaticBoxSizer( new wxStaticBox( m_localSettingsPanel, wxID_ANY, _("Thermal Relief Overrides") ), wxVERTICAL );
-
-	wxFlexGridSizer* fgSizerThermalReliefs;
-	fgSizerThermalReliefs = new wxFlexGridSizer( 0, 3, 0, 0 );
-	fgSizerThermalReliefs->AddGrowableCol( 1 );
-	fgSizerThermalReliefs->SetFlexibleDirection( wxBOTH );
-	fgSizerThermalReliefs->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	m_thermalGapLabel = new wxStaticText( sbSizerThermalReliefs->GetStaticBox(), wxID_ANY, _("Relief gap:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_thermalGapLabel->Wrap( -1 );
-	fgSizerThermalReliefs->Add( m_thermalGapLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
-
-	m_thermalGapCtrl = new wxTextCtrl( sbSizerThermalReliefs->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerThermalReliefs->Add( m_thermalGapCtrl, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxEXPAND, 5 );
-
-	m_thermalGapUnits = new wxStaticText( sbSizerThermalReliefs->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_thermalGapUnits->Wrap( -1 );
-	fgSizerThermalReliefs->Add( m_thermalGapUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
-
-	m_spokeWidthLabel = new wxStaticText( sbSizerThermalReliefs->GetStaticBox(), wxID_ANY, _("Spoke width:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_spokeWidthLabel->Wrap( -1 );
-	fgSizerThermalReliefs->Add( m_spokeWidthLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP, 5 );
-
-	m_spokeWidthCtrl = new wxTextCtrl( sbSizerThermalReliefs->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerThermalReliefs->Add( m_spokeWidthCtrl, 0, wxEXPAND|wxLEFT|wxTOP|wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_spokeWidthUnits = new wxStaticText( sbSizerThermalReliefs->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_spokeWidthUnits->Wrap( -1 );
-	fgSizerThermalReliefs->Add( m_spokeWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
-
-	m_spokeAngleLabel = new wxStaticText( sbSizerThermalReliefs->GetStaticBox(), wxID_ANY, _("Spoke angle:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_spokeAngleLabel->Wrap( -1 );
-	fgSizerThermalReliefs->Add( m_spokeAngleLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
-
-	m_spokeAngleCtrl = new wxTextCtrl( sbSizerThermalReliefs->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerThermalReliefs->Add( m_spokeAngleCtrl, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
-
-	m_spokeAngleUnits = new wxStaticText( sbSizerThermalReliefs->GetStaticBox(), wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_spokeAngleUnits->Wrap( -1 );
-	fgSizerThermalReliefs->Add( m_spokeAngleUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
-
-
-	sbSizerThermalReliefs->Add( fgSizerThermalReliefs, 1, wxEXPAND, 5 );
-
-
-	bSizerLower->Add( sbSizerThermalReliefs, 1, wxEXPAND|wxALL, 5 );
-
-
-	bSizerClearance->Add( bSizerLower, 1, wxEXPAND, 5 );
-
 
 	bSizerPanelClearance->Add( bSizerClearance, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
@@ -793,7 +1020,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_localSettingsPanel->SetSizer( bSizerPanelClearance );
 	m_localSettingsPanel->Layout();
 	bSizerPanelClearance->Fit( m_localSettingsPanel );
-	m_notebook->AddPage( m_localSettingsPanel, _("Clearance Overrides and Settings"), false );
+	m_notebook->AddPage( m_localSettingsPanel, _("Clearance Overrides"), false );
 	m_panelCustomShapePrimitives = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_bSizerPanelPrimitives = new wxBoxSizer( wxVERTICAL );
 
@@ -1054,6 +1281,32 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_layerUserDwgs->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );
 	m_layerECO1->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );
 	m_layerECO2->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );
+	m_cbTeardrops->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_cbPreferZoneConnection->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_cbTeardropsUseNextTrack->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stHDRatio->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_spTeardropHDPercent->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_minTrackWidthUnits->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_minTrackWidthHint->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_teardropShapeLabel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_bitmapTeardrop->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_edgesLabel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_rbStraightLines->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_rbCurved->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stHsetting->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_spTeardropLenPercent->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stTeardropLenUnits->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stMaxLen->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_tcTdMaxLen->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stMaxLenUnits->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stVsetting->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_spTeardropSizePercent->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stLenPercent->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stTdMaxSize->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_tcMaxHeight->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stMaxHeightUnits->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_curvePointsLabel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropCurvePointsUpdateUi ), NULL, this );
+	m_curvePointsCtrl->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropCurvePointsUpdateUi ), NULL, this );
 	m_clearanceCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_nonCopperWarningBook->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnUpdateUINonCopperWarning ), NULL, this );
 	m_listCtrlPrimitives->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_PAD_PROPERTIES_BASE::onPrimitiveDClick ), NULL, this );
@@ -1114,6 +1367,32 @@ DIALOG_PAD_PROPERTIES_BASE::~DIALOG_PAD_PROPERTIES_BASE()
 	m_layerUserDwgs->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );
 	m_layerECO1->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );
 	m_layerECO2->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );
+	m_cbTeardrops->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_cbPreferZoneConnection->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_cbTeardropsUseNextTrack->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stHDRatio->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_spTeardropHDPercent->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_minTrackWidthUnits->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_minTrackWidthHint->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_teardropShapeLabel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_bitmapTeardrop->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_edgesLabel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_rbStraightLines->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_rbCurved->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stHsetting->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_spTeardropLenPercent->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stTeardropLenUnits->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stMaxLen->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_tcTdMaxLen->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stMaxLenUnits->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stVsetting->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_spTeardropSizePercent->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stLenPercent->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stTdMaxSize->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_tcMaxHeight->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_stMaxHeightUnits->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
+	m_curvePointsLabel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropCurvePointsUpdateUi ), NULL, this );
+	m_curvePointsCtrl->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropCurvePointsUpdateUi ), NULL, this );
 	m_clearanceCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_nonCopperWarningBook->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnUpdateUINonCopperWarning ), NULL, this );
 	m_listCtrlPrimitives->Disconnect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_PAD_PROPERTIES_BASE::onPrimitiveDClick ), NULL, this );

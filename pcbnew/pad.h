@@ -779,13 +779,6 @@ private:
     mutable std::shared_ptr<SHAPE_POLY_SET>   m_effectivePolygon;
     mutable int                               m_effectiveBoundingRadius;
 
-    /*
-     * How to build the custom shape in zone, to create the clearance area:
-     * CUST_PAD_SHAPE_IN_ZONE_OUTLINE = use pad shape
-     * CUST_PAD_SHAPE_IN_ZONE_CONVEXHULL = use the convex hull of the pad shape
-     */
-    CUST_PAD_SHAPE_IN_ZONE  m_customShapeClearanceArea;
-
     int               m_subRatsnest;        // Variable used to handle subnet (block) number in
                                             //   ratsnest computations
 
@@ -849,11 +842,18 @@ private:
     double      m_localSolderPasteMarginRatio;  // Local solder mask margin ratio of pad size
                                                 // The final margin is the sum of these 2 values
 
-    ZONE_CONNECTION m_zoneConnection;           // No connection, thermal relief, etc.
-    int         m_thermalSpokeWidth;            // Thermal spoke width.
-    EDA_ANGLE   m_thermalSpokeAngle;            // Rotation of the spokes.  45° will produce an X,
+    /*
+     * How to build the custom shape in zone, to create the clearance area:
+     * CUST_PAD_SHAPE_IN_ZONE_OUTLINE = use pad shape
+     * CUST_PAD_SHAPE_IN_ZONE_CONVEXHULL = use the convex hull of the pad shape
+     */
+    CUST_PAD_SHAPE_IN_ZONE m_customShapeClearanceArea;
+
+    ZONE_CONNECTION     m_zoneConnection;       // No connection, thermal relief, etc.
+    int                 m_thermalSpokeWidth;    // Thermal spoke width.
+    EDA_ANGLE           m_thermalSpokeAngle;    // Rotation of the spokes.  45° will produce an X,
                                                 //   while 90° will produce a +.
-    int         m_thermalGap;
+    int                 m_thermalGap;
 
     std::mutex                                     m_zoneLayerOverridesMutex;
     std::array<ZONE_LAYER_OVERRIDE, MAX_CU_LAYERS> m_zoneLayerOverrides;

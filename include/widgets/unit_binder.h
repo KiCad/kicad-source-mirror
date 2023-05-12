@@ -124,6 +124,8 @@ public:
      */
     virtual long long int GetValue();
 
+    int GetIntValue() { return (int) GetValue(); }
+
     /**
      * Return the current value in Internal Units.
      *

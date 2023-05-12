@@ -924,86 +924,97 @@ void ZONE::HatchBorder()
     int  hatch_line_len = m_borderHatchPitch;
 
     // To have a better look, give a slope depending on the layer
-    int     layer = GetFirstLayer();
-    int     slope_flag = (layer & 1) ? 1 : -1;  // 1 or -1
-    double  slope = 0.707106 * slope_flag;      // 45 degrees slope
-    int64_t max_a, min_a;
+    int              layer = GetFirstLayer();
+    std::vector<int> slope_flags;
 
-    if( slope_flag == 1 )
-    {
-        max_a   = KiROUND( max_y - slope * min_x );
-        min_a   = KiROUND( min_y - slope * max_x );
-    }
+    if( IsTeardropArea() )
+        slope_flags = { 1, -1 };
+    else if( layer & 1 )
+        slope_flags = { 1 };
     else
+        slope_flags = { -1 };
+
+    for( int slope_flag : slope_flags )
     {
-        max_a   = KiROUND( max_y - slope * max_x );
-        min_a   = KiROUND( min_y - slope * min_x );
-    }
+        double  slope = 0.707106 * slope_flag;      // 45 degrees slope
+        int64_t max_a, min_a;
 
-    min_a = (min_a / spacing) * spacing;
-
-    // calculate an offset depending on layer number,
-    // for a better look of hatches on a multilayer board
-    int offset = (layer * 7) / 8;
-    min_a += offset;
-
-    // loop through hatch lines
-    std::vector<VECTOR2I> pointbuffer;
-    pointbuffer.reserve( 256 );
-
-    for( int64_t a = min_a; a < max_a; a += spacing )
-    {
-        pointbuffer.clear();
-
-        // Iterate through all vertices
-        for( auto iterator = m_Poly->IterateSegmentsWithHoles(); iterator; iterator++ )
+        if( slope_flag == 1 )
         {
-            const SEG seg = *iterator;
-            double    x, y;
-
-            if( FindLineSegmentIntersection( a, slope, seg.A.x, seg.A.y, seg.B.x, seg.B.y, x, y ) )
-                pointbuffer.emplace_back( KiROUND( x ), KiROUND( y ) );
+            max_a = KiROUND( max_y - slope * min_x );
+            min_a = KiROUND( min_y - slope * max_x );
+        }
+        else
+        {
+            max_a = KiROUND( max_y - slope * max_x );
+            min_a = KiROUND( min_y - slope * min_x );
         }
 
-        // sort points in order of descending x (if more than 2) to
-        // ensure the starting point and the ending point of the same segment
-        // are stored one just after the other.
-        if( pointbuffer.size() > 2 )
-            sort( pointbuffer.begin(), pointbuffer.end(), sortEndsByDescendingX );
+        min_a = (min_a / spacing) * spacing;
 
-        // creates lines or short segments inside the complex polygon
-        for( size_t ip = 0; ip + 1 < pointbuffer.size(); ip += 2 )
+        // calculate an offset depending on layer number,
+        // for a better look of hatches on a multilayer board
+        int offset = (layer * 7) / 8;
+        min_a += offset;
+
+        // loop through hatch lines
+        std::vector<VECTOR2I> pointbuffer;
+        pointbuffer.reserve( 256 );
+
+        for( int64_t a = min_a; a < max_a; a += spacing )
         {
-            int dx = pointbuffer[ip + 1].x - pointbuffer[ip].x;
+            pointbuffer.clear();
 
-            // Push only one line for diagonal hatch,
-            // or for small lines < twice the line length
-            // else push 2 small lines
-            if( m_borderStyle == ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL
-                || std::abs( dx ) < 2 * hatch_line_len )
+            // Iterate through all vertices
+            for( auto iterator = m_Poly->IterateSegmentsWithHoles(); iterator; iterator++ )
             {
-                m_borderHatchLines.emplace_back( SEG( pointbuffer[ip], pointbuffer[ ip + 1] ) );
+                const SEG seg = *iterator;
+                double    x, y;
+
+                if( FindLineSegmentIntersection( a, slope, seg.A.x, seg.A.y, seg.B.x, seg.B.y, x, y ) )
+                    pointbuffer.emplace_back( KiROUND( x ), KiROUND( y ) );
             }
-            else
+
+            // sort points in order of descending x (if more than 2) to
+            // ensure the starting point and the ending point of the same segment
+            // are stored one just after the other.
+            if( pointbuffer.size() > 2 )
+                sort( pointbuffer.begin(), pointbuffer.end(), sortEndsByDescendingX );
+
+            // creates lines or short segments inside the complex polygon
+            for( size_t ip = 0; ip + 1 < pointbuffer.size(); ip += 2 )
             {
-                double dy = pointbuffer[ip + 1].y - pointbuffer[ip].y;
-                slope = dy / dx;
+                int dx = pointbuffer[ip + 1].x - pointbuffer[ip].x;
 
-                if( dx > 0 )
-                    dx = hatch_line_len;
+                // Push only one line for diagonal hatch,
+                // or for small lines < twice the line length
+                // else push 2 small lines
+                if( m_borderStyle == ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL
+                    || std::abs( dx ) < 2 * hatch_line_len )
+                {
+                    m_borderHatchLines.emplace_back( SEG( pointbuffer[ip], pointbuffer[ ip + 1] ) );
+                }
                 else
-                    dx = -hatch_line_len;
+                {
+                    double dy = pointbuffer[ip + 1].y - pointbuffer[ip].y;
+                    slope = dy / dx;
 
-                int x1 = KiROUND( pointbuffer[ip].x + dx );
-                int x2 = KiROUND( pointbuffer[ip + 1].x - dx );
-                int y1 = KiROUND( pointbuffer[ip].y + dx * slope );
-                int y2 = KiROUND( pointbuffer[ip + 1].y - dx * slope );
+                    if( dx > 0 )
+                        dx = hatch_line_len;
+                    else
+                        dx = -hatch_line_len;
 
-                m_borderHatchLines.emplace_back( SEG( pointbuffer[ip].x, pointbuffer[ip].y,
-                                                      x1, y1 ) );
+                    int x1 = KiROUND( pointbuffer[ip].x + dx );
+                    int x2 = KiROUND( pointbuffer[ip + 1].x - dx );
+                    int y1 = KiROUND( pointbuffer[ip].y + dx * slope );
+                    int y2 = KiROUND( pointbuffer[ip + 1].y - dx * slope );
 
-                m_borderHatchLines.emplace_back( SEG( pointbuffer[ip+1].x, pointbuffer[ip+1].y,
-                                                      x2, y2 ) );
+                    m_borderHatchLines.emplace_back( SEG( pointbuffer[ip].x, pointbuffer[ip].y,
+                                                          x1, y1 ) );
+
+                    m_borderHatchLines.emplace_back( SEG( pointbuffer[ip+1].x, pointbuffer[ip+1].y,
+                                                          x2, y2 ) );
+                }
             }
         }
     }

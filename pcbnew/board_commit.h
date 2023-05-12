@@ -41,6 +41,7 @@ class TOOL_BASE;
 #define SKIP_SET_DIRTY     0x0004
 #define SKIP_CONNECTIVITY  0x0008
 #define ZONE_FILL_OP       0x0010
+#define SKIP_TEARDROPS     0x0020
 
 class BOARD_COMMIT : public COMMIT
 {

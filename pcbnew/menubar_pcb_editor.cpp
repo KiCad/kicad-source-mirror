@@ -207,6 +207,7 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     editMenu->AppendSeparator();
     editMenu->Add( PCB_ACTIONS::editTracksAndVias );
     editMenu->Add( PCB_ACTIONS::editTextAndGraphics );
+    editMenu->Add( PCB_ACTIONS::editTeardrops );
     editMenu->Add( PCB_ACTIONS::changeFootprints );
     editMenu->Add( PCB_ACTIONS::swapLayers );
 
@@ -412,11 +413,6 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     toolsMenu->AppendSeparator();
     toolsMenu->Add( ACTIONS::showFootprintEditor );
     toolsMenu->Add( PCB_ACTIONS::updateFootprints );
-
-    // Add/remove teardrops menuitems:
-    toolsMenu->AppendSeparator();
-    toolsMenu->Add( _( "Add Teardrops..." ), "", ID_RUN_TEARDROP_TOOL, BITMAPS::via );
-    toolsMenu->Add( _( "Remove Teardrops" ), "", ID_REMOVE_TEARDROP_TOOL, BITMAPS::via );
 
     toolsMenu->AppendSeparator();
     toolsMenu->Add( PCB_ACTIONS::cleanupTracksAndVias );

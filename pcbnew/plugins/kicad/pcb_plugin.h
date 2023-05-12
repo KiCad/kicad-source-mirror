@@ -50,6 +50,7 @@ class PCB_TEXT;
 class PCB_TEXTBOX;
 class EDA_TEXT;
 class SHAPE_LINE_CHAIN;
+class TEARDROP_PARAMETERS;
 class PCB_PLUGIN;   // forward decl
 
 /// Current s-expression file format version.  2 was the last legacy format version.
@@ -128,7 +129,8 @@ class PCB_PLUGIN;   // forward decl
 //#define SEXPR_BOARD_FILE_VERSION    20220818  // First-class storage for net-ties
 //#define SEXPR_BOARD_FILE_VERSION    20220914  // Number boxes for custom-shape pads
 //#define SEXPR_BOARD_FILE_VERSION    20221018  // Via & pad zone-layer-connections
-#define SEXPR_BOARD_FILE_VERSION      20230410  // DNP attribute propagated from schematic to attr
+//#define SEXPR_BOARD_FILE_VERSION    20230410  // DNP attribute propagated from schematic to attr
+#define SEXPR_BOARD_FILE_VERSION      20230517  // Teardrop parameters for pads and vias
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 #define LEGACY_ARC_FORMATTING         20210925  ///< These were the last to use old arc formatting
@@ -370,6 +372,8 @@ protected:
 
     /// writes everything that comes before the board_items, like settings and layers etc
     void formatHeader( const BOARD* aBoard, int aNestLevel = 0 ) const;
+
+    void formatTeardropParameters( const TEARDROP_PARAMETERS& tdParams, int aNestLevel = 0 ) const;
 
 private:
     void format( const BOARD* aBoard, int aNestLevel = 0 ) const;

@@ -471,9 +471,6 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                 entry["td_onpadsmd"]  = m_TeardropParamsList.m_TargetPadsWithNoHole;
                 entry["td_ontrackend"]  = m_TeardropParamsList.m_TargetTrack2Track;
                 entry["td_onroundshapesonly"]  = m_TeardropParamsList.m_UseRoundShapesOnly;
-                entry["td_allow_use_two_tracks"] = m_TeardropParamsList.m_AllowUseTwoTracks;
-                entry["td_curve_segcount"]  = m_TeardropParamsList.m_CurveSegCount;
-                entry["td_on_pad_in_zone"]  = m_TeardropParamsList.m_TdOnPadsInZones;
 
                 js.push_back( entry );
 
@@ -501,14 +498,20 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                     if( entry.contains( "td_onroundshapesonly" ) )
                         m_TeardropParamsList.m_UseRoundShapesOnly = entry["td_onroundshapesonly"].get<bool>();
 
-                    if( entry.contains( "td_allow_use_two_tracks" ) )
-                        m_TeardropParamsList.m_AllowUseTwoTracks = entry["td_allow_use_two_tracks"].get<bool>();
+                    // Legacy settings
+                    for( int ii = 0; ii < 3; ++ii )
+                    {
+                        TEARDROP_PARAMETERS* td_prm = m_TeardropParamsList.GetParameters( (TARGET_TD)ii );
 
-                    if( entry.contains( "td_curve_segcount" ) )
-                        m_TeardropParamsList.m_CurveSegCount = entry["td_curve_segcount"].get<int>();
+                        if( entry.contains( "td_allow_use_two_tracks" ) )
+                            td_prm->m_AllowUseTwoTracks = entry["td_allow_use_two_tracks"].get<bool>();
 
-                    if( entry.contains( "td_on_pad_in_zone" ) )
-                        m_TeardropParamsList.m_TdOnPadsInZones = entry["td_on_pad_in_zone"].get<bool>();
+                        if( entry.contains( "td_curve_segcount" ) )
+                            td_prm->m_CurveSegCount = entry["td_curve_segcount"].get<int>();
+
+                        if( entry.contains( "td_on_pad_in_zone" ) )
+                            td_prm->m_TdOnPadsInZones = entry["td_on_pad_in_zone"].get<bool>();
+                    }
                 }
             },
             {} ) );
@@ -526,11 +529,14 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
 
                     entry["td_target_name"]  = GetTeardropTargetCanonicalName( (TARGET_TD)ii );
                     entry["td_maxlen"]  = pcbIUScale.IUTomm( td_prm->m_TdMaxLen );
-                    entry["td_maxheight"]  = pcbIUScale.IUTomm( td_prm->m_TdMaxHeight );
-                    entry["td_length_ratio"]  = td_prm->m_LengthRatio;
-                    entry["td_height_ratio"]  = td_prm->m_HeightRatio;
+                    entry["td_maxheight"]  = pcbIUScale.IUTomm( td_prm->m_TdMaxWidth );
+                    entry["td_length_ratio"]  = td_prm->m_BestLengthRatio;
+                    entry["td_height_ratio"]  = td_prm->m_BestWidthRatio;
                     entry["td_curve_segcount"]  = td_prm->m_CurveSegCount;
                     entry["td_width_to_size_filter_ratio"] = td_prm->m_WidthtoSizeFilterRatio;
+                    entry["td_allow_use_two_tracks"] = td_prm->m_AllowUseTwoTracks;
+                    entry["td_curve_segcount"]  = td_prm->m_CurveSegCount;
+                    entry["td_on_pad_in_zone"]  = td_prm->m_TdOnPadsInZones;
 
                     js.push_back( entry );
                 }
@@ -560,19 +566,28 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                             td_prm->m_TdMaxLen = pcbIUScale.mmToIU( entry["td_maxlen"].get<double>() );
 
                         if( entry.contains( "td_maxheight" ) )
-                            td_prm->m_TdMaxHeight = pcbIUScale.mmToIU( entry["td_maxheight"].get<double>() );
+                            td_prm->m_TdMaxWidth = pcbIUScale.mmToIU( entry["td_maxheight"].get<double>() );
 
                         if( entry.contains( "td_length_ratio" ) )
-                            td_prm->m_LengthRatio = entry["td_length_ratio"].get<double>();
+                            td_prm->m_BestLengthRatio = entry["td_length_ratio"].get<double>();
 
                         if( entry.contains( "td_height_ratio" ) )
-                            td_prm->m_HeightRatio = entry["td_height_ratio"].get<double>();
+                            td_prm->m_BestWidthRatio = entry["td_height_ratio"].get<double>();
 
                         if( entry.contains( "td_curve_segcount" ) )
                             td_prm->m_CurveSegCount = entry["td_curve_segcount"].get<int>();
 
                         if( entry.contains( "td_width_to_size_filter_ratio" ) )
                             td_prm->m_WidthtoSizeFilterRatio = entry["td_width_to_size_filter_ratio"].get<double>();
+
+                        if( entry.contains( "td_allow_use_two_tracks" ) )
+                            td_prm->m_AllowUseTwoTracks = entry["td_allow_use_two_tracks"].get<bool>();
+
+                        if( entry.contains( "td_curve_segcount" ) )
+                            td_prm->m_CurveSegCount = entry["td_curve_segcount"].get<int>();
+
+                        if( entry.contains( "td_on_pad_in_zone" ) )
+                            td_prm->m_TdOnPadsInZones = entry["td_on_pad_in_zone"].get<bool>();
                     }
                 }
             },

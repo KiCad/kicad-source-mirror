@@ -26,8 +26,6 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <panel_setup_formatting.h>
-#include <widgets/paged_dialog.h>
-#include <wx/treebook.h>
 
 
 PANEL_SETUP_FORMATTING::PANEL_SETUP_FORMATTING( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame ) :

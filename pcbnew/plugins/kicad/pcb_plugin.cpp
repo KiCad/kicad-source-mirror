@@ -581,8 +581,12 @@ void PCB_PLUGIN::formatGeneral( const BOARD* aBoard, int aNestLevel ) const
 
     m_out->Print( 0, "\n" );
     m_out->Print( aNestLevel, "(general\n" );
+
     m_out->Print( aNestLevel+1, "(thickness %s)\n",
                   formatInternalUnits( dsnSettings.GetBoardThickness() ).c_str() );
+
+    if( aBoard->LegacyTeardrops() )
+        m_out->Print( aNestLevel+1, "(legacy_teardrops)\n" );
 
     m_out->Print( aNestLevel, ")\n\n" );
 
@@ -706,6 +710,40 @@ void PCB_PLUGIN::formatHeader( const BOARD* aBoard, int aNestLevel ) const
 
     // Save net codes and names
     formatNetInformation( aBoard, aNestLevel );
+}
+
+
+bool isDefaultTeardropParameters( const TEARDROP_PARAMETERS& tdParams )
+{
+    static const TEARDROP_PARAMETERS defaults;
+
+    return tdParams.m_Enabled == defaults.m_Enabled
+            && tdParams.m_BestLengthRatio == defaults.m_BestLengthRatio
+            && tdParams.m_TdMaxLen == defaults.m_TdMaxLen
+            && tdParams.m_BestWidthRatio == defaults.m_BestWidthRatio
+            && tdParams.m_TdMaxWidth == defaults.m_TdMaxWidth
+            && tdParams.m_CurveSegCount == defaults.m_CurveSegCount
+            && tdParams.m_WidthtoSizeFilterRatio == defaults.m_WidthtoSizeFilterRatio
+            && tdParams.m_AllowUseTwoTracks == defaults.m_AllowUseTwoTracks
+            && tdParams.m_TdOnPadsInZones == defaults.m_TdOnPadsInZones;
+}
+
+
+void PCB_PLUGIN::formatTeardropParameters( const TEARDROP_PARAMETERS& tdParams,
+                                           int aNestLevel ) const
+{
+    m_out->Print( aNestLevel, "(teardrops%s%s%s (best_length_ratio %s) (max_length %s) "
+                              "(best_width_ratio %s) (max_width %s) (curve_points %d) "
+                              "(filter_ratio %s))\n",
+                  tdParams.m_Enabled ? " enabled" : "",
+                  tdParams.m_AllowUseTwoTracks ? " allow_two_segments" : "",
+                  tdParams.m_TdOnPadsInZones ? " prefer_zone_connections" : "",
+                  FormatDouble2Str( tdParams.m_BestLengthRatio ).c_str(),
+                  formatInternalUnits( tdParams.m_TdMaxLen ).c_str(),
+                  FormatDouble2Str( tdParams.m_BestWidthRatio ).c_str(),
+                  formatInternalUnits( tdParams.m_TdMaxWidth ).c_str(),
+                  tdParams.m_CurveSegCount,
+                  FormatDouble2Str( tdParams.m_WidthtoSizeFilterRatio ).c_str() );
 }
 
 
@@ -1690,8 +1728,14 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
             m_out->Print( 0, ")" );
         }
 
-        m_out->Print( 0, "\n");
+        m_out->Print( 0, "\n" );
         m_out->Print( aNestLevel+1, ")" );   // end of (basic_shapes
+    }
+
+    if( !isDefaultTeardropParameters( aPad->GetTeardropParams() ) )
+    {
+        m_out->Print( 0, "\n" );
+        formatTeardropParameters( aPad->GetTeardropParams(), aNestLevel+1 );
     }
 
     m_out->Print( 0, " (tstamp %s)", TO_UTF8( aPad->m_Uuid.AsString() ) );
@@ -1924,6 +1968,12 @@ void PCB_PLUGIN::format( const PCB_TRACK* aTrack, int aNestLevel ) const
             }
 
             m_out->Print( 0, ")" );
+        }
+
+        if( !isDefaultTeardropParameters( via->GetTeardropParams() ) )
+        {
+            m_out->Print( 0, "\n" );
+            formatTeardropParameters( via->GetTeardropParams(), aNestLevel+1 );
         }
     }
     else if( aTrack->Type() == PCB_ARC_T )

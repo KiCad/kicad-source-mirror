@@ -35,6 +35,8 @@ class wxListView;
 #include <wx/icon.h>
 #include <wx/statbmp.h>
 #include <wx/statbox.h>
+#include <wx/spinctrl.h>
+#include <wx/radiobut.h>
 #include <wx/listctrl.h>
 #include <wx/button.h>
 #include <wx/notebook.h>
@@ -167,6 +169,52 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxCheckBox* m_layerECO2;
 		wxStaticText* m_staticTextFabProperty;
 		wxChoice* m_choiceFabProperty;
+		wxPanel* m_connectionsPanel;
+		wxBoxSizer* m_legacyTeardropsWarning;
+		wxStaticBitmap* m_legacyTeardropsIcon;
+		wxStaticText* m_staticText85;
+		wxStaticText* m_staticText851;
+		wxCheckBox* m_cbTeardrops;
+		wxCheckBox* m_cbPreferZoneConnection;
+		wxCheckBox* m_cbTeardropsUseNextTrack;
+		wxStaticText* m_stHDRatio;
+		wxSpinCtrlDouble* m_spTeardropHDPercent;
+		wxStaticText* m_minTrackWidthUnits;
+		wxStaticText* m_minTrackWidthHint;
+		wxStaticText* m_teardropShapeLabel;
+		wxStaticLine* m_staticline51;
+		wxStaticBitmap* m_bitmapTeardrop;
+		wxStaticText* m_edgesLabel;
+		wxRadioButton* m_rbStraightLines;
+		wxRadioButton* m_rbCurved;
+		wxStaticText* m_stHsetting;
+		wxSpinCtrlDouble* m_spTeardropLenPercent;
+		wxStaticText* m_stTeardropLenUnits;
+		wxStaticText* m_stMaxLen;
+		wxTextCtrl* m_tcTdMaxLen;
+		wxStaticText* m_stMaxLenUnits;
+		wxStaticText* m_stVsetting;
+		wxSpinCtrlDouble* m_spTeardropSizePercent;
+		wxStaticText* m_stLenPercent;
+		wxStaticText* m_stTdMaxSize;
+		wxTextCtrl* m_tcMaxHeight;
+		wxStaticText* m_stMaxHeightUnits;
+		wxStaticText* m_curvePointsLabel;
+		wxSpinCtrl* m_curvePointsCtrl;
+		wxStaticBoxSizer* m_sbSizerZonesSettings;
+		wxStaticText* m_padConnectionLabel;
+		wxChoice* m_ZoneConnectionChoice;
+		wxStaticText* m_zoneKnockoutLabel;
+		wxChoice* m_ZoneCustomPadShape;
+		wxStaticText* m_thermalGapLabel;
+		wxTextCtrl* m_thermalGapCtrl;
+		wxStaticText* m_thermalGapUnits;
+		wxStaticText* m_spokeWidthLabel;
+		wxTextCtrl* m_spokeWidthCtrl;
+		wxStaticText* m_spokeWidthUnits;
+		wxStaticText* m_spokeAngleLabel;
+		wxTextCtrl* m_spokeAngleCtrl;
+		wxStaticText* m_spokeAngleUnits;
 		wxPanel* m_localSettingsPanel;
 		wxStaticText* m_staticTextInfoPosValue;
 		wxStaticText* m_staticTextInfoNegVal;
@@ -187,20 +235,6 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextInfoPaste;
 		wxStaticBitmap* m_nonCopperWarningIcon;
 		wxStaticText* m_nonCopperWarningText;
-		wxStaticBoxSizer* m_sbSizerZonesSettings;
-		wxStaticText* m_staticText40;
-		wxChoice* m_ZoneConnectionChoice;
-		wxStaticText* m_staticTextcps;
-		wxChoice* m_ZoneCustomPadShape;
-		wxStaticText* m_thermalGapLabel;
-		wxTextCtrl* m_thermalGapCtrl;
-		wxStaticText* m_thermalGapUnits;
-		wxStaticText* m_spokeWidthLabel;
-		wxTextCtrl* m_spokeWidthCtrl;
-		wxStaticText* m_spokeWidthUnits;
-		wxStaticText* m_spokeAngleLabel;
-		wxTextCtrl* m_spokeAngleCtrl;
-		wxStaticText* m_spokeAngleUnits;
 		wxPanel* m_panelCustomShapePrimitives;
 		wxBoxSizer* m_bSizerPanelPrimitives;
 		wxStaticText* m_staticTextPrimitivesList;
@@ -249,6 +283,8 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void OnOffsetCheckbox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPadToDieCheckbox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSetCopperLayers( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onTeardropsUpdateUi( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void onTeardropCurvePointsUpdateUi( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnUpdateUINonCopperWarning( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onPrimitiveDClick( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnPrimitiveSelection( wxListEvent& event ) { event.Skip(); }

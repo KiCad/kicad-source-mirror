@@ -201,7 +201,7 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataFromWindow()
 
     // Transfer data out of the GUI.
     STROKE_PARAMS stroke = m_shape->GetStroke();
-    stroke.SetWidth( m_thickness.GetValue() );
+    stroke.SetWidth( m_thickness.GetIntValue() );
     m_shape->SetStroke( stroke );
 
     m_shape->SetFilled( m_filledCtrl->GetValue() );
@@ -210,26 +210,26 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataFromWindow()
     {
     case SHAPE_T::SEGMENT:
     case SHAPE_T::RECT:
-        m_shape->SetStart( VECTOR2I( m_startX.GetValue(), m_startY.GetValue() ) );
-        m_shape->SetEnd( VECTOR2I( m_endX.GetValue(), m_endY.GetValue() ) );
+        m_shape->SetStart( VECTOR2I( m_startX.GetIntValue(), m_startY.GetIntValue() ) );
+        m_shape->SetEnd( VECTOR2I( m_endX.GetIntValue(), m_endY.GetIntValue() ) );
         break;
 
     case SHAPE_T::BEZIER:
-        m_shape->SetStart( VECTOR2I( m_startX.GetValue(), m_startY.GetValue() ) );
-        m_shape->SetEnd( VECTOR2I( m_endX.GetValue(), m_endY.GetValue() ) );
-        m_shape->SetBezierC1( VECTOR2I( m_ctrl1X.GetValue(), m_ctrl1Y.GetValue()));
-        m_shape->SetBezierC2( VECTOR2I( m_ctrl2X.GetValue(), m_ctrl2Y.GetValue()));
+        m_shape->SetStart( VECTOR2I( m_startX.GetIntValue(), m_startY.GetIntValue() ) );
+        m_shape->SetEnd( VECTOR2I( m_endX.GetIntValue(), m_endY.GetIntValue() ) );
+        m_shape->SetBezierC1( VECTOR2I( m_ctrl1X.GetIntValue(), m_ctrl1Y.GetIntValue()));
+        m_shape->SetBezierC2( VECTOR2I( m_ctrl2X.GetIntValue(), m_ctrl2Y.GetIntValue()));
         break;
 
     case SHAPE_T::ARC:
-        m_shape->SetCenter( VECTOR2I( m_endX.GetValue(), m_endY.GetValue() ) );
-        m_shape->SetStart( VECTOR2I( m_startX.GetValue(), m_startY.GetValue() ) );
+        m_shape->SetCenter( VECTOR2I( m_endX.GetIntValue(), m_endY.GetIntValue() ) );
+        m_shape->SetStart( VECTOR2I( m_startX.GetIntValue(), m_startY.GetIntValue() ) );
         m_shape->SetArcAngleAndEnd( m_radius.GetAngleValue() );
         break;
 
     case SHAPE_T::CIRCLE:
-        m_shape->SetStart( VECTOR2I( m_startX.GetValue(), m_startY.GetValue() ) );
-        m_shape->SetEnd( m_shape->GetStart() + VECTOR2I( m_radius.GetValue(), 0 ) );
+        m_shape->SetStart( VECTOR2I( m_startX.GetIntValue(), m_startY.GetIntValue() ) );
+        m_shape->SetEnd( m_shape->GetStart() + VECTOR2I( m_radius.GetIntValue(), 0 ) );
         break;
 
     case SHAPE_T::POLY:
@@ -333,7 +333,7 @@ bool DIALOG_PAD_PRIMITIVE_POLY_PROPS::TransferDataFromWindow()
     m_shape->SetPolyPoints( m_currPoints );
 
     STROKE_PARAMS stroke = m_shape->GetStroke();
-    stroke.SetWidth( m_thickness.GetValue() );
+    stroke.SetWidth( m_thickness.GetIntValue() );
     m_shape->SetStroke( stroke );
 
     m_shape->SetFilled( m_filledCtrl->GetValue() );
@@ -496,7 +496,7 @@ void DIALOG_PAD_PRIMITIVE_POLY_PROPS::onPaintPolyPanel( wxPaintEvent& event )
     // The draw origin is the center of the window.
     // Therefore the window size is twice the minsize just calculated
     minsize *= 2;
-    minsize += m_thickness.GetValue();
+    minsize += m_thickness.GetIntValue();
 
     // Give a margin
     double scale = std::min( double( dc_size.x ) / minsize, double( dc_size.y ) / minsize ) * 0.9;

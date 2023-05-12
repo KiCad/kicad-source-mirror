@@ -28,7 +28,7 @@
 #include <layer_ids.h>
 
 class PCB_SELECTION;
-class COMMIT;
+class BOARD_COMMIT;
 class PCB_BASE_FRAME;
 class PAD;
 
@@ -36,7 +36,7 @@ class DIALOG_TRACK_VIA_PROPERTIES : public DIALOG_TRACK_VIA_PROPERTIES_BASE
 {
 public:
     DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParent, const PCB_SELECTION& aItems,
-                                 COMMIT& aCommit );
+                                 BOARD_COMMIT& aCommit );
 
     ~DIALOG_TRACK_VIA_PROPERTIES();
 
@@ -53,6 +53,8 @@ private:
     void onViaEdit( wxCommandEvent& aEvent ) override;
 
     void onUnitsChanged( wxCommandEvent& aEvent );
+    void onTeardropsUpdateUi( wxUpdateUIEvent& event ) override;
+    void onCurvedEdgesUpdateUi( wxUpdateUIEvent& event ) override;
 
     bool confirmPadChange( const std::vector<PAD*>& connectedPads );
 
@@ -61,7 +63,7 @@ private:
 private:
     PCB_BASE_FRAME*      m_frame;
     const PCB_SELECTION& m_items;      // List of items to be modified.
-    COMMIT&              m_commit;     // An undo record to add any changes to.
+    BOARD_COMMIT&        m_commit;     // An undo record to add any changes to.
 
     UNIT_BINDER          m_trackStartX, m_trackStartY;
     UNIT_BINDER          m_trackEndX, m_trackEndY;
@@ -69,6 +71,13 @@ private:
 
     UNIT_BINDER          m_viaX, m_viaY;
     UNIT_BINDER          m_viaDiameter, m_viaDrill;
+
+    UNIT_BINDER          m_teardropHDPercent;
+    UNIT_BINDER          m_teardropLenPercent;
+    UNIT_BINDER          m_teardropMaxLen;
+    UNIT_BINDER          m_teardropHeightPercent;
+    UNIT_BINDER          m_teardropMaxHeight;
+    UNIT_BINDER          m_curvePoints;
 
     bool                 m_tracks;     // True if dialog displays any track properties.
     bool                 m_vias;       // True if dialog displays any via properties.

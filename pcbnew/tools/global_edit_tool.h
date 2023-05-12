@@ -58,6 +58,7 @@ public:
 
     int EditTracksAndVias( const TOOL_EVENT& aEvent );
     int EditTextAndGraphics( const TOOL_EVENT& aEvent );
+    int EditTeardrops( const TOOL_EVENT& aEvent );
     int GlobalDeletions( const TOOL_EVENT& aEvent );
     int CleanupTracksAndVias( const TOOL_EVENT& aEvent );
     int CleanupGraphics( const TOOL_EVENT& aEvent );

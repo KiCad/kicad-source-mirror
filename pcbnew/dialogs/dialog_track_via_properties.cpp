@@ -41,26 +41,44 @@
 
 DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParent,
                                                           const PCB_SELECTION& aItems,
-                                                          COMMIT& aCommit ) :
+                                                          BOARD_COMMIT& aCommit ) :
     DIALOG_TRACK_VIA_PROPERTIES_BASE( aParent ),
     m_frame( aParent ),
     m_items( aItems ),
     m_commit( aCommit ),
-    m_trackStartX( aParent, m_TrackStartXLabel, m_TrackStartXCtrl, m_TrackStartXUnit ),
+    m_trackStartX( aParent, m_TrackStartXLabel, m_TrackStartXCtrl, nullptr ),
     m_trackStartY( aParent, m_TrackStartYLabel, m_TrackStartYCtrl, m_TrackStartYUnit ),
-    m_trackEndX( aParent, m_TrackEndXLabel, m_TrackEndXCtrl, m_TrackEndXUnit ),
+    m_trackEndX( aParent, m_TrackEndXLabel, m_TrackEndXCtrl, nullptr ),
     m_trackEndY( aParent, m_TrackEndYLabel, m_TrackEndYCtrl, m_TrackEndYUnit ),
     m_trackWidth( aParent, m_TrackWidthLabel, m_TrackWidthCtrl, m_TrackWidthUnit ),
-    m_viaX( aParent, m_ViaXLabel, m_ViaXCtrl, m_ViaXUnit ),
+    m_viaX( aParent, m_ViaXLabel, m_ViaXCtrl, nullptr ),
     m_viaY( aParent, m_ViaYLabel, m_ViaYCtrl, m_ViaYUnit ),
     m_viaDiameter( aParent, m_ViaDiameterLabel, m_ViaDiameterCtrl, m_ViaDiameterUnit ),
     m_viaDrill( aParent, m_ViaDrillLabel, m_ViaDrillCtrl, m_ViaDrillUnit ),
+    m_teardropHDPercent( aParent, m_stHDRatio, m_tcHDRatio, m_stHDRatioUnits ),
+    m_teardropLenPercent( aParent, m_stLenPercentLabel, m_tcLenPercent, m_stLenPercentUnits ),
+    m_teardropMaxLen( aParent, m_stMaxLen, m_tcTdMaxLen, m_stMaxLenUnits ),
+    m_teardropHeightPercent( aParent, m_stHeightPercentLabel, m_tcHeightPercent, m_stHeightPercentUnits ),
+    m_teardropMaxHeight( aParent, m_stMaxHeight, m_tcMaxHeight, m_stMaxHeightUnits ),
+    m_curvePoints( aParent, m_curvePointsLabel, m_curvePointsCtrl, nullptr ),
     m_tracks( false ),
     m_vias( false )
 {
     m_useCalculatedSize = true;
 
     wxASSERT( !m_items.Empty() );
+
+    m_legacyTeardropsIcon->SetBitmap( KiBitmap( BITMAPS::dialog_warning ) );
+    m_legacyTeardropsWarning->Show( m_frame->GetBoard()->LegacyTeardrops() );
+
+    m_bitmapTeardrop->SetBitmap( KiBitmap( BITMAPS::teardrop_sizes ) );
+
+    m_teardropHDPercent.SetUnits( EDA_UNITS::PERCENT );
+    m_teardropLenPercent.SetUnits( EDA_UNITS::PERCENT );
+    m_teardropHeightPercent.SetUnits( EDA_UNITS::PERCENT );
+    m_curvePoints.SetUnits( EDA_UNITS::UNSCALED );
+
+    m_minTrackWidthHint->SetFont( KIUI::GetInfoFont( this ).Italic() );
 
     // Configure display origin transforms
     m_trackStartX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
@@ -160,9 +178,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                         m_trackWidth.SetValue( INDETERMINATE_STATE );
 
                     if( track_selection_layer != t->GetLayer() )
-                    {
                         track_selection_layer = UNDEFINED_LAYER;
-                    }
                 }
 
                 if( t->IsLocked() )
@@ -175,7 +191,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
             case PCB_VIA_T:
             {
-                const PCB_VIA* v = static_cast<const PCB_VIA*>( item );
+                PCB_VIA* v = static_cast<PCB_VIA*>( item );
 
                 if( !m_vias )       // first via in the list
                 {
@@ -189,6 +205,15 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                     m_annularRingsCtrl->SetSelection( getAnnularRingSelection( v ) );
                     selection_first_layer = v->TopLayer();
                     selection_last_layer = v->BottomLayer();
+
+                    m_cbTeardrops->SetValue( v->GetTeardropParams().m_Enabled );
+                    m_cbTeardropsUseNextTrack->SetValue( v->GetTeardropParams().m_AllowUseTwoTracks );
+                    m_teardropMaxLen.SetValue( v->GetTeardropParams().m_TdMaxLen );
+                    m_teardropMaxHeight.SetValue( v->GetTeardropParams().m_TdMaxWidth );
+                    m_teardropLenPercent.SetDoubleValue( v->GetTeardropParams().m_BestLengthRatio*100.0 );
+                    m_teardropHeightPercent.SetDoubleValue( v->GetTeardropParams().m_BestWidthRatio*100.0 );
+                    m_teardropHDPercent.SetDoubleValue( v->GetTeardropParams().m_WidthtoSizeFilterRatio*100.0 );
+                    m_curvePoints.SetValue( v->GetTeardropParams().m_CurveSegCount );
                 }
                 else        // check if values are the same for every selected via
                 {
@@ -211,14 +236,10 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                         m_viaNotFree->Set3StateValue( wxCHK_UNDETERMINED );
 
                     if( selection_first_layer != v->TopLayer() )
-                    {
                         selection_first_layer = UNDEFINED_LAYER;
-                    }
 
                     if( selection_last_layer != v->BottomLayer() )
-                    {
                         selection_last_layer = UNDEFINED_LAYER;
-                    }
 
                     if( m_annularRingsCtrl->GetSelection() != getAnnularRingSelection( v ) )
                     {
@@ -227,6 +248,30 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
                         m_annularRingsCtrl->SetSelection( 3 );
                     }
+
+                    if( m_cbTeardrops->GetValue() != v->GetTeardropParams().m_Enabled )
+                        m_cbTeardrops->Set3StateValue( wxCHK_UNDETERMINED );
+
+                    if( m_cbTeardropsUseNextTrack->GetValue() != v->GetTeardropParams().m_AllowUseTwoTracks )
+                        m_cbTeardropsUseNextTrack->Set3StateValue( wxCHK_UNDETERMINED );
+
+                    if( m_teardropMaxLen.GetValue() != v->GetTeardropParams().m_TdMaxLen )
+                        m_teardropMaxLen.SetValue( INDETERMINATE_STATE );
+
+                    if( m_teardropMaxHeight.GetValue() != v->GetTeardropParams().m_TdMaxWidth )
+                        m_teardropMaxHeight.SetValue( INDETERMINATE_STATE );
+
+                    if( m_teardropLenPercent.GetDoubleValue() != v->GetTeardropParams().m_BestLengthRatio *100.0 )
+                        m_teardropLenPercent.SetValue( INDETERMINATE_STATE );
+
+                    if( m_teardropHeightPercent.GetDoubleValue() != v->GetTeardropParams().m_BestWidthRatio *100.0 )
+                        m_teardropHeightPercent.SetValue( INDETERMINATE_STATE );
+
+                    if( m_teardropHDPercent.GetDoubleValue() != v->GetTeardropParams().m_WidthtoSizeFilterRatio*100.0 )
+                        m_teardropHDPercent.SetValue( INDETERMINATE_STATE );
+
+                    if( m_curvePoints.GetValue() != v->GetTeardropParams().m_CurveSegCount )
+                        m_curvePoints.SetValue( INDETERMINATE_STATE );
                 }
 
                 if( v->IsLocked() )
@@ -341,6 +386,23 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
         m_annularRingsLabel->Show( getLayerDepth() > 1 );
         m_annularRingsCtrl->Show( getLayerDepth() > 1 );
+
+        if( m_curvePoints.IsIndeterminate() )
+        {
+            m_rbStraightLines->SetValue( false );
+            m_rbCurved->SetValue( false );
+        }
+        else if( m_curvePoints.GetValue() == 0 )
+        {
+            m_rbStraightLines->SetValue( true );
+            m_rbCurved->SetValue( false );
+            m_curvePoints.SetValue( wxEmptyString );
+        }
+        else
+        {
+            m_rbStraightLines->SetValue( false );
+            m_rbCurved->SetValue( true );
+        }
     }
     else
     {
@@ -492,7 +554,9 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
     {
         if( !m_viaDiameter.Validate( GEOMETRY_MIN_SIZE, INT_MAX )
             || !m_viaDrill.Validate( GEOMETRY_MIN_SIZE, INT_MAX ) )
+        {
             return false;
+        }
 
         if( m_ViaDiameterCtrl->IsEnabled() && !m_viaDiameter.IsIndeterminate()
             && m_ViaDrillCtrl->IsEnabled() && !m_viaDrill.IsIndeterminate()
@@ -539,16 +603,16 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 PCB_TRACK* t = static_cast<PCB_TRACK*>( item );
 
                 if( !m_trackStartX.IsIndeterminate() )
-                    t->SetStart( VECTOR2I( m_trackStartX.GetValue(), t->GetStart().y ) );
+                    t->SetStart( VECTOR2I( m_trackStartX.GetIntValue(), t->GetStart().y ) );
 
                 if( !m_trackStartY.IsIndeterminate() )
-                    t->SetStart( VECTOR2I( t->GetStart().x, m_trackStartY.GetValue() ) );
+                    t->SetStart( VECTOR2I( t->GetStart().x, m_trackStartY.GetIntValue() ) );
 
                 if( !m_trackEndX.IsIndeterminate() )
-                    t->SetEnd( VECTOR2I( m_trackEndX.GetValue(), t->GetEnd().y ) );
+                    t->SetEnd( VECTOR2I( m_trackEndX.GetIntValue(), t->GetEnd().y ) );
 
                 if( !m_trackEndY.IsIndeterminate() )
-                    t->SetEnd( VECTOR2I( t->GetEnd().x, m_trackEndY.GetValue() ) );
+                    t->SetEnd( VECTOR2I( t->GetEnd().x, m_trackEndY.GetIntValue() ) );
 
                 if( m_trackNetclass->IsChecked() )
                 {
@@ -561,7 +625,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 }
                 else if( !m_trackWidth.IsIndeterminate() )
                 {
-                    t->SetWidth( m_trackWidth.GetValue() );
+                    t->SetWidth( m_trackWidth.GetIntValue() );
                 }
 
                 int layer = m_TrackLayerCtrl->GetLayerSelection();
@@ -581,10 +645,10 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 PCB_VIA* v = static_cast<PCB_VIA*>( item );
 
                 if( !m_viaX.IsIndeterminate() )
-                    v->SetPosition( VECTOR2I( m_viaX.GetValue(), v->GetPosition().y ) );
+                    v->SetPosition( VECTOR2I( m_viaX.GetIntValue(), v->GetPosition().y ) );
 
                 if( !m_viaY.IsIndeterminate() )
-                    v->SetPosition( VECTOR2I( v->GetPosition().x, m_viaY.GetValue() ) );
+                    v->SetPosition( VECTOR2I( v->GetPosition().x, m_viaY.GetIntValue() ) );
 
                 if( m_viaNotFree->Get3StateValue() != wxCHK_UNDETERMINED )
                     v->SetIsFree( !m_viaNotFree->GetValue() );
@@ -658,10 +722,48 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 else
                 {
                     if( !m_viaDiameter.IsIndeterminate() )
-                        v->SetWidth( m_viaDiameter.GetValue() );
+                        v->SetWidth( m_viaDiameter.GetIntValue() );
 
                     if( !m_viaDrill.IsIndeterminate() )
-                        v->SetDrill( m_viaDrill.GetValue() );
+                        v->SetDrill( m_viaDrill.GetIntValue() );
+                }
+
+                TEARDROP_PARAMETERS* targetParams = &v->GetTeardropParams();
+
+                if( m_cbTeardrops->Get3StateValue() != wxCHK_UNDETERMINED )
+                    targetParams->m_Enabled = m_cbTeardrops->GetValue();
+
+                if( m_cbTeardropsUseNextTrack->Get3StateValue() != wxCHK_UNDETERMINED )
+                    targetParams->m_AllowUseTwoTracks = m_cbTeardropsUseNextTrack->GetValue();
+
+                if( !m_teardropMaxLen.IsIndeterminate() )
+                    targetParams->m_TdMaxLen = m_teardropMaxLen.GetIntValue();
+
+                if( !m_teardropMaxHeight.IsIndeterminate() )
+                    targetParams->m_TdMaxWidth = m_teardropMaxHeight.GetIntValue();
+
+                if( !m_teardropLenPercent.IsIndeterminate() )
+                    targetParams->m_BestLengthRatio = m_teardropLenPercent.GetDoubleValue() / 100.0;
+
+                if( !m_teardropHeightPercent.IsIndeterminate() )
+                    targetParams->m_BestWidthRatio = m_teardropHeightPercent.GetDoubleValue() / 100.0;
+
+                if( !m_teardropHDPercent.IsIndeterminate() )
+                    targetParams->m_WidthtoSizeFilterRatio = m_teardropHDPercent.GetDoubleValue() / 100.0;
+
+                if( m_curvePoints.GetValue() != v->GetTeardropParams().m_CurveSegCount )
+                    m_curvePoints.SetValue( INDETERMINATE_STATE );
+
+                if( m_rbStraightLines->GetValue() )
+                {
+                    targetParams->m_CurveSegCount = 0;
+                }
+                else if( m_rbCurved->GetValue() )
+                {
+                    if( !m_curvePoints.IsIndeterminate() && m_curvePoints.GetValue() > 0 )
+                        targetParams->m_CurveSegCount = m_curvePoints.GetIntValue();
+                    else if( targetParams->m_CurveSegCount == 0 )
+                        targetParams->m_CurveSegCount = 5;
                 }
 
                 if( changeLock )
@@ -851,4 +953,16 @@ void DIALOG_TRACK_VIA_PROPERTIES::onViaEdit( wxCommandEvent& aEvent )
         m_annularRingsLabel->Show( getLayerDepth() > 1 );
         m_annularRingsCtrl->Show( getLayerDepth() > 1 );
     }
+}
+
+
+void DIALOG_TRACK_VIA_PROPERTIES::onTeardropsUpdateUi( wxUpdateUIEvent& event )
+{
+    event.Enable( !m_frame->GetBoard()->LegacyTeardrops() );
+}
+
+
+void DIALOG_TRACK_VIA_PROPERTIES::onCurvedEdgesUpdateUi( wxUpdateUIEvent& event )
+{
+    event.Enable( !m_frame->GetBoard()->LegacyTeardrops() && m_rbCurved->GetValue() );
 }

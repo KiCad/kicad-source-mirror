@@ -239,7 +239,7 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataFromWindow()
                                        pcbIUScale.mmToIU( ZONE_BORDER_HATCH_MAXDIST_MM ) ) )
         return false;
 
-    m_zonesettings.m_BorderHatchPitch = m_outlineHatchPitch.GetValue();
+    m_zonesettings.m_BorderHatchPitch = m_outlineHatchPitch.GetIntValue();
 
     m_zonesettings.m_Locked = m_cbLocked->GetValue();
     m_zonesettings.m_ZonePriority = 0;  // for a keepout, this param is not used.

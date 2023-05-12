@@ -1156,6 +1156,9 @@ public:
      */
     GroupLegalOpsField GroupLegalOps( const PCB_SELECTION& selection ) const;
 
+    bool LegacyTeardrops() const { return m_legacyTeardrops; }
+    void SetLegacyTeardrops( bool aFlag ) { m_legacyTeardrops = aFlag; }
+
     // --------- Item order comparators ---------
 
     struct cmp_items
@@ -1177,7 +1180,7 @@ public:
     std::unordered_map<PTR_PTR_LAYER_CACHE_KEY, bool>     m_EnclosedByAreaCache;
     std::unordered_map< wxString, LSET >                  m_LayerExpressionCache;
     std::unordered_map<ZONE*, std::unique_ptr<DRC_RTREE>> m_CopperZoneRTreeCache;
-    std::unique_ptr<DRC_RTREE>                            m_CopperItemRTreeCache;
+    std::shared_ptr<DRC_RTREE>                            m_CopperItemRTreeCache;
     mutable std::unordered_map<const ZONE*, BOX2I>        m_ZoneBBoxCache;
 
     // ------------ DRC caches -------------
@@ -1248,6 +1251,12 @@ private:
      * boards are loaded from disk.
      */
     std::unique_ptr<BOARD_DESIGN_SETTINGS> m_designSettings;
+
+    /**
+     * Teardrops in 7.0 were applied as a post-processing step (rather than from pad and via
+     * properties).  If this flag is set, then auto-teardrop-generation will be disabled.
+     */
+    bool                         m_legacyTeardrops = false;
 
     NETINFO_LIST                 m_NetInfo;         // net info list (name, design constraints...
 

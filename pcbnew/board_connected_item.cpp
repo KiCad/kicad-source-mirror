@@ -203,5 +203,89 @@ static struct BOARD_CONNECTED_ITEM_DESC
                              &BOARD_CONNECTED_ITEM::GetNetname ) )
                 .SetIsHiddenFromPropertiesManager()
                 .SetIsHiddenFromLibraryEditors();
+
+        auto supportsTeardrops =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( aItem ) )
+                    {
+                        if( bci->GetBoard()->LegacyTeardrops() )
+                            return false;
+
+                        return bci->Type() == PCB_PAD_T || bci->Type() == PCB_VIA_T;
+                    }
+
+                    return false;
+                };
+
+        auto supportsTeardropPreferZoneSetting =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( aItem ) )
+                    {
+                        if( bci->GetBoard()->LegacyTeardrops() )
+                            return false;
+
+                        return bci->Type() == PCB_PAD_T;
+                    }
+
+                    return false;
+                };
+
+        const wxString groupTeardrops = _HKI( "Teardrops" );
+
+        auto enableTeardrops = new PROPERTY<BOARD_CONNECTED_ITEM, bool>( _HKI( "Enable Teardrops" ),
+                         &BOARD_CONNECTED_ITEM::SetTeardropsEnabled,
+                         &BOARD_CONNECTED_ITEM::GetTeardropsEnabled );
+        enableTeardrops->SetAvailableFunc( supportsTeardrops );
+        propMgr.AddProperty( enableTeardrops, groupTeardrops );
+
+        auto bestLength = new PROPERTY<BOARD_CONNECTED_ITEM, double>( _HKI( "Best Length Ratio" ),
+                         &BOARD_CONNECTED_ITEM::SetTeardropBestLengthRatio,
+                         &BOARD_CONNECTED_ITEM::GetTeardropBestLengthRatio );
+        bestLength->SetAvailableFunc( supportsTeardrops );
+        propMgr.AddProperty( bestLength, groupTeardrops );
+
+        auto maxLength = new PROPERTY<BOARD_CONNECTED_ITEM, int>( _HKI( "Max Length" ),
+                         &BOARD_CONNECTED_ITEM::SetTeardropMaxLength,
+                         &BOARD_CONNECTED_ITEM::GetTeardropMaxLength, PROPERTY_DISPLAY::PT_SIZE );
+        maxLength->SetAvailableFunc( supportsTeardrops );
+        propMgr.AddProperty( maxLength, groupTeardrops );
+
+        auto bestWidth = new PROPERTY<BOARD_CONNECTED_ITEM, double>( _HKI( "Best Width Ratio" ),
+                         &BOARD_CONNECTED_ITEM::SetTeardropBestWidthRatio,
+                         &BOARD_CONNECTED_ITEM::GetTeardropBestWidthRatio );
+        bestWidth->SetAvailableFunc( supportsTeardrops );
+        propMgr.AddProperty( bestWidth, groupTeardrops );
+
+        auto maxWidth = new PROPERTY<BOARD_CONNECTED_ITEM, int>( _HKI( "Max Width" ),
+                         &BOARD_CONNECTED_ITEM::SetTeardropMaxWidth,
+                         &BOARD_CONNECTED_ITEM::GetTeardropMaxWidth, PROPERTY_DISPLAY::PT_SIZE );
+        maxWidth->SetAvailableFunc( supportsTeardrops );
+        propMgr.AddProperty( maxWidth, groupTeardrops );
+
+        auto curvePts = new PROPERTY<BOARD_CONNECTED_ITEM, int>( _HKI( "Curve Points" ),
+                         &BOARD_CONNECTED_ITEM::SetTeardropCurvePts,
+                         &BOARD_CONNECTED_ITEM::GetTeardropCurvePts );
+        curvePts->SetAvailableFunc( supportsTeardrops );
+        propMgr.AddProperty( curvePts, groupTeardrops );
+
+        auto preferZones = new PROPERTY<BOARD_CONNECTED_ITEM, bool>( _HKI( "Prefer zone connections" ),
+                         &BOARD_CONNECTED_ITEM::SetTeardropPreferZoneConnections,
+                         &BOARD_CONNECTED_ITEM::GetTeardropPreferZoneConnections );
+        preferZones->SetAvailableFunc( supportsTeardropPreferZoneSetting );
+        propMgr.AddProperty( preferZones, groupTeardrops );
+
+        auto twoTracks = new PROPERTY<BOARD_CONNECTED_ITEM, bool>( _HKI( "Allow teardrops to span two tracks" ),
+                         &BOARD_CONNECTED_ITEM::SetTeardropAllowSpanTwoTracks,
+                         &BOARD_CONNECTED_ITEM::GetTeardropAllowSpanTwoTracks );
+        twoTracks->SetAvailableFunc( supportsTeardrops );
+        propMgr.AddProperty( twoTracks, groupTeardrops );
+
+        auto maxTrackWidth = new PROPERTY<BOARD_CONNECTED_ITEM, double>( _HKI( "Max Width Ratio" ),
+                         &BOARD_CONNECTED_ITEM::SetTeardropMaxTrackWidth,
+                         &BOARD_CONNECTED_ITEM::GetTeardropMaxTrackWidth );
+        maxTrackWidth->SetAvailableFunc( supportsTeardrops );
+        propMgr.AddProperty( maxTrackWidth, groupTeardrops );
     }
 } _BOARD_CONNECTED_ITEM_DESC;
