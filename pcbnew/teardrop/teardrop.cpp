@@ -37,18 +37,22 @@
 #include <convert_basic_shapes_to_polygon.h>
 #include <bezier_curves.h>
 
+#include <progress_reporter.h>
+
 #include <wx/log.h>
 
 // The first priority level of a teardrop area (arbitrary value)
 #define MAGIC_TEARDROP_ZONE_ID 30000
 
 
-TEARDROP_MANAGER::TEARDROP_MANAGER( BOARD* aBoard, PCB_EDIT_FRAME* aFrame )
+TEARDROP_MANAGER::TEARDROP_MANAGER( BOARD* aBoard, PCB_EDIT_FRAME* aFrame, PROGRESS_REPORTER* aReporter )
 {
+    m_frame = aFrame;
+    m_reporter = aReporter;
     m_board = aBoard;
     m_prmsList = m_board->GetDesignSettings().GetTeadropParamsList();
     m_tolerance = 0;
-    m_toolManager = aFrame->GetToolManager();
+    m_toolManager = m_frame->GetToolManager();
 }
 
 
@@ -204,42 +208,46 @@ int TEARDROP_MANAGER::SetTeardrops( BOARD_COMMIT* aCommitter, bool aFollowTracks
 
     if( count || removed_cnt || track2trackCount )
     {
-        if( aCommitter )
-            aCommitter->Push( _( "Add teardrops" ) );
-
         // Note:
         // Refill zones can be made only with clean data, especially connectivity data,
         // therefore only after changes are pushed to avoid crashes in some cases
+        //
+        // Fill raw teardrop shapes, even if aFillAfter is true: it ensure teardrops
+        // will be filled even when undoing refilling zones.
+        // This is a rough calculation, just to show a filled
+        // shape on screen without the (potentially large) performance hit of a zone refill
+        int epsilon = pcbIUScale.mmToIU( 0.001 );
+        int allowed_error = pcbIUScale.mmToIU( 0.005 );
+
+        for( ZONE* zone: m_createdTdList )
+        {
+            int half_min_width = zone->GetMinThickness() / 2;
+            int numSegs = GetArcToSegmentCount( half_min_width, allowed_error, FULL_CIRCLE );
+            SHAPE_POLY_SET filledPolys = *zone->Outline();
+
+            filledPolys.Deflate( half_min_width - epsilon, numSegs );
+
+            // Re-inflate after pruning of areas that don't meet minimum-width criteria
+            if( half_min_width - epsilon > epsilon )
+                filledPolys.Inflate( half_min_width - epsilon, numSegs );
+
+            zone->SetFilledPolysList( zone->GetFirstLayer(), filledPolys );
+        }
+
+        if( aCommitter )
+            aCommitter->Push( _( "Add teardrops" ) );
 
         if( aFillAfter )
         {
             ZONE_FILLER filler( m_board, aCommitter );
+
+            if( m_reporter )
+                filler.SetProgressReporter( m_reporter );
+
             filler.Fill( m_board->Zones() );
 
             if( aCommitter )
-                aCommitter->Push( _( "Refill zones" ) );
-        }
-        else
-        {
-            // Fill raw teardrop shapes. This is a rough calculation, just to show a filled
-            // shape on screen without the (potentially large) performance hit of a zone refill
-            int epsilon = pcbIUScale.mmToIU( 0.001 );
-            int allowed_error = pcbIUScale.mmToIU( 0.005 );
-
-            for( ZONE* zone: m_createdTdList )
-            {
-                int half_min_width = zone->GetMinThickness() / 2;
-                int numSegs = GetArcToSegmentCount( half_min_width, allowed_error, FULL_CIRCLE );
-                SHAPE_POLY_SET filledPolys = *zone->Outline();
-
-                filledPolys.Deflate( half_min_width - epsilon, numSegs );
-
-                // Re-inflate after pruning of areas that don't meet minimum-width criteria
-                if( half_min_width - epsilon > epsilon )
-                    filledPolys.Inflate( half_min_width - epsilon, numSegs );
-
-                zone->SetFilledPolysList( zone->GetFirstLayer(), filledPolys );
-            }
+                aCommitter->Push( _( "Add teardrops and refill zones" ) );
         }
     }
 

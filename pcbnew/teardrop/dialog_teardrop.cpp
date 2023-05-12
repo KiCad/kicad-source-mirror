@@ -31,6 +31,7 @@
 #include "teardrop.h"
 #include "dialog_teardrop_base.h"
 #include <widgets/unit_binder.h>
+#include <widgets/wx_progress_reporters.h>
 
 
 // Curved shapes options. The actual value is the ORed of options
@@ -220,10 +221,13 @@ void PCB_EDIT_FRAME::OnRunTeardropTool( wxCommandEvent& event )
 
     wxBusyCursor dummy;
 
+    std::unique_ptr<WX_PROGRESS_REPORTER> reporter;
+    reporter = std::make_unique<WX_PROGRESS_REPORTER>( this, _( "Filling Zones" ), 4 );
+
     BOARD_COMMIT committer( this );
 
     dlg.TransferToParamList();
-    TEARDROP_MANAGER trdm( GetBoard(), this );
+    TEARDROP_MANAGER trdm( GetBoard(), this, reporter.get() );
 
     int added_count = trdm.SetTeardrops( &committer, dlg.CanUseTwoTracks(),
                                          !dlg.GenerateRawTeardrops() );

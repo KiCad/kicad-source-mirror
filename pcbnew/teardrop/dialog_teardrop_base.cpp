@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -370,7 +370,7 @@ TEARDROP_DIALOG_BASE::TEARDROP_DIALOG_BASE( wxWindow* parent, wxWindowID id, con
 	sbSizerScope->Add( m_cbTrack2Track, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizerShape->Add( sbSizerScope, 1, wxEXPAND|wxTOP, 5 );
+	bSizerShape->Add( sbSizerScope, 0, wxEXPAND|wxTOP, 5 );
 
 	wxStaticBoxSizer* sbSizerOptions;
 	sbSizerOptions = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options") ), wxVERTICAL );
@@ -412,7 +412,7 @@ TEARDROP_DIALOG_BASE::TEARDROP_DIALOG_BASE( wxWindow* parent, wxWindowID id, con
 
 	m_rawTeardropsHint = new wxStaticText( sbSizerOptions->GetStaticBox(), wxID_ANY, _("(Shapes will be adjusted for clearances on next zone fill.)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rawTeardropsHint->Wrap( -1 );
-	m_rawTeardropsHint->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	m_rawTeardropsHint->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	sbSizerOptions->Add( m_rawTeardropsHint, 0, wxLEFT, 27 );
 

@@ -37,6 +37,7 @@
 #define MAGIC_TEARDROP_TRACK_NAME "$teardrop_track$"
 
 class TRACK_BUFFER;
+class PROGRESS_REPORTER;
 
 /**
  * Stores info of a pad, via or track end to build a teardrop
@@ -87,7 +88,13 @@ public:
         TD_TYPE_TRACKEND    // specify a teardrop on a rond end of a wide track
     };
 
-    TEARDROP_MANAGER( BOARD* aBoard, PCB_EDIT_FRAME* aFrame );
+    /**
+     * TEARDROP_MANAGER Ctor
+     * @param aBoard is the board to manage
+     * @param aFrame is the board editor frame
+     * @param aReporter  optional: used to show a progrss bar when refilling zones
+     */
+    TEARDROP_MANAGER( BOARD* aBoard, PCB_EDIT_FRAME* aFrame, PROGRESS_REPORTER* aReporter = nullptr );
 
     /**
      * Set teardrops on a teardrop free board
@@ -249,6 +256,8 @@ private:
     TOOL_MANAGER*             m_toolManager;
     TEARDROP_PARAMETERS_LIST* m_prmsList;       // the teardrop parameters list, from the board design settings
     std::vector<ZONE*>        m_createdTdList;  // list of new created teardrops
+    PCB_EDIT_FRAME*           m_frame;
+    PROGRESS_REPORTER*        m_reporter;       // A reporter to show a progress bar if refilling zones
 };
 
 
