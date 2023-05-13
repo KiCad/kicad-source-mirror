@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 1992-2019 jean-pierre.charras
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -170,6 +170,18 @@ const char* BITMAPCONV_INFO::getBoardLayerName( BMP2CMP_MOD_LAYER aChoice )
         layerName = "F.Mask";
         break;
 
+    case MOD_LYR_FAB:
+        layerName = "F.Fab";
+        break;
+
+    case MOD_LYR_DRAWINGS:
+        layerName = "Dwgs.User";
+        break;
+
+    case MOD_LYR_COMMENTS:
+        layerName = "Cmts.User";
+        break;
+
     case MOD_LYR_ECO1:
         layerName = "Eco1.User";
         break;
@@ -179,7 +191,6 @@ const char* BITMAPCONV_INFO::getBoardLayerName( BMP2CMP_MOD_LAYER aChoice )
         break;
 
     case MOD_LYR_FSILKS:
-    default:    // case MOD_LYR_FSILKS only unless there is a bug
         break;
     }
 

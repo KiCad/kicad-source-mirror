@@ -278,17 +278,15 @@ void BM2CMP_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     m_rbOutputFormat->SetSelection( format );
 
-    if( format == PCBNEW_KICAD_MOD )
-        m_rbPCBLayer->Enable( true );
-    else
-        m_rbPCBLayer->Enable( false );
+    bool enable = format == PCBNEW_KICAD_MOD;
+    m_chPCBLayer->Enable( enable );
 
     int last_layer = cfg->m_LastModLayer;
 
-    if( last_layer > static_cast<int>( MOD_LYR_FINAL ) )   // Out of range
-        m_rbPCBLayer->SetSelection( MOD_LYR_FSILKS );
-    else
-        m_rbPCBLayer->SetSelection( last_layer );
+    if( last_layer < 0 || last_layer > static_cast<int>( MOD_LYR_FINAL ) )   // Out of range
+       last_layer = MOD_LYR_FSILKS;
+
+    m_chPCBLayer->SetSelection( last_layer );
 }
 
 
@@ -303,7 +301,7 @@ void BM2CMP_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     cfg->m_Threshold         = m_sliderThreshold->GetValue();
     cfg->m_Negative          = m_checkNegative->IsChecked();
     cfg->m_LastFormat        = m_rbOutputFormat->GetSelection();
-    cfg->m_LastModLayer      = m_rbPCBLayer->GetSelection();
+    cfg->m_LastModLayer      = m_chPCBLayer->GetSelection();
     cfg->m_Units             = m_PixelUnit->GetSelection();
 }
 
@@ -900,7 +898,7 @@ void BM2CMP_FRAME::ExportToBuffer( std::string& aOutput, OUTPUT_FMT_ID aFormat )
     BMP2CMP_MOD_LAYER modLayer = MOD_LYR_FSILKS;
 
     if( aFormat == PCBNEW_KICAD_MOD )
-        modLayer = (BMP2CMP_MOD_LAYER) m_rbPCBLayer->GetSelection();
+        modLayer = (BMP2CMP_MOD_LAYER) m_chPCBLayer->GetSelection();
 
     BITMAPCONV_INFO converter( aOutput );
     converter.ConvertBitmap( potrace_bitmap, aFormat, m_outputSizeX.GetOutputDPI(),
@@ -913,8 +911,6 @@ void BM2CMP_FRAME::ExportToBuffer( std::string& aOutput, OUTPUT_FMT_ID aFormat )
 
 void BM2CMP_FRAME::OnFormatChange( wxCommandEvent& event )
 {
-    if( m_rbOutputFormat->GetSelection() == PCBNEW_KICAD_MOD )
-        m_rbPCBLayer->Enable( true );
-    else
-        m_rbPCBLayer->Enable( false );
+    bool enable = m_rbOutputFormat->GetSelection() == PCBNEW_KICAD_MOD;
+    m_chPCBLayer->Enable( enable );
 }

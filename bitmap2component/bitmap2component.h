@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2014 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2023 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,10 +38,15 @@ enum OUTPUT_FMT_ID
     FINAL_FMT = KICAD_WKS_LOGO
 };
 
+// for consistency this enum should conform to the
+// indices in m_cbPcbLayer from bitmap2cmp_gui.cpp
 enum BMP2CMP_MOD_LAYER
 {
     MOD_LYR_FSILKS = 0,
     MOD_LYR_FSOLDERMASK,
+    MOD_LYR_FAB,
+    MOD_LYR_DRAWINGS,
+    MOD_LYR_COMMENTS,
     MOD_LYR_ECO1,
     MOD_LYR_ECO2,
     MOD_LYR_FINAL = MOD_LYR_ECO2

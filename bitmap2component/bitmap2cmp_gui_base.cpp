@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -100,9 +100,6 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 	m_buttonLoad = new wxButton( this, wxID_ANY, _("Load Source Image"), wxDefaultPosition, wxDefaultSize, 0 );
 	brightSizer->Add( m_buttonLoad, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-
-	brightSizer->Add( 0, 10, 1, wxEXPAND, 5 );
-
 	wxStaticBoxSizer* sbSizerImgPrms;
 	sbSizerImgPrms = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Output Size") ), wxVERTICAL );
 
@@ -152,18 +149,21 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 	sbSizer2->Add( m_sliderThreshold, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_checkNegative = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_ANY, _("Negative"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer2->Add( m_checkNegative, 0, wxTOP|wxBOTTOM, 5 );
+	sbSizer2->Add( m_checkNegative, 0, wxBOTTOM, 5 );
 
 
 	brightSizer->Add( sbSizer2, 0, wxALL|wxEXPAND, 5 );
 
-	wxString m_rbPCBLayerChoices[] = { _("Front silk screen"), _("Front solder mask"), _("User layer Eco1"), _("User layer Eco2") };
-	int m_rbPCBLayerNChoices = sizeof( m_rbPCBLayerChoices ) / sizeof( wxString );
-	m_rbPCBLayer = new wxRadioBox( this, wxID_ANY, _("Board Layer for Outline"), wxDefaultPosition, wxDefaultSize, m_rbPCBLayerNChoices, m_rbPCBLayerChoices, 1, wxRA_SPECIFY_COLS );
-	m_rbPCBLayer->SetSelection( 1 );
-	m_rbPCBLayer->SetToolTip( _("Choose the board layer to place the outline.\nThe reference designator and value are always placed on the silk screen layer (but will be marked invisible).") );
+	m_sizerPcbLayer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pcb Layer for Graphics") ), wxVERTICAL );
 
-	brightSizer->Add( m_rbPCBLayer, 0, wxALL|wxEXPAND, 5 );
+	wxString m_chPCBLayerChoices[] = { _("Front silk screen"), _("Front solder mask"), _("Front Fab layer"), _("User layer drawings"), _("User layer comments"), _("User layer Eco1"), _("User layer Eco2") };
+	int m_chPCBLayerNChoices = sizeof( m_chPCBLayerChoices ) / sizeof( wxString );
+	m_chPCBLayer = new wxChoice( m_sizerPcbLayer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_chPCBLayerNChoices, m_chPCBLayerChoices, 0 );
+	m_chPCBLayer->SetSelection( 0 );
+	m_sizerPcbLayer->Add( m_chPCBLayer, 0, wxALL|wxEXPAND, 5 );
+
+
+	brightSizer->Add( m_sizerPcbLayer, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	wxString m_rbOutputFormatChoices[] = { _("Symbol (.kicad_sym file)"), _("Footprint (.kicad_mod file)"), _("Postscript (.ps file)"), _("Drawing Sheet (.kicad_wks file)") };
 	int m_rbOutputFormatNChoices = sizeof( m_rbOutputFormatChoices ) / sizeof( wxString );

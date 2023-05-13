@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -69,7 +69,8 @@ class BM2CMP_FRAME_BASE : public KIWAY_PLAYER
 		wxStaticText* m_ThresholdText;
 		wxSlider* m_sliderThreshold;
 		wxCheckBox* m_checkNegative;
-		wxRadioBox* m_rbPCBLayer;
+		wxStaticBoxSizer* m_sizerPcbLayer;
+		wxChoice* m_chPCBLayer;
 		wxRadioBox* m_rbOutputFormat;
 		wxButton* m_buttonExportFile;
 		wxButton* m_buttonExportClipboard;
