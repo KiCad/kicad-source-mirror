@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-12 12:57-0700\n"
-"PO-Revision-Date: 2023-05-11 15:51+0000\n"
+"PO-Revision-Date: 2023-05-14 21:15+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/v7/pt_BR/>\n"
@@ -2785,7 +2785,7 @@ msgstr "Pré-visualização"
 #: pcbnew/dialogs/dialog_import_netlist.cpp:82
 #: pcbnew/dialogs/dialog_plot.cpp:181 pcbnew/dialogs/dialog_update_pcb.cpp:60
 msgid "Close"
-msgstr "Feche"
+msgstr "Fechar"
 
 #: common/dialogs/dialog_print_generic.cpp:155
 msgid "Warning: Bad scale number"
@@ -5872,7 +5872,7 @@ msgstr "Campo%d"
 #: common/tool/action_menu.cpp:208 common/tool/action_menu.cpp:213
 #, c-format
 msgid "Close %s"
-msgstr "Feche %s"
+msgstr "Fechar %s"
 
 #: common/tool/action_menu.cpp:227
 #, c-format
@@ -12745,12 +12745,12 @@ msgstr "Tipo desconhecido do formato da netlist\n"
 #: eeschema/eeschema_jobs_handler.cpp:396
 #, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
-msgstr "Símbolo de plotagem '%s' unidade %d para '%s'\n"
+msgstr "Plotando o símbolo '%s' unidade %d para '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:406
 #, c-format
 msgid "Plotting symbol '%s' to '%s'\n"
-msgstr "Símbolo de plotagem '%s' para '%s'\n"
+msgstr "Plotando o símbolo '%s' para '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:430
 #, c-format
@@ -39059,14 +39059,12 @@ msgid "Import footprint from file"
 msgstr "Importa footprint do arquivo"
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export Footprint..."
-msgstr "E&xportar Footprint..."
+msgstr "Exportar Footprint..."
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export footprint to file"
-msgstr "Exporta o footprint editado para o arquivo"
+msgstr "Exporta o footprint para o arquivo"
 
 #: pcbnew/tools/pcb_actions.cpp:453
 msgid "Footprint Properties..."
