@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-12 12:57-0700\n"
-"PO-Revision-Date: 2023-05-11 15:51+0000\n"
+"PO-Revision-Date: 2023-05-14 21:15+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v7/sv/>\n"
 "Language: sv\n"
@@ -102,9 +102,8 @@ msgid "Build BVH for holes and vias"
 msgstr "Bygg omslutande-volym-hierarki för hål och vior"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:390
-#, fuzzy
 msgid "OpenGL context creation error"
-msgstr "Tar reda på antal termiska ekrar för:"
+msgstr "Fel vid försök att skapa OpenGL-kontext"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:421
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
@@ -12656,12 +12655,12 @@ msgid "Unknown netlist format.\n"
 msgstr "Okänt format för nätlista.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:396
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
 msgstr "Plottar symbol '%s' enhet %d till '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' to '%s'\n"
 msgstr "Plottar symbol '%s' till '%s'\n"
 
@@ -35017,49 +35016,40 @@ msgid "Dimension '%s' on %s"
 msgstr "Dimension '%s' på %s"
 
 #: pcbnew/pcb_dimension.cpp:1319
-#, fuzzy
 msgid "1234.0"
-msgstr "1234"
+msgstr "1234,0"
 
 #: pcbnew/pcb_dimension.cpp:1320
-#, fuzzy
 msgid "1234.0 mm"
-msgstr "1234 mm"
+msgstr "1234,0 mm"
 
 #: pcbnew/pcb_dimension.cpp:1321
-#, fuzzy
 msgid "1234.0 (mm)"
-msgstr "1234 (mm)"
+msgstr "1234,0 (mm)"
 
 #: pcbnew/pcb_dimension.cpp:1353
-#, fuzzy
 msgid "Units Format"
-msgstr "Enhetsformat:"
+msgstr "Enhetsformat"
 
 #: pcbnew/pcb_dimension.cpp:1359
-#, fuzzy
 msgid "Suppress Trailing Zeroes"
 msgstr "Undertryck avslutande nollor"
 
 #: pcbnew/pcb_dimension.cpp:1387
-#, fuzzy
 msgid "Crossbar Height"
-msgstr "Markör höger"
+msgstr "Måttlinjens höjd"
 
 #: pcbnew/pcb_dimension.cpp:1391
-#, fuzzy
 msgid "Extension Line Overshoot"
-msgstr "Förlängningslinje offset:"
+msgstr "Måttgränslinjens utstick"
 
 #: pcbnew/pcb_dimension.cpp:1456
-#, fuzzy
 msgid "Leader Length"
-msgstr "Vialängd"
+msgstr "Hänvisningslinjens längd"
 
 #: pcbnew/pcb_dimension.cpp:1496
-#, fuzzy
 msgid "Text Frame"
-msgstr "Textram:"
+msgstr "Textram"
 
 #: pcbnew/pcb_edit_frame.cpp:203
 msgid "KiCad PCB Editor"
@@ -38736,14 +38726,12 @@ msgid "Import footprint from file"
 msgstr "Importera fotavtryck från fil"
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export Footprint..."
-msgstr "Redigera fält"
+msgstr "Exportera fotavtryck..."
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export footprint to file"
-msgstr "Exportera redigerat fotavtryck till fil"
+msgstr "Exportera fotavtryck till fil"
 
 #: pcbnew/tools/pcb_actions.cpp:453
 msgid "Footprint Properties..."
