@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-12 12:57-0700\n"
-"PO-Revision-Date: 2023-04-21 07:52+0000\n"
+"PO-Revision-Date: 2023-05-14 21:15+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v7/ru/>\n"
 "Language: ru\n"
@@ -12657,12 +12657,12 @@ msgid "Unknown netlist format.\n"
 msgstr "Неизвестный формат списка сетей.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:396
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
-msgstr "Черчение символа '%s' части %d в '%s'\n"
+msgstr "Черчение символа '%s' часть %d в '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' to '%s'\n"
 msgstr "Черчение символа '%s' в '%s'\n"
 
@@ -38744,14 +38744,12 @@ msgid "Import footprint from file"
 msgstr "Импорт посад.места из файла"
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export Footprint..."
-msgstr "Экспорт посад.места"
+msgstr "Экспорт посад.места..."
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export footprint to file"
-msgstr "Экспорт текущего посад.места в файл"
+msgstr "Экспорт посад.места в файл"
 
 #: pcbnew/tools/pcb_actions.cpp:453
 msgid "Footprint Properties..."
