@@ -890,8 +890,11 @@ SCH_LABEL_BASE* LTSPICE_SCH_PARSER::CreateSCH_LABEL( KICAD_T aType, const VECTOR
         UNIMPLEMENTED_FOR( aType );
     }
 
-    label->SetPosition( ToKicadCoords( aOffset ) + m_originOffset );
-    label->SetVisible( true );
+    if( label )
+    {
+        label->SetPosition( ToKicadCoords( aOffset ) + m_originOffset );
+        label->SetVisible( true );
+    }
 
     return label;
 }

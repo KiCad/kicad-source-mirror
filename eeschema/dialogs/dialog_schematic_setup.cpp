@@ -67,6 +67,8 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
             }, _( "Field Name Templates" ) );
 
     m_treebook->AddPage( new wxPanel( GetTreebook() ), _( "Electrical Rules" ) );
+
+    m_severitiesPage = m_treebook->GetPageCount();
     m_treebook->AddLazySubPage(
             [this]( wxWindow* aParent ) -> wxWindow*
             {

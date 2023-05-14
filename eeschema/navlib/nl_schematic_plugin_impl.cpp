@@ -55,6 +55,7 @@ const wxChar* NL_SCHEMATIC_PLUGIN_IMPL::m_logTrace = wxT( "KI_TRACE_NL_SCHEMATIC
 NL_SCHEMATIC_PLUGIN_IMPL::NL_SCHEMATIC_PLUGIN_IMPL() :
         CNavigation3D( false, false ),
         m_viewport2D( nullptr ),
+        m_view( nullptr ),
         m_isMoving( false ),
         m_viewportWidth( 0.0 )
 {
