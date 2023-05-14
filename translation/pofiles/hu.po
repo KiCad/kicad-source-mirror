@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-12 12:58-0700\n"
-"PO-Revision-Date: 2023-05-14 21:16+0000\n"
-"Last-Translator: István Farkas <sakrafi1963@gmail.com>\n"
+"PO-Revision-Date: 2023-05-16 20:36+0000\n"
+"Last-Translator: Miklós Márton <martonmiklosqdev@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
 "master-source/hu/>\n"
 "Language: hu\n"
@@ -23,9 +23,8 @@ msgid "All Files"
 msgstr "Összes fájl"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:328
-#, fuzzy
 msgid "Build board outline"
-msgstr "Panel körvonalai"
+msgstr "Panel körvonala"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:536
 #, fuzzy
@@ -79,9 +78,9 @@ msgid "Simplifying polygons on B_Cu"
 msgstr "Vezetőréteg poligonok egyszerűsítése"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:793
-#, fuzzy, c-format
+#, c-format
 msgid "Simplifying %d copper layers"
-msgstr "Vezetőréteg poligonok egyszerűsítése"
+msgstr "%d rézréteg egyszerűsítése"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:833
 #, fuzzy
@@ -8138,9 +8137,8 @@ msgid "KiCad s-expression schematic files"
 msgstr "KiCad kapcsolási rajz fájl (*.sch)"
 
 #: common/wildcards_and_files_ext.cpp:286
-#, fuzzy
 msgid "Altium schematic files"
-msgstr "Altium kapcsolási rajz fájl"
+msgstr "Altium kapcsolási rajzok"
 
 #: common/wildcards_and_files_ext.cpp:292
 #, fuzzy
@@ -8163,9 +8161,8 @@ msgid "Ltspice schematic files"
 msgstr "KiCad kapcsolási rajz fájl (*.sch)"
 
 #: common/wildcards_and_files_ext.cpp:316
-#, fuzzy
 msgid "Eagle XML files"
-msgstr "Eagle XML fájlok"
+msgstr "EAGLE XML fájlok"
 
 #: common/wildcards_and_files_ext.cpp:322
 #, fuzzy
@@ -9450,9 +9447,9 @@ msgid "Update symbols %s from '%s' to '%s'"
 msgstr "%s frissítve (\"%s\" -> \"%s\")"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:752
-#, fuzzy, c-format
+#, c-format
 msgid "Change symbol %s from '%s' to '%s'"
-msgstr "%s szimbolum lecserélve erre: '%s' a(z) '%s' könyvtárból"
+msgstr "%s szimbólum lecserélése erről: '%s' erre: '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:759
 #, fuzzy, c-format
@@ -10785,9 +10782,8 @@ msgstr "Segítség"
 #: eeschema/dialogs/dialog_text_properties_base.cpp:79
 #: eeschema/dialogs/dialog_user_defined_signals_base.cpp:79
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:30
-#, fuzzy
 msgid "Show syntax help window"
-msgstr "Segítség ablak megjelenítése"
+msgstr "Szintaxis súgó ablak megjelenítése"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:59
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:31
@@ -16389,9 +16385,8 @@ msgstr "\"%s\" busz megnevezés tagjai"
 
 #: eeschema/sch_edit_frame.cpp:132
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:63
-#, fuzzy
 msgid "KiCad Schematic Editor"
-msgstr "Kapcsolási rajz tervező"
+msgstr "Kapcsolási rajz szerkesztő"
 
 #: eeschema/sch_edit_frame.cpp:185 eeschema/sch_edit_frame.cpp:1901
 #, fuzzy
@@ -17379,9 +17374,9 @@ msgstr ""
 "lehetséges\n"
 
 #: eeschema/sch_reference_list.cpp:756
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate items %s%s%s\n"
-msgstr "Azonos elemek  %s%s%s\n"
+msgstr "Duplikált elemek %s%s%s\n"
 
 #: eeschema/sch_reference_list.cpp:781
 #, fuzzy, c-format
@@ -24094,9 +24089,8 @@ msgid "&Archive Project..."
 msgstr "&Projekt archiválása"
 
 #: kicad/menubar.cpp:120
-#, fuzzy
 msgid "Archive all needed project files into zip archive"
-msgstr "Az összes projektfájl archiválása egy tömörített zip fájlba"
+msgstr "Az összes szükséges projektfájl archiválása egy zip fájlba"
 
 #: kicad/menubar.cpp:124
 #, fuzzy
@@ -24738,7 +24732,6 @@ msgid "Rename File"
 msgstr "Fájl átnevezése"
 
 #: kicad/project_tree_item.cpp:140
-#, fuzzy
 msgid "Unable to rename file ... "
 msgstr "A fájlt nem lehet átnevezni... "
 
@@ -27102,9 +27095,8 @@ msgid "deg C/W"
 msgstr "°C"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:276
-#, fuzzy
 msgid "Estimated ampacity:"
-msgstr "Becsült"
+msgstr "Becsült terhelhetőség:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:278
 #, fuzzy
@@ -39216,7 +39208,6 @@ msgid "exclude from BOM"
 msgstr "Nem kerül a panelre"
 
 #: pcbnew/footprint.cpp:1081
-#, fuzzy
 msgid "Status: "
 msgstr "Állapot: "
 
@@ -41055,7 +41046,6 @@ msgid "Marker (%s)"
 msgstr "Jelölő (%s, %s) pozícióban"
 
 #: pcbnew/pcb_shape.cpp:291
-#, fuzzy
 msgid "Drawing"
 msgstr "Rajz"
 
@@ -42726,13 +42716,11 @@ msgstr ""
 
 #: pcbnew/router/pns_dp_meander_placer.cpp:462
 #: pcbnew/router/pns_meander_placer.cpp:281
-#, fuzzy
 msgid "Too long: "
 msgstr "Túl hosszú: "
 
 #: pcbnew/router/pns_dp_meander_placer.cpp:465
 #: pcbnew/router/pns_meander_placer.cpp:284
-#, fuzzy
 msgid "Too short: "
 msgstr "Túl rövid: "
 
@@ -42808,12 +42796,10 @@ msgstr ""
 "Differenciális jelvezeték párok neveinek _N/_P vagy +/- -ra kell végződniük."
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:174
-#, fuzzy
 msgid "Too long: skew "
 msgstr "Túl hosszú: jelcsúszás "
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:177
-#, fuzzy
 msgid "Too short: skew "
 msgstr "Túl rövid: jelcsúszás "
 
