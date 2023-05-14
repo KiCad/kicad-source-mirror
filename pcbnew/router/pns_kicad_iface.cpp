@@ -1266,7 +1266,11 @@ bool PNS_KICAD_IFACE_BASE::syncTextItem( PNS::NODE* aWorld, EDA_TEXT* aText, PCB
         int margin = attrs.m_StrokeWidth * 1.5
                      + GetKnockoutTextMargin( attrs.m_Size, attrs.m_StrokeWidth );
         pcb_text->TransformBoundingBoxToPolygon( &buffer, margin );
+
         // buffer should contain a single rectangular polygon
+        if( !buffer.OutlineCount() )
+            return false;
+
         SHAPE_SIMPLE* rectShape = new SHAPE_SIMPLE;
 
         for( int ii = 0; ii < buffer.Outline(0).PointCount(); ii++ )
