@@ -598,7 +598,9 @@ bool LINE_PLACER::rhWalkBase( const VECTOR2I& aP, LINE& aWalkLine, int aCollisio
 
         aViaOk = buildInitialLine( walkP, l1, round == 0 );
         PNS_DBG( Dbg(), AddItem, &l1, BLUE, 20000, wxT( "walk-base-l1" ) );
-        PNS_DBG( Dbg(), AddPoint, l1.Via().Pos(), BLUE, 100000, wxT( "walk-base-l1-via" ) );
+
+        if( l1.EndsWithVia() )
+            PNS_DBG( Dbg(), AddPoint, l1.Via().Pos(), BLUE, 100000, wxT( "walk-base-l1-via" ) );
 
         LINE initTrack( m_tail );
         initTrack.Line().Append( l1.CLine() );
@@ -731,7 +733,12 @@ bool LINE_PLACER::rhWalkBase( const VECTOR2I& aP, LINE& aWalkLine, int aCollisio
     }
 
     PNS_DBG( Dbg(), AddItem, &walkFull, GREEN, 200000, wxT( "walk-full" ) );
-    PNS_DBG( Dbg(), AddPoint, walkFull.Via().Pos(), GREEN, 200000, wxString::Format( "walk-via ok %d", aViaOk?1:0 ) );
+
+    if( walkFull.EndsWithVia() )
+    {
+        PNS_DBG( Dbg(), AddPoint, walkFull.Via().Pos(), GREEN, 200000,
+                 wxString::Format( "walk-via ok %d", aViaOk ? 1 : 0 ) );
+    }
 
     aWalkLine = walkFull;
 
@@ -987,8 +994,11 @@ bool LINE_PLACER::rhShoveOnly( const VECTOR2I& aP, LINE& aNewHead, LINE& aNewTai
 
         OPTIMIZER optimizer( m_currentNode );
 
-        PNS_DBG( Dbg(), AddPoint, newHead.Via().Pos(), GREEN, 1000000, "shove-via-preopt" );
-        PNS_DBG( Dbg(), AddPoint, newHead.Via().Pos(), GREEN, 1000000, "shove-via-postopt" );
+        if( newHead.EndsWithVia() )
+        {
+            PNS_DBG( Dbg(), AddPoint, newHead.Via().Pos(), GREEN, 1000000, "shove-via-preopt" );
+            PNS_DBG( Dbg(), AddPoint, newHead.Via().Pos(), GREEN, 1000000, "shove-via-postopt" );
+        }
 
         if( ! splitHeadTail( newHead, m_tail, aNewHead, aNewTail ) )
             return false;
