@@ -1269,6 +1269,9 @@ bool PNS_KICAD_IFACE_BASE::syncTextItem( PNS::NODE* aWorld, PCB_TEXT* aText, PCB
 
     aText->TransformBoundingBoxToPolygon( &cornerBuffer, margin );
 
+    if( !cornerBuffer.OutlineCount() )
+        return false;
+
     for( const VECTOR2I& pt : cornerBuffer.Outline( 0 ).CPoints() )
         shape->Append( pt );
 
