@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-12 12:57-0700\n"
-"PO-Revision-Date: 2023-05-12 19:54+0000\n"
+"PO-Revision-Date: 2023-05-14 21:15+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v7/fi/>\n"
 "Language: fi\n"
@@ -12665,14 +12665,14 @@ msgid "Unknown netlist format.\n"
 msgstr "Tuntematon verkkolista formaatti.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:396
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
-msgstr "Piirrä symboli '%s' yksikkö %d '%s'\n"
+msgstr "Piirretään symbolia '%s' yksikkö %d kohteeseen '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' to '%s'\n"
-msgstr "Piirrä symboli '%s' kohteeseen '%s'\n"
+msgstr "Piiretään symbolia '%s' kohteeseen '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:430
 #, c-format
@@ -24909,7 +24909,7 @@ msgstr "Pysäytyskerros"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:253
 msgid "Drill Holes"
-msgstr "Poraa reiät"
+msgstr "Porausreiät"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:260
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:216
