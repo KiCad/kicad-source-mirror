@@ -93,6 +93,8 @@ enum SCH_CLEANUP_FLAGS
 };
 
 
+wxDECLARE_EVENT( EDA_EVT_SCHEMATIC_CHANGED, wxCommandEvent );
+
 /**
  * Schematic editor (Eeschema) main window.
  */
@@ -817,6 +819,11 @@ public:
      */
     void ToggleSchematicHierarchy();
 
+    /**
+     * Toggle the show/hide state of Search pane
+     */
+    void ToggleSearch();
+
     DIALOG_BOOK_REPORTER* GetSymbolDiffDialog();
 
     DIALOG_ERC* GetErcDialog();
@@ -828,6 +835,27 @@ public:
     {
         return wxT( "SchematicHierarchy" );
     }
+
+    /**
+     * @return the name of the wxAuiPaneInfo managing the Search panel
+     */
+    static const wxString SearchPaneName() { return wxT( "Search" ); }
+
+    /**
+     * Add \a aListener to post #EDA_EVT_SCHEMATIC_CHANGED command events to.
+     *
+     * @warning The caller is reponsible for removing any listeners that are no long valid.
+     *
+     * @note This only gets called when the schematic editor is in stand alone mode.  Changing
+     *       projects in the project manager closes the schematic editor when a new project is
+     *       loaded.
+     */
+    void AddSchematicChangeListener( wxEvtHandler* aListener );
+
+    /**
+     * Remove \a aListener to from the schematic changed listener list.
+     */
+    void RemoveSchematicChangeListener( wxEvtHandler* aListener );
 
     DECLARE_EVENT_TABLE()
 
@@ -948,6 +976,10 @@ private:
     HIERARCHY_PANE*         m_hierarchy;
 
 	bool m_syncingPcbToSchSelection; // Recursion guard when synchronizing selection from PCB
+
+    bool m_show_search;
+
+    std::vector<wxEvtHandler*> m_schematicChangeListeners;
 };
 
 

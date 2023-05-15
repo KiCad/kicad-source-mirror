@@ -37,6 +37,7 @@
 #include <tools/ee_selection_tool.h>
 #include <widgets/hierarchy_pane.h>
 #include <widgets/wx_aui_utils.h>
+#include <widgets/sch_search_pane.h>
 
 /* Create  the main Horizontal Toolbar for the schematic editor
  */
@@ -222,6 +223,31 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->AddToolContextMenu( ACTIONS::toggleGrid, std::move( gridMenu ) );
 
     m_optionsToolBar->KiRealize();
+}
+
+
+void SCH_EDIT_FRAME::ToggleSearch()
+{
+    EESCHEMA_SETTINGS* cfg = eeconfig();
+
+    // Ensure m_show_search is up to date (the pane can be closed outside the menu)
+    m_show_search = m_auimgr.GetPane( SearchPaneName() ).IsShown();
+
+    m_show_search = !m_show_search;
+
+    wxAuiPaneInfo& searchPaneInfo = m_auimgr.GetPane( SearchPaneName() );
+    searchPaneInfo.Show( m_show_search );
+
+    if( m_show_search )
+    {
+        SetAuiPaneSize( m_auimgr, searchPaneInfo, -1, cfg->m_AuiPanels.search_panel_height );
+        m_searchPane->FocusSearch();
+    }
+    else
+    {
+        cfg->m_AuiPanels.search_panel_height = m_searchPane->GetSize().y;
+        m_auimgr.Update();
+    }
 }
 
 

@@ -123,6 +123,7 @@ public:
     int GenerateBOM( const TOOL_EVENT& aEvent );
     int DrawSheetOnClipboard( const TOOL_EVENT& aEvent );
 
+    int ShowSearch( const TOOL_EVENT& aEvent );
     int ShowHierarchy( const TOOL_EVENT& aEvent );
 
     int ToggleHiddenPins( const TOOL_EVENT& aEvent );

@@ -33,6 +33,7 @@
 #include <sch_painter.h>
 #include <schematic.h>
 #include <widgets/hierarchy_pane.h>
+#include <widgets/sch_search_pane.h>
 #include <settings/app_settings.h>
 #include <settings/settings_manager.h>
 #include <symbol_lib_table.h>
@@ -172,37 +173,41 @@ void SCH_EDIT_FRAME::SaveProjectLocalSettings()
 void SCH_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     // For now, axes are forced off in Eeschema even if turned on in config
-    eeconfig()->m_Window.grid.axes_enabled = false;
+    EESCHEMA_SETTINGS* cfg = eeconfig();
+    cfg->m_Window.grid.axes_enabled = false;
 
-    SCH_BASE_FRAME::LoadSettings( eeconfig() );
+    SCH_BASE_FRAME::LoadSettings( cfg );
 
     SCH_SEARCH_DATA* searchData = dynamic_cast<SCH_SEARCH_DATA*>( m_findReplaceData.get() );
 
     if( searchData )
     {
-        searchData->replaceReferences = eeconfig()->m_FindReplaceExtra.replace_references;
-        searchData->searchAllFields = eeconfig()->m_FindReplaceExtra.search_all_fields;
-        searchData->searchAllPins = eeconfig()->m_FindReplaceExtra.search_all_pins;
-        searchData->searchCurrentSheetOnly = eeconfig()->m_FindReplaceExtra.search_current_sheet_only;
-        searchData->searchSelectedOnly = eeconfig()->m_FindReplaceExtra.search_selected_only;
+        searchData->replaceReferences = cfg->m_FindReplaceExtra.replace_references;
+        searchData->searchAllFields = cfg->m_FindReplaceExtra.search_all_fields;
+        searchData->searchAllPins = cfg->m_FindReplaceExtra.search_all_pins;
+        searchData->searchCurrentSheetOnly = cfg->m_FindReplaceExtra.search_current_sheet_only;
+        searchData->searchSelectedOnly = cfg->m_FindReplaceExtra.search_selected_only;
     }
+
+    m_show_search = cfg->m_AuiPanels.show_search;
 
     GetRenderSettings()->m_ShowPinsElectricalType = false;
     GetRenderSettings()->m_ShowPinNumbers = false;
-    GetRenderSettings()->SetDefaultFont( eeconfig()->m_Appearance.default_font );
+    GetRenderSettings()->SetDefaultFont( cfg->m_Appearance.default_font );
 }
 
 
 void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
-    SCH_BASE_FRAME::SaveSettings( eeconfig() );
+    EESCHEMA_SETTINGS* cfg = eeconfig();
+    SCH_BASE_FRAME::SaveSettings( cfg );
     wxAuiPaneInfo& hierarchy_pane = m_auimgr.GetPane( SchematicHierarchyPaneName() );
 
-    if( eeconfig() )
+    if( cfg )
     {
-        eeconfig()->m_System.units = static_cast<int>( GetUserUnits() );
-        eeconfig()->m_AuiPanels.show_schematic_hierarchy = hierarchy_pane.IsShown();
-        eeconfig()->m_AuiPanels.schematic_hierarchy_float = hierarchy_pane.IsFloating();
+        cfg->m_System.units = static_cast<int>( GetUserUnits() );
+        cfg->m_AuiPanels.show_schematic_hierarchy = hierarchy_pane.IsShown();
+        cfg->m_AuiPanels.schematic_hierarchy_float = hierarchy_pane.IsFloating();
         // Other parameters (hierarchy_panel_float_width, hierarchy_panel_float_height,
         // and hierarchy_panel_docked_width should have been updated when resizing the
         // hierarchy panel
@@ -211,13 +216,17 @@ void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
         if( searchData )
         {
-            eeconfig()->m_FindReplaceExtra.replace_references = searchData->replaceReferences;
-            eeconfig()->m_FindReplaceExtra.search_all_fields = searchData->searchAllFields;
-            eeconfig()->m_FindReplaceExtra.search_all_pins = searchData->searchAllPins;
-            eeconfig()->m_FindReplaceExtra.search_current_sheet_only =
+            cfg->m_FindReplaceExtra.replace_references = searchData->replaceReferences;
+            cfg->m_FindReplaceExtra.search_all_fields = searchData->searchAllFields;
+            cfg->m_FindReplaceExtra.search_all_pins = searchData->searchAllPins;
+            cfg->m_FindReplaceExtra.search_current_sheet_only =
                     searchData->searchCurrentSheetOnly;
-            eeconfig()->m_FindReplaceExtra.search_selected_only = searchData->searchSelectedOnly;
+            cfg->m_FindReplaceExtra.search_selected_only = searchData->searchSelectedOnly;
         }
+
+        m_show_search = m_auimgr.GetPane( SearchPaneName() ).IsShown();
+        cfg->m_AuiPanels.show_search = m_show_search;
+        cfg->m_AuiPanels.search_panel_height = m_searchPane->GetSize().y;
     }
 }
 

@@ -80,6 +80,7 @@
 #include <view/view_controls.h>
 #include <widgets/wx_infobar.h>
 #include <widgets/hierarchy_pane.h>
+#include <widgets/sch_search_pane.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/cmdline.h>
 #include <wx/app.h>
@@ -115,6 +116,7 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, SCH_BASE_FRAME )
     EVT_DROP_FILES( SCH_EDIT_FRAME::OnDropFiles )
 END_EVENT_TABLE()
 
+wxDEFINE_EVENT( EDA_EVT_SCHEMATIC_CHANGED, wxCommandEvent );
 
 SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         SCH_BASE_FRAME( aKiway, aParent, FRAME_SCH, wxT( "Eeschema" ), wxDefaultPosition,
@@ -130,6 +132,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_supportsAutoSave = true;
     m_syncingPcbToSchSelection = false;
     m_aboutTitle = _HKI( "KiCad Schematic Editor" );
+    m_show_search = false;
 
     m_findReplaceDialog = nullptr;
 
@@ -169,6 +172,8 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_pageSetupData.GetPrintData().SetBin( wxPRINTBIN_AUTO );
     m_pageSetupData.GetPrintData().SetNoCopies( 1 );
 
+    m_searchPane = new SCH_SEARCH_PANE( this );
+
     m_auimgr.SetManagedWindow( this );
 
     CreateInfoBar();
@@ -201,6 +206,19 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( wxS( "DrawFrame" ) )
                       .Center() );
 
+    m_auimgr.AddPane( m_searchPane, EDA_PANE()
+                                            .Name( SearchPaneName() )
+                                            .Bottom()
+                                            .Caption( _( "Search" ) )
+                                            .PaneBorder( false )
+                                            .MinSize( 180, -1 )
+                                            .BestSize( 180, -1 )
+                                            .FloatingSize( 480, 200 )
+                                            .CloseButton( true )
+                                            .DestroyOnClose( false )
+                                            .Show( m_show_search ) );
+
+
     FinishAUIInitialization();
 
     resolveCanvasType();
@@ -226,6 +244,12 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     if( cfg->m_AuiPanels.schematic_hierarchy_float )
         hierarchy_pane.Float();
+
+    if( cfg->m_AuiPanels.search_panel_height > 0 )
+    {
+        wxAuiPaneInfo& searchPane = m_auimgr.GetPane( SearchPaneName() );
+        SetAuiPaneSize( m_auimgr, searchPane, -1, cfg->m_AuiPanels.search_panel_height );
+    }
 
     if( cfg->m_AuiPanels.hierarchy_panel_docked_width > 0 )
     {
@@ -721,6 +745,24 @@ void SCH_EDIT_FRAME::CreateScreens()
         SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
         SetScreen( screen );
     }
+
+    wxCommandEvent e( EDA_EVT_SCHEMATIC_CHANGED );
+    ProcessEventLocally( e );
+
+
+    for( wxEvtHandler* listener : m_schematicChangeListeners )
+    {
+        wxCHECK2( listener, continue );
+
+        // Use the windows variant when handling event messages in case there is any special
+        // event handler pre and/or post processing specific to windows.
+        wxWindow* win = dynamic_cast<wxWindow*>( listener );
+
+        if( win )
+            win->HandleWindowEvent( e );
+        else
+            listener->SafelyProcessEvent( e );
+    }
 }
 
 
@@ -932,6 +974,9 @@ void SCH_EDIT_FRAME::doCloseWindow()
     SetScreen( nullptr );
 
     Schematic().Reset();
+
+    // Prevents any rouge events from continuing (i.e. search panel tries to redraw)
+    Show( false );
 
     Destroy();
 }
@@ -2237,4 +2282,26 @@ void SCH_EDIT_FRAME::onCloseErcDialog( wxCommandEvent& aEvent )
         m_ercDialog->Destroy();
         m_ercDialog = nullptr;
     }
+}
+
+
+void SCH_EDIT_FRAME::AddSchematicChangeListener( wxEvtHandler* aListener )
+{
+    auto it = std::find( m_schematicChangeListeners.begin(), m_schematicChangeListeners.end(),
+                         aListener );
+
+    // Don't add duplicate listeners.
+    if( it == m_schematicChangeListeners.end() )
+        m_schematicChangeListeners.push_back( aListener );
+}
+
+
+void SCH_EDIT_FRAME::RemoveSchematicChangeListener( wxEvtHandler* aListener )
+{
+    auto it = std::find( m_schematicChangeListeners.begin(), m_schematicChangeListeners.end(),
+                         aListener );
+
+    // Don't add duplicate listeners.
+    if( it != m_schematicChangeListeners.end() )
+        m_schematicChangeListeners.erase( it );
 }
