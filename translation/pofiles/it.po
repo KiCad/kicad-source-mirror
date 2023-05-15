@@ -110,7 +110,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-12 12:57-0700\n"
-"PO-Revision-Date: 2023-03-15 13:35+0100\n"
+"PO-Revision-Date: 2023-05-15 10:18+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -4394,9 +4394,9 @@ msgid "Zoom %.2f"
 msgstr "Zoom %.2f"
 
 #: common/eda_draw_frame.cpp:617
-#, fuzzy, c-format
+#, c-format
 msgid "grid %s"
-msgstr "Assi griglia"
+msgstr "griglia %s"
 
 #: common/eda_draw_frame.cpp:630 pagelayout_editor/pl_editor_frame.cpp:752
 msgid "inches"
@@ -10758,9 +10758,8 @@ msgid "Replace matches in reference designators"
 msgstr "Sostituisci corrispondenze nei designatori di riferimento"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:120
-#, fuzzy
 msgid "Replace"
-msgstr "&Rimpiazza"
+msgstr "Rimpiazza"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:41
 msgid "Schematic Setup"
@@ -12800,14 +12799,14 @@ msgid "Unknown netlist format.\n"
 msgstr "Formato netlist sconosciuto.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:396
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
-msgstr "Tracciamento simbolo '%s' unità %d in '%s'\n"
+msgstr "Tracciamento simbolo '%s' unità %d su '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' to '%s'\n"
-msgstr "Tracciamento simbolo '%s' in '%s'\n"
+msgstr "Tracciamento simbolo '%s' su '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:430
 #, c-format
@@ -35221,52 +35220,43 @@ msgstr "Suffisso"
 #: pcbnew/pcb_dimension.cpp:453
 #, c-format
 msgid "Dimension '%s' on %s"
-msgstr "Dimensione \"%s\" su %s"
+msgstr "Dimensione '%s' su %s"
 
 #: pcbnew/pcb_dimension.cpp:1319
-#, fuzzy
 msgid "1234.0"
-msgstr "1234"
+msgstr "1234,0"
 
 #: pcbnew/pcb_dimension.cpp:1320
-#, fuzzy
 msgid "1234.0 mm"
-msgstr "1234 mm"
+msgstr "1234,0 mm"
 
 #: pcbnew/pcb_dimension.cpp:1321
-#, fuzzy
 msgid "1234.0 (mm)"
-msgstr "1234 (mm)"
+msgstr "1234,0 (mm)"
 
 #: pcbnew/pcb_dimension.cpp:1353
-#, fuzzy
 msgid "Units Format"
-msgstr "Formato unità:"
+msgstr "Formato unità"
 
 #: pcbnew/pcb_dimension.cpp:1359
-#, fuzzy
 msgid "Suppress Trailing Zeroes"
 msgstr "Sopprimi gli zeri finali"
 
 #: pcbnew/pcb_dimension.cpp:1387
-#, fuzzy
 msgid "Crossbar Height"
-msgstr "Puntatore destra"
+msgstr "Altezza crocino"
 
 #: pcbnew/pcb_dimension.cpp:1391
-#, fuzzy
 msgid "Extension Line Overshoot"
-msgstr "Scostamento linea estensione:"
+msgstr "Superamento linea estensione"
 
 #: pcbnew/pcb_dimension.cpp:1456
-#, fuzzy
 msgid "Leader Length"
-msgstr "Lunghezza via"
+msgstr "Lunghezza bollatura"
 
 #: pcbnew/pcb_dimension.cpp:1496
-#, fuzzy
 msgid "Text Frame"
-msgstr "Riquadro testo:"
+msgstr "Riquadro testo"
 
 #: pcbnew/pcb_edit_frame.cpp:203
 msgid "KiCad PCB Editor"
@@ -35564,9 +35554,9 @@ msgid "Error creating svg file"
 msgstr "Errore nel creare il file svg"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:337 pcbnew/pcbnew_jobs_handler.cpp:414
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to plot to '%s'.\n"
-msgstr "Fallito caricamento di \"%s\"."
+msgstr "Fallito caricamento su '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:624 pcbnew/pcbnew_jobs_handler.cpp:695
 msgid "Loading footprint library\n"
@@ -38970,12 +38960,10 @@ msgid "Import footprint from file"
 msgstr "Importa impronta da file"
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export Footprint..."
-msgstr "Esporta impronta"
+msgstr "Esporta impronta..."
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export footprint to file"
 msgstr "Esporta impronta su file"
 
@@ -41429,45 +41417,3 @@ msgstr "Schema KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "Circuito stampato KiCad"
-
-#, fuzzy
-#~ msgid "Export Current Footprint..."
-#~ msgstr "Esporta impronta..."
-
-#, fuzzy
-#~ msgid "(De Morgan) "
-#~ msgstr "De Morgan"
-
-#~ msgid "&Find"
-#~ msgstr "Tro&va"
-
-#~ msgid "Replace &All"
-#~ msgstr "Rimpiazz&a tutti"
-
-#, c-format
-#~ msgid "Failed to generate a name for '%s': exceeded UINT64_MAX"
-#~ msgstr "Fallita la generazione del nome per '%s': exceeded UINT64_MAX"
-
-#~ msgid "The name of the field cannot be empty."
-#~ msgstr "Il nome del campo non può essere vuoto."
-
-#, c-format
-#~ msgid ""
-#~ "Simulation model type must be the same as of its base class: '%s', but is "
-#~ "'%s'"
-#~ msgstr ""
-#~ "Il tipo modello di simulazione deve essere lo stesso della sua classe "
-#~ "base: '%s', invece è '%s'"
-
-#~ msgid "PTH and NPTH in separate files file"
-#~ msgstr "Fori metallizzati e non in file separati"
-
-#~ msgid "KiCad Error"
-#~ msgstr "Errore KiCad"
-
-#~ msgid ""
-#~ "Text will not be readable with a thickness greater than\n"
-#~ "1/4 its width or height."
-#~ msgstr ""
-#~ "Il testo sarà illeggibile con uno spessore maggiore di\n"
-#~ "1/4 della sua larghezza o altezza."
