@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-12 12:58-0700\n"
-"PO-Revision-Date: 2023-05-14 21:16+0000\n"
+"PO-Revision-Date: 2023-05-16 20:36+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -4614,7 +4614,7 @@ msgstr "Höjd"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:707
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2152
 msgid "Bezier"
-msgstr "Bezier"
+msgstr "Bézier"
 
 #: common/eda_shape.cpp:1657 pcbnew/pcb_textbox.cpp:547
 #: pcbnew/pcb_track.cpp:1280
@@ -23071,7 +23071,7 @@ msgstr "Ledarens likströmsresistans"
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:234
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:344
 msgid "ohm"
-msgstr "ohm"
+msgstr "Ω"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:217
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:160
@@ -25121,7 +25121,7 @@ msgstr "Fenolpapp naturlig"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:82
 msgid "Aluminum"
-msgstr "Aluminum"
+msgstr "Aluminium"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.h:53
 #: pcbnew/exporters/exporter_vrml.cpp:275
@@ -29289,7 +29289,7 @@ msgstr "Centrumpunkt:"
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:133
 #: pcbnew/dialogs/dialog_pad_properties.cpp:721
 msgid "Ring"
-msgstr "Ring"
+msgstr "Cirkelring"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:197
 msgid "Line width may not be 0 for unfilled shapes."
