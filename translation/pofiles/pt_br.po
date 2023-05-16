@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-12 12:58-0700\n"
-"PO-Revision-Date: 2023-05-14 21:16+0000\n"
+"PO-Revision-Date: 2023-05-16 20:36+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -1592,7 +1592,7 @@ msgstr "Cancela"
 
 #: common/confirm.cpp:168 common/confirm.cpp:173
 msgid "Open Anyway"
-msgstr "Abra mesmo assim"
+msgstr "Abrir mesmo assim"
 
 #: common/confirm.cpp:184 common/confirm.cpp:221
 msgid "Save Changes?"
@@ -3034,11 +3034,11 @@ msgstr ""
 
 #: common/dialogs/panel_color_settings_base.cpp:43
 msgid "Open Theme Folder"
-msgstr "Abra pasta dos temas"
+msgstr "Abrir a pasta dos temas"
 
 #: common/dialogs/panel_color_settings_base.cpp:44
 msgid "Open the folder containing color themes"
-msgstr "Abra a pasta com os temas das cores"
+msgstr "Abrir a pasta com os temas das cores"
 
 #: common/dialogs/panel_common_settings.cpp:85
 msgid "Icon scale:"
@@ -3278,7 +3278,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:290
 msgid "&Auto save:"
-msgstr "Salvamento &Automático:"
+msgstr "Salvamento &automático:"
 
 #: common/dialogs/panel_common_settings_base.cpp:295
 msgid ""
@@ -4156,7 +4156,7 @@ msgstr "Editor de símbolos"
 #: common/eda_base_frame.cpp:1092 common/eda_base_frame.cpp:1101
 #: common/eda_base_frame.cpp:1130 common/eda_base_frame.cpp:1147
 msgid "Display Options"
-msgstr "Opções de Exibição"
+msgstr "Opções de exibição"
 
 #: common/eda_base_frame.cpp:1065 common/eda_base_frame.cpp:1073
 #: common/eda_base_frame.cpp:1093 common/eda_base_frame.cpp:1102
@@ -4207,7 +4207,7 @@ msgstr "Editor da PCI"
 
 #: common/eda_base_frame.cpp:1104
 msgid "Action Plugins"
-msgstr "Plugins de Ação"
+msgstr "Plug-ins de ação"
 
 #: common/eda_base_frame.cpp:1105
 msgid "Origins & Axes"
@@ -5983,7 +5983,7 @@ msgstr "Adicione numa pasta já existente da biblioteca"
 
 #: common/tool/actions.cpp:61
 msgid "Open existing document"
-msgstr "Abra um documento já existente"
+msgstr "Abrir um documento já existente"
 
 #: common/tool/actions.cpp:67
 msgid "Save changes"
@@ -6213,7 +6213,7 @@ msgstr "Marque como uma exclusão a violação na janela atual do verificador"
 
 #: common/tool/actions.cpp:287 kicad/pcm/dialogs/dialog_pcm_base.cpp:131
 msgid "Refresh"
-msgstr "Atualize"
+msgstr "Atualizar"
 
 #: common/tool/actions.cpp:298
 msgid "Zoom to Fit"
@@ -6545,7 +6545,7 @@ msgstr "Introdução ao KiCad"
 
 #: common/tool/actions.cpp:655
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
-msgstr "Abra o guia \"Primeiros passos no KiCad\" para iniciantes"
+msgstr "Abrir o guia \"Primeiros passos no KiCad\" para iniciantes"
 
 #: common/tool/actions.cpp:660
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:35
@@ -6556,7 +6556,7 @@ msgstr "Ajuda"
 
 #: common/tool/actions.cpp:661
 msgid "Open product documentation in a web browser"
-msgstr "Abra a documentação do produto num navegador de internet"
+msgstr "Abrir a documentação do produto num navegador de internet"
 
 #: common/tool/actions.cpp:667
 msgid "List Hotkeys..."
@@ -6573,11 +6573,11 @@ msgstr "Participe"
 
 #: common/tool/actions.cpp:674
 msgid "Open \"Contribute to KiCad\" in a web browser"
-msgstr "Abra \"Contribua com o KiCad\" num navegador de internet"
+msgstr "Abrir \"Contribua com o KiCad\" num navegador de internet"
 
 #: common/tool/actions.cpp:680
 msgid "Open \"Donate to KiCad\" in a web browser"
-msgstr "Abra \"Contribua com o KiCad\" num navegador da internet"
+msgstr "Abrir \"Contribua com o KiCad\" num navegador da internet"
 
 #: common/tool/actions.cpp:684
 msgid "Report Bug"
@@ -8302,7 +8302,7 @@ msgstr "Atualize o campo do texto"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:134
 msgid "Update field visibilities"
-msgstr "Atualize visibilidade do campo"
+msgstr "Atualize a visibilidade do campo"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:135
 msgid "Update field sizes and styles"
@@ -8819,7 +8819,7 @@ msgstr "Edite a gravidade da violação..."
 
 #: eeschema/dialogs/dialog_erc.cpp:725 eeschema/dialogs/dialog_erc.cpp:918
 msgid "Open the Schematic Setup... dialog"
-msgstr "Abra a caixa de diálogo da configuração do esquema... diálogo"
+msgstr "Abrir a caixa de diálogo da configuração do esquema... diálogo"
 
 #: eeschema/dialogs/dialog_erc.cpp:817
 #: eeschema/dialogs/dialog_schematic_setup.cpp:84
@@ -10687,7 +10687,7 @@ msgstr "Abrir o arquivo após a plotagem"
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:163
 msgid "Open output file with associated application after successful plot"
 msgstr ""
-"Abra o arquivo de saída com o aplicativo relacionado depois que a plotagem "
+"Abrir o arquivo de saída com o aplicativo relacionado depois que a plotagem "
 "seja bem-sucedida"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:89
@@ -14568,7 +14568,7 @@ msgstr "O arquivo '%s' do esquema já existe."
 
 #: eeschema/sch_edit_frame.cpp:1192
 msgid "Open Schematic"
-msgstr "Abra o esquema"
+msgstr "Abrir o esquema"
 
 #: eeschema/sch_edit_frame.cpp:1261
 msgid "Assigning footprints requires a fully annotated schematic."
@@ -18571,7 +18571,7 @@ msgstr "Destaca os fios e os pinos de uma rede"
 
 #: eeschema/tools/ee_actions.cpp:603
 msgid "Edit with Symbol Editor"
-msgstr "Abra no editor de símbolos"
+msgstr "Abrir no editor de símbolos"
 
 #: eeschema/tools/ee_actions.cpp:603
 msgid "Open the selected symbol in the Symbol Editor"
@@ -18760,7 +18760,7 @@ msgstr "Alterna para o editor de PCI"
 
 #: eeschema/tools/ee_actions.cpp:728
 msgid "Open PCB in board editor"
-msgstr "Abra a PCI no editor da placa"
+msgstr "Abrir a PCI no editor da placa"
 
 #: eeschema/tools/ee_actions.cpp:733
 msgid "Export Netlist..."
@@ -19110,7 +19110,7 @@ msgstr "Alinha os elementos à grade"
 
 #: eeschema/tools/ee_actions.cpp:981
 msgid "Save Current Sheet Copy As..."
-msgstr "Salva uma cópia da folha at&ual como…"
+msgstr "Salva uma cópia da folha atual como..."
 
 #: eeschema/tools/ee_actions.cpp:981
 msgid "Save a copy of the current sheet to another location or name"
@@ -19486,7 +19486,7 @@ msgstr "A página '%s' não foi encontrada."
 
 #: eeschema/tools/simulator_control.cpp:79
 msgid "Open simulation workbook"
-msgstr "Abra a pasta de trabalho da simulação"
+msgstr "Abrir a pasta de trabalho da simulação"
 
 #: eeschema/tools/simulator_control.cpp:98
 msgid "noname"
@@ -20118,7 +20118,7 @@ msgstr "Arquivos de trabalho"
 
 #: gerbview/files.cpp:182
 msgid "Open Autodetected File(s)"
-msgstr "Abra os arquivo(s) que foram detectado(s) automaticamente"
+msgstr "Abrir os arquivo(s) que foram detectado(s) automaticamente"
 
 #: gerbview/files.cpp:205
 msgid "Top layer"
@@ -20170,11 +20170,11 @@ msgstr "Ilha principal da parte de baixo"
 
 #: gerbview/files.cpp:225
 msgid "Open Gerber File(s)"
-msgstr "Abra os arquivo(s) Gerber"
+msgstr "Abrir os arquivo(s) Gerber"
 
 #: gerbview/files.cpp:236
 msgid "Open NC (Excellon) Drill File(s)"
-msgstr "Abra os arquivo(s) NC (Excellon) de perfuração"
+msgstr "Abrir os arquivo(s) NC (Excellon) de perfuração"
 
 #: gerbview/files.cpp:274
 msgid "File not found:"
@@ -20223,7 +20223,7 @@ msgstr "<b>houve um erro de leitura no arquivo %s que foi descompactado</b>"
 
 #: gerbview/files.cpp:638
 msgid "Open Zip File"
-msgstr "Abra o arquivo Zip"
+msgstr "Abrir o arquivo Zip"
 
 #: gerbview/files.cpp:672 gerbview/job_file_reader.cpp:242
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:163
@@ -20378,7 +20378,7 @@ msgstr "Este arquivo de trabalho usa um formato desatualizado. Recrie-o."
 
 #: gerbview/job_file_reader.cpp:192
 msgid "Open Gerber Job File"
-msgstr "Abra o arquivo de trabalho Gerber"
+msgstr "Abrir o arquivo de trabalho Gerber"
 
 #: gerbview/menubar.cpp:69 gerbview/menubar.cpp:76
 msgid "Clear Recent Gerber Files"
@@ -20386,19 +20386,19 @@ msgstr "Limpe os recentes arquivos Gerber"
 
 #: gerbview/menubar.cpp:75 gerbview/menubar.cpp:98
 msgid "Open Recent Gerber File"
-msgstr "Abra arquivo recente Gerber"
+msgstr "Abrir arquivo recente Gerber"
 
 #: gerbview/menubar.cpp:89
 msgid "Open Recent Drill File"
-msgstr "Abra o arquivo recente de perfuração"
+msgstr "Abrir o arquivo recente de perfuração"
 
 #: gerbview/menubar.cpp:119
 msgid "Open Recent Job File"
-msgstr "Abra o arquivo recente de trabalho"
+msgstr "Abrir o arquivo recente de trabalho"
 
 #: gerbview/menubar.cpp:140
 msgid "Open Recent Zip File"
-msgstr "Abra o arquivo zip recente"
+msgstr "Abrir o arquivo zip recente"
 
 #: gerbview/readgerb.cpp:64
 #, c-format
@@ -20474,45 +20474,45 @@ msgstr "<Sem seleção>"
 
 #: gerbview/tools/gerbview_actions.cpp:39
 msgid "Open Autodetected File(s)..."
-msgstr "Abra os arquivo(s) detectado(s) automaticamente..."
+msgstr "Abrir os arquivo(s) detectado(s) automaticamente..."
 
 #: gerbview/tools/gerbview_actions.cpp:40
 msgid "Open Autodetected file(s) on a new layer."
-msgstr "Abra o(s) arquivo(s) detectado(s) automaticamente numa nova camada."
+msgstr "Abrir o(s) arquivo(s) detectado(s) automaticamente numa nova camada."
 
 #: gerbview/tools/gerbview_actions.cpp:45
 msgid "Open Gerber Plot File(s)..."
-msgstr "Abra os arquivo(s) de plotagem do Gerber..."
+msgstr "Abrir os arquivo(s) de plotagem do Gerber..."
 
 #: gerbview/tools/gerbview_actions.cpp:46
 msgid "Open Gerber plot file(s) on a new layer."
-msgstr "Abra o(s) arquivo(s) de plotagem do Gerber numa nova camada."
+msgstr "Abrir o(s) arquivo(s) de plotagem do Gerber numa nova camada."
 
 #: gerbview/tools/gerbview_actions.cpp:51
 msgid "Open Excellon Drill File(s)..."
-msgstr "Abra os arquivo(s) de treino do Excellon..."
+msgstr "Abrir os arquivo(s) de treino do Excellon..."
 
 #: gerbview/tools/gerbview_actions.cpp:52
 msgid "Open Excellon drill file(s) on a new layer."
-msgstr "Abra o(s) arquivo(s) de perfuração do Excellon numa nova camada."
+msgstr "Abrir o(s) arquivo(s) de perfuração do Excellon numa nova camada."
 
 #: gerbview/tools/gerbview_actions.cpp:57
 msgid "Open Gerber Job File..."
-msgstr "Abra o arquivo de trabalho Gerber..."
+msgstr "Abrir o arquivo de trabalho Gerber..."
 
 #: gerbview/tools/gerbview_actions.cpp:58
 msgid "Open a Gerber job file and its associated gerber plot files"
 msgstr ""
-"Abra um arquivo de trabalho Gerber e os seus arquivos de plotagem associados "
-"ao gerber"
+"Abrir um arquivo de trabalho Gerber e os seus arquivos de plotagem "
+"associados ao gerber"
 
 #: gerbview/tools/gerbview_actions.cpp:63
 msgid "Open Zip Archive File..."
-msgstr "Abra o arquivo Zip..."
+msgstr "Abrir o arquivo Zip..."
 
 #: gerbview/tools/gerbview_actions.cpp:64
 msgid "Open a zipped archive (Gerber and Drill) file"
-msgstr "Abra um arquivo compactado (Gerber e Drill)"
+msgstr "Abrir um arquivo compactado (Gerber e Drill)"
 
 #: gerbview/tools/gerbview_actions.cpp:69
 msgid "Show Layers Manager"
@@ -21330,7 +21330,7 @@ msgid ""
 "Open '%s'\n"
 msgstr ""
 "\n"
-"Abra '%s'\n"
+"Abrir '%s'\n"
 
 #: kicad/files-io.cpp:76
 msgid "Target Directory"
@@ -21507,7 +21507,7 @@ msgstr "Revela a pasta do projeto no Finder"
 
 #: kicad/menubar.cpp:263
 msgid "Open project directory in file explorer"
-msgstr "Abra a pasta do projeto no explorador de arquivos"
+msgstr "Abrir a pasta do projeto no explorador de arquivos"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:53
 msgid "Add Default Repository"
@@ -22106,7 +22106,7 @@ msgstr "Revela o diretório numa janela do Finder"
 
 #: kicad/project_tree_pane.cpp:699
 msgid "Open Directory in File Explorer"
-msgstr "Abra o diretório no explorador de arquivos"
+msgstr "Abrir o diretório no explorador de arquivos"
 
 #: kicad/project_tree_pane.cpp:700 pcbnew/tools/pcb_actions.cpp:621
 msgid "Opens the directory in the default system file manager"
@@ -22118,7 +22118,7 @@ msgstr "Revela os diretórios numa janela do Finder"
 
 #: kicad/project_tree_pane.cpp:709
 msgid "Open Directories in File Explorer"
-msgstr "Abra os diretórios no gerenciador de arquivos"
+msgstr "Abrir os diretórios no gerenciador de arquivos"
 
 #: kicad/project_tree_pane.cpp:710
 msgid "Opens the directories in the default system file manager"
@@ -22126,11 +22126,11 @@ msgstr "Abre os diretórios no gerenciador de arquivos padrão do sistema"
 
 #: kicad/project_tree_pane.cpp:721
 msgid "Open the file in a Text Editor"
-msgstr "Abra o arquivo num editor de texto"
+msgstr "Abrir o arquivo num editor de texto"
 
 #: kicad/project_tree_pane.cpp:723
 msgid "Open files in a Text Editor"
-msgstr "Abra os arquivos num editor de texto"
+msgstr "Abrir os arquivos num editor de texto"
 
 #: kicad/project_tree_pane.cpp:725
 msgid "Edit in a Text Editor"
@@ -22199,7 +22199,7 @@ msgstr "Crie um novo projeto a partir de um modelo"
 
 #: kicad/tools/kicad_manager_actions.cpp:53
 msgid "Open Demo Project..."
-msgstr "Abra o projeto de demonstração..."
+msgstr "Abrir o projeto de demonstração..."
 
 #: kicad/tools/kicad_manager_actions.cpp:53
 msgid "Open a demo project"
@@ -22207,7 +22207,7 @@ msgstr "Abre um projeto de demonstração"
 
 #: kicad/tools/kicad_manager_actions.cpp:59
 msgid "Open Project..."
-msgstr "Abra o projeto..."
+msgstr "Abrir o projeto..."
 
 #: kicad/tools/kicad_manager_actions.cpp:59
 msgid "Open an existing project"
@@ -22215,7 +22215,7 @@ msgstr "Abre um projeto já existente"
 
 #: kicad/tools/kicad_manager_actions.cpp:65
 msgid "Close Project"
-msgstr "Fecha o projeto"
+msgstr "Fechar o projeto"
 
 #: kicad/tools/kicad_manager_actions.cpp:65
 msgid "Close the current project"
@@ -22264,7 +22264,7 @@ msgstr "Executa o plug-in e o gerenciador de conteúdo"
 
 #: kicad/tools/kicad_manager_actions.cpp:133
 msgid "Open Text Editor"
-msgstr "Abra o editor de texto"
+msgstr "Abrir o editor de texto"
 
 #: kicad/tools/kicad_manager_actions.cpp:133
 msgid "Launch preferred text editor"
@@ -22324,7 +22324,7 @@ msgstr "Um problema ocorreu na criação de um novo projeto a partir do modelo."
 
 #: kicad/tools/kicad_manager_control.cpp:307
 msgid "Open Existing Project"
-msgstr "Abra um projeto já existente"
+msgstr "Abrir um projeto já existente"
 
 #: kicad/tools/kicad_manager_control.cpp:601
 #, c-format
@@ -22668,7 +22668,7 @@ msgstr "O arquivo \"%s\" foi inserido"
 
 #: pagelayout_editor/files.cpp:155
 msgid "Open"
-msgstr "Abra"
+msgstr "Abrir"
 
 #: pagelayout_editor/files.cpp:171 pagelayout_editor/files.cpp:218
 #, c-format
@@ -27202,7 +27202,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_drc.cpp:643
 msgid "Open the Board Setup... dialog"
-msgstr "Abra a caixa de diálogo Configuração da placa... diálogo"
+msgstr "Abrir a Configuração da placa... diálogo"
 
 #: pcbnew/dialogs/dialog_drc.cpp:873
 #, c-format
@@ -32810,7 +32810,6 @@ msgid "Check rule syntax"
 msgstr "Verifique a sintaxe da regra"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -33343,8 +33342,15 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.memberOf('<group_name>')\n"
-"É verdadeiro caso `A` seja membro de um determinado grupo. Incluindo membros "
-"agrupados.\n"
+"É verdadeiro caso `A` seja membro de um determinado grupo. Curingas podem "
+"ser usados no nome.\n"
+"Incluindo membros agrupados.\n"
+"<br><br>\n"
+"\n"
+"    A.memberOfFootprint('<footprint_reference>')\n"
+"É verdadeiro caso `A` seja membro de um footprint correspondente ao "
+"designador de referência informado.  A\n"
+"referência pode conter curingas.\n"
 "<br><br>\n"
 "\n"
 "    A.existsOnLayer('<layer_name>')\n"
@@ -33353,10 +33359,14 @@ msgstr ""
 "Editor de camadas da placa ou o seu nome canônico (ex.: `F.Cu`).\n"
 "\n"
 "NB: isso retorna verdadeiro caso `A` esteja numa determinada\n"
-"camada, independentemente se a regra foi ou não avaliada para aquela "
-"camada.\n"
-"Para este último, use uma cláusula `(layer \"layer_name\")` dentro da "
-"regra.\n"
+"camada, independentemente se a regra foi ou não avaliada para aquela camada."
+"\n"
+"Para este último, use uma cláusula `(layer \"layer_name\")` dentro da regra."
+"\n"
+"<br><br>\n"
+"\n"
+"    !!! A.memberOf('<group_name>') !!!\n"
+"Descontinuado; em vez disso use `memberOfGroup()`.\n"
 "<br><br>\n"
 "\n"
 "    !!! A.insideCourtyard('<footprint_refdes>') !!!\n"
@@ -33396,13 +33406,13 @@ msgstr ""
 "\n"
 "    (rule \"Distância entre as vias das diferentes nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "    (rule \"Espaço entre as ilhas das diferentes nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "\n"
 "    (rule \"Furo da ilha para monitorar a folga\"\n"
@@ -33490,8 +33500,8 @@ msgstr ""
 "### Documentação\n"
 "\n"
 "Consulte o link ao lado para ler a documentação completa [https://docs.kicad."
-"org](https://docs.kicad.org/GetMajorMinorVersion/pcbnew/"
-"#custom_design_rules)."
+"org](https://docs.kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:75
 msgid "Default properties for new dimension objects:"
@@ -33823,16 +33833,13 @@ msgid "Checking %s: min %s; opt %s; max %s."
 msgstr "Verificando %s: mín %s; opc %s; máx %s."
 
 #: pcbnew/drc/drc_engine.cpp:1082
-#, fuzzy
 msgid "Netclass clearances apply only between copper items."
-msgstr ""
-"Os isolamentos da placa e da classe da rede se aplicam apenas entre os itens "
-"com cobre."
+msgstr "As folgas Netclass se aplicam apenas entre os itens de cobre."
 
 #: pcbnew/drc/drc_engine.cpp:1086 pcbnew/drc/drc_engine.cpp:1091
-#, fuzzy, c-format
+#, c-format
 msgid "%s contains no copper.  Rule ignored."
-msgstr "%s não é um furo perfurado; regra ignorada."
+msgstr "%s não contém cobre.  Regra ignorada."
 
 #: pcbnew/drc/drc_engine.cpp:1146
 msgid "Keepout constraint not met."
@@ -33904,9 +33911,9 @@ msgid "Condition not satisfied; rule ignored."
 msgstr "Condição não satisfeita; regra ignorada."
 
 #: pcbnew/drc/drc_engine.cpp:1332 pcbnew/drc/drc_engine.cpp:1354
-#, fuzzy, c-format
+#, c-format
 msgid "Local clearance on %s: %s."
-msgstr "Isolamento local na%s; isolamento: %s."
+msgstr "Isolamento local em %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1413
 #, c-format
@@ -34463,137 +34470,137 @@ msgstr "(%s mín %s; atual %s)"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:355
 #, c-format
 msgid "%s corner smoothing setting differs."
-msgstr ""
+msgstr "%s configuração(s) de suavização de canto diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:357
 #, c-format
 msgid "%s corner smoothing radius differs."
-msgstr ""
+msgstr "%s raio(s) de suavização de canto diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid "%s name differs."
-msgstr "%s difere."
+msgstr "%s nome(s) diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:361
-#, fuzzy, c-format
+#, c-format
 msgid "%s priority differs."
-msgstr "%s difere."
+msgstr "%s prioridade(s) diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:364
 #, c-format
 msgid "%s keep-out property differs."
-msgstr ""
+msgstr "%s propriedade(s) de isolamento diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:366
-#, fuzzy, c-format
+#, c-format
 msgid "%s keep out copper fill setting differs."
-msgstr "Afasta o preenchimento com cobre"
+msgstr "%s configuração(ões) de preenchimento do isolamento com cobre diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "%s keep out footprints setting differs."
-msgstr "As configurações dos requisitos do pedaço são diferentes."
+msgstr "%s configuração(ões) de isolamento dos footprints diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:370
 #, c-format
 msgid "%s keep out pads setting differs."
-msgstr ""
+msgstr "%s configuração(ões) de isolamento das ilhas diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:372
-#, fuzzy, c-format
+#, c-format
 msgid "%s keep out tracks setting differs."
-msgstr "Apaga as &trilhas que conectem a redes distintas"
+msgstr "%s configuração(ões) de isolamento das trilhas diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:374
 #, c-format
 msgid "%s keep out vias setting differs."
-msgstr ""
+msgstr "%s configuração(ões) das vias diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:377
-#, fuzzy, c-format
+#, c-format
 msgid "%s layers differ."
-msgstr "%s difere."
+msgstr "%s camada(s) diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:380
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad connection property differs."
-msgstr "%s conexão(ões) da(s) Ilha(s): %s."
+msgstr "%s conexão(ões) da(s) Ilha(s) diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:382
-#, fuzzy, c-format
+#, c-format
 msgid "%s local clearance differs."
-msgstr "Resolvendo o isolamento: %s."
+msgstr "%s isolamento(s) local(is) diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:384
-#, fuzzy, c-format
+#, c-format
 msgid "%s thermal relief gap differs."
-msgstr "%s lacuna(s) de alívio térmico: %s."
+msgstr "%s lacuna(s) de alívio térmico diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:386
-#, fuzzy, c-format
+#, c-format
 msgid "%s thermal relief spoke width differs."
-msgstr "Largura do raio do alívio térmico que foi resolvido: %s."
+msgstr "%s raio(s) de alívio térmico diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "%s min thickness differs."
-msgstr "%s espessura mínima: %s."
+msgstr "%s espessura mínima diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:392
 #, c-format
 msgid "%s remove islands setting differs."
-msgstr ""
+msgstr "%s configuração da remoção da(s) ilhas diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:394
-#, fuzzy, c-format
+#, c-format
 msgid "%s minimum island size setting differs."
-msgstr "Tamanho mínimo da ilha:"
+msgstr "%s configuração(ões) do tamanho mínimo da(s) ilha(s) diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:397
-#, fuzzy, c-format
+#, c-format
 msgid "%s fill type differs."
-msgstr "%s difere."
+msgstr "%s tipo(s) de preenchimento diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:399
-#, fuzzy, c-format
+#, c-format
 msgid "%s hatch width differs."
-msgstr "%s difere."
+msgstr "%s largura do hachurado diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:401
-#, fuzzy, c-format
+#, c-format
 msgid "%s hatch gap differs."
-msgstr "%s difere."
+msgstr "%s largura(s) do hachurado diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:403
-#, fuzzy, c-format
+#, c-format
 msgid "%s hatch orientation differs."
-msgstr "A contagem da regra da região é diferente."
+msgstr "%s orientação(ões) do hachurado diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:405
 #, c-format
 msgid "%s hatch smoothing level differs."
-msgstr ""
+msgstr "%s nivel(eis) de suavização diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:407
 #, c-format
 msgid "%s hatch smoothing amount differs."
-msgstr ""
+msgstr "%s quantidade de suavização do hachurado diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:409
 #, c-format
 msgid "%s minimum hatch hole setting differs."
-msgstr ""
+msgstr "%s configuração(ões) do furo mínimo do hachurado diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:415
-#, fuzzy, c-format
+#, c-format
 msgid "%s outline corner count differs."
-msgstr "A contagem da regra da região é diferente."
+msgstr "%s contagem(s) do contorno do(s) canto(s) diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:430
-#, fuzzy, c-format
+#, c-format
 msgid "%s corners differ."
-msgstr "%s difere."
+msgstr "%s canto(s) diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:440
 msgid "3D model scale doesn't match: "
@@ -34671,14 +34678,14 @@ msgid "Pad count differs."
 msgstr "A contagem das ilhas são diferentes."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:599
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s differs."
-msgstr "%s difere."
+msgstr "Ilha %s diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:604
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s has overrides."
-msgstr "%s possuem substituições."
+msgstr "Ilha %s possuem substituições."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:614
 msgid "3D model count differs."
@@ -36165,24 +36172,24 @@ msgid "Removed %s 'exclude from BOM' fabrication attribute."
 msgstr "%s foi removido, 'exclui do BOM' o atributo de fabricação."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:412
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s 'Do not place' fabrication attribute."
-msgstr "Adiciona %s exclui do atributo de fabricação BOM."
+msgstr "Adiciona %s atributos 'Não colocar' na fabricação."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:417
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'Do not place' fabrication attribute."
-msgstr "Remove %s exclui do atributo de fabricação BOM."
+msgstr "Remove %s atributo 'Não colocar' da fabricação."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:428
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s 'Do not place' fabrication attribute."
-msgstr "%s foi adicionado, 'exclui do BOM' o atributo de fabricação."
+msgstr "Foi adicionado %s atributo(s) 'Não colocar' na fabricação."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:434
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s 'Do not place' fabrication attribute."
-msgstr "%s foi removido, 'exclui do BOM' o atributo de fabricação."
+msgstr "Foi removido %s atributo(s), 'Não colocar' da fabricação."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:510
 #, c-format
@@ -36195,9 +36202,11 @@ msgid "Disconnected %s pin %s."
 msgstr "%s foi desconectado pino %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:526
-#, fuzzy, c-format
+#, c-format
 msgid "No net found for component %s pad %s (no pin %s in symbol)."
-msgstr "Nenhuma rede foi encontrada para o símbolo %s pino %s."
+msgstr ""
+"Nenhuma rede foi encontrada para o componente %s ilha %s (nenhum pino %s no "
+"símbolo)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:580
 #, c-format
@@ -36763,9 +36772,8 @@ msgid "Constraints Report"
 msgstr "Relatório das restrições"
 
 #: pcbnew/pcb_edit_frame.cpp:2455 pcbnew/tools/pcb_actions.cpp:1178
-#, fuzzy
 msgid "Diff Footprint with Library"
-msgstr "Footprints para a biblioteca..."
+msgstr "Diff footprint com a biblioteca"
 
 #: pcbnew/pcb_expr_evaluator.cpp:307
 msgid "must be mm, in, or mil"
@@ -36811,10 +36819,9 @@ msgid "Missing group name argument to %s."
 msgstr "Falta o argumento do nome do grupo para %s."
 
 #: pcbnew/pcb_expr_functions.cpp:802
-#, fuzzy, c-format
+#, c-format
 msgid "Missing footprint argument (reference designator) to %s."
-msgstr ""
-"Falta o argumento do footprint (A, B, ou o designador de referência) para %s."
+msgstr "Falta argumento do footprint (designador de referência) para %s."
 
 #: pcbnew/pcb_expr_functions.cpp:911
 #, c-format
@@ -37406,13 +37413,13 @@ msgstr ""
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:325
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:349
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR construction layer '%s' is on the outer surface of the board. It "
 "has been ignored."
 msgstr ""
-"O design CADSTAR contém reforço de junção. Este importador ainda não é "
-"compatível com eles, então tais reforços no design foram ignorados."
+"A camada de construção CADSTAR '%s' está na superfície externa da placa. Ele "
+"foi ignorado."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:588
 #, c-format
@@ -38047,18 +38054,17 @@ msgid "Cannot interpret date code %d"
 msgstr "Não foi possível interpretar o código de data %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:925
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Items found on undefined layers (%s).\n"
 "Do you wish to rescue them to the %s layer?"
 msgstr ""
-"Itens encontrados nas camadas sem definição.  Deseja\n"
-"resgatá-los para a camada User.Comments?"
+"Itens encontrados nas camadas sem definição (%s).\n"
+"Deseja resgatá-los para a camada %s?"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:930
-#, fuzzy
 msgid "Undefined Layers Warning"
-msgstr "Camadas indefinidas:"
+msgstr "Aviso de camadas indefinidas"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1153
 #, c-format
@@ -38318,11 +38324,9 @@ msgstr ""
 "Forma desconhecida da ilha '%c=0x%02x' na linha: %d do footprint: '%s'."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1536
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown PCB_SHAPE type:'%c=0x%02x' on line %d of footprint '%s'."
-msgstr ""
-"Tipo da forma FP_SHAPE desconhecido:'%c=0x%02x' na linha %d do footprint "
-"'%s'."
+msgstr "Tipo PCB_SHAPE desconhecido:'%c=0x%02x' na linha %d do footprint '%s'."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2299
 #, c-format
@@ -38995,9 +38999,8 @@ msgid "A wire_via refers to missing padstack '%s'."
 msgstr "Um wire_via refere-se ao empilhamento ausente da ilha '%s'."
 
 #: pcbnew/teardrop/dialog_teardrop.cpp:225
-#, fuzzy
 msgid "Filling Zones"
-msgstr "Preenche zona"
+msgstr "Regiões de preenchimento"
 
 #: pcbnew/teardrop/dialog_teardrop.cpp:239
 #, c-format
@@ -39128,13 +39131,14 @@ msgstr ""
 "formato curvo"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:407
-#, fuzzy
 msgid "Generate raw teardrops"
-msgstr "Gere um erro"
+msgstr "Gerar reforço da junção puro"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:413
 msgid "(Shapes will be adjusted for clearances on next zone fill.)"
 msgstr ""
+"(As formas serão ajustadas para as folgas no preenchimento da próxima "
+"região.)"
 
 #: pcbnew/teardrop/dialog_teardrop_base.h:123
 msgid "Add Teardrops"
@@ -39145,9 +39149,8 @@ msgid "Add teardrops"
 msgstr "Adiciona reforços de junção"
 
 #: pcbnew/teardrop/teardrop.cpp:250
-#, fuzzy
 msgid "Add teardrops and refill zones"
-msgstr "Coloque um reforço na junção das ilhas nas regiões"
+msgstr "Adiciona um reforço da junção e áreas de preenchimento"
 
 #: pcbnew/teardrop/teardrop.cpp:449
 msgid "Remove teardrops"
@@ -39325,11 +39328,10 @@ msgid "[netclass %s]"
 msgstr "[netclass %s]"
 
 #: pcbnew/tools/board_inspection_tool.cpp:178
-#, fuzzy
 msgid "Report incomplete: could not compile custom design rules."
 msgstr ""
 "Relatório incompleto: não foi possível compilar as regras personalizadas do "
-"design.  "
+"design."
 
 #: pcbnew/tools/board_inspection_tool.cpp:280
 msgid "Uncoupled Length"
@@ -39521,16 +39523,18 @@ msgid "Cannot generate clearance report on empty group."
 msgstr "Não é possível gerar um relatório de isolamento num grupo vazio."
 
 #: pcbnew/tools/board_inspection_tool.cpp:622
-#, fuzzy
 msgid "Cannot generate clearance report on footprint with no pads."
-msgstr "Não é possível gerar um relatório de isolamento num grupo vazio."
+msgstr ""
+"Não é possível gerar um relatório de isolamento num footprint sem nenhuma "
+"ilha."
 
 #: pcbnew/tools/board_inspection_tool.cpp:637
-#, fuzzy
 msgid ""
 "Cannot generate clearance report on footprint with multiple pads.  Select a "
 "single pad."
-msgstr "Não é possível gerar um relatório de isolamento num grupo vazio."
+msgstr ""
+"Não é possível gerar um relatório de isolamento num footprint com diversas "
+"ilhas.  Selecione uma única ilha."
 
 #: pcbnew/tools/board_inspection_tool.cpp:692
 msgid "Zone connection resolution for:"
@@ -39581,14 +39585,14 @@ msgstr ""
 "Foi substituído por um alívio térmico físico maior de %s;isolamento: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:776
-#, fuzzy, c-format
+#, c-format
 msgid "Overridden by larger physical hole clearance from %s; clearance: %s."
-msgstr "Foi substituído por um furo físico maior de %s;isolamento: %s."
+msgstr ""
+"Foi substituído por um isolamento maior do furo físico de %s; isolamento: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:835
-#, fuzzy
 msgid "Clearance is 0."
-msgstr "Isolamento: %s."
+msgstr "O isolamento é 0."
 
 #: pcbnew/tools/board_inspection_tool.cpp:839
 #, c-format
@@ -39695,21 +39699,18 @@ msgid "Item allowed at current location."
 msgstr "Item permitido na localização atual."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1407
-#, fuzzy
 msgid "Select a footprint to diff with its library equivalent."
 msgstr ""
-"Selecione um footprint para comparar com o seu equivalente na biblioteca."
+"Selecione um footprint para criar um diff com a sua biblioteca equivalente."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1428
-#, fuzzy
 msgid "Board vs library diff for:"
-msgstr "Verificação da placa/biblioteca para:"
+msgstr "Diff da placa vs biblioteca para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1451
 #: pcbnew/tools/board_inspection_tool.cpp:1459
-#, fuzzy
 msgid "Manage Footprint Libraries"
-msgstr "Gerencie as bibliotecas de footprint..."
+msgstr "Gerenciar as bibliotecas de footprint"
 
 #: pcbnew/tools/convert_tool.cpp:67
 msgid "Copy line width of first object"
@@ -40306,11 +40307,11 @@ msgstr "Exclui o último ponto que foi adicionado ao item atual"
 
 #: pcbnew/tools/pcb_actions.cpp:233
 msgid "Close Outline"
-msgstr "Fecha esboço"
+msgstr "Fechar o esboço"
 
 #: pcbnew/tools/pcb_actions.cpp:233
 msgid "Close the in progress outline"
-msgstr "Fecha o esboço em andamento"
+msgstr "Fechar o esboço em andamento"
 
 #: pcbnew/tools/pcb_actions.cpp:240
 msgid "Show the design rules checker window"
@@ -40961,7 +40962,7 @@ msgstr "Adiciona Placa..."
 
 #: pcbnew/tools/pcb_actions.cpp:783
 msgid "Open another board and append its contents to this board"
-msgstr "Abra outra placa e anexe o seu conteúdo nesta placa"
+msgstr "Abrir outra placa e anexar o seu conteúdo nesta placa"
 
 #: pcbnew/tools/pcb_actions.cpp:795
 msgid "Toggle Last Net Highlight"
@@ -41322,9 +41323,8 @@ msgid "Shows board statistics"
 msgstr "Exibe as estatísticas da placa"
 
 #: pcbnew/tools/pcb_actions.cpp:1166
-#, fuzzy
 msgid "Clearance Resolution"
-msgstr "Resolução do isolamento..."
+msgstr "Resolução do isolamento"
 
 #: pcbnew/tools/pcb_actions.cpp:1167
 msgid ""
@@ -41334,19 +41334,17 @@ msgstr ""
 "selecionados"
 
 #: pcbnew/tools/pcb_actions.cpp:1172
-#, fuzzy
 msgid "Constraints Resolution"
-msgstr "Resolução das restrições ..."
+msgstr "Resolução das restrições"
 
 #: pcbnew/tools/pcb_actions.cpp:1173
 msgid "Show constraints resolution for the selected object"
 msgstr "Mostre a resolução das restrições par aos objetos selecionados"
 
 #: pcbnew/tools/pcb_actions.cpp:1179
-#, fuzzy
 msgid "Show differences between board footprint and its library equivalent"
 msgstr ""
-"Verifique as diferenças entre o footprint da placa e o seu equivalente na "
+"Mostra as diferenças entre o footprint da placa e o seu equivalente na "
 "biblioteca"
 
 #: pcbnew/tools/pcb_actions.cpp:1185
