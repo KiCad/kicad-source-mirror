@@ -415,56 +415,6 @@ bool STEP_PCB_MODEL::isBoardOutlineValid()
     return m_pcb_labels.size() > 0;
 }
 
-// A helper function to know if a SHAPE_LINE_CHAIN is encoding a circle
-static bool IsChainCircle( const SHAPE_LINE_CHAIN& aChain )
-{
-    // If aChain is a circle it
-    // - contains only one arc
-    // - this arc has the same start and end point
-    const std::vector<SHAPE_ARC>& arcs = aChain.CArcs();
-
-    if( arcs.size() == 1 )
-    {
-        const SHAPE_ARC& arc = arcs[0];
-
-        if( arc. GetP0() == arc.GetP1() )
-            return true;
-    }
-
-    return false;
-}
-
-bool STEP_PCB_MODEL::MakeShapeAsCylinder( TopoDS_Shape& aShape,
-                                          const SHAPE_LINE_CHAIN& aChain, double aThickness,
-                                          double aZposition, const VECTOR2D& aOrigin )
-{
-    if( !aShape.IsNull() )
-        return false; // there is already data in the shape object
-
-    if( !aChain.IsClosed() )
-        return false; // the loop is not closed
-
-    const std::vector<SHAPE_ARC>& arcs = aChain.CArcs();
-    const SHAPE_ARC& arc = arcs[0];
-
-    TopoDS_Shape base_shape;
-    base_shape = BRepPrimAPI_MakeCylinder(
-                        pcbIUScale.IUTomm( arc.GetRadius() ), aThickness ).Shape();
-    gp_Trsf shift;
-    shift.SetTranslation( gp_Vec( pcbIUScale.IUTomm( arc.GetCenter().x - aOrigin.x ),
-                                  -pcbIUScale.IUTomm( arc.GetCenter().y - aOrigin.y ),
-                                  aZposition ) );
-    BRepBuilderAPI_Transform round_shape( base_shape, shift );
-    aShape = round_shape;
-
-    if( aShape.IsNull() )
-    {
-        ReportMessage( wxT( "failed to create a cylinder vertical shape\n" ) );
-        return false;
-    }
-
-    return true;
-}
 
 bool STEP_PCB_MODEL::MakeShape( TopoDS_Shape& aShape, const SHAPE_LINE_CHAIN& aChain,
                                 double aThickness, double aZposition, const VECTOR2D& aOrigin )
@@ -474,10 +424,6 @@ bool STEP_PCB_MODEL::MakeShape( TopoDS_Shape& aShape, const SHAPE_LINE_CHAIN& aC
 
     if( !aChain.IsClosed() )
         return false; // the loop is not closed
-
-    // a SHAPE_LINE_CHAIN that is in fact a circle (one 360deg arc) is exported as cylinder
-    if( IsChainCircle( aChain ) )
-        return MakeShapeAsCylinder( aShape, aChain, aThickness, aZposition, aOrigin );
 
     BRepBuilderAPI_MakeWire wire;
     bool success = true;
