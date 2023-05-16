@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-12 12:57-0700\n"
-"PO-Revision-Date: 2023-05-14 21:15+0000\n"
+"PO-Revision-Date: 2023-05-18 16:52+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/v7/pt_BR/>\n"
@@ -1575,7 +1575,7 @@ msgstr "Cancela"
 
 #: common/confirm.cpp:168 common/confirm.cpp:173
 msgid "Open Anyway"
-msgstr "Abra mesmo assim"
+msgstr "Abrir mesmo assim"
 
 #: common/confirm.cpp:184 common/confirm.cpp:221
 msgid "Save Changes?"
@@ -3012,11 +3012,11 @@ msgstr ""
 
 #: common/dialogs/panel_color_settings_base.cpp:43
 msgid "Open Theme Folder"
-msgstr "Abra pasta dos temas"
+msgstr "Abrir a pasta dos temas"
 
 #: common/dialogs/panel_color_settings_base.cpp:44
 msgid "Open the folder containing color themes"
-msgstr "Abra a pasta com os temas das cores"
+msgstr "Abrir a pasta com os temas das cores"
 
 #: common/dialogs/panel_common_settings.cpp:86
 msgid "Icon scale:"
@@ -3256,7 +3256,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:290
 msgid "&Auto save:"
-msgstr "Salvamento &Automático:"
+msgstr "Salvamento &automático:"
 
 #: common/dialogs/panel_common_settings_base.cpp:295
 msgid ""
@@ -4130,7 +4130,7 @@ msgstr "Editor de símbolos"
 #: common/eda_base_frame.cpp:1073 common/eda_base_frame.cpp:1082
 #: common/eda_base_frame.cpp:1111 common/eda_base_frame.cpp:1128
 msgid "Display Options"
-msgstr "Opções de Exibição"
+msgstr "Opções de exibição"
 
 #: common/eda_base_frame.cpp:1045 common/eda_base_frame.cpp:1053
 #: common/eda_base_frame.cpp:1074 common/eda_base_frame.cpp:1083
@@ -4181,7 +4181,7 @@ msgstr "Editor da PCI"
 
 #: common/eda_base_frame.cpp:1085
 msgid "Action Plugins"
-msgstr "Plugins de Ação"
+msgstr "Plug-ins de ação"
 
 #: common/eda_base_frame.cpp:1086
 msgid "Origins & Axes"
@@ -5906,7 +5906,7 @@ msgstr "Adicione numa pasta já existente da biblioteca"
 
 #: common/tool/actions.cpp:61
 msgid "Open existing document"
-msgstr "Abra um documento já existente"
+msgstr "Abrir um documento já existente"
 
 #: common/tool/actions.cpp:67
 msgid "Save changes"
@@ -6127,7 +6127,7 @@ msgstr "Marque como uma exclusão a violação na janela atual do verificador"
 
 #: common/tool/actions.cpp:281 kicad/pcm/dialogs/dialog_pcm_base.cpp:131
 msgid "Refresh"
-msgstr "Atualize"
+msgstr "Atualizar"
 
 #: common/tool/actions.cpp:292
 msgid "Zoom to Fit"
@@ -6461,7 +6461,7 @@ msgstr "Introdução ao KiCad"
 
 #: common/tool/actions.cpp:649
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
-msgstr "Abra o guia \"Primeiros passos no KiCad\" para iniciantes"
+msgstr "Abrir o guia \"Primeiros passos no KiCad\" para iniciantes"
 
 #: common/tool/actions.cpp:654
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:35
@@ -6472,7 +6472,7 @@ msgstr "Ajuda"
 
 #: common/tool/actions.cpp:655
 msgid "Open product documentation in a web browser"
-msgstr "Abra a documentação do produto num navegador de internet"
+msgstr "Abrir a documentação do produto num navegador de internet"
 
 #: common/tool/actions.cpp:661
 msgid "List Hotkeys..."
@@ -6489,11 +6489,11 @@ msgstr "Participe"
 
 #: common/tool/actions.cpp:668
 msgid "Open \"Contribute to KiCad\" in a web browser"
-msgstr "Abra \"Contribua com o KiCad\" num navegador de internet"
+msgstr "Abrir \"Contribua com o KiCad\" num navegador de internet"
 
 #: common/tool/actions.cpp:674
 msgid "Open \"Donate to KiCad\" in a web browser"
-msgstr "Abra \"Contribua com o KiCad\" num navegador da internet"
+msgstr "Abrir \"Contribua com o KiCad\" num navegador da internet"
 
 #: common/tool/actions.cpp:678
 msgid "Report Bug"
@@ -8192,7 +8192,7 @@ msgstr "Atualize o campo do texto"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:134
 msgid "Update field visibilities"
-msgstr "Atualize visibilidade do campo"
+msgstr "Atualize a visibilidade do campo"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:135
 msgid "Update field sizes and styles"
@@ -8622,7 +8622,7 @@ msgstr "Edite a gravidade da violação..."
 
 #: eeschema/dialogs/dialog_erc.cpp:714 eeschema/dialogs/dialog_erc.cpp:907
 msgid "Open the Schematic Setup... dialog"
-msgstr "Abra a caixa de diálogo da configuração do esquema... diálogo"
+msgstr "Abrir a caixa de diálogo da configuração do esquema... diálogo"
 
 #: eeschema/dialogs/dialog_erc.cpp:806
 #: eeschema/dialogs/dialog_schematic_setup.cpp:81
@@ -10457,7 +10457,7 @@ msgstr "Abrir o arquivo após a plotagem"
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:163
 msgid "Open output file with associated application after successful plot"
 msgstr ""
-"Abra o arquivo de saída com o aplicativo relacionado depois que a plotagem "
+"Abrir o arquivo de saída com o aplicativo relacionado depois que a plotagem "
 "seja bem-sucedida"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:89
@@ -13920,7 +13920,7 @@ msgstr "O arquivo '%s' do esquema já existe."
 
 #: eeschema/sch_edit_frame.cpp:1143
 msgid "Open Schematic"
-msgstr "Abra o esquema"
+msgstr "Abrir o esquema"
 
 #: eeschema/sch_edit_frame.cpp:1212
 msgid "Assigning footprints requires a fully annotated schematic."
@@ -16194,7 +16194,7 @@ msgstr "sem-nome"
 
 #: eeschema/sim/sim_plot_frame.cpp:1230
 msgid "Open simulation workbook"
-msgstr "Abra a pasta de trabalho da simulação"
+msgstr "Abrir a pasta de trabalho da simulação"
 
 #: eeschema/sim/sim_plot_frame.cpp:1259
 msgid "Save Simulation Workbook As"
@@ -17845,7 +17845,7 @@ msgstr "Destaca os fios e os pinos de uma rede"
 
 #: eeschema/tools/ee_actions.cpp:595
 msgid "Edit with Symbol Editor"
-msgstr "Abra no editor de símbolos"
+msgstr "Abrir no editor de símbolos"
 
 #: eeschema/tools/ee_actions.cpp:595
 msgid "Open the selected symbol in the Symbol Editor"
@@ -17950,7 +17950,7 @@ msgstr "Alterna para o editor de PCI"
 
 #: eeschema/tools/ee_actions.cpp:660
 msgid "Open PCB in board editor"
-msgstr "Abra a PCI no editor da placa"
+msgstr "Abrir a PCI no editor da placa"
 
 #: eeschema/tools/ee_actions.cpp:665
 msgid "Export Netlist..."
@@ -18272,7 +18272,7 @@ msgstr "Alinha os elementos à grade"
 
 #: eeschema/tools/ee_actions.cpp:899
 msgid "Save Current Sheet Copy As..."
-msgstr "Salva uma cópia da folha at&ual como…"
+msgstr "Salva uma cópia da folha atual como..."
 
 #: eeschema/tools/ee_actions.cpp:899
 msgid "Save a copy of the current sheet to another location or name"
@@ -19089,7 +19089,7 @@ msgstr "Arquivos de trabalho"
 
 #: gerbview/files.cpp:182
 msgid "Open Autodetected File(s)"
-msgstr "Abra os arquivo(s) que foram detectado(s) automaticamente"
+msgstr "Abrir os arquivo(s) que foram detectado(s) automaticamente"
 
 #: gerbview/files.cpp:205
 msgid "Top layer"
@@ -19141,11 +19141,11 @@ msgstr "Ilha principal da parte de baixo"
 
 #: gerbview/files.cpp:225
 msgid "Open Gerber File(s)"
-msgstr "Abra os arquivo(s) Gerber"
+msgstr "Abrir os arquivo(s) Gerber"
 
 #: gerbview/files.cpp:236
 msgid "Open NC (Excellon) Drill File(s)"
-msgstr "Abra os arquivo(s) NC (Excellon) de perfuração"
+msgstr "Abrir os arquivo(s) NC (Excellon) de perfuração"
 
 #: gerbview/files.cpp:274
 msgid "File not found:"
@@ -19194,7 +19194,7 @@ msgstr "<b>houve um erro de leitura no arquivo %s que foi descompactado</b>"
 
 #: gerbview/files.cpp:638
 msgid "Open Zip File"
-msgstr "Abra o arquivo Zip"
+msgstr "Abrir o arquivo Zip"
 
 #: gerbview/files.cpp:672 gerbview/job_file_reader.cpp:242
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:163
@@ -19355,7 +19355,7 @@ msgstr "Este arquivo de trabalho usa um formato desatualizado. Recrie-o."
 
 #: gerbview/job_file_reader.cpp:192
 msgid "Open Gerber Job File"
-msgstr "Abra o arquivo de trabalho Gerber"
+msgstr "Abrir o arquivo de trabalho Gerber"
 
 #: gerbview/menubar.cpp:69 gerbview/menubar.cpp:76
 msgid "Clear Recent Gerber Files"
@@ -19363,19 +19363,19 @@ msgstr "Limpe os recentes arquivos Gerber"
 
 #: gerbview/menubar.cpp:75 gerbview/menubar.cpp:98
 msgid "Open Recent Gerber File"
-msgstr "Abra arquivo recente Gerber"
+msgstr "Abrir arquivo recente Gerber"
 
 #: gerbview/menubar.cpp:89
 msgid "Open Recent Drill File"
-msgstr "Abra o arquivo recente de perfuração"
+msgstr "Abrir o arquivo recente de perfuração"
 
 #: gerbview/menubar.cpp:119
 msgid "Open Recent Job File"
-msgstr "Abra o arquivo recente de trabalho"
+msgstr "Abrir o arquivo recente de trabalho"
 
 #: gerbview/menubar.cpp:140
 msgid "Open Recent Zip File"
-msgstr "Abra o arquivo zip recente"
+msgstr "Abrir o arquivo zip recente"
 
 #: gerbview/readgerb.cpp:64
 #, c-format
@@ -19451,45 +19451,45 @@ msgstr "<Sem seleção>"
 
 #: gerbview/tools/gerbview_actions.cpp:39
 msgid "Open Autodetected File(s)..."
-msgstr "Abra os arquivo(s) detectado(s) automaticamente..."
+msgstr "Abrir os arquivo(s) detectado(s) automaticamente..."
 
 #: gerbview/tools/gerbview_actions.cpp:40
 msgid "Open Autodetected file(s) on a new layer."
-msgstr "Abra o(s) arquivo(s) detectado(s) automaticamente numa nova camada."
+msgstr "Abrir o(s) arquivo(s) detectado(s) automaticamente numa nova camada."
 
 #: gerbview/tools/gerbview_actions.cpp:45
 msgid "Open Gerber Plot File(s)..."
-msgstr "Abra os arquivo(s) de plotagem do Gerber..."
+msgstr "Abrir os arquivo(s) de plotagem do Gerber..."
 
 #: gerbview/tools/gerbview_actions.cpp:46
 msgid "Open Gerber plot file(s) on a new layer."
-msgstr "Abra o(s) arquivo(s) de plotagem do Gerber numa nova camada."
+msgstr "Abrir o(s) arquivo(s) de plotagem do Gerber numa nova camada."
 
 #: gerbview/tools/gerbview_actions.cpp:51
 msgid "Open Excellon Drill File(s)..."
-msgstr "Abra os arquivo(s) de treino do Excellon..."
+msgstr "Abrir os arquivo(s) de treino do Excellon..."
 
 #: gerbview/tools/gerbview_actions.cpp:52
 msgid "Open Excellon drill file(s) on a new layer."
-msgstr "Abra o(s) arquivo(s) de perfuração do Excellon numa nova camada."
+msgstr "Abrir o(s) arquivo(s) de perfuração do Excellon numa nova camada."
 
 #: gerbview/tools/gerbview_actions.cpp:57
 msgid "Open Gerber Job File..."
-msgstr "Abra o arquivo de trabalho Gerber..."
+msgstr "Abrir o arquivo de trabalho Gerber..."
 
 #: gerbview/tools/gerbview_actions.cpp:58
 msgid "Open a Gerber job file and its associated gerber plot files"
 msgstr ""
-"Abra um arquivo de trabalho Gerber e os seus arquivos de plotagem associados "
-"ao gerber"
+"Abrir um arquivo de trabalho Gerber e os seus arquivos de plotagem "
+"associados ao gerber"
 
 #: gerbview/tools/gerbview_actions.cpp:63
 msgid "Open Zip Archive File..."
-msgstr "Abra o arquivo Zip..."
+msgstr "Abrir o arquivo Zip..."
 
 #: gerbview/tools/gerbview_actions.cpp:64
 msgid "Open a zipped archive (Gerber and Drill) file"
-msgstr "Abra um arquivo compactado (Gerber e Drill)"
+msgstr "Abrir um arquivo compactado (Gerber e Drill)"
 
 #: gerbview/tools/gerbview_actions.cpp:69
 msgid "Show Layers Manager"
@@ -20271,7 +20271,7 @@ msgid ""
 "Open '%s'\n"
 msgstr ""
 "\n"
-"Abra '%s'\n"
+"Abrir '%s'\n"
 
 #: kicad/files-io.cpp:76
 msgid "Target Directory"
@@ -20448,7 +20448,7 @@ msgstr "Revela a pasta do projeto no Finder"
 
 #: kicad/menubar.cpp:263
 msgid "Open project directory in file explorer"
-msgstr "Abra a pasta do projeto no explorador de arquivos"
+msgstr "Abrir a pasta do projeto no explorador de arquivos"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:53
 msgid "Add Default Repository"
@@ -21048,7 +21048,7 @@ msgstr "Revela o diretório numa janela do Finder"
 
 #: kicad/project_tree_pane.cpp:699
 msgid "Open Directory in File Explorer"
-msgstr "Abra o diretório no explorador de arquivos"
+msgstr "Abrir o diretório no explorador de arquivos"
 
 #: kicad/project_tree_pane.cpp:700 pcbnew/tools/pcb_actions.cpp:621
 msgid "Opens the directory in the default system file manager"
@@ -21060,7 +21060,7 @@ msgstr "Revela os diretórios numa janela do Finder"
 
 #: kicad/project_tree_pane.cpp:709
 msgid "Open Directories in File Explorer"
-msgstr "Abra os diretórios no gerenciador de arquivos"
+msgstr "Abrir os diretórios no gerenciador de arquivos"
 
 #: kicad/project_tree_pane.cpp:710
 msgid "Opens the directories in the default system file manager"
@@ -21068,11 +21068,11 @@ msgstr "Abre os diretórios no gerenciador de arquivos padrão do sistema"
 
 #: kicad/project_tree_pane.cpp:721
 msgid "Open the file in a Text Editor"
-msgstr "Abra o arquivo num editor de texto"
+msgstr "Abrir o arquivo num editor de texto"
 
 #: kicad/project_tree_pane.cpp:723
 msgid "Open files in a Text Editor"
-msgstr "Abra os arquivos num editor de texto"
+msgstr "Abrir os arquivos num editor de texto"
 
 #: kicad/project_tree_pane.cpp:725
 msgid "Edit in a Text Editor"
@@ -21141,7 +21141,7 @@ msgstr "Crie um novo projeto a partir de um modelo"
 
 #: kicad/tools/kicad_manager_actions.cpp:53
 msgid "Open Demo Project..."
-msgstr "Abra o projeto de demonstração..."
+msgstr "Abrir o projeto de demonstração..."
 
 #: kicad/tools/kicad_manager_actions.cpp:53
 msgid "Open a demo project"
@@ -21149,7 +21149,7 @@ msgstr "Abre um projeto de demonstração"
 
 #: kicad/tools/kicad_manager_actions.cpp:59
 msgid "Open Project..."
-msgstr "Abra o projeto..."
+msgstr "Abrir o projeto..."
 
 #: kicad/tools/kicad_manager_actions.cpp:59
 msgid "Open an existing project"
@@ -21157,7 +21157,7 @@ msgstr "Abre um projeto já existente"
 
 #: kicad/tools/kicad_manager_actions.cpp:65
 msgid "Close Project"
-msgstr "Fecha o projeto"
+msgstr "Fechar o projeto"
 
 #: kicad/tools/kicad_manager_actions.cpp:65
 msgid "Close the current project"
@@ -21206,7 +21206,7 @@ msgstr "Executa o plug-in e o gerenciador de conteúdo"
 
 #: kicad/tools/kicad_manager_actions.cpp:133
 msgid "Open Text Editor"
-msgstr "Abra o editor de texto"
+msgstr "Abrir o editor de texto"
 
 #: kicad/tools/kicad_manager_actions.cpp:133
 msgid "Launch preferred text editor"
@@ -21266,7 +21266,7 @@ msgstr "Um problema ocorreu na criação de um novo projeto a partir do modelo."
 
 #: kicad/tools/kicad_manager_control.cpp:307
 msgid "Open Existing Project"
-msgstr "Abra um projeto já existente"
+msgstr "Abrir um projeto já existente"
 
 #: kicad/tools/kicad_manager_control.cpp:601
 #, c-format
@@ -21614,7 +21614,7 @@ msgstr "O arquivo \"%s\" foi inserido"
 
 #: pagelayout_editor/files.cpp:155
 msgid "Open"
-msgstr "Abra"
+msgstr "Abrir"
 
 #: pagelayout_editor/files.cpp:171 pagelayout_editor/files.cpp:218
 #, c-format
@@ -26144,7 +26144,7 @@ msgstr "Execute a ferramenta de resolução de restrições..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:639
 msgid "Open the Board Setup... dialog"
-msgstr "Abra a caixa de diálogo Configuração da placa... diálogo"
+msgstr "Abrir a Configuração da placa... diálogo"
 
 #: pcbnew/dialogs/dialog_drc.cpp:869
 #, c-format
@@ -38852,11 +38852,11 @@ msgstr "Exclui o último ponto que foi adicionado ao item atual"
 
 #: pcbnew/tools/pcb_actions.cpp:233
 msgid "Close Outline"
-msgstr "Fecha esboço"
+msgstr "Fechar o esboço"
 
 #: pcbnew/tools/pcb_actions.cpp:233
 msgid "Close the in progress outline"
-msgstr "Fecha o esboço em andamento"
+msgstr "Fechar o esboço em andamento"
 
 #: pcbnew/tools/pcb_actions.cpp:240
 msgid "Show the design rules checker window"
@@ -39507,7 +39507,7 @@ msgstr "Adiciona Placa..."
 
 #: pcbnew/tools/pcb_actions.cpp:783
 msgid "Open another board and append its contents to this board"
-msgstr "Abra outra placa e anexe o seu conteúdo nesta placa"
+msgstr "Abrir outra placa e anexar o seu conteúdo nesta placa"
 
 #: pcbnew/tools/pcb_actions.cpp:795
 msgid "Toggle Last Net Highlight"
