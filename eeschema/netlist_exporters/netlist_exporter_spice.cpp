@@ -277,7 +277,7 @@ void NETLIST_EXPORTER_SPICE::ConvertToSpiceMarkup( std::string& aNetName )
 
     convertMarkup( root );
 
-    // Remove ngspice-disallowed chars
+    // Replace all ngspice-disallowed chars in netnames by a '_'
     std::replace( converted.begin(), converted.end(), '%', '_' );
     std::replace( converted.begin(), converted.end(), '(', '_' );
     std::replace( converted.begin(), converted.end(), ')', '_' );
@@ -287,6 +287,7 @@ void NETLIST_EXPORTER_SPICE::ConvertToSpiceMarkup( std::string& aNetName )
     std::replace( converted.begin(), converted.end(), '<', '_' );
     std::replace( converted.begin(), converted.end(), '>', '_' );
     std::replace( converted.begin(), converted.end(), '~', '_' );
+    std::replace( converted.begin(), converted.end(), ' ', '_' );
 
     aNetName = converted;
 }
