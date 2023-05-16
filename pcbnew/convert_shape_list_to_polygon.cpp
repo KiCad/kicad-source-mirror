@@ -238,30 +238,22 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
         }
         else if( graphic->GetShape() == SHAPE_T::CIRCLE )
         {
-            // make a circle by segments;
             VECTOR2I center = graphic->GetCenter();
-            VECTOR2I start = center;
             int      radius  = graphic->GetRadius();
-            int      steps   = GetArcToSegmentCount( radius, aErrorMax, FULL_CIRCLE );
-            VECTOR2I nextPt;
-
+            VECTOR2I start = center;
             start.x += radius;
 
-            for( int step = 0; step < steps; ++step )
-            {
-                nextPt = start;
-                RotatePoint( nextPt, center, ANGLE_360 * step / steps );
-                currContour.Append( nextPt );
-
-                if( firstPt )
-                    firstPt = false;
-                else
-                    shapeOwners[ std::make_pair( prevPt, nextPt ) ] = graphic;
-
-                prevPt = nextPt;
-            }
-
+            // Add 360 deg Arc in currContour
+            SHAPE_ARC arc360( center, start, ANGLE_360, 0 );
+            currContour.Append( arc360, aErrorMax );
             currContour.SetClosed( true );
+
+            // set shapeOwners for currContour points created by appending the arc360:
+            for( int ii = 1; ii < currContour.PointCount(); ++ii )
+            {
+                shapeOwners[ std::make_pair( currContour.CPoint( ii-1 ),
+                                             currContour.CPoint( ii ) ) ] = graphic;
+            }
         }
         else if( graphic->GetShape() == SHAPE_T::RECT )
         {
