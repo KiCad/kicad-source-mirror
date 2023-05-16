@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-12 12:58-0700\n"
-"PO-Revision-Date: 2023-05-14 21:16+0000\n"
+"PO-Revision-Date: 2023-05-16 20:36+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
@@ -34946,13 +34946,13 @@ msgstr "Экспорт VRML не удался:\n"
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:129
 #, c-format
 msgid "Created file '%s'"
-msgstr "Создать файл '%s'"
+msgstr "Создан файл '%s'"
 
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:350
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:113
 #, c-format
 msgid "Created file '%s'."
-msgstr "Создать файл '%s'."
+msgstr "Создан файл '%s'."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:159
 #, c-format
