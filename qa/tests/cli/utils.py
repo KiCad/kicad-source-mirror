@@ -24,10 +24,11 @@ import difflib
 import logging
 import subprocess
 import os
+from typing import Tuple
 
 logger = logging.getLogger("cli_util")
 
-def run_and_capture( command: list ) -> tuple[ str, str, int ]:
+def run_and_capture( command: list ) -> Tuple[ str, str, int ]:
     logger.info("Executing command \"%s\"", " ".join( command ))
 
     proc = subprocess.Popen( command,

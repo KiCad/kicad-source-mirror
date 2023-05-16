@@ -26,6 +26,7 @@ import re
 import os
 from pathlib import Path
 import pytest
+from typing import List
 
 @pytest.mark.parametrize("test_file,output_dir,compare_fn,cli_args", 
                             [("cli/basic_test/basic_test.kicad_sch", "basic_test", "cli/basic_test/basic_test.png", []), 
@@ -36,7 +37,7 @@ def test_sch_export_svg( kitest,
                          test_file: str,
                          output_dir: str,
                          compare_fn: str, 
-                         cli_args: list):
+                         cli_args: List[str] ):
     input_file = kitest.get_data_file_path( test_file )
     
     output_path =  kitest.get_output_path( "cli/{}/".format( output_dir ) )
@@ -84,7 +85,7 @@ def test_sch_export_netlist( kitest,
                              output_fn: str, 
                              line_skip_count: int,
                              skip_compare: bool,
-                             cli_args: list):
+                             cli_args: List[str] ):
     input_file = kitest.get_data_file_path( test_file )
     compare_filepath = kitest.get_data_file_path( "cli/basic_test/{}".format( output_fn ) )
     
@@ -116,7 +117,7 @@ def test_sch_export_netlist( kitest,
 def test_sch_export_pdf( kitest,
                          test_file: str,
                          output_fn: str, 
-                         cli_args: list):
+                         cli_args: List[str] ):
     input_file = kitest.get_data_file_path( test_file )
     
     output_filepath =  kitest.get_output_path( "cli/" ).joinpath( output_fn )
@@ -142,7 +143,7 @@ def test_sch_export_pythonbom( kitest,
                          test_file: str,
                          output_fn: str, 
                          line_skip_count: int,
-                         cli_args: list):
+                         cli_args: List[str] ):
     input_file = kitest.get_data_file_path( test_file )
     compare_filepath = kitest.get_data_file_path( "cli/basic_test/{}".format( output_fn ) )
     
