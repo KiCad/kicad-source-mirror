@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-12 12:57-0700\n"
-"PO-Revision-Date: 2023-05-14 21:15+0000\n"
+"PO-Revision-Date: 2023-05-18 16:52+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v7/fi/>\n"
 "Language: fi\n"
@@ -20241,7 +20241,7 @@ msgstr "EAGLE Projekti..."
 
 #: kicad/menubar.cpp:112
 msgid "Import EAGLE CAD XML schematic and board"
-msgstr "Tuo EAGLE CAD XML -kaavio ja -taulu"
+msgstr "Tuo EAGLE CAD XML kytkentäkaavio ja piirilevy"
 
 #: kicad/menubar.cpp:119
 msgid "&Archive Project..."
@@ -20878,7 +20878,7 @@ msgstr "Paljasta Finderissa"
 
 #: kicad/project_tree_pane.cpp:697
 msgid "Reveals the directory in a Finder window"
-msgstr "Paljastaa hakemiston Finder-ikkunassa"
+msgstr "Paljastaa hakemiston Hakuikkunassa"
 
 #: kicad/project_tree_pane.cpp:699
 msgid "Open Directory in File Explorer"
@@ -20890,7 +20890,7 @@ msgstr "Avaa hakemiston järjestelmän oletustiedostonhallinnassa"
 
 #: kicad/project_tree_pane.cpp:707
 msgid "Reveals the directories in a Finder window"
-msgstr "Paljastaa hakemistot Finder-ikkunassa"
+msgstr "Paljastaa hakemistot Hakuikkunassa"
 
 #: kicad/project_tree_pane.cpp:709
 msgid "Open Directories in File Explorer"
@@ -20947,7 +20947,7 @@ msgstr "Vaihda tiedostonimi: '%s'"
 
 #: kicad/project_tree_pane.cpp:823
 msgid "Change filename"
-msgstr "Vaihda tiedostonimeä"
+msgstr "Vaihda tiedostonimi"
 
 #: kicad/project_tree_pane.cpp:1152
 msgid "Network path: not monitoring folder changes"
@@ -40739,7 +40739,7 @@ msgstr "Aseta Verkkoluokan Väri"
 #: pcbnew/widgets/appearance_controls.cpp:2305
 #, c-format
 msgid "Highlight Nets in %s"
-msgstr "Korosta Verkot %s"
+msgstr "Korosta Verkot kohteessa %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:2316
 msgid "Show All Netclasses"
