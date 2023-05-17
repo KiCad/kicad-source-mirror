@@ -115,8 +115,7 @@ END_EVENT_TABLE()
 
 SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         SCH_BASE_FRAME( aKiway, aParent, FRAME_SCH, wxT( "Eeschema" ), wxDefaultPosition,
-                        wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, SCH_EDIT_FRAME_NAME ),
-        m_highlightedConn( nullptr )
+                        wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, SCH_EDIT_FRAME_NAME )
 {
     m_maximizeByDefault = true;
     m_schematic = new SCHEMATIC( nullptr );
@@ -1442,18 +1441,11 @@ void SCH_EDIT_FRAME::initScreenZoom()
 
 void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
 {
-    const SCH_CONNECTION* highlight       = GetHighlightedConnection();
-    SCH_ITEM*             highlightedItem = nullptr;
-    SCH_SHEET_PATH        highlightPath;
-
-    if( highlight )
-    {
-        highlightPath = highlight->LocalSheet();
-        highlightedItem = dynamic_cast<SCH_ITEM*>( GetItem( highlight->Parent()->m_Uuid ) );
-    }
-
+    bool                highlightedConnChanged = false;
+    wxString            highlightedConn = GetHighlightedConnection();
     SCHEMATIC_SETTINGS& settings = Schematic().Settings();
     SCH_SHEET_LIST      list = Schematic().GetSheets();
+
 #ifdef PROFILE
     PROF_TIMER timer;
 #endif
@@ -1481,6 +1473,11 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
             [&]( SCH_ITEM* aChangedItem ) -> void
             {
                 GetCanvas()->GetView()->Update( aChangedItem, KIGFX::REPAINT );
+
+                SCH_CONNECTION* connection = aChangedItem->Connection();
+
+                if( connection && ( connection->Name() == highlightedConn ) )
+                    highlightedConnChanged = true;
             };
 
     if( !ADVANCED_CFG::GetCfg().m_IncrementalConnectivity || aCleanupFlags == GLOBAL_CLEANUP
@@ -1607,8 +1604,13 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
                 return flags;
             } );
 
-    if( highlightedItem )
-        SetHighlightedConnection( highlightedItem->Connection( &highlightPath ) );
+    if( !highlightedConn.IsEmpty() )
+    {
+        if( highlightedConnChanged )
+            wxLogDebug( wxS( "Highlighted connection \"%s\" changed." ), highlightedConn );
+        else if( !Schematic().ConnectionGraph()->FindFirstSubgraphByName( highlightedConn ) )
+            wxLogDebug( wxS( "Highlighted connection \"%s\" no longer exists." ), highlightedConn );
+    }
 }
 
 
@@ -1712,10 +1714,10 @@ void SCH_EDIT_FRAME::ShowChangedLanguage()
 
 void SCH_EDIT_FRAME::UpdateNetHighlightStatus()
 {
-    if( const SCH_CONNECTION* conn = GetHighlightedConnection() )
+    if( !GetHighlightedConnection().IsEmpty() )
     {
         SetStatusText( wxString::Format( _( "Highlighted net: %s" ),
-                                         UnescapeString( conn->Name() ) ) );
+                                         UnescapeString( GetHighlightedConnection() ) ) );
     }
     else
     {

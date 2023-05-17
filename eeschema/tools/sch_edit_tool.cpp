@@ -168,7 +168,7 @@ bool SCH_EDIT_TOOL::Init()
             {
                 SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
 
-                return editFrame && editFrame->GetHighlightedConnection() != nullptr;
+                return editFrame && !editFrame->GetHighlightedConnection().IsEmpty();
             };
 
     auto anyTextTool =

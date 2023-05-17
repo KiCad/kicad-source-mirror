@@ -293,12 +293,12 @@ public:
      */
     void SendCrossProbeClearHighlight();
 
-    const SCH_CONNECTION* GetHighlightedConnection() const
+    const wxString& GetHighlightedConnection() const
     {
         return m_highlightedConn;
     }
 
-    void SetHighlightedConnection( const SCH_CONNECTION* aConnection )
+    void SetHighlightedConnection( const wxString& aConnection )
     {
         m_highlightedConn = aConnection;
     }
@@ -916,7 +916,7 @@ private:
     friend class SCH_FIND_REPLACE_TOOL;
 
     SCHEMATIC*              m_schematic;          ///< The currently loaded schematic
-    const SCH_CONNECTION*   m_highlightedConn;    ///< The highlighted net or bus, or nullptr
+    wxString                m_highlightedConn;    ///< The highlighted net or bus or empty string.
 
     wxPageSetupDialogData   m_pageSetupData;
     std::vector<std::unique_ptr<SCH_ITEM>> m_items_to_repeat;  ///< For the repeat-last-item cmd

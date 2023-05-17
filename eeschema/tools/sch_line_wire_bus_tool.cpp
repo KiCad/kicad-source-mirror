@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -207,7 +207,7 @@ bool SCH_LINE_WIRE_BUS_TOOL::Init()
             {
                 SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
 
-                return editFrame && editFrame->GetHighlightedConnection() != nullptr;
+                return editFrame && !editFrame->GetHighlightedConnection().IsEmpty();
             };
 
     auto& ctxMenu = m_menu.GetMenu();

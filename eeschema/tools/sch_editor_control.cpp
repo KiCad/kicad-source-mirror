@@ -626,9 +626,11 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                         selectionTool->BrightenItem( m_pickerItem );
                 }
 
-                if( m_frame->GetHighlightedConnection() != conn )
+                wxString connectionName = ( conn ) ? conn->Name() : wxS( "" );
+
+                if( m_frame->GetHighlightedConnection() != connectionName )
                 {
-                    m_frame->SetHighlightedConnection( conn );
+                    m_frame->SetHighlightedConnection( connectionName );
 
                     TOOL_EVENT dummyEvent;
                     UpdateNetHighlighting( dummyEvent );
@@ -641,9 +643,9 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                 if( m_pickerItem )
                     m_toolMgr->GetTool<EE_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
 
-                if( m_frame->GetHighlightedConnection() )
+                if( !m_frame->GetHighlightedConnection().IsEmpty() )
                 {
-                    m_frame->SetHighlightedConnection( nullptr );
+                    m_frame->SetHighlightedConnection( wxEmptyString );
 
                     TOOL_EVENT dummyEvent;
                     UpdateNetHighlighting( dummyEvent );
@@ -801,16 +803,18 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
         }
     }
 
-    if( !conn || conn == editFrame->GetHighlightedConnection() )
+    wxString connectionName = ( conn ) ? conn->Name() : wxS( "" );
+
+    if( !conn || connectionName == editFrame->GetHighlightedConnection() )
     {
         editFrame->SetStatusText( wxT( "" ) );
         editFrame->SendCrossProbeClearHighlight();
-        editFrame->SetHighlightedConnection( nullptr );
+        editFrame->SetHighlightedConnection( wxEmptyString );
     }
     else
     {
         editFrame->SetCrossProbeConnection( conn );
-        editFrame->SetHighlightedConnection( conn );
+        editFrame->SetHighlightedConnection( connectionName );
     }
 
     editFrame->UpdateNetHighlightStatus();
@@ -1010,29 +1014,21 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
     SCH_SCREEN*            screen = m_frame->GetCurrentSheet().LastScreen();
     CONNECTION_GRAPH*      connectionGraph = m_frame->Schematic().ConnectionGraph();
     std::vector<EDA_ITEM*> itemsToRedraw;
-    const SCH_CONNECTION*  selectedConn = m_frame->GetHighlightedConnection();
 
-    if( !screen )
-        return 0;
+    wxCHECK( screen && connectionGraph, 0 );
 
-    bool     selectedIsBus = selectedConn ? selectedConn->IsBus() : false;
-    wxString selectedName  = selectedConn ? selectedConn->Name() : wxString( wxS( "" ) );
+    bool     selectedIsBus = false;
+    wxString selectedName  = m_frame->GetHighlightedConnection();
 
     bool                 selectedIsNoNet  = false;
     CONNECTION_SUBGRAPH* selectedSubgraph = nullptr;
-
-    if( selectedConn && selectedConn->Driver() == nullptr )
-    {
-        selectedIsNoNet  = true;
-        selectedSubgraph = connectionGraph->GetSubgraphForItem( selectedConn->Parent() );
-    }
 
     for( SCH_ITEM* item : screen->Items() )
     {
         bool redraw    = item->IsBrightened();
         bool highlight = false;
 
-        if( selectedConn )
+        if( !selectedName.IsEmpty() )
         {
             SCH_CONNECTION* itemConn  = nullptr;
             SCH_SYMBOL*     symbol    = nullptr;
@@ -1045,42 +1041,55 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
             else
                 itemConn = item->Connection();
 
-            if( selectedIsNoNet && selectedSubgraph )
+            if( itemConn && ( selectedName == itemConn->Name() ) )
             {
-                for( SCH_ITEM* subgraphItem : selectedSubgraph->m_items )
+                selectedIsBus = itemConn->IsBus();
+
+                if( itemConn->Driver() == nullptr )
                 {
-                    if( item == subgraphItem )
+                    selectedIsNoNet = true;
+                    selectedSubgraph = connectionGraph->GetSubgraphForItem( itemConn->Parent() );
+                }
+
+                if( selectedIsNoNet && selectedSubgraph )
+                {
+                    for( SCH_ITEM* subgraphItem : selectedSubgraph->GetItems() )
                     {
-                        highlight = true;
-                        break;
+                        if( item == subgraphItem )
+                        {
+                            highlight = true;
+                            break;
+                        }
                     }
                 }
-            }
-            else if( selectedIsBus && itemConn && itemConn->IsNet() )
-            {
-                for( const std::shared_ptr<SCH_CONNECTION>& member : selectedConn->Members() )
+                else if( selectedIsBus && itemConn && itemConn->IsNet() )
                 {
-                    if( member->Name() == itemConn->Name() )
+                    for( const std::shared_ptr<SCH_CONNECTION>& member : itemConn->Members() )
                     {
-                        highlight = true;
-                        break;
-                    }
-                    else if( member->IsBus() )
-                    {
-                        for( const std::shared_ptr<SCH_CONNECTION>& bus_member : member->Members() )
+                        if( member->Name() == itemConn->Name() )
                         {
-                            if( bus_member->Name() == itemConn->Name() )
+                            highlight = true;
+                            break;
+                        }
+                        else if( member->IsBus() )
+                        {
+                            for( const std::shared_ptr<SCH_CONNECTION>& bus_member :
+                                 member->Members() )
                             {
-                                highlight = true;
-                                break;
+                                if( bus_member->Name() == itemConn->Name() )
+                                {
+                                    highlight = true;
+                                    break;
+                                }
                             }
                         }
                     }
                 }
-            }
-            else if( selectedConn && itemConn && selectedName == itemConn->Name() )
-            {
-                highlight = true;
+                else if( !selectedName.IsEmpty() && itemConn
+                       && ( selectedName == itemConn->Name() ) )
+                {
+                    highlight = true;
+                }
             }
         }
 
