@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-12 12:57-0700\n"
-"PO-Revision-Date: 2023-05-12 19:54+0000\n"
+"PO-Revision-Date: 2023-05-18 16:52+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "v7/es_MX/>\n"
@@ -39074,14 +39074,12 @@ msgid "Import footprint from file"
 msgstr "Importar huellas desde un archivo"
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export Footprint..."
-msgstr "&Exportar huella..."
+msgstr "Exportar huella..."
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export footprint to file"
-msgstr "Exportar la huella editada a un archivo"
+msgstr "Exportar huella a un archivo"
 
 #: pcbnew/tools/pcb_actions.cpp:453
 msgid "Footprint Properties..."
