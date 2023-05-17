@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -231,9 +231,9 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         wxString netName = FROM_UTF8( text );
 
         if( auto sg = Schematic().ConnectionGraph()->FindFirstSubgraphByName( netName ) )
-            m_highlightedConn = sg->GetDriverConnection();
+            m_highlightedConn = sg->GetDriverConnection()->Name();
         else
-            m_highlightedConn = nullptr;
+            m_highlightedConn = wxEmptyString;
 
         GetToolManager()->RunAction( EE_ACTIONS::updateNetHighlighting, true );
 
