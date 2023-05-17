@@ -56,6 +56,7 @@
 #include <wx/ffile.h>
 #include <wx/filedlg.h>
 #include <wx_filename.h>
+#include <advanced_config.h>    // for Incremental Connectivity option
 
 
 SIM_PLOT_TYPE operator|( SIM_PLOT_TYPE aFirst, SIM_PLOT_TYPE aSecond )
@@ -460,8 +461,14 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
     wxString           errors;
     WX_STRING_REPORTER reporter( &errors );
 
-    if( !m_schematicFrame->ReadyToNetlist( _( "Simulator requires a fully annotated schematic." ) )
-            || !m_simulator->Attach( m_circuitModel, reporter ) )
+    if( !m_schematicFrame->ReadyToNetlist( _( "Simulator requires a fully annotated schematic." ) ) )
+        return;
+
+    // If we are using the new connectivity, make sure that we do a full-rebuild
+    if( ADVANCED_CFG::GetCfg().m_IncrementalConnectivity )
+        m_schematicFrame->RecalculateConnections( GLOBAL_CLEANUP );
+
+    if( !m_simulator->Attach( m_circuitModel, reporter ) )
     {
         DisplayErrorMessage( this, _( "Errors during netlist generation; simulation aborted.\n\n" )
                                    + errors );
@@ -1727,6 +1734,13 @@ void SIM_PLOT_FRAME::onShowNetlist( wxCommandEvent& event )
 {
     if( m_schematicFrame == nullptr || m_simulator == nullptr )
         return;
+
+    if( !m_schematicFrame->ReadyToNetlist( _( "Simulator requires a fully annotated schematic." ) ) )
+        return;
+
+    // If we are using the new connectivity, make sure that we do a full-rebuild
+    if( ADVANCED_CFG::GetCfg().m_IncrementalConnectivity )
+        m_schematicFrame->RecalculateConnections( GLOBAL_CLEANUP );
 
     wxString           errors;
     WX_STRING_REPORTER reporter( &errors );
