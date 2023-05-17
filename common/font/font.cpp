@@ -121,6 +121,13 @@ void FONT::getLinePositions( const wxString& aText, const VECTOR2I& aPosition,
     VECTOR2I offset( 0, 0 );
     offset.y += aAttrs.m_Size.y;
 
+    if( IsStroke() )
+    {
+        // Fudge factors to match 6.0 positioning
+        offset.x += aAttrs.m_StrokeWidth / 1.52;
+        offset.y -= aAttrs.m_StrokeWidth * 0.052;
+    }
+
     switch(  aAttrs.m_Valign )
     {
     case GR_TEXT_V_ALIGN_TOP:                            break;
@@ -139,7 +146,7 @@ void FONT::getLinePositions( const wxString& aText, const VECTOR2I& aPosition,
         {
         case GR_TEXT_H_ALIGN_LEFT:                                   break;
         case GR_TEXT_H_ALIGN_CENTER: lineOffset.x = -lineSize.x / 2; break;
-        case GR_TEXT_H_ALIGN_RIGHT:  lineOffset.x = -lineSize.x;     break;
+        case GR_TEXT_H_ALIGN_RIGHT:  lineOffset.x = -( lineSize.x + offset.x );     break;
         }
 
         aPositions.push_back( aPosition + lineOffset );
@@ -188,11 +195,10 @@ void FONT::Draw( KIGFX::GAL* aGal, const wxString& aText, const VECTOR2I& aPosit
  */
 VECTOR2I drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
                      const std::unique_ptr<MARKUP::NODE>& aNode, const VECTOR2I& aPosition,
-                     const KIFONT::FONT* aFont, const VECTOR2I& aSize, const VECTOR2I& aOffset,
-                     const EDA_ANGLE& aAngle, bool aMirror, const VECTOR2I& aOrigin,
-                     TEXT_STYLE_FLAGS aTextStyle )
+                     const KIFONT::FONT* aFont, const VECTOR2I& aSize, const EDA_ANGLE& aAngle,
+                     bool aMirror, const VECTOR2I& aOrigin, TEXT_STYLE_FLAGS aTextStyle )
 {
-    VECTOR2I nextPosition = aPosition + aOffset;
+    VECTOR2I nextPosition = aPosition;
     bool     drawUnderline = false;
     bool     drawOverbar = false;
 
@@ -230,7 +236,8 @@ VECTOR2I drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* a
         for( const std::unique_ptr<MARKUP::NODE>& child : aNode->children )
         {
             nextPosition = drawMarkup( aBoundingBox, aGlyphs, child, nextPosition, aFont, aSize,
-                    VECTOR2I(), aAngle, aMirror, aOrigin, textStyle );
+                    aAngle, aMirror, aOrigin, textStyle );
+
         }
     }
 
@@ -284,13 +291,13 @@ VECTOR2I drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* a
 
 VECTOR2I FONT::drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
                            const wxString& aText, const VECTOR2I& aPosition, const VECTOR2I& aSize,
-                           const VECTOR2I& aOffset, const EDA_ANGLE& aAngle, bool aMirror,
-                           const VECTOR2I& aOrigin, TEXT_STYLE_FLAGS aTextStyle ) const
+                           const EDA_ANGLE& aAngle, bool aMirror, const VECTOR2I& aOrigin,
+                           TEXT_STYLE_FLAGS aTextStyle ) const
 {
     MARKUP::MARKUP_PARSER         markupParser( TO_UTF8( aText ) );
     std::unique_ptr<MARKUP::NODE> root = markupParser.Parse();
 
-    return ::drawMarkup( aBoundingBox, aGlyphs, root, aPosition, this, aSize, aOffset, aAngle, aMirror,
+    return ::drawMarkup( aBoundingBox, aGlyphs, root, aPosition, this, aSize, aAngle, aMirror,
                          aOrigin, aTextStyle );
 }
 
@@ -304,13 +311,8 @@ void FONT::drawSingleLineText( KIGFX::GAL* aGal, BOX2I* aBoundingBox, const wxSt
         return;
 
     TEXT_STYLE_FLAGS textStyle = 0;
-    VECTOR2I offset;
 
-    if( !IsOutline() )
-    {
-        offset.x = aGal->GetLineWidth() / 1.52;
-        offset.y = -aGal->GetLineWidth() * 0.052;
-    }
+
     if( aItalic )
         textStyle |= TEXT_STYLE::ITALIC;
 
@@ -319,7 +321,7 @@ void FONT::drawSingleLineText( KIGFX::GAL* aGal, BOX2I* aBoundingBox, const wxSt
 
     std::vector<std::unique_ptr<GLYPH>> glyphs;
 
-    (void) drawMarkup( aBoundingBox, &glyphs, aText, aPosition, aSize, offset, aAngle, aMirror, aOrigin,
+    (void) drawMarkup( aBoundingBox, &glyphs, aText, aPosition, aSize, aAngle, aMirror, aOrigin,
                        textStyle );
 
     aGal->DrawGlyphs( glyphs );
@@ -339,8 +341,8 @@ VECTOR2I FONT::StringBoundaryLimits( const wxString& aText, const VECTOR2I& aSiz
     if( aItalic )
         textStyle |= TEXT_STYLE::ITALIC;
 
-    (void) drawMarkup( &boundingBox, nullptr, aText, VECTOR2I(), aSize, VECTOR2I(), ANGLE_0, false,
-                       VECTOR2I(), textStyle );
+    (void) drawMarkup( &boundingBox, nullptr, aText, VECTOR2I(), aSize, ANGLE_0, false, VECTOR2I(),
+            textStyle );
 
     if( IsStroke() )
     {
@@ -365,8 +367,8 @@ VECTOR2I FONT::boundingBoxSingleLine( BOX2I* aBBox, const wxString& aText,
     if( aItalic )
         textStyle |= TEXT_STYLE::ITALIC;
 
-    VECTOR2I extents = drawMarkup( aBBox, nullptr, aText, aPosition, aSize, VECTOR2I(), ANGLE_0,
-            false, VECTOR2I(), textStyle );
+    VECTOR2I extents = drawMarkup( aBBox, nullptr, aText, aPosition, aSize, ANGLE_0, false,
+            VECTOR2I(), textStyle );
 
     return extents;
 }

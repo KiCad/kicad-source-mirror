@@ -133,7 +133,8 @@ SCH_TEXT::SCH_TEXT( const SCH_TEXT& aText ) :
 
 VECTOR2I SCH_TEXT::GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) const
 {
-    return VECTOR2I( 0, 0 );
+    // Fudge factor to match KiCad 6
+    return VECTOR2I( 0, -2500 );
 }
 
 
