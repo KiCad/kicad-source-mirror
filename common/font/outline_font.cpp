@@ -255,7 +255,7 @@ void OUTLINE_FONT::GetLinesAsGlyphs( std::vector<std::unique_ptr<GLYPH>>* aGlyph
 
     for( size_t i = 0; i < strings.GetCount(); i++ )
     {
-        (void) drawMarkup( nullptr, aGlyphs, strings.Item( i ), positions[i], aAttrs.m_Size, VECTOR2I(),
+        (void) drawMarkup( nullptr, aGlyphs, strings.Item( i ), positions[i], aAttrs.m_Size,
                            aAttrs.m_Angle, aAttrs.m_Mirrored, aPosition, textStyle );
     }
 }

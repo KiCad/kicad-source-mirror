@@ -245,7 +245,7 @@ protected:
                            std::vector<VECTOR2I>& aExtents, const TEXT_ATTRIBUTES& aAttrs ) const;
 
     VECTOR2I drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
-                         const wxString& aText, const VECTOR2I& aPosition, const VECTOR2I& aOffset,
+                         const wxString& aText, const VECTOR2I& aPosition,
                          const VECTOR2I& aSize, const EDA_ANGLE& aAngle, bool aMirror,
                          const VECTOR2I& aOrigin, TEXT_STYLE_FLAGS aTextStyle ) const;
 

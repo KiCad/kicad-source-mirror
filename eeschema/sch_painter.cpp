@@ -2103,6 +2103,21 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
         m_gal->SetIsStroke( true );
         attrs.m_StrokeWidth += getShadowWidth( !aText->IsSelected() );
         attrs.m_Underlined = false;
+
+        // Fudge factors to match 6.0 positioning
+        // New text stroking has width dependent offset but we need to
+        // center the shadow on the stroke.  NB this offset is in font.cpp also
+        double fudge = getShadowWidth( !aText->IsSelected() ) / 1.52;
+
+        if( attrs.m_Halign == GR_TEXT_H_ALIGN_LEFT && attrs.m_Angle == ANGLE_0 )
+            text_offset.x -= fudge;
+        else if( attrs.m_Halign == GR_TEXT_H_ALIGN_RIGHT && attrs.m_Angle == ANGLE_90 )
+            text_offset.y -= fudge;
+        else if( attrs.m_Halign == GR_TEXT_H_ALIGN_RIGHT && attrs.m_Angle == ANGLE_0 )
+            text_offset.x += fudge;
+        else if( attrs.m_Halign == GR_TEXT_H_ALIGN_LEFT && attrs.m_Angle == ANGLE_90 )
+            text_offset.y += fudge;
+
         strokeText( shownText, aText->GetDrawPos() + text_offset, attrs );
 
     }
