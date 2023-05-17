@@ -27,7 +27,10 @@ import os
 from pathlib import Path
 import pytest
 from typing import List
+import platform
 
+@pytest.mark.skipif('ubuntu' in platform.version().lower(),
+                    reason="ubuntu builder cannot install fixtures")
 @pytest.mark.parametrize("test_file,output_dir,compare_fn,cli_args", 
                             [("cli/basic_test/basic_test.kicad_sch", "basic_test", "cli/basic_test/basic_test.png", []), 
                              ("cli/basic_test/basic_test.kicad_sch", "basic_test_nobg_bnw_nods", "cli/basic_test/basic_test_nobg_bnw_nods.png", ["--no-background-color", "--exclude-drawing-sheet", "--black-and-white"])
