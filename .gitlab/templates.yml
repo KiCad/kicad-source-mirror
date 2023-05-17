@@ -28,7 +28,7 @@
   # GitLab supports displaying the results in the GUI through JUNIT artifacts
   # (https://docs.gitlab.com/ee/ci/junit_test_reports.html)
   # so we upload the JUNIT results. Note that there is a bug with how paths
-  # are processed in the junit report (https://gitlab.com/gitlab-org/gitlab/issues/23835)
+  # are processed in the junit report (https://gitlab.com/gitlab-org/gitlab/-/issues/23835)
   # so we can't use a glob and have to list out each hierarchy separately.
   artifacts:
     reports:

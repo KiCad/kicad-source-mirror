@@ -912,7 +912,7 @@ ATEXT6::ATEXT6( ALTIUM_PARSER& aReader, std::map<uint32_t, wxString>& aStringTab
     textposition = static_cast<ALTIUM_TEXT_POSITION>( aReader.Read<uint8_t>() );
     /**
      * In Altium 14 (subrecord1 == 230) only left bottom is valid? I think there is a bit missing.
-     * https://gitlab.com/kicad/code/kicad/merge_requests/60#note_274913397
+     * https://gitlab.com/kicad/code/kicad/-/merge_requests/60#note_274913397
      */
     if( subrecord1 <= 230 )
         textposition = ALTIUM_TEXT_POSITION::LEFT_BOTTOM;

@@ -1,14 +1,3 @@
-stages:
-  - build
-  - test
-  - report
-
-default:
-  image:
-    name: registry.gitlab.com/kicad/kicad-ci/source_containers/master/fedora:36
-    entrypoint: ["/bin/sh", "-c"]
-
-
 ##########################################################################
 # Test the formatting in a merge request using clang-format
 ##########################################################################
@@ -18,8 +7,8 @@ default:
 test_formatting:
   stage: test
   needs: []
-  only:
-    - merge_requests
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
   allow_failure: true
   before_script:
     # We must manually add the KiCad remote to ensure it is named sensibly
@@ -34,13 +23,3 @@ test_formatting:
   script:
     - echo "Testing formatting from commit ${MERGE_BASE_SHA}"
     - ./tools/check_coding.sh --diff --ci --commit ${MERGE_BASE_SHA}
-
-
-include:
-  - local: '/.gitlab/templates.yml'
-  - local: '/.gitlab/Fedora-Linux-CI.yml'
-  - local: '/.gitlab/Ubuntu-20.04-CI.yml'
-  - local: '/.gitlab/Windows-CI.yml'
-  - local: '/.gitlab/coverity.yml'
-  - local: '/.gitlab/linux-metadata-validate.yml'
-  - local: '/.gitlab/doxygen.yml'
