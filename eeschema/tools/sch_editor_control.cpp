@@ -622,7 +622,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                         selectionTool->BrightenItem( m_pickerItem );
                 }
 
-                wxString connectionName = ( conn ) ? conn->Name() : wxS( "" );
+                wxString connectionName = ( conn ) ? conn->Name() : wxString( wxS( "" ) );
 
                 if( m_frame->GetHighlightedConnection() != connectionName )
                 {
@@ -798,7 +798,7 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
         }
     }
 
-    wxString connectionName = ( conn ) ? conn->Name() : wxS( "" );
+    wxString connectionName = ( conn ) ? conn->Name() : wxString( wxS( "" ) );
 
     if( !conn || connectionName == editFrame->GetHighlightedConnection() )
     {
