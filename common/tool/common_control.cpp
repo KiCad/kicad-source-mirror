@@ -50,7 +50,7 @@
 
 /// URL to launch a new issue with pre-populated description
 wxString COMMON_CONTROL::m_bugReportUrl =
-        wxS( "https://gitlab.com/kicad/code/kicad/issues/new?issuable_template=bare&issue[description]=%s" );
+        wxS( "https://gitlab.com/kicad/code/kicad/-/issues/new?issuable_template=bare&issue[description]=%s" );
 
 
 /// Issue template to use for reporting bugs (this should not be translated)

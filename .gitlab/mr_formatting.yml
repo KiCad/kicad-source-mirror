@@ -3,7 +3,7 @@
 ##########################################################################
 # The variable CI_COMMIT_BEFORE_SHA is not available in normal merge requests
 # so we must build the commit hash ourselves, see:
-# https://gitlab.com/gitlab-org/gitlab/issues/12850
+# https://gitlab.com/gitlab-org/gitlab/-/issues/12850
 test_formatting:
   stage: test
   needs: []

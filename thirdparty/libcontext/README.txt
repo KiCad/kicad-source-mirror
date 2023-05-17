@@ -5,7 +5,7 @@ It is licensed under the Boost Software License, with the license text in this d
 The reasons for creating a custom libcontext/coroutines library instead of using the Boost versions are described in several places. It was first introduced and discussed on the mailing list here: https://www.mail-archive.com/kicad-developers@lists.launchpad.net/msg23327.html
 
 
-From https://gitlab.com/kicad/code/kicad/issues/237:
+From https://gitlab.com/kicad/code/kicad/-/issues/237:
 
 ---------------
 
