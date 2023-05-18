@@ -28,7 +28,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-12 12:58-0700\n"
+"POT-Creation-Date: 2023-05-18 11:55-0700\n"
 "PO-Revision-Date: 2023-04-24 19:52+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
@@ -64,12 +64,12 @@ msgstr "기판 외곽선 생성"
 msgid "Create layers"
 msgstr "레이어 생성"
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:685
+#: 3d-viewer/3d_canvas/board_adapter.cpp:680
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:116
 msgid "No footprint loaded."
 msgstr "불러온 풋프린트가 없습니다."
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:702
+#: 3d-viewer/3d_canvas/board_adapter.cpp:697
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
@@ -77,7 +77,7 @@ msgstr ""
 "풋프린트 외곽선이 없거나 잘못되었습니다. 전체 분석을 위해 풋프린트 검사기를 "
 "실행합니다."
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:711
+#: 3d-viewer/3d_canvas/board_adapter.cpp:706
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
 "기판 외곽선이 없거나 잘못되었습니다. 전체 분석을 위해 DRC를 실행합니다."
@@ -248,7 +248,7 @@ msgid "Raytracing"
 msgstr "레이트레이싱"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:112 common/tool/actions.cpp:632
-#: cvpcb/menubar.cpp:74 eeschema/menubar.cpp:308
+#: cvpcb/menubar.cpp:74 eeschema/menubar.cpp:309
 #: eeschema/sim/toolbars_simulator_frame.cpp:149
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:170
 #: gerbview/menubar.cpp:226 kicad/menubar.cpp:202
@@ -258,7 +258,7 @@ msgid "Preferences..."
 msgstr "환경 설정 ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:113 common/tool/actions.cpp:632
-#: cvpcb/menubar.cpp:75 eeschema/menubar.cpp:309
+#: cvpcb/menubar.cpp:75 eeschema/menubar.cpp:310
 #: eeschema/sim/toolbars_simulator_frame.cpp:150
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:171
 #: gerbview/menubar.cpp:227 kicad/menubar.cpp:203
@@ -277,7 +277,7 @@ msgstr "3D 그리드"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:147
 #: bitmap2component/bitmap2cmp_gui.cpp:237 cvpcb/menubar.cpp:87
-#: eeschema/menubar.cpp:319 eeschema/sim/toolbars_simulator_frame.cpp:160
+#: eeschema/menubar.cpp:320 eeschema/sim/toolbars_simulator_frame.cpp:160
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:181
 #: eeschema/toolbars_symbol_viewer.cpp:135 gerbview/menubar.cpp:237
 #: kicad/menubar.cpp:213 pagelayout_editor/menubar.cpp:170
@@ -287,14 +287,14 @@ msgid "&File"
 msgstr "파일 (&F)"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:148 cvpcb/menubar.cpp:88
-#: eeschema/menubar.cpp:320
+#: eeschema/menubar.cpp:321
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:182 kicad/menubar.cpp:214
 #: pagelayout_editor/menubar.cpp:171 pcbnew/menubar_footprint_editor.cpp:255
 #: pcbnew/menubar_pcb_editor.cpp:474
 msgid "&Edit"
 msgstr "편집 (&E)"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:149 eeschema/menubar.cpp:321
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:149 eeschema/menubar.cpp:322
 #: eeschema/sim/toolbars_simulator_frame.cpp:161
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:183
 #: eeschema/toolbars_symbol_viewer.cpp:136 gerbview/menubar.cpp:238
@@ -1272,51 +1272,51 @@ msgstr "종료"
 msgid "Quit Image Converter"
 msgstr "이미지 변환기 종료"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:375
+#: bitmap2component/bitmap2cmp_gui.cpp:373
 #: eeschema/tools/sch_drawing_tools.cpp:594
 #: pagelayout_editor/pl_editor_frame.cpp:862 pcbnew/tools/drawing_tool.cpp:636
 msgid "Choose Image"
 msgstr "이미지 선택"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:376
+#: bitmap2component/bitmap2cmp_gui.cpp:374
 #: eeschema/tools/sch_drawing_tools.cpp:595
 #: pagelayout_editor/pl_editor_frame.cpp:863 pcbnew/tools/drawing_tool.cpp:637
 msgid "Image Files"
 msgstr "이미지 파일"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:714
+#: bitmap2component/bitmap2cmp_gui.cpp:712
 msgid "Unable to export to the Clipboard"
 msgstr "클립보드로 내보낼 수 없음"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:739
+#: bitmap2component/bitmap2cmp_gui.cpp:737
 msgid "Create Logo File"
 msgstr "로고 파일 생성"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:756
-#: bitmap2component/bitmap2cmp_gui.cpp:792
-#: bitmap2component/bitmap2cmp_gui.cpp:826
-#: bitmap2component/bitmap2cmp_gui.cpp:860
+#: bitmap2component/bitmap2cmp_gui.cpp:754
+#: bitmap2component/bitmap2cmp_gui.cpp:790
+#: bitmap2component/bitmap2cmp_gui.cpp:824
+#: bitmap2component/bitmap2cmp_gui.cpp:858
 #, c-format
 msgid "File '%s' could not be created."
 msgstr "'%s' 파일을 만들 수 없습니다."
 
-#: bitmap2component/bitmap2cmp_gui.cpp:776
+#: bitmap2component/bitmap2cmp_gui.cpp:774
 msgid "Create PostScript File"
 msgstr "PostScript 파일 생성"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:812
+#: bitmap2component/bitmap2cmp_gui.cpp:810
 msgid "Create Symbol Library"
 msgstr "심볼 라이브러리 생성"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:846
+#: bitmap2component/bitmap2cmp_gui.cpp:844
 msgid "Create Footprint Library"
 msgstr "풋프린트 라이브러리 생성"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:883
+#: bitmap2component/bitmap2cmp_gui.cpp:881
 msgid "Error allocating memory for potrace bitmap"
 msgstr "포트레이스 비트맵에 메모리 할당 오류"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:910
+#: bitmap2component/bitmap2cmp_gui.cpp:908
 #: common/widgets/wx_html_report_panel_base.cpp:41
 #: eeschema/dialogs/dialog_erc_base.cpp:127 gerbview/files.cpp:399
 #: gerbview/readgerb.cpp:76
@@ -1379,26 +1379,26 @@ msgstr "비트"
 msgid "Load Source Image"
 msgstr "소스 이미지 로드"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:107
+#: bitmap2component/bitmap2cmp_gui_base.cpp:104
 msgid "Output Size"
 msgstr "출력 크기"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:109
+#: bitmap2component/bitmap2cmp_gui_base.cpp:106
 msgid "Lock height / width ratio"
 msgstr "높이 / 너비 비율 잠금"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:115
+#: bitmap2component/bitmap2cmp_gui_base.cpp:112
 #: common/dialogs/dialog_page_settings_base.cpp:34
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:28
 msgid "Size:"
 msgstr "크기:"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:119
-#: bitmap2component/bitmap2cmp_gui_base.cpp:124
+#: bitmap2component/bitmap2cmp_gui_base.cpp:116
+#: bitmap2component/bitmap2cmp_gui_base.cpp:121
 msgid "300"
 msgstr "300"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:143
+#: bitmap2component/bitmap2cmp_gui_base.cpp:140
 #: common/dialogs/dialog_print_generic_base.cpp:24
 #: eeschema/dialogs/dialog_annotate_base.cpp:89
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:49
@@ -1418,52 +1418,58 @@ msgstr "300"
 msgid "Options"
 msgstr "설정"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:145
+#: bitmap2component/bitmap2cmp_gui_base.cpp:142
 msgid "Black / white threshold:"
 msgstr "흑백 임계 값 :"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:150
+#: bitmap2component/bitmap2cmp_gui_base.cpp:147
 msgid ""
 "Adjust the level to convert the greyscale picture to a black and white "
 "picture."
 msgstr "그레이 스케일 그림을 흑백 그림으로 변환하기 위한 레벨을 조정합니다."
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:154
+#: bitmap2component/bitmap2cmp_gui_base.cpp:151
 #: gerbview/gerber_file_image.cpp:338
 msgid "Negative"
 msgstr "네거티브"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:160
+#: bitmap2component/bitmap2cmp_gui_base.cpp:157
+#, fuzzy
+msgid "Pcb Layer for Graphics"
+msgstr "그래픽 추가"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:159
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:525
 msgid "Front silk screen"
 msgstr "전면 실크 스크린"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:160
+#: bitmap2component/bitmap2cmp_gui_base.cpp:159
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:531
 msgid "Front solder mask"
 msgstr "전면 솔더 마스크"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:160
+#: bitmap2component/bitmap2cmp_gui_base.cpp:159
+#, fuzzy
+msgid "Front Fab layer"
+msgstr "Front_layer"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:159
+#, fuzzy
+msgid "User layer drawings"
+msgstr "User.Drawings"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:159
+#, fuzzy
+msgid "User layer comments"
+msgstr "사용자 레이어 Eco1"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:159
 msgid "User layer Eco1"
 msgstr "사용자 레이어 Eco1"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:160
+#: bitmap2component/bitmap2cmp_gui_base.cpp:159
 msgid "User layer Eco2"
 msgstr "사용자 레이어 Eco2"
-
-#: bitmap2component/bitmap2cmp_gui_base.cpp:162
-msgid "Board Layer for Outline"
-msgstr "외곽선용 기판 레이어"
-
-#: bitmap2component/bitmap2cmp_gui_base.cpp:164
-msgid ""
-"Choose the board layer to place the outline.\n"
-"The reference designator and value are always placed on the silk screen "
-"layer (but will be marked invisible)."
-msgstr ""
-"외곽선을 그릴 기판 레이어를 선택합니다.\n"
-"참조 지정자와 값은 항상 실크 스크린 레이어에 배치됩니다 (단, 숨겨짐으로 설정"
-"됩니다)."
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:168
 msgid "Symbol (.kicad_sym file)"
@@ -1495,7 +1501,7 @@ msgstr "파일로 내보내기"
 msgid "Export to Clipboard"
 msgstr "클립보드로 내보내기"
 
-#: bitmap2component/bitmap2cmp_gui_base.h:96
+#: bitmap2component/bitmap2cmp_gui_base.h:97
 #: kicad/tools/kicad_manager_actions.cpp:110
 msgid "Image Converter"
 msgstr "이미지 변환기"
@@ -3813,7 +3819,7 @@ msgstr "선 스타일"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:149
 #: eeschema/lib_field.cpp:552 eeschema/lib_text.cpp:424
 #: eeschema/lib_textbox.cpp:485 eeschema/sch_field.cpp:740
-#: eeschema/sch_label.cpp:931 eeschema/sch_text.cpp:506
+#: eeschema/sch_label.cpp:959 eeschema/sch_text.cpp:507
 #: eeschema/sch_textbox.cpp:450 include/stroke_params.h:80
 #: pcbnew/pcb_dimension.cpp:332 pcbnew/pcb_text.cpp:255
 #: pcbnew/pcb_textbox.cpp:306
@@ -4121,7 +4127,7 @@ msgid "Colors"
 msgstr "색상"
 
 #: common/eda_base_frame.cpp:1071 common/hotkey_store.cpp:73
-#: eeschema/menubar.cpp:139 eeschema/sch_edit_frame.cpp:1633
+#: eeschema/menubar.cpp:139 eeschema/sch_edit_frame.cpp:1680
 #: kicad/tools/kicad_manager_actions.cpp:80
 msgid "Schematic Editor"
 msgstr "회로도 편집기"
@@ -4417,16 +4423,16 @@ msgstr "버스 엔트리"
 msgid "Net Label"
 msgstr "네트 라벨"
 
-#: common/eda_item.cpp:356 eeschema/sch_label.cpp:917
-#: eeschema/sch_label.cpp:1289
+#: common/eda_item.cpp:356 eeschema/sch_label.cpp:945
+#: eeschema/sch_label.cpp:1348
 msgid "Directive Label"
 msgstr "지시문 레이블"
 
-#: common/eda_item.cpp:357 eeschema/sch_label.cpp:918
+#: common/eda_item.cpp:357 eeschema/sch_label.cpp:946
 msgid "Global Label"
 msgstr "전역 라벨"
 
-#: common/eda_item.cpp:358 eeschema/sch_label.cpp:919
+#: common/eda_item.cpp:358 eeschema/sch_label.cpp:947
 msgid "Hierarchical Label"
 msgstr "계층 라벨"
 
@@ -4623,7 +4629,7 @@ msgid "Filled"
 msgstr "채움"
 
 #: common/eda_text.cpp:761 eeschema/lib_textbox.cpp:487
-#: eeschema/sch_label.cpp:933 eeschema/sch_text.cpp:508
+#: eeschema/sch_label.cpp:961 eeschema/sch_text.cpp:509
 #: eeschema/sch_textbox.cpp:452 eeschema/symbol_editor/symbol_editor.cpp:1277
 #: gerbview/gerber_file_image.cpp:338 gerbview/gerber_file_image.cpp:342
 #: gerbview/gerber_file_image.cpp:345
@@ -4646,7 +4652,7 @@ msgstr "표준"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:62
 #: eeschema/dialogs/dialog_text_properties_base.cpp:113
 #: eeschema/fields_grid_table.cpp:344 eeschema/lib_textbox.cpp:487
-#: eeschema/sch_label.cpp:933 eeschema/sch_text.cpp:508
+#: eeschema/sch_label.cpp:961 eeschema/sch_text.cpp:509
 #: eeschema/sch_textbox.cpp:452
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:98
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:58
@@ -4672,7 +4678,7 @@ msgstr "이탤릭체"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:63
 #: eeschema/dialogs/dialog_text_properties_base.cpp:108
 #: eeschema/fields_grid_table.cpp:345 eeschema/lib_textbox.cpp:487
-#: eeschema/sch_label.cpp:933 eeschema/sch_text.cpp:508
+#: eeschema/sch_label.cpp:961 eeschema/sch_text.cpp:509
 #: eeschema/sch_textbox.cpp:452 eeschema/widgets/tuner_slider_base.cpp:43
 #: eeschema/widgets/tuner_slider_base.cpp:48
 #: eeschema/widgets/tuner_slider_base.cpp:53
@@ -8725,12 +8731,12 @@ msgid "Open the Schematic Setup... dialog"
 msgstr "회로도 설정... 대화 창 열기"
 
 #: eeschema/dialogs/dialog_erc.cpp:817
-#: eeschema/dialogs/dialog_schematic_setup.cpp:84
+#: eeschema/dialogs/dialog_schematic_setup.cpp:86
 msgid "Pin Conflicts Map"
 msgstr "충돌 맵 핀 하기"
 
 #: eeschema/dialogs/dialog_erc.cpp:821 eeschema/dialogs/dialog_erc.cpp:923
-#: eeschema/dialogs/dialog_schematic_setup.cpp:77
+#: eeschema/dialogs/dialog_schematic_setup.cpp:79
 #: pcbnew/dialogs/dialog_board_setup.cpp:176 pcbnew/dialogs/dialog_drc.cpp:806
 #: pcbnew/dialogs/dialog_drc.cpp:821
 msgid "Violation Severity"
@@ -9023,7 +9029,7 @@ msgstr "KiCad 글꼴"
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:117
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:99
 #: eeschema/dialogs/dialog_text_properties_base.cpp:123
-#: eeschema/sch_label.cpp:943 eeschema/sch_text.cpp:518
+#: eeschema/sch_label.cpp:971 eeschema/sch_text.cpp:519
 msgid "Align left"
 msgstr "왼쪽 정렬"
 
@@ -9038,7 +9044,7 @@ msgstr "수평 중앙 정렬"
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:127
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:109
 #: eeschema/dialogs/dialog_text_properties_base.cpp:133
-#: eeschema/sch_label.cpp:941 eeschema/sch_text.cpp:516
+#: eeschema/sch_label.cpp:969 eeschema/sch_text.cpp:517
 msgid "Align right"
 msgstr "오른쪽 정렬"
 
@@ -9048,7 +9054,7 @@ msgstr "오른쪽 정렬"
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:124
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:129
 #: eeschema/dialogs/dialog_text_properties_base.cpp:143
-#: eeschema/sch_label.cpp:944 eeschema/sch_text.cpp:519
+#: eeschema/sch_label.cpp:972 eeschema/sch_text.cpp:520
 msgid "Align top"
 msgstr "위쪽 정렬"
 
@@ -9063,7 +9069,7 @@ msgstr "수직 중앙 정렬"
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:147
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:139
 #: eeschema/dialogs/dialog_text_properties_base.cpp:153
-#: eeschema/sch_label.cpp:942 eeschema/sch_text.cpp:517
+#: eeschema/sch_label.cpp:970 eeschema/sch_text.cpp:518
 msgid "Align bottom"
 msgstr "아래쪽 정렬"
 
@@ -9475,8 +9481,8 @@ msgstr "V 정렬"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:64
 #: eeschema/fields_grid_table.cpp:346 eeschema/lib_field.cpp:556
 #: eeschema/lib_text.cpp:428 eeschema/lib_textbox.cpp:491
-#: eeschema/sch_field.cpp:744 eeschema/sch_label.cpp:937
-#: eeschema/sch_text.cpp:512 eeschema/sch_textbox.cpp:456
+#: eeschema/sch_field.cpp:744 eeschema/sch_label.cpp:965
+#: eeschema/sch_text.cpp:513 eeschema/sch_textbox.cpp:456
 #: pcbnew/tools/board_inspection_tool.cpp:1299
 msgid "Text Size"
 msgstr "텍스트 크기"
@@ -9507,8 +9513,8 @@ msgstr "Y 위치"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:68
 #: eeschema/fields_grid_table.cpp:350 eeschema/lib_field.cpp:552
 #: eeschema/lib_text.cpp:424 eeschema/lib_textbox.cpp:485
-#: eeschema/sch_field.cpp:740 eeschema/sch_label.cpp:931
-#: eeschema/sch_text.cpp:506 eeschema/sch_textbox.cpp:450
+#: eeschema/sch_field.cpp:740 eeschema/sch_label.cpp:959
+#: eeschema/sch_text.cpp:507 eeschema/sch_textbox.cpp:450
 #: pcbnew/pcb_dimension.cpp:332 pcbnew/pcb_text.cpp:255
 #: pcbnew/pcb_textbox.cpp:306
 msgid "Font"
@@ -10817,14 +10823,14 @@ msgstr "다른 프로젝트에서 설정 가져오기..."
 msgid "Electrical Rules"
 msgstr "전기 규칙"
 
-#: eeschema/dialogs/dialog_schematic_setup.cpp:86
+#: eeschema/dialogs/dialog_schematic_setup.cpp:88
 #: eeschema/sch_base_frame.cpp:270
 #: pcbnew/dialogs/dialog_board_statistics.cpp:663
 #: pcbnew/footprint_libraries_utils.cpp:522
 msgid "Project"
 msgstr "프로젝트"
 
-#: eeschema/dialogs/dialog_schematic_setup.cpp:97
+#: eeschema/dialogs/dialog_schematic_setup.cpp:99
 #: pcbnew/dialogs/dialog_board_setup.cpp:161
 #: pcbnew/widgets/appearance_controls.cpp:508
 #: pcbnew/widgets/appearance_controls.cpp:2331
@@ -10833,20 +10839,20 @@ msgstr "프로젝트"
 msgid "Net Classes"
 msgstr "네트 클래스"
 
-#: eeschema/dialogs/dialog_schematic_setup.cpp:104
+#: eeschema/dialogs/dialog_schematic_setup.cpp:106
 msgid "Bus Alias Definitions"
 msgstr "버스 별칭 정의"
 
-#: eeschema/dialogs/dialog_schematic_setup.cpp:110
+#: eeschema/dialogs/dialog_schematic_setup.cpp:112
 #: pcbnew/dialogs/dialog_board_setup.cpp:134
 msgid "Text Variables"
 msgstr "텍스트 변수"
 
-#: eeschema/dialogs/dialog_schematic_setup.cpp:125
+#: eeschema/dialogs/dialog_schematic_setup.cpp:127
 msgid "Project is missing or read-only. Settings will not be editable."
 msgstr "프로젝트를 찾을 수 없거나 읽기 전용입니다. 설정은 수정할 수 없습니다."
 
-#: eeschema/dialogs/dialog_schematic_setup.cpp:162
+#: eeschema/dialogs/dialog_schematic_setup.cpp:164
 #, c-format
 msgid ""
 "Error importing settings from project:\n"
@@ -10992,8 +10998,8 @@ msgstr "시트에는 지정된 파일이 있어야 합니다."
 #: eeschema/lib_field.cpp:554 eeschema/lib_pin.cpp:1171
 #: eeschema/lib_pin.cpp:1173 eeschema/lib_text.cpp:426
 #: eeschema/lib_textbox.cpp:489 eeschema/sch_field.cpp:742
-#: eeschema/sch_label.cpp:935 eeschema/sch_pin.cpp:221
-#: eeschema/sch_text.cpp:510 eeschema/sch_textbox.cpp:454
+#: eeschema/sch_label.cpp:963 eeschema/sch_pin.cpp:221
+#: eeschema/sch_text.cpp:511 eeschema/sch_textbox.cpp:454
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:122
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:226
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:330
@@ -11455,7 +11461,7 @@ msgid "Parameter"
 msgstr "매개변수"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:496 eeschema/lib_item.cpp:49
-#: eeschema/lib_pin.cpp:1170 eeschema/sch_label.cpp:929
+#: eeschema/lib_pin.cpp:1170 eeschema/sch_label.cpp:957
 #: eeschema/sch_pin.cpp:207 eeschema/sch_pin.cpp:220
 #: eeschema/symbol_editor/symbol_editor.cpp:1286
 #: gerbview/gerber_draw_item.cpp:620
@@ -11569,7 +11575,7 @@ msgid "The Reference column cannot be hidden."
 msgstr "참조 열은 숨겨질 수 없습니다."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:168
-#: eeschema/sch_label.cpp:916
+#: eeschema/sch_label.cpp:944
 msgid "Label"
 msgstr "라벨"
 
@@ -13153,13 +13159,13 @@ msgid ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
 msgstr "'%s' 파일은 새 루트 시트 파일로 덮어쓰므로 복사할 수 없습니다."
 
-#: eeschema/eeschema_config.cpp:77 eeschema/eeschema_jobs_handler.cpp:99
+#: eeschema/eeschema_config.cpp:78 eeschema/eeschema_jobs_handler.cpp:99
 #: pcbnew/pcbnew_config.cpp:55
 #: pcbnew/python/scripting/pcbnew_scripting_helpers.cpp:169
 msgid "Error loading drawing sheet."
 msgstr "도면 시트를 불러오는 중에 오류가 발생했습니다."
 
-#: eeschema/eeschema_config.cpp:311 eeschema/sheet.cpp:334
+#: eeschema/eeschema_config.cpp:320 eeschema/sheet.cpp:334
 #, c-format
 msgid "Error loading the symbol library table '%s'."
 msgstr "심볼 라이브러리 테이블 '%s'을(를) 불러오는 중에 오류가 발생했습니다."
@@ -14004,7 +14010,7 @@ msgstr "부품자리 요구 사항 면제"
 msgid "Unit %s"
 msgstr "단위 %s"
 
-#: eeschema/lib_text.cpp:477 eeschema/sch_text.cpp:399
+#: eeschema/lib_text.cpp:477 eeschema/sch_text.cpp:400
 #, c-format
 msgid "Graphic Text '%s'"
 msgstr "그래픽 텍스트 '%s'"
@@ -14013,8 +14019,8 @@ msgstr "그래픽 텍스트 '%s'"
 msgid "Graphic Text Box"
 msgstr "그래픽 텍스트 상자"
 
-#: eeschema/lib_textbox.cpp:487 eeschema/sch_label.cpp:933
-#: eeschema/sch_text.cpp:508 eeschema/sch_textbox.cpp:452
+#: eeschema/lib_textbox.cpp:487 eeschema/sch_label.cpp:961
+#: eeschema/sch_text.cpp:509 eeschema/sch_textbox.cpp:452
 msgid "Bold Italic"
 msgstr "굵은 기울임꼴"
 
@@ -14101,45 +14107,45 @@ msgstr "심볼을 라이브러리로..."
 msgid "Symbols to New Library..."
 msgstr "심볼을 새 라이브러리로.."
 
-#: eeschema/menubar.cpp:195
+#: eeschema/menubar.cpp:196
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:124
 #: gerbview/menubar.cpp:185 pagelayout_editor/menubar.cpp:120
 #: pcbnew/menubar_footprint_editor.cpp:138 pcbnew/menubar_pcb_editor.cpp:248
 msgid "&Units"
 msgstr "단위 (&U)"
 
-#: eeschema/menubar.cpp:322
+#: eeschema/menubar.cpp:323
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:184
 #: pagelayout_editor/menubar.cpp:173 pcbnew/menubar_footprint_editor.cpp:257
 #: pcbnew/menubar_pcb_editor.cpp:476
 msgid "&Place"
 msgstr "배치 (&P)"
 
-#: eeschema/menubar.cpp:323
+#: eeschema/menubar.cpp:324
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:185
 #: pagelayout_editor/menubar.cpp:174 pcbnew/menubar_footprint_editor.cpp:258
 #: pcbnew/menubar_pcb_editor.cpp:478
 msgid "&Inspect"
 msgstr "검사 (&I)"
 
-#: eeschema/menubar.cpp:324 gerbview/menubar.cpp:239 kicad/menubar.cpp:216
+#: eeschema/menubar.cpp:325 gerbview/menubar.cpp:239 kicad/menubar.cpp:216
 #: pcbnew/menubar_footprint_editor.cpp:259 pcbnew/menubar_pcb_editor.cpp:479
 msgid "&Tools"
 msgstr "도구 (&T)"
 
-#: eeschema/menubar.cpp:325
+#: eeschema/menubar.cpp:326
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:186
 #: pagelayout_editor/menubar.cpp:175 pcbnew/menubar_footprint_editor.cpp:260
 #: pcbnew/menubar_pcb_editor.cpp:480
 msgid "P&references"
 msgstr "설정 (&r)"
 
-#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:479
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:480
 #, c-format
 msgid "Could not open file '%s' to write IBIS model"
 msgstr "IBIS 모델을 쓰기 위해 '%s' 파일을 열 수 없음"
 
-#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:533
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:534
 #, c-format
 msgid "Could not find library file '%s'"
 msgstr "라이브러리 파일 '%s'을(를) 찾을 수 없음"
@@ -14363,7 +14369,7 @@ msgid "Bus Entry Type"
 msgstr "버스 엔트리 유형"
 
 #: eeschema/sch_bus_entry.cpp:512 eeschema/sch_junction.cpp:301
-#: eeschema/sch_label.cpp:961 eeschema/sch_line.cpp:955 pcbnew/pad.cpp:989
+#: eeschema/sch_label.cpp:989 eeschema/sch_line.cpp:955 pcbnew/pad.cpp:989
 #: pcbnew/pcb_track.cpp:963 pcbnew/tools/pcb_control.cpp:1494
 #: pcbnew/zone.cpp:588
 msgid "Resolved Netclass"
@@ -14378,20 +14384,24 @@ msgstr "연결 이름"
 msgid "Bus Alias %s Members"
 msgstr "버스 별칭 %s 멤버"
 
-#: eeschema/sch_edit_frame.cpp:132
+#: eeschema/sch_edit_frame.cpp:133
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:63
 msgid "KiCad Schematic Editor"
 msgstr "KiCad 회로도 편집기"
 
-#: eeschema/sch_edit_frame.cpp:185 eeschema/sch_edit_frame.cpp:1901
+#: eeschema/sch_edit_frame.cpp:189 eeschema/sch_edit_frame.cpp:1951
 msgid "Schematic Hierarchy"
 msgstr "회로도 계층"
 
-#: eeschema/sch_edit_frame.cpp:282
+#: eeschema/sch_edit_frame.cpp:211 pcbnew/pcb_edit_frame.cpp:322
+msgid "Search"
+msgstr "검색"
+
+#: eeschema/sch_edit_frame.cpp:305
 msgid "New schematic file is unsaved"
 msgstr "새 회로도 파일이 저장되지 않음"
 
-#: eeschema/sch_edit_frame.cpp:820
+#: eeschema/sch_edit_frame.cpp:864
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:541
 #: eeschema/symbol_editor/symbol_editor.cpp:1192
 #: pagelayout_editor/pl_editor_frame.cpp:395
@@ -14401,7 +14411,7 @@ msgstr "새 회로도 파일이 저장되지 않음"
 msgid "Save changes to '%s' before closing?"
 msgstr "닫기 전에 '%s'에 대한 변경 사항을 저장하시겠습니까?"
 
-#: eeschema/sch_edit_frame.cpp:1006
+#: eeschema/sch_edit_frame.cpp:1053
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
@@ -14411,54 +14421,54 @@ msgstr ""
 "니다. 회로도에서 PCB를 생성/업데이트하려면 KiCad 매니저를 실행하여 프로젝트"
 "를 생성하세요."
 
-#: eeschema/sch_edit_frame.cpp:1143 eeschema/sch_plotter.cpp:1029
+#: eeschema/sch_edit_frame.cpp:1190 eeschema/sch_plotter.cpp:1029
 #: eeschema/widgets/symbol_diff_widget.cpp:38
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
 msgstr "회로도"
 
-#: eeschema/sch_edit_frame.cpp:1160
+#: eeschema/sch_edit_frame.cpp:1207
 msgid "New Schematic"
 msgstr "새로운 회로도"
 
-#: eeschema/sch_edit_frame.cpp:1171
+#: eeschema/sch_edit_frame.cpp:1218
 #, c-format
 msgid "Schematic file '%s' already exists."
 msgstr "회로도 파일 '%s'은(는) 이미 존재합니다."
 
-#: eeschema/sch_edit_frame.cpp:1192
+#: eeschema/sch_edit_frame.cpp:1239
 msgid "Open Schematic"
 msgstr "회로도 열기"
 
-#: eeschema/sch_edit_frame.cpp:1261
+#: eeschema/sch_edit_frame.cpp:1308
 msgid "Assigning footprints requires a fully annotated schematic."
 msgstr "풋프린트를 할당하기 위해서는 완전히 주석 처리된 회로도가 필요합니다."
 
-#: eeschema/sch_edit_frame.cpp:1286
+#: eeschema/sch_edit_frame.cpp:1333
 msgid "Could not open CvPcb"
 msgstr "CvPcb를 열 수 없습니다"
 
-#: eeschema/sch_edit_frame.cpp:1623 eeschema/sim/simulator_frame.cpp:767
+#: eeschema/sch_edit_frame.cpp:1670 eeschema/sim/simulator_frame.cpp:767
 #: kicad/kicad_manager_frame.cpp:776 pcbnew/footprint_edit_frame.cpp:947
 #: pcbnew/pcb_edit_frame.cpp:1620
 msgid "[Read Only]"
 msgstr "[읽기 전용]"
 
-#: eeschema/sch_edit_frame.cpp:1626 eeschema/sim/simulator_frame.cpp:770
+#: eeschema/sch_edit_frame.cpp:1673 eeschema/sim/simulator_frame.cpp:770
 #: pcbnew/footprint_edit_frame.cpp:956 pcbnew/pcb_edit_frame.cpp:1623
 msgid "[Unsaved]"
 msgstr "[저장되지 않음]"
 
-#: eeschema/sch_edit_frame.cpp:1630
+#: eeschema/sch_edit_frame.cpp:1677
 msgid "[no schematic loaded]"
 msgstr "[불러온 회로도가 없습니다]"
 
-#: eeschema/sch_edit_frame.cpp:1924
+#: eeschema/sch_edit_frame.cpp:1974
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "강조 표시된 네트: %s"
 
-#: eeschema/sch_edit_frame.cpp:2205 eeschema/tools/ee_actions.cpp:55
+#: eeschema/sch_edit_frame.cpp:2255 eeschema/tools/ee_actions.cpp:55
 #, fuzzy
 msgid "Diff Symbol with Library"
 msgstr "심볼을 라이브러리로..."
@@ -14500,15 +14510,15 @@ msgstr "크기"
 msgid "Tri-State"
 msgstr "3-상태"
 
-#: eeschema/sch_label.cpp:920
+#: eeschema/sch_label.cpp:948
 msgid "Hierarchical Sheet Pin"
 msgstr "계층 시트 핀"
 
-#: eeschema/sch_label.cpp:948 eeschema/sch_text.cpp:523
+#: eeschema/sch_label.cpp:976 eeschema/sch_text.cpp:524
 msgid "Justification"
 msgstr "위치 맞춤"
 
-#: eeschema/sch_label.cpp:1012 eeschema/sch_line.cpp:894
+#: eeschema/sch_label.cpp:1040 eeschema/sch_line.cpp:894
 #: pcbnew/board_connected_item.cpp:173
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
 #: pcbnew/dialogs/dialog_net_inspector.cpp:970 pcbnew/pad.cpp:987
@@ -14519,35 +14529,35 @@ msgstr "위치 맞춤"
 msgid "Net"
 msgstr "네트"
 
-#: eeschema/sch_label.cpp:1015 eeschema/sch_line.cpp:898
+#: eeschema/sch_label.cpp:1043 eeschema/sch_line.cpp:898
 msgid "Resolved netclass"
 msgstr "해결된 넷클래스"
 
-#: eeschema/sch_label.cpp:1031
+#: eeschema/sch_label.cpp:1059
 msgid "Hierarchical Labels"
 msgstr "계층 라벨"
 
-#: eeschema/sch_label.cpp:1116
+#: eeschema/sch_label.cpp:1144
 #, c-format
 msgid "Label '%s'"
 msgstr "라벨 '%s'"
 
-#: eeschema/sch_label.cpp:1293
+#: eeschema/sch_label.cpp:1352
 #, c-format
 msgid "Directive Label [%s %s]"
 msgstr "지시문 레이블 [%s %s]"
 
-#: eeschema/sch_label.cpp:1570
+#: eeschema/sch_label.cpp:1629
 #, c-format
 msgid "Global Label '%s'"
 msgstr "전역 라벨 '%s'"
 
-#: eeschema/sch_label.cpp:1703
+#: eeschema/sch_label.cpp:1762
 #, c-format
 msgid "Hierarchical Label '%s'"
 msgstr "계층 라벨 '%s'"
 
-#: eeschema/sch_label.cpp:1720 pcbnew/dialogs/panel_setup_rules.cpp:686
+#: eeschema/sch_label.cpp:1779 pcbnew/dialogs/panel_setup_rules.cpp:686
 msgid "Syntax Help"
 msgstr "구문 도움말"
 
@@ -15449,7 +15459,7 @@ msgstr "기판에서 제외됨"
 msgid "DNP"
 msgstr "DNP"
 
-#: eeschema/sch_symbol.cpp:1730 eeschema/sch_text.cpp:504
+#: eeschema/sch_symbol.cpp:1730 eeschema/sch_text.cpp:505
 #: eeschema/sch_textbox.cpp:448 eeschema/tools/sch_edit_tool.cpp:378
 #: eeschema/tools/sch_edit_tool.cpp:470 eeschema/tools/sch_edit_tool.cpp:555
 #, fuzzy
@@ -15461,7 +15471,7 @@ msgstr "시뮬레이션"
 msgid "BOM"
 msgstr "부품 목록..."
 
-#: eeschema/sch_symbol.cpp:1745 eeschema/sch_text.cpp:504
+#: eeschema/sch_symbol.cpp:1745 eeschema/sch_text.cpp:505
 #: eeschema/sch_textbox.cpp:448
 #, fuzzy
 msgid "Exclude from"
@@ -15501,7 +15511,7 @@ msgstr "%s에서 심볼을 찾을 수 없음!"
 msgid "Symbol %s [%s]"
 msgstr "심볼 %s [%s]"
 
-#: eeschema/sch_text.cpp:501
+#: eeschema/sch_text.cpp:502
 msgid "Graphic Text"
 msgstr "그래픽 텍스트"
 
@@ -19258,19 +19268,19 @@ msgstr "라이브러리 '%s'을(를) 추가 할 수 없음."
 msgid "Update symbols in schematic to refer to new library?"
 msgstr "새 라이브러리를 참조하도록 회로도의 심볼을 업데이트하시겠습니까?"
 
-#: eeschema/tools/sch_editor_control.cpp:766
+#: eeschema/tools/sch_editor_control.cpp:768
 msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr "오류: 현재 시트에서 중복되는 하위 시트 이름이 발견되었습니다."
 
-#: eeschema/tools/sch_editor_control.cpp:859
+#: eeschema/tools/sch_editor_control.cpp:863
 msgid "No net selected."
 msgstr "선택한 네트가 없음."
 
-#: eeschema/tools/sch_editor_control.cpp:885
+#: eeschema/tools/sch_editor_control.cpp:889
 msgid "Net must be labeled to assign a netclass."
 msgstr "네트클래스를 할당하려면 네트에 라벨을 지정해야 합니다."
 
-#: eeschema/tools/sch_editor_control.cpp:1568
+#: eeschema/tools/sch_editor_control.cpp:1577
 #, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -19281,25 +19291,25 @@ msgstr ""
 "는 제외되었습니다. 목적지 또는 목적지의 하위 시트 중 해당 시트를 상위 시트로 "
 "갖는 시트가 발견되었습니다."
 
-#: eeschema/tools/sch_editor_control.cpp:1947
+#: eeschema/tools/sch_editor_control.cpp:1956
 msgid "Symbols with broken library symbol links cannot be edited."
 msgstr "라이브러리 기호 링크가 끊어진 기호는 편집할 수 없습니다."
 
-#: eeschema/tools/sch_editor_control.cpp:2277
+#: eeschema/tools/sch_editor_control.cpp:2293
 #: pcbnew/tools/board_editor_control.cpp:594
 #: pcbnew/tools/footprint_editor_control.cpp:723
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d 개의 중복된 ID를 교체하였습니다.\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2284
+#: eeschema/tools/sch_editor_control.cpp:2300
 #: pcbnew/tools/board_editor_control.cpp:609
 #: pcbnew/tools/footprint_editor_control.cpp:738
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d 개의 잠재적 문제점이 복구되었습니다."
 
-#: eeschema/tools/sch_editor_control.cpp:2291
+#: eeschema/tools/sch_editor_control.cpp:2307
 #: pcbnew/drc/drc_rule_parser.cpp:179
 msgid "No errors found."
 msgstr "오류가 발견되지 않았습니다."
@@ -25182,18 +25192,18 @@ msgstr "알 수 없는 정리 작업"
 msgid "Updating nets..."
 msgstr "네트 업데이트 중..."
 
-#: pcbnew/convert_shape_list_to_polygon.cpp:306
-#: pcbnew/convert_shape_list_to_polygon.cpp:457
-#: pcbnew/convert_shape_list_to_polygon.cpp:573
-#: pcbnew/convert_shape_list_to_polygon.cpp:587
+#: pcbnew/convert_shape_list_to_polygon.cpp:301
+#: pcbnew/convert_shape_list_to_polygon.cpp:452
+#: pcbnew/convert_shape_list_to_polygon.cpp:568
+#: pcbnew/convert_shape_list_to_polygon.cpp:582
 msgid "(self-intersecting)"
 msgstr "(자체 교차)"
 
-#: pcbnew/convert_shape_list_to_polygon.cpp:464
+#: pcbnew/convert_shape_list_to_polygon.cpp:459
 msgid "(not a closed shape)"
 msgstr "(닫혀 있지 않은 모양)"
 
-#: pcbnew/convert_shape_list_to_polygon.cpp:519
+#: pcbnew/convert_shape_list_to_polygon.cpp:514
 msgid "(multiple board outlines not supported)"
 msgstr "(여러 보드 외곽선은 지원되지 않음)"
 
@@ -34581,7 +34591,7 @@ msgstr "이들은 타원 패드로 출력되었습니다."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:290
 #: pcbnew/exporters/exporter_vrml.cpp:780
-#: pcbnew/exporters/step/exporter_step.cpp:341
+#: pcbnew/exporters/step/exporter_step.cpp:343
 #: pcbnew/specctra_import_export/specctra_export.cpp:116
 msgid "Board outline is malformed. Run DRC for a full analysis."
 msgstr "기판의 외곽선이 잘못되었습니다. DRC를 실행하여 전체 분석을 진행하세요."
@@ -34623,20 +34633,20 @@ msgstr "거버 작업 파일 '%s'을(를) 생성하였습니다."
 msgid "Board stackup settings not up to date."
 msgstr "기판 시작 설정이 최신이 아닙니다."
 
-#: pcbnew/exporters/step/exporter_step.cpp:455
+#: pcbnew/exporters/step/exporter_step.cpp:457
 msgid "Determining PCB data\n"
 msgstr "PCB 데이터 결정\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:458
+#: pcbnew/exporters/step/exporter_step.cpp:460
 #, c-format
 msgid "Board Thickness from stackup: %.3f mm\n"
 msgstr "스택업에서 기판 두께: %.3f mm\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:463
+#: pcbnew/exporters/step/exporter_step.cpp:465
 msgid "Build STEP data\n"
 msgstr "STEP 데이터 구축\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:467
+#: pcbnew/exporters/step/exporter_step.cpp:469
 msgid ""
 "\n"
 "** Error building STEP board model. Export aborted. **\n"
@@ -34645,11 +34655,11 @@ msgstr ""
 "** STEP 보드 모델을 빌드하는 동안 오류가 발생했습니다. 내보내기가 중단되었습"
 "니다. **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:471
+#: pcbnew/exporters/step/exporter_step.cpp:473
 msgid "Writing STEP file\n"
 msgstr "STEP 파일 작성\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:475
+#: pcbnew/exporters/step/exporter_step.cpp:477
 msgid ""
 "\n"
 "** Error writing STEP file. **\n"
@@ -34657,7 +34667,7 @@ msgstr ""
 "\n"
 "** STEP 파일 쓰기 오류. **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:480
+#: pcbnew/exporters/step/exporter_step.cpp:482
 #, c-format
 msgid ""
 "\n"
@@ -34666,8 +34676,8 @@ msgstr ""
 "\n"
 "STEP 파일 '%s' 생성됨.\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:486
-#: pcbnew/exporters/step/exporter_step.cpp:491
+#: pcbnew/exporters/step/exporter_step.cpp:488
+#: pcbnew/exporters/step/exporter_step.cpp:493
 msgid ""
 "\n"
 "** Error exporting STEP file. Export aborted. **\n"
@@ -34675,7 +34685,7 @@ msgstr ""
 "\n"
 "** STEP 파일을 내보내는 중 오류가 발생했습니다. 내보내기가 중단됨 **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:499
+#: pcbnew/exporters/step/exporter_step.cpp:501
 msgid ""
 "Unable to create STEP file.\n"
 "Check that the board has a valid outline and models."
@@ -34683,7 +34693,7 @@ msgstr ""
 "STEP 파일을 생성할 수 없습니다.\n"
 "보드에 유효한 아웃라인과 모델이 있는지 확인하십시오."
 
-#: pcbnew/exporters/step/exporter_step.cpp:504
+#: pcbnew/exporters/step/exporter_step.cpp:506
 msgid "STEP file has been created, but there are warnings."
 msgstr "STEP 파일이 생성되었지만 경고가 있습니다."
 
@@ -36304,10 +36314,6 @@ msgstr "KiCad PCB 편집기"
 #: pcbnew/pcb_edit_frame.cpp:222
 msgid "Export netlist used to update schematics"
 msgstr "회로도를 업데이트하기 위해 사용된 네트리스트 내보내기"
-
-#: pcbnew/pcb_edit_frame.cpp:322
-msgid "Search"
-msgstr "검색"
 
 #: pcbnew/pcb_edit_frame.cpp:406
 msgid "New PCB file is unsaved"
@@ -38162,7 +38168,7 @@ msgstr ""
 "이 영역은 라우터가 처리할 수 없습니다.\n"
 "자체 교차하는 다각형이 아닌지 확인하세요."
 
-#: pcbnew/router/pns_kicad_iface.cpp:1892 pcbnew/router/router_tool.cpp:453
+#: pcbnew/router/pns_kicad_iface.cpp:1895 pcbnew/router/router_tool.cpp:453
 msgid "Interactive Router"
 msgstr "인터랙티브 라우터"
 
@@ -38517,7 +38523,7 @@ msgstr "값이 '%s'인 풋프린트에는 빈 참조 지정자가 있습니다."
 msgid "Multiple footprints have the reference designator '%s'."
 msgstr "여러 풋프린트에는 참조 지정자 '%s'가 있습니다."
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:76
+#: pcbnew/specctra_import_export/specctra_import.cpp:77
 msgid ""
 "Board may be corrupted, do not save it.\n"
 " Fix problem and try again"
@@ -38525,53 +38531,53 @@ msgstr ""
 "기판이 손상되어 있는 것 같습니다. 저장하지 마세요.\n"
 " 문제점을 수정한 후 다시 시도하세요"
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:99
+#: pcbnew/specctra_import_export/specctra_import.cpp:100
 msgid "Session file imported and merged OK."
 msgstr "세션 파일 불러오기 및 합치기 완료."
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:159
+#: pcbnew/specctra_import_export/specctra_import.cpp:160
 #, c-format
 msgid "Session file uses invalid layer id '%s'."
 msgstr "세션 파일이 유효하지 않은 레이어 id '%s'을(를) 사용합니다."
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:218
+#: pcbnew/specctra_import_export/specctra_import.cpp:219
 msgid "Session via padstack has no shapes"
 msgstr "세션 비아 패드스택의 형상이 없습니다"
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:227
+#: pcbnew/specctra_import_export/specctra_import.cpp:228
 #, c-format
 msgid "Unsupported via shape: %s."
 msgstr "지원되지 않는 비아 모양: %s."
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:248
-#: pcbnew/specctra_import_export/specctra_import.cpp:276
+#: pcbnew/specctra_import_export/specctra_import.cpp:249
+#: pcbnew/specctra_import_export/specctra_import.cpp:277
 #, c-format
 msgid "Unsupported via shape: %s"
 msgstr "지원되지 않는 비아 형상: %s"
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:286
+#: pcbnew/specctra_import_export/specctra_import.cpp:287
 #, c-format
 msgid "Session file uses invalid layer id '%s'"
 msgstr "세션 파일이 잘못된 레이어 ID '%s'를 사용합니다"
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:342
+#: pcbnew/specctra_import_export/specctra_import.cpp:343
 msgid "Session file is missing the \"session\" section"
 msgstr "세션 파일이 \"session\" 섹션에 존재하지 않습니다"
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:345
+#: pcbnew/specctra_import_export/specctra_import.cpp:346
 msgid "Session file is missing the \"routes\" section"
 msgstr "세션 파일이 \"routes\" 섹션에 존재하지 않습니다"
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:348
+#: pcbnew/specctra_import_export/specctra_import.cpp:349
 msgid "Session file is missing the \"library_out\" section"
 msgstr "세션 파일이 \"library_out\" 섹션에 존재하지 않습니다"
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:392
+#: pcbnew/specctra_import_export/specctra_import.cpp:400
 #, c-format
 msgid "Reference '%s' not found."
 msgstr "참조 '%s'을(를) 찾을 수 없습니다."
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:521
+#: pcbnew/specctra_import_export/specctra_import.cpp:529
 #, c-format
 msgid "A wire_via refers to missing padstack '%s'."
 msgstr "wire_via가 누락된 패드스택 '%s'을(를) 참조합니다."
@@ -42449,6 +42455,18 @@ msgstr "KiCad 회로도"
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad 인쇄 회로 기판"
 
+#~ msgid "Board Layer for Outline"
+#~ msgstr "외곽선용 기판 레이어"
+
+#~ msgid ""
+#~ "Choose the board layer to place the outline.\n"
+#~ "The reference designator and value are always placed on the silk screen "
+#~ "layer (but will be marked invisible)."
+#~ msgstr ""
+#~ "외곽선을 그릴 기판 레이어를 선택합니다.\n"
+#~ "참조 지정자와 값은 항상 실크 스크린 레이어에 배치됩니다 (단, 숨겨짐으로 설"
+#~ "정됩니다)."
+
 #, fuzzy
 #~ msgid "(De Morgan) "
 #~ msgstr "드모르간"
@@ -44424,9 +44442,6 @@ msgstr "KiCad 인쇄 회로 기판"
 #~ msgid "F.Mask"
 #~ msgstr "F.Mask"
 
-#~ msgid "User.Drawings"
-#~ msgstr "User.Drawings"
-
 #~ msgid "User.Comments"
 #~ msgstr "User.Comments"
 
@@ -46071,10 +46086,6 @@ msgstr "KiCad 인쇄 회로 기판"
 #, fuzzy
 #~ msgid "Lock pads of newly added footprints"
 #~ msgstr "풋프린트 이동"
-
-#, fuzzy
-#~ msgid "Place Imported Graphics"
-#~ msgstr "그래픽 추가"
 
 #, fuzzy
 #~ msgid "Enable PSpice model simulation"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-12 12:58-0700\n"
+"POT-Creation-Date: 2023-05-18 11:55-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -841,29 +841,29 @@ msgstr ""
 msgid "Negative"
 msgstr "Negative"
 
+msgid "Pcb Layer for Graphics"
+msgstr "Pcb Layer for Graphics"
+
 msgid "Front silk screen"
 msgstr "Front silk screen"
 
 msgid "Front solder mask"
 msgstr "Front solder mask"
 
+msgid "Front Fab layer"
+msgstr "Front Fab layer"
+
+msgid "User layer drawings"
+msgstr "User layer drawings"
+
+msgid "User layer comments"
+msgstr "User layer comments"
+
 msgid "User layer Eco1"
 msgstr "User layer Eco1"
 
 msgid "User layer Eco2"
 msgstr "User layer Eco2"
-
-msgid "Board Layer for Outline"
-msgstr "Board Layer for Outline"
-
-msgid ""
-"Choose the board layer to place the outline.\n"
-"The reference designator and value are always placed on the silk screen "
-"layer (but will be marked invisible)."
-msgstr ""
-"Choose the board layer to place the outline.\n"
-"The reference designator and value are always placed on the silk screen "
-"layer (but will be marked invisible)."
 
 msgid "Symbol (.kicad_sym file)"
 msgstr "Symbol (.kicad_sym file)"
@@ -9465,6 +9465,9 @@ msgstr "KiCad Schematic Editor"
 
 msgid "Schematic Hierarchy"
 msgstr "Schematic Hierarchy"
+
+msgid "Search"
+msgstr "Search"
 
 msgid "New schematic file is unsaved"
 msgstr "New schematic file is unsaved"
@@ -25760,9 +25763,6 @@ msgstr "KiCad PCB Editor"
 msgid "Export netlist used to update schematics"
 msgstr "Export netlist used to update schematics"
 
-msgid "Search"
-msgstr "Search"
-
 msgid "New PCB file is unsaved"
 msgstr "New PCB file is unsaved"
 
@@ -30431,6 +30431,18 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Board Layer for Outline"
+#~ msgstr "Board Layer for Outline"
+
+#~ msgid ""
+#~ "Choose the board layer to place the outline.\n"
+#~ "The reference designator and value are always placed on the silk screen "
+#~ "layer (but will be marked invisible)."
+#~ msgstr ""
+#~ "Choose the board layer to place the outline.\n"
+#~ "The reference designator and value are always placed on the silk screen "
+#~ "layer (but will be marked invisible)."
 
 #, c-format
 #~ msgid "Plotting symbol '%s' unit %d %sto '%s'\n"
