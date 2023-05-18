@@ -809,12 +809,27 @@ void PCB_EDIT_FRAME::ToggleSearch()
 
     if( m_show_search )
     {
-        SetAuiPaneSize( m_auimgr, searchPaneInfo, -1, settings->m_AuiPanels.search_panel_height );
+        searchPaneInfo.Direction( settings->m_AuiPanels.search_panel_dock_direction );
+
+        if( settings->m_AuiPanels.search_panel_dock_direction == wxAUI_DOCK_TOP
+            || settings->m_AuiPanels.search_panel_dock_direction == wxAUI_DOCK_BOTTOM )
+        {
+            SetAuiPaneSize( m_auimgr, searchPaneInfo,
+                            -1, settings->m_AuiPanels.search_panel_height );
+        }
+        else if( settings->m_AuiPanels.search_panel_dock_direction == wxAUI_DOCK_LEFT
+                 || settings->m_AuiPanels.search_panel_dock_direction == wxAUI_DOCK_RIGHT )
+        {
+            SetAuiPaneSize( m_auimgr, searchPaneInfo,
+                            settings->m_AuiPanels.search_panel_width, -1 );
+        }
         m_searchPane->FocusSearch();
     }
     else
     {
         settings->m_AuiPanels.search_panel_height = m_searchPane->GetSize().y;
+        settings->m_AuiPanels.search_panel_width = m_searchPane->GetSize().x;
+        settings->m_AuiPanels.search_panel_dock_direction = searchPaneInfo.dock_direction;
         m_auimgr.Update();
     }
 }

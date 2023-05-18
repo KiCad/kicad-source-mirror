@@ -140,6 +140,8 @@ public:
         int  properties_panel_width;
         float properties_splitter_proportion;
         int  search_panel_height;
+        int  search_panel_width;
+        int  search_panel_dock_direction;
         bool show_layer_manager;
         bool show_properties;
         bool show_search;

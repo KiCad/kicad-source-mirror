@@ -351,10 +351,22 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                             settings->m_AuiPanels.properties_panel_width, -1 );
         }
 
-        if( settings->m_AuiPanels.search_panel_height > 0 )
+        if( settings->m_AuiPanels.search_panel_height > 0
+            && ( settings->m_AuiPanels.search_panel_dock_direction == wxAUI_DOCK_TOP
+                || settings->m_AuiPanels.search_panel_dock_direction == wxAUI_DOCK_BOTTOM ) )
         {
             wxAuiPaneInfo& searchPane = m_auimgr.GetPane( SearchPaneName() );
+            searchPane.Direction( settings->m_AuiPanels.search_panel_dock_direction );
             SetAuiPaneSize( m_auimgr, searchPane, -1, settings->m_AuiPanels.search_panel_height );
+        }
+
+        else if( settings->m_AuiPanels.search_panel_width > 0
+                && ( settings->m_AuiPanels.search_panel_dock_direction == wxAUI_DOCK_LEFT
+                    || settings->m_AuiPanels.search_panel_dock_direction == wxAUI_DOCK_RIGHT ) )
+        {
+            wxAuiPaneInfo& searchPane = m_auimgr.GetPane( SearchPaneName() );
+            searchPane.Direction( settings->m_AuiPanels.search_panel_dock_direction );
+            SetAuiPaneSize( m_auimgr, searchPane, settings->m_AuiPanels.search_panel_width, -1 );
         }
 
         m_appearancePanel->SetTabIndex( settings->m_AuiPanels.appearance_panel_tab );
@@ -1301,9 +1313,12 @@ void PCB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         }
 
         // ensure m_show_search is up to date (the pane can be closed)
-        m_show_search = m_auimgr.GetPane( SearchPaneName() ).IsShown();
+        wxAuiPaneInfo& searchPaneInfo = m_auimgr.GetPane( SearchPaneName() );
+        m_show_search = searchPaneInfo.IsShown();
         cfg->m_AuiPanels.show_search = m_show_search;
         cfg->m_AuiPanels.search_panel_height = m_searchPane->GetSize().y;
+        cfg->m_AuiPanels.search_panel_width = m_searchPane->GetSize().x;
+        cfg->m_AuiPanels.search_panel_dock_direction = searchPaneInfo.dock_direction;
     }
 }
 
