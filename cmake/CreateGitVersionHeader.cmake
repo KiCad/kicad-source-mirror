@@ -71,6 +71,9 @@ macro( create_git_version_header _git_src_path )
 
     if( _git_rev_parse_head_result EQUAL 0 )
         set( KICAD_COMMIT_HASH "${_git_REV_PARSE_HEAD}" )
+    else()
+        # placeholder if we can't get a real hash
+        set( KICAD_COMMIT_HASH "0000000000000000000000000000000000000000" )
     endif()
 
     if( _git_rev_count_result EQUAL 0 )
