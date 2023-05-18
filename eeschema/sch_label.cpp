@@ -374,6 +374,34 @@ void SCH_LABEL_BASE::Rotate90( bool aClockwise )
 }
 
 
+void SCH_LABEL_BASE::MirrorSpinStyle( bool aLeftRight )
+{
+    SCH_TEXT::MirrorSpinStyle( aLeftRight );
+
+    for( SCH_FIELD& field : m_fields )
+    {
+        if( ( aLeftRight && field.GetTextAngle().IsHorizontal() )
+                || ( !aLeftRight && field.GetTextAngle().IsVertical() ) )
+        {
+            if( field.GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT )
+                field.SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+            else
+                field.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        }
+
+        VECTOR2I pos = field.GetTextPos();
+        VECTOR2I delta = (VECTOR2I)GetPosition() - pos;
+
+        if( aLeftRight )
+            pos.x = GetPosition().x + delta.x;
+        else
+            pos.y = GetPosition().y + delta.y;
+
+        field.SetTextPos( pos );
+    }
+}
+
+
 bool SCH_LABEL_BASE::IncrementLabel( int aIncrement )
 {
     wxString text = GetText();
@@ -1160,6 +1188,37 @@ int SCH_DIRECTIVE_LABEL::GetPenWidth() const
         pen = Schematic()->Settings().m_DefaultLineWidth;
 
     return GetEffectiveTextPenWidth( pen );
+}
+
+
+void SCH_DIRECTIVE_LABEL::MirrorSpinStyle( bool aLeftRight )
+{
+    // The "text" is in fact a graphic shape. For a horizontal "text", it looks like a
+    // vertical shape (like a text reduced to only "I" letter).
+    // So the mirroring is not exactly similar to a SCH_TEXT item
+    SCH_TEXT::MirrorSpinStyle( !aLeftRight );
+
+    for( SCH_FIELD& field : m_fields )
+    {
+        if( ( aLeftRight && field.GetTextAngle().IsHorizontal() )
+                || ( !aLeftRight && field.GetTextAngle().IsVertical() ) )
+        {
+            if( field.GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT )
+                field.SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+            else
+                field.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        }
+
+        VECTOR2I pos = field.GetTextPos();
+        VECTOR2I delta = (VECTOR2I)GetPosition() - pos;
+
+        if( aLeftRight )
+            pos.x = GetPosition().x + delta.x;
+        else
+            pos.y = GetPosition().y + delta.y;
+
+        field.SetTextPos( pos );
+    }
 }
 
 
