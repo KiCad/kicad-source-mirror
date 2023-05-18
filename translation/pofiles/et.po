@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-12 12:57-0700\n"
+"POT-Creation-Date: 2023-05-18 11:58-0700\n"
 "PO-Revision-Date: 2023-03-30 23:16+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/kicad/v7/et/>\n"
@@ -3657,7 +3657,7 @@ msgstr ""
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:149
 #: eeschema/lib_field.cpp:551 eeschema/lib_text.cpp:424
 #: eeschema/lib_textbox.cpp:484 eeschema/sch_field.cpp:751
-#: eeschema/sch_label.cpp:892 eeschema/sch_text.cpp:496
+#: eeschema/sch_label.cpp:920 eeschema/sch_text.cpp:497
 #: eeschema/sch_textbox.cpp:440 include/stroke_params.h:80
 #: pcbnew/fp_text.cpp:309 pcbnew/fp_textbox.cpp:336
 #: pcbnew/pcb_dimension.cpp:332 pcbnew/pcb_text.cpp:130
@@ -4250,16 +4250,16 @@ msgstr ""
 msgid "Net Label"
 msgstr ""
 
-#: common/eda_item.cpp:365 eeschema/sch_label.cpp:878
-#: eeschema/sch_label.cpp:1250
+#: common/eda_item.cpp:365 eeschema/sch_label.cpp:906
+#: eeschema/sch_label.cpp:1309
 msgid "Directive Label"
 msgstr ""
 
-#: common/eda_item.cpp:366 eeschema/sch_label.cpp:879
+#: common/eda_item.cpp:366 eeschema/sch_label.cpp:907
 msgid "Global Label"
 msgstr ""
 
-#: common/eda_item.cpp:367 eeschema/sch_label.cpp:880
+#: common/eda_item.cpp:367 eeschema/sch_label.cpp:908
 msgid "Hierarchical Label"
 msgstr ""
 
@@ -4457,7 +4457,7 @@ msgid "Filled"
 msgstr ""
 
 #: common/eda_text.cpp:759 eeschema/lib_textbox.cpp:486
-#: eeschema/sch_label.cpp:894 eeschema/sch_text.cpp:498
+#: eeschema/sch_label.cpp:922 eeschema/sch_text.cpp:499
 #: eeschema/sch_textbox.cpp:442 eeschema/symbol_editor/symbol_editor.cpp:1248
 #: gerbview/gerber_file_image.cpp:338 gerbview/gerber_file_image.cpp:342
 #: gerbview/gerber_file_image.cpp:345
@@ -4480,7 +4480,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:62
 #: eeschema/dialogs/dialog_text_properties_base.cpp:110
 #: eeschema/fields_grid_table.cpp:345 eeschema/lib_textbox.cpp:486
-#: eeschema/sch_label.cpp:894 eeschema/sch_text.cpp:498
+#: eeschema/sch_label.cpp:922 eeschema/sch_text.cpp:499
 #: eeschema/sch_textbox.cpp:442
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:98
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:58
@@ -4506,7 +4506,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:63
 #: eeschema/dialogs/dialog_text_properties_base.cpp:105
 #: eeschema/fields_grid_table.cpp:346 eeschema/lib_textbox.cpp:486
-#: eeschema/sch_label.cpp:894 eeschema/sch_text.cpp:498
+#: eeschema/sch_label.cpp:922 eeschema/sch_text.cpp:499
 #: eeschema/sch_textbox.cpp:442
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:93
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:186
@@ -7467,8 +7467,8 @@ msgstr ""
 msgid "%s found"
 msgstr ""
 
-#: eeschema/cross-probing.cpp:175 eeschema/sim/sim_plot_frame.cpp:599
-#: eeschema/sim/sim_plot_frame.cpp:915 eeschema/widgets/tuner_slider.cpp:52
+#: eeschema/cross-probing.cpp:175 eeschema/sim/sim_plot_frame.cpp:606
+#: eeschema/sim/sim_plot_frame.cpp:922 eeschema/widgets/tuner_slider.cpp:52
 #, c-format
 msgid "%s not found"
 msgstr ""
@@ -8283,7 +8283,7 @@ msgid "Export Netlist"
 msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:320
-#: eeschema/sim/sim_plot_frame.cpp:463
+#: eeschema/sim/sim_plot_frame.cpp:464 eeschema/sim/sim_plot_frame.cpp:1738
 msgid "Simulator requires a fully annotated schematic."
 msgstr ""
 
@@ -8475,7 +8475,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:117
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:99
 #: eeschema/dialogs/dialog_text_properties_base.cpp:120
-#: eeschema/sch_label.cpp:904 eeschema/sch_text.cpp:508
+#: eeschema/sch_label.cpp:932 eeschema/sch_text.cpp:509
 msgid "Align left"
 msgstr ""
 
@@ -8490,7 +8490,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:127
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:109
 #: eeschema/dialogs/dialog_text_properties_base.cpp:130
-#: eeschema/sch_label.cpp:902 eeschema/sch_text.cpp:506
+#: eeschema/sch_label.cpp:930 eeschema/sch_text.cpp:507
 msgid "Align right"
 msgstr ""
 
@@ -8500,7 +8500,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:124
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:129
 #: eeschema/dialogs/dialog_text_properties_base.cpp:140
-#: eeschema/sch_label.cpp:905 eeschema/sch_text.cpp:509
+#: eeschema/sch_label.cpp:933 eeschema/sch_text.cpp:510
 msgid "Align top"
 msgstr ""
 
@@ -8515,7 +8515,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:147
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:139
 #: eeschema/dialogs/dialog_text_properties_base.cpp:150
-#: eeschema/sch_label.cpp:903 eeschema/sch_text.cpp:507
+#: eeschema/sch_label.cpp:931 eeschema/sch_text.cpp:508
 msgid "Align bottom"
 msgstr ""
 
@@ -8920,8 +8920,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:64
 #: eeschema/fields_grid_table.cpp:347 eeschema/lib_field.cpp:555
 #: eeschema/lib_text.cpp:428 eeschema/lib_textbox.cpp:490
-#: eeschema/sch_field.cpp:755 eeschema/sch_label.cpp:898
-#: eeschema/sch_text.cpp:502 eeschema/sch_textbox.cpp:446
+#: eeschema/sch_field.cpp:755 eeschema/sch_label.cpp:926
+#: eeschema/sch_text.cpp:503 eeschema/sch_textbox.cpp:446
 #: pcbnew/tools/board_inspection_tool.cpp:1237
 msgid "Text Size"
 msgstr ""
@@ -8952,8 +8952,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:68
 #: eeschema/fields_grid_table.cpp:351 eeschema/lib_field.cpp:551
 #: eeschema/lib_text.cpp:424 eeschema/lib_textbox.cpp:484
-#: eeschema/sch_field.cpp:751 eeschema/sch_label.cpp:892
-#: eeschema/sch_text.cpp:496 eeschema/sch_textbox.cpp:440
+#: eeschema/sch_field.cpp:751 eeschema/sch_label.cpp:920
+#: eeschema/sch_text.cpp:497 eeschema/sch_textbox.cpp:440
 #: pcbnew/fp_text.cpp:309 pcbnew/fp_textbox.cpp:336
 #: pcbnew/pcb_dimension.cpp:332 pcbnew/pcb_text.cpp:130
 #: pcbnew/pcb_textbox.cpp:297
@@ -10374,8 +10374,8 @@ msgstr ""
 #: eeschema/lib_field.cpp:553 eeschema/lib_pin.cpp:1171
 #: eeschema/lib_pin.cpp:1173 eeschema/lib_text.cpp:426
 #: eeschema/lib_textbox.cpp:488 eeschema/sch_field.cpp:753
-#: eeschema/sch_label.cpp:896 eeschema/sch_pin.cpp:220
-#: eeschema/sch_text.cpp:500 eeschema/sch_textbox.cpp:444
+#: eeschema/sch_label.cpp:924 eeschema/sch_pin.cpp:220
+#: eeschema/sch_text.cpp:501 eeschema/sch_textbox.cpp:444
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:122
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:226
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:330
@@ -10420,7 +10420,7 @@ msgid "Add signal by name:"
 msgstr ""
 
 #: eeschema/dialogs/dialog_signal_list_base.h:50
-#: eeschema/sim/sim_plot_frame.cpp:164
+#: eeschema/sim/sim_plot_frame.cpp:165
 msgid "Add Signals"
 msgstr ""
 
@@ -10749,7 +10749,7 @@ msgid "Parameter"
 msgstr ""
 
 #: eeschema/dialogs/dialog_sim_model.cpp:488 eeschema/lib_item.cpp:51
-#: eeschema/lib_pin.cpp:1170 eeschema/sch_label.cpp:890
+#: eeschema/lib_pin.cpp:1170 eeschema/sch_label.cpp:918
 #: eeschema/sch_pin.cpp:206 eeschema/sch_pin.cpp:219
 #: eeschema/symbol_editor/symbol_editor.cpp:1257
 #: gerbview/gerber_draw_item.cpp:620
@@ -12784,7 +12784,7 @@ msgstr ""
 msgid "Unit %s"
 msgstr ""
 
-#: eeschema/lib_text.cpp:477 eeschema/sch_text.cpp:392
+#: eeschema/lib_text.cpp:477 eeschema/sch_text.cpp:393
 #, c-format
 msgid "Graphic Text '%s'"
 msgstr ""
@@ -12793,8 +12793,8 @@ msgstr ""
 msgid "Graphic Text Box"
 msgstr ""
 
-#: eeschema/lib_textbox.cpp:486 eeschema/sch_label.cpp:894
-#: eeschema/sch_text.cpp:498 eeschema/sch_textbox.cpp:442
+#: eeschema/lib_textbox.cpp:486 eeschema/sch_label.cpp:922
+#: eeschema/sch_text.cpp:499 eeschema/sch_textbox.cpp:442
 msgid "Bold Italic"
 msgstr ""
 
@@ -12921,12 +12921,12 @@ msgstr ""
 msgid "P&references"
 msgstr ""
 
-#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:477
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:478
 #, c-format
 msgid "Could not open file '%s' to write IBIS model"
 msgstr ""
 
-#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:531
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:532
 #, c-format
 msgid "Could not find library file '%s'"
 msgstr ""
@@ -13143,7 +13143,7 @@ msgstr ""
 msgid "Bus Entry Type"
 msgstr ""
 
-#: eeschema/sch_bus_entry.cpp:512 eeschema/sch_label.cpp:922
+#: eeschema/sch_bus_entry.cpp:512 eeschema/sch_label.cpp:950
 #: eeschema/sch_line.cpp:924 pcbnew/pad.cpp:1005 pcbnew/pcb_track.cpp:963
 #: pcbnew/tools/pcb_control.cpp:1544 pcbnew/zone.cpp:566
 msgid "Resolved Netclass"
@@ -13171,7 +13171,7 @@ msgstr ""
 msgid "New schematic file is unsaved"
 msgstr ""
 
-#: eeschema/sch_edit_frame.cpp:794 eeschema/sim/sim_plot_frame.cpp:1761
+#: eeschema/sch_edit_frame.cpp:794 eeschema/sim/sim_plot_frame.cpp:1775
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:539
 #: eeschema/symbol_editor/symbol_editor.cpp:1163
 #: pagelayout_editor/pl_editor_frame.cpp:395
@@ -13214,13 +13214,13 @@ msgstr ""
 msgid "Could not open CvPcb"
 msgstr ""
 
-#: eeschema/sch_edit_frame.cpp:1420 eeschema/sim/sim_plot_frame.cpp:349
+#: eeschema/sch_edit_frame.cpp:1420 eeschema/sim/sim_plot_frame.cpp:350
 #: kicad/kicad_manager_frame.cpp:776 pcbnew/footprint_edit_frame.cpp:926
 #: pcbnew/pcb_edit_frame.cpp:1566
 msgid "[Read Only]"
 msgstr ""
 
-#: eeschema/sch_edit_frame.cpp:1423 eeschema/sim/sim_plot_frame.cpp:352
+#: eeschema/sch_edit_frame.cpp:1423 eeschema/sim/sim_plot_frame.cpp:353
 #: pcbnew/footprint_edit_frame.cpp:935 pcbnew/pcb_edit_frame.cpp:1569
 msgid "[Unsaved]"
 msgstr ""
@@ -13266,19 +13266,19 @@ msgstr ""
 msgid "Tri-State"
 msgstr ""
 
-#: eeschema/sch_label.cpp:877
+#: eeschema/sch_label.cpp:905
 msgid "Label"
 msgstr ""
 
-#: eeschema/sch_label.cpp:881
+#: eeschema/sch_label.cpp:909
 msgid "Hierarchical Sheet Pin"
 msgstr ""
 
-#: eeschema/sch_label.cpp:909 eeschema/sch_text.cpp:513
+#: eeschema/sch_label.cpp:937 eeschema/sch_text.cpp:514
 msgid "Justification"
 msgstr ""
 
-#: eeschema/sch_label.cpp:973 eeschema/sch_line.cpp:863
+#: eeschema/sch_label.cpp:1001 eeschema/sch_line.cpp:863
 #: pcbnew/board_connected_item.cpp:172
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
 #: pcbnew/dialogs/dialog_net_inspector.cpp:964 pcbnew/pad.cpp:1003
@@ -13289,35 +13289,35 @@ msgstr ""
 msgid "Net"
 msgstr ""
 
-#: eeschema/sch_label.cpp:976 eeschema/sch_line.cpp:867
+#: eeschema/sch_label.cpp:1004 eeschema/sch_line.cpp:867
 msgid "Resolved netclass"
 msgstr ""
 
-#: eeschema/sch_label.cpp:992
+#: eeschema/sch_label.cpp:1020
 msgid "Hierarchical Labels"
 msgstr ""
 
-#: eeschema/sch_label.cpp:1077
+#: eeschema/sch_label.cpp:1105
 #, c-format
 msgid "Label '%s'"
 msgstr ""
 
-#: eeschema/sch_label.cpp:1254
+#: eeschema/sch_label.cpp:1313
 #, c-format
 msgid "Directive Label [%s %s]"
 msgstr ""
 
-#: eeschema/sch_label.cpp:1531
+#: eeschema/sch_label.cpp:1590
 #, c-format
 msgid "Global Label '%s'"
 msgstr ""
 
-#: eeschema/sch_label.cpp:1664
+#: eeschema/sch_label.cpp:1723
 #, c-format
 msgid "Hierarchical Label '%s'"
 msgstr ""
 
-#: eeschema/sch_label.cpp:1681 pcbnew/dialogs/panel_setup_rules.cpp:687
+#: eeschema/sch_label.cpp:1740 pcbnew/dialogs/panel_setup_rules.cpp:687
 msgid "Syntax Help"
 msgstr ""
 
@@ -14076,7 +14076,7 @@ msgstr ""
 msgid "Symbol %s [%s]"
 msgstr ""
 
-#: eeschema/sch_text.cpp:494
+#: eeschema/sch_text.cpp:495
 msgid "Graphic Text"
 msgstr ""
 
@@ -15069,130 +15069,130 @@ msgid ""
 "Simulation provided no plots. Please refer to console window for results."
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:162
+#: eeschema/sim/sim_plot_frame.cpp:163
 msgid "Run/Stop Simulation"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:163 eeschema/sim/sim_plot_frame_base.cpp:55
+#: eeschema/sim/sim_plot_frame.cpp:164 eeschema/sim/sim_plot_frame_base.cpp:55
 msgid "Run Simulation"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:165
+#: eeschema/sim/sim_plot_frame.cpp:166
 msgid "Add signals to plot"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:166
+#: eeschema/sim/sim_plot_frame.cpp:167
 msgid "Probe"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:167
+#: eeschema/sim/sim_plot_frame.cpp:168
 msgid "Probe signals on the schematic"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:168 eeschema/sim/sim_plot_frame_base.cpp:242
+#: eeschema/sim/sim_plot_frame.cpp:169 eeschema/sim/sim_plot_frame_base.cpp:242
 msgid "Tune"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:169
+#: eeschema/sim/sim_plot_frame.cpp:170
 msgid "Tune component values"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:170
+#: eeschema/sim/sim_plot_frame.cpp:171
 msgid "Sim Command"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:171
+#: eeschema/sim/sim_plot_frame.cpp:172
 msgid "Simulation command and settings"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:354 eeschema/sim/sim_plot_frame_base.h:130
+#: eeschema/sim/sim_plot_frame.cpp:355 eeschema/sim/sim_plot_frame_base.h:130
 msgid "Spice Simulator"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:466 eeschema/sim/sim_plot_frame.cpp:1564
+#: eeschema/sim/sim_plot_frame.cpp:473 eeschema/sim/sim_plot_frame.cpp:1571
 msgid ""
 "Errors during netlist generation; simulation aborted.\n"
 "\n"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:483
+#: eeschema/sim/sim_plot_frame.cpp:490
 msgid ""
 "Schematic sheet simulation command directive has changed.  Do you wish to "
 "update the Simulation Command?"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:506 eeschema/sim/sim_plot_frame.cpp:1993
+#: eeschema/sim/sim_plot_frame.cpp:513 eeschema/sim/sim_plot_frame.cpp:2007
 msgid "Another simulation is already running."
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:534
+#: eeschema/sim/sim_plot_frame.cpp:541
 #, c-format
 msgid "Plot%u - "
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:598 eeschema/sim/sim_plot_frame.cpp:610
-#: eeschema/sim/sim_plot_frame.cpp:934
+#: eeschema/sim/sim_plot_frame.cpp:605 eeschema/sim/sim_plot_frame.cpp:617
+#: eeschema/sim/sim_plot_frame.cpp:941
 msgid "Could not apply tuned value(s):"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:611 eeschema/sim/sim_plot_frame.cpp:923
+#: eeschema/sim/sim_plot_frame.cpp:618 eeschema/sim/sim_plot_frame.cpp:930
 #, c-format
 msgid "%s is not tunable"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:654
+#: eeschema/sim/sim_plot_frame.cpp:661
 msgid "Error: simulation type not defined!\n"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:660
+#: eeschema/sim/sim_plot_frame.cpp:667
 msgid "Error: simulation type doesn't support plotting!\n"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:732 eeschema/sim/sim_plot_panel.h:117
+#: eeschema/sim/sim_plot_frame.cpp:739 eeschema/sim/sim_plot_panel.h:117
 msgid " (mag)"
 msgstr " (mag)"
 
-#: eeschema/sim/sim_plot_frame.cpp:734 eeschema/sim/sim_plot_panel.h:119
+#: eeschema/sim/sim_plot_frame.cpp:741 eeschema/sim/sim_plot_panel.h:119
 msgid " (phase)"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:844 eeschema/sim/sim_plot_frame.cpp:1808
+#: eeschema/sim/sim_plot_frame.cpp:851 eeschema/sim/sim_plot_frame.cpp:1822
 msgid "Signal"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:1181
+#: eeschema/sim/sim_plot_frame.cpp:1188
 msgid "noname"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:1230
+#: eeschema/sim/sim_plot_frame.cpp:1237
 msgid "Open simulation workbook"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:1259
+#: eeschema/sim/sim_plot_frame.cpp:1266
 msgid "Save Simulation Workbook As"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:1274
+#: eeschema/sim/sim_plot_frame.cpp:1281
 msgid "Save Plot as Image"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:1291
+#: eeschema/sim/sim_plot_frame.cpp:1298
 msgid "Save Plot Data"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:1629
+#: eeschema/sim/sim_plot_frame.cpp:1636
 msgid "You need to run plot-providing simulation first."
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:1686
+#: eeschema/sim/sim_plot_frame.cpp:1693
 msgid "SPICE Netlist"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:1758
+#: eeschema/sim/sim_plot_frame.cpp:1772
 msgid "Save changes to workbook?"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:1923
+#: eeschema/sim/sim_plot_frame.cpp:1937
 msgid ""
 "\n"
 "\n"
@@ -15200,19 +15200,19 @@ msgid ""
 "\n"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:2014
+#: eeschema/sim/sim_plot_frame.cpp:2028
 msgid "Remove Signal"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:2014
+#: eeschema/sim/sim_plot_frame.cpp:2028
 msgid "Remove the signal from the plot"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:2022 eeschema/sim/sim_plot_frame.cpp:2049
+#: eeschema/sim/sim_plot_frame.cpp:2036 eeschema/sim/sim_plot_frame.cpp:2063
 msgid "Hide Cursor"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:2024
+#: eeschema/sim/sim_plot_frame.cpp:2038
 msgid "Show Cursor"
 msgstr ""
 
@@ -34528,7 +34528,7 @@ msgid ""
 "Please verify it is not a self-intersecting polygon."
 msgstr ""
 
-#: pcbnew/router/pns_kicad_iface.cpp:1923 pcbnew/router/router_tool.cpp:453
+#: pcbnew/router/pns_kicad_iface.cpp:1927 pcbnew/router/router_tool.cpp:453
 msgid "Interactive Router"
 msgstr ""
 

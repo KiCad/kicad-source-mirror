@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-12 12:57-0700\n"
+"POT-Creation-Date: 2023-05-18 11:58-0700\n"
 "PO-Revision-Date: 2023-05-12 19:54+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
@@ -3726,7 +3726,7 @@ msgstr "線型"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:149
 #: eeschema/lib_field.cpp:551 eeschema/lib_text.cpp:424
 #: eeschema/lib_textbox.cpp:484 eeschema/sch_field.cpp:751
-#: eeschema/sch_label.cpp:892 eeschema/sch_text.cpp:496
+#: eeschema/sch_label.cpp:920 eeschema/sch_text.cpp:497
 #: eeschema/sch_textbox.cpp:440 include/stroke_params.h:80
 #: pcbnew/fp_text.cpp:309 pcbnew/fp_textbox.cpp:336
 #: pcbnew/pcb_dimension.cpp:332 pcbnew/pcb_text.cpp:130
@@ -4333,16 +4333,16 @@ msgstr "匯流排入口"
 msgid "Net Label"
 msgstr "網路標籤"
 
-#: common/eda_item.cpp:365 eeschema/sch_label.cpp:878
-#: eeschema/sch_label.cpp:1250
+#: common/eda_item.cpp:365 eeschema/sch_label.cpp:906
+#: eeschema/sch_label.cpp:1309
 msgid "Directive Label"
 msgstr "指令標籤"
 
-#: common/eda_item.cpp:366 eeschema/sch_label.cpp:879
+#: common/eda_item.cpp:366 eeschema/sch_label.cpp:907
 msgid "Global Label"
 msgstr "全域性標籤"
 
-#: common/eda_item.cpp:367 eeschema/sch_label.cpp:880
+#: common/eda_item.cpp:367 eeschema/sch_label.cpp:908
 msgid "Hierarchical Label"
 msgstr "層次標籤"
 
@@ -4540,7 +4540,7 @@ msgid "Filled"
 msgstr "填充"
 
 #: common/eda_text.cpp:759 eeschema/lib_textbox.cpp:486
-#: eeschema/sch_label.cpp:894 eeschema/sch_text.cpp:498
+#: eeschema/sch_label.cpp:922 eeschema/sch_text.cpp:499
 #: eeschema/sch_textbox.cpp:442 eeschema/symbol_editor/symbol_editor.cpp:1248
 #: gerbview/gerber_file_image.cpp:338 gerbview/gerber_file_image.cpp:342
 #: gerbview/gerber_file_image.cpp:345
@@ -4563,7 +4563,7 @@ msgstr "正常"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:62
 #: eeschema/dialogs/dialog_text_properties_base.cpp:110
 #: eeschema/fields_grid_table.cpp:345 eeschema/lib_textbox.cpp:486
-#: eeschema/sch_label.cpp:894 eeschema/sch_text.cpp:498
+#: eeschema/sch_label.cpp:922 eeschema/sch_text.cpp:499
 #: eeschema/sch_textbox.cpp:442
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:98
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:58
@@ -4589,7 +4589,7 @@ msgstr "斜體"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:63
 #: eeschema/dialogs/dialog_text_properties_base.cpp:105
 #: eeschema/fields_grid_table.cpp:346 eeschema/lib_textbox.cpp:486
-#: eeschema/sch_label.cpp:894 eeschema/sch_text.cpp:498
+#: eeschema/sch_label.cpp:922 eeschema/sch_text.cpp:499
 #: eeschema/sch_textbox.cpp:442
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:93
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:186
@@ -7595,8 +7595,8 @@ msgstr "找到了 %s 但未找到引腳 %s"
 msgid "%s found"
 msgstr "找到 %s"
 
-#: eeschema/cross-probing.cpp:175 eeschema/sim/sim_plot_frame.cpp:599
-#: eeschema/sim/sim_plot_frame.cpp:915 eeschema/widgets/tuner_slider.cpp:52
+#: eeschema/cross-probing.cpp:175 eeschema/sim/sim_plot_frame.cpp:606
+#: eeschema/sim/sim_plot_frame.cpp:922 eeschema/widgets/tuner_slider.cpp:52
 #, c-format
 msgid "%s not found"
 msgstr "未找到 %s"
@@ -8495,7 +8495,7 @@ msgid "Export Netlist"
 msgstr "匯出網表"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:320
-#: eeschema/sim/sim_plot_frame.cpp:463
+#: eeschema/sim/sim_plot_frame.cpp:464 eeschema/sim/sim_plot_frame.cpp:1738
 msgid "Simulator requires a fully annotated schematic."
 msgstr "模擬器需要一張完整批註的原理圖。"
 
@@ -8690,7 +8690,7 @@ msgstr "KiCad 字型"
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:117
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:99
 #: eeschema/dialogs/dialog_text_properties_base.cpp:120
-#: eeschema/sch_label.cpp:904 eeschema/sch_text.cpp:508
+#: eeschema/sch_label.cpp:932 eeschema/sch_text.cpp:509
 msgid "Align left"
 msgstr "左對齊"
 
@@ -8705,7 +8705,7 @@ msgstr "水平居中對齊"
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:127
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:109
 #: eeschema/dialogs/dialog_text_properties_base.cpp:130
-#: eeschema/sch_label.cpp:902 eeschema/sch_text.cpp:506
+#: eeschema/sch_label.cpp:930 eeschema/sch_text.cpp:507
 msgid "Align right"
 msgstr "右對齊"
 
@@ -8715,7 +8715,7 @@ msgstr "右對齊"
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:124
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:129
 #: eeschema/dialogs/dialog_text_properties_base.cpp:140
-#: eeschema/sch_label.cpp:905 eeschema/sch_text.cpp:509
+#: eeschema/sch_label.cpp:933 eeschema/sch_text.cpp:510
 msgid "Align top"
 msgstr "頂部對齊"
 
@@ -8730,7 +8730,7 @@ msgstr "垂直居中對齊"
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:147
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:139
 #: eeschema/dialogs/dialog_text_properties_base.cpp:150
-#: eeschema/sch_label.cpp:903 eeschema/sch_text.cpp:507
+#: eeschema/sch_label.cpp:931 eeschema/sch_text.cpp:508
 msgid "Align bottom"
 msgstr "底部對齊"
 
@@ -9139,8 +9139,8 @@ msgstr "垂直排列"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:64
 #: eeschema/fields_grid_table.cpp:347 eeschema/lib_field.cpp:555
 #: eeschema/lib_text.cpp:428 eeschema/lib_textbox.cpp:490
-#: eeschema/sch_field.cpp:755 eeschema/sch_label.cpp:898
-#: eeschema/sch_text.cpp:502 eeschema/sch_textbox.cpp:446
+#: eeschema/sch_field.cpp:755 eeschema/sch_label.cpp:926
+#: eeschema/sch_text.cpp:503 eeschema/sch_textbox.cpp:446
 #: pcbnew/tools/board_inspection_tool.cpp:1237
 msgid "Text Size"
 msgstr "文字大小"
@@ -9171,8 +9171,8 @@ msgstr "Y 座標"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:68
 #: eeschema/fields_grid_table.cpp:351 eeschema/lib_field.cpp:551
 #: eeschema/lib_text.cpp:424 eeschema/lib_textbox.cpp:484
-#: eeschema/sch_field.cpp:751 eeschema/sch_label.cpp:892
-#: eeschema/sch_text.cpp:496 eeschema/sch_textbox.cpp:440
+#: eeschema/sch_field.cpp:751 eeschema/sch_label.cpp:920
+#: eeschema/sch_text.cpp:497 eeschema/sch_textbox.cpp:440
 #: pcbnew/fp_text.cpp:309 pcbnew/fp_textbox.cpp:336
 #: pcbnew/pcb_dimension.cpp:332 pcbnew/pcb_text.cpp:130
 #: pcbnew/pcb_textbox.cpp:297
@@ -10645,8 +10645,8 @@ msgstr "圖框必須具有指定的檔案。"
 #: eeschema/lib_field.cpp:553 eeschema/lib_pin.cpp:1171
 #: eeschema/lib_pin.cpp:1173 eeschema/lib_text.cpp:426
 #: eeschema/lib_textbox.cpp:488 eeschema/sch_field.cpp:753
-#: eeschema/sch_label.cpp:896 eeschema/sch_pin.cpp:220
-#: eeschema/sch_text.cpp:500 eeschema/sch_textbox.cpp:444
+#: eeschema/sch_label.cpp:924 eeschema/sch_pin.cpp:220
+#: eeschema/sch_text.cpp:501 eeschema/sch_textbox.cpp:444
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:122
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:226
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:330
@@ -10691,7 +10691,7 @@ msgid "Add signal by name:"
 msgstr "按名稱新增訊號："
 
 #: eeschema/dialogs/dialog_signal_list_base.h:50
-#: eeschema/sim/sim_plot_frame.cpp:164
+#: eeschema/sim/sim_plot_frame.cpp:165
 msgid "Add Signals"
 msgstr "新增訊號"
 
@@ -11022,7 +11022,7 @@ msgid "Parameter"
 msgstr "引數"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:488 eeschema/lib_item.cpp:51
-#: eeschema/lib_pin.cpp:1170 eeschema/sch_label.cpp:890
+#: eeschema/lib_pin.cpp:1170 eeschema/sch_label.cpp:918
 #: eeschema/sch_pin.cpp:206 eeschema/sch_pin.cpp:219
 #: eeschema/symbol_editor/symbol_editor.cpp:1257
 #: gerbview/gerber_draw_item.cpp:620
@@ -13128,7 +13128,7 @@ msgstr "貝塞爾曲線，%d 點"
 msgid "Unit %s"
 msgstr "單元 %s"
 
-#: eeschema/lib_text.cpp:477 eeschema/sch_text.cpp:392
+#: eeschema/lib_text.cpp:477 eeschema/sch_text.cpp:393
 #, c-format
 msgid "Graphic Text '%s'"
 msgstr "圖形文字 '%s'"
@@ -13137,8 +13137,8 @@ msgstr "圖形文字 '%s'"
 msgid "Graphic Text Box"
 msgstr "圖形文字框"
 
-#: eeschema/lib_textbox.cpp:486 eeschema/sch_label.cpp:894
-#: eeschema/sch_text.cpp:498 eeschema/sch_textbox.cpp:442
+#: eeschema/lib_textbox.cpp:486 eeschema/sch_label.cpp:922
+#: eeschema/sch_text.cpp:499 eeschema/sch_textbox.cpp:442
 msgid "Bold Italic"
 msgstr "加粗斜體"
 
@@ -13265,12 +13265,12 @@ msgstr "工具 (&T)"
 msgid "P&references"
 msgstr "偏好設定 (&R)"
 
-#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:477
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:478
 #, c-format
 msgid "Could not open file '%s' to write IBIS model"
 msgstr "打不開 '%s' 檔案來寫入 IBIS 模型"
 
-#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:531
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:532
 #, c-format
 msgid "Could not find library file '%s'"
 msgstr "找不到庫檔案 '%s'"
@@ -13491,7 +13491,7 @@ msgstr "匯流排"
 msgid "Bus Entry Type"
 msgstr "匯流排輸入型別"
 
-#: eeschema/sch_bus_entry.cpp:512 eeschema/sch_label.cpp:922
+#: eeschema/sch_bus_entry.cpp:512 eeschema/sch_label.cpp:950
 #: eeschema/sch_line.cpp:924 pcbnew/pad.cpp:1005 pcbnew/pcb_track.cpp:963
 #: pcbnew/tools/pcb_control.cpp:1544 pcbnew/zone.cpp:566
 msgid "Resolved Netclass"
@@ -13519,7 +13519,7 @@ msgstr "原理圖層次結構"
 msgid "New schematic file is unsaved"
 msgstr "新原理圖檔案未儲存"
 
-#: eeschema/sch_edit_frame.cpp:794 eeschema/sim/sim_plot_frame.cpp:1761
+#: eeschema/sch_edit_frame.cpp:794 eeschema/sim/sim_plot_frame.cpp:1775
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:539
 #: eeschema/symbol_editor/symbol_editor.cpp:1163
 #: pagelayout_editor/pl_editor_frame.cpp:395
@@ -13564,13 +13564,13 @@ msgstr "分配封裝需要一張完整批註的原理圖。"
 msgid "Could not open CvPcb"
 msgstr "不能開啟 CvPcb"
 
-#: eeschema/sch_edit_frame.cpp:1420 eeschema/sim/sim_plot_frame.cpp:349
+#: eeschema/sch_edit_frame.cpp:1420 eeschema/sim/sim_plot_frame.cpp:350
 #: kicad/kicad_manager_frame.cpp:776 pcbnew/footprint_edit_frame.cpp:926
 #: pcbnew/pcb_edit_frame.cpp:1566
 msgid "[Read Only]"
 msgstr "[只讀]"
 
-#: eeschema/sch_edit_frame.cpp:1423 eeschema/sim/sim_plot_frame.cpp:352
+#: eeschema/sch_edit_frame.cpp:1423 eeschema/sim/sim_plot_frame.cpp:353
 #: pcbnew/footprint_edit_frame.cpp:935 pcbnew/pcb_edit_frame.cpp:1569
 msgid "[Unsaved]"
 msgstr "[未儲存]"
@@ -13616,19 +13616,19 @@ msgstr "未知 SCH_FILE_T 值：%d"
 msgid "Tri-State"
 msgstr "三態"
 
-#: eeschema/sch_label.cpp:877
+#: eeschema/sch_label.cpp:905
 msgid "Label"
 msgstr "標籤"
 
-#: eeschema/sch_label.cpp:881
+#: eeschema/sch_label.cpp:909
 msgid "Hierarchical Sheet Pin"
 msgstr "層次圖紙頁碼"
 
-#: eeschema/sch_label.cpp:909 eeschema/sch_text.cpp:513
+#: eeschema/sch_label.cpp:937 eeschema/sch_text.cpp:514
 msgid "Justification"
 msgstr "齊行"
 
-#: eeschema/sch_label.cpp:973 eeschema/sch_line.cpp:863
+#: eeschema/sch_label.cpp:1001 eeschema/sch_line.cpp:863
 #: pcbnew/board_connected_item.cpp:172
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
 #: pcbnew/dialogs/dialog_net_inspector.cpp:964 pcbnew/pad.cpp:1003
@@ -13639,35 +13639,35 @@ msgstr "齊行"
 msgid "Net"
 msgstr "網路"
 
-#: eeschema/sch_label.cpp:976 eeschema/sch_line.cpp:867
+#: eeschema/sch_label.cpp:1004 eeschema/sch_line.cpp:867
 msgid "Resolved netclass"
 msgstr "已解析的網路類"
 
-#: eeschema/sch_label.cpp:992
+#: eeschema/sch_label.cpp:1020
 msgid "Hierarchical Labels"
 msgstr "分層標籤"
 
-#: eeschema/sch_label.cpp:1077
+#: eeschema/sch_label.cpp:1105
 #, c-format
 msgid "Label '%s'"
 msgstr "標籤 '%s'"
 
-#: eeschema/sch_label.cpp:1254
+#: eeschema/sch_label.cpp:1313
 #, c-format
 msgid "Directive Label [%s %s]"
 msgstr "指令標籤 [%s %s]"
 
-#: eeschema/sch_label.cpp:1531
+#: eeschema/sch_label.cpp:1590
 #, c-format
 msgid "Global Label '%s'"
 msgstr "全域性標籤 '%s'"
 
-#: eeschema/sch_label.cpp:1664
+#: eeschema/sch_label.cpp:1723
 #, c-format
 msgid "Hierarchical Label '%s'"
 msgstr "層次標籤 '%s'"
 
-#: eeschema/sch_label.cpp:1681 pcbnew/dialogs/panel_setup_rules.cpp:687
+#: eeschema/sch_label.cpp:1740 pcbnew/dialogs/panel_setup_rules.cpp:687
 msgid "Syntax Help"
 msgstr "語法幫助"
 
@@ -14450,7 +14450,7 @@ msgstr "在 %s 中找不到符號!"
 msgid "Symbol %s [%s]"
 msgstr "符號 %s [%s]"
 
-#: eeschema/sch_text.cpp:494
+#: eeschema/sch_text.cpp:495
 msgid "Graphic Text"
 msgstr "圖形文字"
 
@@ -15615,47 +15615,47 @@ msgid ""
 "Simulation provided no plots. Please refer to console window for results."
 msgstr "模擬沒有提供任何繪圖。請參考控制檯視窗的結果。"
 
-#: eeschema/sim/sim_plot_frame.cpp:162
+#: eeschema/sim/sim_plot_frame.cpp:163
 msgid "Run/Stop Simulation"
 msgstr "執行/停止模擬"
 
-#: eeschema/sim/sim_plot_frame.cpp:163 eeschema/sim/sim_plot_frame_base.cpp:55
+#: eeschema/sim/sim_plot_frame.cpp:164 eeschema/sim/sim_plot_frame_base.cpp:55
 msgid "Run Simulation"
 msgstr "執行模擬"
 
-#: eeschema/sim/sim_plot_frame.cpp:165
+#: eeschema/sim/sim_plot_frame.cpp:166
 msgid "Add signals to plot"
 msgstr "新增訊號到繪製"
 
-#: eeschema/sim/sim_plot_frame.cpp:166
+#: eeschema/sim/sim_plot_frame.cpp:167
 msgid "Probe"
 msgstr "探針"
 
-#: eeschema/sim/sim_plot_frame.cpp:167
+#: eeschema/sim/sim_plot_frame.cpp:168
 msgid "Probe signals on the schematic"
 msgstr "在原理圖上探測訊號"
 
-#: eeschema/sim/sim_plot_frame.cpp:168 eeschema/sim/sim_plot_frame_base.cpp:242
+#: eeschema/sim/sim_plot_frame.cpp:169 eeschema/sim/sim_plot_frame_base.cpp:242
 msgid "Tune"
 msgstr "調整"
 
-#: eeschema/sim/sim_plot_frame.cpp:169
+#: eeschema/sim/sim_plot_frame.cpp:170
 msgid "Tune component values"
 msgstr "調整元件的值"
 
-#: eeschema/sim/sim_plot_frame.cpp:170
+#: eeschema/sim/sim_plot_frame.cpp:171
 msgid "Sim Command"
 msgstr "模擬命令"
 
-#: eeschema/sim/sim_plot_frame.cpp:171
+#: eeschema/sim/sim_plot_frame.cpp:172
 msgid "Simulation command and settings"
 msgstr "模擬命令和設定"
 
-#: eeschema/sim/sim_plot_frame.cpp:354 eeschema/sim/sim_plot_frame_base.h:130
+#: eeschema/sim/sim_plot_frame.cpp:355 eeschema/sim/sim_plot_frame_base.h:130
 msgid "Spice Simulator"
 msgstr "Spice 模擬器"
 
-#: eeschema/sim/sim_plot_frame.cpp:466 eeschema/sim/sim_plot_frame.cpp:1564
+#: eeschema/sim/sim_plot_frame.cpp:473 eeschema/sim/sim_plot_frame.cpp:1571
 msgid ""
 "Errors during netlist generation; simulation aborted.\n"
 "\n"
@@ -15663,84 +15663,84 @@ msgstr ""
 "網表生成期間出錯；模擬中斷。\n"
 "\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:483
+#: eeschema/sim/sim_plot_frame.cpp:490
 msgid ""
 "Schematic sheet simulation command directive has changed.  Do you wish to "
 "update the Simulation Command?"
 msgstr "原理圖表模擬命令指令已更改。 你要更新模擬命令嗎？"
 
-#: eeschema/sim/sim_plot_frame.cpp:506 eeschema/sim/sim_plot_frame.cpp:1993
+#: eeschema/sim/sim_plot_frame.cpp:513 eeschema/sim/sim_plot_frame.cpp:2007
 msgid "Another simulation is already running."
 msgstr "另一個模擬已經在執行。"
 
-#: eeschema/sim/sim_plot_frame.cpp:534
+#: eeschema/sim/sim_plot_frame.cpp:541
 #, c-format
 msgid "Plot%u - "
 msgstr "繪製 %u - "
 
-#: eeschema/sim/sim_plot_frame.cpp:598 eeschema/sim/sim_plot_frame.cpp:610
-#: eeschema/sim/sim_plot_frame.cpp:934
+#: eeschema/sim/sim_plot_frame.cpp:605 eeschema/sim/sim_plot_frame.cpp:617
+#: eeschema/sim/sim_plot_frame.cpp:941
 msgid "Could not apply tuned value(s):"
 msgstr "無法應用調整後的值："
 
-#: eeschema/sim/sim_plot_frame.cpp:611 eeschema/sim/sim_plot_frame.cpp:923
+#: eeschema/sim/sim_plot_frame.cpp:618 eeschema/sim/sim_plot_frame.cpp:930
 #, c-format
 msgid "%s is not tunable"
 msgstr "%s 是不可調諧"
 
-#: eeschema/sim/sim_plot_frame.cpp:654
+#: eeschema/sim/sim_plot_frame.cpp:661
 msgid "Error: simulation type not defined!\n"
 msgstr "錯誤：未定義模擬型別！\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:660
+#: eeschema/sim/sim_plot_frame.cpp:667
 msgid "Error: simulation type doesn't support plotting!\n"
 msgstr "錯誤：模擬型別不支援繪製！\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:732 eeschema/sim/sim_plot_panel.h:117
+#: eeschema/sim/sim_plot_frame.cpp:739 eeschema/sim/sim_plot_panel.h:117
 msgid " (mag)"
 msgstr " (mag)"
 
-#: eeschema/sim/sim_plot_frame.cpp:734 eeschema/sim/sim_plot_panel.h:119
+#: eeschema/sim/sim_plot_frame.cpp:741 eeschema/sim/sim_plot_panel.h:119
 msgid " (phase)"
 msgstr " (相位)"
 
-#: eeschema/sim/sim_plot_frame.cpp:844 eeschema/sim/sim_plot_frame.cpp:1808
+#: eeschema/sim/sim_plot_frame.cpp:851 eeschema/sim/sim_plot_frame.cpp:1822
 msgid "Signal"
 msgstr "訊號"
 
-#: eeschema/sim/sim_plot_frame.cpp:1181
+#: eeschema/sim/sim_plot_frame.cpp:1188
 msgid "noname"
 msgstr "無名稱"
 
-#: eeschema/sim/sim_plot_frame.cpp:1230
+#: eeschema/sim/sim_plot_frame.cpp:1237
 msgid "Open simulation workbook"
 msgstr "開啟模擬工作簿"
 
-#: eeschema/sim/sim_plot_frame.cpp:1259
+#: eeschema/sim/sim_plot_frame.cpp:1266
 msgid "Save Simulation Workbook As"
 msgstr "將模擬工作簿儲存為"
 
-#: eeschema/sim/sim_plot_frame.cpp:1274
+#: eeschema/sim/sim_plot_frame.cpp:1281
 msgid "Save Plot as Image"
 msgstr "另存繪製為圖片"
 
-#: eeschema/sim/sim_plot_frame.cpp:1291
+#: eeschema/sim/sim_plot_frame.cpp:1298
 msgid "Save Plot Data"
 msgstr "儲存繪製資料"
 
-#: eeschema/sim/sim_plot_frame.cpp:1629
+#: eeschema/sim/sim_plot_frame.cpp:1636
 msgid "You need to run plot-providing simulation first."
 msgstr "您需要先執行繪製提供模擬。"
 
-#: eeschema/sim/sim_plot_frame.cpp:1686
+#: eeschema/sim/sim_plot_frame.cpp:1693
 msgid "SPICE Netlist"
 msgstr "SPICE 網表"
 
-#: eeschema/sim/sim_plot_frame.cpp:1758
+#: eeschema/sim/sim_plot_frame.cpp:1772
 msgid "Save changes to workbook?"
 msgstr "儲存對工作簿的更改？"
 
-#: eeschema/sim/sim_plot_frame.cpp:1923
+#: eeschema/sim/sim_plot_frame.cpp:1937
 msgid ""
 "\n"
 "\n"
@@ -15752,19 +15752,19 @@ msgstr ""
 "模擬結果：\n"
 "\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:2014
+#: eeschema/sim/sim_plot_frame.cpp:2028
 msgid "Remove Signal"
 msgstr "移除訊號"
 
-#: eeschema/sim/sim_plot_frame.cpp:2014
+#: eeschema/sim/sim_plot_frame.cpp:2028
 msgid "Remove the signal from the plot"
 msgstr "從繪圖中刪除訊號"
 
-#: eeschema/sim/sim_plot_frame.cpp:2022 eeschema/sim/sim_plot_frame.cpp:2049
+#: eeschema/sim/sim_plot_frame.cpp:2036 eeschema/sim/sim_plot_frame.cpp:2063
 msgid "Hide Cursor"
 msgstr "隱藏游標"
 
-#: eeschema/sim/sim_plot_frame.cpp:2024
+#: eeschema/sim/sim_plot_frame.cpp:2038
 msgid "Show Cursor"
 msgstr "顯示游標"
 
@@ -36161,7 +36161,7 @@ msgstr ""
 "佈線工具無法處理此敷銅。\n"
 "請驗證它不是自交叉的多邊形。"
 
-#: pcbnew/router/pns_kicad_iface.cpp:1923 pcbnew/router/router_tool.cpp:453
+#: pcbnew/router/pns_kicad_iface.cpp:1927 pcbnew/router/router_tool.cpp:453
 msgid "Interactive Router"
 msgstr "互動佈線"
 

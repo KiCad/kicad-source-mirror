@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-12 12:57-0700\n"
+"POT-Creation-Date: 2023-05-18 11:58-0700\n"
 "PO-Revision-Date: 2023-01-20 06:51+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/master-"
@@ -3919,7 +3919,7 @@ msgstr "Linijos stilius"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:149
 #: eeschema/lib_field.cpp:551 eeschema/lib_text.cpp:424
 #: eeschema/lib_textbox.cpp:484 eeschema/sch_field.cpp:751
-#: eeschema/sch_label.cpp:892 eeschema/sch_text.cpp:496
+#: eeschema/sch_label.cpp:920 eeschema/sch_text.cpp:497
 #: eeschema/sch_textbox.cpp:440 include/stroke_params.h:80
 #: pcbnew/fp_text.cpp:309 pcbnew/fp_textbox.cpp:336
 #: pcbnew/pcb_dimension.cpp:332 pcbnew/pcb_text.cpp:130
@@ -4553,17 +4553,17 @@ msgstr "Įvažiavimas į autobusą"
 msgid "Net Label"
 msgstr "„Net Label“"
 
-#: common/eda_item.cpp:365 eeschema/sch_label.cpp:878
-#: eeschema/sch_label.cpp:1250
+#: common/eda_item.cpp:365 eeschema/sch_label.cpp:906
+#: eeschema/sch_label.cpp:1309
 #, fuzzy
 msgid "Directive Label"
 msgstr "„Net Label“"
 
-#: common/eda_item.cpp:366 eeschema/sch_label.cpp:879
+#: common/eda_item.cpp:366 eeschema/sch_label.cpp:907
 msgid "Global Label"
 msgstr "Globali žyma"
 
-#: common/eda_item.cpp:367 eeschema/sch_label.cpp:880
+#: common/eda_item.cpp:367 eeschema/sch_label.cpp:908
 msgid "Hierarchical Label"
 msgstr "Hierarchinė žyma"
 
@@ -4765,7 +4765,7 @@ msgid "Filled"
 msgstr "Užpildytas"
 
 #: common/eda_text.cpp:759 eeschema/lib_textbox.cpp:486
-#: eeschema/sch_label.cpp:894 eeschema/sch_text.cpp:498
+#: eeschema/sch_label.cpp:922 eeschema/sch_text.cpp:499
 #: eeschema/sch_textbox.cpp:442 eeschema/symbol_editor/symbol_editor.cpp:1248
 #: gerbview/gerber_file_image.cpp:338 gerbview/gerber_file_image.cpp:342
 #: gerbview/gerber_file_image.cpp:345
@@ -4788,7 +4788,7 @@ msgstr "Įprastai"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:62
 #: eeschema/dialogs/dialog_text_properties_base.cpp:110
 #: eeschema/fields_grid_table.cpp:345 eeschema/lib_textbox.cpp:486
-#: eeschema/sch_label.cpp:894 eeschema/sch_text.cpp:498
+#: eeschema/sch_label.cpp:922 eeschema/sch_text.cpp:499
 #: eeschema/sch_textbox.cpp:442
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:98
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:58
@@ -4814,7 +4814,7 @@ msgstr "Kursyvas"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:63
 #: eeschema/dialogs/dialog_text_properties_base.cpp:105
 #: eeschema/fields_grid_table.cpp:346 eeschema/lib_textbox.cpp:486
-#: eeschema/sch_label.cpp:894 eeschema/sch_text.cpp:498
+#: eeschema/sch_label.cpp:922 eeschema/sch_text.cpp:499
 #: eeschema/sch_textbox.cpp:442
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:93
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:186
@@ -7933,8 +7933,8 @@ msgstr "%s rastas, bet kaištis %s nerastas"
 msgid "%s found"
 msgstr "%s rasta"
 
-#: eeschema/cross-probing.cpp:175 eeschema/sim/sim_plot_frame.cpp:599
-#: eeschema/sim/sim_plot_frame.cpp:915 eeschema/widgets/tuner_slider.cpp:52
+#: eeschema/cross-probing.cpp:175 eeschema/sim/sim_plot_frame.cpp:606
+#: eeschema/sim/sim_plot_frame.cpp:922 eeschema/widgets/tuner_slider.cpp:52
 #, c-format
 msgid "%s not found"
 msgstr "neradau %s"
@@ -8791,7 +8791,7 @@ msgid "Export Netlist"
 msgstr "Eksportuoti „Netlist“"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:320
-#: eeschema/sim/sim_plot_frame.cpp:463
+#: eeschema/sim/sim_plot_frame.cpp:464 eeschema/sim/sim_plot_frame.cpp:1738
 #, fuzzy
 msgid "Simulator requires a fully annotated schematic."
 msgstr "Norint eksportuoti netlistą, reikalinga visiškai anotuota schema."
@@ -9004,7 +9004,7 @@ msgstr "Išeikite iš „KiCad“"
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:117
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:99
 #: eeschema/dialogs/dialog_text_properties_base.cpp:120
-#: eeschema/sch_label.cpp:904 eeschema/sch_text.cpp:508
+#: eeschema/sch_label.cpp:932 eeschema/sch_text.cpp:509
 msgid "Align left"
 msgstr "Sulyginti kairėn"
 
@@ -9020,7 +9020,7 @@ msgstr "Lygiuoti į horizontalųjį centrą"
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:127
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:109
 #: eeschema/dialogs/dialog_text_properties_base.cpp:130
-#: eeschema/sch_label.cpp:902 eeschema/sch_text.cpp:506
+#: eeschema/sch_label.cpp:930 eeschema/sch_text.cpp:507
 msgid "Align right"
 msgstr "Sulyginti dešinėn"
 
@@ -9030,7 +9030,7 @@ msgstr "Sulyginti dešinėn"
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:124
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:129
 #: eeschema/dialogs/dialog_text_properties_base.cpp:140
-#: eeschema/sch_label.cpp:905 eeschema/sch_text.cpp:509
+#: eeschema/sch_label.cpp:933 eeschema/sch_text.cpp:510
 msgid "Align top"
 msgstr "Sulyginti viršų"
 
@@ -9046,7 +9046,7 @@ msgstr "Lygiuoti į vertikalų centrą"
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:147
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:139
 #: eeschema/dialogs/dialog_text_properties_base.cpp:150
-#: eeschema/sch_label.cpp:903 eeschema/sch_text.cpp:507
+#: eeschema/sch_label.cpp:931 eeschema/sch_text.cpp:508
 msgid "Align bottom"
 msgstr "Sulyginti apačias"
 
@@ -9472,8 +9472,8 @@ msgstr "V Sulygiuokite"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:64
 #: eeschema/fields_grid_table.cpp:347 eeschema/lib_field.cpp:555
 #: eeschema/lib_text.cpp:428 eeschema/lib_textbox.cpp:490
-#: eeschema/sch_field.cpp:755 eeschema/sch_label.cpp:898
-#: eeschema/sch_text.cpp:502 eeschema/sch_textbox.cpp:446
+#: eeschema/sch_field.cpp:755 eeschema/sch_label.cpp:926
+#: eeschema/sch_text.cpp:503 eeschema/sch_textbox.cpp:446
 #: pcbnew/tools/board_inspection_tool.cpp:1237
 msgid "Text Size"
 msgstr "Teksto dydis"
@@ -9504,8 +9504,8 @@ msgstr "Y koordinatė"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:68
 #: eeschema/fields_grid_table.cpp:351 eeschema/lib_field.cpp:551
 #: eeschema/lib_text.cpp:424 eeschema/lib_textbox.cpp:484
-#: eeschema/sch_field.cpp:751 eeschema/sch_label.cpp:892
-#: eeschema/sch_text.cpp:496 eeschema/sch_textbox.cpp:440
+#: eeschema/sch_field.cpp:751 eeschema/sch_label.cpp:920
+#: eeschema/sch_text.cpp:497 eeschema/sch_textbox.cpp:440
 #: pcbnew/fp_text.cpp:309 pcbnew/fp_textbox.cpp:336
 #: pcbnew/pcb_dimension.cpp:332 pcbnew/pcb_text.cpp:130
 #: pcbnew/pcb_textbox.cpp:297
@@ -11032,8 +11032,8 @@ msgstr "Lape turi būti nurodyta byla."
 #: eeschema/lib_field.cpp:553 eeschema/lib_pin.cpp:1171
 #: eeschema/lib_pin.cpp:1173 eeschema/lib_text.cpp:426
 #: eeschema/lib_textbox.cpp:488 eeschema/sch_field.cpp:753
-#: eeschema/sch_label.cpp:896 eeschema/sch_pin.cpp:220
-#: eeschema/sch_text.cpp:500 eeschema/sch_textbox.cpp:444
+#: eeschema/sch_label.cpp:924 eeschema/sch_pin.cpp:220
+#: eeschema/sch_text.cpp:501 eeschema/sch_textbox.cpp:444
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:122
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:226
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:330
@@ -11079,7 +11079,7 @@ msgid "Add signal by name:"
 msgstr "Pridėti signalą pagal pavadinimą:"
 
 #: eeschema/dialogs/dialog_signal_list_base.h:50
-#: eeschema/sim/sim_plot_frame.cpp:164
+#: eeschema/sim/sim_plot_frame.cpp:165
 msgid "Add Signals"
 msgstr "Pridėti signalus"
 
@@ -11427,7 +11427,7 @@ msgid "Parameter"
 msgstr "Parametras"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:488 eeschema/lib_item.cpp:51
-#: eeschema/lib_pin.cpp:1170 eeschema/sch_label.cpp:890
+#: eeschema/lib_pin.cpp:1170 eeschema/sch_label.cpp:918
 #: eeschema/sch_pin.cpp:206 eeschema/sch_pin.cpp:219
 #: eeschema/symbol_editor/symbol_editor.cpp:1257
 #: gerbview/gerber_draw_item.cpp:620
@@ -13679,7 +13679,7 @@ msgstr "Bezje krevė"
 msgid "Unit %s"
 msgstr "Vienetas %s"
 
-#: eeschema/lib_text.cpp:477 eeschema/sch_text.cpp:392
+#: eeschema/lib_text.cpp:477 eeschema/sch_text.cpp:393
 #, c-format
 msgid "Graphic Text '%s'"
 msgstr "Grafinis tekstas „%s“"
@@ -13689,8 +13689,8 @@ msgstr "Grafinis tekstas „%s“"
 msgid "Graphic Text Box"
 msgstr "Grafinis tekstas"
 
-#: eeschema/lib_textbox.cpp:486 eeschema/sch_label.cpp:894
-#: eeschema/sch_text.cpp:498 eeschema/sch_textbox.cpp:442
+#: eeschema/lib_textbox.cpp:486 eeschema/sch_label.cpp:922
+#: eeschema/sch_text.cpp:499 eeschema/sch_textbox.cpp:442
 msgid "Bold Italic"
 msgstr "Pusjuodis kursyvas"
 
@@ -13826,12 +13826,12 @@ msgstr "Įrankiai"
 msgid "P&references"
 msgstr "Tinkinti"
 
-#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:477
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:478
 #, fuzzy, c-format
 msgid "Could not open file '%s' to write IBIS model"
 msgstr "Nepavyko rasti bibliotekos failo %s"
 
-#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:531
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:532
 #, fuzzy, c-format
 msgid "Could not find library file '%s'"
 msgstr "Nepavyko rasti bibliotekos failo %s"
@@ -14056,7 +14056,7 @@ msgstr "Šyna"
 msgid "Bus Entry Type"
 msgstr "Autobuso įvažiavimo tipas"
 
-#: eeschema/sch_bus_entry.cpp:512 eeschema/sch_label.cpp:922
+#: eeschema/sch_bus_entry.cpp:512 eeschema/sch_label.cpp:950
 #: eeschema/sch_line.cpp:924 pcbnew/pad.cpp:1005 pcbnew/pcb_track.cpp:963
 #: pcbnew/tools/pcb_control.cpp:1544 pcbnew/zone.cpp:566
 #, fuzzy
@@ -14087,7 +14087,7 @@ msgstr "Scheminis paritetas"
 msgid "New schematic file is unsaved"
 msgstr "Naujas scheminis failas neišsaugotas"
 
-#: eeschema/sch_edit_frame.cpp:794 eeschema/sim/sim_plot_frame.cpp:1761
+#: eeschema/sch_edit_frame.cpp:794 eeschema/sim/sim_plot_frame.cpp:1775
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:539
 #: eeschema/symbol_editor/symbol_editor.cpp:1163
 #: pagelayout_editor/pl_editor_frame.cpp:395
@@ -14135,13 +14135,13 @@ msgstr "Norint eksportuoti netlistą, reikalinga visiškai anotuota schema."
 msgid "Could not open CvPcb"
 msgstr "Nepavyko atidaryti „CvPcb“"
 
-#: eeschema/sch_edit_frame.cpp:1420 eeschema/sim/sim_plot_frame.cpp:349
+#: eeschema/sch_edit_frame.cpp:1420 eeschema/sim/sim_plot_frame.cpp:350
 #: kicad/kicad_manager_frame.cpp:776 pcbnew/footprint_edit_frame.cpp:926
 #: pcbnew/pcb_edit_frame.cpp:1566
 msgid "[Read Only]"
 msgstr "[Tik skaitymui]"
 
-#: eeschema/sch_edit_frame.cpp:1423 eeschema/sim/sim_plot_frame.cpp:352
+#: eeschema/sch_edit_frame.cpp:1423 eeschema/sim/sim_plot_frame.cpp:353
 #: pcbnew/footprint_edit_frame.cpp:935 pcbnew/pcb_edit_frame.cpp:1569
 msgid "[Unsaved]"
 msgstr "[Neišsaugotas]"
@@ -14190,20 +14190,20 @@ msgstr "Nežinoma SCH_FILE_T vertė: %d"
 msgid "Tri-State"
 msgstr "3 lygių"
 
-#: eeschema/sch_label.cpp:877
+#: eeschema/sch_label.cpp:905
 msgid "Label"
 msgstr "Žyma"
 
-#: eeschema/sch_label.cpp:881
+#: eeschema/sch_label.cpp:909
 msgid "Hierarchical Sheet Pin"
 msgstr "Hierarchinis lapo kaištis"
 
-#: eeschema/sch_label.cpp:909 eeschema/sch_text.cpp:513
+#: eeschema/sch_label.cpp:937 eeschema/sch_text.cpp:514
 #, fuzzy
 msgid "Justification"
 msgstr "Lygiavimas:"
 
-#: eeschema/sch_label.cpp:973 eeschema/sch_line.cpp:863
+#: eeschema/sch_label.cpp:1001 eeschema/sch_line.cpp:863
 #: pcbnew/board_connected_item.cpp:172
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
 #: pcbnew/dialogs/dialog_net_inspector.cpp:964 pcbnew/pad.cpp:1003
@@ -14214,37 +14214,37 @@ msgstr "Lygiavimas:"
 msgid "Net"
 msgstr "Grandinė"
 
-#: eeschema/sch_label.cpp:976 eeschema/sch_line.cpp:867
+#: eeschema/sch_label.cpp:1004 eeschema/sch_line.cpp:867
 #, fuzzy
 msgid "Resolved netclass"
 msgstr "Priskirtas „Netclass“"
 
-#: eeschema/sch_label.cpp:992
+#: eeschema/sch_label.cpp:1020
 #, fuzzy
 msgid "Hierarchical Labels"
 msgstr "Hierarchinė žyma"
 
-#: eeschema/sch_label.cpp:1077
+#: eeschema/sch_label.cpp:1105
 #, c-format
 msgid "Label '%s'"
 msgstr "Etiketė „%s“"
 
-#: eeschema/sch_label.cpp:1254
+#: eeschema/sch_label.cpp:1313
 #, fuzzy, c-format
 msgid "Directive Label [%s %s]"
 msgstr "„Net Label“"
 
-#: eeschema/sch_label.cpp:1531
+#: eeschema/sch_label.cpp:1590
 #, c-format
 msgid "Global Label '%s'"
 msgstr "Visuotinė etiketė „%s“"
 
-#: eeschema/sch_label.cpp:1664
+#: eeschema/sch_label.cpp:1723
 #, c-format
 msgid "Hierarchical Label '%s'"
 msgstr "Hierarchinė etiketė „%s“"
 
-#: eeschema/sch_label.cpp:1681 pcbnew/dialogs/panel_setup_rules.cpp:687
+#: eeschema/sch_label.cpp:1740 pcbnew/dialogs/panel_setup_rules.cpp:687
 msgid "Syntax Help"
 msgstr "Sintaksės pagalba"
 
@@ -15108,7 +15108,7 @@ msgstr "Simbolis nerastas %s!"
 msgid "Symbol %s [%s]"
 msgstr "Simbolis %s [%s]"
 
-#: eeschema/sch_text.cpp:494
+#: eeschema/sch_text.cpp:495
 msgid "Graphic Text"
 msgstr "Grafinis tekstas"
 
@@ -16393,138 +16393,138 @@ msgid ""
 msgstr ""
 "Šis modeliavimas nepateikia siužetų. Rezultatų ieškokite konsolės lange"
 
-#: eeschema/sim/sim_plot_frame.cpp:162
+#: eeschema/sim/sim_plot_frame.cpp:163
 msgid "Run/Stop Simulation"
 msgstr "„Run / Stop“ modeliavimas"
 
-#: eeschema/sim/sim_plot_frame.cpp:163 eeschema/sim/sim_plot_frame_base.cpp:55
+#: eeschema/sim/sim_plot_frame.cpp:164 eeschema/sim/sim_plot_frame_base.cpp:55
 msgid "Run Simulation"
 msgstr "Vykdyti modeliavimą"
 
-#: eeschema/sim/sim_plot_frame.cpp:165
+#: eeschema/sim/sim_plot_frame.cpp:166
 msgid "Add signals to plot"
 msgstr "Pridėkite signalų prie diagramos"
 
-#: eeschema/sim/sim_plot_frame.cpp:166
+#: eeschema/sim/sim_plot_frame.cpp:167
 msgid "Probe"
 msgstr "Zondas"
 
-#: eeschema/sim/sim_plot_frame.cpp:167
+#: eeschema/sim/sim_plot_frame.cpp:168
 msgid "Probe signals on the schematic"
 msgstr "Zondo signalai schemoje"
 
-#: eeschema/sim/sim_plot_frame.cpp:168 eeschema/sim/sim_plot_frame_base.cpp:242
+#: eeschema/sim/sim_plot_frame.cpp:169 eeschema/sim/sim_plot_frame_base.cpp:242
 msgid "Tune"
 msgstr "Melodija"
 
-#: eeschema/sim/sim_plot_frame.cpp:169
+#: eeschema/sim/sim_plot_frame.cpp:170
 msgid "Tune component values"
 msgstr "Suderinti komponentų reikšmes"
 
-#: eeschema/sim/sim_plot_frame.cpp:170
+#: eeschema/sim/sim_plot_frame.cpp:171
 #, fuzzy
 msgid "Sim Command"
 msgstr "Komanda"
 
-#: eeschema/sim/sim_plot_frame.cpp:171
+#: eeschema/sim/sim_plot_frame.cpp:172
 #, fuzzy
 msgid "Simulation command and settings"
 msgstr "Modeliavimo nustatymai"
 
-#: eeschema/sim/sim_plot_frame.cpp:354 eeschema/sim/sim_plot_frame_base.h:130
+#: eeschema/sim/sim_plot_frame.cpp:355 eeschema/sim/sim_plot_frame_base.h:130
 msgid "Spice Simulator"
 msgstr "Prieskonių treniruoklis"
 
-#: eeschema/sim/sim_plot_frame.cpp:466 eeschema/sim/sim_plot_frame.cpp:1564
+#: eeschema/sim/sim_plot_frame.cpp:473 eeschema/sim/sim_plot_frame.cpp:1571
 #, fuzzy
 msgid ""
 "Errors during netlist generation; simulation aborted.\n"
 "\n"
 msgstr "Eksportuojant netlistą įvyko klaidų, jos buvo nutrauktos."
 
-#: eeschema/sim/sim_plot_frame.cpp:483
+#: eeschema/sim/sim_plot_frame.cpp:490
 msgid ""
 "Schematic sheet simulation command directive has changed.  Do you wish to "
 "update the Simulation Command?"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:506 eeschema/sim/sim_plot_frame.cpp:1993
+#: eeschema/sim/sim_plot_frame.cpp:513 eeschema/sim/sim_plot_frame.cpp:2007
 #, fuzzy
 msgid "Another simulation is already running."
 msgstr "pl_editor уже запущен. Продолжить?"
 
-#: eeschema/sim/sim_plot_frame.cpp:534
+#: eeschema/sim/sim_plot_frame.cpp:541
 #, c-format
 msgid "Plot%u - "
 msgstr "Sklypas %u - "
 
-#: eeschema/sim/sim_plot_frame.cpp:598 eeschema/sim/sim_plot_frame.cpp:610
-#: eeschema/sim/sim_plot_frame.cpp:934
+#: eeschema/sim/sim_plot_frame.cpp:605 eeschema/sim/sim_plot_frame.cpp:617
+#: eeschema/sim/sim_plot_frame.cpp:941
 msgid "Could not apply tuned value(s):"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:611 eeschema/sim/sim_plot_frame.cpp:923
+#: eeschema/sim/sim_plot_frame.cpp:618 eeschema/sim/sim_plot_frame.cpp:930
 #, fuzzy, c-format
 msgid "%s is not tunable"
 msgstr "Файл '%s' невозможно прочитать."
 
-#: eeschema/sim/sim_plot_frame.cpp:654
+#: eeschema/sim/sim_plot_frame.cpp:661
 msgid "Error: simulation type not defined!\n"
 msgstr "Klaida: modeliavimo tipas neapibrėžtas!\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:660
+#: eeschema/sim/sim_plot_frame.cpp:667
 msgid "Error: simulation type doesn't support plotting!\n"
 msgstr "Klaida: modeliavimo tipas nepalaiko braižymo!\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:732 eeschema/sim/sim_plot_panel.h:117
+#: eeschema/sim/sim_plot_frame.cpp:739 eeschema/sim/sim_plot_panel.h:117
 msgid " (mag)"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:734 eeschema/sim/sim_plot_panel.h:119
+#: eeschema/sim/sim_plot_frame.cpp:741 eeschema/sim/sim_plot_panel.h:119
 #, fuzzy
 msgid " (phase)"
 msgstr "Kintamosios srovės fazė:"
 
-#: eeschema/sim/sim_plot_frame.cpp:844 eeschema/sim/sim_plot_frame.cpp:1808
+#: eeschema/sim/sim_plot_frame.cpp:851 eeschema/sim/sim_plot_frame.cpp:1822
 msgid "Signal"
 msgstr "Signalas"
 
-#: eeschema/sim/sim_plot_frame.cpp:1181
+#: eeschema/sim/sim_plot_frame.cpp:1188
 msgid "noname"
 msgstr "neįvardintas"
 
-#: eeschema/sim/sim_plot_frame.cpp:1230
+#: eeschema/sim/sim_plot_frame.cpp:1237
 msgid "Open simulation workbook"
 msgstr "Atidarykite modeliavimo darbaknygę"
 
-#: eeschema/sim/sim_plot_frame.cpp:1259
+#: eeschema/sim/sim_plot_frame.cpp:1266
 #, fuzzy
 msgid "Save Simulation Workbook As"
 msgstr "Išsaugoti modeliavimo darbaknygę"
 
-#: eeschema/sim/sim_plot_frame.cpp:1274
+#: eeschema/sim/sim_plot_frame.cpp:1281
 msgid "Save Plot as Image"
 msgstr "Išsaugoti sklypą kaip vaizdą"
 
-#: eeschema/sim/sim_plot_frame.cpp:1291
+#: eeschema/sim/sim_plot_frame.cpp:1298
 msgid "Save Plot Data"
 msgstr "Išsaugoti sklypo duomenis"
 
-#: eeschema/sim/sim_plot_frame.cpp:1629
+#: eeschema/sim/sim_plot_frame.cpp:1636
 msgid "You need to run plot-providing simulation first."
 msgstr "Pirmiausia turite paleisti modeliavimo planą."
 
-#: eeschema/sim/sim_plot_frame.cpp:1686
+#: eeschema/sim/sim_plot_frame.cpp:1693
 #, fuzzy
 msgid "SPICE Netlist"
 msgstr "„SPICE netlist“ failas"
 
-#: eeschema/sim/sim_plot_frame.cpp:1758
+#: eeschema/sim/sim_plot_frame.cpp:1772
 #, fuzzy
 msgid "Save changes to workbook?"
 msgstr "Išsaugoti šią plokštę"
 
-#: eeschema/sim/sim_plot_frame.cpp:1923
+#: eeschema/sim/sim_plot_frame.cpp:1937
 msgid ""
 "\n"
 "\n"
@@ -16536,21 +16536,21 @@ msgstr ""
 "Modeliavimo rezultatai:\n"
 "\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:2014
+#: eeschema/sim/sim_plot_frame.cpp:2028
 #, fuzzy
 msgid "Remove Signal"
 msgstr "Pašalinti sinonimą"
 
-#: eeschema/sim/sim_plot_frame.cpp:2014
+#: eeschema/sim/sim_plot_frame.cpp:2028
 #, fuzzy
 msgid "Remove the signal from the plot"
 msgstr "Ištrinkite signalą iš siužeto ekrano"
 
-#: eeschema/sim/sim_plot_frame.cpp:2022 eeschema/sim/sim_plot_frame.cpp:2049
+#: eeschema/sim/sim_plot_frame.cpp:2036 eeschema/sim/sim_plot_frame.cpp:2063
 msgid "Hide Cursor"
 msgstr "Slėpti žymeklį"
 
-#: eeschema/sim/sim_plot_frame.cpp:2024
+#: eeschema/sim/sim_plot_frame.cpp:2038
 msgid "Show Cursor"
 msgstr "Rodyti žymeklį"
 
@@ -37677,7 +37677,7 @@ msgstr ""
 "Šios zonos negalima tvarkyti takelio išdėstymo įrankiu.\n"
 "Patikrinkite, ar tai nėra savaime besikertantis daugiakampis."
 
-#: pcbnew/router/pns_kicad_iface.cpp:1923 pcbnew/router/router_tool.cpp:453
+#: pcbnew/router/pns_kicad_iface.cpp:1927 pcbnew/router/router_tool.cpp:453
 msgid "Interactive Router"
 msgstr "Interaktyvus trasavimas"
 
