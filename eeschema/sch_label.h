@@ -116,6 +116,8 @@ public:
     void Rotate( const VECTOR2I& aCenter ) override;
     void Rotate90( bool aClockwise ) override;
 
+    void MirrorSpinStyle( bool aLeftRight ) override;
+
     void SetPosition( const VECTOR2I& aPosition ) override;
 
     void AutoplaceFields( SCH_SCREEN* aScreen, bool aManual ) override;
@@ -319,6 +321,8 @@ public:
     bool IsConnectable() const override { return true; }
 
     bool AutoRotateOnPlacementSupported() const override { return false; }
+
+    void MirrorSpinStyle( bool aLeftRight ) override;
 
 private:
     int       m_pinLength;
