@@ -40,6 +40,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <footprint.h>
+#include <pcb_group.h>
 #include <pcb_track.h>
 #include <connectivity/connectivity_data.h>
 #include <view/view.h>
@@ -356,9 +357,16 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
         aBoard->Tracks().pop_back();
 
         if( track->IsLocked() )
+        {
             locked.push_back( track );
+        }
         else
+        {
+            if( PCB_GROUP* group = track->GetParentGroup() )
+                group->RemoveItem( track );
+
             delete track;
+        }
     }
 
     aBoard->DeleteMARKERs();
