@@ -21,10 +21,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-18 11:55-0700\n"
-"PO-Revision-Date: 2023-05-11 09:52+0000\n"
+"PO-Revision-Date: 2023-05-19 21:10+0000\n"
 "Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -6881,7 +6881,7 @@ msgstr "Pfad auswählen"
 
 #: common/widgets/lib_tree.cpp:89
 msgid "Sort by Best Match"
-msgstr ""
+msgstr "Nach bester Übereinstimmung sortieren"
 
 #: common/widgets/lib_tree.cpp:90
 #, fuzzy
@@ -8546,51 +8546,46 @@ msgid "No symbol selected"
 msgstr "Kein Symbol gewählt"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:98
-#, fuzzy
 msgid "Connected to database successfully"
-msgstr "Update der Netzliste erfolgreich!"
+msgstr "Verbindung zur Datenbank erfolgreich hergestellt"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Database connection failed: %s"
-msgstr "Zonenverbindung %s: %s."
+msgstr "Datenbankverbindung fehlgeschlagen: %s"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:117
-#, fuzzy
 msgid "No connection to database"
-msgstr "Padverbindung zu Zonen:"
+msgstr "Keine Verbindung zur Datenbank"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "Loaded %zu libraries"
-msgstr "Symbolbibliotheken laden"
+msgstr "%zu Bibliotheken geladen"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:32
-#, fuzzy
 msgid "Connection"
-msgstr "Verbindungen"
+msgstr "Verbindung"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:39
 msgid "DSN:"
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:45
-#, fuzzy
 msgid "Username:"
-msgstr "Neuer Name:"
+msgstr "Benutzername:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
 msgid "Password:"
-msgstr ""
+msgstr "Passwort:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:71
-#, fuzzy
 msgid "Connection String:"
-msgstr "Anschluss:"
+msgstr "Verbindungszeichenkette:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:85
 msgid "Test"
-msgstr ""
+msgstr "Test"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:99
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:190
@@ -8633,7 +8628,7 @@ msgstr "Symbol im Schaltplan:"
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:140
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:145
 msgid "Time in seconds that database queries will be cached for"
-msgstr ""
+msgstr "Zeit in Sekunden, für die Datenbankabfragen zwischengespeichert werden"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.h:79
 #, fuzzy
@@ -11943,7 +11938,7 @@ msgstr "Millimeter"
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:187
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:201
 msgid ","
-msgstr ""
+msgstr ","
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:190
 #, fuzzy
@@ -11952,7 +11947,7 @@ msgstr "Startwert:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:194
 msgid "\""
-msgstr ""
+msgstr "\""
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:197
 #, fuzzy
@@ -11971,7 +11966,7 @@ msgstr "-"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:209
 msgid "Leave blank to disable ranges."
-msgstr ""
+msgstr "Leer lassen, um Bereiche zu deaktivieren."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:213
 #, fuzzy
@@ -14204,14 +14199,12 @@ msgid "Footprint filters differ."
 msgstr "Footprint-Typen stimmen nicht überein."
 
 #: eeschema/lib_symbol.cpp:450
-#, fuzzy
 msgid "Symbol descriptions differ."
-msgstr "Footprint-Beschreibungen stimmen nicht überein."
+msgstr "Symbol-Beschreibungen weichen ab."
 
 #: eeschema/lib_symbol.cpp:459
-#, fuzzy
 msgid "Symbol keywords differ."
-msgstr "Footprint-Schlüsselwörter weichen ab."
+msgstr "Symbol-Schlüsselwörter weichen ab."
 
 #: eeschema/lib_symbol.cpp:468
 msgid "Symbol pin name offsets differ."
@@ -15554,21 +15547,21 @@ msgstr "Zeichenkette ohne Anführung erwartet"
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:294
 #, c-format
 msgid "Expecting integer at line %d in file %s"
-msgstr ""
+msgstr "Ganzzahl in Zeile %d in Datei %s erwartet"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:317
 #, c-format
 msgid "Expected data missing on line %d in file %s"
-msgstr ""
+msgstr "Erwartete Daten in Zeile %d in Datei %s fehlen"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:323
 #, c-format
 msgid "Extra data found on line %d in file %s"
-msgstr ""
+msgstr "Zusätzliche Daten in Zeile %d in Datei %s gefunden"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:351
 msgid "Expecting 0, 1, 2 or 3"
-msgstr ""
+msgstr "0, 1, 2 oder 3 erwartet"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:365
 msgid "Expecting NORMAL or WIDE"
@@ -15580,7 +15573,7 @@ msgstr ""
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:402
 msgid "Expecting R0, R90, R18, R270, M0, M90, M180 or M270"
-msgstr ""
+msgstr "R0, R90, R18, R270, M0, M90, M180 oder M270 erwartet"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:423
 msgid ""
@@ -17935,11 +17928,11 @@ msgstr "Footprint-Neuverknüpfung durch Benutzer abgebrochen."
 
 #: eeschema/tools/backannotate.cpp:356
 msgid "true"
-msgstr ""
+msgstr "wahr"
 
 #: eeschema/tools/backannotate.cpp:356
 msgid "false"
-msgstr ""
+msgstr "falsch"
 
 #: eeschema/tools/backannotate.cpp:362
 #, c-format
@@ -18009,7 +18002,7 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:61
 msgid "Show simulation window for running SPICE or IBIS simulations."
-msgstr ""
+msgstr "Simulationsfenster für laufende SPICE- oder IBIS-Simulationen anzeigen."
 
 #: eeschema/tools/ee_actions.cpp:67
 msgid "Opens the datasheet in a browser"
@@ -19374,14 +19367,14 @@ msgstr ""
 "abzugleichen."
 
 #: eeschema/tools/ee_inspection_tool.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s"
-msgstr "Symbole"
+msgstr "Symbol %s"
 
 #: eeschema/tools/ee_inspection_tool.cpp:275
 #: pcbnew/tools/board_inspection_tool.cpp:1426
 msgid "Summary"
-msgstr ""
+msgstr "Zusammenfassung"
 
 #: eeschema/tools/ee_inspection_tool.cpp:277
 #, fuzzy
@@ -19430,7 +19423,7 @@ msgstr "Keine Lage ausgewählt."
 #: eeschema/tools/ee_inspection_tool.cpp:337
 #: pcbnew/tools/board_inspection_tool.cpp:1485
 msgid "Visual"
-msgstr ""
+msgstr "Visuell"
 
 #: eeschema/tools/ee_inspection_tool.cpp:428
 msgid "No datasheet defined."
