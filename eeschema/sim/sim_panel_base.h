@@ -57,7 +57,7 @@ public:
         m_simCommand = aSimCommand;
     }
 
-    const int GetSimOptions() const { return m_simOptions; }
+    int GetSimOptions() const { return m_simOptions; }
     void SetSimOptions( int aOptions ) { m_simOptions = aOptions; }
 
 private:

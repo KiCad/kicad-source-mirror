@@ -411,7 +411,7 @@ PLUGIN_CONTENT_MANAGER::getCachedRepository( const wxString& aRepositoryId ) con
 }
 
 
-const bool PLUGIN_CONTENT_MANAGER::CacheRepository( const wxString& aRepositoryId )
+bool PLUGIN_CONTENT_MANAGER::CacheRepository( const wxString& aRepositoryId )
 {
     if( m_repository_cache.find( aRepositoryId ) != m_repository_cache.end() )
         return true;

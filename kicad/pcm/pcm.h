@@ -200,7 +200,7 @@ public:
      * @param aRepositoryId id of the repository to cache
      * @return true if packages metadata was cached successfully
      */
-    const bool CacheRepository( const wxString& aRepositoryId );
+    bool CacheRepository( const wxString& aRepositoryId );
 
     /**
      * @brief Get the packages metadata from a previously cached repository

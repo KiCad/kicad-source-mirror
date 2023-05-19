@@ -140,7 +140,7 @@ public:
     /**
      * @return the width of the rectangle.
      */
-     const int GetWidth() const
+     int GetWidth() const
      {
          return m_w;
      }
@@ -148,7 +148,7 @@ public:
     /**
      * @return the height of the rectangle.
      */
-    const int GetHeight() const
+    int GetHeight() const
     {
         return m_h;
     }
