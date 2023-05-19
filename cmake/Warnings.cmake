@@ -207,6 +207,8 @@ if( MSVC )
 
     # disable "function not inlined"
     string( APPEND WARN_FLAGS_CXX " /wd4710" )
+    # disable "function selected for inline expansion"
+    string( APPEND WARN_FLAGS_CXX " /wd4711" )
     # disable "bytes padding added"
     string( APPEND WARN_FLAGS_CXX " /wd4820" )
     # disable "unreferenced formal parameter"
