@@ -37,8 +37,8 @@ struct BOM_FIELD
     bool operator==( const BOM_FIELD& rhs ) const;
 };
 
-const bool operator!=( const BOM_FIELD& lhs, const BOM_FIELD& rhs );
-const bool operator<( const BOM_FIELD& lhs, const BOM_FIELD& rhs );
+bool operator!=( const BOM_FIELD& lhs, const BOM_FIELD& rhs );
+bool operator<( const BOM_FIELD& lhs, const BOM_FIELD& rhs );
 
 void to_json( nlohmann::json& j, const BOM_FIELD& f );
 void from_json( const nlohmann::json& j, BOM_FIELD& f );
@@ -63,8 +63,8 @@ struct BOM_PRESET
     static BOM_PRESET GroupedByValueFootprint();
 };
 
-const bool operator!=( const BOM_PRESET& lhs, const BOM_PRESET& rhs );
-const bool operator<( const BOM_PRESET& lhs, const BOM_PRESET& rhs );
+bool operator!=( const BOM_PRESET& lhs, const BOM_PRESET& rhs );
+bool operator<( const BOM_PRESET& lhs, const BOM_PRESET& rhs );
 
 void to_json( nlohmann::json& j, const BOM_PRESET& f );
 void from_json( const nlohmann::json& j, BOM_PRESET& f );
@@ -89,8 +89,8 @@ struct BOM_FMT_PRESET
     static BOM_FMT_PRESET Semicolons();
 };
 
-const bool operator!=( const BOM_FMT_PRESET& lhs, const BOM_FMT_PRESET& rhs );
-const bool operator<( const BOM_FMT_PRESET& lhs, const BOM_FMT_PRESET& rhs );
+bool operator!=( const BOM_FMT_PRESET& lhs, const BOM_FMT_PRESET& rhs );
+bool operator<( const BOM_FMT_PRESET& lhs, const BOM_FMT_PRESET& rhs );
 
 void to_json( nlohmann::json& j, const BOM_FMT_PRESET& f );
 void from_json( const nlohmann::json& j, BOM_FMT_PRESET& f );

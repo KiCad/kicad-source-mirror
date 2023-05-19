@@ -405,7 +405,7 @@ const wxCursor CURSOR_STORE::GetCursor( KICURSOR aCursorType )
 }
 
 
-const wxStockCursor CURSOR_STORE::GetStockCursor( KICURSOR aCursorType )
+wxStockCursor CURSOR_STORE::GetStockCursor( KICURSOR aCursorType )
 {
     wxStockCursor stockCursor;
     switch( aCursorType )

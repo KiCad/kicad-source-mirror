@@ -189,7 +189,7 @@ public:
      *
      * It is used in context menu.
      */
-    const BITMAPS GetIcon() const
+    BITMAPS GetIcon() const
     {
         return m_icon;
     }

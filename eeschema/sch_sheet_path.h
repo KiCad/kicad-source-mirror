@@ -430,7 +430,7 @@ namespace std
 
 struct SHEET_PATH_HASH
 {
-    const size_t operator()( const SCH_SHEET_PATH& path ) const
+    size_t operator()( const SCH_SHEET_PATH& path ) const
     {
         return path.GetCurrentHash();
     }

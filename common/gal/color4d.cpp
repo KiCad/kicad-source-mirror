@@ -245,19 +245,19 @@ COLOR4D COLOR4D::LegacyMix( const COLOR4D& aColor ) const
 
 namespace KIGFX {
 
-const bool operator==( const COLOR4D& lhs, const COLOR4D& rhs )
+bool operator==( const COLOR4D& lhs, const COLOR4D& rhs )
 {
     return lhs.a == rhs.a && lhs.r == rhs.r && lhs.g == rhs.g && lhs.b == rhs.b;
 }
 
 
-const bool operator!=( const COLOR4D& lhs, const COLOR4D& rhs )
+bool operator!=( const COLOR4D& lhs, const COLOR4D& rhs )
 {
     return !( lhs == rhs );
 }
 
 
-const bool operator<( const COLOR4D& lhs, const COLOR4D& rhs )
+bool operator<( const COLOR4D& lhs, const COLOR4D& rhs )
 {
     if( lhs.r < rhs.r )
         return true;

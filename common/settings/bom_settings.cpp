@@ -45,13 +45,13 @@ bool BOM_FIELD::operator==( const BOM_FIELD& rhs ) const
 }
 
 
-const bool operator!=( const BOM_FIELD& lhs, const BOM_FIELD& rhs )
+bool operator!=( const BOM_FIELD& lhs, const BOM_FIELD& rhs )
 {
     return !( lhs == rhs );
 }
 
 
-const bool operator<( const BOM_FIELD& lhs, const BOM_FIELD& rhs )
+bool operator<( const BOM_FIELD& lhs, const BOM_FIELD& rhs )
 {
     return lhs.name < rhs.name;
 }
@@ -74,13 +74,13 @@ void from_json( const nlohmann::json& j, BOM_FIELD& f )
 }
 
 
-const bool operator!=( const BOM_PRESET& lhs, const BOM_PRESET& rhs )
+bool operator!=( const BOM_PRESET& lhs, const BOM_PRESET& rhs )
 {
     return !( lhs == rhs );
 }
 
 
-const bool operator<( const BOM_PRESET& lhs, const BOM_PRESET& rhs )
+bool operator<( const BOM_PRESET& lhs, const BOM_PRESET& rhs )
 {
     return lhs.name < rhs.name;
 }
@@ -172,13 +172,13 @@ bool BOM_FMT_PRESET::operator==( const BOM_FMT_PRESET& rhs ) const
 }
 
 
-const bool operator!=( const BOM_FMT_PRESET& lhs, const BOM_FMT_PRESET& rhs )
+bool operator!=( const BOM_FMT_PRESET& lhs, const BOM_FMT_PRESET& rhs )
 {
     return !( lhs == rhs );
 }
 
 
-const bool operator<( const BOM_FMT_PRESET& lhs, const BOM_FMT_PRESET& rhs )
+bool operator<( const BOM_FMT_PRESET& lhs, const BOM_FMT_PRESET& rhs )
 {
     return lhs.name < rhs.name;
 }

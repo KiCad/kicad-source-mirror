@@ -113,7 +113,7 @@ public:
 
     static const wxCursor GetCursor( KICURSOR aCursorType );
 
-    static const wxStockCursor GetStockCursor( KICURSOR aCursorType );
+    static wxStockCursor GetStockCursor( KICURSOR aCursorType );
 
 private:
     ///< Internal store of cursors by ID
