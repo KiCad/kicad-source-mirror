@@ -175,12 +175,12 @@ public:
     /**
      * Accessors to parameters used in Rule Area zones:
      */
-    const bool GetIsRuleArea() const { return m_isRuleArea; }
-    const bool GetDoNotAllowCopperPour() const { return m_keepoutDoNotAllowCopperPour; }
-    const bool GetDoNotAllowVias() const { return m_keepoutDoNotAllowVias; }
-    const bool GetDoNotAllowTracks() const { return m_keepoutDoNotAllowTracks; }
-    const bool GetDoNotAllowPads() const { return m_keepoutDoNotAllowPads; }
-    const bool GetDoNotAllowFootprints() const { return m_keepoutDoNotAllowFootprints; }
+    bool GetIsRuleArea() const { return m_isRuleArea; }
+    bool GetDoNotAllowCopperPour() const { return m_keepoutDoNotAllowCopperPour; }
+    bool GetDoNotAllowVias() const { return m_keepoutDoNotAllowVias; }
+    bool GetDoNotAllowTracks() const { return m_keepoutDoNotAllowTracks; }
+    bool GetDoNotAllowPads() const { return m_keepoutDoNotAllowPads; }
+    bool GetDoNotAllowFootprints() const { return m_keepoutDoNotAllowFootprints; }
 
     void SetIsRuleArea( bool aEnable ) { m_isRuleArea = aEnable; }
     void SetDoNotAllowCopperPour( bool aEnable ) { m_keepoutDoNotAllowCopperPour = aEnable; }
@@ -189,7 +189,7 @@ public:
     void SetDoNotAllowPads( bool aEnable ) { m_keepoutDoNotAllowPads = aEnable; }
     void SetDoNotAllowFootprints( bool aEnable ) { m_keepoutDoNotAllowFootprints = aEnable; }
 
-    const ISLAND_REMOVAL_MODE GetIslandRemovalMode() const { return m_removeIslands; }
+    ISLAND_REMOVAL_MODE GetIslandRemovalMode() const { return m_removeIslands; }
     void SetIslandRemovalMode( ISLAND_REMOVAL_MODE aRemove ) { m_removeIslands = aRemove; }
 
     long long int GetMinIslandArea() const { return m_minIslandArea; }

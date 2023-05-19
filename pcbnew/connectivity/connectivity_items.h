@@ -80,7 +80,7 @@ public:
         m_pos += aPos;
     }
 
-    const unsigned int Dist( const CN_ANCHOR& aSecond )
+     unsigned int Dist( const CN_ANCHOR& aSecond )
     {
         return ( m_pos - aSecond.Pos() ).EuclideanNorm();
     }

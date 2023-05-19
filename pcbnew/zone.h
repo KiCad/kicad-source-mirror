@@ -721,7 +721,7 @@ public:
     void SetDoNotAllowPads( bool aEnable )       { m_doNotAllowPads = aEnable; }
     void SetDoNotAllowFootprints( bool aEnable ) { m_doNotAllowFootprints = aEnable; }
 
-    const ISLAND_REMOVAL_MODE GetIslandRemovalMode() const   { return m_islandRemovalMode; }
+    ISLAND_REMOVAL_MODE GetIslandRemovalMode() const   { return m_islandRemovalMode; }
     void SetIslandRemovalMode( ISLAND_REMOVAL_MODE aRemove ) { m_islandRemovalMode = aRemove; }
 
     long long int GetMinIslandArea() const       { return m_minIslandArea; }

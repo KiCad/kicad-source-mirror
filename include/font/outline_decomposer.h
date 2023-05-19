@@ -84,27 +84,27 @@ private:
      */
     int winding( const GLYPH_POINTS& aContour ) const;
 
-    inline static const unsigned int onCurve( char aTags )
+    inline static unsigned int onCurve( char aTags )
     {
         return aTags & 0x1;
     }
 
-    inline static const unsigned int thirdOrderBezierPoint( char aTags )
+    inline static unsigned int thirdOrderBezierPoint( char aTags )
     {
         return onCurve( aTags ) ? 0 : aTags & 0x2;
     }
 
-    inline static const unsigned int secondOrderBezierPoint( char aTags )
+    inline static unsigned int secondOrderBezierPoint( char aTags )
     {
         return onCurve( aTags ) ? 0 : !thirdOrderBezierPoint( aTags );
     }
 
-    inline static const unsigned int hasDropout( char aTags )
+    inline static unsigned int hasDropout( char aTags )
     {
         return aTags & 0x4;
     }
 
-    inline static const unsigned int dropoutMode( char aTags )
+    inline static unsigned int dropoutMode( char aTags )
     {
         return hasDropout( aTags ) ? ( aTags & 0x38 ) : 0;
     }

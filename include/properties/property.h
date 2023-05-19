@@ -661,7 +661,7 @@ public:
         return false;
     }
 
-    const T ToEnum( const wxString value )
+    T ToEnum( const wxString value )
     {
         if( m_reverseMap.count( value ) )
             return m_reverseMap[ value ];

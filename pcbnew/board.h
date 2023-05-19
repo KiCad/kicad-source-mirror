@@ -698,7 +698,7 @@ public:
     /**
      * Return the ID of a layer.
      */
-    const PCB_LAYER_ID GetLayerID( const wxString& aLayerName ) const;
+    PCB_LAYER_ID GetLayerID( const wxString& aLayerName ) const;
 
     /**
      * Return the name of a \a aLayer.
