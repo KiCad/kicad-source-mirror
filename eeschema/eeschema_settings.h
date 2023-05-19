@@ -84,6 +84,8 @@ public:
         int  hierarchy_panel_float_width;   // width of hierarchy tree panel when floating
         int  hierarchy_panel_float_height;  // height of hierarchy tree panel when floating
         int  search_panel_height;           // height of the search panel
+        int  search_panel_width;            // width of the search panel
+        int  search_panel_dock_direction;   // docking direction of the search panel
         bool schematic_hierarchy_float;     // show hierarchy tree panel as floating
         bool show_schematic_hierarchy;      // show hierarchy tree pane
         bool show_search;                   // show the search panel

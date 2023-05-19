@@ -240,12 +240,26 @@ void SCH_EDIT_FRAME::ToggleSearch()
 
     if( m_show_search )
     {
-        SetAuiPaneSize( m_auimgr, searchPaneInfo, -1, cfg->m_AuiPanels.search_panel_height );
+        searchPaneInfo.Direction( cfg->m_AuiPanels.search_panel_dock_direction );
+
+        if( cfg->m_AuiPanels.search_panel_dock_direction == wxAUI_DOCK_TOP
+            || cfg->m_AuiPanels.search_panel_dock_direction == wxAUI_DOCK_BOTTOM )
+        {
+            SetAuiPaneSize( m_auimgr, searchPaneInfo, -1, cfg->m_AuiPanels.search_panel_height );
+        }
+        else if( cfg->m_AuiPanels.search_panel_dock_direction == wxAUI_DOCK_LEFT
+                 || cfg->m_AuiPanels.search_panel_dock_direction == wxAUI_DOCK_RIGHT )
+        {
+            SetAuiPaneSize( m_auimgr, searchPaneInfo, cfg->m_AuiPanels.search_panel_width, -1 );
+        }
+
         m_searchPane->FocusSearch();
     }
     else
     {
         cfg->m_AuiPanels.search_panel_height = m_searchPane->GetSize().y;
+        cfg->m_AuiPanels.search_panel_width = m_searchPane->GetSize().x;
+        cfg->m_AuiPanels.search_panel_dock_direction = searchPaneInfo.dock_direction;
         m_auimgr.Update();
     }
 }

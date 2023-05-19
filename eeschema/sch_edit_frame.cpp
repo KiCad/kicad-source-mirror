@@ -261,10 +261,22 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     if( cfg->m_AuiPanels.schematic_hierarchy_float )
         hierarchy_pane.Float();
 
-    if( cfg->m_AuiPanels.search_panel_height > 0 )
+    if( cfg->m_AuiPanels.search_panel_height > 0
+        && ( cfg->m_AuiPanels.search_panel_dock_direction == wxAUI_DOCK_TOP
+            || cfg->m_AuiPanels.search_panel_dock_direction == wxAUI_DOCK_BOTTOM ) )
     {
         wxAuiPaneInfo& searchPane = m_auimgr.GetPane( SearchPaneName() );
+        searchPane.Direction( cfg->m_AuiPanels.search_panel_dock_direction );
         SetAuiPaneSize( m_auimgr, searchPane, -1, cfg->m_AuiPanels.search_panel_height );
+    }
+
+    else if( cfg->m_AuiPanels.search_panel_width > 0
+            && ( cfg->m_AuiPanels.search_panel_dock_direction == wxAUI_DOCK_LEFT
+                || cfg->m_AuiPanels.search_panel_dock_direction == wxAUI_DOCK_RIGHT ) )
+    {
+        wxAuiPaneInfo& searchPane = m_auimgr.GetPane( SearchPaneName() );
+        searchPane.Direction( cfg->m_AuiPanels.search_panel_dock_direction );
+        SetAuiPaneSize( m_auimgr, searchPane, cfg->m_AuiPanels.search_panel_width, -1 );
     }
 
     if( cfg->m_AuiPanels.float_net_nav_panel )
@@ -654,7 +666,6 @@ void SCH_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( EE_ACTIONS::toggleOPCurrents,      CHECK( showOPCurrentsCond ) );
     mgr->SetConditions( EE_ACTIONS::toggleAnnotateAuto,    CHECK( showAnnotateAutomaticallyCond ) );
     mgr->SetConditions( ACTIONS::toggleBoundingBoxes,      CHECK( cond.BoundingBoxes() ) );
-
 
 #define CURRENT_TOOL( action ) mgr->SetConditions( action, CHECK( cond.CurrentTool( action ) ) )
 

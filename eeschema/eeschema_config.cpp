@@ -224,9 +224,12 @@ void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
             cfg->m_FindReplaceExtra.search_selected_only = searchData->searchSelectedOnly;
         }
 
-        m_show_search = m_auimgr.GetPane( SearchPaneName() ).IsShown();
+        wxAuiPaneInfo& searchPaneInfo = m_auimgr.GetPane( SearchPaneName() );
+        m_show_search = searchPaneInfo.IsShown();
         cfg->m_AuiPanels.show_search = m_show_search;
         cfg->m_AuiPanels.search_panel_height = m_searchPane->GetSize().y;
+        cfg->m_AuiPanels.search_panel_width = m_searchPane->GetSize().x;
+        cfg->m_AuiPanels.search_panel_dock_direction = searchPaneInfo.dock_direction;
     }
 }
 
