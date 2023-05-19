@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-18 11:55-0700\n"
 "PO-Revision-Date: 2023-05-19 21:10+0000\n"
-"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
 "Language: fi\n"
@@ -38665,7 +38665,7 @@ msgstr "A Wire_via viittaa puuttuvaan padstackiin '%s'."
 
 #: pcbnew/teardrop/dialog_teardrop.cpp:225
 msgid "Filling Zones"
-msgstr "Täyttövyöhykeet"
+msgstr "Täyttää vyöhykkeitä"
 
 #: pcbnew/teardrop/dialog_teardrop.cpp:239
 #, c-format
@@ -38792,6 +38792,7 @@ msgid "Number of segments to build a teardrop with curved shape"
 msgstr "Segmenttien lukumäärä kaarevan muotoisen kyynelpisaran rakentamiseksi"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:407
+#, fuzzy
 msgid "Generate raw teardrops"
 msgstr "Luo raakakyynelpisarat"
 
