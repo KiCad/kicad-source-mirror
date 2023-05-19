@@ -594,6 +594,9 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/ratsnest/ratsnest_data.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/ratsnest/ratsnest_view_item.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/sel_layer.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/teardrop/teardrop.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/teardrop/teardrop_parameters.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/teardrop/teardrop_utils.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/zone_settings.cpp
 
     ${CMAKE_SOURCE_DIR}/pcbnew/tools/pcb_grid_helper.cpp

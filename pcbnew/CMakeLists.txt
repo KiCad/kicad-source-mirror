@@ -355,9 +355,6 @@ set( PCBNEW_CLASS_SRCS
     tools/tool_event_utils.cpp
     tools/zone_create_helper.cpp
     tools/zone_filler_tool.cpp
-    teardrop/teardrop.cpp
-    teardrop/teardrop_parameters.cpp
-    teardrop/teardrop_utils.cpp
 
     footprint_preview_panel.cpp
     footprint_tree_pane.cpp
