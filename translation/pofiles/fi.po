@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-18 11:55-0700\n"
-"PO-Revision-Date: 2023-05-17 20:52+0000\n"
+"PO-Revision-Date: 2023-05-19 21:10+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1431,9 +1431,8 @@ msgid "Negative"
 msgstr "Negatiivi"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:157
-#, fuzzy
 msgid "Pcb Layer for Graphics"
-msgstr "Sijoita tuotu grafiikka"
+msgstr "Piirilevykerros grafiikkaa varten"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:159
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:525
@@ -1446,19 +1445,16 @@ msgid "Front solder mask"
 msgstr "Etupuolen juotosmaski"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:159
-#, fuzzy
 msgid "Front Fab layer"
-msgstr "Etu_kerros"
+msgstr "Etuosan valmistuskerros"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:159
-#, fuzzy
 msgid "User layer drawings"
-msgstr "Käyttäjä.Piirustukset"
+msgstr "Käyttäjäkerros piirustukset"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:159
-#, fuzzy
 msgid "User layer comments"
-msgstr "Käyttäjäkerros Eco1"
+msgstr "Käyttäjäkerros kommentit"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:159
 msgid "User layer Eco1"
