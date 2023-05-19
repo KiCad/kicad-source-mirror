@@ -460,7 +460,7 @@ bool BOARD::SetLayerDescr( PCB_LAYER_ID aIndex, const LAYER& aLayer )
 }
 
 
-const PCB_LAYER_ID BOARD::GetLayerID( const wxString& aLayerName ) const
+PCB_LAYER_ID BOARD::GetLayerID( const wxString& aLayerName ) const
 {
     // Check the BOARD physical layer names.
     for( int layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
