@@ -10,10 +10,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-18 11:55-0700\n"
-"PO-Revision-Date: 2023-05-16 20:36+0000\n"
+"PO-Revision-Date: 2023-05-19 21:10+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1422,9 +1422,8 @@ msgid "Negative"
 msgstr "Negativ"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:157
-#, fuzzy
 msgid "Pcb Layer for Graphics"
-msgstr "Placera importerad grafik"
+msgstr "Mönsterkortslager för grafik"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:159
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:525
@@ -1437,19 +1436,16 @@ msgid "Front solder mask"
 msgstr "Lödmask framsida"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:159
-#, fuzzy
 msgid "Front Fab layer"
-msgstr "Främre lager"
+msgstr "Främre tillverkningslager (Fab)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:159
-#, fuzzy
 msgid "User layer drawings"
-msgstr "User.Drawings"
+msgstr "Användardefinierat lager ritningar"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:159
-#, fuzzy
 msgid "User layer comments"
-msgstr "Användarlager Eco1"
+msgstr "Användardefinierat lager kommentarer"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:159
 msgid "User layer Eco1"
@@ -26956,9 +26952,8 @@ msgid "Gap between the measured points and the start of the extension lines"
 msgstr "Avstånd mellan de uppmätta punkterna och förlängningslinjernas start"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:427
-#, fuzzy
 msgid "Extension line overshoot:"
-msgstr "Måttgränslinjens utstick"
+msgstr "Måttgränslinjens utstick:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.h:141
 #: pcbnew/pcb_dimension.cpp:1338 pcbnew/pcb_dimension.cpp:1385
@@ -26997,12 +26992,12 @@ msgstr "Undanta alla överträdelser av regel '%s'"
 #: pcbnew/dialogs/dialog_drc.cpp:599
 #, fuzzy
 msgid "Run Inspect > Clearance Resolution"
-msgstr "Tar reda på isolationsavstånd..."
+msgstr "Utför Inspektera > Ta reda på isolationsavstånd"
 
 #: pcbnew/dialogs/dialog_drc.cpp:612
 #, fuzzy
 msgid "Run Inspect > Constraints Resolution"
-msgstr "Begränsningar Upplösning ..."
+msgstr "Utför Inspektera > Ta reda på begränsningar"
 
 #: pcbnew/dialogs/dialog_drc.cpp:616
 msgid "Run Inspect > Diff Footprint with Library"
@@ -30371,14 +30366,12 @@ msgid "PDF Options"
 msgstr "PDF-alternativ"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:406
-#, fuzzy
 msgid "Generate property popups for front footprints"
-msgstr "Standardtextobjekt för nya fotavtryck:"
+msgstr "Skapa popuprutor för framsidans fotavtrycks egenskaper"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:409
-#, fuzzy
 msgid "Generate property popups for back footprints"
-msgstr "Generera Gerbers för tillverkning"
+msgstr "Skapa popuprutor för baksidans fotavtrycks egenskaper"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:437
 msgid "Run DRC..."
@@ -34230,14 +34223,14 @@ msgid "%s keep-out property differs."
 msgstr "%s spärr-egenskap skiljer sig."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:366
-#, fuzzy, c-format
+#, c-format
 msgid "%s keep out copper fill setting differs."
-msgstr "Spärrzon för kopparfyllning"
+msgstr "%s inställning spärrzon för kopparfyllning är olika"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "%s keep out footprints setting differs."
-msgstr "Inställning för att undanta från krav på gårdsplan är olika."
+msgstr "%s inställning spärrzon för fotavtryck är olika."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:370
 #, c-format
@@ -34245,9 +34238,9 @@ msgid "%s keep out pads setting differs."
 msgstr "%s inställning för spärr mot lödytor skiljer sig."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:372
-#, fuzzy, c-format
+#, c-format
 msgid "%s keep out tracks setting differs."
-msgstr "Ta &bort ledare som ansluter olika nät"
+msgstr "%s inställning spärrzon för ledare är olika."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:374
 #, c-format
@@ -38670,9 +38663,8 @@ msgid "A wire_via refers to missing padstack '%s'."
 msgstr "En wire_via refererar till en saknad kragstapel '%s'."
 
 #: pcbnew/teardrop/dialog_teardrop.cpp:225
-#, fuzzy
 msgid "Filling Zones"
-msgstr "Fyll zon"
+msgstr "Fyller zoner"
 
 #: pcbnew/teardrop/dialog_teardrop.cpp:239
 #, c-format
@@ -38799,13 +38791,14 @@ msgid "Number of segments to build a teardrop with curved shape"
 msgstr "Antal segment för att skapa en bågformad kragförstärkning"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:407
-#, fuzzy
 msgid "Generate raw teardrops"
-msgstr "Rapportera fel"
+msgstr "Skapa preliminära kragförstärkningar"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:413
 msgid "(Shapes will be adjusted for clearances on next zone fill.)"
 msgstr ""
+"(Formerna kommer att justeras med avseende på isolationsavstånd vid nästa "
+"zonfyllning.)"
 
 #: pcbnew/teardrop/dialog_teardrop_base.h:123
 msgid "Add Teardrops"
@@ -38816,9 +38809,8 @@ msgid "Add teardrops"
 msgstr "Lägg till kragförstärkningar"
 
 #: pcbnew/teardrop/teardrop.cpp:250
-#, fuzzy
 msgid "Add teardrops and refill zones"
-msgstr "Placera kragförstärkningar på lödytor i kopparzoner"
+msgstr "Skapa kragförstärkningar och gör om fyllning av kopparzoner"
 
 #: pcbnew/teardrop/teardrop.cpp:449
 msgid "Remove teardrops"
