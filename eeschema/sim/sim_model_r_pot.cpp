@@ -31,11 +31,11 @@ std::string SPICE_GENERATOR_R_POT::ModelLine( const SPICE_ITEM& aItem ) const
     std::string r = "0";
     std::string position = "";
     
-    if ( m_model.FindParam( "r" ) )
-        r = SIM_VALUE::ToSpice( m_model.FindParam( "r" )->value );
+    if( const SIM_MODEL::PARAM* r_param = m_model.FindParam( "r" ) )
+        r = SIM_VALUE::ToSpice( r_param->value );
 
-    if ( m_model.FindParam( "pos" ) )
-        position = SIM_VALUE::ToSpice( m_model.FindParam( "pos" )->value );
+    if( const SIM_MODEL::PARAM* pos_param = m_model.FindParam( "pos" ) )
+        position = SIM_VALUE::ToSpice( pos_param->value );
 
     if( position != "" )
     {

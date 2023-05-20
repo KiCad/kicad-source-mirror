@@ -79,6 +79,10 @@ SIM_MODEL::DEVICE_INFO SIM_MODEL::DeviceInfo( DEVICE_T aDeviceType )
 
         case DEVICE_T::V:         return { "V",      "Voltage Source",    true };
         case DEVICE_T::I:         return { "I",      "Current Source",    true };
+        case DEVICE_T::E:         return { "E",      "Voltage Source",    false };
+        case DEVICE_T::F:         return { "F",      "Current Source",    false };
+        case DEVICE_T::G:         return { "G",      "Current Source",    false };
+        case DEVICE_T::H:         return { "H",      "Voltage Source",    false };
 
         case DEVICE_T::KIBIS:     return { "IBIS",   "IBIS Model",        false };
 
@@ -184,8 +188,10 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     case TYPE::V_SIN:                return { DEVICE_T::V,      "SIN",            "Sine"                       };
     case TYPE::V_PULSE:              return { DEVICE_T::V,      "PULSE",          "Pulse"                      };
     case TYPE::V_EXP:                return { DEVICE_T::V,      "EXP",            "Exponential"                };
-  //case TYPE::V_SFAM:               return { DEVICE_TYPE::V,   "SFAM",           "Single-frequency AM"        };
-  //case TYPE::V_SFFM:               return { DEVICE_TYPE::V,   "SFFM",           "Single-frequency FM"        };
+  //case TYPE::V_SFAM:               return { DEVICE_T::V,      "SFAM",           "Single-frequency AM"        };
+  //case TYPE::V_SFFM:               return { DEVICE_T::V,      "SFFM",           "Single-frequency FM"        };
+    case TYPE::V_VCL:                return { DEVICE_T::E,      "",               "Voltage-controlled"         };
+    case TYPE::V_CCL:                return { DEVICE_T::H,      "",               "Current-controlled"         };
     case TYPE::V_PWL:                return { DEVICE_T::V,      "PWL",            "Piecewise linear"           };
     case TYPE::V_WHITENOISE:         return { DEVICE_T::V,      "WHITENOISE",     "White noise"                };
     case TYPE::V_PINKNOISE:          return { DEVICE_T::V,      "PINKNOISE",      "Pink noise (1/f)"           };
@@ -193,15 +199,17 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     case TYPE::V_RANDUNIFORM:        return { DEVICE_T::V,      "RANDUNIFORM",    "Random uniform"             };
     case TYPE::V_RANDNORMAL:         return { DEVICE_T::V,      "RANDNORMAL",     "Random normal"              };
     case TYPE::V_RANDEXP:            return { DEVICE_T::V,      "RANDEXP",        "Random exponential"         };
-  //case TYPE::V_RANDPOISSON:        return { DEVICE_TYPE::V,   "RANDPOISSON",    "Random Poisson"             };
+  //case TYPE::V_RANDPOISSON:        return { DEVICE_T::V,      "RANDPOISSON",    "Random Poisson"             };
     case TYPE::V_BEHAVIORAL:         return { DEVICE_T::V,      "=",              "Behavioral"                 };
 
     case TYPE::I:                    return { DEVICE_T::I,      "DC",             "DC",                        };
     case TYPE::I_SIN:                return { DEVICE_T::I,      "SIN",            "Sine"                       };
     case TYPE::I_PULSE:              return { DEVICE_T::I,      "PULSE",          "Pulse"                      };
     case TYPE::I_EXP:                return { DEVICE_T::I,      "EXP",            "Exponential"                };
-  //case TYPE::I_SFAM:               return { DEVICE_TYPE::I,   "SFAM",           "Single-frequency AM"        };
-  //case TYPE::I_SFFM:               return { DEVICE_TYPE::I,   "SFFM",           "Single-frequency FM"        };
+  //case TYPE::I_SFAM:               return { DEVICE_T::I,      "SFAM",           "Single-frequency AM"        };
+  //case TYPE::I_SFFM:               return { DEVICE_T::I,      "SFFM",           "Single-frequency FM"        };
+    case TYPE::I_VCL:                return { DEVICE_T::G,      "",               "Voltage-controlled"         };
+    case TYPE::I_CCL:                return { DEVICE_T::F,      "",               "Current-controlled"         };
     case TYPE::I_PWL:                return { DEVICE_T::I,      "PWL",            "Piecewise linear"           };
     case TYPE::I_WHITENOISE:         return { DEVICE_T::I,      "WHITENOISE",     "White noise"                };
     case TYPE::I_PINKNOISE:          return { DEVICE_T::I,      "PINKNOISE",      "Pink noise (1/f)"           };
@@ -209,7 +217,7 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     case TYPE::I_RANDUNIFORM:        return { DEVICE_T::I,      "RANDUNIFORM",    "Random uniform"             };
     case TYPE::I_RANDNORMAL:         return { DEVICE_T::I,      "RANDNORMAL",     "Random normal"              };
     case TYPE::I_RANDEXP:            return { DEVICE_T::I,      "RANDEXP",        "Random exponential"         };
-  //case TYPE::I_RANDPOISSON:        return { DEVICE_TYPE::I,   "RANDPOISSON",    "Random Poisson"             };
+  //case TYPE::I_RANDPOISSON:        return { DEVICE_T::I,      "RANDPOISSON",    "Random Poisson"             };
     case TYPE::I_BEHAVIORAL:         return { DEVICE_T::I,      "=",              "Behavioral"                 };
 
     case TYPE::SUBCKT:               return { DEVICE_T::SUBCKT, "",               "Subcircuit"                 };
@@ -319,6 +327,8 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     case TYPE::V_EXP:                return { "V", "",            "EXP"      };
   //case TYPE::V_SFAM:               return { "V", "",            "AM"       };
   //case TYPE::V_SFFM:               return { "V", "",            "SFFM"     };
+    case TYPE::V_VCL:                return { "E", "",            ""         };
+    case TYPE::V_CCL:                return { "H", "",            ""         };
     case TYPE::V_PWL:                return { "V", "",            "PWL"      };
     case TYPE::V_WHITENOISE:         return { "V", "",            "TRNOISE"  };
     case TYPE::V_PINKNOISE:          return { "V", "",            "TRNOISE"  };
@@ -335,6 +345,8 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     case TYPE::I_EXP:                return { "I", "",            "EXP"      };
   //case TYPE::I_SFAM:               return { "V", "",            "AM"       };
   //case TYPE::I_SFFM:               return { "V", "",            "SFFM"     };
+    case TYPE::I_VCL:                return { "G", "",            ""         };
+    case TYPE::I_CCL:                return { "F", "",            ""         };
     case TYPE::I_PWL:                return { "I", "",            "PWL"      };
     case TYPE::I_WHITENOISE:         return { "I", "",            "TRNOISE"  };
     case TYPE::I_PINKNOISE:          return { "I", "",            "TRNOISE"  };
@@ -910,7 +922,11 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType )
     case TYPE::I_SFAM:
     case TYPE::V_SFFM:
     case TYPE::I_SFFM:*/
+    case TYPE::V_VCL:
+    case TYPE::V_CCL:
     case TYPE::V_PWL:
+    case TYPE::I_VCL:
+    case TYPE::I_CCL:
     case TYPE::I_PWL:
     case TYPE::V_WHITENOISE:
     case TYPE::I_WHITENOISE:

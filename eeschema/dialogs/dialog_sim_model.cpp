@@ -47,6 +47,15 @@
 using CATEGORY = SIM_MODEL::PARAM::CATEGORY;
 
 
+bool equivalent( SIM_MODEL::DEVICE_T a, SIM_MODEL::DEVICE_T b )
+{
+    // A helper to handle SPICE's use of 'E' and 'H' for voltage sources and 'F' and 'G' for
+    // current sources
+    return a == b
+           || SIM_MODEL::DeviceInfo( a ).description == SIM_MODEL::DeviceInfo( b ).description;
+};
+
+
 template <typename T_symbol, typename T_field>
 DIALOG_SIM_MODEL<T_symbol, T_field>::DIALOG_SIM_MODEL( wxWindow* aParent, T_symbol& aSymbol,
                                                        std::vector<T_field>& aFields )
@@ -430,12 +439,12 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateInstanceWidgets( SIM_MODEL* aMod
         {
             for( SIM_MODEL::DEVICE_T deviceType : SIM_MODEL::DEVICE_T_ITERATOR() )
             {
-                if( !SIM_MODEL::DeviceInfo( deviceType ).isBuiltin )
+                if( !SIM_MODEL::DeviceInfo( deviceType ).showInMenu )
                     continue;
 
                 m_deviceTypeChoice->Append( SIM_MODEL::DeviceInfo( deviceType ).description );
 
-                if( deviceType == aModel->GetDeviceType() )
+                if( equivalent( deviceType, aModel->GetDeviceType() ) )
                     m_deviceTypeChoice->SetSelection( m_deviceTypeChoice->GetCount() - 1 );
             }
         }
@@ -444,7 +453,10 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateInstanceWidgets( SIM_MODEL* aMod
 
         for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
         {
-            if( SIM_MODEL::TypeInfo( type ).deviceType == aModel->GetDeviceType() )
+            SIM_MODEL::DEVICE_T deviceType = SIM_MODEL::TypeInfo( type ).deviceType;
+
+            if( deviceType == aModel->GetDeviceType()
+                || SIM_MODEL::DeviceInfo( deviceType ).description == aModel->GetDeviceInfo().description )
             {
                 m_typeChoice->Append( SIM_MODEL::TypeInfo( type ).description );
 
@@ -1203,7 +1215,7 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::onTypeChoice( wxCommandEvent& aEvent )
 
     for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
     {
-        if( deviceType == SIM_MODEL::TypeInfo( type ).deviceType
+        if( equivalent( deviceType, SIM_MODEL::TypeInfo( type ).deviceType )
             && typeDescription == SIM_MODEL::TypeInfo( type ).description )
         {
             if( isIbisLoaded()

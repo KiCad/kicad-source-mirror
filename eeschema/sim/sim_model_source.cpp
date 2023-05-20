@@ -52,10 +52,10 @@ std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
     std::string ac = "";
     std::string dc = "";
 
-    if( m_model.FindParam( "ac" ) )
-        ac = SIM_VALUE::ToSpice( m_model.FindParam( "ac" )->value );
-    if( m_model.FindParam( "dc" ) )
-        dc = SIM_VALUE::ToSpice( m_model.FindParam( "dc" )->value );
+    if( const SIM_MODEL::PARAM* ac_param = m_model.FindParam( "ac" ) )
+        ac = SIM_VALUE::ToSpice( ac_param->value );
+    if( const SIM_MODEL::PARAM* dc_param = m_model.FindParam( "dc" ) )
+        dc = SIM_VALUE::ToSpice( dc_param->value );
 
     bool emptyLine = true;
     item.modelName = "";
@@ -140,7 +140,7 @@ std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
         case SIM_MODEL::TYPE::V_RANDUNIFORM:
         case SIM_MODEL::TYPE::I_RANDUNIFORM:
         {
-            /* JEY TODO
+            /* TODO
             args.append( "1 " );
             args.append( getParamValueString( "dt", "0" ) + " " );
             args.append( getParamValueString( "td", "0" ) + " " );
@@ -182,14 +182,16 @@ std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
             args.append( getParamValueString( "offset", "0" ) + " " );
             break;
 
-        /*case SIM_MODEL::TYPE::V_RANDPOISSON:
+        /*
+        case SIM_MODEL::TYPE::V_RANDPOISSON:
         case SIM_MODEL::TYPE::I_RANDPOISSON:
             args.append( "4 " );
-            args.append( FindParam( "dt" )->value->ToSpiceString() + " " );
-            args.append( FindParam( "td" )->value->ToSpiceString() + " " );
-            args.append( FindParam( "lambda" )->value->ToSpiceString() + " " );
-            args.append( FindParam( "offset" )->value->ToSpiceString() + " " );
-            break;*/
+            args.append( getParamValueString( "dt", "0" ) + " " );
+            args.append( getParamValueString( "td", "0" ) + " " );
+            args.append( getParamValueString( "lambda", "0" ) + " " );
+            args.append( getParamValueString( "offset", "0" ) + " " );
+            break;
+         */
 
         default:
             for( const SIM_MODEL::PARAM& param : m_model.GetParams() )
@@ -206,13 +208,39 @@ std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
         emptyLine = false;
         item.modelName += fmt::format( "{}( {}) ", m_model.GetSpiceInfo().inlineTypeString, args );
     }
+    else
+    {
+        switch( m_model.GetType() )
+        case SIM_MODEL::TYPE::V_VCL:
+        case SIM_MODEL::TYPE::I_VCL:
+        {
+            item.modelName += fmt::format( "{} ", getParamValueString( "gain", "1.0" ) );
+            emptyLine = false;
+
+            if( const SIM_MODEL::PARAM* ic = m_model.FindParam( "ic" ) )
+                item.modelName += fmt::format( "ic={}", SIM_VALUE::ToSpice( ic->value ) );
+
+            break;
+
+        case SIM_MODEL::TYPE::V_CCL:
+        case SIM_MODEL::TYPE::I_CCL:
+            item.modelName += fmt::format( "{} {} ",
+                                           getParamValueString( "control", "V?" ),
+                                           getParamValueString( "gain", "1.0" ) );
+            emptyLine = false;
+            break;
+
+        default:
+            break;
+        }
+    }
 
     if( ac != "" )
     {
         std::string ph = "";
 
-        if( m_model.FindParam( "ph" ) )
-            ph = SIM_VALUE::ToSpice( m_model.FindParam( "ph" )->value );
+        if( const SIM_MODEL::PARAM* ph_param = m_model.FindParam( "ph" ) )
+            ph = SIM_VALUE::ToSpice( ph_param->value );
 
         emptyLine = false;
         item.modelName += fmt::format( "AC {} {}", ac, ph );
@@ -300,7 +328,12 @@ const std::vector<SIM_MODEL::PARAM::INFO>& SIM_MODEL_SOURCE::makeParamInfos( TYP
     static std::vector<PARAM::INFO> vsffm = makeSffmParamInfos( "y", "V" );
     static std::vector<PARAM::INFO> isffm = makeSffmParamInfos( "y", "A" );*/
 
+    static std::vector<PARAM::INFO> vcvs = makeVcParamInfos( "" );
+    static std::vector<PARAM::INFO> ccvs = makeCcParamInfos( "ohm" );
     static std::vector<PARAM::INFO> vpwl = makePwlParamInfos( "y", "Voltage", "V" );
+
+    static std::vector<PARAM::INFO> vccs = makeVcParamInfos( "S" );
+    static std::vector<PARAM::INFO> cccs = makeCcParamInfos( "" );
     static std::vector<PARAM::INFO> ipwl = makePwlParamInfos( "y", "Current", "A" );
 
     static std::vector<PARAM::INFO> vwhitenoise = makeWhiteNoiseParamInfos( "y", "V" );
@@ -334,11 +367,15 @@ const std::vector<SIM_MODEL::PARAM::INFO>& SIM_MODEL_SOURCE::makeParamInfos( TYP
     case TYPE::I_PULSE:       return ipulse;
     case TYPE::V_EXP:         return vexp;
     case TYPE::I_EXP:         return iexp;
-    /*case TYPE::V_SFAM:        return vsfam;
-    case TYPE::I_SFAM:        return isfam;
-    case TYPE::V_SFFM:        return vsffm;
-    case TYPE::I_SFFM:        return isffm;*/
+    //case TYPE::V_SFAM:        return vsfam;
+    //case TYPE::I_SFAM:        return isfam;
+    //case TYPE::V_SFFM:        return vsffm;
+    //case TYPE::I_SFFM:        return isffm;
+    case TYPE::V_VCL:         return vcvs;
+    case TYPE::V_CCL:         return ccvs;
     case TYPE::V_PWL:         return vpwl;
+    case TYPE::I_VCL:         return vccs;
+    case TYPE::I_CCL:         return cccs;
     case TYPE::I_PWL:         return ipwl;
     case TYPE::V_WHITENOISE:  return vwhitenoise;
     case TYPE::I_WHITENOISE:  return iwhitenoise;
@@ -687,6 +724,51 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeSffmParamInfos( std::s
     appendAcParamInfos( paramInfos, aUnit );
     return paramInfos;
 }*/
+
+
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeCcParamInfos( std::string aGainUnit )
+{
+    std::vector<PARAM::INFO> paramInfos;
+    PARAM::INFO paramInfo;
+
+    paramInfo.name = "gain";
+    paramInfo.id = 1;
+    paramInfo.type = SIM_VALUE::TYPE_FLOAT;
+    paramInfo.unit = aGainUnit;
+    paramInfo.description = "Gain";
+    paramInfos.push_back( paramInfo );
+
+    paramInfo.name = "control";
+    paramInfo.id = 2;
+    paramInfo.type = SIM_VALUE::TYPE_STRING;
+    paramInfo.description = "Controlling voltage source";
+    paramInfos.push_back( paramInfo );
+
+    return paramInfos;
+}
+
+
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeVcParamInfos( std::string aGainUnit )
+{
+    std::vector<PARAM::INFO> paramInfos;
+    PARAM::INFO paramInfo;
+
+    paramInfo.name = "gain";
+    paramInfo.id = 1;
+    paramInfo.type = SIM_VALUE::TYPE_FLOAT;
+    paramInfo.unit = aGainUnit;
+    paramInfo.description = "Gain";
+    paramInfos.push_back( paramInfo );
+
+    paramInfo.name = "ic";
+    paramInfo.id = 7;
+    paramInfo.type = SIM_VALUE::TYPE_FLOAT;
+    paramInfo.unit = "V";
+    paramInfo.description = "Initial condition of controlling source (ic)";
+    paramInfos.push_back( paramInfo );
+
+    return paramInfos;
+}
 
 
 std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makePwlParamInfos( std::string aPrefix,
@@ -1050,4 +1132,13 @@ void SIM_MODEL_SOURCE::appendAcParamInfos( std::vector<PARAM::INFO>& aParamInfos
     paramInfo.defaultValue = "0";
     paramInfo.description = "AC phase";
     aParamInfos.push_back( paramInfo );
+}
+
+
+std::vector<std::string> SIM_MODEL_SOURCE::GetPinNames() const
+{
+    if( GetDeviceType() == SIM_MODEL::DEVICE_T::E || GetDeviceType() == SIM_MODEL::DEVICE_T::G )
+        return { "+", "-", "C+", "C-" };
+    else
+        return { "+", "-" };
 }

@@ -74,7 +74,7 @@ public:
     bool HasAutofill() const override { return true; }
     bool HasPrimaryValue() const override { return GetType() == TYPE::V || GetType() == TYPE::I; }
 
-    std::vector<std::string> GetPinNames() const override { return { "+", "-" }; }
+    std::vector<std::string> GetPinNames() const override;
 
 protected:
     void doSetParamValue( int aParamIndex, const std::string& aValue ) override;
@@ -88,6 +88,8 @@ private:
     static std::vector<PARAM::INFO> makeExpParamInfos( std::string aPrefix, std::string aUnit );
     //static std::vector<PARAM::INFO> makeSfamParamInfos( std::string aPrefix, std::string aUnit );
     //static std::vector<PARAM::INFO> makeSffmParamInfos( std::string aPrefix, std::string aUnit );
+    static std::vector<SIM_MODEL::PARAM::INFO> makeVcParamInfos( std::string aGainUnit );
+    static std::vector<SIM_MODEL::PARAM::INFO> makeCcParamInfos( std::string aGainUnit );
     static std::vector<PARAM::INFO> makePwlParamInfos( std::string aPrefix, std::string aQuantity,
                                                        std::string aUnit );
     static std::vector<PARAM::INFO> makeWhiteNoiseParamInfos( std::string aPrefix, std::string aUnit );

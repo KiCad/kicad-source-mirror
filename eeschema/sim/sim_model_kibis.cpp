@@ -110,17 +110,17 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const PR
 
     KIBIS_PARAMETER kparams;
 
-    if ( m_model.FindParam( "vcc" ) )
-        kparams.SetCornerFromString( kparams.m_supply, m_model.FindParam( "vcc" )->value );
+    if( const SIM_MODEL::PARAM* vcc = m_model.FindParam( "vcc" ) )
+        kparams.SetCornerFromString( kparams.m_supply, vcc->value );
     
-    if ( m_model.FindParam( "rpin" ) )
-        kparams.SetCornerFromString( kparams.m_Rpin, m_model.FindParam( "rpin" )->value );
+    if( const SIM_MODEL::PARAM* rpin = m_model.FindParam( "rpin" ) )
+        kparams.SetCornerFromString( kparams.m_Rpin, rpin->value );
 
-    if ( m_model.FindParam( "lpin" ) )
-        kparams.SetCornerFromString( kparams.m_Lpin, m_model.FindParam( "lpin" )->value );
+    if( const SIM_MODEL::PARAM* lpin = m_model.FindParam( "lpin" ) )
+        kparams.SetCornerFromString( kparams.m_Lpin, lpin->value );
 
-    if ( m_model.FindParam( "cpin" ) )
-        kparams.SetCornerFromString( kparams.m_Cpin, m_model.FindParam( "cpin" )->value );
+    if( const SIM_MODEL::PARAM* cpin = m_model.FindParam( "cpin" ) )
+        kparams.SetCornerFromString( kparams.m_Cpin, cpin->value );
 
     //kparams.SetCornerFromString( kparams.m_Ccomp, FindParam( "ccomp" )->value );
 
@@ -139,8 +139,8 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const PR
     {
         std::string paramValue = "";
 
-        if ( m_model.FindParam( "dc" ) )
-            paramValue = m_model.FindParam( "dc" )->value;
+        if( const SIM_MODEL::PARAM* dc = m_model.FindParam( "dc" ) )
+            paramValue = dc->value;
 
         if( paramValue == "hi-Z" )
         {
@@ -166,17 +166,17 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const PR
     {
         KIBIS_WAVEFORM_RECTANGULAR* waveform = new KIBIS_WAVEFORM_RECTANGULAR( &kibis );
 
-        if ( m_model.FindParam( "ton" ) )
-            waveform->m_ton = SIM_VALUE::ToDouble( m_model.FindParam( "ton" )->value, 1 );
+        if( const SIM_MODEL::PARAM* ton = m_model.FindParam( "ton" ) )
+            waveform->m_ton = SIM_VALUE::ToDouble( ton->value, 1 );
 
-        if ( m_model.FindParam( "toff" ) )
-            waveform->m_toff = SIM_VALUE::ToDouble( m_model.FindParam( "toff" )->value, 1 );
+        if( const SIM_MODEL::PARAM* toff = m_model.FindParam( "toff" ) )
+            waveform->m_toff = SIM_VALUE::ToDouble( toff->value, 1 );
 
-        if ( m_model.FindParam( "td" ) )
-            waveform->m_delay = SIM_VALUE::ToDouble( m_model.FindParam( "td" )->value, 0 );
+        if( const SIM_MODEL::PARAM* td = m_model.FindParam( "td" ) )
+            waveform->m_delay = SIM_VALUE::ToDouble( td->value, 0 );
 
-        if ( m_model.FindParam( "n" ) )
-            waveform->m_cycles = SIM_VALUE::ToInt( m_model.FindParam( "n" )->value, 1 );
+        if( const SIM_MODEL::PARAM* n = m_model.FindParam( "n" ) )
+            waveform->m_cycles = SIM_VALUE::ToInt( n->value, 1 );
 
         kparams.m_waveform = waveform;
 
@@ -191,14 +191,14 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const PR
     {
         KIBIS_WAVEFORM_PRBS* waveform = new KIBIS_WAVEFORM_PRBS( &kibis );
 
-        if ( m_model.FindParam( "f0" ) )
-            waveform->m_bitrate = SIM_VALUE::ToDouble( m_model.FindParam( "f0" )->value, 0 );
+        if( const SIM_MODEL::PARAM* f0 = m_model.FindParam( "f0" ) )
+            waveform->m_bitrate = SIM_VALUE::ToDouble( f0->value, 0 );
 
-        if ( m_model.FindParam( "td" ) )
-            waveform->m_delay = SIM_VALUE::ToDouble( m_model.FindParam( "td" )->value, 0 );
+        if( const SIM_MODEL::PARAM* td = m_model.FindParam( "td" ) )
+            waveform->m_delay = SIM_VALUE::ToDouble( td->value, 0 );
 
-        if ( m_model.FindParam( "n" ) )
-            waveform->m_bits = SIM_VALUE::ToInt( m_model.FindParam( "n" )->value, 0 );
+        if( const SIM_MODEL::PARAM* n = m_model.FindParam( "n" ) )
+            waveform->m_bits = SIM_VALUE::ToInt( n->value, 0 );
 
         kparams.m_waveform = waveform;
 

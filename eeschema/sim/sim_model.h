@@ -92,6 +92,10 @@ public:
 
         V,
         I,
+        E,
+        F,
+        G,
+        H,
 
         SUBCKT,
         XSPICE,
@@ -105,7 +109,7 @@ public:
     {
         std::string fieldValue;
         std::string description;
-        bool        isBuiltin;
+        bool        showInMenu;
     };
 
 
@@ -227,8 +231,10 @@ public:
         V_SIN,
         V_PULSE,
         V_EXP,
-        /*V_SFAM,
-        V_SFFM,*/
+        //V_SFAM,
+        //V_SFFM,
+        V_VCL,
+        V_CCL,
         V_PWL,
         V_WHITENOISE,
         V_PINKNOISE,
@@ -243,8 +249,10 @@ public:
         I_SIN,
         I_PULSE,
         I_EXP,
-        /*I_SFAM,
-        I_SFFM,*/
+        //I_SFAM,
+        //I_SFFM,
+        I_VCL,
+        I_CCL,
         I_PWL,
         I_WHITENOISE,
         I_PINKNOISE,
