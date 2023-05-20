@@ -1449,7 +1449,7 @@ bool BOARD_OUTLINE::DelOutline( size_t aIndex )
 }
 
 
-const std::list< IDF_OUTLINE* >*const BOARD_OUTLINE::GetOutlines( void )
+const std::list<IDF_OUTLINE*>* BOARD_OUTLINE::GetOutlines( void )
 {
     return &outlines;
 }

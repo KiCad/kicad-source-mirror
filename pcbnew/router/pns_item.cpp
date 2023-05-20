@@ -33,7 +33,7 @@ namespace PNS {
 
 static void dumpObstacles( const PNS::NODE::OBSTACLES &obstacles )
 {
-    printf( "&&&& %lu obstacles: \n", obstacles.size() );
+    printf( "&&&& %zu obstacles: \n", obstacles.size() );
 
     for( const auto& obs : obstacles )
     {

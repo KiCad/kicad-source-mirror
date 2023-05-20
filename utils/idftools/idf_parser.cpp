@@ -1093,7 +1093,7 @@ bool IDF3_COMPONENT::DelDrill( IDF_DRILL_DATA* aDrill )
 }
 
 
-const std::list< IDF_DRILL_DATA* >*const IDF3_COMPONENT::GetDrills( void )
+const std::list<IDF_DRILL_DATA*>* IDF3_COMPONENT::GetDrills( void )
 {
     return &drills;
 }

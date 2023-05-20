@@ -299,7 +299,7 @@ public:
      *
      * To avoid IDF violations, the user should not alter these entries.
      */
-    const std::list< IDF_DRILL_DATA* >* const GetDrills( void );
+    const std::list<IDF_DRILL_DATA*>* GetDrills( void );
 
     /**
      * Add the given component outline data to this component.

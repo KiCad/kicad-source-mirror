@@ -52,7 +52,7 @@ class OBJECT_3D
 public:
     explicit OBJECT_3D( OBJECT_3D_TYPE aObjType );
 
-    const void SetBoardItem( BOARD_ITEM* aBoardItem ) { m_boardItem = aBoardItem; }
+    void SetBoardItem( BOARD_ITEM* aBoardItem ) { m_boardItem = aBoardItem; }
     BOARD_ITEM* GetBoardItem() const { return m_boardItem; }
 
     void SetMaterial( const MATERIAL* aMaterial )

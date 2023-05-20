@@ -182,7 +182,7 @@ public:
      * It is up to the user to respect the IDFv3 specification and avoid changes to this
      * list which are in violation of the specification.
      */
-    const std::list< IDF_OUTLINE* >*const GetOutlines( void );
+    const std::list<IDF_OUTLINE*>* GetOutlines( void );
 
     /**
      * @return the number of items in the internal outline list.
