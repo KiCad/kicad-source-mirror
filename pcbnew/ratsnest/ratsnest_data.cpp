@@ -341,6 +341,10 @@ void RN_NET::OptimizeRNEdges()
 
                 for( CN_ITEM* item : aAnchor->Item()->ConnectedItems() )
                 {
+                    // Don't consider shorted items
+                    if( aAnchor->Item()->Net() != item->Net() )
+                        continue;
+
                     CN_ZONE_LAYER* zoneLayer = dynamic_cast<CN_ZONE_LAYER*>( item );
 
                     if( zoneLayer && aLayerSet.test( zoneLayer->Layer() ) )
