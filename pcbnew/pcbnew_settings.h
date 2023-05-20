@@ -322,6 +322,7 @@ public:
         bool                 m_ShowModuleRatsnest;
         bool                 m_ShowGlobalRatsnest;
         bool                 m_DisplayRatsnestLinesCurved;
+        double               m_RatsnestThickness;
 
         PCB_DISPLAY_ORIGIN   m_DisplayOrigin;
         bool                 m_DisplayInvertXAxis;

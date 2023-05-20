@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -25,6 +25,7 @@
 #include <wx/statbox.h>
 #include <wx/radiobox.h>
 #include <wx/panel.h>
+#include <wx/spinctrl.h>
 #include <wx/radiobut.h>
 #include <wx/simplebook.h>
 
@@ -66,6 +67,8 @@ class PANEL_EDIT_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxChoice* m_magneticGraphicsChoice;
 		wxCheckBox* m_showSelectedRatsnest;
 		wxCheckBox* m_OptDisplayCurvedRatsnestLines;
+		wxStaticText* m_ratsnestThicknessLabel;
+		wxSpinCtrlDouble* m_ratsnestThickness;
 		wxStaticText* m_staticText5;
 		wxRadioButton* m_rbTrackDragMove;
 		wxRadioButton* m_rbTrackDrag45;

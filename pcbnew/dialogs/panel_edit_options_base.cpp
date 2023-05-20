@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -343,6 +343,20 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 
 	m_OptDisplayCurvedRatsnestLines = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Show ratsnest with curved lines"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer3->Add( m_OptDisplayCurvedRatsnestLines, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	wxBoxSizer* bSizer11;
+	bSizer11 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_ratsnestThicknessLabel = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("Ratsnest line thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ratsnestThicknessLabel->Wrap( -1 );
+	bSizer11->Add( m_ratsnestThicknessLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_ratsnestThickness = new wxSpinCtrlDouble( sbSizer3->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0.5, 10, 0.5, 0.5 );
+	m_ratsnestThickness->SetDigits( 1 );
+	bSizer11->Add( m_ratsnestThickness, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+
+	sbSizer3->Add( bSizer11, 1, wxEXPAND, 5 );
 
 
 	pcbOptionsSizer->Add( sbSizer3, 0, wxEXPAND|wxTOP, 5 );

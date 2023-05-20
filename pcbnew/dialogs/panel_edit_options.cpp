@@ -74,6 +74,7 @@ void PANEL_EDIT_OPTIONS::loadPCBSettings( PCBNEW_SETTINGS* aCfg )
     /* Set display options */
     m_OptDisplayCurvedRatsnestLines->SetValue( aCfg->m_Display.m_DisplayRatsnestLinesCurved );
     m_showSelectedRatsnest->SetValue( aCfg->m_Display.m_ShowModuleRatsnest );
+    m_ratsnestThickness->SetValue( aCfg->m_Display.m_RatsnestThickness );
 
     switch( aCfg->m_TrackDragAction )
     {
@@ -154,6 +155,7 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
 
         cfg->m_Display.m_DisplayRatsnestLinesCurved = m_OptDisplayCurvedRatsnestLines->GetValue();
         cfg->m_Display.m_ShowModuleRatsnest = m_showSelectedRatsnest->GetValue();
+        cfg->m_Display.m_RatsnestThickness = m_ratsnestThickness->GetValue();
 
         cfg->m_RotationAngle = m_rotationAngle.GetAngleValue();
 

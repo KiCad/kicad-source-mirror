@@ -68,16 +68,16 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
     constexpr int CROSS_SIZE = 200000;
 
-    auto gal = aView->GetGAL();
-	gal->SetIsStroke( true );
-    gal->SetIsFill( false );
-    gal->SetLineWidth( 1.0 );
-    auto cfg = static_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
+    PCBNEW_SETTINGS* cfg = static_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
 
     if( !cfg )
         return;
 
     auto rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( aView->GetPainter()->GetSettings() );
+    KIGFX::GAL* gal = aView->GetGAL();
+    gal->SetIsStroke( true );
+    gal->SetIsFill( false );
+    gal->SetLineWidth( cfg->m_Display.m_RatsnestThickness / gal->GetWorldScale() );
 
     std::set<int>        highlightedNets = rs->GetHighlightNetCodes();
     const std::set<int>& hiddenNets      = rs->GetHiddenNets();
