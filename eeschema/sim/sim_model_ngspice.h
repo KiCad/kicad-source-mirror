@@ -41,7 +41,7 @@ public:
 class SIM_MODEL_NGSPICE : public SIM_MODEL_SPICE
 {
 public:
-    friend struct MODEL_INFO_MAP;
+    friend struct NGSPICE_MODEL_INFO_MAP;
 
 
     SIM_MODEL_NGSPICE( TYPE aType );
@@ -112,6 +112,33 @@ private:
     bool canSilentlyIgnoreParam( const std::string& aParamName );
 
     MODEL_TYPE getModelType() const;
+};
+
+
+struct NGSPICE_MODEL_INFO_MAP
+{
+    using MODEL_TYPE = SIM_MODEL_NGSPICE::MODEL_TYPE;
+    using MODEL_INFO = SIM_MODEL_NGSPICE::MODEL_INFO;
+
+    std::unordered_map<MODEL_TYPE, MODEL_INFO> modelInfos;
+
+    NGSPICE_MODEL_INFO_MAP();
+
+private:
+    void addBJT();
+    void addBSIM3();
+    void addBSIM4();
+    void addB3SOI();
+    void addB4SOI();
+    void addDIODE();
+    void addHFET();
+    void addHICUM2();
+    void addHSIM();
+    void addJFET();
+    void addMES();
+    void addMOS();
+    void addMOS9();
+    void addVBIC();
 };
 
 #endif /* SIM_MODEL_NGSPICE_H */

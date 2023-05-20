@@ -187,7 +187,20 @@ set( EESCHEMA_SIM_SRCS
     sim/sim_model_l_mutual.cpp
     sim/sim_model_kibis.cpp
     sim/sim_model_ngspice.cpp
-    sim/sim_model_ngspice_data.cpp
+    sim/sim_model_ngspice_data_bjt.cpp
+    sim/sim_model_ngspice_data_bsim3.cpp
+    sim/sim_model_ngspice_data_bsim4.cpp
+    sim/sim_model_ngspice_data_b3soi.cpp
+    sim/sim_model_ngspice_data_b4soi.cpp
+    sim/sim_model_ngspice_data_diode.cpp
+    sim/sim_model_ngspice_data_hfet.cpp
+    sim/sim_model_ngspice_data_hicum2.cpp
+    sim/sim_model_ngspice_data_hsim.cpp
+    sim/sim_model_ngspice_data_jfet.cpp
+    sim/sim_model_ngspice_data_mes.cpp
+    sim/sim_model_ngspice_data_mos.cpp
+    sim/sim_model_ngspice_data_mos9.cpp
+    sim/sim_model_ngspice_data_vbic.cpp
     sim/sim_model_r_pot.cpp
     sim/sim_model_raw_spice.cpp
     sim/sim_model_source.cpp

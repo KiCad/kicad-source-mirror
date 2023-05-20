@@ -296,3 +296,34 @@ SIM_MODEL_NGSPICE::MODEL_TYPE SIM_MODEL_NGSPICE::getModelType() const
         return MODEL_TYPE::NONE;
     }
 }
+
+
+static std::unique_ptr<NGSPICE_MODEL_INFO_MAP> s_ModelInfoMap;
+
+const SIM_MODEL_NGSPICE::MODEL_INFO& SIM_MODEL_NGSPICE::ModelInfo( MODEL_TYPE aType )
+{
+    if( !s_ModelInfoMap )
+        s_ModelInfoMap = std::make_unique<NGSPICE_MODEL_INFO_MAP>();
+
+    return s_ModelInfoMap->modelInfos.at( aType );
+}
+
+
+NGSPICE_MODEL_INFO_MAP::NGSPICE_MODEL_INFO_MAP()
+{
+    modelInfos[SIM_MODEL_NGSPICE::MODEL_TYPE::NONE] = {};
+    addBJT();
+    addBSIM3();
+    addBSIM4();
+    addB3SOI();
+    addB4SOI();
+    addDIODE();
+    addHFET();
+    addHICUM2();
+    addHSIM();
+    addJFET();
+    addMES();
+    addMOS();
+    addMOS9();
+    addVBIC();
+}
